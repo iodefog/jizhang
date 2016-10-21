@@ -64,12 +64,6 @@ extern const int64_t SSJDefaultSyncVersion;
 /// @name 字符串常量
 ///------------------------------------------
 
-//  接口地址
-extern NSString *const SSJBaseURLString;
-
-//  图片域名
-extern NSString *const SSJImageBaseUrlString;
-
 //
 extern NSString *const SSJErrorDomain;
 

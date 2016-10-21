@@ -10,8 +10,10 @@
 
 @interface SSJDomainManager : NSObject
 
-+ (void)requestDomainWithSuccess:(void(^)())success failure:(void(^)(NSError *error))failure;
-
 + (NSString *)domain;
+
++ (NSString *)imageDomain;
+
++ (void)requestDomain;
 
 @end

@@ -39,4 +39,12 @@
  */
 - (NSString *)base64Encoding;
 
+- (NSData *)aes256_encrypt:(NSString *)key;
+
+- (NSData *)aes256_decrypt:(NSString *)key;
+
+- (NSData *)cd_encryptionWithKey:(NSString *)key iv:(NSString *)Iv;
+
+- (NSData *)cd_decryptionWithKey:(NSString *)key iv:(NSString *)Iv;
+
 @end

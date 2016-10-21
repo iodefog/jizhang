@@ -8,6 +8,7 @@
 
 #import "SSJSynchronizeTask.h"
 #import "AFNetworking.h"
+#import "SSJDomainManager.h"
 
 @interface SSJSynchronizeTask ()
 
@@ -44,7 +45,7 @@
 
 - (NSURLSessionUploadTask *)constructingBodyWithBlock:(void (^)(id <AFMultipartFormData> formData))block headerParams:(NSDictionary *)prarms toUrlPath:(NSString *)path completionHandler:(void (^)(NSURLResponse *response, id responseObject, NSError *error))completionHandler {
     //  创建请求
-    NSString *urlString = [[NSURL URLWithString:path relativeToURL:[NSURL URLWithString:SSJBaseURLString]] absoluteString];
+    NSString *urlString = [[NSURL URLWithString:path relativeToURL:[NSURL URLWithString:[SSJDomainManager domain]]] absoluteString];
     
     NSError *tError = nil;
     NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] multipartFormRequestWithMethod:@"POST" URLString:urlString parameters:nil constructingBodyWithBlock:block error:&tError];

@@ -8,6 +8,7 @@
 
 #import "SSJBaseNetworkService.h"
 #import "SSJGlobalServiceManager.h"
+#import "SSJDomainManager.h"
 
 @interface SSJBaseNetworkService ()
 
@@ -50,7 +51,7 @@
     SSJGlobalServiceManager *manager = [self p_customManager];
     
     NSDictionary *paramsDic = [self packParameters:params];
-    NSString *fullUrlString = [[NSURL URLWithString:urlString relativeToURL:[NSURL URLWithString:SSJBaseURLString]] absoluteString];
+    NSString *fullUrlString = [[NSURL URLWithString:urlString relativeToURL:[NSURL URLWithString:[SSJDomainManager domain]]] absoluteString];
     
     switch (_httpMethod) {
         case SSJBaseNetworkServiceHttpMethodPOST: {

@@ -10,23 +10,6 @@
 
 const int64_t SSJDefaultSyncVersion = -1;
 
-//  接口域名
-#ifdef DEBUG
-NSString *const SSJBaseURLString = @"http://192.168.1.155:18095";   // 测试环境
-NSString *const SSJImageBaseUrlString = @"http://account.gs.9188.com/";   // 测试环境
-
-//NSString *const SSJBaseURLString = @"http://jz.9188.com";
-//NSString *const SSJImageBaseUrlString = @"http://jz.9188.com";
-
-#else
-//NSString *const SSJBaseURLString = @"http://192.168.1.155:18095";   // 测试环境
-//NSString *const SSJImageBaseUrlString = @"http://account.gs.9188.com/";
-
-NSString *const SSJBaseURLString = @"http://jz.9188.com";
-NSString *const SSJImageBaseUrlString = @"http://jz.9188.com";
-
-#endif
-
 NSString *const SSJErrorDomain = @"com.9188.jizhang";
 
 //NSString *const SSJAppStoreAddress = @"https://itunes.apple.com/us/app/li-cai-di/id1023600539?l=zh&ls=1&mt=8";

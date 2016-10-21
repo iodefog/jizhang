@@ -246,14 +246,14 @@ static CGFloat kBottomTitleSize = 22;
 - (NSArray *)growingItems {
     if (!_growingItems) {
         SSJWaveWaterViewItem *lightItem = [SSJWaveWaterViewItem item];
-        lightItem.waveColor = RGBCOLOR(121, 248, 221);
+        lightItem.waveColor = [UIColor ssj_colorWithHex:@"bdeedd"];
         lightItem.waveAmplitude = _waveAmplitude;
         lightItem.waveSpeed = _waveSpeed;
         lightItem.waveCycle = _waveCycle;
         lightItem.waveGrowth = _waveGrowth;
         
         SSJWaveWaterViewItem *heavyItem = [SSJWaveWaterViewItem item];
-        heavyItem.waveColor = RGBCOLOR(38, 227, 198);
+        heavyItem.waveColor = [UIColor ssj_colorWithHex:SSJSurplusGreenColorValue];
         heavyItem.waveAmplitude = _waveAmplitude;
         heavyItem.waveSpeed = _waveSpeed;
         heavyItem.waveCycle = _waveCycle;

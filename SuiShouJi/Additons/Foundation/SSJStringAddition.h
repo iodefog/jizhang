@@ -19,6 +19,14 @@
 /* SHA-1加密 */
 - (NSString *)ssj_sha1HexDigest;
 
+- (NSString *)aes256_encrypt:(NSString *)key;
+
+- (NSString *)aes256_decrypt:(NSString *)key;
+
+- (NSString*)cd_AESencryptWithKey:(NSString*)key iv:(NSString *)Iv;
+
+- (NSString*)cd_AESdecryptWithKey:(NSString *)key iv:(NSString *)Iv;
+
 @end
 
 @interface NSString (SSJDate)

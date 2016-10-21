@@ -42,6 +42,7 @@
 #import "SSJUmengManager.h"
 #import "SSJLocalNotificationHelper.h"
 #import "SSJLocalNotificationStore.h"
+#import "SSJDomainManager.h"
 
 //  进入后台超过的时限后进入锁屏
 static const NSTimeInterval kLockScreenDelay = 60;
@@ -150,6 +151,8 @@ NSDate *SCYEnterBackgroundTime() {
         } animated:NO];
         manager = nil;
     }];
+    
+    [SSJDomainManager requestDomain];
 
     return YES;
 }
