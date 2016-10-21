@@ -14,4 +14,6 @@
 
 @property (nonatomic, strong) SSJBudgetModel *budgetModel;
 
+@property (nonatomic) BOOL edited;
+
 @end

@@ -124,7 +124,8 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
 }
 
 - (void)timingSyncData {
-    if (SSJSyncSetting() == SSJSyncSettingTypeWIFI
+    if (SSJIsUserLogined()
+        && SSJSyncSetting() == SSJSyncSettingTypeWIFI
         && [AFNetworkReachabilityManager managerForDomain:SSJBaseURLString].isReachable) {
         [self startSyncWithSuccess:NULL failure:NULL];
     }
@@ -150,6 +151,10 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
 }
 
 - (void)startSyncIfNeededWithSuccess:(void (^)(SSJDataSynchronizeType type))success failure:(void (^)(SSJDataSynchronizeType type, NSError *error))failure {
+    
+    if (!SSJIsUserLogined()) {
+        return;
+    }
     
     switch (SSJSyncSetting()) {
         case SSJSyncSettingTypeWIFI:

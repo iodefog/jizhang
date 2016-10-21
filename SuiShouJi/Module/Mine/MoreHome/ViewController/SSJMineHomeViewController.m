@@ -264,8 +264,15 @@ static BOOL kNeedBannerDisplay = YES;
     
     //数据导出
     if ([title isEqualToString:kTitle4]) {
-        SSJMagicExportViewController *magicExportVC = [[SSJMagicExportViewController alloc] init];
-        [self.navigationController pushViewController:magicExportVC animated:YES];
+        if (SSJIsUserLogined()) {
+            SSJMagicExportViewController *magicExportVC = [[SSJMagicExportViewController alloc] init];
+            [self.navigationController pushViewController:magicExportVC animated:YES];
+        } else {
+            __weak typeof(self) wself = self;
+            [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"亲，登录后才能导出数据哦" action:[SSJAlertViewAction actionWithTitle:@"暂不导出" handler:NULL], [SSJAlertViewAction actionWithTitle:@"去登录" handler:^(SSJAlertViewAction * _Nonnull action) {
+                [wself login];
+            }], nil];
+        }
     }
     
     //设置
@@ -396,6 +403,15 @@ static BOOL kNeedBannerDisplay = YES;
             SSJBookkeepingTreeViewController *treeVC = [[SSJBookkeepingTreeViewController alloc] init];
             [weakSelf.navigationController pushViewController:treeVC animated:YES];
         };
+        _header.shouldSyncBlock = ^BOOL() {
+            BOOL shouldSync = SSJIsUserLogined();
+            if (!shouldSync) {
+                [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"亲，登录后才能同步数据哦" action:[SSJAlertViewAction actionWithTitle:@"暂不同步" handler:NULL], [SSJAlertViewAction actionWithTitle:@"去登录" handler:^(SSJAlertViewAction * _Nonnull action) {
+                    [weakSelf login];
+                }], nil];
+            }
+            return shouldSync;
+        };
     }
     return _header;
 }
@@ -508,13 +524,17 @@ static BOOL kNeedBannerDisplay = YES;
 
 - (void)loginButtonClicked{
     if (!SSJIsUserLogined()) {
-        SSJLoginViewController *loginVc = [[SSJLoginViewController alloc] init];
-        loginVc.backController = self;
-        [self.navigationController pushViewController:loginVc animated:YES];
+        [self login];
     }else{
         SSJPersonalDetailViewController *personalDetailVc = [[SSJPersonalDetailViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
         [self.navigationController pushViewController:personalDetailVc animated:YES];
     }
+}
+
+- (void)login {
+    SSJLoginViewController *loginVc = [[SSJLoginViewController alloc] init];
+    loginVc.backController = self;
+    [self.navigationController pushViewController:loginVc animated:YES];
 }
 
 #pragma mark - UIImagePickerControllerDelegate

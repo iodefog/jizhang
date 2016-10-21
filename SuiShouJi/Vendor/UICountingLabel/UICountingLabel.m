@@ -245,4 +245,9 @@
     return self.startingValue + (updateVal * (self.destinationValue - self.startingValue));
 }
 
+- (void)stopCounting {
+    [self.timer invalidate];
+    self.timer = nil;
+}
+
 @end

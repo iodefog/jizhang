@@ -20,6 +20,8 @@ static NSString *const kBudgetBillTypeSelectionCellId = @"kBudgetBillTypeSelecti
 
 @property (nonatomic, strong) NSArray *items;
 
+@property (nonatomic, copy) NSArray *originalBillIds;
+
 @end
 
 @implementation SSJBudgetBillTypeSelectionViewController
@@ -35,6 +37,10 @@ static NSString *const kBudgetBillTypeSelectionCellId = @"kBudgetBillTypeSelecti
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.view addSubview:self.tableView];
+    
+    if (_edited) {
+        self.originalBillIds = self.budgetModel.billIds;
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -62,10 +68,17 @@ static NSString *const kBudgetBillTypeSelectionCellId = @"kBudgetBillTypeSelecti
 }
 
 - (void)goBackAction {
-    if (_budgetModel.billIds.count) {
-        [super goBackAction];
-    } else {
+    if (_budgetModel.billIds.count == 0) {
         [CDAutoHideMessageHUD showMessage:@"至少选择一个类别"];
+        return;
+    }
+    
+    if (self.originalBillIds && ![self.originalBillIds isEqualToArray:self.budgetModel.billIds]) {
+        [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"更改类别后，该预算的历史预算数据将清除重置哦" action:[SSJAlertViewAction actionWithTitle:@"取消" handler:NULL], [SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction * _Nonnull action) {
+            [super goBackAction];
+        }], nil];
+    } else {
+        [super goBackAction];
     }
 }
 

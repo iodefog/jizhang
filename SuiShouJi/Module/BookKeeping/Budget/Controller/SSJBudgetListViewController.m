@@ -105,8 +105,8 @@ static NSString *const kBudgetListSecondaryCellId = @"kBudgetListSecondaryCellId
         return cell;
     } else {
         SSJBudgetListSecondaryCell *cell = [tableView dequeueReusableCellWithIdentifier:kBudgetListSecondaryCellId forIndexPath:indexPath];
-        cell.cellItem = item;
         [cell layoutIfNeeded];
+        cell.cellItem = item;
         return cell;
     }
 }

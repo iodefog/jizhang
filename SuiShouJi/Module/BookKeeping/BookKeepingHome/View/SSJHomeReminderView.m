@@ -46,6 +46,7 @@
     [UIView animateWithDuration:0.25 animations:^{
         self.alpha = 1;
     }];
+    [self setBudgetHasRemind];
 }
 
 -(UIImageView *)remindImage{
@@ -82,7 +83,13 @@
 }
 
 -(void)closeButtonClicked:(id)sender{
-    [self setBudgetHasRemind];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [UIView animateWithDuration:0.25 animations:^{
+            self.alpha = 0;
+        } completion:^(BOOL finished) {
+            [self removeFromSuperview];
+        }];
+    });
 }
 
 -(void)setModel:(SSJBudgetModel *)model{
@@ -175,14 +182,7 @@
 
 -(void)setBudgetHasRemind{
     [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
-        [db executeUpdate:@"update BK_USER_BUDGET set ihasremind = 1 where IBID = ? and CUSERID = ?",self.model.ID,SSJUSERID()];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [UIView animateWithDuration:0.25 animations:^{
-                self.alpha = 0;
-            } completion:^(BOOL finished) {
-                [self removeFromSuperview];
-            }];
-        });
+        [db executeUpdate:@"update BK_USER_BUDGET set ihasremind = 1, cwritedate = ?, iversion = ?, operatortype = 1 where IBID = ? and CUSERID = ?", [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], @(SSJSyncVersion()), self.model.ID, SSJUSERID()];
     }];
 }
 

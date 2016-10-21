@@ -38,6 +38,7 @@
         _surplusValueLab.font = [UIFont systemFontOfSize:13];
         _surplusValueLab.textColor = [UIColor ssj_colorWithHex:@"#FFFFFF"];
         _surplusValueLab.format = @"%.2f";
+        _surplusValueLab.method = UILabelCountingMethodEaseOut;
         [self addSubview:_surplusValueLab];
     }
     return self;
@@ -50,7 +51,8 @@
     _surplusLab.left = left;
     _surplusValueLab.left = _surplusLab.right;
     _surplusLab.centerY = _surplusValueLab.centerY = self.height * 0.5;
-    [self updateProgress];
+    _progressView.size = CGSizeMake(self.width, self.height);
+    _progressView.right = self.width * [self progress];
 }
 
 - (void)setBudgetMoney:(CGFloat)budgetMoney {
@@ -96,11 +98,12 @@
     
     if (_budgetMoney >= _expendMoney) {
         _surplusLab.text = @"剩余：";
-        [_surplusValueLab countFrom:_budgetMoney to:_budgetMoney - _expendMoney withDuration:MAX((_expendMoney / _budgetMoney) * 1.5, 1.5)];
+        [_surplusValueLab countFrom:_budgetMoney to:_budgetMoney - _expendMoney withDuration:[self duration]];
         CGSize formSize = [[NSString stringWithFormat:@"%.2f", _budgetMoney] sizeWithAttributes:@{NSFontAttributeName:_surplusValueLab.font}];
         CGSize toSize = [[NSString stringWithFormat:@"%.2f", _budgetMoney - _expendMoney] sizeWithAttributes:@{NSFontAttributeName:_surplusValueLab.font}];
         _surplusValueLab.size = CGSizeMake(MAX(formSize.width, toSize.width), MAX(formSize.height, toSize.height));
     } else {
+        [_surplusValueLab stopCounting];
         _surplusLab.text = @"超支：";
         _surplusValueLab.text = [NSString stringWithFormat:@"%.2f", _budgetMoney - _expendMoney];
         [_surplusValueLab sizeToFit];
@@ -114,17 +117,28 @@
     }
     
     if (!CGRectIsEmpty(self.bounds)) {
-        CGFloat progress = 0;
-        if (_budgetMoney >= _expendMoney) {
-            progress = 1 - (_expendMoney / _budgetMoney);
-        } else {
-            progress = 1;
-        }
-        _progressView.size = CGSizeMake(self.width, self.height);
-        [UIView animateWithDuration:(1 - progress) * 2 animations:^{
-            _progressView.width = self.width * progress;
-        }];
+        CGFloat progress = [self progress];
+        _progressView.right = self.width;
+        [UIView animateWithDuration:[self duration] delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+            _progressView.right = self.width * progress;
+        } completion:NULL];
     }
+}
+
+- (CGFloat)progress {
+    if (_budgetMoney == 0) {
+        return 0;
+    }
+    
+    if (_budgetMoney >= _expendMoney) {
+        return 1 - (_expendMoney / _budgetMoney);
+    } else {
+        return 1;
+    }
+}
+
+- (NSTimeInterval)duration {
+    return MAX((_expendMoney / _budgetMoney) * 1.5, 1.5);
 }
 
 - (void)updateProgressColor {

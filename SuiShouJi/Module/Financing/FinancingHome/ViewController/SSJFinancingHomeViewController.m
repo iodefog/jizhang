@@ -18,7 +18,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 #import "SSJFinancingHomeitem.h"
 #import "SSJFundingDetailsViewController.h"
 #import "SSJFundingTransferViewController.h"
-#import "SSJNewFundingViewController.h"
+#import "SSJFundingItem.h"
 #import "SSJFinancingHomePopView.h"
 #import "SSJDatabaseQueue.h"
 #import "SSJFinancingHomeHelper.h"

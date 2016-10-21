@@ -169,13 +169,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
     
     if ([title isEqualToString:kBudgetTypeTitle]) {
         
-        if (_isEdit) {
-            [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"更改类别后，该预算的历史预算数据将清除重置哦" action:[SSJAlertViewAction actionWithTitle:@"取消" handler:NULL], [SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction * _Nonnull action) {
-                [self enterBillTypeSelectionController];
-            }], nil];
-        } else {
-            [self enterBillTypeSelectionController];
-        }
+        [self enterBillTypeSelectionController];
         
     } else if ([title isEqualToString:kBudgetPeriodTitle]) {
         
@@ -770,6 +764,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
 - (void)enterBillTypeSelectionController {
     SSJBudgetBillTypeSelectionViewController *billTypeSelectionController = [[SSJBudgetBillTypeSelectionViewController alloc] init];
     billTypeSelectionController.budgetModel = _model;
+    billTypeSelectionController.edited = _isEdit;
     [self.navigationController pushViewController:billTypeSelectionController animated:YES];
     [MobClick event:@"budget_pick_bill_type"];
 }
