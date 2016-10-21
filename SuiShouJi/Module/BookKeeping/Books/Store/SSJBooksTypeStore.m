@@ -75,24 +75,25 @@
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
         NSString *userid = SSJUSERID();
         if ([db intForQuery:@"select count(1) from BK_BOOKS_TYPE where cbooksname = ? and cuserid = ? and cbooksid <> ? and operatortype <> 2",item.booksName,userid,item.booksId]) {
+            success = NO;
             SSJDispatch_main_async_safe(^{
                 [CDAutoHideMessageHUD showMessage:@"已有相同账本名称了，换一个吧"];
             });
-            return;
+        }else{
+            int booksOrder = [db intForQuery:@"select max(iorder) from bk_books_type where cuserid = ?",userid] + 1;
+            if ([item.booksId isEqualToString:userid]) {
+                booksOrder = 1;
+            }
+            if (![db boolForQuery:@"select count(*) from BK_BOOKS_TYPE where CBOOKSID = ?", booksid]) {
+                [typeInfo setObject:@(booksOrder) forKey:@"iorder"];
+                [typeInfo setObject:@(0) forKey:@"operatortype"];
+                sql = [self inertSQLStatementWithTypeInfo:typeInfo];
+            } else {
+                [typeInfo setObject:@(1) forKey:@"operatortype"];
+                sql = [self updateSQLStatementWithTypeInfo:typeInfo];
+            }
+            success = [db executeUpdate:sql withParameterDictionary:typeInfo];
         }
-        int booksOrder = [db intForQuery:@"select max(iorder) from bk_books_type where cuserid = ?",userid] + 1;
-        if ([item.booksId isEqualToString:userid]) {
-            booksOrder = 1;
-        }
-        if (![db boolForQuery:@"select count(*) from BK_BOOKS_TYPE where CBOOKSID = ?", booksid]) {
-            [typeInfo setObject:@(booksOrder) forKey:@"iorder"];
-            [typeInfo setObject:@(0) forKey:@"operatortype"];
-            sql = [self inertSQLStatementWithTypeInfo:typeInfo];
-        } else {
-            [typeInfo setObject:@(1) forKey:@"operatortype"];
-            sql = [self updateSQLStatementWithTypeInfo:typeInfo];
-        }
-        success = [db executeUpdate:sql withParameterDictionary:typeInfo];
     }];
     
     return success;
