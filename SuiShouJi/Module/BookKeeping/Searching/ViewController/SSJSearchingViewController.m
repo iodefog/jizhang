@@ -19,7 +19,6 @@
 #import "SSJBudgetNodataRemindView.h"
 #import "SSJSearchResultOrderHeader.h"
 #import "TPKeyboardAvoidingTableView.h"
-#import <YYKeyboardManager/YYKeyboardManager.h>
 #import "SSJSearchResultSummaryItem.h"
 
 static NSString *const khasSearchByMoney = @"khasSearchByMoney";
@@ -30,7 +29,7 @@ static NSString *const kSearchHistoryCellId = @"kSearchHistoryCellId";
 
 static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeaderId";
 
-@interface SSJSearchingViewController ()<UISearchBarDelegate,YYKeyboardObserver>
+@interface SSJSearchingViewController ()<UISearchBarDelegate,UITableViewDelegate,UITableViewDataSource>
 
 @property(nonatomic, strong) SSJSearchBar *searchBar;
 
@@ -45,6 +44,8 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
 @property(nonatomic, strong) SSJSearchResultOrderHeader *resultOrderHeader;
 
 @property(nonatomic, strong) UIView *clearHistoryFooterView;
+
+@property(nonatomic, strong) TPKeyboardAvoidingTableView *tableView;
 
 @end
 
@@ -67,7 +68,6 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
     [self.tableView registerClass:[SSJSearchHistoryCell class] forCellReuseIdentifier:kSearchHistoryCellId];
     [self.tableView registerClass:[SSJBillingChargeCell class] forCellReuseIdentifier:kBillingChargeCellId];
     [self.tableView registerClass:[SSJSearchResultHeader class] forHeaderFooterViewReuseIdentifier:kSearchSearchResultHeaderId];
-    [[YYKeyboardManager defaultManager] addObserver:self];
     // Do any additional setup after loading the view.
 }
 
@@ -101,10 +101,6 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
     [super viewDidLayoutSubviews];
     self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.searchBar.bottom - 10);
     self.tableView.top = self.searchBar.bottom + 10;
-}
-
--(void)dealloc{
-    [[YYKeyboardManager defaultManager] removeObserver:self];
 }
 
 #pragma mark - UISearchBarDelegate
@@ -224,25 +220,38 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
     return nil;
 }
 
-#pragma mark - @protocol YYKeyboardObserver
-- (void)keyboardChangedWithTransition:(YYKeyboardTransition)transition {
-    CGRect kbFrame = [[YYKeyboardManager defaultManager] convertRect:transition.toFrame toView:self.view];
-    if (transition.toVisible) {
-        self.tableView.contentInset = UIEdgeInsetsMake(0, 0, kbFrame.size.height, 0);
-    }else{
-        self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
-    }
-//    [UIView animateWithDuration:transition.animationCurve delay:0 options:transition.animationOption animations:^{
-//        CGRect kbFrame = [[YYKeyboardManager defaultManager] convertRect:transition.toFrame toView:self.superview];
-//        CGRect popframe = self.frame;
-//        popframe.origin.y = kbFrame.origin.y - popframe.size.height - 20;
-//        self.frame = popframe;
-//    } completion:^(BOOL finished) {
-//        
-//    }];
-}
+//#pragma mark - @protocol YYKeyboardObserver
+//- (void)keyboardChangedWithTransition:(YYKeyboardTransition)transition {
+//    CGRect kbFrame = [[YYKeyboardManager defaultManager] convertRect:transition.toFrame toView:self.view];
+//    if (transition.toVisible) {
+//        self.tableView.contentInset = UIEdgeInsetsMake(0, 0, kbFrame.size.height, 0);
+//    }else{
+//        self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
+//    }
+////    [UIView animateWithDuration:transition.animationCurve delay:0 options:transition.animationOption animations:^{
+////        CGRect kbFrame = [[YYKeyboardManager defaultManager] convertRect:transition.toFrame toView:self.superview];
+////        CGRect popframe = self.frame;
+////        popframe.origin.y = kbFrame.origin.y - popframe.size.height - 20;
+////        self.frame = popframe;
+////    } completion:^(BOOL finished) {
+////        
+////    }];
+//}
 
 #pragma mark - Getter
+-(TPKeyboardAvoidingTableView *)tableView{
+    if (_tableView == nil) {
+        _tableView = [[TPKeyboardAvoidingTableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
+        _tableView.dataSource = self;
+        _tableView.delegate = self;
+        _tableView.backgroundColor = [UIColor clearColor];
+        _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
+        _tableView.tableFooterView = [[UIView alloc] init];
+        [_tableView setSeparatorInset:UIEdgeInsetsZero];
+    }
+    return _tableView;
+}
+
 - (SSJSearchBar *)searchBar{
     if (!_searchBar) {
         __weak typeof(self) weakSelf = self;
@@ -338,13 +347,18 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
     [self.tableView ssj_showLoadingIndicator];
     [SSJChargeSearchingStore querySearchHistoryWithSuccess:^(NSArray<SSJSearchHistoryItem *> *result) {
         [weakSelf.tableView ssj_hideLoadingIndicator];
-        weakSelf.tableView.tableHeaderView = nil;
+
+        
         weakSelf.model = SSJSearchHistoryModel;
         weakSelf.items = [NSArray arrayWithArray:result];
         if (!result.count) {
-            [self.tableView ssj_showWatermarkWithCustomView:self.noHistoryHeader animated:NO target:self action:NULL];
+//            [self.tableView ssj_showWatermarkWithCustomView:self.noHistoryHeader animated:NO target:self action:NULL];
+            self.noHistoryHeader.height = self.view.height - self.searchBar.height;
+            self.tableView.tableHeaderView = self.noHistoryHeader;
         }else{
-            [self.tableView ssj_hideWatermark:YES];
+            UIView *noneView = [[UIView alloc]init];
+            noneView.height = 0.1;
+            weakSelf.tableView.tableHeaderView = noneView;
         }
         [weakSelf.tableView reloadData];
 
@@ -375,9 +389,9 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
             }
             weakSelf.tableView.tableHeaderView = weakSelf.resultOrderHeader;
         }else{
-            weakSelf.tableView.tableHeaderView = nil;
+            self.noResultHeader.height = self.view.height - self.searchBar.height;
+            self.tableView.tableHeaderView = self.noResultHeader;
             weakSelf.noResultHeader.title = [NSString stringWithFormat:@"没有搜索到与\"%@\"相关的流水哦,\n换个搜索词再试试吧~",content];
-            [weakSelf.tableView ssj_showWatermarkWithCustomView:weakSelf.noResultHeader animated:NO target:weakSelf action:NULL];
         }
         [weakSelf.tableView reloadData];
     } failure:^(NSError *error) {

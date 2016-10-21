@@ -106,8 +106,6 @@
         [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
         [[NSNotificationCenter defaultCenter]postNotificationName:SSJBooksTypeDidChangeNotification object:nil];
         [self.navigationController popViewControllerAnimated:YES];
-    }else{
-        [CDAutoHideMessageHUD showMessage:@"保存失败"];
     }
 }
 

@@ -429,7 +429,7 @@ BOOL kHomeNeedLoginPop;
         [self.mutiFunctionButton dismiss];
     }else if (index == 2){
         [MobClick event:@"main_search"];
-        SSJSearchingViewController *searchVC = [[SSJSearchingViewController alloc]initWithTableViewStyle:UITableViewStylePlain];
+        SSJSearchingViewController *searchVC = [[SSJSearchingViewController alloc]init];
         [self.navigationController pushViewController:searchVC animated:YES];
     }
 }
