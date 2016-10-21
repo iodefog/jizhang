@@ -7,10 +7,10 @@
 //
 
 #import "SSJAddOrEditLoanViewController.h"
-#import "SSJNewFundingViewController.h"
 #import "SSJReminderEditeViewController.h"
 #import "SSJLoanListViewController.h"
 #import "SSJLoanListViewController.h"
+#import "SSJFundingTypeSelectViewController.h"
 #import "SSJAddOrEditLoanLabelCell.h"
 #import "SSJAddOrEditLoanTextFieldCell.h"
 #import "SSJAddOrEditLoanMultiLabelCell.h"
@@ -20,6 +20,8 @@
 #import "SSJLoanHelper.h"
 #import "SSJLocalNotificationStore.h"
 #import "SSJDataSynchronizer.h"
+#import "SSJCreditCardItem.h"
+#import "SSJFundingItem.h"
 
 static NSString *const kAddOrEditLoanLabelCellId = @"SSJAddOrEditLoanLabelCell";
 static NSString *const kAddOrEditLoanTextFieldCellId = @"SSJAddOrEditLoanTextFieldCell";
@@ -777,12 +779,19 @@ const int kMemoMaxLength = 13;
                 [weakSelf.tableView reloadData];
                 return YES;
             } else if (index == view.items.count - 1) {
-                SSJNewFundingViewController *newFundingVC = [[SSJNewFundingViewController alloc] init];
-                newFundingVC.addNewFundBlock = ^(SSJFundingItem *newFundingItem) {
-                    weakSelf.loanModel.targetFundID = newFundingItem.fundingID;
-                    [weakSelf loadData];
+                SSJFundingTypeSelectViewController *NewFundingVC = [[SSJFundingTypeSelectViewController alloc]init];
+                NewFundingVC.addNewFundingBlock = ^(SSJBaseItem *item){
+                    if ([item isKindOfClass:[SSJFundingItem class]]) {
+                        SSJFundingItem *fundItem = (SSJFundingItem *)item;
+                        weakSelf.loanModel.targetFundID = fundItem.fundingID;
+                        [weakSelf loadData];
+                    } else if ([item isKindOfClass:[SSJCreditCardItem class]]){
+                        SSJCreditCardItem *cardItem = (SSJCreditCardItem *)item;
+                        weakSelf.loanModel.targetFundID = cardItem.cardId;
+                        [weakSelf loadData];
+                    }
                 };
-                [weakSelf.navigationController pushViewController:newFundingVC animated:YES];
+                [weakSelf.navigationController pushViewController:NewFundingVC animated:YES];
                 return NO;
             } else {
                 SSJPRINT(@"警告：selectedIndex大于数组范围");
