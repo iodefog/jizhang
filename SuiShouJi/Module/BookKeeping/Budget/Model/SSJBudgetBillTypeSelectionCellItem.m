@@ -10,4 +10,13 @@
 
 @implementation SSJBudgetBillTypeSelectionCellItem
 
+- (NSString *)debugDescription {
+    return [NSString stringWithFormat:@"%@:%@", self, @{@"leftImage":(_leftImage ?: [NSNull null]),
+                                                        @"billTypeName":(_billTypeName ?: [NSNull null]),
+                                                        @"billTypeColor":(_billTypeColor ?: [NSNull null]),
+                                                        @"billID":(_billID ?: [NSNull null]),
+                                                        @"canSelect":@(_canSelect),
+                                                        @"selected":@(_selected)}];
+}
+
 @end

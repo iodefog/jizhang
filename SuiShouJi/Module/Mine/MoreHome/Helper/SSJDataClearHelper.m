@@ -66,7 +66,7 @@
     newuserItem.defaultMemberState = @"0";
     newuserItem.defaultFundAcctState = @"0";
     newuserItem.defaultBooksTypeState = @"0";
-    newuserItem.currentBooksId = @"";
+    newuserItem.currentBooksId = newuserItem.userId;
     
     // 老用户id没过注册过，说明没有登录，为登陆情况下数据格式化不请求接口
     if ([originalUserItem.registerState isEqualToString:@"0"]) {
@@ -97,6 +97,7 @@
 }
 
 + (void)saveNewUserItem:(SSJUserItem *)newUserItem originalUserItem:(SSJUserItem *)originalUserItem success:(void(^)())success failure:(void (^)(NSError *error))failure {
+    
     if (SSJSetUserId(newUserItem.userId)
         && [SSJUserTableManager saveUserItem:newUserItem]
         && [SSJUserTableManager saveUserItem:originalUserItem]) {
