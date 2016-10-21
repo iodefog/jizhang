@@ -9,7 +9,6 @@
 #import "SSJFundingTransferViewController.h"
 #import "SSJFundingItem.h"
 #import "SSJFundingTypeSelectView.h"
-#import "SSJNewFundingViewController.h"
 #import "SSJDatabaseQueue.h"
 #import "SSJDataSynchronizer.h"
 #import "SSJCreditCardItem.h"
