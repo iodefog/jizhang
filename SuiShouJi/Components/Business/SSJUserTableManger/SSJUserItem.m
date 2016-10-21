@@ -11,6 +11,36 @@
 
 @implementation SSJUserItem
 
++ (NSDictionary *)propertyMapping {
+    static NSDictionary *mapping = nil;
+    if (!mapping) {
+        mapping = @{@"userId":@"cuserid",
+                    @"loginPWD":@"cpwd",
+                    @"fundPWD":@"cfpwd",
+                    @"motionPWD":@"cmotionpwd",
+                    @"motionPWDState":@"cmotionpwdstate",
+                    @"nickName":@"cnickid",
+                    @"mobileNo":@"cmobileno",
+                    @"realName":@"crealname",
+                    @"idCardNo":@"cidcard",
+                    @"registerState":@"cregisterstate",
+                    @"defaultFundAcctState":@"cdefaultfundacctstate",
+                    @"icon":@"cicons",
+                    @"signature":@"usersignature",
+                    @"writeDate":@"cwritedate",
+                    @"motionTrackState":@"cmotionPwdTrackState",
+                    @"fingerPrintState":@"cfingerPrintState",
+                    @"currentBooksId":@"ccurrentBooksId",
+                    @"loginType":@"loginType",
+                    @"defaultMemberState":@"cdefaultmembertate",
+                    @"defaultBooksTypeState":@"cdefaultbookstypestate",
+                    @"openId":@"copenid",
+                    @"remindSettingMotionPWD":@"remindsettingmotionpwd",
+                    @"email":@"cemail"};
+    }
+    return mapping;
+}
+
 - (void)encodeWithCoder:(NSCoder *)aCoder {
     [aCoder encodeObject:_userId forKey:@"userId"];
     [aCoder encodeObject:_loginPWD forKey:@"loginPWD"];
@@ -63,34 +93,33 @@
     return self;
 }
 
-+ (NSDictionary *)propertyMapping {
-    static NSDictionary *mapping = nil;
-    if (!mapping) {
-        mapping = @{@"userId":@"cuserid",
-                    @"loginPWD":@"cpwd",
-                    @"fundPWD":@"cfpwd",
-                    @"motionPWD":@"cmotionpwd",
-                    @"motionPWDState":@"cmotionpwdstate",
-                    @"nickName":@"cnickid",
-                    @"mobileNo":@"cmobileno",
-                    @"realName":@"crealname",
-                    @"idCardNo":@"cidcard",
-                    @"registerState":@"cregisterstate",
-                    @"defaultFundAcctState":@"cdefaultfundacctstate",
-                    @"icon":@"cicons",
-                    @"signature":@"usersignature",
-                    @"writeDate":@"cwritedate",
-                    @"motionTrackState":@"cmotionPwdTrackState",
-                    @"fingerPrintState":@"cfingerPrintState",
-                    @"currentBooksId":@"ccurrentBooksId",
-                    @"loginType":@"loginType",
-                    @"defaultMemberState":@"cdefaultmembertate",
-                    @"defaultBooksTypeState":@"cdefaultbookstypestate",
-                    @"openId":@"copenid",
-                    @"remindSettingMotionPWD":@"remindsettingmotionpwd",
-                    @"email":@"cemail"};
-    }
-    return mapping;
+- (id)copyWithZone:(nullable NSZone *)zone {
+    SSJUserItem *userItem = [[SSJUserItem alloc] init];
+    userItem.userId = _userId;
+    userItem.loginPWD = _loginPWD;
+    userItem.fundPWD = _fundPWD;
+    userItem.motionPWD = _motionPWD;
+    userItem.motionPWDState = _motionPWDState;
+    userItem.nickName = _nickName;
+    userItem.mobileNo = _mobileNo;
+    userItem.realName = _realName;
+    userItem.idCardNo = _idCardNo;
+    userItem.icon = _icon;
+    userItem.registerState = _registerState;
+    userItem.defaultFundAcctState = _defaultFundAcctState;
+    userItem.defaultBooksTypeState = _defaultBooksTypeState;
+    userItem.defaultMemberState = _defaultMemberState;
+    userItem.signature = _signature;
+    userItem.writeDate = _writeDate;
+    userItem.motionTrackState = _motionTrackState;
+    userItem.fingerPrintState = _fingerPrintState;
+    userItem.currentBooksId = _currentBooksId;
+    userItem.loginType = _loginType;
+    userItem.openId = _openId;
+    userItem.remindSettingMotionPWD = _remindSettingMotionPWD;
+    userItem.email = _email;
+    
+    return userItem;
 }
 
 @end

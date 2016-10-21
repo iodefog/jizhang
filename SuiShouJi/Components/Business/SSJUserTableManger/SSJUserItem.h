@@ -8,7 +8,7 @@
 
 #import "SSJBaseItem.h"
 
-@interface SSJUserItem : SSJBaseItem
+@interface SSJUserItem : SSJBaseItem <NSCopying>
 
 //  用户id
 @property (nonatomic, copy) NSString *userId;
@@ -53,7 +53,7 @@
 @property (nonatomic, copy) NSString *defaultMemberState;
 
 //  个性签名
-@property (nonatomic, strong) NSString *signature;
+@property (nonatomic, copy) NSString *signature;
 
 //  客户端修改时间（目前只有修改昵称、个性签名才能改这个属性）
 @property (nonatomic, copy) NSString *writeDate;
@@ -65,14 +65,14 @@
 @property (nonatomic, copy) NSString *fingerPrintState;
 
 //  当前选中的账本id(默认为0)
-@property(nonatomic, strong) NSString *currentBooksId;
+@property(nonatomic, copy) NSString *currentBooksId;
 
-@property(nonatomic, strong) NSString *loginType;
+@property(nonatomic, copy) NSString *loginType;
 
-@property(nonatomic, strong) NSString *openId;
+@property(nonatomic, copy) NSString *openId;
 
 // 是否提示过用户设置手势密码
-@property(nonatomic, strong) NSString *remindSettingMotionPWD;
+@property(nonatomic, copy) NSString *remindSettingMotionPWD;
 
 // 用户导出数据的邮箱地址
 @property(nonatomic, copy) NSString *email;
