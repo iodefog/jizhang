@@ -74,7 +74,18 @@ static NSString *const kBudgetBillTypeSelectionCellId = @"kBudgetBillTypeSelecti
     }
     
     if (self.originalBillIds && ![self.originalBillIds isEqualToArray:self.budgetModel.billIds]) {
-        [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"更改类别后，该预算的历史预算数据将清除重置哦" action:[SSJAlertViewAction actionWithTitle:@"取消" handler:NULL], [SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction * _Nonnull action) {
+        [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"更改类别后，该预算的历史预算数据将清除重置哦" action:[SSJAlertViewAction actionWithTitle:@"取消" handler:^(SSJAlertViewAction * _Nonnull action) {
+            self.budgetModel.billIds = self.originalBillIds;
+            BOOL allSelect = [self.budgetModel.billIds isEqualToArray:@[@"all"]];
+            for (SSJBudgetBillTypeSelectionCellItem *item in self.items) {
+                if (allSelect) {
+                    item.selected = YES;
+                } else {
+                    item.selected = [self.budgetModel.billIds containsObject:item.billID];
+                }
+            }
+            [self.tableView reloadData];
+        }], [SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction * _Nonnull action) {
             [super goBackAction];
         }], nil];
     } else {
@@ -186,7 +197,9 @@ static NSString *const kBudgetBillTypeSelectionCellId = @"kBudgetBillTypeSelecti
                 break;
             }
             
-            [billIds addObject:item.billID];
+            if (item.billID) {
+                [billIds addObject:item.billID];
+            }
         }
     }
     

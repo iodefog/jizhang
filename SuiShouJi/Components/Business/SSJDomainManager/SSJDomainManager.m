@@ -26,7 +26,7 @@ static NSString *const kSSJDomainKey = @"kSSJDomainKey";
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     [manager GET:@"http://hosts.shanghaicaiyi.com/gjj/cpixel.cy" parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
         NSLog(@"success:%@",responseObject);
-        NSLog(@"%@", [responseObject base64Encoding]);
+        NSData *decodeData = [[NSData alloc] initWithBase64EncodedData:responseObject options:0];
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         NSLog(@"error:%@", error);
     }];

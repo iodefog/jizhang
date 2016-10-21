@@ -60,22 +60,18 @@
     NSString *newUserId = SSJUUID();
     
     SSJUserItem *originalUserItem = [SSJUserTableManager queryUserItemForID:originalUserid];
+    originalUserItem.registerState = @"1";
     
     SSJUserItem *newuserItem = [originalUserItem copy];
     newuserItem.userId = newUserId;
     newuserItem.defaultMemberState = @"0";
     newuserItem.defaultFundAcctState = @"0";
     newuserItem.defaultBooksTypeState = @"0";
-    newuserItem.currentBooksId = @"";
+    newuserItem.currentBooksId = newuserItem.userId;
     
     // 老用户id没过注册过，说明没有登录，为登陆情况下数据格式化不请求接口
-    if ([originalUserItem.registerState isEqualToString:@"0"]) {
+    if (SSJIsUserLogined()) {
         
-        [self saveNewUserItem:newuserItem originalUserItem:originalUserItem success:success failure:failure];
-        
-    } else {
-        
-        originalUserItem.registerState = @"1";
         SSJClearUserDataService *service = [[SSJClearUserDataService alloc]initWithDelegate:nil];
         [service clearUserDataWithOriginalUserid:originalUserid newUserid:newUserId Success:^{
             
@@ -93,10 +89,14 @@
                 failure(error);
             }
         }];
+        
+    } else {
+        [self saveNewUserItem:newuserItem originalUserItem:originalUserItem success:success failure:failure];
     }
 }
 
 + (void)saveNewUserItem:(SSJUserItem *)newUserItem originalUserItem:(SSJUserItem *)originalUserItem success:(void(^)())success failure:(void (^)(NSError *error))failure {
+    
     if (SSJSetUserId(newUserItem.userId)
         && [SSJUserTableManager saveUserItem:newUserItem]
         && [SSJUserTableManager saveUserItem:originalUserItem]) {
