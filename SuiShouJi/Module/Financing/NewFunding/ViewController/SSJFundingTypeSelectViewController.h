@@ -15,4 +15,7 @@ typedef void (^addNewFundingBlock)(SSJBaseItem *item);
 
 @property(nonatomic,copy) addNewFundingBlock addNewFundingBlock;
 
+//是否需要借贷
+@property(nonatomic) BOOL needLoanOrNot;
+
 @end

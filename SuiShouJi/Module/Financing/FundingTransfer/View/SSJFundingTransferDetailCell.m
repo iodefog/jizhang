@@ -86,6 +86,7 @@
     if (!_transferSourceLabel) {
         _transferSourceLabel = [[UILabel alloc]init];
         _transferSourceLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+        _transferSourceLabel.textAlignment = NSTextAlignmentLeft;
         _transferSourceLabel.font = [UIFont systemFontOfSize:15];
     }
     return _transferSourceLabel;
