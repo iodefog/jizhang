@@ -12,7 +12,9 @@
 #import "SSJNewFundingViewController.h"
 #import "SSJDatabaseQueue.h"
 #import "SSJDataSynchronizer.h"
+#import "SSJCreditCardItem.h"
 #import "SSJFundingTransferDetailViewController.h"
+#import "SSJFundingTypeSelectViewController.h"
 #import "FMDB.h"
 
 @interface SSJFundingTransferViewController ()
@@ -33,8 +35,8 @@
 @end
 
 @implementation SSJFundingTransferViewController{
-    SSJFundingItem *_transferInItem;
-    SSJFundingItem *_transferOutItem;
+    SSJBaseItem *_transferInItem;
+    SSJBaseItem *_transferOutItem;
 }
 
 #pragma mark - Lifecycle
@@ -61,12 +63,12 @@
     if (self.item != nil) {
         _transferOutItem = [[SSJFundingItem alloc]init];
         _transferInItem = [[SSJFundingItem alloc]init];
-        _transferInItem.fundingID = self.item.transferInId;
-        _transferInItem.fundingIcon = self.item.transferInImage;
-        _transferInItem.fundingName = self.item.transferInName;
-        _transferOutItem.fundingID = self.item.transferOutId;
-        _transferOutItem.fundingIcon = self.item.transferOutImage;
-        _transferOutItem.fundingName = self.item.transferOutName;
+        ((SSJFundingItem *)_transferInItem).fundingID = self.item.transferInId;
+        ((SSJFundingItem *)_transferInItem).fundingIcon = self.item.transferInImage;
+        ((SSJFundingItem *)_transferInItem).fundingName = self.item.transferInName;
+        ((SSJFundingItem *)_transferOutItem).fundingID = self.item.transferOutId;
+        ((SSJFundingItem *)_transferOutItem).fundingIcon = self.item.transferOutImage;
+        ((SSJFundingItem *)_transferOutItem).fundingName = self.item.transferOutName;
     }
 }
 
@@ -230,11 +232,20 @@
                 [weakSelf.transferInButton setImage:[UIImage imageNamed:fundingItem.fundingIcon] forState:UIControlStateNormal];
                 _transferInItem = fundingItem;
             }else{
-                SSJNewFundingViewController *NewFundingVC = [[SSJNewFundingViewController alloc]init];
-                NewFundingVC.addNewFundBlock = ^(SSJFundingItem *newFundingItem){
-                    [weakSelf.transferInButton setTitle:newFundingItem.fundingName forState:UIControlStateNormal];
-                    [weakSelf.transferInButton setImage:[UIImage imageNamed:newFundingItem.fundingIcon] forState:UIControlStateNormal];
-                    _transferInItem = newFundingItem;
+                SSJFundingTypeSelectViewController *NewFundingVC = [[SSJFundingTypeSelectViewController alloc]init];
+                NewFundingVC.addNewFundingBlock = ^(SSJBaseItem *item){
+                    if ([item isKindOfClass:[SSJFundingItem class]]) {
+                        SSJFundingItem *fundItem = (SSJFundingItem *)item;
+                        [weakSelf.transferInButton setTitle:fundItem.fundingName forState:UIControlStateNormal];
+                        [weakSelf.transferInButton setImage:[UIImage imageNamed:fundItem.fundingIcon] forState:UIControlStateNormal];
+                        _transferInItem = fundItem;
+                    }else if ([item isKindOfClass:[SSJCreditCardItem class]]){
+                        SSJCreditCardItem *cardItem = (SSJCreditCardItem *)item;
+                        [weakSelf.transferInButton setTitle:cardItem.cardName forState:UIControlStateNormal];
+                        [weakSelf.transferInButton setImage:[UIImage imageNamed:@"ft_creditcard"] forState:UIControlStateNormal];
+                        _transferInItem = cardItem;
+                    }
+                    
                 };
                 [weakSelf.navigationController pushViewController:NewFundingVC animated:YES];
             }
@@ -258,11 +269,20 @@
                 [weakSelf.transferOutButton setImage:[UIImage imageNamed:fundingItem.fundingIcon] forState:UIControlStateNormal];
                 _transferOutItem = fundingItem;
             }else{
-                SSJNewFundingViewController *NewFundingVC = [[SSJNewFundingViewController alloc]init];
-                NewFundingVC.addNewFundBlock = ^(SSJFundingItem *newFundingItem){
-                    [weakSelf.transferOutButton setTitle:newFundingItem.fundingName forState:UIControlStateNormal];
-                    [weakSelf.transferOutButton setImage:[UIImage imageNamed:newFundingItem.fundingIcon] forState:UIControlStateNormal];
-                    _transferOutItem = newFundingItem;
+                SSJFundingTypeSelectViewController *NewFundingVC = [[SSJFundingTypeSelectViewController alloc]init];
+                NewFundingVC.addNewFundingBlock = ^(SSJBaseItem *item){
+                    if ([item isKindOfClass:[SSJFundingItem class]]) {
+                        SSJFundingItem *fundItem = (SSJFundingItem *)item;
+                        [weakSelf.transferOutButton setTitle:fundItem.fundingName forState:UIControlStateNormal];
+                        [weakSelf.transferOutButton setImage:[UIImage imageNamed:fundItem.fundingIcon] forState:UIControlStateNormal];
+                        _transferOutItem = fundItem;
+                    }else if ([item isKindOfClass:[SSJCreditCardItem class]]){
+                        SSJCreditCardItem *cardItem = (SSJCreditCardItem *)item;
+                        [weakSelf.transferOutButton setTitle:cardItem.cardName forState:UIControlStateNormal];
+                        [weakSelf.transferOutButton setImage:[UIImage imageNamed:@"ft_creditcard"] forState:UIControlStateNormal];
+                        _transferOutItem = cardItem;
+                    }
+                    
                 };
                 [weakSelf.navigationController pushViewController:NewFundingVC animated:YES];
             }
@@ -349,7 +369,26 @@
             return;
         }
     }
-    if ([_transferOutItem.fundingID isEqualToString:_transferInItem.fundingID]) {
+    __block NSString *transferInId;
+    __block NSString *transferOutId;
+    __block NSString *transferInName;
+    __block NSString *transferOutName;
+    if ([_transferInItem isKindOfClass:[SSJFundingItem class]]) {
+        transferInId = ((SSJFundingItem *)_transferInItem).fundingID;
+        transferInName = ((SSJFundingItem *)_transferInItem).fundingName;
+    }else{
+        transferInId = ((SSJCreditCardItem *)_transferInItem).cardId;
+        transferInName = ((SSJCreditCardItem *)_transferInItem).cardName;
+    }
+    if ([_transferOutItem isKindOfClass:[SSJFundingItem class]]) {
+        transferOutId = ((SSJFundingItem *)_transferOutItem).fundingID;
+        transferOutName = ((SSJFundingItem *)_transferOutItem).fundingName
+        ;
+    }else{
+        transferOutId = ((SSJCreditCardItem *)_transferOutItem).cardId;
+        transferOutName = ((SSJCreditCardItem *)_transferOutItem).cardName;
+    }
+    if ([transferInId isEqualToString:transferOutId]) {
         [CDAutoHideMessageHUD showMessage:@"请选择不同账户"];
         return;
     }else if ([str doubleValue] == 0 || [self.transferIntext.text isEqualToString:@""]) {
@@ -365,27 +404,27 @@
         NSString *userid = SSJUSERID();
         NSString *writedate = [[NSDate date] ssj_systemCurrentDateWithFormat:@"YYYY-MM-dd HH:mm:ss.SSS"];
         if (self.item == nil) {
-            if (![db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFUNSID , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE  , CBILLDATE , CBOOKSID , CMEMO) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",SSJUUID(),userid,str,@"3",_transferInItem.fundingID,@"",@"",writedate,@(SSJSyncVersion()),[NSNumber numberWithInt:0],[[NSDate date] ssj_systemCurrentDateWithFormat:@"YYYY-MM-dd"],booksid,weakSelf.memoInput.text])
+            if (![db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFUNSID , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE  , CBILLDATE , CBOOKSID , CMEMO) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",SSJUUID(),userid,str,@"3",transferInId,@"",@"",writedate,@(SSJSyncVersion()),[NSNumber numberWithInt:0],[[NSDate date] ssj_systemCurrentDateWithFormat:@"YYYY-MM-dd"],booksid,weakSelf.memoInput.text])
             {
                 *rollback = YES;
             }
-            if (![db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFUNSID , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE  , CBILLDATE , CBOOKSID , CMEMO) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",SSJUUID(),userid,str,@"4",_transferOutItem.fundingID,@"",@"",writedate,@(SSJSyncVersion()),[NSNumber numberWithInt:0],[[NSDate date] ssj_systemCurrentDateWithFormat:@"YYYY-MM-dd"],booksid,weakSelf.memoInput.text]) {
+            if (![db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFUNSID , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE  , CBILLDATE , CBOOKSID , CMEMO) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",SSJUUID(),userid,str,@"4",transferOutId,@"",@"",writedate,@(SSJSyncVersion()),[NSNumber numberWithInt:0],[[NSDate date] ssj_systemCurrentDateWithFormat:@"YYYY-MM-dd"],booksid,weakSelf.memoInput.text]) {
                 *rollback = YES;
             }
             SSJDispatch_main_async_safe(^(){
                 [self.navigationController popViewControllerAnimated:YES];
             });
         }else{
-            if (![db executeUpdate:@"update bk_user_charge set imoney = ? , ifunsid = ? , cwritedate = ? , iversion = ? , operatortype = 1 , cmemo = ? where ichargeid = ? and cuserid = ?",[NSNumber numberWithDouble:[str doubleValue]],_transferInItem.fundingID,writedate,@(SSJSyncVersion()),weakSelf.memoInput.text,weakSelf.item.transferInChargeId,userid]) {
+            if (![db executeUpdate:@"update bk_user_charge set imoney = ? , ifunsid = ? , cwritedate = ? , iversion = ? , operatortype = 1 , cmemo = ? where ichargeid = ? and cuserid = ?",[NSNumber numberWithDouble:[str doubleValue]],transferInId,writedate,@(SSJSyncVersion()),weakSelf.memoInput.text,weakSelf.item.transferInChargeId,userid]) {
                 *rollback = YES;
             }
-            if (![db executeUpdate:@"update bk_user_charge set imoney = ? , ifunsid = ? , cwritedate = ? , iversion = ? , operatortype = 1 , cmemo = ? where ichargeid = ? and cuserid = ?",[NSNumber numberWithDouble:[str doubleValue]],_transferOutItem.fundingID,writedate,@(SSJSyncVersion()),weakSelf.memoInput.text,weakSelf.item.transferOutChargeId,userid]) {
+            if (![db executeUpdate:@"update bk_user_charge set imoney = ? , ifunsid = ? , cwritedate = ? , iversion = ? , operatortype = 1 , cmemo = ? where ichargeid = ? and cuserid = ?",[NSNumber numberWithDouble:[str doubleValue]],transferOutId,writedate,@(SSJSyncVersion()),weakSelf.memoInput.text,weakSelf.item.transferOutChargeId,userid]) {
                 *rollback = YES;
             }
-            weakSelf.item.transferOutId = _transferOutItem.fundingID ? : weakSelf.item.transferOutId;
-            weakSelf.item.transferInId = _transferInItem.fundingID ? : weakSelf.item.transferInId;
-            weakSelf.item.transferOutName = _transferOutItem.fundingName ? : weakSelf.item.transferOutName;
-            weakSelf.item.transferInName = _transferInItem.fundingName ? : weakSelf.item.transferInName;
+            weakSelf.item.transferOutId = transferOutId ? : weakSelf.item.transferOutId;
+            weakSelf.item.transferInId = transferInId ? : weakSelf.item.transferInId;
+            weakSelf.item.transferOutName = transferOutName ? : weakSelf.item.transferOutName;
+            weakSelf.item.transferInName = transferInName ? : weakSelf.item.transferInName;
             weakSelf.item.transferMoney = str;
             weakSelf.item.transferMemo = weakSelf.memoInput.text;
             SSJDispatch_main_async_safe(^(){

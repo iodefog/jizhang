@@ -39,7 +39,7 @@
         self.moneyLabel.right = self.contentView.width - 10;
         self.moneyLabel.centerY = self.contentView.height / 2;
         self.transferSourceLabel.left = self.fundImage.right + 10;
-        self.transferSourceLabel.right = self.moneyLabel.left - 10;
+        self.transferSourceLabel.width = self.moneyLabel.left - self.fundImage.right - 20;
         self.transferSourceLabel.centerY = self.contentView.height / 2;
     }else{
         self.dateLabel.left = 20;
@@ -49,7 +49,7 @@
         self.moneyLabel.right = self.contentView.width - 10;
         self.moneyLabel.centerY = self.contentView.height / 2;
         self.transferSourceLabel.left = self.fundImage.right + 10;
-        self.transferSourceLabel.right = self.moneyLabel.left - 10;
+        self.transferSourceLabel.width = self.moneyLabel.left - self.fundImage.right - 20;
         self.transferSourceLabel.bottom = self.fundImage.centerY - 5;
         self.memoLabel.width = 200;
         self.memoLabel.left = self.fundImage.right + 10;
