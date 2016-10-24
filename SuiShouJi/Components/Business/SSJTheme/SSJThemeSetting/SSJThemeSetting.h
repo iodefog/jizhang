@@ -26,6 +26,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (void)updateTabbarAppearance;
 
++ (SSJThemeModel *)ThemeModelForModelId:(NSString *)Id;
+
 @end
 
 NS_ASSUME_NONNULL_END

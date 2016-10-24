@@ -13,6 +13,12 @@
 // 主题ID
 @property (nonatomic, copy) NSString *ID;
 
+// 主题的etag值
+@property (nonatomic, copy) NSString *etag;
+
+// 主题的版本
+@property (nonatomic, copy) NSString *version;
+
 // 主题名称
 @property (nonatomic, copy) NSString *name;
 

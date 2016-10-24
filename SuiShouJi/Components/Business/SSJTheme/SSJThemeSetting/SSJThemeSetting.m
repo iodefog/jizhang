@@ -66,6 +66,12 @@
     }
 }
 
++ (SSJThemeModel *)ThemeModelForModelId:(NSString *)Id {
+    NSDictionary *modelInfo = [NSKeyedUnarchiver unarchiveObjectWithFile:[self settingFilePath]];
+    SSJThemeModel *model = [modelInfo objectForKey:Id];
+    return model;
+}
+
 + (SSJThemeModel *)defaultThemeModel {
     SSJThemeModel *model = [[SSJThemeModel alloc] init];
     model.ID = SSJDefaultThemeID;

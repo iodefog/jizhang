@@ -78,9 +78,16 @@ static id _instance;
     NSURL *URL = [NSURL URLWithString:item.downLoadUrl];
     NSURLRequest *request = [NSURLRequest requestWithURL:URL];
     
+    SSJThemeModel *model = [SSJThemeSetting ThemeModelForModelId:item.themeId];
+    
+    if (model.etag.length > 0) {
+        [request setValue:model.etag forKey:@"forHTTPHeaderField"];
+    }
+    
     NSProgress *tProgress = nil;
     
     [self.downLoadingArr addObject:item.themeId];
+    
     
     NSURLSessionDownloadTask *downloadTask = [self.manager downloadTaskWithRequest:request progress:&tProgress destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
         if (![[NSString ssj_themeDirectory] stringByAppendingPathComponent:response.suggestedFilename]) {
@@ -232,6 +239,9 @@ static id _instance;
         }
         
         NSData * data = [entry newDataWithError:nil];
+        if ([fileManager fileExistsAtPath:[NSString stringWithFormat:@"%@/%@", path, entry.fileName]]) {
+            [fileManager removeItemAtPath:[NSString stringWithFormat:@"%@/%@", path, entry.fileName] error:NULL];
+        }
         [data writeToFile:[NSString stringWithFormat:@"%@/%@", path, entry.fileName] atomically:YES];
     }
     
