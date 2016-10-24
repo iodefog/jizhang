@@ -1,4 +1,4 @@
-//
+    //
 //  SSJBooksEditeOrNewViewController.m
 //  SuiShouJi
 //
@@ -11,6 +11,7 @@
 #import "UIViewController+MMDrawerController.h"
 #import "SSJBooksTypeStore.h"
 #import "SSJDatabaseQueue.h"
+#import "SSJDataSynchronizer.h"
 
 @interface SSJBooksEditeOrNewViewController ()
 
@@ -57,6 +58,10 @@
     [self.mm_drawerController setCloseDrawerGestureModeMask:MMCloseDrawerGestureModeAll];
 }
 
+-(void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 #pragma mark - Getter
 - (SSJNewOrEditCustomCategoryView *)booksEditeView{
     if (!_booksEditeView) {
@@ -93,14 +98,14 @@
         [CDAutoHideMessageHUD showMessage:@"请输入账本名称"];
         return;
     }
-    if (self.item.booksName.length > 5) {
+    if (self.item.booksName.length > 5) {                                                                                      
         [CDAutoHideMessageHUD showMessage:@"账本名称不能超过5个字"];
         return;
     }
     if ([SSJBooksTypeStore saveBooksTypeItem:self.item]) {
+        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+        [[NSNotificationCenter defaultCenter]postNotificationName:SSJBooksTypeDidChangeNotification object:nil];
         [self.navigationController popViewControllerAnimated:YES];
-    }else{
-        [CDAutoHideMessageHUD showMessage:@"保存失败"];
     }
 }
 

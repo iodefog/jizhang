@@ -18,6 +18,7 @@
 #import "SSJLocalNotificationStore.h"
 #import "SSJColorSelectViewController.h"
 #import "SSJReminderEditeViewController.h"
+#import "SSJFinancingHomeHelper.h"
 #import "SSJDataSynchronizer.h"
 
 #define NUM @"+-.0123456789"
@@ -386,7 +387,8 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 //    }];
     [SSJCreditCardStore saveCreditCardWithCardItem:weakSelf.item remindItem:weakSelf.remindItem Success:^(NSInteger operatortype){
         if (!operatortype) {
-            [weakSelf.navigationController popToRootViewControllerAnimated:YES];
+            UIViewController *viewControllerNeedToPop = [weakSelf.navigationController.viewControllers objectAtIndex:weakSelf.navigationController.viewControllers.count - 3];
+            [weakSelf.navigationController popToViewController:viewControllerNeedToPop animated:YES];
         }else{
             [weakSelf.navigationController popViewControllerAnimated:YES];
         }
@@ -401,12 +403,30 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 
 - (void)rightButtonClicked:(id)sender{
     __weak typeof(self) weakSelf = self;
-    [SSJCreditCardStore deleteCreditCardWithCardItem:self.item Success:^{
-        [weakSelf.navigationController popToRootViewControllerAnimated:YES];
-        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
-    } failure:^(NSError *error) {
-        [CDAutoHideMessageHUD showMessage:@"删除失败"];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"确定要删除该资金帐户吗?" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:NULL];
+    UIAlertAction *comfirm = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+        if (weakSelf.item.chargeCount) {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"删除该资金后，是否将展示在首页和报表的流水及相关借贷数据一并删除" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *reserve = [UIAlertAction actionWithTitle:@"仅删除资金" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [weakSelf deleteFundingItem:weakSelf.item type:0];
+            }];
+            UIAlertAction *destructive = [UIAlertAction actionWithTitle:@"一并删除" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+                [weakSelf deleteFundingItem:weakSelf.item type:1];
+            }];
+            UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            }];
+            [alert addAction:reserve];
+            [alert addAction:destructive];
+            [alert addAction:cancel];
+            [weakSelf presentViewController:alert animated:YES completion:NULL];
+        }else{
+            [weakSelf deleteFundingItem:weakSelf.item type:0];
+        }
     }];
+    [alert addAction:cancel];
+    [alert addAction:comfirm];
+    [self presentViewController:alert animated:YES completion:NULL];
 }
 
 - (void)transferTextDidChange{
@@ -581,6 +601,16 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 }
 
 #pragma mark - Private
+- (void)deleteFundingItem:(SSJBaseItem *)item type:(BOOL)type{
+    __weak typeof(self) weakSelf = self;
+    [SSJFinancingHomeHelper deleteFundingWithFundingItem:item deleteType:type Success:^{
+        [weakSelf.navigationController popToRootViewControllerAnimated:YES];
+        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+    } failure:^(NSError *error) {
+        NSLog(@"%@",[error localizedDescription]);
+    }];
+}
+
 /**
  *   限制输入框小数点(输入框只改变时候调用valueChange)
  *

@@ -13,6 +13,7 @@
 #import "SSJSynchronizeTaskQueue.h"
 #import "SSJNetworkReachabilityManager.h"
 #import "SSJLoginViewController+SSJCategory.h"
+#import "SSJDomainManager.h"
 
 @interface SSJSynchronizeBlock : NSObject
 
@@ -124,8 +125,9 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
 }
 
 - (void)timingSyncData {
-    if (SSJSyncSetting() == SSJSyncSettingTypeWIFI
-        && [AFNetworkReachabilityManager managerForDomain:SSJBaseURLString].isReachable) {
+    if (SSJIsUserLogined()
+        && SSJSyncSetting() == SSJSyncSettingTypeWIFI
+        && [AFNetworkReachabilityManager managerForDomain:[SSJDomainManager domain]].isReachable) {
         [self startSyncWithSuccess:NULL failure:NULL];
     }
 }
@@ -150,6 +152,10 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
 }
 
 - (void)startSyncIfNeededWithSuccess:(void (^)(SSJDataSynchronizeType type))success failure:(void (^)(SSJDataSynchronizeType type, NSError *error))failure {
+    
+    if (!SSJIsUserLogined()) {
+        return;
+    }
     
     switch (SSJSyncSetting()) {
         case SSJSyncSettingTypeWIFI:

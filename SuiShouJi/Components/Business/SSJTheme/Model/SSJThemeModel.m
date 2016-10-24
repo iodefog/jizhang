@@ -54,6 +54,10 @@
     [aCoder encodeObject:_reportFormsCurveIncomeFillColor forKey:@"reportFormsCurveIncomeFillColor"];
     [aCoder encodeObject:_reportFormsCurvePaymentFillColor forKey:@"reportFormsCurvePaymentFillColor"];
     [aCoder encodeFloat:_recordMakingInputViewAlpha forKey:@"recordMakingInputViewAlpha"];
+    [aCoder encodeObject:_bookKeepingHomeMutiButtonSelectColor forKey:@"bookKeepingHomeMutiButtonSelectColor"];
+    [aCoder encodeObject:_bookKeepingHomeMutiButtonNormalColor forKey:@"bookKeepingHomeMutiButtonNormalColor"];
+    [aCoder encodeObject:_searchResultHeaderBackgroundColor forKey:@"searchResultHeaderBackgroundColor"];
+    
 }
 
 - (nullable instancetype)initWithCoder:(NSCoder *)aDecoder {
@@ -101,6 +105,10 @@
         _reportFormsCurveIncomeFillColor = [aDecoder decodeObjectForKey:@"reportFormsCurveIncomeFillColor"];
         _reportFormsCurvePaymentFillColor = [aDecoder decodeObjectForKey:@"reportFormsCurvePaymentFillColor"];
         _recordMakingInputViewAlpha = [aDecoder decodeFloatForKey:@"recordMakingInputViewAlpha"];
+        _bookKeepingHomeMutiButtonSelectColor = [aDecoder decodeObjectForKey:@"bookKeepingHomeMutiButtonSelectColor"];
+        _bookKeepingHomeMutiButtonNormalColor = [aDecoder decodeObjectForKey:@"bookKeepingHomeMutiButtonNormalColor"];
+        _searchResultHeaderBackgroundColor = [aDecoder decodeObjectForKey:@"recordMakingInputViewAlpha"];
+        
     }
     return self;
 }
@@ -149,7 +157,10 @@
                                                           @"reportFormsCurvePaymentColor":_reportFormsCurvePaymentColor,
                                                           @"reportFormsCurveIncomeFillColor":_reportFormsCurveIncomeFillColor,
                                                           @"reportFormsCurvePaymentFillColor":_reportFormsCurvePaymentFillColor,
-                                                          @"recordMakingInputViewAlpha":@(_recordMakingInputViewAlpha)}];
+                                                          @"recordMakingInputViewAlpha":@(_recordMakingInputViewAlpha),
+                                                          @"bookKeepingHomeMutiButtonSelectColor":_bookKeepingHomeMutiButtonSelectColor,
+                                                          @"bookKeepingHomeMutiButtonNormalColor":_bookKeepingHomeMutiButtonNormalColor,
+                                                          @"searchResultHeaderBackgroundColor":_searchResultHeaderBackgroundColor}];
 }
 
 @end

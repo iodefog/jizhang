@@ -10,7 +10,7 @@
 #import <UIKit/UIKit.h>
 #import "SSJDatabaseQueue.h"
 #import "SSJDatePeriod.h"
-#import "SSJFundAccountTable.h"
+//#import "SSJFundAccountTable.h"
 #import "SSJDailySumChargeTable.h"
 #import "DTTimePeriod.h"
 
@@ -243,9 +243,15 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
         }
     }
     
-    //  根据流水表更新资金帐户余额表和每日流水统计表
-    if (![SSJFundAccountTable updateBalanceForUserId:userId inDatabase:db]
-        || ![SSJDailySumChargeTable updateDailySumChargeForUserId:userId inDatabase:db]) {
+//    //  根据流水表更新资金帐户余额表和每日流水统计表
+//    if (![SSJFundAccountTable updateBalanceForUserId:userId inDatabase:db]
+//        || ![SSJDailySumChargeTable updateDailySumChargeForUserId:userId inDatabase:db]) {
+//        *rollback = YES;
+//        return NO;
+//    }
+    
+    //  更新每日流水统计表
+    if (![SSJDailySumChargeTable updateDailySumChargeForUserId:userId inDatabase:db]) {
         *rollback = YES;
         return NO;
     }

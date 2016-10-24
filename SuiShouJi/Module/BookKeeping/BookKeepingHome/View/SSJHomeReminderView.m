@@ -8,6 +8,8 @@
 
 #import "SSJHomeReminderView.h"
 #import "SSJDatabaseQueue.h"
+#import "UIView+SSJViewAnimatioin.h"
+#import "SSJBookKeepingHomeHelper.h"
 
 @interface SSJHomeReminderView()
 @property (nonatomic,strong) UIImageView *remindImage;
@@ -36,6 +38,15 @@
     self.remindLabel.centerX = self.width / 2;
     self.closeButton.centerX = self.width / 2;
     self.closeButton.top = self.remindLabel.bottom + 15;
+}
+
+- (void)show {
+    self.alpha = 0;
+    [[UIApplication sharedApplication].keyWindow addSubview:self];
+    [UIView animateWithDuration:0.25 animations:^{
+        self.alpha = 1;
+    }];
+    [self setBudgetHasRemind];
 }
 
 -(UIImageView *)remindImage{
@@ -72,52 +83,106 @@
 }
 
 -(void)closeButtonClicked:(id)sender{
-    [self setBudgetHasRemind];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [UIView animateWithDuration:0.25 animations:^{
+            self.alpha = 0;
+        } completion:^(BOOL finished) {
+            [self removeFromSuperview];
+        }];
+    });
 }
 
 -(void)setModel:(SSJBudgetModel *)model{
     _model = model;
-    NSString *typeStr;
-    switch (_model.type) {
-        case SSJBudgetPeriodTypeWeek:
-            typeStr = @"本周";
-            break;
-        case SSJBudgetPeriodTypeMonth:
-            typeStr = @"这个月";
-            break;
-        case SSJBudgetPeriodTypeYear:
-            typeStr = @"今年";
-            break;
-        default:
-            break;
-    }
-    if (_model.budgetMoney < _model.payMoney) {
-        NSMutableAttributedString *attriString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"亲爱的小主，%@您已经超支%.2f元预算了。\n养鱼要蓄水，财富要积累，省点花钱吧",typeStr,_model.payMoney - _model.budgetMoney]];
-        NSString *moneyStr = [NSString stringWithFormat:@"%.2f元",_model.payMoney - _model.budgetMoney];
-        NSRange range = [[NSString stringWithFormat:@"亲爱的小主，%@您已经超支%.2f元预算了。\n养鱼要蓄水，财富要积累，省点花钱吧",typeStr,_model.payMoney - _model.budgetMoney] rangeOfString:moneyStr];
+    if ([_model.billIds isEqualToArray:@[@"all"]]) {
+        
+        NSString *typeStr;
+        switch (_model.type) {
+            case SSJBudgetPeriodTypeWeek:
+                typeStr = @"本周";
+                break;
+            case SSJBudgetPeriodTypeMonth:
+                typeStr = @"这个月";
+                break;
+            case SSJBudgetPeriodTypeYear:
+                typeStr = @"今年";
+                break;
+            default:
+                break;
+        }
+        
+        NSString *moneyStr = nil;
+        NSMutableAttributedString *attriString = nil;
+        UIColor *highlightedColor = nil;
+        
+        if (_model.budgetMoney < _model.payMoney) {
+            highlightedColor = [UIColor ssj_colorWithHex:SSJOverrunRedColorValue];
+            moneyStr = [NSString stringWithFormat:@"%.2f元",_model.payMoney - _model.budgetMoney];
+            attriString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"亲爱的小主，%@您已经超支%@预算了。\n养鱼要蓄水，省点花钱吧", typeStr, moneyStr]];
+        } else {
+            highlightedColor = [UIColor ssj_colorWithHex:@"45fffd"];
+            moneyStr = [NSString stringWithFormat:@"%.2f元",_model.budgetMoney - _model.payMoney];
+            attriString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"亲爱的小主，%@您只剩下%@预算了。\n养鱼要蓄水，省点花钱吧", typeStr, moneyStr]];
+        }
+        
+        NSRange range = [attriString.string rangeOfString:moneyStr];
         [attriString addAttribute:NSForegroundColorAttributeName
-                            value:[UIColor ssj_colorWithHex:@"45fffd"]
+                            value:highlightedColor
                             range:range];
         self.remindLabel.attributedText = attriString;
         [self.remindLabel sizeToFit];
-    }else{
-        NSMutableAttributedString *attriString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"亲爱的小主，%@您只剩下%.2f元预算了。\n养鱼要蓄水，财富要积累，省点花钱吧",typeStr,_model.budgetMoney - _model.payMoney]];
-        NSString *moneyStr = [NSString stringWithFormat:@"%.2f元",_model.budgetMoney - _model.payMoney];
-        NSRange range = [[NSString stringWithFormat:@"亲爱的小主，%@您只剩下%.2f元预算了。\n养鱼要蓄水，财富要积累，省点花钱吧",typeStr,_model.budgetMoney - _model.payMoney]rangeOfString:moneyStr];
+    } else {
+        
+        NSString *typeStr;
+        switch (_model.type) {
+            case SSJBudgetPeriodTypeWeek:
+                typeStr = @"周";
+                break;
+            case SSJBudgetPeriodTypeMonth:
+                typeStr = @"月";
+                break;
+            case SSJBudgetPeriodTypeYear:
+                typeStr = @"年";
+                break;
+            default:
+                break;
+        }
+        
+        NSString *billNames = nil;
+        if (_model.billIds.count > 2) {
+            billNames = [SSJBookKeepingHomeHelper queryBillNameForBillIds:[_model.billIds subarrayWithRange:NSMakeRange(0, 2)]];
+            billNames = [NSString stringWithFormat:@"%@等", billNames];
+        } else {
+            billNames = [SSJBookKeepingHomeHelper queryBillNameForBillIds:_model.billIds];
+        }
+        
+        NSString *moneyStr = nil;
+        NSMutableAttributedString *attriString = nil;
+        UIColor *highlightedColor = nil;
+        
+        if (_model.budgetMoney < _model.payMoney) {
+            highlightedColor = [UIColor ssj_colorWithHex:SSJOverrunRedColorValue];
+            moneyStr = [NSString stringWithFormat:@"%.2f元",_model.payMoney - _model.budgetMoney];
+            attriString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"亲爱的小主，您的%@分类预算-%@已经超支%@了。\n养鱼要蓄水，省点花钱吧！", typeStr, billNames, moneyStr]];
+        } else {
+            highlightedColor = [UIColor ssj_colorWithHex:@"45fffd"];
+            moneyStr = [NSString stringWithFormat:@"%.2f元",_model.budgetMoney - _model.payMoney];
+            attriString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"亲爱的小主，您的%@分类预算-%@只剩下%@了。\n养鱼要蓄水，省点花钱吧！", typeStr, billNames, moneyStr]];
+        }
+        
+        NSRange range = [attriString.string rangeOfString:moneyStr];
         [attriString addAttribute:NSForegroundColorAttributeName
-                            value:[UIColor ssj_colorWithHex:@"45fffd"]
+                            value:highlightedColor
                             range:range];
         self.remindLabel.attributedText = attriString;
         [self.remindLabel sizeToFit];
     }
+
 }
 
 -(void)setBudgetHasRemind{
     [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
-        [db executeUpdate:@"update BK_USER_BUDGET set ihasremind = 1 where IBID = ? and CUSERID = ?",self.model.ID,SSJUSERID()];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self removeFromSuperview];
-        });
+        [db executeUpdate:@"update BK_USER_BUDGET set ihasremind = 1, cwritedate = ?, iversion = ?, operatortype = 1 where IBID = ? and CUSERID = ?", [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], @(SSJSyncVersion()), self.model.ID, SSJUSERID()];
     }];
 }
 

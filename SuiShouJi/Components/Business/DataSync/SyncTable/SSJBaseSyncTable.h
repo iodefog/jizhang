@@ -88,4 +88,14 @@
  */
 + (BOOL)mergeRecords:(NSArray *)records forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error;
 
+
+/**
+ 返回本地数据库的字段名和服务端数据库字段名的映射；
+ 父类返回nil，字累根据情况复写此方法；
+ 此举是为了填坑，本地数据库字段名命名错误导致相应的数据无法同步
+
+ @return
+ */
++ (NSDictionary *)fieldMapping;
+
 @end

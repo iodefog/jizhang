@@ -19,4 +19,7 @@
 //成员颜色
 @property(nonatomic, strong) NSString *memberColor;
 
+//成员颜色
+@property(nonatomic) NSInteger memberOrder;
+
 @end

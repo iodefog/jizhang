@@ -42,6 +42,7 @@
 #import "SSJUmengManager.h"
 #import "SSJLocalNotificationHelper.h"
 #import "SSJLocalNotificationStore.h"
+#import "SSJDomainManager.h"
 
 //  进入后台超过的时限后进入锁屏
 static const NSTimeInterval kLockScreenDelay = 60;
@@ -82,7 +83,10 @@ NSDate *SCYEnterBackgroundTime() {
     
     [self initializeDatabaseWithFinishHandler:^{
         //  启动时强制同步一次
-        [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
+        if (SSJIsUserLogined()) {
+            [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
+        }
+        
         //  开启定时同步
         [[SSJDataSynchronizer shareInstance] startTimingSync];
         
@@ -118,7 +122,6 @@ NSDate *SCYEnterBackgroundTime() {
     if (SSJIsFirstLaunchForCurrentVersion()) {
         [[NSUserDefaults standardUserDefaults]setObject:[NSDate date]forKey:SSJLastPopTimeKey];
         [[NSUserDefaults standardUserDefaults]setBool:NO forKey:SSJHaveLoginOrRegistKey];
-        [[NSUserDefaults standardUserDefaults]setBool:NO forKey:SSJHaveEnterFundingHomeKey];
         [SSJJspatchAnalyze removePatch];
     }
     
@@ -148,6 +151,8 @@ NSDate *SCYEnterBackgroundTime() {
         } animated:NO];
         manager = nil;
     }];
+    
+    [SSJDomainManager requestDomain];
 
     return YES;
 }

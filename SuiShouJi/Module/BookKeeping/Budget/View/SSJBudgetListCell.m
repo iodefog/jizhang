@@ -48,6 +48,11 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
     
+    [self.typeLab sizeToFit];
+    [self.periodLab sizeToFit];
+    [self.paymentLab sizeToFit];
+    [self.budgetLab sizeToFit];
+    
     self.typeLab.center = CGPointMake(self.contentView.width * 0.5, 30);
     self.periodLab.center = CGPointMake(self.contentView.width * 0.5, 55);
     self.paymentLab.leftBottom = CGPointMake(10, self.contentView.height - 15);
@@ -61,26 +66,12 @@
     }
     
     SSJBudgetListCellItem *item = (SSJBudgetListCellItem *)cellItem;
-    self.typeLab.text = item.typeName;
-    [self.typeLab sizeToFit];
-    
+    self.typeLab.text = item.title;
     self.periodLab.text = item.period;
-    [self.periodLab sizeToFit];
-    
-    NSMutableAttributedString *paymentStr = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"已花：%.2f", item.payment]];
-    [paymentStr setAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:20],
-                                NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor]} range:NSMakeRange(3, paymentStr.length - 3)];
-    self.paymentLab.attributedText = paymentStr;
-    [self.paymentLab sizeToFit];
-    
-    NSMutableAttributedString *budgetStr = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"计划：%.2f", item.budget]];
-    [budgetStr setAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:20],
-                               NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor]} range:NSMakeRange(3, budgetStr.length - 3)];
-    self.budgetLab.attributedText = budgetStr;
-    [self.budgetLab sizeToFit];
-    
-    self.waveView.percent = (item.payment / item.budget);
-    self.waveView.money = item.budget - item.payment;
+    self.paymentLab.attributedText = item.expend;
+    self.budgetLab.attributedText = item.budget;
+    self.waveView.budgetMoney = item.budgetValue;
+    self.waveView.expendMoney = item.expendValue;
 }
 
 - (UILabel *)typeLab {
@@ -88,7 +79,7 @@
         _typeLab = [[UILabel alloc] init];
         _typeLab.backgroundColor = [UIColor clearColor];
         _typeLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        _typeLab.font = [UIFont systemFontOfSize:18];
+        _typeLab.font = [UIFont systemFontOfSize:15];
     }
     return _typeLab;
 }
@@ -131,11 +122,7 @@
         _waveView.waveCycle = 1;
         _waveView.waveGrowth = 3;
         _waveView.waveOffset = 60;
-        _waveView.fullWaveAmplitude = 8;
-        _waveView.fullWaveSpeed = 4;
-        _waveView.fullWaveCycle = 4;
         _waveView.outerBorderWidth = 8;
-        _waveView.showText = YES;
     }
     return _waveView;
 }

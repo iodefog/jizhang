@@ -24,7 +24,7 @@
 #import "SSJUserTableManager.h"
 #import "SSJBaselineTextField.h"
 #import "SSJBorderButton.h"
-#import "SSJFundAccountTable.h"
+//#import "SSJFundAccountTable.h"
 #import "SSJThirdPartyLoginManger.h"
 #import "WXApi.h"
 #import "SSJBookkeepingTreeStore.h"
@@ -343,8 +343,8 @@
             [SSJUserDefaultDataCreater createDefaultMembersForUserId:SSJUSERID() inDatabase:db];
         }
         
-        //  更新资金帐户余额
-        [SSJFundAccountTable updateBalanceForUserId:SSJUSERID() inDatabase:db];
+//        //  更新资金帐户余额
+//        [SSJFundAccountTable updateBalanceForUserId:SSJUSERID() inDatabase:db];
     }];
     
     // 如果本地保存的最近一次签到时间和服务端返回的不一致，说明本地没有保存最新的签到记录

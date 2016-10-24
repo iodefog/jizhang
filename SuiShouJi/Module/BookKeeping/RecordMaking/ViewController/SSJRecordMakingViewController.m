@@ -10,7 +10,6 @@
 #import "SSJADDNewTypeViewController.h"
 #import "SSJSegmentedControl.h"
 #import "SSJSmallCalendarView.h"
-#import "SSJNewFundingViewController.h"
 #import "SSJDatabaseQueue.h"
 #import "SSJDataSynchronizer.h"
 #import "SSJChargeCircleSelectView.h"
@@ -19,6 +18,7 @@
 #import "SSJMemberSelectView.h"
 #import "SSJMemberManagerViewController.h"
 #import "SSJNewMemberViewController.h"
+#import "SSJFundingTypeSelectViewController.h"
 
 #import "SSJCustomKeyboard.h"
 #import "SSJCalendarView.h"
@@ -31,6 +31,7 @@
 #import "SSJChargeMemBerItem.h"
 #import "YYKeyboardManager.h"
 #import "SSJRecordMakingStore.h"
+#import "SSJCreditCardItem.h"
 
 #define INPUT_DEFAULT_COLOR [UIColor ssj_colorWithHex:@"#dddddd"]
 
@@ -197,13 +198,25 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
                 weakSelf.item.fundOperatorType = 1;
                 [weakSelf updateFundingType];
             }else{
-                SSJNewFundingViewController *NewFundingVC = [[SSJNewFundingViewController alloc]init];
-                NewFundingVC.addNewFundBlock = ^(SSJFundingItem *newFundingItem){
-                    [weakSelf.FundingTypeSelectView reloadDate];
-                    weakSelf.item.fundId = fundingItem.fundingID;
-                    weakSelf.item.fundName = fundingItem.fundingName;
-                    weakSelf.item.fundOperatorType = 0;
-                    [weakSelf updateFundingType];
+                SSJFundingTypeSelectViewController *NewFundingVC = [[SSJFundingTypeSelectViewController alloc]init];
+                NewFundingVC.needLoanOrNot = NO;
+                NewFundingVC.addNewFundingBlock = ^(SSJBaseItem *item){
+                    if ([item isKindOfClass:[SSJFundingItem class]]) {
+                        SSJFundingItem *fundItem = (SSJFundingItem *)item;
+                        [weakSelf.FundingTypeSelectView reloadDate];
+                        weakSelf.item.fundId = fundItem.fundingID;
+                        weakSelf.item.fundName = fundItem.fundingName;
+                        weakSelf.item.fundOperatorType = 0;
+                        [weakSelf updateFundingType];
+                    }else if ([item isKindOfClass:[SSJCreditCardItem class]]){
+                        SSJCreditCardItem *cardItem = (SSJCreditCardItem *)item;
+                        [weakSelf.FundingTypeSelectView reloadDate];
+                        weakSelf.item.fundId = cardItem.cardId;
+                        weakSelf.item.fundName = cardItem.cardName;
+                        weakSelf.item.fundOperatorType = 0;
+                        [weakSelf updateFundingType];
+                    }
+
                 };
                 [weakSelf.navigationController pushViewController:NewFundingVC animated:YES];
             }
@@ -267,7 +280,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
             __strong typeof(weakSelf) strongSelf = weakSelf;
             strongSelf -> _needToDismiss = YES;
         };
-        _memberSelectView.comfirmBlock = ^(NSArray *selectedMemberItems){
+        _memberSelectView.selectedMemberDidChangeBlock = ^(NSArray *selectedMemberItems){
             weakSelf.item.membersItem = [selectedMemberItems mutableCopy];
             [weakSelf updateMembers];
         };
@@ -511,6 +524,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 - (void)endEditingAction {
     _paymentTypeView.editing = NO;
     _incomeTypeView.editing = NO;
+    [self updateNavigationRightItem];
 //    [self.navigationItem setRightBarButtonItem:nil animated:YES];
 }
 

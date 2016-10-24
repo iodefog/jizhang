@@ -20,15 +20,11 @@
     if (self = [super initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:reuseIdentifier]) {
         
         self.selectionStyle = UITableViewCellSelectionStyleNone;
-        
         self.textLabel.font = [UIFont systemFontOfSize:18];
-        self.textLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        
         self.detailTextLabel.font = [UIFont systemFontOfSize:11];
-        self.detailTextLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-        
         self.switchCtrl = [[UISwitch alloc] init];
         self.accessoryView = self.switchCtrl;
+        [self updateAppearance];
     }
     return self;
 }
@@ -36,9 +32,24 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
     
-    self.textLabel.left = self.detailTextLabel.left = 10;
+    [self.imageView sizeToFit];
+    self.imageView.left = 10;
+    self.imageView.centerY = self.contentView.height * 0.5;
+    
+    self.textLabel.left = self.detailTextLabel.left = self.imageView.right + 10;
     self.textLabel.centerY = self.contentView.height * 0.5;
     self.detailTextLabel.centerY = self.contentView.height - (self.contentView.height - self.textLabel.bottom) * 0.5;
+}
+
+- (void)updateCellAppearanceAfterThemeChanged {
+    [super updateCellAppearanceAfterThemeChanged];
+    [self updateAppearance];
+}
+
+- (void)updateAppearance {
+    self.imageView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    self.textLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    self.detailTextLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
 }
 
 @end

@@ -37,6 +37,29 @@
 +(SSJBooksTypeItem *)queryCurrentBooksTypeForBooksId:(NSString *)booksid;
 
 
-+ (BOOL)deleteBooksTypeWithBooksId:(NSString *)booksId error:(NSError **)error;
+/**
+ 保存账本顺序
 
+ @param items   账本item的数组
+ @param success 保存成功的回调
+ @param failure 保存失败的回调
+ */
++ (void)saveBooksOrderWithItems:(NSArray *)items
+                         sucess:(void(^)())success
+                        failure:(void (^)(NSError *error))failure;
+
+
+
+/**
+ 删除账本
+
+ @param items   要删除的账本
+ @param type    删除的类型(0为不删除流水,1为删除流水)
+ @param success 删除成功的回调
+ @param failure 删除失败的回调
+ */
++ (void)deleteBooksTypeWithbooksItems:(NSArray *)items
+                           deleteType:(BOOL)type
+                              Success:(void(^)())success
+                              failure:(void (^)(NSError *error))failure;
 @end

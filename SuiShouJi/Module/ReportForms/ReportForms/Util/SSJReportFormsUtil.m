@@ -32,7 +32,7 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
             case SSJBillTypeIncome:
             case SSJBillTypePay: {
                 NSString *incomeOrPayType = type == SSJBillTypeIncome ? @"0" : @"1";
-                result = [db executeQuery:@"select distinct strftime('%Y-%m', a.cbilldate) from bk_user_charge as a, bk_bill_type as b where  a.cuserid = ? and a.ibillid = b.id and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and a.cbooksid = ? and b.itype = ? and b.istate <> 2 order by a.cbilldate", SSJUSERID(), userItem.currentBooksId, incomeOrPayType];
+                result = [db executeQuery:@"select distinct strftime('%Y-%m', a.cbilldate) from bk_user_charge as a, bk_bill_type as b where a.cuserid = ? and a.ibillid = b.id and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and a.cbooksid = ? and b.itype = ? and b.istate <> 2 order by a.cbilldate", SSJUSERID(), userItem.currentBooksId, incomeOrPayType];
             }   break;
                 
             case SSJBillTypeSurplus: {
@@ -57,16 +57,17 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
             return;
         }
         
-//        NSInteger year = 0;
+        NSDate *lastDate = nil;
         NSMutableArray *list = [NSMutableArray array];
         while ([result next]) {
             NSString *dateStr = [result stringForColumnIndex:0];
             NSDate *date = [NSDate dateWithString:dateStr formatString:@"yyyy-MM"];
-//            if (year && year != [date year]) {
-//                SSJDatePeriod *period = [SSJDatePeriod datePeriodWithPeriodType:SSJDatePeriodTypeYear date:date];
-//                [list addObject:period];
-//                year = [date year];
-//            }
+            if (lastDate && [lastDate year] != [date year]) {
+                SSJDatePeriod *period = [SSJDatePeriod datePeriodWithPeriodType:SSJDatePeriodTypeYear date:lastDate];
+                [list addObject:period];
+            }
+            
+            lastDate = date;
             
             SSJDatePeriod *period = [SSJDatePeriod datePeriodWithPeriodType:SSJDatePeriodTypeMonth date:date];
             [list addObject:period];
@@ -75,6 +76,9 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
         [result close];
         
         if (list.count) {
+            SSJDatePeriod *period = [SSJDatePeriod datePeriodWithPeriodType:SSJDatePeriodTypeYear date:lastDate];
+            [list addObject:period];
+            
             SSJDatePeriod *firstPeriod = [list firstObject];
             SSJDatePeriod *lastPeriod = [list lastObject];
             [list addObject:[SSJDatePeriod datePeriodWithStartDate:firstPeriod.startDate endDate:lastPeriod.endDate]];
@@ -194,7 +198,6 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
             item.colorValue = [resultSet stringForColumn:@"ccolor"];
             item.imageName = [resultSet stringForColumn:@"ccoin"];
             item.name = [resultSet stringForColumn:@"cname"];
-            item.titleColor = SSJ_CURRENT_THEME.mainColor;
             [result addObject:item];
         }
         
@@ -245,7 +248,6 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
             item.money = [resultSet doubleForColumn:@"sum(a.imoney)"];
             item.colorValue = type == 0 ? @"#f56262" : @"#59ae65";
             item.imageName = type == 0 ? @"reportForms_income" : @"reportForms_expenses";
-            item.titleColor = SSJ_CURRENT_THEME.mainColor;
             [result addObject:item];
             amount += item.money;
         }
@@ -543,7 +545,6 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
             item.ID = [resultSet stringForColumn:@"cmemberid"];
             item.money = [resultSet doubleForColumn:@"sum(mc.imoney)"];
             item.scale = item.money / amount;
-            item.titleColor = SSJ_CURRENT_THEME.mainColor;
             item.isMember = YES;
             [result addObject:item];
         }

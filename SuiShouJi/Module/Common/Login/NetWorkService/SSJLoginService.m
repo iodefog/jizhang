@@ -138,7 +138,7 @@
                      @"openid":@"oauthid"};
         }];
         self.item = [SSJUserItem mj_objectWithKeyValues:result];
-        self.item.loginType = [NSString stringWithFormat:@"%ld",self.loginType];
+        self.item.loginType = [NSString stringWithFormat:@"%luld",(unsigned long)self.loginType];
         if (self.loginType != SSJLoginTypeNormal) {
             self.item.mobileNo = @"";
         }
@@ -147,7 +147,7 @@
 
         self.userBillArray = [NSArray arrayWithArray:[dict objectForKey:@"userBill"]];
         self.fundInfoArray = [NSArray arrayWithArray:[dict objectForKey:@"fundInfo"]];
-        self.booksTypeArray = [NSArray arrayWithArray:[dict objectForKey:@"booksType"]];
+        self.booksTypeArray = [NSArray arrayWithArray:[dict objectForKey:@"bookType"]];
         self.membersArray = [NSArray arrayWithArray:[dict objectForKey:@"bk_member"]];
         self.checkInModel = [SSJBookkeepingTreeCheckInModel mj_objectWithKeyValues:[dict objectForKey:@"userTree"]];
     }

@@ -28,7 +28,19 @@
 
 + (void)SaveFundingOderWithItems:(NSArray <SSJFinancingHomeitem *> *)items error:(NSError **)error;
 
-+ (BOOL)deleteFundingWithFundingItem:(SSJFinancingHomeitem *)item;
+
+/**
+ 删除某个账户
+
+ @param item    要删除的item
+ @param type    删除的类型(0为不删除流水,1为删除流水)
+ @param success 删除成功的回调
+ @param failure 删除失败的回调
+ */
++ (void)deleteFundingWithFundingItem:(SSJBaseItem *)item
+                          deleteType:(BOOL)type
+                             Success:(void(^)())success
+                             failure:(void (^)(NSError *error))failure;
 
 + (SSJFinancingHomeitem *)queryFundItemWithFundingId:(NSString *)fundingId;
 @end

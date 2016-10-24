@@ -51,6 +51,9 @@
 //  设置选中的按钮下标
 - (void)setSelectedIndex:(NSInteger)index animated:(BOOL)animated;
 
+//  设置按钮图片
+- (void)setButtonImage:(UIImage *)image layoutType:(SSJButtonLayoutType)type spaceBetweenImageAndTitle:(CGFloat)space forControlState:(UIControlState)state atIndex:(NSInteger)index;
+
 @end
 
 //  代理协议

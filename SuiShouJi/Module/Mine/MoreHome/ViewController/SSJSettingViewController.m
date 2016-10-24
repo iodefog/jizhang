@@ -24,6 +24,7 @@
 #import "SSJNetworkReachabilityManager.h"
 #import "SSJDataSynchronizer.h"
 #import "SSJLocalNotificationHelper.h"
+#import "SSJLoginViewController.h"
 
 static NSString *const kTitle1 = @"自动同步设置";
 static NSString *const kTitle2 = @"数据重新拉取";
@@ -133,37 +134,28 @@ static NSString *const kTitle8 = @"点击上方微信号复制，接着去微信
     
     //  重新拉去
     if ([title isEqualToString:kTitle2]) {
-//        NSAttributedString *massage = [[NSAttributedString alloc] initWithString:@"手机上的记账数据将重新从云端获取，若您多个手机使用APP且数据不一致时可重新拉取，请在WIFi下操作。" attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:18]}];
-//        SSJStartUpgradeAlertView *alert = [[SSJStartUpgradeAlertView alloc]initWithTitle:@"温馨提示" message:massage cancelButtonTitle:@"取消" sureButtonTitle:@"立即拉取" cancelButtonClickHandler:^(SSJStartUpgradeAlertView * _Nonnull alert) {
-//            [alert dismiss];
-//        } sureButtonClickHandler:^(SSJStartUpgradeAlertView * _Nonnull alert) {
-//            [alert dismiss];
-//            
-//            if ([SSJNetworkReachabilityManager networkReachabilityStatus] == SSJNetworkReachabilityStatusNotReachable) {
-//                [CDAutoHideMessageHUD showMessage:@"请连接网络后重试"];
-//                return;
-//            }
-//            
-//            [SSJDataClearHelper clearLocalDataWithSuccess:^{
-//                [CDAutoHideMessageHUD showMessage:@"重新拉取数据成功"];
-//            } failure:^(NSError *error) {
-//                [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
-//            }];
-//        }];
-//        [alert show];
         
-        [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"手机上的记账数据将重新从云端获取，若您多个手机使用APP且数据不一致时可重新拉取，请在WIFi下操作。" action:[SSJAlertViewAction actionWithTitle:@"取消" handler:NULL], [SSJAlertViewAction actionWithTitle:@"立即拉取" handler:^(SSJAlertViewAction * _Nonnull action) {
-            if ([SSJNetworkReachabilityManager networkReachabilityStatus] == SSJNetworkReachabilityStatusNotReachable) {
-                [CDAutoHideMessageHUD showMessage:@"请连接网络后重试"];
-                return;
-            }
-            
-            [SSJDataClearHelper clearLocalDataWithSuccess:^{
-                [CDAutoHideMessageHUD showMessage:@"重新拉取数据成功"];
-            } failure:^(NSError *error) {
-                [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
-            }];
-        }], nil];
+        if (SSJIsUserLogined()) {
+            [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"手机上的记账数据将重新从云端获取，若您多个手机使用APP且数据不一致时可重新拉取，请在WIFi下操作。" action:[SSJAlertViewAction actionWithTitle:@"取消" handler:NULL], [SSJAlertViewAction actionWithTitle:@"立即拉取" handler:^(SSJAlertViewAction * _Nonnull action) {
+                if ([SSJNetworkReachabilityManager networkReachabilityStatus] == SSJNetworkReachabilityStatusNotReachable) {
+                    [CDAutoHideMessageHUD showMessage:@"请连接网络后重试"];
+                    return;
+                }
+                
+                [SSJDataClearHelper clearLocalDataWithSuccess:^{
+                    [CDAutoHideMessageHUD showMessage:@"重新拉取数据成功"];
+                } failure:^(NSError *error) {
+                    [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
+                }];
+            }], nil];
+        } else {
+            __weak typeof(self) wself = self;
+            [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"亲，登录后重新拉取数据哦" action:[SSJAlertViewAction actionWithTitle:@"暂不拉取" handler:NULL], [SSJAlertViewAction actionWithTitle:@"去登录" handler:^(SSJAlertViewAction * _Nonnull action) {
+                SSJLoginViewController *loginVc = [[SSJLoginViewController alloc] init];
+                loginVc.backController = wself;
+                [self.navigationController pushViewController:loginVc animated:YES];
+            }], nil];
+        }
     }
     
     
@@ -215,7 +207,9 @@ static NSString *const kTitle8 = @"点击上方微信号复制，接着去微信
         SSJAlertViewAction *comfirmAction = [SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction * _Nonnull action) {
             [SSJDataClearHelper clearAllDataWithSuccess:^{
                 [CDAutoHideMessageHUD showMessage:@"数据初始化成功"];
-                [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
+                if (SSJIsUserLogined()) {
+                    [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
+                }
             } failure:^(NSError *error) {
                 [CDAutoHideMessageHUD showMessage:@"数据初始化失败"];
             }];

@@ -39,6 +39,7 @@
         self.moneyLabel.right = self.contentView.width - 10;
         self.moneyLabel.centerY = self.contentView.height / 2;
         self.transferSourceLabel.left = self.fundImage.right + 10;
+        self.transferSourceLabel.width = self.moneyLabel.left - self.fundImage.right - 20;
         self.transferSourceLabel.centerY = self.contentView.height / 2;
     }else{
         self.dateLabel.left = 20;
@@ -48,6 +49,7 @@
         self.moneyLabel.right = self.contentView.width - 10;
         self.moneyLabel.centerY = self.contentView.height / 2;
         self.transferSourceLabel.left = self.fundImage.right + 10;
+        self.transferSourceLabel.width = self.moneyLabel.left - self.fundImage.right - 20;
         self.transferSourceLabel.bottom = self.fundImage.centerY - 5;
         self.memoLabel.width = 200;
         self.memoLabel.left = self.fundImage.right + 10;
@@ -84,6 +86,7 @@
     if (!_transferSourceLabel) {
         _transferSourceLabel = [[UILabel alloc]init];
         _transferSourceLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+        _transferSourceLabel.textAlignment = NSTextAlignmentLeft;
         _transferSourceLabel.font = [UIFont systemFontOfSize:15];
     }
     return _transferSourceLabel;

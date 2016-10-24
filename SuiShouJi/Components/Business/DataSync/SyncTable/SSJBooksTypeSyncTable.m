@@ -22,4 +22,8 @@
     return @[@"cbooksid", @"cuserid"];
 }
 
++ (NSDictionary *)fieldMapping {
+    return @{@"cicoin":@"cicon"};
+}
+
 @end

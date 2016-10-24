@@ -10,15 +10,22 @@
 #import "SSJBudgetEditViewController.h"
 #import "SSJBudgetDetailViewController.h"
 #import "SSJBudgetListCell.h"
+#import "SSJBudgetListSecondaryCell.h"
 #import "SSJBudgetDatabaseHelper.h"
 
 static NSString *const kBudgetListCellId = @"kBudgetListCellId";
+static NSString *const kBudgetListSecondaryCellId = @"kBudgetListSecondaryCellId";
 
 @interface SSJBudgetListViewController () <UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 
 @property (nonatomic, strong) NSArray *dataList;
+
+/**
+ 新建的预算id
+ */
+@property (nonatomic, copy) NSString *addBudgetId;
 
 @end
 
@@ -43,16 +50,36 @@ static NSString *const kBudgetListCellId = @"kBudgetListCellId";
     [super viewWillAppear:animated];
     
     [self.view ssj_showLoadingIndicator];
-    
-    [SSJBudgetDatabaseHelper queryForCurrentBudgetListWithSuccess:^(NSArray<SSJBudgetModel *> * _Nonnull result) {
+    [SSJBudgetDatabaseHelper queryForBudgetCellItemListWithSuccess:^(NSArray<SSJBudgetListCellItem *> * _Nonnull result) {
         [self.view ssj_hideLoadingIndicator];
         self.dataList = result;
         [self.tableView reloadData];
+        
+        // 如果是新建预算返回后，滑动到新建预算的位置
+        if (self.addBudgetId) {
+            for (int section = 0; section < self.dataList.count; section ++) {
+                NSArray *sectionArr = self.dataList[section];
+                for (int row = 0; row < sectionArr.count; row ++) {
+                    SSJBudgetListCellItem *item = sectionArr[row];
+                    if ([item.budgetID isEqualToString:self.addBudgetId]) {
+                        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
+                        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:NO];
+                        break;
+                    }
+                }
+            }
+        }
+        
     } failure:^(NSError * _Nullable error) {
         [self.view ssj_hideLoadingIndicator];
         SSJAlertViewAction *action = [SSJAlertViewAction actionWithTitle:@"确认" handler:NULL];
-        [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:SSJ_ERROR_MESSAGE action:action, nil];
+        [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:[error localizedDescription] action:action, nil];
     }];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    self.addBudgetId = nil;
 }
 
 - (void)updateAppearanceAfterThemeChanged {
@@ -66,19 +93,36 @@ static NSString *const kBudgetListCellId = @"kBudgetListCellId";
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 1;
+    NSArray *rowArr = [self.dataList ssj_safeObjectAtIndex:section];
+    return rowArr.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    SSJBudgetListCell *cell = [tableView dequeueReusableCellWithIdentifier:kBudgetListCellId forIndexPath:indexPath];
-    SSJBudgetListCellItem *cellItem = [self convertCellItemFromModel:[self.dataList ssj_safeObjectAtIndex:indexPath.section]];
-    [cell setCellItem:cellItem];
-    return cell;
+    SSJBudgetListCellItem *item = [self.dataList ssj_objectAtIndexPath:indexPath];
+    if (item.isMajor) {
+        SSJBudgetListCell *cell = [tableView dequeueReusableCellWithIdentifier:kBudgetListCellId forIndexPath:indexPath];
+        cell.cellItem = item;
+        return cell;
+    } else {
+        SSJBudgetListSecondaryCell *cell = [tableView dequeueReusableCellWithIdentifier:kBudgetListSecondaryCellId forIndexPath:indexPath];
+        [cell layoutIfNeeded];
+        cell.cellItem = item;
+        return cell;
+    }
 }
 
 #pragma mark - UITableViewDelegate
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    SSJBudgetListCellItem *item = [self.dataList ssj_objectAtIndexPath:indexPath];
+    return item.rowHeight;
+}
+
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     return 10;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    return 0.1;
 }
 
 - (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
@@ -88,40 +132,23 @@ static NSString *const kBudgetListCellId = @"kBudgetListCellId";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
+    SSJBudgetListCellItem *item = [self.dataList ssj_objectAtIndexPath:indexPath];
     SSJBudgetDetailViewController *detailVC = [[SSJBudgetDetailViewController alloc] init];
-    SSJBudgetModel *model = [self.dataList ssj_safeObjectAtIndex:indexPath.section];
-    detailVC.budgetId = model.ID;
+    detailVC.budgetId = item.budgetID;
     [self.navigationController pushViewController:detailVC animated:YES];
 }
 
 #pragma mark - Event
 - (void)addNewBudgetAction {
+    __weak typeof(self) wself = self;
     SSJBudgetEditViewController *newBudgetVC = [[SSJBudgetEditViewController alloc] init];
+    newBudgetVC.addNewBudgetBlock = ^(NSString *budgetId) {
+        wself.addBudgetId = budgetId;
+    };
     [self.navigationController pushViewController:newBudgetVC animated:YES];
 }
 
 #pragma mark - Private
-- (SSJBudgetListCellItem *)convertCellItemFromModel:(SSJBudgetModel *)model {
-    SSJBudgetListCellItem *cellItem = [[SSJBudgetListCellItem alloc] init];
-    switch (model.type) {
-        case 0:
-            cellItem.typeName = @"周预算";
-            break;
-            
-        case 1:
-            cellItem.typeName = @"月预算";
-            break;
-            
-        case 2:
-            cellItem.typeName = @"年预算";
-            break;
-    }
-    cellItem.period = [NSString stringWithFormat:@"%@——%@", model.beginDate, model.endDate];
-    cellItem.payment = model.payMoney;
-    cellItem.budget = model.budgetMoney;
-    return cellItem;
-}
-
 - (void)setupAddBarButtonItem {
     UIBarButtonItem *addItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"budget_add"] style:UIBarButtonItemStylePlain target:self action:@selector(addNewBudgetAction)];
     self.navigationItem.rightBarButtonItem = addItem;
@@ -130,16 +157,16 @@ static NSString *const kBudgetListCellId = @"kBudgetListCellId";
 #pragma mark - Getter
 - (UITableView *)tableView {
     if (!_tableView) {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM) style:UITableViewStylePlain];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM) style:UITableViewStyleGrouped];
         _tableView.dataSource = self;
         _tableView.delegate = self;
         _tableView.backgroundView = nil;
         _tableView.backgroundColor = [UIColor clearColor];
         _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
-        [_tableView setSeparatorInset:UIEdgeInsetsZero];
+//        [_tableView setSeparatorInset:UIEdgeInsetsZero];
         [_tableView setTableFooterView:[[UIView alloc] init]];
         [_tableView registerClass:[SSJBudgetListCell class] forCellReuseIdentifier:kBudgetListCellId];
-        _tableView.rowHeight = 314;
+        [_tableView registerClass:[SSJBudgetListSecondaryCell class] forCellReuseIdentifier:kBudgetListSecondaryCellId];
     }
     return _tableView;
 }

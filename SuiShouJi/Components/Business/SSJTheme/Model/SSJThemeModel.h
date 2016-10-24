@@ -142,4 +142,13 @@
 // 记一笔输入框透明度
 @property (nonatomic) CGFloat recordMakingInputViewAlpha;
 
+// 首页搜索按钮选中颜色
+@property (nonatomic, copy) NSString *bookKeepingHomeMutiButtonSelectColor;
+
+// 首页搜索按钮普通颜色
+@property (nonatomic, copy) NSString *bookKeepingHomeMutiButtonNormalColor;
+
+// 搜索页面结果头的背景色
+@property (nonatomic, copy) NSString *searchResultHeaderBackgroundColor;
+
 @end

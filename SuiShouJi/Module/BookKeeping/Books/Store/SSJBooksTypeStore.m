@@ -8,6 +8,7 @@
 
 #import "SSJBooksTypeStore.h"
 #import "SSJDatabaseQueue.h"
+#import "SSJDailySumChargeTable.h"
 
 @implementation SSJBooksTypeStore
 + (void)queryForBooksListWithSuccess:(void(^)(NSMutableArray<SSJBooksTypeItem *> *result))success
@@ -16,6 +17,7 @@
         NSString *userid = SSJUSERID();
         NSMutableArray *booksList = [NSMutableArray array];
         FMResultSet *booksResult = [db executeQuery:@"select * from bk_books_type where cuserid = ? and operatortype <> 2 order by iorder asc , cwritedate asc",userid];
+        int order = 1;
         if (!booksResult) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{
@@ -32,8 +34,12 @@
             item.userId = [booksResult stringForColumn:@"cuserid"];
             item.booksIcoin = [booksResult stringForColumn:@"cicoin"];
             item.booksOrder = [booksResult intForColumn:@"iorder"];
+            if (item.booksOrder == 0) {
+                item.booksOrder = order;
+            }
             item.selectToEdite = NO;
             [booksList addObject:item];
+            order ++;
         }
         SSJBooksTypeItem *item = [[SSJBooksTypeItem alloc]init];
         item.booksName = @"添加账本";
@@ -69,27 +75,53 @@
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
         NSString *userid = SSJUSERID();
         if ([db intForQuery:@"select count(1) from BK_BOOKS_TYPE where cbooksname = ? and cuserid = ? and cbooksid <> ? and operatortype <> 2",item.booksName,userid,item.booksId]) {
+            success = NO;
             SSJDispatch_main_async_safe(^{
                 [CDAutoHideMessageHUD showMessage:@"已有相同账本名称了，换一个吧"];
             });
-            return;
+        }else{
+            int booksOrder = [db intForQuery:@"select max(iorder) from bk_books_type where cuserid = ?",userid] + 1;
+            if ([item.booksId isEqualToString:userid]) {
+                booksOrder = 1;
+            }
+            if (![db boolForQuery:@"select count(*) from BK_BOOKS_TYPE where CBOOKSID = ?", booksid]) {
+                [typeInfo setObject:@(booksOrder) forKey:@"iorder"];
+                [typeInfo setObject:@(0) forKey:@"operatortype"];
+                sql = [self inertSQLStatementWithTypeInfo:typeInfo];
+            } else {
+                [typeInfo setObject:@(1) forKey:@"operatortype"];
+                sql = [self updateSQLStatementWithTypeInfo:typeInfo];
+            }
+            success = [db executeUpdate:sql withParameterDictionary:typeInfo];
         }
-        int booksOrder = [db intForQuery:@"select max(iorder) from bk_books_type where cuserid = ?",userid] + 1;
-        if ([item.booksId isEqualToString:userid]) {
-            booksOrder = 1;
-        }
-        if (![db boolForQuery:@"select count(*) from BK_BOOKS_TYPE where CBOOKSID = ?", booksid]) {
-            [typeInfo setObject:@(booksOrder) forKey:@"iorder"];
-            [typeInfo setObject:@(0) forKey:@"operatortype"];
-            sql = [self inertSQLStatementWithTypeInfo:typeInfo];
-        } else {
-            [typeInfo setObject:@(1) forKey:@"operatortype"];
-            sql = [self updateSQLStatementWithTypeInfo:typeInfo];
-        }
-        success = [db executeUpdate:sql withParameterDictionary:typeInfo];
     }];
     
     return success;
+}
+
++ (void)saveBooksOrderWithItems:(NSArray *)items
+                         sucess:(void(^)())success
+                             failure:(void (^)(NSError *error))failure{
+    [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
+        for (SSJBooksTypeItem *item in items) {
+            NSInteger order = [items indexOfObject:item] + 1;
+            NSString *userid = SSJUSERID();
+            NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+            if (![db executeUpdate:@"update bk_books_type set iorder = ?, iversion = ?, cwritedate = ? ,operatortype = 1 where cbooksid = ? and cuserid = ?",@(order),@(SSJSyncVersion()),writeDate,item.booksId,userid]) {
+                if (failure) {
+                    SSJDispatch_main_async_safe(^{
+                        failure([db lastError]);
+                    });
+                }
+                return;
+            }
+        }
+        if (success) {
+            SSJDispatch_main_async_safe(^{
+                success();
+            });
+        }
+    }];
 }
 
 + (NSDictionary *)fieldMapWithTypeItem:(SSJBooksTypeItem *)item {
@@ -133,14 +165,62 @@
     return item;
 }
 
-+ (BOOL)deleteBooksTypeWithBooksId:(NSString *)booksId error:(NSError **)error {
-    __block BOOL success = YES;
-    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
-        success = [db executeUpdate:@"update bk_books_type set operatortype = 2 ,cwritedate = ? ,iversion = ? where cbooksid = ?",[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),booksId];
-        if (!success && error) {
-            *error = [db lastError];
++ (void)deleteBooksTypeWithbooksItems:(NSArray *)items
+                           deleteType:(BOOL)type
+                           Success:(void(^)())success
+                           failure:(void (^)(NSError *error))failure {
+    [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
+        NSString *userId = SSJUSERID();
+        if (!type) {
+            for (SSJBooksTypeItem *item in items) {
+                if (![db executeUpdate:@"update bk_books_type set operatortype = 2 ,cwritedate = ? ,iversion = ? where cbooksid = ?",[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),item.booksId]) {
+                    *rollback = YES;
+                    if (failure) {
+                        SSJDispatch_main_async_safe(^{
+                            failure([db lastError]);
+                        });
+                    }
+                    return;
+                }
+            }
+        }else{
+            for (SSJBooksTypeItem *item in items) {
+                if (![db executeUpdate:@"update bk_books_type set operatortype = 2 ,cwritedate = ? ,iversion = ? where cbooksid = ?",[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),item.booksId]) {
+                    *rollback = YES;
+                    if (failure) {
+                        SSJDispatch_main_async_safe(^{
+                            failure([db lastError]);
+                        });
+                    }
+                    return;
+                }
+                if (![db executeUpdate:@"update bk_user_charge set operatortype = 2 ,cwritedate = ? ,iversion = ? where cbooksid = ?",[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),item.booksId]) {
+                    *rollback = YES;
+                    if (failure) {
+                        SSJDispatch_main_async_safe(^{
+                            failure([db lastError]);
+                        });
+                    }
+                    return;
+                }
+                //更新日常统计表
+                if (![SSJDailySumChargeTable updateDailySumChargeForUserId:userId inDatabase:db]) {
+                    if (failure) {
+                        *rollback = YES;
+                        SSJDispatchMainAsync(^{
+                            failure([db lastError]);
+                        });
+                    }
+                    return;
+                }
+                
+            }
+        }
+        if (success) {
+            SSJDispatch_main_async_safe(^{
+                success();
+            });
         }
     }];
-    return success;
 }
 @end

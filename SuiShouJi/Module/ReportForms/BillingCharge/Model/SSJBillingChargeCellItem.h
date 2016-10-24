@@ -96,4 +96,8 @@
 //流水对应的借贷id
 @property(nonatomic, strong) NSString *loanId;
 
+//客户端添加时间
+@property(nonatomic, strong) NSString *clientAddDate;
+
+
 @end

@@ -67,6 +67,10 @@
     self.verticalSepertorLine.centerY = self.height - 25;
 }
 
+- (void)setShouldSyncBlock:(BOOL (^)())shouldSyncBlock {
+    self.syncButton.shouldSyncBlock = shouldSyncBlock;
+}
+
 -(SSJMineHeaderView *)headPotraitImage{
     if (!_headPotraitImage) {
         _headPotraitImage = [[SSJMineHeaderView alloc]init];
@@ -225,9 +229,6 @@
 
 - (void)syncButtonClicked:(id)sender{
     [MobClick event:@"account_sync"];
-    if (self.syncButtonClickBlock) {
-        self.syncButtonClickBlock();
-    }
 }
 
 - (void)updateAfterThemeChange{

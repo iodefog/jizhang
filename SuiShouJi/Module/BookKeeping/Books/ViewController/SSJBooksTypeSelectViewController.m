@@ -16,10 +16,11 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
 #import "SSJBooksTypeEditeView.h"
 #import "SSJDataSynchronizer.h"
 #import "SSJBooksEditeOrNewViewController.h"
+#import "SSJEditableCollectionView.h"
 
-@interface SSJBooksTypeSelectViewController ()
+@interface SSJBooksTypeSelectViewController ()<SSJEditableCollectionViewDelegate,SSJEditableCollectionViewDataSource>
 
-@property(nonatomic, strong) UICollectionView *collectionView;
+@property(nonatomic, strong) SSJEditableCollectionView *collectionView;
 
 @property(nonatomic, strong) NSMutableArray *items;
 
@@ -75,6 +76,7 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
     self.editeButton.hidden = YES;
     self.deleteButton.hidden = YES;
     self.editeButton.enabled = NO;
+    [self.collectionView endEditing];
 }
 
 -(void)dealloc {
@@ -123,7 +125,6 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
             [self.navigationController pushViewController:booksEditeVc animated:YES];
         }
     }
-
 }
 
 
@@ -187,6 +188,51 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
     return UIEdgeInsetsMake(12, 18, 0, 12);
 }
 
+#pragma mark - SSJEditableCollectionViewDelegate
+- (BOOL)collectionView:(SSJEditableCollectionView *)collectionView shouldBeginEditingWhenPressAtIndexPath:(NSIndexPath *)indexPath{
+    [MobClick event:@"fund_sort"];
+    if (indexPath.row == self.items.count - 1) {
+        return NO;
+    }
+    return YES;
+}
+
+- (BOOL)collectionView:(SSJEditableCollectionView *)collectionView shouldMoveCellAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath{
+    if (toIndexPath.row == self.items.count - 1) {
+        return NO;
+    }
+    return YES;
+}
+
+- (void)collectionView:(SSJEditableCollectionView *)collectionView didBeginEditingWhenPressAtIndexPath:(NSIndexPath *)indexPath{
+    _editeModel = YES;
+    self.rightButton.selected = YES;
+    self.editeButton.hidden = NO;
+    self.deleteButton.hidden = NO;
+    for (SSJBooksTypeItem *item in self.items) {
+        item.editeModel = self.rightButton.isSelected;
+    }
+}
+
+- (void)collectionViewDidEndEditing:(SSJEditableCollectionView *)collectionView{
+    [SSJBooksTypeStore saveBooksOrderWithItems:self.items sucess:^{
+        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+    } failure:^(NSError *error) {
+        NSLog(@"%@",[error localizedDescription]);
+    }];
+}
+
+//- (BOOL)shouldCollectionViewEndEditingWhenUserTapped:(SSJEditableCollectionView *)collectionView{
+//    [self collectionViewEndEditing];
+//    return YES;
+//}
+
+- (void)collectionView:(SSJEditableCollectionView *)collectionView didEndMovingCellFromIndexPath:(NSIndexPath *)fromIndexPath toTargetIndexPath:(NSIndexPath *)toIndexPath{
+    SSJBooksTypeItem *currentItem = [self.items ssj_safeObjectAtIndex:fromIndexPath.row];
+    [self.items removeObjectAtIndex:fromIndexPath.row];
+    [self.items insertObject:currentItem atIndex:toIndexPath.row];
+}
+
 #pragma mark - Event
 - (void)rightButtonClicked:(id)sender{
     _editeModel = !_editeModel;
@@ -194,9 +240,10 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
     self.editeButton.hidden = !self.rightButton.isSelected;
     self.deleteButton.hidden = !self.rightButton.isSelected;
     if (self.rightButton.isSelected) {
-        [self.selectedBooks removeAllObjects];
-    }else{
         [MobClick event:@"accountbook_manage"];
+    }else{
+        [self.collectionView endEditing];
+        [self.selectedBooks removeAllObjects];
     }
     for (SSJBooksTypeItem *item in self.items) {
         item.editeModel = self.rightButton.isSelected;
@@ -221,17 +268,28 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
             return;
         }
         SSJAlertViewAction *comfirmAction = [SSJAlertViewAction actionWithTitle:@"删除" handler:^(SSJAlertViewAction * _Nonnull action) {
-            [MobClick event:@"accountbook_delete"];
-            [weakSelf deleteBooks];
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"删除该账本后，是否将涉及相关资金账户的流水一并删除？" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *reserve = [UIAlertAction actionWithTitle:@"保留资金流水" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [weakSelf deleteBooksWithType:0];
+            }];
+            UIAlertAction *destructive = [UIAlertAction actionWithTitle:@"一并删除" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+                [weakSelf deleteBooksWithType:1];
+            }];
+            UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            }];
+            [alert addAction:reserve];
+            [alert addAction:destructive];
+            [alert addAction:cancel];
+            [weakSelf presentViewController:alert animated:YES completion:NULL];
         }];
         SSJAlertViewAction *cancelAction = [SSJAlertViewAction actionWithTitle:@"取消" handler:NULL];
-        [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@"删除后关于该账本的流水数据将会被彻底清除哦." action:cancelAction , comfirmAction, nil];
+        [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@"你确定要删除该账本吗?" action:cancelAction , comfirmAction, nil];
 
     }
 }
 
 #pragma mark - Getter
--(UICollectionView *)collectionView{
+-(SSJEditableCollectionView *)collectionView{
     if (_collectionView==nil) {
         UICollectionViewFlowLayout *flowLayout=[[UICollectionViewFlowLayout alloc]init];
         [flowLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
@@ -240,10 +298,12 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
         }else{
             flowLayout.minimumInteritemSpacing = 15;
         }
-        _collectionView=[[UICollectionView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM - 55) collectionViewLayout:flowLayout];
-        _collectionView.backgroundColor = [UIColor ssj_colorWithHex:@"ffffff" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
-        _collectionView.delegate=self;
-        _collectionView.dataSource=self;
+        _collectionView=[[SSJEditableCollectionView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM - 55) collectionViewLayout:flowLayout];
+        _collectionView.movedCellScale = 1.08;
+        _collectionView.editDelegate=self;
+        _collectionView.editDataSource=self;
+        _collectionView.exchangeCellRegion = UIEdgeInsetsMake(5, 0, 5, 0);
+        _collectionView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     }
     return _collectionView;
 }
@@ -334,19 +394,29 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
     }];
 }
 
-- (void)deleteBooks{
+- (void)deleteBooksWithType:(BOOL)type{
     for (SSJBooksTypeItem *booksItem in self.selectedBooks) {
-        if ([SSJBooksTypeStore deleteBooksTypeWithBooksId:booksItem.booksId error:NULL]) {
             if ([booksItem.booksId isEqualToString:SSJGetCurrentBooksType()]) {
                 SSJSelectBooksType(SSJUSERID());
                 [[NSNotificationCenter defaultCenter]postNotificationName:SSJBooksTypeDidChangeNotification object:nil];
-            }
         };
     }
-    self.rightButton.selected = NO;
-    self.deleteButton.hidden = YES;
-    self.editeButton.hidden = YES;
-    [self getDateFromDB];
+    __weak typeof(self) weakSelf = self;
+    [SSJBooksTypeStore deleteBooksTypeWithbooksItems:self.selectedBooks deleteType:type Success:^{
+        weakSelf.rightButton.selected = NO;
+        weakSelf.deleteButton.hidden = YES;
+        weakSelf.editeButton.hidden = YES;
+        [weakSelf.collectionView endEditing];
+        for (SSJBooksTypeItem *item in self.items) {
+            item.editeModel = NO;
+        }
+        _editeModel = NO;
+        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+        [self.selectedBooks removeAllObjects];
+        [weakSelf getDateFromDB];
+    } failure:^(NSError *error) {
+        
+    }];
 }
 
 -(void)updateAppearanceAfterThemeChanged{

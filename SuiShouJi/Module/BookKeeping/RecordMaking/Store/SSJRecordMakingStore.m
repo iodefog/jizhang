@@ -53,7 +53,7 @@
             editeItem = item;
             editeItem.operatorType = 0;
             //新建流水
-            if (![db executeUpdate:@"insert into bk_user_charge (ichargeid , cuserid , imoney , ibillid , ifunsid  , cwritedate , iversion , operatortype , cbilldate , cmemo , cbooksid,cimgurl,thumburl) values(?,?,?,?,?,?,?,0,?,?,?,?,?)",item.ID,userId,moneyStr,item.billId,item.fundId,editeTime,@(SSJSyncVersion()),item.billDate,item.chargeMemo,item.booksId,item.chargeImage,item.chargeThumbImage]) {
+            if (![db executeUpdate:@"insert into bk_user_charge (ichargeid , cuserid , imoney , ibillid , ifunsid  , cwritedate , iversion , operatortype , cbilldate , cmemo , cbooksid, cimgurl, thumburl,clientadddate) values(?,?,?,?,?,?,?,0,?,?,?,?,?,?)",item.ID,userId,moneyStr,item.billId,item.fundId,editeTime,@(SSJSyncVersion()),item.billDate,item.chargeMemo,item.booksId,item.chargeImage,item.chargeThumbImage,editeTime]) {
                 *rollback = YES;
                 if (failure) {
                     SSJDispatch_main_async_safe(^{
@@ -113,56 +113,6 @@
                 }else{
                     //如果是收入
                     if (![db executeUpdate:@"insert into bk_dailysum_charge (expenceamount,incomeamount,sumamount,cuserid,cbooksid,cbilldate,cwritedate) values (0,?,?,?,?,?,?)",@(money),@(money),userId,item.booksId,item.billDate,editeTime]) {
-                        *rollback = YES;
-                        if (failure) {
-                            SSJDispatch_main_async_safe(^{
-                                failure([db lastError]);
-                            });
-                        }
-                        return;
-                    }
-                }
-            }
-            //修改账户余额表
-            if ([db intForQuery:@"select count(1) from bk_funs_acct where cuserid = ? and cfundid = ?",userId,item.fundId]) {
-                if (item.incomeOrExpence) {
-                    //如果是支出
-                    if (![db executeUpdate:@"update bk_funs_acct set ibalance = ibalance - ? where cuserid = ? and cfundid = ?",@(money),userId,item.fundId]) {
-                        *rollback = YES;
-                        if (failure) {
-                            SSJDispatch_main_async_safe(^{
-                                failure([db lastError]);
-                            });
-                        }
-                        return;
-                    }
-                }else{
-                    //如果是收入
-                    if (![db executeUpdate:@"update bk_funs_acct set ibalance = ibalance + ? where cuserid = ? and cfundid = ?",@(money),userId,item.fundId]) {
-                        *rollback = YES;
-                        if (failure) {
-                            SSJDispatch_main_async_safe(^{
-                                failure([db lastError]);
-                            });
-                        }
-                        return;
-                    }
-                }
-            }else{
-                if (item.incomeOrExpence) {
-                    //如果是支出
-                    if (![db executeUpdate:@"insert into bk_funs_acct (ibalance,cuserid,cfundid) values (?,?,?)",@(-money),userId,item.fundId]) {
-                        *rollback = YES;
-                        if (failure) {
-                            SSJDispatch_main_async_safe(^{
-                                failure([db lastError]);
-                            });
-                        }
-                        return;
-                    }
-                }else{
-                    //如果是收入
-                    if (![db executeUpdate:@"insert into bk_funs_acct (ibalance,cuserid,cfundid) values (?,?,?)",@(money),userId,item.fundId]) {
                         *rollback = YES;
                         if (failure) {
                             SSJDispatch_main_async_safe(^{
@@ -260,29 +210,9 @@
                         }
                         return;
                     }
-                    //修改账户余额表
-                    if (![db executeUpdate:@"update bk_funs_acct set ibalance = ibalance + ? where cuserid = ? and cfundid = ?",@(originMoney),userId,originItem.fundId]) {
-                        *rollback = YES;
-                        if (failure) {
-                            SSJDispatch_main_async_safe(^{
-                                failure([db lastError]);
-                            });
-                        }
-                        return;
-                    }
                 }else{
                     //修改每日汇总表
                     if (![db executeUpdate:@"update bk_dailysum_charge set incomeamount = incomeamount + ? , sumamount = sumamount - ? where cuserid = ? and cbooksid = ? and cbilldate = ?",@(originMoney),@(originMoney),userId,originItem.booksId,originItem.billDate]) {
-                        if (failure) {
-                            SSJDispatch_main_async_safe(^{
-                                failure([db lastError]);
-                            });
-                        }
-                        return;
-                    }
-                    //修改账户余额表
-                    if (![db executeUpdate:@"update bk_funs_acct set ibalance = ibalance - ? where cuserid = ? and cfundid = ?",@(originMoney),userId,originItem.fundId]) {
-                        *rollback = YES;
                         if (failure) {
                             SSJDispatch_main_async_safe(^{
                                 failure([db lastError]);
@@ -312,15 +242,6 @@
                         }
                     }
 
-                    if (![db executeUpdate:@"update bk_funs_acct set ibalance = ibalance - ? where cuserid = ? and cfundid = ?",@(money),userId,item.fundId]) {
-                        *rollback = YES;
-                        if (failure) {
-                            SSJDispatch_main_async_safe(^{
-                                failure([db lastError]);
-                            });
-                        }
-                        return;
-                    }
                 }else{
                     if ([db intForQuery:@"select count(1) from bk_dailysum_charge where cuserid = ? and cbooksid = ? and cbilldate = ?",userId,item.booksId,item.billDate]) {
                         if (![db executeUpdate:@"update bk_dailysum_charge set incomeamount = incomeamount - ? , sumamount = sumamount + ? where cuserid = ? and cbooksid = ? and cbilldate = ?",@(money),@(money),userId,item.booksId,item.billDate]) {
@@ -340,16 +261,6 @@
                             }
                             return;
                         }
-                    }
-
-                    if (![db executeUpdate:@"update bk_funs_acct set ibalance = ibalance + ? where cuserid = ? and cfundid = ?",@(money),userId,item.fundId]) {
-                        *rollback = YES;
-                        if (failure) {
-                            SSJDispatch_main_async_safe(^{
-                                failure([db lastError]);
-                            });
-                        }
-                        return;
                     }
                 }
                 if (![db executeUpdate:@"delete from bk_dailysum_charge where incomeamount = 0 and expenceamount = 0 and sumamount = 0"]) {

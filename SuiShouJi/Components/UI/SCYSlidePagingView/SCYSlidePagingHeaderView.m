@@ -66,6 +66,7 @@
         CGFloat axisX = width *idx;
         CGFloat axisY = 0;
         button.frame = CGRectMake(axisX, axisY, width, height);
+        [button ssj_layoutContent];
     }
     
     if (CGSizeEqualToSize(_tabSize, CGSizeZero)) {
@@ -166,6 +167,19 @@
     [self p_setSelectedIndex:index animated:animated];
 }
 
+- (void)setButtonImage:(UIImage *)image layoutType:(SSJButtonLayoutType)type spaceBetweenImageAndTitle:(CGFloat)space forControlState:(UIControlState)state atIndex:(NSInteger)index {
+    UIButton *button = [_buttons ssj_safeObjectAtIndex:index];
+    
+    if (state == UIControlStateNormal) {
+        [button setImage:image forState:UIControlStateNormal];
+    } else if (state == UIControlStateSelected) {
+        [button setImage:image forState:UIControlStateSelected];
+        [button setImage:image forState:(UIControlStateHighlighted | UIControlStateSelected)];
+    }
+    button.contentLayoutType = type;
+    button.spaceBetweenImageAndTitle = space;
+}
+
 #pragma mark - Private
 - (void)reload {
     [_buttons makeObjectsPerformSelector:@selector(removeFromSuperview)];
@@ -199,6 +213,7 @@
         }
         
         _userTapped = YES;
+        
         [self p_setSelectedIndex:selectedIndex animated:_buttonClickAnimated];
         
         if (!_buttonClickAnimated) {
@@ -214,9 +229,9 @@
         return;
     }
     
-    if (_selectedIndex == index) {
-        return;
-    }
+//    if (_selectedIndex == index) {
+//        return;
+//    }
     
     _selectedIndex = index;
     

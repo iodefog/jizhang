@@ -64,12 +64,6 @@ extern const int64_t SSJDefaultSyncVersion;
 /// @name 字符串常量
 ///------------------------------------------
 
-//  接口地址
-extern NSString *const SSJBaseURLString;
-
-//  图片域名
-extern NSString *const SSJImageBaseUrlString;
-
 //
 extern NSString *const SSJErrorDomain;
 
@@ -102,6 +96,12 @@ extern NSString *const SSJWeiBoAppKey;
 
 //微博secret
 extern NSString *const SSJWeiBoSecret;
+
+//预算超支红色
+extern NSString *const SSJOverrunRedColorValue;
+
+//预算剩余绿色
+extern NSString *const SSJSurplusGreenColorValue;
 
 /** -------------------- KEY -------------------- */
 //保存上次弹窗的时间

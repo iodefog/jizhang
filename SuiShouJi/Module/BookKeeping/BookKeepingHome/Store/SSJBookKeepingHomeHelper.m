@@ -59,7 +59,7 @@ NSString *const SSJDateStartIndexDicKey = @"SSJDateStartIndexDicKey";
         NSString *lastDate = @"";
         int count = 0;
         int chargeCount = 0;
-        FMResultSet *chargeResult = [db executeQuery:@"select a.cbilldate , a.imoney , a.ichargeid , a.ibillid , a.cwritedate  ,a.ifunsid , a.cuserid , a.cimgurl ,  a.thumburl ,a.cmemo , a.iconfigid , a.operatortype as chargeoperatortype , b.cname, b.ccoin, b.ccolor, b.itype from (select cbilldate , imoney , ichargeid , ibillid , cwritedate  ,ifunsid , cuserid , cmemo ,  cimgurl ,  thumburl , iconfigid , operatortype from (select cbilldate , imoney , ichargeid , ibillid , cwritedate , ifunsid , cuserid , cmemo ,  cimgurl , thumburl , iconfigid , operatortype , cbooksid from bk_user_charge where operatortype != 2 and cbooksid = ?) where cuserid = ? union select * from (select cbilldate , sumamount as imoney , '' as ichargeid , '-1' as             ibillid , '3'||substr(cwritedate,2) as cwritedate , '' as ifunsid , cuserid , '' as cmemo , '' as cimgurl , '' as thumburl ,  0 as operatortype , cbooksid from bk_dailysum_charge where cuserid = ? and cbooksid = ? order by cbilldate desc)) as a left join bk_bill_type as b on a.ibillid = b.id where a.cbilldate <= ? and (b.istate <> 2 or b.istate is null) order by a.cbilldate desc , a.cwritedate desc",booksid,userid,userid,booksid,[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"]];
+        FMResultSet *chargeResult = [db executeQuery:@"select a.cbilldate , a.imoney , a.ichargeid , a.ibillid , a.cwritedate  ,a.ifunsid , a.cuserid , a.cimgurl ,  a.thumburl ,a.cmemo , a.iconfigid , a.operatortype as chargeoperatortype , a.clientadddate , b.cname, b.ccoin, b.ccolor, b.itype from (select cbilldate , imoney , ichargeid , ibillid , cwritedate  ,ifunsid , cuserid , cmemo ,  cimgurl ,  thumburl , iconfigid , operatortype , clientadddate from (select cbilldate , imoney , ichargeid , ibillid , cwritedate , ifunsid , cuserid , cmemo ,  cimgurl , thumburl , iconfigid , operatortype , cbooksid , clientadddate from bk_user_charge where operatortype != 2 and cbooksid = ?) where cuserid = ? union select * from (select cbilldate , sumamount as imoney , '' as ichargeid , '-1' as ibillid , '3'||substr(cwritedate,2) as cwritedate , '' as ifunsid , cuserid , '' as cmemo , '' as cimgurl , '' as thumburl ,  0 as operatortype , cbooksid , '3'||substr(cwritedate,2) as clientadddate from bk_dailysum_charge where cuserid = ? and cbooksid = ? order by cbilldate desc)) as a left join bk_bill_type as b on a.ibillid = b.id where a.cbilldate <= ? and (b.istate <> 2 or b.istate is null) order by a.cbilldate desc , a.clientadddate desc ,  a.cwritedate desc",booksid,userid,userid,booksid,[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"]];
         if (!chargeResult) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{
@@ -85,6 +85,7 @@ NSString *const SSJDateStartIndexDicKey = @"SSJDateStartIndexDicKey";
             item.configId = [chargeResult stringForColumn:@"ICONFIGID"];
             item.operatorType = [chargeResult intForColumn:@"CHARGEOPERATORTYPE"];
             item.billDate = [chargeResult stringForColumn:@"CBILLDATE"];
+            item.clientAddDate = [chargeResult stringForColumn:@"clientadddate"];
             if ([item.billId isEqualToString:@"-1"]) {
                 [startIndex setObject:@(count) forKey:item.billDate];
             }
@@ -175,4 +176,29 @@ NSString *const SSJDateStartIndexDicKey = @"SSJDateStartIndexDicKey";
     item.billDate = [set stringForColumn:@"CBILLDATE"];
     return item;
 }
+
++ (NSString *)queryBillNameForBillIds:(NSArray *)billIds {
+    __block NSString *billName = nil;
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+        
+        NSMutableArray *tmpBillIds = [NSMutableArray arrayWithCapacity:billIds.count];
+        for (NSString *billId in billIds) {
+            [tmpBillIds addObject:[NSString stringWithFormat:@"'%@'", billId]];
+        }
+        
+        NSString *sql = [NSString stringWithFormat:@"select cname from bk_bill_type where id in (%@)", [tmpBillIds componentsJoinedByString:@","]];
+        FMResultSet *resultSet = [db executeQuery:sql];
+        
+        NSMutableArray *tmpBillNames = [NSMutableArray arrayWithCapacity:billIds.count];
+        while ([resultSet next]) {
+            NSString *name = [resultSet stringForColumn:@"cname"];
+            [tmpBillNames addObject:name];
+        }
+        [resultSet close];
+        
+        billName = [tmpBillNames componentsJoinedByString:@"、"];
+    }];
+    return billName;
+}
+
 @end

@@ -30,17 +30,18 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 #import "SSJFundingTypeSelectView.h"
 #import "SSJChargeCircleSelectView.h"
 #import "SSJBillTypeSelectViewController.h"
+#import "SSJFundingTypeSelectViewController.h"
 #import "SSJChargeCircleTimeSelectView.h"
 #import "SSJCircleChargeTypeSelectView.h"
 #import "SSJImaageBrowseViewController.h"
 #import "SSJRecordMakingCategoryItem.h"
-#import "SSJNewFundingViewController.h"
 #import "SSJDatabaseQueue.h"
 #import "SSJChargeMemBerItem.h"
 #import "SSJMemberSelectView.h"
 #import "SSJMemberManagerViewController.h"
 #import "SSJNewMemberViewController.h"
 #import "SSJDataSynchronizer.h"
+#import "SSJCreditCardItem.h"
 
 @interface SSJChargeCicleModifyViewController ()<UITextFieldDelegate,UITableViewDelegate,UITableViewDataSource,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 @property(nonatomic, strong) NSArray *titles;
@@ -244,7 +245,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
     circleModifyCell.cellImageName = image;
     if ([title isEqualToString:kTitle4]) {
         circleModifyCell.cellInput.hidden = NO;
-        circleModifyCell.cellInput.text = self.item.money;
+        circleModifyCell.cellInput.text = [NSString stringWithFormat:@"%.2f",[self.item.money doubleValue]];
         circleModifyCell.cellInput.attributedPlaceholder = [[NSAttributedString alloc]initWithString:@"0.00" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         circleModifyCell.cellInput.keyboardType = UIKeyboardTypeDecimalPad;
         circleModifyCell.cellInput.delegate = self;
@@ -411,12 +412,23 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
                 [weakSelf.tableView reloadData];
                 [weakSelf.fundSelectView dismiss];
             }else{
-                SSJNewFundingViewController *NewFundingVC = [[SSJNewFundingViewController alloc]init];
-                NewFundingVC.addNewFundBlock = ^(SSJFundingItem *newFundingItem){
-                    weakSelf.item.fundId = newFundingItem.fundingID;
-                    weakSelf.item.fundName = newFundingItem.fundingName;
-                    weakSelf.item.fundImage = newFundingItem.fundingIcon;
-                    [weakSelf.tableView reloadData];
+                SSJFundingTypeSelectViewController *NewFundingVC = [[SSJFundingTypeSelectViewController alloc]init];
+                NewFundingVC.needLoanOrNot = NO;
+                NewFundingVC.addNewFundingBlock = ^(SSJBaseItem *item){
+                    if ([item isKindOfClass:[SSJFundingItem class]]) {
+                        SSJFundingItem *fundItem = (SSJFundingItem *)item;
+                        weakSelf.item.fundId = fundItem.fundingID;
+                        weakSelf.item.fundName = fundItem.fundingName;
+                        weakSelf.item.fundImage = fundItem.fundingIcon;
+                        [weakSelf.tableView reloadData];
+                    }else if ([item isKindOfClass:[SSJCreditCardItem class]]){
+                        SSJCreditCardItem *cardItem = (SSJCreditCardItem *)item;
+                        weakSelf.item.fundId = cardItem.cardId;
+                        weakSelf.item.fundName = cardItem.cardName;
+                        weakSelf.item.fundImage = @"ft_creditcard";
+                        [weakSelf.tableView reloadData];
+                    }
+
                 };
                 [weakSelf.fundSelectView dismiss];
                 [weakSelf.navigationController pushViewController:NewFundingVC animated:YES];
@@ -459,6 +471,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
             weakSelf.item.incomeOrExpence = !selectType;
             SSJRecordMakingCategoryItem *categoryItem = [SSJCategoryListHelper queryfirstCategoryItemWithIncomeOrExpence:weakSelf.item.incomeOrExpence];
             weakSelf.item.typeName = categoryItem.categoryTitle;
+            weakSelf.item.imageName = categoryItem.categoryImage;
             weakSelf.item.billId = categoryItem.categoryID;
             [weakSelf.tableView reloadData];
         };
@@ -470,7 +483,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
     if (!_memberSelectView) {
         __weak typeof(self) weakSelf = self;
         _memberSelectView = [[SSJMemberSelectView alloc]initWithFrame:[UIScreen mainScreen].bounds];
-        _memberSelectView.comfirmBlock = ^(NSArray *selectedMemberItems){
+        _memberSelectView.selectedMemberDidChangeBlock = ^(NSArray *selectedMemberItems){
             weakSelf.item.membersItem = [selectedMemberItems mutableCopy];
             [weakSelf.tableView reloadData];
         };
@@ -524,6 +537,12 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
         [CDAutoHideMessageHUD showMessage:@"请输入金额"];
         return;
     }
+    
+    if (!self.item.membersItem.count) {
+        [CDAutoHideMessageHUD showMessage:@"至少选择一个成员"];
+        return;
+    }
+    
     if (self.selectedImage != nil) {
         NSString *imageName = SSJUUID();
         if (SSJSaveImage(self.selectedImage , imageName) && SSJSaveThumbImage(self.selectedImage, imageName)) {

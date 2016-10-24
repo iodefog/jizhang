@@ -33,6 +33,7 @@
 #import "SSJLoginViewController+SSJCategory.h"
 #import "SSJLocalNotificationStore.h"
 #import "SSJLocalNotificationHelper.h"
+#import "SSJDomainManager.h"
 
 //
 static const NSTimeInterval kTimeoutInterval = 30;
@@ -198,45 +199,7 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
                     return;
                 }
                 
-                //  合并数据完成后根据定期记账和定期预算进行补充；即使补充失败，也不影响同步，在其他时机可以再次补充
-                [SSJRegularManager supplementBookkeepingIfNeededForUserId:self.userId];
-                [SSJRegularManager supplementBudgetIfNeededForUserId:self.userId];
-                
-                // 用户流水表中存在，但是成员流水表中不存在的流水插入到成员流水表中，默认就是用户自己的
-                [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
-                    BOOL success = [db executeUpdate:@"insert into bk_member_charge (ichargeid, cmemberid, imoney, iversion, cwritedate, operatortype) select a.ichargeid, ?, a.imoney, ?, ?, 0 from bk_user_charge as a left join bk_member_charge as b on a.ichargeid = b.ichargeid where b.ichargeid is null and a.operatortype <> 2 and a.cuserid = ?", [NSString stringWithFormat:@"%@-0", self.userId], @(SSJSyncVersion()), [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], self.userId];
-                    if (!success) {
-                        *rollback = YES;
-                    }
-                }];
-                
-                // 根据用户的提醒表中的记录注册本地通知
-                [SSJLocalNotificationHelper cancelLocalNotificationWithUserId:self.userId];
-                [SSJLocalNotificationStore queryForreminderListForUserId:self.userId WithSuccess:^(NSArray<SSJReminderItem *> *result) {
-                    for (SSJReminderItem *item in result) {
-                        [SSJLocalNotificationHelper registerLocalNotificationWithremindItem:item];
-                    }
-                } failure:^(NSError *error) {
-                    SSJPRINT(@"警告：同步后注册本地通知失败 error:%@", [error localizedDescription]);
-                }];
-                
-                // 因为老版本没有同步账本图标，老版本同步过来的数据图表为空，所以这里把图标加上
-                [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
-                    NSString *booksID1 = self.userId;
-                    NSString *booksID2 = [NSString stringWithFormat:@"%@-1", self.userId];
-                    NSString *booksID3 = [NSString stringWithFormat:@"%@-2", self.userId];
-                    NSString *booksID4 = [NSString stringWithFormat:@"%@-3", self.userId];
-                    NSString *booksID5 = [NSString stringWithFormat:@"%@-4", self.userId];
-                    
-                    [db executeUpdate:@"update bk_books_type set cicoin = 'bk_moren' where cbooksid = ? and cuserid = ? and (length(cicoin) == 0 or cicoin is null)", booksID1, self.userId];
-                    [db executeUpdate:@"update bk_books_type set cicoin = 'bk_shengyi' where cbooksid = ? and cuserid = ? and (length(cicoin) == 0 or cicoin is null)", booksID2, self.userId];
-                    [db executeUpdate:@"update bk_books_type set cicoin = 'bk_jiehun' where cbooksid = ? and cuserid = ? and (length(cicoin) == 0 or cicoin is null)", booksID3, self.userId];
-                    [db executeUpdate:@"update bk_books_type set cicoin = 'bk_zhuangxiu' where cbooksid = ? and cuserid = ? and (length(cicoin) == 0 or cicoin is null)", booksID4, self.userId];
-                    [db executeUpdate:@"update bk_books_type set cicoin = 'bk_lvxing' where cbooksid = ? and cuserid = ? and (length(cicoin) == 0 or cicoin is null)", booksID5, self.userId];
-                    
-                    NSString *sqlStr = [NSString stringWithFormat:@"update bk_books_type set cicoin = 'bk_moren' where cbooksid not in ('%@', '%@', '%@', '%@', '%@') and cuserid = '%@' and (length(cicoin) == 0 or cicoin is null)", booksID1, booksID2, booksID3, booksID4, booksID5, self.userId];
-                    [db executeUpdate:sqlStr];
-                }];
+                [self extraProcessAfterMerge];
                 
                 if (success) {
                     SSJPRINT(@"<<< --------- SSJ Sync Data Success! --------- >>>");
@@ -263,12 +226,6 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
 //    __block NSString *userId = nil;
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
         
-//        //  把当前同步的版本号插入到BK_SYNC表中
-//        if (![SSJSyncTable insertUnderwaySyncVersion:(self.lastSuccessSyncVersion + 1) forUserId:self.userId inDatabase:db]) {
-//            *error = [db lastError];
-//            return;
-//        }
-        
         //  更新当前的版本号
         SSJUpdateSyncVersion(self.lastSuccessSyncVersion + 2);
         
@@ -278,8 +235,6 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
                 [jsonObject setObject:syncRecords forKey:[syncTable tableName]];
             }
         }
-        
-//        userId = [SSJUserTableManager unregisteredUserIdInDatabase:db error:error];
     }];
     
     if (self.userId.length) {
@@ -317,7 +272,7 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
 - (void)uploadData:(NSData *)data completionHandler:(void (^)(NSURLResponse *response, id responseObject, NSError *error))completionHandler {
     
     //  创建请求
-    NSString *urlString = [[NSURL URLWithString:@"/sync/syncdata.go" relativeToURL:[NSURL URLWithString:SSJBaseURLString]] absoluteString];
+    NSString *urlString = [[NSURL URLWithString:@"/sync/syncdata.go" relativeToURL:[NSURL URLWithString:[SSJDomainManager domain]]] absoluteString];
     
     NSError *tError = nil;
     NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] multipartFormRequestWithMethod:@"POST" URLString:urlString parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
@@ -421,6 +376,59 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
     }
     
     return mergeSuccess;
+}
+
+- (void)extraProcessAfterMerge {
+    // 如果用户当前账本已删除，就切换成日常账本
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+        int operatorType = [db intForQuery:@"select bt.operatortype from bk_books_type as bt, bk_user as u where u.cuserid = ? and bt.cuserid = u.cuserid and u.ccurrentbooksid = bt.cbooksid", self.userId];
+        if (operatorType == 2) {
+            [db executeUpdate:@"update bk_user set ccurrentbooksid = ?", self.userId];
+            SSJDispatchMainAsync(^{
+                [[NSNotificationCenter defaultCenter] postNotificationName:SSJBooksTypeDidChangeNotification object:nil];
+            });
+        }
+    }];
+    
+    // 合并数据完成后根据定期记账和定期预算进行补充；即使补充失败，也不影响同步，在其他时机可以再次补充
+    [SSJRegularManager supplementBookkeepingIfNeededForUserId:self.userId];
+    [SSJRegularManager supplementBudgetIfNeededForUserId:self.userId];
+    
+    // 用户流水表中存在，但是成员流水表中不存在的流水插入到成员流水表中，默认就是用户自己的
+    [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
+        BOOL success = [db executeUpdate:@"insert into bk_member_charge (ichargeid, cmemberid, imoney, iversion, cwritedate, operatortype) select a.ichargeid, ?, a.imoney, ?, ?, 0 from bk_user_charge as a left join bk_member_charge as b on a.ichargeid = b.ichargeid where b.ichargeid is null and a.operatortype <> 2 and a.cuserid = ?", [NSString stringWithFormat:@"%@-0", self.userId], @(SSJSyncVersion()), [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], self.userId];
+        if (!success) {
+            *rollback = YES;
+        }
+    }];
+    
+    // 根据用户的提醒表中的记录注册本地通知
+    [SSJLocalNotificationHelper cancelLocalNotificationWithUserId:self.userId];
+    [SSJLocalNotificationStore queryForreminderListForUserId:self.userId WithSuccess:^(NSArray<SSJReminderItem *> *result) {
+        for (SSJReminderItem *item in result) {
+            [SSJLocalNotificationHelper registerLocalNotificationWithremindItem:item];
+        }
+    } failure:^(NSError *error) {
+        SSJPRINT(@"警告：同步后注册本地通知失败 error:%@", [error localizedDescription]);
+    }];
+    
+    // 因为老版本没有同步账本图标，老版本同步过来的数据图表为空，所以这里把图标加上
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+        NSString *booksID1 = self.userId;
+        NSString *booksID2 = [NSString stringWithFormat:@"%@-1", self.userId];
+        NSString *booksID3 = [NSString stringWithFormat:@"%@-2", self.userId];
+        NSString *booksID4 = [NSString stringWithFormat:@"%@-3", self.userId];
+        NSString *booksID5 = [NSString stringWithFormat:@"%@-4", self.userId];
+        
+        [db executeUpdate:@"update bk_books_type set cicoin = 'bk_moren' where cbooksid = ? and cuserid = ? and (length(cicoin) == 0 or cicoin is null)", booksID1, self.userId];
+        [db executeUpdate:@"update bk_books_type set cicoin = 'bk_shengyi' where cbooksid = ? and cuserid = ? and (length(cicoin) == 0 or cicoin is null)", booksID2, self.userId];
+        [db executeUpdate:@"update bk_books_type set cicoin = 'bk_jiehun' where cbooksid = ? and cuserid = ? and (length(cicoin) == 0 or cicoin is null)", booksID3, self.userId];
+        [db executeUpdate:@"update bk_books_type set cicoin = 'bk_zhuangxiu' where cbooksid = ? and cuserid = ? and (length(cicoin) == 0 or cicoin is null)", booksID4, self.userId];
+        [db executeUpdate:@"update bk_books_type set cicoin = 'bk_lvxing' where cbooksid = ? and cuserid = ? and (length(cicoin) == 0 or cicoin is null)", booksID5, self.userId];
+        
+        NSString *sqlStr = [NSString stringWithFormat:@"update bk_books_type set cicoin = 'bk_moren' where cbooksid not in ('%@', '%@', '%@', '%@', '%@') and cuserid = '%@' and (length(cicoin) == 0 or cicoin is null)", booksID1, booksID2, booksID3, booksID4, booksID5, self.userId];
+        [db executeUpdate:sqlStr];
+    }];
 }
 
 //  将data进行zip压缩

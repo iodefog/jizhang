@@ -37,9 +37,12 @@ typedef NS_ENUM(NSInteger, SSJReportFormsType) {
 @property (nonatomic, copy) NSString *ID;
 
 // 文本颜色
-@property (nonatomic, copy) NSString *titleColor;
+//@property (nonatomic, copy) NSString *titleColor;
 
 // 是否成员（不是成员就是分类）
 @property (nonatomic) BOOL isMember;
+
+// 是否隐藏比例
+@property (nonatomic) BOOL percentHiden;
 
 @end

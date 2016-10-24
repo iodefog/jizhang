@@ -21,9 +21,7 @@
 @property(nonatomic) SSJBookkeepingTreeLevel checkInLevel;
  
 //点击同步的回调
-typedef void (^syncButtonClickBlock)();
-
-@property (nonatomic, copy) syncButtonClickBlock syncButtonClickBlock;
+@property (nonatomic, copy) BOOL (^shouldSyncBlock)();
 
 //点击同步的回调
 typedef void (^checkInButtonClickBlock)();

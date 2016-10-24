@@ -11,6 +11,9 @@
 #import "SSJChargeMemberItem.h"
 #import "SSJDatabaseQueue.h"
 #import "SSJNewMemberViewController.h"
+#import "SSJMemberTableViewCell.h"
+
+static NSString *const kMemberTableViewCellIdentifier = @"kMemberTableViewCellIdentifier";
 
 @interface SSJMemberSelectView()
 
@@ -33,6 +36,7 @@
         self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
         [self addSubview:self.topView];
         [self addSubview:self.tableView];
+        [self.tableView registerClass:[SSJMemberTableViewCell class] forCellReuseIdentifier:kMemberTableViewCellIdentifier];
         [self sizeToFit];
     }
     return self;
@@ -60,13 +64,20 @@
     SSJChargeMemberItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
     if (indexPath.row != [tableView numberOfRowsInSection:0] - 1) {
         if ([self.selectedMemberItems containsObject:item]) {
-            [self.selectedMemberItems removeObject:item];
+            if (self.selectedMemberItems.count > 1) {
+                [self.selectedMemberItems removeObject:item];
+            }
         }else{
             [self.selectedMemberItems addObject:item];
         }
         [self.tableView reloadData];
+        
+        if (self.selectedMemberDidChangeBlock) {
+            self.selectedMemberDidChangeBlock(self.selectedMemberItems);
+        }
     }else{
         [MobClick event:@"dialog_add_member"];
+        [self dismiss];
         if (self.addNewMemberBlock) {
             self.addNewMemberBlock();
         }
@@ -79,23 +90,16 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *cellId = @"SSJMemberCell";
-    SSJBaseTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+    SSJMemberTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kMemberTableViewCellIdentifier forIndexPath:indexPath];
     if (!cell) {
-        cell = [[SSJBaseTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
-        cell.backgroundColor = [UIColor clearColor];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.imageView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+        cell = [[SSJMemberTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kMemberTableViewCellIdentifier];
     }
+    cell.selectable = YES;
     SSJChargeMemberItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
-    NSString *title = item.memberName;
-    cell.textLabel.text = title;
+    cell.memberItem = item;
     UIImageView *checkMarkImage = [[UIImageView alloc]initWithImage:[[UIImage imageNamed:@"checkmark"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
     checkMarkImage.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
     cell.accessoryView = [self.selectedMemberItems containsObject:item] ? checkMarkImage : nil;
-    cell.imageView.image = [title isEqualToString:@"添加新成员"] ? [[UIImage imageNamed:@"border_add"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] : nil;
-    cell.imageView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-    cell.textLabel.textColor = [title isEqualToString:@"添加新成员"] ? [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] : [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     return cell;
 }
 
@@ -139,7 +143,7 @@
         UIButton *comfirmButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [comfirmButton setTitle:@"确定" forState:UIControlStateNormal];
         [comfirmButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] forState:UIControlStateNormal];
-        [comfirmButton addTarget:self action:@selector(comfirmButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+        [comfirmButton addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
         comfirmButton.titleLabel.font = [UIFont systemFontOfSize:18];
         [_topView addSubview:comfirmButton];
         comfirmButton.size = CGSizeMake(50, 20);
@@ -159,17 +163,6 @@
 }
 
 #pragma mark - Event
--(void)comfirmButtonClick:(id)sender{
-    if (!self.selectedMemberItems.count) {
-        [CDAutoHideMessageHUD showMessage:@"至少选择一个成员"];
-        return;
-    }
-    [self dismiss];
-    if (self.comfirmBlock) {
-        self.comfirmBlock(self.selectedMemberItems);
-    }
-}
-
 - (void)manageButtonClick:(id)sender{
     [self dismiss];
     if (self.manageBlock) {
@@ -215,15 +208,21 @@
     __weak typeof(self) weakSelf = self;
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSString *userid = SSJUSERID();
-        FMResultSet *allMembersResult = [db executeQuery:@"select * from bk_member where cuserid = ? and istate <> 0 order by cadddate asc",userid];
+        FMResultSet *allMembersResult = [db executeQuery:@"select * from bk_member where cuserid = ? and istate <> 0 order by iorder asc , cadddate asc",userid];
         NSMutableArray *allMembersArr = [NSMutableArray array];
         NSMutableArray *idsArr = [NSMutableArray array];
+        int count = 1;
         while ([allMembersResult next]) {
             SSJChargeMemberItem *item = [[SSJChargeMemberItem alloc]init];
             item.memberId = [allMembersResult stringForColumn:@"CMEMBERID"];
             [idsArr addObject:[NSString stringWithFormat:@"'%@'",item.memberId]];
             item.memberName = [allMembersResult stringForColumn:@"CNAME"];
             item.memberColor = [allMembersResult stringForColumn:@"CCOLOR"];
+            item.memberOrder = [allMembersResult intForColumn:@"IORDER"];
+            if (!item.memberOrder) {
+                item.memberOrder = count;
+            }
+            count ++;
             [allMembersArr addObject:item];
         }
         [allMembersResult close];
@@ -242,6 +241,7 @@
         item.memberName = @"添加新成员";
         [allMembersArr addObject:item];
         weakSelf.items = [NSArray arrayWithArray:allMembersArr];
+        [weakSelf updateSelectedMemberItems];
         dispatch_async(dispatch_get_main_queue(), ^{
             [weakSelf.tableView reloadData];
         });
@@ -250,7 +250,17 @@
 
 -(void)setSelectedMemberItems:(NSMutableArray *)selectedMemberItems{
     _selectedMemberItems = selectedMemberItems;
+    [self updateSelectedMemberItems];
     [self.tableView reloadData];
+}
+
+- (void)updateSelectedMemberItems {
+    NSMutableArray *tmpMemberItems = [_selectedMemberItems copy];
+    for (SSJChargeMemberItem *memberItem in tmpMemberItems) {
+        if (self.items && ![self.items containsObject:memberItem]) {
+            [_selectedMemberItems removeObject:memberItem];
+        }
+    }
 }
 
 /*

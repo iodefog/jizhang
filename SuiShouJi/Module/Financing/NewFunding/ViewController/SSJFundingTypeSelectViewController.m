@@ -144,7 +144,9 @@
             item.fundingMemo = [rs stringForColumn:@"CMEMO"];
             item.fundingParent = [rs stringForColumn:@"CPARENT"];
             if (![item.fundingID isEqualToString:@"9"]) {
-                [tempArray addObject:item];
+                if (weakSelf.needLoanOrNot || (![item.fundingID isEqualToString:@"10"] && ![item.fundingID isEqualToString:@"11"])) {
+                    [tempArray addObject:item];
+                }
             }
         }
         NSArray *tempSortedArr =  [tempArray sortedArrayUsingComparator:^NSComparisonResult(SSJFundingItem *item1, SSJFundingItem *item2){

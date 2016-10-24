@@ -18,7 +18,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 #import "SSJFinancingHomeitem.h"
 #import "SSJFundingDetailsViewController.h"
 #import "SSJFundingTransferViewController.h"
-#import "SSJNewFundingViewController.h"
+#import "SSJFundingItem.h"
 #import "SSJFinancingHomePopView.h"
 #import "SSJDatabaseQueue.h"
 #import "SSJFinancingHomeHelper.h"
@@ -73,6 +73,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
         popView.frame = [UIScreen mainScreen].bounds;
         [[UIApplication sharedApplication].keyWindow addSubview:popView];
         [[NSUserDefaults standardUserDefaults]setBool:YES forKey:SSJHaveEnterFundingHomeKey];
+        [[NSUserDefaults standardUserDefaults] synchronize];
     }
 }
 
@@ -155,28 +156,49 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
     SSJFinancingHomeCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:SSJFinancingNormalCellIdentifier forIndexPath:indexPath];
     cell.item = item;
     cell.editeModel = _editeModel;
-    cell.deleteButtonClickBlock = ^(SSJFinancingHomeCell *cell){
-        if ([cell.item isKindOfClass:[SSJCreditCardItem class]]) {
-            SSJCreditCardItem *deleteItem = (SSJCreditCardItem *)cell.item;
-            [SSJCreditCardStore deleteCreditCardWithCardItem:deleteItem Success:^{
-                //            [weakSelf.items removeObjectAtIndex:deleteIndex.item];
-                //            [weakSelf.collectionView deleteItemsAtIndexPaths:@[deleteIndex]];
-                [weakSelf getDateFromDateBase];
-                [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
-            } failure:^(NSError *error) {
-                
-            }];
-        }else{
-            SSJFinancingHomeitem *deleteItem = (SSJFinancingHomeitem *)cell.item;
-            [SSJLoanHelper queryForLoanModelsWithFundID:deleteItem.fundingParent colseOutState:2 success:^(NSArray<SSJLoanModel *> * _Nonnull list) {
-                
-            } failure:^(NSError * _Nonnull error) {
-                
-            }];
-            [self.items removeObject:deleteItem];
-            [weakSelf.collectionView reloadData];
-            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
-        }
+    cell.deleteButtonClickBlock = ^(SSJFinancingHomeCell *cell,NSInteger chargeCount){
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"确定要删除该资金帐户吗?" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:NULL];
+        UIAlertAction *comfirm = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+            if (chargeCount) {
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"删除该资金后，是否将展示在首页和报表的流水及相关借贷数据一并删除" preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *reserve = [UIAlertAction actionWithTitle:@"仅删除资金" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                    [weakSelf deleteFundingItem:cell.item type:0];
+                }];
+                UIAlertAction *destructive = [UIAlertAction actionWithTitle:@"一并删除" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+                    [weakSelf deleteFundingItem:cell.item type:1];
+                }];
+                UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                }];
+                [alert addAction:reserve];
+                [alert addAction:destructive];
+                [alert addAction:cancel];
+                [weakSelf presentViewController:alert animated:YES completion:NULL];
+            }else{
+                [weakSelf deleteFundingItem:cell.item type:0];
+            }
+        }];
+        [alert addAction:cancel];
+        [alert addAction:comfirm];
+        [self presentViewController:alert animated:YES completion:NULL];
+//        if ([cell.item isKindOfClass:[SSJCreditCardItem class]]) {
+//            SSJCreditCardItem *deleteItem = (SSJCreditCardItem *)cell.item;
+//            [SSJCreditCardStore deleteCreditCardWithCardItem:deleteItem Success:^{
+//                //            [weakSelf.items removeObjectAtIndex:deleteIndex.item];
+//                //            [weakSelf.collectionView deleteItemsAtIndexPaths:@[deleteIndex]];
+//                [weakSelf getDateFromDateBase];
+//                [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+//            } failure:^(NSError *error) {
+//                
+//            }];
+//        }else{
+//            SSJFinancingHomeitem *deleteItem = (SSJFinancingHomeitem *)cell.item;
+//            [SSJLoanHelper queryForLoanModelsWithFundID:deleteItem.fundingParent colseOutState:2 success:^(NSArray<SSJLoanModel *> * _Nonnull list) {
+//                
+//            } failure:^(NSError * _Nonnull error) {
+//                
+//            }];
+//        }
     };
     return cell;
 }
@@ -210,7 +232,8 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 }
 
 - (void)collectionViewDidEndEditing:(SSJEditableCollectionView *)collectionView{
-    
+    [MobClick event:@"account_book_sort"];
+    [SSJFinancingHomeHelper SaveFundingOderWithItems:self.items error:nil];
 }
 
 //- (BOOL)shouldCollectionViewEndEditingWhenUserTapped:(SSJEditableCollectionView *)collectionView{
@@ -289,6 +312,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 
 - (void)rightButtonClicked:(id)sender{
     SSJFundingTypeSelectViewController *fundingTypeSelectVC = [[SSJFundingTypeSelectViewController alloc]init];
+    fundingTypeSelectVC.needLoanOrNot = YES;
     __weak typeof(self) weakSelf = self;
     fundingTypeSelectVC.addNewFundingBlock = ^(SSJBaseItem *item){
         if ([item isKindOfClass:[SSJFundingItem class]]) {
@@ -341,12 +365,21 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
     }];
 }
 
+- (void)deleteFundingItem:(SSJBaseItem *)item type:(BOOL)type{
+    __weak typeof(self) weakSelf = self;
+    [SSJFinancingHomeHelper deleteFundingWithFundingItem:item deleteType:type Success:^{
+        [weakSelf getDateFromDateBase];
+        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+    } failure:^(NSError *error) {
+        NSLog(@"%@",[error localizedDescription]);
+    }];
+}
+
 -(void)collectionViewEndEditing{
     _editeModel = NO;
     [self.collectionView reloadData];
     UIBarButtonItem *rightButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"founds_jia"] style:UIBarButtonItemStylePlain target:self action:@selector(rightButtonClicked:)];
     self.navigationItem.rightBarButtonItem = rightButton;
-    [SSJFinancingHomeHelper SaveFundingOderWithItems:self.items error:nil];
     [self.collectionView endEditing];
 }
 

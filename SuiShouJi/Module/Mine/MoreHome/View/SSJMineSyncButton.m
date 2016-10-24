@@ -98,6 +98,15 @@ static NSString *const kCircleAnimationKey = @"circleAnimationKey";
 }
 
 -(void)syncButtonClicked:(id)sender{
+    BOOL shouldSync = YES;
+    if (_shouldSyncBlock) {
+        shouldSync = _shouldSyncBlock();
+    }
+    
+    if (!shouldSync) {
+        return;
+    }
+    
     [self startAnimation];
     _startTime = CFAbsoluteTimeGetCurrent();
     self.titleLabel.text = @"同步中";

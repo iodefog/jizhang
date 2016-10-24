@@ -8,9 +8,9 @@
 
 //  1.6.0
 
-#import "SSJBaseSyncTable.h"
+#import <Foundation/Foundation.h>
 #import "SSJDatabaseVersionProtocol.h"
 
-@interface SSJDatabaseVersion6 : SSJBaseSyncTable <SSJDatabaseVersionProtocol>
+@interface SSJDatabaseVersion6 : NSObject <SSJDatabaseVersionProtocol>
 
 @end

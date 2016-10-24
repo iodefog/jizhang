@@ -34,7 +34,6 @@
             && [db executeUpdate:@"delete from bk_user_bill where cuserid = ?", userId]
             && [db executeUpdate:@"delete from bk_books_type where cuserid = ?", userId]
             && [db executeUpdate:@"delete from bk_dailysum_charge where cuserid = ?", userId]
-            && [db executeUpdate:@"delete from bk_funs_acct where cuserid = ?", userId]
             && [db executeUpdate:@"delete from bk_sync where cuserid = ?", userId]) {
             
             [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:^(SSJDataSynchronizeType type) {
@@ -59,42 +58,68 @@
     
     NSString *originalUserid = SSJUSERID();
     NSString *newUserId = SSJUUID();
+    
     SSJUserItem *originalUserItem = [SSJUserTableManager queryUserItemForID:originalUserid];
     originalUserItem.registerState = @"1";
-    SSJUserItem *newuserItem = originalUserItem;
+    
+    SSJUserItem *newuserItem = [originalUserItem copy];
     newuserItem.userId = newUserId;
     newuserItem.defaultMemberState = @"0";
     newuserItem.defaultFundAcctState = @"0";
     newuserItem.defaultBooksTypeState = @"0";
-    newuserItem.currentBooksId = @"";
-    SSJClearUserDataService *service = [[SSJClearUserDataService alloc]initWithDelegate:nil];
-    [service clearUserDataWithOriginalUserid:originalUserid newUserid:newUserId Success:^{
-        if (SSJSetUserId(newUserId) && [SSJUserTableManager saveUserItem:newuserItem] && [SSJUserTableManager saveUserItem:originalUserItem]) {
-            [SSJLocalNotificationHelper cancelLocalNotificationWithUserId:originalUserid];
-            [SSJUserDefaultDataCreater asyncCreateAllDefaultDataWithSuccess:^{
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if (success) {
-                        success();
-                    }
-                });
-            } failure:^(NSError *error) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if ([service.returnCode isEqualToString:@"-5555"]) {
-                        [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"数据已格式化成功，请重新登录！" action:[SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction * _Nonnull action) {
-                            [SSJLoginViewController reloginIfNeeded];
-                        }], nil];
-                    } else {
-                        if (failure) {
-                            failure(error);
-                        }
-                    }
-                });
-            }];
-        }
-    } failure:^(NSError *error) {
-        if (failure) {
-            failure(error);
-        }
-    }];
+    newuserItem.currentBooksId = newuserItem.userId;
+    
+    // 老用户id没过注册过，说明没有登录，为登陆情况下数据格式化不请求接口
+    if (SSJIsUserLogined()) {
+        
+        SSJClearUserDataService *service = [[SSJClearUserDataService alloc]initWithDelegate:nil];
+        [service clearUserDataWithOriginalUserid:originalUserid newUserid:newUserId Success:^{
+            
+            if ([service.returnCode isEqualToString:@"-5555"]) {
+                [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"数据已格式化成功，请重新登录！" action:[SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction * _Nonnull action) {
+                    [SSJLoginViewController reloginIfNeeded];
+                }], nil];
+                return;
+            }
+            
+            [self saveNewUserItem:newuserItem originalUserItem:originalUserItem success:success failure:failure];
+            
+        } failure:^(NSError *error) {
+            if (failure) {
+                failure(error);
+            }
+        }];
+        
+    } else {
+        [self saveNewUserItem:newuserItem originalUserItem:originalUserItem success:success failure:failure];
+    }
 }
+
++ (void)saveNewUserItem:(SSJUserItem *)newUserItem originalUserItem:(SSJUserItem *)originalUserItem success:(void(^)())success failure:(void (^)(NSError *error))failure {
+    
+    if (SSJSetUserId(newUserItem.userId)
+        && [SSJUserTableManager saveUserItem:newUserItem]
+        && [SSJUserTableManager saveUserItem:originalUserItem]) {
+        
+        [SSJLocalNotificationHelper cancelLocalNotificationWithUserId:originalUserItem.userId];
+        [SSJUserDefaultDataCreater asyncCreateAllDefaultDataWithSuccess:^{
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (success) {
+                    success();
+                }
+            });
+        } failure:^(NSError *error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (failure) {
+                    failure(error);
+                }
+            });
+        }];
+    } else {
+        if (failure) {
+            failure(nil);
+        }
+    }
+}
+
 @end

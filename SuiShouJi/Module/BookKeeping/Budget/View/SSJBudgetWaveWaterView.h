@@ -25,29 +25,17 @@
 // percent<1的情况下，两条波纹之间的位移
 @property (nonatomic) CGFloat waveOffset;
 
-// percent>=1的情况下，波纹振幅，默认是1
-@property (nonatomic) CGFloat fullWaveAmplitude;
-
-// percent>=1的情况下，波纹速度，默认是1
-@property (nonatomic) CGFloat fullWaveSpeed;
-
-// percent>=1的情况下，波纹周期，默认是1
-@property (nonatomic) CGFloat fullWaveCycle;
-
 // 内部边框宽度，default 1
 @property (nonatomic) CGFloat innerBorderWidth;
 
 // 外部边框宽度，default 1
 @property (nonatomic) CGFloat outerBorderWidth;
 
-// 金额
-@property (nonatomic) double money;
+// 预算金额
+@property (nonatomic) double budgetMoney;
 
-// 百分比，最小为0，在0～1之间（不包括1），只显示两条波纹；等于1时，显示多条绿色波纹；大于1时，显示多条红色波纹
-@property (nonatomic) CGFloat percent;
-
-// default NO
-@property (nonatomic) BOOL showText;
+// 支出金额
+@property (nonatomic) double expendMoney;
 
 - (instancetype)initWithRadius:(CGFloat)radius;
 

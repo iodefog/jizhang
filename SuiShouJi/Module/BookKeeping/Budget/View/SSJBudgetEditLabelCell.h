@@ -10,6 +10,6 @@
 
 @interface SSJBudgetEditLabelCell : SSJBaseTableViewCell
 
-@property (nonatomic, strong, readonly) UILabel *subtitleLab;
+//@property (nonatomic, strong, readonly) UILabel *subtitleLab;
 
 @end

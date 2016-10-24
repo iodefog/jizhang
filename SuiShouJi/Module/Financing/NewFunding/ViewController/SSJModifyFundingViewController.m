@@ -13,6 +13,7 @@
 #import "TPKeyboardAvoidingTableView.h"
 #import "SSJDatabaseQueue.h"
 #import "SSJDataSynchronizer.h"
+#import "SSJFinancingHomeHelper.h"
 #import "SSJCustomKeyboard.h"
 
 #import "FMDB.h"
@@ -236,13 +237,23 @@
 
 -(UIBarButtonItem*)rightBarButton{
     if (!_rightBarButton) {
-        _rightBarButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStyleBordered target:self action:@selector(rightBarButtonClicked:)];
+        _rightBarButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(rightBarButtonClicked:)];
 //        _rightBarButton.tintColor = [UIColor ssj_colorWithHex:@"cccccc"];
     }
     return _rightBarButton;
 }
 
 #pragma mark - Private
+- (void)deleteFundingItem:(SSJBaseItem *)item type:(BOOL)type{
+    __weak typeof(self) weakSelf = self;
+    [SSJFinancingHomeHelper deleteFundingWithFundingItem:item deleteType:type Success:^{
+        [weakSelf.navigationController popToRootViewControllerAnimated:YES];
+        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+    } failure:^(NSError *error) {
+        NSLog(@"%@",[error localizedDescription]);
+    }];
+}
+
 -(void)saveButtonClicked:(id)sender{
     NSString* number=@"^(\\-)?\\d+(\\.\\d{1,2})?$";
     NSPredicate *numberPre = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",number];
@@ -273,7 +284,6 @@
                 *rollback = YES;
             }
         }
-        [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = ? WHERE CFUNDID = ? AND CUSERID = ? ",[NSNumber numberWithDouble:[_amountTextField.text doubleValue]] , weakSelf.item.fundingID,SSJUSERID()];
         [db executeUpdate:@"UPDATE BK_FUND_INFO SET CACCTNAME = ? , CPARENT = ? , CCOLOR = ? , CICOIN = (SELECT CICOIN FROM BK_FUND_INFO WHERE CFUNDID = ?) , CMEMO = ? , IVERSION = ? , CWRITEDATE = ? , OPERATORTYPE = ? WHERE CFUNDID = ? AND CUSERID = ? ",_nameTextField.text,_selectParent,_selectColor, _selectParent , _memoTextField.text , @(SSJSyncVersion()), [[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"] , [NSNumber numberWithInt:1] ,weakSelf.item.fundingID,SSJUSERID()];
         dispatch_async(dispatch_get_main_queue(), ^(){
             [weakSelf.navigationController popViewControllerAnimated:YES];
@@ -304,26 +314,30 @@
 
 -(void)rightBarButtonClicked:(id)sender{
     __weak typeof(self) weakSelf = self;
-    [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
-        NSString *userid = SSJUSERID();
-        BOOL haveConfigOrNot;
-        if ([db intForQuery:@"select * from bk_charge_period_config where ifunsid = ? and cuserid = ? and operatortype != 2",weakSelf.item.fundingID,userid] > 0) {
-            haveConfigOrNot = YES;
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"确定要删除该资金帐户吗?" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:NULL];
+    UIAlertAction *comfirm = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+        if (weakSelf.item.chargeCount) {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"删除该资金后，是否将展示在首页和报表的流水及相关借贷数据一并删除" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *reserve = [UIAlertAction actionWithTitle:@"仅删除资金" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [weakSelf deleteFundingItem:weakSelf.item type:0];
+            }];
+            UIAlertAction *destructive = [UIAlertAction actionWithTitle:@"一并删除" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+                [weakSelf deleteFundingItem:weakSelf.item type:1];
+            }];
+            UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            }];
+            [alert addAction:reserve];
+            [alert addAction:destructive];
+            [alert addAction:cancel];
+            [weakSelf presentViewController:alert animated:YES completion:NULL];
         }else{
-            haveConfigOrNot = NO;
+            [weakSelf deleteFundingItem:weakSelf.item type:0];
         }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (haveConfigOrNot) {
-                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"删除此资金账户，关联的周期记账将会被暂停哦，如需续用请至“更多”进行编辑。" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
-                alert.tag = 100;
-                [alert show];
-            }else{
-                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"你确定要删除该资金账户吗?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
-                alert.tag = 101;
-                [alert show];
-            }
-        });
     }];
+    [alert addAction:cancel];
+    [alert addAction:comfirm];
+    [self presentViewController:alert animated:YES completion:NULL];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{

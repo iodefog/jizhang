@@ -92,6 +92,7 @@
     }
     self.moneyLab.right = self.contentView.width - 10;
     self.moneyLab.centerY = self.contentView.height * 0.5;
+    self.typeLabel.width = self.moneyLab.left - self.imageView.right - 20;
 }
 
 - (void)setItem:(SSJBillingChargeCellItem *)item {

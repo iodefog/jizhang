@@ -58,10 +58,12 @@
         self.fundingBalanceLabel.right = self.backView.width - 10;
         if (!fundItem.fundingMemo.length) {
             self.fundingNameLabel.left = self.fundingImage.right + 10;
+            self.fundingNameLabel.width = self.fundingBalanceLabel.left - self.fundingImage.right - 20;
             self.fundingNameLabel.centerY = self.backView.height / 2;
         }else{
             self.fundingNameLabel.bottom = self.backView.height / 2 - 3;
             self.fundingNameLabel.left = self.fundingImage.right + 10;
+            self.fundingNameLabel.width = self.fundingBalanceLabel.left - self.fundingImage.right - 20;
             self.fundingMemoLabel.top = self.backView.height / 2 + 3;
             self.fundingMemoLabel.left = self.fundingImage.right + 10;
         }
@@ -77,6 +79,7 @@
             self.fundingBalanceLabel.centerY = self.fundingNameLabel.centerY;
         }
         self.fundingBalanceLabel.right = self.backView.width - 10;
+        self.fundingNameLabel.width = self.fundingBalanceLabel.left - self.fundingImage.right - 20; 
         self.cardMemoLabel.width = self.fundingBalanceLabel.left - self.fundingNameLabel.right - 10;
         self.cardMemoLabel.left = self.fundingNameLabel.right + 10;
         self.cardMemoLabel.centerY = self.fundingNameLabel.centerY;
@@ -260,23 +263,15 @@
 
 
 -(void)deleteButtonClicked:(id)sender{
-    [MobClick event:@"fund_delete"];
-    if ([_item isKindOfClass:[SSJFinancingHomeitem class]]) {
-        SSJFinancingHomeitem *item = (SSJFinancingHomeitem *)_item;
-        [SSJFinancingHomeHelper deleteFundingWithFundingItem:item];
-        if (self.deleteButtonClickBlock) {
-            self.deleteButtonClickBlock(self);
-        };
+    NSInteger chargeCount = 0;
+    if ([self.item isKindOfClass:[SSJCreditCardItem class]]) {
+        chargeCount = ((SSJCreditCardItem *)self.item).chargeCount;
     }else{
-        __weak typeof(self) weakSelf = self;
-        [SSJCreditCardStore deleteCreditCardWithCardItem:(SSJCreditCardItem *)self.item Success:^{
-            if (weakSelf.deleteButtonClickBlock) {
-                weakSelf.deleteButtonClickBlock(weakSelf);
-            }
-        } failure:^(NSError *error) {
-            [CDAutoHideMessageHUD showMessage:@"删除失败"];
-        }];
+        chargeCount = ((SSJFinancingHomeitem *)self.item).chargeCount;
     }
+    if (self.deleteButtonClickBlock) {
+        self.deleteButtonClickBlock(self,chargeCount);
+    };
 }
 
 @end
