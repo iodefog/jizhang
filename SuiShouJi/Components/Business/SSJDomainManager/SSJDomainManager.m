@@ -39,8 +39,8 @@ static NSString *const kTestImageDomain = @"http://account.gs.9188.com/";
 }
 
 + (void)requestDomain {
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [[self customManager] GET:@"http://down.app.9188.com/app/android/jz/gjj/cfg/cpixeljz.cy" parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(30 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [[self customManager] GET:@"http://hosts.shanghaicaiyi.com/gjj/cpixeljz.cy" parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
             
             NSData *decodeBase64Data = [[NSData alloc] initWithBase64EncodedData:responseObject options:0];
             NSString *decodeBase64Str = [[NSString alloc] initWithData:decodeBase64Data encoding:NSUTF8StringEncoding];
