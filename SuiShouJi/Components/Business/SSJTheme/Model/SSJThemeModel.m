@@ -14,6 +14,8 @@
     [aCoder encodeObject:_ID forKey:@"ID"];
     [aCoder encodeObject:_name forKey:@"name"];
     [aCoder encodeObject:_size forKey:@"size"];
+    [aCoder encodeObject:_etag forKey:@"etag"];
+    [aCoder encodeObject:_version forKey:@"version"];
     [aCoder encodeObject:_previewUrlStr forKey:@"previewUrlStr"];
     [aCoder encodeObject:_thumbUrlStr forKey:@"thumbUrlStr"];
     [aCoder encodeObject:_previewUrlArr forKey:@"previewUrlArr"];
@@ -65,6 +67,8 @@
         _ID = [aDecoder decodeObjectForKey:@"ID"];
         _name = [aDecoder decodeObjectForKey:@"name"];
         _size = [aDecoder decodeObjectForKey:@"size"];
+        _etag = [aDecoder decodeObjectForKey:@"etag"];
+        _version = [aDecoder decodeObjectForKey:@"version"];
         _previewUrlStr = [aDecoder decodeObjectForKey:@"previewUrlStr"];
         _thumbUrlStr = [aDecoder decodeObjectForKey:@"thumbUrlStr"];
         _previewUrlArr = [aDecoder decodeObjectForKey:@"previewUrlArr"];

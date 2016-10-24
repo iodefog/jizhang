@@ -14,6 +14,7 @@
     return @{
              @"themeId" : @"id",
              @"themeTitle" : @"name",
+             @"version" : @"iversion",
              @"themeImageUrl" : @"imgUrl",
              @"themeThumbImageUrl" : @"thumbUrl",
              @"themeDesc" : @"desc",

@@ -10,8 +10,19 @@
 
 @interface SSJThemeItem : SSJBaseItem
 
+typedef NS_ENUM(NSInteger, themeStatus) {
+    themeStatusNotDownloaded,        // 未下载
+    themeStatusHaveDownloaded,       // 已下载
+    themeStatusNeedToUpdate,         // 需要升级
+    themeStatusInuse                 // 使用中
+};
+
+
 //主题ID
 @property(nonatomic, strong) NSString *themeId;
+
+//主题版本
+@property(nonatomic, strong) NSString *version;
 
 //主题名称
 @property(nonatomic, strong) NSString *themeTitle;
@@ -27,6 +38,9 @@
 
 //主题状态(0为未下载,1为已下载,2为已启用)
 @property(nonatomic) NSInteger themeStatus;
+
+//主题状态(0为未下载,1为已下载,2为已启用)
+//@property(nonatomic) themeStatus themeStatus;
 
 //主题详情的图片
 @property(nonatomic, strong) NSArray *images;

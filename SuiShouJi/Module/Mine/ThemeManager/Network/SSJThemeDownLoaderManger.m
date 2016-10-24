@@ -76,12 +76,12 @@ static id _instance;
         item.downLoadUrl = [NSString stringWithFormat:@"http://%@",item.downLoadUrl];
     }
     NSURL *URL = [NSURL URLWithString:item.downLoadUrl];
-    NSURLRequest *request = [NSURLRequest requestWithURL:URL];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:URL];
     
     SSJThemeModel *model = [SSJThemeSetting ThemeModelForModelId:item.themeId];
     
     if (model.etag.length > 0) {
-        [request setValue:model.etag forKey:@"If-None-Match"];
+        [request setValue:model.etag forHTTPHeaderField:@"If-None-Match"];
     }
     
     NSProgress *tProgress = nil;
@@ -155,6 +155,8 @@ static id _instance;
         }
         
         SSJThemeModel *model = [SSJThemeModel mj_objectWithKeyValues:resultInfo];
+        model.etag = [[(NSHTTPURLResponse *)response allHeaderFields] objectForKey:@"ETag"];
+        model.version = item.version;
         [SSJThemeSetting addThemeModel:model];
         
         if (success) {
