@@ -81,7 +81,7 @@ static id _instance;
     SSJThemeModel *model = [SSJThemeSetting ThemeModelForModelId:item.themeId];
     
     if (model.etag.length > 0) {
-        [request setValue:model.etag forKey:@"forHTTPHeaderField"];
+        [request setValue:model.etag forKey:@"If-None-Match"];
     }
     
     NSProgress *tProgress = nil;
