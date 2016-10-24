@@ -139,6 +139,7 @@
         _memoView.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _memoView.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"写点啥备注下" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         _memoView.returnKeyType = UIReturnKeyDone;
+        _memoView.clearButtonMode = UITextFieldViewModeWhileEditing;
     }
     return _memoView;
 }

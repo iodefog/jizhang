@@ -33,6 +33,7 @@
 #import "SSJLoginViewController+SSJCategory.h"
 #import "SSJLocalNotificationStore.h"
 #import "SSJLocalNotificationHelper.h"
+#import "SSJDomainManager.h"
 
 //
 static const NSTimeInterval kTimeoutInterval = 30;
@@ -271,7 +272,7 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
 - (void)uploadData:(NSData *)data completionHandler:(void (^)(NSURLResponse *response, id responseObject, NSError *error))completionHandler {
     
     //  创建请求
-    NSString *urlString = [[NSURL URLWithString:@"/sync/syncdata.go" relativeToURL:[NSURL URLWithString:SSJBaseURLString]] absoluteString];
+    NSString *urlString = [[NSURL URLWithString:@"/sync/syncdata.go" relativeToURL:[NSURL URLWithString:[SSJDomainManager domain]]] absoluteString];
     
     NSError *tError = nil;
     NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] multipartFormRequestWithMethod:@"POST" URLString:urlString parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {

@@ -11,13 +11,14 @@
 #import "MMDrawerController.h"
 #import "sys/utsname.h"
 #import "SFHFKeychainUtils.h"
+#import "SSJDomainManager.h"
 
 NSString* SSJURLWithAPI(NSString* api) {
-    return [[NSURL URLWithString:api relativeToURL:[NSURL URLWithString:SSJBaseURLString]] absoluteString];
+    return [[NSURL URLWithString:api relativeToURL:[NSURL URLWithString:[SSJDomainManager domain]]] absoluteString];
 }
 
 NSString* SSJImageURLWithAPI(NSString* api) {
-    return [[NSURL URLWithString:api relativeToURL:[NSURL URLWithString:SSJImageBaseUrlString]] absoluteString];
+    return [[NSURL URLWithString:api relativeToURL:[NSURL URLWithString:[SSJDomainManager imageDomain]]] absoluteString];
 }
 
 NSString *SSJAppName() {
@@ -385,7 +386,7 @@ NSString *SSJGetChargeImageUrl(NSString *imageName){
         imageName = [NSString stringWithFormat:@"%@.jpg",imageName];
     }
     NSString *path = [NSString stringWithFormat:@"/image/sync/%@", imageName];
-    return [[NSURL URLWithString:path relativeToURL:[NSURL URLWithString:SSJImageBaseUrlString]] absoluteString];
+    return [[NSURL URLWithString:path relativeToURL:[NSURL URLWithString:[SSJDomainManager imageDomain]]] absoluteString];
 }
 
 void SSJDispatchMainSync(void (^block)(void)) {

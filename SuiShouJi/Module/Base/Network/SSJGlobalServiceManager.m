@@ -8,6 +8,7 @@
 
 #import "SSJGlobalServiceManager.h"
 #import "CDPointActivityIndicator.h"
+#import "SSJDomainManager.h"
 
 @interface SSJGlobalServiceManager ()
 
@@ -25,7 +26,7 @@
             NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
             configuration.requestCachePolicy = NSURLRequestReloadIgnoringLocalCacheData;
             
-            manager = [[SSJGlobalServiceManager alloc] initWithBaseURL:[NSURL URLWithString:SSJBaseURLString] sessionConfiguration:configuration];
+            manager = [[SSJGlobalServiceManager alloc] initWithBaseURL:[NSURL URLWithString:[SSJDomainManager domain]] sessionConfiguration:configuration];
         }
     });
     return manager;
