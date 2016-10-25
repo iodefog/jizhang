@@ -784,17 +784,55 @@
     NSMutableDictionary *mapping = [NSMutableDictionary dictionary];
     NSMutableArray *repeatIds = [NSMutableArray array];
     
-    // 查询重复的借贷id，根据借贷日期、接待人判断是否重复
-    FMResultSet *resultSet = [db executeQuery:@"select a.loanid as oldLoanId, b.loanid as newLoanId from bk_loan where as a, bk_loan as b where a.cuserid = ? and b.cuserid = ? and a.operatortype <> 2 and a.lender = b.lender and a.cborrowdate = b.cborrowdate", oldUserId, newUserId];
+    // 查询重复的借贷id，根据借贷日期、借贷人判断是否重复
+    FMResultSet *resultSet = [db executeQuery:@"select a.loanid as oldLoanId, b.loanid as newLoanId from bk_loan where as a, bk_loan as b where a.cuserid = ? and b.cuserid = ? and a.operatortype <> 2 and a.lender = b.lender and a.cborrowdate = b.cborrowdate order by b.cwritedate", oldUserId, newUserId];
     while ([resultSet next]) {
         NSString *oldLoanId = [resultSet stringForColumn:@"oldLoanId"];
         NSString *newLoanId = [resultSet stringForColumn:@"newLoanId"];
         [mapping setObject:newLoanId forKey:oldLoanId];
-        [repeatIds addObject:oldLoanId];
+        [repeatIds addObject:[NSString stringWithFormat:@"'%@'", oldLoanId]];
     }
     [resultSet close];
     
+    // 查找出没有重复的借贷，并创建一套新的相同记录到登录账户下
+    NSMutableString *sql_1 = [[NSString stringWithFormat:@"select loanid, lender, jmoney, cthefundid, ctargetfundid, cetarget, cborrowdate, crepaymentdate, cenddate, rate, memo, interest, cremindid, itype, iend from bk_loan where cuserid = ? and operatortype <> 2"] mutableCopy];
+    if (repeatIds.count) {
+        [sql_1 appendFormat:@" and loanid not in (%@)", [repeatIds componentsJoinedByString:@","]];
+    }
+    resultSet = [db executeQuery:sql_1, oldUserId];
     
+    NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+    while ([resultSet next]) {
+        NSString *loanId = [resultSet stringForColumn:@"loanid"];
+        NSString *lender = [resultSet stringForColumn:@"lender"];
+        NSString *money = [resultSet stringForColumn:@"jmoney"];
+        NSString *fundId = [resultSet stringForColumn:@"cthefundid"];
+        NSString *targetFundId = [resultSet stringForColumn:@"ctargetfundid"];
+        NSString *endTargetFundId = [resultSet stringForColumn:@"cetarget"];
+        NSString *borrowDate = [resultSet stringForColumn:@"cborrowdate"];
+        NSString *repaymentDate = [resultSet stringForColumn:@"crepaymentdate"];
+        NSString *endDate = [resultSet stringForColumn:@"cenddate"];
+        NSString *rate = [resultSet stringForColumn:@"rate"];
+        NSString *memo = [resultSet stringForColumn:@"memo"];
+        NSString *interest = [resultSet stringForColumn:@"interest"];
+        NSString *remindId = [resultSet stringForColumn:@"cremindid"];
+        NSString *type = [resultSet stringForColumn:@"itype"];
+        NSString *end = [resultSet stringForColumn:@"iend"];
+        
+        NSString *newLoanId = SSJUUID();
+        NSString *newFundId = [[self fundIdMapping] objectForKey:fundId];
+        NSString *newTargetFundId = [[self fundIdMapping] objectForKey:targetFundId];
+        NSString *newEndTargetFundId = [[self fundIdMapping] objectForKey:endTargetFundId];
+        NSString *newRemindId = [[self remindIdMapping] objectForKey:remindId];
+        
+        if (![db executeUpdate:@"insert info bk_loan (loanid, lender, jmoney, cthefundid, ctargetfundid, cetarget, cborrowdate, crepaymentdate, cenddate, rate, memo, interest, cremindid, itype, iend, cuserid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", newLoanId, lender, money, newFundId, newTargetFundId, newEndTargetFundId, borrowDate, repaymentDate, endDate, rate, memo, interest, newRemindId, type, end, newUserId, @(SSJSyncVersion()), @0, writeDate]) {
+            [resultSet close];
+            return nil;
+        }
+        
+        [[self loanIdMapping] setObject:newLoanId forKey:loanId];
+    }
+    [resultSet close];
     
     return mapping;
 }
