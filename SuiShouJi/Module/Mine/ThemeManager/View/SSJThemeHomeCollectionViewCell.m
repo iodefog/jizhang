@@ -131,7 +131,7 @@
 
 -(void)statusButtonClicked:(id)sender{
 //    __weak typeof(self) weakSelf = self;
-    if([((UIButton *)sender).titleLabel.text isEqualToString:@"下载"] && ![[SSJThemeDownLoaderManger sharedInstance].downLoadingArr containsObject:self.item.themeId]) {
+//    if([((UIButton *)sender).titleLabel.text isEqualToString:@"下载"] && ![[SSJThemeDownLoaderManger sharedInstance].downLoadingArr containsObject:self.item.themeId]) {
         __weak typeof(self) weakSelf = self;
         [((UIButton *)sender) setTitle:@"" forState:UIControlStateNormal];
         [[SSJThemeDownLoaderManger sharedInstance] downloadThemeWithItem:self.item success:^(SSJThemeItem *item){
@@ -149,13 +149,13 @@
         }];
         self.themeStatusButton.downloadMaskView.hidden = NO;
         [[SSJThemeDownLoaderManger sharedInstance] addProgressHandler:_downloadHandler forID:self.item.themeId];
-    }else if ([((UIButton *)sender).titleLabel.text isEqualToString:@"启用"]){
-        [SSJThemeSetting switchToThemeID:self.item.themeId];
-        [MobClick event:@"open_skin" attributes:@{@"ID":self.item.themeId,@"Name":self.item.themeTitle}];
-        if (self.themeChangeBlock) {
-            self.themeChangeBlock();
-        }
-    }
+//    }else if ([((UIButton *)sender).titleLabel.text isEqualToString:@"启用"]){
+//        [SSJThemeSetting switchToThemeID:self.item.themeId];
+//        [MobClick event:@"open_skin" attributes:@{@"ID":self.item.themeId,@"Name":self.item.themeTitle}];
+//        if (self.themeChangeBlock) {
+//            self.themeChangeBlock();
+//        }
+//    }
 }
 
 -(void)setItem:(SSJThemeItem *)item{

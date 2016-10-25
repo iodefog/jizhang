@@ -42,6 +42,7 @@
 #import "SSJUmengManager.h"
 #import "SSJLocalNotificationHelper.h"
 #import "SSJLocalNotificationStore.h"
+#import "SSJThemeUpdate.h"
 #import "SSJDomainManager.h"
 
 //  进入后台超过的时限后进入锁屏
@@ -123,6 +124,7 @@ NSDate *SCYEnterBackgroundTime() {
         [[NSUserDefaults standardUserDefaults]setObject:[NSDate date]forKey:SSJLastPopTimeKey];
         [[NSUserDefaults standardUserDefaults]setBool:NO forKey:SSJHaveLoginOrRegistKey];
         [SSJJspatchAnalyze removePatch];
+        [SSJThemeUpdate UpdateLocalThemesIfneeded];
     }
     
     //每次启动打一次补丁

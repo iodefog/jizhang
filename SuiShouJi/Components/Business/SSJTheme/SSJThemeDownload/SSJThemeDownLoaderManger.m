@@ -99,6 +99,15 @@ static id _instance;
     } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
         [_blockerMapping removeObjectForKey:item.themeId];
         
+        if (((NSHTTPURLResponse *)response).statusCode == 304) {
+            if (success) {
+                SSJDispatch_main_async_safe(^{
+                    success(item);
+                });
+            }
+            return;
+        }
+        
         if (error) {
             [self.downLoadingArr removeObject:item.themeId];
             SSJPRINT(@"%@",[error localizedDescription]);

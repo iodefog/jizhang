@@ -7,7 +7,6 @@
 //
 
 #import "SSJThemeService.h"
-#import "SSJThemeItem.h"
 
 @implementation SSJThemeService
 
@@ -27,6 +26,9 @@
         item.themeDesc = @"官方默认皮肤，羞羞萌萌的小猫伴你走过记账囧途，简约的初心设计与你一路相随。";
         [themeArray insertObject:item atIndex:0];
         self.themes = [NSArray arrayWithArray:themeArray];
+        if (self.success) {
+            self.success(self.themes);
+        }
     }
 }
 @end
