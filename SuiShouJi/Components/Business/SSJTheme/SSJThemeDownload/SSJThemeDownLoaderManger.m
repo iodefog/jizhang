@@ -1,4 +1,4 @@
-//
+    //
 //  SSJThemeDownLoaderManger.m
 //  SuiShouJi
 //
@@ -71,121 +71,123 @@ static id _instance;
 - (void)downloadThemeWithItem:(SSJThemeItem *)item
                     success:(void(^)(SSJThemeItem *item))success
                     failure:(void (^)(NSError *error))failure {
-    
-    if (![item.downLoadUrl hasPrefix:@"http"]) {
-        item.downLoadUrl = [NSString stringWithFormat:@"http://%@",item.downLoadUrl];
-    }
-    NSURL *URL = [NSURL URLWithString:item.downLoadUrl];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:URL];
-    
-    SSJThemeModel *model = [SSJThemeSetting ThemeModelForModelId:item.themeId];
-    
-    if (model.etag.length > 0) {
-        [request setValue:model.etag forHTTPHeaderField:@"If-None-Match"];
-    }
-    
-    NSProgress *tProgress = nil;
-    
-    [self.downLoadingArr addObject:item.themeId];
-    
-    
-    NSURLSessionDownloadTask *downloadTask = [self.manager downloadTaskWithRequest:request progress:&tProgress destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
-        if (![[NSString ssj_themeDirectory] stringByAppendingPathComponent:response.suggestedFilename]) {
-            [[NSFileManager defaultManager] createDirectoryAtPath:[[NSString ssj_themeDirectory] stringByAppendingPathComponent:item.themeId] withIntermediateDirectories:YES attributes:nil error:nil];
+    if (item.downLoadUrl.length) {
+        if (![item.downLoadUrl hasPrefix:@"http"]) {
+            item.downLoadUrl = [NSString stringWithFormat:@"http://%@",item.downLoadUrl];
         }
-        NSString *path = [[NSString ssj_themeDirectory] stringByAppendingPathComponent:response.suggestedFilename];
-        NSURL *fileURL = [NSURL fileURLWithPath:path];
-        return fileURL;
-    } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
-        [_blockerMapping removeObjectForKey:item.themeId];
+        NSURL *URL = [NSURL URLWithString:item.downLoadUrl];
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:URL];
         
-        if (((NSHTTPURLResponse *)response).statusCode == 304) {
+        SSJThemeModel *model = [SSJThemeSetting ThemeModelForModelId:item.themeId];
+        
+        if (model.etag.length > 0) {
+            [request setValue:model.etag forHTTPHeaderField:@"If-None-Match"];
+        }
+        
+        NSProgress *tProgress = nil;
+        
+        [self.downLoadingArr addObject:item.themeId];
+        
+        
+        NSURLSessionDownloadTask *downloadTask = [self.manager downloadTaskWithRequest:request progress:&tProgress destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
+            if (![[NSString ssj_themeDirectory] stringByAppendingPathComponent:response.suggestedFilename]) {
+                [[NSFileManager defaultManager] createDirectoryAtPath:[[NSString ssj_themeDirectory] stringByAppendingPathComponent:item.themeId] withIntermediateDirectories:YES attributes:nil error:nil];
+            }
+            NSString *path = [[NSString ssj_themeDirectory] stringByAppendingPathComponent:response.suggestedFilename];
+            NSURL *fileURL = [NSURL fileURLWithPath:path];
+            return fileURL;
+        } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
+            [_blockerMapping removeObjectForKey:item.themeId];
+            
+            if (((NSHTTPURLResponse *)response).statusCode == 304) {
+                if (success) {
+                    SSJDispatch_main_async_safe(^{
+                        success(item);
+                    });
+                }
+                return;
+            }
+            
+            if (error) {
+                [self.downLoadingArr removeObject:item.themeId];
+                SSJPRINT(@"%@",[error localizedDescription]);
+                if (failure) {
+                    SSJDispatch_main_async_safe(^{
+                        failure(error);
+                    });
+                }
+                return;
+            }
+            
+            [self.downLoadingArr removeObject:item.themeId];
+            [tProgress removeObserver:self forKeyPath:@"fractionCompleted"];
+            
+            NSError *tError = nil;
+            [self unzipUrl:filePath path:[NSString ssj_themeDirectory] error:&tError];
+            
+            // 不管解压是否成功，把压缩包删除，否则可能会导致以后下载相同压缩包不能覆盖的奇葩问题
+            [[NSFileManager defaultManager] removeItemAtURL:filePath error:&error];
+            
+            if (tError) {
+                SSJPRINT(@"%@",[error localizedDescription]);
+                if (failure) {
+                    SSJDispatch_main_async_safe(^{
+                        failure(error);
+                    });
+                }
+                return;
+            }
+            
+            // 解析主题配置文件，
+            NSString *themeSettingPath = [[[NSString ssj_themeDirectory] stringByAppendingPathComponent:item.themeId] stringByAppendingPathComponent:@"themeSettings.json"];
+            NSData *jsonData = [NSData dataWithContentsOfFile:themeSettingPath];
+            
+            if (!jsonData) {
+                if (failure) {
+                    SSJDispatch_main_async_safe(^{
+                        failure(error);
+                    });
+                }
+                SSJPRINT(@"<<< themeSettings.json 文件不存在 目录：%@>>>", themeSettingPath);
+                return;
+            }
+            
+            NSDictionary *resultInfo = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&tError];
+            if (tError) {
+                if (failure) {
+                    SSJDispatch_main_async_safe(^{
+                        failure(tError);
+                    });
+                }
+                SSJPRINT(@"<<< 解析主题json文件错误 error：%@ >>>", error);
+                return;
+            }
+            
+            SSJThemeModel *model = [SSJThemeModel mj_objectWithKeyValues:resultInfo];
+            model.etag = [[(NSHTTPURLResponse *)response allHeaderFields] objectForKey:@"ETag"];
+            model.version = item.version;
+            [SSJThemeSetting addThemeModel:model];
+            
             if (success) {
                 SSJDispatch_main_async_safe(^{
                     success(item);
                 });
             }
-            return;
-        }
+        }];
         
-        if (error) {
-            [self.downLoadingArr removeObject:item.themeId];
-            SSJPRINT(@"%@",[error localizedDescription]);
-            if (failure) {
-                SSJDispatch_main_async_safe(^{
-                    failure(error);
-                });
-            }
-            return;
-        }
+        //    [self.manager setDownloadTaskDidWriteDataBlock:^(NSURLSession *session, NSURLSessionDownloadTask *downloadTask, int64_t bytesWritten, int64_t totalBytesWritten, int64_t totalBytesExpectedToWrite) {
+        //
+        //    }];
         
-        [self.downLoadingArr removeObject:item.themeId];
-        [tProgress removeObserver:self forKeyPath:@"fractionCompleted"];
+        [tProgress setUserInfoObject:item.themeId forKey:@"ID"];
+        [tProgress addObserver:self forKeyPath:@"fractionCompleted" options:NSKeyValueObservingOptionNew context:NULL];
         
-        NSError *tError = nil;
-        [self unzipUrl:filePath path:[NSString ssj_themeDirectory] error:&tError];
-        
-        // 不管解压是否成功，把压缩包删除，否则可能会导致以后下载相同压缩包不能覆盖的奇葩问题
-        [[NSFileManager defaultManager] removeItemAtURL:filePath error:&error];
-        
-        if (tError) {
-            SSJPRINT(@"%@",[error localizedDescription]);
-            if (failure) {
-                SSJDispatch_main_async_safe(^{
-                    failure(error);
-                });
-            }
-            return;
-        }
-        
-        // 解析主题配置文件，
-        NSString *themeSettingPath = [[[NSString ssj_themeDirectory] stringByAppendingPathComponent:item.themeId] stringByAppendingPathComponent:@"themeSettings.json"];
-        NSData *jsonData = [NSData dataWithContentsOfFile:themeSettingPath];
-        
-        if (!jsonData) {
-            if (failure) {
-                SSJDispatch_main_async_safe(^{
-                    failure(error);
-                });
-            }
-            SSJPRINT(@"<<< themeSettings.json 文件不存在 目录：%@>>>", themeSettingPath);
-            return;
-        }
-        
-        NSDictionary *resultInfo = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&tError];
-        if (tError) {
-            if (failure) {
-                SSJDispatch_main_async_safe(^{
-                    failure(tError);
-                });
-            }
-            SSJPRINT(@"<<< 解析主题json文件错误 error：%@ >>>", error);
-            return;
-        }
-        
-        SSJThemeModel *model = [SSJThemeModel mj_objectWithKeyValues:resultInfo];
-        model.etag = [[(NSHTTPURLResponse *)response allHeaderFields] objectForKey:@"ETag"];
-        model.version = item.version;
-        [SSJThemeSetting addThemeModel:model];
-        
-        if (success) {
-            SSJDispatch_main_async_safe(^{
-                success(item);
-            });
-        }
-    }];
-    
-//    [self.manager setDownloadTaskDidWriteDataBlock:^(NSURLSession *session, NSURLSessionDownloadTask *downloadTask, int64_t bytesWritten, int64_t totalBytesWritten, int64_t totalBytesExpectedToWrite) {
-//        
-//    }];
-    
-    [tProgress setUserInfoObject:item.themeId forKey:@"ID"];
-    [tProgress addObserver:self forKeyPath:@"fractionCompleted" options:NSKeyValueObservingOptionNew context:NULL];
-    
-    SSJThemeDownLoaderProgressBlocker *progressBlocker = [[SSJThemeDownLoaderProgressBlocker alloc] init];
-    progressBlocker.ID = item.themeId;
-    [_blockerMapping setObject:progressBlocker forKey:item.themeId];
-    [downloadTask resume];
+        SSJThemeDownLoaderProgressBlocker *progressBlocker = [[SSJThemeDownLoaderProgressBlocker alloc] init];
+        progressBlocker.ID = item.themeId;
+        [_blockerMapping setObject:progressBlocker forKey:item.themeId];
+        [downloadTask resume];
+
+    }
 }
 
 - (void)addProgressHandler:(SSJThemeDownLoaderProgressBlock)handler forID:(NSString *)ID {
