@@ -25,6 +25,7 @@
                 }
             }
         };
+        [service requestThemeList];
     }else{
         SSJThemeService *service = [[SSJThemeService alloc]initWithDelegate:NULL];
         service.success = ^(NSArray <SSJThemeItem *> *items){
@@ -46,6 +47,7 @@
                 }
             }
         };
+        [service requestThemeList];
     }
 }
 
