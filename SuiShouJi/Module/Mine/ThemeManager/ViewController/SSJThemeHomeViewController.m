@@ -215,17 +215,21 @@ static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
     for (SSJThemeItem *theme in themes) {
         if ([theme.themeId isEqualToString:@"0"]) {
             if ([theme.themeId isEqualToString:[SSJThemeSetting currentThemeModel].ID]) {
-                theme.themeStatus = 2;
+                theme.themeStatus = themeStatusInuse;
             }else {
-                theme.themeStatus = 1;
+                theme.themeStatus = themeStatusHaveDownloaded;
             }
         }else{
-            if ([theme.themeId isEqualToString:[SSJThemeSetting currentThemeModel].ID]) {
-                theme.themeStatus = 2;
-            }else if ([[NSFileManager defaultManager] fileExistsAtPath:[[NSString ssj_themeDirectory] stringByAppendingPathComponent:theme.themeId]]) {
-                theme.themeStatus = 1;
+            if ([[SSJThemeSetting ThemeModelForModelId:theme.themeId].version integerValue] < [theme.version integerValue]) {
+                theme.themeStatus = themeStatusNeedToUpdate;
             }else{
-                theme.themeStatus = 0;
+                if ([theme.themeId isEqualToString:[SSJThemeSetting currentThemeModel].ID]) {
+                    theme.themeStatus = themeStatusInuse;
+                }else if ([[NSFileManager defaultManager] fileExistsAtPath:[[NSString ssj_themeDirectory] stringByAppendingPathComponent:theme.themeId]]) {
+                    theme.themeStatus = themeStatusHaveDownloaded;
+                }else{
+                    theme.themeStatus = themeStatusNotDownloaded;
+                }
             }
         }
         //获取主题是否正在下载
