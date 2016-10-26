@@ -110,7 +110,7 @@
     [resultSet close];
     
     // 查询有定期记账的成员
-    resultSet = [db executeQuery:@"select distinct cmemberids from bk_charge_period_config where cuserid = ?", userId1];
+    resultSet = [db executeQuery:@"select distinct cmemberids from bk_charge_period_config where operatortype <> 2 and cuserid = ?", userId1];
     while ([resultSet next]) {
         NSString *memberIdsStr = [resultSet stringForColumn:@"ifunsid"];
         NSArray *tMemberIds = [memberIdsStr componentsSeparatedByString:@","];
@@ -127,12 +127,14 @@
         return YES;
     }
     
-    NSMutableDictionary *memberIdMapping = [NSMutableDictionary dictionary];
+    NSDate *date = [NSDate dateWithTimeIntervalSince1970:version];
+    NSString *dateStr = [date formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+    
     NSString *allMemberIdStr = [memberIds componentsJoinedByString:@","];
     
     // 查询名称重复的成员id
     NSMutableArray *repeatIds = [NSMutableArray array];
-    NSString *sql_1 = [NSString stringWithFormat:@"select a.cmemberid as oldId, b.cmemberid as newId from bk_member as a, bk_member as b where a.cuserid = ? and b.cuserid = ? and a.cname = b.cname and a.cmemberid in (%@) order by b.cwritedate", allMemberIdStr];
+    NSString *sql_1 = [NSString stringWithFormat:@"select a.cmemberid as oldId, b.cmemberid as newId from bk_member as a, bk_member as b where a.cuserid = ? and b.cuserid = ? and a.cname = b.cname and a.cmemberid in (%@) and a.cwritedate > '%@' and order by b.cwritedate", allMemberIdStr, dateStr];
     resultSet = [db executeQuery:sql_1, userId1, userId2];
     
     while ([resultSet next]) {
@@ -147,7 +149,7 @@
     
     // 查询名称未重复的成员，copy到登录账户下
     NSString *repeatMemberIdStr = [repeatIds componentsJoinedByString:@","];
-    NSMutableString *sql_2 = [[NSString stringWithFormat:@"select cmemberid, cname, ccolor, istate, cadddate, operatortype from bk_member where cuserid = ? and cmemberid in (%@) and cmemberid not in (%@)", allMemberIdStr, repeatMemberIdStr] mutableCopy];
+    NSMutableString *sql_2 = [[NSString stringWithFormat:@"select cmemberid, cname, ccolor, istate, cadddate, operatortype from bk_member where cuserid = ? and cmemberid in (%@) and cmemberid not in (%@) and cwritedate > '%@'", allMemberIdStr, repeatMemberIdStr, dateStr] mutableCopy];
     resultSet = [db executeQuery:sql_2, userId1];
     
     NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
@@ -226,7 +228,6 @@
         return NO;
     }
     
-    NSMutableDictionary *billIdMapping = [NSMutableDictionary dictionary];
     NSString *allBillIdStr = [billIds componentsJoinedByString:@","];
     
     // 查询名称重复的类别id
@@ -286,6 +287,10 @@
 #pragma mark - 资金账户
 
 @implementation SSJAccountsMergeFundInfoTable
+
+- (BOOL)mergeFromUserID:(NSString *)userId1 toUserId:(NSString *)userId2 version:(int64_t)version inDatabase:(FMDatabase *)db error:(NSError **)error {
+    
+}
 
 @end
 
