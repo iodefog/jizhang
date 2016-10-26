@@ -36,11 +36,11 @@ typedef NS_ENUM(NSInteger, themeStatus) {
 //主题大小
 @property(nonatomic, strong) NSString *themeSize;
 
-//主题状态(0为未下载,1为已下载,2为已启用)
-@property(nonatomic) NSInteger themeStatus;
+////主题状态(0为未下载,1为已下载,2为已启用)
+//@property(nonatomic) NSInteger themeStatus;
 
-//主题状态(0为未下载,1为已下载,2为已启用)
-//@property(nonatomic) themeStatus themeStatus;
+//主题状态
+@property(nonatomic) themeStatus themeStatus;
 
 //主题详情的图片
 @property(nonatomic, strong) NSArray *images;

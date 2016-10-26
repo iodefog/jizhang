@@ -21,10 +21,10 @@
 + (BOOL)addThemeModel:(SSJThemeModel *)model {
     NSDictionary *modelInfo = [NSKeyedUnarchiver unarchiveObjectWithFile:[self settingFilePath]];
     NSMutableDictionary *newModelInfo = [NSMutableDictionary dictionaryWithCapacity:modelInfo.count + 1];
-    if ([modelInfo objectForKey:model.ID]) {
+    [newModelInfo addEntriesFromDictionary:modelInfo];
+    if ([newModelInfo objectForKey:model.ID]) {
         [newModelInfo removeObjectForKey:model.ID];
     }
-    [newModelInfo addEntriesFromDictionary:modelInfo];
     [newModelInfo setObject:model forKey:model.ID];
     
     return [NSKeyedArchiver archiveRootObject:newModelInfo toFile:[self settingFilePath]];
