@@ -329,11 +329,7 @@
         NSString *oldFundId = [resultSet stringForColumn:@"oldFundId"];
         NSString *newFundId = [resultSet stringForColumn:@"newFundId"];
         [repeatedFundIds addObject:[NSString stringWithFormat:@"'%@'", oldFundId]];
-        
-        SSJAccountsMergerMappingModel *model = [[SSJAccountsMergerMappingModel alloc] init];
-        model.ID = newFundId;
-        model.newCreated = NO;
-        [[SSJAccountsMergerMappingManager sharedManager].fundIdMapping setObject:model forKey:oldFundId];
+        [[SSJAccountsMergerMappingManager sharedManager].fundIdMapping setObject:newFundId forKey:oldFundId];
     }
     [resultSet close];
     
@@ -377,10 +373,7 @@
             return NO;
         }
         
-        SSJAccountsMergerMappingModel *model = [[SSJAccountsMergerMappingModel alloc] init];
-        model.ID = newFundId;
-        model.newCreated = YES;
-        [[SSJAccountsMergerMappingManager sharedManager].fundIdMapping setObject:model forKey:oldFundId];
+        [[SSJAccountsMergerMappingManager sharedManager].fundIdMapping setObject:newFundId forKey:oldFundId];
     }
     [resultSet close];
     
@@ -407,6 +400,8 @@
     
     NSString *sql_3 = [NSString stringWithFormat:@"select cfundid, iquota, cbilldate, crepaymentdate, cremindid, ibilldatesettlement, operatortype from bk_user_credit where cuserid = ? and cfundid in (%@)", newCreatedFundIDs];
     FMResultSet *resultSet = [db executeQuery:sql_3, userId1];
+    
+    resultSet = [db executeQuery:@"select cfundid from bk_user_credit where cuserid = ? and cwritedate > ?", ]
     
     while ([resultSet next]) {
         NSString *cfundid = [resultSet stringForColumn:@"cfundid"];
@@ -681,106 +676,107 @@
  2.排重借贷生成的流水，根据流水的借贷id判断在登录账户的流水中是否存在，已存在说明此流水需要排除
  3.同一次转账的两条流水cwritedate必须相同
  */
-//- (BOOL)mergeFromUserID:(NSString *)userId1 toUserId:(NSString *)userId2 version:(int64_t)version inDatabase:(FMDatabase *)db error:(NSError **)error {
-//    
-//    NSMutableDictionary *mapping = [NSMutableDictionary dictionary];
-//    NSMutableArray *repeatIds = [NSMutableArray array];
-//    
-//    NSDate *date = [NSDate dateWithTimeIntervalSince1970:version];
-//    NSString *dateStr = [date formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-//    
-//    // 根据周期记账id和记账日期查询两个账户下重复的周期记账生成的流水
-//    NSMutableArray *chargeInfos = [NSMutableArray array];
-//    FMResultSet *resultSet = [db executeQuery:@"select ichargeid, iconfigid, cbilldate from bk_user_charge where cuserid = ? and cwritedate > ? and length(iconfigid) > 0", userId1, dateStr];
-//    while ([resultSet next]) {
-//        NSString *chargeId = [resultSet stringForColumn:@"ichargeid"];
-//        NSString *billDate = [resultSet stringForColumn:@"cbilldate"];
-//        NSString *configId = [resultSet stringForColumn:@"iconfigid"];
-//        NSString *mappedConfigId = [[SSJAccountsMergerMappingManager sharedManager].periodChargeIdMapping objectForKey:configId];
-//        [chargeInfos addObject:@{@"chargeId":chargeId,
-//                                 @"configId":mappedConfigId,
-//                                 @"billDate":billDate}];
-//    }
-//    [resultSet close];
-//    
-//    for (NSDictionary *chargeInfo in chargeInfos) {
-//        NSString *chargeId = chargeInfo[@"chargeId"];
-//        NSString *configId = chargeInfo[@"configId"];
-//        NSString *billDate = chargeInfo[@"billDate"];
-//        if ([db boolForQuery:@"select count(1) from bk_user_charge where iconfigid = ? and cbilldate = ? and cuserid = ?", configId, billDate, userId2]) {
-//            [repeatIds addObject:[NSString stringWithFormat:@"'%@'", chargeId]];
-//        }
-//    }
-//    
-//    // 排重借贷流水
-//    NSMutableArray *loanChargeInfos = [NSMutableArray array];
-//    resultSet = [db executeQuery:@"select ichargeid, loanid from bk_user_charge where length(loanid) > 0 and cuserid = ?", oldUserId];
-//    while ([resultSet next]) {
-//        NSString *chargeId = [resultSet stringForColumn:@"ichargeid"];
-//        NSString *loanId = [resultSet stringForColumn:@"loanid"];
-//        [loanChargeInfos addObject:@{@"ichargeid":chargeId,
-//                                     @"loanid":loanId}];
-//    }
-//    [resultSet close];
-//    
-//    for (NSDictionary *loanChargeInfo in loanChargeInfos) {
-//        NSString *chargeId = loanChargeInfo[@"ichargeid"];
-//        NSString *loanId = loanChargeInfo[@"loanid"];
-//        NSString *newLoanId = self.loanIdMapping[loanId];
-//        if ([db boolForQuery:@"select count(1) from bk_user_charge where cuserid = ? and loanid = ?", newUserId, newLoanId]) {
-//            [repeatIds addObject:[NSString stringWithFormat:@"'%@'", chargeId]];
-//        }
-//    }
-//    
-//    // 查询未重复的记账流水，copy到登录账户下
-//    NSString *repeatIdStr = [repeatIds componentsJoinedByString:@","];
-//    NSString *sql_1 = [NSString stringWithFormat:@"select ichargeid, cbooksid, loanid, ibillid, ifunsid, iconfigid, imoney, cbilldate, cmemo, cimgurl, thumburl, cwritedate from bk_user_charge where cuserid = ? and operatortype <> 2 and ichargeid not in (%@) and ibillid <> '1' and ibillid <> '2'", repeatIdStr];
-//    resultSet = [db executeQuery:sql_1, oldUserId];
-//    
-//    NSString *commonWriteDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-//    while ([resultSet next]) {
-//        NSString *chargeId = [resultSet stringForColumn:@"ichargeid"];
-//        NSString *bookId = [resultSet stringForColumn:@"cbooksid"];
-//        NSString *loanId = [resultSet stringForColumn:@"loanid"];
-//        NSString *billId = [resultSet stringForColumn:@"ibillid"];
-//        NSString *fundId = [resultSet stringForColumn:@"ifunsid"];
-//        NSString *configId = [resultSet stringForColumn:@"iconfigid"];
-//        
-//        NSString *money = [resultSet stringForColumn:@"imoney"];
-//        NSString *billDate = [resultSet stringForColumn:@"cbilldate"];
-//        NSString *memo = [resultSet stringForColumn:@"cmemo"];
-//        NSString *imgUrl = [resultSet stringForColumn:@"cimgurl"];
-//        NSString *thumbUrl = [resultSet stringForColumn:@"thumburl"];
-//        
-//        NSString *writeDate = nil;
-//        if ([billId isEqualToString:@"3"] || [billId isEqualToString:@"4"]) {
-//            NSString *dateStr = [resultSet stringForColumn:@"cwritedate"];
-//            NSDate *tmpDate = [NSDate dateWithString:dateStr formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
-//            tmpDate = [tmpDate dateByAddingSeconds:1];
-//            writeDate = [tmpDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-//        } else {
-//            writeDate = commonWriteDate;
-//        }
-//        
-//        NSString *newChargeId = SSJUUID();
-//        NSString *newBookId = self.bookIdMapping[bookId];
-//        NSString *newLoanId = self.loanIdMapping[loanId];
-//        NSString *newBillId = self.billIdMapping[billId] ?: billId;
-//        NSString *newFundId = self.fundIdMapping[fundId];
-//        NSString *newConfigId = self.periodChargeIdMapping[configId];
-//        
-//        if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cbooksid, loanid, ibillid, ifunsid, iconfigid, imoney, cbilldate, cmemo, cimgurl, thumburl, cuserid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", newChargeId, newBookId, newLoanId, newBillId, newFundId, newConfigId, money, billDate, memo, imgUrl, thumbUrl, newUserId, @(SSJSyncVersion()), @0, writeDate]) {
-//            [resultSet close];
-//            *error = [db lastError];
-//            return nil;
-//        }
-//        
-//        [mapping setObject:newChargeId forKey:chargeId];
-//    }
-//    [resultSet close];
-//    
-//    return mapping;
-//}
+- (BOOL)mergeFromUserID:(NSString *)userId1 toUserId:(NSString *)userId2 version:(int64_t)version inDatabase:(FMDatabase *)db error:(NSError **)error {
+    
+    NSMutableDictionary *mapping = [SSJAccountsMergerMappingManager sharedManager].chargeIdMapping;
+    NSMutableArray *repeatIds = [NSMutableArray array];
+    
+    NSDate *date = [NSDate dateWithTimeIntervalSince1970:version];
+    NSString *dateStr = [date formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+    
+    // 根据周期记账id和记账日期查询两个账户下重复的周期记账生成的流水
+    NSMutableArray *chargeInfos = [NSMutableArray array];
+    FMResultSet *resultSet = [db executeQuery:@"select ichargeid, iconfigid, cbilldate from bk_user_charge where cuserid = ? and cwritedate > ? and length(iconfigid) > 0", userId1, dateStr];
+    while ([resultSet next]) {
+        NSString *chargeId = [resultSet stringForColumn:@"ichargeid"];
+        NSString *billDate = [resultSet stringForColumn:@"cbilldate"];
+        NSString *configId = [resultSet stringForColumn:@"iconfigid"];
+        NSString *mappedConfigId = [[SSJAccountsMergerMappingManager sharedManager].periodChargeIdMapping objectForKey:configId];
+        [chargeInfos addObject:@{@"chargeId":chargeId,
+                                 @"configId":mappedConfigId,
+                                 @"billDate":billDate}];
+    }
+    [resultSet close];
+    
+    for (NSDictionary *chargeInfo in chargeInfos) {
+        NSString *chargeId = chargeInfo[@"chargeId"];
+        NSString *configId = chargeInfo[@"configId"];
+        NSString *billDate = chargeInfo[@"billDate"];
+        if ([db boolForQuery:@"select count(1) from bk_user_charge where iconfigid = ? and cbilldate = ? and cuserid = ?", configId, billDate, userId2]) {
+            [repeatIds addObject:[NSString stringWithFormat:@"'%@'", chargeId]];
+        }
+    }
+    
+    // 排重借贷流水
+    NSMutableArray *loanChargeInfos = [NSMutableArray array];
+    resultSet = [db executeQuery:@"select ichargeid, loanid from bk_user_charge where length(loanid) > 0 and cuserid = ? and cwritedate > ?", userId1, dateStr];
+    while ([resultSet next]) {
+        NSString *chargeId = [resultSet stringForColumn:@"ichargeid"];
+        NSString *loanId = [resultSet stringForColumn:@"loanid"];
+        [loanChargeInfos addObject:@{@"ichargeid":chargeId,
+                                     @"loanid":loanId}];
+    }
+    [resultSet close];
+    
+    for (NSDictionary *loanChargeInfo in loanChargeInfos) {
+        NSString *chargeId = loanChargeInfo[@"ichargeid"];
+        NSString *loanId = loanChargeInfo[@"loanid"];
+        NSString *mappedLoanId = [[SSJAccountsMergerMappingManager sharedManager].loanIdMapping objectForKey:loanId];
+        if ([db boolForQuery:@"select count(1) from bk_user_charge where cuserid = ? and loanid = ?", userId2, mappedLoanId]) {
+            [repeatIds addObject:[NSString stringWithFormat:@"'%@'", chargeId]];
+        }
+    }
+    
+    // 查询未重复的记账流水，copy到登录账户下
+    NSString *repeatIdStr = [repeatIds componentsJoinedByString:@","];
+    NSString *sql_1 = [NSString stringWithFormat:@"select ichargeid, cbooksid, loanid, ibillid, ifunsid, iconfigid, imoney, cbilldate, cmemo, cimgurl, thumburl, cwritedate from bk_user_charge where cuserid = ? and operatortype <> 2 and ichargeid not in (%@) and ibillid <> '1' and ibillid <> '2' and cwritedate > ?", repeatIdStr];
+    resultSet = [db executeQuery:sql_1, userId1, dateStr];
+    
+    NSString *commonWriteDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+    while ([resultSet next]) {
+        NSString *chargeId = [resultSet stringForColumn:@"ichargeid"];
+        NSString *bookId = [resultSet stringForColumn:@"cbooksid"];
+        NSString *loanId = [resultSet stringForColumn:@"loanid"];
+        NSString *billId = [resultSet stringForColumn:@"ibillid"];
+        NSString *fundId = [resultSet stringForColumn:@"ifunsid"];
+        NSString *configId = [resultSet stringForColumn:@"iconfigid"];
+        
+        NSString *money = [resultSet stringForColumn:@"imoney"];
+        NSString *billDate = [resultSet stringForColumn:@"cbilldate"];
+        NSString *memo = [resultSet stringForColumn:@"cmemo"];
+        NSString *imgUrl = [resultSet stringForColumn:@"cimgurl"];
+        NSString *thumbUrl = [resultSet stringForColumn:@"thumburl"];
+        
+        NSString *writeDate = nil;
+        if ([billId isEqualToString:@"3"] || [billId isEqualToString:@"4"]) {
+            NSString *dateStr = [resultSet stringForColumn:@"cwritedate"];
+            NSDate *tmpDate = [NSDate dateWithString:dateStr formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
+            tmpDate = [tmpDate dateByAddingSeconds:1];
+            writeDate = [tmpDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        } else {
+            writeDate = commonWriteDate;
+        }
+        
+        NSString *newChargeId = SSJUUID();
+        NSString *newBookId = [[SSJAccountsMergerMappingManager sharedManager].bookIdMapping objectForKey:bookId];
+        NSString *newLoanId = [[SSJAccountsMergerMappingManager sharedManager].loanIdMapping objectForKey:loanId];
+        // billIdMapping里只保存user_bill里的id，istate为2的特殊类别不在user_bill里
+        NSString *newBillId = [[SSJAccountsMergerMappingManager sharedManager].billIdMapping objectForKey:billId] ?: billId;
+        NSString *newConfigId = [[SSJAccountsMergerMappingManager sharedManager].periodChargeIdMapping objectForKey:configId];
+        NSString *newFundId = self.fundIdMapping[fundId];
+        
+        if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cbooksid, loanid, ibillid, ifunsid, iconfigid, imoney, cbilldate, cmemo, cimgurl, thumburl, cuserid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", newChargeId, newBookId, newLoanId, newBillId, newFundId, newConfigId, money, billDate, memo, imgUrl, thumbUrl, userId2, @(SSJSyncVersion()), @0, writeDate]) {
+            [resultSet close];
+            *error = [db lastError];
+            return NO;
+        }
+        
+        [mapping setObject:newChargeId forKey:chargeId];
+    }
+    [resultSet close];
+    
+    return YES;
+}
 
 @end
 

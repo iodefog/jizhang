@@ -8,8 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-@class SSJAccountsMergerMappingModel;
-
 @interface SSJAccountsMergerMappingManager : NSObject
 
 + (instancetype)sharedManager;
@@ -20,7 +18,7 @@
 
 @property (nonatomic, readonly) NSMutableDictionary <NSString *, NSString *>*billIdMapping;
 
-@property (nonatomic, readonly) NSMutableDictionary <NSString *, SSJAccountsMergerMappingModel *>*fundIdMapping;
+@property (nonatomic, readonly) NSMutableDictionary <NSString *, NSString *>*fundIdMapping;
 
 @property (nonatomic, readonly) NSMutableDictionary <NSString *, NSString *>*bookIdMapping;
 
@@ -29,13 +27,5 @@
 @property (nonatomic, readonly) NSMutableDictionary <NSString *, NSString *>*periodChargeIdMapping;
 
 @property (nonatomic, readonly) NSMutableDictionary <NSString *, NSString *>*chargeIdMapping;
-
-@end
-
-@interface SSJAccountsMergerMappingModel : NSObject
-
-@property (nonatomic, copy) NSString *ID;
-
-@property (nonatomic) BOOL newCreated;
 
 @end
