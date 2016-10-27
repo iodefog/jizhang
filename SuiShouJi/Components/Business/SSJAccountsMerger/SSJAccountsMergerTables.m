@@ -388,20 +388,31 @@
 
 - (BOOL)mergeFromUserID:(NSString *)userId1 toUserId:(NSString *)userId2 version:(int64_t)version inDatabase:(FMDatabase *)db error:(NSError **)error {
     
+    NSMutableArray *fundIds = [NSMutableArray array];
     NSDictionary *fundMapping = [SSJAccountsMergerMappingManager sharedManager].fundIdMapping;
+    NSString *dateStr = [[NSDate dateWithTimeIntervalSince1970:version] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+    
+    FMResultSet *resultSet = [db executeQuery:@"select cfundid from bk_user_credit where cuserid = ? and cwritedate > ?", userId1, dateStr];
+    while ([resultSet next]) {
+        NSString *fundId = [resultSet stringForColumn:@"cfundid"];
+        [fundIds addObject:fundId];
+    }
+    [resultSet close];
+    
     NSMutableArray *newCreatedFundIDs = [NSMutableArray array];
-    for (SSJAccountsMergerMappingModel *model in fundMapping) {
-        if (model.newCreated) {
-            [newCreatedFundIDs addObject:[NSString stringWithFormat:@"'%@'", model.ID]];
+    
+    for (NSString *fundId in fundIds) {
+        NSString *mappedFundId = [fundMapping objectForKey:@"fundId"];
+        BOOL existed = [db boolForQuery:@"select count(1) from bk_user_credit where cuserid = ? and cfundid = ?", userId2, mappedFundId];
+        if (!existed) {
+            [newCreatedFundIDs addObject:[NSString stringWithFormat:@"'%@'", fundId]];
         }
     }
     
+    NSString *sql = [NSString stringWithFormat:@"select cfundid, iquota, cbilldate, crepaymentdate, cremindid, ibilldatesettlement, operatortype from bk_user_credit where cuserid = ? and cfundid in (%@)", newCreatedFundIDs];
+    resultSet = [db executeQuery:sql, userId1];
+    
     NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-    
-    NSString *sql_3 = [NSString stringWithFormat:@"select cfundid, iquota, cbilldate, crepaymentdate, cremindid, ibilldatesettlement, operatortype from bk_user_credit where cuserid = ? and cfundid in (%@)", newCreatedFundIDs];
-    FMResultSet *resultSet = [db executeQuery:sql_3, userId1];
-    
-    resultSet = [db executeQuery:@"select cfundid from bk_user_credit where cuserid = ? and cwritedate > ?", ]
     
     while ([resultSet next]) {
         NSString *cfundid = [resultSet stringForColumn:@"cfundid"];
@@ -411,9 +422,7 @@
         NSString *remindId = [resultSet stringForColumn:@"cremindid"];
         NSString *billDateSettlement = [resultSet stringForColumn:@"ibilldatesettlement"];
         NSString *operatorType = [resultSet stringForColumn:@"operatortype"];
-        
-        SSJAccountsMergerMappingModel *model = fundMapping[cfundid];
-        NSString *newFundId = model.ID;
+        NSString *newFundId = [fundMapping objectForKey:cfundid];
         
         if (![db executeUpdate:@"insert into bk_user_credit (cfundid, iquota, cbilldate, crepaymentdate, cremindid, ibilldatesettlement, cuserid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", newFundId, quota, billDate, repaymentDate, remindId, billDateSettlement, userId2, @(SSJSyncVersion()), operatorType, writeDate]) {
             *error = [db lastError];
@@ -570,9 +579,9 @@
         NSString *newLoanId = SSJUUID();
         
         NSDictionary *fundMapping = [SSJAccountsMergerMappingManager sharedManager].fundIdMapping;
-        NSString *newFundId = ((SSJAccountsMergerMappingModel *)fundMapping[fundId]).ID;
-        NSString *newTargetFundId = ((SSJAccountsMergerMappingModel *)fundMapping[targetFundId]).ID;
-        NSString *newEndTargetFundId = ((SSJAccountsMergerMappingModel *)fundMapping[endTargetFundId]).ID;
+        NSString *newFundId = fundMapping[fundId];
+        NSString *newTargetFundId = fundMapping[targetFundId];
+        NSString *newEndTargetFundId = fundMapping[endTargetFundId];
         NSString *newRemindId = [[SSJAccountsMergerMappingManager sharedManager].remindIdMapping objectForKey:remindId];
         
         if (![db executeUpdate:@"insert info bk_loan (loanid, lender, jmoney, cthefundid, ctargetfundid, cetarget, cborrowdate, crepaymentdate, cenddate, rate, memo, interest, cremindid, itype, iend, cuserid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", newLoanId, lender, money, newFundId, newTargetFundId, newEndTargetFundId, borrowDate, repaymentDate, endDate, rate, memo, interest, newRemindId, type, end, userId2, @(SSJSyncVersion()), @0, writeDate]) {
@@ -636,8 +645,7 @@
         NSString *newConfigId = SSJUUID();
         NSString *newBillId = [[SSJAccountsMergerMappingManager sharedManager].billIdMapping objectForKey:billId];
         NSString *newBookId = [[SSJAccountsMergerMappingManager sharedManager].bookIdMapping objectForKey:bookId];
-        SSJAccountsMergerMappingModel *model = [[SSJAccountsMergerMappingManager sharedManager].fundIdMapping objectForKey:fundId];
-        NSString *newFundId = model.ID;
+        NSString *newFundId = [[SSJAccountsMergerMappingManager sharedManager].fundIdMapping objectForKey:fundId];
         
         NSMutableArray *newMemberIds = [NSMutableArray array];
         for (NSString *memberId in [memberIds componentsSeparatedByString:@","]) {
@@ -763,7 +771,7 @@
         // billIdMapping里只保存user_bill里的id，istate为2的特殊类别不在user_bill里
         NSString *newBillId = [[SSJAccountsMergerMappingManager sharedManager].billIdMapping objectForKey:billId] ?: billId;
         NSString *newConfigId = [[SSJAccountsMergerMappingManager sharedManager].periodChargeIdMapping objectForKey:configId];
-        NSString *newFundId = self.fundIdMapping[fundId];
+        NSString *newFundId = [SSJAccountsMergerMappingManager sharedManager].fundIdMapping[fundId];
         
         if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cbooksid, loanid, ibillid, ifunsid, iconfigid, imoney, cbilldate, cmemo, cimgurl, thumburl, cuserid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", newChargeId, newBookId, newLoanId, newBillId, newFundId, newConfigId, money, billDate, memo, imgUrl, thumbUrl, userId2, @(SSJSyncVersion()), @0, writeDate]) {
             [resultSet close];
