@@ -60,30 +60,38 @@
 }
 
 + (NSError *)updateUserTableWithDatabase:(FMDatabase *)db {
-    if (![db executeUpdate:@"alter table bk_user add cdefaultmembertate integer default 0"]) {
-        return [db lastError];
+    if (![db columnExists:@"cdefaultmembertate" inTableWithName:@"bk_user"]) {
+        if (![db executeUpdate:@"alter table bk_user add cdefaultmembertate integer default 0"]) {
+            return [db lastError];
+        }
     }
     
-    if (![db executeUpdate:@"alter table bk_user add copenid text"]) {
-        return [db lastError];
+    if (![db columnExists:@"copenid" inTableWithName:@"bk_user"]) {
+        if (![db executeUpdate:@"alter table bk_user add copenid text"]) {
+            return [db lastError];
+        }
     }
     
-    if (![db executeUpdate:@"alter table bk_user add remindsettingmotionpwd integer"]) {
-        return [db lastError];
+    if (![db columnExists:@"remindsettingmotionpwd" inTableWithName:@"bk_user"]) {
+        if (![db executeUpdate:@"alter table bk_user add remindsettingmotionpwd integer"]) {
+            return [db lastError];
+        }
     }
     
     return nil;
 }
 
 + (NSError *)updateChargePeriodTableWithDatabase:(FMDatabase *)db {
-    if (![db executeUpdate:@"alter table bk_charge_period_config add CMEMBERIDS text"]) {
-        return [db lastError];
+    if (![db columnExists:@"CMEMBERIDS" inTableWithName:@"bk_charge_period_config"]) {
+        if (![db executeUpdate:@"alter table bk_charge_period_config add CMEMBERIDS text"]) {
+            return [db lastError];
+        }
     }
+    
     return nil;
 }
 
 + (NSError *)supplementMemberChargeRecordsInDatabase:(FMDatabase *)db {
-    [db beginTransaction];
     
     FMResultSet *result = [db executeQuery:@"select ichargeid, imoney, cuserid from bk_user_charge where operatortype <> 2"];
     if (!result) {
@@ -108,20 +116,20 @@
         
         BOOL success = [db executeUpdate:@"insert into bk_member_charge (ichargeid, cmemberid, imoney, iversion, cwritedate, operatortype) values (?, ?, ?, ?, ?, ?)", chargeID, memberID, money, @(SSJSyncVersion()), [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], @0];
         if (!success) {
-            [db rollback];
             return [db lastError];
         }
     }
-    
-    [db commit];
     
     return nil;
 }
 
 + (NSError *)updateUserBudgetWithDatabase:(FMDatabase *)db {
-    if (![db executeUpdate:@"alter table bk_user_budget add islastday integer default 0"]) {
-        return [db lastError];
+    if (![db columnExists:@"islastday" inTableWithName:@"bk_user_budget"]) {
+        if (![db executeUpdate:@"alter table bk_user_budget add islastday integer default 0"]) {
+            return [db lastError];
+        }
     }
+    
     return nil;
 }
 

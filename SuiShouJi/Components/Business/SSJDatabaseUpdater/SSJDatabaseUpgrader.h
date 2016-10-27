@@ -12,6 +12,4 @@
 
 + (NSError *)upgradeDatabase;
 
-+ (void)upgradeDatabaseWithSuccess:(void (^)())success failure:(void (^)(NSError *error))failure;
-
 @end

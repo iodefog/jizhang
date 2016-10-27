@@ -42,17 +42,23 @@
         return [db lastError];
     }
     
-    if (![db executeUpdate:@"ALTER TABLE BK_USER_CHARGE ADD CLIENTADDDATE TEXT"]) {
-        return [db lastError];
+    if (![db columnExists:@"CLIENTADDDATE" inTableWithName:@"BK_USER_CHARGE"]) {
+        if (![db executeUpdate:@"ALTER TABLE BK_USER_CHARGE ADD CLIENTADDDATE TEXT"]) {
+            return [db lastError];
+        }
     }
+    
     
     return nil;
 }
 
 + (NSError *)updateMemberTableWithDatabase:(FMDatabase *)db {
-    if (![db executeUpdate:@"ALTER TABLE BK_MEMBER ADD IORDER INTEGER"]) {
-        return [db lastError];
+    if (![db columnExists:@"IORDER" inTableWithName:@"BK_MEMBER"]) {
+        if (![db executeUpdate:@"ALTER TABLE BK_MEMBER ADD IORDER INTEGER"]) {
+            return [db lastError];
+        }
     }
+    
     return nil;
 }
 
