@@ -12,43 +12,36 @@
 @implementation SSJDatabaseVersion4
 
 + (NSError *)startUpgradeInDatabase:(FMDatabase *)db {
-    [db beginTransaction];
+    
     NSError *error = [self createBooksTypeTableWithDatabase:db];
     if (error) {
-        [db rollback];
         return error;
     }
     
     error = [self updateUserChargeTableWithDatabase:db];
     if (error) {
-        [db rollback];
         return error;
     }
     
     error = [self updateUserBudgetTableWithDatabase:db];
     if (error) {
-        [db rollback];
         return error;
     }
     
     error = [self updateDailySumChargeTableWithDatabase:db];
     if (error) {
-        [db rollback];
         return error;
     }
     
     error = [self updateChargePeriodConfigTableWithDatabase:db];
     if (error) {
-        [db rollback];
         return error;
     }
     
     error = [self updateUserTableWithDatabase:db];
     if (error) {
-        [db rollback];
         return error;
     }
-    [db commit];
     
     return nil;
 }
@@ -79,9 +72,12 @@
 }
 
 + (NSError *)updateUserChargeTableWithDatabase:(FMDatabase *)db {
-    if (![db executeUpdate:@"alter table bk_user_charge add cbooksid text"]) {
-        return [db lastError];
+    if (![db columnExists:@"cbooksid" inTableWithName:@"bk_user_charge"]) {
+        if (![db executeUpdate:@"alter table bk_user_charge add cbooksid text"]) {
+            return [db lastError];
+        }
     }
+    
     if (![db executeUpdate:@"update bk_user_charge set cbooksid = cuserid"]) {
         return [db lastError];
     }
@@ -89,9 +85,12 @@
 }
 
 + (NSError *)updateUserBudgetTableWithDatabase:(FMDatabase *)db {
-    if (![db executeUpdate:@"alter table bk_user_budget add cbooksid text"]) {
-        return [db lastError];
+    if (![db columnExists:@"cbooksid" inTableWithName:@"bk_user_budget"]) {
+        if (![db executeUpdate:@"alter table bk_user_budget add cbooksid text"]) {
+            return [db lastError];
+        }
     }
+    
     if (![db executeUpdate:@"update bk_user_budget set cbooksid = cuserid"]) {
         return [db lastError];
     }
@@ -128,9 +127,12 @@
 }
 
 + (NSError *)updateChargePeriodConfigTableWithDatabase:(FMDatabase *)db {
-    if (![db executeUpdate:@"alter table bk_charge_period_config add cbooksid text"]) {
-        return [db lastError];
+    if (![db columnExists:@"cbooksid" inTableWithName:@"bk_charge_period_config"]) {
+        if (![db executeUpdate:@"alter table bk_charge_period_config add cbooksid text"]) {
+            return [db lastError];
+        }
     }
+    
     if (![db executeUpdate:@"update bk_charge_period_config set cbooksid = cuserid"]) {
         return [db lastError];
     }
@@ -138,12 +140,18 @@
 }
 
 + (NSError *)updateUserTableWithDatabase:(FMDatabase *)db {
-    if (![db executeUpdate:@"alter table bk_user add cdefaultbookstypestate integer default 0"]) {
-        return [db lastError];
+    if (![db columnExists:@"cdefaultbookstypestate" inTableWithName:@"bk_user"]) {
+        if (![db executeUpdate:@"alter table bk_user add cdefaultbookstypestate integer default 0"]) {
+            return [db lastError];
+        }
     }
-    if (![db executeUpdate:@"alter table bk_user add ccurrentbooksid text"]) {
-        return [db lastError];
+    
+    if (![db columnExists:@"ccurrentbooksid" inTableWithName:@"bk_user"]) {
+        if (![db executeUpdate:@"alter table bk_user add ccurrentbooksid text"]) {
+            return [db lastError];
+        }
     }
+    
     if (![db executeUpdate:@"update bk_user set ccurrentbooksid = cuserid"]) {
         return [db lastError];
     }

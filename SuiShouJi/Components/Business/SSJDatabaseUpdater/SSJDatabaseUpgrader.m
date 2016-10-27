@@ -26,56 +26,40 @@ static const int kDatabaseVersion = 9;
 
 + (NSError *)upgradeDatabase {
     __block NSError *error = nil;
+    __block int currentVersion = 0;
+    
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
-        error = [self startUpgradeInDatabase:db];
-    }];
-    return error;
-}
-
-+ (void)upgradeDatabaseWithSuccess:(void (^)())success failure:(void (^)(NSError *error))failure {
-    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        NSError *error = [self startUpgradeInDatabase:db];
+        if (![db executeUpdate:@"create table if not exists bk_db_version (version integer not null default 0)"]) {
+            error = [db lastError];
+            return;
+        }
+        // 查询当前数据库的版本
+        currentVersion = [db intForQuery:@"select max(version) from bk_db_version"];
         
-        if (error) {
-            if (failure) {
-                failure(error);
+        // 升级成功的版本
+        int upgradeVersion = currentVersion;
+        
+        for (int ver = currentVersion + 1; ver <= kDatabaseVersion; ver ++) {
+            Class dbVersionClass = [[self databaseVersionInfo] objectForKey:@(ver)];
+            if ([dbVersionClass conformsToProtocol:@protocol(SSJDatabaseVersionProtocol)]) {
+                
+                [db beginTransaction];
+                
+                error = [dbVersionClass startUpgradeInDatabase:db];
+                if (error) {
+                    [db rollback];
+                    break;
+                }
+                
+                [db commit];
+                upgradeVersion = ver;
             }
-        } else {
-            if (success) {
-                success();
-            }
+        }
+        
+        if (upgradeVersion > currentVersion) {
+            [db executeUpdate:@"insert into bk_db_version (version) values (?)", @(upgradeVersion)];
         }
     }];
-}
-
-+ (NSError *)startUpgradeInDatabase:(FMDatabase *)db {
-    if (![db executeUpdate:@"create table if not exists bk_db_version (version integer not null default 0)"]) {
-        return [db lastError];
-    }
-    
-    // 查询当前数据库的版本
-    int currentVersion = [db intForQuery:@"select max(version) from bk_db_version"];
-    
-    // 升级成功的版本
-    int upgradeVersion = currentVersion;
-    
-    NSError *error = nil;
-    
-    for (int ver = currentVersion + 1; ver <= kDatabaseVersion; ver ++) {
-        Class dbVersionClass = [[self databaseVersionInfo] objectForKey:@(ver)];
-        if ([dbVersionClass conformsToProtocol:@protocol(SSJDatabaseVersionProtocol)]) {
-            error = [dbVersionClass startUpgradeInDatabase:db];
-            if (error) {
-                break;
-            }
-            
-            upgradeVersion = ver;
-        }
-    }
-    
-    if (upgradeVersion > currentVersion) {
-        [db executeUpdate:@"insert into bk_db_version (version) values (?)", @(upgradeVersion)];
-    }
     
     return error;
 }

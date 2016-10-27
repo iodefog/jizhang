@@ -67,15 +67,17 @@
 
 + (NSError *)updateSyncTableWithDatabase:(FMDatabase *)db {
     NSString *userId = SSJUSERID();
-    if ([db executeUpdate:@"delete from bk_sync where cuserid = ?",userId]) {
+    if (![db executeUpdate:@"delete from bk_sync where cuserid = ?",userId]) {
         return [db lastError];
     }
     return nil;
 }
 
 + (NSError *)updateFundInfoTableAndFunsAcctTableWithDatabase:(FMDatabase *)db {
-    if (![db executeUpdate:@"alter table bk_fund_info add idisplay integer default 1"]) {
-        return [db lastError];
+    if (![db columnExists:@"idisplay" inTableWithName:@"bk_fund_info"]) {
+        if (![db executeUpdate:@"alter table bk_fund_info add idisplay integer default 1"]) {
+            return [db lastError];
+        }
     }
     
     if (![db executeUpdate:@"update bk_fund_info set cacctname = '借出款', cmemo = '应收钱款' where cfundid = '9'"]) {
@@ -180,16 +182,22 @@
 }
 
 + (NSError *)updateUserTableWithDatabase:(FMDatabase *)db {
-    if (![db executeUpdate:@"alter table BK_USER add CEMAIL text"]) {
-        return [db lastError];
+    if (![db columnExists:@"CEMAIL" inTableWithName:@"BK_USER"]) {
+        if (![db executeUpdate:@"alter table BK_USER add CEMAIL text"]) {
+            return [db lastError];
+        }
     }
+    
     return nil;
 }
 
 + (NSError *)updateUserChargeTableWithDatabase:(FMDatabase *)db {
-    if (![db executeUpdate:@"alter table BK_USER_CHARGE add LOANID text"]) {
-        return [db lastError];
+    if (![db columnExists:@"LOANID" inTableWithName:@"BK_USER_CHARGE"]) {
+        if (![db executeUpdate:@"alter table BK_USER_CHARGE add LOANID text"]) {
+            return [db lastError];
+        }
     }
+    
     return nil;
 }
 
