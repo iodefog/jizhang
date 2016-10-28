@@ -71,7 +71,7 @@
     }
     
     // 新建表
-    if (![db executeUpdate:@"create table BK_BILL_TYPE (ID TEXT, CNAME TEXT, ITYPE INTEGER,  CCOIN TEXT, CCOLOR TEXT, ISTATE INTEGER , ICUSTOM INTEGER, CPARENT TEXT, DEFAULTORDER INTEGER , IBOOKSTYPE INTEGER PRIMARY KEY(ID)"]) {
+    if (![db executeUpdate:@"create table BK_BILL_TYPE (ID TEXT, CNAME TEXT, ITYPE INTEGER,  CCOIN TEXT, CCOLOR TEXT, ISTATE INTEGER , ICUSTOM INTEGER, CPARENT TEXT, DEFAULTORDER INTEGER ,PRIMARY KEY(ID)"]) {
         return [db lastError];
     }
     
@@ -145,7 +145,6 @@
 //    if (![db executeUpdate:@"insert into bk_bill_type select a.cuserid , a.ibillid, 1, ?, ?, 0, 1000, a.cbooksid from bk_user_charge a, bk_user_bill b where a.ibillid = b.cbillid and a.ibillid not in (select cbillid from bk_user_bill where cbooksid = a.cbooksid)",cwriteDate,@(SSJSyncVersion())]) {
 //        return [db lastError];
 //    }
-//    
     
     return nil;
 }
