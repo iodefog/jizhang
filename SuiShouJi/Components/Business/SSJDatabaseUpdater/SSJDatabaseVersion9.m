@@ -27,6 +27,11 @@
         return error;
     }
     
+    error = [self updateBudgetTableWithDatabase:db];
+    if (error) {
+        return error;
+    }
+    
     return nil;
 }
 
@@ -48,7 +53,6 @@
         }
     }
     
-    
     return nil;
 }
 
@@ -57,6 +61,14 @@
         if (![db executeUpdate:@"ALTER TABLE BK_MEMBER ADD IORDER INTEGER"]) {
             return [db lastError];
         }
+    }
+    
+    return nil;
+}
+
++ (NSError *)updateBudgetTableWithDatabase:(FMDatabase *)db {
+    if (![db executeUpdate:@"UPDATE BK_USER_BUDGET SET CBILLTYPE = 'all'"]) {
+        return [db lastError];
     }
     
     return nil;
