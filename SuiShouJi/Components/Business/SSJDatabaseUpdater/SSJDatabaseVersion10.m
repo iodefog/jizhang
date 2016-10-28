@@ -12,20 +12,42 @@
 @implementation SSJDatabaseVersion10
 
 + (NSError *)startUpgradeInDatabase:(FMDatabase *)db {
-    NSError *error = [self updateBillTypeTableWithDatabase:db];
+    NSError *error = [self updateBooksTypeTableWithDatabase:db];
+    if (error) {
+        return error;
+    }
+    
+    error = [self updateBillTypeTableWithDatabase:db];
     if (error) {
         return error;
     }
 
-    error = [self updateUserBillTableWithDatabase:db];
-    if (error) {
-        return error;
-    }
+//    error = [self updateUserBillTableWithDatabase:db];
+//    if (error) {
+//        return error;
+//    }
 //
 //    error = [self updateMemberTableWithDatabase:db];
 //    if (error) {
 //        return error;
 //    }
+    
+    return nil;
+}
+
++ (NSError *)updateBooksTypeTableWithDatabase:(FMDatabase *)db {
+    NSString *cwriteDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+    
+    // bk_books_type增加记账类型父类字段
+    if (![db columnExists:@"iparenttype" inTableWithName:@"bk_books_type"]) {
+        if (![db executeUpdate:@"alter table bk_books_type add iparenttype text"]) {
+            return [db lastError];
+        }
+    }
+    
+    if (![db executeUpdate:@"update bk_books_type set iparenttype = case when length(cbooksid) != length(cuserid) and cbooksid like cuserid || '%' then substr(cbooksid, length(cuserid) + 2, length(cbooksid) - length(cuserid) - 1) else '0' end ,iversion = ? ,cwritedate = ?",@(SSJSyncVersion()),cwriteDate]) {
+        return [db lastError];
+    }
     
     return nil;
 }
@@ -87,15 +109,16 @@
         return [db lastError];
     }
     
-    // 将账本下默认类型插入user_bill
-    if (![db executeUpdate:@"insert into bk_user_bill values (select b.cuserid, a.id as cbillid, 1, ?, ?, 0, a.defultOrder, b.cuserid || a.ibookstype)"]) {
+    // 首先给每个账本加入默认的记账类型
+    if (![db executeUpdate:@"insert into bk_user_bill select a.cuserid ,b.id , 1, '', 0, 0, b.defultorder, a.cbooksid from bk_books_type a, bk_bill_type b where a.iparenttype = b.ibookstype",cwriteDate,@(SSJSyncVersion())]) {
         return [db lastError];
     }
     
-    // 将以前版本在账本下有过流水的记账类型添加到对应的账本中
-    if (![db executeUpdate:@"insert into bk_user_bill values (select cuserid, ibillid as cbillid, 1, ?, ?, 0, iorder AUTO_INCREMENT, cbooksid from bk_user_charge where cbooksid <> cuserid and operatortype <> 2 order by count(ichargeid) desc)",@(SSJSyncVersion()),cwriteDate]) {
+    // 给每个账本添加之前版本已经用过的记账类型
+    if (![db executeUpdate:@"insert into bk_bill_type select a.cuserid , a.ibillid, 1, ?, ?, 0, 1000, a.cbooksid from bk_user_charge a, bk_user_bill b where a.ibillid = b.cbillid and a.ibillid not in (select cbillid from bk_user_bill where cbooksid = a.cbooksid)",cwriteDate,@(SSJSyncVersion())]) {
         return [db lastError];
     }
+    
     
     return nil;
 }
