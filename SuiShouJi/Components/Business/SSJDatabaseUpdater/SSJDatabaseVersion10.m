@@ -88,7 +88,7 @@
     }
     
     // 将账本下默认类型插入user_bill
-    if (![db executeUpdate:@"insert into bk_user_bill values (select b.cuserid, a.id as cbillid, 1, ?, ?, 0, a.defultOrder b.cuserid || a.ibookstype)"]) {
+    if (![db executeUpdate:@"insert into bk_user_bill values (select b.cuserid, a.id as cbillid, 1, ?, ?, 0, a.defultOrder, b.cuserid || a.ibookstype)"]) {
         return [db lastError];
     }
     
