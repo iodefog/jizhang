@@ -24,7 +24,7 @@
             booksId = userId;
         }
         NSMutableArray *categoryList =[NSMutableArray array];
-        NSString *sql = [NSString stringWithFormat:@"SELECT A.CNAME , A.CCOLOR , A.CCOIN , B.CWRITEDATE , A.ID, B.IORDER FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE B.ISTATE = 1 AND A.ITYPE = %d AND A.ID = B.CBILLID AND B.CUSERID = '%@' AND A.CPARENT is null AND CBOOKSID = '%@' ORDER BY B.IORDER, B.CWRITEDATE , A.ID",incomeOrExpenture,userId,booksId];
+        NSString *sql = [NSString stringWithFormat:@"SELECT A.CNAME , A.CCOLOR , A.CCOIN , B.CWRITEDATE , A.ID, B.IORDER FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE B.ISTATE = 1 AND A.ITYPE = %d AND A.ID = B.CBILLID AND B.CUSERID = '%@' AND A.CPARENT is null AND B.CBOOKSID = '%@' ORDER BY B.IORDER, B.CWRITEDATE , A.ID",incomeOrExpenture,userId,booksId];
             FMResultSet *result = [db executeQuery:sql];
             while ([result next]) {
                 NSString *categoryTitle = [result stringForColumn:@"CNAME"];
