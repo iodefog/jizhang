@@ -54,14 +54,14 @@
 
 + (NSError *)updateBillTypeTableWithDatabase:(FMDatabase *)db {
     
-    // 首先给user_bill添加新的cbooksid主键
+    // 首先给BILL_TYPE删除cbooksid字段
     // 创建临时表
-    if (![db executeUpdate:@"create temporary table TMP_BILL_TYPE (ID TEXT, CNAME TEXT, ITYPE INTEGER,  CCOIN TEXT, CCOLOR TEXT, ISTATE INTEGER , ICUSTOM INTEGER, CPARENT TEXT, DEFAULTORDER INTEGER , IBOOKSTYPE INTEGER PRIMARY KEY(ID))"]) {
+    if (![db executeUpdate:@"create temporary table TMP_BILL_TYPE (ID TEXT, CNAME TEXT, ITYPE INTEGER,  CCOIN TEXT, CCOLOR TEXT, ISTATE INTEGER , ICUSTOM INTEGER, CPARENT TEXT, DEFAULTORDER INTEGER, PRIMARY KEY(ID))"]) {
         return [db lastError];
     }
     
     // 将原来表中的纪录插入到临时表中
-    if (![db executeUpdate:@"insert into TMP_BILL_TYPE select ID, CNAME, ITYPE, CCOIN, CCOLOR, ISTATE , ICUSTOM , CPARENT , DEFAULTORDER from BK_USER_BILL"]) {
+    if (![db executeUpdate:@"insert into TMP_BILL_TYPE select ID, CNAME, ITYPE, CCOIN, CCOLOR, ISTATE , ICUSTOM , CPARENT , DEFAULTORDER from BK_BILL_TYPE"]) {
         return [db lastError];
     }
     
@@ -141,11 +141,11 @@
         return [db lastError];
     }
     
-    // 给每个账本添加之前版本已经用过的记账类型
-    if (![db executeUpdate:@"insert into bk_bill_type select a.cuserid , a.ibillid, 1, ?, ?, 0, 1000, a.cbooksid from bk_user_charge a, bk_user_bill b where a.ibillid = b.cbillid and a.ibillid not in (select cbillid from bk_user_bill where cbooksid = a.cbooksid)",cwriteDate,@(SSJSyncVersion())]) {
-        return [db lastError];
-    }
-    
+//    // 给每个账本添加之前版本已经用过的记账类型
+//    if (![db executeUpdate:@"insert into bk_bill_type select a.cuserid , a.ibillid, 1, ?, ?, 0, 1000, a.cbooksid from bk_user_charge a, bk_user_bill b where a.ibillid = b.cbillid and a.ibillid not in (select cbillid from bk_user_bill where cbooksid = a.cbooksid)",cwriteDate,@(SSJSyncVersion())]) {
+//        return [db lastError];
+//    }
+//    
     
     return nil;
 }
