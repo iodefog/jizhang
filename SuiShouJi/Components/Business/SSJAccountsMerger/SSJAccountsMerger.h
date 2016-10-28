@@ -24,7 +24,7 @@
  (5)                  member_charge
                         /      \
                        v        \
- (4)               user_charge   \
+ (4)              user_charge    \
                      /   \        \
                     /     \        \
                    v       \        \
@@ -33,10 +33,10 @@
               /     \         \        \
              v       v         v        \
  (2)      credit  user_bill   loan       \
-            |         |        / \        \
-            |         |       /   \        \
-            v         v      v     v        v
- (1)      fund      books  fund   remind   member
+           / \        |        / \        \
+          /   \       |       /   \        \
+         v     v      v      v     v        v
+ (1)   fund  remind books  fund   remind   member
 
  @param userId1
  @param userId2

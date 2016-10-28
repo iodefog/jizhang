@@ -10,6 +10,8 @@
 #import "SSJAccountsMergerMappingManager.h"
 #import "FMDB.h"
 
+static NSString *const kDateFormat = @"yyyy-MM-dd HH:mm:ss.SSS";
+
 @interface SSJAccountsMergeVersionManager : NSObject
 
 @end
@@ -35,26 +37,24 @@
 
 - (BOOL)mergeFromUserID:(NSString *)userId1 toUserId:(NSString *)userId2 version:(int64_t)version inDatabase:(FMDatabase *)db error:(NSError **)error {
     
-    NSDate *date = [NSDate dateWithTimeIntervalSince1970:version];
-    NSString *dateStr = [date formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-    
     // 查询重复的提醒，根据提醒名称、类型判断是否重复，排除默认记账提醒
     NSMutableArray *repeatedIds = [NSMutableArray array];
-    FMResultSet *resultSet = [db executeQuery:@"select a.cremindid as remindId1, b.cremindid as remindId2 from bk_user_remind as a, bk_user_remind as b where a.cuserid = ? and b.cuserid = ? and a.cremindname = b.cremindname and a.itype = b.itype and a.itype <> 1 and a.operatortype <> 2 and a.cwritedate > ? and order by b.cwritedate", userId1, userId2, dateStr];
+    FMResultSet *resultSet = [db executeQuery:@"select a.cremindid as remindId1, b.cremindid as remindId2, a.cwritedate from bk_user_remind as a, bk_user_remind as b where a.cuserid = ? and b.cuserid = ? and a.cremindname = b.cremindname and a.itype = b.itype and a.itype <> 1 and a.operatortype <> 2 and order by b.cwritedate", userId1, userId2];
     while ([resultSet next]) {
         NSString *remindId1 = [resultSet stringForColumn:@"remindId1"];
         NSString *remindId2 = [resultSet stringForColumn:@"remindId2"];
-        [repeatedIds addObject:[NSString stringWithFormat:@"'%@'", remindId1]];
         [[SSJAccountsMergerMappingManager sharedManager].remindIdMapping setObject:remindId2 forKey:remindId1];
+        [repeatedIds addObject:[NSString stringWithFormat:@"'%@'", remindId1]];
     }
     [resultSet close];
     
+    // 将排重后的提醒copy到新用户
     NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-    NSMutableString *sql = [@"select cremindid, cremindname, cmemo, cstartdate, istate, itype, icycle, iisend from bk_user_remind where cuserid = ? and operatortype <> 2 and itype <> 1 and cwritedate > ?" mutableCopy];
+    NSMutableString *sql = [@"select cremindid, cremindname, cmemo, cstartdate, istate, itype, icycle, iisend, cwritedate from bk_user_remind where cuserid = ? and operatortype <> 2 and itype <> 1" mutableCopy];
     if (repeatedIds.count > 0) {
         [sql appendFormat:@" and cremindid not in (%@)", [repeatedIds componentsJoinedByString:@","]];
     }
-    resultSet = [db executeQuery:sql, userId1, dateStr];
+    resultSet = [db executeQuery:sql, userId1];
     while ([resultSet next]) {
         NSString *remindId = [resultSet stringForColumn:@"cremindid"];
         NSString *name = [resultSet stringForColumn:@"cremindname"];
@@ -66,25 +66,30 @@
         NSString *isEnd = [resultSet stringForColumn:@"iisend"];
         NSString *newRemindId = SSJUUID();
         
-        NSDictionary *remindInfo = @{@"cremindid":newRemindId,
-                                     @"cremindname":name,
-                                     @"cmemo":memo,
-                                     @"cstartdate":startDate,
-                                     @"istate":state,
-                                     @"itype":type,
-                                     @"icycle":cycle,
-                                     @"iisend":isEnd,
-                                     @"cuserid":userId2,
-                                     @"iversion":@(SSJSyncVersion()),
-                                     @"operatortype":@(0),
-                                     @"cwritedate":writeDate};
-        
-        if (![db executeUpdate:@"insert into bk_user_remind (cremindid, cremindname, cmemo, cstartdate, istate, itype, icycle, iisend, cuserid, iversion, operatortype, cwritedate) values (:cremindid, :cremindname, :cmemo, :cstartdate, :istate, :itype, :icycle, :iisend, :cuserid, :iversion, :operatortype, :cwritedate)" withParameterDictionary:remindInfo]) {
-            *error = [db lastError];
-            return NO;
-        }
-        
         [[SSJAccountsMergerMappingManager sharedManager].remindIdMapping setObject:newRemindId forKey:remindId];
+        
+        NSString *writeDateStr = [resultSet stringForColumn:@"cwritedate"];
+        NSTimeInterval ver = [NSDate dateWithString:writeDateStr formatString:kDateFormat].timeIntervalSince1970;
+        
+        if (ver > version) {
+            NSDictionary *remindInfo = @{@"cremindid":newRemindId,
+                                         @"cremindname":name,
+                                         @"cmemo":memo,
+                                         @"cstartdate":startDate,
+                                         @"istate":state,
+                                         @"itype":type,
+                                         @"icycle":cycle,
+                                         @"iisend":isEnd,
+                                         @"cuserid":userId2,
+                                         @"iversion":@(SSJSyncVersion()),
+                                         @"operatortype":@(0),
+                                         @"cwritedate":writeDate};
+            
+            if (![db executeUpdate:@"insert into bk_user_remind (cremindid, cremindname, cmemo, cstartdate, istate, itype, icycle, iisend, cuserid, iversion, operatortype, cwritedate) values (:cremindid, :cremindname, :cmemo, :cstartdate, :istate, :itype, :icycle, :iisend, :cuserid, :iversion, :operatortype, :cwritedate)" withParameterDictionary:remindInfo]) {
+                *error = [db lastError];
+                return NO;
+            }
+        }
     }
     [resultSet close];
     
@@ -134,7 +139,7 @@
     
     // 查询名称重复的成员id
     NSMutableArray *repeatIds = [NSMutableArray array];
-    NSString *sql_1 = [NSString stringWithFormat:@"select a.cmemberid as oldId, b.cmemberid as newId from bk_member as a, bk_member as b where a.cuserid = ? and b.cuserid = ? and a.cname = b.cname and a.cmemberid in (%@) and a.cwritedate > '%@' and order by b.cwritedate", allMemberIdStr, dateStr];
+    NSString *sql_1 = [NSString stringWithFormat:@"select a.cmemberid as oldId, b.cmemberid as newId from bk_member as a, bk_member as b where a.cuserid = ? and b.cuserid = ? and a.cname = b.cname and a.cmemberid in (%@) and order by b.cwritedate", allMemberIdStr];
     resultSet = [db executeQuery:sql_1, userId1, userId2];
     
     while ([resultSet next]) {
