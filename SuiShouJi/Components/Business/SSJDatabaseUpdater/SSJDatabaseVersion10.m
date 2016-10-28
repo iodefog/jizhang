@@ -53,14 +53,41 @@
 }
 
 + (NSError *)updateBillTypeTableWithDatabase:(FMDatabase *)db {
-    if ([db columnExists:@"cbooksid" inTableWithName:@"bk_bill_type"]) {
-        if (![db executeUpdate:@"alter table bk_bill_type DROP COLUMN cbooksid"]) {
+    
+    // 首先给user_bill添加新的cbooksid主键
+    // 创建临时表
+    if (![db executeUpdate:@"create temporary table TMP_BILL_TYPE (ID TEXT, CNAME TEXT, ITYPE INTEGER,  CCOIN TEXT, CCOLOR TEXT, ISTATE INTEGER , ICUSTOM INTEGER, CPARENT TEXT, DEFAULTORDER INTEGER , IBOOKSTYPE INTEGER PRIMARY KEY(ID))"]) {
+        return [db lastError];
+    }
+    
+    // 将原来表中的纪录插入到临时表中
+    if (![db executeUpdate:@"insert into TMP_BILL_TYPE select ID, CNAME, ITYPE, CCOIN, CCOLOR, ISTATE , ICUSTOM , CPARENT , DEFAULTORDER from BK_USER_BILL"]) {
+        return [db lastError];
+    }
+    
+    // 删除原来的表
+    if (![db executeUpdate:@"drop table BK_BILL_TYPE"]) {
+        return [db lastError];
+    }
+    
+    // 新建表
+    if (![db executeUpdate:@"create table BK_BILL_TYPE (ID TEXT, CNAME TEXT, ITYPE INTEGER,  CCOIN TEXT, CCOLOR TEXT, ISTATE INTEGER , ICUSTOM INTEGER, CPARENT TEXT, DEFAULTORDER INTEGER , IBOOKSTYPE INTEGER PRIMARY KEY(ID)"]) {
+        return [db lastError];
+    }
+    
+    // 将临时表数据插入新表
+    if (![db executeUpdate:@"insert into BK_BILL_TYPE select * from TMP_USER_BILL"]) {
+        return [db lastError];
+    }
+    
+    if (![db columnExists:@"ibookstype" inTableWithName:@"BK_BILL_TYPE"]) {
+        if (![db executeUpdate:@"alter table BK_BILL_TYPE add ibookstype text"]) {
             return [db lastError];
         }
     }
     
     // 删除bill_type所有默认数据,并重新插入新的数据
-    if (![db executeUpdate:@"delete from bk_bill_type where cbillid like '@%' or cbillid like '1%'"]) {
+    if (![db executeUpdate:@"delete from bk_bill_type where icustom <> 1 or icustom is null"]) {
         return [db lastError];
     }
     
