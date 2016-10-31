@@ -84,16 +84,22 @@
         return [db lastError];
     }
     
-    if (![db executeUpdate:@"insert into bk_fund_info (cfundid, cacctname, cicoin, cparent, cwritedate, operatortype, cmemo) values (?, ?, ?, ?, ?, ?, ?)", @"10", @"借出款", @"ft_jiechukuan", @"root", @"-1", @"0", @"应收钱款"]) {
-        return [db lastError];
+    if (![db boolForQuery:@"select count(1) from bk_fund_info where cfundid = '10'"]) {
+        if (![db executeUpdate:@"insert into bk_fund_info (cfundid, cacctname, cicoin, cparent, cwritedate, operatortype, cmemo) values (?, ?, ?, ?, ?, ?, ?)", @"10", @"借出款", @"ft_jiechukuan", @"root", @"-1", @"0", @"应收钱款"]) {
+            return [db lastError];
+        }
     }
     
-    if (![db executeUpdate:@"insert into bk_fund_info (cfundid, cacctname, cicoin, cparent, cwritedate, operatortype) values (?, ?, ?, ?, ?, ?)", @"11", @"欠款", @"ft_qiankuan", @"root", @"-1", @"0"]) {
-        return [db lastError];
+    if (![db boolForQuery:@"select count(1) from bk_fund_info where cfundid = '11'"]) {
+        if (![db executeUpdate:@"insert into bk_fund_info (cfundid, cacctname, cicoin, cparent, cwritedate, operatortype) values (?, ?, ?, ?, ?, ?)", @"11", @"欠款", @"ft_qiankuan", @"root", @"-1", @"0"]) {
+            return [db lastError];
+        }
     }
     
-    if (![db executeUpdate:@"insert into bk_fund_info (cfundid, cacctname, cicoin, cparent, cwritedate, operatortype, cmemo) values (?, ?, ?, ?, ?, ?, ?)", @"12", @"社保", @"ft_shebao", @"root", @"-1", @"0", @"医保"]) {
-        return [db lastError];
+    if (![db boolForQuery:@"select count(1) from bk_fund_info where cfundid = '12'"]) {
+        if (![db executeUpdate:@"insert into bk_fund_info (cfundid, cacctname, cicoin, cparent, cwritedate, operatortype, cmemo) values (?, ?, ?, ?, ?, ?, ?)", @"12", @"社保", @"ft_shebao", @"root", @"-1", @"0", @"医保"]) {
+            return [db lastError];
+        }
     }
     
     FMResultSet *result = [db executeQuery:@"select cuserid from bk_user"];
@@ -110,20 +116,28 @@
         
         int maxOrder = [db intForQuery:@"select max(iorder) from bk_fund_info where cuserid = ?", userId];
         
-        if (![db executeUpdate:@"insert into BK_FUND_INFO (CFUNDID, CACCTNAME, CPARENT, CCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID, CICOIN, IORDER) values (?, '借出款', '10', '#a883d8', ?, 0, ?, ?, 'ft_jiechukuan', ?)", lendFundID, writeDate, @(SSJSyncVersion()), userId, @(maxOrder + 1)]) {
-            return [db lastError];
+        if (![db boolForQuery:@"select count(1) from BK_FUND_INFO where CFUNDID = ?", lendFundID]) {
+            if (![db executeUpdate:@"insert into BK_FUND_INFO (CFUNDID, CACCTNAME, CPARENT, CCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID, CICOIN, IORDER) values (?, '借出款', '10', '#a883d8', ?, 0, ?, ?, 'ft_jiechukuan', ?)", lendFundID, writeDate, @(SSJSyncVersion()), userId, @(maxOrder + 1)]) {
+                return [db lastError];
+            }
         }
         
-        if (![db executeUpdate:@"insert into BK_FUND_INFO (CFUNDID, CACCTNAME, CPARENT, CCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID, CICOIN, IORDER) values (?, '欠款', '11', '#ef6161', ?, 0, ?, ?, 'ft_qiankuan', ?)", borrowFundID, writeDate, @(SSJSyncVersion()), userId, @(maxOrder + 2)]) {
-            return [db lastError];
+        if (![db boolForQuery:@"select count(1) from BK_FUND_INFO where CFUNDID = ?", borrowFundID]) {
+            if (![db executeUpdate:@"insert into BK_FUND_INFO (CFUNDID, CACCTNAME, CPARENT, CCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID, CICOIN, IORDER) values (?, '欠款', '11', '#ef6161', ?, 0, ?, ?, 'ft_qiankuan', ?)", borrowFundID, writeDate, @(SSJSyncVersion()), userId, @(maxOrder + 2)]) {
+                return [db lastError];
+            }
         }
         
-        if (![db executeUpdate:@"insert into BK_FUNS_ACCT (CFUNDID, CUSERID, IBALANCE) values (?, ?, ?)", lendFundID, userId, @0.00]) {
-            return [db lastError];
+        if (![db boolForQuery:@"select count(1) from BK_FUNS_ACCT where CFUNDID = ?", lendFundID]) {
+            if (![db executeUpdate:@"insert into BK_FUNS_ACCT (CFUNDID, CUSERID, IBALANCE) values (?, ?, ?)", lendFundID, userId, @0.00]) {
+                return [db lastError];
+            }
         }
         
-        if (![db executeUpdate:@"insert into BK_FUNS_ACCT (CFUNDID, CUSERID, IBALANCE) values (?, ?, ?)", borrowFundID, userId, @0.00]) {
-            return [db lastError];
+        if (![db boolForQuery:@"select count(1) from BK_FUNS_ACCT where CFUNDID = ?", borrowFundID]) {
+            if (![db executeUpdate:@"insert into BK_FUNS_ACCT (CFUNDID, CUSERID, IBALANCE) values (?, ?, ?)", borrowFundID, userId, @0.00]) {
+                return [db lastError];
+            }
         }
     }
     
@@ -155,6 +169,9 @@
 }
 
 + (NSError *)insertDefaultRemindWithDatabase:(FMDatabase *)db {
+    // 之前数据库升级bug导致重复执行操作，补救措施
+    [db executeUpdate:@"delete from bk_user_remind"];
+    
     BOOL open = NO;
     NSString *time = nil;
     FMResultSet *result = [db executeQuery:@"select * from BK_CHARGE_REMINDER"];
@@ -202,12 +219,16 @@
 }
 
 + (NSError *)updateBillTypeTableWithDatabase:(FMDatabase *)db {
-    if (![db executeUpdate:@"insert into BK_BILL_TYPE (ID, CNAME, ITYPE, CCOIN, CCOLOR, ISTATE, ICUSTOM) values ('5', '借贷利息收入', 0, 'bt_interest', '#408637', 2, 0)"]) {
-        return [db lastError];
+    if (![db boolForQuery:@"select count(1) from BK_BILL_TYPE where ID = '5'"]) {
+        if (![db executeUpdate:@"insert into BK_BILL_TYPE (ID, CNAME, ITYPE, CCOIN, CCOLOR, ISTATE, ICUSTOM) values ('5', '借贷利息收入', 0, 'bt_interest', '#408637', 2, 0)"]) {
+            return [db lastError];
+        }
     }
     
-    if (![db executeUpdate:@"insert into BK_BILL_TYPE (ID, CNAME, ITYPE, CCOIN, CCOLOR, ISTATE, ICUSTOM) values ('6', '借贷利息支出', 1, 'bt_interest', '#408637', 2, 0)"]) {
-        return [db lastError];
+    if (![db boolForQuery:@"select count(1) from BK_BILL_TYPE where ID = '6'"]) {
+        if (![db executeUpdate:@"insert into BK_BILL_TYPE (ID, CNAME, ITYPE, CCOIN, CCOLOR, ISTATE, ICUSTOM) values ('6', '借贷利息支出', 1, 'bt_interest', '#408637', 2, 0)"]) {
+            return [db lastError];
+        }
     }
     
     return nil;
