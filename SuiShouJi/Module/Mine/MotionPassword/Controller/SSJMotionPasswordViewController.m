@@ -115,9 +115,12 @@ static const int kVerifyFailureTimesLimit = 5;
     switch (self.type) {
         case SSJMotionPasswordViewControllerTypeSetting: {
             _userItem = [SSJUserTableManager queryProperty:@[@"userId", @"loginPWD", @"motionPWD", @"motionTrackState"] forUserId:SSJUSERID()];
+            
+            self.motionView.showStroke = [_userItem.motionTrackState boolValue];
             if ([_userItem.motionTrackState boolValue]) {
                 [self.view addSubview:self.miniMotionView];
             }
+            
             if (_userItem.motionPWD.length) {
                 self.needToVerifyOriginalPwd = YES;
                 self.miniMotionView.hidden = YES;
@@ -131,8 +134,9 @@ static const int kVerifyFailureTimesLimit = 5;
             
         case SSJMotionPasswordViewControllerTypeVerification: {
             //  查询手势密码
-            _userItem = [SSJUserTableManager queryProperty:@[@"userId", @"motionPWD", @"icon", @"mobileNo", @"fingerPrintState"] forUserId:SSJUSERID()];
+            _userItem = [SSJUserTableManager queryProperty:@[@"userId", @"motionPWD", @"icon", @"mobileNo", @"fingerPrintState", @"motionTrackState"] forUserId:SSJUSERID()];
             self.password = _userItem.motionPWD;
+            self.motionView.showStroke = [_userItem.motionTrackState boolValue];
             
             [self.view addSubview:self.portraitView];
             [self.view addSubview:self.forgetPwdBtn];
@@ -146,8 +150,9 @@ static const int kVerifyFailureTimesLimit = 5;
         }   break;
             
         case SSJMotionPasswordViewControllerTypeTurnoff: {
-            _userItem = [SSJUserTableManager queryProperty:@[@"userId", @"loginPWD", @"motionPWD"] forUserId:SSJUSERID()];
+            _userItem = [SSJUserTableManager queryProperty:@[@"userId", @"loginPWD", @"motionPWD", @"motionTrackState"] forUserId:SSJUSERID()];
             self.remindLab.text = @"请输入原手势密码";
+            self.motionView.showStroke = [_userItem.motionTrackState boolValue];
             [self.view addSubview:self.verifyLoginPwdBtn];
             
         }   break;

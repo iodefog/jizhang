@@ -70,18 +70,21 @@
  将历时预算全部改成总预算，当前预算中类别最多的作为总预算，其他作为分预算；这样处理是因为之前数据库升级有bug，导致app升级到1.8但是数据库没有做相应的版本更新操作，只能采用此方法作为补救措施
  */
 + (NSError *)updateBudgetTableWithDatabase:(FMDatabase *)db {
-    if (![db executeUpdate:@"UPDATE BK_USER_BUDGET SET CBILLTYPE = 'all' WHERE CEDATE < date('now', 'localtime')"]) {
+    NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+    
+    // 将所有有效的历史预算设置为总预算
+    if (![db executeUpdate:@"UPDATE BK_USER_BUDGET SET CBILLTYPE = 'all', IVERSION = ?, CWRITEDATE = ?, OPERATORTYPE = 1 WHERE CEDATE < date('now', 'localtime') AND OPERATORTYPE <> 2", @(SSJSyncVersion()), writeDate]) {
         return [db lastError];
     }
     
     NSMutableArray *budgetIDs = [NSMutableArray array];
-    
     NSMutableDictionary *userBudgetInfo = [NSMutableDictionary dictionary];
     
-    FMResultSet *resultSet = [db executeQuery:@"SELECT IBID, ITYPE, CBILLTYPE, CUSERID, CBOOKSID FROM BK_USER_BUDGET WHERE CEDATE >= DATE('NOW', 'LOCALTIME') AND CSDATE <= DATE('NOW', 'LOCALTIME') "];
+    // 查询所有用户不同账本下当前有效的预算
+    FMResultSet *resultSet = [db executeQuery:@"SELECT IBID, ITYPE, CBILLTYPE, CUSERID, CBOOKSID FROM BK_USER_BUDGET WHERE CEDATE >= DATE('NOW', 'LOCALTIME') AND CSDATE <= DATE('NOW', 'LOCALTIME') AND OPERATORTYPE <> 2"];
     while ([resultSet next]) {
-        NSString *budgetId = [resultSet stringForColumn:@"IBID"];
         int type = [resultSet intForColumn:@"ITYPE"];
+        NSString *budgetId = [resultSet stringForColumn:@"IBID"];
         NSString *billType = [resultSet stringForColumn:@"CBILLTYPE"];
         NSArray *billTypes = [billType componentsSeparatedByString:@","];
         NSString *userId = [resultSet stringForColumn:@"CUSERID"];
@@ -160,9 +163,10 @@
         }
     }];
     
+    // 将类别最多的预算修改为总预算
     if (budgetIDs.count > 0) {
-        NSString *sql = [NSString stringWithFormat:@"UPDATE BK_USER_BUDGET SET CBILLTYPE = 'all' WHERE IBID IN (%@)", [budgetIDs componentsJoinedByString:@","]];
-        if (![db executeUpdate:sql]) {
+        NSString *sql = [NSString stringWithFormat:@"UPDATE BK_USER_BUDGET SET CBILLTYPE = 'all', OPERATORTYPE = 1, IVERSION = ?, CWRITEDATE = ? WHERE IBID IN (%@)", [budgetIDs componentsJoinedByString:@","]];
+        if (![db executeUpdate:sql, @(SSJSyncVersion()), writeDate]) {
             return [db lastError];
         }
     }
