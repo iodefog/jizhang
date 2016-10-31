@@ -22,10 +22,10 @@
         return error;
     }
 
-//    error = [self updateUserBillTableWithDatabase:db];
-//    if (error) {
-//        return error;
-//    }
+    error = [self updateUserBillTableWithDatabase:db];
+    if (error) {
+        return error;
+    }
 //
 //    error = [self updateMemberTableWithDatabase:db];
 //    if (error) {
@@ -76,7 +76,7 @@
     }
     
     // 将临时表数据插入新表
-    if (![db executeUpdate:@"insert into BK_BILL_TYPE select * from TMP_USER_BILL"]) {
+    if (![db executeUpdate:@"insert into BK_BILL_TYPE select * from TMP_BILL_TYPE"]) {
         return [db lastError];
     }
     
@@ -108,12 +108,12 @@
     
     // 首先给user_bill添加新的cbooksid主键
     // 创建临时表
-    if (![db executeUpdate:@"create temporary table TMP_USER_BILL (CUSERID TEXT, CBILLID TEXT, ISTATE INTEGER, CWRITEDATE TEXT, IVERSION INTEGER, IORDER INTEGER, CBOOKSID TEXT PRIMARY KEY(CBILLID, CUSERID, CBOOKSID))"]) {
+    if (![db executeUpdate:@"create temporary table TMP_USER_BILL (CUSERID TEXT, CBILLID TEXT, ISTATE INTEGER, CWRITEDATE TEXT, IVERSION INTEGER , OPERATORTYPE INTEGER , IORDER INTEGER, CBOOKSID TEXT , PRIMARY KEY(CBILLID, CUSERID, CBOOKSID))"]) {
         return [db lastError];
     }
     
     // 将原来表中的纪录插入到临时表中
-    if (![db executeUpdate:@"insert into TMP_USER_BILL select CUSERID, CBILLID, ISTATE, CWRITEDATE, IVERSION, CUSERID , IORDER , CBOOKSID from BK_USER_BILL"]) {
+    if (![db executeUpdate:@"insert into TMP_USER_BILL select CUSERID, CBILLID, ISTATE, CWRITEDATE, IVERSION , OPERATORTYPE , IORDER , '' from BK_USER_BILL"]) {
         return [db lastError];
     }
     
@@ -123,7 +123,7 @@
     }
     
     // 新建表
-    if (![db executeUpdate:@"create table BK_USER_BILL (CUSERID TEXT, CBILLID TEXT, ISTATE INTEGER, CWRITEDATE TEXT, IVERSION INTEGER, IORDER INTEGER, CBOOKSID TEXT PRIMARY KEY(CBILLID, CUSERID, CBOOKSID)"]) {
+    if (![db executeUpdate:@"create table BK_USER_BILL (CUSERID TEXT, CBILLID TEXT, ISTATE INTEGER, CWRITEDATE TEXT, IVERSION INTEGER, OPERATORTYPE INTEGER, IORDER INTEGER, CBOOKSID TEXT, PRIMARY KEY(CBILLID, CUSERID, CBOOKSID))"]) {
         return [db lastError];
     }
     
@@ -137,7 +137,7 @@
     }
     
     // 首先给每个账本加入默认的记账类型
-    if (![db executeUpdate:@"insert into bk_user_bill select a.cuserid ,b.id , 1, '', 0, 0, b.defultorder, a.cbooksid from bk_books_type a, bk_bill_type b where a.iparenttype = b.ibookstype",cwriteDate,@(SSJSyncVersion())]) {
+    if (![db executeUpdate:@"insert into bk_user_bill select a.cuserid ,b.id , 1, ?, ?, 0, b.defaultorder, a.cbooksid from bk_books_type a, bk_bill_type b where a.iparenttype = b.ibookstype and a.cbooksid <> a.cuserid",cwriteDate,@(SSJSyncVersion())]) {
         return [db lastError];
     }
     
