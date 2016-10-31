@@ -36,14 +36,14 @@
 }
 
 + (NSError *)createSearchHistoryTableWithDatabase:(FMDatabase *)db {
-    if (![db executeUpdate:@"CREATE TABLE BK_SEARCH_HISTORY (CUSERID TEXT NOT NULL, CSEARCHCONTENT TEXT NOT NULL, CHISTORYID TEXT NOT NULL, CSEARCHDATE TEXT, PRIMARY KEY(CUSERID, CHISTORYID))"]) {
+    if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS BK_SEARCH_HISTORY (CUSERID TEXT NOT NULL, CSEARCHCONTENT TEXT NOT NULL, CHISTORYID TEXT NOT NULL, CSEARCHDATE TEXT, PRIMARY KEY(CUSERID, CHISTORYID))"]) {
         return [db lastError];
     }
     return nil;
 }
 
 + (NSError *)updateUserChargeTableWithDatabase:(FMDatabase *)db {
-    if (![db executeUpdate:@"CREATE INDEX UserIndex ON BK_USER_CHARGE (CUSERID)"]) {
+    if (![db executeUpdate:@"CREATE INDEX IF NOT EXISTS UserIndex ON BK_USER_CHARGE (CUSERID)"]) {
         return [db lastError];
     }
     
@@ -74,62 +74,91 @@
         return [db lastError];
     }
     
-    NSString *weekBudgetId = nil;
-    NSString *monthBudgetId = nil;
-    NSString *yearBudgetId = nil;
-    
-    NSUInteger weekBudgetTypeCount = 0;
-    NSUInteger monthBudgetTypeCount = 0;
-    NSUInteger yearBudgetTypeCount = 0;
-    
     NSMutableArray *budgetIDs = [NSMutableArray array];
     
-    FMResultSet *resultSet = [db executeQuery:@"SELECT IBID, ITYPE, CBILLTYPE FROM BK_USER_BUDGET WHERE CEDATE >= DATE('NOW', 'LOCALTIME') AND CSDATE <= DATE('NOW', 'LOCALTIME')"];
+    NSMutableDictionary *userBudgetInfo = [NSMutableDictionary dictionary];
+    
+    FMResultSet *resultSet = [db executeQuery:@"SELECT IBID, ITYPE, CBILLTYPE, CUSERID, CBOOKSID FROM BK_USER_BUDGET WHERE CEDATE >= DATE('NOW', 'LOCALTIME') AND CSDATE <= DATE('NOW', 'LOCALTIME') "];
     while ([resultSet next]) {
         NSString *budgetId = [resultSet stringForColumn:@"IBID"];
         int type = [resultSet intForColumn:@"ITYPE"];
         NSString *billType = [resultSet stringForColumn:@"CBILLTYPE"];
         NSArray *billTypes = [billType componentsSeparatedByString:@","];
+        NSString *userId = [resultSet stringForColumn:@"CUSERID"];
+        NSString *booksId = [resultSet stringForColumn:@"CBOOKSID"];
         
-        if (type == 0) {
-            if ([billTypes isEqualToArray:@[@"all"]]) {
-                weekBudgetId = budgetId;
-                weekBudgetTypeCount = NSUIntegerMax;
-            } else {
-                weekBudgetId = weekBudgetTypeCount > billTypes.count ? weekBudgetId : budgetId;
-                weekBudgetTypeCount = billTypes.count;
-            }
-        } else if (type == 1) {
-            if ([billTypes isEqualToArray:@[@"all"]]) {
-                monthBudgetId = budgetId;
-                monthBudgetTypeCount = NSUIntegerMax;
-            } else {
-                monthBudgetId = monthBudgetTypeCount > billTypes.count ? monthBudgetId : budgetId;
-                monthBudgetTypeCount = billTypes.count;
-            }
-        } else if (type == 2) {
-            if ([billTypes isEqualToArray:@[@"all"]]) {
-                yearBudgetId = budgetId;
-                yearBudgetTypeCount = NSUIntegerMax;
-            } else {
-                yearBudgetId = yearBudgetTypeCount > billTypes.count ? yearBudgetId : budgetId;
-                yearBudgetTypeCount = billTypes.count;
-            }
+        NSString *key = [NSString stringWithFormat:@"%@+%@", userId, booksId];
+        
+        NSMutableArray *budgets = userBudgetInfo[key];
+        if (!budgets) {
+            budgets = [NSMutableArray array];
         }
+        
+        [budgets addObject:@{@"budgetId":budgetId,
+                             @"type":@(type),
+                             @"billTypes":billTypes}];
+        
+        [userBudgetInfo setObject:budgets forKey:key];
     }
     [resultSet close];
     
-    if (weekBudgetId) {
-        [budgetIDs addObject:[NSString stringWithFormat:@"'%@'", weekBudgetId]];
-    }
-    
-    if (monthBudgetId) {
-        [budgetIDs addObject:[NSString stringWithFormat:@"'%@'", monthBudgetId]];
-    }
-    
-    if (yearBudgetId) {
-        [budgetIDs addObject:[NSString stringWithFormat:@"'%@'", yearBudgetId]];
-    }
+    // 遍历每个用户的账本，查找类别最多的预算（如果billtype是all，直接当作类别最多）
+    [userBudgetInfo enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+        
+        NSString *weekBudgetId = nil;
+        NSString *monthBudgetId = nil;
+        NSString *yearBudgetId = nil;
+        
+        NSUInteger weekBudgetTypeCount = 0;
+        NSUInteger monthBudgetTypeCount = 0;
+        NSUInteger yearBudgetTypeCount = 0;
+        
+        NSArray *budgets = obj;
+        
+        for (NSDictionary *budgetInfo in budgets) {
+            int type = [budgetInfo[@"type"] intValue];
+            NSArray *billTypes = budgetInfo[@"billTypes"];
+            NSString *budgetId = budgetInfo[@"budgetId"];
+            
+            if (type == 0) {
+                if ([billTypes isEqualToArray:@[@"all"]]) {
+                    weekBudgetId = budgetId;
+                    weekBudgetTypeCount = NSUIntegerMax;
+                } else {
+                    weekBudgetId = weekBudgetTypeCount > billTypes.count ? weekBudgetId : budgetId;
+                    weekBudgetTypeCount = billTypes.count;
+                }
+            } else if (type == 1) {
+                if ([billTypes isEqualToArray:@[@"all"]]) {
+                    monthBudgetId = budgetId;
+                    monthBudgetTypeCount = NSUIntegerMax;
+                } else {
+                    monthBudgetId = monthBudgetTypeCount > billTypes.count ? monthBudgetId : budgetId;
+                    monthBudgetTypeCount = billTypes.count;
+                }
+            } else if (type == 2) {
+                if ([billTypes isEqualToArray:@[@"all"]]) {
+                    yearBudgetId = budgetId;
+                    yearBudgetTypeCount = NSUIntegerMax;
+                } else {
+                    yearBudgetId = yearBudgetTypeCount > billTypes.count ? yearBudgetId : budgetId;
+                    yearBudgetTypeCount = billTypes.count;
+                }
+            }
+        }
+        
+        if (weekBudgetId) {
+            [budgetIDs addObject:[NSString stringWithFormat:@"'%@'", weekBudgetId]];
+        }
+        
+        if (monthBudgetId) {
+            [budgetIDs addObject:[NSString stringWithFormat:@"'%@'", monthBudgetId]];
+        }
+        
+        if (yearBudgetId) {
+            [budgetIDs addObject:[NSString stringWithFormat:@"'%@'", yearBudgetId]];
+        }
+    }];
     
     if (budgetIDs.count > 0) {
         NSString *sql = [NSString stringWithFormat:@"UPDATE BK_USER_BUDGET SET CBILLTYPE = 'all' WHERE IBID IN (%@)", [budgetIDs componentsJoinedByString:@","]];
