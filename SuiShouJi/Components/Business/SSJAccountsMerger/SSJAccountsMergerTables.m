@@ -34,6 +34,42 @@ static NSString *const kDateFormat = @"yyyy-MM-dd HH:mm:ss.SSS";
 #pragma mark - 提醒表
 
 @implementation SSJAccountsMergeRemindTable
+- (NSArray *)queryDataNeedToMergeWithUserID:(NSString *)userId version:(int64_t)version inDatabase:(FMDatabase *)db error:(NSError **)error {
+    
+    NSMutableArray *remindInfos = [NSMutableArray array];
+    
+    NSString *verDateStr = [[NSDate dateWithTimeIntervalSince1970:version] formattedDateWithFormat:kDateFormat];
+    
+    // 查询要合并的自定义提醒
+    FMResultSet *resultSet = [db executeQuery:@"select cremindid, cremindname, cmemo, cstartdate, istate, itype, icycle, iisend from bk_user_remind where cuserid = ? and operatortype <> 2 and itype = 0 and cwritedate > ?", userId, verDateStr];
+    while ([resultSet next]) {
+        NSString *remindId = [resultSet stringForColumn:@"cremindid"];
+        NSString *name = [resultSet stringForColumn:@"cremindname"];
+        NSString *memo = [resultSet stringForColumn:@"cmemo"];
+        NSString *startDate = [resultSet stringForColumn:@"cstartdate"];
+        NSString *state = [resultSet stringForColumn:@"istate"];
+        NSString *type = [resultSet stringForColumn:@"itype"];
+        NSString *cycle = [resultSet stringForColumn:@"icycle"];
+        NSString *isEnd = [resultSet stringForColumn:@"iisend"];
+        
+        [remindInfos addObject:@{@"cremindid":remindId,
+                                 @"cremindname":name,
+                                 @"cmemo":memo,
+                                 @"cstartdate":startDate,
+                                 @"istate":state,
+                                 @"itype":type,
+                                 @"icycle":cycle,
+                                 @"iisend":isEnd}];
+    }
+    [resultSet close];
+    
+    // 查询要合并的借贷提醒
+    [db executeQuery:@"select cremindid, cremindname, cmemo, cstartdate, istate, itype, icycle, iisend from bk_user_remind where cuserid = ? and operatortype <> 2 and itype = 0 and cwritedate > ?"];
+    
+    // 查询要合并的信用卡提醒
+    
+    return remindInfos;
+}
 
 - (BOOL)mergeFromUserID:(NSString *)userId1 toUserId:(NSString *)userId2 version:(int64_t)version inDatabase:(FMDatabase *)db error:(NSError **)error {
     
@@ -132,9 +168,6 @@ static NSString *const kDateFormat = @"yyyy-MM-dd HH:mm:ss.SSS";
         return YES;
     }
     
-    NSDate *date = [NSDate dateWithTimeIntervalSince1970:version];
-    NSString *dateStr = [date formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-    
     NSString *allMemberIdStr = [memberIds componentsJoinedByString:@","];
     
     // 查询名称重复的成员id
@@ -154,7 +187,7 @@ static NSString *const kDateFormat = @"yyyy-MM-dd HH:mm:ss.SSS";
     
     // 查询名称未重复的成员，copy到登录账户下
     NSString *repeatMemberIdStr = [repeatIds componentsJoinedByString:@","];
-    NSMutableString *sql_2 = [[NSString stringWithFormat:@"select cmemberid, cname, ccolor, istate, cadddate, operatortype from bk_member where cuserid = ? and cmemberid in (%@) and cmemberid not in (%@) and cwritedate > '%@'", allMemberIdStr, repeatMemberIdStr, dateStr] mutableCopy];
+    NSMutableString *sql_2 = [[NSString stringWithFormat:@"select cmemberid, cname, ccolor, istate, cadddate, operatortype, cwritedate from bk_member where cuserid = ? and cmemberid in (%@) and cmemberid not in (%@)", allMemberIdStr, repeatMemberIdStr] mutableCopy];
     resultSet = [db executeQuery:sql_2, userId1];
     
     NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
@@ -167,23 +200,28 @@ static NSString *const kDateFormat = @"yyyy-MM-dd HH:mm:ss.SSS";
         NSString *operatorType = [resultSet stringForColumn:@"operatortype"];
         NSString *newMemberId = SSJUUID();
         
-        NSDictionary *memeberInfo = @{@"cmemberid":newMemberId,
-                                      @"cname":name,
-                                      @"ccolor":color,
-                                      @"istate":state,
-                                      @"cadddate":addDate,
-                                      @"iorder":@(maxOrder ++),
-                                      @"cuserid":userId2,
-                                      @"iversion":@(SSJSyncVersion()),
-                                      @"cwritedate":writeDate,
-                                      @"operatortype":operatorType};
-        
-        if (![db executeUpdate:@"insert into bk_member (cmemberid, cname, ccolor, istate, cadddate, iorder, cuserid, iversion, cwritedate, operatortype) values (:cmemberid, :cname, :ccolor, :istate, :cadddate, :iorder, :cuserid, :iversion, :cwritedate, :operatortype)" withParameterDictionary:memeberInfo]) {
-            *error = [db lastError];
-            return NO;
-        }
-        
         [[SSJAccountsMergerMappingManager sharedManager].memberIdMapping setObject:newMemberId forKey:memberId];
+        
+        NSString *writeDateStr = [resultSet stringForColumn:@"cwritedate"];
+        NSTimeInterval ver = [NSDate dateWithString:writeDateStr formatString:kDateFormat].timeIntervalSince1970;
+        
+        if (ver > version) {
+            NSDictionary *memeberInfo = @{@"cmemberid":newMemberId,
+                                          @"cname":name,
+                                          @"ccolor":color,
+                                          @"istate":state,
+                                          @"cadddate":addDate,
+                                          @"iorder":@(maxOrder ++),
+                                          @"cuserid":userId2,
+                                          @"iversion":@(SSJSyncVersion()),
+                                          @"cwritedate":writeDate,
+                                          @"operatortype":operatorType};
+            
+            if (![db executeUpdate:@"insert into bk_member (cmemberid, cname, ccolor, istate, cadddate, iorder, cuserid, iversion, cwritedate, operatortype) values (:cmemberid, :cname, :ccolor, :istate, :cadddate, :iorder, :cuserid, :iversion, :cwritedate, :operatortype)" withParameterDictionary:memeberInfo]) {
+                *error = [db lastError];
+                return NO;
+            }
+        }
     }
     [resultSet close];
     
@@ -321,12 +359,9 @@ static NSString *const kDateFormat = @"yyyy-MM-dd HH:mm:ss.SSS";
     
     NSString *allFundIdStr = [fundIds componentsJoinedByString:@","];
     
-    NSDate *date = [NSDate dateWithTimeIntervalSince1970:version];
-    NSString *dateStr = [date formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-    
     // 查询名称重复的资金账户id
-    NSString *sql_1 = [NSString stringWithFormat:@"select a.cfundid as oldFundId, b.cfundid as newFundId from bk_fund_info as a, bk_fund_info as b where a.cuserid = ? and b.cuserid = ? and a.cacctname = b.cacctname and a.cfundid in (%@) and a.cwritedate > ? order by b.cwritedate", allFundIdStr];
-    resultSet = [db executeQuery:sql_1, userId1, userId2, dateStr];
+    NSString *sql_1 = [NSString stringWithFormat:@"select a.cfundid as oldFundId, b.cfundid as newFundId from bk_fund_info as a, bk_fund_info as b where a.cuserid = ? and b.cuserid = ? and a.cacctname = b.cacctname and a.cfundid in (%@) order by b.cwritedate", allFundIdStr];
+    resultSet = [db executeQuery:sql_1, userId1, userId2];
     
     NSMutableArray *repeatedFundIds = [NSMutableArray array];
     
@@ -341,7 +376,7 @@ static NSString *const kDateFormat = @"yyyy-MM-dd HH:mm:ss.SSS";
     int maxOrder = [db intForQuery:@"select max(iorder) from bk_fund_info where cuserid = ?", userId2];
     
     // 查询没有重复的资金账户，复制到已登录账户下
-    NSMutableString *sql_2 = [[NSString stringWithFormat:@"select cfundid, cacctname, cicoin, cparent, ccolor, cmemo, idisplay, operatortype from bk_fund_info where cuserid = ? and cfundid in (%@) and cwritedate > '%@'", allFundIdStr, dateStr] mutableCopy];
+    NSMutableString *sql_2 = [[NSString stringWithFormat:@"select cfundid, cacctname, cicoin, cparent, ccolor, cmemo, idisplay, operatortype, cwritedate from bk_fund_info where cuserid = ? and cfundid in (%@)", allFundIdStr] mutableCopy];
     if (repeatedFundIds.count) {
         [sql_2 appendFormat:@" and cfundid not in (%@)", [repeatedFundIds componentsJoinedByString:@","]];
     }
@@ -360,25 +395,30 @@ static NSString *const kDateFormat = @"yyyy-MM-dd HH:mm:ss.SSS";
         NSString *oldFundId = [resultSet stringForColumn:@"cfundid"];
         NSString *newFundId = SSJUUID();
         
-        NSDictionary *newFundInfo = @{@"cfundid":newFundId,
-                                      @"cacctname":name,
-                                      @"cicoin":icoin,
-                                      @"cparent":parent,
-                                      @"ccolor":color,
-                                      @"cmemo":memo,
-                                      @"idisplay":display,
-                                      @"iorder":@(maxOrder ++),
-                                      @"cuserid":userId2,
-                                      @"operatortype":operatortype,
-                                      @"iversion":@(SSJSyncVersion()),
-                                      @"cwritedate":writeDate};
-        
-        if (![db executeUpdate:@"insert into bk_fund_info (cfundid, cacctname, cicoin, cparent, ccolor, cmemo, idisplay, iorder, cuserid, operatortype, iversion, writeDate) values (:cfundid, :cacctname, :cicoin, :cparent, :ccolor, :cmemo, :idisplay, :iorder, :cuserid, :operatortype, :iversion, :writeDate)" withParameterDictionary:newFundInfo]) {
-            *error = [db lastError];
-            return NO;
-        }
-        
         [[SSJAccountsMergerMappingManager sharedManager].fundIdMapping setObject:newFundId forKey:oldFundId];
+        
+        NSString *writeDateStr = [resultSet stringForColumn:@"cwritedate"];
+        NSTimeInterval ver = [NSDate dateWithString:writeDateStr formatString:kDateFormat].timeIntervalSince1970;
+        
+        if (ver > version) {
+            NSDictionary *newFundInfo = @{@"cfundid":newFundId,
+                                          @"cacctname":name,
+                                          @"cicoin":icoin,
+                                          @"cparent":parent,
+                                          @"ccolor":color,
+                                          @"cmemo":memo,
+                                          @"idisplay":display,
+                                          @"iorder":@(maxOrder ++),
+                                          @"cuserid":userId2,
+                                          @"operatortype":operatortype,
+                                          @"iversion":@(SSJSyncVersion()),
+                                          @"cwritedate":writeDate};
+            
+            if (![db executeUpdate:@"insert into bk_fund_info (cfundid, cacctname, cicoin, cparent, ccolor, cmemo, idisplay, iorder, cuserid, operatortype, iversion, writeDate) values (:cfundid, :cacctname, :cicoin, :cparent, :ccolor, :cmemo, :idisplay, :iorder, :cuserid, :operatortype, :iversion, :writeDate)" withParameterDictionary:newFundInfo]) {
+                *error = [db lastError];
+                return NO;
+            }
+        }
     }
     [resultSet close];
     
@@ -429,12 +469,22 @@ static NSString *const kDateFormat = @"yyyy-MM-dd HH:mm:ss.SSS";
         NSString *operatorType = [resultSet stringForColumn:@"operatortype"];
         NSString *newFundId = [fundMapping objectForKey:cfundid];
         
-        if (![db executeUpdate:@"insert into bk_user_credit (cfundid, iquota, cbilldate, crepaymentdate, cremindid, ibilldatesettlement, cuserid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", newFundId, quota, billDate, repaymentDate, remindId, billDateSettlement, userId2, @(SSJSyncVersion()), operatorType, writeDate]) {
+        NSDictionary *memberInfo = @{@"cfundid":newFundId,
+                                     @"iquota":quota,
+                                     @"cbilldate":billDate,
+                                     @"crepaymentdate":repaymentDate,
+                                     @"cremindid":remindId,
+                                     @"ibilldatesettlement":billDateSettlement,
+                                     @"cuserid":userId2,
+                                     @"iversion":@(SSJSyncVersion()),
+                                     @"operatortype":operatorType,
+                                     @"cwritedate":writeDate};
+        
+        if (![db executeUpdate:@"insert into bk_user_credit (cfundid, iquota, cbilldate, crepaymentdate, cremindid, ibilldatesettlement, cuserid, iversion, operatortype, cwritedate) values (:cfundid, :iquota, :cbilldate, :crepaymentdate, :cremindid, :ibilldatesettlement, :cuserid, :iversion, :operatortype, :cwritedate)" withParameterDictionary:memberInfo]) {
             *error = [db lastError];
             [resultSet close];
             return NO;
         }
-        
     }
     [resultSet close];
     
@@ -472,15 +522,12 @@ static NSString *const kDateFormat = @"yyyy-MM-dd HH:mm:ss.SSS";
         return YES;
     }
     
-    // 查询名称重复的账本id
-    NSDate *date = [NSDate dateWithTimeIntervalSince1970:version];
-    NSString *dateStr = [date formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-    
     NSMutableArray *repeatedBooksIds = [NSMutableArray array];
     NSString *booksIdStr = [booksIds componentsJoinedByString:@","];
     
-    NSString *sql_1 = [NSString stringWithFormat:@"select a.cbooksid as oldBooksId, b.cbooksid as newBooksId from bk_books_type as a, bk_books_type as b where a.cuserid = ? and b.cuserid = ? and a.cbooksname = b.cbooksname and a.cbooksid in (%@) and a.cwritedate > ? order by b.cwritedate", booksIdStr];
-    resultSet = [db executeQuery:sql_1, userId1, userId2, dateStr];
+    // 查询名称重复的账本id
+    NSString *sql_1 = [NSString stringWithFormat:@"select a.cbooksid as oldBooksId, b.cbooksid as newBooksId from bk_books_type as a, bk_books_type as b where a.cuserid = ? and b.cuserid = ? and a.cbooksname = b.cbooksname and a.cbooksid in (%@) order by b.cwritedate", booksIdStr];
+    resultSet = [db executeQuery:sql_1, userId1, userId2];
     while ([resultSet next]) {
         NSString *oldBooksId = [resultSet stringForColumn:@"oldBooksId"];
         NSString *newBooksId = [resultSet stringForColumn:@"newBooksId"];
@@ -492,13 +539,12 @@ static NSString *const kDateFormat = @"yyyy-MM-dd HH:mm:ss.SSS";
     int maxOrder = [db intForQuery:@"select max(iorder) from bk_books_type where cuserid = ?", userId2];
     
     // 查询没有重复的账本，复制到已登录账户下
-    NSMutableString *sql_2 = [[NSString stringWithFormat:@"select cbooksid, cbooksname, cbookscolor, cicoin, operatortype from bk_books_type where cuserid = ? and cbooksid in (%@) and cwritedate > ?", booksIdStr] mutableCopy];
+    NSMutableString *sql_2 = [[NSString stringWithFormat:@"select cbooksid, cbooksname, cbookscolor, cicoin, operatortype, cwritedate from bk_books_type where cuserid = ? and cbooksid in (%@)", booksIdStr] mutableCopy];
     if (repeatedBooksIds.count) {
         [sql_2 appendFormat:@" and cbooksid not in (%@)", [repeatedBooksIds componentsJoinedByString:@","]];
     }
-    resultSet = [db executeQuery:sql_2, userId1, dateStr];
+    resultSet = [db executeQuery:sql_2, userId1];
     
-    NSMutableArray *newBooksRecords = [NSMutableArray array];
     NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
     
     while ([resultSet next]) {
@@ -509,26 +555,31 @@ static NSString *const kDateFormat = @"yyyy-MM-dd HH:mm:ss.SSS";
         NSString *operatorType = [resultSet stringForColumn:@"operatortype"];
         NSString *newID = SSJUUID();
         
-        [newBooksRecords addObject:@{@"cbooksid":newID,
-                                     @"cbooksname":name,
-                                     @"cbookscolor":color,
-                                     @"cicoin":icoin,
-                                     @"iorder":@(maxOrder ++),
-                                     @"cuserid":userId2,
-                                     @"iversion":@(SSJSyncVersion()),
-                                     @"cwritedate":writeDate,
-                                     @"operatortype":operatorType}];
-        
         [[SSJAccountsMergerMappingManager sharedManager].bookIdMapping setObject:newID forKey:ID];
+        
+        NSString *writeDateStr = [resultSet stringForColumn:@"cwritedate"];
+        NSTimeInterval ver = [NSDate dateWithString:writeDateStr formatString:kDateFormat].timeIntervalSince1970;
+        
+        if (ver > version) {
+            NSDictionary *bookInfo = @{@"cbooksid":newID,
+                                       @"cbooksname":name,
+                                       @"cbookscolor":color,
+                                       @"cicoin":icoin,
+                                       @"iorder":@(maxOrder ++),
+                                       @"cuserid":userId2,
+                                       @"iversion":@(SSJSyncVersion()),
+                                       @"cwritedate":writeDate,
+                                       @"operatortype":operatorType};
+            
+            if (![db executeUpdate:@"insert into bk_books_type (cbooksid, cbooksname, cbookscolor, cicoin, iorder, cuserid, iversion, cwritedate, operatortype) values (:cbooksid, :cbooksname, :cbookscolor, :cicoin, :iorder, :cuserid, :iversion, :cwritedate, :operatortype)" withParameterDictionary:bookInfo]) {
+                *error = [db lastError];
+                return NO;
+            }
+        }
+        
+        
     }
     [resultSet close];
-    
-    for (NSDictionary *booksRecord in newBooksRecords) {
-        if (![db executeUpdate:@"insert into bk_books_type (cbooksid, cbooksname, cbookscolor, cicoin, iorder, cuserid, iversion, cwritedate, operatortype) values (:cbooksid, :cbooksname, :cbookscolor, :cicoin, :iorder, :cuserid, :iversion, :cwritedate, :operatortype)" withParameterDictionary:booksRecord]) {
-            *error = [db lastError];
-            return NO;
-        }
-    }
     
     return YES;
 }
@@ -541,13 +592,11 @@ static NSString *const kDateFormat = @"yyyy-MM-dd HH:mm:ss.SSS";
 
 - (BOOL)mergeFromUserID:(NSString *)userId1 toUserId:(NSString *)userId2 version:(int64_t)version inDatabase:(FMDatabase *)db error:(NSError **)error {
     
-    // 查询重复的借贷id，根据借贷日期、借贷人判断是否重复
     NSMutableArray *repeatIds = [NSMutableArray array];
-    NSDate *date = [NSDate dateWithTimeIntervalSince1970:version];
-    NSString *dateStr = [date formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
     NSMutableDictionary *mapping = [SSJAccountsMergerMappingManager sharedManager].loanIdMapping;
     
-    FMResultSet *resultSet = [db executeQuery:@"select a.loanid as oldLoanId, b.loanid as newLoanId from bk_loan where as a, bk_loan as b where a.cuserid = ? and b.cuserid = ? and a.operatortype <> 2 and a.lender = b.lender and a.cborrowdate = b.cborrowdate and a.cwritedate > ? order by b.cwritedate", userId1, userId2, dateStr];
+    // 查询重复的借贷id，根据借贷日期、借贷人判断是否重复
+    FMResultSet *resultSet = [db executeQuery:@"select a.loanid as oldLoanId, b.loanid as newLoanId from bk_loan where as a, bk_loan as b where a.cuserid = ? and b.cuserid = ? and a.operatortype <> 2 and a.lender = b.lender and a.cborrowdate = b.cborrowdate order by b.cwritedate", userId1, userId2];
     while ([resultSet next]) {
         NSString *oldLoanId = [resultSet stringForColumn:@"oldLoanId"];
         NSString *newLoanId = [resultSet stringForColumn:@"newLoanId"];
@@ -589,12 +638,16 @@ static NSString *const kDateFormat = @"yyyy-MM-dd HH:mm:ss.SSS";
         NSString *newEndTargetFundId = fundMapping[endTargetFundId];
         NSString *newRemindId = [[SSJAccountsMergerMappingManager sharedManager].remindIdMapping objectForKey:remindId];
         
-        if (![db executeUpdate:@"insert info bk_loan (loanid, lender, jmoney, cthefundid, ctargetfundid, cetarget, cborrowdate, crepaymentdate, cenddate, rate, memo, interest, cremindid, itype, iend, cuserid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", newLoanId, lender, money, newFundId, newTargetFundId, newEndTargetFundId, borrowDate, repaymentDate, endDate, rate, memo, interest, newRemindId, type, end, userId2, @(SSJSyncVersion()), @0, writeDate]) {
-            [resultSet close];
-            return NO;
-        }
-        
         [mapping setObject:newLoanId forKey:loanId];
+        
+        NSString *writeDateStr = [resultSet stringForColumn:@"cwritedate"];
+        NSTimeInterval ver = [NSDate dateWithString:writeDateStr formatString:kDateFormat].timeIntervalSince1970;
+        if (ver > version) {
+            if (![db executeUpdate:@"insert info bk_loan (loanid, lender, jmoney, cthefundid, ctargetfundid, cetarget, cborrowdate, crepaymentdate, cenddate, rate, memo, interest, cremindid, itype, iend, cuserid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", newLoanId, lender, money, newFundId, newTargetFundId, newEndTargetFundId, borrowDate, repaymentDate, endDate, rate, memo, interest, newRemindId, type, end, userId2, @(SSJSyncVersion()), @0, writeDate]) {
+                [resultSet close];
+                return NO;
+            }
+        }
     }
     [resultSet close];
     
