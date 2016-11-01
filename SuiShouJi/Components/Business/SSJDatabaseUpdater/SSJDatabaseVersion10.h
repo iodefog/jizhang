@@ -6,6 +6,8 @@
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
 
+//  1.9.0
+
 #import <Foundation/Foundation.h>
 #import "SSJDatabaseVersionProtocol.h"
 
