@@ -52,7 +52,7 @@
              @"type":@"itype",
              @"operatorType":@"operatortype",
              @"version":@"iversion",
-             @"writeDate":@"cwriteDate"};
+             @"writeDate":@"cwritedate"};
 }
 
 + (instancetype)modelWithResultSet:(FMResultSet *)resultSet {
