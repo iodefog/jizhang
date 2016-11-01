@@ -11,6 +11,50 @@
 
 @implementation SSJLoanModel
 
++ (NSArray *)mj_allowedPropertyNames {
+    return @[@"ID",
+             @"userID",
+             @"lender",
+             @"jMoney",
+             @"fundID",
+             @"targetFundID",
+             @"endTargetFundID",
+             @"borrowDate",
+             @"repaymentDate",
+             @"endDate",
+             @"rate",
+             @"memo",
+             @"remindID",
+             @"interest",
+             @"closeOut",
+             @"type",
+             @"operatorType",
+             @"version",
+             @"writeDate"];
+}
+
++ (NSDictionary *)mj_replacedKeyFromPropertyName {
+    return @{@"ID":@"loanid",
+             @"userID":@"cuserid",
+             @"lender":@"lender",
+             @"jMoney":@"jmoney",
+             @"fundID":@"cthefundid",
+             @"targetFundID":@"ctargetfundid",
+             @"endTargetFundID":@"cetarget",
+             @"borrowDate":@"cborrowdate",
+             @"repaymentDate":@"crepaymentdate",
+             @"endDate":@"cenddate",
+             @"rate":@"rate",
+             @"memo":@"memo",
+             @"remindID":@"cremindid",
+             @"interest":@"interest",
+             @"closeOut":@"iend",
+             @"type":@"itype",
+             @"operatorType":@"operatortype",
+             @"version":@"iversion",
+             @"writeDate":@"cwriteDate"};
+}
+
 + (instancetype)modelWithResultSet:(FMResultSet *)resultSet {
     SSJLoanModel *model = [[SSJLoanModel alloc] init];
     model.ID = [resultSet stringForColumn:@"loanid"];
@@ -21,11 +65,6 @@
     model.fundID = [resultSet stringForColumn:@"cthefundid"];
     model.targetFundID = [resultSet stringForColumn:@"ctargetfundid"];
     model.endTargetFundID = [resultSet stringForColumn:@"cetarget"];
-    model.chargeID = [resultSet stringForColumn:@"cthecharge"];
-    model.targetChargeID = [resultSet stringForColumn:@"ctargetcharge"];
-    model.endChargeID = [resultSet stringForColumn:@"cethecharge"];
-    model.endTargetChargeID = [resultSet stringForColumn:@"cetargetcharge"];
-    model.interestChargeID = [resultSet stringForColumn:@"cinterestid"];
     model.borrowDate = [NSDate dateWithString:[resultSet stringForColumn:@"cborrowdate"] formatString:@"yyyy-MM-dd"];
     model.repaymentDate = [NSDate dateWithString:[resultSet stringForColumn:@"crepaymentdate"] formatString:@"yyyy-MM-dd"];
     model.endDate = [NSDate dateWithString:[resultSet stringForColumn:@"cenddate"] formatString:@"yyyy-MM-dd"];
@@ -71,28 +110,6 @@
     
     return model;
 }
-
-//+ (NSDictionary *)propertyMapping {
-//    return @{@"ID":@"loanid",
-//             @"userID":@"cuserid",
-//             @"lender":@"lender",
-//             @"jMoney":@"jmoney",
-//             @"fundID":@"cthefundid",
-//             @"targetFundID":@"ctargetfundid",
-//             @"chargeID":@"cthecharge",
-//             @"targetChargeID":@"ctargetcharge",
-//             @"borrowDate":@"cborrowdate",
-//             @"repaymentDate":@"crepaymentdate",
-//             @"rate":@"rate",
-//             @"memo":@"memo",
-//             @"remindID":@"cremindid",
-//             @"interest":@"interest",
-//             @"closeOut":@"iend",
-//             @"type":@"itype",
-//             @"operatorType":@"operatortype",
-//             @"version":@"iversion",
-//             @"writeDate":@"cwriteDate"};
-//}
 
 - (NSString *)debugDescription {
     return [NSString stringWithFormat:@"%@:%@", self, @{@"ID":(_ID ?: [NSNull null]),

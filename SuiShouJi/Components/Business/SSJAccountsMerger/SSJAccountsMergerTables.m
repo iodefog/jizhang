@@ -606,11 +606,11 @@ static NSString *const kDateFormat = @"yyyy-MM-dd HH:mm:ss.SSS";
     [resultSet close];
     
     // 查找出没有重复的借贷，并创建一套新的相同记录到登录账户下
-    NSMutableString *sql_1 = [[NSString stringWithFormat:@"select loanid, lender, jmoney, cthefundid, ctargetfundid, cetarget, cborrowdate, crepaymentdate, cenddate, rate, memo, interest, cremindid, itype, iend from bk_loan where cuserid = ? and operatortype <> 2 and cwritedate > ?"] mutableCopy];
+    NSMutableString *sql_1 = [[NSString stringWithFormat:@"select loanid, lender, jmoney, cthefundid, ctargetfundid, cetarget, cborrowdate, crepaymentdate, cenddate, rate, memo, interest, cremindid, itype, iend from bk_loan where cuserid = ? and operatortype <> 2"] mutableCopy];
     if (repeatIds.count) {
         [sql_1 appendFormat:@" and loanid not in (%@)", [repeatIds componentsJoinedByString:@","]];
     }
-    resultSet = [db executeQuery:sql_1, userId1, dateStr];
+    resultSet = [db executeQuery:sql_1, userId1];
     
     NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
     while ([resultSet next]) {

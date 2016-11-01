@@ -42,7 +42,7 @@ NS_ASSUME_NONNULL_BEGIN
                             failure:(void (^)(NSError *error))failure;
 
 /**
- *  保存借贷模型
+ *  新增或更新借贷
  *
  *  @param model     借贷模型
  *  @param success   成功的回调

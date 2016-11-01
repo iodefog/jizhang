@@ -9,7 +9,6 @@
 #import "SSJLoanHelper.h"
 #import "SSJLocalNotificationStore.h"
 #import "SSJLoanFundAccountSelectionViewItem.h"
-//#import "SSJFundAccountTable.h"
 #import "SSJLocalNotificationHelper.h"
 
 NSString *const SSJFundItemListKey = @"SSJFundItemListKey";
@@ -22,31 +21,33 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
                              success:(void (^)(NSArray <SSJLoanModel *>*list))success
                              failure:(void (^)(NSError *error))failure {
     
-    NSMutableString *sqlStr = [[NSString stringWithFormat:@"select l.*, fi.cicoin from bk_loan as l, bk_fund_info as fi where l.cthefundid = fi.cfundid and l.cuserid = '%@' and l.cthefundid = '%@' and l.operatortype <> 2", SSJUSERID(), fundID] mutableCopy];
-    switch (state) {
-        case 0:
-        case 1:
-            [sqlStr appendFormat:@" and iend = %d", state];
-            break;
-            
-        case 2:
-            break;
-            
-        default:
-            SSJPRINT(@"警告：参数state无效");
-            if (failure) {
-                SSJDispatchMainAsync(^{
-                    NSError *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"参数state无效，有效值0、1、2"}];
-                    failure(error);
-                });
-            }
-            break;
-    }
-    
-    [sqlStr appendString:@" order by jmoney desc"];
+    NSString *userId = SSJUSERID();
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        FMResultSet *result = [db executeQuery:sqlStr];
+        NSMutableString *sqlStr = [[NSString stringWithFormat:@"select l.*, fi.cicoin from bk_loan as l, bk_fund_info as fi where l.cthefundid = fi.cfundid and l.cuserid = ? and l.cthefundid = ? and l.operatortype <> 2"] mutableCopy];
+        switch (state) {
+            case 0:
+            case 1:
+                [sqlStr appendFormat:@" and iend = %d", state];
+                break;
+                
+            case 2:
+                break;
+                
+            default:
+                SSJPRINT(@"警告：参数state无效");
+                if (failure) {
+                    SSJDispatchMainAsync(^{
+                        NSError *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"参数state无效，有效值0、1、2"}];
+                        failure(error);
+                    });
+                }
+                break;
+        }
+        
+        [sqlStr appendString:@" order by jmoney desc"];
+        
+        FMResultSet *result = [db executeQuery:sqlStr, userId, fundID];
         if (!result) {
             if (failure) {
                 SSJDispatchMainAsync(^{
@@ -86,6 +87,10 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
         [list addObjectsFromArray:list1];
         [list addObjectsFromArray:list2];
         [list addObjectsFromArray:list3];
+        
+        for (SSJLoanModel *model in list) {
+            [self queryLoanChargeWithModel:model inDatabase:db];
+        }
         
         if (success) {
             SSJDispatchMainAsync(^{
@@ -127,11 +132,6 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
             model.fundID = [resultSet stringForColumn:@"cthefundid"];
             model.targetFundID = [resultSet stringForColumn:@"ctargetfundid"];
             model.endTargetFundID = [resultSet stringForColumn:@"cetarget"];
-            model.chargeID = [resultSet stringForColumn:@"cthecharge"];
-            model.targetChargeID = [resultSet stringForColumn:@"ctargetcharge"];
-            model.endChargeID = [resultSet stringForColumn:@"cethecharge"];
-            model.endTargetChargeID = [resultSet stringForColumn:@"cetargetcharge"];
-            model.interestChargeID = [resultSet stringForColumn:@"cinterestid"];
             model.borrowDate = [NSDate dateWithString:[resultSet stringForColumn:@"cborrowdate"] formatString:@"yyyy-MM-dd"];
             model.repaymentDate = [NSDate dateWithString:[resultSet stringForColumn:@"crepaymentdate"] formatString:@"yyyy-MM-dd"];
             model.endDate = [NSDate dateWithString:[resultSet stringForColumn:@"cenddate"] formatString:@"yyyy-MM-dd"];
@@ -146,6 +146,8 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
             model.writeDate = [NSDate dateWithString:[resultSet stringForColumn:@"cwritedate"] formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
         }
         [resultSet close];
+        
+        [self queryLoanChargeWithModel:model inDatabase:db];
         
         if (success) {
             SSJDispatchMainAsync(^{
@@ -164,24 +166,9 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
     
     [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
         
-        FMResultSet *resultSet = [db executeQuery:@"select * from bk_loan where loanid = ?", loanModel.ID];
-        if (!resultSet) {
-            if (failure) {
-                SSJDispatchMainAsync(^{
-                    failure([db lastError]);
-                });
-            }
-            return;
-        }
-        
-        SSJLoanModel *newestModel = nil;
-        if ([resultSet next]) {
-            newestModel = [SSJLoanModel modelWithResultSet:resultSet];
-        }
-        [resultSet close];
-        
         // 如果当前的借贷记录已经删除，就当作成功处理（这种情况发生在查询记录后在另一个客户端上删除了）
-        if (newestModel.operatorType == 2) {
+        int operatorType = [db intForQuery:@"select operatortype from bk_loan where loanid = ?", loanModel.ID];
+        if (operatorType == 2) {
             if (success) {
                 SSJDispatchMainAsync(^{
                     success();
@@ -204,17 +191,6 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
             return;
         }
         
-//        // 更新资金账户的余额
-//        if (![SSJFundAccountTable updateBalanceForUserId:loanModel.userID inDatabase:db]) {
-//            *rollback = YES;
-//            if (failure) {
-//                SSJDispatchMainAsync(^{
-//                    failure([db lastError]);
-//                });
-//            }
-//            return;
-//        }
-        
         // 存储提醒记录
         if (remindModel) {
             remindModel.fundId = loanModel.ID;
@@ -230,7 +206,7 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
             }
         }
         
-        //
+        // 修改借贷账户的可见状态
         if (![db executeUpdate:@"update bk_fund_info set idisplay = 1, iversion = ?, operatortype = 1, cwritedate = ? where cfundid = ?", @(SSJSyncVersion()), [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], loanModel.fundID]) {
             *rollback = YES;
             if (failure) {
@@ -790,11 +766,37 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
     [modelInfo setObject:writeDate forKey:@"writeDate"];
     [modelInfo setObject:@(SSJSyncVersion()) forKey:@"version"];
     
-    if (![db executeUpdate:@"replace into bk_loan (loanid, cuserid, lender, jmoney, cthefundid, ctargetfundid, cthecharge, ctargetcharge, cborrowdate, crepaymentdate, rate, memo, cremindid, interest, iend, itype, cwritedate, operatortype, iversion) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", modelInfo[@"ID"], modelInfo[@"userID"],modelInfo[@"lender"], modelInfo[@"jMoney"], modelInfo[@"fundID"], modelInfo[@"targetFundID"], modelInfo[@"chargeID"], modelInfo[@"targetChargeID"], modelInfo[@"borrowDate"], modelInfo[@"repaymentDate"], modelInfo[@"rate"], modelInfo[@"memo"], modelInfo[@"remindID"], modelInfo[@"interest"], modelInfo[@"closeOut"], modelInfo[@"type"], modelInfo[@"writeDate"], modelInfo[@"operatorType"], modelInfo[@"version"]]) {
+    if (![db executeUpdate:@"replace into bk_loan (loanid, cuserid, lender, jmoney, cthefundid, ctargetfundid, cborrowdate, crepaymentdate, rate, memo, cremindid, interest, iend, itype, cwritedate, operatortype, iversion) values (:loanid, :cuserid, :lender, :jmoney, :cthefundid, :ctargetfundid, :cborrowdate, :crepaymentdate, :rate, :memo, :cremindid, :interest, :iend, :itype, :cwritedate, :operatortype, :iversion)" withParameterDictionary:modelInfo]) {
         return NO;
     }
     
     return YES;
+}
+
++ (void)queryLoanChargeWithModel:(SSJLoanModel *)model inDatabase:(FMDatabase *)db {
+    switch (model.type) {
+        case SSJLoanTypeLend: {
+            model.chargeID = [db stringForQuery:@"select ichargeid from bk_user_charge where ifunsid = ? and loanid = ? and ibillid = ? and operatortype <> 2", model.fundID, model.ID, @(3)];
+            model.targetChargeID = [db stringForQuery:@"select ichargeid from bk_user_charge where ifunsid = ? and loanid = ? and ibillid = ? and operatortype <> 2", model.targetFundID, model.ID, @(4)];
+            if (model.closeOut) {
+                model.endChargeID = [db stringForQuery:@"select ichargeid from bk_user_charge where ifunsid = ? and loanid = ? and ibillid = ? and operatortype <> 2", model.fundID, model.ID, @(4)];
+                model.endTargetChargeID = [db stringForQuery:@"select ichargeid from bk_user_charge where ifunsid = ? and loanid = ? and ibillid = ? and operatortype <> 2", model.targetFundID, model.ID, @(3)];
+                model.interestChargeID = [db stringForQuery:@"select ichargeid from bk_user_charge where ifunsid = ? and loanid = ? and ibillid = ? and operatortype <> 2", model.targetFundID, model.ID, @(5)];
+            }
+        }
+            break;
+            
+        case SSJLoanTypeBorrow: {
+            model.chargeID = [db stringForQuery:@"select ichargeid from bk_user_charge where ifunsid = ? and loanid = ? and ibillid = ? and operatortype <> 2", model.fundID, model.ID, @(4)];
+            model.targetChargeID = [db stringForQuery:@"select ichargeid from bk_user_charge where ifunsid = ? and loanid = ? and ibillid = ? and operatortype <> 2", model.targetFundID, model.ID, @(3)];
+            if (model.closeOut) {
+                model.endChargeID = [db stringForQuery:@"select ichargeid from bk_user_charge where ifunsid = ? and loanid = ? and ibillid = ? and operatortype <> 2", model.fundID, model.ID, @(3)];
+                model.endTargetChargeID = [db stringForQuery:@"select ichargeid from bk_user_charge where ifunsid = ? and loanid = ? and ibillid = ? and operatortype <> 2", model.targetFundID, model.ID, @(4)];
+                model.interestChargeID = [db stringForQuery:@"select ichargeid from bk_user_charge where ifunsid = ? and loanid = ? and ibillid = ? and operatortype <> 2", model.targetFundID, model.ID, @(6)];
+            }
+        }
+            break;
+    }
 }
 
 @end
