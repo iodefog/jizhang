@@ -135,17 +135,17 @@
     }
     
     // 给每个自定义账本添加日常账本中所有类型
-    if (![db executeUpdate:@"insert into bk_user_bill select b.cuserid ,b.cbillid , b.istate, ?, ?, 0, b.iorder, a.cbooksid from bk_books_type a, bk_user_bill b where b.operatortype <> 2 and a.cbooksid not like a.cuserid || '%' and b.cbooksid = a.cuserid and b.icustom = 0",cwriteDate,@(SSJSyncVersion())]) {
+    if (![db executeUpdate:@"insert into bk_user_bill select b.cuserid ,b.cbillid , b.istate, ?, ?, 0, b.iorder, a.cbooksid from bk_books_type a, bk_user_bill b where b.operatortype <> 2 and a.cbooksid not like a.cuserid || '%' and b.cbooksid = a.cuserid and length(b.cbillid) < 10",cwriteDate,@(SSJSyncVersion())]) {
         return [db lastError];
     }
     
     // 给自定义账本添加已经使用过的自定义记账类型
-    if (![db executeUpdate:@"insert into bk_user_bill select distinct a.cuserid , a.ibillid, 1, ?, ?, 0, 0, a.cbooksid from bk_user_charge a, bk_user_bill b where a.ibillid = b.cbillid and a.operatortype <> 2 and b.operatortype <> 2 and b.icustom = 1 and a.cbooksid not like a.cuserid || '%'",cwriteDate,@(SSJSyncVersion())]) {
+    if (![db executeUpdate:@"insert into bk_user_bill select distinct a.cuserid , a.ibillid, 1, ?, ?, 0, 0, a.cbooksid from bk_user_charge a, bk_user_bill b where a.ibillid = b.cbillid and a.operatortype <> 2 and b.operatortype <> 2 and length(b.cbillid) > 10 and a.cbooksid not like a.cuserid || '%'",cwriteDate,@(SSJSyncVersion())]) {
         return [db lastError];
     }
     
     // 给非自定义账本账本添加之前版本已经用过的记账类型
-    if (![db executeUpdate:@"insert into bk_user_bill select distinct a.cuserid , a.ibillid, 1, ?, ?, 0, 0, a.cbooksid from bk_user_charge a, bk_user_bill b where a.ibillid = b.cbillid and a.operatortype <> 2 and b.operatortype <> 2 and b.cbooksid <> a.cuserid and a.cbooksid like a.cuserid || '%'",cwriteDate,@(SSJSyncVersion())]) {
+    if (![db executeUpdate:@"insert into bk_user_bill select distinct a.cuserid , a.ibillid, 1, ?, ?, 0, 0, a.cbooksid from bk_user_charge a, bk_user_bill b where a.ibillid = b.cbillid and a.operatortype <> 2 and b.operatortype <> 2 and a.cbooksid <> a.cuserid and a.cbooksid like a.cuserid || '%'",cwriteDate,@(SSJSyncVersion())]) {
         return [db lastError];
     }
     

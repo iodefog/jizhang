@@ -330,6 +330,9 @@
         //  更新排序字段为空的收支类型
         [SSJLoginHelper updateBillTypeOrderIfNeededForUserId:SSJUSERID() inDatabase:db error:nil];
         
+        //  更新父类型为空的账本
+        [SSJLoginHelper updateBooksParentIfNeededForUserId:SSJUSERID() inDatabase:db error:nil];
+        
         //  如果登录没有返回任何资金帐户，说明服务器没有保存任何资金记录，就给用户创建默认的
         [SSJUserDefaultDataCreater createDefaultFundAccountsIfNeededForUserId:SSJUSERID() inDatabase:db];
         
