@@ -27,7 +27,9 @@
     NSString *fundId = record[@"ifunsid"];
     
     if (!billId || !fundId) {
-        *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"ibillid and fundId in record must not be nil"}];
+        if (error) {
+            *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"ibillid and fundId in record must not be nil"}];
+        }
         SSJPRINT(@">>> SSJ warning:cuserid and ibillid in record must not be nil \n record:%@", record);
         return NO;
     }

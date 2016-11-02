@@ -18,13 +18,17 @@
 + (NSArray *)queryRecordsNeedToSyncWithUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
     int64_t version = [SSJSyncTable lastSuccessSyncVersionForUserId:userId inDatabase:db];
     if (version == SSJ_INVALID_SYNC_VERSION) {
-        *error = [db lastError];
+        if (error) {
+            *error = [db lastError];
+        }
         return nil;
     }
     
     FMResultSet *resultSet = [db executeQuery:@"select cbillid, cuserid, istate, iorder, cwritedate, iversion, operatortype from bk_user_bill where cuserid = ? and iversion > ?", userId, @(version)];
     if (!resultSet) {
-        *error = [db lastError];
+        if (error) {
+            *error = [db lastError];
+        }
         return nil;
     }
     
@@ -61,12 +65,16 @@
         
         if (exist) {
             if (![db executeUpdate:@"update bk_user_bill set istate = ?, iorder = ?, cwritedate = ?, iversion = ?, operatortype = ? where cbillid = ? and cuserid = ? and cwritedate < ?", recordInfo[@"istate"], recordInfo[@"iorder"], recordInfo[@"cwritedate"], recordInfo[@"iversion"], recordInfo[@"operatortype"], recordInfo[@"cbillid"], recordInfo[@"cuserid"], recordInfo[@"cwritedate"]]) {
-                *error = [db lastError];
+                if (error) {
+                    *error = [db lastError];
+                }
                 return NO;
             }
         } else {
             if (![db executeUpdate:@"insert into bk_user_bill (cbillid, cuserid, istate, iorder, cwritedate, iversion, operatortype) values (?, ?, ?, ?, ?, ?, ?)", recordInfo[@"cbillid"], recordInfo[@"cuserid"], recordInfo[@"istate"], recordInfo[@"iorder"], recordInfo[@"cwritedate"], recordInfo[@"iversion"], recordInfo[@"operatortype"]]) {
-                *error = [db lastError];
+                if (error) {
+                    *error = [db lastError];
+                }
                 return NO;
             }
         }
@@ -78,7 +86,9 @@
 + (BOOL)updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:(int64_t)newVersion forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
     int64_t version = [SSJSyncTable lastSuccessSyncVersionForUserId:userId inDatabase:db];
     if (version == SSJ_INVALID_SYNC_VERSION) {
-        *error = [db lastError];
+        if (error) {
+            *error = [db lastError];
+        }
         SSJPRINT(@">>>SSJ warning: invalid sync version");
         return NO;
     }

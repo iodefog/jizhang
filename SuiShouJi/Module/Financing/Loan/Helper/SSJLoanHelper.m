@@ -310,7 +310,9 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
     
     // 将借贷记录的operatortype改为2
     if (![db executeUpdate:@"update bk_loan set operatortype = ?, iversion = ?, cwritedate = ? where loanid = ?", @2, @(SSJSyncVersion()), writeDate, model.ID]) {
-        *error = [db lastError];
+        if (error) {
+            *error = [db lastError];
+        }
         return NO;
     }
     
@@ -339,13 +341,17 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
     // 将要删除的转帐流水operatortype改为2
     NSString *sqlStr = [NSString stringWithFormat:@"update bk_user_charge set operatortype = %@, iversion = %@, cwritedate = '%@' where ichargeid in (%@)", @2, @(SSJSyncVersion()), writeDate, chargeIDs];
     if (![db executeUpdate:sqlStr]) {
-        *error = [db lastError];
+        if (error) {
+            *error = [db lastError];
+        }
         return NO;
     }
     
     // 将提醒的operatortype改为2
     if (![db executeUpdate:@"update bk_user_remind set operatortype = ?, iversion = ?, cwritedate = ? where cremindid = ?", @2, @(SSJSyncVersion()), writeDate, model.remindID]) {
-        *error = [db lastError];
+        if (error) {
+            *error = [db lastError];
+        }
         return NO;
     }
     

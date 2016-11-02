@@ -28,7 +28,9 @@
     NSString *fundId = record[@"ifunsid"];
     NSString *configId = record[@"iconfigid"];  //  定期记账配置id可已为空（仅一次）
     if (!billId || !fundId) {
-        *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"ibillid and fundId in record must not be nil"}];
+        if (error) {
+            *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"ibillid and fundId in record must not be nil"}];
+        }
         SSJPRINT(@">>> SSJ warning: ibillid and fundId in record must not be nil \n record:%@", record);
         return NO;
     }

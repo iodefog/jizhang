@@ -181,28 +181,38 @@
     
     //删除信用卡表
     if (![db executeUpdate:@"update bk_user_credit set operatortype = 2 , cwritedate = ? , iversion = ? where cuserid = ? and cfundid = ?",writeDate,@(SSJSyncVersion()),userId,item.cardId]) {
-        *error = [db lastError];
+        if (error) {
+            *error = [db lastError];
+        }
         return NO;
     }
     //删除资金帐户表
     if (![db executeUpdate:@"update bk_fund_info set operatortype = 2 , cwritedate = ? , iversion = ? where cuserid = ? and cfundid = ?",writeDate,@(SSJSyncVersion()),userId,item.cardId]) {
-        *error = [db lastError];
+        if (error) {
+            *error = [db lastError];
+        }
         return NO;
     }
     //删除流水表
     if (![db executeUpdate:@"update bk_user_charge set operatortype = 2 , cwritedate = ? , iversion = ? where cuserid = ? and ifunsid = ?",writeDate,@(SSJSyncVersion()),userId,item.cardId]) {
-        *error = [db lastError];
+        if (error) {
+            *error = [db lastError];
+        }
         return NO;
     }
     //更新日常统计表
     if (![SSJDailySumChargeTable updateDailySumChargeForUserId:userId inDatabase:db]) {
-        *error = [db lastError];
+        if (error) {
+            *error = [db lastError];
+        }
         return NO;
     }
     //删除提醒表
     if (item.remindId.length) {
         if (![db executeUpdate:@"update bk_user_remind set operatortype = 2 , cwritedate = ? , iversion = ? where cuserid = ? and cremindid = ?",writeDate,@(SSJSyncVersion()),userId,item.remindId]) {
-            *error = [db lastError];
+            if (error) {
+                *error = [db lastError];
+            }
             return NO;
         }
         //取消提醒
@@ -212,7 +222,9 @@
     }
     FMResultSet *resultSet = [db executeQuery:@"select * from bk_loan where loanid in (select loanid from bk_user_charge where ifunsid = ? and operatortype <> 2)", item.cardId];
     if (!resultSet) {
-        *error = [db lastError];
+        if (error) {
+            *error = [db lastError];
+        }
         return NO;
     }
     NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:0];
@@ -244,7 +256,9 @@
     for (SSJLoanModel *model in tempArr) {
         [SSJLoanHelper queryLoanChargeWithModel:model inDatabase:db];
         if (![SSJLoanHelper deleteLoanModel:model inDatabase:db forUserId:userId error:NULL]) {
-            *error = [db lastError];
+            if (error) {
+                *error = [db lastError];
+            }
             return NO;
         };
     }

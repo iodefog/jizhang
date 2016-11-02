@@ -122,7 +122,9 @@ static NSString *const kDateFormat = @"yyyy-MM-dd HH:mm:ss.SSS";
                                          @"cwritedate":writeDate};
             
             if (![db executeUpdate:@"insert into bk_user_remind (cremindid, cremindname, cmemo, cstartdate, istate, itype, icycle, iisend, cuserid, iversion, operatortype, cwritedate) values (:cremindid, :cremindname, :cmemo, :cstartdate, :istate, :itype, :icycle, :iisend, :cuserid, :iversion, :operatortype, :cwritedate)" withParameterDictionary:remindInfo]) {
-                *error = [db lastError];
+                if (error) {
+                    *error = [db lastError];
+                }
                 return NO;
             }
         }
@@ -218,7 +220,9 @@ static NSString *const kDateFormat = @"yyyy-MM-dd HH:mm:ss.SSS";
                                           @"operatortype":operatorType};
             
             if (![db executeUpdate:@"insert into bk_member (cmemberid, cname, ccolor, istate, cadddate, iorder, cuserid, iversion, cwritedate, operatortype) values (:cmemberid, :cname, :ccolor, :istate, :cadddate, :iorder, :cuserid, :iversion, :cwritedate, :operatortype)" withParameterDictionary:memeberInfo]) {
-                *error = [db lastError];
+                if (error) {
+                    *error = [db lastError];
+                }
                 return NO;
             }
         }
@@ -262,12 +266,16 @@ static NSString *const kDateFormat = @"yyyy-MM-dd HH:mm:ss.SSS";
     
     // 创建个临时表存储类别ID、类别名称、userid，再从临时表中查询名称重复的收支类别id
     if (![db executeUpdate:@"create temporary table if not exists tmpTable (id text, name text, userid text, cwritedate text, primary key(id, userid))"]) {
-        *error = [db lastError];
+        if (error) {
+            *error = [db lastError];
+        }
         return NO;
     }
     
     if (![db executeUpdate:@"insert into tmpTable (id, name, userid, cwritedate) select bt.id, bt.cname, ub.cuserid, ub.cwritedate from bk_user_bill as ub, bk_bill_type as bt where ub.cbillid = bt.id and bt.icustom = 1"]) {
-        *error = [db lastError];
+        if (error) {
+            *error = [db lastError];
+        }
         return NO;
     }
     
@@ -314,7 +322,9 @@ static NSString *const kDateFormat = @"yyyy-MM-dd HH:mm:ss.SSS";
                                    @"operatortype":operatorType};
         
         if (![db executeUpdate:@"insert into bk_user_bill (cuserid, cbillid, istate, iorder, iversion, cwitedate, operatortype) values (:cuserid, :cbillid, :istate, :iorder, :iversion, :cwitedate, :operatortype)" withParameterDictionary:billInfo]) {
-            *error = [db lastError];
+            if (error) {
+                *error = [db lastError];
+            }
             return NO;
         }
         
@@ -415,7 +425,9 @@ static NSString *const kDateFormat = @"yyyy-MM-dd HH:mm:ss.SSS";
                                           @"cwritedate":writeDate};
             
             if (![db executeUpdate:@"insert into bk_fund_info (cfundid, cacctname, cicoin, cparent, ccolor, cmemo, idisplay, iorder, cuserid, operatortype, iversion, writeDate) values (:cfundid, :cacctname, :cicoin, :cparent, :ccolor, :cmemo, :idisplay, :iorder, :cuserid, :operatortype, :iversion, :writeDate)" withParameterDictionary:newFundInfo]) {
-                *error = [db lastError];
+                if (error) {
+                    *error = [db lastError];
+                }
                 return NO;
             }
         }
@@ -481,7 +493,9 @@ static NSString *const kDateFormat = @"yyyy-MM-dd HH:mm:ss.SSS";
                                      @"cwritedate":writeDate};
         
         if (![db executeUpdate:@"insert into bk_user_credit (cfundid, iquota, cbilldate, crepaymentdate, cremindid, ibilldatesettlement, cuserid, iversion, operatortype, cwritedate) values (:cfundid, :iquota, :cbilldate, :crepaymentdate, :cremindid, :ibilldatesettlement, :cuserid, :iversion, :operatortype, :cwritedate)" withParameterDictionary:memberInfo]) {
-            *error = [db lastError];
+            if (error) {
+                *error = [db lastError];
+            }
             [resultSet close];
             return NO;
         }
@@ -572,7 +586,9 @@ static NSString *const kDateFormat = @"yyyy-MM-dd HH:mm:ss.SSS";
                                        @"operatortype":operatorType};
             
             if (![db executeUpdate:@"insert into bk_books_type (cbooksid, cbooksname, cbookscolor, cicoin, iorder, cuserid, iversion, cwritedate, operatortype) values (:cbooksid, :cbooksname, :cbookscolor, :cicoin, :iorder, :cuserid, :iversion, :cwritedate, :operatortype)" withParameterDictionary:bookInfo]) {
-                *error = [db lastError];
+                if (error) {
+                    *error = [db lastError];
+                }
                 return NO;
             }
         }
@@ -718,7 +734,9 @@ static NSString *const kDateFormat = @"yyyy-MM-dd HH:mm:ss.SSS";
         NSString *newMemberIdStr = [newMemberIds componentsJoinedByString:@","];
         
         if (![db executeUpdate:@"insert into bk_charge_period_config (iconfigid, cuserid, ibillid, ifunsid, cbooksid, cmembersid, itype, imoney, cimgurl, cmemo, cbilldate, istate, iversion, cwritedate, operatortype) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", newConfigId, userId2, newBillId, newFundId, newBookId, newMemberIdStr, type, money, imgUrl, memo, billDate, state, @(SSJSyncVersion()), writeDate, operatorType]) {
-            *error = [db lastError];
+            if (error) {
+                *error = [db lastError];
+            }
             [resultSet close];
             return NO;
         }
@@ -833,7 +851,9 @@ static NSString *const kDateFormat = @"yyyy-MM-dd HH:mm:ss.SSS";
         
         if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cbooksid, loanid, ibillid, ifunsid, iconfigid, imoney, cbilldate, cmemo, cimgurl, thumburl, cuserid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", newChargeId, newBookId, newLoanId, newBillId, newFundId, newConfigId, money, billDate, memo, imgUrl, thumbUrl, userId2, @(SSJSyncVersion()), @0, writeDate]) {
             [resultSet close];
-            *error = [db lastError];
+            if (error) {
+                *error = [db lastError];
+            }
             return NO;
         }
         

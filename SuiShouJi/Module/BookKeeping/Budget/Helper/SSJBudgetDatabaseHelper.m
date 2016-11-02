@@ -693,7 +693,9 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
 + (BOOL)saveBudgetModel:(SSJBudgetModel *)model inDatabase:(FMDatabase *)db error:(NSError **)error {
     if (![model isKindOfClass:[SSJBudgetModel class]]) {
         SSJPRINT(@"model is not kind of class SSJBudgetModel");
-        *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"model is not kind of class SSJBudgetModel"}];
+        if (error) {
+            *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"model is not kind of class SSJBudgetModel"}];
+        }
         return NO;
     }
     
@@ -710,7 +712,9 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
             return YES;
             
         } else {
-            *error = [db lastError];
+            if (error) {
+                *error = [db lastError];
+            }
             return NO;
         }
         
@@ -726,7 +730,9 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
             return YES;
             
         } else {
-            *error = [db lastError];
+            if (error) {
+                *error = [db lastError];
+            }
             return NO;
         }
     }
