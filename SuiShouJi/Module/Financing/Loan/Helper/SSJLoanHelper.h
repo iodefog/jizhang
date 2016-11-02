@@ -42,7 +42,7 @@ NS_ASSUME_NONNULL_BEGIN
                             failure:(void (^)(NSError *error))failure;
 
 /**
- *  保存借贷模型
+ *  新增或更新借贷
  *
  *  @param model     借贷模型
  *  @param success   成功的回调
@@ -136,6 +136,14 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param model 借贷模型
  */
 + (double)closeOutInterestWithLoanModel:(SSJLoanModel *)model;
+
+/**
+ 根据model存储的信息查询此借贷的转帐流水、结清转帐流水、结清利息流水
+
+ @param model model 借贷模型 ID、fundID、targetFundID不能为空；如果已结清endTargetFundID也不能为空
+ @param db 数据库对象
+ */
++ (void)queryLoanChargeWithModel:(SSJLoanModel *)model inDatabase:(FMDatabase *)db;
 
 @end
 

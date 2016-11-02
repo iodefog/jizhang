@@ -40,16 +40,16 @@ typedef NS_ENUM(NSInteger, SSJLoanType) {
 // 借入／借出目标账户(结清后)
 @property (nonatomic, copy) NSString *endTargetFundID;
 
-// 所属转账流水
+// 创建借贷时产生的本账户转账流水
 @property (nonatomic, copy) NSString *chargeID;
 
-// 目标转账流水
+// 创建借贷时产生的目标账户转账流水
 @property (nonatomic, copy) NSString *targetChargeID;
 
-// 结清所属转账流水
+// 结清时产生的本账户转账流水
 @property (nonatomic, copy) NSString *endChargeID;
 
-// 结清目标转账流水
+// 结清时产生的目标账户转账流水
 @property (nonatomic, copy) NSString *endTargetChargeID;
 
 // 结清产生的利息流水

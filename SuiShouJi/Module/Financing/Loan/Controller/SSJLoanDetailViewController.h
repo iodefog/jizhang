@@ -7,7 +7,6 @@
 //
 
 #import "SSJBaseViewController.h"
-#import "SSJLoanModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

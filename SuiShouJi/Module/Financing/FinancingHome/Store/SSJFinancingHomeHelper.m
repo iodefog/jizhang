@@ -161,11 +161,6 @@
                         loanModel.fundID = [resultSet stringForColumn:@"cthefundid"];
                         loanModel.targetFundID = [resultSet stringForColumn:@"ctargetfundid"];
                         loanModel.endTargetFundID = [resultSet stringForColumn:@"cetarget"];
-                        loanModel.chargeID = [resultSet stringForColumn:@"cthecharge"];
-                        loanModel.targetChargeID = [resultSet stringForColumn:@"ctargetcharge"];
-                        loanModel.endChargeID = [resultSet stringForColumn:@"cethecharge"];
-                        loanModel.endTargetChargeID = [resultSet stringForColumn:@"cetargetcharge"];
-                        loanModel.interestChargeID = [resultSet stringForColumn:@"cinterestid"];
                         loanModel.borrowDate = [NSDate dateWithString:[resultSet stringForColumn:@"cborrowdate"] formatString:@"yyyy-MM-dd"];
                         loanModel.repaymentDate = [NSDate dateWithString:[resultSet stringForColumn:@"crepaymentdate"] formatString:@"yyyy-MM-dd"];
                         loanModel.endDate = [NSDate dateWithString:[resultSet stringForColumn:@"cenddate"] formatString:@"yyyy-MM-dd"];
@@ -180,6 +175,9 @@
                         loanModel.writeDate = [NSDate dateWithString:[resultSet stringForColumn:@"cwritedate"] formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
                     }
                     [resultSet close];
+                    
+                    [SSJLoanHelper queryLoanChargeWithModel:loanModel inDatabase:db];
+                    
                     if (![SSJLoanHelper deleteLoanModel:loanModel inDatabase:db forUserId:userId error:NULL]) {
                         if (failure) {
                             *rollback = YES;
@@ -227,11 +225,6 @@
                         loanModel.fundID = [resultSet stringForColumn:@"cthefundid"];
                         loanModel.targetFundID = [resultSet stringForColumn:@"ctargetfundid"];
                         loanModel.endTargetFundID = [resultSet stringForColumn:@"cetarget"];
-                        loanModel.chargeID = [resultSet stringForColumn:@"cthecharge"];
-                        loanModel.targetChargeID = [resultSet stringForColumn:@"ctargetcharge"];
-                        loanModel.endChargeID = [resultSet stringForColumn:@"cethecharge"];
-                        loanModel.endTargetChargeID = [resultSet stringForColumn:@"cetargetcharge"];
-                        loanModel.interestChargeID = [resultSet stringForColumn:@"cinterestid"];
                         loanModel.borrowDate = [NSDate dateWithString:[resultSet stringForColumn:@"cborrowdate"] formatString:@"yyyy-MM-dd"];
                         loanModel.repaymentDate = [NSDate dateWithString:[resultSet stringForColumn:@"crepaymentdate"] formatString:@"yyyy-MM-dd"];
                         loanModel.endDate = [NSDate dateWithString:[resultSet stringForColumn:@"cenddate"] formatString:@"yyyy-MM-dd"];
@@ -249,6 +242,7 @@
                     }
                     
                     for (SSJLoanModel *model in tempArr) {
+                        [SSJLoanHelper queryLoanChargeWithModel:model inDatabase:db];
                         if (![SSJLoanHelper deleteLoanModel:model inDatabase:db forUserId:userId error:NULL]) {
                             if (failure) {
                                 *rollback = YES;

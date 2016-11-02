@@ -21,9 +21,12 @@
 }
 
 + (NSError *)updateUserTableWithDatabase:(FMDatabase *)db {
-    if (![db executeUpdate:@"alter table bk_user add logintype integer"]) {
-        return [db lastError];
+    if (![db columnExists:@"logintype" inTableWithName:@"bk_user"]) {
+        if (![db executeUpdate:@"alter table bk_user add logintype integer"]) {
+            return [db lastError];
+        }
     }
+    
     return nil;
 }
 

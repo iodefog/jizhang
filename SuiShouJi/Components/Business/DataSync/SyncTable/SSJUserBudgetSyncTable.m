@@ -38,10 +38,6 @@
         return YES;
     }
     
-    // 查询本地是否有预算类别、周期、支出类型、账本类型都相同的其它记录，有的话保留修改时间较晚的
-//    resultSet = [db executeQuery:@"select ibid, cwritedate, operatortype from bk_user_budget where cuserid = ? and csdate = ? and cedate = ? and itype = ? and cbilltype = ? and ibid <> ? and operatortype <> 2", userId, record[@"csdate"], record[@"cedate"], record[@"itype"], record[@"cbilltype"], record[@"ibid"]];
-
-    // 目前先把相同支出类型的判断去掉，以后增加用户自选支出类型再加上
     // 查询本地是否有相同预算类别、账本类型，并且当前有效的记录记录，有的话保留修改时间较晚的
     NSString *todayStr = [today formattedDateWithFormat:@"yyyy-MM-dd"];
     FMResultSet *resultSet = [db executeQuery:@"select ibid, cwritedate, operatortype from bk_user_budget where cuserid = ? and csdate <= ? and cedate >= ? and itype = ? and cbooksid = ? and cbilltype = ? and ibid <> ? and operatortype <> 2", userId, todayStr, todayStr, record[@"itype"], record[@"cbooksid"], record[@"cbilltype"], record[@"ibid"]];

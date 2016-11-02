@@ -64,7 +64,7 @@
 
 @end
 
-#pragma mark - 流水
+#pragma mark - 用户流水
 
 @interface SSJAccountsMergeChargeTable : NSObject <SSJAccountsMerge>
 

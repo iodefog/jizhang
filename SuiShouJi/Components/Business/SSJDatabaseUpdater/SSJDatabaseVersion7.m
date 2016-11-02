@@ -21,8 +21,10 @@
 }
 
 + (NSError *)updateUserTableWithDatabase:(FMDatabase *)db {
-    if (![db executeUpdate:@"alter table bk_user add lastselectfundid text"]) {
-        return [db lastError];
+    if (![db columnExists:@"lastselectfundid" inTableWithName:@"bk_user"]) {
+        if (![db executeUpdate:@"alter table bk_user add lastselectfundid text"]) {
+            return [db lastError];
+        }
     }
     
     return nil;

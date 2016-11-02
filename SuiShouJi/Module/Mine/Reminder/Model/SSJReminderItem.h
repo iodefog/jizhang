@@ -11,7 +11,7 @@
 @interface SSJReminderItem : SSJBaseItem<NSCopying>
 
 typedef NS_ENUM(NSInteger, SSJReminderType) {
-    SSJReminderTypeNormal,       //普通提醒
+    SSJReminderTypeNormal,       //自定义提醒
     SSJReminderTypeCharge,       //记账提醒
     SSJReminderTypeCreditCard,   //信用卡提醒
     SSJReminderTypeBorrowing     //借贷提醒提醒
