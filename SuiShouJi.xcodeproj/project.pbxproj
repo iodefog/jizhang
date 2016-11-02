@@ -50,6 +50,9 @@
 		7D39554F1C5F7CE2004D807C /* SSJStartNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D39554E1C5F7CE2004D807C /* SSJStartNetworkService.m */; };
 		7D3955521C5F7D25004D807C /* SSJStartChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D3955511C5F7D25004D807C /* SSJStartChecker.m */; };
 		7D3955551C606BAF004D807C /* SSJStartUpgradeAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D3955541C606BAF004D807C /* SSJStartUpgradeAlertView.m */; };
+		7D3A0F8E1DCA054A00444CEB /* SSJBookKeepingHomeDateView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CC97D6C1DA9F8260055B3BD /* SSJBookKeepingHomeDateView.m */; };
+		7D3A0F8F1DCA054A00444CEB /* SSJBookKeepingHomeDateView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CC97D6C1DA9F8260055B3BD /* SSJBookKeepingHomeDateView.m */; };
+		7D3A0F901DCA054B00444CEB /* SSJBookKeepingHomeDateView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CC97D6C1DA9F8260055B3BD /* SSJBookKeepingHomeDateView.m */; };
 		7D41A6961D1415F30043FD81 /* SSJNetworkReachabilityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D41A6951D1415F30043FD81 /* SSJNetworkReachabilityManager.m */; };
 		7D46328A1D2100E90040BABD /* UIImage+SSJTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE4A7EB1D20DD8C00F05BF0 /* UIImage+SSJTheme.m */; };
 		7D46328E1D21029F0040BABD /* UIImageView+SSJTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D46328D1D21029F0040BABD /* UIImageView+SSJTheme.m */; };
@@ -715,9 +718,9 @@
 		7DDB6D271DB9A57200D823AE /* SSJDomainManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DDB6D221DB9A57200D823AE /* SSJDomainManager.m */; };
 		7DDB6D4A1DBA063600D823AE /* GTMBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DDB6D481DBA063600D823AE /* GTMBase64.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		7DDB6D4B1DBA063600D823AE /* GTMBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DDB6D481DBA063600D823AE /* GTMBase64.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		7DDB6D4C1DBA063600D823AE /* GTMBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DDB6D481DBA063600D823AE /* GTMBase64.m */; };
-		7DDB6D4D1DBA063600D823AE /* GTMBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DDB6D481DBA063600D823AE /* GTMBase64.m */; };
-		7DDB6D4E1DBA063600D823AE /* GTMBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DDB6D481DBA063600D823AE /* GTMBase64.m */; };
+		7DDB6D4C1DBA063600D823AE /* GTMBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DDB6D481DBA063600D823AE /* GTMBase64.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		7DDB6D4D1DBA063600D823AE /* GTMBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DDB6D481DBA063600D823AE /* GTMBase64.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		7DDB6D4E1DBA063600D823AE /* GTMBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DDB6D481DBA063600D823AE /* GTMBase64.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		7DDBB0201C9AAA57003433D0 /* SSJSyncFileModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DDBB01F1C9AAA57003433D0 /* SSJSyncFileModel.m */; };
 		7DDDA8001CBE53A60029ADAC /* UIView+SSJViewAnimatioin.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DDDA7FF1CBE53A60029ADAC /* UIView+SSJViewAnimatioin.m */; };
 		7DE0896F1D333ED4008431D6 /* SSJDatabaseVersion5.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE0896E1D333ED4008431D6 /* SSJDatabaseVersion5.m */; };
@@ -7001,6 +7004,7 @@
 				7D2930171D76E917003EF6D8 /* SSJEditBillTypeViewController.m in Sources */,
 				7DBA55A41D6D32B700C02D79 /* SSJUserUtil.m in Sources */,
 				7DBA55A51D6D32B700C02D79 /* SSJBannerNetworkService.m in Sources */,
+				7D3A0F8E1DCA054A00444CEB /* SSJBookKeepingHomeDateView.m in Sources */,
 				7DBA55A61D6D32B700C02D79 /* SSJThemeItem.m in Sources */,
 				7DBA55A71D6D32B700C02D79 /* SSJTransferDetailHeader.m in Sources */,
 				7DBA55A81D6D32B700C02D79 /* SSJBookkeepingTreeRuleDescView.m in Sources */,
@@ -7934,6 +7938,7 @@
 				7D2930181D76E917003EF6D8 /* SSJEditBillTypeViewController.m in Sources */,
 				9CECFB201D6D41A700DB2C8B /* SSJUserUtil.m in Sources */,
 				9CECFB211D6D41A700DB2C8B /* SSJBannerNetworkService.m in Sources */,
+				7D3A0F8F1DCA054A00444CEB /* SSJBookKeepingHomeDateView.m in Sources */,
 				9CECFB221D6D41A700DB2C8B /* SSJThemeItem.m in Sources */,
 				9CECFB231D6D41A700DB2C8B /* SSJTransferDetailHeader.m in Sources */,
 				9CECFB241D6D41A700DB2C8B /* SSJBookkeepingTreeRuleDescView.m in Sources */,
@@ -8748,6 +8753,7 @@
 				9CEC00291D6D41EB00DB2C8B /* SSJBookkeepingTreeCheckInService.m in Sources */,
 				9CEC002A1D6D41EB00DB2C8B /* SSJRegistOrderView.m in Sources */,
 				9C9A0C431D6D9688002AF046 /* SSJLoanFundAccountSelectionView.m in Sources */,
+				7D3A0F901DCA054B00444CEB /* SSJBookKeepingHomeDateView.m in Sources */,
 				9CEC002B1D6D41EB00DB2C8B /* SSJPercentCircleViewItem.m in Sources */,
 				9CEC002C1D6D41EB00DB2C8B /* SSJBaseCollectionViewController.m in Sources */,
 				9CEC002D1D6D41EB00DB2C8B /* SSJCalenderTableViewNoDataHeader.m in Sources */,
