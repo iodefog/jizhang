@@ -24,7 +24,7 @@
             booksId = userId;
         }
         NSMutableArray *categoryList =[NSMutableArray array];
-        NSString *sql = [NSString stringWithFormat:@"SELECT A.CNAME , A.CCOLOR , A.CCOIN , B.CWRITEDATE , A.ID, B.IORDER FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE B.ISTATE = 1 AND A.ITYPE = %d AND A.ID = B.CBILLID AND B.CUSERID = '%@' AND A.CPARENT  <> 'root' AND B.CBOOKSID = '%@' ORDER BY B.IORDER, B.CWRITEDATE , A.ID",incomeOrExpenture,userId,booksId];
+        NSString *sql = [NSString stringWithFormat:@"SELECT A.CNAME , A.CCOLOR , A.CCOIN , B.CWRITEDATE , A.ID, B.IORDER FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE B.ISTATE = 1 AND A.ITYPE = %d AND A.ID = B.CBILLID AND B.CUSERID = '%@' AND (A.CPARENT <> 'root' or A.CPARENT is null) AND B.CBOOKSID = '%@' ORDER BY B.IORDER, B.CWRITEDATE , A.ID",incomeOrExpenture,userId,booksId];
             FMResultSet *result = [db executeQuery:sql];
             while ([result next]) {
                 NSString *categoryTitle = [result stringForColumn:@"CNAME"];
@@ -325,7 +325,7 @@
         SSJBillModel *model = nil;
         
         // 可能有多个未删除的同名类别，根据writedate取最新的类别
-        FMResultSet *resultSet = [db executeQuery:@"select ub.cbillid, ub.istate, ub.operatortype, bt.cname, bt.ccoin, bt.ccolor, bt.itype, bt.icustom from bk_user_bill as ub, bk_bill_type as bt where ub.cbillid = bt.id and ub.cuserid = ? and bt.cname = ? and ub.operatortype <> 2 order by ub.cwritedate desc", userID, name];
+        FMResultSet *resultSet = [db executeQuery:@"select ub.cbillid, ub.istate, ub.operatortype, bt.cname, bt.ccoin, bt.ccolor, bt.itype, bt.icustom from bk_user_bill as ub, bk_bill_type as bt where ub.cbillid = bt.id and ub.cuserid = ? and bt.cname = ? and ub.operatortype <> 2 and ub.cbooksid = ? order by ub.cwritedate desc", userID, name, booksID];
         
         while ([resultSet next]) {
             model = [[SSJBillModel alloc] init];
@@ -352,7 +352,7 @@
         }
         
         // 可能有多个已经删除的同名类别，根据writedate取最新的类别
-        resultSet = [db executeQuery:@"select ub.cbillid, ub.istate, ub.operatortype, bt.cname, bt.ccoin, bt.ccolor, bt.itype, bt.icustom from bk_user_bill as ub, bk_bill_type as bt where ub.cbillid = bt.id and ub.cuserid = ? and bt.cname = ? and ub.operatortype == 2 order by ub.cwritedate desc", userID, name];
+        resultSet = [db executeQuery:@"select ub.cbillid, ub.istate, ub.operatortype, bt.cname, bt.ccoin, bt.ccolor, bt.itype, bt.icustom from bk_user_bill as ub, bk_bill_type as bt where ub.cbillid = bt.id and ub.cuserid = ? and bt.cname = ? and ub.operatortype == 2 and ub.cbooksid = ? order by ub.cwritedate desc", userID, name, booksID];
         
         while ([resultSet next]) {
             model = [[SSJBillModel alloc] init];
@@ -382,10 +382,14 @@
                                  success:(void(^)(SSJBillModel *model))success
                                  failure:(void(^)(NSError *))failure {
     
-    NSString *userID = SSJUSERID();
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        NSString *userID = SSJUSERID();
+        NSString *booksID = [db stringForQuery:@"select ccurrentbooksid from bk_user where cuserid = ?",userID];
+        if (!booksID.length) {
+            booksID = userID;
+        }
         // 可能有多个已经删除的同名类别，根据writedate取最新的类别
-        FMResultSet *resultSet = [db executeQuery:@"select ub.cbillid, ub.istate, ub.operatortype, bt.cname, bt.ccoin, bt.ccolor, bt.itype, bt.icustom from bk_user_bill as ub, bk_bill_type as bt where ub.cbillid = bt.id and ub.cuserid = ? and bt.cname = ? and ub.cbillid <> ? and ub.operatortype <> 2 order by ub.cwritedate desc", userID, name, categoryID];
+        FMResultSet *resultSet = [db executeQuery:@"select ub.cbillid, ub.istate, ub.operatortype, bt.cname, bt.ccoin, bt.ccolor, bt.itype, bt.icustom from bk_user_bill as ub, bk_bill_type as bt where ub.cbillid = bt.id and ub.cuserid = ? and bt.cname = ? and ub.cbillid <> ? and ub.operatortype <> 2 and ub.cbooksid = ? order by ub.cwritedate desc", userID, name, categoryID, booksID];
         if (!resultSet) {
             if (failure) {
                 SSJDispatchMainAsync(^{
