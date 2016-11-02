@@ -240,7 +240,13 @@ const int kMemoMaxLength = 13;
         cell.textLabel.text = @"还款日";
         
         cell.additionalIcon.image = nil;
-        cell.subtitleLabel.text = [_loanModel.repaymentDate formattedDateWithFormat:@"yyyy.MM.dd"];
+        if (_loanModel.repaymentDate) {
+            cell.subtitleLabel.text = [_loanModel.repaymentDate formattedDateWithFormat:@"yyyy.MM.dd"];
+            cell.subtitleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+        } else {
+            cell.subtitleLabel.text = @"选填";
+            cell.subtitleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+        }
         cell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         cell.switchControl.hidden = YES;
         cell.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
@@ -341,7 +347,7 @@ const int kMemoMaxLength = 13;
         [self.borrowDateSelectionView show];
     } else if ([indexPath compare:[NSIndexPath indexPathForRow:1 inSection:1]] == NSOrderedSame) {
         [self.view endEditing:YES];
-        self.repaymentDateSelectionView.selectedDate = _loanModel.repaymentDate;
+        self.repaymentDateSelectionView.selectedDate = [self paymentDate];
         [self.repaymentDateSelectionView show];
     } else if ([indexPath compare:[NSIndexPath indexPathForRow:0 inSection:3]] == NSOrderedSame) {
         if (_reminderItem) {
@@ -520,20 +526,7 @@ const int kMemoMaxLength = 13;
         [self.view ssj_hideLoadingIndicator];
         
         if (!_loanModel.ID.length) {
-            NSDate *today = [NSDate date];
-            
-            _loanModel.ID = SSJUUID();
-            _loanModel.userID = SSJUSERID();
-            _loanModel.chargeID = SSJUUID();
-            _loanModel.targetChargeID = SSJUUID();
-            _loanModel.targetFundID = [items firstObject].ID;
-            _loanModel.remindID = _reminderItem.remindId ?: @"";
-            _loanModel.borrowDate = [NSDate dateWithYear:today.year month:today.month day:today.day];
-            _loanModel.repaymentDate = [_loanModel.borrowDate dateByAddingMonths:1];
-            _loanModel.interest = YES;
-            _loanModel.lender = @"";
-            _loanModel.memo = @"";
-            _loanModel.operatorType = 0;
+            [self initModelWithTargetFundID:[items firstObject].ID];
         }
         
         self.fundingSelectionView.items = items;
@@ -553,11 +546,35 @@ const int kMemoMaxLength = 13;
     }];
 }
 
+- (void)initModelWithTargetFundID:(NSString *)fundId {
+    NSDate *today = [NSDate date];
+    
+    _loanModel.ID = SSJUUID();
+    _loanModel.userID = SSJUSERID();
+    _loanModel.chargeID = SSJUUID();
+    _loanModel.targetChargeID = SSJUUID();
+    _loanModel.targetFundID = fundId;
+    _loanModel.remindID = _reminderItem.remindId ?: @"";
+    _loanModel.borrowDate = [NSDate dateWithYear:today.year month:today.month day:today.day];
+    _loanModel.repaymentDate = nil;
+    _loanModel.interest = NO;
+    _loanModel.lender = @"";
+    _loanModel.memo = @"";
+    _loanModel.operatorType = 0;
+}
+
 - (void)updateInterest {
-    NSString *interestStr = [NSString stringWithFormat:@"%.2f", [SSJLoanHelper expectedInterestWithLoanModel:_loanModel]];
-    NSMutableAttributedString *richText = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"T+1计息，预期利息为%@元", interestStr]];
-    [richText setAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]} range:[richText.string rangeOfString:interestStr]];
-    _interestLab.attributedText = richText;
+    if (_loanModel.repaymentDate) {
+        NSString *interestStr = [NSString stringWithFormat:@"%.2f", [SSJLoanHelper expectedInterestWithLoanModel:_loanModel]];
+        NSMutableAttributedString *richText = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"T+1计息，预期利息为%@元", interestStr]];
+        [richText setAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]} range:[richText.string rangeOfString:interestStr]];
+        _interestLab.attributedText = richText;
+    } else {
+        NSString *interestStr = [NSString stringWithFormat:@"%.2f", [SSJLoanHelper interestForEverydayWithLoanModel:_loanModel]];
+        NSMutableAttributedString *richText = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"每天利息为%@元", interestStr]];
+        [richText setAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]} range:[richText.string rangeOfString:interestStr]];
+        _interestLab.attributedText = richText;
+    }
 }
 
 - (BOOL)checkLoanModelIsValid {
@@ -644,7 +661,10 @@ const int kMemoMaxLength = 13;
 
 - (void)enterReminderVC {
     SSJReminderItem *tmpRemindItem = _reminderItem;
+    
     if (!tmpRemindItem) {
+        NSDate *paymentDate = [self paymentDate];
+        
         tmpRemindItem = [[SSJReminderItem alloc] init];
         switch (_loanModel.type) {
             case SSJLoanTypeLend:
@@ -657,7 +677,7 @@ const int kMemoMaxLength = 13;
         }
         tmpRemindItem.remindCycle = 7;
         tmpRemindItem.remindType = SSJReminderTypeBorrowing;
-        tmpRemindItem.remindDate = [NSDate dateWithYear:_loanModel.repaymentDate.year month:_loanModel.repaymentDate.month day:_loanModel.repaymentDate.day hour:20 minute:0 second:0];
+        tmpRemindItem.remindDate = [NSDate dateWithYear:paymentDate.year month:paymentDate.month day:paymentDate.day hour:20 minute:0 second:0];
         tmpRemindItem.minimumDate = _loanModel.borrowDate;
         tmpRemindItem.remindState = YES;
         tmpRemindItem.borrowtarget = _loanModel.lender;
@@ -725,6 +745,10 @@ const int kMemoMaxLength = 13;
     }
     
     return decimal;
+}
+
+- (NSDate *)paymentDate {
+    return _loanModel.repaymentDate ?: [_loanModel.borrowDate dateByAddingMonths:1];
 }
 
 #pragma mark - Getter

@@ -11,11 +11,6 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-//typedef NS_ENUM(NSInteger, SSJAddOrEditLoanViewControllerEntry) {
-//    SSJAddOrEditLoanViewControllerEntryLoanList,        // 借贷列表
-//    SSJAddOrEditLoanViewControllerEntryFundTypeList     // 资金类型列表
-//};
-
 @interface SSJAddOrEditLoanViewController : SSJBaseViewController
 
 // 如果loanModel的ID为空就是新建，反之是编辑;新建的话loanModel的fundID、type必须传值

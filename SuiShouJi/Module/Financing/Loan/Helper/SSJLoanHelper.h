@@ -138,6 +138,14 @@ NS_ASSUME_NONNULL_BEGIN
 + (double)closeOutInterestWithLoanModel:(SSJLoanModel *)model;
 
 /**
+ 每天利息金额
+
+ @param model 借贷模型
+ @return 每天利息金额
+ */
++ (double)interestForEverydayWithLoanModel:(SSJLoanModel *)model;
+
+/**
  根据model存储的信息查询此借贷的转帐流水、结清转帐流水、结清利息流水
 
  @param model model 借贷模型 ID、fundID、targetFundID不能为空；如果已结清endTargetFundID也不能为空

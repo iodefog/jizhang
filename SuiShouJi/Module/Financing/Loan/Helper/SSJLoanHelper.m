@@ -673,6 +673,10 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
     return [self interestUntilDate:model.endDate withLoanModel:model];
 }
 
++ (double)interestForEverydayWithLoanModel:(SSJLoanModel *)model {
+    return model.rate * model.jMoney / 365;
+}
+
 + (double)interestUntilDate:(NSDate *)date withLoanModel:(SSJLoanModel *)model {
     if (!date || !model.borrowDate) {
         SSJPRINT(@">>> 警告：借贷利息日期为空");
@@ -685,7 +689,7 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
         return 0;
     }
     
-    return daysInterval * model.rate * model.jMoney / 365;
+    return daysInterval * [self interestForEverydayWithLoanModel:model];
 }
 
 + (BOOL)saveLoanModel:(SSJLoanModel *)model booksID:(NSString *)booksID inDatabase:(FMDatabase *)db {
