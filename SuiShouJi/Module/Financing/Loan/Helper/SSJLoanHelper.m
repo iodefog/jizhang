@@ -9,7 +9,9 @@
 #import "SSJLoanHelper.h"
 #import "SSJLocalNotificationStore.h"
 #import "SSJLoanFundAccountSelectionViewItem.h"
+#import "SSJLoanDetailCellItem.h"
 #import "SSJLocalNotificationHelper.h"
+
 
 NSString *const SSJFundItemListKey = @"SSJFundItemListKey";
 NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
@@ -770,6 +772,15 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
         }
             break;
     }
+}
+
++ (void)queryLoanChangeChargesWithLoanId:(NSString *)loanId
+                                 success:(void (^)(NSArray <SSJLoanDetailCellItem *>*items))success
+                                 failure:(void (^)(NSError *error))failure {
+    
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        
+    }];
 }
 
 @end
