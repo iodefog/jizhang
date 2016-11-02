@@ -28,6 +28,9 @@
 //用户成员类型数据
 @property (readonly, nonatomic,strong) NSArray *membersArray;
 
+//用户成员类型数据
+@property (readonly, nonatomic,strong) NSArray *customCategoryArray;
+
 //登录用户的accesstoken
 @property (readonly, nonatomic,strong) NSString *accesstoken;
 
