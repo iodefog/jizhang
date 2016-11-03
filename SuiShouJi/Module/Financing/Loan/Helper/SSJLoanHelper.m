@@ -758,6 +758,8 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
                 model.endTargetChargeID = [db stringForQuery:@"select ichargeid from bk_user_charge where ifunsid = ? and loanid = ? and ibillid = ? and operatortype <> 2", model.endTargetFundID, model.ID, @(3)];
                 model.interestChargeID = [db stringForQuery:@"select ichargeid from bk_user_charge where ifunsid = ? and loanid = ? and ibillid = ? and operatortype <> 2", model.endTargetFundID, model.ID, @(5)];
             }
+            
+            [db executeQuery:@"select ichargeid, ibillid, imoney from bk_user_charge where ifunsid = ? and loanid = ? and ibillid in ('7', '8') order by cbilldate desc"];
         }
             break;
             
