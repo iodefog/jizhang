@@ -245,31 +245,8 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
             return;
         }
         
-        // 拼接要删除的转帐流水id
-        NSMutableString *chargeIDs = [NSMutableString string];
-        if (model.chargeID.length) {
-            [chargeIDs appendFormat:@"'%@'", model.chargeID];
-        }
-        
-        if (model.targetChargeID.length) {
-            [chargeIDs appendFormat:@", '%@'", model.targetChargeID];
-        }
-        
-        if (model.endChargeID.length) {
-            [chargeIDs appendFormat:@", '%@'", model.endChargeID];
-        }
-        
-        if (model.endTargetChargeID.length) {
-            [chargeIDs appendFormat:@", '%@'", model.endTargetChargeID];
-        }
-        
-        if (model.interestChargeID.length) {
-            [chargeIDs appendFormat:@", '%@'", model.interestChargeID];
-        }
-        
-        // 将要删除的转帐流水operatortype改为2
-        NSString *sqlStr = [NSString stringWithFormat:@"update bk_user_charge set operatortype = %@, iversion = %@, cwritedate = '%@' where ichargeid in (%@)", @2, @(SSJSyncVersion()), writeDate, chargeIDs];
-        if (![db executeUpdate:sqlStr]) {
+        // 将和借贷相关的流水operatortype改为2
+        if (![db executeUpdate:@"update bk_user_charge set operatortype = %@, iversion = %@, cwritedate = '%@' where loanID = ?", @2, @(SSJSyncVersion()), writeDate, model.ID]) {
             *rollback = YES;
             if (failure) {
                 SSJDispatchMainAsync(^{

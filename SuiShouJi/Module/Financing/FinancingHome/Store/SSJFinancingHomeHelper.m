@@ -176,8 +176,6 @@
                     }
                     [resultSet close];
                     
-                    [SSJLoanHelper queryLoanChargeWithModel:loanModel inDatabase:db];
-                    
                     if (![SSJLoanHelper deleteLoanModel:loanModel inDatabase:db forUserId:userId error:NULL]) {
                         if (failure) {
                             *rollback = YES;
@@ -242,7 +240,6 @@
                     }
                     
                     for (SSJLoanModel *model in tempArr) {
-                        [SSJLoanHelper queryLoanChargeWithModel:model inDatabase:db];
                         if (![SSJLoanHelper deleteLoanModel:model inDatabase:db forUserId:userId error:NULL]) {
                             if (failure) {
                                 *rollback = YES;
