@@ -1206,6 +1206,11 @@
 		9C32775A1CE471A900109C4C /* YWFeedbackAudioExtentionFMWK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C3277511CE471A900109C4C /* YWFeedbackAudioExtentionFMWK.framework */; };
 		9C32775B1CE471A900109C4C /* YWFeedbackFMWK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C3277521CE471A900109C4C /* YWFeedbackFMWK.framework */; };
 		9C32775C1CE471A900109C4C /* YWHybridWebViewFMWK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C3277531CE471A900109C4C /* YWHybridWebViewFMWK.framework */; };
+		9C3899A11DC9D99700715732 /* SSJCustomCategoryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3899A01DC9D99700715732 /* SSJCustomCategoryItem.m */; };
+		9C3899A21DC9D99700715732 /* SSJCustomCategoryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3899A01DC9D99700715732 /* SSJCustomCategoryItem.m */; };
+		9C3899A31DC9D99700715732 /* SSJCustomCategoryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3899A01DC9D99700715732 /* SSJCustomCategoryItem.m */; };
+		9C3899A41DC9D99700715732 /* SSJCustomCategoryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3899A01DC9D99700715732 /* SSJCustomCategoryItem.m */; };
+		9C3899A51DC9D99700715732 /* SSJCustomCategoryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3899A01DC9D99700715732 /* SSJCustomCategoryItem.m */; };
 		9C40F1A81D4F6015003FF1C6 /* SSJWeixinFooter.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C40F1A71D4F6015003FF1C6 /* SSJWeixinFooter.m */; };
 		9C40F1A91D4F6015003FF1C6 /* SSJWeixinFooter.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C40F1A71D4F6015003FF1C6 /* SSJWeixinFooter.m */; };
 		9C4121931D7EC9B100F29428 /* SSJReminderCircleSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C4121921D7EC9B100F29428 /* SSJReminderCircleSelectView.m */; };
@@ -3071,6 +3076,8 @@
 		9C3277511CE471A900109C4C /* YWFeedbackAudioExtentionFMWK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = YWFeedbackAudioExtentionFMWK.framework; sourceTree = "<group>"; };
 		9C3277521CE471A900109C4C /* YWFeedbackFMWK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = YWFeedbackFMWK.framework; sourceTree = "<group>"; };
 		9C3277531CE471A900109C4C /* YWHybridWebViewFMWK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = YWHybridWebViewFMWK.framework; sourceTree = "<group>"; };
+		9C38999F1DC9D99700715732 /* SSJCustomCategoryItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCustomCategoryItem.h; sourceTree = "<group>"; };
+		9C3899A01DC9D99700715732 /* SSJCustomCategoryItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCustomCategoryItem.m; sourceTree = "<group>"; };
 		9C40F1A61D4F6015003FF1C6 /* SSJWeixinFooter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJWeixinFooter.h; sourceTree = "<group>"; };
 		9C40F1A71D4F6015003FF1C6 /* SSJWeixinFooter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJWeixinFooter.m; sourceTree = "<group>"; };
 		9C4121911D7EC9B100F29428 /* SSJReminderCircleSelectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReminderCircleSelectView.h; sourceTree = "<group>"; };
@@ -4900,6 +4907,8 @@
 			children = (
 				9C4EBC931D7D1C4B00BE4982 /* SSJThirdPartLoginItem.h */,
 				9C4EBC941D7D1C4B00BE4982 /* SSJThirdPartLoginItem.m */,
+				9C38999F1DC9D99700715732 /* SSJCustomCategoryItem.h */,
+				9C3899A01DC9D99700715732 /* SSJCustomCategoryItem.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -7436,6 +7445,7 @@
 				7DBA56E21D6D32B700C02D79 /* UIImageView+SSJTheme.m in Sources */,
 				7DBA56E31D6D32B700C02D79 /* SSJRegistCompleteViewController.m in Sources */,
 				7DBA56E41D6D32B700C02D79 /* SSJListMenuItem.m in Sources */,
+				9C3899A31DC9D99700715732 /* SSJCustomCategoryItem.m in Sources */,
 				7DBA56E51D6D32B700C02D79 /* SSJCircleChargeStore.m in Sources */,
 				7DBA56E61D6D32B700C02D79 /* SSJDatabaseVersion2.m in Sources */,
 				7DBA56E71D6D32B700C02D79 /* SCYMotionEncryptionView.m in Sources */,
@@ -7639,6 +7649,7 @@
 				9C2A67641D194CA70010F1DA /* SSJMagicExportCalendarIndexPath.m in Sources */,
 				9C2A67651D194CA70010F1DA /* SSJMotionPasswordLoginPasswordAlertView.m in Sources */,
 				9CC452C91D9B59F40044FA87 /* SSJMultiFunctionButtonView.m in Sources */,
+				9C3899A21DC9D99700715732 /* SSJCustomCategoryItem.m in Sources */,
 				9C2A67661D194CA70010F1DA /* SSJGradientMaskView.m in Sources */,
 				9C2A67671D194CA70010F1DA /* SSJBookkeepingTreeCheckInModel.m in Sources */,
 				9C2A67681D194CA70010F1DA /* SSJChargeDetailMemoCell.m in Sources */,
@@ -8370,6 +8381,7 @@
 				9CECFC5E1D6D41A700DB2C8B /* UIImageView+SSJTheme.m in Sources */,
 				9CECFC5F1D6D41A700DB2C8B /* SSJRegistCompleteViewController.m in Sources */,
 				9CECFC601D6D41A700DB2C8B /* SSJListMenuItem.m in Sources */,
+				9C3899A41DC9D99700715732 /* SSJCustomCategoryItem.m in Sources */,
 				9CECFC611D6D41A700DB2C8B /* SSJCircleChargeStore.m in Sources */,
 				9CECFC621D6D41A700DB2C8B /* SSJDatabaseVersion2.m in Sources */,
 				9CECFC631D6D41A700DB2C8B /* SCYMotionEncryptionView.m in Sources */,
@@ -8453,6 +8465,7 @@
 				9CECFF1A1D6D41EB00DB2C8B /* SSJThemeItem.m in Sources */,
 				9CECFF1B1D6D41EB00DB2C8B /* SSJTransferDetailHeader.m in Sources */,
 				9CECFF1C1D6D41EB00DB2C8B /* SSJBookkeepingTreeRuleDescView.m in Sources */,
+				9C3899A51DC9D99700715732 /* SSJCustomCategoryItem.m in Sources */,
 				9CECFF1D1D6D41EB00DB2C8B /* SRSlimeView.m in Sources */,
 				9CECFF1E1D6D41EB00DB2C8B /* SSJStartNetworkService.m in Sources */,
 				9C41219E1D7EC9B700F29428 /* SSJReminderCircleSelectView.m in Sources */,
@@ -9179,6 +9192,7 @@
 				9CF594361D66B4EA00006594 /* SSJReminderViewController.m in Sources */,
 				BD70DF6B1C4B26B3000E6CC9 /* UIViewController+SSJPageFlow.m in Sources */,
 				9CD9BC2E1CFD2DAA0061803B /* SSJBookkeepingReminderViewController.m in Sources */,
+				9C3899A11DC9D99700715732 /* SSJCustomCategoryItem.m in Sources */,
 				7D6B12CB1D4CA3DA0036BF4E /* SSJReportFormsMemberAndCategorySwitchControl.m in Sources */,
 				9C6D65EB1D826B700081A7CE /* SSJReminderWeekDaySelectView.m in Sources */,
 				BD0433991C1A8DA50051E7AB /* SSJBaseViewController.m in Sources */,

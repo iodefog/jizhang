@@ -56,6 +56,34 @@
 }
 
 + (BOOL)mergeRecords:(NSArray *)records forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
+//    // 首先判断本地有没有用户的数据
+//    if (![db intForQuery:@"select count(1) from bk_user_bill where cuserid = ?",userId]) {
+//        // 如果本地没有该用户数据,则首先把后端的数据插入表中
+//        for (NSDictionary *recordInfo in records) {
+//            if (![db executeUpdate:@"insert into bk_user_bill (cbillid, cuserid, istate, iorder, cwritedate, iversion, operatortype, cbooksid) values (?, ?, ?, ?, ?, ?, ?, ?)", recordInfo[@"cbillid"], recordInfo[@"cuserid"], recordInfo[@"istate"], recordInfo[@"iorder"], recordInfo[@"cwritedate"], recordInfo[@"iversion"], recordInfo[@"operatortype"], recordInfo[@"operatortype"]]) {
+//                if (error) {
+//                    *error = [db lastError];
+//                }
+//                return NO;
+//            }
+//        }
+//        // 然后将所有cbooksid为null的账户类型改为日常账本
+//        if (![db executeUpdate:@"update bk_user_bill set cbooksid = ? where cuserid = ? and cbooksid is null",userId,userId]) {
+//            if (error) {
+//                *error = [db lastError];
+//            }
+//            return NO;
+//        }
+//        
+//        // 然后将日常账本的记账类型拷进自定义账本
+//        if (![db executeUpdate:@"insert into bk_user_bill values (select * from bk_user_bill a where cbooksid = ? and length(cbillid) < 10 where not exists select * from bk_user_bill where cbooksid = a.cbooksid) and cbooksid <> cuserid",userId,userId]) {
+//            if (error) {
+//                *error = [db lastError];
+//            }
+//            return NO;
+//        }
+//        
+//    }
     for (NSDictionary *recordInfo in records) {
         if (![db boolForQuery:@"select count(*) from BK_BILL_TYPE where ID = ?", recordInfo[@"cbillid"]]) {
             continue;
@@ -80,6 +108,65 @@
         }
     }
     
+    return YES;
+}
+
++ (BOOL)mergeWhenLoginWithRecords:(NSArray *)records forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
+    NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+    BOOL hasUpdated = YES;
+    for (NSDictionary *recordInfo in records) {
+        if (![recordInfo[@"cbooksid"] length]) {
+            hasUpdated = NO;
+            break;
+        }
+    }
+    // 首先判断本地有没有用户的数据
+    if (![db intForQuery:@"select count(1) from bk_user_bill where cuserid = ?",userId]) {
+        // 如果本地没有该用户数据,则首先把后端的数据插入表中
+        for (NSDictionary *recordInfo in records) {
+            if (![db executeUpdate:@"insert into bk_user_bill (cbillid, cuserid, istate, iorder, cwritedate, iversion, operatortype, cbooksid) values (?, ?, ?, ?, ?, ?, ?, ?)", recordInfo[@"cbillid"], recordInfo[@"cuserid"], recordInfo[@"istate"], recordInfo[@"iorder"], recordInfo[@"cwritedate"], recordInfo[@"iversion"], recordInfo[@"operatortype"], recordInfo[@"operatortype"], recordInfo[@"cbooksid"]]) {
+                if (error) {
+                    *error = [db lastError];
+                }
+                return NO;
+            }
+        }
+        // 然后将所有cbooksid为null的账户类型改为日常账本
+        if (![db executeUpdate:@"update bk_user_bill set cbooksid = ? where cuserid = ? and cbooksid is null",userId,userId]) {
+            if (error) {
+                *error = [db lastError];
+            }
+            return NO;
+        }
+        
+        // 如果后端数据没有升级的话要对后端数据进行处理
+        if (!hasUpdated) {
+            // 然后将日常账本的记账类型拷进自定义账本
+            if (![db executeUpdate:@"insert into bk_user_bill values (select ub.cuserid, ub.cbillid, ?, ?, 1, ub.iorder, bk.cbooksid from bk_user_bill ub , bk_books_type bk where ub.operatortype <> 2 and bk.cbooksid not like bk.cuserid || '%' and ub.cbooksid = bk.cuserid and length(ub.cbillid) < 10 and ub.cuserid = ? and bk.cuserid = ?)",writeDate,@(SSJSyncVersion()),userId,userId]) {
+                if (error) {
+                    *error = [db lastError];
+                }
+                return NO;
+            }
+            
+            // 将四个非日常账本的默认账本插入所有默认类型
+            if (![db executeUpdate:@"insert into bk_user_bill select bk.cuserid ,bt.id , 1, ?, ?, 1, bt.defaultorder, bk.cbooksid from bk_books_type bk, bk_bill_type bt where bk.iparenttype = bt.ibookstype and bk.cbooksid <> bk.cuserid and bk.cbooksid like bk.cuserid || '%' and bt.cuserid = ? and bk.cuserid = ?",writeDate,@(SSJSyncVersion()),userId,userId]) {
+                if (error) {
+                    *error = [db lastError];
+                }
+                return NO;
+            }
+        }
+    }else{
+        // 如果本地有数据
+        if (hasUpdated) {
+            // 如果后端数据库已经升级过了,则执行正常的合并操作
+            [self mergeRecords:records forUserId:userId inDatabase:db error:nil];
+        }else{
+            // 如果没有升级,则直接抛弃
+        }
+    }
+
     return YES;
 }
 

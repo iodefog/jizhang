@@ -324,7 +324,7 @@
     [result1 close];
     [result2 close];
     
-    FMResultSet *billTypeResult = [db executeQuery:@"select id, istate, defaultOrder from BK_BILL_TYPE where istate <> 2 and icustom = 0"];
+    FMResultSet *billTypeResult = [db executeQuery:@"select id, istate, defaultOrder , iparenttype from BK_BILL_TYPE where istate <> 2 and icustom = 0"];
     if (!billTypeResult) {
         return [db lastError];
     }
@@ -336,8 +336,14 @@
         NSString *billId = [billTypeResult stringForColumn:@"id"];
         int state = [billTypeResult intForColumn:@"istate"];
         NSString *order = [billTypeResult stringForColumn:@"defaultOrder"];
+        NSString *booksId;
+        if (![billTypeResult intForColumn:@"iparenttype"]) {
+            booksId = userID;
+        }else{
+            booksId = [NSString stringWithFormat:@"%@-%d",userID,[billTypeResult intForColumn:@"iparenttype"]];
+        }
         
-        BOOL executeSuccessfull = [db executeUpdate:@"insert into BK_USER_BILL (CUSERID, CBILLID, ISTATE, IORDER, CWRITEDATE, IVERSION, OPERATORTYPE) select ?, ?, ?, ?, ?, ?, 0 where not exists (select * from BK_USER_BILL where CBILLID = ? and cuserid = ?)", userID, billId, @(state), order, date, @(SSJSyncVersion()), billId, userID];
+        BOOL executeSuccessfull = [db executeUpdate:@"insert into BK_USER_BILL (CUSERID, CBILLID, ISTATE, IORDER, CWRITEDATE, IVERSION, OPERATORTYPE, CBOOKSID) select ?, ?, ?, ?, ?, ?, 0 , ? where not exists (select * from BK_USER_BILL where CBILLID = ? and cuserid = ? and cbooksid = ?)", userID, billId, @(state), order, date, @(SSJSyncVersion()), booksId, billId, userID, booksId];
         successfull = successfull && executeSuccessfull;
     }
     
