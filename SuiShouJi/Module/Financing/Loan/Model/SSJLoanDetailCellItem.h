@@ -16,11 +16,8 @@
 
 @property (nonatomic, copy) NSString *subtitle;
 
-@property (nonatomic) BOOL closeOut;
-
 + (instancetype)itemWithImage:(NSString *)image
                         title:(NSString *)title
-                     subtitle:(NSString *)subtitle
-                     closeOut:(BOOL)closeOut;
+                     subtitle:(NSString *)subtitle;
 
 @end

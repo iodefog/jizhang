@@ -231,17 +231,26 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
     if (indexPath.row > 0) {
         SSJBaseItem *item = [((SSJFundingDetailListItem *)[self.listItems objectAtIndex:indexPath.section]).chargeArray objectAtIndex:indexPath.row - 1];
         if ([item isKindOfClass:[SSJBillingChargeCellItem class]]) {
-            if ([((SSJBillingChargeCellItem*)item).billId integerValue] >= 1000 || ((SSJBillingChargeCellItem*)item).billId.length > 4) {
+            
+            SSJBillingChargeCellItem *cellItem = (SSJBillingChargeCellItem *)item;
+            
+            if (cellItem.billId.length > 4
+                || [cellItem.billId integerValue] >= 1000) {
                 SSJCalenderDetailViewController *calenderDetailVC = [[SSJCalenderDetailViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
                 calenderDetailVC.item = (SSJBillingChargeCellItem *)item;
                 [self.navigationController pushViewController:calenderDetailVC animated:YES];
             }
-            if (([((SSJBillingChargeCellItem*)item).billId integerValue] == 3 || [((SSJBillingChargeCellItem*)item).billId integerValue] == 4) && ![((SSJBillingChargeCellItem*)item).transferSource isEqualToString:((SSJBillingChargeCellItem*)item).typeName]) {
+            
+            if (([cellItem.billId integerValue] == 3
+                 || [cellItem.billId integerValue] == 4)
+                 && ![cellItem.transferSource isEqualToString:cellItem.typeName]) {
                 SSJFundingTransferEditeViewController *transferVc = [[SSJFundingTransferEditeViewController alloc] init];
                 transferVc.chargeItem = (SSJBillingChargeCellItem*)item;
                 [self.navigationController pushViewController:transferVc animated:YES];
             }
-            if ([((SSJBillingChargeCellItem*)item).billId integerValue] == 6) {
+            
+            if ([cellItem.billId integerValue] == 5
+                || [cellItem.billId integerValue] == 6) {
                 SSJInterestDetailViewController *interestVc = [[SSJInterestDetailViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
                 interestVc.loanId = ((SSJBillingChargeCellItem*)item).loanId;
                 [self.navigationController pushViewController:interestVc animated:YES];

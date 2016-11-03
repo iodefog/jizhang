@@ -24,7 +24,7 @@
         return nil;
     }
     
-    FMResultSet *resultSet = [db executeQuery:@"select cbillid, cuserid, istate, iorder, cwritedate, iversion, operatortype from bk_user_bill where cuserid = ? and iversion > ?", userId, @(version)];
+    FMResultSet *resultSet = [db executeQuery:@"select cbillid, cuserid, cbooksid, istate, iorder, cwritedate, iversion, operatortype from bk_user_bill where cuserid = ? and iversion > ?", userId, @(version)];
     if (!resultSet) {
         if (error) {
             *error = [db lastError];
@@ -37,6 +37,7 @@
     while ([resultSet next]) {
         NSString *cbillid = [resultSet stringForColumn:@"cbillid"];
         NSString *cuserid = [resultSet stringForColumn:@"cuserid"];
+        NSString *cbooksid = [resultSet stringForColumn:@"cbooksid"];
         NSString *istate = [resultSet stringForColumn:@"istate"];
         NSString *iorder = [resultSet stringForColumn:@"iorder"];
         NSString *cwritedate = [resultSet stringForColumn:@"cwritedate"];
@@ -45,6 +46,7 @@
         
         [syncRecords addObject:@{@"cbillid" : cbillid ?: @"",
                                  @"cuserid" : cuserid ?: @"",
+                                 @"cbooksid" : cbooksid ?: @"",
                                  @"istate" : istate ?: @"",
                                  @"iorder" : iorder ?: @"",
                                  @"cwritedate" : cwritedate ?: @"",
@@ -89,17 +91,17 @@
             continue;
         }
         
-        BOOL exist = [db boolForQuery:@"select count(*) from bk_user_bill where cbillid = ? and cuserid = ?", recordInfo[@"cbillid"], recordInfo[@"cuserid"]];
+        BOOL exist = [db boolForQuery:@"select count(*) from bk_user_bill where cbillid = ? and cuserid = ? and cbooksid = ?", recordInfo[@"cbillid"], recordInfo[@"cuserid"], recordInfo[@"cbooksid"]];
         
         if (exist) {
-            if (![db executeUpdate:@"update bk_user_bill set istate = ?, iorder = ?, cwritedate = ?, iversion = ?, operatortype = ? where cbillid = ? and cuserid = ? and cwritedate < ?", recordInfo[@"istate"], recordInfo[@"iorder"], recordInfo[@"cwritedate"], recordInfo[@"iversion"], recordInfo[@"operatortype"], recordInfo[@"cbillid"], recordInfo[@"cuserid"], recordInfo[@"cwritedate"]]) {
+            if (![db executeUpdate:@"update bk_user_bill set istate = ?, iorder = ?, cwritedate = ?, iversion = ?, operatortype = ? where cbillid = ? and cuserid = ? and cbooksid = ? and cwritedate < ?", recordInfo[@"istate"], recordInfo[@"iorder"], recordInfo[@"cwritedate"], recordInfo[@"iversion"], recordInfo[@"operatortype"], recordInfo[@"cbillid"], recordInfo[@"cuserid"], recordInfo[@"cbooksid"], recordInfo[@"cwritedate"]]) {
                 if (error) {
                     *error = [db lastError];
                 }
                 return NO;
             }
         } else {
-            if (![db executeUpdate:@"insert into bk_user_bill (cbillid, cuserid, istate, iorder, cwritedate, iversion, operatortype) values (?, ?, ?, ?, ?, ?, ?)", recordInfo[@"cbillid"], recordInfo[@"cuserid"], recordInfo[@"istate"], recordInfo[@"iorder"], recordInfo[@"cwritedate"], recordInfo[@"iversion"], recordInfo[@"operatortype"]]) {
+            if (![db executeUpdate:@"insert into bk_user_bill (cbillid, cuserid, cbooksid, istate, iorder, cwritedate, iversion, operatortype) values (?, ?, ?, ?, ?, ?, ?)", recordInfo[@"cbillid"], recordInfo[@"cuserid"], recordInfo[@"cbooksid"], recordInfo[@"istate"], recordInfo[@"iorder"], recordInfo[@"cwritedate"], recordInfo[@"iversion"], recordInfo[@"operatortype"]]) {
                 if (error) {
                     *error = [db lastError];
                 }
