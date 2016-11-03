@@ -58,34 +58,6 @@
 }
 
 + (BOOL)mergeRecords:(NSArray *)records forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
-//    // 首先判断本地有没有用户的数据
-//    if (![db intForQuery:@"select count(1) from bk_user_bill where cuserid = ?",userId]) {
-//        // 如果本地没有该用户数据,则首先把后端的数据插入表中
-//        for (NSDictionary *recordInfo in records) {
-//            if (![db executeUpdate:@"insert into bk_user_bill (cbillid, cuserid, istate, iorder, cwritedate, iversion, operatortype, cbooksid) values (?, ?, ?, ?, ?, ?, ?, ?)", recordInfo[@"cbillid"], recordInfo[@"cuserid"], recordInfo[@"istate"], recordInfo[@"iorder"], recordInfo[@"cwritedate"], recordInfo[@"iversion"], recordInfo[@"operatortype"], recordInfo[@"operatortype"]]) {
-//                if (error) {
-//                    *error = [db lastError];
-//                }
-//                return NO;
-//            }
-//        }
-//        // 然后将所有cbooksid为null的账户类型改为日常账本
-//        if (![db executeUpdate:@"update bk_user_bill set cbooksid = ? where cuserid = ? and cbooksid is null",userId,userId]) {
-//            if (error) {
-//                *error = [db lastError];
-//            }
-//            return NO;
-//        }
-//        
-//        // 然后将日常账本的记账类型拷进自定义账本
-//        if (![db executeUpdate:@"insert into bk_user_bill values (select * from bk_user_bill a where cbooksid = ? and length(cbillid) < 10 where not exists select * from bk_user_bill where cbooksid = a.cbooksid) and cbooksid <> cuserid",userId,userId]) {
-//            if (error) {
-//                *error = [db lastError];
-//            }
-//            return NO;
-//        }
-//        
-//    }
     for (NSDictionary *recordInfo in records) {
         if (![db boolForQuery:@"select count(*) from BK_BILL_TYPE where ID = ?", recordInfo[@"cbillid"]]) {
             continue;
