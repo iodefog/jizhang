@@ -27,7 +27,6 @@
 
 @property (nonatomic,strong) NSArray *customCategoryArray;
 
-
 //登录用户的accesstoken
 @property (nonatomic,strong) NSString *accesstoken;
 

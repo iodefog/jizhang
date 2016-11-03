@@ -27,19 +27,13 @@
             *error = [db lastError];
         }
     }
-    
-    // 更新记账类型为空的账本
-    if (![db executeUpdate:@"update bk_books_type set iparenttype = 0 where iparenttype is null"]) {
-        if (error) {
-            *error = [db lastError];
-        }
-    }
+
 }
 
 + (void)updateCustomUserBillNeededForUserId:(NSString *)userId billTypeItems:(NSArray *)items inDatabase:(FMDatabase *)db error:(NSError **)error {
     NSString *writedate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
     for (SSJCustomCategoryItem *item in items) {
-        if (![db executeUpdate:@"insert into bk_user_bill set cuserid = ?, cbillid = ?, istate = 1, cwritedate = ?,iversion = ? ,operatortype = 0, iorder = 0, cbooksid = ? where select * not exists (select * from BK_USER_BILL where CBILLID = ? and cuserid = ? and cbooksid = ?)",userId,item.ibillid,writedate,@(SSJSyncVersion()),item.cbooksid,item.ibillid,userId,item.cbooksid]) {
+        if (![db executeUpdate:@"insert into bk_user_bill values (?,?,1,?,?,1,0,?) where not exists select * from bk_user_bill where cuserid = ? and cbillid = ? and cbooksid = ?",userId,item.ibillid,writedate,@(SSJSyncVersion()),item.cbooksid,item.ibillid,userId,item.cbooksid,userId,item.ibillid,item.cbooksid]) {
             if (error) {
                 *error = [db lastError];
             }

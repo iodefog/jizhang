@@ -10,6 +10,11 @@
 
 @implementation SSJCustomCategoryItem
 
-
++ (NSDictionary *)replacedKeyFromPropertyName{
+    return @{
+             @"cbooksid" : @"CBOOKSID",
+             @"ibillid" : @"IBILLID"
+             };
+}
 
 @end

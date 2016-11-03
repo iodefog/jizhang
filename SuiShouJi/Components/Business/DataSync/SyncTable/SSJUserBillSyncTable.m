@@ -73,7 +73,7 @@
                 return NO;
             }
         } else {
-            if (![db executeUpdate:@"insert into bk_user_bill (cbillid, cuserid, cbooksid, istate, iorder, cwritedate, iversion, operatortype) values (?, ?, ?, ?, ?, ?, ?)", recordInfo[@"cbillid"], recordInfo[@"cuserid"], recordInfo[@"cbooksid"], recordInfo[@"istate"], recordInfo[@"iorder"], recordInfo[@"cwritedate"], recordInfo[@"iversion"], recordInfo[@"operatortype"]]) {
+            if (![db executeUpdate:@"insert into bk_user_bill (cbillid, cuserid, cbooksid, istate, iorder, cwritedate, iversion, operatortype) values (?, ?, ?, ?, ?, ?, ?, ?)", recordInfo[@"cbillid"], recordInfo[@"cuserid"], recordInfo[@"cbooksid"], recordInfo[@"istate"], recordInfo[@"iorder"], recordInfo[@"cwritedate"], recordInfo[@"iversion"], recordInfo[@"operatortype"]]) {
                 if (error) {
                     *error = [db lastError];
                 }
@@ -116,7 +116,7 @@
         // 如果后端数据没有升级的话要对后端数据进行处理
         if (!hasUpdated) {
             // 然后将日常账本的记账类型拷进自定义账本
-            if (![db executeUpdate:@"insert into bk_user_bill values (select ub.cuserid, ub.cbillid, ?, ?, 1, ub.iorder, bk.cbooksid from bk_user_bill ub , bk_books_type bk where ub.operatortype <> 2 and bk.cbooksid not like bk.cuserid || '%' and ub.cbooksid = bk.cuserid and length(ub.cbillid) < 10 and ub.cuserid = ? and bk.cuserid = ?)",writeDate,@(SSJSyncVersion()),userId,userId]) {
+            if (![db executeUpdate:@"insert into bk_user_bill select ub.cuserid, ub.cbillid, ?, ?, 1, ub.iorder, bk.cbooksid from bk_user_bill ub , bk_books_type bk where ub.operatortype <> 2 and bk.cbooksid not like bk.cuserid || '%' and ub.cbooksid = bk.cuserid and length(ub.cbillid) < 10 and ub.cuserid = ? and bk.cuserid = ?",writeDate,@(SSJSyncVersion()),userId,userId]) {
                 if (error) {
                     *error = [db lastError];
                 }

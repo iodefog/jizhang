@@ -4707,8 +4707,8 @@
 				7D87AE851D63079C0024D33C /* SSJDatabaseVersion8.m */,
 				7D738A8C1DAB267F000CD629 /* SSJDatabaseVersion9.h */,
 				7D738A8D1DAB267F000CD629 /* SSJDatabaseVersion9.m */,
-				9C246BA21DCADB7600C61C34 /* SSJDatabaseVersion10.m */,
 				9C246BA31DCADB7600C61C34 /* SSJDatabaseVersion10.h */,
+				9C246BA21DCADB7600C61C34 /* SSJDatabaseVersion10.m */,
 			);
 			path = SSJDatabaseUpdater;
 			sourceTree = "<group>";
