@@ -188,6 +188,10 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>App需要您的同意,才能访问相机</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>App需要您的同意,才能访问相册</string>
 	<key>UIFileSharingEnabled</key>
 	<false/>
 	<key>UIMainStoryboardFile</key>
