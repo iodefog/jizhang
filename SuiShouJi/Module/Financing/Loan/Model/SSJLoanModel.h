@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "SSJLoanChargeModel.h"
 
 @class FMResultSet;
 
