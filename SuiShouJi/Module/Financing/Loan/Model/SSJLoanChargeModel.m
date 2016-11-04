@@ -10,4 +10,18 @@
 
 @implementation SSJLoanChargeModel
 
+- (id)copyWithZone:(nullable NSZone *)zone {
+    SSJLoanChargeModel *model = [[SSJLoanChargeModel alloc] init];
+    model.chargeId = self.chargeId;
+    model.fundId = self.fundId;
+    model.billId = self.billId;
+    model.money = self.money;
+    model.billDate = self.billDate;
+    model.memo = self.memo;
+    model.type = self.type;
+//    model.partnerModel = self.partnerModel;
+//    model.interestModel = self.interestModel;
+    return model;
+}
+
 @end

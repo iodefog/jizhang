@@ -12,7 +12,8 @@
  借贷变更流水类型
 
  - SSJLoanChargeTypeCreate: 创建借贷产生的流水
- - SSJLoanChargeTypeBalanceChange: 修改借贷余额产生的流水
+ - SSJLoanChargeTypeBalanceIncrease: 增加借贷余额产生的流水
+ - SSJLoanChargeTypeBalanceReduce: 减少借贷余额产生的流水
  - SSJLoanChargeTypeRepayment: 还款/收款产生的流水
  - SSJLoanChargeTypeAdd: 追加借出/欠款产生的流水
  - SSJLoanChargeTypeCloseOut: 结清产生的流水
@@ -21,11 +22,17 @@
  */
 typedef NS_ENUM(NSUInteger, SSJLoanChargeType) {
     SSJLoanChargeTypeCreate,
-    SSJLoanChargeTypeBalanceChange,
+    SSJLoanChargeTypeBalanceIncrease,
+    SSJLoanChargeTypeBalanceReduce,
     SSJLoanChargeTypeRepayment,
     SSJLoanChargeTypeAdd,
     SSJLoanChargeTypeCloseOut,
     SSJLoanChargeTypeInterest
+};
+
+typedef NS_ENUM(NSInteger, SSJLoanType) {
+    SSJLoanTypeLend,    // 借出
+    SSJLoanTypeBorrow   // 借入
 };
 
 @interface SSJLoanChargeModel : NSObject <NSCopying>
@@ -34,16 +41,22 @@ typedef NS_ENUM(NSUInteger, SSJLoanChargeType) {
 
 @property (nonatomic, copy) NSString *fundId;
 
-@property (nonatomic) double money;
-
-@property (nonatomic, copy) NSDate *billDate;
+@property (nonatomic, copy) NSString *billId;
 
 @property (nonatomic, copy) NSString *memo;
 
-@property (nonatomic) BOOL transferredIn;
+@property (nonatomic, copy) NSDate *billDate;
 
-@property (nonatomic, copy) SSJLoanChargeModel *partnerModel;
+@property (nonatomic, copy) NSDate *writeDate;
 
-@property (nonatomic, copy) SSJLoanChargeModel *interestModel;
+@property (nonatomic) double money;
+
+@property (nonatomic) SSJLoanType type;
+
+//@property (nonatomic) SSJLoanChargeType chargeType;
+//
+//@property (nonatomic, copy) SSJLoanChargeModel *partnerModel;
+//
+//@property (nonatomic, copy) SSJLoanChargeModel *interestModel;
 
 @end

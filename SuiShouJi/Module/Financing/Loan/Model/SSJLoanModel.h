@@ -11,11 +11,6 @@
 
 @class FMResultSet;
 
-typedef NS_ENUM(NSInteger, SSJLoanType) {
-    SSJLoanTypeLend,    // 借出
-    SSJLoanTypeBorrow   // 借入
-};
-
 @interface SSJLoanModel : NSObject <NSCopying>
 
 @property (nonatomic, copy) NSString *ID;
@@ -55,6 +50,8 @@ typedef NS_ENUM(NSInteger, SSJLoanType) {
 
 // 结清产生的利息流水
 @property (nonatomic, copy) NSString *interestChargeID;
+
+@property (nonatomic, copy) NSArray <SSJLoanChargeModel *>*chargeModels;
 
 // 借入／借出日期
 @property (nonatomic, copy) NSDate *borrowDate;
