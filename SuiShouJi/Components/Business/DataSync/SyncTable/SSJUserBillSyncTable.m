@@ -63,10 +63,10 @@
             continue;
         }
         
-        BOOL exist = [db boolForQuery:@"select count(*) from bk_user_bill where cbillid = ? and cuserid = ? and cbooksid = ?", recordInfo[@"cbillid"], recordInfo[@"cuserid"], recordInfo[@"cbooksid"]];
+        BOOL exist = [db boolForQuery:@"select count(*) from bk_user_bill where cbillid = ? and cuserid = ? and cbooksid = ?", recordInfo[@"cbillid"], recordInfo[@"cuserid"], recordInfo[@"cbooksid"] ? : recordInfo[@"cuserid"]];
         
         if (exist) {
-            if (![db executeUpdate:@"update bk_user_bill set istate = ?, iorder = ?, cwritedate = ?, iversion = ?, operatortype = ? where cbillid = ? and cuserid = ? and cbooksid = ? and cwritedate < ?", recordInfo[@"istate"], recordInfo[@"iorder"], recordInfo[@"cwritedate"], recordInfo[@"iversion"], recordInfo[@"operatortype"], recordInfo[@"cbillid"], recordInfo[@"cuserid"], recordInfo[@"cbooksid"], recordInfo[@"cwritedate"]]) {
+            if (![db executeUpdate:@"update bk_user_bill set istate = ?, iorder = ?, cwritedate = ?, iversion = ?, operatortype = ? where cbillid = ? and cuserid = ? and cbooksid = ? and cwritedate < ?", recordInfo[@"istate"], recordInfo[@"iorder"], recordInfo[@"cwritedate"], recordInfo[@"iversion"], recordInfo[@"operatortype"], recordInfo[@"cbillid"], recordInfo[@"cuserid"], recordInfo[@"cbooksid"] ? : recordInfo[@"cuserid"], recordInfo[@"cwritedate"]]) {
                 if (error) {
                     *error = [db lastError];
                 }
@@ -81,16 +81,16 @@
             }
         }
     }
-    
+
     return YES;
 }
 
 + (BOOL)mergeWhenLoginWithRecords:(NSArray *)records forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
     NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-    BOOL hasUpdated = YES;
+    BOOL hasUpdated = NO;
     for (NSDictionary *recordInfo in records) {
-        if (![recordInfo[@"cbooksid"] length]) {
-            hasUpdated = NO;
+        if ([recordInfo[@"cbillid"] isEqualToString:@"1072"] || [recordInfo[@"cbillid"] isEqualToString:@"2046"]) {
+            hasUpdated = YES;
             break;
         }
     }
@@ -98,7 +98,8 @@
     if (![db intForQuery:@"select count(1) from bk_user_bill where cuserid = ?",userId]) {
         // 如果本地没有该用户数据,则首先把后端的数据插入表中
         for (NSDictionary *recordInfo in records) {
-            if (![db executeUpdate:@"insert into bk_user_bill (cbillid, cuserid, istate, iorder, cwritedate, iversion, operatortype, cbooksid) values (?, ?, ?, ?, ?, ?, ?, ?)", recordInfo[@"cbillid"], recordInfo[@"cuserid"], recordInfo[@"istate"], recordInfo[@"iorder"], recordInfo[@"cwritedate"], recordInfo[@"iversion"], recordInfo[@"operatortype"], recordInfo[@"operatortype"], recordInfo[@"cbooksid"]]) {
+            NSString *sql = [NSString stringWithFormat:@"insert into bk_user_bill (cbillid, cuserid, istate, iorder, cwritedate, iversion, operatortype, cbooksid) values ('%@', '%@', '%@', '%@', '%@', '%@', '%@', '%@')", recordInfo[@"cbillid"], recordInfo[@"cuserid"], recordInfo[@"istate"], recordInfo[@"iorder"], recordInfo[@"cwritedate"], recordInfo[@"iversion"], recordInfo[@"operatortype"],recordInfo[@"cbooksid"] ? : recordInfo[@"cuserid"]];
+            if (![db executeUpdate:sql]) {
                 if (error) {
                     *error = [db lastError];
                 }
@@ -115,8 +116,9 @@
         
         // 如果后端数据没有升级的话要对后端数据进行处理
         if (!hasUpdated) {
+            NSString *sql1 = [NSString stringWithFormat:@"insert into bk_user_bill select ub.cuserid, ub.cbillid, 1, '%@', '%@', 1, ub.iorder, bk.cbooksid from bk_user_bill ub , bk_books_type bk where ub.operatortype <> 2 and bk.cbooksid not like bk.cuserid || '%%' and ub.cbooksid = bk.cuserid and length(ub.cbillid) < 10  and bk.cuserid = '%@' and ub.cuserid = '%@'",writeDate,@(SSJSyncVersion()),userId,userId];
             // 然后将日常账本的记账类型拷进自定义账本
-            if (![db executeUpdate:@"insert into bk_user_bill select ub.cuserid, ub.cbillid, ?, ?, 1, ub.iorder, bk.cbooksid from bk_user_bill ub , bk_books_type bk where ub.operatortype <> 2 and bk.cbooksid not like bk.cuserid || '%' and ub.cbooksid = bk.cuserid and length(ub.cbillid) < 10 and ub.cuserid = ? and bk.cuserid = ?",writeDate,@(SSJSyncVersion()),userId,userId]) {
+            if (![db executeUpdate:sql1]) {
                 if (error) {
                     *error = [db lastError];
                 }
@@ -124,7 +126,8 @@
             }
             
             // 将四个非日常账本的默认账本插入所有默认类型
-            if (![db executeUpdate:@"insert into bk_user_bill select bk.cuserid ,bt.id , 1, ?, ?, 1, bt.defaultorder, bk.cbooksid from bk_books_type bk, bk_bill_type bt where bk.iparenttype = bt.ibookstype and bk.cbooksid <> bk.cuserid and bk.cbooksid like bk.cuserid || '%' and bt.cuserid = ? and bk.cuserid = ?",writeDate,@(SSJSyncVersion()),userId,userId]) {
+            NSString *sql2 = [NSString stringWithFormat:@"insert into bk_user_bill select bk.cuserid ,bt.id , 1, '%@', '%@', 1, bt.defaultorder, bk.cbooksid from bk_books_type bk, bk_bill_type bt where bk.iparenttype = bt.ibookstype and bk.cbooksid <> bk.cuserid and bk.cbooksid like bk.cuserid || '%%' and bk.cuserid = '%@'",writeDate,@(SSJSyncVersion()),userId];
+            if (![db executeUpdate:sql2]) {
                 if (error) {
                     *error = [db lastError];
                 }

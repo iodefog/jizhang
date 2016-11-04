@@ -326,7 +326,7 @@
         [SSJLoginHelper updateCustomUserBillNeededForUserId:SSJUSERID() billTypeItems:self.loginService.customCategoryArray inDatabase:db error:nil];
         
         //  检测缺少哪个收支类型就创建
-        [SSJUserDefaultDataCreater createDefaultBillTypesIfNeededForUserId:SSJUSERID() inDatabase:db];
+//        [SSJUserDefaultDataCreater createDefaultBillTypesIfNeededForUserId:SSJUSERID() inDatabase:db];
         
         //  更新排序字段为空的收支类型
         [SSJLoginHelper updateBillTypeOrderIfNeededForUserId:SSJUSERID() inDatabase:db error:nil];

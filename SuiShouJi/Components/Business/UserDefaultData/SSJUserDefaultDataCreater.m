@@ -343,7 +343,7 @@
             booksId = [NSString stringWithFormat:@"%@-%d",userID,[billTypeResult intForColumn:@"ibookstype"]];
         }
         
-        BOOL executeSuccessfull = [db executeUpdate:@"insert into BK_USER_BILL (CUSERID, CBILLID, ISTATE, IORDER, CWRITEDATE, IVERSION, OPERATORTYPE, CBOOKSID) select ?, ?, ?, ?, ?, ?, 0 , ? where not exists (select * from BK_USER_BILL where CBILLID = ? and cuserid = ? and cbooksid = ?)", userID, billId, @(state), order, date, @(SSJSyncVersion()), booksId, billId, userID, booksId];
+        BOOL executeSuccessfull = [db executeUpdate:@"insert into BK_USER_BILL (CUSERID, CBILLID, ISTATE, IORDER, CWRITEDATE, IVERSION, OPERATORTYPE, CBOOKSID) select ?, ?, ?, ?, ?, ?, 1 , ? where not exists (select * from BK_USER_BILL where CBILLID = ? and cuserid = ? and cbooksid = ?)", userID, billId, @(state), order, date, @(SSJSyncVersion()), booksId, billId, userID, booksId];
         successfull = successfull && executeSuccessfull;
     }
     
