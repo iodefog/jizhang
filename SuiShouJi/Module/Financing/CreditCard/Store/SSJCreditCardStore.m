@@ -254,7 +254,6 @@
     [resultSet close];
     
     for (SSJLoanModel *model in tempArr) {
-        [SSJLoanHelper queryLoanChargeWithModel:model inDatabase:db];
         if (![SSJLoanHelper deleteLoanModel:model inDatabase:db forUserId:userId error:NULL]) {
             if (error) {
                 *error = [db lastError];
