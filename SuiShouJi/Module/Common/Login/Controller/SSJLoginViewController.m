@@ -320,19 +320,18 @@
     
     [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
         //  merge登陆接口返回的收支类型、资金帐户、账本
+        [SSJBooksTypeSyncTable mergeRecords:self.loginService.booksTypeArray forUserId:SSJUSERID() inDatabase:db error:nil];
+        //  更新父类型为空的账本
+        [SSJLoginHelper updateBooksParentIfNeededForUserId:SSJUSERID() inDatabase:db error:nil];
         [SSJUserBillSyncTable mergeWhenLoginWithRecords:self.loginService.userBillArray forUserId:SSJUSERID() inDatabase:db error:nil];
         [SSJFundInfoSyncTable mergeRecords:self.loginService.fundInfoArray forUserId:SSJUSERID() inDatabase:db error:nil];
-        [SSJBooksTypeSyncTable mergeRecords:self.loginService.booksTypeArray forUserId:SSJUSERID() inDatabase:db error:nil];
         [SSJLoginHelper updateCustomUserBillNeededForUserId:SSJUSERID() billTypeItems:self.loginService.customCategoryArray inDatabase:db error:nil];
         
         //  检测缺少哪个收支类型就创建
-//        [SSJUserDefaultDataCreater createDefaultBillTypesIfNeededForUserId:SSJUSERID() inDatabase:db];
+        [SSJUserDefaultDataCreater createDefaultBillTypesIfNeededForUserId:SSJUSERID() inDatabase:db];
         
         //  更新排序字段为空的收支类型
         [SSJLoginHelper updateBillTypeOrderIfNeededForUserId:SSJUSERID() inDatabase:db error:nil];
-        
-        //  更新父类型为空的账本
-        [SSJLoginHelper updateBooksParentIfNeededForUserId:SSJUSERID() inDatabase:db error:nil];
         
         //  如果登录没有返回任何资金帐户，说明服务器没有保存任何资金记录，就给用户创建默认的
         [SSJUserDefaultDataCreater createDefaultFundAccountsIfNeededForUserId:SSJUSERID() inDatabase:db];
