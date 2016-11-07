@@ -694,9 +694,9 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
         chargeModel.type = model.type;
         [changeModels addObject:chargeModel];
         
-        if (<#condition#>) {
-            <#statements#>
-        }
+//        if (<#condition#>) {
+//            <#statements#>
+//        }
     }
     [resultSet close];
     
