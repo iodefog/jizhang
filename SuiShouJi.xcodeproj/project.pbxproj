@@ -755,6 +755,9 @@
 		7DEF54601C75F82A00A90153 /* SSJPercentCircleNodeItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF545F1C75F82A00A90153 /* SSJPercentCircleNodeItem.m */; };
 		7DEF54631C76B46300A90153 /* SSJPercentCircleAdditionGroupNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF54621C76B46300A90153 /* SSJPercentCircleAdditionGroupNode.m */; };
 		7DEF54661C76DCAB00A90153 /* SSJPercentCircleViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF54651C76DCAB00A90153 /* SSJPercentCircleViewItem.m */; };
+		7DF07DFA1DD0265800B0AF97 /* SSJAccountsMerger.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DF07DF51DD0265800B0AF97 /* SSJAccountsMerger.m */; };
+		7DF07DFB1DD0265800B0AF97 /* SSJAccountsMergerMappingManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DF07DF71DD0265800B0AF97 /* SSJAccountsMergerMappingManager.m */; };
+		7DF07DFC1DD0265800B0AF97 /* SSJAccountsMergerTables.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DF07DF91DD0265800B0AF97 /* SSJAccountsMergerTables.m */; };
 		7DF19ED81D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DF19ED71D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m */; };
 		7DF19ED91D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DF19ED71D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m */; };
 		7DF19EDA1D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DF19ED71D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m */; };
@@ -2993,6 +2996,12 @@
 		7DEF54621C76B46300A90153 /* SSJPercentCircleAdditionGroupNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJPercentCircleAdditionGroupNode.m; sourceTree = "<group>"; };
 		7DEF54641C76DCAB00A90153 /* SSJPercentCircleViewItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJPercentCircleViewItem.h; sourceTree = "<group>"; };
 		7DEF54651C76DCAB00A90153 /* SSJPercentCircleViewItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJPercentCircleViewItem.m; sourceTree = "<group>"; };
+		7DF07DF41DD0265800B0AF97 /* SSJAccountsMerger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJAccountsMerger.h; sourceTree = "<group>"; };
+		7DF07DF51DD0265800B0AF97 /* SSJAccountsMerger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJAccountsMerger.m; sourceTree = "<group>"; };
+		7DF07DF61DD0265800B0AF97 /* SSJAccountsMergerMappingManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJAccountsMergerMappingManager.h; sourceTree = "<group>"; };
+		7DF07DF71DD0265800B0AF97 /* SSJAccountsMergerMappingManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJAccountsMergerMappingManager.m; sourceTree = "<group>"; };
+		7DF07DF81DD0265800B0AF97 /* SSJAccountsMergerTables.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJAccountsMergerTables.h; sourceTree = "<group>"; };
+		7DF07DF91DD0265800B0AF97 /* SSJAccountsMergerTables.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJAccountsMergerTables.m; sourceTree = "<group>"; };
 		7DF19ED61D74418B00DD611C /* SSJNewOrEditCustomCategoryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJNewOrEditCustomCategoryView.h; sourceTree = "<group>"; };
 		7DF19ED71D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJNewOrEditCustomCategoryView.m; sourceTree = "<group>"; };
 		7DF8B9AB1CDC2B0000F461A6 /* SSJEditableCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJEditableCollectionView.h; sourceTree = "<group>"; };
@@ -4285,6 +4294,7 @@
 		7D6AAB5E1C312C340007C0A3 /* Business */ = {
 			isa = PBXGroup;
 			children = (
+				7DF07DF31DD0265800B0AF97 /* SSJAccountsMerger */,
 				7DDB6D191DB9A55000D823AE /* SSJDomainManager */,
 				7DE4A7CF1D20C01900F05BF0 /* SSJTheme */,
 				7DE2E9101C9C28F5001868F5 /* UmengManager */,
@@ -4776,6 +4786,19 @@
 				7DEF54621C76B46300A90153 /* SSJPercentCircleAdditionGroupNode.m */,
 			);
 			path = SSJPercentCircleView;
+			sourceTree = "<group>";
+		};
+		7DF07DF31DD0265800B0AF97 /* SSJAccountsMerger */ = {
+			isa = PBXGroup;
+			children = (
+				7DF07DF41DD0265800B0AF97 /* SSJAccountsMerger.h */,
+				7DF07DF51DD0265800B0AF97 /* SSJAccountsMerger.m */,
+				7DF07DF61DD0265800B0AF97 /* SSJAccountsMergerMappingManager.h */,
+				7DF07DF71DD0265800B0AF97 /* SSJAccountsMergerMappingManager.m */,
+				7DF07DF81DD0265800B0AF97 /* SSJAccountsMergerTables.h */,
+				7DF07DF91DD0265800B0AF97 /* SSJAccountsMergerTables.m */,
+			);
+			path = SSJAccountsMerger;
 			sourceTree = "<group>";
 		};
 		7DF8B9AA1CDC2B0000F461A6 /* SSJEditableCollectionView */ = {
@@ -9080,6 +9103,7 @@
 				9C9D0B861D080E09003A9F4E /* SSJCircleChargeTypeSelectView.m in Sources */,
 				9C24CFBC1D76C9ED0095D150 /* SSJBooksTypeStore.m in Sources */,
 				BD04332A1C1A78B40051E7AB /* UIBarButtonItem+CDCategory.m in Sources */,
+				7DF07DFA1DD0265800B0AF97 /* SSJAccountsMerger.m in Sources */,
 				7D6B12D61D4CBC140036BF4E /* SSJListMenu.m in Sources */,
 				7DBA553E1D6AFFE900C02D79 /* SSJAddOrEditLoanTextFieldCell.m in Sources */,
 				7D567E3C1D9D1632006512C8 /* SSJBudgetProgressView.m in Sources */,
@@ -9172,6 +9196,7 @@
 				BD33FD2E1C4B2E4C006A6942 /* SSJAlertViewAdapter.m in Sources */,
 				BD0433331C1A82110051E7AB /* SSJConstant.m in Sources */,
 				7D4EF8851C43B1A3003C4B20 /* SSJDailySumChargeTable.m in Sources */,
+				7DF07DFB1DD0265800B0AF97 /* SSJAccountsMergerMappingManager.m in Sources */,
 				7D5F33361CEAE6C10086B67E /* SSJBudgetConst.m in Sources */,
 				9CF594361D66B4EA00006594 /* SSJReminderViewController.m in Sources */,
 				BD70DF6B1C4B26B3000E6CC9 /* UIViewController+SSJPageFlow.m in Sources */,
@@ -9223,6 +9248,7 @@
 				BD543C441C1A6DBC00910D61 /* AppDelegate.m in Sources */,
 				BD542B601CB5457800655EE2 /* SSJThirdPartyLoginManger.m in Sources */,
 				9CE7D78F1D2F4ECA0013E97B /* SSJAdItem.m in Sources */,
+				7DF07DFC1DD0265800B0AF97 /* SSJAccountsMergerTables.m in Sources */,
 				9C9DD66A1D49FA31001FA3C5 /* SSJThemeManagerViewController.m in Sources */,
 				9C94719C1CEB473E00D69079 /* SSJCalendarViewController.m in Sources */,
 				9C47E6F21D224BEF005F338A /* SSJThemeService.m in Sources */,
