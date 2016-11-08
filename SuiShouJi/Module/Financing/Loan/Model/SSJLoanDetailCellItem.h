@@ -8,6 +8,10 @@
 
 #import "SSJBaseItem.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
+@class SSJLoanChargeModel;
+
 @interface SSJLoanDetailCellItem : SSJBaseItem
 
 @property (nonatomic, copy) NSString *image;
@@ -16,8 +20,17 @@
 
 @property (nonatomic, copy) NSString *subtitle;
 
+@property (nonatomic, copy, nullable) NSAttributedString *bottomTitle;
+
+@property (nonatomic, readonly) CGFloat cellHeight;
+
 + (instancetype)itemWithImage:(NSString *)image
                         title:(NSString *)title
-                     subtitle:(NSString *)subtitle;
+                     subtitle:(NSString *)subtitle
+                  bottomTitle:(nullable NSAttributedString *)bottomTitle;
+
++ (SSJLoanDetailCellItem *)cellItemWithChargeModel:(SSJLoanChargeModel *)model;
 
 @end
+
+NS_ASSUME_NONNULL_END

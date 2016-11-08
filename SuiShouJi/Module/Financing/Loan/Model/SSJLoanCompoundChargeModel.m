@@ -19,4 +19,10 @@
     return model;
 }
 
+- (NSString *)debugDescription {
+    return [NSString stringWithFormat:@"%@:%@", self, @{@"chargeModel":(self.chargeModel ?: [NSNull null]),
+                                                        @"targetChargeModel":(self.targetChargeModel ?: [NSNull null]),
+                                                        @"interestCharge":(self.interestCharge ?: [NSNull null])}];
+}
+
 @end

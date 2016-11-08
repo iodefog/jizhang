@@ -56,11 +56,15 @@ typedef NS_ENUM(NSUInteger, SSJLoanCompoundChargeType) {
 
 @property (nonatomic, copy) NSString *memo;
 
+@property (nonatomic, copy) NSString *icon;
+
 @property (nonatomic, copy) NSDate *billDate;
 
 @property (nonatomic, copy) NSDate *writeDate;
 
 @property (nonatomic) double money;
+
+@property (nonatomic) double oldMoney;
 
 @property (nonatomic) SSJLoanType type;
 

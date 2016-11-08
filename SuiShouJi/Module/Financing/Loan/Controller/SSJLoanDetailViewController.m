@@ -39,11 +39,20 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
 
 @property (nonatomic, strong) SSJLoanModel *loanModel;
 
+@property (nonatomic) BOOL displayChangeRecords;
+
 @end
 
 @implementation SSJLoanDetailViewController
 
 #pragma mark - Lifecycle
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+        _displayChangeRecords = YES;
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -213,188 +222,90 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
 }
 
 - (void)organiseCellItems {
+    
+    NSMutableArray *section1 = nil;
+    NSMutableArray *section2 = nil;
+    
     if (_loanModel.closeOut) {
-        
-        NSString *borrowMoneyStr = [NSString stringWithFormat:@"¥%.2f", _loanModel.jMoney];
-        
-        NSString *interestStr = [NSString stringWithFormat:@"¥%.2f", [SSJLoanHelper closeOutInterestWithLoanModel:_loanModel]];
         
         NSString *accountName = [SSJLoanHelper queryForFundNameWithID:_loanModel.targetFundID];
         NSString *endAccountName = [SSJLoanHelper queryForFundNameWithID:_loanModel.endTargetFundID];
-        
         NSString *borrowDateStr = [_loanModel.borrowDate formattedDateWithFormat:@"yyyy.MM.dd"];
-        
         NSString *closeOutDateStr = [_loanModel.endDate formattedDateWithFormat:@"yyyy.MM.dd"];
         
-        NSString *daysFromRepaymentTitle = nil;
-        NSString *daysFromRepaymentDateStr = nil;
-        
-        if ([_loanModel.endDate compare:_loanModel.repaymentDate] == NSOrderedAscending) {
-            daysFromRepaymentTitle = @"早于还款日";
-            daysFromRepaymentDateStr = [NSString stringWithFormat:@"%d天", (int)[_loanModel.repaymentDate daysFrom:_loanModel.endDate]];
-        } else {
-            daysFromRepaymentTitle = @"超出还款日";
-            daysFromRepaymentDateStr = [NSString stringWithFormat:@"%d天", (int)[_loanModel.endDate daysFrom:_loanModel.repaymentDate]];
-        }
-        
-        NSArray *section1 = nil;
-        NSArray *section2 = nil;
-        NSArray *section3 = nil;
+        NSString *loanDayTitle = nil;
+        NSString *loanAccountTitle = nil;
         
         switch (_loanModel.type) {
             case SSJLoanTypeLend:
-                section1 = @[[SSJLoanDetailCellItem itemWithImage:@"loan_person" title:@"借款人" subtitle:_loanModel.lender],
-                             [SSJLoanDetailCellItem itemWithImage:@"loan_money" title:@"借出金额" subtitle:borrowMoneyStr]];
-                
-                if (_loanModel.interest) {
-                    section2 = @[[SSJLoanDetailCellItem itemWithImage:@"loan_yield" title:@"利息收入" subtitle:interestStr],
-                                 [SSJLoanDetailCellItem itemWithImage:@"loan_account" title:@"借出账户" subtitle:accountName],
-                                 [SSJLoanDetailCellItem itemWithImage:@"loan_closeOut" title:@"结清账户" subtitle:endAccountName]];
-                } else {
-                    section2 = @[[SSJLoanDetailCellItem itemWithImage:@"loan_account" title:@"借出账户" subtitle:accountName],
-                                 [SSJLoanDetailCellItem itemWithImage:@"loan_closeOut" title:@"结清账户" subtitle:endAccountName]];
-                }
-                
-                if (_loanModel.memo.length) {
-                    section3 = @[[SSJLoanDetailCellItem itemWithImage:@"loan_calendar" title:@"借款日" subtitle:borrowDateStr],
-                                 [SSJLoanDetailCellItem itemWithImage:@"loan_expires" title:@"结清日" subtitle:closeOutDateStr],
-                                 [SSJLoanDetailCellItem itemWithImage:@"loan_clock" title:daysFromRepaymentTitle subtitle:daysFromRepaymentDateStr],
-                                 [SSJLoanDetailCellItem itemWithImage:@"loan_memo" title:@"备注" subtitle:_loanModel.memo]];
-                } else {
-                    section3 = @[[SSJLoanDetailCellItem itemWithImage:@"loan_calendar" title:@"借款日" subtitle:borrowDateStr],
-                                 [SSJLoanDetailCellItem itemWithImage:@"loan_expires" title:@"结清日" subtitle:closeOutDateStr],
-                                 [SSJLoanDetailCellItem itemWithImage:@"loan_clock" title:daysFromRepaymentTitle subtitle:daysFromRepaymentDateStr]];
-                }
-                
+                loanDayTitle = @"借款日";
+                loanAccountTitle = @"借出账户";
                 break;
                 
             case SSJLoanTypeBorrow:
-                section1 = @[[SSJLoanDetailCellItem itemWithImage:@"loan_person" title:@"欠谁钱款" subtitle:_loanModel.lender],
-                             [SSJLoanDetailCellItem itemWithImage:@"loan_money" title:@"欠款金额" subtitle:borrowMoneyStr]];
-                
-                if (_loanModel.interest) {
-                    section2 = @[[SSJLoanDetailCellItem itemWithImage:@"loan_yield" title:@"利息支出" subtitle:interestStr],
-                                 [SSJLoanDetailCellItem itemWithImage:@"loan_account" title:@"借入账户" subtitle:accountName],
-                                 [SSJLoanDetailCellItem itemWithImage:@"loan_closeOut" title:@"结清账户" subtitle:endAccountName]];
-                } else {
-                    section2 = @[[SSJLoanDetailCellItem itemWithImage:@"loan_account" title:@"借入账户" subtitle:accountName],
-                                 [SSJLoanDetailCellItem itemWithImage:@"loan_closeOut" title:@"结清账户" subtitle:endAccountName]];
-                }
-                
-                if (_loanModel.memo.length) {
-                    section3 = @[[SSJLoanDetailCellItem itemWithImage:@"loan_calendar" title:@"欠款日" subtitle:borrowDateStr],
-                                 [SSJLoanDetailCellItem itemWithImage:@"loan_expires" title:@"结清日" subtitle:closeOutDateStr],
-                                 [SSJLoanDetailCellItem itemWithImage:@"loan_clock" title:daysFromRepaymentTitle subtitle:daysFromRepaymentDateStr],
-                                 [SSJLoanDetailCellItem itemWithImage:@"loan_memo" title:@"备注" subtitle:_loanModel.memo]];
-                } else {
-                    section3 = @[[SSJLoanDetailCellItem itemWithImage:@"loan_calendar" title:@"欠款日" subtitle:borrowDateStr],
-                                 [SSJLoanDetailCellItem itemWithImage:@"loan_expires" title:@"结清日" subtitle:closeOutDateStr],
-                                 [SSJLoanDetailCellItem itemWithImage:@"loan_clock" title:daysFromRepaymentTitle subtitle:daysFromRepaymentDateStr]];
-                }
-                
+                loanDayTitle = @"欠款日";
+                loanAccountTitle = @"借入账户";
                 break;
         }
         
-        _cellItems = @[section1, section2, section3];
+        section1 = [@[[SSJLoanDetailCellItem itemWithImage:@"loan_expires" title:@"结清日" subtitle:closeOutDateStr bottomTitle:nil],
+                      [SSJLoanDetailCellItem itemWithImage:@"loan_calendar" title:loanDayTitle subtitle:borrowDateStr bottomTitle:nil],
+                      [SSJLoanDetailCellItem itemWithImage:@"loan_closeOut" title:@"结清账户" subtitle:endAccountName bottomTitle:nil],
+                      [SSJLoanDetailCellItem itemWithImage:@"loan_account" title:loanAccountTitle subtitle:accountName bottomTitle:nil]] mutableCopy];
+        
+        if (_loanModel.memo.length) {
+            [section1 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_memo" title:@"备注" subtitle:_loanModel.memo bottomTitle:nil]];
+        }
         
     } else {
         
-        NSString *borrowMoneyStr = [NSString stringWithFormat:@"¥%.2f", _loanModel.jMoney];
-        
-        NSString *interestStr = [NSString stringWithFormat:@"¥%.2f", [SSJLoanHelper currentInterestWithLoanModel:_loanModel]];
-        
-        NSString *expectedInterestStr = [NSString stringWithFormat:@"¥%.2f", [SSJLoanHelper expectedInterestWithLoanModel:_loanModel]];
-        
-        NSString *accountName = [SSJLoanHelper queryForFundNameWithID:_loanModel.targetFundID];
-        
-        NSString *borrowDateStr = [_loanModel.borrowDate formattedDateWithFormat:@"yyyy.MM.dd"];
-        NSString *repaymentDateStr = [_loanModel.repaymentDate formattedDateWithFormat:@"yyyy.MM.dd"];
-        
-        NSString *daysFromRepaymentTitle = nil;
-        NSString *daysFromRepaymentDateStr = nil;
-        
-        NSDate *today = [NSDate date];
-        today = [NSDate dateWithYear:today.year month:today.month day:today.day];
-        
-        if ([today compare:_loanModel.repaymentDate] == NSOrderedAscending) {
-            daysFromRepaymentTitle = @"距还款日";
-            daysFromRepaymentDateStr = [NSString stringWithFormat:@"%d天", (int)[_loanModel.repaymentDate daysFrom:today]];
-        } else {
-            daysFromRepaymentTitle = @"超出还款日";
-            daysFromRepaymentDateStr = [NSString stringWithFormat:@"%d天", (int)[today daysFrom:_loanModel.repaymentDate]];
-        }
-        
-        NSString *remindDateStr = @"关闭";
-        if (_loanModel.remindID.length) {
-            SSJReminderItem *remindItem = [SSJLocalNotificationStore queryReminderItemForID:_loanModel.remindID];
-            if (remindItem.remindState) {
-                remindDateStr = [remindItem.remindDate formattedDateWithFormat:@"yyyy.MM.dd"];
-            }
-        }
-        
-        NSArray *section1 = nil;
-        NSArray *section2 = nil;
-        NSArray *section3 = nil;
-        NSArray *section4 = nil;
+        NSString *loanDateTitle = nil;
         
         switch (_loanModel.type) {
             case SSJLoanTypeLend:
-                section1 = @[[SSJLoanDetailCellItem itemWithImage:@"loan_person" title:@"借款人" subtitle:_loanModel.lender],
-                             [SSJLoanDetailCellItem itemWithImage:@"loan_money" title:@"借出金额" subtitle:borrowMoneyStr]];
-                
-                if (_loanModel.interest) {
-                    section2 = @[[SSJLoanDetailCellItem itemWithImage:@"loan_yield" title:@"已产生利息" subtitle:interestStr],
-                                 [SSJLoanDetailCellItem itemWithImage:@"loan_expectedInterest" title:@"预期利息" subtitle:expectedInterestStr],
-                                 [SSJLoanDetailCellItem itemWithImage:@"loan_account" title:@"借出账户" subtitle:accountName]];
-                } else {
-                    section2 = @[[SSJLoanDetailCellItem itemWithImage:@"loan_account" title:@"借出账户" subtitle:accountName]];
-                }
-                
-                if (_loanModel.memo.length) {
-                    section3 = @[[SSJLoanDetailCellItem itemWithImage:@"loan_calendar" title:@"借款日" subtitle:borrowDateStr],
-                                 [SSJLoanDetailCellItem itemWithImage:@"loan_expires" title:@"还款日" subtitle:repaymentDateStr],
-                                 [SSJLoanDetailCellItem itemWithImage:@"loan_clock" title:daysFromRepaymentTitle subtitle:daysFromRepaymentDateStr],
-                                 [SSJLoanDetailCellItem itemWithImage:@"loan_memo" title:@"备注" subtitle:_loanModel.memo]];
-                } else {
-                    section3 = @[[SSJLoanDetailCellItem itemWithImage:@"loan_calendar" title:@"借款日" subtitle:borrowDateStr],
-                                 [SSJLoanDetailCellItem itemWithImage:@"loan_expires" title:@"还款日" subtitle:repaymentDateStr],
-                                 [SSJLoanDetailCellItem itemWithImage:@"loan_clock" title:daysFromRepaymentTitle subtitle:daysFromRepaymentDateStr]];
-                }
-                
-                section4 = @[[SSJLoanDetailCellItem itemWithImage:@"loan_remind" title:@"到期日提醒" subtitle:remindDateStr]];
-                
+                loanDateTitle = @"借款日";
                 break;
                 
             case SSJLoanTypeBorrow:
-                section1 = @[[SSJLoanDetailCellItem itemWithImage:@"loan_person" title:@"欠谁钱款" subtitle:_loanModel.lender],
-                             [SSJLoanDetailCellItem itemWithImage:@"loan_money" title:@"欠款金额" subtitle:borrowMoneyStr]];
-                
-                if (_loanModel.interest) {
-                    section2 = @[[SSJLoanDetailCellItem itemWithImage:@"loan_yield" title:@"已产生利息" subtitle:interestStr],
-                                 [SSJLoanDetailCellItem itemWithImage:@"loan_expectedInterest" title:@"预期利息" subtitle:expectedInterestStr],
-                                 [SSJLoanDetailCellItem itemWithImage:@"loan_account" title:@"借入账户" subtitle:accountName]];
-                } else {
-                    section2 = @[[SSJLoanDetailCellItem itemWithImage:@"loan_account" title:@"借入账户" subtitle:accountName]];
-                }
-                
-                if (_loanModel.memo.length) {
-                    section3 = @[[SSJLoanDetailCellItem itemWithImage:@"loan_calendar" title:@"欠款日" subtitle:borrowDateStr],
-                                 [SSJLoanDetailCellItem itemWithImage:@"loan_expires" title:@"还款日" subtitle:repaymentDateStr],
-                                 [SSJLoanDetailCellItem itemWithImage:@"loan_clock" title:daysFromRepaymentTitle subtitle:daysFromRepaymentDateStr],
-                                 [SSJLoanDetailCellItem itemWithImage:@"loan_memo" title:@"备注" subtitle:_loanModel.memo]];
-                } else {
-                    section3 = @[[SSJLoanDetailCellItem itemWithImage:@"loan_calendar" title:@"欠款日" subtitle:borrowDateStr],
-                                 [SSJLoanDetailCellItem itemWithImage:@"loan_expires" title:@"还款日" subtitle:repaymentDateStr],
-                                 [SSJLoanDetailCellItem itemWithImage:@"loan_clock" title:daysFromRepaymentTitle subtitle:daysFromRepaymentDateStr]];
-                }
-                
-                section4 = @[[SSJLoanDetailCellItem itemWithImage:@"loan_remind" title:@"到期日提醒" subtitle:remindDateStr]];
-                
+                loanDateTitle = @"欠款日";
                 break;
         }
         
-        _cellItems = @[section1, section2, section3, section4];
+        NSString *borrowDateStr = [_loanModel.borrowDate formattedDateWithFormat:@"yyyy.MM.dd"];
+        [section1 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_calendar" title:loanDateTitle subtitle:borrowDateStr bottomTitle:nil]];
+        
+        if (_loanModel.repaymentDate) {
+            NSString *repaymentDateStr = [_loanModel.repaymentDate formattedDateWithFormat:@"yyyy.MM.dd"];
+            [section1 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_expires" title:@"还款日" subtitle:repaymentDateStr bottomTitle:nil]];
+            
+            NSString *expectedInterestStr = [NSString stringWithFormat:@"¥%.2f", [SSJLoanHelper expectedInterestWithLoanModel:_loanModel]];
+            [section1 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_expectedInterest" title:@"预期利息" subtitle:expectedInterestStr bottomTitle:nil]];
+        } else {
+            NSString *remindDateStr = @"关闭";
+            if (_loanModel.remindID.length) {
+                SSJReminderItem *remindItem = [SSJLocalNotificationStore queryReminderItemForID:_loanModel.remindID];
+                if (remindItem.remindState) {
+                    remindDateStr = [remindItem.remindDate formattedDateWithFormat:@"yyyy.MM.dd"];
+                }
+            }
+            [section1 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_remind" title:@"到期日提醒" subtitle:remindDateStr bottomTitle:nil]];
+            
+            NSString *expectedInterestStr = [NSString stringWithFormat:@"¥%.2f", [SSJLoanHelper interestForEverydayWithLoanModel:_loanModel]];
+            [section1 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_expectedInterest" title:@"每天利息" subtitle:expectedInterestStr bottomTitle:nil]];
+        }
+        
+        if (_loanModel.memo.length) {
+            [section1 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_memo" title:@"备注" subtitle:_loanModel.memo bottomTitle:nil]];
+        }
     }
+    
+    if (_displayChangeRecords) {
+        for (SSJLoanChargeModel *chargeModel in self.loanModel.chargeModels) {
+            [section2 addObject:[SSJLoanDetailCellItem cellItemWithChargeModel:chargeModel]];
+        }
+    }
+    
+    _cellItems = @[section1, section2];
 }
 
 - (void)loadLoanModel {
@@ -600,6 +511,9 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     if (!_headerView) {
         _headerView = [[SSJSeparatorFormView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, 174)];
         _headerView.backgroundColor = [UIColor ssj_colorWithHex:@""];
+        _headerView.separatorColor = [UIColor whiteColor];
+        _headerView.horizontalSeparatorInset = UIEdgeInsetsMake(0, 42, 0, 42);
+        _headerView.verticalSeparatorInset = UIEdgeInsetsMake(22, 0, 22, 0);
         _headerView.dataSource = self;
     }
     return _headerView;

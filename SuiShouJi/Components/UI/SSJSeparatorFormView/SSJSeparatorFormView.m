@@ -60,9 +60,10 @@
     [_topLab sizeToFit];
     [_bottomLab sizeToFit];
     
-    CGFloat verticalGap = (self.height - _topLab.height - _bottomLab.height) * 0.33;
-    _topLab.top = verticalGap;
-    _bottomLab.top = _topLab.bottom + verticalGap;
+    CGFloat baseGap = (self.height - _topLab.height - _bottomLab.height) * 0.2;
+    CGFloat top = baseGap * 2;
+    _topLab.top = top;
+    _bottomLab.top = _topLab.bottom + baseGap;
     _topLab.centerX = _bottomLab.centerX = self.width * 0.5;
 }
 
@@ -79,13 +80,15 @@
 
 @end
 
+#define SEPARATOR_WIDTH (1 / [UIScreen mainScreen].scale)
+
 @interface SSJSeparatorFormView ()
 
 @property (nonatomic, strong) NSMutableArray *cells;
 
-@property (nonatomic, strong) NSMutableArray *rowSeparators;
+@property (nonatomic, strong) NSMutableArray *horizontalSeparators;
 
-@property (nonatomic, strong) NSMutableArray *cellSeparators;
+@property (nonatomic, strong) NSMutableArray *verticalSeparators;
 
 @end
 
@@ -94,8 +97,8 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         _cells = [[NSMutableArray alloc] init];
-        _rowSeparators = [[NSMutableArray alloc] init];
-        _cellSeparators = [[NSMutableArray alloc] init];
+        _horizontalSeparators = [[NSMutableArray alloc] init];
+        _verticalSeparators = [[NSMutableArray alloc] init];
     }
     return self;
 }
@@ -107,12 +110,12 @@
         NSArray *rowCells = _cells[rowIdx];
         CGFloat cellWidth = self.width / rowCells.count;
         
-        if (rowIdx < _rowSeparators.count) {
-            UIView *rowSeparator = _rowSeparators[rowIdx];
-            rowSeparator.frame = CGRectMake(_horizontalSeparatorInset.left, (rowIdx + 1) * rowHeight, self.width - _horizontalSeparatorInset.left - _horizontalSeparatorInset.right, 1);
+        if (rowIdx < _horizontalSeparators.count) {
+            UIView *rowSeparator = _horizontalSeparators[rowIdx];
+            rowSeparator.frame = CGRectMake(_horizontalSeparatorInset.left, (rowIdx + 1) * rowHeight, self.width - _horizontalSeparatorInset.left - _horizontalSeparatorInset.right, SEPARATOR_WIDTH);
         }
         
-        NSArray *cellSeparators = _cellSeparators[rowIdx];
+        NSArray *cellSeparators = _verticalSeparators[rowIdx];
         
         for (NSUInteger cellIdx = 0; cellIdx < rowCells.count; cellIdx ++) {
             SSJSeparatorFormViewCell *cell = rowCells[cellIdx];
@@ -120,7 +123,8 @@
             
             if (cellSeparators.count > cellIdx) {
                 UIView *cellSeparator = cellSeparators[cellIdx];
-                cellSeparator.frame = CGRectMake((cellIdx + 1) * cellWidth, _horizontalSeparatorInset.top, 1, self.width - _horizontalSeparatorInset.top - _horizontalSeparatorInset.bottom);
+                CGFloat top = rowHeight * rowIdx;
+                cellSeparator.frame = CGRectMake((cellIdx + 1) * cellWidth, top + _verticalSeparatorInset.top, SEPARATOR_WIDTH, rowHeight - _verticalSeparatorInset.top - _verticalSeparatorInset.bottom);
             }
         }
     }
@@ -139,8 +143,8 @@
     [self setNeedsLayout];
     
     [_cells removeAllObjects];
-    [_rowSeparators removeAllObjects];
-    [_cellSeparators removeAllObjects];
+    [_horizontalSeparators removeAllObjects];
+    [_verticalSeparators removeAllObjects];
     
     NSUInteger rowCount = [_dataSource numberOfRowsInSeparatorFormView:self];
     
@@ -152,14 +156,15 @@
         if (rowIdx > 0) {
             UIView *rowSeparator = [[UIView alloc] init];
             rowSeparator.backgroundColor = _separatorColor;
-            [_rowSeparators addObject:rowSeparator];
+            [self insertSubview:rowSeparator atIndex:100];
+            [_horizontalSeparators addObject:rowSeparator];
         }
         
         NSMutableArray *cellSeparators = [NSMutableArray arrayWithCapacity:cellCount];
         
         for (NSUInteger cellIndex = 0; cellIndex < cellCount; cellIndex ++) {
             
-            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:cellCount inSection:rowCount];
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:cellIndex inSection:rowIdx];
             SSJSeparatorFormViewCellItem *item = [_dataSource separatorFormView:self itemForCellAtIndex:indexPath];
             
             SSJSeparatorFormViewCell *cell = [[SSJSeparatorFormViewCell alloc] init];
@@ -170,11 +175,12 @@
             if (cellIndex > 0) {
                 UIView *cellSeparator = [[UIView alloc] init];
                 cellSeparator.backgroundColor = _separatorColor;
+                [self insertSubview:cellSeparator atIndex:100];
                 [cellSeparators addObject:cellSeparator];
             }
         }
         
-        [_cellSeparators addObject:cellSeparators];
+        [_verticalSeparators addObject:cellSeparators];
         
         [_cells addObject:rowCells];
     }
@@ -184,25 +190,25 @@
     if (!CGColorEqualToColor(_separatorColor.CGColor, separatorColor.CGColor)) {
         _separatorColor = separatorColor;
         
-        for (UIView *separator in _rowSeparators) {
+        for (UIView *separator in _horizontalSeparators) {
             separator.backgroundColor = _separatorColor;
         }
         
-        for (UIView *separator in _cellSeparators) {
+        for (UIView *separator in _verticalSeparators) {
             separator.backgroundColor = _separatorColor;
         }
     }
 }
 
 - (void)setHorizontalSeparatorInset:(UIEdgeInsets)horizontalSeparatorInset {
-    if (UIEdgeInsetsEqualToEdgeInsets(_horizontalSeparatorInset, horizontalSeparatorInset)) {
+    if (!UIEdgeInsetsEqualToEdgeInsets(_horizontalSeparatorInset, horizontalSeparatorInset)) {
         _horizontalSeparatorInset = horizontalSeparatorInset;
         [self setNeedsLayout];
     }
 }
 
 - (void)setVerticalSeparatorInset:(UIEdgeInsets)verticalSeparatorInset {
-    if (UIEdgeInsetsEqualToEdgeInsets(_verticalSeparatorInset, verticalSeparatorInset)) {
+    if (!UIEdgeInsetsEqualToEdgeInsets(_verticalSeparatorInset, verticalSeparatorInset)) {
         _verticalSeparatorInset = verticalSeparatorInset;
         [self setNeedsLayout];
     }

@@ -13,8 +13,6 @@
 
 @property (nonatomic) SSJLoanType type;
 
-//@property (nonatomic) SSJLoanCompoundChargeType chargeType;
-
 @property (nonatomic, copy) SSJLoanChargeModel *chargeModel;
 
 @property (nonatomic, copy) SSJLoanChargeModel *targetChargeModel;
