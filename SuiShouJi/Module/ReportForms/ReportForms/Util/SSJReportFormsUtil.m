@@ -19,24 +19,36 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
 @implementation SSJReportFormsUtil
 
 + (void)queryForPeriodListWithIncomeOrPayType:(SSJBillType)type
+                                      booksId:(NSString *)booksId
                                       success:(void (^)(NSArray<SSJDatePeriod *> *))success
                                       failure:(void (^)(NSError *))failure {
     
-    SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID()];
-    if (!userItem.currentBooksId.length) {
-        userItem.currentBooksId = SSJUSERID();
+    if (!booksId) {
+        SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID()];
+        booksId = userItem.currentBooksId.length ? userItem.currentBooksId: SSJUSERID();
     }
+    
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         FMResultSet *result = nil;
         switch (type) {
             case SSJBillTypeIncome:
             case SSJBillTypePay: {
                 NSString *incomeOrPayType = type == SSJBillTypeIncome ? @"0" : @"1";
-                result = [db executeQuery:@"select distinct strftime('%Y-%m', a.cbilldate) from bk_user_charge as a, bk_bill_type as b where a.cuserid = ? and a.ibillid = b.id and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and a.cbooksid = ? and b.itype = ? and b.istate <> 2 order by a.cbilldate", SSJUSERID(), userItem.currentBooksId, incomeOrPayType];
+                if ([booksId isEqualToString:@"all"]) {
+                    result = [db executeQuery:@"select distinct strftime('%Y-%m', a.cbilldate) from bk_user_charge as a, bk_bill_type as b where a.cuserid = ? and a.ibillid = b.id and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and b.itype = ? and b.istate <> 2 order by a.cbilldate", SSJUSERID(), incomeOrPayType];
+                } else {
+                    result = [db executeQuery:@"select distinct strftime('%Y-%m', a.cbilldate) from bk_user_charge as a, bk_bill_type as b where a.cuserid = ? and a.ibillid = b.id and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and a.cbooksid = ? and b.itype = ? and b.istate <> 2 order by a.cbilldate", SSJUSERID(), booksId, incomeOrPayType];
+                }
+                
             }   break;
                 
             case SSJBillTypeSurplus: {
-                result = [db executeQuery:@"select distinct strftime('%Y-%m', a.cbilldate) from bk_user_charge as a, bk_bill_type as b where a.cuserid = ? and a.ibillid = b.id and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and a.cbooksid = ? and b.istate <> 2 order by a.cbilldate", SSJUSERID(), userItem.currentBooksId];
+                if ([booksId isEqualToString:@"all"]) {
+                    result = [db executeQuery:@"select distinct strftime('%Y-%m', a.cbilldate) from bk_user_charge as a, bk_bill_type as b where a.cuserid = ? and a.ibillid = b.id and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and b.istate <> 2 order by a.cbilldate", SSJUSERID()];
+                } else {
+                    result = [db executeQuery:@"select distinct strftime('%Y-%m', a.cbilldate) from bk_user_charge as a, bk_bill_type as b where a.cuserid = ? and a.ibillid = b.id and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and a.cbooksid = ? and b.istate <> 2 order by a.cbilldate", SSJUSERID(), booksId];
+                }
+                
             }   break;
                 
             case SSJBillTypeUnknown:
@@ -93,6 +105,7 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
 }
 
 + (void)queryForIncomeOrPayType:(SSJBillType)type
+                        booksId:(NSString *)booksId
                       startDate:(NSDate *)startDate
                         endDate:(NSDate *)endDate
                         success:(void(^)(NSArray<SSJReportFormsItem *> *result))success
@@ -101,11 +114,11 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
     switch (type) {
         case SSJBillTypeIncome:
         case SSJBillTypePay:
-            [self queryForIncomeOrPayChargeWithType:type startDate:startDate endDate:endDate success:success failure:failure];
+            [self queryForIncomeOrPayChargeWithType:type booksId:booksId startDate:startDate endDate:endDate success:success failure:failure];
             break;
             
         case SSJBillTypeSurplus:
-            [self queryForSurplusWithStartDate:startDate endDate:endDate success:success failure:failure];
+            [self queryForSurplusWithBooksId:booksId startDate:startDate endDate:endDate success:success failure:failure];
             break;
             
         case SSJBillTypeUnknown:
@@ -116,6 +129,7 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
 
 //  查询收支数据
 + (void)queryForIncomeOrPayChargeWithType:(SSJBillType)type
+                                  booksId:(NSString *)booksId
                                 startDate:(NSDate *)startDate
                                   endDate:(NSDate *)endDate
                                   success:(void (^)(NSArray <SSJReportFormsItem *> *result))success
@@ -145,15 +159,26 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
     NSString *beginDateStr = [startDate formattedDateWithFormat:@"yyyy-MM-dd"];
     NSString *endDateStr = [endDate formattedDateWithFormat:@"yyyy-MM-dd"];
     
-    SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID()];
-    
-    if (!userItem.currentBooksId.length) {
-        userItem.currentBooksId = SSJUSERID();
+    if (!booksId) {
+        SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID()];
+        booksId = userItem.currentBooksId.length ? userItem.currentBooksId: SSJUSERID();
     }
 
     //  查询不同收支类型的总额
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        FMResultSet *amountResultSet = [db executeQuery:@"select sum(a.IMONEY) from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.CBILLDATE >= ? and a.cbilldate <= ? and a.cbilldate <= datetime('now', 'localtime') and a.CUSERID = ? and a.OPERATORTYPE <> 2 and a.cbooksid = ? and b.istate <> 2 and b.ITYPE = ?", beginDateStr , endDateStr, SSJUSERID(), userItem.currentBooksId, incomeOrPayType];
+        NSMutableString *sql_1 = [@"select sum(a.IMONEY) from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.cbilldate >= :beginDateStr and a.cbilldate <= :endDateStr and a.cbilldate <= datetime('now', 'localtime') and a.cuserid = :userId and a.operatortype <> 2 and b.istate <> 2 and b.itype = :type" mutableCopy];
+        
+        NSMutableDictionary *params_1 = [@{@"beginDateStr":beginDateStr,
+                                         @"endDateStr":endDateStr,
+                                         @"userId":SSJUSERID(),
+                                         @"type":incomeOrPayType} mutableCopy];
+        
+        if (![booksId isEqualToString:@"all"]) {
+            [sql_1 appendString:@" and a.cbooksid = :booksId"];
+            [params_1 setObject:booksId forKey:@"booksId"];
+        }
+        
+        FMResultSet *amountResultSet = [db executeQuery:sql_1 withParameterDictionary:params_1];
         
         if (!amountResultSet) {
             SSJPRINT(@">>>SSJ\n class:%@\n method:%@\n message:%@\n error:%@",NSStringFromClass([self class]), NSStringFromSelector(_cmd), [db lastErrorMessage], [db lastError]);
@@ -179,7 +204,21 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
         }
         
         //  查询不同收支类型相应的金额、名称、图标、颜色
-        FMResultSet *resultSet = [db executeQuery:@"select sum(a.imoney), b.id, b.cname, b.ccoin, b.ccolor from bk_user_charge as a, bk_bill_type as b where a.cuserid = ? and a.ibillid = b.id and a.cbilldate >= ? and a.cbilldate <= ? and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and a.cbooksid = ? and b.itype = ? and b.istate <> 2 group by b.id", SSJUSERID(), beginDateStr, endDateStr, userItem.currentBooksId, incomeOrPayType];
+        NSMutableString *sql_2 = [@"select sum(a.imoney), b.id, b.cname, b.ccoin, b.ccolor from bk_user_charge as a, bk_bill_type as b where a.cuserid = :userId and a.ibillid = b.id and a.cbilldate >= :beginDateStr and a.cbilldate <= :endDateStr and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and b.itype = :type and b.istate <> 2" mutableCopy];
+        
+        NSMutableDictionary *params_2 = [@{@"userId":SSJUSERID(),
+                                           @"beginDateStr":beginDateStr,
+                                           @"endDateStr":endDateStr,
+                                           @"type":incomeOrPayType} mutableCopy];
+        
+        if (![booksId isEqualToString:@"all"]) {
+            [sql_2 appendString:@" and a.cbooksid = :booksId"];
+            [params_2 setObject:booksId forKey:@"booksId"];
+        }
+        
+        [sql_2 appendString:@" group by b.id"];
+        
+        FMResultSet *resultSet = [db executeQuery:sql_2 withParameterDictionary:params_2];
         
         if (!resultSet) {
             SSJPRINT(@">>>SSJ\n class:%@\n method:%@\n message:%@\n error:%@",NSStringFromClass([self class]), NSStringFromSelector(_cmd), [db lastErrorMessage], [db lastError]);
@@ -210,15 +249,15 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
 }
 
 //  查询结余数据
-+ (void)queryForSurplusWithStartDate:(NSDate *)startDate
-                             endDate:(NSDate *)endDate
-                             success:(void (^)(NSArray <SSJReportFormsItem *> *result))success
-                             failure:(void (^)(NSError *error))failure {
++ (void)queryForSurplusWithBooksId:(NSString *)booksId
+                         startDate:(NSDate *)startDate
+                           endDate:(NSDate *)endDate
+                           success:(void (^)(NSArray <SSJReportFormsItem *> *result))success
+                           failure:(void (^)(NSError *error))failure {
     
-    SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID()];
-    
-    if (!userItem.currentBooksId.length) {
-        userItem.currentBooksId = SSJUSERID();
+    if (!booksId) {
+        SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID()];
+        booksId = userItem.currentBooksId.length ? userItem.currentBooksId: SSJUSERID();
     }
 
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
@@ -226,7 +265,19 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
         NSString *beginDateStr = [startDate formattedDateWithFormat:@"yyyy-MM-dd"];
         NSString *endDateStr = [endDate formattedDateWithFormat:@"yyyy-MM-dd"];
         
-        FMResultSet *resultSet = [db executeQuery:@"select sum(a.imoney), b.itype from bk_user_charge as a, bk_bill_type as b where a.cuserid = ? and a.ibillid = b.id and a.cbilldate >= ? and a.cbilldate <= ? and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and a.cbooksid = ? and b.istate <> 2 group by b.itype order by b.itype desc", SSJUSERID(), beginDateStr, endDateStr, userItem.currentBooksId];
+        NSMutableString *sql = [@"select sum(a.imoney), b.itype from bk_user_charge as a, bk_bill_type as b where a.cuserid = :userId and a.ibillid = b.id and a.cbilldate >= :beginDateStr and a.cbilldate <= :endDateStr and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and b.istate <> 2" mutableCopy];
+        
+        NSMutableDictionary *params = [@{@"userId":SSJUSERID(),
+                                         @"beginDateStr":beginDateStr,
+                                         @"endDateStr":endDateStr} mutableCopy];
+        
+        if (![booksId isEqualToString:@"all"]) {
+            [sql appendString:@" and a.cbooksid = :booksId"];
+            [params setObject:booksId forKey:@"booksId"];
+        }
+        [sql appendString:@" group by b.itype order by b.itype desc"];
+        
+        FMResultSet *resultSet = [db executeQuery:sql withParameterDictionary:params];
         
         if (!resultSet) {
             SSJPRINT(@">>>SSJ\n class:%@\n method:%@\n message:%@\n error:%@",NSStringFromClass([self class]), NSStringFromSelector(_cmd), [db lastErrorMessage], [db lastError]);
@@ -279,16 +330,15 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
         return;
     }
     
-    SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID()];
-    
-    if (!booksId.length) {
-        booksId = SSJUSERID();
+    if (!booksId) {
+        SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID()];
+        booksId = userItem.currentBooksId.length ? userItem.currentBooksId: SSJUSERID();
     }
 
     NSMutableString *sqlStr = [NSMutableString stringWithFormat:@"select a.imoney, a.cbilldate, b.itype from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = '%@' and a.operatortype <> 2 and b.istate <> 2 and a.cbilldate <= datetime('now', 'localtime')", SSJUSERID()];
     
     if (![booksId isEqualToString:@"all"]) {
-        [sqlStr appendFormat:@" and a.cbooksid = '%@'", userItem.currentBooksId];
+        [sqlStr appendFormat:@" and a.cbooksid = '%@'", booksId];
     }
     
     if (startDate) {

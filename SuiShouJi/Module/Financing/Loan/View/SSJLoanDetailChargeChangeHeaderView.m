@@ -33,6 +33,9 @@
 - (void)layoutSubviews {
     [_titleLab sizeToFit];
     _titleLab.left = 15;
+    _titleLab.centerY = self.height * 0.5;
+    
+//    _arrow
 }
 
 - (void)setExpanded:(BOOL)expanded {

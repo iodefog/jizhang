@@ -413,7 +413,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
     
     [self.view ssj_showLoadingIndicator];
     
-    [SSJReportFormsUtil queryForPeriodListWithIncomeOrPayType:[self currentType] success:^(NSArray<SSJDatePeriod *> *periods) {
+    [SSJReportFormsUtil queryForPeriodListWithIncomeOrPayType:[self currentType] booksId:nil success:^(NSArray<SSJDatePeriod *> *periods) {
         
         if (periods.count == 0) {
             _dateAxisView.hidden = YES;
@@ -562,7 +562,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
     switch (_typeAndMemberControl.option) {
         case SSJReportFormsMemberAndCategorySwitchControlOptionCategory: {
             [self.view ssj_showLoadingIndicator];
-            [SSJReportFormsUtil queryForIncomeOrPayType:[self currentType] startDate:period.startDate endDate:period.endDate success:^(NSArray<SSJReportFormsItem *> *result) {
+            [SSJReportFormsUtil queryForIncomeOrPayType:[self currentType] booksId:nil startDate:period.startDate endDate:period.endDate success:^(NSArray<SSJReportFormsItem *> *result) {
                 [self.view ssj_hideLoadingIndicator];
                 [self organiseDatasWithResult:result];
             } failure:^(NSError *error) {

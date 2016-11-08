@@ -211,8 +211,7 @@
 
 - (void)reloadData {
     [self.view ssj_showLoadingIndicator];
-    SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID()];
-    [SSJReportFormsUtil queryForBillStatisticsWithType:(int)_segmentControl.selectedSegmentIndex startDate:_startDate endDate:_endDate booksId:userItem.currentBooksId success:^(NSDictionary *result) {
+    [SSJReportFormsUtil queryForBillStatisticsWithType:(int)_segmentControl.selectedSegmentIndex startDate:_startDate endDate:_endDate booksId:nil success:^(NSDictionary *result) {
         
         [self.view ssj_hideLoadingIndicator];
         _datas = result[SSJReportFormsCurveModelListKey];
