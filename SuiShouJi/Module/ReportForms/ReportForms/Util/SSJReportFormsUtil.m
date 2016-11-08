@@ -268,23 +268,28 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
 + (void)queryForBillStatisticsWithType:(int)type
                              startDate:(NSDate *)startDate
                                endDate:(NSDate *)endDate
+                               booksId:(NSString *)booksId
                                success:(void(^)(NSDictionary *result))success
                                failure:(void (^)(NSError *error))failure {
     
-    if (type != 0 && type != 1 && type != 2) {
+    if (type != 0 && type != 1) {
         if (failure) {
-            failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"type参数错误，只能为0、1、2"}]);
+            failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"type参数错误，只能为0、1"}]);
         }
         return;
     }
     
     SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID()];
     
-    if (!userItem.currentBooksId.length) {
-        userItem.currentBooksId = SSJUSERID();
+    if (!booksId.length) {
+        booksId = SSJUSERID();
     }
 
-    NSMutableString *sqlStr = [NSMutableString stringWithFormat:@"select a.imoney, a.cbilldate, b.itype from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = '%@' and a.operatortype <> 2 and a.cbooksid = '%@' and b.istate <> 2 and a.cbilldate <= datetime('now', 'localtime')", SSJUSERID(), userItem.currentBooksId];
+    NSMutableString *sqlStr = [NSMutableString stringWithFormat:@"select a.imoney, a.cbilldate, b.itype from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = '%@' and a.operatortype <> 2 and b.istate <> 2 and a.cbilldate <= datetime('now', 'localtime')", SSJUSERID()];
+    
+    if (![booksId isEqualToString:@"all"]) {
+        [sqlStr appendFormat:@" and a.cbooksid = '%@'", userItem.currentBooksId];
+    }
     
     if (startDate) {
         NSString *startDateStr = [startDate formattedDateWithFormat:@"yyyy-MM-dd"];
@@ -303,7 +308,7 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
         if (!resultSet) {
             SSJPRINT(@">>>SSJ\n class:%@\n method:%@\n message:%@\n error:%@",NSStringFromClass([self class]), NSStringFromSelector(_cmd), [db lastErrorMessage], [db lastError]);
             if (failure) {
-                SSJDispatch_main_async_safe(^{
+                SSJDispatchMainAsync(^{
                     failure([db lastError]);
                 });
             }
@@ -427,7 +432,7 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
         endDateStr = endDate ? [endDate formattedDateWithFormat:@"yyyy-MM-dd"] : endDateStr;
         
         if (success) {
-            SSJDispatch_main_async_safe(^{
+            SSJDispatchMainAsync(^{
                 NSMutableDictionary *result = [NSMutableDictionary dictionary];
                 if (list) {
                     [result setObject:list forKey:SSJReportFormsCurveModelListKey];
