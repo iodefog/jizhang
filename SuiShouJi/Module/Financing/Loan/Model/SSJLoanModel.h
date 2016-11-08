@@ -24,7 +24,7 @@
 // 借贷图标
 @property (nonatomic, copy) NSString *image;
 
-// 借入／借出金额
+// 剩余借入／借出金额（包含扣除余额变更、追加变更、结清）
 @property (nonatomic) double jMoney;
 
 // 借入／借出所属账户

@@ -9,6 +9,7 @@
 #import "SSJLoanDetailViewController.h"
 #import "SSJAddOrEditLoanViewController.h"
 #import "SSJLoanCloseOutViewController.h"
+#import "SSJSeparatorFormView.h"
 #import "SSJLoanDetailCell.h"
 #import "SSJLoanHelper.h"
 #import "SSJLocalNotificationStore.h"
@@ -16,7 +17,7 @@
 
 static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
 
-@interface SSJLoanDetailViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface SSJLoanDetailViewController () <UITableViewDataSource, UITableViewDelegate, SSJSeparatorFormViewDataSource>
 
 @property (nonatomic, strong) UITableView *tableView;
 
@@ -28,9 +29,13 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
 
 @property (nonatomic, strong) UIImageView *stampView;
 
+@property (nonatomic, strong) SSJSeparatorFormView *headerView;
+
 @property (nonatomic, strong) UIBarButtonItem *editItem;
 
 @property (nonatomic, strong) NSArray *cellItems;
+
+@property (nonatomic, strong) NSArray *headerItems;
 
 @property (nonatomic, strong) SSJLoanModel *loanModel;
 
@@ -39,13 +44,6 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
 @implementation SSJLoanDetailViewController
 
 #pragma mark - Lifecycle
-- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-        
-    }
-    return self;
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -54,6 +52,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     [self.view addSubview:self.deleteBtn];
     [self.view addSubview:self.closeOutBtn];
     [self.tableView addSubview:self.stampView];
+    self.tableView.tableHeaderView = self.headerView;
     
     [self updateAppearance];
 }
@@ -88,6 +87,29 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     return 10;
 }
 
+#pragma mark - SSJSeparatorFormViewDataSource
+- (NSUInteger)numberOfRowsInSeparatorFormView:(SSJSeparatorFormView *)view {
+    return 2;
+}
+
+- (NSUInteger)separatorFormView:(SSJSeparatorFormView *)view numberOfCellsInRow:(NSUInteger)row {
+    return 3;
+}
+
+- (SSJSeparatorFormViewCellItem *)separatorFormView:(SSJSeparatorFormView *)view itemForCellAtIndex:(NSIndexPath *)index {
+    if ([index compare:[NSIndexPath indexPathForRow:0 inSection:0]] == NSOrderedSame) {
+        
+    } else if ([index compare:[NSIndexPath indexPathForRow:0 inSection:0]] == NSOrderedSame) {
+        
+    } else if ([index compare:[NSIndexPath indexPathForRow:0 inSection:0]] == NSOrderedSame) {
+        
+    } else if ([index compare:[NSIndexPath indexPathForRow:0 inSection:0]] == NSOrderedSame) {
+        
+    } else {
+        return nil;
+    }
+}
+
 #pragma mark - Private
 - (void)updateAppearance {
     _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
@@ -110,6 +132,132 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     
     [_revertBtn ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
     [_deleteBtn ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
+}
+
+- (void)organiseHeaderItems {
+    double loanSum = 0;     // 借贷总额
+    double interest = 0;    // 产生利息
+    double payment = 0;     // 已收、已还金额
+    for (SSJLoanChargeModel *chargeModel in self.loanModel.chargeModels) {
+        if (chargeModel.chargeType == SSJLoanCompoundChargeTypeCreate) {
+            loanSum = chargeModel.money;
+        } else if (chargeModel.chargeType == SSJLoanCompoundChargeTypeBalanceIncrease) {
+            loanSum += chargeModel.money;
+        } else if (chargeModel.chargeType == SSJLoanCompoundChargeTypeBalanceDecrease) {
+            loanSum -= chargeModel.money;
+        } else if (chargeModel.chargeType == SSJLoanCompoundChargeTypeAdd) {
+            loanSum += chargeModel.money;
+        } else if (chargeModel.chargeType == SSJLoanCompoundChargeTypeInterest) {
+            interest += chargeModel.money;
+        } else if (chargeModel.chargeType == SSJLoanCompoundChargeTypeRepayment) {
+            payment += chargeModel.money;
+        }
+    }
+    
+    SSJSeparatorFormViewCellItem *surplusItem = nil;
+    SSJSeparatorFormViewCellItem *sumItem = nil;
+    SSJSeparatorFormViewCellItem *interestItem = nil;
+    SSJSeparatorFormViewCellItem *lenderItem = nil;
+    
+    NSString *surplusTitle = nil;
+    NSString *sumTitle = nil;
+    NSString *interestTitle = nil;
+    NSString *paymentTitle = nil;
+    NSString *lenderTitle = nil;
+    
+    switch (self.loanModel.type) {
+        case SSJLoanTypeLend: {
+            surplusTitle = @"剩余借出款";
+            sumTitle = @"借出总额";
+            interestTitle = @"利息收入";
+            paymentTitle = @"已收金额";
+            lenderTitle = @"利息收入";
+            
+            surplusItem = [SSJSeparatorFormViewCellItem itemWithTopTitle:@"剩余借出款"
+                                                             bottomTitle:[NSString stringWithFormat:@"%.2f", self.loanModel.jMoney]
+                                                           topTitleColor:[UIColor whiteColor]
+                                                        bottomTitleColor:[UIColor whiteColor]
+                                                            topTitleFont:[UIFont systemFontOfSize:11]
+                                                         bottomTitleFont:[UIFont systemFontOfSize:24]];
+            
+            sumItem = [SSJSeparatorFormViewCellItem itemWithTopTitle:@"借出总额"
+                                                         bottomTitle:[NSString stringWithFormat:@"%.2f", loanSum]
+                                                       topTitleColor:[UIColor whiteColor]
+                                                    bottomTitleColor:[UIColor whiteColor]
+                                                        topTitleFont:[UIFont systemFontOfSize:11]
+                                                     bottomTitleFont:[UIFont systemFontOfSize:15]];
+            
+            if (interest > 0) {
+                interestItem = [SSJSeparatorFormViewCellItem itemWithTopTitle:@"利息收入"
+                                                                  bottomTitle:[NSString stringWithFormat:@"%.2f", interest]
+                                                                topTitleColor:[UIColor whiteColor]
+                                                             bottomTitleColor:[UIColor whiteColor]
+                                                                 topTitleFont:[UIFont systemFontOfSize:11]
+                                                              bottomTitleFont:[UIFont systemFontOfSize:15]];
+            } else {
+                interestItem = [SSJSeparatorFormViewCellItem itemWithTopTitle:@"已收金额"
+                                                                  bottomTitle:[NSString stringWithFormat:@"%.2f", payment]
+                                                                topTitleColor:[UIColor whiteColor]
+                                                             bottomTitleColor:[UIColor whiteColor]
+                                                                 topTitleFont:[UIFont systemFontOfSize:11]
+                                                              bottomTitleFont:[UIFont systemFontOfSize:15]];
+            }
+            
+            lenderItem = [SSJSeparatorFormViewCellItem itemWithTopTitle:@"被谁借款"
+                                                            bottomTitle:self.loanModel.lender
+                                                          topTitleColor:[UIColor whiteColor]
+                                                       bottomTitleColor:[UIColor whiteColor]
+                                                           topTitleFont:[UIFont systemFontOfSize:11]
+                                                        bottomTitleFont:[UIFont systemFontOfSize:15]];
+        }
+            break;
+            
+        case SSJLoanTypeBorrow: {
+            surplusTitle = @"剩余借出款";
+            sumTitle = @"借出总额";
+            interestTitle = @"利息收入";
+            paymentTitle = @"已收金额";
+            lenderTitle = @"利息收入";
+            surplusItem = [SSJSeparatorFormViewCellItem itemWithTopTitle:@"剩余欠款"
+                                                             bottomTitle:[NSString stringWithFormat:@"%.2f", self.loanModel.jMoney]
+                                                           topTitleColor:[UIColor whiteColor]
+                                                        bottomTitleColor:[UIColor whiteColor]
+                                                            topTitleFont:[UIFont systemFontOfSize:11]
+                                                         bottomTitleFont:[UIFont systemFontOfSize:24]];
+            
+            sumItem = [SSJSeparatorFormViewCellItem itemWithTopTitle:@"欠款总额"
+                                                         bottomTitle:[NSString stringWithFormat:@"%.2f", loanSum]
+                                                       topTitleColor:[UIColor whiteColor]
+                                                    bottomTitleColor:[UIColor whiteColor]
+                                                        topTitleFont:[UIFont systemFontOfSize:11]
+                                                     bottomTitleFont:[UIFont systemFontOfSize:15]];
+            
+            if (interest > 0) {
+                interestItem = [SSJSeparatorFormViewCellItem itemWithTopTitle:@"利息支出"
+                                                                  bottomTitle:[NSString stringWithFormat:@"%.2f", interest]
+                                                                topTitleColor:[UIColor whiteColor]
+                                                             bottomTitleColor:[UIColor whiteColor]
+                                                                 topTitleFont:[UIFont systemFontOfSize:11]
+                                                              bottomTitleFont:[UIFont systemFontOfSize:15]];
+            } else {
+                interestItem = [SSJSeparatorFormViewCellItem itemWithTopTitle:@"已还金额"
+                                                                  bottomTitle:[NSString stringWithFormat:@"%.2f", payment]
+                                                                topTitleColor:[UIColor whiteColor]
+                                                             bottomTitleColor:[UIColor whiteColor]
+                                                                 topTitleFont:[UIFont systemFontOfSize:11]
+                                                              bottomTitleFont:[UIFont systemFontOfSize:15]];
+            }
+            
+            lenderItem = [SSJSeparatorFormViewCellItem itemWithTopTitle:@"欠谁钱款"
+                                                            bottomTitle:self.loanModel.lender
+                                                          topTitleColor:[UIColor whiteColor]
+                                                       bottomTitleColor:[UIColor whiteColor]
+                                                           topTitleFont:[UIFont systemFontOfSize:11]
+                                                        bottomTitleFont:[UIFont systemFontOfSize:15]];
+        }
+            break;
+    }
+    
 }
 
 - (void)organiseCellItems {
@@ -303,9 +451,12 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
         [self.view ssj_hideLoadingIndicator];
         self.loanModel = model;
         [self updateTitle];
-        [self organiseCellItems];
         [self updateSubViewHidden];
+        [self organiseCellItems];
         [self.tableView reloadData];
+        [self organiseHeaderItems];
+        [self.headerView reloadData];
+        self.headerView.backgroundColor = [UIColor ssj_colorWithHex:[SSJLoanHelper queryForFundColorWithID:self.loanModel.fundID]];
         
         switch (self.loanModel.type) {
             case SSJLoanTypeLend:
@@ -491,6 +642,15 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
         _editItem = [[UIBarButtonItem alloc] initWithTitle:@"编辑" style:UIBarButtonItemStylePlain target:self action:@selector(editAction)];
     }
     return _editItem;
+}
+
+- (SSJSeparatorFormView *)headerView {
+    if (!_headerView) {
+        _headerView = [[SSJSeparatorFormView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, 174)];
+        _headerView.backgroundColor = [UIColor ssj_colorWithHex:@""];
+        _headerView.dataSource = self;
+    }
+    return _headerView;
 }
 
 @end

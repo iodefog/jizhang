@@ -8,31 +8,38 @@
 
 #import <Foundation/Foundation.h>
 
-/**
- 借贷变更流水类型
+@class FMResultSet;
 
- - SSJLoanChargeTypeCreate: 创建借贷产生的流水
- - SSJLoanChargeTypeBalanceIncrease: 增加借贷余额产生的流水
- - SSJLoanChargeTypeBalanceReduce: 减少借贷余额产生的流水
- - SSJLoanChargeTypeRepayment: 还款/收款产生的流水
- - SSJLoanChargeTypeAdd: 追加借出/欠款产生的流水
- - SSJLoanChargeTypeCloseOut: 结清产生的流水
- - SSJLoanChargeTypeInterest: 还款/收款、结清产生的利息流水
- 
+/**
+ 借贷类型
+
+ - SSJLoanTypeLend: 借入
+ - SSJLoanTypeLend: 借出
  */
-typedef NS_ENUM(NSUInteger, SSJLoanChargeType) {
-    SSJLoanChargeTypeCreate,
-    SSJLoanChargeTypeBalanceIncrease,
-    SSJLoanChargeTypeBalanceReduce,
-    SSJLoanChargeTypeRepayment,
-    SSJLoanChargeTypeAdd,
-    SSJLoanChargeTypeCloseOut,
-    SSJLoanChargeTypeInterest
+typedef NS_ENUM(NSInteger, SSJLoanType) {
+    SSJLoanTypeLend,
+    SSJLoanTypeBorrow
 };
 
-typedef NS_ENUM(NSInteger, SSJLoanType) {
-    SSJLoanTypeLend,    // 借出
-    SSJLoanTypeBorrow   // 借入
+/**
+ 借贷变更流水类型
+ 
+ - SSJLoanCompoundChargeTypeCreate: 创建借贷产生的流水
+ - SSJLoanCompoundChargeTypeBalanceChange: 借贷余额变更产生的流水
+ - SSJLoanCompoundChargeTypeRepayment: 还款/收款产生的流水
+ - SSJLoanCompoundChargeTypeAdd: 追加借出/欠款产生的流水
+ - SSJLoanCompoundChargeTypeCloseOut: 结清产生的流水
+ - SSJLoanCompoundChargeTypeInterest: 还款/收款、结清产生的利息流水
+ 
+ */
+typedef NS_ENUM(NSUInteger, SSJLoanCompoundChargeType) {
+    SSJLoanCompoundChargeTypeCreate,
+    SSJLoanCompoundChargeTypeBalanceIncrease,
+    SSJLoanCompoundChargeTypeBalanceDecrease,
+    SSJLoanCompoundChargeTypeRepayment,
+    SSJLoanCompoundChargeTypeAdd,
+    SSJLoanCompoundChargeTypeCloseOut,
+    SSJLoanCompoundChargeTypeInterest
 };
 
 @interface SSJLoanChargeModel : NSObject <NSCopying>
@@ -42,6 +49,10 @@ typedef NS_ENUM(NSInteger, SSJLoanType) {
 @property (nonatomic, copy) NSString *fundId;
 
 @property (nonatomic, copy) NSString *billId;
+
+@property (nonatomic, copy) NSString *loanId;
+
+@property (nonatomic, copy) NSString *userId;
 
 @property (nonatomic, copy) NSString *memo;
 
@@ -53,10 +64,8 @@ typedef NS_ENUM(NSInteger, SSJLoanType) {
 
 @property (nonatomic) SSJLoanType type;
 
-//@property (nonatomic) SSJLoanChargeType chargeType;
-//
-//@property (nonatomic, copy) SSJLoanChargeModel *partnerModel;
-//
-//@property (nonatomic, copy) SSJLoanChargeModel *interestModel;
+@property (nonatomic) SSJLoanCompoundChargeType chargeType;
+
+@property (nonatomic) BOOL closedOut;
 
 @end

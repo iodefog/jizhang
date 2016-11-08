@@ -14,6 +14,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @class SSJReminderItem;
+@class SSJLoanCompoundChargeModel;
 
 @interface SSJLoanHelper : NSObject
 
@@ -117,6 +118,14 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSString *)queryForFundNameWithID:(NSString *)ID;
 
 /**
+ 查询资金账户颜色值
+
+ @param ID 资金账户的ID
+ @return 16进制颜色值
+ */
++ (NSString *)queryForFundColorWithID:(NSString *)ID;
+
+/**
  *  到今天为止产生的利息
  *
  *  @param model 借贷模型
@@ -145,13 +154,17 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (double)interestForEverydayWithLoanModel:(SSJLoanModel *)model;
 
-/**
- 根据model存储的信息查询此借贷的转帐流水、结清转帐流水、结清利息流水
 
- @param model model 借贷模型 ID、fundID、targetFundID不能为空；如果已结清endTargetFundID也不能为空
- @param db 数据库对象
+/**
+ 查询借贷流水详情
+
+ @param model 借贷流水中的莫一个子流水，转入、转出、利息等
+ @param success 成功的回调
+ @param failure 失败的回调
  */
-+ (void)queryLoanChargeWithModel:(SSJLoanModel *)model inDatabase:(FMDatabase *)db;
++ (void)queryLoanChangeDetailWithLoanChargeModel:(SSJLoanChargeModel *)model
+                                         success:(void (^)(SSJLoanCompoundChargeModel *model))success
+                                         failure:(void (^)(NSError *error))failure;
 
 @end
 

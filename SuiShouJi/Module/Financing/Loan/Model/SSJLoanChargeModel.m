@@ -7,6 +7,7 @@
 //
 
 #import "SSJLoanChargeModel.h"
+#import "FMResultSet.h"
 
 @implementation SSJLoanChargeModel
 
@@ -19,9 +20,8 @@
     model.billDate = self.billDate;
     model.memo = self.memo;
     model.type = self.type;
-//    model.partnerModel = self.partnerModel;
-//    model.interestModel = self.interestModel;
-    return model;
+    model.chargeType = self.chargeType;
+    return model;   
 }
 
 @end
