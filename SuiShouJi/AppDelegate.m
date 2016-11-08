@@ -122,7 +122,6 @@ NSDate *SCYEnterBackgroundTime() {
     //如果第一次打开记录当前时间
     if (SSJIsFirstLaunchForCurrentVersion()) {
         [[NSUserDefaults standardUserDefaults]setObject:[NSDate date]forKey:SSJLastPopTimeKey];
-        [[NSUserDefaults standardUserDefaults]setBool:NO forKey:SSJHaveLoginOrRegistKey];
         [SSJJspatchAnalyze removePatch];
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [SSJThemeUpdate updateLocalThemesIfneeded];

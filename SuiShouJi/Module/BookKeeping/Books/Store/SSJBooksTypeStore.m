@@ -441,10 +441,10 @@ NSString *const SSJReportFormsCurveModelEndDateForBooksKey = @"SSJReportFormsCur
 }
 
 + (void)queryForPeriodListWithsuccess:(void (^)(NSArray<SSJDatePeriod *> *))success
-                                      failure:(void (^)(NSError *))failure {
-    
+                                      failure:(void (^)(NSError *))failure{
+
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        FMResultSet *result = result = [db executeQuery:@"select distinct strftime('%Y-%m', a.cbilldate) from bk_user_charge as a, bk_bill_type as b where a.cuserid = ? and a.ibillid = b.id and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and a.cbooksid = ? and b.itype = ? and b.istate <> 2 order by a.cbilldate", SSJUSERID()];
+        FMResultSet *result = [db executeQuery:@"select distinct strftime('%Y-%m', a.cbilldate) from bk_user_charge as a, bk_bill_type as b where a.cuserid = ? and a.ibillid = b.id and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and b.istate <> 2 order by a.cbilldate", SSJUSERID()];
         
         if (!result) {
             if (failure) {

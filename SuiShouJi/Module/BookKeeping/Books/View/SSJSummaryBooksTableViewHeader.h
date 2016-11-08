@@ -14,6 +14,10 @@
 
 @interface SSJSummaryBooksTableViewHeader : UIView
 
+@property (nonatomic, copy) void(^periodSelectBlock)(NSInteger selectPeriod);
+
+@property (nonatomic, copy) void(^incocmeOrExpentureSelectBlock)(NSInteger incocmeOrExpenture);
+
 // 滚动日期选择
 @property(nonatomic, strong) SSJReportFormsScaleAxisView *dateAxisView;
 
@@ -34,5 +38,9 @@
 
 //  编辑、删除自定义时间按钮
 @property (nonatomic, strong) UIButton *addOrDeleteCustomPeriodBtn;
+
+@property (nonatomic) double totalIncome;
+
+@property (nonatomic) double totalExpenture;
 
 @end

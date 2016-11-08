@@ -17,6 +17,7 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
 #import "SSJDataSynchronizer.h"
 #import "SSJBooksEditeOrNewViewController.h"
 #import "SSJEditableCollectionView.h"
+#import "SSJSummaryBooksViewController.h"
 
 @interface SSJBooksTypeSelectViewController ()<SSJEditableCollectionViewDelegate,SSJEditableCollectionViewDataSource>
 
@@ -235,19 +236,23 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
 
 #pragma mark - Event
 - (void)rightButtonClicked:(id)sender{
-    _editeModel = !_editeModel;
-    self.rightButton.selected = !self.rightButton.isSelected;
-    self.editeButton.hidden = !self.rightButton.isSelected;
-    self.deleteButton.hidden = !self.rightButton.isSelected;
-    if (self.rightButton.isSelected) {
-        [MobClick event:@"accountbook_manage"];
-    }else{
-        [self.collectionView endEditing];
-        [self.selectedBooks removeAllObjects];
-    }
-    for (SSJBooksTypeItem *item in self.items) {
-        item.editeModel = self.rightButton.isSelected;
-    }
+
+    SSJSummaryBooksViewController *summaryVc = [[SSJSummaryBooksViewController alloc]init];
+    [self.navigationController pushViewController:summaryVc animated:YES];
+
+//    _editeModel = !_editeModel;
+//    self.rightButton.selected = !self.rightButton.isSelected;
+//    self.editeButton.hidden = !self.rightButton.isSelected;
+//    self.deleteButton.hidden = !self.rightButton.isSelected;
+//    if (self.rightButton.isSelected) {
+//        [MobClick event:@"accountbook_manage"];
+//    }else{
+//        [self.collectionView endEditing];
+//        [self.selectedBooks removeAllObjects];
+//    }
+//    for (SSJBooksTypeItem *item in self.items) {
+//        item.editeModel = self.rightButton.isSelected;
+//    }
 }
 
 - (void)editeButtonClicked:(id)sender{

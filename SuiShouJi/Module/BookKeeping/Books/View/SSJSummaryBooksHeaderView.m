@@ -44,7 +44,8 @@
 - (void)layoutSubviews{
     [super layoutSubviews];
     self.seperatorLine.center = CGPointMake(self.width / 2, self.height / 2);
-    self.incomeTitleLab.centerY = self.incomeLab.centerY = self.expentureTitleLab.centerY = self.expentureLab.centerY;
+    self.incomeTitleLab.centerY = self.expentureTitleLab.centerY = self.height / 2 - 12;
+    self.incomeLab.centerY = self.expentureLab.centerY = self.height / 2 + 12;
     self.incomeTitleLab.centerX = self.incomeLab.centerX = self.width / 4;
     self.expentureTitleLab.centerX = self.expentureLab.centerX = self.width / 2 + self.width / 4;
 }

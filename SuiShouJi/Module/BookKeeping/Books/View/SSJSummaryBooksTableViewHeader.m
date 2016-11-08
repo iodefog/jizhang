@@ -26,6 +26,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
+        self.backgroundColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         [self addSubview:self.summaryHeader];
         [self addSubview:self.dateAxisView];
         [self addSubview:self.firstLineLab];
@@ -75,7 +76,7 @@
 - (SSJReportFormsScaleAxisView *)dateAxisView {
     if (!_dateAxisView) {
         _dateAxisView = [[SSJReportFormsScaleAxisView alloc] initWithFrame:CGRectMake(0, 0, self.width, 50)];
-        _dateAxisView.backgroundColor = [UIColor clearColor];
+        _dateAxisView.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
         _dateAxisView.scaleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         _dateAxisView.selectedScaleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
     }
@@ -84,14 +85,13 @@
 
 - (SSJSegmentedControl *)periodSelectSegment {
     if (!_periodSelectSegment) {
-        _periodSelectSegment = [[SSJSegmentedControl alloc] initWithItems:@[@"日",@"月", @"周"]];
-        _periodSelectSegment.size = CGSizeMake(150, 45);
+        _periodSelectSegment = [[SSJSegmentedControl alloc] initWithItems:@[@"日",@"周",@"月"]];
+        _periodSelectSegment.size = CGSizeMake(225, 30);
         _periodSelectSegment.font = [UIFont systemFontOfSize:15];
         _periodSelectSegment.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         _periodSelectSegment.selectedBorderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
         [_periodSelectSegment setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]} forState:UIControlStateNormal];
         [_periodSelectSegment setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]} forState:UIControlStateSelected];
-        [_periodSelectSegment addTarget:self action:@selector(segmentControlValueDidChange) forControlEvents:UIControlEventValueChanged];
     }
     return _periodSelectSegment;
 }
@@ -105,9 +105,8 @@
         _incomOrExpenseSelectSegment.selectedBorderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
         [_incomOrExpenseSelectSegment setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]} forState:UIControlStateNormal];
         [_incomOrExpenseSelectSegment setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]} forState:UIControlStateSelected];
-        [_incomOrExpenseSelectSegment addTarget:self action:@selector(segmentControlValueDidChange) forControlEvents:UIControlEventValueChanged];
     }
-    return _periodSelectSegment;
+    return _incomOrExpenseSelectSegment;
 }
 
 -(UILabel *)firstLineLab{
@@ -149,7 +148,6 @@
         _customPeriodBtn.layer.borderWidth = 1;
         _customPeriodBtn.layer.cornerRadius = 15;
         _customPeriodBtn.hidden = YES;
-        [_customPeriodBtn addTarget:self action:@selector(enterCalendarVC) forControlEvents:UIControlEventTouchUpInside];
     }
     return _customPeriodBtn;
 }
@@ -159,9 +157,19 @@
         _addOrDeleteCustomPeriodBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _addOrDeleteCustomPeriodBtn.frame = CGRectMake(self.width - 50, self.dateAxisView.top, 50, 50);
         [_addOrDeleteCustomPeriodBtn setImage:[UIImage ssj_themeImageWithName:@"reportForms_edit"] forState:UIControlStateNormal];
-        [_addOrDeleteCustomPeriodBtn addTarget:self action:@selector(customPeriodBtnAction) forControlEvents:UIControlEventTouchUpInside];
+//        [_addOrDeleteCustomPeriodBtn addTarget:self action:@selector(customPeriodBtnAction) forControlEvents:UIControlEventTouchUpInside];
     }
     return _addOrDeleteCustomPeriodBtn;
+}
+
+- (void)setTotalIncome:(double)totalIncome{
+    _totalIncome = totalIncome;
+    self.summaryHeader.income = _totalIncome;
+}
+
+- (void)setTotalExpenture:(double)totalExpenture{
+    _totalExpenture = totalExpenture;
+    self.summaryHeader.expenture = _totalExpenture;
 }
 
 /*
