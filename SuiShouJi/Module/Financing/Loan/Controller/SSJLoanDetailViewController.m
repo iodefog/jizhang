@@ -9,6 +9,7 @@
 #import "SSJLoanDetailViewController.h"
 #import "SSJAddOrEditLoanViewController.h"
 #import "SSJLoanCloseOutViewController.h"
+#import "SSJLoanDetailChargeChangeHeaderView.h"
 #import "SSJSeparatorFormView.h"
 #import "SSJLoanDetailCell.h"
 #import "SSJLoanHelper.h"
@@ -31,6 +32,8 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
 
 @property (nonatomic, strong) SSJSeparatorFormView *headerView;
 
+@property (nonatomic, strong) SSJLoanDetailChargeChangeHeaderView *changeSectionHeaderView;
+
 @property (nonatomic, strong) UIBarButtonItem *editItem;
 
 @property (nonatomic, strong) NSArray *cellItems;
@@ -39,8 +42,6 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
 
 @property (nonatomic, strong) SSJLoanModel *loanModel;
 
-@property (nonatomic) BOOL displayChangeRecords;
-
 @end
 
 @implementation SSJLoanDetailViewController
@@ -48,7 +49,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
 #pragma mark - Lifecycle
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-        _displayChangeRecords = YES;
+        
     }
     return self;
 }
@@ -93,7 +94,25 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
 
 #pragma mark - UITableViewDelegate
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    if (section == 1) {
+        return 40;
+    }
     return 10;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    return 10;
+}
+
+- (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    if (section == 1) {
+        return self.changeSectionHeaderView;
+    }
+    return nil;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
 }
 
 #pragma mark - SSJSeparatorFormViewDataSource
@@ -223,8 +242,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
 
 - (void)organiseCellItems {
     
-    NSMutableArray *section1 = nil;
-    NSMutableArray *section2 = nil;
+    NSMutableArray *section1 = [[NSMutableArray alloc] init];
     
     if (_loanModel.closeOut) {
         
@@ -248,10 +266,10 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
                 break;
         }
         
-        section1 = [@[[SSJLoanDetailCellItem itemWithImage:@"loan_expires" title:@"结清日" subtitle:closeOutDateStr bottomTitle:nil],
-                      [SSJLoanDetailCellItem itemWithImage:@"loan_calendar" title:loanDayTitle subtitle:borrowDateStr bottomTitle:nil],
-                      [SSJLoanDetailCellItem itemWithImage:@"loan_closeOut" title:@"结清账户" subtitle:endAccountName bottomTitle:nil],
-                      [SSJLoanDetailCellItem itemWithImage:@"loan_account" title:loanAccountTitle subtitle:accountName bottomTitle:nil]] mutableCopy];
+        [section1 addObjectsFromArray:@[[SSJLoanDetailCellItem itemWithImage:@"loan_expires" title:@"结清日" subtitle:closeOutDateStr bottomTitle:nil],
+                                        [SSJLoanDetailCellItem itemWithImage:@"loan_calendar" title:loanDayTitle subtitle:borrowDateStr bottomTitle:nil],
+                                        [SSJLoanDetailCellItem itemWithImage:@"loan_closeOut" title:@"结清账户" subtitle:endAccountName bottomTitle:nil],
+                                        [SSJLoanDetailCellItem itemWithImage:@"loan_account" title:loanAccountTitle subtitle:accountName bottomTitle:nil]]];
         
         if (_loanModel.memo.length) {
             [section1 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_memo" title:@"备注" subtitle:_loanModel.memo bottomTitle:nil]];
@@ -299,7 +317,8 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
         }
     }
     
-    if (_displayChangeRecords) {
+    NSMutableArray *section2 = [[NSMutableArray alloc] init];
+    if (self.changeSectionHeaderView.expanded) {
         for (SSJLoanChargeModel *chargeModel in self.loanModel.chargeModels) {
             [section2 addObject:[SSJLoanDetailCellItem cellItemWithChargeModel:chargeModel]];
         }
@@ -320,6 +339,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
         [self organiseHeaderItems];
         [self.headerView reloadData];
         self.headerView.backgroundColor = [UIColor ssj_colorWithHex:[SSJLoanHelper queryForFundColorWithID:self.loanModel.fundID]];
+        self.changeSectionHeaderView.title = [NSString stringWithFormat:@"变更记录：%d条", (int)self.loanModel.chargeModels.count];
         
         switch (self.loanModel.type) {
             case SSJLoanTypeLend:
@@ -517,6 +537,27 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
         _headerView.dataSource = self;
     }
     return _headerView;
+}
+
+- (SSJLoanDetailChargeChangeHeaderView *)changeSectionHeaderView {
+    if (!_changeSectionHeaderView) {
+        __weak typeof(self) wself = self;
+        _changeSectionHeaderView = [[SSJLoanDetailChargeChangeHeaderView alloc] init];
+        _changeSectionHeaderView.expanded = YES;
+        _changeSectionHeaderView.tapHandle = ^(SSJLoanDetailChargeChangeHeaderView *view) {
+            NSMutableArray *section = [wself.cellItems ssj_safeObjectAtIndex:1];
+            [section removeAllObjects];
+            if (view.expanded) {
+                if (wself.changeSectionHeaderView.expanded) {
+                    for (SSJLoanChargeModel *chargeModel in wself.loanModel.chargeModels) {
+                        [section addObject:[SSJLoanDetailCellItem cellItemWithChargeModel:chargeModel]];
+                    }
+                }
+            }
+            [wself.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
+        };
+    }
+    return _changeSectionHeaderView;
 }
 
 @end

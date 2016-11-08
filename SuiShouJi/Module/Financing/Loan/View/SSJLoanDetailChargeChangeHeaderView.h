@@ -12,6 +12,10 @@
 
 @property (nonatomic) BOOL expanded;
 
+@property (nonatomic, copy) NSString *title;
+
+@property (nonatomic, copy) void (^tapHandle)(SSJLoanDetailChargeChangeHeaderView *);
+
 - (void)updateAppearance;
 
 @end
