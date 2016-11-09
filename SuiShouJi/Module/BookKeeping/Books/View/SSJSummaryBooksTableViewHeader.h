@@ -11,12 +11,13 @@
 #import "SSJReportFormsCurveGraphView.h"
 #import "SSJPercentCircleView.h"
 #import "SSJSegmentedControl.h"
+#import "SSJDatePeriod.h"
 
 @interface SSJSummaryBooksTableViewHeader : UIView
 
-@property (nonatomic, copy) void(^periodSelectBlock)(NSInteger selectPeriod);
+@property (nonatomic, copy) void(^periodSelectBlock)();
 
-@property (nonatomic, copy) void(^incocmeOrExpentureSelectBlock)(NSInteger incocmeOrExpenture);
+@property (nonatomic, copy) void(^incomeOrExpentureSelectBlock)();
 
 // 滚动日期选择
 @property(nonatomic, strong) SSJReportFormsScaleAxisView *dateAxisView;
@@ -42,5 +43,7 @@
 @property (nonatomic) double totalIncome;
 
 @property (nonatomic) double totalExpenture;
+
+@property(nonatomic, strong) SSJDatePeriod *customPeriod;
 
 @end

@@ -37,7 +37,7 @@ extern NSString *const SSJReportFormsCurveModelEndDateKey;
  *  @param type         收入／支出／结余
  *  @param booksId      账本id，如果传nil就当做当前账本，查询所有账本数据传all
  *  @param startDate    开始时间
- *  @param endDate      结束时间
+ *  @param endDate      结束时间x
  *  @param success      查询成功的回调
  *  @param failure      查询失败的回调
  */
