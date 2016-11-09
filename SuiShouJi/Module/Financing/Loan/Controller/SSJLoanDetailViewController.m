@@ -12,6 +12,7 @@
 #import "SSJLoanDetailChargeChangeHeaderView.h"
 #import "SSJSeparatorFormView.h"
 #import "SSJLoanDetailCell.h"
+#import "SSJLoanChangeChargeSelectionControl.h"
 #import "SSJLoanHelper.h"
 #import "SSJLocalNotificationStore.h"
 #import "SSJDataSynchronizer.h"
@@ -33,6 +34,8 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
 @property (nonatomic, strong) SSJSeparatorFormView *headerView;
 
 @property (nonatomic, strong) SSJLoanDetailChargeChangeHeaderView *changeSectionHeaderView;
+
+@property (nonatomic, strong) SSJLoanChangeChargeSelectionControl *changeChargeSelectionView;
 
 @property (nonatomic, strong) UIBarButtonItem *editItem;
 
@@ -157,6 +160,8 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     [_changeBtn ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
     [_closeOutBtn ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
     [_deleteBtn ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
+    
+    [_changeSectionHeaderView updateAppearance];
 }
 
 - (void)organiseHeaderItems {
@@ -437,19 +442,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
 }
 
 - (void)changeBtnAction {
-    self.changeBtn.enabled = NO;
-    [SSJLoanHelper recoverLoanModel:_loanModel success:^{
-        _loanModel.closeOut = NO;
-        self.changeBtn.enabled = YES;
-        [self organiseCellItems];
-        [self updateSubViewHidden];
-        [self.tableView reloadData];
-        [CDAutoHideMessageHUD showMessage:@"恢复项目成功"];
-        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
-    } failure:^(NSError * _Nonnull error) {
-        self.changeBtn.enabled = YES;
-        [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
-    }];
+    [self.changeChargeSelectionView show];
 }
 
 - (void)deleteBtnAction {
@@ -457,6 +450,10 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"删除该项目后相关的账户流水数据(含转账、利息）将被彻底删除哦。" action:[SSJAlertViewAction actionWithTitle:@"取消" handler:NULL], [SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction *action) {
         [wself deleteLoanModel];
     }], nil];
+}
+
+- (void)addChangeChargeAction {
+    
 }
 
 #pragma mark - Getter
@@ -568,6 +565,24 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
         };
     }
     return _changeSectionHeaderView;
+}
+
+- (SSJLoanChangeChargeSelectionControl *)changeChargeSelectionView {
+    if (!_changeChargeSelectionView) {
+        _changeChargeSelectionView = [[SSJLoanChangeChargeSelectionControl alloc] initWithLoanType:_loanModel.type];
+        _changeChargeSelectionView.selectionHandle = ^(SSJLoanChangeChargeSelectionValue value){
+            switch (value) {
+                case SSJLoanChangeChargeSelectionRepayment:
+                    
+                    break;
+                    
+                case SSJLoanChangeChargeSelectionAdd:
+                    
+                    break;
+            }
+        };
+    }
+    return _changeChargeSelectionView;
 }
 
 @end
