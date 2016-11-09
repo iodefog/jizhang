@@ -35,6 +35,8 @@
         [self addSubview:self.secondLineLab];
         [self addSubview:self.incomOrExpenseSelectSegment];
         [self addSubview:self.chartView];
+        [self.chartView addSubview:self.incomeAndPaymentTitleLab];
+        [self.chartView addSubview:self.incomeAndPaymentMoneyLab];
         [self addSubview:self.customPeriodBtn];
         [self addSubview:self.addOrDeleteCustomPeriodBtn];
     }
@@ -55,6 +57,9 @@
     self.incomOrExpenseSelectSegment.top = self.secondLineLab.bottom + 20;
     self.incomOrExpenseSelectSegment.centerX = self.width / 2;
     self.chartView.leftTop = CGPointMake(0, self.incomOrExpenseSelectSegment.bottom + 29);
+    CGRect hollowFrame = UIEdgeInsetsInsetRect(self.chartView.circleFrame, UIEdgeInsetsMake(self.chartView.circleThickness, self.chartView.circleThickness, self.chartView.circleThickness, self.chartView.circleThickness));
+    self.incomeAndPaymentTitleLab.frame = CGRectMake(hollowFrame.origin.x, (hollowFrame.size.height - 38) * 0.5 + hollowFrame.origin.y, hollowFrame.size.width, 15);
+    self.incomeAndPaymentMoneyLab.frame = CGRectMake(hollowFrame.origin.x, (hollowFrame.size.height - 38) * 0.5 + hollowFrame.origin.y + 20, hollowFrame.size.width, 18);
     self.addOrDeleteCustomPeriodBtn.frame = CGRectMake(self.width - 50, self.dateAxisView.top, 50, 50);
 }
 
@@ -138,6 +143,30 @@
         [_secondLineLab sizeToFit];
     }
     return _secondLineLab;
+}
+
+- (UILabel *)incomeAndPaymentTitleLab {
+    if (!_incomeAndPaymentTitleLab) {
+        _incomeAndPaymentTitleLab = [[UILabel alloc] init];
+        _incomeAndPaymentTitleLab.backgroundColor = [UIColor clearColor];
+        _incomeAndPaymentTitleLab.font = [UIFont systemFontOfSize:15];
+        _incomeAndPaymentTitleLab.textAlignment = NSTextAlignmentCenter;
+        _incomeAndPaymentTitleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    }
+    return _incomeAndPaymentTitleLab;
+}
+
+- (UILabel *)incomeAndPaymentMoneyLab {
+    if (!_incomeAndPaymentMoneyLab) {
+        _incomeAndPaymentMoneyLab = [[UILabel alloc] init];
+        _incomeAndPaymentMoneyLab.backgroundColor = [UIColor clearColor];
+        _incomeAndPaymentMoneyLab.font = [UIFont systemFontOfSize:18];
+        _incomeAndPaymentMoneyLab.minimumScaleFactor = 0.66;
+        _incomeAndPaymentMoneyLab.adjustsFontSizeToFitWidth = YES;
+        _incomeAndPaymentMoneyLab.textAlignment = NSTextAlignmentCenter;
+        _incomeAndPaymentMoneyLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    }
+    return _incomeAndPaymentMoneyLab;
 }
 
 - (SSJSummaryBooksHeaderView *)summaryHeader{
