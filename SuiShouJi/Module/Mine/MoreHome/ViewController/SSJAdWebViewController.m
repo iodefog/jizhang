@@ -51,11 +51,14 @@
     if (navigationType == UIWebViewNavigationTypeLinkClicked)
     {
         NSURL *url = [request URL];
-        if([[UIApplication sharedApplication]canOpenURL:url])
-        {
-            [[UIApplication sharedApplication]openURL:url];
+        NSString *urlStr = [NSString stringWithFormat:@"%@",url];
+        if ([urlStr hasPrefix:@"weixin"]) {
+            if([[UIApplication sharedApplication]canOpenURL:url])
+            {
+                [[UIApplication sharedApplication]openURL:url];
+            }
+            return NO;
         }
-        return NO;
     }
     return YES;
 }

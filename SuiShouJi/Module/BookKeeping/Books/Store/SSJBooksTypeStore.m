@@ -35,6 +35,7 @@
             item.userId = [booksResult stringForColumn:@"cuserid"];
             item.booksIcoin = [booksResult stringForColumn:@"cicoin"];
             item.booksOrder = [booksResult intForColumn:@"iorder"];
+            item.booksParent = [booksResult intForColumn:@"iparenttype"];
             if (item.booksOrder == 0) {
                 item.booksOrder = order;
             }
@@ -219,6 +220,28 @@
         }
         if (success) {
             SSJDispatch_main_async_safe(^{
+                success();
+            });
+        }
+    }];
+}
+
++ (void)generateBooksTypeForBooksItem:(SSJBooksTypeItem *)item
+                                Success:(void(^)())success
+                                failure:(void (^)(NSError *error))failure{
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        NSString *userId = SSJUSERID();
+        NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm;ss.sss"];
+        if (![db executeUpdate:@"insert into bk_user_bill select ?, id, istate, ?, ?, defualtorder,? from bk_bill_type where ibookstype = ? and icustom = 0",userId,@(SSJSyncVersion()),writeDate,item.booksId,item.booksParent]) {
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        }
+        if (success) {
+            SSJDispatchMainAsync(^{
                 success();
             });
         }

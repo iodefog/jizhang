@@ -855,6 +855,11 @@
 		9C26923D1D9CB59400B3B5DF /* SSJSearchHistoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C26923A1D9CB58D00B3B5DF /* SSJSearchHistoryCell.m */; };
 		9C26923E1D9CB59500B3B5DF /* SSJSearchHistoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C26923A1D9CB58D00B3B5DF /* SSJSearchHistoryCell.m */; };
 		9C26923F1D9CB59600B3B5DF /* SSJSearchHistoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C26923A1D9CB58D00B3B5DF /* SSJSearchHistoryCell.m */; };
+		9C26FDAF1DD2F9E80086F94F /* SSJBooksHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C26FDAE1DD2F9E80086F94F /* SSJBooksHeaderView.m */; };
+		9C26FDB01DD3058B0086F94F /* SSJBooksHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C26FDAE1DD2F9E80086F94F /* SSJBooksHeaderView.m */; };
+		9C26FDB11DD3058B0086F94F /* SSJBooksHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C26FDAE1DD2F9E80086F94F /* SSJBooksHeaderView.m */; };
+		9C26FDB21DD3058C0086F94F /* SSJBooksHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C26FDAE1DD2F9E80086F94F /* SSJBooksHeaderView.m */; };
+		9C26FDB31DD3058D0086F94F /* SSJBooksHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C26FDAE1DD2F9E80086F94F /* SSJBooksHeaderView.m */; };
 		9C29319C1CEEFFD300484F6E /* SSJPatchUpdateService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C29319B1CEEFFD300484F6E /* SSJPatchUpdateService.m */; };
 		9C2A670A1D194CA70010F1DA /* SSJAlertViewAction.m in Sources */ = {isa = PBXBuildFile; fileRef = BD33FD281C4B2E4C006A6942 /* SSJAlertViewAction.m */; };
 		9C2A670B1D194CA70010F1DA /* SSJForgetPasswordFirstStepViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE6E8701C56419F001C9138 /* SSJForgetPasswordFirstStepViewController.m */; };
@@ -1828,7 +1833,6 @@
 		9CECFB551D6D41A700DB2C8B /* NSString+SSJTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE4A7E41D20DC7000F05BF0 /* NSString+SSJTheme.m */; };
 		9CECFB561D6D41A700DB2C8B /* SSJCalenderDetaiImagelFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F329A1CEAE6C10086B67E /* SSJCalenderDetaiImagelFooterView.m */; };
 		9CECFB571D6D41A700DB2C8B /* SSJFundInfoSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B24261C3E098F009A74A8 /* SSJFundInfoSyncTable.m */; };
-		9CECFB581D6D41A700DB2C8B /* SSJAdWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C2B19221D3E185200B987EE /* SSJAdWebViewController.m */; };
 		9CECFB591D6D41A700DB2C8B /* SSJRecordMakingStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C56E12F1D1A87640057895D /* SSJRecordMakingStore.m */; };
 		9CECFB5A1D6D41A700DB2C8B /* SSJFinancingHomeHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C94713E1CEB224C00D69079 /* SSJFinancingHomeHeader.m */; };
 		9CECFB5B1D6D41A700DB2C8B /* SSJMineHomeImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBC81CFD2DAA0061803B /* SSJMineHomeImageCell.m */; };
@@ -3076,6 +3080,8 @@
 		9C24CFD51D76CC250095D150 /* SSJBooksEditeOrNewViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBooksEditeOrNewViewController.m; sourceTree = "<group>"; };
 		9C2692391D9CB58D00B3B5DF /* SSJSearchHistoryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJSearchHistoryCell.h; sourceTree = "<group>"; };
 		9C26923A1D9CB58D00B3B5DF /* SSJSearchHistoryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJSearchHistoryCell.m; sourceTree = "<group>"; };
+		9C26FDAD1DD2F9E80086F94F /* SSJBooksHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBooksHeaderView.h; sourceTree = "<group>"; };
+		9C26FDAE1DD2F9E80086F94F /* SSJBooksHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBooksHeaderView.m; sourceTree = "<group>"; };
 		9C29319A1CEEFFD300484F6E /* SSJPatchUpdateService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJPatchUpdateService.h; sourceTree = "<group>"; };
 		9C29319B1CEEFFD300484F6E /* SSJPatchUpdateService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJPatchUpdateService.m; sourceTree = "<group>"; };
 		9C2A6A9D1D194CA70010F1DA /* youyujizhang.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = youyujizhang.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -4914,6 +4920,8 @@
 				9CA5F0BA1DD02BF8003E72E8 /* SSJSummaryBooksHeaderView.m */,
 				9CA5F0C31DD047DB003E72E8 /* SSJSummaryBooksTableViewHeader.h */,
 				9CA5F0C41DD047DB003E72E8 /* SSJSummaryBooksTableViewHeader.m */,
+				9C26FDAD1DD2F9E80086F94F /* SSJBooksHeaderView.h */,
+				9C26FDAE1DD2F9E80086F94F /* SSJBooksHeaderView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -6646,7 +6654,7 @@
 					};
 					BD543C3B1C1A6DBC00910D61 = {
 						CreatedOnToolsVersion = 7.2;
-						DevelopmentTeam = 534SCE47WT;
+						DevelopmentTeam = 747363KXQ6;
 					};
 					BD543C541C1A6DBC00910D61 = {
 						CreatedOnToolsVersion = 7.2;
@@ -7447,6 +7455,7 @@
 				7DBA56AF1D6D32B700C02D79 /* SSJDataSynchronizer.m in Sources */,
 				7DBA56B01D6D32B700C02D79 /* SSJFinancingHomeCell.m in Sources */,
 				7DBA56B11D6D32B700C02D79 /* SSJScrollTextLayer.m in Sources */,
+				9C26FDB11DD3058B0086F94F /* SSJBooksHeaderView.m in Sources */,
 				7DBA56B21D6D32B700C02D79 /* SSJFundingDailySumCell.m in Sources */,
 				7DBA56B31D6D32B700C02D79 /* SSJThemeDetailViewController.m in Sources */,
 				7DBA56B41D6D32B700C02D79 /* CDPointActivityIndicator.m in Sources */,
@@ -7628,6 +7637,7 @@
 				9C2A67281D194CA70010F1DA /* SSJBookkeepingTreeViewController.m in Sources */,
 				9C2A672B1D194CA70010F1DA /* SSJLoadMoreCell.m in Sources */,
 				9C91AE181D93A4BB00B585AA /* SSJChargeSearchingStore.m in Sources */,
+				9C26FDB01DD3058B0086F94F /* SSJBooksHeaderView.m in Sources */,
 				7D5432CE1D5C0A340021106E /* SSJThemeDownLoadCompleteService.m in Sources */,
 				9C2A672C1D194CA70010F1DA /* SSJHomeReminderView.m in Sources */,
 				7D87AEBD1D66E05B0024D33C /* SSJUserCreditSyncTable.m in Sources */,
@@ -8116,7 +8126,6 @@
 				9CECFB561D6D41A700DB2C8B /* SSJCalenderDetaiImagelFooterView.m in Sources */,
 				9CECFB571D6D41A700DB2C8B /* SSJFundInfoSyncTable.m in Sources */,
 				9C9A0C2A1D6D9600002AF046 /* SSJModifyFundingTableViewCell.m in Sources */,
-				9CECFB581D6D41A700DB2C8B /* SSJAdWebViewController.m in Sources */,
 				9CECFB591D6D41A700DB2C8B /* SSJRecordMakingStore.m in Sources */,
 				9CECFB5A1D6D41A700DB2C8B /* SSJFinancingHomeHeader.m in Sources */,
 				9CECFB5B1D6D41A700DB2C8B /* SSJMineHomeImageCell.m in Sources */,
@@ -8389,6 +8398,7 @@
 				9CECFC2B1D6D41A700DB2C8B /* SSJDataSynchronizer.m in Sources */,
 				9CECFC2C1D6D41A700DB2C8B /* SSJFinancingHomeCell.m in Sources */,
 				9CECFC2D1D6D41A700DB2C8B /* SSJScrollTextLayer.m in Sources */,
+				9C26FDB21DD3058C0086F94F /* SSJBooksHeaderView.m in Sources */,
 				9CECFC2E1D6D41A700DB2C8B /* SSJFundingDailySumCell.m in Sources */,
 				9CECFC2F1D6D41A700DB2C8B /* SSJThemeDetailViewController.m in Sources */,
 				9CECFC301D6D41A700DB2C8B /* CDPointActivityIndicator.m in Sources */,
@@ -8868,6 +8878,7 @@
 				9CEC00241D6D41EB00DB2C8B /* SSJFinancingHomeCell.m in Sources */,
 				9CEC00251D6D41EB00DB2C8B /* SSJScrollTextLayer.m in Sources */,
 				9CEC00261D6D41EB00DB2C8B /* SSJFundingDailySumCell.m in Sources */,
+				9C26FDB31DD3058D0086F94F /* SSJBooksHeaderView.m in Sources */,
 				9CEC00271D6D41EB00DB2C8B /* SSJThemeDetailViewController.m in Sources */,
 				9CEC00281D6D41EB00DB2C8B /* CDPointActivityIndicator.m in Sources */,
 				7DE1FC6F1DD1CBE500B2D4AD /* SSJLoanDetailChargeChangeHeaderView.m in Sources */,
@@ -9316,6 +9327,7 @@
 				BD542B601CB5457800655EE2 /* SSJThirdPartyLoginManger.m in Sources */,
 				9CE7D78F1D2F4ECA0013E97B /* SSJAdItem.m in Sources */,
 				7DF07DFC1DD0265800B0AF97 /* SSJAccountsMergerTables.m in Sources */,
+				9C26FDAF1DD2F9E80086F94F /* SSJBooksHeaderView.m in Sources */,
 				9C9DD66A1D49FA31001FA3C5 /* SSJThemeManagerViewController.m in Sources */,
 				9C94719C1CEB473E00D69079 /* SSJCalendarViewController.m in Sources */,
 				9C47E6F21D224BEF005F338A /* SSJThemeService.m in Sources */,
@@ -9965,9 +9977,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: XiaoYong  Wu (6CF3K2UQ7J)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: XiaoYong  Wu (6CF3K2UQ7J)";
-				DEVELOPMENT_TEAM = 534SCE47WT;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Can Wu (7Z729NG4UD)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Can Wu (7Z729NG4UD)";
+				DEVELOPMENT_TEAM = 747363KXQ6;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -9996,10 +10008,10 @@
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/Wechat",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhangAppStore;
+				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
 				PRODUCT_NAME = SuiShouJi;
-				PROVISIONING_PROFILE = "193073ec-df65-4082-8e3b-275df22d5f5a";
-				PROVISIONING_PROFILE_SPECIFIER = JiZhangAppStoreDeve;
+				PROVISIONING_PROFILE = "12d63f95-f5cc-484c-9ed3-05623e71842f";
+				PROVISIONING_PROFILE_SPECIFIER = JiZhangEnterpriseDevelopment;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -10044,7 +10056,7 @@
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/Wechat",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhangAppStore;
+				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
 				PRODUCT_NAME = SuiShouJi;
 				PROVISIONING_PROFILE = "baf5cd64-b6df-4069-ad53-afe79aec80d8";
 				PROVISIONING_PROFILE_SPECIFIER = JiZhangAppstoreAdHoc;

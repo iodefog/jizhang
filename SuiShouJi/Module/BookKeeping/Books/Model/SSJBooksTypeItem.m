@@ -15,6 +15,7 @@
         mapping = @{@"booksId":@"cbooksid",
                     @"booksName":@"cbooksname",
                     @"booksColor":@"cbookscolor",
+                    @"booksParent":@"iparenttype",
                     @"userId":@"cuserid",
                     @"cwriteDate":@"cwritedate",
                     @"operatorType":@"operatortype",

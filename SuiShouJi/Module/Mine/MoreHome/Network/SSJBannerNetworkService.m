@@ -12,7 +12,7 @@
 
 - (void)requestBannersList{
     self.showLodingIndicator = NO;
-    [self request:@"http://jz.9188.com/app/new_banners.json" params:nil];
+    [self request:@"http://jz.9188.com/app/banner_test.json" params:nil];
 }
 
 - (void)requestDidFinish:(id)rootElement{
