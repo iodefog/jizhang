@@ -142,6 +142,10 @@
     
     [self setNeedsLayout];
     
+    [_cells makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    [_horizontalSeparators makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    [_verticalSeparators makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    
     [_cells removeAllObjects];
     [_horizontalSeparators removeAllObjects];
     [_verticalSeparators removeAllObjects];

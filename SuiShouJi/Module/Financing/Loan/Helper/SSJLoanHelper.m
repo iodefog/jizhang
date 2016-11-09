@@ -636,6 +636,8 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
     }
     
     switch (model.interestType) {
+        // 如果没有选择过计息方式，就按照原始变本金计算
+        case SSJLoanInterestTypeUnknown:
         case SSJLoanInterestTypeOriginalPrincipal:
             return [self interestUntilDate:model.repaymentDate withLoanModel:model];
             
@@ -656,9 +658,6 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
             interest += [self interestWithPrincipal:principal rate:model.rate days:(int)[model.repaymentDate daysFrom:lastChangeDate]];
             return interest;
         }
-            
-        case SSJLoanInterestTypeUnknown:
-            return 0;
     }
 }
 
