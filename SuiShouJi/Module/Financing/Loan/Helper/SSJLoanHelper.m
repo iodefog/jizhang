@@ -756,16 +756,31 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
                                          success:(void (^)(SSJLoanCompoundChargeModel *model))success
                                          failure:(void (^)(NSError *error))failure {
     
-    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+    if (!model) {
+        NSError *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"借贷流水模型不能为nil"}];
+        failure(error);
+        return;
+    }
+    
+    if (![model.billId isEqualToString:@"3"]
+        && ![model.billId isEqualToString:@"4"]
+        && ![model.billId isEqualToString:@"5"]
+        && ![model.billId isEqualToString:@"6"]
+        && ![model.billId isEqualToString:@"7"]
+        && ![model.billId isEqualToString:@"8"]
+        && ![model.billId isEqualToString:@"9"]
+        && ![model.billId isEqualToString:@"10"]) {
         
-        SSJLoanCompoundChargeModel *compoundModel = [[SSJLoanCompoundChargeModel alloc] init];
-        if ([model.billId isEqualToString:@"5"]
-            || [model.billId isEqualToString:@"6"]) {
-            compoundModel.interestCharge = model;
-        } else {
-            compoundModel.chargeModel = model;
+        if (failure) {
+            NSError *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat:@"该流水不是借贷产生的流水，billId:%@", model.billId]}];
+            failure(error);
         }
-        compoundModel.type = model.type;
+        return;
+    }
+    
+    NSMutableArray *chargeModels = [@[model] mutableCopy];
+    
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         
         NSString *billDateStr = [model.billDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         NSString *writeDateStr = [model.writeDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
@@ -792,15 +807,26 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
 //            chargeModel.chargeType = model.chargeType;
             chargeModel.userId = model.userId;
             chargeModel.closedOut = model.closedOut;
-            
-            if ([chargeModel.billId isEqualToString:@"5"]
-                       || [chargeModel.billId isEqualToString:@"6"]) {
-                compoundModel.interestCharge = chargeModel;
-            } else {
-                compoundModel.targetChargeModel = chargeModel;
-            }
+            [chargeModels addObject:chargeModel];
         }
         [resultSet close];
+        
+        SSJLoanCompoundChargeModel *compoundModel = [[SSJLoanCompoundChargeModel alloc] init];
+        
+        for (SSJLoanChargeModel *chargeModel in chargeModels) {
+            if ([chargeModel.billId isEqualToString:@"5"]
+                || [chargeModel.billId isEqualToString:@"6"]) {
+                compoundModel.interestCharge = chargeModel;
+            } else {
+                NSString *parentId = [db stringForQuery:@"select cparent from bk_fund_info where cuserid = ? and cfundid = ?", chargeModel.userId, chargeModel.fundId];
+                if ([parentId isEqualToString:@"10"]
+                    || [parentId isEqualToString:@"11"]) {
+                    compoundModel.chargeModel = chargeModel;
+                } else {
+                    compoundModel.targetChargeModel = chargeModel;
+                }
+            }
+        }
         
         if (success) {
             SSJDispatchMainAsync(^{

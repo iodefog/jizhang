@@ -143,7 +143,6 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (double)interestForEverydayWithLoanModel:(SSJLoanModel *)model;
 
-
 /**
  查询借贷流水详情
 

@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class FMResultSet;
 
 /**
@@ -54,16 +56,18 @@ typedef NS_ENUM(NSUInteger, SSJLoanCompoundChargeType) {
 
 @property (nonatomic, copy) NSString *userId;
 
-@property (nonatomic, copy) NSString *memo;
+@property (nonatomic, copy, nullable) NSString *memo;
 
-@property (nonatomic, copy) NSString *icon;
+@property (nonatomic, copy, nullable) NSString *icon;
 
 @property (nonatomic, copy) NSDate *billDate;
 
 @property (nonatomic, copy) NSDate *writeDate;
 
+// 流水金额
 @property (nonatomic) double money;
 
+// 变更钱的金额
 @property (nonatomic) double oldMoney;
 
 @property (nonatomic) SSJLoanType type;
@@ -73,3 +77,5 @@ typedef NS_ENUM(NSUInteger, SSJLoanCompoundChargeType) {
 @property (nonatomic) BOOL closedOut;
 
 @end
+
+NS_ASSUME_NONNULL_END
