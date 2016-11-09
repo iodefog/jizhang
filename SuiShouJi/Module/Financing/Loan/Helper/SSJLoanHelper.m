@@ -609,7 +609,57 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
 }
 
 + (double)expectedInterestWithLoanModel:(SSJLoanModel *)model {
-    return [self interestUntilDate:model.repaymentDate withLoanModel:model];
+    if (model.closeOut) {
+        SSJPRINT(@"该借贷已结清");
+        return 0;
+    }
+    
+    if (!model.borrowDate || !model.repaymentDate) {
+        SSJPRINT(@"borrowDate、repaymentDate不能为nil，borrowDate：%@ repaymentDate:%@", model.borrowDate, model.repaymentDate);
+        return 0;
+    }
+    
+    double principal = 0;
+    double interest = 0;
+    
+    // 先计算出借贷起始本金（包括余额变更后的）
+    for (SSJLoanChargeModel *chargeModel in model.chargeModels) {
+        if (chargeModel.chargeType == SSJLoanCompoundChargeTypeCreate) {
+            principal = chargeModel.money;
+        } else if (chargeModel.chargeType == SSJLoanCompoundChargeTypeBalanceIncrease) {
+            principal += chargeModel.money;
+        } else if (chargeModel.chargeType == SSJLoanCompoundChargeTypeBalanceDecrease) {
+            principal -= chargeModel.money;
+        } else if (chargeModel.chargeType == SSJLoanCompoundChargeTypeInterest) {
+            interest += chargeModel.money;
+        }
+    }
+    
+    switch (model.interestType) {
+        case SSJLoanInterestTypeOriginalPrincipal:
+            return [self interestUntilDate:model.repaymentDate withLoanModel:model];
+            
+        case SSJLoanInterestTypeChangePrincipal: {
+            NSDate *lastChangeDate = model.borrowDate;
+            for (SSJLoanChargeModel *chargeModel in model.chargeModels) {
+                if (chargeModel.chargeType == SSJLoanCompoundChargeTypeRepayment) {
+                    interest += [self interestWithPrincipal:principal rate:model.rate days:(int)[chargeModel.billDate daysFrom:lastChangeDate]];
+                    principal -= chargeModel.money;
+                    lastChangeDate = chargeModel.billDate;
+                } else if (chargeModel.chargeType == SSJLoanCompoundChargeTypeAdd) {
+                    interest += [self interestWithPrincipal:principal rate:model.rate days:(int)[chargeModel.billDate daysFrom:lastChangeDate]];
+                    principal += chargeModel.money;
+                    lastChangeDate = chargeModel.billDate;
+                }
+            }
+            
+            interest += [self interestWithPrincipal:principal rate:model.rate days:(int)[model.repaymentDate daysFrom:lastChangeDate]];
+            return interest;
+        }
+            
+        case SSJLoanInterestTypeUnknown:
+            return 0;
+    }
 }
 
 + (double)closeOutInterestWithLoanModel:(SSJLoanModel *)model {
@@ -617,7 +667,7 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
 }
 
 + (double)interestForEverydayWithLoanModel:(SSJLoanModel *)model {
-    return model.rate * model.jMoney / 365;
+    return [self interestWithPrincipal:model.jMoney rate:model.rate days:1];
 }
 
 + (double)interestUntilDate:(NSDate *)date withLoanModel:(SSJLoanModel *)model {
@@ -633,6 +683,10 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
     }
     
     return daysInterval * [self interestForEverydayWithLoanModel:model];
+}
+
++ (double)interestWithPrincipal:(double)principal rate:(double)rate days:(int)days {
+    return days * principal * rate / 365;
 }
 
 + (BOOL)saveLoanModel:(SSJLoanModel *)model booksID:(NSString *)booksID inDatabase:(FMDatabase *)db {
