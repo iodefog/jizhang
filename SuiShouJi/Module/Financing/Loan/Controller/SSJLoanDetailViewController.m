@@ -72,7 +72,14 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
     [self loadLoanModel];
+    
+    self.navigationController.navigationBar.tintColor = [UIColor ssj_colorWithHex:@"#FFFFFF"];
+    [self.navigationController.navigationBar setShadowImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:@"#FFFFFF" alpha:0.5] size:CGSizeMake(0, 0.5)]];
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:self.fundColor] size:CGSizeZero] forBarMetrics:UIBarMetricsDefault];
+    self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:21],
+                                                                    NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"#FFFFFF"]};
 }
 
 - (void)updateAppearanceAfterThemeChanged {
@@ -350,7 +357,6 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
         [self.tableView reloadData];
         [self organiseHeaderItems];
         [self.headerView reloadData];
-        self.headerView.backgroundColor = [UIColor ssj_colorWithHex:[SSJLoanHelper queryForFundColorWithID:self.loanModel.fundID]];
         self.changeSectionHeaderView.title = [NSString stringWithFormat:@"变更记录：%d条", (int)self.loanModel.chargeModels.count];
         
         switch (self.loanModel.type) {
@@ -537,7 +543,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
 - (SSJSeparatorFormView *)headerView {
     if (!_headerView) {
         _headerView = [[SSJSeparatorFormView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, 174)];
-        _headerView.backgroundColor = [UIColor ssj_colorWithHex:@""];
+        _headerView.backgroundColor = [UIColor ssj_colorWithHex:self.fundColor];
         _headerView.separatorColor = [UIColor whiteColor];
         _headerView.horizontalSeparatorInset = UIEdgeInsetsMake(0, 42, 0, 42);
         _headerView.verticalSeparatorInset = UIEdgeInsetsMake(22, 0, 22, 0);

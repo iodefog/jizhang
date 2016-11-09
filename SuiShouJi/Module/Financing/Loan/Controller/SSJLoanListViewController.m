@@ -112,6 +112,7 @@ static NSString *const kLoanListCellId = @"kLoanListCellId";
     SSJLoanModel *model = [_list ssj_safeObjectAtIndex:indexPath.section];
     SSJLoanDetailViewController *loanDetailVC = [[SSJLoanDetailViewController alloc] init];
     loanDetailVC.loanID = model.ID;
+    loanDetailVC.fundColor = [SSJLoanHelper queryForFundColorWithID:model.fundID];
     [self.navigationController pushViewController:loanDetailVC animated:YES];
 }
 
