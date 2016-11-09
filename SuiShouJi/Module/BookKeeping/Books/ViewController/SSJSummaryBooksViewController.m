@@ -299,7 +299,6 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
         [self.view ssj_hideLoadingIndicator];
         [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
     }];
-
 }
 
 

@@ -14,6 +14,7 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
 #import "SSJBooksTypeCollectionViewCell.h"
 #import "UIViewController+MMDrawerController.h"
 #import "SSJBooksTypeEditeView.h"
+#import "SSJBooksHeaderView.h"
 #import "SSJDataSynchronizer.h"
 #import "SSJBooksEditeOrNewViewController.h"
 #import "SSJEditableCollectionView.h"
@@ -33,6 +34,8 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
 
 @property(nonatomic, strong) UIButton *rightButton;
 
+@property(nonatomic, strong) SSJBooksHeaderView *header;
+
 @end
 
 @implementation SSJBooksTypeSelectViewController{
@@ -50,6 +53,7 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self.view addSubview:self.header];
     [self.view addSubview:self.collectionView];
     [self.view addSubview:self.editeButton];
     [self.view addSubview:self.deleteButton];
@@ -64,6 +68,7 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
 //    self.mm_drawerController.openDrawerGestureModeMask = MMOpenDrawerGestureModeAll;
+    [self.header startAnimating];
     [MobClick event:@"main_account_book"];
     [self getDateFromDB];
     
@@ -71,6 +76,7 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
 
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
+    [self.header stopLoading];
     [self.selectedBooks removeAllObjects];
     _editeModel = NO;
     self.rightButton.selected = NO;
@@ -90,6 +96,7 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
     self.editeButton.leftBottom = CGPointMake(0, self.view.height);
     self.deleteButton.size = CGSizeMake(self.view.width * 0.42, 55);
     self.deleteButton.leftBottom = CGPointMake(self.editeButton.right, self.view.height);
+    self.header.width = self.view.width;
 }
 
 #pragma mark - UICollectionViewDelegate
@@ -236,23 +243,19 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
 
 #pragma mark - Event
 - (void)rightButtonClicked:(id)sender{
-
-    SSJSummaryBooksViewController *summaryVc = [[SSJSummaryBooksViewController alloc]init];
-    [self.navigationController pushViewController:summaryVc animated:YES];
-
-//    _editeModel = !_editeModel;
-//    self.rightButton.selected = !self.rightButton.isSelected;
-//    self.editeButton.hidden = !self.rightButton.isSelected;
-//    self.deleteButton.hidden = !self.rightButton.isSelected;
-//    if (self.rightButton.isSelected) {
-//        [MobClick event:@"accountbook_manage"];
-//    }else{
-//        [self.collectionView endEditing];
-//        [self.selectedBooks removeAllObjects];
-//    }
-//    for (SSJBooksTypeItem *item in self.items) {
-//        item.editeModel = self.rightButton.isSelected;
-//    }
+    _editeModel = !_editeModel;
+    self.rightButton.selected = !self.rightButton.isSelected;
+    self.editeButton.hidden = !self.rightButton.isSelected;
+    self.deleteButton.hidden = !self.rightButton.isSelected;
+    if (self.rightButton.isSelected) {
+        [MobClick event:@"accountbook_manage"];
+    }else{
+        [self.collectionView endEditing];
+        [self.selectedBooks removeAllObjects];
+    }
+    for (SSJBooksTypeItem *item in self.items) {
+        item.editeModel = self.rightButton.isSelected;
+    }
 }
 
 - (void)editeButtonClicked:(id)sender{
@@ -303,7 +306,7 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
         }else{
             flowLayout.minimumInteritemSpacing = 15;
         }
-        _collectionView=[[SSJEditableCollectionView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM - 55) collectionViewLayout:flowLayout];
+        _collectionView=[[SSJEditableCollectionView alloc] initWithFrame:CGRectMake(0, self.header.bottom, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM - 169) collectionViewLayout:flowLayout];
         _collectionView.movedCellScale = 1.08;
         _collectionView.editDelegate=self;
         _collectionView.editDataSource=self;
@@ -360,6 +363,18 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
         _rightButton.selected = NO;
     }
     return _rightButton;
+}
+
+- (SSJBooksHeaderView *)header{
+    if (!_header) {
+        _header = [[SSJBooksHeaderView alloc]initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, 114)];
+        __weak typeof(self) weakSelf = self;
+        _header.buttonClickBlock = ^(){
+            SSJSummaryBooksViewController *summaryVc = [[SSJSummaryBooksViewController alloc]init];
+            [weakSelf.navigationController pushViewController:summaryVc animated:YES];
+        };
+    }
+    return _header;
 }
 
 //-(SSJBooksTypeEditeView *)booksEditeView{
