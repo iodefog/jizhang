@@ -32,8 +32,6 @@
         
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapAction)];
         [self addGestureRecognizer:tap];
-        
-        self.backgroundColor = [UIColor whiteColor];
     }
     return self;
 }
@@ -65,6 +63,11 @@
 - (void)updateAppearance {
     _titleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     _arrow.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    if ([SSJCurrentThemeID() isEqualToString:SSJDefaultThemeID]) {
+        self.backgroundColor = [UIColor whiteColor];
+    } else {
+        self.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+    }
 }
 
 - (void)tapAction {

@@ -65,7 +65,6 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     [self.view addSubview:self.deleteBtn];
     [self.view addSubview:self.closeOutBtn];
     [self.tableView addSubview:self.stampView];
-    self.tableView.tableHeaderView = self.headerView;
     
     [self updateAppearance];
 }
@@ -141,6 +140,8 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
 #pragma mark - Private
 - (void)updateAppearance {
     _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
+    [_changeSectionHeaderView updateAppearance];
+    [_changeChargeSelectionView updateAppearance];
     
     if ([SSJCurrentThemeID() isEqualToString:SSJDefaultThemeID]) {
         
@@ -167,8 +168,6 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     [_changeBtn ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
     [_closeOutBtn ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
     [_deleteBtn ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
-    
-    [_changeSectionHeaderView updateAppearance];
 }
 
 - (void)organiseHeaderItems {
@@ -355,6 +354,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
         [self updateSubViewHidden];
         [self organiseCellItems];
         [self.tableView reloadData];
+        self.tableView.tableHeaderView = self.headerView;
         [self organiseHeaderItems];
         [self.headerView reloadData];
         self.changeSectionHeaderView.title = [NSString stringWithFormat:@"变更记录：%d条", (int)self.loanModel.chargeModels.count];

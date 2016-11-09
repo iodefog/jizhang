@@ -142,9 +142,15 @@
     
     [self setNeedsLayout];
     
-    [_cells makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    for (NSArray *rowCells in _cells) {
+        [rowCells makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    }
+    
     [_horizontalSeparators makeObjectsPerformSelector:@selector(removeFromSuperview)];
-    [_verticalSeparators makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    
+    for (NSArray *cellSeparators in _verticalSeparators) {
+        [cellSeparators makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    }
     
     [_cells removeAllObjects];
     [_horizontalSeparators removeAllObjects];
