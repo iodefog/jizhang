@@ -70,10 +70,15 @@
  给对应的账本生成记账类型
  
  @param items   账本item
- @param success 保存成功的回调
- @param failure 保存失败的回调
+ @param success 生成成功的回调
+ @param failure 生成失败的回调
  */
 + (void)generateBooksTypeForBooksItem:(SSJBooksTypeItem *)item
                               Success:(void(^)())success
                               failure:(void (^)(NSError *error))failure;
+
+
++ (void)getTotalIncomeAndExpenceWithSuccess:(void(^)(double income,double expenture))success
+                                    failure:(void (^)(NSError *error))failure;
+
 @end
