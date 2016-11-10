@@ -681,69 +681,25 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
         chargeModel.closedOut = model.closeOut;
         [changeModels addObject:chargeModel];
         
-        switch (model.type) {
-            case SSJLoanTypeLend:
-                if ([chargeModel.billId isEqualToString:@"3"]) {
-                    // 创建
-                    chargeModel.chargeType = SSJLoanCompoundChargeTypeCreate;
-                    surplus = chargeModel.money;
-                } else if ([chargeModel.billId isEqualToString:@"4"]) {
-                    // 结清
-                    chargeModel.chargeType = SSJLoanCompoundChargeTypeCloseOut;
-                    surplus -= chargeModel.money;
-                } else if ([chargeModel.billId isEqualToString:@"5"]
-                           || [chargeModel.billId isEqualToString:@"6"]) {
-                    // 利息
-                    chargeModel.chargeType = SSJLoanCompoundChargeTypeInterest;
-                } else if ([chargeModel.billId isEqualToString:@"7"]) {
-                    // 追加借出
-                    chargeModel.chargeType = SSJLoanCompoundChargeTypeAdd;
-                    surplus += chargeModel.money;
-                } else if ([chargeModel.billId isEqualToString:@"8"]) {
-                    // 收款
-                    chargeModel.chargeType = SSJLoanCompoundChargeTypeRepayment;
-                    surplus -= chargeModel.money;
-                } else if ([chargeModel.billId isEqualToString:@"9"]) {
-                    // 余额增加
-                    chargeModel.chargeType = SSJLoanCompoundChargeTypeBalanceIncrease;
-                    surplus += chargeModel.money;
-                } else if ([chargeModel.billId isEqualToString:@"10"]) {
-                    // 余额减少
-                    chargeModel.chargeType = SSJLoanCompoundChargeTypeBalanceDecrease;
-                    surplus -= chargeModel.money;
-                }
+        [self updateChargeTypeWithModel:chargeModel];
+        
+        switch (chargeModel.chargeType) {
+            case SSJLoanCompoundChargeTypeCreate:
+                surplus = chargeModel.money;
                 break;
                 
-            case SSJLoanTypeBorrow:
-                if ([chargeModel.billId isEqualToString:@"3"]) {
-                    // 结清
-                    chargeModel.chargeType = SSJLoanCompoundChargeTypeCloseOut;
-                    surplus -= chargeModel.money;
-                } else if ([chargeModel.billId isEqualToString:@"4"]) {
-                    // 创建
-                    chargeModel.chargeType = SSJLoanCompoundChargeTypeCreate;
-                    surplus = chargeModel.money;
-                } else if ([chargeModel.billId isEqualToString:@"5"]
-                           || [chargeModel.billId isEqualToString:@"6"]) {
-                    // 利息
-                    chargeModel.chargeType = SSJLoanCompoundChargeTypeInterest;
-                } else if ([chargeModel.billId isEqualToString:@"7"]) {
-                    // 还款
-                    chargeModel.chargeType = SSJLoanCompoundChargeTypeRepayment;
-                    surplus -= chargeModel.money;
-                } else if ([chargeModel.billId isEqualToString:@"8"]) {
-                    // 追加欠款
-                    chargeModel.chargeType = SSJLoanCompoundChargeTypeAdd;
-                    surplus += chargeModel.money;
-                } else if ([chargeModel.billId isEqualToString:@"9"]) {
-                    // 余额减少
-                    chargeModel.chargeType = SSJLoanCompoundChargeTypeBalanceDecrease;
-                    surplus -= chargeModel.money;
-                } else if ([chargeModel.billId isEqualToString:@"10"]) {
-                    // 余额增加
-                    chargeModel.chargeType = SSJLoanCompoundChargeTypeBalanceIncrease;
-                    surplus += chargeModel.money;
-                }
+            case SSJLoanCompoundChargeTypeBalanceIncrease:
+            case SSJLoanCompoundChargeTypeAdd:
+                surplus += chargeModel.money;
+                break;
+                
+            case SSJLoanCompoundChargeTypeBalanceDecrease:
+                case SSJLoanCompoundChargeTypeRepayment:
+                case SSJLoanCompoundChargeTypeCloseOut:
+                surplus -= chargeModel.money;
+                break;
+                
+            case SSJLoanCompoundChargeTypeInterest:
                 break;
         }
     }
@@ -756,24 +712,10 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
                                          success:(void (^)(SSJLoanCompoundChargeModel *model))success
                                          failure:(void (^)(NSError *error))failure {
     
-    if (!model) {
-        NSError *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"借贷流水模型不能为nil"}];
-        failure(error);
-        return;
-    }
-    
-    if (![model.billId isEqualToString:@"3"]
-        && ![model.billId isEqualToString:@"4"]
-        && ![model.billId isEqualToString:@"5"]
-        && ![model.billId isEqualToString:@"6"]
-        && ![model.billId isEqualToString:@"7"]
-        && ![model.billId isEqualToString:@"8"]
-        && ![model.billId isEqualToString:@"9"]
-        && ![model.billId isEqualToString:@"10"]) {
-        
+    NSError *tError = nil;
+    if (![self checkLoanModelValid:model error:&tError]) {
         if (failure) {
-            NSError *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat:@"该流水不是借贷产生的流水，billId:%@", model.billId]}];
-            failure(error);
+            failure(tError);
         }
         return;
     }
@@ -804,7 +746,6 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
             chargeModel.writeDate = model.writeDate;
             chargeModel.money = money;
             chargeModel.type = model.type;
-//            chargeModel.chargeType = model.chargeType;
             chargeModel.userId = model.userId;
             chargeModel.closedOut = model.closedOut;
             [chargeModels addObject:chargeModel];
@@ -815,8 +756,20 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
         compoundModel.lender = [db stringForQuery:@"select lender from bk_loan where loanid = ? and cuserid = ?", model.loanId, model.userId];
         
         for (SSJLoanChargeModel *chargeModel in chargeModels) {
-            if ([chargeModel.billId isEqualToString:@"5"]
-                || [chargeModel.billId isEqualToString:@"6"]) {
+            
+            [self updateChargeTypeWithModel:chargeModel];
+            
+            NSError *tError = nil;
+            if (![self checkLoanModelValid:chargeModel error:&tError]) {
+                if (failure) {
+                    SSJDispatchMainAsync(^{
+                        failure(tError);
+                    });
+                }
+                return;
+            }
+            
+            if (chargeModel.chargeType == SSJLoanCompoundChargeTypeInterest) {
                 compoundModel.interestChargeModel = chargeModel;
             } else {
                 NSString *parentId = [db stringForQuery:@"select cparent from bk_fund_info where cuserid = ? and cfundid = ?", chargeModel.userId, chargeModel.fundId];
@@ -835,6 +788,172 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
             });
         }
     }];
+}
+
++ (void)deleteLoanCompoundChargeModel:(SSJLoanCompoundChargeModel *)model
+                              success:(void (^)(void))success
+                              failure:(void (^)(NSError *error))failure {
+    
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        
+        NSMutableArray *chargeIds = [[NSMutableArray alloc] init];
+        
+        if (model.chargeModel.chargeId) {
+            [chargeIds addObject:[NSString stringWithFormat:@"'%@'", model.chargeModel.chargeId]];
+        }
+        
+        if (model.targetChargeModel.chargeId) {
+            [chargeIds addObject:[NSString stringWithFormat:@"'%@'", model.targetChargeModel.chargeId]];
+        }
+        
+        if (model.interestChargeModel.chargeId) {
+            [chargeIds addObject:[NSString stringWithFormat:@"'%@'", model.interestChargeModel.chargeId]];
+        }
+        
+        NSString *writeDateStr = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        
+        NSString *sql = [NSString stringWithFormat:@"update bk_user_charge set operatortype = 2, cwritedate = ?, iversion = ? where ichargeid in (%@) and cuserid = ?", [chargeIds componentsJoinedByString:@","]];
+        
+        if (![db executeUpdate:sql, writeDateStr, @(SSJSyncVersion()), model.chargeModel.userId]) {
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        }
+        
+        if (success) {
+            SSJDispatchMainAsync(^{
+                success();
+            });
+        }
+    }];
+}
+
++ (void)updateChargeTypeWithModel:(SSJLoanChargeModel *)model {
+    switch (model.type) {
+        case SSJLoanTypeLend:
+            if ([model.billId isEqualToString:@"3"]) {
+                // 创建
+                model.chargeType = SSJLoanCompoundChargeTypeCreate;
+            } else if ([model.billId isEqualToString:@"4"]) {
+                // 结清
+                model.chargeType = SSJLoanCompoundChargeTypeCloseOut;
+            } else if ([model.billId isEqualToString:@"5"]
+                       || [model.billId isEqualToString:@"6"]) {
+                // 利息
+                model.chargeType = SSJLoanCompoundChargeTypeInterest;
+            } else if ([model.billId isEqualToString:@"7"]) {
+                // 追加借出
+                model.chargeType = SSJLoanCompoundChargeTypeAdd;
+            } else if ([model.billId isEqualToString:@"8"]) {
+                // 收款
+                model.chargeType = SSJLoanCompoundChargeTypeRepayment;
+            } else if ([model.billId isEqualToString:@"9"]) {
+                // 余额增加
+                model.chargeType = SSJLoanCompoundChargeTypeBalanceIncrease;
+            } else if ([model.billId isEqualToString:@"10"]) {
+                // 余额减少
+                model.chargeType = SSJLoanCompoundChargeTypeBalanceDecrease;
+            }
+            break;
+            
+        case SSJLoanTypeBorrow:
+            if ([model.billId isEqualToString:@"3"]) {
+                // 结清
+                model.chargeType = SSJLoanCompoundChargeTypeCloseOut;
+            } else if ([model.billId isEqualToString:@"4"]) {
+                // 创建
+                model.chargeType = SSJLoanCompoundChargeTypeCreate;
+            } else if ([model.billId isEqualToString:@"5"]
+                       || [model.billId isEqualToString:@"6"]) {
+                // 利息
+                model.chargeType = SSJLoanCompoundChargeTypeInterest;
+            } else if ([model.billId isEqualToString:@"7"]) {
+                // 还款
+                model.chargeType = SSJLoanCompoundChargeTypeRepayment;
+            } else if ([model.billId isEqualToString:@"8"]) {
+                // 追加欠款
+                model.chargeType = SSJLoanCompoundChargeTypeAdd;
+            } else if ([model.billId isEqualToString:@"9"]) {
+                // 余额减少
+                model.chargeType = SSJLoanCompoundChargeTypeBalanceDecrease;
+            } else if ([model.billId isEqualToString:@"10"]) {
+                // 余额增加
+                model.chargeType = SSJLoanCompoundChargeTypeBalanceIncrease;
+            }
+            break;
+    }
+}
+
+// 验证借贷有效性
++ (BOOL)checkLoanModelValid:(SSJLoanChargeModel *)model error:(NSError **)error {
+    if (!model) {
+        if (error) {
+            *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"借贷流水模型不能为nil"}];
+        }
+        return NO;
+    }
+    
+    if (!model.chargeId.length) {
+        if (error) {
+            *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat:@"借贷流水的chargeId为nil或空字符串 chargeId:%@", model.chargeId]}];
+        }
+        return NO;
+    }
+    
+    if (!model.fundId.length) {
+        if (error) {
+            *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat:@"借贷流水的fundId为nil或空字符串 fundId:%@", model.fundId]}];
+        }
+        return NO;
+    }
+    
+    if (!model.loanId.length) {
+        if (error) {
+            *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat:@"借贷流水的loanId为nil或空字符串 loanId:%@", model.loanId]}];
+        }
+        return NO;
+    }
+    
+    if (!model.userId.length) {
+        if (error) {
+            *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat:@"借贷流水的userId为nil或空字符串 userId:%@", model.userId]}];
+        }
+        return NO;
+    }
+    
+    if (![model.billId isEqualToString:@"3"]
+        && ![model.billId isEqualToString:@"4"]
+        && ![model.billId isEqualToString:@"5"]
+        && ![model.billId isEqualToString:@"6"]
+        && ![model.billId isEqualToString:@"7"]
+        && ![model.billId isEqualToString:@"8"]
+        && ![model.billId isEqualToString:@"9"]
+        && ![model.billId isEqualToString:@"10"]) {
+        
+        if (error) {
+            *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat:@"该流水不是借贷产生的流水，billId:%@", model.billId]}];
+        }
+        return NO;
+    }
+    
+    if (!model.billDate) {
+        if (error) {
+            *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat:@"借贷流水的billDate为nil billDate:%@", model.billDate]}];
+        }
+        return NO;
+    }
+    
+    if (!model.writeDate) {
+        if (error) {
+            *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat:@"借贷流水的writeDate为nil writeDate:%@", model.writeDate]}];
+        }
+        return NO;
+    }
+    
+    return YES;
 }
 
 @end

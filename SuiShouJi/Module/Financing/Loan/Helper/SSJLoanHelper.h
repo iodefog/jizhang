@@ -154,6 +154,17 @@ NS_ASSUME_NONNULL_BEGIN
                                          success:(void (^)(SSJLoanCompoundChargeModel *model))success
                                          failure:(void (^)(NSError *error))failure;
 
+/**
+ 删除借贷产生的流水
+
+ @param model 借贷产生的流水模型
+ @param success 删除成功的回调
+ @param failure 删除失败的回调
+ */
++ (void)deleteLoanCompoundChargeModel:(SSJLoanCompoundChargeModel *)model
+                              success:(void (^)(void))success
+                              failure:(void (^)(NSError *error))failure;
+
 @end
 
 NS_ASSUME_NONNULL_END

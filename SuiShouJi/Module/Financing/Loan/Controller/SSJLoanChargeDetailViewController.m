@@ -38,8 +38,9 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self.view addSubview:self.tableView];
+    [self updateTitle];
     [self showDeleteItemIfNeeded];
+    [self.view addSubview:self.tableView];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -81,6 +82,62 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
             || _model.chargeType == SSJLoanCompoundChargeTypeBalanceDecrease) {
             self.navigationItem.rightBarButtonItem = self.deleteItem;
         }
+    }
+}
+
+- (void)updateTitle {
+    switch (_compoundModel.chargeModel.chargeType) {
+        case SSJLoanCompoundChargeTypeCreate: {
+            switch (_compoundModel.chargeModel.type) {
+                case SSJLoanTypeLend:
+                    self.title = @"借出款";
+                    break;
+                    
+                case SSJLoanTypeBorrow:
+                    self.title = @"欠款";
+                    break;
+            }
+        }
+            break;
+            
+        case SSJLoanCompoundChargeTypeBalanceIncrease:
+        case SSJLoanCompoundChargeTypeBalanceDecrease: {
+            self.title = @"详情";
+        }
+            break;
+            
+        case SSJLoanCompoundChargeTypeRepayment: {
+            switch (_compoundModel.chargeModel.type) {
+                case SSJLoanTypeLend:
+                    self.title = @"收款";
+                    break;
+                    
+                case SSJLoanTypeBorrow:
+                    self.title = @"还款";
+                    break;
+            }
+        }
+            break;
+            
+        case SSJLoanCompoundChargeTypeAdd: {
+            switch (_compoundModel.chargeModel.type) {
+                case SSJLoanTypeLend:
+                    self.title = @"追加借出";
+                    break;
+                    
+                case SSJLoanTypeBorrow:
+                    self.title = @"追加还款";
+                    break;
+            }
+        }
+            break;
+            
+        case SSJLoanCompoundChargeTypeCloseOut:
+            self.title = @"结清";
+            break;
+            
+        case SSJLoanCompoundChargeTypeInterest:
+            break;
     }
 }
 
@@ -429,7 +486,15 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
 
 #pragma mark - Event
 - (void)deleteItemAction {
-    
+    self.deleteItem.enabled = NO;
+    [SSJLoanHelper deleteLoanCompoundChargeModel:_compoundModel success:^{
+        self.deleteItem.enabled = YES;
+        [CDAutoHideMessageHUD showMessage:@"删除成功"];
+        [self goBackAction];
+    } failure:^(NSError * _Nonnull error) {
+        self.deleteItem.enabled = YES;
+        [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
+    }];
 }
 
 #pragma mark - Getter
