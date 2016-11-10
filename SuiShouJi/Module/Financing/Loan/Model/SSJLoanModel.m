@@ -28,6 +28,7 @@
              @"interest",
              @"closeOut",
              @"type",
+             @"interestType",
              @"operatorType",
              @"version",
              @"writeDate"];
@@ -50,6 +51,7 @@
              @"interest":@"interest",
              @"closeOut":@"iend",
              @"type":@"itype",
+             @"interestType":@"interesttype",
              @"operatorType":@"operatortype",
              @"version":@"iversion",
              @"writeDate":@"cwritedate"};
@@ -74,6 +76,7 @@
     model.interest = [resultSet boolForColumn:@"interest"];
     model.closeOut = [resultSet boolForColumn:@"iend"];
     model.type = [resultSet intForColumn:@"itype"];
+    model.interestType = [resultSet intForColumn:@"interesttype"];
     model.operatorType = [resultSet intForColumn:@"operatorType"];
     model.version = [resultSet longLongIntForColumn:@"iversion"];
     model.writeDate = [NSDate dateWithString:[resultSet stringForColumn:@"cwritedate"] formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
@@ -104,6 +107,7 @@
     model.interest = _interest;
     model.closeOut = _closeOut;
     model.type = _type;
+    model.interestType = _interestType;
     model.operatorType = _operatorType;
     model.version = _version;
     model.writeDate = _writeDate;
@@ -133,6 +137,7 @@
                                                         @"interest":@(_interest),
                                                         @"closeOut":@(_closeOut),
                                                         @"type":@(_type),
+                                                        @"interestType":@(_interestType),
                                                         @"operatorType":@(_operatorType),
                                                         @"version":@(_version),
                                                         @"writeDate":(_writeDate ?: [NSNull null])}];

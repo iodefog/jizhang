@@ -467,84 +467,6 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
     }];
 }
 
-+ (void)recoverLoanModel:(SSJLoanModel *)model
-                 success:(void (^)())success
-                 failure:(void (^)(NSError *error))failure {
-    
-    [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
-        
-        // 如果当前的借贷记录已结清或删除，直接执行成功回调
-        int operatorType = [db intForQuery:@"select operatortype from bk_loan where loanid = ?", model.ID];
-        if (operatorType == 2) {
-            if (success) {
-                SSJDispatchMainAsync(^{
-                    success();
-                });
-            }
-            return;
-        }
-        
-        NSString *writedate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-        
-        // 拼接要删除的转帐流水id
-        NSMutableString *chargeIDs = [NSMutableString string];
-        
-        if (model.endChargeID.length) {
-            [chargeIDs appendFormat:@"'%@'", model.endChargeID];
-        }
-        
-        if (model.endTargetChargeID.length) {
-            [chargeIDs appendFormat:@", '%@'", model.endTargetChargeID];
-        }
-        
-        if (model.interestChargeID.length) {
-            [chargeIDs appendFormat:@", '%@'", model.interestChargeID];
-        }
-        
-        // 将要删除的转帐流水operatortype改为2
-        NSString *sqlStr = [NSString stringWithFormat:@"update bk_user_charge set operatortype = 2, iversion = ?, cwritedate = ? where ichargeid in (%@)", chargeIDs];
-        
-        // 把结清借贷产生的转帐流水状态改为删除
-        if (![db executeUpdate:sqlStr, @(SSJSyncVersion()), writedate]) {
-            *rollback = YES;
-            if (failure) {
-                SSJDispatchMainAsync(^{
-                    failure([db lastError]);
-                });
-            }
-            return;
-        }
-        
-        // 修改借贷记录的结清状态，并且清空结清转帐流水ID
-        if (![db executeUpdate:@"update bk_loan set iend = ?, iversion = ?, operatortype = ?, cwritedate = ? where loanid = ?", @0, @(SSJSyncVersion()), @1, writedate, model.ID]) {
-            *rollback = YES;
-            if (failure) {
-                SSJDispatchMainAsync(^{
-                    failure([db lastError]);
-                });
-            }
-            return;
-        }
-        
-        // 开启提醒
-        if (![db executeUpdate:@"update bk_user_remind set istate = ?, operatortype = ?, iversion = ?, cwritedate = ? where cremindid = ? and operatortype <> 2", @1, @1, @(SSJSyncVersion()), writedate, model.remindID]) {
-            *rollback = YES;
-            if (failure) {
-                SSJDispatchMainAsync(^{
-                    failure([db lastError]);
-                });
-            }
-            return;
-        }
-        
-        if (success) {
-            SSJDispatchMainAsync(^{
-                success();
-            });
-        }
-    }];
-}
-
 + (void)queryFundModelListWithSuccess:(void (^)(NSArray <SSJLoanFundAccountSelectionViewItem *>*items))success
                               failure:(void (^)(NSError *error))failure {
     
@@ -609,7 +531,56 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
 }
 
 + (double)expectedInterestWithLoanModel:(SSJLoanModel *)model {
-    return [self interestUntilDate:model.repaymentDate withLoanModel:model];
+    if (model.closeOut) {
+        SSJPRINT(@"该借贷已结清");
+        return 0;
+    }
+    
+    if (!model.borrowDate || !model.repaymentDate) {
+        SSJPRINT(@"borrowDate、repaymentDate不能为nil，borrowDate：%@ repaymentDate:%@", model.borrowDate, model.repaymentDate);
+        return 0;
+    }
+    
+    double principal = 0;
+    double interest = 0;
+    
+    // 先计算出借贷起始本金（包括余额变更后的）
+    for (SSJLoanChargeModel *chargeModel in model.chargeModels) {
+        if (chargeModel.chargeType == SSJLoanCompoundChargeTypeCreate) {
+            principal = chargeModel.money;
+        } else if (chargeModel.chargeType == SSJLoanCompoundChargeTypeBalanceIncrease) {
+            principal += chargeModel.money;
+        } else if (chargeModel.chargeType == SSJLoanCompoundChargeTypeBalanceDecrease) {
+            principal -= chargeModel.money;
+        } else if (chargeModel.chargeType == SSJLoanCompoundChargeTypeInterest) {
+            interest += chargeModel.money;
+        }
+    }
+    
+    switch (model.interestType) {
+        // 如果没有选择过计息方式，就按照原始变本金计算
+        case SSJLoanInterestTypeUnknown:
+        case SSJLoanInterestTypeOriginalPrincipal:
+            return [self interestUntilDate:model.repaymentDate withLoanModel:model];
+            
+        case SSJLoanInterestTypeChangePrincipal: {
+            NSDate *lastChangeDate = model.borrowDate;
+            for (SSJLoanChargeModel *chargeModel in model.chargeModels) {
+                if (chargeModel.chargeType == SSJLoanCompoundChargeTypeRepayment) {
+                    interest += [self interestWithPrincipal:principal rate:model.rate days:(int)[chargeModel.billDate daysFrom:lastChangeDate]];
+                    principal -= chargeModel.money;
+                    lastChangeDate = chargeModel.billDate;
+                } else if (chargeModel.chargeType == SSJLoanCompoundChargeTypeAdd) {
+                    interest += [self interestWithPrincipal:principal rate:model.rate days:(int)[chargeModel.billDate daysFrom:lastChangeDate]];
+                    principal += chargeModel.money;
+                    lastChangeDate = chargeModel.billDate;
+                }
+            }
+            
+            interest += [self interestWithPrincipal:principal rate:model.rate days:(int)[model.repaymentDate daysFrom:lastChangeDate]];
+            return interest;
+        }
+    }
 }
 
 + (double)closeOutInterestWithLoanModel:(SSJLoanModel *)model {
@@ -617,7 +588,7 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
 }
 
 + (double)interestForEverydayWithLoanModel:(SSJLoanModel *)model {
-    return model.rate * model.jMoney / 365;
+    return [self interestWithPrincipal:model.jMoney rate:model.rate days:1];
 }
 
 + (double)interestUntilDate:(NSDate *)date withLoanModel:(SSJLoanModel *)model {
@@ -633,6 +604,10 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
     }
     
     return daysInterval * [self interestForEverydayWithLoanModel:model];
+}
+
++ (double)interestWithPrincipal:(double)principal rate:(double)rate days:(int)days {
+    return days * principal * rate / 365;
 }
 
 + (BOOL)saveLoanModel:(SSJLoanModel *)model booksID:(NSString *)booksID inDatabase:(FMDatabase *)db {
@@ -781,16 +756,31 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
                                          success:(void (^)(SSJLoanCompoundChargeModel *model))success
                                          failure:(void (^)(NSError *error))failure {
     
-    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+    if (!model) {
+        NSError *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"借贷流水模型不能为nil"}];
+        failure(error);
+        return;
+    }
+    
+    if (![model.billId isEqualToString:@"3"]
+        && ![model.billId isEqualToString:@"4"]
+        && ![model.billId isEqualToString:@"5"]
+        && ![model.billId isEqualToString:@"6"]
+        && ![model.billId isEqualToString:@"7"]
+        && ![model.billId isEqualToString:@"8"]
+        && ![model.billId isEqualToString:@"9"]
+        && ![model.billId isEqualToString:@"10"]) {
         
-        SSJLoanCompoundChargeModel *compoundModel = [[SSJLoanCompoundChargeModel alloc] init];
-        if ([model.billId isEqualToString:@"5"]
-            || [model.billId isEqualToString:@"6"]) {
-            compoundModel.interestCharge = model;
-        } else {
-            compoundModel.chargeModel = model;
+        if (failure) {
+            NSError *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat:@"该流水不是借贷产生的流水，billId:%@", model.billId]}];
+            failure(error);
         }
-        compoundModel.type = model.type;
+        return;
+    }
+    
+    NSMutableArray *chargeModels = [@[model] mutableCopy];
+    
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         
         NSString *billDateStr = [model.billDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         NSString *writeDateStr = [model.writeDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
@@ -817,15 +807,26 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
 //            chargeModel.chargeType = model.chargeType;
             chargeModel.userId = model.userId;
             chargeModel.closedOut = model.closedOut;
-            
-            if ([chargeModel.billId isEqualToString:@"5"]
-                       || [chargeModel.billId isEqualToString:@"6"]) {
-                compoundModel.interestCharge = chargeModel;
-            } else {
-                compoundModel.targetChargeModel = chargeModel;
-            }
+            [chargeModels addObject:chargeModel];
         }
         [resultSet close];
+        
+        SSJLoanCompoundChargeModel *compoundModel = [[SSJLoanCompoundChargeModel alloc] init];
+        
+        for (SSJLoanChargeModel *chargeModel in chargeModels) {
+            if ([chargeModel.billId isEqualToString:@"5"]
+                || [chargeModel.billId isEqualToString:@"6"]) {
+                compoundModel.interestCharge = chargeModel;
+            } else {
+                NSString *parentId = [db stringForQuery:@"select cparent from bk_fund_info where cuserid = ? and cfundid = ?", chargeModel.userId, chargeModel.fundId];
+                if ([parentId isEqualToString:@"10"]
+                    || [parentId isEqualToString:@"11"]) {
+                    compoundModel.chargeModel = chargeModel;
+                } else {
+                    compoundModel.targetChargeModel = chargeModel;
+                }
+            }
+        }
         
         if (success) {
             SSJDispatchMainAsync(^{

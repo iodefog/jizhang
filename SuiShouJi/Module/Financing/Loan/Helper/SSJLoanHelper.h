@@ -91,17 +91,6 @@ NS_ASSUME_NONNULL_BEGIN
                   failure:(void (^)(NSError *error))failure;
 
 /**
- *  恢复已结清借贷
- *
- *  @param model     借贷模型
- *  @param success   成功的回调
- *  @param failure   失败的回调
- */
-+ (void)recoverLoanModel:(SSJLoanModel *)model
-                 success:(void (^)())success
-                 failure:(void (^)(NSError *error))failure;
-
-/**
  *  查询除借贷以外，当前用户的资金账户列表
  *
  *  @param success   成功的回调
@@ -153,7 +142,6 @@ NS_ASSUME_NONNULL_BEGIN
  @return 每天利息金额
  */
 + (double)interestForEverydayWithLoanModel:(SSJLoanModel *)model;
-
 
 /**
  查询借贷流水详情

@@ -9,14 +9,16 @@
 #import <Foundation/Foundation.h>
 #import "SSJLoanChargeModel.h"
 
-@interface SSJLoanCompoundChargeModel : NSObject <NSCopying>
+NS_ASSUME_NONNULL_BEGIN
 
-@property (nonatomic) SSJLoanType type;
+@interface SSJLoanCompoundChargeModel : NSObject <NSCopying>
 
 @property (nonatomic, copy) SSJLoanChargeModel *chargeModel;
 
 @property (nonatomic, copy) SSJLoanChargeModel *targetChargeModel;
 
-@property (nonatomic, copy) SSJLoanChargeModel *interestCharge;
+@property (nonatomic, copy, nullable) SSJLoanChargeModel *interestCharge;
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -9,6 +9,20 @@
 #import <Foundation/Foundation.h>
 #import "SSJLoanChargeModel.h"
 
+
+/**
+ 计息方式
+
+ - SSJLoanInterestTypeUnknown: 未知
+ - SSJLoanInterestTypeOriginalPrincipal: 不改变本金计息
+ - SSJLoanInterestTypeChangePrincipal: 改变本金计息
+ */
+typedef NS_ENUM(NSUInteger, SSJLoanInterestType) {
+    SSJLoanInterestTypeUnknown = 0,
+    SSJLoanInterestTypeOriginalPrincipal = 1,
+    SSJLoanInterestTypeChangePrincipal = 2
+};
+
 @class FMResultSet;
 
 @interface SSJLoanModel : NSObject <NSCopying>
@@ -79,6 +93,9 @@
 
 // 0:借出 1:借入
 @property (nonatomic) SSJLoanType type;
+
+// 计息方式
+@property (nonatomic) SSJLoanInterestType interestType;
 
 @property (nonatomic) int operatorType;
 

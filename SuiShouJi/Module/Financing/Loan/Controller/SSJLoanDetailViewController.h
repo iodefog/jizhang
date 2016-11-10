@@ -14,6 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, copy) NSString *loanID;
 
+@property (nonatomic, copy) NSString *fundColor;
+
 @end
 
 NS_ASSUME_NONNULL_END

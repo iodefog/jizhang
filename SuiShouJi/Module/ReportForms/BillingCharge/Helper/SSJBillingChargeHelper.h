@@ -22,14 +22,16 @@ extern NSString *const SSJBillingChargeRecordKey;
 @interface SSJBillingChargeHelper : NSObject
 
 /**
- *  查询某个时间内的记账流水数据；
+ *  查询特定时间内的指定类别流水数据；
  *
  *  @param ID           收支类别id
+ *  @param booksId      账本id，如果传nil就当做当前账本，查询所有账本数据传all
  *  @param period       查询的时间段，如果超过当前时间，则截止到今天
  *  @param success      查询成功的回调；参数data中是字典类型，有两个key：SSJBillingChargeDateKey对应日期字符串，SSJBillingChargeRecordKey对应数组，数组中元素是SSJBillingChargeCellItem类型实例
  *  @param failure      查询失败的回调
  */
 + (void)queryDataWithBillTypeID:(NSString *)ID
+                        booksId:(NSString *)booksId
                        inPeriod:(SSJDatePeriod *)period
                         success:(void (^)(NSArray <NSDictionary *>*data))success
                         failure:(void (^)(NSError *error))failure;
