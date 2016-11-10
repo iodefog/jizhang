@@ -25,7 +25,7 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
     
     if (!booksId) {
         SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID()];
-        booksId = userItem.currentBooksId.length ? userItem.currentBooksId: SSJUSERID();
+        booksId = userItem.currentBooksId ?: SSJUSERID();
     }
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
@@ -161,7 +161,7 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
     
     if (!booksId) {
         SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID()];
-        booksId = userItem.currentBooksId.length ? userItem.currentBooksId: SSJUSERID();
+        booksId = userItem.currentBooksId ?: SSJUSERID();
     }
 
     //  查询不同收支类型的总额
@@ -257,7 +257,7 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
     
     if (!booksId) {
         SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID()];
-        booksId = userItem.currentBooksId.length ? userItem.currentBooksId: SSJUSERID();
+        booksId = userItem.currentBooksId ?: SSJUSERID();
     }
 
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
@@ -332,7 +332,7 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
     
     if (!booksId) {
         SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID()];
-        booksId = userItem.currentBooksId.length ? userItem.currentBooksId: SSJUSERID();
+        booksId = userItem.currentBooksId ?: SSJUSERID();
     }
 
     NSMutableString *sqlStr = [NSMutableString stringWithFormat:@"select a.imoney, a.cbilldate, b.itype from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = '%@' and a.operatortype <> 2 and b.istate <> 2 and a.cbilldate <= datetime('now', 'localtime')", SSJUSERID()];
@@ -351,7 +351,7 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
         [sqlStr appendFormat:@" and a.cbilldate <= '%@'", endDateStr];
     }
     
-    [sqlStr appendString:@"order by a.cbilldate"];
+    [sqlStr appendString:@" order by a.cbilldate"];
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         FMResultSet *resultSet = [db executeQuery:sqlStr];

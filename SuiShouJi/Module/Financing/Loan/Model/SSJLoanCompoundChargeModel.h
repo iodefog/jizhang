@@ -13,11 +13,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface SSJLoanCompoundChargeModel : NSObject <NSCopying>
 
+@property (nonatomic, copy) NSString *lender;
+
 @property (nonatomic, copy) SSJLoanChargeModel *chargeModel;
 
 @property (nonatomic, copy) SSJLoanChargeModel *targetChargeModel;
 
-@property (nonatomic, copy, nullable) SSJLoanChargeModel *interestCharge;
+@property (nonatomic, copy, nullable) SSJLoanChargeModel *interestChargeModel;
 
 @end
 

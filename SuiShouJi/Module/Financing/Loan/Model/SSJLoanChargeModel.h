@@ -67,7 +67,7 @@ typedef NS_ENUM(NSUInteger, SSJLoanCompoundChargeType) {
 // 流水金额
 @property (nonatomic) double money;
 
-// 变更钱的金额
+// 变更前的金额
 @property (nonatomic) double oldMoney;
 
 @property (nonatomic) SSJLoanType type;

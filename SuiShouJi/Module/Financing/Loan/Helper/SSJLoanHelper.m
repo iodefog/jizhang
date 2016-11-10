@@ -812,11 +812,12 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
         [resultSet close];
         
         SSJLoanCompoundChargeModel *compoundModel = [[SSJLoanCompoundChargeModel alloc] init];
+        compoundModel.lender = [db stringForQuery:@"select lender from bk_loan where loanid = ? and cuserid = ?", model.loanId, model.userId];
         
         for (SSJLoanChargeModel *chargeModel in chargeModels) {
             if ([chargeModel.billId isEqualToString:@"5"]
                 || [chargeModel.billId isEqualToString:@"6"]) {
-                compoundModel.interestCharge = chargeModel;
+                compoundModel.interestChargeModel = chargeModel;
             } else {
                 NSString *parentId = [db stringForQuery:@"select cparent from bk_fund_info where cuserid = ? and cfundid = ?", chargeModel.userId, chargeModel.fundId];
                 if ([parentId isEqualToString:@"10"]
