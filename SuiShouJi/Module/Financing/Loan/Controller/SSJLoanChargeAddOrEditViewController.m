@@ -7,31 +7,39 @@
 //
 
 #import "SSJLoanChargeAddOrEditViewController.h"
+#import "TPKeyboardAvoidingTableView.h"
+#import "SSJLoanChargeModel.h"
 
-@interface SSJLoanChargeAddOrEditViewController ()
+@interface SSJLoanChargeAddOrEditViewController ()<UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
+
+@property (nonatomic, strong) TPKeyboardAvoidingTableView *tableView;
 
 @end
 
 @implementation SSJLoanChargeAddOrEditViewController
 
+#pragma mark - Lifecycle
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+#pragma mark - Getter
+- (TPKeyboardAvoidingTableView *)tableView {
+    if (!_tableView) {
+        _tableView = [[TPKeyboardAvoidingTableView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM) style:UITableViewStyleGrouped];
+        _tableView.dataSource = self;
+        _tableView.delegate = self;
+        _tableView.backgroundView = nil;
+        _tableView.backgroundColor = [UIColor clearColor];
+        [_tableView setSeparatorInset:UIEdgeInsetsZero];
+//        [_tableView registerClass:[SSJAddOrEditLoanLabelCell class] forCellReuseIdentifier:kAddOrEditLoanLabelCellId];
+//        [_tableView registerClass:[SSJAddOrEditLoanTextFieldCell class] forCellReuseIdentifier:kAddOrEditLoanTextFieldCellId];
+//        [_tableView registerClass:[SSJAddOrEditLoanMultiLabelCell class] forCellReuseIdentifier:kAddOrEditLoanMultiLabelCellId];
+        _tableView.sectionHeaderHeight = 10;
+        _tableView.sectionFooterHeight = 0;
+    }
+    return _tableView;
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

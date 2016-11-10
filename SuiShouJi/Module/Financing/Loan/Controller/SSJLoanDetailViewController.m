@@ -9,6 +9,8 @@
 #import "SSJLoanDetailViewController.h"
 #import "SSJAddOrEditLoanViewController.h"
 #import "SSJLoanCloseOutViewController.h"
+#import "SSJLoanChargeDetailViewController.h"
+#import "SSJLoanChargeAddOrEditViewController.h"
 #import "SSJLoanDetailChargeChangeHeaderView.h"
 #import "SSJSeparatorFormView.h"
 #import "SSJLoanDetailCell.h"
