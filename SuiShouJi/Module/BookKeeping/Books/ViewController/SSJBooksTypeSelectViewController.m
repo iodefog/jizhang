@@ -19,6 +19,8 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
 #import "SSJBooksEditeOrNewViewController.h"
 #import "SSJEditableCollectionView.h"
 #import "SSJSummaryBooksViewController.h"
+#import "SSJDatabaseQueue.h"
+#import "SSJBooksParentSelectView.h"
 
 @interface SSJBooksTypeSelectViewController ()<SSJEditableCollectionViewDelegate,SSJEditableCollectionViewDataSource>
 
@@ -35,6 +37,8 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
 @property(nonatomic, strong) UIButton *rightButton;
 
 @property(nonatomic, strong) SSJBooksHeaderView *header;
+
+@property(nonatomic, strong) SSJBooksParentSelectView *parentSelectView;
 
 @end
 
@@ -67,11 +71,12 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:@"#f9d2da"] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
 //    self.mm_drawerController.openDrawerGestureModeMask = MMOpenDrawerGestureModeAll;
     [self.header startAnimating];
     [MobClick event:@"main_account_book"];
     [self getDateFromDB];
-    
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
@@ -123,14 +128,16 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
         }
     }else{
         if (![item.booksName isEqualToString:@"添加账本"]) {
-            [MobClick event:@"change_account_book"];
-            SSJSelectBooksType(item.booksId);
-            [self.collectionView reloadData];
-            [self.mm_drawerController closeDrawerAnimated:YES completion:NULL];
-            [[NSNotificationCenter defaultCenter]postNotificationName:SSJBooksTypeDidChangeNotification object:nil];
+//            [MobClick event:@"change_account_book"];
+//            SSJSelectBooksType(item.booksId);
+//            [self.collectionView reloadData];
+//            [self.mm_drawerController closeDrawerAnimated:YES completion:NULL];
+//            [[NSNotificationCenter defaultCenter]postNotificationName:SSJBooksTypeDidChangeNotification object:nil];
         }else{
-            SSJBooksEditeOrNewViewController *booksEditeVc = [[SSJBooksEditeOrNewViewController alloc]init];
-            [self.navigationController pushViewController:booksEditeVc animated:YES];
+//            SSJBooksEditeOrNewViewController *booksEditeVc = [[SSJBooksEditeOrNewViewController alloc]init];
+//            [self.navigationController pushViewController:booksEditeVc animated:YES];
+            [self.parentSelectView show];
+
         }
     }
 }
@@ -403,9 +410,23 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
 //    return _booksEditeView;
 //}
 
+- (SSJBooksParentSelectView *)parentSelectView{
+    if (!_parentSelectView) {
+        _parentSelectView = [[SSJBooksParentSelectView alloc]initWithFrame:self.view.frame];
+    }
+    return _parentSelectView;
+}
+
 #pragma mark - Private
 -(void)getDateFromDB{
     __weak typeof(self) weakSelf = self;
+    [SSJBooksTypeStore getTotalIncomeAndExpenceWithSuccess:^(double income, double expenture) {
+        weakSelf.header.income = income;
+        weakSelf.header.expenture = expenture;
+    } failure:^(NSError *error) {
+        
+    }];
+    
     [SSJBooksTypeStore queryForBooksListWithSuccess:^(NSMutableArray<SSJBooksTypeItem *> *result) {
         weakSelf.items = [NSMutableArray arrayWithArray:result];
         [weakSelf.collectionView reloadData];

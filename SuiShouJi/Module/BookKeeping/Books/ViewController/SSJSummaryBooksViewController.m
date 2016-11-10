@@ -13,10 +13,12 @@
 #import "SSJUserTableManager.h"
 #import "SSJDatabaseQueue.h"
 #import "SSJReportFormsUtil.h"
+#import "SSJBooksTypeStore.h"
 #import "SSJUserItem.h"
 #import "SSJReportFormsIncomeAndPayCell.h"
 #import "SSJMagicExportCalendarViewController.h"
 #import "UIViewController+MMDrawerController.h"
+#import "SSJBillingChargeViewController.h"
 
 static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
 
@@ -143,6 +145,20 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
     return incomeAndPayCell;
 }
 
+#pragma mark - UITableViewDelegate
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    if (self.chargeDatas.count > indexPath.row) {
+        SSJReportFormsItem *item = self.chargeDatas[indexPath.row];
+        SSJBillingChargeViewController *billingChargeVC = [[SSJBillingChargeViewController alloc] init];
+        billingChargeVC.ID = item.ID;
+        billingChargeVC.color = [UIColor ssj_colorWithHex:item.colorValue];
+        billingChargeVC.period = _customPeriod ?: [_periods ssj_safeObjectAtIndex:_header.dateAxisView.selectedIndex];
+        billingChargeVC.isPayment = _header.incomOrExpenseSelectSegment.selectedSegmentIndex == 0;
+        [self.navigationController pushViewController:billingChargeVC animated:YES];
+    }
+}
 
 #pragma mark - SSJReportFormsScaleAxisViewDelegate
 - (NSUInteger)numberOfAxisInScaleAxisView:(SSJReportFormsScaleAxisView *)scaleAxisView {
@@ -305,12 +321,13 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
 // 加载日期选择的数据
 - (void)reloadAxisView{
     __weak typeof(self) weakSelf = self;
-    
-    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        NSString *userId = SSJUSERID();
-        weakSelf.header.totalIncome = [db doubleForQuery:@"select sum(uc.imoney) from bk_user_charge uc, bk_bill_type bt where uc.ibillid = bt.id and bt.itype = 0 and uc.cuserid = ? and bt.istate <> 2",userId];
-        weakSelf.header.totalExpenture = [db doubleForQuery:@"select sum(uc.imoney) from bk_user_charge uc, bk_bill_type bt where uc.ibillid = bt.id and bt.itype = 1 and uc.cuserid = ? and bt.istate <> 2",userId];
+    [SSJBooksTypeStore getTotalIncomeAndExpenceWithSuccess:^(double income, double expenture) {
+        weakSelf.header.totalIncome = income;
+        weakSelf.header.totalExpenture = expenture;
+    } failure:^(NSError *error) {
+        
     }];
+
     
     [SSJReportFormsUtil queryForPeriodListWithIncomeOrPayType:SSJBillTypeSurplus booksId:@"all" success:^(NSArray<SSJDatePeriod *> *periods) {
         
@@ -339,7 +356,12 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
             _header.dateAxisView.selectedIndex = _periods.count - 3;
         }
         
-        _currentPeriod = [_periods ssj_safeObjectAtIndex:_header.dateAxisView.selectedIndex];
+        if (!_periods.count) {
+            _header.addOrDeleteCustomPeriodBtn.hidden = YES;
+        }else{
+            _currentPeriod = [_periods ssj_safeObjectAtIndex:_header.dateAxisView.selectedIndex];
+            _header.addOrDeleteCustomPeriodBtn.hidden = NO;
+        }
         
         [self reloadAllDatas];
     } failure:^(NSError *error) {

@@ -23,6 +23,10 @@ static NSString *const kSummaryButtonAnimationKey = @"summaryButtonAnimationKey"
 @property(nonatomic, strong) UILabel *expentureLab;
 
 @property(nonatomic, strong) UIButton *summaryButton;
+
+@property(nonatomic, strong) UIView *backColorView;
+
+@property(nonatomic, strong) UIImageView *waveImage;
 @end
 
 @implementation SSJBooksHeaderView
@@ -35,6 +39,8 @@ static NSString *const kSummaryButtonAnimationKey = @"summaryButtonAnimationKey"
         [self ssj_setBorderStyle:SSJBorderStyleTop];
         [self ssj_setBorderWidth:1.f / [UIScreen mainScreen].scale];
         self.backgroundColor = [UIColor ssj_colorWithHex:@"#f9d2da"];
+        [self addSubview:self.backColorView];
+        [self addSubview:self.waveImage];
         [self addSubview:self.incomeTitleLab];
         [self addSubview:self.incomeLab];
         [self addSubview:self.expentureTitleLab];
@@ -46,6 +52,8 @@ static NSString *const kSummaryButtonAnimationKey = @"summaryButtonAnimationKey"
 
 - (void)layoutSubviews{
     [super layoutSubviews];
+    self.backColorView.leftTop = CGPointMake(0, 0);
+    self.waveImage.leftTop = CGPointMake(0, self.backColorView.bottom);
     self.incomeTitleLab.centerY = self.expentureTitleLab.centerY = self.height / 2 - 12;
     self.incomeLab.centerY = self.expentureLab.centerY = self.height / 2 + 12;
     self.incomeTitleLab.centerX = self.incomeLab.centerX = self.width / 4;
@@ -102,6 +110,22 @@ static NSString *const kSummaryButtonAnimationKey = @"summaryButtonAnimationKey"
         [_summaryButton addTarget:self action:@selector(buttonClickAction) forControlEvents:UIControlEventTouchUpInside];
     }
     return _summaryButton;
+}
+
+- (UIView *)backColorView{
+    if (!_backColorView) {
+        _backColorView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.width, self.height - 38)];
+        _backColorView.backgroundColor = [UIColor ssj_colorWithHex:@""];
+    }
+    return _backColorView;
+}
+
+- (UIImageView *)waveImage{
+    if (!_waveImage) {
+        _waveImage = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, self.width, 38)];
+        _waveImage.image = [UIImage ssj_themeImageWithName:@"bk_wave"];
+    }
+    return _waveImage;
 }
 
 - (void)setIncome:(double)income{

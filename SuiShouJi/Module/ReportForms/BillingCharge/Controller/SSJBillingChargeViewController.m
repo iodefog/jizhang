@@ -11,6 +11,7 @@
 #import "SSJBillingChargeHeaderView.h"
 #import "SSJBillingChargeCell.h"
 #import "SSJBillingChargeHelper.h"
+#import "UIViewController+MMDrawerController.h"
 
 static NSString *const kBillingChargeCellID = @"kBillingChargeCellID";
 static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID";
@@ -44,13 +45,23 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
+    [self.mm_drawerController setMaximumLeftDrawerWidth:SSJSCREENWITH];
+    [self.mm_drawerController setOpenDrawerGestureModeMask:MMOpenDrawerGestureModeNone];
+    [self.mm_drawerController setCloseDrawerGestureModeMask:MMCloseDrawerGestureModeNone];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:self.color size:CGSizeZero] forBarMetrics:UIBarMetricsDefault];
     [self.navigationController.navigationBar setTitleTextAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:21],
                                                                       NSForegroundColorAttributeName:[UIColor whiteColor]}];
     [self reloadData];
 }
+
+- (void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    [self.mm_drawerController setMaximumLeftDrawerWidth:SSJSCREENWITH * 0.8];
+    [self.mm_drawerController setOpenDrawerGestureModeMask:MMOpenDrawerGestureModeAll];
+    [self.mm_drawerController setCloseDrawerGestureModeMask:MMCloseDrawerGestureModeAll];
+}
+
 
 - (void)updateAppearanceAfterThemeChanged {
     [super updateAppearanceAfterThemeChanged];
