@@ -130,7 +130,7 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
         
     } else {
         [self.view ssj_showLoadingIndicator];
-        [SSJBillingChargeHelper queryDataWithBillTypeID:_ID inPeriod:_period success:^(NSArray<NSDictionary *> *data) {
+        [SSJBillingChargeHelper queryDataWithBillTypeID:_ID booksId:nil inPeriod:_period success:^(NSArray<NSDictionary *> *data) {
             [self.view ssj_hideLoadingIndicator];
             self.datas = data;
             [self.tableView reloadData];

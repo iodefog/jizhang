@@ -333,7 +333,7 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
     
     NSString *versinStr = tableInfo[@"syncversion"];
     
-    //  存储当前同步用户数据
+    // 存储当前同步用户数据
     NSArray *userArr = tableInfo[@"bk_user"];
     for (NSDictionary *userInfo in userArr) {
         NSString *userId = userInfo[@"cuserid"];
@@ -350,7 +350,7 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
         [SSJUserTableManager saveUserItem:userItem];
     }
     
-    //  合并顺序：1.收支类型 2.资金帐户 3.定期记账 4.记账流水 5.预算
+    // 合并顺序：1.收支类型 2.资金帐户 3.定期记账 4.记账流水 5.预算
     __block BOOL mergeSuccess = YES;
     __block BOOL updateVersionSuccess = YES;
     
@@ -374,7 +374,7 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
         }
     }
     
-    //  所有数据合并成功、版本号更新成功后，插入一个新的记录到BK_SYNC中
+    // 所有数据合并成功、版本号更新成功后，插入一个新的记录到BK_SYNC中
     if (updateVersionSuccess) {
         __block BOOL tSuccess = YES;
         [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
