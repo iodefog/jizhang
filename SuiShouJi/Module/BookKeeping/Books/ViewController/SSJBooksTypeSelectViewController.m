@@ -128,14 +128,12 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
         }
     }else{
         if (![item.booksName isEqualToString:@"添加账本"]) {
-//            [MobClick event:@"change_account_book"];
-//            SSJSelectBooksType(item.booksId);
-//            [self.collectionView reloadData];
-//            [self.mm_drawerController closeDrawerAnimated:YES completion:NULL];
-//            [[NSNotificationCenter defaultCenter]postNotificationName:SSJBooksTypeDidChangeNotification object:nil];
+            [MobClick event:@"change_account_book"];
+            SSJSelectBooksType(item.booksId);
+            [self.collectionView reloadData];
+            [self.mm_drawerController closeDrawerAnimated:YES completion:NULL];
+            [[NSNotificationCenter defaultCenter]postNotificationName:SSJBooksTypeDidChangeNotification object:nil];
         }else{
-//            SSJBooksEditeOrNewViewController *booksEditeVc = [[SSJBooksEditeOrNewViewController alloc]init];
-//            [self.navigationController pushViewController:booksEditeVc animated:YES];
             [self.parentSelectView show];
 
         }
@@ -413,6 +411,15 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
 - (SSJBooksParentSelectView *)parentSelectView{
     if (!_parentSelectView) {
         _parentSelectView = [[SSJBooksParentSelectView alloc]initWithFrame:self.view.frame];
+        __weak typeof(self) weakSelf = self;
+        _parentSelectView.parentSelectBlock = ^(NSInteger selectParent){
+            SSJBooksEditeOrNewViewController *booksEditeVc = [[SSJBooksEditeOrNewViewController alloc]init];
+            SSJBooksTypeItem *item = [[SSJBooksTypeItem alloc]init];
+            item.booksParent = selectParent;
+            booksEditeVc.item = item;
+            [weakSelf.parentSelectView dismiss];
+            [weakSelf.navigationController pushViewController:booksEditeVc animated:YES];
+        };
     }
     return _parentSelectView;
 }

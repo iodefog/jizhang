@@ -35,7 +35,9 @@
         self.title = @"编辑账本";
     }else{
         self.title = @"添加账本";
-        self.item = [[SSJBooksTypeItem alloc]init];
+        if (!self.item) {
+            self.item = [[SSJBooksTypeItem alloc]init];
+        }
         self.item.booksColor = @"#fc7a60";
         self.item.booksIcoin = @"bk_moren";
     }
@@ -102,11 +104,14 @@
         [CDAutoHideMessageHUD showMessage:@"账本名称不能超过5个字"];
         return;
     }
-    if ([SSJBooksTypeStore saveBooksTypeItem:self.item]) {
+    __weak typeof(self) weakSelf = self;
+    [SSJBooksTypeStore saveBooksTypeItem:self.item sucess:^{
         [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
         [[NSNotificationCenter defaultCenter]postNotificationName:SSJBooksTypeDidChangeNotification object:nil];
-        [self.navigationController popViewControllerAnimated:YES];
-    }
+        [weakSelf.navigationController popViewControllerAnimated:YES];
+    } failure:^(NSError *error) {
+        [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
+    }];
 }
 
 #pragma mark - Private

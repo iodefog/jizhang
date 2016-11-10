@@ -7,7 +7,6 @@
 //
 
 #import "SSJNewOrEditCustomCategoryView.h"
-#import "SSJCategoryEditableCollectionView.h"
 #import "SSJAddNewTypeColorSelectionView.h"
 
 @interface SSJNewOrEditCustomCategoryView () <UITextFieldDelegate>
@@ -15,8 +14,6 @@
 @property (nonatomic, strong) UITextField *textField;
 
 @property (nonatomic, strong) UIImageView *selectedTypeView;
-
-@property (nonatomic, strong) SSJCategoryEditableCollectionView *imageSelectionView;
 
 @property (nonatomic, strong) SSJAddNewTypeColorSelectionView *colorSelectionView;
 

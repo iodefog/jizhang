@@ -153,6 +153,7 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
         SSJReportFormsItem *item = self.chargeDatas[indexPath.row];
         SSJBillingChargeViewController *billingChargeVC = [[SSJBillingChargeViewController alloc] init];
         billingChargeVC.ID = item.ID;
+        billingChargeVC.booksId = @"all";
         billingChargeVC.color = [UIColor ssj_colorWithHex:item.colorValue];
         billingChargeVC.period = _customPeriod ?: [_periods ssj_safeObjectAtIndex:_header.dateAxisView.selectedIndex];
         billingChargeVC.isPayment = _header.incomOrExpenseSelectSegment.selectedSegmentIndex == 0;

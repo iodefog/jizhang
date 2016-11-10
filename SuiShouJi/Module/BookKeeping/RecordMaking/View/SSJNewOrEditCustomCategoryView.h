@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SSJCategoryEditableCollectionView.h"
 
 @class SSJRecordMakingCategoryItem;
 
@@ -27,6 +28,8 @@
 @property (nonatomic, copy) void (^selectImageAction)(SSJNewOrEditCustomCategoryView *view);
 
 @property (nonatomic, copy) void (^selectColorAction)(SSJNewOrEditCustomCategoryView *view);
+
+@property (nonatomic, strong) SSJCategoryEditableCollectionView *imageSelectionView;
 
 - (void)updateAppearance;
 
