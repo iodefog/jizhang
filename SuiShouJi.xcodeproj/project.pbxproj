@@ -1508,6 +1508,7 @@
 		9C9DD6611D484A07001FA3C5 /* SSJClearUserDataService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9DD65F1D4768F5001FA3C5 /* SSJClearUserDataService.m */; };
 		9C9DD66A1D49FA31001FA3C5 /* SSJThemeManagerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9DD6691D49FA31001FA3C5 /* SSJThemeManagerViewController.m */; };
 		9C9DD66B1D49FA31001FA3C5 /* SSJThemeManagerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9DD6691D49FA31001FA3C5 /* SSJThemeManagerViewController.m */; };
+		9CA40E5F1DD481FC0001E9E3 /* SSJBooksColorAndIconSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CA40E5E1DD481FC0001E9E3 /* SSJBooksColorAndIconSelectView.m */; };
 		9CA5F0BB1DD02BF8003E72E8 /* SSJSummaryBooksHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CA5F0BA1DD02BF8003E72E8 /* SSJSummaryBooksHeaderView.m */; };
 		9CA5F0C51DD047DB003E72E8 /* SSJSummaryBooksTableViewHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CA5F0C41DD047DB003E72E8 /* SSJSummaryBooksTableViewHeader.m */; };
 		9CA5F0C91DD06479003E72E8 /* SSJSummaryBooksViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CA5F0C81DD06479003E72E8 /* SSJSummaryBooksViewController.m */; };
@@ -3260,6 +3261,8 @@
 		9C9DD65F1D4768F5001FA3C5 /* SSJClearUserDataService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJClearUserDataService.m; sourceTree = "<group>"; };
 		9C9DD6681D49FA31001FA3C5 /* SSJThemeManagerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJThemeManagerViewController.h; sourceTree = "<group>"; };
 		9C9DD6691D49FA31001FA3C5 /* SSJThemeManagerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJThemeManagerViewController.m; sourceTree = "<group>"; };
+		9CA40E5D1DD481FC0001E9E3 /* SSJBooksColorAndIconSelectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBooksColorAndIconSelectView.h; sourceTree = "<group>"; };
+		9CA40E5E1DD481FC0001E9E3 /* SSJBooksColorAndIconSelectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBooksColorAndIconSelectView.m; sourceTree = "<group>"; };
 		9CA5F0B91DD02BF7003E72E8 /* SSJSummaryBooksHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJSummaryBooksHeaderView.h; sourceTree = "<group>"; };
 		9CA5F0BA1DD02BF8003E72E8 /* SSJSummaryBooksHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJSummaryBooksHeaderView.m; sourceTree = "<group>"; };
 		9CA5F0C31DD047DB003E72E8 /* SSJSummaryBooksTableViewHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJSummaryBooksTableViewHeader.h; sourceTree = "<group>"; };
@@ -4950,6 +4953,8 @@
 				9CC9F4781DD4176C001E1606 /* SSJBooksParentSelectCell.m */,
 				9CC9F47B1DD42681001E1606 /* SSJBooksParentSelectView.h */,
 				9CC9F47C1DD42681001E1606 /* SSJBooksParentSelectView.m */,
+				9CA40E5D1DD481FC0001E9E3 /* SSJBooksColorAndIconSelectView.h */,
+				9CA40E5E1DD481FC0001E9E3 /* SSJBooksColorAndIconSelectView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -9169,6 +9174,7 @@
 				7D5F332F1CEAE6C10086B67E /* SSJHomeBarCalenderButton.m in Sources */,
 				9C9323F61D9DFA9500EBD216 /* SSJSearchResultHeader.m in Sources */,
 				BD70DF5A1C4751EA000E6CC9 /* SSJForgetPassowrdNetworkService.m in Sources */,
+				9CA40E5F1DD481FC0001E9E3 /* SSJBooksColorAndIconSelectView.m in Sources */,
 				BD70DF5C1C4751EA000E6CC9 /* SSJForgotPSWResetService.m in Sources */,
 				7DD9D0C61CF6E2A6005AF735 /* SSJReportFormsScaleAxisCell.m in Sources */,
 				BD04339A1C1A8DA50051E7AB /* SSJNewBaseTableViewController.m in Sources */,

@@ -7,7 +7,7 @@
 //
 
 #import "SSJBooksEditeOrNewViewController.h"
-#import "SSJNewOrEditCustomCategoryView.h"
+#import "SSJBooksColorAndIconSelectView.h"
 #import "UIViewController+MMDrawerController.h"
 #import "SSJBooksTypeStore.h"
 #import "SSJDatabaseQueue.h"
@@ -15,7 +15,7 @@
 
 @interface SSJBooksEditeOrNewViewController ()
 
-@property(nonatomic, strong) SSJNewOrEditCustomCategoryView *booksEditeView;
+@property(nonatomic, strong) SSJBooksColorAndIconSelectView *booksEditeView;
 
 @end
 
@@ -65,17 +65,18 @@
 }
 
 #pragma mark - Getter
-- (SSJNewOrEditCustomCategoryView *)booksEditeView{
+- (SSJBooksColorAndIconSelectView *)booksEditeView{
     if (!_booksEditeView) {
-        _booksEditeView = [[SSJNewOrEditCustomCategoryView alloc]initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM + 10, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM - 10)];
+        _booksEditeView = [[SSJBooksColorAndIconSelectView alloc]initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM + 10, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM - 10)];
         _booksEditeView.colors = [self colorsArray];
+        _booksEditeView.booksParent = self.item.booksParent;
         _booksEditeView.images = [self imageArray];
         __weak typeof(self) weakSelf = self;
-        _booksEditeView.selectImageAction = ^(SSJNewOrEditCustomCategoryView *view){
+        _booksEditeView.selectImageAction = ^(SSJBooksColorAndIconSelectView *view){
             [MobClick event:@"accountbook_icon_pick"];
             weakSelf.item.booksIcoin = view.selectedImage;
         };
-        _booksEditeView.selectColorAction = ^(SSJNewOrEditCustomCategoryView *view){
+        _booksEditeView.selectColorAction = ^(SSJBooksColorAndIconSelectView *view){
             [MobClick event:@"accountbook_color_pick"];
             weakSelf.item.booksColor = view.selectedColor;
         };
@@ -108,7 +109,7 @@
     [SSJBooksTypeStore saveBooksTypeItem:self.item sucess:^{
         [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
         [[NSNotificationCenter defaultCenter]postNotificationName:SSJBooksTypeDidChangeNotification object:nil];
-        [weakSelf.navigationController popViewControllerAnimated:YES];
+        [self.navigationController popViewControllerAnimated:YES];
     } failure:^(NSError *error) {
         [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
     }];
