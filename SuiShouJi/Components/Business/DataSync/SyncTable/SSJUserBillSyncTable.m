@@ -116,7 +116,7 @@
         
         // 如果后端数据没有升级的话要对后端数据进行处理
         if (!hasUpdated) {
-            NSString *sql1 = [NSString stringWithFormat:@"insert into bk_user_bill select ub.cuserid, ub.cbillid, 1, '%@', '%@', 1, ub.iorder, bk.cbooksid from bk_user_bill ub , bk_books_type bk where ub.operatortype <> 2 and bk.cbooksid not like bk.cuserid || '%%' and ub.cbooksid = bk.cuserid and length(ub.cbillid) < 10  and bk.cuserid = '%@' and ub.cuserid = '%@'",writeDate,@(SSJSyncVersion()),userId,userId];
+            NSString *sql1 = [NSString stringWithFormat:@"insert into bk_user_bill select ub.cuserid, ub.cbillid, ub.istate, '%@', '%@', 1, ub.iorder, bk.cbooksid from bk_user_bill ub , bk_books_type bk where ub.operatortype <> 2 and bk.cbooksid not like bk.cuserid || '%%' and ub.cbooksid = bk.cuserid and length(ub.cbillid) < 10  and bk.cuserid = '%@' and ub.cuserid = '%@'",writeDate,@(SSJSyncVersion()),userId,userId];
             // 然后将日常账本的记账类型拷进自定义账本
             if (![db executeUpdate:sql1]) {
                 if (error) {
