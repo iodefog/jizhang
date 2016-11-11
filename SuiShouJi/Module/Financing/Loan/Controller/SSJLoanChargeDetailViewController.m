@@ -77,10 +77,10 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
 #pragma mark - Private
 - (void)showDeleteItemIfNeeded {
     // 只有未结清状态下，并且是余额变更才能显示删除按钮
-    if (!_model.closedOut) {
+    if (!_compoundModel.closeOut) {
         if (_model.chargeType == SSJLoanCompoundChargeTypeBalanceIncrease
             || _model.chargeType == SSJLoanCompoundChargeTypeBalanceDecrease) {
-            self.navigationItem.rightBarButtonItem = self.deleteItem;
+            [self.navigationItem setRightBarButtonItem:self.deleteItem animated:YES];
         }
     }
 }

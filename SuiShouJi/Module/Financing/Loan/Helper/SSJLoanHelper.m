@@ -678,7 +678,6 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
         chargeModel.oldMoney = surplus;
         chargeModel.loanId = model.ID;
         chargeModel.type = model.type;
-        chargeModel.closedOut = model.closeOut;
         [changeModels addObject:chargeModel];
         
         [self updateChargeTypeWithModel:chargeModel];
@@ -747,13 +746,16 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
             chargeModel.money = money;
             chargeModel.type = model.type;
             chargeModel.userId = model.userId;
-            chargeModel.closedOut = model.closedOut;
             [chargeModels addObject:chargeModel];
         }
         [resultSet close];
         
         SSJLoanCompoundChargeModel *compoundModel = [[SSJLoanCompoundChargeModel alloc] init];
-        compoundModel.lender = [db stringForQuery:@"select lender from bk_loan where loanid = ? and cuserid = ?", model.loanId, model.userId];
+        resultSet = [db executeQuery:@"select lender, iend from bk_loan where loanid = ? and cuserid = ?", model.loanId, model.userId];
+        while ([resultSet next]) {
+            compoundModel.lender = [resultSet stringForColumn:@"lender"];
+            compoundModel.closeOut = [resultSet boolForColumn:@"iend"];
+        }
         
         for (SSJLoanChargeModel *chargeModel in chargeModels) {
             

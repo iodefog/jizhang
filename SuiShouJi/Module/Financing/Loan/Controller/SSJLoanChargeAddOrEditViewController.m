@@ -24,6 +24,9 @@
     
 }
 
+#pragma mark - Private
+
+
 #pragma mark - Getter
 - (TPKeyboardAvoidingTableView *)tableView {
     if (!_tableView) {

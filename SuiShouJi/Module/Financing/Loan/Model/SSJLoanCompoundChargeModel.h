@@ -15,6 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, copy) NSString *lender;
 
+@property (nonatomic) BOOL closeOut;
+
 @property (nonatomic, copy) SSJLoanChargeModel *chargeModel;
 
 @property (nonatomic, copy) SSJLoanChargeModel *targetChargeModel;
