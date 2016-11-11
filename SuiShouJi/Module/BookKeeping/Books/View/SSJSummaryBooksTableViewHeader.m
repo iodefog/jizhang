@@ -8,6 +8,7 @@
 
 #import "SSJSummaryBooksTableViewHeader.h"
 #import "SSJSummaryBooksHeaderView.h"
+#import "SSJBudgetNodataRemindView.h"
 
 @interface SSJSummaryBooksTableViewHeader()
 
@@ -16,6 +17,10 @@
 @property(nonatomic, strong) UILabel *firstLineLab;
 
 @property(nonatomic, strong) UILabel *secondLineLab;
+
+@property(nonatomic, strong) SSJBudgetNodataRemindView *chartNoResultView;
+
+@property(nonatomic, strong) SSJBudgetNodataRemindView *curveNoResultView;
 
 @end
 
@@ -32,9 +37,11 @@
         [self addSubview:self.firstLineLab];
         [self addSubview:self.periodSelectSegment];
         [self addSubview:self.curveView];
+        [self addSubview:self.curveNoResultView];
         [self addSubview:self.secondLineLab];
         [self addSubview:self.incomOrExpenseSelectSegment];
         [self addSubview:self.chartView];
+        [self addSubview:self.chartNoResultView];
         [self.chartView addSubview:self.incomeAndPaymentTitleLab];
         [self.chartView addSubview:self.incomeAndPaymentMoneyLab];
         [self addSubview:self.customPeriodBtn];
@@ -52,11 +59,13 @@
     self.periodSelectSegment.top = self.firstLineLab.bottom + 20;
     self.periodSelectSegment.centerX = self.width / 2;
     self.curveView.leftTop = CGPointMake(0, self.periodSelectSegment.bottom + 29);
+    self.curveNoResultView.frame = self.curveView.frame;
     self.secondLineLab.top = self.curveView.bottom + 50;
     self.secondLineLab.centerX = self.width / 2;
     self.incomOrExpenseSelectSegment.top = self.secondLineLab.bottom + 20;
     self.incomOrExpenseSelectSegment.centerX = self.width / 2;
     self.chartView.leftTop = CGPointMake(0, self.incomOrExpenseSelectSegment.bottom + 29);
+    self.chartNoResultView.frame = self.chartView.frame;
     CGRect hollowFrame = UIEdgeInsetsInsetRect(self.chartView.circleFrame, UIEdgeInsetsMake(self.chartView.circleThickness, self.chartView.circleThickness, self.chartView.circleThickness, self.chartView.circleThickness));
     self.incomeAndPaymentTitleLab.frame = CGRectMake(hollowFrame.origin.x, (hollowFrame.size.height - 38) * 0.5 + hollowFrame.origin.y, hollowFrame.size.width, 15);
     self.incomeAndPaymentMoneyLab.frame = CGRectMake(hollowFrame.origin.x, (hollowFrame.size.height - 38) * 0.5 + hollowFrame.origin.y + 20, hollowFrame.size.width, 18);
@@ -199,6 +208,24 @@
     return _addOrDeleteCustomPeriodBtn;
 }
 
+- (SSJBudgetNodataRemindView *)curveNoResultView{
+    if (!_curveNoResultView) {
+        _curveNoResultView = [[SSJBudgetNodataRemindView alloc]init];
+        _curveNoResultView.image = @"budget_no_data";
+        _curveNoResultView.title = @"报表空空如也";
+    }
+    return _curveNoResultView;
+}
+
+- (SSJBudgetNodataRemindView *)chartNoResultView{
+    if (!_chartNoResultView) {
+        _chartNoResultView = [[SSJBudgetNodataRemindView alloc]init];
+        _chartNoResultView.image = @"budget_no_data";
+        _chartNoResultView.title = @"报表空空如也";
+    }
+    return _chartNoResultView;
+}
+
 - (void)setTotalIncome:(double)totalIncome{
     _totalIncome = totalIncome;
     self.summaryHeader.income = _totalIncome;
@@ -220,6 +247,32 @@
         self.dateAxisView.hidden = NO;
         self.customPeriodBtn.hidden = YES;
         [self.addOrDeleteCustomPeriodBtn setImage:[UIImage ssj_themeImageWithName:@"reportForms_edit"] forState:UIControlStateNormal];
+    }
+}
+
+- (void)setChartViewHasDataOrNot:(BOOL)chartViewHasDataOrNot{
+    _chartViewHasDataOrNot = chartViewHasDataOrNot;
+    if (!_chartViewHasDataOrNot) {
+        self.chartView.hidden = YES;
+        self.chartNoResultView.hidden = NO;
+    }else{
+        self.chartView.hidden = NO;
+        self.chartNoResultView.hidden = YES;
+    }
+}
+
+- (void)setCurveViewHasDataOrNot:(BOOL)curveViewHasDataOrNot{
+    _curveViewHasDataOrNot = curveViewHasDataOrNot;
+    if (!_curveViewHasDataOrNot) {
+        self.curveView.hidden = YES;
+        self.curveNoResultView.hidden = NO;
+        self.chartView.hidden = YES;
+        self.chartNoResultView.hidden = NO;
+    }else{
+        self.curveView.hidden = NO;
+        self.curveNoResultView.hidden = YES;
+        self.chartView.hidden = NO;
+        self.chartNoResultView.hidden = YES;
     }
 }
 

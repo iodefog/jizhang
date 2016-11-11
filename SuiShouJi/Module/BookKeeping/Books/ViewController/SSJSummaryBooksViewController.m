@@ -306,10 +306,9 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
                 [self.view ssj_hideLoadingIndicator];
                 [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
             }];
-            
-//            [self.view ssj_hideWatermark:YES];
+            self.header.curveViewHasDataOrNot = YES;
         } else {
-//            [self.view ssj_showWatermarkWithCustomView:self.noDataRemindView animated:YES target:nil action:nil];
+            self.header.curveViewHasDataOrNot = NO;
         }
         
     } failure:^(NSError *error) {
@@ -413,13 +412,12 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
     
     [self.header.chartView reloadData];
     
-//    if (!self.datas.count) {
-//        self.tableView.hidden = YES;
-//        [self.view ssj_showWatermarkWithCustomView:self.noDataRemindView animated:YES target:nil action:nil];
-//    } else {
-//        self.tableView.hidden = NO;
-//        [self.view ssj_hideWatermark:YES];
-//    }
+    if (!self.chargeDatas.count) {
+        self.header.chartViewHasDataOrNot = NO;
+    } else {
+        self.header.chartViewHasDataOrNot = YES;
+
+    }
     
     //        NSString *selectedTitle = [_segmentControl.titles ssj_safeObjectAtIndex:_segmentControl.selectedIndex];
     //        if ([selectedTitle isEqualToString:kSegmentTitleSurplus]) {
