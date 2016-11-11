@@ -121,6 +121,8 @@ static NSString * SSJBooksParentSelectCellIdentifier = @"SSJBooksParentSelectCel
         return;
     }
     
+    [self.collectionView reloadData];
+    
     UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
     
     [self.superview ssj_hideBackViewForView:self animation:^{
@@ -134,6 +136,9 @@ static NSString * SSJBooksParentSelectCellIdentifier = @"SSJBooksParentSelectCel
 {
     SSJBooksParentSelectCell * cell = (SSJBooksParentSelectCell *)[collectionView cellForItemAtIndexPath:indexPath];
     cell.isSelected = YES;
+    if (self.parentSelectBlock) {
+        self.parentSelectBlock(indexPath.item);
+    }
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -145,8 +150,8 @@ static NSString * SSJBooksParentSelectCellIdentifier = @"SSJBooksParentSelectCel
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     SSJBooksParentSelectCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:SSJBooksParentSelectCellIdentifier forIndexPath:indexPath];
-    cell.image = [self.images ssj_safeObjectAtIndex:indexPath.row];
-    cell.title = [self.titles ssj_safeObjectAtIndex:indexPath.row];
+    cell.image = [self.images ssj_safeObjectAtIndex:indexPath.item];
+    cell.title = [self.titles ssj_safeObjectAtIndex:indexPath.item];
     cell.isSelected = NO;
     return cell;
 }

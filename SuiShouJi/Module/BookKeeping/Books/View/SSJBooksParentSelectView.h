@@ -10,6 +10,8 @@
 
 @interface SSJBooksParentSelectView : UIView
 
+@property (nonatomic, copy) void(^parentSelectBlock)(NSInteger selectParent);
+
 - (void)show;
 
 - (void)dismiss;

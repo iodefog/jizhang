@@ -1,17 +1,15 @@
 //
-//  SSJNewOrEditCustomCategoryView.h
+//  SSJBooksColorAndIconSelectView.h
 //  SuiShouJi
 //
-//  Created by old lang on 16/8/29.
+//  Created by ricky on 16/11/10.
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 #import "SSJCategoryEditableCollectionView.h"
 
-@class SSJRecordMakingCategoryItem;
-
-@interface SSJNewOrEditCustomCategoryView : UIView
+@interface SSJBooksColorAndIconSelectView : UIView
 
 @property (nonatomic, strong, readonly) UITextField *textField;
 
@@ -25,12 +23,15 @@
 
 @property (nonatomic) CGFloat displayColorRowCount;
 
-@property (nonatomic, copy) void (^selectImageAction)(SSJNewOrEditCustomCategoryView *view);
+@property (nonatomic, copy) void (^selectImageAction)(SSJBooksColorAndIconSelectView *view);
 
-@property (nonatomic, copy) void (^selectColorAction)(SSJNewOrEditCustomCategoryView *view);
+@property (nonatomic, copy) void (^selectColorAction)(SSJBooksColorAndIconSelectView *view);
 
-@property (nonatomic, strong) SSJCategoryEditableCollectionView *imageSelectionView;
+@property (nonatomic, strong) SSJCategoryEditableCollectionView *imageSelectionView;\
+
+@property(nonatomic) NSInteger booksParent;
 
 - (void)updateAppearance;
+
 
 @end

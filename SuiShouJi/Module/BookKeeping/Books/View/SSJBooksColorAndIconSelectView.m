@@ -1,15 +1,15 @@
 //
-//  SSJNewOrEditCustomCategoryView.m
+//  SSJBooksColorAndIconSelectView.m
 //  SuiShouJi
 //
-//  Created by old lang on 16/8/29.
+//  Created by ricky on 16/11/10.
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
 
-#import "SSJNewOrEditCustomCategoryView.h"
+#import "SSJBooksColorAndIconSelectView.h"
 #import "SSJAddNewTypeColorSelectionView.h"
 
-@interface SSJNewOrEditCustomCategoryView () <UITextFieldDelegate>
+@interface SSJBooksColorAndIconSelectView () <UITextFieldDelegate>
 
 @property (nonatomic, strong) UITextField *textField;
 
@@ -19,13 +19,19 @@
 
 @property (nonatomic, strong) NSMutableArray *cellItems;
 
+@property(nonatomic, strong) UILabel *booksParentLab;
+
+@property(nonatomic, strong) UIView *backColorView;
+
 @end
 
-@implementation SSJNewOrEditCustomCategoryView
+@implementation SSJBooksColorAndIconSelectView
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         [self addSubview:self.textField];
+        [self addSubview:self.backColorView];
+        [self addSubview:self.booksParentLab];
         [self addSubview:self.imageSelectionView];
         [self addSubview:self.colorSelectionView];
         [self updateAppearance];
@@ -35,7 +41,10 @@
 
 - (void)layoutSubviews {
     _textField.frame = CGRectMake(0, 0, self.width, 63);
-    _imageSelectionView.frame = CGRectMake(0, _textField.bottom, self.width, self.height - _textField.bottom - self.colorSelectionView.height);
+    _backColorView.frame = CGRectMake(0, _textField.bottom, self.width, 34);
+    _booksParentLab.left = 30;
+    _booksParentLab.centerY = _backColorView.centerY;
+    _imageSelectionView.frame = CGRectMake(0, _backColorView.bottom, self.width, self.height - _backColorView.bottom - self.colorSelectionView.height);
     _colorSelectionView.bottom = self.height;
 }
 
@@ -44,7 +53,8 @@
     _textField.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     _textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入类别名称" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
     [_textField ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
-    
+    _backColorView.backgroundColor = [UIColor ssj_colorWithHex:@"#f9d2da"];
+    _booksParentLab.textColor  = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     _colorSelectionView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     [_colorSelectionView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
     
@@ -70,7 +80,7 @@
         _selectedImage = selectedImage;
         [self updateSelectedImage];
         [self updateImageSelectionView];
-//        [self updateColorSelectionView];
+        //        [self updateColorSelectionView];
     }
 }
 
@@ -80,6 +90,48 @@
         [self updateSelectedImage];
         [self updateImageSelectionView];
         [self updateColorSelectionView];
+    }
+}
+
+- (void)setBooksParent:(NSInteger)booksParent{
+    _booksParent = booksParent;
+    switch (_booksParent) {
+        case 0:{
+            self.booksParentLab.text = @"账本收支类型: 日常账本";
+            [self.booksParentLab sizeToFit];
+        }
+            break;
+            
+        case 1:{
+            self.booksParentLab.text = @"账本收支类型: 生意账本";
+            [self.booksParentLab sizeToFit];
+        }
+            
+            break;
+            
+        case 2:{
+            self.booksParentLab.text = @"账本收支类型: 结婚账本";
+            [self.booksParentLab sizeToFit];
+        }
+            break;
+            
+        case 3:{
+            self.booksParentLab.text = @"账本收支类型: 装修账本";
+            [self.booksParentLab sizeToFit];
+        }
+            break;
+            
+        case 4:{
+            self.booksParentLab.text = @"账本收支类型: 旅行账本";
+            [self.booksParentLab sizeToFit];
+        }
+            break;
+    
+        default:{
+            self.booksParentLab.text = @"日常账本";
+            [self.booksParentLab sizeToFit];
+        }
+            break;
     }
 }
 
@@ -194,5 +246,31 @@
     }
     return _colorSelectionView;
 }
+
+- (UILabel *)booksParentLab{
+    if (!_booksParentLab) {
+        _booksParentLab = [[UILabel alloc]init];
+        _booksParentLab.font = [UIFont systemFontOfSize:18];
+        _booksParentLab.backgroundColor = [UIColor clearColor];
+        _booksParentLab.textColor  = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    }
+    return _booksParentLab;
+}
+
+- (UIView *)backColorView{
+    if (!_backColorView) {
+        _backColorView = [[UIView alloc]init];
+        _backColorView.backgroundColor = [UIColor ssj_colorWithHex:@"#f9d2da"];
+    }
+    return _backColorView;
+}
+
+/*
+// Only override drawRect: if you perform custom drawing.
+// An empty implementation adversely affects performance during animation.
+- (void)drawRect:(CGRect)rect {
+    // Drawing code
+}
+*/
 
 @end
