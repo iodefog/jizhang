@@ -42,7 +42,7 @@
 - (void)layoutSubviews {
     _textField.frame = CGRectMake(0, 0, self.width, 63);
     _backColorView.frame = CGRectMake(0, _textField.bottom, self.width, 34);
-    _booksParentLab.left = 30;
+    _booksParentLab.left = 30   ;
     _booksParentLab.centerY = _backColorView.centerY;
     _imageSelectionView.frame = CGRectMake(0, _backColorView.bottom, self.width, self.height - _backColorView.bottom - self.colorSelectionView.height);
     _colorSelectionView.bottom = self.height;

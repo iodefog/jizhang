@@ -52,4 +52,8 @@
 
 @property(nonatomic, strong) SSJDatePeriod *customPeriod;
 
+@property(nonatomic) BOOL curveViewHasDataOrNot;
+
+@property(nonatomic) BOOL chartViewHasDataOrNot;
+
 @end
