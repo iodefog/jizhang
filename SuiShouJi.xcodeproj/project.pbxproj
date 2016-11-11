@@ -10073,7 +10073,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co. Ltd.";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co. Ltd.";
-				DEVELOPMENT_TEAM = 534SCE47WT;
+				DEVELOPMENT_TEAM = 747363KXQ6;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -10104,8 +10104,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
 				PRODUCT_NAME = SuiShouJi;
-				PROVISIONING_PROFILE = "baf5cd64-b6df-4069-ad53-afe79aec80d8";
-				PROVISIONING_PROFILE_SPECIFIER = JiZhangAppstoreAdHoc;
+				PROVISIONING_PROFILE = "cc299689-cec6-4ad4-ad85-2270ff299d21";
+				PROVISIONING_PROFILE_SPECIFIER = JiZhangEnterpriseAdHoc;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
