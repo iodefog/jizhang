@@ -87,6 +87,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param failure   失败的回调
  */
 + (void)closeOutLoanModel:(SSJLoanModel *)model
+             chargeModels:(NSArray <SSJLoanCompoundChargeModel *>*)chargeModels
                   success:(void (^)())success
                   failure:(void (^)(NSError *error))failure;
 
@@ -115,25 +116,20 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSString *)queryForFundColorWithID:(NSString *)ID;
 
 /**
- *  到今天为止产生的利息
- *
- *  @param model 借贷模型
- */
-+ (double)currentInterestWithLoanModel:(SSJLoanModel *)model;
-
-/**
  *  预期利息
  *
  *  @param model 借贷模型
+ *  @param chargeModels 借贷产生的流水
  */
-+ (double)expectedInterestWithLoanModel:(SSJLoanModel *)model;
++ (double)expectedInterestWithLoanModel:(SSJLoanModel *)model chargeModels:(NSArray <SSJLoanCompoundChargeModel *>*)chargeModels;
 
 /**
  *  结清利息
  *
  *  @param model 借贷模型
+ *  @param chargeModels 借贷产生的流水
  */
-+ (double)closeOutInterestWithLoanModel:(SSJLoanModel *)model;
++ (double)closeOutInterestWithLoanModel:(SSJLoanModel *)model chargeModels:(NSArray <SSJLoanCompoundChargeModel *>*)chargeModels;
 
 /**
  每天利息金额
@@ -144,13 +140,35 @@ NS_ASSUME_NONNULL_BEGIN
 + (double)interestForEverydayWithLoanModel:(SSJLoanModel *)model;
 
 /**
- 查询借贷流水详情
+ 查询借贷详情
 
  @param model 借贷流水中的莫一个子流水，转入、转出、利息等
  @param success 成功的回调
  @param failure 失败的回调
  */
 + (void)queryLoanChangeDetailWithLoanChargeModel:(SSJLoanChargeModel *)model
+                                         success:(void (^)(SSJLoanCompoundChargeModel *model))success
+                                         failure:(void (^)(NSError *error))failure;
+
+/**
+ 查询借贷产生的流水列表
+
+ @param loanModel 借贷模型
+ @param success 成功的回调
+ @param failure 失败的回调
+ */
++ (void)queryLoanChargeModeListWithLoanModel:(SSJLoanModel *)loanModel
+                                     success:(void (^)(NSArray <SSJLoanCompoundChargeModel *>*list))success
+                                     failure:(void (^)(NSError *error))failure;
+
+/**
+ 根据流水id查询借贷生成的转账流水（包括转入、转出、利息），此流水必须是转账生成的
+
+ @param chargeId 借贷生成的流水
+ @param success 成功的回调
+ @param failure 失败的回调
+ */
++ (void)queryLoanCompoundChargeModelWithChargeId:(NSString *)chargeId
                                          success:(void (^)(SSJLoanCompoundChargeModel *model))success
                                          failure:(void (^)(NSError *error))failure;
 
@@ -164,6 +182,21 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)deleteLoanCompoundChargeModel:(SSJLoanCompoundChargeModel *)model
                               success:(void (^)(void))success
                               failure:(void (^)(NSError *error))failure;
+
+/**
+ 新增或修改借贷产生的流水
+
+ @param model 借贷产生的流水
+ @param success 成功的回调
+ @param failure 失败的回调
+ */
++ (void)saveLoanCompoundChargeModel:(SSJLoanCompoundChargeModel *)model
+                            success:(void (^)(void))success
+                            failure:(void (^)(NSError *error))failure;
+
++ (void)saveLoanCompoundChargeModels:(NSArray <SSJLoanCompoundChargeModel *>*)models
+                             success:(void (^)(void))success
+                             failure:(void (^)(NSError *error))failure;
 
 @end
 

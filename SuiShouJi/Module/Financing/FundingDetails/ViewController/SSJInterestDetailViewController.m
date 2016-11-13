@@ -22,6 +22,8 @@ static NSString *const kTitle6 = @"结清日";
 
 @property(nonatomic, strong) SSJLoanModel *model;
 
+@property(nonatomic, strong) NSArray <SSJLoanCompoundChargeModel *>*chargeModels;
+
 @property(nonatomic, strong) NSArray *titles;
 
 @end
@@ -64,7 +66,7 @@ static NSString *const kTitle6 = @"结清日";
     cell.detailTextLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     cell.textLabel.text = title;
     if ([title isEqualToString:kTitle1]) {
-        cell.detailTextLabel.text = [NSString stringWithFormat:@"%@￥%.2f",self.model.type ? @"-" : @"+",[SSJLoanHelper closeOutInterestWithLoanModel:self.model]];
+        cell.detailTextLabel.text = [NSString stringWithFormat:@"%@￥%.2f",self.model.type ? @"-" : @"+",[SSJLoanHelper closeOutInterestWithLoanModel:self.model chargeModels:_chargeModels]];
     }
     if ([title isEqualToString:kTitle2] || [title isEqualToString:kTitle3]) {
         cell.detailTextLabel.text = [SSJFinancingHomeHelper queryFundItemWithFundingId:self.model.endTargetFundID].fundingName;
@@ -94,14 +96,21 @@ static NSString *const kTitle6 = @"结清日";
     __weak typeof(self) weakSelf = self;
     [self.view ssj_showLoadingIndicator];
     [SSJLoanHelper queryForLoanModelWithLoanID:loanId success:^(SSJLoanModel * _Nonnull model) {
-        weakSelf.model = model;
-        if (!model.type) {
-            self.titles = @[@[kTitle1],@[kTitle3],@[kTitle5],@[kTitle6]];
-        }else{
-            self.titles = @[@[kTitle1],@[kTitle2],@[kTitle4],@[kTitle6]];
-        }
-        [self.view ssj_hideLoadingIndicator];
-        [weakSelf.tableView reloadData];
+        
+        [SSJLoanHelper queryLoanChargeModeListWithLoanModel:model success:^(NSArray<SSJLoanCompoundChargeModel *> * _Nonnull list) {
+            weakSelf.model = model;
+            weakSelf.chargeModels = list;
+            if (!model.type) {
+                self.titles = @[@[kTitle1],@[kTitle3],@[kTitle5],@[kTitle6]];
+            }else{
+                self.titles = @[@[kTitle1],@[kTitle2],@[kTitle4],@[kTitle6]];
+            }
+            [self.view ssj_hideLoadingIndicator];
+            [weakSelf.tableView reloadData];
+        } failure:^(NSError * _Nonnull error) {
+            [self.view ssj_hideLoadingIndicator];
+        }];
+        
     } failure:^(NSError * _Nonnull error) {
         [self.view ssj_hideLoadingIndicator];
     }];

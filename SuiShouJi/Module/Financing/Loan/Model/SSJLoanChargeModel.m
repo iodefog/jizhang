@@ -11,6 +11,18 @@
 
 @implementation SSJLoanChargeModel
 
++ (NSArray *)mj_allowedPropertyNames {
+    return @[@"chargeId",
+             @"fundId",
+             @"billId",
+             @"loanId",
+             @"userId",
+             @"memo",
+             @"billDate",
+             @"writeDate",
+             @"money"];
+}
+
 - (id)copyWithZone:(nullable NSZone *)zone {
     SSJLoanChargeModel *model = [[SSJLoanChargeModel alloc] init];
     model.chargeId = self.chargeId;

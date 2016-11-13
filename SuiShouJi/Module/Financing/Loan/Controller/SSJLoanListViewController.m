@@ -143,18 +143,15 @@ static NSString *const kLoanListCellId = @"kLoanListCellId";
 
 #pragma mark - Event
 - (void)rightItemAction {
-    SSJLoanModel *model = [[SSJLoanModel alloc] init];
-    model.fundID = _item.fundingID;
+    SSJAddOrEditLoanViewController *addLoanVC = [[SSJAddOrEditLoanViewController alloc] init];
     if ([_item.fundingParent isEqualToString:@"10"]) {
-        model.type = SSJLoanTypeLend;
+        addLoanVC.type = SSJLoanTypeLend;
         [MobClick event:@"add_loan"];
     } else if ([_item.fundingParent isEqualToString:@"11"]) {
-        model.type = SSJLoanTypeBorrow;
+        addLoanVC.type = SSJLoanTypeBorrow;
         [MobClick event:@"add_owed"];
     }
     
-    SSJAddOrEditLoanViewController *addLoanVC = [[SSJAddOrEditLoanViewController alloc] init];
-    addLoanVC.loanModel = model;
     [self.navigationController pushViewController:addLoanVC animated:YES];
 }
 

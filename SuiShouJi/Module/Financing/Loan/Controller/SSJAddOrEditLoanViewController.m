@@ -58,6 +58,15 @@ const int kMemoMaxLength = 13;
 
 @property (nonatomic) BOOL edited;
 
+// 原始的借贷金额，只有在编辑记录此金额
+@property (nonatomic) double originalMoney;
+
+// 创建借贷时产生的流水
+@property (nonatomic, strong) SSJLoanCompoundChargeModel *createCompoundModel;
+
+// 编辑借贷金额新产生的余额变更流水
+@property (nonatomic, strong) SSJLoanCompoundChargeModel *changeCompoundModel;
+
 @end
 
 @implementation SSJAddOrEditLoanViewController
@@ -77,31 +86,15 @@ const int kMemoMaxLength = 13;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    _edited = _loanModel.ID.length;
+    _edited = (_loanModel && _chargeModels);
+    
+    [self loadData];
+    [self updateTitle];
     
     if (_edited) {
-        UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(deleteButtonClicked)];
+        self.originalMoney = _loanModel.jMoney;
+        UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(deleteButtonClicked)];
         self.navigationItem.rightBarButtonItem = rightItem;
-        
-        switch (_loanModel.type) {
-            case SSJLoanTypeLend:
-                self.title = @"编辑借出款";
-                break;
-                
-            case SSJLoanTypeBorrow:
-                self.title = @"编辑欠款";
-                break;
-        }
-    } else {
-        switch (_loanModel.type) {
-            case SSJLoanTypeLend:
-                self.title = @"添加借出款";
-                break;
-                
-            case SSJLoanTypeBorrow:
-                self.title = @"添加欠款";
-                break;
-        }
     }
     
     [self.view addSubview:self.tableView];
@@ -109,8 +102,6 @@ const int kMemoMaxLength = 13;
     self.tableView.hidden = YES;
     
     [self updateAppearance];
-    
-    [self loadData];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -135,7 +126,7 @@ const int kMemoMaxLength = 13;
     } else if (section == 1) {
         return 3;
     } else if (section == 2) {
-        return _loanModel.interest ? 2 : 1;
+        return self.loanModel.interest ? 2 : 1;
     } else if (section == 3) {
         return 1;
     } else {
@@ -147,7 +138,7 @@ const int kMemoMaxLength = 13;
     if ([indexPath compare:[NSIndexPath indexPathForRow:0 inSection:0]] == NSOrderedSame) {
         SSJAddOrEditLoanTextFieldCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditLoanTextFieldCellId forIndexPath:indexPath];
         cell.imageView.image = [[UIImage imageNamed:@"loan_person"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        switch (_loanModel.type) {
+        switch (self.loanModel.type) {
             case SSJLoanTypeLend:
                 cell.textLabel.text = @"被谁借款";
                 break;
@@ -157,7 +148,7 @@ const int kMemoMaxLength = 13;
                 break;
         }
         cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"必填" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
-        cell.textField.text = _loanModel.lender;
+        cell.textField.text = self.loanModel.lender;
         cell.textField.keyboardType = UIKeyboardTypeDefault;
         cell.textField.delegate = self;
         cell.textField.clearsOnBeginEditing = YES;
@@ -169,7 +160,7 @@ const int kMemoMaxLength = 13;
     } else if ([indexPath compare:[NSIndexPath indexPathForRow:1 inSection:0]] == NSOrderedSame) {
         SSJAddOrEditLoanTextFieldCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditLoanTextFieldCellId forIndexPath:indexPath];
         cell.imageView.image = [[UIImage imageNamed:@"loan_money"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        switch (_loanModel.type) {
+        switch (self.loanModel.type) {
             case SSJLoanTypeLend:
                 cell.textLabel.text = @"借出金额";
                 break;
@@ -180,7 +171,7 @@ const int kMemoMaxLength = 13;
         }
         
         cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"¥0.00" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
-        cell.textField.text = [NSString stringWithFormat:@"¥%.2f", _loanModel.jMoney];
+        cell.textField.text = [NSString stringWithFormat:@"¥%.2f", self.loanModel.jMoney];
         cell.textField.keyboardType = UIKeyboardTypeDecimalPad;
         cell.textField.clearsOnBeginEditing = YES;
         cell.textField.delegate = self;
@@ -192,7 +183,7 @@ const int kMemoMaxLength = 13;
     } else if ([indexPath compare:[NSIndexPath indexPathForRow:2 inSection:0]] == NSOrderedSame) {
         SSJAddOrEditLoanLabelCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditLoanLabelCellId forIndexPath:indexPath];
         cell.imageView.image = [[UIImage imageNamed:@"loan_account"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        switch (_loanModel.type) {
+        switch (self.loanModel.type) {
             case SSJLoanTypeLend:
                 cell.textLabel.text = @"借出账户";
                 break;
@@ -215,7 +206,7 @@ const int kMemoMaxLength = 13;
     } else if ([indexPath compare:[NSIndexPath indexPathForRow:0 inSection:1]] == NSOrderedSame) {
         SSJAddOrEditLoanLabelCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditLoanLabelCellId forIndexPath:indexPath];
         cell.imageView.image = [[UIImage imageNamed:@"loan_calendar"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        switch (_loanModel.type) {
+        switch (self.loanModel.type) {
             case SSJLoanTypeLend:
                 cell.textLabel.text = @"借款日";
                 break;
@@ -226,7 +217,7 @@ const int kMemoMaxLength = 13;
         }
         
         cell.additionalIcon.image = nil;
-        cell.subtitleLabel.text = [_loanModel.borrowDate formattedDateWithFormat:@"yyyy.MM.dd"];
+        cell.subtitleLabel.text = [self.loanModel.borrowDate formattedDateWithFormat:@"yyyy.MM.dd"];
         cell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         cell.switchControl.hidden = YES;
         cell.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
@@ -240,8 +231,8 @@ const int kMemoMaxLength = 13;
         cell.textLabel.text = @"还款日";
         
         cell.additionalIcon.image = nil;
-        if (_loanModel.repaymentDate) {
-            cell.subtitleLabel.text = [_loanModel.repaymentDate formattedDateWithFormat:@"yyyy.MM.dd"];
+        if (self.loanModel.repaymentDate) {
+            cell.subtitleLabel.text = [self.loanModel.repaymentDate formattedDateWithFormat:@"yyyy.MM.dd"];
             cell.subtitleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         } else {
             cell.subtitleLabel.text = @"选填";
@@ -259,7 +250,7 @@ const int kMemoMaxLength = 13;
         cell.imageView.image = [[UIImage imageNamed:@"loan_memo"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.textLabel.text = @"备注";
         cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"选填" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
-        cell.textField.text = _loanModel.memo;
+        cell.textField.text = self.loanModel.memo;
         cell.textField.keyboardType = UIKeyboardTypeDefault;
         cell.textField.clearsOnBeginEditing = NO;
         cell.textField.clearButtonMode = UITextFieldViewModeWhileEditing;
@@ -276,7 +267,7 @@ const int kMemoMaxLength = 13;
         cell.additionalIcon.image = nil;
         cell.subtitleLabel.text = nil;
         cell.switchControl.hidden = NO;
-        [cell.switchControl setOn:_loanModel.interest animated:YES];
+        [cell.switchControl setOn:self.loanModel.interest animated:YES];
         [cell.switchControl addTarget:self action:@selector(interestSwitchAction:) forControlEvents:UIControlEventValueChanged];
         cell.customAccessoryType = UITableViewCellAccessoryNone;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -289,8 +280,8 @@ const int kMemoMaxLength = 13;
         cell.imageView.image = [[UIImage imageNamed:@"loan_yield"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.textLabel.text = @"年化收益率";
         cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"0.0" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
-        if (_loanModel.rate) {
-            cell.textField.text = [NSString stringWithFormat:@"%.1f", _loanModel.rate * 100];
+        if (self.loanModel.rate) {
+            cell.textField.text = [NSString stringWithFormat:@"%.1f", self.loanModel.rate * 100];
         }
         cell.textField.keyboardType = UIKeyboardTypeDecimalPad;
         cell.textField.delegate = self;
@@ -343,7 +334,7 @@ const int kMemoMaxLength = 13;
         [self.fundingSelectionView show];
     } else if ([indexPath compare:[NSIndexPath indexPathForRow:0 inSection:1]] == NSOrderedSame) {
         [self.view endEditing:YES];
-        self.borrowDateSelectionView.selectedDate = _loanModel.borrowDate;
+        self.borrowDateSelectionView.selectedDate = self.loanModel.borrowDate;
         [self.borrowDateSelectionView show];
     } else if ([indexPath compare:[NSIndexPath indexPathForRow:1 inSection:1]] == NSOrderedSame) {
         [self.view endEditing:YES];
@@ -368,16 +359,17 @@ const int kMemoMaxLength = 13;
 
 - (BOOL)textFieldShouldClear:(UITextField *)textField {
     if (textField.tag == kLenderTag) {
-        _loanModel.lender = @"";
+        self.loanModel.lender = @"";
         [self updateRemindName];
     } else if (textField.tag == kMoneyTag) {
-        _loanModel.jMoney = 0;
+        self.loanModel.jMoney = 0;
+        
         [self updateRemindName];
         [self updateInterest];
     } else if (textField.tag == kMemoTag) {
-        _loanModel.memo = @"";
+        self.loanModel.memo = @"";
     } else if (textField.tag == kRateTag) {
-        _loanModel.rate = 0;
+        self.loanModel.rate = 0;
         [self updateInterest];
     }
     
@@ -393,24 +385,41 @@ const int kMemoMaxLength = 13;
 - (void)textDidChange:(NSNotification *)notification {
     UITextField *textField = notification.object;
     if ([textField isKindOfClass:[UITextField class]]) {
+        
         if (textField.tag == kLenderTag) {
-            _loanModel.lender = textField.text;
+            
+            self.loanModel.lender = textField.text;
             [self updateRemindName];
+            
         } else if (textField.tag == kMoneyTag) {
+            
             NSString *tmpMoneyStr = [textField.text stringByReplacingOccurrencesOfString:@"¥" withString:@""];
             if (tmpMoneyStr.length) {
                 tmpMoneyStr = [NSString stringWithFormat:@"¥%@", tmpMoneyStr];
             }
             textField.text = [self reserveDecimal:tmpMoneyStr digits:2];
-            _loanModel.jMoney = [[textField.text stringByReplacingOccurrencesOfString:@"¥" withString:@""] doubleValue];
+            self.loanModel.jMoney = [[textField.text stringByReplacingOccurrencesOfString:@"¥" withString:@""] doubleValue];
+            
+            if (_edited) {
+                [self updateBalanceChangeMoney];
+            } else {
+                self.createCompoundModel.chargeModel.money = self.loanModel.jMoney;
+                self.createCompoundModel.targetChargeModel.money = self.loanModel.jMoney;
+            }
+            
             [self updateRemindName];
             [self updateInterest];
+            
         } else if (textField.tag == kMemoTag) {
-            _loanModel.memo = textField.text;
+            
+            self.loanModel.memo = textField.text;
+            
         } else if (textField.tag == kRateTag) {
+            
             textField.text = [self reserveDecimal:textField.text digits:1];
-            _loanModel.rate = [textField.text doubleValue] * 0.01;
+            self.loanModel.rate = [textField.text doubleValue] * 0.01;
             [self updateInterest];
+            
         }
     }
 }
@@ -424,41 +433,57 @@ const int kMemoMaxLength = 13;
 
 - (void)sureButtonAction {
     if ([self checkLoanModelIsValid]) {
+        
         _sureButton.enabled = NO;
         [_sureButton ssj_showLoadingIndicator];
-        [SSJLoanHelper saveLoanModel:_loanModel remindModel:_reminderItem success:^{
-            _sureButton.enabled = YES;
-            [_sureButton ssj_hideLoadingIndicator];
+        
+        NSMutableArray *saveChargeModels = [@[self.createCompoundModel] mutableCopy];
+        if (self.changeCompoundModel.chargeModel.money) {
+            [saveChargeModels addObject:self.changeCompoundModel];
+        }
+        
+        [SSJLoanHelper saveLoanModel:self.loanModel remindModel:_reminderItem success:^{
             
-            if (_enterFromFundTypeList) {
-                UIViewController *homeController = [self.navigationController.viewControllers firstObject];
+            [SSJLoanHelper saveLoanCompoundChargeModels:saveChargeModels success:^{
                 
-                SSJFinancingHomeitem *item = [[SSJFinancingHomeitem alloc] init];
-                item.fundingID = _loanModel.fundID;
-                switch (_loanModel.type) {
-                    case SSJLoanTypeLend:
-                        item.fundingParent = @"10";
-                        item.fundingName = @"借出款";
-                        break;
-                        
-                    case SSJLoanTypeBorrow:
-                        item.fundingParent = @"11";
-                        item.fundingName = @"欠款";
-                        break;
+                _sureButton.enabled = YES;
+                [_sureButton ssj_hideLoadingIndicator];
+                
+                if (_enterFromFundTypeList) {
+                    UIViewController *homeController = [self.navigationController.viewControllers firstObject];
+                    
+                    SSJFinancingHomeitem *item = [[SSJFinancingHomeitem alloc] init];
+                    item.fundingID = self.loanModel.fundID;
+                    switch (self.loanModel.type) {
+                        case SSJLoanTypeLend:
+                            item.fundingParent = @"10";
+                            item.fundingName = @"借出款";
+                            break;
+                            
+                        case SSJLoanTypeBorrow:
+                            item.fundingParent = @"11";
+                            item.fundingName = @"欠款";
+                            break;
+                    }
+                    SSJLoanListViewController *loanListController = [[SSJLoanListViewController alloc] init];
+                    loanListController.item = item;
+                    
+                    [self.navigationController setViewControllers:@[homeController, loanListController] animated:YES];
+                } else {
+                    [self.navigationController popViewControllerAnimated:YES];
                 }
-                SSJLoanListViewController *loanListController = [[SSJLoanListViewController alloc] init];
-                loanListController.item = item;
                 
-                [self.navigationController setViewControllers:@[homeController, loanListController] animated:YES];
-            } else {
-                [self.navigationController popViewControllerAnimated:YES];
-            }
-            
-            if (!_edited && _loanModel.remindID.length) {
-                [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"添加成功，提醒详情请在“更多-提醒”查看" action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
-            }
-            
-            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+                if (!_edited && self.loanModel.remindID.length) {
+                    [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"添加成功，提醒详情请在“更多-提醒”查看" action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
+                }
+                
+                [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+                
+            } failure:^(NSError * _Nonnull error) {
+                _sureButton.enabled = YES;
+                [_sureButton ssj_hideLoadingIndicator];
+                [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
+            }];
             
         } failure:^(NSError * _Nonnull error) {
             _sureButton.enabled = YES;
@@ -469,13 +494,13 @@ const int kMemoMaxLength = 13;
 }
 
 - (void)interestSwitchAction:(UISwitch *)switchCtrl {
-    _loanModel.interest = switchCtrl.on;
+    self.loanModel.interest = switchCtrl.on;
     [_tableView beginUpdates];
     [_tableView reloadSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationNone];
     [_tableView endUpdates];
     
     if (switchCtrl.on) {
-        switch (_loanModel.type) {
+        switch (self.loanModel.type) {
             case SSJLoanTypeLend:
                 [MobClick event:@"loan_interest"];
                 break;
@@ -495,7 +520,7 @@ const int kMemoMaxLength = 13;
     }
     
     if (switchCtrl.on) {
-        switch (_loanModel.type) {
+        switch (self.loanModel.type) {
             case SSJLoanTypeLend:
                 [MobClick event:@"loan_remind"];
                 break;
@@ -508,6 +533,18 @@ const int kMemoMaxLength = 13;
 }
 
 #pragma mark - Private
+- (void)updateTitle {
+    switch (self.loanModel.type) {
+        case SSJLoanTypeLend:
+            self.title = _edited ? @"编辑借出款" : @"添加借出款";
+            break;
+            
+        case SSJLoanTypeBorrow:
+            self.title = _edited ? @"编辑欠款" : @"添加欠款";
+            break;
+    }
+}
+
 - (void)updateAppearance {
     [_sureButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];
     [_sureButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor alpha:0.5] forState:UIControlStateDisabled];
@@ -518,21 +555,19 @@ const int kMemoMaxLength = 13;
     [self.view ssj_showLoadingIndicator];
     [SSJLoanHelper queryFundModelListWithSuccess:^(NSArray <SSJLoanFundAccountSelectionViewItem *>*items) {
         
-        if (_loanModel.remindID.length) {
-            _reminderItem = [SSJLocalNotificationStore queryReminderItemForID:_loanModel.remindID];
-        }
-        
         _tableView.hidden = NO;
         [self.view ssj_hideLoadingIndicator];
         
-        if (!_loanModel.ID.length) {
-            [self initModelWithTargetFundID:[items firstObject].ID];
+        if (!_edited) {
+            NSString *targetFundId = [items firstObject].ID;
+            self.loanModel.targetFundID = targetFundId;
+            self.createCompoundModel.targetChargeModel.fundId = targetFundId;
         }
         
         self.fundingSelectionView.items = items;
         for (int i = 0; i < items.count; i ++) {
             SSJLoanFundAccountSelectionViewItem *item = items[i];
-            if ([item.ID isEqualToString:_loanModel.targetFundID]) {
+            if ([item.ID isEqualToString:self.loanModel.targetFundID]) {
                 self.fundingSelectionView.selectedIndex = i;
                 break;
             }
@@ -546,31 +581,28 @@ const int kMemoMaxLength = 13;
     }];
 }
 
-- (void)initModelWithTargetFundID:(NSString *)fundId {
-    NSDate *today = [NSDate date];
-    
-    _loanModel.ID = SSJUUID();
-    _loanModel.userID = SSJUSERID();
-    _loanModel.chargeID = SSJUUID();
-    _loanModel.targetChargeID = SSJUUID();
-    _loanModel.targetFundID = fundId;
-    _loanModel.remindID = _reminderItem.remindId ?: @"";
-    _loanModel.borrowDate = [NSDate dateWithYear:today.year month:today.month day:today.day];
-    _loanModel.repaymentDate = nil;
-    _loanModel.interest = NO;
-    _loanModel.lender = @"";
-    _loanModel.memo = @"";
-    _loanModel.operatorType = 0;
+// 返回计算预期利息需要的流水列表
+- (NSArray *)chargeModelsAccordingToEditState {
+    if (_edited) {
+        NSMutableArray *models = [NSMutableArray arrayWithArray:_chargeModels];
+        if (self.changeCompoundModel.chargeModel.money) {
+            [models addObject:self.changeCompoundModel];
+        }
+        return models;
+    } else {
+        return @[self.createCompoundModel];
+    }
 }
 
 - (void)updateInterest {
-    if (_loanModel.repaymentDate) {
-        NSString *interestStr = [NSString stringWithFormat:@"%.2f", [SSJLoanHelper expectedInterestWithLoanModel:_loanModel]];
+    if (self.loanModel.repaymentDate) {
+        double interest = [SSJLoanHelper expectedInterestWithLoanModel:self.loanModel chargeModels:[self chargeModelsAccordingToEditState]];
+        NSString *interestStr = [NSString stringWithFormat:@"%.2f", interest];
         NSMutableAttributedString *richText = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"T+1计息，预期利息为%@元", interestStr]];
         [richText setAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]} range:[richText.string rangeOfString:interestStr]];
         _interestLab.attributedText = richText;
     } else {
-        NSString *interestStr = [NSString stringWithFormat:@"%.2f", [SSJLoanHelper interestForEverydayWithLoanModel:_loanModel]];
+        NSString *interestStr = [NSString stringWithFormat:@"%.2f", [SSJLoanHelper interestForEverydayWithLoanModel:self.loanModel]];
         NSMutableAttributedString *richText = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"每天利息为%@元", interestStr]];
         [richText setAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]} range:[richText.string rangeOfString:interestStr]];
         _interestLab.attributedText = richText;
@@ -578,80 +610,70 @@ const int kMemoMaxLength = 13;
 }
 
 - (BOOL)checkLoanModelIsValid {
-    switch (_loanModel.type) {
+    switch (self.loanModel.type) {
         case SSJLoanTypeLend:
-            if (_loanModel.lender.length == 0) {
+            if (self.loanModel.lender.length == 0) {
                 [CDAutoHideMessageHUD showMessage:@"请输入借款人"];
                 return NO;
             }
             
-            if (_loanModel.lender.length > kLenderMaxLength) {
+            if (self.loanModel.lender.length > kLenderMaxLength) {
                 [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"借款人不能超过%d个字", kLenderMaxLength]];
                 return NO;
             }
             
-            if (_loanModel.jMoney <= 0) {
+            if (self.loanModel.jMoney <= 0) {
                 [CDAutoHideMessageHUD showMessage:@"借出金额必须大于0"];
                 return NO;
             }
             
-            if (_loanModel.targetFundID.length == 0) {
+            if (self.loanModel.targetFundID.length == 0) {
                 [CDAutoHideMessageHUD showMessage:@"请选择借出账户"];
                 return NO;
             }
             
-            if (!_loanModel.borrowDate) {
+            if (!self.loanModel.borrowDate) {
                 [CDAutoHideMessageHUD showMessage:@"请选择借出日期"];
-                return NO;
-            }
-            
-            if (!_loanModel.repaymentDate) {
-                [CDAutoHideMessageHUD showMessage:@"请选择借款日"];
                 return NO;
             }
             
             break;
             
         case SSJLoanTypeBorrow:
-            if (_loanModel.lender.length == 0) {
+            if (self.loanModel.lender.length == 0) {
                 [CDAutoHideMessageHUD showMessage:@"请输入欠款人"];
                 return NO;
             }
             
-            if (_loanModel.lender.length > kLenderMaxLength) {
+            if (self.loanModel.lender.length > kLenderMaxLength) {
                 [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"欠款人不能超过%d个字", kLenderMaxLength]];
                 return NO;
             }
             
-            if (_loanModel.jMoney <= 0) {
+            if (self.loanModel.jMoney <= 0) {
                 [CDAutoHideMessageHUD showMessage:@"欠款金额必须大于0"];
                 return NO;
             }
             
-            if (_loanModel.targetFundID.length == 0) {
+            if (self.loanModel.targetFundID.length == 0) {
                 [CDAutoHideMessageHUD showMessage:@"请选择借入账户"];
                 return NO;
             }
             
-            if (!_loanModel.borrowDate) {
+            if (!self.loanModel.borrowDate) {
                 [CDAutoHideMessageHUD showMessage:@"请选择欠款日"];
-                return NO;
-            }
-            
-            if (!_loanModel.repaymentDate) {
-                [CDAutoHideMessageHUD showMessage:@"请选择还款日"];
                 return NO;
             }
             
             break;
     }
     
-    if (_loanModel.memo.length > kMemoMaxLength) {
+    if (self.loanModel.memo.length > kMemoMaxLength) {
         [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"备注不能超过%d个字", kMemoMaxLength]];
         return NO;
     }
     
-    if (_loanModel.interest && _loanModel.rate <= 0) {
+    if (self.loanModel.interest && self.loanModel.rate <= 0) {
         [CDAutoHideMessageHUD showMessage:@"收益率必须大于0"];
         return NO;
     }
@@ -666,22 +688,22 @@ const int kMemoMaxLength = 13;
         NSDate *paymentDate = [self paymentDate];
         
         tmpRemindItem = [[SSJReminderItem alloc] init];
-        switch (_loanModel.type) {
+        switch (self.loanModel.type) {
             case SSJLoanTypeLend:
-                tmpRemindItem.remindName = [NSString stringWithFormat:@"被%@借%.2f元", _loanModel.lender, _loanModel.jMoney];
+                tmpRemindItem.remindName = [NSString stringWithFormat:@"被%@借%.2f元", self.loanModel.lender, self.loanModel.jMoney];
                 break;
                 
             case SSJLoanTypeBorrow:
-                tmpRemindItem.remindName = [NSString stringWithFormat:@"欠%@钱款%.2f元", _loanModel.lender, _loanModel.jMoney];
+                tmpRemindItem.remindName = [NSString stringWithFormat:@"欠%@钱款%.2f元", self.loanModel.lender, self.loanModel.jMoney];
                 break;
         }
         tmpRemindItem.remindCycle = 7;
         tmpRemindItem.remindType = SSJReminderTypeBorrowing;
         tmpRemindItem.remindDate = [NSDate dateWithYear:paymentDate.year month:paymentDate.month day:paymentDate.day hour:20 minute:0 second:0];
-        tmpRemindItem.minimumDate = _loanModel.borrowDate;
+        tmpRemindItem.minimumDate = self.loanModel.borrowDate;
         tmpRemindItem.remindState = YES;
-        tmpRemindItem.borrowtarget = _loanModel.lender;
-        switch (_loanModel.type) {
+        tmpRemindItem.borrowtarget = self.loanModel.lender;
+        switch (self.loanModel.type) {
             case SSJLoanTypeLend:
                 tmpRemindItem.borrowtOrLend = @"1";
                 break;
@@ -706,13 +728,13 @@ const int kMemoMaxLength = 13;
 
 - (void)updateRemindName {
     if (_reminderItem) {
-        switch (_loanModel.type) {
+        switch (self.loanModel.type) {
             case SSJLoanTypeLend:
-                _reminderItem.remindName = [NSString stringWithFormat:@"被%@借%.2f元", _loanModel.lender ?: @"", _loanModel.jMoney];
+                _reminderItem.remindName = [NSString stringWithFormat:@"被%@借%.2f元", self.loanModel.lender ?: @"", self.loanModel.jMoney];
                 break;
                 
             case SSJLoanTypeBorrow:
-                _reminderItem.remindName = [NSString stringWithFormat:@"欠%@钱款%.2f元", _loanModel.lender ?: @"", _loanModel.jMoney];
+                _reminderItem.remindName = [NSString stringWithFormat:@"欠%@钱款%.2f元", self.loanModel.lender ?: @"", self.loanModel.jMoney];
                 break;
         }
     }
@@ -720,7 +742,7 @@ const int kMemoMaxLength = 13;
 
 - (void)deleteLoanModel {
     self.navigationItem.rightBarButtonItem.enabled = NO;
-    [SSJLoanHelper deleteLoanModel:_loanModel success:^{
+    [SSJLoanHelper deleteLoanModel:self.loanModel success:^{
         self.navigationItem.rightBarButtonItem.enabled = YES;
         UIViewController *listVC = [self ssj_previousViewControllerBySubtractingIndex:2];
         if ([listVC isKindOfClass:[SSJLoanListViewController class]]) {
@@ -748,10 +770,170 @@ const int kMemoMaxLength = 13;
 }
 
 - (NSDate *)paymentDate {
-    return _loanModel.repaymentDate ?: [_loanModel.borrowDate dateByAddingMonths:1];
+    return self.loanModel.repaymentDate ?: [self.loanModel.borrowDate dateByAddingMonths:1];
+}
+
+// 更新余额变更流水的金额
+- (void)updateBalanceChangeMoney {
+    if (self.loanModel.jMoney > self.originalMoney) {
+        
+        self.changeCompoundModel.chargeModel.money = self.loanModel.jMoney - self.originalMoney;
+        self.changeCompoundModel.targetChargeModel.money = self.loanModel.jMoney - self.originalMoney;
+        self.changeCompoundModel.chargeModel.chargeType = SSJLoanCompoundChargeTypeBalanceIncrease;
+        
+        switch (_type) {
+            case SSJLoanTypeLend:
+                self.changeCompoundModel.chargeModel.billId = @"9";
+                self.changeCompoundModel.targetChargeModel.billId = @"10";
+                break;
+                
+            case SSJLoanTypeBorrow:
+                self.changeCompoundModel.chargeModel.billId = @"10";
+                self.changeCompoundModel.targetChargeModel.billId = @"9";
+                break;
+        }
+        
+    } else if (self.loanModel.jMoney < self.originalMoney) {
+        
+        self.changeCompoundModel.chargeModel.money = self.originalMoney - self.loanModel.jMoney;
+        self.changeCompoundModel.targetChargeModel.money = self.originalMoney - self.loanModel.jMoney;
+        self.changeCompoundModel.chargeModel.chargeType = SSJLoanCompoundChargeTypeBalanceDecrease;
+        
+        switch (_type) {
+            case SSJLoanTypeLend:
+                self.changeCompoundModel.chargeModel.billId = @"10";
+                self.changeCompoundModel.targetChargeModel.billId = @"9";
+                break;
+                
+            case SSJLoanTypeBorrow:
+                self.changeCompoundModel.chargeModel.billId = @"9";
+                self.changeCompoundModel.targetChargeModel.billId = @"10";
+                break;
+        }
+        
+    } else {
+        self.changeCompoundModel.chargeModel.money = 0;
+        self.changeCompoundModel.targetChargeModel.money = 0;
+    }
+}
+
+- (NSString *)fundId {
+    switch (_type) {
+        case SSJLoanTypeLend:
+            return [NSString stringWithFormat:@"%@-5", SSJUSERID()];
+            break;
+            
+        case SSJLoanTypeBorrow:
+            return [NSString stringWithFormat:@"%@-6", SSJUSERID()];
+            break;
+    }
 }
 
 #pragma mark - Getter
+- (SSJLoanModel *)loanModel {
+    if (!_loanModel) {
+        _loanModel = [[SSJLoanModel alloc] init];
+        _loanModel.ID = SSJUUID();
+        _loanModel.userID = SSJUSERID();
+        _loanModel.remindID = _reminderItem.remindId ?: @"";
+        _loanModel.borrowDate = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:[NSDate date].day];
+        _loanModel.repaymentDate = nil;
+        _loanModel.interest = NO;
+        _loanModel.lender = @"";
+        _loanModel.memo = @"";
+        _loanModel.operatorType = 0;
+        _loanModel.fundID = [self fundId];
+        
+        
+        if (_loanModel.remindID.length) {
+            _reminderItem = [SSJLocalNotificationStore queryReminderItemForID:_loanModel.remindID];
+        }
+    }
+    return _loanModel;
+}
+
+- (SSJLoanCompoundChargeModel *)createCompoundModel {
+    if (!_createCompoundModel) {
+        if (_edited) {
+            for (SSJLoanCompoundChargeModel *compoundModel in _chargeModels) {
+                if (compoundModel.chargeType == SSJLoanCompoundChargeTypeCreate) {
+                    _createCompoundModel = compoundModel;
+                }
+            }
+        } else {
+            NSString *chargeBillId = nil;
+            NSString *targetChargeBillId = nil;
+            
+            switch (_type) {
+                case SSJLoanTypeLend:
+                    chargeBillId = @"3";
+                    targetChargeBillId = @"4";
+                    break;
+                    
+                case SSJLoanTypeBorrow:
+                    chargeBillId = @"4";
+                    targetChargeBillId = @"3";
+                    break;
+            }
+            
+            NSDate *billDate = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:[NSDate date].day];
+            
+            SSJLoanChargeModel *chargeModel = [[SSJLoanChargeModel alloc] init];
+            chargeModel.chargeId = SSJUUID();
+            chargeModel.fundId = [self fundId];
+            chargeModel.billId = chargeBillId;
+            chargeModel.loanId = self.loanModel.ID;
+            chargeModel.userId = SSJUSERID();
+            chargeModel.billDate = billDate;
+            chargeModel.type = _type;
+            chargeModel.chargeType = SSJLoanCompoundChargeTypeCreate;
+            
+            SSJLoanChargeModel *targetChargeModel = [[SSJLoanChargeModel alloc] init];
+            targetChargeModel.chargeId = SSJUUID();
+            targetChargeModel.billId = targetChargeBillId;
+            targetChargeModel.loanId = self.loanModel.ID;
+            targetChargeModel.userId = SSJUSERID();
+            targetChargeModel.billDate = billDate;
+            targetChargeModel.type = _type;
+            targetChargeModel.chargeType = SSJLoanCompoundChargeTypeCreate;
+            
+            _createCompoundModel = [[SSJLoanCompoundChargeModel alloc] init];
+            _createCompoundModel.chargeModel = chargeModel;
+            _createCompoundModel.targetChargeModel = targetChargeModel;
+        }
+    }
+    return _createCompoundModel;
+}
+
+- (SSJLoanCompoundChargeModel *)changeCompoundModel {
+    if (!_changeCompoundModel) {
+        
+        NSDate *billDate = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:[NSDate date].day];
+        
+        SSJLoanChargeModel *chargeModel = [[SSJLoanChargeModel alloc] init];
+        chargeModel.chargeId = SSJUUID();
+        chargeModel.fundId = [self fundId];
+        chargeModel.loanId = self.loanModel.ID;
+        chargeModel.userId = SSJUSERID();
+        chargeModel.billDate = billDate;
+        chargeModel.type = _type;
+        
+        SSJLoanChargeModel *targetChargeModel = [[SSJLoanChargeModel alloc] init];
+        targetChargeModel.chargeId = SSJUUID();
+        targetChargeModel.fundId = self.loanModel.targetFundID;
+        targetChargeModel.loanId = self.loanModel.ID;
+        targetChargeModel.userId = SSJUSERID();
+        targetChargeModel.billDate = billDate;
+        targetChargeModel.type = _type;
+        
+        _changeCompoundModel = [[SSJLoanCompoundChargeModel alloc] init];
+        _changeCompoundModel.chargeModel = chargeModel;
+        _changeCompoundModel.targetChargeModel = targetChargeModel;
+    }
+    
+    return _changeCompoundModel;
+}
+
 - (TPKeyboardAvoidingTableView *)tableView {
     if (!_tableView) {
         _tableView = [[TPKeyboardAvoidingTableView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM) style:UITableViewStyleGrouped];
@@ -800,6 +982,10 @@ const int kMemoMaxLength = 13;
             if (index < view.items.count - 1) {
                 SSJLoanFundAccountSelectionViewItem *item = [view.items objectAtIndex:index];
                 weakSelf.loanModel.targetFundID = item.ID;
+                weakSelf.createCompoundModel.targetChargeModel.fundId = item.ID;
+                if (weakSelf.edited) {
+                    weakSelf.changeCompoundModel.targetChargeModel.fundId = item.ID;
+                }
                 [weakSelf.tableView reloadData];
                 return YES;
             } else if (index == view.items.count - 1) {
@@ -809,10 +995,18 @@ const int kMemoMaxLength = 13;
                     if ([item isKindOfClass:[SSJFundingItem class]]) {
                         SSJFundingItem *fundItem = (SSJFundingItem *)item;
                         weakSelf.loanModel.targetFundID = fundItem.fundingID;
+                        weakSelf.createCompoundModel.targetChargeModel.fundId = fundItem.fundingID;
+                        if (weakSelf.edited) {
+                            weakSelf.changeCompoundModel.targetChargeModel.fundId = fundItem.fundingID;
+                        }
                         [weakSelf loadData];
                     } else if ([item isKindOfClass:[SSJCreditCardItem class]]){
                         SSJCreditCardItem *cardItem = (SSJCreditCardItem *)item;
                         weakSelf.loanModel.targetFundID = cardItem.cardId;
+                        weakSelf.createCompoundModel.targetChargeModel.fundId = cardItem.cardId;
+                        if (weakSelf.edited) {
+                            weakSelf.changeCompoundModel.targetChargeModel.fundId = cardItem.cardId;
+                        }
                         [weakSelf loadData];
                     }
                 };
@@ -832,7 +1026,15 @@ const int kMemoMaxLength = 13;
         __weak typeof(self) wself = self;
         _borrowDateSelectionView = [[SSJLoanDateSelectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 244)];
         _borrowDateSelectionView.selectDateAction = ^(SSJLoanDateSelectionView *view) {
+            
             wself.loanModel.borrowDate = view.selectedDate;
+            wself.createCompoundModel.chargeModel.billDate = view.selectedDate;
+            wself.createCompoundModel.targetChargeModel.billDate = view.selectedDate;
+            if (wself.edited) {
+                wself.changeCompoundModel.chargeModel.billDate = view.selectedDate;
+                wself.changeCompoundModel.targetChargeModel.billDate = view.selectedDate;
+            }
+            
             if (wself.reminderItem.remindDate && [view.selectedDate compare:wself.reminderItem.remindDate] == NSOrderedDescending) {
                 wself.reminderItem.remindDate = view.selectedDate;
             }

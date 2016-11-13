@@ -7,8 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "SSJLoanChargeModel.h"
+#import "SSJLoanCompoundChargeModel.h"
 
+NS_ASSUME_NONNULL_BEGIN
 
 /**
  计息方式
@@ -36,9 +37,9 @@ typedef NS_ENUM(NSUInteger, SSJLoanInterestType) {
 @property (nonatomic, copy) NSString *lender;
 
 // 借贷图标
-@property (nonatomic, copy) NSString *image;
+@property (nonatomic, copy, nullable) NSString *image;
 
-// 剩余借入／借出金额（包含扣除余额变更、追加变更、结清）
+// 剩余借入／借出金额（包含扣除余额变更、追加变更）
 @property (nonatomic) double jMoney;
 
 // 借入／借出所属账户
@@ -48,42 +49,25 @@ typedef NS_ENUM(NSUInteger, SSJLoanInterestType) {
 @property (nonatomic, copy) NSString *targetFundID;
 
 // 借入／借出目标账户(结清后)
-@property (nonatomic, copy) NSString *endTargetFundID;
-
-// 创建借贷时产生的本账户转账流水
-@property (nonatomic, copy) NSString *chargeID;
-
-// 创建借贷时产生的目标账户转账流水
-@property (nonatomic, copy) NSString *targetChargeID;
-
-// 结清时产生的本账户转账流水
-@property (nonatomic, copy) NSString *endChargeID;
-
-// 结清时产生的目标账户转账流水
-@property (nonatomic, copy) NSString *endTargetChargeID;
-
-// 结清产生的利息流水
-@property (nonatomic, copy) NSString *interestChargeID;
-
-@property (nonatomic, copy) NSArray <SSJLoanChargeModel *>*chargeModels;
+@property (nonatomic, copy, nullable) NSString *endTargetFundID;
 
 // 借入／借出日期
 @property (nonatomic, copy) NSDate *borrowDate;
 
 // 期限日期
-@property (nonatomic, copy) NSDate *repaymentDate;
+@property (nonatomic, copy, nullable) NSDate *repaymentDate;
 
 // 结清日期
-@property (nonatomic, copy) NSDate *endDate;
+@property (nonatomic, copy, nullable) NSDate *endDate;
 
 // 利率
 @property (nonatomic) double rate;
 
 // 备注
-@property (nonatomic, copy) NSString *memo;
+@property (nonatomic, copy, nullable) NSString *memo;
 
 // 提醒ID
-@property (nonatomic, copy) NSString *remindID;
+@property (nonatomic, copy, nullable) NSString *remindID;
 
 // 是否计息
 @property (nonatomic) BOOL interest;
@@ -106,3 +90,5 @@ typedef NS_ENUM(NSUInteger, SSJLoanInterestType) {
 + (instancetype)modelWithResultSet:(FMResultSet *)resultSet;
 
 @end
+
+NS_ASSUME_NONNULL_END
