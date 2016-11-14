@@ -21,6 +21,7 @@
 - (instancetype)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
     if (self) {
+        self.needClearButtonOrNot = NO;
         [self addSubview:self.datePicker];
         [self addSubview:self.topView];
         [self sizeToFit];
@@ -93,6 +94,8 @@
         [_titleLabel sizeToFit];
         [_topView addSubview:_titleLabel];
         _closeButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 35, 35)];
+        [_closeButton setTitleColor:[UIColor ssj_colorWithHex:@"#eb4a64"] forState:UIControlStateNormal];
+        _closeButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
         [_closeButton setImage:[UIImage imageNamed:@"close"] forState:UIControlStateNormal];
         [_closeButton addTarget:self action:@selector(closeButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         [_topView addSubview:_closeButton];
@@ -106,6 +109,11 @@
 
 
 -(void)closeButtonClicked:(id)sender{
+    if (_needClearButtonOrNot) {
+        if (self.clearButtonClickBlcok) {
+            self.clearButtonClickBlcok();
+        }
+    }
     [self dismiss];
 }
 
@@ -143,6 +151,19 @@
 
 - (void)setMinimumDate:(NSDate *)minimumDate{
     _minimumDate = minimumDate;
+}
+
+- (void)setNeedClearButtonOrNot:(BOOL)needClearButtonOrNot{
+    _needClearButtonOrNot = needClearButtonOrNot;
+    if (!_needClearButtonOrNot) {
+        [self.closeButton setImage:[UIImage imageNamed:@"close"] forState:UIControlStateNormal];
+        [self.closeButton setTitle:@"" forState:UIControlStateNormal];
+        self.closeButton.size = CGSizeMake(35, 35);
+    }else{
+        [self.closeButton setImage:nil forState:UIControlStateNormal];
+        [self.closeButton setTitle:@"清空" forState:UIControlStateNormal];
+        self.closeButton.size = CGSizeMake(100, 35);
+    }
 }
 
 -(void)setCurrentDate:(NSDate *)currentDate{

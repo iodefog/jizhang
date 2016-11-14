@@ -146,7 +146,7 @@
             sql = [NSString stringWithFormat:@"SELECT * FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE A.ITYPE = '%d' AND A.ICUSTOM = '%d' AND B.ISTATE = 0 AND B.CUSERID = '%@' AND A.ID = B.CBILLID AND B.OPERATORTYPE <> 2 AND B.CBOOKSID = '%@' ORDER BY B.IORDER",incomeOrExpenture, custom, userId,booksID];
         }else{
             if (custom == 0) {
-                sql = [NSString stringWithFormat:@"SELECT DISTINCT * FROM (SELECT * FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE A.ITYPE = %d AND A.ICUSTOM = 0 AND B.CUSERID = '%@' AND A.ID = B.CBILLID AND B.OPERATORTYPE <> 2 AND B.CBOOKSID = '%@' AND A.ID NOT IN (SELECT CBILLID FROM BK_USER_BILL WHERE CUSERID = '%@' AND CBOOKSID = '%@' AND ISTATE = 1) UNION SELECT * FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE A.ITYPE = %d AND A.ICUSTOM = 0  AND B.ISTATE = 0 AND B.CUSERID = '%@' AND A.ID = B.CBILLID AND B.OPERATORTYPE <> 2 AND B.CBOOKSID = '%@' ORDER BY B.IORDER)",incomeOrExpenture,userId,userId,userId,booksId,incomeOrExpenture,userId,booksID];
+                sql = [NSString stringWithFormat:@"SELECT DISTINCT * FROM (SELECT * FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE A.ITYPE = %d AND A.ICUSTOM = 0 AND B.CUSERID = '%@' AND A.ID = B.CBILLID AND B.OPERATORTYPE <> 2 AND B.CBOOKSID = '%@' AND A.ID NOT IN (SELECT CBILLID FROM BK_USER_BILL WHERE CUSERID = '%@' AND CBOOKSID = '%@' AND ISTATE = 1) UNION SELECT * FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE A.ITYPE = %d AND A.ICUSTOM = 0  AND B.ISTATE = 0 AND B.CUSERID = '%@' AND A.ID = B.CBILLID AND B.OPERATORTYPE <> 2 AND B.CBOOKSID = '%@' ORDER BY B.IORDER)",incomeOrExpenture,userId,userId,userId,booksID,incomeOrExpenture,userId,booksID];
             }else{
                 sql = [NSString stringWithFormat:@"SELECT * FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE A.ITYPE = %d AND A.ICUSTOM = 1 AND B.ISTATE = 0 AND B.CUSERID = '%@' AND A.ID = B.CBILLID AND B.OPERATORTYPE <> 2 AND B.CBOOKSID = '%@' ORDER BY B.IORDER",incomeOrExpenture, userId,booksID];
             }
@@ -236,9 +236,9 @@
             return;
         }
         
-        int maxOrder = [db intForQuery:@"select max(a.iorder) from bk_user_bill as a, bk_bill_type as b where a.cuserid = ? and a.istate = 1 and a.operatortype <> 2 and a.cbillid = b.id and b.itype = ? and a.cbooksid = ?", userId, @(incomeOrExpenture),booksId];
+        int maxOrder = [db intForQuery:@"select max(a.iorder) from bk_user_bill as a, bk_bill_type as b where a.cuserid = ? and a.istate = 1 and a.operatortype <> 2 and a.cbillid = b.id and b.itype = ? and a.cbooksid = ?", userId, @(incomeOrExpenture),booksID];
         
-        if ([db executeUpdate:@"insert into bk_user_bill (cuserid, cbillid, istate, cwritedate, iversion, operatortype, iorder, cbooksid) values (?, ?, 1, ?, ?, 0, ?, ?)", userId, newCategoryId, [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], @(SSJSyncVersion()), @(maxOrder + 1),booksId]) {
+        if ([db executeUpdate:@"insert into bk_user_bill (cuserid, cbillid, istate, cwritedate, iversion, operatortype, iorder, cbooksid) values (?, ?, 1, ?, ?, 0, ?, ?)", userId, newCategoryId, [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], @(SSJSyncVersion()), @(maxOrder + 1),booksID]) {
             if (success) {
                 SSJDispatch_main_async_safe(^{
                     success(newCategoryId);

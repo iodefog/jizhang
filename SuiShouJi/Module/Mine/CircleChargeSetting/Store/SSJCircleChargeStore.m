@@ -159,7 +159,7 @@
         }
         //插入周期记账表
         if (![db intForQuery:@"select count(1) from bk_charge_period_config where iconfigid = ?",item.configId]) {
-            if (![db executeUpdate:@"insert into bk_charge_period_config (iconfigid, cuserid, ibillid, ifunsid, itype, imoney, cimgurl, cmemo, cbilldate, istate, iversion, cwritedate, operatortype, cbooksid, cmemberids) values (?,?,?,?,?,?,?,?,?,1,?,?,0,?,?)",item.configId,userid,item.billId,item.fundId,@(item.chargeCircleType),@([item.money doubleValue]),item.chargeImage,item.chargeMemo,item.billDate,@(SSJSyncVersion()),cwriteDate,booksid,membersStr]) {
+            if (![db executeUpdate:@"insert into bk_charge_period_config (iconfigid, cuserid, ibillid, ifunsid, itype, imoney, cimgurl, cmemo, cbilldate, istate, iversion, cwritedate, operatortype, cbooksid, cmemberids, cbilldateend) values (?,?,?,?,?,?,?,?,?,1,?,?,0,?,?,?)",item.configId,userid,item.billId,item.fundId,@(item.chargeCircleType),@([item.money doubleValue]),item.chargeImage,item.chargeMemo,item.billDate,@(SSJSyncVersion()),cwriteDate,booksid,membersStr,item.chargeCircleEndDate]) {
                 if (failure) {
                     SSJDispatch_main_async_safe(^{
                         failure([db lastError]);
@@ -268,7 +268,7 @@
             }
         }else{
             //修改周期记账
-            if (![db executeUpdate:@"update bk_charge_period_config set ibillid = ? ,ifunsid = ? ,itype = ? ,imoney = ?,cimgurl = ?,cmemo = ?,cbilldate = ?,iversion = ?,cwritedate = ?,operatortype = 1 , cmemberids = ? where cuserid = ? and cbooksid = ? and iconfigid = ?",item.billId,item.fundId,@(item.chargeCircleType),item.money,item.chargeImage,item.chargeMemo,item.billDate,@(SSJSyncVersion()),cwriteDate,membersStr,userid,item.booksId,item.configId]) {
+            if (![db executeUpdate:@"update bk_charge_period_config set ibillid = ? ,ifunsid = ? ,itype = ? ,imoney = ?,cimgurl = ?,cmemo = ?,cbilldate = ?,iversion = ?,cwritedate = ?,operatortype = 1 , cmemberids = ?, cbilldateend = ? where cuserid = ? and cbooksid = ? and iconfigid = ?",item.billId,item.fundId,@(item.chargeCircleType),item.money,item.chargeImage,item.chargeMemo,item.billDate,@(SSJSyncVersion()),cwriteDate,membersStr,userid,item.booksId,item.configId,item.chargeCircleEndDate]) {
                 if (failure) {
                     SSJDispatch_main_async_safe(^{
                         failure([db lastError]);
