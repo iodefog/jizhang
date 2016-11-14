@@ -45,6 +45,7 @@
             item.chargeCircleType = [chargeResult intForColumn:@"ITYPE"];
             item.fundName = [chargeResult stringForColumn:@"CACCTNAME"];
             item.fundImage = [chargeResult stringForColumn:@"cicoin"];
+            item.chargeCircleEndDate = [chargeResult stringForColumn:@"cbilldateend"];
             NSString *memberStr = [chargeResult stringForColumn:@"CMEMBERIDS"];
             item.membersItem = [NSMutableArray arrayWithCapacity:0];
             if (!memberStr.length) {

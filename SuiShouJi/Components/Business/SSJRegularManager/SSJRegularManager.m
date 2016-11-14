@@ -148,6 +148,12 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
         NSString *thumbUrl = [resultSet stringForColumn:@"thumburl"];
         NSString *booksId = [resultSet stringForColumn:@"cbooksid"];
         
+        NSString *endDateStr = [resultSet stringForColumn:@"cbilldateend"];
+        NSDate *endDate = [NSDate dateWithString:endDateStr formatString:@"yyyy-MM-dd"];
+        if ([endDate earlierDate:[NSDate date]]) {
+            continue;
+        }
+        
         NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         NSArray *memberIds = [[resultSet stringForColumn:@"cmemberids"] componentsSeparatedByString:@","];
         if (!memberIds) {
@@ -199,6 +205,11 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
         NSString *money = [resultSet stringForColumn:@"imoney"];
         NSString *imgUrl = [resultSet stringForColumn:@"cimgurl"];
         NSString *memo = [resultSet stringForColumn:@"cmemo"];
+        NSString *endDateStr = [resultSet stringForColumn:@"cbilldateend"];
+        NSDate *endDate = [NSDate dateWithString:endDateStr formatString:@"yyyy-MM-dd"];
+        if ([endDate earlierDate:[NSDate date]]) {
+            continue;
+        }
         NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         NSString *thumbUrl = nil;
         if (imgUrl && imgUrl.length > 0) {
