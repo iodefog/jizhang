@@ -338,6 +338,10 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
 -(SSJChargeCircleTimeSelectView *)chargeCircleTimeView{
     if (!_chargeCircleTimeView) {
         _chargeCircleTimeView = [[SSJChargeCircleTimeSelectView alloc]initWithFrame:self.view.bounds];
+        _chargeCircleTimeView.maxDate = [NSDate date];
+        _chargeCircleTimeView.timeIsTooLateBlock = ^(){
+            [CDAutoHideMessageHUD showMessage:@"转账时间不能大于当前时间哦"];
+        };
         __weak typeof(self) weakSelf = self;
         _chargeCircleTimeView.timerSetBlock = ^(NSString *dateStr){
             weakSelf.item.transferDate = dateStr;

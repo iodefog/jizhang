@@ -83,7 +83,7 @@
         _topView = [[UIView alloc]init];
         _topView.backgroundColor = [UIColor whiteColor];
         _titleLabel = [[UILabel alloc]init];
-        _titleLabel.text = @"提醒时间";
+        _titleLabel.text = @"选择日期";
         _titleLabel.textAlignment = NSTextAlignmentCenter;
         _titleLabel.font = [UIFont systemFontOfSize:18];
         _titleLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
@@ -113,15 +113,36 @@
     NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy-MM-dd"];
     NSString* dateStr = [dateFormatter stringFromDate:[self.datePicker date]];
-    if ([self.datePicker date].year < [NSDate date].year || ([self.datePicker date].year == [NSDate date].year && [self.datePicker date].month < [NSDate date].month) || ([self.datePicker date].year == [NSDate date].year && [self.datePicker date].month == [NSDate date].month && [self.datePicker date].day < [NSDate date].day)) {
-        [self.datePicker setDate:[NSDate date] animated:YES];
-        [CDAutoHideMessageHUD showMessage:@"不能设置历史日期的周期记账哦"];
-        return;
+    if (self.maxDate) {
+        if ([self.datePicker.date isLaterThan:self.maxDate]) {
+            [self.datePicker setDate:[NSDate date] animated:YES];
+            if (self.timeIsTooLateBlock) {
+                self.timeIsTooLateBlock();
+            }
+            return;
+        }
+    }
+    if (self.minimumDate) {
+        if ([self.datePicker.date isEarlierThan:self.minimumDate]) {
+            [self.datePicker setDate:[NSDate date] animated:YES];
+            if (self.timeIsTooEarlyBlock) {
+                self.timeIsTooEarlyBlock();
+            }
+            return;
+        }
     }
     if (self.timerSetBlock) {
         self.timerSetBlock(dateStr);
     }
     [self dismiss];
+}
+
+- (void)setMaxDate:(NSDate *)maxDate{
+    _maxDate = maxDate;
+}
+
+- (void)setMinimumDate:(NSDate *)minimumDate{
+    _minimumDate = minimumDate;
 }
 
 -(void)setCurrentDate:(NSDate *)currentDate{

@@ -18,10 +18,6 @@ typedef void (^fundingTypeSelectBlock)(SSJFundingItem *item);
 //选择类型的回调
 @property (nonatomic, copy) fundingTypeSelectBlock fundingTypeSelectBlock;
 
-@property(nonatomic, strong) NSDate *maxDate;
-
-@property(nonatomic, strong) NSDate *minimumDate;
-
 @property (nonatomic, copy) void(^dismissBlock)();
 
 -(void)reloadDate;

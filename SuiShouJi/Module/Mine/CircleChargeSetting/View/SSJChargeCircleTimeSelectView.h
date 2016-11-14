@@ -9,10 +9,16 @@
 #import <UIKit/UIKit.h>
 
 @interface SSJChargeCircleTimeSelectView : UIView
-//选择时间回调
-typedef void (^timerSetBlock)(NSString *dateStr);
 
-@property (nonatomic, copy) timerSetBlock timerSetBlock;
+@property (nonatomic, copy) void (^timerSetBlock)(NSString *dateStr);
+
+@property (nonatomic, copy) void (^timeIsTooEarlyBlock)();
+
+@property (nonatomic, copy) void (^timeIsTooLateBlock)();
+
+@property(nonatomic, strong) NSDate *maxDate;
+
+@property(nonatomic, strong) NSDate *minimumDate;
 
 @property(nonatomic, strong) NSDate *currentDate;
 

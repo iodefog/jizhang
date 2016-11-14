@@ -461,6 +461,10 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 -(SSJChargeCircleTimeSelectView *)chargeCircleTimeView{
     if (!_chargeCircleTimeView) {
         _chargeCircleTimeView = [[SSJChargeCircleTimeSelectView alloc]initWithFrame:self.view.bounds];
+        _chargeCircleTimeView.minimumDate = [NSDate date];
+        _chargeCircleTimeView.timeIsTooEarlyBlock = ^(){
+            [CDAutoHideMessageHUD showMessage:@"不能设置历史日期的周期记账哦"];
+        };
         __weak typeof(self) weakSelf = self;
         _chargeCircleTimeView.timerSetBlock = ^(NSString *dateStr){
             weakSelf.item.billDate = dateStr;
