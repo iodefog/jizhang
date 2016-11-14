@@ -59,6 +59,7 @@
     [aCoder encodeObject:_bookKeepingHomeMutiButtonSelectColor forKey:@"bookKeepingHomeMutiButtonSelectColor"];
     [aCoder encodeObject:_bookKeepingHomeMutiButtonNormalColor forKey:@"bookKeepingHomeMutiButtonNormalColor"];
     [aCoder encodeObject:_searchResultHeaderBackgroundColor forKey:@"searchResultHeaderBackgroundColor"];
+    [aCoder encodeObject:_summaryBooksHeaderColor forKey:@"summaryBooksHeaderColor"];
     
 }
 
@@ -112,6 +113,7 @@
         _bookKeepingHomeMutiButtonSelectColor = [aDecoder decodeObjectForKey:@"bookKeepingHomeMutiButtonSelectColor"];
         _bookKeepingHomeMutiButtonNormalColor = [aDecoder decodeObjectForKey:@"bookKeepingHomeMutiButtonNormalColor"];
         _searchResultHeaderBackgroundColor = [aDecoder decodeObjectForKey:@"recordMakingInputViewAlpha"];
+        _summaryBooksHeaderColor = [aDecoder decodeObjectForKey:@"summaryBooksHeaderColor"];
         
     }
     return self;
@@ -164,7 +166,8 @@
                                                           @"recordMakingInputViewAlpha":@(_recordMakingInputViewAlpha),
                                                           @"bookKeepingHomeMutiButtonSelectColor":_bookKeepingHomeMutiButtonSelectColor,
                                                           @"bookKeepingHomeMutiButtonNormalColor":_bookKeepingHomeMutiButtonNormalColor,
-                                                          @"searchResultHeaderBackgroundColor":_searchResultHeaderBackgroundColor}];
+                                                          @"searchResultHeaderBackgroundColor":_searchResultHeaderBackgroundColor,
+                                                          @"summaryBooksHeaderColor":_summaryBooksHeaderColor}];
 }
 
 @end

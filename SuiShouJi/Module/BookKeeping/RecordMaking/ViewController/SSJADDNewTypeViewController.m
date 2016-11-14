@@ -200,7 +200,9 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
             return;
         }
         
-        [SSJCategoryListHelper querySameNameCategoryWithName:name success:^(SSJBillModel *model) {
+        [SSJCategoryListHelper querySameNameCategoryWithName:name
+                                                     booksId:self.booksId
+                                                     success:^(SSJBillModel *model) {
             if (model) {
                 if (model.operatorType == 2) {
                     if (model.custom) {
@@ -284,6 +286,7 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
     __weak typeof(self) wself = self;
     
     SSJEditBillTypeViewController *editVC = [[SSJEditBillTypeViewController alloc] init];
+    editVC.booksId = self.booksId;
     editVC.model = editModel;
     editVC.addNewCategoryAction = _addNewCategoryAction;
     editVC.editSuccessHandle = ^(SSJEditBillTypeViewController *controller, SSJBillModel *model) {
@@ -316,7 +319,9 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
     }
     
     NSArray *deleteIDs = [_featuredCategoryCollectionView.selectedItems valueForKeyPath:@"categoryID"];
-    [SSJCategoryListHelper deleteCategoryWithIDs:deleteIDs success:^{
+    [SSJCategoryListHelper deleteCategoryWithIDs:deleteIDs
+                                         booksId:self.booksId
+                                         success:^{
         [_featuredCategoryCollectionView deleteItems:_featuredCategoryCollectionView.selectedItems];
         if (_featuredCategoryCollectionView.items.count == 0) {
             [_featuredCategoryCollectionView ssj_showWatermarkWithCustomView:_noFeaturedCategoryRemindView animated:YES target:nil action:nil];
@@ -338,7 +343,9 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
     }
     
     NSArray *deleteIDs = [_customCategoryCollectionView.selectedItems valueForKeyPath:@"categoryID"];
-    [SSJCategoryListHelper deleteCategoryWithIDs:deleteIDs success:^{
+    [SSJCategoryListHelper deleteCategoryWithIDs:deleteIDs
+                                         booksId:self.booksId
+                                         success:^{
         [_customCategoryCollectionView deleteItems:_customCategoryCollectionView.selectedItems];
         if (_customCategoryCollectionView.items.count == 0) {
             [_customCategoryCollectionView ssj_showWatermarkWithCustomView:_noCustomCategoryRemindView animated:YES target:nil action:nil];
@@ -359,7 +366,10 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
     if (_titleSegmentView.selectedSegmentIndex == 0
         && _featuredCategoryCollectionView.items.count == 0) {
         
-        [SSJCategoryListHelper queryForUnusedCategoryListWithIncomeOrExpenture:_incomeOrExpence custom:0 success:^(NSMutableArray<SSJRecordMakingCategoryItem *> *result) {
+        [SSJCategoryListHelper queryForUnusedCategoryListWithIncomeOrExpenture:_incomeOrExpence
+                                                                        custom:0
+                                                                       booksId:self.booksId
+                                                                       success:^(NSMutableArray<SSJRecordMakingCategoryItem *> *result) {
             _featuredCategoryCollectionView.items = result;
             [self updateButtons];
             [self updateSelectedIndexForCollectionView:_featuredCategoryCollectionView];
@@ -380,7 +390,10 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
         if (self.customCategorySwitchConrol.selectedIndex == 0
             && _customCategoryCollectionView.items.count == 0) {
             
-            [SSJCategoryListHelper queryForUnusedCategoryListWithIncomeOrExpenture:_incomeOrExpence custom:1 success:^(NSMutableArray<SSJRecordMakingCategoryItem *> *result) {
+            [SSJCategoryListHelper queryForUnusedCategoryListWithIncomeOrExpenture:_incomeOrExpence
+                                                                            custom:1
+                                                                           booksId:self.booksId
+                                                                           success:^(NSMutableArray<SSJRecordMakingCategoryItem *> *result) {
                 _customCategoryCollectionView.items = result;
                 [self updateButtons];
                 [self updateSelectedIndexForCollectionView:_customCategoryCollectionView];
@@ -547,13 +560,16 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 }
 
 - (void)openCategoryWithID:(NSString *)ID name:(NSString *)name color:(NSString *)color image:(NSString *)image type:(int)type {
-    int order = [SSJCategoryListHelper queryForBillTypeMaxOrderWithState:1 type:type] + 1;
+    int order = [SSJCategoryListHelper queryForBillTypeMaxOrderWithState:1
+                                                                    type:type
+                                                                 booksId:self.booksId] + 1;
     [SSJCategoryListHelper updateCategoryWithID:ID
                                            name:name
                                           color:color
                                           image:image
                                           order:order
                                           state:1
+                                        booksId:self.booksId
                                         Success:^(NSString *categoryId) {
                                             
         [self.navigationController popViewControllerAnimated:YES];
@@ -568,7 +584,10 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 }
 
 - (void)addNewCategoryWithName:(NSString *)name image:(NSString *)image color:(NSString *)color {
-    [SSJCategoryListHelper addNewCustomCategoryWithIncomeOrExpenture:_incomeOrExpence name:name icon:image color:color success:^(NSString *categoryId){
+    [SSJCategoryListHelper addNewCustomCategoryWithIncomeOrExpenture:_incomeOrExpence
+                                                                name:name
+                                                                icon:image color:color
+                                                             booksId:self.booksId success:^(NSString *categoryId){
         [self.navigationController popViewControllerAnimated:YES];
         if (self.addNewCategoryAction) {
             self.addNewCategoryAction(categoryId, _incomeOrExpence);

@@ -21,6 +21,7 @@
 - (instancetype)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
     if (self) {
+        self.needClearButtonOrNot = NO;
         [self addSubview:self.datePicker];
         [self addSubview:self.topView];
         [self sizeToFit];
@@ -83,7 +84,7 @@
         _topView = [[UIView alloc]init];
         _topView.backgroundColor = [UIColor whiteColor];
         _titleLabel = [[UILabel alloc]init];
-        _titleLabel.text = @"提醒时间";
+        _titleLabel.text = @"选择日期";
         _titleLabel.textAlignment = NSTextAlignmentCenter;
         _titleLabel.font = [UIFont systemFontOfSize:18];
         _titleLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
@@ -93,6 +94,8 @@
         [_titleLabel sizeToFit];
         [_topView addSubview:_titleLabel];
         _closeButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 35, 35)];
+        [_closeButton setTitleColor:[UIColor ssj_colorWithHex:@"#eb4a64"] forState:UIControlStateNormal];
+        _closeButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
         [_closeButton setImage:[UIImage imageNamed:@"close"] forState:UIControlStateNormal];
         [_closeButton addTarget:self action:@selector(closeButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         [_topView addSubview:_closeButton];
@@ -106,6 +109,11 @@
 
 
 -(void)closeButtonClicked:(id)sender{
+    if (_needClearButtonOrNot) {
+        if (self.clearButtonClickBlcok) {
+            self.clearButtonClickBlcok();
+        }
+    }
     [self dismiss];
 }
 
@@ -113,15 +121,49 @@
     NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy-MM-dd"];
     NSString* dateStr = [dateFormatter stringFromDate:[self.datePicker date]];
-    if ([self.datePicker date].year < [NSDate date].year || ([self.datePicker date].year == [NSDate date].year && [self.datePicker date].month < [NSDate date].month) || ([self.datePicker date].year == [NSDate date].year && [self.datePicker date].month == [NSDate date].month && [self.datePicker date].day < [NSDate date].day)) {
-        [self.datePicker setDate:[NSDate date] animated:YES];
-        [CDAutoHideMessageHUD showMessage:@"不能设置历史日期的周期记账哦"];
-        return;
+    if (self.maxDate) {
+        if ([self.datePicker.date isLaterThan:self.maxDate]) {
+            [self.datePicker setDate:self.maxDate animated:YES];
+            if (self.timeIsTooLateBlock) {
+                self.timeIsTooLateBlock();
+            }
+            return;
+        }
+    }
+    if (self.minimumDate) {
+        if ([self.datePicker.date isEarlierThan:self.minimumDate]) {
+            [self.datePicker setDate:self.minimumDate animated:YES];
+            if (self.timeIsTooEarlyBlock) {
+                self.timeIsTooEarlyBlock();
+            }
+            return;
+        }
     }
     if (self.timerSetBlock) {
         self.timerSetBlock(dateStr);
     }
     [self dismiss];
+}
+
+- (void)setMaxDate:(NSDate *)maxDate{
+    _maxDate = maxDate;
+}
+
+- (void)setMinimumDate:(NSDate *)minimumDate{
+    _minimumDate = minimumDate;
+}
+
+- (void)setNeedClearButtonOrNot:(BOOL)needClearButtonOrNot{
+    _needClearButtonOrNot = needClearButtonOrNot;
+    if (!_needClearButtonOrNot) {
+        [self.closeButton setImage:[UIImage imageNamed:@"close"] forState:UIControlStateNormal];
+        [self.closeButton setTitle:@"" forState:UIControlStateNormal];
+        self.closeButton.size = CGSizeMake(35, 35);
+    }else{
+        [self.closeButton setImage:nil forState:UIControlStateNormal];
+        [self.closeButton setTitle:@"清空" forState:UIControlStateNormal];
+        self.closeButton.size = CGSizeMake(100, 35);
+    }
 }
 
 -(void)setCurrentDate:(NSDate *)currentDate{

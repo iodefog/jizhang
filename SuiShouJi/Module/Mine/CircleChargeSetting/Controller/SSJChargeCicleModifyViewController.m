@@ -51,6 +51,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 @property(nonatomic, strong) SSJFundingTypeSelectView *fundSelectView;
 @property(nonatomic, strong) SSJChargeCircleSelectView *circleSelectView;
 @property(nonatomic, strong) SSJChargeCircleTimeSelectView *chargeCircleTimeView;
+@property(nonatomic, strong) SSJChargeCircleTimeSelectView *chargeCircleEndTimeView;
 @property(nonatomic, strong) SSJCircleChargeTypeSelectView *chargeTypeSelectView;
 @property(nonatomic, strong) SSJMemberSelectView *memberSelectView;
 @property(nonatomic, strong) UIImage *selectedImage;
@@ -224,6 +225,11 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
             [sheet showInView:self.view];
         }
     }
+    if ([title isEqualToString:kTitle12]) {
+        NSDate *startDate = [NSDate dateWithString:self.item.billDate formatString:@"yyyy-MM-dd"];
+        self.chargeCircleEndTimeView.minimumDate = startDate;
+        [self.chargeCircleEndTimeView show];
+    }
 }
 
 
@@ -246,7 +252,9 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
     circleModifyCell.cellImageName = image;
     if ([title isEqualToString:kTitle4]) {
         circleModifyCell.cellInput.hidden = NO;
-        circleModifyCell.cellInput.text = [NSString stringWithFormat:@"%.2f",[self.item.money doubleValue]];
+        if (self.item.money.length) {
+            circleModifyCell.cellInput.text = [NSString stringWithFormat:@"%.2f",[self.item.money doubleValue]];
+        }
         circleModifyCell.cellInput.attributedPlaceholder = [[NSAttributedString alloc]initWithString:@"0.00" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         circleModifyCell.cellInput.keyboardType = UIKeyboardTypeDecimalPad;
         circleModifyCell.cellInput.delegate = self;
@@ -461,6 +469,10 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 -(SSJChargeCircleTimeSelectView *)chargeCircleTimeView{
     if (!_chargeCircleTimeView) {
         _chargeCircleTimeView = [[SSJChargeCircleTimeSelectView alloc]initWithFrame:self.view.bounds];
+        _chargeCircleTimeView.minimumDate = [NSDate date];
+        _chargeCircleTimeView.timeIsTooEarlyBlock = ^(){
+            [CDAutoHideMessageHUD showMessage:@"不能设置历史日期的周期记账哦"];
+        };
         __weak typeof(self) weakSelf = self;
         _chargeCircleTimeView.timerSetBlock = ^(NSString *dateStr){
             weakSelf.item.billDate = dateStr;
@@ -468,6 +480,26 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
         };
     }
     return _chargeCircleTimeView;
+}
+
+-(SSJChargeCircleTimeSelectView *)chargeCircleEndTimeView{
+    if (!_chargeCircleEndTimeView) {
+        _chargeCircleEndTimeView = [[SSJChargeCircleTimeSelectView alloc]initWithFrame:self.view.bounds];
+        _chargeCircleEndTimeView.needClearButtonOrNot = YES;
+        _chargeCircleEndTimeView.timeIsTooEarlyBlock = ^(){
+            [CDAutoHideMessageHUD showMessage:@"结束日期不能早于起始日期哦~"];
+        };
+        __weak typeof(self) weakSelf = self;
+        _chargeCircleEndTimeView.timerSetBlock = ^(NSString *dateStr){
+            weakSelf.item.chargeCircleEndDate = dateStr;
+            [weakSelf.tableView reloadData];
+        };
+        _chargeCircleEndTimeView.clearButtonClickBlcok = ^(){
+            weakSelf.item.chargeCircleEndDate = nil;
+            [weakSelf.tableView reloadData];
+        };
+    }
+    return _chargeCircleEndTimeView;
 }
 
 -(SSJCircleChargeTypeSelectView *)chargeTypeSelectView{

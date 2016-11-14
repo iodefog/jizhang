@@ -18,6 +18,8 @@
 /**
  选择新的记账类型回调 categoryId:类别id incomeOrExpence:是否支出
  */
-@property (nonatomic, copy) void (^addNewCategoryAction)(NSString *categoryId, BOOL incomeOrExpence);
+@property (nonatomic, copy) void (^addNewCategoryAction)(NSString *categoryId, BOOL incomeOrExpence);\
+
+@property(nonatomic, strong) NSString *booksId;
 
 @end

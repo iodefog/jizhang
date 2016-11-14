@@ -15,16 +15,20 @@
 @implementation SSJCategoryListHelper
 
 + (void)queryForCategoryListWithIncomeOrExpenture:(int)incomeOrExpenture
+                                          booksId:(NSString *)booksId
                                           Success:(void(^)(NSMutableArray<SSJRecordMakingBillTypeSelectionCellItem *> *result))success
                                           failure:(void (^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSString *userId = SSJUSERID();
-        NSString *booksId = [db stringForQuery:@"select ccurrentbooksid from bk_user where cuserid = ?",userId];
+        NSString *booksID = booksId;
         if (!booksId.length) {
-            booksId = userId;
+            booksID = [db stringForQuery:@"select ccurrentbooksid from bk_user where cuserid = ?",userId];
+            if (!booksID.length) {
+                booksID = userId;
+            }
         }
         NSMutableArray *categoryList =[NSMutableArray array];
-        NSString *sql = [NSString stringWithFormat:@"SELECT A.CNAME , A.CCOLOR , A.CCOIN , B.CWRITEDATE , A.ID, B.IORDER FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE B.ISTATE = 1 AND A.ITYPE = %d AND A.ID = B.CBILLID AND B.CUSERID = '%@' AND (A.CPARENT <> 'root' or A.CPARENT is null) AND B.CBOOKSID = '%@' ORDER BY B.IORDER, B.CWRITEDATE , A.ID",incomeOrExpenture,userId,booksId];
+        NSString *sql = [NSString stringWithFormat:@"SELECT A.CNAME , A.CCOLOR , A.CCOIN , B.CWRITEDATE , A.ID, B.IORDER FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE B.ISTATE = 1 AND A.ITYPE = %d AND A.ID = B.CBILLID AND B.CUSERID = '%@' AND (A.CPARENT <> 'root' or A.CPARENT is null) AND B.CBOOKSID = '%@' ORDER BY B.IORDER, B.CWRITEDATE , A.ID",incomeOrExpenture,userId,booksID];
             FMResultSet *result = [db executeQuery:sql];
             while ([result next]) {
                 NSString *categoryTitle = [result stringForColumn:@"CNAME"];
@@ -47,15 +51,20 @@
     }];
 }
 
-+ (int)queryForBillTypeMaxOrderWithState:(int)state type:(int)type {
++ (int)queryForBillTypeMaxOrderWithState:(int)state
+                                    type:(int)type
+                                 booksId:(NSString *)booksId{
     __block int maxOrder = 0;
     NSString *userID = SSJUSERID();
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
-        NSString *booksId = [db stringForQuery:@"select ccurrentbooksid from bk_user where cuserid = ?",userID];
+        NSString *booksID = booksId;
         if (!booksId.length) {
-            booksId = userID;
+            booksID = [db stringForQuery:@"select ccurrentbooksid from bk_user where cuserid = ?",userID];
+            if (!booksID.length) {
+                booksID = userID;
+            }
         }
-        maxOrder = [db intForQuery:@"select max(a.iorder) from bk_user_bill as a, bk_bill_type as b where a.cbillid = b.id and a.cuserid = ? and b.itype = ? and a.istate = ? and a.cbooksid = ?", userID, @(type), @(state),booksId];
+        maxOrder = [db intForQuery:@"select max(a.iorder) from bk_user_bill as a, bk_bill_type as b where a.cbillid = b.id and a.cuserid = ? and b.itype = ? and a.istate = ? and a.cbooksid = ?", userID, @(type), @(state),booksID];
     }];
     return maxOrder;
 }
@@ -66,14 +75,18 @@
                        image:(NSString *)image
                        order:(int)order
                        state:(int)state
+                     booksId:(NSString *)booksId
                      Success:(void(^)(NSString *categoryId))success
                      failure:(void (^)(NSError *error))failure {
     
     NSString *userID = SSJUSERID();
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        NSString *booksId = [db stringForQuery:@"select ccurrentbooksid from bk_user where cuserid = ?",userID];
+        NSString *booksID = booksId;
         if (!booksId.length) {
-            booksId = userID;
+            booksID = [db stringForQuery:@"select ccurrentbooksid from bk_user where cuserid = ?",userID];
+            if (!booksID.length) {
+                booksID = userID;
+            }
         }
         if (![db executeUpdate:@"update bk_bill_type set cname = ?, ccoin = ?, ccolor = ? where id = ?", name, image, color, categoryId]) {
             if (failure) {
@@ -84,8 +97,8 @@
             return;
         }
         
-        if (![db intForQuery:@"select count(1) from bk_user_bill where cbillid = ? and cuserid = ? and cbooksid = ?",categoryId,userID,booksId]) {
-            if (![db executeUpdate:@"insert into bk_user_bill values (?, ?, ?, ?, ?, 1, ?, ?)",userID, categoryId, @(state), [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], @(SSJSyncVersion()), @(order),booksId]) {
+        if (![db intForQuery:@"select count(1) from bk_user_bill where cbillid = ? and cuserid = ? and cbooksid = ?",categoryId,userID,booksID]) {
+            if (![db executeUpdate:@"insert into bk_user_bill values (?, ?, ?, ?, ?, 1, ?, ?)",userID, categoryId, @(state), [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], @(SSJSyncVersion()), @(order),booksID]) {
                 if (failure) {
                     SSJDispatch_main_async_safe(^{
                         failure([db lastError]);
@@ -94,7 +107,7 @@
                 return;
             }
         }else{
-            if (![db executeUpdate:@"update bk_user_bill set istate = ?, iorder = ?, cwritedate =?, iversion = ?, operatortype = 1 where cbillid = ? and cuserid = ? and cbooksid = ?", @(state), @(order), [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], @(SSJSyncVersion()), categoryId, userID, booksId]) {
+            if (![db executeUpdate:@"update bk_user_bill set istate = ?, iorder = ?, cwritedate =?, iversion = ?, operatortype = 1 where cbillid = ? and cuserid = ? and cbooksid = ?", @(state), @(order), [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], @(SSJSyncVersion()), categoryId, userID, booksID]) {
                 if (failure) {
                     SSJDispatch_main_async_safe(^{
                         failure([db lastError]);
@@ -114,24 +127,28 @@
 
 + (void)queryForUnusedCategoryListWithIncomeOrExpenture:(int)incomeOrExpenture
                                                  custom:(int)custom
+                                                booksId:(NSString *)booksId
                                                 success:(void(^)(NSMutableArray<SSJRecordMakingCategoryItem *> *result))success
                                                 failure:(void (^)(NSError *error))failure {
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db){
         NSString *userId = SSJUSERID();
-        NSString *booksId = [db stringForQuery:@"select ccurrentbooksid from bk_user where cuserid = ?",userId];
+        NSString *booksID = booksId;
         if (!booksId.length) {
-            booksId = userId;
+            booksID = [db stringForQuery:@"select ccurrentbooksid from bk_user where cuserid = ?",userId];
+            if (!booksID.length) {
+                booksID = userId;
+            }
         }
-        int parentType = [db intForQuery:@"select iparenttype from bk_books_type where cbooksid = ?",booksId];
+        int parentType = [db intForQuery:@"select iparenttype from bk_books_type where cbooksid = ?",booksID];
         NSString *sql;
         if (parentType == 0) {
-            sql = [NSString stringWithFormat:@"SELECT * FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE A.ITYPE = '%d' AND A.ICUSTOM = '%d' AND B.ISTATE = 0 AND B.CUSERID = '%@' AND A.ID = B.CBILLID AND B.OPERATORTYPE <> 2 AND B.CBOOKSID = '%@' ORDER BY B.IORDER",incomeOrExpenture, custom, userId,booksId];
+            sql = [NSString stringWithFormat:@"SELECT * FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE A.ITYPE = '%d' AND A.ICUSTOM = '%d' AND B.ISTATE = 0 AND B.CUSERID = '%@' AND A.ID = B.CBILLID AND B.OPERATORTYPE <> 2 AND B.CBOOKSID = '%@' ORDER BY B.IORDER",incomeOrExpenture, custom, userId,booksID];
         }else{
             if (custom == 0) {
-                sql = [NSString stringWithFormat:@"SELECT DISTINCT * FROM (SELECT * FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE A.ITYPE = %d AND A.ICUSTOM = 0 AND B.CUSERID = '%@' AND A.ID = B.CBILLID AND B.OPERATORTYPE <> 2 AND B.CBOOKSID = '%@' AND A.ID NOT IN (SELECT CBILLID FROM BK_USER_BILL WHERE CUSERID = '%@' AND CBOOKSID = '%@' AND ISTATE = 1) UNION SELECT * FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE A.ITYPE = %d AND A.ICUSTOM = 0  AND B.ISTATE = 0 AND B.CUSERID = '%@' AND A.ID = B.CBILLID AND B.OPERATORTYPE <> 2 AND B.CBOOKSID = '%@' ORDER BY B.IORDER)",incomeOrExpenture,userId,userId,userId,booksId,incomeOrExpenture,userId,booksId];
+                sql = [NSString stringWithFormat:@"SELECT DISTINCT * FROM (SELECT * FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE A.ITYPE = %d AND A.ICUSTOM = 0 AND B.CUSERID = '%@' AND A.ID = B.CBILLID AND B.OPERATORTYPE <> 2 AND B.CBOOKSID = '%@' AND A.ID NOT IN (SELECT CBILLID FROM BK_USER_BILL WHERE CUSERID = '%@' AND CBOOKSID = '%@' AND ISTATE = 1) UNION SELECT * FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE A.ITYPE = %d AND A.ICUSTOM = 0  AND B.ISTATE = 0 AND B.CUSERID = '%@' AND A.ID = B.CBILLID AND B.OPERATORTYPE <> 2 AND B.CBOOKSID = '%@' ORDER BY B.IORDER)",incomeOrExpenture,userId,userId,userId,booksID,incomeOrExpenture,userId,booksID];
             }else{
-                sql = [NSString stringWithFormat:@"SELECT * FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE A.ITYPE = %d AND A.ICUSTOM = 1 AND B.ISTATE = 0 AND B.CUSERID = '%@' AND A.ID = B.CBILLID AND B.OPERATORTYPE <> 2 AND B.CBOOKSID = '%@' ORDER BY B.IORDER",incomeOrExpenture, userId,booksId];
+                sql = [NSString stringWithFormat:@"SELECT * FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE A.ITYPE = %d AND A.ICUSTOM = 1 AND B.ISTATE = 0 AND B.CUSERID = '%@' AND A.ID = B.CBILLID AND B.OPERATORTYPE <> 2 AND B.CBOOKSID = '%@' ORDER BY B.IORDER",incomeOrExpenture, userId,booksID];
             }
         }
         FMResultSet *rs = [db executeQuery:sql];
@@ -196,13 +213,17 @@
                                              name:(NSString *)name
                                              icon:(NSString *)icon
                                             color:(NSString *)color
+                                          booksId:(NSString *)booksId
                                           success:(void(^)(NSString *categoryId))success
                                           failure:(void (^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSString *userId = SSJUSERID();
-        NSString *booksId = [db stringForQuery:@"select ccurrentbooksid from bk_user where cuserid = ?",userId];
+        NSString *booksID = booksId;
         if (!booksId.length) {
-            booksId = userId;
+            booksID = [db stringForQuery:@"select ccurrentbooksid from bk_user where cuserid = ?",userId];
+            if (!booksID.length) {
+                booksID = userId;
+            }
         }
         NSString *newCategoryId = SSJUUID();
         NSString *colorValue = [color hasPrefix:@"#"] ? color : [NSString stringWithFormat:@"#%@", color];
@@ -215,9 +236,9 @@
             return;
         }
         
-        int maxOrder = [db intForQuery:@"select max(a.iorder) from bk_user_bill as a, bk_bill_type as b where a.cuserid = ? and a.istate = 1 and a.operatortype <> 2 and a.cbillid = b.id and b.itype = ? and a.cbooksid = ?", userId, @(incomeOrExpenture),booksId];
+        int maxOrder = [db intForQuery:@"select max(a.iorder) from bk_user_bill as a, bk_bill_type as b where a.cuserid = ? and a.istate = 1 and a.operatortype <> 2 and a.cbillid = b.id and b.itype = ? and a.cbooksid = ?", userId, @(incomeOrExpenture),booksID];
         
-        if ([db executeUpdate:@"insert into bk_user_bill (cuserid, cbillid, istate, cwritedate, iversion, operatortype, iorder, cbooksid) values (?, ?, 1, ?, ?, 0, ?, ?)", userId, newCategoryId, [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], @(SSJSyncVersion()), @(maxOrder + 1),booksId]) {
+        if ([db executeUpdate:@"insert into bk_user_bill (cuserid, cbillid, istate, cwritedate, iversion, operatortype, iorder, cbooksid) values (?, ?, 1, ?, ?, 0, ?, ?)", userId, newCategoryId, [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], @(SSJSyncVersion()), @(maxOrder + 1),booksID]) {
             if (success) {
                 SSJDispatch_main_async_safe(^{
                     success(newCategoryId);
@@ -277,15 +298,19 @@
 }
 
 + (void)deleteCategoryWithIDs:(NSArray *)categoryIDs
+                      booksId:(NSString *)booksId
                       success:(void(^)())success
                       failure:(void(^)(NSError *error))failure {
 
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSString *userId = SSJUSERID();
-        NSString *booksId = [db stringForQuery:@"select ccurrentbooksid from bk_user where cuserid = ?",userId];
+        NSString *booksID = booksId;
         if (!booksId.length) {
-            booksId = userId;
+            booksID = [db stringForQuery:@"select ccurrentbooksid from bk_user where cuserid = ?",userId];
+            if (!booksID.length) {
+                booksID = userId;
+            }
         }
         NSMutableArray *tmpIDs = [NSMutableArray arrayWithCapacity:categoryIDs.count];
         for (NSString *ID in categoryIDs) {
@@ -293,7 +318,7 @@
         }
         NSString *billIDs = [tmpIDs componentsJoinedByString:@", "];
         NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-        NSString *sqlStr = [NSString stringWithFormat:@"update bk_user_bill set operatortype = 2, iversion = %@, cwritedate = '%@' where cbillid in (%@) and cuserid = '%@' and cbooksid = '%@'", @(SSJSyncVersion()), writeDate, billIDs, userId, booksId];
+        NSString *sqlStr = [NSString stringWithFormat:@"update bk_user_bill set operatortype = 2, iversion = %@, cwritedate = '%@' where cbillid in (%@) and cuserid = '%@' and cbooksid = '%@'", @(SSJSyncVersion()), writeDate, billIDs, userId, booksID];
         if ([db executeUpdate:sqlStr]) {
             if (success) {
                 SSJDispatchMainAsync(^{
@@ -312,15 +337,19 @@
 }
 
 + (void)querySameNameCategoryWithName:(NSString *)name
+                              booksId:(NSString *)booksId
                               success:(void(^)(SSJBillModel *model))success
                               failure:(void(^)(NSError *))failure {
     
 
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSString *userID = SSJUSERID();
-        NSString *booksID = [db stringForQuery:@"select ccurrentbooksid from bk_user where cuserid = ?",userID];
-        if (!booksID.length) {
-            booksID = userID;
+        NSString *booksID = booksId;
+        if (!booksId.length) {
+            booksID = [db stringForQuery:@"select ccurrentbooksid from bk_user where cuserid = ?",userID];
+            if (!booksID.length) {
+                booksID = userID;
+            }
         }
         SSJBillModel *model = nil;
         
@@ -379,14 +408,18 @@
 
 + (void)queryAnotherCategoryWithSameName:(NSString *)name
                      exceptForCategoryID:(NSString *)categoryID
+                                 booksId:(NSString *)booksId
                                  success:(void(^)(SSJBillModel *model))success
                                  failure:(void(^)(NSError *))failure {
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSString *userID = SSJUSERID();
-        NSString *booksID = [db stringForQuery:@"select ccurrentbooksid from bk_user where cuserid = ?",userID];
-        if (!booksID.length) {
-            booksID = userID;
+        NSString *booksID = booksId;
+        if (!booksId.length) {
+            booksID = [db stringForQuery:@"select ccurrentbooksid from bk_user where cuserid = ?",userID];
+            if (!booksID.length) {
+                booksID = userID;
+            }
         }
         // 可能有多个已经删除的同名类别，根据writedate取最新的类别
         FMResultSet *resultSet = [db executeQuery:@"select ub.cbillid, ub.istate, ub.operatortype, bt.cname, bt.ccoin, bt.ccolor, bt.itype, bt.icustom from bk_user_bill as ub, bk_bill_type as bt where ub.cbillid = bt.id and ub.cuserid = ? and bt.cname = ? and ub.cbillid <> ? and ub.operatortype <> 2 and ub.cbooksid = ? order by ub.cwritedate desc", userID, name, categoryID, booksID];

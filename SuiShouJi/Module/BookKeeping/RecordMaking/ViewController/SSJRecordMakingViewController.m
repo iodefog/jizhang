@@ -19,7 +19,7 @@
 #import "SSJMemberManagerViewController.h"
 #import "SSJNewMemberViewController.h"
 #import "SSJFundingTypeSelectViewController.h"
-
+#import "UIViewController+MMDrawerController.h"
 #import "SSJCustomKeyboard.h"
 #import "SSJCalendarView.h"
 #import "SSJDateSelectedView.h"
@@ -134,6 +134,9 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self getCategoryList];
+    [self.mm_drawerController setMaximumLeftDrawerWidth:SSJSCREENWITH];
+    [self.mm_drawerController setOpenDrawerGestureModeMask:MMOpenDrawerGestureModeNone];
+    [self.mm_drawerController setCloseDrawerGestureModeMask:MMCloseDrawerGestureModeNone];
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -152,6 +155,9 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     [super viewWillDisappear:animated];
     [_billTypeInputView.moneyInput resignFirstResponder];
     [_accessoryView.memoView resignFirstResponder];
+    [self.mm_drawerController setMaximumLeftDrawerWidth:SSJSCREENWITH * 0.8];
+    [self.mm_drawerController setOpenDrawerGestureModeMask:MMOpenDrawerGestureModeAll];
+    [self.mm_drawerController setCloseDrawerGestureModeMask:MMCloseDrawerGestureModeAll];
 }
 
 - (void)viewDidLayoutSubviews {
@@ -631,7 +637,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     }
     __weak typeof(self) weakSelf = self;
     [self.view ssj_showLoadingIndicator];
-    [SSJCategoryListHelper queryForCategoryListWithIncomeOrExpenture:!self.titleSegment.selectedSegmentIndex Success:^(NSMutableArray *result) {
+    [SSJCategoryListHelper queryForCategoryListWithIncomeOrExpenture:!self.titleSegment.selectedSegmentIndex booksId:self.item.booksId Success:^(NSMutableArray *result) {
         __block SSJRecordMakingBillTypeSelectionCellItem *selectedItem = nil;
         dispatch_apply([result count], dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(size_t index) {
             SSJRecordMakingBillTypeSelectionCellItem *item = [result ssj_safeObjectAtIndex:index];
@@ -847,6 +853,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     
     billTypeView.addAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView) {
         SSJADDNewTypeViewController *addNewTypeVc = [[SSJADDNewTypeViewController alloc]init];
+        addNewTypeVc.booksId = self.item.booksId;
         addNewTypeVc.incomeOrExpence = !wself.titleSegment.selectedSegmentIndex;
         addNewTypeVc.addNewCategoryAction = ^(NSString *categoryId, BOOL incomeOrExpence){
             wself.item.billId = categoryId;
@@ -941,13 +948,14 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 
 - (void)deleteItem:(SSJRecordMakingBillTypeSelectionCellItem *)item ofItems:(NSArray *)items {
     int type = !self.titleSegment.selectedSegmentIndex;
-    int order = [SSJCategoryListHelper queryForBillTypeMaxOrderWithState:0 type:type] + 1;
+    int order = [SSJCategoryListHelper queryForBillTypeMaxOrderWithState:0 type:type booksId:self.item.booksId] + 1;
     
     [SSJCategoryListHelper updateCategoryWithID:item.ID
                                            name:item.title
                                           color:item.colorValue
                                           image:item.imageName
                                           order:order state:0
+                                        booksId:self.item.booksId
                                         Success:NULL
                                         failure:^(NSError *error) {
                                             [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了"

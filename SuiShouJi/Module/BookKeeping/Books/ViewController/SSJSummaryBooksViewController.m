@@ -80,7 +80,7 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
     [super viewWillAppear:animated];
     [self reloadAxisView];
     [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:@"#f9d2da"] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.summaryBooksHeaderColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
 
     [self.mm_drawerController setMaximumLeftDrawerWidth:SSJSCREENWITH];
     [self.mm_drawerController setOpenDrawerGestureModeMask:MMOpenDrawerGestureModeNone];
