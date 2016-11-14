@@ -123,7 +123,7 @@
     NSString* dateStr = [dateFormatter stringFromDate:[self.datePicker date]];
     if (self.maxDate) {
         if ([self.datePicker.date isLaterThan:self.maxDate]) {
-            [self.datePicker setDate:[NSDate date] animated:YES];
+            [self.datePicker setDate:self.maxDate animated:YES];
             if (self.timeIsTooLateBlock) {
                 self.timeIsTooLateBlock();
             }
@@ -132,7 +132,7 @@
     }
     if (self.minimumDate) {
         if ([self.datePicker.date isEarlierThan:self.minimumDate]) {
-            [self.datePicker setDate:[NSDate date] animated:YES];
+            [self.datePicker setDate:self.minimumDate animated:YES];
             if (self.timeIsTooEarlyBlock) {
                 self.timeIsTooEarlyBlock();
             }

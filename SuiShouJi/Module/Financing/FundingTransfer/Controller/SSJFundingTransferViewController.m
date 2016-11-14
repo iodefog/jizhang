@@ -69,6 +69,7 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
 //    self.view.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
     self.titles = @[@[@"转出账户",@"转入账户"],@[@"转账金额"],@[@"备注",@"转账日期"]];
     self.images = @[@[@"founds_zhuanchuzhanghu",@"founds_zhuanruzhanghu"],@[@"loan_money"],@[@"loan_memo",@"loan_calendar"]];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(transferTextDidChange) name:UITextFieldTextDidChangeNotification object:nil];
     [self.view addSubview:self.tableView];
     if (self.item != nil) {
         _transferOutItem = [[SSJFundingItem alloc]init];
@@ -437,6 +438,10 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
 }
 
 #pragma mark - Private
+
+- (void)transferTextDidChange{
+    [self setupTextFiledNum:_moneyInput num:2];
+}
 
 //-(void)transferTextDidChange{
 //    [self setupTextFiledNum:self.transferIntext num:2];
