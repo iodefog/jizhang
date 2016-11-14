@@ -155,6 +155,9 @@
 @property (nonatomic, copy) NSString *bookKeepingHomeMutiButtonNormalColor;
 
 // 搜索页面结果头的背景色
-@property (nonatomic, copy) NSString *searchResultHeaderBackgroundColor;
+@property (nonatomic, copy) NSString *searchResultHeaderBackgroundColor;\
+
+// 总账本的背景颜色
+@property (nonatomic, copy) NSString *summaryBooksHeaderColor;
 
 @end

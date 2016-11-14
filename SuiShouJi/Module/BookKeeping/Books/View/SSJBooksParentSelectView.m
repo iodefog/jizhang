@@ -61,7 +61,7 @@ static NSString * SSJBooksParentSelectCellIdentifier = @"SSJBooksParentSelectCel
 - (UIView *)backColorView{
     if (!_backColorView) {
         _backColorView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.width, 42)];
-        _backColorView.backgroundColor = [UIColor ssj_colorWithHex:@"#f9d2da"];
+        _backColorView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.summaryBooksHeaderColor];
     }
     return _backColorView;
 }

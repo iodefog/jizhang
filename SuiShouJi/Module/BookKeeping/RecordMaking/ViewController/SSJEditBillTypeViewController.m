@@ -89,8 +89,9 @@
     _model.color = _categoryEditView.selectedColor;
     _model.icon = _categoryEditView.selectedImage;
     
-    [SSJCategoryListHelper queryAnotherCategoryWithSameName:_model.name
+    [SSJCategoryListHelper queryAnotherCategoryWithSameName:_model.name 
                                         exceptForCategoryID:_model.ID
+                                                    booksId:self.booksId
                                                     success:^(SSJBillModel *model) {
                                                         if (model) {
                                                             if (model.state) {
@@ -131,6 +132,7 @@
                                           image:_model.icon
                                           order:_model.order
                                           state:_model.state
+                                        booksId:self.booksId
                                         Success:^(NSString *categoryId) {
                                             [self.navigationController popViewControllerAnimated:YES];
                                             [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];

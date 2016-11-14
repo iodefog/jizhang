@@ -22,6 +22,7 @@
  *  @param failure           查询失败的回调
  */
 + (void)queryForCategoryListWithIncomeOrExpenture:(int)incomeOrExpenture
+                                          booksId:(NSString *)booksId
                                           Success:(void(^)(NSMutableArray<SSJRecordMakingBillTypeSelectionCellItem *> *result))success
                                           failure:(void (^)(NSError *error))failure;
 
@@ -31,7 +32,9 @@
  *  @param state    0:关闭 1:开启
  *  @param type     0:收入 1:支出
  */
-+ (int)queryForBillTypeMaxOrderWithState:(int)state type:(int)type;
++ (int)queryForBillTypeMaxOrderWithState:(int)state
+                                    type:(int)type
+                                 booksId:(NSString *)booksId;
 
 /**
  *  更改收支类型
@@ -52,6 +55,7 @@
                        image:(NSString *)image
                        order:(int)order
                        state:(int)state
+                     booksId:(NSString *)booksId
                      Success:(void(^)(NSString *categoryId))success
                      failure:(void (^)(NSError *error))failure;
 
@@ -65,6 +69,7 @@
  */
 + (void)queryForUnusedCategoryListWithIncomeOrExpenture:(int)incomeOrExpenture
                                                  custom:(int)custom
+                                                booksId:(NSString *)booksId
                                                 success:(void(^)(NSMutableArray<SSJRecordMakingCategoryItem *> *result))success
                                                 failure:(void (^)(NSError *error))failure;
 
@@ -93,6 +98,7 @@
                                              name:(NSString *)name
                                              icon:(NSString *)icon
                                             color:(NSString *)color
+                                          booksId:(NSString *)booksId
                                           success:(void(^)(NSString *categoryId))success
                                           failure:(void (^)(NSError *error))failure;
 
@@ -125,6 +131,7 @@
  *  @param failure      查询失败的回调
  */
 + (void)deleteCategoryWithIDs:(NSArray *)categoryIDs
+                      booksId:(NSString *)booksId
                       success:(void(^)())success
                       failure:(void(^)(NSError *error))failure;
 
@@ -136,11 +143,13 @@
  *  @param failure      查询失败的回调
  */
 + (void)querySameNameCategoryWithName:(NSString *)name
+                              booksId:(NSString *)booksId
                               success:(void(^)(SSJBillModel *model))success
                               failure:(void(^)(NSError *))failure;
 
 + (void)queryAnotherCategoryWithSameName:(NSString *)name
                      exceptForCategoryID:(NSString *)categoryID
+                                 booksId:(NSString *)booksId
                                  success:(void(^)(SSJBillModel *model))success
                                  failure:(void(^)(NSError *))failure;
 
