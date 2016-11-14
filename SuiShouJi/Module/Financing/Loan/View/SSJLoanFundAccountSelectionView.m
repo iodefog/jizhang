@@ -78,7 +78,7 @@ static NSString *const kCellId = @"SSJLoanFundAccountSelectionCell";
     [self dismiss];
 }
 
-- (void)setSelectedIndex:(NSUInteger)selectedIndex {
+- (void)setSelectedIndex:(NSInteger)selectedIndex {
     if (selectedIndex >= _cellItems.count) {
         SSJPRINT(@"警告：selectedIndex大于数组的范围");
         return;
@@ -87,7 +87,7 @@ static NSString *const kCellId = @"SSJLoanFundAccountSelectionCell";
     _selectedIndex = selectedIndex;
     for (int i = 0; i < _cellItems.count; i ++) {
         SSJLoanFundAccountSelectionCellItem *cellItem = _cellItems[i];
-        cellItem.showCheckMark = i == _selectedIndex;
+        cellItem.showCheckMark = (i == _selectedIndex);
     }
 }
 

@@ -46,6 +46,10 @@ static NSUInteger kClostOutDateTag = 1004;
 
 @property (nonatomic, strong) NSArray *cellTags;
 
+@property (nonatomic, strong) SSJLoanCompoundChargeModel *compoundModel;
+
+@property (nonatomic, strong) NSArray <SSJLoanCompoundChargeModel *>*chargeModels;
+
 @end
 
 @implementation SSJLoanCloseOutViewController
@@ -64,6 +68,8 @@ static NSUInteger kClostOutDateTag = 1004;
     NSDate *today = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:[NSDate date].day];
     NSDate *endDate = [today isLaterThan:_loanModel.borrowDate] ? today : _loanModel.borrowDate;
     _loanModel.endDate = endDate;
+    
+    [self initCompoundModel];
     
     [self organiseTitles];
     [self organiseImages];
@@ -114,7 +120,7 @@ static NSUInteger kClostOutDateTag = 1004;
             
             SSJAddOrEditLoanTextFieldCell *interestCell = (SSJAddOrEditLoanTextFieldCell *)cell;
             interestCell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"¥0.00" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
-            interestCell.textField.text = [NSString stringWithFormat:@"¥%.2f", [SSJLoanHelper closeOutInterestWithLoanModel:_loanModel chargeModels:_chargeModels]];
+            interestCell.textField.text = [NSString stringWithFormat:@"¥%.2f", [SSJLoanHelper closeOutInterestWithLoanModel:self.loanModel chargeModels:self.chargeModels]];
             interestCell.textField.keyboardType = UIKeyboardTypeDecimalPad;
             interestCell.textField.clearsOnBeginEditing = YES;
             interestCell.textField.delegate = self;
@@ -176,17 +182,14 @@ static NSUInteger kClostOutDateTag = 1004;
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    
     if (textField.tag == kInterestTag) {
-        BOOL shouldChange = YES;
+        NSString *tmpMoneyStr = [textField.text stringByReplacingCharactersInRange:range withString:string];
+        tmpMoneyStr = [tmpMoneyStr stringByReplacingOccurrencesOfString:@"¥" withString:@""];
+        tmpMoneyStr = [tmpMoneyStr ssj_reserveDecimalDigits:2 intDigits:0];
+        textField.text = [NSString stringWithFormat:@"¥%@", tmpMoneyStr];
+        self.compoundModel.interestChargeModel.money = [tmpMoneyStr doubleValue];
         
-        NSString *newStr = [textField.text stringByReplacingCharactersInRange:range withString:string];
-        if (newStr.length) {
-            textField.text = [self formatMoneyString:newStr];
-            shouldChange = NO;
-        }
-        
-        return shouldChange;
+        return NO;
     }
     
     return YES;
@@ -203,41 +206,30 @@ static NSUInteger kClostOutDateTag = 1004;
     [self.view ssj_showLoadingIndicator];
     
     [SSJLoanHelper queryFundModelListWithSuccess:^(NSArray <SSJLoanFundAccountSelectionViewItem *>*items) {
-        
-        [self.view ssj_hideLoadingIndicator];
-        self.fundingSelectionView.items = items;
-        for (int i = 0; i < items.count; i ++) {
-            SSJLoanFundAccountSelectionViewItem *item = items[i];
-            if ([item.ID isEqualToString:_loanModel.endTargetFundID]) {
-                self.fundingSelectionView.selectedIndex = i;
-                break;
+        [SSJLoanHelper queryLoanChargeModeListWithLoanModel:self.loanModel success:^(NSArray<SSJLoanCompoundChargeModel *> * _Nonnull list) {
+            
+            [self.view ssj_hideLoadingIndicator];
+            
+            self.chargeModels = list;
+            self.fundingSelectionView.items = items;
+            for (int i = 0; i < items.count; i ++) {
+                SSJLoanFundAccountSelectionViewItem *item = items[i];
+                if ([item.ID isEqualToString:_loanModel.endTargetFundID]) {
+                    self.fundingSelectionView.selectedIndex = i;
+                    break;
+                }
             }
-        }
-        [_tableView reloadData];
+            [_tableView reloadData];
+            
+        } failure:^(NSError * _Nonnull error) {
+            [self.view ssj_hideLoadingIndicator];
+            [self showError:error];
+        }];
         
     } failure:^(NSError * _Nonnull error) {
-        
         [self.view ssj_hideLoadingIndicator];
-        [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
+        [self showError:error];
     }];
-}
-
-- (NSString *)formatMoneyString:(NSString *)money {
-    money = [money stringByReplacingOccurrencesOfString:@"¥" withString:@""];
-    if (money.length) {
-        money = [NSString stringWithFormat:@"¥%@", money];
-    }
-    
-    NSArray *components = [money componentsSeparatedByString:@"."];
-    if (components.count >= 2) {
-        NSString *integer = [components objectAtIndex:0];
-        NSString *digit = [components objectAtIndex:1];
-        if (digit.length > 2) {
-            digit = [digit substringToIndex:2];
-        }
-        money = [NSString stringWithFormat:@"%@.%@", integer, digit];
-    }
-    return money;
 }
 
 - (BOOL)needToDisplayInterest {
@@ -290,6 +282,70 @@ static NSUInteger kClostOutDateTag = 1004;
     } else {
         return nil;
     }
+}
+
+- (void)initCompoundModel {
+    if (!_compoundModel) {
+        NSString *chargeBillId = nil;
+        NSString *targetChargeBillId = nil;
+        NSString *interestChargeBillId = nil;
+        
+        switch (self.loanModel.type) {
+            case SSJLoanTypeLend:
+                chargeBillId = @"4";
+                targetChargeBillId = @"3";
+                interestChargeBillId = @"5";
+                break;
+                
+            case SSJLoanTypeBorrow:
+                chargeBillId = @"3";
+                targetChargeBillId = @"4";
+                interestChargeBillId = @"6";
+                break;
+        }
+        
+        SSJLoanChargeModel *chargeModel = [[SSJLoanChargeModel alloc] init];
+        chargeModel.chargeId = SSJUUID();
+        chargeModel.fundId = self.loanModel.fundID;
+        chargeModel.billId = chargeBillId;
+        chargeModel.loanId = self.loanModel.ID;
+        chargeModel.userId = SSJUSERID();
+        chargeModel.billDate = self.loanModel.endDate;
+        chargeModel.money = self.loanModel.jMoney;
+        
+        SSJLoanChargeModel *targetChargeModel = [[SSJLoanChargeModel alloc] init];
+        targetChargeModel.chargeId = SSJUUID();
+        targetChargeModel.fundId = self.loanModel.targetFundID;
+        targetChargeModel.billId = targetChargeBillId;
+        targetChargeModel.loanId = self.loanModel.ID;
+        targetChargeModel.userId = SSJUSERID();
+        targetChargeModel.billDate = self.loanModel.endDate;
+        targetChargeModel.money = self.loanModel.jMoney;
+        
+        SSJLoanChargeModel *interestModel = [[SSJLoanChargeModel alloc] init];
+        interestModel.chargeId = SSJUUID();
+        interestModel.fundId = self.loanModel.targetFundID;
+        interestModel.billId = interestChargeBillId;
+        interestModel.loanId = self.loanModel.ID;
+        interestModel.userId = SSJUSERID();
+        interestModel.billDate = self.loanModel.endDate;
+        interestModel.money = self.loanModel.jMoney;
+        
+        _compoundModel = [[SSJLoanCompoundChargeModel alloc] init];
+        _compoundModel.chargeModel = chargeModel;
+        _compoundModel.targetChargeModel = targetChargeModel;
+        _compoundModel.interestChargeModel = interestModel;
+    }
+}
+
+- (void)showError:(NSError *)error {
+    NSString *message = nil;
+#ifdef DEBUG
+    message = [error localizedDescription];
+#else
+    message = SSJ_ERROR_MESSAGE;
+#endif
+    [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:message action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
 }
 
 #pragma mark - Event
@@ -354,7 +410,7 @@ static NSUInteger kClostOutDateTag = 1004;
     }
     
     self.sureButton.enabled = NO;
-    [SSJLoanHelper closeOutLoanModel:_loanModel chargeModels:_chargeModels success:^{
+    [SSJLoanHelper closeOutLoanModel:self.loanModel chargeModel:self.compoundModel success:^{
         self.sureButton.enabled = YES;
         [self.navigationController popViewControllerAnimated:YES];
         [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
@@ -370,7 +426,7 @@ static NSUInteger kClostOutDateTag = 1004;
         }
     } failure:^(NSError * _Nonnull error) {
         self.sureButton.enabled = YES;
-        [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
+        [self showError:error];
     }];
 }
 
@@ -422,6 +478,8 @@ static NSUInteger kClostOutDateTag = 1004;
             if (index < view.items.count - 1) {
                 SSJLoanFundAccountSelectionViewItem *item = [view.items objectAtIndex:index];
                 weakSelf.loanModel.endTargetFundID = item.ID;
+                weakSelf.compoundModel.targetChargeModel.fundId = item.ID;
+                weakSelf.compoundModel.interestChargeModel.fundId = item.ID;
                 [weakSelf.tableView reloadData];
                 return YES;
             } else if (index == view.items.count - 1) {
@@ -431,10 +489,14 @@ static NSUInteger kClostOutDateTag = 1004;
                     if ([item isKindOfClass:[SSJFundingItem class]]) {
                         SSJFundingItem *fundItem = (SSJFundingItem *)item;
                         weakSelf.loanModel.targetFundID = fundItem.fundingID;
+                        weakSelf.compoundModel.targetChargeModel.fundId = fundItem.fundingID;
+                        weakSelf.compoundModel.interestChargeModel.fundId = fundItem.fundingID;
                         [weakSelf loadData];
                     } else if ([item isKindOfClass:[SSJCreditCardItem class]]){
                         SSJCreditCardItem *cardItem = (SSJCreditCardItem *)item;
                         weakSelf.loanModel.targetFundID = cardItem.cardId;
+                        weakSelf.compoundModel.targetChargeModel.fundId = cardItem.cardId;
+                        weakSelf.compoundModel.interestChargeModel.fundId = cardItem.cardId;
                         [weakSelf loadData];
                     }
                 };
@@ -456,7 +518,12 @@ static NSUInteger kClostOutDateTag = 1004;
         _endDateSelectionView = [[SSJLoanDateSelectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 244)];
         _endDateSelectionView.selectedDate = _loanModel.endDate;
         _endDateSelectionView.selectDateAction = ^(SSJLoanDateSelectionView *view) {
+            
             weakSelf.loanModel.endDate = view.selectedDate;
+            weakSelf.compoundModel.chargeModel.billDate = view.selectedDate;
+            weakSelf.compoundModel.targetChargeModel.billDate = view.selectedDate;
+            weakSelf.compoundModel.interestChargeModel.billDate = view.selectedDate;
+            
             [weakSelf organiseTitles];
             [weakSelf organiseImages];
             [weakSelf organiseCellTags];

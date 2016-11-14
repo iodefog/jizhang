@@ -92,7 +92,9 @@ NSString *const SSJBudgetDetailBillInfoColorKey = @"SSJBudgetDetailBillInfoColor
         NSMutableArray *billNames = [NSMutableArray array];
         for (NSString *billId in model.billIds) {
             NSDictionary *billInfo = billMapping[billId];
-            [billNames addObject:billInfo[SSJBudgetDetailBillInfoNameKey]];
+            if (billInfo[SSJBudgetDetailBillInfoNameKey]) {
+                [billNames addObject:billInfo[SSJBudgetDetailBillInfoNameKey]];
+            }
             if (billNames.count == 4) {
                 break;
             }
