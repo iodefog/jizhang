@@ -18,6 +18,7 @@ static NSString *const kTitle8 = @"循环周期";
 static NSString *const kTitle9 = @"资金账户";
 static NSString *const kTitle10 = @"起始日期";
 static NSString *const kTitle11 = @"不支持设置历史日期的周期账";
+static NSString *const kTitle12 = @"结束时间";
 
 static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 
@@ -74,8 +75,8 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.titles = @[@[kTitle1,kTitle2],@[kTitle3,kTitle4,kTitle5,kTitle7],@[kTitle6,kTitle8,kTitle9,kTitle10,kTitle11]];
-    _images = @[@[@"xuhuan_zhangben",@"xuhuan_shouzhileixing"],@[@"xuhuan_leibie",@"xuhuan_jine",@"xuhuan_beizhu",@"xuhuan_paizhao" ],@[@"xunhuan_chengyuan",@"xuhuan_xuhuan",@"xuhuan_zijinzhanghu",@"xuhuan_riqi",@""]];
+    self.titles = @[@[kTitle1,kTitle2],@[kTitle3,kTitle4,kTitle5,kTitle7],@[kTitle6,kTitle8,kTitle9,kTitle10,kTitle11,kTitle12]];
+    _images = @[@[@"xuhuan_zhangben",@"xuhuan_shouzhileixing"],@[@"xuhuan_leibie",@"xuhuan_jine",@"xuhuan_beizhu",@"xuhuan_paizhao" ],@[@"xunhuan_chengyuan",@"xuhuan_xuhuan",@"xuhuan_zijinzhanghu",@"xuhuan_riqi",@"",@"xunhuan_end"]];
     [self.view addSubview:self.tableView];
     [self.tableView registerClass:[SSJChargeCircleModifyCell class] forCellReuseIdentifier:SSJChargeCircleEditeCellIdentifier];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(transferTextDidChange) name:UITextFieldTextDidChangeNotification object:nil];
@@ -328,6 +329,13 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
             circleModifyCell.cellDetail = ((SSJChargeMemberItem *)[self.item.membersItem ssj_safeObjectAtIndex:0]).memberName;
         }else{
             circleModifyCell.cellDetail = [NSString stringWithFormat:@"%ld人",self.item.membersItem.count];
+        }
+    }else if ([title isEqualToString:kTitle12]) {
+        circleModifyCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        if (self.item.chargeCircleEndDate.length) {
+            circleModifyCell.cellDetail = self.item.chargeCircleEndDate;
+        }else{
+            circleModifyCell.cellDetail = @"请选择结束日期";
         }
     }
     if ([title isEqualToString:kTitle7]) {

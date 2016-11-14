@@ -22,6 +22,7 @@
 #import "SSJBooksTypeStore.h"
 #import "SSJBooksTypeItem.h"
 #import "SSJReportFormsViewController.h"
+#import "UIViewController+MMDrawerController.h"
 #import "FMDB.h"
 #import "SSJChargeMemBerItem.h"
 #import "SSJCalenderDetailHeader.h"
@@ -68,8 +69,18 @@
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:self.item.colorValue] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
     self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:21],
                                                                     NSForegroundColorAttributeName:[UIColor whiteColor]};
+    [self.mm_drawerController setMaximumLeftDrawerWidth:SSJSCREENWITH];
+    [self.mm_drawerController setOpenDrawerGestureModeMask:MMOpenDrawerGestureModeNone];
+    [self.mm_drawerController setCloseDrawerGestureModeMask:MMCloseDrawerGestureModeNone];
+
 }
 
+- (void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    [self.mm_drawerController setMaximumLeftDrawerWidth:SSJSCREENWITH * 0.8];
+    [self.mm_drawerController setOpenDrawerGestureModeMask:MMOpenDrawerGestureModeAll];
+    [self.mm_drawerController setCloseDrawerGestureModeMask:MMCloseDrawerGestureModeAll];
+}
 #pragma mark - UITableViewDelegate
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     SSJBaseItem *item = [self.items ssj_objectAtIndexPath:indexPath];
@@ -197,7 +208,6 @@
 }
 
 #pragma mark - Private
-
 /**
  *  修改流水
  */

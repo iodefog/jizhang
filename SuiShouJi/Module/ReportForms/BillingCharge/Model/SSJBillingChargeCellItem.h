@@ -73,6 +73,9 @@
 //循环记账类型
 @property (nonatomic) NSInteger chargeCircleType;
 
+//循环记账结束时间
+@property (nonatomic, strong) NSString *chargeCircleEndDate;
+
 //循环记账类型开关(循环配置用,0是关闭,1是开启)
 @property (nonatomic) BOOL isOnOrNot;
 

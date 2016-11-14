@@ -114,6 +114,7 @@
     item.booksName = [set stringForColumn:@"CBOOKSNAME"];
     item.isOnOrNot = [set boolForColumn:@"ISTATE"];
     item.chargeCircleType = [set intForColumn:@"ITYPE"];
+    item.chargeCircleEndDate = [set stringForColumn:@"CBILLDATEEND"];
     item.fundName = [set stringForColumn:@"CACCTNAME"];
     return item;
 }

@@ -9,33 +9,49 @@
 #import "SSJFundingTransferViewController.h"
 #import "SSJFundingItem.h"
 #import "SSJFundingTypeSelectView.h"
+#import "TPKeyboardAvoidingTableView.h"
+#import "SSJChargeCircleTimeSelectView.h"
 #import "SSJDatabaseQueue.h"
 #import "SSJDataSynchronizer.h"
 #import "SSJCreditCardItem.h"
+#import "SSJChargeCircleModifyCell.h"
 #import "SSJFundingTransferDetailViewController.h"
 #import "SSJFundingTypeSelectViewController.h"
 #import "FMDB.h"
 
-@interface SSJFundingTransferViewController ()
+static NSString *const kTitle1 = @"转出账户";
+static NSString *const kTitle2 = @"转入账户";
+static NSString *const kTitle3 = @"转账金额";
+static NSString *const kTitle4 = @"备注";
+static NSString *const kTitle5 = @"转账日期";
+
+static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEditeCellIdentifier";
+
+@interface SSJFundingTransferViewController ()<UITableViewDelegate,UITableViewDataSource>
+
+@property(nonatomic, strong) TPKeyboardAvoidingTableView *tableView;
+
 @property (nonatomic,strong) UIBarButtonItem *rightButton;
-@property (nonatomic,strong) UITextField *transferIntext;
-@property (nonatomic,strong) UITextField *transferOuttext;
-@property (nonatomic,strong) UIImageView *transferImage;
-@property (nonatomic,strong) UIView *transferInButtonView;
-@property (nonatomic,strong) UIView *transferOutButtonView;
-@property (nonatomic,strong) UIButton *transferInButton;
-@property (nonatomic,strong) UIButton *transferOutButton;
+
 @property (nonatomic,strong) SSJFundingTypeSelectView *transferInFundingTypeSelect;
+
 @property (nonatomic,strong) SSJFundingTypeSelectView *transferOutFundingTypeSelect;
-@property (nonatomic,strong) UILabel *transferLabel;
-@property (nonatomic,strong) UILabel *memoLabel;
-@property (nonatomic,strong) UITextField  *memoInput;
-@property(nonatomic, strong) UIButton *comfirmButton;
+
+@property(nonatomic, strong) SSJChargeCircleTimeSelectView *chargeCircleTimeView;
+
+@property(nonatomic, strong) UIView *saveFooterView;
+
+@property(nonatomic, strong) NSArray *titles;
+
+@property(nonatomic, strong) NSArray *images;
+
 @end
 
 @implementation SSJFundingTransferViewController{
     SSJBaseItem *_transferInItem;
     SSJBaseItem *_transferOutItem;
+    UITextField *_moneyInput;
+    UITextField *_memoInput;
 }
 
 #pragma mark - Lifecycle
@@ -51,14 +67,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 //    self.view.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
-    self.navigationItem.rightBarButtonItem = self.rightButton;
-    [self.view addSubview:self.transferIntext];
-    [self.view addSubview:self.transferOuttext];
-    [self.view addSubview:self.transferLabel];
-    [self.view addSubview:self.transferImage];
-    [self.view addSubview:self.memoInput];
-    [self.view addSubview:self.memoLabel];
-    [self.view addSubview:self.comfirmButton];
+    self.titles = @[@[@"转出账户",@"转入账户"],@[@"转账金额"],@[@"备注",@"转账日期"]];
+    self.images = @[@[@"founds_zhuanchuzhanghu",@"founds_zhuanruzhanghu"],@[@"loan_money"],@[@"loan_memo",@"loan_calendar"]];
+    [self.view addSubview:self.tableView];
     if (self.item != nil) {
         _transferOutItem = [[SSJFundingItem alloc]init];
         _transferInItem = [[SSJFundingItem alloc]init];
@@ -68,53 +79,157 @@
         ((SSJFundingItem *)_transferOutItem).fundingID = self.item.transferOutId;
         ((SSJFundingItem *)_transferOutItem).fundingIcon = self.item.transferOutImage;
         ((SSJFundingItem *)_transferOutItem).fundingName = self.item.transferOutName;
-    }
-}
-
--(void)viewDidLayoutSubviews{
-    self.transferOuttext.size = CGSizeMake(self.view.width, 60);
-    self.transferOuttext.leftTop = CGPointMake(0, SSJ_NAVIBAR_BOTTOM + 20);
-    self.transferIntext.size = CGSizeMake(self.view.width, 60);
-    self.transferIntext.leftTop = CGPointMake(0, self.transferOuttext.bottom + 85);
-    self.transferImage.size = CGSizeMake(14, 24);
-    self.transferImage.centerX = self.view.width / 2 - 14;
-    self.transferImage.centerY = self.transferOuttext.bottom + 42.5;
-    self.transferLabel.left = _transferImage.right;
-    self.transferLabel.centerY = _transferImage.centerY;
-    self.memoInput.size = CGSizeMake(self.view.width, 50);
-    self.memoInput.top = self.transferIntext.bottom;
-    [self.memoInput ssj_relayoutBorder];
-    self.memoLabel.centerY = self.memoInput.centerY;
-    self.memoLabel.left = 20;
-    self.comfirmButton.size = CGSizeMake(self.view.width - 40, 40);
-    self.comfirmButton.top = self.memoInput.bottom + 20;
-    self.comfirmButton.centerX = self.view.width / 2;
-}
-
--(void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
-    if (self.item != nil) {
         self.navigationItem.rightBarButtonItem = nil;
-    }else{
         self.title = @"编辑转账";
+    }else{
+        self.item = [[SSJFundingTransferDetailItem alloc]init];
+        self.item.transferDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"];
+        self.navigationItem.rightBarButtonItem = self.rightButton;
     }
+    [self.tableView registerClass:[SSJChargeCircleModifyCell class] forCellReuseIdentifier:SSJFundingTransferEditeCellIdentifier];
+
 }
+
+//-(void)viewWillAppear:(BOOL)animated{
+//    [super viewWillAppear:animated];
+//    if (self.item != nil) {
+//        self.navigationItem.rightBarButtonItem = nil;
+//    }else{
+//    }
+//}
 
 -(void)dealloc{
     [[NSNotificationCenter defaultCenter]removeObserver:self];
 }
 
+#pragma mark - UITableViewDelegate
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return 55;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    return 10;
+}
+
+-(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
+    if (section == 2) {
+        return self.saveFooterView;
+    }
+    return nil;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
+    if (section == 2) {
+        return 80 ;
+    }
+    return 0.1f;
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
+    if ([title isEqualToString:kTitle1]) {
+        if ([_transferInItem isKindOfClass:[SSJFundingItem class]]) {
+            self.transferInFundingTypeSelect.selectFundID = ((SSJFundingItem *)_transferInItem).fundingID;
+        }else if ([_transferInItem isKindOfClass:[SSJCreditCardItem class]]) {
+            self.transferInFundingTypeSelect.selectFundID = ((SSJCreditCardItem *)_transferInItem).cardId;
+        }
+        [self.transferInFundingTypeSelect show];
+    }else if ([title isEqualToString:kTitle2]){
+        if ([_transferInItem isKindOfClass:[SSJFundingItem class]]) {
+            self.transferOutFundingTypeSelect.selectFundID = ((SSJFundingItem *)_transferOutItem).fundingID;
+        }else if ([_transferInItem isKindOfClass:[SSJCreditCardItem class]]) {
+            self.transferOutFundingTypeSelect.selectFundID = ((SSJCreditCardItem *)_transferOutItem).cardId;
+        }
+        [self.transferOutFundingTypeSelect show];
+    }else if ([title isEqualToString:kTitle5]){
+        [self.chargeCircleTimeView show];
+    }
+}
+
+
+#pragma mark - UITableViewDataSource
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    return [self.titles[section] count];
+}
+
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    return self.titles.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
+    NSString *image = [self.images ssj_objectAtIndexPath:indexPath];
+    SSJChargeCircleModifyCell *circleModifyCell = [tableView dequeueReusableCellWithIdentifier:SSJFundingTransferEditeCellIdentifier];
+    circleModifyCell.cellTitle = title;
+    circleModifyCell.cellImageName = image;
+    if ([title isEqualToString:kTitle1]) {
+        circleModifyCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        circleModifyCell.cellInput.hidden = YES;
+        if (!_transferInItem) {
+            circleModifyCell.cellDetail = @"请选择转出账户";
+        }else{
+            if ([_transferInItem isKindOfClass:[SSJFundingItem class]]) {
+                circleModifyCell.cellDetail = ((SSJFundingItem *)_transferInItem).fundingName;
+                circleModifyCell.cellTypeImageName = ((SSJFundingItem *)_transferInItem).fundingIcon;
+            }else if ([_transferInItem isKindOfClass:[SSJCreditCardItem class]]) {
+                circleModifyCell.cellDetail = ((SSJCreditCardItem *)_transferInItem).cardName;
+                circleModifyCell.cellTypeImageName = @"ft_creditcard";
+            }
+
+        }
+//        _moneyInput = circleModifyCell.cellInput;
+    }else if ([title isEqualToString:kTitle2]) {
+        circleModifyCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        circleModifyCell.cellInput.hidden = YES;
+        if (!_transferInItem) {
+            circleModifyCell.cellDetail = @"请选择转入账户";
+        }else{
+            if ([_transferOutItem isKindOfClass:[SSJFundingItem class]]) {
+                circleModifyCell.cellDetail = ((SSJFundingItem *)_transferOutItem).fundingName;
+                circleModifyCell.cellTypeImageName = ((SSJFundingItem *)_transferOutItem).fundingIcon;
+            }else if ([_transferOutItem isKindOfClass:[SSJCreditCardItem class]]) {
+                circleModifyCell.cellDetail = ((SSJCreditCardItem *)_transferOutItem).cardName;
+                circleModifyCell.cellTypeImageName = @"ft_creditcard";
+            }
+        }
+    }else if ([title isEqualToString:kTitle3]) {
+        circleModifyCell.cellInput.hidden = NO;
+        if (self.item.transferMoney.length) {
+            circleModifyCell.cellInput.text = [NSString stringWithFormat:@"%.2f",[self.item.transferMoney doubleValue]];
+        }
+        circleModifyCell.cellInput.attributedPlaceholder = [[NSAttributedString alloc]initWithString:@"0.00" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+        circleModifyCell.cellInput.keyboardType = UIKeyboardTypeDecimalPad;
+        circleModifyCell.cellInput.delegate = self;
+        circleModifyCell.cellInput.tag = 100;
+        _moneyInput = circleModifyCell.cellInput;
+    }else if ([title isEqualToString:kTitle4]) {
+        circleModifyCell.cellInput.hidden = NO;
+        circleModifyCell.cellInput.attributedPlaceholder = [[NSAttributedString alloc]initWithString:@"15字内 (选填)" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+        circleModifyCell.cellInput.text = self.item.transferMemo;
+        circleModifyCell.cellInput.textAlignment = NSTextAlignmentLeft;
+        circleModifyCell.cellInput.delegate = self;
+        _memoInput = circleModifyCell.cellInput;
+    }else if ([title isEqualToString:kTitle5]) {
+        circleModifyCell.cellInput.hidden = YES;
+        circleModifyCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        circleModifyCell.cellDetail = self.item.transferDate;
+    }
+    return circleModifyCell;
+}
+
+
 #pragma mark - UITextFieldDelegate
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
-    if (textField == self.transferIntext || textField == self.transferOuttext) {
-        NSInteger existedLength = textField.text.length;
-        NSInteger selectedLength = range.length;
-        NSInteger replaceLength = string.length;
-        if (existedLength - selectedLength + replaceLength > 10) {
-            [CDAutoHideMessageHUD showMessage:@"金额不能超过10位"];
-            return NO;
-        }
-    }
+//    if (textField == self.transferIntext || textField == self.transferOuttext) {
+//        NSInteger existedLength = textField.text.length;
+//        NSInteger selectedLength = range.length;
+//        NSInteger replaceLength = string.length;
+//        if (existedLength - selectedLength + replaceLength > 10) {
+//            [CDAutoHideMessageHUD showMessage:@"金额不能超过10位"];
+//            return NO;
+//        }
+//    }
     return YES;
 }
 
@@ -127,96 +242,6 @@
     return _rightButton;
 }
 
--(UITextField *)transferIntext{
-    if (_transferIntext == nil) {
-        _transferIntext = [[UITextField alloc]init];
-//        _transferIntext.borderStyle = UITextBorderStyleRoundedRect;
-        _transferIntext.backgroundColor = [UIColor ssj_colorWithHex:@"ffffff" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
-        _transferIntext.keyboardType = UIKeyboardTypeDecimalPad;
-        _transferIntext.font = [UIFont systemFontOfSize:24];
-        if (self.item != nil) {
-            _transferIntext.text = [NSString stringWithFormat:@"¥%.2f",[self.item.transferMoney doubleValue]];
-        }
-        _transferIntext.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"¥0.00" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
-        _transferIntext.leftView = self.transferInButtonView;
-        _transferIntext.leftViewMode = UITextFieldViewModeAlways;
-        _transferIntext.textAlignment = NSTextAlignmentRight;
-        _transferIntext.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-        UIView *rightView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 10, 35)];
-        _transferIntext.rightView = rightView;
-        _transferIntext.rightViewMode = UITextFieldViewModeAlways;
-        _transferIntext.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(transferTextDidChange)name:UITextFieldTextDidChangeNotification object:nil];
-        _transferIntext.delegate = self;
-    }
-    return _transferIntext;
-}
-
--(UITextField *)transferOuttext{
-    if (_transferOuttext == nil) {
-        _transferOuttext = [[UITextField alloc]init];
-        //        _transferIntext.borderStyle = UITextBorderStyleRoundedRect;
-        _transferOuttext.backgroundColor = [UIColor ssj_colorWithHex:@"ffffff" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
-        _transferOuttext.keyboardType = UIKeyboardTypeDecimalPad;
-        _transferOuttext.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        _transferOuttext.font = [UIFont systemFontOfSize:24];
-        if (self.item != nil) {
-            _transferOuttext.text = [NSString stringWithFormat:@"¥%.2f",[self.item.transferMoney doubleValue]];
-        }
-        _transferOuttext.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"¥0.00" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
-        _transferOuttext.leftView = self.transferOutButtonView;
-        _transferOuttext.leftViewMode = UITextFieldViewModeAlways;
-        _transferOuttext.textAlignment = NSTextAlignmentRight;
-        _transferOuttext.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-        UIView *rightView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 10, 35)];
-        _transferOuttext.rightView = rightView;
-        _transferOuttext.rightViewMode = UITextFieldViewModeAlways;
-        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(transferTextDidChange)name:UITextFieldTextDidChangeNotification object:nil];
-        _transferOuttext.delegate = self;
-    }
-    return _transferOuttext;
-}
-
--(UIView *)transferInButtonView{
-    if (!_transferInButtonView) {
-        _transferInButtonView = [[UIView alloc]initWithFrame:CGRectMake(0, 0 ,170, 30)];
-        _transferInButton = [[UIButton alloc]initWithFrame:CGRectMake(20, 0 ,150, 30)];
-        _transferInButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-        if (self.item == nil) {
-            [_transferInButton setTitle:@"请选择转入账户" forState:UIControlStateNormal];
-        }else{
-            [_transferInButton setTitle:self.item.transferInName forState:UIControlStateNormal];
-            [_transferInButton setImage:[UIImage imageNamed:self.item.transferInImage] forState:UIControlStateNormal];
-        }
-        _transferInButton.titleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        [_transferInButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] forState:UIControlStateNormal];
-        _transferInButton.titleLabel.font = [UIFont systemFontOfSize:18];
-        [_transferInButton addTarget:self action:@selector(transferInButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
-        [_transferInButtonView addSubview:_transferInButton];
-    }
-    return _transferInButtonView;
-}
-
--(UIView *)transferOutButtonView{
-    if (!_transferOutButtonView) {
-        _transferOutButtonView = [[UIView alloc]initWithFrame:CGRectMake(0, 0 ,170, 30)];
-        _transferOutButton = [[UIButton alloc]initWithFrame:CGRectMake(20, 0 ,150, 30)];
-        _transferOutButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-        if (self.item == nil) {
-            [_transferOutButton setTitle:@"请选择转出账户" forState:UIControlStateNormal];
-        }else{
-            [_transferOutButton setTitle:self.item.transferOutName forState:UIControlStateNormal];
-            [_transferOutButton setImage:[UIImage imageNamed:self.item.transferOutImage] forState:UIControlStateNormal];
-        }
-        [_transferOutButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] forState:UIControlStateNormal];
-        _transferOutButton.titleLabel.font = [UIFont systemFontOfSize:18];
-        [_transferOutButton addTarget:self action:@selector(transferOutButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
-        [_transferOutButtonView addSubview:_transferOutButton];
-
-    }
-    return _transferOutButtonView;
-}
-
 -(SSJFundingTypeSelectView *)transferInFundingTypeSelect{
     if (!_transferInFundingTypeSelect) {
         __weak typeof(self) weakSelf = self;
@@ -227,8 +252,6 @@
         _transferInFundingTypeSelect.fundingTypeSelectBlock = ^(SSJFundingItem *fundingItem){
             if (![fundingItem.fundingName isEqualToString:@"添加资金新的账户"])
             {
-                [weakSelf.transferInButton setTitle:fundingItem.fundingName forState:UIControlStateNormal];
-                [weakSelf.transferInButton setImage:[UIImage imageNamed:fundingItem.fundingIcon] forState:UIControlStateNormal];
                 _transferInItem = fundingItem;
             }else{
                 SSJFundingTypeSelectViewController *NewFundingVC = [[SSJFundingTypeSelectViewController alloc]init];
@@ -236,19 +259,15 @@
                 NewFundingVC.addNewFundingBlock = ^(SSJBaseItem *item){
                     if ([item isKindOfClass:[SSJFundingItem class]]) {
                         SSJFundingItem *fundItem = (SSJFundingItem *)item;
-                        [weakSelf.transferInButton setTitle:fundItem.fundingName forState:UIControlStateNormal];
-                        [weakSelf.transferInButton setImage:[UIImage imageNamed:fundItem.fundingIcon] forState:UIControlStateNormal];
                         _transferInItem = fundItem;
                     }else if ([item isKindOfClass:[SSJCreditCardItem class]]){
                         SSJCreditCardItem *cardItem = (SSJCreditCardItem *)item;
-                        [weakSelf.transferInButton setTitle:cardItem.cardName forState:UIControlStateNormal];
-                        [weakSelf.transferInButton setImage:[UIImage imageNamed:@"ft_creditcard"] forState:UIControlStateNormal];
                         _transferInItem = cardItem;
                     }
-                    
                 };
                 [weakSelf.navigationController pushViewController:NewFundingVC animated:YES];
             }
+            [weakSelf.tableView reloadData];
             [weakSelf.transferInFundingTypeSelect dismiss];
         };
     }
@@ -265,8 +284,6 @@
         _transferOutFundingTypeSelect.fundingTypeSelectBlock = ^(SSJFundingItem *fundingItem){
             if (![fundingItem.fundingName isEqualToString:@"添加资金新的账户"])
             {
-                [weakSelf.transferOutButton setTitle:fundingItem.fundingName forState:UIControlStateNormal];
-                [weakSelf.transferOutButton setImage:[UIImage imageNamed:fundingItem.fundingIcon] forState:UIControlStateNormal];
                 _transferOutItem = fundingItem;
             }else{
                 SSJFundingTypeSelectViewController *NewFundingVC = [[SSJFundingTypeSelectViewController alloc]init];
@@ -274,86 +291,60 @@
                 NewFundingVC.addNewFundingBlock = ^(SSJBaseItem *item){
                     if ([item isKindOfClass:[SSJFundingItem class]]) {
                         SSJFundingItem *fundItem = (SSJFundingItem *)item;
-                        [weakSelf.transferOutButton setTitle:fundItem.fundingName forState:UIControlStateNormal];
-                        [weakSelf.transferOutButton setImage:[UIImage imageNamed:fundItem.fundingIcon] forState:UIControlStateNormal];
                         _transferOutItem = fundItem;
                     }else if ([item isKindOfClass:[SSJCreditCardItem class]]){
                         SSJCreditCardItem *cardItem = (SSJCreditCardItem *)item;
-                        [weakSelf.transferOutButton setTitle:cardItem.cardName forState:UIControlStateNormal];
-                        [weakSelf.transferOutButton setImage:[UIImage imageNamed:@"ft_creditcard"] forState:UIControlStateNormal];
                         _transferOutItem = cardItem;
                     }
-                    
                 };
                 [weakSelf.navigationController pushViewController:NewFundingVC animated:YES];
             }
+            [weakSelf.tableView reloadData];
+            
             [weakSelf.transferOutFundingTypeSelect dismiss];
         };
     }
     return _transferOutFundingTypeSelect;
 }
 
--(UIImageView *)transferImage{
-    if (!_transferImage) {
-        _transferImage = [[UIImageView alloc]init];
-        _transferImage.image = [[UIImage imageNamed:@"founds_exchange"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        _transferImage.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+-(TPKeyboardAvoidingTableView *)tableView{
+    if (_tableView == nil) {
+        _tableView = [[TPKeyboardAvoidingTableView alloc]initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM) style:UITableViewStyleGrouped];
+        _tableView.backgroundColor = [UIColor clearColor];
+        _tableView.delegate = self;
+        _tableView.dataSource = self;
+        _tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+        _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellIndicatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
     }
-    return _transferImage;
+    return _tableView;
 }
 
--(UILabel *)transferLabel{
-    if (!_transferLabel) {
-        _transferLabel = [[UILabel alloc]init];
-        _transferLabel.font = [UIFont systemFontOfSize:13];
-        _transferLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-        _transferLabel.text = @"转至";
-        [_transferLabel sizeToFit];
+-(UIView *)saveFooterView{
+    if (_saveFooterView == nil) {
+        _saveFooterView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 80)];
+        UIButton *saveButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, _saveFooterView.width - 20, 40)];
+        [saveButton setTitle:@"保存" forState:UIControlStateNormal];
+        saveButton.layer.cornerRadius = 3.f;
+        saveButton.layer.masksToBounds = YES;
+        [saveButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];
+        [saveButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [saveButton addTarget:self action:@selector(saveButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+        saveButton.center = CGPointMake(_saveFooterView.width / 2, _saveFooterView.height / 2);
+        [_saveFooterView addSubview:saveButton];
     }
-    return _transferLabel;
+    return _saveFooterView;
 }
 
--(UILabel *)memoLabel{
-    if (!_memoLabel) {
-        _memoLabel = [[UILabel alloc]init];
-        _memoLabel.text = @"备注:";
-        _memoLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        _memoLabel.font = [UIFont systemFontOfSize:15];
-        [_memoLabel sizeToFit];
+-(SSJChargeCircleTimeSelectView *)chargeCircleTimeView{
+    if (!_chargeCircleTimeView) {
+        _chargeCircleTimeView = [[SSJChargeCircleTimeSelectView alloc]initWithFrame:self.view.bounds];
+        __weak typeof(self) weakSelf = self;
+        _chargeCircleTimeView.timerSetBlock = ^(NSString *dateStr){
+            weakSelf.item.transferDate = dateStr;
+            [weakSelf.tableView reloadData];
+        };
     }
-    return _memoLabel;
-}
-
--(UITextField *)memoInput{
-    if (!_memoInput) {
-        _memoInput = [[UITextField alloc]init];
-        _memoInput.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        _memoInput.backgroundColor = [UIColor ssj_colorWithHex:@"ffffff" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
-        _memoInput.font = [UIFont systemFontOfSize:15];
-        _memoInput.textAlignment = NSTextAlignmentLeft;
-        if (self.item != nil) {
-            _memoInput.text = self.item.transferMemo;
-        }
-        float textWidth = [@"备注:" sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:15]}].width;
-        UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 30 + textWidth, 0)];
-        _memoInput.leftView = view;
-        _memoInput.leftViewMode = UITextFieldViewModeAlways;
-        [_memoInput ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellIndicatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
-        [_memoInput ssj_setBorderStyle:SSJBorderStyleTop];
-    }
-    return _memoInput;
-}
-
--(UIButton *)comfirmButton{
-    if (!_comfirmButton) {
-        _comfirmButton = [[UIButton alloc]init];
-        [_comfirmButton setTitle:@"确认转账" forState:UIControlStateNormal];
-        [_comfirmButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        _comfirmButton.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor];
-        _comfirmButton.layer.cornerRadius = 3.f;
-        [_comfirmButton addTarget:self action:@selector(saveClicked:) forControlEvents:UIControlEventTouchUpInside];
-    }
-    return _comfirmButton;
+    return _chargeCircleTimeView;
 }
 
 #pragma mark - Event
@@ -362,8 +353,7 @@
     [self.navigationController pushViewController:transferDetailVc animated:YES];
 }
 
--(void)saveClicked:(id)sender{
-    NSString *str = [_transferIntext.text stringByReplacingOccurrencesOfString:@"¥" withString:@""];
+-(void)saveButtonClicked:(id)sender{
     if (self.item == nil) {
         if (_transferInItem == nil || _transferOutItem == nil) {
             [CDAutoHideMessageHUD showMessage:@"请选择资金账户"];
@@ -392,10 +382,10 @@
     if ([transferInId isEqualToString:transferOutId]) {
         [CDAutoHideMessageHUD showMessage:@"请选择不同账户"];
         return;
-    }else if ([str doubleValue] == 0 || [self.transferIntext.text isEqualToString:@""]) {
+    }else if ([_moneyInput.text doubleValue] == 0 || [_moneyInput.text isEqualToString:@""]) {
         [CDAutoHideMessageHUD showMessage:@"请输入金额"];
         return;
-    }else if (self.memoInput.text.length > 15){
+    }else if (_memoInput.text.length > 15){
         [CDAutoHideMessageHUD showMessage:@"备注最多输入15个字哦"];
         return;
     }
@@ -404,30 +394,30 @@
     [[SSJDatabaseQueue sharedInstance]asyncInTransaction:^(FMDatabase *db , BOOL *rollback){
         NSString *userid = SSJUSERID();
         NSString *writedate = [[NSDate date] ssj_systemCurrentDateWithFormat:@"YYYY-MM-dd HH:mm:ss.SSS"];
-        if (self.item == nil) {
-            if (![db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFUNSID , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE  , CBILLDATE , CBOOKSID , CMEMO) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",SSJUUID(),userid,str,@"3",transferInId,@"",@"",writedate,@(SSJSyncVersion()),[NSNumber numberWithInt:0],[[NSDate date] ssj_systemCurrentDateWithFormat:@"YYYY-MM-dd"],booksid,weakSelf.memoInput.text])
+        if (!self.item.transferInChargeId.length && !self.item.transferOutChargeId.length) {
+            if (![db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFUNSID , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE  , CBILLDATE , CBOOKSID , CMEMO) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",SSJUUID(),userid,_moneyInput.text,@"3",transferInId,@"",@"",writedate,@(SSJSyncVersion()),[NSNumber numberWithInt:0],weakSelf.item.transferDate,booksid,_memoInput.text])
             {
                 *rollback = YES;
             }
-            if (![db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFUNSID , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE  , CBILLDATE , CBOOKSID , CMEMO) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",SSJUUID(),userid,str,@"4",transferOutId,@"",@"",writedate,@(SSJSyncVersion()),[NSNumber numberWithInt:0],[[NSDate date] ssj_systemCurrentDateWithFormat:@"YYYY-MM-dd"],booksid,weakSelf.memoInput.text]) {
+            if (![db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFUNSID , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE  , CBILLDATE , CBOOKSID , CMEMO) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",SSJUUID(),userid,_moneyInput.text,@"4",transferOutId,@"",@"",writedate,@(SSJSyncVersion()),[NSNumber numberWithInt:0],weakSelf.item.transferDate,booksid,_memoInput.text]) {
                 *rollback = YES;
             }
             SSJDispatch_main_async_safe(^(){
                 [self.navigationController popViewControllerAnimated:YES];
             });
         }else{
-            if (![db executeUpdate:@"update bk_user_charge set imoney = ? , ifunsid = ? , cwritedate = ? , iversion = ? , operatortype = 1 , cmemo = ? where ichargeid = ? and cuserid = ?",[NSNumber numberWithDouble:[str doubleValue]],transferInId,writedate,@(SSJSyncVersion()),weakSelf.memoInput.text,weakSelf.item.transferInChargeId,userid]) {
+            if (![db executeUpdate:@"update bk_user_charge set imoney = ? , ifunsid = ? , cwritedate = ? , iversion = ? , operatortype = 1 , cmemo = ? , cbilldate = ? where ichargeid = ? and cuserid = ?",[NSNumber numberWithDouble:[_moneyInput.text doubleValue]],transferInId,writedate,@(SSJSyncVersion()),_memoInput.text,weakSelf.item.transferDate,weakSelf.item.transferInChargeId,userid]) {
                 *rollback = YES;
             }
-            if (![db executeUpdate:@"update bk_user_charge set imoney = ? , ifunsid = ? , cwritedate = ? , iversion = ? , operatortype = 1 , cmemo = ? where ichargeid = ? and cuserid = ?",[NSNumber numberWithDouble:[str doubleValue]],transferOutId,writedate,@(SSJSyncVersion()),weakSelf.memoInput.text,weakSelf.item.transferOutChargeId,userid]) {
+            if (![db executeUpdate:@"update bk_user_charge set imoney = ? , ifunsid = ? , cwritedate = ? , iversion = ? , operatortype = 1 , cmemo = ? , cbilldate = ? where ichargeid = ? and cuserid = ?",[NSNumber numberWithDouble:[_moneyInput.text doubleValue]],transferOutId,writedate,@(SSJSyncVersion()),_memoInput.text,weakSelf.item.transferDate,weakSelf.item.transferOutChargeId,userid]) {
                 *rollback = YES;
             }
             weakSelf.item.transferOutId = transferOutId ? : weakSelf.item.transferOutId;
             weakSelf.item.transferInId = transferInId ? : weakSelf.item.transferInId;
             weakSelf.item.transferOutName = transferOutName ? : weakSelf.item.transferOutName;
             weakSelf.item.transferInName = transferInName ? : weakSelf.item.transferInName;
-            weakSelf.item.transferMoney = str;
-            weakSelf.item.transferMemo = weakSelf.memoInput.text;
+            weakSelf.item.transferMoney = _moneyInput.text;
+            weakSelf.item.transferMemo = _memoInput.text;
             SSJDispatch_main_async_safe(^(){
                 if (weakSelf.editeCompleteBlock) {
                     weakSelf.editeCompleteBlock(weakSelf.item);
@@ -444,37 +434,37 @@
 
 #pragma mark - Private
 
--(void)transferTextDidChange{
-    [self setupTextFiledNum:self.transferIntext num:2];
-    [self setupTextFiledNum:self.transferOuttext num:2];
-    if ([self.transferIntext isFirstResponder]) {
-        if (![self.transferIntext.text hasPrefix:@"¥"]&&![self.transferIntext.text isEqualToString:@""]) {
-            self.transferIntext.text = [NSString stringWithFormat:@"¥%@",self.transferIntext.text];
-        }else if ([self.transferIntext.text isEqualToString:@"¥"]){
-            self.transferIntext.text = @"";
-        }
-        self.transferOuttext.text = self.transferIntext.text;
-    }else{
-        if (![self.transferOuttext.text hasPrefix:@"¥"]&&![self.transferIntext.text isEqualToString:@""]) {
-            self.transferOuttext.text = [NSString stringWithFormat:@"¥%@",self.transferOuttext.text];
-        }else if ([self.transferOuttext.text isEqualToString:@"¥"]){
-            self.transferOuttext.text = @"";
-        }
-        self.transferIntext.text = self.transferOuttext.text;
-    }
-}
+//-(void)transferTextDidChange{
+//    [self setupTextFiledNum:self.transferIntext num:2];
+//    [self setupTextFiledNum:self.transferOuttext num:2];
+//    if ([self.transferIntext isFirstResponder]) {
+//        if (![self.transferIntext.text hasPrefix:@"¥"]&&![self.transferIntext.text isEqualToString:@""]) {
+//            self.transferIntext.text = [NSString stringWithFormat:@"¥%@",self.transferIntext.text];
+//        }else if ([self.transferIntext.text isEqualToString:@"¥"]){
+//            self.transferIntext.text = @"";
+//        }
+//        self.transferOuttext.text = self.transferIntext.text;
+//    }else{
+//        if (![self.transferOuttext.text hasPrefix:@"¥"]&&![self.transferIntext.text isEqualToString:@""]) {
+//            self.transferOuttext.text = [NSString stringWithFormat:@"¥%@",self.transferOuttext.text];
+//        }else if ([self.transferOuttext.text isEqualToString:@"¥"]){
+//            self.transferOuttext.text = @"";
+//        }
+//        self.transferIntext.text = self.transferOuttext.text;
+//    }
+//}
 
--(void)transferOutButtonClicked:(id)sender{
-    [self.transferIntext resignFirstResponder];
-    [self.transferOuttext resignFirstResponder];
-    [self.transferOutFundingTypeSelect show];
-}
-
--(void)transferInButtonClicked:(id)sender{
-    [self.transferIntext resignFirstResponder];
-    [self.transferOuttext resignFirstResponder];
-    [self.transferInFundingTypeSelect show];
-}
+//-(void)transferOutButtonClicked:(id)sender{
+//    [self.transferIntext resignFirstResponder];
+//    [self.transferOuttext resignFirstResponder];
+//    [self.transferOutFundingTypeSelect show];
+//}
+//
+//-(void)transferInButtonClicked:(id)sender{
+//    [self.transferIntext resignFirstResponder];
+//    [self.transferOuttext resignFirstResponder];
+//    [self.transferInFundingTypeSelect show];
+//}
 
 
 /**

@@ -298,6 +298,7 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
                 [_header.curveView scrollToAxisXAtIndex:_curveItems.count - 1 animated:NO];
             }
             SSJDatePeriod *currentPeriod = ((SSJReportFormsCurveModel *)[_curveItems ssj_safeObjectAtIndex:_curveItems.count - 1]).period;
+            _currentPeriod = currentPeriod;
             // 加载流水列表和饼状图的数据
             [SSJReportFormsUtil queryForIncomeOrPayType:!(int)_header.incomOrExpenseSelectSegment.selectedSegmentIndex booksId:@"all" startDate:currentPeriod.startDate endDate:currentPeriod.endDate success:^(NSArray<SSJReportFormsItem *> *result) {
                 [self.view ssj_hideLoadingIndicator];
@@ -352,8 +353,8 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
         _periods = periods;
         [_header.dateAxisView reloadData];
         
-        if (_periods.count >= 3) {
-            _header.dateAxisView.selectedIndex = _periods.count - 3;
+        if (_periods.count >= 1) {
+            _header.dateAxisView.selectedIndex = _periods.count - 1;
         }
         
         if (!_periods.count) {
