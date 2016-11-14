@@ -74,8 +74,6 @@ typedef NS_ENUM(NSUInteger, SSJLoanCompoundChargeType) {
 
 @property (nonatomic) SSJLoanCompoundChargeType chargeType;
 
-@property (nonatomic) BOOL closedOut;
-
 @end
 
 NS_ASSUME_NONNULL_END

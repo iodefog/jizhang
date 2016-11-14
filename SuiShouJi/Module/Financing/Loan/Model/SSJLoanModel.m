@@ -92,12 +92,7 @@
     model.jMoney = _jMoney;
     model.fundID = _fundID;
     model.targetFundID = _targetFundID;
-    model.chargeID = _chargeID;
-    model.targetChargeID = _targetChargeID;
     model.endTargetFundID = _endTargetFundID;
-    model.endChargeID = _endChargeID;
-    model.endTargetChargeID = _endTargetChargeID;
-    model.interestChargeID = _interestChargeID;
     model.borrowDate = _borrowDate;
     model.repaymentDate = _repaymentDate;
     model.endDate = _endDate;
@@ -123,11 +118,6 @@
                                                         @"fundID":(_fundID ?:[NSNull null]),
                                                         @"targetFundID":(_targetFundID ?: [NSNull null]),
                                                         @"endTargetFundID":(_endTargetFundID ?: [NSNull null]),
-                                                        @"chargeID":(_chargeID ?: [NSNull null]),
-                                                        @"targetChargeID":(_targetChargeID ?: [NSNull null]),
-                                                        @"endChargeID":(_endChargeID ?: [NSNull null]),
-                                                        @"endTargetChargeID":(_endTargetChargeID ?: [NSNull null]),
-                                                        @"interestChargeID":(_interestChargeID ?: [NSNull null]),
                                                         @"borrowDate":(_borrowDate ?: [NSNull null]),
                                                         @"repaymentDate":(_repaymentDate ?: [NSNull null]),
                                                         @"enddate":(_endDate ?: [NSNull null]),

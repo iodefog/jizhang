@@ -74,6 +74,11 @@
 		7D4A796C1DD30B5000E905F4 /* SSJLoanChargeDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4A79691DD30B5000E905F4 /* SSJLoanChargeDetailViewController.m */; };
 		7D4A796D1DD30B5000E905F4 /* SSJLoanChargeDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4A79691DD30B5000E905F4 /* SSJLoanChargeDetailViewController.m */; };
 		7D4A796E1DD30B5000E905F4 /* SSJLoanChargeDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4A79691DD30B5000E905F4 /* SSJLoanChargeDetailViewController.m */; };
+		7D4A79731DD46D6100E905F4 /* SSJLoanChargeAddOrEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4A79721DD46D6100E905F4 /* SSJLoanChargeAddOrEditViewController.m */; };
+		7D4A79741DD46D6100E905F4 /* SSJLoanChargeAddOrEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4A79721DD46D6100E905F4 /* SSJLoanChargeAddOrEditViewController.m */; };
+		7D4A79751DD46D6100E905F4 /* SSJLoanChargeAddOrEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4A79721DD46D6100E905F4 /* SSJLoanChargeAddOrEditViewController.m */; };
+		7D4A79761DD46D6100E905F4 /* SSJLoanChargeAddOrEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4A79721DD46D6100E905F4 /* SSJLoanChargeAddOrEditViewController.m */; };
+		7D4A79771DD46D6100E905F4 /* SSJLoanChargeAddOrEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4A79721DD46D6100E905F4 /* SSJLoanChargeAddOrEditViewController.m */; };
 		7D4CF7041D38D16D009CC8ED /* SSJBudgetNodataRemindView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4CF7031D38D16D009CC8ED /* SSJBudgetNodataRemindView.m */; };
 		7D4CF7051D38D174009CC8ED /* SSJBudgetNodataRemindView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4CF7031D38D16D009CC8ED /* SSJBudgetNodataRemindView.m */; };
 		7D4CF70E1D38E38B009CC8ED /* SSJBannerHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE7D7841D2F4EA40013E97B /* SSJBannerHeaderView.m */; };
@@ -2669,6 +2674,8 @@
 		7D4A795B1DD2F01000E905F4 /* SSJLoanChangeChargeSelectionControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJLoanChangeChargeSelectionControl.m; sourceTree = "<group>"; };
 		7D4A79681DD30B5000E905F4 /* SSJLoanChargeDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJLoanChargeDetailViewController.h; sourceTree = "<group>"; };
 		7D4A79691DD30B5000E905F4 /* SSJLoanChargeDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJLoanChargeDetailViewController.m; sourceTree = "<group>"; };
+		7D4A79711DD46D6100E905F4 /* SSJLoanChargeAddOrEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJLoanChargeAddOrEditViewController.h; sourceTree = "<group>"; };
+		7D4A79721DD46D6100E905F4 /* SSJLoanChargeAddOrEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJLoanChargeAddOrEditViewController.m; sourceTree = "<group>"; };
 		7D4CF7021D38D16D009CC8ED /* SSJBudgetNodataRemindView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBudgetNodataRemindView.h; sourceTree = "<group>"; };
 		7D4CF7031D38D16D009CC8ED /* SSJBudgetNodataRemindView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBudgetNodataRemindView.m; sourceTree = "<group>"; };
 		7D4EF8801C43B10C003C4B20 /* SSJFundAccountTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SSJFundAccountTable.h; path = OtherTable/SSJFundAccountTable.h; sourceTree = "<group>"; };
@@ -4497,6 +4504,8 @@
 				7D8C7E9F1D6F19BA00D72E2D /* SSJLoanCloseOutViewController.m */,
 				7D4A79681DD30B5000E905F4 /* SSJLoanChargeDetailViewController.h */,
 				7D4A79691DD30B5000E905F4 /* SSJLoanChargeDetailViewController.m */,
+				7D4A79711DD46D6100E905F4 /* SSJLoanChargeAddOrEditViewController.h */,
+				7D4A79721DD46D6100E905F4 /* SSJLoanChargeAddOrEditViewController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -7403,6 +7412,7 @@
 				7DBA56701D6D32B700C02D79 /* SSJMagicExportViewController.m in Sources */,
 				7DFD30461D75217300A0D7A0 /* SSJCategoryEditableCollectionView.m in Sources */,
 				7DBA56711D6D32B700C02D79 /* SSJAlertViewAdapter.m in Sources */,
+				7D4A79751DD46D6100E905F4 /* SSJLoanChargeAddOrEditViewController.m in Sources */,
 				9C9A0C921D73CDC7002AF046 /* SSJCreditCardItem.m in Sources */,
 				7DBA56721D6D32B700C02D79 /* SSJConstant.m in Sources */,
 				7DBA56731D6D32B700C02D79 /* SSJDailySumChargeTable.m in Sources */,
@@ -7865,6 +7875,7 @@
 				9C2A67AC1D194CA70010F1DA /* SSJBookkeepingTreeHelpCellItem.m in Sources */,
 				9C2A67AD1D194CA70010F1DA /* SSJFundingDetailHeader.m in Sources */,
 				9C2A67AE1D194CA70010F1DA /* SSJCalenderDetailViewController.m in Sources */,
+				7D4A79741DD46D6100E905F4 /* SSJLoanChargeAddOrEditViewController.m in Sources */,
 				9C2A67AF1D194CA70010F1DA /* SSJBudgetDetailViewController.m in Sources */,
 				9C2A67B01D194CA70010F1DA /* SSJBaselineTextField.m in Sources */,
 				9CF0AC101D58753700475C5B /* SSJDataClearHelper.m in Sources */,
@@ -8539,6 +8550,7 @@
 				9CECFC861D6D41A700DB2C8B /* (null) in Sources */,
 				9C7C9E6C1DB706E10095F49B /* SSJSearchResultSummaryItem.m in Sources */,
 				9CECFC871D6D41A700DB2C8B /* SCYMotionEncryptionTriangleLayer.m in Sources */,
+				7D4A79761DD46D6100E905F4 /* SSJLoanChargeAddOrEditViewController.m in Sources */,
 				9C9A0C181D6D9567002AF046 /* SSJLoanSyncTable.m in Sources */,
 				9CECFC881D6D41A700DB2C8B /* SSJSyncSettingViewController.m in Sources */,
 				9CECFC891D6D41A700DB2C8B /* SSJADDNewTypeViewController.m in Sources */,
@@ -9016,6 +9028,7 @@
 				9C24CFC71D76CA010095D150 /* SSJBooksTypeItem.m in Sources */,
 				9CEC007E1D6D41EB00DB2C8B /* (null) in Sources */,
 				9CEC007F1D6D41EB00DB2C8B /* SCYMotionEncryptionTriangleLayer.m in Sources */,
+				7D4A79771DD46D6100E905F4 /* SSJLoanChargeAddOrEditViewController.m in Sources */,
 				9C9A0C191D6D9569002AF046 /* SSJLoanSyncTable.m in Sources */,
 				9CEC00801D6D41EB00DB2C8B /* SSJSyncSettingViewController.m in Sources */,
 				9CEC00811D6D41EB00DB2C8B /* SSJADDNewTypeViewController.m in Sources */,
@@ -9179,6 +9192,7 @@
 				7DD9D0C61CF6E2A6005AF735 /* SSJReportFormsScaleAxisCell.m in Sources */,
 				BD04339A1C1A8DA50051E7AB /* SSJNewBaseTableViewController.m in Sources */,
 				7DD49BF41DB78A4A00318AF9 /* UICountingLabel.m in Sources */,
+				7D4A79731DD46D6100E905F4 /* SSJLoanChargeAddOrEditViewController.m in Sources */,
 				9CD9BC331CFD2DAA0061803B /* SSJMotionPasswordViewController.m in Sources */,
 				9C9471841CEB224C00D69079 /* SSJFundingDetailCell.m in Sources */,
 				7D87AE9A1D6319DC0024D33C /* SSJLoanModel.m in Sources */,

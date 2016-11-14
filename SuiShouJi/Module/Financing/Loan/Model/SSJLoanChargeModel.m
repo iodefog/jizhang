@@ -11,6 +11,18 @@
 
 @implementation SSJLoanChargeModel
 
++ (NSArray *)mj_allowedPropertyNames {
+    return @[@"chargeId",
+             @"fundId",
+             @"billId",
+             @"loanId",
+             @"userId",
+             @"memo",
+             @"billDate",
+             @"writeDate",
+             @"money"];
+}
+
 - (id)copyWithZone:(nullable NSZone *)zone {
     SSJLoanChargeModel *model = [[SSJLoanChargeModel alloc] init];
     model.chargeId = self.chargeId;
@@ -26,8 +38,7 @@
     model.oldMoney = self.oldMoney;
     model.type = self.type;
     model.chargeType = self.chargeType;
-    model.closedOut = self.closedOut;
-    return model;   
+    return model;
 }
 
 - (NSString *)debugDescription {
@@ -43,8 +54,7 @@
                                                         @"money":@(self.money),
                                                         @"oldMoney":@(self.oldMoney),
                                                         @"type":@(self.type),
-                                                        @"chargeType":@(self.chargeType),
-                                                        @"closedOut":@(self.closedOut)}];
+                                                        @"chargeType":@(self.chargeType)}];
 }
 
 @end
