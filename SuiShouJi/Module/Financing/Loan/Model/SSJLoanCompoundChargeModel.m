@@ -14,7 +14,7 @@
     SSJLoanCompoundChargeModel *model = [[SSJLoanCompoundChargeModel alloc] init];
     model.lender = self.lender;
     model.closeOut = self.closeOut;
-    model.chargeType = self.chargeType;
+//    model.chargeType = self.chargeType;
     model.chargeModel = self.chargeModel;
     model.targetChargeModel = self.targetChargeModel;
     model.interestChargeModel = self.interestChargeModel;
@@ -24,7 +24,7 @@
 - (NSString *)debugDescription {
     return [NSString stringWithFormat:@"%@:%@", self, @{@"lender":(self.lender ?: [NSNull null]),
                                                         @"closeOut":@(self.closeOut),
-                                                        @"chargeType":@(self.chargeType),
+                                                        /*@"chargeType":@(self.chargeType),*/
                                                         @"chargeModel":(self.chargeModel ?: [NSNull null]),
                                                         @"targetChargeModel":(self.targetChargeModel ?: [NSNull null]),
                                                         @"interestChargeModel":(self.interestChargeModel ?: [NSNull null])}];

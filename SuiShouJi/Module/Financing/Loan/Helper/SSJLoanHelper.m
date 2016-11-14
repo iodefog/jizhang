@@ -288,7 +288,8 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
 }
 
 + (void)saveLoanModel:(SSJLoanModel *)loanModel
-          remindModel:(SSJReminderItem *)remindModel
+         chargeModels:(NSArray <SSJLoanCompoundChargeModel *>*)chargeModels
+          remindModel:(nullable SSJReminderItem *)remindModel
               success:(void (^)())success
               failure:(void (^)(NSError *error))failure {
     
@@ -305,6 +306,7 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
             return;
         }
         
+        // 存储借贷记录
         loanModel.version = SSJSyncVersion();
         loanModel.writeDate = [NSDate date];
         
@@ -345,6 +347,28 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
                 });
             }
             return;
+        }
+        
+        // 存储流水记录
+        NSError *error = nil;
+        NSDate *lastDate = [NSDate date];
+        for (SSJLoanCompoundChargeModel *model in chargeModels) {
+            
+            NSDate *writeDate = [lastDate dateByAddingSeconds:1];
+            model.chargeModel.writeDate = writeDate;
+            model.targetChargeModel.writeDate = writeDate;
+            model.interestChargeModel.writeDate = writeDate;
+            lastDate = writeDate;
+            
+            if (![self saveLoanCompoundChargeModel:model inDatabase:db error:&error]) {
+                *rollback = YES;
+                if (failure) {
+                    SSJDispatchMainAsync(^{
+                        failure(error);
+                    });
+                }
+                return;
+            }
         }
         
         // 存储提醒记录
@@ -809,7 +833,15 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
     [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
         
         NSError *error = nil;
+        NSDate *lastDate = [NSDate date];
         for (SSJLoanCompoundChargeModel *model in models) {
+            
+            NSDate *writeDate = [lastDate dateByAddingSeconds:1];
+            model.chargeModel.writeDate = writeDate;
+            model.targetChargeModel.writeDate = writeDate;
+            model.interestChargeModel.writeDate = writeDate;
+            lastDate = writeDate;
+            
             if (![self saveLoanCompoundChargeModel:model inDatabase:db error:&error]) {
                 *rollback = YES;
                 if (failure) {
@@ -829,6 +861,14 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
     }];
 }
 
+/**
+ 存储借贷产生的流水记录
+
+ @param model 借贷产生的流水记录
+ @param db FMDatabase实例
+ @param error 输出参数，传入指向指针的指针
+ @return 是否保存成功
+ */
 + (BOOL)saveLoanCompoundChargeModel:(SSJLoanCompoundChargeModel *)model inDatabase:(FMDatabase *)db error:(NSError **)error {
     
     if (!model.chargeModel || !model.targetChargeModel) {
@@ -853,11 +893,11 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
         return NO;
     }
     
-    NSString *writeDateStr = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-    
     // 所属账户转账流水
     if (model.chargeModel.money > 0) {
         NSString *billDateStr = [model.chargeModel.billDate formattedDateWithFormat:@"yyyy-MM-dd"];
+        NSString *writeDateStr = [model.chargeModel.writeDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        
         NSMutableDictionary *chargeInfo = [model.chargeModel mj_keyValues];
         [chargeInfo setObject:billDateStr forKey:@"billDate"];
         [chargeInfo setObject:writeDateStr forKey:@"writeDate"];
@@ -878,6 +918,8 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
     // 目标账户转账流水
     if (model.targetChargeModel.money > 0) {
         NSString *billDateStr = [model.targetChargeModel.billDate formattedDateWithFormat:@"yyyy-MM-dd"];
+        NSString *writeDateStr = [model.targetChargeModel.writeDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        
         NSMutableDictionary *targetChargeInfo = [model.targetChargeModel mj_keyValues];
         [targetChargeInfo setObject:billDateStr forKey:@"billDate"];
         [targetChargeInfo setObject:writeDateStr forKey:@"writeDate"];
@@ -898,6 +940,8 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
     // 利息流水
     if (model.interestChargeModel.money > 0) {
         NSString *billDateStr = [model.interestChargeModel.billDate formattedDateWithFormat:@"yyyy-MM-dd"];
+        NSString *writeDateStr = [model.interestChargeModel.writeDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        
         NSMutableDictionary *interestChargeInfo = [model.interestChargeModel mj_keyValues];
         [interestChargeInfo setObject:billDateStr forKey:@"billDate"];
         [interestChargeInfo setObject:writeDateStr forKey:@"writeDate"];

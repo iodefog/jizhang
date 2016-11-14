@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic) BOOL closeOut;
 
-@property (nonatomic) SSJLoanCompoundChargeType chargeType;
+//@property (nonatomic) SSJLoanCompoundChargeType chargeType;
 
 @property (nonatomic, copy) SSJLoanChargeModel *chargeModel;
 

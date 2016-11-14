@@ -50,6 +50,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param failure   失败的回调
  */
 + (void)saveLoanModel:(SSJLoanModel *)loanModel
+         chargeModels:(NSArray <SSJLoanCompoundChargeModel *>*)chargeModels
           remindModel:(nullable SSJReminderItem *)remindModel
               success:(void (^)())success
               failure:(void (^)(NSError *error))failure;

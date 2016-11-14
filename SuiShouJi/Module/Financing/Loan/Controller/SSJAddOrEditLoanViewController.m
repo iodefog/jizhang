@@ -67,6 +67,8 @@ const int kMemoMaxLength = 13;
 // 编辑借贷金额新产生的余额变更流水
 @property (nonatomic, strong) SSJLoanCompoundChargeModel *changeCompoundModel;
 
+@property (nonatomic, strong) NSMutableArray <SSJLoanCompoundChargeModel *>*savedChargeModels;
+
 @end
 
 @implementation SSJAddOrEditLoanViewController
@@ -437,53 +439,52 @@ const int kMemoMaxLength = 13;
         _sureButton.enabled = NO;
         [_sureButton ssj_showLoadingIndicator];
         
+        // 保存流水，包括创建借贷的转帐流水，如果是编辑，还要包括余额变更流水
         NSMutableArray *saveChargeModels = [@[self.createCompoundModel] mutableCopy];
-        if (self.changeCompoundModel.chargeModel.money) {
+        if (_edited) {
             [saveChargeModels addObject:self.changeCompoundModel];
+            for (SSJLoanCompoundChargeModel *compoundModel in self.chargeModels) {
+                if (compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeBalanceIncrease
+                    || compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeBalanceDecrease) {
+                    [saveChargeModels addObject:compoundModel];
+                }
+            }
         }
         
-        [SSJLoanHelper saveLoanModel:self.loanModel remindModel:_reminderItem success:^{
+        [SSJLoanHelper saveLoanModel:self.loanModel chargeModels:saveChargeModels remindModel:_reminderItem success:^{
             
-            [SSJLoanHelper saveLoanCompoundChargeModels:saveChargeModels success:^{
+            _sureButton.enabled = YES;
+            [_sureButton ssj_hideLoadingIndicator];
+            
+            if (_enterFromFundTypeList) {
+                UIViewController *homeController = [self.navigationController.viewControllers firstObject];
                 
-                _sureButton.enabled = YES;
-                [_sureButton ssj_hideLoadingIndicator];
-                
-                if (_enterFromFundTypeList) {
-                    UIViewController *homeController = [self.navigationController.viewControllers firstObject];
-                    
-                    SSJFinancingHomeitem *item = [[SSJFinancingHomeitem alloc] init];
-                    item.fundingID = self.loanModel.fundID;
-                    switch (self.loanModel.type) {
-                        case SSJLoanTypeLend:
-                            item.fundingParent = @"10";
-                            item.fundingName = @"借出款";
-                            break;
-                            
-                        case SSJLoanTypeBorrow:
-                            item.fundingParent = @"11";
-                            item.fundingName = @"欠款";
-                            break;
-                    }
-                    SSJLoanListViewController *loanListController = [[SSJLoanListViewController alloc] init];
-                    loanListController.item = item;
-                    
-                    [self.navigationController setViewControllers:@[homeController, loanListController] animated:YES];
-                } else {
-                    [self.navigationController popViewControllerAnimated:YES];
+                SSJFinancingHomeitem *item = [[SSJFinancingHomeitem alloc] init];
+                item.fundingID = self.loanModel.fundID;
+                switch (self.loanModel.type) {
+                    case SSJLoanTypeLend:
+                        item.fundingParent = @"10";
+                        item.fundingName = @"借出款";
+                        break;
+                        
+                    case SSJLoanTypeBorrow:
+                        item.fundingParent = @"11";
+                        item.fundingName = @"欠款";
+                        break;
                 }
+                SSJLoanListViewController *loanListController = [[SSJLoanListViewController alloc] init];
+                loanListController.item = item;
                 
-                if (!_edited && self.loanModel.remindID.length) {
-                    [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"添加成功，提醒详情请在“更多-提醒”查看" action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
-                }
-                
-                [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
-                
-            } failure:^(NSError * _Nonnull error) {
-                _sureButton.enabled = YES;
-                [_sureButton ssj_hideLoadingIndicator];
-                [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
-            }];
+                [self.navigationController setViewControllers:@[homeController, loanListController] animated:YES];
+            } else {
+                [self.navigationController popViewControllerAnimated:YES];
+            }
+            
+            if (!_edited && self.loanModel.remindID.length) {
+                [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"添加成功，提醒详情请在“更多-提醒”查看" action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
+            }
+            
+            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
             
         } failure:^(NSError * _Nonnull error) {
             _sureButton.enabled = YES;
@@ -560,8 +561,14 @@ const int kMemoMaxLength = 13;
         
         if (!_edited) {
             NSString *targetFundId = [items firstObject].ID;
-            self.loanModel.targetFundID = targetFundId;
-            self.createCompoundModel.targetChargeModel.fundId = targetFundId;
+            
+            if (!self.loanModel.targetFundID) {
+                self.loanModel.targetFundID = targetFundId;
+            }
+            
+            if (!self.createCompoundModel.targetChargeModel.fundId) {
+                self.createCompoundModel.targetChargeModel.fundId = targetFundId;
+            }
         }
         
         self.fundingSelectionView.items = items;
@@ -817,6 +824,21 @@ const int kMemoMaxLength = 13;
     }
 }
 
+// 更新借贷的目标账户id、借贷产生的依赖目标账户流水的账户id
+- (void)updateTargetFundId:(NSString *)fundId {
+    self.loanModel.targetFundID = fundId;
+    self.createCompoundModel.targetChargeModel.fundId = fundId;
+    if (self.edited) {
+        self.changeCompoundModel.targetChargeModel.fundId = fundId;
+        for (SSJLoanCompoundChargeModel *compoundModel in self.chargeModels) {
+            if (compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeBalanceIncrease
+                || compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeBalanceDecrease) {
+                compoundModel.targetChargeModel.fundId = fundId;
+            }
+        }
+    }
+}
+
 - (NSString *)fundId {
     switch (_type) {
         case SSJLoanTypeLend:
@@ -843,8 +865,6 @@ const int kMemoMaxLength = 13;
         _loanModel.memo = @"";
         _loanModel.operatorType = 0;
         _loanModel.fundID = [self fundId];
-        
-        
         if (_loanModel.remindID.length) {
             _reminderItem = [SSJLocalNotificationStore queryReminderItemForID:_loanModel.remindID];
         }
@@ -856,7 +876,7 @@ const int kMemoMaxLength = 13;
     if (!_createCompoundModel) {
         if (_edited) {
             for (SSJLoanCompoundChargeModel *compoundModel in _chargeModels) {
-                if (compoundModel.chargeType == SSJLoanCompoundChargeTypeCreate) {
+                if (compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeCreate) {
                     _createCompoundModel = compoundModel;
                 }
             }
@@ -981,11 +1001,7 @@ const int kMemoMaxLength = 13;
         _fundingSelectionView.shouldSelectAccountAction = ^BOOL(SSJLoanFundAccountSelectionView *view, NSUInteger index) {
             if (index < view.items.count - 1) {
                 SSJLoanFundAccountSelectionViewItem *item = [view.items objectAtIndex:index];
-                weakSelf.loanModel.targetFundID = item.ID;
-                weakSelf.createCompoundModel.targetChargeModel.fundId = item.ID;
-                if (weakSelf.edited) {
-                    weakSelf.changeCompoundModel.targetChargeModel.fundId = item.ID;
-                }
+                [weakSelf updateTargetFundId:item.ID];
                 [weakSelf.tableView reloadData];
                 return YES;
             } else if (index == view.items.count - 1) {
@@ -994,19 +1010,11 @@ const int kMemoMaxLength = 13;
                 NewFundingVC.addNewFundingBlock = ^(SSJBaseItem *item){
                     if ([item isKindOfClass:[SSJFundingItem class]]) {
                         SSJFundingItem *fundItem = (SSJFundingItem *)item;
-                        weakSelf.loanModel.targetFundID = fundItem.fundingID;
-                        weakSelf.createCompoundModel.targetChargeModel.fundId = fundItem.fundingID;
-                        if (weakSelf.edited) {
-                            weakSelf.changeCompoundModel.targetChargeModel.fundId = fundItem.fundingID;
-                        }
+                        [weakSelf updateTargetFundId:fundItem.fundingID];
                         [weakSelf loadData];
                     } else if ([item isKindOfClass:[SSJCreditCardItem class]]){
                         SSJCreditCardItem *cardItem = (SSJCreditCardItem *)item;
-                        weakSelf.loanModel.targetFundID = cardItem.cardId;
-                        weakSelf.createCompoundModel.targetChargeModel.fundId = cardItem.cardId;
-                        if (weakSelf.edited) {
-                            weakSelf.changeCompoundModel.targetChargeModel.fundId = cardItem.cardId;
-                        }
+                        [weakSelf updateTargetFundId:cardItem.cardId];
                         [weakSelf loadData];
                     }
                 };
