@@ -60,7 +60,7 @@
     [aCoder encodeObject:_bookKeepingHomeMutiButtonNormalColor forKey:@"bookKeepingHomeMutiButtonNormalColor"];
     [aCoder encodeObject:_searchResultHeaderBackgroundColor forKey:@"searchResultHeaderBackgroundColor"];
     [aCoder encodeObject:_summaryBooksHeaderColor forKey:@"summaryBooksHeaderColor"];
-    
+    [aCoder encodeFloat:_summaryBooksHeaderAlpha forKey:@"summaryBooksHeaderAlpha"];
 }
 
 - (nullable instancetype)initWithCoder:(NSCoder *)aDecoder {
@@ -114,7 +114,7 @@
         _bookKeepingHomeMutiButtonNormalColor = [aDecoder decodeObjectForKey:@"bookKeepingHomeMutiButtonNormalColor"];
         _searchResultHeaderBackgroundColor = [aDecoder decodeObjectForKey:@"recordMakingInputViewAlpha"];
         _summaryBooksHeaderColor = [aDecoder decodeObjectForKey:@"summaryBooksHeaderColor"];
-        
+        _summaryBooksHeaderAlpha = [aDecoder decodeFloatForKey:@"summaryBooksHeaderAlpha"];
     }
     return self;
 }
@@ -167,7 +167,8 @@
                                                           @"bookKeepingHomeMutiButtonSelectColor":_bookKeepingHomeMutiButtonSelectColor,
                                                           @"bookKeepingHomeMutiButtonNormalColor":_bookKeepingHomeMutiButtonNormalColor,
                                                           @"searchResultHeaderBackgroundColor":_searchResultHeaderBackgroundColor,
-                                                          @"summaryBooksHeaderColor":_summaryBooksHeaderColor}];
+                                                          @"summaryBooksHeaderColor":_summaryBooksHeaderColor,
+                                                          @"summaryBooksHeaderAlpha":@(_summaryBooksHeaderAlpha)}];
 }
 
 @end

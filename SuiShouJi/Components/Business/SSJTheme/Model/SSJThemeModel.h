@@ -160,4 +160,7 @@
 // 总账本的背景颜色
 @property (nonatomic, copy) NSString *summaryBooksHeaderColor;
 
+// 总账本的背景颜色
+@property (nonatomic) CGFloat summaryBooksHeaderAlpha;
+
 @end

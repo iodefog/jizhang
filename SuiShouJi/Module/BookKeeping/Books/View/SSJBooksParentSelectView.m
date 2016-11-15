@@ -32,7 +32,7 @@ static NSString * SSJBooksParentSelectCellIdentifier = @"SSJBooksParentSelectCel
     if (self) {
         self.layer.cornerRadius = 15;
         self.layer.masksToBounds = YES;
-        self.backgroundColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+        self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
         [self addSubview:self.backColorView];
         [self addSubview:self.waveView];
         [self addSubview:self.titleLab];
@@ -61,7 +61,7 @@ static NSString * SSJBooksParentSelectCellIdentifier = @"SSJBooksParentSelectCel
 - (UIView *)backColorView{
     if (!_backColorView) {
         _backColorView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.width, 42)];
-        _backColorView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.summaryBooksHeaderColor];
+        _backColorView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.summaryBooksHeaderColor alpha:SSJ_CURRENT_THEME.summaryBooksHeaderAlpha];
     }
     return _backColorView;
 }
