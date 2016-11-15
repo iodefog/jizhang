@@ -150,9 +150,6 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
         
         NSString *endDateStr = [resultSet stringForColumn:@"cbilldateend"];
         NSDate *endDate = [NSDate dateWithString:endDateStr formatString:@"yyyy-MM-dd"];
-        if ([endDate earlierDate:[NSDate date]]) {
-            continue;
-        }
         
         NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         NSArray *memberIds = [[resultSet stringForColumn:@"cmemberids"] componentsSeparatedByString:@","];
@@ -169,6 +166,9 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
         NSArray *billDates = [self billDatesFromDate:billDate periodType:periodType containFromDate:NO];
         
         for (NSDate *billDate in billDates) {
+            if ([endDate earlierDate:billDate]) {
+                continue;
+            }
             NSString *billDateStr = [billDate formattedDateWithFormat:@"yyyy-MM-dd"];
             NSString *chargeId = SSJUUID();
             
@@ -207,9 +207,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
         NSString *memo = [resultSet stringForColumn:@"cmemo"];
         NSString *endDateStr = [resultSet stringForColumn:@"cbilldateend"];
         NSDate *endDate = [NSDate dateWithString:endDateStr formatString:@"yyyy-MM-dd"];
-        if ([endDate earlierDate:[NSDate date]]) {
-            continue;
-        }
+
         NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         NSString *thumbUrl = nil;
         if (imgUrl && imgUrl.length > 0) {
@@ -236,6 +234,9 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
         CGFloat memberMoney = [money doubleValue] / memberIds.count;
         
         for (NSDate *billDate in billDates) {
+            if ([endDate earlierDate:billDate]) {
+                continue;
+            }
             NSString *chargeId = SSJUUID();
             
             NSString *billDateStr = [billDate formattedDateWithFormat:@"yyyy-MM-dd"];

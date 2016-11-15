@@ -209,6 +209,7 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
         circleModifyCell.cellInput.attributedPlaceholder = [[NSAttributedString alloc]initWithString:@"15字内 (选填)" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         circleModifyCell.cellInput.text = self.item.transferMemo;
         circleModifyCell.cellInput.textAlignment = NSTextAlignmentLeft;
+        circleModifyCell.cellInput.tag = 101;
         circleModifyCell.cellInput.delegate = self;
         _memoInput = circleModifyCell.cellInput;
     }else if ([title isEqualToString:kTitle5]) {
@@ -231,6 +232,19 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
 //            return NO;
 //        }
 //    }
+    return YES;
+}
+
+-(void)textFieldDidEndEditing:(UITextField *)textField{
+    if (textField.tag == 100) {
+        self.item.transferMoney = textField.text;
+    }else if (textField.tag == 101){
+        self.item.transferMemo = textField.text;
+    }
+}
+
+-(BOOL)textFieldShouldReturn:(UITextField *)textField{
+    [textField resignFirstResponder];
     return YES;
 }
 

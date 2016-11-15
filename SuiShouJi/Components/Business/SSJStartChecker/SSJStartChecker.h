@@ -83,4 +83,5 @@ typedef NS_ENUM(NSInteger, SSJAppUpdateType){
  */
 - (NSString *)startImageUrl;
 
+
 @end

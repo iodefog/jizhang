@@ -66,6 +66,12 @@ NSString *const SSJWeiBoAppKey = @"4058368695";
 
 NSString *const SSJWeiBoSecret = @"b0584e24371e5ad6118dfa0e3de3197c";
 
+NSString *const SSJMQAppKey = @"afd40ae47cdf7df68551cfbb0d3676d5";
+
+NSString *const SSJMQSecret = @"$2a$12$7aT9OEXA7uw3w/3WgmHyh.znbeVy32ncR2uVPpuVzvw/8LxXdeGYW";
+
+NSString *const SSJMQDefualtGroupId = @"8cabbcb30fd9b3ab00168555fd892d6f";
+
 NSString *const SSJOverrunRedColorValue = @"#ff654c";
 
 NSString *const SSJSurplusGreenColorValue = @"#0ac082";

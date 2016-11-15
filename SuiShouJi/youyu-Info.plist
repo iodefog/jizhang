@@ -109,6 +109,11 @@
 		<true/>
 		<key>NSExceptionDomains</key>
 		<dict>
+            <key>s3.cn-north-1.amazonaws.com.cn</key>
+            <dict>
+                <key>NSExceptionRequiresForwardSecrecy</key>
+                <false/>
+            </dict>
 			<key>log.umsns.com</key>
 			<dict>
 				<key>NSIncludesSubdomains</key>

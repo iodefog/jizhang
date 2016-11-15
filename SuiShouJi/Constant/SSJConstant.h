@@ -97,6 +97,15 @@ extern NSString *const SSJWeiBoAppKey;
 //微博secret
 extern NSString *const SSJWeiBoSecret;
 
+//美恰appkey
+extern NSString *const SSJMQAppKey;
+
+//美恰secret
+extern NSString *const SSJMQSecret;
+
+//美恰默认客服组
+extern NSString *const SSJMQDefualtGroupId;
+
 //预算超支红色
 extern NSString *const SSJOverrunRedColorValue;
 
