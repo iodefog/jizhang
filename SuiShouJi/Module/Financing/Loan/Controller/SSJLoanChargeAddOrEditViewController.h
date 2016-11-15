@@ -6,6 +6,8 @@
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
 
+// 收款、追加编辑／新建
+
 #import "SSJBaseViewController.h"
 #import "SSJLoanCompoundChargeModel.h"
 

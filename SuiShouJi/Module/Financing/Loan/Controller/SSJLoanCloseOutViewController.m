@@ -65,20 +65,11 @@ static NSUInteger kClostOutDateTag = 1004;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    NSDate *today = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:[NSDate date].day];
-    NSDate *endDate = [today isLaterThan:_loanModel.borrowDate] ? today : _loanModel.borrowDate;
-    _loanModel.endDate = endDate;
-    
-    [self initCompoundModel];
-    
-    [self organiseTitles];
-    [self organiseImages];
-    [self organiseCellTags];
-    
     [self loadData];
     
     [self.view addSubview:self.tableView];
     self.tableView.tableFooterView = self.footerView;
+    self.tableView.hidden = YES;
     [self updateAppearance];
 }
 
@@ -210,6 +201,20 @@ static NSUInteger kClostOutDateTag = 1004;
             
             [self.view ssj_hideLoadingIndicator];
             
+            if (!_loanModel.endDate) {
+                NSDate *endDate = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:[NSDate date].day];
+                for (SSJLoanCompoundChargeModel *compoundModel in self.chargeModels) {
+                    endDate = [endDate isLaterThan:compoundModel.chargeModel.billDate] ? endDate : compoundModel.chargeModel.billDate;
+                }
+                _loanModel.endDate = endDate;
+            }
+            
+            [self initCompoundModel];
+            
+            [self organiseTitles];
+            [self organiseImages];
+            [self organiseCellTags];
+            
             self.fundingSelectionView.items = items;
             for (int i = 0; i < items.count; i ++) {
                 SSJLoanFundAccountSelectionViewItem *item = items[i];
@@ -220,9 +225,10 @@ static NSUInteger kClostOutDateTag = 1004;
             }
             
             self.chargeModels = list;
-            self.compoundModel.interestChargeModel.money = [SSJLoanHelper closeOutInterestWithLoanModel:self.loanModel chargeModels:self.chargeModels];
+            self.compoundModel.interestChargeModel.money = [SSJLoanHelper caculateInterestUntilDate:self.loanModel.endDate model:self.loanModel chargeModels:self.chargeModels];
             
             [self.tableView reloadData];
+            self.tableView.hidden = NO;
             
         } failure:^(NSError * _Nonnull error) {
             [self.view ssj_hideLoadingIndicator];
@@ -318,7 +324,7 @@ static NSUInteger kClostOutDateTag = 1004;
         
         SSJLoanChargeModel *targetChargeModel = [[SSJLoanChargeModel alloc] init];
         targetChargeModel.chargeId = SSJUUID();
-        targetChargeModel.fundId = self.loanModel.targetFundID;
+        targetChargeModel.fundId = self.loanModel.endTargetFundID;
         targetChargeModel.billId = targetChargeBillId;
         targetChargeModel.loanId = self.loanModel.ID;
         targetChargeModel.userId = SSJUSERID();
@@ -327,7 +333,7 @@ static NSUInteger kClostOutDateTag = 1004;
         
         SSJLoanChargeModel *interestModel = [[SSJLoanChargeModel alloc] init];
         interestModel.chargeId = SSJUUID();
-        interestModel.fundId = self.loanModel.targetFundID;
+        interestModel.fundId = self.loanModel.endTargetFundID;
         interestModel.billId = interestChargeBillId;
         interestModel.loanId = self.loanModel.ID;
         interestModel.userId = SSJUSERID();
@@ -338,6 +344,100 @@ static NSUInteger kClostOutDateTag = 1004;
         _compoundModel.targetChargeModel = targetChargeModel;
         _compoundModel.interestChargeModel = interestModel;
     }
+}
+
+- (BOOL)checkLoanModelValid {
+    if (_loanModel.jMoney <= 0) {
+        switch (_loanModel.type) {
+            case SSJLoanTypeLend:
+                [CDAutoHideMessageHUD showMessage:@"借出金额必须大于0元"];
+                break;
+                
+            case SSJLoanTypeBorrow:
+                [CDAutoHideMessageHUD showMessage:@"欠款金额必须大于0元"];
+                break;
+        }
+        
+        return NO;
+    }
+    
+    if (_loanModel.rate < 0) {
+        switch (_loanModel.type) {
+            case SSJLoanTypeLend:
+                [CDAutoHideMessageHUD showMessage:@"利息收入不能小于0元"];
+                break;
+                
+            case SSJLoanTypeBorrow:
+                [CDAutoHideMessageHUD showMessage:@"利息支出不能小于0元"];
+                break;
+        }
+        
+        return NO;
+    }
+    
+    if (!_loanModel.endTargetFundID.length) {
+        switch (_loanModel.type) {
+            case SSJLoanTypeLend:
+                [CDAutoHideMessageHUD showMessage:@"请选择转入账户"];
+                break;
+                
+            case SSJLoanTypeBorrow:
+                [CDAutoHideMessageHUD showMessage:@"请选择转转出账户"];
+                break;
+        }
+        
+        return NO;
+    }
+    
+    if (!_loanModel.endDate) {
+        [CDAutoHideMessageHUD showMessage:@"请选择结清日期"];
+        return NO;
+    }
+    
+    if (![self validateEndDate:self.loanModel.endDate]) {
+        return NO;
+    }
+    
+    return YES;
+}
+
+- (BOOL)validateEndDate:(NSDate *)endDate {
+    for (SSJLoanCompoundChargeModel *compoundModel in self.chargeModels) {
+        
+        if ([self.loanModel.endDate compare:compoundModel.chargeModel.billDate] == NSOrderedAscending) {
+            switch (self.loanModel.type) {
+                case SSJLoanTypeLend:
+                    if (compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeCreate
+                        || compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeBalanceIncrease
+                        || compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeBalanceDecrease) {
+                        [CDAutoHideMessageHUD showMessage:@"结清日不能早于借出日期"];
+                    } else if (compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeRepayment) {
+                        [CDAutoHideMessageHUD showMessage:@"结清日不能早于收款日期"];
+                    } else if (compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeAdd) {
+                        [CDAutoHideMessageHUD showMessage:@"结清日不能早于追加借出日期"];
+                    }
+                    
+                    break;
+                    
+                case SSJLoanTypeBorrow:
+                    if (compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeCreate
+                        || compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeBalanceIncrease
+                        || compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeBalanceDecrease) {
+                        [CDAutoHideMessageHUD showMessage:@"结清日不能早于借入日期"];
+                    } else if (compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeRepayment) {
+                        [CDAutoHideMessageHUD showMessage:@"结清日不能早于还款日期"];
+                    } else if (compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeAdd) {
+                        [CDAutoHideMessageHUD showMessage:@"结清日不能早于追加欠款日期"];
+                    }
+                    
+                    break;
+            }
+            
+            return NO;
+        }
+    }
+    
+    return YES;
 }
 
 - (void)showError:(NSError *)error {
@@ -352,84 +452,27 @@ static NSUInteger kClostOutDateTag = 1004;
 
 #pragma mark - Event
 - (void)sureButtonAction {
-    if (_loanModel.jMoney <= 0) {
-        switch (_loanModel.type) {
-            case SSJLoanTypeLend:
-                [CDAutoHideMessageHUD showMessage:@"借出金额必须大于0元"];
-                break;
-                
-            case SSJLoanTypeBorrow:
-                [CDAutoHideMessageHUD showMessage:@"欠款金额必须大于0元"];
-                break;
-        }
-        
-        return;
+    if ([self checkLoanModelValid]) {
+        self.sureButton.enabled = NO;
+        [SSJLoanHelper closeOutLoanModel:self.loanModel chargeModel:self.compoundModel success:^{
+            self.sureButton.enabled = YES;
+            [self.navigationController popViewControllerAnimated:YES];
+            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+            
+            switch (_loanModel.type) {
+                case SSJLoanTypeLend:
+                    [MobClick event:@"end_loan"];
+                    break;
+                    
+                case SSJLoanTypeBorrow:
+                    [MobClick event:@"end_owed"];
+                    break;
+            }
+        } failure:^(NSError * _Nonnull error) {
+            self.sureButton.enabled = YES;
+            [self showError:error];
+        }];
     }
-    
-    if (_loanModel.rate < 0) {
-        switch (_loanModel.type) {
-            case SSJLoanTypeLend:
-                [CDAutoHideMessageHUD showMessage:@"利息收入不能小于0元"];
-                break;
-                
-            case SSJLoanTypeBorrow:
-                [CDAutoHideMessageHUD showMessage:@"利息支出不能小于0元"];
-                break;
-        }
-        
-        return;
-    }
-    
-    if (!_loanModel.endTargetFundID.length) {
-        switch (_loanModel.type) {
-            case SSJLoanTypeLend:
-                [CDAutoHideMessageHUD showMessage:@"请选择转入账户"];
-                break;
-                
-            case SSJLoanTypeBorrow:
-                [CDAutoHideMessageHUD showMessage:@"请选择转转出账户"];
-                break;
-        }
-        return;
-    }
-    
-    if (!_loanModel.endDate) {
-        [CDAutoHideMessageHUD showMessage:@"请选择结清日期"];
-        return;
-    }
-    
-    if ([_loanModel.endDate compare:_loanModel.borrowDate] == NSOrderedAscending) {
-        switch (_loanModel.type) {
-            case SSJLoanTypeLend:
-                [CDAutoHideMessageHUD showMessage:@"结清日不能早于借出日期"];
-                break;
-                
-            case SSJLoanTypeBorrow:
-                [CDAutoHideMessageHUD showMessage:@"结清日不能早于借入日期"];
-                break;
-        }
-        return;
-    }
-    
-    self.sureButton.enabled = NO;
-    [SSJLoanHelper closeOutLoanModel:self.loanModel chargeModel:self.compoundModel success:^{
-        self.sureButton.enabled = YES;
-        [self.navigationController popViewControllerAnimated:YES];
-        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
-        
-        switch (_loanModel.type) {
-            case SSJLoanTypeLend:
-                [MobClick event:@"end_loan"];
-                break;
-                
-            case SSJLoanTypeBorrow:
-                [MobClick event:@"end_owed"];
-                break;
-        }
-    } failure:^(NSError * _Nonnull error) {
-        self.sureButton.enabled = YES;
-        [self showError:error];
-    }];
 }
 
 #pragma mark - Getter
@@ -530,25 +573,13 @@ static NSUInteger kClostOutDateTag = 1004;
             [weakSelf organiseImages];
             [weakSelf organiseCellTags];
             
-            self.compoundModel.interestChargeModel.money = [SSJLoanHelper closeOutInterestWithLoanModel:self.loanModel chargeModels:self.chargeModels];
+            weakSelf.compoundModel.interestChargeModel.money = [SSJLoanHelper caculateInterestUntilDate:weakSelf.loanModel.endDate model:weakSelf.loanModel chargeModels:weakSelf.chargeModels];
             
             [weakSelf.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
             [weakSelf.tableView reloadSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationFade];
         };
         _endDateSelectionView.shouldSelectDateAction = ^BOOL(SSJLoanDateSelectionView *view, NSDate *date) {
-            if ([date compare:weakSelf.loanModel.borrowDate] == NSOrderedAscending) {
-                switch (weakSelf.loanModel.type) {
-                    case SSJLoanTypeLend:
-                        [CDAutoHideMessageHUD showMessage:@"结清日不能早于借出日期"];
-                        break;
-                        
-                    case SSJLoanTypeBorrow:
-                        [CDAutoHideMessageHUD showMessage:@"结清日不能早于借入日期"];
-                        break;
-                }
-                return NO;
-            }
-            return YES;
+            return [weakSelf validateEndDate:date];
         };
     }
     return _endDateSelectionView;

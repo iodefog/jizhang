@@ -122,11 +122,11 @@ static NSString *const kCellId = @"cellId";
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.section == 0 && indexPath.row == 0) {
         if (_selectionHandle) {
-            _selectionHandle(SSJLoanChangeChargeSelectionRepayment);
+            _selectionHandle(SSJLoanCompoundChargeTypeRepayment);
         }
     } else if (indexPath.section == 0 && indexPath.row == 1) {
         if (_selectionHandle) {
-            _selectionHandle(SSJLoanChangeChargeSelectionAdd);
+            _selectionHandle(SSJLoanCompoundChargeTypeAdd);
         }
     }
     [self dismiss];

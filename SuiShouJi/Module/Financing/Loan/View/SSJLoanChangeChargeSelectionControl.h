@@ -9,23 +9,14 @@
 #import <UIKit/UIKit.h>
 #import "SSJLoanChargeModel.h"
 
-
-/**
- 选择变更流水类型
- 
- - SSJLoanChangeChargeSelectionRepayment: 还款／欠款
- - SSJLoanChangeChargeSelectionAdd: 追加借出／欠款
- */
-typedef NS_ENUM(NSUInteger, SSJLoanChangeChargeSelectionValue) {
-    SSJLoanChangeChargeSelectionRepayment,
-    SSJLoanChangeChargeSelectionAdd
-};
-
 @interface SSJLoanChangeChargeSelectionControl : UIView
 
 @property (nonatomic, readonly) SSJLoanType loanType;
 
-@property (nonatomic, copy) void (^selectionHandle)(SSJLoanChangeChargeSelectionValue value);
+/**
+ 选组收款／还款、追加借出／欠款的回调；value只有两个有效值，SSJLoanCompoundChargeTypeRepayment和SSJLoanCompoundChargeTypeAdd
+ */
+@property (nonatomic, copy) void (^selectionHandle)(SSJLoanCompoundChargeType value);
 
 - (instancetype)initWithLoanType:(SSJLoanType)loanType;
 

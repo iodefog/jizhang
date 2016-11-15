@@ -73,11 +73,17 @@ static NSUInteger kDateTag = 1005;
     [self.view addSubview:self.tableView];
     self.tableView.tableFooterView = self.footerView;
     self.tableView.hidden = YES;
+    [self updateAppearance];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self loadData];
+}
+
+- (void)updateAppearanceAfterThemeChanged {
+    [super updateAppearanceAfterThemeChanged];
+    [self updateAppearance];
 }
 
 #pragma mark - UITableViewDataSource
@@ -167,6 +173,10 @@ static NSUInteger kDateTag = 1005;
 }
 
 #pragma mark - UITableViewDelegate
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 10;
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     NSUInteger tag = [[self.cellTags ssj_objectAtIndexPath:indexPath] unsignedIntegerValue];
@@ -193,6 +203,7 @@ static NSUInteger kDateTag = 1005;
     if (textField.tag == kMoneyTag && self.chargeType == SSJLoanCompoundChargeTypeRepayment) {
         
         NSString *moneyStr = [textField.text stringByReplacingCharactersInRange:range withString:string];
+        moneyStr = [moneyStr stringByReplacingOccurrencesOfString:@"¥" withString:@""];
         
         if ([moneyStr doubleValue] > self.surplus) {
             
@@ -239,7 +250,70 @@ static NSUInteger kDateTag = 1005;
     return YES;
 }
 
+#pragma mark - Event
+- (void)deleteItemAction {
+    
+}
+
+- (void)sureButtonAction {
+    if ([self checkCompoundModelValid]) {
+        if (self.chargeType == SSJLoanCompoundChargeTypeRepayment) {
+            self.loanModel.jMoney = self.surplus - self.compoundModel.chargeModel.money;
+        } else if (self.chargeType == SSJLoanCompoundChargeTypeAdd) {
+            self.loanModel.jMoney = self.surplus + self.compoundModel.chargeModel.money;
+        }
+        
+        self.sureButton.enabled = NO;
+        [self.sureButton ssj_showLoadingIndicator];
+        [SSJLoanHelper saveLoanModel:self.loanModel chargeModels:@[self.compoundModel] remindModel:nil success:^{
+            self.sureButton.enabled = YES;
+            [self.sureButton ssj_hideLoadingIndicator];
+            [self goBackAction];
+        } failure:^(NSError * _Nonnull error) {
+            self.sureButton.enabled = YES;
+            [self.sureButton ssj_hideLoadingIndicator];
+            [self showError:error];
+        }];
+    }
+}
+
+- (void)textDidChange:(NSNotification *)notification {
+    UITextField *textField = notification.object;
+    if ([textField isKindOfClass:[UITextField class]]) {
+        
+        if (textField.tag == kMoneyTag) {
+
+            NSString *tmpMoneyStr = [textField.text stringByReplacingOccurrencesOfString:@"¥" withString:@""];
+            tmpMoneyStr = [tmpMoneyStr ssj_reserveDecimalDigits:2 intDigits:0];
+            textField.text = [NSString stringWithFormat:@"¥%@", tmpMoneyStr];
+            double money = [tmpMoneyStr doubleValue];
+            self.compoundModel.chargeModel.money = money;
+            self.compoundModel.targetChargeModel.money = money;
+            [self updateInterest];
+            
+        } else if (textField.tag == kInterestTag) {
+            
+            NSString *tmpMoneyStr = [textField.text stringByReplacingOccurrencesOfString:@"¥" withString:@""];
+            tmpMoneyStr = [tmpMoneyStr ssj_reserveDecimalDigits:2 intDigits:0];
+            textField.text = [NSString stringWithFormat:@"¥%@", tmpMoneyStr];
+            self.compoundModel.interestChargeModel.money = [tmpMoneyStr doubleValue];
+            
+        } else if (textField.tag == kMemoTag) {
+            
+            self.compoundModel.chargeModel.memo = textField.text;
+            self.compoundModel.targetChargeModel.memo = textField.text;
+            self.compoundModel.interestChargeModel.memo = textField.text;
+        }
+    }
+}
+
 #pragma mark - Private
+- (void)updateAppearance {
+    [_sureButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];
+    [_sureButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor alpha:0.5] forState:UIControlStateDisabled];
+    _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
+}
+
 - (void)updateTitle {
     switch (self.loanModel.type) {
         case SSJLoanTypeLend:
@@ -269,15 +343,19 @@ static NSUInteger kDateTag = 1005;
 
 - (void)loadData {
     [self.view ssj_showLoadingIndicator];
-    [SSJLoanHelper queryForLoanModelWithLoanID:self.compoundModel.chargeModel.loanId success:^(SSJLoanModel * _Nonnull model) {
+    [SSJLoanHelper queryForLoanModelWithLoanID:(_edited ? self.compoundModel.chargeModel.loanId : self.loanId) success:^(SSJLoanModel * _Nonnull model) {
         [SSJLoanHelper queryFundModelListWithSuccess:^(NSArray <SSJLoanFundAccountSelectionViewItem *>*items) {
             
             [self.view ssj_hideLoadingIndicator];
             
             self.loanModel = model;
             
-            if (self.chargeType == SSJLoanCompoundChargeTypeRepayment && self.surplus == 0) {
-                self.surplus = self.loanModel.jMoney + self.compoundModel.chargeModel.money;
+            if (self.surplus == 0) {
+                if (self.chargeType == SSJLoanCompoundChargeTypeRepayment) {
+                    self.surplus = self.loanModel.jMoney + self.compoundModel.chargeModel.money;
+                } else if (self.chargeType == SSJLoanCompoundChargeTypeAdd) {
+                    self.surplus = self.loanModel.jMoney - self.compoundModel.chargeModel.money;
+                }
             }
             
             if (!_edited) {
@@ -475,20 +553,33 @@ static NSUInteger kDateTag = 1005;
 
 - (void)updateInterest {
     if (self.compoundModel.interestChargeModel) {
-        double interestPerDay = [SSJLoanHelper interestForEverydayWithLoanModel:self.loanModel];
-        NSInteger days = [self.compoundModel.chargeModel.billDate daysFrom:self.loanModel.borrowDate];
+        double principal = self.compoundModel.chargeModel.money;
+        double rate = self.loanModel.rate;
+        int days = (int)[self.compoundModel.chargeModel.billDate daysFrom:self.loanModel.borrowDate];
         days = MAX(days, 0);
-        self.compoundModel.interestChargeModel.money = days * interestPerDay;
-        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:2 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+        self.compoundModel.interestChargeModel.money = [SSJLoanHelper interestWithPrincipal:principal rate:rate days:days];
+        
+        if ([self.tableView numberOfRowsInSection:0] > 1) {
+            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+        }
     }
 }
 
-#pragma mark - Event
-- (void)deleteItemAction {
+- (BOOL)checkCompoundModelValid {
+    if (self.compoundModel.chargeModel.money <= 0) {
+        switch (self.loanModel.type) {
+            case SSJLoanTypeLend:
+                [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"收款金额必须大于0元"]];
+                break;
+                
+            case SSJLoanTypeBorrow:
+                [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"还款金额必须大于0元"]];
+                break;
+        }
+        
+        return NO;
+    }
     
-}
-
-- (void)sureButtonAction {
     if (self.chargeType == SSJLoanCompoundChargeTypeRepayment) {
         
         if (self.compoundModel.chargeModel.money > self.surplus) {
@@ -504,7 +595,8 @@ static NSUInteger kDateTag = 1005;
                     [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"还款金额不能大于剩余欠款%.2f元", self.surplus]];
                     break;
             }
-            return;
+            
+            return NO;
         }
         
         if (self.compoundModel.chargeModel.money == self.surplus) {
@@ -523,56 +615,12 @@ static NSUInteger kDateTag = 1005;
                 
             }];
             [SSJAlertViewAdapter showAlertViewWithTitle:nil message:message action:cancelAction, sureAction, nil];
-            return;
+            
+            return NO;
         }
     }
     
-    
-    self.sureButton.enabled = NO;
-    [self.sureButton ssj_showLoadingIndicator];
-    [SSJLoanHelper saveLoanModel:self.loanModel chargeModels:@[self.compoundModel] remindModel:nil success:^{
-        self.sureButton.enabled = YES;
-        [self.sureButton ssj_hideLoadingIndicator];
-        [self goBackAction];
-    } failure:^(NSError * _Nonnull error) {
-        self.sureButton.enabled = YES;
-        [self.sureButton ssj_hideLoadingIndicator];
-        [self showError:error];
-    }];
-}
-
-- (void)textDidChange:(NSNotification *)notification {
-    UITextField *textField = notification.object;
-    if ([textField isKindOfClass:[UITextField class]]) {
-        
-        if (textField.tag == kMoneyTag) {
-            
-            NSString *tmpMoneyStr = [textField.text stringByReplacingOccurrencesOfString:@"¥" withString:@""];
-            if (tmpMoneyStr.length) {
-                tmpMoneyStr = [NSString stringWithFormat:@"¥%@", tmpMoneyStr];
-            }
-            textField.text = [tmpMoneyStr ssj_reserveDecimalDigits:2 intDigits:0];
-            double money = [[textField.text stringByReplacingOccurrencesOfString:@"¥" withString:@""] doubleValue];
-            self.compoundModel.chargeModel.money = money;
-            self.compoundModel.targetChargeModel.money = money;
-            [self updateInterest];
-            
-        } else if (textField.tag == kInterestTag) {
-            
-            NSString *tmpMoneyStr = [textField.text stringByReplacingOccurrencesOfString:@"¥" withString:@""];
-            if (tmpMoneyStr.length) {
-                tmpMoneyStr = [NSString stringWithFormat:@"¥%@", tmpMoneyStr];
-            }
-            textField.text = [tmpMoneyStr ssj_reserveDecimalDigits:2 intDigits:0];
-            double money = [[textField.text stringByReplacingOccurrencesOfString:@"¥" withString:@""] doubleValue];
-            self.compoundModel.interestChargeModel.money = money;
-            
-        } else if (textField.tag == kMemoTag) {
-            self.compoundModel.chargeModel.memo = textField.text;
-            self.compoundModel.targetChargeModel.memo = textField.text;
-            self.compoundModel.interestChargeModel.memo = textField.text;
-        }
-    }
+    return YES;
 }
 
 #pragma mark - Getter
@@ -586,7 +634,6 @@ static NSUInteger kDateTag = 1005;
         [_tableView setSeparatorInset:UIEdgeInsetsZero];
         [_tableView registerClass:[SSJAddOrEditLoanLabelCell class] forCellReuseIdentifier:kAddOrEditLoanLabelCellId];
         [_tableView registerClass:[SSJAddOrEditLoanTextFieldCell class] forCellReuseIdentifier:kAddOrEditLoanTextFieldCellId];
-        _tableView.sectionHeaderHeight = 10;
         _tableView.sectionFooterHeight = 0;
     }
     return _tableView;
@@ -663,6 +710,7 @@ static NSUInteger kDateTag = 1005;
             weakSelf.compoundModel.chargeModel.billDate = view.selectedDate;
             weakSelf.compoundModel.targetChargeModel.billDate = view.selectedDate;
             weakSelf.compoundModel.interestChargeModel.billDate = view.selectedDate;
+            [weakSelf updateInterest];
         };
         _dateSelectionView.shouldSelectDateAction = ^BOOL(SSJLoanDateSelectionView *view, NSDate *date) {
             if ([date compare:weakSelf.loanModel.borrowDate] == NSOrderedAscending) {

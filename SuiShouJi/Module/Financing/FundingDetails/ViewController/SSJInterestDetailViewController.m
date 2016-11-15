@@ -66,7 +66,8 @@ static NSString *const kTitle6 = @"结清日";
     cell.detailTextLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     cell.textLabel.text = title;
     if ([title isEqualToString:kTitle1]) {
-        cell.detailTextLabel.text = [NSString stringWithFormat:@"%@￥%.2f",self.model.type ? @"-" : @"+",[SSJLoanHelper closeOutInterestWithLoanModel:self.model chargeModels:_chargeModels]];
+        double interest = [SSJLoanHelper caculateInterestUntilDate:self.model.endDate model:self.model chargeModels:_chargeModels];
+        cell.detailTextLabel.text = [NSString stringWithFormat:@"%@￥%.2f",self.model.type ? @"-" : @"+", interest];
     }
     if ([title isEqualToString:kTitle2] || [title isEqualToString:kTitle3]) {
         cell.detailTextLabel.text = [SSJFinancingHomeHelper queryFundItemWithFundingId:self.model.endTargetFundID].fundingName;

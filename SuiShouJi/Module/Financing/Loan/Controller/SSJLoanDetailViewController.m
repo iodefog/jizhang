@@ -330,7 +330,8 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
             }
             [section1 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_remind" title:@"到期日提醒" subtitle:remindDateStr bottomTitle:nil]];
             
-            NSString *expectedInterestStr = [NSString stringWithFormat:@"¥%.2f", [SSJLoanHelper interestForEverydayWithLoanModel:_loanModel]];
+            double interest = [SSJLoanHelper interestWithPrincipal:self.loanModel.jMoney rate:self.loanModel.rate days:1];
+            NSString *expectedInterestStr = [NSString stringWithFormat:@"¥%.2f", interest];
             [section1 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_expectedInterest" title:@"每天利息" subtitle:expectedInterestStr bottomTitle:nil]];
         }
         
@@ -593,17 +594,13 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
 
 - (SSJLoanChangeChargeSelectionControl *)changeChargeSelectionView {
     if (!_changeChargeSelectionView) {
+        __weak typeof(self) wself = self;
         _changeChargeSelectionView = [[SSJLoanChangeChargeSelectionControl alloc] initWithLoanType:_loanModel.type];
-        _changeChargeSelectionView.selectionHandle = ^(SSJLoanChangeChargeSelectionValue value){
-            switch (value) {
-                case SSJLoanChangeChargeSelectionRepayment:
-                    
-                    break;
-                    
-                case SSJLoanChangeChargeSelectionAdd:
-                    
-                    break;
-            }
+        _changeChargeSelectionView.selectionHandle = ^(SSJLoanCompoundChargeType value){
+            SSJLoanChargeAddOrEditViewController *addOrEditVC = [[SSJLoanChargeAddOrEditViewController alloc] init];
+            addOrEditVC.loanId = wself.loanID;
+            addOrEditVC.chargeType = value;
+            [wself.navigationController pushViewController:addOrEditVC animated:YES];
         };
     }
     return _changeChargeSelectionView;

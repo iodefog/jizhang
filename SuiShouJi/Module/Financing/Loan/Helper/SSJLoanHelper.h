@@ -117,6 +117,16 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSString *)queryForFundColorWithID:(NSString *)ID;
 
 /**
+ 计算固定本金产生的利息
+
+ @param principal 本金
+ @param rate 年华收益率
+ @param days 天数
+ @return 利息
+ */
++ (double)interestWithPrincipal:(double)principal rate:(double)rate days:(int)days;
+
+/**
  *  预期利息
  *
  *  @param model 借贷模型
@@ -125,20 +135,14 @@ NS_ASSUME_NONNULL_BEGIN
 + (double)expectedInterestWithLoanModel:(SSJLoanModel *)model chargeModels:(NSArray <SSJLoanCompoundChargeModel *>*)chargeModels;
 
 /**
- *  结清利息
- *
- *  @param model 借贷模型
- *  @param chargeModels 借贷产生的流水
- */
-+ (double)closeOutInterestWithLoanModel:(SSJLoanModel *)model chargeModels:(NSArray <SSJLoanCompoundChargeModel *>*)chargeModels;
+ 计算可变本金产生的利息；因为变更流水会改变本金，利息是按照不同时间段内的本金计算
 
-/**
- 每天利息金额
-
- @param model 借贷模型
- @return 每天利息金额
+ @param date 截止日期
+ @param model 借贷模型，用borrowDate、rate、interestType三个属性计算利息
+ @param models 借贷生成的流水记录
+ @return 计算结果
  */
-+ (double)interestForEverydayWithLoanModel:(SSJLoanModel *)model;
++ (double)caculateInterestUntilDate:(NSDate *)untilDate model:(SSJLoanModel *)model chargeModels:(NSArray <SSJLoanCompoundChargeModel *>*)models;
 
 /**
  查询借贷详情
