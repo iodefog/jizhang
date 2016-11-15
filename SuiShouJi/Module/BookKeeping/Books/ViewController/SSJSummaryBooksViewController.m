@@ -66,7 +66,6 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
     [super viewDidLoad];
     [self.view addSubview:self.tableView];
     self.tableView.tableHeaderView = self.header;
-    [self updateIncomeAndPaymentLabels];
     [self.tableView registerClass:[SSJReportFormsIncomeAndPayCell class] forCellReuseIdentifier:kIncomeAndPayCellID];
     // Do any additional setup after loading the view.
 }
@@ -79,6 +78,7 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self reloadAxisView];
+    [self updateIncomeAndPaymentLabels];
     [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.summaryBooksHeaderColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
 
