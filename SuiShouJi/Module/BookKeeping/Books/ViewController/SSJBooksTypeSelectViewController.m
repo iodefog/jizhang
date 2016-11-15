@@ -77,6 +77,9 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
     [self.header startAnimating];
     [MobClick event:@"main_account_book"];
     [self getDateFromDB];
+    [self.mm_drawerController setMaximumLeftDrawerWidth:SSJSCREENWITH * 0.8];
+    [self.mm_drawerController setOpenDrawerGestureModeMask:MMOpenDrawerGestureModeAll];
+    [self.mm_drawerController setCloseDrawerGestureModeMask:MMCloseDrawerGestureModeAll];
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
