@@ -493,7 +493,13 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
         [self goBackAction];
     } failure:^(NSError * _Nonnull error) {
         self.deleteItem.enabled = YES;
-        [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
+        NSString *message = nil;
+#ifdef DEBUG
+        message = [error localizedDescription];
+#else
+        message = SSJ_ERROR_MESSAGE;
+#endif
+        [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:message action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
     }];
 }
 

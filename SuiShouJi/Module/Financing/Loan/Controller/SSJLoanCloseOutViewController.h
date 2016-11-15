@@ -15,8 +15,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, copy) SSJLoanModel *loanModel;
 
-@property (nonatomic, copy) NSArray <SSJLoanCompoundChargeModel *>*chargeModels;
-
 @end
 
 NS_ASSUME_NONNULL_END

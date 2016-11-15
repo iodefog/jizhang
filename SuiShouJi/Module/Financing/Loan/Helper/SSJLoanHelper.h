@@ -88,7 +88,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param failure   失败的回调
  */
 + (void)closeOutLoanModel:(SSJLoanModel *)model
-             chargeModels:(NSArray <SSJLoanCompoundChargeModel *>*)chargeModels
+              chargeModel:(SSJLoanCompoundChargeModel *)chargeModel
                   success:(void (^)())success
                   failure:(void (^)(NSError *error))failure;
 

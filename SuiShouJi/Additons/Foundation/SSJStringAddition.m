@@ -139,7 +139,7 @@
 
 @implementation NSString (SSJDecimal)
 
-- (NSString *)ssj_reserveDecimalDigits:(int)DecimalDigits intDigits:(int)intDigits{
+- (NSString *)ssj_reserveDecimalDigits:(int)DecimalDigits intDigits:(int)intDigits {
     NSArray *arr = [self componentsSeparatedByString:@"."];
     NSString *intPart = [arr objectAtIndex:0];
     if (intDigits > 0) {

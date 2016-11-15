@@ -472,11 +472,9 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
 }
 
 + (void)closeOutLoanModel:(SSJLoanModel *)model
-             chargeModels:(NSArray <SSJLoanCompoundChargeModel *>*)chargeModels
+              chargeModel:(SSJLoanCompoundChargeModel *)chargeModel
                   success:(void (^)())success
                   failure:(void (^)(NSError *error))failure {
-    
-    NSString *booksID = SSJGetCurrentBooksType();
     
     [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
         
@@ -506,78 +504,29 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
             return;
         }
         
-        NSString *endChargeID = SSJUUID();
-        NSString *endTargetChargeID = SSJUUID();
-        NSString *interestChargeID = nil;
+        NSDate *writeDate = [NSDate date];
+        chargeModel.chargeModel.writeDate = writeDate;
+        chargeModel.targetChargeModel.writeDate = writeDate;
+        chargeModel.interestChargeModel.writeDate = writeDate;
+        NSError *error = nil;
         
-        NSString *endBillID = nil;
-        NSString *endTargetBillID = nil;
-        NSString *interestBillID = nil;
-        
-        switch (model.type) {
-            case SSJLoanTypeLend:
-                endBillID = @"4";
-                endTargetBillID = @"3";
-                interestBillID = @"5";
-                break;
-                
-            case SSJLoanTypeBorrow:
-                endBillID = @"3";
-                endTargetBillID = @"4";
-                interestBillID = @"6";
-                break;
+        if (![self saveLoanCompoundChargeModel:chargeModel inDatabase:db error:&error]) {
+            
+            *rollback = YES;
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure([db lastError]);
+                });
+            }
+            
+            return;
         }
         
-        NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        NSString *writeDateStr = [writeDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         NSString *endDateStr = [model.endDate formattedDateWithFormat:@"yyyy-MM-dd"];
         
-        // 插入所属结清流水
-        if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cbilldate, cbooksid, loanid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", endChargeID, model.userID, @(model.jMoney), endBillID, model.fundID, endDateStr, booksID, model.ID, @(SSJSyncVersion()), @(0), writeDate]) {
-            
-            *rollback = YES;
-            if (failure) {
-                SSJDispatchMainAsync(^{
-                    failure([db lastError]);
-                });
-            }
-
-            return;
-        }
-        
-        // 插入目标结清流水
-        if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cbilldate, cbooksid, loanid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", endTargetChargeID, model.userID, @(model.jMoney), endTargetBillID, model.endTargetFundID, endDateStr, booksID, model.ID, @(SSJSyncVersion()), @(0), writeDate]) {
-            
-            *rollback = YES;
-            if (failure) {
-                SSJDispatchMainAsync(^{
-                    failure([db lastError]);
-                });
-            }
-            
-            return;
-        }
-        
-        // 计算利息，利息只保留2位小数
-        double interest = [[NSString stringWithFormat:@"%.2f", [self closeOutInterestWithLoanModel:model chargeModels:chargeModels]] doubleValue];
-        
-        // 开启计息并且利息大于0就插入一条利息流水
-        if (interest > 0 && model.interest) {
-            interestChargeID = SSJUUID();
-            if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cbilldate, loanid, cbooksid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", interestChargeID, model.userID, @(interest), interestBillID, model.endTargetFundID, endDateStr, model.ID, @0, @(SSJSyncVersion()), @(0), writeDate]) {
-                
-                *rollback = YES;
-                if (failure) {
-                    SSJDispatchMainAsync(^{
-                        failure([db lastError]);
-                    });
-                }
-                
-                return;
-            }
-        }
-        
         // 修改当前借贷记录的结清状态
-        if (![db executeUpdate:@"update bk_loan set iend = ?, jmoney = ?, rate = ?, ctargetfundid = ?, cetarget = ?, cenddate = ?, iversion = ?, operatortype = ?, cwritedate = ? where loanid = ?", @1, @(model.jMoney), @(model.rate), model.targetFundID, model.endTargetFundID, endDateStr, @(SSJSyncVersion()), @1, writeDate, model.ID]) {
+        if (![db executeUpdate:@"update bk_loan set iend = ?, jmoney = ?, rate = ?, ctargetfundid = ?, cetarget = ?, cenddate = ?, iversion = ?, operatortype = ?, cwritedate = ? where loanid = ?", @1, @(model.jMoney), @(model.rate), model.targetFundID, model.endTargetFundID, endDateStr, @(SSJSyncVersion()), @1, writeDateStr, model.ID]) {
             
             *rollback = YES;
             if (failure) {
@@ -601,7 +550,7 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
         }
         
         // 关闭提醒、更改提醒名称（因为结清时金额可以再次被用户编辑）
-        if (![db executeUpdate:@"update bk_user_remind set istate = ?, cremindname = ?, iversion = ?, operatortype = ?, cwritedate = ? where cremindid = ? and operatortype <> 2", @0, remindName, @(SSJSyncVersion()), @1, writeDate, model.remindID]) {
+        if (![db executeUpdate:@"update bk_user_remind set istate = ?, cremindname = ?, iversion = ?, operatortype = ?, cwritedate = ? where cremindid = ? and operatortype <> 2", @0, remindName, @(SSJSyncVersion()), @1, writeDateStr, model.remindID]) {
             *rollback = YES;
             if (failure) {
                 SSJDispatchMainAsync(^{
@@ -806,7 +755,14 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
                             failure:(void (^)(NSError *error))failure {
     
     [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
+        
+        NSDate *writeDate = [NSDate date];
+        model.chargeModel.writeDate = writeDate;
+        model.targetChargeModel.writeDate = writeDate;
+        model.interestChargeModel.writeDate = writeDate;
+        
         NSError *error = nil;
+        
         if (![self saveLoanCompoundChargeModel:model inDatabase:db error:&error]) {
             *rollback = YES;
             if (failure) {
@@ -823,7 +779,6 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
             });
         }
     }];
-    
 }
 
 + (void)saveLoanCompoundChargeModels:(NSArray <SSJLoanCompoundChargeModel *>*)models
