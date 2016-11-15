@@ -266,7 +266,10 @@ static BOOL kNeedBannerDisplay = YES;
                                                 @"nickname": userItem.realName ?: @"",
                                                 @"tel": userItem.mobileNo ?: @"",
                                                 @"登录方式": userItem.loginType ?: @"",
-                                                @"注册状态": userItem.registerState ?: @""
+                                                @"注册状态": userItem.registerState ?: @"",
+                                                @"应用名称": SSJAppName(),
+                                                @"应用版本号": SSJAppVersion(),
+                                                @"手机型号" : SSJPhoneModel()
                                                 };
         [MQManager setClientInfo:clientCustomizedAttrs completion:^(BOOL success , NSError *error) {
             

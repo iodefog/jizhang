@@ -115,7 +115,7 @@ static NSString *const kSummaryButtonAnimationKey = @"summaryButtonAnimationKey"
 - (UIView *)backColorView{
     if (!_backColorView) {
         _backColorView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.width, self.height - 38)];
-        _backColorView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.summaryBooksHeaderColor];
+        _backColorView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.summaryBooksHeaderColor alpha:SSJ_CURRENT_THEME.summaryBooksHeaderAlpha];
     }
     return _backColorView;
 }
@@ -167,6 +167,17 @@ static NSString *const kSummaryButtonAnimationKey = @"summaryButtonAnimationKey"
     if (self.buttonClickBlock) {
         self.buttonClickBlock();
     }
+}
+
+- (void)updateAfterThemeChange{
+    self.incomeTitleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    self.incomeLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    self.expentureTitleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    self.expentureLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    [self.summaryButton setImage:[UIImage ssj_themeImageWithName:@"bk_summary"] forState:UIControlStateNormal];
+    self.waveImage.image = [UIImage ssj_themeImageWithName:@"bk_wave"];
+    self.backColorView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.summaryBooksHeaderColor alpha:SSJ_CURRENT_THEME.summaryBooksHeaderAlpha];
+
 }
 
 /*

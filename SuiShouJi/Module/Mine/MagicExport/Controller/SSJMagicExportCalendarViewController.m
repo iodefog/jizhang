@@ -60,20 +60,6 @@
     self.calendarView.height = self.view.height - self.dateSwitchControl.bottom;
 }
 
-- (void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
-    [self.mm_drawerController setMaximumLeftDrawerWidth:SSJSCREENWITH];
-    [self.mm_drawerController setOpenDrawerGestureModeMask:MMOpenDrawerGestureModeNone];
-    [self.mm_drawerController setCloseDrawerGestureModeMask:MMCloseDrawerGestureModeNone];
-}
-
-- (void)viewWillDisappear:(BOOL)animated{
-    [super viewWillDisappear:animated];
-    [self.mm_drawerController setMaximumLeftDrawerWidth:SSJSCREENWITH * 0.8];
-    [self.mm_drawerController setOpenDrawerGestureModeMask:MMOpenDrawerGestureModeAll];
-    [self.mm_drawerController setCloseDrawerGestureModeMask:MMCloseDrawerGestureModeAll];
-}
-
 - (void)updateAppearanceAfterThemeChanged {
     [super updateAppearanceAfterThemeChanged];
     [self updateAppearance];

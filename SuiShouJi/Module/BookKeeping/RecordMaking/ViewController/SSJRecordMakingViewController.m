@@ -134,9 +134,6 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self getCategoryList];
-    [self.mm_drawerController setMaximumLeftDrawerWidth:SSJSCREENWITH];
-    [self.mm_drawerController setOpenDrawerGestureModeMask:MMOpenDrawerGestureModeNone];
-    [self.mm_drawerController setCloseDrawerGestureModeMask:MMCloseDrawerGestureModeNone];
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -155,9 +152,6 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     [super viewWillDisappear:animated];
     [_billTypeInputView.moneyInput resignFirstResponder];
     [_accessoryView.memoView resignFirstResponder];
-    [self.mm_drawerController setMaximumLeftDrawerWidth:SSJSCREENWITH * 0.8];
-    [self.mm_drawerController setOpenDrawerGestureModeMask:MMOpenDrawerGestureModeAll];
-    [self.mm_drawerController setCloseDrawerGestureModeMask:MMCloseDrawerGestureModeAll];
 }
 
 - (void)viewDidLayoutSubviews {

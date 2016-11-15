@@ -22,4 +22,6 @@
 
 - (void)stopLoading;
 
+- (void)updateAfterThemeChange;
+
 @end

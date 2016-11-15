@@ -82,6 +82,9 @@
 // tabbar边框线透明度
 @property (nonatomic) CGFloat tabBarShadowImageAlpha;
 
+// tabbar背景图片
+@property (nonatomic, copy) NSString *tabBarBackgroundImage;
+
 // cell分割线透明度
 @property (nonatomic) CGFloat cellSeparatorAlpha;
 
@@ -159,5 +162,8 @@
 
 // 总账本的背景颜色
 @property (nonatomic, copy) NSString *summaryBooksHeaderColor;
+
+// 总账本的背景颜色
+@property (nonatomic) CGFloat summaryBooksHeaderAlpha;
 
 @end

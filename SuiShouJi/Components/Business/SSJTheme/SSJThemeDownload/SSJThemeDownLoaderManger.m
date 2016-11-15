@@ -11,6 +11,7 @@
 #import "AFNetworking.h"
 #import "SSJThemeModel.h"
 #import <ZipZap/ZipZap.h>
+#import "SSJGlobalServiceManager.h"
 
 @interface SSJThemeDownLoaderProgressBlocker : NSObject
 
@@ -60,7 +61,7 @@ static id _instance;
     self = [super init];
     if (self) {
         NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
-        self.manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:configuration];
+        self.manager = [[SSJGlobalServiceManager alloc] initWithSessionConfiguration:configuration];
         [self.manager.operationQueue setMaxConcurrentOperationCount:5];
         _blockerMapping = [NSMutableDictionary dictionary];
         _downLoadingArr = [NSMutableArray array];

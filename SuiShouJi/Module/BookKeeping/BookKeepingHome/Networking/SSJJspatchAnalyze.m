@@ -10,7 +10,7 @@
 #import "AFNetworking.h"
 #import "JPEngine.h"
 #import "SSJPatchUpdateService.h"
-
+#import "SSJGlobalServiceManager.h"
 
 @implementation SSJJspatchAnalyze
 
@@ -35,7 +35,7 @@
 + (void)SSJJsPatchAnalyzePatchWithItem:(SSJJsPatchItem *)item{
     if ([item.patchVersion integerValue] > [SSJLastPatchVersion() integerValue]) {
         NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
-        AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:configuration];
+        AFURLSessionManager *manager = [[SSJGlobalServiceManager alloc] initWithSessionConfiguration:configuration];
         if (![item.patchUrl hasPrefix:@"http"]) {
             item.patchUrl = [NSString stringWithFormat:@"http://%@",item.patchUrl];
         }

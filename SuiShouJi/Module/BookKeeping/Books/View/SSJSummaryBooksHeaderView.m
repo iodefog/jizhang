@@ -31,7 +31,7 @@
         [self ssj_setBorderColor:[UIColor whiteColor]];
         [self ssj_setBorderStyle:SSJBorderStyleTop];
         [self ssj_setBorderWidth:1.f / [UIScreen mainScreen].scale];
-        self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.summaryBooksHeaderColor];
+        self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.summaryBooksHeaderColor alpha:SSJ_CURRENT_THEME.summaryBooksHeaderAlpha];
         [self addSubview:self.seperatorLine];
         [self addSubview:self.incomeTitleLab];
         [self addSubview:self.incomeLab];
