@@ -277,7 +277,9 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
     if (_customPeriod) {
         period = _customPeriod;
     }else{
-        period = [_periods ssj_safeObjectAtIndex:self.header.dateAxisView.selectedIndex];
+        if (_periods.count) {
+            period = [_periods ssj_safeObjectAtIndex:self.header.dateAxisView.selectedIndex];
+        }
     }
     [SSJReportFormsUtil queryForBillStatisticsWithType:!(int)_header.periodSelectSegment.selectedSegmentIndex startDate:period.startDate endDate:period.endDate booksId:@"all" success:^(NSDictionary *result) {
         
@@ -345,8 +347,10 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
         _periods = periods;
         [_header.dateAxisView reloadData];
         
-        if (_periods.count >= 1) {
-            _header.dateAxisView.selectedIndex = _periods.count - 1;
+        if (_periods.count) {
+            if (_periods.count >= 1) {
+                _header.dateAxisView.selectedIndex = _periods.count - 1;
+            }
         }
         
         if (!_periods.count) {

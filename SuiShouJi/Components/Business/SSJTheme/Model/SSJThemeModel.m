@@ -34,6 +34,7 @@
     [aCoder encodeObject:_tabBarTitleColor forKey:@"tabBarTitleColor"];
     [aCoder encodeObject:_tabBarSelectedTitleColor forKey:@"tabBarSelectedTitleColor"];
     [aCoder encodeObject:_tabBarBackgroundColor forKey:@"tabBarBackgroundColor"];
+    [aCoder encodeObject:_tabBarBackgroundImage forKey:@"tabBarBackgroundImage"];
     [aCoder encodeFloat:_cellSeparatorAlpha forKey:@"cellSeparatorAlpha"];
     [aCoder encodeObject:_cellSeparatorColor forKey:@"cellSeparatorColor"];
     [aCoder encodeObject:_cellIndicatorColor forKey:@"cellIndicatorColor"];
@@ -88,6 +89,7 @@
         _tabBarTitleColor = [aDecoder decodeObjectForKey:@"tabBarTitleColor"];
         _tabBarSelectedTitleColor = [aDecoder decodeObjectForKey:@"tabBarSelectedTitleColor"];
         _tabBarBackgroundColor = [aDecoder decodeObjectForKey:@"tabBarBackgroundColor"];
+        _tabBarBackgroundImage = [aDecoder decodeObjectForKey:@"tabBarBackgroundImage"];
         _cellSeparatorAlpha = [aDecoder decodeFloatForKey:@"cellSeparatorAlpha"];
         _cellSeparatorColor = [aDecoder decodeObjectForKey:@"cellSeparatorColor"];
         _cellIndicatorColor = [aDecoder decodeObjectForKey:@"cellIndicatorColor"];
@@ -142,6 +144,7 @@
                                                           @"tabBarSelectedTitleColor":_tabBarSelectedTitleColor,
                                                           @"tabBarBackgroundColor":_tabBarBackgroundColor,
                                                           @"tabBarShadowImageAlpha":@(_tabBarShadowImageAlpha),
+                                                          @"tabBarBackgroundImage":_tabBarBackgroundImage,  
                                                           @"cellSeparatorAlpha":@(_cellSeparatorAlpha),
                                                           @"cellSeparatorColor":_cellSeparatorColor,
                                                           @"cellIndicatorColor":_cellIndicatorColor,

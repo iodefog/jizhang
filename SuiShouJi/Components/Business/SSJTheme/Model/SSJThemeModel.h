@@ -82,6 +82,9 @@
 // tabbar边框线透明度
 @property (nonatomic) CGFloat tabBarShadowImageAlpha;
 
+// tabbar背景图片
+@property (nonatomic, copy) NSString *tabBarBackgroundImage;
+
 // cell分割线透明度
 @property (nonatomic) CGFloat cellSeparatorAlpha;
 
