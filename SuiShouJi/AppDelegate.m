@@ -81,6 +81,7 @@ NSDate *SCYEnterBackgroundTime() {
     
     [SSJUmengManager umengTrack];
     [SSJUmengManager umengShare];
+    [MQManager setScheduledAgentWithAgentId:@"" agentGroupId:SSJMQDefualtGroupId scheduleRule:MQScheduleRulesRedirectGroup];
     
     [self initializeDatabaseWithFinishHandler:^{
         //  启动时强制同步一次

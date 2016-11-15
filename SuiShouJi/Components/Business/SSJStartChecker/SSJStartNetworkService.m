@@ -56,7 +56,7 @@
         self.isInReview = [[results objectForKey:@"review"] boolValue];
         self.remindMassage = [results objectForKey:@"remind"];
         self.startImage = [results objectForKey:@"homeheaderbg"];
-        self.mqGroupId = [results objectForKey:@""];
+        self.mqGroupId = [results objectForKey:@"mqgid"];
     }
 }
 
