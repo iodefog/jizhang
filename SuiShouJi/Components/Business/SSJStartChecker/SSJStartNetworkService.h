@@ -31,6 +31,9 @@
 //  启动页图片
 @property (readonly, nonatomic, copy) NSString *startImage;
 
+//  启动页图片
+@property (readonly, nonatomic, copy) NSString *mqGroupId;
+
 - (void)request;
 
 @end

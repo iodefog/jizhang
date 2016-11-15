@@ -232,34 +232,47 @@ static BOOL kNeedBannerDisplay = YES;
     
     //意见反馈
     if ([title isEqualToString:kTitle5]) {
-        __weak typeof(self) weakSelf = self;
-        [self.feedbackKit makeFeedbackViewControllerWithCompletionBlock:^(YWFeedbackViewController *viewController, NSError *error) {
-            if ( viewController != nil ) {
-
-                viewController.title = @"用户反馈";
-                
-                UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:viewController];
-                [weakSelf presentViewController:nav animated:YES completion:nil];
-                
-                viewController.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"reportForms_left"] style:UIBarButtonItemStylePlain target:self action:@selector(backButtonClicked:)];
-                viewController.navigationController.navigationBar.tintColor = [UIColor ssj_colorWithHex:@"eb4a64"];
-                
-                __weak typeof(nav) weakNav = nav;
-                
-                [viewController setOpenURLBlock:^(NSString *aURLString, UIViewController *aParentController) {
-                    UIViewController *webVC = [[UIViewController alloc] initWithNibName:nil bundle:nil];
-                    UIWebView *webView = [[UIWebView alloc] initWithFrame:webVC.view.bounds];
-                    webView.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
-                    
-                    [webVC.view addSubview:webView];
-                    [weakNav pushViewController:webVC animated:YES];
-                    [webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:aURLString]]];
-                }];
-            } else {
-                NSString *title = [error.userInfo objectForKey:@"msg"]?:@"接口调用失败，请保持网络通畅！";
-                [CDAutoHideMessageHUD showMessage:title];
-            }
+//        __weak typeof(self) weakSelf = self;
+//        [self.feedbackKit makeFeedbackViewControllerWithCompletionBlock:^(YWFeedbackViewController *viewController, NSError *error) {
+//            if ( viewController != nil ) {
+//
+//                viewController.title = @"用户反馈";
+//                
+//                UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:viewController];
+//                [weakSelf presentViewController:nav animated:YES completion:nil];
+//                
+//                viewController.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"reportForms_left"] style:UIBarButtonItemStylePlain target:self action:@selector(backButtonClicked:)];
+//                viewController.navigationController.navigationBar.tintColor = [UIColor ssj_colorWithHex:@"eb4a64"];
+//                
+//                __weak typeof(nav) weakNav = nav;
+//                
+//                [viewController setOpenURLBlock:^(NSString *aURLString, UIViewController *aParentController) {
+//                    UIViewController *webVC = [[UIViewController alloc] initWithNibName:nil bundle:nil];
+//                    UIWebView *webView = [[UIWebView alloc] initWithFrame:webVC.view.bounds];
+//                    webView.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
+//                    
+//                    [webVC.view addSubview:webView];
+//                    [weakNav pushViewController:webVC animated:YES];
+//                    [webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:aURLString]]];
+//                }];
+//            } else {
+//                NSString *title = [error.userInfo objectForKey:@"msg"]?:@"接口调用失败，请保持网络通畅！";
+//                [CDAutoHideMessageHUD showMessage:title];
+//            }
+//        }];
+        SSJUserItem *userItem = [SSJUserTableManager queryUserItemForID:SSJUSERID()];
+        NSDictionary* clientCustomizedAttrs = @{@"userid": userItem.userId ?: @"",
+                                                @"openid": userItem.openId ?: @"",
+                                                @"nickname": userItem.realName ?: @"",
+                                                @"tel": userItem.mobileNo ?: @"",
+                                                @"登录方式": userItem.loginType ?: @"",
+                                                @"注册状态": userItem.registerState ?: @""
+                                                };
+        [MQManager setClientInfo:clientCustomizedAttrs completion:^(BOOL success , NSError *error) {
+            
         }];
+        MQChatViewManager *chatViewManager = [[MQChatViewManager alloc] init];
+        [chatViewManager pushMQChatViewControllerInViewController:self];
     }
     
     //数据导出

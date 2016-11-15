@@ -190,10 +190,14 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
         [self.navigationController pushViewController:billTypeSelectVC animated:YES];
     }
     if ([title isEqualToString:kTitle10]) {
-        NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
-        [dateFormatter setDateFormat:@"yyyy-MM-dd"];
-        NSDate* date = [dateFormatter dateFromString:self.item.billDate];
-        self.chargeCircleTimeView.currentDate = date;
+        if (self.item.billDate.length) {
+            NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
+            [dateFormatter setDateFormat:@"yyyy-MM-dd"];
+            NSDate* date = [dateFormatter dateFromString:self.item.billDate];
+            self.chargeCircleTimeView.currentDate = date;
+        }else{
+            self.chargeCircleTimeView.currentDate = [NSDate date];
+        }
         [self.chargeCircleTimeView show];
     }
     if ([title isEqualToString:kTitle2]) {
@@ -469,7 +473,6 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 -(SSJChargeCircleTimeSelectView *)chargeCircleTimeView{
     if (!_chargeCircleTimeView) {
         _chargeCircleTimeView = [[SSJChargeCircleTimeSelectView alloc]initWithFrame:self.view.bounds];
-        _chargeCircleTimeView.minimumDate = [NSDate date];
         _chargeCircleTimeView.timeIsTooEarlyBlock = ^(){
             [CDAutoHideMessageHUD showMessage:@"不能设置历史日期的周期记账哦"];
         };

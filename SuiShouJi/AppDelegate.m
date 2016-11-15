@@ -157,6 +157,12 @@ NSDate *SCYEnterBackgroundTime() {
     }];
     
     [SSJDomainManager requestDomain];
+    
+    // 美恰sdk设置
+    [MQManager initWithAppkey:SSJMQAppKey completion:^(NSString *clientId, NSError *error) {
+        
+    }];
+    
 
     return YES;
 }
@@ -176,6 +182,8 @@ NSDate *SCYEnterBackgroundTime() {
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
+    //App 进入后台时，关闭美洽服务
+    [MQManager closeMeiqiaService];
     SCYSaveEnterBackgroundTime();
 }
 
@@ -190,6 +198,12 @@ NSDate *SCYEnterBackgroundTime() {
     if (interval >= kLockScreenDelay) {
         [SSJMotionPasswordViewController verifyMotionPasswordIfNeeded:NULL animated:NO];
     }
+    // App 进入前台时，开启美洽服务
+    [MQManager openMeiqiaService];
+}
+
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken{
+    [MQManager registerDeviceToken:deviceToken];
 }
 
 #pragma mark - Getter
