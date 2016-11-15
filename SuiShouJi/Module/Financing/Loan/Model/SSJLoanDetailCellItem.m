@@ -7,7 +7,6 @@
 //
 
 #import "SSJLoanDetailCellItem.h"
-#import "SSJLoanChargeModel.h"
 
 @implementation SSJLoanDetailCellItem
 
@@ -119,7 +118,11 @@
             break;
     }
     
-    return [SSJLoanDetailCellItem itemWithImage:model.icon title:title subtitle:subtitle bottomTitle:bottomTitle];
+    SSJLoanDetailCellItem *item = [SSJLoanDetailCellItem itemWithImage:model.icon title:title subtitle:subtitle bottomTitle:bottomTitle];
+    item.chargeId = model.chargeId;
+    item.chargeType = model.chargeType;
+    
+    return item;
 }
 
 + (NSAttributedString *)bottomTitleWithChargeModel:(SSJLoanChargeModel *)model {

@@ -41,7 +41,9 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
 
 @property (nonatomic, strong) UIBarButtonItem *editItem;
 
-@property (nonatomic, strong) NSArray *cellItems;
+@property (nonatomic, strong) NSMutableArray <SSJLoanDetailCellItem *>*section1Items;
+
+@property (nonatomic, strong) NSMutableArray <SSJLoanDetailCellItem *>*section2Items;
 
 @property (nonatomic, strong) NSArray *headerItems;
 
@@ -56,7 +58,8 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
 #pragma mark - Lifecycle
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-        
+        self.section1Items = [[NSMutableArray alloc] init];
+        self.section2Items = [[NSMutableArray alloc] init];
     }
     return self;
 }
@@ -92,16 +95,27 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
 
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return _cellItems.count;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [[_cellItems ssj_safeObjectAtIndex:section] count];
+    if (section == 0) {
+        return self.section1Items.count;
+    } else if (section == 1) {
+        return self.section2Items.count;
+    } else {
+        return 0;
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     SSJLoanDetailCell *cell = [tableView dequeueReusableCellWithIdentifier:kSSJLoanDetailCellID forIndexPath:indexPath];
-    cell.cellItem = [_cellItems ssj_objectAtIndexPath:indexPath];
+    if (indexPath.section == 0) {
+        cell.cellItem = [self.section1Items ssj_safeObjectAtIndex:indexPath.row];
+    } else if (indexPath.section == 1) {
+        cell.cellItem = [self.section2Items ssj_safeObjectAtIndex:indexPath.row];
+    }
+    
     return cell;
 }
 
@@ -125,7 +139,26 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+    if (indexPath.section == 1) {
+        SSJLoanDetailCellItem *item = [self.section2Items ssj_safeObjectAtIndex:indexPath.row];
+        if (self.loanModel.closeOut
+            || item.chargeType == SSJLoanCompoundChargeTypeCreate
+            || item.chargeType == SSJLoanCompoundChargeTypeBalanceIncrease
+            || item.chargeType == SSJLoanCompoundChargeTypeBalanceDecrease) {
+            
+            SSJLoanChargeDetailViewController *chargeDetailController = [[SSJLoanChargeDetailViewController alloc] init];
+            chargeDetailController.chargeId = item.chargeId;
+            [self.navigationController pushViewController:chargeDetailController animated:YES];
+            
+        } else {
+            
+            SSJLoanChargeAddOrEditViewController *chargeEditController = [[SSJLoanChargeAddOrEditViewController alloc] init];
+            chargeEditController.edited = YES;
+            chargeEditController.chargeId = item.chargeId;
+            [self.navigationController pushViewController:chargeEditController animated:YES];
+            
+        }
+    }
 }
 
 #pragma mark - SSJSeparatorFormViewDataSource
@@ -262,9 +295,9 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     _headerItems = @[@[surplusItem], @[sumItem, interestItem, lenderItem]];
 }
 
-- (void)organiseCellItems {
+- (void)reorganiseSection1Items {
     
-    NSMutableArray *section1 = [[NSMutableArray alloc] init];
+    [self.section1Items removeAllObjects];
     
     if (_loanModel.closeOut) {
         
@@ -288,13 +321,13 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
                 break;
         }
         
-        [section1 addObjectsFromArray:@[[SSJLoanDetailCellItem itemWithImage:@"loan_expires" title:@"结清日" subtitle:closeOutDateStr bottomTitle:nil],
+        [self.section1Items addObjectsFromArray:@[[SSJLoanDetailCellItem itemWithImage:@"loan_expires" title:@"结清日" subtitle:closeOutDateStr bottomTitle:nil],
                                         [SSJLoanDetailCellItem itemWithImage:@"loan_calendar" title:loanDayTitle subtitle:borrowDateStr bottomTitle:nil],
                                         [SSJLoanDetailCellItem itemWithImage:@"loan_closeOut" title:@"结清账户" subtitle:endAccountName bottomTitle:nil],
                                         [SSJLoanDetailCellItem itemWithImage:@"loan_account" title:loanAccountTitle subtitle:accountName bottomTitle:nil]]];
         
         if (_loanModel.memo.length) {
-            [section1 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_memo" title:@"备注" subtitle:_loanModel.memo bottomTitle:nil]];
+            [self.section1Items addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_memo" title:@"备注" subtitle:_loanModel.memo bottomTitle:nil]];
         }
         
     } else {
@@ -312,14 +345,14 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
         }
         
         NSString *borrowDateStr = [_loanModel.borrowDate formattedDateWithFormat:@"yyyy.MM.dd"];
-        [section1 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_calendar" title:loanDateTitle subtitle:borrowDateStr bottomTitle:nil]];
+        [self.section1Items addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_calendar" title:loanDateTitle subtitle:borrowDateStr bottomTitle:nil]];
         
         if (_loanModel.repaymentDate) {
             NSString *repaymentDateStr = [_loanModel.repaymentDate formattedDateWithFormat:@"yyyy.MM.dd"];
-            [section1 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_expires" title:@"还款日" subtitle:repaymentDateStr bottomTitle:nil]];
+            [self.section1Items addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_expires" title:@"还款日" subtitle:repaymentDateStr bottomTitle:nil]];
             
             NSString *expectedInterestStr = [NSString stringWithFormat:@"¥%.2f", [SSJLoanHelper expectedInterestWithLoanModel:_loanModel chargeModels:_chargeModels]];
-            [section1 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_expectedInterest" title:@"预期利息" subtitle:expectedInterestStr bottomTitle:nil]];
+            [self.section1Items addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_expectedInterest" title:@"预期利息" subtitle:expectedInterestStr bottomTitle:nil]];
         } else {
             NSString *remindDateStr = @"关闭";
             if (_loanModel.remindID.length) {
@@ -328,32 +361,30 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
                     remindDateStr = [remindItem.remindDate formattedDateWithFormat:@"yyyy.MM.dd"];
                 }
             }
-            [section1 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_remind" title:@"到期日提醒" subtitle:remindDateStr bottomTitle:nil]];
+            [self.section1Items addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_remind" title:@"到期日提醒" subtitle:remindDateStr bottomTitle:nil]];
             
             double interest = [SSJLoanHelper interestWithPrincipal:self.loanModel.jMoney rate:self.loanModel.rate days:1];
             NSString *expectedInterestStr = [NSString stringWithFormat:@"¥%.2f", interest];
-            [section1 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_expectedInterest" title:@"每天利息" subtitle:expectedInterestStr bottomTitle:nil]];
+            [self.section1Items addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_expectedInterest" title:@"每天利息" subtitle:expectedInterestStr bottomTitle:nil]];
         }
         
         if (_loanModel.memo.length) {
-            [section1 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_memo" title:@"备注" subtitle:_loanModel.memo bottomTitle:nil]];
+            [self.section1Items addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_memo" title:@"备注" subtitle:_loanModel.memo bottomTitle:nil]];
         }
     }
-    
-    _cellItems = @[section1, [self reorganiseChargeListSection]];
 }
 
-- (NSMutableArray *)reorganiseChargeListSection {
-    NSMutableArray *section = [[NSMutableArray alloc] init];
+- (void)reorganiseSection2Items {
+    [self.section2Items removeAllObjects];
+    
     if (self.changeSectionHeaderView.expanded) {
         for (SSJLoanCompoundChargeModel *compoundModel in self.chargeModels) {
-            [section addObject:[SSJLoanDetailCellItem cellItemWithChargeModel:compoundModel.chargeModel]];
+            [self.section2Items addObject:[SSJLoanDetailCellItem cellItemWithChargeModel:compoundModel.chargeModel]];
             if (compoundModel.interestChargeModel) {
-                [section addObject:[SSJLoanDetailCellItem cellItemWithChargeModel:compoundModel.interestChargeModel]];
+                [self.section2Items addObject:[SSJLoanDetailCellItem cellItemWithChargeModel:compoundModel.interestChargeModel]];
             }
         }
     }
-    return section;
 }
 
 - (void)loadData {
@@ -370,14 +401,16 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
             [self updateTitle];
             [self updateSubViewHidden];
             
-            [self organiseCellItems];
-            [self.tableView reloadData];
-            self.tableView.tableHeaderView = self.headerView;
+            [self reorganiseSection1Items];
+            [self reorganiseSection2Items];
             
             [self organiseHeaderItems];
-            [self.headerView reloadData];
             
-            self.changeSectionHeaderView.title = [NSString stringWithFormat:@"变更记录：%d条", (int)list.count];
+            [self.tableView reloadData];
+            [self.headerView reloadData];
+            self.tableView.tableHeaderView = self.headerView;
+            
+            self.changeSectionHeaderView.title = [NSString stringWithFormat:@"变更记录：%d条", (int)self.section2Items.count];
             
             switch (self.loanModel.type) {
                 case SSJLoanTypeLend:
@@ -398,13 +431,23 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
             }
         } failure:^(NSError * _Nonnull error) {
             [self.view ssj_hideLoadingIndicator];
-            [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:nil], nil];
+            [self showError:error];
         }];
         
     } failure:^(NSError * _Nonnull error) {
         [self.view ssj_hideLoadingIndicator];
-        [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:nil], nil];
+        [self showError:error];
     }];
+}
+
+- (void)showError:(NSError *)error {
+    NSString *message = nil;
+#ifdef DEBUG
+    message = [error localizedDescription];
+#else
+    message = SSJ_ERROR_MESSAGE;
+#endif
+    [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:message action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
 }
 
 - (void)deleteLoanModel {
@@ -583,9 +626,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
         _changeSectionHeaderView = [[SSJLoanDetailChargeChangeHeaderView alloc] init];
         _changeSectionHeaderView.expanded = YES;
         _changeSectionHeaderView.tapHandle = ^(SSJLoanDetailChargeChangeHeaderView *view) {
-            NSMutableArray *section = [wself.cellItems ssj_safeObjectAtIndex:1];
-            [section removeAllObjects];
-            [section addObjectsFromArray:[wself reorganiseChargeListSection]];
+            [wself reorganiseSection2Items];
             [wself.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
         };
     }
@@ -598,6 +639,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
         _changeChargeSelectionView = [[SSJLoanChangeChargeSelectionControl alloc] initWithLoanType:_loanModel.type];
         _changeChargeSelectionView.selectionHandle = ^(SSJLoanCompoundChargeType value){
             SSJLoanChargeAddOrEditViewController *addOrEditVC = [[SSJLoanChargeAddOrEditViewController alloc] init];
+            addOrEditVC.edited = NO;
             addOrEditVC.loanId = wself.loanID;
             addOrEditVC.chargeType = value;
             [wself.navigationController pushViewController:addOrEditVC animated:YES];

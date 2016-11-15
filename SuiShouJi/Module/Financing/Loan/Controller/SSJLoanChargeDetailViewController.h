@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface SSJLoanChargeDetailViewController : SSJBaseViewController
 
-@property (nonatomic, copy) SSJLoanChargeModel *model;
+@property (nonatomic, copy) NSString *chargeId;
 
 @end
 

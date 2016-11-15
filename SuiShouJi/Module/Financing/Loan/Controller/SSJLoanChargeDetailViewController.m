@@ -41,20 +41,18 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     [self updateTitle];
     [self showDeleteItemIfNeeded];
     [self.view addSubview:self.tableView];
+    [self updateAppearance];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    [self.view ssj_showLoadingIndicator];
-    [SSJLoanHelper queryLoanChangeDetailWithLoanChargeModel:_model success:^(SSJLoanCompoundChargeModel * _Nonnull model) {
-        [self.view ssj_hideLoadingIndicator];
-        [self organiseCellItems];
-        [self.tableView reloadData];
-    } failure:^(NSError * _Nonnull error) {
-        [self.view ssj_hideLoadingIndicator];
-        [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
-    }];
+    [self loadData];
+}
+
+- (void)updateAppearanceAfterThemeChanged {
+    [super updateAppearanceAfterThemeChanged];
+    [self updateAppearance];
 }
 
 #pragma mark - UITableViewDataSource
@@ -73,13 +71,33 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
 }
 
 #pragma mark - UITableViewDelegate
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 10;
+}
 
 #pragma mark - Private
+- (void)loadData {
+    [self.view ssj_showLoadingIndicator];
+    [SSJLoanHelper queryLoanCompoundChangeModelWithChargeId:self.chargeId success:^(SSJLoanCompoundChargeModel * _Nonnull model) {
+        [self.view ssj_hideLoadingIndicator];
+        self.compoundModel = model;
+        [self organiseCellItems];
+        [self.tableView reloadData];
+    } failure:^(NSError * _Nonnull error) {
+        [self.view ssj_hideLoadingIndicator];
+        [self showError:error];
+    }];
+}
+
+- (void)updateAppearance {
+    _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
+}
+
 - (void)showDeleteItemIfNeeded {
     // 只有未结清状态下，并且是余额变更才能显示删除按钮
-    if (!_compoundModel.closeOut) {
-        if (_model.chargeType == SSJLoanCompoundChargeTypeBalanceIncrease
-            || _model.chargeType == SSJLoanCompoundChargeTypeBalanceDecrease) {
+    if (!self.compoundModel.closeOut) {
+        if (self.compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeBalanceIncrease
+            || self.compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeBalanceDecrease) {
             [self.navigationItem setRightBarButtonItem:self.deleteItem animated:YES];
         }
     }
@@ -176,7 +194,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     NSString *accountTitle = nil;
     NSString *lenderTitle = nil;
     
-    switch (_model.type) {
+    switch (self.compoundModel.chargeModel.type) {
         case SSJLoanTypeLend:
             moneyTitle = @"借出金额";
             dateTitle = @"借出日期";
@@ -195,26 +213,26 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     NSMutableArray *section_1 = [[NSMutableArray alloc] init];
     NSMutableArray *section_2 = [[NSMutableArray alloc] init];
     
-    NSString *money = [NSString stringWithFormat:@"%.2f", _model.money];
+    NSString *money = [NSString stringWithFormat:@"%.2f", self.compoundModel.chargeModel.money];
     [section_1 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_money"
                                                         title:moneyTitle
                                                      subtitle:money
                                                   bottomTitle:nil]];
     
-    NSString *accountName = [SSJLoanHelper queryForFundNameWithID:_compoundModel.targetChargeModel.fundId];
+    NSString *accountName = [SSJLoanHelper queryForFundNameWithID:self.compoundModel.targetChargeModel.fundId];
     [section_1 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_account"
                                                         title:accountTitle
                                                      subtitle:accountName
                                                   bottomTitle:nil]];
     
-    if (_model.memo.length) {
+    if (self.compoundModel.chargeModel.memo.length) {
         [section_2 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_memo"
                                                             title:@"备注"
-                                                         subtitle:_model.memo
+                                                         subtitle:self.compoundModel.chargeModel.memo
                                                       bottomTitle:nil]];
     }
     
-    NSString *dateStr = [_model.billDate formattedDateWithFormat:@"yyyy.MM.dd"];
+    NSString *dateStr = [self.compoundModel.chargeModel.billDate formattedDateWithFormat:@"yyyy.MM.dd"];
     [section_2 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_calendar"
                                                         title:dateTitle
                                                      subtitle:dateStr
@@ -222,7 +240,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     
     [section_2 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_person"
                                                         title:lenderTitle
-                                                     subtitle:_compoundModel.lender
+                                                     subtitle:self.compoundModel.lender
                                                   bottomTitle:nil]];
     
     [_cellItems removeAllObjects];
@@ -238,7 +256,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     NSString *dateTitle = @"更改日期";
     NSString *lenderTitle = nil;
     
-    switch (_model.type) {
+    switch (self.compoundModel.chargeModel.type) {
         case SSJLoanTypeLend:
             moneyTitle = @"剩余借出款余额变更";
             lenderTitle = @"被谁借款";
@@ -253,7 +271,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     NSMutableArray *section_1 = [[NSMutableArray alloc] init];
     NSMutableArray *section_2 = [[NSMutableArray alloc] init];
     
-    NSString *money = [NSString stringWithFormat:@"%.2f", _model.money];
+    NSString *money = [NSString stringWithFormat:@"%.2f", self.compoundModel.chargeModel.money];
     [section_1 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_money"
                                                         title:moneyTitle
                                                      subtitle:money
@@ -265,14 +283,14 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
                                                      subtitle:accountName
                                                   bottomTitle:nil]];
     
-    if (_model.memo.length) {
+    if (self.compoundModel.chargeModel.memo.length) {
         [section_2 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_memo"
                                                             title:memoTitle
-                                                         subtitle:_model.memo
+                                                         subtitle:self.compoundModel.chargeModel.memo
                                                       bottomTitle:nil]];
     }
     
-    NSString *dateStr = [_model.billDate formattedDateWithFormat:@"yyyy.MM.dd"];
+    NSString *dateStr = [self.compoundModel.chargeModel.billDate formattedDateWithFormat:@"yyyy.MM.dd"];
     [section_2 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_calendar"
                                                         title:dateTitle
                                                      subtitle:dateStr
@@ -280,7 +298,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     
     [section_2 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_person"
                                                         title:lenderTitle
-                                                     subtitle:_compoundModel.lender
+                                                     subtitle:self.compoundModel.lender
                                                   bottomTitle:nil]];
     
     [_cellItems removeAllObjects];
@@ -297,7 +315,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     NSString *dateTitle = nil;
     NSString *lenderTitle = nil;
     
-    switch (_model.type) {
+    switch (self.compoundModel.chargeModel.type) {
         case SSJLoanTypeLend:
             moneyTitle = @"收款金额";
             interestTitle = @"利息收入";
@@ -318,14 +336,14 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     NSMutableArray *section_1 = [[NSMutableArray alloc] init];
     NSMutableArray *section_2 = [[NSMutableArray alloc] init];
     
-    NSString *money = [NSString stringWithFormat:@"%.2f", _compoundModel.targetChargeModel.money];
+    NSString *money = [NSString stringWithFormat:@"%.2f", self.compoundModel.targetChargeModel.money];
     [section_1 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_money"
                                                         title:moneyTitle
                                                      subtitle:money
                                                   bottomTitle:nil]];
     
     if (_compoundModel.interestChargeModel.money) {
-        NSString *interest = [NSString stringWithFormat:@"%.2f", _compoundModel.interestChargeModel.money];
+        NSString *interest = [NSString stringWithFormat:@"%.2f", self.compoundModel.interestChargeModel.money];
         [section_1 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_yield"
                                                             title:interestTitle
                                                          subtitle:interest
@@ -338,14 +356,14 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
                                                      subtitle:accountName
                                                   bottomTitle:nil]];
     
-    if (_model.memo.length) {
+    if (self.compoundModel.chargeModel.memo.length) {
         [section_2 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_memo"
                                                             title:memoTitle
-                                                         subtitle:_model.memo
+                                                         subtitle:self.compoundModel.chargeModel.memo
                                                       bottomTitle:nil]];
     }
     
-    NSString *dateStr = [_model.billDate formattedDateWithFormat:@"yyyy.MM.dd"];
+    NSString *dateStr = [self.compoundModel.chargeModel.billDate formattedDateWithFormat:@"yyyy.MM.dd"];
     [section_2 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_calendar"
                                                         title:dateTitle
                                                      subtitle:dateStr
@@ -369,7 +387,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     NSString *dateTitle = @"日期";
     NSString *lenderTitle = nil;
     
-    switch (_model.type) {
+    switch (self.compoundModel.chargeModel.type) {
         case SSJLoanTypeLend:
             moneyTitle = @"追加借出金额";
             accountTitle = @"转出账户";
@@ -386,7 +404,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     NSMutableArray *section_1 = [[NSMutableArray alloc] init];
     NSMutableArray *section_2 = [[NSMutableArray alloc] init];
     
-    NSString *money = [NSString stringWithFormat:@"%.2f", _model.money];
+    NSString *money = [NSString stringWithFormat:@"%.2f", self.compoundModel.chargeModel.money];
     [section_1 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_money"
                                                         title:moneyTitle
                                                      subtitle:money
@@ -398,14 +416,14 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
                                                      subtitle:accountName
                                                   bottomTitle:nil]];
     
-    if (_model.memo.length) {
+    if (self.compoundModel.chargeModel.memo.length) {
         [section_2 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_memo"
                                                             title:memoTitle
-                                                         subtitle:_model.memo
+                                                         subtitle:self.compoundModel.chargeModel.memo
                                                       bottomTitle:nil]];
     }
     
-    NSString *dateStr = [_model.billDate formattedDateWithFormat:@"yyyy.MM.dd"];
+    NSString *dateStr = [self.compoundModel.chargeModel.billDate formattedDateWithFormat:@"yyyy.MM.dd"];
     [section_2 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_calendar"
                                                         title:dateTitle
                                                      subtitle:dateStr
@@ -429,7 +447,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     NSString *dateTitle = @"结清日";
     NSString *lenderTitle = nil;
     
-    switch (_model.type) {
+    switch (self.compoundModel.chargeModel.type) {
         case SSJLoanTypeLend:
             moneyTitle = @"借出款金额";
             interestTitle = @"利息收入";
@@ -448,27 +466,27 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     NSMutableArray *section_1 = [[NSMutableArray alloc] init];
     NSMutableArray *section_2 = [[NSMutableArray alloc] init];
     
-    NSString *money = [NSString stringWithFormat:@"%.2f", _compoundModel.targetChargeModel.money];
+    NSString *money = [NSString stringWithFormat:@"%.2f", self.compoundModel.targetChargeModel.money];
     [section_1 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_money"
                                                         title:moneyTitle
                                                      subtitle:money
                                                   bottomTitle:nil]];
     
     if (_compoundModel.interestChargeModel.money) {
-        NSString *interest = [NSString stringWithFormat:@"%.2f", _compoundModel.interestChargeModel.money];
+        NSString *interest = [NSString stringWithFormat:@"%.2f", self.compoundModel.interestChargeModel.money];
         [section_1 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_yield"
                                                             title:interestTitle
                                                          subtitle:interest
                                                       bottomTitle:nil]];
     }
     
-    NSString *accountName = [SSJLoanHelper queryForFundNameWithID:_compoundModel.targetChargeModel.fundId];
+    NSString *accountName = [SSJLoanHelper queryForFundNameWithID:self.compoundModel.targetChargeModel.fundId];
     [section_1 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_account"
                                                         title:accountTitle
                                                      subtitle:accountName
                                                   bottomTitle:nil]];
     
-    NSString *dateStr = [_model.billDate formattedDateWithFormat:@"yyyy.MM.dd"];
+    NSString *dateStr = [self.compoundModel.chargeModel.billDate formattedDateWithFormat:@"yyyy.MM.dd"];
     [section_2 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_calendar"
                                                         title:dateTitle
                                                      subtitle:dateStr
@@ -476,12 +494,22 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     
     [section_2 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_person"
                                                         title:lenderTitle
-                                                     subtitle:_compoundModel.lender
+                                                     subtitle:self.compoundModel.lender
                                                   bottomTitle:nil]];
     
     [_cellItems removeAllObjects];
     [_cellItems addObject:section_1];
     [_cellItems addObject:section_2];
+}
+
+- (void)showError:(NSError *)error {
+    NSString *message = nil;
+#ifdef DEBUG
+    message = [error localizedDescription];
+#else
+    message = SSJ_ERROR_MESSAGE;
+#endif
+    [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:message action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
 }
 
 #pragma mark - Event
@@ -512,7 +540,6 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
         _tableView.backgroundView = nil;
         _tableView.backgroundColor = [UIColor clearColor];
         [_tableView setSeparatorInset:UIEdgeInsetsZero];
-        _tableView.sectionHeaderHeight = 10;
         _tableView.sectionFooterHeight = 0;
         _tableView.rowHeight = 54;
         [_tableView registerClass:[SSJLoanDetailCell class] forCellReuseIdentifier:kSSJLoanDetailCellID];

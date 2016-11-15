@@ -151,7 +151,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param success 成功的回调
  @param failure 失败的回调
  */
-+ (void)queryLoanChangeDetailWithLoanChargeModel:(SSJLoanChargeModel *)model
++ (void)queryLoanCompoundChangeModelWithChargeId:(NSString *)chargeId
                                          success:(void (^)(SSJLoanCompoundChargeModel *model))success
                                          failure:(void (^)(NSError *error))failure;
 

@@ -286,6 +286,7 @@ static NSUInteger kClostOutDateTag = 1004;
     }
 }
 
+// 如果外部没有传入结清日期，就取大于等于今天的变更流水日期
 - (void)initEndDate {
     if (!_loanModel.endDate) {
         NSDate *endDate = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:[NSDate date].day];
