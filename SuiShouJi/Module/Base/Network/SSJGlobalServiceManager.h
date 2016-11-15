@@ -21,12 +21,12 @@
 @property (nonatomic, assign) AFSSLPinningMode SSLPinningMode;
 
 /**
- *  是否允许无效或过期的证书，默认为YES
+ *  是否允许无效或过期的证书
  */
 @property (nonatomic, assign) BOOL allowInvalidCertificates;
 
 /**
- *  是否开启域名验证，默认为YES
+ *  是否开启域名验证
  */
 @property (nonatomic, assign) BOOL validatesDomainName;
 

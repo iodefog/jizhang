@@ -34,6 +34,7 @@
 #import "SSJLocalNotificationStore.h"
 #import "SSJLocalNotificationHelper.h"
 #import "SSJDomainManager.h"
+#import "SSJGlobalServiceManager.h"
 
 //
 static const NSTimeInterval kTimeoutInterval = 30;
@@ -320,10 +321,8 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
     request.timeoutInterval = kTimeoutInterval;
     
     //  开始上传
-    AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+    SSJGlobalServiceManager *manager = [SSJGlobalServiceManager sharedManager];
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    
-    //    NSProgress *progress = nil;
     NSURLSessionUploadTask *task = [manager uploadTaskWithStreamedRequest:request progress:nil completionHandler:completionHandler];
     [task resume];
 }

@@ -201,14 +201,7 @@ static NSUInteger kClostOutDateTag = 1004;
             
             [self.view ssj_hideLoadingIndicator];
             
-            if (!_loanModel.endDate) {
-                NSDate *endDate = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:[NSDate date].day];
-                for (SSJLoanCompoundChargeModel *compoundModel in self.chargeModels) {
-                    endDate = [endDate isLaterThan:compoundModel.chargeModel.billDate] ? endDate : compoundModel.chargeModel.billDate;
-                }
-                _loanModel.endDate = endDate;
-            }
-            
+            [self initEndDate];
             [self initCompoundModel];
             
             [self organiseTitles];
@@ -290,6 +283,16 @@ static NSUInteger kClostOutDateTag = 1004;
         return kAddOrEditLoanLabelCellId;
     } else {
         return nil;
+    }
+}
+
+- (void)initEndDate {
+    if (!_loanModel.endDate) {
+        NSDate *endDate = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:[NSDate date].day];
+        for (SSJLoanCompoundChargeModel *compoundModel in self.chargeModels) {
+            endDate = [endDate isLaterThan:compoundModel.chargeModel.billDate] ? endDate : compoundModel.chargeModel.billDate;
+        }
+        _loanModel.endDate = endDate;
     }
 }
 
