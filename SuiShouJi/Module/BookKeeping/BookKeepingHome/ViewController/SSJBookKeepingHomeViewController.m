@@ -107,7 +107,6 @@ BOOL kHomeNeedLoginPop;
     }];
 //    _hasLoad = YES;
     [self popIfNeeded];
-    self.tableView.contentInset = UIEdgeInsetsMake(46, 0, 0, 0);
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
     self.extendedLayoutIncludesOpaqueBars = YES;
     [self getCurrentDate];
@@ -181,7 +180,7 @@ BOOL kHomeNeedLoginPop;
     self.homeBar.leftTop = CGPointMake(0, 0);
     self.bookKeepingHeader.size = CGSizeMake(self.view.width, 136);
     self.bookKeepingHeader.top = self.homeBar.bottom;
-    self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.bookKeepingHeader.bottom - 49);
+    self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.bookKeepingHeader.bottom);
     self.tableView.top = self.bookKeepingHeader.bottom;
     self.clearView.frame = self.view.frame;
     self.homeButton.size = CGSizeMake(106, 106);
@@ -510,6 +509,7 @@ BOOL kHomeNeedLoginPop;
 -(SSJHomeTableView *)tableView{
     if (!_tableView) {
         _tableView = [[SSJHomeTableView alloc]init];
+        _tableView.contentInset = UIEdgeInsetsMake(46, 0, 48, 0);
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.showsVerticalScrollIndicator = NO;
