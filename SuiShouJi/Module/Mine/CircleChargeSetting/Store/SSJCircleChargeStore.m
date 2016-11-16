@@ -77,7 +77,7 @@
         NSString *userid = SSJUSERID();
         SSJBillingChargeCellItem *item = [[SSJBillingChargeCellItem alloc]init];
         item.billDate = [[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"];
-        item.billId = [db stringForQuery:@"select a.id from bk_bill_type as a , bk_user_bill as b where b.istate = 1 and b.cuserid = ? and a.id = b.cbillid and a.itype = ? order by b.iorder limit 1",userid,@(incomeOrExpence)];
+        item.billId = [db stringForQuery:@"select a.id from bk_bill_type as a , bk_user_bill as b where b.istate = 1 and b.cuserid = ? and a.id = b.cbillid and a.itype = ? and b.cbooksid = ? order by b.iorder limit 1",userid,@(incomeOrExpence),booksId];
         item.typeName = [db stringForQuery:@"select cname from bk_bill_type where id = ?",item.billId];
         item.booksName = [db stringForQuery:@"select cbooksname from bk_books_type where cbooksid = ?",booksId];
         item.fundId = [db stringForQuery:@"select cfundid from bk_fund_info where cuserid = ? and operatortype <> 2 order by iorder limit 1",userid];
