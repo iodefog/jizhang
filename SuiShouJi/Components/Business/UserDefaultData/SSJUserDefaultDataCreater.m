@@ -337,14 +337,19 @@
         int state = [billTypeResult intForColumn:@"istate"];
         NSString *order = [billTypeResult stringForColumn:@"defaultOrder"];
         NSString *booksId;
-        if (![billTypeResult intForColumn:@"ibookstype"]) {
-            booksId = userID;
-        }else{
-            booksId = [NSString stringWithFormat:@"%@-%d",userID,[billTypeResult intForColumn:@"ibookstype"]];
-        }
+        NSString *booksTypes = [billTypeResult stringForColumn:@"ibookstype"];
+        NSArray *booksTypeArr = [booksTypes componentsSeparatedByString:@","];
         
-        BOOL executeSuccessfull = [db executeUpdate:@"insert into BK_USER_BILL (CUSERID, CBILLID, ISTATE, IORDER, CWRITEDATE, IVERSION, OPERATORTYPE, CBOOKSID) select ?, ?, ?, ?, ?, ?, 1 , ? where not exists (select * from BK_USER_BILL where CBILLID = ? and cuserid = ? and cbooksid = ?)", userID, billId, @(state), order, date, @(SSJSyncVersion()), booksId, billId, userID, booksId];
-        successfull = successfull && executeSuccessfull;
+        for (NSString *booksType in booksTypeArr) {
+            if (![booksType integerValue]) {
+                booksId = userID;
+            }else{
+                booksId = [NSString stringWithFormat:@"%@-%@",userID,booksType] ;
+                state = 1;
+            }
+            BOOL executeSuccessfull = [db executeUpdate:@"insert into BK_USER_BILL (CUSERID, CBILLID, ISTATE, IORDER, CWRITEDATE, IVERSION, OPERATORTYPE, CBOOKSID) select ?, ?, ?, ?, ?, ?, 1 , ? where not exists (select * from BK_USER_BILL where CBILLID = ? and cuserid = ? and cbooksid = ?)", userID, billId, @(state), order, date, @(SSJSyncVersion()), booksId, billId, userID, booksId];
+            successfull = successfull && executeSuccessfull;
+        }
     }
     
     [billTypeResult close];
