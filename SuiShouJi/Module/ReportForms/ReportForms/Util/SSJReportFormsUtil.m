@@ -88,11 +88,13 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
         [result close];
         
         if (list.count) {
-            SSJDatePeriod *period = [SSJDatePeriod datePeriodWithPeriodType:SSJDatePeriodTypeYear date:lastDate];
-            [list addObject:period];
-            
             SSJDatePeriod *firstPeriod = [list firstObject];
             SSJDatePeriod *lastPeriod = [list lastObject];
+            
+            // 增加最后一个年周期
+            [list addObject:[SSJDatePeriod datePeriodWithPeriodType:SSJDatePeriodTypeYear date:lastDate]];
+            
+            // 增加合计（即最开始的日期到当前日期）
             [list addObject:[SSJDatePeriod datePeriodWithStartDate:firstPeriod.startDate endDate:lastPeriod.endDate]];
         }
         
