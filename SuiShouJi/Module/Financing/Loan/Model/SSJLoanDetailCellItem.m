@@ -32,6 +32,7 @@
 }
 
 + (SSJLoanDetailCellItem *)cellItemWithChargeModel:(SSJLoanChargeModel *)model {
+    NSString *icon = nil;
     NSString *title = nil;
     NSString *subtitle = nil;
     NSAttributedString *bottomTitle = nil;
@@ -40,37 +41,44 @@
         case SSJLoanTypeLend:
             switch (model.chargeType) {
                 case SSJLoanCompoundChargeTypeCreate:
+                    icon = @"loan_lend";
                     title = @"借出";
                     subtitle = [NSString stringWithFormat:@"＋%.2f", model.money];
                     break;
                     
                 case SSJLoanCompoundChargeTypeBalanceIncrease:
-                    title = @"剩余借出款余额变更";
+                    icon = @"loan_balance";
+                    title = @"剩余借出款更改";
                     subtitle = [NSString stringWithFormat:@"＋%.2f", model.money];
                     bottomTitle = [self bottomTitleWithChargeModel:model];
                     break;
                 case SSJLoanCompoundChargeTypeBalanceDecrease:
-                    title = @"剩余借出款余额变更";
+                    icon = @"loan_balance";
+                    title = @"剩余借出款更改";
                     subtitle = [NSString stringWithFormat:@"－%.2f", model.money];
                     bottomTitle = [self bottomTitleWithChargeModel:model];
                     break;
                     
                 case SSJLoanCompoundChargeTypeRepayment:
+                    icon = @"loan_receipt";
                     title = @"收款";
                     subtitle = [NSString stringWithFormat:@"－%.2f", model.money];
                     break;
                     
                 case SSJLoanCompoundChargeTypeAdd:
+                    icon = @"loan_append";
                     title = @"追加借出";
                     subtitle = [NSString stringWithFormat:@"＋%.2f", model.money];
                     break;
                     
                 case SSJLoanCompoundChargeTypeCloseOut:
+                    icon = @"loan_lend";
                     title = @"借出款结清";
                     subtitle = [NSString stringWithFormat:@"－%.2f", model.money];
                     break;
                     
                 case SSJLoanCompoundChargeTypeInterest:
+                    icon = @"loan_interest_charge";
                     title = @"利息收入";
                     subtitle = [NSString stringWithFormat:@"＋%.2f", model.money];
                     break;
@@ -80,37 +88,44 @@
         case SSJLoanTypeBorrow:
             switch (model.chargeType) {
                 case SSJLoanCompoundChargeTypeCreate:
+                    icon = @"loan_debt";
                     title = @"欠款";
                     subtitle = [NSString stringWithFormat:@"－%.2f", model.money];
                     break;
                     
                 case SSJLoanCompoundChargeTypeBalanceIncrease:
-                    title = @"剩余借出款余额变更";
+                    icon = @"loan_balance";
+                    title = @"剩余欠款更改";
                     subtitle = [NSString stringWithFormat:@"－%.2f", model.money];
                     bottomTitle = [self bottomTitleWithChargeModel:model];
                     break;
                 case SSJLoanCompoundChargeTypeBalanceDecrease:
-                    title = @"剩余借出款余额变更";
+                    icon = @"loan_balance";
+                    title = @"剩余欠款更改";
                     subtitle = [NSString stringWithFormat:@"＋%.2f", model.money];
                     bottomTitle = [self bottomTitleWithChargeModel:model];
                     break;
                     
                 case SSJLoanCompoundChargeTypeRepayment:
+                    icon = @"loan_repayment";
                     title = @"还款";
                     subtitle = [NSString stringWithFormat:@"＋%.2f", model.money];
                     break;
                     
                 case SSJLoanCompoundChargeTypeAdd:
+                    icon = @"loan_append";
                     title = @"追加欠款";
                     subtitle = [NSString stringWithFormat:@"－%.2f", model.money];
                     break;
                     
                 case SSJLoanCompoundChargeTypeCloseOut:
+                    icon = @"loan_debt";
                     title = @"欠款结清";
                     subtitle = [NSString stringWithFormat:@"＋%.2f", model.money];
                     break;
                     
                 case SSJLoanCompoundChargeTypeInterest:
+                    icon = @"loan_interest_charge";
                     title = @"利息支出";
                     subtitle = [NSString stringWithFormat:@"－%.2f", model.money];
                     break;
@@ -118,7 +133,7 @@
             break;
     }
     
-    SSJLoanDetailCellItem *item = [SSJLoanDetailCellItem itemWithImage:model.icon title:title subtitle:subtitle bottomTitle:bottomTitle];
+    SSJLoanDetailCellItem *item = [SSJLoanDetailCellItem itemWithImage:icon title:title subtitle:subtitle bottomTitle:bottomTitle];
     item.chargeId = model.chargeId;
     item.chargeType = model.chargeType;
     
