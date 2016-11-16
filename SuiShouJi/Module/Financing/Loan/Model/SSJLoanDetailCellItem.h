@@ -7,10 +7,9 @@
 //
 
 #import "SSJBaseItem.h"
+#import "SSJLoanChargeModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
-
-@class SSJLoanChargeModel;
 
 @interface SSJLoanDetailCellItem : SSJBaseItem
 
@@ -23,6 +22,13 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy, nullable) NSAttributedString *bottomTitle;
 
 @property (nonatomic, readonly) CGFloat cellHeight;
+
+/**
+ 在借贷详情的流水列表中，一个流水列表可能对应2个SSJLoanDetailCellItem，需要用过ID查找对应的流水模型
+ */
+@property (nonatomic, copy) NSString *chargeId;
+
+@property (nonatomic) SSJLoanCompoundChargeType chargeType;
 
 + (instancetype)itemWithImage:(NSString *)image
                         title:(NSString *)title

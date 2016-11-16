@@ -16,19 +16,27 @@ NS_ASSUME_NONNULL_BEGIN
 @interface SSJLoanChargeAddOrEditViewController : SSJBaseViewController
 
 /**
- 借贷id（注意：新建必传，编辑不传）
+ 是否编辑
  */
-@property (nonatomic, copy, nullable) NSString *loanId;
+@property (nonatomic) BOOL edited;
 
 /**
- 指定是追加还是还款，只有SSJLoanCompoundChargeTypeRepayment和SSJLoanCompoundChargeTypeAdd两个值有效（注意：无论新建还是编辑必传）
+ 指定是追加还是还款，只有SSJLoanCompoundChargeTypeRepayment和SSJLoanCompoundChargeTypeAdd两个值有效
+ 注意：新建必传，编辑不传
  */
 @property (nonatomic) SSJLoanCompoundChargeType chargeType;
 
 /**
- 借贷流水复合模型（注意：编辑必传，新建不传）
+ 借贷id
+ 注意：新建必传，编辑不传
  */
-@property (nonatomic, copy, nullable) SSJLoanCompoundChargeModel *compoundModel;
+@property (nonatomic, copy, nullable) NSString *loanId;
+
+/**
+ 流水id，根据此id查询其余借贷流水，必须是借贷产生的流水
+ 注意：新建不传，编辑必传
+ */
+@property (nonatomic, copy, nullable) NSString *chargeId;
 
 @end
 

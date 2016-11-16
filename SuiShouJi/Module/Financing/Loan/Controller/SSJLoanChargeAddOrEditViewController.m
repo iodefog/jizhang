@@ -8,6 +8,7 @@
 
 #import "SSJLoanChargeAddOrEditViewController.h"
 #import "SSJFundingTypeSelectViewController.h"
+#import "SSJLoanCloseOutViewController.h"
 #import "SSJAddOrEditLoanLabelCell.h"
 #import "SSJAddOrEditLoanTextFieldCell.h"
 #import "TPKeyboardAvoidingTableView.h"
@@ -42,7 +43,7 @@ static NSUInteger kDateTag = 1005;
 
 @property (nonatomic, strong) SSJLoanModel *loanModel;
 
-@property (nonatomic) BOOL edited;
+@property (nonatomic, strong) SSJLoanCompoundChargeModel *compoundModel;
 
 @property (nonatomic, strong) NSArray *cellTags;
 
@@ -68,7 +69,6 @@ static NSUInteger kDateTag = 1005;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.edited = self.compoundModel;
     [self showDeleteItemIfNeeded];
     [self.view addSubview:self.tableView];
     self.tableView.tableFooterView = self.footerView;
@@ -252,7 +252,19 @@ static NSUInteger kDateTag = 1005;
 
 #pragma mark - Event
 - (void)deleteItemAction {
-    
+    [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"您确认删除该记录" action:[SSJAlertViewAction actionWithTitle:@"取消" handler:NULL], [SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction *action) {
+        
+        self.navigationItem.rightBarButtonItem.enabled = NO;
+        [SSJLoanHelper deleteLoanCompoundChargeModel:self.compoundModel success:^{
+            self.navigationItem.rightBarButtonItem.enabled = YES;
+            [CDAutoHideMessageHUD showMessage:@"删除成功"];
+            [self goBackAction];
+        } failure:^(NSError * _Nonnull error) {
+            self.navigationItem.rightBarButtonItem.enabled = YES;
+            [self showError:error];
+        }];
+        
+    }], nil];
 }
 
 - (void)sureButtonAction {
@@ -268,6 +280,7 @@ static NSUInteger kDateTag = 1005;
         [SSJLoanHelper saveLoanModel:self.loanModel chargeModels:@[self.compoundModel] remindModel:nil success:^{
             self.sureButton.enabled = YES;
             [self.sureButton ssj_hideLoadingIndicator];
+            [CDAutoHideMessageHUD showMessage:@"保存成功"];
             [self goBackAction];
         } failure:^(NSError * _Nonnull error) {
             self.sureButton.enabled = YES;
@@ -343,12 +356,32 @@ static NSUInteger kDateTag = 1005;
 
 - (void)loadData {
     [self.view ssj_showLoadingIndicator];
-    [SSJLoanHelper queryForLoanModelWithLoanID:(_edited ? self.compoundModel.chargeModel.loanId : self.loanId) success:^(SSJLoanModel * _Nonnull model) {
+    
+    if (self.edited) {
+        [SSJLoanHelper queryLoanCompoundChangeModelWithChargeId:self.chargeId success:^(SSJLoanCompoundChargeModel * _Nonnull model) {
+            self.compoundModel = model;
+            self.chargeType = self.compoundModel.chargeModel.chargeType;
+            [self loadLoanModelAndFundListWithLoanId:self.compoundModel.chargeModel.loanId];
+        } failure:^(NSError * _Nonnull error) {
+            [self.view ssj_hideLoadingIndicator];
+            [self showError:error];
+        }];
+    } else {
+        [self loadLoanModelAndFundListWithLoanId:self.loanId];
+    }
+}
+
+- (void)loadLoanModelAndFundListWithLoanId:(NSString *)loanId {
+    [SSJLoanHelper queryForLoanModelWithLoanID:loanId success:^(SSJLoanModel * _Nonnull model) {
         [SSJLoanHelper queryFundModelListWithSuccess:^(NSArray <SSJLoanFundAccountSelectionViewItem *>*items) {
             
             [self.view ssj_hideLoadingIndicator];
             
             self.loanModel = model;
+            
+            if (!_edited) {
+                [self initCompoundModel];
+            }
             
             if (self.surplus == 0) {
                 if (self.chargeType == SSJLoanCompoundChargeTypeRepayment) {
@@ -356,10 +389,6 @@ static NSUInteger kDateTag = 1005;
                 } else if (self.chargeType == SSJLoanCompoundChargeTypeAdd) {
                     self.surplus = self.loanModel.jMoney - self.compoundModel.chargeModel.money;
                 }
-            }
-            
-            if (!_edited) {
-                [self initCompoundModel];
             }
             
             [self updateTitle];
@@ -438,6 +467,7 @@ static NSUInteger kDateTag = 1005;
         chargeModel.loanId = self.loanModel.ID;
         chargeModel.userId = SSJUSERID();
         chargeModel.billDate = billDate;
+        chargeModel.chargeType = self.chargeType;
         
         SSJLoanChargeModel *targetChargeModel = [[SSJLoanChargeModel alloc] init];
         targetChargeModel.chargeId = SSJUUID();
@@ -446,6 +476,7 @@ static NSUInteger kDateTag = 1005;
         targetChargeModel.loanId = self.loanModel.ID;
         targetChargeModel.userId = SSJUSERID();
         targetChargeModel.billDate = billDate;
+        targetChargeModel.chargeType = self.chargeType;
         
         _compoundModel = [[SSJLoanCompoundChargeModel alloc] init];
         _compoundModel.chargeModel = chargeModel;
@@ -463,6 +494,8 @@ static NSUInteger kDateTag = 1005;
             interestModel.loanId = self.loanModel.ID;
             interestModel.userId = SSJUSERID();
             interestModel.billDate = billDate;
+            interestModel.chargeType = SSJLoanCompoundChargeTypeInterest;
+            
             _compoundModel.interestChargeModel = interestModel;
         }
     }
@@ -612,7 +645,11 @@ static NSUInteger kDateTag = 1005;
             }
             SSJAlertViewAction *cancelAction = [SSJAlertViewAction actionWithTitle:@"取消" handler:NULL];
             SSJAlertViewAction *sureAction = [SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction * _Nonnull action) {
-                
+                SSJLoanCloseOutViewController *closeOutController = [[SSJLoanCloseOutViewController alloc] init];
+                closeOutController.loanModel = self.loanModel;
+                closeOutController.loanModel.endTargetFundID = self.compoundModel.targetChargeModel.fundId;
+                closeOutController.loanModel.endDate = self.compoundModel.targetChargeModel.billDate;
+                [self.navigationController pushViewController:closeOutController animated:YES];
             }];
             [SSJAlertViewAdapter showAlertViewWithTitle:nil message:message action:cancelAction, sureAction, nil];
             
@@ -711,6 +748,7 @@ static NSUInteger kDateTag = 1005;
             weakSelf.compoundModel.targetChargeModel.billDate = view.selectedDate;
             weakSelf.compoundModel.interestChargeModel.billDate = view.selectedDate;
             [weakSelf updateInterest];
+            [weakSelf.tableView reloadData];
         };
         _dateSelectionView.shouldSelectDateAction = ^BOOL(SSJLoanDateSelectionView *view, NSDate *date) {
             if ([date compare:weakSelf.loanModel.borrowDate] == NSOrderedAscending) {
