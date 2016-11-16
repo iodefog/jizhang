@@ -26,7 +26,8 @@
 #import "SSJCreditCardDetailHeader.h"
 #import "SSJCreditCardListDetailItem.h"
 #import "SSJCreditCardListCell.h"
-#import "SSJInterestDetailViewController.h"
+#import "SSJLoanChargeDetailViewController.h"
+#import "SSJLoanChargeAddOrEditViewController.h"
 
 #import "FMDB.h"
 
@@ -233,27 +234,32 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
         if ([item isKindOfClass:[SSJBillingChargeCellItem class]]) {
             
             SSJBillingChargeCellItem *cellItem = (SSJBillingChargeCellItem *)item;
+            int billId = [cellItem.billId intValue];
             
-            if (cellItem.billId.length > 4
-                || [cellItem.billId integerValue] >= 1000) {
-                SSJCalenderDetailViewController *calenderDetailVC = [[SSJCalenderDetailViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
-                calenderDetailVC.item = (SSJBillingChargeCellItem *)item;
-                [self.navigationController pushViewController:calenderDetailVC animated:YES];
-            }
-            
-            if (([cellItem.billId integerValue] == 3
-                 || [cellItem.billId integerValue] == 4)
-                 && ![cellItem.transferSource isEqualToString:cellItem.typeName]) {
-                SSJFundingTransferEditeViewController *transferVc = [[SSJFundingTransferEditeViewController alloc] init];
-                transferVc.chargeItem = (SSJBillingChargeCellItem*)item;
-                [self.navigationController pushViewController:transferVc animated:YES];
-            }
-            
-            if ([cellItem.billId integerValue] == 5
-                || [cellItem.billId integerValue] == 6) {
-                SSJInterestDetailViewController *interestVc = [[SSJInterestDetailViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
-                interestVc.loanId = ((SSJBillingChargeCellItem*)item).loanId;
-                [self.navigationController pushViewController:interestVc animated:YES];
+            if (cellItem.loanId) {
+                // 满足以下条件跳转详情页面，否则跳转编辑页面
+                // 1.借贷已结清 2.流水类别是转入／转出，只有创建借贷或结清时才回生成这两种流水 3.余额变更
+                BOOL closeOut = [SSJFundingDetailHelper queryCloseOutStateWithLoanId:cellItem.loanId];
+                if (closeOut || billId == 3 || billId == 4 || billId == 9 || billId == 10) {
+                    SSJLoanChargeDetailViewController *detailController = [[SSJLoanChargeDetailViewController alloc] init];
+                    detailController.chargeId = cellItem.ID;
+                    [self.navigationController pushViewController:detailController animated:YES];
+                } else {
+                    SSJLoanChargeAddOrEditViewController *editController = [[SSJLoanChargeAddOrEditViewController alloc] init];
+                    editController.edited = YES;
+                    editController.chargeId = cellItem.ID;
+                    [self.navigationController pushViewController:editController animated:YES];
+                }
+            } else {
+                if (billId == 3 || billId == 4) {
+                    SSJFundingTransferEditeViewController *transferVc = [[SSJFundingTransferEditeViewController alloc] init];
+                    transferVc.chargeItem = (SSJBillingChargeCellItem*)item;
+                    [self.navigationController pushViewController:transferVc animated:YES];
+                } else {
+                    SSJCalenderDetailViewController *calenderDetailVC = [[SSJCalenderDetailViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
+                    calenderDetailVC.item = (SSJBillingChargeCellItem *)item;
+                    [self.navigationController pushViewController:calenderDetailVC animated:YES];
+                }
             }
         }
     }

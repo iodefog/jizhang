@@ -240,6 +240,14 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
     }];
 }
 
++ (BOOL)queryCloseOutStateWithLoanId:(NSString *)loanId {
+    __block BOOL closeOut = NO;
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+        closeOut = [db boolForQuery:@"select iend from bk_loan where loanid = ?", loanId];
+    }];
+    return closeOut;
+}
+
 
 + (NSString *)stringFromWeekday:(NSInteger)weekday {
     switch (weekday) {
