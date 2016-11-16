@@ -45,6 +45,22 @@
     _datePicker.date = selectedDate;
 }
 
+- (void)setLeftButtonItem:(SSJLoanDateSelectionButtonItem *)leftButtonItem {
+    _leftButtonItem = leftButtonItem;
+    [self updateButton:self.cancelBtn buttonItem:self.leftButtonItem];
+}
+
+- (void)setRightButtonItem:(SSJLoanDateSelectionButtonItem *)rightButtonItem {
+    _rightButtonItem = rightButtonItem;
+    [self updateButton:self.sureBtn buttonItem:self.rightButtonItem];
+}
+
+- (void)updateButton:(UIButton *)button buttonItem:(SSJLoanDateSelectionButtonItem *)item {
+    [button setTitle:item.title forState:UIControlStateNormal];
+    [button setTitleColor:item.color forState:UIControlStateNormal];
+    [button setImage:item.image forState:UIControlStateNormal];
+}
+
 - (void)show {
     if (self.superview) {
         return;
@@ -72,10 +88,20 @@
 
 #pragma mark - Event
 - (void)cancelButtonClicked {
+    if (self.leftButtonItem.action) {
+        self.leftButtonItem.action();
+        return;
+    }
+    
     [self dismiss];
 }
 
 - (void)sureButtonClicked {
+    if (self.rightButtonItem.action) {
+        self.rightButtonItem.action();
+        return;
+    }
+    
     BOOL shouldSelect = YES;
     NSDate *selectedDate = [NSDate dateWithYear:_datePicker.date.year month:_datePicker.date.month day:_datePicker.date.day];
     if (_shouldSelectDateAction) {
@@ -105,6 +131,7 @@
 - (UIButton *)cancelBtn {
     if (!_cancelBtn) {
         _cancelBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
+        _cancelBtn.titleLabel.font = [UIFont systemFontOfSize:16];
         [_cancelBtn setImage:[UIImage imageNamed:@"close"] forState:UIControlStateNormal];
         [_cancelBtn addTarget:self action:@selector(cancelButtonClicked) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -114,6 +141,7 @@
 - (UIButton *)sureBtn {
     if (!_sureBtn) {
         _sureBtn = [[UIButton alloc] initWithFrame:CGRectMake(self.width - 44, 0, 44, 44)];
+        _sureBtn.titleLabel.font = [UIFont systemFontOfSize:16];
         [_sureBtn setImage:[UIImage imageNamed:@"checkmark"] forState:UIControlStateNormal];
         [_sureBtn addTarget:self action:@selector(sureButtonClicked) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -127,6 +155,24 @@
         _datePicker.backgroundColor = [UIColor whiteColor];
     }
     return _datePicker;
+}
+
+@end
+
+
+@implementation SSJLoanDateSelectionButtonItem
+
++ (instancetype)buttonItemWithTitle:(NSString *)title
+                              image:(UIImage *)image
+                              color:(UIColor *)color
+                             action:(SSJLoanDateSelectionButtonItemAction)action {
+    
+    SSJLoanDateSelectionButtonItem *item = [[SSJLoanDateSelectionButtonItem alloc] init];
+    item.title = title;
+    item.image = image;
+    item.color = color;
+    item.action = action;
+    return item;
 }
 
 @end
