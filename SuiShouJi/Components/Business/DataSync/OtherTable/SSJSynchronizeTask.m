@@ -20,6 +20,17 @@
     return [[self alloc] init];
 }
 
+- (SSJGlobalServiceManager *)sessionManager {
+    if (!_sessionManager) {
+        NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+        configuration.requestCachePolicy = NSURLRequestReloadIgnoringLocalCacheData;
+        
+        _sessionManager = [[SSJGlobalServiceManager alloc] initWithBaseURL:[NSURL URLWithString:[SSJDomainManager domain]] sessionConfiguration:configuration];
+        _sessionManager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    }
+    return _sessionManager;
+}
+
 - (void)startSyncWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure {
     
 }
@@ -62,11 +73,7 @@
     }];
     
     //  开始上传
-    AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
-    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    
-    //    NSProgress *progress = nil;
-    NSURLSessionUploadTask *task = [manager uploadTaskWithStreamedRequest:request progress:nil completionHandler:completionHandler];
+    NSURLSessionUploadTask *task = [self.sessionManager uploadTaskWithStreamedRequest:request progress:nil completionHandler:completionHandler];
     [task resume];
     
     return task;

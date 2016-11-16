@@ -197,28 +197,30 @@ static NSUInteger kClostOutDateTag = 1004;
     [self.view ssj_showLoadingIndicator];
     
     [SSJLoanHelper queryFundModelListWithSuccess:^(NSArray <SSJLoanFundAccountSelectionViewItem *>*items) {
+        
+        self.fundingSelectionView.items = items;
+        for (int i = 0; i < items.count; i ++) {
+            SSJLoanFundAccountSelectionViewItem *item = items[i];
+            if ([item.ID isEqualToString:self.loanModel.endTargetFundID]) {
+                self.fundingSelectionView.selectedIndex = i;
+                break;
+            }
+        }
+        
         [SSJLoanHelper queryLoanChargeModeListWithLoanModel:self.loanModel success:^(NSArray<SSJLoanCompoundChargeModel *> * _Nonnull list) {
             
             [self.view ssj_hideLoadingIndicator];
             
+            self.chargeModels = list;
+            
             [self initEndDate];
             [self initCompoundModel];
+            
+            self.compoundModel.interestChargeModel.money = [SSJLoanHelper caculateInterestUntilDate:self.loanModel.endDate model:self.loanModel chargeModels:self.chargeModels];
             
             [self organiseTitles];
             [self organiseImages];
             [self organiseCellTags];
-            
-            self.fundingSelectionView.items = items;
-            for (int i = 0; i < items.count; i ++) {
-                SSJLoanFundAccountSelectionViewItem *item = items[i];
-                if ([item.ID isEqualToString:self.loanModel.endTargetFundID]) {
-                    self.fundingSelectionView.selectedIndex = i;
-                    break;
-                }
-            }
-            
-            self.chargeModels = list;
-            self.compoundModel.interestChargeModel.money = [SSJLoanHelper caculateInterestUntilDate:self.loanModel.endDate model:self.loanModel chargeModels:self.chargeModels];
             
             [self.tableView reloadData];
             self.tableView.hidden = NO;
@@ -286,7 +288,7 @@ static NSUInteger kClostOutDateTag = 1004;
     }
 }
 
-// 如果外部没有传入结清日期，就取大于等于今天的变更流水日期
+// 如果外部没有传入结清日期，就取当天和所有变更流水中最大的日期
 - (void)initEndDate {
     if (!_loanModel.endDate) {
         NSDate *endDate = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:[NSDate date].day];

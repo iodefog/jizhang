@@ -1116,6 +1116,17 @@ const int kMemoMaxLength = 13;
             }
             return YES;
         };
+        
+        __weak typeof(_repaymentDateSelectionView) weakDateSelectionView = _repaymentDateSelectionView;
+        _repaymentDateSelectionView.leftButtonItem = [SSJLoanDateSelectionButtonItem buttonItemWithTitle:@"清空"
+                                                                                                   image:nil
+                                                                                                   color:[UIColor ssj_colorWithHex:SSJOverrunRedColorValue]
+                                                                                                  action:^{
+                                                                                                      weakSelf.reminderItem.remindDate = [weakSelf paymentDate];
+                                                                                                      weakSelf.loanModel.repaymentDate = nil;
+                                                                                                      [weakSelf.tableView reloadData];
+                                                                                                      [weakDateSelectionView dismiss];
+        }];
     }
     return _repaymentDateSelectionView;
 }
