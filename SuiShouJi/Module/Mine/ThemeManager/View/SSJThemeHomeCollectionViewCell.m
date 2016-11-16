@@ -67,7 +67,7 @@
     self.themeSizeLabel.leftBottom = CGPointMake(self.themeTitleLabel.right + 10, self.themeTitleLabel.bottom);
     self.themeStatusLabel.leftTop = CGPointMake(self.themeTitleLabel.left, self.themeTitleLabel.bottom + 10);
     self.themeStatusButton.leftTop = self.themeStatusLabel.leftTop;
-    if (self.item.themeStatus != 2) {
+    if (self.item.themeStatus != themeStatusInuse) {
         self.themeStatusButton.hidden = NO;
         self.themeStatusLabel.hidden = YES;
     }else{
@@ -174,8 +174,9 @@
             [self.themeStatusButton.button setTitle:@"启用" forState:UIControlStateNormal];
         }else if (_item.themeStatus == themeStatusInuse) {
             self.themeStatusLabel.text = @"使用中";
+            self.themeStatusButton.hidden = YES;
         }else if (_item.themeStatus == themeStatusNeedToUpdate) {
-            self.themeStatusLabel.text = @"升级";
+            [self.themeStatusButton.button setTitle:@"升级" forState:UIControlStateNormal];
         }
         [self.themeImage sd_setImageWithURL:[NSURL URLWithString:_item.themeImageUrl] placeholderImage:[UIImage imageNamed:@"noneImage"]];
 //        __weak typeof(self) weakSelf = self;
@@ -189,10 +190,10 @@
         self.themeSizeLabel.hidden = YES;
         self.themeTitleLabel.text = _item.themeTitle;
         [self.themeTitleLabel sizeToFit];
-        if (_item.themeStatus == 1) {
-            [self.themeStatusButton.button setTitle:@"启用" forState:UIControlStateNormal];
-        }else if (_item.themeStatus == 2) {
+        if (_item.themeStatus == themeStatusInuse) {
             self.themeStatusLabel.text = @"使用中";
+        }else {
+            [self.themeStatusButton.button setTitle:@"启用" forState:UIControlStateNormal];
         }
         self.themeImage.image = [UIImage imageNamed:@"defualtImage"];
     }
