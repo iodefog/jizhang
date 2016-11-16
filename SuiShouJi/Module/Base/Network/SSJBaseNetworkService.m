@@ -220,6 +220,7 @@
 /** 需要子类覆写的方法 **/
 //--------------------------------
 - (void)requestDidFinish:(id)rootElement {
+    
 }
 
 @end
