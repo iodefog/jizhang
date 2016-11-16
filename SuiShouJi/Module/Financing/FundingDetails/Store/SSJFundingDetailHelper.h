@@ -37,4 +37,7 @@ extern NSString *const SSJFundingDetailSumKey;
 + (void)queryDataWithCreditCardItem:(SSJCreditCardItem *)cardItem
                             success:(void (^)(NSMutableArray <SSJFundingDetailListItem *> *data))success
                             failure:(void (^)(NSError *error))failure;
+
++ (BOOL)queryCloseOutStateWithLoanId:(NSString *)loanId;
+
 @end

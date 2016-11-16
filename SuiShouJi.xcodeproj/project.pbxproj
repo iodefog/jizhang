@@ -3183,8 +3183,8 @@
 		9C6CA7F01DCADACA0013A499 /* SSJThemeUpdate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJThemeUpdate.m; sourceTree = "<group>"; };
 		9C6D65E91D826B700081A7CE /* SSJReminderWeekDaySelectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReminderWeekDaySelectView.h; sourceTree = "<group>"; };
 		9C6D65EA1D826B700081A7CE /* SSJReminderWeekDaySelectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReminderWeekDaySelectView.m; sourceTree = "<group>"; };
-		9C6D660B1D82B7AA0081A7CE /* SSJInterestDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJInterestDetailViewController.h; sourceTree = "<group>"; };
-		9C6D660C1D82B7AA0081A7CE /* SSJInterestDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJInterestDetailViewController.m; sourceTree = "<group>"; };
+		9C6D660B1D82B7AA0081A7CE /* SSJInterestDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SSJInterestDetailViewController.h; path = ViewController/SSJInterestDetailViewController.h; sourceTree = "<group>"; };
+		9C6D660C1D82B7AA0081A7CE /* SSJInterestDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SSJInterestDetailViewController.m; path = ViewController/SSJInterestDetailViewController.m; sourceTree = "<group>"; };
 		9C6D66231D86BD220081A7CE /* SSJBannerItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBannerItem.h; sourceTree = "<group>"; };
 		9C6D66241D86BD220081A7CE /* SSJBannerItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBannerItem.m; sourceTree = "<group>"; };
 		9C6D662B1D86BD710081A7CE /* SSJListAdItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJListAdItem.h; sourceTree = "<group>"; };
@@ -4889,6 +4889,15 @@
 			path = SSJSeparatorFormView;
 			sourceTree = "<group>";
 		};
+		7DF5D6BF1DDBF989006ED7ED /* Deprecated */ = {
+			isa = PBXGroup;
+			children = (
+				9C6D660B1D82B7AA0081A7CE /* SSJInterestDetailViewController.h */,
+				9C6D660C1D82B7AA0081A7CE /* SSJInterestDetailViewController.m */,
+			);
+			name = Deprecated;
+			sourceTree = "<group>";
+		};
 		7DF8B9AA1CDC2B0000F461A6 /* SSJEditableCollectionView */ = {
 			isa = PBXGroup;
 			children = (
@@ -5284,6 +5293,7 @@
 		9C9471471CEB224C00D69079 /* FundingDetails */ = {
 			isa = PBXGroup;
 			children = (
+				7DF5D6BF1DDBF989006ED7ED /* Deprecated */,
 				9C9471481CEB224C00D69079 /* Model */,
 				9C94714F1CEB224C00D69079 /* Store */,
 				9C9471521CEB224C00D69079 /* View */,
@@ -5346,8 +5356,6 @@
 			children = (
 				9C9471601CEB224C00D69079 /* SSJFundingDetailsViewController.h */,
 				9C9471611CEB224C00D69079 /* SSJFundingDetailsViewController.m */,
-				9C6D660B1D82B7AA0081A7CE /* SSJInterestDetailViewController.h */,
-				9C6D660C1D82B7AA0081A7CE /* SSJInterestDetailViewController.m */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
