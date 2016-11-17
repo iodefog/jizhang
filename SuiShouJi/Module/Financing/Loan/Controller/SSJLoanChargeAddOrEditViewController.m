@@ -268,26 +268,100 @@ static NSUInteger kDateTag = 1005;
 }
 
 - (void)sureButtonAction {
-    if ([self checkCompoundModelValid]) {
-        if (self.chargeType == SSJLoanCompoundChargeTypeRepayment) {
-            self.loanModel.jMoney = self.surplus - self.compoundModel.chargeModel.money;
-        } else if (self.chargeType == SSJLoanCompoundChargeTypeAdd) {
-            self.loanModel.jMoney = self.surplus + self.compoundModel.chargeModel.money;
+    
+    if (self.compoundModel.chargeModel.money <= 0) {
+        switch (self.loanModel.type) {
+            case SSJLoanTypeLend:
+                [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"收款金额必须大于0元"]];
+                break;
+                
+            case SSJLoanTypeBorrow:
+                [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"还款金额必须大于0元"]];
+                break;
         }
         
-        self.sureButton.enabled = NO;
-        [self.sureButton ssj_showLoadingIndicator];
-        [SSJLoanHelper saveLoanModel:self.loanModel chargeModels:@[self.compoundModel] remindModel:nil success:^{
-            self.sureButton.enabled = YES;
-            [self.sureButton ssj_hideLoadingIndicator];
-            [CDAutoHideMessageHUD showMessage:@"保存成功"];
-            [self goBackAction];
-        } failure:^(NSError * _Nonnull error) {
-            self.sureButton.enabled = YES;
-            [self.sureButton ssj_hideLoadingIndicator];
-            [self showError:error];
-        }];
+        return;
     }
+    
+    if (self.chargeType == SSJLoanCompoundChargeTypeRepayment) {
+        
+        if (self.compoundModel.chargeModel.money > self.surplus) {
+            self.compoundModel.chargeModel.money = self.surplus;
+            self.compoundModel.targetChargeModel.money = self.surplus;
+            [self updateInterest];
+            switch (self.loanModel.type) {
+                case SSJLoanTypeLend:
+                    [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"收款金额不能大于剩余借出额%.2f元", self.surplus]];
+                    break;
+                    
+                case SSJLoanTypeBorrow:
+                    [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"还款金额不能大于剩余欠款%.2f元", self.surplus]];
+                    break;
+            }
+            
+            return;
+        }
+        
+        if (self.compoundModel.chargeModel.money == self.surplus) {
+            NSString *message = nil;
+            switch (self.compoundModel.chargeModel.type) {
+                case SSJLoanTypeLend:
+                    message = @"您的收款金额等于剩余借出金额，是否立即结清该笔欠款？";
+                    break;
+                    
+                case SSJLoanTypeBorrow:
+                    message = @"您的还款金额等于剩余欠款金额，是否立即结清该笔欠款？";
+                    break;
+            }
+            SSJAlertViewAction *cancelAction = [SSJAlertViewAction actionWithTitle:@"取消" handler:^(SSJAlertViewAction * _Nonnull action) {
+                [self saveLoanCharge];
+            }];
+            SSJAlertViewAction *sureAction = [SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction * _Nonnull action) {
+                SSJLoanCloseOutViewController *closeOutController = [[SSJLoanCloseOutViewController alloc] init];
+                closeOutController.loanModel = self.loanModel;
+                closeOutController.loanModel.endTargetFundID = self.compoundModel.targetChargeModel.fundId;
+                closeOutController.loanModel.endDate = self.compoundModel.targetChargeModel.billDate;
+                
+                NSMutableArray *controllers = [self.navigationController.viewControllers mutableCopy];
+                [controllers removeObject:self];
+                [controllers addObject:closeOutController];
+                [self.navigationController setViewControllers:controllers animated:YES];
+            }];
+            [SSJAlertViewAdapter showAlertViewWithTitle:nil message:message action:cancelAction, sureAction, nil];
+            
+            return;
+        }
+    }
+    
+    [self saveLoanCharge];
+}
+
+- (void)saveLoanCharge {
+    
+    // 更新借贷的剩余金额
+    if (self.chargeType == SSJLoanCompoundChargeTypeRepayment) {
+        self.loanModel.jMoney = self.surplus - self.compoundModel.chargeModel.money;
+    } else if (self.chargeType == SSJLoanCompoundChargeTypeAdd) {
+        self.loanModel.jMoney = self.surplus + self.compoundModel.chargeModel.money;
+    }
+    
+    // 利息金额为0的话，清空利息模型
+    if (self.compoundModel.interestChargeModel.money == 0) {
+        self.compoundModel.interestChargeModel = nil;
+    }
+    
+    self.sureButton.enabled = NO;
+    [self.sureButton ssj_showLoadingIndicator];
+    [SSJLoanHelper saveLoanModel:self.loanModel chargeModels:@[self.compoundModel] remindModel:nil success:^{
+        self.sureButton.enabled = YES;
+        [self.sureButton ssj_hideLoadingIndicator];
+        [CDAutoHideMessageHUD showMessage:@"保存成功"];
+        [self goBackAction];
+    } failure:^(NSError * _Nonnull error) {
+        self.sureButton.enabled = YES;
+        [self.sureButton ssj_hideLoadingIndicator];
+        [self showError:error];
+    }];
 }
 
 - (void)textDidChange:(NSNotification *)notification {
@@ -596,72 +670,6 @@ static NSUInteger kDateTag = 1005;
             [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
         }
     }
-}
-
-- (BOOL)checkCompoundModelValid {
-    if (self.compoundModel.chargeModel.money <= 0) {
-        switch (self.loanModel.type) {
-            case SSJLoanTypeLend:
-                [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"收款金额必须大于0元"]];
-                break;
-                
-            case SSJLoanTypeBorrow:
-                [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"还款金额必须大于0元"]];
-                break;
-        }
-        
-        return NO;
-    }
-    
-    if (self.chargeType == SSJLoanCompoundChargeTypeRepayment) {
-        
-        if (self.compoundModel.chargeModel.money > self.surplus) {
-            self.compoundModel.chargeModel.money = self.surplus;
-            self.compoundModel.targetChargeModel.money = self.surplus;
-            [self updateInterest];
-            switch (self.loanModel.type) {
-                case SSJLoanTypeLend:
-                    [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"收款金额不能大于剩余借出额%.2f元", self.surplus]];
-                    break;
-                    
-                case SSJLoanTypeBorrow:
-                    [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"还款金额不能大于剩余欠款%.2f元", self.surplus]];
-                    break;
-            }
-            
-            return NO;
-        }
-        
-        if (self.compoundModel.chargeModel.money == self.surplus) {
-            NSString *message = nil;
-            switch (self.compoundModel.chargeModel.type) {
-                case SSJLoanTypeLend:
-                    message = @"您的收款金额等于剩余借出金额，是否立即结清该笔欠款？";
-                    break;
-                    
-                case SSJLoanTypeBorrow:
-                    message = @"您的还款金额等于剩余欠款金额，是否立即结清该笔欠款？";
-                    break;
-            }
-            SSJAlertViewAction *cancelAction = [SSJAlertViewAction actionWithTitle:@"取消" handler:NULL];
-            SSJAlertViewAction *sureAction = [SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction * _Nonnull action) {
-                SSJLoanCloseOutViewController *closeOutController = [[SSJLoanCloseOutViewController alloc] init];
-                closeOutController.loanModel = self.loanModel;
-                closeOutController.loanModel.endTargetFundID = self.compoundModel.targetChargeModel.fundId;
-                closeOutController.loanModel.endDate = self.compoundModel.targetChargeModel.billDate;
-                
-                NSMutableArray *controllers = [self.navigationController.viewControllers mutableCopy];
-                [controllers removeObject:self];
-                [controllers addObject:closeOutController];
-                [self.navigationController setViewControllers:controllers animated:YES];
-            }];
-            [SSJAlertViewAdapter showAlertViewWithTitle:nil message:message action:cancelAction, sureAction, nil];
-            
-            return NO;
-        }
-    }
-    
-    return YES;
 }
 
 #pragma mark - Getter

@@ -198,7 +198,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
         
     } else {
         [_closeOutBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] forState:UIControlStateNormal];
-        [_closeOutBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"#FFFFFF" alpha:0.3] forState:UIControlStateNormal];
+        [_closeOutBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"#FFFFFF" alpha:0.8] forState:UIControlStateNormal];
         
         [_changeBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] forState:UIControlStateNormal];
         [_changeBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor alpha:0.8] forState:UIControlStateNormal];
@@ -268,7 +268,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
         case SSJLoanTypeLend: {
             surplusTitle = @"剩余借出款";
             sumTitle = @"借出总额";
-            interestTitle = @"利息收入";
+            interestTitle = self.loanModel.closeOut ? @"利息收入" : @"已收利息";
             paymentTitle = @"已收金额";
             lenderTitle = @"被谁借款";
         }

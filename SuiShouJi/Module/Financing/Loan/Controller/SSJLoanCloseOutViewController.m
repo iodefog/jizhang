@@ -458,6 +458,11 @@ static NSUInteger kClostOutDateTag = 1004;
             }
         }
         
+        // 利息金额为0的话，清空利息模型
+        if (self.compoundModel.interestChargeModel.money == 0) {
+            self.compoundModel.interestChargeModel = nil;
+        }
+        
         self.sureButton.enabled = NO;
         [SSJLoanHelper closeOutLoanModel:self.loanModel chargeModel:self.compoundModel success:^{
             self.sureButton.enabled = YES;
