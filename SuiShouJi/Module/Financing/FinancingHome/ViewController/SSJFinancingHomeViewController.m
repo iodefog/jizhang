@@ -269,7 +269,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
         _collectionView.editDelegate=self;
         _collectionView.editDataSource=self;
         _collectionView.exchangeCellRegion = UIEdgeInsetsMake(5, 0, 5, 0);
-        _collectionView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+        _collectionView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     }
     return _collectionView;
 }
@@ -396,8 +396,8 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 -(void)updateAppearanceAfterThemeChanged{
     [super updateAppearanceAfterThemeChanged];
     [self.headerView updateAfterThemeChange];
-    self.collectionView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
-    self.headerView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+    self.collectionView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+    self.headerView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     self.navigationItem.rightBarButtonItem.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     [self.headerView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
     [self.headerView ssj_setBorderStyle:SSJBorderStyleBottom | SSJBorderStyleTop];

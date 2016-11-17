@@ -66,7 +66,7 @@
 - (SCYSlidePagingHeaderView *)slidePageView{
     if (!_slidePageView) {
         _slidePageView = [[SCYSlidePagingHeaderView alloc]init];
-        _slidePageView.backgroundColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+        _slidePageView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         _slidePageView.titleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _slidePageView.displayedButtonCount = 2;
         _slidePageView.titleFont = 18;
@@ -240,7 +240,7 @@
 
 - (void)updateCellAppearanceAfterThemeChanged {
     self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.searchResultHeaderBackgroundColor];
-    self.slidePageView.backgroundColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+    self.slidePageView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     self.slidePageView.titleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     self.resultCountLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     self.singleLineLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];

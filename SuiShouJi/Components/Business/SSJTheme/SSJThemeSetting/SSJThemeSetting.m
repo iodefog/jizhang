@@ -80,6 +80,8 @@
     model.ID = SSJDefaultThemeID;
     model.name = @"官方白";
     model.backgroundAlpha = 1;
+    model.mainBackGroundColor = @"#FFFFFF";
+    model.needBlurOrNot = NO;
     model.mainColor = @"#393939";
     model.secondaryColor = @"#a7a7a7";
     model.marcatoColor = @"#eb4a64";

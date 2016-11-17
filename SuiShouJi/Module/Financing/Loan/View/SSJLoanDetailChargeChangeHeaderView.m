@@ -66,7 +66,7 @@
     if ([SSJCurrentThemeID() isEqualToString:SSJDefaultThemeID]) {
         self.backgroundColor = [UIColor whiteColor];
     } else {
-        self.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+        self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     }
 }
 

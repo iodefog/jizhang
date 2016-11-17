@@ -56,16 +56,20 @@
     self.view.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
     
     if (_appliesTheme) {
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateAppearanceAfterThemeChanged) name:SSJThemeDidChangeNotification object:nil];
-        if ([self isKindOfClass:[SSJReportFormsViewController class]] || [self isKindOfClass:[SSJRecordMakingViewController class]]) {
-            _backgroundView = [[UIImageView alloc] initWithImage:[[UIImage ssj_compatibleThemeImageNamed:@"background"] blurredImageWithRadius:2.f iterations:20 tintColor:[UIColor clearColor]]];
+        if (SSJ_CURRENT_THEME.needBlurOrNot) {
+            if ([self isKindOfClass:[SSJReportFormsViewController class]] || [self isKindOfClass:[SSJRecordMakingViewController class]]) {
+                _backgroundView = [[UIImageView alloc] initWithImage:[[UIImage ssj_compatibleThemeImageNamed:@"background"] blurredImageWithRadius:2.f iterations:20 tintColor:[UIColor clearColor]]];
+            }else{
+                _backgroundView = [[UIImageView alloc] initWithImage:[UIImage ssj_compatibleThemeImageNamed:@"background"]];
+            }
         }else{
             _backgroundView = [[UIImageView alloc] initWithImage:[UIImage ssj_compatibleThemeImageNamed:@"background"]];
         }
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateAppearanceAfterThemeChanged) name:SSJThemeDidChangeNotification object:nil];
+
         _backgroundView.frame = self.view.bounds;
         [self.view addSubview:_backgroundView];
     }
-    
     if (self.navigationController && [[self.navigationController viewControllers] count] > 1) {
         if (!self.navigationItem.leftBarButtonItem) {
             [self ssj_showBackButtonWithTarget:self selector:@selector(goBackAction)];

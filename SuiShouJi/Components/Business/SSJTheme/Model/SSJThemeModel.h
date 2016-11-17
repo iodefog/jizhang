@@ -40,6 +40,12 @@
 // 所有背景透明度
 @property (nonatomic) CGFloat backgroundAlpha;
 
+// 是否需要高斯模糊
+@property (nonatomic) BOOL needBlurOrNot;
+
+// 主要背景颜色
+@property (nonatomic, copy) NSString *mainBackGroundColor;
+
 // 主要颜色
 @property (nonatomic, copy) NSString *mainColor;
 
