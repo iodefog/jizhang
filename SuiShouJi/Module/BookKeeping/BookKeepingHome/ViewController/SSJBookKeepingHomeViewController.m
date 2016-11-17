@@ -180,7 +180,11 @@ BOOL kHomeNeedLoginPop;
     self.homeBar.leftTop = CGPointMake(0, 0);
     self.bookKeepingHeader.size = CGSizeMake(self.view.width, 136);
     self.bookKeepingHeader.top = self.homeBar.bottom;
-    self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.bookKeepingHeader.bottom);
+    if (!SSJ_CURRENT_THEME.tabBarBackgroundImage.length) {
+        self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.bookKeepingHeader.bottom - SSJ_TABBAR_HEIGHT);
+    }else{
+        self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.bookKeepingHeader.bottom);
+    }
     self.tableView.top = self.bookKeepingHeader.bottom;
     self.clearView.frame = self.view.frame;
     self.homeButton.size = CGSizeMake(106, 106);
@@ -509,7 +513,11 @@ BOOL kHomeNeedLoginPop;
 -(SSJHomeTableView *)tableView{
     if (!_tableView) {
         _tableView = [[SSJHomeTableView alloc]init];
-        _tableView.contentInset = UIEdgeInsetsMake(46, 0, 48, 0);
+        if (!SSJ_CURRENT_THEME.tabBarBackgroundImage.length) {
+            _tableView.contentInset = UIEdgeInsetsMake(46, 0, 0, 0);
+        }else{
+            _tableView.contentInset = UIEdgeInsetsMake(46, 0, SSJ_TABBAR_HEIGHT, 0);
+        }
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.showsVerticalScrollIndicator = NO;
@@ -747,6 +755,13 @@ BOOL kHomeNeedLoginPop;
     self.mutiFunctionButton.mainButtonNormalColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.bookKeepingHomeMutiButtonSelectColor];
     self.mutiFunctionButton.secondaryButtonNormalColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.bookKeepingHomeMutiButtonSelectColor];
     self.mutiFunctionButton.mainButtonSelectedColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.bookKeepingHomeMutiButtonNormalColor];
+    if (!SSJ_CURRENT_THEME.tabBarBackgroundImage.length) {
+        self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.bookKeepingHeader.bottom - SSJ_TABBAR_HEIGHT);
+        self.tableView.contentInset = UIEdgeInsetsMake(46, 0, 0, 0);
+    }else{
+        self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.bookKeepingHeader.bottom);
+        self.tableView.contentInset = UIEdgeInsetsMake(46, 0, SSJ_TABBAR_HEIGHT, 0);
+    }
 }
 
 -(void)getDateFromDatebase{

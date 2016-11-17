@@ -130,19 +130,19 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
     if ([title isEqualToString:kTitle1]) {
+        if ([_transferOutItem isKindOfClass:[SSJFundingItem class]]) {
+            self.transferOutFundingTypeSelect.selectFundID = ((SSJFundingItem *)_transferOutItem).fundingID;
+        }else if ([_transferInItem isKindOfClass:[SSJCreditCardItem class]]) {
+            self.transferOutFundingTypeSelect.selectFundID = ((SSJCreditCardItem *)_transferOutItem).cardId;
+        }
+        [self.transferOutFundingTypeSelect show];
+    }else if ([title isEqualToString:kTitle2]){
         if ([_transferInItem isKindOfClass:[SSJFundingItem class]]) {
             self.transferInFundingTypeSelect.selectFundID = ((SSJFundingItem *)_transferInItem).fundingID;
         }else if ([_transferInItem isKindOfClass:[SSJCreditCardItem class]]) {
             self.transferInFundingTypeSelect.selectFundID = ((SSJCreditCardItem *)_transferInItem).cardId;
         }
         [self.transferInFundingTypeSelect show];
-    }else if ([title isEqualToString:kTitle2]){
-        if ([_transferInItem isKindOfClass:[SSJFundingItem class]]) {
-            self.transferOutFundingTypeSelect.selectFundID = ((SSJFundingItem *)_transferOutItem).fundingID;
-        }else if ([_transferInItem isKindOfClass:[SSJCreditCardItem class]]) {
-            self.transferOutFundingTypeSelect.selectFundID = ((SSJCreditCardItem *)_transferOutItem).cardId;
-        }
-        [self.transferOutFundingTypeSelect show];
     }else if ([title isEqualToString:kTitle5]){
         [self.chargeCircleTimeView show];
     }
@@ -167,14 +167,14 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
     if ([title isEqualToString:kTitle1]) {
         circleModifyCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         circleModifyCell.cellInput.hidden = YES;
-        if (!_transferInItem) {
+        if (!_transferOutItem) {
             circleModifyCell.cellDetail = @"请选择转出账户";
         }else{
-            if ([_transferInItem isKindOfClass:[SSJFundingItem class]]) {
-                circleModifyCell.cellDetail = ((SSJFundingItem *)_transferInItem).fundingName;
-                circleModifyCell.cellTypeImageName = ((SSJFundingItem *)_transferInItem).fundingIcon;
-            }else if ([_transferInItem isKindOfClass:[SSJCreditCardItem class]]) {
-                circleModifyCell.cellDetail = ((SSJCreditCardItem *)_transferInItem).cardName;
+            if ([_transferOutItem isKindOfClass:[SSJFundingItem class]]) {
+                circleModifyCell.cellDetail = ((SSJFundingItem *)_transferOutItem).fundingName;
+                circleModifyCell.cellTypeImageName = ((SSJFundingItem *)_transferOutItem).fundingIcon;
+            }else if ([_transferOutItem isKindOfClass:[SSJCreditCardItem class]]) {
+                circleModifyCell.cellDetail = ((SSJCreditCardItem *)_transferOutItem).cardName;
                 circleModifyCell.cellTypeImageName = @"ft_creditcard";
             }
 
@@ -187,10 +187,10 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
             circleModifyCell.cellDetail = @"请选择转入账户";
         }else{
             if ([_transferOutItem isKindOfClass:[SSJFundingItem class]]) {
-                circleModifyCell.cellDetail = ((SSJFundingItem *)_transferOutItem).fundingName;
-                circleModifyCell.cellTypeImageName = ((SSJFundingItem *)_transferOutItem).fundingIcon;
+                circleModifyCell.cellDetail = ((SSJFundingItem *)_transferInItem).fundingName;
+                circleModifyCell.cellTypeImageName = ((SSJFundingItem *)_transferInItem).fundingIcon;
             }else if ([_transferOutItem isKindOfClass:[SSJCreditCardItem class]]) {
-                circleModifyCell.cellDetail = ((SSJCreditCardItem *)_transferOutItem).cardName;
+                circleModifyCell.cellDetail = ((SSJCreditCardItem *)_transferInItem).cardName;
                 circleModifyCell.cellTypeImageName = @"ft_creditcard";
             }
         }
