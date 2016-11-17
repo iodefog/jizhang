@@ -90,6 +90,10 @@ const int kMemoMaxLength = 13;
     
     _edited = (_loanModel && _chargeModels);
     
+    if (_loanModel.remindID.length) {
+        _reminderItem = [SSJLocalNotificationStore queryReminderItemForID:_loanModel.remindID];
+    }
+    
     [self loadData];
     [self updateTitle];
     
@@ -858,7 +862,6 @@ const int kMemoMaxLength = 13;
         _loanModel = [[SSJLoanModel alloc] init];
         _loanModel.ID = SSJUUID();
         _loanModel.userID = SSJUSERID();
-        _loanModel.remindID = _reminderItem.remindId ?: @"";
         _loanModel.borrowDate = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:[NSDate date].day];
         _loanModel.repaymentDate = nil;
         _loanModel.interest = NO;
@@ -867,9 +870,6 @@ const int kMemoMaxLength = 13;
         _loanModel.operatorType = 0;
         _loanModel.fundID = [self fundId];
         _loanModel.type = self.type;
-        if (_loanModel.remindID.length) {
-            _reminderItem = [SSJLocalNotificationStore queryReminderItemForID:_loanModel.remindID];
-        }
     }
     return _loanModel;
 }

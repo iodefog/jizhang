@@ -322,9 +322,9 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
         }
         
         [self.section1Items addObjectsFromArray:@[[SSJLoanDetailCellItem itemWithImage:@"loan_expires" title:@"结清日" subtitle:closeOutDateStr bottomTitle:nil],
-                                        [SSJLoanDetailCellItem itemWithImage:@"loan_calendar" title:loanDayTitle subtitle:borrowDateStr bottomTitle:nil],
-                                        [SSJLoanDetailCellItem itemWithImage:@"loan_closeOut" title:@"结清账户" subtitle:endAccountName bottomTitle:nil],
-                                        [SSJLoanDetailCellItem itemWithImage:@"loan_account" title:loanAccountTitle subtitle:accountName bottomTitle:nil]]];
+                                                  [SSJLoanDetailCellItem itemWithImage:@"loan_calendar" title:loanDayTitle subtitle:borrowDateStr bottomTitle:nil],
+                                                  [SSJLoanDetailCellItem itemWithImage:@"loan_closeOut" title:@"结清账户" subtitle:endAccountName bottomTitle:nil],
+                                                  [SSJLoanDetailCellItem itemWithImage:@"loan_account" title:loanAccountTitle subtitle:accountName bottomTitle:nil]]];
         
         if (_loanModel.memo.length) {
             [self.section1Items addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_memo" title:@"备注" subtitle:_loanModel.memo bottomTitle:nil]];
@@ -333,7 +333,6 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     } else {
         
         NSString *loanDateTitle = nil;
-        
         switch (_loanModel.type) {
             case SSJLoanTypeLend:
                 loanDateTitle = @"借款日";
@@ -350,22 +349,26 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
         if (_loanModel.repaymentDate) {
             NSString *repaymentDateStr = [_loanModel.repaymentDate formattedDateWithFormat:@"yyyy.MM.dd"];
             [self.section1Items addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_expires" title:@"还款日" subtitle:repaymentDateStr bottomTitle:nil]];
-            
-            NSString *expectedInterestStr = [NSString stringWithFormat:@"¥%.2f", [SSJLoanHelper expectedInterestWithLoanModel:_loanModel chargeModels:_chargeModels]];
-            [self.section1Items addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_expectedInterest" title:@"预期利息" subtitle:expectedInterestStr bottomTitle:nil]];
         } else {
-            NSString *remindDateStr = @"关闭";
             if (_loanModel.remindID.length) {
+                NSString *remindDateStr = @"关闭";
                 SSJReminderItem *remindItem = [SSJLocalNotificationStore queryReminderItemForID:_loanModel.remindID];
                 if (remindItem.remindState) {
                     remindDateStr = [remindItem.remindDate formattedDateWithFormat:@"yyyy.MM.dd"];
                 }
+                [self.section1Items addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_remind" title:@"到期日提醒" subtitle:remindDateStr bottomTitle:nil]];
             }
-            [self.section1Items addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_remind" title:@"到期日提醒" subtitle:remindDateStr bottomTitle:nil]];
-            
-            double interest = [SSJLoanHelper interestWithPrincipal:self.loanModel.jMoney rate:self.loanModel.rate days:1];
-            NSString *expectedInterestStr = [NSString stringWithFormat:@"¥%.2f", interest];
-            [self.section1Items addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_expectedInterest" title:@"每天利息" subtitle:expectedInterestStr bottomTitle:nil]];
+        }
+        
+        if (_loanModel.interest) {
+            if (_loanModel.repaymentDate) {
+                NSString *expectedInterestStr = [NSString stringWithFormat:@"¥%.2f", [SSJLoanHelper expectedInterestWithLoanModel:_loanModel chargeModels:_chargeModels]];
+                [self.section1Items addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_expectedInterest" title:@"预期利息" subtitle:expectedInterestStr bottomTitle:nil]];
+            } else {
+                double interest = [SSJLoanHelper interestWithPrincipal:self.loanModel.jMoney rate:self.loanModel.rate days:1];
+                NSString *expectedInterestStr = [NSString stringWithFormat:@"¥%.2f", interest];
+                [self.section1Items addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_expectedInterest" title:@"每天利息" subtitle:expectedInterestStr bottomTitle:nil]];
+            }
         }
         
         if (_loanModel.memo.length) {
