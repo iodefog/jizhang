@@ -360,7 +360,7 @@ static NSUInteger kDateTag = 1005;
     } failure:^(NSError * _Nonnull error) {
         self.sureButton.enabled = YES;
         [self.sureButton ssj_hideLoadingIndicator];
-        [SSJAlertViewAdapter showError:error];
+        [self showError:error];
     }];
 }
 
