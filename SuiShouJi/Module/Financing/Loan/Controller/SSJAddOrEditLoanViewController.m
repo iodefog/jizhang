@@ -444,10 +444,14 @@ const int kMemoMaxLength = 13;
         _sureButton.enabled = NO;
         [_sureButton ssj_showLoadingIndicator];
         
-        // 保存流水，包括创建借贷的转帐流水，如果是编辑，还要包括余额变更流水
+        // 保存流水，包括创建借贷产生的流水，如果是编辑，还要包括余额变更流水
         NSMutableArray *saveChargeModels = [@[self.createCompoundModel] mutableCopy];
         if (_edited) {
-            [saveChargeModels addObject:self.changeCompoundModel];
+            if (self.changeCompoundModel.chargeModel.money > 0) {
+                [saveChargeModels addObject:self.changeCompoundModel];
+            }
+            
+            // 编辑可能会更改目标账户、日期，所以要保存所有余额变更流水
             for (SSJLoanCompoundChargeModel *compoundModel in self.chargeModels) {
                 if (compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeBalanceIncrease
                     || compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeBalanceDecrease) {

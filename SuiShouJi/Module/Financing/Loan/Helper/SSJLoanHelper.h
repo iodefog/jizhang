@@ -182,7 +182,7 @@ NS_ASSUME_NONNULL_BEGIN
 
  @param model 借贷产生的流水模型
  @param success 删除成功的回调
- @param failure 删除失败的回调
+ @param failure 删除失败的回调，error code为1代表删除流水后借贷剩余金额会小于0
  */
 + (void)deleteLoanCompoundChargeModel:(SSJLoanCompoundChargeModel *)model
                               success:(void (^)(void))success

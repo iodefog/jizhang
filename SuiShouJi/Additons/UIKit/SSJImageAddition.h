@@ -56,8 +56,6 @@
  */
 - (UIImage *)ssj_blurredImageWithRadius:(CGFloat)radius iterations:(NSUInteger)iterations tintColor:(UIColor *)tintColor;
 
-
-
 /**
  *  改变图片到指定大小
  *
@@ -66,7 +64,6 @@
  *  @return (UIImage *) 缩放后的图片
  */
 - (UIImage *)ssj_scaleImageWithSize:(CGSize)Size;
-
 
 /**
  *  改变图片颜色

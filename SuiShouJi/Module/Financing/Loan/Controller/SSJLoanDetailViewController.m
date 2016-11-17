@@ -268,7 +268,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
         case SSJLoanTypeLend: {
             surplusTitle = @"剩余借出款";
             sumTitle = @"借出总额";
-            interestTitle = @"利息收入";
+            interestTitle = self.loanModel.closeOut ? @"利息收入" : @"已收利息";
             paymentTitle = @"已收金额";
             lenderTitle = @"被谁借款";
         }

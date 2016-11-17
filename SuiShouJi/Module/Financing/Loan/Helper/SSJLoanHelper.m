@@ -838,7 +838,7 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
         
         NSString *writeDateStr = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         
-        // 更新借贷的剩余金额
+        // 更新删除后的借贷余额
         double surplus = [db doubleForQuery:@"select jmoney from bk_loan where loanid = ?", model.chargeModel.loanId];
         
         if (model.chargeModel.chargeType == SSJLoanCompoundChargeTypeRepayment) {
@@ -851,6 +851,16 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
             surplus += model.chargeModel.money;
         }
         
+        if (surplus < 0) {
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure([NSError errorWithDomain:SSJErrorDomain code:1 userInfo:nil]);
+                });
+            }
+            return;
+        }
+        
+        // 更新借贷的剩余金额
         if (![db executeUpdate:@"update bk_loan set jmoney = ?, iversion = ?, cwritedate = ?, operatortype = 1 where loanid = ?", @(surplus), @(SSJSyncVersion()), writeDateStr, model.chargeModel.loanId]) {
             *rollback = YES;
             if (failure) {
@@ -995,7 +1005,7 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
     }
     
     // 所属账户转账流水
-    if (model.chargeModel.money > 0) {
+    if (model.chargeModel) {
         NSString *billDateStr = [model.chargeModel.billDate formattedDateWithFormat:@"yyyy-MM-dd"];
         NSString *writeDateStr = [model.chargeModel.writeDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         
@@ -1017,7 +1027,7 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
     }
     
     // 目标账户转账流水
-    if (model.targetChargeModel.money > 0) {
+    if (model.targetChargeModel) {
         NSString *billDateStr = [model.targetChargeModel.billDate formattedDateWithFormat:@"yyyy-MM-dd"];
         NSString *writeDateStr = [model.targetChargeModel.writeDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         
@@ -1039,7 +1049,7 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
     }
     
     // 利息流水
-    if (model.interestChargeModel.money > 0) {
+    if (model.interestChargeModel) {
         NSString *billDateStr = [model.interestChargeModel.billDate formattedDateWithFormat:@"yyyy-MM-dd"];
         NSString *writeDateStr = [model.interestChargeModel.writeDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         
