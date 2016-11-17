@@ -370,7 +370,6 @@ const int kMemoMaxLength = 13;
         [self updateRemindName];
     } else if (textField.tag == kMoneyTag) {
         self.loanModel.jMoney = 0;
-        
         [self updateRemindName];
         [self updateInterest];
     } else if (textField.tag == kMemoTag) {
@@ -407,13 +406,6 @@ const int kMemoMaxLength = 13;
             textField.text = [self reserveDecimal:tmpMoneyStr digits:2];
             self.loanModel.jMoney = [[textField.text stringByReplacingOccurrencesOfString:@"¥" withString:@""] doubleValue];
             
-            if (_edited) {
-                [self updateBalanceChangeMoney];
-            } else {
-                self.createCompoundModel.chargeModel.money = self.loanModel.jMoney;
-                self.createCompoundModel.targetChargeModel.money = self.loanModel.jMoney;
-            }
-            
             [self updateRemindName];
             [self updateInterest];
             
@@ -441,15 +433,11 @@ const int kMemoMaxLength = 13;
 - (void)sureButtonAction {
     if ([self checkLoanModelIsValid]) {
         
-        _sureButton.enabled = NO;
-        [_sureButton ssj_showLoadingIndicator];
+        [self updateChargeModels];
         
         // 保存流水，包括创建借贷产生的流水，如果是编辑，还要包括余额变更流水
         NSMutableArray *saveChargeModels = [@[self.createCompoundModel] mutableCopy];
         if (_edited) {
-            if (self.changeCompoundModel.chargeModel.money > 0) {
-                [saveChargeModels addObject:self.changeCompoundModel];
-            }
             
             // 编辑可能会更改目标账户、日期，所以要保存所有余额变更流水
             for (SSJLoanCompoundChargeModel *compoundModel in self.chargeModels) {
@@ -458,7 +446,15 @@ const int kMemoMaxLength = 13;
                     [saveChargeModels addObject:compoundModel];
                 }
             }
+            
+            // 如果有新的余额变更流水，就保存
+            if (self.changeCompoundModel.chargeModel.money > 0) {
+                [saveChargeModels addObject:self.changeCompoundModel];
+            }
         }
+        
+        _sureButton.enabled = NO;
+        [_sureButton ssj_showLoadingIndicator];
         
         [SSJLoanHelper saveLoanModel:self.loanModel chargeModels:saveChargeModels remindModel:_reminderItem success:^{
             
@@ -833,21 +829,6 @@ const int kMemoMaxLength = 13;
     }
 }
 
-// 更新借贷的目标账户id、借贷产生的依赖目标账户流水的账户id
-- (void)updateTargetFundId:(NSString *)fundId {
-    self.loanModel.targetFundID = fundId;
-    self.createCompoundModel.targetChargeModel.fundId = fundId;
-    if (self.edited) {
-        self.changeCompoundModel.targetChargeModel.fundId = fundId;
-        for (SSJLoanCompoundChargeModel *compoundModel in self.chargeModels) {
-            if (compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeBalanceIncrease
-                || compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeBalanceDecrease) {
-                compoundModel.targetChargeModel.fundId = fundId;
-            }
-        }
-    }
-}
-
 - (NSString *)fundId {
     switch (_type) {
         case SSJLoanTypeLend:
@@ -857,6 +838,45 @@ const int kMemoMaxLength = 13;
         case SSJLoanTypeBorrow:
             return [NSString stringWithFormat:@"%@-6", SSJUSERID()];
             break;
+    }
+}
+
+- (void)updateChargeModels {
+    
+    self.createCompoundModel.chargeModel.billDate = self.loanModel.borrowDate;
+    self.createCompoundModel.chargeModel.memo = self.loanModel.memo;
+    
+    self.createCompoundModel.targetChargeModel.fundId = self.loanModel.targetFundID;
+    self.createCompoundModel.targetChargeModel.billDate = self.loanModel.borrowDate;
+    self.createCompoundModel.targetChargeModel.memo = self.loanModel.memo;
+    
+    if (self.edited) {
+        
+        [self updateBalanceChangeMoney];
+        
+        self.changeCompoundModel.chargeModel.billDate = self.loanModel.borrowDate;
+        self.changeCompoundModel.chargeModel.memo = self.loanModel.memo;
+        
+        self.changeCompoundModel.targetChargeModel.fundId = self.loanModel.targetFundID;
+        self.changeCompoundModel.targetChargeModel.billDate = self.loanModel.borrowDate;
+        self.changeCompoundModel.targetChargeModel.memo = self.loanModel.memo;
+        
+        for (SSJLoanCompoundChargeModel *compoundModel in self.chargeModels) {
+            if (compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeBalanceIncrease
+                || compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeBalanceDecrease) {
+                
+                compoundModel.chargeModel.billDate = self.loanModel.borrowDate;
+                compoundModel.chargeModel.memo = self.loanModel.memo;
+                
+                compoundModel.targetChargeModel.fundId = self.loanModel.targetFundID;
+                compoundModel.targetChargeModel.billDate = self.loanModel.borrowDate;
+                compoundModel.targetChargeModel.memo = self.loanModel.memo;
+            }
+        }
+        
+    } else {
+        self.createCompoundModel.chargeModel.money = self.loanModel.jMoney;
+        self.createCompoundModel.targetChargeModel.money = self.loanModel.jMoney;
     }
 }
 
@@ -1007,7 +1027,7 @@ const int kMemoMaxLength = 13;
         _fundingSelectionView.shouldSelectAccountAction = ^BOOL(SSJLoanFundAccountSelectionView *view, NSUInteger index) {
             if (index < view.items.count - 1) {
                 SSJLoanFundAccountSelectionViewItem *item = [view.items objectAtIndex:index];
-                [weakSelf updateTargetFundId:item.ID];
+                weakSelf.loanModel.targetFundID = item.ID;
                 [weakSelf.tableView reloadData];
                 return YES;
             } else if (index == view.items.count - 1) {
@@ -1016,11 +1036,11 @@ const int kMemoMaxLength = 13;
                 NewFundingVC.addNewFundingBlock = ^(SSJBaseItem *item){
                     if ([item isKindOfClass:[SSJFundingItem class]]) {
                         SSJFundingItem *fundItem = (SSJFundingItem *)item;
-                        [weakSelf updateTargetFundId:fundItem.fundingID];
+                        weakSelf.loanModel.targetFundID = fundItem.fundingID;
                         [weakSelf loadData];
                     } else if ([item isKindOfClass:[SSJCreditCardItem class]]){
                         SSJCreditCardItem *cardItem = (SSJCreditCardItem *)item;
-                        [weakSelf updateTargetFundId:cardItem.cardId];
+                        weakSelf.loanModel.targetFundID = cardItem.cardId;
                         [weakSelf loadData];
                     }
                 };
@@ -1042,12 +1062,6 @@ const int kMemoMaxLength = 13;
         _borrowDateSelectionView.selectDateAction = ^(SSJLoanDateSelectionView *view) {
             
             wself.loanModel.borrowDate = view.selectedDate;
-            wself.createCompoundModel.chargeModel.billDate = view.selectedDate;
-            wself.createCompoundModel.targetChargeModel.billDate = view.selectedDate;
-            if (wself.edited) {
-                wself.changeCompoundModel.chargeModel.billDate = view.selectedDate;
-                wself.changeCompoundModel.targetChargeModel.billDate = view.selectedDate;
-            }
             
             if (wself.reminderItem.remindDate && [view.selectedDate compare:wself.reminderItem.remindDate] == NSOrderedDescending) {
                 wself.reminderItem.remindDate = view.selectedDate;

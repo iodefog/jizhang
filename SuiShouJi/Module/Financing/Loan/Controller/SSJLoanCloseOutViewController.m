@@ -415,7 +415,7 @@ static NSUInteger kClostOutDateTag = 1004;
                     if (compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeCreate
                         || compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeBalanceIncrease
                         || compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeBalanceDecrease) {
-                        [CDAutoHideMessageHUD showMessage:@"结清日不能早于借入日期"];
+                        [CDAutoHideMessageHUD showMessage:@"结清日不能早于欠款日期"];
                     } else if (compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeRepayment) {
                         [CDAutoHideMessageHUD showMessage:@"结清日不能早于还款日期"];
                     } else if (compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeAdd) {

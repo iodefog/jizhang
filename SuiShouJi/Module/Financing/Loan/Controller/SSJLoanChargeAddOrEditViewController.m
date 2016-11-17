@@ -229,11 +229,11 @@ static NSUInteger kDateTag = 1005;
                 
                 switch (self.loanModel.type) {
                     case SSJLoanTypeLend:
-                        [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"收款金额不能大于剩余借出额%.2f元", self.surplus]];
+                        [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"修改后的金额需要≤%.2f，否则剩余借出款会为负哦", self.surplus]];
                         break;
                         
                     case SSJLoanTypeBorrow:
-                        [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"还款金额不能大于剩余欠款%.2f元", self.surplus]];
+                        [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"修改后的金额需要≤%.2f，否则剩余欠款会为正哦", self.surplus]];
                         break;
                 }
                 
@@ -308,11 +308,11 @@ static NSUInteger kDateTag = 1005;
             [self updateInterest];
             switch (self.loanModel.type) {
                 case SSJLoanTypeLend:
-                    [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"收款金额不能大于剩余借出额%.2f元", self.surplus]];
+                    [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"修改后的金额需要≤%.2f，否则剩余借出款会为负哦", self.surplus]];
                     break;
                     
                 case SSJLoanTypeBorrow:
-                    [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"还款金额不能大于剩余欠款%.2f元", self.surplus]];
+                    [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"修改后的金额需要≤%.2f，否则剩余欠款会为正哦", self.surplus]];
                     break;
             }
             
@@ -320,6 +320,9 @@ static NSUInteger kDateTag = 1005;
         }
         
         if (self.compoundModel.chargeModel.money == self.surplus) {
+            // 因为金额输入框的clearsOnBeginEditing设为YES，系统弹窗出现后输入框会失去焦点，弹窗消失后又会重新获取焦，输入框内容被清空，导致调用[self saveLoanCharge]方法保存的金额就变成0了，所以这里强制取消焦点
+            [self.view endEditing:YES];
+            
             NSString *message = nil;
             switch (self.compoundModel.chargeModel.type) {
                 case SSJLoanTypeLend:
@@ -361,11 +364,11 @@ static NSUInteger kDateTag = 1005;
             
             switch (self.loanModel.type) {
                 case SSJLoanTypeLend:
-                    [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"收款金额不能小于%.2f元", money]];
+                    [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"修改后的金额需要≥%.2f，否则剩余借出款会为负哦", money]];
                     break;
                     
                 case SSJLoanTypeBorrow:
-                    [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"还款金额不能小于%.2f元", money]];
+                    [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"修改后的金额需要≥%.2f，否则剩余欠款会为正哦", money]];
                     break;
             }
             
@@ -816,11 +819,11 @@ static NSUInteger kDateTag = 1005;
                             break;
                             
                         case SSJLoanTypeBorrow:
-                            [CDAutoHideMessageHUD showMessage:@"还款日期不能早于借入日期"];
+                            [CDAutoHideMessageHUD showMessage:@"还款日期不能早于欠款日期"];
                             break;
                     }
                 } else if (weakSelf.chargeType == SSJLoanCompoundChargeTypeAdd) {
-                    [CDAutoHideMessageHUD showMessage:@"日期不能早于借入日期"];
+                    [CDAutoHideMessageHUD showMessage:@"日期不能早于欠款日期"];
                 }
                 
                 return NO;
