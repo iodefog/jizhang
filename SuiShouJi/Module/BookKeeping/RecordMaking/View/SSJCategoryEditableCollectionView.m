@@ -57,7 +57,7 @@ static NSString *const kAdditionalUnselectedImage = @"record_making_unselected";
         _longPressGesture.delegate = self;
         [self addGestureRecognizer:_longPressGesture];
         
-        _collectionView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+        _collectionView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     }
     return self;
 }
@@ -175,7 +175,7 @@ static NSString *const kAdditionalUnselectedImage = @"record_making_unselected";
 }
 
 - (void)updateAppearance {
-    _collectionView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+    _collectionView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     for (SSJCategoryEditableCollectionViewCellItem *cellItem in _cellItems) {
         cellItem.titleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     }

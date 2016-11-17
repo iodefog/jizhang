@@ -319,7 +319,7 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
         _collectionView.editDelegate=self;
         _collectionView.editDataSource=self;
         _collectionView.exchangeCellRegion = UIEdgeInsetsMake(5, 0, 5, 0);
-        _collectionView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+        _collectionView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     }
     return _collectionView;
 }

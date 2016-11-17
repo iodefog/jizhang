@@ -94,7 +94,7 @@ static NSString * SSJBooksParentSelectCellIdentifier = @"SSJBooksParentSelectCel
         _collectionView=[[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:flowLayout];
         _collectionView.delegate=self;
         _collectionView.dataSource=self;
-        _collectionView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+        _collectionView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     }
     return _collectionView;
 }

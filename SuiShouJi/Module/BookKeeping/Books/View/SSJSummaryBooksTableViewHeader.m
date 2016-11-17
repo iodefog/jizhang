@@ -14,6 +14,8 @@
 
 @property(nonatomic, strong) SSJSummaryBooksHeaderView *summaryHeader;
 
+@property(nonatomic, strong) UIView *backColorView;
+
 @property(nonatomic, strong) UILabel *firstLineLab;
 
 @property(nonatomic, strong) UILabel *secondLineLab;
@@ -31,9 +33,9 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.backgroundColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         [self addSubview:self.summaryHeader];
         [self addSubview:self.dateAxisView];
+        [self addSubview:self.backColorView];
         [self addSubview:self.firstLineLab];
         [self addSubview:self.periodSelectSegment];
         [self addSubview:self.curveView];
@@ -54,6 +56,8 @@
     [super layoutSubviews];
     self.summaryHeader.leftTop = CGPointMake(0, 0);
     self.dateAxisView.leftTop = CGPointMake(0, self.summaryHeader.bottom);
+    self.backColorView.leftTop = CGPointMake(0, self.dateAxisView.bottom);
+    self.backColorView.size = CGSizeMake(self.width, self.height - self.dateAxisView.bottom);
     self.firstLineLab.top = self.dateAxisView.bottom + 37;
     self.firstLineLab.centerX = self.width / 2;
     self.periodSelectSegment.top = self.firstLineLab.bottom + 20;
@@ -75,7 +79,7 @@
 - (SSJPercentCircleView *)chartView{
     if (!_chartView) {
         _chartView = [[SSJPercentCircleView alloc] initWithFrame:CGRectMake(0, 0, self.width, 320) insets:UIEdgeInsetsMake(80, 80, 80, 80) thickness:39];
-        _chartView.contentView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+        _chartView.contentView.backgroundColor = [UIColor clearColor];
         [_chartView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
         [_chartView ssj_setBorderStyle:SSJBorderStyleBottom];
         [_chartView ssj_setBorderWidth:1];
@@ -86,6 +90,7 @@
 - (SSJReportFormsCurveGraphView *)curveView {
     if (!_curveView) {
         _curveView = [[SSJReportFormsCurveGraphView alloc] initWithFrame:CGRectMake(0, 0, self.width, 384)];
+        _curveView.backgroundColor = [UIColor clearColor];
     }
     return _curveView;
 }
@@ -93,7 +98,7 @@
 - (SSJReportFormsScaleAxisView *)dateAxisView {
     if (!_dateAxisView) {
         _dateAxisView = [[SSJReportFormsScaleAxisView alloc] initWithFrame:CGRectMake(0, 0, self.width, 50)];
-        _dateAxisView.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
+        _dateAxisView.backgroundColor = [UIColor clearColor];
         _dateAxisView.scaleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         _dateAxisView.selectedScaleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
     }
@@ -226,6 +231,14 @@
     return _chartNoResultView;
 }
 
+- (UIView *)backColorView{
+    if (!_backColorView) {
+        _backColorView = [[UIView alloc]init];
+        _backColorView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+    }
+    return _backColorView;
+}
+
 - (void)setTotalIncome:(double)totalIncome{
     _totalIncome = totalIncome;
     self.summaryHeader.income = _totalIncome;
@@ -297,6 +310,10 @@
             self.incomeOrExpentureSelectBlock();
         }
     }
+}
+
+- (void)updateAfterThemeChange{
+    self.backColorView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
 }
 
 /*

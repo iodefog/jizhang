@@ -38,7 +38,7 @@ static NSString *const kSummaryButtonAnimationKey = @"summaryButtonAnimationKey"
         [self ssj_setBorderColor:[UIColor whiteColor]];
         [self ssj_setBorderStyle:SSJBorderStyleTop];
         [self ssj_setBorderWidth:1.f / [UIScreen mainScreen].scale];
-        self.backgroundColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+        self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         [self addSubview:self.backColorView];
         [self addSubview:self.waveImage];
         [self addSubview:self.incomeTitleLab];
@@ -177,6 +177,7 @@ static NSString *const kSummaryButtonAnimationKey = @"summaryButtonAnimationKey"
     [self.summaryButton setImage:[UIImage ssj_themeImageWithName:@"bk_summary"] forState:UIControlStateNormal];
     self.waveImage.image = [UIImage ssj_themeImageWithName:@"bk_wave"];
     self.backColorView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.summaryBooksHeaderColor alpha:SSJ_CURRENT_THEME.summaryBooksHeaderAlpha];
+    self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
 }
 
 /*

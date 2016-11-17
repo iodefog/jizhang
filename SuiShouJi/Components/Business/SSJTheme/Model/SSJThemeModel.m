@@ -21,6 +21,8 @@
     [aCoder encodeObject:_previewUrlArr forKey:@"previewUrlArr"];
     [aCoder encodeObject:_desc forKey:@"desc"];
     [aCoder encodeFloat:_backgroundAlpha forKey:@"backgroundAlpha"];
+    [aCoder encodeBool:_needBlurOrNot forKey:@"needBlurOrNot"];
+    [aCoder encodeObject:_mainBackGroundColor forKey:@"mainBackGroundColor"];
     [aCoder encodeObject:_mainColor forKey:@"mainColor"];
     [aCoder encodeObject:_secondaryColor forKey:@"secondaryColor"];
     [aCoder encodeObject:_marcatoColor forKey:@"marcatoColor"];
@@ -76,6 +78,8 @@
         _previewUrlArr = [aDecoder decodeObjectForKey:@"previewUrlArr"];
         _desc = [aDecoder decodeObjectForKey:@"desc"];
         _backgroundAlpha = [aDecoder decodeFloatForKey:@"backgroundAlpha"];
+        _needBlurOrNot = [aDecoder decodeBoolForKey:@"needBlurOrNot"];
+        _mainBackGroundColor = [aDecoder decodeObjectForKey:@"mainBackGroundColor"];
         _mainColor = [aDecoder decodeObjectForKey:@"mainColor"];
         _secondaryColor = [aDecoder decodeObjectForKey:@"secondaryColor"];
         _marcatoColor = [aDecoder decodeObjectForKey:@"marcatoColor"];
@@ -130,6 +134,8 @@
                                                           @"previewUrlArr":_previewUrlArr,
                                                           @"desc":_desc,
                                                           @"backgroundAlpha":@(_backgroundAlpha),
+                                                          @"needBlurOrNot":@(_needBlurOrNot),
+                                                          @"mainBackGroundColor":_mainBackGroundColor,
                                                           @"mainColor":_mainColor,
                                                           @"secondaryColor":_secondaryColor,
                                                           @"marcatoColor":_marcatoColor,

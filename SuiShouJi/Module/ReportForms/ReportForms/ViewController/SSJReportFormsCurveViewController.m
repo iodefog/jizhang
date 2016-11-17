@@ -295,7 +295,7 @@
 - (UIView *)questionBackView {
     if (!_questionBackView) {
         _questionBackView = [[UIView alloc] initWithFrame:CGRectMake(0, self.curveView.bottom, self.view.width, 30)];
-        _questionBackView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+        _questionBackView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         [_questionBackView addSubview:self.questionBtn];
     }
     return _questionBackView;
