@@ -7,6 +7,7 @@
 //
 
 #import "SSJBaseItem.h"
+#import "SSJLoanChargeModel.h"
 
 @interface SSJBillingChargeCellItem : SSJBaseItem
 
@@ -98,6 +99,15 @@
 
 //流水对应的借贷id
 @property(nonatomic, strong) NSString *loanId;
+
+//借贷产生的流水类型
+@property(nonatomic) SSJLoanCompoundChargeType loanChargeType;
+
+//对应的借贷是借出还是欠款
+@property(nonatomic) SSJLoanType loanType;
+
+//借贷的来源
+@property(nonatomic, strong) NSString *loanSource;
 
 //客户端添加时间
 @property(nonatomic, strong) NSString *clientAddDate;
