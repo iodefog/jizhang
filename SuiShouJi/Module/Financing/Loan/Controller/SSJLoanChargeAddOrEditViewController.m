@@ -649,7 +649,11 @@ static NSUInteger kDateTag = 1005;
                 closeOutController.loanModel = self.loanModel;
                 closeOutController.loanModel.endTargetFundID = self.compoundModel.targetChargeModel.fundId;
                 closeOutController.loanModel.endDate = self.compoundModel.targetChargeModel.billDate;
-                [self.navigationController pushViewController:closeOutController animated:YES];
+                
+                NSMutableArray *controllers = [self.navigationController.viewControllers mutableCopy];
+                [controllers removeObject:self];
+                [controllers addObject:closeOutController];
+                [self.navigationController setViewControllers:controllers animated:YES];
             }];
             [SSJAlertViewAdapter showAlertViewWithTitle:nil message:message action:cancelAction, sureAction, nil];
             

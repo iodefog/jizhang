@@ -136,7 +136,11 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     if (section == 1) {
         return self.changeSectionHeaderView;
     }
-    return nil;
+    return [UIView new];
+}
+
+- (nullable UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
+    return [UIView new];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
