@@ -813,13 +813,11 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
                               failure:(void (^)(NSError *error))failure {
     
     if (model.chargeModel.chargeType == SSJLoanCompoundChargeTypeCreate
-        || model.chargeModel.chargeType == SSJLoanCompoundChargeTypeBalanceIncrease
-        || model.chargeModel.chargeType == SSJLoanCompoundChargeTypeBalanceDecrease
         || model.chargeModel.chargeType == SSJLoanCompoundChargeTypeCloseOut) {
         
         if (failure) {
             SSJDispatchMainAsync(^{
-                failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"非还款／收款、追加借出／欠款流水不能删除"}]);
+                failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"创建／结清借贷产生的流水记录不能删除"}]);
             });
             return;
         }
@@ -847,6 +845,10 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
             surplus += model.chargeModel.money;
         } else if (model.chargeModel.chargeType == SSJLoanCompoundChargeTypeAdd) {
             surplus -= model.chargeModel.money;
+        } else if (model.chargeModel.chargeType == SSJLoanCompoundChargeTypeBalanceIncrease) {
+            surplus -= model.chargeModel.money;
+        } else if (model.chargeModel.chargeType == SSJLoanCompoundChargeTypeBalanceDecrease) {
+            surplus += model.chargeModel.money;
         }
         
         if (![db executeUpdate:@"update bk_loan set jmoney = ?, iversion = ?, cwritedate = ?, operatortype = 1 where loanid = ?", @(surplus), @(SSJSyncVersion()), writeDateStr, model.chargeModel.loanId]) {

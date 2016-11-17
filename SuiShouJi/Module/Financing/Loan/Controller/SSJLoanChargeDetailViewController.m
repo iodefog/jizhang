@@ -39,7 +39,6 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self showDeleteItemIfNeeded];
     [self.view addSubview:self.tableView];
     [self updateAppearance];
 }
@@ -81,6 +80,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     [SSJLoanHelper queryLoanCompoundChangeModelWithChargeId:self.chargeId success:^(SSJLoanCompoundChargeModel * _Nonnull model) {
         [self.view ssj_hideLoadingIndicator];
         self.compoundModel = model;
+        [self showDeleteItemIfNeeded];
         [self updateTitle];
         [self organiseCellItems];
         [self.tableView reloadData];
@@ -515,21 +515,20 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
 
 #pragma mark - Event
 - (void)deleteItemAction {
-    self.deleteItem.enabled = NO;
-    [SSJLoanHelper deleteLoanCompoundChargeModel:_compoundModel success:^{
-        self.deleteItem.enabled = YES;
-        [CDAutoHideMessageHUD showMessage:@"删除成功"];
-        [self goBackAction];
-    } failure:^(NSError * _Nonnull error) {
-        self.deleteItem.enabled = YES;
-        NSString *message = nil;
-#ifdef DEBUG
-        message = [error localizedDescription];
-#else
-        message = SSJ_ERROR_MESSAGE;
-#endif
-        [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:message action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
-    }];
+    [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"您确认删除该记录" action:[SSJAlertViewAction actionWithTitle:@"取消" handler:NULL], [SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction *action) {
+        
+        self.deleteItem.enabled = NO;
+        
+        [SSJLoanHelper deleteLoanCompoundChargeModel:_compoundModel success:^{
+            self.deleteItem.enabled = YES;
+            [CDAutoHideMessageHUD showMessage:@"删除成功"];
+            [self goBackAction];
+        } failure:^(NSError * _Nonnull error) {
+            self.deleteItem.enabled = YES;
+            [self showError:error];
+        }];
+        
+    }], nil];
 }
 
 #pragma mark - Getter
