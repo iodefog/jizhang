@@ -344,7 +344,7 @@
             if (![booksType integerValue]) {
                 booksId = userID;
             }else{
-                booksId = [NSString stringWithFormat:@"%@-%@",userID,booksType] ;
+                booksId = [NSString stringWithFormat:@"%@-%@",userID,booksType];
                 state = 1;
             }
             BOOL executeSuccessfull = [db executeUpdate:@"insert into BK_USER_BILL (CUSERID, CBILLID, ISTATE, IORDER, CWRITEDATE, IVERSION, OPERATORTYPE, CBOOKSID) select ?, ?, ?, ?, ?, ?, 1 , ? where not exists (select * from BK_USER_BILL where CBILLID = ? and cuserid = ? and cbooksid = ?)", userID, billId, @(state), order, date, @(SSJSyncVersion()), booksId, billId, userID, booksId];

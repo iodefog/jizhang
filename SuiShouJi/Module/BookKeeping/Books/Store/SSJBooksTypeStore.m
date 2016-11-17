@@ -260,8 +260,8 @@
                                     failure:(void (^)(NSError *error))failure{
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSString *userId = SSJUSERID();
-        double income = [db doubleForQuery:@"select sum(uc.imoney) from bk_user_charge uc, bk_bill_type bt where uc.ibillid = bt.id and bt.itype = 0 and uc.cuserid = ? and bt.istate <> 2 and uc.operatortype <> 2",userId];
-        double expenture = [db doubleForQuery:@"select sum(uc.imoney) from bk_user_charge uc, bk_bill_type bt where uc.ibillid = bt.id and bt.itype = 1 and uc.cuserid = ? and bt.istate <> 2 and uc.operatortype <> 2",userId];
+        double income = [db doubleForQuery:@"select sum(uc.imoney) from bk_user_charge uc, bk_bill_type bt where uc.ibillid = bt.id and bt.itype = 0 and uc.cuserid = ? and bt.istate <> 2 and uc.operatortype <> 2 and uc.cbilldate <= date('now', 'localtime')",userId];
+        double expenture = [db doubleForQuery:@"select sum(uc.imoney) from bk_user_charge uc, bk_bill_type bt where uc.ibillid = bt.id and bt.itype = 1 and uc.cuserid = ? and bt.istate <> 2 and uc.operatortype <> 2 and uc.cbilldate <= date('now', 'localtime')",userId];
         if (success) {
             SSJDispatchMainAsync(^{
                 success(income,expenture);

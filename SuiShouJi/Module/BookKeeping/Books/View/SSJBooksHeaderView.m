@@ -177,7 +177,6 @@ static NSString *const kSummaryButtonAnimationKey = @"summaryButtonAnimationKey"
     [self.summaryButton setImage:[UIImage ssj_themeImageWithName:@"bk_summary"] forState:UIControlStateNormal];
     self.waveImage.image = [UIImage ssj_themeImageWithName:@"bk_wave"];
     self.backColorView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.summaryBooksHeaderColor alpha:SSJ_CURRENT_THEME.summaryBooksHeaderAlpha];
-
 }
 
 /*
