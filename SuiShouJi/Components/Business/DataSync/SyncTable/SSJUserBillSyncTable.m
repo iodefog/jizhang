@@ -126,12 +126,40 @@
             }
             
             // 将四个非日常账本的默认账本插入所有默认类型
-            NSString *sql2 = [NSString stringWithFormat:@"insert into bk_user_bill select bk.cuserid ,bt.id , 1, '%@', '%@', 1, bt.defaultorder, bk.cbooksid from bk_books_type bk, bk_bill_type bt where bk.iparenttype = bt.ibookstype and bk.cbooksid <> bk.cuserid and bk.cbooksid like bk.cuserid || '%%' and bk.cuserid = '%@'",writeDate,@(SSJSyncVersion()),userId];
+            NSString *sql2 = [NSString stringWithFormat:@"insert into bk_user_bill select a.cuserid ,b.id , 1, '%@', '%@', 0, b.defaultorder, a.cbooksid from bk_books_type a, bk_bill_type b where a.iparenttype = b.ibookstype and a.cbooksid <> a.cuserid and length(b.ibookstype) = 1 and a.cbooksid like a.cuserid || '%%' and cuserid = '%@'",writeDate,@(SSJSyncVersion()),userId];
             if (![db executeUpdate:sql2]) {
                 if (error) {
                     *error = [db lastError];
                 }
                 return NO;
+            }
+            
+            FMResultSet *result = [db executeQuery:@"select id ,defaultorder ,ibookstype from bk_bill_type where length(ibookstype) > 1"];
+            
+            NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:0];
+            
+            while ([result next]) {
+                NSString *cbillid = [result stringForColumn:@"id"];
+                NSString *defualtOrder = [result stringForColumn:@"defaultorder"];
+                NSString *iparenttype = [result stringForColumn:@"ibookstype"];
+                NSDictionary *dic = @{@"kBillIdKey":cbillid,
+                                      @"kDefualtOrderKey":defualtOrder,
+                                      @"kParentTypeKey":iparenttype};
+                [tempArr addObject:dic];
+            };
+            
+            for (NSDictionary *dict in tempArr) {
+                NSString *cbillid = [dict objectForKey:@"kBillIdKey"];
+                NSString *defualtOrder = [dict objectForKey:@"kDefualtOrderKey"];
+                NSString *iparenttype = [dict objectForKey:@"kParentTypeKey"];
+                NSArray *parentArr = [iparenttype componentsSeparatedByString:@","];
+                for (NSString *parenttype in parentArr) {
+                    if ([parenttype integerValue]) {
+                        if (![db executeUpdate:@"insert into bk_user_bill select cuserid ,? , 1, ?, ?, 1, ?, cbooksid from bk_books_type where iparenttype = ? and operatortype <> 2 and cuserid = ?",cbillid,writeDate,@(SSJSyncVersion()),defualtOrder,parenttype,userId]) {
+                            return [db lastError];
+                        }
+                    }
+                }
             }
         }
     }else{

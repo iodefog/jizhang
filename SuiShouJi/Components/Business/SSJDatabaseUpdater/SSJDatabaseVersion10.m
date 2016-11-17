@@ -135,18 +135,18 @@ static NSString *const kDefualtOrderKey = @"kDefualtOrderKey";
     }
     
     // 首先给每个默认账本加入默认的独有的记账类型
-    if (![db executeUpdate:@"insert into bk_user_bill select a.cuserid ,b.id , 1, ?, ?, 0, b.defaultorder, a.cbooksid from bk_books_type a, bk_bill_type b where a.iparenttype = b.ibookstype and a.cbooksid <> a.cuserid and length(a.ibookstype) = 1 and a.cbooksid like a.cuserid || '%'",cwriteDate,@(SSJSyncVersion())]) {
+    if (![db executeUpdate:@"insert into bk_user_bill select a.cuserid ,b.id , 1, ?, ?, 0, b.defaultorder, a.cbooksid from bk_books_type a, bk_bill_type b where a.iparenttype = b.ibookstype and a.cbooksid <> a.cuserid and length(b.ibookstype) = 1 and a.cbooksid like a.cuserid || '%'",cwriteDate,@(SSJSyncVersion())]) {
         return [db lastError];
     }
     
-    FMResultSet *result = [db executeQuery:@"select id ,defaultorder ,iparenttype from bk_books_type where length(a.ibookstype) > 1"];
+    FMResultSet *result = [db executeQuery:@"select id ,defaultorder ,ibookstype from bk_bill_type where length(ibookstype) > 1"];
     
     NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:0];
     
     while ([result next]) {
         NSString *cbillid = [result stringForColumn:@"id"];
         NSString *defualtOrder = [result stringForColumn:@"defaultorder"];
-        NSString *iparenttype = [result stringForColumn:@"iparenttype"];
+        NSString *iparenttype = [result stringForColumn:@"ibookstype"];
         NSDictionary *dic = @{kBillIdKey:cbillid,
                               kDefualtOrderKey:defualtOrder,
                               kParentTypeKey:iparenttype};
@@ -159,8 +159,10 @@ static NSString *const kDefualtOrderKey = @"kDefualtOrderKey";
         NSString *iparenttype = [dict objectForKey:kParentTypeKey];
         NSArray *parentArr = [iparenttype componentsSeparatedByString:@","];
         for (NSString *parenttype in parentArr) {
-            if ([db executeUpdate:@"insert into bk_user_bill select cuserid ,? , 1, ?, ?, 1, ?, cbooksid from bk_books_type where iparenttype = ? and operatortype <> 2",cbillid,cwriteDate,@(SSJSyncVersion()),defualtOrder,parenttype]) {
-                return [db lastError];
+            if ([parenttype integerValue]) {
+                if ([db executeUpdate:@"insert into bk_user_bill select cuserid ,? , 1, ?, ?, 1, ?, cbooksid from bk_books_type where iparenttype = ? and operatortype <> 2",cbillid,cwriteDate,@(SSJSyncVersion()),defualtOrder,parenttype]) {
+                    return [db lastError];
+                }
             }
         }
     }
