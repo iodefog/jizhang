@@ -58,6 +58,7 @@ static NSString * SSJTransferEditeCellIdentifier = @"SSJTransferEditeCellIdentif
     }else{
         self.titles = @[@[kTitle1,kTitle2,kTitle3,kTitle5]];
     }
+    [self.tableView reloadData];
 }
 
 #pragma mark - UITableViewDelegate
