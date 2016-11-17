@@ -793,7 +793,7 @@ const int kMemoMaxLength = 13;
         self.changeCompoundModel.targetChargeModel.money = self.loanModel.jMoney - self.originalMoney;
         self.changeCompoundModel.chargeModel.chargeType = SSJLoanCompoundChargeTypeBalanceIncrease;
         
-        switch (_type) {
+        switch (self.loanModel.type) {
             case SSJLoanTypeLend:
                 self.changeCompoundModel.chargeModel.billId = @"9";
                 self.changeCompoundModel.targetChargeModel.billId = @"10";
@@ -811,7 +811,7 @@ const int kMemoMaxLength = 13;
         self.changeCompoundModel.targetChargeModel.money = self.originalMoney - self.loanModel.jMoney;
         self.changeCompoundModel.chargeModel.chargeType = SSJLoanCompoundChargeTypeBalanceDecrease;
         
-        switch (_type) {
+        switch (self.loanModel.type) {
             case SSJLoanTypeLend:
                 self.changeCompoundModel.chargeModel.billId = @"10";
                 self.changeCompoundModel.targetChargeModel.billId = @"9";
@@ -829,20 +829,9 @@ const int kMemoMaxLength = 13;
     }
 }
 
-- (NSString *)fundId {
-    switch (_type) {
-        case SSJLoanTypeLend:
-            return [NSString stringWithFormat:@"%@-5", SSJUSERID()];
-            break;
-            
-        case SSJLoanTypeBorrow:
-            return [NSString stringWithFormat:@"%@-6", SSJUSERID()];
-            break;
-    }
-}
-
 - (void)updateChargeModels {
     
+    self.createCompoundModel.chargeModel.fundId = self.loanModel.fundID;
     self.createCompoundModel.chargeModel.billDate = self.loanModel.borrowDate;
     self.createCompoundModel.chargeModel.memo = self.loanModel.memo;
     
@@ -854,6 +843,7 @@ const int kMemoMaxLength = 13;
         
         [self updateBalanceChangeMoney];
         
+        self.changeCompoundModel.chargeModel.fundId = self.loanModel.fundID;
         self.changeCompoundModel.chargeModel.billDate = self.loanModel.borrowDate;
         self.changeCompoundModel.chargeModel.memo = self.loanModel.memo;
         
@@ -892,8 +882,16 @@ const int kMemoMaxLength = 13;
         _loanModel.lender = @"";
         _loanModel.memo = @"";
         _loanModel.operatorType = 0;
-        _loanModel.fundID = [self fundId];
         _loanModel.type = self.type;
+        switch (self.type) {
+            case SSJLoanTypeLend:
+                _loanModel.fundID = [NSString stringWithFormat:@"%@-5", SSJUSERID()];
+                break;
+                
+            case SSJLoanTypeBorrow:
+                _loanModel.fundID = [NSString stringWithFormat:@"%@-6", SSJUSERID()];
+                break;
+        }
     }
     return _loanModel;
 }
@@ -922,15 +920,11 @@ const int kMemoMaxLength = 13;
                     break;
             }
             
-            NSDate *billDate = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:[NSDate date].day];
-            
             SSJLoanChargeModel *chargeModel = [[SSJLoanChargeModel alloc] init];
             chargeModel.chargeId = SSJUUID();
-            chargeModel.fundId = [self fundId];
             chargeModel.billId = chargeBillId;
             chargeModel.loanId = self.loanModel.ID;
             chargeModel.userId = SSJUSERID();
-            chargeModel.billDate = billDate;
             chargeModel.type = _type;
             chargeModel.chargeType = SSJLoanCompoundChargeTypeCreate;
             
@@ -939,7 +933,6 @@ const int kMemoMaxLength = 13;
             targetChargeModel.billId = targetChargeBillId;
             targetChargeModel.loanId = self.loanModel.ID;
             targetChargeModel.userId = SSJUSERID();
-            targetChargeModel.billDate = billDate;
             targetChargeModel.type = _type;
             targetChargeModel.chargeType = SSJLoanCompoundChargeTypeCreate;
             
@@ -954,23 +947,17 @@ const int kMemoMaxLength = 13;
 - (SSJLoanCompoundChargeModel *)changeCompoundModel {
     if (!_changeCompoundModel) {
         
-        NSDate *billDate = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:[NSDate date].day];
-        
         SSJLoanChargeModel *chargeModel = [[SSJLoanChargeModel alloc] init];
         chargeModel.chargeId = SSJUUID();
-        chargeModel.fundId = [self fundId];
         chargeModel.loanId = self.loanModel.ID;
         chargeModel.userId = SSJUSERID();
-        chargeModel.billDate = billDate;
-        chargeModel.type = _type;
+        chargeModel.type = self.loanModel.type;
         
         SSJLoanChargeModel *targetChargeModel = [[SSJLoanChargeModel alloc] init];
         targetChargeModel.chargeId = SSJUUID();
-        targetChargeModel.fundId = self.loanModel.targetFundID;
         targetChargeModel.loanId = self.loanModel.ID;
         targetChargeModel.userId = SSJUSERID();
-        targetChargeModel.billDate = billDate;
-        targetChargeModel.type = _type;
+        targetChargeModel.type = self.loanModel.type;
         
         _changeCompoundModel = [[SSJLoanCompoundChargeModel alloc] init];
         _changeCompoundModel.chargeModel = chargeModel;
