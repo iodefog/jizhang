@@ -72,6 +72,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     [self.view addSubview:self.deleteBtn];
     [self.view addSubview:self.closeOutBtn];
     [self.tableView addSubview:self.stampView];
+    self.stampView.layer.zPosition = 100;
     
     [self updateAppearance];
 }
@@ -124,7 +125,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     if (section == 1) {
         return 40;
     }
-    return 10;
+    return 0;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
@@ -208,23 +209,48 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
 }
 
 - (void)organiseHeaderItems {
+    double surplus = 0;     // 剩余金额
     double loanSum = 0;     // 借贷总额
     double interest = 0;    // 产生利息
     double payment = 0;     // 已收、已还金额
     
     for (SSJLoanCompoundChargeModel *compoundModel in _chargeModels) {
-        if (compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeCreate) {
-            loanSum = compoundModel.chargeModel.money;
-        } else if (compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeBalanceIncrease) {
-            loanSum += compoundModel.chargeModel.money;
-        } else if (compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeBalanceDecrease) {
-            loanSum -= compoundModel.chargeModel.money;
-        } else if (compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeAdd) {
-            loanSum += compoundModel.chargeModel.money;
-        } else if (compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeInterest) {
-            interest += compoundModel.chargeModel.money;
-        } else if (compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeRepayment) {
-            payment += compoundModel.chargeModel.money;
+        switch (compoundModel.chargeModel.chargeType) {
+            case SSJLoanCompoundChargeTypeCreate:
+                surplus = compoundModel.chargeModel.money;
+                loanSum = compoundModel.chargeModel.money;
+                break;
+                
+            case SSJLoanCompoundChargeTypeBalanceIncrease:
+                surplus += compoundModel.chargeModel.money;
+                loanSum += compoundModel.chargeModel.money;
+                break;
+                
+            case SSJLoanCompoundChargeTypeBalanceDecrease:
+                surplus -= compoundModel.chargeModel.money;
+                loanSum -= compoundModel.chargeModel.money;
+                break;
+                
+            case SSJLoanCompoundChargeTypeRepayment:
+                surplus -= compoundModel.chargeModel.money;
+                payment += compoundModel.chargeModel.money;
+                break;
+                
+            case SSJLoanCompoundChargeTypeAdd:
+                surplus += compoundModel.chargeModel.money;
+                loanSum += compoundModel.chargeModel.money;
+                break;
+                
+            case SSJLoanCompoundChargeTypeCloseOut:
+                surplus -= compoundModel.chargeModel.money;
+                break;
+                
+            case SSJLoanCompoundChargeTypeInterest:
+                break;
+        }
+        
+        if (compoundModel.interestChargeModel.money > 0) {
+            interest += compoundModel.interestChargeModel.money;
         }
     }
     
@@ -255,7 +281,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     }
     
     SSJSeparatorFormViewCellItem *surplusItem = [SSJSeparatorFormViewCellItem itemWithTopTitle:surplusTitle
-                                                                                   bottomTitle:[NSString stringWithFormat:@"%.2f", self.loanModel.jMoney]
+                                                                                   bottomTitle:[NSString stringWithFormat:@"%.2f", surplus]
                                                                                  topTitleColor:[UIColor whiteColor]
                                                                               bottomTitleColor:[UIColor whiteColor]
                                                                                   topTitleFont:[UIFont systemFontOfSize:11]
@@ -536,17 +562,17 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
 #pragma mark - Getter
 - (UITableView *)tableView {
     if (!_tableView) {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM) style:UITableViewStyleGrouped];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM) style:UITableViewStylePlain];
         _tableView.dataSource = self;
         _tableView.delegate = self;
         _tableView.backgroundView = nil;
         _tableView.backgroundColor = [UIColor clearColor];
-        [_tableView setSeparatorInset:UIEdgeInsetsZero];
         [_tableView setTableFooterView:[[UIView alloc] init]];
         [_tableView registerClass:[SSJLoanDetailCell class] forCellReuseIdentifier:kSSJLoanDetailCellID];
         _tableView.rowHeight = 54;
         _tableView.sectionFooterHeight = 0;
         _tableView.contentInset = UIEdgeInsetsMake(0, 0, 54, 0);
+        _tableView.separatorInset = UIEdgeInsetsMake(0, 12, 0, 0);
     }
     return _tableView;
 }
@@ -597,8 +623,8 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
 - (UIImageView *)stampView {
     if (!_stampView) {
         _stampView = [[UIImageView alloc] initWithImage:[UIImage ssj_themeImageWithName:@"loan_stamp"]];
-        _stampView.size = CGSizeMake(134, 134);
-        _stampView.center = CGPointMake(self.tableView.width * 0.5, self.tableView.height * 0.32);
+        _stampView.size = CGSizeMake(70, 70);
+        _stampView.center = CGPointMake(self.tableView.width * 0.6, 178);
         _stampView.hidden = YES;
     }
     return _stampView;

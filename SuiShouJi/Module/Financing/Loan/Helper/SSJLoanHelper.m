@@ -156,26 +156,13 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
     }];
 }
 
-+ (void)queryLoanChangeDetailWithLoanChargeModel:(SSJLoanChargeModel *)model
-                                         success:(void (^)(SSJLoanCompoundChargeModel *model))success
-                                         failure:(void (^)(NSError *error))failure {
-    
-    NSError *tError = nil;
-    if (![self checkLoanModelValid:model error:&tError]) {
-        if (failure) {
-            failure(tError);
-        }
-        return;
-    }
-    
-    
-}
-
 + (void)queryLoanChargeModeListWithLoanModel:(SSJLoanModel *)loanModel
                                      success:(void (^)(NSArray <SSJLoanCompoundChargeModel *>*list))success
                                      failure:(void (^)(NSError *error))failure {
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        
+        SSJLoanCompoundChargeModel *createModel = nil;
         NSMutableArray *compoundModels = [NSMutableArray array];
         double surplus = 0; // 剩余金额
         
@@ -221,10 +208,17 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
             
             SSJLoanCompoundChargeModel *compoundModel = [[SSJLoanCompoundChargeModel alloc] init];
             compoundModel.chargeModel = chargeModel;
-            [compoundModels addObject:compoundModel];
+            if (compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeCreate) {
+                createModel = compoundModel;
+            } else {
+                [compoundModels addObject:compoundModel];
+            }
         }
         
         [resultSet close];
+        
+        // 确保创建的流水在数组中第一个
+        [compoundModels insertObject:createModel atIndex:0];
         
         // 查询和第一次查询结果匹配的流水（例第一次查询结果是转入，这次查询就是转出、利息，反之一样）
         for (SSJLoanCompoundChargeModel *compoundModel in compoundModels) {
@@ -446,7 +440,7 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
     }
     
     // 将和借贷相关的流水operatortype改为2
-    if (![db executeUpdate:@"update bk_user_charge set operatortype = %@, iversion = %@, cwritedate = '%@' where loanID = ?", @2, @(SSJSyncVersion()), writeDate, model.ID]) {
+    if (![db executeUpdate:@"update bk_user_charge set operatortype = ?, iversion = ?, cwritedate = ? where loanID = ?", @2, @(SSJSyncVersion()), writeDate, model.ID]) {
         if (error) {
             *error = [db lastError];
         }

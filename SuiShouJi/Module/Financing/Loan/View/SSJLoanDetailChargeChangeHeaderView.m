@@ -28,6 +28,9 @@
         _arrow.transform = CGAffineTransformMakeRotation(_expanded ? 0 : M_PI);
         [self addSubview:_arrow];
         
+        [self ssj_setBorderWidth:1];
+        [self ssj_setBorderStyle:(SSJBorderStyleTop | SSJBorderStyleBottom)];
+        
         [self updateAppearance];
         
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapAction)];
@@ -43,6 +46,8 @@
     
     _arrow.right = self.width - 20;
     _arrow.centerY = self.height * 0.5;
+    
+    [self ssj_relayoutBorder];
 }
 
 - (void)setExpanded:(BOOL)expanded {
@@ -63,6 +68,7 @@
 - (void)updateAppearance {
     _titleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     _arrow.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    [self ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
     if ([SSJCurrentThemeID() isEqualToString:SSJDefaultThemeID]) {
         self.backgroundColor = [UIColor whiteColor];
     } else {

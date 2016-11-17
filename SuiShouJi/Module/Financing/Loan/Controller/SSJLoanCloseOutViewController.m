@@ -353,21 +353,7 @@ static NSUInteger kClostOutDateTag = 1004;
 }
 
 - (BOOL)checkLoanModelValid {
-    if (_loanModel.jMoney <= 0) {
-        switch (_loanModel.type) {
-            case SSJLoanTypeLend:
-                [CDAutoHideMessageHUD showMessage:@"借出金额必须大于0元"];
-                break;
-                
-            case SSJLoanTypeBorrow:
-                [CDAutoHideMessageHUD showMessage:@"欠款金额必须大于0元"];
-                break;
-        }
-        
-        return NO;
-    }
-    
-    if (_loanModel.rate < 0) {
+    if (self.compoundModel.interestChargeModel.money < 0) {
         switch (_loanModel.type) {
             case SSJLoanTypeLend:
                 [CDAutoHideMessageHUD showMessage:@"利息收入不能小于0元"];
@@ -459,6 +445,19 @@ static NSUInteger kClostOutDateTag = 1004;
 #pragma mark - Event
 - (void)sureButtonAction {
     if ([self checkLoanModelValid]) {
+        
+        for (SSJLoanCompoundChargeModel *compoundModel in self.chargeModels) {
+            if (compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeCreate) {
+                self.loanModel.jMoney = compoundModel.chargeModel.money;
+            } else if (compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeBalanceIncrease) {
+                self.loanModel.jMoney += compoundModel.chargeModel.money;
+            } else if (compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeBalanceDecrease) {
+                self.loanModel.jMoney -= compoundModel.chargeModel.money;
+            } else if (compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeAdd) {
+                self.loanModel.jMoney += compoundModel.chargeModel.money;
+            }
+        }
+        
         self.sureButton.enabled = NO;
         [SSJLoanHelper closeOutLoanModel:self.loanModel chargeModel:self.compoundModel success:^{
             self.sureButton.enabled = YES;
