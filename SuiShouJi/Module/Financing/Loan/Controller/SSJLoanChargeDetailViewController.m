@@ -38,7 +38,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self updateTitle];
+    
     [self showDeleteItemIfNeeded];
     [self.view addSubview:self.tableView];
     [self updateAppearance];
@@ -81,6 +81,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     [SSJLoanHelper queryLoanCompoundChangeModelWithChargeId:self.chargeId success:^(SSJLoanCompoundChargeModel * _Nonnull model) {
         [self.view ssj_hideLoadingIndicator];
         self.compoundModel = model;
+        [self updateTitle];
         [self organiseCellItems];
         [self.tableView reloadData];
     } failure:^(NSError * _Nonnull error) {

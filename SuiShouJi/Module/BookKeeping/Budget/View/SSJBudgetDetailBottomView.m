@@ -39,18 +39,4 @@
     return _circleView;
 }
 
-//- (SSJBorderButton *)button {
-//    if (!_button) {
-//        _button = [[SSJBorderButton alloc] init];
-//        [_button setFontSize:21];
-//        [_button setTitle:@"编辑" forState:SSJBorderButtonStateNormal];
-//        [_button setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:SSJBorderButtonStateNormal];
-//        [_button setTitleColor:[UIColor whiteColor] forState:SSJBorderButtonStateHighlighted];
-//        [_button setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:SSJBorderButtonStateNormal];
-//        [_button setBackgroundColor:[UIColor clearColor] forState:SSJBorderButtonStateNormal];
-//        [_button setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:SSJBorderButtonStateHighlighted];
-//    }
-//    return _button;
-//}
-
 @end

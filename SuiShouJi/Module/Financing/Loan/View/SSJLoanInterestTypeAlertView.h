@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SSJLoanModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -14,29 +15,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface SSJLoanInterestTypeAlertView : UIView
 
-- (instancetype)initWithTitle:(nullable NSString *)title sureButtonItem:(nullable SSJLoanInterestTypeAlertViewButtonItem *)sureButtonItem otherButtonItem:(nullable SSJLoanInterestTypeAlertViewButtonItem *)otherButtonItem,...;
+@property (nonatomic) SSJLoginType type;
 
-@end
+@property (nonatomic) SSJLoanInterestType interestType;
 
-typedef void(^SSJLoanInterestTypeAlertViewButtonAction)();
-
-@interface SSJLoanInterestTypeAlertViewButtonItem : NSObject
-
-@property (nonatomic, copy) NSString *title;
-
-@property (nonatomic, strong) UIColor *titleColor;
-
-@property (nonatomic, strong) UIColor *borderColor;
-
-@property (nonatomic, strong) UIColor *fillColor;
-
-@property (nonatomic, copy) SSJLoanInterestTypeAlertViewButtonAction action;
-
-+ (instancetype)itemWithTitle:(NSString *)title
-                   titleColor:(UIColor *)titleColor
-                  borderColor:(UIColor *)borderColor
-                    fillColor:(UIColor *)fillColor
-                       action:(SSJLoanInterestTypeAlertViewButtonAction)action;
+@property (nonatomic) double money;
 
 @end
 

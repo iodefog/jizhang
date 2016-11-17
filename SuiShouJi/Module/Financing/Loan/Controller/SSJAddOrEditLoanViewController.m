@@ -866,6 +866,7 @@ const int kMemoMaxLength = 13;
         _loanModel.memo = @"";
         _loanModel.operatorType = 0;
         _loanModel.fundID = [self fundId];
+        _loanModel.type = self.type;
         if (_loanModel.remindID.length) {
             _reminderItem = [SSJLocalNotificationStore queryReminderItemForID:_loanModel.remindID];
         }

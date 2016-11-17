@@ -7,22 +7,18 @@
 //
 
 #import "SSJLoanInterestTypeAlertView.h"
+#import "SSJBorderButton.h"
 
 @interface SSJLoanInterestTypeAlertView ()
 
 @property (nonatomic, strong) UILabel *titleLab;
 
-@property (nonatomic, strong) UILabel *descLab;
+@property (nonatomic, strong) SSJBorderButton *button1;
 
-@property (nonatomic, strong) UIButton *button1;
-
-@property (nonatomic, strong) UIButton *button2;
+@property (nonatomic, strong) SSJBorderButton *button2;
 
 @property (nonatomic, strong) UIButton *sureButton;
 
-@property (nonatomic, strong) NSMutableArray *otherButtonItems;
-
-@property (nonatomic, strong) SSJLoanInterestTypeAlertViewButtonItem *sureButtonItem;
 
 @end
 
@@ -36,23 +32,28 @@
     
     if (self = [super initWithFrame:CGRectZero]) {
         
-        self.otherButtonItems = [[NSMutableArray alloc] init];
+        
+        NSMutableArray *buttonItems = [[NSMutableArray alloc] init];
         if (otherButtonItem) {
-            [self.otherButtonItems addObject:otherButtonItem];
+            [buttonItems addObject:otherButtonItem];
         }
         
         va_list actionList;
         va_start(actionList, otherButtonItem);
         SSJLoanInterestTypeAlertViewButtonItem *tempItem = nil;
         while ((tempItem = va_arg(actionList, SSJLoanInterestTypeAlertViewButtonItem *))) {
-            [self.otherButtonItems addObject:tempItem];
+            [buttonItems addObject:tempItem];
         }
         va_end(actionList);
+//        [self initButtonsWithItems:buttonItems];
         
+        self.sureButton = [UIButton buttonWithType:UIButtonTypeCustom];
+//        [self updateButton:self.sureButton withItem:sureButtonItem];
+        
+        self.titleLab.text = title;
         
         [self addSubview:self.titleLab];
         [self addSubview:self.sureButton];
-        [self initButtons];
     }
     
     return self;
@@ -62,27 +63,27 @@
     
 }
 
-- (void)initButtons {
-    
-}
-
-//- (void)
-
 - (UILabel *)titleLab {
     if (!_titleLab) {
         _titleLab = [[UILabel alloc] init];
         _titleLab.font = [UIFont systemFontOfSize:18];
         _titleLab.textColor = [UIColor ssj_colorWithHex:@"#393939"];
-        _titleLab.text = @"";
     }
     return _titleLab;
 }
 
-- (UILabel *)descLab {
-    if (!_descLab) {
-        
+- (SSJBorderButton *)button1 {
+    if (!_button1) {
+        _button1 = [[SSJBorderButton alloc] init];
+        [_button1 setFontSize:21];
+        [_button1 setTitle:@"" forState:SSJBorderButtonStateNormal];
+        [_button1 setTitleColor:[UIColor ssj_colorWithHex:@"#eb4a64"] forState:SSJBorderButtonStateNormal];
+        [_button1 setTitleColor:[UIColor whiteColor] forState:SSJBorderButtonStateHighlighted];
+        [_button1 setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:SSJBorderButtonStateNormal];
+        [_button1 setBackgroundColor:[UIColor clearColor] forState:SSJBorderButtonStateNormal];
+        [_button1 setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:SSJBorderButtonStateHighlighted];
     }
-    return _descLab;
+    return _button1;
 }
 
 @end
