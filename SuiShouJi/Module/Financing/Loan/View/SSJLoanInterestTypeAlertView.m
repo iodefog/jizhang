@@ -130,6 +130,8 @@ static NSString *const kSelectedBorderColorValue = @"#eb4a64";
     if (!_originalPrincipalButton) {
         _originalPrincipalButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _originalPrincipalButton.titleLabel.font = [UIFont systemFontOfSize:16];
+        _originalPrincipalButton.titleLabel.adjustsFontSizeToFitWidth = YES;
+        _originalPrincipalButton.titleLabel.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
         [_originalPrincipalButton setTitleColor:[UIColor ssj_colorWithHex:@"#343434"] forState:UIControlStateNormal];
         [_originalPrincipalButton addTarget:self action:@selector(originalPrincipalButtonAction) forControlEvents:UIControlEventTouchUpInside];
         
@@ -143,6 +145,8 @@ static NSString *const kSelectedBorderColorValue = @"#eb4a64";
     if (!_changePrincipalButton) {
         _changePrincipalButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _changePrincipalButton.titleLabel.font = [UIFont systemFontOfSize:16];
+        _changePrincipalButton.titleLabel.adjustsFontSizeToFitWidth = YES;
+        _changePrincipalButton.titleLabel.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
         [_changePrincipalButton setTitleColor:[UIColor ssj_colorWithHex:@"#343434"] forState:UIControlStateNormal];
         [_changePrincipalButton addTarget:self action:@selector(changePrincipalButtonAction) forControlEvents:UIControlEventTouchUpInside];
         
