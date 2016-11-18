@@ -720,6 +720,56 @@ const int kMemoMaxLength = 13;
     return YES;
 }
 
+- (BOOL)validateBorrowDate:(NSDate *)date {
+    if ([date compare:self.loanModel.repaymentDate] == NSOrderedDescending) {
+        switch (self.loanModel.type) {
+            case SSJLoanTypeLend:
+                [CDAutoHideMessageHUD showMessage:@"借款日不能晚于还款日"];
+                break;
+                
+            case SSJLoanTypeBorrow:
+                [CDAutoHideMessageHUD showMessage:@"欠款日不能晚于还款日"];
+                break;
+        }
+        
+        return NO;
+    }
+    
+    for (SSJLoanCompoundChargeModel *model in self.chargeModels) {
+        if (model.chargeModel.chargeType == SSJLoanCompoundChargeTypeRepayment) {
+            if ([date compare:model.chargeModel.billDate] == NSOrderedDescending) {
+                switch (self.loanModel.type) {
+                    case SSJLoanTypeLend:
+                        [CDAutoHideMessageHUD showMessage:@"更改借款日期不能晚于收款流水日期"];
+                        break;
+                        
+                    case SSJLoanTypeBorrow:
+                        [CDAutoHideMessageHUD showMessage:@"更改欠款日期不能晚于还款流水日期"];
+                        break;
+                }
+                
+                return NO;
+            }
+        } else if (model.chargeModel.chargeType == SSJLoanCompoundChargeTypeAdd) {
+            if ([date compare:model.chargeModel.billDate] == NSOrderedDescending) {
+                switch (self.loanModel.type) {
+                    case SSJLoanTypeLend:
+                        [CDAutoHideMessageHUD showMessage:@"更改借款日期不能晚于追加借款日期"];
+                        break;
+                        
+                    case SSJLoanTypeBorrow:
+                        [CDAutoHideMessageHUD showMessage:@"更改欠款日期不能晚于追加欠款日期"];
+                        break;
+                }
+                
+                return NO;
+            }
+        }
+    }
+    
+    return YES;
+}
+
 - (void)enterReminderVC {
     SSJReminderItem *tmpRemindItem = _reminderItem;
     
@@ -1080,20 +1130,7 @@ const int kMemoMaxLength = 13;
             }
         };
         _borrowDateSelectionView.shouldSelectDateAction = ^BOOL(SSJLoanDateSelectionView *view, NSDate *date) {
-            if ([date compare:wself.loanModel.repaymentDate] == NSOrderedDescending) {
-                switch (wself.loanModel.type) {
-                    case SSJLoanTypeLend:
-                        [CDAutoHideMessageHUD showMessage:@"借款日不能晚于还款日"];
-                        break;
-                        
-                    case SSJLoanTypeBorrow:
-                        [CDAutoHideMessageHUD showMessage:@"欠款日不能晚于还款日"];
-                        break;
-                }
-                return NO;
-            }
-            
-            return YES;
+            return [wself validateBorrowDate:date];
         };
     }
     return _borrowDateSelectionView;
