@@ -714,7 +714,7 @@ static NSUInteger kDateTag = 1005;
 }
 
 - (BOOL)showInterestTypeAlertIfNeeded {
-    if (self.loanModel.interestType == SSJLoanInterestTypeUnknown) {
+    if (self.loanModel.interestType == SSJLoanInterestTypeUnknown && self.loanModel.interest) {
         
         [self.view endEditing:YES];
         
