@@ -10,5 +10,16 @@
 #import "SSJBillingChargeCellItem.h"
 
 @interface SSJCalenderDetailViewController :SSJNewBaseTableViewController<UIAlertViewDelegate>
+
 @property (nonatomic,strong) SSJBillingChargeCellItem *item;
+
+// 类别id或者成员id
+@property(nonatomic, strong) NSString *Id;
+
+// 账本id
+@property(nonatomic, strong) NSString *booksId;
+
+// 是成员流水还是类别流水
+@property (nonatomic) BOOL isMemberCharge;
+
 @end
