@@ -249,7 +249,7 @@
                                forUserId:(NSString *)userId{
     NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm;ss.sss"];
     if (![db intForQuery:@"select count(1) from bk_user_bill where cbooksid = ?",item.booksId]) {
-        if (![db executeUpdate:@"insert into bk_user_bill select ?, id, istate, ?, ?, 1, defaultorder,? from bk_bill_type where ibookstype = ? and icustom = 0",userId,@(SSJSyncVersion()),writeDate,item.booksId,@(item.booksParent)]) {
+        if (![db executeUpdate:@"insert into bk_user_bill select ?, id, istate, ?, ?, 1, defaultorder,? from bk_bill_type where ibookstype = ? and icustom = 0",userId,writeDate,@(SSJSyncVersion()),item.booksId,@(item.booksParent)]) {
             return NO;
         }
     }

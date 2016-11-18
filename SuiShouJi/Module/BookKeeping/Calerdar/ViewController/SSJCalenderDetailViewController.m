@@ -285,14 +285,29 @@
             }
         }
         [db executeUpdate:@"DELETE FROM BK_DAILYSUM_CHARGE WHERE SUMAMOUNT = 0 AND INCOMEAMOUNT = 0 AND EXPENCEAMOUNT = 0"];
-        chargeCount = [db intForQuery:@"select count(1) from bk_user_charge where cuserid = ? and cbooksid = ? and cbilldate like ? and operatortype <> 2",weakSelf.item.booksId,userId,[NSString stringWithFormat:@"%@__",[weakSelf.item.billDate substringWithRange:NSMakeRange(0, 8)]]];
-    }];
-    if ([[self.navigationController.viewControllers firstObject] isKindOfClass:[SSJReportFormsViewController class]]) {
-        if (chargeCount == 0) {
-            [self.navigationController popToRootViewControllerAnimated:YES];
+        NSMutableString *chargeCountSql;
+        if (weakSelf.isMemberCharge) {
+            chargeCountSql = [NSMutableString stringWithFormat:@"select count(1) from bk_user_charge where cuserid = '%@' and operatortype <> 2",userId];
+            if (weakSelf.booksId.length && ![weakSelf.booksId isEqualToString:@"all"]) {
+                [chargeCountSql appendFormat:@" and cbooksid = '%@'",weakSelf.booksId];
+            }
+            if (weakSelf.Id.length) {
+                [chargeCountSql appendFormat:@" and cmemberid = '%@'",weakSelf.Id];
+            }
         }else{
-            [self.navigationController popViewControllerAnimated:YES];
+            chargeCountSql = [NSMutableString stringWithFormat:@"select count(1) from bk_user_charge where cuserid = '%@' and operatortype <> 2",userId];
+            if (weakSelf.booksId.length && ![weakSelf.booksId isEqualToString:@"all"]) {
+                [chargeCountSql appendFormat:@" and cbooksid = '%@'",weakSelf.booksId];
+            }
+            if (weakSelf.Id.length) {
+                [chargeCountSql appendFormat:@" and ibillid = '%@'",weakSelf.Id];
+            }
         }
+        chargeCount = [db intForQuery:chargeCountSql];
+    }];
+    if (!chargeCount && weakSelf.Id.length && weakSelf.booksId.length) {
+        UIViewController *vc = [weakSelf.navigationController.viewControllers objectAtIndex:weakSelf.navigationController.viewControllers.count - 3];
+        [self.navigationController popToViewController:vc animated:YES];
     }else{
         [self.navigationController popViewControllerAnimated:YES];
     }

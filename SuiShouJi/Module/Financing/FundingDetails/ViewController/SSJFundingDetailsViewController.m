@@ -256,9 +256,12 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
                     transferVc.chargeItem = (SSJBillingChargeCellItem*)item;
                     [self.navigationController pushViewController:transferVc animated:YES];
                 } else {
-                    SSJCalenderDetailViewController *calenderDetailVC = [[SSJCalenderDetailViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
-                    calenderDetailVC.item = (SSJBillingChargeCellItem *)item;
-                    [self.navigationController pushViewController:calenderDetailVC animated:YES];
+                    if (billId != 1 && billId != 2) {
+                        SSJCalenderDetailViewController *calenderDetailVC = [[SSJCalenderDetailViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
+                        calenderDetailVC.item = (SSJBillingChargeCellItem *)item;
+                        [self.navigationController pushViewController:calenderDetailVC animated:YES];
+
+                    }
                 }
             }
         }

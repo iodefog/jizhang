@@ -12,6 +12,7 @@
 #import "SSJBillingChargeCell.h"
 #import "SSJBillingChargeHelper.h"
 #import "UIViewController+MMDrawerController.h"
+#import "SSJUserTableManager.h"
 
 static NSString *const kBillingChargeCellID = @"kBillingChargeCellID";
 static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID";
@@ -105,6 +106,11 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
     NSArray *datas = sectionInfo[SSJBillingChargeRecordKey];
     SSJBillingChargeCellItem *selectedItem = [datas ssj_safeObjectAtIndex:indexPath.row];
     SSJCalenderDetailViewController *calenderDetailVC = [[SSJCalenderDetailViewController alloc] initWithTableViewStyle:UITableViewStyleGrouped];
+    if (!self.booksId.length) {
+        self.booksId = [SSJUserTableManager queryUserItemForID:SSJUSERID()].currentBooksId;
+    }
+    calenderDetailVC.booksId = self.booksId;
+    calenderDetailVC.Id = self.ID;
     calenderDetailVC.item = selectedItem;
     [self.navigationController pushViewController:calenderDetailVC animated:YES];
 }
