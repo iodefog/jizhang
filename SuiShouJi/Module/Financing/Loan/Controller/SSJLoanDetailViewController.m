@@ -416,7 +416,28 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     [self.section2Items removeAllObjects];
     
     if (self.changeSectionHeaderView.expanded) {
-        for (SSJLoanCompoundChargeModel *compoundModel in self.chargeModels) {
+        // 把流水列表按照billdate、writedate降序排序，优先级billdate>writedate
+        NSArray *tmpModels = [self.chargeModels sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+            
+            SSJLoanCompoundChargeModel *model1 = obj1;
+            SSJLoanCompoundChargeModel *model2 = obj2;
+            
+            if ([model1.chargeModel.billDate compare:model2.chargeModel.billDate] == NSOrderedAscending) {
+                return NSOrderedDescending;
+            } else if ([model1.chargeModel.billDate compare:model2.chargeModel.billDate] == NSOrderedDescending) {
+                return NSOrderedAscending;
+            } else {
+                if ([model1.chargeModel.writeDate compare:model2.chargeModel.writeDate] == NSOrderedAscending) {
+                    return NSOrderedDescending;
+                } else if ([model1.chargeModel.writeDate compare:model2.chargeModel.writeDate] == NSOrderedDescending) {
+                    return NSOrderedAscending;
+                } else {
+                    return NSOrderedSame;
+                }
+            }
+        }];
+        
+        for (SSJLoanCompoundChargeModel *compoundModel in tmpModels) {
             [self.section2Items addObject:[SSJLoanDetailCellItem cellItemWithChargeModel:compoundModel.chargeModel]];
             if (compoundModel.interestChargeModel) {
                 [self.section2Items addObject:[SSJLoanDetailCellItem cellItemWithChargeModel:compoundModel.interestChargeModel]];

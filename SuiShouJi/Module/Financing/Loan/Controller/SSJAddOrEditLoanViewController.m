@@ -355,15 +355,6 @@ const int kMemoMaxLength = 15;
 }
 
 #pragma mark - UITextFieldDelegate
-//- (void)textFieldDidEndEditing:(UITextField *)textField {
-//    if (textField.tag == kMoneyTag) {
-//        NSString *money = [textField.text stringByReplacingOccurrencesOfString:@"¥" withString:@""];
-//        textField.text = [NSString stringWithFormat:@"¥%.2f", [money doubleValue]];
-//    } else if (textField.tag == kRateTag) {
-//        textField.text = [NSString stringWithFormat:@"%.1f", [textField.text doubleValue]];
-//    }
-//}
-
 // 有些输入框的clearsOnBeginEditing设为YES，只要获取焦点文本内容就会清空，这种情况下不会收到文本改变的通知，所以在这个代理函数中进行了处理
 - (BOOL)textFieldShouldClear:(UITextField *)textField {
     if (textField.tag == kLenderTag) {

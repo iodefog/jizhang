@@ -383,7 +383,6 @@ static NSUInteger kDateTag = 1005;
                     }
                 }
             }
-
             
             textField.text = [NSString stringWithFormat:@"¥%@", tmpMoneyStr];
             

@@ -55,9 +55,14 @@ static NSUInteger kClostOutDateTag = 1004;
 @implementation SSJLoanCloseOutViewController
 
 #pragma mark - Lifecycle
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextFieldTextDidChangeNotification object:nil];
+}
+
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.title = @"结清";
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:) name:UITextFieldTextDidChangeNotification object:nil];
     }
     return self;
 }
@@ -165,22 +170,10 @@ static NSUInteger kClostOutDateTag = 1004;
 }
 
 #pragma mark - UITextFieldDelegate
-- (void)textFieldDidEndEditing:(UITextField *)textField {
+// 有些输入框的clearsOnBeginEditing设为YES，只要获取焦点文本内容就会清空，这种情况下不会收到文本改变的通知，所以在这个代理函数中进行了处理
+- (BOOL)textFieldShouldClear:(UITextField *)textField {
     if (textField.tag == kInterestTag) {
-        NSString *money = [textField.text stringByReplacingOccurrencesOfString:@"¥" withString:@""];
-        textField.text = [NSString stringWithFormat:@"¥%.2f", [money doubleValue]];
-    }
-}
-
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    if (textField.tag == kInterestTag) {
-        NSString *tmpMoneyStr = [textField.text stringByReplacingCharactersInRange:range withString:string];
-        tmpMoneyStr = [tmpMoneyStr stringByReplacingOccurrencesOfString:@"¥" withString:@""];
-        tmpMoneyStr = [tmpMoneyStr ssj_reserveDecimalDigits:2 intDigits:0];
-        textField.text = [NSString stringWithFormat:@"¥%@", tmpMoneyStr];
-        self.compoundModel.interestChargeModel.money = [tmpMoneyStr doubleValue];
-        
-        return NO;
+        self.compoundModel.interestChargeModel.money = 0;
     }
     
     return YES;
@@ -237,7 +230,8 @@ static NSUInteger kClostOutDateTag = 1004;
 }
 
 - (BOOL)needToDisplayInterest {
-    return (_loanModel.interest && [_loanModel.endDate compare:_loanModel.borrowDate] == NSOrderedDescending);
+//    return (_loanModel.interest && [_loanModel.endDate compare:_loanModel.borrowDate] == NSOrderedDescending);
+    return _loanModel.interest;
 }
 
 - (void)organiseTitles {
@@ -396,7 +390,7 @@ static NSUInteger kClostOutDateTag = 1004;
 - (BOOL)validateEndDate:(NSDate *)endDate {
     for (SSJLoanCompoundChargeModel *compoundModel in self.chargeModels) {
         
-        if ([self.loanModel.endDate compare:compoundModel.chargeModel.billDate] == NSOrderedAscending) {
+        if ([endDate compare:compoundModel.chargeModel.billDate] == NSOrderedAscending) {
             switch (self.loanModel.type) {
                 case SSJLoanTypeLend:
                     if (compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeCreate
@@ -404,7 +398,7 @@ static NSUInteger kClostOutDateTag = 1004;
                         || compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeBalanceDecrease) {
                         [CDAutoHideMessageHUD showMessage:@"结清日不能早于借出日期"];
                     } else if (compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeRepayment) {
-                        [CDAutoHideMessageHUD showMessage:@"结清日不能早于收款日期"];
+                        [CDAutoHideMessageHUD showMessage:@"结清日不能早于收款流水日期"];
                     } else if (compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeAdd) {
                         [CDAutoHideMessageHUD showMessage:@"结清日不能早于追加借出日期"];
                     }
@@ -417,7 +411,7 @@ static NSUInteger kClostOutDateTag = 1004;
                         || compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeBalanceDecrease) {
                         [CDAutoHideMessageHUD showMessage:@"结清日不能早于欠款日期"];
                     } else if (compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeRepayment) {
-                        [CDAutoHideMessageHUD showMessage:@"结清日不能早于还款日期"];
+                        [CDAutoHideMessageHUD showMessage:@"结清日不能早于还款流水日期"];
                     } else if (compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeAdd) {
                         [CDAutoHideMessageHUD showMessage:@"结清日不能早于追加欠款日期"];
                     }
@@ -482,6 +476,23 @@ static NSUInteger kClostOutDateTag = 1004;
             self.sureButton.enabled = YES;
             [self showError:error];
         }];
+    }
+}
+
+- (void)textDidChange:(NSNotification *)notification {
+    UITextField *textField = notification.object;
+    if ([textField isKindOfClass:[UITextField class]]) {
+        
+        if (textField.tag == kInterestTag) {
+            
+            NSString *tmpMoneyStr = [textField.text stringByReplacingOccurrencesOfString:@"¥" withString:@""];
+            tmpMoneyStr = [tmpMoneyStr ssj_reserveDecimalDigits:2 intDigits:0];
+            if (tmpMoneyStr.length > 11) {
+                tmpMoneyStr = [tmpMoneyStr substringToIndex:11];
+            }
+            textField.text = [NSString stringWithFormat:@"¥%@", tmpMoneyStr];
+            self.compoundModel.interestChargeModel.money = [tmpMoneyStr doubleValue];
+        }
     }
 }
 
@@ -579,9 +590,9 @@ static NSUInteger kClostOutDateTag = 1004;
             weakSelf.compoundModel.targetChargeModel.billDate = view.selectedDate;
             weakSelf.compoundModel.interestChargeModel.billDate = view.selectedDate;
             
-            [weakSelf organiseTitles];
-            [weakSelf organiseImages];
-            [weakSelf organiseCellTags];
+//            [weakSelf organiseTitles];
+//            [weakSelf organiseImages];
+//            [weakSelf organiseCellTags];
             
             weakSelf.compoundModel.interestChargeModel.money = [SSJLoanHelper caculateInterestUntilDate:weakSelf.loanModel.endDate model:weakSelf.loanModel chargeModels:weakSelf.chargeModels];
             
