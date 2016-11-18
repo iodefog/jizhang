@@ -11,15 +11,22 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class SSJLoanInterestTypeAlertViewButtonItem;
+typedef NS_ENUM(NSUInteger, SSJLoanInterestTypeAlertViewType) {
+    SSJLoanInterestTypeAlertViewTypeOriginalPrincipal = SSJLoanInterestTypeOriginalPrincipal,
+    SSJLoanInterestTypeAlertViewTypeChangePrincipal = SSJLoanInterestTypeChangePrincipal
+};
 
 @interface SSJLoanInterestTypeAlertView : UIView
 
-@property (nonatomic) SSJLoginType type;
+@property (nonatomic, copy) NSString *title;
 
-@property (nonatomic) SSJLoanInterestType interestType;
+@property (nonatomic, copy) NSString *originalPrincipalButtonTitle;
 
-@property (nonatomic) double money;
+@property (nonatomic, copy) NSString *changePrincipalButtonTitle;
+
+@property (nonatomic) SSJLoanInterestTypeAlertViewType interestType;
+
+@property (nonatomic, copy) void (^sureAction)(SSJLoanInterestTypeAlertView *);
 
 @end
 

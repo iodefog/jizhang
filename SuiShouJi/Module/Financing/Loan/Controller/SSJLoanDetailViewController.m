@@ -247,6 +247,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
                 
             case SSJLoanCompoundChargeTypeCloseOut:
                 surplus -= compoundModel.chargeModel.money;
+                payment += compoundModel.chargeModel.money;
                 break;
                 
             case SSJLoanCompoundChargeTypeInterest:
@@ -259,6 +260,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     }
     
     NSString *surplusTitle = nil;
+    NSString *surplusValue = nil;
     NSString *sumTitle = nil;
     NSString *interestTitle = nil;
     NSString *paymentTitle = nil;
@@ -267,6 +269,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     switch (self.loanModel.type) {
         case SSJLoanTypeLend: {
             surplusTitle = @"剩余借出款";
+            surplusValue = [NSString stringWithFormat:@"%.2f", surplus];
             sumTitle = @"借出总额";
             interestTitle = self.loanModel.closeOut ? @"利息收入" : @"已收利息";
             paymentTitle = @"已收金额";
@@ -276,8 +279,9 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
             
         case SSJLoanTypeBorrow: {
             surplusTitle = @"剩余欠款";
+            surplusValue = (surplus == 0) ? [NSString stringWithFormat:@"%.2f", surplus] : [NSString stringWithFormat:@"-%.2f", surplus];
             sumTitle = @"欠款总额";
-            interestTitle = @"利息支出";
+            interestTitle = self.loanModel.closeOut ? @"利息支出" : @"已还利息";
             paymentTitle = @"已还金额";
             lenderTitle = @"欠谁钱款";
         }
@@ -285,7 +289,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     }
     
     SSJSeparatorFormViewCellItem *surplusItem = [SSJSeparatorFormViewCellItem itemWithTopTitle:surplusTitle
-                                                                                   bottomTitle:[NSString stringWithFormat:@"%.2f", surplus]
+                                                                                   bottomTitle:surplusValue
                                                                                  topTitleColor:[UIColor whiteColor]
                                                                               bottomTitleColor:[UIColor whiteColor]
                                                                                   topTitleFont:[UIFont systemFontOfSize:11]
@@ -392,10 +396,11 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
         
         if (_loanModel.interest) {
             if (_loanModel.repaymentDate) {
-                NSString *expectedInterestStr = [NSString stringWithFormat:@"¥%.2f", [SSJLoanHelper expectedInterestWithLoanModel:_loanModel chargeModels:_chargeModels]];
+                double interest = [SSJLoanHelper caculateInterestUntilDate:_loanModel.repaymentDate model:_loanModel chargeModels:_chargeModels];
+                NSString *expectedInterestStr = [NSString stringWithFormat:@"%.2f", interest];
                 [self.section1Items addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_expectedInterest" title:@"预期利息" subtitle:expectedInterestStr bottomTitle:nil]];
             } else {
-                double interest = [SSJLoanHelper interestWithPrincipal:self.loanModel.jMoney rate:self.loanModel.rate days:1];
+                double interest = [SSJLoanHelper caculateInterestForEveryDayWithLoanModel:self.loanModel chargeModels:self.chargeModels];
                 NSString *expectedInterestStr = [NSString stringWithFormat:@"¥%.2f", interest];
                 [self.section1Items addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_expectedInterest" title:@"每天利息" subtitle:expectedInterestStr bottomTitle:nil]];
             }

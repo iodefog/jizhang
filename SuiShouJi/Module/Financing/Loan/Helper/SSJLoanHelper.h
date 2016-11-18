@@ -117,22 +117,13 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSString *)queryForFundColorWithID:(NSString *)ID;
 
 /**
- 计算固定本金产生的利息
+ 计算每日利息
 
- @param principal 本金
- @param rate 年华收益率
- @param days 天数
- @return 利息
+ @param model 借贷模型，根据rate、interestType两个属性计算利息
+ @param models 借贷生成的流水记录
+ @return 计算结果
  */
-+ (double)interestWithPrincipal:(double)principal rate:(double)rate days:(int)days;
-
-/**
- *  预期利息
- *
- *  @param model 借贷模型
- *  @param chargeModels 借贷产生的流水
- */
-+ (double)expectedInterestWithLoanModel:(SSJLoanModel *)model chargeModels:(NSArray <SSJLoanCompoundChargeModel *>*)chargeModels;
++ (double)caculateInterestForEveryDayWithLoanModel:(SSJLoanModel *)model chargeModels:(NSArray <SSJLoanCompoundChargeModel *>*)models;
 
 /**
  计算可变本金产生的利息；因为变更流水会改变本金，利息是按照不同时间段内的本金计算
@@ -143,6 +134,16 @@ NS_ASSUME_NONNULL_BEGIN
  @return 计算结果
  */
 + (double)caculateInterestUntilDate:(NSDate *)untilDate model:(SSJLoanModel *)model chargeModels:(NSArray <SSJLoanCompoundChargeModel *>*)models;
+
+/**
+ 计算固定本金产生的利息
+ 
+ @param principal 本金
+ @param rate 年华收益率
+ @param days 天数
+ @return 利息
+ */
++ (double)interestWithPrincipal:(double)principal rate:(double)rate days:(int)days;
 
 /**
  查询借贷详情
@@ -165,17 +166,6 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)queryLoanChargeModeListWithLoanModel:(SSJLoanModel *)loanModel
                                      success:(void (^)(NSArray <SSJLoanCompoundChargeModel *>*list))success
                                      failure:(void (^)(NSError *error))failure;
-
-/**
- 根据流水id查询借贷生成的转账流水（包括转入、转出、利息），此流水必须是转账生成的
-
- @param chargeId 借贷生成的流水
- @param success 成功的回调
- @param failure 失败的回调
- */
-+ (void)queryLoanCompoundChargeModelWithChargeId:(NSString *)chargeId
-                                         success:(void (^)(SSJLoanCompoundChargeModel *model))success
-                                         failure:(void (^)(NSError *error))failure;
 
 /**
  删除借贷产生的流水

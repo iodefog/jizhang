@@ -140,6 +140,7 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
             model.memo = [resultSet stringForColumn:@"memo"];
             model.remindID = [resultSet stringForColumn:@"cremindid"];
             model.interest = [resultSet boolForColumn:@"interest"];
+            model.interestType = [resultSet intForColumn:@"interesttype"];
             model.closeOut = [resultSet boolForColumn:@"iend"];
             model.type = [resultSet intForColumn:@"itype"];
             model.operatorType = [resultSet intForColumn:@"operatorType"];
@@ -332,7 +333,7 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
             [modelInfo setObject:@"" forKey:@"cremindid"];
         }
         
-        if (![db executeUpdate:@"replace into bk_loan (loanid, cuserid, lender, jmoney, cthefundid, ctargetfundid, cborrowdate, crepaymentdate, rate, memo, cremindid, interest, iend, itype, cwritedate, operatortype, iversion) values (:loanid, :cuserid, :lender, :jmoney, :cthefundid, :ctargetfundid, :cborrowdate, :crepaymentdate, :rate, :memo, :cremindid, :interest, :iend, :itype, :cwritedate, :operatortype, :iversion)" withParameterDictionary:modelInfo]) {
+        if (![db executeUpdate:@"replace into bk_loan (loanid, cuserid, lender, jmoney, cthefundid, ctargetfundid, cborrowdate, crepaymentdate, rate, memo, cremindid, interest, interesttype, iend, itype, cwritedate, operatortype, iversion) values (:loanid, :cuserid, :lender, :jmoney, :cthefundid, :ctargetfundid, :cborrowdate, :crepaymentdate, :rate, :memo, :cremindid, :interest, :interesttype, :iend, :itype, :cwritedate, :operatortype, :iversion)" withParameterDictionary:modelInfo]) {
             *rollback = YES;
             if (failure) {
                 SSJDispatchMainAsync(^{
@@ -619,29 +620,30 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
     return fundName;
 }
 
-+ (double)expectedInterestWithLoanModel:(SSJLoanModel *)model chargeModels:(NSArray <SSJLoanCompoundChargeModel *>*)chargeModels {
-    if (model.closeOut) {
-        SSJPRINT(@"该借贷已结清");
-        return 0;
-    }
++ (double)caculateInterestForEveryDayWithLoanModel:(SSJLoanModel *)model chargeModels:(NSArray <SSJLoanCompoundChargeModel *>*)models {
     
-    if (!model.borrowDate || !model.repaymentDate) {
-        SSJPRINT(@"borrowDate、repaymentDate不能为nil，borrowDate：%@ repaymentDate:%@", model.borrowDate, model.repaymentDate);
-        return 0;
-    }
+    double principal = 0;   // 本金
     
-    double interest = 0;
-    
-    // 先计算出借贷起始本金（包括余额变更后的）
-    for (SSJLoanCompoundChargeModel *compoundModel in chargeModels) {
-        if (compoundModel.interestChargeModel) {
-            interest += compoundModel.interestChargeModel.money;
+    for (SSJLoanCompoundChargeModel *compoundModel in models) {
+        
+        if (compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeCreate) {
+            principal = compoundModel.chargeModel.money;
+        } else if (compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeBalanceIncrease) {
+            principal += compoundModel.chargeModel.money;
+        } else if (compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeBalanceDecrease) {
+            principal -= compoundModel.chargeModel.money;
+        } else if (compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeRepayment) {
+            if (model.interestType == SSJLoanInterestTypeChangePrincipal) {
+                principal -= compoundModel.chargeModel.money;
+            }
+        } else if (compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeAdd) {
+            if (model.interestType == SSJLoanInterestTypeChangePrincipal) {
+                principal += compoundModel.chargeModel.money;
+            }
         }
     }
     
-    interest += [self caculateInterestUntilDate:model.repaymentDate model:model chargeModels:chargeModels];
-    
-    return interest;
+    return [self interestWithPrincipal:principal rate:model.rate days:1];
 }
 
 + (double)caculateInterestUntilDate:(NSDate *)untilDate model:(SSJLoanModel *)model chargeModels:(NSArray <SSJLoanCompoundChargeModel *>*)models {

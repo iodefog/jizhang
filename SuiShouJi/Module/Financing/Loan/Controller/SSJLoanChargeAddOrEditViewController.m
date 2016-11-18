@@ -14,6 +14,8 @@
 #import "TPKeyboardAvoidingTableView.h"
 #import "SSJLoanFundAccountSelectionView.h"
 #import "SSJLoanDateSelectionView.h"
+#import "SSJLoanInterestTypeAlertView.h"
+#import "UIView+SSJViewAnimatioin.h"
 #import "SSJFundingItem.h"
 #import "SSJCreditCardItem.h"
 #import "SSJLoanHelper.h"
@@ -40,6 +42,8 @@ static NSUInteger kDateTag = 1005;
 
 // 日期选择控件
 @property (nonatomic, strong) SSJLoanDateSelectionView *dateSelectionView;
+
+@property (nonatomic, strong) SSJLoanInterestTypeAlertView *interestTypeAlertView;
 
 @property (nonatomic, strong) SSJLoanModel *loanModel;
 
@@ -286,6 +290,19 @@ static NSUInteger kDateTag = 1005;
 
 - (void)sureButtonAction {
     
+    if (self.surplus == 0) {
+        switch (self.loanModel.type) {
+            case SSJLoanTypeLend:
+                [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"你的剩余借出款为0，无需再收款了。"]];
+                break;
+                
+            case SSJLoanTypeBorrow:
+                [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"你的剩余欠款为0，无需再还款了。"]];
+                break;
+        }
+        return;
+    }
+    
     if (self.compoundModel.chargeModel.money <= 0) {
         switch (self.loanModel.type) {
             case SSJLoanTypeLend:
@@ -296,7 +313,6 @@ static NSUInteger kDateTag = 1005;
                 [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"还款金额必须大于0元"]];
                 break;
         }
-        
         return;
     }
     
@@ -333,8 +349,11 @@ static NSUInteger kDateTag = 1005;
                     message = @"您的还款金额等于剩余欠款金额，是否立即结清该笔欠款？";
                     break;
             }
+            
             SSJAlertViewAction *cancelAction = [SSJAlertViewAction actionWithTitle:@"取消" handler:^(SSJAlertViewAction * _Nonnull action) {
-                [self saveLoanCharge];
+                if (![self showInterestTypeAlertIfNeeded]) {
+                    [self saveLoanCharge];
+                }
             }];
             SSJAlertViewAction *sureAction = [SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction * _Nonnull action) {
                 SSJLoanCloseOutViewController *closeOutController = [[SSJLoanCloseOutViewController alloc] init];
@@ -376,35 +395,9 @@ static NSUInteger kDateTag = 1005;
         }
     }
     
-    [self saveLoanCharge];
-}
-
-- (void)saveLoanCharge {
-    
-    // 更新借贷的剩余金额
-    if (self.chargeType == SSJLoanCompoundChargeTypeRepayment) {
-        self.loanModel.jMoney = self.surplus - self.compoundModel.chargeModel.money;
-    } else if (self.chargeType == SSJLoanCompoundChargeTypeAdd) {
-        self.loanModel.jMoney = self.surplus + self.compoundModel.chargeModel.money;
+    if (![self showInterestTypeAlertIfNeeded]) {
+        [self saveLoanCharge];
     }
-    
-    // 利息金额为0的话，清空利息模型
-    if (self.compoundModel.interestChargeModel.money == 0) {
-        self.compoundModel.interestChargeModel = nil;
-    }
-    
-    self.sureButton.enabled = NO;
-    [self.sureButton ssj_showLoadingIndicator];
-    [SSJLoanHelper saveLoanModel:self.loanModel chargeModels:@[self.compoundModel] remindModel:nil success:^{
-        self.sureButton.enabled = YES;
-        [self.sureButton ssj_hideLoadingIndicator];
-        [CDAutoHideMessageHUD showMessage:@"保存成功"];
-        [self goBackAction];
-    } failure:^(NSError * _Nonnull error) {
-        self.sureButton.enabled = YES;
-        [self.sureButton ssj_hideLoadingIndicator];
-        [self showError:error];
-    }];
 }
 
 - (void)textDidChange:(NSNotification *)notification {
@@ -720,6 +713,81 @@ static NSUInteger kDateTag = 1005;
     }
 }
 
+- (BOOL)showInterestTypeAlertIfNeeded {
+    if (self.loanModel.interestType == SSJLoanInterestTypeUnknown) {
+        
+        [self.view endEditing:YES];
+        
+        NSString *title = nil;
+        switch (self.loanModel.type) {
+            case SSJLoanTypeLend:
+                title = @"剩余借出款变更后计息是否变化？";
+                break;
+                
+            case SSJLoanTypeBorrow:
+                title = @"剩余欠款变更后计息是否变化？";
+                break;
+        }
+        
+        NSString *buttonTitle1 = [NSString stringWithFormat:@"仍按%.2f元计息", self.surplus];
+        
+        NSString *date = nil;
+        if ([self.compoundModel.chargeModel.billDate isSameDay:[NSDate date]]) {
+            date = @"今日";
+        } else {
+            date = [self.compoundModel.chargeModel.billDate formattedDateWithFormat:@"yyyy-MM-dd"];
+        }
+        
+        double newPrincipal = 0;
+        if (self.chargeType == SSJLoanCompoundChargeTypeRepayment) {
+            newPrincipal = self.surplus - self.compoundModel.chargeModel.money;
+        } else if (self.chargeType == SSJLoanCompoundChargeTypeAdd) {
+            newPrincipal = self.surplus + self.compoundModel.chargeModel.money;
+        }
+        
+        NSString *buttonTitle2 = [NSString stringWithFormat:@"由%@起按%.2f元计息", date, newPrincipal];
+        
+        UIWindow *window = [UIApplication sharedApplication].keyWindow;
+        
+        self.interestTypeAlertView.title = title;
+        self.interestTypeAlertView.originalPrincipalButtonTitle = buttonTitle1;
+        self.interestTypeAlertView.changePrincipalButtonTitle = buttonTitle2;
+        [self.interestTypeAlertView ssj_popupInView:window completion:NULL];
+        
+        return YES;
+    }
+    
+    return NO;
+}
+
+- (void)saveLoanCharge {
+    
+    // 更新借贷的剩余金额
+    if (self.chargeType == SSJLoanCompoundChargeTypeRepayment) {
+        self.loanModel.jMoney = self.surplus - self.compoundModel.chargeModel.money;
+    } else if (self.chargeType == SSJLoanCompoundChargeTypeAdd) {
+        self.loanModel.jMoney = self.surplus + self.compoundModel.chargeModel.money;
+    }
+    
+    // 利息金额为0的话，清空利息模型
+    if (self.compoundModel.interestChargeModel.money == 0) {
+        self.compoundModel.interestChargeModel = nil;
+    }
+    
+    self.sureButton.enabled = NO;
+    [self.sureButton ssj_showLoadingIndicator];
+    [SSJLoanHelper saveLoanModel:self.loanModel chargeModels:@[self.compoundModel] remindModel:nil success:^{
+        self.sureButton.enabled = YES;
+        [self.sureButton ssj_hideLoadingIndicator];
+        [CDAutoHideMessageHUD showMessage:@"保存成功"];
+        [self goBackAction];
+    } failure:^(NSError * _Nonnull error) {
+        self.sureButton.enabled = YES;
+        [self.sureButton ssj_hideLoadingIndicator];
+        [self showError:error];
+    }];
+}
+
 #pragma mark - Getter
 - (TPKeyboardAvoidingTableView *)tableView {
     if (!_tableView) {
@@ -832,6 +900,20 @@ static NSUInteger kDateTag = 1005;
         };
     }
     return _dateSelectionView;
+}
+
+- (SSJLoanInterestTypeAlertView *)interestTypeAlertView {
+    if (!_interestTypeAlertView) {
+        __weak typeof(self) wself = self;
+        _interestTypeAlertView = [[SSJLoanInterestTypeAlertView alloc] init];
+        _interestTypeAlertView.interestType = SSJLoanInterestTypeAlertViewTypeOriginalPrincipal;
+        _interestTypeAlertView.sureAction = ^(SSJLoanInterestTypeAlertView *alert) {
+            [alert ssj_dismiss:NULL];
+            wself.loanModel.interestType = (SSJLoanInterestType)alert.interestType;
+            [wself saveLoanCharge];
+        };
+    }
+    return _interestTypeAlertView;
 }
 
 @end
