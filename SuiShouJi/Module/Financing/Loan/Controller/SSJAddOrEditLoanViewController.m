@@ -635,7 +635,8 @@ const int kMemoMaxLength = 13;
         [richText setAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]} range:[richText.string rangeOfString:interestStr]];
         _interestLab.attributedText = richText;
     } else {
-        NSString *interestStr = [NSString stringWithFormat:@"%.2f", [SSJLoanHelper interestWithPrincipal:self.loanModel.jMoney rate:self.loanModel.rate days:1]];
+        double interest = [SSJLoanHelper caculateInterestForEveryDayWithLoanModel:self.loanModel chargeModels:[self chargeModelsAccordingToEditState]];
+        NSString *interestStr = [NSString stringWithFormat:@"%.2f", interest];
         NSMutableAttributedString *richText = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"每天利息为%@元", interestStr]];
         [richText setAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]} range:[richText.string rangeOfString:interestStr]];
         _interestLab.attributedText = richText;

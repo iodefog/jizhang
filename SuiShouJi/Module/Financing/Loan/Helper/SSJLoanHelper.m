@@ -620,6 +620,32 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
     return fundName;
 }
 
++ (double)caculateInterestForEveryDayWithLoanModel:(SSJLoanModel *)model chargeModels:(NSArray <SSJLoanCompoundChargeModel *>*)models {
+    
+    double principal = 0;   // 本金
+    
+    for (SSJLoanCompoundChargeModel *compoundModel in models) {
+        
+        if (compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeCreate) {
+            principal = compoundModel.chargeModel.money;
+        } else if (compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeBalanceIncrease) {
+            principal += compoundModel.chargeModel.money;
+        } else if (compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeBalanceDecrease) {
+            principal -= compoundModel.chargeModel.money;
+        } else if (compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeRepayment) {
+            if (model.interestType == SSJLoanInterestTypeChangePrincipal) {
+                principal -= compoundModel.chargeModel.money;
+            }
+        } else if (compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeAdd) {
+            if (model.interestType == SSJLoanInterestTypeChangePrincipal) {
+                principal += compoundModel.chargeModel.money;
+            }
+        }
+    }
+    
+    return [self interestWithPrincipal:principal rate:model.rate days:1];
+}
+
 + (double)caculateInterestUntilDate:(NSDate *)untilDate model:(SSJLoanModel *)model chargeModels:(NSArray <SSJLoanCompoundChargeModel *>*)models {
     
     if (!model.borrowDate || !untilDate) {
