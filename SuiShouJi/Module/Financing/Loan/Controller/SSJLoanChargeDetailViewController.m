@@ -505,11 +505,15 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
 
 - (void)showError:(NSError *)error {
     NSString *message = nil;
+    if (error.code == 1) {
+        message = @"该流水暂不能删除哦，可先编辑收款或追加借出金额再操作。";
+    } else {
 #ifdef DEBUG
-    message = [error localizedDescription];
+        message = [error localizedDescription];
 #else
-    message = SSJ_ERROR_MESSAGE;
+        message = SSJ_ERROR_MESSAGE;
 #endif
+    }
     [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:message action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
 }
 

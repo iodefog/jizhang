@@ -26,19 +26,9 @@ static NSString *const kCellId = @"cellId";
 
 - (instancetype)initWithLoanType:(SSJLoanType)loanType {
     if (self = [super initWithFrame:CGRectZero]) {
-        [self addSubview:self.tableView];
-        switch (_loanType) {
-            case SSJLoanTypeLend:
-                self.titles = @[@[@"收款", @"追加借出"], @[@"取消"]];
-                break;
-                
-            case SSJLoanTypeBorrow:
-                self.titles = @[@[@"还款", @"追加欠款"], @[@"取消"]];
-                break;
-        }
-        
         self.backgroundColor = [UIColor clearColor];
-        self.tableView.backgroundColor = [UIColor clearColor];
+        self.loanType = loanType;
+        [self addSubview:self.tableView];
         [self updateAppearance];
     }
     return self;
@@ -54,6 +44,19 @@ static NSString *const kCellId = @"cellId";
 
 - (CGSize)sizeThatFits:(CGSize)size {
     return CGSizeMake([UIApplication sharedApplication].keyWindow.width, kRowHeight * 3 + kGap + 1);
+}
+
+- (void)setLoanType:(SSJLoanType)loanType {
+    _loanType = loanType;
+    switch (_loanType) {
+        case SSJLoanTypeLend:
+            self.titles = @[@[@"收款", @"追加借出"], @[@"取消"]];
+            break;
+            
+        case SSJLoanTypeBorrow:
+            self.titles = @[@[@"还款", @"追加欠款"], @[@"取消"]];
+            break;
+    }
 }
 
 - (void)show {

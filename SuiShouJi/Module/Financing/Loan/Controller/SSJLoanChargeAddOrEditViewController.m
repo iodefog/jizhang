@@ -200,29 +200,46 @@ static NSUInteger kDateTag = 1005;
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    if (textField.tag == kMoneyTag && self.chargeType == SSJLoanCompoundChargeTypeRepayment) {
+    if (textField.tag == kMoneyTag) {
         
         NSString *moneyStr = [textField.text stringByReplacingCharactersInRange:range withString:string];
-        moneyStr = [moneyStr stringByReplacingOccurrencesOfString:@"¥" withString:@""];
+        double money = [[moneyStr stringByReplacingOccurrencesOfString:@"¥" withString:@""] doubleValue];
         
-        if ([moneyStr doubleValue] > self.surplus) {
-            
-            self.compoundModel.chargeModel.money = self.surplus;
-            self.compoundModel.targetChargeModel.money = self.surplus;
-            [self updateInterest];
-            textField.text = [NSString stringWithFormat:@"¥%.2f", self.surplus];
-            
+        if (money < 0) {
             switch (self.loanModel.type) {
                 case SSJLoanTypeLend:
-                    [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"收款金额不能大于剩余借出额%.2f元", self.surplus]];
+                    [CDAutoHideMessageHUD showMessage:@"收款金额不能小于0元"];
                     break;
                     
                 case SSJLoanTypeBorrow:
-                    [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"还款金额不能大于剩余欠款%.2f元", self.surplus]];
+                    [CDAutoHideMessageHUD showMessage:@"还款金额不能小于0元"];
                     break;
             }
-            
             return NO;
+        }
+        
+        if (self.chargeType == SSJLoanCompoundChargeTypeRepayment) {
+            
+            if (self.surplus - money < 0) {
+                
+                self.compoundModel.chargeModel.money = self.surplus;
+                self.compoundModel.targetChargeModel.money = self.surplus;
+                [self updateInterest];
+                textField.text = [NSString stringWithFormat:@"¥%.2f", self.surplus];
+                
+                switch (self.loanModel.type) {
+                    case SSJLoanTypeLend:
+                        [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"修改后的金额需要≤%.2f，否则剩余借出款会为负哦", self.surplus]];
+                        break;
+                        
+                    case SSJLoanTypeBorrow:
+                        [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"修改后的金额需要≤%.2f，否则剩余欠款会为正哦", self.surplus]];
+                        break;
+                }
+                
+                return NO;
+            }
+            
         }
     }
     return YES;
@@ -291,11 +308,11 @@ static NSUInteger kDateTag = 1005;
             [self updateInterest];
             switch (self.loanModel.type) {
                 case SSJLoanTypeLend:
-                    [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"收款金额不能大于剩余借出额%.2f元", self.surplus]];
+                    [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"修改后的金额需要≤%.2f，否则剩余借出款会为负哦", self.surplus]];
                     break;
                     
                 case SSJLoanTypeBorrow:
-                    [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"还款金额不能大于剩余欠款%.2f元", self.surplus]];
+                    [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"修改后的金额需要≤%.2f，否则剩余欠款会为正哦", self.surplus]];
                     break;
             }
             
@@ -303,6 +320,9 @@ static NSUInteger kDateTag = 1005;
         }
         
         if (self.compoundModel.chargeModel.money == self.surplus) {
+            // 因为金额输入框的clearsOnBeginEditing设为YES，系统弹窗出现后输入框会失去焦点，弹窗消失后又会重新获取焦，输入框内容被清空，导致调用[self saveLoanCharge]方法保存的金额就变成0了，所以这里强制取消焦点
+            [self.view endEditing:YES];
+            
             NSString *message = nil;
             switch (self.compoundModel.chargeModel.type) {
                 case SSJLoanTypeLend:
@@ -328,6 +348,29 @@ static NSUInteger kDateTag = 1005;
                 [self.navigationController setViewControllers:controllers animated:YES];
             }];
             [SSJAlertViewAdapter showAlertViewWithTitle:nil message:message action:cancelAction, sureAction, nil];
+            
+            return;
+        }
+    }
+    
+    if (self.chargeType == SSJLoanCompoundChargeTypeAdd) {
+        if (self.surplus + self.compoundModel.chargeModel.money < 0) {
+            
+            double money = ABS(self.surplus);
+            
+            self.compoundModel.chargeModel.money = money;
+            self.compoundModel.targetChargeModel.money = money;
+            [self updateInterest];
+            
+            switch (self.loanModel.type) {
+                case SSJLoanTypeLend:
+                    [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"修改后的金额需要≥%.2f，否则剩余借出款会为负哦", money]];
+                    break;
+                    
+                case SSJLoanTypeBorrow:
+                    [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"修改后的金额需要≥%.2f，否则剩余欠款会为正哦", money]];
+                    break;
+            }
             
             return;
         }
@@ -493,11 +536,16 @@ static NSUInteger kDateTag = 1005;
 
 - (void)showError:(NSError *)error {
     NSString *message = nil;
+    if (error.code == 1) {
+        message = @"该流水暂不能删除哦，可先编辑收款或追加借出金额再操作。";
+    } else {
 #ifdef DEBUG
-    message = [error localizedDescription];
+        message = [error localizedDescription];
 #else
-    message = SSJ_ERROR_MESSAGE;
+        message = SSJ_ERROR_MESSAGE;
 #endif
+    }
+
     [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:message action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
 }
 
@@ -771,11 +819,11 @@ static NSUInteger kDateTag = 1005;
                             break;
                             
                         case SSJLoanTypeBorrow:
-                            [CDAutoHideMessageHUD showMessage:@"还款日期不能早于借入日期"];
+                            [CDAutoHideMessageHUD showMessage:@"还款日期不能早于欠款日期"];
                             break;
                     }
                 } else if (weakSelf.chargeType == SSJLoanCompoundChargeTypeAdd) {
-                    [CDAutoHideMessageHUD showMessage:@"日期不能早于借入日期"];
+                    [CDAutoHideMessageHUD showMessage:@"日期不能早于欠款日期"];
                 }
                 
                 return NO;

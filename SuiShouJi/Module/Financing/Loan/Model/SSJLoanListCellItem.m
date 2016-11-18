@@ -29,7 +29,7 @@
         case SSJLoanTypeBorrow:
             item.money = [NSString stringWithFormat:@"-%.2f", model.jMoney];
             item.loanTitle = [NSString stringWithFormat:@"欠%@钱款", model.lender];
-            item.date = [NSString stringWithFormat:@"借入日期：%@", borrowDate];
+            item.date = [NSString stringWithFormat:@"欠款日期：%@", borrowDate];
             break;
     }
     
