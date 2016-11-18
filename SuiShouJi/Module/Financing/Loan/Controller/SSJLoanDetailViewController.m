@@ -279,9 +279,9 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
             
         case SSJLoanTypeBorrow: {
             surplusTitle = @"剩余欠款";
-            surplusValue = [NSString stringWithFormat:@"-%.2f", surplus];
+            surplusValue = (surplus == 0) ? [NSString stringWithFormat:@"%.2f", surplus] : [NSString stringWithFormat:@"-%.2f", surplus];
             sumTitle = @"欠款总额";
-            interestTitle = @"利息支出";
+            interestTitle = self.loanModel.closeOut ? @"利息支出" : @"已还利息";
             paymentTitle = @"已还金额";
             lenderTitle = @"欠谁钱款";
         }

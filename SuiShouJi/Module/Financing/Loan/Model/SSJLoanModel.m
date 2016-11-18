@@ -74,9 +74,9 @@
     model.memo = [resultSet stringForColumn:@"memo"];
     model.remindID = [resultSet stringForColumn:@"cremindid"];
     model.interest = [resultSet boolForColumn:@"interest"];
+    model.interestType = [resultSet intForColumn:@"interesttype"];
     model.closeOut = [resultSet boolForColumn:@"iend"];
     model.type = [resultSet intForColumn:@"itype"];
-    model.interestType = [resultSet intForColumn:@"interesttype"];
     model.operatorType = [resultSet intForColumn:@"operatorType"];
     model.version = [resultSet longLongIntForColumn:@"iversion"];
     model.writeDate = [NSDate dateWithString:[resultSet stringForColumn:@"cwritedate"] formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];

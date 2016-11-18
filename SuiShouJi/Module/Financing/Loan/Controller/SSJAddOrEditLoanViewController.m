@@ -11,6 +11,7 @@
 #import "SSJLoanListViewController.h"
 #import "SSJLoanListViewController.h"
 #import "SSJFundingTypeSelectViewController.h"
+#import "SSJLoanDetailViewController.h"
 #import "SSJAddOrEditLoanLabelCell.h"
 #import "SSJAddOrEditLoanTextFieldCell.h"
 #import "SSJAddOrEditLoanMultiLabelCell.h"
@@ -400,11 +401,9 @@ const int kMemoMaxLength = 13;
         } else if (textField.tag == kMoneyTag) {
             
             NSString *tmpMoneyStr = [textField.text stringByReplacingOccurrencesOfString:@"¥" withString:@""];
-            if (tmpMoneyStr.length) {
-                tmpMoneyStr = [NSString stringWithFormat:@"¥%@", tmpMoneyStr];
-            }
-            textField.text = [self reserveDecimal:tmpMoneyStr digits:2];
-            self.loanModel.jMoney = [[textField.text stringByReplacingOccurrencesOfString:@"¥" withString:@""] doubleValue];
+            tmpMoneyStr = [tmpMoneyStr ssj_reserveDecimalDigits:2 intDigits:0];
+            textField.text = [NSString stringWithFormat:@"¥%@", tmpMoneyStr];
+            self.loanModel.jMoney = [tmpMoneyStr doubleValue];
             
             [self updateRemindName];
             [self updateInterest];
@@ -414,8 +413,12 @@ const int kMemoMaxLength = 13;
             self.loanModel.memo = textField.text;
             
         } else if (textField.tag == kRateTag) {
-            
-            textField.text = [self reserveDecimal:textField.text digits:1];
+            NSString *moneyStr = textField.text;
+            if ([moneyStr doubleValue] > 100) {
+                moneyStr = @"100.0";
+                [CDAutoHideMessageHUD showMessage:@"收益率不能大于100％"];
+            }
+            textField.text = [moneyStr ssj_reserveDecimalDigits:1 intDigits:0];
             self.loanModel.rate = [textField.text doubleValue] * 0.01;
             [self updateInterest];
             
@@ -462,8 +465,7 @@ const int kMemoMaxLength = 13;
             [_sureButton ssj_hideLoadingIndicator];
             
             if (_enterFromFundTypeList) {
-                UIViewController *homeController = [self.navigationController.viewControllers firstObject];
-                
+                // 从资金首页->选择账户类型->创建借贷->借贷详情，点击返回回到借贷列表
                 SSJFinancingHomeitem *item = [[SSJFinancingHomeitem alloc] init];
                 item.fundingID = self.loanModel.fundID;
                 switch (self.loanModel.type) {
@@ -477,12 +479,31 @@ const int kMemoMaxLength = 13;
                         item.fundingName = @"欠款";
                         break;
                 }
+                
                 SSJLoanListViewController *loanListController = [[SSJLoanListViewController alloc] init];
                 loanListController.item = item;
                 
-                [self.navigationController setViewControllers:@[homeController, loanListController] animated:YES];
+                SSJLoanDetailViewController *detailController = [[SSJLoanDetailViewController alloc] init];
+                detailController.loanID = self.loanModel.ID;
+                detailController.fundColor = [SSJLoanHelper queryForFundColorWithID:self.loanModel.fundID];
+                
+                UIViewController *homeController = [self.navigationController.viewControllers firstObject];
+                
+                [self.navigationController setViewControllers:@[homeController, loanListController, detailController] animated:YES];
             } else {
-                [self.navigationController popViewControllerAnimated:YES];
+                if (self.edited) {
+                    [self.navigationController popViewControllerAnimated:YES];
+                } else {
+                    // 新建借贷完成后跳转到借贷详情页
+                    SSJLoanDetailViewController *detailController = [[SSJLoanDetailViewController alloc] init];
+                    detailController.loanID = self.loanModel.ID;
+                    detailController.fundColor = [SSJLoanHelper queryForFundColorWithID:self.loanModel.fundID];
+                    
+                    NSMutableArray *controllers = [self.navigationController.viewControllers mutableCopy];
+                    [controllers removeObject:self];
+                    [controllers addObject:detailController];
+                    [self.navigationController setViewControllers:controllers animated:YES];
+                }
             }
             
             if (!_edited && self.loanModel.remindID.length) {
@@ -690,6 +711,11 @@ const int kMemoMaxLength = 13;
         return NO;
     }
     
+    if (self.loanModel.interest && self.loanModel.rate >= 1) {
+        [CDAutoHideMessageHUD showMessage:@"收益率不能大于100％"];
+        return NO;
+    }
+    
     return YES;
 }
 
@@ -765,20 +791,6 @@ const int kMemoMaxLength = 13;
         self.navigationItem.rightBarButtonItem.enabled = YES;
         [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
     }];
-}
-
-- (NSString *)reserveDecimal:(NSString *)decimal digits:(int)digits {
-    NSArray *components = [decimal componentsSeparatedByString:@"."];
-    if (components.count >= 2) {
-        NSString *integer = [components objectAtIndex:0];
-        NSString *digit = [components objectAtIndex:1];
-        if (digit.length > digits) {
-            digit = [digit substringToIndex:digits];
-        }
-        return [NSString stringWithFormat:@"%@.%@", integer, digit];
-    }
-    
-    return decimal;
 }
 
 - (NSDate *)paymentDate {

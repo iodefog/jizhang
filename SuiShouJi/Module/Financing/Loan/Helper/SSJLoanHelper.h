@@ -167,17 +167,6 @@ NS_ASSUME_NONNULL_BEGIN
                                      failure:(void (^)(NSError *error))failure;
 
 /**
- 根据流水id查询借贷生成的转账流水（包括转入、转出、利息），此流水必须是转账生成的
-
- @param chargeId 借贷生成的流水
- @param success 成功的回调
- @param failure 失败的回调
- */
-+ (void)queryLoanCompoundChargeModelWithChargeId:(NSString *)chargeId
-                                         success:(void (^)(SSJLoanCompoundChargeModel *model))success
-                                         failure:(void (^)(NSError *error))failure;
-
-/**
  删除借贷产生的流水
 
  @param model 借贷产生的流水模型

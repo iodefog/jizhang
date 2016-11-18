@@ -29,6 +29,7 @@
              @"memo",
              @"cremindid",
              @"interest",
+             @"interesttype",
              @"iend",
              @"itype",
              @"operatortype",
