@@ -195,59 +195,13 @@ static NSUInteger kDateTag = 1005;
 }
 
 #pragma mark - UITextFieldDelegate
-- (void)textFieldDidEndEditing:(UITextField *)textField {
-    if (textField.tag == kMoneyTag
-        || textField.tag == kInterestTag) {
-        NSString *money = [textField.text stringByReplacingOccurrencesOfString:@"¥" withString:@""];
-        textField.text = [NSString stringWithFormat:@"¥%.2f", [money doubleValue]];
-    }
-}
-
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    if (textField.tag == kMoneyTag) {
-        
-        NSString *moneyStr = [textField.text stringByReplacingCharactersInRange:range withString:string];
-        double money = [[moneyStr stringByReplacingOccurrencesOfString:@"¥" withString:@""] doubleValue];
-        
-        if (money < 0) {
-            switch (self.loanModel.type) {
-                case SSJLoanTypeLend:
-                    [CDAutoHideMessageHUD showMessage:@"收款金额不能小于0元"];
-                    break;
-                    
-                case SSJLoanTypeBorrow:
-                    [CDAutoHideMessageHUD showMessage:@"还款金额不能小于0元"];
-                    break;
-            }
-            return NO;
-        }
-        
-        if (self.chargeType == SSJLoanCompoundChargeTypeRepayment) {
-            
-            if (self.surplus - money < 0) {
-                
-                self.compoundModel.chargeModel.money = self.surplus;
-                self.compoundModel.targetChargeModel.money = self.surplus;
-                [self updateInterest];
-                textField.text = [NSString stringWithFormat:@"¥%.2f", self.surplus];
-                
-                switch (self.loanModel.type) {
-                    case SSJLoanTypeLend:
-                        [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"修改后的金额需要≤%.2f，否则剩余借出款会为负哦", self.surplus]];
-                        break;
-                        
-                    case SSJLoanTypeBorrow:
-                        [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"修改后的金额需要≤%.2f，否则剩余欠款会为正哦", self.surplus]];
-                        break;
-                }
-                
-                return NO;
-            }
-            
-        }
-    }
-    return YES;
-}
+//- (void)textFieldDidEndEditing:(UITextField *)textField {
+//    if (textField.tag == kMoneyTag
+//        || textField.tag == kInterestTag) {
+//        NSString *money = [textField.text stringByReplacingOccurrencesOfString:@"¥" withString:@""];
+//        textField.text = [NSString stringWithFormat:@"¥%.2f", [money doubleValue]];
+//    }
+//}
 
 // 有些输入框的clearsOnBeginEditing设为YES，只要获取焦点文本内容就会清空，这种情况下不会收到文本改变的通知，所以在这个代理函数中进行了处理
 - (BOOL)textFieldShouldClear:(UITextField *)textField {
@@ -405,10 +359,34 @@ static NSUInteger kDateTag = 1005;
     if ([textField isKindOfClass:[UITextField class]]) {
         
         if (textField.tag == kMoneyTag) {
-
+            
             NSString *tmpMoneyStr = [textField.text stringByReplacingOccurrencesOfString:@"¥" withString:@""];
             tmpMoneyStr = [tmpMoneyStr ssj_reserveDecimalDigits:2 intDigits:0];
+            
+            if (tmpMoneyStr.length > 11) {
+                tmpMoneyStr = [tmpMoneyStr substringToIndex:11];
+            }
+            
+            if (self.chargeType == SSJLoanCompoundChargeTypeRepayment) {
+                if (self.surplus - [tmpMoneyStr doubleValue] < 0) {
+                    
+                    tmpMoneyStr = [NSString stringWithFormat:@"%.2f", self.surplus];
+                    
+                    switch (self.loanModel.type) {
+                        case SSJLoanTypeLend:
+                            [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"修改后的金额需要≤%.2f，否则剩余借出款会为负哦", self.surplus]];
+                            break;
+                            
+                        case SSJLoanTypeBorrow:
+                            [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"修改后的金额需要≤%.2f，否则剩余欠款会为正哦", self.surplus]];
+                            break;
+                    }
+                }
+            }
+
+            
             textField.text = [NSString stringWithFormat:@"¥%@", tmpMoneyStr];
+            
             double money = [tmpMoneyStr doubleValue];
             self.compoundModel.chargeModel.money = money;
             self.compoundModel.targetChargeModel.money = money;
@@ -422,7 +400,9 @@ static NSUInteger kDateTag = 1005;
             self.compoundModel.interestChargeModel.money = [tmpMoneyStr doubleValue];
             
         } else if (textField.tag == kMemoTag) {
-            
+            if (textField.text.length > 15) {
+                textField.text = [textField.text substringToIndex:15];
+            }
             self.compoundModel.chargeModel.memo = textField.text;
             self.compoundModel.targetChargeModel.memo = textField.text;
             self.compoundModel.interestChargeModel.memo = textField.text;
