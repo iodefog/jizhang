@@ -56,7 +56,9 @@
         self.imageView.size = CGSizeMake(imageDiam, imageDiam);
         self.imageView.leftTop = CGPointMake(10, (self.contentView.height - imageDiam) * 0.5);
         self.imageView.layer.cornerRadius = imageDiam * 0.5;
-        self.imageView.contentScaleFactor = [UIScreen mainScreen].scale * self.imageView.image.size.width / (imageDiam * 0.75);
+        if (!self.item.loanId.length) {
+            self.imageView.contentScaleFactor = [UIScreen mainScreen].scale * self.imageView.image.size.width / (imageDiam * 0.75);
+        }
         self.typeLabel.left = self.imageView.right + 10;
         self.typeLabel.centerY = self.height * 0.5;
     }else{
@@ -64,7 +66,9 @@
         self.imageView.size = CGSizeMake(imageDiam, imageDiam);
         self.imageView.left = 10;
         self.imageView.layer.cornerRadius = imageDiam * 0.5;
-        self.imageView.contentScaleFactor = [UIScreen mainScreen].scale * self.imageView.image.size.width / (imageDiam * 0.75);
+        if (!self.item.loanId.length) {
+            self.imageView.contentScaleFactor = [UIScreen mainScreen].scale * self.imageView.image.size.width / (imageDiam * 0.75);
+        }
         self.haveImage.size = CGSizeMake(19, 19);
         self.memoImage.size = CGSizeMake(19, 19);
         self.typeLabel.left = self.imageView.right + 10;
@@ -150,7 +154,7 @@
                     
                 case SSJLoanCompoundChargeTypeInterest:{
                     self.imageView.tintColor = [UIColor ssj_colorWithHex:@"#32c68c"];
-                    self.imageView.image = [[UIImage imageNamed:@"loan_interest"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                    self.imageView.image = [[UIImage imageNamed:@"loan_interest_charge"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                     self.imageView.layer.borderColor = [UIColor ssj_colorWithHex:@"#32c68c" ].CGColor;
                     self.typeLabel.text = [NSString stringWithFormat:@"利息收入-被%@借",item.loanSource];
                     [self.typeLabel sizeToFit];
@@ -211,7 +215,7 @@
                     
                 case SSJLoanCompoundChargeTypeInterest:{
                     self.imageView.tintColor = [UIColor ssj_colorWithHex:@"#32c68c"];
-                    self.imageView.image = [[UIImage imageNamed:@"loan_interest"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                    self.imageView.image = [[UIImage imageNamed:@"loan_interest_charge"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                     self.imageView.layer.borderColor = [UIColor ssj_colorWithHex:@"#32c68c"].CGColor;
                     self.typeLabel.text = [NSString stringWithFormat:@"利息支出-欠%@欠款",item.loanSource];
                     [self.typeLabel sizeToFit];

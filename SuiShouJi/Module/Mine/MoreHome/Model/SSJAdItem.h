@@ -15,5 +15,4 @@
 
 @property(nonatomic, strong) SSJListAdItem *listAdItem;
 
-
 @end
