@@ -72,7 +72,7 @@ static NSString *const kLodingViewAnimationKey = @"lodingViewAnimationKey";
 -(UIImageView *)lineImage{
     if (!_lineImage) {
         _lineImage = [[UIImageView alloc]init];
-        _lineImage.image = [UIImage imageNamed:@"home_line"];
+        _lineImage.image = [UIImage ssj_themeImageWithName:@"home_line"];
     }
     return _lineImage;
 }
