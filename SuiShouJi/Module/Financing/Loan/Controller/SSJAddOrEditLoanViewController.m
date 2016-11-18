@@ -629,7 +629,7 @@ const int kMemoMaxLength = 13;
 
 - (void)updateInterest {
     if (self.loanModel.repaymentDate) {
-        double interest = [SSJLoanHelper expectedInterestWithLoanModel:self.loanModel chargeModels:[self chargeModelsAccordingToEditState]];
+        double interest = [SSJLoanHelper caculateInterestUntilDate:self.loanModel.repaymentDate model:self.loanModel chargeModels:[self chargeModelsAccordingToEditState]];
         NSString *interestStr = [NSString stringWithFormat:@"%.2f", interest];
         NSMutableAttributedString *richText = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"T+1计息，预期利息为%@元", interestStr]];
         [richText setAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]} range:[richText.string rangeOfString:interestStr]];

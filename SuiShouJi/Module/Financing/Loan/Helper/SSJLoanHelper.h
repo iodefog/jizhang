@@ -127,14 +127,6 @@ NS_ASSUME_NONNULL_BEGIN
 + (double)interestWithPrincipal:(double)principal rate:(double)rate days:(int)days;
 
 /**
- *  预期利息
- *
- *  @param model 借贷模型
- *  @param chargeModels 借贷产生的流水
- */
-+ (double)expectedInterestWithLoanModel:(SSJLoanModel *)model chargeModels:(NSArray <SSJLoanCompoundChargeModel *>*)chargeModels;
-
-/**
  计算可变本金产生的利息；因为变更流水会改变本金，利息是按照不同时间段内的本金计算
 
  @param date 截止日期

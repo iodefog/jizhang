@@ -396,7 +396,8 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
         
         if (_loanModel.interest) {
             if (_loanModel.repaymentDate) {
-                NSString *expectedInterestStr = [NSString stringWithFormat:@"¥%.2f", [SSJLoanHelper expectedInterestWithLoanModel:_loanModel chargeModels:_chargeModels]];
+                double interest = [SSJLoanHelper caculateInterestUntilDate:_loanModel.repaymentDate model:_loanModel chargeModels:_chargeModels];
+                NSString *expectedInterestStr = [NSString stringWithFormat:@"%.2f", interest];
                 [self.section1Items addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_expectedInterest" title:@"预期利息" subtitle:expectedInterestStr bottomTitle:nil]];
             } else {
                 double interest = [SSJLoanHelper interestWithPrincipal:self.loanModel.jMoney rate:self.loanModel.rate days:1];

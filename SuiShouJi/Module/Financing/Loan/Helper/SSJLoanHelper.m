@@ -620,31 +620,6 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
     return fundName;
 }
 
-+ (double)expectedInterestWithLoanModel:(SSJLoanModel *)model chargeModels:(NSArray <SSJLoanCompoundChargeModel *>*)chargeModels {
-    if (model.closeOut) {
-        SSJPRINT(@"该借贷已结清");
-        return 0;
-    }
-    
-    if (!model.borrowDate || !model.repaymentDate) {
-        SSJPRINT(@"borrowDate、repaymentDate不能为nil，borrowDate：%@ repaymentDate:%@", model.borrowDate, model.repaymentDate);
-        return 0;
-    }
-    
-    double interest = 0;
-    
-    // 先计算出借贷起始本金（包括余额变更后的）
-    for (SSJLoanCompoundChargeModel *compoundModel in chargeModels) {
-        if (compoundModel.interestChargeModel) {
-            interest += compoundModel.interestChargeModel.money;
-        }
-    }
-    
-    interest += [self caculateInterestUntilDate:model.repaymentDate model:model chargeModels:chargeModels];
-    
-    return interest;
-}
-
 + (double)caculateInterestUntilDate:(NSDate *)untilDate model:(SSJLoanModel *)model chargeModels:(NSArray <SSJLoanCompoundChargeModel *>*)models {
     
     if (!model.borrowDate || !untilDate) {
