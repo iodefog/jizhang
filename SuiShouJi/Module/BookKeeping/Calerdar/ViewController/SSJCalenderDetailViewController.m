@@ -286,6 +286,12 @@
         }
         [db executeUpdate:@"DELETE FROM BK_DAILYSUM_CHARGE WHERE SUMAMOUNT = 0 AND INCOMEAMOUNT = 0 AND EXPENCEAMOUNT = 0"];
         NSMutableString *chargeCountSql;
+        NSString *startDate;
+        NSString *endDate;
+        if (weakSelf.period) {
+            startDate = [weakSelf.period.startDate formattedDateWithFormat:@"yyyy-MM-dd"];
+            endDate = [weakSelf.period.endDate formattedDateWithFormat:@"yyyy-MM-dd"];
+        }
         if (weakSelf.isMemberCharge) {
             chargeCountSql = [NSMutableString stringWithFormat:@"select count(1) from bk_user_charge where cuserid = '%@' and operatortype <> 2",userId];
             if (weakSelf.booksId.length && ![weakSelf.booksId isEqualToString:@"all"]) {
@@ -294,6 +300,9 @@
             if (weakSelf.Id.length) {
                 [chargeCountSql appendFormat:@" and cmemberid = '%@'",weakSelf.Id];
             }
+            if (weakSelf.period) {
+                [chargeCountSql appendFormat:@" and cbilldate >= '%@' and cbilldate <= '%@'",startDate,endDate];
+            }
         }else{
             chargeCountSql = [NSMutableString stringWithFormat:@"select count(1) from bk_user_charge where cuserid = '%@' and operatortype <> 2",userId];
             if (weakSelf.booksId.length && ![weakSelf.booksId isEqualToString:@"all"]) {
@@ -301,6 +310,9 @@
             }
             if (weakSelf.Id.length) {
                 [chargeCountSql appendFormat:@" and ibillid = '%@'",weakSelf.Id];
+            }
+            if (weakSelf.period) {
+                [chargeCountSql appendFormat:@" and cbilldate >= '%@' and cbilldate <= '%@'",startDate,endDate];
             }
         }
         chargeCount = [db intForQuery:chargeCountSql];

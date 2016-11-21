@@ -588,8 +588,8 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 
 -(void)deleteButtonClicked:(id)sender{
     __weak typeof(self) weakSelf = self;
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"" style:UIAlertActionStyleCancel handler:NULL];
-    UIAlertAction *comfirmAction = [UIAlertAction actionWithTitle:@"" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:NULL];
+    UIAlertAction *comfirmAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [weakSelf deleteChargeConfig];
     }];
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"你确定要删除这条周期记账吗?" preferredStyle:UIAlertControllerStyleAlert];
