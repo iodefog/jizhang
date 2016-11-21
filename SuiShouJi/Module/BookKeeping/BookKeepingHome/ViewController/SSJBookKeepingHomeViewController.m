@@ -726,7 +726,7 @@ BOOL kHomeNeedLoginPop;
         NSDate *lastPopTime = [[NSUserDefaults standardUserDefaults]objectForKey:SSJLastPopTimeKey];
         NSTimeInterval time=[currentDate timeIntervalSinceDate:lastPopTime];
         int days=((int)time)/(3600*24);
-        if (days > 1) {
+        if (days >= 1) {
             SSJBookKeepingHomePopView *popView = [SSJBookKeepingHomePopView BookKeepingHomePopView];
             popView.frame = [UIScreen mainScreen].bounds;
             popView.loginBtnClickBlock = ^(){
