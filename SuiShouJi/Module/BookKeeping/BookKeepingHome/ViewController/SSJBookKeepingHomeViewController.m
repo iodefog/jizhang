@@ -169,8 +169,8 @@ BOOL kHomeNeedLoginPop;
     [self getCurrentDate];
     [self.tableView reloadData];
     if (!_dateViewHasDismiss) {
-        [self.floatingDateView dismiss];
-        [self.mutiFunctionButton dismiss];
+        [self.floatingDateView removeFromSuperview];
+        [self.mutiFunctionButton removeFromSuperview];
         _dateViewHasDismiss = YES;
     }
 }
