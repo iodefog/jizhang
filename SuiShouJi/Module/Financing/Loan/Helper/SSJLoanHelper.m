@@ -620,6 +620,14 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
     return fundName;
 }
 
++ (NSString *)queryForFundColorWithLoanId:(NSString *)loanId {
+    __block NSString *colorValue = nil;
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+        colorValue = [db stringForQuery:@"select ccolor from bk_fund_info where cfundid = (select cthefundid from bk_loan where loanid = ?)", loanId];
+    }];
+    return colorValue;
+}
+
 + (double)caculateInterestForEveryDayWithLoanModel:(SSJLoanModel *)model chargeModels:(NSArray <SSJLoanCompoundChargeModel *>*)models {
     
     double principal = 0;   // 本金

@@ -117,6 +117,14 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSString *)queryForFundColorWithID:(NSString *)ID;
 
 /**
+ 通过借贷id查询对应资金账户的颜色
+
+ @param loanId 借贷id
+ @return 颜色值
+ */
++ (NSString *)queryForFundColorWithLoanId:(NSString *)loanId;
+
+/**
  计算每日利息
 
  @param model 借贷模型，根据rate、interestType两个属性计算利息
