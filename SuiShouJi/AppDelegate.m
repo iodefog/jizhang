@@ -173,6 +173,10 @@ NSDate *SCYEnterBackgroundTime() {
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     //每次从后台进入打一次补丁
     [SSJJspatchAnalyze SSJJsPatchAnalyzePatch];
+    
+    // 当程序从后台进入前台，检测是否自动补充定期记账和预算，因为程序在后台不能收到本地通知
+    [SSJRegularManager supplementBookkeepingIfNeededForUserId:SSJUSERID() withSuccess:NULL failure:NULL];
+    [SSJRegularManager supplementBudgetIfNeededForUserId:SSJUSERID() withSuccess:NULL failure:NULL];
 }
 
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
@@ -190,10 +194,7 @@ NSDate *SCYEnterBackgroundTime() {
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
-    // 当程序从后台进入前台，检测是否自动补充定期记账和预算，因为程序在后台不能收到本地通知
-    [SSJRegularManager supplementBookkeepingIfNeededForUserId:SSJUSERID() withSuccess:NULL failure:NULL];
-    [SSJRegularManager supplementBudgetIfNeededForUserId:SSJUSERID() withSuccess:NULL failure:NULL];
-    
+
     NSDate *backgroundTime = SCYEnterBackgroundTime();
     NSTimeInterval interval = [backgroundTime timeIntervalSinceDate:[NSDate date]];
     interval = ABS(interval);
