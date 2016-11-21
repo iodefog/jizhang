@@ -68,8 +68,6 @@ const int kMemoMaxLength = 15;
 // 编辑借贷金额新产生的余额变更流水
 @property (nonatomic, strong) SSJLoanCompoundChargeModel *changeCompoundModel;
 
-@property (nonatomic, strong) NSMutableArray <SSJLoanCompoundChargeModel *>*savedChargeModels;
-
 @end
 
 @implementation SSJAddOrEditLoanViewController
@@ -465,12 +463,10 @@ const int kMemoMaxLength = 15;
         NSMutableArray *saveChargeModels = [@[self.createCompoundModel] mutableCopy];
         if (_edited) {
             
-            // 编辑可能会更改目标账户、日期，所以要保存所有余额变更流水
+            // 1.编辑可能会更改目标账户、日期，所以要保存所有余额变更流水
+            // 2.因为详情页面中流水列表是根据billdate、writedate排序的，如果只update余额变更流水，顺序就会乱掉，所以要update所有流水
             for (SSJLoanCompoundChargeModel *compoundModel in self.chargeModels) {
-                if (compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeBalanceIncrease
-                    || compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeBalanceDecrease) {
-                    [saveChargeModels addObject:compoundModel];
-                }
+                [saveChargeModels addObject:compoundModel];
             }
             
             // 如果有新的余额变更流水，就保存

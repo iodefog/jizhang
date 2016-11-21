@@ -15,7 +15,8 @@
                    topTitleColor:(UIColor *)topTitleColor
                 bottomTitleColor:(UIColor *)bottomTitleColor
                     topTitleFont:(UIFont *)topTitleFont
-                 bottomTitleFont:(UIFont *)bottomTitleFont {
+                 bottomTitleFont:(UIFont *)bottomTitleFont
+                   contentInsets:(UIEdgeInsets)contentInsets {
     
     SSJSeparatorFormViewCellItem *item = [[SSJSeparatorFormViewCellItem alloc] init];
     item.topTitle = topTitle;
@@ -24,6 +25,7 @@
     item.bottomTitleColor = bottomTitleColor;
     item.topTitleFont = topTitleFont;
     item.bottomTitleFont = bottomTitleFont;
+    item.contentInsets = contentInsets;
     return item;
 }
 
@@ -32,6 +34,8 @@
 @interface SSJSeparatorFormViewCell : UIView
 
 @property (nonatomic, strong) SSJSeparatorFormViewCellItem *item;
+
+@property (nonatomic) UIEdgeInsets contentInsets;
 
 @end
 
@@ -48,9 +52,11 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         _topLab = [[UILabel alloc] init];
+        _topLab.adjustsFontSizeToFitWidth = YES;
         [self addSubview:_topLab];
         
         _bottomLab = [[UILabel alloc] init];
+        _bottomLab.adjustsFontSizeToFitWidth = YES;
         [self addSubview:_bottomLab];
     }
     return self;
@@ -59,6 +65,11 @@
 - (void)layoutSubviews {
     [_topLab sizeToFit];
     [_bottomLab sizeToFit];
+    
+    CGRect contentFrame = UIEdgeInsetsInsetRect(self.bounds, self.contentInsets);
+    _topLab.width = MIN(CGRectGetWidth(contentFrame), _topLab.width);
+    _bottomLab.width = MIN(CGRectGetWidth(contentFrame), _bottomLab.width);
+    
     
     CGFloat baseGap = (self.height - _topLab.height - _bottomLab.height) * 0.2;
     CGFloat top = baseGap * 2;
@@ -69,6 +80,7 @@
 
 - (void)setItem:(SSJSeparatorFormViewCellItem *)item {
     [self setNeedsLayout];
+    
     _topLab.text = item.topTitle;
     _topLab.font = item.topTitleFont;
     _topLab.textColor = item.topTitleColor;
@@ -76,6 +88,8 @@
     _bottomLab.text = item.bottomTitle;
     _bottomLab.font = item.bottomTitleFont;
     _bottomLab.textColor = item.bottomTitleColor;
+    
+    self.contentInsets = item.contentInsets;
 }
 
 @end

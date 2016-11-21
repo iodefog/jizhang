@@ -44,6 +44,7 @@
 #import "SSJLocalNotificationStore.h"
 #import "SSJThemeUpdate.h"
 #import "SSJDomainManager.h"
+#import "SSJLoanHelper.h"
 
 //  进入后台超过的时限后进入锁屏
 static const NSTimeInterval kLockScreenDelay = 60;
@@ -178,7 +179,7 @@ NSDate *SCYEnterBackgroundTime() {
     
     [self pushToControllerWithNotification:notification];
     
-        //  收到本地通知后，检测通知是否自动补充定期记账和预算的通知，是的话就进行补充，反之忽略
+    //  收到本地通知后，检测通知是否自动补充定期记账和预算的通知，是的话就进行补充，反之忽略
     [SSJRegularManager performRegularTaskWithLocalNotification:notification];
 }
 
@@ -356,6 +357,7 @@ NSDate *SCYEnterBackgroundTime() {
                     remindItem.fundId = [self getLoanIdForRemindId:remindItem.remindId];
                 }
                 loanVc.loanID = remindItem.fundId;
+                loanVc.fundColor = [SSJLoanHelper queryForFundColorWithLoanId:remindItem.fundId];
                 [currentVc.navigationController pushViewController:loanVc animated:YES];
             }
         }

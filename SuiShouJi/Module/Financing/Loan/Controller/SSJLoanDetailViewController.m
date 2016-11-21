@@ -58,6 +58,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
 #pragma mark - Lifecycle
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+        self.hidesBottomBarWhenPushed = YES;
         self.section1Items = [[NSMutableArray alloc] init];
         self.section2Items = [[NSMutableArray alloc] init];
     }
@@ -293,14 +294,15 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
                                                                                  topTitleColor:[UIColor whiteColor]
                                                                               bottomTitleColor:[UIColor whiteColor]
                                                                                   topTitleFont:[UIFont systemFontOfSize:11]
-                                                                               bottomTitleFont:[UIFont systemFontOfSize:24]];
+                                                                               bottomTitleFont:[UIFont systemFontOfSize:24] contentInsets:UIEdgeInsetsMake(0, 6, 0, 6)];
     
     SSJSeparatorFormViewCellItem *sumItem = [SSJSeparatorFormViewCellItem itemWithTopTitle:sumTitle
                                                                                bottomTitle:[NSString stringWithFormat:@"%.2f", loanSum]
                                                                              topTitleColor:[UIColor whiteColor]
                                                                           bottomTitleColor:[UIColor whiteColor]
                                                                               topTitleFont:[UIFont systemFontOfSize:11]
-                                                                           bottomTitleFont:[UIFont systemFontOfSize:15]];
+                                                                           bottomTitleFont:[UIFont systemFontOfSize:15]
+                                                                             contentInsets:UIEdgeInsetsMake(0, 6, 0, 6)];
     
     SSJSeparatorFormViewCellItem *interestItem = nil;
     if (interest > 0) {
@@ -309,14 +311,16 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
                                                         topTitleColor:[UIColor whiteColor]
                                                      bottomTitleColor:[UIColor whiteColor]
                                                          topTitleFont:[UIFont systemFontOfSize:11]
-                                                      bottomTitleFont:[UIFont systemFontOfSize:15]];
+                                                      bottomTitleFont:[UIFont systemFontOfSize:15]
+                                                        contentInsets:UIEdgeInsetsMake(0, 6, 0, 6)];
     } else {
         interestItem = [SSJSeparatorFormViewCellItem itemWithTopTitle:paymentTitle
                                                           bottomTitle:[NSString stringWithFormat:@"%.2f", payment]
                                                         topTitleColor:[UIColor whiteColor]
                                                      bottomTitleColor:[UIColor whiteColor]
                                                          topTitleFont:[UIFont systemFontOfSize:11]
-                                                      bottomTitleFont:[UIFont systemFontOfSize:15]];
+                                                      bottomTitleFont:[UIFont systemFontOfSize:15]
+                                                        contentInsets:UIEdgeInsetsMake(0, 6, 0, 6)];
     }
     
     SSJSeparatorFormViewCellItem *lenderItem = [SSJSeparatorFormViewCellItem itemWithTopTitle:lenderTitle
@@ -324,7 +328,8 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
                                                                                 topTitleColor:[UIColor whiteColor]
                                                                              bottomTitleColor:[UIColor whiteColor]
                                                                                  topTitleFont:[UIFont systemFontOfSize:11]
-                                                                              bottomTitleFont:[UIFont systemFontOfSize:15]];
+                                                                              bottomTitleFont:[UIFont systemFontOfSize:15]
+                                                                                contentInsets:UIEdgeInsetsMake(0, 6, 0, 6)];
     
     _headerItems = @[@[surplusItem], @[sumItem, interestItem, lenderItem]];
 }
