@@ -403,17 +403,17 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
             
             if (!period) {
                 period = [SSJDatePeriod datePeriodWithPeriodType:periodType date:billDate];
-                // 第一次遍历，补充查询起始时间和查询出的第一条纪录之间的收支统计
-                if (startDate) {
-                    SSJDatePeriod *startPeriod = [SSJDatePeriod datePeriodWithPeriodType:periodType date:startDate];
-                    NSMutableArray *periods = [@[startPeriod] mutableCopy];
-                    [periods addObjectsFromArray:[period periodsFromPeriod:startPeriod]];
-                    for (int i = 0; i < periods.count - 1; i ++) {
-                        SSJDatePeriod *addPeriod = periods[i];
-                        weekOrder++;
-                        [list addObject:[self modelWithPayment:0 income:0 weekOrder:weekOrder period:addPeriod]];
-                    }
-                }
+//                // 第一次遍历，补充查询起始时间和查询出的第一条纪录之间的收支统计
+//                if (startDate) {
+//                    SSJDatePeriod *startPeriod = [SSJDatePeriod datePeriodWithPeriodType:periodType date:startDate];
+//                    NSMutableArray *periods = [@[startPeriod] mutableCopy];
+//                    [periods addObjectsFromArray:[period periodsFromPeriod:startPeriod]];
+//                    for (int i = 0; i < periods.count - 1; i ++) {
+//                        SSJDatePeriod *addPeriod = periods[i];
+//                        weekOrder++;
+//                        [list addObject:[self modelWithPayment:0 income:0 weekOrder:weekOrder period:addPeriod]];
+//                    }
+//                }
             }
             
             if ([period containDate:billDate]) {
@@ -454,30 +454,30 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
                 [list addObject:[self modelWithPayment:payment income:income weekOrder:weekOrder period:period]];
             }
             
-            // 补充查询出的最后一个收支统计和截止时间之间的收支统计
-            if (endDate) {
-                lastModel = [list lastObject];
-                SSJDatePeriod *endPeriod = [SSJDatePeriod datePeriodWithPeriodType:periodType date:endDate];
-                NSArray *periods = [endPeriod periodsFromPeriod:lastModel.period];
-                for (int i = 0; i < periods.count; i ++) {
-                    SSJDatePeriod *addPeriod = periods[i];
-                    weekOrder++;
-                    [list addObject:[self modelWithPayment:0 income:0 weekOrder:weekOrder period:addPeriod]];
-                }
-            }
+//            // 补充查询出的最后一个收支统计和截止时间之间的收支统计
+//            if (endDate) {
+//                lastModel = [list lastObject];
+//                SSJDatePeriod *endPeriod = [SSJDatePeriod datePeriodWithPeriodType:periodType date:endDate];
+//                NSArray *periods = [endPeriod periodsFromPeriod:lastModel.period];
+//                for (int i = 0; i < periods.count; i ++) {
+//                    SSJDatePeriod *addPeriod = periods[i];
+//                    weekOrder++;
+//                    [list addObject:[self modelWithPayment:0 income:0 weekOrder:weekOrder period:addPeriod]];
+//                }
+//            }
         } else {
-            // 如果数据库中没有纪录，并且起始、截止时间都传入了，补充之间的收支统计
-            if (startDate && endDate) {
-                SSJDatePeriod *startPeriod = [SSJDatePeriod datePeriodWithPeriodType:periodType date:startDate];
-                SSJDatePeriod *endPeriod = [SSJDatePeriod datePeriodWithPeriodType:periodType date:endDate];
-                NSMutableArray *periods = [[endPeriod periodsFromPeriod:startPeriod] mutableCopy];
-                [periods addObject:startPeriod];
-                for (int i = 0; i < periods.count; i ++) {
-                    SSJDatePeriod *addPeriod = periods[i];
-                    weekOrder++;
-                    [list addObject:[self modelWithPayment:0 income:0 weekOrder:weekOrder period:addPeriod]];
-                }
-            }
+//            // 如果数据库中没有纪录，并且起始、截止时间都传入了，补充之间的收支统计
+//            if (startDate && endDate) {
+//                SSJDatePeriod *startPeriod = [SSJDatePeriod datePeriodWithPeriodType:periodType date:startDate];
+//                SSJDatePeriod *endPeriod = [SSJDatePeriod datePeriodWithPeriodType:periodType date:endDate];
+//                NSMutableArray *periods = [[endPeriod periodsFromPeriod:startPeriod] mutableCopy];
+//                [periods addObject:startPeriod];
+//                for (int i = 0; i < periods.count; i ++) {
+//                    SSJDatePeriod *addPeriod = periods[i];
+//                    weekOrder++;
+//                    [list addObject:[self modelWithPayment:0 income:0 weekOrder:weekOrder period:addPeriod]];
+//                }
+//            }
         }
         
         startDateStr = startDate ? [startDate formattedDateWithFormat:@"yyyy-MM-dd"] : startDateStr;

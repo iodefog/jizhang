@@ -62,9 +62,9 @@
     
     self.navigationItem.titleView = self.segmentControl;
     
+    [self.view addSubview:self.periodLabel];
+    [self.view addSubview:self.editPeriodBtn];
     [self.view addSubview:self.scrollView];
-    [self.scrollView addSubview:self.periodLabel];
-    [self.scrollView addSubview:self.editPeriodBtn];
     [self.scrollView addSubview:self.curveView];
     [self.scrollView addSubview:self.questionBackView];
     [self.scrollView addSubview:self.gridView];
@@ -161,7 +161,7 @@
     _periodLabel.text = [NSString stringWithFormat:@"%@--%@", beginDateStr, endDateStr];
     CGSize textSize = [_periodLabel.text sizeWithAttributes:@{NSFontAttributeName:_periodLabel.font}];
     _periodLabel.width = textSize.width + 28;
-    _periodLabel.center = CGPointMake(self.view.width * 0.5, 25);
+    _periodLabel.center = CGPointMake(self.view.width * 0.5, 25 + SSJ_NAVIBAR_BOTTOM);
 }
 
 - (void)updateGirdViewWithResult:(NSDictionary *)result {
@@ -255,7 +255,7 @@
 
 - (UIScrollView *)scrollView {
     if (!_scrollView) {
-        _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM)];
+        _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM + 50, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM - 50)];
         _scrollView.backgroundColor = [UIColor clearColor];
     }
     return _scrollView;
@@ -263,7 +263,7 @@
 
 - (UILabel *)periodLabel {
     if (!_periodLabel) {
-        _periodLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 30)];
+        _periodLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, 0, 30)];
         _periodLabel.textAlignment = NSTextAlignmentCenter;
         _periodLabel.font = [UIFont systemFontOfSize:15];
         _periodLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
@@ -277,7 +277,7 @@
 - (UIButton *)editPeriodBtn {
     if (!_editPeriodBtn) {
         _editPeriodBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        _editPeriodBtn.frame = CGRectMake(self.view.width - 50, 0, 50, 50);
+        _editPeriodBtn.frame = CGRectMake(self.view.width - 50, SSJ_NAVIBAR_BOTTOM, 50, 50);
         [_editPeriodBtn setImage:[UIImage ssj_themeImageWithName:@"reportForms_edit"] forState:UIControlStateNormal];
         [_editPeriodBtn addTarget:self action:@selector(editPeriodBtnAction) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -286,7 +286,7 @@
 
 - (SSJReportFormsCurveGraphView *)curveView {
     if (!_curveView) {
-        _curveView = [[SSJReportFormsCurveGraphView alloc] initWithFrame:CGRectMake(0, 50, self.view.width, 384)];
+        _curveView = [[SSJReportFormsCurveGraphView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 384)];
         _curveView.delegate = self;
     }
     return _curveView;
@@ -321,7 +321,7 @@
 
 - (SSJBudgetNodataRemindView *)noDataRemindView {
     if (!_noDataRemindView) {
-        _noDataRemindView = [[SSJBudgetNodataRemindView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 260)];
+        _noDataRemindView = [[SSJBudgetNodataRemindView alloc] initWithFrame:CGRectMake(0, 50, self.view.width, 210)];
         _noDataRemindView.title = @"报表空空如也";
         _noDataRemindView.image = @"budget_no_data";
     }
