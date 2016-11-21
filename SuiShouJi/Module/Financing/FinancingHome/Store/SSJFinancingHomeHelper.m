@@ -241,9 +241,8 @@
                         loanModel.version = [resultSet longLongIntForColumn:@"iversion"];
                         loanModel.writeDate = [NSDate dateWithString:[resultSet stringForColumn:@"cwritedate"] formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
                         [tempArr addObject:loanModel];
-                        [resultSet close];
                     }
-                    
+                    [resultSet close];
                     for (SSJLoanModel *model in tempArr) {
                         if (![SSJLoanHelper deleteLoanModel:model inDatabase:db forUserId:userId error:NULL]) {
                             if (failure) {
