@@ -32,6 +32,11 @@ static NSString *const kDefualtOrderKey = @"kDefualtOrderKey";
         return error;
     }
     
+    error = [self updateLoanTableWithDatabase:db];
+    if (error) {
+        return error;
+    }
+    
     return nil;
 }
 
@@ -185,6 +190,12 @@ static NSString *const kDefualtOrderKey = @"kDefualtOrderKey";
     return nil;
 }
 
++ (NSError *)updateLoanTableWithDatabase:(FMDatabase *)db {
+    if (![db executeUpdate:@"alter table BK_LOAN add INTERESTTYPE INTEGER DEFAULT 0"]) {
+        return [db lastError];
+    }
+    return nil;
+}
 
 + (NSArray *)insertSqlArray {
     return  @[@"INSERT INTO `BK_BILL_TYPE` VALUES ('1000','餐饮',1,'bt_food','#ee9d29',1,0,NULL,'0,3,4')",
