@@ -169,10 +169,12 @@ extern NSString *const SSJBudgetConflictBudgetModelKey;
  *  查询支出类别列表
  *
  *  @param model     预算模型
+ *  @param booksId   账本id，如果为nil，查询当前账本
  *  @param success   查询成功的回调
  *  @param failure   查询失败的回调
  */
 + (void)queryBudgetBillTypeSelectionItemListWithBudgetModel:(SSJBudgetModel *)model
+                                                    booksId:(nullable NSString *)booksId
                                                     success:(void(^)(NSArray <SSJBudgetBillTypeSelectionCellItem *>*list))success
                                                     failure:(void(^)(NSError *error))failure;
 

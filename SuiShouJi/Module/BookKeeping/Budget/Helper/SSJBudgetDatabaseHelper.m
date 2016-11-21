@@ -801,13 +801,20 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
 }
 
 + (void)queryBudgetBillTypeSelectionItemListWithBudgetModel:(SSJBudgetModel *)model
+                                                    booksId:(NSString *)booksId
                                                     success:(void(^)(NSArray <SSJBudgetBillTypeSelectionCellItem *>*list))success
                                                     failure:(void(^)(NSError *error))failure {
     NSString *userID = SSJUSERID();
+    
+    if (!booksId) {
+        SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID()];
+        booksId = userItem.currentBooksId ?: SSJUSERID();
+    }
+    
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         
         // 查询所有默认支出类别
-        FMResultSet *resultSet = [db executeQuery:@"select bt.cname, bt.ccolor, bt.ccoin, ub.cwritedate, bt.id from BK_BILL_TYPE bt, BK_USER_BILL ub where ub.istate = 1 and bt.itype = 1 and bt.id = ub.cbillid and ub.cuserid = ? and bt.cparent <> 'root' order by ub.iorder, ub.cwritedate, bt.id", userID];
+        FMResultSet *resultSet = [db executeQuery:@"select bt.cname, bt.ccolor, bt.ccoin, ub.cwritedate, bt.id from BK_BILL_TYPE bt, BK_USER_BILL ub where ub.istate = 1 and bt.itype = 1 and bt.id = ub.cbillid and ub.cuserid = ? and ub.cbooksid = ? and (bt.cparent <> 'root' or bt.cparent is null) order by ub.iorder, ub.cwritedate, bt.id", userID, booksId];
         
         if (!resultSet) {
             if (failure) {

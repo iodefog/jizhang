@@ -46,25 +46,7 @@ static NSString *const kBudgetBillTypeSelectionCellId = @"kBudgetBillTypeSelecti
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    [self.view ssj_showLoadingIndicator];
-    [SSJBudgetDatabaseHelper queryBudgetBillTypeSelectionItemListWithBudgetModel:_budgetModel success:^(NSArray<SSJBudgetBillTypeSelectionCellItem *> * _Nonnull list) {
-        [self.view ssj_hideLoadingIndicator];
-        self.items = list;
-        [self.tableView reloadData];
-        
-        for (SSJBudgetBillTypeSelectionCellItem *item in list) {
-            if (item.selected) {
-                NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:[list indexOfObject:item] inSection:0];
-//                [self.tableView selectRowAtIndexPath:selectedIndexPath animated:YES scrollPosition:UITableViewScrollPositionTop];
-                [self.tableView scrollToRowAtIndexPath:selectedIndexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
-                break;
-            }
-        }
-        
-    } failure:^(NSError * _Nonnull error) {
-        [self.view ssj_hideLoadingIndicator];
-        [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
-    }];
+    [self loadData];
 }
 
 - (void)goBackAction {
@@ -204,6 +186,39 @@ static NSString *const kBudgetBillTypeSelectionCellId = @"kBudgetBillTypeSelecti
     }
     
     _budgetModel.billIds = [billIds copy];
+}
+
+- (void)loadData {
+    [self.view ssj_showLoadingIndicator];
+    [SSJBudgetDatabaseHelper queryBudgetBillTypeSelectionItemListWithBudgetModel:_budgetModel booksId:nil success:^(NSArray<SSJBudgetBillTypeSelectionCellItem *> * _Nonnull list) {
+        
+        [self.view ssj_hideLoadingIndicator];
+        self.items = list;
+        [self.tableView reloadData];
+        
+        for (SSJBudgetBillTypeSelectionCellItem *item in list) {
+            if (item.selected) {
+                NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:[list indexOfObject:item] inSection:0];
+                //                [self.tableView selectRowAtIndexPath:selectedIndexPath animated:YES scrollPosition:UITableViewScrollPositionTop];
+                [self.tableView scrollToRowAtIndexPath:selectedIndexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
+                break;
+            }
+        }
+        
+    } failure:^(NSError * _Nonnull error) {
+        [self.view ssj_hideLoadingIndicator];
+        [self showError:error];
+    }];
+}
+
+- (void)showError:(NSError *)error {
+    NSString *message = nil;
+#ifdef DEBUG
+    message = [error localizedDescription];
+#else
+    message = SSJ_ERROR_MESSAGE;
+#endif
+    [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:message action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
 }
 
 #pragma mark - Getter
