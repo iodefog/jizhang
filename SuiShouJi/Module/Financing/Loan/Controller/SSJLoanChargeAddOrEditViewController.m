@@ -244,7 +244,7 @@ static NSUInteger kDateTag = 1005;
 
 - (void)sureButtonAction {
     
-    if (self.surplus == 0) {
+    if (self.surplus == 0 && self.chargeType == SSJLoanCompoundChargeTypeRepayment) {
         switch (self.loanModel.type) {
             case SSJLoanTypeLend:
                 [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"你的剩余借出款为0，无需再收款了。"]];
