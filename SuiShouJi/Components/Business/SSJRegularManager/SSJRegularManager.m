@@ -166,7 +166,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
         NSArray *billDates = [self billDatesFromDate:billDate periodType:periodType containFromDate:NO];
         
         for (NSDate *billDate in billDates) {
-            if ([endDate earlierDate:billDate]) {
+            if ([endDate isEarlierThan:billDate]) {
                 continue;
             }
             NSString *billDateStr = [billDate formattedDateWithFormat:@"yyyy-MM-dd"];
@@ -234,7 +234,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
         CGFloat memberMoney = [money doubleValue] / memberIds.count;
         
         for (NSDate *billDate in billDates) {
-            if ([endDate earlierDate:billDate]) {
+            if ([endDate isEarlierThan:billDate]) {
                 continue;
             }
             NSString *chargeId = SSJUUID();
