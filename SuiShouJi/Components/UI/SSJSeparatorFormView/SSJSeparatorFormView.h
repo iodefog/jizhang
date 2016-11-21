@@ -52,12 +52,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong, nullable) UIFont *bottomTitleFont;
 
+@property (nonatomic) UIEdgeInsets contentInsets;
+
 + (instancetype)itemWithTopTitle:(NSString *)topTitle
                      bottomTitle:(NSString *)bottomTitle
                    topTitleColor:(UIColor *)topTitleColor
                 bottomTitleColor:(UIColor *)bottomTitleColor
                     topTitleFont:(UIFont *)topTitleFont
-                 bottomTitleFont:(UIFont *)bottomTitleFont;
+                 bottomTitleFont:(UIFont *)bottomTitleFont
+                   contentInsets:(UIEdgeInsets)contentInsets;
 
 @end
 
