@@ -88,6 +88,7 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    [self.customCategorySwitchConrol setSelectedIndex:1 animated:NO];
     [self loadData];
 }
 
