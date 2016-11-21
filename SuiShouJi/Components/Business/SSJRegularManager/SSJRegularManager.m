@@ -130,7 +130,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
     }
     
     //  查询当前用户所有有效定期记账最近一次的流水记录
-    FMResultSet *resultSet = [db executeQuery:@"select max(a.cbilldate), a.thumburl, a.cbooksid, b.iconfigid, b.ibillid, b.ifunsid, b.itype, b.imoney, b.cimgurl, b.cmemo, b.cmemberids from bk_user_charge as a, bk_charge_period_config as b where a.iconfigid = b.iconfigid and a.cuserid = ? and b.cuserid = ? and b.istate = 1 and b.operatortype <> 2 and a.cbilldate <= datetime('now', 'localtime') group by b.iconfigid", userId, userId];
+    FMResultSet *resultSet = [db executeQuery:@"select max(a.cbilldate), a.thumburl, a.cbooksid,  b.iconfigid, b.ibillid, b.ifunsid, b.itype, b.imoney, b.cimgurl, b.cmemo, b.cmemberids, b.cbilldateend from bk_user_charge as a, bk_charge_period_config as b where a.iconfigid = b.iconfigid and a.cuserid = ? and b.cuserid = ? and b.istate = 1 and b.operatortype <> 2 and a.cbilldate <= datetime('now', 'localtime') group by b.iconfigid", userId, userId];
     if (!resultSet) {
         return NO;
     }
@@ -189,7 +189,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
     
     //  查询没有生成过流水的定期记账
     NSString *tConfigIdStr = [configIdArr componentsJoinedByString:@","];
-    NSMutableString *query = [NSMutableString stringWithFormat:@"select iconfigid, ibillid, ifunsid, itype, imoney, cimgurl, cmemo, cbilldate, cbooksid, cmemberids from bk_charge_period_config where cuserid = '%@' and istate = 1 and operatortype <> 2", userId];
+    NSMutableString *query = [NSMutableString stringWithFormat:@"select iconfigid, ibillid, ifunsid, itype, imoney, cimgurl, cmemo, cbilldate, cbooksid, cmemberids, cbilldateend from bk_charge_period_config where cuserid = '%@' and istate = 1 and operatortype <> 2", userId];
     if (tConfigIdStr.length) {
         [query appendFormat:@" and iconfigid not in (%@)", tConfigIdStr];
     }

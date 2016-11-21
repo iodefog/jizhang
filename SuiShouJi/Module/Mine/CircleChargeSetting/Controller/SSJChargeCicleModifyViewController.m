@@ -553,36 +553,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
     return _memberSelectView;
 }
 
-#pragma mark - Private
--(void)takePhoto{
-    UIImagePickerControllerSourceType sourceType = UIImagePickerControllerSourceTypeCamera;
-    if ([UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypeCamera])
-    {
-        UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-        picker.delegate = self;
-        picker.allowsEditing = YES;
-        picker.sourceType = sourceType;
-        [self presentViewController:picker animated:YES completion:^{}];
-    }else{
-        NSLog(@"模拟其中无法打开照相机,请在真机中使用");
-    }
-}
-
--(void)localPhoto{
-    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-    
-    picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-    picker.delegate = self;
-    //设置选择后的图片可被编辑
-    picker.allowsEditing = YES;
-    [self presentViewController:picker animated:YES completion:^{}];
-}
-
-
--(void)transferTextDidChange{
-    [self setupTextFiledNum:_moneyInput num:2];
-}
-
+#pragma mark - Event
 -(void)saveButtonClicked:(id)sender{
     [_moneyInput resignFirstResponder];
     [_memoInput resignFirstResponder];
@@ -617,6 +588,18 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 
 -(void)deleteButtonClicked:(id)sender{
     __weak typeof(self) weakSelf = self;
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"" style:UIAlertActionStyleCancel handler:NULL];
+    UIAlertAction *comfirmAction = [UIAlertAction actionWithTitle:@"" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [weakSelf deleteChargeConfig];
+    }];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"你确定要删除这条周期记账吗?" preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:cancelAction];
+    [alert addAction:comfirmAction];
+    [self.navigationController presentViewController:alert animated:YES completion:NULL];
+}
+
+- (void)deleteChargeConfig{
+    __weak typeof(self) weakSelf = self;
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSString *writeDate = [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         if ([db intForQuery:@"select count(1) from bk_charge_period_config where iconfigid = ?",weakSelf.item.configId]) {
@@ -627,6 +610,38 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
         });
     }];
 }
+
+
+#pragma mark - Private
+-(void)takePhoto{
+    UIImagePickerControllerSourceType sourceType = UIImagePickerControllerSourceTypeCamera;
+    if ([UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypeCamera])
+    {
+        UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+        picker.delegate = self;
+        picker.allowsEditing = YES;
+        picker.sourceType = sourceType;
+        [self presentViewController:picker animated:YES completion:^{}];
+    }else{
+        NSLog(@"模拟其中无法打开照相机,请在真机中使用");
+    }
+}
+
+-(void)localPhoto{
+    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+    
+    picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    picker.delegate = self;
+    //设置选择后的图片可被编辑
+    picker.allowsEditing = YES;
+    [self presentViewController:picker animated:YES completion:^{}];
+}
+
+
+-(void)transferTextDidChange{
+    [self setupTextFiledNum:_moneyInput num:2];
+}
+
 
 /**
  *   限制输入框小数点(输入框只改变时候调用valueChange)
