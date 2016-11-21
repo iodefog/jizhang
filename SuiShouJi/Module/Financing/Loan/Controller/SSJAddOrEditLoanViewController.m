@@ -398,6 +398,7 @@ const int kMemoMaxLength = 15;
             }
             
             self.loanModel.lender = textField.text;
+            self.reminderItem.borrowtarget = textField.text;
             [self updateRemindName];
             
         } else if (textField.tag == kMoneyTag) {

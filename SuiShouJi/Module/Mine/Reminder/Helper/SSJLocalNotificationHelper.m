@@ -64,7 +64,7 @@
             }
                 
             case SSJReminderTypeBorrowing:{
-                if (item.borrowtarget.length) {
+                if (!item.borrowtarget.length) {
                     item.borrowtarget = @"";
                 }
                 if (!item.borrowtOrLend) {
