@@ -193,20 +193,6 @@
         }
         return NO;
     }
-    //删除流水表
-    if (![db executeUpdate:@"update bk_user_charge set operatortype = 2 , cwritedate = ? , iversion = ? where cuserid = ? and ifunsid = ?",writeDate,@(SSJSyncVersion()),userId,item.cardId]) {
-        if (error) {
-            *error = [db lastError];
-        }
-        return NO;
-    }
-    //更新日常统计表
-    if (![SSJDailySumChargeTable updateDailySumChargeForUserId:userId inDatabase:db]) {
-        if (error) {
-            *error = [db lastError];
-        }
-        return NO;
-    }
     //删除提醒表
     if (item.remindId.length) {
         if (![db executeUpdate:@"update bk_user_remind set operatortype = 2 , cwritedate = ? , iversion = ? where cuserid = ? and cremindid = ?",writeDate,@(SSJSyncVersion()),userId,item.remindId]) {
@@ -260,6 +246,20 @@
             }
             return NO;
         };
+    }
+    //删除流水表
+    if (![db executeUpdate:@"update bk_user_charge set operatortype = 2 , cwritedate = ? , iversion = ? where cuserid = ? and ifunsid = ?",writeDate,@(SSJSyncVersion()),userId,item.cardId]) {
+        if (error) {
+            *error = [db lastError];
+        }
+        return NO;
+    }
+    //更新日常统计表
+    if (![SSJDailySumChargeTable updateDailySumChargeForUserId:userId inDatabase:db]) {
+        if (error) {
+            *error = [db lastError];
+        }
+        return NO;
     }
     return YES;
 }
