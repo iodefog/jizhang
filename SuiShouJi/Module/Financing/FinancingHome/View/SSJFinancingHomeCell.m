@@ -112,6 +112,7 @@
         _fundingBalanceLabel = [[UILabel alloc]init];
         _fundingBalanceLabel.textColor = [UIColor whiteColor];
         _fundingBalanceLabel.font = [UIFont systemFontOfSize:22];
+        _fundingBalanceLabel.textAlignment = NSTextAlignmentRight;
     }
     return _fundingBalanceLabel;
 }
