@@ -152,8 +152,10 @@
                         }
                         return;
                     }
-                    SSJLoanModel *loanModel = [[SSJLoanModel alloc] init];
+                    
+                    NSMutableArray *models = [NSMutableArray array];
                     while ([resultSet next]) {
+                        SSJLoanModel *loanModel = [[SSJLoanModel alloc] init];
                         loanModel.ID = [resultSet stringForColumn:@"loanid"];
                         loanModel.userID = [resultSet stringForColumn:@"cuserid"];
                         loanModel.lender = [resultSet stringForColumn:@"lender"];
@@ -173,18 +175,21 @@
                         loanModel.operatorType = [resultSet intForColumn:@"operatorType"];
                         loanModel.version = [resultSet longLongIntForColumn:@"iversion"];
                         loanModel.writeDate = [NSDate dateWithString:[resultSet stringForColumn:@"cwritedate"] formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
+                        [models addObject:loanModel];
                     }
                     [resultSet close];
                     
-                    if (![SSJLoanHelper deleteLoanModel:loanModel inDatabase:db forUserId:userId error:NULL]) {
-                        if (failure) {
-                            *rollback = YES;
-                            SSJDispatchMainAsync(^{
-                                failure([db lastError]);
-                            });
-                        }
-                        return;
-                    };
+                    for (SSJLoanModel *loanModel in models) {
+                        if (![SSJLoanHelper deleteLoanModel:loanModel inDatabase:db forUserId:userId error:NULL]) {
+                            if (failure) {
+                                *rollback = YES;
+                                SSJDispatchMainAsync(^{
+                                    failure([db lastError]);
+                                });
+                            }
+                            return;
+                        };
+                    }
                 }
             }else{
                 //如果是普通资金帐户
