@@ -99,6 +99,9 @@ BOOL kHomeNeedLoginPop;
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     [self.mm_drawerController setGestureCompletionBlock:^(MMDrawerController *drawerController, UIGestureRecognizer *gesture) {
         __strong typeof(weakSelf) sself = weakSelf;
+        if (drawerController.openSide == MMDrawerSideNone) {
+            [weakSelf getDateFromDatebase];
+        }
         if (!sself->_dateViewHasDismiss) {
             [weakSelf.floatingDateView dismiss];
             [weakSelf.mutiFunctionButton dismiss];

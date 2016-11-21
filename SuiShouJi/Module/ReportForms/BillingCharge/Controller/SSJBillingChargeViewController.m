@@ -109,6 +109,9 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
     if (!self.booksId.length) {
         self.booksId = [SSJUserTableManager queryUserItemForID:SSJUSERID()].currentBooksId;
     }
+    if (self.period) {
+        calenderDetailVC.period = self.period;
+    }
     calenderDetailVC.booksId = self.booksId;
     calenderDetailVC.Id = self.ID;
     calenderDetailVC.item = selectedItem;

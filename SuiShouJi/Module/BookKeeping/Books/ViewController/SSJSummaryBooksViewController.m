@@ -223,9 +223,7 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
 }
 
 - (void)curveGraphView:(SSJReportFormsCurveGraphView *)graphView didScrollToAxisXIndex:(NSUInteger)index {
-    SSJReportFormsCurveModel *model = [_curveItems ssj_safeObjectAtIndex:index];
-    self.currentPeriod = model.period;
-    [self reloadDatasCurrentPeriod];
+
 }
 
 #pragma mark - Private
@@ -260,9 +258,16 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
         return;
     }
     [self.view ssj_showLoadingIndicator];
-    
+    SSJDatePeriod *period;
+    if (_customPeriod) {
+        period = _customPeriod;
+    }else{
+        if (_periods.count) {
+            period = [_periods ssj_safeObjectAtIndex:self.header.dateAxisView.selectedIndex];
+        }
+    }
     // 加载流水列表和饼状图的数据
-    [SSJReportFormsUtil queryForIncomeOrPayType:!(int)_header.incomOrExpenseSelectSegment.selectedSegmentIndex booksId:@"all" startDate:self.currentPeriod.startDate endDate:self.currentPeriod.endDate success:^(NSArray<SSJReportFormsItem *> *result) {
+    [SSJReportFormsUtil queryForIncomeOrPayType:!(int)_header.incomOrExpenseSelectSegment.selectedSegmentIndex booksId:@"all" startDate:period.startDate endDate:period.endDate success:^(NSArray<SSJReportFormsItem *> *result) {
         [self.view ssj_hideLoadingIndicator];
         [self organiseDatasWithResult:result];
     } failure:^(NSError *error) {
@@ -295,7 +300,7 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
             SSJDatePeriod *currentPeriod = ((SSJReportFormsCurveModel *)[_curveItems ssj_safeObjectAtIndex:_curveItems.count - 1]).period;
             _currentPeriod = currentPeriod;
             // 加载流水列表和饼状图的数据
-            [SSJReportFormsUtil queryForIncomeOrPayType:!(int)_header.incomOrExpenseSelectSegment.selectedSegmentIndex booksId:@"all" startDate:currentPeriod.startDate endDate:currentPeriod.endDate success:^(NSArray<SSJReportFormsItem *> *result) {
+            [SSJReportFormsUtil queryForIncomeOrPayType:!(int)_header.incomOrExpenseSelectSegment.selectedSegmentIndex booksId:@"all" startDate:period.startDate endDate:period.endDate success:^(NSArray<SSJReportFormsItem *> *result) {
                 [self.view ssj_hideLoadingIndicator];
                 [self organiseDatasWithResult:result];
             } failure:^(NSError *error) {
@@ -305,6 +310,8 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
             self.header.curveViewHasDataOrNot = YES;
         } else {
             self.header.curveViewHasDataOrNot = NO;
+            self.chargeDatas = nil;
+            [self.tableView reloadData];
         }
         
     } failure:^(NSError *error) {

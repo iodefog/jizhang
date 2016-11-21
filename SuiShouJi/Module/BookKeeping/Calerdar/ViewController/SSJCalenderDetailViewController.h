@@ -8,6 +8,7 @@
 
 #import "SSJNewBaseTableViewController.h"
 #import "SSJBillingChargeCellItem.h"
+#import "SSJDatePeriod.h"
 
 @interface SSJCalenderDetailViewController :SSJNewBaseTableViewController<UIAlertViewDelegate>
 
@@ -21,5 +22,8 @@
 
 // 是成员流水还是类别流水
 @property (nonatomic) BOOL isMemberCharge;
+
+// 查询周期内的流水
+@property (nonatomic, strong) SSJDatePeriod *period;
 
 @end
