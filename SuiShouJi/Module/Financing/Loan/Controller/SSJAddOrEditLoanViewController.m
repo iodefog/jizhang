@@ -198,9 +198,15 @@ const int kMemoMaxLength = 15;
                 break;
         }
         
-        SSJLoanFundAccountSelectionViewItem *selectedFundItem = [self.fundingSelectionView.items ssj_safeObjectAtIndex:_fundingSelectionView.selectedIndex];
-        cell.additionalIcon.image = [UIImage imageNamed:selectedFundItem.image];
-        cell.subtitleLabel.text = selectedFundItem.title;
+        if (_fundingSelectionView.selectedIndex >= 0) {
+            SSJLoanFundAccountSelectionViewItem *selectedFundItem = [self.fundingSelectionView.items ssj_safeObjectAtIndex:_fundingSelectionView.selectedIndex];
+            cell.additionalIcon.image = [UIImage imageNamed:selectedFundItem.image];
+            cell.subtitleLabel.text = selectedFundItem.title;
+        } else {
+            cell.additionalIcon.image = nil;
+            cell.subtitleLabel.text = @"请选择账户";
+        }
+        
         cell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         cell.switchControl.hidden = YES;
         cell.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
@@ -605,6 +611,7 @@ const int kMemoMaxLength = 15;
         _tableView.hidden = NO;
         [self.view ssj_hideLoadingIndicator];
         
+        // 新建借贷设置默认账户
         if (!_edited) {
             NSString *targetFundId = [items firstObject].ID;
             
@@ -618,13 +625,23 @@ const int kMemoMaxLength = 15;
         }
         
         self.fundingSelectionView.items = items;
+        self.fundingSelectionView.selectedIndex = -1;
+        
+        BOOL hasSelectedFund = NO;  // 是否有选中的账户
         for (int i = 0; i < items.count; i ++) {
             SSJLoanFundAccountSelectionViewItem *item = items[i];
             if ([item.ID isEqualToString:self.loanModel.targetFundID]) {
                 self.fundingSelectionView.selectedIndex = i;
+                hasSelectedFund = YES;
                 break;
             }
         }
+        
+        // 如果此借贷的目标资金账户不在现有账户列表中，就置为nil
+        if (!hasSelectedFund) {
+            self.loanModel.targetFundID = nil;
+        }
+        
         [_tableView reloadData];
         
     } failure:^(NSError * _Nonnull error) {

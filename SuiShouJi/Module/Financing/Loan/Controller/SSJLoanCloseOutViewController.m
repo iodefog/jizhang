@@ -126,8 +126,15 @@ static NSUInteger kClostOutDateTag = 1004;
             
             SSJAddOrEditLoanLabelCell *accountCell = (SSJAddOrEditLoanLabelCell *)cell;
             SSJLoanFundAccountSelectionViewItem *selectedFundItem = [self.fundingSelectionView.items ssj_safeObjectAtIndex:_fundingSelectionView.selectedIndex];
-            accountCell.additionalIcon.image = [UIImage imageNamed:selectedFundItem.image];
-            accountCell.subtitleLabel.text = selectedFundItem.title;
+            
+            if (_fundingSelectionView.selectedIndex >= 0) {
+                accountCell.additionalIcon.image = [UIImage imageNamed:selectedFundItem.image];
+                accountCell.subtitleLabel.text = selectedFundItem.title;
+            } else {
+                accountCell.additionalIcon.image = nil;
+                accountCell.subtitleLabel.text = @"请选择账户";
+            }
+            
             accountCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
             accountCell.switchControl.hidden = YES;
             accountCell.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
@@ -192,12 +199,21 @@ static NSUInteger kClostOutDateTag = 1004;
     [SSJLoanHelper queryFundModelListWithSuccess:^(NSArray <SSJLoanFundAccountSelectionViewItem *>*items) {
         
         self.fundingSelectionView.items = items;
+        self.fundingSelectionView.selectedIndex = -1;
+        
+        BOOL hasSelectedFund = NO;
         for (int i = 0; i < items.count; i ++) {
             SSJLoanFundAccountSelectionViewItem *item = items[i];
             if ([item.ID isEqualToString:self.loanModel.endTargetFundID]) {
                 self.fundingSelectionView.selectedIndex = i;
+                hasSelectedFund = YES;
                 break;
             }
+        }
+        
+        // 如果此借贷的目标资金账户不在现有账户列表中，就置为nil，在保存的时候会监测endTargetFundID，空的话会提示用户选择账户
+        if (!hasSelectedFund) {
+            self.loanModel.endTargetFundID = nil;
         }
         
         [SSJLoanHelper queryLoanChargeModeListWithLoanModel:self.loanModel success:^(NSArray<SSJLoanCompoundChargeModel *> * _Nonnull list) {
@@ -554,13 +570,13 @@ static NSUInteger kClostOutDateTag = 1004;
                 NewFundingVC.addNewFundingBlock = ^(SSJBaseItem *item){
                     if ([item isKindOfClass:[SSJFundingItem class]]) {
                         SSJFundingItem *fundItem = (SSJFundingItem *)item;
-                        weakSelf.loanModel.targetFundID = fundItem.fundingID;
+                        weakSelf.loanModel.endTargetFundID = fundItem.fundingID;
                         weakSelf.compoundModel.targetChargeModel.fundId = fundItem.fundingID;
                         weakSelf.compoundModel.interestChargeModel.fundId = fundItem.fundingID;
                         [weakSelf loadData];
                     } else if ([item isKindOfClass:[SSJCreditCardItem class]]){
                         SSJCreditCardItem *cardItem = (SSJCreditCardItem *)item;
-                        weakSelf.loanModel.targetFundID = cardItem.cardId;
+                        weakSelf.loanModel.endTargetFundID = cardItem.cardId;
                         weakSelf.compoundModel.targetChargeModel.fundId = cardItem.cardId;
                         weakSelf.compoundModel.interestChargeModel.fundId = cardItem.cardId;
                         [weakSelf loadData];

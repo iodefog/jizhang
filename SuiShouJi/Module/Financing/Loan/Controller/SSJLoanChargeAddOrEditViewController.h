@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface SSJLoanChargeAddOrEditViewController : SSJBaseViewController
 
 /**
- 是否编辑
+ 是否编辑，默认NO
  */
 @property (nonatomic) BOOL edited;
 
