@@ -52,8 +52,8 @@ static NSString *const kSummaryButtonAnimationKey = @"summaryButtonAnimationKey"
 
 - (void)layoutSubviews{
     [super layoutSubviews];
-    self.backColorView.leftTop = CGPointMake(0, 0);
-    self.waveImage.leftTop = CGPointMake(0, self.backColorView.bottom);
+//    self.backColorView.leftTop = CGPointMake(0, 0);
+    self.waveImage.leftTop = CGPointMake(0, 0);
     self.incomeTitleLab.centerY = self.expentureTitleLab.centerY = self.height / 2 - 12;
     self.incomeLab.centerY = self.expentureLab.centerY = self.height / 2 + 12;
     self.incomeTitleLab.centerX = self.incomeLab.centerX = self.width / 4;
@@ -112,18 +112,18 @@ static NSString *const kSummaryButtonAnimationKey = @"summaryButtonAnimationKey"
     return _summaryButton;
 }
 
-- (UIView *)backColorView{
-    if (!_backColorView) {
-        _backColorView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.width, self.height - 38)];
-        _backColorView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.summaryBooksHeaderColor alpha:SSJ_CURRENT_THEME.summaryBooksHeaderAlpha];
-    }
-    return _backColorView;
-}
+//- (UIView *)backColorView{
+//    if (!_backColorView) {
+//        _backColorView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.width, self.height - 38)];
+//        _backColorView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.summaryBooksHeaderColor alpha:SSJ_CURRENT_THEME.summaryBooksHeaderAlpha];
+//    }
+//    return _backColorView;
+//}
 
 - (UIImageView *)waveImage{
     if (!_waveImage) {
-        _waveImage = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, self.width, 38)];
-        _waveImage.image = [UIImage ssj_themeImageWithName:@"bk_wave"];
+        _waveImage = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, self.width, self.height)];
+        _waveImage.image = [[UIImage ssj_themeImageWithName:@"bk_wave"] resizableImageWithCapInsets:UIEdgeInsetsMake(10, 0, 0, 0) resizingMode:UIImageResizingModeStretch];
     }
     return _waveImage;
 }
