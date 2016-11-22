@@ -181,6 +181,7 @@
         [self.themeImage sd_setImageWithURL:[NSURL URLWithString:_item.themeImageUrl] placeholderImage:[UIImage imageNamed:@"noneImage"]];
 //        __weak typeof(self) weakSelf = self;
         if (self.item.isDownLoading) {
+            [self.themeStatusButton.button setTitle:@"" forState:UIControlStateNormal];
             self.themeStatusButton.downloadMaskView.hidden = NO;
             [[SSJThemeDownLoaderManger sharedInstance] addProgressHandler:_downloadHandler forID:self.item.themeId];
         }else{

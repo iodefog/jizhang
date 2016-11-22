@@ -72,7 +72,7 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.summaryBooksHeaderColor alpha:SSJ_CURRENT_THEME.summaryBooksHeaderAlpha] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
 //    self.mm_drawerController.openDrawerGestureModeMask = MMOpenDrawerGestureModeAll;
     [self.header startAnimating];
     [MobClick event:@"main_account_book"];
@@ -375,7 +375,7 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
 
 - (SSJBooksHeaderView *)header{
     if (!_header) {
-        _header = [[SSJBooksHeaderView alloc]initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, 114)];
+        _header = [[SSJBooksHeaderView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 178)];
         __weak typeof(self) weakSelf = self;
         _header.buttonClickBlock = ^(){
             SSJSummaryBooksViewController *summaryVc = [[SSJSummaryBooksViewController alloc]init];

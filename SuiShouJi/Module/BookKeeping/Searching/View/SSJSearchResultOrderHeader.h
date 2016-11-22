@@ -18,4 +18,6 @@
 
 @property (nonatomic, copy) void(^orderSelectBlock)(SSJChargeListOrder order);
 
+- (void)updateCellAppearanceAfterThemeChanged;
+
 @end

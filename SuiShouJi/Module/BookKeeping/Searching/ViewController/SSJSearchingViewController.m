@@ -400,6 +400,11 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
     }];
 }
 
+- (void)updateAppearanceAfterThemeChanged{
+    [super updateAppearanceAfterThemeChanged];
+    [self.resultOrderHeader updateCellAppearanceAfterThemeChanged];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
