@@ -19,4 +19,6 @@
 
 + (void)updateCustomUserBillNeededForUserId:(NSString *)userId billTypeItems:(NSArray *)items inDatabase:(FMDatabase *)db error:(NSError **)error;
 
+
+
 @end
