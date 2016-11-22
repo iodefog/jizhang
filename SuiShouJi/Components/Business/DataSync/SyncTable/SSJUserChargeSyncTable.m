@@ -15,7 +15,25 @@
 }
 
 + (NSArray *)columns {
-    return @[@"ichargeid", @"imoney", @"ibillid", @"ifunsid", @"iconfigid", @"cadddate", @"ioldmoney", @"ibalance", @"cbilldate", @"cuserid", @"cimgurl", @"thumburl", @"cmemo", @"cbooksid", @"loanid", @"clientadddate", @"cwritedate", @"iversion", @"operatortype"];
+    return @[@"ichargeid",
+             @"imoney",
+             @"ibillid",
+             @"ifunsid",
+             @"iconfigid",
+             @"cadddate",
+             @"ioldmoney",
+             @"ibalance",
+             @"cbilldate",
+             @"cuserid",
+             @"cimgurl",
+             @"thumburl",
+             @"cmemo",
+             @"cbooksid",
+             @"loanid",
+             @"clientadddate",
+             @"cwritedate",
+             @"iversion",
+             @"operatortype"];
 }
 
 + (NSArray *)primaryKeys {
