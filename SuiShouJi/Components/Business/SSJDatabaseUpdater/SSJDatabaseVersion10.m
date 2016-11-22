@@ -37,6 +37,11 @@ static NSString *const kDefualtOrderKey = @"kDefualtOrderKey";
         return error;
     }
     
+    error = [self updatePeriodChargeConfigTableWithDatabase:db];
+    if (error) {
+        return error;
+    }
+    
     return nil;
 }
 
@@ -165,7 +170,7 @@ static NSString *const kDefualtOrderKey = @"kDefualtOrderKey";
         NSArray *parentArr = [iparenttype componentsSeparatedByString:@","];
         for (NSString *parenttype in parentArr) {
             if ([parenttype integerValue]) {
-                if ([db executeUpdate:@"insert into bk_user_bill select cuserid ,? , 1, ?, ?, 1, ?, cbooksid from bk_books_type where iparenttype = ? and operatortype <> 2",cbillid,cwriteDate,@(SSJSyncVersion()),defualtOrder,parenttype]) {
+                if (![db executeUpdate:@"insert into bk_user_bill select cuserid ,? , 1, ?, ?, 1, ?, cbooksid from bk_books_type where iparenttype = ? and operatortype <> 2",cbillid,cwriteDate,@(SSJSyncVersion()),defualtOrder,parenttype]) {
                     return [db lastError];
                 }
             }
@@ -192,6 +197,13 @@ static NSString *const kDefualtOrderKey = @"kDefualtOrderKey";
 
 + (NSError *)updateLoanTableWithDatabase:(FMDatabase *)db {
     if (![db executeUpdate:@"alter table BK_LOAN add INTERESTTYPE INTEGER DEFAULT 0"]) {
+        return [db lastError];
+    }
+    return nil;
+}
+
++ (NSError *)updatePeriodChargeConfigTableWithDatabase:(FMDatabase *)db {
+    if (![db executeUpdate:@"alter table BK_CHARGE_PERIOD_CONFIG add CBILLDATEEND TEXT"]) {
         return [db lastError];
     }
     return nil;
