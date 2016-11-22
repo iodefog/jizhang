@@ -280,6 +280,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
         }else{
             _noDataHeader = [[SSJFundingDetailNoDataView alloc]initWithFrame:CGRectMake(0, 171                           , self.view.width, self.view.height - 171)];
         }
+        _noDataHeader.hidden = YES;
     }
     return _noDataHeader;
 }
