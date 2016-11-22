@@ -121,8 +121,8 @@
     model.bookKeepingHomeMutiButtonNormalColor = @"#cccccc";
     model.bookKeepingHomeMutiButtonSelectColor = @"#f5b52a";
     model.searchResultHeaderBackgroundColor = @"#ffebeb";
-    model.summaryBooksHeaderColor = @"#f9d2da";
-    model.summaryBooksHeaderAlpha = 0.3;
+    model.summaryBooksHeaderColor = @"#ffd2d2";
+    model.summaryBooksHeaderAlpha = 1;
     return model;
 }
 

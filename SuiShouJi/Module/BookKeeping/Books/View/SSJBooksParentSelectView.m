@@ -18,8 +18,6 @@ static NSString * SSJBooksParentSelectCellIdentifier = @"SSJBooksParentSelectCel
 
 @property(nonatomic, strong) UILabel *titleLab;
 
-@property(nonatomic, strong) UIView *backColorView;
-
 @property(nonatomic, strong) UIImageView *waveView;
 
 @end
@@ -33,7 +31,6 @@ static NSString * SSJBooksParentSelectCellIdentifier = @"SSJBooksParentSelectCel
         self.layer.cornerRadius = 15;
         self.layer.masksToBounds = YES;
         self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
-        [self addSubview:self.backColorView];
         [self addSubview:self.waveView];
         [self addSubview:self.titleLab];
         [self addSubview:self.collectionView];
@@ -46,10 +43,8 @@ static NSString * SSJBooksParentSelectCellIdentifier = @"SSJBooksParentSelectCel
 - (void)layoutSubviews{
     [super layoutSubviews];
     self.titleLab.center = CGPointMake(self.width / 2, 40);
-    self.backColorView.leftTop = CGPointMake(0, 0);
-    self.backColorView.size = CGSizeMake(self.width, 42);
-    self.waveView.leftTop = CGPointMake(0, self.backColorView.bottom);
-    self.waveView.size = CGSizeMake(self.width, 38);
+    self.waveView.leftTop = CGPointMake(0, 0);
+    self.waveView.size = CGSizeMake(self.width, 80);
     self.collectionView.size = CGSizeMake(self.width, self.height - self.waveView.bottom);
     self.collectionView.leftTop = CGPointMake(0, self.waveView.bottom);
 }
@@ -58,18 +53,10 @@ static NSString * SSJBooksParentSelectCellIdentifier = @"SSJBooksParentSelectCel
     return CGSizeMake([UIApplication sharedApplication].keyWindow.width - 40, 390);
 }
 
-- (UIView *)backColorView{
-    if (!_backColorView) {
-        _backColorView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.width, 42)];
-        _backColorView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.summaryBooksHeaderColor alpha:SSJ_CURRENT_THEME.summaryBooksHeaderAlpha];
-    }
-    return _backColorView;
-}
-
 - (UIImageView *)waveView{
     if (!_waveView) {
-        _waveView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, self.width, 38)];
-        _waveView.image = [UIImage ssj_themeImageWithName:@"bk_wave"];
+        _waveView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, self.width, 80)];
+        _waveView.image = [[UIImage ssj_themeImageWithName:@"bk_wave"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 0, 32, 0) resizingMode:UIImageResizingModeStretch];
     }
     return _waveView;
 }

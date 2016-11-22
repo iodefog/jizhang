@@ -24,8 +24,6 @@ static NSString *const kSummaryButtonAnimationKey = @"summaryButtonAnimationKey"
 
 @property(nonatomic, strong) UIButton *summaryButton;
 
-@property(nonatomic, strong) UIView *backColorView;
-
 @property(nonatomic, strong) UIImageView *waveImage;
 @end
 
@@ -39,7 +37,6 @@ static NSString *const kSummaryButtonAnimationKey = @"summaryButtonAnimationKey"
         [self ssj_setBorderStyle:SSJBorderStyleTop];
         [self ssj_setBorderWidth:1.f / [UIScreen mainScreen].scale];
         self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
-        [self addSubview:self.backColorView];
         [self addSubview:self.waveImage];
         [self addSubview:self.incomeTitleLab];
         [self addSubview:self.incomeLab];
@@ -112,18 +109,10 @@ static NSString *const kSummaryButtonAnimationKey = @"summaryButtonAnimationKey"
     return _summaryButton;
 }
 
-//- (UIView *)backColorView{
-//    if (!_backColorView) {
-//        _backColorView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.width, self.height - 38)];
-//        _backColorView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.summaryBooksHeaderColor alpha:SSJ_CURRENT_THEME.summaryBooksHeaderAlpha];
-//    }
-//    return _backColorView;
-//}
-
 - (UIImageView *)waveImage{
     if (!_waveImage) {
         _waveImage = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, self.width, self.height)];
-        _waveImage.image = [[UIImage ssj_themeImageWithName:@"bk_wave"] resizableImageWithCapInsets:UIEdgeInsetsMake(10, 0, 0, 0) resizingMode:UIImageResizingModeStretch];
+        _waveImage.image = [[UIImage ssj_themeImageWithName:@"bk_wave"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 0, 32, 0) resizingMode:UIImageResizingModeStretch];
     }
     return _waveImage;
 }
@@ -175,8 +164,7 @@ static NSString *const kSummaryButtonAnimationKey = @"summaryButtonAnimationKey"
     self.expentureTitleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     self.expentureLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     [self.summaryButton setImage:[UIImage ssj_themeImageWithName:@"bk_summary"] forState:UIControlStateNormal];
-    self.waveImage.image = [UIImage ssj_themeImageWithName:@"bk_wave"];
-    self.backColorView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.summaryBooksHeaderColor alpha:SSJ_CURRENT_THEME.summaryBooksHeaderAlpha];
+    self.waveImage.image = [[UIImage ssj_themeImageWithName:@"bk_wave"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 0, 32, 0) resizingMode:UIImageResizingModeStretch];
     self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
 }
 
