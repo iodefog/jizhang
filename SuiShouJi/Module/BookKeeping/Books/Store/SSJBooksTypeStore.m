@@ -247,12 +247,43 @@
 + (BOOL)generateBooksTypeForBooksItem:(SSJBooksTypeItem *)item
                            indatabase:(FMDatabase *)db
                                forUserId:(NSString *)userId{
+    // 补充每个账本独有的记账类型
     NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.sss"];
     if (![db intForQuery:@"select count(1) from bk_user_bill where cbooksid = ?",item.booksId]) {
         if (![db executeUpdate:@"insert into bk_user_bill select ?, id, istate, ?, ?, 1, defaultorder,? from bk_bill_type where ibookstype = ? and icustom = 0",userId,writeDate,@(SSJSyncVersion()),item.booksId,@(item.booksParent)]) {
             return NO;
         }
     }
+    
+    // 补充账本公用的记账类型
+    FMResultSet *result = [db executeQuery:@"select id ,defaultorder ,ibookstype from bk_bill_type where length(ibookstype) > 1"];
+    
+    NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:0];
+    
+    while ([result next]) {
+        NSString *cbillid = [result stringForColumn:@"id"];
+        NSString *defualtOrder = [result stringForColumn:@"defaultorder"];
+        NSString *iparenttype = [result stringForColumn:@"ibookstype"];
+        NSDictionary *dic = @{@"kBillIdKey":cbillid,
+                              @"kDefualtOrderKey":defualtOrder,
+                              @"kParentTypeKey":iparenttype};
+        [tempArr addObject:dic];
+    };
+    
+    for (NSDictionary *dict in tempArr) {
+        NSString *cbillid = [dict objectForKey:@"kBillIdKey"];
+        NSString *defualtOrder = [dict objectForKey:@"kDefualtOrderKey"];
+        NSString *iparenttype = [dict objectForKey:@"kParentTypeKey"];
+        NSArray *parentArr = [iparenttype componentsSeparatedByString:@","];
+        for (NSString *parenttype in parentArr) {
+            if ([parenttype integerValue] == item.booksParent) {
+                if (![db executeUpdate:@"insert into bk_user_bill values (?,?,1,?,?,1,?,?)",userId,cbillid,writeDate,@(SSJSyncVersion()),defualtOrder,item.booksId]) {
+                    return NO;
+                }
+            }
+        }
+    }
+    
     return YES;
 }
 
