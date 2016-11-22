@@ -46,7 +46,7 @@ typedef NS_ENUM(NSUInteger, SSJLoanInterestType) {
 @property (nonatomic, copy) NSString *fundID;
 
 // 借入／借出目标账户(结清前)
-@property (nonatomic, copy) NSString *targetFundID;
+@property (nonatomic, copy, nullable) NSString *targetFundID;
 
 // 借入／借出目标账户(结清后)
 @property (nonatomic, copy, nullable) NSString *endTargetFundID;

@@ -73,16 +73,13 @@ static NSUInteger kDateTag = 1005;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [self loadData];
+    
     [self showDeleteItemIfNeeded];
     [self.view addSubview:self.tableView];
     self.tableView.tableFooterView = self.footerView;
     self.tableView.hidden = YES;
     [self updateAppearance];
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    [self loadData];
 }
 
 - (void)updateAppearanceAfterThemeChanged {
@@ -134,9 +131,16 @@ static NSUInteger kDateTag = 1005;
         SSJAddOrEditLoanLabelCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditLoanLabelCellId forIndexPath:indexPath];
         cell.imageView.image = [[UIImage imageNamed:@"loan_account"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.textLabel.text = [self titleForCellTag:tag];
-        SSJLoanFundAccountSelectionViewItem *selectedFundItem = [self.fundingSelectionView.items ssj_safeObjectAtIndex:self.fundingSelectionView.selectedIndex];
-        cell.additionalIcon.image = [UIImage imageNamed:selectedFundItem.image];
-        cell.subtitleLabel.text = selectedFundItem.title;
+        
+        if (self.fundingSelectionView.selectedIndex >= 0) {
+            SSJLoanFundAccountSelectionViewItem *selectedFundItem = [self.fundingSelectionView.items ssj_safeObjectAtIndex:self.fundingSelectionView.selectedIndex];
+            cell.additionalIcon.image = [UIImage imageNamed:selectedFundItem.image];
+            cell.subtitleLabel.text = selectedFundItem.title;
+        } else {
+            cell.additionalIcon.image = nil;
+            cell.subtitleLabel.text = @"请选择账户";
+        }
+        
         cell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         cell.switchControl.hidden = YES;
         cell.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
@@ -247,11 +251,11 @@ static NSUInteger kDateTag = 1005;
     if (self.surplus == 0 && self.chargeType == SSJLoanCompoundChargeTypeRepayment) {
         switch (self.loanModel.type) {
             case SSJLoanTypeLend:
-                [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"你的剩余借出款为0，无需再收款了。"]];
+                [CDAutoHideMessageHUD showMessage:@"你的剩余借出款为0，无需再收款了"];
                 break;
                 
             case SSJLoanTypeBorrow:
-                [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"你的剩余欠款为0，无需再还款了。"]];
+                [CDAutoHideMessageHUD showMessage:@"你的剩余欠款为0，无需再还款了"];
                 break;
         }
         return;
@@ -260,13 +264,39 @@ static NSUInteger kDateTag = 1005;
     if (self.compoundModel.chargeModel.money <= 0) {
         switch (self.loanModel.type) {
             case SSJLoanTypeLend:
-                [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"收款金额必须大于0元"]];
+                [CDAutoHideMessageHUD showMessage:@"收款金额必须大于0元"];
                 break;
                 
             case SSJLoanTypeBorrow:
-                [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"还款金额必须大于0元"]];
+                [CDAutoHideMessageHUD showMessage:@"还款金额必须大于0元"];
                 break;
         }
+        return;
+    }
+    
+    if (!self.compoundModel.targetChargeModel.fundId.length) {
+        if (self.chargeType == SSJLoanCompoundChargeTypeRepayment) {
+            switch (self.loanModel.type) {
+                case SSJLoanTypeLend:
+                    [CDAutoHideMessageHUD showMessage:@"请选择转入账户"];
+                    break;
+                    
+                case SSJLoanTypeBorrow:
+                    [CDAutoHideMessageHUD showMessage:@"请选择转出账户"];
+                    break;
+            }
+        } else if (self.chargeType == SSJLoanCompoundChargeTypeAdd) {
+            switch (self.loanModel.type) {
+                case SSJLoanTypeLend:
+                    [CDAutoHideMessageHUD showMessage:@"请选择转出账户"];
+                    break;
+                    
+                case SSJLoanTypeBorrow:
+                    [CDAutoHideMessageHUD showMessage:@"请选择转入账户"];
+                    break;
+            }
+        }
+        
         return;
     }
     
@@ -487,12 +517,20 @@ static NSUInteger kDateTag = 1005;
             
             self.fundingSelectionView.items = items;
             self.fundingSelectionView.selectedIndex = -1;
+            
+            BOOL hasSelectedFund = NO;  // 目标账户是否在现有的资金列表中
             for (int i = 0; i < items.count; i ++) {
                 SSJLoanFundAccountSelectionViewItem *item = items[i];
                 if ([item.ID isEqualToString:self.compoundModel.targetChargeModel.fundId]) {
                     self.fundingSelectionView.selectedIndex = i;
+                    hasSelectedFund = YES;
                     break;
                 }
+            }
+            
+            // 如果目标账户不在现有的资金列表中，将目标账户置为nil
+            if (!hasSelectedFund) {
+                self.compoundModel.targetChargeModel.fundId = nil;
             }
             
         } failure:^(NSError * _Nonnull error) {
@@ -822,16 +860,21 @@ static NSUInteger kDateTag = 1005;
                 SSJFundingTypeSelectViewController *NewFundingVC = [[SSJFundingTypeSelectViewController alloc]init];
                 NewFundingVC.needLoanOrNot = NO;
                 NewFundingVC.addNewFundingBlock = ^(SSJBaseItem *item){
+                    
                     if ([item isKindOfClass:[SSJFundingItem class]]) {
                         SSJFundingItem *fundItem = (SSJFundingItem *)item;
                         weakSelf.compoundModel.targetChargeModel.fundId = fundItem.fundingID;
                         weakSelf.compoundModel.interestChargeModel.fundId = fundItem.fundingID;
-                        [weakSelf loadData];
                     } else if ([item isKindOfClass:[SSJCreditCardItem class]]){
                         SSJCreditCardItem *cardItem = (SSJCreditCardItem *)item;
                         weakSelf.compoundModel.targetChargeModel.fundId = cardItem.cardId;
                         weakSelf.compoundModel.interestChargeModel.fundId = cardItem.cardId;
-                        [weakSelf loadData];
+                    }
+                    
+                    if (weakSelf.edited) {
+                        [weakSelf loadLoanModelAndFundListWithLoanId:weakSelf.compoundModel.chargeModel.loanId];
+                    } else {
+                        [weakSelf loadLoanModelAndFundListWithLoanId:weakSelf.loanId];
                     }
                 };
                 [weakSelf.navigationController pushViewController:NewFundingVC animated:YES];
