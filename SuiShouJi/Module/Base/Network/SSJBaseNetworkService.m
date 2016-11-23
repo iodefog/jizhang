@@ -32,7 +32,7 @@
         _delegate = delegate;
         _httpMethod = SSJBaseNetworkServiceHttpMethodPOST;
         _timeoutInterval = 60;
-        _pinningMode = AFSSLPinningModePublicKey;
+        _pinningMode = AFSSLPinningModeCertificate;
         _allowInvalidCertificates = YES;
         _validatesDomainName = YES;
         

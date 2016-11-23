@@ -27,7 +27,7 @@
         
         _sessionManager = [[SSJGlobalServiceManager alloc] initWithBaseURL:[NSURL URLWithString:[SSJDomainManager domain]] sessionConfiguration:configuration];
         _sessionManager.responseSerializer = [AFHTTPResponseSerializer serializer];
-        _sessionManager.SSLPinningMode = AFSSLPinningModePublicKey;
+        _sessionManager.SSLPinningMode = AFSSLPinningModeCertificate;
         _sessionManager.allowInvalidCertificates = YES;
         _sessionManager.validatesDomainName = YES;
     }
