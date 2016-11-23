@@ -188,7 +188,7 @@ static NSString *const kDefualtOrderKey = @"kDefualtOrderKey";
     }
     
     // 给非自定义账本账本添加之前版本已经用过的记账类型
-    if (![db executeUpdate:@"insert into bk_user_bill select distinct a.cuserid , a.ibillid, 1, ?, ?, 0, 0, a.cbooksid from bk_user_charge a, bk_user_bill b where a.ibillid = b.cbillid and a.operatortype <> 2 and b.operatortype <> 2 and a.cbooksid <> a.cuserid and a.cbooksid like a.cuserid || '%' and not exists (select * from bk_user_bill where cbooksid = a.cbooksid)",cwriteDate,@(SSJSyncVersion())]) {
+    if (![db executeUpdate:@"insert into bk_user_bill select distinct a.cuserid , a.ibillid, 1, ?, ?, 0, 0, a.cbooksid from bk_user_charge a, bk_user_bill b where a.ibillid = b.cbillid and a.operatortype <> 2 and b.operatortype <> 2 and a.cbooksid <> a.cuserid and a.cbooksid like a.cuserid || '%' and not exists (select * from bk_user_bill where cbooksid = a.cbooksid and cbillid = a.ibillid)",cwriteDate,@(SSJSyncVersion())]) {
         return [db lastError];
     }
     
