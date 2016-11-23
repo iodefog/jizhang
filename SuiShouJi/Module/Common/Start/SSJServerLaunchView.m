@@ -45,7 +45,7 @@
 //    manager.imageDownloader.downloadTimeout = timeout;
     
     NSURL *url = [NSURL URLWithString:SSJImageURLWithAPI(imgUrl)];
-    [manager downloadImageWithURL:url options:SDWebImageContinueInBackground progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+    [manager downloadImageWithURL:url options:(SDWebImageContinueInBackground | SDWebImageAllowInvalidSSLCertificates) progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
         if (!image || error) {
 #ifdef DEBUG
             [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"下载服务端下发启动页失败，error:%@", [error localizedDescription]]];

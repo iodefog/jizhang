@@ -208,7 +208,7 @@
                 self.imageBrowser.image = image;
                 [self updateImageSize];
             }else{
-                [self.imageBrowser sd_setImageWithURL:[NSURL URLWithString:SSJGetChargeImageUrl(self.item.chargeImage)] placeholderImage:nil options:SDWebImageProgressiveDownload completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                [self.imageBrowser sd_setImageWithURL:[NSURL URLWithString:SSJGetChargeImageUrl(self.item.chargeImage)] placeholderImage:nil options:(SDWebImageProgressiveDownload | SDWebImageAllowInvalidSSLCertificates) completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                     [self updateImageSize];
                 }];
             }
@@ -221,7 +221,7 @@
                 self.imageBrowser.image = image;
                 [self updateImageSize];
             }else{
-                [self.imageBrowser sd_setImageWithURL:[NSURL URLWithString:SSJGetChargeImageUrl(self.item.chargeImage)] placeholderImage:nil options:SDWebImageProgressiveDownload completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                [self.imageBrowser sd_setImageWithURL:[NSURL URLWithString:SSJGetChargeImageUrl(self.item.chargeImage)] placeholderImage:nil options:(SDWebImageProgressiveDownload | SDWebImageAllowInvalidSSLCertificates) completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                     [self updateImageSize];
                 }];
             }

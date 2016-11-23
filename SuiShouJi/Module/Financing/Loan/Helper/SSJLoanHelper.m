@@ -219,7 +219,9 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
         [resultSet close];
         
         // 确保创建的流水在数组中第一个
-        [compoundModels insertObject:createModel atIndex:0];
+        if (createModel) {
+            [compoundModels insertObject:createModel atIndex:0];
+        }
         
         // 查询和第一次查询结果匹配的流水（例第一次查询结果是转入，这次查询就是转出、利息，反之一样）
         for (SSJLoanCompoundChargeModel *compoundModel in compoundModels) {

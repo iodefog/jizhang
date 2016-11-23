@@ -81,7 +81,7 @@
     
     SDWebImageManager *manager = [[SDWebImageManager alloc] init];
     manager.imageDownloader.downloadTimeout = timeout;
-    [manager downloadImageWithURL:[NSURL URLWithString:SSJImageURLWithAPI(url)] options:SDWebImageContinueInBackground progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+    [manager downloadImageWithURL:[NSURL URLWithString:SSJImageURLWithAPI(url)] options:(SDWebImageContinueInBackground | SDWebImageAllowInvalidSSLCertificates) progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
 #ifdef DEBUG
         if (error) {
             [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"下载记账树图片失败，error:%@", [error localizedDescription]]];
