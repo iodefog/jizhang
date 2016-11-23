@@ -119,14 +119,21 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                     listItem.income = listItem.income + [item.money doubleValue]; 
                 }
                 if ([item.billDate isEqualToString:lastDetailDate]) {
+                    SSJFundingListDayItem *dayItem = [listItem.chargeArray firstObject];
+                    if (item.incomeOrExpence) {
+                        dayItem.expenture = dayItem.expenture - [item.money doubleValue];
+                    }else{
+                        dayItem.income = dayItem.income + [item.money doubleValue];
+                    }
                     [listItem.chargeArray addObject:item];
                 }else{
                     SSJFundingListDayItem *dayItem = [[SSJFundingListDayItem alloc]init];
                     dayItem.date = item.billDate;
-                    NSString *incomeSql = [NSString stringWithFormat:@"select sum(a.imoney) from bk_user_charge as a , bk_bill_type as b where ifunsid = '%@' and a.ibillid = b.id and b.itype = 0 and a.cbilldate = '%@' and operatortype <> 2",ID,item.billDate];
-                    NSString *expenceSql = [NSString stringWithFormat:@"select sum(a.imoney) from bk_user_charge as a , bk_bill_type as b where ifunsid = '%@' and a.ibillid = b.id and b.itype = 1 and a.cbilldate = '%@' and operatortype <> 2",ID,item.billDate];
-                    dayItem.income = [db doubleForQuery:incomeSql];
-                    dayItem.expenture = [db doubleForQuery:expenceSql];
+                    if (item.incomeOrExpence) {
+                        dayItem.expenture = - [item.money doubleValue];
+                    }else{
+                        dayItem.income = [item.money doubleValue];
+                    }
                     lastDetailDate = item.billDate;
                     [listItem.chargeArray addObject:dayItem];
                     [listItem.chargeArray addObject:item];
@@ -146,14 +153,21 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                 listItem.date = month;
                 NSMutableArray *tempArray = [NSMutableArray array];
                 if ([item.billDate isEqualToString:lastDetailDate]) {
+                    SSJFundingListDayItem *dayItem = [listItem.chargeArray firstObject];
+                    if (item.incomeOrExpence) {
+                        dayItem.expenture = dayItem.expenture - [item.money doubleValue];
+                    }else{
+                        dayItem.income = dayItem.income + [item.money doubleValue];
+                    }
                     [tempArray addObject:item];
                 }else{
                     SSJFundingListDayItem *dayItem = [[SSJFundingListDayItem alloc]init];
                     dayItem.date = item.billDate;
-                    NSString *incomeSql = [NSString stringWithFormat:@"select sum(a.imoney) from bk_user_charge as a , bk_bill_type as b where ifunsid = '%@' and a.ibillid = b.id and b.itype = 0 and a.cbilldate = '%@' and operatortype <> 2",ID,item.billDate];
-                    NSString *expenceSql = [NSString stringWithFormat:@"select sum(a.imoney) from bk_user_charge as a , bk_bill_type as b where ifunsid = '%@' and a.ibillid = b.id and b.itype = 1 and a.cbilldate = '%@' and operatortype <> 2",ID,item.billDate];
-                    dayItem.income = [db doubleForQuery:incomeSql];
-                    dayItem.expenture = [db doubleForQuery:expenceSql];
+                    if (item.incomeOrExpence) {
+                        dayItem.expenture = [item.money doubleValue];
+                    }else{
+                        dayItem.income = [item.money doubleValue];
+                    }
                     lastDetailDate = item.billDate;
                     [tempArray addObject:dayItem];
                     [tempArray addObject:item];

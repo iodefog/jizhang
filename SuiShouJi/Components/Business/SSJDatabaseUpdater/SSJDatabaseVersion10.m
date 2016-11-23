@@ -168,7 +168,7 @@ static NSString *const kDefualtOrderKey = @"kDefualtOrderKey";
         NSString *defualtOrder = [dict objectForKey:kDefualtOrderKey];
         NSString *iparenttype = [dict objectForKey:kParentTypeKey];
         NSArray *parentArr = [iparenttype componentsSeparatedByString:@","];
-        for (NSString *parenttype in parentArr) {
+            for (NSString *parenttype in parentArr) {
             if ([parenttype integerValue]) {
                 if (![db executeUpdate:@"insert into bk_user_bill select cuserid ,? , 1, ?, ?, 1, ?, cbooksid from bk_books_type where iparenttype = ? and operatortype <> 2",cbillid,cwriteDate,@(SSJSyncVersion()),defualtOrder,parenttype]) {
                     return [db lastError];
@@ -188,7 +188,7 @@ static NSString *const kDefualtOrderKey = @"kDefualtOrderKey";
     }
     
     // 给非自定义账本账本添加之前版本已经用过的记账类型
-    if (![db executeUpdate:@"insert into bk_user_bill select distinct a.cuserid , a.ibillid, 1, ?, ?, 0, 0, a.cbooksid from bk_user_charge a, bk_user_bill b where a.ibillid = b.cbillid and a.operatortype <> 2 and b.operatortype <> 2 and a.cbooksid <> a.cuserid and a.cbooksid like a.cuserid || '%'",cwriteDate,@(SSJSyncVersion())]) {
+    if (![db executeUpdate:@"insert into bk_user_bill select distinct a.cuserid , a.ibillid, 1, ?, ?, 0, 0, a.cbooksid from bk_user_charge a, bk_user_bill b where a.ibillid = b.cbillid and a.operatortype <> 2 and b.operatortype <> 2 and a.cbooksid <> a.cuserid and a.cbooksid like a.cuserid || '%' and not exists (select * from bk_user_bill where cbooksid = a.cbooksid)",cwriteDate,@(SSJSyncVersion())]) {
         return [db lastError];
     }
     
