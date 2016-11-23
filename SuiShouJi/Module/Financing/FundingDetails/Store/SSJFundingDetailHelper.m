@@ -21,9 +21,10 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
 @implementation SSJFundingDetailHelper
 
 + (void)queryDataWithFundTypeID:(NSString *)ID
-                         success:(void (^)(NSMutableArray <SSJFundingDetailListItem *> *data))success
+                         success:(void (^)(NSMutableArray <SSJFundingDetailListItem *> *data,SSJFinancingHomeitem *fundingItem))success
                          failure:(void (^)(NSError *error))failure{
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        SSJFinancingHomeitem *fundingItem = [[SSJFinancingHomeitem alloc]init];
         NSString *userid = SSJUSERID();
         NSString *sql = [NSString stringWithFormat:@"select substr(a.cbilldate,0,7) as cmonth , a.* , a.cwritedate as chargedate , b.*, c.lender, c.itype as loantype from BK_USER_CHARGE a, BK_BILL_TYPE b left join bk_loan c on a.loanid = c.loanid where a.IBILLID = b.ID and a.IFUNSID = '%@' and a.operatortype <> 2 and (a.cbilldate <= '%@' or length(a.loanid) > 0) order by cmonth desc , a.cbilldate desc ,  a.cwritedate desc", ID , [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"]];
         FMResultSet *resultSet = [db executeQuery:sql];
@@ -58,8 +59,10 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
             item.loanType = [resultSet intForColumn:@"loantype"];
             if (item.incomeOrExpence && ![item.money hasPrefix:@"-"]) {
                 item.money = [NSString stringWithFormat:@"-%.2f",[item.money doubleValue]];
+                fundingItem.fundingExpence = fundingItem.fundingExpence + [item.money doubleValue];
             }else if(!item.incomeOrExpence && ![item.money hasPrefix:@"+"]){
                 item.money = [NSString stringWithFormat:@"+%.2f",[item.money doubleValue]];
+                fundingItem.fundingIncome = fundingItem.fundingIncome + [item.money doubleValue];
             }
             if (item.loanId.length) {
                 // 先判断他是借入还是借出
@@ -164,7 +167,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                     SSJFundingListDayItem *dayItem = [[SSJFundingListDayItem alloc]init];
                     dayItem.date = item.billDate;
                     if (item.incomeOrExpence) {
-                        dayItem.expenture = [item.money doubleValue];
+                        dayItem.expenture = - [item.money doubleValue];
                     }else{
                         dayItem.income = [item.money doubleValue];
                     }
@@ -177,22 +180,25 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                 [result addObject:listItem];
             }
         }
-        
+        [resultSet close];
+        fundingItem.fundingName = [db stringForQuery:@"select cacctname from bk_fund_info where cfundid = ? and cuserid = ?",ID,userid];
+        fundingItem.fundingColor = [db stringForQuery:@"select ccolor from bk_fund_info where cfundid = ? and cuserid = ?",ID,userid];
         SSJDispatchMainAsync(^{
             if (success) {
-                success(result);
+                success(result,fundingItem);
             }
         });
     }];
 }
 
 + (void)queryDataWithCreditCardItem:(SSJCreditCardItem *)cardItem
-                        success:(void (^)(NSMutableArray <SSJFundingDetailListItem *> *data))success
+                        success:(void (^)(NSMutableArray <SSJFundingDetailListItem *> *data,SSJCreditCardItem *cardItem))success
                         failure:(void (^)(NSError *error))failure{
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSString *userid = SSJUSERID();
         NSString *sql = [NSString stringWithFormat:@"select a.* , a.cwritedate as chargedate, c.lender, c.itype as loantype, b.*  from BK_USER_CHARGE a, BK_BILL_TYPE b left join bk_loan c on a.loanid = c.loanid where a.IBILLID = b.ID and a.IFUNSID = '%@' and a.operatortype <> 2 and a.cbilldate <= '%@' order by a.cbilldate desc ,  a.cwritedate desc", cardItem.cardId , [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"]];
         FMResultSet *resultSet = [db executeQuery:sql];
+        SSJCreditCardItem *newcardItem = [[SSJCreditCardItem alloc]init];
         if (!resultSet) {
             if (failure) {
                 failure([db lastError]);
@@ -222,8 +228,10 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
             item.loanType = [resultSet intForColumn:@"loantype"];
             if (item.incomeOrExpence && ![item.money hasPrefix:@"-"]) {
                 item.money = [NSString stringWithFormat:@"-%.2f",[[resultSet stringForColumn:@"IMONEY"] doubleValue]];
+                newcardItem.cardExpence = newcardItem.cardExpence + [item.money doubleValue];
             }else if(!item.incomeOrExpence && ![item.money hasPrefix:@"+"]){
                 item.money = [NSString stringWithFormat:@"+%.2f",[[resultSet stringForColumn:@"IMONEY"] doubleValue]];
+                newcardItem.cardIncome = newcardItem.cardIncome + [item.money doubleValue];
             }
             if (item.loanId.length) {
                 // 先判断他是借入还是借出
@@ -341,9 +349,12 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                 [result addObject:listItem];
             }
         }
+        [resultSet close];
+        cardItem.cardColor = [db stringForQuery:@""];
+        cardItem.cardName = [db stringForQuery:@""];
         SSJDispatchMainAsync(^{
             if (success) {
-                success(result);
+                success(result,newcardItem);
             }
         });
     }];

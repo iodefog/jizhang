@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "SSJFundingDetailListItem.h"
 #import "SSJCreditCardItem.h"
+#import "SSJFinancingHomeitem.h"
 
 //  对应日期的key
 extern NSString *const SSJFundingDetailDateKey;
@@ -31,11 +32,11 @@ extern NSString *const SSJFundingDetailSumKey;
  *  @param failure 查询失败的回调
  */
 + (void)queryDataWithFundTypeID:(NSString *)ID
-                        success:(void (^)(NSMutableArray <SSJFundingDetailListItem *> *data))success
+                        success:(void (^)(NSMutableArray <SSJFundingDetailListItem *> *data,SSJFinancingHomeitem *fundingItem))success
                         failure:(void (^)(NSError *error))failure;
 
 + (void)queryDataWithCreditCardItem:(SSJCreditCardItem *)cardItem
-                            success:(void (^)(NSMutableArray <SSJFundingDetailListItem *> *data))success
+                            success:(void (^)(NSMutableArray <SSJFundingDetailListItem *> *data,SSJCreditCardItem *cardItem))success
                             failure:(void (^)(NSError *error))failure;
 
 + (BOOL)queryCloseOutStateWithLoanId:(NSString *)loanId;

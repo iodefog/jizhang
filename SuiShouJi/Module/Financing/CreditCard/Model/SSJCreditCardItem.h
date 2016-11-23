@@ -17,10 +17,16 @@
 @property(nonatomic, strong) NSString *cardName;
 
 // 信用卡额度
-@property(nonatomic) float cardLimit;
+@property(nonatomic) double cardLimit;
 
 // 信用卡额度
-@property(nonatomic) float cardBalance;
+@property(nonatomic) double cardBalance;
+
+// 信用卡额度
+@property(nonatomic) double cardIncome;
+
+// 信用卡额度
+@property(nonatomic) double cardExpence;
 
 // 是否已账单日结算
 @property(nonatomic) BOOL settleAtRepaymentDay;
