@@ -7,7 +7,7 @@
 //
 
 #import "SSJBookkeepingTreeHelper.h"
-#import "AFNetworking.h"
+#import "SSJGlobalServiceManager.h"
 
 @implementation SSJBookkeepingTreeHelper
 
@@ -114,9 +114,7 @@
     }
     
     NSString *gifUrl = SSJImageURLWithAPI(url);
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    [manager GET:gifUrl parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+    [[SSJGlobalServiceManager standardManager] GET:gifUrl parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
         if ([responseObject isKindOfClass:[NSData class]]) {
             [[self memoryCache] setObject:responseObject forKey:url];
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{

@@ -32,6 +32,19 @@
     return manager;
 }
 
++ (instancetype)standardManager {
+    NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+    configuration.requestCachePolicy = NSURLRequestReloadIgnoringLocalAndRemoteCacheData;
+    
+    SSJGlobalServiceManager *manager = [[SSJGlobalServiceManager alloc] initWithBaseURL:[NSURL URLWithString:[SSJDomainManager domain]] sessionConfiguration:configuration];
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    manager.SSLPinningMode = AFSSLPinningModeCertificate;
+    manager.allowInvalidCertificates = YES;
+    manager.validatesDomainName = YES;
+    
+    return manager;
+}
+
 + (void)addService:(SSJBaseNetworkService *)service {
     SSJGlobalServiceManager *manager = [SSJGlobalServiceManager sharedManager];
     if (![manager.services containsObject:service]) {

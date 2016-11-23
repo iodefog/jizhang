@@ -36,6 +36,13 @@
 + (instancetype)sharedManager;
 
 /**
+ 返回一个新的实例对象，
+
+ @return
+ */
++ (instancetype)standardManager;
+
+/**
  *  如果创建一个新的请求，需要调用此方法把service添加到数组中；
  *  此方法来实现控制是否需要显示加载框
  */
