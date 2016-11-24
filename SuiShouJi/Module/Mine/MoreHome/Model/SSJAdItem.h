@@ -8,11 +8,14 @@
 
 #import "SSJBaseItem.h"
 #import "SSJListAdItem.h"
+#import "SSJBooksAdBanner.h"
 
 @interface SSJAdItem : SSJBaseItem
 
 @property(nonatomic, strong) NSArray *bannerItems;
 
 @property(nonatomic, strong) SSJListAdItem *listAdItem;
+
+@property(nonatomic, strong) SSJBooksAdBanner *booksAdItem;
 
 @end

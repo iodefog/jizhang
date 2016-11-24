@@ -180,7 +180,7 @@
                     self.imageView.tintColor = [UIColor ssj_colorWithHex:@"#5a98de"];
                     self.imageView.image = [[UIImage imageNamed:@"loan_balance"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                     self.imageView.layer.borderColor = [UIColor ssj_colorWithHex:@"#5a98de"].CGColor;
-                    self.typeLabel.text = [NSString stringWithFormat:@"欠款余额变更-欠%@欠款",item.loanSource];
+                    self.typeLabel.text = [NSString stringWithFormat:@"欠款余额变更-欠%@钱款",item.loanSource];
                     [self.typeLabel sizeToFit];
                 }
                     
@@ -190,7 +190,7 @@
                     self.imageView.tintColor = [UIColor ssj_colorWithHex:@"#5a98de"];
                     self.imageView.image = [[UIImage imageNamed:@"loan_repayment"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                     self.imageView.layer.borderColor = [UIColor ssj_colorWithHex:@"#5a98de"].CGColor;
-                    self.typeLabel.text = [NSString stringWithFormat:@"还款-欠%@欠款",item.loanSource];
+                    self.typeLabel.text = [NSString stringWithFormat:@"还款-欠%@钱款",item.loanSource];
                     [self.typeLabel sizeToFit];
                 }
                     break;
@@ -199,7 +199,7 @@
                     self.imageView.tintColor = [UIColor ssj_colorWithHex:@"#5a98de"];
                     self.imageView.image = [[UIImage imageNamed:@"loan_append"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                     self.imageView.layer.borderColor = [UIColor ssj_colorWithHex:@"#5a98de"].CGColor;
-                    self.typeLabel.text = [NSString stringWithFormat:@"追加欠款-欠%@欠款",item.loanSource];
+                    self.typeLabel.text = [NSString stringWithFormat:@"追加欠款-欠%@钱款",item.loanSource];
                     [self.typeLabel sizeToFit];
                 }
                     break;
@@ -208,7 +208,7 @@
                     self.imageView.tintColor = [UIColor ssj_colorWithHex:@"#5a98de"];
                     self.imageView.image = [[UIImage imageNamed:@"loan_debt"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                     self.imageView.layer.borderColor = [UIColor ssj_colorWithHex:@"#5a98de"].CGColor;
-                    self.typeLabel.text = [NSString stringWithFormat:@"欠款结清-欠%@欠款",item.loanSource];
+                    self.typeLabel.text = [NSString stringWithFormat:@"欠款结清-欠%@钱款",item.loanSource];
                     [self.typeLabel sizeToFit];
                 }
                     break;
@@ -217,7 +217,7 @@
                     self.imageView.tintColor = [UIColor ssj_colorWithHex:@"#32c68c"];
                     self.imageView.image = [[UIImage imageNamed:@"loan_interest_charge"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                     self.imageView.layer.borderColor = [UIColor ssj_colorWithHex:@"#32c68c"].CGColor;
-                    self.typeLabel.text = [NSString stringWithFormat:@"利息支出-欠%@欠款",item.loanSource];
+                    self.typeLabel.text = [NSString stringWithFormat:@"利息支出-欠%@钱款",item.loanSource];
                     [self.typeLabel sizeToFit];
                 }
                     break;

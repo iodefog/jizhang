@@ -250,7 +250,7 @@
 - (UILabel *)booksParentLab{
     if (!_booksParentLab) {
         _booksParentLab = [[UILabel alloc]init];
-        _booksParentLab.font = [UIFont systemFontOfSize:18];
+        _booksParentLab.font = [UIFont systemFontOfSize:12];
         _booksParentLab.backgroundColor = [UIColor clearColor];
         _booksParentLab.textColor  = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     }

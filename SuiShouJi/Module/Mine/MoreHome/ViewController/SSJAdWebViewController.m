@@ -7,6 +7,7 @@
 //
 
 #import "SSJAdWebViewController.h"
+#import "UIViewController+MMDrawerController.h"
 
 @interface SSJAdWebViewController ()
 
@@ -32,6 +33,9 @@
     [super viewWillAppear:animated];
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithTitle:@"关闭" style:UIBarButtonItemStylePlain target:self action:@selector(rightButtonClicked:)];
     self.navigationItem.rightBarButtonItem = rightItem;
+    [self.mm_drawerController setMaximumLeftDrawerWidth:SSJSCREENWITH];
+    [self.mm_drawerController setOpenDrawerGestureModeMask:MMOpenDrawerGestureModeNone];
+    [self.mm_drawerController setCloseDrawerGestureModeMask:MMCloseDrawerGestureModeNone];
 }
 
 #pragma mark - Event

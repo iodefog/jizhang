@@ -8,11 +8,15 @@
 
 static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
 
+static BOOL kNeedBannerDisplay = YES;
+
 #import "SSJBooksTypeSelectViewController.h"
 #import "SSJBooksTypeStore.h"
 #import "SSJBooksTypeItem.h"
 #import "SSJBooksTypeCollectionViewCell.h"
 #import "UIViewController+MMDrawerController.h"
+#import "SSJAdWebViewController.h"
+#import "SSJAdWebViewController.h"
 #import "SSJBooksTypeEditeView.h"
 #import "SSJBooksHeaderView.h"
 #import "SSJDataSynchronizer.h"
@@ -21,6 +25,8 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
 #import "SSJSummaryBooksViewController.h"
 #import "SSJDatabaseQueue.h"
 #import "SSJBooksParentSelectView.h"
+#import "SSJBooksAdView.h"
+#import "SSJBannerNetworkService.h"
 
 @interface SSJBooksTypeSelectViewController ()<SSJEditableCollectionViewDelegate,SSJEditableCollectionViewDataSource>
 
@@ -39,6 +45,10 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
 @property(nonatomic, strong) SSJBooksHeaderView *header;
 
 @property(nonatomic, strong) SSJBooksParentSelectView *parentSelectView;
+
+@property(nonatomic, strong) SSJBooksAdView *adView;
+
+@property(nonatomic, strong) SSJBannerNetworkService *adService;
 
 @end
 
@@ -61,6 +71,7 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
     [self.view addSubview:self.collectionView];
     [self.view addSubview:self.editeButton];
     [self.view addSubview:self.deleteButton];
+    [self.view addSubview:self.adView];
     self.selectedBooks = [NSMutableArray arrayWithCapacity:0];
     [self.collectionView registerClass:[SSJBooksTypeCollectionViewCell class] forCellWithReuseIdentifier:SSJBooksTypeCellIdentifier];
     [self.collectionView setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
@@ -74,6 +85,7 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
     [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
 //    self.mm_drawerController.openDrawerGestureModeMask = MMOpenDrawerGestureModeAll;
+    [self.adService requestBannersList];
     [self.header startAnimating];
     [MobClick event:@"main_account_book"];
     [self getDateFromDB];
@@ -105,6 +117,8 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
     self.deleteButton.size = CGSizeMake(self.view.width * 0.42, 55);
     self.deleteButton.leftBottom = CGPointMake(self.editeButton.right, self.view.height);
     self.header.width = self.view.width;
+    self.adView.leftBottom = CGPointMake(0, self.view.height);
+    self.adView.width = self.view.width;
 }
 
 #pragma mark - UICollectionViewDelegate
@@ -131,7 +145,7 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
         }
     }else{
         if (![item.booksName isEqualToString:@"添加账本"]) {
-            [MobClick event:@"change_account_book"];
+            [MobClick event:@"change_account_book" attributes:@{@"账本名称":item.booksName}];
             SSJSelectBooksType(item.booksId);
             [self.collectionView reloadData];
             [self.mm_drawerController closeDrawerAnimated:YES completion:NULL];
@@ -247,6 +261,19 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
     SSJBooksTypeItem *currentItem = [self.items ssj_safeObjectAtIndex:fromIndexPath.row];
     [self.items removeObjectAtIndex:fromIndexPath.row];
     [self.items insertObject:currentItem atIndex:toIndexPath.row];
+}
+
+#pragma mark - SSJBaseNetworkServiceDelegate
+- (void)serverDidFinished:(SSJBaseNetworkService *)service{
+    if (kNeedBannerDisplay) {
+        SSJBooksAdBanner *booksAdItem = self.adService.item.booksAdItem;
+        if (booksAdItem.hidden) {
+            self.adView.hidden = NO;
+            [self.adView.adImageView sd_setImageWithURL:[NSURL URLWithString:booksAdItem.adImage] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                self.adView.height = self.view.width * image.size.height / image.size.width;
+            }];
+        }
+    }
 }
 
 #pragma mark - Event
@@ -426,6 +453,31 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
         };
     }
     return _parentSelectView;
+}
+
+- (SSJBooksAdView *)adView{
+    if (!_adView) {
+        _adView = [[SSJBooksAdView alloc]init];
+        __weak typeof(self) weakSelf = self;
+        _adView.imageClickBlock = ^(){
+            SSJAdWebViewController *webVc = [SSJAdWebViewController webViewVCWithURL:[NSURL URLWithString:weakSelf.adService.item.booksAdItem.adUrl]];
+            [weakSelf.navigationController pushViewController:webVc animated:YES];
+        };
+        _adView.closeButtonClickBlock = ^(){
+            kNeedBannerDisplay = NO;
+            weakSelf.adView.hidden = YES;
+        };
+        _adView.hidden = YES;
+    }
+    return _adView;
+}
+
+- (SSJBannerNetworkService *)adService{
+    if (!_adService) {
+        _adService = [[SSJBannerNetworkService alloc]initWithDelegate:self];
+        _adService.httpMethod = SSJBaseNetworkServiceHttpMethodGET;
+    }
+    return _adService;
 }
 
 #pragma mark - Private
