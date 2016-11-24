@@ -239,6 +239,7 @@ static BOOL kNeedBannerDisplay = YES;
     self.rightButton.selected = YES;
     self.editeButton.hidden = NO;
     self.deleteButton.hidden = NO;
+    self.adView.hidden = YES;
     for (SSJBooksTypeItem *item in self.items) {
         item.editeModel = self.rightButton.isSelected;
     }
@@ -283,8 +284,10 @@ static BOOL kNeedBannerDisplay = YES;
     self.editeButton.hidden = !self.rightButton.isSelected;
     self.deleteButton.hidden = !self.rightButton.isSelected;
     if (self.rightButton.isSelected) {
+        self.adView.hidden = YES;
         [MobClick event:@"accountbook_manage"];
     }else{
+        self.adView.hidden = NO;
         [self.collectionView endEditing];
         [self.selectedBooks removeAllObjects];
     }
@@ -514,6 +517,7 @@ static BOOL kNeedBannerDisplay = YES;
         for (SSJBooksTypeItem *item in self.items) {
             item.editeModel = NO;
         }
+        self.adView.hidden = NO;
         _editeModel = NO;
         [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
         [self.selectedBooks removeAllObjects];
