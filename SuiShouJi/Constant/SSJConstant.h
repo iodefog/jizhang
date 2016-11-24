@@ -116,6 +116,9 @@ extern NSString *const SSJSurplusGreenColorValue;
 //保存上次弹窗的时间
 extern NSString *const SSJLastPopTimeKey;
 
+//保存上次保存的广告标识
+extern NSString *const SSJLastSavedIdfaKey;
+
 //保存是否登录或者注册过
 extern NSString *const SSJHaveLoginOrRegistKey;
 

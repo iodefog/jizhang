@@ -20,6 +20,8 @@ NSString *const SSJUserProtocolUrl = @"http://1.9188.com/h5/about_shq/protocol.h
 
 NSString *const SSJLastPopTimeKey = @"lastPopTimeKey";
 
+NSString *const SSJLastSavedIdfaKey = @"lastSavedIdfaKey";
+
 NSString *const SSJHaveLoginOrRegistKey = @"haveLoginOrRegistKey";
 
 NSString *const SSJHaveEnterFundingHomeKey = @"haveEnterFundingHomeKey";

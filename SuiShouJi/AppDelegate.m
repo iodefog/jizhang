@@ -45,6 +45,9 @@
 #import "SSJThemeUpdate.h"
 #import "SSJDomainManager.h"
 #import "SSJLoanHelper.h"
+#import "SSJIdfaUploadService.h"
+#import <AdSupport/ASIdentifierManager.h>
+#import "SimulateIDFA.h"
 
 //  进入后台超过的时限后进入锁屏
 static const NSTimeInterval kLockScreenDelay = 60;
@@ -68,6 +71,8 @@ NSDate *SCYEnterBackgroundTime() {
 @property (nonatomic, strong) SSJStartViewManager *startViewManager;
 
 @property(nonatomic, strong) SSJGradientMaskView *maskView;
+
+@property(nonatomic, strong) SSJIdfaUploadService *uploadService;
 @end
 
 @implementation AppDelegate
@@ -83,6 +88,7 @@ NSDate *SCYEnterBackgroundTime() {
     [SSJUmengManager umengTrack];
     [SSJUmengManager umengShare];
     [MQManager setScheduledAgentWithAgentId:@"" agentGroupId:SSJMQDefualtGroupId scheduleRule:MQScheduleRulesRedirectGroup];
+    [self uploadIdfa];
     
     [self initializeDatabaseWithFinishHandler:^{
         //  启动时强制同步一次
@@ -210,11 +216,18 @@ NSDate *SCYEnterBackgroundTime() {
 }
 
 #pragma mark - Getter
--(SSJGradientMaskView *)maskView{
+- (SSJGradientMaskView *)maskView{
     if (!_maskView) {
         _maskView = [[SSJGradientMaskView alloc]initWithFrame:CGRectMake(0, 0, SSJSCREENWITH, SSJSCREENHEIGHT)];
     }
     return _maskView;
+}
+
+- (SSJIdfaUploadService *)uploadService{
+    if (!_uploadService) {
+        _uploadService = [[SSJIdfaUploadService alloc]initWithDelegate:NULL];
+    }
+    return _uploadService;
 }
 
 #pragma mark - Private
@@ -317,6 +330,21 @@ NSDate *SCYEnterBackgroundTime() {
     [UIApplication sharedApplication].keyWindow.rootViewController = drawerController;
 }
 
+// 上传idfa
+- (void)uploadIdfa{
+    NSString *idfa;
+    if ([ASIdentifierManager sharedManager].advertisingTrackingEnabled) {
+        idfa = [NSString stringWithFormat:@"%@",[ASIdentifierManager sharedManager].advertisingIdentifier];
+    } else{
+        idfa = [SimulateIDFA createSimulateIDFA];
+    }
+    NSString *lastUploadIdfa = [[NSUserDefaults standardUserDefaults] objectForKey:SSJLastSavedIdfaKey];
+    if (![lastUploadIdfa isEqualToString:idfa] || !lastUploadIdfa) {
+        [self.uploadService uploadIdfaWithIdfaStr:idfa Success:^(NSString *idfaStr) {
+            [[NSUserDefaults standardUserDefaults] setObject:idfaStr forKey:SSJLastSavedIdfaKey];
+        }];
+    }
+}
     
 #pragma mark - qq快登
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation{
