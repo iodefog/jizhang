@@ -1345,6 +1345,11 @@
 		9C77DBAF1DE6ED2200CD64A2 /* SSJIdfaUploadService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C77DBAC1DE6ED2200CD64A2 /* SSJIdfaUploadService.m */; };
 		9C77DBB01DE6ED2200CD64A2 /* SSJIdfaUploadService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C77DBAC1DE6ED2200CD64A2 /* SSJIdfaUploadService.m */; };
 		9C77DBB11DE6ED2200CD64A2 /* SSJIdfaUploadService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C77DBAC1DE6ED2200CD64A2 /* SSJIdfaUploadService.m */; };
+		9C77DBB51DE70B3100CD64A2 /* SSJCustomJsonSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C77DBB41DE70B3100CD64A2 /* SSJCustomJsonSerializer.m */; };
+		9C77DBB61DE70B3100CD64A2 /* SSJCustomJsonSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C77DBB41DE70B3100CD64A2 /* SSJCustomJsonSerializer.m */; };
+		9C77DBB71DE70B3100CD64A2 /* SSJCustomJsonSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C77DBB41DE70B3100CD64A2 /* SSJCustomJsonSerializer.m */; };
+		9C77DBB81DE70B3100CD64A2 /* SSJCustomJsonSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C77DBB41DE70B3100CD64A2 /* SSJCustomJsonSerializer.m */; };
+		9C77DBB91DE70B3100CD64A2 /* SSJCustomJsonSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C77DBB41DE70B3100CD64A2 /* SSJCustomJsonSerializer.m */; };
 		9C7B9CC91D33BFF800A4F71F /* SSJFundingDetailNoDataView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C7B9CC81D33BFF800A4F71F /* SSJFundingDetailNoDataView.m */; };
 		9C7C9E3E1DB4D22B0095F49B /* SSJMemberTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C7C9E3D1DB4D22B0095F49B /* SSJMemberTableViewCell.m */; };
 		9C7C9E461DB4D2310095F49B /* SSJMemberTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C7C9E3D1DB4D22B0095F49B /* SSJMemberTableViewCell.m */; };
@@ -3223,6 +3228,8 @@
 		9C77DB9B1DE6E31200CD64A2 /* SimulateIDFA.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SimulateIDFA.m; sourceTree = "<group>"; };
 		9C77DBAB1DE6ED2200CD64A2 /* SSJIdfaUploadService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJIdfaUploadService.h; sourceTree = "<group>"; };
 		9C77DBAC1DE6ED2200CD64A2 /* SSJIdfaUploadService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJIdfaUploadService.m; sourceTree = "<group>"; };
+		9C77DBB31DE70B3100CD64A2 /* SSJCustomJsonSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCustomJsonSerializer.h; sourceTree = "<group>"; };
+		9C77DBB41DE70B3100CD64A2 /* SSJCustomJsonSerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCustomJsonSerializer.m; sourceTree = "<group>"; };
 		9C7B9CC71D33BFF800A4F71F /* SSJFundingDetailNoDataView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFundingDetailNoDataView.h; sourceTree = "<group>"; };
 		9C7B9CC81D33BFF800A4F71F /* SSJFundingDetailNoDataView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFundingDetailNoDataView.m; sourceTree = "<group>"; };
 		9C7C9E3C1DB4D22B0095F49B /* SSJMemberTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMemberTableViewCell.h; sourceTree = "<group>"; };
@@ -6289,6 +6296,8 @@
 				BD04337A1C1A8DA50051E7AB /* SSJGlobalServiceManager.m */,
 				7D41A6941D1415F30043FD81 /* SSJNetworkReachabilityManager.h */,
 				7D41A6951D1415F30043FD81 /* SSJNetworkReachabilityManager.m */,
+				9C77DBB31DE70B3100CD64A2 /* SSJCustomJsonSerializer.h */,
+				9C77DBB41DE70B3100CD64A2 /* SSJCustomJsonSerializer.m */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -7641,6 +7650,7 @@
 				7DBA56EA1D6D32B700C02D79 /* SSJChargeCicleModifyViewController.m in Sources */,
 				7DBA56EB1D6D32B700C02D79 /* SSJCalendarCollectionViewCell.m in Sources */,
 				7DBA56EC1D6D32B700C02D79 /* SSJLoadMoreCollectionViewCell.m in Sources */,
+				9C77DBB71DE70B3100CD64A2 /* SSJCustomJsonSerializer.m in Sources */,
 				7DBA56ED1D6D32B700C02D79 /* SSJUmengManager.m in Sources */,
 				7D567E4C1D9D1AD6006512C8 /* SSJBudgetListSecondaryCell.m in Sources */,
 				7DBA56EE1D6D32B700C02D79 /* SSJBudgetListCell.m in Sources */,
@@ -7757,6 +7767,7 @@
 				9C2A67251D194CA70010F1DA /* SSJFundingDetailListFirstLineCell.m in Sources */,
 				7D87AE971D6319770024D33C /* SSJLoanHelper.m in Sources */,
 				9C2A67261D194CA70010F1DA /* SSJTableView.m in Sources */,
+				9C77DBB61DE70B3100CD64A2 /* SSJCustomJsonSerializer.m in Sources */,
 				9C2A67281D194CA70010F1DA /* SSJBookkeepingTreeViewController.m in Sources */,
 				9C2A672B1D194CA70010F1DA /* SSJLoadMoreCell.m in Sources */,
 				9C91AE181D93A4BB00B585AA /* SSJChargeSearchingStore.m in Sources */,
@@ -8303,6 +8314,7 @@
 				9CECFB7B1D6D41A700DB2C8B /* SSJForgetPassowrdNetworkService.m in Sources */,
 				9CECFB7C1D6D41A700DB2C8B /* SSJForgotPSWResetService.m in Sources */,
 				9CECFB7D1D6D41A700DB2C8B /* SSJReportFormsScaleAxisCell.m in Sources */,
+				9C77DBB81DE70B3100CD64A2 /* SSJCustomJsonSerializer.m in Sources */,
 				9CECFB7E1D6D41A700DB2C8B /* SSJNewBaseTableViewController.m in Sources */,
 				9CECFB7F1D6D41A700DB2C8B /* (null) in Sources */,
 				9CECFB801D6D41A700DB2C8B /* SSJMotionPasswordViewController.m in Sources */,
@@ -8786,6 +8798,7 @@
 				9CECFF721D6D41EB00DB2C8B /* SSJHomeBarCalenderButton.m in Sources */,
 				9C9A0C031D6D945B002AF046 /* SSJLocalNotificationStore.m in Sources */,
 				9CECFF731D6D41EB00DB2C8B /* SSJForgetPassowrdNetworkService.m in Sources */,
+				9C77DBB91DE70B3100CD64A2 /* SSJCustomJsonSerializer.m in Sources */,
 				9CECFF741D6D41EB00DB2C8B /* SSJForgotPSWResetService.m in Sources */,
 				9CECFF751D6D41EB00DB2C8B /* SSJReportFormsScaleAxisCell.m in Sources */,
 				9CECFF761D6D41EB00DB2C8B /* SSJNewBaseTableViewController.m in Sources */,
@@ -9191,6 +9204,7 @@
 				BD0433241C1A78B40051E7AB /* SSJImageAddition.m in Sources */,
 				9CD9BC111CFD2DAA0061803B /* SSJMagicExportCalendarSwitchStartAndEndDateControl.m in Sources */,
 				9C9471871CEB224C00D69079 /* SSJFundingDetailListFirstLineCell.m in Sources */,
+				9C77DBB51DE70B3100CD64A2 /* SSJCustomJsonSerializer.m in Sources */,
 				9CE7D7851D2F4EA40013E97B /* SSJBannerHeaderView.m in Sources */,
 				9C9A0C8E1D73CDB7002AF046 /* SSJCreditCardItem.m in Sources */,
 				BD0433271C1A78B40051E7AB /* SSJTableView.m in Sources */,

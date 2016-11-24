@@ -7,6 +7,7 @@
 //
 
 #import "SSJIdfaUploadService.h"
+#import "SSJCustomJsonSerializer.h"
 
 @interface SSJIdfaUploadService()
 
@@ -23,6 +24,7 @@
     [dict setObject:str forKey:@"idfa"];
     [dict setObject:SSJDefaultSource() forKey:@"source"];
     self.idfaStr = str;
+    self.responseSerializer = [SSJCustomJsonSerializer serializer];
     [self request:SSJURLWithAPI(@"http://iphone.app.huishuaka.com/credit/iosIdfaSave.go") params:dict];
     self.successBlock = success;
 }
