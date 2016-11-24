@@ -581,6 +581,16 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
 
 - (void)changeBtnAction {
     [self.changeChargeSelectionView show];
+    
+    switch (self.loanModel.type) {
+        case SSJLoanTypeLend:
+            [MobClick event:@"loan_modify"];
+            break;
+            
+        case SSJLoanTypeBorrow:
+            [MobClick event:@"owed_modify"];
+            break;
+    }
 }
 
 - (void)deleteBtnAction {
@@ -588,10 +598,16 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"删除该项目后相关的账户流水数据(含转账、利息）将被彻底删除哦。" action:[SSJAlertViewAction actionWithTitle:@"取消" handler:NULL], [SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction *action) {
         [wself deleteLoanModel];
     }], nil];
-}
-
-- (void)addChangeChargeAction {
     
+    switch (self.loanModel.type) {
+        case SSJLoanTypeLend:
+            [MobClick event:@"loan_delete"];
+            break;
+            
+        case SSJLoanTypeBorrow:
+            [MobClick event:@"owed_delete"];
+            break;
+    }
 }
 
 #pragma mark - Getter
@@ -707,6 +723,26 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
             addOrEditVC.loanId = wself.loanID;
             addOrEditVC.chargeType = value;
             [wself.navigationController pushViewController:addOrEditVC animated:YES];
+            
+            switch (wself.loanModel.type) {
+                case SSJLoanTypeLend:
+                    if (value == SSJLoanCompoundChargeTypeRepayment) {
+                        [MobClick event:@"loan_refund"];
+                    } else if (value == SSJLoanCompoundChargeTypeAdd) {
+                        [MobClick event:@"loan_additional"];
+                    }
+                    
+                    break;
+                    
+                case SSJLoanTypeBorrow:
+                    if (value == SSJLoanCompoundChargeTypeRepayment) {
+                        [MobClick event:@"owed_refund"];
+                    } else if (value == SSJLoanCompoundChargeTypeAdd) {
+                        [MobClick event:@"owed_additional"];
+                    }
+
+                    break;
+            }
         };
     }
     return _changeChargeSelectionView;

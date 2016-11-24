@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
  借贷类型
 
  - SSJLoanTypeLend: 借出
- - SSJLoanTypeBorrow: 借入
+ - SSJLoanTypeBorrow: 借入（欠款）
  */
 typedef NS_ENUM(NSInteger, SSJLoanType) {
     SSJLoanTypeLend,
