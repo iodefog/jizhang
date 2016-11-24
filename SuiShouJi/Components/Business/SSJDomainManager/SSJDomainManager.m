@@ -27,8 +27,8 @@ static NSString *const kTestImageDomain = @"http://account.gs.9188.com/";
     return kDefaultDomain;
 #else
 //    return kTestDomain;
-//    return [self formalDomain];
-    return kDefaultDomain;
+    return [self formalDomain];
+//    return kDefaultDomain;
 #endif
 }
 
@@ -39,8 +39,8 @@ static NSString *const kTestImageDomain = @"http://account.gs.9188.com/";
     return kDefaultDomain;
 #else
 //    return kTestImageDomain;
-//    return [self formalDomain];
-    return kDefaultDomain;
+    return [self formalDomain];
+//    return kDefaultDomain;
 
 #endif
 }
