@@ -35,6 +35,7 @@
         _pinningMode = AFSSLPinningModeCertificate;
         _allowInvalidCertificates = YES;
         _validatesDomainName = YES;
+        _responseSerializer = [AFJSONResponseSerializer serializer];
         
         self.formatter = [[NSDateFormatter alloc] init];
         [self.formatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
@@ -142,7 +143,7 @@
     manager.SSLPinningMode = _pinningMode;
     manager.allowInvalidCertificates = _allowInvalidCertificates;
     manager.validatesDomainName = _validatesDomainName;
-    manager.responseSerializer = [AFJSONResponseSerializer serializer];
+    manager.responseSerializer = _responseSerializer;
     manager.requestSerializer.timeoutInterval = _timeoutInterval;
     [manager.operationQueue setMaxConcurrentOperationCount:1];
     return manager;
