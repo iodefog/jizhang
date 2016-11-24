@@ -26,7 +26,8 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         SSJFinancingHomeitem *fundingItem = [[SSJFinancingHomeitem alloc]init];
         NSString *userid = SSJUSERID();
-        NSString *sql = [NSString stringWithFormat:@"select substr(a.cbilldate,0,7) as cmonth , a.* , a.cwritedate as chargedate , b.*, c.lender, c.itype as loantype from BK_USER_CHARGE a, BK_BILL_TYPE b left join bk_loan c on a.loanid = c.loanid where a.IBILLID = b.ID and a.IFUNSID = '%@' and a.operatortype <> 2 and (a.cbilldate <= '%@' or length(a.loanid) > 0) order by cmonth desc , a.cbilldate desc ,  a.cwritedate desc", ID , [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"]];
+        NSMutableArray *tempDateArr = [NSMutableArray arrayWithCapacity:0];
+        NSString *sql = [NSString stringWithFormat:@"select substr(a.cbilldate,0,7) as cmonth , a.* , a.cwritedate as chargedate , b.*, c.lender, c.itype as loantype from BK_USER_CHARGE a, BK_BILL_TYPE b left join bk_loan c on a.loanid = c.loanid where a.IBILLID = b.ID and a.IFUNSID = '%@' and a.operatortype <> 2 and (a.cbilldate <= '%@' or length(a.loanid) > 0) order by cmonth desc , a.cbilldate desc , a.cwritedate desc", ID , [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"]];
         FMResultSet *resultSet = [db executeQuery:sql];
         if (!resultSet) {
             if (failure) {
@@ -113,7 +114,8 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                 }else if ([item.typeName isEqualToString:@"转出"]){
                     item.transferSource = [db stringForQuery:@"select b.cacctname from bk_user_charge as a, bk_fund_info as b where substr(a.cwritedate,1,19) = ? and a.cuserid = ? and a.ifunsid = b.cfundid and b.cfundid <> ? and a.ibillid = '3' limit 1",[item.editeDate substringWithRange:NSMakeRange(0, 19)],userid,item.fundId];
                 }
-            }            NSString *month = [resultSet stringForColumn:@"cmonth"];
+            }
+            NSString *month = [resultSet stringForColumn:@"cmonth"];
             if ([month isEqualToString:lastDate]) {
                 SSJFundingDetailListItem *listItem = [result lastObject];
                 if (item.incomeOrExpence) {
@@ -122,14 +124,16 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                     listItem.income = listItem.income + [item.money doubleValue]; 
                 }
                 if ([item.billDate isEqualToString:lastDetailDate]) {
-                    SSJFundingListDayItem *dayItem = [listItem.chargeArray firstObject];
+                    SSJFundingListDayItem *dayItem = [tempDateArr firstObject];
                     if (item.incomeOrExpence) {
                         dayItem.expenture = dayItem.expenture - [item.money doubleValue];
                     }else{
                         dayItem.income = dayItem.income + [item.money doubleValue];
                     }
-                    [listItem.chargeArray addObject:item];
+                    [tempDateArr addObject:item];
                 }else{
+                    [listItem.chargeArray addObjectsFromArray:tempDateArr];
+                    [tempDateArr removeAllObjects];
                     SSJFundingListDayItem *dayItem = [[SSJFundingListDayItem alloc]init];
                     dayItem.date = item.billDate;
                     if (item.incomeOrExpence) {
@@ -138,10 +142,13 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                         dayItem.income = [item.money doubleValue];
                     }
                     lastDetailDate = item.billDate;
-                    [listItem.chargeArray addObject:dayItem];
-                    [listItem.chargeArray addObject:item];
+                    [tempDateArr addObject:dayItem];
+                    [tempDateArr addObject:item];
                 }
-            }else{
+            } else{
+                SSJFundingDetailListItem *lastlistItem = [result lastObject];
+                [lastlistItem.chargeArray addObjectsFromArray:tempDateArr];
+                [tempDateArr removeAllObjects];
                 SSJFundingDetailListItem *listItem = [[SSJFundingDetailListItem alloc]init];
                 if ([lastDate isEqualToString:@""]) {
                     listItem.isExpand = YES;
@@ -154,32 +161,23 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                     listItem.income = [item.money doubleValue];
                 }
                 listItem.date = month;
-                NSMutableArray *tempArray = [NSMutableArray array];
-                if ([item.billDate isEqualToString:lastDetailDate]) {
-                    SSJFundingListDayItem *dayItem = [listItem.chargeArray firstObject];
-                    if (item.incomeOrExpence) {
-                        dayItem.expenture = dayItem.expenture - [item.money doubleValue];
-                    }else{
-                        dayItem.income = dayItem.income + [item.money doubleValue];
-                    }
-                    [tempArray addObject:item];
+                SSJFundingListDayItem *dayItem = [[SSJFundingListDayItem alloc]init];
+                dayItem.date = item.billDate;
+                if (item.incomeOrExpence) {
+                    dayItem.expenture = - [item.money doubleValue];
                 }else{
-                    SSJFundingListDayItem *dayItem = [[SSJFundingListDayItem alloc]init];
-                    dayItem.date = item.billDate;
-                    if (item.incomeOrExpence) {
-                        dayItem.expenture = - [item.money doubleValue];
-                    }else{
-                        dayItem.income = [item.money doubleValue];
-                    }
-                    lastDetailDate = item.billDate;
-                    [tempArray addObject:dayItem];
-                    [tempArray addObject:item];
+                    dayItem.income = [item.money doubleValue];
                 }
-                listItem.chargeArray = [NSMutableArray arrayWithArray:tempArray];
+                listItem.chargeArray = [NSMutableArray arrayWithCapacity:0];
+                lastDetailDate = item.billDate;
+                [tempDateArr addObject:dayItem];
+                [tempDateArr addObject:item];
                 lastDate = month;
                 [result addObject:listItem];
             }
         }
+        SSJFundingDetailListItem *listItem = [result lastObject];
+        [listItem.chargeArray addObjectsFromArray:tempDateArr];
         [resultSet close];
         fundingItem.fundingName = [db stringForQuery:@"select cacctname from bk_fund_info where cfundid = ? and cuserid = ?",ID,userid];
         fundingItem.fundingColor = [db stringForQuery:@"select ccolor from bk_fund_info where cfundid = ? and cuserid = ?",ID,userid];

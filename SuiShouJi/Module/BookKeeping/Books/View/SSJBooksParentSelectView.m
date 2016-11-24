@@ -122,6 +122,30 @@ static NSString * SSJBooksParentSelectCellIdentifier = @"SSJBooksParentSelectCel
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     SSJBooksParentSelectCell * cell = (SSJBooksParentSelectCell *)[collectionView cellForItemAtIndexPath:indexPath];
+    switch (indexPath.item) {
+        case 0:
+            [MobClick event:@"book_type_richang"];
+            break;
+ 
+        case 1:
+            [MobClick event:@"book_type_shengyi"];
+            break;
+
+        case 2:
+            [MobClick event:@"book_type_jiehun"];
+            break;
+
+        case 3:
+            [MobClick event:@"book_type_zhuangxiu"];
+            break;
+
+        case 4:
+            [MobClick event:@"book_type_lvxing"];
+            break;
+
+        default:
+            break;
+    }
     cell.isSelected = YES;
     if (self.parentSelectBlock) {
         self.parentSelectBlock(indexPath.item);

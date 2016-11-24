@@ -378,6 +378,7 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
         _header = [[SSJBooksHeaderView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 178)];
         __weak typeof(self) weakSelf = self;
         _header.buttonClickBlock = ^(){
+            [MobClick event:@"account_all_booksType"];
             SSJSummaryBooksViewController *summaryVc = [[SSJSummaryBooksViewController alloc]init];
             [weakSelf.navigationController pushViewController:summaryVc animated:YES];
         };

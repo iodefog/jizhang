@@ -145,7 +145,7 @@
                     
                 case SSJLoanCompoundChargeTypeCloseOut:{
                     self.imageView.tintColor = [UIColor ssj_colorWithHex:@"#4ab0e5"];
-                    self.imageView.image = [[UIImage imageNamed:@"loan_closeOut"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                    self.imageView.image = [[UIImage imageNamed:@"loan_lend"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                     self.imageView.layer.borderColor = [UIColor ssj_colorWithHex:@"#4ab0e5" ].CGColor;
                     self.typeLabel.text = [NSString stringWithFormat:@"借出款结清-被%@借",item.loanSource];
                     [self.typeLabel sizeToFit];
@@ -171,7 +171,7 @@
                     self.imageView.tintColor = [UIColor ssj_colorWithHex:@"#5a98de"];
                     self.imageView.image = [[UIImage imageNamed:@"loan_debt"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                     self.imageView.layer.borderColor = [UIColor ssj_colorWithHex:@"#5a98de"].CGColor;
-                    self.typeLabel.text = [NSString stringWithFormat:@"欠款-欠%@欠款",item.loanSource];
+                    self.typeLabel.text = [NSString stringWithFormat:@"欠款-欠%@钱款",item.loanSource];
                     [self.typeLabel sizeToFit];
                 }
                     break;
@@ -206,7 +206,7 @@
                     
                 case SSJLoanCompoundChargeTypeCloseOut:{
                     self.imageView.tintColor = [UIColor ssj_colorWithHex:@"#5a98de"];
-                    self.imageView.image = [[UIImage imageNamed:@"loan_closeOut"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                    self.imageView.image = [[UIImage imageNamed:@"loan_debt"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                     self.imageView.layer.borderColor = [UIColor ssj_colorWithHex:@"#5a98de"].CGColor;
                     self.typeLabel.text = [NSString stringWithFormat:@"欠款结清-欠%@欠款",item.loanSource];
                     [self.typeLabel sizeToFit];

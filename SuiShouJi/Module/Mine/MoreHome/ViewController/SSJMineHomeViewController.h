@@ -8,6 +8,6 @@
 
 #import "SSJBaseViewController.h"
 
-@interface SSJMineHomeViewController : SSJBaseViewController<UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UITableViewDelegate,UITableViewDataSource>
+@interface SSJMineHomeViewController : SSJBaseViewController
 
 @end

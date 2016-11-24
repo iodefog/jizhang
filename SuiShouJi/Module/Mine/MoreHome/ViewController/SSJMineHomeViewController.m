@@ -43,6 +43,7 @@
 #import "SSJStartChecker.h"
 #import <YWFeedbackFMWK/YWFeedbackKit.h>
 #import "UIViewController+SSJMotionPassword.h"
+#import "UMSocial.h"
 
 static NSString *const kTitle1 = @"提醒";
 static NSString *const kTitle2 = @"主题皮肤";
@@ -51,12 +52,14 @@ static NSString *const kTitle4 = @"数据文件导出";
 static NSString *const kTitle5 = @"意见反馈";
 static NSString *const kTitle6 = @"给个好评";
 static NSString *const kTitle7 = @"设置";
+static NSString *const kTitle8 = @"分享APP";
+
 
 static BOOL KHasEnterMineHome;
 
 static BOOL kNeedBannerDisplay = YES;
 
-@interface SSJMineHomeViewController ()
+@interface SSJMineHomeViewController ()<UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UITableViewDelegate,UITableViewDataSource,UMSocialUIDelegate>
 @property (nonatomic,strong) SSJMineHomeTableViewHeader *header;
 @property (nonatomic, strong) SSJPortraitUploadNetworkService *portraitUploadService;
 @property (nonatomic,strong) UIView *loggedFooterView;
@@ -106,13 +109,26 @@ static BOOL kNeedBannerDisplay = YES;
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
     //  根据审核状态显示响应的内容，“给个好评”在审核期间不能被看到，否则可能会被拒绝-
     if ([SSJStartChecker sharedInstance].isInReview) {
-        self.images = [@[@[[UIImage imageNamed:@"more_tixing"], [UIImage imageNamed:@"more_zhouqi"], [UIImage imageNamed:@"more_pifu"]],@[[UIImage imageNamed:@"more_daochu"]], @[[UIImage imageNamed:@"more_fankui"], [UIImage imageNamed:@"more_shezhi"]]] mutableCopy];
-        self.titles = [@[@[kTitle1 , kTitle2 , kTitle3], @[kTitle4],@[kTitle5 , kTitle7]] mutableCopy];
-        _titleArr = [@[kTitle1 , kTitle2 , kTitle3 , kTitle4 , kTitle5 , kTitle7] mutableCopy];
+        if ([SSJDefaultSource() isEqualToString:@"11501"] || [SSJDefaultSource() isEqualToString:@"11502"]) {
+            self.images = [@[@[[UIImage imageNamed:@"more_tixing"], [UIImage imageNamed:@"more_zhouqi"], [UIImage imageNamed:@"more_pifu"]],@[[UIImage imageNamed:@"more_daochu"]], @[[UIImage imageNamed:@"more_share"]], @[[UIImage imageNamed:@"more_fankui"], [UIImage imageNamed:@"more_shezhi"]]] mutableCopy];
+            self.titles = [@[@[kTitle1 , kTitle2 , kTitle3], @[kTitle4],@[kTitle8],@[kTitle5 , kTitle7]] mutableCopy];
+            _titleArr = [@[kTitle1 , kTitle2 , kTitle3 , kTitle4 , kTitle8 , kTitle5 , kTitle7] mutableCopy];
+        } else{
+            self.images = [@[@[[UIImage imageNamed:@"more_tixing"], [UIImage imageNamed:@"more_zhouqi"], [UIImage imageNamed:@"more_pifu"]],@[[UIImage imageNamed:@"more_daochu"]], @[[UIImage imageNamed:@"more_fankui"], [UIImage imageNamed:@"more_shezhi"]]] mutableCopy];
+            self.titles = [@[@[kTitle1 , kTitle2 , kTitle3], @[kTitle4],@[kTitle5 , kTitle7]] mutableCopy];
+            _titleArr = [@[kTitle1 , kTitle2 , kTitle3 , kTitle4 , kTitle5 , kTitle7] mutableCopy];
+        }
+
     } else {
-        self.images = [@[@[[UIImage imageNamed:@"more_tixing"], [UIImage imageNamed:@"more_pifu"], [UIImage imageNamed:@"more_zhouqi"]],@[[UIImage imageNamed:@"more_daochu"]], @[[UIImage imageNamed:@"more_fankui"], [UIImage imageNamed:@"more_haoping"], [UIImage imageNamed:@"more_shezhi"]]] mutableCopy];
-        self.titles = [@[@[kTitle1 , kTitle2 , kTitle3], @[kTitle4], @[kTitle5 , kTitle6 , kTitle7]]mutableCopy];
-        _titleArr = [@[kTitle1 , kTitle2 , kTitle3 , kTitle4 , kTitle5 , kTitle6 , kTitle7] mutableCopy];
+        if ([SSJDefaultSource() isEqualToString:@"11501"] || [SSJDefaultSource() isEqualToString:@"11502"]) {
+            self.images = [@[@[[UIImage imageNamed:@"more_tixing"], [UIImage imageNamed:@"more_pifu"], [UIImage imageNamed:@"more_zhouqi"]],@[[UIImage imageNamed:@"more_daochu"]], @[[UIImage imageNamed:@"more_share"]], @[[UIImage imageNamed:@"more_fankui"], [UIImage imageNamed:@"more_haoping"], [UIImage imageNamed:@"more_shezhi"]]] mutableCopy];
+            self.titles = [@[@[kTitle1 , kTitle2 , kTitle3], @[kTitle4],@[kTitle8], @[kTitle5 , kTitle6 , kTitle7]]mutableCopy];
+            _titleArr = [@[kTitle1 , kTitle2 , kTitle3 , kTitle4 , kTitle8 , kTitle5 , kTitle6 , kTitle7] mutableCopy];
+        } else{
+            self.images = [@[@[[UIImage imageNamed:@"more_tixing"], [UIImage imageNamed:@"more_pifu"], [UIImage imageNamed:@"more_zhouqi"]],@[[UIImage imageNamed:@"more_daochu"]], @[[UIImage imageNamed:@"more_fankui"], [UIImage imageNamed:@"more_haoping"], [UIImage imageNamed:@"more_shezhi"]]] mutableCopy];
+            self.titles = [@[@[kTitle1 , kTitle2 , kTitle3], @[kTitle4], @[kTitle5 , kTitle6 , kTitle7]]mutableCopy];
+            _titleArr = [@[kTitle1 , kTitle2 , kTitle3 , kTitle4 , kTitle5 , kTitle6 , kTitle7] mutableCopy];
+        }
     }
 
     __weak typeof(self) weakSelf = self;
@@ -303,10 +319,25 @@ static BOOL kNeedBannerDisplay = YES;
         [self.navigationController pushViewController:themeVC animated:YES];
     }
     
-//    if ([title isEqualToString:kTitle7]) {
-//        SSJSettingViewController *settingVC = [[SSJSettingViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
-//        [self.navigationController pushViewController:settingVC animated:YES];
-//    }
+    //  把APP推荐给好友
+    if ([title isEqualToString:kTitle8]) {
+        if ([SSJDefaultSource() isEqualToString:@"11501"]) {
+            [UMSocialSnsService presentSnsIconSheetView:self
+                                                 appKey:SSJDetailSettingForSource(@"UMAppKey")
+                                              shareText:@"财务管理第一步，从记录消费生活开始!"
+                                             shareImage:[UIImage imageNamed:SSJDetailSettingForSource(@"ShareIcon")]
+                                        shareToSnsNames:[NSArray arrayWithObjects:UMShareToQQ,UMShareToSina,UMShareToWechatSession,UMShareToWechatTimeline,nil]
+                                               delegate:self];
+        }else{
+            [UMSocialSnsService presentSnsIconSheetView:self
+                                                 appKey:SSJDetailSettingForSource(@"UMAppKey")
+                                              shareText:@"在这里，记录消费生活是件有趣简单的事儿，管家更有窍门。"
+                                             shareImage:[UIImage imageNamed:SSJDetailSettingForSource(@"ShareIcon")]
+                                        shareToSnsNames:[NSArray arrayWithObjects:UMShareToQQ,UMShareToSina,UMShareToWechatSession,UMShareToWechatTimeline,nil]
+                                               delegate:self];
+        }
+    }
+
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -366,6 +397,27 @@ static BOOL kNeedBannerDisplay = YES;
     }
 }
 
+#pragma mark - UMSocialUIDelegate
+-(void)didFinishGetUMSocialDataInViewController:(UMSocialResponseEntity *)response
+{
+    //根据responseCode得到发送结果,如果分享成功
+    if(response.responseCode == UMSResponseCodeSuccess)
+    {
+        [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@"分享成功" action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL],nil];
+    }else{
+        [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@"分享失败" action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL],nil];
+    }
+}
+
+-(void)didSelectSocialPlatform:(NSString *)platformName withSocialData:(UMSocialData *)socialData
+{
+    if (platformName == UMShareToSina) {
+        socialData.shareText = [NSString stringWithFormat:@"%@ %@",SSJDetailSettingForSource(@"ShareTitle"),SSJDetailSettingForSource(@"ShareUrl")];
+        socialData.shareImage = [UIImage imageNamed:SSJDetailSettingForSource(@"WeiboBanner")];
+    }else{
+        socialData.shareText = SSJDetailSettingForSource(@"ShareContent");
+    }
+}
 
 #pragma mark - Getter
 -(SSJBannerHeaderView *)bannerHeader{
