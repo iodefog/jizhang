@@ -8,6 +8,7 @@
 
 #import "SSJLoginService.h"
 #import "SSJUserInfoItem.h"
+#import "SSJCustomCategoryItem.h"
 
 @interface SSJLoginService ()
 
@@ -23,6 +24,8 @@
 @property (nonatomic,strong) NSArray *booksTypeArray;
 
 @property (nonatomic,strong) NSArray *membersArray;
+
+@property (nonatomic,strong) NSArray *customCategoryArray;
 
 //登录用户的accesstoken
 @property (nonatomic,strong) NSString *accesstoken;
@@ -150,6 +153,7 @@
         self.booksTypeArray = [NSArray arrayWithArray:[dict objectForKey:@"bookType"]];
         self.membersArray = [NSArray arrayWithArray:[dict objectForKey:@"bk_member"]];
         self.checkInModel = [SSJBookkeepingTreeCheckInModel mj_objectWithKeyValues:[dict objectForKey:@"userTree"]];
+        self.customCategoryArray = [SSJCustomCategoryItem mj_objectArrayWithKeyValuesArray:[dict objectForKey:@"bookBillArray"]];
     }
 }
 

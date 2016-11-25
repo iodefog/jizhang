@@ -38,7 +38,9 @@
 + (NSArray *)queryRecordsNeedToSyncWithUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
     int64_t version = [SSJSyncTable lastSuccessSyncVersionForUserId:userId inDatabase:db];
     if (version == SSJ_INVALID_SYNC_VERSION) {
-        *error = [db lastError];
+        if (error) {
+            *error = [db lastError];
+        }
         return nil;
     }
     
@@ -51,7 +53,9 @@
     
     FMResultSet *result = [db executeQuery:query];
     if (!result) {
-        *error = [db lastError];
+        if (error) {
+            *error = [db lastError];
+        }
         SSJPRINT(@">>>SSJ warning:\n message:%@\n error:%@", [db lastErrorMessage], [db lastError]);
         return nil;
     }
@@ -75,7 +79,9 @@
 + (BOOL)updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:(int64_t)newVersion forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
     int64_t version = [SSJSyncTable lastSuccessSyncVersionForUserId:userId inDatabase:db];
     if (version == SSJ_INVALID_SYNC_VERSION) {
-        *error = [db lastError];
+        if (error) {
+            *error = [db lastError];
+        }
         SSJPRINT(@">>>SSJ warning: invalid sync version");
         return NO;
     }
@@ -93,7 +99,9 @@
     
     BOOL success = [db executeUpdate:update];
     if (!success) {
-        *error = [db lastError];
+        if (error) {
+            *error = [db lastError];
+        }
         SSJPRINT(@">>>SSJ warning:an error occured when update sync version of record that is modified during synchronization to the newest version\n message:%@\n error:%@", [db lastErrorMessage], [db lastError]);
     }
     

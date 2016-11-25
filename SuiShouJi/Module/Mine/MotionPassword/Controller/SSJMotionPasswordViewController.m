@@ -46,6 +46,8 @@ static const int kVerifyFailureTimesLimit = 5;
 
 @property (nonatomic, strong) SSJUserItem *userItem;
 
+@property (nonatomic, strong) LAContext *context;
+
 @end
 
 @implementation SSJMotionPasswordViewController
@@ -174,6 +176,9 @@ static const int kVerifyFailureTimesLimit = 5;
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     [self.navigationController setNavigationBarHidden:NO animated:YES];
+    
+    [_context invalidate];
+    _context = nil;
 }
 
 - (void)viewWillLayoutSubviews {
@@ -388,11 +393,14 @@ static const int kVerifyFailureTimesLimit = 5;
 
 //  验证touchID
 - (void)verifyTouchIDIfNeeded {
-    LAContext *context = [[LAContext alloc] init];
-    context.localizedFallbackTitle = @"";
+    if (!_context) {
+        _context = [[LAContext alloc] init];
+        _context.localizedFallbackTitle = @"";
+    }
+    
     NSError *error = nil;
-    if ([context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&error]) {
-        [context evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics localizedReason:@"请按住Home键进行解锁" reply:^(BOOL success, NSError * _Nullable error) {
+    if ([_context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&error]) {
+        [_context evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics localizedReason:@"请按住Home键进行解锁" reply:^(BOOL success, NSError * _Nullable error) {
             if (success) {
                 SSJDispatchMainSync(^{
                     [self.navigationController setNavigationBarHidden:NO];
@@ -446,7 +454,7 @@ static const int kVerifyFailureTimesLimit = 5;
         UIImageView *imageView = [[UIImageView alloc] initWithCornerRadiusAdvance:CGRectGetWidth(imageFrame) * 0.5 rectCornerType:UIRectCornerAllCorners];
         imageView.frame = imageFrame;
         NSString *iconUrlStr = [_userItem.icon hasPrefix:@"http"] ? _userItem.icon : SSJImageURLWithAPI(_userItem.icon);
-        [imageView sd_setImageWithURL:[NSURL URLWithString:iconUrlStr] placeholderImage:[UIImage imageNamed:@"defualt_portrait"] options:SDWebImageAvoidAutoSetImage completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+        [imageView sd_setImageWithURL:[NSURL URLWithString:iconUrlStr] placeholderImage:[UIImage imageNamed:@"defualt_portrait"] options:(SDWebImageAvoidAutoSetImage | SDWebImageAllowInvalidSSLCertificates) completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
             if (image && cacheType == SDImageCacheTypeNone) {
                 [UIView animateWithDuration:0.25 animations:^{
                     imageView.image = image;

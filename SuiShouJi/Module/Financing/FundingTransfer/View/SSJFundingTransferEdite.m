@@ -11,6 +11,7 @@
 @interface SSJFundingTransferEdite()
 @property(nonatomic, strong) UILabel *cellTitleLabel;
 @property(nonatomic, strong) UILabel *cellDetailLabel;
+@property(nonatomic, strong) UIImageView *cellDetailImage;
 @end
 
 @implementation SSJFundingTransferEdite
@@ -18,7 +19,7 @@
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         [self.contentView addSubview:self.cellTitleLabel];
         [self.contentView addSubview:self.cellDetailLabel];
-
+        [self.contentView addSubview:self.cellDetailImage];
     }
     return self;
 }
@@ -28,6 +29,8 @@
     self.cellTitleLabel.centerY = self.cellDetailLabel.centerY = self.contentView.height / 2;
     self.cellTitleLabel.left = 10;
     self.cellDetailLabel.right = self.contentView.width - 10;
+    self.cellDetailImage.centerY = self.height / 2;
+    self.cellDetailImage.right = self.cellDetailLabel.left - 10;
 }
 
 -(UILabel *)cellTitleLabel{
@@ -48,6 +51,13 @@
     return _cellDetailLabel;
 }
 
+-(UIImageView *)cellDetailImage{
+    if (!_cellDetailImage) {
+        _cellDetailImage = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 30, 30)];
+    }
+    return _cellDetailImage;
+}
+
 -(void)setCellTitle:(NSString *)cellTitle{
     _cellTitle = cellTitle;
     self.cellTitleLabel.text = _cellTitle;
@@ -59,6 +69,12 @@
     self.cellDetailLabel.text = _cellDetail;
     [self.cellDetailLabel sizeToFit];
 }
+
+- (void)setCellImage:(NSString *)cellImage{
+    _cellImage = cellImage;
+    self.cellDetailImage.image = [UIImage imageNamed:_cellImage];
+}
+
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.

@@ -11,7 +11,10 @@
 
 @interface SSJLoanFundAccountSelectionView : UIView
 
-@property (nonatomic) NSUInteger selectedIndex;
+/**
+ 选中的下标，默认是0，如果设置为负数，就没有选择任何item
+ */
+@property (nonatomic) NSInteger selectedIndex;
 
 @property (nonatomic, strong) NSArray <SSJLoanFundAccountSelectionViewItem *>*items;
 

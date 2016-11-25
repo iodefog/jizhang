@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "SSJSyncFileModel.h"
+#import "SSJGlobalServiceManager.h"
 
 @interface SSJSynchronizeTask : NSObject
 
@@ -16,6 +17,8 @@
 @property (nonatomic, copy) NSString *userId;
 
 @property (nonatomic, weak) dispatch_queue_t syncQueue;
+
+@property (nonatomic, strong) SSJGlobalServiceManager *sessionManager;
 
 /**
  *  开始数据同步，需要子类覆写，本类中什么也没做

@@ -8,6 +8,7 @@
 
 #import "SSJBaseItem.h"
 #import "SSJListAdItem.h"
+#import "SSJBooksAdBanner.h"
 
 @interface SSJAdItem : SSJBaseItem
 
@@ -15,5 +16,6 @@
 
 @property(nonatomic, strong) SSJListAdItem *listAdItem;
 
+@property(nonatomic, strong) SSJBooksAdBanner *booksAdItem;
 
 @end

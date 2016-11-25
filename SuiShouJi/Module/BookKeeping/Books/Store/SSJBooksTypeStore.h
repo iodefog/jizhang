@@ -8,6 +8,9 @@
 
 #import <Foundation/Foundation.h>
 #import "SSJBooksTypeItem.h"
+#import "SSJReportFormsItem.h"
+#import "SSJDatePeriod.h"
+
 
 @interface SSJBooksTypeStore : NSObject
 
@@ -25,7 +28,9 @@
  *
  *  @return (BOOL) 是否保存成功
  */
-+ (BOOL)saveBooksTypeItem:(SSJBooksTypeItem *)item;
++ (void)saveBooksTypeItem:(SSJBooksTypeItem *)item
+                   sucess:(void(^)())success
+                  failure:(void (^)(NSError *error))failure;
 
 /**
  *  查询当前的账本
@@ -62,4 +67,8 @@
                            deleteType:(BOOL)type
                               Success:(void(^)())success
                               failure:(void (^)(NSError *error))failure;
+
++ (void)getTotalIncomeAndExpenceWithSuccess:(void(^)(double income,double expenture))success
+                                    failure:(void (^)(NSError *error))failure;
+
 @end

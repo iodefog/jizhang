@@ -25,6 +25,9 @@
 //账本顺序
 @property(nonatomic) int booksOrder;
 
+//账本父类
+@property(nonatomic) NSInteger booksParent;
+
 @property(nonatomic, strong) NSString *userId;
 
 @property(nonatomic, strong) NSString *cwriteDate;
@@ -36,4 +39,5 @@
 @property(nonatomic) BOOL editeModel;
 
 + (NSDictionary *)propertyMapping;
+
 @end

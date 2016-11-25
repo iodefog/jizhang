@@ -22,6 +22,7 @@
 #import "SSJBooksTypeStore.h"
 #import "SSJBooksTypeItem.h"
 #import "SSJReportFormsViewController.h"
+#import "UIViewController+MMDrawerController.h"
 #import "FMDB.h"
 #import "SSJChargeMemBerItem.h"
 #import "SSJCalenderDetailHeader.h"
@@ -197,7 +198,6 @@
 }
 
 #pragma mark - Private
-
 /**
  *  修改流水
  */
@@ -226,6 +226,9 @@
             weakSelf.item.incomeOrExpence = [chargeResult boolForColumn:@"ITYPE"];
             weakSelf.item.fundName = [chargeResult stringForColumn:@"cacctname"];
             weakSelf.item.booksId = [chargeResult stringForColumn:@"cbooksid"];
+            if (!weakSelf.item.booksId.length) {
+                weakSelf.item.booksId = SSJUSERID();
+            }
             weakSelf.item.booksName = [chargeResult stringForColumn:@"cbooksname"];
         }
         [chargeResult close];
@@ -269,30 +272,56 @@
  *  数据库中删除流水
  */
 -(void)deleteCharge{
-    __block NSString *booksid = SSJGetCurrentBooksType();
     __weak typeof(self) weakSelf = self;
     __block int chargeCount = 0;
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db){
         NSString *userId = SSJUSERID();
         [db executeUpdate:@"UPDATE BK_USER_CHARGE SET OPERATORTYPE = 2 , CWRITEDATE = ? , IVERSION = ? WHERE ICHARGEID = ?",[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),weakSelf.item.ID];
         if ([db intForQuery:@"SELECT ITYPE FROM BK_BILL_TYPE WHERE ID = ?",weakSelf.item.billId]) {
-            if (![db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET EXPENCEAMOUNT = EXPENCEAMOUNT - ? , SUMAMOUNT = SUMAMOUNT + ? , CWRITEDATE = ? WHERE CBILLDATE = ? and cbooksid = ? and cuserid = ?",[NSNumber numberWithDouble:[weakSelf.item.money doubleValue]],[NSNumber numberWithDouble:[weakSelf.item.money doubleValue]],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],weakSelf.item.billDate,booksid,userId]) {
+            if (![db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET EXPENCEAMOUNT = EXPENCEAMOUNT - ? , SUMAMOUNT = SUMAMOUNT + ? , CWRITEDATE = ? WHERE CBILLDATE = ? and cbooksid = ? and cuserid = ?",[NSNumber numberWithDouble:[weakSelf.item.money doubleValue]],[NSNumber numberWithDouble:[weakSelf.item.money doubleValue]],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],weakSelf.item.billDate,weakSelf.item.booksId,userId]) {
                 return;
             }
         }else{
-            if (![db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET INCOMEAMOUNT = INCOMEAMOUNT - ? , SUMAMOUnT = SUMAMOUNT - ? , CWRITEDATE = ? WHERE CBILLDATE = ? and cbooksid = ? and cuserid = ?",[NSNumber numberWithDouble:[weakSelf.item.money doubleValue]],[NSNumber numberWithDouble:[weakSelf.item.money doubleValue]],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],weakSelf.item.billDate,booksid,userId]) {
+            if (![db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET INCOMEAMOUNT = INCOMEAMOUNT - ? , SUMAMOUnT = SUMAMOUNT - ? , CWRITEDATE = ? WHERE CBILLDATE = ? and cbooksid = ? and cuserid = ?",[NSNumber numberWithDouble:[weakSelf.item.money doubleValue]],[NSNumber numberWithDouble:[weakSelf.item.money doubleValue]],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],weakSelf.item.billDate,weakSelf.item.booksId,userId]) {
                 return;
             }
         }
         [db executeUpdate:@"DELETE FROM BK_DAILYSUM_CHARGE WHERE SUMAMOUNT = 0 AND INCOMEAMOUNT = 0 AND EXPENCEAMOUNT = 0"];
-        chargeCount = [db intForQuery:@"select count(1) from bk_user_charge where cuserid = ? and cbooksid = ? and cbilldate like ? and operatortype <> 2",weakSelf.item.booksId,userId,[NSString stringWithFormat:@"%@__",[weakSelf.item.billDate substringWithRange:NSMakeRange(0, 8)]]];
-    }];
-    if ([[self.navigationController.viewControllers firstObject] isKindOfClass:[SSJReportFormsViewController class]]) {
-        if (chargeCount == 0) {
-            [self.navigationController popToRootViewControllerAnimated:YES];
-        }else{
-            [self.navigationController popViewControllerAnimated:YES];
+        NSMutableString *chargeCountSql;
+        NSString *startDate;
+        NSString *endDate;
+        if (weakSelf.period) {
+            startDate = [weakSelf.period.startDate formattedDateWithFormat:@"yyyy-MM-dd"];
+            endDate = [weakSelf.period.endDate formattedDateWithFormat:@"yyyy-MM-dd"];
         }
+        if (weakSelf.isMemberCharge) {
+            chargeCountSql = [NSMutableString stringWithFormat:@"select count(1) from bk_user_charge where cuserid = '%@' and operatortype <> 2",userId];
+            if (weakSelf.booksId.length && ![weakSelf.booksId isEqualToString:@"all"]) {
+                [chargeCountSql appendFormat:@" and cbooksid = '%@'",weakSelf.booksId];
+            }
+            if (weakSelf.Id.length) {
+                [chargeCountSql appendFormat:@" and cmemberid = '%@'",weakSelf.Id];
+            }
+            if (weakSelf.period) {
+                [chargeCountSql appendFormat:@" and cbilldate >= '%@' and cbilldate <= '%@'",startDate,endDate];
+            }
+        }else{
+            chargeCountSql = [NSMutableString stringWithFormat:@"select count(1) from bk_user_charge where cuserid = '%@' and operatortype <> 2",userId];
+            if (weakSelf.booksId.length && ![weakSelf.booksId isEqualToString:@"all"]) {
+                [chargeCountSql appendFormat:@" and cbooksid = '%@'",weakSelf.booksId];
+            }
+            if (weakSelf.Id.length) {
+                [chargeCountSql appendFormat:@" and ibillid = '%@'",weakSelf.Id];
+            }
+            if (weakSelf.period) {
+                [chargeCountSql appendFormat:@" and cbilldate >= '%@' and cbilldate <= '%@'",startDate,endDate];
+            }
+        }
+        chargeCount = [db intForQuery:chargeCountSql];
+    }];
+    if (!chargeCount && weakSelf.Id.length && weakSelf.booksId.length) {
+        UIViewController *vc = [weakSelf.navigationController.viewControllers objectAtIndex:weakSelf.navigationController.viewControllers.count - 3];
+        [self.navigationController popToViewController:vc animated:YES];
     }else{
         [self.navigationController popViewControllerAnimated:YES];
     }

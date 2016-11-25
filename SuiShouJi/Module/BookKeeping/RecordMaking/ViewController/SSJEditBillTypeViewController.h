@@ -22,6 +22,8 @@ NS_ASSUME_NONNULL_BEGIN
 // 有同名类别，返回记一笔页面选中该类别的回调
 @property (nonatomic, copy) void (^addNewCategoryAction)(NSString *categoryId, BOOL incomeOrExpence);
 
+@property(nonatomic, strong) NSString *booksId;
+
 @end    
 
 NS_ASSUME_NONNULL_END

@@ -93,6 +93,14 @@
     self.repaymentDayLab.centerX = self.secondVerticalSeperatorLine.right + self.firstVerticalSeperatorLine.left / 2;
     self.bottomView.size = CGSizeMake(self.width, 40);
     self.bottomView.leftTop = CGPointMake(0, self.backGroundView.bottom);
+    if (self.totalIncome == 0 && self.totalExpence == 0) {
+        self.incomeLab.hidden = YES;
+        self.expenceLab.hidden = YES;
+    }else{
+        self.incomeLab.hidden = NO;
+        self.expenceLab.hidden = NO;
+
+    }
     self.incomeLab.left = 10;
     self.incomeLab.centerY = self.bottomView.centerY;
     self.expenceLab.right = self.width - 10;

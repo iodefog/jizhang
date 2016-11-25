@@ -267,11 +267,11 @@
     }
     
     NSString *writeDate = [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-    [db executeUpdate:@"INSERT INTO BK_BOOKS_TYPE (CBOOKSID, CBOOKSNAME, CBOOKSCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID , IORDER, CICOIN) VALUES (?, ?, ?, ?, 0, ?, ? , ? , ?)",userId, @"日常账本", @"#7fb04f", writeDate, @(SSJSyncVersion()), userId,@(1),@"bk_moren"];
-    [db executeUpdate:@"INSERT INTO BK_BOOKS_TYPE (CBOOKSID, CBOOKSNAME, CBOOKSCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID , IORDER, CICOIN) VALUES (?, ?, ?, ?, 0, ?, ? , ? , ?)", [NSString stringWithFormat:@"%@-1",userId], @"生意账本", @"#f5a237", writeDate, @(SSJSyncVersion()), userId,@(2),@"bk_shengyi"];
-    [db executeUpdate:@"INSERT INTO BK_BOOKS_TYPE (CBOOKSID, CBOOKSNAME, CBOOKSCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID , IORDER, CICOIN) VALUES (?, ?, ?, ?, 0, ?, ? , ? , ?)", [NSString stringWithFormat:@"%@-2",userId], @"结婚账本", @"#ff6363", writeDate, @(SSJSyncVersion()), userId,@(3),@"bk_jiehun"];
-    [db executeUpdate:@"INSERT INTO BK_BOOKS_TYPE (CBOOKSID, CBOOKSNAME, CBOOKSCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID , IORDER ,CICOIN) VALUES (?, ?, ?, ?, 0, ?, ? , ? , ?)", [NSString stringWithFormat:@"%@-3",userId], @"装修账本", @"#5ca0d9", writeDate, @(SSJSyncVersion()), userId,@(4),@"bk_zhuangxiu"];
-    [db executeUpdate:@"INSERT INTO BK_BOOKS_TYPE (CBOOKSID, CBOOKSNAME, CBOOKSCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID, IORDER, CICOIN) VALUES (?, ?, ?, ?, 0, ?, ? , ? , ?)", [NSString stringWithFormat:@"%@-4",userId], @"旅行账本", @"#ad82dd", writeDate, @(SSJSyncVersion()), userId,@(5),@"bk_lvxing"];
+    [db executeUpdate:@"INSERT INTO BK_BOOKS_TYPE (CBOOKSID, CBOOKSNAME, CBOOKSCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID , IORDER, CICOIN, IPARENTTYPE) VALUES (?, ?, ?, ?, 0, ?, ? , ? , ? , 0)",userId, @"日常账本", @"#7fb04f", writeDate, @(SSJSyncVersion()), userId,@(1),@"bk_moren"];
+    [db executeUpdate:@"INSERT INTO BK_BOOKS_TYPE (CBOOKSID, CBOOKSNAME, CBOOKSCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID , IORDER, CICOIN, IPARENTTYPE) VALUES (?, ?, ?, ?, 0, ?, ? , ? , ? , 1)", [NSString stringWithFormat:@"%@-1",userId], @"生意账本", @"#f5a237", writeDate, @(SSJSyncVersion()), userId,@(2),@"bk_shengyi"];
+    [db executeUpdate:@"INSERT INTO BK_BOOKS_TYPE (CBOOKSID, CBOOKSNAME, CBOOKSCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID , IORDER, CICOIN, IPARENTTYPE) VALUES (?, ?, ?, ?, 0, ?, ? , ? , ? , 2)", [NSString stringWithFormat:@"%@-2",userId], @"结婚账本", @"#ff6363", writeDate, @(SSJSyncVersion()), userId,@(3),@"bk_jiehun"];
+    [db executeUpdate:@"INSERT INTO BK_BOOKS_TYPE (CBOOKSID, CBOOKSNAME, CBOOKSCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID , IORDER ,CICOIN, IPARENTTYPE) VALUES (?, ?, ?, ?, 0, ?, ? , ? , ? , 3)", [NSString stringWithFormat:@"%@-3",userId], @"装修账本", @"#5ca0d9", writeDate, @(SSJSyncVersion()), userId,@(4),@"bk_zhuangxiu"];
+    [db executeUpdate:@"INSERT INTO BK_BOOKS_TYPE (CBOOKSID, CBOOKSNAME, CBOOKSCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID, IORDER, CICOIN, IPARENTTYPE) VALUES (?, ?, ?, ?, 0, ?, ? , ? , ? , 4)", [NSString stringWithFormat:@"%@-4",userId], @"旅行账本", @"#ad82dd", writeDate, @(SSJSyncVersion()), userId,@(5),@"bk_lvxing"];
     
     return nil;
 }
@@ -324,7 +324,7 @@
     [result1 close];
     [result2 close];
     
-    FMResultSet *billTypeResult = [db executeQuery:@"select id, istate, defaultOrder from BK_BILL_TYPE where istate <> 2 and icustom = 0"];
+    FMResultSet *billTypeResult = [db executeQuery:@"select id, istate, defaultOrder , ibookstype from BK_BILL_TYPE where istate <> 2 and icustom = 0"];
     if (!billTypeResult) {
         return [db lastError];
     }
@@ -336,9 +336,20 @@
         NSString *billId = [billTypeResult stringForColumn:@"id"];
         int state = [billTypeResult intForColumn:@"istate"];
         NSString *order = [billTypeResult stringForColumn:@"defaultOrder"];
+        NSString *booksId;
+        NSString *booksTypes = [billTypeResult stringForColumn:@"ibookstype"];
+        NSArray *booksTypeArr = [booksTypes componentsSeparatedByString:@","];
         
-        BOOL executeSuccessfull = [db executeUpdate:@"insert into BK_USER_BILL (CUSERID, CBILLID, ISTATE, IORDER, CWRITEDATE, IVERSION, OPERATORTYPE) select ?, ?, ?, ?, ?, ?, 0 where not exists (select * from BK_USER_BILL where CBILLID = ? and cuserid = ?)", userID, billId, @(state), order, date, @(SSJSyncVersion()), billId, userID];
-        successfull = successfull && executeSuccessfull;
+        for (NSString *booksType in booksTypeArr) {
+            if (![booksType integerValue]) {
+                booksId = userID;
+            }else{
+                booksId = [NSString stringWithFormat:@"%@-%@",userID,booksType];
+                state = 1;
+            }
+            BOOL executeSuccessfull = [db executeUpdate:@"insert into BK_USER_BILL (CUSERID, CBILLID, ISTATE, IORDER, CWRITEDATE, IVERSION, OPERATORTYPE, CBOOKSID) select ?, ?, ?, ?, ?, ?, 1 , ? where not exists (select * from BK_USER_BILL where CBILLID = ? and cuserid = ? and cbooksid = ?)", userID, billId, @(state), order, date, @(SSJSyncVersion()), booksId, billId, userID, booksId];
+            successfull = successfull && executeSuccessfull;
+        }
     }
     
     [billTypeResult close];

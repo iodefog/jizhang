@@ -57,18 +57,25 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
 
 - (instancetype)init {
     if (self = [super init]) {
-        self.syncTableClasses = @[[SSJBooksTypeSyncTable class],
-                                  [SSJBillTypeSyncTable class],
-                                  [SSJUserBillSyncTable class],
-                                  [SSJFundInfoSyncTable class],
-                                  [SSJUserChargePeriodConfigSyncTable class],
-                                  [SSJUserChargeSyncTable class],
-                                  [SSJUserBudgetSyncTable class],
-                                  [SSJMemberSyncTable class],
-                                  [SSJMemberChargeSyncTable class],
-                                  [SSJUserRemindSyncTable class],
-                                  [SSJLoanSyncTable class],
-                                  [SSJUserCreditSyncTable class]];
+        NSSet *firstLayer = [NSSet setWithObjects:[SSJUserRemindSyncTable class],
+                                                  [SSJBooksTypeSyncTable class],
+                                                  [SSJMemberSyncTable class],
+                                                  [SSJBillTypeSyncTable class], nil];
+        
+        NSSet *secondLayer = [NSSet setWithObjects:[SSJFundInfoSyncTable class],
+                                                   [SSJUserCreditSyncTable class],
+                                                   [SSJUserBillSyncTable class],
+                                                   [SSJUserBudgetSyncTable class], nil];
+        
+        NSSet *thirdLayer = [NSSet setWithObjects:[SSJUserChargePeriodConfigSyncTable class],
+                                                  [SSJLoanSyncTable class], nil];
+        
+        NSSet *fourthLayer = [NSSet setWithObjects:[SSJUserChargeSyncTable class], nil];
+        
+        NSSet *fifthLayer = [NSSet setWithObjects:[SSJMemberChargeSyncTable class], nil];
+        
+        
+        self.syncTableClasses = @[firstLayer, secondLayer, thirdLayer, fourthLayer, fifthLayer];
     }
     return self;
 }
@@ -229,10 +236,12 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
         //  更新当前的版本号
         SSJUpdateSyncVersion(self.lastSuccessSyncVersion + 2);
         
-        for (Class syncTable in self.syncTableClasses) {
-            NSArray *syncRecords = [syncTable queryRecordsNeedToSyncWithUserId:self.userId inDatabase:db error:error];
-            if (syncRecords.count) {
-                [jsonObject setObject:syncRecords forKey:[syncTable tableName]];
+        for (NSSet *layer in self.syncTableClasses) {
+            for (Class syncTable in layer) {
+                NSArray *syncRecords = [syncTable queryRecordsNeedToSyncWithUserId:self.userId inDatabase:db error:error];
+                if (syncRecords.count) {
+                    [jsonObject setObject:syncRecords forKey:[syncTable tableName]];
+                }
             }
         }
     }];
@@ -311,11 +320,8 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
     request.timeoutInterval = kTimeoutInterval;
     
     //  开始上传
-    AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
-    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     
-    //    NSProgress *progress = nil;
-    NSURLSessionUploadTask *task = [manager uploadTaskWithStreamedRequest:request progress:nil completionHandler:completionHandler];
+    NSURLSessionUploadTask *task = [self.sessionManager uploadTaskWithStreamedRequest:request progress:nil completionHandler:completionHandler];
     [task resume];
 }
 
@@ -324,7 +330,7 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
     
     NSString *versinStr = tableInfo[@"syncversion"];
     
-    //  存储当前同步用户数据
+    // 存储当前同步用户数据
     NSArray *userArr = tableInfo[@"bk_user"];
     for (NSDictionary *userInfo in userArr) {
         NSString *userId = userInfo[@"cuserid"];
@@ -341,29 +347,31 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
         [SSJUserTableManager saveUserItem:userItem];
     }
     
-    //  合并顺序：1.收支类型 2.资金帐户 3.定期记账 4.记账流水 5.预算
+    // 合并顺序：1.收支类型 2.资金帐户 3.定期记账 4.记账流水 5.预算
     __block BOOL mergeSuccess = YES;
     __block BOOL updateVersionSuccess = YES;
     
-    for (Class syncTable in self.syncTableClasses) {
-        [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
-            if (![syncTable mergeRecords:tableInfo[[syncTable tableName]] forUserId:self.userId inDatabase:db error:error]) {
-                *rollback = YES;
-                mergeSuccess = NO;
-                return;
-            }
+    for (NSSet *layer in self.syncTableClasses) {
+        for (Class syncTable in layer) {
+            [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
+                if (![syncTable mergeRecords:tableInfo[[syncTable tableName]] forUserId:self.userId inDatabase:db error:error]) {
+                    *rollback = YES;
+                    mergeSuccess = NO;
+                    return;
+                }
+                
+                if ([versinStr length] && ![syncTable updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:[versinStr longLongValue] + 1 forUserId:self.userId inDatabase:db error:error]) {
+                    updateVersionSuccess = NO;
+                }
+            }];
             
-            if ([versinStr length] && ![syncTable updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:[versinStr longLongValue] + 1 forUserId:self.userId inDatabase:db error:error]) {
-                updateVersionSuccess = NO;
+            if (!mergeSuccess) {
+                return NO;
             }
-        }];
-        
-        if (!mergeSuccess) {
-            return NO;
         }
     }
     
-    //  所有数据合并成功、版本号更新成功后，插入一个新的记录到BK_SYNC中
+    // 所有数据合并成功、版本号更新成功后，插入一个新的记录到BK_SYNC中
     if (updateVersionSuccess) {
         __block BOOL tSuccess = YES;
         [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {

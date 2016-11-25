@@ -78,8 +78,8 @@ static NSString *const kCellId = @"SSJLoanFundAccountSelectionCell";
     [self dismiss];
 }
 
-- (void)setSelectedIndex:(NSUInteger)selectedIndex {
-    if (selectedIndex >= _cellItems.count) {
+- (void)setSelectedIndex:(NSInteger)selectedIndex {
+    if (selectedIndex >= (NSInteger)_cellItems.count) {
         SSJPRINT(@"警告：selectedIndex大于数组的范围");
         return;
     }
@@ -87,7 +87,7 @@ static NSString *const kCellId = @"SSJLoanFundAccountSelectionCell";
     _selectedIndex = selectedIndex;
     for (int i = 0; i < _cellItems.count; i ++) {
         SSJLoanFundAccountSelectionCellItem *cellItem = _cellItems[i];
-        cellItem.showCheckMark = i == _selectedIndex;
+        cellItem.showCheckMark = (i == _selectedIndex);
     }
 }
 
@@ -129,7 +129,7 @@ static NSString *const kCellId = @"SSJLoanFundAccountSelectionCell";
         self.bottom = keyWindow.height;
     } timeInterval:0.25 fininshed:NULL];
     
-    if (_selectedIndex < [_tableView numberOfRowsInSection:0]) {
+    if (_selectedIndex >= 0 && _selectedIndex < [_tableView numberOfRowsInSection:0]) {
         [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:_selectedIndex inSection:0] atScrollPosition:UITableViewScrollPositionMiddle animated:NO];
     }
 }

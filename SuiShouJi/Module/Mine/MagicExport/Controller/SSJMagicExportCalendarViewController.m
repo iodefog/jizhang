@@ -8,6 +8,7 @@
 
 #import "SSJMagicExportCalendarViewController.h"
 #import "SSJMagicExportCalendarSwitchStartAndEndDateControl.h"
+#import "UIViewController+MMDrawerController.h"
 #import "SSJMagicExportCalendarView.h"
 #import "SSJMagicExportStore.h"
 #import "SSJUserTableManager.h"
@@ -133,7 +134,7 @@
 
 #pragma mark - Private
 - (void)updateAppearance {
-    _dateSwitchControl.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+    _dateSwitchControl.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     _calendarView.highlightColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
     [_calendarView reload];
     [_calendarView updateAppearance];

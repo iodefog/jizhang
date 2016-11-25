@@ -7,7 +7,7 @@
 //
 
 #import "SSJBookkeepingTreeHelper.h"
-#import "AFNetworking.h"
+#import "SSJGlobalServiceManager.h"
 
 @implementation SSJBookkeepingTreeHelper
 
@@ -81,7 +81,7 @@
     
     SDWebImageManager *manager = [[SDWebImageManager alloc] init];
     manager.imageDownloader.downloadTimeout = timeout;
-    [manager downloadImageWithURL:[NSURL URLWithString:SSJImageURLWithAPI(url)] options:SDWebImageContinueInBackground progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+    [manager downloadImageWithURL:[NSURL URLWithString:SSJImageURLWithAPI(url)] options:(SDWebImageContinueInBackground | SDWebImageAllowInvalidSSLCertificates) progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
 #ifdef DEBUG
         if (error) {
             [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"下载记账树图片失败，error:%@", [error localizedDescription]]];
@@ -114,9 +114,7 @@
     }
     
     NSString *gifUrl = SSJImageURLWithAPI(url);
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    [manager GET:gifUrl parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+    [[SSJGlobalServiceManager standardManager] GET:gifUrl parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
         if ([responseObject isKindOfClass:[NSData class]]) {
             [[self memoryCache] setObject:responseObject forKey:url];
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{

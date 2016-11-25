@@ -130,7 +130,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
     }
     
     //  查询当前用户所有有效定期记账最近一次的流水记录
-    FMResultSet *resultSet = [db executeQuery:@"select max(a.cbilldate), a.thumburl, a.cbooksid, b.iconfigid, b.ibillid, b.ifunsid, b.itype, b.imoney, b.cimgurl, b.cmemo, b.cmemberids from bk_user_charge as a, bk_charge_period_config as b where a.iconfigid = b.iconfigid and a.cuserid = ? and b.cuserid = ? and b.istate = 1 and b.operatortype <> 2 and a.cbilldate <= datetime('now', 'localtime') group by b.iconfigid", userId, userId];
+    FMResultSet *resultSet = [db executeQuery:@"select max(a.cbilldate), a.thumburl, a.cbooksid,  b.iconfigid, b.ibillid, b.ifunsid, b.itype, b.imoney, b.cimgurl, b.cmemo, b.cmemberids, b.cbilldateend from bk_user_charge as a, bk_charge_period_config as b where a.iconfigid = b.iconfigid and a.cuserid = ? and b.cuserid = ? and b.istate = 1 and b.operatortype <> 2 and a.cbilldate <= datetime('now', 'localtime') group by b.iconfigid", userId, userId];
     if (!resultSet) {
         return NO;
     }
@@ -148,10 +148,15 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
         NSString *thumbUrl = [resultSet stringForColumn:@"thumburl"];
         NSString *booksId = [resultSet stringForColumn:@"cbooksid"];
         
+        NSString *endDateStr = [resultSet stringForColumn:@"cbilldateend"];
+        NSDate *endDate = [NSDate dateWithString:endDateStr formatString:@"yyyy-MM-dd"];
+        
         NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-        NSArray *memberIds = [[resultSet stringForColumn:@"cmemberids"] componentsSeparatedByString:@","];
-        if (!memberIds) {
-            memberIds = @[[NSString stringWithFormat:@"%@-0", userId]];
+        NSString *memeberIdStr = [resultSet stringForColumn:@"cmemberids"];
+        
+        NSArray *memberIds = [memeberIdStr componentsSeparatedByString:@","];
+        if (!memeberIdStr.length) {
+             memberIds = @[[NSString stringWithFormat:@"%@-0", userId]];
         }
         CGFloat memberMoney = [money doubleValue] / memberIds.count;
         
@@ -163,6 +168,9 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
         NSArray *billDates = [self billDatesFromDate:billDate periodType:periodType containFromDate:NO];
         
         for (NSDate *billDate in billDates) {
+            if ([endDate isEarlierThan:billDate]) {
+                continue;
+            }
             NSString *billDateStr = [billDate formattedDateWithFormat:@"yyyy-MM-dd"];
             NSString *chargeId = SSJUUID();
             
@@ -183,7 +191,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
     
     //  查询没有生成过流水的定期记账
     NSString *tConfigIdStr = [configIdArr componentsJoinedByString:@","];
-    NSMutableString *query = [NSMutableString stringWithFormat:@"select iconfigid, ibillid, ifunsid, itype, imoney, cimgurl, cmemo, cbilldate, cbooksid, cmemberids from bk_charge_period_config where cuserid = '%@' and istate = 1 and operatortype <> 2", userId];
+    NSMutableString *query = [NSMutableString stringWithFormat:@"select iconfigid, ibillid, ifunsid, itype, imoney, cimgurl, cmemo, cbilldate, cbooksid, cmemberids, cbilldateend from bk_charge_period_config where cuserid = '%@' and istate = 1 and operatortype <> 2", userId];
     if (tConfigIdStr.length) {
         [query appendFormat:@" and iconfigid not in (%@)", tConfigIdStr];
     }
@@ -199,6 +207,9 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
         NSString *money = [resultSet stringForColumn:@"imoney"];
         NSString *imgUrl = [resultSet stringForColumn:@"cimgurl"];
         NSString *memo = [resultSet stringForColumn:@"cmemo"];
+        NSString *endDateStr = [resultSet stringForColumn:@"cbilldateend"];
+        NSDate *endDate = [NSDate dateWithString:endDateStr formatString:@"yyyy-MM-dd"];
+
         NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         NSString *thumbUrl = nil;
         if (imgUrl && imgUrl.length > 0) {
@@ -225,6 +236,9 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
         CGFloat memberMoney = [money doubleValue] / memberIds.count;
         
         for (NSDate *billDate in billDates) {
+            if ([endDate isEarlierThan:billDate]) {
+                continue;
+            }
             NSString *chargeId = SSJUUID();
             
             NSString *billDateStr = [billDate formattedDateWithFormat:@"yyyy-MM-dd"];

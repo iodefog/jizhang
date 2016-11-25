@@ -7,11 +7,14 @@
 //
 
 #import "SSJBaseNetworkService.h"
+#import "SSJThemeItem.h"
 
 @interface SSJThemeService : SSJBaseNetworkService
 
 //客户端返回的主题
 @property(nonatomic, strong) NSArray *themes;
+
+@property (nonatomic, copy) void (^success)(NSArray <SSJThemeItem *> *items);
 
 //请求主题列表
 - (void)requestThemeList;

@@ -13,6 +13,12 @@
 // 主题ID
 @property (nonatomic, copy) NSString *ID;
 
+// 主题的etag值
+@property (nonatomic, copy) NSString *etag;
+
+// 主题的版本
+@property (nonatomic, copy) NSString *version;
+
 // 主题名称
 @property (nonatomic, copy) NSString *name;
 
@@ -33,6 +39,12 @@
 
 // 所有背景透明度
 @property (nonatomic) CGFloat backgroundAlpha;
+
+// 是否需要高斯模糊
+@property (nonatomic) BOOL needBlurOrNot;
+
+// 主要背景颜色
+@property (nonatomic, copy) NSString *mainBackGroundColor;
 
 // 主要颜色
 @property (nonatomic, copy) NSString *mainColor;
@@ -75,6 +87,9 @@
 
 // tabbar边框线透明度
 @property (nonatomic) CGFloat tabBarShadowImageAlpha;
+
+// tabbar背景图片
+@property (nonatomic, copy) NSString *tabBarBackgroundImage;
 
 // cell分割线透明度
 @property (nonatomic) CGFloat cellSeparatorAlpha;
@@ -149,6 +164,12 @@
 @property (nonatomic, copy) NSString *bookKeepingHomeMutiButtonNormalColor;
 
 // 搜索页面结果头的背景色
-@property (nonatomic, copy) NSString *searchResultHeaderBackgroundColor;
+@property (nonatomic, copy) NSString *searchResultHeaderBackgroundColor;\
+
+// 总账本的背景颜色
+@property (nonatomic, copy) NSString *summaryBooksHeaderColor;
+
+// 总账本的背景颜色
+@property (nonatomic) CGFloat summaryBooksHeaderAlpha;
 
 @end

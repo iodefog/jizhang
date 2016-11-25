@@ -16,6 +16,7 @@
 @property (readwrite, nonatomic, copy) NSString *type;
 @property (readwrite, nonatomic, copy) NSString *remindMassage;
 @property (readwrite, nonatomic, copy) NSString *startImage;
+@property (readwrite, nonatomic, copy) NSString *mqGroupId;
 @property (readwrite, nonatomic) BOOL isInReview;
 
 @end
@@ -55,6 +56,7 @@
         self.isInReview = [[results objectForKey:@"review"] boolValue];
         self.remindMassage = [results objectForKey:@"remind"];
         self.startImage = [results objectForKey:@"homeheaderbg"];
+        self.mqGroupId = [results objectForKey:@"mqgid"];
     }
 }
 

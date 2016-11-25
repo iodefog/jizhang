@@ -42,17 +42,23 @@ static NSString * SSJTransferEditeCellIdentifier = @"SSJTransferEditeCellIdentif
     if (self.item == nil && self.chargeItem != nil) {
         [self getTransferItemForCharge];
     }
-    if (self.item.transferMemo.length) {
-        self.titles = @[@[kTitle1,kTitle2,kTitle3,kTitle4,kTitle5]];
-    }else{
-        self.titles = @[@[kTitle1,kTitle2,kTitle3,kTitle5]];
-    }
     [self.tableView registerClass:[SSJFundingTransferEdite class] forCellReuseIdentifier:SSJTransferEditeCellIdentifier];
     // Do any additional setup after loading the view.
 }
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    if (self.item.editable) {
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(rightBarButtonClicked:)];
+    }else{
+        self.navigationItem.rightBarButtonItem = nil;
+    }
+    if (self.item.transferMemo.length) {
+        self.titles = @[@[kTitle1,kTitle2,kTitle3,kTitle4,kTitle5]];
+    }else{
+        self.titles = @[@[kTitle1,kTitle2,kTitle3,kTitle5]];
+    }
+    [self.tableView reloadData];
 }
 
 #pragma mark - UITableViewDelegate
@@ -97,8 +103,10 @@ static NSString * SSJTransferEditeCellIdentifier = @"SSJTransferEditeCellIdentif
         cell.cellDetail = [NSString stringWithFormat:@"%.2f",[self.item.transferMoney doubleValue]];
     }else if ([title isEqualToString:kTitle2]) {
         cell.cellDetail = self.item.transferOutName;
+        cell.cellImage = self.item.transferOutImage;
     }else if ([title isEqualToString:kTitle3]) {
         cell.cellDetail = self.item.transferInName;
+        cell.cellImage = self.item.transferInImage;
     }else if ([title isEqualToString:kTitle4]) {
         cell.cellDetail = self.item.transferMemo;
     }else if ([title isEqualToString:kTitle5]) {

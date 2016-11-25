@@ -19,7 +19,7 @@
 #import "SSJMemberManagerViewController.h"
 #import "SSJNewMemberViewController.h"
 #import "SSJFundingTypeSelectViewController.h"
-
+#import "UIViewController+MMDrawerController.h"
 #import "SSJCustomKeyboard.h"
 #import "SSJCalendarView.h"
 #import "SSJDateSelectedView.h"
@@ -362,7 +362,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     } else if (_accessoryView.memoView == textField) {
         NSString *text = textField.text ? : @"";
         text = [text stringByReplacingCharactersInRange:range withString:string];
-        if (string.length > 50) {
+        if (text.length > 50) {
             [CDAutoHideMessageHUD showMessage:@"最多只能输入50个字"];
             return NO;
         }
@@ -631,7 +631,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     }
     __weak typeof(self) weakSelf = self;
     [self.view ssj_showLoadingIndicator];
-    [SSJCategoryListHelper queryForCategoryListWithIncomeOrExpenture:!self.titleSegment.selectedSegmentIndex Success:^(NSMutableArray *result) {
+    [SSJCategoryListHelper queryForCategoryListWithIncomeOrExpenture:!self.titleSegment.selectedSegmentIndex booksId:self.item.booksId Success:^(NSMutableArray *result) {
         __block SSJRecordMakingBillTypeSelectionCellItem *selectedItem = nil;
         dispatch_apply([result count], dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(size_t index) {
             SSJRecordMakingBillTypeSelectionCellItem *item = [result ssj_safeObjectAtIndex:index];
@@ -847,6 +847,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     
     billTypeView.addAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView) {
         SSJADDNewTypeViewController *addNewTypeVc = [[SSJADDNewTypeViewController alloc]init];
+        addNewTypeVc.booksId = self.item.booksId;
         addNewTypeVc.incomeOrExpence = !wself.titleSegment.selectedSegmentIndex;
         addNewTypeVc.addNewCategoryAction = ^(NSString *categoryId, BOOL incomeOrExpence){
             wself.item.billId = categoryId;
@@ -941,13 +942,14 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 
 - (void)deleteItem:(SSJRecordMakingBillTypeSelectionCellItem *)item ofItems:(NSArray *)items {
     int type = !self.titleSegment.selectedSegmentIndex;
-    int order = [SSJCategoryListHelper queryForBillTypeMaxOrderWithState:0 type:type] + 1;
+    int order = [SSJCategoryListHelper queryForBillTypeMaxOrderWithState:0 type:type booksId:self.item.booksId] + 1;
     
     [SSJCategoryListHelper updateCategoryWithID:item.ID
                                            name:item.title
                                           color:item.colorValue
                                           image:item.imageName
                                           order:order state:0
+                                        booksId:self.item.booksId
                                         Success:NULL
                                         failure:^(NSError *error) {
                                             [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了"

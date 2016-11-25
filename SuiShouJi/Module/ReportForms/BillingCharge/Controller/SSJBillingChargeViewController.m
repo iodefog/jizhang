@@ -11,6 +11,8 @@
 #import "SSJBillingChargeHeaderView.h"
 #import "SSJBillingChargeCell.h"
 #import "SSJBillingChargeHelper.h"
+#import "UIViewController+MMDrawerController.h"
+#import "SSJUserTableManager.h"
 
 static NSString *const kBillingChargeCellID = @"kBillingChargeCellID";
 static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID";
@@ -44,7 +46,6 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:self.color size:CGSizeZero] forBarMetrics:UIBarMetricsDefault];
     [self.navigationController.navigationBar setTitleTextAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:21],
@@ -105,6 +106,14 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
     NSArray *datas = sectionInfo[SSJBillingChargeRecordKey];
     SSJBillingChargeCellItem *selectedItem = [datas ssj_safeObjectAtIndex:indexPath.row];
     SSJCalenderDetailViewController *calenderDetailVC = [[SSJCalenderDetailViewController alloc] initWithTableViewStyle:UITableViewStyleGrouped];
+    if (!self.booksId.length) {
+        self.booksId = [SSJUserTableManager queryUserItemForID:SSJUSERID()].currentBooksId;
+    }
+    if (self.period) {
+        calenderDetailVC.period = self.period;
+    }
+    calenderDetailVC.booksId = self.booksId;
+    calenderDetailVC.Id = self.ID;
     calenderDetailVC.item = selectedItem;
     [self.navigationController pushViewController:calenderDetailVC animated:YES];
 }
@@ -118,7 +127,7 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
 - (void)reloadData {
     if (_isMemberCharge) {
         [self.view ssj_showLoadingIndicator];
-        [SSJBillingChargeHelper queryMemberChargeWithMemberID:_ID inPeriod:_period isPayment:_isPayment success:^(NSArray<NSDictionary *> *data) {
+        [SSJBillingChargeHelper queryMemberChargeWithMemberID:_ID booksId:_booksId inPeriod:_period isPayment:_isPayment success:^(NSArray<NSDictionary *> *data) {
             [self.view ssj_hideLoadingIndicator];
             self.datas = data;
             [self.tableView reloadData];
@@ -130,7 +139,7 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
         
     } else {
         [self.view ssj_showLoadingIndicator];
-        [SSJBillingChargeHelper queryDataWithBillTypeID:_ID inPeriod:_period success:^(NSArray<NSDictionary *> *data) {
+        [SSJBillingChargeHelper queryDataWithBillTypeID:_ID booksId:_booksId inPeriod:_period success:^(NSArray<NSDictionary *> *data) {
             [self.view ssj_hideLoadingIndicator];
             self.datas = data;
             [self.tableView reloadData];

@@ -99,6 +99,9 @@ BOOL kHomeNeedLoginPop;
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     [self.mm_drawerController setGestureCompletionBlock:^(MMDrawerController *drawerController, UIGestureRecognizer *gesture) {
         __strong typeof(weakSelf) sself = weakSelf;
+        if (drawerController.openSide == MMDrawerSideNone) {
+            [weakSelf getDateFromDatebase];
+        }
         if (!sself->_dateViewHasDismiss) {
             [weakSelf.floatingDateView dismiss];
             [weakSelf.mutiFunctionButton dismiss];
@@ -107,7 +110,6 @@ BOOL kHomeNeedLoginPop;
     }];
 //    _hasLoad = YES;
     [self popIfNeeded];
-    self.tableView.contentInset = UIEdgeInsetsMake(46, 0, 0, 0);
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
     self.extendedLayoutIncludesOpaqueBars = YES;
     [self getCurrentDate];
@@ -156,6 +158,9 @@ BOOL kHomeNeedLoginPop;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.view.backgroundColor = [UIColor whiteColor];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadAfterBooksTypeChange) name:SSJBooksTypeDidChangeNotification object:nil];
+    [self.mm_drawerController setMaximumLeftDrawerWidth:SSJSCREENWITH * 0.8];
+    [self.mm_drawerController setOpenDrawerGestureModeMask:MMOpenDrawerGestureModeAll];
+    [self.mm_drawerController setCloseDrawerGestureModeMask:MMCloseDrawerGestureModeAll];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -166,11 +171,9 @@ BOOL kHomeNeedLoginPop;
     self.selectIndex = nil;
     [self getCurrentDate];
     [self.tableView reloadData];
-    if (!_dateViewHasDismiss) {
-        [self.floatingDateView dismiss];
-        [self.mutiFunctionButton dismiss];
-        _dateViewHasDismiss = YES;
-    }
+    [self.floatingDateView removeFromSuperview];
+    [self.mutiFunctionButton removeFromSuperview];
+    _dateViewHasDismiss = YES;
 }
 
 -(void)viewDidLayoutSubviews{
@@ -178,7 +181,11 @@ BOOL kHomeNeedLoginPop;
     self.homeBar.leftTop = CGPointMake(0, 0);
     self.bookKeepingHeader.size = CGSizeMake(self.view.width, 136);
     self.bookKeepingHeader.top = self.homeBar.bottom;
-    self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.bookKeepingHeader.bottom - 49);
+    if (!SSJ_CURRENT_THEME.tabBarBackgroundImage.length) {
+        self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.bookKeepingHeader.bottom - SSJ_TABBAR_HEIGHT);
+    }else{
+        self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.bookKeepingHeader.bottom);
+    }
     self.tableView.top = self.bookKeepingHeader.bottom;
     self.clearView.frame = self.view.frame;
     self.homeButton.size = CGSizeMake(106, 106);
@@ -260,33 +267,7 @@ BOOL kHomeNeedLoginPop;
             [currentCell animatedShowCellWithDistance:self.view.height + indexPath.row * 130 delay:0.2 * (indexPath.row + 1) completion:^{
                 weakSelf.hasLoad = YES;
             }];
-//            currentCell.incomeLabel.alpha = 0;
-//            currentCell.expenditureLabel.alpha = 0;
-//            currentCell.incomeMemoLabel.alpha = 0;
-//            currentCell.expentureMemoLabel.alpha = 0;
-//            currentCell.IncomeImage.alpha = 0;
-//            currentCell.expentureImage.alpha = 0;
-//            self.bookKeepingHeader.expenditureTitleLabel.alpha = 0;
-//            self.bookKeepingHeader.incomeTitleLabel.alpha = 0;
-//            currentCell.categoryImageButton.transform = CGAffineTransformMakeTranslation(0, self.view.height + indexPath.row * 130);
-//            [UIView animateWithDuration:0.7 delay:0.2 * (indexPath.row + 1) options:UIViewAnimationOptionTransitionNone animations:^{
-//                currentCell.categoryImageButton.transform = CGAffineTransformIdentity;
-//            } completion:^(BOOL finished) {
-//                [currentCell shake];
-//                [UIView animateWithDuration:0.4 animations:^{
-//                currentCell.isAnimating = YES;
-//                currentCell.incomeLabel.alpha = 1;
-//                currentCell.expenditureLabel.alpha = 1;
-//                currentCell.incomeMemoLabel.alpha = 1;
-//                currentCell.expentureMemoLabel.alpha = 1;
-//                currentCell.IncomeImage.alpha = 1;
-//                currentCell.expentureImage.alpha = 1;
-//                weakSelf.bookKeepingHeader.expenditureTitleLabel.alpha = 1;
-//                weakSelf.bookKeepingHeader.incomeTitleLabel.alpha = 1;
-//                } completion:^(BOOL finished) {
-//                    weakSelf.hasLoad = YES;
-//                }];
-//            }];
+
         }
     }
 }
@@ -307,23 +288,6 @@ BOOL kHomeNeedLoginPop;
         };
         UINavigationController *recordNav = [[UINavigationController alloc]initWithRootViewController:recordmakingVC];
         [weakSelf presentViewController:recordNav animated:YES completion:NULL];
-//        _isRefreshing = YES;
-//        [self.homeButton startLoading];
-//        scrollView.contentInset = UIEdgeInsetsMake(59, 0, 0, 0);
-//        self.statusLabel.hidden = NO;
-//        self.statusLabel.text = @"数据同步中";
-//        [self.statusLabel sizeToFit];
-//        [self.view setNeedsLayout];
-//        __weak typeof(self) weakSelf = self;
-//        [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:^(SSJDataSynchronizeType type){
-//            if (type == SSJDataSynchronizeTypeData) {
-//                weakSelf.refreshSuccessOrNot = YES;
-//                [weakSelf.homeButton stopLoading];
-//            }
-//        }failure:^(SSJDataSynchronizeType type, NSError *error) {
-//            weakSelf.refreshSuccessOrNot = NO;
-//            [weakSelf.homeButton stopLoading];
-//        }];
     }
 }
 
@@ -402,23 +366,6 @@ BOOL kHomeNeedLoginPop;
         [self reloadCurrentMonthData];
     }
 }
-
-//-(void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset{
-//    if (scrollView.contentOffset.y < 46 && targetContentOffset->y < 46) {
-//        [SSJBudgetDatabaseHelper queryForCurrentBudgetListWithSuccess:^(NSArray<SSJBudgetModel *> * _Nonnull result) {
-//            self.budgetButton.model = [result firstObject];
-//            for (int i = 0; i < result.count; i++) {
-//                if ([result objectAtIndex:i].remindMoney >= [result objectAtIndex:i].budgetMoney - [result objectAtIndex:i].payMoney && [result objectAtIndex:i].isRemind == 1 && [result objectAtIndex:i].isAlreadyReminded == 0) {
-//                    self.remindView.model = [result objectAtIndex:i];
-//                    [[UIApplication sharedApplication].keyWindow addSubview:self.remindView];
-//                    break;
-//                }
-//            }
-//        } failure:^(NSError * _Nullable error) {
-//            NSLog(@"%@",error.localizedDescription);
-//        }];
-//    }
-//}
 
 #pragma mark - SSJMultiFunctionButtonDelegate
 - (void)multiFunctionButtonView:(SSJMultiFunctionButtonView *)buttonView willSelectButtonAtIndex:(NSUInteger)index{
@@ -507,6 +454,11 @@ BOOL kHomeNeedLoginPop;
 -(SSJHomeTableView *)tableView{
     if (!_tableView) {
         _tableView = [[SSJHomeTableView alloc]init];
+        if (!SSJ_CURRENT_THEME.tabBarBackgroundImage.length) {
+            _tableView.contentInset = UIEdgeInsetsMake(46, 0, 0, 0);
+        }else{
+            _tableView.contentInset = UIEdgeInsetsMake(46, 0, SSJ_TABBAR_HEIGHT, 0);
+        }
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.showsVerticalScrollIndicator = NO;
@@ -560,28 +512,6 @@ BOOL kHomeNeedLoginPop;
             UINavigationController *recordNav = [[UINavigationController alloc]initWithRootViewController:recordmakingVC];
             [weakSelf presentViewController:recordNav animated:YES completion:NULL];
         };
-//        _homeButton.animationStopBlock = ^(){
-//            weakSelf.statusLabel.hidden = NO;
-//            if (weakSelf.refreshSuccessOrNot) {
-//                weakSelf.statusLabel.text = @"数据同步成功";
-//                weakSelf.homeButton.refreshSuccessOrNot = YES;
-//                [weakSelf.statusLabel sizeToFit];
-//                [weakSelf.view setNeedsLayout];
-//            }else{
-//                weakSelf.statusLabel.text = @"数据同步失败";
-//                weakSelf.homeButton.refreshSuccessOrNot = NO;
-//                [weakSelf.statusLabel sizeToFit];
-//                [weakSelf.view setNeedsLayout];
-//            }
-//            [weakSelf.tableView setContentOffset:CGPointMake(0, -36) animated:YES];
-//            dispatch_time_t time=dispatch_time(DISPATCH_TIME_NOW, 1 *NSEC_PER_SEC);
-//            
-//            dispatch_after(time, dispatch_get_main_queue(), ^{
-//                weakSelf.statusLabel.text = @"";
-//                weakSelf.statusLabel.hidden = YES;
-//                _isRefreshing = NO;
-//            });
-//        };
     }
     return _homeButton;
 }
@@ -592,25 +522,6 @@ BOOL kHomeNeedLoginPop;
     }
     return _noDataHeader;
 }
-
-//-(UILabel *)statusLabel{
-//    if (!_statusLabel) {
-//        _statusLabel = [[UILabel alloc]init];
-//        _statusLabel.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
-//        _statusLabel.font = [UIFont systemFontOfSize:14];
-//        _statusLabel.hidden = YES;
-//        _statusLabel.backgroundColor = [UIColor whiteColor];
-//        _statusLabel.text = @"";
-//    }
-//    return _statusLabel;
-//}
-
-//- (SSJBookKeepingHomeBooksButton *)leftButton{
-//    if (!_leftButton) {
-//        _leftButton = [[SSJBookKeepingHomeBooksButton alloc]initWithFrame:CGRectMake(0, 0, 30, 32)];
-//    }
-//    return _leftButton;
-//}
 
 - (SSJBookKeepingHomeDateView *)floatingDateView{
     if (!_floatingDateView) {
@@ -692,15 +603,6 @@ BOOL kHomeNeedLoginPop;
     __weak typeof(self) weakSelf = self;
     if ([[NSUserDefaults standardUserDefaults]objectForKey:SSJLastLoggedUserItemKey] && !SSJIsUserLogined() && kHomeNeedLoginPop) {
         kHomeNeedLoginPop = NO;
-//        NSAttributedString *massage = [[NSAttributedString alloc]initWithString:@"当前未登录，请登录后再去记账吧~" attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:18]}];
-//        SSJStartUpgradeAlertView *alert = [[SSJStartUpgradeAlertView alloc]initWithTitle:@"温馨提示" message:massage cancelButtonTitle:@"关闭" sureButtonTitle:@"立即登录" cancelButtonClickHandler:^(SSJStartUpgradeAlertView * _Nonnull alert) {
-//            [alert dismiss];
-//        } sureButtonClickHandler:^(SSJStartUpgradeAlertView * _Nonnull alert) {
-//            SSJLoginViewController *loginVc = [[SSJLoginViewController alloc]init];
-//            [weakSelf.navigationController pushViewController:loginVc animated:YES];
-//            [alert dismiss];
-//        }];
-//        [alert show];
         
         [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:@"当前未登录，请登录后再去记账吧~" action:[SSJAlertViewAction actionWithTitle:@"关闭" handler:NULL], [SSJAlertViewAction actionWithTitle:@"立即登录" handler:^(SSJAlertViewAction * _Nonnull action) {
             SSJLoginViewController *loginVc = [[SSJLoginViewController alloc]init];
@@ -712,7 +614,7 @@ BOOL kHomeNeedLoginPop;
         NSDate *lastPopTime = [[NSUserDefaults standardUserDefaults]objectForKey:SSJLastPopTimeKey];
         NSTimeInterval time=[currentDate timeIntervalSinceDate:lastPopTime];
         int days=((int)time)/(3600*24);
-        if (days > 1) {
+        if (days >= 1) {
             SSJBookKeepingHomePopView *popView = [SSJBookKeepingHomePopView BookKeepingHomePopView];
             popView.frame = [UIScreen mainScreen].bounds;
             popView.loginBtnClickBlock = ^(){
@@ -744,6 +646,13 @@ BOOL kHomeNeedLoginPop;
     self.mutiFunctionButton.mainButtonNormalColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.bookKeepingHomeMutiButtonSelectColor];
     self.mutiFunctionButton.secondaryButtonNormalColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.bookKeepingHomeMutiButtonSelectColor];
     self.mutiFunctionButton.mainButtonSelectedColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.bookKeepingHomeMutiButtonNormalColor];
+    if (!SSJ_CURRENT_THEME.tabBarBackgroundImage.length) {
+        self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.bookKeepingHeader.bottom - SSJ_TABBAR_HEIGHT);
+        self.tableView.contentInset = UIEdgeInsetsMake(46, 0, 0, 0);
+    }else{
+        self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.bookKeepingHeader.bottom);
+        self.tableView.contentInset = UIEdgeInsetsMake(46, 0, SSJ_TABBAR_HEIGHT, 0);
+    }
 }
 
 -(void)getDateFromDatebase{
@@ -776,8 +685,8 @@ BOOL kHomeNeedLoginPop;
         }];
         _startTime = CFAbsoluteTimeGetCurrent();
         [SSJBookKeepingHomeHelper queryForChargeListExceptNewCharge:self.newlyAddChargeArr Success:^(NSDictionary *result) {
-            _endTime = CFAbsoluteTimeGetCurrent();
-            NSLog(@"查询%ld条数据耗时%f秒",((NSArray *)[result objectForKey:SSJOrginalChargeArrKey]).count,_endTime - _startTime);
+//            _endTime = CFAbsoluteTimeGetCurrent();
+//            NSLog(@"查询%ld条数据耗时%f秒",((NSArray *)[result objectForKey:SSJOrginalChargeArrKey]).count,_endTime - _startTime);
 //            [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:[NSString stringWithFormat:@"查询%ld条数据耗时%f",((NSArray *)[result objectForKey:SSJOrginalChargeArrKey]).count,_endTime - _startTime] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL],NULL];
 
             if (!((NSArray *)[result objectForKey:SSJNewAddChargeArrKey]).count) {

@@ -14,11 +14,15 @@
     [aCoder encodeObject:_ID forKey:@"ID"];
     [aCoder encodeObject:_name forKey:@"name"];
     [aCoder encodeObject:_size forKey:@"size"];
+    [aCoder encodeObject:_etag forKey:@"etag"];
+    [aCoder encodeObject:_version forKey:@"version"];
     [aCoder encodeObject:_previewUrlStr forKey:@"previewUrlStr"];
     [aCoder encodeObject:_thumbUrlStr forKey:@"thumbUrlStr"];
     [aCoder encodeObject:_previewUrlArr forKey:@"previewUrlArr"];
     [aCoder encodeObject:_desc forKey:@"desc"];
     [aCoder encodeFloat:_backgroundAlpha forKey:@"backgroundAlpha"];
+    [aCoder encodeBool:_needBlurOrNot forKey:@"needBlurOrNot"];
+    [aCoder encodeObject:_mainBackGroundColor forKey:@"mainBackGroundColor"];
     [aCoder encodeObject:_mainColor forKey:@"mainColor"];
     [aCoder encodeObject:_secondaryColor forKey:@"secondaryColor"];
     [aCoder encodeObject:_marcatoColor forKey:@"marcatoColor"];
@@ -32,6 +36,7 @@
     [aCoder encodeObject:_tabBarTitleColor forKey:@"tabBarTitleColor"];
     [aCoder encodeObject:_tabBarSelectedTitleColor forKey:@"tabBarSelectedTitleColor"];
     [aCoder encodeObject:_tabBarBackgroundColor forKey:@"tabBarBackgroundColor"];
+    [aCoder encodeObject:_tabBarBackgroundImage forKey:@"tabBarBackgroundImage"];
     [aCoder encodeFloat:_cellSeparatorAlpha forKey:@"cellSeparatorAlpha"];
     [aCoder encodeObject:_cellSeparatorColor forKey:@"cellSeparatorColor"];
     [aCoder encodeObject:_cellIndicatorColor forKey:@"cellIndicatorColor"];
@@ -57,7 +62,8 @@
     [aCoder encodeObject:_bookKeepingHomeMutiButtonSelectColor forKey:@"bookKeepingHomeMutiButtonSelectColor"];
     [aCoder encodeObject:_bookKeepingHomeMutiButtonNormalColor forKey:@"bookKeepingHomeMutiButtonNormalColor"];
     [aCoder encodeObject:_searchResultHeaderBackgroundColor forKey:@"searchResultHeaderBackgroundColor"];
-    
+    [aCoder encodeObject:_summaryBooksHeaderColor forKey:@"summaryBooksHeaderColor"];
+    [aCoder encodeFloat:_summaryBooksHeaderAlpha forKey:@"summaryBooksHeaderAlpha"];
 }
 
 - (nullable instancetype)initWithCoder:(NSCoder *)aDecoder {
@@ -65,11 +71,15 @@
         _ID = [aDecoder decodeObjectForKey:@"ID"];
         _name = [aDecoder decodeObjectForKey:@"name"];
         _size = [aDecoder decodeObjectForKey:@"size"];
+        _etag = [aDecoder decodeObjectForKey:@"etag"];
+        _version = [aDecoder decodeObjectForKey:@"version"];
         _previewUrlStr = [aDecoder decodeObjectForKey:@"previewUrlStr"];
         _thumbUrlStr = [aDecoder decodeObjectForKey:@"thumbUrlStr"];
         _previewUrlArr = [aDecoder decodeObjectForKey:@"previewUrlArr"];
         _desc = [aDecoder decodeObjectForKey:@"desc"];
         _backgroundAlpha = [aDecoder decodeFloatForKey:@"backgroundAlpha"];
+        _needBlurOrNot = [aDecoder decodeBoolForKey:@"needBlurOrNot"];
+        _mainBackGroundColor = [aDecoder decodeObjectForKey:@"mainBackGroundColor"];
         _mainColor = [aDecoder decodeObjectForKey:@"mainColor"];
         _secondaryColor = [aDecoder decodeObjectForKey:@"secondaryColor"];
         _marcatoColor = [aDecoder decodeObjectForKey:@"marcatoColor"];
@@ -83,6 +93,7 @@
         _tabBarTitleColor = [aDecoder decodeObjectForKey:@"tabBarTitleColor"];
         _tabBarSelectedTitleColor = [aDecoder decodeObjectForKey:@"tabBarSelectedTitleColor"];
         _tabBarBackgroundColor = [aDecoder decodeObjectForKey:@"tabBarBackgroundColor"];
+        _tabBarBackgroundImage = [aDecoder decodeObjectForKey:@"tabBarBackgroundImage"];
         _cellSeparatorAlpha = [aDecoder decodeFloatForKey:@"cellSeparatorAlpha"];
         _cellSeparatorColor = [aDecoder decodeObjectForKey:@"cellSeparatorColor"];
         _cellIndicatorColor = [aDecoder decodeObjectForKey:@"cellIndicatorColor"];
@@ -108,7 +119,8 @@
         _bookKeepingHomeMutiButtonSelectColor = [aDecoder decodeObjectForKey:@"bookKeepingHomeMutiButtonSelectColor"];
         _bookKeepingHomeMutiButtonNormalColor = [aDecoder decodeObjectForKey:@"bookKeepingHomeMutiButtonNormalColor"];
         _searchResultHeaderBackgroundColor = [aDecoder decodeObjectForKey:@"recordMakingInputViewAlpha"];
-        
+        _summaryBooksHeaderColor = [aDecoder decodeObjectForKey:@"summaryBooksHeaderColor"];
+        _summaryBooksHeaderAlpha = [aDecoder decodeFloatForKey:@"summaryBooksHeaderAlpha"];
     }
     return self;
 }
@@ -122,6 +134,8 @@
                                                           @"previewUrlArr":_previewUrlArr,
                                                           @"desc":_desc,
                                                           @"backgroundAlpha":@(_backgroundAlpha),
+                                                          @"needBlurOrNot":@(_needBlurOrNot),
+                                                          @"mainBackGroundColor":_mainBackGroundColor,
                                                           @"mainColor":_mainColor,
                                                           @"secondaryColor":_secondaryColor,
                                                           @"marcatoColor":_marcatoColor,
@@ -136,6 +150,7 @@
                                                           @"tabBarSelectedTitleColor":_tabBarSelectedTitleColor,
                                                           @"tabBarBackgroundColor":_tabBarBackgroundColor,
                                                           @"tabBarShadowImageAlpha":@(_tabBarShadowImageAlpha),
+                                                          @"tabBarBackgroundImage":_tabBarBackgroundImage,  
                                                           @"cellSeparatorAlpha":@(_cellSeparatorAlpha),
                                                           @"cellSeparatorColor":_cellSeparatorColor,
                                                           @"cellIndicatorColor":_cellIndicatorColor,
@@ -160,7 +175,9 @@
                                                           @"recordMakingInputViewAlpha":@(_recordMakingInputViewAlpha),
                                                           @"bookKeepingHomeMutiButtonSelectColor":_bookKeepingHomeMutiButtonSelectColor,
                                                           @"bookKeepingHomeMutiButtonNormalColor":_bookKeepingHomeMutiButtonNormalColor,
-                                                          @"searchResultHeaderBackgroundColor":_searchResultHeaderBackgroundColor}];
+                                                          @"searchResultHeaderBackgroundColor":_searchResultHeaderBackgroundColor,
+                                                          @"summaryBooksHeaderColor":_summaryBooksHeaderColor,
+                                                          @"summaryBooksHeaderAlpha":@(_summaryBooksHeaderAlpha)}];
 }
 
 @end

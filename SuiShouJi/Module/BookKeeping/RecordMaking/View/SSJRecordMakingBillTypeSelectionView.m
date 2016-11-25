@@ -228,7 +228,7 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
         _collectionView.alwaysBounceVertical = YES;
         _collectionView.showsHorizontalScrollIndicator = NO;
         _collectionView.showsVerticalScrollIndicator = NO;
-        _collectionView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+        _collectionView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         [_collectionView registerClass:[SSJRecordMakingBillTypeSelectionCell class] forCellWithReuseIdentifier:kCellId];
         _collectionView.exchangeCellRegion = UIEdgeInsetsMake(11, (kCellWidth - 52) * 0.5, 25, (kCellWidth - 52) * 0.5);
     }

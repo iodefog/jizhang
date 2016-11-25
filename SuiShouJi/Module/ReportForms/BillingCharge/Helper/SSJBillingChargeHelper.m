@@ -19,21 +19,35 @@ NSString *const SSJBillingChargeRecordKey = @"SSJBillingChargeRecordKey";
 @implementation SSJBillingChargeHelper
 
 + (void)queryDataWithBillTypeID:(NSString *)ID
+                        booksId:(NSString *)booksId
                        inPeriod:(SSJDatePeriod *)period
                         success:(void (^)(NSArray <NSDictionary *>*data))success
                         failure:(void (^)(NSError *error))failure {
     
-    SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID()];
-    
-    if (!userItem.currentBooksId.length) {
-        userItem.currentBooksId = SSJUSERID();
+    if (!booksId) {
+        SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID()];
+        booksId = userItem.currentBooksId ?: SSJUSERID();
     }
     
     NSString *beginDate = [period.startDate formattedDateWithFormat:@"yyyy-MM-dd"];
     NSString *endDate = [period.endDate formattedDateWithFormat:@"yyyy-MM-dd"];
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        FMResultSet *resultSet = [db executeQuery:@"select a.ICHARGEID, a.IMONEY, a.CBILLDATE , a.CWRITEDATE , a.IFUNSID, a.IBILLID, a.cmemo, a.cimgurl, a.thumburl, a.iconfigid, b.CNAME, b.CCOIN, b.CCOLOR, b.ITYPE from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.IBILLID = ? and a.CBILLDATE >= ? and a.CBILLDATE <= ? and a.CBILLDATE <= datetime('now', 'localtime') and a.CUSERID = ? and a.OPERATORTYPE <> 2 and a.CBOOKSID = ? order by a.CBILLDATE desc", ID, beginDate, endDate, SSJUSERID(), userItem.currentBooksId];
+        
+        NSMutableString *sql = [@"select a.ICHARGEID, a.IMONEY, a.CBILLDATE, a.CWRITEDATE, a.IFUNSID, a.IBILLID, a.cmemo, a.cimgurl, a.thumburl, a.iconfigid, a.cbooksid, b.CNAME, b.CCOIN, b.CCOLOR, b.ITYPE from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.IBILLID = :billId and a.CBILLDATE >= :beginDate and a.CBILLDATE <= :endDate and a.CBILLDATE <= datetime('now', 'localtime') and a.CUSERID = :userId and a.OPERATORTYPE <> 2" mutableCopy];
+        
+        NSMutableDictionary *params = [@{@"billId":ID,
+                                         @"beginDate":beginDate,
+                                         @"endDate":endDate,
+                                         @"userId":SSJUSERID()} mutableCopy];
+        
+        if (![booksId isEqualToString:@"all"]) {
+            [sql appendString:@" and a.CBOOKSID = :booksId"];
+            [params setObject:booksId forKey:@"booksId"];
+        }
+        [sql appendString:@" order by a.CBILLDATE desc"];
+        
+        FMResultSet *resultSet = [db executeQuery:sql withParameterDictionary:params];
         
         if (!resultSet) {
             SSJPRINT(@">>>SSJ\n class:%@\n method:%@\n message:%@\n error:%@",NSStringFromClass([self class]), NSStringFromSelector(_cmd), [db lastErrorMessage], [db lastError]);
@@ -63,7 +77,7 @@ NSString *const SSJBillingChargeRecordKey = @"SSJBillingChargeRecordKey";
             item.chargeImage = [resultSet stringForColumn:@"cimgurl"];
             item.chargeThumbImage = [resultSet stringForColumn:@"thumburl"];
             item.configId = [resultSet stringForColumn:@"iconfigid"];
-            item.booksId = userItem.currentBooksId;
+            item.booksId = [resultSet stringForColumn:@"cbooksid"];;
             
             if ([tempDate isEqualToString:item.billDate]) {
                 NSMutableArray *items = subDic[SSJBillingChargeRecordKey];
@@ -104,23 +118,40 @@ NSString *const SSJBillingChargeRecordKey = @"SSJBillingChargeRecordKey";
 }
 
 + (void)queryMemberChargeWithMemberID:(NSString *)ID
+                              booksId:(NSString *)booksId
                              inPeriod:(SSJDatePeriod *)period
                             isPayment:(BOOL)isPayment
                               success:(void (^)(NSArray <NSDictionary *>*data))success
                               failure:(void (^)(NSError *error))failure {
     
-    SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID()];
-    
-    if (!userItem.currentBooksId.length) {
-        userItem.currentBooksId = SSJUSERID();
+    if (!booksId) {
+        SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID()];
+        booksId = userItem.currentBooksId ?: SSJUSERID();
     }
     
     NSString *beginDate = [period.startDate formattedDateWithFormat:@"yyyy-MM-dd"];
     NSString *endDate = [period.endDate formattedDateWithFormat:@"yyyy-MM-dd"];
     
+    NSString *userID = SSJUSERID();
+    
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         
-        FMResultSet *resultSet = [db executeQuery:@"select a.ICHARGEID, c.IMONEY, a.CBILLDATE , a.CWRITEDATE , a.IFUNSID, a.IBILLID, a.cmemo, a.cimgurl, a.thumburl, a.iconfigid, b.CNAME, b.CCOIN, b.CCOLOR, b.ITYPE from BK_USER_CHARGE as a, BK_BILL_TYPE as b, bk_member_charge as c where a.IBILLID = b.ID and a.ichargeid = c.ichargeid and b.istate <> 2 and b.itype = ? and c.cmemberid = ? and a.CBILLDATE >= ? and a.CBILLDATE <= ? and a.CBILLDATE <= datetime('now', 'localtime') and a.CUSERID = ? and a.OPERATORTYPE <> 2 and a.CBOOKSID = ? order by a.CBILLDATE desc", @(isPayment), ID, beginDate, endDate, SSJUSERID(), userItem.currentBooksId];
+        NSMutableString *sql = [@"select a.ICHARGEID, c.IMONEY, a.CBILLDATE , a.CWRITEDATE , a.IFUNSID, a.IBILLID, a.cmemo, a.cimgurl, a.thumburl, a.iconfigid, a.cbooksid, b.CNAME, b.CCOIN, b.CCOLOR, b.ITYPE from BK_USER_CHARGE as a, BK_BILL_TYPE as b, bk_member_charge as c where a.IBILLID = b.ID and a.ichargeid = c.ichargeid and b.istate <> 2 and b.itype = :type and c.cmemberid = :memberId and a.CBILLDATE >= :beginDate and a.CBILLDATE <= :endDate and a.CBILLDATE <= datetime('now', 'localtime') and a.CUSERID = :userId and a.OPERATORTYPE <> 2" mutableCopy];
+        
+        NSMutableDictionary *params = [@{@"type":@(isPayment),
+                                         @"memberId":ID,
+                                         @"beginDate":beginDate,
+                                         @"endDate":endDate,
+                                         @"userId":userID} mutableCopy];
+        
+        if (![booksId isEqualToString:@"all"]) {
+            [sql appendString:@" and a.CBOOKSID = :booksId"];
+            [params setObject:booksId forKey:@"booksId"];
+        }
+        
+        [sql appendString:@" order by a.CBILLDATE desc"];
+        
+        FMResultSet *resultSet = [db executeQuery:sql withParameterDictionary:params];
         
         if (!resultSet) {
             SSJPRINT(@">>>SSJ\n class:%@\n method:%@\n message:%@\n error:%@",NSStringFromClass([self class]), NSStringFromSelector(_cmd), [db lastErrorMessage], [db lastError]);
@@ -150,7 +181,7 @@ NSString *const SSJBillingChargeRecordKey = @"SSJBillingChargeRecordKey";
             item.chargeImage = [resultSet stringForColumn:@"cimgurl"];
             item.chargeThumbImage = [resultSet stringForColumn:@"thumburl"];
             item.configId = [resultSet stringForColumn:@"iconfigid"];
-            item.booksId = userItem.currentBooksId;
+            item.booksId = [resultSet stringForColumn:@"cbooksid"];
             
             if ([tempDate isEqualToString:item.billDate]) {
                 NSMutableArray *items = subDic[SSJBillingChargeRecordKey];

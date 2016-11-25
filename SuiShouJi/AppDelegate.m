@@ -42,7 +42,12 @@
 #import "SSJUmengManager.h"
 #import "SSJLocalNotificationHelper.h"
 #import "SSJLocalNotificationStore.h"
+#import "SSJThemeUpdate.h"
 #import "SSJDomainManager.h"
+#import "SSJLoanHelper.h"
+#import "SSJIdfaUploadService.h"
+#import <AdSupport/ASIdentifierManager.h>
+#import "SimulateIDFA.h"
 
 //  进入后台超过的时限后进入锁屏
 static const NSTimeInterval kLockScreenDelay = 60;
@@ -66,6 +71,8 @@ NSDate *SCYEnterBackgroundTime() {
 @property (nonatomic, strong) SSJStartViewManager *startViewManager;
 
 @property(nonatomic, strong) SSJGradientMaskView *maskView;
+
+@property(nonatomic, strong) SSJIdfaUploadService *uploadService;
 @end
 
 @implementation AppDelegate
@@ -80,6 +87,8 @@ NSDate *SCYEnterBackgroundTime() {
     
     [SSJUmengManager umengTrack];
     [SSJUmengManager umengShare];
+    [MQManager setScheduledAgentWithAgentId:@"" agentGroupId:SSJMQDefualtGroupId scheduleRule:MQScheduleRulesRedirectGroup];
+//    [self uploadIdfa];
     
     [self initializeDatabaseWithFinishHandler:^{
         //  启动时强制同步一次
@@ -121,8 +130,11 @@ NSDate *SCYEnterBackgroundTime() {
     //如果第一次打开记录当前时间
     if (SSJIsFirstLaunchForCurrentVersion()) {
         [[NSUserDefaults standardUserDefaults]setObject:[NSDate date]forKey:SSJLastPopTimeKey];
-        [[NSUserDefaults standardUserDefaults]setBool:NO forKey:SSJHaveLoginOrRegistKey];
         [SSJJspatchAnalyze removePatch];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [SSJThemeUpdate updateLocalThemesIfneeded];
+        });
+        
     }
     
     //每次启动打一次补丁
@@ -153,6 +165,12 @@ NSDate *SCYEnterBackgroundTime() {
     }];
     
     [SSJDomainManager requestDomain];
+    
+    // 美恰sdk设置
+    [MQManager initWithAppkey:SSJMQAppKey completion:^(NSString *clientId, NSError *error) {
+        
+    }];
+    
 
     return YES;
 }
@@ -161,39 +179,55 @@ NSDate *SCYEnterBackgroundTime() {
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     //每次从后台进入打一次补丁
     [SSJJspatchAnalyze SSJJsPatchAnalyzePatch];
+    
+    // 当程序从后台进入前台，检测是否自动补充定期记账和预算，因为程序在后台不能收到本地通知
+    [SSJRegularManager supplementBookkeepingIfNeededForUserId:SSJUSERID() withSuccess:NULL failure:NULL];
+    [SSJRegularManager supplementBudgetIfNeededForUserId:SSJUSERID() withSuccess:NULL failure:NULL];
 }
 
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
     
     [self pushToControllerWithNotification:notification];
     
-        //  收到本地通知后，检测通知是否自动补充定期记账和预算的通知，是的话就进行补充，反之忽略
+    //  收到本地通知后，检测通知是否自动补充定期记账和预算的通知，是的话就进行补充，反之忽略
     [SSJRegularManager performRegularTaskWithLocalNotification:notification];
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
+    //App 进入后台时，关闭美洽服务
+    [MQManager closeMeiqiaService];
     SCYSaveEnterBackgroundTime();
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
-    // 当程序从后台进入前台，检测是否自动补充定期记账和预算，因为程序在后台不能收到本地通知
-    [SSJRegularManager supplementBookkeepingIfNeededForUserId:SSJUSERID() withSuccess:NULL failure:NULL];
-    [SSJRegularManager supplementBudgetIfNeededForUserId:SSJUSERID() withSuccess:NULL failure:NULL];
-    
+
     NSDate *backgroundTime = SCYEnterBackgroundTime();
     NSTimeInterval interval = [backgroundTime timeIntervalSinceDate:[NSDate date]];
     interval = ABS(interval);
     if (interval >= kLockScreenDelay) {
         [SSJMotionPasswordViewController verifyMotionPasswordIfNeeded:NULL animated:NO];
     }
+    // App 进入前台时，开启美洽服务
+    [MQManager openMeiqiaService];
+}
+
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken{
+    [MQManager registerDeviceToken:deviceToken];
 }
 
 #pragma mark - Getter
--(SSJGradientMaskView *)maskView{
+- (SSJGradientMaskView *)maskView{
     if (!_maskView) {
         _maskView = [[SSJGradientMaskView alloc]initWithFrame:CGRectMake(0, 0, SSJSCREENWITH, SSJSCREENHEIGHT)];
     }
     return _maskView;
+}
+
+- (SSJIdfaUploadService *)uploadService{
+    if (!_uploadService) {
+        _uploadService = [[SSJIdfaUploadService alloc]initWithDelegate:NULL];
+    }
+    return _uploadService;
 }
 
 #pragma mark - Private
@@ -296,6 +330,21 @@ NSDate *SCYEnterBackgroundTime() {
     [UIApplication sharedApplication].keyWindow.rootViewController = drawerController;
 }
 
+// 上传idfa
+- (void)uploadIdfa{
+    NSString *idfa;
+    if ([ASIdentifierManager sharedManager].advertisingTrackingEnabled) {
+        idfa = [NSString stringWithFormat:@"%@",[ASIdentifierManager sharedManager].advertisingIdentifier];
+    } else{
+        idfa = [SimulateIDFA createSimulateIDFA];
+    }
+    NSString *lastUploadIdfa = [[NSUserDefaults standardUserDefaults] objectForKey:SSJLastSavedIdfaKey];
+    if (![lastUploadIdfa isEqualToString:idfa] || !lastUploadIdfa) {
+        [self.uploadService uploadIdfaWithIdfaStr:idfa Success:^(NSString *idfaStr) {
+            [[NSUserDefaults standardUserDefaults] setObject:idfaStr forKey:SSJLastSavedIdfaKey];
+        }];
+    }
+}
     
 #pragma mark - qq快登
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation{
@@ -337,6 +386,7 @@ NSDate *SCYEnterBackgroundTime() {
                     remindItem.fundId = [self getLoanIdForRemindId:remindItem.remindId];
                 }
                 loanVc.loanID = remindItem.fundId;
+                loanVc.fundColor = [SSJLoanHelper queryForFundColorWithLoanId:remindItem.fundId];
                 [currentVc.navigationController pushViewController:loanVc animated:YES];
             }
         }

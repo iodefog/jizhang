@@ -18,13 +18,17 @@
 + (NSArray *)queryRecordsNeedToSyncWithUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
     int64_t version = [SSJSyncTable lastSuccessSyncVersionForUserId:userId inDatabase:db];
     if (version == SSJ_INVALID_SYNC_VERSION) {
-        *error = [db lastError];
+        if (error) {
+            *error = [db lastError];
+        }
         return nil;
     }
     
     FMResultSet *result = [db executeQuery:@"select a.ichargeid, a.cmemberid, a.imoney, a.iversion, a.cwritedate, a.operatortype from bk_member_charge as a, bk_user_charge as b where a.ichargeid = b.ichargeid and b.cuserid = ? and a.iversion > ?", userId, @(version)];
     if (!result) {
-        *error = [db lastError];
+        if (error) {
+            *error = [db lastError];
+        }
         return nil;
     }
     
@@ -91,7 +95,9 @@
     
     int64_t version = [SSJSyncTable lastSuccessSyncVersionForUserId:userId inDatabase:db];
     if (version == SSJ_INVALID_SYNC_VERSION) {
-        *error = [db lastError];
+        if (error) {
+            *error = [db lastError];
+        }
         SSJPRINT(@">>>SSJ warning: invalid sync version");
         return NO;
     }

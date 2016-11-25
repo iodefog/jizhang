@@ -19,24 +19,36 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
 @implementation SSJReportFormsUtil
 
 + (void)queryForPeriodListWithIncomeOrPayType:(SSJBillType)type
+                                      booksId:(NSString *)booksId
                                       success:(void (^)(NSArray<SSJDatePeriod *> *))success
                                       failure:(void (^)(NSError *))failure {
     
-    SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID()];
-    if (!userItem.currentBooksId.length) {
-        userItem.currentBooksId = SSJUSERID();
+    if (!booksId) {
+        SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID()];
+        booksId = userItem.currentBooksId ?: SSJUSERID();
     }
+    
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         FMResultSet *result = nil;
         switch (type) {
             case SSJBillTypeIncome:
             case SSJBillTypePay: {
                 NSString *incomeOrPayType = type == SSJBillTypeIncome ? @"0" : @"1";
-                result = [db executeQuery:@"select distinct strftime('%Y-%m', a.cbilldate) from bk_user_charge as a, bk_bill_type as b where a.cuserid = ? and a.ibillid = b.id and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and a.cbooksid = ? and b.itype = ? and b.istate <> 2 order by a.cbilldate", SSJUSERID(), userItem.currentBooksId, incomeOrPayType];
+                if ([booksId isEqualToString:@"all"]) {
+                    result = [db executeQuery:@"select distinct strftime('%Y-%m', a.cbilldate) from bk_user_charge as a, bk_bill_type as b where a.cuserid = ? and a.ibillid = b.id and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and b.itype = ? and b.istate <> 2 order by a.cbilldate", SSJUSERID(), incomeOrPayType];
+                } else {
+                    result = [db executeQuery:@"select distinct strftime('%Y-%m', a.cbilldate) from bk_user_charge as a, bk_bill_type as b where a.cuserid = ? and a.ibillid = b.id and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and a.cbooksid = ? and b.itype = ? and b.istate <> 2 order by a.cbilldate", SSJUSERID(), booksId, incomeOrPayType];
+                }
+                
             }   break;
                 
             case SSJBillTypeSurplus: {
-                result = [db executeQuery:@"select distinct strftime('%Y-%m', a.cbilldate) from bk_user_charge as a, bk_bill_type as b where a.cuserid = ? and a.ibillid = b.id and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and a.cbooksid = ? and b.istate <> 2 order by a.cbilldate", SSJUSERID(), userItem.currentBooksId];
+                if ([booksId isEqualToString:@"all"]) {
+                    result = [db executeQuery:@"select distinct strftime('%Y-%m', a.cbilldate) from bk_user_charge as a, bk_bill_type as b where a.cuserid = ? and a.ibillid = b.id and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and b.istate <> 2 order by a.cbilldate", SSJUSERID()];
+                } else {
+                    result = [db executeQuery:@"select distinct strftime('%Y-%m', a.cbilldate) from bk_user_charge as a, bk_bill_type as b where a.cuserid = ? and a.ibillid = b.id and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and a.cbooksid = ? and b.istate <> 2 order by a.cbilldate", SSJUSERID(), booksId];
+                }
+                
             }   break;
                 
             case SSJBillTypeUnknown:
@@ -76,11 +88,13 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
         [result close];
         
         if (list.count) {
-            SSJDatePeriod *period = [SSJDatePeriod datePeriodWithPeriodType:SSJDatePeriodTypeYear date:lastDate];
-            [list addObject:period];
-            
             SSJDatePeriod *firstPeriod = [list firstObject];
             SSJDatePeriod *lastPeriod = [list lastObject];
+            
+            // 增加最后一个年周期
+            [list addObject:[SSJDatePeriod datePeriodWithPeriodType:SSJDatePeriodTypeYear date:lastDate]];
+            
+            // 增加合计（即最开始的日期到当前日期）
             [list addObject:[SSJDatePeriod datePeriodWithStartDate:firstPeriod.startDate endDate:lastPeriod.endDate]];
         }
         
@@ -93,6 +107,7 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
 }
 
 + (void)queryForIncomeOrPayType:(SSJBillType)type
+                        booksId:(NSString *)booksId
                       startDate:(NSDate *)startDate
                         endDate:(NSDate *)endDate
                         success:(void(^)(NSArray<SSJReportFormsItem *> *result))success
@@ -101,11 +116,11 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
     switch (type) {
         case SSJBillTypeIncome:
         case SSJBillTypePay:
-            [self queryForIncomeOrPayChargeWithType:type startDate:startDate endDate:endDate success:success failure:failure];
+            [self queryForIncomeOrPayChargeWithType:type booksId:booksId startDate:startDate endDate:endDate success:success failure:failure];
             break;
             
         case SSJBillTypeSurplus:
-            [self queryForSurplusWithStartDate:startDate endDate:endDate success:success failure:failure];
+            [self queryForSurplusWithBooksId:booksId startDate:startDate endDate:endDate success:success failure:failure];
             break;
             
         case SSJBillTypeUnknown:
@@ -116,6 +131,7 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
 
 //  查询收支数据
 + (void)queryForIncomeOrPayChargeWithType:(SSJBillType)type
+                                  booksId:(NSString *)booksId
                                 startDate:(NSDate *)startDate
                                   endDate:(NSDate *)endDate
                                   success:(void (^)(NSArray <SSJReportFormsItem *> *result))success
@@ -145,15 +161,26 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
     NSString *beginDateStr = [startDate formattedDateWithFormat:@"yyyy-MM-dd"];
     NSString *endDateStr = [endDate formattedDateWithFormat:@"yyyy-MM-dd"];
     
-    SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID()];
-    
-    if (!userItem.currentBooksId.length) {
-        userItem.currentBooksId = SSJUSERID();
+    if (!booksId) {
+        SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID()];
+        booksId = userItem.currentBooksId ?: SSJUSERID();
     }
 
     //  查询不同收支类型的总额
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        FMResultSet *amountResultSet = [db executeQuery:@"select sum(a.IMONEY) from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.CBILLDATE >= ? and a.cbilldate <= ? and a.cbilldate <= datetime('now', 'localtime') and a.CUSERID = ? and a.OPERATORTYPE <> 2 and a.cbooksid = ? and b.istate <> 2 and b.ITYPE = ?", beginDateStr , endDateStr, SSJUSERID(), userItem.currentBooksId, incomeOrPayType];
+        NSMutableString *sql_1 = [@"select sum(a.IMONEY) from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.cbilldate >= :beginDateStr and a.cbilldate <= :endDateStr and a.cbilldate <= datetime('now', 'localtime') and a.cuserid = :userId and a.operatortype <> 2 and b.istate <> 2 and b.itype = :type" mutableCopy];
+        
+        NSMutableDictionary *params_1 = [@{@"beginDateStr":beginDateStr,
+                                         @"endDateStr":endDateStr,
+                                         @"userId":SSJUSERID(),
+                                         @"type":incomeOrPayType} mutableCopy];
+        
+        if (![booksId isEqualToString:@"all"]) {
+            [sql_1 appendString:@" and a.cbooksid = :booksId"];
+            [params_1 setObject:booksId forKey:@"booksId"];
+        }
+        
+        FMResultSet *amountResultSet = [db executeQuery:sql_1 withParameterDictionary:params_1];
         
         if (!amountResultSet) {
             SSJPRINT(@">>>SSJ\n class:%@\n method:%@\n message:%@\n error:%@",NSStringFromClass([self class]), NSStringFromSelector(_cmd), [db lastErrorMessage], [db lastError]);
@@ -179,7 +206,21 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
         }
         
         //  查询不同收支类型相应的金额、名称、图标、颜色
-        FMResultSet *resultSet = [db executeQuery:@"select sum(a.imoney), b.id, b.cname, b.ccoin, b.ccolor from bk_user_charge as a, bk_bill_type as b where a.cuserid = ? and a.ibillid = b.id and a.cbilldate >= ? and a.cbilldate <= ? and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and a.cbooksid = ? and b.itype = ? and b.istate <> 2 group by b.id", SSJUSERID(), beginDateStr, endDateStr, userItem.currentBooksId, incomeOrPayType];
+        NSMutableString *sql_2 = [@"select sum(a.imoney), b.id, b.cname, b.ccoin, b.ccolor from bk_user_charge as a, bk_bill_type as b where a.cuserid = :userId and a.ibillid = b.id and a.cbilldate >= :beginDateStr and a.cbilldate <= :endDateStr and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and b.itype = :type and b.istate <> 2" mutableCopy];
+        
+        NSMutableDictionary *params_2 = [@{@"userId":SSJUSERID(),
+                                           @"beginDateStr":beginDateStr,
+                                           @"endDateStr":endDateStr,
+                                           @"type":incomeOrPayType} mutableCopy];
+        
+        if (![booksId isEqualToString:@"all"]) {
+            [sql_2 appendString:@" and a.cbooksid = :booksId"];
+            [params_2 setObject:booksId forKey:@"booksId"];
+        }
+        
+        [sql_2 appendString:@" group by b.id"];
+        
+        FMResultSet *resultSet = [db executeQuery:sql_2 withParameterDictionary:params_2];
         
         if (!resultSet) {
             SSJPRINT(@">>>SSJ\n class:%@\n method:%@\n message:%@\n error:%@",NSStringFromClass([self class]), NSStringFromSelector(_cmd), [db lastErrorMessage], [db lastError]);
@@ -210,15 +251,15 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
 }
 
 //  查询结余数据
-+ (void)queryForSurplusWithStartDate:(NSDate *)startDate
-                             endDate:(NSDate *)endDate
-                             success:(void (^)(NSArray <SSJReportFormsItem *> *result))success
-                             failure:(void (^)(NSError *error))failure {
++ (void)queryForSurplusWithBooksId:(NSString *)booksId
+                         startDate:(NSDate *)startDate
+                           endDate:(NSDate *)endDate
+                           success:(void (^)(NSArray <SSJReportFormsItem *> *result))success
+                           failure:(void (^)(NSError *error))failure {
     
-    SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID()];
-    
-    if (!userItem.currentBooksId.length) {
-        userItem.currentBooksId = SSJUSERID();
+    if (!booksId) {
+        SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID()];
+        booksId = userItem.currentBooksId ?: SSJUSERID();
     }
 
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
@@ -226,7 +267,19 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
         NSString *beginDateStr = [startDate formattedDateWithFormat:@"yyyy-MM-dd"];
         NSString *endDateStr = [endDate formattedDateWithFormat:@"yyyy-MM-dd"];
         
-        FMResultSet *resultSet = [db executeQuery:@"select sum(a.imoney), b.itype from bk_user_charge as a, bk_bill_type as b where a.cuserid = ? and a.ibillid = b.id and a.cbilldate >= ? and a.cbilldate <= ? and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and a.cbooksid = ? and b.istate <> 2 group by b.itype order by b.itype desc", SSJUSERID(), beginDateStr, endDateStr, userItem.currentBooksId];
+        NSMutableString *sql = [@"select sum(a.imoney), b.itype from bk_user_charge as a, bk_bill_type as b where a.cuserid = :userId and a.ibillid = b.id and a.cbilldate >= :beginDateStr and a.cbilldate <= :endDateStr and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and b.istate <> 2" mutableCopy];
+        
+        NSMutableDictionary *params = [@{@"userId":SSJUSERID(),
+                                         @"beginDateStr":beginDateStr,
+                                         @"endDateStr":endDateStr} mutableCopy];
+        
+        if (![booksId isEqualToString:@"all"]) {
+            [sql appendString:@" and a.cbooksid = :booksId"];
+            [params setObject:booksId forKey:@"booksId"];
+        }
+        [sql appendString:@" group by b.itype order by b.itype desc"];
+        
+        FMResultSet *resultSet = [db executeQuery:sql withParameterDictionary:params];
         
         if (!resultSet) {
             SSJPRINT(@">>>SSJ\n class:%@\n method:%@\n message:%@\n error:%@",NSStringFromClass([self class]), NSStringFromSelector(_cmd), [db lastErrorMessage], [db lastError]);
@@ -268,23 +321,27 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
 + (void)queryForBillStatisticsWithType:(int)type
                              startDate:(NSDate *)startDate
                                endDate:(NSDate *)endDate
+                               booksId:(NSString *)booksId
                                success:(void(^)(NSDictionary *result))success
                                failure:(void (^)(NSError *error))failure {
     
-    if (type != 0 && type != 1 && type != 2) {
+    if (type != 0 && type != 1) {
         if (failure) {
-            failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"type参数错误，只能为0、1、2"}]);
+            failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"type参数错误，只能为0、1"}]);
         }
         return;
     }
     
-    SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID()];
-    
-    if (!userItem.currentBooksId.length) {
-        userItem.currentBooksId = SSJUSERID();
+    if (!booksId) {
+        SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID()];
+        booksId = userItem.currentBooksId ?: SSJUSERID();
     }
 
-    NSMutableString *sqlStr = [NSMutableString stringWithFormat:@"select a.imoney, a.cbilldate, b.itype from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = '%@' and a.operatortype <> 2 and a.cbooksid = '%@' and b.istate <> 2 and a.cbilldate <= datetime('now', 'localtime')", SSJUSERID(), userItem.currentBooksId];
+    NSMutableString *sqlStr = [NSMutableString stringWithFormat:@"select a.imoney, a.cbilldate, b.itype from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = '%@' and a.operatortype <> 2 and b.istate <> 2 and a.cbilldate <= datetime('now', 'localtime')", SSJUSERID()];
+    
+    if (![booksId isEqualToString:@"all"]) {
+        [sqlStr appendFormat:@" and a.cbooksid = '%@'", booksId];
+    }
     
     if (startDate) {
         NSString *startDateStr = [startDate formattedDateWithFormat:@"yyyy-MM-dd"];
@@ -296,14 +353,14 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
         [sqlStr appendFormat:@" and a.cbilldate <= '%@'", endDateStr];
     }
     
-    [sqlStr appendString:@"order by a.cbilldate"];
+    [sqlStr appendString:@" order by a.cbilldate"];
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         FMResultSet *resultSet = [db executeQuery:sqlStr];
         if (!resultSet) {
             SSJPRINT(@">>>SSJ\n class:%@\n method:%@\n message:%@\n error:%@",NSStringFromClass([self class]), NSStringFromSelector(_cmd), [db lastErrorMessage], [db lastError]);
             if (failure) {
-                SSJDispatch_main_async_safe(^{
+                SSJDispatchMainAsync(^{
                     failure([db lastError]);
                 });
             }
@@ -346,17 +403,17 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
             
             if (!period) {
                 period = [SSJDatePeriod datePeriodWithPeriodType:periodType date:billDate];
-                // 第一次遍历，补充查询起始时间和查询出的第一条纪录之间的收支统计
-                if (startDate) {
-                    SSJDatePeriod *startPeriod = [SSJDatePeriod datePeriodWithPeriodType:periodType date:startDate];
-                    NSMutableArray *periods = [@[startPeriod] mutableCopy];
-                    [periods addObjectsFromArray:[period periodsFromPeriod:startPeriod]];
-                    for (int i = 0; i < periods.count - 1; i ++) {
-                        SSJDatePeriod *addPeriod = periods[i];
-                        weekOrder++;
-                        [list addObject:[self modelWithPayment:0 income:0 weekOrder:weekOrder period:addPeriod]];
-                    }
-                }
+//                // 第一次遍历，补充查询起始时间和查询出的第一条纪录之间的收支统计
+//                if (startDate) {
+//                    SSJDatePeriod *startPeriod = [SSJDatePeriod datePeriodWithPeriodType:periodType date:startDate];
+//                    NSMutableArray *periods = [@[startPeriod] mutableCopy];
+//                    [periods addObjectsFromArray:[period periodsFromPeriod:startPeriod]];
+//                    for (int i = 0; i < periods.count - 1; i ++) {
+//                        SSJDatePeriod *addPeriod = periods[i];
+//                        weekOrder++;
+//                        [list addObject:[self modelWithPayment:0 income:0 weekOrder:weekOrder period:addPeriod]];
+//                    }
+//                }
             }
             
             if ([period containDate:billDate]) {
@@ -397,37 +454,37 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
                 [list addObject:[self modelWithPayment:payment income:income weekOrder:weekOrder period:period]];
             }
             
-            // 补充查询出的最后一个收支统计和截止时间之间的收支统计
-            if (endDate) {
-                lastModel = [list lastObject];
-                SSJDatePeriod *endPeriod = [SSJDatePeriod datePeriodWithPeriodType:periodType date:endDate];
-                NSArray *periods = [endPeriod periodsFromPeriod:lastModel.period];
-                for (int i = 0; i < periods.count; i ++) {
-                    SSJDatePeriod *addPeriod = periods[i];
-                    weekOrder++;
-                    [list addObject:[self modelWithPayment:0 income:0 weekOrder:weekOrder period:addPeriod]];
-                }
-            }
+//            // 补充查询出的最后一个收支统计和截止时间之间的收支统计
+//            if (endDate) {
+//                lastModel = [list lastObject];
+//                SSJDatePeriod *endPeriod = [SSJDatePeriod datePeriodWithPeriodType:periodType date:endDate];
+//                NSArray *periods = [endPeriod periodsFromPeriod:lastModel.period];
+//                for (int i = 0; i < periods.count; i ++) {
+//                    SSJDatePeriod *addPeriod = periods[i];
+//                    weekOrder++;
+//                    [list addObject:[self modelWithPayment:0 income:0 weekOrder:weekOrder period:addPeriod]];
+//                }
+//            }
         } else {
-            // 如果数据库中没有纪录，并且起始、截止时间都传入了，补充之间的收支统计
-            if (startDate && endDate) {
-                SSJDatePeriod *startPeriod = [SSJDatePeriod datePeriodWithPeriodType:periodType date:startDate];
-                SSJDatePeriod *endPeriod = [SSJDatePeriod datePeriodWithPeriodType:periodType date:endDate];
-                NSMutableArray *periods = [[endPeriod periodsFromPeriod:startPeriod] mutableCopy];
-                [periods addObject:startPeriod];
-                for (int i = 0; i < periods.count; i ++) {
-                    SSJDatePeriod *addPeriod = periods[i];
-                    weekOrder++;
-                    [list addObject:[self modelWithPayment:0 income:0 weekOrder:weekOrder period:addPeriod]];
-                }
-            }
+//            // 如果数据库中没有纪录，并且起始、截止时间都传入了，补充之间的收支统计
+//            if (startDate && endDate) {
+//                SSJDatePeriod *startPeriod = [SSJDatePeriod datePeriodWithPeriodType:periodType date:startDate];
+//                SSJDatePeriod *endPeriod = [SSJDatePeriod datePeriodWithPeriodType:periodType date:endDate];
+//                NSMutableArray *periods = [[endPeriod periodsFromPeriod:startPeriod] mutableCopy];
+//                [periods addObject:startPeriod];
+//                for (int i = 0; i < periods.count; i ++) {
+//                    SSJDatePeriod *addPeriod = periods[i];
+//                    weekOrder++;
+//                    [list addObject:[self modelWithPayment:0 income:0 weekOrder:weekOrder period:addPeriod]];
+//                }
+//            }
         }
         
         startDateStr = startDate ? [startDate formattedDateWithFormat:@"yyyy-MM-dd"] : startDateStr;
         endDateStr = endDate ? [endDate formattedDateWithFormat:@"yyyy-MM-dd"] : endDateStr;
         
         if (success) {
-            SSJDispatch_main_async_safe(^{
+            SSJDispatchMainAsync(^{
                 NSMutableDictionary *result = [NSMutableDictionary dictionary];
                 if (list) {
                     [result setObject:list forKey:SSJReportFormsCurveModelListKey];

@@ -29,7 +29,6 @@
 static NSString *const kTitle1 = @"自动同步设置";
 static NSString *const kTitle2 = @"数据重新拉取";
 static NSString *const kTitle3 = @"数据格式化";
-static NSString *const kTitle4 = @"分享APP";
 static NSString *const kTitle6 = @"关于我们";
 static NSString *const kTitle5 = @"检查更新";
 static NSString *const kTitle7 = @"微信公众号";
@@ -62,31 +61,15 @@ static NSString *const kTitle8 = @"点击上方微信号复制，接着去微信
     [super viewWillAppear:animated];
     if ([SSJStartChecker sharedInstance].isInReview) {
         if ([WXApi isWXAppInstalled]) {
-            if ([SSJDefaultSource() isEqualToString:@"11501"] || [SSJDefaultSource() isEqualToString:@"11502"]) {
-                self.titles = @[@[kTitle1], @[kTitle2 , kTitle3], @[kTitle4], @[kTitle6] ,@[kTitle7,kTitle8]];
-            }else{
-                self.titles = @[@[kTitle1], @[kTitle2 , kTitle3], @[kTitle6] ,@[kTitle7,kTitle8]];
-            }
+            self.titles = @[@[kTitle1], @[kTitle2 , kTitle3], @[kTitle6] ,@[kTitle7,kTitle8]];
         }else{
-            if ([SSJDefaultSource() isEqualToString:@"11501"] || [SSJDefaultSource() isEqualToString:@"11502"]) {
-                self.titles = @[@[kTitle1], @[kTitle2 , kTitle3], @[kTitle4], @[kTitle6]];
-            }else{
-                self.titles = @[@[kTitle1], @[kTitle2 , kTitle3], @[kTitle6]];
-            }
+            self.titles = @[@[kTitle1], @[kTitle2 , kTitle3], @[kTitle6]];
         }
     } else {
         if ([WXApi isWXAppInstalled]) {
-            if ([SSJDefaultSource() isEqualToString:@"11501"] || [SSJDefaultSource() isEqualToString:@"11502"]) {
-                self.titles = @[@[kTitle1], @[kTitle2 , kTitle3] , @[kTitle4 , kTitle5], @[kTitle6],@[kTitle7,kTitle8]];
-            }else{
-                self.titles = @[@[kTitle1], @[kTitle2 , kTitle3] , @[kTitle5], @[kTitle6],@[kTitle7,kTitle8]];
-            }
+            self.titles = @[@[kTitle1], @[kTitle2 , kTitle3] , @[kTitle5], @[kTitle6],@[kTitle7,kTitle8]];
         }else{
-            if ([SSJDefaultSource() isEqualToString:@"11501"] || [SSJDefaultSource() isEqualToString:@"11502"]) {
-                self.titles = @[@[kTitle1], @[kTitle2 , kTitle3] , @[kTitle4 , kTitle5], @[kTitle6]];
-            }else{
-                self.titles = @[@[kTitle1], @[kTitle2 , kTitle3] , @[kTitle5], @[kTitle6]];
-            }
+            self.titles = @[@[kTitle1], @[kTitle2 , kTitle3] , @[kTitle5], @[kTitle6]];
         }
     }
     
@@ -183,25 +166,7 @@ static NSString *const kTitle8 = @"点击上方微信号复制，接着去微信
         [self.navigationController pushViewController:aboutUsVc animated:YES];
     }
     
-    //  把APP推荐给好友
-    if ([title isEqualToString:kTitle4]) {
-        if ([SSJDefaultSource() isEqualToString:@"11501"]) {
-            [UMSocialSnsService presentSnsIconSheetView:self
-                                                 appKey:SSJDetailSettingForSource(@"UMAppKey")
-                                              shareText:@"财务管理第一步，从记录消费生活开始!"
-                                             shareImage:[UIImage imageNamed:SSJDetailSettingForSource(@"ShareIcon")]
-                                        shareToSnsNames:[NSArray arrayWithObjects:UMShareToQQ,UMShareToSina,UMShareToWechatSession,UMShareToWechatTimeline,nil]
-                                               delegate:self];
-        }else{
-            [UMSocialSnsService presentSnsIconSheetView:self
-                                                 appKey:SSJDetailSettingForSource(@"UMAppKey")
-                                              shareText:@"在这里，记录消费生活是件有趣简单的事儿，管家更有窍门。"
-                                             shareImage:[UIImage imageNamed:SSJDetailSettingForSource(@"ShareIcon")]
-                                        shareToSnsNames:[NSArray arrayWithObjects:UMShareToQQ,UMShareToSina,UMShareToWechatSession,UMShareToWechatTimeline,nil]
-                                               delegate:self];
-        }
-    }
-    
+     
     //数据格式化
     if ([title isEqualToString:kTitle3]) {
         SSJAlertViewAction *comfirmAction = [SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction * _Nonnull action) {
@@ -261,29 +226,6 @@ static NSString *const kTitle8 = @"点击上方微信号复制，接着去微信
     }
     return mineHomeCell;
 }
-
-#pragma mark - UMSocialUIDelegate
--(void)didFinishGetUMSocialDataInViewController:(UMSocialResponseEntity *)response
-{
-    //根据responseCode得到发送结果,如果分享成功
-    if(response.responseCode == UMSResponseCodeSuccess)
-    {
-        [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@"分享成功" action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL],nil];
-    }else{
-        [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@"分享失败" action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL],nil];
-    }
-}
-
--(void)didSelectSocialPlatform:(NSString *)platformName withSocialData:(UMSocialData *)socialData
-{
-    if (platformName == UMShareToSina) {
-        socialData.shareText = [NSString stringWithFormat:@"%@ %@",SSJDetailSettingForSource(@"ShareTitle"),SSJDetailSettingForSource(@"ShareUrl")];
-        socialData.shareImage = [UIImage imageNamed:SSJDetailSettingForSource(@"WeiboBanner")];
-    }else{
-        socialData.shareText = SSJDetailSettingForSource(@"ShareContent");
-    }
-}
-
 
 #pragma mark - Getter
 -(SSJWeixinFooter *)weixinFooter{

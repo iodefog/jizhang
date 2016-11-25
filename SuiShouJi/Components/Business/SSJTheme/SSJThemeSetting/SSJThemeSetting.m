@@ -22,6 +22,9 @@
     NSDictionary *modelInfo = [NSKeyedUnarchiver unarchiveObjectWithFile:[self settingFilePath]];
     NSMutableDictionary *newModelInfo = [NSMutableDictionary dictionaryWithCapacity:modelInfo.count + 1];
     [newModelInfo addEntriesFromDictionary:modelInfo];
+    if ([newModelInfo objectForKey:model.ID]) {
+        [newModelInfo removeObjectForKey:model.ID];
+    }
     [newModelInfo setObject:model forKey:model.ID];
     
     return [NSKeyedArchiver archiveRootObject:newModelInfo toFile:[self settingFilePath]];
@@ -66,11 +69,19 @@
     }
 }
 
++ (SSJThemeModel *)ThemeModelForModelId:(NSString *)Id {
+    NSDictionary *modelInfo = [NSKeyedUnarchiver unarchiveObjectWithFile:[self settingFilePath]];
+    SSJThemeModel *model = [modelInfo objectForKey:Id];
+    return model;
+}
+
 + (SSJThemeModel *)defaultThemeModel {
     SSJThemeModel *model = [[SSJThemeModel alloc] init];
     model.ID = SSJDefaultThemeID;
     model.name = @"官方白";
     model.backgroundAlpha = 1;
+    model.mainBackGroundColor = @"#FFFFFF";
+    model.needBlurOrNot = NO;
     model.mainColor = @"#393939";
     model.secondaryColor = @"#a7a7a7";
     model.marcatoColor = @"#eb4a64";
@@ -110,7 +121,8 @@
     model.bookKeepingHomeMutiButtonNormalColor = @"#cccccc";
     model.bookKeepingHomeMutiButtonSelectColor = @"#f5b52a";
     model.searchResultHeaderBackgroundColor = @"#ffebeb";
-
+    model.summaryBooksHeaderColor = @"#ffd2d2";
+    model.summaryBooksHeaderAlpha = 1;
     return model;
 }
 
@@ -126,10 +138,12 @@
     }
     
     SSJThemeModel *themeModel = [self currentThemeModel];
-    
     [tabBarVC.tabBar setShadowImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:@"#e8e8e8" alpha:themeModel.tabBarShadowImageAlpha] size:CGSizeZero]];
-    [tabBarVC.tabBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:themeModel.tabBarBackgroundColor alpha:themeModel.backgroundAlpha] size:CGSizeZero]];
-    
+    if(themeModel.tabBarBackgroundImage.length) {
+        [tabBarVC.tabBar setBackgroundImage:[UIImage ssj_themeImageWithName:themeModel.tabBarBackgroundImage]];
+    }else{
+        [tabBarVC.tabBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:themeModel.tabBarBackgroundColor alpha:themeModel.backgroundAlpha] size:CGSizeZero]];
+    }
     UIViewController *recordHomeController = [tabBarVC.viewControllers ssj_safeObjectAtIndex:0];
     recordHomeController.tabBarItem.image = [UIImage ssj_themeImageWithName:@"tab_accounte_nor" renderingMode:UIImageRenderingModeAlwaysOriginal];
     recordHomeController.tabBarItem.selectedImage = [UIImage ssj_themeImageWithName:@"tab_accounte_sel" renderingMode:UIImageRenderingModeAlwaysOriginal];

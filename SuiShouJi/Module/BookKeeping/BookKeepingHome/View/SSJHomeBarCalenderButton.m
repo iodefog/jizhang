@@ -63,4 +63,5 @@
     self.calenderImage.image = [UIImage ssj_themeImageWithName:@"home_calender"];
     [self.calenderImage sizeToFit];
 }
+
 @end

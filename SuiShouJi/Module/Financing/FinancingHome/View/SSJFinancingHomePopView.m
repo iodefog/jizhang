@@ -15,6 +15,7 @@
 @implementation SSJFinancingHomePopView
 
 -(void)awakeFromNib{
+    [super awakeFromNib];
     self.backImage.image = [UIImage ssj_compatibleImageNamed:@"founds_yindao"];
 }
 

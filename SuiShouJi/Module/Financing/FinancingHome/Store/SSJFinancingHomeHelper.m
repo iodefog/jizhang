@@ -152,8 +152,10 @@
                         }
                         return;
                     }
-                    SSJLoanModel *loanModel = [[SSJLoanModel alloc] init];
+                    
+                    NSMutableArray *models = [NSMutableArray array];
                     while ([resultSet next]) {
+                        SSJLoanModel *loanModel = [[SSJLoanModel alloc] init];
                         loanModel.ID = [resultSet stringForColumn:@"loanid"];
                         loanModel.userID = [resultSet stringForColumn:@"cuserid"];
                         loanModel.lender = [resultSet stringForColumn:@"lender"];
@@ -161,11 +163,6 @@
                         loanModel.fundID = [resultSet stringForColumn:@"cthefundid"];
                         loanModel.targetFundID = [resultSet stringForColumn:@"ctargetfundid"];
                         loanModel.endTargetFundID = [resultSet stringForColumn:@"cetarget"];
-                        loanModel.chargeID = [resultSet stringForColumn:@"cthecharge"];
-                        loanModel.targetChargeID = [resultSet stringForColumn:@"ctargetcharge"];
-                        loanModel.endChargeID = [resultSet stringForColumn:@"cethecharge"];
-                        loanModel.endTargetChargeID = [resultSet stringForColumn:@"cetargetcharge"];
-                        loanModel.interestChargeID = [resultSet stringForColumn:@"cinterestid"];
                         loanModel.borrowDate = [NSDate dateWithString:[resultSet stringForColumn:@"cborrowdate"] formatString:@"yyyy-MM-dd"];
                         loanModel.repaymentDate = [NSDate dateWithString:[resultSet stringForColumn:@"crepaymentdate"] formatString:@"yyyy-MM-dd"];
                         loanModel.endDate = [NSDate dateWithString:[resultSet stringForColumn:@"cenddate"] formatString:@"yyyy-MM-dd"];
@@ -178,17 +175,21 @@
                         loanModel.operatorType = [resultSet intForColumn:@"operatorType"];
                         loanModel.version = [resultSet longLongIntForColumn:@"iversion"];
                         loanModel.writeDate = [NSDate dateWithString:[resultSet stringForColumn:@"cwritedate"] formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
+                        [models addObject:loanModel];
                     }
                     [resultSet close];
-                    if (![SSJLoanHelper deleteLoanModel:loanModel inDatabase:db forUserId:userId error:NULL]) {
-                        if (failure) {
-                            *rollback = YES;
-                            SSJDispatchMainAsync(^{
-                                failure([db lastError]);
-                            });
-                        }
-                        return;
-                    };
+                    
+                    for (SSJLoanModel *loanModel in models) {
+                        if (![SSJLoanHelper deleteLoanModel:loanModel inDatabase:db forUserId:userId error:NULL]) {
+                            if (failure) {
+                                *rollback = YES;
+                                SSJDispatchMainAsync(^{
+                                    failure([db lastError]);
+                                });
+                            }
+                            return;
+                        };
+                    }
                 }
             }else{
                 //如果是普通资金帐户
@@ -227,11 +228,6 @@
                         loanModel.fundID = [resultSet stringForColumn:@"cthefundid"];
                         loanModel.targetFundID = [resultSet stringForColumn:@"ctargetfundid"];
                         loanModel.endTargetFundID = [resultSet stringForColumn:@"cetarget"];
-                        loanModel.chargeID = [resultSet stringForColumn:@"cthecharge"];
-                        loanModel.targetChargeID = [resultSet stringForColumn:@"ctargetcharge"];
-                        loanModel.endChargeID = [resultSet stringForColumn:@"cethecharge"];
-                        loanModel.endTargetChargeID = [resultSet stringForColumn:@"cetargetcharge"];
-                        loanModel.interestChargeID = [resultSet stringForColumn:@"cinterestid"];
                         loanModel.borrowDate = [NSDate dateWithString:[resultSet stringForColumn:@"cborrowdate"] formatString:@"yyyy-MM-dd"];
                         loanModel.repaymentDate = [NSDate dateWithString:[resultSet stringForColumn:@"crepaymentdate"] formatString:@"yyyy-MM-dd"];
                         loanModel.endDate = [NSDate dateWithString:[resultSet stringForColumn:@"cenddate"] formatString:@"yyyy-MM-dd"];
@@ -245,9 +241,8 @@
                         loanModel.version = [resultSet longLongIntForColumn:@"iversion"];
                         loanModel.writeDate = [NSDate dateWithString:[resultSet stringForColumn:@"cwritedate"] formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
                         [tempArr addObject:loanModel];
-                        [resultSet close];
                     }
-                    
+                    [resultSet close];
                     for (SSJLoanModel *model in tempArr) {
                         if (![SSJLoanHelper deleteLoanModel:model inDatabase:db forUserId:userId error:NULL]) {
                             if (failure) {

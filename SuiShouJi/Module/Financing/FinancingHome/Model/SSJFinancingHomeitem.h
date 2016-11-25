@@ -29,6 +29,12 @@
 //账户余额
 @property (nonatomic) double fundingAmount;
 
+//账户收入
+@property (nonatomic) double fundingIncome;
+
+//账户支出
+@property (nonatomic) double fundingExpence;
+
 //账户备注
 @property(nonatomic,strong) NSString *fundingMemo;
 

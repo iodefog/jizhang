@@ -37,6 +37,11 @@ typedef NS_ENUM(NSUInteger, SSJBaseNetworkServiceHttpMethod) {
 @property (nonatomic, assign) SSJBaseNetworkServiceHttpMethod httpMethod;
 
 /**
+ 返回数据序列化方式
+ */
+@property (nonatomic, strong) AFHTTPResponseSerializer <AFURLResponseSerialization> * responseSerializer;
+
+/**
  *  请求超时时间
  */
 @property (nonatomic, assign) NSTimeInterval timeoutInterval;

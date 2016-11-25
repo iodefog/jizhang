@@ -15,7 +15,22 @@
 }
 
 + (NSArray *)columns {
-    return @[@"iconfigid", @"cuserid", @"ibillid", @"ifunsid", @"itype", @"imoney", @"cimgurl", @"cmemo", @"cbilldate", @"istate", @"cbooksid", @"cmemberids", @"iversion", @"cwritedate", @"operatortype"];
+    return @[@"iconfigid",
+             @"cuserid",
+             @"ibillid",
+             @"ifunsid",
+             @"itype",
+             @"imoney",
+             @"cimgurl",
+             @"cmemo",
+             @"cbilldate",
+             @"istate",
+             @"cbooksid",
+             @"cmemberids",
+             @"iversion",
+             @"cwritedate",
+             @"operatortype",
+             @"cbilldateend"];
 }
 
 + (NSArray *)primaryKeys {
@@ -27,18 +42,20 @@
     NSString *fundId = record[@"ifunsid"];
     
     if (!billId || !fundId) {
-        *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"ibillid and fundId in record must not be nil"}];
+        if (error) {
+            *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"ibillid and fundId in record must not be nil"}];
+        }
         SSJPRINT(@">>> SSJ warning:cuserid and ibillid in record must not be nil \n record:%@", record);
         return NO;
     }
     
-    //  如果此流水不依赖于特殊收支类型（istate等于2），还要从user_bill表中查询是否有此类型(因为user_bill中没有特殊收支类型)
+    // 如果此流水不依赖于特殊收支类型（istate等于2），还要从user_bill表中查询是否有此类型(因为user_bill中没有特殊收支类型)
     BOOL hasBillType = [db intForQuery:@"select istate from bk_bill_type where id = ?", billId] == 2;
     if (!hasBillType) {
         hasBillType = [db boolForQuery:@"select count(*) from bk_user_bill where cuserid = ? and cbillid = ?", userId, billId];
     }
     
-    //  查询fund_info中是否有对应的资金帐户
+    // 查询fund_info中是否有对应的资金帐户
     BOOL hasFundAccount = [db boolForQuery:@"select count(*) from bk_fund_info where cuserid = ? and cfundid = ?", userId, fundId];
     
     return (hasBillType && hasFundAccount);

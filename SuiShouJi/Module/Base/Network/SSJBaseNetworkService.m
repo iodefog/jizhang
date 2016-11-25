@@ -32,9 +32,10 @@
         _delegate = delegate;
         _httpMethod = SSJBaseNetworkServiceHttpMethodPOST;
         _timeoutInterval = 60;
-        _pinningMode = AFSSLPinningModePublicKey;
+        _pinningMode = AFSSLPinningModeCertificate;
         _allowInvalidCertificates = YES;
         _validatesDomainName = YES;
+        _responseSerializer = [AFJSONResponseSerializer serializer];
         
         self.formatter = [[NSDateFormatter alloc] init];
         [self.formatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
@@ -139,11 +140,12 @@
 /* 配置manager */
 - (SSJGlobalServiceManager *)p_customManager {
     SSJGlobalServiceManager *manager = [SSJGlobalServiceManager sharedManager];
-//    manager.SSLPinningMode = _pinningMode;
-//    manager.allowInvalidCertificates = _allowInvalidCertificates;
-//    manager.validatesDomainName = _validatesDomainName;
-    manager.responseSerializer = [AFJSONResponseSerializer serializer];
+    manager.SSLPinningMode = _pinningMode;
+    manager.allowInvalidCertificates = _allowInvalidCertificates;
+    manager.validatesDomainName = _validatesDomainName;
+    manager.responseSerializer = _responseSerializer;
     manager.requestSerializer.timeoutInterval = _timeoutInterval;
+    [manager.operationQueue setMaxConcurrentOperationCount:1];
     return manager;
 }
 
@@ -219,6 +221,7 @@
 /** 需要子类覆写的方法 **/
 //--------------------------------
 - (void)requestDidFinish:(id)rootElement {
+    
 }
 
 @end

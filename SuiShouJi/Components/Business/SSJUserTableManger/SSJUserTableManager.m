@@ -55,7 +55,9 @@
 + (NSString *)unregisteredUserIdInDatabase:(FMDatabase *)db error:(NSError **)error {
     FMResultSet *result = [db executeQuery:@"select CUSERID from BK_USER where CREGISTERSTATE = 0"];
     if (!result) {
-        *error = [db lastError];
+        if (error) {
+            *error = [db lastError];
+        }
         return nil;
     }
     

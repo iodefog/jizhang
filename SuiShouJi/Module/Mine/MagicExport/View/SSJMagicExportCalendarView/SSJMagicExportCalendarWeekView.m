@@ -18,7 +18,7 @@
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        self.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+        self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         
         NSArray *weekArr = @[@"日", @"一", @"二", @"三", @"四", @"五", @"六"];
         _labelArr = [[NSMutableArray alloc] initWithCapacity:weekArr.count];
@@ -46,7 +46,7 @@
 }
 
 - (void)updateAppearance {
-    self.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+    self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     for (UILabel *lab in _labelArr) {
         lab.textColor = ([lab.text isEqualToString:@"日"] || [lab.text isEqualToString:@"六"]) ? [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] : [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     }

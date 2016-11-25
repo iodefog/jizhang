@@ -112,6 +112,7 @@ static NSString *const kLoanListCellId = @"kLoanListCellId";
     SSJLoanModel *model = [_list ssj_safeObjectAtIndex:indexPath.section];
     SSJLoanDetailViewController *loanDetailVC = [[SSJLoanDetailViewController alloc] init];
     loanDetailVC.loanID = model.ID;
+    loanDetailVC.fundColor = [SSJLoanHelper queryForFundColorWithID:model.fundID];
     [self.navigationController pushViewController:loanDetailVC animated:YES];
 }
 
@@ -142,24 +143,21 @@ static NSString *const kLoanListCellId = @"kLoanListCellId";
 
 #pragma mark - Event
 - (void)rightItemAction {
-    SSJLoanModel *model = [[SSJLoanModel alloc] init];
-    model.fundID = _item.fundingID;
+    SSJAddOrEditLoanViewController *addLoanVC = [[SSJAddOrEditLoanViewController alloc] init];
     if ([_item.fundingParent isEqualToString:@"10"]) {
-        model.type = SSJLoanTypeLend;
+        addLoanVC.type = SSJLoanTypeLend;
         [MobClick event:@"add_loan"];
     } else if ([_item.fundingParent isEqualToString:@"11"]) {
-        model.type = SSJLoanTypeBorrow;
+        addLoanVC.type = SSJLoanTypeBorrow;
         [MobClick event:@"add_owed"];
     }
     
-    SSJAddOrEditLoanViewController *addLoanVC = [[SSJAddOrEditLoanViewController alloc] init];
-    addLoanVC.loanModel = model;
     [self.navigationController pushViewController:addLoanVC animated:YES];
 }
 
 #pragma mark - Private
 - (void)updateAppearance {
-    _headerSegmentView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+    _headerSegmentView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     _headerSegmentView.titleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     _headerSegmentView.selectedTitleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
     [_headerSegmentView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];

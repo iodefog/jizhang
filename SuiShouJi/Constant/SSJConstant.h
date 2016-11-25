@@ -97,6 +97,15 @@ extern NSString *const SSJWeiBoAppKey;
 //微博secret
 extern NSString *const SSJWeiBoSecret;
 
+//美恰appkey
+extern NSString *const SSJMQAppKey;
+
+//美恰secret
+extern NSString *const SSJMQSecret;
+
+//美恰默认客服组
+extern NSString *const SSJMQDefualtGroupId;
+
 //预算超支红色
 extern NSString *const SSJOverrunRedColorValue;
 
@@ -106,6 +115,9 @@ extern NSString *const SSJSurplusGreenColorValue;
 /** -------------------- KEY -------------------- */
 //保存上次弹窗的时间
 extern NSString *const SSJLastPopTimeKey;
+
+//保存上次保存的广告标识
+extern NSString *const SSJLastSavedIdfaKey;
 
 //保存是否登录或者注册过
 extern NSString *const SSJHaveLoginOrRegistKey;

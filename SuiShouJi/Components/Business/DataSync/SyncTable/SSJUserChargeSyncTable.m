@@ -15,7 +15,25 @@
 }
 
 + (NSArray *)columns {
-    return @[@"ichargeid", @"imoney", @"ibillid", @"ifunsid", @"iconfigid", @"cadddate", @"ioldmoney", @"ibalance", @"cbilldate", @"cuserid", @"cimgurl", @"thumburl", @"cmemo", @"cbooksid", @"loanid", @"clientadddate", @"cwritedate", @"iversion", @"operatortype"];
+    return @[@"ichargeid",
+             @"imoney",
+             @"ibillid",
+             @"ifunsid",
+             @"iconfigid",
+             @"cadddate",
+             @"ioldmoney",
+             @"ibalance",
+             @"cbilldate",
+             @"cuserid",
+             @"cimgurl",
+             @"thumburl",
+             @"cmemo",
+             @"cbooksid",
+             @"loanid",
+             @"clientadddate",
+             @"cwritedate",
+             @"iversion",
+             @"operatortype"];
 }
 
 + (NSArray *)primaryKeys {
@@ -28,7 +46,9 @@
     NSString *fundId = record[@"ifunsid"];
     NSString *configId = record[@"iconfigid"];  //  定期记账配置id可已为空（仅一次）
     if (!billId || !fundId) {
-        *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"ibillid and fundId in record must not be nil"}];
+        if (error) {
+            *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"ibillid and fundId in record must not be nil"}];
+        }
         SSJPRINT(@">>> SSJ warning: ibillid and fundId in record must not be nil \n record:%@", record);
         return NO;
     }

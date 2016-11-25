@@ -7,13 +7,24 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "SSJLoanCompoundChargeModel.h"
+
+NS_ASSUME_NONNULL_BEGIN
+
+/**
+ 计息方式
+
+ - SSJLoanInterestTypeUnknown: 未知
+ - SSJLoanInterestTypeOriginalPrincipal: 不改变本金计息
+ - SSJLoanInterestTypeChangePrincipal: 改变本金计息
+ */
+typedef NS_ENUM(NSUInteger, SSJLoanInterestType) {
+    SSJLoanInterestTypeUnknown = 0,
+    SSJLoanInterestTypeOriginalPrincipal = 1,
+    SSJLoanInterestTypeChangePrincipal = 2
+};
 
 @class FMResultSet;
-
-typedef NS_ENUM(NSInteger, SSJLoanType) {
-    SSJLoanTypeLend,    // 借出
-    SSJLoanTypeBorrow   // 借入
-};
 
 @interface SSJLoanModel : NSObject <NSCopying>
 
@@ -26,52 +37,37 @@ typedef NS_ENUM(NSInteger, SSJLoanType) {
 @property (nonatomic, copy) NSString *lender;
 
 // 借贷图标
-@property (nonatomic, copy) NSString *image;
+@property (nonatomic, copy, nullable) NSString *image;
 
-// 借入／借出金额
+// 剩余借入／借出金额（包含扣除余额变更、追加变更）
 @property (nonatomic) double jMoney;
 
 // 借入／借出所属账户
 @property (nonatomic, copy) NSString *fundID;
 
 // 借入／借出目标账户(结清前)
-@property (nonatomic, copy) NSString *targetFundID;
+@property (nonatomic, copy, nullable) NSString *targetFundID;
 
 // 借入／借出目标账户(结清后)
-@property (nonatomic, copy) NSString *endTargetFundID;
-
-// 所属转账流水
-@property (nonatomic, copy) NSString *chargeID;
-
-// 目标转账流水
-@property (nonatomic, copy) NSString *targetChargeID;
-
-// 结清所属转账流水
-@property (nonatomic, copy) NSString *endChargeID;
-
-// 结清目标转账流水
-@property (nonatomic, copy) NSString *endTargetChargeID;
-
-// 结清产生的利息流水
-@property (nonatomic, copy) NSString *interestChargeID;
+@property (nonatomic, copy, nullable) NSString *endTargetFundID;
 
 // 借入／借出日期
 @property (nonatomic, copy) NSDate *borrowDate;
 
 // 期限日期
-@property (nonatomic, copy) NSDate *repaymentDate;
+@property (nonatomic, copy, nullable) NSDate *repaymentDate;
 
 // 结清日期
-@property (nonatomic, copy) NSDate *endDate;
+@property (nonatomic, copy, nullable) NSDate *endDate;
 
 // 利率
 @property (nonatomic) double rate;
 
 // 备注
-@property (nonatomic, copy) NSString *memo;
+@property (nonatomic, copy, nullable) NSString *memo;
 
 // 提醒ID
-@property (nonatomic, copy) NSString *remindID;
+@property (nonatomic, copy, nullable) NSString *remindID;
 
 // 是否计息
 @property (nonatomic) BOOL interest;
@@ -82,6 +78,9 @@ typedef NS_ENUM(NSInteger, SSJLoanType) {
 // 0:借出 1:借入
 @property (nonatomic) SSJLoanType type;
 
+// 计息方式
+@property (nonatomic) SSJLoanInterestType interestType;
+
 @property (nonatomic) int operatorType;
 
 @property (nonatomic) long long version;
@@ -91,3 +90,5 @@ typedef NS_ENUM(NSInteger, SSJLoanType) {
 + (instancetype)modelWithResultSet:(FMResultSet *)resultSet;
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -318,35 +318,8 @@
         return;
     }
     
-    [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
-        //  merge登陆接口返回的收支类型、资金帐户、账本
-        [SSJUserBillSyncTable mergeRecords:self.loginService.userBillArray forUserId:SSJUSERID() inDatabase:db error:nil];
-        [SSJFundInfoSyncTable mergeRecords:self.loginService.fundInfoArray forUserId:SSJUSERID() inDatabase:db error:nil];
-        [SSJBooksTypeSyncTable mergeRecords:self.loginService.booksTypeArray forUserId:SSJUSERID() inDatabase:db error:nil];
+    [SSJLoginHelper updateTableWhenLoginWithServices:self.loginService];
         
-        //  检测缺少哪个收支类型就创建
-        [SSJUserDefaultDataCreater createDefaultBillTypesIfNeededForUserId:SSJUSERID() inDatabase:db];
-        
-        //  更新排序字段为空的收支类型
-        [SSJLoginHelper updateBillTypeOrderIfNeededForUserId:SSJUSERID() inDatabase:db error:nil];
-        
-        //  如果登录没有返回任何资金帐户，说明服务器没有保存任何资金记录，就给用户创建默认的
-        [SSJUserDefaultDataCreater createDefaultFundAccountsIfNeededForUserId:SSJUSERID() inDatabase:db];
-        
-        //  如果登录没有返回任何账本类型，说明服务器没有保存任何账本类型，就给用户创建默认的
-        if (self.loginService.booksTypeArray.count == 0) {
-            [SSJUserDefaultDataCreater createDefaultBooksTypeForUserId:SSJUSERID() inDatabase:db];
-        }
-        
-        //  如果登录没有返回任何成员类型，说明服务器没有保存任何成员类型，就给用户创建默认的
-        if (self.loginService.membersArray.count == 0) {
-            [SSJUserDefaultDataCreater createDefaultMembersForUserId:SSJUSERID() inDatabase:db];
-        }
-        
-//        //  更新资金帐户余额
-//        [SSJFundAccountTable updateBalanceForUserId:SSJUSERID() inDatabase:db];
-    }];
-    
     // 如果本地保存的最近一次签到时间和服务端返回的不一致，说明本地没有保存最新的签到记录
     SSJBookkeepingTreeCheckInModel *checkInModel = [SSJBookkeepingTreeStore queryCheckInInfoWithUserId:SSJUSERID() error:nil];
     if (![checkInModel.lastCheckInDate isEqualToString:_loginService.checkInModel.lastCheckInDate]) {

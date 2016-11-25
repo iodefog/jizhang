@@ -18,6 +18,7 @@ static NSString *const kTitle8 = @"循环周期";
 static NSString *const kTitle9 = @"资金账户";
 static NSString *const kTitle10 = @"起始日期";
 static NSString *const kTitle11 = @"不支持设置历史日期的周期账";
+static NSString *const kTitle12 = @"结束时间";
 
 static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 
@@ -50,6 +51,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 @property(nonatomic, strong) SSJFundingTypeSelectView *fundSelectView;
 @property(nonatomic, strong) SSJChargeCircleSelectView *circleSelectView;
 @property(nonatomic, strong) SSJChargeCircleTimeSelectView *chargeCircleTimeView;
+@property(nonatomic, strong) SSJChargeCircleTimeSelectView *chargeCircleEndTimeView;
 @property(nonatomic, strong) SSJCircleChargeTypeSelectView *chargeTypeSelectView;
 @property(nonatomic, strong) SSJMemberSelectView *memberSelectView;
 @property(nonatomic, strong) UIImage *selectedImage;
@@ -74,8 +76,8 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.titles = @[@[kTitle1,kTitle2],@[kTitle3,kTitle4,kTitle5,kTitle7],@[kTitle6,kTitle8,kTitle9,kTitle10,kTitle11]];
-    _images = @[@[@"xuhuan_zhangben",@"xuhuan_shouzhileixing"],@[@"xuhuan_leibie",@"xuhuan_jine",@"xuhuan_beizhu",@"xuhuan_paizhao" ],@[@"xunhuan_chengyuan",@"xuhuan_xuhuan",@"xuhuan_zijinzhanghu",@"xuhuan_riqi",@""]];
+    self.titles = @[@[kTitle1,kTitle2],@[kTitle3,kTitle4,kTitle5,kTitle7],@[kTitle6,kTitle8,kTitle9,kTitle10,kTitle11,kTitle12]];
+    _images = @[@[@"xuhuan_zhangben",@"xuhuan_shouzhileixing"],@[@"xuhuan_leibie",@"xuhuan_jine",@"xuhuan_beizhu",@"xuhuan_paizhao" ],@[@"xunhuan_chengyuan",@"xuhuan_xuhuan",@"xuhuan_zijinzhanghu",@"xuhuan_riqi",@"",@"xunhuan_end"]];
     [self.view addSubview:self.tableView];
     [self.tableView registerClass:[SSJChargeCircleModifyCell class] forCellReuseIdentifier:SSJChargeCircleEditeCellIdentifier];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(transferTextDidChange) name:UITextFieldTextDidChangeNotification object:nil];
@@ -188,10 +190,14 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
         [self.navigationController pushViewController:billTypeSelectVC animated:YES];
     }
     if ([title isEqualToString:kTitle10]) {
-        NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
-        [dateFormatter setDateFormat:@"yyyy-MM-dd"];
-        NSDate* date = [dateFormatter dateFromString:self.item.billDate];
-        self.chargeCircleTimeView.currentDate = date;
+        if (self.item.billDate.length) {
+            NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
+            [dateFormatter setDateFormat:@"yyyy-MM-dd"];
+            NSDate* date = [dateFormatter dateFromString:self.item.billDate];
+            self.chargeCircleTimeView.currentDate = date;
+        }else{
+            self.chargeCircleTimeView.currentDate = [NSDate date];
+        }
         [self.chargeCircleTimeView show];
     }
     if ([title isEqualToString:kTitle2]) {
@@ -223,6 +229,20 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
             [sheet showInView:self.view];
         }
     }
+    if ([title isEqualToString:kTitle12]) {
+        NSDate *startDate = [NSDate date];
+        if (self.item.billDate.length) {
+            NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
+            [dateFormatter setDateFormat:@"yyyy-MM-dd"];
+            NSDate* date = [dateFormatter dateFromString:self.item.billDate];
+            startDate = date;
+        }else{
+            startDate = [NSDate date];
+        }
+        startDate = [NSDate dateWithString:self.item.billDate formatString:@"yyyy-MM-dd"];
+        self.chargeCircleEndTimeView.minimumDate = startDate;
+        [self.chargeCircleEndTimeView show];
+    }
 }
 
 
@@ -245,7 +265,9 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
     circleModifyCell.cellImageName = image;
     if ([title isEqualToString:kTitle4]) {
         circleModifyCell.cellInput.hidden = NO;
-        circleModifyCell.cellInput.text = [NSString stringWithFormat:@"%.2f",[self.item.money doubleValue]];
+        if (self.item.money.length) {
+            circleModifyCell.cellInput.text = [NSString stringWithFormat:@"%.2f",[self.item.money doubleValue]];
+        }
         circleModifyCell.cellInput.attributedPlaceholder = [[NSAttributedString alloc]initWithString:@"0.00" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         circleModifyCell.cellInput.keyboardType = UIKeyboardTypeDecimalPad;
         circleModifyCell.cellInput.delegate = self;
@@ -328,6 +350,13 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
             circleModifyCell.cellDetail = ((SSJChargeMemberItem *)[self.item.membersItem ssj_safeObjectAtIndex:0]).memberName;
         }else{
             circleModifyCell.cellDetail = [NSString stringWithFormat:@"%ld人",self.item.membersItem.count];
+        }
+    }else if ([title isEqualToString:kTitle12]) {
+        circleModifyCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        if (self.item.chargeCircleEndDate.length) {
+            circleModifyCell.cellDetail = self.item.chargeCircleEndDate;
+        }else{
+            circleModifyCell.cellDetail = @"请选择结束日期";
         }
     }
     if ([title isEqualToString:kTitle7]) {
@@ -453,6 +482,10 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 -(SSJChargeCircleTimeSelectView *)chargeCircleTimeView{
     if (!_chargeCircleTimeView) {
         _chargeCircleTimeView = [[SSJChargeCircleTimeSelectView alloc]initWithFrame:self.view.bounds];
+        _chargeCircleTimeView.minimumDate = [NSDate date];
+        _chargeCircleTimeView.timeIsTooEarlyBlock = ^(){
+            [CDAutoHideMessageHUD showMessage:@"不能设置历史日期的周期记账哦"];
+        };
         __weak typeof(self) weakSelf = self;
         _chargeCircleTimeView.timerSetBlock = ^(NSString *dateStr){
             weakSelf.item.billDate = dateStr;
@@ -460,6 +493,26 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
         };
     }
     return _chargeCircleTimeView;
+}
+
+-(SSJChargeCircleTimeSelectView *)chargeCircleEndTimeView{
+    if (!_chargeCircleEndTimeView) {
+        _chargeCircleEndTimeView = [[SSJChargeCircleTimeSelectView alloc]initWithFrame:self.view.bounds];
+        _chargeCircleEndTimeView.needClearButtonOrNot = YES;
+        _chargeCircleEndTimeView.timeIsTooEarlyBlock = ^(){
+            [CDAutoHideMessageHUD showMessage:@"结束日期不能早于起始日期哦~"];
+        };
+        __weak typeof(self) weakSelf = self;
+        _chargeCircleEndTimeView.timerSetBlock = ^(NSString *dateStr){
+            weakSelf.item.chargeCircleEndDate = dateStr;
+            [weakSelf.tableView reloadData];
+        };
+        _chargeCircleEndTimeView.clearButtonClickBlcok = ^(){
+            weakSelf.item.chargeCircleEndDate = nil;
+            [weakSelf.tableView reloadData];
+        };
+    }
+    return _chargeCircleEndTimeView;
 }
 
 -(SSJCircleChargeTypeSelectView *)chargeTypeSelectView{
@@ -500,36 +553,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
     return _memberSelectView;
 }
 
-#pragma mark - Private
--(void)takePhoto{
-    UIImagePickerControllerSourceType sourceType = UIImagePickerControllerSourceTypeCamera;
-    if ([UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypeCamera])
-    {
-        UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-        picker.delegate = self;
-        picker.allowsEditing = YES;
-        picker.sourceType = sourceType;
-        [self presentViewController:picker animated:YES completion:^{}];
-    }else{
-        NSLog(@"模拟其中无法打开照相机,请在真机中使用");
-    }
-}
-
--(void)localPhoto{
-    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-    
-    picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-    picker.delegate = self;
-    //设置选择后的图片可被编辑
-    picker.allowsEditing = YES;
-    [self presentViewController:picker animated:YES completion:^{}];
-}
-
-
--(void)transferTextDidChange{
-    [self setupTextFiledNum:_moneyInput num:2];
-}
-
+#pragma mark - Event
 -(void)saveButtonClicked:(id)sender{
     [_moneyInput resignFirstResponder];
     [_memoInput resignFirstResponder];
@@ -564,6 +588,18 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 
 -(void)deleteButtonClicked:(id)sender{
     __weak typeof(self) weakSelf = self;
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:NULL];
+    UIAlertAction *comfirmAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [weakSelf deleteChargeConfig];
+    }];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"你确定要删除这条周期记账吗?" preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:cancelAction];
+    [alert addAction:comfirmAction];
+    [self.navigationController presentViewController:alert animated:YES completion:NULL];
+}
+
+- (void)deleteChargeConfig{
+    __weak typeof(self) weakSelf = self;
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSString *writeDate = [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         if ([db intForQuery:@"select count(1) from bk_charge_period_config where iconfigid = ?",weakSelf.item.configId]) {
@@ -574,6 +610,38 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
         });
     }];
 }
+
+
+#pragma mark - Private
+-(void)takePhoto{
+    UIImagePickerControllerSourceType sourceType = UIImagePickerControllerSourceTypeCamera;
+    if ([UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypeCamera])
+    {
+        UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+        picker.delegate = self;
+        picker.allowsEditing = YES;
+        picker.sourceType = sourceType;
+        [self presentViewController:picker animated:YES completion:^{}];
+    }else{
+        NSLog(@"模拟其中无法打开照相机,请在真机中使用");
+    }
+}
+
+-(void)localPhoto{
+    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+    
+    picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    picker.delegate = self;
+    //设置选择后的图片可被编辑
+    picker.allowsEditing = YES;
+    [self presentViewController:picker animated:YES completion:^{}];
+}
+
+
+-(void)transferTextDidChange{
+    [self setupTextFiledNum:_moneyInput num:2];
+}
+
 
 /**
  *   限制输入框小数点(输入框只改变时候调用valueChange)

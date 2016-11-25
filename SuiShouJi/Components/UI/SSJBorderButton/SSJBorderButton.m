@@ -77,7 +77,6 @@ static const NSTimeInterval kAnimationDuration = 0.25;
         
         self.titleLabel.textColor = self.titleColorInfo[@(self.state)] ?: self.titleColorInfo[@(SSJBorderButtonStateNormal)];
         [UIView animateWithDuration:kAnimationDuration animations:^{
-//            [self updateAppearance];
             self.titleLabel.text = self.titleInfo[@(self.state)] ?: self.titleInfo[@(SSJBorderButtonStateNormal)];
             self.layer.borderColor = ((UIColor *)self.borderColorInfo[@(self.state)]).CGColor ?: ((UIColor *)self.borderColorInfo[@(SSJBorderButtonStateNormal)]).CGColor;
             self.backgroundColor = self.backgroundColorInfo[@(self.state)] ?: self.backgroundColorInfo[@(SSJBorderButtonStateNormal)];
@@ -130,16 +129,6 @@ static const NSTimeInterval kAnimationDuration = 0.25;
     
     _shouldPerformAction = YES;
     self.state = SSJBorderButtonStateHighlighted;
-    
-//    CALayer *presentationLayer = self.layer.presentationLayer;
-//    if (!CGColorEqualToColor(presentationLayer.backgroundColor, DEFAULT_BACKGROUND_COLOR.CGColor)) {
-//        [self.layer removeAllAnimations];
-//        self.backgroundColor = DEFAULT_BACKGROUND_COLOR;
-//        self.titleLabel.textColor = self.color;
-//    } else {
-//        self.backgroundColor = self.color;
-//        self.titleLabel.textColor = [UIColor whiteColor];
-//    }
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -161,12 +150,6 @@ static const NSTimeInterval kAnimationDuration = 0.25;
     dispatch_after(delayTime, dispatch_get_main_queue(), ^{
         self.state = SSJBorderButtonStateNormal;
     });
-//    self.state = SSJBorderButtonStateNormal;
-    
-//    [UIView animateWithDuration:kAnimationDuration delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
-//        self.backgroundColor = DEFAULT_BACKGROUND_COLOR;
-//        self.titleLabel.textColor = self.color;
-//    } completion:NULL];
     
     if (self.enabled && _shouldPerformAction) {
         if ([self.target respondsToSelector:self.action]) {
@@ -179,12 +162,6 @@ static const NSTimeInterval kAnimationDuration = 0.25;
     [super touchesCancelled:touches withEvent:event];
     
     self.state = SSJBorderButtonStateNormal;
-    
-    
-//    [UIView animateWithDuration:kAnimationDuration delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
-//        self.backgroundColor = self.backgroundColorInfo[@(UIControlStateNormal)];
-//        self.titleLabel.textColor = self.color;
-//    } completion:NULL];
 }
 
 @end

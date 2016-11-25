@@ -7,7 +7,7 @@
 //
 
 #import "SSJBooksEditeOrNewViewController.h"
-#import "SSJNewOrEditCustomCategoryView.h"
+#import "SSJBooksColorAndIconSelectView.h"
 #import "UIViewController+MMDrawerController.h"
 #import "SSJBooksTypeStore.h"
 #import "SSJDatabaseQueue.h"
@@ -15,7 +15,7 @@
 
 @interface SSJBooksEditeOrNewViewController ()
 
-@property(nonatomic, strong) SSJNewOrEditCustomCategoryView *booksEditeView;
+@property(nonatomic, strong) SSJBooksColorAndIconSelectView *booksEditeView;
 
 @end
 
@@ -35,7 +35,9 @@
         self.title = @"编辑账本";
     }else{
         self.title = @"添加账本";
-        self.item = [[SSJBooksTypeItem alloc]init];
+        if (!self.item) {
+            self.item = [[SSJBooksTypeItem alloc]init];
+        }
         self.item.booksColor = @"#fc7a60";
         self.item.booksIcoin = @"bk_moren";
     }
@@ -51,29 +53,23 @@
     [self.mm_drawerController setCloseDrawerGestureModeMask:MMCloseDrawerGestureModeNone];
 }
 
-- (void)viewWillDisappear:(BOOL)animated{
-    [super viewWillDisappear:animated];
-    [self.mm_drawerController setMaximumLeftDrawerWidth:SSJSCREENWITH * 0.8];
-    [self.mm_drawerController setOpenDrawerGestureModeMask:MMOpenDrawerGestureModeAll];
-    [self.mm_drawerController setCloseDrawerGestureModeMask:MMCloseDrawerGestureModeAll];
-}
-
 -(void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark - Getter
-- (SSJNewOrEditCustomCategoryView *)booksEditeView{
+- (SSJBooksColorAndIconSelectView *)booksEditeView{
     if (!_booksEditeView) {
-        _booksEditeView = [[SSJNewOrEditCustomCategoryView alloc]initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM + 10, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM - 10)];
+        _booksEditeView = [[SSJBooksColorAndIconSelectView alloc]initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM + 10, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM - 10)];
         _booksEditeView.colors = [self colorsArray];
+        _booksEditeView.booksParent = self.item.booksParent;
         _booksEditeView.images = [self imageArray];
         __weak typeof(self) weakSelf = self;
-        _booksEditeView.selectImageAction = ^(SSJNewOrEditCustomCategoryView *view){
+        _booksEditeView.selectImageAction = ^(SSJBooksColorAndIconSelectView *view){
             [MobClick event:@"accountbook_icon_pick"];
             weakSelf.item.booksIcoin = view.selectedImage;
         };
-        _booksEditeView.selectColorAction = ^(SSJNewOrEditCustomCategoryView *view){
+        _booksEditeView.selectColorAction = ^(SSJBooksColorAndIconSelectView *view){
             [MobClick event:@"accountbook_color_pick"];
             weakSelf.item.booksColor = view.selectedColor;
         };
@@ -102,11 +98,14 @@
         [CDAutoHideMessageHUD showMessage:@"账本名称不能超过5个字"];
         return;
     }
-    if ([SSJBooksTypeStore saveBooksTypeItem:self.item]) {
+    __weak typeof(self) weakSelf = self;
+    [SSJBooksTypeStore saveBooksTypeItem:self.item sucess:^{
         [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
         [[NSNotificationCenter defaultCenter]postNotificationName:SSJBooksTypeDidChangeNotification object:nil];
         [self.navigationController popViewControllerAnimated:YES];
-    }
+    } failure:^(NSError *error) {
+        [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
+    }];
 }
 
 #pragma mark - Private

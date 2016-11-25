@@ -41,6 +41,13 @@
 
 @interface NSString (SSJDecimal)
 
+/**
+ 将数字字符串保留指定的整数位数和小数位数
+
+ @param DecimalDigits 保留的小数位数，如果是0，整数位就不做任何处理
+ @param intDigits 保留的整数位数，如果是0就舍去小数
+ @return 处理后的字符串
+ */
 - (NSString *)ssj_reserveDecimalDigits:(int)DecimalDigits intDigits:(int)intDigits;
 
 @end

@@ -18,13 +18,17 @@
 + (NSArray *)queryRecordsNeedToSyncWithUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
     int64_t version = [SSJSyncTable lastSuccessSyncVersionForUserId:userId inDatabase:db];
     if (version == SSJ_INVALID_SYNC_VERSION) {
-        *error = [db lastError];
+        if (error) {
+            *error = [db lastError];
+        }
         return nil;
     }
     
     FMResultSet *result = [db executeQuery:@"select a.id, a.cname, a.itype, a.ccoin, a.ccolor, a.icustom, a.istate from bk_bill_type as a, bk_user_bill as b where a.id = b.cbillid and a.icustom = 1 and b.cuserid = ? and b.iversion > ?", userId, @(version)];
     if (!result) {
-        *error = [db lastError];
+        if (error) {
+            *error = [db lastError];
+        }
         return nil;
     }
     
@@ -60,7 +64,9 @@
         NSString *ccoin = recordInfo[@"ccoin"];
         NSString *ccolor = recordInfo[@"ccolor"];
         if (![db executeUpdate:@"insert into bk_bill_type (id, cname, itype, ccoin, ccolor, icustom, istate) values (?, ?, ?, ?, ?, 1, 1)", ID, cname, itype, ccoin, ccolor]) {
-            *error = [db lastError];
+            if (error) {
+                *error = [db lastError];
+            }
             return NO;
         }
     }

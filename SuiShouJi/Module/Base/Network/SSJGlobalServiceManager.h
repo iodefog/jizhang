@@ -21,12 +21,12 @@
 @property (nonatomic, assign) AFSSLPinningMode SSLPinningMode;
 
 /**
- *  是否允许无效或过期的证书，默认为YES
+ *  是否允许无效或过期的证书
  */
 @property (nonatomic, assign) BOOL allowInvalidCertificates;
 
 /**
- *  是否开启域名验证，默认为YES
+ *  是否开启域名验证
  */
 @property (nonatomic, assign) BOOL validatesDomainName;
 
@@ -34,6 +34,13 @@
  *  返回单列对象，此单列管理一个 url session
  */
 + (instancetype)sharedManager;
+
+/**
+ 返回一个新的实例对象，此方法定义了缓存策略、证书验证方式、返回数据序列化方式
+
+ @return
+ */
++ (instancetype)standardManager;
 
 /**
  *  如果创建一个新的请求，需要调用此方法把service添加到数组中；

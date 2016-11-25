@@ -31,7 +31,7 @@ typedef NS_ENUM(NSInteger, SSJDataSynchronizeType) {
 - (void)stopTimingSync;
 
 /**
- *  开始数据同步
+ *  开始数据同步，包括同步用户数据、图片
  *
  *  @param success  同步成功回调
  *  @param failure  同步失败回调
@@ -39,7 +39,7 @@ typedef NS_ENUM(NSInteger, SSJDataSynchronizeType) {
 - (void)startSyncWithSuccess:(void (^)(SSJDataSynchronizeType type))success failure:(void (^)(SSJDataSynchronizeType type, NSError *error))failure;
 
 /**
- *  根据网络环境、同步设置、是否登录决定是否需要同步数据
+ *  根据网络环境、同步设置、是否登录决定是否需要同步
  *
  *  @param success  同步成功回调
  *  @param failure  同步失败回调

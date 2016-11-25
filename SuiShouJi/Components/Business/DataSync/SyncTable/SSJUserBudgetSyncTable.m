@@ -15,7 +15,23 @@
 }
 
 + (NSArray *)columns {
-    return @[@"ibid", @"cuserid", @"itype", @"imoney", @"iremindmoney", @"csdate", @"cedate", @"istate", @"ccadddate", @"cbilltype", @"iremind", @"ihasremind", @"cbooksid", @"islastday", @"iversion", @"cwritedate", @"operatortype"];
+    return @[@"ibid",
+             @"cuserid",
+             @"itype",
+             @"imoney",
+             @"iremindmoney",
+             @"csdate",
+             @"cedate",
+             @"istate",
+             @"ccadddate",
+             @"cbilltype",
+             @"iremind",
+             @"ihasremind",
+             @"cbooksid",
+             @"islastday",
+             @"iversion",
+             @"cwritedate",
+             @"operatortype"];
 }
 
 + (NSArray *)primaryKeys {
@@ -43,7 +59,9 @@
     FMResultSet *resultSet = [db executeQuery:@"select ibid, cwritedate, operatortype from bk_user_budget where cuserid = ? and csdate <= ? and cedate >= ? and itype = ? and cbooksid = ? and cbilltype = ? and ibid <> ? and operatortype <> 2", userId, todayStr, todayStr, record[@"itype"], record[@"cbooksid"], record[@"cbilltype"], record[@"ibid"]];
     
     if (!resultSet) {
-        *error = [db lastError];
+        if (error) {
+            *error = [db lastError];
+        }
         return NO;
     }
     
@@ -64,7 +82,9 @@
             
             //  合并记录修改时间较晚，删除本地记录，合并此记录；如果本地记录删除失败，就忽略服务器返回的记录
             if (![db executeUpdate:@"update bk_user_budget set operatortype = 2 where ibid = ?", [resultSet stringForColumn:@"ibid"]]) {
-                *error = [db lastError];
+                if (error) {
+                    *error = [db lastError];
+                }
                 [resultSet close];
                 return NO;
             }

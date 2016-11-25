@@ -80,6 +80,8 @@ static const NSUInteger kMaxLoadUpdateItmes = 0; //  加载更新信息失败的
 - (void)serverDidFinished:(SSJBaseNetworkService *)service {
     if ([self.networkService.returnCode isEqualToString:@"1"]) {
         [self finishCheckUpdate];
+        
+        [MQManager setScheduledAgentWithAgentId:@"" agentGroupId:self.networkService.mqGroupId scheduleRule:MQScheduleRulesRedirectGroup];
 #ifdef DEBUG
         [CDAutoHideMessageHUD showMessage:@"启动接口请求成功"];
         SSJPRINT(@">>> 启动接口请求成功");
