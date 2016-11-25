@@ -348,8 +348,8 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
             }
         }
         [resultSet close];
-        cardItem.cardColor = [db stringForQuery:@""];
-        cardItem.cardName = [db stringForQuery:@""];
+        newcardItem.cardColor = [db stringForQuery:@"select ccolor from bk_fund_info where cfundid = ? and cuserid = ?",cardItem.cardId,userid];
+        newcardItem.cardName = [db stringForQuery:@"select cacctname from bk_fund_info where cfundid = ? and cuserid = ?",cardItem.cardId,userid];
         SSJDispatchMainAsync(^{
             if (success) {
                 success(result,newcardItem);
