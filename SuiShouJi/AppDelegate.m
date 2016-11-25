@@ -211,9 +211,9 @@ NSDate *SCYEnterBackgroundTime() {
     [MQManager openMeiqiaService];
 }
 
-- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken{
-    [MQManager registerDeviceToken:deviceToken];
-}
+//- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken{
+//    [MQManager registerDeviceToken:deviceToken];
+//}
 
 #pragma mark - Getter
 - (SSJGradientMaskView *)maskView{
