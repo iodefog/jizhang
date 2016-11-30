@@ -53,6 +53,14 @@ typedef NS_ENUM(NSInteger, SSJBillType) {
     SSJBillTypeSurplus = 2    // 结余(收入＋支出)
 };
 
+//  收支类型
+typedef NS_ENUM(NSInteger, SSJChargeIdType) {
+    SSJChargeIdTypeNormal = 0,        // 普通记账
+    SSJChargeIdTypeCircleConfig = 1,  // 周期记账
+    SSJChargeIdTypeLoan = 2,          // 借贷
+    SSJChargeIdTypeRepayment = 3,     // 还款
+};
+
 ///------------------------------------------
 /// @name 基本数据常量
 ///------------------------------------------

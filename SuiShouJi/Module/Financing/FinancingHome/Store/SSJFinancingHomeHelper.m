@@ -380,7 +380,7 @@
     for (SSJBillingChargeCellItem *item in tempArr) {
         NSDate *writeDate = [NSDate dateWithString:item.editeDate formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
         NSDate *maxDate = [writeDate dateByAddingSeconds:1];
-        NSDate *minDate = [writeDate dateBySubtractingMinutes:1];
+        NSDate *minDate = [writeDate dateBySubtractingSeconds:1];
         NSString *maxDateStr = [maxDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         NSString *minDateStr = [minDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         if ([item.billId isEqualToString:@"3"]) {
