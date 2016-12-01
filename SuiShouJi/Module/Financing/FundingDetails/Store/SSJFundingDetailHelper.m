@@ -60,7 +60,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
             item.loanType = [resultSet intForColumn:@"loantype"];
             if (item.incomeOrExpence && ![item.money hasPrefix:@"-"]) {
                 item.money = [NSString stringWithFormat:@"-%.2f",[item.money doubleValue]];
-                fundingItem.fundingExpence = fundingItem.fundingExpence + [item.money doubleValue];
+                fundingItem.fundingExpence = fundingItem.fundingExpence - [item.money doubleValue];
             }else if(!item.incomeOrExpence && ![item.money hasPrefix:@"+"]){
                 item.money = [NSString stringWithFormat:@"+%.2f",[item.money doubleValue]];
                 fundingItem.fundingIncome = fundingItem.fundingIncome + [item.money doubleValue];

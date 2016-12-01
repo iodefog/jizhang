@@ -42,10 +42,14 @@
                     model.cardId = item.fundId;
                     model.repaymentSourceFoundId = [db stringForQuery:@"select ifunsid from bk_user_charge where cwritedate = ? and ichargeid <> ? and itype = ?",item.editeDate,item.ID,SSJChargeIdTypeRepayment];
                     model.repaymentSourceFoundName = [db stringForQuery:@"select cacctname from bk_fund_info where cfundid = ?",model.repaymentSourceFoundId];
+                    model.repaymentChargeId = item.ID;
+                    model.sourceChargeId = [db stringForQuery:@"select ichargeid from bk_user_charge where cwritedate = ? and ichargeid <> ? and itype = ?",item.editeDate,item.ID,SSJChargeIdTypeRepayment];
                 } else{
                     model.cardId = [db stringForQuery:@"select ifunsid from bk_user_charge where cwritedate = ? and ichargeid <> ? and itype = ?",item.editeDate,item.ID,SSJChargeIdTypeRepayment];
                     model.repaymentSourceFoundId = item.fundId;
                     model.repaymentSourceFoundName = [db stringForQuery:@"select cacctname from bk_fund_info where cfundid = ?",item.fundId];
+                    model.sourceChargeId = item.ID;
+                    model.repaymentChargeId = [db stringForQuery:@"select ichargeid from bk_user_charge where cwritedate = ? and ichargeid <> ? and itype = ?",item.editeDate,item.ID,SSJChargeIdTypeRepayment];
                 }
                 model.repaymentMoney = [NSDecimalNumber decimalNumberWithString:item.money];
                 model.memo = item.chargeMemo;
@@ -59,7 +63,12 @@
                                 Success:(void (^)(void))success
                                 failure:(void (^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-       
+        if (!model.instalmentCout) {
+            // 如果期数为0则是还款
+            
+        }else{
+            
+        }
     }];
 }
 @end

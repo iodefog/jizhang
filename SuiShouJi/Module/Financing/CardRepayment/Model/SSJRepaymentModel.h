@@ -28,6 +28,12 @@
 // 还款金额
 @property(nonatomic, strong) NSDecimalNumber *repaymentMoney;
 
+// 还款的流水id
+@property(nonatomic, strong) NSString *repaymentChargeId;
+
+// 转账来源的流水id
+@property(nonatomic, strong) NSString *sourceChargeId;
+
 // 分期期数
 @property(nonatomic) NSInteger instalmentCout;
 
