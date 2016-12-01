@@ -22,11 +22,17 @@
 // 还款来源资金账户id
 @property(nonatomic, strong) NSString *repaymentSourceFoundId;
 
+// 还款来源资金账户名称
+@property(nonatomic, strong) NSString *repaymentSourceFoundName;
+
 // 还款金额
 @property(nonatomic, strong) NSDecimalNumber *repaymentMoney;
 
 // 分期期数
 @property(nonatomic) NSInteger instalmentCout;
+
+// 分期期数
+@property(nonatomic) NSInteger currentInstalmentCout;
 
 // 分期手续费
 @property(nonatomic, strong) NSDecimalNumber *poundageRate;
