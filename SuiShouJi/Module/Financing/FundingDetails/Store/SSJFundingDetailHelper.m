@@ -60,7 +60,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
             item.loanType = [resultSet intForColumn:@"loantype"];
             if (item.incomeOrExpence && ![item.money hasPrefix:@"-"]) {
                 item.money = [NSString stringWithFormat:@"-%.2f",[item.money doubleValue]];
-                fundingItem.fundingExpence = fundingItem.fundingExpence + [item.money doubleValue];
+                fundingItem.fundingExpence = fundingItem.fundingExpence - [item.money doubleValue];
             }else if(!item.incomeOrExpence && ![item.money hasPrefix:@"+"]){
                 item.money = [NSString stringWithFormat:@"+%.2f",[item.money doubleValue]];
                 fundingItem.fundingIncome = fundingItem.fundingIncome + [item.money doubleValue];
@@ -226,7 +226,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
             item.loanType = [resultSet intForColumn:@"loantype"];
             if (item.incomeOrExpence && ![item.money hasPrefix:@"-"]) {
                 item.money = [NSString stringWithFormat:@"-%.2f",[[resultSet stringForColumn:@"IMONEY"] doubleValue]];
-                newcardItem.cardExpence = newcardItem.cardExpence + [item.money doubleValue];
+                newcardItem.cardExpence = newcardItem.cardExpence - [item.money doubleValue];
             }else if(!item.incomeOrExpence && ![item.money hasPrefix:@"+"]){
                 item.money = [NSString stringWithFormat:@"+%.2f",[[resultSet stringForColumn:@"IMONEY"] doubleValue]];
                 newcardItem.cardIncome = newcardItem.cardIncome + [item.money doubleValue];
@@ -286,10 +286,14 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
             NSString *currentPeriod;
             NSString *currentMonth;
             if (billDate.day >= cardItem.cardBillingDay) {
-                currentPeriod = [NSString stringWithFormat:@"%d.%d-%d.%d",billDate.month,cardItem.cardBillingDay + 1,billDate.month + 1,cardItem.cardBillingDay];
+                NSDate *firstDate = [[NSDate dateWithYear:0 month:billDate.month day:cardItem.cardBillingDay] dateByAddingDays:1];
+                NSDate *secondDate = [[NSDate dateWithYear:0 month:billDate.month day:cardItem.cardBillingDay] dateByAddingMonths:1];
+                currentPeriod = [NSString stringWithFormat:@"%d.%d-%d.%d",firstDate.month,firstDate.day,secondDate.month,secondDate.day];
                 currentMonth = [[[NSDate dateWithYear:billDate.year month:billDate.month day:billDate.day] dateByAddingMonths:1] formattedDateWithFormat:@"yyyy-MM"];
             }else{
-                currentPeriod = [NSString stringWithFormat:@"%d.%d-%d.%d",billDate.month - 1,cardItem.cardBillingDay + 1,billDate.month,cardItem.cardBillingDay];
+                NSDate *firstDate = [[[NSDate dateWithYear:0 month:billDate.month day:cardItem.cardBillingDay] dateByAddingDays:1] dateBySubtractingMonths:1];
+                NSDate *secondDate = [NSDate dateWithYear:0 month:billDate.month day:cardItem.cardBillingDay];
+                currentPeriod = [NSString stringWithFormat:@"%d.%d-%d.%d",firstDate.month,firstDate.day,secondDate.month,secondDate.day];
                 currentMonth = [[NSDate dateWithYear:billDate.year month:billDate.month day:billDate.day] formattedDateWithFormat:@"yyyy-MM"];
             }
             if ([currentPeriod isEqualToString:lastPeriod]) {
@@ -376,7 +380,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
         case 5: return @"星期四";
         case 6: return @"星期五";
         case 7: return @"星期六";
-            
+
         default: return nil;
     }
 }

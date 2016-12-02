@@ -103,9 +103,9 @@
     NSInteger daysToBillingDate = [billingDate daysFrom:today];
     NSInteger daysToRepaymentDate = [repaymentDate daysFrom:today];
     NSInteger minmumDays = MIN(daysToBillingDate, daysToRepaymentDate);
-    if (billingDate.day == today.day) {
+    if (!daysToBillingDate) {
         self.daysLab.text = [NSString stringWithFormat:@"距还款日:%ld天",daysToRepaymentDate + 1];
-    }else if(repaymentDate.day == today.day){
+    }else if(!daysToRepaymentDate){
         self.daysLab.text = [NSString stringWithFormat:@"距账单日:%ld天",daysToBillingDate + 1];
     }else{
         if (minmumDays + 1 < 0) {
