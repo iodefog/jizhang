@@ -1290,6 +1290,8 @@
 		9C41219E1D7EC9B700F29428 /* SSJReminderCircleSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C4121921D7EC9B100F29428 /* SSJReminderCircleSelectView.m */; };
 		9C4152081D38F0C500D2AC02 /* SSJBookKeepingHomeNoDataHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C4152071D38F0C500D2AC02 /* SSJBookKeepingHomeNoDataHeader.m */; };
 		9C4152101D38F24100D2AC02 /* SSJBookKeepingHomeNoDataHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C4152071D38F0C500D2AC02 /* SSJBookKeepingHomeNoDataHeader.m */; };
+		9C47BB831DF1498B0077ACF5 /* SSJRepaymentModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C47BB7D1DF1498B0077ACF5 /* SSJRepaymentModel.m */; };
+		9C47BB841DF1498B0077ACF5 /* SSJRepaymentStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C47BB801DF1498B0077ACF5 /* SSJRepaymentStore.m */; };
 		9C47E6E41D222372005F338A /* SSJThemeDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C66F1401D214E330094125D /* SSJThemeDetailViewController.m */; };
 		9C47E6EF1D222A26005F338A /* SSJDownLoadProgressButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C47E6EE1D222A26005F338A /* SSJDownLoadProgressButton.m */; };
 		9C47E6F21D224BEF005F338A /* SSJThemeService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C47E6F11D224BEF005F338A /* SSJThemeService.m */; };
@@ -3196,6 +3198,10 @@
 		9C4121921D7EC9B100F29428 /* SSJReminderCircleSelectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReminderCircleSelectView.m; sourceTree = "<group>"; };
 		9C4152061D38F0C500D2AC02 /* SSJBookKeepingHomeNoDataHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookKeepingHomeNoDataHeader.h; sourceTree = "<group>"; };
 		9C4152071D38F0C500D2AC02 /* SSJBookKeepingHomeNoDataHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBookKeepingHomeNoDataHeader.m; sourceTree = "<group>"; };
+		9C47BB7C1DF1498B0077ACF5 /* SSJRepaymentModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJRepaymentModel.h; sourceTree = "<group>"; };
+		9C47BB7D1DF1498B0077ACF5 /* SSJRepaymentModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJRepaymentModel.m; sourceTree = "<group>"; };
+		9C47BB7F1DF1498B0077ACF5 /* SSJRepaymentStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJRepaymentStore.h; sourceTree = "<group>"; };
+		9C47BB801DF1498B0077ACF5 /* SSJRepaymentStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJRepaymentStore.m; sourceTree = "<group>"; };
 		9C47E6ED1D222A26005F338A /* SSJDownLoadProgressButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJDownLoadProgressButton.h; sourceTree = "<group>"; };
 		9C47E6EE1D222A26005F338A /* SSJDownLoadProgressButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDownLoadProgressButton.m; sourceTree = "<group>"; };
 		9C47E6F01D224BEF005F338A /* SSJThemeService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJThemeService.h; sourceTree = "<group>"; };
@@ -5110,6 +5116,49 @@
 			path = YWFramework;
 			sourceTree = "<group>";
 		};
+		9C47BB7A1DF1498B0077ACF5 /* CardRepayment */ = {
+			isa = PBXGroup;
+			children = (
+				9C47BB7B1DF1498B0077ACF5 /* Model */,
+				9C47BB7E1DF1498B0077ACF5 /* Store */,
+				9C47BB811DF1498B0077ACF5 /* View */,
+				9C47BB821DF1498B0077ACF5 /* ViewController */,
+			);
+			path = CardRepayment;
+			sourceTree = "<group>";
+		};
+		9C47BB7B1DF1498B0077ACF5 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				9C47BB7C1DF1498B0077ACF5 /* SSJRepaymentModel.h */,
+				9C47BB7D1DF1498B0077ACF5 /* SSJRepaymentModel.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		9C47BB7E1DF1498B0077ACF5 /* Store */ = {
+			isa = PBXGroup;
+			children = (
+				9C47BB7F1DF1498B0077ACF5 /* SSJRepaymentStore.h */,
+				9C47BB801DF1498B0077ACF5 /* SSJRepaymentStore.m */,
+			);
+			path = Store;
+			sourceTree = "<group>";
+		};
+		9C47BB811DF1498B0077ACF5 /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		9C47BB821DF1498B0077ACF5 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
 		9C56E12A1D1A86340057895D /* Store */ = {
 			isa = PBXGroup;
 			children = (
@@ -5285,6 +5334,7 @@
 		9C9471301CEB224C00D69079 /* Financing */ = {
 			isa = PBXGroup;
 			children = (
+				9C47BB7A1DF1498B0077ACF5 /* CardRepayment */,
 				9C9A0C831D73CDB6002AF046 /* CreditCard */,
 				9CF593E51D63FFBB00006594 /* NewFunding */,
 				7D87AE8F1D6319490024D33C /* Loan */,
@@ -9347,6 +9397,7 @@
 				7DBA55521D6BF53500C02D79 /* SSJLoanFundAccountSelectionCell.m in Sources */,
 				7DF8B9AD1CDC2B0000F461A6 /* SSJEditableCollectionView.m in Sources */,
 				9CF594061D63FFBB00006594 /* SSJColorSelectViewController.m in Sources */,
+				9C47BB831DF1498B0077ACF5 /* SSJRepaymentModel.m in Sources */,
 				9CD9BC0B1CFD2DAA0061803B /* SSJMagicExportAnnouncementViewController.m in Sources */,
 				9C9D0B801D01898E003A9F4E /* SSJBillTypeSelectCell.m in Sources */,
 				BD0E43FB1C21380F00F9179D /* SFHFKeychainUtils.m in Sources */,
@@ -9478,6 +9529,7 @@
 				7D581EB81C5107C300E202A2 /* SSJSyncTable.m in Sources */,
 				9C6D662D1D86BD710081A7CE /* SSJListAdItem.m in Sources */,
 				7DAA38531D952AA0000ED16E /* SSJBudgetBillTypeSelectionCellItem.m in Sources */,
+				9C47BB841DF1498B0077ACF5 /* SSJRepaymentStore.m in Sources */,
 				9CD9BC201CFD2DAA0061803B /* SSJAboutusTableViewCell.m in Sources */,
 				7D36AC471D461704006526B3 /* SSJMemberSyncTable.m in Sources */,
 				9C17FF1C1CE96ED90016EE4C /* SSJCustomKeyboard.m in Sources */,

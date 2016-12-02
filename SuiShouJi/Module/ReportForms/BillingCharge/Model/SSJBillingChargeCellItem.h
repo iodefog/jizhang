@@ -112,5 +112,10 @@
 //客户端添加时间
 @property(nonatomic, strong) NSString *clientAddDate;
 
+//id的类型(周期记账,借贷,还款)
+@property(nonatomic) SSJChargeIdType idType;
+
+//杂项id(周期记账,借贷,还款id)根据上面的type来判断
+@property(nonatomic, strong) NSString *sundryId;
 
 @end
