@@ -12,12 +12,6 @@
 /// @name 枚举
 ///------------------------------------------
 
-//  渠道号
-typedef NS_ENUM(NSInteger, SSJAppSource) {
-    SSJAppSourceMainAppStore = 8000,    //  苹果市场主包
-    SSJAppSourceMainEnterPrise = 8001   //  企业版主包
-};
-
 //  注册、忘记密码类型
 typedef NS_ENUM(NSInteger, SSJRegistAndForgetPasswordType) {
     SSJRegistAndForgetPasswordTypeRegist,           //  注册
