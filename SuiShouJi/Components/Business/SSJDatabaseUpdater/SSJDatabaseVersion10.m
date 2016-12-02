@@ -103,7 +103,6 @@ static NSString *const kDefualtOrderKey = @"kDefualtOrderKey";
     
     for (NSString *sqlStr in [self insertSqlArray]) {
         if (![db executeUpdate:sqlStr]) {
-            [db rollback];
             return [db lastError];
         }
     }

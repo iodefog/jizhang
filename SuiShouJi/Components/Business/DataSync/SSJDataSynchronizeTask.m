@@ -129,7 +129,7 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
     //  上传数据
     [self uploadData:zipData completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
         
-        //  因为请求回调是在主线程队列中执行，所以在放到同步队列里执行以下操作
+        // 因为请求回调是在主线程队列中执行，所以在放到同步队列里执行以下操作
         dispatch_async(self.syncQueue, ^{
             
             if (error) {
@@ -328,11 +328,32 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
 //  合并json数据
 - (BOOL)mergeData:(NSDictionary *)tableInfo error:(NSError **)error {
     
+    if (![tableInfo isKindOfClass:[NSDictionary class]]) {
+        if (error) {
+            *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"服务端返回的数据格式错误"}];
+        }
+        return NO;
+    }
+    
     NSString *versinStr = tableInfo[@"syncversion"];
     
     // 存储当前同步用户数据
     NSArray *userArr = tableInfo[@"bk_user"];
+    if (![userArr isKindOfClass:[NSArray class]]) {
+        if (error) {
+            *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"服务端返回的bk_user数据格式错误"}];
+        }
+        return NO;
+    }
+    
     for (NSDictionary *userInfo in userArr) {
+        if (![userInfo isKindOfClass:[NSDictionary class]]) {
+            if (error) {
+                *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"服务端返回的bk_user数据格式错误"}];
+            }
+            return NO;
+        }
+        
         NSString *userId = userInfo[@"cuserid"];
         if (![userId isEqualToString:self.userId]) {
             continue;
@@ -411,7 +432,7 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
     }];
     
     // 根据用户的提醒表中的记录注册本地通知
-    [SSJLocalNotificationHelper cancelLocalNotificationWithUserId:self.userId];
+    [SSJLocalNotificationHelper cancelLocalNotificationWithKey:SSJReminderNotificationKey];
     [SSJLocalNotificationStore queryForreminderListForUserId:self.userId WithSuccess:^(NSArray<SSJReminderItem *> *result) {
         for (SSJReminderItem *item in result) {
             [SSJLocalNotificationHelper registerLocalNotificationWithremindItem:item];

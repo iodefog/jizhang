@@ -33,6 +33,7 @@
 #import "SSJThirdPartLoginItem.h"
 #import "SSJLoginHelper.h"
 #import "SSJStartChecker.h"
+#import "SSJLocalNotificationHelper.h"
 
 @interface SSJLoginViewController () <UITextFieldDelegate>
 
@@ -318,6 +319,7 @@
         return;
     }
     
+    // 合并登陆借口返回的数据，即使合并失败也不影响登陆，因为之后还会同步一次
     [SSJLoginHelper updateTableWhenLoginWithServices:self.loginService];
         
     // 如果本地保存的最近一次签到时间和服务端返回的不一致，说明本地没有保存最新的签到记录
@@ -327,6 +329,10 @@
         [SSJBookkeepingTreeHelper loadTreeImageWithUrlPath:_loginService.checkInModel.treeImgUrl finish:NULL];
         [SSJBookkeepingTreeHelper loadTreeGifImageDataWithUrlPath:_loginService.checkInModel.treeGifUrl finish:NULL];
     }
+    
+    [CDAutoHideMessageHUD showMessage:@"登录成功"];
+    [[NSNotificationCenter defaultCenter]postNotificationName:SSJLoginOrRegisterNotification object:nil];
+    [SSJLocalNotificationHelper cancelLocalNotificationWithKey:SSJReminderNotificationKey];
     
     //  登陆成功后强制同步一次
     [[NSNotificationCenter defaultCenter] postNotificationName:SSJShowSyncLoadingNotification object:self];
@@ -341,8 +347,6 @@
     //  如果有finishHandle，就通过finishHandle来控制页面流程，否则走默认流程
     [[NSUserDefaults standardUserDefaults]setBool:YES forKey:SSJHaveLoginOrRegistKey];
     [[NSUserDefaults standardUserDefaults]setInteger:self.loginService.loginType forKey:SSJUserLoginTypeKey];
-    [CDAutoHideMessageHUD showMessage:@"登录成功"];
-    [[NSNotificationCenter defaultCenter]postNotificationName:SSJLoginOrRegisterNotification object:nil];
     
     //  如果用户手势密码开启，进入手势密码页面
     SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"motionPWD", @"motionPWDState"] forUserId:SSJUSERID()];
