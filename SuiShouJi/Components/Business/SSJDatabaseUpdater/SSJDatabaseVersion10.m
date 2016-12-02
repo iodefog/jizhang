@@ -103,7 +103,6 @@ static NSString *const kDefualtOrderKey = @"kDefualtOrderKey";
     
     for (NSString *sqlStr in [self insertSqlArray]) {
         if (![db executeUpdate:sqlStr]) {
-            [db rollback];
             return [db lastError];
         }
     }
@@ -452,18 +451,7 @@ static NSString *const kDefualtOrderKey = @"kDefualtOrderKey";
               @"INSERT INTO `BK_BILL_TYPE` VALUES ('7','借贷变更收入',0,NULL,'#993f84',2,0,NULL,NULL,NULL)",
               @"INSERT INTO `BK_BILL_TYPE` VALUES ('8','借贷变更支出',1,NULL,'#4a8984',2,0,NULL,NULL,NULL)",
               @"INSERT INTO `BK_BILL_TYPE` VALUES ('9','借贷余额转入',0,NULL,NULL,2,0,NULL,NULL,NULL)",
-              @"INSERT INTO `BK_BILL_TYPE` VALUES ('10','借贷余额转出',1,NULL,NULL,2,0,NULL,NULL,NULL)",
-              @"INSERT INTO `BK_BILL_TYPE` VALUES ('1a9e14fc-acca-44c4-8a48-67baf7a44931','签证',1,'bt_shu','#d29361',1,1,NULL,NULL,NULL)",
-              @"INSERT INTO `BK_BILL_TYPE` VALUES ('236614f7-9030-46ae-8850-0144127a16bb','粉粉',1,'bt_taobao','#a8a67e',1,1,NULL,NULL,NULL)",
-              @"INSERT INTO `BK_BILL_TYPE` VALUES ('2cdd6b1a-62e9-423a-a681-ff4b4bf06719','鞋子',1,'bt_xie','#c55553',1,1,NULL,NULL,NULL)",
-              @"INSERT INTO `BK_BILL_TYPE` VALUES ('337b4da5-f771-4bc0-83db-ebba2d63be8d','电子照片',1,'bt_chae','#c55553',1,1,NULL,NULL,NULL)",
-              @"INSERT INTO `BK_BILL_TYPE` VALUES ('872d6d92-a84f-4992-8c5b-b2408b707b57','装修2',1,'bt_zhaungxiu','#c55553',1,1,NULL,NULL,NULL)",
-              @"INSERT INTO `BK_BILL_TYPE` VALUES ('8fa4be81-5350-4fd0-b68d-20a2a834ff25','小狗',1,'bt_chong','#c55553',1,1,NULL,NULL,NULL)",
-              @"INSERT INTO `BK_BILL_TYPE` VALUES ('a0a84230-13e0-4123-ad65-777dab2b031a','书',1,'bt_shu','#c55553',1,1,NULL,NULL,NULL)",
-              @"INSERT INTO `BK_BILL_TYPE` VALUES ('a19d9891-5434-48f1-8836-fa6a875cc609','宝宝',1,'bt_child','#d29361',1,1,NULL,NULL,NULL)",
-              @"INSERT INTO `BK_BILL_TYPE` VALUES ('e6670dc2-7fb4-4c27-a83f-834c57673ae3','老妈保险',1,'bt_shouxufei','#a90868',1,1,NULL,NULL,NULL)",
-              @"INSERT INTO `BK_BILL_TYPE` VALUES ('f6a5cfbb-46f0-4c96-a870-5467de44413d','淘宝',1,'bt_taobao','#d29361',1,1,NULL,NULL,NULL)",
-              @"INSERT INTO `BK_BILL_TYPE` VALUES ('fce1a7b0-3b57-43eb-b59f-ca8a78d993e0','去吧2',1,'bt_baozhuang','#c55553',1,1,NULL,NULL,NULL)"];
+              @"INSERT INTO `BK_BILL_TYPE` VALUES ('10','借贷余额转出',1,NULL,NULL,2,0,NULL,NULL,NULL)"];
 }
 
 
