@@ -34,7 +34,7 @@
 
 + (instancetype)standardManager {
     NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
-    configuration.requestCachePolicy = NSURLRequestReloadIgnoringLocalAndRemoteCacheData;
+    configuration.requestCachePolicy = NSURLRequestReloadIgnoringLocalCacheData;
     
     SSJGlobalServiceManager *manager = [[SSJGlobalServiceManager alloc] initWithBaseURL:[NSURL URLWithString:[SSJDomainManager domain]] sessionConfiguration:configuration];
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
