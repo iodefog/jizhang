@@ -319,6 +319,7 @@
         return;
     }
     
+    // 合并登陆借口返回的数据，即使合并失败也不影响登陆，因为之后还会同步一次
     [SSJLoginHelper updateTableWhenLoginWithServices:self.loginService];
         
     // 如果本地保存的最近一次签到时间和服务端返回的不一致，说明本地没有保存最新的签到记录
