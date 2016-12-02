@@ -143,7 +143,39 @@
                     }
                 }
             } else{
-                
+                // 如果是修改,首先将原来所有的跟这条分期有关的流水全部删除,然后将新的流水插入
+                if ([db executeUpdate:@"update bk_user_charge set operatortype = 2 , iversion = ?, cwritedate = ? where id = ? and itype = ?",model.repaymentId,SSJChargeIdTypeRepayment]) {
+                    *rollback = YES;
+                    if (failure) {
+                        SSJDispatch_main_async_safe(^{
+                            failure([db lastError]);
+                        });
+                    }
+                }
+                for (int i = 0; i < model.instalmentCout; i ++) {
+                    NSString *chargeid = SSJUUID();
+                    NSDate *billdate = [NSDate dateWithString:model.applyDate formatString:@"yyyy-MM-dd"];
+                    billdate = [billdate dateByAddingMonths:i];
+                    if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cbooksid, ibillid, ifunsid, imoney, cbilldate, cmemo, cuserid, iversion, operatortype, cwritedate, itype, id) values (?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?)",chargeid,booksId,@"11",model.cardId,model.repaymentMoney,[billdate formattedDateWithFormat:@"yyyy-MM-dd"],model.memo,userID,@(SSJSyncVersion()),writeDate,SSJChargeIdTypeRepayment,model.repaymentId]) {
+                        *rollback = YES;
+                        if (failure) {
+                            SSJDispatch_main_async_safe(^{
+                                failure([db lastError]);
+                            });
+                        }
+                    }
+                    if (model.poundageRate) {
+                        float poundageMoney = [model.repaymentMoney doubleValue] * [model.poundageRate doubleValue] / model.instalmentCout;
+                        if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cbooksid, ibillid, ifunsid, imoney, cbilldate, cmemo, cuserid, iversion, operatortype, cwritedate, itype, id) values (?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?)",chargeid,booksId,@"11",model.cardId,@(poundageMoney),[billdate formattedDateWithFormat:@"yyyy-MM-dd"],model.memo,userID,@(SSJSyncVersion()),writeDate,SSJChargeIdTypeRepayment,model.repaymentId]) {
+                            *rollback = YES;
+                            if (failure) {
+                                SSJDispatch_main_async_safe(^{
+                                    failure([db lastError]);
+                                });
+                            }
+                        }
+                    }
+                }
             }
         }
     }];
