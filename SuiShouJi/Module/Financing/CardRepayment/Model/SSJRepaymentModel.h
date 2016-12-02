@@ -37,7 +37,7 @@
 // 分期期数
 @property(nonatomic) NSInteger instalmentCout;
 
-// 分期期数
+// 当前期数
 @property(nonatomic) NSInteger currentInstalmentCout;
 
 // 分期手续费

@@ -62,12 +62,89 @@
 + (void)saveRepaymentWithRepaymentModel:(SSJRepaymentModel *)model
                                 Success:(void (^)(void))success
                                 failure:(void (^)(NSError *error))failure {
-    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+    [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
+        NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        NSString *userID = SSJUSERID();
+        NSString *booksId = [db stringForQuery:@"select CCURRENTBOOKSID from bk_user where cuserid = ?",userID];
+        if (!booksId.length) {
+            booksId = userID;
+        }
         if (!model.instalmentCout) {
             // 如果期数为0则是还款
-            
+            if (!model.repaymentChargeId.length) {
+                // 如果是新建,插入两笔转账流水
+                model.repaymentChargeId = SSJUUID();
+                model.sourceChargeId = SSJUUID();
+                // 转入流水
+                if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cbooksid, ibillid, ifunsid, imoney, cbilldate, cmemo, cuserid, iversion, operatortype, cwritedate, itype) values (?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?)",model.repaymentChargeId,booksId,@"3",model.cardId,model.repaymentMoney,model.applyDate,model.memo,userID,@(SSJSyncVersion()),writeDate,SSJChargeIdTypeRepayment]) {
+                    *rollback = YES;
+                    if (failure) {
+                        SSJDispatch_main_async_safe(^{
+                            failure([db lastError]);
+                        });
+                    }
+                }
+                // 转出流水
+                if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cbooksid, ibillid, ifunsid, imoney, cbilldate, cmemo, cuserid, iversion, operatortype, cwritedate, itype) values (?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?)",model.sourceChargeId,booksId,@"4",model.repaymentSourceFoundId,model.repaymentMoney,model.applyDate,model.memo,userID,@(SSJSyncVersion()),writeDate,SSJChargeIdTypeRepayment]) {
+                    *rollback = YES;
+                    if (failure) {
+                        SSJDispatch_main_async_safe(^{
+                            failure([db lastError]);
+                        });
+                    }
+                }
+            } else{
+                // 修改转出流水
+                if (![db executeUpdate:@"update bk_user_charge set imoney = ?, cbilldate = ?, cmemo = ?, iversion = ?, operatortype = 1, cwritedate = ? where ichargeid = ? and cuserid = ?",model.repaymentMoney,model.applyDate,model.memo,@(SSJSyncVersion()),writeDate,model.repaymentChargeId,userID]) {
+                    *rollback = YES;
+                    if (failure) {
+                        SSJDispatch_main_async_safe(^{
+                            failure([db lastError]);
+                        });
+                    }
+                }
+                // 转出流水
+                if (![db executeUpdate:@"update bk_user_charge set ifunsid, imoney = ?, cbilldate = ?, cmemo = ?, iversion = ?, operatortype = 1, cwritedate = ? where ichargeid = ? and cuserid = ?",model.repaymentSourceFoundId,model.repaymentMoney,model.applyDate,model.memo,@(SSJSyncVersion()),writeDate,model.sourceChargeId,userID]) {
+                    *rollback = YES;
+                    if (failure) {
+                        SSJDispatch_main_async_safe(^{
+                            failure([db lastError]);
+                        });
+                    }
+                }
+            }
         }else{
-            
+            // 如果不为0则为账单分期
+            if (!model.repaymentId.length) {
+                model.repaymentId = SSJUUID();
+                //如果是新建
+                for (int i = 0; i < model.instalmentCout; i ++) {
+                    NSString *chargeid = SSJUUID();
+                    NSDate *billdate = [NSDate dateWithString:model.applyDate formatString:@"yyyy-MM-dd"];
+                    billdate = [billdate dateByAddingMonths:i];
+                    if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cbooksid, ibillid, ifunsid, imoney, cbilldate, cmemo, cuserid, iversion, operatortype, cwritedate, itype, id) values (?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?)",chargeid,booksId,@"11",model.cardId,model.repaymentMoney,[billdate formattedDateWithFormat:@"yyyy-MM-dd"],model.memo,userID,@(SSJSyncVersion()),writeDate,SSJChargeIdTypeRepayment,model.repaymentId]) {
+                        *rollback = YES;
+                        if (failure) {
+                            SSJDispatch_main_async_safe(^{
+                                failure([db lastError]);
+                            });
+                        }
+                    }
+                    if (model.poundageRate) {
+                        float poundageMoney = [model.repaymentMoney doubleValue] * [model.poundageRate doubleValue] / model.instalmentCout;
+                        if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cbooksid, ibillid, ifunsid, imoney, cbilldate, cmemo, cuserid, iversion, operatortype, cwritedate, itype, id) values (?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?)",chargeid,booksId,@"11",model.cardId,@(poundageMoney),[billdate formattedDateWithFormat:@"yyyy-MM-dd"],model.memo,userID,@(SSJSyncVersion()),writeDate,SSJChargeIdTypeRepayment,model.repaymentId]) {
+                            *rollback = YES;
+                            if (failure) {
+                                SSJDispatch_main_async_safe(^{
+                                    failure([db lastError]);
+                                });
+                            }
+                        }
+                    }
+                }
+            } else{
+                
+            }
         }
     }];
 }
