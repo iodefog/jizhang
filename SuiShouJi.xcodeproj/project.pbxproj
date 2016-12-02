@@ -11,7 +11,7 @@
 		7D07B6951CF2AC4900B9C390 /* SSJJsPatchItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D07B6941CF2AC4900B9C390 /* SSJJsPatchItem.m */; };
 		7D07B6981CF2C1F300B9C390 /* SSJLoginHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D07B6971CF2C1F300B9C390 /* SSJLoginHelper.m */; };
 		7D1D7F431C86BBD90001F72A /* SSJUserChargePeriodConfigSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D1D7F421C86BBD90001F72A /* SSJUserChargePeriodConfigSyncTable.m */; };
-		7D1D7F461C86DB520001F72A /* SSJUserBudgetSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D1D7F451C86DB520001F72A /* SSJUserBudgetSyncTable.m */; };
+		7D1D7F461C86DB520001F72A /* SSJUserBudgetSyncTable.m in Sources */ = {isa = PBXBuildFile>; fileRef = 7D1D7F451C86DB520001F72A /* SSJUserBudgetSyncTable.m */; };
 		7D1D7F4A1C87EC660001F72A /* SSJRegularManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D1D7F491C87EC660001F72A /* SSJRegularManager.m */; };
 		7D1DB4361D6AA924006C2AC2 /* SSJLoanListSectionHeaderAmountView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D1DB4351D6AA924006C2AC2 /* SSJLoanListSectionHeaderAmountView.m */; };
 		7D1DB4371D6AA924006C2AC2 /* SSJLoanListSectionHeaderAmountView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D1DB4351D6AA924006C2AC2 /* SSJLoanListSectionHeaderAmountView.m */; };
@@ -8476,11 +8476,8 @@
 				9CECFB951D6D41A700DB2C8B /* SSJBudgetDetailMiddleTitleView.m in Sources */,
 				9C9A0C3C1D6D9667002AF046 /* SSJReminderEditeViewController.m in Sources */,
 				9C9A0C5A1D6D9749002AF046 /* SSJReminderDateSelectView.m in Sources */,
-<<<<<<< HEAD
 				9C3391871DEBFD0D0030E635 /* SSJDatabaseVersion10.m in Sources */,
-=======
 				9C17B5481DEED847000D6C99 /* SSJBooksParentSelectCell.m in Sources */,
->>>>>>> f25bdd66fd4aec236965a684bfc420d380fab5a6
 				7D9F5BCE1D6D9CA600362CFA /* SSJLoanDateSelectionView.m in Sources */,
 				9CECFB961D6D41A700DB2C8B /* SSJMagicExportCalendarDateViewItem.m in Sources */,
 				9CECFB971D6D41A700DB2C8B /* SSJBillTypeSyncTable.m in Sources */,
@@ -8671,11 +8668,8 @@
 				9CECFC241D6D41A700DB2C8B /* (null) in Sources */,
 				9CECFC251D6D41A700DB2C8B /* SSJMagicExportCalendarViewController.m in Sources */,
 				9CECFC261D6D41A700DB2C8B /* SSJMineHeaderView.m in Sources */,
-<<<<<<< HEAD
 				9C3391971DEBFD7C0030E635 /* SSJBooksParentSelectCell.m in Sources */,
-=======
 				9C17B52C1DEED7B1000D6C99 /* SSJBooksParentSelectView.m in Sources */,
->>>>>>> f25bdd66fd4aec236965a684bfc420d380fab5a6
 				9CECFC271D6D41A700DB2C8B /* SSJRegistCheckAuthCodeViewController.m in Sources */,
 				9C9A0C9A1D73D1AA002AF046 /* SSJCreditCardStore.m in Sources */,
 				9CECFC281D6D41A700DB2C8B /* SSJRegistNetworkService.m in Sources */,
@@ -8815,11 +8809,8 @@
 				9CECFC971D6D41A700DB2C8B /* SSJPageControl.m in Sources */,
 				7DAA38561D952AA0000ED16E /* SSJBudgetBillTypeSelectionCellItem.m in Sources */,
 				7DAA38481D952A8B000ED16E /* SSJBudgetBillTypeSelectionCell.m in Sources */,
-<<<<<<< HEAD
 				9C33919F1DEBFDA30030E635 /* SSJSummaryBooksHeaderView.m in Sources */,
-=======
 				9C17B54C1DEED8A1000D6C99 /* SSJSummaryBooksHeaderView.m in Sources */,
->>>>>>> f25bdd66fd4aec236965a684bfc420d380fab5a6
 				9CECFC981D6D41A700DB2C8B /* SSJNickNameModifyView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -8988,11 +8979,8 @@
 				9CECFF8D1D6D41EB00DB2C8B /* SSJBudgetDetailMiddleTitleView.m in Sources */,
 				9C9A0C3D1D6D9667002AF046 /* SSJReminderEditeViewController.m in Sources */,
 				9C9A0C5B1D6D974A002AF046 /* SSJReminderDateSelectView.m in Sources */,
-<<<<<<< HEAD
 				9C3391881DEBFD0D0030E635 /* SSJDatabaseVersion10.m in Sources */,
-=======
 				9C17B5491DEED848000D6C99 /* SSJBooksParentSelectCell.m in Sources */,
->>>>>>> f25bdd66fd4aec236965a684bfc420d380fab5a6
 				7D9F5BCF1D6D9CA600362CFA /* SSJLoanDateSelectionView.m in Sources */,
 				9CECFF8E1D6D41EB00DB2C8B /* SSJMagicExportCalendarDateViewItem.m in Sources */,
 				9CECFF8F1D6D41EB00DB2C8B /* SSJBillTypeSyncTable.m in Sources */,
@@ -9183,11 +9171,8 @@
 				9CEC001A1D6D41EB00DB2C8B /* SSJListMenuCellItem.m in Sources */,
 				7DFD30561D75268D00A0D7A0 /* SSJCategoryEditableCollectionViewCell.m in Sources */,
 				9CEC001B1D6D41EB00DB2C8B /* SSJWeiXinLoginHelper.m in Sources */,
-<<<<<<< HEAD
 				9C3391981DEBFD7C0030E635 /* SSJBooksParentSelectCell.m in Sources */,
-=======
 				9C17B52D1DEED7B1000D6C99 /* SSJBooksParentSelectView.m in Sources */,
->>>>>>> f25bdd66fd4aec236965a684bfc420d380fab5a6
 				9CEC001C1D6D41EB00DB2C8B /* (null) in Sources */,
 				9CEC001D1D6D41EB00DB2C8B /* SSJMagicExportCalendarViewController.m in Sources */,
 				9CEC001E1D6D41EB00DB2C8B /* SSJMineHeaderView.m in Sources */,
@@ -9327,11 +9312,8 @@
 				9CEC008F1D6D41EB00DB2C8B /* SSJPageControl.m in Sources */,
 				7DAA38571D952AA0000ED16E /* SSJBudgetBillTypeSelectionCellItem.m in Sources */,
 				7DAA38491D952A8B000ED16E /* SSJBudgetBillTypeSelectionCell.m in Sources */,
-<<<<<<< HEAD
 				9C3391A01DEBFDA30030E635 /* SSJSummaryBooksHeaderView.m in Sources */,
-=======
 				9C17B54D1DEED8A1000D6C99 /* SSJSummaryBooksHeaderView.m in Sources */,
->>>>>>> f25bdd66fd4aec236965a684bfc420d380fab5a6
 				9CEC00901D6D41EB00DB2C8B /* SSJNickNameModifyView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -10025,13 +10007,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-<<<<<<< HEAD
 				CODE_SIGN_IDENTITY = "iPhone Developer: Xiaoyong Wu (8WX4Y5V9K8)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Xiaoyong Wu (8WX4Y5V9K8)";
-=======
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Xiaoyong Wu (E25A2E4ZN2)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Xiaoyong Wu (E25A2E4ZN2)";
->>>>>>> f25bdd66fd4aec236965a684bfc420d380fab5a6
 				DEVELOPMENT_TEAM = E25A2E4ZN2;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -10063,11 +10042,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhang;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-<<<<<<< HEAD
 				PROVISIONING_PROFILE = "a56fd33a-a686-41d2-8cd2-e0a953a5f2e4";
-=======
 				PROVISIONING_PROFILE = "4f90dc0a-abbc-4b9d-8078-d82276a69e60";
->>>>>>> f25bdd66fd4aec236965a684bfc420d380fab5a6
 				PROVISIONING_PROFILE_SPECIFIER = youyujizhangAppStoreDis;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 			};
