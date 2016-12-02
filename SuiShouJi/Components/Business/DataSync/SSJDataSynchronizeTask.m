@@ -432,7 +432,7 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
     }];
     
     // 根据用户的提醒表中的记录注册本地通知
-    [SSJLocalNotificationHelper cancelLocalNotificationWithUserId:self.userId];
+    [SSJLocalNotificationHelper cancelLocalNotificationWithKey:SSJReminderNotificationKey];
     [SSJLocalNotificationStore queryForreminderListForUserId:self.userId WithSuccess:^(NSArray<SSJReminderItem *> *result) {
         for (SSJReminderItem *item in result) {
             [SSJLocalNotificationHelper registerLocalNotificationWithremindItem:item];
