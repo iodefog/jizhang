@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "SSJBudgetConst.h"
 
 @interface SSJBudgetModel : NSObject <NSCopying>
 

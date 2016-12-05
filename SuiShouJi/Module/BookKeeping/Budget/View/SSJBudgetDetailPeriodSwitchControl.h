@@ -9,7 +9,6 @@
 //  预算周期切换控件
 
 #import <UIKit/UIKit.h>
-#import "SSJBudgetConst.h"
 
 @interface SSJBudgetDetailPeriodSwitchControl : UIControl
 

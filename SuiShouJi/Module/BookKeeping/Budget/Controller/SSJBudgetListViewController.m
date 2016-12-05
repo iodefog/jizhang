@@ -11,6 +11,7 @@
 #import "SSJBudgetDetailViewController.h"
 #import "SSJBudgetListCell.h"
 #import "SSJBudgetListSecondaryCell.h"
+#import "SSJBudgetCategorySelectionControl.h"
 #import "SSJBudgetDatabaseHelper.h"
 
 static NSString *const kBudgetListCellId = @"kBudgetListCellId";
@@ -19,6 +20,8 @@ static NSString *const kBudgetListSecondaryCellId = @"kBudgetListSecondaryCellId
 @interface SSJBudgetListViewController () <UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
+
+@property (nonatomic, strong) SSJBudgetCategorySelectionControl *rightBarControl;
 
 @property (nonatomic, strong) NSArray *dataList;
 
@@ -169,6 +172,13 @@ static NSString *const kBudgetListSecondaryCellId = @"kBudgetListSecondaryCellId
         [_tableView registerClass:[SSJBudgetListSecondaryCell class] forCellReuseIdentifier:kBudgetListSecondaryCellId];
     }
     return _tableView;
+}
+
+- (SSJBudgetCategorySelectionControl *)rightBarControl {
+    if (!_rightBarControl) {
+        _rightBarControl = [[SSJBudgetCategorySelectionControl alloc] init];
+    }
+    return _rightBarControl;
 }
 
 @end
