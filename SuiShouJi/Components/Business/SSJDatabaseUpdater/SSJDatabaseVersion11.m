@@ -24,7 +24,7 @@
 + (NSError *)updateUserChargeTableWithDatabase:(FMDatabase *)db {
     
     // 新版本改造user_charge表,将原来的借贷id和周期记账还有新加的还款id统一成一个字段id,新加一个itype字段来区分id是哪一个id
-    if (![db executeUpdate:@"alter table bk_user_charge add itype integer"]) {
+    if (![db executeUpdate:@"alter table bk_user_charge add ichargetype integer"]) {
         return [db lastError];
     }
     
@@ -32,21 +32,21 @@
         return [db lastError];
     }
     
-    if (![db executeUpdate:@"update bk_user_charge set itype = ? and id = loanid where length(loanid) > 0",SSJChargeIdTypeLoan]) {
+    if (![db executeUpdate:@"update bk_user_charge set ichargetype = ? and id = loanid where length(loanid) > 0",SSJChargeIdTypeLoan]) {
         return [db lastError];
     }
     
-    if (![db executeUpdate:@"update bk_user_charge set itype = ? and id = iconfigid where length(iconfigid) > 0",SSJChargeIdTypeCircleConfig]) {
+    if (![db executeUpdate:@"update bk_user_charge set ichargetype = ? and id = iconfigid where length(iconfigid) > 0",SSJChargeIdTypeCircleConfig]) {
         return [db lastError];
     }
     
     // 创建临时表
-    if (![db executeUpdate:@"create temporary table TMP_USER_CHARGE (ICHARGEID TEXT, CUSERID TEXT, IMONEY TEXT,  IBILLID TEXT, IFUNSID TEXT, CADDDATE TEXT , IOLDMONEY TEXT, IBALANCE TEXT, CBILLDATE TEXT, CMEMO TEXT, CIMGURL TEXT,  THUMBURL TEXT, IVERSION INTEGER, CWRITEDATE TEXT , OPERATORTYPE TEXT, CBOOKSID TEXT, CLIENTADDDATE TEXT , ITYPE INTEGER , ID TEXT , PRIMARY KEY(ICHARGEID))"]) {
+    if (![db executeUpdate:@"create temporary table TMP_USER_CHARGE (ICHARGEID TEXT, CUSERID TEXT, IMONEY TEXT,  IBILLID TEXT, IFUNSID TEXT, CADDDATE TEXT , IOLDMONEY TEXT, IBALANCE TEXT, CBILLDATE TEXT, CMEMO TEXT, CIMGURL TEXT,  THUMBURL TEXT, IVERSION INTEGER, CWRITEDATE TEXT , OPERATORTYPE TEXT, CBOOKSID TEXT, CLIENTADDDATE TEXT , ICHARGETYPE INTEGER , ID TEXT , PRIMARY KEY(ICHARGEID))"]) {
         return [db lastError];
     }
     
     // 将原来表中的纪录插入到临时表中
-    if (![db executeUpdate:@"insert into TMP_USER_CHARGE select ICHARGEID, CUSERID, IMONEY,  IBILLID, IFUNSID, CADDDATE , IOLDMONEY, IBALANCE, CBILLDATE, CMEMO, CIMGURL,  THUMBURL, IVERSION, CWRITEDATE, OPERATORTYPE, CBOOKSID, CLIENTADDDATE, ITYPE , ID from BK_BILL_TYPE"]) {
+    if (![db executeUpdate:@"insert into TMP_USER_CHARGE select ICHARGEID, CUSERID, IMONEY,  IBILLID, IFUNSID, CADDDATE , IOLDMONEY, IBALANCE, CBILLDATE, CMEMO, CIMGURL,  THUMBURL, IVERSION, CWRITEDATE, OPERATORTYPE, CBOOKSID, CLIENTADDDATE, ICHARGETYPE , ID from BK_BILL_TYPE"]) {
         return [db lastError];
     }
     
@@ -56,7 +56,7 @@
     }
     
     // 新建表
-    if (![db executeUpdate:@"create table BK_USER_CHARGE (ICHARGEID TEXT, CUSERID TEXT, IMONEY TEXT,  IBILLID TEXT, IFUNSID TEXT, CADDDATE TEXT , IOLDMONEY TEXT, IBALANCE TEXT, CBILLDATE TEXT, CMEMO TEXT, CIMGURL TEXT,  THUMBURL TEXT, IVERSION INTEGER, CWRITEDATE TEXT , OPERATORTYPE TEXT, CBOOKSID TEXT, CLIENTADDDATE TEXT , ITYPE INTEGER , ID TEXT , PRIMARY KEY(ICHARGEID))"]) {
+    if (![db executeUpdate:@"create table BK_USER_CHARGE (ICHARGEID TEXT, CUSERID TEXT, IMONEY TEXT,  IBILLID TEXT, IFUNSID TEXT, CADDDATE TEXT , IOLDMONEY TEXT, IBALANCE TEXT, CBILLDATE TEXT, CMEMO TEXT, CIMGURL TEXT,  THUMBURL TEXT, IVERSION INTEGER, CWRITEDATE TEXT , OPERATORTYPE TEXT, CBOOKSID TEXT, CLIENTADDDATE TEXT , ICHARGETYPE INTEGER , ID TEXT , PRIMARY KEY(ICHARGEID))"]) {
         return [db lastError];
     }
     

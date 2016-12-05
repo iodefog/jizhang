@@ -43,4 +43,7 @@
                              failure:(void (^)(NSError *error))failure;
 
 + (SSJFinancingHomeitem *)queryFundItemWithFundingId:(NSString *)fundingId;
+
+// 获取列表中有效的第一个资金item
++ (SSJFinancingHomeitem *)queryfirstFundItem;
 @end

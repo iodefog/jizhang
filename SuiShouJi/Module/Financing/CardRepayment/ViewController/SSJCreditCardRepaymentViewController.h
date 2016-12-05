@@ -7,10 +7,10 @@
 //
 
 #import "SSJBaseViewController.h"
-#import "SSJBillingChargeCellItem.h"
+#import "SSJRepaymentModel.h"
 
 @interface SSJCreditCardRepaymentViewController : SSJBaseViewController
 
-@property(nonatomic, strong) SSJBillingChargeCellItem *chargeItem;
+@property(nonatomic, strong) SSJRepaymentModel *repaymentModel;
 
 @end

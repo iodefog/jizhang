@@ -6,29 +6,33 @@
 //  Copyright © 2015年 ___9188___. All rights reserved.
 //
 
-#import "SSJFundingDetailsViewController.h"
-#import "SSJFundingDetailHeader.h"
+#import "SSJCreditCardListDetailItem.h"
+#import "SSJFundingDetailListItem.h"
+#import "SSJBillingChargeCellItem.h"
+#import "SSJRepaymentModel.h"
+
 #import "SSJFundingDetailHelper.h"
-#import "SSJFundingDetailCell.h"
 #import "SSJFundingDetailListHeaderView.h"
 #import "SSJReportFormsUtil.h"
 #import "SSJModifyFundingViewController.h"
 #import "SSJDatabaseQueue.h"
-#import "SSJFundingDetailListItem.h"
-#import "SSJBillingChargeCellItem.h"
+#import "SSJCreditCardStore.h"
+
+#import "SSJFundingDetailHeader.h"
+#import "SSJFundingDetailCell.h"
 #import "SSJFundingDetailListFirstLineCell.h"
 #import "SSJFundingDailySumCell.h"
-#import "SSJCalenderDetailViewController.h"
-#import "SSJFundingTransferEditeViewController.h"
 #import "SSJFundingDetailNoDataView.h"
-#import "SSJNewCreditCardViewController.h"
-#import "SSJCreditCardStore.h"
 #import "SSJCreditCardDetailHeader.h"
-#import "SSJCreditCardListDetailItem.h"
 #import "SSJCreditCardListCell.h"
+
 #import "SSJLoanChargeDetailViewController.h"
 #import "SSJLoanChargeAddOrEditViewController.h"
 #import "SSJCreditCardRepaymentViewController.h"
+#import "SSJFundingDetailsViewController.h"
+#import "SSJNewCreditCardViewController.h"
+#import "SSJFundingTransferEditeViewController.h"
+#import "SSJCalenderDetailViewController.h"
 
 #import "FMDB.h"
 
@@ -387,6 +391,11 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:NULL];
     UIAlertAction *repaymentAction = [UIAlertAction actionWithTitle:@"还款" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         SSJCreditCardRepaymentViewController *repaymentVC = [[SSJCreditCardRepaymentViewController alloc]init];
+        SSJRepaymentModel *model = [[SSJRepaymentModel alloc]init];
+        SSJCreditCardItem *item = (SSJCreditCardItem *)self.item;
+        model.cardId = item.cardId;
+        model.cardName = item.cardName;
+        repaymentVC.repaymentModel = model;
         [weakSelf.navigationController pushViewController:repaymentVC animated:YES];
     }];
     UIAlertAction *instalAction = [UIAlertAction actionWithTitle:@"账单分期" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {

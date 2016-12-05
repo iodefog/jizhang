@@ -16,14 +16,26 @@
 // 信用卡id
 @property(nonatomic, strong) NSString *cardId;
 
+// 信用卡账单日
+@property(nonatomic) NSInteger cardBillingDay;
+
+// 信用卡名称
+@property(nonatomic, strong) NSString *cardName;
+
 // 还款申请时间(分期还款时用)
 @property(nonatomic, strong) NSString *applyDate;
 
 // 还款来源资金账户id
 @property(nonatomic, strong) NSString *repaymentSourceFoundId;
 
+// 还款的
+@property(nonatomic, strong) NSString *repaymentMonth;
+
 // 还款来源资金账户名称
 @property(nonatomic, strong) NSString *repaymentSourceFoundName;
+
+// 还款来源资金账户图标
+@property(nonatomic, strong) NSString *repaymentSourceFoundImage;
 
 // 还款金额
 @property(nonatomic, strong) NSDecimalNumber *repaymentMoney;

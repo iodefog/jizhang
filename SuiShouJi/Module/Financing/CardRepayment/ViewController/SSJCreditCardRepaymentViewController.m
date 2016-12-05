@@ -7,10 +7,11 @@
 //
 
 #import "SSJCreditCardRepaymentViewController.h"
+
 #import "TPKeyboardAvoidingTableView.h"
 #import "SSJChargeCircleModifyCell.h"
 
-#import "SSJRepaymentModel.h"
+#import "SSJFinancingHomeHelper.h"
 
 static NSString *const SSJRepaymentEditeCellIdentifier = @"SSJRepaymentEditeCellIdentifier";
 
@@ -19,10 +20,10 @@ static NSString *const kTitle2 = @"还款金额";
 static NSString *const kTitle3 = @"备注";
 static NSString *const kTitle4 = @"付款账户";
 static NSString *const kTitle5 = @"还款日期";
+static NSString *const kTitle6 = @"还款账单月份";
+
 
 @interface SSJCreditCardRepaymentViewController ()<UITableViewDataSource,UITableViewDelegate>
-
-@property(nonatomic, strong) SSJRepaymentModel *repaymentModel;
 
 @property(nonatomic, strong) TPKeyboardAvoidingTableView *tableView;
 
@@ -38,9 +39,22 @@ static NSString *const kTitle5 = @"还款日期";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.titles = @[@[kTitle1,kTitle2,kTitle3],@[kTitle4,kTitle5]];
-    self.images = @[@[@"loan_person",@"loan_money",@"loan_memo"],@[@"card_zhanghu",@"loan_expires"]];
+    self.titles = @[@[kTitle1,kTitle2,kTitle3],@[kTitle4,kTitle6,kTitle5]];
+    self.images = @[@[@"loan_person",@"loan_money",@"loan_memo"],@[@"card_zhanghu",@"",@"loan_expires"]];
     [self.tableView registerClass:[SSJChargeCircleModifyCell class] forCellReuseIdentifier:SSJRepaymentEditeCellIdentifier];
+    if (!self.repaymentModel.repaymentId.length) {
+        self.repaymentModel.applyDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"];
+        self.repaymentModel.repaymentSourceFoundId = [SSJFinancingHomeHelper queryfirstFundItem].fundingID;
+        self.repaymentModel.repaymentSourceFoundName = [SSJFinancingHomeHelper queryfirstFundItem].fundingName;
+        self.repaymentModel.repaymentSourceFoundImage = [SSJFinancingHomeHelper queryfirstFundItem].fundingIcon;
+        NSDate *repaymentDate = [NSDate date];
+        if (repaymentDate.day < self.repaymentModel.cardBillingDay) {
+            repaymentDate = [repaymentDate dateBySubtractingMonths:2];
+        }else {
+            repaymentDate = [repaymentDate dateBySubtractingMonths:1];
+        }
+        
+    }
     [self.view addSubview:self.tableView];
     // Do any additional setup after loading the view.
 }
@@ -89,6 +103,34 @@ static NSString *const kTitle5 = @"还款日期";
     SSJChargeCircleModifyCell *repaymentModifyCell = [tableView dequeueReusableCellWithIdentifier:SSJRepaymentEditeCellIdentifier];
     repaymentModifyCell.cellTitle = title;
     repaymentModifyCell.cellImageName = image;
+    if ([title isEqualToString:kTitle2] || [title isEqualToString:kTitle3]) {
+        repaymentModifyCell.cellInput.hidden = NO;
+    }else {
+        repaymentModifyCell.cellInput.hidden = YES;
+    }
+    if (indexPath.section == 1) {
+        repaymentModifyCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    }else{
+        repaymentModifyCell.accessoryType = UITableViewCellAccessoryNone;
+    }
+    if ([title isEqualToString:kTitle1]) {
+        repaymentModifyCell.cellDetail = self.repaymentModel.cardName;
+    }else if ([title isEqualToString:kTitle2]) {
+        if (self.repaymentModel.repaymentMoney != 0) {
+            repaymentModifyCell.cellInput.text = [NSString stringWithFormat:@"%@",self.repaymentModel.repaymentMoney];
+        }
+        repaymentModifyCell.cellInput.attributedPlaceholder = [[NSAttributedString alloc]initWithString:@"0.00" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+    }else if ([title isEqualToString:kTitle3]) {
+        repaymentModifyCell.cellInput.attributedPlaceholder = [[NSAttributedString alloc]initWithString:@"选填" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+        repaymentModifyCell.cellInput.text = self.repaymentModel.memo;
+    }else if ([title isEqualToString:kTitle4]) {
+        repaymentModifyCell.cellDetail = self.repaymentModel.repaymentSourceFoundName;
+        repaymentModifyCell.cellTypeImageName = self.repaymentModel.repaymentSourceFoundImage;
+    }else if ([title isEqualToString:kTitle5]) {
+        repaymentModifyCell.cellDetail = self.repaymentModel.applyDate;
+    }else if ([title isEqualToString:kTitle6]) {
+        
+    }
     return repaymentModifyCell;
 }
 

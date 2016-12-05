@@ -58,11 +58,15 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
             item.loanId = [resultSet stringForColumn:@"loanid"];
             item.loanSource = [resultSet stringForColumn:@"lender"];
             item.loanType = [resultSet intForColumn:@"loantype"];
-            if (item.incomeOrExpence && ![item.money hasPrefix:@"-"]) {
-                item.money = [NSString stringWithFormat:@"-%.2f",[item.money doubleValue]];
-                fundingItem.fundingExpence = fundingItem.fundingExpence - [item.money doubleValue];
-            }else if(!item.incomeOrExpence && ![item.money hasPrefix:@"+"]){
-                item.money = [NSString stringWithFormat:@"+%.2f",[item.money doubleValue]];
+            if (item.incomeOrExpence) {
+                if (![item.money hasPrefix:@"-"]) {
+                    item.money = [NSString stringWithFormat:@"-%.2f",[item.money doubleValue]];
+                }
+                fundingItem.fundingExpence = fundingItem.fundingExpence + [item.money doubleValue];
+            }else if(!item.incomeOrExpence){
+                if (![item.money hasPrefix:@"+"]) {
+                    item.money = [NSString stringWithFormat:@"+%.2f",[item.money doubleValue]];
+                }
                 fundingItem.fundingIncome = fundingItem.fundingIncome + [item.money doubleValue];
             }
             if (item.loanId.length) {
@@ -224,11 +228,15 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
             item.loanId = [resultSet stringForColumn:@"loanid"];
             item.loanSource = [resultSet stringForColumn:@"lender"];
             item.loanType = [resultSet intForColumn:@"loantype"];
-            if (item.incomeOrExpence && ![item.money hasPrefix:@"-"]) {
-                item.money = [NSString stringWithFormat:@"-%.2f",[[resultSet stringForColumn:@"IMONEY"] doubleValue]];
-                newcardItem.cardExpence = newcardItem.cardExpence - [item.money doubleValue];
-            }else if(!item.incomeOrExpence && ![item.money hasPrefix:@"+"]){
-                item.money = [NSString stringWithFormat:@"+%.2f",[[resultSet stringForColumn:@"IMONEY"] doubleValue]];
+            if (item.incomeOrExpence) {
+                if (![item.money hasPrefix:@"-"]) {
+                    item.money = [NSString stringWithFormat:@"-%.2f",[item.money doubleValue]];
+                }
+                newcardItem.cardExpence = newcardItem.cardExpence + [item.money doubleValue];
+            }else if(!item.incomeOrExpence){
+                if (![item.money hasPrefix:@"+"]) {
+                    item.money = [NSString stringWithFormat:@"+%.2f",[item.money doubleValue]];
+                }
                 newcardItem.cardIncome = newcardItem.cardIncome + [item.money doubleValue];
             }
             if (item.loanId.length) {
