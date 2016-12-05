@@ -55,6 +55,13 @@ typedef NS_ENUM(NSInteger, SSJChargeIdType) {
     SSJChargeIdTypeRepayment = 3,     // 还款
 };
 
+//  预算周期
+typedef NS_ENUM(NSUInteger, SSJBudgetPeriodType) {
+    SSJBudgetPeriodTypeWeek = 0,    //  每周
+    SSJBudgetPeriodTypeMonth = 1,   //  每月
+    SSJBudgetPeriodTypeYear = 2     //  每年
+};
+
 ///------------------------------------------
 /// @name 基本数据常量
 ///------------------------------------------

@@ -16,7 +16,7 @@
 // 选中的cell下标
 @property (nonatomic) NSUInteger selectedIndex;
 
-// 标题为选中状态颜色
+// 标题未选中状态颜色
 @property (nonatomic, strong) UIColor *normalTitleColor;
 
 // 标题选中状态颜色

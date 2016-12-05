@@ -9,7 +9,6 @@
 //  周期选择
 
 #import <UIKit/UIKit.h>
-#import "SSJBudgetConst.h"
 
 @interface SSJBudgetEditPeriodSelectionView : UIControl
 
