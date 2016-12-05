@@ -417,7 +417,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
     if (_saveFooterView == nil) {
         _saveFooterView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 80)];
         UIButton *saveButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, _saveFooterView.width - 20, 40)];
-        [saveButton setTitle:@"保存" forState:UIControlStateNormal];
+        [saveButton setTitle:@"确定" forState:UIControlStateNormal];
         saveButton.layer.cornerRadius = 3.f;
         saveButton.layer.masksToBounds = YES;
         [saveButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];

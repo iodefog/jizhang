@@ -28,6 +28,7 @@
 #import "SSJCreditCardListCell.h"
 #import "SSJLoanChargeDetailViewController.h"
 #import "SSJLoanChargeAddOrEditViewController.h"
+#import "SSJCreditCardRepaymentViewController.h"
 
 #import "FMDB.h"
 
@@ -45,6 +46,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
 @property(nonatomic, strong) SSJFundingDetailNoDataView *noDataHeader;
 @property(nonatomic, strong) SSJCreditCardItem *cardItem;
 @property(nonatomic, strong) SSJCreditCardDetailHeader *creditCardHeader;
+@property(nonatomic, strong) UIButton *repaymentButton;
 @end
 
 @implementation SSJFundingDetailsViewController{
@@ -79,7 +81,9 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
 
     [self.tableView registerClass:[SSJFundingDetailListFirstLineCell class] forCellReuseIdentifier:kFundingListFirstLineCellID];
     if ([self.item isKindOfClass:[SSJCreditCardItem class]]) {
+        [self.view addSubview:self.repaymentButton];
         self.tableView.tableHeaderView = self.creditCardHeader;
+        self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 50, 0);
     }else{
         self.tableView.tableHeaderView = self.header;
     }
@@ -343,7 +347,24 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
     return _rightButton;
 }
 
-#pragma mark - Private
+- (UIButton *)repaymentButton{
+    if (!_repaymentButton) {
+        _repaymentButton = [[UIButton alloc]initWithFrame:CGRectMake(0, self.view.height - 50, self.view.width, 50)];
+        [_repaymentButton setTitle:@"还款" forState:UIControlStateNormal];
+        [_repaymentButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        if ([SSJCurrentThemeID() isEqualToString:SSJDefaultThemeID]) {
+            [_repaymentButton setTitleColor:[UIColor ssj_colorWithHex:@"#373737"] forState:UIControlStateNormal];
+            [_repaymentButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"#CCCCCC" alpha:0.8] forState:UIControlStateNormal];
+        } else{
+            [_repaymentButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] forState:UIControlStateNormal];
+            [_repaymentButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor alpha:0.8] forState:UIControlStateNormal];
+        }
+        [_repaymentButton addTarget:self action:@selector(repaymentButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _repaymentButton;
+}
+
+#pragma mark - Event
 -(void)rightButtonClicked:(id)sender{
     if ([self.item isKindOfClass:[SSJCreditCardItem class]]) {
         SSJNewCreditCardViewController *creditCardVc = [[SSJNewCreditCardViewController alloc]init];
@@ -360,6 +381,24 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
     }
 }
 
+-(void)repaymentButtonClicked:(id)sender{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    __weak typeof(self) weakSelf = self;
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:NULL];
+    UIAlertAction *repaymentAction = [UIAlertAction actionWithTitle:@"还款" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        SSJCreditCardRepaymentViewController *repaymentVC = [[SSJCreditCardRepaymentViewController alloc]init];
+        [weakSelf.navigationController pushViewController:repaymentVC animated:YES];
+    }];
+    UIAlertAction *instalAction = [UIAlertAction actionWithTitle:@"账单分期" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        
+    }];
+    [alert addAction:repaymentAction];
+    [alert addAction:instalAction];
+    [alert addAction:cancelAction];
+    [self.navigationController presentViewController:alert animated:YES completion:NULL];
+}
+
+#pragma mark - Private
 -(void)reloadDataAfterSync{
     __weak typeof(self) weakSelf = self;
     [self.view ssj_showLoadingIndicator];
