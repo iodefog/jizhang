@@ -14,4 +14,6 @@
 
 @property (nonatomic, copy) NSString *title;
 
++ (instancetype)itemWithImageName:(NSString *)imageName title:(NSString *)title;
+
 @end

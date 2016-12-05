@@ -763,7 +763,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
 
 - (void)enterBillTypeSelectionController {
     SSJBudgetBillTypeSelectionViewController *billTypeSelectionController = [[SSJBudgetBillTypeSelectionViewController alloc] init];
-    billTypeSelectionController.budgetModel = _model;
+    billTypeSelectionController.selectedTypeList = _model.billIds;
     billTypeSelectionController.edited = _isEdit;
     [self.navigationController pushViewController:billTypeSelectionController animated:YES];
     [MobClick event:@"budget_pick_bill_type"];

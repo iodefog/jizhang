@@ -39,7 +39,7 @@ static NSString *const kBudgetBillTypeSelectionCellId = @"kBudgetBillTypeSelecti
     [self.view addSubview:self.tableView];
     
     if (_edited) {
-        self.originalBillIds = self.budgetModel.billIds;
+        self.originalBillIds = self.selectedTypeList;
     }
 }
 
@@ -50,20 +50,20 @@ static NSString *const kBudgetBillTypeSelectionCellId = @"kBudgetBillTypeSelecti
 }
 
 - (void)goBackAction {
-    if (_budgetModel.billIds.count == 0) {
+    if (self.selectedTypeList.count == 0) {
         [CDAutoHideMessageHUD showMessage:@"至少选择一个类别"];
         return;
     }
     
-    if (self.originalBillIds && ![self.originalBillIds isEqualToArray:self.budgetModel.billIds]) {
+    if (self.originalBillIds && ![self.originalBillIds isEqualToArray:self.selectedTypeList]) {
         [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"更改类别后，该预算的历史预算数据将清除重置哦" action:[SSJAlertViewAction actionWithTitle:@"取消" handler:^(SSJAlertViewAction * _Nonnull action) {
-            self.budgetModel.billIds = self.originalBillIds;
-            BOOL allSelect = [self.budgetModel.billIds isEqualToArray:@[@"all"]];
+            self.selectedTypeList = self.originalBillIds;
+            BOOL allSelect = [self.selectedTypeList isEqualToArray:@[@"all"]];
             for (SSJBudgetBillTypeSelectionCellItem *item in self.items) {
                 if (allSelect) {
                     item.selected = YES;
                 } else {
-                    item.selected = [self.budgetModel.billIds containsObject:item.billID];
+                    item.selected = [self.selectedTypeList containsObject:item.billID];
                 }
             }
             [self.tableView reloadData];
@@ -140,9 +140,9 @@ static NSString *const kBudgetBillTypeSelectionCellId = @"kBudgetBillTypeSelecti
         addNewTypeVc.incomeOrExpence = 1;
         addNewTypeVc.addNewCategoryAction = ^(NSString *categoryId, BOOL incomeOrExpence){
             if (incomeOrExpence) {
-                NSMutableArray *tmpBillIds = [wself.budgetModel.billIds mutableCopy];
+                NSMutableArray *tmpBillIds = [wself.selectedTypeList mutableCopy];
                 [tmpBillIds addObject:categoryId];
-                wself.budgetModel.billIds = tmpBillIds;
+                wself.selectedTypeList = tmpBillIds;
             }
         };
         [self.navigationController pushViewController:addNewTypeVc animated:YES];
@@ -156,18 +156,6 @@ static NSString *const kBudgetBillTypeSelectionCellId = @"kBudgetBillTypeSelecti
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
     return 10;
 }
-
-//- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
-//    SSJBudgetBillTypeSelectionCellItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
-//    if (item.canSelect) {
-//        item.selected = NO;
-//        if ([_budgetModel.billIds containsObject:item.billID]) {
-//            NSMutableArray *tmpBillIds = [_budgetModel.billIds mutableCopy];
-//            [tmpBillIds removeObject:item.billID];
-//            _budgetModel.billIds = [tmpBillIds copy];
-//        }
-//    }
-//}
 
 #pragma mark - Private
 - (void)updateSelectedBillIds {
@@ -185,12 +173,12 @@ static NSString *const kBudgetBillTypeSelectionCellId = @"kBudgetBillTypeSelecti
         }
     }
     
-    _budgetModel.billIds = [billIds copy];
+    self.selectedTypeList = [billIds copy];
 }
 
 - (void)loadData {
     [self.view ssj_showLoadingIndicator];
-    [SSJBudgetDatabaseHelper queryBudgetBillTypeSelectionItemListWithBudgetModel:_budgetModel booksId:nil success:^(NSArray<SSJBudgetBillTypeSelectionCellItem *> * _Nonnull list) {
+    [SSJBudgetDatabaseHelper queryBudgetBillTypeSelectionItemListWithSelectedTypeList:self.selectedTypeList booksId:nil success:^(NSArray<SSJBudgetBillTypeSelectionCellItem *> * _Nonnull list) {
         
         [self.view ssj_hideLoadingIndicator];
         self.items = list;

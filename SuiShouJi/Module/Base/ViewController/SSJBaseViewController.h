@@ -32,7 +32,8 @@
 @property (nonatomic, readonly) BOOL isDatabaseInitFinished;
 
 /**
- *  是否应用主题，默认为YES
+ *  是否应用主题，默认为YE；
+ *  注意：要在初始化方法中设置
  */
 @property (nonatomic) BOOL appliesTheme;
 

@@ -12,8 +12,16 @@
 
 @interface SSJBudgetBillTypeSelectionViewController : SSJBaseViewController
 
-@property (nonatomic, strong) SSJBudgetModel *budgetModel;
+/**
+ 选中的类别列表
+ 注意：只有从编辑／新建预算页面进入需要传值
+ */
+@property (nonatomic, strong) NSArray <NSString *>*selectedTypeList;
 
+/**
+ 是否编辑
+ 注意：只有从编辑／新建预算页面进入需要传值
+ */
 @property (nonatomic) BOOL edited;
 
 @end

@@ -142,18 +142,28 @@ static NSString *const kBudgetListSecondaryCellId = @"kBudgetListSecondaryCellId
 }
 
 #pragma mark - Event
-- (void)addNewBudgetAction {
-    __weak typeof(self) wself = self;
-    SSJBudgetEditViewController *newBudgetVC = [[SSJBudgetEditViewController alloc] init];
-    newBudgetVC.addNewBudgetBlock = ^(NSString *budgetId) {
-        wself.addBudgetId = budgetId;
-    };
-    [self.navigationController pushViewController:newBudgetVC animated:YES];
+- (void)categorySelectionControlAction {
+    switch (self.rightBarControl.option) {
+        case SSJBudgetCategorySelectionControlOptionMajor: {
+            __weak typeof(self) wself = self;
+            SSJBudgetEditViewController *newBudgetVC = [[SSJBudgetEditViewController alloc] init];
+            newBudgetVC.addNewBudgetBlock = ^(NSString *budgetId) {
+                wself.addBudgetId = budgetId;
+            };
+            [self.navigationController pushViewController:newBudgetVC animated:YES];
+        }
+            break;
+            
+        case SSJBudgetCategorySelectionControlOptionSecondary: {
+            
+        }
+            break;
+    }
 }
 
 #pragma mark - Private
 - (void)setupAddBarButtonItem {
-    UIBarButtonItem *addItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"budget_add"] style:UIBarButtonItemStylePlain target:self action:@selector(addNewBudgetAction)];
+    UIBarButtonItem *addItem = [[UIBarButtonItem alloc] initWithCustomView:self.rightBarControl];
     self.navigationItem.rightBarButtonItem = addItem;
 }
 
@@ -177,6 +187,7 @@ static NSString *const kBudgetListSecondaryCellId = @"kBudgetListSecondaryCellId
 - (SSJBudgetCategorySelectionControl *)rightBarControl {
     if (!_rightBarControl) {
         _rightBarControl = [[SSJBudgetCategorySelectionControl alloc] init];
+        [_rightBarControl addTarget:self action:@selector(categorySelectionControlAction) forControlEvents:UIControlEventValueChanged];
     }
     return _rightBarControl;
 }
