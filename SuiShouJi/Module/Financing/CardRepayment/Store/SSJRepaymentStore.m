@@ -35,7 +35,7 @@
                     NSDate *billDate = [NSDate dateWithString:item.billDate formatString:@"yyyy-MM"];
                     model.currentInstalmentCout = [billDate monthsFrom:applyDate] + 1;
                 }
-            }else{
+            }else {
                 //是还款的情况
                 NSString *fundParent = [db stringForQuery:@"select cparent from bk_fund_info where cfundid = ?",item.fundId];
                 if ([fundParent isEqualToString:@"3"]) {
@@ -93,7 +93,7 @@
                         });
                     }
                 }
-            } else{
+            }else {
                 // 修改转出流水
                 if (![db executeUpdate:@"update bk_user_charge set imoney = ?, cbilldate = ?, cmemo = ?, iversion = ?, operatortype = 1, cwritedate = ? where ichargeid = ? and cuserid = ?",model.repaymentMoney,model.applyDate,model.memo,@(SSJSyncVersion()),writeDate,model.repaymentChargeId,userID]) {
                     *rollback = YES;
@@ -142,7 +142,7 @@
                         }
                     }
                 }
-            } else{
+            }else {
                 // 如果是修改,首先将原来所有的跟这条分期有关的流水全部删除,然后将新的流水插入
                 if ([db executeUpdate:@"update bk_user_charge set operatortype = 2 , iversion = ?, cwritedate = ? where id = ? and itype = ?",model.repaymentId,SSJChargeIdTypeRepayment]) {
                     *rollback = YES;

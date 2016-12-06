@@ -7,11 +7,18 @@
 //
 
 #import "SSJCreditCardRepaymentViewController.h"
+#import "SSJFundingTypeSelectViewController.h"
+#import "SSJMonthSelectView.h"
 
 #import "TPKeyboardAvoidingTableView.h"
 #import "SSJChargeCircleModifyCell.h"
+#import "SSJFundingTypeSelectView.h"
+#import "SSJReminderDateSelectView.h"
 
 #import "SSJFinancingHomeHelper.h"
+
+#import "SSJFundingItem.h"
+#import "SSJCreditCardItem.h"
 
 static NSString *const SSJRepaymentEditeCellIdentifier = @"SSJRepaymentEditeCellIdentifier";
 
@@ -33,6 +40,12 @@ static NSString *const kTitle6 = @"还款账单月份";
 
 @property(nonatomic, strong) NSArray *images;
 
+@property(nonatomic, strong) SSJFundingTypeSelectView *fundSelectView;
+
+@property(nonatomic, strong) SSJReminderDateSelectView *repaymentTimeView;
+
+@property(nonatomic, strong) SSJMonthSelectView *repaymentMonthSelectView;
+
 @end
 
 @implementation SSJCreditCardRepaymentViewController
@@ -42,6 +55,12 @@ static NSString *const kTitle6 = @"还款账单月份";
     self.titles = @[@[kTitle1,kTitle2,kTitle3],@[kTitle4,kTitle6,kTitle5]];
     self.images = @[@[@"loan_person",@"loan_money",@"loan_memo"],@[@"card_zhanghu",@"",@"loan_expires"]];
     [self.tableView registerClass:[SSJChargeCircleModifyCell class] forCellReuseIdentifier:SSJRepaymentEditeCellIdentifier];
+    [self.view addSubview:self.tableView];
+    // Do any additional setup after loading the view.
+}
+
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
     if (!self.repaymentModel.repaymentId.length) {
         self.repaymentModel.applyDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"];
         self.repaymentModel.repaymentSourceFoundId = [SSJFinancingHomeHelper queryfirstFundItem].fundingID;
@@ -53,14 +72,12 @@ static NSString *const kTitle6 = @"还款账单月份";
         }else {
             repaymentDate = [repaymentDate dateBySubtractingMonths:1];
         }
-        
+        self.repaymentModel.repaymentMonth = [repaymentDate formattedDateWithFormat:@"yyyy年MM月"];
     }
-    [self.view addSubview:self.tableView];
-    // Do any additional setup after loading the view.
 }
 
 #pragma mark - UITableViewDelegate
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     return 55;
 }
 
@@ -68,32 +85,41 @@ static NSString *const kTitle6 = @"还款账单月份";
     return 10;
 }
 
--(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
     if (section == 1) {
         return self.saveFooterView;
     }
     return nil;
 }
 
--(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
     if (section == 2) {
         return 80 ;
     }
     return 0.1f;
 }
 
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
+    if ([title isEqualToString:kTitle4]) {
+        self.fundSelectView.selectFundID = self.repaymentModel.repaymentSourceFoundId;
+        [self.fundSelectView show];
+    }else if ([title isEqualToString:kTitle5]) {
+        self.repaymentTimeView.currentDate = [NSDate dateWithString:self.repaymentModel.applyDate formatString:@"yyyy-MM-dd"];
+        [self.repaymentTimeView show];
+    }else if ([title isEqualToString:kTitle6]) {
+        [self.repaymentMonthSelectView show];
+    }
 }
 
 
 #pragma mark - UITableViewDataSource
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return [self.titles[section] count];
 }
 
--(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     return self.titles.count;
 }
 
@@ -120,6 +146,7 @@ static NSString *const kTitle6 = @"还款账单月份";
             repaymentModifyCell.cellInput.text = [NSString stringWithFormat:@"%@",self.repaymentModel.repaymentMoney];
         }
         repaymentModifyCell.cellInput.attributedPlaceholder = [[NSAttributedString alloc]initWithString:@"0.00" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+        repaymentModifyCell.cellInput.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
     }else if ([title isEqualToString:kTitle3]) {
         repaymentModifyCell.cellInput.attributedPlaceholder = [[NSAttributedString alloc]initWithString:@"选填" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         repaymentModifyCell.cellInput.text = self.repaymentModel.memo;
@@ -129,13 +156,18 @@ static NSString *const kTitle6 = @"还款账单月份";
     }else if ([title isEqualToString:kTitle5]) {
         repaymentModifyCell.cellDetail = self.repaymentModel.applyDate;
     }else if ([title isEqualToString:kTitle6]) {
-        
+        repaymentModifyCell.cellDetail = self.repaymentModel.repaymentMonth;
     }
     return repaymentModifyCell;
 }
 
+#pragma mark - Event
+- (void)saveButtonClicked:(id)sender{
+    
+}
+
 #pragma mark - Getter
--(TPKeyboardAvoidingTableView *)tableView{
+- (TPKeyboardAvoidingTableView *)tableView{
     if (!_tableView) {
         _tableView = [[TPKeyboardAvoidingTableView alloc]initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM) style:UITableViewStyleGrouped];
         _tableView.backgroundColor = [UIColor clearColor];
@@ -146,6 +178,80 @@ static NSString *const kTitle6 = @"还款账单月份";
     }
     return _tableView;
 }
+
+- (UIView *)saveFooterView{
+    if (_saveFooterView == nil) {
+        _saveFooterView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 80)];
+        UIButton *saveButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, _saveFooterView.width - 20, 40)];
+        [saveButton setTitle:@"保存" forState:UIControlStateNormal];
+        saveButton.layer.cornerRadius = 3.f;
+        saveButton.layer.masksToBounds = YES;
+        [saveButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];
+        [saveButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [saveButton addTarget:self action:@selector(saveButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+        saveButton.center = CGPointMake(_saveFooterView.width / 2, _saveFooterView.height / 2);
+        [_saveFooterView addSubview:saveButton];
+    }
+    return _saveFooterView;
+}
+
+-(SSJFundingTypeSelectView *)fundSelectView{
+    if (!_fundSelectView) {
+        _fundSelectView = [[SSJFundingTypeSelectView alloc]init];
+        __weak typeof(self) weakSelf = self;
+        _fundSelectView.fundingTypeSelectBlock = ^(SSJFundingItem *item){
+            if (item.fundingID.length) {
+                weakSelf.repaymentModel.repaymentSourceFoundId = item.fundingID;
+                weakSelf.repaymentModel.repaymentSourceFoundName = item.fundingName;
+                weakSelf.repaymentModel.repaymentSourceFoundImage = item.fundingIcon;
+                [weakSelf.tableView reloadData];
+                [weakSelf.fundSelectView dismiss];
+            }else{
+                SSJFundingTypeSelectViewController *NewFundingVC = [[SSJFundingTypeSelectViewController alloc]init];
+                NewFundingVC.needLoanOrNot = NO;
+                NewFundingVC.addNewFundingBlock = ^(SSJBaseItem *item){
+                    if ([item isKindOfClass:[SSJFundingItem class]]) {
+                        SSJFundingItem *fundItem = (SSJFundingItem *)item;
+                        weakSelf.repaymentModel.repaymentSourceFoundId = fundItem.fundingID;
+                        weakSelf.repaymentModel.repaymentSourceFoundName = fundItem.fundingName;
+                        weakSelf.repaymentModel.repaymentSourceFoundImage = fundItem.fundingIcon;
+                        [weakSelf.tableView reloadData];
+                    }else if ([item isKindOfClass:[SSJCreditCardItem class]]){
+                        SSJCreditCardItem *cardItem = (SSJCreditCardItem *)item;
+                        weakSelf.repaymentModel.repaymentSourceFoundId = cardItem.cardId;
+                        weakSelf.repaymentModel.repaymentSourceFoundName = cardItem.cardName;
+                        weakSelf.repaymentModel.repaymentSourceFoundImage = @"ft_creditcard";
+                        [weakSelf.tableView reloadData];
+                    }
+                    
+                };
+                [weakSelf.fundSelectView dismiss];
+                [weakSelf.navigationController pushViewController:NewFundingVC animated:YES];
+            }
+        };
+    }
+    return _fundSelectView;
+}
+
+-(SSJReminderDateSelectView *)repaymentTimeView{
+    if (!_repaymentTimeView) {
+        _repaymentTimeView = [[SSJReminderDateSelectView alloc]initWithFrame:self.view.bounds];
+        __weak typeof(self) weakSelf = self;
+        _repaymentTimeView.dateSetBlock = ^(NSDate *date){
+            weakSelf.repaymentModel.applyDate = [date formattedDateWithFormat:@"yyyy-MM-dd"];
+            [weakSelf.tableView reloadData];
+        };
+    }
+    return _repaymentTimeView;
+}
+
+- (SSJMonthSelectView *)repaymentMonthSelectView{
+    if (!_repaymentMonthSelectView) {
+        _repaymentMonthSelectView = [[SSJMonthSelectView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height)];
+    }
+    return _repaymentMonthSelectView;
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

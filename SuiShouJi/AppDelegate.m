@@ -80,19 +80,10 @@ NSDate *SCYEnterBackgroundTime() {
 #pragma mark - Lifecycle
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 #ifdef DEBUG
-//    NSString *sourcePath = [[NSBundle mainBundle] pathForResource:@"sample" ofType:@"js"];
+//    NSString *sourcePath = [[NSBundle mainBundle] pathForResource:@"patch1" ofType:@"js"];
 //    NSString *script = [NSString stringWithContentsOfFile:sourcePath encoding:NSUTF8StringEncoding error:nil];
 //    [JPEngine evaluateScript:script];
 #endif
-    NSDecimalNumber *number = [NSDecimalNumber numberWithDouble:-0.00];
-    NSDecimalNumberHandler *roundingBehavior = [NSDecimalNumberHandler decimalNumberHandlerWithRoundingMode:NSRoundPlain
-                                                                                                      scale:2
-                                                                                           raiseOnExactness:NO
-                                                                                            raiseOnOverflow:NO
-                                                                                           raiseOnUnderflow:NO
-                                                                                        raiseOnDivideByZero:NO];
-    NSDecimalNumber *resultDN = [number decimalNumberByRoundingAccordingToBehavior:roundingBehavior];
-    NSLog(@"%@",resultDN);
     
     [SSJUmengManager umengTrack];
     [SSJUmengManager umengShare];
