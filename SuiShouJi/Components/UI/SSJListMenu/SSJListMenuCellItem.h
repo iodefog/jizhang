@@ -18,4 +18,6 @@
 
 @property (nonatomic, strong) UIColor *imageColor;
 
+@property (nonatomic, strong) UIFont *titleFont;
+
 @end

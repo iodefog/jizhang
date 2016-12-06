@@ -17,12 +17,15 @@
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         self.textLabel.backgroundColor = [UIColor clearColor];
+        self.textLabel.adjustsFontSizeToFitWidth = YES;
     }
     return self;
 }
 
 - (void)layoutSubviews {
     [super layoutSubviews];
+    
+    self.textLabel.width = self.contentView.width - self.textLabel.left;
 }
 
 - (void)setCellItem:(SSJBaseItem *)cellItem {
@@ -42,6 +45,8 @@
     self.imageView.tintColor = item.imageColor;
     self.textLabel.text = item.title;
     self.textLabel.textColor = item.titleColor;
+    self.textLabel.font = item.titleFont;
+    [self setNeedsLayout];
 }
 
 - (void)addObserver {

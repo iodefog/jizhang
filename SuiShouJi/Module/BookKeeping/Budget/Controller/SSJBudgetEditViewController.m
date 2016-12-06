@@ -17,7 +17,6 @@
 #import "SSJBudgetEditTextFieldCell.h"
 #import "SSJBudgetEditSwitchCtrlCell.h"
 #import "SSJBudgetDatabaseHelper.h"
-#import "SSJCustomKeyboard.h"
 #import "SSJDatePeriod.h"
 #import "SSJDataSynchronizer.h"
 #import "SSJUserTableManager.h"
@@ -75,7 +74,6 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.hidesBottomBarWhenPushed = YES;
-        self.remindPercent = 0.1;
     }
     return self;
 }
@@ -294,6 +292,11 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         return;
     }
     
+    if (self.model.isRemind && self.model.remindMoney < 0) {
+        [CDAutoHideMessageHUD showMessage:@"预算占比提醒不能小于0"];
+        return;
+    }
+    
     [self updateSaveButtonState:YES];
     
     //  检测是否有预算类别、开始时间、预算周期和当前保存的预算冲突的配置
@@ -397,6 +400,8 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
             [self initBudgetModel];
         }
         
+        self.remindPercent = self.model.remindMoney / self.model.budgetMoney;
+        
         [self updateCellTitles];
         
         _bookName = [SSJBudgetDatabaseHelper queryBookNameForBookId:self.model.booksId];
@@ -429,7 +434,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
     self.model.billIds = @[@"all"];
     self.model.type = 1;
     self.model.budgetMoney = 3000;
-    self.model.remindMoney = self.model.budgetMoney * self.remindPercent;
+    self.model.remindMoney = 300;
     self.model.beginDate = [period.startDate formattedDateWithFormat:@"yyyy-MM-dd"];
     self.model.endDate = [period.endDate formattedDateWithFormat:@"yyyy-MM-dd"];
     self.model.isAutoContinued = YES;
@@ -503,7 +508,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         budgetMoneyCell.imageView.image = [[UIImage imageNamed:@"xuhuan_jine"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         budgetMoneyCell.textField.tag = kBudgetMoneyTextFieldTag;
         budgetMoneyCell.textField.text = [NSString stringWithFormat:@"￥%.2f", self.model.budgetMoney];
-        budgetMoneyCell.textField.inputView = [SSJCustomKeyboard sharedInstance];
+        budgetMoneyCell.textField.keyboardType = UIKeyboardTypeDecimalPad;
         budgetMoneyCell.textField.delegate = self;
         budgetMoneyCell.textField.rightView = nil;
         budgetMoneyCell.detailTextLabel.text = nil;
@@ -525,7 +530,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         SSJBudgetEditTextFieldCell *budgetScaleCell = cell;
         budgetScaleCell.imageView.image = [[UIImage imageNamed:@"budget_chart"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         budgetScaleCell.textField.tag = kBudgetRemindScaleTextFieldTag;
-        budgetScaleCell.textField.inputView = [SSJCustomKeyboard sharedInstance];
+        budgetScaleCell.textField.keyboardType = UIKeyboardTypeDecimalPad;
         budgetScaleCell.textField.delegate = self;
         
         [self updateRemindMoneyScaleWithCell:budgetScaleCell];

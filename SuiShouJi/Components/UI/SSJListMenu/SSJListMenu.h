@@ -31,6 +31,9 @@
 // 图片颜色
 @property (nonatomic, strong) UIColor *imageColor;
 
+// 标题大小，默认16号字
+@property (nonatomic) CGFloat titleFontSize;
+
 // default 2;必须大于0
 @property (nonatomic) CGFloat displayRowCount;
 
