@@ -36,8 +36,6 @@
 }
 
 - (void)layoutSubviews {
-//    self.imageView.centerY = self.height * 0.5;
-//    self.imageView.right = self.width;
     self.imageView.center = CGPointMake(self.width * 0.7, self.height * 0.5);
 }
 
@@ -56,7 +54,7 @@
 - (void)updateAppearance {
     self.imageView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
     self.listMenu.normalTitleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-    self.listMenu.selectedTitleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
+    self.listMenu.selectedTitleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     self.listMenu.fillColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
     self.listMenu.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
     self.listMenu.imageColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
@@ -65,7 +63,7 @@
 - (void)tapAction {
     UIWindow *window = [UIApplication sharedApplication].keyWindow;
     
-    CGPoint showPoint = [self convertPoint:CGPointMake(self.width * 0.5, self.bottom) toView:window];
+    CGPoint showPoint = [self convertPoint:CGPointMake(self.imageView.centerX, self.bottom) toView:window];
     [self.listMenu showInView:window atPoint:showPoint dismissHandle:^(SSJListMenu *listMenu) {
         [UIView animateWithDuration:0.2 animations:^{
             self.imageView.transform = CGAffineTransformIdentity;
@@ -112,7 +110,7 @@
 - (SSJListMenu *)listMenu {
     if (!_listMenu) {
         _listMenu = [[SSJListMenu alloc] initWithItems:[self listItems]];
-        _listMenu.size = CGSizeMake(104, 84);
+        _listMenu.size = CGSizeMake(124, 84);
         [_listMenu addTarget:self action:@selector(listMenuSelectAction) forControlEvents:UIControlEventValueChanged];
     }
     return _listMenu;

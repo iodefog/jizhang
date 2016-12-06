@@ -174,7 +174,7 @@ extern NSString *const SSJBudgetConflictBudgetModelKey;
  *  @param failure   查询失败的回调
  */
 + (void)queryBudgetBillTypeSelectionItemListWithSelectedTypeList:(NSArray *)typeList
-                                                         booksId:(NSString *)booksId
+                                                         booksId:(nullable NSString *)booksId
                                                          success:(void(^)(NSArray <SSJBudgetBillTypeSelectionCellItem *>*list))success
                                                          failure:(void(^)(NSError *error))failure;
 

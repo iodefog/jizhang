@@ -82,8 +82,8 @@
     model.backgroundAlpha = 1;
     model.mainBackGroundColor = @"#FFFFFF";
     model.needBlurOrNot = NO;
-    model.mainColor = @"#393939";
-    model.secondaryColor = @"#a7a7a7";
+    model.mainColor = @"#333333";
+    model.secondaryColor = @"#999999";
     model.marcatoColor = @"#eb4a64";
     model.mainFillColor = @"#F4F4F4";
     model.secondaryFillColor = @"#FFFFFF";
@@ -97,7 +97,7 @@
     model.tabBarBackgroundColor = @"#FFFFFF";
     model.tabBarShadowImageAlpha = 1;
     model.cellSeparatorAlpha = 1;
-    model.cellSeparatorColor = @"#e8e8e8";
+    model.cellSeparatorColor = @"#dddddd";
     model.cellIndicatorColor = @"#cccccc";
     model.cellSelectionStyle = UITableViewCellSelectionStyleGray;
     model.statusBarStyle = UIStatusBarStyleDefault;

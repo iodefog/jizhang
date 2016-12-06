@@ -8,9 +8,11 @@
 
 #import "SSJBudgetBillTypeSelectionViewController.h"
 #import "SSJADDNewTypeViewController.h"
+#import "SSJBudgetEditViewController.h"
 #import "SSJBudgetBillTypeSelectionCell.h"
 #import "SSJBudgetDatabaseHelper.h"
 #import "SSJBudgetModel.h"
+#import "SSJDatePeriod.h"
 
 static NSString *const kBudgetBillTypeSelectionCellId = @"kBudgetBillTypeSelectionCellId";
 
@@ -141,6 +143,35 @@ static NSString *const kBudgetBillTypeSelectionCellId = @"kBudgetBillTypeSelecti
         return;
     }
     
+    if (self.enterFromBudgetList) {
+        
+        SSJDatePeriod *period = [SSJDatePeriod datePeriodWithPeriodType:SSJDatePeriodTypeMonth date:[NSDate date]];
+        SSJBudgetModel *budgetModel = [[SSJBudgetModel alloc] init];
+        budgetModel.ID = SSJUUID();
+        budgetModel.userId = SSJUSERID();
+        budgetModel.booksId = SSJGetCurrentBooksType();
+        budgetModel.billIds = self.selectedTypeList;
+        budgetModel.type = 1;
+        budgetModel.budgetMoney = 3000;
+        budgetModel.remindMoney = 300;
+        budgetModel.beginDate = [period.startDate formattedDateWithFormat:@"yyyy-MM-dd"];
+        budgetModel.endDate = [period.endDate formattedDateWithFormat:@"yyyy-MM-dd"];
+        budgetModel.isAutoContinued = YES;
+        budgetModel.isRemind = YES;
+        budgetModel.isAlreadyReminded = NO;
+        budgetModel.isLastDay = YES;
+        
+        SSJBudgetEditViewController *newBudgetController = [[SSJBudgetEditViewController alloc] init];
+        newBudgetController.model = budgetModel;
+        
+        NSMutableArray *viewControllers = [self.navigationController.viewControllers mutableCopy];
+        [viewControllers removeObject:self];
+        [viewControllers addObject:newBudgetController];
+        [self.navigationController setViewControllers:viewControllers animated:YES];
+        
+        return;
+    }
+    
     if (self.originalBillIds && ![self.originalBillIds isEqualToArray:self.selectedTypeList]) {
         
         [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"更改类别后，该预算的历史预算数据将清除重置哦" action:[SSJAlertViewAction actionWithTitle:@"取消" handler:^(SSJAlertViewAction * _Nonnull action) {
@@ -161,17 +192,20 @@ static NSString *const kBudgetBillTypeSelectionCellId = @"kBudgetBillTypeSelecti
             if (self.saveHandle) {
                 self.saveHandle(self);
             }
-            [super goBackAction];
+            [self goBackAction];
             
         }], nil];
         
     } else {
-        
         if (self.saveHandle) {
             self.saveHandle(self);
         }
-        [super goBackAction];
+        [self goBackAction];
     }
+}
+
+- (void)goBack {
+    
 }
 
 #pragma mark - Private

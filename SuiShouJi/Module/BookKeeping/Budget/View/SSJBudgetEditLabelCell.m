@@ -19,8 +19,8 @@
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:reuseIdentifier]) {
         
-        self.textLabel.font = [UIFont systemFontOfSize:18];
-        self.detailTextLabel.font = [UIFont systemFontOfSize:18];
+        self.textLabel.font = [UIFont systemFontOfSize:16];
+        self.detailTextLabel.font = [UIFont systemFontOfSize:16];
         self.detailTextLabel.textAlignment = NSTextAlignmentRight;
         
         [self updateAppearance];

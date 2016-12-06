@@ -34,6 +34,7 @@ static const CGFloat kGap = 5;
         
         self.backgroundColor = [UIColor clearColor];
         
+        _titleFontSize = 16;
         _displayRowCount = 2;
         
         _items = items;
@@ -191,6 +192,7 @@ static const CGFloat kGap = 5;
         cellItem.imageName = item.imageName;
         cellItem.title = item.title;
         cellItem.titleColor = _normalTitleColor;
+        cellItem.titleFont = [UIFont systemFontOfSize:_titleFontSize];
         [_cellItems addObject:cellItem];
     }
 }

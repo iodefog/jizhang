@@ -19,8 +19,9 @@
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:reuseIdentifier]) {
         self.selectionStyle = UITableViewCellSelectionStyleNone;
-        self.textLabel.font = [UIFont systemFontOfSize:18];
-        self.detailTextLabel.font = [UIFont systemFontOfSize:11];
+        self.textLabel.font = [UIFont systemFontOfSize:16];
+        self.detailTextLabel.font = [UIFont systemFontOfSize:13];
+        
         self.textField = [[UITextField alloc] init];
         self.textField.textAlignment = NSTextAlignmentRight;
         [self.contentView addSubview:self.textField];
@@ -34,16 +35,33 @@
     [super layoutSubviews];
     
     [self.imageView sizeToFit];
-    self.imageView.left = 10;
-    self.imageView.centerY = self.contentView.height * 0.5;
+    [self.textLabel sizeToFit];
+    [self.detailTextLabel sizeToFit];
     
-    self.textLabel.left = self.detailTextLabel.left = self.imageView.right + 10;
-    self.textLabel.centerY = self.contentView.height * 0.5;
-    
-    self.detailTextLabel.width = MIN(self.detailTextLabel.width, self.contentView.width - 20);
-    self.detailTextLabel.centerY = self.contentView.height - (self.contentView.height - self.textLabel.bottom) * 0.5;
-    
-    self.textField.frame = CGRectMake(self.contentView.width * 0.5 - 10, 0, self.contentView.width * 0.5, self.contentView.height);
+    if (self.detailTextLabel.text) {
+        CGFloat verticalGap = (self.contentView.height - self.textLabel.height - self.detailTextLabel.height) * 0.33;
+        
+        self.imageView.left = 10;
+        self.imageView.top = verticalGap;
+        
+        self.textLabel.left = self.imageView.right + 10;
+        self.textLabel.top = verticalGap;
+        
+        self.detailTextLabel.left = self.imageView.right + 10;
+        self.detailTextLabel.top = self.textLabel.bottom + verticalGap;
+        self.detailTextLabel.width = MIN(self.detailTextLabel.width, self.contentView.width - self.detailTextLabel.left - 10);
+        
+        self.textField.frame = CGRectMake(self.contentView.width * 0.5 - 10, 0, self.contentView.width * 0.5, self.detailTextLabel.top);
+        
+    } else {
+        self.imageView.left = 10;
+        self.imageView.centerY = self.contentView.height * 0.5;
+        
+        self.textLabel.left = self.imageView.right + 10;
+        self.textLabel.centerY = self.contentView.height * 0.5;
+        
+        self.textField.frame = CGRectMake(self.contentView.width * 0.5 - 10, 0, self.contentView.width * 0.5, self.contentView.height);
+    }
 }
 
 - (void)updateCellAppearanceAfterThemeChanged {

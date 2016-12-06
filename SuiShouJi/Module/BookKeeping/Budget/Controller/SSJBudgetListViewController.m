@@ -13,6 +13,7 @@
 #import "SSJBudgetListSecondaryCell.h"
 #import "SSJBudgetCategorySelectionControl.h"
 #import "SSJBudgetDatabaseHelper.h"
+#import "SSJBudgetBillTypeSelectionViewController.h"
 
 static NSString *const kBudgetListCellId = @"kBudgetListCellId";
 static NSString *const kBudgetListSecondaryCellId = @"kBudgetListSecondaryCellId";
@@ -155,7 +156,9 @@ static NSString *const kBudgetListSecondaryCellId = @"kBudgetListSecondaryCellId
             break;
             
         case SSJBudgetCategorySelectionControlOptionSecondary: {
-            
+            SSJBudgetBillTypeSelectionViewController *billTypeSelectionController = [[SSJBudgetBillTypeSelectionViewController alloc] init];
+            billTypeSelectionController.enterFromBudgetList = YES;
+            [self.navigationController pushViewController:billTypeSelectionController animated:YES];
         }
             break;
     }
