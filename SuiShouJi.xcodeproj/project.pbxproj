@@ -706,6 +706,11 @@
 		7DC4875D1DF6629700C27B69 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7DC487611DF6629700C27B69 /* Localizable.strings */; };
 		7DC4875E1DF6629700C27B69 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7DC487611DF6629700C27B69 /* Localizable.strings */; };
 		7DC4875F1DF6629700C27B69 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7DC487611DF6629700C27B69 /* Localizable.strings */; };
+		7DC487651DF6B42E00C27B69 /* SSJRecordMakingCustomNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC487641DF6B42E00C27B69 /* SSJRecordMakingCustomNavigationBar.m */; };
+		7DC487661DF6B42E00C27B69 /* SSJRecordMakingCustomNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC487641DF6B42E00C27B69 /* SSJRecordMakingCustomNavigationBar.m */; };
+		7DC487671DF6B42E00C27B69 /* SSJRecordMakingCustomNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC487641DF6B42E00C27B69 /* SSJRecordMakingCustomNavigationBar.m */; };
+		7DC487681DF6B42E00C27B69 /* SSJRecordMakingCustomNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC487641DF6B42E00C27B69 /* SSJRecordMakingCustomNavigationBar.m */; };
+		7DC487691DF6B42E00C27B69 /* SSJRecordMakingCustomNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC487641DF6B42E00C27B69 /* SSJRecordMakingCustomNavigationBar.m */; };
 		7DC517311CA93D3F00D23CF0 /* SSJWaveWaterPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC517291CA93D3F00D23CF0 /* SSJWaveWaterPath.m */; };
 		7DC517331CA93D3F00D23CF0 /* SSJWaveWaterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC5172D1CA93D3F00D23CF0 /* SSJWaveWaterView.m */; };
 		7DC517341CA93D3F00D23CF0 /* SSJWaveWaterViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC5172F1CA93D3F00D23CF0 /* SSJWaveWaterViewItem.m */; };
@@ -3017,6 +3022,8 @@
 		7DBA598B1D6D32B700C02D79 /* JiZhangGuanJia.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JiZhangGuanJia.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7DC487601DF6629700C27B69 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		7DC487621DF6629900C27B69 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		7DC487631DF6B42E00C27B69 /* SSJRecordMakingCustomNavigationBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJRecordMakingCustomNavigationBar.h; sourceTree = "<group>"; };
+		7DC487641DF6B42E00C27B69 /* SSJRecordMakingCustomNavigationBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJRecordMakingCustomNavigationBar.m; sourceTree = "<group>"; };
 		7DC517281CA93D3F00D23CF0 /* SSJWaveWaterPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJWaveWaterPath.h; sourceTree = "<group>"; };
 		7DC517291CA93D3F00D23CF0 /* SSJWaveWaterPath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJWaveWaterPath.m; sourceTree = "<group>"; };
 		7DC5172C1CA93D3F00D23CF0 /* SSJWaveWaterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJWaveWaterView.h; sourceTree = "<group>"; };
@@ -4344,6 +4351,8 @@
 				7DFD30581D75288D00A0D7A0 /* SSJCategoryEditableCollectionViewCellItem.m */,
 				9C7C9E3C1DB4D22B0095F49B /* SSJMemberTableViewCell.h */,
 				9C7C9E3D1DB4D22B0095F49B /* SSJMemberTableViewCell.m */,
+				7DC487631DF6B42E00C27B69 /* SSJRecordMakingCustomNavigationBar.h */,
+				7DC487641DF6B42E00C27B69 /* SSJRecordMakingCustomNavigationBar.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -7777,6 +7786,7 @@
 				7DBA57161D6D32B700C02D79 /* SSJSyncSettingTableViewCell.m in Sources */,
 				7DBA57171D6D32B700C02D79 /* SSJFundingDetailsViewController.m in Sources */,
 				7DBA57181D6D32B700C02D79 /* SSJCustomKeyBoardButton.m in Sources */,
+				7DC487671DF6B42E00C27B69 /* SSJRecordMakingCustomNavigationBar.m in Sources */,
 				9C17B53B1DEED7FF000D6C99 /* SSJThemeUpdate.m in Sources */,
 				9C9A0C551D6D96FB002AF046 /* SSJReminderListCell.m in Sources */,
 				7DF07E101DD086CF00B0AF97 /* SSJSeparatorFormView.m in Sources */,
@@ -8078,6 +8088,7 @@
 				7DF07E0F1DD086CF00B0AF97 /* SSJSeparatorFormView.m in Sources */,
 				7DAA38541D952AA0000ED16E /* SSJBudgetBillTypeSelectionCellItem.m in Sources */,
 				9C2A67C61D194CA70010F1DA /* SSJSyncTable.m in Sources */,
+				7DC487661DF6B42E00C27B69 /* SSJRecordMakingCustomNavigationBar.m in Sources */,
 				9C9A0C9C1D73D1AE002AF046 /* SSJBillingDaySelectView.m in Sources */,
 				9C6D662E1D86BD750081A7CE /* SSJListAdItem.m in Sources */,
 				9C2A67C71D194CA70010F1DA /* SSJAboutusTableViewCell.m in Sources */,
@@ -8357,6 +8368,7 @@
 				9C9A0C2A1D6D9600002AF046 /* SSJModifyFundingTableViewCell.m in Sources */,
 				9CECFB591D6D41A700DB2C8B /* SSJRecordMakingStore.m in Sources */,
 				9CECFB5A1D6D41A700DB2C8B /* SSJFinancingHomeHeader.m in Sources */,
+				7DC487681DF6B42E00C27B69 /* SSJRecordMakingCustomNavigationBar.m in Sources */,
 				9CECFB5B1D6D41A700DB2C8B /* SSJMineHomeImageCell.m in Sources */,
 				9CECFB5C1D6D41A700DB2C8B /* SSJDatabaseVersion1.m in Sources */,
 				9C9A0C9E1D73D1AF002AF046 /* SSJBillingDaySelectView.m in Sources */,
@@ -8851,6 +8863,7 @@
 				9C9A0C2B1D6D9601002AF046 /* SSJModifyFundingTableViewCell.m in Sources */,
 				9CECFF501D6D41EB00DB2C8B /* SSJAdWebViewController.m in Sources */,
 				9CECFF511D6D41EB00DB2C8B /* SSJRecordMakingStore.m in Sources */,
+				7DC487691DF6B42E00C27B69 /* SSJRecordMakingCustomNavigationBar.m in Sources */,
 				9CECFF521D6D41EB00DB2C8B /* SSJFinancingHomeHeader.m in Sources */,
 				9CECFF531D6D41EB00DB2C8B /* SSJMineHomeImageCell.m in Sources */,
 				9CECFF541D6D41EB00DB2C8B /* SSJDatabaseVersion1.m in Sources */,
@@ -9496,6 +9509,7 @@
 				9CD9BC361CFD2DAA0061803B /* SSJPersonalDetailItem.m in Sources */,
 				9C9323EE1D9D28BB00EBD216 /* SSJSearchBarAddition.m in Sources */,
 				7DA6EDD21D2B5CAE0097F06C /* SSJThemeModel.m in Sources */,
+				7DC487651DF6B42E00C27B69 /* SSJRecordMakingCustomNavigationBar.m in Sources */,
 				7D3955551C606BAF004D807C /* SSJStartUpgradeAlertView.m in Sources */,
 				BD0433911C1A8DA50051E7AB /* SSJBaseNetworkService.m in Sources */,
 				7D567E4A1D9D1AD6006512C8 /* SSJBudgetListSecondaryCell.m in Sources */,
