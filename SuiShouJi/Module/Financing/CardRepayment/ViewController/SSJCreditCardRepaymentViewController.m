@@ -53,7 +53,7 @@ static NSString *const kTitle6 = @"还款账单月份";
         }else {
             repaymentDate = [repaymentDate dateBySubtractingMonths:1];
         }
-        
+        self.repaymentModel.repaymentMonth = [repaymentDate formattedDateWithFormat:@"yyyy年MM月"];
     }
     [self.view addSubview:self.tableView];
     // Do any additional setup after loading the view.
@@ -120,6 +120,7 @@ static NSString *const kTitle6 = @"还款账单月份";
             repaymentModifyCell.cellInput.text = [NSString stringWithFormat:@"%@",self.repaymentModel.repaymentMoney];
         }
         repaymentModifyCell.cellInput.attributedPlaceholder = [[NSAttributedString alloc]initWithString:@"0.00" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+        repaymentModifyCell.cellInput.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
     }else if ([title isEqualToString:kTitle3]) {
         repaymentModifyCell.cellInput.attributedPlaceholder = [[NSAttributedString alloc]initWithString:@"选填" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         repaymentModifyCell.cellInput.text = self.repaymentModel.memo;
@@ -129,13 +130,18 @@ static NSString *const kTitle6 = @"还款账单月份";
     }else if ([title isEqualToString:kTitle5]) {
         repaymentModifyCell.cellDetail = self.repaymentModel.applyDate;
     }else if ([title isEqualToString:kTitle6]) {
-        
+        repaymentModifyCell.cellDetail = self.repaymentModel.repaymentMonth;
     }
     return repaymentModifyCell;
 }
 
+#pragma mark - Event
+- (void)saveButtonClicked:(id)sender{
+    
+}
+
 #pragma mark - Getter
--(TPKeyboardAvoidingTableView *)tableView{
+- (TPKeyboardAvoidingTableView *)tableView{
     if (!_tableView) {
         _tableView = [[TPKeyboardAvoidingTableView alloc]initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM) style:UITableViewStyleGrouped];
         _tableView.backgroundColor = [UIColor clearColor];
@@ -146,6 +152,24 @@ static NSString *const kTitle6 = @"还款账单月份";
     }
     return _tableView;
 }
+
+- (UIView *)saveFooterView{
+    if (_saveFooterView == nil) {
+        _saveFooterView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 80)];
+        UIButton *saveButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, _saveFooterView.width - 20, 40)];
+        [saveButton setTitle:@"保存" forState:UIControlStateNormal];
+        saveButton.layer.cornerRadius = 3.f;
+        saveButton.layer.masksToBounds = YES;
+        [saveButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];
+        [saveButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [saveButton addTarget:self action:@selector(saveButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+        saveButton.center = CGPointMake(_saveFooterView.width / 2, _saveFooterView.height / 2);
+        [_saveFooterView addSubview:saveButton];
+    }
+    return _saveFooterView;
+}
+
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
