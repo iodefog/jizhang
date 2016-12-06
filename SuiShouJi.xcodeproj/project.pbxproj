@@ -701,6 +701,11 @@
 		7DBA59381D6D32B700C02D79 /* ProjectSettings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7D4EF8931C4B5625003C4B20 /* ProjectSettings.plist */; };
 		7DBA595B1D6D32B700C02D79 /* SSJFinancingHomePopView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9C9471411CEB224C00D69079 /* SSJFinancingHomePopView.xib */; };
 		7DBA59861D6D32B700C02D79 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BD543C481C1A6DBC00910D61 /* Main.storyboard */; };
+		7DC4875B1DF6629700C27B69 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7DC487611DF6629700C27B69 /* Localizable.strings */; };
+		7DC4875C1DF6629700C27B69 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7DC487611DF6629700C27B69 /* Localizable.strings */; };
+		7DC4875D1DF6629700C27B69 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7DC487611DF6629700C27B69 /* Localizable.strings */; };
+		7DC4875E1DF6629700C27B69 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7DC487611DF6629700C27B69 /* Localizable.strings */; };
+		7DC4875F1DF6629700C27B69 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7DC487611DF6629700C27B69 /* Localizable.strings */; };
 		7DC517311CA93D3F00D23CF0 /* SSJWaveWaterPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC517291CA93D3F00D23CF0 /* SSJWaveWaterPath.m */; };
 		7DC517331CA93D3F00D23CF0 /* SSJWaveWaterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC5172D1CA93D3F00D23CF0 /* SSJWaveWaterView.m */; };
 		7DC517341CA93D3F00D23CF0 /* SSJWaveWaterViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC5172F1CA93D3F00D23CF0 /* SSJWaveWaterViewItem.m */; };
@@ -3010,6 +3015,8 @@
 		7DBA55581D6BFAF300C02D79 /* SSJLoanFundAccountSelectionViewItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJLoanFundAccountSelectionViewItem.h; sourceTree = "<group>"; };
 		7DBA55591D6BFAF300C02D79 /* SSJLoanFundAccountSelectionViewItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJLoanFundAccountSelectionViewItem.m; sourceTree = "<group>"; };
 		7DBA598B1D6D32B700C02D79 /* JiZhangGuanJia.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JiZhangGuanJia.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7DC487601DF6629700C27B69 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		7DC487621DF6629900C27B69 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		7DC517281CA93D3F00D23CF0 /* SSJWaveWaterPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJWaveWaterPath.h; sourceTree = "<group>"; };
 		7DC517291CA93D3F00D23CF0 /* SSJWaveWaterPath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJWaveWaterPath.m; sourceTree = "<group>"; };
 		7DC5172C1CA93D3F00D23CF0 /* SSJWaveWaterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJWaveWaterView.h; sourceTree = "<group>"; };
@@ -4652,6 +4659,14 @@
 				7DA6EDD11D2B5CAE0097F06C /* SSJThemeModel.m */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		7DC4873F1DF655BA00C27B69 /* Localization */ = {
+			isa = PBXGroup;
+			children = (
+				7DC487611DF6629700C27B69 /* Localizable.strings */,
+			);
+			path = Localization;
 			sourceTree = "<group>";
 		};
 		7DC517251CA93D3F00D23CF0 /* SSJWaveWaterView */ = {
@@ -6409,6 +6424,7 @@
 		BD0E43EB1C2118E600F9179D /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				7DC4873F1DF655BA00C27B69 /* Localization */,
 				9C23EA4B1DDAD4FE0003C5AB /* certificates */,
 				BD78E4B01C8FF8C7003A1EE1 /* sound */,
 				7D4EF8921C4B5625003C4B20 /* Plist */,
@@ -6936,6 +6952,7 @@
 				7DBA589F1D6D32B700C02D79 /* yw_1222.jpg in Resources */,
 				7DBA58CA1D6D32B700C02D79 /* sr_refresh.png in Resources */,
 				7DBA59381D6D32B700C02D79 /* ProjectSettings.plist in Resources */,
+				7DC4875D1DF6629700C27B69 /* Localizable.strings in Resources */,
 				7DBA595B1D6D32B700C02D79 /* SSJFinancingHomePopView.xib in Resources */,
 				7DBA59861D6D32B700C02D79 /* Main.storyboard in Resources */,
 			);
@@ -6955,6 +6972,7 @@
 				9C2A69871D194CA70010F1DA /* rain_sound.wav in Resources */,
 				9C2A69AD1D194CA70010F1DA /* Assets.xcassets in Resources */,
 				9C2A69C31D194CA70010F1DA /* yw_1222.jpg in Resources */,
+				7DC4875C1DF6629700C27B69 /* Localizable.strings in Resources */,
 				9C2A69EE1D194CA70010F1DA /* sr_refresh.png in Resources */,
 				9C2A6A4F1D194CA70010F1DA /* ProjectSettings.plist in Resources */,
 				9C2A6A711D194CA70010F1DA /* SSJFinancingHomePopView.xib in Resources */,
@@ -6979,6 +6997,7 @@
 				9CEC02131D6D41EB00DB2C8B /* yw_1222.jpg in Resources */,
 				9CEC023E1D6D41EB00DB2C8B /* sr_refresh.png in Resources */,
 				9CEC02AD1D6D41EB00DB2C8B /* ProjectSettings.plist in Resources */,
+				7DC4875F1DF6629700C27B69 /* Localizable.strings in Resources */,
 				9CEC02D01D6D41EB00DB2C8B /* SSJFinancingHomePopView.xib in Resources */,
 				9CEC02FB1D6D41EB00DB2C8B /* Main.storyboard in Resources */,
 			);
@@ -7001,6 +7020,7 @@
 				9CECFE1B1D6D41A700DB2C8B /* yw_1222.jpg in Resources */,
 				9CECFE461D6D41A700DB2C8B /* sr_refresh.png in Resources */,
 				9CECFEB51D6D41A700DB2C8B /* ProjectSettings.plist in Resources */,
+				7DC4875E1DF6629700C27B69 /* Localizable.strings in Resources */,
 				9CECFED81D6D41A700DB2C8B /* SSJFinancingHomePopView.xib in Resources */,
 				9CECFF031D6D41A700DB2C8B /* Main.storyboard in Resources */,
 			);
@@ -7023,6 +7043,7 @@
 				9C3277591CE471A900109C4C /* yw_1222.jpg in Resources */,
 				BD0432F01C1A77BB0051E7AB /* sr_refresh.png in Resources */,
 				7D4EF8941C4B5625003C4B20 /* ProjectSettings.plist in Resources */,
+				7DC4875B1DF6629700C27B69 /* Localizable.strings in Resources */,
 				9C94717C1CEB224C00D69079 /* SSJFinancingHomePopView.xib in Resources */,
 				BD543C4A1C1A6DBC00910D61 /* Main.storyboard in Resources */,
 			);
@@ -9771,6 +9792,15 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		7DC487611DF6629700C27B69 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7DC487601DF6629700C27B69 /* en */,
+				7DC487621DF6629900C27B69 /* zh-Hans */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 		BD543C481C1A6DBC00910D61 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (

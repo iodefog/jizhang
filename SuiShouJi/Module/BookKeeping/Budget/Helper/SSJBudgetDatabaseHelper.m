@@ -800,7 +800,7 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
     return [sortArr componentsJoinedByString:@","];
 }
 
-+ (void)queryBudgetBillTypeSelectionItemListWithSelectedTypeList:(NSArray *)list
++ (void)queryBudgetBillTypeSelectionItemListWithSelectedTypeList:(NSArray *)typeList
                                                          booksId:(NSString *)booksId
                                                          success:(void(^)(NSArray <SSJBudgetBillTypeSelectionCellItem *>*list))success
                                                          failure:(void(^)(NSError *error))failure {
@@ -834,7 +834,7 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
             item.billTypeName = [resultSet stringForColumn:@"cname"];
             item.billTypeColor = [resultSet stringForColumn:@"ccolor"];
             item.canSelect = YES;
-            item.selected = [list containsObject:item.billID] || [[list firstObject] isEqualToString:@"all"];
+            item.selected = [typeList containsObject:item.billID] || [[typeList firstObject] isEqualToString:@"all"];
             [list addObject:item];
         }
         [resultSet close];
@@ -844,7 +844,7 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
             selectAllItem.billID = @"all";
             selectAllItem.billTypeName = @"全选";
             selectAllItem.canSelect = YES;
-            selectAllItem.selected = [[list firstObject] isEqualToString:@"all"];
+            selectAllItem.selected = [[typeList firstObject] isEqualToString:@"all"];
             [list insertObject:selectAllItem atIndex:0];
         }
         

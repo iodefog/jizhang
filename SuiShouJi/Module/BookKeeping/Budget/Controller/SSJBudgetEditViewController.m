@@ -393,7 +393,9 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
 - (void)queryBillTypeList {
     [self.view ssj_showLoadingIndicator];
     [SSJBudgetDatabaseHelper queryBillTypeMapWithSuccess:^(NSDictionary * _Nonnull billTypeMap) {
+        
         [self.view ssj_hideLoadingIndicator];
+        
         self.budgetTypeMap = billTypeMap;
         
         //  如果是新建预算，需要重新创建个预算模型
@@ -402,7 +404,9 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         }
         
         [self updateCellTitles];
+        
         _bookName = [SSJBudgetDatabaseHelper queryBookNameForBookId:self.model.booksId];
+        
         [self.tableView reloadData];
         if (self.tableView.tableFooterView != self.footerView) {
             self.tableView.tableFooterView = self.footerView;
@@ -762,9 +766,13 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
 }
 
 - (void)enterBillTypeSelectionController {
+    __weak typeof(self) wself = self;
     SSJBudgetBillTypeSelectionViewController *billTypeSelectionController = [[SSJBudgetBillTypeSelectionViewController alloc] init];
     billTypeSelectionController.selectedTypeList = _model.billIds;
     billTypeSelectionController.edited = _isEdit;
+    billTypeSelectionController.saveHandle = ^(SSJBudgetBillTypeSelectionViewController *controller) {
+        wself.model.billIds = controller.selectedTypeList;
+    };
     [self.navigationController pushViewController:billTypeSelectionController animated:YES];
     [MobClick event:@"budget_pick_bill_type"];
 }
