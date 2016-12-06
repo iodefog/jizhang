@@ -25,11 +25,11 @@
 // 还款申请时间(分期还款时用)
 @property(nonatomic, strong) NSString *applyDate;
 
-// 还款来源资金账户id
-@property(nonatomic, strong) NSString *repaymentSourceFoundId;
-
 // 还款的账单月份
 @property(nonatomic, strong) NSString *repaymentMonth;
+
+// 还款来源资金账户id
+@property(nonatomic, strong) NSString *repaymentSourceFoundId;
 
 // 还款来源资金账户名称
 @property(nonatomic, strong) NSString *repaymentSourceFoundName;

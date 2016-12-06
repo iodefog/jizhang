@@ -7,11 +7,17 @@
 //
 
 #import "SSJCreditCardRepaymentViewController.h"
+#import "SSJFundingTypeSelectViewController.h"
 
 #import "TPKeyboardAvoidingTableView.h"
 #import "SSJChargeCircleModifyCell.h"
+#import "SSJFundingTypeSelectView.h"
+#import "SSJChargeCircleTimeSelectView.h"
 
 #import "SSJFinancingHomeHelper.h"
+
+#import "SSJFundingItem.h"
+#import "SSJCreditCardItem.h"
 
 static NSString *const SSJRepaymentEditeCellIdentifier = @"SSJRepaymentEditeCellIdentifier";
 
@@ -33,6 +39,10 @@ static NSString *const kTitle6 = @"还款账单月份";
 
 @property(nonatomic, strong) NSArray *images;
 
+@property(nonatomic, strong) SSJFundingTypeSelectView *fundSelectView;
+
+@property(nonatomic, strong) SSJChargeCircleTimeSelectView *repaymentTimeView;
+
 @end
 
 @implementation SSJCreditCardRepaymentViewController
@@ -42,6 +52,12 @@ static NSString *const kTitle6 = @"还款账单月份";
     self.titles = @[@[kTitle1,kTitle2,kTitle3],@[kTitle4,kTitle6,kTitle5]];
     self.images = @[@[@"loan_person",@"loan_money",@"loan_memo"],@[@"card_zhanghu",@"",@"loan_expires"]];
     [self.tableView registerClass:[SSJChargeCircleModifyCell class] forCellReuseIdentifier:SSJRepaymentEditeCellIdentifier];
+    [self.view addSubview:self.tableView];
+    // Do any additional setup after loading the view.
+}
+
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
     if (!self.repaymentModel.repaymentId.length) {
         self.repaymentModel.applyDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"];
         self.repaymentModel.repaymentSourceFoundId = [SSJFinancingHomeHelper queryfirstFundItem].fundingID;
@@ -55,12 +71,10 @@ static NSString *const kTitle6 = @"还款账单月份";
         }
         self.repaymentModel.repaymentMonth = [repaymentDate formattedDateWithFormat:@"yyyy年MM月"];
     }
-    [self.view addSubview:self.tableView];
-    // Do any additional setup after loading the view.
 }
 
 #pragma mark - UITableViewDelegate
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     return 55;
 }
 
@@ -68,32 +82,40 @@ static NSString *const kTitle6 = @"还款账单月份";
     return 10;
 }
 
--(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
     if (section == 1) {
         return self.saveFooterView;
     }
     return nil;
 }
 
--(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
     if (section == 2) {
         return 80 ;
     }
     return 0.1f;
 }
 
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
+    if ([title isEqualToString:kTitle4]) {
+        self.fundSelectView.selectFundID = self.repaymentModel.repaymentSourceFoundId;
+        [self.fundSelectView show];
+    }else if ([title isEqualToString:kTitle5]) {
+        
+    }else if ([title isEqualToString:kTitle6]) {
+        
+    }
 }
 
 
 #pragma mark - UITableViewDataSource
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return [self.titles[section] count];
 }
 
--(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     return self.titles.count;
 }
 
@@ -169,6 +191,55 @@ static NSString *const kTitle6 = @"还款账单月份";
     return _saveFooterView;
 }
 
+-(SSJFundingTypeSelectView *)fundSelectView{
+    if (!_fundSelectView) {
+        _fundSelectView = [[SSJFundingTypeSelectView alloc]init];
+        __weak typeof(self) weakSelf = self;
+        _fundSelectView.fundingTypeSelectBlock = ^(SSJFundingItem *item){
+            if (item.fundingID.length) {
+                weakSelf.repaymentModel.repaymentSourceFoundId = item.fundingID;
+                weakSelf.repaymentModel.repaymentSourceFoundName = item.fundingName;
+                weakSelf.repaymentModel.repaymentSourceFoundImage = item.fundingIcon;
+                [weakSelf.tableView reloadData];
+                [weakSelf.fundSelectView dismiss];
+            }else{
+                SSJFundingTypeSelectViewController *NewFundingVC = [[SSJFundingTypeSelectViewController alloc]init];
+                NewFundingVC.needLoanOrNot = NO;
+                NewFundingVC.addNewFundingBlock = ^(SSJBaseItem *item){
+                    if ([item isKindOfClass:[SSJFundingItem class]]) {
+                        SSJFundingItem *fundItem = (SSJFundingItem *)item;
+                        weakSelf.repaymentModel.repaymentSourceFoundId = fundItem.fundingID;
+                        weakSelf.repaymentModel.repaymentSourceFoundName = fundItem.fundingName;
+                        weakSelf.repaymentModel.repaymentSourceFoundImage = fundItem.fundingIcon;
+                        [weakSelf.tableView reloadData];
+                    }else if ([item isKindOfClass:[SSJCreditCardItem class]]){
+                        SSJCreditCardItem *cardItem = (SSJCreditCardItem *)item;
+                        weakSelf.repaymentModel.repaymentSourceFoundId = cardItem.cardId;
+                        weakSelf.repaymentModel.repaymentSourceFoundName = cardItem.cardName;
+                        weakSelf.repaymentModel.repaymentSourceFoundImage = @"ft_creditcard";
+                        [weakSelf.tableView reloadData];
+                    }
+                    
+                };
+                [weakSelf.fundSelectView dismiss];
+                [weakSelf.navigationController pushViewController:NewFundingVC animated:YES];
+            }
+        };
+    }
+    return _fundSelectView;
+}
+
+-(SSJChargeCircleTimeSelectView *)repaymentTimeView{
+    if (!_repaymentTimeView) {
+        _repaymentTimeView = [[SSJChargeCircleTimeSelectView alloc]initWithFrame:self.view.bounds];
+        _repaymentTimeView.minimumDate = [NSDate date];
+        __weak typeof(self) weakSelf = self;
+        _repaymentTimeView.timerSetBlock = ^(NSString *dateStr){
+            [weakSelf.tableView reloadData];
+        };
+    }
+    return _repaymentTimeView;
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
