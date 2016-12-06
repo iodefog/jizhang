@@ -8,11 +8,12 @@
 
 #import "SSJCreditCardRepaymentViewController.h"
 #import "SSJFundingTypeSelectViewController.h"
+#import "SSJMonthSelectView.h"
 
 #import "TPKeyboardAvoidingTableView.h"
 #import "SSJChargeCircleModifyCell.h"
 #import "SSJFundingTypeSelectView.h"
-#import "SSJChargeCircleTimeSelectView.h"
+#import "SSJReminderDateSelectView.h"
 
 #import "SSJFinancingHomeHelper.h"
 
@@ -41,7 +42,9 @@ static NSString *const kTitle6 = @"还款账单月份";
 
 @property(nonatomic, strong) SSJFundingTypeSelectView *fundSelectView;
 
-@property(nonatomic, strong) SSJChargeCircleTimeSelectView *repaymentTimeView;
+@property(nonatomic, strong) SSJReminderDateSelectView *repaymentTimeView;
+
+@property(nonatomic, strong) SSJMonthSelectView *repaymentMonthSelectView;
 
 @end
 
@@ -103,9 +106,10 @@ static NSString *const kTitle6 = @"还款账单月份";
         self.fundSelectView.selectFundID = self.repaymentModel.repaymentSourceFoundId;
         [self.fundSelectView show];
     }else if ([title isEqualToString:kTitle5]) {
-        
+        self.repaymentTimeView.currentDate = [NSDate dateWithString:self.repaymentModel.applyDate formatString:@"yyyy-MM-dd"];
+        [self.repaymentTimeView show];
     }else if ([title isEqualToString:kTitle6]) {
-        
+        [self.repaymentMonthSelectView show];
     }
 }
 
@@ -229,16 +233,23 @@ static NSString *const kTitle6 = @"还款账单月份";
     return _fundSelectView;
 }
 
--(SSJChargeCircleTimeSelectView *)repaymentTimeView{
+-(SSJReminderDateSelectView *)repaymentTimeView{
     if (!_repaymentTimeView) {
-        _repaymentTimeView = [[SSJChargeCircleTimeSelectView alloc]initWithFrame:self.view.bounds];
-        _repaymentTimeView.minimumDate = [NSDate date];
+        _repaymentTimeView = [[SSJReminderDateSelectView alloc]initWithFrame:self.view.bounds];
         __weak typeof(self) weakSelf = self;
-        _repaymentTimeView.timerSetBlock = ^(NSString *dateStr){
+        _repaymentTimeView.dateSetBlock = ^(NSDate *date){
+            weakSelf.repaymentModel.applyDate = [date formattedDateWithFormat:@"yyyy-MM-dd"];
             [weakSelf.tableView reloadData];
         };
     }
     return _repaymentTimeView;
+}
+
+- (SSJMonthSelectView *)repaymentMonthSelectView{
+    if (!_repaymentMonthSelectView) {
+        _repaymentMonthSelectView = [[SSJMonthSelectView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height)];
+    }
+    return _repaymentMonthSelectView;
 }
 
 - (void)didReceiveMemoryWarning {
