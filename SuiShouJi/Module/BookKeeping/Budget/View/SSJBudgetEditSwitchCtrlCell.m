@@ -20,10 +20,12 @@
     if (self = [super initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:reuseIdentifier]) {
         
         self.selectionStyle = UITableViewCellSelectionStyleNone;
-        self.textLabel.font = [UIFont systemFontOfSize:18];
-        self.detailTextLabel.font = [UIFont systemFontOfSize:11];
+        self.textLabel.font = [UIFont systemFontOfSize:16];
+        self.detailTextLabel.font = [UIFont systemFontOfSize:13];
+        
         self.switchCtrl = [[UISwitch alloc] init];
-        self.accessoryView = self.switchCtrl;
+        [self.contentView addSubview:self.switchCtrl];
+        
         [self updateAppearance];
     }
     return self;
@@ -33,12 +35,35 @@
     [super layoutSubviews];
     
     [self.imageView sizeToFit];
-    self.imageView.left = 10;
-    self.imageView.centerY = self.contentView.height * 0.5;
+    [self.textLabel sizeToFit];
+    [self.detailTextLabel sizeToFit];
     
-    self.textLabel.left = self.detailTextLabel.left = self.imageView.right + 10;
-    self.textLabel.centerY = self.contentView.height * 0.5;
-    self.detailTextLabel.centerY = self.contentView.height - (self.contentView.height - self.textLabel.bottom) * 0.5;
+    if (self.detailTextLabel.text) {
+        
+        CGFloat verticalGap = (self.contentView.height - self.textLabel.height - self.detailTextLabel.height) * 0.33;
+        
+        self.imageView.left = 10;
+        self.imageView.top = verticalGap;
+        
+        self.textLabel.left = self.imageView.right + 10;
+        self.textLabel.top = verticalGap;
+        
+        self.detailTextLabel.left = self.imageView.right + 10;
+        self.detailTextLabel.top = self.textLabel.bottom + verticalGap;
+        
+        self.switchCtrl.right = self.contentView.width - 10;
+        self.switchCtrl.centerY = self.textLabel.centerY;
+        
+    } else {
+        self.imageView.left = 10;
+        self.imageView.centerY = self.contentView.height * 0.5;
+        
+        self.textLabel.left = self.detailTextLabel.left = self.imageView.right + 10;
+        self.textLabel.centerY = self.contentView.height * 0.5;
+        
+        self.switchCtrl.right = self.contentView.width - 10;
+        self.switchCtrl.centerY = self.contentView.height * 0.5;
+    }
 }
 
 - (void)updateCellAppearanceAfterThemeChanged {

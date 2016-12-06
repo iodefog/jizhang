@@ -122,33 +122,37 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
     NSString *cellTitle = [self.cellTitles ssj_objectAtIndexPath:indexPath];
     if ([cellTitle isEqualToString:kBudgetTypeTitle]) {
         //  预算类别
-        return 54;
+        return 50;
     } else if ([cellTitle isEqualToString:kBooksTypeTitle]) {
         //  账本类型
-        return 54;
+        return 50;
     } else if ([cellTitle isEqualToString:kAutoContinueTitle]) {
         //  自动续用
-        return 66;
+        return 65;
     } else if ([cellTitle isEqualToString:kBudgetMoneyTitle]) {
         //  预算金额
-        return 54;
+        return 50;
     } else if ([cellTitle isEqualToString:kBudgetRemindTitle]) {
         //  预算提醒
-        return 49;
+        return 50;
     } else if ([cellTitle isEqualToString:kBudgetRemindScaleTitle]) {
         //  预算占比提醒
-        return 62;
+        return 65;
     } else if ([cellTitle isEqualToString:kBudgetPeriodTitle]
                || [cellTitle isEqualToString:kAccountDayTitle]) {
         //  周期、结算日
-        return 54;
+        return 50;
     } else {
         return 0;
     }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return 10;
+    if (section == 0) {
+        return 0.1;
+    } else {
+        return 10;
+    }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
@@ -785,7 +789,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         _tableView.backgroundColor = [UIColor clearColor];
         _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
         _tableView.tableFooterView = [[UIView alloc] init];
-        [_tableView setSeparatorInset:UIEdgeInsetsZero];
+        [_tableView setSeparatorInset:UIEdgeInsetsMake(0, 14, 0, 0)];
         [_tableView registerClass:[SSJBudgetEditLabelCell class] forCellReuseIdentifier:kBudgetEditLabelCellId];
         [_tableView registerClass:[SSJBudgetEditTextFieldCell class] forCellReuseIdentifier:kBudgetEditTextFieldCellId];
         [_tableView registerClass:[SSJBudgetEditSwitchCtrlCell class] forCellReuseIdentifier:kBudgetEditSwitchCtrlCellId];
