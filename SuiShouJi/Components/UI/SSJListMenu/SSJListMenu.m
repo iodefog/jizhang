@@ -30,15 +30,21 @@ static const CGFloat kGap = 5;
 @implementation SSJListMenu
 
 - (instancetype)initWithItems:(NSArray *)items {
-    if (self = [super initWithFrame:CGRectZero]) {
+    if (self = [self initWithFrame:CGRectZero]) {
+        
+        _items = items;
+        [self organiseCellItems];
+    }
+    return self;
+}
+
+- (instancetype)initWithFrame:(CGRect)frame {
+    if (self = [super initWithFrame:frame]) {
         
         self.backgroundColor = [UIColor clearColor];
         
         _titleFontSize = 16;
         _displayRowCount = 2;
-        
-        _items = items;
-        [self organiseCellItems];
         
         [self.layer addSublayer:self.outlineLayer];
         [self addSubview:self.tableView];
@@ -49,6 +55,11 @@ static const CGFloat kGap = 5;
 - (void)layoutSubviews {
     _tableView.frame = CGRectMake(0, 3, self.width, self.height - 3);
     _tableView.rowHeight = _tableView.height / _displayRowCount;
+}
+
+#pragma mark - Public
+- (void)setItems:(NSArray<SSJListMenuItem *> *)items {
+    
 }
 
 - (void)setSelectedIndex:(NSUInteger)selectedIndex {

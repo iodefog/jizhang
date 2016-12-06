@@ -11,7 +11,7 @@
 
 @interface SSJListMenu : UIControl
 
-@property (nonatomic, strong, readonly) NSArray <SSJListMenuItem *>*items;
+@property (nonatomic, strong) NSArray <SSJListMenuItem *>*items;
 
 // 选中的cell下标
 @property (nonatomic) NSUInteger selectedIndex;

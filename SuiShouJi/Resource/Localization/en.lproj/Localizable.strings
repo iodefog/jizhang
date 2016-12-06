@@ -7,3 +7,6 @@
 */
 
 "保存" = "save";
+"支出" = "payment";
+"收入" = "income";
+"管理" = "manage";
