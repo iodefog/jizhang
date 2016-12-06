@@ -173,10 +173,10 @@ extern NSString *const SSJBudgetConflictBudgetModelKey;
  *  @param success   查询成功的回调
  *  @param failure   查询失败的回调
  */
-+ (void)queryBudgetBillTypeSelectionItemListWithBudgetModel:(SSJBudgetModel *)model
-                                                    booksId:(nullable NSString *)booksId
-                                                    success:(void(^)(NSArray <SSJBudgetBillTypeSelectionCellItem *>*list))success
-                                                    failure:(void(^)(NSError *error))failure;
++ (void)queryBudgetBillTypeSelectionItemListWithSelectedTypeList:(NSArray <NSString *>*)list
+                                                         booksId:(nullable NSString *)booksId
+                                                         success:(void(^)(NSArray <SSJBudgetBillTypeSelectionCellItem *>*list))success
+                                                         failure:(void(^)(NSError *error))failure;
 
 @end
 

@@ -800,10 +800,10 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
     return [sortArr componentsJoinedByString:@","];
 }
 
-+ (void)queryBudgetBillTypeSelectionItemListWithBudgetModel:(SSJBudgetModel *)model
-                                                    booksId:(NSString *)booksId
-                                                    success:(void(^)(NSArray <SSJBudgetBillTypeSelectionCellItem *>*list))success
-                                                    failure:(void(^)(NSError *error))failure {
++ (void)queryBudgetBillTypeSelectionItemListWithSelectedTypeList:(NSArray *)list
+                                                         booksId:(NSString *)booksId
+                                                         success:(void(^)(NSArray <SSJBudgetBillTypeSelectionCellItem *>*list))success
+                                                         failure:(void(^)(NSError *error))failure {
     NSString *userID = SSJUSERID();
     
     if (!booksId) {
@@ -834,11 +834,7 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
             item.billTypeName = [resultSet stringForColumn:@"cname"];
             item.billTypeColor = [resultSet stringForColumn:@"ccolor"];
             item.canSelect = YES;
-            item.selected = [model.billIds containsObject:item.billID] || [[model.billIds firstObject] isEqualToString:@"all"];
-//            item.canSelect = ![billIDs containsObject:item.billID];
-//            if (item.canSelect) {
-//                item.selected = [model.billIds containsObject:item.billID] || [[model.billIds firstObject] isEqualToString:@"all"];
-//            }
+            item.selected = [list containsObject:item.billID] || [[list firstObject] isEqualToString:@"all"];
             [list addObject:item];
         }
         [resultSet close];
@@ -848,7 +844,7 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
             selectAllItem.billID = @"all";
             selectAllItem.billTypeName = @"全选";
             selectAllItem.canSelect = YES;
-            selectAllItem.selected = [[model.billIds firstObject] isEqualToString:@"all"];
+            selectAllItem.selected = [[list firstObject] isEqualToString:@"all"];
             [list insertObject:selectAllItem atIndex:0];
         }
         

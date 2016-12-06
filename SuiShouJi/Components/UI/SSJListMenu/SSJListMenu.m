@@ -11,6 +11,8 @@
 
 static const NSTimeInterval kDuration = 0.2;
 
+static const CGFloat kGap = 5;
+
 @interface SSJListMenu () <UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
@@ -195,9 +197,9 @@ static const NSTimeInterval kDuration = 0.2;
 
 - (CGFloat)vertexXWithShowPoint:(CGPoint)point inView:(UIView *)view {
     if (point.x < self.width * 0.5) {
-        return point.x;
+        return point.x - kGap;
     } else if (point.x > view.width - self.width * 0.5) {
-        return self.width - (view.width - point.x);
+        return self.width - (view.width - point.x) + kGap;
     } else {
         return self.width * 0.5;
     }

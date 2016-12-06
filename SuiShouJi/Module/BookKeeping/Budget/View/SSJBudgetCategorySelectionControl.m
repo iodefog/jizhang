@@ -21,10 +21,12 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         [self addSubview:self.imageView];
-        [self addSubview:self.listMenu];
         
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapAction)];
         [self addGestureRecognizer:tap];
+        
+        [self sizeToFit];
+        [self updateAppearance];
     }
     return self;
 }
@@ -34,7 +36,9 @@
 }
 
 - (void)layoutSubviews {
-    self.imageView.center = CGPointMake(self.width * 0.5, self.height * 0.5);
+//    self.imageView.centerY = self.height * 0.5;
+//    self.imageView.right = self.width;
+    self.imageView.center = CGPointMake(self.width * 0.7, self.height * 0.5);
 }
 
 - (void)setOption:(SSJBudgetCategorySelectionControlOption)option {
@@ -47,6 +51,15 @@
             self.listMenu.selectedIndex = 1;
             break;
     }
+}
+
+- (void)updateAppearance {
+    self.imageView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
+    self.listMenu.normalTitleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    self.listMenu.selectedTitleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
+    self.listMenu.fillColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
+    self.listMenu.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
+    self.listMenu.imageColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
 }
 
 - (void)tapAction {

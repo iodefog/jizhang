@@ -10,4 +10,11 @@
 
 @implementation SSJListMenuItem
 
++ (instancetype)itemWithImageName:(NSString *)imageName title:(NSString *)title {
+    SSJListMenuItem *item = [[SSJListMenuItem alloc] init];
+    item.imageName = imageName;
+    item.title = title;
+    return item;
+}
+
 @end
