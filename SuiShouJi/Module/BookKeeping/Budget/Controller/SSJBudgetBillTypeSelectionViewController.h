@@ -13,7 +13,7 @@
 @interface SSJBudgetBillTypeSelectionViewController : SSJBaseViewController
 
 /**
- 选中的类别列表
+ 选中的类别ID列表
  注意：只有从编辑／新建预算页面进入需要传值
  */
 @property (nonatomic, strong) NSArray <NSString *>*selectedTypeList;
@@ -23,5 +23,15 @@
  注意：只有从编辑／新建预算页面进入需要传值
  */
 @property (nonatomic) BOOL edited;
+
+/**
+ 是否从预算列表入口进入
+ */
+@property (nonatomic) BOOL enterFromBudgetList;
+
+/**
+ 点击保存按钮触发的回调
+ */
+@property (nonatomic, copy) void (^saveHandle)(SSJBudgetBillTypeSelectionViewController *);
 
 @end

@@ -41,38 +41,15 @@ static NSString *const kBudgetBillTypeSelectionCellId = @"kBudgetBillTypeSelecti
     if (_edited) {
         self.originalBillIds = self.selectedTypeList;
     }
+    
+    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"保存", nil) style:UIBarButtonItemStylePlain target:self action:@selector(saveAction)];
+    self.navigationItem.rightBarButtonItem = rightItem;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
     [self loadData];
-}
-
-- (void)goBackAction {
-    if (self.selectedTypeList.count == 0) {
-        [CDAutoHideMessageHUD showMessage:@"至少选择一个类别"];
-        return;
-    }
-    
-    if (self.originalBillIds && ![self.originalBillIds isEqualToArray:self.selectedTypeList]) {
-        [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"更改类别后，该预算的历史预算数据将清除重置哦" action:[SSJAlertViewAction actionWithTitle:@"取消" handler:^(SSJAlertViewAction * _Nonnull action) {
-            self.selectedTypeList = self.originalBillIds;
-            BOOL allSelect = [self.selectedTypeList isEqualToArray:@[@"all"]];
-            for (SSJBudgetBillTypeSelectionCellItem *item in self.items) {
-                if (allSelect) {
-                    item.selected = YES;
-                } else {
-                    item.selected = [self.selectedTypeList containsObject:item.billID];
-                }
-            }
-            [self.tableView reloadData];
-        }], [SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction * _Nonnull action) {
-            [super goBackAction];
-        }], nil];
-    } else {
-        [super goBackAction];
-    }
 }
 
 - (void)updateAppearanceAfterThemeChanged {
@@ -155,6 +132,46 @@ static NSString *const kBudgetBillTypeSelectionCellId = @"kBudgetBillTypeSelecti
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
     return 10;
+}
+
+#pragma mark - Event
+- (void)saveAction {
+    if (self.selectedTypeList.count == 0) {
+        [CDAutoHideMessageHUD showMessage:@"至少选择一个类别"];
+        return;
+    }
+    
+    if (self.originalBillIds && ![self.originalBillIds isEqualToArray:self.selectedTypeList]) {
+        
+        [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"更改类别后，该预算的历史预算数据将清除重置哦" action:[SSJAlertViewAction actionWithTitle:@"取消" handler:^(SSJAlertViewAction * _Nonnull action) {
+            
+            self.selectedTypeList = self.originalBillIds;
+            BOOL allSelect = [self.selectedTypeList isEqualToArray:@[@"all"]];
+            for (SSJBudgetBillTypeSelectionCellItem *item in self.items) {
+                if (allSelect) {
+                    item.selected = YES;
+                } else {
+                    item.selected = [self.selectedTypeList containsObject:item.billID];
+                }
+            }
+            [self.tableView reloadData];
+            
+        }], [SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction * _Nonnull action) {
+            
+            if (self.saveHandle) {
+                self.saveHandle(self);
+            }
+            [super goBackAction];
+            
+        }], nil];
+        
+    } else {
+        
+        if (self.saveHandle) {
+            self.saveHandle(self);
+        }
+        [super goBackAction];
+    }
 }
 
 #pragma mark - Private
