@@ -588,16 +588,6 @@ BOOL kHomeNeedLoginPop;
     }];
 }
 
--(void)budgetButtonClicked:(id)sender{
-    if (self.homeBar.budgetButton.model == nil) {
-        SSJBudgetEditViewController *budgetEditVC = [[SSJBudgetEditViewController alloc]init];
-        [self.navigationController pushViewController:budgetEditVC animated:YES];
-    }else{
-        SSJBudgetListViewController *budgetListVC = [[SSJBudgetListViewController alloc]init];
-        [self.navigationController pushViewController:budgetListVC animated:YES];
-    }
-}
-
 #pragma mark - Private
 -(void)popIfNeeded{
     __weak typeof(self) weakSelf = self;

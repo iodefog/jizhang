@@ -67,9 +67,6 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
 //  提醒百分比
 @property (nonatomic) double remindPercent;
 
-// 是否编辑
-@property (nonatomic) BOOL isEdit;
-
 @end
 
 @implementation SSJBudgetEditViewController
@@ -85,8 +82,6 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    _isEdit = self.model;
     
     if (_isEdit) {
         self.navigationItem.title = @"编辑预算";
@@ -398,7 +393,6 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         
         self.budgetTypeMap = billTypeMap;
         
-        //  如果是新建预算，需要重新创建个预算模型
         if (!self.model) {
             [self initBudgetModel];
         }

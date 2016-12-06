@@ -15,7 +15,12 @@
 @interface SSJBudgetEditViewController : SSJBaseViewController
 
 /**
- 预算配置模型；新建不穿；编辑必传
+ 是否编辑，反之新建
+ */
+@property (nonatomic) BOOL isEdit;
+
+/**
+ 预算配置模型；如果不传则新内部创建默认预算模型
  */
 @property (nonatomic, copy) SSJBudgetModel *model;
 

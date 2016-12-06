@@ -122,6 +122,7 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
 #pragma mark - Event
 - (void)editButtonAction {
     SSJBudgetEditViewController *budgetEditVC = [[SSJBudgetEditViewController alloc] init];
+    budgetEditVC.isEdit = YES;
     budgetEditVC.model = self.budgetModel;
     [self.navigationController pushViewController:budgetEditVC animated:YES];
 }
