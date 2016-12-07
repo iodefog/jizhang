@@ -12,7 +12,8 @@
 
 + (NSDictionary *)objectClassInArray{
     return @{
-             @"bannerItems" : @"SSJBannerItem"
+             @"bannerItems" : @"SSJBannerItem",
+             @"listAdItems" : @"SSJListAdItem"
              };
 }
 

@@ -14,7 +14,7 @@
 
 @property(nonatomic, strong) NSArray *bannerItems;
 
-@property(nonatomic, strong) SSJListAdItem *listAdItem;
+@property(nonatomic, strong) NSArray *listAdItems;
 
 @property(nonatomic, strong) SSJBooksAdBanner *booksAdItem;
 
