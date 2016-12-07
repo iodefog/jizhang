@@ -7,7 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "SSJRepaymentModel.h"
 
 @interface SSJRepaymentStore : NSObject
+
++ (void)saveRepaymentWithRepaymentModel:(SSJRepaymentModel *)model
+                                Success:(void (^)(void))success
+                                failure:(void (^)(NSError *error))failure;
 
 @end
