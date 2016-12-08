@@ -19,7 +19,7 @@
 
 + (NSDictionary *)replacedKeyFromPropertyName{
     return @{
-             @"listAdItem" : @"pinnedBanner",
+             @"listAdItems" : @"pinnedBanner",
              @"bannerItems" : @"loopBanners",
              @"booksAdItem" : @"booksBanner"
              };

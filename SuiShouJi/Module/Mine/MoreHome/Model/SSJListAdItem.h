@@ -18,5 +18,6 @@
 
 //广告跳转页面
 @property(nonatomic, strong) NSString *url;
-
+@property (nonatomic, copy) NSString *imageUrl;
+@property (nonatomic, copy) NSString *imageName;
 @end

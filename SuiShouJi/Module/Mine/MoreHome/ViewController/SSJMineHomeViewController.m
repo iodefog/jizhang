@@ -44,22 +44,27 @@
 #import <YWFeedbackFMWK/YWFeedbackKit.h>
 #import "UIViewController+SSJMotionPassword.h"
 #import "UMSocial.h"
+#import "SSJMineHomeCollectionImageCell.h"
+#import "SSJHeaderBannerImageView.h"
 
 static NSString *const kTitle1 = @"提醒";
 static NSString *const kTitle2 = @"主题皮肤";
 static NSString *const kTitle3 = @"周期记账";
-static NSString *const kTitle4 = @"数据文件导出";
+static NSString *const kTitle4 = @"数据导出";
 static NSString *const kTitle5 = @"意见反馈";
 static NSString *const kTitle6 = @"给个好评";
 static NSString *const kTitle7 = @"设置";
 static NSString *const kTitle8 = @"分享APP";
+static NSString *const kHeaderViewID = @"headerViewIdentifier";
+static NSString *const kItemID = @"homeItemIdentifier";
 
 
 static BOOL KHasEnterMineHome;
 
 static BOOL kNeedBannerDisplay = YES;
 
-@interface SSJMineHomeViewController ()<UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UITableViewDelegate,UITableViewDataSource,UMSocialUIDelegate>
+@interface SSJMineHomeViewController ()<UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UMSocialUIDelegate,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,SSJHeaderBannerImageViewDelegate>
+//UITableViewDelegate,UITableViewDataSource,
 @property (nonatomic,strong) SSJMineHomeTableViewHeader *header;
 @property (nonatomic, strong) SSJPortraitUploadNetworkService *portraitUploadService;
 @property (nonatomic,strong) UIView *loggedFooterView;
@@ -69,11 +74,16 @@ static BOOL kNeedBannerDisplay = YES;
 @property (nonatomic, strong) NSMutableArray *images;
 @property (nonatomic,strong) NSString *circleChargeState;
 @property(nonatomic, strong) UIView *rightbuttonView;
-@property(nonatomic, strong) UITableView *tableView;
+//@property(nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) UICollectionView *collectionView;
+@property (nonatomic, strong) SSJHeaderBannerImageView *headerBannerImageView;//头部banner
 @property(nonatomic, strong) SSJBannerNetworkService *bannerService;
 @property(nonatomic, strong) SSJBannerHeaderView *bannerHeader;
 @property (nonatomic, strong) YWFeedbackKit *feedbackKit;
-@property(nonatomic, strong) SSJListAdItem *adItem;
+//@property(nonatomic, strong) SSJListAdItem *adItem;
+@property (nonatomic, strong) UIView *lineView;
+@property (nonatomic, strong) NSMutableArray<SSJListAdItem *> *adItems;//服务器返回的广告
+@property (nonatomic, strong) NSMutableArray<SSJListAdItem *> *adItemsArray;//合并之后的广告
 @end
 
 @implementation SSJMineHomeViewController{
@@ -94,7 +104,7 @@ static BOOL kNeedBannerDisplay = YES;
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.view addSubview:self.header];
-    [self.view addSubview:self.tableView];
+    [self.view addSubview:self.collectionView];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -110,27 +120,39 @@ static BOOL kNeedBannerDisplay = YES;
     //  根据审核状态显示响应的内容，“给个好评”在审核期间不能被看到，否则可能会被拒绝-
     if ([SSJStartChecker sharedInstance].isInReview) {
         if ([SSJDefaultSource() isEqualToString:@"11501"] || [SSJDefaultSource() isEqualToString:@"11502"]) {
-            self.images = [@[@[[UIImage imageNamed:@"more_tixing"], [UIImage imageNamed:@"more_zhouqi"], [UIImage imageNamed:@"more_pifu"]],@[[UIImage imageNamed:@"more_daochu"]], @[[UIImage imageNamed:@"more_share"]], @[[UIImage imageNamed:@"more_fankui"], [UIImage imageNamed:@"more_shezhi"]]] mutableCopy];
-            self.titles = [@[@[kTitle1 , kTitle2 , kTitle3], @[kTitle4],@[kTitle8],@[kTitle5 , kTitle7]] mutableCopy];
+            self.images = [@[@"more_tixing", @"more_zhouqi", @"more_pifu",@"more_daochu", @"more_share", @"more_fankui", @"more_shezhi"] mutableCopy];
+            self.titles = [@[kTitle1 , kTitle2 , kTitle3, kTitle4,kTitle8,kTitle5 , kTitle7] mutableCopy];
             _titleArr = [@[kTitle1 , kTitle2 , kTitle3 , kTitle4 , kTitle8 , kTitle5 , kTitle7] mutableCopy];
         } else{
-            self.images = [@[@[[UIImage imageNamed:@"more_tixing"], [UIImage imageNamed:@"more_zhouqi"], [UIImage imageNamed:@"more_pifu"]],@[[UIImage imageNamed:@"more_daochu"]], @[[UIImage imageNamed:@"more_fankui"], [UIImage imageNamed:@"more_shezhi"]]] mutableCopy];
-            self.titles = [@[@[kTitle1 , kTitle2 , kTitle3], @[kTitle4],@[kTitle5 , kTitle7]] mutableCopy];
+            self.images = [@[@"more_tixing", @"more_zhouqi", @"more_pifu",@"more_daochu", @"more_fankui", @"more_shezhi"] mutableCopy];
+            self.titles = [@[kTitle1 , kTitle2 , kTitle3, kTitle4,kTitle5 , kTitle7] mutableCopy];
             _titleArr = [@[kTitle1 , kTitle2 , kTitle3 , kTitle4 , kTitle5 , kTitle7] mutableCopy];
         }
 
     } else {
         if ([SSJDefaultSource() isEqualToString:@"11501"] || [SSJDefaultSource() isEqualToString:@"11502"]) {
-            self.images = [@[@[[UIImage imageNamed:@"more_tixing"], [UIImage imageNamed:@"more_pifu"], [UIImage imageNamed:@"more_zhouqi"]],@[[UIImage imageNamed:@"more_daochu"]], @[[UIImage imageNamed:@"more_share"]], @[[UIImage imageNamed:@"more_fankui"], [UIImage imageNamed:@"more_haoping"], [UIImage imageNamed:@"more_shezhi"]]] mutableCopy];
-            self.titles = [@[@[kTitle1 , kTitle2 , kTitle3], @[kTitle4],@[kTitle8], @[kTitle5 , kTitle6 , kTitle7]]mutableCopy];
+            self.images = [@[@"more_tixing", @"more_pifu",@"more_zhouqi",@"more_daochu", @"more_share", @"more_fankui", @"more_haoping", @"more_shezhi"] mutableCopy];
+            self.titles = [@[kTitle1 , kTitle2 , kTitle3, kTitle4,kTitle8, kTitle5 , kTitle6 , kTitle7]mutableCopy];
             _titleArr = [@[kTitle1 , kTitle2 , kTitle3 , kTitle4 , kTitle8 , kTitle5 , kTitle6 , kTitle7] mutableCopy];
         } else{
-            self.images = [@[@[[UIImage imageNamed:@"more_tixing"], [UIImage imageNamed:@"more_pifu"], [UIImage imageNamed:@"more_zhouqi"]],@[[UIImage imageNamed:@"more_daochu"]], @[[UIImage imageNamed:@"more_fankui"], [UIImage imageNamed:@"more_haoping"], [UIImage imageNamed:@"more_shezhi"]]] mutableCopy];
-            self.titles = [@[@[kTitle1 , kTitle2 , kTitle3], @[kTitle4], @[kTitle5 , kTitle6 , kTitle7]]mutableCopy];
+            self.images = [@[@"more_tixing", @"more_pifu", @"more_zhouqi",@"more_daochu", @"more_fankui", @"more_haoping", @"more_shezhi"] mutableCopy];
+            self.titles = [@[kTitle1 , kTitle2 , kTitle3, kTitle4, kTitle5 , kTitle6 , kTitle7] mutableCopy];
             _titleArr = [@[kTitle1 , kTitle2 , kTitle3 , kTitle4 , kTitle5 , kTitle6 , kTitle7] mutableCopy];
         }
     }
 
+    //遍历images、titles生产广告模型
+    [self.adItemsArray removeAllObjects];
+    for (NSInteger i=0; i<self.titles.count; i++) {
+        SSJListAdItem *item = [[SSJListAdItem alloc] init];
+        item.adTitle = [self.titles ssj_safeObjectAtIndex:i];
+        item.imageName = [self.images ssj_safeObjectAtIndex:i];
+        item.imageUrl = nil;
+        item.hidden = NO;
+        item.url = nil;//不需要跳转网页
+        [self.adItemsArray addObject:item];
+    }
+    
     __weak typeof(self) weakSelf = self;
     [self getUserInfo:^(SSJUserInfoItem *item){
         weakSelf.header.item = item;
@@ -153,8 +175,8 @@ static BOOL kNeedBannerDisplay = YES;
     [super viewDidLayoutSubviews];
     self.header.size = CGSizeMake(self.view.width, 219);
     self.header.leftTop = CGPointMake(0, 0);
-    self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.header.bottom - self.tabBarController.tabBar.height);
-    self.tableView.top = self.header.bottom;
+    self.collectionView.size = CGSizeMake(self.view.width, self.view.height - self.header.bottom - self.tabBarController.tabBar.height);
+    self.collectionView.top = self.header.bottom;
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -164,49 +186,115 @@ static BOOL kNeedBannerDisplay = YES;
 }
 
 #pragma mark - UITableViewDelegate
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
-    if ([title isEqualToString:kTitle5]) {
-        return 65;
+//-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+//    NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
+//    if ([title isEqualToString:kTitle5]) {
+//        return 65;
+//    }
+//    return 55;
+//}
+//
+//- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+//    if (self.bannerHeader.items.count && section == 0 && kNeedBannerDisplay) {
+//        return 90;
+//    }
+//    return 10;
+//}
+
+//-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+//    if (self.bannerHeader.items.count && section == 0 && kNeedBannerDisplay) {
+//        return self.bannerHeader;
+//    }
+//    return [UIView new];
+//}
+
+//-(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
+//    UIView *footerView = [[UIView alloc]initWithFrame:CGRectZero];
+//    return footerView;
+//}
+
+//-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
+//    return 0.1f;
+//}
+
+//-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+//    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+//    }
+//
+//-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
+//    SSJMineHomeImageCell * currentCell = (SSJMineHomeImageCell *)cell;
+//    if (!KHasEnterMineHome) {
+//        currentCell.transform = CGAffineTransformMakeTranslation( - self.view.width , 0);
+//        [UIView animateWithDuration:0.3 delay:0.1 * [_titleArr indexOfObject:currentCell.cellTitle] options:UIViewAnimationOptionTransitionCurlUp animations:^{
+//            currentCell.transform = CGAffineTransformIdentity;
+//        } completion:^(BOOL finished) {
+//            KHasEnterMineHome = YES;
+//        }];
+//    }
+//}
+#pragma mark - UICollectionViewDataSource
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
+{
+    return 1;
+}
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
+    return self.adItemsArray.count;
+}
+
+-(UICollectionViewCell*)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    SSJMineHomeCollectionImageCell *cell=[collectionView dequeueReusableCellWithReuseIdentifier:kItemID forIndexPath:indexPath];
+    
+    [cell setAdItem:[self.adItemsArray ssj_safeObjectAtIndex:indexPath.item] indexPath:indexPath];
+    return cell;
+}
+#pragma mark -UICollectionViewDelegateFlowLayout
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    return CGSizeMake(SSJSCREENWITH / kColum, 100);
+}
+
+//  返回头视图
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
+{
+    //如果是头视图
+    if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
+        self.headerBannerImageView =  [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:kHeaderViewID forIndexPath:indexPath];
+        self.headerBannerImageView.delegate = self;
+        //添加头视图的内容
+        return self.headerBannerImageView;
     }
-    return 55;
+    //如果底部视图
+    //    if([kind isEqualToString:UICollectionElementKindSectionFooter]){
+    //
+    //    }
+    return nil;
+}
+-(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
+{
+    return UIEdgeInsetsMake(0, 0, 0, 0);//分别为上、左、下、右
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    if (self.bannerHeader.items.count && section == 0 && kNeedBannerDisplay) {
-        return 90;
-    }
-    return 10;
-}
-
--(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
-    if (self.bannerHeader.items.count && section == 0 && kNeedBannerDisplay) {
-        return self.bannerHeader;
-    }
-    return [UIView new];
-}
-
--(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
-    UIView *footerView = [[UIView alloc]initWithFrame:CGRectZero];
-    return footerView;
-}
-
--(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
-    return 0.1f;
-}
-
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
+#pragma mark -UICollectionViewDelegate
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+//    NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
+    SSJListAdItem *item = [self.adItemsArray ssj_safeObjectAtIndex:indexPath.item];
+    
     
     // 如果是广告
-    if ([title isEqualToString:self.adItem.adTitle]) {
-        SSJAdWebViewController *webVc = [SSJAdWebViewController webViewVCWithURL:[NSURL URLWithString:self.adItem.url]];
+//    if ([title isEqualToString:self.adItem.adTitle]) {
+//        SSJAdWebViewController *webVc = [SSJAdWebViewController webViewVCWithURL:[NSURL URLWithString:self.adItem.url]];
+//        [self.navigationController pushViewController:webVc animated:YES];
+//    }
+    if (item.url.length && item.imageUrl.length) {
+        SSJAdWebViewController *webVc = [SSJAdWebViewController webViewVCWithURL:[NSURL URLWithString:item.url]];
         [self.navigationController pushViewController:webVc animated:YES];
     }
     
     //  给个好评
-    if ([title isEqualToString:kTitle6]) {
+    if ([item.adTitle isEqualToString:kTitle6]) {
         NSString *appstoreUrlStr = [SSJSettingForSource() objectForKey:@"AppStoreUrl"];
         NSURL *url = [NSURL URLWithString:appstoreUrlStr];
         if ([[UIApplication sharedApplication] canOpenURL:url]) {
@@ -216,66 +304,66 @@ static BOOL kNeedBannerDisplay = YES;
     }
     
     //  记账提醒
-    if ([title isEqualToString:kTitle1]) {
+    if ([item.adTitle isEqualToString:kTitle1]) {
         SSJReminderViewController *BookkeepingReminderVC = [[SSJReminderViewController alloc]init];
         [self.navigationController pushViewController:BookkeepingReminderVC animated:YES];
         return;
     }
     
     //  周期记账
-    if ([title isEqualToString:kTitle3]) {
+    if ([item.adTitle isEqualToString:kTitle3]) {
         SSJCircleChargeSettingViewController *circleChargeSettingVC = [[SSJCircleChargeSettingViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
         [self.navigationController pushViewController:circleChargeSettingVC animated:YES];
         return;
     }
     
-//    //  记账树
-//    if ([title isEqualToString:kTitle4]) {
-//        SSJBookkeepingTreeViewController *treeVC = [[SSJBookkeepingTreeViewController alloc] init];
-//        [self.navigationController pushViewController:treeVC animated:YES];
-//        return;
-//    }
-
-//    //  把APP推荐给好友
-//    if ([title isEqualToString:kTitle5]) {
-//        [UMSocialSnsService presentSnsIconSheetView:self
-//                                             appKey:kUMAppKey
-//                                          shareText:@"财务管理第一步，从记录消费生活开始!"
-//                                         shareImage:[UIImage imageNamed:@"icon"]
-//                                    shareToSnsNames:[NSArray arrayWithObjects:UMShareToQQ,UMShareToSina,UMShareToWechatSession,UMShareToWechatTimeline,nil]
-//                                           delegate:self];
-//    }
+    //    //  记账树
+    //    if ([title isEqualToString:kTitle4]) {
+    //        SSJBookkeepingTreeViewController *treeVC = [[SSJBookkeepingTreeViewController alloc] init];
+    //        [self.navigationController pushViewController:treeVC animated:YES];
+    //        return;
+    //    }
+    
+    //    //  把APP推荐给好友
+    //    if ([title isEqualToString:kTitle5]) {
+    //        [UMSocialSnsService presentSnsIconSheetView:self
+    //                                             appKey:kUMAppKey
+    //                                          shareText:@"财务管理第一步，从记录消费生活开始!"
+    //                                         shareImage:[UIImage imageNamed:@"icon"]
+    //                                    shareToSnsNames:[NSArray arrayWithObjects:UMShareToQQ,UMShareToSina,UMShareToWechatSession,UMShareToWechatTimeline,nil]
+    //                                           delegate:self];
+    //    }
     
     //意见反馈
-    if ([title isEqualToString:kTitle5]) {
-//        __weak typeof(self) weakSelf = self;
-//        [self.feedbackKit makeFeedbackViewControllerWithCompletionBlock:^(YWFeedbackViewController *viewController, NSError *error) {
-//            if ( viewController != nil ) {
-//
-//                viewController.title = @"用户反馈";
-//                
-//                UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:viewController];
-//                [weakSelf presentViewController:nav animated:YES completion:nil];
-//                
-//                viewController.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"reportForms_left"] style:UIBarButtonItemStylePlain target:self action:@selector(backButtonClicked:)];
-//                viewController.navigationController.navigationBar.tintColor = [UIColor ssj_colorWithHex:@"eb4a64"];
-//                
-//                __weak typeof(nav) weakNav = nav;
-//                
-//                [viewController setOpenURLBlock:^(NSString *aURLString, UIViewController *aParentController) {
-//                    UIViewController *webVC = [[UIViewController alloc] initWithNibName:nil bundle:nil];
-//                    UIWebView *webView = [[UIWebView alloc] initWithFrame:webVC.view.bounds];
-//                    webView.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
-//                    
-//                    [webVC.view addSubview:webView];
-//                    [weakNav pushViewController:webVC animated:YES];
-//                    [webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:aURLString]]];
-//                }];
-//            } else {
-//                NSString *title = [error.userInfo objectForKey:@"msg"]?:@"接口调用失败，请保持网络通畅！";
-//                [CDAutoHideMessageHUD showMessage:title];
-//            }
-//        }];
+    if ([item.adTitle isEqualToString:kTitle5]) {
+        //        __weak typeof(self) weakSelf = self;
+        //        [self.feedbackKit makeFeedbackViewControllerWithCompletionBlock:^(YWFeedbackViewController *viewController, NSError *error) {
+        //            if ( viewController != nil ) {
+        //
+        //                viewController.title = @"用户反馈";
+        //
+        //                UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:viewController];
+        //                [weakSelf presentViewController:nav animated:YES completion:nil];
+        //
+        //                viewController.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"reportForms_left"] style:UIBarButtonItemStylePlain target:self action:@selector(backButtonClicked:)];
+        //                viewController.navigationController.navigationBar.tintColor = [UIColor ssj_colorWithHex:@"eb4a64"];
+        //
+        //                __weak typeof(nav) weakNav = nav;
+        //
+        //                [viewController setOpenURLBlock:^(NSString *aURLString, UIViewController *aParentController) {
+        //                    UIViewController *webVC = [[UIViewController alloc] initWithNibName:nil bundle:nil];
+        //                    UIWebView *webView = [[UIWebView alloc] initWithFrame:webVC.view.bounds];
+        //                    webView.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
+        //
+        //                    [webVC.view addSubview:webView];
+        //                    [weakNav pushViewController:webVC animated:YES];
+        //                    [webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:aURLString]]];
+        //                }];
+        //            } else {
+        //                NSString *title = [error.userInfo objectForKey:@"msg"]?:@"接口调用失败，请保持网络通畅！";
+        //                [CDAutoHideMessageHUD showMessage:title];
+        //            }
+        //        }];
         SSJUserItem *userItem = [SSJUserTableManager queryUserItemForID:SSJUSERID()];
         NSDictionary* clientCustomizedAttrs = @{@"userid": userItem.userId ?: @"",
                                                 @"openid": userItem.openId ?: @"",
@@ -295,7 +383,7 @@ static BOOL kNeedBannerDisplay = YES;
     }
     
     //数据导出
-    if ([title isEqualToString:kTitle4]) {
+    if ([item.adTitle isEqualToString:kTitle4]) {
         if (SSJIsUserLogined()) {
             SSJMagicExportViewController *magicExportVC = [[SSJMagicExportViewController alloc] init];
             [self.navigationController pushViewController:magicExportVC animated:YES];
@@ -308,19 +396,19 @@ static BOOL kNeedBannerDisplay = YES;
     }
     
     //设置
-    if ([title isEqualToString:kTitle7]) {
+    if ([item.adTitle isEqualToString:kTitle7]) {
         SSJSettingViewController *settingVC = [[SSJSettingViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
         [self.navigationController pushViewController:settingVC animated:YES];
     }
     
     //主题
-    if ([title isEqualToString:kTitle2]) {
+    if ([item.adTitle isEqualToString:kTitle2]) {
         SSJThemeHomeViewController *themeVC = [[SSJThemeHomeViewController alloc]init];
         [self.navigationController pushViewController:themeVC animated:YES];
     }
     
     //  把APP推荐给好友
-    if ([title isEqualToString:kTitle8]) {
+    if ([item.adTitle isEqualToString:kTitle8]) {
         if ([SSJDefaultSource() isEqualToString:@"11501"]) {
             [UMSocialSnsService presentSnsIconSheetView:self
                                                  appKey:SSJDetailSettingForSource(@"UMAppKey")
@@ -337,64 +425,41 @@ static BOOL kNeedBannerDisplay = YES;
                                                delegate:self];
         }
     }
-
-}
-
--(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
-    SSJMineHomeImageCell * currentCell = (SSJMineHomeImageCell *)cell;
-    if (!KHasEnterMineHome) {
-        currentCell.transform = CGAffineTransformMakeTranslation( - self.view.width , 0);
-        [UIView animateWithDuration:0.3 delay:0.1 * [_titleArr indexOfObject:currentCell.cellTitle] options:UIViewAnimationOptionTransitionCurlUp animations:^{
-            currentCell.transform = CGAffineTransformIdentity;
-        } completion:^(BOOL finished) {
-            KHasEnterMineHome = YES;
-        }];
-    }
-}
-
-#pragma mark - UITableViewDataSource
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return [self.titles[section] count];
-}
-
--(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return self.titles.count;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *cellId = @"SSJMineHomeCell";
-    SSJMineHomeImageCell *mineHomeCell = [tableView dequeueReusableCellWithIdentifier:cellId];
-    if (!mineHomeCell) {
-        mineHomeCell = [[SSJMineHomeImageCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
-        mineHomeCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    }
-    mineHomeCell.cellTitle = [self.titles ssj_objectAtIndexPath:indexPath];
     
-    mineHomeCell.cellImage = [self.images ssj_objectAtIndexPath:indexPath];
-    
-    if ([mineHomeCell.cellTitle isEqualToString:kTitle5]) {
-        mineHomeCell.cellSubTitle = @"反馈交流QQ群:552563622";
-        mineHomeCell.hasMassage = _hasUreadMassage;
-    }else{
-        mineHomeCell.cellSubTitle = @"";
-        mineHomeCell.hasMassage = NO;
-    }
-    return mineHomeCell;
+
 }
 
 #pragma mark - SSJBaseNetworkService
 -(void)serverDidFinished:(SSJBaseNetworkService *)service{
-    if (self.bannerService.item.bannerItems.count) {
-        self.bannerHeader.items = self.bannerService.item.bannerItems;
-        [self.tableView reloadData];
-    }
+//    if (self.bannerService.item.bannerItems.count) {
+//        self.bannerHeader.items = self.bannerService.item.bannerItems;
+//        [self.collectionView reloadData];
+//    }
 //    if (self.bannerService.item.listAdItem.hidden) {
 //        self.adItem = self.bannerService.item.listAdItem;
 //        [self.titles insertObject:@[self.adItem.adTitle] atIndex:0];
 //        [_titleArr insertObject:self.adItem.adTitle atIndex:0];
-//        [self.images insertObject:@[[UIImage imageNamed:@"jinrong"]] atIndex:0];
+////        [self.images insertObject:@[[UIImage imageNamed:@"jinrong"]] atIndex:0];
 //        [self.tableView reloadData];
 //    }
+    //banner
+    if (self.bannerService.item.bannerItems.count) {
+        self.headerBannerImageView.bannerItemArray = self.bannerService.item.bannerItems;
+    }else{
+        UICollectionViewFlowLayout *collectionViewLayout = (UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout;
+        collectionViewLayout.headerReferenceSize = CGSizeMake(SSJSCREENWITH, 0);
+    }
+    
+    //广告
+    
+    for (SSJListAdItem *listAdItem in self.bannerService.item.listAdItems) {
+        if (listAdItem.hidden) {
+            [self.adItems addObject:listAdItem];
+           NSInteger index = [self.adItems indexOfObject:listAdItem];
+            [self.adItemsArray insertObject:listAdItem atIndex:index];
+            [self.collectionView reloadData];
+        }
+    }
 }
 
 #pragma mark - UMSocialUIDelegate
@@ -419,6 +484,14 @@ static BOOL kNeedBannerDisplay = YES;
     }
 }
 
+
+#pragma mark - headerBannerImageView
+- (void)pushToViewControllerWithUrl:(NSString *)urlStr
+{
+    SSJAdWebViewController *webVc = [SSJAdWebViewController webViewVCWithURL:[NSURL URLWithString:urlStr]];
+    [self.navigationController pushViewController:webVc animated:YES];
+}
+
 #pragma mark - Getter
 -(SSJBannerHeaderView *)bannerHeader{
     if (!_bannerHeader) {
@@ -426,7 +499,7 @@ static BOOL kNeedBannerDisplay = YES;
         _bannerHeader = [[SSJBannerHeaderView alloc]init];
         _bannerHeader.closeButtonClickBlock = ^(){
             kNeedBannerDisplay = NO;
-            [weakSelf.tableView reloadData];
+            [weakSelf.collectionView reloadData];
         };
         _bannerHeader.bannerClickedBlock = ^(NSString *url , NSString *title){
             SSJAdWebViewController *webVc = [SSJAdWebViewController webViewVCWithURL:[NSURL URLWithString:url]];
@@ -444,21 +517,28 @@ static BOOL kNeedBannerDisplay = YES;
     return _bannerService;
 }
 
--(UITableView *)tableView{
-    if (!_tableView) {
-        _tableView = [[UITableView alloc]initWithFrame:CGRectZero style:UITableViewStyleGrouped];
-//        _tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
-//        [_tableView ssj_clearExtendSeparator];
-        if ([_tableView respondsToSelector:@selector(setSeparatorInset:)]) {
-            [_tableView setSeparatorInset:UIEdgeInsetsZero];
-        }
-        _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
-        _tableView.backgroundColor = [UIColor clearColor];
-        _tableView.delegate = self;
-        _tableView.dataSource = self;
+
+- (UICollectionView *)collectionView
+{
+    if (!_collectionView) {
+        UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
+        layout.minimumLineSpacing = 0;
+        layout.minimumInteritemSpacing = 0;
+        layout.sectionInset = UIEdgeInsetsMake(0, 0, 0, 0);
+        layout.itemSize = CGSizeMake(SSJSCREENWITH/kColum, 100);
+        layout.headerReferenceSize = CGSizeMake(SSJSCREENWITH, 90);//头的高度
+        _collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
+        [_collectionView registerClass:[SSJMineHomeCollectionImageCell class] forCellWithReuseIdentifier:kItemID];
+        [_collectionView registerClass:[SSJHeaderBannerImageView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:kHeaderViewID];//注册头
+        _collectionView.dataSource = self;
+        _collectionView.delegate = self;
+        [_collectionView addSubview:self.lineView];
+        self.lineView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+        _collectionView.backgroundColor = [UIColor clearColor];
     }
-    return _tableView;
+    return _collectionView;
 }
+
 
 -(SSJMineHomeTableViewHeader *)header{
     if (!_header) {
@@ -508,13 +588,29 @@ static BOOL kNeedBannerDisplay = YES;
                 }else{
                     _hasUreadMassage = NO;
                 }
-                [weakSelf.tableView reloadData];
+                [weakSelf.collectionView reloadData];
             }else{
                 NSLog(@"%@",[error localizedDescription]);
             }
         }];
     }
     return _feedbackKit;
+}
+
+- (NSMutableArray<SSJListAdItem *> *)adItemsArray
+{
+    if (!_adItemsArray) {
+        _adItemsArray = [NSMutableArray array];
+    }
+    return _adItemsArray;
+}
+
+- (UIView *)lineView
+{
+    if (!_lineView) {
+        _lineView = [[UIView alloc] initWithFrame:CGRectMake(0, kBannerHeight, SSJSCREENWITH, 0.5)];
+    }
+    return _lineView;
 }
 
 #pragma mark - Event
@@ -572,7 +668,8 @@ static BOOL kNeedBannerDisplay = YES;
 -(void)updateAppearanceAfterThemeChanged{
     [super updateAppearanceAfterThemeChanged];
     [self.header updateAfterThemeChange];
-    _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
+//    _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
+    self.lineView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
 }
 
 -(void)getCircleChargeState{
@@ -585,7 +682,7 @@ static BOOL kNeedBannerDisplay = YES;
             weakSelf.circleChargeState = @"关闭";
         }
         dispatch_async(dispatch_get_main_queue(), ^{
-            [weakSelf.tableView reloadData];
+            [weakSelf.collectionView reloadData];
         });
     }];
 }
@@ -614,7 +711,7 @@ static BOOL kNeedBannerDisplay = YES;
     __weak typeof(self) weakSelf = self;
     [self.portraitUploadService uploadimgWithIMG:image finishBlock:^(NSString *icon){
 //        weakSelf.header.headPotraitImage.headerImage.image = image;
-        [weakSelf.tableView reloadData];
+        [weakSelf.collectionView reloadData];
         
         SSJUserItem *userItem = [[SSJUserItem alloc] init];
         userItem.userId = SSJUSERID();
