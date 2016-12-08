@@ -390,7 +390,8 @@ static const void *kSSJLoadingIndicatorKey = &kSSJLoadingIndicatorKey;
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
-static const void *kBackViewIdentifier = &kBackViewIdentifier;
+static const void *kBackViewsIdentifier = &kBackViewsIdentifier;
+static const void *kShowViewsIdentifier = &kShowViewsIdentifier;
 
 @implementation UIView (SSJBackView)
 
@@ -400,16 +401,21 @@ static const void *kBackViewIdentifier = &kBackViewIdentifier;
                           target:(id)target
                      touchAction:(SEL)selector {
     
-    UIView* backView = [[UIView alloc] initWithFrame:self.bounds];
+    if ([[self ssj_showViews] containsObject:view]) {
+        return;
+    }
+    
+    UIView *backView = [[UIView alloc] initWithFrame:self.bounds];
     backView.backgroundColor = backColor;
     backView.alpha = a;
-    UITapGestureRecognizer* gesture = [[UITapGestureRecognizer alloc] initWithTarget:target action:selector];
-    [backView addGestureRecognizer:gesture];
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:target action:selector];
+    [backView addGestureRecognizer:tap];
     
-    objc_setAssociatedObject(self, kBackViewIdentifier, backView, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     [self addSubview:backView];
     [self addSubview:view];
     
+    [[self ssj_backViews] addObject:backView];
+    [[self ssj_showViews] addObject:view];
 }
 
 - (void)ssj_showViewWithBackView:(UIView *)view
@@ -432,10 +438,16 @@ static const void *kBackViewIdentifier = &kBackViewIdentifier;
                    timeInterval:(NSTimeInterval)interval
                       fininshed:(void(^)(BOOL complation))fininshed {
     
+    if (![[self ssj_showViews] containsObject:view]) {
+        return;
+    }
+    
     [UIView animateWithDuration:interval
                      animations:animation
                      completion:^(BOOL finish){
+                         
                          [self ssj_hideBackViewForView:view];
+                         
                          if (fininshed) {
                              fininshed(finish);
                          }
@@ -444,14 +456,33 @@ static const void *kBackViewIdentifier = &kBackViewIdentifier;
 }
 
 - (void)ssj_hideBackViewForView:(UIView *)view {
-    UIView* backView = objc_getAssociatedObject(self, kBackViewIdentifier);
-    [view removeFromSuperview];
-    [backView removeFromSuperview];
+    NSUInteger index = [[self ssj_showViews] indexOfObject:view];
+    if (index != NSNotFound) {
+        UIView *backView = [[self ssj_backViews] objectAtIndex:index];
+        [view removeFromSuperview];
+        [backView removeFromSuperview];
+        
+        [[self ssj_showViews] removeObjectAtIndex:index];
+        [[self ssj_backViews] removeObjectAtIndex:index];
+    }
 }
 
-- (UIView*)backView{
-    UIView* backView = objc_getAssociatedObject(self, kBackViewIdentifier);
-    return backView;
+- (NSMutableArray *)ssj_backViews {
+    NSMutableArray *backViews = objc_getAssociatedObject(self, kBackViewsIdentifier);
+    if (!backViews) {
+        backViews = [[NSMutableArray alloc] init];
+        objc_setAssociatedObject(self, kBackViewsIdentifier, backViews, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
+    return backViews;
+}
+
+- (NSMutableArray *)ssj_showViews {
+    NSMutableArray *showViews = objc_getAssociatedObject(self, kShowViewsIdentifier);
+    if (!showViews) {
+        showViews = [[NSMutableArray alloc] init];
+        objc_setAssociatedObject(self, kShowViewsIdentifier, showViews, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
+    return showViews;
 }
 
 @end

@@ -169,7 +169,7 @@
             [originResult close];
             double originMoney = [originItem.money doubleValue];
             //更新流水表
-            if (![db executeUpdate:@"update bk_user_charge set imoney = ? , ibillid = ? , ifunsid = ? , cwritedate = ? , operatortype = 1 , cbilldate = ? , iversion = ? , cmemo = ?  ,cimgurl = ? , thumburl = ? where ichargeid = ? and cuserid = ?",moneyStr,item.billId,item.fundId,[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],item.billDate,@(SSJSyncVersion()),item.chargeMemo,item.chargeImage, item.chargeThumbImage,item.ID,userId]) {
+            if (![db executeUpdate:@"update bk_user_charge set imoney = ? , ibillid = ? , ifunsid = ? , cwritedate = ? , operatortype = 1 , cbilldate = ? , iversion = ? , cmemo = ?  ,cimgurl = ? , thumburl = ?, cbooksid = ? where ichargeid = ? and cuserid = ?",moneyStr,item.billId,item.fundId,[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],item.billDate,@(SSJSyncVersion()),item.chargeMemo,item.chargeImage, item.chargeThumbImage, item.booksId,item.ID,userId]) {
                 *rollback = YES;
                 if (failure) {
                     SSJDispatch_main_async_safe(^{

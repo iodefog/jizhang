@@ -13,4 +13,6 @@
 
 @property(nonatomic, strong) SSJBooksTypeItem *item;
 
+@property (nonatomic, copy) void (^saveBooksBlock)(NSString *booksId);
+
 @end

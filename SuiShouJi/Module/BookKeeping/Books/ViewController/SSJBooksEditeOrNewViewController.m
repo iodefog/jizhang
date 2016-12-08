@@ -103,6 +103,9 @@
         [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
         [[NSNotificationCenter defaultCenter]postNotificationName:SSJBooksTypeDidChangeNotification object:nil];
         [self.navigationController popViewControllerAnimated:YES];
+        if (_saveBooksBlock) {
+            _saveBooksBlock(self.item.booksId);
+        }
     } failure:^(NSError *error) {
         [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
     }];

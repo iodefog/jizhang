@@ -106,5 +106,9 @@ BOOL SSJSelectBooksType(NSString *booksId){
     SSJUserItem *item = [[SSJUserItem alloc]init];
     item.userId = SSJUSERID();
     item.currentBooksId = booksId;
-    return [SSJUserTableManager saveUserItem:item];
+    BOOL success = [SSJUserTableManager saveUserItem:item];
+    if (success) {
+        [[NSNotificationCenter defaultCenter]postNotificationName:SSJBooksTypeDidChangeNotification object:nil];
+    }
+    return success;
 }
