@@ -13,8 +13,8 @@
 
 @property (nonatomic, strong) NSArray <SSJListMenuItem *>*items;
 
-// 选中的cell下标
-@property (nonatomic) NSUInteger selectedIndex;
+// 选中的cell下标，默认－1（即什么都不选）
+@property (nonatomic) NSInteger selectedIndex;
 
 // 标题未选中状态颜色
 @property (nonatomic, strong) UIColor *normalTitleColor;
@@ -42,6 +42,8 @@
 - (void)showInView:(UIView *)view atPoint:(CGPoint)point;
 
 - (void)showInView:(UIView *)view atPoint:(CGPoint)point dismissHandle:(void (^)(SSJListMenu *listMenu))dismissHandle;
+
+- (void)showInView:(UIView *)view atPoint:(CGPoint)point finishHandle:(void(^)(SSJListMenu *listMenu))finishHandle dismissHandle:(void (^)(SSJListMenu *listMenu))dismissHandle;
 
 - (void)dismiss;
 

@@ -62,14 +62,10 @@
     
     CGPoint showPoint = [self convertPoint:CGPointMake(self.width * 0.5, self.bottom) toView:window];
     [self.listMenu showInView:window atPoint:showPoint dismissHandle:^(SSJListMenu *listMenu) {
-        [UIView animateWithDuration:0.2 animations:^{
-            _triangle.transform = CATransform3DIdentity;
-        }];
+        _triangle.transform = CATransform3DIdentity;
     }];
     
-    [UIView animateWithDuration:0.2 animations:^{
-        _triangle.transform = CATransform3DMakeRotation(M_PI, 0, 0, 1);
-    }];
+    _triangle.transform = CATransform3DMakeRotation(M_PI, 0, 0, 1);
 }
 
 - (void)listMenuSelectAction {

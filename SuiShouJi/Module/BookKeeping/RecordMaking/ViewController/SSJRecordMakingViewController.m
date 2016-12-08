@@ -20,6 +20,7 @@
 #import "SSJNewMemberViewController.h"
 #import "SSJFundingTypeSelectViewController.h"
 #import "UIViewController+MMDrawerController.h"
+#import "SSJBooksEditeOrNewViewController.h"
 #import "SSJCustomKeyboard.h"
 #import "SSJCalendarView.h"
 #import "SSJDateSelectedView.h"
@@ -27,10 +28,13 @@
 #import "SSJRecordMakingBillTypeInputView.h"
 #import "SSJRecordMakingBillTypeSelectionView.h"
 #import "SSJRecordMakingBillTypeInputAccessoryView.h"
+#import "SSJRecordMakingCustomNavigationBar.h"
+#import "SSJBooksParentSelectView.h"
 #import "SSJRecordMakingBillTypeSelectionCellItem.h"
 #import "SSJChargeMemBerItem.h"
 #import "YYKeyboardManager.h"
 #import "SSJRecordMakingStore.h"
+#import "SSJBooksTypeStore.h"
 #import "SSJCreditCardItem.h"
 
 #define INPUT_DEFAULT_COLOR [UIColor ssj_colorWithHex:@"#dddddd"]
@@ -43,7 +47,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 
 @interface SSJRecordMakingViewController () <UIScrollViewDelegate, UITextFieldDelegate, UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, YYKeyboardObserver>
 
-@property (nonatomic,strong) SSJSegmentedControl *titleSegment;
+@property (nonatomic, strong) SSJRecordMakingCustomNavigationBar *customNaviBar;
 
 @property (nonatomic,strong) UIImage *selectedImage;
 
@@ -67,18 +71,17 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 
 @property (nonatomic, strong) SSJRecordMakingBillTypeInputAccessoryView *accessoryView;
 
+@property (nonatomic, strong) SSJBooksParentSelectView *parentSelectView;
+
 @property (nonatomic, strong) UIImageView *guideView;
 
 @property (nonatomic, strong) UITextField *currentInput;
 
 @property (nonatomic, strong) UIScrollView *scrollView;
 
-@property (nonatomic, strong) UIBarButtonItem *managerItem;
-
-@property (nonatomic, strong) UIBarButtonItem *doneItem;
-
 @property (nonatomic) NSInteger lastSelectedIndex;
 
+@property (nonatomic, strong) NSArray *booksIds;
 
 @property (nonatomic) long currentYear;
 @property (nonatomic) long currentMonth;
@@ -111,12 +114,11 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         self.item = [[SSJBillingChargeCellItem alloc]init];
     }
     
-    [self ssj_showBackButtonWithTarget:self selector:@selector(goBackAction)];
-    
     [self initData];
     
     self.view.backgroundColor = [UIColor whiteColor];
-    [self settitleSegment];
+    
+    [self.view addSubview:self.customNaviBar];
     [self.view addSubview:self.billTypeInputView];
     [self.view addSubview:self.scrollView];
     [self.view addSubview:self.accessoryView];
@@ -133,6 +135,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
     [self getCategoryList];
 }
 
@@ -150,6 +153,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
     [_billTypeInputView.moneyInput resignFirstResponder];
     [_accessoryView.memoView resignFirstResponder];
 }
@@ -161,6 +165,33 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 }
 
 #pragma mark - Getter
+- (SSJRecordMakingCustomNavigationBar *)customNaviBar {
+    if (!_customNaviBar) {
+        __weak typeof(self) wself = self;
+        _customNaviBar = [[SSJRecordMakingCustomNavigationBar alloc] init];
+        _customNaviBar.titles = @[@"test1", @"test2"];
+//        _customNaviBar.showBookHandle = ^(SSJRecordMakingCustomNavigationBar *naviBar) {
+//            [wself.currentInput resignFirstResponder];
+//        };
+        _customNaviBar.selectBookHandle = ^(SSJRecordMakingCustomNavigationBar *naviBar) {
+            [wself.currentInput becomeFirstResponder];
+        };
+        _customNaviBar.addNewBookHandle = ^(SSJRecordMakingCustomNavigationBar *naviBar) {
+            [wself.parentSelectView show];
+        };
+        _customNaviBar.selectBillTypeHandle = ^(SSJRecordMakingCustomNavigationBar *naviBar) {
+            [wself segmentPressed];
+        };
+        _customNaviBar.backOffHandle = ^(SSJRecordMakingCustomNavigationBar *naviBar) {
+            [wself goBackAction];
+        };
+        _customNaviBar.managementHandle = ^(SSJRecordMakingCustomNavigationBar *naviBar) {
+            [wself managerItemAction];
+        };
+    }
+    return _customNaviBar;
+}
+
 -(SSJDateSelectedView*)DateSelectedView{
     if (!_DateSelectedView) {
         _DateSelectedView = [[SSJDateSelectedView alloc]initWithFrame:[UIScreen mainScreen].bounds forYear:self.selectedYear Month:self.selectedMonth Day:self.selectedDay];
@@ -231,7 +262,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 
 - (SSJRecordMakingBillTypeInputView *)billTypeInputView {
     if (!_billTypeInputView) {
-        _billTypeInputView = [[SSJRecordMakingBillTypeInputView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, 91)];
+        _billTypeInputView = [[SSJRecordMakingBillTypeInputView alloc] initWithFrame:CGRectMake(0, self.customNaviBar.bottom, self.view.width, 91)];
         _billTypeInputView.fillColor = INPUT_DEFAULT_COLOR;
         _billTypeInputView.moneyInput.delegate = self;
         if (_item.money) {
@@ -332,18 +363,20 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     return _accessoryView;
 }
 
-- (UIBarButtonItem *)managerItem {
-    if (!_managerItem) {
-        _managerItem = [[UIBarButtonItem alloc] initWithTitle:@"管理" style:UIBarButtonItemStylePlain target:self action:@selector(managerItemAction)];
+- (SSJBooksParentSelectView *)parentSelectView{
+    if (!_parentSelectView) {
+        _parentSelectView = [[SSJBooksParentSelectView alloc]initWithFrame:self.view.frame];
+        __weak typeof(self) weakSelf = self;
+        _parentSelectView.parentSelectBlock = ^(NSInteger selectParent){
+            SSJBooksEditeOrNewViewController *booksEditeVc = [[SSJBooksEditeOrNewViewController alloc]init];
+            SSJBooksTypeItem *item = [[SSJBooksTypeItem alloc]init];
+            item.booksParent = selectParent;
+            booksEditeVc.item = item;
+            [weakSelf.parentSelectView dismiss];
+            [weakSelf.navigationController pushViewController:booksEditeVc animated:YES];
+        };
     }
-    return _managerItem;
-}
-
-- (UIBarButtonItem *)doneItem {
-    if (!_doneItem) {
-        _doneItem = [[UIBarButtonItem alloc] initWithTitle:@"完成" style:UIBarButtonItemStylePlain target:self action:@selector(doneItemAction)];
-    }
-    return _doneItem;
+    return _parentSelectView;
 }
 
 #pragma mark - UITextFieldDelegate
@@ -413,7 +446,13 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         NSInteger currentSelectedIndex = scrollView.contentOffset.x / scrollView.width;
         if (_lastSelectedIndex != currentSelectedIndex) {
             _lastSelectedIndex = currentSelectedIndex;
-            _titleSegment.selectedSegmentIndex = currentSelectedIndex;
+            
+            if (_lastSelectedIndex == 0) {
+                _customNaviBar.selectedBillType = SSJBillTypePay;
+            } else if (_lastSelectedIndex == 1) {
+                _customNaviBar.selectedBillType = SSJBillTypeIncome;
+            }
+            
             _paymentTypeView.editing = NO;
             _incomeTypeView.editing = NO;
             [self updateBillTypeSelectionViewAndInputView];
@@ -447,16 +486,17 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     [self.view endEditing:YES];
 }
 
--(void)segmentPressed:(id)sender{
-    if (self.titleSegment.selectedSegmentIndex == 0) {
+- (void)segmentPressed {
+    if (_customNaviBar.selectedBillType == SSJBillTypePay) {
         [MobClick event:@"addRecord_type_out"];
-    }else{
+        [_scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
+    } else if (_customNaviBar.selectedBillType == SSJBillTypeIncome) {
         [MobClick event:@"addRecord_type_in"];
+        [_scrollView setContentOffset:CGPointMake(_scrollView.width, 0) animated:YES];
     }
     
     _paymentTypeView.editing = NO;
     _incomeTypeView.editing = NO;
-    [_scrollView setContentOffset:CGPointMake(self.titleSegment.selectedSegmentIndex * _scrollView.width, 0) animated:YES];
     [self updateBillTypeSelectionViewAndInputView];
     [self updateNavigationRightItem];
 }
@@ -525,7 +565,6 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     _paymentTypeView.editing = NO;
     _incomeTypeView.editing = NO;
     [self updateNavigationRightItem];
-//    [self.navigationItem setRightBarButtonItem:nil animated:YES];
 }
 
 - (void)hideGuideView {
@@ -540,24 +579,26 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 }
 
 - (void)managerItemAction {
-    if (_titleSegment.selectedSegmentIndex == 0) {
-        _paymentTypeView.editing = YES;
-    } else if (_titleSegment.selectedSegmentIndex == 1) {
-        _incomeTypeView.editing = YES;
+    switch (_customNaviBar.selectedBillType) {
+        case SSJBillTypePay:
+            _paymentTypeView.editing = !_customNaviBar.managed;
+            break;
+            
+        case SSJBillTypeIncome:
+            _incomeTypeView.editing = !_customNaviBar.managed;
+            break;
+            
+        case SSJBillTypeUnknown:
+        case SSJBillTypeSurplus:
+            SSJPRINT(@"未定义选项");
+            break;
     }
-    [self updateNavigationRightItem];
     
-    [MobClick event:@"addRecord_manage"];
-}
-
-- (void)doneItemAction {
-    if (_titleSegment.selectedSegmentIndex == 0) {
-        _paymentTypeView.editing = NO;
-    } else if (_titleSegment.selectedSegmentIndex == 1) {
-        _incomeTypeView.editing = NO;
+    if (_customNaviBar.managed) {
+        [MobClick event:@"addRecord_manage"];
+    } else {
+        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
     }
-    [self updateNavigationRightItem];
-    [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
 }
 
 #pragma mark - private
@@ -589,7 +630,95 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         }
     }
     self.item.billDate = [NSString stringWithFormat:@"%04ld-%02ld-%02ld",self.selectedYear,self.selectedMonth,self.selectedDay];
-    //获取选中的资金账户
+    [self loadFundData];
+    [self getmembersForTheCharge];
+}
+
+- (void)getCategoryList {
+    if (_customNaviBar.selectedBillType != SSJBillTypePay
+         && _customNaviBar.selectedBillType != SSJBillTypeIncome) {
+        return;
+    }
+    
+    __weak typeof(self) weakSelf = self;
+    [self.view ssj_showLoadingIndicator];
+    [SSJCategoryListHelper queryForCategoryListWithIncomeOrExpenture:_customNaviBar.selectedBillType booksId:self.item.booksId Success:^(NSMutableArray *categoryList) {
+        
+        [SSJBooksTypeStore queryForBooksListWithSuccess:^(NSMutableArray<SSJBooksTypeItem *> *bookList) {
+            
+            [self.view ssj_hideLoadingIndicator];
+            
+            __block SSJRecordMakingBillTypeSelectionCellItem *selectedItem = nil;
+            dispatch_apply([categoryList count], dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(size_t index) {
+                SSJRecordMakingBillTypeSelectionCellItem *item = [categoryList ssj_safeObjectAtIndex:index];
+                if (weakSelf.item.billId && [item.ID isEqualToString:weakSelf.item.billId]) {
+                    item.selected = YES;
+                    selectedItem = item;
+                }
+            });
+            
+            if (!selectedItem) {
+                selectedItem = [categoryList firstObject];
+                selectedItem.selected = YES;
+                weakSelf.item.billId = selectedItem.ID;
+            }
+            
+            if (_customNaviBar.selectedBillType == SSJBillTypePay) {
+                weakSelf.paymentTypeView.items = categoryList;
+            } else if (_customNaviBar.selectedBillType == SSJBillTypeIncome) {
+                weakSelf.incomeTypeView.items = categoryList;
+            }
+            
+            if (selectedItem) {
+                [UIView animateWithDuration:kAnimationDuration animations:^{
+                    weakSelf.billTypeInputView.fillColor = [UIColor ssj_colorWithHex:selectedItem.colorValue];
+                }];
+                weakSelf.billTypeInputView.billTypeName = selectedItem.title;
+            }
+            
+            NSInteger selectedIndex = -1;
+            NSString *currentBookId = self.item.booksId.length ? self.item.booksId : SSJGetCurrentBooksType();
+            NSMutableArray *bookTitles = [[NSMutableArray alloc] initWithCapacity:bookList.count];
+            NSMutableArray *bookIds = [[NSMutableArray alloc] initWithCapacity:bookList.count];
+            
+            for (int i = 0; i < bookList.count; i ++) {
+                SSJBooksTypeItem *item = bookList[i];
+                if (item.booksId) {
+                    [bookTitles addObject:item.booksName];
+                    [bookIds addObject:item.booksId];
+                }
+                
+                if ([item.booksId isEqualToString:currentBookId]) {
+                    selectedIndex = i;
+                }
+            }
+            
+            _customNaviBar.titles = bookTitles;
+            _customNaviBar.selectedTitleIndex = selectedIndex;
+            
+        } failure:^(NSError *error) {
+            [self.view ssj_hideLoadingIndicator];
+            [self showError:error];
+        }];
+        
+    } failure:^(NSError *error) {
+        [self.view ssj_hideLoadingIndicator];
+        [self showError:error];
+    }];
+}
+
+- (void)showError:(NSError *)error {
+    NSString *message = nil;
+#ifdef DEBUG
+    message = [error localizedDescription];
+#else
+    message = SSJ_ERROR_MESSAGE;
+#endif
+    [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:message action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
+}
+
+// 获取选中的资金账户
+- (void)loadFundData {
     __weak typeof(self) weakSelf = self;
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSString *userId = SSJUSERID();
@@ -620,48 +749,6 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         dispatch_async(dispatch_get_main_queue(), ^(){
             [weakSelf updateFundingType];
         });
-    }];
-    [self getmembersForTheCharge];
-}
-
--(void)getCategoryList{
-    if (self.titleSegment.selectedSegmentIndex != 0
-        && self.titleSegment.selectedSegmentIndex != 1) {
-        return;
-    }
-    __weak typeof(self) weakSelf = self;
-    [self.view ssj_showLoadingIndicator];
-    [SSJCategoryListHelper queryForCategoryListWithIncomeOrExpenture:!self.titleSegment.selectedSegmentIndex booksId:self.item.booksId Success:^(NSMutableArray *result) {
-        __block SSJRecordMakingBillTypeSelectionCellItem *selectedItem = nil;
-        dispatch_apply([result count], dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(size_t index) {
-            SSJRecordMakingBillTypeSelectionCellItem *item = [result ssj_safeObjectAtIndex:index];
-            if (weakSelf.item.billId && [item.ID isEqualToString:weakSelf.item.billId]) {
-                item.selected = YES;
-                selectedItem = item;
-            }
-        });
-        if (!selectedItem) {
-            selectedItem = [result firstObject];
-            selectedItem.selected = YES;
-            weakSelf.item.billId = selectedItem.ID;
-        }
-        
-        if (weakSelf.titleSegment.selectedSegmentIndex == 0) {
-            weakSelf.paymentTypeView.items = result;
-        } else if (weakSelf.titleSegment.selectedSegmentIndex == 1) {
-            weakSelf.incomeTypeView.items = result;
-        }
-        
-        if (selectedItem) {
-            [UIView animateWithDuration:kAnimationDuration animations:^{
-                weakSelf.billTypeInputView.fillColor = [UIColor ssj_colorWithHex:selectedItem.colorValue];
-            }];
-            weakSelf.billTypeInputView.billTypeName = selectedItem.title;
-        }
-        
-        [self.view ssj_hideLoadingIndicator];
-    } failure:^(NSError *error) {
-        [self.view ssj_hideLoadingIndicator];
     }];
 }
 
@@ -725,22 +812,6 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     [self presentViewController:picker animated:YES completion:^{}];
 }
 
--(void)settitleSegment{
-    _titleSegment = [[SSJSegmentedControl alloc]initWithItems:@[@"支出",@"收入"]];
-    if (self.item.ID == nil) {
-        _titleSegment.selectedSegmentIndex = 0;
-    }else{
-        _titleSegment.selectedSegmentIndex = !self.item.incomeOrExpence;
-    }
-    _titleSegment.size = CGSizeMake(202, 30);
-    _titleSegment.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-    _titleSegment.selectedBorderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
-    [_titleSegment setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]} forState:UIControlStateNormal];
-    [_titleSegment setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]} forState:UIControlStateSelected];
-    [_titleSegment addTarget: self action: @selector(segmentPressed:)forControlEvents: UIControlEventValueChanged];
-    self.navigationItem.titleView = _titleSegment;
-}
-
 -(void)makeArecord{
     __weak typeof(self) weakSelf = self;
     if (!_item.billId.length) {
@@ -767,7 +838,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         return;
     }
     
-    self.item.incomeOrExpence = !_titleSegment.selectedSegmentIndex;
+    self.item.incomeOrExpence = _customNaviBar.selectedBillType;
     self.item.money = _billTypeInputView.moneyInput.text;
     self.item.chargeMemo = _accessoryView.memoView.text;
     
@@ -848,35 +919,40 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     billTypeView.addAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView) {
         SSJADDNewTypeViewController *addNewTypeVc = [[SSJADDNewTypeViewController alloc]init];
         addNewTypeVc.booksId = self.item.booksId;
-        addNewTypeVc.incomeOrExpence = !wself.titleSegment.selectedSegmentIndex;
+        addNewTypeVc.incomeOrExpence = wself.customNaviBar.selectedBillType;
         addNewTypeVc.addNewCategoryAction = ^(NSString *categoryId, BOOL incomeOrExpence){
             wself.item.billId = categoryId;
-            wself.titleSegment.selectedSegmentIndex = incomeOrExpence ? 0 : 1;
-            [wself.scrollView setContentOffset:CGPointMake(wself.titleSegment.selectedSegmentIndex * wself.scrollView.width, 0) animated:YES];
+            wself.customNaviBar.selectedBillType = incomeOrExpence;
+            
+            if (wself.customNaviBar.selectedBillType == SSJBillTypePay) {
+                [wself.scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
+            } else if (wself.customNaviBar.selectedBillType == SSJBillTypeIncome) {
+                [wself.scrollView setContentOffset:CGPointMake(wself.scrollView.width, 0) animated:YES];
+            }
+            
             [wself updateNavigationRightItem];
         };
         [wself.navigationController pushViewController:addNewTypeVc animated:YES];
     };
     
     billTypeView.dragAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView, BOOL isDragUp) {
-        if (isDragUp) {
-            [wself.billTypeInputView.moneyInput resignFirstResponder];
-        } else {
-            if (!selectionView.editing) {
-                [wself.billTypeInputView.moneyInput becomeFirstResponder];
+        if (!selectionView.editing) {
+            if (isDragUp) {
+                [wself.currentInput resignFirstResponder];
+            } else {
+                [wself.currentInput becomeFirstResponder];
             }
         }
     };
     
     billTypeView.beginEditingAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView) {
-        UIBarButtonItem *endEditingItem = [[UIBarButtonItem alloc] initWithTitle:@"完成" style:UIBarButtonItemStylePlain target:wself action:@selector(endEditingAction)];
-        [wself.navigationItem setRightBarButtonItem:endEditingItem animated:YES];
+        wself.customNaviBar.managed = YES;
         [wself.currentInput resignFirstResponder];
     };
     
     billTypeView.endEditingAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView) {
         [wself.currentInput becomeFirstResponder];
-        [wself.navigationItem setRightBarButtonItem:nil animated:YES];
+        wself.customNaviBar.managed = NO;
         [SSJCategoryListHelper updateCategoryOrderWithItems:selectionView.items success:NULL failure:^(NSError *error) {
             [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
         }];
@@ -884,7 +960,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 }
 
 - (void)updateBillTypeSelectionViewAndInputView {
-    if (_titleSegment.selectedSegmentIndex == 0) {
+    if (_customNaviBar.selectedBillType == SSJBillTypePay) {
         if (_paymentTypeView.items.count == 0) {
             [self getCategoryList];
         } else {
@@ -898,7 +974,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
                 }
             }
         }
-    } else if (_titleSegment.selectedSegmentIndex == 1) {
+    } else if (_customNaviBar.selectedBillType == SSJBillTypeIncome) {
         if (_incomeTypeView.items.count == 0) {
             [self getCategoryList];
         } else {
@@ -931,18 +1007,15 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 }
 
 - (void)updateNavigationRightItem {
-    if (_titleSegment.selectedSegmentIndex == 0) {
-        UIBarButtonItem *currentItem = _paymentTypeView.editing ? self.doneItem : self.managerItem;
-        [self.navigationItem setRightBarButtonItem:currentItem animated:YES];
-    } else if (_titleSegment.selectedSegmentIndex == 1) {
-        UIBarButtonItem *currentItem = _incomeTypeView.editing ? self.doneItem : self.managerItem;
-        [self.navigationItem setRightBarButtonItem:currentItem animated:YES];
+    if (_customNaviBar.selectedBillType == SSJBillTypePay) {
+        _customNaviBar.managed = _paymentTypeView.editing;
+    } else if (_customNaviBar.selectedBillType == SSJBillTypeIncome) {
+        _customNaviBar.managed = _incomeTypeView.editing;
     }
 }
 
 - (void)deleteItem:(SSJRecordMakingBillTypeSelectionCellItem *)item ofItems:(NSArray *)items {
-    int type = !self.titleSegment.selectedSegmentIndex;
-    int order = [SSJCategoryListHelper queryForBillTypeMaxOrderWithState:0 type:type booksId:self.item.booksId] + 1;
+    int order = [SSJCategoryListHelper queryForBillTypeMaxOrderWithState:0 type:_customNaviBar.selectedBillType booksId:self.item.booksId] + 1;
     
     [SSJCategoryListHelper updateCategoryWithID:item.ID
                                            name:item.title

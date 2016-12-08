@@ -781,6 +781,7 @@
 		7DE6E86C1C55DD9C001C9138 /* SSJRegistOrderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE6E86B1C55DD9C001C9138 /* SSJRegistOrderView.m */; };
 		7DE6E8711C56419F001C9138 /* SSJForgetPasswordFirstStepViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE6E8701C56419F001C9138 /* SSJForgetPasswordFirstStepViewController.m */; };
 		7DE6E8741C5641B6001C9138 /* SSJForgetPasswordSecondStepViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE6E8731C5641B6001C9138 /* SSJForgetPasswordSecondStepViewController.m */; };
+		7DE981161DF8EE8900C82CE7 /* SSJRecordMakingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F33261CEAE6C10086B67E /* SSJRecordMakingViewController.m */; };
 		7DEF54521C75DEEC00A90153 /* SSJPercentCircleAdditionNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF544D1C75DEEC00A90153 /* SSJPercentCircleAdditionNode.m */; };
 		7DEF54531C75DEEC00A90153 /* SSJPercentCircleAdditionNodeItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF544F1C75DEEC00A90153 /* SSJPercentCircleAdditionNodeItem.m */; };
 		7DEF54541C75DEEC00A90153 /* SSJPercentCircleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF54511C75DEEC00A90153 /* SSJPercentCircleView.m */; };
@@ -8987,6 +8988,7 @@
 				9CECFFA91D6D41EB00DB2C8B /* SSJUserInfoItem.m in Sources */,
 				7D766A581D87DFE7004F8F82 /* SSJReminderWeekDaySelectView.m in Sources */,
 				9CECFFAA1D6D41EB00DB2C8B /* SSJChargeCircleNoneView.m in Sources */,
+				7DE981161DF8EE8900C82CE7 /* SSJRecordMakingViewController.m in Sources */,
 				9CECFFAB1D6D41EB00DB2C8B /* SSJMemberManagerViewController.m in Sources */,
 				9CECFFAC1D6D41EB00DB2C8B /* TPKeyboardAvoidingCollectionView.m in Sources */,
 				9CECFFAD1D6D41EB00DB2C8B /* SSJUserTableManager.m in Sources */,

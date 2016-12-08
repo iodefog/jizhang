@@ -184,7 +184,12 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
 }
 
 - (void)setEditing:(BOOL)editing {
+    if (_editing == editing) {
+        return;
+    }
+    
     _editing = editing;
+    
     if (_editing) {
         [_collectionView beginEditing];
     } else {

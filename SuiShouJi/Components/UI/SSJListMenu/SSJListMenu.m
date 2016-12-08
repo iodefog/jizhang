@@ -43,6 +43,7 @@ static const CGFloat kGap = 5;
         
         self.backgroundColor = [UIColor clearColor];
         
+        _selectedIndex = -1;
         _titleFontSize = 16;
         _displayRowCount = 2;
         
@@ -59,10 +60,16 @@ static const CGFloat kGap = 5;
 
 #pragma mark - Public
 - (void)setItems:(NSArray<SSJListMenuItem *> *)items {
+    if (items && [_items isEqualToArray:items]) {
+        return;
+    }
     
+    _items = items;
+    _selectedIndex = -1;
+    [self organiseCellItems];
 }
 
-- (void)setSelectedIndex:(NSUInteger)selectedIndex {
+- (void)setSelectedIndex:(NSInteger)selectedIndex {
     if (selectedIndex >= _items.count) {
         SSJPRINT(@"selectedIndex大于数组items元素个数");
         return;
@@ -101,7 +108,7 @@ static const CGFloat kGap = 5;
 
 - (void)setFillColor:(UIColor *)fillColor {
     _fillColor = fillColor;
-    self.outlineLayer.fillColor = fillColor.CGColor;
+    _outlineLayer.fillColor = fillColor.CGColor;
 }
 
 - (void)setSeparatorColor:(UIColor *)separatorColor {
@@ -125,14 +132,19 @@ static const CGFloat kGap = 5;
     if (displayRowCount <= 0) {
         SSJPRINT(@"displayRowCount必须大于0");
     }
+    _displayRowCount = displayRowCount;
     [self setNeedsLayout];
 }
 
 - (void)showInView:(UIView *)view atPoint:(CGPoint)point {
-    [self showInView:view atPoint:point dismissHandle:NULL];
+    [self showInView:view atPoint:point finishHandle:NULL dismissHandle:NULL];
 }
 
 - (void)showInView:(UIView *)view atPoint:(CGPoint)point dismissHandle:(void (^)(SSJListMenu *listMenu))dismissHandle {
+    [self showInView:view atPoint:point finishHandle:NULL dismissHandle:dismissHandle];
+}
+
+- (void)showInView:(UIView *)view atPoint:(CGPoint)point finishHandle:(void(^)(SSJListMenu *listMenu))finishHandle dismissHandle:(void (^)(SSJListMenu *listMenu))dismissHandle {
     if (!self.superview) {
         
         _showPoint = point;
@@ -144,7 +156,7 @@ static const CGFloat kGap = 5;
         [path addLineToPoint:CGPointMake(vertexX + 3, 3)];
         [path closePath];
         
-        self.outlineLayer.path = path.CGPath;
+        _outlineLayer.path = path.CGPath;
         
         CGFloat scale = vertexX / self.width;
         
@@ -160,8 +172,13 @@ static const CGFloat kGap = 5;
             [_tableView reloadData];
             [UIView animateWithDuration:kDuration animations:^{
                 _tableView.alpha = 1;
+                if (finishHandle) {
+                    finishHandle(self);
+                }
             }];
         }];
+        
+        [self setNeedsLayout];
         
         _dismissHandle = dismissHandle;
     }
@@ -198,14 +215,19 @@ static const CGFloat kGap = 5;
         _cellItems = [NSMutableArray arrayWithCapacity:_items.count];
     }
     
-    for (SSJListMenuItem *item in _items) {
+    [_cellItems removeAllObjects];
+    
+    for (int idx = 0; idx < _items.count; idx ++) {
+        SSJListMenuItem *item = _items[idx];
         SSJListMenuCellItem *cellItem = [[SSJListMenuCellItem alloc] init];
         cellItem.imageName = item.imageName;
         cellItem.title = item.title;
-        cellItem.titleColor = _normalTitleColor;
+        cellItem.titleColor = idx == _selectedIndex ? _normalTitleColor : _selectedTitleColor;
         cellItem.titleFont = [UIFont systemFontOfSize:_titleFontSize];
         [_cellItems addObject:cellItem];
     }
+    
+    [_tableView reloadData];
 }
 
 - (CGFloat)vertexXWithShowPoint:(CGPoint)point inView:(UIView *)view {

@@ -14,10 +14,18 @@
 
 @implementation SSJCategoryListHelper
 
-+ (void)queryForCategoryListWithIncomeOrExpenture:(int)incomeOrExpenture
++ (void)queryForCategoryListWithIncomeOrExpenture:(SSJBillType)billType
                                           booksId:(NSString *)booksId
                                           Success:(void(^)(NSMutableArray<SSJRecordMakingBillTypeSelectionCellItem *> *result))success
                                           failure:(void (^)(NSError *error))failure {
+    
+    if (billType != SSJBillTypeIncome && billType != SSJBillTypePay) {
+        if (failure) {
+            failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"billType参数错误"}]);
+        }
+        return;
+    }
+    
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSString *userId = SSJUSERID();
         NSString *booksID = booksId;
@@ -28,7 +36,7 @@
             }
         }
         NSMutableArray *categoryList =[NSMutableArray array];
-        NSString *sql = [NSString stringWithFormat:@"SELECT A.CNAME , A.CCOLOR , A.CCOIN , B.CWRITEDATE , A.ID, B.IORDER FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE B.ISTATE = 1 AND A.ITYPE = %d AND A.ID = B.CBILLID AND B.CUSERID = '%@' AND (A.CPARENT <> 'root' or A.CPARENT is null) AND B.CBOOKSID = '%@' ORDER BY B.IORDER, B.CWRITEDATE , A.ID",incomeOrExpenture,userId,booksID];
+        NSString *sql = [NSString stringWithFormat:@"SELECT A.CNAME , A.CCOLOR , A.CCOIN , B.CWRITEDATE , A.ID, B.IORDER FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE B.ISTATE = 1 AND A.ITYPE = %d AND A.ID = B.CBILLID AND B.CUSERID = '%@' AND (A.CPARENT <> 'root' or A.CPARENT is null) AND B.CBOOKSID = '%@' ORDER BY B.IORDER, B.CWRITEDATE , A.ID", (int)billType,userId,booksID];
             FMResultSet *result = [db executeQuery:sql];
             while ([result next]) {
                 NSString *categoryTitle = [result stringForColumn:@"CNAME"];
@@ -52,8 +60,9 @@
 }
 
 + (int)queryForBillTypeMaxOrderWithState:(int)state
-                                    type:(int)type
+                                    type:(SSJBillType)type
                                  booksId:(NSString *)booksId{
+    
     __block int maxOrder = 0;
     NSString *userID = SSJUSERID();
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
