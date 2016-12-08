@@ -8,11 +8,14 @@
 
 #import <Foundation/Foundation.h>
 #import "SSJRepaymentModel.h"
+#import "SSJBillingChargeCellItem.h"
 
 @interface SSJRepaymentStore : NSObject
 
 + (void)saveRepaymentWithRepaymentModel:(SSJRepaymentModel *)model
                                 Success:(void (^)(void))success
                                 failure:(void (^)(NSError *error))failure;
+
++ (SSJRepaymentModel *)queryRepaymentModelWithChargeItem:(SSJBillingChargeCellItem *)item;
 
 @end
