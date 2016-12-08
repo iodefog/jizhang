@@ -18,7 +18,7 @@
             // 如果有还款id,则为账单分期,若没有,则是还款
             if (![item.billId isEqualToString:@"3"] && ![item.billId isEqualToString:@"4"]) {
                 //是账单分期的情况
-                FMResultSet *resultSet = [db executeQuery:@"select a.* , b.ifunsid, c.cacctname from bk_credit_repayment a, bk_user_charge b, bk_fund_info c where a.crepaymentid = ? and a.id = b.id and b.ichargeid <> ? and b.ifunsid = c.acctname",item.sundryId,item.ID];
+                FMResultSet *resultSet = [db executeQuery:@"select a.* , b.ifunsid, c.cacctname from bk_credit_repayment a, bk_user_charge b, bk_fund_info c where a.crepaymentid = ? and a.crepaymentid = b.id and b.ichargeid <> ? and b.ifunsid = c.cfundid",item.sundryId,item.ID];
                 while ([resultSet next]) {
                     model.repaymentId = item.sundryId;
                     model.cardId = [resultSet stringForColumn:@"CCARDID"];
@@ -141,7 +141,7 @@
                 model.repaymentId = SSJUUID();
                 //如果是新建
                 // 在还款表插入一条数据
-                if (![db executeUpdate:@"insert into bk_credit_repayment (crepaymentid, iinstalmentcount, capplydate, ccardid, repaymentmoney, ipoundagerate, cmemo, cuserid, iversion, operatortype, cwritedate, crepaymentmonth) values (?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?)",model.repaymentId,model.instalmentCout,[model.applyDate formattedDateWithFormat:@"yyyy-MM-dd"],model.cardId,model.repaymentMoney,model.poundageRate,model.memo,userID,@(SSJSyncVersion()),writeDate,[model.repaymentMonth formattedDateWithFormat:@"yyyy-MM"]]) {
+                if (![db executeUpdate:@"insert into bk_credit_repayment (crepaymentid, iinstalmentcount, capplydate, ccardid, repaymentmoney, ipoundagerate, cmemo, cuserid, iversion, operatortype, cwritedate, crepaymentmonth) values (?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?)",model.repaymentId,@(model.instalmentCout),[model.applyDate formattedDateWithFormat:@"yyyy-MM-dd"],model.cardId,model.repaymentMoney,model.poundageRate,model.memo,userID,@(SSJSyncVersion()),writeDate,[model.repaymentMonth formattedDateWithFormat:@"yyyy-MM"]]) {
                     *rollback = YES;
                     if (failure) {
                         SSJDispatch_main_async_safe(^{
@@ -152,9 +152,11 @@
                 
                 for (int i = 0; i < model.instalmentCout; i ++) {
                     NSString *chargeid = SSJUUID();
+                    NSString *poundageChargeId = SSJUUID();
                     NSDate *billdate = model.applyDate;
                     billdate = [billdate dateByAddingMonths:i];
-                    if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cbooksid, ibillid, ifunsid, imoney, cbilldate, cmemo, cuserid, iversion, operatortype, cwritedate, ichargetype, id) values (?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?)",chargeid,booksId,@"11",model.cardId,model.repaymentMoney,[billdate formattedDateWithFormat:@"yyyy-MM-dd"],model.memo,userID,@(SSJSyncVersion()),writeDate,@(SSJChargeIdTypeRepayment),model.repaymentId]) {
+                    double principalMoney = [model.repaymentMoney doubleValue] / model.instalmentCout;
+                    if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cbooksid, ibillid, ifunsid, imoney, cbilldate, cmemo, cuserid, iversion, operatortype, cwritedate, ichargetype, id) values (?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?, ?)",chargeid,booksId,@"11",model.cardId,@(principalMoney),[billdate formattedDateWithFormat:@"yyyy-MM-dd"],model.memo,userID,@(SSJSyncVersion()),writeDate,@(SSJChargeIdTypeRepayment),model.repaymentId]) {
                         *rollback = YES;
                         if (failure) {
                             SSJDispatch_main_async_safe(^{
@@ -163,8 +165,8 @@
                         }
                     }
                     if (model.poundageRate) {
-                        float poundageMoney = [model.repaymentMoney doubleValue] * [model.poundageRate doubleValue] / model.instalmentCout;
-                        if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cbooksid, ibillid, ifunsid, imoney, cbilldate, cmemo, cuserid, iversion, operatortype, cwritedate, ichargetype, id) values (?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?)",chargeid,booksId,@"11",model.cardId,@(poundageMoney),[billdate formattedDateWithFormat:@"yyyy-MM-dd"],model.memo,userID,@(SSJSyncVersion()),writeDate,@(SSJChargeIdTypeRepayment),model.repaymentId]) {
+                        double poundageMoney = [model.repaymentMoney doubleValue] * [model.poundageRate doubleValue] / model.instalmentCout;
+                        if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cbooksid, ibillid, ifunsid, imoney, cbilldate, cmemo, cuserid, iversion, operatortype, cwritedate, ichargetype, id) values (?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?, ?)",poundageChargeId,booksId,@"12",model.cardId,@(poundageMoney),[billdate formattedDateWithFormat:@"yyyy-MM-dd"],model.memo,userID,@(SSJSyncVersion()),writeDate,@(SSJChargeIdTypeRepayment),model.repaymentId]) {
                             *rollback = YES;
                             if (failure) {
                                 SSJDispatch_main_async_safe(^{
@@ -196,9 +198,11 @@
                 }
                 for (int i = 0; i < model.instalmentCout; i ++) {
                     NSString *chargeid = SSJUUID();
+                    NSString *poundageChargeId = SSJUUID();
                     NSDate *billdate = model.applyDate;
                     billdate = [billdate dateByAddingMonths:i];
-                    if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cbooksid, ibillid, ifunsid, imoney, cbilldate, cmemo, cuserid, iversion, operatortype, cwritedate, ichargetype, id) values (?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?)",chargeid,booksId,@"11",model.cardId,model.repaymentMoney,[billdate formattedDateWithFormat:@"yyyy-MM-dd"],model.memo,userID,@(SSJSyncVersion()),writeDate,@(SSJChargeIdTypeRepayment),model.repaymentId]) {
+                    double principalMoney = [model.repaymentMoney doubleValue] / model.instalmentCout;
+                    if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cbooksid, ibillid, ifunsid, imoney, cbilldate, cmemo, cuserid, iversion, operatortype, cwritedate, ichargetype, id) values (?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?, ?)",chargeid,booksId,@"11",model.cardId,@(principalMoney),[billdate formattedDateWithFormat:@"yyyy-MM-dd"],model.memo,userID,@(SSJSyncVersion()),writeDate,@(SSJChargeIdTypeRepayment),model.repaymentId]) {
                         *rollback = YES;
                         if (failure) {
                             SSJDispatch_main_async_safe(^{
@@ -207,8 +211,8 @@
                         }
                     }
                     if (model.poundageRate) {
-                        float poundageMoney = [model.repaymentMoney doubleValue] * [model.poundageRate doubleValue] / model.instalmentCout;
-                        if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cbooksid, ibillid, ifunsid, imoney, cbilldate, cmemo, cuserid, iversion, operatortype, cwritedate, ichargetype, id) values (?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?)",chargeid,booksId,@"11",model.cardId,@(poundageMoney),[billdate formattedDateWithFormat:@"yyyy-MM-dd"],model.memo,userID,@(SSJSyncVersion()),writeDate,@(SSJChargeIdTypeRepayment),model.repaymentId]) {
+                        double poundageMoney = [model.repaymentMoney doubleValue] * [model.poundageRate doubleValue] / model.instalmentCout;
+                        if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cbooksid, ibillid, ifunsid, imoney, cbilldate, cmemo, cuserid, iversion, operatortype, cwritedate, ichargetype, id) values (?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?, ?)",poundageChargeId,booksId,@"12",model.cardId,@(poundageMoney),[billdate formattedDateWithFormat:@"yyyy-MM-dd"],model.memo,userID,@(SSJSyncVersion()),writeDate,@(SSJChargeIdTypeRepayment),model.repaymentId]) {
                             *rollback = YES;
                             if (failure) {
                                 SSJDispatch_main_async_safe(^{

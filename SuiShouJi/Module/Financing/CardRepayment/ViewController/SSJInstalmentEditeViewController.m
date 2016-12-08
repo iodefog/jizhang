@@ -153,10 +153,11 @@ static NSString *const kTitle6 = @"分期申请日";
         if (self.repaymentModel.poundageRate) {
             poundageModifyCell.textField.text = [NSString stringWithFormat:@"%.2f", [self.repaymentModel.poundageRate doubleValue] * 100];
         }
+        _poundageLab = poundageModifyCell.subtitleLabel;
         poundageModifyCell.textField.keyboardType = UIKeyboardTypeDecimalPad;
         poundageModifyCell.textField.delegate = self;
         [poundageModifyCell setNeedsLayout];
-        
+        [self updatePoundageLab];
         return poundageModifyCell;
     }else if([title isEqualToString:kTitle6]) {
         SSJInstalmentDateSelectCell *dateSelectCell = [tableView dequeueReusableCellWithIdentifier:SSJInstalmentDateSelectCellIdentifier];
@@ -164,6 +165,8 @@ static NSString *const kTitle6 = @"分期申请日";
         dateSelectCell.textLabel.text = title;
         dateSelectCell.detailLabel.text = [self.repaymentModel.applyDate formattedDateWithFormat:@"yyyy-MM-dd"];
         [dateSelectCell setNeedsLayout];
+        _instalDateLab = dateSelectCell.subtitleLabel;
+        [self updatePoundageLab];
         return dateSelectCell;
     }else{
         SSJChargeCircleModifyCell *repaymentModifyCell = [tableView dequeueReusableCellWithIdentifier:SSJInstalmentCellIdentifier];
@@ -192,6 +195,7 @@ static NSString *const kTitle6 = @"分期申请日";
             repaymentModifyCell.cellInput.attributedPlaceholder = [[NSAttributedString alloc]initWithString:@"0.00" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
             repaymentModifyCell.cellInput.tag = 101;
             repaymentModifyCell.cellInput.keyboardType = UIKeyboardTypeDecimalPad;
+            [self updatePoundageLab];
         }
         return repaymentModifyCell;
     }
@@ -242,6 +246,7 @@ static NSString *const kTitle6 = @"分期申请日";
             NSString *rateStr = [NSString stringWithFormat:@"%f",rate];
             self.repaymentModel.poundageRate = [NSDecimalNumber decimalNumberWithString:rateStr];
         }
+        [self updatePoundageLab];
     }
 }
 
@@ -251,6 +256,7 @@ static NSString *const kTitle6 = @"分期申请日";
         self.repaymentModel.instalmentCout = 36;
         [CDAutoHideMessageHUD showMessage:@"分期期数最大为36期哦"];
     }
+    [self updatePoundageLab];
     self.instalmentCountView.text = [NSString stringWithFormat:@"%ld",self.repaymentModel.instalmentCout];
 }
 
@@ -259,7 +265,8 @@ static NSString *const kTitle6 = @"分期申请日";
     if (self.repaymentModel.instalmentCout < 1) {
         self.repaymentModel.instalmentCout = 1;
         [CDAutoHideMessageHUD showMessage:@"分期期数最小为1期哦"];
-        }
+    }
+    [self updatePoundageLab];
     self.instalmentCountView.text = [NSString stringWithFormat:@"%ld",self.repaymentModel.instalmentCout];
 }
 
@@ -363,7 +370,15 @@ static NSString *const kTitle6 = @"分期申请日";
 #pragma mark - private
 - (void)updatePoundageLab{
     double principalMoney = [self.repaymentModel.repaymentMoney doubleValue] / self.repaymentModel.instalmentCout;
-    _poundageLab.text = [NSString stringWithFormat:@"每期应还本金%@,手续费%@"];
+    NSString *pripalStr = [[NSString stringWithFormat:@"%f",principalMoney] ssj_moneyDecimalDisplayWithDigits:2];
+    double poundageMoney = [self.repaymentModel.repaymentMoney doubleValue] * [self.repaymentModel.poundageRate doubleValue] / self.repaymentModel.instalmentCout;
+    NSString *poundageStr = [[NSString stringWithFormat:@"%f",poundageMoney] ssj_moneyDecimalDisplayWithDigits:2];
+    double sumMoney = principalMoney + poundageMoney;
+    NSString *sumMoneyStr = [[NSString stringWithFormat:@"%f",sumMoney] ssj_moneyDecimalDisplayWithDigits:2];
+    _poundageLab.text = [NSString stringWithFormat:@"每期应还本金%@,手续费%@",pripalStr,poundageStr];
+    [_poundageLab sizeToFit];
+    _instalDateLab.text = [NSString stringWithFormat:@"每月%ld号信用卡将自动生成%@元的分期流水",self.repaymentModel.applyDate.day,sumMoneyStr];
+    [_instalDateLab sizeToFit];
 }
 
 - (void)didReceiveMemoryWarning {
