@@ -17,4 +17,6 @@
  */
 -(NSString *)ssj_moneyDisplayFormat;
 
+-(NSString *)ssj_moneyDecimalDisplayWithDigits:(int)digits;
+
 @end

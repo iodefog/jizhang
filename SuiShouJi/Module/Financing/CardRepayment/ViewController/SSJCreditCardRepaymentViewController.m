@@ -289,7 +289,7 @@ static NSString *const kTitle6 = @"还款账单月份";
     return _fundSelectView;
 }
 
--(SSJReminderDateSelectView *)repaymentTimeView{
+- (SSJReminderDateSelectView *)repaymentTimeView{
     if (!_repaymentTimeView) {
         _repaymentTimeView = [[SSJReminderDateSelectView alloc]initWithFrame:self.view.bounds];
         __weak typeof(self) weakSelf = self;
