@@ -11,7 +11,7 @@
 @interface SSJMonthSelectView : UIView
 
 // 选择日期的回调
-@property (nonatomic, copy) void (^timerSetBlock)(NSString *dateStr);
+@property (nonatomic, copy) void (^timerSetBlock)(NSDate *date);
 
 // 选择日期的回调
 @property (nonatomic, copy) void (^clearButtonClickBlcok)();

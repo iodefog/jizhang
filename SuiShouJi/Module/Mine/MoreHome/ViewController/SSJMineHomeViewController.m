@@ -388,13 +388,13 @@ static BOOL kNeedBannerDisplay = YES;
         self.bannerHeader.items = self.bannerService.item.bannerItems;
         [self.tableView reloadData];
     }
-    if (self.bannerService.item.listAdItem.hidden) {
-        self.adItem = self.bannerService.item.listAdItem;
-        [self.titles insertObject:@[self.adItem.adTitle] atIndex:0];
-        [_titleArr insertObject:self.adItem.adTitle atIndex:0];
-        [self.images insertObject:@[[UIImage imageNamed:@"jinrong"]] atIndex:0];
-        [self.tableView reloadData];
-    }
+//    if (self.bannerService.item.listAdItem.hidden) {
+//        self.adItem = self.bannerService.item.listAdItem;
+//        [self.titles insertObject:@[self.adItem.adTitle] atIndex:0];
+//        [_titleArr insertObject:self.adItem.adTitle atIndex:0];
+//        [self.images insertObject:@[[UIImage imageNamed:@"jinrong"]] atIndex:0];
+//        [self.tableView reloadData];
+//    }
 }
 
 #pragma mark - UMSocialUIDelegate

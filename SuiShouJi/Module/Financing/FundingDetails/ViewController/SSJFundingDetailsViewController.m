@@ -33,6 +33,7 @@
 #import "SSJNewCreditCardViewController.h"
 #import "SSJFundingTransferEditeViewController.h"
 #import "SSJCalenderDetailViewController.h"
+#import "SSJInstalmentEditeViewController.h"
 
 #import "FMDB.h"
 
@@ -400,7 +401,14 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
         [weakSelf.navigationController pushViewController:repaymentVC animated:YES];
     }];
     UIAlertAction *instalAction = [UIAlertAction actionWithTitle:@"账单分期" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        
+        SSJInstalmentEditeViewController *instalmentVc = [[SSJInstalmentEditeViewController alloc]init];
+        SSJRepaymentModel *model = [[SSJRepaymentModel alloc]init];
+        SSJCreditCardItem *item = (SSJCreditCardItem *)self.item;
+        model.cardId = item.cardId;
+        model.cardName = item.cardName;
+        model.cardBillingDay = item.cardBillingDay;
+        instalmentVc.repaymentModel = model;
+        [weakSelf.navigationController pushViewController:instalmentVc animated:YES];
     }];
     [alert addAction:repaymentAction];
     [alert addAction:instalAction];
