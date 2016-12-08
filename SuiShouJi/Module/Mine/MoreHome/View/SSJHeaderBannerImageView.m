@@ -29,7 +29,7 @@ static NSString *const kHeadBannerCellID = @"SSJHeaderBannerCollectionViewCellID
     if (!_collectionView) {
         UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
         layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-        layout.minimumLineSpacing = 0;
+        layout.minimumLineSpacing = 5;
         layout.minimumInteritemSpacing = 0;
         _collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
         [_collectionView registerClass:[SSJHeaderBannerCollectionViewCell class] forCellWithReuseIdentifier:kHeadBannerCellID];
@@ -49,8 +49,17 @@ static NSString *const kHeadBannerCellID = @"SSJHeaderBannerCollectionViewCellID
 
 - (void)setBannerItemArray:(NSArray *)bannerItemArray
 {
+    NSMutableArray *array = [NSMutableArray array];
+    if (bannerItemArray.count > 1) {
+        for (NSInteger i = 0; i<100; i++) {
+            [array addObjectsFromArray:bannerItemArray];
+        }
+        _bannerItemArray = [array copy];
+    }
     _bannerItemArray = bannerItemArray;
-    [self.collectionView reloadData];
+    if (_bannerItemArray.count > 0) {
+        [self.collectionView reloadData];
+    }
 }
 
 
@@ -76,16 +85,11 @@ static NSString *const kHeadBannerCellID = @"SSJHeaderBannerCollectionViewCellID
 #pragma mark -UICollectionViewDelegateFlowLayout
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (self.bannerItemArray.count < 1) {
-        return CGSizeZero;
-    }else if (self.bannerItemArray.count == 1){
+    if (self.bannerItemArray.count == 1) {
         return CGSizeMake(SSJSCREENWITH, kBannerHeight);
-    }else if (self.bannerItemArray.count == 2){
-        return CGSizeMake(SSJSCREENWITH * 0.5, kBannerHeight);
-    }else if(self.bannerItemArray.count >= 3){
-        return CGSizeMake(SSJSCREENWITH / 3, kBannerHeight);
+    }else{
+        return CGSizeMake(285, kBannerHeight);
     }
-    return CGSizeZero;
 }
 
 #pragma mark -UICollectionViewDelegate

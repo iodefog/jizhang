@@ -51,7 +51,7 @@ static NSString *const kTitle1 = @"提醒";
 static NSString *const kTitle2 = @"主题皮肤";
 static NSString *const kTitle3 = @"周期记账";
 static NSString *const kTitle4 = @"数据导出";
-static NSString *const kTitle5 = @"意见反馈";
+static NSString *const kTitle5 = @"建议与咨询";
 static NSString *const kTitle6 = @"给个好评";
 static NSString *const kTitle7 = @"设置";
 static NSString *const kTitle8 = @"分享APP";
@@ -451,7 +451,6 @@ static BOOL kNeedBannerDisplay = YES;
     }
     
     //广告
-    
     for (SSJListAdItem *listAdItem in self.bannerService.item.listAdItems) {
         if (listAdItem.hidden) {
             [self.adItems addObject:listAdItem];

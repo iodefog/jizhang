@@ -59,7 +59,7 @@
         _topImage.image = [UIImage imageNamed:adItem.imageName];
     }
     _nameLabel.text = adItem.adTitle;
-    if ([adItem.adTitle isEqualToString:@"意见反馈"]) {//显示附标题
+    if ([adItem.adTitle isEqualToString:@"建议与咨询"]) {//显示附标题
         _bottomLabel.text = @"反馈交流群:552563622";
         self.nameLabel.frame = CGRectMake(0, CGRectGetMaxY(self.topImage.frame) + 10, self.width, 20);
         self.bottomLabel.frame = CGRectMake(0, CGRectGetMaxY(self.nameLabel.frame), self.width, 15);
@@ -120,17 +120,6 @@
     return _bottomLabel;
 }
 
-
-
-//- (UIView *)vLineView
-//{
-//    if (_vLineView) {
-//        _vLineView = [[UIView alloc] init];
-//        _hLineView.backgroundColor = [UIColor colorWithWhite:.8 alpha:1];
-////        _hLineView.width = 0.5;
-//    }
-//    return _vLineView;
-//}
 
 -(void)updateCellAppearanceAfterThemeChanged{
     self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
