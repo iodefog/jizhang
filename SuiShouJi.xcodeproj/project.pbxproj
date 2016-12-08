@@ -846,6 +846,7 @@
 		916E31E51DF8EEF8003C18D4 /* SSJMineHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 91C2E81A1DF7D69E003ADABE /* SSJMineHomeViewController.m */; };
 		916E31E61DF8EEF8003C18D4 /* SSJMineHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 91C2E81A1DF7D69E003ADABE /* SSJMineHomeViewController.m */; };
 		916E31E71DF8EEF9003C18D4 /* SSJMineHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 91C2E81A1DF7D69E003ADABE /* SSJMineHomeViewController.m */; };
+		916E31EB1DF95231003C18D4 /* SSJProductAdviceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 916E31EA1DF95231003C18D4 /* SSJProductAdviceViewController.m */; };
 		91C2E81B1DF7D69E003ADABE /* SSJMineHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 91C2E81A1DF7D69E003ADABE /* SSJMineHomeViewController.m */; };
 		9C0AB1691D670BAE0082B971 /* SSJCreditCardEditeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0AB1681D670BAE0082B971 /* SSJCreditCardEditeCell.m */; };
 		9C0AB1711D670BB30082B971 /* SSJCreditCardEditeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0AB1681D670BAE0082B971 /* SSJCreditCardEditeCell.m */; };
@@ -3162,6 +3163,8 @@
 		916012041DF7D86C00BF571C /* SSJHeaderBannerImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJHeaderBannerImageView.m; sourceTree = "<group>"; };
 		916012061DF7DC3B00BF571C /* SSJHeaderBannerCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJHeaderBannerCollectionViewCell.h; sourceTree = "<group>"; };
 		916012071DF7DC3B00BF571C /* SSJHeaderBannerCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJHeaderBannerCollectionViewCell.m; sourceTree = "<group>"; };
+		916E31E91DF95231003C18D4 /* SSJProductAdviceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJProductAdviceViewController.h; sourceTree = "<group>"; };
+		916E31EA1DF95231003C18D4 /* SSJProductAdviceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJProductAdviceViewController.m; sourceTree = "<group>"; };
 		91C2E8191DF7D69E003ADABE /* SSJMineHomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMineHomeViewController.h; sourceTree = "<group>"; };
 		91C2E81A1DF7D69E003ADABE /* SSJMineHomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMineHomeViewController.m; sourceTree = "<group>"; };
 		9C0AB1671D670BAE0082B971 /* SSJCreditCardEditeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCreditCardEditeCell.h; sourceTree = "<group>"; };
@@ -5909,6 +5912,8 @@
 				9CD9BBDE1CFD2DAA0061803B /* SSJSyncSettingViewController.m */,
 				9C2B19211D3E185200B987EE /* SSJAdWebViewController.h */,
 				9C2B19221D3E185200B987EE /* SSJAdWebViewController.m */,
+				916E31E91DF95231003C18D4 /* SSJProductAdviceViewController.h */,
+				916E31EA1DF95231003C18D4 /* SSJProductAdviceViewController.m */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -9743,6 +9748,7 @@
 				7D87AEBC1D66E05B0024D33C /* SSJUserCreditSyncTable.m in Sources */,
 				916012051DF7D86C00BF571C /* SSJHeaderBannerImageView.m in Sources */,
 				7D6B12DC1D4CBC140036BF4E /* SSJListMenuItem.m in Sources */,
+				916E31EB1DF95231003C18D4 /* SSJProductAdviceViewController.m in Sources */,
 				7DBA554A1D6BED0D00C02D79 /* SSJLoanFundAccountSelectionView.m in Sources */,
 				9CD9BC091CFD2DAA0061803B /* SSJCircleChargeStore.m in Sources */,
 				7DB429011CAE3E5000B46F32 /* SSJDatabaseVersion2.m in Sources */,

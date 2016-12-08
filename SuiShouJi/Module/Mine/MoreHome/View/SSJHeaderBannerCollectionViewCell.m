@@ -24,7 +24,7 @@
     if (!_imageView) {
         _imageView = [[UIImageView alloc] init];
         _imageView.backgroundColor = [UIColor clearColor];
-        _imageView.contentMode = UIViewContentModeScaleAspectFill;
+//        _imageView.contentMode = UIViewContentModeScaleAspectFit;
     }
     return _imageView;
 }
@@ -33,9 +33,10 @@
     [self.imageView sd_setImageWithURL:[NSURL URLWithString:image]];
 //    [self.imageView sd_setImageWithURL:[NSURL URLWithString:image] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
 //        if (image) {
-//            self.imageView.image = image;
+//            
 //        }
 //    }];
+    
 }
 
 - (void)layoutSubviews
