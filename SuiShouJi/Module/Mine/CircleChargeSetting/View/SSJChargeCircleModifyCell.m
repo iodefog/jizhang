@@ -32,11 +32,12 @@
 
 -(void)layoutSubviews{
     [super layoutSubviews];
-    self.cellImage.left = 10;
+    [self.cellImage sizeToFit];
+    self.cellImage.left = 16;
     self.cellImage.centerY = self.height / 2;
     self.cellTitleLabel.left = self.cellImage.right + 10;
     self.cellTitleLabel.centerY = self.height / 2;
-    self.cellSubTitleLabel.left = 10;
+    self.cellSubTitleLabel.left = 16;
     self.cellSubTitleLabel.centerY = self.height / 2;
     if (self.contentView.width == self.width) {
         self.cellDetailLabel.right = self.contentView.width - 10;

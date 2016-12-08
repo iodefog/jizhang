@@ -132,8 +132,6 @@
 
 @interface UIView (SSJBackView)
 
-@property (nonatomic,readonly)UIView* backView;
-
 - (void)ssj_showViewWithBackView:(UIView *)view
                        backColor:(UIColor *)backColor
                            alpha:(CGFloat)a

@@ -169,7 +169,7 @@
             [originResult close];
             double originMoney = [originItem.money doubleValue];
             //更新流水表
-            if (![db executeUpdate:@"update bk_user_charge set imoney = ? , ibillid = ? , ifunsid = ? , cwritedate = ? , operatortype = 1 , cbilldate = ? , iversion = ? , cmemo = ?  ,cimgurl = ? , thumburl = ? where ichargeid = ? and cuserid = ?",moneyStr,item.billId,item.fundId,[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],item.billDate,@(SSJSyncVersion()),item.chargeMemo,item.chargeImage, item.chargeThumbImage,item.ID,userId]) {
+            if (![db executeUpdate:@"update bk_user_charge set imoney = ? , ibillid = ? , ifunsid = ? , cwritedate = ? , operatortype = 1 , cbilldate = ? , iversion = ? , cmemo = ?  ,cimgurl = ? , thumburl = ?, cbooksid = ? where ichargeid = ? and cuserid = ?",moneyStr,item.billId,item.fundId,[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],item.billDate,@(SSJSyncVersion()),item.chargeMemo,item.chargeImage, item.chargeThumbImage, item.booksId,item.ID,userId]) {
                 *rollback = YES;
                 if (failure) {
                     SSJDispatch_main_async_safe(^{
@@ -199,7 +199,7 @@
                 [[NSFileManager defaultManager] removeItemAtPath:SSJImagePath(originItem.chargeThumbImage) error:nil];
                 [db executeUpdate:@"delete from BK_IMG_SYNC where CIMGNAME = ?",originItem.chargeImage];
             }
-            if (money != [originItem.money doubleValue] || item.incomeOrExpence != originItem.incomeOrExpence || ![item.billDate isEqualToString:originItem.billDate]) {
+            if (money != [originItem.money doubleValue] || item.incomeOrExpence != originItem.incomeOrExpence || ![item.billDate isEqualToString:originItem.billDate] || ![item.booksId isEqualToString:originItem.booksId]) {
                 if (originItem.incomeOrExpence) {
                     //修改每日汇总表
                     if (![db executeUpdate:@"update bk_dailysum_charge set expenceamount = expenceamount - ? , sumamount = sumamount + ?, cwritedate = ?  where cuserid = ? and cbooksid = ? and cbilldate = ?",@(originMoney),@(originMoney),editeTime,userId,originItem.booksId,originItem.billDate]) {

@@ -21,28 +21,15 @@ static NSString *const kTestImageDomain = @"http://account.gs.9188.com/";
 @implementation SSJDomainManager
 
 + (NSString *)domain {
-#ifdef DEBUG
+    return kTestDomain;
 //    return [self formalDomain];
-//    return kTestDomain;
-    return kDefaultDomain;
-#else
-//    return kTestDomain;
-    return [self formalDomain];
 //    return kDefaultDomain;
-#endif
 }
 
 + (NSString *)imageDomain {
-#ifdef DEBUG
+    return kTestImageDomain;
 //    return [self formalDomain];
-//    return kTestImageDomain;
-    return kDefaultDomain;
-#else
-//    return kTestImageDomain;
-    return [self formalDomain];
 //    return kDefaultDomain;
-
-#endif
 }
 
 + (void)requestDomain {

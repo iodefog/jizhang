@@ -665,6 +665,8 @@ const int kMemoMaxLength = 15;
 }
 
 - (void)updateInterest {
+    [self updateChargeModels];
+    
     if (self.loanModel.repaymentDate) {
         double interest = [SSJLoanHelper caculateInterestUntilDate:self.loanModel.repaymentDate model:self.loanModel chargeModels:[self chargeModelsAccordingToEditState]];
         NSString *interestStr = [NSString stringWithFormat:@"%.2f", interest];

@@ -17,11 +17,11 @@
 /**
  *  查询所有的启用的记账类型
  *
- *  @param incomeOrExpenture 收入还是支出(1为支出,0为收入)
+ *  @param incomeOrExpenture 收入还是支出(只有SSJBillTypeIncome、SSJBillTypePay两个值有效)
  *  @param success           查询成功的回调
  *  @param failure           查询失败的回调
  */
-+ (void)queryForCategoryListWithIncomeOrExpenture:(int)incomeOrExpenture
++ (void)queryForCategoryListWithIncomeOrExpenture:(SSJBillType)billType
                                           booksId:(NSString *)booksId
                                           Success:(void(^)(NSMutableArray<SSJRecordMakingBillTypeSelectionCellItem *> *result))success
                                           failure:(void (^)(NSError *error))failure;
@@ -30,10 +30,10 @@
  *  查询收支类别对应开启、关闭状态下的最大序号
  *
  *  @param state    0:关闭 1:开启
- *  @param type     0:收入 1:支出
+ *  @param type     SSJBillTypeIncome:收入 SSJBillTypePay:支出；如果非上述两个值，则查询出错
  */
 + (int)queryForBillTypeMaxOrderWithState:(int)state
-                                    type:(int)type
+                                    type:(SSJBillType)type
                                  booksId:(NSString *)booksId;
 
 /**
