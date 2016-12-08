@@ -103,13 +103,21 @@
 
 - (void)setItem:(SSJBillingChargeCellItem *)item {
     _item = item;
+    // 如果是信用卡还款有关的
     if (item.idType == SSJChargeIdTypeRepayment) {
         SSJRepaymentModel *repaymentModel = [SSJRepaymentStore queryRepaymentModelWithChargeItem:item];
         if ([item.billId isEqualToString:@"3"] || [item.billId isEqualToString:@"4"]) {
+            // 如果是信用卡还款
             self.typeLabel.text = [NSString stringWithFormat:@"%ld月账单还款",repaymentModel.repaymentMonth.month];
             [self.typeLabel sizeToFit];
-        }else{
-            
+        }else if([item.billId isEqualToString:@"11"]) {
+            // 如果是信用卡分期本金
+            self.typeLabel.text = [NSString stringWithFormat:@"%ld月账单分期本金 %ld/%ld期",repaymentModel.repaymentMonth.month,repaymentModel.currentInstalmentCout,repaymentModel.instalmentCout];
+            [self.typeLabel sizeToFit];
+        }else if([item.billId isEqualToString:@"12"]) {
+            // 如果是信用卡分期手续费
+            self.typeLabel.text = [NSString stringWithFormat:@"%ld月账单分期手续费 %ld/%ld期",repaymentModel.repaymentMonth.month,repaymentModel.currentInstalmentCout,repaymentModel.instalmentCout];
+            [self.typeLabel sizeToFit];
         }
     }else{
         if (item.loanId.length) {

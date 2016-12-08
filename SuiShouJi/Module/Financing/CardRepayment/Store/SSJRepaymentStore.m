@@ -22,7 +22,7 @@
                 while ([resultSet next]) {
                     model.repaymentId = item.sundryId;
                     model.cardId = [resultSet stringForColumn:@"CCARDID"];
-                    
+                    model.repaymentMonth = [NSDate dateWithString:[resultSet stringForColumn:@"crepaymentmonth"] formatString:@"yyyy-MM"];
                     model.applyDate = [NSDate dateWithString:[resultSet stringForColumn:@"CAPPLYDATE"] formatString:@"yyyy-MM-dd"] ;
                     model.repaymentSourceFoundId = [resultSet stringForColumn:@"ifunsid"];
                     model.repaymentSourceFoundName = [resultSet stringForColumn:@"cacctname"];
@@ -41,12 +41,14 @@
                 model.repaymentMonth = [NSDate dateWithString:repaymentStr formatString:@"yyyy-MM"];
                 if ([fundParent isEqualToString:@"3"]) {
                     model.cardId = item.fundId;
+                    model.cardName = [db stringForQuery:@"select cacctname from bk_fund_info where cfundid = ?",model.cardId];
                     model.repaymentSourceFoundId = [db stringForQuery:@"select ifunsid from bk_user_charge where cwritedate = ? and ichargeid <> ? and ichargetype = ?",item.editeDate,item.ID,@(SSJChargeIdTypeRepayment)];
                     model.repaymentSourceFoundName = [db stringForQuery:@"select cacctname from bk_fund_info where cfundid = ?",model.repaymentSourceFoundId];
                     model.repaymentChargeId = item.ID;
                     model.sourceChargeId = [db stringForQuery:@"select ichargeid from bk_user_charge where cwritedate = ? and ichargeid <> ? and ichargetype = ?",item.editeDate,item.ID,@(SSJChargeIdTypeRepayment)];
-                } else{
+                }else {
                     model.cardId = [db stringForQuery:@"select ifunsid from bk_user_charge where cwritedate = ? and ichargeid <> ? and ichargetype = ?",item.editeDate,item.ID,@(SSJChargeIdTypeRepayment)];
+                    model.cardName = [db stringForQuery:@"select cacctname from bk_fund_info where cfundid = ?",model.cardId];
                     model.repaymentSourceFoundId = item.fundId;
                     model.repaymentSourceFoundName = [db stringForQuery:@"select cacctname from bk_fund_info where cfundid = ?",item.fundId];
                     model.sourceChargeId = item.ID;
@@ -149,7 +151,6 @@
                         });
                     }
                 }
-                
                 for (int i = 0; i < model.instalmentCout; i ++) {
                     NSString *chargeid = SSJUUID();
                     NSString *poundageChargeId = SSJUUID();

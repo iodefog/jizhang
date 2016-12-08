@@ -15,6 +15,7 @@
 #import "SSJFundingDetailListHeaderView.h"
 #import "SSJReportFormsUtil.h"
 #import "SSJModifyFundingViewController.h"
+#import "SSJCreditCardRepaymentViewController.h"
 #import "SSJDatabaseQueue.h"
 #import "SSJCreditCardStore.h"
 
@@ -283,6 +284,15 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
                     editController.edited = YES;
                     editController.chargeId = cellItem.ID;
                     [self.navigationController pushViewController:editController animated:YES];
+                }
+            } else if(cellItem.idType == SSJChargeIdTypeRepayment) {
+                if (billId == 3 || billId == 4) {
+                    // 如果是转账,则是还款,跳转到还款页面
+                    SSJCreditCardRepaymentViewController *repaymentVc = [[SSJCreditCardRepaymentViewController alloc]init];
+                    repaymentVc.chargeItem = cellItem;
+                    [self.navigationController pushViewController:repaymentVc animated:YES];
+                }else {
+                    
                 }
             } else {
                 if (billId == 3 || billId == 4) {
