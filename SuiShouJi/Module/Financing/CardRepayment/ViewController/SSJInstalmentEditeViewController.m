@@ -206,16 +206,21 @@ static NSString *const kTitle6 = @"分期申请日";
     UITextField *textField = notification.object;
     if ([textField isKindOfClass:[UITextField class]]) {
         if (textField.tag == 100) {
-            if ([textField.text integerValue] > 36) {
-                [CDAutoHideMessageHUD showMessage:@"分期期数最大为36期哦"];
-                self.repaymentModel.instalmentCout = 36;
-            }else if ([textField.text integerValue] < 1) {
-                [CDAutoHideMessageHUD showMessage:@"分期期数最小为1期哦"];
-                self.repaymentModel.instalmentCout = 1;
+            if (textField.text.length > 0) {
+                if ([textField.text integerValue] > 36) {
+                    [CDAutoHideMessageHUD showMessage:@"分期期数最大为36期哦"];
+                    self.repaymentModel.instalmentCout = 36;
+                }else if ([textField.text integerValue] < 1) {
+                    [CDAutoHideMessageHUD showMessage:@"分期期数最小为1期哦"];
+                    self.repaymentModel.instalmentCout = 1;
+                }else{
+                    self.repaymentModel.instalmentCout = [textField.text integerValue];
+                }
+                textField.text = [NSString stringWithFormat:@"%ld",self.repaymentModel.instalmentCout];
             }else{
-                self.repaymentModel.instalmentCout = [textField.text integerValue];
+                self.repaymentModel.instalmentCout = 0;
+                textField.text = @"";
             }
-            textField.text = [NSString stringWithFormat:@"%ld",self.repaymentModel.instalmentCout];
         }else if (textField.tag == 101) {
             textField.text = [textField.text ssj_reserveDecimalDigits:2 intDigits:0];
             self.repaymentModel.repaymentMoney = [NSDecimalNumber decimalNumberWithString:textField.text];
@@ -233,11 +238,21 @@ static NSString *const kTitle6 = @"分期申请日";
 }
 
 - (void)plusButtonClicked:(id)sender{
-    
+    self.repaymentModel.instalmentCout = self.repaymentModel.instalmentCout + 1;
+    if (self.repaymentModel.instalmentCout > 36) {
+        self.repaymentModel.instalmentCout = 36;
+        [CDAutoHideMessageHUD showMessage:@"分期期数最大为36期哦"];
+    }
+    self.instalmentCountView.text = [NSString stringWithFormat:@"%ld",self.repaymentModel.instalmentCout];
 }
 
 - (void)minusButtonClicked:(id)sender{
-    
+    self.repaymentModel.instalmentCout = self.repaymentModel.instalmentCout - 1;
+    if (self.repaymentModel.instalmentCout < 1) {
+        self.repaymentModel.instalmentCout = 1;
+        [CDAutoHideMessageHUD showMessage:@"分期期数最小为1期哦"];
+        }
+    self.instalmentCountView.text = [NSString stringWithFormat:@"%ld",self.repaymentModel.instalmentCout];
 }
 
 - (void)saveButtonClicked:(id)sender{
@@ -247,6 +262,10 @@ static NSString *const kTitle6 = @"分期申请日";
     }
     if ([[NSDate dateWithYear:self.repaymentModel.repaymentMonth.year month:self.repaymentModel.repaymentMonth.month day:self.repaymentModel.cardBillingDay] isLaterThan:self.repaymentModel.applyDate]) {
         [CDAutoHideMessageHUD showMessage:@"本期账单还没有出不能分期哦"];
+        return;
+    }
+    if (!self.repaymentModel.instalmentCout) {
+        [CDAutoHideMessageHUD showMessage:@"请选择分期期数"];
         return;
     }
     __weak typeof(self) weakSelf = self;
