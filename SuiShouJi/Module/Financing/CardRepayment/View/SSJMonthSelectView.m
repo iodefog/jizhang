@@ -94,12 +94,19 @@
 }
 
 - (CGFloat)pickerView:(UIPickerView *)pickerView widthForComponent:(NSInteger)component {
-    return self.width;
+    return self.width  / 2;
 }
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
 {
-
+    if (component == 0) {
+        NSString *year = [self.years objectAtIndex:row];
+        self.currentDate = [NSDate dateWithYear:[year integerValue] month:self.currentDate.month day:self.currentDate.day];
+    }
+    if (component == 1) {
+        NSString *month = [[self monthArray] objectAtIndex:row];
+        self.currentDate = [NSDate dateWithYear:self.currentDate.year month:[month integerValue] day:self.currentDate.day];
+    }
 }
 
 - (CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component{
@@ -112,11 +119,13 @@
         label.text = [self.years objectAtIndex:row];
         label.font = [UIFont systemFontOfSize:18];
         label.textColor = [UIColor ssj_colorWithHex:@"#393939"];
+        label.textAlignment = NSTextAlignmentRight;
         [label sizeToFit];
     }else{
         label.text = [[self monthArray] objectAtIndex:row];
         label.font = [UIFont systemFontOfSize:18];
         label.textColor = [UIColor ssj_colorWithHex:@"#393939"];
+        label.textAlignment = NSTextAlignmentLeft;
         [label sizeToFit];
     }
     return label;
@@ -161,9 +170,23 @@
     return _topView;
 }
 
+- (void)setCurrentDate:(NSDate *)currentDate{
+    _currentDate = currentDate;
+    if (_currentDate) {
+        [self.datePicker selectRow:_currentDate.year - self.minimumDate.year inComponent:0 animated:NO];
+        [self.datePicker selectRow:_currentDate.month - 1 inComponent:1 animated:NO];
+    }
+}
 
--(void)closeButtonClicked:(id)sender{
+- (void)closeButtonClicked:(id)sender{
     [self dismiss];
+}
+
+- (void)comfirmButtonClicked:(id)sender{
+    [self dismiss];
+    if (self.timerSetBlock) {
+        self.timerSetBlock(self.currentDate);
+    }
 }
 
 - (NSArray *)monthArray{

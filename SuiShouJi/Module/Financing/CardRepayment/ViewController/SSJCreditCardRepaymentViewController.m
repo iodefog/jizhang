@@ -16,6 +16,7 @@
 #import "SSJReminderDateSelectView.h"
 
 #import "SSJFinancingHomeHelper.h"
+#import "SSJRepaymentStore.h"
 
 #import "SSJFundingItem.h"
 #import "SSJCreditCardItem.h"
@@ -50,6 +51,17 @@ static NSString *const kTitle6 = @"还款账单月份";
 
 @implementation SSJCreditCardRepaymentViewController
 
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextFieldTextDidChangeNotification object:nil];
+}
+
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:) name:UITextFieldTextDidChangeNotification object:nil];
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.titles = @[@[kTitle1,kTitle2,kTitle3],@[kTitle4,kTitle6,kTitle5]];
@@ -62,7 +74,7 @@ static NSString *const kTitle6 = @"还款账单月份";
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     if (!self.repaymentModel.repaymentId.length) {
-        self.repaymentModel.applyDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"];
+        self.repaymentModel.applyDate = [NSDate date];
         self.repaymentModel.repaymentSourceFoundId = [SSJFinancingHomeHelper queryfirstFundItem].fundingID;
         self.repaymentModel.repaymentSourceFoundName = [SSJFinancingHomeHelper queryfirstFundItem].fundingName;
         self.repaymentModel.repaymentSourceFoundImage = [SSJFinancingHomeHelper queryfirstFundItem].fundingIcon;
@@ -72,7 +84,7 @@ static NSString *const kTitle6 = @"还款账单月份";
         }else {
             repaymentDate = [repaymentDate dateBySubtractingMonths:1];
         }
-        self.repaymentModel.repaymentMonth = [repaymentDate formattedDateWithFormat:@"yyyy年MM月"];
+        self.repaymentModel.repaymentMonth = repaymentDate;
     }
 }
 
@@ -93,7 +105,7 @@ static NSString *const kTitle6 = @"还款账单月份";
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
-    if (section == 2) {
+    if (section == 1) {
         return 80 ;
     }
     return 0.1f;
@@ -106,9 +118,10 @@ static NSString *const kTitle6 = @"还款账单月份";
         self.fundSelectView.selectFundID = self.repaymentModel.repaymentSourceFoundId;
         [self.fundSelectView show];
     }else if ([title isEqualToString:kTitle5]) {
-        self.repaymentTimeView.currentDate = [NSDate dateWithString:self.repaymentModel.applyDate formatString:@"yyyy-MM-dd"];
+        self.repaymentTimeView.currentDate = self.repaymentModel.applyDate;
         [self.repaymentTimeView show];
     }else if ([title isEqualToString:kTitle6]) {
+        self.repaymentMonthSelectView.currentDate = self.repaymentModel.repaymentMonth;
         [self.repaymentMonthSelectView show];
     }
 }
@@ -146,24 +159,67 @@ static NSString *const kTitle6 = @"还款账单月份";
             repaymentModifyCell.cellInput.text = [NSString stringWithFormat:@"%@",self.repaymentModel.repaymentMoney];
         }
         repaymentModifyCell.cellInput.attributedPlaceholder = [[NSAttributedString alloc]initWithString:@"0.00" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+        repaymentModifyCell.cellInput.tag = 100;
         repaymentModifyCell.cellInput.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
     }else if ([title isEqualToString:kTitle3]) {
         repaymentModifyCell.cellInput.attributedPlaceholder = [[NSAttributedString alloc]initWithString:@"选填" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+        repaymentModifyCell.cellInput.tag = 101;
         repaymentModifyCell.cellInput.text = self.repaymentModel.memo;
     }else if ([title isEqualToString:kTitle4]) {
         repaymentModifyCell.cellDetail = self.repaymentModel.repaymentSourceFoundName;
         repaymentModifyCell.cellTypeImageName = self.repaymentModel.repaymentSourceFoundImage;
     }else if ([title isEqualToString:kTitle5]) {
-        repaymentModifyCell.cellDetail = self.repaymentModel.applyDate;
+        repaymentModifyCell.cellDetail = [self.repaymentModel.applyDate formattedDateWithFormat:@"yyyy-MM-dd"];
     }else if ([title isEqualToString:kTitle6]) {
-        repaymentModifyCell.cellDetail = self.repaymentModel.repaymentMonth;
+        repaymentModifyCell.cellDetail = [self.repaymentModel.repaymentMonth formattedDateWithFormat:@"yyyy年MM月"];
     }
     return repaymentModifyCell;
 }
 
+#pragma mark - UITextFieldDelegate
+-(void)textFieldDidEndEditing:(UITextField *)textField{
+    if (textField.tag == 100) {
+        self.repaymentModel.repaymentMoney = [NSDecimalNumber decimalNumberWithString:textField.text];
+    }else if (textField.tag == 101){
+        self.repaymentModel.memo = textField.text;
+    }
+}
+
+-(BOOL)textFieldShouldReturn:(UITextField *)textField{
+    [textField resignFirstResponder];
+    return YES;
+}
+
+
 #pragma mark - Event
+- (void)textDidChange:(NSNotification *)notification {
+    UITextField *textField = notification.object;
+    if ([textField isKindOfClass:[UITextField class]]) {
+        if (textField.tag == 100) {
+            [self setupTextFiledNum:textField num:2];
+            self.repaymentModel.repaymentMoney = [NSDecimalNumber decimalNumberWithString:textField.text];
+        }else if (textField.tag == 101){
+            self.repaymentModel.memo = textField.text;
+        }
+    }
+}
+
+
 - (void)saveButtonClicked:(id)sender{
-    
+    if (self.repaymentModel.repaymentMoney == 0) {
+        [CDAutoHideMessageHUD showMessage:@"请输入还款金额"];
+        return;
+    }
+    if ([[NSDate dateWithYear:self.repaymentModel.repaymentMonth.year month:self.repaymentModel.repaymentMonth.month day:self.repaymentModel.cardBillingDay] isLaterThan:self.repaymentModel.applyDate]) {
+        [CDAutoHideMessageHUD showMessage:@"本期账单还没有出不能还款哦"];
+        return;
+    }
+    __weak typeof(self) weakSelf = self;
+    [SSJRepaymentStore saveRepaymentWithRepaymentModel:self.repaymentModel Success:^{
+        [weakSelf.navigationController popViewControllerAnimated:YES];
+    } failure:^(NSError *error) {
+
+    }];
 }
 
 #pragma mark - Getter
@@ -238,7 +294,7 @@ static NSString *const kTitle6 = @"还款账单月份";
         _repaymentTimeView = [[SSJReminderDateSelectView alloc]initWithFrame:self.view.bounds];
         __weak typeof(self) weakSelf = self;
         _repaymentTimeView.dateSetBlock = ^(NSDate *date){
-            weakSelf.repaymentModel.applyDate = [date formattedDateWithFormat:@"yyyy-MM-dd"];
+            weakSelf.repaymentModel.applyDate = date;
             [weakSelf.tableView reloadData];
         };
     }
@@ -248,9 +304,48 @@ static NSString *const kTitle6 = @"还款账单月份";
 - (SSJMonthSelectView *)repaymentMonthSelectView{
     if (!_repaymentMonthSelectView) {
         _repaymentMonthSelectView = [[SSJMonthSelectView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height)];
+        __weak typeof(self) weakSelf = self;
+        _repaymentMonthSelectView.timerSetBlock = ^(NSDate *date){
+            weakSelf.repaymentModel.repaymentMonth = date;
+            [weakSelf.tableView reloadData];
+        };
     }
     return _repaymentMonthSelectView;
 }
+
+#pragma mark - Private
+/**
+ *   限制输入框小数点(输入框只改变时候调用valueChange)
+ *
+ *  @param TF  输入框
+ *  @param num 小数点后限制位数
+ */
+-(void)setupTextFiledNum:(UITextField *)TF num:(int)num
+{
+    NSString *str = [TF.text stringByReplacingOccurrencesOfString:@"¥" withString:@""];
+    NSArray *arr = [TF.text componentsSeparatedByString:@"."];
+    if ([str isEqualToString:@"0."] || [str isEqualToString:@"."]) {
+        TF.text = @"0.";
+    }else if (str.length == 2) {
+        if ([str floatValue] == 0) {
+            TF.text = @"0";
+        }else if(arr.count < 2){
+            TF.text = [NSString stringWithFormat:@"%d",[str intValue]];
+        }
+    }
+    
+    if (arr.count > 2) {
+        TF.text = [NSString stringWithFormat:@"%@.%@",arr[0],arr[1]];
+    }
+    
+    if (arr.count == 2) {
+        NSString * lastStr = arr.lastObject;
+        if (lastStr.length > num) {
+            TF.text = [NSString stringWithFormat:@"%@.%@",arr[0],[lastStr substringToIndex:num]];
+        }
+    }
+}
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

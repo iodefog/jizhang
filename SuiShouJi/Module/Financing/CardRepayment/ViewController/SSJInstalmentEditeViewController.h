@@ -1,8 +1,8 @@
 //
-//  SSJCreditCardRepaymentViewController.h
+//  SSJRepaymentDetailViewController.h
 //  SuiShouJi
 //
-//  Created by ricky on 2016/12/5.
+//  Created by ricky on 2016/12/7.
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
 
@@ -10,7 +10,7 @@
 #import "SSJBillingChargeCellItem.h"
 #import "SSJRepaymentModel.h"
 
-@interface SSJCreditCardRepaymentViewController : SSJBaseViewController
+@interface SSJInstalmentEditeViewController : SSJBaseViewController
 
 @property(nonatomic, strong) SSJBillingChargeCellItem *chargeItem;
 
