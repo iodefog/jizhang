@@ -149,7 +149,6 @@ static BOOL kNeedBannerDisplay = YES;
             SSJSelectBooksType(item.booksId);
             [self.collectionView reloadData];
             [self.mm_drawerController closeDrawerAnimated:YES completion:NULL];
-            [[NSNotificationCenter defaultCenter]postNotificationName:SSJBooksTypeDidChangeNotification object:nil];
         }else{
             [self.parentSelectView show];
 
@@ -505,7 +504,6 @@ static BOOL kNeedBannerDisplay = YES;
     for (SSJBooksTypeItem *booksItem in self.selectedBooks) {
             if ([booksItem.booksId isEqualToString:SSJGetCurrentBooksType()]) {
                 SSJSelectBooksType(SSJUSERID());
-                [[NSNotificationCenter defaultCenter]postNotificationName:SSJBooksTypeDidChangeNotification object:nil];
         };
     }
     __weak typeof(self) weakSelf = self;

@@ -111,7 +111,12 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     _needToDismiss = YES;
     
     if (!self.item) {
-        self.item = [[SSJBillingChargeCellItem alloc]init];
+        self.item = [[SSJBillingChargeCellItem alloc] init];
+    }
+    
+    // 如果没有账本id就传当前账本（从首页进入没有传账本id）
+    if (!self.item.booksId) {
+        self.item.booksId = SSJGetCurrentBooksType();
     }
     
     [self initData];
@@ -136,7 +141,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES animated:YES];
-    [self getCategoryList];
+    [self loadCategoryAndBooksList];
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -170,10 +175,8 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         __weak typeof(self) wself = self;
         _customNaviBar = [[SSJRecordMakingCustomNavigationBar alloc] init];
         _customNaviBar.titles = @[@"test1", @"test2"];
-//        _customNaviBar.showBookHandle = ^(SSJRecordMakingCustomNavigationBar *naviBar) {
-//            [wself.currentInput resignFirstResponder];
-//        };
         _customNaviBar.selectBookHandle = ^(SSJRecordMakingCustomNavigationBar *naviBar) {
+            wself.item.booksId = [wself.booksIds ssj_safeObjectAtIndex:naviBar.selectedTitleIndex];
             [wself.currentInput becomeFirstResponder];
         };
         _customNaviBar.addNewBookHandle = ^(SSJRecordMakingCustomNavigationBar *naviBar) {
@@ -365,14 +368,19 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 
 - (SSJBooksParentSelectView *)parentSelectView{
     if (!_parentSelectView) {
-        _parentSelectView = [[SSJBooksParentSelectView alloc]initWithFrame:self.view.frame];
+        _parentSelectView = [[SSJBooksParentSelectView alloc] initWithFrame:self.view.frame];
         __weak typeof(self) weakSelf = self;
-        _parentSelectView.parentSelectBlock = ^(NSInteger selectParent){
-            SSJBooksEditeOrNewViewController *booksEditeVc = [[SSJBooksEditeOrNewViewController alloc]init];
+        _parentSelectView.parentSelectBlock = ^(NSInteger selectParent) {
+            [weakSelf.parentSelectView dismiss];
+            
             SSJBooksTypeItem *item = [[SSJBooksTypeItem alloc]init];
             item.booksParent = selectParent;
+            
+            SSJBooksEditeOrNewViewController *booksEditeVc = [[SSJBooksEditeOrNewViewController alloc] init];
             booksEditeVc.item = item;
-            [weakSelf.parentSelectView dismiss];
+            booksEditeVc.saveBooksBlock = ^(NSString *booksId) {
+                weakSelf.item.booksId = booksId;
+            };
             [weakSelf.navigationController pushViewController:booksEditeVc animated:YES];
         };
     }
@@ -634,7 +642,10 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     [self getmembersForTheCharge];
 }
 
-- (void)getCategoryList {
+/**
+ 加载收支类别和账本数据
+ */
+- (void)loadCategoryAndBooksList {
     if (_customNaviBar.selectedBillType != SSJBillTypePay
          && _customNaviBar.selectedBillType != SSJBillTypeIncome) {
         return;
@@ -677,7 +688,6 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
             }
             
             NSInteger selectedIndex = -1;
-            NSString *currentBookId = self.item.booksId.length ? self.item.booksId : SSJGetCurrentBooksType();
             NSMutableArray *bookTitles = [[NSMutableArray alloc] initWithCapacity:bookList.count];
             NSMutableArray *bookIds = [[NSMutableArray alloc] initWithCapacity:bookList.count];
             
@@ -686,13 +696,14 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
                 if (item.booksId) {
                     [bookTitles addObject:item.booksName];
                     [bookIds addObject:item.booksId];
-                }
-                
-                if ([item.booksId isEqualToString:currentBookId]) {
-                    selectedIndex = i;
+                    
+                    if ([item.booksId isEqualToString:self.item.booksId]) {
+                        selectedIndex = i;
+                    }
                 }
             }
             
+            _booksIds = [bookIds copy];
             _customNaviBar.titles = bookTitles;
             _customNaviBar.selectedTitleIndex = selectedIndex;
             
@@ -854,6 +865,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     }
     
     [SSJRecordMakingStore saveChargeWithChargeItem:self.item Success:^(SSJBillingChargeCellItem *editeItem){
+        SSJSelectBooksType(editeItem.booksId);
         if (weakSelf.addNewChargeBlock) {
             weakSelf.addNewChargeBlock(@[editeItem]);
         }
@@ -962,7 +974,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 - (void)updateBillTypeSelectionViewAndInputView {
     if (_customNaviBar.selectedBillType == SSJBillTypePay) {
         if (_paymentTypeView.items.count == 0) {
-            [self getCategoryList];
+            [self loadCategoryAndBooksList];
         } else {
             for (SSJRecordMakingBillTypeSelectionCellItem *item in _paymentTypeView.items) {
                 if (item.selected) {
@@ -976,7 +988,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         }
     } else if (_customNaviBar.selectedBillType == SSJBillTypeIncome) {
         if (_incomeTypeView.items.count == 0) {
-            [self getCategoryList];
+            [self loadCategoryAndBooksList];
         } else {
             for (SSJRecordMakingBillTypeSelectionCellItem *item in _incomeTypeView.items) {
                 if (item.selected) {
