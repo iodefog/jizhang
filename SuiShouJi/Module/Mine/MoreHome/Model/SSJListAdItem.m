@@ -14,7 +14,8 @@
     return @{
              @"adTitle" : @"title",
              @"hidden" : @"hide",
-             @"url" : @"tourl"
+             @"url" : @"tourl",
+             @"imageUrl" : @"image"
              };
 }
 
