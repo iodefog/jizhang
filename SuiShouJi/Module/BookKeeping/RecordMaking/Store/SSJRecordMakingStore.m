@@ -199,7 +199,7 @@
                 [[NSFileManager defaultManager] removeItemAtPath:SSJImagePath(originItem.chargeThumbImage) error:nil];
                 [db executeUpdate:@"delete from BK_IMG_SYNC where CIMGNAME = ?",originItem.chargeImage];
             }
-            if (money != [originItem.money doubleValue] || item.incomeOrExpence != originItem.incomeOrExpence || ![item.billDate isEqualToString:originItem.billDate]) {
+            if (money != [originItem.money doubleValue] || item.incomeOrExpence != originItem.incomeOrExpence || ![item.billDate isEqualToString:originItem.billDate] || ![item.booksId isEqualToString:originItem.booksId]) {
                 if (originItem.incomeOrExpence) {
                     //修改每日汇总表
                     if (![db executeUpdate:@"update bk_dailysum_charge set expenceamount = expenceamount - ? , sumamount = sumamount + ?, cwritedate = ?  where cuserid = ? and cbooksid = ? and cbilldate = ?",@(originMoney),@(originMoney),editeTime,userId,originItem.booksId,originItem.billDate]) {
