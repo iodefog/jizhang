@@ -315,7 +315,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         newReminderCell.type = SSJCreditCardCellTypeassertedDetail;
         newReminderCell.cellDetail = [self.remindItem.remindDate formattedDateWithFormat:@"yyyy-MM-dd"];
         newReminderCell.cellTitle = title;
-        self.remindStateButton.on = self.item.remindState;
+        self.remindStateButton.on = self.remindItem.remindState;
         newReminderCell.accessoryView = self.remindStateButton;
         newReminderCell.customAccessoryType = UITableViewCellAccessoryNone;
         newReminderCell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -439,7 +439,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 }
 
 - (void)remindSwitchChange:(id)sender{
-    if (self.item.remindId.length) {
+    if (self.remindItem) {
         self.remindItem.remindState = self.remindStateButton.isOn;
     }else{
         if (self.remindStateButton.isOn) {
