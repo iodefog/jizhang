@@ -87,6 +87,8 @@ static NSString *const kTitle6 = @"还款账单月份";
             repaymentDate = [repaymentDate dateBySubtractingMonths:1];
         }
         self.repaymentModel.repaymentMonth = repaymentDate;
+        UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(deleteButtonClicked)];
+        self.navigationItem.rightBarButtonItem = rightItem;
     }
 }
 
@@ -158,7 +160,7 @@ static NSString *const kTitle6 = @"还款账单月份";
         repaymentModifyCell.cellDetail = self.repaymentModel.cardName;
     }else if ([title isEqualToString:kTitle2]) {
         if (self.repaymentModel.repaymentMoney != 0) {
-            repaymentModifyCell.cellInput.text = [NSString stringWithFormat:@"%@",self.repaymentModel.repaymentMoney];
+            repaymentModifyCell.cellInput.text = [[NSString stringWithFormat:@"%@",self.repaymentModel.repaymentMoney] ssj_moneyDecimalDisplayWithDigits:2];
         }
         repaymentModifyCell.cellInput.attributedPlaceholder = [[NSAttributedString alloc]initWithString:@"0.00" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         repaymentModifyCell.cellInput.tag = 100;
@@ -221,6 +223,15 @@ static NSString *const kTitle6 = @"还款账单月份";
         [weakSelf.navigationController popViewControllerAnimated:YES];
     } failure:^(NSError *error) {
 
+    }];
+}
+
+- (void)deleteButtonClicked{
+    __weak typeof(self) weakSelf = self;
+    [SSJRepaymentStore deleteRepaymentWithRepaymentModel:self.repaymentModel Success:^{
+        [weakSelf.navigationController popViewControllerAnimated:YES];
+    } failure:^(NSError *error) {
+        
     }];
 }
 

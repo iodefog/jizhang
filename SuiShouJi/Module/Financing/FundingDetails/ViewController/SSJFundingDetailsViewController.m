@@ -35,6 +35,7 @@
 #import "SSJFundingTransferEditeViewController.h"
 #import "SSJCalenderDetailViewController.h"
 #import "SSJInstalmentEditeViewController.h"
+#import "SSJInstalmentDetailViewController.h"
 
 #import "FMDB.h"
 
@@ -292,7 +293,9 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
                     repaymentVc.chargeItem = cellItem;
                     [self.navigationController pushViewController:repaymentVc animated:YES];
                 }else {
-                    
+                    SSJInstalmentDetailViewController *instalmentDetailVc = [[SSJInstalmentDetailViewController alloc]init];
+                    instalmentDetailVc.chargeItem = cellItem;
+                    [self.navigationController pushViewController:instalmentDetailVc animated:YES];
                 }
             } else {
                 if (billId == 3 || billId == 4) {

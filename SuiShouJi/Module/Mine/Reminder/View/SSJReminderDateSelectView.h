@@ -14,6 +14,8 @@
 
 @property (nonatomic, copy) void (^dateSetBlock)(NSDate *date);
 
+@property(nonatomic, strong) NSDate *minmumDate;
+
 -(void)show;
 
 -(void)dismiss;

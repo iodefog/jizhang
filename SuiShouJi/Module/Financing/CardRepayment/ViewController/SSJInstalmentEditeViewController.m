@@ -88,6 +88,9 @@ static NSString *const kTitle6 = @"分期申请日";
             repaymentDate = [repaymentDate dateBySubtractingMonths:1];
         }
         self.repaymentModel.repaymentMonth = repaymentDate;
+    } else {
+        UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(deleteButtonClicked)];
+        self.navigationItem.rightBarButtonItem = rightItem;  
     }
     [self.tableView reloadData];
 }
@@ -283,8 +286,21 @@ static NSString *const kTitle6 = @"分期申请日";
         [CDAutoHideMessageHUD showMessage:@"请选择分期期数"];
         return;
     }
+    if (![SSJRepaymentStore checkTheMoneyIsValidForTheRepaymentWithRepaymentModel:self.repaymentModel]) {
+        [CDAutoHideMessageHUD showMessage:@"分期金额不能大于当期账单金额哦"];
+        return;
+    }
     __weak typeof(self) weakSelf = self;
     [SSJRepaymentStore saveRepaymentWithRepaymentModel:self.repaymentModel Success:^{
+        [weakSelf.navigationController popViewControllerAnimated:YES];
+    } failure:^(NSError *error) {
+        
+    }];
+}
+
+- (void)deleteButtonClicked{
+    __weak typeof(self) weakSelf = self;
+    [SSJRepaymentStore deleteRepaymentWithRepaymentModel:self.repaymentModel Success:^{
         [weakSelf.navigationController popViewControllerAnimated:YES];
     } failure:^(NSError *error) {
         
@@ -375,9 +391,16 @@ static NSString *const kTitle6 = @"分期申请日";
     NSString *poundageStr = [[NSString stringWithFormat:@"%f",poundageMoney] ssj_moneyDecimalDisplayWithDigits:2];
     double sumMoney = principalMoney + poundageMoney;
     NSString *sumMoneyStr = [[NSString stringWithFormat:@"%f",sumMoney] ssj_moneyDecimalDisplayWithDigits:2];
-    _poundageLab.text = [NSString stringWithFormat:@"每期应还本金%@,手续费%@",pripalStr,poundageStr];
+    NSString *firstStr = [NSString stringWithFormat:@"每期应还本金%@,手续费%@",pripalStr,poundageStr];
+    NSMutableAttributedString *firstAtrributeStr = [[NSMutableAttributedString alloc]initWithString:firstStr];
+    [firstAtrributeStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] range:NSMakeRange(6, pripalStr.length)];
+    [firstAtrributeStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] range:NSMakeRange(firstStr.length - poundageStr.length, poundageStr.length)];
+    _poundageLab.attributedText = firstAtrributeStr;
     [_poundageLab sizeToFit];
-    _instalDateLab.text = [NSString stringWithFormat:@"每月%ld号信用卡将自动生成%@元的分期流水",self.repaymentModel.applyDate.day,sumMoneyStr];
+    NSString *secondStr = [NSString stringWithFormat:@"每月%ld号信用卡将自动生成%@元的分期流水",self.repaymentModel.applyDate.day,sumMoneyStr];
+    NSMutableAttributedString *secondAtrributeStr = [[NSMutableAttributedString alloc]initWithString:secondStr];
+    [secondAtrributeStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] range:[secondStr rangeOfString:sumMoneyStr]];
+    _instalDateLab.attributedText = secondAtrributeStr;
     [_instalDateLab sizeToFit];
 }
 
