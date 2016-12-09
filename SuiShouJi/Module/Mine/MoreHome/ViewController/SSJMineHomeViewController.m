@@ -46,6 +46,7 @@
 #import "UMSocial.h"
 #import "SSJMineHomeCollectionImageCell.h"
 #import "SSJHeaderBannerImageView.h"
+#import "SSJProductAdviceViewController.h"
 
 static NSString *const kTitle1 = @"提醒";
 static NSString *const kTitle2 = @"主题皮肤";
@@ -262,6 +263,7 @@ static BOOL kNeedBannerDisplay = YES;
     if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
         self.headerBannerImageView =  [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:kHeaderViewID forIndexPath:indexPath];
         self.headerBannerImageView.delegate = self;
+        self.headerBannerImageView.bannerItemArray = self.bannerService.item.bannerItems;
         //添加头视图的内容
         return self.headerBannerImageView;
     }
@@ -335,7 +337,7 @@ static BOOL kNeedBannerDisplay = YES;
     //    }
     
     //意见反馈
-    if ([item.adTitle isEqualToString:kTitle5]) {
+    /*if ([item.adTitle isEqualToString:kTitle5]) {
         //        __weak typeof(self) weakSelf = self;
         //        [self.feedbackKit makeFeedbackViewControllerWithCompletionBlock:^(YWFeedbackViewController *viewController, NSError *error) {
         //            if ( viewController != nil ) {
@@ -364,6 +366,7 @@ static BOOL kNeedBannerDisplay = YES;
         //                [CDAutoHideMessageHUD showMessage:title];
         //            }
         //        }];
+        
         SSJUserItem *userItem = [SSJUserTableManager queryUserItemForID:SSJUSERID()];
         NSDictionary* clientCustomizedAttrs = @{@"userid": userItem.userId ?: @"",
                                                 @"openid": userItem.openId ?: @"",
@@ -380,6 +383,10 @@ static BOOL kNeedBannerDisplay = YES;
         }];
         MQChatViewManager *chatViewManager = [[MQChatViewManager alloc] init];
         [chatViewManager pushMQChatViewControllerInViewController:self];
+    }*/
+    if ([item.adTitle isEqualToString:kTitle5]) {
+        SSJProductAdviceViewController *adviceVC = [[SSJProductAdviceViewController alloc] init];
+        [self.navigationController pushViewController:adviceVC animated:YES];
     }
     
     //数据导出
@@ -444,10 +451,9 @@ static BOOL kNeedBannerDisplay = YES;
 //    }
     //banner
     if (self.bannerService.item.bannerItems.count) {
-        self.headerBannerImageView.bannerItemArray = self.bannerService.item.bannerItems;
-    }else{
+//        self.headerBannerImageView.bannerItemArray = self.bannerService.item.bannerItems;
         UICollectionViewFlowLayout *collectionViewLayout = (UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout;
-        collectionViewLayout.headerReferenceSize = CGSizeMake(SSJSCREENWITH, 0);
+        collectionViewLayout.headerReferenceSize = CGSizeMake(SSJSCREENWITH, 90);
     }
     
     //广告
@@ -525,7 +531,7 @@ static BOOL kNeedBannerDisplay = YES;
         layout.minimumInteritemSpacing = 0;
         layout.sectionInset = UIEdgeInsetsMake(0, 0, 0, 0);
         layout.itemSize = CGSizeMake(SSJSCREENWITH/kColum, 100);
-        layout.headerReferenceSize = CGSizeMake(SSJSCREENWITH, 90);//头的高度
+        layout.headerReferenceSize = CGSizeMake(SSJSCREENWITH, 0);//头的高度
         _collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
         [_collectionView registerClass:[SSJMineHomeCollectionImageCell class] forCellWithReuseIdentifier:kItemID];
         [_collectionView registerClass:[SSJHeaderBannerImageView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:kHeaderViewID];//注册头
