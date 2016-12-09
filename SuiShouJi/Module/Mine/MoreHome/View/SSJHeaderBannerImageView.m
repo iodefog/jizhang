@@ -37,6 +37,8 @@ static NSString *const kHeadBannerCellID = @"SSJHeaderBannerCollectionViewCellID
         _collectionView.dataSource = self;
         _collectionView.delegate = self;
         _collectionView.backgroundColor = [UIColor whiteColor];
+        _collectionView.showsHorizontalScrollIndicator = NO;
+        _collectionView.showsVerticalScrollIndicator = NO;
     }
     return _collectionView;
 }

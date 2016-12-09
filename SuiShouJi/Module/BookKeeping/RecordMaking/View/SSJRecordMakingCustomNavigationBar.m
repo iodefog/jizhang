@@ -190,8 +190,7 @@
     }
     [items addObject:[SSJListMenuItem itemWithImageName:nil title:@"添加账本"]];
     self.booksMenu.items = items;
-    self.booksMenu.displayRowCount = MIN(6, _titles.count);
-    self.booksMenu.height = 34 * self.booksMenu.displayRowCount;
+    self.booksMenu.maxDisplayRowCount = 6.5;
     _selectedTitleIndex = -1;
     [self updateTitle];
 }
@@ -252,7 +251,6 @@
     self.booksMenu.selectedTitleColor = mainColor;
     self.booksMenu.fillColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
     self.booksMenu.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
-    self.booksMenu.imageColor = secondaryColor;
 }
 
 #pragma mark - Getter
@@ -293,6 +291,7 @@
 - (SSJListMenu *)booksMenu {
     if (!_booksMenu) {
         _booksMenu = [[SSJListMenu alloc] initWithFrame:CGRectMake(0, 0, 104, 0)];
+        _booksMenu.maxDisplayRowCount = 5.5;
         [_booksMenu addTarget:self action:@selector(selectBookAction) forControlEvents:UIControlEventValueChanged];
     }
     return _booksMenu;

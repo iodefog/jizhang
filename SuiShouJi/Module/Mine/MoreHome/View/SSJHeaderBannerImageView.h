@@ -16,6 +16,7 @@
 
 @end
 @interface SSJHeaderBannerImageView : UICollectionReusableView
+
 @property (nonatomic, strong) NSArray<SSJBannerItem *> *bannerItemArray;
 @property (nonatomic, weak) id<SSJHeaderBannerImageViewDelegate> delegate;
 @end
