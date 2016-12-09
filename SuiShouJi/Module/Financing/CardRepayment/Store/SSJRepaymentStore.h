@@ -18,4 +18,10 @@
 
 + (SSJRepaymentModel *)queryRepaymentModelWithChargeItem:(SSJBillingChargeCellItem *)item;
 
++ (BOOL)checkTheMoneyIsValidForTheRepaymentWithRepaymentModel:(SSJRepaymentModel *)model;
+
++ (void)deleteRepaymentWithRepaymentModel:(SSJRepaymentModel *)model
+                                  Success:(void (^)(void))success
+                                  failure:(void (^)(NSError *error))failure ;
+
 @end

@@ -519,6 +519,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 -(SSJReminderDateSelectView *)dateSelectView{
     if (!_dateSelectView) {
         _dateSelectView = [[SSJReminderDateSelectView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 500)];
+        _dateSelectView.minmumDate = [NSDate date];
         __weak typeof(self) weakSelf = self;
         _dateSelectView.dateSetBlock = ^(NSDate *date){
             if (date.day > 28) {

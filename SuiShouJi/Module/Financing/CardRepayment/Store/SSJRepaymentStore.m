@@ -55,7 +55,9 @@
                     model.sourceChargeId = item.ID;
                     model.repaymentChargeId = [db stringForQuery:@"select ichargeid from bk_user_charge where cwritedate = ? and ichargeid <> ? and ichargetype = ?",item.editeDate,item.ID,@(SSJChargeIdTypeRepayment)];   
                 }
-                model.repaymentMoney = [NSDecimalNumber decimalNumberWithString:item.money];
+                double repaymentMoney = [item.money doubleValue];
+                NSString *repamentMoneyStr = [NSString stringWithFormat:@"%f",fabs(repaymentMoney)];
+                model.repaymentMoney = [NSDecimalNumber decimalNumberWithString:repamentMoneyStr];
                 model.memo = item.chargeMemo;
             }
         }
@@ -233,4 +235,47 @@
         }
     }];
 }
+
++ (void)deleteRepaymentWithRepaymentModel:(SSJRepaymentModel *)model
+                                Success:(void (^)(void))success
+                                failure:(void (^)(NSError *error))failure {
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        NSString *userId = SSJUSERID();
+        if (![db executeUpdate:@"update bk_user_charge set operatortype = 2, iversion = ?, cwritedate = ? where cuserid = ? and ichargetype = ? and id = ?",@(SSJSyncVersion()),writeDate,userId,@(SSJChargeIdTypeRepayment),model.repaymentId]) {
+            if (failure) {
+                SSJDispatch_main_async_safe(^{
+                    failure([db lastError]);
+                });
+            }
+        };
+        if (![db executeUpdate:@"update bk_credit_repayment set operatortype = 2, iversion = ?, cwritedate = ? where cuserid = ? and crepaymentid = ?",@(SSJSyncVersion()),writeDate,userId,@(SSJChargeIdTypeRepayment),model.repaymentId]) {
+            if (failure) {
+                SSJDispatch_main_async_safe(^{
+                    failure([db lastError]);
+                });
+            }
+        };
+        if (success) {
+            SSJDispatch_main_async_safe(^{
+                success();
+            });
+        }
+    }];
+}
+
++ (BOOL)checkTheMoneyIsValidForTheRepaymentWithRepaymentModel:(SSJRepaymentModel *)model{
+    __block BOOL isInvalid = YES;
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+        NSString *userid = SSJUSERID();
+        NSString *currentMonth = [NSString stringWithFormat:@"%@-%%",[model.repaymentMonth formattedDateWithFormat:@"yyyy-MM"]];
+        double cardSum = [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and b.itype = 0 and a.ifunsid = ? and a.cbilldate like ?",userid,model.cardId,currentMonth] - [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and b.itype = 1 and a.ifunsid = ? and a.cbilldate like ?",userid,model.cardId,currentMonth];
+        
+        if ([model.repaymentMoney doubleValue] > fabs(cardSum) || cardSum > 0) {
+            isInvalid = NO;
+        }
+    }];
+    return isInvalid;
+}
+
 @end

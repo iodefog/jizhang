@@ -114,7 +114,6 @@
         _dateSelect = [[UIDatePicker alloc]initWithFrame:CGRectMake(0, 0, self.width, 260)];
         _dateSelect.datePickerMode = UIDatePickerModeDate;
         [_dateSelect addTarget:self action:@selector(datePickerValueChanged:) forControlEvents:UIControlEventValueChanged];
-        _dateSelect.minimumDate = [NSDate date];
         _dateSelect.backgroundColor = [UIColor whiteColor];
     }
     return _dateSelect;
@@ -143,6 +142,11 @@
     _currentDate = currentDate;
     self.dateSelect.date = _currentDate;
     self.weekView.currentDate = _currentDate;
+}
+
+- (void)setMinmumDate:(NSDate *)minmumDate{
+    _minmumDate = minmumDate;
+    self.dateSelect.minimumDate = minmumDate;
 }
 
 - (void)datePickerValueChanged:(id)sender{
