@@ -9,13 +9,14 @@
 #import "SSJReportFormsViewController.h"
 #import "SSJPercentCircleView.h"
 #import "SSJPageControl.h"
-#import "SSJReportFormsMemberAndCategorySwitchControl.h"
 #import "SSJReportFormsSurplusView.h"
 #import "SSJReportFormsIncomeAndPayCell.h"
+#import "SSJReportFormsChartCell.h"
 #import "SSJReportFormsScaleAxisView.h"
 #import "SSJBudgetNodataRemindView.h"
 #import "SCYSlidePagingHeaderView.h"
 #import "SSJSegmentedControl.h"
+#import "SSJListMenu.h"
 
 #import "SSJBillingChargeViewController.h"
 #import "SSJMagicExportCalendarViewController.h"
@@ -24,6 +25,7 @@
 #import "SSJUserTableManager.h"
 #import "SSJBooksTypeStore.h"
 
+static NSString *const kChartViewCellID = @"kChartViewCellID";
 static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
 
 static NSString *const kSegmentTitlePay = @"支出";
@@ -33,7 +35,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
 @interface SSJReportFormsViewController () <UITableViewDataSource, UITableViewDelegate, UITabBarControllerDelegate, SSJReportFormsPercentCircleDataSource, SSJReportFormsScaleAxisViewDelegate, SCYSlidePagingHeaderViewDelegate>
 
 //  饼图、折线图切换控件
-@property (nonatomic, strong) SSJSegmentedControl *segmentCtrl;
+@property (nonatomic, strong) SSJSegmentedControl *titleSegmentCtrl;
 
 //  切换年份、月份控件
 @property (nonatomic, strong) SSJReportFormsScaleAxisView *dateAxisView;
@@ -66,13 +68,16 @@ static NSString *const kSegmentTitleIncome = @"收入";
 @property (nonatomic, strong) NSArray *booksIds;
 
 //  tableview数据源
-@property (nonatomic, strong) NSArray *datas;
+@property (nonatomic, strong) NSMutableArray *datas;
 
 //  日期切换刻度控件的数据源
 @property (nonatomic, strong) NSArray *periods;
 
 //  自定义时间周期
 @property (nonatomic, strong) SSJDatePeriod *customPeriod;
+
+//  选择的成员／类别
+@property (nonatomic) SSJReportFormsMemberAndCategoryOption selectedOption;
 
 @end
 
@@ -82,6 +87,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.statisticsTitle = @"报表首页";
+        self.datas = [[NSMutableArray alloc] init];
         self.automaticallyAdjustsScrollViewInsets = NO;
         self.extendedLayoutIncludesOpaqueBars = YES;
     }
@@ -96,7 +102,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reportForms_curve"] style:UIBarButtonItemStylePlain target:self action:@selector(enterCurveVewController)];
     self.navigationItem.rightBarButtonItem = rightItem;
     
-    self.navigationItem.titleView = self.segmentCtrl;
+    self.navigationItem.titleView = self.titleSegmentCtrl;
     [self.view addSubview:self.dateAxisView];
     [self.view addSubview:self.customPeriodBtn];
     [self.view addSubview:self.addOrDeleteCustomPeriodBtn];
@@ -138,10 +144,27 @@ static NSString *const kSegmentTitleIncome = @"收入";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    SSJReportFormsIncomeAndPayCell *incomeAndPayCell = [tableView dequeueReusableCellWithIdentifier:kIncomeAndPayCellID forIndexPath:indexPath];
-    incomeAndPayCell.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
-    [incomeAndPayCell setCellItem:[self.datas ssj_safeObjectAtIndex:indexPath.row]];
-    return incomeAndPayCell;
+    SSJBaseItem *item = [self.datas ssj_objectAtIndexPath:indexPath];
+    
+    if ([item isKindOfClass:[SSJReportFormsChartCellItem class]]) {
+        SSJReportFormsChartCell *chartCell = [tableView dequeueReusableCellWithIdentifier:kChartViewCellID forIndexPath:indexPath];
+        chartCell.cellItem = item;
+        chartCell.option = _selectedOption;
+        __weak typeof(self) wself = self;
+        chartCell.selectOptionHandle = ^(SSJReportFormsChartCell *cell) {
+            wself.selectedOption = cell.option;
+            [wself reloadDatas];
+        };
+        return chartCell;
+    }
+    
+    if ([item isKindOfClass:[SSJReportFormsItem class]]) {
+        SSJReportFormsIncomeAndPayCell *incomeAndPayCell = [tableView dequeueReusableCellWithIdentifier:kIncomeAndPayCellID forIndexPath:indexPath];
+        incomeAndPayCell.cellItem = item;
+        return incomeAndPayCell;
+    }
+    
+    return [UITableViewCell new];
 }
 
 #pragma mark - UITableViewDelegate
@@ -218,16 +241,20 @@ static NSString *const kSegmentTitleIncome = @"收入";
 }
 
 #pragma mark - Event
+- (void)titleSegmentCtrlAction {
+//    [self reloadDatas];
+}
+
 // 切换分类和成员
 - (void)typeAndMemberControlAction {
     [self reloadDatas];
     
-    switch (_typeAndMemberControl.option) {
-        case SSJReportFormsMemberAndCategorySwitchControlOptionCategory:
+    switch (_selectedOption) {
+        case SSJReportFormsMemberAndCategoryOptionCategory:
             [MobClick event:@"form_category"];
             break;
             
-        case SSJReportFormsMemberAndCategorySwitchControlOptionMember:
+        case SSJReportFormsMemberAndCategoryOptionMember:
             [MobClick event:@"form_member"];
             break;
     }
@@ -267,6 +294,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
     [_booksMenu showInView:window atPoint:CGPointMake(22, 60)];
 }
 
+#pragma mark - Overwrite
 - (void)reloadDataAfterSync {
     [self reloadDatas];
 }
@@ -333,21 +361,6 @@ static NSString *const kSegmentTitleIncome = @"收入";
     _customPeriodBtn.centerX = self.view.width * 0.5;
 }
 
-//  计算总收入\支出
-- (void)caculateIncomeOrPayment {
-    if (_payAndIncomeSegmentControl.selectedIndex == 0
-        || _payAndIncomeSegmentControl.selectedIndex == 1) {
-    
-        
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            NSNumber *payment = [self.datas valueForKeyPath:@"@sum.money"];
-            dispatch_sync(dispatch_get_main_queue(), ^{
-                
-            });
-        });
-    }
-}
-
 // 如果当前是自定义时间，就查询自定义时间范围内的流水统计；反之就查询当前刻度时间的流水统计
 - (void)reloadDatas {
     if (_customPeriod) {
@@ -372,6 +385,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
             
             [self.view ssj_hideLoadingIndicator];
             
+            // 组织账本数据
             NSInteger selectedIndex = 0;
             NSMutableArray *bookIds = [[NSMutableArray alloc] init];
             NSMutableArray *listItem = [[NSMutableArray alloc] init];
@@ -442,21 +456,6 @@ static NSString *const kSegmentTitleIncome = @"收入";
 }
 
 - (void)organiseDatasWithResult:(NSArray *)result {
-    //  将datas按照收支类型所占比例从大到小进行排序
-    self.datas = [result sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
-        SSJReportFormsItem *item1 = obj1;
-        SSJReportFormsItem *item2 = obj2;
-        if (item1.scale > item2.scale) {
-            return NSOrderedAscending;
-        } else if (item1.scale < item2.scale) {
-            return NSOrderedDescending;
-        } else {
-            return NSOrderedSame;
-        }
-    }];
-    [self.tableView reloadData];
-    [self caculateIncomeOrPayment];
-    
     //  将比例小于0.01的item过滤掉
     NSMutableArray *filterItems = [NSMutableArray array];
     double scaleAmount = 0;
@@ -468,28 +467,48 @@ static NSString *const kSegmentTitleIncome = @"收入";
     }
     
     //  将 SSJReportFormsItem 转换成 SSJReportFormsPercentCircleItem 存入数组
-    [self.circleItems removeAllObjects];
+    NSMutableArray *chartItems = [[NSMutableArray alloc] init];
     for (SSJReportFormsItem *item in filterItems) {
-        NSString *selectedTitle = [_payAndIncomeSegmentControl.titles ssj_safeObjectAtIndex:_payAndIncomeSegmentControl.selectedIndex];
-        
-        if ([selectedTitle isEqualToString:kSegmentTitlePay]
-            || [selectedTitle isEqualToString:kSegmentTitleIncome]) {
-            //  收入、支出
-            SSJPercentCircleViewItem *circleItem = [[SSJPercentCircleViewItem alloc] init];
-            circleItem.scale = item.scale / scaleAmount;
-            circleItem.imageName = item.imageName;
-            circleItem.colorValue = item.colorValue;
-            circleItem.additionalText = [NSString stringWithFormat:@"%.0f％", item.scale * 100];
-            circleItem.imageBorderShowed = YES;
-            if (item.isMember) {
-                circleItem.customView = [self chartAdditionalViewWithMemberName:item.name colorValue:item.colorValue];
-            }
-            [self.circleItems addObject:circleItem];
-            
+        //  收入、支出
+        SSJPercentCircleViewItem *circleItem = [[SSJPercentCircleViewItem alloc] init];
+        circleItem.scale = item.scale / scaleAmount;
+        circleItem.imageName = item.imageName;
+        circleItem.colorValue = item.colorValue;
+        circleItem.additionalText = [NSString stringWithFormat:@"%.0f％", item.scale * 100];
+        circleItem.imageBorderShowed = YES;
+        if (item.isMember) {
+            circleItem.customView = [self chartAdditionalViewWithMemberName:item.name colorValue:item.colorValue];
         }
+        [chartItems addObject:circleItem];
     }
     
-    [self.chartView reloadData];
+    SSJReportFormsChartCellItem *chartCellItem = [[SSJReportFormsChartCellItem alloc] init];
+    chartCellItem.chartItems = chartItems;
+    if (_payAndIncomeSegmentControl.selectedIndex == 0) {
+        chartCellItem.title = @"支出";
+    } else if (_payAndIncomeSegmentControl.selectedIndex == 1) {
+        chartCellItem.title = @"收入";
+    }
+    double amount = [[result valueForKeyPath:@"@sum.money"] doubleValue];
+    chartCellItem.amount = [[NSString stringWithFormat:@"%f", amount] ssj_moneyDecimalDisplayWithDigits:2];
+    [self.datas addObject:chartCellItem];
+    
+    //  将datas按照收支类型所占比例从大到小进行排序
+    NSArray *cellItems = [result sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+        SSJReportFormsItem *item1 = obj1;
+        SSJReportFormsItem *item2 = obj2;
+        if (item1.scale > item2.scale) {
+            return NSOrderedAscending;
+        } else if (item1.scale < item2.scale) {
+            return NSOrderedDescending;
+        } else {
+            return NSOrderedSame;
+        }
+    }];
+    
+    [self.datas addObjectsFromArray:cellItems];
+    
+    [self.tableView reloadData];
     
     if (!self.datas.count) {
         self.tableView.hidden = YES;
@@ -519,27 +538,27 @@ static NSString *const kSegmentTitleIncome = @"收入";
         return;
     }
     
-    switch (_typeAndMemberControl.option) {
-        case SSJReportFormsMemberAndCategorySwitchControlOptionCategory: {
+    switch (_selectedOption) {
+        case SSJReportFormsMemberAndCategoryOptionCategory: {
             [self.view ssj_showLoadingIndicator];
             [SSJReportFormsUtil queryForIncomeOrPayType:[self currentType] booksId:nil startDate:period.startDate endDate:period.endDate success:^(NSArray<SSJReportFormsItem *> *result) {
                 [self.view ssj_hideLoadingIndicator];
                 [self organiseDatasWithResult:result];
             } failure:^(NSError *error) {
+                [self showError:error];
                 [self.view ssj_hideLoadingIndicator];
-                [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
             }];
         }
             break;
             
-        case SSJReportFormsMemberAndCategorySwitchControlOptionMember: {
+        case SSJReportFormsMemberAndCategoryOptionMember: {
             [self.view ssj_showLoadingIndicator];
             [SSJReportFormsUtil queryForMemberChargeWithType:[self currentType] startDate:period.startDate endDate:period.endDate success:^(NSArray<SSJReportFormsItem *> *result) {
                 [self.view ssj_hideLoadingIndicator];
                 [self organiseDatasWithResult:result];
             } failure:^(NSError *error) {
+                [self showError:error];
                 [self.view ssj_hideLoadingIndicator];
-                [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
             }];
         }
             break;
@@ -578,6 +597,15 @@ static NSString *const kSegmentTitleIncome = @"收入";
 }
 
 #pragma mark - Getter
+- (SSJSegmentedControl *)titleSegmentCtrl {
+    if (!_titleSegmentCtrl) {
+        _titleSegmentCtrl = [[SSJSegmentedControl alloc] initWithItems:@[@"饼图",@"折线图"]];
+        _titleSegmentCtrl.size = CGSizeMake(170, 24);
+        [_titleSegmentCtrl addTarget:self action:@selector(titleSegmentCtrlAction) forControlEvents: UIControlEventValueChanged];
+    }
+    return _titleSegmentCtrl;
+}
+
 - (SSJReportFormsScaleAxisView *)dateAxisView {
     if (!_dateAxisView) {
         _dateAxisView = [[SSJReportFormsScaleAxisView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, 50)];
@@ -630,6 +658,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
         _tableView.delegate = self;
         _tableView.separatorInset = UIEdgeInsetsZero;
         _tableView.tableFooterView = [[UIView alloc] init];
+        [_tableView registerClass:[SSJReportFormsChartCell class] forCellReuseIdentifier:kChartViewCellID];
         [_tableView registerClass:[SSJReportFormsIncomeAndPayCell class] forCellReuseIdentifier:kIncomeAndPayCellID];
     }
     return _tableView;

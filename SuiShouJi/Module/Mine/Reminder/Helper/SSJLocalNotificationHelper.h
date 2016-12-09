@@ -39,4 +39,6 @@
  *  @param userId 用户id
  */
 + (void)cancelLocalNotificationWithUserId:(NSString * __nonnull)userId;
+
++ (NSDate *)calculateNexRemindDateWithStartDate:(NSDate *)date remindCycle:(NSInteger)remindCycle remindAtEndOfMonth:(BOOL)remindAtEndOfMonth;
 @end

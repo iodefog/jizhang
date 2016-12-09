@@ -12,11 +12,11 @@
 
 @interface SSJReportFormsChartCellItem : SSJBaseItem
 
-@property (nonatomic, strong) NSArray <SSJPercentCircleViewItem *>* chartItems;
+@property (nonatomic, copy) NSArray <SSJPercentCircleViewItem *>* chartItems;
 
-@property (nonatomic, strong) NSString *title;
+@property (nonatomic, copy) NSString *title;
 
-@property (nonatomic, strong) NSString *amount;
+@property (nonatomic, copy) NSString *amount;
 
 - (BOOL)isEqualToItem:(SSJReportFormsChartCellItem *)item;
 
