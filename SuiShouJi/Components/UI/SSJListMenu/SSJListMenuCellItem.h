@@ -10,6 +10,8 @@
 
 @interface SSJListMenuCellItem : NSObject
 
+@property (nonatomic) CGSize imageSize;
+
 @property (nonatomic, copy) NSString *imageName;
 
 @property (nonatomic, copy) NSString *title;
@@ -19,5 +21,11 @@
 @property (nonatomic, strong) UIColor *imageColor;
 
 @property (nonatomic, strong) UIFont *titleFont;
+
+@property (nonatomic) CGFloat gapBetweenImageAndTitle;
+
+@property (nonatomic) UIControlContentHorizontalAlignment contentAlignment;
+
+@property (nonatomic) UIEdgeInsets contentInset;
 
 @end

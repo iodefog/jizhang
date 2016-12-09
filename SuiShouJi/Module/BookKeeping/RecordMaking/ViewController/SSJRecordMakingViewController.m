@@ -178,6 +178,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         _customNaviBar.selectBookHandle = ^(SSJRecordMakingCustomNavigationBar *naviBar) {
             wself.item.booksId = [wself.booksIds ssj_safeObjectAtIndex:naviBar.selectedTitleIndex];
             [wself.currentInput becomeFirstResponder];
+            [wself loadCategoryAndBooksList];
         };
         _customNaviBar.addNewBookHandle = ^(SSJRecordMakingCustomNavigationBar *naviBar) {
             [wself.parentSelectView show];

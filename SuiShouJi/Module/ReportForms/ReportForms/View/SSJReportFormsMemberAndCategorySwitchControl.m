@@ -53,7 +53,7 @@
     self.listMenu.selectedTitleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
     self.listMenu.fillColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
     self.listMenu.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
-    self.listMenu.imageColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    self.listMenu.normalImageColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
 }
 
 #pragma mark - Action
@@ -127,8 +127,9 @@
 
 - (SSJListMenu *)listMenu {
     if (!_listMenu) {
-        _listMenu = [[SSJListMenu alloc] initWithItems:[self listItems]];
-        _listMenu.size = CGSizeMake(104, 84);
+        _listMenu = [[SSJListMenu alloc] init];
+        _listMenu.items = [self listItems];
+        _listMenu.width = 104;
         [_listMenu addTarget:self action:@selector(listMenuSelectAction) forControlEvents:UIControlEventValueChanged];
     }
     return _listMenu;
