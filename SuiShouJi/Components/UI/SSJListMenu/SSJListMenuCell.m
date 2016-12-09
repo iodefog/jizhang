@@ -25,7 +25,67 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
     
-    self.textLabel.width = self.contentView.width - self.textLabel.left;
+    SSJListMenuCellItem *item = (SSJListMenuCellItem *)self.cellItem;
+    
+    if (!CGSizeEqualToSize(item.imageSize, CGSizeZero)) {
+        self.imageView.size = item.imageSize;
+    } else {
+        [self.imageView sizeToFit];
+    }
+    
+    [self.textLabel sizeToFit];
+    
+    CGRect contentFrame = UIEdgeInsetsInsetRect(self.contentView.bounds, item.contentInset);
+    
+    if (CGSizeEqualToSize(self.imageView.size, CGSizeZero)) {
+        switch (item.contentAlignment) {
+            case UIControlContentHorizontalAlignmentCenter: {
+                self.textLabel.centerX = CGRectGetMidX(contentFrame);
+            }
+                break;
+                
+            case UIControlContentHorizontalAlignmentLeft: {
+                self.textLabel.left = CGRectGetMinX(contentFrame);
+            }
+                break;
+                
+            case UIControlContentHorizontalAlignmentRight: {
+                self.textLabel.left = CGRectGetMaxX(contentFrame);
+            }
+                break;
+                
+            case UIControlContentHorizontalAlignmentFill:
+                
+                break;
+        }
+    } else {
+        switch (item.contentAlignment) {
+            case UIControlContentHorizontalAlignmentCenter: {
+                CGFloat left = (CGRectGetWidth(contentFrame) - self.imageView.width - self.textLabel.width - item.gapBetweenImageAndTitle) * 0.5;
+                self.imageView.left = CGRectGetMinX(contentFrame) + left;
+                self.textLabel.left = self.imageView.right + item.gapBetweenImageAndTitle;
+            }
+                break;
+                
+            case UIControlContentHorizontalAlignmentLeft: {
+                self.imageView.left = CGRectGetMinX(contentFrame);
+                self.textLabel.left = self.imageView.right + item.gapBetweenImageAndTitle;
+            }
+                break;
+                
+            case UIControlContentHorizontalAlignmentRight: {
+                self.textLabel.right = CGRectGetMaxX(contentFrame);
+                self.imageView.right = self.textLabel.left - item.gapBetweenImageAndTitle;
+            }
+                break;
+                
+            case UIControlContentHorizontalAlignmentFill:
+                
+                break;
+        }
+    }
+    
+    self.imageView.centerY = self.textLabel.centerY = self.contentView.height * 0.5;
 }
 
 - (void)setCellItem:(SSJBaseItem *)cellItem {
@@ -40,12 +100,16 @@
 }
 
 - (void)updateAppearance {
+    
     SSJListMenuCellItem *item = (SSJListMenuCellItem *)self.cellItem;
+    
     self.imageView.image = [[UIImage imageNamed:item.imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     self.imageView.tintColor = item.imageColor;
+    
     self.textLabel.text = item.title;
     self.textLabel.textColor = item.titleColor;
     self.textLabel.font = item.titleFont;
+    
     [self setNeedsLayout];
 }
 

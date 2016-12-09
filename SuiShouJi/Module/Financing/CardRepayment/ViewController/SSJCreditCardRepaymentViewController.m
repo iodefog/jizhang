@@ -73,7 +73,9 @@ static NSString *const kTitle6 = @"还款账单月份";
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    if (!self.repaymentModel.repaymentId.length) {
+    if (self.repaymentModel.repaymentId.length || self.chargeItem) {
+        self.repaymentModel = [SSJRepaymentStore queryRepaymentModelWithChargeItem:self.chargeItem];
+    }else {
         self.repaymentModel.applyDate = [NSDate date];
         self.repaymentModel.repaymentSourceFoundId = [SSJFinancingHomeHelper queryfirstFundItem].fundingID;
         self.repaymentModel.repaymentSourceFoundName = [SSJFinancingHomeHelper queryfirstFundItem].fundingName;
@@ -289,7 +291,7 @@ static NSString *const kTitle6 = @"还款账单月份";
     return _fundSelectView;
 }
 
--(SSJReminderDateSelectView *)repaymentTimeView{
+- (SSJReminderDateSelectView *)repaymentTimeView{
     if (!_repaymentTimeView) {
         _repaymentTimeView = [[SSJReminderDateSelectView alloc]initWithFrame:self.view.bounds];
         __weak typeof(self) weakSelf = self;

@@ -24,4 +24,35 @@
     return self;
 }
 
+-(NSString *)ssj_moneyDecimalDisplayWithDigits:(int)digits{
+    NSMutableString *result;
+    if (self!=nil && self.length>0) {
+        NSDecimalNumberHandler *roundUp = [NSDecimalNumberHandler
+                                           decimalNumberHandlerWithRoundingMode:NSRoundBankers
+                                           scale:2
+                                           raiseOnExactness:NO
+                                           raiseOnOverflow:NO
+                                           raiseOnUnderflow:NO
+                                           raiseOnDivideByZero:YES];
+        NSDecimalNumber *decimalNum = [NSDecimalNumber decimalNumberWithString:self];
+        decimalNum = [decimalNum decimalNumberByRoundingAccordingToBehavior:roundUp];
+        result = [NSMutableString stringWithFormat:@"%@",decimalNum];
+        NSInteger decimalDigits;
+        if ([[result componentsSeparatedByString:@"."] count] == 1) {
+            decimalDigits = 0;
+        }else{
+            decimalDigits = [[result componentsSeparatedByString:@"."] lastObject].length;
+        }
+        if (!decimalDigits && digits) {
+            [result appendString:@"."];
+        }
+        if (decimalDigits < digits) {
+            for (int i = 0; i < digits - decimalDigits; i ++) {
+                [result appendString:@"0"];
+            }
+        }
+    }
+    return result;
+}
+
 @end
