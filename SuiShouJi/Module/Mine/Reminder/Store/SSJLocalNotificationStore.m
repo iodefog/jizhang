@@ -136,10 +136,9 @@
         item.remindMemo = [resultSet stringForColumn:@"cmemo"];
         item.remindCycle = [resultSet intForColumn:@"icycle"];
         item.remindType = [resultSet intForColumn:@"itype"];
-        NSString *dateStr = [resultSet stringForColumn:@"cstartdate"];
-        item.remindDate = [NSDate dateWithString:dateStr formatString:@"yyyy-MM-dd HH:mm:ss"];
-        item.remindState = [resultSet boolForColumn:@"istate"];
         item.remindAtTheEndOfMonth = [resultSet stringForColumn:@"iisend"];
+        item.remindDate = [SSJLocalNotificationHelper calculateNexRemindDateWithStartDate:item.remindDate remindCycle:item.remindCycle remindAtEndOfMonth:item.remindAtTheEndOfMonth];
+        item.remindState = [resultSet boolForColumn:@"istate"];
         if (item.remindType == SSJReminderTypeBorrowing){
             NSString *minmumDate = [db stringForQuery:@"select cborrowdate from bk_loan where cremindid = ? and cuserid = ?",item.remindId,userId];
             item.minimumDate = [NSDate dateWithString:minmumDate formatString:@"yyyy-MM-dd HH:mm:ss"];
