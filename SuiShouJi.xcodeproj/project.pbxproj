@@ -1341,6 +1341,7 @@
 		9C32775A1CE471A900109C4C /* YWFeedbackAudioExtentionFMWK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C3277511CE471A900109C4C /* YWFeedbackAudioExtentionFMWK.framework */; };
 		9C32775B1CE471A900109C4C /* YWFeedbackFMWK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C3277521CE471A900109C4C /* YWFeedbackFMWK.framework */; };
 		9C32775C1CE471A900109C4C /* YWHybridWebViewFMWK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C3277531CE471A900109C4C /* YWHybridWebViewFMWK.framework */; };
+		9C36CC321DFAB95200698022 /* patch1.js in Resources */ = {isa = PBXBuildFile; fileRef = 9C36CC311DFAB95200698022 /* patch1.js */; };
 		9C3899A11DC9D99700715732 /* SSJCustomCategoryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3899A01DC9D99700715732 /* SSJCustomCategoryItem.m */; };
 		9C3899A21DC9D99700715732 /* SSJCustomCategoryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3899A01DC9D99700715732 /* SSJCustomCategoryItem.m */; };
 		9C3899A31DC9D99700715732 /* SSJCustomCategoryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3899A01DC9D99700715732 /* SSJCustomCategoryItem.m */; };
@@ -3288,6 +3289,7 @@
 		9C3277511CE471A900109C4C /* YWFeedbackAudioExtentionFMWK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = YWFeedbackAudioExtentionFMWK.framework; sourceTree = "<group>"; };
 		9C3277521CE471A900109C4C /* YWFeedbackFMWK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = YWFeedbackFMWK.framework; sourceTree = "<group>"; };
 		9C3277531CE471A900109C4C /* YWHybridWebViewFMWK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = YWHybridWebViewFMWK.framework; sourceTree = "<group>"; };
+		9C36CC311DFAB95200698022 /* patch1.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = patch1.js; sourceTree = "<group>"; };
 		9C38999F1DC9D99700715732 /* SSJCustomCategoryItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCustomCategoryItem.h; sourceTree = "<group>"; };
 		9C3899A01DC9D99700715732 /* SSJCustomCategoryItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCustomCategoryItem.m; sourceTree = "<group>"; };
 		9C40F1A61D4F6015003FF1C6 /* SSJWeixinFooter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJWeixinFooter.h; sourceTree = "<group>"; };
@@ -6535,6 +6537,7 @@
 		BD0E43EB1C2118E600F9179D /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				9C36CC311DFAB95200698022 /* patch1.js */,
 				7DC4873F1DF655BA00C27B69 /* Localization */,
 				9C23EA4B1DDAD4FE0003C5AB /* certificates */,
 				BD78E4B01C8FF8C7003A1EE1 /* sound */,
@@ -7147,6 +7150,7 @@
 				BD543C4F1C1A6DBC00910D61 /* LaunchScreen.storyboard in Resources */,
 				9C23EA4D1DDAD4FE0003C5AB /* https.cer in Resources */,
 				9C2A6AA21D195E7B0010F1DA /* youyu-Info.plist in Resources */,
+				9C36CC321DFAB95200698022 /* patch1.js in Resources */,
 				BD0432F11C1A77BB0051E7AB /* sr_refresh@2x.png in Resources */,
 				7D5F332C1CEAE6C10086B67E /* SSJBookKeepingHomePopView.xib in Resources */,
 				7D4A430A1CC63755002F0264 /* rain_sound.wav in Resources */,

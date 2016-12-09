@@ -80,12 +80,11 @@ NSDate *SCYEnterBackgroundTime() {
 #pragma mark - Lifecycle
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
-    NSString *str = @"313131.0000000000000004";
-    NSLog(@"%@",[str ssj_moneyDecimalDisplayWithDigits:2]);
+
 #ifdef DEBUG
-//    NSString *sourcePath = [[NSBundle mainBundle] pathForResource:@"patch1" ofType:@"js"];
-//    NSString *script = [NSString stringWithContentsOfFile:sourcePath encoding:NSUTF8StringEncoding error:nil];
-//    [JPEngine evaluateScript:script];
+    NSString *sourcePath = [[NSBundle mainBundle] pathForResource:@"patch1" ofType:@"js"];
+    NSString *script = [NSString stringWithContentsOfFile:sourcePath encoding:NSUTF8StringEncoding error:nil];
+    [JPEngine evaluateScript:script];
 #endif
     
     [SSJUmengManager umengTrack];

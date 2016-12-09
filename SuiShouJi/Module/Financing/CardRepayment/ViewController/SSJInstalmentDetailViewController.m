@@ -58,6 +58,10 @@ static NSString *const SSJInstalmentDetailMutiLabCellIdentifier = @"SSJInstalmen
 
 #pragma mark - UITableViewDelegate
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    NSString *title = [self.titles ssj_safeObjectAtIndex:indexPath.row];
+    if([title isEqualToString:kTitle1]) {
+        return 70;
+    }
     return 55;
 }
 
@@ -83,8 +87,8 @@ static NSString *const SSJInstalmentDetailMutiLabCellIdentifier = @"SSJInstalmen
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
-    NSString *image = [self.images ssj_objectAtIndexPath:indexPath];
+    NSString *title = [self.titles ssj_safeObjectAtIndex:indexPath.row];
+    NSString *image = [self.images ssj_safeObjectAtIndex:indexPath.row];
     if([title isEqualToString:kTitle2]) {
         SSJInstalmentDateSelectCell *dateSelectCell = [tableView dequeueReusableCellWithIdentifier:SSJInstalmentDetailMutiLabCellIdentifier];
         dateSelectCell.imageView.image = [[UIImage imageNamed:@"loan_yield"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
@@ -114,7 +118,7 @@ static NSString *const SSJInstalmentDetailMutiLabCellIdentifier = @"SSJInstalmen
             repaymentModifyCell.cellDetail = [NSString stringWithFormat:@"%ld期",self.repaymentModel.currentInstalmentCout];
         } else if ([title isEqualToString:kTitle5]) {
             repaymentModifyCell.cellDetail = [NSString stringWithFormat:@"%@",self.chargeItem.billDate];
-        } else if ([title isEqualToString:kTitle5]) {
+        } else if ([title isEqualToString:kTitle6]) {
             repaymentModifyCell.cellDetail = self.repaymentModel.cardName;
         }
         return repaymentModifyCell;
