@@ -82,9 +82,9 @@ NSDate *SCYEnterBackgroundTime() {
     
 
 #ifdef DEBUG
-    NSString *sourcePath = [[NSBundle mainBundle] pathForResource:@"patch1" ofType:@"js"];
-    NSString *script = [NSString stringWithContentsOfFile:sourcePath encoding:NSUTF8StringEncoding error:nil];
-    [JPEngine evaluateScript:script];
+//    NSString *sourcePath = [[NSBundle mainBundle] pathForResource:@"patch1" ofType:@"js"];
+//    NSString *script = [NSString stringWithContentsOfFile:sourcePath encoding:NSUTF8StringEncoding error:nil];
+//    [JPEngine evaluateScript:script];
 #endif
     
     [SSJUmengManager umengTrack];
