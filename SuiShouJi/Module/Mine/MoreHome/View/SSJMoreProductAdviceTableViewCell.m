@@ -8,39 +8,80 @@
 
 #import "SSJMoreProductAdviceTableViewCell.h"
 #import "SSJChatMessageItem.h"
+#import "SSJPersonalDetailHelper.h"
+#import "UIImageView+CornerRadius.h"
 @interface SSJMoreProductAdviceTableViewCell()
-@property (strong, nonatomic)  UILabel *timeLabel;
-@property (strong, nonatomic)  UIButton *textButton;
-@property (strong, nonatomic)  UIImageView *iconView;
-@property (strong, nonatomic)  UIButton *otherTextButton;
-@property (strong, nonatomic)  UIImageView *otherIconView;
+@property (weak, nonatomic) IBOutlet UILabel *timeLabel;
+@property (weak, nonatomic) IBOutlet UIButton *textButton;
+@property (weak, nonatomic) IBOutlet UIButton *otherTextButton;
+@property (weak, nonatomic) IBOutlet UIImageView *otherIconView;
+@property (weak, nonatomic) IBOutlet UIImageView *iconView;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *timeHeightConst;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *otherButtonWidthConst;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *buttonWidthConst;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *textBtnHeightConst;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *otherTextBtnHeightConst;
+
+
 @end
 @implementation SSJMoreProductAdviceTableViewCell
 
-- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+- (void)awakeFromNib
 {
-    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
-        [self.contentView addSubview:self.timeLabel];
-        [self.contentView addSubview:self.textButton];
-        [self.contentView addSubview:self.iconView];
-        [self.contentView addSubview:self.otherTextButton];
-        [self.contentView addSubview:self.otherIconView];
+    [super awakeFromNib];
+//    _iconView.image = [UIImage imageNamed:@"defualt_portrait"];
+    //        [_iconView zy_cornerRadiusAdvance:20 rectCornerType:UIRectCornerTopLeft | UIRectCornerBottomRight];
+    //        [_iconView zy_attachBorderWidth:2 color:[UIColor redColor]];
+    [SSJPersonalDetailHelper queryUserDetailWithsuccess:^(SSJPersonalDetailItem *data) {
+        if ([data.iconUrl hasPrefix:@"http"]) {
+            [_iconView sd_setImageWithURL:[NSURL URLWithString:data.iconUrl] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
+        }else{
+            [_iconView sd_setImageWithURL:[NSURL URLWithString:SSJImageURLWithAPI(data.iconUrl)] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
+        }
+    } failure:^(NSError *error) {
+        _iconView.image = [UIImage imageNamed:@"defualt_portrait"];
+    }];
+    
+    _textButton.titleLabel.numberOfLines = 0;
+    _otherTextButton.titleLabel.numberOfLines = 0;
+    [_textButton.titleLabel setPreferredMaxLayoutWidth:SSJSCREENWITH - 2*(_iconView.width + 25)];
+    [_otherTextButton.titleLabel setPreferredMaxLayoutWidth:SSJSCREENWITH - 2*(_iconView.width + 25)];
+    
+    _textButton.layer.cornerRadius = 5;
+    _otherTextButton.layer.cornerRadius = 5;
+    [_textButton clipsToBounds];
+    [_otherTextButton clipsToBounds];
+    _buttonWidthConst.constant = _otherButtonWidthConst.constant = SSJSCREENWITH - 2*(_iconView.width + 30);
+}
+
++ (SSJMoreProductAdviceTableViewCell *)cellWithTableView:(UITableView *)tableView
+{
+    static NSString *cellId = @"SSJMoreProductAdviceTableViewCellId";
+    SSJMoreProductAdviceTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+    if (!cell) {
+        cell = [[[NSBundle mainBundle] loadNibNamed:@"SSJMoreProductAdviceTableViewCell" owner:nil options:nil] firstObject];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
-    return self;
+    return cell;
 }
 
 - (void)setMessage:(SSJChatMessageItem *)message
 {
     _message = message;
-    if (self.message.cContent.length && !self.message.creplyContent.length) {//建议
-        message.isSystem = NO;
-    }else if(!self.message.cContent.length && self.message.creplyContent.length){//系统回复
-        message.isSystem = YES;
+    
+    if (message.isHiddenTime == YES) { // 隐藏时间
+        self.timeLabel.hidden = YES;
+        _timeHeightConst.constant = 0;
+    } else { // 显示时间
+        self.timeLabel.text = message.dateStr;
+        self.timeLabel.hidden = NO;
+        _timeHeightConst.constant = 21;
     }
-    if (message.isSystem == NO) { // 右边
+    if (message.isSystem == NO) {//建议
         [self settingShowTextButton:self.textButton showIconView:self.iconView hideTextButton:self.otherTextButton hideIconView:self.otherIconView];
-    } else { // 左边
+    }else{//系统回复
         [self settingShowTextButton:self.otherTextButton showIconView:self.otherIconView hideTextButton:self.textButton hideIconView:self.iconView];
+        
     }
 }
 
@@ -56,66 +97,35 @@
     showIconView.hidden = NO;
     
     // 设置按钮的文字
-    if (self.message.cContent.length && !self.message.creplyContent.length) {//建议
-        [showTextButton setTitle:self.message.cContent forState:UIControlStateNormal];
-    }else if(!self.message.cContent.length && self.message.creplyContent.length){
-        [showTextButton setTitle:self.message.creplyContent forState:UIControlStateNormal];
+    if (self.message.isSystem == NO) {//建议
+        [showTextButton setTitle:self.message.content forState:UIControlStateNormal];
+    }else if(self.message.isSystem == YES){//系统
+//        [showTextButton setTitle:@"及时发放几点开始发一US和发挥法律回复IE哈符合法律和发酵法律发了发货后发货方哈佛哈哈发货费花儿uguighuahfalhfeuahuahfla哈佛和哈啊分哈哈立法回复而非哈哈发货覅u案发哈哈覅哈哈发货发胡覅哈佛hi艺" forState:UIControlStateNormal];
+        [showTextButton setTitle:self.message.content forState:UIControlStateNormal];
     }
-    
     // 设置按钮的高度就是titleLabel的高度
-    CGFloat buttonH = showTextButton.titleLabel.frame.size.height;
-    showTextButton.height = buttonH;
+    CGFloat buttonH = [self heightOfString:showTextButton.titleLabel.text font:[UIFont systemFontOfSize:16] width:SSJSCREENWITH - 2*(_iconView.width + 30)] + 10;
+    _textBtnHeightConst.constant = buttonH;
+    _otherTextBtnHeightConst.constant = buttonH;
     
     // 强制更新
     [showTextButton layoutIfNeeded];
     
     // 计算当前cell的高度
-    CGFloat buttonMaxY = CGRectGetMaxY(showTextButton.frame);
-    CGFloat iconMaxY = CGRectGetMaxY(showIconView.frame);
-    self.message.cellHeight = MAX(buttonMaxY, iconMaxY) + 10;
+    CGFloat timeH = self.message.isHiddenTime == YES ? 0 : 21;
+    CGFloat buttonMaxY = showTextButton.height + timeH;
+    self.message.cellHeight = buttonMaxY + 15 ;
 }
 
-#pragma mark -Lazy
-- (UILabel *)timeLabel
+//字符串文字的高度
+
+- (CGFloat)heightOfString:(NSString *)string font:(UIFont *)font width:(CGFloat)width
+
 {
-    if (!_timeLabel) {
-        _timeLabel = [[UILabel alloc] init];
-    }
-    return _timeLabel;
+    CGRect bounds;
+    NSDictionary * parameterDict=[NSDictionary dictionaryWithObject:font forKey:NSFontAttributeName];
+    bounds=[string boundingRectWithSize:CGSizeMake(width, CGFLOAT_MAX) options:NSStringDrawingTruncatesLastVisibleLine|NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin attributes:parameterDict context:nil];
+    return bounds.size.height;
 }
-
-- (UIButton *)textButton
-{
-    if (!_textButton) {
-        _textButton = [[UIButton alloc] init];
-    }
-    return _textButton;
-}
-
-- (UIButton *)otherTextButton
-{
-    if (!_otherTextButton) {
-        _otherTextButton = [[UIButton alloc] init];
-    }
-    return _otherTextButton;
-}
-
-- (UIImageView *)iconView
-{
-    if (!_iconView) {
-        _iconView = [[UIImageView alloc] init];
-    }
-    return _iconView;
-}
-
-
-- (UIImageView *)otherIconView
-{
-    if (!_otherIconView) {
-        _otherIconView = [[UIImageView alloc] init];
-    }
-    return _otherIconView;
-}
-
 
 @end

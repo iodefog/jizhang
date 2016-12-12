@@ -64,7 +64,8 @@ static NSInteger padding = 15;
     UIImage *image = [UIImage imageNamed:@"more_productAdvice_banner.png"];
     float scale = image.size.height / image.size.width;
 
-   return 318 + SSJSCREENWITH * scale;
+//   return 318 + SSJSCREENWITH * scale;
+    return CGRectGetMaxY(_bottomBgview.frame);
 }
 
 #pragma mark -Lazy
@@ -173,6 +174,26 @@ static NSInteger padding = 15;
 }
 
 
+
+#pragma mark - action
+- (void)submitButtonClicked
+{
+    if (self.textView.text.length < 1) {
+        [CDAutoHideMessageHUD showMessage:@"请输入建议再提交哦"];
+        return;
+    }
+    if (self.delegate && [self.delegate respondsToSelector:@selector(submitAdviceButtonClickedWithMessage:additionalMessage:)] && self.textView.text.length) {
+        [self.delegate submitAdviceButtonClickedWithMessage:_textView.text additionalMessage:_textField.text];
+    }
+}
+
+- (void)clearAdviceContext
+{
+    [self endEditing:YES];
+    self.textView.text = @"";
+    self.textField.text = @"";
+}
+
 //- (void)updateCellAppearanceAfterThemeChanged
 //{
 //    [self.bottomBgview ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
@@ -188,9 +209,4 @@ static NSInteger padding = 15;
 //    self.fanKuiLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
 //}
 
-#pragma mark - action
-- (void)submitButtonClicked
-{
-    SSJPRINT(@"===");
-}
 @end

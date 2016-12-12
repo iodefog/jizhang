@@ -357,6 +357,7 @@ static BOOL kNeedBannerDisplay = YES;
     }*/
     if ([item.adTitle isEqualToString:kTitle5]) {
         SSJProductAdviceViewController *adviceVC = [[SSJProductAdviceViewController alloc] init];
+        [adviceVC setHidesBottomBarWhenPushed:YES];
         [self.navigationController pushViewController:adviceVC animated:YES];
     }
     

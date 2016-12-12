@@ -7,12 +7,15 @@
 //
 
 #import "SSJBaseNetworkService.h"
-@class SSJChatMessageItem;
+@class SSJChatMessageItem,SSJAdviceItem;
 @interface SSJProductAdviceNetWorkService : SSJBaseNetworkService
 /**
  //type	int	是	0:查询 1：添加
  */
-- (void)requestAdviceMessageListWithType:(int)type;
+- (void)requestAdviceMessageListWithType:(int)type message:(NSString *)messageStr additionalMessage:(NSString *)addMessate;
 
-@property (nonatomic, strong) SSJChatMessageItem *messageItem;
+/**
+ <#注释#>
+ */
+@property (nonatomic, strong) SSJAdviceItem *adviceItems;
 @end
