@@ -420,6 +420,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
         model.cardId = item.cardId;
         model.cardName = item.cardName;
         model.cardBillingDay = item.cardBillingDay;
+        model.cardRepaymentDay = item.cardRepaymentDay;
         instalmentVc.repaymentModel = model;
         [weakSelf.navigationController pushViewController:instalmentVc animated:YES];
     }];

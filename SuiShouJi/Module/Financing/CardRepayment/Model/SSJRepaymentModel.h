@@ -19,6 +19,9 @@
 // 信用卡账单日
 @property(nonatomic) NSInteger cardBillingDay;
 
+// 信用卡还款日
+@property(nonatomic) NSInteger cardRepaymentDay;
+
 // 信用卡名称
 @property(nonatomic, strong) NSString *cardName;
 
