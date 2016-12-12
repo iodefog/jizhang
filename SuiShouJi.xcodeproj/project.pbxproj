@@ -140,7 +140,6 @@
 		7D5F333B1CEAE6C10086B67E /* SSJBudgetListCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32711CEAE6C10086B67E /* SSJBudgetListCellItem.m */; };
 		7D5F333C1CEAE6C10086B67E /* SSJBudgetModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32731CEAE6C10086B67E /* SSJBudgetModel.m */; };
 		7D5F333D1CEAE6C10086B67E /* SSJBudgetTypeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32751CEAE6C10086B67E /* SSJBudgetTypeModel.m */; };
-		7D5F333E1CEAE6C10086B67E /* SSJBudgetDetailBottomView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32781CEAE6C10086B67E /* SSJBudgetDetailBottomView.m */; };
 		7D5F333F1CEAE6C10086B67E /* SSJBudgetDetailHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F327A1CEAE6C10086B67E /* SSJBudgetDetailHeaderView.m */; };
 		7D5F33401CEAE6C10086B67E /* SSJBudgetDetailMiddleTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F327C1CEAE6C10086B67E /* SSJBudgetDetailMiddleTitleView.m */; };
 		7D5F33411CEAE6C10086B67E /* SSJBudgetDetailPeriodSwitchControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F327E1CEAE6C10086B67E /* SSJBudgetDetailPeriodSwitchControl.m */; };
@@ -462,7 +461,6 @@
 		7DBA56391D6D32B700C02D79 /* SSJUserTableManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2E7FB41C520EA500A2601C /* SSJUserTableManager.m */; };
 		7DBA563A1D6D32B700C02D79 /* SSJNormalWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD04338E1C1A8DA50051E7AB /* SSJNormalWebViewController.m */; };
 		7DBA563B1D6D32B700C02D79 /* SSJNoneCircleChargeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBD11CFD2DAA0061803B /* SSJNoneCircleChargeView.m */; };
-		7DBA563C1D6D32B700C02D79 /* SSJBudgetDetailBottomView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32781CEAE6C10086B67E /* SSJBudgetDetailBottomView.m */; };
 		7DBA563D1D6D32B700C02D79 /* SSJBookKeepingHomeNoDataHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C4152071D38F0C500D2AC02 /* SSJBookKeepingHomeNoDataHeader.m */; };
 		7DBA563E1D6D32B700C02D79 /* SSJWaveWaterViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC5172F1CA93D3F00D23CF0 /* SSJWaveWaterViewItem.m */; };
 		7DBA563F1D6D32B700C02D79 /* SSJThemeHomeCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C66F11C1D20C40F0094125D /* SSJThemeHomeCollectionViewCell.m */; };
@@ -1120,7 +1118,6 @@
 		9C2A678F1D194CA70010F1DA /* SSJUserTableManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2E7FB41C520EA500A2601C /* SSJUserTableManager.m */; };
 		9C2A67901D194CA70010F1DA /* SSJNormalWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD04338E1C1A8DA50051E7AB /* SSJNormalWebViewController.m */; };
 		9C2A67911D194CA70010F1DA /* SSJNoneCircleChargeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBD11CFD2DAA0061803B /* SSJNoneCircleChargeView.m */; };
-		9C2A67921D194CA70010F1DA /* SSJBudgetDetailBottomView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32781CEAE6C10086B67E /* SSJBudgetDetailBottomView.m */; };
 		9C2A67931D194CA70010F1DA /* SSJWaveWaterViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC5172F1CA93D3F00D23CF0 /* SSJWaveWaterViewItem.m */; };
 		9C2A67941D194CA70010F1DA /* SSJSynchronizeTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D768A7C1C96C93A00CB75B0 /* SSJSynchronizeTask.m */; };
 		9C2A67951D194CA70010F1DA /* SSJRecordMakingBillTypeSelectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F33191CEAE6C10086B67E /* SSJRecordMakingBillTypeSelectionCell.m */; };
@@ -2085,7 +2082,6 @@
 		9CECFBB51D6D41A700DB2C8B /* SSJUserTableManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2E7FB41C520EA500A2601C /* SSJUserTableManager.m */; };
 		9CECFBB61D6D41A700DB2C8B /* SSJNormalWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD04338E1C1A8DA50051E7AB /* SSJNormalWebViewController.m */; };
 		9CECFBB71D6D41A700DB2C8B /* SSJNoneCircleChargeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBD11CFD2DAA0061803B /* SSJNoneCircleChargeView.m */; };
-		9CECFBB81D6D41A700DB2C8B /* SSJBudgetDetailBottomView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32781CEAE6C10086B67E /* SSJBudgetDetailBottomView.m */; };
 		9CECFBB91D6D41A700DB2C8B /* SSJBookKeepingHomeNoDataHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C4152071D38F0C500D2AC02 /* SSJBookKeepingHomeNoDataHeader.m */; };
 		9CECFBBA1D6D41A700DB2C8B /* SSJWaveWaterViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC5172F1CA93D3F00D23CF0 /* SSJWaveWaterViewItem.m */; };
 		9CECFBBB1D6D41A700DB2C8B /* SSJThemeHomeCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C66F11C1D20C40F0094125D /* SSJThemeHomeCollectionViewCell.m */; };
@@ -2485,7 +2481,6 @@
 		9CECFFAD1D6D41EB00DB2C8B /* SSJUserTableManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2E7FB41C520EA500A2601C /* SSJUserTableManager.m */; };
 		9CECFFAE1D6D41EB00DB2C8B /* SSJNormalWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD04338E1C1A8DA50051E7AB /* SSJNormalWebViewController.m */; };
 		9CECFFAF1D6D41EB00DB2C8B /* SSJNoneCircleChargeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBD11CFD2DAA0061803B /* SSJNoneCircleChargeView.m */; };
-		9CECFFB01D6D41EB00DB2C8B /* SSJBudgetDetailBottomView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32781CEAE6C10086B67E /* SSJBudgetDetailBottomView.m */; };
 		9CECFFB11D6D41EB00DB2C8B /* SSJBookKeepingHomeNoDataHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C4152071D38F0C500D2AC02 /* SSJBookKeepingHomeNoDataHeader.m */; };
 		9CECFFB21D6D41EB00DB2C8B /* SSJWaveWaterViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC5172F1CA93D3F00D23CF0 /* SSJWaveWaterViewItem.m */; };
 		9CECFFB31D6D41EB00DB2C8B /* SSJThemeHomeCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C66F11C1D20C40F0094125D /* SSJThemeHomeCollectionViewCell.m */; };
@@ -2877,8 +2872,6 @@
 		7D5F32731CEAE6C10086B67E /* SSJBudgetModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBudgetModel.m; sourceTree = "<group>"; };
 		7D5F32741CEAE6C10086B67E /* SSJBudgetTypeModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBudgetTypeModel.h; sourceTree = "<group>"; };
 		7D5F32751CEAE6C10086B67E /* SSJBudgetTypeModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBudgetTypeModel.m; sourceTree = "<group>"; };
-		7D5F32771CEAE6C10086B67E /* SSJBudgetDetailBottomView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBudgetDetailBottomView.h; sourceTree = "<group>"; };
-		7D5F32781CEAE6C10086B67E /* SSJBudgetDetailBottomView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBudgetDetailBottomView.m; sourceTree = "<group>"; };
 		7D5F32791CEAE6C10086B67E /* SSJBudgetDetailHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBudgetDetailHeaderView.h; sourceTree = "<group>"; };
 		7D5F327A1CEAE6C10086B67E /* SSJBudgetDetailHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBudgetDetailHeaderView.m; sourceTree = "<group>"; };
 		7D5F327B1CEAE6C10086B67E /* SSJBudgetDetailMiddleTitleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBudgetDetailMiddleTitleView.h; sourceTree = "<group>"; };
@@ -4260,8 +4253,6 @@
 		7D5F32761CEAE6C10086B67E /* View */ = {
 			isa = PBXGroup;
 			children = (
-				7D5F32771CEAE6C10086B67E /* SSJBudgetDetailBottomView.h */,
-				7D5F32781CEAE6C10086B67E /* SSJBudgetDetailBottomView.m */,
 				7D5F32791CEAE6C10086B67E /* SSJBudgetDetailHeaderView.h */,
 				7D5F327A1CEAE6C10086B67E /* SSJBudgetDetailHeaderView.m */,
 				7D5F327B1CEAE6C10086B67E /* SSJBudgetDetailMiddleTitleView.h */,
@@ -7635,7 +7626,6 @@
 				7DBA56391D6D32B700C02D79 /* SSJUserTableManager.m in Sources */,
 				7DBA563A1D6D32B700C02D79 /* SSJNormalWebViewController.m in Sources */,
 				7DBA563B1D6D32B700C02D79 /* SSJNoneCircleChargeView.m in Sources */,
-				7DBA563C1D6D32B700C02D79 /* SSJBudgetDetailBottomView.m in Sources */,
 				9C26923D1D9CB59400B3B5DF /* SSJSearchHistoryCell.m in Sources */,
 				9C9A0C4E1D6D96BD002AF046 /* SSJAddOrEditLoanTextFieldCell.m in Sources */,
 				7DBA563D1D6D32B700C02D79 /* SSJBookKeepingHomeNoDataHeader.m in Sources */,
@@ -8151,7 +8141,6 @@
 				9C91AE1F1D94D8C700B585AA /* SSJSearchResultItem.m in Sources */,
 				9C2A67901D194CA70010F1DA /* SSJNormalWebViewController.m in Sources */,
 				9C2A67911D194CA70010F1DA /* SSJNoneCircleChargeView.m in Sources */,
-				9C2A67921D194CA70010F1DA /* SSJBudgetDetailBottomView.m in Sources */,
 				9C2A67931D194CA70010F1DA /* SSJWaveWaterViewItem.m in Sources */,
 				9C4152101D38F24100D2AC02 /* SSJBookKeepingHomeNoDataHeader.m in Sources */,
 				9C2A67941D194CA70010F1DA /* SSJSynchronizeTask.m in Sources */,
@@ -8644,7 +8633,6 @@
 				9CECFBB51D6D41A700DB2C8B /* SSJUserTableManager.m in Sources */,
 				9CECFBB61D6D41A700DB2C8B /* SSJNormalWebViewController.m in Sources */,
 				9CECFBB71D6D41A700DB2C8B /* SSJNoneCircleChargeView.m in Sources */,
-				9CECFBB81D6D41A700DB2C8B /* SSJBudgetDetailBottomView.m in Sources */,
 				7D00D8081DFA9CC00007A8FB /* SSJReportFormsChartCell.m in Sources */,
 				9C26923E1D9CB59500B3B5DF /* SSJSearchHistoryCell.m in Sources */,
 				9C7C51121DF5053A0032705C /* SSJCreditCardRepaymentViewController.m in Sources */,
@@ -9151,7 +9139,6 @@
 				9CECFFAD1D6D41EB00DB2C8B /* SSJUserTableManager.m in Sources */,
 				9CECFFAE1D6D41EB00DB2C8B /* SSJNormalWebViewController.m in Sources */,
 				9CECFFAF1D6D41EB00DB2C8B /* SSJNoneCircleChargeView.m in Sources */,
-				9CECFFB01D6D41EB00DB2C8B /* SSJBudgetDetailBottomView.m in Sources */,
 				9C26923F1D9CB59600B3B5DF /* SSJSearchHistoryCell.m in Sources */,
 				9C7C51131DF5053A0032705C /* SSJCreditCardRepaymentViewController.m in Sources */,
 				9C9A0C501D6D96BD002AF046 /* SSJAddOrEditLoanTextFieldCell.m in Sources */,
@@ -9673,7 +9660,6 @@
 				9C91AE1E1D94D8C700B585AA /* SSJSearchResultItem.m in Sources */,
 				BD04339B1C1A8DA50051E7AB /* SSJNormalWebViewController.m in Sources */,
 				9CD9BC2B1CFD2DAA0061803B /* SSJNoneCircleChargeView.m in Sources */,
-				7D5F333E1CEAE6C10086B67E /* SSJBudgetDetailBottomView.m in Sources */,
 				9C9A0C971D73CE07002AF046 /* SSJBillingDaySelectView.m in Sources */,
 				9C4152081D38F0C500D2AC02 /* SSJBookKeepingHomeNoDataHeader.m in Sources */,
 				7DC517341CA93D3F00D23CF0 /* SSJWaveWaterViewItem.m in Sources */,

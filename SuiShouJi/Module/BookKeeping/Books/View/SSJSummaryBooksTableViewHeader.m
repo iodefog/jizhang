@@ -44,8 +44,6 @@
         [self addSubview:self.incomOrExpenseSelectSegment];
         [self addSubview:self.chartView];
         [self addSubview:self.chartNoResultView];
-        [self.chartView addSubview:self.incomeAndPaymentTitleLab];
-        [self.chartView addSubview:self.incomeAndPaymentMoneyLab];
         [self addSubview:self.customPeriodBtn];
         [self addSubview:self.addOrDeleteCustomPeriodBtn];
     }
@@ -70,16 +68,16 @@
     self.incomOrExpenseSelectSegment.centerX = self.width / 2;
     self.chartView.leftTop = CGPointMake(0, self.incomOrExpenseSelectSegment.bottom + 29);
     self.chartNoResultView.frame = self.chartView.frame;
-    CGRect hollowFrame = UIEdgeInsetsInsetRect(self.chartView.circleFrame, UIEdgeInsetsMake(self.chartView.circleThickness, self.chartView.circleThickness, self.chartView.circleThickness, self.chartView.circleThickness));
-    self.incomeAndPaymentTitleLab.frame = CGRectMake(hollowFrame.origin.x, (hollowFrame.size.height - 38) * 0.5 + hollowFrame.origin.y, hollowFrame.size.width, 15);
-    self.incomeAndPaymentMoneyLab.frame = CGRectMake(hollowFrame.origin.x, (hollowFrame.size.height - 38) * 0.5 + hollowFrame.origin.y + 20, hollowFrame.size.width, 18);
-    self.addOrDeleteCustomPeriodBtn.frame = CGRectMake(self.width - 50, self.dateAxisView.top, 50, 50);
+//    CGRect hollowFrame = UIEdgeInsetsInsetRect(self.chartView.circleFrame, UIEdgeInsetsMake(self.chartView.circleThickness, self.chartView.circleThickness, self.chartView.circleThickness, self.chartView.circleThickness));
+//    self.incomeAndPaymentTitleLab.frame = CGRectMake(hollowFrame.origin.x, (hollowFrame.size.height - 38) * 0.5 + hollowFrame.origin.y, hollowFrame.size.width, 15);
+//    self.incomeAndPaymentMoneyLab.frame = CGRectMake(hollowFrame.origin.x, (hollowFrame.size.height - 38) * 0.5 + hollowFrame.origin.y + 20, hollowFrame.size.width, 18);
+//    self.addOrDeleteCustomPeriodBtn.frame = CGRectMake(self.width - 50, self.dateAxisView.top, 50, 50);
 }
 
 - (SSJPercentCircleView *)chartView{
     if (!_chartView) {
         _chartView = [[SSJPercentCircleView alloc] initWithFrame:CGRectMake(0, 0, self.width, 320) insets:UIEdgeInsetsMake(80, 80, 80, 80) thickness:39];
-        _chartView.contentView.backgroundColor = [UIColor clearColor];
+        _chartView.backgroundColor = [UIColor clearColor];
         [_chartView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
         [_chartView ssj_setBorderStyle:SSJBorderStyleBottom];
         [_chartView ssj_setBorderWidth:1];
@@ -159,30 +157,6 @@
     return _secondLineLab;
 }
 
-- (UILabel *)incomeAndPaymentTitleLab {
-    if (!_incomeAndPaymentTitleLab) {
-        _incomeAndPaymentTitleLab = [[UILabel alloc] init];
-        _incomeAndPaymentTitleLab.backgroundColor = [UIColor clearColor];
-        _incomeAndPaymentTitleLab.font = [UIFont systemFontOfSize:15];
-        _incomeAndPaymentTitleLab.textAlignment = NSTextAlignmentCenter;
-        _incomeAndPaymentTitleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-    }
-    return _incomeAndPaymentTitleLab;
-}
-
-- (UILabel *)incomeAndPaymentMoneyLab {
-    if (!_incomeAndPaymentMoneyLab) {
-        _incomeAndPaymentMoneyLab = [[UILabel alloc] init];
-        _incomeAndPaymentMoneyLab.backgroundColor = [UIColor clearColor];
-        _incomeAndPaymentMoneyLab.font = [UIFont systemFontOfSize:18];
-        _incomeAndPaymentMoneyLab.minimumScaleFactor = 0.66;
-        _incomeAndPaymentMoneyLab.adjustsFontSizeToFitWidth = YES;
-        _incomeAndPaymentMoneyLab.textAlignment = NSTextAlignmentCenter;
-        _incomeAndPaymentMoneyLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-    }
-    return _incomeAndPaymentMoneyLab;
-}
-
 - (SSJSummaryBooksHeaderView *)summaryHeader{
     if (!_summaryHeader) {
         _summaryHeader = [[SSJSummaryBooksHeaderView alloc]initWithFrame:CGRectMake(0, 0, self.width, 109)];
@@ -247,6 +221,14 @@
 - (void)setTotalExpenture:(double)totalExpenture{
     _totalExpenture = totalExpenture;
     self.summaryHeader.expenture = _totalExpenture;
+}
+
+- (void)setTitle:(NSString *)title {
+    _chartView.bottomTitle = title;
+}
+
+- (void)setAmount:(NSString *)amount {
+    _chartView.topTitle = amount;
 }
 
 - (void)setCustomPeriod:(SSJDatePeriod *)customPeriod{
@@ -315,13 +297,5 @@
 - (void)updateAfterThemeChange{
     self.backColorView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
 }
-
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
-}
-*/
 
 @end

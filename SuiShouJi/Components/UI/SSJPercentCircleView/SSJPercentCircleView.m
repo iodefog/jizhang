@@ -31,6 +31,10 @@
 
 @property (nonatomic) BOOL reloadFailedCauseByEmptyFrame;
 
+@property (nonatomic, strong) UILabel *topTitleLab;
+
+@property (nonatomic, strong) UILabel *bottomTitleLab;
+
 @end
 
 @implementation SSJPercentCircleView
@@ -51,6 +55,14 @@
         self.additionGroupNode = [SSJPercentCircleAdditionGroupNode node];
         [self.contentView addSubview:self.additionGroupNode];
         
+        _topTitleLab = [[UILabel alloc] init];
+        _topTitleLab.textAlignment = NSTextAlignmentCenter;
+        [self.contentView addSubview:_topTitleLab];
+        
+        _bottomTitleLab = [[UILabel alloc] init];
+        _bottomTitleLab.textAlignment = NSTextAlignmentCenter;
+        [self.contentView addSubview:_bottomTitleLab];
+        
         self.skinView = [[UIImageView alloc] initWithFrame:self.bounds];
         self.skinView.hidden = YES;
         [self addSubview:self.skinView];
@@ -63,9 +75,56 @@
 - (void)layoutSubviews {
     self.contentView.frame = self.bounds;
     [self updateCircleFrame];
+    [self layoutTitleLabels];
     
     if (_reloadFailedCauseByEmptyFrame) {
         [self reloadData];
+    }
+}
+
+- (void)setBackgroundColor:(UIColor *)backgroundColor {
+    [super setBackgroundColor:backgroundColor];
+    self.contentView.backgroundColor = backgroundColor;
+}
+
+- (void)setGapBetweenTitles:(CGFloat)gapBetweenTitles {
+    if (_gapBetweenTitles != gapBetweenTitles) {
+        _gapBetweenTitles = gapBetweenTitles;
+        [self setNeedsLayout];
+    }
+}
+
+- (void)setTopTitle:(NSString *)topTitle {
+    if (![_topTitle isEqualToString:topTitle]) {
+        _topTitle = topTitle;
+        _topTitleLab.text = _topTitle;
+        [self setNeedsLayout];
+    }
+}
+
+- (void)setBottomTitle:(NSString *)bottomTitle {
+    if (![_bottomTitle isEqualToString:bottomTitle]) {
+        _bottomTitle = bottomTitle;
+        _bottomTitleLab.text = _bottomTitle;
+        [self setNeedsLayout];
+    }
+}
+
+- (void)setTopTitleAttribute:(NSDictionary *)topTitleAttribute {
+    if (![_topTitleAttribute isEqualToDictionary:topTitleAttribute]) {
+        _topTitleAttribute = topTitleAttribute;
+        _topTitleLab.font = topTitleAttribute[NSFontAttributeName];
+        _topTitleLab.textColor = topTitleAttribute[NSForegroundColorAttributeName];
+        [self setNeedsLayout];
+    }
+}
+
+- (void)setBottomTitleAttribute:(NSDictionary *)bottomTitleAttribute {
+    if (![_bottomTitleAttribute isEqualToDictionary:bottomTitleAttribute]) {
+        _bottomTitleAttribute = bottomTitleAttribute;
+        _bottomTitleLab.font = bottomTitleAttribute[NSFontAttributeName];
+        _bottomTitleLab.textColor = bottomTitleAttribute[NSForegroundColorAttributeName];
+        [self setNeedsLayout];
     }
 }
 
@@ -178,6 +237,24 @@
     CGRect circleFrame = UIEdgeInsetsInsetRect(self.bounds, self.circleInsets);
     CGFloat circleDiam = MIN(circleFrame.size.width, circleFrame.size.height);
     self.circleFrame = CGRectMake((self.width - circleDiam) * 0.5, circleFrame.origin.y, circleDiam, circleDiam);
+}
+
+- (void)layoutTitleLabels {
+    [_topTitleLab sizeToFit];
+    [_bottomTitleLab sizeToFit];
+    
+    CGRect outerCircleFrame = UIEdgeInsetsInsetRect(self.bounds, _circleInsets);
+    CGRect innerCircleFrame = UIEdgeInsetsInsetRect(outerCircleFrame, UIEdgeInsetsMake(_circleThickness, _circleThickness, _circleThickness, _circleThickness));
+    
+    CGFloat obliqueLength = CGRectGetWidth(innerCircleFrame) * 0.5; // 斜边
+    CGFloat edgeLenth_1 = (_topTitleLab.height + _bottomTitleLab.height + _gapBetweenTitles) * 0.5; // 对边
+    CGFloat edgeLenth_2 = floor(sqrt(obliqueLength * obliqueLength - edgeLenth_1 * edgeLenth_1));
+    
+    CGFloat left = CGRectGetMinX(innerCircleFrame) + obliqueLength - edgeLenth_2;
+    CGFloat top = CGRectGetMinY(innerCircleFrame) + obliqueLength - edgeLenth_1;
+    
+    _topTitleLab.frame = CGRectMake(left, top, edgeLenth_2 * 2, _topTitleLab.height);
+    _bottomTitleLab.frame = CGRectMake(left, _topTitleLab.bottom + _gapBetweenTitles, edgeLenth_2 * 2, _bottomTitleLab.height);
 }
 
 @end
