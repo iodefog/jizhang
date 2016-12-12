@@ -19,4 +19,11 @@
 //  解析数据，element可以为空
 - (void)parseElement:(id)element;
 
+/**
+ 返回对应cell的行高，默认返回44；子类根据情况复写此方法
+
+ @return 对应cell的行高
+ */
+- (CGFloat)rowHeight;
+
 @end

@@ -203,6 +203,31 @@ static NSString *const kSegmentTitleIncome = @"收入";
     return nil;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    SSJBaseItem *item = [self.datas ssj_objectAtIndexPath:indexPath];
+    return [item rowHeight];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    if (_titleSegmentCtrl.selectedSegmentIndex == 0 && section == 0) {
+        return self.payAndIncomeSegmentControl.height;
+    }
+    
+    if (_titleSegmentCtrl.selectedSegmentIndex == 1 && section == 0) {
+        return self.timePeriodSegmentControl.height;
+    }
+    
+    if (_titleSegmentCtrl.selectedSegmentIndex == 1 && section == 2) {
+        return self.payAndIncomeSegmentControl.height;
+    }
+    
+    return 0;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    return 10;
+}
+
 #pragma mark - SCYSlidePagingHeaderViewDelegate
 - (void)slidePagingHeaderView:(SCYSlidePagingHeaderView *)headerView didSelectButtonAtIndex:(NSUInteger)index {
     [self reloadDatas];
@@ -356,15 +381,11 @@ static NSString *const kSegmentTitleIncome = @"收入";
 
 //  返回当前收支类型
 - (SSJBillType)currentType {
-    NSString *selectedTitle = [_payAndIncomeSegmentControl.titles ssj_safeObjectAtIndex:_payAndIncomeSegmentControl.selectedIndex];
-
-    if ([selectedTitle isEqualToString:kSegmentTitlePay]) {
+    if (self.payAndIncomeSegmentControl.selectedIndex == 0) {
         return SSJBillTypePay;
-    } else if ([selectedTitle isEqualToString:kSegmentTitleIncome]) {
+    } else if (self.payAndIncomeSegmentControl.selectedIndex == 1) {
         return SSJBillTypeIncome;
-    }/* else if ([selectedTitle isEqualToString:kSegmentTitleSurplus]) {
-        return SSJBillTypeSurplus;
-    }*/ else {
+    } else {
         return SSJBillTypeUnknown;
     }
 }
