@@ -29,6 +29,8 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
     }
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        
+        // 查询有数据的月份
         FMResultSet *result = nil;
         switch (type) {
             case SSJBillTypeIncome:
@@ -69,20 +71,32 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
             return;
         }
         
-        NSDate *lastDate = nil;
         NSMutableArray *list = [NSMutableArray array];
+        
         while ([result next]) {
+            
             NSString *dateStr = [result stringForColumnIndex:0];
             NSDate *date = [NSDate dateWithString:dateStr formatString:@"yyyy-MM"];
-            if (lastDate && [lastDate year] != [date year]) {
-                SSJDatePeriod *period = [SSJDatePeriod datePeriodWithPeriodType:SSJDatePeriodTypeYear date:lastDate];
-                [list addObject:period];
+            SSJDatePeriod *currentPeriod = [SSJDatePeriod datePeriodWithPeriodType:SSJDatePeriodTypeMonth date:date];
+            
+            if (list.count) {
+                // 计算当前和上次之间的周期列表
+                SSJDatePeriod *lastPeriod = [list lastObject];
+                NSArray *periods = [currentPeriod periodsFromPeriod:lastPeriod];
+                
+                for (SSJDatePeriod *period in periods) {
+                    // 比较每个相邻的月周期之间的年份是否相同，不同就插入一条上个月周期的年周期
+                    if (period.startDate.year != lastPeriod.startDate.year) {
+                        SSJDatePeriod *yearPeriod = [SSJDatePeriod datePeriodWithPeriodType:SSJDatePeriodTypeYear date:lastPeriod.startDate];
+                        [list addObject:yearPeriod];
+                    }
+                    
+                    [list addObject:period];
+                    lastPeriod = period;
+                }
+            } else {
+                [list addObject:currentPeriod];
             }
-            
-            lastDate = date;
-            
-            SSJDatePeriod *period = [SSJDatePeriod datePeriodWithPeriodType:SSJDatePeriodTypeMonth date:date];
-            [list addObject:period];
         }
         
         [result close];
@@ -92,7 +106,7 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
             SSJDatePeriod *lastPeriod = [list lastObject];
             
             // 增加最后一个年周期
-            [list addObject:[SSJDatePeriod datePeriodWithPeriodType:SSJDatePeriodTypeYear date:lastDate]];
+            [list addObject:[SSJDatePeriod datePeriodWithPeriodType:SSJDatePeriodTypeYear date:lastPeriod.startDate]];
             
             // 增加合计（即最开始的日期到当前日期）
             [list addObject:[SSJDatePeriod datePeriodWithStartDate:firstPeriod.startDate endDate:lastPeriod.endDate]];

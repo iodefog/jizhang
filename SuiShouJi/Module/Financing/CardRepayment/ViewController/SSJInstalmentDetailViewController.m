@@ -7,6 +7,7 @@
 //
 
 #import "SSJInstalmentDetailViewController.h"
+#import "SSJInstalmentEditeViewController.h"
 
 #import "SSJChargeCircleModifyCell.h"
 #import "SSJInstalmentDateSelectCell.h"
@@ -58,6 +59,10 @@ static NSString *const SSJInstalmentDetailMutiLabCellIdentifier = @"SSJInstalmen
 
 #pragma mark - UITableViewDelegate
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    NSString *title = [self.titles ssj_safeObjectAtIndex:indexPath.row];
+    if([title isEqualToString:kTitle1]) {
+        return 70;
+    }
     return 55;
 }
 
@@ -70,7 +75,7 @@ static NSString *const SSJInstalmentDetailMutiLabCellIdentifier = @"SSJInstalmen
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
-    return 80 ;
+    return 80;
 }
 
 #pragma mark - UITableViewDataSource
@@ -83,13 +88,14 @@ static NSString *const SSJInstalmentDetailMutiLabCellIdentifier = @"SSJInstalmen
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
-    NSString *image = [self.images ssj_objectAtIndexPath:indexPath];
+    NSString *title = [self.titles ssj_safeObjectAtIndex:indexPath.row];
+    NSString *image = [self.images ssj_safeObjectAtIndex:indexPath.row];
     if([title isEqualToString:kTitle2]) {
         SSJInstalmentDateSelectCell *dateSelectCell = [tableView dequeueReusableCellWithIdentifier:SSJInstalmentDetailMutiLabCellIdentifier];
         dateSelectCell.imageView.image = [[UIImage imageNamed:@"loan_yield"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         dateSelectCell.textLabel.text = title;
-        dateSelectCell.subtitleLabel.text = [NSString stringWithFormat:@"分期金额%@,手续费率%@%%",self.repaymentModel.repaymentMoney,self.repaymentModel.poundageRate];
+        double poudageRate = [self.repaymentModel.poundageRate doubleValue] * 100;
+        dateSelectCell.subtitleLabel.text = [NSString stringWithFormat:@"分期金额%@,手续费率%@%%",self.repaymentModel.repaymentMoney,[[NSString stringWithFormat:@"%f",poudageRate] ssj_moneyDecimalDisplayWithDigits:2]];
         dateSelectCell.subtitleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         [dateSelectCell setNeedsLayout];
         return dateSelectCell;
@@ -114,7 +120,7 @@ static NSString *const SSJInstalmentDetailMutiLabCellIdentifier = @"SSJInstalmen
             repaymentModifyCell.cellDetail = [NSString stringWithFormat:@"%ld期",self.repaymentModel.currentInstalmentCout];
         } else if ([title isEqualToString:kTitle5]) {
             repaymentModifyCell.cellDetail = [NSString stringWithFormat:@"%@",self.chargeItem.billDate];
-        } else if ([title isEqualToString:kTitle5]) {
+        } else if ([title isEqualToString:kTitle6]) {
             repaymentModifyCell.cellDetail = self.repaymentModel.cardName;
         }
         return repaymentModifyCell;
@@ -138,6 +144,12 @@ static NSString *const SSJInstalmentDetailMutiLabCellIdentifier = @"SSJInstalmen
     return _editeFooterView;
 }
 
+#pragma mark - Event
+- (void)editeButtonClicked:(id)sender{
+    SSJInstalmentEditeViewController *instalmentVc = [[SSJInstalmentEditeViewController alloc]init];
+    instalmentVc.repaymentModel = self.repaymentModel;
+    [self.navigationController pushViewController:instalmentVc animated:YES];
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

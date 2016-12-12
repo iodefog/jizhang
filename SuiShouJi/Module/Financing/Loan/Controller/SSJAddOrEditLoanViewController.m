@@ -851,6 +851,11 @@ const int kMemoMaxLength = 15;
         wself.loanModel.remindID = item.remindId;
         [wself.tableView reloadData];
     };
+    reminderVC.deleteReminderAction = ^{
+        wself.reminderItem = nil;
+        wself.loanModel.remindID = nil;
+        [wself.tableView reloadData];
+    };
     [self.navigationController pushViewController:reminderVC animated:YES];
 }
 

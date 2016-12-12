@@ -11,14 +11,14 @@
 @implementation SSJReportFormsItem
 
 - (NSString *)debugDescription {
-    return [NSString stringWithFormat:@"%@", @{@"scale":@(_scale),
-                                               @"money":@(_money),
-                                               @"type":@(_type),
-                                               @"imageName":(_imageName ?: @""),
-                                               @"name":(_name ?: @""),
-                                               @"colorValue":(_colorValue ?: @""),
-                                               @"ID":(_ID ?: @""),
-                                               @"isMember":@(_isMember)}];
+    return [NSString stringWithFormat:@"%@:%@", self, @{@"scale":@(_scale),
+                                                        @"money":@(_money),
+                                                        @"type":@(_type),
+                                                        @"imageName":(_imageName ?: @""),
+                                                        @"name":(_name ?: @""),
+                                                        @"colorValue":(_colorValue ?: @""),
+                                                        @"ID":(_ID ?: @""),
+                                                        @"isMember":@(_isMember)}];
 }
 
 @end

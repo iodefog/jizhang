@@ -392,7 +392,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
     }else{
         SSJFinancingHomeitem *financingItem = (SSJFinancingHomeitem *)self.item;
         SSJModifyFundingViewController *newFundingVC = [[SSJModifyFundingViewController alloc]init];
-        financingItem.fundingAmount = _totalIncome + _totalExpence;
+        financingItem.fundingAmount = _totalIncome - _totalExpence;
         newFundingVC.item = financingItem;
         [self.navigationController pushViewController:newFundingVC animated:YES];
         [MobClick event:@"fund_edit"];
@@ -420,6 +420,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
         model.cardId = item.cardId;
         model.cardName = item.cardName;
         model.cardBillingDay = item.cardBillingDay;
+        model.cardRepaymentDay = item.cardRepaymentDay;
         instalmentVc.repaymentModel = model;
         [weakSelf.navigationController pushViewController:instalmentVc animated:YES];
     }];
