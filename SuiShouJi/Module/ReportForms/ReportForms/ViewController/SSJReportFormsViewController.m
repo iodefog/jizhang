@@ -132,14 +132,15 @@ static NSString *const kSegmentTitleIncome = @"收入";
 }
 
 #pragma mark - UITableViewDataSource
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return self.datas.count;
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    NSString *selectedTitle = [_payAndIncomeSegmentControl.titles ssj_safeObjectAtIndex:_payAndIncomeSegmentControl.selectedIndex];
-    
-    if ([selectedTitle isEqualToString:kSegmentTitlePay]
-        || [selectedTitle isEqualToString:kSegmentTitleIncome]) {
-        return self.datas.count;
+    NSArray *sectionArr = [self.datas ssj_safeObjectAtIndex:section];
+    if ([sectionArr isKindOfClass:[NSArray class]]) {
+        return sectionArr.count;
     }
-    
     return 0;
 }
 
@@ -188,6 +189,18 @@ static NSString *const kSegmentTitleIncome = @"收入";
             [MobClick event:@"form_member_detail"];
         }
     }
+}
+
+- (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    if (_titleSegmentCtrl.selectedSegmentIndex == 0 && section == 0) {
+        return self.payAndIncomeSegmentControl;
+    }
+    
+    if (_titleSegmentCtrl.selectedSegmentIndex == 1) {
+        return nil;
+    }
+    
+    return nil;
 }
 
 #pragma mark - SCYSlidePagingHeaderViewDelegate
@@ -308,6 +321,11 @@ static NSString *const kSegmentTitleIncome = @"收入";
 
 #pragma mark - Private
 - (void)updateAppearance {
+    
+    _titleSegmentCtrl.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    _titleSegmentCtrl.selectedBorderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
+    [_titleSegmentCtrl setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]} forState:UIControlStateNormal];
+    [_titleSegmentCtrl setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]} forState:UIControlStateSelected];
     
     _payAndIncomeSegmentControl.titleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     _payAndIncomeSegmentControl.selectedTitleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
@@ -456,6 +474,20 @@ static NSString *const kSegmentTitleIncome = @"收入";
 }
 
 - (void)organiseDatasWithResult:(NSArray *)result {
+    
+    if (!result.count) {
+        self.tableView.hidden = YES;
+        [self.view ssj_showWatermarkWithCustomView:self.noDataRemindView animated:YES target:nil action:nil];
+        return;
+    }
+    
+    self.tableView.hidden = NO;
+    [self.view ssj_hideWatermark:YES];
+    
+    [self.datas removeAllObjects];
+    
+    NSMutableArray *sectionArr = [[NSMutableArray alloc] initWithCapacity:1];
+    
     //  将比例小于0.01的item过滤掉
     NSMutableArray *filterItems = [NSMutableArray array];
     double scaleAmount = 0;
@@ -491,7 +523,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
     }
     double amount = [[result valueForKeyPath:@"@sum.money"] doubleValue];
     chartCellItem.amount = [[NSString stringWithFormat:@"%f", amount] ssj_moneyDecimalDisplayWithDigits:2];
-    [self.datas addObject:chartCellItem];
+    [sectionArr addObject:chartCellItem];
     
     //  将datas按照收支类型所占比例从大到小进行排序
     NSArray *cellItems = [result sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
@@ -506,17 +538,10 @@ static NSString *const kSegmentTitleIncome = @"收入";
         }
     }];
     
-    [self.datas addObjectsFromArray:cellItems];
+    [sectionArr addObjectsFromArray:cellItems];
+    [self.datas addObject:sectionArr];
     
     [self.tableView reloadData];
-    
-    if (!self.datas.count) {
-        self.tableView.hidden = YES;
-        [self.view ssj_showWatermarkWithCustomView:self.noDataRemindView animated:YES target:nil action:nil];
-    } else {
-        self.tableView.hidden = NO;
-        [self.view ssj_hideWatermark:YES];
-    }
 }
 
 - (UILabel *)chartAdditionalViewWithMemberName:(NSString *)name colorValue:(NSString *)colorValue {
