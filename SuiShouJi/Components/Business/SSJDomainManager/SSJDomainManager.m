@@ -15,7 +15,7 @@ const int kMaxRequestFailureTimes = 2;
 static NSString *const kSSJDomainKey = @"SSJDomainManagerKey";
 
 static NSString *const kDefaultDomain = @"https://jz.9188.com";
-static NSString *const kTestDomain = @"http://192.168.1.51:10012/in";
+static NSString *const kTestDomain = @"http://192.168.1.51:10012/";
 static NSString *const kTestImageDomain = @"http://account.gs.9188.com/";
 
 @implementation SSJDomainManager

@@ -22,6 +22,7 @@
                 while ([resultSet next]) {
                     model.repaymentId = item.sundryId;
                     model.cardId = [resultSet stringForColumn:@"CCARDID"];
+                    model.cardName = [resultSet stringForColumn:@"cacctname"];
                     model.repaymentMonth = [NSDate dateWithString:[resultSet stringForColumn:@"crepaymentmonth"] formatString:@"yyyy-MM"];
                     model.applyDate = [NSDate dateWithString:[resultSet stringForColumn:@"CAPPLYDATE"] formatString:@"yyyy-MM-dd"] ;
                     model.repaymentSourceFoundId = [resultSet stringForColumn:@"ifunsid"];
