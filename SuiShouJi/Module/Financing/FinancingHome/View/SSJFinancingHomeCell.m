@@ -202,6 +202,8 @@
         [self.fundingNameLabel sizeToFit];
         if (item.cardMemo.length) {
             self.cardMemoLabel.text = [NSString stringWithFormat:@"| %@",item.cardMemo];
+        } else {
+            self.cardMemoLabel.text = @"";
         }
         [self.cardMemoLabel sizeToFit];
         if (item.cardBillingDay != 0 && item.cardRepaymentDay != 0) {
