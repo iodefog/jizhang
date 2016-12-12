@@ -100,11 +100,10 @@
     if (self.message.isSystem == NO) {//建议
         [showTextButton setTitle:self.message.content forState:UIControlStateNormal];
     }else if(self.message.isSystem == YES){//系统
-//        [showTextButton setTitle:@"及时发放几点开始发一US和发挥法律回复IE哈符合法律和发酵法律发了发货后发货方哈佛哈哈发货费花儿uguighuahfalhfeuahuahfla哈佛和哈啊分哈哈立法回复而非哈哈发货覅u案发哈哈覅哈哈发货发胡覅哈佛hi艺" forState:UIControlStateNormal];
         [showTextButton setTitle:self.message.content forState:UIControlStateNormal];
     }
     // 设置按钮的高度就是titleLabel的高度
-    CGFloat buttonH = [self heightOfString:showTextButton.titleLabel.text font:[UIFont systemFontOfSize:16] width:SSJSCREENWITH - 2*(_iconView.width + 30)] + 10;
+    CGFloat buttonH = [self heightOfString:showTextButton.titleLabel.text font:[UIFont systemFontOfSize:16] width:SSJSCREENWITH - 2*(_iconView.width + 30)] + 20;
     _textBtnHeightConst.constant = buttonH;
     _otherTextBtnHeightConst.constant = buttonH;
     
@@ -118,9 +117,7 @@
 }
 
 //字符串文字的高度
-
 - (CGFloat)heightOfString:(NSString *)string font:(UIFont *)font width:(CGFloat)width
-
 {
     CGRect bounds;
     NSDictionary * parameterDict=[NSDictionary dictionaryWithObject:font forKey:NSFontAttributeName];

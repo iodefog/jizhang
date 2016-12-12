@@ -410,20 +410,8 @@ static BOOL kNeedBannerDisplay = YES;
 
 #pragma mark - SSJBaseNetworkService
 -(void)serverDidFinished:(SSJBaseNetworkService *)service{
-//    if (self.bannerService.item.bannerItems.count) {
-//        self.bannerHeader.items = self.bannerService.item.bannerItems;
-//        [self.collectionView reloadData];
-//    }
-//    if (self.bannerService.item.listAdItem.hidden) {
-//        self.adItem = self.bannerService.item.listAdItem;
-//        [self.titles insertObject:@[self.adItem.adTitle] atIndex:0];
-//        [_titleArr insertObject:self.adItem.adTitle atIndex:0];
-////        [self.images insertObject:@[[UIImage imageNamed:@"jinrong"]] atIndex:0];
-//        [self.tableView reloadData];
-//    }
     //banner
     if (self.bannerService.item.bannerItems.count) {
-//        self.headerBannerImageView.bannerItemArray = self.bannerService.item.bannerItems;
         UICollectionViewFlowLayout *collectionViewLayout = (UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout;
         collectionViewLayout.headerReferenceSize = CGSizeMake(SSJSCREENWITH, 90);
     }

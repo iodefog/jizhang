@@ -61,10 +61,6 @@ static NSInteger padding = 15;
 #pragma mark -Getter
 - (CGFloat)headerHeight
 {
-    UIImage *image = [UIImage imageNamed:@"more_productAdvice_banner.png"];
-    float scale = image.size.height / image.size.width;
-
-//   return 318 + SSJSCREENWITH * scale;
     return CGRectGetMaxY(_bottomBgview.frame);
 }
 
