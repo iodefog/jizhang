@@ -523,6 +523,7 @@
             
         case 4:{
             // 如果是每月
+            baseStartDate = [NSDate dateWithYear:baseStartDate.year month:baseStartDate.month day:date.day hour:baseStartDate.hour minute:baseStartDate.minute second:baseStartDate.second];
             if (date.day > 28 && date.day < baseStartDate.daysInMonth) {
                 // 如果提醒时间大于28号,并且日期大于本月的最大日期
                 if (remindAtEndOfMonth) {
@@ -550,6 +551,7 @@
             
         case 5:{
             // 如果是每月最后一天
+            baseStartDate = [NSDate dateWithYear:baseStartDate.year month:baseStartDate.month day:date.day hour:baseStartDate.hour minute:baseStartDate.minute second:baseStartDate.second];
             if (baseStartDate.day != baseStartDate.daysInMonth) {
                 nextRemindDate = [NSDate dateWithYear:baseStartDate.year month:baseStartDate.month day:baseStartDate.daysInMonth hour:date.hour minute:date.minute second:date.second];
             }else{
@@ -567,6 +569,7 @@
             
         case 6:{
             // 如果是每年
+            baseDate = [NSDate dateWithYear:baseDate.year month:date.month day:date.day hour:baseDate.hour minute:baseDate.minute second:baseDate.second];
             if ([baseStartDate isEarlierThan:today]) {
                 nextRemindDate = [baseStartDate dateByAddingYears:1];
             }else{

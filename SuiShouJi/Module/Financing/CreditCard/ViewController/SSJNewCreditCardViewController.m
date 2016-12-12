@@ -71,6 +71,17 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     UITextField *_memoInput;
 }
 
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextFieldTextDidChangeNotification object:nil];
+}
+
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:) name:UITextFieldTextDidChangeNotification object:nil];
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.titles = @[@[kTitle1,kTitle2],@[kTitle3,kTitle4,kTitle5],@[kTitle6,kTitle7,kTitle8],@[kTitle9,kTitle10]];
@@ -105,7 +116,6 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(transferTextDidChange) name:UITextFieldTextDidChangeNotification object:nil];
     [self.tableView reloadData];
 }
 
@@ -434,8 +444,25 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     [self presentViewController:alert animated:YES completion:NULL];
 }
 
-- (void)transferTextDidChange{
-    [self setupTextFiledNum:_limitInput num:2];
+- (void)textDidChange:(NSNotification *)notification {
+    UITextField *textField = notification.object;
+    if ([textField isKindOfClass:[UITextField class]]) {
+
+        if (textField.tag == 100) {
+            self.item.cardName = textField.text;
+        }
+        if (textField.tag == 101){
+            textField.text = [textField.text ssj_reserveDecimalDigits:2 intDigits:0];
+            self.item.cardLimit = [textField.text doubleValue];
+        }
+        if (textField.tag == 102){
+            textField.text = [textField.text ssj_reserveDecimalDigits:2 intDigits:0];
+            self.item.cardBalance = [textField.text doubleValue];
+        }
+        if (textField.tag == 103){
+            self.item.cardMemo = textField.text;
+        }
+    }
 }
 
 - (void)remindSwitchChange:(id)sender{
@@ -596,7 +623,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     if (!_remindStateButton) {
         _remindStateButton = [[UISwitch alloc]init];
         _remindStateButton.onTintColor = [UIColor ssj_colorWithHex:@"43cf78"];
-        [_remindStateButton addTarget:self action:@selector(remindSwitchChange:) forControlEvents:UIControlEventTouchUpInside];
+        [_remindStateButton addTarget:self action:@selector(remindSwitchChange:) forControlEvents:UIControlEventValueChanged];
     }
     return _remindStateButton;
 }
