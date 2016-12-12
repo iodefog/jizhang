@@ -106,6 +106,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(transferTextDidChange) name:UITextFieldTextDidChangeNotification object:nil];
+    [self.tableView reloadData];
 }
 
 #pragma mark - UITableViewDelegate
@@ -173,6 +174,10 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
                 weakSelf.remindItem = item;
                 weakSelf.item.remindState = 1;
                 weakSelf.item.remindId = item.remindId;
+                [weakSelf.tableView reloadData];
+            };
+            remindEditeVc.deleteReminderAction = ^(){
+                weakSelf.remindItem = nil;
                 [weakSelf.tableView reloadData];
             };
             [self.navigationController pushViewController:remindEditeVc animated:YES];
@@ -310,7 +315,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         newReminderCell.type = SSJCreditCardCellTypeassertedDetail;
         newReminderCell.cellDetail = [self.remindItem.remindDate formattedDateWithFormat:@"yyyy-MM-dd"];
         newReminderCell.cellTitle = title;
-        self.remindStateButton.on = self.item.remindState;
+        self.remindStateButton.on = self.remindItem.remindState;
         newReminderCell.accessoryView = self.remindStateButton;
         newReminderCell.customAccessoryType = UITableViewCellAccessoryNone;
         newReminderCell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -434,7 +439,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 }
 
 - (void)remindSwitchChange:(id)sender{
-    if (self.item.remindId.length) {
+    if (self.remindItem) {
         self.remindItem.remindState = self.remindStateButton.isOn;
     }else{
         if (self.remindStateButton.isOn) {
@@ -462,6 +467,10 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
                 weakSelf.remindItem = item;
                 weakSelf.item.remindState = 1;
                 weakSelf.item.remindId = item.remindId;
+                [weakSelf.tableView reloadData];
+            };
+            remindEditeVc.deleteReminderAction = ^(){
+                weakSelf.remindItem = nil;
                 [weakSelf.tableView reloadData];
             };
             [self.navigationController pushViewController:remindEditeVc animated:YES];

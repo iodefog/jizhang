@@ -91,9 +91,9 @@
         item.cardId = SSJUUID();
     }
     
-    NSInteger maxOrder = [db intForQuery:@"select max(iorder) from bk_fund_info where cuserid = ? and operatortype <> 2",userId];
+    NSInteger maxOrder = [db intForQuery:@"select max(iorder) from bk_fund_info where cuserid = ? and operatortype <> 2",userId] + 1;
 
-    // 判断是新增还是删除
+    // 判断是新增还是修改
     if (![db intForQuery:@"select count(1) from bk_fund_info where cfundid = ? and cuserid = ? and operatortype <> 2",item.cardId,userId]) {
         // 插入资金帐户表
         if (![db executeUpdate:@"insert into bk_fund_info (cfundid ,cacctname ,cicoin ,cparent ,ccolor ,cwritedate ,operatortype ,iversion ,cmemo ,cuserid , iorder ,idisplay) values (?,?,?,3,?,?,0,?,?,?,?,1)",item.cardId,item.cardName,@"ft_creditcard",item.cardColor,editeDate,@(SSJSyncVersion()),item.cardMemo,userId,@(maxOrder)]) {
