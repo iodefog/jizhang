@@ -34,4 +34,6 @@
 //此行是否展开
 @property(nonatomic) BOOL isExpand;
 
+@property(nonatomic) double instalmentMoney;
+
 @end
