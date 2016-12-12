@@ -623,7 +623,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     if (!_remindStateButton) {
         _remindStateButton = [[UISwitch alloc]init];
         _remindStateButton.onTintColor = [UIColor ssj_colorWithHex:@"43cf78"];
-        [_remindStateButton addTarget:self action:@selector(remindSwitchChange:) forControlEvents:UIControlEventTouchUpInside];
+        [_remindStateButton addTarget:self action:@selector(remindSwitchChange:) forControlEvents:UIControlEventValueChanged];
     }
     return _remindStateButton;
 }
