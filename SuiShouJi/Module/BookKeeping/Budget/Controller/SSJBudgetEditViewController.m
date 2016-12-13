@@ -654,8 +654,9 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
     if (self.model.billIds.count <= 4) {
         NSMutableArray *typeNameArr = [NSMutableArray arrayWithCapacity:4];
         for (NSString *typeId in self.model.billIds) {
-            if (typeId) {
-                [typeNameArr addObject:self.budgetTypeMap[typeId]];
+            NSString *billTypeName = self.budgetTypeMap[typeId];
+            if (billTypeName) {
+                [typeNameArr addObject:billTypeName];
             }
         }
         return [typeNameArr componentsJoinedByString:@","];

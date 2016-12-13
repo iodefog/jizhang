@@ -10,19 +10,13 @@
 #import "SSJPercentCircleView.h"
 #import "SSJListMenu.h"
 
-@interface SSJReportFormsChartCell ()
+@interface SSJReportFormsChartCell () <SSJReportFormsPercentCircleDataSource>
 
 @property (nonatomic, strong) SSJPercentCircleView *chartView;
 
 @property (nonatomic, strong) UIButton *categoryBtn;
 
 @property (nonatomic, strong) SSJListMenu *listMenu;
-
-//  圆环中间顶部的总收入、总支出
-@property (nonatomic, strong) UILabel *incomeAndPaymentTitleLab;
-
-//  圆环中间顶部的总收入、总支出金额
-@property (nonatomic, strong) UILabel *incomeAndPaymentMoneyLab;
 
 @end
 
@@ -32,8 +26,8 @@
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         [self.contentView addSubview:self.chartView];
         [self.contentView addSubview:self.categoryBtn];
-        [self.contentView addSubview:self.incomeAndPaymentTitleLab];
-        [self.contentView addSubview:self.incomeAndPaymentMoneyLab];
+        [self updateAppearance];
+        self.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     return self;
 }
@@ -44,10 +38,26 @@
     _chartView.frame = self.contentView.bounds;
     _categoryBtn.size = CGSizeMake(50, 50);
     _categoryBtn.center = CGPointMake(self.contentView.width * 0.9, 0.12);
+}
+
+#pragma mark - Overwrite
+- (void)updateCellAppearanceAfterThemeChanged {
+    [super updateCellAppearanceAfterThemeChanged];
+    [self updateAppearance];
+}
+
+- (void)setCellItem:(SSJBaseItem *)cellItem {
+    SSJReportFormsChartCellItem *item = (SSJReportFormsChartCellItem *)cellItem;
+    if (![item isKindOfClass:[SSJReportFormsChartCellItem class]]) {
+        return;
+    }
     
-    CGRect hollowFrame = UIEdgeInsetsInsetRect(self.chartView.circleFrame, UIEdgeInsetsMake(self.chartView.circleThickness, self.chartView.circleThickness, self.chartView.circleThickness, self.chartView.circleThickness));
-    _incomeAndPaymentTitleLab.frame = CGRectMake(hollowFrame.origin.x, (hollowFrame.size.height - 38) * 0.5 + hollowFrame.origin.y, hollowFrame.size.width, 15);
-    _incomeAndPaymentMoneyLab.frame = CGRectMake(hollowFrame.origin.x, (hollowFrame.size.height - 38) * 0.5 + hollowFrame.origin.y + 20, hollowFrame.size.width, 18);
+    if (![self.chartCellItem isEqualToItem:item]) {
+        [super setCellItem:cellItem];
+        [_chartView reloadData];
+        _chartView.topTitle = self.chartCellItem.amount;
+        _chartView.bottomTitle = self.chartCellItem.title;
+    }
 }
 
 #pragma mark - SSJReportFormsPercentCircleDataSource
@@ -62,33 +72,14 @@
     return nil;
 }
 
-#pragma mark - Overwrite
-- (void)updateCellAppearanceAfterThemeChanged {
-    [super updateCellAppearanceAfterThemeChanged];
-    
-    _chartView.contentView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+#pragma mark - Private
+- (void)updateAppearance {
+    _chartView.backgroundColor = [UIColor clearColor];
     [_chartView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
-    
-    _incomeAndPaymentTitleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-    _incomeAndPaymentMoneyLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-}
-
-- (void)setCellItem:(SSJBaseItem *)cellItem {
-    SSJReportFormsChartCellItem *item = (SSJReportFormsChartCellItem *)cellItem;
-    if (![item isKindOfClass:[SSJReportFormsChartCellItem class]]) {
-        return;
-    }
-    
-    if (![self.chartCellItem isEqualToItem:item]) {
-        [super setCellItem:cellItem];
-        [_chartView reloadData];
-        _incomeAndPaymentTitleLab.text = self.chartCellItem.title;
-        _incomeAndPaymentMoneyLab.text = self.chartCellItem.amount;
-    }
-}
-
-- (SSJReportFormsChartCellItem *)chartCellItem {
-    return (SSJReportFormsChartCellItem *)self.cellItem;
+    _chartView.topTitleAttribute = @{NSFontAttributeName:[UIFont systemFontOfSize:16],
+                                     NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor]};
+    _chartView.bottomTitleAttribute = @{NSFontAttributeName:[UIFont systemFontOfSize:12],
+                                        NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]};
 }
 
 #pragma mark - Event
@@ -121,6 +112,7 @@
 - (SSJPercentCircleView *)chartView {
     if (!_chartView) {
         _chartView = [[SSJPercentCircleView alloc] initWithFrame:CGRectZero insets:UIEdgeInsetsMake(80, 80, 80, 80) thickness:39];
+        _chartView.dataSource = self;
         [_chartView ssj_setBorderStyle:SSJBorderStyleBottom];
         [_chartView ssj_setBorderWidth:1];
     }
@@ -146,26 +138,8 @@
     return _listMenu;
 }
 
-- (UILabel *)incomeAndPaymentTitleLab {
-    if (!_incomeAndPaymentTitleLab) {
-        _incomeAndPaymentTitleLab = [[UILabel alloc] init];
-        _incomeAndPaymentTitleLab.backgroundColor = [UIColor clearColor];
-        _incomeAndPaymentTitleLab.font = [UIFont systemFontOfSize:15];
-        _incomeAndPaymentTitleLab.textAlignment = NSTextAlignmentCenter;
-    }
-    return _incomeAndPaymentTitleLab;
-}
-
-- (UILabel *)incomeAndPaymentMoneyLab {
-    if (!_incomeAndPaymentMoneyLab) {
-        _incomeAndPaymentMoneyLab = [[UILabel alloc] init];
-        _incomeAndPaymentMoneyLab.backgroundColor = [UIColor clearColor];
-        _incomeAndPaymentMoneyLab.font = [UIFont systemFontOfSize:18];
-        _incomeAndPaymentMoneyLab.minimumScaleFactor = 0.66;
-        _incomeAndPaymentMoneyLab.adjustsFontSizeToFitWidth = YES;
-        _incomeAndPaymentMoneyLab.textAlignment = NSTextAlignmentCenter;
-    }
-    return _incomeAndPaymentMoneyLab;
+- (SSJReportFormsChartCellItem *)chartCellItem {
+    return (SSJReportFormsChartCellItem *)self.cellItem;
 }
 
 @end
