@@ -370,6 +370,8 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
         for (SSJCreditCardListDetailItem *listItem in result) {
             listItem.instalmentMoney = [db doubleForQuery:@"select repaymentmoney from bk_credit_repayment where cuserid = ? and crepaymentmonth = ? and ccardid = ?",userid,listItem.month,cardItem.cardId];
         }
+        double instalMoney = [db doubleForQuery:@"select sum(repaymentmoney) from bk_credit_repayment where cuserid = ? and ccardid = ? and operatortype <> 2",userid,cardItem.cardId];
+        newcardItem.cardExpence = newcardItem.cardExpence + instalMoney;
         SSJDispatchMainAsync(^{
             if (success) {
                 success(result,newcardItem);

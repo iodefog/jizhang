@@ -190,7 +190,6 @@
         [self.cardBillingDayLabel sizeToFit];
         self.cardLimitLabel.text = @"";
         [self.cardLimitLabel sizeToFit];
-        [self setNeedsLayout];
     }else if([_item isKindOfClass:[SSJCreditCardItem class]]){
         SSJCreditCardItem *item = (SSJCreditCardItem *)_item;
         self.backView.backgroundColor = [UIColor ssj_colorWithHex:item.cardColor];
@@ -251,6 +250,7 @@
             [self.fundingMemoLabel sizeToFit];
         }else{
             self.fundingMemoLabel.text = [NSString stringWithFormat:@"信用卡额度%.2f",item.cardLimit];
+            self.cardBillingDayLabel.text = @"";
             [self.fundingMemoLabel sizeToFit];
         }
     }
