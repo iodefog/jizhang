@@ -11,7 +11,7 @@
 
 @interface SSJBaseTableViewCell : UITableViewCell
 
-@property (nonatomic, strong) SSJBaseItem *cellItem;
+@property (nonatomic, strong) __kindof SSJBaseItem *cellItem;
 
 @property (nonatomic) UITableViewCellAccessoryType customAccessoryType;
 

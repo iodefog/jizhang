@@ -9,11 +9,13 @@
 #import "SSJReportFormsViewController.h"
 #import "SSJPercentCircleView.h"
 #import "SSJPageControl.h"
-#import "SSJReportFormsSurplusView.h"
 #import "SSJReportFormsIncomeAndPayCell.h"
 #import "SSJReportFormsChartCell.h"
-#import "SSJReportFormsNoDataCell.h"
+#import "SSJReportFormCurveCell.h"
 #import "SSJReportFormStatisticsCell.h"
+#import "SSJReportFormCurveListCell.h"
+#import "SSJReportFormsNoDataCell.h"
+
 #import "SSJReportFormsScaleAxisView.h"
 #import "SSJBudgetNodataRemindView.h"
 #import "SCYSlidePagingHeaderView.h"
@@ -28,9 +30,11 @@
 #import "SSJBooksTypeStore.h"
 
 static NSString *const kChartViewCellID = @"kChartViewCellID";
+static NSString *const kSSJReportFormCurveCellID = @"kSSJReportFormCurveCellID";
 static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
 static NSString *const kNoDataRemindCellID = @"kNoDataRemindCellID";
 static NSString *const kSSJReportFormStatisticsCellID = @"kSSJReportFormStatisticsCellID";
+static NSString *const kSSJReportFormCurveListCellID = @"kSSJReportFormCurveListCellID";
 
 static NSString *const kSegmentTitlePay = @"支出";
 static NSString *const kSegmentTitleIncome = @"收入";
@@ -79,6 +83,9 @@ static NSString *const kSegmentTitleIncome = @"收入";
 
 //  选择的成员／类别
 @property (nonatomic) SSJReportFormsMemberAndCategoryOption selectedOption;
+
+//  折线图的时间维度
+@property (nonatomic) SSJTimeDimension timeDimension;
 
 @end
 
@@ -176,6 +183,28 @@ static NSString *const kSegmentTitleIncome = @"收入";
         SSJReportFormsIncomeAndPayCell *incomeAndPayCell = [tableView dequeueReusableCellWithIdentifier:kIncomeAndPayCellID forIndexPath:indexPath];
         incomeAndPayCell.cellItem = item;
         return incomeAndPayCell;
+    }
+    
+    if ([item isKindOfClass:[SSJReportFormCurveCellItem class]]) {
+        SSJReportFormCurveCell *curveCell = [tableView dequeueReusableCellWithIdentifier:kSSJReportFormCurveCellID forIndexPath:indexPath];
+        curveCell.cellItem = item;
+        curveCell.changeTimePeriodHandle = ^(SSJReportFormCurveCell *cell) {
+//            SSJReportFormCurveCellItem *item = cell.cellItem;
+            
+        };
+        return curveCell;
+    }
+    
+    if ([item isKindOfClass:[SSJReportFormStatisticsCellItem class]]) {
+        SSJReportFormStatisticsCell *statisticsCell = [tableView dequeueReusableCellWithIdentifier:kSSJReportFormStatisticsCellID forIndexPath:indexPath];
+        statisticsCell.cellItem = item;
+        return statisticsCell;
+    }
+    
+    if ([item isKindOfClass:[SSJReportFormCurveListCellItem class]]) {
+        SSJReportFormCurveListCell *curveListCell = [tableView dequeueReusableCellWithIdentifier:kSSJReportFormCurveListCellID forIndexPath:indexPath];
+        curveListCell.cellItem = item;
+        return curveListCell;
     }
     
     if ([item isKindOfClass:[SSJReportFormsNoDataCellItem class]]) {
@@ -399,30 +428,61 @@ static NSString *const kSegmentTitleIncome = @"收入";
         return;
     }
     
-    switch (_selectedOption) {
-        case SSJReportFormsMemberAndCategoryOptionCategory: {
-            [self.view ssj_showLoadingIndicator];
-            [SSJReportFormsUtil queryForIncomeOrPayType:[self currentType] booksId:nil startDate:period.startDate endDate:period.endDate success:^(NSArray<SSJReportFormsItem *> *result) {
-                [self.view ssj_hideLoadingIndicator];
-                [self reorganiseTableVieDatasWithOriginalData:result];
-            } failure:^(NSError *error) {
-                [self showError:error];
-                [self.view ssj_hideLoadingIndicator];
-            }];
+    if (_titleSegmentCtrl.selectedSegmentIndex == 0) {
+        switch (_selectedOption) {
+            case SSJReportFormsMemberAndCategoryOptionCategory: {
+                [self.view ssj_showLoadingIndicator];
+                [SSJReportFormsUtil queryForIncomeOrPayType:[self currentType] booksId:nil startDate:period.startDate endDate:period.endDate success:^(NSArray<SSJReportFormsItem *> *result) {
+                    [self.view ssj_hideLoadingIndicator];
+                    [self reorganiseTableVieDatasWithOriginalData:result];
+                } failure:^(NSError *error) {
+                    [self showError:error];
+                    [self.view ssj_hideLoadingIndicator];
+                }];
+            }
+                break;
+                
+            case SSJReportFormsMemberAndCategoryOptionMember: {
+                [self.view ssj_showLoadingIndicator];
+                [SSJReportFormsUtil queryForMemberChargeWithType:[self currentType] startDate:period.startDate endDate:period.endDate success:^(NSArray<SSJReportFormsItem *> *result) {
+                    [self.view ssj_hideLoadingIndicator];
+                    [self reorganiseTableVieDatasWithOriginalData:result];
+                } failure:^(NSError *error) {
+                    [self showError:error];
+                    [self.view ssj_hideLoadingIndicator];
+                }];
+            }
+                break;
         }
-            break;
+    } else if (_titleSegmentCtrl.selectedSegmentIndex == 1) {
+        [self.view ssj_showLoadingIndicator];
+        [SSJReportFormsUtil queryForBillStatisticsWithType:_timeDimension startDate:period.startDate endDate:period.endDate booksId:nil success:^(NSDictionary *result) {
             
-        case SSJReportFormsMemberAndCategoryOptionMember: {
-            [self.view ssj_showLoadingIndicator];
-            [SSJReportFormsUtil queryForMemberChargeWithType:[self currentType] startDate:period.startDate endDate:period.endDate success:^(NSArray<SSJReportFormsItem *> *result) {
-                [self.view ssj_hideLoadingIndicator];
-                [self reorganiseTableVieDatasWithOriginalData:result];
-            } failure:^(NSError *error) {
-                [self showError:error];
-                [self.view ssj_hideLoadingIndicator];
-            }];
-        }
-            break;
+//            [self.view ssj_hideLoadingIndicator];
+//            _datas = result[SSJReportFormsCurveModelListKey];
+//            
+//            if (_datas.count > 0) {
+//                [_curveView reloadData];
+//                if (_datas.count >= 1) {
+//                    [_curveView scrollToAxisXAtIndex:_datas.count - 1 animated:NO];
+//                }
+//                [self updatePeriodLabelWithResult:result];
+//                [self updateGirdViewWithResult:result];
+//                [self updateDescViewWithResult:result];
+//                
+//                _scrollView.hidden = NO;
+//                [self.view ssj_hideWatermark:YES];
+//            } else {
+//                _scrollView.hidden = YES;
+//                [self.view ssj_showWatermarkWithCustomView:self.noDataRemindView animated:YES target:nil action:nil];
+//            }
+            
+        } failure:^(NSError *error) {
+            [self.view ssj_hideLoadingIndicator];
+            [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
+        }];
+    } else {
+        
     }
 }
 
@@ -718,8 +778,10 @@ static NSString *const kSegmentTitleIncome = @"收入";
         _tableView.tableFooterView = [[UIView alloc] init];
         [_tableView registerClass:[SSJReportFormsChartCell class] forCellReuseIdentifier:kChartViewCellID];
         [_tableView registerClass:[SSJReportFormsIncomeAndPayCell class] forCellReuseIdentifier:kIncomeAndPayCellID];
-        [_tableView registerClass:[SSJReportFormsNoDataCell class] forCellReuseIdentifier:kNoDataRemindCellID];
+        [_tableView registerClass:[SSJReportFormCurveCell class] forCellReuseIdentifier:kSSJReportFormCurveCellID];
         [_tableView registerClass:[SSJReportFormStatisticsCell class] forCellReuseIdentifier:kSSJReportFormStatisticsCellID];
+        [_tableView registerClass:[SSJReportFormCurveListCell class] forCellReuseIdentifier:kSSJReportFormCurveListCellID];
+        [_tableView registerClass:[SSJReportFormsNoDataCell class] forCellReuseIdentifier:kNoDataRemindCellID];
     }
     return _tableView;
 }

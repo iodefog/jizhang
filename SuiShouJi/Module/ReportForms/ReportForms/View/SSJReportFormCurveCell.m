@@ -57,7 +57,7 @@
 }
 
 - (SSJReportFormCurveCellItem *)cellItem {
-    return [self cellItem];
+    return (SSJReportFormCurveCellItem *)[super cellItem];
 }
 
 - (void)updateCellAppearanceAfterThemeChanged {

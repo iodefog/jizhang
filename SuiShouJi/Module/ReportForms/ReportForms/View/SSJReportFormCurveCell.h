@@ -13,6 +13,4 @@
 
 @property (nonatomic, copy) void (^changeTimePeriodHandle)(SSJReportFormCurveCell *);
 
-@property (nonatomic, strong) SSJReportFormCurveCellItem *cellItem;
-
 @end

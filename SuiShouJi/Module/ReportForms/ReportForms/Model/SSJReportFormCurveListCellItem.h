@@ -10,4 +10,12 @@
 
 @interface SSJReportFormCurveListCellItem : SSJBaseItem
 
+@property (nonatomic, copy) NSString *leftTitle;
+
+@property (nonatomic, copy) NSString *rightTitle;
+
+@property (nonatomic, copy) NSString *progressColorValue;
+
+@property (nonatomic) CGFloat scale;
+
 @end
