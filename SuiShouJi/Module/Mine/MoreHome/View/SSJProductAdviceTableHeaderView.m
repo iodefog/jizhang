@@ -61,7 +61,9 @@ static NSInteger padding = 15;
 #pragma mark -Getter
 - (CGFloat)headerHeight
 {
-    return CGRectGetMaxY(_bottomBgview.frame);
+    [self setNeedsDisplay];
+    CGFloat height = CGRectGetMaxY(_bottomBgview.frame);
+    return height < 100 ? 436 : height;
 }
 
 #pragma mark -Lazy

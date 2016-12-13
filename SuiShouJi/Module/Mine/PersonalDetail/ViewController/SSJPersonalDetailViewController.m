@@ -12,7 +12,7 @@ static NSString *const kTitle3 = @"个性签名";
 static NSString *const kTitle4 = @"手机号";
 static NSString *const kTitle5 = @"我的等级";
 static NSString *const kTitle6 = @"修改登录密码";
-static NSString *const kTitle7 = @"手势密码";
+//static NSString *const kTitle7 = @"手势密码";
 
 extern BOOL kHomeNeedLoginPop;
 
@@ -28,7 +28,6 @@ extern BOOL kHomeNeedLoginPop;
 #import "SSJUserDefaultDataCreater.h"
 #import "SSJPasswordModifyViewController.h"
 #import "SSJNickNameModifyView.h"
-#import "SSJMotionPasswordSettingViewController.h"
 #import "SSJBookkeepingTreeCheckInModel.h"
 #import "SSJBookkeepingTreeStore.h"
 #import "SSJBookkeepingTreeHelper.h"
@@ -74,9 +73,9 @@ extern BOOL kHomeNeedLoginPop;
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     if (SSJUserLoginType() != SSJLoginTypeNormal) {
-        self.titles = @[@[kTitle1 , kTitle2 , kTitle3 , kTitle5],@[kTitle7]];
+        self.titles = @[@[kTitle1 , kTitle2 , kTitle3 , kTitle5]];
     }else{
-        self.titles = @[@[kTitle1 , kTitle2 , kTitle3 , kTitle4 , kTitle5],@[kTitle6 , kTitle7]];
+        self.titles = @[@[kTitle1 , kTitle2 , kTitle3 , kTitle4 , kTitle5],@[kTitle6]];
     }
 }
 
@@ -125,10 +124,11 @@ extern BOOL kHomeNeedLoginPop;
     if ([title isEqualToString:kTitle3]) {
         [self.signatureModifyView show];
     }
-    if ([title isEqualToString:kTitle7]) {
-        SSJMotionPasswordSettingViewController *motionPwdSettingVC = [[SSJMotionPasswordSettingViewController alloc] initWithTableViewStyle:UITableViewStylePlain];
-        [self.navigationController pushViewController:motionPwdSettingVC animated:YES];
-    }
+    //mzl mod
+//    if ([title isEqualToString:kTitle7]) {
+//        SSJMotionPasswordSettingViewController *motionPwdSettingVC = [[SSJMotionPasswordSettingViewController alloc] initWithTableViewStyle:UITableViewStylePlain];
+//        [self.navigationController pushViewController:motionPwdSettingVC animated:YES];
+//    }
 }
 #pragma mark - UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -169,9 +169,12 @@ extern BOOL kHomeNeedLoginPop;
         mineHomeCell.cellDetail = self.item.mobileNo;
     }else if ([title isEqualToString:kTitle6]){
         mineHomeCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    } else if ([title isEqualToString:kTitle7]) {
-        mineHomeCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    } else if ([title isEqualToString:kTitle5]){
+    }
+    //mzl mod
+//    else if ([title isEqualToString:kTitle7]) {
+//        mineHomeCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
+//    }
+    else if ([title isEqualToString:kTitle5]){
         mineHomeCell.cellDetail = self.checkInLevel;
     }
     return mineHomeCell;

@@ -882,11 +882,6 @@
 		7DFFD5C61D67201E000FDAA6 /* SSJAddOrEditLoanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DFFD5C51D67201E000FDAA6 /* SSJAddOrEditLoanViewController.m */; };
 		7DFFD5C71D67201E000FDAA6 /* SSJAddOrEditLoanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DFFD5C51D67201E000FDAA6 /* SSJAddOrEditLoanViewController.m */; };
 		910DD6911DF7B47E00A73F0C /* SSJMineHomeCollectionImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 910DD68F1DF7B47E00A73F0C /* SSJMineHomeCollectionImageCell.m */; };
-		911C79971DFE7DE6001EECDC /* SSJMoreProductAdviceTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 911C79961DFE7DE6001EECDC /* SSJMoreProductAdviceTableViewCell.xib */; };
-		911C79981DFE7DE6001EECDC /* SSJMoreProductAdviceTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 911C79961DFE7DE6001EECDC /* SSJMoreProductAdviceTableViewCell.xib */; };
-		911C79991DFE7DE6001EECDC /* SSJMoreProductAdviceTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 911C79961DFE7DE6001EECDC /* SSJMoreProductAdviceTableViewCell.xib */; };
-		911C799A1DFE7DE6001EECDC /* SSJMoreProductAdviceTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 911C79961DFE7DE6001EECDC /* SSJMoreProductAdviceTableViewCell.xib */; };
-		911C799B1DFE7DE6001EECDC /* SSJMoreProductAdviceTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 911C79961DFE7DE6001EECDC /* SSJMoreProductAdviceTableViewCell.xib */; };
 		916012051DF7D86C00BF571C /* SSJHeaderBannerImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 916012041DF7D86C00BF571C /* SSJHeaderBannerImageView.m */; };
 		916012081DF7DC3B00BF571C /* SSJHeaderBannerCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 916012071DF7DC3B00BF571C /* SSJHeaderBannerCollectionViewCell.m */; };
 		916E31D81DF8EECF003C18D4 /* SSJMineHomeCollectionImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 910DD68F1DF7B47E00A73F0C /* SSJMineHomeCollectionImageCell.m */; };
@@ -3267,7 +3262,6 @@
 		7DFFD5C51D67201E000FDAA6 /* SSJAddOrEditLoanViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJAddOrEditLoanViewController.m; sourceTree = "<group>"; };
 		910DD68E1DF7B47E00A73F0C /* SSJMineHomeCollectionImageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMineHomeCollectionImageCell.h; sourceTree = "<group>"; };
 		910DD68F1DF7B47E00A73F0C /* SSJMineHomeCollectionImageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMineHomeCollectionImageCell.m; sourceTree = "<group>"; };
-		911C79961DFE7DE6001EECDC /* SSJMoreProductAdviceTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SSJMoreProductAdviceTableViewCell.xib; sourceTree = "<group>"; };
 		916012031DF7D86C00BF571C /* SSJHeaderBannerImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJHeaderBannerImageView.h; sourceTree = "<group>"; };
 		916012041DF7D86C00BF571C /* SSJHeaderBannerImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJHeaderBannerImageView.m; sourceTree = "<group>"; };
 		916012061DF7DC3B00BF571C /* SSJHeaderBannerCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJHeaderBannerCollectionViewCell.h; sourceTree = "<group>"; };
@@ -6063,7 +6057,6 @@
 				916E32071DF967C1003C18D4 /* SSJProductAdviceTableHeaderView.m */,
 				91F7FD191DFA7D3C005F4B6B /* SSJMoreProductAdviceTableViewCell.h */,
 				91F7FD1A1DFA7D3C005F4B6B /* SSJMoreProductAdviceTableViewCell.m */,
-				911C79961DFE7DE6001EECDC /* SSJMoreProductAdviceTableViewCell.xib */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -7164,7 +7157,6 @@
 				7DBA589F1D6D32B700C02D79 /* yw_1222.jpg in Resources */,
 				7DBA58CA1D6D32B700C02D79 /* sr_refresh.png in Resources */,
 				7DBA59381D6D32B700C02D79 /* ProjectSettings.plist in Resources */,
-				911C79991DFE7DE6001EECDC /* SSJMoreProductAdviceTableViewCell.xib in Resources */,
 				7DC4875D1DF6629700C27B69 /* Localizable.strings in Resources */,
 				7DBA595B1D6D32B700C02D79 /* SSJFinancingHomePopView.xib in Resources */,
 				7DBA59861D6D32B700C02D79 /* Main.storyboard in Resources */,
@@ -7184,7 +7176,6 @@
 				9C2A69511D194CA70010F1DA /* SSJBookKeepingHomePopView.xib in Resources */,
 				9C2A69871D194CA70010F1DA /* rain_sound.wav in Resources */,
 				9C2A69AD1D194CA70010F1DA /* Assets.xcassets in Resources */,
-				911C79981DFE7DE6001EECDC /* SSJMoreProductAdviceTableViewCell.xib in Resources */,
 				9C2A69C31D194CA70010F1DA /* yw_1222.jpg in Resources */,
 				7DC4875C1DF6629700C27B69 /* Localizable.strings in Resources */,
 				9C2A69EE1D194CA70010F1DA /* sr_refresh.png in Resources */,
@@ -7211,7 +7202,6 @@
 				9CEC02131D6D41EB00DB2C8B /* yw_1222.jpg in Resources */,
 				9CEC023E1D6D41EB00DB2C8B /* sr_refresh.png in Resources */,
 				9CEC02AD1D6D41EB00DB2C8B /* ProjectSettings.plist in Resources */,
-				911C799B1DFE7DE6001EECDC /* SSJMoreProductAdviceTableViewCell.xib in Resources */,
 				7DC4875F1DF6629700C27B69 /* Localizable.strings in Resources */,
 				9CEC02D01D6D41EB00DB2C8B /* SSJFinancingHomePopView.xib in Resources */,
 				9CEC02FB1D6D41EB00DB2C8B /* Main.storyboard in Resources */,
@@ -7235,7 +7225,6 @@
 				9CECFE1B1D6D41A700DB2C8B /* yw_1222.jpg in Resources */,
 				9CECFE461D6D41A700DB2C8B /* sr_refresh.png in Resources */,
 				9CECFEB51D6D41A700DB2C8B /* ProjectSettings.plist in Resources */,
-				911C799A1DFE7DE6001EECDC /* SSJMoreProductAdviceTableViewCell.xib in Resources */,
 				7DC4875E1DF6629700C27B69 /* Localizable.strings in Resources */,
 				9CECFED81D6D41A700DB2C8B /* SSJFinancingHomePopView.xib in Resources */,
 				9CECFF031D6D41A700DB2C8B /* Main.storyboard in Resources */,
@@ -7259,7 +7248,6 @@
 				9C3277591CE471A900109C4C /* yw_1222.jpg in Resources */,
 				BD0432F01C1A77BB0051E7AB /* sr_refresh.png in Resources */,
 				7D4EF8941C4B5625003C4B20 /* ProjectSettings.plist in Resources */,
-				911C79971DFE7DE6001EECDC /* SSJMoreProductAdviceTableViewCell.xib in Resources */,
 				7DC4875B1DF6629700C27B69 /* Localizable.strings in Resources */,
 				9C94717C1CEB224C00D69079 /* SSJFinancingHomePopView.xib in Resources */,
 				BD543C4A1C1A6DBC00910D61 /* Main.storyboard in Resources */,

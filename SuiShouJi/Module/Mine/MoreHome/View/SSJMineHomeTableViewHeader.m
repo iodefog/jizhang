@@ -8,17 +8,20 @@
 
 #import "SSJMineHomeTableViewHeader.h"
 #import "SSJMineSyncButton.h"
+#import "SSJUserItem.h"
+#import "SSJUserTableManager.h"
 
 @interface SSJMineHomeTableViewHeader()
 @property (nonatomic, strong) SSJMineHeaderView *headPotraitImage;
 @property (nonatomic, strong) UILabel *nicknameLabel;
 @property(nonatomic, strong) UILabel *checkInLevelLabel;
 @property(nonatomic, strong) UIButton *checkInButton;
-//@property(nonatomic, strong) UIButton *syncButton;
+@property(nonatomic, strong) UILabel *geXingSignLabel;
 @property(nonatomic, strong) UIView *verticalSepertorLine;
 @property(nonatomic, strong) UIImageView *backImage;
 @property(nonatomic, strong) UIButton *loginButton;
 @property(nonatomic, strong) SSJMineSyncButton *syncButton;
+
 @end
 
 @implementation SSJMineHomeTableViewHeader
@@ -30,11 +33,13 @@
         [self addSubview:self.backImage];
         [self addSubview:self.headPotraitImage];
         [self addSubview:self.nicknameLabel];
+        [self addSubview:self.geXingSignLabel];
         [self addSubview:self.checkInLevelLabel];
         [self addSubview:self.syncButton];
         [self addSubview:self.checkInButton];
         [self addSubview:self.verticalSepertorLine];
         [self addSubview:self.loginButton];
+        
         if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
             self.backImage.hidden = NO;
         }else{
@@ -51,12 +56,14 @@
     self.loginButton.size = CGSizeMake(self.width, self.height - 50);
     self.loginButton.leftTop = CGPointMake(0, 0);
     self.headPotraitImage.size = CGSizeMake(64, 64);
-    self.headPotraitImage.centerX = self.width / 2;
-    self.headPotraitImage.top = 40;
-    self.nicknameLabel.top = self.headPotraitImage.bottom + 10;
-    self.nicknameLabel.centerX = self.width / 2;
-    self.checkInLevelLabel.top = self.nicknameLabel.bottom + 10;
-    self.checkInLevelLabel.centerX = self.width / 2;
+    self.headPotraitImage.left = 20;
+    self.headPotraitImage.top = 60;
+    self.nicknameLabel.top = self.headPotraitImage.top + 15;
+    self.nicknameLabel.left = self.geXingSignLabel.left = CGRectGetMaxX(self.headPotraitImage.frame) + 10;
+    self.geXingSignLabel.top = CGRectGetMaxY(self.nicknameLabel.frame) + 0;
+    self.geXingSignLabel.size = CGSizeMake(self.width - CGRectGetMinX(self.geXingSignLabel.frame), 21);
+    self.checkInLevelLabel.centerY = self.headPotraitImage.centerY;
+    self.checkInLevelLabel.right = self.right - 20;
     self.syncButton.size = CGSizeMake(self.width / 2 , 50);
     self.syncButton.leftBottom = CGPointMake(0, self.height);
     [self.syncButton ssj_relayoutBorder];
@@ -79,7 +86,7 @@
     return _headPotraitImage;
 }
 
--(UILabel *)nicknameLabel{
+- (UILabel *)nicknameLabel{
     if (!_nicknameLabel) {
         _nicknameLabel = [[UILabel alloc]init];
         _nicknameLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.moreHomeTitleColor];
@@ -87,6 +94,17 @@
     }
     return _nicknameLabel;
 }
+
+- (UILabel *)geXingSignLabel{
+    if (!_geXingSignLabel) {
+        _geXingSignLabel = [[UILabel alloc] init];
+        _geXingSignLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.moreHomeSubtitleColor];
+        _geXingSignLabel.font = [UIFont systemFontOfSize:13];
+    }
+    return _geXingSignLabel;
+}
+
+
 
 -(UILabel *)checkInLevelLabel{
     if (!_checkInLevelLabel) {
@@ -147,6 +165,8 @@
     return _verticalSepertorLine;
 }
 
+
+#pragma mark Setter
 -(void)setItem:(SSJUserInfoItem *)item{
     _item = item;
     if (SSJIsUserLogined()) {
@@ -172,6 +192,17 @@
         self.headPotraitImage.headerImage.image = [UIImage imageNamed:@"defualt_portrait"];
         self.nicknameLabel.text = @"待君登录";
         [self.nicknameLabel sizeToFit];
+    }
+
+}
+
+- (void)setSignStr
+{
+    SSJUserItem *userItem = [SSJUserTableManager queryUserItemForID:SSJUSERID()];
+    if (userItem.signature.length < 1 || userItem.signature == nil) {
+        _geXingSignLabel.text = @"个性签名何必个性";
+    }else{
+        _geXingSignLabel.text = userItem.signature;
     }
 
 }
