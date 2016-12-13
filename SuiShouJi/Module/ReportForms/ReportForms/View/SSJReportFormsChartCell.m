@@ -27,6 +27,7 @@
         [self.contentView addSubview:self.chartView];
         [self.contentView addSubview:self.categoryBtn];
         [self updateAppearance];
+        self.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     return self;
 }
