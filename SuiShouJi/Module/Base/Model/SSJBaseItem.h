@@ -20,10 +20,8 @@
 - (void)parseElement:(id)element;
 
 /**
- 返回对应cell的行高，默认返回44；子类根据情况复写此方法
-
- @return 对应cell的行高
+ 返回对应cell的行高，默认返回44；子类根据情况复写Getter方法
  */
-- (CGFloat)rowHeight;
+@property (nonatomic, readonly) CGFloat rowHeight;
 
 @end
