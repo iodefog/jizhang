@@ -110,10 +110,11 @@ static NSString *const SSJInstalmentDetailMutiLabCellIdentifier = @"SSJInstalmen
         if ([title isEqualToString:kTitle1]) {
             if ([self.chargeItem.billId isEqualToString:@"11"]) {
                 repaymentModifyCell.cellTitle = [NSString stringWithFormat:@"%ld月份账单本金",self.repaymentModel.repaymentMonth.month];
+                repaymentModifyCell.cellDetail = [[NSString stringWithFormat:@"%f",[self.repaymentModel.repaymentMoney doubleValue] / self.repaymentModel.instalmentCout] ssj_moneyDecimalDisplayWithDigits:2];
             } else {
                 repaymentModifyCell.cellTitle = [NSString stringWithFormat:@"%ld月份账单手续费",self.repaymentModel.repaymentMonth.month];
+                repaymentModifyCell.cellDetail = [[NSString stringWithFormat:@"%f",[self.repaymentModel.repaymentMoney doubleValue] * [self.repaymentModel.poundageRate doubleValue] / self.repaymentModel.instalmentCout] ssj_moneyDecimalDisplayWithDigits:2];
             }
-            repaymentModifyCell.cellDetail = [[NSString stringWithFormat:@"%f",[self.repaymentModel.repaymentMoney doubleValue] / self.repaymentModel.instalmentCout] ssj_moneyDecimalDisplayWithDigits:2];
         } else if ([title isEqualToString:kTitle3]) {
             repaymentModifyCell.cellDetail = [NSString stringWithFormat:@"%ld期",self.repaymentModel.instalmentCout];
         } else if ([title isEqualToString:kTitle4]) {
