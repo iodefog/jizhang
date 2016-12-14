@@ -6,6 +6,8 @@
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
 
+//  类别、成员切换控件
+
 #import <UIKit/UIKit.h>
 #import "SSJListMenu.h"
 

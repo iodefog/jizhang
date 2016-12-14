@@ -78,7 +78,7 @@
             self.fundingBalanceLabel.centerY = self.fundingNameLabel.centerY;
         }
         self.fundingBalanceLabel.right = self.backView.width - 10;
-        self.fundingNameLabel.width = self.fundingBalanceLabel.left - self.fundingImage.right - 20; 
+//        self.fundingNameLabel.width = self.fundingBalanceLabel.left - self.fundingImage.right - 20; 
         self.cardMemoLabel.width = self.fundingBalanceLabel.left - self.fundingNameLabel.right - 10;
         self.cardMemoLabel.left = self.fundingNameLabel.right + 10;
         self.cardMemoLabel.centerY = self.fundingNameLabel.centerY;
@@ -201,6 +201,8 @@
         [self.fundingNameLabel sizeToFit];
         if (item.cardMemo.length) {
             self.cardMemoLabel.text = [NSString stringWithFormat:@"| %@",item.cardMemo];
+        } else {
+            self.cardMemoLabel.text = @"";
         }
         [self.cardMemoLabel sizeToFit];
         if (item.cardBillingDay != 0 && item.cardRepaymentDay != 0) {

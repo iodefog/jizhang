@@ -40,11 +40,9 @@
 //  编辑、删除自定义时间按钮
 @property (nonatomic, strong) UIButton *addOrDeleteCustomPeriodBtn;
 
-//  圆环中间顶部的总收入、总支出
-@property (nonatomic, strong) UILabel *incomeAndPaymentTitleLab;
+@property (nonatomic, copy) NSString *title;
 
-//  圆环中间顶部的总收入、总支出金额
-@property (nonatomic, strong) UILabel *incomeAndPaymentMoneyLab;
+@property (nonatomic, copy) NSString *amount;
 
 @property (nonatomic) double totalIncome;
 

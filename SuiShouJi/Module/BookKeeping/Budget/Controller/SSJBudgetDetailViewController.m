@@ -11,7 +11,6 @@
 #import "SSJBillingChargeViewController.h"
 #import "SSJBudgetDetailPeriodSwitchControl.h"
 #import "SSJBudgetDetailHeaderView.h"
-#import "SSJBudgetDetailBottomView.h"
 #import "SSJBudgetDetailMiddleTitleView.h"
 #import "SSJBorderButton.h"
 #import "SSJPercentCircleView.h"

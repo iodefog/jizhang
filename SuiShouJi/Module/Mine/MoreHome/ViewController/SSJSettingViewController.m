@@ -25,7 +25,9 @@
 #import "SSJDataSynchronizer.h"
 #import "SSJLocalNotificationHelper.h"
 #import "SSJLoginViewController.h"
+#import "SSJMotionPasswordSettingViewController.h"
 
+static NSString *const kTitle0 = @"手势密码";
 static NSString *const kTitle1 = @"自动同步设置";
 static NSString *const kTitle2 = @"数据重新拉取";
 static NSString *const kTitle3 = @"数据格式化";
@@ -61,15 +63,15 @@ static NSString *const kTitle8 = @"点击上方微信号复制，接着去微信
     [super viewWillAppear:animated];
     if ([SSJStartChecker sharedInstance].isInReview) {
         if ([WXApi isWXAppInstalled]) {
-            self.titles = @[@[kTitle1], @[kTitle2 , kTitle3], @[kTitle6] ,@[kTitle7,kTitle8]];
+            self.titles = @[@[kTitle0], @[kTitle1], @[kTitle2 , kTitle3], @[kTitle6] ,@[kTitle7,kTitle8]];
         }else{
             self.titles = @[@[kTitle1], @[kTitle2 , kTitle3], @[kTitle6]];
         }
     } else {
         if ([WXApi isWXAppInstalled]) {
-            self.titles = @[@[kTitle1], @[kTitle2 , kTitle3] , @[kTitle5], @[kTitle6],@[kTitle7,kTitle8]];
+            self.titles = @[@[kTitle0], @[kTitle1], @[kTitle2 , kTitle3] , @[kTitle5], @[kTitle6],@[kTitle7,kTitle8]];
         }else{
-            self.titles = @[@[kTitle1], @[kTitle2 , kTitle3] , @[kTitle5], @[kTitle6]];
+            self.titles = @[@[kTitle0], @[kTitle1], @[kTitle2 , kTitle3] , @[kTitle5], @[kTitle6]];
         }
     }
     
@@ -108,11 +110,17 @@ static NSString *const kTitle8 = @"点击上方微信号复制，接着去微信
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
+    if ([title isEqualToString:kTitle0]) {
+        SSJMotionPasswordSettingViewController *motionPwdSettingVC = [[SSJMotionPasswordSettingViewController alloc] initWithTableViewStyle:UITableViewStylePlain];
+        [self.navigationController pushViewController:motionPwdSettingVC animated:YES];
+        return;
+    }
     
     //  同步设置
     if ([title isEqualToString:kTitle1]) {
         SSJSyncSettingViewController *syncSettingVC = [[SSJSyncSettingViewController alloc]init];
         [self.navigationController pushViewController:syncSettingVC animated:YES];
+        return;
     }
     
     //  重新拉去

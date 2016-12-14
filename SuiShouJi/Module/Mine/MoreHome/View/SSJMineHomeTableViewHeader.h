@@ -26,6 +26,10 @@
 //点击同步的回调
 typedef void (^checkInButtonClickBlock)();
 
+/**
+ 签名
+ */
+- (void)setSignStr;
 @property (nonatomic, copy) checkInButtonClickBlock checkInButtonClickBlock;
 
 //点击登录回调

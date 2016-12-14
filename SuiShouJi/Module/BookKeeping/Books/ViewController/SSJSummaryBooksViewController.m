@@ -230,27 +230,11 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
 //  更新总收入\总支出
 - (void)updateIncomeAndPaymentLabels {
     if (_header.incomOrExpenseSelectSegment.selectedSegmentIndex == 0) {
-        _header.incomeAndPaymentTitleLab.hidden = _header.incomeAndPaymentMoneyLab.hidden = NO;
-        _header.incomeAndPaymentTitleLab.text = @"总支出";
+        _header.title = @"总支出";
     } else if (_header.incomOrExpenseSelectSegment.selectedSegmentIndex == 1) {
-        _header.incomeAndPaymentTitleLab.hidden = _header.incomeAndPaymentMoneyLab.hidden = NO;
-        _header.incomeAndPaymentTitleLab.text = @"总收入";
+        _header.title = @"总收入";
     }
 }
-
-//  计算总收入\支出
-- (void)caculateIncomeOrPayment {
-    [_header.incomeAndPaymentMoneyLab ssj_showLoadingIndicator];
-
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSNumber *payment = [self.chargeDatas valueForKeyPath:@"@sum.money"];
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            [_header.incomeAndPaymentMoneyLab ssj_hideLoadingIndicator];
-            _header.incomeAndPaymentMoneyLab.text = [NSString stringWithFormat:@"%.2f", [payment doubleValue]];
-        });
-    });
-}
-
 
 // 查询某个周期内的流水统计
 - (void)reloadDatasCurrentPeriod {
@@ -390,7 +374,9 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
         }
     }];
     [self.tableView reloadData];
-    [self caculateIncomeOrPayment];
+    
+    NSNumber *payment = [self.chargeDatas valueForKeyPath:@"@sum.money"];
+    _header.amount = [NSString stringWithFormat:@"%.2f", [payment doubleValue]];
     
     //  将比例小于0.01的item过滤掉
     NSMutableArray *filterItems = [NSMutableArray array];

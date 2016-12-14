@@ -10,4 +10,5 @@
 
 @interface SSJProductAdviceViewController : SSJBaseViewController
 
+
 @end

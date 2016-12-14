@@ -33,4 +33,8 @@
     SSJPRINT(@"<<< 警告：设置未定义的属性：%@ >>>",key);
 }
 
+- (CGFloat)rowHeight {
+    return 54;
+}
+
 @end

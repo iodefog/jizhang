@@ -13,14 +13,23 @@
 #import "SSJUserTableManager.h"
 #import <YWFeedbackFMWK/YWFeedbackKit.h>
 #import "SSJProductAdviceNetWorkService.h"
-@interface SSJProductAdviceViewController ()<UITableViewDelegate,UITableViewDataSource>
-@property (nonatomic, strong) UITableView *tableView;
+#import "TPKeyboardAvoidingTableView.h"
+#import "SSJMoreProductAdviceTableViewCell.h"
+#import "SSJAdviceItem.h"
+#import "SSJChatMessageItem.h"
+
+@interface SSJProductAdviceViewController ()<UITableViewDelegate,UITableViewDataSource,SSJProductAdviceTableHeaderViewDelegate>
+@property (nonatomic, strong) TPKeyboardAvoidingTableView *tableView;
 @property (nonatomic, strong) SSJProductAdviceTableHeaderView *productAdviceTableHeaderView;
-//@property (nonatomic, strong) YWFeedbackKit *feedbackKit;
+@property (nonatomic, strong) NSArray *chartMessageArray;
 /**
  <#注释#>
  */
 @property (nonatomic, strong) SSJProductAdviceNetWorkService *adviceService;
+/**
+ 请求类型
+ */
+@property (nonatomic, assign) NSInteger requestType;
 @end
 
 @implementation SSJProductAdviceViewController
@@ -29,20 +38,21 @@
     [super viewDidLoad];
     [self.view addSubview:self.tableView];
     [self setUpNav];
-    self.automaticallyAdjustsScrollViewInsets = NO;
+//    self.automaticallyAdjustsScrollViewInsets = NO;
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     //type	int	是	0:查询 1：添加
-    [self.adviceService requestAdviceMessageListWithType:0];
+    self.requestType = 0;
+    [self.adviceService requestAdviceMessageListWithType:0 message:@"" additionalMessage:@""];
 }
 
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
-    self.tableView.frame = CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM);
+    self.tableView.frame = CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM + SSJ_TABBAR_HEIGHT);
 }
 
 - (void)setUpNav
@@ -89,9 +99,77 @@
 #pragma mark - SSJBaseNetworkService
 -(void)serverDidFinished:(SSJBaseNetworkService *)service
 {
-//    self.adviceService.messageItem
+    if ([service.returnCode isEqualToString:@"1"]) {
+//        type	int	是	0:查询 1：添加
+        if (self.requestType == 1) {
+            //清空内容
+            [self.productAdviceTableHeaderView clearAdviceContext];
+            //提示语
+             [CDAutoHideMessageHUD showMessage:service.desc];
+            //刷新数据
+            self.requestType = 0;
+            [self.adviceService requestAdviceMessageListWithType:0 message:@"" additionalMessage:@""];
+        }else if (self.requestType == 0){
+            [self sortedArray];
+        }
+    }
 }
-
+/*
+ 数组排序等处理
+ */
+- (void)sortedArray
+{
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    formatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
+    //处理数据
+    //     self.chartMessageArray = self.adviceService.adviceItems.messageItems;
+    NSMutableArray *tempArr = [NSMutableArray array];
+    for (SSJChatMessageItem *item in self.adviceService.adviceItems.messageItems) {
+        if (item.creplyContent.length) {//如果回复内容存在
+            SSJChatMessageItem *chartMessageItem = [[SSJChatMessageItem alloc] init];
+            chartMessageItem.isSystem = YES;
+            [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss.0"];
+            NSDate *tempDate = [formatter dateFromString:item.creplyDate];
+            [formatter setDateFormat:@"yyyy-MM-dd"];
+            NSString *string = [formatter stringFromDate:tempDate];
+            chartMessageItem.dateStr = string;
+            chartMessageItem.date = tempDate;
+            chartMessageItem.date = [formatter dateFromString:string];
+            chartMessageItem.content = item.creplyContent;
+            [tempArr addObject:chartMessageItem];
+        }
+        if (item.cContent.length) {//如果建议内容存在
+            SSJChatMessageItem *chartMessageItem = [[SSJChatMessageItem alloc] init];
+            chartMessageItem.isSystem = NO;
+            [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss.0"];
+            NSDate *tempDate = [formatter dateFromString:item.caddDate];
+            [formatter setDateFormat:@"yyyy-MM-dd"];
+            NSString *string = [formatter stringFromDate:tempDate];
+            chartMessageItem.dateStr = string;
+            chartMessageItem.date = tempDate;
+            chartMessageItem.content = item.cContent;
+            [tempArr addObject:chartMessageItem];
+        }
+    }
+    //对数组按照时间进行排序
+    NSArray *arr = [tempArr sortedArrayUsingComparator:^NSComparisonResult(SSJChatMessageItem * _Nonnull obj1, SSJChatMessageItem *  _Nonnull obj2) {
+        NSDate *date1 = obj1.date;
+        NSDate *date2 = obj2.date;
+        NSComparisonResult result = [date1 compare:date2];
+        return result == NSOrderedAscending;
+    }];
+    
+    //遍历排序后的数组判断是否显示时间同一天的不显示，否则显示
+    SSJChatMessageItem *lastItem;
+    for (SSJChatMessageItem *item in arr) {
+        if ([lastItem.date isSameDay:item.date]) {
+            item.isHiddenTime = YES;
+        }
+        lastItem = item;
+    }
+    self.chartMessageArray = [NSMutableArray arrayWithArray:arr];
+    [self.tableView reloadData];
+}
 
 #pragma mark -Lazy
 #pragma mark -Getter
@@ -103,14 +181,15 @@
     return _adviceService;
 }
 
-- (UITableView *)tableView
+- ( TPKeyboardAvoidingTableView*)tableView
 {
     if (!_tableView) {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
+        _tableView = [[TPKeyboardAvoidingTableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.backgroundColor = [UIColor clearColor];
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        _tableView.contentInset = UIEdgeInsetsMake(0, 0, 15, 0);
     }
     return _tableView;
 }
@@ -119,6 +198,7 @@
 {
     if (!_productAdviceTableHeaderView) {
         _productAdviceTableHeaderView = [[SSJProductAdviceTableHeaderView alloc] init];
+        _productAdviceTableHeaderView.delegate = self;
     }
     return _productAdviceTableHeaderView;
 }
@@ -131,17 +211,13 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 2;
+    return self.chartMessageArray.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    return nil;
-   static NSString *cellId = @"cellForRowAtIndexPath";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
-    if (!cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellId];
-    }
+   SSJMoreProductAdviceTableViewCell *cell =  [SSJMoreProductAdviceTableViewCell cellWithTableView:tableView];
+    cell.message = [self.chartMessageArray ssj_safeObjectAtIndex:indexPath.row];
     return cell;
 }
 
@@ -151,6 +227,30 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
     return self.productAdviceTableHeaderView.headerHeight;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+   SSJChatMessageItem *item = [self.chartMessageArray ssj_safeObjectAtIndex:indexPath.row];
+    return item.cellHeight;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForHeaderInSection:(NSInteger)section
+{
+    return 436;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 100;
+}
+
+#pragma mark -SSJProductAdviceTableHeaderViewDelegate
+- (void)submitAdviceButtonClickedWithMessage:(NSString *)messageStr additionalMessage:(NSString *)addMessage
+{
+    self.requestType = 1;
+    [self.adviceService requestAdviceMessageListWithType:1 message:messageStr additionalMessage:addMessage];//添加
+    
 }
 
 @end

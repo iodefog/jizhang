@@ -47,6 +47,7 @@
 #import "SSJMineHomeCollectionImageCell.h"
 #import "SSJHeaderBannerImageView.h"
 #import "SSJProductAdviceViewController.h"
+#import "SSJPersonalDetailItem.h"
 
 static NSString *const kTitle1 = @"提醒";
 static NSString *const kTitle2 = @"主题皮肤";
@@ -60,7 +61,7 @@ static NSString *const kHeaderViewID = @"headerViewIdentifier";
 static NSString *const kItemID = @"homeItemIdentifier";
 
 
-static BOOL KHasEnterMineHome;
+//static BOOL KHasEnterMineHome;
 
 static BOOL kNeedBannerDisplay = YES;
 
@@ -81,6 +82,7 @@ static BOOL kNeedBannerDisplay = YES;
 @property(nonatomic, strong) SSJBannerNetworkService *bannerService;
 @property(nonatomic, strong) SSJBannerHeaderView *bannerHeader;
 @property (nonatomic, strong) YWFeedbackKit *feedbackKit;
+@property(nonatomic, strong) SSJPersonalDetailItem *personalDetailItem;
 
 @property (nonatomic, strong) UIView *lineView;
 @property (nonatomic, strong) NSMutableArray<SSJListAdItem *> *adItems;//服务器返回的广告
@@ -159,6 +161,7 @@ static BOOL kNeedBannerDisplay = YES;
         weakSelf.header.item = item;
         _userItem = item;
     }];
+    [self.header setSignStr];//设置签名
     
     SSJBookkeepingTreeCheckInModel *checkInModel = [SSJBookkeepingTreeStore queryCheckInInfoWithUserId:SSJUSERID() error:nil];
     self.header.checkInLevel = [SSJBookkeepingTreeHelper treeLevelForDays:checkInModel.checkInTimes];
@@ -186,53 +189,7 @@ static BOOL kNeedBannerDisplay = YES;
     [self.userInfoService cancel];
 }
 
-#pragma mark - UITableViewDelegate
-//-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-//    NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
-//    if ([title isEqualToString:kTitle5]) {
-//        return 65;
-//    }
-//    return 55;
-//}
-//
-//- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-//    if (self.bannerHeader.items.count && section == 0 && kNeedBannerDisplay) {
-//        return 90;
-//    }
-//    return 10;
-//}
 
-//-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
-//    if (self.bannerHeader.items.count && section == 0 && kNeedBannerDisplay) {
-//        return self.bannerHeader;
-//    }
-//    return [UIView new];
-//}
-
-//-(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
-//    UIView *footerView = [[UIView alloc]initWithFrame:CGRectZero];
-//    return footerView;
-//}
-
-//-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
-//    return 0.1f;
-//}
-
-//-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-//    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-//    }
-//
-//-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
-//    SSJMineHomeImageCell * currentCell = (SSJMineHomeImageCell *)cell;
-//    if (!KHasEnterMineHome) {
-//        currentCell.transform = CGAffineTransformMakeTranslation( - self.view.width , 0);
-//        [UIView animateWithDuration:0.3 delay:0.1 * [_titleArr indexOfObject:currentCell.cellTitle] options:UIViewAnimationOptionTransitionCurlUp animations:^{
-//            currentCell.transform = CGAffineTransformIdentity;
-//        } completion:^(BOOL finished) {
-//            KHasEnterMineHome = YES;
-//        }];
-//    }
-//}
 #pragma mark - UICollectionViewDataSource
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
@@ -281,15 +238,9 @@ static BOOL kNeedBannerDisplay = YES;
 #pragma mark -UICollectionViewDelegate
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-//    NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
     SSJListAdItem *item = [self.adItemsArray ssj_safeObjectAtIndex:indexPath.item];
     
-    
     // 如果是广告
-//    if ([title isEqualToString:self.adItem.adTitle]) {
-//        SSJAdWebViewController *webVc = [SSJAdWebViewController webViewVCWithURL:[NSURL URLWithString:self.adItem.url]];
-//        [self.navigationController pushViewController:webVc animated:YES];
-//    }
     if (item.url.length && item.imageUrl.length) {
         SSJAdWebViewController *webVc = [SSJAdWebViewController webViewVCWithURL:[NSURL URLWithString:item.url]];
         [self.navigationController pushViewController:webVc animated:YES];
@@ -357,6 +308,7 @@ static BOOL kNeedBannerDisplay = YES;
     }*/
     if ([item.adTitle isEqualToString:kTitle5]) {
         SSJProductAdviceViewController *adviceVC = [[SSJProductAdviceViewController alloc] init];
+        [adviceVC setHidesBottomBarWhenPushed:YES];
         [self.navigationController pushViewController:adviceVC animated:YES];
     }
     
@@ -409,22 +361,11 @@ static BOOL kNeedBannerDisplay = YES;
 
 #pragma mark - SSJBaseNetworkService
 -(void)serverDidFinished:(SSJBaseNetworkService *)service{
-//    if (self.bannerService.item.bannerItems.count) {
-//        self.bannerHeader.items = self.bannerService.item.bannerItems;
-//        [self.collectionView reloadData];
-//    }
-//    if (self.bannerService.item.listAdItem.hidden) {
-//        self.adItem = self.bannerService.item.listAdItem;
-//        [self.titles insertObject:@[self.adItem.adTitle] atIndex:0];
-//        [_titleArr insertObject:self.adItem.adTitle atIndex:0];
-////        [self.images insertObject:@[[UIImage imageNamed:@"jinrong"]] atIndex:0];
-//        [self.tableView reloadData];
-//    }
     //banner
     if (self.bannerService.item.bannerItems.count) {
-//        self.headerBannerImageView.bannerItemArray = self.bannerService.item.bannerItems;
         UICollectionViewFlowLayout *collectionViewLayout = (UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout;
-        collectionViewLayout.headerReferenceSize = CGSizeMake(SSJSCREENWITH, 90);
+        collectionViewLayout.headerReferenceSize = CGSizeMake(SSJSCREENWITH, kBannerHeight);
+        self.lineView.top = kBannerHeight;
     }
     
     //广告
@@ -584,7 +525,8 @@ static BOOL kNeedBannerDisplay = YES;
 - (UIView *)lineView
 {
     if (!_lineView) {
-        _lineView = [[UIView alloc] initWithFrame:CGRectMake(0, kBannerHeight, SSJSCREENWITH, 0.5)];
+        _lineView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SSJSCREENWITH, 0.5)];
+        self.lineView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
     }
     return _lineView;
 }

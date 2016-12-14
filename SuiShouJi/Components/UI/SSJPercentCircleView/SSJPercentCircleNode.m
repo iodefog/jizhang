@@ -10,7 +10,7 @@
 
 static NSString *const kAnimationKey = @"kAnimationKey";
 
-@interface SSJPercentCircleNode ()
+@interface SSJPercentCircleNode () <CAAnimationDelegate>
 
 @property (nonatomic) CGPoint centerPoint;
 

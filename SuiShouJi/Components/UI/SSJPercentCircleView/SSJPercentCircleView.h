@@ -23,13 +23,19 @@
 
 - (instancetype)initWithFrame:(CGRect)frame insets:(UIEdgeInsets)insets thickness:(CGFloat)thickness;
 
-@property (nonatomic, strong, readonly) UIView *contentView;
-
 @property (nonatomic, readonly) UIEdgeInsets circleInsets;
 
 @property (nonatomic, readonly) CGFloat circleThickness;
 
-@property (nonatomic, readonly) CGRect circleFrame;
+@property (nonatomic) CGFloat gapBetweenTitles;
+
+@property (nonatomic, copy) NSString *topTitle;
+
+@property (nonatomic, copy) NSString *bottomTitle;
+
+@property (nonatomic, strong) NSDictionary *topTitleAttribute;
+
+@property (nonatomic, strong) NSDictionary *bottomTitleAttribute;
 
 @property (nonatomic, weak) id <SSJReportFormsPercentCircleDataSource> dataSource;
 
