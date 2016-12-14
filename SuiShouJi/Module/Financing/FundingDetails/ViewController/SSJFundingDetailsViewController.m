@@ -36,6 +36,7 @@
 #import "SSJCalenderDetailViewController.h"
 #import "SSJInstalmentEditeViewController.h"
 #import "SSJInstalmentDetailViewController.h"
+#import "SSJBalenceChangeDetailViewController.h"
 
 #import "FMDB.h"
 
@@ -308,6 +309,10 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
                         calenderDetailVC.item = (SSJBillingChargeCellItem *)item;
                         [self.navigationController pushViewController:calenderDetailVC animated:YES];
 
+                    } else {
+                        SSJBalenceChangeDetailViewController *balanceChangeVc = [[SSJBalenceChangeDetailViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
+                        balanceChangeVc.chargeItem = (SSJBillingChargeCellItem *)item;
+                        [self.navigationController pushViewController:balanceChangeVc animated:YES];
                     }
                 }
             }

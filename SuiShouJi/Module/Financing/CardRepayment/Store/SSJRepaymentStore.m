@@ -35,7 +35,7 @@
                     model.memo = [resultSet stringForColumn:@"CMEMO"];
                     model.cardRepaymentDay = [resultSet intForColumn:@"crepaymentdate"];
                     model.cardBillingDay = [resultSet intForColumn:@"cbilldate"];
-                    NSDate *billDate = [NSDate dateWithString:item.billDate formatString:@"yyyy-MM"];
+                    NSDate *billDate = [NSDate dateWithString:item.billDate formatString:@"yyyy-MM-dd"];
                     model.currentInstalmentCout = [billDate monthsFrom:model.applyDate] + 1;
                 }
             }else {
@@ -254,7 +254,7 @@
                 });
             }
         };
-        if (![db executeUpdate:@"update bk_credit_repayment set operatortype = 2, iversion = ?, cwritedate = ? where cuserid = ? and crepaymentid = ?",@(SSJSyncVersion()),writeDate,userId,@(SSJChargeIdTypeRepayment),model.repaymentId]) {
+        if (![db executeUpdate:@"update bk_credit_repayment set operatortype = 2, iversion = ?, cwritedate = ? where cuserid = ? and crepaymentid = ?",@(SSJSyncVersion()),writeDate,userId,model.repaymentId]) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{
                     failure([db lastError]);
