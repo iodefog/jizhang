@@ -7,6 +7,7 @@
 //
 
 #import "SSJInstalmentEditeViewController.h"
+#import "SSJFundingDetailsViewController.h"
 
 #import "TPKeyboardAvoidingTableView.h"
 #import "SSJReminderDateSelectView.h"
@@ -88,9 +89,11 @@ static NSString *const kTitle6 = @"分期申请日";
             repaymentDate = [repaymentDate dateBySubtractingMonths:1];
         }
         self.repaymentModel.repaymentMonth = repaymentDate;
+        self.title = @"新建账单分期";
     } else {
         UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(deleteButtonClicked)];
-        self.navigationItem.rightBarButtonItem = rightItem;  
+        self.navigationItem.rightBarButtonItem = rightItem;
+        self.title = @"编辑账单分期";
     }
     [self.tableView reloadData];
 }
@@ -286,17 +289,29 @@ static NSString *const kTitle6 = @"分期申请日";
         [CDAutoHideMessageHUD showMessage:@"本期账单还没有出不能分期哦"];
         return;
     }
-    if (!([[[NSDate dateWithYear:self.repaymentModel.repaymentMonth.year month:self.repaymentModel.repaymentMonth.month day:self.repaymentModel.cardBillingDay] dateBySubtractingMonths:1] isEarlierThanOrEqualTo:self.repaymentModel.applyDate] && [[NSDate dateWithYear:self.repaymentModel.repaymentMonth.year month:self.repaymentModel.repaymentMonth.month day:self.repaymentModel.cardRepaymentDay] isLaterThanOrEqualTo:self.repaymentModel.applyDate])) {
-        [CDAutoHideMessageHUD showMessage:@"分期分期只能在账单日和还款日之间申请哦"];
-        return;
+    if (self.repaymentModel.cardBillingDay > self.repaymentModel.cardRepaymentDay) {
+        if (!([[[NSDate dateWithYear:self.repaymentModel.repaymentMonth.year month:self.repaymentModel.repaymentMonth.month day:self.repaymentModel.cardBillingDay] dateBySubtractingMonths:1] isEarlierThanOrEqualTo:self.repaymentModel.applyDate] && [[NSDate dateWithYear:self.repaymentModel.repaymentMonth.year month:self.repaymentModel.repaymentMonth.month day:self.repaymentModel.cardRepaymentDay] isLaterThanOrEqualTo:self.repaymentModel.applyDate])) {
+            [CDAutoHideMessageHUD showMessage:@"分期分期只能在账单日和还款日之间申请哦"];
+            return;
+        }
+    } else {
+        if (!([[[NSDate dateWithYear:self.repaymentModel.repaymentMonth.year month:self.repaymentModel.repaymentMonth.month day:self.repaymentModel.cardBillingDay] dateBySubtractingMonths:1] isEarlierThanOrEqualTo:self.repaymentModel.applyDate] && [[[NSDate dateWithYear:self.repaymentModel.repaymentMonth.year month:self.repaymentModel.repaymentMonth.month day:self.repaymentModel.cardRepaymentDay] dateByAddingMonths:1] isLaterThanOrEqualTo:self.repaymentModel.applyDate])) {
+            [CDAutoHideMessageHUD showMessage:@"分期分期只能在账单日和还款日之间申请哦"];
+            return;
+        }
     }
+
     if (![SSJRepaymentStore checkTheMoneyIsValidForTheRepaymentWithRepaymentModel:self.repaymentModel]) {
         [CDAutoHideMessageHUD showMessage:@"分期金额不能大于当期账单金额哦"];
         return;
     }
     __weak typeof(self) weakSelf = self;
     [SSJRepaymentStore saveRepaymentWithRepaymentModel:self.repaymentModel Success:^{
-        [weakSelf.navigationController popViewControllerAnimated:YES];
+        for (UIViewController *viewcontroller in self.navigationController.viewControllers) {
+            if ([viewcontroller isKindOfClass:[SSJFundingDetailsViewController class]]) {
+                [weakSelf.navigationController popToViewController:viewcontroller animated:YES];
+            }
+        }
     } failure:^(NSError *error) {
         
     }];
@@ -305,7 +320,11 @@ static NSString *const kTitle6 = @"分期申请日";
 - (void)deleteButtonClicked{
     __weak typeof(self) weakSelf = self;
     [SSJRepaymentStore deleteRepaymentWithRepaymentModel:self.repaymentModel Success:^{
-        [weakSelf.navigationController popViewControllerAnimated:YES];
+        for (UIViewController *viewcontroller in self.navigationController.viewControllers) {
+            if ([viewcontroller isKindOfClass:[SSJFundingDetailsViewController class]]) {
+                [weakSelf.navigationController popToViewController:viewcontroller animated:YES];
+            }
+        }
     } failure:^(NSError *error) {
         
     }];

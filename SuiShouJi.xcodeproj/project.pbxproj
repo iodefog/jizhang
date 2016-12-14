@@ -1657,6 +1657,7 @@
 		9C9D0B831D07B015003A9F4E /* SSJChargeCircleTimeSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9D0B821D07B015003A9F4E /* SSJChargeCircleTimeSelectView.m */; };
 		9C9D0B861D080E09003A9F4E /* SSJCircleChargeTypeSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9D0B851D080E09003A9F4E /* SSJCircleChargeTypeSelectView.m */; };
 		9C9D0BA91D0E7C1D003A9F4E /* SSJChargeCircleNoneView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9D0BA81D0E7C1D003A9F4E /* SSJChargeCircleNoneView.m */; };
+		9C9D58861E01167F00E04213 /* SSJBalenceChangeDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9D58851E01167F00E04213 /* SSJBalenceChangeDetailViewController.m */; };
 		9C9DD6561D475A13001FA3C5 /* SSJDataClearHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9DD6551D475A13001FA3C5 /* SSJDataClearHelper.m */; };
 		9C9DD6601D4768F5001FA3C5 /* SSJClearUserDataService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9DD65F1D4768F5001FA3C5 /* SSJClearUserDataService.m */; };
 		9C9DD6611D484A07001FA3C5 /* SSJClearUserDataService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9DD65F1D4768F5001FA3C5 /* SSJClearUserDataService.m */; };
@@ -3455,6 +3456,8 @@
 		9C9D0B851D080E09003A9F4E /* SSJCircleChargeTypeSelectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCircleChargeTypeSelectView.m; sourceTree = "<group>"; };
 		9C9D0BA71D0E7C1D003A9F4E /* SSJChargeCircleNoneView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJChargeCircleNoneView.h; sourceTree = "<group>"; };
 		9C9D0BA81D0E7C1D003A9F4E /* SSJChargeCircleNoneView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJChargeCircleNoneView.m; sourceTree = "<group>"; };
+		9C9D58841E01167F00E04213 /* SSJBalenceChangeDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBalenceChangeDetailViewController.h; sourceTree = "<group>"; };
+		9C9D58851E01167F00E04213 /* SSJBalenceChangeDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBalenceChangeDetailViewController.m; sourceTree = "<group>"; };
 		9C9DD6541D475A13001FA3C5 /* SSJDataClearHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJDataClearHelper.h; sourceTree = "<group>"; };
 		9C9DD6551D475A13001FA3C5 /* SSJDataClearHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDataClearHelper.m; sourceTree = "<group>"; };
 		9C9DD65E1D4768F5001FA3C5 /* SSJClearUserDataService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJClearUserDataService.h; sourceTree = "<group>"; };
@@ -5611,6 +5614,8 @@
 			children = (
 				9C9471601CEB224C00D69079 /* SSJFundingDetailsViewController.h */,
 				9C9471611CEB224C00D69079 /* SSJFundingDetailsViewController.m */,
+				9C9D58841E01167F00E04213 /* SSJBalenceChangeDetailViewController.h */,
+				9C9D58851E01167F00E04213 /* SSJBalenceChangeDetailViewController.m */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -9643,6 +9648,7 @@
 				9C9471771CEB224C00D69079 /* SSJFinancingHomeHelper.m in Sources */,
 				7D5F33401CEAE6C10086B67E /* SSJBudgetDetailMiddleTitleView.m in Sources */,
 				7D8C7E841D6ED9D800D72E2D /* SSJLoanDetailViewController.m in Sources */,
+				9C9D58861E01167F00E04213 /* SSJBalenceChangeDetailViewController.m in Sources */,
 				9CD9BC171CFD2DAA0061803B /* SSJMagicExportCalendarDateViewItem.m in Sources */,
 				7D5848801CE5BB4A0027DAFA /* SSJBillTypeSyncTable.m in Sources */,
 				9CF5942F1D65AE6200006594 /* SSJLocalNotificationHelper.m in Sources */,

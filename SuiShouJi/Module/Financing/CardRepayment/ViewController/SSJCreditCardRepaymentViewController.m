@@ -58,6 +58,7 @@ static NSString *const kTitle6 = @"还款账单月份";
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:) name:UITextFieldTextDidChangeNotification object:nil];
+        self.title = @"还款";
     }
     return self;
 }
@@ -75,6 +76,8 @@ static NSString *const kTitle6 = @"还款账单月份";
     [super viewWillAppear:animated];
     if (self.repaymentModel.repaymentId.length || self.chargeItem) {
         self.repaymentModel = [SSJRepaymentStore queryRepaymentModelWithChargeItem:self.chargeItem];
+        UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(deleteButtonClicked)];
+        self.navigationItem.rightBarButtonItem = rightItem;
     }else {
         self.repaymentModel.applyDate = [NSDate date];
         self.repaymentModel.repaymentSourceFoundId = [SSJFinancingHomeHelper queryfirstFundItem].fundingID;
@@ -87,8 +90,6 @@ static NSString *const kTitle6 = @"还款账单月份";
             repaymentDate = repaymentDate;
         }
         self.repaymentModel.repaymentMonth = repaymentDate;
-        UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(deleteButtonClicked)];
-        self.navigationItem.rightBarButtonItem = rightItem;
     }
 }
 
@@ -218,6 +219,7 @@ static NSString *const kTitle6 = @"还款账单月份";
         [CDAutoHideMessageHUD showMessage:@"本期账单还没有出不能还款哦"];
         return;
     }
+
     __weak typeof(self) weakSelf = self;
     [SSJRepaymentStore saveRepaymentWithRepaymentModel:self.repaymentModel Success:^{
         [weakSelf.navigationController popViewControllerAnimated:YES];
