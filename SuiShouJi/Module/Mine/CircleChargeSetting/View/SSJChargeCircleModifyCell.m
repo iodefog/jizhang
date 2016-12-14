@@ -32,7 +32,6 @@
 
 -(void)layoutSubviews{
     [super layoutSubviews];
-    [self.cellImage sizeToFit];
     self.cellImage.left = 16;
     self.cellImage.centerY = self.height / 2;
     self.cellTitleLabel.left = self.cellImage.right + 10;
@@ -88,7 +87,8 @@
 
 -(UIImageView *)cellImageView{
     if (!_cellImageView) {
-        _cellImageView = [[UIImageView alloc]init];
+        _cellImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 21, 21)];
+        _cellImageView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     }
     return _cellImageView;
 }
@@ -156,6 +156,7 @@
     self.cellDetailLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     self.cellSubTitleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     self.cellInput.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    self.cellImageView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
 }
 
 /*

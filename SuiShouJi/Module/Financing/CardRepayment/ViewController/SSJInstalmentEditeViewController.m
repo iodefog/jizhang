@@ -282,11 +282,11 @@ static NSString *const kTitle6 = @"分期申请日";
         [CDAutoHideMessageHUD showMessage:@"请选择分期期数"];
         return;
     }
-    if ([[[NSDate dateWithYear:self.repaymentModel.repaymentMonth.year month:self.repaymentModel.repaymentMonth.month day:self.repaymentModel.cardBillingDay] dateByAddingMonths:1] isLaterThan:[NSDate date]]) {
+    if ([[NSDate dateWithYear:self.repaymentModel.repaymentMonth.year month:self.repaymentModel.repaymentMonth.month day:self.repaymentModel.cardBillingDay] isLaterThan:[NSDate date]]) {
         [CDAutoHideMessageHUD showMessage:@"本期账单还没有出不能分期哦"];
         return;
     }
-    if (!([[[NSDate dateWithYear:self.repaymentModel.repaymentMonth.year month:self.repaymentModel.repaymentMonth.month day:self.repaymentModel.cardBillingDay] dateByAddingMonths:1] isEarlierThan:self.repaymentModel.applyDate] && [[[NSDate dateWithYear:self.repaymentModel.repaymentMonth.year month:self.repaymentModel.repaymentMonth.month day:self.repaymentModel.cardRepaymentDay] dateByAddingMonths:1] isLaterThan:self.repaymentModel.applyDate])) {
+    if (!([[[NSDate dateWithYear:self.repaymentModel.repaymentMonth.year month:self.repaymentModel.repaymentMonth.month day:self.repaymentModel.cardBillingDay] dateBySubtractingMonths:1] isEarlierThanOrEqualTo:self.repaymentModel.applyDate] && [[NSDate dateWithYear:self.repaymentModel.repaymentMonth.year month:self.repaymentModel.repaymentMonth.month day:self.repaymentModel.cardRepaymentDay] isLaterThanOrEqualTo:self.repaymentModel.applyDate])) {
         [CDAutoHideMessageHUD showMessage:@"分期分期只能在账单日和还款日之间申请哦"];
         return;
     }

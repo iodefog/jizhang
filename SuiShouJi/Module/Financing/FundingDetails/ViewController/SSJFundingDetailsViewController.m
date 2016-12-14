@@ -135,7 +135,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
             _totalExpence = cardItem.cardExpence;
             weakSelf.creditCardHeader.totalIncome = cardItem.cardIncome;
             weakSelf.creditCardHeader.totalExpence = cardItem.cardExpence;
-            weakSelf.creditCardHeader.cardBalance = cardItem.cardIncome - cardItem.cardExpence;
+            weakSelf.creditCardHeader.cardBalance = cardItem.cardIncome + cardItem.cardExpence;
             weakSelf.title = cardItem.cardName;
             [weakSelf.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:cardItem.cardColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
             weakSelf.header.backgroundColor = [UIColor ssj_colorWithHex:cardItem.cardColor];
@@ -414,15 +414,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
         [weakSelf.navigationController pushViewController:repaymentVC animated:YES];
     }];
     UIAlertAction *instalAction = [UIAlertAction actionWithTitle:@"账单分期" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        SSJInstalmentEditeViewController *instalmentVc = [[SSJInstalmentEditeViewController alloc]init];
-        SSJRepaymentModel *model = [[SSJRepaymentModel alloc]init];
-        SSJCreditCardItem *item = (SSJCreditCardItem *)self.item;
-        model.cardId = item.cardId;
-        model.cardName = item.cardName;
-        model.cardBillingDay = item.cardBillingDay;
-        model.cardRepaymentDay = item.cardRepaymentDay;
-        instalmentVc.repaymentModel = model;
-        [weakSelf.navigationController pushViewController:instalmentVc animated:YES];
+        [weakSelf enterInstalmentVc];
     }];
     [alert addAction:repaymentAction];
     [alert addAction:instalAction];
@@ -471,7 +463,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
                 _totalExpence = cardItem.cardExpence;
                 weakSelf.creditCardHeader.totalIncome = cardItem.cardIncome;
                 weakSelf.creditCardHeader.totalExpence = cardItem.cardExpence;
-                weakSelf.creditCardHeader.cardBalance = cardItem.cardIncome - cardItem.cardExpence;
+                weakSelf.creditCardHeader.cardBalance = cardItem.cardIncome + cardItem.cardExpence;
                 weakSelf.title = cardItem.cardName;
                 [weakSelf.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:cardItem.cardColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
                 weakSelf.header.backgroundColor = [UIColor ssj_colorWithHex:cardItem.cardColor];
@@ -504,6 +496,45 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
         }
     }
 //    [self getTotalIcomeAndExpence];
+}
+
+- (void)enterInstalmentVc {
+    if (self.cardItem.cardBillingDay == 0 && self.cardItem.cardRepaymentDay == 0) {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:@"请先去设置账单日和还款日哦" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:NULL];
+        __weak typeof(self) weakSelf = self;
+        UIAlertAction *comfirm = [UIAlertAction actionWithTitle:@"去设置" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            SSJNewCreditCardViewController *creditCardVc = [[SSJNewCreditCardViewController alloc]init];
+            creditCardVc.cardId = self.cardItem.cardId;
+            [weakSelf.navigationController pushViewController:creditCardVc animated:YES];
+        }];
+        [alert addAction:cancel];
+        [alert addAction:comfirm];
+        [self.navigationController presentViewController:alert animated:YES completion:NULL];
+        return;
+    }
+    if (!self.cardItem.settleAtRepaymentDay) {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:@"使用分期付款需信用卡设置为以账单日结算哦!" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:NULL];
+        __weak typeof(self) weakSelf = self;
+        UIAlertAction *comfirm = [UIAlertAction actionWithTitle:@"去设置" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            SSJNewCreditCardViewController *creditCardVc = [[SSJNewCreditCardViewController alloc]init];
+            creditCardVc.cardId = self.cardItem.cardId;
+            [weakSelf.navigationController pushViewController:creditCardVc animated:YES];
+        }];
+        [alert addAction:cancel];
+        [alert addAction:comfirm];
+        [self.navigationController presentViewController:alert animated:YES completion:NULL];
+        return;
+    }
+    SSJInstalmentEditeViewController *instalmentVc = [[SSJInstalmentEditeViewController alloc]init];
+    SSJRepaymentModel *model = [[SSJRepaymentModel alloc]init];
+    model.cardId = self.cardItem.cardId;
+    model.cardName = self.cardItem.cardName;
+    model.cardBillingDay = self.cardItem.cardBillingDay;
+    model.cardRepaymentDay = self.cardItem.cardRepaymentDay;
+    instalmentVc.repaymentModel = model;
+    [self.navigationController pushViewController:instalmentVc animated:YES];
 }
 
 - (void)didReceiveMemoryWarning {

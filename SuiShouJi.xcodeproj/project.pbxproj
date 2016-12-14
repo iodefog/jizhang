@@ -5488,8 +5488,8 @@
 			isa = PBXGroup;
 			children = (
 				9C9471321CEB224C00D69079 /* Model */,
-				9C9471351CEB224C00D69079 /* Store */,
 				9C9471381CEB224C00D69079 /* View */,
+				9C9471351CEB224C00D69079 /* Store */,
 				9C9471421CEB224C00D69079 /* ViewController */,
 			);
 			path = FinancingHome;

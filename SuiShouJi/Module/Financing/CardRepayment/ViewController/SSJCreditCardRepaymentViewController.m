@@ -82,9 +82,9 @@ static NSString *const kTitle6 = @"还款账单月份";
         self.repaymentModel.repaymentSourceFoundImage = [SSJFinancingHomeHelper queryfirstFundItem].fundingIcon;
         NSDate *repaymentDate = [NSDate date];
         if (repaymentDate.day < self.repaymentModel.cardBillingDay) {
-            repaymentDate = [repaymentDate dateBySubtractingMonths:2];
-        }else {
             repaymentDate = [repaymentDate dateBySubtractingMonths:1];
+        }else {
+            repaymentDate = repaymentDate;
         }
         self.repaymentModel.repaymentMonth = repaymentDate;
         UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(deleteButtonClicked)];

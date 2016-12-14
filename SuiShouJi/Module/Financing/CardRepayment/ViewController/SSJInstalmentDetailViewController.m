@@ -45,6 +45,7 @@ static NSString *const SSJInstalmentDetailMutiLabCellIdentifier = @"SSJInstalmen
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.titles = @[kTitle1,kTitle2,kTitle3,kTitle4,kTitle5,kTitle6];
+    self.images = @[@"",@"card_instalment",@"card_instalmencount",@"card_currentinstalment",@"loan_expires",@"card_zhanghu"];
     [self.tableView registerClass:[SSJChargeCircleModifyCell class] forCellReuseIdentifier:SSJInstalmentDetailCellIdentifier];
     [self.tableView registerClass:[SSJInstalmentDateSelectCell class] forCellReuseIdentifier:SSJInstalmentDetailMutiLabCellIdentifier];
     // Do any additional setup after loading the view.
@@ -92,7 +93,7 @@ static NSString *const SSJInstalmentDetailMutiLabCellIdentifier = @"SSJInstalmen
     NSString *image = [self.images ssj_safeObjectAtIndex:indexPath.row];
     if([title isEqualToString:kTitle2]) {
         SSJInstalmentDateSelectCell *dateSelectCell = [tableView dequeueReusableCellWithIdentifier:SSJInstalmentDetailMutiLabCellIdentifier];
-        dateSelectCell.imageView.image = [[UIImage imageNamed:@"loan_yield"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        dateSelectCell.imageView.image = [[UIImage imageNamed:@"card_instalment"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         dateSelectCell.textLabel.text = title;
         double poudageRate = [self.repaymentModel.poundageRate doubleValue] * 100;
         dateSelectCell.subtitleLabel.text = [NSString stringWithFormat:@"分期金额%@,手续费率%@%%",self.repaymentModel.repaymentMoney,[[NSString stringWithFormat:@"%f",poudageRate] ssj_moneyDecimalDisplayWithDigits:2]];
@@ -103,17 +104,20 @@ static NSString *const SSJInstalmentDetailMutiLabCellIdentifier = @"SSJInstalmen
         SSJChargeCircleModifyCell *repaymentModifyCell = [tableView dequeueReusableCellWithIdentifier:SSJInstalmentDetailCellIdentifier];
         if (![title isEqualToString:kTitle1]) {
             repaymentModifyCell.cellTitle = title;
+            repaymentModifyCell.cellImageName = image;
         }
-        repaymentModifyCell.cellImageName = image;
         repaymentModifyCell.cellInput.hidden = YES;
         repaymentModifyCell.accessoryType = UITableViewCellAccessoryNone;
         if ([title isEqualToString:kTitle1]) {
             if ([self.chargeItem.billId isEqualToString:@"11"]) {
                 repaymentModifyCell.cellTitle = [NSString stringWithFormat:@"%ld月份账单本金",self.repaymentModel.repaymentMonth.month];
+                repaymentModifyCell.cellDetail = [[NSString stringWithFormat:@"%f",[self.repaymentModel.repaymentMoney doubleValue] / self.repaymentModel.instalmentCout] ssj_moneyDecimalDisplayWithDigits:2];
+                repaymentModifyCell.cellImageName = @"ft_cash";
             } else {
                 repaymentModifyCell.cellTitle = [NSString stringWithFormat:@"%ld月份账单手续费",self.repaymentModel.repaymentMonth.month];
+                repaymentModifyCell.cellDetail = [[NSString stringWithFormat:@"%f",[self.repaymentModel.repaymentMoney doubleValue] * [self.repaymentModel.poundageRate doubleValue] / self.repaymentModel.instalmentCout] ssj_moneyDecimalDisplayWithDigits:2];
+                repaymentModifyCell.cellImageName = @"bt_shouxufei";
             }
-            repaymentModifyCell.cellDetail = [[NSString stringWithFormat:@"%f",[self.repaymentModel.repaymentMoney doubleValue] / self.repaymentModel.instalmentCout] ssj_moneyDecimalDisplayWithDigits:2];
         } else if ([title isEqualToString:kTitle3]) {
             repaymentModifyCell.cellDetail = [NSString stringWithFormat:@"%ld期",self.repaymentModel.instalmentCout];
         } else if ([title isEqualToString:kTitle4]) {
