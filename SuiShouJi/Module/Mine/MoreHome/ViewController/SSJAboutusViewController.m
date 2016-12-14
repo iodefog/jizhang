@@ -10,6 +10,8 @@
 #import "SSJAboutusTableViewCell.h"
 #import "SSJNormalWebViewController.h"
 
+#import "SSJStartChecker.h"
+
 static NSString *const kTitle1 = @"团队介绍";
 static NSString *const kTitle2 = @"用户协议";
 static NSString *const kTitle3 = @"联系客服";
@@ -100,7 +102,11 @@ static NSString *const kTitle3 = @"联系客服";
     }
     mineHomeCell.cellTitle = [self.titles ssj_safeObjectAtIndex:indexPath.row];
     if ([mineHomeCell.cellTitle isEqualToString:kTitle3]) {
-        mineHomeCell.cellDetail = @"400-7676-298";
+        if ([SSJStartChecker sharedInstance].serviceNum.length) {
+            mineHomeCell.cellDetail = [SSJStartChecker sharedInstance].serviceNum;
+        } else {
+            mineHomeCell.cellDetail = @"400-7676-298";
+        }
         mineHomeCell.cellSubTitle = @"(工作日: 9: 00--18: 00)";
     }
     return mineHomeCell;

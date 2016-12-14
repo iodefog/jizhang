@@ -18,7 +18,7 @@
             // 如果有还款id,则为账单分期,若没有,则是还款
             if (![item.billId isEqualToString:@"3"] && ![item.billId isEqualToString:@"4"]) {
                 //是账单分期的情况
-                FMResultSet *resultSet = [db executeQuery:@"select a.* , b.ifunsid, c.cacctname from bk_credit_repayment a, bk_user_charge b, bk_fund_info c where a.crepaymentid = ? and a.crepaymentid = b.id and b.ichargeid <> ? and b.ifunsid = c.cfundid",item.sundryId,item.ID];
+                FMResultSet *resultSet = [db executeQuery:@"select a.* , b.ifunsid, c.cacctname, d.cbilldate, d.crepaymentdate from bk_credit_repayment a, bk_user_charge b, bk_fund_info c, bk_user_credit d where a.crepaymentid = ? and a.crepaymentid = b.id and b.ichargeid = ? and b.ifunsid = c.cfundid",item.sundryId,item.ID];
                 while ([resultSet next]) {
                     model.repaymentId = item.sundryId;
                     model.cardId = [resultSet stringForColumn:@"CCARDID"];
@@ -29,9 +29,13 @@
                     model.repaymentSourceFoundName = [resultSet stringForColumn:@"cacctname"];
                     model.repaymentMoney = [NSDecimalNumber decimalNumberWithString:[resultSet stringForColumn:@"REPAYMENTMONEY"]];
                     model.instalmentCout = [resultSet intForColumn:@"IINSTALMENTCOUNT"];
-                    model.poundageRate = [NSDecimalNumber decimalNumberWithString:[resultSet stringForColumn:@"IPOUNDAGERATE"]];
+                    if ([resultSet stringForColumn:@"IPOUNDAGERATE"]) {
+                        model.poundageRate = [NSDecimalNumber decimalNumberWithString:[resultSet stringForColumn:@"IPOUNDAGERATE"]];
+                    }
                     model.memo = [resultSet stringForColumn:@"CMEMO"];
-                    NSDate *billDate = [NSDate dateWithString:item.billDate formatString:@"yyyy-MM"];
+                    model.cardRepaymentDay = [resultSet intForColumn:@"crepaymentdate"];
+                    model.cardBillingDay = [resultSet intForColumn:@"cbilldate"];
+                    NSDate *billDate = [NSDate dateWithString:item.billDate formatString:@"yyyy-MM-dd"];
                     model.currentInstalmentCout = [billDate monthsFrom:model.applyDate] + 1;
                 }
             }else {
@@ -184,7 +188,7 @@
             }else {
                 // 如果是修改,首先将原来所有的跟这条分期有关的流水全部删除,然后将新的流水插入
                 // 修改还款表数据
-                if (![db executeUpdate:@"update bk_credit_repayment set iinstalmentcount = ?, capplydate = ?, repaymentmoney = ?, ipoundagerate = ?, cmemo = ? where crepaymentid = ? and cuserid = ?",@(model.instalmentCout),[model.applyDate formattedDateWithFormat:@"yyyy-MM-dd"],model.repaymentMoney,model.memo,userID,@(SSJSyncVersion()),writeDate,[model.repaymentMonth formattedDateWithFormat:@"yyyy-MM"]]) {
+                if (![db executeUpdate:@"update bk_credit_repayment set iinstalmentcount = ?, capplydate = ?, repaymentmoney = ?, ipoundagerate = ?, cmemo = ?, iversion = ?, cwritedate = ? where crepaymentid = ? and cuserid = ?",@(model.instalmentCout),[model.applyDate formattedDateWithFormat:@"yyyy-MM-dd"],model.repaymentMoney,model.poundageRate,model.memo,@(SSJSyncVersion()),writeDate,model.repaymentId,userID]) {
                     *rollback = YES;
                     if (failure) {
                         SSJDispatch_main_async_safe(^{
@@ -193,7 +197,7 @@
                     }
                 }
                 
-                if ([db executeUpdate:@"update bk_user_charge set operatortype = 2 , iversion = ?, cwritedate = ? where id = ? and ichargetype = ?",model.repaymentId,@(SSJChargeIdTypeRepayment)]) {
+                if (![db executeUpdate:@"update bk_user_charge set operatortype = 2 , iversion = ?, cwritedate = ? where id = ? and ichargetype = ?",@(SSJSyncVersion()),writeDate,model.repaymentId,@(SSJChargeIdTypeRepayment)]) {
                     *rollback = YES;
                     if (failure) {
                         SSJDispatch_main_async_safe(^{
@@ -250,7 +254,7 @@
                 });
             }
         };
-        if (![db executeUpdate:@"update bk_credit_repayment set operatortype = 2, iversion = ?, cwritedate = ? where cuserid = ? and crepaymentid = ?",@(SSJSyncVersion()),writeDate,userId,@(SSJChargeIdTypeRepayment),model.repaymentId]) {
+        if (![db executeUpdate:@"update bk_credit_repayment set operatortype = 2, iversion = ?, cwritedate = ? where cuserid = ? and crepaymentid = ?",@(SSJSyncVersion()),writeDate,userId,model.repaymentId]) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{
                     failure([db lastError]);
@@ -269,8 +273,9 @@
     __block BOOL isInvalid = YES;
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
         NSString *userid = SSJUSERID();
-        NSString *currentMonth = [NSString stringWithFormat:@"%@-%%",[model.repaymentMonth formattedDateWithFormat:@"yyyy-MM"]];
-        double cardSum = [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and b.itype = 0 and a.ifunsid = ? and a.cbilldate like ?",userid,model.cardId,currentMonth] - [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and b.itype = 1 and a.ifunsid = ? and a.cbilldate like ?",userid,model.cardId,currentMonth];
+        NSDate *firstBillDay = [[NSDate dateWithYear:model.repaymentMonth.year month:model.repaymentMonth.month day:model.cardBillingDay] dateBySubtractingMonths:1];
+        NSDate *secondBillDay = [[NSDate dateWithYear:model.repaymentMonth.year month:model.repaymentMonth.month day:model.cardBillingDay] dateBySubtractingDays:1];
+        double cardSum = [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and b.itype = 0 and a.ifunsid = ? and a.cbilldate >= ? and a.cbilldate <= ?",userid,model.cardId,[firstBillDay formattedDateWithFormat:@"yyyy-MM-dd"],[secondBillDay formattedDateWithFormat:@"yyyy-MM-dd"]] - [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and b.itype = 1 and a.ifunsid = ? and a.cbilldate >= ? and a.cbilldate <= ?",userid,model.cardId,[firstBillDay formattedDateWithFormat:@"yyyy-MM-dd"],[secondBillDay formattedDateWithFormat:@"yyyy-MM-dd"]];
         
         if ([model.repaymentMoney doubleValue] > fabs(cardSum) || cardSum > 0) {
             isInvalid = NO;

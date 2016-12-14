@@ -30,9 +30,9 @@
 - (void)requestDidFinish:(id)rootElement{
     [super requestDidFinish:rootElement];
     NSDictionary *result = [[NSDictionary dictionaryWithDictionary:rootElement] objectForKey:@"results"];
-    if ([[NSDictionary dictionaryWithDictionary:rootElement] objectForKey:@"desc"]) {
-        NSDictionary *result = [NSDictionary dictionaryWithDictionary:rootElement];
-    }
+//    if ([[NSDictionary dictionaryWithDictionary:rootElement] objectForKey:@"desc"]) {
+//        NSDictionary *result = [NSDictionary dictionaryWithDictionary:rootElement];
+//    }
     self.adviceItems = [SSJAdviceItem mj_objectWithKeyValues:result];
 }
 

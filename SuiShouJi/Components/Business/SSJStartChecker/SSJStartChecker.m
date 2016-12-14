@@ -65,8 +65,12 @@ static const NSUInteger kMaxLoadUpdateItmes = 0; //  加载更新信息失败的
     return self.networkService.remindMassage;
 }
 
--(NSString *)startImageUrl{
+- (NSString *)startImageUrl{
     return self.networkService.startImage;
+}
+
+- (NSString *)serviceNum{
+    return self.networkService.serviceNumber;
 }
 
 #pragma mark - UIAlertViewDelegate

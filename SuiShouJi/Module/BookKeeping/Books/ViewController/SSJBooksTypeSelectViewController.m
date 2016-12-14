@@ -270,7 +270,9 @@ static BOOL kNeedBannerDisplay = YES;
         if (booksAdItem.hidden) {
             self.adView.hidden = NO;
             [self.adView.adImageView sd_setImageWithURL:[NSURL URLWithString:booksAdItem.adImage] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-                self.adView.height = self.view.width * image.size.height / image.size.width;
+                if (image) {
+                    self.adView.height = self.view.width * image.size.height / image.size.width;
+                }
             }];
         }
     }

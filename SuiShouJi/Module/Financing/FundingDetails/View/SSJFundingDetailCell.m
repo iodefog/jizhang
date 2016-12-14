@@ -105,6 +105,9 @@
     _item = item;
     // 如果是信用卡还款有关的
     if (item.idType == SSJChargeIdTypeRepayment) {
+        self.imageView.tintColor = [UIColor ssj_colorWithHex:_item.colorValue];
+        self.imageView.image = [[UIImage imageNamed:item.imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        self.imageView.layer.borderColor = [UIColor ssj_colorWithHex:item.colorValue].CGColor;
         SSJRepaymentModel *repaymentModel = [SSJRepaymentStore queryRepaymentModelWithChargeItem:item];
         if ([item.billId isEqualToString:@"3"] || [item.billId isEqualToString:@"4"]) {
             // 如果是信用卡还款

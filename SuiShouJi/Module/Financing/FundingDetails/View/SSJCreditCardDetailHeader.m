@@ -278,7 +278,7 @@
 
 - (void)setTotalExpence:(double)totalExpence{
     _totalExpence = totalExpence;
-    self.expenceLab.text = [NSString stringWithFormat:@"累计支出:%.2f",_totalExpence];
+    self.expenceLab.text = [NSString stringWithFormat:@"累计支出:%.2f",fabs(_totalExpence)];
     [self.expenceLab sizeToFit];
 }
 

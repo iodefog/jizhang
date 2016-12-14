@@ -34,6 +34,9 @@
 //  启动页图片
 @property (readonly, nonatomic, copy) NSString *mqGroupId;
 
+//  启动页图片
+@property (readonly, nonatomic, copy) NSString *serviceNumber;
+
 - (void)request;
 
 @end
