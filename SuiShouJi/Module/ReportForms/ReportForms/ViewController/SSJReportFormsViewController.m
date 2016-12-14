@@ -11,8 +11,6 @@
 #import "SSJPageControl.h"
 #import "SSJReportFormsIncomeAndPayCell.h"
 #import "SSJReportFormsChartCell.h"
-#import "SSJReportFormCurveCell.h"
-#import "SSJReportFormStatisticsCell.h"
 #import "SSJReportFormCurveListCell.h"
 #import "SSJReportFormsNoDataCell.h"
 
@@ -21,6 +19,7 @@
 #import "SCYSlidePagingHeaderView.h"
 #import "SSJSegmentedControl.h"
 #import "SSJListMenu.h"
+#import "SSJReportFormCurveHeaderView.h"
 
 #import "SSJBillingChargeViewController.h"
 #import "SSJMagicExportCalendarViewController.h"
@@ -53,6 +52,8 @@ static NSString *const kSegmentTitleIncome = @"收入";
 
 //  没有流水的提示视图
 @property (nonatomic, strong) SSJBudgetNodataRemindView *noDataRemindView;
+
+@property (nonatomic, strong) SSJReportFormCurveHeaderView *curveView;
 
 //  流水列表视图
 @property (nonatomic, strong) UITableView *tableView;
@@ -183,22 +184,6 @@ static NSString *const kSegmentTitleIncome = @"收入";
         SSJReportFormsIncomeAndPayCell *incomeAndPayCell = [tableView dequeueReusableCellWithIdentifier:kIncomeAndPayCellID forIndexPath:indexPath];
         incomeAndPayCell.cellItem = item;
         return incomeAndPayCell;
-    }
-    
-    if ([item isKindOfClass:[SSJReportFormCurveCellItem class]]) {
-        SSJReportFormCurveCell *curveCell = [tableView dequeueReusableCellWithIdentifier:kSSJReportFormCurveCellID forIndexPath:indexPath];
-        curveCell.cellItem = item;
-        curveCell.changeTimePeriodHandle = ^(SSJReportFormCurveCell *cell) {
-//            SSJReportFormCurveCellItem *item = cell.cellItem;
-            
-        };
-        return curveCell;
-    }
-    
-    if ([item isKindOfClass:[SSJReportFormStatisticsCellItem class]]) {
-        SSJReportFormStatisticsCell *statisticsCell = [tableView dequeueReusableCellWithIdentifier:kSSJReportFormStatisticsCellID forIndexPath:indexPath];
-        statisticsCell.cellItem = item;
-        return statisticsCell;
     }
     
     if ([item isKindOfClass:[SSJReportFormCurveListCellItem class]]) {
@@ -727,7 +712,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
     [self.navigationItem setLeftBarButtonItem:leftItem animated:YES];
 }
 
-#pragma mark - Getter
+#pragma mark - LazyLoading
 - (SSJSegmentedControl *)titleSegmentCtrl {
     if (!_titleSegmentCtrl) {
         _titleSegmentCtrl = [[SSJSegmentedControl alloc] initWithItems:@[@"饼图",@"折线图"]];
@@ -778,8 +763,6 @@ static NSString *const kSegmentTitleIncome = @"收入";
         _tableView.tableFooterView = [[UIView alloc] init];
         [_tableView registerClass:[SSJReportFormsChartCell class] forCellReuseIdentifier:kChartViewCellID];
         [_tableView registerClass:[SSJReportFormsIncomeAndPayCell class] forCellReuseIdentifier:kIncomeAndPayCellID];
-        [_tableView registerClass:[SSJReportFormCurveCell class] forCellReuseIdentifier:kSSJReportFormCurveCellID];
-        [_tableView registerClass:[SSJReportFormStatisticsCell class] forCellReuseIdentifier:kSSJReportFormStatisticsCellID];
         [_tableView registerClass:[SSJReportFormCurveListCell class] forCellReuseIdentifier:kSSJReportFormCurveListCellID];
         [_tableView registerClass:[SSJReportFormsNoDataCell class] forCellReuseIdentifier:kNoDataRemindCellID];
     }
@@ -793,6 +776,13 @@ static NSString *const kSegmentTitleIncome = @"收入";
         _noDataRemindView.title = @"报表空空如也";
     }
     return _noDataRemindView;
+}
+
+- (SSJReportFormCurveHeaderView *)curveView {
+    if (!_curveView) {
+        _curveView = [[SSJReportFormCurveHeaderView alloc] init];
+    }
+    return _curveView;
 }
 
 - (UIButton *)customPeriodBtn {

@@ -49,6 +49,10 @@
 
 @implementation SSJSeparatorFormViewCell
 
+- (void)dealloc {
+    
+}
+
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         _topLab = [[UILabel alloc] init];
@@ -81,15 +85,44 @@
 - (void)setItem:(SSJSeparatorFormViewCellItem *)item {
     [self setNeedsLayout];
     
-    _topLab.text = item.topTitle;
-    _topLab.font = item.topTitleFont;
-    _topLab.textColor = item.topTitleColor;
+    [self removeObserver];
+    _item = item;
+    [self addObserver];
+    [self updateAppearance];
+}
+
+- (void)observeValueForKeyPath:(nullable NSString *)keyPath ofObject:(nullable id)object change:(nullable NSDictionary<NSString*, id> *)change context:(nullable void *)context {
+    [self updateAppearance];
+}
+
+- (void)addObserver {
+    [_item addObserver:self forKeyPath:@"topTitle" options:NSKeyValueObservingOptionNew context:NULL];
+    [_item addObserver:self forKeyPath:@"topTitleFont" options:NSKeyValueObservingOptionNew context:NULL];
+    [_item addObserver:self forKeyPath:@"topTitleColor" options:NSKeyValueObservingOptionNew context:NULL];
+    [_item addObserver:self forKeyPath:@"bottomTitle" options:NSKeyValueObservingOptionNew context:NULL];
+    [_item addObserver:self forKeyPath:@"bottomTitleFont" options:NSKeyValueObservingOptionNew context:NULL];
+    [_item addObserver:self forKeyPath:@"bottomTitleColor" options:NSKeyValueObservingOptionNew context:NULL];
+}
+
+- (void)removeObserver {
+    [_item removeObserver:self forKeyPath:@"topTitle"];
+    [_item removeObserver:self forKeyPath:@"topTitleFont"];
+    [_item removeObserver:self forKeyPath:@"topTitleColor"];
+    [_item removeObserver:self forKeyPath:@"bottomTitle"];
+    [_item removeObserver:self forKeyPath:@"bottomTitleFont"];
+    [_item removeObserver:self forKeyPath:@"bottomTitleColor"];
+}
+
+- (void)updateAppearance {
+    _topLab.text = _item.topTitle;
+    _topLab.font = _item.topTitleFont;
+    _topLab.textColor = _item.topTitleColor;
     
-    _bottomLab.text = item.bottomTitle;
-    _bottomLab.font = item.bottomTitleFont;
-    _bottomLab.textColor = item.bottomTitleColor;
+    _bottomLab.text = _item.bottomTitle;
+    _bottomLab.font = _item.bottomTitleFont;
+    _bottomLab.textColor = _item.bottomTitleColor;
     
-    self.contentInsets = item.contentInsets;
+    self.contentInsets = _item.contentInsets;
 }
 
 @end
