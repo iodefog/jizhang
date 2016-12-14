@@ -30,8 +30,7 @@
 {
     [super awakeFromNib];
 //    _iconView.image = [UIImage imageNamed:@"defualt_portrait"];
-    //        [_iconView zy_cornerRadiusAdvance:20 rectCornerType:UIRectCornerTopLeft | UIRectCornerBottomRight];
-    //        [_iconView zy_attachBorderWidth:2 color:[UIColor redColor]];
+    [_iconView zy_cornerRadiusAdvance:15 rectCornerType:UIRectCornerAllCorners];
     [SSJPersonalDetailHelper queryUserDetailWithsuccess:^(SSJPersonalDetailItem *data) {
         if ([data.iconUrl hasPrefix:@"http"]) {
             [_iconView sd_setImageWithURL:[NSURL URLWithString:data.iconUrl] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
