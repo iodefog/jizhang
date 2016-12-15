@@ -852,4 +852,12 @@ BOOL kHomeNeedLoginPop;
     [self getDateFromDatebase];
 }
 
+- (void)showEvaluatePopView
+{
+    if (!SSJIsFirstLaunchForCurrentVersion()) {//当前版本不是第一次启动
+        //当前版本是否显示过弹框()
+        
+    }
+}
+
 @end

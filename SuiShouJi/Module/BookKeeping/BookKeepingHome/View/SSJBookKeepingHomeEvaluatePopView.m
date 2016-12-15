@@ -7,6 +7,10 @@
 //
 
 #import "SSJBookKeepingHomeEvaluatePopView.h"
+
+NSString *const SSJApplicationLunchTimeKey = @"SSJApplicationLunchTimeKey";
+NSString *const SSJNewUserKey = @"SSJNewUserKey";
+
 @interface SSJBookKeepingHomeEvaluatePopView()
 
 @property (nonatomic, strong) UIImageView *bgImageView;
@@ -121,6 +125,36 @@
 
 
 #pragma mark -Action
+- (void)showEvaluatePopView
+{
+   UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+    [keyWindow addSubview:self];
+}
+
+
++ (BOOL)SSJIsNewUser
+{
+    return YES;
+}
+
+
++ (void)evaluatePopViewConfiguration
+{
+    //设置app启动时间
+    if (SSJIsFirstLaunchForCurrentVersion()) {//当前版本是第一次启动
+        
+        [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:SSJApplicationLunchTimeKey];
+        
+        //判断是否为新用户
+        if ([self SSJIsNewUser]) {//是新用户
+            [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:SSJNewUserKey];
+        }else{
+            [[NSUserDefaults standardUserDefaults] setObject:@"0" forKey:SSJNewUserKey];
+        }
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+}
+
 - (void)favorableButtonClicked
 {
     NSString *appstoreUrlStr = [SSJSettingForSource() objectForKey:@"AppStoreUrl"];
