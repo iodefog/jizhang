@@ -20,6 +20,8 @@ typedef void (^fundingTypeSelectBlock)(SSJFundingItem *item);
 
 @property (nonatomic, copy) void(^dismissBlock)();
 
+@property(nonatomic, strong) NSArray *exceptionIDs;
+
 -(void)reloadDate;
 
 - (void)show;

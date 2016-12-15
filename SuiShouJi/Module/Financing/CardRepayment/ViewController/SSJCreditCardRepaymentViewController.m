@@ -66,14 +66,8 @@ static NSString *const kTitle6 = @"还款账单月份";
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.titles = @[@[kTitle1,kTitle2,kTitle3],@[kTitle4,kTitle6,kTitle5]];
-    self.images = @[@[@"loan_person",@"loan_money",@"loan_memo"],@[@"card_zhanghu",@"",@"loan_expires"]];
+    self.images = @[@[@"loan_person",@"loan_money",@"loan_memo"],@[@"card_zhanghu",@"loan_calendar",@"loan_expires"]];
     [self.tableView registerClass:[SSJChargeCircleModifyCell class] forCellReuseIdentifier:SSJRepaymentEditeCellIdentifier];
-    [self.view addSubview:self.tableView];
-    // Do any additional setup after loading the view.
-}
-
-- (void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
     if (self.repaymentModel.repaymentId.length || self.chargeItem) {
         self.repaymentModel = [SSJRepaymentStore queryRepaymentModelWithChargeItem:self.chargeItem];
         UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(deleteButtonClicked)];
@@ -91,6 +85,12 @@ static NSString *const kTitle6 = @"还款账单月份";
         }
         self.repaymentModel.repaymentMonth = repaymentDate;
     }
+    [self.view addSubview:self.tableView];
+    // Do any additional setup after loading the view.
+}
+
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
 }
 
 #pragma mark - UITableViewDelegate
@@ -121,6 +121,7 @@ static NSString *const kTitle6 = @"还款账单月份";
     NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
     if ([title isEqualToString:kTitle4]) {
         self.fundSelectView.selectFundID = self.repaymentModel.repaymentSourceFoundId;
+        self.fundSelectView.exceptionIDs = @[self.repaymentModel.cardId];
         [self.fundSelectView show];
     }else if ([title isEqualToString:kTitle5]) {
         self.repaymentTimeView.currentDate = self.repaymentModel.applyDate;

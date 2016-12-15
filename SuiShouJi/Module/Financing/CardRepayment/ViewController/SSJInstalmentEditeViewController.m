@@ -17,6 +17,7 @@
 #import "SSJInstalmentDateSelectCell.h"
 
 #import "SSJRepaymentStore.h"
+#import "SSJDatabaseQueue.h"
 #import "SSJFinancingHomeHelper.h"
 
 static NSString *const SSJInstalmentCellIdentifier = @"SSJInstalmentCellIdentifier";
@@ -289,7 +290,7 @@ static NSString *const kTitle6 = @"分期申请日";
         [CDAutoHideMessageHUD showMessage:@"本期账单还没有出不能分期哦"];
         return;
     }
-    if (self.repaymentModel.cardBillingDay > self.repaymentModel.cardRepaymentDay) {
+    if (self.repaymentModel.cardBillingDay < self.repaymentModel.cardRepaymentDay) {
         if (!([[[NSDate dateWithYear:self.repaymentModel.repaymentMonth.year month:self.repaymentModel.repaymentMonth.month day:self.repaymentModel.cardBillingDay] dateBySubtractingMonths:1] isEarlierThanOrEqualTo:self.repaymentModel.applyDate] && [[NSDate dateWithYear:self.repaymentModel.repaymentMonth.year month:self.repaymentModel.repaymentMonth.month day:self.repaymentModel.cardRepaymentDay] isLaterThanOrEqualTo:self.repaymentModel.applyDate])) {
             [CDAutoHideMessageHUD showMessage:@"分期分期只能在账单日和还款日之间申请哦"];
             return;
@@ -300,7 +301,10 @@ static NSString *const kTitle6 = @"分期申请日";
             return;
         }
     }
-
+    if ([self checkTheInstalCountWithMonth:self.repaymentModel.repaymentMonth] > 0) {
+        [CDAutoHideMessageHUD showMessage:@"每个账单周期只能申请一次分期哦"];
+        return;
+    }
     if (![SSJRepaymentStore checkTheMoneyIsValidForTheRepaymentWithRepaymentModel:self.repaymentModel]) {
         [CDAutoHideMessageHUD showMessage:@"分期金额不能大于当期账单金额哦"];
         return;
@@ -362,16 +366,15 @@ static NSString *const kTitle6 = @"分期申请日";
 - (UITextField *)instalmentCountView{
     if (!_instalmentCountView) {
         _instalmentCountView = [[UITextField alloc]initWithFrame:CGRectMake(0, 0, 110, 25)];
-        _instalmentCountView.backgroundColor = [UIColor redColor];
         _instalmentCountView.textAlignment = NSTextAlignmentCenter;
         _instalmentCountView.text = [NSString stringWithFormat:@"%ld",self.repaymentModel.instalmentCout];
         _instalmentCountView.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         UIButton *plusButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 25, 25)];
         [plusButton addTarget:self action:@selector(plusButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
-        [plusButton setTitle:@"+" forState:UIControlStateNormal];
+        [plusButton setImage:[UIImage ssj_themeImageWithName:@"card_repaymentplus"] forState:UIControlStateNormal];
         UIButton *minusButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 25, 25)];
         [minusButton addTarget:self action:@selector(minusButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
-        [minusButton setTitle:@"-" forState:UIControlStateNormal];
+        [minusButton setImage:[UIImage ssj_themeImageWithName:@"card_repaymentminus"] forState:UIControlStateNormal];
         _instalmentCountView.rightViewMode = UITextFieldViewModeAlways;
         _instalmentCountView.leftViewMode = UITextFieldViewModeAlways;
         _instalmentCountView.rightView = plusButton;
@@ -408,9 +411,19 @@ static NSString *const kTitle6 = @"分期申请日";
 
 #pragma mark - private
 - (void)updatePoundageLab{
-    double principalMoney = [self.repaymentModel.repaymentMoney doubleValue] / self.repaymentModel.instalmentCout;
+    double principalMoney;
+    if (self.repaymentModel.instalmentCout) {
+        principalMoney = [self.repaymentModel.repaymentMoney doubleValue] / self.repaymentModel.instalmentCout;
+    } else {
+        principalMoney = 0;
+    }
     NSString *pripalStr = [[NSString stringWithFormat:@"%f",principalMoney] ssj_moneyDecimalDisplayWithDigits:2];
-    double poundageMoney = [self.repaymentModel.repaymentMoney doubleValue] * [self.repaymentModel.poundageRate doubleValue] / self.repaymentModel.instalmentCout;
+    double poundageMoney;
+    if (self.repaymentModel.instalmentCout) {
+        poundageMoney = [self.repaymentModel.repaymentMoney doubleValue] * [self.repaymentModel.poundageRate doubleValue];
+    } else {
+        poundageMoney = 0;
+    }
     NSString *poundageStr = [[NSString stringWithFormat:@"%f",poundageMoney] ssj_moneyDecimalDisplayWithDigits:2];
     double sumMoney = principalMoney + poundageMoney;
     NSString *sumMoneyStr = [[NSString stringWithFormat:@"%f",sumMoney] ssj_moneyDecimalDisplayWithDigits:2];
@@ -425,6 +438,15 @@ static NSString *const kTitle6 = @"分期申请日";
     [secondAtrributeStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] range:[secondStr rangeOfString:sumMoneyStr]];
     _instalDateLab.attributedText = secondAtrributeStr;
     [_instalDateLab sizeToFit];
+}
+
+- (NSInteger)checkTheInstalCountWithMonth:(NSDate *)month{
+    __block NSInteger instalmentCount;
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+        NSString *userId = SSJUSERID();
+        instalmentCount = [db intForQuery:@"select count(1) from bk_credit_repayment where cuserid = ? and operatortype <> 2 and iinstalmentcount > 0 and crepaymentmonth = ?",userId,[month formattedDateWithFormat:@"yyyy-MM"]];
+    }];
+    return instalmentCount;
 }
 
 - (void)didReceiveMemoryWarning {

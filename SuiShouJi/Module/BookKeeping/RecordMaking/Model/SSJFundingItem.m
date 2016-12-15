@@ -33,4 +33,12 @@
     }
     return self;
 }
+
+- (BOOL)isEqual:(id)object {
+    SSJFundingItem *item = (SSJFundingItem *)object;
+    if ([self.fundingID isEqualToString:item.fundingID]) {
+        return YES;
+    }
+    return NO;
+}
 @end

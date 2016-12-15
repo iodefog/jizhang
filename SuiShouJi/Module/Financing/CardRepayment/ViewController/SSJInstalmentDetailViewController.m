@@ -122,7 +122,7 @@ static NSString *const SSJInstalmentDetailMutiLabCellIdentifier = @"SSJInstalmen
                 repaymentModifyCell.cellImageName = @"ft_cash";
             } else {
                 repaymentModifyCell.cellTitle = [NSString stringWithFormat:@"%ld月份账单手续费",self.repaymentModel.repaymentMonth.month];
-                repaymentModifyCell.cellDetail = [[NSString stringWithFormat:@"%f",[self.repaymentModel.repaymentMoney doubleValue] * [self.repaymentModel.poundageRate doubleValue] / self.repaymentModel.instalmentCout] ssj_moneyDecimalDisplayWithDigits:2];
+                repaymentModifyCell.cellDetail = [[NSString stringWithFormat:@"%f",[self.repaymentModel.repaymentMoney doubleValue] * [self.repaymentModel.poundageRate doubleValue]] ssj_moneyDecimalDisplayWithDigits:2];
                 repaymentModifyCell.cellImageName = @"bt_shouxufei";
             }
         } else if ([title isEqualToString:kTitle3]) {

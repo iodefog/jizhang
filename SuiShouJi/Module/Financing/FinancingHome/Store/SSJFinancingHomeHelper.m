@@ -330,16 +330,6 @@
                     [SSJLocalNotificationHelper cancelLocalNotificationWithremindItem:remindItem];
                 }
             }else{
-                if (![SSJCreditCardStore deleteCreditCardWithCardItem:cardItem inDatabase:db forUserId:userId error:NULL]) {
-                    *rollback = YES;
-                    SSJDispatch_main_async_safe(^{
-                        if (failure) {
-                            failure([db lastError]);
-                        }
-                        return;
-                    });
-                };
-                
                 // 删掉账户所对应的转账
                 if (![self deleteTransferChargeInDataBase:db withFundId:cardItem.cardId userId:userId error:NULL]) {
                     if (failure) {
@@ -350,6 +340,16 @@
                     }
                     return;
                 }
+                
+                if (![SSJCreditCardStore deleteCreditCardWithCardItem:cardItem inDatabase:db forUserId:userId error:NULL]) {
+                    *rollback = YES;
+                    SSJDispatch_main_async_safe(^{
+                        if (failure) {
+                            failure([db lastError]);
+                        }
+                        return;
+                    });
+                };
             }
         }
         if (success) {
