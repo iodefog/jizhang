@@ -41,7 +41,7 @@
 #import "SSJBookKeepingHomeDateView.h"
 #import "SSJMultiFunctionButtonView.h"
 #import "SSJBookKeepingHomeBar.h"
-
+#import "SSJBookKeepingHomeEvaluatePopView.h"
 BOOL kHomeNeedLoginPop;
 
 @interface SSJBookKeepingHomeViewController ()<SSJMultiFunctionButtonDelegate>
@@ -58,6 +58,10 @@ BOOL kHomeNeedLoginPop;
 @property(nonatomic, strong) SSJBookKeepingHomeNoDataHeader *noDataHeader;
 @property(nonatomic, strong) SSJBookKeepingHomeDateView *floatingDateView;
 @property(nonatomic, strong) SSJMultiFunctionButtonView *mutiFunctionButton;
+/**
+ 弹出好评弹框
+ */
+@property (nonatomic, strong) SSJBookKeepingHomeEvaluatePopView *evaluatePopView;
 @property(nonatomic, strong) UILabel *statusLabel;
 @property(nonatomic, strong) NSIndexPath *selectIndex;
 @property(nonatomic, strong) NSString *currentIncome;
@@ -161,6 +165,9 @@ BOOL kHomeNeedLoginPop;
     [self.mm_drawerController setMaximumLeftDrawerWidth:SSJSCREENWITH * 0.8];
     [self.mm_drawerController setOpenDrawerGestureModeMask:MMOpenDrawerGestureModeAll];
     [self.mm_drawerController setCloseDrawerGestureModeMask:MMCloseDrawerGestureModeAll];
+    
+    SSJBookKeepingHomeEvaluatePopView *evaluate = [[SSJBookKeepingHomeEvaluatePopView alloc] initWithFrame:CGRectMake(0, 0, SSJSCREENWITH, SSJSCREENHEIGHT)];
+    [evaluate showEvaluatePopView];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -572,6 +579,26 @@ BOOL kHomeNeedLoginPop;
     return _homeBar;
 }
 
+- (SSJBookKeepingHomeEvaluatePopView *)evaluatePopView
+{
+    if (!_evaluatePopView) {
+        _evaluatePopView = [[SSJBookKeepingHomeEvaluatePopView alloc] initWithFrame:self.view.bounds];
+//        //好评
+//        _evaluatePopView.favorableReceptionBtnClickBlock = ^{
+//        
+//        };
+//        //稍后再说
+//        _evaluatePopView.laterBtnClickBlock = ^{
+//        
+//        };
+//        //不在显示
+//        _evaluatePopView.notShowAgainBtnClickBlock = ^{
+//            
+//        };
+    }
+    return _evaluatePopView;
+}
+
 #pragma mark - Event
 -(void)rightBarButtonClicked{
     SSJCalendarViewController *calendarVC = [[SSJCalendarViewController alloc]init];
@@ -827,5 +854,6 @@ BOOL kHomeNeedLoginPop;
     self.hasLoad = NO;
     [self getDateFromDatebase];
 }
+
 
 @end

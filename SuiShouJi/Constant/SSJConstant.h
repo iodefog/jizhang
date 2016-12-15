@@ -62,6 +62,19 @@ typedef NS_ENUM(NSUInteger, SSJBudgetPeriodType) {
     SSJBudgetPeriodTypeYear = 2     //  每年
 };
 
+/**
+ 时间维度
+
+ - SSJTimeDimensionDay: 日
+ - SSJTimeDimensionWeek: 周
+ - SSJTimeDimensionMonth: 月
+ */
+typedef NS_ENUM(NSUInteger, SSJTimeDimension) {
+    SSJTimeDimensionDay = 0,
+    SSJTimeDimensionWeek = 1,
+    SSJTimeDimensionMonth = 2
+};
+
 ///------------------------------------------
 /// @name 基本数据常量
 ///------------------------------------------

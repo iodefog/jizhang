@@ -155,7 +155,7 @@ static const NSTimeInterval kTransitionDuration = 0.3;
 
 // 当前版本第一次启动显示引导页
 - (void)showGuideViewIfNeeded {
-    if (SSJIsFirstLaunchForCurrentVersion()) {
+    if (SSJLaunchTimesForCurrentVersion() == 1) {
         if (!_guideView) {
             __weak typeof(self) wself = self;
             _guideView = [[SSJGuideView alloc] initWithFrame:[UIScreen mainScreen].bounds];

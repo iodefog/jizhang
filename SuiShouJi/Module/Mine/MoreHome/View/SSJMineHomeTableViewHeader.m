@@ -21,6 +21,7 @@
 @property(nonatomic, strong) UIImageView *backImage;
 @property(nonatomic, strong) UIButton *loginButton;
 @property(nonatomic, strong) SSJMineSyncButton *syncButton;
+@property (nonatomic, strong) UIImageView *dengjiImage;
 
 @end
 
@@ -39,11 +40,13 @@
         [self addSubview:self.checkInButton];
         [self addSubview:self.verticalSepertorLine];
         [self addSubview:self.loginButton];
-        
+        [self addSubview:self.dengjiImage];
         if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
             self.backImage.hidden = NO;
+            self.verticalSepertorLine.hidden = YES;
         }else{
             self.backImage.hidden = YES;
+            self.verticalSepertorLine.hidden = NO;
             self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         }
     }
@@ -60,10 +63,10 @@
     self.headPotraitImage.top = 60;
     self.nicknameLabel.top = self.headPotraitImage.top + 15;
     self.nicknameLabel.left = self.geXingSignLabel.left = CGRectGetMaxX(self.headPotraitImage.frame) + 10;
-    self.geXingSignLabel.top = CGRectGetMaxY(self.nicknameLabel.frame) + 0;
+    self.geXingSignLabel.top = CGRectGetMaxY(self.nicknameLabel.frame);
     self.geXingSignLabel.size = CGSizeMake(self.width - CGRectGetMinX(self.geXingSignLabel.frame), 21);
-    self.checkInLevelLabel.centerY = self.headPotraitImage.centerY;
-    self.checkInLevelLabel.right = self.right - 20;
+    self.dengjiImage.left = CGRectGetMaxX(self.nicknameLabel.frame) + 10;
+    self.dengjiImage.centerY = self.nicknameLabel.centerY;
     self.syncButton.size = CGSizeMake(self.width / 2 , 50);
     self.syncButton.leftBottom = CGPointMake(0, self.height);
     [self.syncButton ssj_relayoutBorder];
@@ -125,7 +128,12 @@
         _checkInButton.titleLabel.font = [UIFont systemFontOfSize:16];
         [_checkInButton ssj_setBorderStyle:SSJBorderStyleTop];
         [_checkInButton ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
-        [_checkInButton ssj_setBorderWidth:1.f / [UIScreen mainScreen].scale];
+        if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
+            [_checkInButton ssj_setBorderWidth:0];
+        }else{
+           [_checkInButton ssj_setBorderWidth:1.f / [UIScreen mainScreen].scale];
+        }
+        
         [_checkInButton addTarget:self action:@selector(checkInButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _checkInButton;
@@ -136,7 +144,11 @@
         _syncButton = [[SSJMineSyncButton alloc]init];
         [_syncButton ssj_setBorderStyle:SSJBorderStyleTop];
         [_syncButton ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
-        [_syncButton ssj_setBorderWidth:1.f / [UIScreen mainScreen].scale];
+        if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
+            [_syncButton ssj_setBorderWidth:0];
+        }else{
+            [_syncButton ssj_setBorderWidth:1.f / [UIScreen mainScreen].scale];
+        }
     }
     return _syncButton;
 }
@@ -163,6 +175,14 @@
         _verticalSepertorLine.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
     }
     return _verticalSepertorLine;
+}
+
+- (UIImageView *)dengjiImage
+{
+    if (!_dengjiImage) {
+        _dengjiImage = [[UIImageView alloc] init];
+    }
+    return _dengjiImage;
 }
 
 
@@ -209,40 +229,51 @@
 
 -(void)setCheckInLevel:(SSJBookkeepingTreeLevel)checkInLevel{
     _checkInLevel = checkInLevel;
-    NSString *levelStr;
+    UIImage *levelImage;
     switch (_checkInLevel) {
         case SSJBookkeepingTreeLevelSeed:
-            levelStr = @"种子";
+//            levelStr = @"种子";
+            
+            levelImage = [UIImage ssj_themeImageWithName:@"more_zhognzi"];
             break;
         case SSJBookkeepingTreeLevelSapling:
-            levelStr = @"树苗";
+//            levelStr = @"树苗";
+            levelImage = [UIImage ssj_themeImageWithName:@"more_shumiao"];
             break;
         case SSJBookkeepingTreeLevelSmallTree:
-            levelStr = @"小树";
+//            levelStr = @"小树";
+            levelImage = [UIImage ssj_themeImageWithName:@"more_xiaoshu"];
             break;
         case SSJBookkeepingTreeLevelStrongTree:
-            levelStr = @"壮树";
+//            levelStr = @"壮树";
+            levelImage = [UIImage ssj_themeImageWithName:@"more_zhuangshu"];
             break;
         case SSJBookkeepingTreeLevelBigTree:
-            levelStr = @"大树";
+//            levelStr = @"大树";
+            levelImage = [UIImage ssj_themeImageWithName:@"more_dashu"];
             break;
         case SSJBookkeepingTreeLevelSilveryTree:
-            levelStr = @"银树";
+//            levelStr = @"银树";
+            levelImage = [UIImage ssj_themeImageWithName:@"more_yinshu"];
             break;
         case SSJBookkeepingTreeLevelGoldTree:
-            levelStr = @"金树";
+//            levelStr = @"金树";
+            levelImage = [UIImage ssj_themeImageWithName:@"more_jinshu"];
             break;
         case SSJBookkeepingTreeLevelDiamondTree:
-            levelStr = @"钻石树";
+//            levelStr = @"钻石树";
+            levelImage = [UIImage ssj_themeImageWithName:@"more_zuanshizhu"];
             break;
         case SSJBookkeepingTreeLevelCrownTree:
-            levelStr = @"皇冠树";
+//            levelStr = @"皇冠树";
+            levelImage = [UIImage ssj_themeImageWithName:@"more_huangguanshu"];
             break;
         default:
             break;
     }
-    self.checkInLevelLabel.text = [NSString stringWithFormat:@"等级: %@",levelStr];
-    [self.checkInLevelLabel sizeToFit];
+//    self.checkInLevelLabel.text = [NSString stringWithFormat:@"等级: %@",levelStr];
+    self.dengjiImage.image = levelImage;
+    [self.dengjiImage sizeToFit];
 }
 
 - (void)loginButtonClicked:(id)sender {

@@ -99,7 +99,6 @@
 }
 
 - (void)beginButtonAciton {
-    SSJAddLaunchTimesForCurrentVersion();
     if (self.beginHandle) {
         self.beginHandle(self);
         self.beginHandle = nil;

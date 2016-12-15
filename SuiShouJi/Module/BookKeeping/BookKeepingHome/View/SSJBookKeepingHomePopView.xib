@@ -1,8 +1,12 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -36,7 +40,7 @@
                         <constraint firstAttribute="height" constant="34" id="wLC-nz-Qbk"/>
                     </constraints>
                     <state key="normal" title="注册">
-                        <color key="titleColor" red="0.92156862745098034" green="0.29019607843137252" blue="0.39215686274509803" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="titleColor" red="0.92156862745098034" green="0.29019607843137252" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </state>
                     <connections>
                         <action selector="registerButtonClicked:" destination="iN0-l3-epB" eventType="touchUpInside" id="rFd-Kf-syr"/>
@@ -44,20 +48,20 @@
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5BL-WW-bPL">
                     <rect key="frame" x="177" y="278" width="80" height="34"/>
-                    <color key="backgroundColor" red="0.92156862745098034" green="0.29019607843137252" blue="0.39215686274509803" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" red="0.92156862745098034" green="0.29019607843137252" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="34" id="4Cq-mQ-jxj"/>
                         <constraint firstAttribute="width" constant="80" id="X1c-WG-Mv0"/>
                     </constraints>
                     <state key="normal" title="登录">
-                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </state>
                     <connections>
                         <action selector="loginButtonClicked:" destination="iN0-l3-epB" eventType="touchUpInside" id="e8I-eX-KPT"/>
                     </connections>
                 </button>
             </subviews>
-            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.60223599137931039" colorSpace="calibratedRGB"/>
+            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.60223599137931039" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="2lc-EN-isa" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="B6E-y6-3Rj"/>
                 <constraint firstItem="2lc-EN-isa" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="Gmg-IH-mhP"/>
