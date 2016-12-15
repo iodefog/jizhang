@@ -62,6 +62,19 @@ typedef NS_ENUM(NSUInteger, SSJBudgetPeriodType) {
     SSJBudgetPeriodTypeYear = 2     //  每年
 };
 
+/**
+ 时间维度
+
+ - SSJTimeDimensionDay: 日
+ - SSJTimeDimensionWeek: 周
+ - SSJTimeDimensionMonth: 月
+ */
+typedef NS_ENUM(NSUInteger, SSJTimeDimension) {
+    SSJTimeDimensionDay = 0,
+    SSJTimeDimensionWeek = 1,
+    SSJTimeDimensionMonth = 2
+};
+
 //  评价弹框用户选择类型
 typedef NS_ENUM(NSUInteger, SSJEvaluateSelecatedType) {
     SSJEvaluateSelecatedTypeUnKnow = 0,        //  未知，用户没有选择

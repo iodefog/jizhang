@@ -126,9 +126,21 @@ NSString *SSJMessageWithErrorCode(NSError *error);
 BOOL checkName(NSString *userName);
 
 /**
- *  当前版本是否第一次启动
+ 把老版本（1.9.2之前的）版本启动次数数据进行迁移
  */
-BOOL SSJIsFirstLaunchForCurrentVersion();
+void SSJMigrateLaunchTimesInfo();
+
+/**
+ 返回不同版本启动次数数据
+
+ @return 不同版本启动次数
+ */
+NSDictionary *SSJLaunchTimesInfo();
+
+/**
+ *  当前版本的启动次数
+ */
+NSInteger SSJLaunchTimesForCurrentVersion();
 
 /**
  *  增加当前版本的启动次数
