@@ -244,20 +244,43 @@ BOOL checkName(NSString *userName){
     return canUse;
 }
 
-BOOL SSJIsFirstLaunchForCurrentVersion() {
-    NSUserDefaults* userDefault = [NSUserDefaults standardUserDefaults];
-    NSString *versionKey = SSJAppVersion();
-    NSInteger launchTimes = [userDefault integerForKey:versionKey];
-    return launchTimes == 0;
+static NSString *const kSSJLaunchTimesInfoKey = @"kSSJLaunchTimesInfoKey";
+
+void SSJMigrateLaunchTimesInfo() {
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    if (![userDefaults objectForKey:kSSJLaunchTimesInfoKey]) {
+        NSMutableDictionary *versionInfo = [[NSMutableDictionary alloc] init];
+        NSArray *versions = @[@"1.9.2", @"1.9.1", @"1.9.0", @"1.8.2", @"1.8.1", @"1.8.0", @"1.7.3", @"1.7.2", @"1.7.1", @"1.7.0"];
+        for (NSString *version in versions) {
+            NSInteger launchTimes = [userDefaults integerForKey:version];
+            [versionInfo setObject:@(launchTimes) forKey:version];
+        }
+        [userDefaults setObject:versionInfo forKey:kSSJLaunchTimesInfoKey];
+        [userDefaults synchronize];
+    }
+}
+
+NSDictionary *SSJLaunchTimesInfo() {
+    NSDictionary *info = [[NSUserDefaults standardUserDefaults] dictionaryForKey:kSSJLaunchTimesInfoKey];
+    if (!info) {
+        info = [[NSDictionary alloc] init];
+        [[NSUserDefaults standardUserDefaults] setObject:info forKey:kSSJLaunchTimesInfoKey];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+    return info;
+}
+
+NSInteger SSJLaunchTimesForCurrentVersion() {
+    return [[SSJLaunchTimesInfo() objectForKey:SSJAppVersion()] integerValue];
 }
 
 void SSJAddLaunchTimesForCurrentVersion() {
-    NSUserDefaults* userDefault = [NSUserDefaults standardUserDefaults];
-    NSString *versionKey = SSJAppVersion();
-    NSInteger launchTimes = [userDefault integerForKey:versionKey];
+    NSMutableDictionary *info = [SSJLaunchTimesInfo() mutableCopy];
+    NSInteger launchTimes = [[info objectForKey:SSJAppVersion()] integerValue];
     launchTimes ++;
-    [userDefault setInteger:launchTimes forKey:versionKey];
-    [userDefault synchronize];
+    [info setObject:@(launchTimes) forKey:SSJAppVersion()];
+    [[NSUserDefaults standardUserDefaults] setObject:info forKey:kSSJLaunchTimesInfoKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 NSString *SSJDocumentPath() {
@@ -417,6 +440,4 @@ BOOL SSJSavePatchVersion(NSInteger patchVersion){
 NSString *SSJLastPatchVersion(){
     return [[NSUserDefaults standardUserDefaults] objectForKey:SSJLastPatchVersionKey];
 }
-
-
 

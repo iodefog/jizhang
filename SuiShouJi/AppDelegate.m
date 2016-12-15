@@ -79,7 +79,9 @@ NSDate *SCYEnterBackgroundTime() {
 
 #pragma mark - Lifecycle
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    
+    // 此方法最好第一个调用
+    SSJMigrateLaunchTimesInfo();
+    SSJAddLaunchTimesForCurrentVersion();
 
 #ifdef DEBUG
 //    NSString *sourcePath = [[NSBundle mainBundle] pathForResource:@"patch1" ofType:@"js"];
@@ -130,7 +132,7 @@ NSDate *SCYEnterBackgroundTime() {
     [SSJNetworkReachabilityManager startMonitoring];
     
     //如果第一次打开记录当前时间
-    if (SSJIsFirstLaunchForCurrentVersion()) {
+    if (SSJLaunchTimesForCurrentVersion() == 1) {
         [[NSUserDefaults standardUserDefaults]setObject:[NSDate date]forKey:SSJLastPopTimeKey];
         [SSJJspatchAnalyze removePatch];
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -172,7 +174,6 @@ NSDate *SCYEnterBackgroundTime() {
     [MQManager initWithAppkey:SSJMQAppKey completion:^(NSString *clientId, NSError *error) {
         
     }];
-    
 
     return YES;
 }
