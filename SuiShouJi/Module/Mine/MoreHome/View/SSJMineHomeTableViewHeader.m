@@ -40,7 +40,7 @@
         [self addSubview:self.checkInButton];
         [self addSubview:self.verticalSepertorLine];
         [self addSubview:self.loginButton];
-        
+        [self addSubview:self.dengjiImage];
         if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
             self.backImage.hidden = NO;
             self.verticalSepertorLine.hidden = YES;
@@ -65,9 +65,8 @@
     self.nicknameLabel.left = self.geXingSignLabel.left = CGRectGetMaxX(self.headPotraitImage.frame) + 10;
     self.geXingSignLabel.top = CGRectGetMaxY(self.nicknameLabel.frame);
     self.geXingSignLabel.size = CGSizeMake(self.width - CGRectGetMinX(self.geXingSignLabel.frame), 21);
-//    self.checkInLevelLabel.centerY = self.headPotraitImage.centerY;
-//    self.checkInLevelLabel.right = self.right - 20;
     self.dengjiImage.left = CGRectGetMaxX(self.nicknameLabel.frame) + 10;
+    self.dengjiImage.centerY = self.nicknameLabel.centerY;
     self.syncButton.size = CGSizeMake(self.width / 2 , 50);
     self.syncButton.leftBottom = CGPointMake(0, self.height);
     [self.syncButton ssj_relayoutBorder];

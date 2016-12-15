@@ -75,6 +75,14 @@ typedef NS_ENUM(NSUInteger, SSJTimeDimension) {
     SSJTimeDimensionMonth = 2
 };
 
+//  评价弹框用户选择类型
+typedef NS_ENUM(NSUInteger, SSJEvaluateSelecatedType) {
+    SSJEvaluateSelecatedTypeUnKnow = 0,        //  未知，用户没有选择
+    SSJEvaluateSelecatedTypeHighPraise = 1,    //  赏个好评
+    SSJEvaluateSelecatedTypeLatter = 2,        //  稍后再说
+    SSJEvaluateSelecatedTypeNotShowAgain = 3   //  别再烦我
+};
+
 ///------------------------------------------
 /// @name 基本数据常量
 ///------------------------------------------
@@ -161,6 +169,10 @@ extern NSString *const SSJLastLoggedUserItemKey;
 
 //  本地通知的key
 extern NSString *const SSJReminderNotificationKey;
+
+//  应用第一次启动时间（弹框）
+extern NSString *const SSJApplicationLunchTimeKey;
+
 
 
 /** --------------- Notification --------------- */
