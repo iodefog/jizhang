@@ -41,7 +41,7 @@
 #import "SSJBookKeepingHomeDateView.h"
 #import "SSJMultiFunctionButtonView.h"
 #import "SSJBookKeepingHomeBar.h"
-
+#import "SSJBookKeepingHomeEvaluatePopView.h"
 BOOL kHomeNeedLoginPop;
 
 @interface SSJBookKeepingHomeViewController ()<SSJMultiFunctionButtonDelegate>
@@ -58,6 +58,10 @@ BOOL kHomeNeedLoginPop;
 @property(nonatomic, strong) SSJBookKeepingHomeNoDataHeader *noDataHeader;
 @property(nonatomic, strong) SSJBookKeepingHomeDateView *floatingDateView;
 @property(nonatomic, strong) SSJMultiFunctionButtonView *mutiFunctionButton;
+/**
+ 弹出好评弹框
+ */
+@property (nonatomic, strong) SSJBookKeepingHomeEvaluatePopView *evaluatePopView;
 @property(nonatomic, strong) UILabel *statusLabel;
 @property(nonatomic, strong) NSIndexPath *selectIndex;
 @property(nonatomic, strong) NSString *currentIncome;
@@ -570,6 +574,26 @@ BOOL kHomeNeedLoginPop;
         [_homeBar.leftButton.button addTarget:self action:@selector(leftBarButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _homeBar;
+}
+
+- (SSJBookKeepingHomeEvaluatePopView *)evaluatePopView
+{
+    if (!_evaluatePopView) {
+        _evaluatePopView = [[SSJBookKeepingHomeEvaluatePopView alloc] initWithFrame:self.view.bounds];
+//        //好评
+//        _evaluatePopView.favorableReceptionBtnClickBlock = ^{
+//        
+//        };
+//        //稍后再说
+//        _evaluatePopView.laterBtnClickBlock = ^{
+//        
+//        };
+//        //不在显示
+//        _evaluatePopView.notShowAgainBtnClickBlock = ^{
+//            
+//        };
+    }
+    return _evaluatePopView;
 }
 
 #pragma mark - Event
