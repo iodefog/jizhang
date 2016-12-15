@@ -7,6 +7,7 @@
 //
 
 #import "SSJReportFormCurveHeaderViewItem.h"
+#import "SSJReportFormsCurveModel.h"
 
 @implementation SSJReportFormCurveHeaderViewItem
 
