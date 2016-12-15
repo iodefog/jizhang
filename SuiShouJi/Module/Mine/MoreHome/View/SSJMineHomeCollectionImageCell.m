@@ -60,7 +60,7 @@
     }
     _nameLabel.text = adItem.adTitle;
     if ([adItem.adTitle isEqualToString:@"建议与咨询"]) {//显示附标题
-        _bottomLabel.text = @"反馈交流群:552563622";
+        _bottomLabel.text = @"反馈群:552563622";
         self.nameLabel.frame = CGRectMake(0, CGRectGetMaxY(self.topImage.frame) + 10, self.width, 20);
         self.bottomLabel.frame = CGRectMake(0, CGRectGetMaxY(self.nameLabel.frame), self.width, 15);
     }else{

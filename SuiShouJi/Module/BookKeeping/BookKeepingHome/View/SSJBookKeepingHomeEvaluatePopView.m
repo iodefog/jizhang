@@ -10,6 +10,7 @@
 
 NSString *const SSJApplicationLunchTimeKey = @"SSJApplicationLunchTimeKey";
 NSString *const SSJNewUserKey = @"SSJNewUserKey";
+NSString *const SSJEvaluateSelecatedKey = @"SSJEvaluateSelecatedKey";
 
 @interface SSJBookKeepingHomeEvaluatePopView()
 
@@ -52,6 +53,8 @@ NSString *const SSJNewUserKey = @"SSJNewUserKey";
 
 }
 
+
+#pragma mark - Lazy
 - (UIImageView *)bgImageView
 {
     if (!_bgImageView) {
@@ -116,44 +119,107 @@ NSString *const SSJNewUserKey = @"SSJNewUserKey";
     return _notShowAgainButton;
 }
 
+#pragma mark - Setter
+- (void)setEvaluateSelecatedType:(SSJEvaluateSelecatedType)evaluateSelecatedType
+{
+    _evaluateSelecatedType = evaluateSelecatedType;
+    [[NSUserDefaults standardUserDefaults] setObject:@(evaluateSelecatedType) forKey:SSJEvaluateSelecatedKey];
+}
 
-#pragma mark -Private
+#pragma mark - Private
 - (void)dismiss
 {
     [self removeFromSuperview];
 }
 
-
-#pragma mark -Action
-- (void)showEvaluatePopView
+- (void)show
 {
-   UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
-    [keyWindow addSubview:self];
+    UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+    [keyWindow addSubview:self];//显示弹框
 }
 
 
+#pragma mark - Action
+- (void)showEvaluatePopView
+{
+    //当前版本是否显示过弹框()
+    int type = [[[NSUserDefaults standardUserDefaults] objectForKey:SSJEvaluateSelecatedKey] intValue];
+    if(type == SSJEvaluateSelecatedTypeNotShowAgain && SSJLaunchTimesForCurrentVersion() <= 1){//更新新版本继续弹出,当前版本是第一次启动并且上一个版本选择了高冷无视更新为还未选择
+        self.evaluateSelecatedType = SSJEvaluateSelecatedTypeUnKnow;
+        return;
+    }
+    
+    if (SSJLaunchTimesForCurrentVersion() > 1) {//当前版本不是第一次启动
+        switch (type) {
+            case SSJEvaluateSelecatedTypeUnKnow:
+            {
+                //新用户
+                if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"SSJNewUserKey"] intValue] == 0) {
+                    //5天后弹出
+                    [self showAfterFiveDays];
+                    
+                }else if([[[NSUserDefaults standardUserDefaults] objectForKey:@"SSJNewUserKey"] intValue] == 1){//老用户
+                    [self show];
+                }
+            }
+                break;
+            case SSJEvaluateSelecatedTypeHighPraise://以后都不弹
+                break;
+            case SSJEvaluateSelecatedTypeLatter:
+            {
+                [self showAfterFiveDays];//每隔5天后弹出
+            }
+                break;
+            case SSJEvaluateSelecatedTypeNotShowAgain://当前版本不在弹出
+                break;
+            default:
+                break;
+        }
+    }
+}
+
+- (void)showAfterFiveDays{
+    NSDate *currentDate = [NSDate date];
+    NSDate *lastPopTime = [[NSUserDefaults standardUserDefaults]objectForKey:SSJApplicationLunchTimeKey];
+    NSTimeInterval time = [currentDate timeIntervalSinceDate:lastPopTime];
+    int days=((int)time) / (3600*24);
+    //每隔5天弹出
+    if (days > 5) {
+        //弹出
+        [self show];
+    }
+    //更新时间
+    [[NSUserDefaults standardUserDefaults] setObject:currentDate forKey:SSJApplicationLunchTimeKey];
+}
+
 + (BOOL)SSJIsNewUser
 {
-    return YES;
+   NSDictionary *dic = SSJLaunchTimesInfo();
+    __block long double lunchTimes = 0;
+    [dic enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+        lunchTimes += [obj doubleValue];
+    }];
+    return lunchTimes <= 1;
 }
 
 
 + (void)evaluatePopViewConfiguration
 {
+    BOOL isFirstLaunch = SSJLaunchTimesForCurrentVersion() == 1;
     //设置app启动时间
-    if (SSJIsFirstLaunchForCurrentVersion()) {//当前版本是第一次启动
-        
+    if (isFirstLaunch) {
         [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:SSJApplicationLunchTimeKey];
         
         //判断是否为新用户
         if ([self SSJIsNewUser]) {//是新用户
-            [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:SSJNewUserKey];
+            [[NSUserDefaults standardUserDefaults] setObject:@(0) forKey:SSJNewUserKey];
         }else{
-            [[NSUserDefaults standardUserDefaults] setObject:@"0" forKey:SSJNewUserKey];
+            [[NSUserDefaults standardUserDefaults] setObject:@(1) forKey:SSJNewUserKey];
         }
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
 }
+
 
 - (void)favorableButtonClicked
 {
@@ -162,17 +228,20 @@ NSString *const SSJNewUserKey = @"SSJNewUserKey";
     if ([[UIApplication sharedApplication] canOpenURL:url]) {
         [[UIApplication sharedApplication] openURL:url];
     }
+    self.evaluateSelecatedType = SSJEvaluateSelecatedTypeHighPraise;
     [self dismiss];
     
 }
 
 - (void)latterButtonClicked
 {
+    self.evaluateSelecatedType = SSJEvaluateSelecatedTypeLatter;
     [self dismiss];
 }
 
 - (void)notShowAgainButtonClicked
 {
+    self.evaluateSelecatedType = SSJEvaluateSelecatedTypeNotShowAgain;
     [self dismiss];
 }
 @end
