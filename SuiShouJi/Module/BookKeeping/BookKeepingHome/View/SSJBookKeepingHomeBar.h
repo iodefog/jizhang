@@ -21,6 +21,6 @@
 @property(nonatomic, strong) SSJBookKeepingHomeBooksButton *leftButton;
 
 // 记账树gif图片
-@property (nonatomic, strong) FLAnimatedImageView *loadingView;
+//@property (nonatomic, strong) FLAnimatedImageView *loadingView;
 
 @end
