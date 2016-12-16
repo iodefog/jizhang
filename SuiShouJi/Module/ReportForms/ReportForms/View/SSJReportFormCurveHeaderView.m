@@ -57,7 +57,9 @@
     _topContainerView.frame = CGRectMake(0, 10, self.width, 410);
     _separatorFormView.frame = CGRectMake(0, _topContainerView.bottom + 10, self.width, 88);
     _timePeriodSegmentControl.frame = CGRectMake(0, 0, self.width, 40);
+    [_timePeriodSegmentControl setTabSize:CGSizeMake(_timePeriodSegmentControl.width * 0.33, 2)];
     _curveView.frame = CGRectMake(0, _timePeriodSegmentControl.bottom, self.width, 330);
+    [_curveView ssj_relayoutBorder];
     _questionBtn.frame = CGRectMake(8, _curveView.bottom, 30, 30);
 }
 
@@ -68,17 +70,20 @@
 
 #pragma mark - SCYSlidePagingHeaderViewDelegate
 - (void)slidePagingHeaderView:(SCYSlidePagingHeaderView *)headerView didSelectButtonAtIndex:(NSUInteger)index {
+    if (index == 0) {
+        _item.timeDimension = SSJTimeDimensionDay;
+    } else if (index == 1) {
+        _item.timeDimension = SSJTimeDimensionWeek;
+    } else if (index == 2) {
+        _item.timeDimension = SSJTimeDimensionMonth;
+    } else {
+        SSJPRINT(@"未定义选中下标执行的逻辑");
+        return;
+    }
+    
     if (_changeTimePeriodHandle) {
         _changeTimePeriodHandle(self);
     }
-    
-    //    if (_payAndIncomeSegmentControl.selectedIndex == 0) {
-    //        [MobClick event:@"form_out"];
-    //    } else if (_payAndIncomeSegmentControl.selectedIndex == 1) {
-    //        [MobClick event:@"form_in"];
-    //    } else {
-    //
-    //    }
 }
 
 #pragma mark - SSJReportFormsCurveGraphViewDelegate
@@ -128,9 +133,9 @@
 
 #pragma mark - Public
 - (void)setItem:(SSJReportFormCurveHeaderViewItem *)item {
-    if ([_item isEqualToItem:item]) {
-        return;
-    }
+//    if ([_item isEqualToItem:item]) {
+//        return;
+//    }
     
     _item = item;
     
@@ -180,11 +185,13 @@
     _topContainerView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     
     _separatorFormView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+    _separatorFormView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
     
     _timePeriodSegmentControl.titleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     _timePeriodSegmentControl.selectedTitleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
     _timePeriodSegmentControl.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
-    [_timePeriodSegmentControl ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
+    
+    [_curveView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
     
     _questionBtn.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     
@@ -211,10 +218,7 @@
         _timePeriodSegmentControl = [[SCYSlidePagingHeaderView alloc] init];
         _timePeriodSegmentControl.customDelegate = self;
         _timePeriodSegmentControl.buttonClickAnimated = YES;
-        [_timePeriodSegmentControl setTabSize:CGSizeMake(_timePeriodSegmentControl.width * 0.3, 3)];
         _timePeriodSegmentControl.titles = @[@"日", @"周", @"月"];
-        [_timePeriodSegmentControl ssj_setBorderWidth:1];
-        [_timePeriodSegmentControl ssj_setBorderStyle:SSJBorderStyleBottom];
     }
     return _timePeriodSegmentControl;
 }
@@ -222,6 +226,8 @@
 - (SSJReportFormsCurveGraphView *)curveView {
     if (!_curveView) {
         _curveView = [[SSJReportFormsCurveGraphView alloc] init];
+        [_curveView ssj_setBorderWidth:1];
+        [_curveView ssj_setBorderStyle:SSJBorderStyleTop];
         _curveView.delegate = self;
     }
     return _curveView;
@@ -241,8 +247,6 @@
     if (!_separatorFormView) {
         _separatorFormView = [[SSJSeparatorFormView alloc] init];
         _separatorFormView.separatorColor = [UIColor whiteColor];
-        _separatorFormView.horizontalSeparatorInset = UIEdgeInsetsMake(0, 42, 0, 42);
-        _separatorFormView.verticalSeparatorInset = UIEdgeInsetsMake(22, 0, 22, 0);
         _separatorFormView.dataSource = self;
     }
     return _separatorFormView;

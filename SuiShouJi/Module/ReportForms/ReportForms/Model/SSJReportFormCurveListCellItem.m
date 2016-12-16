@@ -10,4 +10,11 @@
 
 @implementation SSJReportFormCurveListCellItem
 
+- (instancetype)init {
+    if (self = [super init]) {
+        self.rowHeight = 90;
+    }
+    return self;
+}
+
 @end

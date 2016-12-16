@@ -59,12 +59,12 @@ extern NSString *const SSJReportFormsCurveModelEndDateKey;
  *  @param success      查询成功的回调
  *  @param failure      查询失败的回调
  */
-+ (void)queryForBillStatisticsWithType:(int)type
-                             startDate:(NSDate *)startDate
-                               endDate:(NSDate *)endDate
-                               booksId:(NSString *)booksId
-                               success:(void(^)(NSDictionary *result))success
-                               failure:(void (^)(NSError *error))failure;
++ (void)queryForBillStatisticsWithTimeDimension:(SSJTimeDimension)dimension
+                                      startDate:(NSDate *)startDate
+                                        endDate:(NSDate *)endDate
+                                        booksId:(NSString *)booksId
+                                        success:(void(^)(NSDictionary *result))success
+                                        failure:(void (^)(NSError *error))failure;
 
 /**
  *  查询某个时间段内有效的收入／支出成员流水统计

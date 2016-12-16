@@ -50,7 +50,7 @@
 @implementation SSJSeparatorFormViewCell
 
 - (void)dealloc {
-    
+    [self removeObserver];
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {

@@ -6,9 +6,9 @@
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
 
-#import "SSJBaseItem.h"
+#import <Foundation/Foundation.h>
 
-@interface SSJUserItem : SSJBaseItem <NSCopying>
+@interface SSJUserItem : NSObject <NSCopying>
 
 //  用户id
 @property (nonatomic, copy) NSString *userId;
