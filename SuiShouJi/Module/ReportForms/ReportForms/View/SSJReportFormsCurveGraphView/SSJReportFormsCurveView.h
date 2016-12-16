@@ -26,9 +26,39 @@
 @property (nonatomic) CGFloat maxValue;
 
 /**
- <#Description#>
+ 曲线的布局范围
  */
 @property (nonatomic) UIEdgeInsets contentInsets;
+
+/**
+ 是否显示曲线阴影，默认NO
+ */
+@property (nonatomic) BOOL showShadow;
+
+/**
+ 是否填充曲线，默认NO
+ */
+@property (nonatomic) BOOL fillCurve;
+
+/**
+ 支出曲线颜色
+ */
+@property (nonatomic, strong) UIColor *paymentCurveColor;
+
+/**
+ 收入曲线颜色
+ */
+@property (nonatomic, strong) UIColor *incomeCurveColor;
+
+/**
+ 支出曲线填充颜色
+ */
+@property (nonatomic, strong) UIColor *paymentFillColor;
+
+/**
+ 收入曲线填充颜色
+ */
+@property (nonatomic, strong) UIColor *incomeFillColor;
 
 /**
  获取支出曲线上X轴坐标对应的Y轴坐标，此方法目前没有实现

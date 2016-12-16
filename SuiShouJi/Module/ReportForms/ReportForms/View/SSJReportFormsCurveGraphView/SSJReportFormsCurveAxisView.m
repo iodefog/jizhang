@@ -18,6 +18,8 @@
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
+        _titleColor = [UIColor blackColor];
+        _scaleColor = [UIColor blackColor];
         self.backgroundColor = [UIColor clearColor];
         _labels = [[NSMutableArray alloc] init];
     }
@@ -51,7 +53,7 @@
         CGContextAddLineToPoint(ctx, self.width, 3);
     }
     
-    CGContextSetStrokeColorWithColor(ctx, [UIColor ssj_colorWithHex:@"878787"].CGColor);
+    CGContextSetStrokeColorWithColor(ctx, _scaleColor.CGColor);
     CGContextSetLineWidth(ctx, 1 / [UIScreen mainScreen].scale);
     CGContextStrokePath(ctx);
 }
@@ -66,12 +68,34 @@
         for (int i = 0; i < _axisTitles.count; i ++) {
             UILabel *label = [[UILabel alloc] init];
             label.font = [UIFont systemFontOfSize:12];
-            label.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+            label.textColor = _titleColor;
             label.text = _axisTitles[i];
             [label sizeToFit];
             [self addSubview:label];
             [_labels addObject:label];
         }
+        [self setNeedsDisplay];
+    }
+}
+
+- (void)setMargin:(CGFloat)margin {
+    if (_margin != margin) {
+        _margin = margin;
+        [self setNeedsLayout];
+        [self setNeedsDisplay];
+    }
+}
+
+- (void)setTitleColor:(UIColor *)titleColor {
+    if (!CGColorEqualToColor(_titleColor.CGColor, titleColor.CGColor)) {
+        _titleColor = titleColor;
+        [_labels makeObjectsPerformSelector:@selector(setTextColor:) withObject:_titleColor];
+    }
+}
+
+- (void)setScaleColor:(UIColor *)scaleColor {
+    if (!CGColorEqualToColor(_scaleColor.CGColor, scaleColor.CGColor)) {
+        _scaleColor = scaleColor;
         [self setNeedsDisplay];
     }
 }
