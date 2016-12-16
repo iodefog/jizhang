@@ -88,6 +88,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
     [self.tableView registerClass:[SSJCreditCardListCell class] forCellReuseIdentifier:kCreditCardListFirstLineCellID];
 
     [self.tableView registerClass:[SSJFundingDetailListFirstLineCell class] forCellReuseIdentifier:kFundingListFirstLineCellID];
+    [self.view addSubview:self.noDataHeader];
     if ([self.item isKindOfClass:[SSJCreditCardItem class]]) {
         [self.view addSubview:self.repaymentButton];
         self.tableView.tableHeaderView = self.creditCardHeader;
@@ -95,7 +96,6 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
     }else{
         self.tableView.tableHeaderView = self.header;
     }
-    [self.view addSubview:self.noDataHeader];
 }
 
 
@@ -312,6 +312,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
                     } else {
                         SSJBalenceChangeDetailViewController *balanceChangeVc = [[SSJBalenceChangeDetailViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
                         balanceChangeVc.chargeItem = (SSJBillingChargeCellItem *)item;
+                        balanceChangeVc.fundItem = self.item;
                         [self.navigationController pushViewController:balanceChangeVc animated:YES];
                     }
                 }

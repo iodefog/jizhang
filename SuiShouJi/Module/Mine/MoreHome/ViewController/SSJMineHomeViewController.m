@@ -207,7 +207,7 @@ static BOOL kNeedBannerDisplay = YES;
     [cell setAdItem:[self.adItemsArray ssj_safeObjectAtIndex:indexPath.item] indexPath:indexPath];
     return cell;
 }
-#pragma mark -UICollectionViewDelegateFlowLayout
+#pragma mark - UICollectionViewDelegateFlowLayout
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     return CGSizeMake(SSJSCREENWITH / kColum, 100);
@@ -235,7 +235,7 @@ static BOOL kNeedBannerDisplay = YES;
     return UIEdgeInsetsMake(0, 0, 0, 0);//分别为上、左、下、右
 }
 
-#pragma mark -UICollectionViewDelegate
+#pragma mark - UICollectionViewDelegate
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     SSJListAdItem *item = [self.adItemsArray ssj_safeObjectAtIndex:indexPath.item];

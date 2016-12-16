@@ -24,6 +24,7 @@
 #import "MMDrawerController.h"
 #import "SSJFundingDetailsViewController.h"
 #import "SSJLoanDetailViewController.h"
+#import "SSJBookKeepingHomeEvaluatePopView.h"
 
 #import "SSJGradientMaskView.h"
 #import "SSJCreditCardItem.h"
@@ -174,6 +175,9 @@ NSDate *SCYEnterBackgroundTime() {
     [MQManager initWithAppkey:SSJMQAppKey completion:^(NSString *clientId, NSError *error) {
         
     }];
+    
+    //保存app启动时间，判断是否为新用户
+    [SSJBookKeepingHomeEvaluatePopView evaluatePopViewConfiguration];
 
     return YES;
 }

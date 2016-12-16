@@ -10,7 +10,13 @@
 
 #import "SSJFundingDetailCell.h"
 
+#import "SSJFinancingHomeitem.h"
+#import "SSJCreditCardItem.h"
+
+#import "SSJDatabaseQueue.h"
+
 static NSString *const kFundingDetailCellID = @"kFundingDetailCellID";
+static NSString *const kFundingListFirstLineCellID = @"kFundingListFirstLineCellID";
 
 @interface SSJBalenceChangeDetailViewController ()
 
@@ -20,8 +26,28 @@ static NSString *const kFundingDetailCellID = @"kFundingDetailCellID";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self.tableView registerClass:[SSJBaseTableViewCell class] forCellReuseIdentifier:kFundingDetailCellID];
+    self.chargeItem.chargeImage = @"";
+    self.chargeItem.chargeMemo = @"";
+    [self.tableView registerClass:[SSJFundingDetailCell class] forCellReuseIdentifier:kFundingDetailCellID];
+    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(deleteButtonClicked)];
+    self.navigationItem.rightBarButtonItem = rightItem;
     // Do any additional setup after loading the view.
+}
+
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    self.title = @"详情";
+    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor],NSFontAttributeName:[UIFont systemFontOfSize:21]};
+    [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
+    [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
+    if ([self.fundItem isKindOfClass:[SSJCreditCardItem class]]) {
+        SSJCreditCardItem *cardItem = (SSJCreditCardItem *)self.fundItem;
+        [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:cardItem.cardColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+    }else{
+        SSJFinancingHomeitem *financingItem = (SSJFinancingHomeitem *)self.fundItem;
+        [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:financingItem.fundingColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+    }
+
 }
 
 #pragma mark - UITableViewDataSource
@@ -37,43 +63,44 @@ static NSString *const kFundingDetailCellID = @"kFundingDetailCellID";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    SSJBaseTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kFundingDetailCellID forIndexPath:indexPath];
-    if (!cell) {
-        cell = [[SSJBaseTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:kFundingDetailCellID];
-        cell.backgroundColor = [UIColor clearColor];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.textLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-    }
+
     if (indexPath.section == 0) {
-        cell.imageView.image = [[UIImage imageNamed:self.chargeItem.imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        cell.imageView.tintColor = [UIColor ssj_colorWithHex:self.chargeItem.colorValue];
-        cell.textLabel.text = self.chargeItem.typeName;
-        cell.textLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        cell.detailTextLabel.text = self.chargeItem.typeName;
-        cell.detailTextLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        cell.detailTextLabel.font = [UIFont systemFontOfSize:20];
+        SSJFundingDetailCell *cell = [tableView dequeueReusableCellWithIdentifier:kFundingDetailCellID];
+        cell.item = self.chargeItem;
         return cell;
     }
-    if (indexPath.row == 0 && indexPath.section == 1) {
-        cell.textLabel.text = @"时间";
-        cell.textLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        cell.detailTextLabel.text = self.chargeItem.billDate;
-        cell.detailTextLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    if (indexPath.section == 1) {
+        SSJBaseTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kFundingListFirstLineCellID];
+        if (!cell) {
+            cell = [[SSJBaseTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:kFundingListFirstLineCellID];
+            cell.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+            cell.detailTextLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+            cell.textLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        }
+        if (indexPath.row == 0) {
+            cell.textLabel.text = @"时间";
+            cell.detailTextLabel.text = self.chargeItem.billDate;
+        } else {
+            cell.textLabel.text = @"资金类型";
+            if ([self.fundItem isKindOfClass:[SSJCreditCardItem class]]) {
+                SSJCreditCardItem *cardItem = (SSJCreditCardItem *)self.fundItem;
+                cell.textLabel.text = cardItem.cardName;
+            }else{
+                SSJFinancingHomeitem *financingItem = (SSJFinancingHomeitem *)self.fundItem;
+                cell.detailTextLabel.text = financingItem.fundingName;
+            }
+        }
         return cell;
+
     }
-    if (indexPath.row == 1 && indexPath.section == 1) {
-        cell.textLabel.text = @"资金类型";
-        cell.textLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        cell.detailTextLabel.text = self.chargeItem.fundName;
-        cell.detailTextLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-        return cell;
-    }
+    
     return nil;
 }
 
 #pragma mark - UITableViewDelegate
 
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.section == 0) {
         return 90;
     }
@@ -81,8 +108,25 @@ static NSString *const kFundingDetailCellID = @"kFundingDetailCellID";
 }
 
 
--(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
     return 10;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
+    return 0.1;
+}
+
+#pragma Event
+- (void)deleteButtonClicked{
+    __weak typeof(self) weakSelf = self;
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        NSString *userId = SSJUSERID();
+        NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        [db executeUpdate:@"update bk_user_charge set operatortype = 2, iversion = ?,cwritedate = ? where ichargeid = ? and cuserid = ?",@(SSJSyncVersion()),writeDate,weakSelf.chargeItem.ID,userId];
+        SSJDispatchMainAsync(^{
+            [weakSelf.navigationController popViewControllerAnimated:YES];
+        });
+    }];
 }
 
 - (void)didReceiveMemoryWarning {

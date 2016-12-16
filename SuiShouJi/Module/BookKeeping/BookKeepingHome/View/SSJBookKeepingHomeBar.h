@@ -10,6 +10,7 @@
 #import "SSJHomeBudgetButton.h"
 #import "SSJHomeBarCalenderButton.h"
 #import "SSJBookKeepingHomeBooksButton.h"
+#import "FLAnimatedImageView.h"
 
 @interface SSJBookKeepingHomeBar : UIView
 
@@ -18,5 +19,8 @@
 @property (nonatomic,strong) SSJHomeBarCalenderButton *rightBarButton;
 
 @property(nonatomic, strong) SSJBookKeepingHomeBooksButton *leftButton;
+
+// 记账树gif图片
+@property (nonatomic, strong) FLAnimatedImageView *loadingView;
 
 @end

@@ -932,6 +932,7 @@
 		91F7FD331DFA9EF9005F4B6B /* SSJProductAdviceNetWorkService.m in Sources */ = {isa = PBXBuildFile; fileRef = 91F7FD2F1DFA9EF9005F4B6B /* SSJProductAdviceNetWorkService.m */; };
 		91F7FD341DFA9EF9005F4B6B /* SSJProductAdviceNetWorkService.m in Sources */ = {isa = PBXBuildFile; fileRef = 91F7FD2F1DFA9EF9005F4B6B /* SSJProductAdviceNetWorkService.m */; };
 		91F7FD381DFAB94A005F4B6B /* SSJAdviceItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 91F7FD371DFAB94A005F4B6B /* SSJAdviceItem.m */; };
+		9C057FE31E0295F20083E472 /* homeLoading.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9C057FE21E0295F20083E472 /* homeLoading.gif */; };
 		9C0AB1691D670BAE0082B971 /* SSJCreditCardEditeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0AB1681D670BAE0082B971 /* SSJCreditCardEditeCell.m */; };
 		9C0AB1711D670BB30082B971 /* SSJCreditCardEditeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0AB1681D670BAE0082B971 /* SSJCreditCardEditeCell.m */; };
 		9C141B821D23BD920095E336 /* SSJThemeImageCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C141B811D23BD920095E336 /* SSJThemeImageCollectionViewCell.m */; };
@@ -1688,6 +1689,7 @@
 		9C9D0B861D080E09003A9F4E /* SSJCircleChargeTypeSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9D0B851D080E09003A9F4E /* SSJCircleChargeTypeSelectView.m */; };
 		9C9D0BA91D0E7C1D003A9F4E /* SSJChargeCircleNoneView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9D0BA81D0E7C1D003A9F4E /* SSJChargeCircleNoneView.m */; };
 		9C9D58861E01167F00E04213 /* SSJBalenceChangeDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9D58851E01167F00E04213 /* SSJBalenceChangeDetailViewController.m */; };
+		9C9D58901E0144BF00E04213 /* xiaomao.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9C9D588F1E0144BF00E04213 /* xiaomao.gif */; };
 		9C9DD6561D475A13001FA3C5 /* SSJDataClearHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9DD6551D475A13001FA3C5 /* SSJDataClearHelper.m */; };
 		9C9DD6601D4768F5001FA3C5 /* SSJClearUserDataService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9DD65F1D4768F5001FA3C5 /* SSJClearUserDataService.m */; };
 		9C9DD6611D484A07001FA3C5 /* SSJClearUserDataService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9DD65F1D4768F5001FA3C5 /* SSJClearUserDataService.m */; };
@@ -3282,6 +3284,7 @@
 		91F7FD2F1DFA9EF9005F4B6B /* SSJProductAdviceNetWorkService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJProductAdviceNetWorkService.m; sourceTree = "<group>"; };
 		91F7FD361DFAB94A005F4B6B /* SSJAdviceItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJAdviceItem.h; sourceTree = "<group>"; };
 		91F7FD371DFAB94A005F4B6B /* SSJAdviceItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJAdviceItem.m; sourceTree = "<group>"; };
+		9C057FE21E0295F20083E472 /* homeLoading.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = homeLoading.gif; sourceTree = "<group>"; };
 		9C0AB1671D670BAE0082B971 /* SSJCreditCardEditeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCreditCardEditeCell.h; sourceTree = "<group>"; };
 		9C0AB1681D670BAE0082B971 /* SSJCreditCardEditeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCreditCardEditeCell.m; sourceTree = "<group>"; };
 		9C141B801D23BD920095E336 /* SSJThemeImageCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJThemeImageCollectionViewCell.h; sourceTree = "<group>"; };
@@ -3500,6 +3503,7 @@
 		9C9D0BA81D0E7C1D003A9F4E /* SSJChargeCircleNoneView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJChargeCircleNoneView.m; sourceTree = "<group>"; };
 		9C9D58841E01167F00E04213 /* SSJBalenceChangeDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBalenceChangeDetailViewController.h; sourceTree = "<group>"; };
 		9C9D58851E01167F00E04213 /* SSJBalenceChangeDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBalenceChangeDetailViewController.m; sourceTree = "<group>"; };
+		9C9D588F1E0144BF00E04213 /* xiaomao.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = xiaomao.gif; sourceTree = "<group>"; };
 		9C9DD6541D475A13001FA3C5 /* SSJDataClearHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJDataClearHelper.h; sourceTree = "<group>"; };
 		9C9DD6551D475A13001FA3C5 /* SSJDataClearHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDataClearHelper.m; sourceTree = "<group>"; };
 		9C9DD65E1D4768F5001FA3C5 /* SSJClearUserDataService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJClearUserDataService.h; sourceTree = "<group>"; };
@@ -5721,6 +5725,15 @@
 			path = ViewController;
 			sourceTree = "<group>";
 		};
+		9C9D588E1E0144BF00E04213 /* GifImage */ = {
+			isa = PBXGroup;
+			children = (
+				9C057FE21E0295F20083E472 /* homeLoading.gif */,
+				9C9D588F1E0144BF00E04213 /* xiaomao.gif */,
+			);
+			path = GifImage;
+			sourceTree = "<group>";
+		};
 		9CD9BB561CFD2DAA0061803B /* Mine */ = {
 			isa = PBXGroup;
 			children = (
@@ -6632,6 +6645,7 @@
 		BD0E43EB1C2118E600F9179D /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				9C9D588E1E0144BF00E04213 /* GifImage */,
 				7DC4873F1DF655BA00C27B69 /* Localization */,
 				9C23EA4B1DDAD4FE0003C5AB /* certificates */,
 				BD78E4B01C8FF8C7003A1EE1 /* sound */,
@@ -7249,6 +7263,7 @@
 				9C23EA4D1DDAD4FE0003C5AB /* https.cer in Resources */,
 				9C2A6AA21D195E7B0010F1DA /* youyu-Info.plist in Resources */,
 				BD0432F11C1A77BB0051E7AB /* sr_refresh@2x.png in Resources */,
+				9C9D58901E0144BF00E04213 /* xiaomao.gif in Resources */,
 				7D5F332C1CEAE6C10086B67E /* SSJBookKeepingHomePopView.xib in Resources */,
 				7D4A430A1CC63755002F0264 /* rain_sound.wav in Resources */,
 				BD543C4C1C1A6DBC00910D61 /* Assets.xcassets in Resources */,
@@ -7256,6 +7271,7 @@
 				BD0432F01C1A77BB0051E7AB /* sr_refresh.png in Resources */,
 				7D4EF8941C4B5625003C4B20 /* ProjectSettings.plist in Resources */,
 				91EBE4351E000139002564C4 /* SSJMoreProductAdviceTableViewCell.xib in Resources */,
+				9C057FE31E0295F20083E472 /* homeLoading.gif in Resources */,
 				7DC4875B1DF6629700C27B69 /* Localizable.strings in Resources */,
 				9C94717C1CEB224C00D69079 /* SSJFinancingHomePopView.xib in Resources */,
 				BD543C4A1C1A6DBC00910D61 /* Main.storyboard in Resources */,

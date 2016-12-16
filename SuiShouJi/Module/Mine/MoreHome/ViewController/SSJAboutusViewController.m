@@ -81,7 +81,13 @@ static NSString *const kTitle3 = @"联系客服";
     
     //  联系客服
     if ([title isEqualToString:kTitle3]) {
-        NSMutableString * str=[[NSMutableString alloc] initWithFormat:@"tel:%@",@"400-7676-298"];
+        NSString *serviceNum;
+        if ([SSJStartChecker sharedInstance].serviceNum.length) {
+            serviceNum = [SSJStartChecker sharedInstance].serviceNum;
+        } else {
+            serviceNum = @"400-7676-298";
+        }
+        NSMutableString * str=[[NSMutableString alloc] initWithFormat:@"tel:%@",serviceNum];
         UIWebView * callWebview = [[UIWebView alloc] init];
         [callWebview loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:str]]];
         [self.view addSubview:callWebview];

@@ -191,7 +191,9 @@
             item.fundingID = [rs stringForColumn:@"CFUNDID"];
             item.fundingName = [rs stringForColumn:@"CACCTNAME"];
             item.fundingParent = [rs stringForColumn:@"CPARENT"];
-            [_items addObject:item];
+            if (![weakSelf.exceptionIDs containsObject:item.fundingID]) {
+                [_items addObject:item];
+            }
         }
         SSJFundingItem *item = [[SSJFundingItem alloc]init];
         item.fundingName = @"添加资金新的账户";
@@ -203,6 +205,9 @@
     }];
 }
 
+- (void)setExceptionIDs:(NSArray *)exceptionIDs{
+    _exceptionIDs = exceptionIDs;
+}
 
 -(void)reloadDate{
     [self getDateFromDb];

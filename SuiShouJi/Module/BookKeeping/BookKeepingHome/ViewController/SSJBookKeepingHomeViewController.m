@@ -165,6 +165,9 @@ BOOL kHomeNeedLoginPop;
     [self.mm_drawerController setMaximumLeftDrawerWidth:SSJSCREENWITH * 0.8];
     [self.mm_drawerController setOpenDrawerGestureModeMask:MMOpenDrawerGestureModeAll];
     [self.mm_drawerController setCloseDrawerGestureModeMask:MMCloseDrawerGestureModeAll];
+    
+    SSJBookKeepingHomeEvaluatePopView *evaluate = [[SSJBookKeepingHomeEvaluatePopView alloc] initWithFrame:CGRectMake(0, 0, SSJSCREENWITH, SSJSCREENHEIGHT)];
+    [evaluate showEvaluatePopView];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -851,5 +854,6 @@ BOOL kHomeNeedLoginPop;
     self.hasLoad = NO;
     [self getDateFromDatebase];
 }
+
 
 @end

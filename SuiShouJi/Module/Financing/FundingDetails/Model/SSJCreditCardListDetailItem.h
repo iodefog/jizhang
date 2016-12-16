@@ -36,4 +36,6 @@
 
 @property(nonatomic) double instalmentMoney;
 
+@property(nonatomic) double moneyNeedToRepay;
+
 @end
