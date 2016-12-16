@@ -65,6 +65,8 @@
 
 @property (nonatomic, strong) SSJReportFormProgressView *progressView;
 
+@property (nonatomic, strong) UILabel *rightLabel;
+
 @end
 
 @implementation SSJReportFormCurveListCell
@@ -72,11 +74,15 @@
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         
+        self.textLabel.font = [UIFont systemFontOfSize:12];
+        
+        _rightLabel = [[UILabel alloc] init];
+        _rightLabel.font = [UIFont systemFontOfSize:12];
+        [self addSubview:_rightLabel];
+        
         _progressView = [[SSJReportFormProgressView alloc] init];
         [self.contentView addSubview:_progressView];
         
-        self.textLabel.font = [UIFont systemFontOfSize:12];
-        self.detailTextLabel.font = [UIFont systemFontOfSize:12];
         self.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         [self updateAppearance];
     }
@@ -87,13 +93,15 @@
     [super layoutSubviews];
     
     [self.textLabel sizeToFit];
-    [self.detailTextLabel sizeToFit];
+    [_rightLabel sizeToFit];
     
     self.textLabel.leftTop = CGPointMake(10, 20);
-    self.detailTextLabel.rightTop = CGPointMake(self.contentView.width - 10, 20);
-    self.detailTextLabel.left = MAX(self.detailTextLabel.left, self.textLabel.right + 20);
     
-    _progressView.frame = CGRectMake(10, 40, self.contentView.width - 20, 30);
+    CGFloat maxRightLabWidth = (self.contentView.width - self.textLabel.right - 10 - 20);
+    _rightLabel.width = MIN(_rightLabel.width, maxRightLabWidth);
+    _rightLabel.rightTop = CGPointMake(self.contentView.width - 5, 20);
+    
+    _progressView.frame = CGRectMake(10, 40, self.contentView.width - 15, 30);
 }
 
 - (void)setCellItem:(SSJBaseItem *)cellItem {
@@ -104,7 +112,7 @@
     [super setCellItem:cellItem];
     
     self.textLabel.text = self.item.leftTitle;
-    self.detailTextLabel.text = self.item.rightTitle;
+    _rightLabel.text = self.item.rightTitle;
     _progressView.progress = self.item.scale;
     [_progressView setFillColor:[UIColor ssj_colorWithHex:self.item.progressColorValue]];
 }
@@ -116,7 +124,7 @@
 
 - (void)updateAppearance {
     self.textLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-    self.detailTextLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    _rightLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
 }
 
 - (SSJReportFormCurveListCellItem *)item {

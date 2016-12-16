@@ -237,14 +237,9 @@ static NSString *const kSegmentTitleIncome = @"收入";
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    if (_titleSegmentCtrl.selectedSegmentIndex == 0 && section == 0) {
+    if (section == 0) {
         return self.payAndIncomeSegmentControl.height;
     }
-    
-    if (_titleSegmentCtrl.selectedSegmentIndex == 1 && section == 2) {
-        return self.payAndIncomeSegmentControl.height;
-    }
-    
     return 0;
 }
 

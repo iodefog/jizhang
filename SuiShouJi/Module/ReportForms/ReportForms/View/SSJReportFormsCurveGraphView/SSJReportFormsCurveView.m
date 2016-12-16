@@ -61,9 +61,13 @@ void MyCGPathApplierFunc (void *info, const CGPathElement *element) {
 
 @property (nonatomic, strong) UIBezierPath *incomeCurvePath;
 
+@property (nonatomic, strong) UIBezierPath *incomeShadowPath;
+
 @property (nonatomic, strong) UIBezierPath *incomeFillPath;
 
 @property (nonatomic, strong) UIBezierPath *paymentCurvePath;
+
+@property (nonatomic, strong) UIBezierPath *paymentShadowPath;
 
 @property (nonatomic, strong) UIBezierPath *paymentFillPath;
 
@@ -80,9 +84,12 @@ void MyCGPathApplierFunc (void *info, const CGPathElement *element) {
         self.backgroundColor = [UIColor clearColor];
         
         _incomeCurvePath = [UIBezierPath bezierPath];
+        _incomeShadowPath = [UIBezierPath bezierPath];
         _incomeFillPath = [UIBezierPath bezierPath];
+        
         _paymentCurvePath = [UIBezierPath bezierPath];
-        _paymentFillPath = [UIBezierPath bezierPath];
+        _paymentShadowPath = [UIBezierPath bezierPath];
+        _incomeFillPath = [UIBezierPath bezierPath];
         
         _incomePointMapping = [NSMutableDictionary dictionary];
         _paymentPointMapping = [NSMutableDictionary dictionary];
@@ -97,9 +104,9 @@ void MyCGPathApplierFunc (void *info, const CGPathElement *element) {
 
 - (void)drawRect:(CGRect)rect {
     if (_incomeCurvePath.empty
-        || _incomeFillPath.empty
+        || _incomeShadowPath.empty
         || _paymentCurvePath.empty
-        || _paymentFillPath.empty) {
+        || _paymentShadowPath.empty) {
         return;
     }
     
@@ -107,24 +114,32 @@ void MyCGPathApplierFunc (void *info, const CGPathElement *element) {
     CGContextSetBlendMode(ctx, kCGBlendModeXOR);
     
     // 填充颜色
-    CGContextSetFillColorWithColor(ctx, [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurveIncomeFillColor].CGColor);
-    CGContextAddPath(ctx, _incomeFillPath.CGPath);
-    CGContextDrawPath(ctx, kCGPathFill);
+    if (!_incomeFillPath.empty) {
+        CGContextSetFillColorWithColor(ctx, [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurveIncomeFillColor].CGColor);
+        CGContextAddPath(ctx, _incomeFillPath.CGPath);
+        CGContextDrawPath(ctx, kCGPathFill);
+    }
     
-    CGContextSetFillColorWithColor(ctx, [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurvePaymentFillColor].CGColor);
-    CGContextAddPath(ctx, _paymentFillPath.CGPath);
-    CGContextDrawPath(ctx, kCGPathFill);
+    if (!_paymentFillPath.empty) {
+        CGContextSetFillColorWithColor(ctx, [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurvePaymentFillColor].CGColor);
+        CGContextAddPath(ctx, _paymentFillPath.CGPath);
+        CGContextDrawPath(ctx, kCGPathFill);
+    }
     
     // 曲线
     CGContextSetLineWidth(ctx, 1);
     
-    CGContextSetStrokeColorWithColor(ctx, [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurveIncomeColor].CGColor);
-    CGContextAddPath(ctx, _incomeCurvePath.CGPath);
-    CGContextDrawPath(ctx, kCGPathStroke);
+    if (!_incomeCurvePath.empty) {
+        CGContextSetStrokeColorWithColor(ctx, [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurveIncomeColor].CGColor);
+        CGContextAddPath(ctx, _incomeCurvePath.CGPath);
+        CGContextDrawPath(ctx, kCGPathStroke);
+    }
     
-    CGContextSetStrokeColorWithColor(ctx, [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurvePaymentColor].CGColor);
-    CGContextAddPath(ctx, _paymentCurvePath.CGPath);
-    CGContextDrawPath(ctx, kCGPathStroke);
+    if (!_paymentCurvePath.empty) {
+        CGContextSetStrokeColorWithColor(ctx, [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurvePaymentColor].CGColor);
+        CGContextAddPath(ctx, _paymentCurvePath.CGPath);
+        CGContextDrawPath(ctx, kCGPathStroke);
+    }
 }
 
 - (void)setIncomeValues:(NSArray *)incomeValues {
@@ -150,20 +165,20 @@ void MyCGPathApplierFunc (void *info, const CGPathElement *element) {
 }
 
 - (void)updateIncomePath {
-    [self updateCurvePath:_incomeCurvePath WithValues:_incomeValues];
+    [self updateCurvePath:_incomeCurvePath withValues:_incomeValues];
     [self updateFillPath:_incomeFillPath withCurvePath:_incomeCurvePath];
     // 这个方法只能取到贝塞尔曲线的起始点、终点、两个控制点
 //    CGPathApply(_incomeCurvePath.CGPath, (__bridge void * _Nullable)(_incomePointMapping), MyCGPathApplierFunc);
 }
 
 - (void)updatePaymentPath {
-    [self updateCurvePath:_paymentCurvePath WithValues:_paymentValues];
+    [self updateCurvePath:_paymentCurvePath withValues:_paymentValues];
     [self updateFillPath:_paymentFillPath withCurvePath:_paymentCurvePath];
     // 这个方法只能取到贝塞尔曲线的起始点、终点、两个控制点
 //    CGPathApply(_paymentCurvePath.CGPath, (__bridge void * _Nullable)(_paymentPointMapping), MyCGPathApplierFunc);
 }
 
-- (void)updateCurvePath:(UIBezierPath *)path WithValues:(NSArray *)values {
+- (void)updateCurvePath:(UIBezierPath *)path withValues:(NSArray *)values {
     if (!path || !values.count || CGRectIsEmpty(self.bounds)) {
         return;
     }
