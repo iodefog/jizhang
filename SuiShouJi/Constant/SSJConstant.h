@@ -167,8 +167,14 @@ extern NSString *const SSJReminderNotificationKey;
 //  数据同步成功通知
 extern NSString *const SSJSyncDataSuccessNotification;
 
+//  数据同步失败通知
+extern NSString *const SSJSyncDataFailureNotification;
+
 //  图片同步成功通知
 extern NSString *const SSJSyncImageSuccessNotification;
+
+//  图片同步失败通知
+extern NSString *const SSJSyncImageFailureNotification;
 
 //  登录或者注册成功通知
 extern NSString *const SSJLoginOrRegisterNotification;
