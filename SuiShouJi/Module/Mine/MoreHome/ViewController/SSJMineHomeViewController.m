@@ -618,7 +618,8 @@ static BOOL kNeedBannerDisplay = YES;
 - (void)login {
     SSJLoginViewController *loginVc = [[SSJLoginViewController alloc] init];
     UITabBarController *tabbarVc = self.navigationController.tabBarController;
-    loginVc.backController = [tabbarVc.viewControllers objectAtIndex:0];
+    
+    loginVc.backController = [((UINavigationController *)[tabbarVc.viewControllers firstObject]).viewControllers firstObject];
     [self.navigationController pushViewController:loginVc animated:YES];
 }
 
