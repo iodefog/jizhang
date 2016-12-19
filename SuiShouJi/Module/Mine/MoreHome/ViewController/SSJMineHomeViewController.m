@@ -36,6 +36,7 @@
 #import "SSJBannerNetworkService.h"
 #import "SSJBannerHeaderView.h"
 #import "SSJReminderViewController.h"
+#import "SSJBookKeepingHomeViewController.h"
 #import "SSJListAdItem.h"
 
 #import "UIImageView+WebCache.h"
@@ -617,8 +618,12 @@ static BOOL kNeedBannerDisplay = YES;
 - (void)login {
     SSJLoginViewController *loginVc = [[SSJLoginViewController alloc] init];
     UITabBarController *tabbarVc = self.navigationController.tabBarController;
-    tabbarVc.selectedIndex = 0;
-    loginVc.backController = tabbarVc;
+    for (UIViewController *viewcontroller in tabbarVc.viewControllers) {
+        if ([viewcontroller isKindOfClass:[SSJBookKeepingHomeViewController class]]) {
+            loginVc.backController = viewcontroller;
+            break;
+        }
+    }
     [self.navigationController pushViewController:loginVc animated:YES];
 }
 
