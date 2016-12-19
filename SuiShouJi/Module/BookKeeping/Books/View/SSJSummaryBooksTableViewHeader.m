@@ -88,6 +88,7 @@
 - (SSJReportFormsCurveGraphView *)curveView {
     if (!_curveView) {
         _curveView = [[SSJReportFormsCurveGraphView alloc] initWithFrame:CGRectMake(0, 0, self.width, 384)];
+        [_curveView updateAppearanceAccordToTheme];
         _curveView.backgroundColor = [UIColor clearColor];
     }
     return _curveView;

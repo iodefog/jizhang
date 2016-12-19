@@ -26,6 +26,7 @@
 #import "SSJLocalNotificationHelper.h"
 #import "SSJLoginViewController.h"
 #import "SSJMotionPasswordSettingViewController.h"
+#import "SSJLoginViewController+SSJCategory.h"
 
 static NSString *const kTitle0 = @"手势密码";
 static NSString *const kTitle1 = @"自动同步设置";
@@ -111,6 +112,10 @@ static NSString *const kTitle8 = @"点击上方微信号复制，接着去微信
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
     if ([title isEqualToString:kTitle0]) {
+        if (!SSJIsUserLogined()) {
+            [self login];
+            return;
+        }
         SSJMotionPasswordSettingViewController *motionPwdSettingVC = [[SSJMotionPasswordSettingViewController alloc] initWithTableViewStyle:UITableViewStylePlain];
         [self.navigationController pushViewController:motionPwdSettingVC animated:YES];
         return;
@@ -241,6 +246,13 @@ static NSString *const kTitle8 = @"点击上方微信号复制，接着去微信
         _weixinFooter = [[SSJWeixinFooter alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 150)];
     }
     return _weixinFooter;
+}
+
+#pragma mark - Action
+- (void)login {
+    SSJLoginViewController *loginVc = [[SSJLoginViewController alloc] init];
+    loginVc.backController = self;
+    [self.navigationController pushViewController:loginVc animated:YES];
 }
 
 - (void)didReceiveMemoryWarning {

@@ -271,7 +271,17 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
             period = [_periods ssj_safeObjectAtIndex:self.header.dateAxisView.selectedIndex];
         }
     }
-    [SSJReportFormsUtil queryForBillStatisticsWithType:!(int)_header.periodSelectSegment.selectedSegmentIndex startDate:period.startDate endDate:period.endDate booksId:@"all" success:^(NSDictionary *result) {
+    
+    SSJTimeDimension dimension = SSJTimeDimensionDay;
+    if (_header.periodSelectSegment.selectedSegmentIndex == 0) {
+        dimension = SSJTimeDimensionWeek;
+    } else if (_header.periodSelectSegment.selectedSegmentIndex == 1) {
+        dimension = SSJTimeDimensionMonth;
+    } else {
+        return;
+    }
+    
+    [SSJReportFormsUtil queryForBillStatisticsWithTimeDimension:dimension startDate:period.startDate endDate:period.endDate booksId:@"all" success:^(NSDictionary *result) {
         
         [self.view ssj_hideLoadingIndicator];
         _curveItems = result[SSJReportFormsCurveModelListKey];

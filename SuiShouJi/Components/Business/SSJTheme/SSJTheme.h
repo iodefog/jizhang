@@ -16,5 +16,6 @@
 #import "SSJThemeModel.h"
 #import "SSJThemeDownLoaderManger.h"
 #import "SSJThemeSetting.h"
+#import "SSJThemePlugin.h"
 
 #endif /* SSJTheme_h */

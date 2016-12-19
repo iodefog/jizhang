@@ -126,7 +126,7 @@ NSString *SSJMessageWithErrorCode(NSError *error);
 BOOL checkName(NSString *userName);
 
 /**
- 把老版本（1.9.2之前的）版本启动次数数据进行迁移
+ 把老版本（1.9.2之前并且包涵1.9.2的）版本启动次数数据进行迁移
  */
 void SSJMigrateLaunchTimesInfo();
 

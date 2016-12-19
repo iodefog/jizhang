@@ -352,7 +352,7 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:SSJHideSyncLoadingNotification object:self];
         [CDAutoHideMessageHUD showMessage:@"同步失败"];
     }];
-    [self.loadingView show];
+//    [self.loadingView show];
     
     //  如果有finishHandle，就通过finishHandle来控制页面流程，否则走默认流程
     [[NSUserDefaults standardUserDefaults]setBool:YES forKey:SSJHaveLoginOrRegistKey];

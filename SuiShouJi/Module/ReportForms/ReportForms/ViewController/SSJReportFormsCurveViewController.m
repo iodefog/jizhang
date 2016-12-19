@@ -211,7 +211,7 @@
 
 - (void)reloadData {
     [self.view ssj_showLoadingIndicator];
-    [SSJReportFormsUtil queryForBillStatisticsWithType:(int)_segmentControl.selectedSegmentIndex startDate:_startDate endDate:_endDate booksId:nil success:^(NSDictionary *result) {
+    [SSJReportFormsUtil queryForBillStatisticsWithTimeDimension:(int)_segmentControl.selectedSegmentIndex startDate:_startDate endDate:_endDate booksId:nil success:^(NSDictionary *result) {
         
         [self.view ssj_hideLoadingIndicator];
         _datas = result[SSJReportFormsCurveModelListKey];

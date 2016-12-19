@@ -16,8 +16,15 @@
 }
 
 - (instancetype)initWithElement:(id)element {
-    if (self = [super init]) {
+    if (self = [self init]) {
         [self parseElement:element];
+    }
+    return self;
+}
+
+- (instancetype)init {
+    if (self = [super init]) {
+        _rowHeight = 54;
     }
     return self;
 }
@@ -31,10 +38,6 @@
 
 - (void)setValue:(id)value forUndefinedKey:(NSString *)key {
     SSJPRINT(@"<<< 警告：设置未定义的属性：%@ >>>",key);
-}
-
-- (CGFloat)rowHeight {
-    return 54;
 }
 
 @end

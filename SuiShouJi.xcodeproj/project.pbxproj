@@ -20,6 +20,11 @@
 		7D07B68B1CF2A72C00B9C390 /* SSJJspatchAnalyze.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D07B68A1CF2A72C00B9C390 /* SSJJspatchAnalyze.m */; };
 		7D07B6951CF2AC4900B9C390 /* SSJJsPatchItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D07B6941CF2AC4900B9C390 /* SSJJsPatchItem.m */; };
 		7D07B6981CF2C1F300B9C390 /* SSJLoginHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D07B6971CF2C1F300B9C390 /* SSJLoginHelper.m */; };
+		7D098C792A14820300C86957 /* SSJDatabaseErrorHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D098C782A14820300C86957 /* SSJDatabaseErrorHandler.m */; };
+		7D098C7A2A14820300C86957 /* SSJDatabaseErrorHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D098C782A14820300C86957 /* SSJDatabaseErrorHandler.m */; };
+		7D098C7B2A14820300C86957 /* SSJDatabaseErrorHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D098C782A14820300C86957 /* SSJDatabaseErrorHandler.m */; };
+		7D098C7C2A14820300C86957 /* SSJDatabaseErrorHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D098C782A14820300C86957 /* SSJDatabaseErrorHandler.m */; };
+		7D098C7D2A14820300C86957 /* SSJDatabaseErrorHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D098C782A14820300C86957 /* SSJDatabaseErrorHandler.m */; };
 		7D1D7F431C86BBD90001F72A /* SSJUserChargePeriodConfigSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D1D7F421C86BBD90001F72A /* SSJUserChargePeriodConfigSyncTable.m */; };
 		7D1D7F461C86DB520001F72A /* SSJUserBudgetSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D1D7F451C86DB520001F72A /* SSJUserBudgetSyncTable.m */; };
 		7D1D7F4A1C87EC660001F72A /* SSJRegularManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D1D7F491C87EC660001F72A /* SSJRegularManager.m */; };
@@ -209,9 +214,6 @@
 		7D6B12DC1D4CBC140036BF4E /* SSJListMenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B12D51D4CBC140036BF4E /* SSJListMenuItem.m */; };
 		7D6B12DD1D4CBC140036BF4E /* SSJListMenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B12D51D4CBC140036BF4E /* SSJListMenuItem.m */; };
 		7D6F93211D080981000CCDB3 /* SSJReportFormsCurveViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6F93201D080981000CCDB3 /* SSJReportFormsCurveViewController.m */; };
-		7D6F93301D0809E0000CCDB3 /* SSJReportFormsCurveAxisView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6F932B1D0809E0000CCDB3 /* SSJReportFormsCurveAxisView.m */; };
-		7D6F93311D0809E0000CCDB3 /* SSJReportFormsCurveGraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6F932D1D0809E0000CCDB3 /* SSJReportFormsCurveGraphView.m */; };
-		7D6F93321D0809E0000CCDB3 /* SSJReportFormsCurveView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6F932F1D0809E0000CCDB3 /* SSJReportFormsCurveView.m */; };
 		7D6F93351D0812A9000CCDB3 /* SSJReportFormsCurveModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6F93341D0812A9000CCDB3 /* SSJReportFormsCurveModel.m */; };
 		7D70C1371E00E68400479E44 /* SSJReportFormCurveHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D70C1361E00E68400479E44 /* SSJReportFormCurveHeaderView.m */; };
 		7D70C1381E00E68400479E44 /* SSJReportFormCurveHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D70C1361E00E68400479E44 /* SSJReportFormCurveHeaderView.m */; };
@@ -236,6 +238,21 @@
 		7D768A7D1C96C93A00CB75B0 /* SSJSynchronizeTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D768A7C1C96C93A00CB75B0 /* SSJSynchronizeTask.m */; };
 		7D768A801C96CA4400CB75B0 /* SSJSynchronizeTaskQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D768A7F1C96CA4400CB75B0 /* SSJSynchronizeTaskQueue.m */; };
 		7D768A831C97E76400CB75B0 /* SSJDatabaseVersion1.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D768A821C97E76400CB75B0 /* SSJDatabaseVersion1.m */; };
+		7D78DB3A1E03D0B700CBA636 /* SSJReportFormsCurveAxisView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D78DB351E03D0B700CBA636 /* SSJReportFormsCurveAxisView.m */; };
+		7D78DB3B1E03D0B700CBA636 /* SSJReportFormsCurveAxisView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D78DB351E03D0B700CBA636 /* SSJReportFormsCurveAxisView.m */; };
+		7D78DB3C1E03D0B700CBA636 /* SSJReportFormsCurveAxisView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D78DB351E03D0B700CBA636 /* SSJReportFormsCurveAxisView.m */; };
+		7D78DB3D1E03D0B700CBA636 /* SSJReportFormsCurveAxisView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D78DB351E03D0B700CBA636 /* SSJReportFormsCurveAxisView.m */; };
+		7D78DB3E1E03D0B700CBA636 /* SSJReportFormsCurveAxisView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D78DB351E03D0B700CBA636 /* SSJReportFormsCurveAxisView.m */; };
+		7D78DB3F1E03D0B700CBA636 /* SSJReportFormsCurveGraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D78DB371E03D0B700CBA636 /* SSJReportFormsCurveGraphView.m */; };
+		7D78DB401E03D0B700CBA636 /* SSJReportFormsCurveGraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D78DB371E03D0B700CBA636 /* SSJReportFormsCurveGraphView.m */; };
+		7D78DB411E03D0B700CBA636 /* SSJReportFormsCurveGraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D78DB371E03D0B700CBA636 /* SSJReportFormsCurveGraphView.m */; };
+		7D78DB421E03D0B700CBA636 /* SSJReportFormsCurveGraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D78DB371E03D0B700CBA636 /* SSJReportFormsCurveGraphView.m */; };
+		7D78DB431E03D0B700CBA636 /* SSJReportFormsCurveGraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D78DB371E03D0B700CBA636 /* SSJReportFormsCurveGraphView.m */; };
+		7D78DB441E03D0B700CBA636 /* SSJReportFormsCurveView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D78DB391E03D0B700CBA636 /* SSJReportFormsCurveView.m */; };
+		7D78DB451E03D0B700CBA636 /* SSJReportFormsCurveView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D78DB391E03D0B700CBA636 /* SSJReportFormsCurveView.m */; };
+		7D78DB461E03D0B700CBA636 /* SSJReportFormsCurveView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D78DB391E03D0B700CBA636 /* SSJReportFormsCurveView.m */; };
+		7D78DB471E03D0B700CBA636 /* SSJReportFormsCurveView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D78DB391E03D0B700CBA636 /* SSJReportFormsCurveView.m */; };
+		7D78DB481E03D0B700CBA636 /* SSJReportFormsCurveView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D78DB391E03D0B700CBA636 /* SSJReportFormsCurveView.m */; };
 		7D87AE861D63079C0024D33C /* SSJDatabaseVersion8.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D87AE851D63079C0024D33C /* SSJDatabaseVersion8.m */; };
 		7D87AE871D63079C0024D33C /* SSJDatabaseVersion8.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D87AE851D63079C0024D33C /* SSJDatabaseVersion8.m */; };
 		7D87AE961D6319770024D33C /* SSJLoanHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D87AE951D6319770024D33C /* SSJLoanHelper.m */; };
@@ -362,7 +379,6 @@
 		7DBA55B61D6D32B700C02D79 /* SSJAddNewTypeColorSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32FC1CEAE6C10086B67E /* SSJAddNewTypeColorSelectionView.m */; };
 		7DBA55B71D6D32B700C02D79 /* SSJUserInfoNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBB91CFD2DAA0061803B /* SSJUserInfoNetworkService.m */; };
 		7DBA55B81D6D32B700C02D79 /* SSJObjectAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433031C1A78B40051E7AB /* SSJObjectAddition.m */; };
-		7DBA55B91D6D32B700C02D79 /* SSJReportFormsCurveAxisView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6F932B1D0809E0000CCDB3 /* SSJReportFormsCurveAxisView.m */; };
 		7DBA55BA1D6D32B700C02D79 /* SSJServerLaunchView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D587E5A1CC0DFF40058847B /* SSJServerLaunchView.m */; };
 		7DBA55BB1D6D32B700C02D79 /* TPKeyboardAvoidingTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0432E71C1A77BB0051E7AB /* TPKeyboardAvoidingTableView.m */; };
 		7DBA55BC1D6D32B700C02D79 /* SSJImageAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = BD04330E1C1A78B40051E7AB /* SSJImageAddition.m */; };
@@ -587,7 +603,6 @@
 		7DBA569D1D6D32B700C02D79 /* SSJThemeManagerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9DD6691D49FA31001FA3C5 /* SSJThemeManagerViewController.m */; };
 		7DBA569E1D6D32B700C02D79 /* SSJCalendarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C94719B1CEB473E00D69079 /* SSJCalendarViewController.m */; };
 		7DBA569F1D6D32B700C02D79 /* SSJThemeService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C47E6F11D224BEF005F338A /* SSJThemeService.m */; };
-		7DBA56A01D6D32B700C02D79 /* SSJReportFormsCurveGraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6F932D1D0809E0000CCDB3 /* SSJReportFormsCurveGraphView.m */; };
 		7DBA56A11D6D32B700C02D79 /* SSJMagicExportCalendarWeekView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBA71CFD2DAA0061803B /* SSJMagicExportCalendarWeekView.m */; };
 		7DBA56A21D6D32B700C02D79 /* SSJGuideContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF3F1C4751EA000E6CC9 /* SSJGuideContentView.m */; };
 		7DBA56A31D6D32B700C02D79 /* SSJDebugUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = BD04333D1C1A82730051E7AB /* SSJDebugUtil.m */; };
@@ -601,7 +616,6 @@
 		7DBA56AB1D6D32B700C02D79 /* SSJRegistCheckAuthCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF501C4751EA000E6CC9 /* SSJRegistCheckAuthCodeViewController.m */; };
 		7DBA56AC1D6D32B700C02D79 /* SSJRegistNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF571C4751EA000E6CC9 /* SSJRegistNetworkService.m */; };
 		7DBA56AD1D6D32B700C02D79 /* SSJReportFormsCurveViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6F93201D080981000CCDB3 /* SSJReportFormsCurveViewController.m */; };
-		7DBA56AE1D6D32B700C02D79 /* SSJReportFormsCurveView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6F932F1D0809E0000CCDB3 /* SSJReportFormsCurveView.m */; };
 		7DBA56AF1D6D32B700C02D79 /* SSJDataSynchronizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B241B1C3E091B009A74A8 /* SSJDataSynchronizer.m */; };
 		7DBA56B01D6D32B700C02D79 /* SSJFinancingHomeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C94713C1CEB224C00D69079 /* SSJFinancingHomeCell.m */; };
 		7DBA56B11D6D32B700C02D79 /* SSJScrollTextLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F325B1CEAE6C10086B67E /* SSJScrollTextLayer.m */; };
@@ -891,11 +905,6 @@
 		916E31E61DF8EEF8003C18D4 /* SSJMineHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 91C2E81A1DF7D69E003ADABE /* SSJMineHomeViewController.m */; };
 		916E31E71DF8EEF9003C18D4 /* SSJMineHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 91C2E81A1DF7D69E003ADABE /* SSJMineHomeViewController.m */; };
 		916E31EB1DF95231003C18D4 /* SSJProductAdviceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 916E31EA1DF95231003C18D4 /* SSJProductAdviceViewController.m */; };
-		916E31F61DF96703003C18D4 /* SSJProductAdviceCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 916E31F51DF96703003C18D4 /* SSJProductAdviceCell.m */; };
-		916E31F71DF96703003C18D4 /* SSJProductAdviceCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 916E31F51DF96703003C18D4 /* SSJProductAdviceCell.m */; };
-		916E31F81DF96703003C18D4 /* SSJProductAdviceCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 916E31F51DF96703003C18D4 /* SSJProductAdviceCell.m */; };
-		916E31F91DF96703003C18D4 /* SSJProductAdviceCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 916E31F51DF96703003C18D4 /* SSJProductAdviceCell.m */; };
-		916E31FA1DF96703003C18D4 /* SSJProductAdviceCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 916E31F51DF96703003C18D4 /* SSJProductAdviceCell.m */; };
 		916E32021DF96710003C18D4 /* SSJProductAdviceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 916E31EA1DF95231003C18D4 /* SSJProductAdviceViewController.m */; };
 		916E32031DF96710003C18D4 /* SSJProductAdviceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 916E31EA1DF95231003C18D4 /* SSJProductAdviceViewController.m */; };
 		916E32041DF96711003C18D4 /* SSJProductAdviceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 916E31EA1DF95231003C18D4 /* SSJProductAdviceViewController.m */; };
@@ -1049,7 +1058,6 @@
 		9C2A671D1D194CA70010F1DA /* SSJAddNewTypeColorSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32FC1CEAE6C10086B67E /* SSJAddNewTypeColorSelectionView.m */; };
 		9C2A671E1D194CA70010F1DA /* SSJUserInfoNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBB91CFD2DAA0061803B /* SSJUserInfoNetworkService.m */; };
 		9C2A671F1D194CA70010F1DA /* SSJObjectAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433031C1A78B40051E7AB /* SSJObjectAddition.m */; };
-		9C2A67201D194CA70010F1DA /* SSJReportFormsCurveAxisView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6F932B1D0809E0000CCDB3 /* SSJReportFormsCurveAxisView.m */; };
 		9C2A67211D194CA70010F1DA /* SSJServerLaunchView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D587E5A1CC0DFF40058847B /* SSJServerLaunchView.m */; };
 		9C2A67221D194CA70010F1DA /* TPKeyboardAvoidingTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0432E71C1A77BB0051E7AB /* TPKeyboardAvoidingTableView.m */; };
 		9C2A67231D194CA70010F1DA /* SSJImageAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = BD04330E1C1A78B40051E7AB /* SSJImageAddition.m */; };
@@ -1234,7 +1242,6 @@
 		9C2A67DF1D194CA70010F1DA /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BD543C431C1A6DBC00910D61 /* AppDelegate.m */; };
 		9C2A67E01D194CA70010F1DA /* SSJThirdPartyLoginManger.m in Sources */ = {isa = PBXBuildFile; fileRef = BD542B5F1CB5457800655EE2 /* SSJThirdPartyLoginManger.m */; };
 		9C2A67E11D194CA70010F1DA /* SSJCalendarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C94719B1CEB473E00D69079 /* SSJCalendarViewController.m */; };
-		9C2A67E21D194CA70010F1DA /* SSJReportFormsCurveGraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6F932D1D0809E0000CCDB3 /* SSJReportFormsCurveGraphView.m */; };
 		9C2A67E31D194CA70010F1DA /* SSJMagicExportCalendarWeekView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBA71CFD2DAA0061803B /* SSJMagicExportCalendarWeekView.m */; };
 		9C2A67E41D194CA70010F1DA /* SSJGuideContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF3F1C4751EA000E6CC9 /* SSJGuideContentView.m */; };
 		9C2A67E51D194CA70010F1DA /* SSJDebugUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = BD04333D1C1A82730051E7AB /* SSJDebugUtil.m */; };
@@ -1246,7 +1253,6 @@
 		9C2A67EC1D194CA70010F1DA /* SSJRegistCheckAuthCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF501C4751EA000E6CC9 /* SSJRegistCheckAuthCodeViewController.m */; };
 		9C2A67ED1D194CA70010F1DA /* SSJRegistNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF571C4751EA000E6CC9 /* SSJRegistNetworkService.m */; };
 		9C2A67EE1D194CA70010F1DA /* SSJReportFormsCurveViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6F93201D080981000CCDB3 /* SSJReportFormsCurveViewController.m */; };
-		9C2A67EF1D194CA70010F1DA /* SSJReportFormsCurveView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6F932F1D0809E0000CCDB3 /* SSJReportFormsCurveView.m */; };
 		9C2A67F01D194CA70010F1DA /* SSJDataSynchronizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B241B1C3E091B009A74A8 /* SSJDataSynchronizer.m */; };
 		9C2A67F11D194CA70010F1DA /* SSJFinancingHomeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C94713C1CEB224C00D69079 /* SSJFinancingHomeCell.m */; };
 		9C2A67F21D194CA70010F1DA /* SSJScrollTextLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F325B1CEAE6C10086B67E /* SSJScrollTextLayer.m */; };
@@ -1827,7 +1833,6 @@
 		9CEC00111D6D41EB00DB2C8B /* SSJThemeManagerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9DD6691D49FA31001FA3C5 /* SSJThemeManagerViewController.m */; };
 		9CEC00121D6D41EB00DB2C8B /* SSJCalendarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C94719B1CEB473E00D69079 /* SSJCalendarViewController.m */; };
 		9CEC00131D6D41EB00DB2C8B /* SSJThemeService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C47E6F11D224BEF005F338A /* SSJThemeService.m */; };
-		9CEC00141D6D41EB00DB2C8B /* SSJReportFormsCurveGraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6F932D1D0809E0000CCDB3 /* SSJReportFormsCurveGraphView.m */; };
 		9CEC00151D6D41EB00DB2C8B /* SSJMagicExportCalendarWeekView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBA71CFD2DAA0061803B /* SSJMagicExportCalendarWeekView.m */; };
 		9CEC00161D6D41EB00DB2C8B /* SSJGuideContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF3F1C4751EA000E6CC9 /* SSJGuideContentView.m */; };
 		9CEC00171D6D41EB00DB2C8B /* SSJDebugUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = BD04333D1C1A82730051E7AB /* SSJDebugUtil.m */; };
@@ -1841,7 +1846,6 @@
 		9CEC001F1D6D41EB00DB2C8B /* SSJRegistCheckAuthCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF501C4751EA000E6CC9 /* SSJRegistCheckAuthCodeViewController.m */; };
 		9CEC00201D6D41EB00DB2C8B /* SSJRegistNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF571C4751EA000E6CC9 /* SSJRegistNetworkService.m */; };
 		9CEC00211D6D41EB00DB2C8B /* SSJReportFormsCurveViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6F93201D080981000CCDB3 /* SSJReportFormsCurveViewController.m */; };
-		9CEC00221D6D41EB00DB2C8B /* SSJReportFormsCurveView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6F932F1D0809E0000CCDB3 /* SSJReportFormsCurveView.m */; };
 		9CEC00231D6D41EB00DB2C8B /* SSJDataSynchronizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B241B1C3E091B009A74A8 /* SSJDataSynchronizer.m */; };
 		9CEC00241D6D41EB00DB2C8B /* SSJFinancingHomeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C94713C1CEB224C00D69079 /* SSJFinancingHomeCell.m */; };
 		9CEC00251D6D41EB00DB2C8B /* SSJScrollTextLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F325B1CEAE6C10086B67E /* SSJScrollTextLayer.m */; };
@@ -2003,7 +2007,6 @@
 		9CECFB321D6D41A700DB2C8B /* SSJAddNewTypeColorSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32FC1CEAE6C10086B67E /* SSJAddNewTypeColorSelectionView.m */; };
 		9CECFB331D6D41A700DB2C8B /* SSJUserInfoNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBB91CFD2DAA0061803B /* SSJUserInfoNetworkService.m */; };
 		9CECFB341D6D41A700DB2C8B /* SSJObjectAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433031C1A78B40051E7AB /* SSJObjectAddition.m */; };
-		9CECFB351D6D41A700DB2C8B /* SSJReportFormsCurveAxisView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6F932B1D0809E0000CCDB3 /* SSJReportFormsCurveAxisView.m */; };
 		9CECFB361D6D41A700DB2C8B /* SSJServerLaunchView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D587E5A1CC0DFF40058847B /* SSJServerLaunchView.m */; };
 		9CECFB371D6D41A700DB2C8B /* TPKeyboardAvoidingTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0432E71C1A77BB0051E7AB /* TPKeyboardAvoidingTableView.m */; };
 		9CECFB381D6D41A700DB2C8B /* SSJImageAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = BD04330E1C1A78B40051E7AB /* SSJImageAddition.m */; };
@@ -2227,7 +2230,6 @@
 		9CECFC191D6D41A700DB2C8B /* SSJThemeManagerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9DD6691D49FA31001FA3C5 /* SSJThemeManagerViewController.m */; };
 		9CECFC1A1D6D41A700DB2C8B /* SSJCalendarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C94719B1CEB473E00D69079 /* SSJCalendarViewController.m */; };
 		9CECFC1B1D6D41A700DB2C8B /* SSJThemeService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C47E6F11D224BEF005F338A /* SSJThemeService.m */; };
-		9CECFC1C1D6D41A700DB2C8B /* SSJReportFormsCurveGraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6F932D1D0809E0000CCDB3 /* SSJReportFormsCurveGraphView.m */; };
 		9CECFC1D1D6D41A700DB2C8B /* SSJMagicExportCalendarWeekView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBA71CFD2DAA0061803B /* SSJMagicExportCalendarWeekView.m */; };
 		9CECFC1E1D6D41A700DB2C8B /* SSJGuideContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF3F1C4751EA000E6CC9 /* SSJGuideContentView.m */; };
 		9CECFC1F1D6D41A700DB2C8B /* SSJDebugUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = BD04333D1C1A82730051E7AB /* SSJDebugUtil.m */; };
@@ -2241,7 +2243,6 @@
 		9CECFC271D6D41A700DB2C8B /* SSJRegistCheckAuthCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF501C4751EA000E6CC9 /* SSJRegistCheckAuthCodeViewController.m */; };
 		9CECFC281D6D41A700DB2C8B /* SSJRegistNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF571C4751EA000E6CC9 /* SSJRegistNetworkService.m */; };
 		9CECFC291D6D41A700DB2C8B /* SSJReportFormsCurveViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6F93201D080981000CCDB3 /* SSJReportFormsCurveViewController.m */; };
-		9CECFC2A1D6D41A700DB2C8B /* SSJReportFormsCurveView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6F932F1D0809E0000CCDB3 /* SSJReportFormsCurveView.m */; };
 		9CECFC2B1D6D41A700DB2C8B /* SSJDataSynchronizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B241B1C3E091B009A74A8 /* SSJDataSynchronizer.m */; };
 		9CECFC2C1D6D41A700DB2C8B /* SSJFinancingHomeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C94713C1CEB224C00D69079 /* SSJFinancingHomeCell.m */; };
 		9CECFC2D1D6D41A700DB2C8B /* SSJScrollTextLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F325B1CEAE6C10086B67E /* SSJScrollTextLayer.m */; };
@@ -2402,7 +2403,6 @@
 		9CECFF2A1D6D41EB00DB2C8B /* SSJAddNewTypeColorSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32FC1CEAE6C10086B67E /* SSJAddNewTypeColorSelectionView.m */; };
 		9CECFF2B1D6D41EB00DB2C8B /* SSJUserInfoNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBB91CFD2DAA0061803B /* SSJUserInfoNetworkService.m */; };
 		9CECFF2C1D6D41EB00DB2C8B /* SSJObjectAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433031C1A78B40051E7AB /* SSJObjectAddition.m */; };
-		9CECFF2D1D6D41EB00DB2C8B /* SSJReportFormsCurveAxisView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6F932B1D0809E0000CCDB3 /* SSJReportFormsCurveAxisView.m */; };
 		9CECFF2E1D6D41EB00DB2C8B /* SSJServerLaunchView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D587E5A1CC0DFF40058847B /* SSJServerLaunchView.m */; };
 		9CECFF2F1D6D41EB00DB2C8B /* TPKeyboardAvoidingTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0432E71C1A77BB0051E7AB /* TPKeyboardAvoidingTableView.m */; };
 		9CECFF301D6D41EB00DB2C8B /* SSJImageAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = BD04330E1C1A78B40051E7AB /* SSJImageAddition.m */; };
@@ -2788,6 +2788,8 @@
 		7D07B6941CF2AC4900B9C390 /* SSJJsPatchItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJJsPatchItem.m; sourceTree = "<group>"; };
 		7D07B6961CF2C1F300B9C390 /* SSJLoginHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJLoginHelper.h; sourceTree = "<group>"; };
 		7D07B6971CF2C1F300B9C390 /* SSJLoginHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJLoginHelper.m; sourceTree = "<group>"; };
+		7D098C772A14820300C86957 /* SSJDatabaseErrorHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJDatabaseErrorHandler.h; sourceTree = "<group>"; };
+		7D098C782A14820300C86957 /* SSJDatabaseErrorHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDatabaseErrorHandler.m; sourceTree = "<group>"; };
 		7D1D7F411C86BBD90001F72A /* SSJUserChargePeriodConfigSyncTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJUserChargePeriodConfigSyncTable.h; sourceTree = "<group>"; };
 		7D1D7F421C86BBD90001F72A /* SSJUserChargePeriodConfigSyncTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJUserChargePeriodConfigSyncTable.m; sourceTree = "<group>"; };
 		7D1D7F441C86DB520001F72A /* SSJUserBudgetSyncTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJUserBudgetSyncTable.h; sourceTree = "<group>"; };
@@ -3037,12 +3039,6 @@
 		7D6B12D51D4CBC140036BF4E /* SSJListMenuItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJListMenuItem.m; sourceTree = "<group>"; };
 		7D6F931F1D080981000CCDB3 /* SSJReportFormsCurveViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormsCurveViewController.h; sourceTree = "<group>"; };
 		7D6F93201D080981000CCDB3 /* SSJReportFormsCurveViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReportFormsCurveViewController.m; sourceTree = "<group>"; };
-		7D6F932A1D0809E0000CCDB3 /* SSJReportFormsCurveAxisView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormsCurveAxisView.h; sourceTree = "<group>"; };
-		7D6F932B1D0809E0000CCDB3 /* SSJReportFormsCurveAxisView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReportFormsCurveAxisView.m; sourceTree = "<group>"; };
-		7D6F932C1D0809E0000CCDB3 /* SSJReportFormsCurveGraphView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormsCurveGraphView.h; sourceTree = "<group>"; };
-		7D6F932D1D0809E0000CCDB3 /* SSJReportFormsCurveGraphView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReportFormsCurveGraphView.m; sourceTree = "<group>"; };
-		7D6F932E1D0809E0000CCDB3 /* SSJReportFormsCurveView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormsCurveView.h; sourceTree = "<group>"; };
-		7D6F932F1D0809E0000CCDB3 /* SSJReportFormsCurveView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReportFormsCurveView.m; sourceTree = "<group>"; };
 		7D6F93331D0812A9000CCDB3 /* SSJReportFormsCurveModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormsCurveModel.h; sourceTree = "<group>"; };
 		7D6F93341D0812A9000CCDB3 /* SSJReportFormsCurveModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReportFormsCurveModel.m; sourceTree = "<group>"; };
 		7D70C1351E00E68400479E44 /* SSJReportFormCurveHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormCurveHeaderView.h; sourceTree = "<group>"; };
@@ -3060,6 +3056,12 @@
 		7D768A811C97E76400CB75B0 /* SSJDatabaseVersion1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJDatabaseVersion1.h; sourceTree = "<group>"; };
 		7D768A821C97E76400CB75B0 /* SSJDatabaseVersion1.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDatabaseVersion1.m; sourceTree = "<group>"; };
 		7D768A841C97E78600CB75B0 /* SSJDatabaseVersionProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJDatabaseVersionProtocol.h; sourceTree = "<group>"; };
+		7D78DB341E03D0B700CBA636 /* SSJReportFormsCurveAxisView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormsCurveAxisView.h; sourceTree = "<group>"; };
+		7D78DB351E03D0B700CBA636 /* SSJReportFormsCurveAxisView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReportFormsCurveAxisView.m; sourceTree = "<group>"; };
+		7D78DB361E03D0B700CBA636 /* SSJReportFormsCurveGraphView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormsCurveGraphView.h; sourceTree = "<group>"; };
+		7D78DB371E03D0B700CBA636 /* SSJReportFormsCurveGraphView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReportFormsCurveGraphView.m; sourceTree = "<group>"; };
+		7D78DB381E03D0B700CBA636 /* SSJReportFormsCurveView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormsCurveView.h; sourceTree = "<group>"; };
+		7D78DB391E03D0B700CBA636 /* SSJReportFormsCurveView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReportFormsCurveView.m; sourceTree = "<group>"; };
 		7D87AE841D63079C0024D33C /* SSJDatabaseVersion8.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJDatabaseVersion8.h; sourceTree = "<group>"; };
 		7D87AE851D63079C0024D33C /* SSJDatabaseVersion8.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDatabaseVersion8.m; sourceTree = "<group>"; };
 		7D87AE941D6319770024D33C /* SSJLoanHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJLoanHelper.h; sourceTree = "<group>"; };
@@ -3272,8 +3274,6 @@
 		916012071DF7DC3B00BF571C /* SSJHeaderBannerCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJHeaderBannerCollectionViewCell.m; sourceTree = "<group>"; };
 		916E31E91DF95231003C18D4 /* SSJProductAdviceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJProductAdviceViewController.h; sourceTree = "<group>"; };
 		916E31EA1DF95231003C18D4 /* SSJProductAdviceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJProductAdviceViewController.m; sourceTree = "<group>"; };
-		916E31F41DF96703003C18D4 /* SSJProductAdviceCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJProductAdviceCell.h; sourceTree = "<group>"; };
-		916E31F51DF96703003C18D4 /* SSJProductAdviceCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJProductAdviceCell.m; sourceTree = "<group>"; };
 		916E32061DF967C1003C18D4 /* SSJProductAdviceTableHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJProductAdviceTableHeaderView.h; sourceTree = "<group>"; };
 		916E32071DF967C1003C18D4 /* SSJProductAdviceTableHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJProductAdviceTableHeaderView.m; sourceTree = "<group>"; };
 		91C2E8191DF7D69E003ADABE /* SSJMineHomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMineHomeViewController.h; sourceTree = "<group>"; };
@@ -4566,7 +4566,6 @@
 		7D6AAB501C30EC1F0007C0A3 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				7D6F93291D0809E0000CCDB3 /* SSJReportFormsCurveGraphView */,
 				7DD9D0C11CF6E2A6005AF735 /* SSJReportFormsScaleAxisView */,
 				7D6AAB511C30EC290007C0A3 /* SSJReportFormsSwitchYearControl.h */,
 				7D6AAB521C30EC290007C0A3 /* SSJReportFormsSwitchYearControl.m */,
@@ -4626,6 +4625,7 @@
 		7D6AAB5F1C312C340007C0A3 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				7D78DB331E03D0B700CBA636 /* SSJReportFormsCurveGraphView */,
 				7DF07E0B1DD086BB00B0AF97 /* SSJSeparatorFormView */,
 				7D6B12CD1D4CBC140036BF4E /* SSJListMenu */,
 				9C17FF191CE96ED90016EE4C /* SSJCustomKeyBoard */,
@@ -4697,19 +4697,6 @@
 			path = SSJListMenu;
 			sourceTree = "<group>";
 		};
-		7D6F93291D0809E0000CCDB3 /* SSJReportFormsCurveGraphView */ = {
-			isa = PBXGroup;
-			children = (
-				7D6F932C1D0809E0000CCDB3 /* SSJReportFormsCurveGraphView.h */,
-				7D6F932D1D0809E0000CCDB3 /* SSJReportFormsCurveGraphView.m */,
-				7D6F932A1D0809E0000CCDB3 /* SSJReportFormsCurveAxisView.h */,
-				7D6F932B1D0809E0000CCDB3 /* SSJReportFormsCurveAxisView.m */,
-				7D6F932E1D0809E0000CCDB3 /* SSJReportFormsCurveView.h */,
-				7D6F932F1D0809E0000CCDB3 /* SSJReportFormsCurveView.m */,
-			);
-			path = SSJReportFormsCurveGraphView;
-			sourceTree = "<group>";
-		};
 		7D766A451D87AAAE004F8F82 /* Deprecated */ = {
 			isa = PBXGroup;
 			children = (
@@ -4726,6 +4713,19 @@
 				7D768A721C926B6600CB75B0 /* SSJBorderButton.m */,
 			);
 			path = SSJBorderButton;
+			sourceTree = "<group>";
+		};
+		7D78DB331E03D0B700CBA636 /* SSJReportFormsCurveGraphView */ = {
+			isa = PBXGroup;
+			children = (
+				7D78DB361E03D0B700CBA636 /* SSJReportFormsCurveGraphView.h */,
+				7D78DB371E03D0B700CBA636 /* SSJReportFormsCurveGraphView.m */,
+				7D78DB341E03D0B700CBA636 /* SSJReportFormsCurveAxisView.h */,
+				7D78DB351E03D0B700CBA636 /* SSJReportFormsCurveAxisView.m */,
+				7D78DB381E03D0B700CBA636 /* SSJReportFormsCurveView.h */,
+				7D78DB391E03D0B700CBA636 /* SSJReportFormsCurveView.m */,
+			);
+			path = SSJReportFormsCurveGraphView;
 			sourceTree = "<group>";
 		};
 		7D87AE8F1D6319490024D33C /* Loan */ = {
@@ -4824,6 +4824,8 @@
 			children = (
 				7D99D45A1C3522D7006EB113 /* SSJDatabaseQueue.h */,
 				7D99D45B1C3522D7006EB113 /* SSJDatabaseQueue.m */,
+				7D098C772A14820300C86957 /* SSJDatabaseErrorHandler.h */,
+				7D098C782A14820300C86957 /* SSJDatabaseErrorHandler.m */,
 			);
 			path = Store;
 			sourceTree = "<group>";
@@ -6075,8 +6077,6 @@
 				916012041DF7D86C00BF571C /* SSJHeaderBannerImageView.m */,
 				916012061DF7DC3B00BF571C /* SSJHeaderBannerCollectionViewCell.h */,
 				916012071DF7DC3B00BF571C /* SSJHeaderBannerCollectionViewCell.m */,
-				916E31F41DF96703003C18D4 /* SSJProductAdviceCell.h */,
-				916E31F51DF96703003C18D4 /* SSJProductAdviceCell.m */,
 				916E32061DF967C1003C18D4 /* SSJProductAdviceTableHeaderView.h */,
 				916E32071DF967C1003C18D4 /* SSJProductAdviceTableHeaderView.m */,
 				91F7FD191DFA7D3C005F4B6B /* SSJMoreProductAdviceTableViewCell.h */,
@@ -7536,6 +7536,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D78DB3C1E03D0B700CBA636 /* SSJReportFormsCurveAxisView.m in Sources */,
 				7DBA55A01D6D32B700C02D79 /* SSJAlertViewAction.m in Sources */,
 				7DBA55A11D6D32B700C02D79 /* SSJForgetPasswordFirstStepViewController.m in Sources */,
 				7DBA55A21D6D32B700C02D79 /* SSJPercentCircleAdditionNodeItem.m in Sources */,
@@ -7572,7 +7573,6 @@
 				7DBA55B71D6D32B700C02D79 /* SSJUserInfoNetworkService.m in Sources */,
 				9C17B5471DEED847000D6C99 /* SSJBooksParentSelectCell.m in Sources */,
 				7DBA55B81D6D32B700C02D79 /* SSJObjectAddition.m in Sources */,
-				7DBA55B91D6D32B700C02D79 /* SSJReportFormsCurveAxisView.m in Sources */,
 				7DBA55BA1D6D32B700C02D79 /* SSJServerLaunchView.m in Sources */,
 				9C24CFD81D76CC2B0095D150 /* SSJBooksEditeOrNewViewController.m in Sources */,
 				7DBA55BB1D6D32B700C02D79 /* TPKeyboardAvoidingTableView.m in Sources */,
@@ -7667,6 +7667,7 @@
 				7DBA56051D6D32B700C02D79 /* SSJFundingDetailCell.m in Sources */,
 				7DBA56061D6D32B700C02D79 /* SSJMotionPasswordSettingViewController.m in Sources */,
 				9C24CFCD1D76CA0D0095D150 /* SSJBooksTypeCollectionViewCell.m in Sources */,
+				7D78DB411E03D0B700CBA636 /* SSJReportFormsCurveGraphView.m in Sources */,
 				7DBA56071D6D32B700C02D79 /* SSJForgotPSWSendVerCodeService.m in Sources */,
 				7DBA56081D6D32B700C02D79 /* SSJMagicExportCalendarIndexPath.m in Sources */,
 				7DBA56091D6D32B700C02D79 /* SSJMotionPasswordLoginPasswordAlertView.m in Sources */,
@@ -7764,6 +7765,7 @@
 				7DBA564E1D6D32B700C02D79 /* SSJGuideView.m in Sources */,
 				7DBA564F1D6D32B700C02D79 /* SSJThemePlugin.m in Sources */,
 				7DBA56501D6D32B700C02D79 /* SSJDataAddition.m in Sources */,
+				7D78DB461E03D0B700CBA636 /* SSJReportFormsCurveView.m in Sources */,
 				7D70C1471E00E84300479E44 /* SSJReportFormCurveHeaderViewItem.m in Sources */,
 				7DBA56511D6D32B700C02D79 /* SSJFinancingHomeitem.m in Sources */,
 				7DBA56521D6D32B700C02D79 /* SSJBudgetTypeModel.m in Sources */,
@@ -7859,6 +7861,7 @@
 				7DBA568F1D6D32B700C02D79 /* SSJAlertViewDelegator.m in Sources */,
 				7DBA56901D6D32B700C02D79 /* SSJMineHomeTabelviewCell.m in Sources */,
 				7DBA56911D6D32B700C02D79 /* SSJNewMemberHeaderView.m in Sources */,
+				7D098C7B2A14820300C86957 /* SSJDatabaseErrorHandler.m in Sources */,
 				9C9A0C201D6D95A2002AF046 /* SSJFundingTypeSelectViewController.m in Sources */,
 				7D8C7E861D6ED9D800D72E2D /* SSJLoanDetailViewController.m in Sources */,
 				7DBA56921D6D32B700C02D79 /* NSString+MoneyDisplayFormat.m in Sources */,
@@ -7880,7 +7883,6 @@
 				7DBA569F1D6D32B700C02D79 /* SSJThemeService.m in Sources */,
 				9C7C9E471DB4D2320095F49B /* SSJMemberTableViewCell.m in Sources */,
 				7DE1FC6D1DD1CBE500B2D4AD /* SSJLoanDetailChargeChangeHeaderView.m in Sources */,
-				7DBA56A01D6D32B700C02D79 /* SSJReportFormsCurveGraphView.m in Sources */,
 				7DBA56A11D6D32B700C02D79 /* SSJMagicExportCalendarWeekView.m in Sources */,
 				7DBA56A21D6D32B700C02D79 /* SSJGuideContentView.m in Sources */,
 				7DBA56A31D6D32B700C02D79 /* SSJDebugUtil.m in Sources */,
@@ -7901,7 +7903,6 @@
 				9C9A0C991D73D1A9002AF046 /* SSJCreditCardStore.m in Sources */,
 				7DBA56AC1D6D32B700C02D79 /* SSJRegistNetworkService.m in Sources */,
 				7DBA56AD1D6D32B700C02D79 /* SSJReportFormsCurveViewController.m in Sources */,
-				7DBA56AE1D6D32B700C02D79 /* SSJReportFormsCurveView.m in Sources */,
 				7DBA56AF1D6D32B700C02D79 /* SSJDataSynchronizer.m in Sources */,
 				7DBA56B01D6D32B700C02D79 /* SSJFinancingHomeCell.m in Sources */,
 				7DBA56B11D6D32B700C02D79 /* SSJScrollTextLayer.m in Sources */,
@@ -8090,7 +8091,6 @@
 				9C2A671D1D194CA70010F1DA /* SSJAddNewTypeColorSelectionView.m in Sources */,
 				9C2A671E1D194CA70010F1DA /* SSJUserInfoNetworkService.m in Sources */,
 				9C2A671F1D194CA70010F1DA /* SSJObjectAddition.m in Sources */,
-				9C2A67201D194CA70010F1DA /* SSJReportFormsCurveAxisView.m in Sources */,
 				9C2A67211D194CA70010F1DA /* SSJServerLaunchView.m in Sources */,
 				9C2A67221D194CA70010F1DA /* TPKeyboardAvoidingTableView.m in Sources */,
 				9C2A67231D194CA70010F1DA /* SSJImageAddition.m in Sources */,
@@ -8192,6 +8192,7 @@
 				9C2A67641D194CA70010F1DA /* SSJMagicExportCalendarIndexPath.m in Sources */,
 				9C2A67651D194CA70010F1DA /* SSJMotionPasswordLoginPasswordAlertView.m in Sources */,
 				9C17B5461DEED846000D6C99 /* SSJBooksParentSelectCell.m in Sources */,
+				7D78DB451E03D0B700CBA636 /* SSJReportFormsCurveView.m in Sources */,
 				9CC452C91D9B59F40044FA87 /* SSJMultiFunctionButtonView.m in Sources */,
 				9C3899A21DC9D99700715732 /* SSJCustomCategoryItem.m in Sources */,
 				9C2A67661D194CA70010F1DA /* SSJGradientMaskView.m in Sources */,
@@ -8303,7 +8304,6 @@
 				9C2A67AC1D194CA70010F1DA /* SSJBookkeepingTreeHelpCellItem.m in Sources */,
 				9C2A67AD1D194CA70010F1DA /* SSJFundingDetailHeader.m in Sources */,
 				9C2A67AE1D194CA70010F1DA /* SSJCalenderDetailViewController.m in Sources */,
-				916E31F71DF96703003C18D4 /* SSJProductAdviceCell.m in Sources */,
 				7D4A79741DD46D6100E905F4 /* SSJLoanChargeAddOrEditViewController.m in Sources */,
 				9C2A67AF1D194CA70010F1DA /* SSJBudgetDetailViewController.m in Sources */,
 				9C2A67B01D194CA70010F1DA /* SSJBaselineTextField.m in Sources */,
@@ -8323,6 +8323,7 @@
 				9C2A67B81D194CA70010F1DA /* UIScrollView+TPKeyboardAvoidingAdditions.m in Sources */,
 				9C2A67B91D194CA70010F1DA /* SSJReportFormsSurplusView.m in Sources */,
 				9C2A67BA1D194CA70010F1DA /* SSJUserBillSyncTable.m in Sources */,
+				7D78DB3B1E03D0B700CBA636 /* SSJReportFormsCurveAxisView.m in Sources */,
 				9C2A67BB1D194CA70010F1DA /* SSJCircleChargeSettingViewController.m in Sources */,
 				91F7FD311DFA9EF9005F4B6B /* SSJProductAdviceNetWorkService.m in Sources */,
 				9CD5168D1D9D02550040480B /* SSJHistoryHeader.m in Sources */,
@@ -8343,6 +8344,7 @@
 				7DF07E0F1DD086CF00B0AF97 /* SSJSeparatorFormView.m in Sources */,
 				7DAA38541D952AA0000ED16E /* SSJBudgetBillTypeSelectionCellItem.m in Sources */,
 				9C2A67C61D194CA70010F1DA /* SSJSyncTable.m in Sources */,
+				7D78DB401E03D0B700CBA636 /* SSJReportFormsCurveGraphView.m in Sources */,
 				7DC487661DF6B42E00C27B69 /* SSJRecordMakingCustomNavigationBar.m in Sources */,
 				9C9A0C9C1D73D1AE002AF046 /* SSJBillingDaySelectView.m in Sources */,
 				9C6D662E1D86BD750081A7CE /* SSJListAdItem.m in Sources */,
@@ -8382,7 +8384,6 @@
 				7D5C862F1D2F96D300C73A9A /* SSJThemePlugin.m in Sources */,
 				9C2A67E01D194CA70010F1DA /* SSJThirdPartyLoginManger.m in Sources */,
 				9C2A67E11D194CA70010F1DA /* SSJCalendarViewController.m in Sources */,
-				9C2A67E21D194CA70010F1DA /* SSJReportFormsCurveGraphView.m in Sources */,
 				9C2A67E31D194CA70010F1DA /* SSJMagicExportCalendarWeekView.m in Sources */,
 				7D6B12DB1D4CBC140036BF4E /* SSJListMenuCellItem.m in Sources */,
 				9C2A67E41D194CA70010F1DA /* SSJGuideContentView.m in Sources */,
@@ -8402,7 +8403,6 @@
 				9C17B54A1DEED89F000D6C99 /* SSJSummaryBooksHeaderView.m in Sources */,
 				7D00D8061DFA9CC00007A8FB /* SSJReportFormsChartCell.m in Sources */,
 				9C2A67EE1D194CA70010F1DA /* SSJReportFormsCurveViewController.m in Sources */,
-				9C2A67EF1D194CA70010F1DA /* SSJReportFormsCurveView.m in Sources */,
 				7DD5F8EE1DF509F100430533 /* SSJBudgetCategorySelectionControl.m in Sources */,
 				9C9324051D9E591E00EBD216 /* SSJSearchResultOrderHeader.m in Sources */,
 				9C17B5321DEED7E1000D6C99 /* SSJSummaryBooksViewController.m in Sources */,
@@ -8433,6 +8433,7 @@
 				9C2A68031D194CA70010F1DA /* SSJPasswordModifyViewController.m in Sources */,
 				9C141B8A1D23BD960095E336 /* SSJThemeImageCollectionViewCell.m in Sources */,
 				9C2A68041D194CA70010F1DA /* SSJDatabaseUpgrader.m in Sources */,
+				7D098C7A2A14820300C86957 /* SSJDatabaseErrorHandler.m in Sources */,
 				7D00D80D1DFAA3D30007A8FB /* SSJReportFormsChartCellItem.m in Sources */,
 				9C2A68051D194CA70010F1DA /* SSJBillingChargeCellItem.m in Sources */,
 				9C2A68061D194CA70010F1DA /* SSJImaageBrowseViewController.m in Sources */,
@@ -8565,6 +8566,7 @@
 				9CECFB201D6D41A700DB2C8B /* SSJUserUtil.m in Sources */,
 				9CECFB211D6D41A700DB2C8B /* SSJBannerNetworkService.m in Sources */,
 				7D3A0F8F1DCA054A00444CEB /* SSJBookKeepingHomeDateView.m in Sources */,
+				7D78DB471E03D0B700CBA636 /* SSJReportFormsCurveView.m in Sources */,
 				9CECFB221D6D41A700DB2C8B /* SSJThemeItem.m in Sources */,
 				9CECFB231D6D41A700DB2C8B /* SSJTransferDetailHeader.m in Sources */,
 				9CECFB241D6D41A700DB2C8B /* SSJBookkeepingTreeRuleDescView.m in Sources */,
@@ -8591,7 +8593,6 @@
 				9CECFB321D6D41A700DB2C8B /* SSJAddNewTypeColorSelectionView.m in Sources */,
 				9CECFB331D6D41A700DB2C8B /* SSJUserInfoNetworkService.m in Sources */,
 				9CECFB341D6D41A700DB2C8B /* SSJObjectAddition.m in Sources */,
-				9CECFB351D6D41A700DB2C8B /* SSJReportFormsCurveAxisView.m in Sources */,
 				9CECFB361D6D41A700DB2C8B /* SSJServerLaunchView.m in Sources */,
 				9C24CFD91D76CC2B0095D150 /* SSJBooksEditeOrNewViewController.m in Sources */,
 				9CECFB371D6D41A700DB2C8B /* TPKeyboardAvoidingTableView.m in Sources */,
@@ -8724,11 +8725,11 @@
 				9C17B5481DEED847000D6C99 /* SSJBooksParentSelectCell.m in Sources */,
 				7D9F5BCE1D6D9CA600362CFA /* SSJLoanDateSelectionView.m in Sources */,
 				9CECFB961D6D41A700DB2C8B /* SSJMagicExportCalendarDateViewItem.m in Sources */,
-				916E31F91DF96703003C18D4 /* SSJProductAdviceCell.m in Sources */,
 				9CECFB971D6D41A700DB2C8B /* SSJBillTypeSyncTable.m in Sources */,
 				9CECFB981D6D41A700DB2C8B /* SSJRegistGetVerViewController.m in Sources */,
 				9CECFB991D6D41A700DB2C8B /* SSJMagicExportSuccessAlertView.m in Sources */,
 				9CECFB9A1D6D41A700DB2C8B /* SSJFundingTypeSelectView.m in Sources */,
+				7D78DB3D1E03D0B700CBA636 /* SSJReportFormsCurveAxisView.m in Sources */,
 				9CECFB9B1D6D41A700DB2C8B /* SSJViewControllerAddition.m in Sources */,
 				9CECFB9C1D6D41A700DB2C8B /* SSJUserItem.m in Sources */,
 				9CECFB9D1D6D41A700DB2C8B /* SSJMemoMakingView.m in Sources */,
@@ -8899,9 +8900,9 @@
 				9C9A0C491D6D969D002AF046 /* SSJAddOrEditLoanLabelCell.m in Sources */,
 				9CECFC1A1D6D41A700DB2C8B /* SSJCalendarViewController.m in Sources */,
 				9CECFC1B1D6D41A700DB2C8B /* SSJThemeService.m in Sources */,
+				7D78DB421E03D0B700CBA636 /* SSJReportFormsCurveGraphView.m in Sources */,
 				9C7C9E481DB4D2320095F49B /* SSJMemberTableViewCell.m in Sources */,
 				7DE1FC6E1DD1CBE500B2D4AD /* SSJLoanDetailChargeChangeHeaderView.m in Sources */,
-				9CECFC1C1D6D41A700DB2C8B /* SSJReportFormsCurveGraphView.m in Sources */,
 				9CECFC1D1D6D41A700DB2C8B /* SSJMagicExportCalendarWeekView.m in Sources */,
 				9CECFC1E1D6D41A700DB2C8B /* SSJGuideContentView.m in Sources */,
 				9CECFC1F1D6D41A700DB2C8B /* SSJDebugUtil.m in Sources */,
@@ -8921,7 +8922,6 @@
 				9C9A0C9A1D73D1AA002AF046 /* SSJCreditCardStore.m in Sources */,
 				9CECFC281D6D41A700DB2C8B /* SSJRegistNetworkService.m in Sources */,
 				9CECFC291D6D41A700DB2C8B /* SSJReportFormsCurveViewController.m in Sources */,
-				9CECFC2A1D6D41A700DB2C8B /* SSJReportFormsCurveView.m in Sources */,
 				9CECFC2B1D6D41A700DB2C8B /* SSJDataSynchronizer.m in Sources */,
 				9CECFC2C1D6D41A700DB2C8B /* SSJFinancingHomeCell.m in Sources */,
 				9CECFC2D1D6D41A700DB2C8B /* SSJScrollTextLayer.m in Sources */,
@@ -8965,6 +8965,7 @@
 				9CECFC4D1D6D41A700DB2C8B /* TPKeyboardAvoidingScrollView.m in Sources */,
 				9CECFC4E1D6D41A700DB2C8B /* SSJBillTypeSelectViewController.m in Sources */,
 				9CECFC4F1D6D41A700DB2C8B /* SSJBookKeepingHomeTableViewCell.m in Sources */,
+				7D098C7C2A14820300C86957 /* SSJDatabaseErrorHandler.m in Sources */,
 				9CECFC511D6D41A700DB2C8B /* SSJRecordMakingBillTypeSelectionView.m in Sources */,
 				9CECFC521D6D41A700DB2C8B /* SSJReportFormsCurveDescriptionView.m in Sources */,
 				9CECFC531D6D41A700DB2C8B /* SSJFundingTransferDetailViewController.m in Sources */,
@@ -9069,6 +9070,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D78DB3E1E03D0B700CBA636 /* SSJReportFormsCurveAxisView.m in Sources */,
 				9CECFF141D6D41EB00DB2C8B /* SSJAlertViewAction.m in Sources */,
 				9CECFF151D6D41EB00DB2C8B /* SSJForgetPasswordFirstStepViewController.m in Sources */,
 				9CECFF161D6D41EB00DB2C8B /* SSJPercentCircleAdditionNodeItem.m in Sources */,
@@ -9103,7 +9105,6 @@
 				9CECFF2A1D6D41EB00DB2C8B /* SSJAddNewTypeColorSelectionView.m in Sources */,
 				9CECFF2B1D6D41EB00DB2C8B /* SSJUserInfoNetworkService.m in Sources */,
 				9CECFF2C1D6D41EB00DB2C8B /* SSJObjectAddition.m in Sources */,
-				9CECFF2D1D6D41EB00DB2C8B /* SSJReportFormsCurveAxisView.m in Sources */,
 				9CECFF2E1D6D41EB00DB2C8B /* SSJServerLaunchView.m in Sources */,
 				9C24CFDA1D76CC2C0095D150 /* SSJBooksEditeOrNewViewController.m in Sources */,
 				9CECFF2F1D6D41EB00DB2C8B /* TPKeyboardAvoidingTableView.m in Sources */,
@@ -9200,6 +9201,7 @@
 				9CECFF771D6D41EB00DB2C8B /* (null) in Sources */,
 				9CECFF781D6D41EB00DB2C8B /* SSJMotionPasswordViewController.m in Sources */,
 				7D8C7EA41D6F19BA00D72E2D /* SSJLoanCloseOutViewController.m in Sources */,
+				7D78DB431E03D0B700CBA636 /* SSJReportFormsCurveGraphView.m in Sources */,
 				9CECFF791D6D41EB00DB2C8B /* SSJFundingDetailCell.m in Sources */,
 				9CECFF7A1D6D41EB00DB2C8B /* SSJMotionPasswordSettingViewController.m in Sources */,
 				9C24CFCF1D76CA0E0095D150 /* SSJBooksTypeCollectionViewCell.m in Sources */,
@@ -9297,6 +9299,7 @@
 				7D4A796E1DD30B5000E905F4 /* SSJLoanChargeDetailViewController.m in Sources */,
 				9CECFFBC1D6D41EB00DB2C8B /* SSJBaseNetworkService.m in Sources */,
 				9CECFFBD1D6D41EB00DB2C8B /* SSJHomeTableView.m in Sources */,
+				7D78DB481E03D0B700CBA636 /* SSJReportFormsCurveView.m in Sources */,
 				7D70C1491E00E84300479E44 /* SSJReportFormCurveHeaderViewItem.m in Sources */,
 				9CECFFBE1D6D41EB00DB2C8B /* SSJLoginViewController.m in Sources */,
 				9CECFFBF1D6D41EB00DB2C8B /* SSJBudgetEditPeriodSelectionView.m in Sources */,
@@ -9392,6 +9395,7 @@
 				9CECFFFE1D6D41EB00DB2C8B /* SSJPatchUpdateService.m in Sources */,
 				9CECFFFF1D6D41EB00DB2C8B /* SSJChargeDetailMemberCell.m in Sources */,
 				9C91AE221D94D8C700B585AA /* SSJSearchResultItem.m in Sources */,
+				7D098C7D2A14820300C86957 /* SSJDatabaseErrorHandler.m in Sources */,
 				9C24CFCB1D76CA070095D150 /* SSJBooksTypeStore.m in Sources */,
 				9CEC00001D6D41EB00DB2C8B /* SSJImageSynchronizeTask.m in Sources */,
 				9CEC00011D6D41EB00DB2C8B /* SSJSettingViewController.m in Sources */,
@@ -9418,7 +9422,6 @@
 				9C9A0C4A1D6D969E002AF046 /* SSJAddOrEditLoanLabelCell.m in Sources */,
 				9CEC00121D6D41EB00DB2C8B /* SSJCalendarViewController.m in Sources */,
 				9CEC00131D6D41EB00DB2C8B /* SSJThemeService.m in Sources */,
-				9CEC00141D6D41EB00DB2C8B /* SSJReportFormsCurveGraphView.m in Sources */,
 				9CEC00151D6D41EB00DB2C8B /* SSJMagicExportCalendarWeekView.m in Sources */,
 				9CEC00161D6D41EB00DB2C8B /* SSJGuideContentView.m in Sources */,
 				9CEC00171D6D41EB00DB2C8B /* SSJDebugUtil.m in Sources */,
@@ -9440,7 +9443,6 @@
 				9C9A0C9B1D73D1AA002AF046 /* SSJCreditCardStore.m in Sources */,
 				9CEC00201D6D41EB00DB2C8B /* SSJRegistNetworkService.m in Sources */,
 				9CEC00211D6D41EB00DB2C8B /* SSJReportFormsCurveViewController.m in Sources */,
-				9CEC00221D6D41EB00DB2C8B /* SSJReportFormsCurveView.m in Sources */,
 				9CEC00231D6D41EB00DB2C8B /* SSJDataSynchronizer.m in Sources */,
 				9CEC00241D6D41EB00DB2C8B /* SSJFinancingHomeCell.m in Sources */,
 				9CEC00251D6D41EB00DB2C8B /* SSJScrollTextLayer.m in Sources */,
@@ -9618,11 +9620,11 @@
 				7D5F33751CEAE6C10086B67E /* SSJAddNewTypeColorSelectionView.m in Sources */,
 				9CD9BC1F1CFD2DAA0061803B /* SSJUserInfoNetworkService.m in Sources */,
 				BD04331F1C1A78B40051E7AB /* SSJObjectAddition.m in Sources */,
-				7D6F93301D0809E0000CCDB3 /* SSJReportFormsCurveAxisView.m in Sources */,
 				7D587E5B1CC0DFF40058847B /* SSJServerLaunchView.m in Sources */,
 				BD0432F61C1A77BB0051E7AB /* TPKeyboardAvoidingTableView.m in Sources */,
 				BD0433241C1A78B40051E7AB /* SSJImageAddition.m in Sources */,
 				9CD9BC111CFD2DAA0061803B /* SSJMagicExportCalendarSwitchStartAndEndDateControl.m in Sources */,
+				7D78DB3F1E03D0B700CBA636 /* SSJReportFormsCurveGraphView.m in Sources */,
 				9C9471871CEB224C00D69079 /* SSJFundingDetailListFirstLineCell.m in Sources */,
 				9C77DBB51DE70B3100CD64A2 /* SSJCustomJsonSerializer.m in Sources */,
 				7DB9F8281DFFC9230084E998 /* SSJReportFormsNoDataCellItem.m in Sources */,
@@ -9657,7 +9659,6 @@
 				7D5F334A1CEAE6C10086B67E /* SSJCalenderCellItem.m in Sources */,
 				7D4CF7041D38D16D009CC8ED /* SSJBudgetNodataRemindView.m in Sources */,
 				BDC01FF31C2D92E3008B1F75 /* CDAutoHideMessageHUD.m in Sources */,
-				916E31F61DF96703003C18D4 /* SSJProductAdviceCell.m in Sources */,
 				9C6CA7F11DCADACA0013A499 /* SSJThemeUpdate.m in Sources */,
 				9C53A3BA1D420A01003BA2F0 /* SSJNewMemberViewController.m in Sources */,
 				7D5F33771CEAE6C10086B67E /* SSJCategoryCollectionViewCell.m in Sources */,
@@ -9742,6 +9743,7 @@
 				9C5377341D756B51002B230A /* SSJCreditCardListCell.m in Sources */,
 				7DBA55331D6AFA9E00C02D79 /* SSJAddOrEditLoanLabelCell.m in Sources */,
 				7DDA489A1C8821F20010EB01 /* SSJDatePeriod.m in Sources */,
+				7D78DB441E03D0B700CBA636 /* SSJReportFormsCurveView.m in Sources */,
 				7D5F33821CEAE6C10086B67E /* SSJRecordMakingBillTypeInputAccessoryView.m in Sources */,
 				7D5F333A1CEAE6C10086B67E /* SSJBudgetDatabaseHelper.m in Sources */,
 				BD04331C1C1A78B40051E7AB /* SSJArrayAddition.m in Sources */,
@@ -9939,7 +9941,6 @@
 				9C94719C1CEB473E00D69079 /* SSJCalendarViewController.m in Sources */,
 				9C47E6F21D224BEF005F338A /* SSJThemeService.m in Sources */,
 				9CF594321D65B59B00006594 /* SSJLocalNotificationStore.m in Sources */,
-				7D6F93311D0809E0000CCDB3 /* SSJReportFormsCurveGraphView.m in Sources */,
 				9CD9BC181CFD2DAA0061803B /* SSJMagicExportCalendarWeekView.m in Sources */,
 				BD70DF5E1C4751EA000E6CC9 /* SSJGuideContentView.m in Sources */,
 				BD0433401C1A82730051E7AB /* SSJDebugUtil.m in Sources */,
@@ -9958,7 +9959,6 @@
 				BD70DF641C4751EA000E6CC9 /* SSJRegistCheckAuthCodeViewController.m in Sources */,
 				BD70DF671C4751EA000E6CC9 /* SSJRegistNetworkService.m in Sources */,
 				7D6F93211D080981000CCDB3 /* SSJReportFormsCurveViewController.m in Sources */,
-				7D6F93321D0809E0000CCDB3 /* SSJReportFormsCurveView.m in Sources */,
 				7D2B241C1C3E091B009A74A8 /* SSJDataSynchronizer.m in Sources */,
 				9C9471791CEB224C00D69079 /* SSJFinancingHomeCell.m in Sources */,
 				7D5F33331CEAE6C10086B67E /* SSJScrollTextLayer.m in Sources */,
@@ -9973,6 +9973,7 @@
 				7D5F33501CEAE6C10086B67E /* SSJCalenderTableViewNoDataHeader.m in Sources */,
 				9CD9BC021CFD2DAA0061803B /* SSJBookkeepingTreeStore.m in Sources */,
 				9CF594221D654AC900006594 /* SSJReminderItem.m in Sources */,
+				7D098C792A14820300C86957 /* SSJDatabaseErrorHandler.m in Sources */,
 				9CD9BC231CFD2DAA0061803B /* SSJChargeReminderTimeView.m in Sources */,
 				9C1723871D52D3D100BB13DE /* SSJCanlenderChargeDetailCell.m in Sources */,
 				9CF594001D63FFBB00006594 /* SSJColorSelectCollectionViewCell.m in Sources */,
@@ -10003,6 +10004,7 @@
 				BD542B561CB544F700655EE2 /* SSJQQLoginHelper.m in Sources */,
 				9CE2F89C1D9B9020008099C1 /* SSJSearchBar.m in Sources */,
 				BD0432F51C1A77BB0051E7AB /* TPKeyboardAvoidingScrollView.m in Sources */,
+				7D78DB3A1E03D0B700CBA636 /* SSJReportFormsCurveAxisView.m in Sources */,
 				9C9D0B7D1D01867D003A9F4E /* SSJBillTypeSelectViewController.m in Sources */,
 				7D5F332D1CEAE6C10086B67E /* SSJBookKeepingHomeTableViewCell.m in Sources */,
 				9C9A0C901D73CDB7002AF046 /* SSJNewCreditCardViewController.m in Sources */,
@@ -10646,7 +10648,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co. Ltd.";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co. Ltd.";
-				DEVELOPMENT_TEAM = 747363KXQ6;
+				DEVELOPMENT_TEAM = 534SCE47WT;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

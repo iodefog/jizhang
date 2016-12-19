@@ -277,7 +277,7 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
     return syncData;
 }
 
-//  上传文件流
+//  上传文件
 - (void)uploadData:(NSData *)data completionHandler:(void (^)(NSURLResponse *response, id responseObject, NSError *error))completionHandler {
     
     //  创建请求
