@@ -10,4 +10,8 @@
 
 @interface SSJHomeLoadingView : UIView
 
+- (void)show;
+
+- (void)dismiss;
+
 @end

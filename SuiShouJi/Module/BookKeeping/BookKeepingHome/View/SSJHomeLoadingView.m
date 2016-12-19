@@ -20,7 +20,14 @@
 
 @end
 
-@implementation SSJHomeLoadingView
+@implementation SSJHomeLoadingView{
+    NSInteger _currentSecond;
+    CFAbsoluteTime _startTime;
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
@@ -28,6 +35,8 @@
     if (self) {
         self.backgroundColor = [UIColor whiteColor];
         [self addSubview:self.loadingView];
+        [self addSubview:self.statusLab];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(syncCompleteHandler) name:SSJSyncDataSuccessNotification object:nil];
     }
     return self;
 }
@@ -43,6 +52,10 @@
     [keyWindow addSubview:self];
     
     self.size = CGSizeMake(keyWindow.width, keyWindow.height);
+    
+    _startTime = CFAbsoluteTimeGetCurrent();
+    
+    [self.timer fire];
 }
 
 - (void)dismiss {
@@ -51,6 +64,12 @@
     }
     
     [self removeFromSuperview];
+    
+    [self.timer invalidate];
+    
+    self.timer = nil;
+    
+    _currentSecond = 0;
 }
 
 - (void)layoutSubviews{
@@ -78,6 +97,35 @@
     }
     return _statusLab;
 }
+
+- (NSTimer *)timer{
+    if (_timer) {
+        _timer = [NSTimer timerWithTimeInterval:1 target:self selector:@selector(updateCurrentSecond) userInfo:nil repeats:YES];
+        [[NSRunLoop currentRunLoop] addTimer:_timer forMode:NSRunLoopCommonModes];
+    }
+    return _timer;
+}
+
+- (void)updateCurrentSecond{
+    _currentSecond = _currentSecond + 1;
+    if (_currentSecond > 8) {
+        [self dismiss];
+    }
+}
+
+- (void)syncCompleteHandler{
+    CFAbsoluteTime _currentTime = CFAbsoluteTimeGetCurrent();
+    if (_currentTime - _startTime > 2) {
+        [self dismiss];
+    } else {
+        __weak typeof(self) weakSelf = self;
+        dispatch_time_t time=dispatch_time(DISPATCH_TIME_NOW, (2 - _currentTime) *NSEC_PER_SEC);
+        dispatch_after(time, dispatch_get_main_queue(), ^{
+            [weakSelf dismiss];
+        });
+    }
+}
+
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
