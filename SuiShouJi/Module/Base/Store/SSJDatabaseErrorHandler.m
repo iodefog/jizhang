@@ -10,6 +10,7 @@
 #import <ZipZap/ZipZap.h>
 #import "SSJGlobalServiceManager.h"
 #import "AFNetworking.h"
+#import "SSJDomainManager.h"
 
 #define documentPath [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject]
 #define writePath [documentPath stringByAppendingPathComponent:@"db_error"]
@@ -20,7 +21,6 @@
 @implementation SSJDatabaseErrorHandler
 
 + (void)handleError:(NSError *)error {
-    return;
     if (!error) return;
     NSFileManager *fileManager = [NSFileManager defaultManager];
     if (![fileManager fileExistsAtPath:writePath]) {
@@ -29,36 +29,33 @@
     
     //读取db_error_list.json
     NSMutableArray *errorArray = nil;
-    if ([fileManager fileExistsAtPath:@"db_error_list.json"]) {
-       NSData *jdata = [[NSData alloc] initWithContentsOfFile:jsonPath];
-        id jsonObject = [NSJSONSerialization JSONObjectWithData:jdata options:kNilOptions error:nil];
-        if ([jsonObject isKindOfClass:[NSArray class]]) {
-            errorArray = [NSMutableArray arrayWithArray:jsonObject];
-        }
+    if ([fileManager fileExistsAtPath:jsonPath]) {
+        NSArray *arr = [NSArray arrayWithContentsOfFile:jsonPath];
+        errorArray = [NSMutableArray arrayWithArray:arr];
+    }else{
+        errorArray = [NSMutableArray array];
     }
     
     //格式化成json数据
     NSDate *currentDate = [NSDate date];
     NSString *sqlName = [NSString stringWithFormat:@"db_error_%ld",(long)[currentDate timeIntervalSince1970]];
-    NSDictionary *dic = [NSDictionary dictionary];
-    [dic setValue:SSJUSERID() forKey:@"cuserId"];
-    [dic setValue:SSJAppVersion() forKey:@"releaseVersion"];
+    NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+    [dic setValue:SSJUSERID() forKey:@"cuserid"];
+    [dic setValue:SSJAppVersion() forKey:@"releaseversion"];
     [dic setValue:SSJDefaultSource() forKey:@"isource"];
     [dic setValue:SSJPhoneModel() forKey:@"cmodel"];
-    [dic setValue:@(SSJSystemVersion()) forKey:@"cphoneOs"];
+    [dic setValue:@(SSJSystemVersion()) forKey:@"cphoneos"];
     [dic setValue:[error localizedDescription] forKey:@"cmemo"];
     [dic setValue:currentDate forKey:@"cdate"];
-//    [dic setValue:sqlName forKey:@"cfileName"];
     [dic setValue:@(0) forKey:@"uploaded"];
     [errorArray addObject:dic];
     
     //压缩文件目录
     NSError *tError = nil;
-//    NSString *sqlPath = [documentPath stringByAppendingPathComponent:@"%@",sqlName];
     NSString *sqlPath = writePath;
     NSData *data = [NSData dataWithContentsOfFile:SSJSQLitePath()];
     //压缩
-    NSData *zipData = [self zipData:data error:&tError sqlPath:(NSString *)sqlPath sqlName:sqlPath];
+    NSData *zipData = [self zipData:data error:&tError sqlPath:sqlPath sqlName:sqlName];
     //上传判断网络状态
     if ([[AFNetworkReachabilityManager sharedManager] isReachableViaWiFi]) {//wifi
         //读取db_error_list文件，查询没有上传过的记录
@@ -67,8 +64,13 @@
                 //上传
                     [self uploadData:zipData completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
                         //修改此记录的上传状态（uploaded），并删除数据库文件
-                        [dic setValue:@(1) forKey:@"uploaded"];
-                        [fileManager removeItemAtPath:sqlPath error:nil];
+                        if ([responseObject isKindOfClass:[NSDictionary class]]) {
+                            int code = [[responseObject objectForKey:@"code"] intValue];
+                            if (code == 1) {
+                                [dic setValue:@(1) forKey:@"uploaded"];
+                                [fileManager removeItemAtPath:sqlPath error:nil];
+                            }
+                        }
                     } parametersDic:dic];
             }
         }
@@ -81,9 +83,8 @@
 + (void)uploadData:(NSData *)data completionHandler:(void (^)(NSURLResponse *response, id responseObject, NSError *error))completionHandler parametersDic:(NSDictionary *)paraDic{
     
     //  创建请求
-//    NSString *urlString = [[NSURL URLWithString:@"/sync/syncdata.go" relativeToURL:[NSURL URLWithString:[SSJDomainManager domain]]] absoluteString];
-    NSString *urlString = @"";
-    
+    NSString *urlString = [[NSURL URLWithString:@"/admin/applog.go" relativeToURL:[NSURL URLWithString:[SSJDomainManager domain]]] absoluteString];
+//    /admin/applog.go
     NSError *tError = nil;
     NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] multipartFormRequestWithMethod:@"POST" URLString:urlString parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
         NSString *fileName = [NSString stringWithFormat:@"db_error_%ld.zip", (long)[NSDate date].timeIntervalSince1970];

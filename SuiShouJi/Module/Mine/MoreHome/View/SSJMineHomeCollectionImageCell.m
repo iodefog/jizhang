@@ -25,8 +25,8 @@
         [self.contentView addSubview:self.bottomLabel];
         self.bottomLabel.textAlignment = NSTextAlignmentCenter;
         self.bottomLabel.font = [UIFont systemFontOfSize:12];
-        [self ssj_setBorderStyle:SSJBorderStyleBottom | SSJBorderStyleRight];
-        [self ssj_setBorderWidth:0.5];
+        [self ssj_setBorderStyle:SSJBorderStyleBottom | SSJBorderStyleLeft];
+        [self ssj_setBorderWidth:1];
         [self ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
        self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCellAppearanceAfterThemeChanged) name:SSJThemeDidChangeNotification object:nil];
@@ -69,18 +69,12 @@
         self.bottomLabel.frame = CGRectMake(0, CGRectGetMaxY(self.nameLabel.frame), self.width, 15);
     }
     
-    //边框
+//    //边框
 //    if ((indexPath.row + 1) % kColum == 0) {
 //        //第三列
-//        self.vLineView.hidden = YES;
-//    }else{
-//        self.vLineView.hidden = NO;
+//        [self ssj_setBorderWidth:0.5];
 //    }
-    
-//    else if ((indexPath.row + 1) % kColum == 1){
-//        //第一列
-//        
-//    }
+
 }
 #pragma mark Lazy
 - (UIImageView *)topImage
@@ -121,7 +115,7 @@
 }
 
 
--(void)updateCellAppearanceAfterThemeChanged{
+-(void)updateCellAppearanceAfterThemeChanged {
     self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     self.nameLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     self.bottomLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
