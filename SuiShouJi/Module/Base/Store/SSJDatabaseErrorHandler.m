@@ -20,6 +20,7 @@
 @implementation SSJDatabaseErrorHandler
 
 + (void)handleError:(NSError *)error {
+    return;
     if (!error) return;
     NSFileManager *fileManager = [NSFileManager defaultManager];
     if (![fileManager fileExistsAtPath:writePath]) {
@@ -28,11 +29,14 @@
     
     //读取db_error_list.json
     NSMutableArray *errorArray = nil;
-    NSData *jdata = [[NSData alloc] initWithContentsOfFile:jsonPath];
-    id jsonObject = [NSJSONSerialization JSONObjectWithData:jdata options:kNilOptions error:nil];
-    if ([jsonObject isKindOfClass:[NSArray class]]) {
-        errorArray = [NSMutableArray arrayWithArray:jsonObject];
+    if ([fileManager fileExistsAtPath:@"db_error_list.json"]) {
+       NSData *jdata = [[NSData alloc] initWithContentsOfFile:jsonPath];
+        id jsonObject = [NSJSONSerialization JSONObjectWithData:jdata options:kNilOptions error:nil];
+        if ([jsonObject isKindOfClass:[NSArray class]]) {
+            errorArray = [NSMutableArray arrayWithArray:jsonObject];
+        }
     }
+    
     //格式化成json数据
     NSDate *currentDate = [NSDate date];
     NSString *sqlName = [NSString stringWithFormat:@"db_error_%ld",(long)[currentDate timeIntervalSince1970]];
@@ -44,7 +48,7 @@
     [dic setValue:@(SSJSystemVersion()) forKey:@"cphoneOs"];
     [dic setValue:[error localizedDescription] forKey:@"cmemo"];
     [dic setValue:currentDate forKey:@"cdate"];
-    [dic setValue:sqlName forKey:@"cfileName"];
+//    [dic setValue:sqlName forKey:@"cfileName"];
     [dic setValue:@(0) forKey:@"uploaded"];
     [errorArray addObject:dic];
     

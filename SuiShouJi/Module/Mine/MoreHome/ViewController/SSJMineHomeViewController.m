@@ -218,7 +218,7 @@ static BOOL kNeedBannerDisplay = YES;
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
 {
     //如果是头视图
-    if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
+    if ([kind isEqualToString:UICollectionElementKindSectionHeader] && kNeedBannerDisplay == YES) {
         self.headerBannerImageView =  [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:kHeaderViewID forIndexPath:indexPath];
         self.headerBannerImageView.delegate = self;
         self.headerBannerImageView.bannerItemArray = self.bannerService.item.bannerItems;
@@ -365,8 +365,13 @@ static BOOL kNeedBannerDisplay = YES;
     //banner
     if (self.bannerService.item.bannerItems.count) {
         UICollectionViewFlowLayout *collectionViewLayout = (UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout;
-        collectionViewLayout.headerReferenceSize = CGSizeMake(SSJSCREENWITH, kBannerHeight);
-        self.lineView.top = kBannerHeight;
+        if (kNeedBannerDisplay == YES) {
+            collectionViewLayout.headerReferenceSize = CGSizeMake(SSJSCREENWITH, kBannerHeight);
+            self.lineView.top = kBannerHeight;
+        }else{
+            self.lineView.top = 0;
+        }
+        
     }
     
     //广告
@@ -402,13 +407,6 @@ static BOOL kNeedBannerDisplay = YES;
     }
 }
 
-
-#pragma mark - headerBannerImageView
-- (void)pushToViewControllerWithUrl:(NSString *)urlStr
-{
-    SSJAdWebViewController *webVc = [SSJAdWebViewController webViewVCWithURL:[NSURL URLWithString:urlStr]];
-    [self.navigationController pushViewController:webVc animated:YES];
-}
 
 #pragma mark - Getter
 -(SSJBannerHeaderView *)bannerHeader {
@@ -643,6 +641,28 @@ static BOOL kNeedBannerDisplay = YES;
 
 -(void)backButtonClicked:(id)sender{
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+
+#pragma mark - headerBannerImageView
+- (void)pushToViewControllerWithUrl:(NSString *)urlStr
+{
+    SSJAdWebViewController *webVc = [SSJAdWebViewController webViewVCWithURL:[NSURL URLWithString:urlStr]];
+    [self.navigationController pushViewController:webVc animated:YES];
+}
+
+- (void)closeBanner
+{
+    kNeedBannerDisplay = NO;
+    UICollectionViewFlowLayout *collectionViewLayout = (UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout;
+    if (kNeedBannerDisplay == YES) {
+        collectionViewLayout.headerReferenceSize = CGSizeMake(SSJSCREENWITH, kBannerHeight);
+        self.lineView.top = kBannerHeight;
+    }else{
+        collectionViewLayout.headerReferenceSize = CGSizeMake(SSJSCREENWITH, 0);
+        self.lineView.top = 0;
+    }
+    [self.collectionView reloadData];
 }
 
 //-(SSJMineHomeTableViewHeader *)header{
