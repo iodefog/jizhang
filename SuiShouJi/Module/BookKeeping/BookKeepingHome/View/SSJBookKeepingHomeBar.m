@@ -9,6 +9,13 @@
 #import "SSJBookKeepingHomeBar.h"
 #import "FLAnimatedImage.h"
 
+@interface SSJBookKeepingHomeBar()
+
+@property (nonatomic,strong) UILabel *statusLab;
+
+@end
+
+
 @implementation SSJBookKeepingHomeBar
 
 - (instancetype)initWithFrame:(CGRect)frame
@@ -20,6 +27,8 @@
         [self addSubview:self.leftButton];
         [self addSubview:self.rightBarButton];
         [self addSubview:self.budgetButton];
+        [self addSubview:self.loadingView];
+        [self addSubview:self.statusLab];
     }
     return self;
 }
@@ -57,15 +66,37 @@
     return _rightBarButton;
 }
     
-//- (FLAnimatedImageView *)loadingView{
-//    if (!_loadingView) {
-//        _loadingView = [[FLAnimatedImageView alloc] initWithFrame:CGRectMake(0, 0, 57, 25)];
-//        _loadingView.backgroundColor = [UIColor redColor];
-//        NSData *gifData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"homeLoading" ofType:@"gif"]];
-//        _loadingView.animatedImage = [FLAnimatedImage animatedImageWithGIFData:gifData];
-//    }
-//    return _loadingView;
-//}
+- (FLAnimatedImageView *)loadingView{
+    if (!_loadingView) {
+        _loadingView = [[FLAnimatedImageView alloc] initWithFrame:CGRectMake(0, 0, 57, 25)];
+        NSData *gifData;
+        if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
+            gifData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"homeDefualtLoading" ofType:@"gif"]];
+        } else {
+            gifData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"homeLoading" ofType:@"gif"]];
+            
+        }
+        _loadingView.animatedImage = [FLAnimatedImage animatedImageWithGIFData:gifData];
+    }
+    return _loadingView;
+}
+
+- (UILabel *)statusLab {
+    if (!_statusLab) {
+        _statusLab = [[UILabel alloc] init];
+        _statusLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+        _statusLab.font = [UIFont systemFontOfSize:13];
+        _statusLab.text  = @"数据加载中";
+        [_statusLab sizeToFit];
+    }
+    return _statusLab;
+}
+
+- (void)updateAfterThemeChange {
+    [self.rightBarButton updateAfterThemeChange];
+    [self.budgetButton updateAfterThemeChange];
+    self.statusLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+}
 
 /*
 // Only override drawRect: if you perform custom drawing.

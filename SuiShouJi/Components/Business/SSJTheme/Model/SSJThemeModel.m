@@ -63,7 +63,14 @@
     [aCoder encodeObject:_bookKeepingHomeMutiButtonNormalColor forKey:@"bookKeepingHomeMutiButtonNormalColor"];
     [aCoder encodeObject:_searchResultHeaderBackgroundColor forKey:@"searchResultHeaderBackgroundColor"];
     [aCoder encodeObject:_summaryBooksHeaderColor forKey:@"summaryBooksHeaderColor"];
+    [aCoder encodeObject:_keyboardSeparatorColor forKey:@"keyboardSeparatorColor"];
+    [aCoder encodeObject:_financingDetailHeaderColor forKey:@"financingDetailHeaderColor"];
+    [aCoder encodeFloat:_financingDetailHeaderAlpha forKey:@"financingDetailHeaderAlpha"];
     [aCoder encodeFloat:_summaryBooksHeaderAlpha forKey:@"summaryBooksHeaderAlpha"];
+    [aCoder encodeObject:_financingDetailMainColor forKey:@"financingDetailMainColor"];
+    [aCoder encodeFloat:_financingDetailMainAlpha forKey:@"_financingDetailMainAlpha"];
+    [aCoder encodeObject:_financingDetailSecondaryColor forKey:@"financingDetailSecondaryColor"];
+    [aCoder encodeFloat:_financingDetailSecondaryAlpha forKey:@"financingDetailSecondaryAlpha"];
 }
 
 - (nullable instancetype)initWithCoder:(NSCoder *)aDecoder {
@@ -121,6 +128,13 @@
         _searchResultHeaderBackgroundColor = [aDecoder decodeObjectForKey:@"recordMakingInputViewAlpha"];
         _summaryBooksHeaderColor = [aDecoder decodeObjectForKey:@"summaryBooksHeaderColor"];
         _summaryBooksHeaderAlpha = [aDecoder decodeFloatForKey:@"summaryBooksHeaderAlpha"];
+        _financingDetailHeaderColor = [aDecoder decodeObjectForKey:@"financingDetailHeaderColor"];
+        _financingDetailHeaderAlpha = [aDecoder decodeFloatForKey:@"financingDetailHeaderAlpha"];
+        _keyboardSeparatorColor = [aDecoder decodeObjectForKey:@"_keyboardSeparatorColor"];
+        _financingDetailMainColor = [aDecoder decodeObjectForKey:@"financingDetailMainColor"];
+        _financingDetailMainAlpha = [aDecoder decodeFloatForKey:@"financingDetailMainAlpha"];
+        _financingDetailSecondaryColor = [aDecoder decodeObjectForKey:@"financingDetailSecondaryColor"];
+        _financingDetailSecondaryAlpha = [aDecoder decodeFloatForKey:@"financingDetailSecondaryAlpha"];
     }
     return self;
 }

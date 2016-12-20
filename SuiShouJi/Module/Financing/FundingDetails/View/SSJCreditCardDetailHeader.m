@@ -245,7 +245,6 @@
 
 - (void)setItem:(SSJCreditCardItem *)item{
     _item = item;
-    self.backGroundView.backgroundColor = [UIColor ssj_colorWithHex:_item.cardColor];
     self.balanceLab.text = [NSString stringWithFormat:@"%.2f",_item.cardBalance];
     if (_item.cardBalance > 0) {
         self.balanceTitleLab.text = @"当前余额";

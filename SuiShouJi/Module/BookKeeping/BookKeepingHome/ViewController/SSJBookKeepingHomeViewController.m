@@ -648,16 +648,14 @@ BOOL kHomeNeedLoginPop;
             [[NSUserDefaults standardUserDefaults]setObject:currentDate forKey:SSJLastPopTimeKey];
         }
     }
-
 }
 
--(void)updateAppearanceAfterThemeChanged{
+-(void)updateAppearanceAfterThemeChanged {
     [super updateAppearanceAfterThemeChanged];
     [self.bookKeepingHeader updateAfterThemeChange];
     [self.tableView updateAfterThemeChange];
     [self.homeButton updateAfterThemeChange];
-    [self.homeBar.budgetButton updateAfterThemeChange];
-    [self.homeBar.rightBarButton updateAfterThemeChange];
+    [self.homeBar updateAfterThemeChange];
     [self.noDataHeader updateAfterThemeChanged];
     [self.floatingDateView updateAfterThemeChange];
     self.mutiFunctionButton.mainButtonNormalColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.bookKeepingHomeMutiButtonSelectColor];

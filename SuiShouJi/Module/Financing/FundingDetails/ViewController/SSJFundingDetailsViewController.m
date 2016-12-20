@@ -107,10 +107,22 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
     [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
     if ([self.item isKindOfClass:[SSJCreditCardItem class]]) {
         SSJCreditCardItem *cardItem = (SSJCreditCardItem *)self.item;
-        [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:cardItem.cardColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+        if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
+            [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:cardItem.cardColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+            self.creditCardHeader.backGroundView.backgroundColor = [UIColor ssj_colorWithHex:cardItem.cardColor];
+        } else {
+            [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailHeaderColor alpha:SSJ_CURRENT_THEME.financingDetailHeaderAlpha] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+            self.creditCardHeader.backGroundView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailHeaderColor alpha:SSJ_CURRENT_THEME.financingDetailHeaderAlpha];
+        }
     }else{
         SSJFinancingHomeitem *financingItem = (SSJFinancingHomeitem *)self.item;
-        [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:financingItem.fundingColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+        if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
+            [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:financingItem.fundingColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+            self.header.backgroundColor = [UIColor ssj_colorWithHex:financingItem.fundingColor];
+        } else {
+            [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailHeaderColor alpha:SSJ_CURRENT_THEME.financingDetailHeaderAlpha] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+            self.header.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailHeaderColor alpha:SSJ_CURRENT_THEME.financingDetailHeaderAlpha];
+        }
     }
     __weak typeof(self) weakSelf = self;
     [self.view ssj_showLoadingIndicator];
@@ -118,9 +130,6 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
         self.cardItem = (SSJCreditCardItem *)self.item;
         self.cardItem = [SSJCreditCardStore queryCreditCardDetailWithCardId:self.cardItem.cardId];
         self.creditCardHeader.item = self.cardItem;
-    }else{
-        SSJFinancingHomeitem *financingItem = (SSJFinancingHomeitem *)self.item;
-        _header.backgroundColor = [UIColor ssj_colorWithHex:financingItem.fundingColor];
     }
     if ([self.item isKindOfClass:[SSJCreditCardItem class]] && self.cardItem.settleAtRepaymentDay) {
         [SSJFundingDetailHelper queryDataWithCreditCardItem:self.cardItem success:^(NSMutableArray *data,SSJCreditCardItem *cardItem) {
@@ -138,8 +147,13 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
             weakSelf.creditCardHeader.totalExpence = cardItem.cardExpence;
             weakSelf.creditCardHeader.cardBalance = cardItem.cardIncome + cardItem.cardExpence;
             weakSelf.title = cardItem.cardName;
-            [weakSelf.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:cardItem.cardColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
-            weakSelf.header.backgroundColor = [UIColor ssj_colorWithHex:cardItem.cardColor];
+            if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
+                [weakSelf.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:cardItem.cardColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+                weakSelf.creditCardHeader.backGroundView.backgroundColor = [UIColor ssj_colorWithHex:cardItem.cardColor];
+            } else {
+                [weakSelf.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailHeaderColor alpha:SSJ_CURRENT_THEME.financingDetailHeaderAlpha] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+                weakSelf.creditCardHeader.backGroundView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailHeaderColor alpha:SSJ_CURRENT_THEME.financingDetailHeaderAlpha];
+            }
         } failure:^(NSError *error) {
             [weakSelf.view ssj_hideLoadingIndicator];
         }];
@@ -161,8 +175,14 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
                 weakSelf.creditCardHeader.totalExpence = fundingItem.fundingExpence;
                 weakSelf.creditCardHeader.cardBalance = fundingItem.fundingIncome - fundingItem.fundingExpence;
                 weakSelf.title = cardItem.cardName;
-                [weakSelf.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:fundingItem.fundingColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
-                weakSelf.header.backgroundColor = [UIColor ssj_colorWithHex:fundingItem.fundingColor];
+                if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID] || !SSJ_CURRENT_THEME.financingDetailHeaderColor.length) {
+                    [weakSelf.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:fundingItem.fundingColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+                    weakSelf.creditCardHeader.backGroundView.backgroundColor = [UIColor ssj_colorWithHex:fundingItem.fundingColor];
+                } else {
+                    [weakSelf.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailHeaderColor alpha:SSJ_CURRENT_THEME.financingDetailHeaderAlpha] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+                    weakSelf.creditCardHeader.backGroundView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailHeaderColor alpha:SSJ_CURRENT_THEME.financingDetailHeaderAlpha];
+                }
+
             } failure:^(NSError *error) {
                 [weakSelf.view ssj_hideLoadingIndicator];
             }];
@@ -184,8 +204,14 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
                 weakSelf.header.totalExpenceLabel.text = [NSString stringWithFormat:@"%.2f",fundingItem.fundingExpence];
                 [weakSelf.header.totalExpenceLabel sizeToFit];
                 weakSelf.title = fundingItem.fundingName;
-                [weakSelf.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:fundingItem.fundingColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
-                weakSelf.header.backgroundColor = [UIColor ssj_colorWithHex:fundingItem.fundingColor];
+                if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID] || !SSJ_CURRENT_THEME.financingDetailHeaderColor.length) {
+                    [weakSelf.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:fundingItem.fundingColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+                    weakSelf.header.backgroundColor = [UIColor ssj_colorWithHex:fundingItem.fundingColor];
+                } else {
+                    [weakSelf.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailHeaderColor alpha:SSJ_CURRENT_THEME.financingDetailHeaderAlpha] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+                    weakSelf.header.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailHeaderColor alpha:SSJ_CURRENT_THEME.financingDetailHeaderAlpha];
+
+                }
             } failure:^(NSError *error) {
                 [weakSelf.view ssj_hideLoadingIndicator];
             }];
@@ -344,10 +370,6 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
         [_header ssj_setBorderColor:[UIColor whiteColor]];
         [_header ssj_setBorderStyle:SSJBorderStyleTop];
         [_header ssj_setBorderWidth:1 / [UIScreen mainScreen].scale];
-        if ([self.item isKindOfClass:[SSJFinancingHomeitem class]]) {
-            SSJFinancingHomeitem *financingItem = (SSJFinancingHomeitem *)self.item;
-            _header.backgroundColor = [UIColor ssj_colorWithHex:financingItem.fundingColor];
-        }
     }
     return _header;
 }
@@ -448,8 +470,13 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
             weakSelf.creditCardHeader.totalExpence = cardItem.cardExpence;
             weakSelf.creditCardHeader.cardBalance = cardItem.cardIncome + cardItem.cardExpence;
             weakSelf.title = cardItem.cardName;
-            [weakSelf.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:cardItem.cardColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
-            weakSelf.header.backgroundColor = [UIColor ssj_colorWithHex:cardItem.cardColor];
+            if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
+                [weakSelf.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:cardItem.cardColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+                weakSelf.creditCardHeader.backGroundView.backgroundColor = [UIColor ssj_colorWithHex:cardItem.cardColor];
+            } else {
+                [weakSelf.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailHeaderColor alpha:SSJ_CURRENT_THEME.financingDetailHeaderAlpha] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+                weakSelf.creditCardHeader.backGroundView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailHeaderColor alpha:SSJ_CURRENT_THEME.financingDetailHeaderAlpha];
+            }
         } failure:^(NSError *error) {
             [weakSelf.view ssj_hideLoadingIndicator];
         }];
@@ -471,8 +498,13 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
                 weakSelf.creditCardHeader.totalExpence = cardItem.cardExpence;
                 weakSelf.creditCardHeader.cardBalance = cardItem.cardIncome + cardItem.cardExpence;
                 weakSelf.title = cardItem.cardName;
-                [weakSelf.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:cardItem.cardColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
-                weakSelf.header.backgroundColor = [UIColor ssj_colorWithHex:cardItem.cardColor];
+                if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID] || !SSJ_CURRENT_THEME.financingDetailHeaderColor.length) {
+                    [weakSelf.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:cardItem.cardColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+                    weakSelf.creditCardHeader.backGroundView.backgroundColor = [UIColor ssj_colorWithHex:cardItem.cardColor];
+                } else {
+                    [weakSelf.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailHeaderColor alpha:SSJ_CURRENT_THEME.financingDetailHeaderAlpha] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+                    weakSelf.creditCardHeader.backGroundView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailHeaderColor alpha:SSJ_CURRENT_THEME.financingDetailHeaderAlpha];
+                }
             } failure:^(NSError *error) {
                 [weakSelf.view ssj_hideLoadingIndicator];
             }];
@@ -494,8 +526,13 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
                 weakSelf.header.totalExpenceLabel.text = [NSString stringWithFormat:@"%.2f",fundingItem.fundingExpence];
                 [weakSelf.header.totalExpenceLabel sizeToFit];
                 weakSelf.title = fundingItem.fundingName;
-                [weakSelf.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:fundingItem.fundingColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
-                weakSelf.header.backgroundColor = [UIColor ssj_colorWithHex:fundingItem.fundingColor];
+                if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID] || !SSJ_CURRENT_THEME.financingDetailHeaderColor.length) {
+                    [weakSelf.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:fundingItem.fundingColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+                    weakSelf.header.backgroundColor = [UIColor ssj_colorWithHex:fundingItem.fundingColor];
+                } else {
+                    [weakSelf.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailHeaderColor alpha:SSJ_CURRENT_THEME.financingDetailHeaderAlpha] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+                    weakSelf.header.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailHeaderColor alpha:SSJ_CURRENT_THEME.financingDetailHeaderAlpha];
+                }
             } failure:^(NSError *error) {
                 [weakSelf.view ssj_hideLoadingIndicator];
             }];
