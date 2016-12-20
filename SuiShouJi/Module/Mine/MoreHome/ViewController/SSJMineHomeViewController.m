@@ -36,6 +36,7 @@
 #import "SSJBannerNetworkService.h"
 #import "SSJBannerHeaderView.h"
 #import "SSJReminderViewController.h"
+#import "SSJBookKeepingHomeViewController.h"
 #import "SSJListAdItem.h"
 
 #import "UIImageView+WebCache.h"
@@ -410,7 +411,7 @@ static BOOL kNeedBannerDisplay = YES;
 }
 
 #pragma mark - Getter
--(SSJBannerHeaderView *)bannerHeader{
+-(SSJBannerHeaderView *)bannerHeader {
     if (!_bannerHeader) {
         __weak typeof(self) weakSelf = self;
         _bannerHeader = [[SSJBannerHeaderView alloc]init];
@@ -426,7 +427,7 @@ static BOOL kNeedBannerDisplay = YES;
     return _bannerHeader;
 }
 
--(SSJBannerNetworkService *)bannerService{
+-(SSJBannerNetworkService *)bannerService {
     if (!_bannerService) {
         _bannerService = [[SSJBannerNetworkService alloc]initWithDelegate:self];
         _bannerService.httpMethod = SSJBaseNetworkServiceHttpMethodGET;
@@ -457,7 +458,7 @@ static BOOL kNeedBannerDisplay = YES;
 }
 
 
--(SSJMineHomeTableViewHeader *)header{
+-(SSJMineHomeTableViewHeader *)header {
     if (!_header) {
         __weak typeof(self) weakSelf = self;
         _header = [[SSJMineHomeTableViewHeader alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 135)];
@@ -481,7 +482,7 @@ static BOOL kNeedBannerDisplay = YES;
     return _header;
 }
 
--(YWFeedbackKit *)feedbackKit{
+-(YWFeedbackKit *)feedbackKit {
     if (!_feedbackKit) {
         NSString *avtarUrl;
         if ([_userItem.cicon hasPrefix:@"http"]) {
@@ -532,7 +533,7 @@ static BOOL kNeedBannerDisplay = YES;
 }
 
 #pragma mark - Event
--(void)takePhoto{
+-(void)takePhoto {
     UIImagePickerControllerSourceType sourceType = UIImagePickerControllerSourceTypeCamera;
     if ([UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypeCamera])
     {
@@ -547,7 +548,7 @@ static BOOL kNeedBannerDisplay = YES;
     }
 }
 
--(void)localPhoto{
+-(void)localPhoto {
     UIImagePickerController *picker = [[UIImagePickerController alloc] init];
     
     picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
@@ -558,7 +559,7 @@ static BOOL kNeedBannerDisplay = YES;
 }
 
 
--(void)getUserInfo:(void (^)(SSJUserInfoItem *item))UserInfo{
+-(void)getUserInfo:(void (^)(SSJUserInfoItem *item))UserInfo {
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db){
         FMResultSet *rs = [db executeQuery:@"SELECT * FROM BK_USER WHERE CUSERID = ?",SSJUSERID()];
         SSJUserInfoItem *item = [[SSJUserInfoItem alloc]init];
@@ -574,7 +575,7 @@ static BOOL kNeedBannerDisplay = YES;
     }];
 }
 
--(void)reloadDataAfterSync{
+-(void)reloadDataAfterSync {
     __weak typeof(self) weakSelf = self;
     [self getUserInfo:^(SSJUserInfoItem *item){
         weakSelf.header.item = item;
@@ -583,14 +584,14 @@ static BOOL kNeedBannerDisplay = YES;
 }
 
 #pragma mark - Private
--(void)updateAppearanceAfterThemeChanged{
+-(void)updateAppearanceAfterThemeChanged {
     [super updateAppearanceAfterThemeChanged];
     [self.header updateAfterThemeChange];
 //    _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
     self.lineView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
 }
 
--(void)getCircleChargeState{
+-(void)getCircleChargeState {
     __weak typeof(self) weakSelf = self;
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         BOOL isOnOrNot = [db intForQuery:@"select isonornot from BK_CHARGE_REMINDER"];
@@ -605,7 +606,7 @@ static BOOL kNeedBannerDisplay = YES;
     }];
 }
 
-- (void)loginButtonClicked{
+- (void)loginButtonClicked {
     if (!SSJIsUserLogined()) {
         [self login];
     }else{
@@ -616,7 +617,9 @@ static BOOL kNeedBannerDisplay = YES;
 
 - (void)login {
     SSJLoginViewController *loginVc = [[SSJLoginViewController alloc] init];
-    loginVc.backController = self;
+    UITabBarController *tabbarVc = self.navigationController.tabBarController;
+    
+    loginVc.backController = [((UINavigationController *)[tabbarVc.viewControllers firstObject]).viewControllers firstObject];
     [self.navigationController pushViewController:loginVc animated:YES];
 }
 

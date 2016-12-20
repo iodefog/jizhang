@@ -34,23 +34,37 @@
 #import "SSJLoginHelper.h"
 #import "SSJStartChecker.h"
 #import "SSJLocalNotificationHelper.h"
+#import "SSJHomeLoadingView.h"
 
 @interface SSJLoginViewController () <UITextFieldDelegate>
 
 @property (nonatomic, strong) SSJLoginService *loginService;
 
 @property (nonatomic,strong)SSJBaselineTextField *tfPhoneNum;
+
 @property (nonatomic,strong)SSJBaselineTextField *tfPassword;
+
 @property (nonatomic,copy)NSString *strUserAccount;
+
 @property (nonatomic,copy)NSString *strUserPassword;
+
 @property (nonatomic,strong)UIButton *loginButton;
+
 @property (nonatomic,strong)UIButton *registerButton;
+
 @property (nonatomic,strong)UIButton *forgetButton;
+
 @property (nonatomic,strong)UIButton *tencentLoginButton;
+
 @property (nonatomic,strong)UIButton *weixinLoginButton;
+
 @property (nonatomic,strong)UIView *leftSeperatorLine;
+
 @property (nonatomic,strong)UIView *rightSeperatorLine;
+
 @property (nonatomic,strong)UILabel *thirdPartyLoginLabel;
+
+@property(nonatomic, strong) SSJHomeLoadingView *loadingView;
 @end
 
 @implementation SSJLoginViewController
@@ -338,6 +352,7 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:SSJHideSyncLoadingNotification object:self];
         [CDAutoHideMessageHUD showMessage:@"同步失败"];
     }];
+    [self.loadingView show];
     
     //  如果有finishHandle，就通过finishHandle来控制页面流程，否则走默认流程
     [[NSUserDefaults standardUserDefaults]setBool:YES forKey:SSJHaveLoginOrRegistKey];
@@ -375,6 +390,13 @@
         _loginService.showLodingIndicator = YES;
     }
     return _loginService;
+}
+
+- (SSJHomeLoadingView *)loadingView{
+    if (!_loadingView) {
+        _loadingView = [[SSJHomeLoadingView alloc] init];
+    }
+    return _loadingView;
 }
 
 

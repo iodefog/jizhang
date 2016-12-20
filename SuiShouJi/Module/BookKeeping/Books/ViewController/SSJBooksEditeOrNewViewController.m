@@ -98,7 +98,7 @@
         [CDAutoHideMessageHUD showMessage:@"账本名称不能超过5个字"];
         return;
     }
-    __weak typeof(self) weakSelf = self;
+//    __weak typeof(self) weakSelf = self;
     [SSJBooksTypeStore saveBooksTypeItem:self.item sucess:^{
         [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
         [[NSNotificationCenter defaultCenter]postNotificationName:SSJBooksTypeDidChangeNotification object:nil];

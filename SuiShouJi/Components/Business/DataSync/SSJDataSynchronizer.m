@@ -230,6 +230,8 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
             }
             [self.dataFailureBlocks removeBlock];
             [self.dataSuccessBlocks removeBlock];
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:SSJSyncDataFailureNotification object:self];
         });
         return;
     }
@@ -250,6 +252,8 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
                 [CDAutoHideMessageHUD showMessage:error.localizedDescription];
             }
 #endif
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:SSJSyncImageFailureNotification object:self];
         });
     }
 }
