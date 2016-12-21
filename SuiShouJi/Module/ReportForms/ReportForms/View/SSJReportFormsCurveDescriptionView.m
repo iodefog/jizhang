@@ -11,9 +11,14 @@
 
 const UIEdgeInsets kTextInset = {15, 5, 10, 5};
 
+const CGFloat kSuperMargin = 5;
+
+
 @interface SSJReportFormsCurveDescriptionView ()
 
 @property (nonatomic, strong) UILabel *label;
+
+@property (nonatomic) CGPoint showPoint;
 
 @end
 
@@ -26,7 +31,6 @@ const UIEdgeInsets kTextInset = {15, 5, 10, 5};
         _label = [[UILabel alloc] init];
         _label.numberOfLines = 0;
         _label.font = [UIFont systemFontOfSize:10];
-        _label.width = [UIScreen mainScreen].bounds.size.width * 0.94 - kTextInset.left - kTextInset.right;
         [self addSubview:_label];
     }
     return self;
@@ -39,17 +43,18 @@ const UIEdgeInsets kTextInset = {15, 5, 10, 5};
 
 - (void)drawRect:(CGRect)rect {
     UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 5, self.width , self.height - 5) cornerRadius:3];
-    [path moveToPoint:CGPointMake(4, 5)];
-    [path addLineToPoint:CGPointMake(10, 0)];
-    [path addLineToPoint:CGPointMake(16, 5)];
+    [path moveToPoint:_showPoint];
+    [path addLineToPoint:CGPointMake(_showPoint.x - 4, 5)];
+    [path addLineToPoint:CGPointMake(_showPoint.x + 4, 5)];
     
     [[UIColor ssj_colorWithHex:@"f6f6f6"] setFill];
     [path fill];
 }
 
 - (CGSize)sizeThatFits:(CGSize)size {
-    CGSize screenSize = [UIScreen mainScreen].bounds.size;
-    return CGSizeMake(screenSize.width * 0.94, _label.height + kTextInset.top + kTextInset.bottom);
+    _label.width = self.superview.width - kTextInset.left - kTextInset.right - kSuperMargin * 2;
+    [_label sizeToFit];
+    return CGSizeMake(_label.width + kTextInset.left + kTextInset.right, _label.height + kTextInset.top + kTextInset.bottom);
 }
 
 - (void)setPeriod:(SSJDatePeriod *)period {
@@ -64,16 +69,24 @@ const UIEdgeInsets kTextInset = {15, 5, 10, 5};
     [text appendAttributedString:titleText];
     [text appendAttributedString:bodyText];
     _label.attributedText = text;
-    [_label sizeToFit];
     [self sizeToFit];
 }
 
 - (void)showInView:(UIView *)view atPoint:(CGPoint)point {
     if (self.superview != view) {
         self.leftTop = CGPointMake(point.x - 10, point.y);
-        [UIView transitionWithView:view duration:0.25 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-            [view addSubview:self];
-        } completion:NULL];
+        
+        [view addSubview:self];
+        [self sizeToFit];
+        self.left = kSuperMargin;
+        self.top = point.y;
+        self.alpha = 0;
+        
+        _showPoint = [self.superview convertPoint:point toView:self];
+        
+        [UIView animateWithDuration:0.25 animations:^{
+            self.alpha = 1;
+        }];
     }
 }
 
