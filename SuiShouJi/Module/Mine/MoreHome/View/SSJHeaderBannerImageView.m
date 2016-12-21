@@ -12,6 +12,10 @@
 #import "SSJBannerItem.h"
 @interface SSJHeaderBannerImageView()<UICollectionViewDelegateFlowLayout,UICollectionViewDataSource,UICollectionViewDelegate>
 @property (nonatomic, strong) UICollectionView *collectionView;
+/**
+ <#注释#>
+ */
+@property (nonatomic, strong) UIButton *closeButton;
 @end
 @implementation SSJHeaderBannerImageView
 static NSString *const kHeadBannerCellID = @"SSJHeaderBannerCollectionViewCellID";
@@ -20,6 +24,7 @@ static NSString *const kHeadBannerCellID = @"SSJHeaderBannerCollectionViewCellID
 - (instancetype)initWithFrame:(CGRect)frame{
     if (self = [super initWithFrame:frame]) {
         [self addSubview:self.collectionView];
+        [self addSubview:self.closeButton];
     }
     return self;
 }
@@ -43,10 +48,22 @@ static NSString *const kHeadBannerCellID = @"SSJHeaderBannerCollectionViewCellID
     return _collectionView;
 }
 
+- (UIButton *)closeButton
+{
+    if (!_closeButton) {
+        _closeButton = [[UIButton alloc] init];
+        [_closeButton setImage:[UIImage imageNamed:@"banner_cha"] forState:UIControlStateNormal];
+        [_closeButton sizeToFit];
+        [_closeButton addTarget:self action:@selector(closeButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _closeButton;
+}
+
 - (void)layoutSubviews
 {
     [super layoutSubviews];
     self.collectionView.frame = CGRectMake(0, 0, SSJSCREENWITH , kBannerHeight);
+    self.closeButton.rightTop = CGPointMake(SSJSCREENWITH - 20, 10);
 }
 
 - (void)setBannerItemArray:(NSArray *)bannerItemArray
@@ -61,6 +78,13 @@ static NSString *const kHeadBannerCellID = @"SSJHeaderBannerCollectionViewCellID
     _bannerItemArray = bannerItemArray;
     if (_bannerItemArray.count > 0) {
         [self.collectionView reloadData];
+    }
+}
+
+- (void)closeButtonClicked
+{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(closeBanner)]) {
+        [self.delegate closeBanner];
     }
 }
 

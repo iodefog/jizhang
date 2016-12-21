@@ -45,7 +45,7 @@ static const void * kSSJDatabaseQueueSpecificKey = &kSSJDatabaseQueueSpecificKey
         }
         
         NSError *error = [db lastError];
-        if (error) {
+        if (error.code != 0) {
             [SSJDatabaseErrorHandler handleError:error];
         }
     }];
@@ -59,7 +59,7 @@ static const void * kSSJDatabaseQueueSpecificKey = &kSSJDatabaseQueueSpecificKey
         }
         
         NSError *error = [db lastError];
-        if (error) {
+        if (error.code != 0) {
             [SSJDatabaseErrorHandler handleError:error];
         }
         
@@ -75,7 +75,7 @@ static const void * kSSJDatabaseQueueSpecificKey = &kSSJDatabaseQueueSpecificKey
         }
         
         NSError *error = [db lastError];
-        if (error) {
+        if (error.code != 0) {
             [SSJDatabaseErrorHandler handleError:error];
         }
         

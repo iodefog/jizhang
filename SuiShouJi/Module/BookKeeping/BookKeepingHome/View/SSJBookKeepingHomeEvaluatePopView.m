@@ -47,8 +47,8 @@ NSString *const SSJEvaluateSelecatedKey = @"SSJEvaluateSelecatedKey";
         self.bgImageView.centerX = self.width * 0.5;
     }
     self.notShowAgainButton.bottom = self.bgImageView.height - 25;
-    self.latterButton.bottom = CGRectGetMinY(self.notShowAgainButton.frame) - 14;
-    self.favorableButton.bottom = CGRectGetMinY(self.latterButton.frame) - 7;
+    self.latterButton.bottom = CGRectGetMinY(self.notShowAgainButton.frame) - 11;
+    self.favorableButton.bottom = CGRectGetMinY(self.latterButton.frame) - 5;
     self.favorableButton.centerX = self.latterButton.centerX = self.notShowAgainButton.centerX = self.bgImageView.width * 0.5;
 
 }

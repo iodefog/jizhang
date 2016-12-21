@@ -13,6 +13,7 @@
 @protocol SSJHeaderBannerImageViewDelegate <NSObject>
 
 - (void)pushToViewControllerWithUrl:(NSString *)urlStr;
+- (void)closeBanner;
 
 @end
 @interface SSJHeaderBannerImageView : UICollectionReusableView
