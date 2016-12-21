@@ -111,6 +111,7 @@
     _currentSecond = _currentSecond + 1;
     if (_currentSecond > 8) {
         [self dismiss];
+        [[NSNotificationCenter defaultCenter] postNotificationName:SSJHomeContinueLoadingNotification object:nil];
     }
 }
 

@@ -162,7 +162,6 @@ extern NSString *const SSJLastLoggedUserItemKey;
 //  本地通知的key
 extern NSString *const SSJReminderNotificationKey;
 
-
 /** --------------- Notification --------------- */
 //  数据同步成功通知
 extern NSString *const SSJSyncDataSuccessNotification;
@@ -194,4 +193,5 @@ extern NSString *const SSJInitDatabaseDidFinishNotification;
 //  切换账本的通知
 extern NSString *const SSJBooksTypeDidChangeNotification;
 
-
+//  本地通知的key
+extern NSString *const SSJHomeContinueLoadingNotification;

@@ -86,12 +86,18 @@ BOOL kHomeNeedLoginPop;
 }
 
 #pragma mark - Lifecycle
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.statisticsTitle = @"首页";
         self.extendedLayoutIncludesOpaqueBars = YES;
         self.automaticallyAdjustsScrollViewInsets = NO;
         _budgetRemindInfo = [NSMutableDictionary dictionary];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(continueLoading) name:SSJHomeContinueLoadingNotification object:nil];
 //        [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleLightContent];
     }
     return self;
@@ -100,6 +106,7 @@ BOOL kHomeNeedLoginPop;
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     __weak typeof(self) weakSelf = self;
+    [self continueLoading];
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     [self.mm_drawerController setGestureCompletionBlock:^(MMDrawerController *drawerController, UIGestureRecognizer *gesture) {
         __strong typeof(weakSelf) sself = weakSelf;
@@ -203,13 +210,10 @@ BOOL kHomeNeedLoginPop;
     self.statusLabel.centerX = self.view.width / 2;
 }
 
--(BOOL)prefersStatusBarHidden{
+- (BOOL)prefersStatusBarHidden {
     return YES;
 }
 
--(void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
 
 #pragma mark - UITableViewDelegate
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -600,12 +604,12 @@ BOOL kHomeNeedLoginPop;
 }
 
 #pragma mark - Event
--(void)rightBarButtonClicked{
+- (void)rightBarButtonClicked {
     SSJCalendarViewController *calendarVC = [[SSJCalendarViewController alloc]init];
     [self.navigationController pushViewController:calendarVC animated:YES];
 }
 
--(void)leftBarButtonClicked:(id)sender{
+- (void)leftBarButtonClicked:(id)sender {
     [self.mm_drawerController toggleDrawerSide:MMDrawerSideLeft animated:YES completion:^(BOOL finished) {
         if (!_dateViewHasDismiss) {
             [self.floatingDateView dismiss];
@@ -615,8 +619,23 @@ BOOL kHomeNeedLoginPop;
     }];
 }
 
+- (void)continueLoading {
+    self.homeBar.isAnimating = YES;
+    [UIView animateWithDuration:0.6 animations:^{
+        self.homeBar.height = 100;
+        self.bookKeepingHeader.top = self.homeBar.bottom;
+        if (!SSJ_CURRENT_THEME.tabBarBackgroundImage.length) {
+            self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.bookKeepingHeader.bottom - SSJ_TABBAR_HEIGHT);
+        }else{
+            self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.bookKeepingHeader.bottom);
+        } 
+    } completion:^(BOOL finished) {
+        
+    }];
+}
+
 #pragma mark - Private
--(void)popIfNeeded{
+- (void)popIfNeeded {
     __weak typeof(self) weakSelf = self;
     if ([[NSUserDefaults standardUserDefaults]objectForKey:SSJLastLoggedUserItemKey] && !SSJIsUserLogined() && kHomeNeedLoginPop) {
         kHomeNeedLoginPop = NO;

@@ -41,6 +41,9 @@
     self.leftButton.centerY = 10 + self.height / 2;
     self.rightBarButton.right = self.width - 10;
     self.rightBarButton.centerY = 10 + self.height / 2;
+    self.loadingView.centerX = self.statusLab.centerX = self.width / 2;
+    self.loadingView.top = self.budgetButton.bottom + 5;
+    self.statusLab.top = self.loadingView.bottom + 5;
 }
 
 - (SSJHomeBudgetButton *)budgetButton{
@@ -76,6 +79,7 @@
             gifData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"homeLoading" ofType:@"gif"]];
             
         }
+        _loadingView.hidden = YES;
         _loadingView.animatedImage = [FLAnimatedImage animatedImageWithGIFData:gifData];
     }
     return _loadingView;
@@ -88,6 +92,7 @@
         _statusLab.font = [UIFont systemFontOfSize:13];
         _statusLab.text  = @"数据加载中";
         [_statusLab sizeToFit];
+        _statusLab.hidden = YES;
     }
     return _statusLab;
 }
@@ -96,6 +101,12 @@
     [self.rightBarButton updateAfterThemeChange];
     [self.budgetButton updateAfterThemeChange];
     self.statusLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+}
+
+- (void)setIsAnimating:(BOOL)isAnimating {
+    _isAnimating = isAnimating;
+    self.statusLab.hidden = self.loadingView.hidden = !_isAnimating;
+    [self setNeedsLayout];
 }
 
 /*
