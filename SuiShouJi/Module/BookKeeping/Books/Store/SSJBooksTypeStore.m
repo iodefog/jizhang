@@ -45,7 +45,7 @@
         }
         SSJBooksTypeItem *item = [[SSJBooksTypeItem alloc]init];
         item.booksName = @"添加账本";
-        item.booksColor = SSJ_CURRENT_THEME.secondaryColor;
+        item.booksColor = @"#cccccc";
         item.booksIcoin = @"book_tianjia";
         item.selectToEdite = NO;
         [booksList addObject:item];

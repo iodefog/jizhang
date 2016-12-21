@@ -36,6 +36,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.appliesTheme = NO;
     [self.view addSubview:self.tableView];
     [self setUpNav];
 //    self.automaticallyAdjustsScrollViewInsets = NO;

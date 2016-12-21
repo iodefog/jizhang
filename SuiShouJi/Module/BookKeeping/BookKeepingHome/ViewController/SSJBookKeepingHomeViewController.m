@@ -97,7 +97,6 @@ BOOL kHomeNeedLoginPop;
         self.extendedLayoutIncludesOpaqueBars = YES;
         self.automaticallyAdjustsScrollViewInsets = NO;
         _budgetRemindInfo = [NSMutableDictionary dictionary];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(continueLoading) name:SSJHomeContinueLoadingNotification object:nil];
 //        [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleLightContent];
     }
     return self;
@@ -106,7 +105,6 @@ BOOL kHomeNeedLoginPop;
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     __weak typeof(self) weakSelf = self;
-    [self continueLoading];
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     [self.mm_drawerController setGestureCompletionBlock:^(MMDrawerController *drawerController, UIGestureRecognizer *gesture) {
         __strong typeof(weakSelf) sself = weakSelf;
@@ -172,7 +170,9 @@ BOOL kHomeNeedLoginPop;
     [self.mm_drawerController setMaximumLeftDrawerWidth:SSJSCREENWITH * 0.8];
     [self.mm_drawerController setOpenDrawerGestureModeMask:MMOpenDrawerGestureModeAll];
     [self.mm_drawerController setCloseDrawerGestureModeMask:MMCloseDrawerGestureModeAll];
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(continueLoading) name:SSJHomeContinueLoadingNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(syncDidFail) name:SSJSyncDataFailureNotification object:nil];
+
     SSJBookKeepingHomeEvaluatePopView *evaluate = [[SSJBookKeepingHomeEvaluatePopView alloc] initWithFrame:CGRectMake(0, 0, SSJSCREENWITH, SSJSCREENHEIGHT)];
     [evaluate showEvaluatePopView];
 }
@@ -622,7 +622,7 @@ BOOL kHomeNeedLoginPop;
 - (void)continueLoading {
     self.homeBar.isAnimating = YES;
     [UIView animateWithDuration:0.6 animations:^{
-        self.homeBar.height = 100;
+        self.homeBar.height = 110;
         self.bookKeepingHeader.top = self.homeBar.bottom;
         if (!SSJ_CURRENT_THEME.tabBarBackgroundImage.length) {
             self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.bookKeepingHeader.bottom - SSJ_TABBAR_HEIGHT);
@@ -632,6 +632,10 @@ BOOL kHomeNeedLoginPop;
     } completion:^(BOOL finished) {
         
     }];
+}
+
+- (void)syncDidFail {
+    [self stopLoading];
 }
 
 #pragma mark - Private
@@ -808,7 +812,7 @@ BOOL kHomeNeedLoginPop;
     } else {
         [self getDateFromDatebase];
     }
-    
+    [self stopLoading];
     [self reloadBudgetData];
     NSString *booksid = SSJGetCurrentBooksType();
     SSJBooksTypeItem *currentBooksItem = [SSJBooksTypeStore queryCurrentBooksTypeForBooksId:booksid];
@@ -872,5 +876,19 @@ BOOL kHomeNeedLoginPop;
     [self getDateFromDatebase];
 }
 
+- (void)stopLoading {
+    self.homeBar.isAnimating = NO;
+    [UIView animateWithDuration:0.6 animations:^{
+        self.homeBar.height = 64;
+        self.bookKeepingHeader.top = self.homeBar.bottom;
+        if (!SSJ_CURRENT_THEME.tabBarBackgroundImage.length) {
+            self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.bookKeepingHeader.bottom - SSJ_TABBAR_HEIGHT);
+        }else{
+            self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.bookKeepingHeader.bottom);
+        }
+    } completion:^(BOOL finished) {
+        
+    }];
+}
 
 @end

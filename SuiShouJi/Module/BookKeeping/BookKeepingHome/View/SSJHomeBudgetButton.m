@@ -11,8 +11,9 @@
 #import "SSJBudgetWaveWaterView.h"
 
 @interface SSJHomeBudgetButton()
-@property(nonatomic, strong) UIView *seperatorLine;
+
 @end
+
 @implementation SSJHomeBudgetButton
 
 - (instancetype)initWithFrame:(CGRect)frame

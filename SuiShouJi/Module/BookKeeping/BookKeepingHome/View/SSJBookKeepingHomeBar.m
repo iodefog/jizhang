@@ -35,15 +35,27 @@
 
 - (void)layoutSubviews{
     [super layoutSubviews];
-    self.budgetButton.centerX = self.width / 2;
-    self.budgetButton.bottom = self.height;
-    self.leftButton.left = 10;
-    self.leftButton.centerY = 10 + self.height / 2;
-    self.rightBarButton.right = self.width - 10;
-    self.rightBarButton.centerY = 10 + self.height / 2;
-    self.loadingView.centerX = self.statusLab.centerX = self.width / 2;
-    self.loadingView.top = self.budgetButton.bottom + 5;
-    self.statusLab.top = self.loadingView.bottom + 5;
+    if (self.isAnimating) {
+        self.budgetButton.centerX = self.width / 2;
+        self.budgetButton.top = 15;
+        self.leftButton.left = 10;
+        self.leftButton.centerY = self.budgetButton.centerY;
+        self.rightBarButton.right = self.width - 10;
+        self.rightBarButton.centerY = self.budgetButton.centerY;
+        self.loadingView.centerX = self.statusLab.centerX = self.width / 2;
+        self.loadingView.top = self.budgetButton.bottom + 5;
+        self.statusLab.top = self.loadingView.bottom + 5;
+    } else {
+        self.budgetButton.centerX = self.width / 2;
+        self.budgetButton.bottom = self.height;
+        self.leftButton.left = 10;
+        self.leftButton.centerY = 10 + self.height / 2;
+        self.rightBarButton.right = self.width - 10;
+        self.rightBarButton.centerY = 10 + self.height / 2;
+        self.loadingView.centerX = self.statusLab.centerX = self.width / 2;
+        self.loadingView.top = self.budgetButton.bottom + 5;
+        self.statusLab.top = self.loadingView.bottom + 5;
+    }
 }
 
 - (SSJHomeBudgetButton *)budgetButton{
@@ -101,10 +113,19 @@
     [self.rightBarButton updateAfterThemeChange];
     [self.budgetButton updateAfterThemeChange];
     self.statusLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    NSData *gifData;
+    if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
+        gifData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"homeDefualtLoading" ofType:@"gif"]];
+    } else {
+        gifData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"homeLoading" ofType:@"gif"]];
+        
+    }
+    self.loadingView.animatedImage = [FLAnimatedImage animatedImageWithGIFData:gifData];
 }
 
 - (void)setIsAnimating:(BOOL)isAnimating {
     _isAnimating = isAnimating;
+    self.budgetButton.seperatorLine.hidden = _isAnimating;
     self.statusLab.hidden = self.loadingView.hidden = !_isAnimating;
     [self setNeedsLayout];
 }
