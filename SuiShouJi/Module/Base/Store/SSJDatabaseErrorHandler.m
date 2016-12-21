@@ -83,7 +83,9 @@
         //读取db_error_list文件，查询没有上传过的记录
         //读取db_error_list.json
         NSMutableArray *errorArray = [self readErrerInJson];
-        [self uploadData:errorArray.count -1 array:errorArray];
+        if (errorArray.count > 0) {
+            [self uploadData:errorArray.count -1 array:errorArray];
+        }
     }
 }
 
@@ -96,10 +98,16 @@
             //上传
             [self uploadData:[self zipSql] completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
                 if (error) return ;
-                //修改此记录的上传状态（uploaded），并删除数据库文件
-                if ([responseObject isKindOfClass:[NSDictionary class]]) {
-                    int code = [[responseObject objectForKey:@"code"] intValue];
+                NSHTTPURLResponse *tResponse = (NSHTTPURLResponse *)response;
+                NSString *contentType = tResponse.allHeaderFields[@"Content-Type"];
+                
+                //  返回的是json数据格式
+                NSError *err;
+                if ([contentType isEqualToString:@"text/json;charset=UTF-8"]) {
+                    NSDictionary *responseInfo = [NSJSONSerialization JSONObjectWithData:responseObject options:0 error:&err];
+                    NSInteger code = [responseInfo[@"code"] integerValue];
                     if (code == 1) {
+                        //修改此记录的上传状态（uploaded），并删除数据库文件
                         [dic setValue:@(1) forKey:@"uploaded"];
                         NSString *sqlName = [NSString stringWithFormat:@"db_error_%ld",(long)[[NSDate date] timeIntervalSince1970]];
                         NSString *sqlPath = [[NSBundle mainBundle] pathForResource:sqlName ofType:@"zip"];
@@ -143,10 +151,8 @@
 
 //  上传文件
 + (void)uploadData:(NSData *)data completionHandler:(void (^)(NSURLResponse *response, id responseObject, NSError *error))completionHandler parametersDic:(NSDictionary *)paraDic{
-    
     //  创建请求
     NSString *urlString = SSJURLWithAPI(@"/admin/applog.go");
-//    /admin/applog.go
     NSError *tError = nil;
     NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] multipartFormRequestWithMethod:@"POST" URLString:urlString parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
         NSString *fileName = [NSString stringWithFormat:@"db_error_%ld.zip", (long)[NSDate date].timeIntervalSince1970];
