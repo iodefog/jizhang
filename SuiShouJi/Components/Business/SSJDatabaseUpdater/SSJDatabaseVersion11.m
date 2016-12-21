@@ -16,8 +16,7 @@
     NSError *error = [self updateUserChargeTableWithDatabase:db];
     if (error) {
         return error;
-    }
-    
+    }       
     return nil;
 }
 

@@ -68,7 +68,7 @@
     [aCoder encodeFloat:_financingDetailHeaderAlpha forKey:@"financingDetailHeaderAlpha"];
     [aCoder encodeFloat:_summaryBooksHeaderAlpha forKey:@"summaryBooksHeaderAlpha"];
     [aCoder encodeObject:_financingDetailMainColor forKey:@"financingDetailMainColor"];
-    [aCoder encodeFloat:_financingDetailMainAlpha forKey:@"_financingDetailMainAlpha"];
+    [aCoder encodeFloat:_financingDetailMainAlpha forKey:@"financingDetailMainAlpha"];
     [aCoder encodeObject:_financingDetailSecondaryColor forKey:@"financingDetailSecondaryColor"];
     [aCoder encodeFloat:_financingDetailSecondaryAlpha forKey:@"financingDetailSecondaryAlpha"];
 }
@@ -130,7 +130,7 @@
         _summaryBooksHeaderAlpha = [aDecoder decodeFloatForKey:@"summaryBooksHeaderAlpha"];
         _financingDetailHeaderColor = [aDecoder decodeObjectForKey:@"financingDetailHeaderColor"];
         _financingDetailHeaderAlpha = [aDecoder decodeFloatForKey:@"financingDetailHeaderAlpha"];
-        _keyboardSeparatorColor = [aDecoder decodeObjectForKey:@"_keyboardSeparatorColor"];
+        _keyboardSeparatorColor = [aDecoder decodeObjectForKey:@"keyboardSeparatorColor"];
         _financingDetailMainColor = [aDecoder decodeObjectForKey:@"financingDetailMainColor"];
         _financingDetailMainAlpha = [aDecoder decodeFloatForKey:@"financingDetailMainAlpha"];
         _financingDetailSecondaryColor = [aDecoder decodeObjectForKey:@"financingDetailSecondaryColor"];

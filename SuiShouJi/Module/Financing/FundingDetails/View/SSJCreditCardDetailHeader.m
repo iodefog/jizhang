@@ -110,7 +110,11 @@
 -(UILabel *)balanceTitleLab{
     if (!_balanceTitleLab) {
         _balanceTitleLab = [[UILabel alloc]init];
-        _balanceTitleLab.textColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:0.5];
+        if (SSJ_CURRENT_THEME.financingDetailSecondaryColor.length) {
+            _balanceTitleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailSecondaryColor alpha:SSJ_CURRENT_THEME.financingDetailSecondaryAlpha];
+        } else {
+            _balanceTitleLab.textColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:0.5];
+        }
         _balanceTitleLab.font = [UIFont systemFontOfSize:11];
         [_balanceTitleLab sizeToFit];
     }
@@ -120,7 +124,11 @@
 -(UILabel *)balanceLab{
     if (!_balanceLab) {
         _balanceLab = [[UILabel alloc]init];
-        _balanceLab.textColor = [UIColor ssj_colorWithHex:@"#ffffff"];
+        if (SSJ_CURRENT_THEME.financingDetailMainColor.length) {
+            _balanceLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailMainColor alpha:SSJ_CURRENT_THEME.financingDetailMainAlpha];
+        } else {
+            _balanceLab.textColor = [UIColor ssj_colorWithHex:@"#ffffff"];
+        }
         _balanceLab.font = [UIFont systemFontOfSize:24];
     }
     return _balanceLab;
@@ -129,7 +137,11 @@
 -(UILabel *)limitTitleLab{
     if (!_limitTitleLab) {
         _limitTitleLab = [[UILabel alloc]init];
-        _limitTitleLab.textColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:0.5];
+        if (SSJ_CURRENT_THEME.financingDetailSecondaryColor.length) {
+            _limitTitleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailSecondaryColor alpha:SSJ_CURRENT_THEME.financingDetailSecondaryAlpha];
+        } else {
+            _limitTitleLab.textColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:0.5];
+        }
         _limitTitleLab.font = [UIFont systemFontOfSize:11];
         _limitTitleLab.text = @"信用额度";
         [_limitTitleLab sizeToFit];
@@ -140,7 +152,11 @@
 -(UILabel *)limitLab{
     if (!_limitLab) {
         _limitLab = [[UILabel alloc]init];
-        _limitLab.textColor = [UIColor ssj_colorWithHex:@"#ffffff"];
+        if (SSJ_CURRENT_THEME.financingDetailMainColor.length) {
+            _limitLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailMainColor alpha:SSJ_CURRENT_THEME.financingDetailMainAlpha];
+        } else {
+            _limitLab.textColor = [UIColor ssj_colorWithHex:@"#ffffff"];
+        }
         _limitLab.font = [UIFont systemFontOfSize:15];
     }
     return _limitLab;
@@ -149,7 +165,11 @@
 -(UILabel *)repaymentDayTitleLab{
     if (!_repaymentDayTitleLab) {
         _repaymentDayTitleLab = [[UILabel alloc]init];
-        _repaymentDayTitleLab.textColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:0.5];
+        if (SSJ_CURRENT_THEME.financingDetailSecondaryColor.length) {
+            _repaymentDayTitleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailSecondaryColor alpha:SSJ_CURRENT_THEME.financingDetailSecondaryAlpha];
+        } else {
+            _repaymentDayTitleLab.textColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:0.5];
+        }
         _repaymentDayTitleLab.font = [UIFont systemFontOfSize:11];
         _repaymentDayTitleLab.text = @"还款日";
         [_repaymentDayTitleLab sizeToFit];
@@ -160,7 +180,11 @@
 -(UILabel *)repaymentDayLab{
     if (!_repaymentDayLab) {
         _repaymentDayLab = [[UILabel alloc]init];
-        _repaymentDayLab.textColor = [UIColor ssj_colorWithHex:@"#ffffff"];
+        if (SSJ_CURRENT_THEME.financingDetailMainColor.length) {
+            _repaymentDayLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailMainColor alpha:SSJ_CURRENT_THEME.financingDetailMainAlpha];
+        } else {
+            _repaymentDayLab.textColor = [UIColor ssj_colorWithHex:@"#ffffff"];
+        }
         _repaymentDayLab.font = [UIFont systemFontOfSize:15];
     }
     return _repaymentDayLab;
@@ -169,7 +193,11 @@
 -(UILabel *)billingDayTitleLab{
     if (!_billingDayTitleLab) {
         _billingDayTitleLab = [[UILabel alloc]init];
-        _billingDayTitleLab.textColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:0.5];
+        if (SSJ_CURRENT_THEME.financingDetailSecondaryColor.length) {
+            _billingDayTitleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailSecondaryColor alpha:SSJ_CURRENT_THEME.financingDetailSecondaryAlpha];
+        } else {
+            _billingDayTitleLab.textColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:0.5];
+        }
         _billingDayTitleLab.font = [UIFont systemFontOfSize:11];
         _billingDayTitleLab.text = @"账单日";
         [_billingDayTitleLab sizeToFit];
@@ -180,7 +208,11 @@
 -(UILabel *)billingDayLab{
     if (!_billingDayLab) {
         _billingDayLab = [[UILabel alloc]init];
-        _billingDayLab.textColor = [UIColor ssj_colorWithHex:@"#ffffff"];
+        if (SSJ_CURRENT_THEME.financingDetailMainColor.length) {
+            _billingDayLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailMainColor alpha:SSJ_CURRENT_THEME.financingDetailMainAlpha];
+        } else {
+            _billingDayLab.textColor = [UIColor ssj_colorWithHex:@"#ffffff"];
+        }
         _billingDayLab.font = [UIFont systemFontOfSize:15];
     }
     return _billingDayLab;
@@ -189,7 +221,11 @@
 -(UIView *)horizontalSeperatorLine{
     if (!_horizontalSeperatorLine) {
         _horizontalSeperatorLine = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 290, 1 / [UIScreen mainScreen].scale)];
-        _horizontalSeperatorLine.backgroundColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:0.5];
+        if (SSJ_CURRENT_THEME.financingDetailSecondaryColor.length) {
+            _horizontalSeperatorLine.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailSecondaryColor alpha:SSJ_CURRENT_THEME.financingDetailSecondaryAlpha];
+        } else {
+            _horizontalSeperatorLine.backgroundColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:0.5];
+        }
     }
     return _horizontalSeperatorLine;
 }
@@ -197,7 +233,11 @@
 -(UIView *)firstVerticalSeperatorLine{
     if (!_firstVerticalSeperatorLine) {
         _firstVerticalSeperatorLine = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 1 / [UIScreen mainScreen].scale, 40)];
-        _firstVerticalSeperatorLine.backgroundColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:0.5];
+        if (SSJ_CURRENT_THEME.financingDetailSecondaryColor.length) {
+            _firstVerticalSeperatorLine.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailSecondaryColor alpha:SSJ_CURRENT_THEME.financingDetailSecondaryAlpha];
+        } else {
+            _firstVerticalSeperatorLine.backgroundColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:0.5];
+        }
     }
     return _firstVerticalSeperatorLine;
 }
@@ -205,7 +245,11 @@
 -(UIView *)secondVerticalSeperatorLine{
     if (!_secondVerticalSeperatorLine) {
         _secondVerticalSeperatorLine = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 1 / [UIScreen mainScreen].scale, 40)];
-        _secondVerticalSeperatorLine.backgroundColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:0.5];
+        if (SSJ_CURRENT_THEME.financingDetailSecondaryColor.length) {
+            _secondVerticalSeperatorLine.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailSecondaryColor alpha:SSJ_CURRENT_THEME.financingDetailSecondaryAlpha];
+        } else {
+            _secondVerticalSeperatorLine.backgroundColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:0.5];
+        }
     }
     return _secondVerticalSeperatorLine;
 }
