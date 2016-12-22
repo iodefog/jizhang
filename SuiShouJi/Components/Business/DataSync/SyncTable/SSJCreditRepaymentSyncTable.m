@@ -58,7 +58,8 @@
         if ([db intForQuery:@"select count(1) from bk_credit_repayment where cuserid = ? and crepaymentmonth = ? and iinstalmentcount > 0 and operatortype <> 2",userId,month] && [instalmentcount integerValue]) {
             // 首先判断当月有没有分期,如果有,则直接抛弃这条数据
             if (localOperatortype == 1 || localOperatortype == 0) {
-                // 如果本地有一条已经删除的数据
+                // 如果本地有一条已经删除的数据,则抛弃这条数据
+                
             }
             
         }
