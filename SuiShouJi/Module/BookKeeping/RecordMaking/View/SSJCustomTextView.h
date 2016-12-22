@@ -15,5 +15,8 @@
 @property(nonatomic,copy) NSString *placeholder;  //文字
 
 @property(nonatomic,strong) UIColor *placeholderColor; //文字颜色
-
+/**
+ placeholder距离上边距的距离
+ */
+@property (nonatomic, assign) CGFloat placeholderTopConst;
 @end

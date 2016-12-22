@@ -28,7 +28,6 @@
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    self.placeholderLabel.top = 25;
     self.placeholderLabel.left =5;
     self.placeholderLabel.width =self.width - self.placeholderLabel.left*2.0;
     CGSize maxSize =CGSizeMake(self.placeholderLabel.width,MAXFLOAT);
@@ -39,6 +38,12 @@
     [super setText:text];
     [self textDidChange];
     
+}
+
+- (void)setPlaceholderTopConst:(CGFloat)placeholderTopConst
+{
+    _placeholderTopConst = placeholderTopConst;
+    self.placeholderLabel.top = 7;
 }
 
 -(void)setPlaceholder:(NSString *)placeholder{

@@ -37,6 +37,7 @@ static NSInteger padding = 15;
         [self.bgview addSubview:self.textView];
         [self.bgview addSubview:self.submitButton];
         [self.bottomBgview addSubview:self.fanKuiLabel];
+        self.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
     }
     return self;
 }
@@ -92,7 +93,6 @@ static NSInteger padding = 15;
         _textField.layer.borderColor = [UIColor ssj_colorWithHex:@"dddddd"].CGColor;
         _textField.textColor = [UIColor ssj_colorWithHex:@"333333"];
         [_textField setValue: [UIColor ssj_colorWithHex:@"cccccc"] forKeyPath:@"_placeholderLabel.textColor"];
-        
         UIView *leftview = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 5, _textField.height)];
         _textField.leftViewMode = UITextFieldViewModeAlways;
         _textField.leftView = leftview;
@@ -111,10 +111,12 @@ static NSInteger padding = 15;
         _textView.layer.cornerRadius = 5;
         _textView.clipsToBounds = YES;
         _textView.backgroundColor = [UIColor clearColor];
+        _textView.contentMode = UIViewContentModeCenter;
         _textView.layer.borderColor = [UIColor ssj_colorWithHex:@"dddddd"].CGColor;
         _textView.textColor = [UIColor ssj_colorWithHex:@"333333"];
         _textView.placeholderColor = [UIColor ssj_colorWithHex:@"cccccc"];
         _textView.layer.borderWidth = 0.5;
+        _textView.placeholderTopConst = 0;
     }
     return _textView;
 }

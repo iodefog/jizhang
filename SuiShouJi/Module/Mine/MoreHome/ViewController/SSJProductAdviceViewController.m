@@ -38,7 +38,8 @@
     [super viewDidLoad];
     [self.view addSubview:self.tableView];
     [self setUpNav];
-//    self.automaticallyAdjustsScrollViewInsets = NO;
+    self.backgroundView.hidden = YES;
+    self.view.backgroundColor = [UIColor whiteColor];
 }
 
 - (void)viewWillAppear:(BOOL)animated
