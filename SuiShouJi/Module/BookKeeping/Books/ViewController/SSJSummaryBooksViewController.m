@@ -281,8 +281,7 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
         return;
     }
     
-    [SSJReportFormsUtil queryForBillStatisticsWithTimeDimension:dimension startDate:period.startDate endDate:period.endDate booksId:@"all" success:^(NSDictionary *result) {
-        
+    [SSJReportFormsUtil queryForBillStatisticsWithTimeDimension:dimension booksId:@"all" billTypeId:nil startDate:period.startDate endDate:period.endDate success:^(NSDictionary *result) {
         [self.view ssj_hideLoadingIndicator];
         _curveItems = result[SSJReportFormsCurveModelListKey];
         

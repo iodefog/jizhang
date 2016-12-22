@@ -74,9 +74,10 @@ extern NSString *const SSJReportFormsCurveModelEndDateKey;
  *  @param failure      查询失败的回调
  */
 + (void)queryForBillStatisticsWithTimeDimension:(SSJTimeDimension)dimension
+                                        booksId:(NSString *)booksId
+                                     billTypeId:(NSString *)billTypeId
                                       startDate:(NSDate *)startDate
                                         endDate:(NSDate *)endDate
-                                        booksId:(NSString *)booksId
                                         success:(void(^)(NSDictionary *result))success
                                         failure:(void (^)(NSError *error))failure;
 

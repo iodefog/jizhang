@@ -246,6 +246,13 @@ static const unsigned int kAllCalendarUnitFlags = NSCalendarUnitYear | NSCalenda
     return NO;
 }
 
+#pragma mark - NSCopying
+- (instancetype)copyWithZone:(NSZone *)zone {
+    SSJDatePeriod *period = [[SSJDatePeriod alloc] initWithPeriodType:_periodType date:_startDate];
+    return period;
+}
+
+#pragma mark - NSObject
 - (BOOL)isEqual:(id)object {
     if (![object isKindOfClass:[self class]]) {
         return NO;

@@ -18,4 +18,6 @@
 
 @property (nonatomic) CGFloat scale;
 
+@property (nonatomic, copy) NSString *billTypeId;
+
 @end
