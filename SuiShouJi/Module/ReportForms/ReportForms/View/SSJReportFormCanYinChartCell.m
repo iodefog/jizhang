@@ -32,6 +32,7 @@
         [self.contentView addSubview:self.ratioLabel];
         [self.contentView addSubview:self.amountLabel];
         self.dateLabel.font = self.ratioLabel.font = self.amountLabel.font = [UIFont systemFontOfSize:14];
+        [self updateAppearance];
     }
     return self;
 }
@@ -187,10 +188,14 @@
     return _amountLabel;
 }
 
+- (void)updateAppearance
+{
+    self.ratioLabel.textColor = self.amountLabel.textColor = self.dateLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+}
 - (void)updateCellAppearanceAfterThemeChanged
 {
-   self.ratioLabel.textColor = self.amountLabel.textColor = self.dateLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-    
+    [super updateCellAppearanceAfterThemeChanged];
+    [self updateAppearance];
 }
 
 /*
