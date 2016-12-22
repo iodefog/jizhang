@@ -34,11 +34,13 @@
 @implementation SSJReportFormsCurveGraphView (SSJTheme)
 
 - (void)updateAppearanceAccordToTheme {
-    self.scaleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-    self.paymentCurveColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurvePaymentColor];
-    self.incomeCurveColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurveIncomeColor];
-    self.balloonColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor];
+    self.scaleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor];
+    self.balloonTitleAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:13],
+                                    NSForegroundColorAttributeName:[UIColor whiteColor],
+                                    NSBackgroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor]};
     self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
 }
 
 @end
+
+

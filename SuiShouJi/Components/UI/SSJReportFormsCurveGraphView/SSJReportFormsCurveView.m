@@ -1,337 +1,200 @@
 //
 //  SSJReportFormsCurveView.m
-//  SSJCurveGraphDemo
+//  SSJCurveGraphView
 //
-//  Created by old lang on 16/6/3.
+//  Created by old lang on 16/12/16.
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
 
 #import "SSJReportFormsCurveView.h"
-#import "UIBezierPath+LxThroughPointsBezier.h"
-
-void MyCGPathApplierFunc (void *info, const CGPathElement *element) {
-    NSMutableDictionary *mapping = (__bridge NSMutableDictionary *)info;
-    
-    CGPoint *points = element->points;
-    CGPathElementType type = element->type;
-    
-    switch(type) {
-        case kCGPathElementMoveToPoint: {
-            // contains 1 point
-            CGPoint point = points[0];
-            [mapping setObject:@(point.y) forKey:@(point.x)];
-        }
-            break;
-            
-        case kCGPathElementAddLineToPoint: {
-            // contains 1 point
-            CGPoint point = points[0];
-            [mapping setObject:@(point.y) forKey:@(point.x)];
-        }
-            break;
-            
-        case kCGPathElementAddQuadCurveToPoint: {
-            // contains 2 points
-            CGPoint point1 = points[0];
-            CGPoint point2 = points[1];
-            
-            [mapping setObject:@(point1.y) forKey:@(point1.x)];
-            [mapping setObject:@(point2.y) forKey:@(point2.x)];
-        }
-            break;
-            
-        case kCGPathElementAddCurveToPoint: {
-            // contains 3 points
-            CGPoint point1 = points[0];
-            CGPoint point2 = points[1];
-            CGPoint point3 = points[2];
-            
-            [mapping setObject:@(point1.y) forKey:@(point1.x)];
-            [mapping setObject:@(point2.y) forKey:@(point2.x)];
-            [mapping setObject:@(point3.y) forKey:@(point3.x)];
-        }
-            break;
-            
-        case kCGPathElementCloseSubpath: // contains no point
-            break;
-    }
-}
+#import "SSJReportFormsCurveViewItem.h"
+#import "SSJReportFormsCurveDot.h"
 
 @interface SSJReportFormsCurveView ()
 
-@property (nonatomic, strong) UIBezierPath *incomeCurvePath;
+@property (nonatomic, strong) UIBezierPath *curvePath;
 
-@property (nonatomic, strong) UIBezierPath *incomeShadowPath;
+@property (nonatomic, strong) UIBezierPath *curveShadowPath;
 
-@property (nonatomic, strong) UIBezierPath *incomeFillPath;
+@property (nonatomic, strong) SSJReportFormsCurveDot *dot;
 
-@property (nonatomic, strong) UIBezierPath *paymentCurvePath;
+@property (nonatomic, strong) UILabel *valueLab;
 
-@property (nonatomic, strong) UIBezierPath *paymentShadowPath;
+@property (nonatomic, strong) NSSet *observedCurveProperies;
 
-@property (nonatomic, strong) UIBezierPath *paymentFillPath;
+@property (nonatomic, strong) NSSet *observedDotProperies;
 
-@property (nonatomic, strong) NSMutableDictionary *incomePointMapping;
-
-@property (nonatomic, strong) NSMutableDictionary *paymentPointMapping;
+@property (nonatomic, strong) NSSet *observedLabelProperies;
 
 @end
 
 @implementation SSJReportFormsCurveView
 
+- (void)dealloc {
+    [self removeObserver];
+}
+
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
+        
+        _observedCurveProperies = [[NSSet alloc] initWithObjects:@"startPoint",
+                                   @"endPoint",
+                                   @"showCurve",
+                                   @"curveWidth",
+                                   @"curveColor",
+                                   @"showShadow",
+                                   @"shadowWidth",
+                                   @"shadowOffset",
+                                   @"shadowAlpha", nil];
+        
+        _observedDotProperies = [[NSSet alloc] initWithObjects:@"showValue",
+                                 @"value",
+                                 @"valueColor",
+                                 @"valueFont", nil];
+        
+        _observedLabelProperies = [[NSSet alloc] initWithObjects:@"showDot",
+                                   @"dotColor",
+                                   @"dotAlpha", nil];
+        
+        _curvePath = [UIBezierPath bezierPath];
+        _curveShadowPath = [UIBezierPath bezierPath];
+        
+        _dot = [[SSJReportFormsCurveDot alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
+        _dot.outerRadius = 8;
+        _dot.innerRadius = 4;
+        [self addSubview:_dot];
+        
+        _valueLab = [[UILabel alloc] init];
+        [self addSubview:_valueLab];
+        
         self.backgroundColor = [UIColor clearColor];
-        
-        _shadowOffset = CGPointZero;
-        
-        _incomeCurvePath = [UIBezierPath bezierPath];
-        _incomeShadowPath = [UIBezierPath bezierPath];
-        _incomeFillPath = [UIBezierPath bezierPath];
-        
-        _paymentCurvePath = [UIBezierPath bezierPath];
-        _paymentShadowPath = [UIBezierPath bezierPath];
-        _incomeFillPath = [UIBezierPath bezierPath];
-        
-        _incomePointMapping = [NSMutableDictionary dictionary];
-        _paymentPointMapping = [NSMutableDictionary dictionary];
     }
     return self;
 }
 
 - (void)layoutSubviews {
-    [self updateIncomePath];
-    [self updatePaymentPath];
+    _dot.center = _item.endPoint;
+    
+    [_valueLab sizeToFit];
+    _valueLab.leftTop = CGPointMake(_item.endPoint.x + _dot.outerRadius, _item.endPoint.y + _dot.outerRadius);
 }
 
 - (void)drawRect:(CGRect)rect {
     
     CGContextRef ctx = UIGraphicsGetCurrentContext();
-    CGContextSetBlendMode(ctx, kCGBlendModeXOR);
     
-    // 填充颜色
-    if (_fillCurve) {
-        if (!_incomeFillPath.empty) {
-            CGContextSetFillColorWithColor(ctx, _incomeFillColor.CGColor);
-            CGContextAddPath(ctx, _incomeFillPath.CGPath);
-            CGContextDrawPath(ctx, kCGPathFill);
-        }
-        
-        if (!_paymentFillPath.empty) {
-            CGContextSetFillColorWithColor(ctx, _paymentFillColor.CGColor);
-            CGContextAddPath(ctx, _paymentFillPath.CGPath);
-            CGContextDrawPath(ctx, kCGPathFill);
-        }
-    }
-    
-    // 曲线
-    CGContextSetLineWidth(ctx, 1);
-    
-    if (!_incomeCurvePath.empty) {
-        CGContextSetStrokeColorWithColor(ctx, _incomeCurveColor.CGColor);
-        CGContextAddPath(ctx, _incomeCurvePath.CGPath);
+    if (_item.showCurve) {
+        [self updateCurvePath];
+        CGContextSetLineWidth(ctx, _item.curveWidth);
+        CGContextSetStrokeColorWithColor(ctx, _item.curveColor.CGColor);
+        CGContextAddPath(ctx, _curvePath.CGPath);
         CGContextDrawPath(ctx, kCGPathStroke);
     }
     
-    if (!_paymentCurvePath.empty) {
-        CGContextSetStrokeColorWithColor(ctx, _paymentCurveColor.CGColor);
-        CGContextAddPath(ctx, _paymentCurvePath.CGPath);
+    if (_item.showShadow) {
+        [self updateShadowCurvePath];
+        CGContextSetLineWidth(ctx, _item.shadowWidth);
+        CGContextSetStrokeColorWithColor(ctx, [_item.curveColor colorWithAlphaComponent:_item.shadowAlpha].CGColor);
+        CGContextAddPath(ctx, _curveShadowPath.CGPath);
         CGContextDrawPath(ctx, kCGPathStroke);
     }
+}
+
+- (void)setItem:(SSJReportFormsCurveViewItem *)item {
     
-    // 曲线阴影
-    if (_showShadow) {
-        if (!_incomeShadowPath.empty) {
-            CGContextSetStrokeColorWithColor(ctx, [_incomeCurveColor colorWithAlphaComponent:0.5].CGColor);
-            CGContextAddPath(ctx, _incomeShadowPath.CGPath);
-            CGContextDrawPath(ctx, kCGPathStroke);
-        }
-        
-        if (!_paymentShadowPath.empty) {
-            CGContextSetStrokeColorWithColor(ctx, [_paymentCurveColor colorWithAlphaComponent:0.5].CGColor);
-            CGContextAddPath(ctx, _paymentShadowPath.CGPath);
-            CGContextDrawPath(ctx, kCGPathStroke);
-        }
-    }
-}
-
-- (void)setIncomeValues:(NSArray *)incomeValues {
-    if (![_incomeValues isEqualToArray:incomeValues]) {
-        _incomeValues = incomeValues;
-        [self updateIncomePath];
-        [self setNeedsDisplay];
-    }
-}
-
-- (void)setPaymentValues:(NSArray *)paymentValues {
-    if (![_paymentValues isEqualToArray:paymentValues]) {
-        _paymentValues = paymentValues;
-        [self updatePaymentPath];
-        [self setNeedsDisplay];
-    }
-}
-
-- (void)setShadowOffset:(CGPoint)shadowOffset {
-    if (!CGPointEqualToPoint(_shadowOffset, shadowOffset)) {
-        _shadowOffset = shadowOffset;
-        
-        if (_showShadow) {
-            [self updateCurveShadowPath:_incomeShadowPath withValues:_incomeValues];
-            [self updateCurveShadowPath:_paymentShadowPath withValues:_paymentValues];
-            [self setNeedsDisplay];
-        }
-    }
-}
-
-- (void)setShowShadow:(BOOL)showShadow {
-    if (_showShadow != showShadow) {
-        _showShadow = showShadow;
-        [self setNeedsDisplay];
-    }
-}
-
-- (void)setFillCurve:(BOOL)fillCurve {
-    if (_fillCurve != fillCurve) {
-        _fillCurve = fillCurve;
-        [self setNeedsDisplay];
-    }
-}
-
-- (void)setPaymentCurveColor:(UIColor *)paymentCurveColor {
-    if (!CGColorEqualToColor(_paymentCurveColor.CGColor, paymentCurveColor.CGColor)) {
-        _paymentCurveColor = paymentCurveColor;
-        [self setNeedsDisplay];
-    }
-}
-
-- (void)setIncomeCurveColor:(UIColor *)incomeCurveColor {
-    if (!CGColorEqualToColor(_incomeCurveColor.CGColor, incomeCurveColor.CGColor)) {
-        _incomeCurveColor = incomeCurveColor;
-        [self setNeedsDisplay];
-    }
-}
-
-- (void)setPaymentFillColor:(UIColor *)paymentFillColor {
-    if (!CGColorEqualToColor(_paymentFillColor.CGColor, paymentFillColor.CGColor)) {
-        _paymentFillColor = paymentFillColor;
-        [self setNeedsDisplay];
-    }
-}
-
-- (void)setIncomeFillColor:(UIColor *)incomeFillColor {
-    if (!CGColorEqualToColor(_incomeFillColor.CGColor, incomeFillColor.CGColor)) {
-        _incomeFillColor = incomeFillColor;
-        [self setNeedsDisplay];
-    }
-}
-
-- (CGFloat)paymentAxisYAtAxisX:(CGFloat)axisX {
-    return [_paymentPointMapping[@(axisX)] floatValue];
-}
-
-- (CGFloat)incomeAxisYAtAxisX:(CGFloat)axisX {
-    return [_incomePointMapping[@(axisX)] floatValue];
-}
-
-- (void)updateIncomePath {
-    [self updateCurvePath:_incomeCurvePath withValues:_incomeValues];
-    
-    if (_showShadow) {
-        [self updateCurveShadowPath:_incomeShadowPath withValues:_incomeValues];
-    }
-    
-    if (_fillCurve) {
-        [self updateFillPath:_incomeFillPath withCurvePath:_incomeCurvePath];
-    }
-    
-    // 这个方法只能取到贝塞尔曲线的起始点、终点、两个控制点
-//    CGPathApply(_incomeCurvePath.CGPath, (__bridge void * _Nullable)(_incomePointMapping), MyCGPathApplierFunc);
-}
-
-- (void)updatePaymentPath {
-    [self updateCurvePath:_paymentCurvePath withValues:_paymentValues];
-    
-    if (_showShadow) {
-        [self updateCurveShadowPath:_paymentShadowPath withValues:_paymentValues];
-    }
-    
-    if (_fillCurve) {
-        [self updateFillPath:_paymentFillPath withCurvePath:_paymentCurvePath];
-    }
-    
-    // 这个方法只能取到贝塞尔曲线的起始点、终点、两个控制点
-//    CGPathApply(_paymentCurvePath.CGPath, (__bridge void * _Nullable)(_paymentPointMapping), MyCGPathApplierFunc);
-}
-
-- (void)updateCurvePath:(UIBezierPath *)path withValues:(NSArray *)values {
-    if (!path || !values.count || CGRectIsEmpty(self.bounds)) {
+    if (!item) {
+        SSJPRINT(@"item不能为nil");
         return;
     }
     
-    [path removeAllPoints];
+    BOOL needsToRedraw = (!_item || ![_item isCurveInfoEqualToItem:item]);
     
-    CGRect contentFrame = UIEdgeInsetsInsetRect(self.bounds, _contentInsets);
+    [self removeObserver];
+    _item = item;
+    [self addObserver];
     
-    CGFloat unitX = contentFrame.size.width / (values.count - 1);
-    for (int i = 0; i < values.count; i ++) {
-        NSNumber *value = values[i];
-        CGFloat x = unitX * i + contentFrame.origin.x;
-        CGFloat y = contentFrame.size.height * (1 - [value floatValue] / _maxValue) + contentFrame.origin.y;
-        
-        CGPoint point = CGPointMake(x, y);
-        if (i == 0) {
-            [path moveToPoint:point];
-        } else {
-            CGFloat offset = (point.x - path.currentPoint.x) * 0.35;
-            CGPoint controlPoint1 = CGPointMake(path.currentPoint.x + offset, path.currentPoint.y);
-            CGPoint controlPoint2 = CGPointMake(point.x - offset, point.y);
-            [path addCurveToPoint:point controlPoint1:controlPoint1 controlPoint2:controlPoint2];
-        }
+    [self updateDot];
+    [self updateDot];
+    if (needsToRedraw) {
+        [self setNeedsDisplay];
     }
 }
 
-- (void)updateCurveShadowPath:(UIBezierPath *)path withValues:(NSArray *)values {
-    if (!path || !values.count || CGRectIsEmpty(self.bounds)) {
-        return;
-    }
+- (void)updateCurvePath {
+    [_curvePath removeAllPoints];
     
-    [path removeAllPoints];
+    CGFloat offset = (_item.endPoint.x - _item.startPoint.x) * 0.35;
+    CGPoint controlPoint1 = CGPointMake(_item.startPoint.x + offset, _item.startPoint.y);
+    CGPoint controlPoint2 = CGPointMake(_item.endPoint.x - offset, _item.endPoint.y);
     
-    CGRect contentFrame = UIEdgeInsetsInsetRect(self.bounds, _contentInsets);
+    [_curvePath moveToPoint:_item.startPoint];
+    [_curvePath addCurveToPoint:_item.endPoint controlPoint1:controlPoint1 controlPoint2:controlPoint2];
+}
+
+- (void)updateShadowCurvePath {
+    [_curveShadowPath removeAllPoints];
     
-    CGFloat unitX = contentFrame.size.width / (values.count - 1);
-    for (int i = 0; i < values.count; i ++) {
-        NSNumber *value = values[i];
-        CGFloat x = unitX * i + contentFrame.origin.x;
-        CGFloat y = contentFrame.size.height * (1 - [value floatValue] / _maxValue) + contentFrame.origin.y;
-        
-        x += _shadowOffset.x;
-        y += _shadowOffset.y;
-        
-        CGPoint point = CGPointMake(x, y);
-        if (i == 0) {
-            [path moveToPoint:point];
-        } else {
-            CGFloat offset = (point.x - path.currentPoint.x) * 0.35;
-            CGPoint controlPoint1 = CGPointMake(path.currentPoint.x + offset + _shadowOffset.x, path.currentPoint.y + _shadowOffset.y);
-            CGPoint controlPoint2 = CGPointMake(point.x - offset + _shadowOffset.x, point.y + _shadowOffset.y);
-            [path addCurveToPoint:point controlPoint1:controlPoint1 controlPoint2:controlPoint2];
-        }
+    CGPoint startPoint = CGPointMake(_item.startPoint.x + _item.shadowOffset.x, _item.startPoint.y + _item.shadowOffset.y);
+    CGPoint endPoint = CGPointMake(_item.endPoint.x + _item.shadowOffset.x, _item.endPoint.y + _item.shadowOffset.y);
+    
+    CGFloat offset = (_item.endPoint.x - _item.startPoint.x) * 0.35;
+    CGPoint controlPoint1 = CGPointMake(startPoint.x + offset, startPoint.y);
+    CGPoint controlPoint2 = CGPointMake(endPoint.x - offset, endPoint.y);
+    
+    [_curveShadowPath moveToPoint:startPoint];
+    [_curveShadowPath addCurveToPoint:endPoint controlPoint1:controlPoint1 controlPoint2:controlPoint2];
+}
+
+- (void)updateDot {
+    _dot.dotColor = _item.dotColor;
+    _dot.outerColorAlpha = _item.dotAlpha;
+    _dot.hidden = !_item.showDot;
+}
+
+- (void)updateValueLabel {
+    _valueLab.hidden = !_item.showValue;
+    _valueLab.textColor = _item.valueColor;
+    _valueLab.font = _item.valueFont;
+    _valueLab.text = _item.value;
+}
+
+- (void)observeValueForKeyPath:(nullable NSString *)keyPath ofObject:(nullable id)object change:(nullable NSDictionary<NSKeyValueChangeKey, id> *)change context:(nullable void *)context {
+    
+    if ([_observedCurveProperies containsObject:keyPath]) {
+        [self setNeedsDisplay];
+    } else if ([_observedDotProperies containsObject:keyPath]) {
+        [self updateDot];
+    } else if ([_observedLabelProperies containsObject:keyPath]) {
+        [self updateValueLabel];
     }
 }
 
-- (void)updateFillPath:(UIBezierPath *)fillPath withCurvePath:(UIBezierPath *)curvePath {
-    if (curvePath.empty) {
-        return;
+- (void)addObserver {
+    for (NSString *property in _observedCurveProperies) {
+        [_item addObserver:self forKeyPath:property options:NSKeyValueObservingOptionNew context:NULL];
     }
     
-    [fillPath removeAllPoints];
+    for (NSString *property in _observedDotProperies) {
+        [_item addObserver:self forKeyPath:property options:NSKeyValueObservingOptionNew context:NULL];
+    }
     
-    CGRect contentFrame = UIEdgeInsetsInsetRect(self.bounds, _contentInsets);
-    [fillPath appendPath:curvePath];
-    [fillPath addLineToPoint:CGPointMake(CGRectGetMaxX(contentFrame), CGRectGetMaxY(contentFrame))];
-    [fillPath addLineToPoint:CGPointMake(CGRectGetMinX(contentFrame), CGRectGetMaxY(contentFrame))];
-    [fillPath closePath];
+    for (NSString *property in _observedLabelProperies) {
+        [_item addObserver:self forKeyPath:property options:NSKeyValueObservingOptionNew context:NULL];
+    }
+}
+
+- (void)removeObserver {
+    for (NSString *property in _observedCurveProperies) {
+        [_item removeObserver:self forKeyPath:property];
+    }
+    
+    for (NSString *property in _observedDotProperies) {
+        [_item removeObserver:self forKeyPath:property];
+    }
+    
+    for (NSString *property in _observedLabelProperies) {
+        [_item removeObserver:self forKeyPath:property];
+    }
 }
 
 @end
