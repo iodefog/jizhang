@@ -10,20 +10,24 @@
 
 @implementation SSJReportFormsCurveModel
 
-+ (instancetype)modelWithPayment:(NSString *)payment income:(NSString *)income time:(NSString *)time period:(SSJDatePeriod *)period {
++ (instancetype)modelWithPayment:(double)payment
+                          income:(double)income
+                       startDate:(NSDate *)startDate
+                         endDate:(NSDate *)endDate {
+    
     SSJReportFormsCurveModel *model = [[SSJReportFormsCurveModel alloc] init];
     model.payment = payment;
     model.income = income;
-    model.time = time;
-    model.period = period;
+    model.startDate = startDate;
+    model.endDate = endDate;
     return model;
 }
 
 - (NSString *)debugDescription {
-    return [NSString stringWithFormat:@"<%@>:%@", self, @{@"payment":_payment,
-                                                          @"income":_income,
-                                                          @"time":_time,
-                                                          @"period":_period}];
+    return [NSString stringWithFormat:@"<%@>:%@", self, @{@"payment":@(_payment),
+                                                          @"income":@(_income),
+                                                          @"startDate":_startDate ?: [NSNull null],
+                                                          @"endDate":_endDate ?: [NSNull null]}];
 }
 
 

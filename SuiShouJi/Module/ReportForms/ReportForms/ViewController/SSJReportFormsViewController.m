@@ -470,8 +470,8 @@ static NSString *const kSegmentTitleIncome = @"收入";
     double income = 0;
     double payment = 0;
     for (SSJReportFormsCurveModel *model in curveModels) {
-        income += [model.income doubleValue];
-        payment += [model.payment doubleValue];
+        income += model.income;
+        payment += model.payment;
     }
     
     int dayCount = dayCount = [period.endDate timeIntervalSinceDate:period.startDate] / (24 * 60 * 60);

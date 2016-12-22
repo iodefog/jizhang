@@ -117,9 +117,9 @@ static const CGFloat kSeparatorFormViewHeight = 88;
     
     SSJReportFormsCurveModel *model = [self.item.curveModels ssj_safeObjectAtIndex:axisXIndex];
     if (curveIndex == 0) {  // 支出
-        return [model.payment floatValue];
+        return model.payment;
     } else if (curveIndex == 1) { // 收入
-        return [model.income floatValue];
+        return model.income;
     } else {
         return 0;
     }
@@ -127,7 +127,24 @@ static const CGFloat kSeparatorFormViewHeight = 88;
 
 - (NSString *)curveGraphView:(SSJReportFormsCurveGraphView *)graphView titleAtAxisXIndex:(NSUInteger)index {
     SSJReportFormsCurveModel *model = [self.item.curveModels ssj_safeObjectAtIndex:index];
-    return model.time;
+    switch (_item.timeDimension) {
+        case SSJTimeDimensionDay: {
+            return [model.startDate formattedDateWithFormat:@"dd日"];
+        }
+            break;
+            
+        case SSJTimeDimensionWeek: {
+            NSString *startDateStr = [model.startDate formattedDateWithFormat:@"MM/dd"];
+            NSString *endDateStr = [model.endDate formattedDateWithFormat:@"MM/dd"];
+            return [NSString stringWithFormat:@"%@~%@", startDateStr, endDateStr];
+        }
+            break;
+            
+        case SSJTimeDimensionMonth: {
+            return [model.startDate formattedDateWithFormat:@"MM月"];
+        }
+            break;
+    }
 }
 
 - (UIColor *)curveGraphView:(SSJReportFormsCurveGraphView *)graphView colorForCurveAtIndex:(NSUInteger)curveIndex {
@@ -146,15 +163,15 @@ static const CGFloat kSeparatorFormViewHeight = 88;
     if (index == 0) {
         switch (_item.timeDimension) {
             case SSJTimeDimensionDay:
-                return [model.period.startDate formattedDateWithFormat:@"M月"];
+                return [model.startDate formattedDateWithFormat:@"M月"];
                 break;
                 
             case SSJTimeDimensionWeek:
-                return [model.period.startDate formattedDateWithFormat:@"yyyy年"];
+                return [model.startDate formattedDateWithFormat:@"yyyy年"];
                 break;
                 
             case SSJTimeDimensionMonth:
-                return [model.period.startDate formattedDateWithFormat:@"yyyy年"];
+                return [model.startDate formattedDateWithFormat:@"yyyy年"];
                 break;
         }
     }
@@ -162,23 +179,23 @@ static const CGFloat kSeparatorFormViewHeight = 88;
     SSJReportFormsCurveModel *lastModel = [self.item.curveModels ssj_safeObjectAtIndex:index - 1];
     switch (_item.timeDimension) {
         case SSJTimeDimensionDay:
-            if (model.period.startDate.year != lastModel.period.startDate.year
-                || model.period.startDate.month != lastModel.period.startDate.month) {
-                return [model.period.startDate formattedDateWithFormat:@"M月"];
+            if (model.startDate.year != lastModel.startDate.year
+                || model.startDate.month != lastModel.startDate.month) {
+                return [model.startDate formattedDateWithFormat:@"M月"];
             }
             
             break;
             
         case SSJTimeDimensionWeek:
-            if (model.period.startDate.year != lastModel.period.startDate.year) {
-                return [model.period.startDate formattedDateWithFormat:@"yyyy年"];
+            if (model.startDate.year != lastModel.startDate.year) {
+                return [model.startDate formattedDateWithFormat:@"yyyy年"];
             }
             
             break;
             
         case SSJTimeDimensionMonth:
-            if (model.period.startDate.year != lastModel.period.startDate.year) {
-                return [model.period.startDate formattedDateWithFormat:@"yyyy年"];
+            if (model.startDate.year != lastModel.startDate.year) {
+                return [model.startDate formattedDateWithFormat:@"yyyy年"];
             }
             
             break;
@@ -194,16 +211,16 @@ static const CGFloat kSeparatorFormViewHeight = 88;
 
 - (NSString *)curveGraphView:(SSJReportFormsCurveGraphView *)graphView titleForBallonAtAxisXIndex:(NSUInteger)index {
     SSJReportFormsCurveModel *model = [self.item.curveModels ssj_safeObjectAtIndex:index];
-    NSString *surplusStr = [NSString stringWithFormat:@"%f", [model.income floatValue] - [model.payment floatValue]];
+    NSString *surplusStr = [NSString stringWithFormat:@"%f", (model.income - model.payment)];
     return [NSString stringWithFormat:@"结余%@", [surplusStr ssj_moneyDecimalDisplayWithDigits:2]];
 }
 
 - (NSString *)curveGraphView:(SSJReportFormsCurveGraphView *)graphView titleForBallonLabelAtCurveIndex:(NSUInteger)curveIndex axisXIndex:(NSUInteger)axisXIndex {
     SSJReportFormsCurveModel *model = [self.item.curveModels ssj_safeObjectAtIndex:axisXIndex];
     if (curveIndex == 0) { // 支出
-        return [NSString stringWithFormat:@"支出%@", [model.payment ssj_moneyDecimalDisplayWithDigits:2]];
+        return [NSString stringWithFormat:@"支出%@", [[NSString stringWithFormat:@"%f", model.payment] ssj_moneyDecimalDisplayWithDigits:2]];
     } else if (curveIndex == 1) { // 收入
-        return [NSString stringWithFormat:@"收入%@", [model.income ssj_moneyDecimalDisplayWithDigits:2]];
+        return [NSString stringWithFormat:@"收入%@", [[NSString stringWithFormat:@"%f", model.income] ssj_moneyDecimalDisplayWithDigits:2]];
     } else {
         return nil;
     }
@@ -239,7 +256,7 @@ static const CGFloat kSeparatorFormViewHeight = 88;
     _item = item;
     
     SSJReportFormsCurveModel *firstModel = [_item.curveModels firstObject];
-    self.descView.period = firstModel.period;
+    self.descView.period = [SSJDatePeriod datePeriodWithStartDate:firstModel.startDate endDate:firstModel.endDate];
     
     switch (_item.timeDimension) {
         case SSJTimeDimensionDay:
@@ -312,16 +329,29 @@ static const CGFloat kSeparatorFormViewHeight = 88;
 
 #pragma mark - Private
 - (void)updateCurveUnitAxisXLength {
-    if (_timePeriodSegmentControl.selectedIndex == 0
-        || _timePeriodSegmentControl.selectedIndex == 2) {
-        _curveView.unitAxisXLength = self.width / 7;
-    } else if (_timePeriodSegmentControl.selectedIndex == 1) {
-        _curveView.unitAxisXLength = self.width / 4;
+    switch (_item.timeDimension) {
+        case SSJTimeDimensionDay:
+        case SSJTimeDimensionMonth:
+            _curveView.unitAxisXLength = self.width / 7;
+            break;
+            
+        case SSJTimeDimensionWeek:
+            _curveView.unitAxisXLength = self.width / 4;
+            break;
     }
 }
 
 - (void)updateQuestionBtnHidden {
-    _questionBtn.hidden = (_timePeriodSegmentControl.selectedIndex == 0 || _timePeriodSegmentControl.selectedIndex == 2);
+    switch (_item.timeDimension) {
+        case SSJTimeDimensionDay:
+        case SSJTimeDimensionMonth:
+            _questionBtn.hidden = YES;
+            break;
+            
+        case SSJTimeDimensionWeek:
+            _questionBtn.hidden = NO;
+            break;
+    }
 }
 
 #pragma mark - Event

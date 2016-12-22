@@ -430,13 +430,13 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
                 }
             } else {
                 
-                [list addObject:[self modelWithPayment:payment income:income period:period]];
+                [list addObject:[SSJReportFormsCurveModel modelWithPayment:payment income:income startDate:period.startDate endDate:period.endDate]];
                 
                 SSJDatePeriod *currentPeriod = [SSJDatePeriod datePeriodWithPeriodType:periodType date:billDate];
                 NSArray *periods = [currentPeriod periodsFromPeriod:period];
                 for (int i = 0; i < periods.count - 1; i ++) {
                     SSJDatePeriod *addPeriod = periods[i];
-                    [list addObject:[self modelWithPayment:0 income:0 period:addPeriod]];
+                    [list addObject:[SSJReportFormsCurveModel modelWithPayment:0 income:0 startDate:addPeriod.startDate endDate:addPeriod.endDate]];
                 }
                 
                 period = currentPeriod;
@@ -453,8 +453,8 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
         if (period) {
             // 如果列表为空或者最后一个收支统计与当前收支统计的周期不一致，就把当前统计加入到列表中
             SSJReportFormsCurveModel *lastModel = [list lastObject];
-            if (!lastModel || [lastModel.period compareWithPeriod:period] != SSJDatePeriodComparisonResultSame) {
-                [list addObject:[self modelWithPayment:payment income:income period:period]];
+            if (!lastModel || [lastModel.startDate compare:period.startDate] != NSOrderedSame) {
+                [list addObject:[SSJReportFormsCurveModel modelWithPayment:payment income:income startDate:period.startDate endDate:period.endDate]];
             }
         } else {
 //            // 如果数据库中没有纪录，并且起始、截止时间都传入了，补充之间的收支统计
@@ -470,6 +470,14 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
 //                }
 //            }
         }
+        
+        // 确保第一条模型的开始时间不早于传入的开始时间
+        SSJReportFormsCurveModel *firstCurveModel = [list firstObject];
+        firstCurveModel.startDate = ([firstCurveModel.startDate compare:startDate] == NSOrderedAscending) ? startDate : firstCurveModel.startDate;
+        
+        // 确保最后一条模型的结束时间不晚于传入的结束时间
+        SSJReportFormsCurveModel *lastCurveModel = [list lastObject];
+        lastCurveModel.endDate = ([lastCurveModel.endDate compare:endDate] == NSOrderedAscending) ? lastCurveModel.endDate : endDate;
         
         startDateStr = startDate ? [startDate formattedDateWithFormat:@"yyyy-MM-dd"] : startDateStr;
         endDateStr = endDate ? [endDate formattedDateWithFormat:@"yyyy-MM-dd"] : endDateStr;
@@ -492,23 +500,31 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
     }];
 }
 
-+ (SSJReportFormsCurveModel *)modelWithPayment:(double)payment income:(double)income period:(SSJDatePeriod *)period {
-    NSString *paymentStr = [NSString stringWithFormat:@"%f", payment];
-    NSString *incomeStr = [NSString stringWithFormat:@"%f", income];
-    NSString *timeStr = nil;
-    
-    if (period.periodType == SSJDatePeriodTypeMonth) {
-        timeStr = [NSString stringWithFormat:@"%d月", (int)period.startDate.month];
-    } else if (period.periodType == SSJDatePeriodTypeWeek) {
-        NSString *startDateStr = [period.startDate formattedDateWithFormat:@"MM/dd"];
-        NSString *endDateStr = [period.endDate formattedDateWithFormat:@"MM/dd"];
-        timeStr = [NSString stringWithFormat:@"%@~%@", startDateStr, endDateStr];
-    } else if (period.periodType == SSJDatePeriodTypeDay) {
-        timeStr = [period.startDate formattedDateWithFormat:@"dd"];
-    }
-    
-    return [SSJReportFormsCurveModel modelWithPayment:paymentStr income:incomeStr time:timeStr period:period];
-}
+//+ (SSJDatePeriod *)periodWithPeriodType:(SSJDatePeriodType)periodType date:(NSDate *)date withinStartDate:(NSDate *)startDate andEndDate:(NSDate *)endDate {
+//    SSJDatePeriod *tmpPeriod = [[SSJDatePeriod alloc] initWithPeriodType:periodType date:date];
+//    NSDate *tmpStartDate = [tmpPeriod.startDate compare:startDate] == NSOrderedAscending ? startDate : tmpPeriod.startDate;
+//    NSDate *tmpEndDate = [tmpPeriod.endDate compare:endDate] == NSOrderedAscending ? tmpPeriod.endDate : endDate;
+//    return [SSJDatePeriod datePeriodWithStartDate:tmpStartDate endDate:tmpEndDate];
+//}
+
+//+ (SSJReportFormsCurveModel *)modelWithPayment:(double)payment income:(double)income period:(SSJDatePeriod *)period {
+//    NSString *paymentStr = [NSString stringWithFormat:@"%f", payment];
+//    NSString *incomeStr = [NSString stringWithFormat:@"%f", income];
+//    NSString *timeStr = nil;
+//    
+//    if (period.periodType == SSJDatePeriodTypeMonth) {
+//        timeStr = [NSString stringWithFormat:@"%d月", (int)period.startDate.month];
+//    } else if (period.periodType == SSJDatePeriodTypeWeek) {
+//        NSString *startDateStr = [period.startDate formattedDateWithFormat:@"MM/dd"];
+//        NSString *endDateStr = [period.endDate formattedDateWithFormat:@"MM/dd"];
+//        timeStr = [NSString stringWithFormat:@"%@~%@", startDateStr, endDateStr];
+//    } else if (period.periodType == SSJDatePeriodTypeDay) {
+//        timeStr = [period.startDate formattedDateWithFormat:@"dd"];
+//    }
+//    
+//    [SSJReportFormsCurveModel modelWithPayment:payment income:income startDate:<#(NSDate *)#> endDate:<#(NSDate *)#>]
+//    return [SSJReportFormsCurveModel modelWithPayment:paymentStr income:incomeStr time:timeStr period:period];
+//}
 
 //  查询成员记账数据
 + (void)queryForMemberChargeWithType:(SSJBillType)type
