@@ -49,7 +49,7 @@
 #import "SSJIdfaUploadService.h"
 #import <AdSupport/ASIdentifierManager.h>
 #import "SimulateIDFA.h"
-
+#import "SSJDatabaseErrorHandler.h"
 //  进入后台超过的时限后进入锁屏
 static const NSTimeInterval kLockScreenDelay = 60;
 
@@ -178,7 +178,10 @@ NSDate *SCYEnterBackgroundTime() {
     
     //保存app启动时间，判断是否为新用户
     [SSJBookKeepingHomeEvaluatePopView evaluatePopViewConfiguration];
-
+    //上传数据库错误
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [SSJDatabaseErrorHandler upLoadData];
+    });
     return YES;
 }
 

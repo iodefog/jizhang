@@ -16,6 +16,7 @@
     if (self = [super initWithFrame:frame]) {
         [self addSubview:self.imageView];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCellAppearanceAfterThemeChanged) name:SSJThemeDidChangeNotification object:nil];
+        [self updateCellAppearanceAfterThemeChanged];
     }
     return self;
 }
