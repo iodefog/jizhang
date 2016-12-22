@@ -77,9 +77,12 @@ static NSString *const kSegmentTitleIncome = @"收入";
 @property (nonatomic, strong) NSMutableArray *datas;
 
 //  日期切换刻度控件的数据源
-@property (nonatomic, strong) NSArray *periods;
+@property (nonatomic, strong) NSArray<SSJDatePeriod *> *periods;
 
 @property (nonatomic, strong) SSJReportFormCurveHeaderViewItem *curveHeaderItem;
+
+//  选中的时间周期
+@property (nonatomic, strong) SSJDatePeriod *selectedPeriod;
 
 //  自定义时间周期
 @property (nonatomic, strong) SSJDatePeriod *customPeriod;
@@ -300,7 +303,8 @@ static NSString *const kSegmentTitleIncome = @"收入";
 }
 
 - (void)scaleAxisView:(SSJReportFormsScaleAxisView *)scaleAxisView didSelectedScaleAxisAtIndex:(NSUInteger)index {
-    [self reloadDatasInPeriod:[_periods ssj_safeObjectAtIndex:index]];
+    _selectedPeriod = [_periods ssj_safeObjectAtIndex:index];
+    [self reloadDatasInPeriod:_selectedPeriod];
     [MobClick event:@"form_date_picked"];
 }
 
@@ -376,10 +380,20 @@ static NSString *const kSegmentTitleIncome = @"收入";
             
             [self.view ssj_hideLoadingIndicator];
             
-            [self reorganiseDateAxisViewDataWithOriginalData:periods];
+            _periods = periods;
             
-            // 查询当前月份的流水统计
-            [self reloadDatasInPeriod:[_periods ssj_safeObjectAtIndex:_dateAxisView.selectedIndex]];
+            [self updateSubveiwsHidden];
+            
+            if (_periods.count > 0) {
+                
+                [_dateAxisView reloadData];
+                
+                NSUInteger selectedIndex = _selectedPeriod ? [_periods indexOfObject:_selectedPeriod] : NSNotFound;
+                _dateAxisView.selectedIndex = (selectedIndex != NSNotFound) ?: _periods.count - 1;
+                _selectedPeriod = [_periods ssj_safeObjectAtIndex:_dateAxisView.selectedIndex];
+                
+                [self reloadDatasInPeriod:(_customPeriod ?: _selectedPeriod)];
+            }
             
         } failure:^(NSError *error) {
             [self.view ssj_hideLoadingIndicator];
@@ -508,10 +522,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
     [self updateLfetItem];
 }
 
-// 重新组织时间刻度控件的数据
-- (void)reorganiseDateAxisViewDataWithOriginalData:(NSArray <SSJDatePeriod *>*)periods {
-    _periods = periods;
-    
+- (void)updateSubveiwsHidden {
     if (_periods.count == 0) {
         _dateAxisView.hidden = YES;
         _customPeriodBtn.hidden = YES;
@@ -523,17 +534,17 @@ static NSString *const kSegmentTitleIncome = @"收入";
         return;
     }
     
-    _dateAxisView.hidden = NO;
-    _customPeriodBtn.hidden = !_customPeriod;
+    if (_customPeriod) {
+        _dateAxisView.hidden = YES;
+        _customPeriodBtn.hidden = NO;
+    } else {
+        _dateAxisView.hidden = NO;
+        _customPeriodBtn.hidden = YES;
+    }
+    
     _addOrDeleteCustomPeriodBtn.hidden = NO;
     self.tableView.hidden = NO;
     [self.view ssj_hideWatermark:YES];
-    
-    [_dateAxisView reloadData];
-    
-    if (_periods.count >= 3) {
-        _dateAxisView.selectedIndex = _periods.count - 1;
-    }
 }
 
 - (void)reorganiseChartTableVieDatasWithOriginalData:(NSArray<SSJReportFormsItem *> *)result {
