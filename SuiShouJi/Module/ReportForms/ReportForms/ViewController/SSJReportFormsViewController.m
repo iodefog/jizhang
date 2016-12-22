@@ -110,8 +110,6 @@ static NSString *const kSegmentTitleIncome = @"收入";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.tabBarController.delegate = self;
-    
     self.navigationItem.titleView = self.titleSegmentCtrl;
     [self.view addSubview:self.dateAxisView];
     [self.view addSubview:self.customPeriodBtn];
@@ -123,7 +121,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self reloadDatas];
+    [self reloadAllDatas];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -133,7 +131,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
 
 #pragma mark - Overwrite
 - (void)reloadDataAfterSync {
-    [self reloadDatas];
+    [self reloadAllDatas];
 }
 
 - (void)updateAppearanceAfterThemeChanged {
@@ -141,16 +139,6 @@ static NSString *const kSegmentTitleIncome = @"收入";
     
     [_tableView reloadData];
     [self updateAppearance];
-}
-
-#pragma mark - UITabBarControllerDelegate
-- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
-    if ([viewController isKindOfClass:[UINavigationController class]]) {
-        UINavigationController *naviController = (UINavigationController *)viewController;
-        if (naviController.topViewController == self) {
-            [self reloadAllDatas];
-        }
-    }
 }
 
 #pragma mark - UITableViewDataSource
@@ -168,7 +156,17 @@ static NSString *const kSegmentTitleIncome = @"收入";
         __weak typeof(self) wself = self;
         chartCell.selectOptionHandle = ^(SSJReportFormsChartCell *cell) {
             wself.selectedOption = cell.option;
-            [wself reloadDatas];
+            [wself reloadDatasInPeriod:wself.customPeriod ?: wself.selectedPeriod];
+            
+            switch (wself.selectedOption) {
+                case SSJReportFormsMemberAndCategoryOptionCategory:
+                    [MobClick event:@"form_category"];
+                    break;
+                    
+                case SSJReportFormsMemberAndCategoryOptionMember:
+                    [MobClick event:@"form_member"];
+                    break;
+            }
         };
         return chartCell;
     }
@@ -310,31 +308,19 @@ static NSString *const kSegmentTitleIncome = @"收入";
 
 #pragma mark - Event
 - (void)titleSegmentCtrlAction {
-    [self reloadDatas];
-}
-
-// 切换分类和成员
-- (void)typeAndMemberControlAction {
-    [self reloadDatas];
-    
-    switch (_selectedOption) {
-        case SSJReportFormsMemberAndCategoryOptionCategory:
-            [MobClick event:@"form_category"];
-            break;
-            
-        case SSJReportFormsMemberAndCategoryOptionMember:
-            [MobClick event:@"form_member"];
-            break;
-    }
+    [self reloadDatasInPeriod:_customPeriod ?: _selectedPeriod];
 }
 
 - (void)customPeriodBtnAction {
     if (_customPeriod) {
+        
         _customPeriod = nil;
         _dateAxisView.hidden = NO;
         _customPeriodBtn.hidden = YES;
+        
         [_addOrDeleteCustomPeriodBtn setImage:[UIImage ssj_themeImageWithName:@"reportForms_edit"] forState:UIControlStateNormal];
-        [self reloadDatas];
+        
+        [self reloadDatasInPeriod:_selectedPeriod];
         
         [MobClick event:@"form_date_custom_delete"];
     } else {
@@ -355,16 +341,16 @@ static NSString *const kSegmentTitleIncome = @"收入";
 }
 
 #pragma mark - Private
-// 如果当前是自定义时间，就查询自定义时间范围内的流水统计；反之就查询当前刻度时间的流水统计
-- (void)reloadDatas {
-    if (_customPeriod) {
-        [self reloadDatasInPeriod:_customPeriod];
-    } else if (_periods.count) {
-        [self reloadDatasInPeriod:[_periods ssj_safeObjectAtIndex:_dateAxisView.selectedIndex]];
-    } else {
-        [self reloadAllDatas];
-    }
-}
+//// 如果当前是自定义时间，就查询自定义时间范围内的流水统计；反之就查询当前刻度时间的流水统计
+//- (void)reloadDatas {
+//    if (_customPeriod) {
+//        [self reloadDatasInPeriod:_customPeriod];
+//    } else if (_periods.count) {
+//        [self reloadDatasInPeriod:[_periods ssj_safeObjectAtIndex:_dateAxisView.selectedIndex]];
+//    } else {
+//        [self reloadAllDatas];
+//    }
+//}
 
 //  重新加载数据
 - (void)reloadAllDatas {
@@ -389,7 +375,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
                 [_dateAxisView reloadData];
                 
                 NSUInteger selectedIndex = _selectedPeriod ? [_periods indexOfObject:_selectedPeriod] : NSNotFound;
-                _dateAxisView.selectedIndex = (selectedIndex != NSNotFound) ?: _periods.count - 1;
+                _dateAxisView.selectedIndex = (selectedIndex != NSNotFound) ? selectedIndex : _periods.count - 1;
                 _selectedPeriod = [_periods ssj_safeObjectAtIndex:_dateAxisView.selectedIndex];
                 
                 [self reloadDatasInPeriod:(_customPeriod ?: _selectedPeriod)];
@@ -409,6 +395,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
 // 查询某个周期内的流水统计
 - (void)reloadDatasInPeriod:(SSJDatePeriod *)period {
     if (!period) {
+        SSJPRINT(@"参数period不能为nil");
         return;
     }
     
@@ -753,7 +740,6 @@ static NSString *const kSegmentTitleIncome = @"收入";
         wself.customPeriodBtn.hidden = NO;
         [wself updateCustomPeriodBtn];
         [wself.addOrDeleteCustomPeriodBtn setImage:[UIImage ssj_themeImageWithName:@"reportForms_delete"] forState:UIControlStateNormal];
-        [wself reloadDatas];
     };
     [self.navigationController pushViewController:calendarVC animated:YES];
     
