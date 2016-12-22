@@ -144,6 +144,11 @@ static const CGFloat kSeparatorFormViewHeight = 88;
             return [model.startDate formattedDateWithFormat:@"MM月"];
         }
             break;
+            
+        case SSJTimeDimensionUnknown: {
+            return nil;
+        }
+            break;
     }
 }
 
@@ -173,6 +178,9 @@ static const CGFloat kSeparatorFormViewHeight = 88;
             case SSJTimeDimensionMonth:
                 return [model.startDate formattedDateWithFormat:@"yyyy年"];
                 break;
+                
+            case SSJTimeDimensionUnknown:
+                break;
         }
     }
     
@@ -198,6 +206,9 @@ static const CGFloat kSeparatorFormViewHeight = 88;
                 return [model.startDate formattedDateWithFormat:@"yyyy年"];
             }
             
+            break;
+            
+        case SSJTimeDimensionUnknown:
             break;
     }
     
@@ -270,12 +281,16 @@ static const CGFloat kSeparatorFormViewHeight = 88;
         case SSJTimeDimensionMonth:
             [_timePeriodSegmentControl setSelectedIndex:2 animated:NO];
             break;
+            
+        case SSJTimeDimensionUnknown:
+            break;
     }
     
     [self updateQuestionBtnHidden];
     
     [_curveView reloadData];
     [_curveView scrollToAxisXAtIndex:(_item.curveModels.count - 1) animated:NO];
+    [self updateCurveUnitAxisXLength];
     
     _incomeItem = [SSJSeparatorFormViewCellItem itemWithTopTitle:_item.generalIncome
                                                      bottomTitle:@"总收入"
@@ -338,6 +353,9 @@ static const CGFloat kSeparatorFormViewHeight = 88;
         case SSJTimeDimensionWeek:
             _curveView.unitAxisXLength = self.width / 4;
             break;
+            
+        case SSJTimeDimensionUnknown:
+            break;
     }
 }
 
@@ -350,6 +368,9 @@ static const CGFloat kSeparatorFormViewHeight = 88;
             
         case SSJTimeDimensionWeek:
             _questionBtn.hidden = NO;
+            break;
+            
+        case SSJTimeDimensionUnknown:
             break;
     }
 }

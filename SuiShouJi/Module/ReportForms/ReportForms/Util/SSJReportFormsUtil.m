@@ -332,6 +332,92 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
     }];
 }
 
++ (void)queryForDefaultTimeDimensionWithStartDate:(NSDate *)startDate
+                                          endDate:(NSDate *)endDate
+                                          booksId:(NSString *)booksId
+                                          success:(void(^)(SSJTimeDimension timeDimension))success
+                                          failure:(void (^)(NSError *error))failure {
+    
+    if ([startDate compare:endDate] == NSOrderedDescending) {
+        if (failure) {
+            failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"startDate不能晚于endDate"}]);
+        }
+        return;
+    }
+    
+    
+    if (!booksId) {
+        booksId = SSJGetCurrentBooksType();
+    }
+    
+    NSMutableString *sqlStr = [NSMutableString stringWithFormat:@"select max(a.cbilldate) as maxBillDate, min(a.cbilldate) as minBillDate from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = '%@' and a.operatortype <> 2 and b.istate <> 2 and a.cbilldate <= datetime('now', 'localtime')", SSJUSERID()];
+    
+    if (![booksId isEqualToString:@"all"]) {
+        [sqlStr appendFormat:@" and a.cbooksid = '%@'", booksId];
+    }
+    
+    if (startDate) {
+        NSString *startDateStr = [startDate formattedDateWithFormat:@"yyyy-MM-dd"];
+        [sqlStr appendFormat:@" and a.cbilldate >= '%@'", startDateStr];
+    }
+    
+    if (endDate) {
+        NSString *endDateStr = [endDate formattedDateWithFormat:@"yyyy-MM-dd"];
+        [sqlStr appendFormat:@" and a.cbilldate <= '%@'", endDateStr];
+    }
+    
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        FMResultSet *resultSet = [db executeQuery:sqlStr];
+        if (!resultSet) {
+            SSJPRINT(@">>>SSJ\n class:%@\n method:%@\n message:%@\n error:%@",NSStringFromClass([self class]), NSStringFromSelector(_cmd), [db lastErrorMessage], [db lastError]);
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        }
+        
+        NSDate *maxDate = nil;
+        NSDate *minDate = nil;
+        
+        while ([resultSet next]) {
+            NSString *maxDateStr = [resultSet stringForColumn:@"maxBillDate"];
+            maxDate = [NSDate dateWithString:maxDateStr formatString:@"yyyy-MM-dd"];
+            
+            NSString *minDateStr = [resultSet stringForColumn:@"minBillDate"];
+            minDate = [NSDate dateWithString:minDateStr formatString:@"yyyy-MM-dd"];
+        }
+        
+        [resultSet close];
+        
+        SSJTimeDimension timeDimension = [self dimensionWithDate1:maxDate date2:minDate];
+        
+        if (success) {
+            SSJDispatchMainAsync(^{
+                success(timeDimension);
+            });
+        }
+    }];
+}
+
++ (SSJTimeDimension)dimensionWithDate1:(NSDate *)date1 date2:(NSDate *)date2 {
+    if (!date1 || !date2) {
+        return SSJTimeDimensionUnknown;
+    }
+    
+    if (date1.month != date2.month || date1.year != date2.year) {
+        return SSJTimeDimensionMonth;
+    }
+    
+    SSJDatePeriod *weekPeriod = [SSJDatePeriod datePeriodWithPeriodType:SSJDatePeriodTypeWeek date:date1];
+    if (![weekPeriod containDate:date2]) {
+        return SSJTimeDimensionWeek;
+    }
+    
+    return SSJTimeDimensionDay;
+}
+
 + (void)queryForBillStatisticsWithTimeDimension:(SSJTimeDimension)dimension
                                       startDate:(NSDate *)startDate
                                         endDate:(NSDate *)endDate
@@ -339,9 +425,25 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
                                         success:(void(^)(NSDictionary *result))success
                                         failure:(void (^)(NSError *error))failure {
     
-    if (dimension != SSJTimeDimensionDay
-        && dimension != SSJTimeDimensionWeek
-        && dimension != SSJTimeDimensionMonth) {
+    SSJDatePeriodType periodType = SSJDatePeriodTypeUnknown;
+    switch (dimension) {
+        case SSJTimeDimensionDay:
+            periodType = SSJDatePeriodTypeDay;
+            break;
+            
+        case SSJTimeDimensionWeek:
+            periodType = SSJDatePeriodTypeWeek;
+            break;
+            
+        case SSJTimeDimensionMonth:
+            periodType = SSJDatePeriodTypeMonth;
+            break;
+            
+        case SSJTimeDimensionUnknown:
+            break;
+    }
+    
+    if (periodType == SSJDatePeriodTypeUnknown) {
         if (failure) {
             failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"dimension参数无效"}]);
         }
@@ -385,22 +487,6 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
         
         double payment = 0;
         double income = 0;
-        
-        SSJDatePeriodType periodType = SSJDatePeriodTypeUnknown;
-        
-        switch (dimension) {
-            case SSJTimeDimensionDay:
-                periodType = SSJDatePeriodTypeDay;
-                break;
-                
-            case SSJTimeDimensionWeek:
-                periodType = SSJDatePeriodTypeWeek;
-                break;
-                
-            case SSJTimeDimensionMonth:
-                periodType = SSJDatePeriodTypeMonth;
-                break;
-        }
         
         NSMutableArray *list = [NSMutableArray array];
         NSString *startDateStr = nil;
