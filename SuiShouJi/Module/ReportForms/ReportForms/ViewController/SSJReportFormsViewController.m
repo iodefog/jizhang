@@ -827,7 +827,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
         _curveView = [[SSJReportFormCurveHeaderView alloc] init];
         __weak typeof(self) wself = self;
         _curveView.changeTimePeriodHandle = ^(SSJReportFormCurveHeaderView *view) {
-            SSJDatePeriod *period = [wself.periods ssj_safeObjectAtIndex:wself.dateAxisView.selectedIndex];
+            SSJDatePeriod *period = wself.customPeriod ?: [wself.periods ssj_safeObjectAtIndex:wself.dateAxisView.selectedIndex];
             [SSJReportFormsUtil queryForBillStatisticsWithTimeDimension:view.item.timeDimension
                                                               startDate:period.startDate
                                                                 endDate:period.endDate
