@@ -40,7 +40,7 @@
         [resultSet close];
         item.remindState = [db boolForQuery:@"select istate from bk_user_remind where cremindid = ? and cuserid = ?",item.remindId,userId];
         NSString *currentDate = [[NSDate date]formattedDateWithFormat:@"yyyy-MM-dd"];
-        item.cardBalance = [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and (a.cbilldate <= ? or length(a.loanid) > 0) and b.itype = 0 and a.ifunsid = ?",userId,currentDate,cardId] - [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and (a.cbilldate <= ? or length(a.loanid) > 0) and b.itype = 1 and a.ifunsid = ?",userId,currentDate,cardId] + [db doubleForQuery:@"select sum(repaymentmoney) from bk_credit_repayment where cuserid = ? and ccardid = ? and operatortype <> 2 and iinstalmentcount > 0",userId,cardId];
+        item.cardBalance = [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and (a.cbilldate <= ? or ichargetype = ?) and b.itype = 0 and a.ifunsid = ?",userId,currentDate,@(SSJChargeIdTypeLoan),cardId] - [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and (a.cbilldate <= ? or ichargetype = ?) and b.itype = 1 and a.ifunsid = ?",userId,currentDate,@(SSJChargeIdTypeLoan),cardId] + [db doubleForQuery:@"select sum(repaymentmoney) from bk_credit_repayment where cuserid = ? and ccardid = ? and operatortype <> 2 and iinstalmentcount > 0",userId,cardId];
         item.chargeCount = [db intForQuery:@"select count(1) from bk_user_charge where ifunsid = ? and cuserid = ? and operatortype <> 2",cardId,userId];
     }];
     return item;
@@ -123,7 +123,7 @@
         }
         
         NSString *currentDate = [[NSDate date]formattedDateWithFormat:@"yyyy-MM-dd"];
-        double originalBalance = [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and (a.cbilldate <= ? or length(a.loanid) > 0) and b.itype = 0 and a.ifunsid = ?",userId,currentDate,item.cardId] - [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and (a.cbilldate <= ? or length(a.loanid) > 0) and b.itype = 1 and a.ifunsid = ?",userId,currentDate,item.cardId] + [db doubleForQuery:@"select sum(repaymentmoney) from bk_credit_repayment where cuserid = ? and ccardid = ? and operatortype <> 2",userId,item.cardId];
+        double originalBalance = [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and (a.cbilldate <= ? or ichargetype = ?) and b.itype = 0 and a.ifunsid = ?",userId,currentDate,@(SSJChargeIdTypeLoan),item.cardId] - [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and (a.cbilldate <= ? or ichargetype = ?) and b.itype = 1 and a.ifunsid = ?",userId,currentDate,@(SSJChargeIdTypeLoan),item.cardId] + [db doubleForQuery:@"select sum(repaymentmoney) from bk_credit_repayment where cuserid = ? and ccardid = ? and operatortype <> 2",userId,item.cardId];
         
         double differenceBalance = item.cardBalance - originalBalance;
         
@@ -206,7 +206,7 @@
         remindItem.remindId = item.remindId;
         [SSJLocalNotificationHelper cancelLocalNotificationWithremindItem:remindItem];
     }
-    FMResultSet *resultSet = [db executeQuery:@"select * from bk_loan where loanid in (select loanid from bk_user_charge where ifunsid = ? and operatortype <> 2)", item.cardId];
+    FMResultSet *resultSet = [db executeQuery:@"select * from bk_loan where loanid in (select cid from bk_user_charge where ifunsid = ? and operatortype <> 2 and ichargetype = ?)", item.cardId,@(SSJChargeIdTypeLoan)];
     if (!resultSet) {
         if (error) {
             *error = [db lastError];

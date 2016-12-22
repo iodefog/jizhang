@@ -168,7 +168,7 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
         double surplus = 0; // 剩余金额
         
         // 查询依赖借贷的转帐流水
-        FMResultSet *resultSet = [db executeQuery:@"select uc.ichargeid, uc.ifunsid, uc.ibillid, uc.imoney, uc.cmemo, uc.cbilldate, uc.cwritedate, bt.ccoin from bk_user_charge as uc, bk_bill_type as bt where uc.ibillid = bt.id and uc.cuserid = ? and uc.ifunsid = ? and uc.loanid = ? and uc.operatortype <> 2 order by uc.cbilldate, uc.cwritedate", loanModel.userID, loanModel.fundID, loanModel.ID];
+        FMResultSet *resultSet = [db executeQuery:@"select uc.ichargeid, uc.ifunsid, uc.ibillid, uc.imoney, uc.cmemo, uc.cbilldate, uc.cwritedate, bt.ccoin from bk_user_charge as uc, bk_bill_type as bt where uc.ibillid = bt.id and uc.cuserid = ? and uc.ifunsid = ? and uc.cid = ? and uc.ichargetype = ? and uc.operatortype <> 2 order by uc.cbilldate, uc.cwritedate", loanModel.userID, loanModel.fundID, loanModel.ID,@(SSJChargeIdTypeLoan)];
         
         while ([resultSet next]) {
             SSJLoanChargeModel *chargeModel = [[SSJLoanChargeModel alloc] init];
@@ -229,7 +229,7 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
             NSString *billDateStr = [compoundModel.chargeModel.billDate formattedDateWithFormat:@"yyyy-MM-dd"];
             NSString *writeDateStr = [compoundModel.chargeModel.writeDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
             
-            FMResultSet *resultSet = [db executeQuery:@"select ichargeid, ifunsid, ibillid, cmemo, cbilldate, imoney from bk_user_charge where ichargeid <> ? and cbilldate = ? and cwritedate = ? and loanid = ? and cuserid = ? and operatortype <> 2", compoundModel.chargeModel.chargeId, billDateStr, writeDateStr, compoundModel.chargeModel.loanId, compoundModel.chargeModel.userId];
+            FMResultSet *resultSet = [db executeQuery:@"select ichargeid, ifunsid, ibillid, cmemo, cbilldate, imoney from bk_user_charge where ichargeid <> ? and cbilldate = ? and cwritedate = ? and cid = ? and cuserid = ? and ichargetype = ? and operatortype <> 2", compoundModel.chargeModel.chargeId, billDateStr, writeDateStr, compoundModel.chargeModel.loanId, compoundModel.chargeModel.userId,@(SSJChargeIdTypeLoan)];
             
             while ([resultSet next]) {
                 NSString *chargeId = [resultSet stringForColumn:@"ichargeid"];
@@ -443,7 +443,7 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
     }
     
     // 将和借贷相关的流水operatortype改为2
-    if (![db executeUpdate:@"update bk_user_charge set operatortype = ?, iversion = ?, cwritedate = ? where loanID = ?", @2, @(SSJSyncVersion()), writeDate, model.ID]) {
+    if (![db executeUpdate:@"update bk_user_charge set operatortype = ?, iversion = ?, cwritedate = ? where cid = ? and ichargetype = ?", @2, @(SSJSyncVersion()), writeDate, model.ID, @(SSJChargeIdTypeLoan)]) {
         if (error) {
             *error = [db lastError];
         }
@@ -1026,11 +1026,13 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
         [chargeInfo setObject:writeDateStr forKey:@"writeDate"];
         [chargeInfo setObject:@(SSJSyncVersion()) forKey:@"version"];
         [chargeInfo setObject:@(1) forKey:@"operatorType"];
+        [chargeInfo setObject:@(SSJChargeIdTypeLoan) forKey:@"chargetype"];
+
         if (![chargeInfo objectForKey:@"memo"]) {
             [chargeInfo setObject:@"" forKey:@"memo"];
         }
         
-        if (![db executeUpdate:@"replace into bk_user_charge (ichargeid, cuserid, ibillid, ifunsid, cbilldate, loanid, imoney, cmemo, iversion, operatortype, cwritedate) values (:chargeId, :userId, :billId, :fundId, :billDate, :loanId, :money, :memo, :version, :operatorType, :writeDate)" withParameterDictionary:chargeInfo]) {
+        if (![db executeUpdate:@"replace into bk_user_charge (ichargeid, cuserid, ibillid, ifunsid, cbilldate, cid, imoney, cmemo, iversion, operatortype, cwritedate, ichargetype) values (:chargeId, :userId, :billId, :fundId, :billDate, :loanId, :money, :memo, :version, :operatorType, :writeDate, :chargetype)" withParameterDictionary:chargeInfo]) {
             if (error) {
                 *error = [db lastError];
             }
@@ -1048,11 +1050,12 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
         [targetChargeInfo setObject:writeDateStr forKey:@"writeDate"];
         [targetChargeInfo setObject:@(SSJSyncVersion()) forKey:@"version"];
         [targetChargeInfo setObject:@(1) forKey:@"operatorType"];
+        [targetChargeInfo setObject:@(SSJChargeIdTypeLoan) forKey:@"chargetype"];
         if (![targetChargeInfo objectForKey:@"memo"]) {
             [targetChargeInfo setObject:@"" forKey:@"memo"];
         }
         
-        if (![db executeUpdate:@"replace into bk_user_charge (ichargeid, cuserid, ibillid, ifunsid, cbilldate, loanid, imoney, cmemo, iversion, operatortype, cwritedate) values (:chargeId, :userId, :billId, :fundId, :billDate, :loanId, :money, :memo, :version, :operatorType, :writeDate)" withParameterDictionary:targetChargeInfo]) {
+        if (![db executeUpdate:@"replace into bk_user_charge (ichargeid, cuserid, ibillid, ifunsid, cbilldate, cid, imoney, cmemo, iversion, operatortype, cwritedate, ichargetype) values (:chargeId, :userId, :billId, :fundId, :billDate, :loanId, :money, :memo, :version, :operatorType, :writeDate, :chargetype)" withParameterDictionary:targetChargeInfo]) {
             if (error) {
                 *error = [db lastError];
             }
@@ -1070,11 +1073,12 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
         [interestChargeInfo setObject:writeDateStr forKey:@"writeDate"];
         [interestChargeInfo setObject:@(SSJSyncVersion()) forKey:@"version"];
         [interestChargeInfo setObject:@(1) forKey:@"operatorType"];
+        [interestChargeInfo setObject:@(SSJChargeIdTypeLoan) forKey:@"chargetype"];
         if (![interestChargeInfo objectForKey:@"memo"]) {
             [interestChargeInfo setObject:@"" forKey:@"memo"];
         }
         
-        if (![db executeUpdate:@"replace into bk_user_charge (ichargeid, cuserid, ibillid, ifunsid, cbilldate, loanid, imoney, cmemo, iversion, operatortype, cwritedate) values (:chargeId, :userId, :billId, :fundId, :billDate, :loanId, :money, :memo, :version, :operatorType, :writeDate)" withParameterDictionary:interestChargeInfo]) {
+        if (![db executeUpdate:@"replace into bk_user_charge (ichargeid, cuserid, ibillid, ifunsid, cbilldate, cid, imoney, cmemo, iversion, operatortype, cwritedate, ichargetype) values (:chargeId, :userId, :billId, :fundId, :billDate, :loanId, :money, :memo, :version, :operatorType, :writeDate, :chargetype)" withParameterDictionary:interestChargeInfo]) {
             if (error) {
                 *error = [db lastError];
             }

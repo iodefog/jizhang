@@ -27,7 +27,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
         SSJFinancingHomeitem *fundingItem = [[SSJFinancingHomeitem alloc]init];
         NSString *userid = SSJUSERID();
         NSMutableArray *tempDateArr = [NSMutableArray arrayWithCapacity:0];
-        NSString *sql = [NSString stringWithFormat:@"select substr(a.cbilldate,0,7) as cmonth , a.* , a.cwritedate as chargedate , a.cid as sundryid, b.*, c.lender, c.itype as loantype from BK_USER_CHARGE a, BK_BILL_TYPE b left join bk_loan c on a.loanid = c.loanid where a.IBILLID = b.ID and a.IFUNSID = '%@' and a.operatortype <> 2 and (a.cbilldate <= '%@' or length(a.loanid) > 0) order by cmonth desc , a.cbilldate desc , a.cwritedate desc", ID , [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"]];
+        NSString *sql = [NSString stringWithFormat:@"select substr(a.cbilldate,0,7) as cmonth , a.* , a.cwritedate as chargedate , a.cid as sundryid, b.*, c.lender, c.itype as loantype from BK_USER_CHARGE a, BK_BILL_TYPE b left join bk_loan c on a.cid = c.loanid where a.IBILLID = b.ID and a.IFUNSID = '%@' and a.operatortype <> 2 and (a.cbilldate <= '%@' or (length(a.cid) > 0 and a.ichargetype = %ld)) order by cmonth desc , a.cbilldate desc , a.cwritedate desc", ID , [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"],SSJChargeIdTypeLoan];
         FMResultSet *resultSet = [db executeQuery:sql];
         if (!resultSet) {
             if (failure) {
@@ -51,14 +51,17 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
             item.chargeMemo = [resultSet stringForColumn:@"cmemo"];
             item.chargeImage = [resultSet stringForColumn:@"cimgurl"];
             item.chargeThumbImage = [resultSet stringForColumn:@"thumburl"];
-            item.configId = [resultSet stringForColumn:@"iconfigid"];
             item.booksId = [resultSet stringForColumn:@"cbooksid"];
             item.money = [resultSet stringForColumn:@"IMONEY"];
-            item.loanId = [resultSet stringForColumn:@"loanid"];
-            item.loanId = [resultSet stringForColumn:@"loanid"];
             item.loanSource = [resultSet stringForColumn:@"lender"];
             item.loanType = [resultSet intForColumn:@"loantype"];
             item.idType = [resultSet intForColumn:@"ichargetype"];
+            if (item.idType == SSJChargeIdTypeCircleConfig) {
+                item.configId = [resultSet stringForColumn:@"sundryid"];
+            }
+            if (item.idType == SSJChargeIdTypeLoan) {
+                item.loanId = [resultSet stringForColumn:@"sundryid"];
+            }
             item.sundryId = [resultSet stringForColumn:@"sundryid"];
             if (item.incomeOrExpence) {
                 if (![item.money hasPrefix:@"-"]) {
@@ -200,7 +203,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                         failure:(void (^)(NSError *error))failure{
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSString *userid = SSJUSERID();
-        NSString *sql = [NSString stringWithFormat:@"select a.* , a.cwritedate as chargedate, a.cid as sundryid, c.lender, c.itype as loantype, b.*  from BK_USER_CHARGE a, BK_BILL_TYPE b left join bk_loan c on a.loanid = c.loanid where a.IBILLID = b.ID and a.IFUNSID = '%@' and a.operatortype <> 2 and a.cbilldate <= '%@' order by a.cbilldate desc ,  a.cwritedate desc", cardItem.cardId , [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"]];
+        NSString *sql = [NSString stringWithFormat:@"select a.* , a.cwritedate as chargedate, a.cid as sundryid, c.lender, c.itype as loantype, b.*  from BK_USER_CHARGE a, BK_BILL_TYPE b left join bk_loan c on a.cid = c.loanid where a.IBILLID = b.ID and a.IFUNSID = '%@' and a.operatortype <> 2 and (a.cbilldate <= '%@' or (length(a.cid) > 0 and a.ichargetype = %ld)) order by a.cbilldate desc ,  a.cwritedate desc", cardItem.cardId , [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"],SSJChargeIdTypeLoan];
         FMResultSet *resultSet = [db executeQuery:sql];
         SSJCreditCardItem *newcardItem = [[SSJCreditCardItem alloc]init];
         if (!resultSet) {

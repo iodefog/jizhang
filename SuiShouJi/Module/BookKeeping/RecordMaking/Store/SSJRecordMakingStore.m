@@ -148,7 +148,7 @@
             editeItem = item;
             editeItem.operatorType = 0;
             //修改流水
-            FMResultSet *originResult = [db executeQuery:@"select a.cbilldate , a.imoney , a.ichargeid , a.ibillid , a.cwritedate , a.ifunsid , a.cuserid , a.cmemo ,  a.cimgurl , a.thumburl , a.iconfigid , a.operatortype , a.cbooksid , b.itype from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.ichargeid = ? and a.cuserid = ?",item.ID,userId];
+            FMResultSet *originResult = [db executeQuery:@"select a.cbilldate , a.imoney , a.ichargeid , a.ibillid , a.cwritedate , a.ifunsid , a.cuserid , a.cmemo ,  a.cimgurl , a.thumburl , a.cid, a.ichargetype , a.operatortype , a.cbooksid , b.itype from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.ichargeid = ? and a.cuserid = ?",item.ID,userId];
             SSJBillingChargeCellItem *originItem = [[SSJBillingChargeCellItem alloc]init];
             while ([originResult next]) {
                 originItem.money = [originResult stringForColumn:@"IMONEY"];
@@ -158,7 +158,9 @@
                 originItem.chargeImage = [originResult stringForColumn:@"CIMGURL"];
                 originItem.chargeThumbImage = [originResult stringForColumn:@"THUMBURL"];
                 originItem.chargeMemo = [originResult stringForColumn:@"CMEMO"];
-                originItem.configId = [originResult stringForColumn:@"ICONFIGID"];
+                if ([originResult intForColumn:@"ichargetype"] == SSJChargeIdTypeCircleConfig) {
+                    originItem.configId = [originResult stringForColumn:@"cid"];
+                }
                 originItem.billDate = [originResult stringForColumn:@"CBILLDATE"];
                 originItem.incomeOrExpence = [originResult intForColumn:@"ITYPE"];
                 originItem.booksId = [originResult stringForColumn:@"CBOOKSID"];
