@@ -25,7 +25,10 @@
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         [self.contentView.layer addSublayer:self.topLineLayer];
         [self.contentView.layer addSublayer:self.bottomLineLayer];
-        
+        [self.contentView addSubview:self.dateLabel];
+        [self.contentView addSubview:self.ratioLabel];
+        [self.contentView addSubview:self.amountLabel];
+        self.dateLabel.font = self.ratioLabel.font = self.amountLabel.font = [UIFont systemFontOfSize:14];
     }
     return self;
 }
@@ -50,6 +53,7 @@
     SSJReportFormCanYinChartCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
     if (!cell) {
         cell = [[SSJReportFormCanYinChartCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     return cell;
 }
@@ -112,6 +116,7 @@
         CGPathAddLineToPoint(solidShapePath, NULL, 15,self.height*0.5);
         [_topLineLayer setPath:solidShapePath];
         CGPathRelease(solidShapePath);
+        _bottomLineLayer.hidden = YES;
     }
     return _topLineLayer;
 }
@@ -128,6 +133,7 @@
         CGPathAddLineToPoint(solidShapePath, NULL, 15,self.height);
         [_bottomLineLayer setPath:solidShapePath];
         CGPathRelease(solidShapePath);
+        _bottomLineLayer.hidden = YES;
     }
     return _bottomLineLayer;
 }
@@ -154,5 +160,11 @@
         _amountLabel = [[UILabel alloc] init];
     }
     return _amountLabel;
+}
+
+- (void)updateCellAppearanceAfterThemeChanged
+{
+   self.ratioLabel.textColor = self.amountLabel.textColor = self.dateLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    
 }
 @end
