@@ -247,7 +247,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
 #pragma mark - SCYSlidePagingHeaderViewDelegate
 - (void)slidePagingHeaderView:(SCYSlidePagingHeaderView *)headerView didSelectButtonAtIndex:(NSUInteger)index {
     
-    SSJDatePeriod *period = _customPeriod ?: [_periods ssj_safeObjectAtIndex:_dateAxisView.selectedIndex];
+    SSJDatePeriod *period = _customPeriod ?: _selectedPeriod;
     
     if (_titleSegmentCtrl.selectedSegmentIndex == 0) {
         
@@ -439,7 +439,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
         [SSJReportFormsUtil queryForBillStatisticsWithTimeDimension:self.curveHeaderItem.timeDimension
                                                           startDate:period.startDate
                                                             endDate:period.endDate
-                                                            booksId:nil
+                                                            booksId:_currentBooksId
                                                             success:^(NSDictionary *result) {
             
             [self updateCurveHeaderItemWithCurveModels:result[SSJReportFormsCurveModelListKey] period:period];
