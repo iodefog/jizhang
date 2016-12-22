@@ -109,9 +109,6 @@ static NSString *const kSegmentTitleIncome = @"收入";
     
     self.tabBarController.delegate = self;
     
-    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reportForms_curve"] style:UIBarButtonItemStylePlain target:self action:@selector(enterCurveVewController)];
-    self.navigationItem.rightBarButtonItem = rightItem;
-    
     self.navigationItem.titleView = self.titleSegmentCtrl;
     [self.view addSubview:self.dateAxisView];
     [self.view addSubview:self.customPeriodBtn];
@@ -327,14 +324,6 @@ static NSString *const kSegmentTitleIncome = @"收入";
     }
 }
 
-//  切换周期（年、月）
-- (void)enterCurveVewController {
-//    SSJReportFormsCurveViewController *curveVC = [[SSJReportFormsCurveViewController alloc] init];
-//    [self.navigationController pushViewController:curveVC animated:YES];
-    
-    [MobClick event:@"form_curve"];
-}
-
 - (void)customPeriodBtnAction {
     if (_customPeriod) {
         _customPeriod = nil;
@@ -454,15 +443,17 @@ static NSString *const kSegmentTitleIncome = @"收入";
             
             [self updateCurveHeaderItemWithCurveModels:result[SSJReportFormsCurveModelListKey] period:period];
             
-            [SSJReportFormsUtil queryForIncomeOrPayType:[self currentType]
-                                                booksId:_currentBooksId
-                                              startDate:period.startDate
-                                                endDate:period.endDate
-                                                success:^(NSArray<SSJReportFormsItem *> *list) {
+            [SSJReportFormsUtil queryForIncomeOrPayType:[self currentType] booksId:_currentBooksId startDate:period.startDate endDate:period.endDate success:^(NSArray<SSJReportFormsItem *> *list) {
                 [self.view ssj_hideLoadingIndicator];
+                
                 self.curveView.item = _curveHeaderItem;
-                self.tableView.tableHeaderView = self.curveView;
+                if (_curveHeaderItem.curveModels.count == 0) {
+                    self.tableView.tableHeaderView = nil;
+                } else {
+                    self.tableView.tableHeaderView = self.curveView;
+                }
                 [self reorganiseCurveTableDataWithOriginalData:list];
+                
             } failure:^(NSError *error) {
                 [self showError:error];
                 [self.view ssj_hideLoadingIndicator];
@@ -472,8 +463,6 @@ static NSString *const kSegmentTitleIncome = @"收入";
             [self.view ssj_hideLoadingIndicator];
             [self showError:error];
         }];
-    } else {
-        
     }
 }
 
@@ -615,6 +604,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
     [self.tableView reloadData];
 }
 
+// 组织折线图下方的列表数据
 - (void)reorganiseCurveTableDataWithOriginalData:(NSArray<SSJReportFormsItem *> *)result {
     [self.datas removeAllObjects];
     
@@ -626,13 +616,15 @@ static NSString *const kSegmentTitleIncome = @"收入";
         return;
     }
     
+    double maxMoney = [[result valueForKeyPath:@"@max.money"] doubleValue];
+    
     //  将datas按照收支类型所占比例从大到小进行排序
     NSArray *sortedItems = [result sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
         SSJReportFormsItem *item1 = obj1;
         SSJReportFormsItem *item2 = obj2;
-        if (item1.scale > item2.scale) {
+        if (item1.money > item2.money) {
             return NSOrderedAscending;
-        } else if (item1.scale < item2.scale) {
+        } else if (item1.money < item2.money) {
             return NSOrderedDescending;
         } else {
             return NSOrderedSame;
@@ -641,10 +633,10 @@ static NSString *const kSegmentTitleIncome = @"收入";
     
     for (SSJReportFormsItem *item in sortedItems) {
         SSJReportFormCurveListCellItem *curveListItem = [[SSJReportFormCurveListCellItem alloc] init];
-        curveListItem.leftTitle = [NSString stringWithFormat:@"%@ %.1f％", item.name, item.scale];
+        curveListItem.leftTitle = [NSString stringWithFormat:@"%@ %.1f％", item.name, item.scale * 100];
         curveListItem.rightTitle = [[NSString stringWithFormat:@"%f", item.money] ssj_moneyDecimalDisplayWithDigits:2];
         curveListItem.progressColorValue = item.colorValue;
-        curveListItem.scale = item.scale;
+        curveListItem.scale = item.money / maxMoney;
         [self.datas addObject:curveListItem];
     }
     

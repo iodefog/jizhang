@@ -473,6 +473,27 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
         return;
     }
     
+    _hasReloaded = YES;
+    _maxValue = 0;
+    _currentIndex = 0;
+    
+    [_collectionView reloadData];
+    
+    [_curveColors removeAllObjects];
+    [_values removeAllObjects];
+    [_items removeAllObjects];
+    
+    [_dots makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    [_dots removeAllObjects];
+    
+    [_labels makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    [_labels removeAllObjects];
+    
+    [_suspensionItems removeAllObjects];
+    
+    _ballonView.title = nil;
+    _suspensionView.items = nil;
+    
     _axisXCount = [_dataSource numberOfAxisXInCurveGraphView:self];
     if (_axisXCount == 0) {
         return;
@@ -485,9 +506,6 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
         }
     }
     
-    _hasReloaded = YES;
-    _maxValue = 0;
-    _currentIndex = 0;
     [self updateContentOffset:NO];
     
     [self reorganiseCurveColors];
@@ -514,7 +532,6 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
     [self caculateCurvePoint];
     
     [_gridView reloadData];
-    [_collectionView reloadData];
 }
 
 - (void)scrollToAxisXAtIndex:(NSUInteger)index animated:(BOOL)animted {
@@ -542,7 +559,6 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
 
 #pragma mark - Private
 - (void)reorganiseCurveColors {
-    [_curveColors removeAllObjects];
     for (int curveIdx = 0; curveIdx < _curveCount; curveIdx ++) {
         UIColor *curveColor = [_dataSource curveGraphView:self colorForCurveAtIndex:curveIdx];
         [_curveColors addObject:(curveColor ?: _defaultCurveColor)];
@@ -550,8 +566,6 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
 }
 
 - (void)reorganiseValues {
-    [_values removeAllObjects];
-    
     NSMutableArray *originValues = [[NSMutableArray alloc] initWithCapacity:_curveCount];
     for (int curveIdx = 0; curveIdx < _curveCount; curveIdx ++) {
         [originValues addObject:@0];
@@ -576,7 +590,6 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
 }
 
 - (void)reorganiseItems {
-    [_items removeAllObjects];
     for (int axisXIdx = 0; axisXIdx < _axisXCount + 1; axisXIdx ++) {
         
         SSJReportFormsCurveCellItem *cellItem = [[SSJReportFormsCurveCellItem alloc] init];
@@ -644,12 +657,6 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
         return;
     }
     
-    [_dots makeObjectsPerformSelector:@selector(removeFromSuperview)];
-    [_dots removeAllObjects];
-    
-    [_labels makeObjectsPerformSelector:@selector(removeFromSuperview)];
-    [_labels removeAllObjects];
-    
     for (int curveIdx = 0; curveIdx < _curveCount; curveIdx ++) {
         
         UIColor *color = _curveColors[curveIdx];
@@ -679,8 +686,6 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
     if (![_dataSource respondsToSelector:@selector(curveGraphView:suspensionTitleAtAxisXIndex:)]) {
         return;
     }
-    
-    [_suspensionItems removeAllObjects];
     
     SSJReportFormsCurveSuspensionViewItem *item = nil;
     NSUInteger rowCount = 0;

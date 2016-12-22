@@ -29,7 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic) CGFloat contentOffsetX;
 
-@property (nonatomic, strong) NSArray<SSJReportFormsCurveSuspensionViewItem *> *items;
+@property (nonatomic, strong, nullable) NSArray<SSJReportFormsCurveSuspensionViewItem *> *items;
 
 @end
 

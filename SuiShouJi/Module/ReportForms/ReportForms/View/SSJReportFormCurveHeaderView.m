@@ -203,7 +203,7 @@ static const CGFloat kSeparatorFormViewHeight = 88;
     if (curveIndex == 0) { // 支出
         return [NSString stringWithFormat:@"支出%@", [model.payment ssj_moneyDecimalDisplayWithDigits:2]];
     } else if (curveIndex == 1) { // 收入
-        return [NSString stringWithFormat:@"支出%@", [model.income ssj_moneyDecimalDisplayWithDigits:2]];
+        return [NSString stringWithFormat:@"收入%@", [model.income ssj_moneyDecimalDisplayWithDigits:2]];
     } else {
         return nil;
     }
