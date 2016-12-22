@@ -34,6 +34,7 @@
         [self.contentView addSubview:self.dateLabel];
         [self.contentView addSubview:self.ratioLabel];
         [self.contentView addSubview:self.amountLabel];
+        self.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         self.dateLabel.font = self.ratioLabel.font = self.amountLabel.font = [UIFont systemFontOfSize:14];
         [self updateAppearance];
     }
@@ -61,7 +62,6 @@
     SSJReportFormCanYinChartCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
     if (!cell) {
         cell = [[SSJReportFormCanYinChartCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     return cell;
 }
