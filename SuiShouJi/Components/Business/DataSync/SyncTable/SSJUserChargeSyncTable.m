@@ -19,7 +19,6 @@
              @"imoney",
              @"ibillid",
              @"ifunsid",
-             @"iconfigid",
              @"cadddate",
              @"ioldmoney",
              @"ibalance",
@@ -29,7 +28,6 @@
              @"thumburl",
              @"cmemo",
              @"cbooksid",
-             @"loanid",
              @"clientadddate",
              @"cwritedate",
              @"iversion",
@@ -46,7 +44,8 @@
     
     NSString *billId = record[@"ibillid"];
     NSString *fundId = record[@"ifunsid"];
-    NSString *configId = record[@"iconfigid"];  //  定期记账配置id可已为空（仅一次）
+    NSString *configId = record[@"cid"];  //  定期记账配置id可已为空（仅一次）
+    SSJChargeIdType idtype = [record[@"ichargetype"] integerValue];
     if (!billId || !fundId) {
         if (error) {
             *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"ibillid and fundId in record must not be nil"}];
@@ -68,7 +67,7 @@
     }
     
     //  如果返回了定期配置id，就查询定期配置表中是否有这个id
-    if (configId.length) {
+    if (configId.length && idtype == SSJChargeIdTypeCircleConfig) {
         //  定期配置表中没有对应id的记录
         if (![db boolForQuery:@"select count(*) from bk_charge_period_config where iconfigid = ? and cuserid = ?", configId, userId]) {
             return NO;
@@ -77,7 +76,7 @@
         NSInteger operatortype = [record[@"operatortype"] integerValue];
         if (operatortype != 2) {
             //  查询本地是否有相同configid和billdate的其它有效流水
-            FMResultSet *resultSet = [db executeQuery:@"select ichargeid, operatortype, cwritedate from bk_user_charge where cbilldate = ? and iconfigid = ? and cuserid = ? and ichargeid <> ? and operatortype <> 2", record[@"cbilldate"], record[@"iconfigid"], userId, record[@"ichargeid"]];
+            FMResultSet *resultSet = [db executeQuery:@"select ichargeid, operatortype, cwritedate from bk_user_charge where cbilldate = ? and cid = ? and ichargetype = ? and cuserid = ? and ichargeid <> ? and operatortype <> 2", record[@"cbilldate"], record[@"cid"], @(SSJChargeIdTypeCircleConfig) , userId, record[@"ichargeid"]];
             if (!resultSet) {
                 return NO;
             }

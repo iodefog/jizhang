@@ -52,7 +52,10 @@
             item.chargeMemo = [resultSet stringForColumn:@"cmemo"];
             item.chargeImage = [resultSet stringForColumn:@"cimgurl"];
             item.chargeThumbImage = [resultSet stringForColumn:@"thumburl"];
-            item.configId = [resultSet stringForColumn:@"iconfigid"];
+            item.idType = [resultSet intForColumn:@"ichargetype"];
+            if (item.idType == SSJChargeIdTypeCircleConfig) {
+                item.configId = [resultSet stringForColumn:@"cid"];
+            }
             NSString *billDate = [resultSet stringForColumn:@"CBILLDATE"];
             item.booksId = [resultSet stringForColumn:@"cbooksid"];
             if ([result objectForKey:billDate] == nil) {

@@ -91,7 +91,7 @@
 - (UILabel *)statusLab{
     if (!_statusLab) {
         _statusLab = [[UILabel alloc] init];
-        _statusLab.text = @"正在加载数据,请稍后...";
+        _statusLab.text = @"正在加载数据,请稍候...";
         _statusLab.font = [UIFont systemFontOfSize:16];
         _statusLab.textColor  = [UIColor ssj_colorWithHex:@"#333333"];
         [_statusLab sizeToFit];
@@ -100,7 +100,7 @@
 }
 
 - (NSTimer *)timer{
-    if (_timer) {
+    if (!_timer) {
         _timer = [NSTimer timerWithTimeInterval:1 target:self selector:@selector(updateCurrentSecond) userInfo:nil repeats:YES];
         [[NSRunLoop currentRunLoop] addTimer:_timer forMode:NSRunLoopCommonModes];
     }
@@ -119,6 +119,7 @@
     CFAbsoluteTime _currentTime = CFAbsoluteTimeGetCurrent();
     if (_currentTime - _startTime > 2) {
         [self dismiss];
+        [CDAutoHideMessageHUD showMessage:<#(NSString *)#> inView:<#(UIView *)#> duration:<#(NSTimeInterval)#>]
     } else {
         __weak typeof(self) weakSelf = self;
         dispatch_time_t time=dispatch_time(DISPATCH_TIME_NOW, (2 - _currentTime) *NSEC_PER_SEC);

@@ -51,13 +51,17 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
             item.chargeMemo = [resultSet stringForColumn:@"cmemo"];
             item.chargeImage = [resultSet stringForColumn:@"cimgurl"];
             item.chargeThumbImage = [resultSet stringForColumn:@"thumburl"];
-            item.configId = [resultSet stringForColumn:@"iconfigid"];
             item.booksId = [resultSet stringForColumn:@"cbooksid"];
             item.money = [resultSet stringForColumn:@"IMONEY"];
-            item.loanId = [resultSet stringForColumn:@"loanid"];
             item.loanSource = [resultSet stringForColumn:@"lender"];
             item.loanType = [resultSet intForColumn:@"loantype"];
             item.idType = [resultSet intForColumn:@"ichargetype"];
+            if (item.idType == SSJChargeIdTypeCircleConfig) {
+                item.configId = [resultSet stringForColumn:@"sundryid"];
+            }
+            if (item.idType == SSJChargeIdTypeLoan) {
+                item.loanId = [resultSet stringForColumn:@"sundryid"];
+            }
             item.sundryId = [resultSet stringForColumn:@"sundryid"];
             if (item.incomeOrExpence) {
                 if (![item.money hasPrefix:@"-"]) {

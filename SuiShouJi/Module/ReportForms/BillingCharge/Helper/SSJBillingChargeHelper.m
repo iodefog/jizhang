@@ -34,7 +34,7 @@ NSString *const SSJBillingChargeRecordKey = @"SSJBillingChargeRecordKey";
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         
-        NSMutableString *sql = [@"select a.ICHARGEID, a.IMONEY, a.CBILLDATE, a.CWRITEDATE, a.IFUNSID, a.IBILLID, a.cmemo, a.cimgurl, a.thumburl, a.iconfigid, a.cbooksid, b.CNAME, b.CCOIN, b.CCOLOR, b.ITYPE from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.IBILLID = :billId and a.CBILLDATE >= :beginDate and a.CBILLDATE <= :endDate and a.CBILLDATE <= datetime('now', 'localtime') and a.CUSERID = :userId and a.OPERATORTYPE <> 2" mutableCopy];
+        NSMutableString *sql = [@"select a.ICHARGEID, a.IMONEY, a.CBILLDATE, a.CWRITEDATE, a.IFUNSID, a.IBILLID, a.cmemo, a.cimgurl, a.thumburl, a.cid , a.ichargetype, a.cbooksid, b.CNAME, b.CCOIN, b.CCOLOR, b.ITYPE from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.IBILLID = :billId and a.CBILLDATE >= :beginDate and a.CBILLDATE <= :endDate and a.CBILLDATE <= datetime('now', 'localtime') and a.CUSERID = :userId and a.OPERATORTYPE <> 2" mutableCopy];
         
         NSMutableDictionary *params = [@{@"billId":ID,
                                          @"beginDate":beginDate,
@@ -76,7 +76,10 @@ NSString *const SSJBillingChargeRecordKey = @"SSJBillingChargeRecordKey";
             item.chargeMemo = [resultSet stringForColumn:@"cmemo"];
             item.chargeImage = [resultSet stringForColumn:@"cimgurl"];
             item.chargeThumbImage = [resultSet stringForColumn:@"thumburl"];
-            item.configId = [resultSet stringForColumn:@"iconfigid"];
+            item.idType = [resultSet intForColumn:@"ichargetype"];
+            if (item.idType == SSJChargeIdTypeCircleConfig) {
+                item.configId = [resultSet stringForColumn:@"cid"];
+            }
             item.booksId = [resultSet stringForColumn:@"cbooksid"];;
             
             if ([tempDate isEqualToString:item.billDate]) {
@@ -136,7 +139,7 @@ NSString *const SSJBillingChargeRecordKey = @"SSJBillingChargeRecordKey";
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         
-        NSMutableString *sql = [@"select a.ICHARGEID, c.IMONEY, a.CBILLDATE , a.CWRITEDATE , a.IFUNSID, a.IBILLID, a.cmemo, a.cimgurl, a.thumburl, a.iconfigid, a.cbooksid, b.CNAME, b.CCOIN, b.CCOLOR, b.ITYPE from BK_USER_CHARGE as a, BK_BILL_TYPE as b, bk_member_charge as c where a.IBILLID = b.ID and a.ichargeid = c.ichargeid and b.istate <> 2 and b.itype = :type and c.cmemberid = :memberId and a.CBILLDATE >= :beginDate and a.CBILLDATE <= :endDate and a.CBILLDATE <= datetime('now', 'localtime') and a.CUSERID = :userId and a.OPERATORTYPE <> 2" mutableCopy];
+        NSMutableString *sql = [@"select a.ICHARGEID, c.IMONEY, a.CBILLDATE , a.CWRITEDATE , a.IFUNSID, a.IBILLID, a.cmemo, a.cimgurl, a.thumburl, a.cid, a.ichargetype, a.cbooksid, b.CNAME, b.CCOIN, b.CCOLOR, b.ITYPE from BK_USER_CHARGE as a, BK_BILL_TYPE as b, bk_member_charge as c where a.IBILLID = b.ID and a.ichargeid = c.ichargeid and b.istate <> 2 and b.itype = :type and c.cmemberid = :memberId and a.CBILLDATE >= :beginDate and a.CBILLDATE <= :endDate and a.CBILLDATE <= datetime('now', 'localtime') and a.CUSERID = :userId and a.OPERATORTYPE <> 2" mutableCopy];
         
         NSMutableDictionary *params = [@{@"type":@(isPayment),
                                          @"memberId":ID,
@@ -180,7 +183,10 @@ NSString *const SSJBillingChargeRecordKey = @"SSJBillingChargeRecordKey";
             item.chargeMemo = [resultSet stringForColumn:@"cmemo"];
             item.chargeImage = [resultSet stringForColumn:@"cimgurl"];
             item.chargeThumbImage = [resultSet stringForColumn:@"thumburl"];
-            item.configId = [resultSet stringForColumn:@"iconfigid"];
+            item.idType = [resultSet intForColumn:@"ichargetype"];
+            if (item.idType) {
+                item.configId = [resultSet stringForColumn:@"cid"];
+            }
             item.booksId = [resultSet stringForColumn:@"cbooksid"];
             
             if ([tempDate isEqualToString:item.billDate]) {

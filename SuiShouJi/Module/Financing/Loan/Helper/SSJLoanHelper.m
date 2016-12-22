@@ -1032,7 +1032,7 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
             [chargeInfo setObject:@"" forKey:@"memo"];
         }
         
-        if (![db executeUpdate:@"replace into bk_user_charge (ichargeid, cuserid, ibillid, ifunsid, cbilldate, cid, imoney, cmemo, iversion, operatortype, cwritedatel, ichargetype) values (:chargeId, :userId, :billId, :fundId, :billDate, :loanId, :money, :memo, :version, :operatorType, :writeDate, :chargetype)" withParameterDictionary:chargeInfo]) {
+        if (![db executeUpdate:@"replace into bk_user_charge (ichargeid, cuserid, ibillid, ifunsid, cbilldate, cid, imoney, cmemo, iversion, operatortype, cwritedate, ichargetype) values (:chargeId, :userId, :billId, :fundId, :billDate, :loanId, :money, :memo, :version, :operatorType, :writeDate, :chargetype)" withParameterDictionary:chargeInfo]) {
             if (error) {
                 *error = [db lastError];
             }

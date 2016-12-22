@@ -59,7 +59,7 @@ NSString *const SSJDateStartIndexDicKey = @"SSJDateStartIndexDicKey";
         NSString *lastDate = @"";
         int count = 0;
         int chargeCount = 0;
-        FMResultSet *chargeResult = [db executeQuery:@"select a.cbilldate , a.imoney , a.ichargeid , a.ibillid , a.cwritedate  ,a.ifunsid , a.cuserid , a.cimgurl ,  a.thumburl ,a.cmemo , a.iconfigid , a.operatortype as chargeoperatortype , a.clientadddate , b.cname, b.ccoin, b.ccolor, b.itype from (select cbilldate , imoney , ichargeid , ibillid , cwritedate  ,ifunsid , cuserid , cmemo ,  cimgurl ,  thumburl , iconfigid , operatortype , clientadddate from (select cbilldate , imoney , ichargeid , ibillid , cwritedate , ifunsid , cuserid , cmemo ,  cimgurl , thumburl , iconfigid , operatortype , cbooksid , clientadddate from bk_user_charge where operatortype != 2 and cbooksid = ?) where cuserid = ? union select * from (select cbilldate , sumamount as imoney , '' as ichargeid , '-1' as ibillid , '3'||substr(cwritedate,2) as cwritedate , '' as ifunsid , cuserid , '' as cmemo , '' as cimgurl , '' as thumburl ,  0 as operatortype , cbooksid , '3'||substr(cwritedate,2) as clientadddate from bk_dailysum_charge where cuserid = ? and cbooksid = ? order by cbilldate desc)) as a left join bk_bill_type as b on a.ibillid = b.id where a.cbilldate <= ? and (b.istate <> 2 or b.istate is null) order by a.cbilldate desc , a.clientadddate desc ,  a.cwritedate desc",booksid,userid,userid,booksid,[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"]];
+        FMResultSet *chargeResult = [db executeQuery:@"select a.cbilldate , a.imoney , a.ichargeid , a.ibillid , a.cwritedate  ,a.ifunsid , a.cuserid , a.cimgurl ,  a.thumburl ,a.cmemo , a.operatortype as chargeoperatortype , a.clientadddate , b.cname, b.ccoin, b.ccolor, b.itype from (select cbilldate , imoney , ichargeid , ibillid , cwritedate  ,ifunsid , cuserid , cmemo ,  cimgurl ,  thumburl , operatortype, cbooksid , clientadddate from (select cbilldate , imoney , ichargeid , ibillid , cwritedate , ifunsid , cuserid , cmemo ,  cimgurl , thumburl , operatortype , cbooksid , clientadddate from bk_user_charge where operatortype != 2 and cbooksid = ?) where cuserid = ? union select * from (select cbilldate , sumamount as imoney , '' as ichargeid , '-1' as ibillid , '3'||substr(cwritedate,2) as cwritedate , '' as ifunsid , cuserid , '' as cmemo , '' as cimgurl , '' as thumburl ,  0 as operatortype , cbooksid , '3'||substr(cwritedate,2) as clientadddate from bk_dailysum_charge where cuserid = ? and cbooksid = ? order by cbilldate desc)) as a left join bk_bill_type as b on a.ibillid = b.id where a.cbilldate <= ? and (b.istate <> 2 or b.istate is null) order by a.cbilldate desc , a.clientadddate desc ,  a.cwritedate desc",booksid,userid,userid,booksid,[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"]];
         if (!chargeResult) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{
@@ -82,7 +82,6 @@ NSString *const SSJDateStartIndexDicKey = @"SSJDateStartIndexDicKey";
             item.chargeImage = [chargeResult stringForColumn:@"CIMGURL"];
             item.chargeThumbImage = [chargeResult stringForColumn:@"THUMBURL"];
             item.chargeMemo = [chargeResult stringForColumn:@"CMEMO"];
-            item.configId = [chargeResult stringForColumn:@"ICONFIGID"];
             item.operatorType = [chargeResult intForColumn:@"CHARGEOPERATORTYPE"];
             item.billDate = [chargeResult stringForColumn:@"CBILLDATE"];
             item.clientAddDate = [chargeResult stringForColumn:@"clientadddate"];
@@ -172,7 +171,6 @@ NSString *const SSJDateStartIndexDicKey = @"SSJDateStartIndexDicKey";
     item.chargeImage = [set stringForColumn:@"CIMGURL"];
     item.chargeThumbImage = [set stringForColumn:@"THUMBURL"];
     item.chargeMemo = [set stringForColumn:@"CMEMO"];
-    item.configId = [set stringForColumn:@"ICONFIGID"];
     item.billDate = [set stringForColumn:@"CBILLDATE"];
     return item;
 }
