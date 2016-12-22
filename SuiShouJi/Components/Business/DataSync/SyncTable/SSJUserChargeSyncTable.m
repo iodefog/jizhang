@@ -33,6 +33,8 @@
              @"clientadddate",
              @"cwritedate",
              @"iversion",
+             @"ichargetype",
+             @"cid",
              @"operatortype"];
 }
 

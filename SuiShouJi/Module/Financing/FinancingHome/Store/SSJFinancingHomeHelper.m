@@ -51,7 +51,7 @@
         [fundingResult close];
         NSString *currentDate = [[NSDate date]formattedDateWithFormat:@"yyyy-MM-dd"];
         for (SSJFinancingHomeitem *item in fundingList) {
-            item.fundingAmount = [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and (a.cbilldate <= ? or length(a.loanid) > 0) and b.itype = 0 and a.ifunsid = ?",userid,currentDate,item.fundingID] - [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and (a.cbilldate <= ? or length(a.loanid) > 0) and b.itype = 1 and a.ifunsid = ?",userid,currentDate,item.fundingID];
+            item.fundingAmount = [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and (a.cbilldate <= ? or ichargetype = ?) and b.itype = 0 and a.ifunsid = ?",userid,currentDate,@(SSJChargeIdTypeLoan),item.fundingID] - [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and (a.cbilldate <= ? or ichargetype = ?) and b.itype = 1 and a.ifunsid = ?",userid,currentDate,@(SSJChargeIdTypeLoan),item.fundingID];
             item.chargeCount = [db intForQuery:@"select count(1) from bk_user_charge where ifunsid = ? and cuserid = ? and operatortype <> 2",item.fundingID,userid];
         }
         if (success) {
@@ -67,7 +67,7 @@
         NSString *userid = SSJUSERID();
         double fundingSum = 0;
         NSString *currentDate = [[NSDate date]formattedDateWithFormat:@"yyyy-MM-dd"];
-        fundingSum = [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge a, bk_bill_type b ,bk_fund_info c where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and (a.cbilldate <= ? or length(a.loanid) > 0) and b.itype = 0 and a.ifunsid = c.cfundid and c.idisplay = 1 and c.operatortype <> 2",userid,currentDate] - [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge a, bk_bill_type b ,bk_fund_info c where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and (a.cbilldate <= ? or length(a.loanid) > 0) and b.itype = 1 and a.ifunsid = c.cfundid and c.idisplay = 1 and c.operatortype <> 2",userid,currentDate];
+        fundingSum = [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge a, bk_bill_type b ,bk_fund_info c where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and (a.cbilldate <= ? or ichargetype = ?) and b.itype = 0 and a.ifunsid = c.cfundid and c.idisplay = 1 and c.operatortype <> 2",userid,currentDate,@(SSJChargeIdTypeLoan)] - [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge a, bk_bill_type b ,bk_fund_info c where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and (a.cbilldate <= ? or ichargetype = ?) and b.itype = 1 and a.ifunsid = c.cfundid and c.idisplay = 1 and c.operatortype <> 2",userid,currentDate,@(SSJChargeIdTypeLoan)];
         if (success) {
             SSJDispatch_main_async_safe(^{
                 success(fundingSum);
@@ -217,7 +217,7 @@
                     };
                     
                     //找出所有和当前资金帐户有关的借贷
-                    FMResultSet *resultSet = [db executeQuery:@"select * from bk_loan where loanid in (select loanid from bk_user_charge where ifunsid = ? and operatortype <> 2)", fundingItem.fundingID];
+                    FMResultSet *resultSet = [db executeQuery:@"select * from bk_loan where loanid in (select cid from bk_user_charge where ifunsid = ? and operatortype <> 2 and ichargetype = ?)", fundingItem.fundingID,@(SSJChargeIdTypeLoan)];
                     NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:0];
                     while ([resultSet next]) {
                         SSJLoanModel *loanModel = [[SSJLoanModel alloc] init];

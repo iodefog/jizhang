@@ -82,7 +82,6 @@
             item.chargeThumbImage = [resultSet stringForColumn:@"thumburl"];
             item.configId = [resultSet stringForColumn:@"iconfigid"];
             item.booksId = [resultSet stringForColumn:@"cbooksid"];
-            item.loanId = [resultSet stringForColumn:@"loanid"];
             item.incomeOrExpence = [resultSet boolForColumn:@"itype"];
             item.money = [NSString stringWithFormat:@"%.2f",[[resultSet stringForColumn:@"IMONEY"] doubleValue]];
             count ++;

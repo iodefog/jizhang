@@ -19,6 +19,7 @@
 #import "SSJUserRemindSyncTable.h"
 #import "SSJLoanSyncTable.h"
 #import "SSJUserCreditSyncTable.h"
+#import "SSJCreditRepaymentSyncTable.h"
 
 #import "SSJSyncTable.h"
 
@@ -64,6 +65,7 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
         
         NSSet *secondLayer = [NSSet setWithObjects:[SSJFundInfoSyncTable class],
                                                    [SSJUserCreditSyncTable class],
+                                                   [SSJCreditRepaymentSyncTable class],
                                                    [SSJUserBillSyncTable class],
                                                    [SSJUserBudgetSyncTable class], nil];
         
