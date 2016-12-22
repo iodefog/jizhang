@@ -18,8 +18,4 @@
 
 //判断是否是第一个或者最后一个cell
 - (void)tableView:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath;
-/*
- *根据颜色画实线圆
- */
-- (void)drawCircleWithColor:(NSString *)colorStr;
 @end

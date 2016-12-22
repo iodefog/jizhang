@@ -32,10 +32,11 @@
     }
     return self;
 }
+
 - (void)setImageColor:(NSString *)imageColor
 {
     _imageColor = imageColor;
-    [self drawCircleWithColor:imageColor];
+    [self setNeedsDisplay];
 }
 
 - (void)layoutSubviews
@@ -62,45 +63,6 @@
     self.topLineLayer.hidden = indexPath.row == 0;
     self.bottomLineLayer.hidden = indexPath.row == [tableView numberOfRowsInSection:indexPath.section] - 1;
 }
-
-/*
- *画实线圆
- */
-
-- (void)drawCircleWithColor:(NSString *)colorStr
-{
-    //    第一层直径20px 30%  第二层直径14px 30%   中间最小的点实色 直径8px
-    CGRect frame1 = CGRectMake(10, (self.height - 10)*0.5, 10, 10);//最外面
-    CGRect frame2 = CGRectMake(11.5, (self.height - 7)*0.5, 7, 7);
-    CGRect frame3 = CGRectMake(13, (self.height - 4)*0.5, 4, 4);
-    UIColor *color1 = [UIColor ssj_colorWithHex:colorStr alpha:0.3];
-    UIColor *color2 = color1;
-    UIColor *color3 = [UIColor ssj_colorWithHex:colorStr];
-    CAShapeLayer *solidLine1 =  [CAShapeLayer layer];
-    CGMutablePathRef solidPath1 =  CGPathCreateMutable();
-    solidLine1.fillColor = color1.CGColor;
-    CGPathAddEllipseInRect(solidPath1, nil, frame1);
-    solidLine1.path = solidPath1;
-    CGPathRelease(solidPath1);
-    [self.contentView.layer addSublayer:solidLine1];
-    
-    CAShapeLayer *solidLine2 =  [CAShapeLayer layer];
-    CGMutablePathRef solidPath2 =  CGPathCreateMutable();
-    solidLine2.fillColor = color2.CGColor;
-    CGPathAddEllipseInRect(solidPath2, nil, frame2);
-    solidLine2.path = solidPath2;
-    CGPathRelease(solidPath2);
-    [self.contentView.layer addSublayer:solidLine2];
-    
-    CAShapeLayer *solidLine3 =  [CAShapeLayer layer];
-    CGMutablePathRef solidPath3 =  CGPathCreateMutable();
-    solidLine3.fillColor = color3.CGColor;
-    CGPathAddEllipseInRect(solidPath3, nil, frame3);
-    solidLine3.path = solidPath3;
-    CGPathRelease(solidPath3);
-    [self.contentView.layer addSublayer:solidLine3];
-}
-
 
 
 #pragma mark - Lazy
@@ -167,4 +129,30 @@
    self.ratioLabel.textColor = self.amountLabel.textColor = self.dateLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     
 }
+
+
+- (void)drawRect:(CGRect)rect
+{
+    //    第一层直径20px 30%  第二层直径14px 30%   中间最小的点实色 直径8px
+    CGRect frame1 = CGRectMake(10, (self.height - 10)*0.5, 10, 10);//最外面
+    CGRect frame2 = CGRectMake(11.5, (self.height - 7)*0.5, 7, 7);
+    CGRect frame3 = CGRectMake(13, (self.height - 4)*0.5, 4, 4);
+    UIColor *color1 = [UIColor ssj_colorWithHex:self.imageColor alpha:0.3];
+    UIColor *color2 = color1;
+    UIColor *color3 = [UIColor ssj_colorWithHex:self.imageColor];
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetLineWidth(context, 0.0);
+    CGContextAddEllipseInRect(context, frame1);//在这个框中画圆
+    [color1 set];
+    CGContextFillPath(context);
+    
+    CGContextAddEllipseInRect(context, frame2);//在这个框中画圆
+    CGContextFillPath(context);
+    [color2 set];
+    CGContextAddEllipseInRect(context, frame3);//在这个框中画圆
+    [color3 set];
+    CGContextFillPath(context);
+}
+
+
 @end
