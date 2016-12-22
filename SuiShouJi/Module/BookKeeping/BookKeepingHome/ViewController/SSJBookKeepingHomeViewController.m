@@ -673,7 +673,7 @@ BOOL kHomeNeedLoginPop;
     }
 }
 
--(void)updateAppearanceAfterThemeChanged {
+- (void)updateAppearanceAfterThemeChanged {
     [super updateAppearanceAfterThemeChanged];
     [self.bookKeepingHeader updateAfterThemeChange];
     [self.tableView updateAfterThemeChange];
@@ -693,7 +693,7 @@ BOOL kHomeNeedLoginPop;
     }
 }
 
--(void)getDateFromDatebase{
+- (void)getDateFromDatebase{
     [self.tableView ssj_showLoadingIndicator];
     __weak typeof(self) weakSelf = self;
     if (self.allowRefresh) {
