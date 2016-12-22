@@ -1,62 +1,57 @@
 //
 //  SSJReportFormsCurveGraphView.m
-//  SSJCurveGraphDemo
+//  SSJCurveGraphView
 //
-//  Created by old lang on 16/6/1.
+//  Created by old lang on 16/12/16.
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
 
 #import "SSJReportFormsCurveGraphView.h"
-#import "SSJReportFormsCurveView.h"
-#import "SSJReportFormsCurveAxisView.h"
+#import "SSJReportFormsCurveGridView.h"
+#import "SSJReportFormsCurveBalloonView.h"
+#import "SSJReportFormsCurveCell.h"
+#import "SSJReportFormsCurveDot.h"
+#import "SSJReportFormsCurveSuspensionView.h"
+#import "SSJReportFormsCurveCellItem.h"
+#import "SSJReportFormsCurveViewItem.h"
 
-static const CGFloat kTopSpaceHeight = 106;
-static const CGFloat kBottomSpaceHeight = 32;
+static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID";
 
-@interface SSJReportFormsCurveGraphView () <UIScrollViewDelegate>
+@interface SSJReportFormsCurveGraphView () <UICollectionViewDataSource, UICollectionViewDelegate, SSJReportFormsCurveGridViewDataSource>
 
-@property (nonatomic, strong) UIScrollView *scrollView;
+@property (nonatomic, strong) SSJReportFormsCurveGridView *gridView;
 
-@property (nonatomic, strong) SSJReportFormsCurveView *curveView;
+@property (nonatomic, strong) SSJReportFormsCurveBalloonView *ballonView;
 
-@property (nonatomic, strong) SSJReportFormsCurveAxisView *axisXView;
+@property (nonatomic, strong) UICollectionView *collectionView;
 
-@property (nonatomic, strong) UIView *verticalLine;
+@property (nonatomic, strong) SSJReportFormsCurveSuspensionView *suspensionView;
 
-@property (nonatomic, strong) UIView *paymentPoint;
+@property (nonatomic, strong) NSMutableArray<SSJReportFormsCurveDot *> *dots;
 
-@property (nonatomic, strong) UIView *incomePoint;
+@property (nonatomic, strong) NSMutableArray<UILabel *> *labels;
 
-@property (nonatomic, strong) UILabel *paymentLabel;
+@property (nonatomic, strong) NSMutableArray<UIColor *> *curveColors;
 
-@property (nonatomic, strong) UILabel *incomeLabel;
+@property (nonatomic, strong) NSMutableArray<SSJReportFormsCurveSuspensionViewItem *> *suspensionItems;
 
-@property (nonatomic, strong) UILabel *surplusLabel;
+@property (nonatomic, strong) NSMutableArray<NSArray *> *values;
 
-@property (nonatomic, strong) UILabel *surplusValueLabel;
+@property (nonatomic, strong) NSMutableArray<SSJReportFormsCurveCellItem *> *items;
 
-@property (nonatomic, strong) UIImageView *balloonView;
+@property (nonatomic, strong) UIColor *defaultCurveColor;
 
-@property (nonatomic, strong) NSMutableArray *paymentValues;
-
-@property (nonatomic, strong) NSMutableArray *incomeValues;
-
-@property (nonatomic, strong) NSMutableArray *axisYLabels;
-
-@property (nonatomic, strong) NSMutableArray *horizontalLines;
-
-@property (nonatomic) long maxValue;
+@property (nonatomic) CGFloat maxValue;
 
 @property (nonatomic) NSUInteger axisXCount;
 
-@property (nonatomic) NSUInteger selectedAxisXIndex;
+@property (nonatomic) NSUInteger curveCount;
 
-// X轴刻度宽度
-@property (nonatomic) CGFloat unitX;
+@property (nonatomic) NSUInteger currentIndex;
 
-@property (nonatomic) CGFloat maxSurplusValue;
+@property (nonatomic) BOOL userScrolled;
 
-@property (nonatomic) CGFloat minSurplusValue;
+@property (nonatomic) BOOL hasReloaded;
 
 @end
 
@@ -65,460 +60,825 @@ static const CGFloat kBottomSpaceHeight = 32;
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         
-        _displayAxisXCount = 7;
-        _scaleColor = [UIColor grayColor];
-        _paymentCurveColor = [UIColor greenColor];
-        _incomeCurveColor = [UIColor redColor];
-        _balloonColor = [UIColor orangeColor];
+        _unitAxisXLength = 50;
+        _axisYCount = 6;
+        _curveInsets = UIEdgeInsetsMake(46, 0, 56, 0);
+        _scaleColor = [UIColor lightGrayColor];
+        _scaleTitleFontSize = 10;
+        _showCurveShadow = YES;
+        _showOriginAndTerminalCurve = NO;
+        _valueColor = [UIColor blackColor];
+        _valueFontSize = 12;
         
-        _selectedAxisXIndex = 0;
-        _paymentValues = [[NSMutableArray alloc] init];
-        _incomeValues = [[NSMutableArray alloc] init];
-        _axisYLabels = [[NSMutableArray alloc] init];
-        _horizontalLines = [[NSMutableArray alloc] init];
+        _curveCount = 1;
+        _dots = [[NSMutableArray alloc] init];
+        _labels = [[NSMutableArray alloc] init];
+        _curveColors = [[NSMutableArray alloc] init];
+        _suspensionItems = [[NSMutableArray alloc] init];
+        _values = [[NSMutableArray alloc] init];
+        _items = [[NSMutableArray alloc] init];
+        _defaultCurveColor = [UIColor redColor];
         
-        [self addSubview:self.scrollView];
-        [self.scrollView addSubview:self.curveView];
-        [self.scrollView addSubview:self.axisXView];
-        [self addSubview:self.verticalLine];
-        [self addSubview:self.paymentPoint];
-        [self addSubview:self.incomePoint];
-        [self addSubview:self.paymentLabel];
-        [self addSubview:self.incomeLabel];
-        [self addSubview:self.balloonView];
-        [self.balloonView addSubview:self.surplusLabel];
-        [self.balloonView addSubview:self.surplusValueLabel];
-        
-        [self updateSubviewHidden];
+        [self addSubview:self.gridView];
+        [self addSubview:self.ballonView];
+        [self addSubview:self.collectionView];
+        [self addSubview:self.suspensionView];
     }
     return self;
 }
 
 - (void)layoutSubviews {
-    if (_axisXCount == 0) {
+    
+    [self caculateCurvePoint];
+    [self updateDotsAndLabelsPosition];
+    
+    [_gridView reloadData];
+    
+    for (SSJReportFormsCurveCellItem *item in _items) {
+        item.scaleTop = self.height - _curveInsets.bottom;
+    }
+    
+    _gridView.frame = self.bounds;
+    
+    _ballonView.top = 10;
+    _ballonView.height = self.height - _curveInsets.bottom - _ballonView.top;
+    _ballonView.centerX = self.width * 0.5;
+    
+    [_collectionView.collectionViewLayout invalidateLayout];
+    _collectionView.frame = CGRectMake(0, 0, self.width, self.height - _curveInsets.bottom + _scaleTitleFontSize + 14);
+    [self updateContentInset];
+    
+    _suspensionView.frame = CGRectMake(0, _collectionView.bottom, self.width, self.height - _collectionView.bottom);
+    
+    static BOOL firstLayout = YES;
+    if (firstLayout) {
+        firstLayout = NO;
+        _userScrolled = NO;
+        [self updateContentOffset:NO];
+    }
+}
+
+#pragma mark - UICollectionViewDataSource
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    return _items.count;
+}
+
+- (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    SSJReportFormsCurveCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kSSJReportFormsCurveCellID forIndexPath:indexPath];
+    
+    if (_items.count > indexPath.item) {
+        SSJReportFormsCurveCellItem *item = [_items objectAtIndex:indexPath.item];
+        cell.cellItem = item;
+    }
+    
+#warning test
+//    cell.layer.borderColor = [UIColor redColor].CGColor;
+//    cell.layer.borderWidth = 1;
+    
+    return cell;
+}
+
+#pragma mark - UICollectionViewDelegate
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.item < 0 || indexPath.item >= _items.count - 1) {
         return;
     }
     
-    CGFloat unitHeight = (self.height - kTopSpaceHeight - kBottomSpaceHeight) * 0.2;
-    
-    for (int i = 0; i < _axisYLabels.count; i ++) {
-        UILabel *label = _axisYLabels[i];
-        label.bottom = unitHeight * i + kTopSpaceHeight - 2;
+    if (_currentIndex != indexPath.item) {
+        for (SSJReportFormsCurveDot *dot in _dots) {
+            dot.hidden = YES;
+        }
+        
+        for (UILabel *label in _labels) {
+            label.hidden = YES;
+        }
     }
     
-    for (int i = 0; i < _horizontalLines.count; i ++) {
-        UIView *line = _horizontalLines[i];
-        line.frame = CGRectMake(0, kTopSpaceHeight + unitHeight * i, self.width, 1 / [UIScreen mainScreen].scale);
+    _userScrolled = YES;
+    _currentIndex = indexPath.item;
+    [self updateBallonAndLablesTitle];
+    [self updateDotsAndLabelsPosition];
+    [self updateContentOffset:YES];
+}
+
+#pragma mark - UICollectionViewDelegateFlowLayout
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.item == 0 || indexPath.item == _items.count - 1) {
+        return CGSizeMake(_unitAxisXLength * 0.5, _collectionView.height);
+    } else {
+        return CGSizeMake(_unitAxisXLength, _collectionView.height);
     }
-    
-    _unitX = self.width / (_displayAxisXCount - 1);
-    
-    CGFloat width = _unitX * (_axisXCount - 1);
-    _curveView.frame = CGRectMake(0, kTopSpaceHeight, width, self.height - kTopSpaceHeight - kBottomSpaceHeight);
-    
-    _axisXView.frame = CGRectMake(0, self.height - kBottomSpaceHeight, width, kBottomSpaceHeight);
-    
-    _scrollView.frame = self.bounds;
-    _scrollView.contentSize = CGSizeMake(width, self.height);
-    _scrollView.contentInset = UIEdgeInsetsMake(0, _axisXCount == 1 ? 0 : _scrollView.width * 0.5, 0, _scrollView.width * 0.5);
-    [_scrollView setContentOffset:CGPointMake(_unitX * _selectedAxisXIndex - self.width * 0.5, 0) animated:NO];
-    
-    _verticalLine.frame = CGRectMake(self.width * 0.5, 60, 1 / [UIScreen mainScreen].scale, self.height - 60 - kBottomSpaceHeight);
-    
-    _balloonView.centerX = self.width * 0.5;
-    _balloonView.top = 10;
-    _surplusLabel.top = 10;
-    _surplusLabel.centerX = _balloonView.width * 0.5;
-    
-    [self adjustPaymentAndIncomePoint];
-    [self updateSurplus];
-    
-//#warning test
-//    _scrollView.clipsToBounds = NO;
-//    _scrollView.layer.borderColor = [UIColor blueColor].CGColor;
-//    _scrollView.layer.borderWidth = 1;
-//    _curveView.frame = CGRectMake(0, kTopSpaceHeight, width, self.height - kTopSpaceHeight - kBottomSpaceHeight + 40);
-//    _curveView.layer.borderColor = [UIColor yellowColor].CGColor;
-//    _curveView.layer.borderWidth = 1;
-//    _curveView.layer.zPosition = 100;
-//    _curveView.contentInsets = UIEdgeInsetsMake(0, 0, 40, 0);
 }
 
 #pragma mark - UIScrollViewDelegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    if (!scrollView.tracking && !scrollView.dragging && !scrollView.decelerating) {
-        return;
+    if (scrollView.tracking || scrollView.dragging || scrollView.decelerating) {
+        for (SSJReportFormsCurveDot *dot in _dots) {
+            dot.hidden = YES;
+        }
+        for (UILabel *label in _labels) {
+            label.hidden = YES;
+        }
     }
     
-    if (scrollView.contentOffset.x == -scrollView.contentInset.left) {
-        _selectedAxisXIndex = 0;
-        [self adjustPaymentAndIncomePoint];
-        [self updateSurplus];
-    } else if (scrollView.contentOffset.x == _axisXView.width - _scrollView.width * 0.5) {
-        _selectedAxisXIndex = _axisXCount - 1;
-        [self adjustPaymentAndIncomePoint];
-        [self updateSurplus];
-    }
+    _suspensionView.contentOffsetX = _collectionView.contentOffset.x;
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-    [self adjustOffSetXToCenter];
-    if (_delegate && [_delegate respondsToSelector:@selector(curveGraphView:didScrollToAxisXIndex:)]) {
-        [_delegate curveGraphView:self didScrollToAxisXIndex:_selectedAxisXIndex];
+    
+    NSIndexPath *indexPath = [self indexPathForCenterX];
+    if (indexPath && indexPath.item >= 0 && indexPath.item < _axisXCount) {
+        
+        _userScrolled = YES;
+        _currentIndex = indexPath.item;
+        [self updateBallonAndLablesTitle];
+        [self updateDotsAndLabelsPosition];
+        [self updateContentOffset:YES];
+        
+        if (_currentIndex == 0 || _currentIndex == _axisXCount - 1) {
+            for (SSJReportFormsCurveDot *dot in _dots) {
+                dot.hidden = !_showBalloon;
+            }
+            
+            for (UILabel *label in _labels) {
+                label.hidden = !_showBalloon;
+            }
+            
+            if (_delegate && [_delegate respondsToSelector:@selector(curveGraphView:didScrollToAxisXIndex:)]) {
+                [_delegate curveGraphView:self didScrollToAxisXIndex:_currentIndex];
+            }
+        }
     }
+    
+//    CGFloat rightGap = _collectionView.width - (_collectionView.contentSize.width - _collectionView.contentOffset.x);
+//    
+//    if (_collectionView.contentOffset.x == -_collectionView.contentInset.left) {
+//        
+//        _currentIndex = 0;
+//        [self updateBallonAndLablesTitle];
+//        [self updateDotsAndLabelsPosition];
+//        
+//        for (SSJReportFormsCurveDot *dot in _dots) {
+//            dot.hidden = !_showBalloon;
+//        }
+//        
+//        for (UILabel *label in _labels) {
+//            label.hidden = !_showBalloon;
+//        }
+//
+//        if (_delegate && [_delegate respondsToSelector:@selector(curveGraphView:didScrollToAxisXIndex:)]) {
+//            [_delegate curveGraphView:self didScrollToAxisXIndex:_currentIndex];
+//        }
+//
+//    } else if (rightGap == _collectionView.contentInset.right) {
+//        
+//        _currentIndex = _axisXCount - 1;
+//        [self updateBallonAndLablesTitle];
+//        [self updateDotsAndLabelsPosition];
+//        
+//        for (SSJReportFormsCurveDot *dot in _dots) {
+//            dot.hidden = !_showBalloon;
+//        }
+//        
+//        for (UILabel *label in _labels) {
+//            label.hidden = !_showBalloon;
+//        }
+//        
+//        if (_delegate && [_delegate respondsToSelector:@selector(curveGraphView:didScrollToAxisXIndex:)]) {
+//            [_delegate curveGraphView:self didScrollToAxisXIndex:_currentIndex];
+//        }
+//        
+//    } else {
+//        
+//        NSIndexPath *indexPath = [self indexPathForCenterX];
+//        if (indexPath && indexPath.item >= 0) {
+//            _userScrolled = YES;
+//            _currentIndex = indexPath.item;
+//            [self updateBallonAndLablesTitle];
+//            [self updateDotsAndLabelsPosition];
+//            [self updateContentOffsetWithIndexPath:indexPath animated:YES];
+//        }
+//    }
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
     if (!decelerate) {
-        [self adjustOffSetXToCenter];
-        if (_delegate && [_delegate respondsToSelector:@selector(curveGraphView:didScrollToAxisXIndex:)]) {
-            [_delegate curveGraphView:self didScrollToAxisXIndex:_selectedAxisXIndex];
+        
+        NSIndexPath *indexPath = [self indexPathForCenterX];
+        if (indexPath && indexPath.item >= 0 && indexPath.item < _axisXCount) {
+            _userScrolled = YES;
+            _currentIndex = indexPath.item;
+            [self updateBallonAndLablesTitle];
+            [self updateDotsAndLabelsPosition];
+            [self updateContentOffset:YES];
         }
     }
 }
 
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
-    [self adjustPaymentAndIncomePoint];
-    [self updateSurplus];
+    for (SSJReportFormsCurveDot *dot in _dots) {
+        dot.hidden = !_showBalloon;
+    }
+    
+    for (UILabel *label in _labels) {
+        label.hidden = !_showBalloon;
+    }
+    
+    if (_userScrolled && _delegate && [_delegate respondsToSelector:@selector(curveGraphView:didScrollToAxisXIndex:)]) {
+        [_delegate curveGraphView:self didScrollToAxisXIndex:_currentIndex];
+    }
 }
 
-#pragma mark - Public
+#pragma mark - SSJReportFormsCurveGridViewDataSource
+- (NSUInteger)numberOfHorizontalLineInGridView:(SSJReportFormsCurveGridView *)gridView {
+    return _axisYCount;
+}
+
+- (CGFloat)gridView:(SSJReportFormsCurveGridView *)gridView headerSpaceOnHorizontalLineAtIndex:(NSUInteger)index {
+    if (index == 0) {
+        return _curveInsets.top;
+    } else {
+        if (_axisYCount > 1) {
+            return (self.height - _curveInsets.bottom - _curveInsets.top) / (_axisYCount - 1);
+        } else if (_axisYCount == 1) {
+            return self.height - _curveInsets.bottom;
+        } else {
+            return 0;
+        }
+    }
+}
+
+- (nullable NSString *)gridView:(SSJReportFormsCurveGridView *)gridView titleAtIndex:(NSUInteger)index {
+    if (_axisYCount > 1) {
+        CGFloat unitValue = _maxValue / (_axisYCount - 1);
+        CGFloat value = _maxValue - unitValue * index;
+        return [NSString stringWithFormat:@"%.2f", value];
+    } else if (_axisYCount == 1) {
+        return @"0.00";
+    } else {
+        return nil;
+    }
+}
+
+#pragma mark - Pulic
+- (void)setUnitAxisXLength:(CGFloat)unitAxisXLength {
+    if (_unitAxisXLength != unitAxisXLength) {
+        _unitAxisXLength = unitAxisXLength;
+        _suspensionView.unitSpace = _unitAxisXLength;
+        CGFloat offsetX = (_currentIndex + 0.5) * _unitAxisXLength - _collectionView.width * 0.5;
+        [_collectionView setContentOffset:CGPointMake(offsetX, 0) animated:NO];
+        [self setNeedsLayout];
+    }
+}
+
+- (void)setAxisYCount:(NSUInteger)axisYCount {
+    if (_axisYCount != axisYCount) {
+        _axisYCount = axisYCount;
+        [_gridView reloadData];
+    }
+}
+
+- (void)setCurveInsets:(UIEdgeInsets)curveInsets {
+    if (!UIEdgeInsetsEqualToEdgeInsets(_curveInsets, curveInsets)) {
+        _curveInsets = curveInsets;
+        [self setNeedsLayout];
+    }
+}
+
 - (void)setScaleColor:(UIColor *)scaleColor {
     if (!CGColorEqualToColor(_scaleColor.CGColor, scaleColor.CGColor)) {
         _scaleColor = scaleColor;
+        _gridView.titleColor = _scaleColor;
+        _gridView.lineColor = _scaleColor;
         
-        [_axisYLabels makeObjectsPerformSelector:@selector(setTextColor:) withObject:_scaleColor];
-        [_horizontalLines makeObjectsPerformSelector:@selector(setBackgroundColor:) withObject:_scaleColor];
-        _axisXView.titleColor = _scaleColor;
-        _axisXView.scaleColor = _scaleColor;
+        for (SSJReportFormsCurveCellItem *item in _items) {
+            item.scaleColor = _scaleColor;
+            item.titleColor = _scaleColor;
+        }
     }
 }
 
-- (void)setPaymentCurveColor:(UIColor *)paymentCurveColor {
-    if (!CGColorEqualToColor(_paymentCurveColor.CGColor, paymentCurveColor.CGColor)) {
-        _paymentCurveColor = paymentCurveColor;
-        
-        _paymentPoint.backgroundColor = _paymentCurveColor;
-        _paymentLabel.textColor = _paymentCurveColor;
-        _curveView.paymentCurveColor = _paymentCurveColor;
+- (void)setScaleTitleFontSize:(CGFloat)scaleTitleFontSize {
+    if (_scaleTitleFontSize != scaleTitleFontSize) {
+        _scaleTitleFontSize = scaleTitleFontSize;
+        _gridView.titleFont = [UIFont systemFontOfSize:_scaleTitleFontSize];
+        [_items makeObjectsPerformSelector:@selector(setFont:) withObject:[UIFont systemFontOfSize:_scaleTitleFontSize]];
     }
 }
 
-- (void)setIncomeCurveColor:(UIColor *)incomeCurveColor {
-    if (!CGColorEqualToColor(_incomeCurveColor.CGColor, incomeCurveColor.CGColor)) {
-        _incomeCurveColor = incomeCurveColor;
+- (void)setShowBalloon:(BOOL)showBalloon {
+    if (_showBalloon != showBalloon) {
+        _showBalloon = showBalloon;
         
-        _incomePoint.backgroundColor = _incomeCurveColor;
-        _incomeLabel.textColor = _incomeCurveColor;
-        _curveView.incomeCurveColor = _incomeCurveColor;
+        for (SSJReportFormsCurveDot *dot in _dots) {
+            dot.hidden = !_showBalloon;
+        }
+        
+        for (UILabel *label in _labels) {
+            label.hidden = !_showBalloon;
+        }
+        
+        _ballonView.hidden = !_showBalloon;
+        
+        [self updateBallonAndLablesTitle];
     }
 }
 
-- (void)setBalloonColor:(UIColor *)balloonColor {
-    if (!CGColorEqualToColor(_balloonColor.CGColor, balloonColor.CGColor)) {
-        _balloonColor = balloonColor;
+- (void)setBalloonTitleAttributes:(NSDictionary *)balloonTitleAttributes {
+    _ballonView.titleFont = balloonTitleAttributes[NSFontAttributeName];
+    _ballonView.titleColor = balloonTitleAttributes[NSForegroundColorAttributeName];
+    _ballonView.ballonColor = balloonTitleAttributes[NSBackgroundColorAttributeName];
+}
+
+- (void)setShowValuePoint:(BOOL)showValuePoint {
+    if (_showValuePoint != showValuePoint) {
+        _showValuePoint = showValuePoint;
         
-        _balloonView.tintColor = _balloonColor;
-        _verticalLine.backgroundColor = _balloonColor;
+        for (SSJReportFormsCurveCellItem *cellItem in _items) {
+            for (SSJReportFormsCurveViewItem *curveItem in cellItem.curveItems) {
+                curveItem.showDot = _showValuePoint;
+                curveItem.showValue = _showValuePoint;
+            }
+        }
+    }
+}
+
+- (void)setValueColor:(UIColor *)valueColor {
+    if (!CGColorEqualToColor(_valueColor.CGColor, valueColor.CGColor)) {
+        _valueColor = valueColor;
+        
+        for (SSJReportFormsCurveCellItem *cellItem in _items) {
+            for (SSJReportFormsCurveViewItem *curveItem in cellItem.curveItems) {
+                curveItem.valueColor = _valueColor;
+            }
+        }
+    }
+}
+
+- (void)setValueFontSize:(CGFloat)valueFontSize {
+    if (_valueFontSize != valueFontSize) {
+        _valueFontSize = valueFontSize;
+        
+        for (SSJReportFormsCurveCellItem *cellItem in _items) {
+            for (SSJReportFormsCurveViewItem *curveItem in cellItem.curveItems) {
+                curveItem.valueFont = [UIFont systemFontOfSize:_valueFontSize];
+            }
+        }
+    }
+}
+
+- (void)setShowCurveShadow:(BOOL)showCurveShadow {
+    if (_showCurveShadow != showCurveShadow) {
+        _showCurveShadow = showCurveShadow;
+        
+        for (SSJReportFormsCurveCellItem *cellItem in _items) {
+            for (SSJReportFormsCurveViewItem *curveItem in cellItem.curveItems) {
+                curveItem.showShadow = _showCurveShadow;
+            }
+        }
+    }
+}
+
+- (void)setShowOriginAndTerminalCurve:(BOOL)showOriginAndTerminalCurve {
+    if (_showOriginAndTerminalCurve != showOriginAndTerminalCurve) {
+        _showOriginAndTerminalCurve = showOriginAndTerminalCurve;
+        
+        for (int cellIdx = 0; cellIdx < _items.count; cellIdx ++) {
+            
+            SSJReportFormsCurveCellItem *cellItem = _items[cellIdx];
+            
+            for (SSJReportFormsCurveViewItem *curveItem in cellItem.curveItems) {
+                
+                if (_showOriginAndTerminalCurve) {
+                    curveItem.showCurve = YES;
+                    curveItem.showShadow = _showCurveShadow;
+                } else {
+                    if (cellIdx > 0 && cellIdx < _axisXCount) {
+                        curveItem.showCurve = YES;
+                        curveItem.showShadow = _showCurveShadow;
+                    } else {
+                        curveItem.showCurve = NO;
+                        curveItem.showShadow = NO;
+                    }
+                }
+            }
+        }
     }
 }
 
 - (void)reloadData {
-    if (!_delegate
-        || ![_delegate respondsToSelector:@selector(numberOfAxisXInCurveGraphView:)]
-        || ![_delegate respondsToSelector:@selector(curveGraphView:titleAtAxisXIndex:)]
-        || ![_delegate respondsToSelector:@selector(curveGraphView:paymentValueAtAxisXIndex:)]
-        || ![_delegate respondsToSelector:@selector(curveGraphView:incomeValueAtAxisXIndex:)]) {
+    if (!_dataSource
+        || ![_dataSource respondsToSelector:@selector(numberOfAxisXInCurveGraphView:)]
+        || ![_dataSource respondsToSelector:@selector(curveGraphView:valueForCurveAtIndex:axisXIndex:)]) {
         return;
     }
     
-    _axisXCount = [_delegate numberOfAxisXInCurveGraphView:self];
+    _hasReloaded = YES;
+    _maxValue = 0;
+    _currentIndex = 0;
+    
+    [_collectionView reloadData];
+    
+    [_curveColors removeAllObjects];
+    [_values removeAllObjects];
+    [_items removeAllObjects];
+    
+    [_dots makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    [_dots removeAllObjects];
+    
+    [_labels makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    [_labels removeAllObjects];
+    
+    [_suspensionItems removeAllObjects];
+    
+    _ballonView.title = nil;
+    _suspensionView.items = nil;
+    
+    _axisXCount = [_dataSource numberOfAxisXInCurveGraphView:self];
     if (_axisXCount == 0) {
-        NSLog(@"numberOfAxisXInCurveGraphView不能返回0");
         return;
     }
     
-    [_axisYLabels makeObjectsPerformSelector:@selector(removeFromSuperview)];
-    [_axisYLabels removeAllObjects];
-    
-    [_horizontalLines makeObjectsPerformSelector:@selector(removeFromSuperview)];
-    [_horizontalLines removeAllObjects];
-    
-    [_paymentValues removeAllObjects];
-    [_incomeValues removeAllObjects];
-    
-    CGFloat tMaxValue = 0;
-    NSMutableArray *axisXTitles = [NSMutableArray arrayWithCapacity:_axisXCount];
-    
-    for (int idx = 0; idx < _axisXCount; idx ++) {
-        
-        CGFloat paymentValue = [_delegate curveGraphView:self paymentValueAtAxisXIndex:idx];
-        if (paymentValue < 0) {
-            NSLog(@"支出value不能为负数");
+    if ([_dataSource respondsToSelector:@selector(numberOfCurveInCurveGraphView:)]) {
+        _curveCount = [_dataSource numberOfCurveInCurveGraphView:self];
+        if (_curveCount == 0) {
             return;
         }
-        [_paymentValues addObject:@(paymentValue)];
-        
-        
-        CGFloat incomeValue = [_delegate curveGraphView:self incomeValueAtAxisXIndex:idx];
-        if (incomeValue < 0) {
-            NSLog(@"收入value不能为负数");
-            return;
-        }
-        [_incomeValues addObject:@(incomeValue)];
-        
-        _maxSurplusValue = MAX(incomeValue - paymentValue, _maxSurplusValue);
-        _minSurplusValue = MIN(incomeValue - paymentValue, _minSurplusValue);
-        
-        NSString *title = [_delegate curveGraphView:self titleAtAxisXIndex:idx];
-        if (!title) {
-            NSLog(@"X轴title不能为nil");
-            return;
-        }
-        [axisXTitles addObject:title];
-        
-        tMaxValue = MAX(MAX(tMaxValue, paymentValue), incomeValue);
     }
     
-    _selectedAxisXIndex = MIN(_selectedAxisXIndex, _incomeValues.count - 1);
+    [self updateContentOffset:NO];
+    
+    [self reorganiseCurveColors];
+    
+    [self reorganiseValues];
+    
+    [self reorganiseItems];
+    
+    [self reorganiseDotsAndLabels];
+    
+    [self reorganiseSuspensionViewItem];
+    
+    [self updateBallonAndLablesTitle];
+    [self updateDotsAndLabelsPosition];
     
     int index = 0;
-    int topDigit = tMaxValue;
+    int topDigit = _maxValue;
     while (topDigit >= 10) {
         topDigit = topDigit / 10;
         index ++;
     }
-    
-    BOOL showScaleValue = topDigit > 0;
     _maxValue = (topDigit + 1) * pow(10, index);
     
-    _curveView.maxValue = _maxValue;
-    _curveView.width = self.width / _displayAxisXCount * _axisXCount;
-    _curveView.paymentValues = _paymentValues;
-    _curveView.incomeValues = _incomeValues;
-    [_curveView setNeedsDisplay];
+    [self caculateCurvePoint];
     
-    [_axisXView setAxisTitles:axisXTitles];
-    
-    _scrollView.contentSize = _curveView.size;
-    
-    long unitValue = _maxValue * 0.2;
-    for (int i = 0; i < 6; i ++) {
-        UILabel *label = [[UILabel alloc] init];
-        label.backgroundColor = [UIColor clearColor];
-        label.font = [UIFont systemFontOfSize:12];
-        label.textColor = _scaleColor;
-        label.text = [NSString stringWithFormat:@"%ld", _maxValue - i * unitValue];
-        label.hidden = !showScaleValue;
-        [label sizeToFit];
-        [self addSubview:label];
-        [_axisYLabels addObject:label];
-        
-        UIView *line = [[UIView alloc] init];
-        line.backgroundColor = _scaleColor;
-        [self addSubview:line];
-        [_horizontalLines addObject:line];
-    }
-    
-    [self updateSubviewHidden];
-    [self setNeedsLayout];
+    [_gridView reloadData];
 }
 
 - (void)scrollToAxisXAtIndex:(NSUInteger)index animated:(BOOL)animted {
-    if (index > _axisXCount - 1) {
-        NSLog(@"超出最大X轴刻度范围");
+    if (index >= _axisXCount) {
+        NSLog(@"index必须小于%d", (int)_axisXCount);
         return;
     }
-    _selectedAxisXIndex = index;
-    [_scrollView setContentOffset:CGPointMake(_unitX * _selectedAxisXIndex - self.width * 0.5, 0) animated:animted];
+    
+    if (animted && _currentIndex != index) {
+        for (SSJReportFormsCurveDot *dot in _dots) {
+            dot.hidden = YES;
+        }
+        
+        for (UILabel *label in _labels) {
+            label.hidden = YES;
+        }
+    }
+    
+    _userScrolled = NO;
+    _currentIndex = index;
+    [self updateBallonAndLablesTitle];
+    [self updateDotsAndLabelsPosition];
+    [self updateContentOffset:animted];
 }
 
 #pragma mark - Private
-- (void)updateSubviewHidden {
-    if (_axisXCount > 0) {
-        _verticalLine.hidden = NO;
-        _paymentPoint.hidden = NO;
-        _incomePoint.hidden = NO;
-        _paymentLabel.hidden = NO;
-        _balloonView.hidden = NO;
-    } else {
-        _verticalLine.hidden = YES;
-        _paymentPoint.hidden = YES;
-        _incomePoint.hidden = YES;
-        _paymentLabel.hidden = YES;
-        _balloonView.hidden = YES;
+- (void)reorganiseCurveColors {
+    for (int curveIdx = 0; curveIdx < _curveCount; curveIdx ++) {
+        UIColor *curveColor = [_dataSource curveGraphView:self colorForCurveAtIndex:curveIdx];
+        [_curveColors addObject:(curveColor ?: _defaultCurveColor)];
     }
 }
 
-- (void)adjustPaymentAndIncomePoint {
-    if (_axisXCount == 0) {
+- (void)reorganiseValues {
+    NSMutableArray *originValues = [[NSMutableArray alloc] initWithCapacity:_curveCount];
+    for (int curveIdx = 0; curveIdx < _curveCount; curveIdx ++) {
+        [originValues addObject:@0];
+    }
+    [_values addObject:originValues];
+    
+    for (int axisXIdx = 0; axisXIdx < _axisXCount; axisXIdx ++) {
+        NSMutableArray *valuesPerAxisX = [[NSMutableArray alloc] initWithCapacity:_curveCount];
+        for (int curveIdx = 0; curveIdx < _curveCount; curveIdx ++) {
+            CGFloat value = [_dataSource curveGraphView:self valueForCurveAtIndex:curveIdx axisXIndex:axisXIdx];
+            [valuesPerAxisX addObject:@(value)];
+            _maxValue = MAX(value, _maxValue);
+        }
+        [_values addObject:valuesPerAxisX];
+    }
+    
+    NSMutableArray *terminalValues = [[NSMutableArray alloc] initWithCapacity:_curveCount];
+    for (int curveIdx = 0; curveIdx < _curveCount; curveIdx ++) {
+        [terminalValues addObject:@0];
+    }
+    [_values addObject:terminalValues];
+}
+
+- (void)reorganiseItems {
+    for (int axisXIdx = 0; axisXIdx < _axisXCount + 1; axisXIdx ++) {
+        
+        SSJReportFormsCurveCellItem *cellItem = [[SSJReportFormsCurveCellItem alloc] init];
+        
+        NSMutableArray *curveItems = [[NSMutableArray alloc] initWithCapacity:_curveCount];
+        
+        if (axisXIdx < _axisXCount) {
+            cellItem.title = [_dataSource curveGraphView:self titleAtAxisXIndex:axisXIdx];
+            cellItem.titleFont = [UIFont systemFontOfSize:_scaleTitleFontSize];
+            cellItem.titleColor = _scaleColor;
+            cellItem.scaleColor = _scaleColor;
+            cellItem.scaleTop = self.height - _curveInsets.bottom;
+        }
+        
+        for (int curveIdx = 0; curveIdx < _curveCount; curveIdx ++) {
+            
+            SSJReportFormsCurveViewItem *curveItem = [[SSJReportFormsCurveViewItem alloc] init];
+            curveItem.curveColor = [_curveColors objectAtIndex:curveIdx];
+            curveItem.curveWidth = 1;
+            curveItem.shadowWidth = 3;
+            curveItem.shadowOffset = CGPointMake(0, 8);
+            curveItem.shadowAlpha = 0.2;
+            curveItem.valueColor = _valueColor;
+            curveItem.valueFont = [UIFont systemFontOfSize:_valueFontSize];
+            curveItem.dotColor = [_curveColors objectAtIndex:curveIdx];
+            curveItem.dotAlpha = 0.3;
+            
+            if (_showOriginAndTerminalCurve) {
+                curveItem.showCurve = YES;
+                curveItem.showShadow = _showCurveShadow;
+            } else {
+                if (axisXIdx > 0 && axisXIdx < _axisXCount) {
+                    curveItem.showCurve = YES;
+                    curveItem.showShadow = _showCurveShadow;
+                } else {
+                    curveItem.showCurve = NO;
+                    curveItem.showShadow = NO;
+                }
+            }
+            
+            if (axisXIdx < _axisXCount) {
+                NSArray *valuesPerAxis = _values[axisXIdx + 1];
+                CGFloat value = [valuesPerAxis[curveIdx] floatValue];
+                curveItem.showValue = _showValuePoint;
+                curveItem.value = [NSString stringWithFormat:@"%.2f", value];
+                curveItem.showDot = _showValuePoint;
+            }
+            
+            [curveItems addObject:curveItem];
+        }
+        
+        cellItem.curveItems = curveItems;
+        [_items addObject:cellItem];
+    }
+}
+
+- (void)reorganiseDotsAndLabels {
+    NSUInteger currentIndex = _currentIndex + 1;
+    if (_values.count <= currentIndex) {
         return;
     }
     
-    CGFloat paymentHeight = [_paymentValues[_selectedAxisXIndex] floatValue] / _maxValue * (self.height - kTopSpaceHeight - kBottomSpaceHeight);
-    CGFloat paymentY = self.height - paymentHeight - kBottomSpaceHeight;
-    _paymentPoint.center = CGPointMake(self.width * 0.5, paymentY);
-    
-    CGFloat incomeHeight = [_incomeValues[_selectedAxisXIndex] floatValue] / _maxValue * (self.height - kTopSpaceHeight - kBottomSpaceHeight);
-    CGFloat incomeY = self.height - incomeHeight - kBottomSpaceHeight;
-    _incomePoint.center = CGPointMake(self.width * 0.5, incomeY);
-    
-    _paymentLabel.text = [NSString stringWithFormat:@"支出 %.2f", [_paymentValues[_selectedAxisXIndex] doubleValue]];
-    [_paymentLabel sizeToFit];
-    _paymentLabel.rightBottom = CGPointMake(_paymentPoint.left - 2, _paymentPoint.top + 2);
-    
-    _incomeLabel.text = [NSString stringWithFormat:@"收入 %.2f", [_incomeValues[_selectedAxisXIndex] doubleValue]];
-    [_incomeLabel sizeToFit];
-    _incomeLabel.leftBottom = CGPointMake(_incomePoint.right + 2, _incomePoint.top + 2);
-}
-
-- (void)adjustOffSetXToCenter {
-    CGFloat centerOffSetX = self.width * 0.5 + _scrollView.contentOffset.x;
-    CGFloat unitCount = floor(centerOffSetX / _unitX);
-    if (centerOffSetX - unitCount * _unitX >= _unitX * 0.5) {
-        unitCount ++;
+    NSArray *values = _values[currentIndex];
+    if (![values isKindOfClass:[NSArray class]]) {
+        return;
     }
     
-    CGFloat offSetX = unitCount * _unitX - self.width * 0.5;
-    [_scrollView setContentOffset:CGPointMake(offSetX, 0) animated:YES];
-    _selectedAxisXIndex = unitCount;
+    for (int curveIdx = 0; curveIdx < _curveCount; curveIdx ++) {
+        
+        UIColor *color = _curveColors[curveIdx];
+        
+        CGFloat value = [values[curveIdx] floatValue];
+        CGFloat maxCurveHeight = (self.height - _curveInsets.top - _curveInsets.bottom);
+        CGFloat y = self.height - _curveInsets.bottom - value / _maxValue * maxCurveHeight;
+        
+        SSJReportFormsCurveDot *dot = [[SSJReportFormsCurveDot alloc] init];
+        dot.outerColorAlpha = 0.2;
+        dot.dotColor = color;
+        dot.center = CGPointMake(self.width * 0.5, y);
+        dot.hidden = !_showBalloon;
+        [self addSubview:dot];
+        [_dots addObject:dot];
+        
+        UILabel *label = [[UILabel alloc] init];
+        label.font = [UIFont systemFontOfSize:_valueFontSize];
+        label.textColor = color;
+        label.hidden = !_showBalloon;
+        [self addSubview:label];
+        [_labels addObject:label];
+    }
 }
 
-- (void)updateSurplus {
-    float surplus = [_incomeValues[_selectedAxisXIndex] floatValue] - [_paymentValues[_selectedAxisXIndex] floatValue];
-    if (_minSurplusValue != _maxSurplusValue) {
-        if (surplus == _minSurplusValue) {
-            _surplusLabel.text = @"结余最低";
-        } else if (surplus == _maxSurplusValue) {
-            _surplusLabel.text = @"结余最高";
+- (void)reorganiseSuspensionViewItem {
+    if (![_dataSource respondsToSelector:@selector(curveGraphView:suspensionTitleAtAxisXIndex:)]) {
+        return;
+    }
+    
+    SSJReportFormsCurveSuspensionViewItem *item = nil;
+    NSUInteger rowCount = 0;
+    
+    for (int axisXIdx = 0; axisXIdx < _axisXCount; axisXIdx ++) {
+        
+        NSString *suspensionTitle = [_dataSource curveGraphView:self suspensionTitleAtAxisXIndex:axisXIdx];
+        
+        if (suspensionTitle) {
+            
+            if (item) {
+                item.rowCount = rowCount;
+                [_suspensionItems addObject:item];
+            }
+            
+            item = [[SSJReportFormsCurveSuspensionViewItem alloc] init];
+            item.titleColor = _scaleColor;
+            item.titleFont = [UIFont systemFontOfSize:_scaleTitleFontSize];
+            item.title = suspensionTitle;
+            rowCount = 0;
+            
         } else {
-            _surplusLabel.text = @"结余";
+            
+            if (!item) {
+                item = [[SSJReportFormsCurveSuspensionViewItem alloc] init];
+                item.titleColor = _scaleColor;
+                item.titleFont = [UIFont systemFontOfSize:_scaleTitleFontSize];
+            }
+            
+            rowCount ++;
         }
-    } else {
-        _surplusLabel.text = @"结余";
     }
     
-    [_surplusLabel sizeToFit];
+    if (item) {
+        item.rowCount = rowCount;
+        [_suspensionItems addObject:item];
+    }
     
-    _surplusValueLabel.text = [NSString stringWithFormat:@"%.2f", surplus];
-    [_surplusValueLabel sizeToFit];
-    _surplusValueLabel.top = _surplusLabel.bottom + 2;
+    _suspensionView.items = _suspensionItems;
+}
+
+- (void)caculateCurvePoint {
+    for (int cellIdx = 0; cellIdx < _items.count; cellIdx ++) {
+        SSJReportFormsCurveCellItem *cellItem = _items[cellIdx];
+        
+        NSArray *startValues = _values[cellIdx];
+        NSArray *endValues = _values[cellIdx + 1];
+        
+        for (int curveIdx = 0; curveIdx < cellItem.curveItems.count; curveIdx ++) {
+            
+            CGFloat maxCurveHeight = self.height - _curveInsets.top - _curveInsets.bottom;
+            
+            CGFloat startValue = [startValues[curveIdx] floatValue];
+            CGFloat startPintY = self.height - (startValue / _maxValue) * maxCurveHeight - _curveInsets.bottom;
+            
+            CGFloat endValue = [endValues[curveIdx] floatValue];
+            CGFloat endPintY = self.height - (endValue / _maxValue) * maxCurveHeight - _curveInsets.bottom;
+            
+            CGFloat endPointX = (cellIdx == 0 || cellIdx == _items.count - 1) ? _unitAxisXLength * 0.5 : _unitAxisXLength;
+            
+            SSJReportFormsCurveViewItem *curveItem = cellItem.curveItems[curveIdx];
+            curveItem.startPoint = CGPointMake(0, startPintY);
+            curveItem.endPoint = CGPointMake(endPointX, endPintY);
+        }
+    }
+}
+
+- (void)updateContentOffset:(BOOL)animated {
+    CGFloat offsetX = (_currentIndex + 0.5) * _unitAxisXLength - _collectionView.width * 0.5;
+    [_collectionView setContentOffset:CGPointMake(offsetX, 0) animated:animated];
+}
+
+- (void)updateContentInset {
+    CGFloat horizontalInset = (_collectionView.width - _unitAxisXLength) * 0.5;
+    _collectionView.contentInset = UIEdgeInsetsMake(0, horizontalInset, 0, horizontalInset);
+}
+
+- (void)updateDotsAndLabelsPosition {
+    if (_maxValue == 0) {
+        return;
+    }
     
-    _balloonView.width = MAX(54, MAX(_surplusValueLabel.width + 4, _surplusLabel.width));
-    _balloonView.centerX = self.width * 0.5;
-    _surplusValueLabel.centerX = _balloonView.width * 0.5;
-    _surplusLabel.centerX = _balloonView.width * 0.5;
+    NSUInteger currentIndex = _currentIndex + 1;
+    if (_values.count <= currentIndex) {
+        return;
+    }
+    
+    NSArray *values = _values[currentIndex];
+    if (![values isKindOfClass:[NSArray class]]) {
+        return;
+    }
+    
+    for (int idx = 0; idx < _dots.count; idx ++) {
+        if (values.count <= idx) {
+            return;
+        }
+        
+        CGFloat value = [values[idx] floatValue];
+        CGFloat maxCurveHeight = (self.height - _curveInsets.top - _curveInsets.bottom);
+        CGFloat y = self.height - _curveInsets.bottom - value / _maxValue * maxCurveHeight;
+        
+        SSJReportFormsCurveDot *dot = _dots[idx];
+        dot.center = CGPointMake(self.width * 0.5, y);
+        
+        UILabel *label = _labels[idx];
+        if (idx % 2 == 0) {
+            label.left = dot.right + 2;
+            label.centerY = dot.centerY;
+        } else {
+            label.right = dot.left - 2;
+            label.centerY = dot.centerY;
+        }
+    }
+}
+
+- (void)updateBallonAndLablesTitle {
+    if (!_showBalloon || !_hasReloaded) {
+        return;
+    }
+    
+    if (_delegate && [_delegate respondsToSelector:@selector(curveGraphView:titleForBallonAtAxisXIndex:)]) {
+        _ballonView.title = [_delegate curveGraphView:self titleForBallonAtAxisXIndex:_currentIndex];
+    }
+    
+    for (int curveIdx = 0; curveIdx < _curveCount; curveIdx ++) {
+        
+        UILabel *label = _labels[curveIdx];
+        
+        if (_delegate && [_delegate respondsToSelector:@selector(curveGraphView:titleForBallonLabelAtCurveIndex:axisXIndex:)]) {
+            label.text = [_delegate curveGraphView:self titleForBallonLabelAtCurveIndex:curveIdx axisXIndex:_currentIndex];
+            [label sizeToFit];
+        }
+    }
+}
+
+- (NSIndexPath *)indexPathForCenterX {
+    NSIndexPath *indexPath = [_collectionView indexPathForItemAtPoint:CGPointMake(_collectionView.width * 0.5 + _collectionView.contentOffset.x, 0)];
+    if (indexPath) {
+        UICollectionViewLayoutAttributes *layout = [_collectionView layoutAttributesForItemAtIndexPath:indexPath];
+        CGFloat centerX = _collectionView.width * 0.5 + _collectionView.contentOffset.x;
+        if (centerX < CGRectGetMidX(layout.frame)) {
+            indexPath = [NSIndexPath indexPathForItem:indexPath.item - 1 inSection:indexPath.section];
+        }
+        return indexPath;
+    }
+    
+    return nil;
 }
 
 #pragma mark - LazyLoading
-- (UIScrollView *)scrollView {
-    if (!_scrollView) {
-        _scrollView = [[UIScrollView alloc] init];
-        _scrollView.decelerationRate = UIScrollViewDecelerationRateFast;
-        _scrollView.showsHorizontalScrollIndicator = NO;
-        _scrollView.delegate = self;
+- (SSJReportFormsCurveGridView *)gridView {
+    if (!_gridView) {
+        _gridView = [[SSJReportFormsCurveGridView alloc] init];
+        _gridView.dataSource = self;
     }
-    return _scrollView;
+    return _gridView;
 }
 
-- (SSJReportFormsCurveView *)curveView {
-    if (!_curveView) {
-        _curveView = [[SSJReportFormsCurveView alloc] init];
-        _curveView.paymentCurveColor = _paymentCurveColor;
-        _curveView.incomeCurveColor = _incomeCurveColor;
-        _curveView.showShadow = YES;
+- (SSJReportFormsCurveBalloonView *)ballonView {
+    if (!_ballonView) {
+        _ballonView = [[SSJReportFormsCurveBalloonView alloc] init];
+        _ballonView.hidden = !_showBalloon;
     }
-    return _curveView;
+    return _ballonView;
 }
 
-- (SSJReportFormsCurveAxisView *)axisXView {
-    if (!_axisXView) {
-        _axisXView = [[SSJReportFormsCurveAxisView alloc] init];
-        _axisXView.titleColor = _scaleColor;
-        _axisXView.scaleColor = _scaleColor;
+- (UICollectionView *)collectionView {
+    if (!_collectionView) {
+        UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
+        layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+        layout.minimumLineSpacing = 0;
+        layout.minimumInteritemSpacing = 0;
+        
+        _collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
+        _collectionView.dataSource = self;
+        _collectionView.delegate = self;
+        _collectionView.backgroundColor = [UIColor clearColor];
+        [_collectionView registerClass:[SSJReportFormsCurveCell class] forCellWithReuseIdentifier:kSSJReportFormsCurveCellID];
+        _collectionView.showsHorizontalScrollIndicator = NO;
+        
+#warning test
+//        _collectionView.layer.borderWidth = 1;
+//        _collectionView.layer.borderColor = [UIColor blackColor].CGColor;
     }
-    return _axisXView;
+    return _collectionView;
 }
 
-- (UIView *)verticalLine {
-    if (!_verticalLine) {
-        _verticalLine = [[UIView alloc] init];
-        _verticalLine.backgroundColor = _balloonColor;
+- (SSJReportFormsCurveSuspensionView *)suspensionView {
+    if (!_suspensionView) {
+        _suspensionView = [[SSJReportFormsCurveSuspensionView alloc] init];
+        _suspensionView.unitSpace = _unitAxisXLength;
     }
-    return _verticalLine;
-}
-
-- (UIView *)paymentPoint {
-    if (!_paymentPoint) {
-        _paymentPoint = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 8, 8)];
-        _paymentPoint.backgroundColor = _paymentCurveColor;
-        _paymentPoint.layer.cornerRadius = 4;
-        _paymentPoint.clipsToBounds = YES;
-    }
-    return _paymentPoint;
-}
-
-- (UIView *)incomePoint {
-    if (!_incomePoint) {
-        _incomePoint = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 8, 8)];
-        _incomePoint.backgroundColor = _incomeCurveColor;
-        _incomePoint.layer.cornerRadius = 4;
-        _incomePoint.clipsToBounds = YES;
-    }
-    return _incomePoint;
-}
-
-- (UILabel *)paymentLabel {
-    if (!_paymentLabel) {
-        _paymentLabel = [[UILabel alloc] init];
-        _paymentLabel.backgroundColor = [UIColor clearColor];
-        _paymentLabel.textColor = _paymentCurveColor;
-        _paymentLabel.font = [UIFont systemFontOfSize:10];
-        _paymentLabel.text = @"支出";
-        [_paymentLabel sizeToFit];
-    }
-    return _paymentLabel;
-}
-
-- (UILabel *)incomeLabel {
-    if (!_incomeLabel) {
-        _incomeLabel = [[UILabel alloc] init];
-        _incomeLabel.backgroundColor = [UIColor clearColor];
-        _incomeLabel.font = [UIFont systemFontOfSize:10];
-        _incomeLabel.textColor = _incomeCurveColor;
-        _incomeLabel.text = @"收入";
-        [_incomeLabel sizeToFit];
-    }
-    return _incomeLabel;
-}
-
-- (UIImageView *)balloonView {
-    if (!_balloonView) {
-        _balloonView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"reportForms_balloon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
-        _balloonView.tintColor = _balloonColor;
-    }
-    return _balloonView;
-}
-
-- (UILabel *)surplusLabel {
-    if (!_surplusLabel) {
-        _surplusLabel = [[UILabel alloc] init];
-        _surplusLabel.backgroundColor = [UIColor clearColor];
-        _surplusLabel.font = [UIFont systemFontOfSize:10];
-        _surplusLabel.textColor = [UIColor whiteColor];
-    }
-    return _surplusLabel;
-}
-
-- (UILabel *)surplusValueLabel {
-    if (!_surplusValueLabel) {
-        _surplusValueLabel = [[UILabel alloc] init];
-        _surplusValueLabel.textAlignment = NSTextAlignmentCenter;
-        _surplusValueLabel.backgroundColor = [UIColor clearColor];
-        _surplusValueLabel.font = [UIFont systemFontOfSize:12];
-        _surplusValueLabel.textColor = [UIColor whiteColor];
-    }
-    return _surplusValueLabel;
+    return _suspensionView;
 }
 
 @end

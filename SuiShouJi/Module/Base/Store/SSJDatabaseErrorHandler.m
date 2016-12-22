@@ -78,8 +78,9 @@
 //压缩数据库上传错误信息
 + (void)upLoadData
 {
-    NSError *error;
-    [self writeToFileWithError:error];//将错误写入文件
+//    NSError *error;
+//    [self writeToFileWithError:error];//将错误写入文件
+//    SSJPRINT(@"%@===%@",writePath,jsonPath);
     //上传判断网络状态
     if ([SSJNetworkReachabilityManager networkReachabilityStatus] == SSJNetworkReachabilityStatusReachableViaWiFi) {//wifi
         //读取db_error_list文件，查询没有上传过的记录
@@ -122,17 +123,22 @@
                         [self removeSqlFileWithName:sqlName];
                         //再次写入
                         [arr writeToFile:jsonPath atomically:YES];
-                        [self uploadData:index-1 array:arr];
+                        [self uploadData:index-1 array:arr];//上传下一个
+                    }else{
+                        [self uploadData:index-1 array:arr];//上传下一个
                     }
+                }else{
+                    [self uploadData:index-1 array:arr];//上传下一个
                 }
             } parametersDic:dic fileName:sqlName];
+        }else{
+            [self uploadData:index-1 array:arr];//上传下一个
         }
     });
 }
 
 + (void)removeSqlFileWithName:(NSString *)name
 {
-    NSString *fillName = [NSString stringWithFormat:@"%@.zip",name];
     NSString *dataPath = [writePath stringByAppendingPathComponent:name];
     NSFileManager *fileManager = [NSFileManager defaultManager];
     if ([fileManager fileExistsAtPath:dataPath]) {//如果存在

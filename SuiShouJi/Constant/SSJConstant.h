@@ -69,7 +69,8 @@ typedef NS_ENUM(NSUInteger, SSJBudgetPeriodType) {
  - SSJTimeDimensionWeek: 周
  - SSJTimeDimensionMonth: 月
  */
-typedef NS_ENUM(NSUInteger, SSJTimeDimension) {
+typedef NS_ENUM(NSInteger, SSJTimeDimension) {
+    SSJTimeDimensionUnknown = -1,
     SSJTimeDimensionDay = 0,
     SSJTimeDimensionWeek = 1,
     SSJTimeDimensionMonth = 2

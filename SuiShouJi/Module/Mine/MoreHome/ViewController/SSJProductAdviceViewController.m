@@ -46,9 +46,15 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
     //type	int	是	0:查询 1：添加
     self.requestType = 0;
     [self.adviceService requestAdviceMessageListWithType:0 message:@"" additionalMessage:@""];
+}
+
+-(UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleDefault;
 }
 
 - (void)viewDidLayoutSubviews

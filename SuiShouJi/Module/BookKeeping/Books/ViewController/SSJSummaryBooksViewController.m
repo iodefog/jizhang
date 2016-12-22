@@ -203,28 +203,28 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
 }
 
 #pragma mark - SSJReportFormsCurveGraphViewDelegate
-- (NSUInteger)numberOfAxisXInCurveGraphView:(SSJReportFormsCurveGraphView *)graphView {
-    return _curveItems.count;
-}
-
-- (NSString *)curveGraphView:(SSJReportFormsCurveGraphView *)graphView titleAtAxisXIndex:(NSUInteger)index {
-    SSJReportFormsCurveModel *model = [_curveItems ssj_safeObjectAtIndex:index];
-    return model.time;
-}
-
-- (CGFloat)curveGraphView:(SSJReportFormsCurveGraphView *)graphView paymentValueAtAxisXIndex:(NSUInteger)index {
-    SSJReportFormsCurveModel *model = [_curveItems ssj_safeObjectAtIndex:index];
-    return [model.payment floatValue];
-}
-
-- (CGFloat)curveGraphView:(SSJReportFormsCurveGraphView *)graphView incomeValueAtAxisXIndex:(NSUInteger)index {
-    SSJReportFormsCurveModel *model = [_curveItems ssj_safeObjectAtIndex:index];
-    return [model.income floatValue];
-}
-
-- (void)curveGraphView:(SSJReportFormsCurveGraphView *)graphView didScrollToAxisXIndex:(NSUInteger)index {
-
-}
+//- (NSUInteger)numberOfAxisXInCurveGraphView:(SSJReportFormsCurveGraphView *)graphView {
+//    return _curveItems.count;
+//}
+//
+//- (NSString *)curveGraphView:(SSJReportFormsCurveGraphView *)graphView titleAtAxisXIndex:(NSUInteger)index {
+//    SSJReportFormsCurveModel *model = [_curveItems ssj_safeObjectAtIndex:index];
+//    return model.time;
+//}
+//
+//- (CGFloat)curveGraphView:(SSJReportFormsCurveGraphView *)graphView paymentValueAtAxisXIndex:(NSUInteger)index {
+//    SSJReportFormsCurveModel *model = [_curveItems ssj_safeObjectAtIndex:index];
+//    return [model.payment floatValue];
+//}
+//
+//- (CGFloat)curveGraphView:(SSJReportFormsCurveGraphView *)graphView incomeValueAtAxisXIndex:(NSUInteger)index {
+//    SSJReportFormsCurveModel *model = [_curveItems ssj_safeObjectAtIndex:index];
+//    return [model.income floatValue];
+//}
+//
+//- (void)curveGraphView:(SSJReportFormsCurveGraphView *)graphView didScrollToAxisXIndex:(NSUInteger)index {
+//
+//}
 
 #pragma mark - Private
 //  更新总收入\总支出
@@ -291,7 +291,9 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
             if (_curveItems.count >= 1) {
                 [_header.curveView scrollToAxisXAtIndex:_curveItems.count - 1 animated:NO];
             }
-            SSJDatePeriod *currentPeriod = ((SSJReportFormsCurveModel *)[_curveItems ssj_safeObjectAtIndex:_curveItems.count - 1]).period;
+            
+            SSJReportFormsCurveModel *curveModel = [_curveItems ssj_safeObjectAtIndex:_curveItems.count - 1];
+            SSJDatePeriod *currentPeriod = [SSJDatePeriod datePeriodWithStartDate:curveModel.startDate endDate:curveModel.endDate];
             _currentPeriod = currentPeriod;
             // 加载流水列表和饼状图的数据
             [SSJReportFormsUtil queryForIncomeOrPayType:!(int)_header.incomOrExpenseSelectSegment.selectedSegmentIndex booksId:@"all" startDate:period.startDate endDate:period.endDate success:^(NSArray<SSJReportFormsItem *> *result) {

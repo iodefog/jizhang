@@ -1,49 +1,111 @@
 //
 //  SSJReportFormsCurveGraphView.h
-//  SSJCurveGraphDemo
+//  SSJCurveGraphView
 //
-//  Created by old lang on 16/6/1.
+//  Created by old lang on 16/12/16.
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class SSJReportFormsCurveGraphView;
 
-@protocol SSJReportFormsCurveGraphViewDelegate <NSObject>
+@protocol SSJReportFormsCurveGraphViewDataSource <NSObject>
 
 @required
 - (NSUInteger)numberOfAxisXInCurveGraphView:(SSJReportFormsCurveGraphView *)graphView;
 
-- (NSString *)curveGraphView:(SSJReportFormsCurveGraphView *)graphView titleAtAxisXIndex:(NSUInteger)index;
+- (CGFloat)curveGraphView:(SSJReportFormsCurveGraphView *)graphView valueForCurveAtIndex:(NSUInteger)curveIndex axisXIndex:(NSUInteger)axisXIndex;
 
-- (CGFloat)curveGraphView:(SSJReportFormsCurveGraphView *)graphView paymentValueAtAxisXIndex:(NSUInteger)index;
+@optional
+- (NSUInteger)numberOfCurveInCurveGraphView:(SSJReportFormsCurveGraphView *)graphView;
 
-- (CGFloat)curveGraphView:(SSJReportFormsCurveGraphView *)graphView incomeValueAtAxisXIndex:(NSUInteger)index;
+- (nullable NSString *)curveGraphView:(SSJReportFormsCurveGraphView *)graphView titleAtAxisXIndex:(NSUInteger)index;
+
+- (nullable UIColor *)curveGraphView:(SSJReportFormsCurveGraphView *)graphView colorForCurveAtIndex:(NSUInteger)curveIndex;
+
+- (nullable NSString *)curveGraphView:(SSJReportFormsCurveGraphView *)graphView suspensionTitleAtAxisXIndex:(NSUInteger)index;
+
+@end
+
+@protocol SSJReportFormsCurveGraphViewDelegate <NSObject>
 
 @optional
 - (void)curveGraphView:(SSJReportFormsCurveGraphView *)graphView didScrollToAxisXIndex:(NSUInteger)index;
+
+- (nullable NSString *)curveGraphView:(SSJReportFormsCurveGraphView *)graphView titleForBallonAtAxisXIndex:(NSUInteger)index;
+
+- (nullable NSString *)curveGraphView:(SSJReportFormsCurveGraphView *)graphView titleForBallonLabelAtCurveIndex:(NSUInteger)curveIndex axisXIndex:(NSUInteger)axisXIndex;
 
 @end
 
 @interface SSJReportFormsCurveGraphView : UIView
 
-@property (nonatomic, weak) id<SSJReportFormsCurveGraphViewDelegate> delegate;
+@property (nonatomic, weak) id <SSJReportFormsCurveGraphViewDataSource> dataSource;
 
-// default 7
-@property (nonatomic) CGFloat displayAxisXCount;
+@property (nonatomic, weak) id <SSJReportFormsCurveGraphViewDelegate> delegate;
 
-// 刻度值、刻度线的颜色，默认grayColor
+/**
+ X轴每个刻度之间的距离，默认50
+ */
+@property (nonatomic) CGFloat unitAxisXLength;
+
+/**
+ Y轴刻度数量，默认6
+ */
+@property (nonatomic) NSUInteger axisYCount;
+
+/**
+ 曲线的Y轴坐标浮动范围，只有top、bottom的值有效，默认{46, 0, 56, 0}
+ */
+@property (nonatomic) UIEdgeInsets curveInsets;
+
+/**
+ 刻度值、刻度线的颜色，默认lightGrayColor
+ */
 @property (nonatomic, strong) UIColor *scaleColor;
 
-// 支出曲线、标题、圆点的颜色，默认greenColor
-@property (nonatomic, strong) UIColor *paymentCurveColor;
+/**
+ X轴、Y轴刻度标题字体大小，默认10号
+ */
+@property (nonatomic) CGFloat scaleTitleFontSize;
 
-// 收入曲线、标题、圆点的颜色，默认redColor
-@property (nonatomic, strong) UIColor *incomeCurveColor;
+/**
+ 是否显示中间气球，默认NO
+ */
+@property (nonatomic, assign) BOOL showBalloon;
 
-// 结余背景颜色，默认orangeColor
-@property (nonatomic, strong) UIColor *balloonColor;
+/**
+ 设置折线图中间气球标题样式，只有NSFontAttributeName、NSForegroundColorAttributeName、NSBackgroundColorAttributeName 3个key有效
+ */
+@property (nonatomic, strong) NSDictionary *balloonTitleAttributes;
+
+/**
+ 是否在每个曲线上显示数值，默认NO
+ */
+@property (nonatomic, assign) BOOL showValuePoint;
+
+/**
+ 数值颜色，默认blackColor
+ */
+@property (nonatomic, strong) UIColor *valueColor;
+
+/**
+ 数值字体大小，默认12
+ */
+@property (nonatomic, assign) CGFloat valueFontSize;
+
+/**
+ 是否显示曲线的阴影，默认YES
+ */
+@property (nonatomic, assign) BOOL showCurveShadow;
+
+/**
+ 是否显示原点到第一个值、最后一个值到终点的曲线，默认NO
+ */
+@property (nonatomic, assign) BOOL showOriginAndTerminalCurve;
 
 /**
  重载数据，此方法触发SSJReportFormsCurveGraphViewDelegate的方法
@@ -52,10 +114,12 @@
 
 /**
  滚动到指定的X轴下标，使其位于中间
-
+ 
  @param index 指定的X轴下标
  @param animted 是否显示动画效果
  */
 - (void)scrollToAxisXAtIndex:(NSUInteger)index animated:(BOOL)animted;
 
 @end
+
+NS_ASSUME_NONNULL_END
