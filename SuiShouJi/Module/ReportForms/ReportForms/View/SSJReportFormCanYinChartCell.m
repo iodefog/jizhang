@@ -16,6 +16,9 @@
 @property (nonatomic, strong) UILabel *amountLabel;
 @property (nonatomic, strong) CAShapeLayer *topLineLayer;
 @property (nonatomic, strong) CAShapeLayer *bottomLineLayer;
+@property (nonatomic, strong) CAShapeLayer *circleLayer1;
+@property (nonatomic, strong) CAShapeLayer *circleLayer2;
+@property (nonatomic, strong) CAShapeLayer *circleLayer3;
 
 @end
 @implementation SSJReportFormCanYinChartCell
@@ -64,6 +67,43 @@
     self.bottomLineLayer.hidden = indexPath.row == [tableView numberOfRowsInSection:indexPath.section] - 1;
 }
 
+/*
+ *画实线圆
+ */
+
+- (void)drawCircleWithColor:(UIColor *)colorStr
+{
+    //    第一层直径20px 30%  第二层直径14px 30%   中间最小的点实色 直径8px
+    CGRect frame1 = CGRectMake(10, (self.frame.size.height - 10)*0.5, 10, 10);//最外面
+    CGRect frame2 = CGRectMake(11.5, (self.frame.size.height - 7)*0.5, 7, 7);
+    CGRect frame3 = CGRectMake(13, (self.frame.size.height - 4)*0.5, 4, 4);
+    UIColor *color1 = colorStr;
+    UIColor *color2 = color1;
+    UIColor *color3 = colorStr;
+    /*
+     *画实线圆
+     */
+    CGMutablePathRef solidPath1 =  CGPathCreateMutable();
+    self.circleLayer1.fillColor = color2.CGColor;
+    CGPathAddEllipseInRect(solidPath1, nil, frame1);
+    self.circleLayer1.path = solidPath1;
+    CGPathRelease(solidPath1);
+    
+    
+    CGMutablePathRef solidPath2 =  CGPathCreateMutable();
+    self.circleLayer2.fillColor = color2.CGColor;
+    CGPathAddEllipseInRect(solidPath2, nil, frame2);
+    self.circleLayer2.path = solidPath2;
+    CGPathRelease(solidPath2);
+    
+    
+    CGMutablePathRef solidPath3 =  CGPathCreateMutable();
+    self.circleLayer3.fillColor = color3.CGColor;
+    CGPathAddEllipseInRect(solidPath3, nil, frame3);
+    self.circleLayer3.path = solidPath3;
+    CGPathRelease(solidPath3);
+}
+
 
 #pragma mark - Lazy
 - (CAShapeLayer *)topLineLayer
@@ -90,7 +130,7 @@
         CGMutablePathRef solidShapePath =  CGPathCreateMutable();
         [_bottomLineLayer setFillColor:[[UIColor clearColor] CGColor]];
         [_bottomLineLayer setStrokeColor:[[UIColor orangeColor] CGColor]];
-        _bottomLineLayer.lineWidth = 2.0f ;
+        _bottomLineLayer.lineWidth = 1.0f ;
         CGPathMoveToPoint(solidShapePath, NULL, 15, self.height*0.5);
         CGPathAddLineToPoint(solidShapePath, NULL, 15,self.height);
         [_bottomLineLayer setPath:solidShapePath];
@@ -98,6 +138,29 @@
         _bottomLineLayer.hidden = YES;
     }
     return _bottomLineLayer;
+}
+- (CAShapeLayer *)circleLayer1
+{
+    if (!_circleLayer1) {
+        _circleLayer1 =  [CAShapeLayer layer];
+    }
+    return _circleLayer1;
+}
+
+- (CAShapeLayer *)circleLayer2
+{
+    if (!_circleLayer2) {
+        _circleLayer2 =  [CAShapeLayer layer];
+    }
+    return _circleLayer2;
+}
+
+- (CAShapeLayer *)circleLayer3
+{
+    if (!_circleLayer3) {
+        _circleLayer3 =  [CAShapeLayer layer];
+    }
+    return _circleLayer3;
 }
 
 - (UILabel *)dateLabel
@@ -130,7 +193,7 @@
     
 }
 
-
+/*
 - (void)drawRect:(CGRect)rect
 {
     //    第一层直径20px 30%  第二层直径14px 30%   中间最小的点实色 直径8px
@@ -153,6 +216,6 @@
     [color3 set];
     CGContextFillPath(context);
 }
-
+*/
 
 @end
