@@ -39,6 +39,7 @@
     self.appliesTheme = NO;
     [self.view addSubview:self.tableView];
     [self setUpNav];
+    self.backgroundView.hidden = YES;
     self.view.backgroundColor = [UIColor whiteColor];
 }
 
@@ -49,6 +50,11 @@
     //type	int	是	0:查询 1：添加
     self.requestType = 0;
     [self.adviceService requestAdviceMessageListWithType:0 message:@"" additionalMessage:@""];
+}
+
+-(UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleDefault;
 }
 
 - (void)viewDidLayoutSubviews

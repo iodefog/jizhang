@@ -968,6 +968,7 @@
 		91F7FD331DFA9EF9005F4B6B /* SSJProductAdviceNetWorkService.m in Sources */ = {isa = PBXBuildFile; fileRef = 91F7FD2F1DFA9EF9005F4B6B /* SSJProductAdviceNetWorkService.m */; };
 		91F7FD341DFA9EF9005F4B6B /* SSJProductAdviceNetWorkService.m in Sources */ = {isa = PBXBuildFile; fileRef = 91F7FD2F1DFA9EF9005F4B6B /* SSJProductAdviceNetWorkService.m */; };
 		91F7FD381DFAB94A005F4B6B /* SSJAdviceItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 91F7FD371DFAB94A005F4B6B /* SSJAdviceItem.m */; };
+		91FD904D1E0B8319001C64B7 /* SSJReportFormCanYinChartCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 91FD904C1E0B8319001C64B7 /* SSJReportFormCanYinChartCell.m */; };
 		9C0AB1691D670BAE0082B971 /* SSJCreditCardEditeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0AB1681D670BAE0082B971 /* SSJCreditCardEditeCell.m */; };
 		9C0AB1711D670BB30082B971 /* SSJCreditCardEditeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0AB1681D670BAE0082B971 /* SSJCreditCardEditeCell.m */; };
 		9C141B821D23BD920095E336 /* SSJThemeImageCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C141B811D23BD920095E336 /* SSJThemeImageCollectionViewCell.m */; };
@@ -3333,6 +3334,8 @@
 		91F7FD2F1DFA9EF9005F4B6B /* SSJProductAdviceNetWorkService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJProductAdviceNetWorkService.m; sourceTree = "<group>"; };
 		91F7FD361DFAB94A005F4B6B /* SSJAdviceItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJAdviceItem.h; sourceTree = "<group>"; };
 		91F7FD371DFAB94A005F4B6B /* SSJAdviceItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJAdviceItem.m; sourceTree = "<group>"; };
+		91FD904B1E0B8319001C64B7 /* SSJReportFormCanYinChartCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormCanYinChartCell.h; sourceTree = "<group>"; };
+		91FD904C1E0B8319001C64B7 /* SSJReportFormCanYinChartCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReportFormCanYinChartCell.m; sourceTree = "<group>"; };
 		9C0AB1671D670BAE0082B971 /* SSJCreditCardEditeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCreditCardEditeCell.h; sourceTree = "<group>"; };
 		9C0AB1681D670BAE0082B971 /* SSJCreditCardEditeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCreditCardEditeCell.m; sourceTree = "<group>"; };
 		9C141B801D23BD920095E336 /* SSJThemeImageCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJThemeImageCollectionViewCell.h; sourceTree = "<group>"; };
@@ -4638,6 +4641,8 @@
 				7DB9F84A1DFFED170084E998 /* SSJReportFormCurveListCell.m */,
 				7D70C1351E00E68400479E44 /* SSJReportFormCurveHeaderView.h */,
 				7D70C1361E00E68400479E44 /* SSJReportFormCurveHeaderView.m */,
+				91FD904B1E0B8319001C64B7 /* SSJReportFormCanYinChartCell.h */,
+				91FD904C1E0B8319001C64B7 /* SSJReportFormCanYinChartCell.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -10098,6 +10103,7 @@
 				7D6CC8F61E0A731C00FF6133 /* SSJReportFormsCurveBalloonView.m in Sources */,
 				9C9A0C901D73CDB7002AF046 /* SSJNewCreditCardViewController.m in Sources */,
 				7D5F33861CEAE6C10086B67E /* SSJRecordMakingBillTypeSelectionView.m in Sources */,
+				91FD904D1E0B8319001C64B7 /* SSJReportFormCanYinChartCell.m in Sources */,
 				7DABCA661D0E5A32002886E8 /* SSJReportFormsCurveDescriptionView.m in Sources */,
 				9CD9BC4D1CFDBFB40061803B /* SSJFundingTransferDetailViewController.m in Sources */,
 				9C2FC0501D3E3AA100A4C0C9 /* SSJChargeMemberItem.m in Sources */,
