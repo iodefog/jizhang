@@ -39,7 +39,7 @@
 - (void)setImageColor:(NSString *)imageColor
 {
     _imageColor = imageColor;
-    [self setNeedsDisplay];
+    [self drawCircleWithColor:imageColor];
 }
 
 - (void)layoutSubviews
@@ -71,15 +71,15 @@
  *画实线圆
  */
 
-- (void)drawCircleWithColor:(UIColor *)colorStr
+- (void)drawCircleWithColor:(NSString *)colorStr
 {
     //    第一层直径20px 30%  第二层直径14px 30%   中间最小的点实色 直径8px
     CGRect frame1 = CGRectMake(10, (self.frame.size.height - 10)*0.5, 10, 10);//最外面
     CGRect frame2 = CGRectMake(11.5, (self.frame.size.height - 7)*0.5, 7, 7);
     CGRect frame3 = CGRectMake(13, (self.frame.size.height - 4)*0.5, 4, 4);
-    UIColor *color1 = colorStr;
+    UIColor *color1 = [UIColor ssj_colorWithHex:colorStr alpha:0.3];
     UIColor *color2 = color1;
-    UIColor *color3 = colorStr;
+    UIColor *color3 = [UIColor ssj_colorWithHex:colorStr];;
     /*
      *画实线圆
      */
