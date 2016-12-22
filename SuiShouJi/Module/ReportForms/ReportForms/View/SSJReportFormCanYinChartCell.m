@@ -28,10 +28,14 @@
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         [self.contentView.layer addSublayer:self.topLineLayer];
         [self.contentView.layer addSublayer:self.bottomLineLayer];
+        [self.contentView.layer addSublayer:self.circleLayer1];
+        [self.contentView.layer addSublayer:self.circleLayer2];
+        [self.contentView.layer addSublayer:self.circleLayer3];
         [self.contentView addSubview:self.dateLabel];
         [self.contentView addSubview:self.ratioLabel];
         [self.contentView addSubview:self.amountLabel];
         self.dateLabel.font = self.ratioLabel.font = self.amountLabel.font = [UIFont systemFontOfSize:14];
+        [self updateAppearance];
     }
     return self;
 }
@@ -63,6 +67,7 @@
 }
 
 - (void)tableView:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath{
+    if ([tableView numberOfRowsInSection:indexPath.section] < 1) return;
     self.topLineLayer.hidden = indexPath.row == 0;
     self.bottomLineLayer.hidden = indexPath.row == [tableView numberOfRowsInSection:indexPath.section] - 1;
 }
@@ -112,8 +117,8 @@
         _topLineLayer = [CAShapeLayer layer];
         CGMutablePathRef solidShapePath =  CGPathCreateMutable();
         [_topLineLayer setFillColor:[[UIColor clearColor] CGColor]];
-        [_topLineLayer setStrokeColor:[[UIColor orangeColor] CGColor]];
-        _topLineLayer.lineWidth = 2.0f ;
+        [_topLineLayer setStrokeColor:[UIColor ssj_colorWithHex:self.imageColor].CGColor];
+        _topLineLayer.lineWidth = 0.5f ;
         CGPathMoveToPoint(solidShapePath, NULL, 15, 0);
         CGPathAddLineToPoint(solidShapePath, NULL, 15,self.height*0.5);
         [_topLineLayer setPath:solidShapePath];
@@ -129,8 +134,8 @@
         _bottomLineLayer = [CAShapeLayer layer];
         CGMutablePathRef solidShapePath =  CGPathCreateMutable();
         [_bottomLineLayer setFillColor:[[UIColor clearColor] CGColor]];
-        [_bottomLineLayer setStrokeColor:[[UIColor orangeColor] CGColor]];
-        _bottomLineLayer.lineWidth = 1.0f ;
+        [_bottomLineLayer setStrokeColor:[UIColor ssj_colorWithHex:self.imageColor].CGColor];
+        _bottomLineLayer.lineWidth = 0.5f ;
         CGPathMoveToPoint(solidShapePath, NULL, 15, self.height*0.5);
         CGPathAddLineToPoint(solidShapePath, NULL, 15,self.height);
         [_bottomLineLayer setPath:solidShapePath];
@@ -187,10 +192,14 @@
     return _amountLabel;
 }
 
+- (void)updateAppearance
+{
+    self.ratioLabel.textColor = self.amountLabel.textColor = self.dateLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+}
 - (void)updateCellAppearanceAfterThemeChanged
 {
-   self.ratioLabel.textColor = self.amountLabel.textColor = self.dateLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-    
+    [super updateCellAppearanceAfterThemeChanged];
+    [self updateAppearance];
 }
 
 /*
