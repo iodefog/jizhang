@@ -246,6 +246,21 @@ static const unsigned int kAllCalendarUnitFlags = NSCalendarUnitYear | NSCalenda
     return NO;
 }
 
+- (BOOL)isEqual:(id)object {
+    if (![object isKindOfClass:[self class]]) {
+        return NO;
+    }
+    
+    SSJDatePeriod *anotherPeriod = object;
+    if (_periodType != anotherPeriod.periodType
+        || [_startDate compare:anotherPeriod.startDate] != NSOrderedSame
+        || [_endDate compare:anotherPeriod.endDate] != NSOrderedSame) {
+        return NO;
+    }
+    
+    return YES;
+}
+
 - (NSString *)debugDescription {
     return [NSString stringWithFormat:@"%@", @{@"startDate":(_startDate ? [_startDate formattedDateWithFormat:@"yyyy-MM-dd"] : [NSNull null]),
                                                @"endDate":(_endDate ? [_endDate formattedDateWithFormat:@"yyyy-MM-dd"] : [NSNull null]),

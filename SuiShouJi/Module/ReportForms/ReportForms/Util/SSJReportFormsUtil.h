@@ -48,6 +48,20 @@ extern NSString *const SSJReportFormsCurveModelEndDateKey;
                         success:(void(^)(NSArray<SSJReportFormsItem *> *result))success
                         failure:(void (^)(NSError *error))failure;
 
+/**
+ 
+
+ @param startDate <#startDate description#>
+ @param endDate <#endDate description#>
+ @param booksId <#booksId description#>
+ @param success <#success description#>
+ @param failure <#failure description#>
+ */
++ (void)queryForDefaultTimeDimensionWithStartDate:(NSDate *)startDate
+                                          endDate:(NSDate *)endDate
+                                          booksId:(NSString *)booksId
+                                          success:(void(^)(SSJTimeDimension timeDimension))success
+                                          failure:(void (^)(NSError *error))failure;
 
 /**
  *  查询某个时间段内有效的收入／支出流水统计

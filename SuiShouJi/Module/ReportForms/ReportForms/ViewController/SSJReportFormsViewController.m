@@ -53,7 +53,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
 //  没有流水的提示视图
 @property (nonatomic, strong) SSJBudgetNodataRemindView *noDataRemindView;
 
-@property (nonatomic, strong) SSJReportFormCurveHeaderView *curveView;
+@property (nonatomic, strong) SSJReportFormCurveHeaderView *curveHeaderView;
 
 //  流水列表视图
 @property (nonatomic, strong) UITableView *tableView;
@@ -77,9 +77,12 @@ static NSString *const kSegmentTitleIncome = @"收入";
 @property (nonatomic, strong) NSMutableArray *datas;
 
 //  日期切换刻度控件的数据源
-@property (nonatomic, strong) NSArray *periods;
+@property (nonatomic, strong) NSArray<SSJDatePeriod *> *periods;
 
 @property (nonatomic, strong) SSJReportFormCurveHeaderViewItem *curveHeaderItem;
+
+//  选中的时间周期
+@property (nonatomic, strong) SSJDatePeriod *selectedPeriod;
 
 //  自定义时间周期
 @property (nonatomic, strong) SSJDatePeriod *customPeriod;
@@ -107,8 +110,6 @@ static NSString *const kSegmentTitleIncome = @"收入";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.tabBarController.delegate = self;
-    
     self.navigationItem.titleView = self.titleSegmentCtrl;
     [self.view addSubview:self.dateAxisView];
     [self.view addSubview:self.customPeriodBtn];
@@ -120,7 +121,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self reloadDatas];
+    [self reloadAllDatas];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -130,7 +131,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
 
 #pragma mark - Overwrite
 - (void)reloadDataAfterSync {
-    [self reloadDatas];
+    [self reloadAllDatas];
 }
 
 - (void)updateAppearanceAfterThemeChanged {
@@ -138,16 +139,6 @@ static NSString *const kSegmentTitleIncome = @"收入";
     
     [_tableView reloadData];
     [self updateAppearance];
-}
-
-#pragma mark - UITabBarControllerDelegate
-- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
-    if ([viewController isKindOfClass:[UINavigationController class]]) {
-        UINavigationController *naviController = (UINavigationController *)viewController;
-        if (naviController.topViewController == self) {
-            [self reloadAllDatas];
-        }
-    }
 }
 
 #pragma mark - UITableViewDataSource
@@ -165,7 +156,17 @@ static NSString *const kSegmentTitleIncome = @"收入";
         __weak typeof(self) wself = self;
         chartCell.selectOptionHandle = ^(SSJReportFormsChartCell *cell) {
             wself.selectedOption = cell.option;
-            [wself reloadDatas];
+            [wself reloadDatasInPeriod:wself.customPeriod ?: wself.selectedPeriod];
+            
+            switch (wself.selectedOption) {
+                case SSJReportFormsMemberAndCategoryOptionCategory:
+                    [MobClick event:@"form_category"];
+                    break;
+                    
+                case SSJReportFormsMemberAndCategoryOptionMember:
+                    [MobClick event:@"form_member"];
+                    break;
+            }
         };
         return chartCell;
     }
@@ -195,7 +196,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    SSJBaseItem *item = [self.datas ssj_objectAtIndexPath:indexPath];
+    SSJBaseItem *item = [self.datas ssj_safeObjectAtIndex:indexPath.row];
     
     if ([item isKindOfClass:[SSJReportFormsItem class]]) {
         SSJReportFormsItem *tmpItem = (SSJReportFormsItem *)item;
@@ -246,7 +247,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
 #pragma mark - SCYSlidePagingHeaderViewDelegate
 - (void)slidePagingHeaderView:(SCYSlidePagingHeaderView *)headerView didSelectButtonAtIndex:(NSUInteger)index {
     
-    SSJDatePeriod *period = _customPeriod ?: [_periods ssj_safeObjectAtIndex:_dateAxisView.selectedIndex];
+    SSJDatePeriod *period = _customPeriod ?: _selectedPeriod;
     
     if (_titleSegmentCtrl.selectedSegmentIndex == 0) {
         
@@ -300,37 +301,26 @@ static NSString *const kSegmentTitleIncome = @"收入";
 }
 
 - (void)scaleAxisView:(SSJReportFormsScaleAxisView *)scaleAxisView didSelectedScaleAxisAtIndex:(NSUInteger)index {
-    [self reloadDatasInPeriod:[_periods ssj_safeObjectAtIndex:index]];
+    _selectedPeriod = [_periods ssj_safeObjectAtIndex:index];
+    [self reloadDatasInPeriod:_selectedPeriod];
     [MobClick event:@"form_date_picked"];
 }
 
 #pragma mark - Event
 - (void)titleSegmentCtrlAction {
-    [self reloadDatas];
-}
-
-// 切换分类和成员
-- (void)typeAndMemberControlAction {
-    [self reloadDatas];
-    
-    switch (_selectedOption) {
-        case SSJReportFormsMemberAndCategoryOptionCategory:
-            [MobClick event:@"form_category"];
-            break;
-            
-        case SSJReportFormsMemberAndCategoryOptionMember:
-            [MobClick event:@"form_member"];
-            break;
-    }
+    [self reloadDatasInPeriod:_customPeriod ?: _selectedPeriod];
 }
 
 - (void)customPeriodBtnAction {
     if (_customPeriod) {
+        
         _customPeriod = nil;
         _dateAxisView.hidden = NO;
         _customPeriodBtn.hidden = YES;
+        
         [_addOrDeleteCustomPeriodBtn setImage:[UIImage ssj_themeImageWithName:@"reportForms_edit"] forState:UIControlStateNormal];
-        [self reloadDatas];
+        
+        [self reloadDatasInPeriod:_selectedPeriod];
         
         [MobClick event:@"form_date_custom_delete"];
     } else {
@@ -351,17 +341,6 @@ static NSString *const kSegmentTitleIncome = @"收入";
 }
 
 #pragma mark - Private
-// 如果当前是自定义时间，就查询自定义时间范围内的流水统计；反之就查询当前刻度时间的流水统计
-- (void)reloadDatas {
-    if (_customPeriod) {
-        [self reloadDatasInPeriod:_customPeriod];
-    } else if (_periods.count) {
-        [self reloadDatasInPeriod:[_periods ssj_safeObjectAtIndex:_dateAxisView.selectedIndex]];
-    } else {
-        [self reloadAllDatas];
-    }
-}
-
 //  重新加载数据
 - (void)reloadAllDatas {
     
@@ -376,10 +355,20 @@ static NSString *const kSegmentTitleIncome = @"收入";
             
             [self.view ssj_hideLoadingIndicator];
             
-            [self reorganiseDateAxisViewDataWithOriginalData:periods];
+            _periods = periods;
             
-            // 查询当前月份的流水统计
-            [self reloadDatasInPeriod:[_periods ssj_safeObjectAtIndex:_dateAxisView.selectedIndex]];
+            [self updateSubveiwsHidden];
+            
+            if (_periods.count > 0) {
+                
+                [_dateAxisView reloadData];
+                
+                NSUInteger selectedIndex = _selectedPeriod ? [_periods indexOfObject:_selectedPeriod] : NSNotFound;
+                _dateAxisView.selectedIndex = (selectedIndex != NSNotFound) ? selectedIndex : _periods.count - 1;
+                _selectedPeriod = [_periods ssj_safeObjectAtIndex:_dateAxisView.selectedIndex];
+                
+                [self reloadDatasInPeriod:(_customPeriod ?: _selectedPeriod)];
+            }
             
         } failure:^(NSError *error) {
             [self.view ssj_hideLoadingIndicator];
@@ -395,6 +384,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
 // 查询某个周期内的流水统计
 - (void)reloadDatasInPeriod:(SSJDatePeriod *)period {
     if (!period) {
+        SSJPRINT(@"参数period不能为nil");
         return;
     }
     
@@ -435,33 +425,43 @@ static NSString *const kSegmentTitleIncome = @"收入";
         }
     } else if (_titleSegmentCtrl.selectedSegmentIndex == 1) {
         [self.view ssj_showLoadingIndicator];
-        [SSJReportFormsUtil queryForBillStatisticsWithTimeDimension:self.curveHeaderItem.timeDimension
-                                                          startDate:period.startDate
-                                                            endDate:period.endDate
-                                                            booksId:nil
-                                                            success:^(NSDictionary *result) {
+        
+        [SSJReportFormsUtil queryForDefaultTimeDimensionWithStartDate:period.startDate endDate:period.endDate booksId:_currentBooksId success:^(SSJTimeDimension timeDimension) {
             
-            [self updateCurveHeaderItemWithCurveModels:result[SSJReportFormsCurveModelListKey] period:period];
+            if (timeDimension != SSJTimeDimensionUnknown) {
+                self.curveHeaderItem.timeDimension = timeDimension;
+            }
             
-            [SSJReportFormsUtil queryForIncomeOrPayType:[self currentType] booksId:_currentBooksId startDate:period.startDate endDate:period.endDate success:^(NSArray<SSJReportFormsItem *> *list) {
-                [self.view ssj_hideLoadingIndicator];
+            [SSJReportFormsUtil queryForBillStatisticsWithTimeDimension:self.curveHeaderItem.timeDimension startDate:period.startDate endDate:period.endDate booksId:_currentBooksId success:^(NSDictionary *result) {
                 
-                self.curveView.item = _curveHeaderItem;
-                if (_curveHeaderItem.curveModels.count == 0) {
-                    self.tableView.tableHeaderView = nil;
-                } else {
-                    self.tableView.tableHeaderView = self.curveView;
-                }
-                [self reorganiseCurveTableDataWithOriginalData:list];
+                [self updateCurveHeaderItemWithCurveModels:result[SSJReportFormsCurveModelListKey] period:period];
+                
+                [SSJReportFormsUtil queryForIncomeOrPayType:[self currentType] booksId:_currentBooksId startDate:period.startDate endDate:period.endDate success:^(NSArray<SSJReportFormsItem *> *list) {
+                    
+                    [self.view ssj_hideLoadingIndicator];
+                    
+                    self.curveHeaderView.item = _curveHeaderItem;
+                    if (_curveHeaderItem.curveModels.count == 0) {
+                        self.tableView.tableHeaderView = nil;
+                    } else {
+                        self.tableView.tableHeaderView = self.curveHeaderView;
+                    }
+                    
+                    [self reorganiseCurveTableDataWithOriginalData:list];
+                    
+                } failure:^(NSError *error) {
+                    [self showError:error];
+                    [self.view ssj_hideLoadingIndicator];
+                }];
                 
             } failure:^(NSError *error) {
-                [self showError:error];
                 [self.view ssj_hideLoadingIndicator];
+                [self showError:error];
             }];
             
         } failure:^(NSError *error) {
-            [self.view ssj_hideLoadingIndicator];
             [self showError:error];
+            [self.view ssj_hideLoadingIndicator];
         }];
     }
 }
@@ -470,8 +470,8 @@ static NSString *const kSegmentTitleIncome = @"收入";
     double income = 0;
     double payment = 0;
     for (SSJReportFormsCurveModel *model in curveModels) {
-        income += [model.income doubleValue];
-        payment += [model.payment doubleValue];
+        income += model.income;
+        payment += model.payment;
     }
     
     int dayCount = dayCount = [period.endDate timeIntervalSinceDate:period.startDate] / (24 * 60 * 60);
@@ -508,10 +508,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
     [self updateLfetItem];
 }
 
-// 重新组织时间刻度控件的数据
-- (void)reorganiseDateAxisViewDataWithOriginalData:(NSArray <SSJDatePeriod *>*)periods {
-    _periods = periods;
-    
+- (void)updateSubveiwsHidden {
     if (_periods.count == 0) {
         _dateAxisView.hidden = YES;
         _customPeriodBtn.hidden = YES;
@@ -523,17 +520,17 @@ static NSString *const kSegmentTitleIncome = @"收入";
         return;
     }
     
-    _dateAxisView.hidden = NO;
-    _customPeriodBtn.hidden = !_customPeriod;
+    if (_customPeriod) {
+        _dateAxisView.hidden = YES;
+        _customPeriodBtn.hidden = NO;
+    } else {
+        _dateAxisView.hidden = NO;
+        _customPeriodBtn.hidden = YES;
+    }
+    
     _addOrDeleteCustomPeriodBtn.hidden = NO;
     self.tableView.hidden = NO;
     [self.view ssj_hideWatermark:YES];
-    
-    [_dateAxisView reloadData];
-    
-    if (_periods.count >= 3) {
-        _dateAxisView.selectedIndex = _periods.count - 1;
-    }
 }
 
 - (void)reorganiseChartTableVieDatasWithOriginalData:(NSArray<SSJReportFormsItem *> *)result {
@@ -665,9 +662,13 @@ static NSString *const kSegmentTitleIncome = @"收入";
     self.payAndIncomeSegmentControl.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     [self.payAndIncomeSegmentControl ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
     
+    self.dateAxisView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     self.dateAxisView.scaleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     self.dateAxisView.selectedScaleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
     [self.dateAxisView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
+    
+    [self.customPeriodBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] forState:UIControlStateNormal];
+    self.customPeriodBtn.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor].CGColor;
     
     self.tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
     
@@ -738,7 +739,6 @@ static NSString *const kSegmentTitleIncome = @"收入";
         wself.customPeriodBtn.hidden = NO;
         [wself updateCustomPeriodBtn];
         [wself.addOrDeleteCustomPeriodBtn setImage:[UIImage ssj_themeImageWithName:@"reportForms_delete"] forState:UIControlStateNormal];
-        [wself reloadDatas];
     };
     [self.navigationController pushViewController:calendarVC animated:YES];
     
@@ -818,12 +818,12 @@ static NSString *const kSegmentTitleIncome = @"收入";
     return _noDataRemindView;
 }
 
-- (SSJReportFormCurveHeaderView *)curveView {
-    if (!_curveView) {
-        _curveView = [[SSJReportFormCurveHeaderView alloc] init];
+- (SSJReportFormCurveHeaderView *)curveHeaderView {
+    if (!_curveHeaderView) {
+        _curveHeaderView = [[SSJReportFormCurveHeaderView alloc] init];
         __weak typeof(self) wself = self;
-        _curveView.changeTimePeriodHandle = ^(SSJReportFormCurveHeaderView *view) {
-            SSJDatePeriod *period = [wself.periods ssj_safeObjectAtIndex:wself.dateAxisView.selectedIndex];
+        _curveHeaderView.changeTimePeriodHandle = ^(SSJReportFormCurveHeaderView *view) {
+            SSJDatePeriod *period = wself.customPeriod ?: [wself.periods ssj_safeObjectAtIndex:wself.dateAxisView.selectedIndex];
             [SSJReportFormsUtil queryForBillStatisticsWithTimeDimension:view.item.timeDimension
                                                               startDate:period.startDate
                                                                 endDate:period.endDate
@@ -832,7 +832,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
                 
                 [wself.view ssj_hideLoadingIndicator];
                 [wself updateCurveHeaderItemWithCurveModels:result[SSJReportFormsCurveModelListKey] period:period];
-                wself.curveView.item = wself.curveHeaderItem;
+                wself.curveHeaderView.item = wself.curveHeaderItem;
                 
             } failure:^(NSError *error) {
                 [wself.view ssj_hideLoadingIndicator];
@@ -854,7 +854,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
             }
         };
     }
-    return _curveView;
+    return _curveHeaderView;
 }
 
 - (UIButton *)customPeriodBtn {

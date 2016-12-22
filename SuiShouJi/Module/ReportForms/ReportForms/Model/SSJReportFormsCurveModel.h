@@ -12,17 +12,17 @@
 
 @interface SSJReportFormsCurveModel : NSObject
 
-@property (nonatomic, copy) NSString *payment;
+@property (nonatomic) double payment;
 
-@property (nonatomic, copy) NSString *income;
+@property (nonatomic) double income;
 
-@property (nonatomic, copy) NSString *time;
+@property (nonatomic, strong) NSDate *startDate;
 
-@property (nonatomic, strong) SSJDatePeriod *period;
+@property (nonatomic, strong) NSDate *endDate;
 
-+ (instancetype)modelWithPayment:(NSString *)payment
-                          income:(NSString *)income
-                            time:(NSString *)time
-                          period:(SSJDatePeriod *)period;
++ (instancetype)modelWithPayment:(double)payment
+                          income:(double)income
+                       startDate:(NSDate *)startDate
+                         endDate:(NSDate *)endDate;
 
 @end
