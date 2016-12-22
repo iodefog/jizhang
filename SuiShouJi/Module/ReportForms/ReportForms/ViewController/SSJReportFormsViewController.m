@@ -217,8 +217,10 @@ static NSString *const kSegmentTitleIncome = @"收入";
         }
     } else if ([item isKindOfClass:[SSJReportFormCurveListCellItem class]]) {
         
+        SSJReportFormCurveListCellItem *curveListItem = (SSJReportFormCurveListCellItem *)item;
         SSJReportFormsBillTypeDetailViewController *billTypeDetailController = [[SSJReportFormsBillTypeDetailViewController alloc] init];
-        billTypeDetailController.billTypeID = ((SSJReportFormCurveListCellItem *)item).billTypeId;
+        billTypeDetailController.billTypeID = curveListItem.billTypeId;
+        billTypeDetailController.title = curveListItem.leftTitle1;
         [self.navigationController pushViewController:billTypeDetailController animated:YES];
     }
 }
@@ -432,7 +434,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
     } else if (_titleSegmentCtrl.selectedSegmentIndex == 1) {
         [self.view ssj_showLoadingIndicator];
         
-        [SSJReportFormsUtil queryForDefaultTimeDimensionWithStartDate:period.startDate endDate:period.endDate booksId:_currentBooksId success:^(SSJTimeDimension timeDimension) {
+        [SSJReportFormsUtil queryForDefaultTimeDimensionWithStartDate:period.startDate endDate:period.endDate booksId:_currentBooksId billTypeId:nil success:^(SSJTimeDimension timeDimension) {
             
             if (timeDimension != SSJTimeDimensionUnknown) {
                 self.curveHeaderItem.timeDimension = timeDimension;
@@ -636,7 +638,8 @@ static NSString *const kSegmentTitleIncome = @"收入";
     
     for (SSJReportFormsItem *item in sortedItems) {
         SSJReportFormCurveListCellItem *curveListItem = [[SSJReportFormCurveListCellItem alloc] init];
-        curveListItem.leftTitle = [NSString stringWithFormat:@"%@ %.1f％", item.name, item.scale * 100];
+        curveListItem.leftTitle1 = item.name;
+        curveListItem.leftTitle2 = [NSString stringWithFormat:@"%.1f％", item.scale * 100];
         curveListItem.rightTitle = [[NSString stringWithFormat:@"%f", item.money] ssj_moneyDecimalDisplayWithDigits:2];
         curveListItem.progressColorValue = item.colorValue;
         curveListItem.scale = item.money / maxMoney;

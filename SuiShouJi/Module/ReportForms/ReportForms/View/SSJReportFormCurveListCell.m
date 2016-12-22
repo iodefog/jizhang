@@ -111,7 +111,7 @@
     
     [super setCellItem:cellItem];
     
-    self.textLabel.text = self.item.leftTitle;
+    self.textLabel.text = [NSString stringWithFormat:@"%@ %@", self.item.leftTitle1, self.item.leftTitle2];
     _rightLabel.text = self.item.rightTitle;
     _progressView.progress = self.item.scale;
     [_progressView setFillColor:[UIColor ssj_colorWithHex:self.item.progressColorValue]];

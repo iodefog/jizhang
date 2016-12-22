@@ -10,7 +10,9 @@
 
 @interface SSJReportFormCurveListCellItem : SSJBaseItem
 
-@property (nonatomic, copy) NSString *leftTitle;
+@property (nonatomic, copy) NSString *leftTitle1;
+
+@property (nonatomic, copy) NSString *leftTitle2;
 
 @property (nonatomic, copy) NSString *rightTitle;
 

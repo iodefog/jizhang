@@ -119,7 +119,7 @@
     CFAbsoluteTime _currentTime = CFAbsoluteTimeGetCurrent();
     if (_currentTime - _startTime > 2) {
         [self dismiss];
-        [CDAutoHideMessageHUD showMessage:<#(NSString *)#> inView:<#(UIView *)#> duration:<#(NSTimeInterval)#>]
+//        [CDAutoHideMessageHUD showMessage:<#(NSString *)#> inView:<#(UIView *)#> duration:<#(NSTimeInterval)#>]
     } else {
         __weak typeof(self) weakSelf = self;
         dispatch_time_t time=dispatch_time(DISPATCH_TIME_NOW, (2 - _currentTime) *NSEC_PER_SEC);
