@@ -10,6 +10,7 @@
 #import "SSJBudgetModel.h"
 
 @interface SSJHomeBudgetButton : UIView
+
 @property (nonatomic,strong) SSJBudgetModel *model;
 
 @property (nonatomic,strong) UIButton *button;
@@ -21,6 +22,8 @@ typedef void(^budgetButtonClickBlock)(SSJBudgetModel *model);
 @property(nonatomic) double currentBalance;
 
 @property (nonatomic) long currentMonth;
+
+@property(nonatomic, strong) UIView *seperatorLine;
 
 - (void)updateAfterThemeChange;
 

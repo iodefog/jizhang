@@ -220,10 +220,13 @@
 {
     SSJUserItem *userItem = [SSJUserTableManager queryUserItemForID:SSJUSERID()];
     if (userItem.signature.length < 1 || userItem.signature == nil) {
-        _geXingSignLabel.text = @"个性签名何必个性";
+        _geXingSignLabel.text = @"";
+        self.nicknameLabel.centerY = self.headPotraitImage.centerY;
     }else{
         _geXingSignLabel.text = userItem.signature;
+        self.nicknameLabel.top = self.headPotraitImage.top + 15;
     }
+    self.dengjiImage.centerY = self.nicknameLabel.centerY;
 
 }
 
@@ -296,9 +299,15 @@
 - (void)updateAfterThemeChange{
     if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
         self.backImage.hidden = NO;
+        [self.checkInButton ssj_setBorderWidth:0];
+        [self.syncButton ssj_setBorderWidth:0];
+        self.verticalSepertorLine.hidden = YES;
     }else{
         self.backImage.hidden = YES;
         self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+        [self.checkInButton ssj_setBorderWidth:1.f / [UIScreen mainScreen].scale];
+        [self.syncButton ssj_setBorderWidth:1.f / [UIScreen mainScreen].scale];
+        self.verticalSepertorLine.hidden = NO;
     }
     self.geXingSignLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.moreHomeSubtitleColor];
     self.nicknameLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.moreHomeTitleColor];

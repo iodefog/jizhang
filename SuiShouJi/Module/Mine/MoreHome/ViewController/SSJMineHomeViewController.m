@@ -68,6 +68,7 @@ static BOOL kNeedBannerDisplay = YES;
 
 @interface SSJMineHomeViewController ()<UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UMSocialUIDelegate,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,SSJHeaderBannerImageViewDelegate>
 //UITableViewDelegate,UITableViewDataSource,
+
 @property (nonatomic,strong) SSJMineHomeTableViewHeader *header;
 @property (nonatomic, strong) SSJPortraitUploadNetworkService *portraitUploadService;
 @property (nonatomic,strong) UIView *loggedFooterView;
@@ -75,7 +76,7 @@ static BOOL kNeedBannerDisplay = YES;
 @property (nonatomic,strong) SSJUserInfoItem *item;
 @property (nonatomic, strong) NSMutableArray *titles;
 @property (nonatomic, strong) NSMutableArray *images;
-@property (nonatomic,strong) NSString *circleChargeState;
+//@property (nonatomic,strong) NSString *circleChargeState;
 @property(nonatomic, strong) UIView *rightbuttonView;
 //@property(nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UICollectionView *collectionView;
@@ -124,11 +125,11 @@ static BOOL kNeedBannerDisplay = YES;
     //  根据审核状态显示响应的内容，“给个好评”在审核期间不能被看到，否则可能会被拒绝-
     if ([SSJStartChecker sharedInstance].isInReview) {
         if ([SSJDefaultSource() isEqualToString:@"11501"] || [SSJDefaultSource() isEqualToString:@"11502"]) {
-            self.images = [@[@"more_tixing", @"more_zhouqi", @"more_pifu",@"more_daochu", @"more_share", @"more_fankui", @"more_shezhi"] mutableCopy];
+            self.images = [@[@"more_tixing", @"more_pifu", @"more_zhouqi",@"more_daochu", @"more_share", @"more_fankui", @"more_shezhi"] mutableCopy];
             self.titles = [@[kTitle1 , kTitle2 , kTitle3, kTitle4,kTitle8,kTitle5 , kTitle7] mutableCopy];
             _titleArr = [@[kTitle1 , kTitle2 , kTitle3 , kTitle4 , kTitle8 , kTitle5 , kTitle7] mutableCopy];
         } else{
-            self.images = [@[@"more_tixing", @"more_zhouqi", @"more_pifu",@"more_daochu", @"more_fankui", @"more_shezhi"] mutableCopy];
+            self.images = [@[@"more_tixing", @"more_pifu", @"more_zhouqi",@"more_daochu", @"more_fankui", @"more_shezhi"] mutableCopy];
             self.titles = [@[kTitle1 , kTitle2 , kTitle3, kTitle4,kTitle5 , kTitle7] mutableCopy];
             _titleArr = [@[kTitle1 , kTitle2 , kTitle3 , kTitle4 , kTitle5 , kTitle7] mutableCopy];
         }
@@ -167,7 +168,7 @@ static BOOL kNeedBannerDisplay = YES;
     SSJBookkeepingTreeCheckInModel *checkInModel = [SSJBookkeepingTreeStore queryCheckInInfoWithUserId:SSJUSERID() error:nil];
     self.header.checkInLevel = [SSJBookkeepingTreeHelper treeLevelForDays:checkInModel.checkInTimes];
     
-    [self getCircleChargeState];
+//    [self getCircleChargeState];
     self.navigationItem.rightBarButtonItem.tintColor = [UIColor ssj_colorWithHex:@"eb4a64"];
 }
 
@@ -589,20 +590,20 @@ static BOOL kNeedBannerDisplay = YES;
     self.lineView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
 }
 
--(void)getCircleChargeState {
-    __weak typeof(self) weakSelf = self;
-    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        BOOL isOnOrNot = [db intForQuery:@"select isonornot from BK_CHARGE_REMINDER"];
-        if (isOnOrNot) {
-            weakSelf.circleChargeState = @"开启";
-        }else{
-            weakSelf.circleChargeState = @"关闭";
-        }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [weakSelf.collectionView reloadData];
-        });
-    }];
-}
+//-(void)getCircleChargeState {
+//    __weak typeof(self) weakSelf = self;
+//    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+//        BOOL isOnOrNot = [db intForQuery:@"select isonornot from BK_CHARGE_REMINDER"];
+//        if (isOnOrNot) {
+//            weakSelf.circleChargeState = @"开启";
+//        }else{
+//            weakSelf.circleChargeState = @"关闭";
+//        }
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            [weakSelf.collectionView reloadData];
+//        });
+//    }];
+//}
 
 - (void)loginButtonClicked {
     if (!SSJIsUserLogined()) {

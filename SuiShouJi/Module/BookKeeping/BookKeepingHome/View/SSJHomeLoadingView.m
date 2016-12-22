@@ -76,7 +76,7 @@
     [super layoutSubviews];
     self.loadingView.center = CGPointMake(self.width / 2, self.height / 2);
     self.statusLab.centerX = self.width / 2;
-    self.statusLab.top = self.loadingView.height + 10;
+    self.statusLab.top = self.loadingView.bottom + 10;
 }
 
 - (FLAnimatedImageView *)loadingView{
@@ -94,6 +94,7 @@
         _statusLab.text = @"正在加载数据,请稍后...";
         _statusLab.font = [UIFont systemFontOfSize:16];
         _statusLab.textColor  = [UIColor ssj_colorWithHex:@"#333333"];
+        [_statusLab sizeToFit];
     }
     return _statusLab;
 }
@@ -110,6 +111,7 @@
     _currentSecond = _currentSecond + 1;
     if (_currentSecond > 8) {
         [self dismiss];
+        [[NSNotificationCenter defaultCenter] postNotificationName:SSJHomeContinueLoadingNotification object:nil];
     }
 }
 

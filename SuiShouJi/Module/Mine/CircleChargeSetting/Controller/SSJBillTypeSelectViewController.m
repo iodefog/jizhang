@@ -130,7 +130,7 @@ static NSString * SSJBillTypeSelectCellIdentifier = @"billTypeSelectCellIdentifi
 -(void)getdataFromDb{
     __weak typeof(self) weakSelf = self;
     [SSJCategoryListHelper queryForCategoryListWithIncomeOrExpenture:self.incomeOrExpenture booksId:@"" Success:^(NSMutableArray<SSJRecordMakingBillTypeSelectionCellItem *> *result) {
-        SSJRecordMakingBillTypeSelectionCellItem *item = [SSJRecordMakingBillTypeSelectionCellItem itemWithTitle:@"添加" imageName:@"add" colorValue:@"cccccc" ID:@"" order:0];
+        SSJRecordMakingBillTypeSelectionCellItem *item = [SSJRecordMakingBillTypeSelectionCellItem itemWithTitle:@"添加" imageName:@"add" colorValue:SSJ_CURRENT_THEME.secondaryColor ID:@"" order:0];
         [result addObject:item];
         weakSelf.items = [[NSMutableArray alloc]initWithArray:result];
         [weakSelf.tableView reloadData];

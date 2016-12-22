@@ -61,7 +61,7 @@
     NSMutableArray *errorArray = [self readErrerInJson];
     
     //格式化成json数据
-    NSDate *currentDate = [NSDate date];
+    NSString *currentDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss"];
     NSMutableDictionary *dic = [NSMutableDictionary dictionary];
     [dic setValue:SSJUSERID() forKey:@"cuserid"];
     [dic setValue:SSJAppVersion() forKey:@"releaseversion"];
@@ -78,12 +78,16 @@
 //压缩数据库上传错误信息
 + (void)upLoadData
 {
+    NSError *error;
+    [self writeToFileWithError:error];//将错误写入文件
     //上传判断网络状态
     if ([SSJNetworkReachabilityManager networkReachabilityStatus] == SSJNetworkReachabilityStatusReachableViaWiFi) {//wifi
         //读取db_error_list文件，查询没有上传过的记录
         //读取db_error_list.json
         NSMutableArray *errorArray = [self readErrerInJson];
-        [self uploadData:errorArray.count -1 array:errorArray];
+        if (errorArray.count > 0) {
+            [self uploadData:errorArray.count -1 array:errorArray];
+        }
     }
 }
 
@@ -93,27 +97,49 @@
         if (index < 0)return;
         NSDictionary *dic = [arr ssj_safeObjectAtIndex:index];
         if ([[dic objectForKey:@"uploaded"] intValue] == 0) {
-            //上传
-            [self uploadData:[self zipSql] completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
-                if (error) return ;
-                //修改此记录的上传状态（uploaded），并删除数据库文件
-                if ([responseObject isKindOfClass:[NSDictionary class]]) {
-                    int code = [[responseObject objectForKey:@"code"] intValue];
+            //数据库名称
+            NSString *cFileName = [dic objectForKey:@"cfilename"];
+            NSString *sqlName = cFileName.length ? cFileName : [NSString stringWithFormat:@"db_error_%ld",(long)[[NSDate date] timeIntervalSince1970]];
+            
+            //存储数据库名称
+            [dic setValue:sqlName forKey:@"cfilename"];
+            NSData *zipData = [self zipSqlWithName:sqlName];
+            //再次写入
+            [arr writeToFile:jsonPath atomically:YES];
+            [self uploadData:zipData completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
+                if (error)return;
+                NSHTTPURLResponse *tResponse = (NSHTTPURLResponse *)response;
+                NSString *contentType = tResponse.allHeaderFields[@"Content-Type"];
+                
+                //  返回的是json数据格式
+                NSError *err;
+                if ([contentType isEqualToString:@"text/json;charset=UTF-8"]) {
+                    NSDictionary *responseInfo = [NSJSONSerialization JSONObjectWithData:responseObject options:0 error:&err];
+                    NSInteger code = [responseInfo[@"code"] integerValue];
                     if (code == 1) {
+                        //修改此记录的上传状态（uploaded），并删除数据库文件
                         [dic setValue:@(1) forKey:@"uploaded"];
-                        NSString *sqlName = [NSString stringWithFormat:@"db_error_%ld",(long)[[NSDate date] timeIntervalSince1970]];
-                        NSString *sqlPath = [[NSBundle mainBundle] pathForResource:sqlName ofType:@"zip"];
-                        [[NSFileManager defaultManager] removeItemAtPath:sqlPath error:nil];
+                        [self removeSqlFileWithName:sqlName];
                         //再次写入
                         [arr writeToFile:jsonPath atomically:YES];
                         [self uploadData:index-1 array:arr];
                     }
                 }
-            } parametersDic:dic];
+            } parametersDic:dic fileName:sqlName];
         }
     });
 }
 
++ (void)removeSqlFileWithName:(NSString *)name
+{
+    NSString *fillName = [NSString stringWithFormat:@"%@.zip",name];
+    NSString *dataPath = [writePath stringByAppendingPathComponent:name];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    if ([fileManager fileExistsAtPath:dataPath]) {//如果存在
+        // 读取data
+        [fileManager removeItemAtPath:dataPath error:nil];
+    }
+}
 
 //读取db_error_list.json
 + (NSMutableArray *)readErrerInJson
@@ -129,27 +155,32 @@
 }
 
 //压缩数据库
-+ (NSData *)zipSql
++ (NSData *)zipSqlWithName:(NSString *)name
 {
+    NSString *fillName = [NSString stringWithFormat:@"%@.zip",name];
+    //如果有文件就直接取出
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    if ([fileManager fileExistsAtPath:fillName]) {//如果存在
+        NSString *dataPath = [writePath stringByAppendingPathComponent:name];
+        // 读取data
+        return [NSData dataWithContentsOfFile:dataPath];
+    }
     //压缩文件目录
     NSError *tError = nil;
     NSString *sqlPath = writePath;
     NSData *data = [NSData dataWithContentsOfFile:SSJSQLitePath()];
-    NSString *sqlName = [NSString stringWithFormat:@"db_error_%ld",(long)[[NSDate date] timeIntervalSince1970]];
     //压缩
-    NSData *zipData = [self zipData:data error:&tError sqlPath:sqlPath sqlName:sqlName];
+    NSData *zipData = [self zipData:data error:&tError sqlPath:sqlPath sqlName:name];
+    
     return zipData;
 }
 
 //  上传文件
-+ (void)uploadData:(NSData *)data completionHandler:(void (^)(NSURLResponse *response, id responseObject, NSError *error))completionHandler parametersDic:(NSDictionary *)paraDic{
-    
++ (void)uploadData:(NSData *)data completionHandler:(void (^)(NSURLResponse *response, id responseObject, NSError *error))completionHandler parametersDic:(NSDictionary *)paraDic fileName:(NSString *)fileName{
     //  创建请求
     NSString *urlString = SSJURLWithAPI(@"/admin/applog.go");
-//    /admin/applog.go
     NSError *tError = nil;
     NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] multipartFormRequestWithMethod:@"POST" URLString:urlString parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-        NSString *fileName = [NSString stringWithFormat:@"db_error_%ld.zip", (long)[NSDate date].timeIntervalSince1970];
         [formData appendPartWithFileData:data name:@"zip" fileName:fileName mimeType:@"application/zip"];
     } error:&tError];
     
@@ -169,6 +200,12 @@
     
     //  开始上传
     SSJGlobalServiceManager *manager = [SSJGlobalServiceManager standardManager];
+    //申明返回的结果是json类型
+//    manager.responseSerializer = [AFJSONResponseSerializer serializer];
+    //申明请求的数据是json类型
+//    manager.requestSerializer = [AFJSONRequestSerializer serializer];
+    //如果报接受类型不一致请替换一致text/html或别的
+//    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html", nil];
     manager.operationQueue.maxConcurrentOperationCount = 1;//一次只执行一个任务
     NSURLSessionUploadTask *task = [manager uploadTaskWithStreamedRequest:request progress:nil completionHandler:completionHandler];
 

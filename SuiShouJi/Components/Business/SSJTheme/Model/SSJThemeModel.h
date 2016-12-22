@@ -97,6 +97,9 @@
 // cell分割线颜色
 @property (nonatomic, copy) NSString *cellSeparatorColor;
 
+// 键盘分割线颜色
+@property (nonatomic, copy) NSString *keyboardSeparatorColor;
+
 // cell右侧箭头颜色
 @property (nonatomic, copy) NSString *cellIndicatorColor;
 
@@ -169,7 +172,25 @@
 // 总账本的背景颜色
 @property (nonatomic, copy) NSString *summaryBooksHeaderColor;
 
-// 总账本的背景颜色
+// 总账本的背景颜色透明度
 @property (nonatomic) CGFloat summaryBooksHeaderAlpha;
+
+// 资金详情背景颜色
+@property (nonatomic, copy) NSString *financingDetailHeaderColor;
+
+// 资金详情背景颜色透明度
+@property (nonatomic) CGFloat financingDetailHeaderAlpha;
+
+// 资金详情背景颜色
+@property (nonatomic, copy) NSString *financingDetailMainColor;
+
+// 资金详情背景颜色透明度
+@property (nonatomic) CGFloat financingDetailMainAlpha;
+
+// 资金详情背景颜色
+@property (nonatomic, copy) NSString *financingDetailSecondaryColor;
+
+// 资金详情背景颜色透明度
+@property (nonatomic) CGFloat financingDetailSecondaryAlpha;
 
 @end

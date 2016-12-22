@@ -86,6 +86,11 @@ BOOL kHomeNeedLoginPop;
 }
 
 #pragma mark - Lifecycle
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.statisticsTitle = @"首页";
@@ -165,7 +170,9 @@ BOOL kHomeNeedLoginPop;
     [self.mm_drawerController setMaximumLeftDrawerWidth:SSJSCREENWITH * 0.8];
     [self.mm_drawerController setOpenDrawerGestureModeMask:MMOpenDrawerGestureModeAll];
     [self.mm_drawerController setCloseDrawerGestureModeMask:MMCloseDrawerGestureModeAll];
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(continueLoading) name:SSJHomeContinueLoadingNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(syncDidFail) name:SSJSyncDataFailureNotification object:nil];
+
     SSJBookKeepingHomeEvaluatePopView *evaluate = [[SSJBookKeepingHomeEvaluatePopView alloc] initWithFrame:CGRectMake(0, 0, SSJSCREENWITH, SSJSCREENHEIGHT)];
     [evaluate showEvaluatePopView];
 }
@@ -203,13 +210,10 @@ BOOL kHomeNeedLoginPop;
     self.statusLabel.centerX = self.view.width / 2;
 }
 
--(BOOL)prefersStatusBarHidden{
+- (BOOL)prefersStatusBarHidden {
     return YES;
 }
 
--(void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
 
 #pragma mark - UITableViewDelegate
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -600,12 +604,12 @@ BOOL kHomeNeedLoginPop;
 }
 
 #pragma mark - Event
--(void)rightBarButtonClicked{
+- (void)rightBarButtonClicked {
     SSJCalendarViewController *calendarVC = [[SSJCalendarViewController alloc]init];
     [self.navigationController pushViewController:calendarVC animated:YES];
 }
 
--(void)leftBarButtonClicked:(id)sender{
+- (void)leftBarButtonClicked:(id)sender {
     [self.mm_drawerController toggleDrawerSide:MMDrawerSideLeft animated:YES completion:^(BOOL finished) {
         if (!_dateViewHasDismiss) {
             [self.floatingDateView dismiss];
@@ -615,8 +619,27 @@ BOOL kHomeNeedLoginPop;
     }];
 }
 
+- (void)continueLoading {
+    self.homeBar.isAnimating = YES;
+    [UIView animateWithDuration:0.6 animations:^{
+        self.homeBar.height = 110;
+        self.bookKeepingHeader.top = self.homeBar.bottom;
+        if (!SSJ_CURRENT_THEME.tabBarBackgroundImage.length) {
+            self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.bookKeepingHeader.bottom - SSJ_TABBAR_HEIGHT);
+        }else{
+            self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.bookKeepingHeader.bottom);
+        } 
+    } completion:^(BOOL finished) {
+        
+    }];
+}
+
+- (void)syncDidFail {
+    [self stopLoading];
+}
+
 #pragma mark - Private
--(void)popIfNeeded{
+- (void)popIfNeeded {
     __weak typeof(self) weakSelf = self;
     if ([[NSUserDefaults standardUserDefaults]objectForKey:SSJLastLoggedUserItemKey] && !SSJIsUserLogined() && kHomeNeedLoginPop) {
         kHomeNeedLoginPop = NO;
@@ -648,16 +671,14 @@ BOOL kHomeNeedLoginPop;
             [[NSUserDefaults standardUserDefaults]setObject:currentDate forKey:SSJLastPopTimeKey];
         }
     }
-
 }
 
--(void)updateAppearanceAfterThemeChanged{
+- (void)updateAppearanceAfterThemeChanged {
     [super updateAppearanceAfterThemeChanged];
     [self.bookKeepingHeader updateAfterThemeChange];
     [self.tableView updateAfterThemeChange];
     [self.homeButton updateAfterThemeChange];
-    [self.homeBar.budgetButton updateAfterThemeChange];
-    [self.homeBar.rightBarButton updateAfterThemeChange];
+    [self.homeBar updateAfterThemeChange];
     [self.noDataHeader updateAfterThemeChanged];
     [self.floatingDateView updateAfterThemeChange];
     self.mutiFunctionButton.mainButtonNormalColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.bookKeepingHomeMutiButtonSelectColor];
@@ -672,7 +693,7 @@ BOOL kHomeNeedLoginPop;
     }
 }
 
--(void)getDateFromDatebase{
+- (void)getDateFromDatebase{
     [self.tableView ssj_showLoadingIndicator];
     __weak typeof(self) weakSelf = self;
     if (self.allowRefresh) {
@@ -791,7 +812,7 @@ BOOL kHomeNeedLoginPop;
     } else {
         [self getDateFromDatebase];
     }
-    
+    [self stopLoading];
     [self reloadBudgetData];
     NSString *booksid = SSJGetCurrentBooksType();
     SSJBooksTypeItem *currentBooksItem = [SSJBooksTypeStore queryCurrentBooksTypeForBooksId:booksid];
@@ -855,5 +876,19 @@ BOOL kHomeNeedLoginPop;
     [self getDateFromDatebase];
 }
 
+- (void)stopLoading {
+    self.homeBar.isAnimating = NO;
+    [UIView animateWithDuration:0.6 animations:^{
+        self.homeBar.height = 64;
+        self.bookKeepingHeader.top = self.homeBar.bottom;
+        if (!SSJ_CURRENT_THEME.tabBarBackgroundImage.length) {
+            self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.bookKeepingHeader.bottom - SSJ_TABBAR_HEIGHT);
+        }else{
+            self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.bookKeepingHeader.bottom);
+        }
+    } completion:^(BOOL finished) {
+        
+    }];
+}
 
 @end

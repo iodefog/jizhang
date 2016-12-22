@@ -87,7 +87,7 @@
                                                                @"pwd":password ?: @"",
                                                            @"cimei":[UIDevice currentDevice].identifierForVendor.UUIDString,
                                                            @"cmodel":SSJPhoneModel(),
-                                                           @"cphoneos":SSJPhoneModel()}];
+                                                           @"cphoneos":[[UIDevice currentDevice] systemVersion]}];
             break;
             
         case SSJRegistAndForgetPasswordTypeForgetPassword:

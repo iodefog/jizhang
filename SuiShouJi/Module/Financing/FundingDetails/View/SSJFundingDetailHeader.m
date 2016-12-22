@@ -52,7 +52,11 @@
 -(UILabel *)expenceLabel{
     if (!_expenceLabel) {
         _expenceLabel = [[UILabel alloc]init];
-        _expenceLabel.textColor = [UIColor whiteColor];
+        if (SSJ_CURRENT_THEME.financingDetailMainColor.length) {
+            _expenceLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailMainColor alpha:SSJ_CURRENT_THEME.financingDetailMainAlpha];
+        } else {
+            _expenceLabel.textColor = [UIColor whiteColor];
+        }
         _expenceLabel.font = [UIFont systemFontOfSize:15];
         _expenceLabel.textAlignment = NSTextAlignmentCenter;
         _expenceLabel.text = @"累计支出";
@@ -64,7 +68,11 @@
 -(UILabel *)incomeLabel{
     if (!_incomeLabel) {
         _incomeLabel = [[UILabel alloc]init];
-        _incomeLabel.textColor = [UIColor whiteColor];
+        if (SSJ_CURRENT_THEME.financingDetailMainColor.length) {
+            _incomeLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailMainColor alpha:SSJ_CURRENT_THEME.financingDetailMainAlpha];
+        } else {
+            _incomeLabel.textColor = [UIColor whiteColor];
+        }
         _incomeLabel.font = [UIFont systemFontOfSize:15];
         _incomeLabel.textAlignment = NSTextAlignmentCenter;
         _incomeLabel.text = @"累计收入";
@@ -77,7 +85,11 @@
     if (!_totalExpenceLabel) {
         _totalExpenceLabel = [[UILabel alloc]init];
         _totalExpenceLabel.font = [UIFont systemFontOfSize:24];
-        _totalExpenceLabel.textColor = [UIColor whiteColor];
+        if (SSJ_CURRENT_THEME.financingDetailMainColor.length) {
+            _totalExpenceLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailMainColor alpha:SSJ_CURRENT_THEME.financingDetailMainAlpha];
+        } else {
+            _totalExpenceLabel.textColor = [UIColor whiteColor];
+        }
         _totalExpenceLabel.textAlignment = NSTextAlignmentCenter;
     }
     return _totalExpenceLabel;
@@ -88,7 +100,11 @@
     if (!_totalIncomeLabel) {
         _totalIncomeLabel = [[UILabel alloc]init];
         _totalIncomeLabel.font = [UIFont systemFontOfSize:24];
-        _totalIncomeLabel.textColor = [UIColor whiteColor];
+        if (SSJ_CURRENT_THEME.financingDetailMainColor.length) {
+            _totalIncomeLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailMainColor alpha:SSJ_CURRENT_THEME.financingDetailMainAlpha];
+        } else {
+            _totalIncomeLabel.textColor = [UIColor whiteColor];
+        }
         _totalIncomeLabel.textAlignment = NSTextAlignmentCenter;
     }
     return _totalIncomeLabel;

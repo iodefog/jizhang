@@ -20,7 +20,11 @@
 
 @property(nonatomic, strong) SSJBookKeepingHomeBooksButton *leftButton;
 
-// 记账树gif图片
-//@property (nonatomic, strong) FLAnimatedImageView *loadingView;
+// 首页gif图片
+@property (nonatomic, strong) FLAnimatedImageView *loadingView;
+
+@property (nonatomic) BOOL isAnimating;
+
+- (void)updateAfterThemeChange;
 
 @end

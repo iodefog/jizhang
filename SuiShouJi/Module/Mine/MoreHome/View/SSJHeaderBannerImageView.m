@@ -41,7 +41,7 @@ static NSString *const kHeadBannerCellID = @"SSJHeaderBannerCollectionViewCellID
         _collectionView.bounces = NO;
         _collectionView.dataSource = self;
         _collectionView.delegate = self;
-        _collectionView.backgroundColor = [UIColor whiteColor];
+        _collectionView.backgroundColor = [UIColor clearColor];
         _collectionView.showsHorizontalScrollIndicator = NO;
         _collectionView.showsVerticalScrollIndicator = NO;
     }
@@ -74,8 +74,9 @@ static NSString *const kHeadBannerCellID = @"SSJHeaderBannerCollectionViewCellID
             [array addObjectsFromArray:bannerItemArray];
         }
         _bannerItemArray = [array copy];
+    }else{
+        _bannerItemArray = bannerItemArray;
     }
-    _bannerItemArray = bannerItemArray;
     if (_bannerItemArray.count > 0) {
         [self.collectionView reloadData];
     }
