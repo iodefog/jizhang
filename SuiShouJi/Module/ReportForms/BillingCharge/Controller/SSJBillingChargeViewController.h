@@ -19,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString *ID;
 
 // 账本id，根据此id展示哪个账本的数据，如果不传就默认展示当前账本的数据，如果传all就展示所有账本数据
-@property (nonatomic, copy) NSString *booksId;
+@property (nonatomic, copy, nullable) NSString *booksId;
 
 // 查询周期内的流水
 @property (nonatomic, strong) SSJDatePeriod *period;
