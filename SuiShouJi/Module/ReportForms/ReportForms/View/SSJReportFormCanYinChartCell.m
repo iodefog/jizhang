@@ -7,6 +7,7 @@
 //
 
 #import "SSJReportFormCanYinChartCell.h"
+#import "SSJReportFormCanYinChartCellItem.h"
 @interface SSJReportFormCanYinChartCell()
 /**
  圆圈背景图层
@@ -41,12 +42,6 @@
     return self;
 }
 
-- (void)setImageColor:(NSString *)imageColor
-{
-    _imageColor = imageColor;
-    [self drawCircleWithColor:imageColor];
-}
-
 - (void)layoutSubviews
 {
     [super layoutSubviews];
@@ -56,20 +51,27 @@
     self.amountLabel.right = self.width - 30;
 }
 
-+ (SSJReportFormCanYinChartCell *)cellWithTableView:(UITableView *)tableView
+- (void)setChartItem:(SSJReportFormCanYinChartCellItem *)chartItem
 {
-   static NSString *cellId = @"SSJReportFormCanYinChartCellId";
-    SSJReportFormCanYinChartCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
-    if (!cell) {
-        cell = [[SSJReportFormCanYinChartCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+    _chartItem = chartItem;
+    [self drawCircleWithColor:chartItem.circleColor];
+    self.dateLabel.text = chartItem.leftText.length ? chartItem.leftText : @"";
+    self.ratioLabel.text = chartItem.centerText.length ? chartItem.centerText : @"";
+    self.amountLabel.text = chartItem.rightText.length ? chartItem.rightText : @"";
+    [self.dateLabel sizeToFit];
+    [self.ratioLabel sizeToFit];
+    [self.amountLabel sizeToFit];
+    
+    if (chartItem.segmentStyle == SSJReportFormCanYinChartCellSegmentStyleHeader) {
+        self.topLineLayer.hidden = YES;
+        self.bottomLineLayer.hidden = NO;
+    }else if (chartItem.segmentStyle == SSJReportFormCanYinChartCellSegmentStyleBody){
+        self.topLineLayer.hidden = NO;
+        self.bottomLineLayer.hidden = NO;
+    }else if (chartItem.segmentStyle == SSJReportFormCanYinChartCellSegmentStyleFooter){
+        self.topLineLayer.hidden = NO;
+        self.bottomLineLayer.hidden = YES;
     }
-    return cell;
-}
-
-- (void)tableView:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath{
-    if ([tableView numberOfRowsInSection:indexPath.section] < 1) return;
-    self.topLineLayer.hidden = indexPath.row == 0;
-    self.bottomLineLayer.hidden = indexPath.row == [tableView numberOfRowsInSection:indexPath.section] - 1;
 }
 
 /*
@@ -117,7 +119,7 @@
         _topLineLayer = [CAShapeLayer layer];
         CGMutablePathRef solidShapePath =  CGPathCreateMutable();
         [_topLineLayer setFillColor:[[UIColor clearColor] CGColor]];
-        [_topLineLayer setStrokeColor:[UIColor ssj_colorWithHex:self.imageColor].CGColor];
+        [_topLineLayer setStrokeColor:[UIColor ssj_colorWithHex:self.chartItem.circleColor].CGColor];
         _topLineLayer.lineWidth = 0.5f ;
         CGPathMoveToPoint(solidShapePath, NULL, 15, 0);
         CGPathAddLineToPoint(solidShapePath, NULL, 15,self.height*0.5);
@@ -134,7 +136,7 @@
         _bottomLineLayer = [CAShapeLayer layer];
         CGMutablePathRef solidShapePath =  CGPathCreateMutable();
         [_bottomLineLayer setFillColor:[[UIColor clearColor] CGColor]];
-        [_bottomLineLayer setStrokeColor:[UIColor ssj_colorWithHex:self.imageColor].CGColor];
+        [_bottomLineLayer setStrokeColor:[UIColor ssj_colorWithHex:self.chartItem.circleColor].CGColor];
         _bottomLineLayer.lineWidth = 0.5f ;
         CGPathMoveToPoint(solidShapePath, NULL, 15, self.height*0.5);
         CGPathAddLineToPoint(solidShapePath, NULL, 15,self.height);
