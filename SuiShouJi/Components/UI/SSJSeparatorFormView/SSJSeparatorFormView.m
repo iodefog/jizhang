@@ -133,9 +133,9 @@
 
 @property (nonatomic, strong) NSMutableArray *cells;
 
-@property (nonatomic, strong) NSMutableArray *horizontalSeparators;
+@property (nonatomic, strong) NSMutableArray<UIView *> *horizontalSeparators;
 
-@property (nonatomic, strong) NSMutableArray *verticalSeparators;
+@property (nonatomic, strong) NSMutableArray<NSArray *> *verticalSeparators;
 
 @end
 
@@ -251,8 +251,10 @@
             separator.backgroundColor = _separatorColor;
         }
         
-        for (UIView *separator in _verticalSeparators) {
-            separator.backgroundColor = _separatorColor;
+        for (NSArray *separators in _verticalSeparators) {
+            for (UIView *separator in separators) {
+                separator.backgroundColor = _separatorColor;
+            }
         }
     }
 }

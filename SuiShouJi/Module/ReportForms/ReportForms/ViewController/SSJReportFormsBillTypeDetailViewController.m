@@ -8,16 +8,27 @@
 
 #import "SSJReportFormsBillTypeDetailViewController.h"
 #import "SSJReportFormsScaleAxisView.h"
-#import "SSJReportFormCurveHeaderView.h"
+#import "SCYSlidePagingHeaderView.h"
+#import "SSJReportFormsCurveGraphView.h"
+#import "SSJSeparatorFormView.h"
+#import "SSJReportFormsCurveDescriptionView.h"
 #import "SSJBudgetNodataRemindView.h"
 #import "SSJReportFormCanYinChartCell.h"
 #import "SSJReportFormsCurveModel.h"
 #import "SSJDatePeriod.h"
 #import "SSJReportFormsUtil.h"
 
+static const CGFloat kSpaceHeight = 10;
+
+static const CGFloat kTimePeriodSegmentControlHeight = 40;
+
+static const CGFloat kCurveViewHeight = 350;
+
+static const CGFloat kSeparatorFormViewHeight = 88;
+
 static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinChartCellId";
 
-@interface SSJReportFormsBillTypeDetailViewController () <UITableViewDataSource, UITableViewDelegate, SSJReportFormsScaleAxisViewDelegate>
+@interface SSJReportFormsBillTypeDetailViewController () <UITableViewDataSource, UITableViewDelegate, SSJReportFormsScaleAxisViewDelegate, SCYSlidePagingHeaderViewDelegate, SSJReportFormsCurveGraphViewDataSource, SSJReportFormsCurveGraphViewDelegate, SSJSeparatorFormViewDataSource>
 
 //  自定义时间
 @property (nonatomic, strong) UIButton *customPeriodBtn;
@@ -28,20 +39,32 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
 //  切换年份、月份控件
 @property (nonatomic, strong) SSJReportFormsScaleAxisView *dateAxisView;
 
+@property (nonatomic, strong) SCYSlidePagingHeaderView *timeDemisionControl;
+
+@property (nonatomic, strong) SSJReportFormsCurveGraphView *curveView;
+
+@property (nonatomic, strong) SSJSeparatorFormView *separatorFormView;
+
+@property (nonatomic, strong) UIView *headerView;
+
 //  流水列表视图
 @property (nonatomic, strong) UITableView *tableView;
 
-@property (nonatomic, strong) SSJReportFormCurveHeaderView *curveHeaderView;
+@property (nonatomic, strong) UIButton *questionBtn;
+
+@property (nonatomic, strong) SSJReportFormsCurveDescriptionView *descView;
 
 //  没有流水的提示视图
 @property (nonatomic, strong) SSJBudgetNodataRemindView *noDataRemindView;
 
-@property (nonatomic, strong) SSJReportFormCurveHeaderViewItem *curveHeaderItem;
-
 //  日期切换刻度控件的数据源
 @property (nonatomic, strong) NSArray<SSJDatePeriod *> *periods;
 
+@property (nonatomic, strong) NSArray<SSJReportFormsCurveModel *> *curveModels;
+
 @property (nonatomic, strong) NSMutableArray *items;
+
+@property (nonatomic) SSJTimeDimension dimesion;
 
 @end
 
@@ -49,9 +72,10 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+        
+        _dimesion = SSJTimeDimensionMonth;
         _items = [[NSMutableArray alloc] init];
-        _curveHeaderItem = [[SSJReportFormCurveHeaderViewItem alloc] init];
-        _curveHeaderItem.timeDimension = SSJTimeDimensionMonth;
+        
     }
     return self;
 }
@@ -63,7 +87,12 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
     [self.view addSubview:self.addOrDeleteCustomPeriodBtn];
     [self.view addSubview:self.dateAxisView];
     [self.view addSubview:self.tableView];
-    self.tableView.tableHeaderView = self.curveHeaderView;
+    
+    self.tableView.tableHeaderView = self.headerView;
+    [self.headerView addSubview:self.timeDemisionControl];
+    [self.headerView addSubview:self.curveView];
+    [self.headerView addSubview:self.separatorFormView];
+    
     [self updateAppearance];
 }
 
@@ -94,6 +123,17 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
         [self.view ssj_hideLoadingIndicator];
         [self showError:error];
     }];
+}
+
+- (void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+    
+    _dateAxisView.frame = CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, 50);
+    _separatorFormView.frame = CGRectMake(0, kSpaceHeight, self.view.width, kSeparatorFormViewHeight);
+    _timeDemisionControl.frame = CGRectMake(0, _separatorFormView.bottom + kSpaceHeight, self.view.width, kTimePeriodSegmentControlHeight);
+    _curveView.frame = CGRectMake(0, _timeDemisionControl.bottom, self.view.width, kCurveViewHeight);
+    _headerView.frame = CGRectMake(0, 0, self.view.width, kSpaceHeight * 3 + kTimePeriodSegmentControlHeight + kCurveViewHeight + kSeparatorFormViewHeight);
+    _tableView.frame = CGRectMake(0, self.dateAxisView.bottom, self.view.width, self.view.height - self.dateAxisView.bottom - SSJ_TABBAR_HEIGHT);
 }
 
 #pragma mark - UITableViewDataSource
@@ -147,9 +187,214 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
 //    [MobClick event:@"form_date_picked"];
 }
 
+#pragma mark - SCYSlidePagingHeaderViewDelegate
+- (void)slidePagingHeaderView:(SCYSlidePagingHeaderView *)headerView didSelectButtonAtIndex:(NSUInteger)index {
+    
+    SSJDatePeriod *period = _customPeriod ?: _selectedPeriod;
+    
+    [SSJReportFormsUtil queryForBillStatisticsWithTimeDimension:[self currentDemension] booksId:nil billTypeId:_billTypeID startDate:period.startDate endDate:period.endDate success:^(NSDictionary *result) {
+        
+        [self.view ssj_hideLoadingIndicator];
+        
+//        [self updateCurveHeaderItemWithCurveModels:result[SSJReportFormsCurveModelListKey] period:period];
+        
+        _curveModels = result[SSJReportFormsCurveModelListKey];
+        [_separatorFormView reloadData];
+        [_curveView reloadData];
+        [_curveView scrollToAxisXAtIndex:(_curveModels.count - 1) animated:NO];
+        [self updateCurveUnitAxisXLength];
+        [self updateQuestionBtnHidden];
+        
+    } failure:^(NSError *error) {
+        [self.view ssj_hideLoadingIndicator];
+        [self showError:error];
+    }];
+}
+
+#pragma mark - SSJReportFormsCurveGraphViewDataSource
+- (NSUInteger)numberOfAxisXInCurveGraphView:(SSJReportFormsCurveGraphView *)graphView {
+    return _curveModels.count;
+}
+
+- (NSUInteger)numberOfCurveInCurveGraphView:(SSJReportFormsCurveGraphView *)graphView {
+    return 1;
+}
+
+- (CGFloat)curveGraphView:(SSJReportFormsCurveGraphView *)graphView valueForCurveAtIndex:(NSUInteger)curveIndex axisXIndex:(NSUInteger)axisXIndex {
+    
+    SSJReportFormsCurveModel *model = [_curveModels ssj_safeObjectAtIndex:axisXIndex];
+    if (curveIndex == 0) {  // 支出
+        return model.payment;
+    } else if (curveIndex == 1) { // 收入
+        return model.income;
+    } else {
+        return 0;
+    }
+}
+
+- (NSString *)curveGraphView:(SSJReportFormsCurveGraphView *)graphView titleAtAxisXIndex:(NSUInteger)index {
+    SSJReportFormsCurveModel *model = [_curveModels ssj_safeObjectAtIndex:index];
+    switch ([self currentDemension]) {
+        case SSJTimeDimensionDay: {
+            return [model.startDate formattedDateWithFormat:@"dd日"];
+        }
+            break;
+            
+        case SSJTimeDimensionWeek: {
+            NSString *startDateStr = [model.startDate formattedDateWithFormat:@"MM/dd"];
+            NSString *endDateStr = [model.endDate formattedDateWithFormat:@"MM/dd"];
+            return [NSString stringWithFormat:@"%@~%@", startDateStr, endDateStr];
+        }
+            break;
+            
+        case SSJTimeDimensionMonth: {
+            return [model.startDate formattedDateWithFormat:@"MM月"];
+        }
+            break;
+            
+        case SSJTimeDimensionUnknown: {
+            return nil;
+        }
+            break;
+    }
+}
+
+- (UIColor *)curveGraphView:(SSJReportFormsCurveGraphView *)graphView colorForCurveAtIndex:(NSUInteger)curveIndex {
+    if (curveIndex == 0) { // 支出
+        return [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurvePaymentColor];
+    } else if (curveIndex == 1) { // 收入
+        return [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurveIncomeColor];
+    } else {
+        return nil;
+    }
+}
+
+- (nullable NSString *)curveGraphView:(SSJReportFormsCurveGraphView *)graphView suspensionTitleAtAxisXIndex:(NSUInteger)index {
+    
+    SSJReportFormsCurveModel *model = [_curveModels ssj_safeObjectAtIndex:index];
+    if (index == 0) {
+        switch ([self currentDemension]) {
+            case SSJTimeDimensionDay:
+                return [model.startDate formattedDateWithFormat:@"M月"];
+                break;
+                
+            case SSJTimeDimensionWeek:
+                return [model.startDate formattedDateWithFormat:@"yyyy年"];
+                break;
+                
+            case SSJTimeDimensionMonth:
+                return [model.startDate formattedDateWithFormat:@"yyyy年"];
+                break;
+                
+            case SSJTimeDimensionUnknown:
+                break;
+        }
+    }
+    
+    SSJReportFormsCurveModel *lastModel = [_curveModels ssj_safeObjectAtIndex:index - 1];
+    switch ([self currentDemension]) {
+        case SSJTimeDimensionDay:
+            if (model.startDate.year != lastModel.startDate.year
+                || model.startDate.month != lastModel.startDate.month) {
+                return [model.startDate formattedDateWithFormat:@"M月"];
+            }
+            
+            break;
+            
+        case SSJTimeDimensionWeek:
+            if (model.startDate.year != lastModel.startDate.year) {
+                return [model.startDate formattedDateWithFormat:@"yyyy年"];
+            }
+            
+            break;
+            
+        case SSJTimeDimensionMonth:
+            if (model.startDate.year != lastModel.startDate.year) {
+                return [model.startDate formattedDateWithFormat:@"yyyy年"];
+            }
+            
+            break;
+            
+        case SSJTimeDimensionUnknown:
+            break;
+    }
+    
+    return nil;
+}
+
+#pragma mark - SSJReportFormsCurveGraphViewDelegate
+- (void)curveGraphView:(SSJReportFormsCurveGraphView *)graphView didScrollToAxisXIndex:(NSUInteger)index {
+    [MobClick event:@"form_curve_move"];
+}
+
+- (NSString *)curveGraphView:(SSJReportFormsCurveGraphView *)graphView titleForBallonAtAxisXIndex:(NSUInteger)index {
+    SSJReportFormsCurveModel *model = [_curveModels ssj_safeObjectAtIndex:index];
+    NSString *surplusStr = [NSString stringWithFormat:@"%f", (model.income - model.payment)];
+    return [NSString stringWithFormat:@"结余%@", [surplusStr ssj_moneyDecimalDisplayWithDigits:2]];
+}
+
+- (NSString *)curveGraphView:(SSJReportFormsCurveGraphView *)graphView titleForBallonLabelAtCurveIndex:(NSUInteger)curveIndex axisXIndex:(NSUInteger)axisXIndex {
+    SSJReportFormsCurveModel *model = [_curveModels ssj_safeObjectAtIndex:axisXIndex];
+    if (curveIndex == 0) { // 支出
+        return [NSString stringWithFormat:@"支出%@", [[NSString stringWithFormat:@"%f", model.payment] ssj_moneyDecimalDisplayWithDigits:2]];
+    } else if (curveIndex == 1) { // 收入
+        return [NSString stringWithFormat:@"收入%@", [[NSString stringWithFormat:@"%f", model.income] ssj_moneyDecimalDisplayWithDigits:2]];
+    } else {
+        return nil;
+    }
+}
+
+#pragma mark - SSJSeparatorFormViewDataSource
+- (NSUInteger)numberOfRowsInSeparatorFormView:(SSJSeparatorFormView *)view {
+    return 1;
+}
+
+- (NSUInteger)separatorFormView:(SSJSeparatorFormView *)view numberOfCellsInRow:(NSUInteger)row {
+    return 3;
+}
+
+- (SSJSeparatorFormViewCellItem *)separatorFormView:(SSJSeparatorFormView *)view itemForCellAtIndex:(NSIndexPath *)index {
+    if (index.row == 0) {
+        return [SSJSeparatorFormViewCellItem itemWithTopTitle:@""
+                                                  bottomTitle:@"最大值"
+                                                topTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurveIncomeColor]
+                                             bottomTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]
+                                                 topTitleFont:[UIFont systemFontOfSize:18]
+                                              bottomTitleFont:[UIFont systemFontOfSize:12]
+                                                contentInsets:UIEdgeInsetsZero];
+    } else if (index.row == 1) {
+        return [SSJSeparatorFormViewCellItem itemWithTopTitle:@""
+                                                  bottomTitle:@"最小值"
+                                                topTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurveIncomeColor]
+                                             bottomTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]
+                                                 topTitleFont:[UIFont systemFontOfSize:18]
+                                              bottomTitleFont:[UIFont systemFontOfSize:12]
+                                                contentInsets:UIEdgeInsetsZero];
+    } else if (index.row == 2) {
+        return [SSJSeparatorFormViewCellItem itemWithTopTitle:@""
+                                                  bottomTitle:@"合值"
+                                                topTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurveIncomeColor]
+                                             bottomTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]
+                                                 topTitleFont:[UIFont systemFontOfSize:18]
+                                              bottomTitleFont:[UIFont systemFontOfSize:12]
+                                                contentInsets:UIEdgeInsetsZero];
+    } else {
+        return nil;
+    }
+}
+
+#pragma mark - Event
+- (void)questionBtnAction {
+    if (_descView.superview) {
+        [_descView dismiss];
+    } else {
+        CGPoint showPoint = [_questionBtn convertPoint:CGPointMake(_questionBtn.width * 0.5, _questionBtn.height - 5) toView:self.view];
+        [_descView showInView:self.view atPoint:showPoint];
+    }
+}
+
 #pragma mark - Private
 - (void)updateAppearance {
-    
     self.dateAxisView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     self.dateAxisView.scaleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     self.dateAxisView.selectedScaleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
@@ -167,6 +412,20 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
     }
     
     [self.noDataRemindView updateAppearance];
+    
+    [_curveView reloadData];
+    _curveView.scaleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor];
+    [_curveView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
+    
+    [_separatorFormView reloadData];
+    _separatorFormView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+    _separatorFormView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
+    
+    _timeDemisionControl.titleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    _timeDemisionControl.selectedTitleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
+    _timeDemisionControl.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+    
+    _questionBtn.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
 }
 
 - (void)updateSubveiwsHidden {
@@ -207,12 +466,17 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
         
         _tableView.hidden = NO;
         [self.view ssj_hideWatermark:YES];
-        self.curveHeaderItem.timeDimension = timeDimension;
+        [self updateDimension:timeDimension];
         
-        [SSJReportFormsUtil queryForBillStatisticsWithTimeDimension:self.curveHeaderItem.timeDimension booksId:nil billTypeId:_billTypeID startDate:period.startDate endDate:period.endDate success:^(NSDictionary *result) {
+        [SSJReportFormsUtil queryForBillStatisticsWithTimeDimension:timeDimension booksId:nil billTypeId:_billTypeID startDate:period.startDate endDate:period.endDate success:^(NSDictionary *result) {
             
-            [self updateCurveHeaderItemWithCurveModels:result[SSJReportFormsCurveModelListKey] period:period];
-            self.curveHeaderView.item = _curveHeaderItem;
+//            [self updateCurveHeaderItemWithCurveModels:result[SSJReportFormsCurveModelListKey] period:period];
+            _curveModels = result[SSJReportFormsCurveModelListKey];
+            [_separatorFormView reloadData];
+            [_curveView reloadData];
+            [_curveView scrollToAxisXAtIndex:(_curveModels.count - 1) animated:NO];
+            [self updateCurveUnitAxisXLength];
+            [self updateQuestionBtnHidden];
             
         } failure:^(NSError *error) {
             [self.view ssj_hideLoadingIndicator];
@@ -223,6 +487,37 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
         [self showError:error];
         [self.view ssj_hideLoadingIndicator];
     }];
+}
+
+- (void)updateDimension:(SSJTimeDimension)dimension {
+    switch (dimension) {
+        case SSJTimeDimensionDay:
+            [_timeDemisionControl setSelectedIndex:0 animated:YES];
+            break;
+            
+        case SSJTimeDimensionWeek:
+            [_timeDemisionControl setSelectedIndex:1 animated:YES];
+            break;
+            
+        case SSJTimeDimensionMonth:
+            [_timeDemisionControl setSelectedIndex:2 animated:YES];
+            break;
+            
+        case SSJTimeDimensionUnknown:
+            break;
+    }
+}
+
+- (SSJTimeDimension)currentDemension {
+    if (_timeDemisionControl.selectedIndex == 0) {
+        return SSJTimeDimensionDay;
+    } else if (_timeDemisionControl.selectedIndex == 1) {
+        return SSJTimeDimensionWeek;
+    } else if (_timeDemisionControl.selectedIndex == 1) {
+        return SSJTimeDimensionMonth;
+    } else {
+        return SSJTimeDimensionUnknown;
+    }
 }
 
 - (void)updateCurveHeaderItemWithCurveModels:(NSArray<SSJReportFormsCurveModel *> *)curveModels period:(SSJDatePeriod *)period {
@@ -237,10 +532,42 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
     dayCount ++;
     double dailyCost = payment / dayCount;
     
-    _curveHeaderItem.curveModels = curveModels;
-    _curveHeaderItem.generalIncome = [[NSString stringWithFormat:@"%f", income] ssj_moneyDecimalDisplayWithDigits:2];
-    _curveHeaderItem.generalPayment = [[NSString stringWithFormat:@"%f", payment] ssj_moneyDecimalDisplayWithDigits:2];
-    _curveHeaderItem.dailyCost = [[NSString stringWithFormat:@"%f", dailyCost] ssj_moneyDecimalDisplayWithDigits:2];
+//    _curveHeaderItem.curveModels = curveModels;
+//    _curveHeaderItem.generalIncome = [[NSString stringWithFormat:@"%f", income] ssj_moneyDecimalDisplayWithDigits:2];
+//    _curveHeaderItem.generalPayment = [[NSString stringWithFormat:@"%f", payment] ssj_moneyDecimalDisplayWithDigits:2];
+//    _curveHeaderItem.dailyCost = [[NSString stringWithFormat:@"%f", dailyCost] ssj_moneyDecimalDisplayWithDigits:2];
+}
+
+- (void)updateCurveUnitAxisXLength {
+    switch ([self currentDemension]) {
+        case SSJTimeDimensionDay:
+        case SSJTimeDimensionMonth:
+            _curveView.unitAxisXLength = self.view.width / 7;
+            break;
+            
+        case SSJTimeDimensionWeek:
+            _curveView.unitAxisXLength = self.view.width / 4;
+            break;
+            
+        case SSJTimeDimensionUnknown:
+            break;
+    }
+}
+
+- (void)updateQuestionBtnHidden {
+    switch ([self currentDemension]) {
+        case SSJTimeDimensionDay:
+        case SSJTimeDimensionMonth:
+            _questionBtn.hidden = YES;
+            break;
+            
+        case SSJTimeDimensionWeek:
+            _questionBtn.hidden = NO;
+            break;
+            
+        case SSJTimeDimensionUnknown:
+            break;
+    }
 }
 
 - (void)showError:(NSError *)error {
@@ -256,7 +583,7 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
 #pragma mark - LazyLoading
 - (SSJReportFormsScaleAxisView *)dateAxisView {
     if (!_dateAxisView) {
-        _dateAxisView = [[SSJReportFormsScaleAxisView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, 50)];
+        _dateAxisView = [[SSJReportFormsScaleAxisView alloc] init];
         _dateAxisView.delegate = self;
         [_dateAxisView ssj_setBorderWidth:1];
         [_dateAxisView ssj_setBorderStyle:(SSJBorderStyleBottom)];
@@ -264,43 +591,45 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
     return _dateAxisView;
 }
 
-- (SSJReportFormCurveHeaderView *)curveHeaderView {
-    if (!_curveHeaderView) {
-        _curveHeaderView = [[SSJReportFormCurveHeaderView alloc] init];
-        __weak typeof(self) wself = self;
-        _curveHeaderView.changeTimePeriodHandle = ^(SSJReportFormCurveHeaderView *view) {
-            SSJDatePeriod *period = wself.customPeriod ?: wself.selectedPeriod;
-
-            [SSJReportFormsUtil queryForBillStatisticsWithTimeDimension:view.item.timeDimension booksId:nil billTypeId:wself.billTypeID startDate:period.startDate endDate:period.endDate success:^(NSDictionary *result) {
-                
-                [wself.view ssj_hideLoadingIndicator];
-                [wself updateCurveHeaderItemWithCurveModels:result[SSJReportFormsCurveModelListKey] period:period];
-                wself.curveHeaderView.item = wself.curveHeaderItem;
-                
-            } failure:^(NSError *error) {
-                [wself.view ssj_hideLoadingIndicator];
-                [wself showError:error];
-            }];
-            
-//            switch (view.item.timeDimension) {
-//                case SSJTimeDimensionDay:
-//                    [MobClick event:@"form_curve_day"];
-//                    break;
-//                    
-//                case SSJTimeDimensionWeek:
-//                    [MobClick event:@"form_curve_week"];
-//                    break;
-//                    
-//                case SSJTimeDimensionMonth:
-//                    [MobClick event:@"form_curve_month"];
-//                    break;
-//                    
-//                case SSJTimeDimensionUnknown:
-//                    break;
-//            }
-        };
+- (SSJSeparatorFormView *)separatorFormView {
+    if (!_separatorFormView) {
+        _separatorFormView = [[SSJSeparatorFormView alloc] init];
+        _separatorFormView.separatorColor = [UIColor whiteColor];
+        _separatorFormView.dataSource = self;
     }
-    return _curveHeaderView;
+    return _separatorFormView;
+}
+
+- (SCYSlidePagingHeaderView *)timeDemisionControl {
+    if (!_timeDemisionControl) {
+        _timeDemisionControl = [[SCYSlidePagingHeaderView alloc] init];
+        _timeDemisionControl.customDelegate = self;
+        _timeDemisionControl.buttonClickAnimated = YES;
+        _timeDemisionControl.titles = @[@"日", @"周", @"月"];
+    }
+    return _timeDemisionControl;
+}
+
+- (SSJReportFormsCurveGraphView *)curveView {
+    if (!_curveView) {
+        _curveView = [[SSJReportFormsCurveGraphView alloc] init];
+        _curveView.dataSource = self;
+        _curveView.delegate = self;
+        _curveView.showValuePoint = YES;
+        _curveView.showCurveShadow = YES;
+        
+        [_curveView ssj_setBorderWidth:1];
+        [_curveView ssj_setBorderStyle:SSJBorderStyleTop];
+    }
+    return _curveView;
+}
+
+- (UIView *)headerView {
+    if (!_headerView) {
+        _headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, kSpaceHeight * 3 + kTimePeriodSegmentControlHeight + kCurveViewHeight + kSeparatorFormViewHeight)];
+        _headerView.backgroundColor = [UIColor clearColor];
+    }
+    return _headerView;
 }
 
 - (UITableView *)tableView {
@@ -316,6 +645,22 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
         _tableView.tableFooterView = [[UIView alloc] init];
     }
     return _tableView;
+}
+
+- (UIButton *)questionBtn {
+    if (!_questionBtn) {
+        _questionBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_questionBtn setImage:[[UIImage imageNamed:@"reportForms_question"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+        [_questionBtn addTarget:self action:@selector(questionBtnAction) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _questionBtn;
+}
+
+- (SSJReportFormsCurveDescriptionView *)descView {
+    if (!_descView) {
+        _descView = [[SSJReportFormsCurveDescriptionView alloc] init];
+    }
+    return _descView;
 }
 
 - (SSJBudgetNodataRemindView *)noDataRemindView {
