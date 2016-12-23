@@ -15,10 +15,10 @@
  - SSJReportFormCanYinChartCellStyleBody: 点和上下半部分线
  - SSJReportFormCanYinChartCellStyleFooter: 只有点和上半部分线
  */
-typedef NS_ENUM(NSUInteger, SSJReportFormCanYinChartCellSegmentStyle) {
-    SSJReportFormCanYinChartCellSegmentStyleHeader,
-    SSJReportFormCanYinChartCellSegmentStyleBody,
-    SSJReportFormCanYinChartCellSegmentStyleFooter
+typedef NS_OPTIONS(NSUInteger, SSJReportFormCanYinChartCellSegmentStyle) {
+    SSJReportFormCanYinChartCellSegmentStyleNone = 0,
+    SSJReportFormCanYinChartCellSegmentStyleTop = 1 << 0,
+    SSJReportFormCanYinChartCellSegmentStyleBottom = 1 << 1
 };
 
 @interface SSJReportFormCanYinChartCellItem : SSJBaseItem
