@@ -12,10 +12,3 @@
 @interface SSJThemePlugin : NSObject
 
 @end
-
-
-@interface SSJReportFormsCurveGraphView (SSJTheme)
-
-- (void)updateAppearanceAccordToTheme;
-
-@end
