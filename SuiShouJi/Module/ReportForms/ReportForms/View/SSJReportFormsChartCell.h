@@ -9,6 +9,12 @@
 #import "SSJBaseTableViewCell.h"
 #import "SSJReportFormsChartCellItem.h"
 
+/**
+ 成员、类别选项
+
+ - SSJReportFormsMemberAndCategoryOptionCategory: 类别
+ - SSJReportFormsMemberAndCategoryOptionMember: 成员
+ */
 typedef NS_ENUM(NSUInteger, SSJReportFormsMemberAndCategoryOption) {
     SSJReportFormsMemberAndCategoryOptionCategory = 0,
     SSJReportFormsMemberAndCategoryOptionMember
@@ -16,8 +22,14 @@ typedef NS_ENUM(NSUInteger, SSJReportFormsMemberAndCategoryOption) {
 
 @interface SSJReportFormsChartCell : SSJBaseTableViewCell
 
+/**
+ 当前选中的选项
+ */
 @property (nonatomic) SSJReportFormsMemberAndCategoryOption option;
 
+/**
+ 切换成员、类别的回调
+ */
 @property (nonatomic, copy) void (^selectOptionHandle)(SSJReportFormsChartCell *);
 
 @end

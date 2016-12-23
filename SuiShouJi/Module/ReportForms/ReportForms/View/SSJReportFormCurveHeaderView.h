@@ -9,12 +9,25 @@
 #import <UIKit/UIKit.h>
 #import "SSJReportFormCurveHeaderViewItem.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface SSJReportFormCurveHeaderView : UIView
 
-@property (nonatomic, copy) void (^changeTimePeriodHandle)(SSJReportFormCurveHeaderView *);
+/**
+ 切换时间维度触发的回调
+ */
+@property (nonatomic, copy, nullable) void (^changeTimePeriodHandle)(SSJReportFormCurveHeaderView *);
 
+/**
+ 模型
+ */
 @property (nonatomic, strong) SSJReportFormCurveHeaderViewItem *item;
 
+/**
+ 根据主题更新界面
+ */
 - (void)updateAppearanceAccordingToTheme;
 
 @end
+
+NS_ASSUME_NONNULL_END
