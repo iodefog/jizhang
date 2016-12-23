@@ -55,4 +55,6 @@
 // 信用卡流水
 @property(nonatomic) NSInteger chargeCount;
 
+@property(nonatomic) BOOL hasMadeInstalment;
+
 @end

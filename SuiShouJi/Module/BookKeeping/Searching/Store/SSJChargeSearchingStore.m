@@ -80,7 +80,6 @@
             item.chargeMemo = [resultSet stringForColumn:@"cmemo"];
             item.chargeImage = [resultSet stringForColumn:@"cimgurl"];
             item.chargeThumbImage = [resultSet stringForColumn:@"thumburl"];
-            item.configId = [resultSet stringForColumn:@"iconfigid"];
             item.booksId = [resultSet stringForColumn:@"cbooksid"];
             item.incomeOrExpence = [resultSet boolForColumn:@"itype"];
             item.money = [NSString stringWithFormat:@"%.2f",[[resultSet stringForColumn:@"IMONEY"] doubleValue]];
