@@ -27,7 +27,7 @@
         
         _curveViews = [[NSMutableArray alloc] init];
         
-        _scale = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 1, 2)];
+        _scale = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 1, 4)];
         [self.contentView addSubview:_scale];
         
         _titleLab = [[UILabel alloc] init];
