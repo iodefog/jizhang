@@ -78,8 +78,10 @@
 //压缩数据库上传错误信息
 + (void)upLoadData
 {
-//    NSError *error;
-//    [self writeToFileWithError:error];//将错误写入文件
+//    for (int i=0; i<5; i++) {
+//        NSError *error;
+//        [self writeToFileWithError:error];//将错误写入文件
+//    }
 //    SSJPRINT(@"%@===%@",writePath,jsonPath);
     //上传判断网络状态
     if ([SSJNetworkReachabilityManager networkReachabilityStatus] == SSJNetworkReachabilityStatusReachableViaWiFi) {//wifi
@@ -163,10 +165,9 @@
 //压缩数据库
 + (NSData *)zipSqlWithName:(NSString *)name
 {
-    NSString *fillName = [NSString stringWithFormat:@"%@.zip",name];
     //如果有文件就直接取出
     NSFileManager *fileManager = [NSFileManager defaultManager];
-    if ([fileManager fileExistsAtPath:fillName]) {//如果存在
+    if ([fileManager fileExistsAtPath:[writePath stringByAppendingPathComponent:name]]) {//如果存在
         NSString *dataPath = [writePath stringByAppendingPathComponent:name];
         // 读取data
         return [NSData dataWithContentsOfFile:dataPath];
@@ -187,7 +188,7 @@
     NSString *urlString = SSJURLWithAPI(@"/admin/applog.go");
     NSError *tError = nil;
     NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] multipartFormRequestWithMethod:@"POST" URLString:urlString parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-        [formData appendPartWithFileData:data name:@"zip" fileName:fileName mimeType:@"application/zip"];
+        [formData appendPartWithFileData:data name:@"zip" fileName:[fileName stringByAppendingPathExtension:@"zip"] mimeType:@"application/zip"];
     } error:&tError];
     
     if (tError) {
@@ -225,7 +226,8 @@
     ZZArchive *newArchive = [[ZZArchive alloc] initWithURL:[NSURL fileURLWithPath:zipPath]
                                                    options:@{ZZOpenOptionsCreateIfMissingKey:@YES}
                                                      error:error];
-    ZZArchiveEntry *entry = [ZZArchiveEntry archiveEntryWithFileName:@"db_error_list.json"
+    NSString *name = [sqlName stringByAppendingPathExtension:@"db"];
+    ZZArchiveEntry *entry = [ZZArchiveEntry archiveEntryWithFileName:name
                                                             compress:YES
                                                            dataBlock:^(NSError **error) {
                                                                return data;
