@@ -218,11 +218,17 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
         [self.view ssj_hideLoadingIndicator];
         
         _curveModels = result[SSJReportFormsCurveModelListKey];
+        
         [self caculateValue];
         [_separatorFormView reloadData];
+        
         [_curveView reloadData];
         [_curveView scrollToAxisXAtIndex:(_curveModels.count - 1) animated:NO];
         [self updateCurveUnitAxisXLength];
+        
+        [self reorganiseCellItems];
+        [_tableView reloadData];
+        
         [self updateQuestionBtnHidden];
         
     } failure:^(NSError *error) {
@@ -476,15 +482,18 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
         [SSJReportFormsUtil queryForBillStatisticsWithTimeDimension:timeDimension booksId:nil billTypeId:_billTypeID startDate:period.startDate endDate:period.endDate success:^(NSDictionary *result) {
             
             _curveModels = result[SSJReportFormsCurveModelListKey];
-            [self caculateValue];
-            [self reorganiseCellItems];
             
-            [_tableView reloadData];
+            [self caculateValue];
             [_separatorFormView reloadData];
+            
             [_curveView reloadData];
             [_curveView scrollToAxisXAtIndex:(_curveModels.count - 1) animated:NO];
             [self updateCurveUnitAxisXLength];
+            
             [self updateQuestionBtnHidden];
+            
+            [self reorganiseCellItems];
+            [_tableView reloadData];
             
         } failure:^(NSError *error) {
             [self.view ssj_hideLoadingIndicator];
