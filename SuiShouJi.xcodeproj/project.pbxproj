@@ -263,6 +263,11 @@
 		7D6CC9291E0B837300FF6133 /* SSJReportFormsBillTypeDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6CC9261E0B837300FF6133 /* SSJReportFormsBillTypeDetailViewController.m */; };
 		7D6CC92A1E0B837300FF6133 /* SSJReportFormsBillTypeDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6CC9261E0B837300FF6133 /* SSJReportFormsBillTypeDetailViewController.m */; };
 		7D6CC92B1E0B837300FF6133 /* SSJReportFormsBillTypeDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6CC9261E0B837300FF6133 /* SSJReportFormsBillTypeDetailViewController.m */; };
+		7D6CC9451E0CB7BD00FF6133 /* SSJReportFormCanYinChartCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6CC9441E0CB7BD00FF6133 /* SSJReportFormCanYinChartCellItem.m */; };
+		7D6CC9461E0CB7BD00FF6133 /* SSJReportFormCanYinChartCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6CC9441E0CB7BD00FF6133 /* SSJReportFormCanYinChartCellItem.m */; };
+		7D6CC9471E0CB7BD00FF6133 /* SSJReportFormCanYinChartCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6CC9441E0CB7BD00FF6133 /* SSJReportFormCanYinChartCellItem.m */; };
+		7D6CC9481E0CB7BD00FF6133 /* SSJReportFormCanYinChartCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6CC9441E0CB7BD00FF6133 /* SSJReportFormCanYinChartCellItem.m */; };
+		7D6CC9491E0CB7BD00FF6133 /* SSJReportFormCanYinChartCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6CC9441E0CB7BD00FF6133 /* SSJReportFormCanYinChartCellItem.m */; };
 		7D6F93351D0812A9000CCDB3 /* SSJReportFormsCurveModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6F93341D0812A9000CCDB3 /* SSJReportFormsCurveModel.m */; };
 		7D70C1371E00E68400479E44 /* SSJReportFormCurveHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D70C1361E00E68400479E44 /* SSJReportFormCurveHeaderView.m */; };
 		7D70C1381E00E68400479E44 /* SSJReportFormCurveHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D70C1361E00E68400479E44 /* SSJReportFormCurveHeaderView.m */; };
@@ -3098,6 +3103,8 @@
 		7D6CC8F51E0A731C00FF6133 /* SSJReportFormsCurveViewItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReportFormsCurveViewItem.m; sourceTree = "<group>"; };
 		7D6CC9251E0B837300FF6133 /* SSJReportFormsBillTypeDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormsBillTypeDetailViewController.h; sourceTree = "<group>"; };
 		7D6CC9261E0B837300FF6133 /* SSJReportFormsBillTypeDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReportFormsBillTypeDetailViewController.m; sourceTree = "<group>"; };
+		7D6CC9431E0CB7BD00FF6133 /* SSJReportFormCanYinChartCellItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormCanYinChartCellItem.h; sourceTree = "<group>"; };
+		7D6CC9441E0CB7BD00FF6133 /* SSJReportFormCanYinChartCellItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReportFormCanYinChartCellItem.m; sourceTree = "<group>"; };
 		7D6F93331D0812A9000CCDB3 /* SSJReportFormsCurveModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormsCurveModel.h; sourceTree = "<group>"; };
 		7D6F93341D0812A9000CCDB3 /* SSJReportFormsCurveModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReportFormsCurveModel.m; sourceTree = "<group>"; };
 		7D70C1351E00E68400479E44 /* SSJReportFormCurveHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormCurveHeaderView.h; sourceTree = "<group>"; };
@@ -4620,6 +4627,8 @@
 				7DB9F8511DFFED2E0084E998 /* SSJReportFormCurveListCellItem.m */,
 				7D70C1431E00E84300479E44 /* SSJReportFormCurveHeaderViewItem.h */,
 				7D70C1441E00E84300479E44 /* SSJReportFormCurveHeaderViewItem.m */,
+				7D6CC9431E0CB7BD00FF6133 /* SSJReportFormCanYinChartCellItem.h */,
+				7D6CC9441E0CB7BD00FF6133 /* SSJReportFormCanYinChartCellItem.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -7827,6 +7836,7 @@
 				9C26923D1D9CB59400B3B5DF /* SSJSearchHistoryCell.m in Sources */,
 				9C9A0C4E1D6D96BD002AF046 /* SSJAddOrEditLoanTextFieldCell.m in Sources */,
 				7DBA563D1D6D32B700C02D79 /* SSJBookKeepingHomeNoDataHeader.m in Sources */,
+				7D6CC9471E0CB7BD00FF6133 /* SSJReportFormCanYinChartCellItem.m in Sources */,
 				7DBA563E1D6D32B700C02D79 /* SSJWaveWaterViewItem.m in Sources */,
 				7D6CC9081E0A798000FF6133 /* SSJReportFormsCurveSuspensionView.m in Sources */,
 				9C9A0C111D6D953A002AF046 /* SSJModifyFundingViewController.m in Sources */,
@@ -8377,6 +8387,7 @@
 				7DBA553F1D6AFFE900C02D79 /* SSJAddOrEditLoanTextFieldCell.m in Sources */,
 				9C2A679F1D194CA70010F1DA /* SSJGuideView.m in Sources */,
 				9CF594331D65B5A000006594 /* SSJLocalNotificationStore.m in Sources */,
+				7D6CC9461E0CB7BD00FF6133 /* SSJReportFormCanYinChartCellItem.m in Sources */,
 				9C2A67A01D194CA70010F1DA /* SSJDataAddition.m in Sources */,
 				9C2A67A11D194CA70010F1DA /* SSJFinancingHomeitem.m in Sources */,
 				9C2A67A21D194CA70010F1DA /* SSJBudgetTypeModel.m in Sources */,
@@ -8910,6 +8921,7 @@
 				9CECFBDA1D6D41A700DB2C8B /* SSJFundingDetailHeader.m in Sources */,
 				9CECFBDB1D6D41A700DB2C8B /* SSJCalenderDetailViewController.m in Sources */,
 				7DFD305C1D75288D00A0D7A0 /* SSJCategoryEditableCollectionViewCellItem.m in Sources */,
+				7D6CC9481E0CB7BD00FF6133 /* SSJReportFormCanYinChartCellItem.m in Sources */,
 				9CECFBDC1D6D41A700DB2C8B /* SSJBudgetDetailViewController.m in Sources */,
 				9C77DBA91DE6E31200CD64A2 /* SimulateIDFA.m in Sources */,
 				9CECFBDD1D6D41A700DB2C8B /* SSJThemeImageCollectionViewCell.m in Sources */,
@@ -9378,6 +9390,7 @@
 				9CECFFAC1D6D41EB00DB2C8B /* TPKeyboardAvoidingCollectionView.m in Sources */,
 				9CECFFAD1D6D41EB00DB2C8B /* SSJUserTableManager.m in Sources */,
 				9CECFFAE1D6D41EB00DB2C8B /* SSJNormalWebViewController.m in Sources */,
+				7D6CC9491E0CB7BD00FF6133 /* SSJReportFormCanYinChartCellItem.m in Sources */,
 				9CECFFAF1D6D41EB00DB2C8B /* SSJNoneCircleChargeView.m in Sources */,
 				7D6CC90A1E0A798100FF6133 /* SSJReportFormsCurveSuspensionView.m in Sources */,
 				9C26923F1D9CB59600B3B5DF /* SSJSearchHistoryCell.m in Sources */,
@@ -10129,6 +10142,7 @@
 				7D5F337B1CEAE6C10086B67E /* SSJDateSelectedView.m in Sources */,
 				7DDDA8001CBE53A60029ADAC /* UIView+SSJViewAnimatioin.m in Sources */,
 				BD04331E1C1A78B40051E7AB /* SSJDateAddition.m in Sources */,
+				7D6CC9451E0CB7BD00FF6133 /* SSJReportFormCanYinChartCellItem.m in Sources */,
 				BD543C411C1A6DBC00910D61 /* main.m in Sources */,
 				7D46328E1D21029F0040BABD /* UIImageView+SSJTheme.m in Sources */,
 				7DBA55461D6B000D00C02D79 /* SSJAddOrEditLoanMultiLabelCell.m in Sources */,
