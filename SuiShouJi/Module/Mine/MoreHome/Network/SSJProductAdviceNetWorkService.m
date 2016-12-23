@@ -23,7 +23,7 @@
     if (type == 1) {
         [dict setObject:messageStr forKey:@"ccontent"];//建议内容
         if (addMessate.length) {
-            [dict setObject:messageStr forKey:@"ccontact"];//联系方式
+            [dict setObject:addMessate forKey:@"ccontact"];//联系方式
         }
     }
 //    [dict setObject:@"ec560ecc-f0de-4638-ae37-ebeaf5c8b5c2" forKey:@"cuserid"];
