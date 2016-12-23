@@ -47,7 +47,7 @@
     [super layoutSubviews];
     self.dateLabel.centerY = self.ratioLabel.centerY = self.amountLabel.centerY = self.contentView.height * 0.5;
     self.dateLabel.left = 30;
-    self.ratioLabel.centerX = self.contentView.width * 0.5;
+    self.ratioLabel.centerX = SSJSCREENWITH * 0.5;
     
     self.amountLabel.width = MIN(self.amountLabel.width, self.contentView.width - self.ratioLabel.right);
     self.amountLabel.right = self.contentView.width;
@@ -67,7 +67,7 @@
     [self drawCircleWithColor:item.circleColor];
     [self drawLineWithColor:item.circleColor];
     self.dateLabel.text = item.leftText.length ? item.leftText : @"";
-    self.ratioLabel.text = item.centerText.length ? item.centerText : @"";
+    self.ratioLabel.text = item.centerText.length ? [NSString stringWithFormat:@"%@%@",item.centerText,@"%"] : @"";
     self.amountLabel.text = item.rightText.length ? item.rightText : @"";
     [self.dateLabel sizeToFit];
     [self.ratioLabel sizeToFit];
