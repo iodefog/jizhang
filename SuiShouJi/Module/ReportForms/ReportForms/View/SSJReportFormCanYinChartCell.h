@@ -7,10 +7,9 @@
 //
 
 #import "SSJBaseTableViewCell.h"
+
 @class SSJReportFormCanYinChartCellItem;
+
 @interface SSJReportFormCanYinChartCell : SSJBaseTableViewCell
-/**
- 模型
- */
-@property (nonatomic, strong) SSJReportFormCanYinChartCellItem *chartItem;
+
 @end

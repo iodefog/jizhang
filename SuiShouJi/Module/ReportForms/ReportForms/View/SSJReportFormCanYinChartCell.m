@@ -45,29 +45,38 @@
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    self.dateLabel.centerY = self.ratioLabel.centerY = self.amountLabel.centerY = self.centerY;
+    self.dateLabel.centerY = self.ratioLabel.centerY = self.amountLabel.centerY = self.contentView.height * 0.5;
     self.dateLabel.left = 30;
-    self.ratioLabel.centerX = self.centerX;
-    self.amountLabel.right = self.width - 30;
+    self.ratioLabel.centerX = self.contentView.width * 0.5;
+    
+    self.amountLabel.width = MIN(self.amountLabel.width, self.contentView.width - self.ratioLabel.right);
+    self.amountLabel.right = self.contentView.width;
 }
 
-- (void)setChartItem:(SSJReportFormCanYinChartCellItem *)chartItem
-{
-    _chartItem = chartItem;
-    [self drawCircleWithColor:chartItem.circleColor];
-    self.dateLabel.text = chartItem.leftText.length ? chartItem.leftText : @"";
-    self.ratioLabel.text = chartItem.centerText.length ? chartItem.centerText : @"";
-    self.amountLabel.text = chartItem.rightText.length ? chartItem.rightText : @"";
+- (void)setCellItem:(SSJReportFormCanYinChartCellItem *)cellItem {
+    
+    if (![cellItem isKindOfClass:[SSJReportFormCanYinChartCellItem class]]) {
+        return;
+    }
+    
+    [super setCellItem:cellItem];
+    
+    SSJReportFormCanYinChartCellItem *item = cellItem;
+    
+    [self drawCircleWithColor:item.circleColor];
+    self.dateLabel.text = item.leftText.length ? item.leftText : @"";
+    self.ratioLabel.text = item.centerText.length ? item.centerText : @"";
+    self.amountLabel.text = item.rightText.length ? item.rightText : @"";
     [self.dateLabel sizeToFit];
     [self.ratioLabel sizeToFit];
     [self.amountLabel sizeToFit];
     
     self.topLineLayer.hidden = YES;
     self.bottomLineLayer.hidden = YES;
-    if (chartItem.segmentStyle & SSJReportFormCanYinChartCellSegmentStyleTop) {
+    if (item.segmentStyle & SSJReportFormCanYinChartCellSegmentStyleTop) {
         self.topLineLayer.hidden = NO;
     }
-    if (chartItem.segmentStyle & SSJReportFormCanYinChartCellSegmentStyleBottom){
+    if (item.segmentStyle & SSJReportFormCanYinChartCellSegmentStyleBottom){
         self.bottomLineLayer.hidden = NO;
     }
 }
@@ -117,7 +126,7 @@
         _topLineLayer = [CAShapeLayer layer];
         CGMutablePathRef solidShapePath =  CGPathCreateMutable();
         [_topLineLayer setFillColor:[[UIColor clearColor] CGColor]];
-        [_topLineLayer setStrokeColor:[UIColor ssj_colorWithHex:self.chartItem.circleColor].CGColor];
+        [_topLineLayer setStrokeColor:[UIColor ssj_colorWithHex:((SSJReportFormCanYinChartCellItem *)self.cellItem).circleColor].CGColor];
         _topLineLayer.lineWidth = 0.5f ;
         CGPathMoveToPoint(solidShapePath, NULL, 15, 0);
         CGPathAddLineToPoint(solidShapePath, NULL, 15,self.height*0.5);
@@ -133,7 +142,7 @@
         _bottomLineLayer = [CAShapeLayer layer];
         CGMutablePathRef solidShapePath =  CGPathCreateMutable();
         [_bottomLineLayer setFillColor:[[UIColor clearColor] CGColor]];
-        [_bottomLineLayer setStrokeColor:[UIColor ssj_colorWithHex:self.chartItem.circleColor].CGColor];
+        [_bottomLineLayer setStrokeColor:[UIColor ssj_colorWithHex:((SSJReportFormCanYinChartCellItem *)self.cellItem).circleColor].CGColor];
         _bottomLineLayer.lineWidth = 0.5f ;
         CGPathMoveToPoint(solidShapePath, NULL, 15, self.height*0.5);
         CGPathAddLineToPoint(solidShapePath, NULL, 15,self.height);

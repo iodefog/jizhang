@@ -152,7 +152,7 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
     _curveView.frame = CGRectMake(0, _timeDemisionControl.bottom, self.view.width, kCurveViewHeight);
     [_curveView ssj_relayoutBorder];
     _headerView.frame = CGRectMake(0, 0, self.view.width, kSpaceHeight * 3 + kTimePeriodSegmentControlHeight + kCurveViewHeight + kSeparatorFormViewHeight);
-    _tableView.frame = CGRectMake(0, self.dateAxisView.bottom, self.view.width, self.view.height - self.dateAxisView.bottom - SSJ_TABBAR_HEIGHT);
+    _tableView.frame = CGRectMake(0, self.dateAxisView.bottom, self.view.width, self.view.height - self.dateAxisView.bottom);
 }
 
 #pragma mark - UITableViewDataSource
@@ -252,29 +252,7 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
 
 - (NSString *)curveGraphView:(SSJReportFormsCurveGraphView *)graphView titleAtAxisXIndex:(NSUInteger)index {
     SSJReportFormsCurveModel *model = [_curveModels ssj_safeObjectAtIndex:index];
-    switch ([self currentDemension]) {
-        case SSJTimeDimensionDay: {
-            return [model.startDate formattedDateWithFormat:@"dd日"];
-        }
-            break;
-            
-        case SSJTimeDimensionWeek: {
-            NSString *startDateStr = [model.startDate formattedDateWithFormat:@"MM/dd"];
-            NSString *endDateStr = [model.endDate formattedDateWithFormat:@"MM/dd"];
-            return [NSString stringWithFormat:@"%@~%@", startDateStr, endDateStr];
-        }
-            break;
-            
-        case SSJTimeDimensionMonth: {
-            return [model.startDate formattedDateWithFormat:@"MM月"];
-        }
-            break;
-            
-        case SSJTimeDimensionUnknown: {
-            return nil;
-        }
-            break;
-    }
+    return [self timeWithModel:model];
 }
 
 - (UIColor *)curveGraphView:(SSJReportFormsCurveGraphView *)graphView colorForCurveAtIndex:(NSUInteger)curveIndex {
@@ -345,7 +323,8 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
 
 #pragma mark - SSJReportFormsCurveGraphViewDelegate
 - (void)curveGraphView:(SSJReportFormsCurveGraphView *)graphView didScrollToAxisXIndex:(NSUInteger)index {
-    [MobClick event:@"form_curve_move"];
+    [self reorganiseCellItems];
+    [_tableView reloadData];
 }
 
 - (NSString *)curveGraphView:(SSJReportFormsCurveGraphView *)graphView titleForBallonAtAxisXIndex:(NSUInteger)index {
@@ -498,7 +477,9 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
             
             _curveModels = result[SSJReportFormsCurveModelListKey];
             [self caculateValue];
+            [self reorganiseCellItems];
             
+            [_tableView reloadData];
             [_separatorFormView reloadData];
             [_curveView reloadData];
             [_curveView scrollToAxisXAtIndex:(_curveModels.count - 1) animated:NO];
@@ -517,8 +498,42 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
 }
 
 - (void)reorganiseCellItems {
+    
+    NSMutableArray *tmpModels = [[NSMutableArray alloc] init];
+    
+    for (NSNumber *indexNumber in _curveView.visibleIndexs) {
+        int index = [indexNumber doubleValue];
+        SSJReportFormsCurveModel *model = [_curveModels ssj_safeObjectAtIndex:index];
+        double money = _isPayment ? model.payment : model.income;
+        
+        if (money) {
+            [tmpModels addObject:model];
+        }
+    }
+    
     [_cellItems removeAllObjects];
     
+    for (int i = 0; i < tmpModels.count; i ++) {
+        SSJReportFormsCurveModel *model = [tmpModels ssj_safeObjectAtIndex:i];
+        double money = _isPayment ? model.payment : model.income;
+        
+        SSJReportFormCanYinChartCellItem *item = [[SSJReportFormCanYinChartCellItem alloc] init];
+        if (_curveView.visibleIndexs.count == 1) {
+            item.segmentStyle = SSJReportFormCanYinChartCellSegmentStyleNone;
+        } else if (i == 0) {
+            item.segmentStyle = SSJReportFormCanYinChartCellSegmentStyleBottom;
+        } else if (i == tmpModels.count - 1) {
+            item.segmentStyle = SSJReportFormCanYinChartCellSegmentStyleTop;
+        } else {
+            item.segmentStyle = SSJReportFormCanYinChartCellSegmentStyleTop | SSJReportFormCanYinChartCellSegmentStyleBottom;
+        }
+        item.leftText = [self timeWithModel:model];
+        item.centerText = [[NSString stringWithFormat:@"%f", (money / _amount) * 100] ssj_moneyDecimalDisplayWithDigits:1];
+        item.rightText = [[NSString stringWithFormat:@"%f", money] ssj_moneyDecimalDisplayWithDigits:2];
+        item.circleColor = _colorValue;
+        
+        [_cellItems addObject:item];
+    }
 }
 
 - (void)updateAppearance {
@@ -619,7 +634,7 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
             break;
             
         case SSJTimeDimensionWeek:
-            _curveView.unitAxisXLength = self.view.width / 4;
+            _curveView.unitAxisXLength = self.view.width / 5;
             break;
             
         case SSJTimeDimensionUnknown:
@@ -691,6 +706,32 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
     _customPeriodBtn.centerX = self.view.width * 0.5;
 }
 
+- (NSString *)timeWithModel:(SSJReportFormsCurveModel *)model {
+    switch ([self currentDemension]) {
+        case SSJTimeDimensionDay: {
+            return [model.startDate formattedDateWithFormat:@"dd日"];
+        }
+            break;
+            
+        case SSJTimeDimensionWeek: {
+            NSString *startDateStr = [model.startDate formattedDateWithFormat:@"MM/dd"];
+            NSString *endDateStr = [model.endDate formattedDateWithFormat:@"MM/dd"];
+            return [NSString stringWithFormat:@"%@~%@", startDateStr, endDateStr];
+        }
+            break;
+            
+        case SSJTimeDimensionMonth: {
+            return [model.startDate formattedDateWithFormat:@"MM月"];
+        }
+            break;
+            
+        case SSJTimeDimensionUnknown: {
+            return nil;
+        }
+            break;
+    }
+}
+
 #pragma mark - LazyLoading
 - (UIButton *)customPeriodBtn {
     if (!_customPeriodBtn) {
@@ -755,7 +796,7 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
 
 - (UIView *)headerView {
     if (!_headerView) {
-        _headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, kSpaceHeight * 3 + kTimePeriodSegmentControlHeight + kCurveViewHeight + kSeparatorFormViewHeight)];
+        _headerView = [[UIView alloc] initWithFrame:CGRectZero];
         _headerView.backgroundColor = [UIColor clearColor];
     }
     return _headerView;
@@ -763,15 +804,17 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
 
 - (UITableView *)tableView {
     if (!_tableView) {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.dateAxisView.bottom, self.view.width, self.view.height - self.dateAxisView.bottom - SSJ_TABBAR_HEIGHT) style:UITableViewStylePlain];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
         _tableView.backgroundColor = [UIColor clearColor];
         _tableView.rowHeight = 55;
         _tableView.sectionHeaderHeight = 0;
         _tableView.sectionFooterHeight = 0;
         _tableView.dataSource = self;
         _tableView.delegate = self;
-        _tableView.separatorInset = UIEdgeInsetsZero;
+        _tableView.separatorInset = UIEdgeInsetsMake(0, 30, 0, 0);
         _tableView.tableFooterView = [[UIView alloc] init];
+        _tableView.tableFooterView.height = 36;
+        [_tableView registerClass:[SSJReportFormCanYinChartCell class] forCellReuseIdentifier:kSSJReportFormCanYinChartCellId];
     }
     return _tableView;
 }
