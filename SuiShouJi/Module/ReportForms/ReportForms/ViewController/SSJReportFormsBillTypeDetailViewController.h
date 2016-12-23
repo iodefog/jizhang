@@ -14,8 +14,6 @@
 
 @property (nonatomic, strong) NSString *billTypeID;
 
-@property (nonatomic, strong) UIColor *billTypeColor;
-
 @property (nonatomic, copy) SSJDatePeriod *customPeriod;
 
 @property (nonatomic, copy) SSJDatePeriod *selectedPeriod;

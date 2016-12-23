@@ -66,10 +66,21 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
 
 @property (nonatomic) SSJTimeDimension dimesion;
 
+@property (nonatomic) BOOL isPayment;
+
+@property (nonatomic, strong) NSString *colorValue;
+
+@property (nonatomic) double maxValue;
+
+@property (nonatomic) double amount;
+
+@property (nonatomic) double average;
+
 @end
 
 @implementation SSJReportFormsBillTypeDetailViewController
 
+#pragma mark - Lifecycle
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         
@@ -100,6 +111,10 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
     [super viewWillAppear:animated];
     
     [self.view ssj_showLoadingIndicator];
+    
+    _isPayment = [SSJReportFormsUtil isPaymentWithBillTypeId:_billTypeID];
+    _colorValue = [SSJReportFormsUtil billTypeColorWithBillTypeId:_billTypeID];
+    
     [SSJReportFormsUtil queryForPeriodListWithIncomeOrPayType:SSJBillTypeSurplus booksId:nil success:^(NSArray<SSJDatePeriod *> *periods) {
         
         [self.view ssj_hideLoadingIndicator];
@@ -132,6 +147,7 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
     _separatorFormView.frame = CGRectMake(0, kSpaceHeight, self.view.width, kSeparatorFormViewHeight);
     _timeDemisionControl.frame = CGRectMake(0, _separatorFormView.bottom + kSpaceHeight, self.view.width, kTimePeriodSegmentControlHeight);
     _curveView.frame = CGRectMake(0, _timeDemisionControl.bottom, self.view.width, kCurveViewHeight);
+    [_curveView ssj_relayoutBorder];
     _headerView.frame = CGRectMake(0, 0, self.view.width, kSpaceHeight * 3 + kTimePeriodSegmentControlHeight + kCurveViewHeight + kSeparatorFormViewHeight);
     _tableView.frame = CGRectMake(0, self.dateAxisView.bottom, self.view.width, self.view.height - self.dateAxisView.bottom - SSJ_TABBAR_HEIGHT);
 }
@@ -223,12 +239,10 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
 - (CGFloat)curveGraphView:(SSJReportFormsCurveGraphView *)graphView valueForCurveAtIndex:(NSUInteger)curveIndex axisXIndex:(NSUInteger)axisXIndex {
     
     SSJReportFormsCurveModel *model = [_curveModels ssj_safeObjectAtIndex:axisXIndex];
-    if (curveIndex == 0) {  // 支出
+    if (_isPayment) {
         return model.payment;
-    } else if (curveIndex == 1) { // 收入
-        return model.income;
     } else {
-        return 0;
+        return model.income;
     }
 }
 
@@ -260,13 +274,7 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
 }
 
 - (UIColor *)curveGraphView:(SSJReportFormsCurveGraphView *)graphView colorForCurveAtIndex:(NSUInteger)curveIndex {
-    if (curveIndex == 0) { // 支出
-        return [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurvePaymentColor];
-    } else if (curveIndex == 1) { // 收入
-        return [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurveIncomeColor];
-    } else {
-        return nil;
-    }
+    return [UIColor ssj_colorWithHex:_colorValue];
 }
 
 - (nullable NSString *)curveGraphView:(SSJReportFormsCurveGraphView *)graphView suspensionTitleAtAxisXIndex:(NSUInteger)index {
@@ -322,6 +330,15 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
     return nil;
 }
 
+- (BOOL)curveGraphView:(SSJReportFormsCurveGraphView *)graphView shouldShowValuePointForCurveAtIndex:(NSUInteger)curveIndex axisXIndex:(NSUInteger)axisXIndex {
+    SSJReportFormsCurveModel *model = [_curveModels ssj_safeObjectAtIndex:axisXIndex];
+    if (_isPayment) {
+        return model.payment > 0;
+    } else {
+        return model.income > 0;
+    }
+}
+
 #pragma mark - SSJReportFormsCurveGraphViewDelegate
 - (void)curveGraphView:(SSJReportFormsCurveGraphView *)graphView didScrollToAxisXIndex:(NSUInteger)index {
     [MobClick event:@"form_curve_move"];
@@ -355,29 +372,58 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
 
 - (SSJSeparatorFormViewCellItem *)separatorFormView:(SSJSeparatorFormView *)view itemForCellAtIndex:(NSIndexPath *)index {
     if (index.row == 0) {
-        return [SSJSeparatorFormViewCellItem itemWithTopTitle:@""
-                                                  bottomTitle:@"最大值"
-                                                topTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurveIncomeColor]
+        
+        NSString *topTitle = [[NSString stringWithFormat:@"%f", _average] ssj_moneyDecimalDisplayWithDigits:2];
+        
+        NSString *bottomTitle = nil;
+        switch ([self currentDemension]) {
+            case SSJTimeDimensionDay:
+                bottomTitle = _isPayment ? @"日均支出" : @"日均收入";
+                break;
+                
+            case SSJTimeDimensionWeek:
+                bottomTitle = _isPayment ? @"周均支出" : @"周均收入";
+                break;
+                
+            case SSJTimeDimensionMonth:
+                bottomTitle = _isPayment ? @"月均支出" : @"月均收入";
+                break;
+                
+            case SSJTimeDimensionUnknown:
+                return nil;
+                break;
+        }
+        
+        return [SSJSeparatorFormViewCellItem itemWithTopTitle:topTitle
+                                                  bottomTitle:bottomTitle
+                                                topTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor]
                                              bottomTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]
                                                  topTitleFont:[UIFont systemFontOfSize:18]
                                               bottomTitleFont:[UIFont systemFontOfSize:12]
                                                 contentInsets:UIEdgeInsetsZero];
+        
     } else if (index.row == 1) {
-        return [SSJSeparatorFormViewCellItem itemWithTopTitle:@""
-                                                  bottomTitle:@"最小值"
-                                                topTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurveIncomeColor]
+        
+        NSString *topTitle = [[NSString stringWithFormat:@"%f", _maxValue] ssj_moneyDecimalDisplayWithDigits:2];
+        return [SSJSeparatorFormViewCellItem itemWithTopTitle:topTitle
+                                                  bottomTitle:@"最大值"
+                                                topTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor]
                                              bottomTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]
                                                  topTitleFont:[UIFont systemFontOfSize:18]
                                               bottomTitleFont:[UIFont systemFontOfSize:12]
                                                 contentInsets:UIEdgeInsetsZero];
+        
     } else if (index.row == 2) {
-        return [SSJSeparatorFormViewCellItem itemWithTopTitle:@""
+        
+        NSString *topTitle = [[NSString stringWithFormat:@"%f", _amount] ssj_moneyDecimalDisplayWithDigits:2];
+        return [SSJSeparatorFormViewCellItem itemWithTopTitle:topTitle
                                                   bottomTitle:@"合值"
-                                                topTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurveIncomeColor]
+                                                topTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]
                                              bottomTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]
                                                  topTitleFont:[UIFont systemFontOfSize:18]
                                               bottomTitleFont:[UIFont systemFontOfSize:12]
                                                 contentInsets:UIEdgeInsetsZero];
+        
     } else {
         return nil;
     }
@@ -398,7 +444,6 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
     self.dateAxisView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     self.dateAxisView.scaleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     self.dateAxisView.selectedScaleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
-    [self.dateAxisView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
     
     [self.customPeriodBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] forState:UIControlStateNormal];
     self.customPeriodBtn.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor].CGColor;
@@ -415,6 +460,7 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
     
     [_curveView reloadData];
     _curveView.scaleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor];
+    _curveView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     [_curveView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
     
     [_separatorFormView reloadData];
@@ -470,8 +516,9 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
         
         [SSJReportFormsUtil queryForBillStatisticsWithTimeDimension:timeDimension booksId:nil billTypeId:_billTypeID startDate:period.startDate endDate:period.endDate success:^(NSDictionary *result) {
             
-//            [self updateCurveHeaderItemWithCurveModels:result[SSJReportFormsCurveModelListKey] period:period];
             _curveModels = result[SSJReportFormsCurveModelListKey];
+            [self caculateValue];
+            
             [_separatorFormView reloadData];
             [_curveView reloadData];
             [_curveView scrollToAxisXAtIndex:(_curveModels.count - 1) animated:NO];
@@ -513,7 +560,7 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
         return SSJTimeDimensionDay;
     } else if (_timeDemisionControl.selectedIndex == 1) {
         return SSJTimeDimensionWeek;
-    } else if (_timeDemisionControl.selectedIndex == 1) {
+    } else if (_timeDemisionControl.selectedIndex == 2) {
         return SSJTimeDimensionMonth;
     } else {
         return SSJTimeDimensionUnknown;
@@ -580,13 +627,38 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
     [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:message action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
 }
 
+- (void)caculateValue {
+    
+    _amount = 0;
+    _maxValue = 0;
+    _average = 0;
+    
+    int count = 0;
+    
+    for (SSJReportFormsCurveModel *model in _curveModels) {
+        double money = _isPayment ? model.payment : model.income;
+        if (money > 0) {
+            count ++;
+            _amount += money;
+            _maxValue = MAX(_maxValue, money);
+        }
+    }
+    
+    if (count == 0) {
+        SSJPRINT(@"没有有数据的周期");
+        return;
+    }
+    
+    if (count > 0) {
+        _average = _amount / count;
+    }
+}
+
 #pragma mark - LazyLoading
 - (SSJReportFormsScaleAxisView *)dateAxisView {
     if (!_dateAxisView) {
         _dateAxisView = [[SSJReportFormsScaleAxisView alloc] init];
         _dateAxisView.delegate = self;
-        [_dateAxisView ssj_setBorderWidth:1];
-        [_dateAxisView ssj_setBorderStyle:(SSJBorderStyleBottom)];
     }
     return _dateAxisView;
 }
@@ -617,9 +689,8 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
         _curveView.delegate = self;
         _curveView.showValuePoint = YES;
         _curveView.showCurveShadow = YES;
-        
         [_curveView ssj_setBorderWidth:1];
-        [_curveView ssj_setBorderStyle:SSJBorderStyleTop];
+        [_curveView ssj_setBorderStyle:(SSJBorderStyleTop)];
     }
     return _curveView;
 }

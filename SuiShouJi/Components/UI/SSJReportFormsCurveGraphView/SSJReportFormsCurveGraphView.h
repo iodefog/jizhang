@@ -28,6 +28,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable NSString *)curveGraphView:(SSJReportFormsCurveGraphView *)graphView suspensionTitleAtAxisXIndex:(NSUInteger)index;
 
+- (BOOL)curveGraphView:(SSJReportFormsCurveGraphView *)graphView shouldShowValuePointForCurveAtIndex:(NSUInteger)curveIndex axisXIndex:(NSUInteger)axisXIndex;
+
 @end
 
 @protocol SSJReportFormsCurveGraphViewDelegate <NSObject>

@@ -99,4 +99,14 @@ extern NSString *const SSJReportFormsCurveModelEndDateKey;
                              success:(void (^)(NSArray <SSJReportFormsItem *> *result))success
                              failure:(void (^)(NSError *error))failure;
 
+/**
+ 查询指定的类别是否是支出
+
+ @param billTypeId 类别id
+ @return
+ */
++ (BOOL)isPaymentWithBillTypeId:(NSString *)billTypeId;
+
++ (NSString *)billTypeColorWithBillTypeId:(NSString *)billTypeId;
+
 @end

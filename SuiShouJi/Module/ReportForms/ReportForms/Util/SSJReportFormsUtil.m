@@ -728,4 +728,20 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
     }];
 }
 
++ (BOOL)isPaymentWithBillTypeId:(NSString *)billTypeId {
+    __block BOOL isPayment;
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+        isPayment = [db boolForQuery:@"select itype from bk_bill_type where id = ?", billTypeId];
+    }];
+    return isPayment;
+}
+
++ (NSString *)billTypeColorWithBillTypeId:(NSString *)billTypeId {
+    __block NSString *color;
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+        color = [db stringForQuery:@"select ccolor from bk_bill_type where id = ?", billTypeId];
+    }];
+    return color;
+}
+
 @end

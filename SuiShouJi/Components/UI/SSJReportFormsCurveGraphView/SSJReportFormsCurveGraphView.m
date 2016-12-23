@@ -394,6 +394,10 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
     if (_showValuePoint != showValuePoint) {
         _showValuePoint = showValuePoint;
         
+        if ([_dataSource respondsToSelector:@selector(curveGraphView:shouldShowValuePointForCurveAtIndex:axisXIndex:)]) {
+            return;
+        }
+        
         for (SSJReportFormsCurveCellItem *cellItem in _items) {
             for (SSJReportFormsCurveViewItem *curveItem in cellItem.curveItems) {
                 curveItem.showDot = _showValuePoint;
@@ -590,6 +594,9 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
 }
 
 - (void)reorganiseItems {
+    
+    BOOL responsed = [_dataSource respondsToSelector:@selector(curveGraphView:shouldShowValuePointForCurveAtIndex:axisXIndex:)];
+    
     for (int axisXIdx = 0; axisXIdx < _axisXCount + 1; axisXIdx ++) {
         
         SSJReportFormsCurveCellItem *cellItem = [[SSJReportFormsCurveCellItem alloc] init];
@@ -633,9 +640,15 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
             if (axisXIdx < _axisXCount) {
                 NSArray *valuesPerAxis = _values[axisXIdx + 1];
                 CGFloat value = [valuesPerAxis[curveIdx] floatValue];
-                curveItem.showValue = _showValuePoint;
                 curveItem.value = [NSString stringWithFormat:@"%.2f", value];
-                curveItem.showDot = _showValuePoint;
+                
+                BOOL showValuePoint = _showValuePoint;
+                if (responsed) {
+                    showValuePoint = [_dataSource curveGraphView:self shouldShowValuePointForCurveAtIndex:curveIdx axisXIndex:axisXIdx];
+                }
+                
+                curveItem.showValue = showValuePoint;
+                curveItem.showDot = showValuePoint;
             }
             
             [curveItems addObject:curveItem];
