@@ -94,8 +94,8 @@
 
 + (void)uploadData:(NSInteger)index array:(NSArray *)arr
 {
+    if (index < 0)return;
     dispatch_async([self sharedQueue], ^{
-        if (index < 0)return;
         NSDictionary *dic = [arr ssj_safeObjectAtIndex:index];
         if ([[dic objectForKey:@"uploaded"] intValue] == 0) {
             //数据库名称

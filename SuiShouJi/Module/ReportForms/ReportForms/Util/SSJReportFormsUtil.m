@@ -335,6 +335,7 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
 + (void)queryForDefaultTimeDimensionWithStartDate:(NSDate *)startDate
                                           endDate:(NSDate *)endDate
                                           booksId:(NSString *)booksId
+                                       billTypeId:(NSString *)billTypeId
                                           success:(void(^)(SSJTimeDimension timeDimension))success
                                           failure:(void (^)(NSError *error))failure {
     
@@ -354,6 +355,10 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
     
     if (![booksId isEqualToString:@"all"]) {
         [sqlStr appendFormat:@" and a.cbooksid = '%@'", booksId];
+    }
+    
+    if (billTypeId) {
+        [sqlStr appendFormat:@" and a.ibillid = '%@'", billTypeId];
     }
     
     if (startDate) {
@@ -419,9 +424,10 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
 }
 
 + (void)queryForBillStatisticsWithTimeDimension:(SSJTimeDimension)dimension
+                                        booksId:(NSString *)booksId
+                                     billTypeId:(NSString *)billTypeId
                                       startDate:(NSDate *)startDate
                                         endDate:(NSDate *)endDate
-                                        booksId:(NSString *)booksId
                                         success:(void(^)(NSDictionary *result))success
                                         failure:(void (^)(NSError *error))failure {
     
@@ -459,6 +465,10 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
     
     if (![booksId isEqualToString:@"all"]) {
         [sqlStr appendFormat:@" and a.cbooksid = '%@'", booksId];
+    }
+    
+    if (billTypeId) {
+        [sqlStr appendFormat:@" and a.ibillid = '%@'", billTypeId];
     }
     
     if (startDate) {

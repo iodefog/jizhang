@@ -26,7 +26,7 @@ typedef NS_ENUM(NSInteger, SSJDatePeriodComparisonResult) {
     SSJDatePeriodComparisonResultDescending = NSOrderedDescending
 };
 
-@interface SSJDatePeriod : NSObject
+@interface SSJDatePeriod : NSObject <NSCopying>
 
 @property (nullable, nonatomic, strong, readonly) NSDate *startDate;
 
