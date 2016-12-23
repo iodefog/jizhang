@@ -149,16 +149,30 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     
     //账单日
     if ([title isEqualToString:kTitle7]) {
-        [MobClick event:@"credit_bill_date"];
-        self.billingDateSelectView.currentDate = self.item.cardBillingDay;
-        [self.billingDateSelectView show];
+        if (self.item.hasMadeInstalment) {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:@"您使用了\"分期还款功能\",不能更改账单日,否则每月账单会错乱哦" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *comfirmAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:NULL];
+            [alert addAction:comfirmAction];
+            [self.navigationController presentViewController:alert animated:YES completion:NULL];
+        } else {
+            [MobClick event:@"credit_bill_date"];
+            self.billingDateSelectView.currentDate = self.item.cardBillingDay;
+            [self.billingDateSelectView show];
+        }
     }
     
     //还款日
     if ([title isEqualToString:kTitle8]) {
-        [MobClick event:@"credit_payment_date"];
-        self.repaymentDateSelectView.currentDate = self.item.cardRepaymentDay;
-        [self.repaymentDateSelectView show];
+        if (self.item.hasMadeInstalment) {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:@"您使用了\"分期还款功能\",不能更改还款日,否则每月账单会错乱哦" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *comfirmAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:NULL];
+            [alert addAction:comfirmAction];
+            [self.navigationController presentViewController:alert animated:YES completion:NULL];
+        } else {
+            [MobClick event:@"credit_payment_date"];
+            self.repaymentDateSelectView.currentDate = self.item.cardRepaymentDay;
+            [self.repaymentDateSelectView show];
+        }
     }
     
     if ([title isEqualToString:kTitle10]) {
@@ -505,6 +519,18 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     }
 }
 
+- (void)billDateSettleMentButtonClicked{
+    if (!self.billDateSettleMentButton.isOn) {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:@"您使用了\"分期还款功能\",需\"以账单日结算\",否则每月账单会错乱哦" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *comfirmAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:NULL];
+        [alert addAction:comfirmAction];
+        __weak typeof(self) weakSelf = self;
+        [self.navigationController presentViewController:alert animated:YES completion:^{
+            [weakSelf.billDateSettleMentButton setOn:YES animated:YES];
+        }];
+    }
+}
+
 #pragma mark - UITextFieldDelegate
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
     NSInteger existedLength = textField.text.length;
@@ -632,6 +658,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     if (!_billDateSettleMentButton) {
         _billDateSettleMentButton = [[UISwitch alloc]init];
         _billDateSettleMentButton.onTintColor = [UIColor ssj_colorWithHex:@"43cf78"];
+        [_billDateSettleMentButton addTarget:self action:@selector(billDateSettleMentButtonClicked) forControlEvents:UIControlEventValueChanged];
     }
     return _billDateSettleMentButton;
 }

@@ -111,6 +111,8 @@
     _currentSecond = _currentSecond + 1;
     if (_currentSecond > 8) {
         [self dismiss];
+        UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+        [CDAutoHideMessageHUD showMessage:@"数据加载还需等待，您可开始记账让APP自动同步数据即可。" inView:keyWindow duration:3.f];
         [[NSNotificationCenter defaultCenter] postNotificationName:SSJHomeContinueLoadingNotification object:nil];
     }
 }
@@ -119,7 +121,6 @@
     CFAbsoluteTime _currentTime = CFAbsoluteTimeGetCurrent();
     if (_currentTime - _startTime > 2) {
         [self dismiss];
-        [CDAutoHideMessageHUD showMessage:<#(NSString *)#> inView:<#(UIView *)#> duration:<#(NSTimeInterval)#>]
     } else {
         __weak typeof(self) weakSelf = self;
         dispatch_time_t time=dispatch_time(DISPATCH_TIME_NOW, (2 - _currentTime) *NSEC_PER_SEC);

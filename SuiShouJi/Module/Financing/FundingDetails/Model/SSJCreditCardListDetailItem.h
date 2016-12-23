@@ -36,6 +36,10 @@
 
 @property(nonatomic) double instalmentMoney;
 
+@property(nonatomic) double repaymentMoney;
+
+@property(nonatomic) double repaymentForOtherMonthMoney;
+
 @property(nonatomic) double moneyNeedToRepay;
 
 @end

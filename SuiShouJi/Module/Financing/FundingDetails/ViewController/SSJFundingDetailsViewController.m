@@ -210,7 +210,6 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
                 } else {
                     [weakSelf.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailHeaderColor alpha:SSJ_CURRENT_THEME.financingDetailHeaderAlpha] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
                     weakSelf.header.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailHeaderColor alpha:SSJ_CURRENT_THEME.financingDetailHeaderAlpha];
-
                 }
             } failure:^(NSError *error) {
                 [weakSelf.view ssj_hideLoadingIndicator];
