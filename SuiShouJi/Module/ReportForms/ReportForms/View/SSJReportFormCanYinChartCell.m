@@ -27,10 +27,10 @@
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
-        [self.contentView.layer addSublayer:self.topLineLayer];
-        [self.contentView.layer addSublayer:self.bottomLineLayer];
         [self.contentView.layer addSublayer:self.circleLayer1];
         [self.contentView.layer addSublayer:self.circleLayer2];
+        [self.contentView.layer addSublayer:self.topLineLayer];
+        [self.contentView.layer addSublayer:self.bottomLineLayer];
         [self.contentView.layer addSublayer:self.circleLayer3];
         [self.contentView addSubview:self.dateLabel];
         [self.contentView addSubview:self.ratioLabel];
@@ -61,9 +61,11 @@
     
     [super setCellItem:cellItem];
     
+    
     SSJReportFormCanYinChartCellItem *item = cellItem;
     
     [self drawCircleWithColor:item.circleColor];
+    [self drawLineWithColor:item.circleColor];
     self.dateLabel.text = item.leftText.length ? item.leftText : @"";
     self.ratioLabel.text = item.centerText.length ? item.centerText : @"";
     self.amountLabel.text = item.rightText.length ? item.rightText : @"";
@@ -119,19 +121,33 @@
 }
 
 
+- (void)drawLineWithColor:(NSString *)colorStr
+{
+    CGMutablePathRef solidShapePath =  CGPathCreateMutable();
+    [self.topLineLayer setFillColor:[[UIColor clearColor] CGColor]];
+    self.topLineLayer.lineWidth = 0.5f ;
+    [self.topLineLayer setStrokeColor:[UIColor ssj_colorWithHex:colorStr].CGColor];
+    CGPathMoveToPoint(solidShapePath, NULL, 15, 0);
+    CGPathAddLineToPoint(solidShapePath, NULL, 15,self.height*0.5);
+    [self.topLineLayer setPath:solidShapePath];
+    CGPathRelease(solidShapePath);
+    
+    CGMutablePathRef solidShapePath2 =  CGPathCreateMutable();
+    [_bottomLineLayer setFillColor:[[UIColor clearColor] CGColor]];
+    _bottomLineLayer.lineWidth = 0.5f ;
+    [self.bottomLineLayer setStrokeColor:[UIColor ssj_colorWithHex:colorStr].CGColor];
+    CGPathMoveToPoint(solidShapePath2, NULL, 15, self.height*0.5);
+    CGPathAddLineToPoint(solidShapePath2, NULL, 15,self.height);
+    [_bottomLineLayer setPath:solidShapePath2];
+    CGPathRelease(solidShapePath2);
+    
+}
+
 #pragma mark - Lazy
 - (CAShapeLayer *)topLineLayer
 {
     if (!_topLineLayer) {
         _topLineLayer = [CAShapeLayer layer];
-        CGMutablePathRef solidShapePath =  CGPathCreateMutable();
-        [_topLineLayer setFillColor:[[UIColor clearColor] CGColor]];
-        [_topLineLayer setStrokeColor:[UIColor ssj_colorWithHex:((SSJReportFormCanYinChartCellItem *)self.cellItem).circleColor].CGColor];
-        _topLineLayer.lineWidth = 0.5f ;
-        CGPathMoveToPoint(solidShapePath, NULL, 15, 0);
-        CGPathAddLineToPoint(solidShapePath, NULL, 15,self.height*0.5);
-        [_topLineLayer setPath:solidShapePath];
-        CGPathRelease(solidShapePath);
     }
     return _topLineLayer;
 }
@@ -140,14 +156,6 @@
 {
     if (!_bottomLineLayer) {
         _bottomLineLayer = [CAShapeLayer layer];
-        CGMutablePathRef solidShapePath =  CGPathCreateMutable();
-        [_bottomLineLayer setFillColor:[[UIColor clearColor] CGColor]];
-        [_bottomLineLayer setStrokeColor:[UIColor ssj_colorWithHex:((SSJReportFormCanYinChartCellItem *)self.cellItem).circleColor].CGColor];
-        _bottomLineLayer.lineWidth = 0.5f ;
-        CGPathMoveToPoint(solidShapePath, NULL, 15, self.height*0.5);
-        CGPathAddLineToPoint(solidShapePath, NULL, 15,self.height);
-        [_bottomLineLayer setPath:solidShapePath];
-        CGPathRelease(solidShapePath);
     }
     return _bottomLineLayer;
 }
