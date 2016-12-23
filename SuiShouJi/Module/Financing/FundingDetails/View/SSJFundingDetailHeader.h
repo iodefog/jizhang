@@ -9,6 +9,9 @@
 #import <UIKit/UIKit.h>
 
 @interface SSJFundingDetailHeader : UIView
+
 @property(nonatomic, strong) UILabel *totalIncomeLabel;
+
 @property(nonatomic, strong) UILabel *totalExpenceLabel;
+
 @end

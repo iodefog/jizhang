@@ -383,7 +383,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
             NSDate *currentMonth = [NSDate dateWithString:listItem.month formatString:@"yyyy-MM"];
             NSDate *firstDate = [[NSDate dateWithYear:currentMonth.year month:currentMonth.month day:cardItem.cardBillingDay] dateBySubtractingMonths:1];
             NSDate *seconDate = [[NSDate dateWithYear:currentMonth.year month:currentMonth.month day:cardItem.cardBillingDay] dateByAddingDays:1];
-            listItem.repaymentForOtherMonthMoney = [db doubleForQuery:@"select sum(repaymentmoney) from bk_credit_repayment where cuserid = ? and crepaymentmonth <> ? and ccardid = ? and operatortype <> 2 and iinstalmentcount = 0 and (capplydate < ? or capplydate > ?)",userid,listItem.month,cardItem.cardId,[firstDate formattedDateWithFormat:@"yyyy-MM-dd"],[seconDate formattedDateWithFormat:@"yyyy-MM-dd"]];
+            listItem.repaymentForOtherMonthMoney = [db doubleForQuery:@"select sum(repaymentmoney) from bk_credit_repayment where cuserid = ? and crepaymentmonth <> ? and ccardid = ? and operatortype <> 2 and iinstalmentcount = 0 and capplydate >= ? and   capplydate <= ?",userid,listItem.month,cardItem.cardId,[firstDate formattedDateWithFormat:@"yyyy-MM-dd"],[seconDate formattedDateWithFormat:@"yyyy-MM-dd"]];
         }
         double instalMoney = [db doubleForQuery:@"select sum(repaymentmoney) from bk_credit_repayment where cuserid = ? and ccardid = ? and operatortype <> 2 and iinstalmentcount > 0",userid,cardItem.cardId];
         if (instalMoney > 0) {

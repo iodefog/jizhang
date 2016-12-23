@@ -14,10 +14,15 @@
 @interface SSJFundingDetailCell()
 
 @property (nonatomic, strong) UILabel *moneyLab;
+
 @property(nonatomic, strong) UIImageView *memoImage;
+
 @property(nonatomic, strong) UIImageView *haveImage;
+
 @property(nonatomic, strong) UILabel *typeLabel;
+
 @property(nonatomic, strong) UILabel *memoLabel;
+
 @end
 
 @implementation SSJFundingDetailCell
@@ -111,15 +116,15 @@
         SSJRepaymentModel *repaymentModel = [SSJRepaymentStore queryRepaymentModelWithChargeItem:item];
         if ([item.billId isEqualToString:@"3"] || [item.billId isEqualToString:@"4"]) {
             // 如果是信用卡还款
-            self.typeLabel.text = [NSString stringWithFormat:@"%ld月账单还款",repaymentModel.repaymentMonth.month];
+            self.typeLabel.text = [NSString stringWithFormat:@"%ld月账单还款",(long)repaymentModel.repaymentMonth.month];
             [self.typeLabel sizeToFit];
         }else if([item.billId isEqualToString:@"11"]) {
             // 如果是信用卡分期本金
-            self.typeLabel.text = [NSString stringWithFormat:@"%ld月账单分期本金 %ld/%ld期",repaymentModel.repaymentMonth.month,repaymentModel.currentInstalmentCout,repaymentModel.instalmentCout];
+            self.typeLabel.text = [NSString stringWithFormat:@"%ld月账单分期本金 %ld/%ld期",(long)repaymentModel.repaymentMonth.month,(long)repaymentModel.currentInstalmentCout,(long)repaymentModel.instalmentCout];
             [self.typeLabel sizeToFit];
         }else if([item.billId isEqualToString:@"12"]) {
             // 如果是信用卡分期手续费
-            self.typeLabel.text = [NSString stringWithFormat:@"%ld月账单分期手续费 %ld/%ld期",repaymentModel.repaymentMonth.month,repaymentModel.currentInstalmentCout,repaymentModel.instalmentCout];
+            self.typeLabel.text = [NSString stringWithFormat:@"%ld月账单分期手续费 %ld/%ld期",(long)repaymentModel.repaymentMonth.month,(long)repaymentModel.currentInstalmentCout,(long)repaymentModel.instalmentCout];
             [self.typeLabel sizeToFit];
         }
     }else{
@@ -264,8 +269,7 @@
         }
 
     }
-    
-      if (item.chargeMemo.length != 0) {
+    if (item.chargeMemo.length != 0) {
         self.memoImage.hidden = NO;
         self.memoLabel.hidden = NO;
         self.memoLabel.text = _item.chargeMemo;
@@ -297,7 +301,7 @@
     return _moneyLab;
 }
 
--(UIImageView *)memoImage{
+-(UIImageView *)memoImage {
     if (!_memoImage) {
         _memoImage = [[UIImageView alloc]init];
         _memoImage.image = [UIImage imageNamed:@"mark_jilu"];
@@ -305,7 +309,7 @@
     return _memoImage;
 }
 
--(UIImageView *)haveImage{
+-(UIImageView *)haveImage {
     if (!_haveImage) {
         _haveImage = [[UIImageView alloc]init];
         _haveImage.image = [UIImage imageNamed:@"mark_pic"];

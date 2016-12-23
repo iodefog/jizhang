@@ -24,6 +24,8 @@
 
 @property(nonatomic, strong) UILabel *subDetailLab;
 
+@property(nonatomic, strong) UIImageView *payOffImage;
+
 @end
 
 @implementation SSJFundingDetailListHeaderView
@@ -42,12 +44,14 @@
         [self addSubview:self.moneyLabel];
         [self addSubview:self.subLab];
         [self addSubview:self.subDetailLab];
+        [self addSubview:self.payOffImage];
     }
     return self;
 }
 
 -(void)layoutSubviews{
     [super layoutSubviews];
+    self.payOffImage.leftTop = CGPointMake(0, 0);
     if ([self.item isKindOfClass:[SSJCreditCardListDetailItem class]] && ((SSJCreditCardListDetailItem *)self.item).instalmentMoney > 0) {
         self.btn.frame = self.bounds;
         self.dateLabel.left = 10;
@@ -125,10 +129,19 @@
     return _subDetailLab;
 }
 
+- (UIImageView *)payOffImage {
+    if (!_payOffImage) {
+        _payOffImage = [[UIImageView alloc] init];
+        _payOffImage.image = [UIImage ssj_themeImageWithName:@"card_payoff"];
+        [_payOffImage sizeToFit];
+    }
+    return _payOffImage;
+}
 
 - (void)setItem:(SSJBaseItem *)item{
     _item = item;
     if ([_item isKindOfClass:[SSJFundingDetailListItem class]]) {
+        _payOffImage.hidden = YES;
         SSJFundingDetailListItem *fundingItem = (SSJFundingDetailListItem *)_item;
         NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
         [formatter setDateFormat:@"yyyy-MM"];
@@ -169,6 +182,7 @@
         self.dateLabel.text = dateStr;
         [self.dateLabel sizeToFit];
         double totalMoney = creditCardItem.income - creditCardItem.expenture + creditCardItem.instalmentMoney;
+        double moneyNeedToRepay = creditCardItem.income - creditCardItem.expenture + creditCardItem.repaymentMoney + creditCardItem.repaymentForOtherMonthMoney;
         if (creditCardItem.instalmentMoney > 0) {
             if (totalMoney < 0) {
                 self.subLab.text = [NSString stringWithFormat:@"(账单已分期,本期应还金额为%@元)",[[NSString stringWithFormat:@"%f",fabs(totalMoney)]  ssj_moneyDecimalDisplayWithDigits:2]];
