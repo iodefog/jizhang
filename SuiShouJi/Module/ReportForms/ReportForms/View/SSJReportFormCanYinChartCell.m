@@ -62,15 +62,13 @@
     [self.ratioLabel sizeToFit];
     [self.amountLabel sizeToFit];
     
-    if (chartItem.segmentStyle == SSJReportFormCanYinChartCellSegmentStyleHeader) {
-        self.topLineLayer.hidden = YES;
-        self.bottomLineLayer.hidden = NO;
-    }else if (chartItem.segmentStyle == SSJReportFormCanYinChartCellSegmentStyleBody){
+    self.topLineLayer.hidden = YES;
+    self.bottomLineLayer.hidden = YES;
+    if (chartItem.segmentStyle & SSJReportFormCanYinChartCellSegmentStyleTop) {
         self.topLineLayer.hidden = NO;
+    }
+    if (chartItem.segmentStyle & SSJReportFormCanYinChartCellSegmentStyleBottom){
         self.bottomLineLayer.hidden = NO;
-    }else if (chartItem.segmentStyle == SSJReportFormCanYinChartCellSegmentStyleFooter){
-        self.topLineLayer.hidden = NO;
-        self.bottomLineLayer.hidden = YES;
     }
 }
 
@@ -125,7 +123,6 @@
         CGPathAddLineToPoint(solidShapePath, NULL, 15,self.height*0.5);
         [_topLineLayer setPath:solidShapePath];
         CGPathRelease(solidShapePath);
-        _bottomLineLayer.hidden = YES;
     }
     return _topLineLayer;
 }
@@ -142,7 +139,6 @@
         CGPathAddLineToPoint(solidShapePath, NULL, 15,self.height);
         [_bottomLineLayer setPath:solidShapePath];
         CGPathRelease(solidShapePath);
-        _bottomLineLayer.hidden = YES;
     }
     return _bottomLineLayer;
 }
