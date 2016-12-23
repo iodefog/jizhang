@@ -61,6 +61,7 @@ NSString *const SSJMagicExportStoreEndDateKey = @"SSJMagicExportStoreEndDateKey"
 
 + (void)queryAllBillDateWithBillType:(SSJBillType)billType
                              booksId:(NSString *)booksId
+                          billTypeId:(NSString *)billTypeId
                              success:(void (^)(NSArray<NSDate *> *result))success
                              failure:(void (^)(NSError *error))failure {
     
@@ -83,9 +84,14 @@ NSString *const SSJMagicExportStoreEndDateKey = @"SSJMagicExportStoreEndDateKey"
             break;
     }
     
-    if (booksId.length) {
+    if (booksId) {
         [queryStr appendFormat:@" and a.cbooksid = '%@'", booksId];
     }
+    
+    if (billTypeId) {
+        [queryStr appendFormat:@" and a.ibillid = '%@'", billTypeId];
+    }
+    
     [queryStr appendString:@" order by a.cbilldate"];
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {

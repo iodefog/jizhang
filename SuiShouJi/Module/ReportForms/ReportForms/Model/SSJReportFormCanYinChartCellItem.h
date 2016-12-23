@@ -11,9 +11,9 @@
 /**
  左侧分割线段样式
 
- - SSJReportFormCanYinChartCellStyleHeader: 只有点和下半部分线
- - SSJReportFormCanYinChartCellStyleBody: 点和上下半部分线
- - SSJReportFormCanYinChartCellStyleFooter: 只有点和上半部分线
+ - SSJReportFormCanYinChartCellSegmentStyleNone: 只有点没有分线
+ - SSJReportFormCanYinChartCellSegmentStyleTop: 点和上半部分线
+ - SSJReportFormCanYinChartCellSegmentStyleBottom: 点和下半部分线
  */
 typedef NS_OPTIONS(NSUInteger, SSJReportFormCanYinChartCellSegmentStyle) {
     SSJReportFormCanYinChartCellSegmentStyleNone = 0,

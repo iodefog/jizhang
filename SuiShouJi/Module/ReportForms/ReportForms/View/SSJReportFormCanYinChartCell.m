@@ -27,10 +27,10 @@
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
-        [self.contentView.layer addSublayer:self.topLineLayer];
-        [self.contentView.layer addSublayer:self.bottomLineLayer];
         [self.contentView.layer addSublayer:self.circleLayer1];
         [self.contentView.layer addSublayer:self.circleLayer2];
+        [self.contentView.layer addSublayer:self.topLineLayer];
+        [self.contentView.layer addSublayer:self.bottomLineLayer];
         [self.contentView.layer addSublayer:self.circleLayer3];
         [self.contentView addSubview:self.dateLabel];
         [self.contentView addSubview:self.ratioLabel];
@@ -45,29 +45,40 @@
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    self.dateLabel.centerY = self.ratioLabel.centerY = self.amountLabel.centerY = self.centerY;
+    self.dateLabel.centerY = self.ratioLabel.centerY = self.amountLabel.centerY = self.contentView.height * 0.5;
     self.dateLabel.left = 30;
-    self.ratioLabel.centerX = self.centerX;
-    self.amountLabel.right = self.width - 30;
+    self.ratioLabel.centerX = SSJSCREENWITH * 0.5;
+    
+    self.amountLabel.width = MIN(self.amountLabel.width, self.contentView.width - self.ratioLabel.right);
+    self.amountLabel.right = self.contentView.width;
 }
 
-- (void)setChartItem:(SSJReportFormCanYinChartCellItem *)chartItem
-{
-    _chartItem = chartItem;
-    [self drawCircleWithColor:chartItem.circleColor];
-    self.dateLabel.text = chartItem.leftText.length ? chartItem.leftText : @"";
-    self.ratioLabel.text = chartItem.centerText.length ? chartItem.centerText : @"";
-    self.amountLabel.text = chartItem.rightText.length ? chartItem.rightText : @"";
+- (void)setCellItem:(SSJReportFormCanYinChartCellItem *)cellItem {
+    
+    if (![cellItem isKindOfClass:[SSJReportFormCanYinChartCellItem class]]) {
+        return;
+    }
+    
+    [super setCellItem:cellItem];
+    
+    
+    SSJReportFormCanYinChartCellItem *item = cellItem;
+    
+    [self drawCircleWithColor:item.circleColor];
+    [self drawLineWithColor:item.circleColor];
+    self.dateLabel.text = item.leftText.length ? item.leftText : @"";
+    self.ratioLabel.text = item.centerText.length ? [NSString stringWithFormat:@"%@%@",item.centerText,@"%"] : @"";
+    self.amountLabel.text = item.rightText.length ? item.rightText : @"";
     [self.dateLabel sizeToFit];
     [self.ratioLabel sizeToFit];
     [self.amountLabel sizeToFit];
     
     self.topLineLayer.hidden = YES;
     self.bottomLineLayer.hidden = YES;
-    if (chartItem.segmentStyle & SSJReportFormCanYinChartCellSegmentStyleTop) {
+    if (item.segmentStyle & SSJReportFormCanYinChartCellSegmentStyleTop) {
         self.topLineLayer.hidden = NO;
     }
-    if (chartItem.segmentStyle & SSJReportFormCanYinChartCellSegmentStyleBottom){
+    if (item.segmentStyle & SSJReportFormCanYinChartCellSegmentStyleBottom){
         self.bottomLineLayer.hidden = NO;
     }
 }
@@ -110,19 +121,33 @@
 }
 
 
+- (void)drawLineWithColor:(NSString *)colorStr
+{
+    CGMutablePathRef solidShapePath =  CGPathCreateMutable();
+    [self.topLineLayer setFillColor:[[UIColor clearColor] CGColor]];
+    self.topLineLayer.lineWidth = 0.5f ;
+    [self.topLineLayer setStrokeColor:[UIColor ssj_colorWithHex:colorStr].CGColor];
+    CGPathMoveToPoint(solidShapePath, NULL, 15, 0);
+    CGPathAddLineToPoint(solidShapePath, NULL, 15,self.height*0.5);
+    [self.topLineLayer setPath:solidShapePath];
+    CGPathRelease(solidShapePath);
+    
+    CGMutablePathRef solidShapePath2 =  CGPathCreateMutable();
+    [_bottomLineLayer setFillColor:[[UIColor clearColor] CGColor]];
+    _bottomLineLayer.lineWidth = 0.5f ;
+    [self.bottomLineLayer setStrokeColor:[UIColor ssj_colorWithHex:colorStr].CGColor];
+    CGPathMoveToPoint(solidShapePath2, NULL, 15, self.height*0.5);
+    CGPathAddLineToPoint(solidShapePath2, NULL, 15,self.height);
+    [_bottomLineLayer setPath:solidShapePath2];
+    CGPathRelease(solidShapePath2);
+    
+}
+
 #pragma mark - Lazy
 - (CAShapeLayer *)topLineLayer
 {
     if (!_topLineLayer) {
         _topLineLayer = [CAShapeLayer layer];
-        CGMutablePathRef solidShapePath =  CGPathCreateMutable();
-        [_topLineLayer setFillColor:[[UIColor clearColor] CGColor]];
-        [_topLineLayer setStrokeColor:[UIColor ssj_colorWithHex:self.chartItem.circleColor].CGColor];
-        _topLineLayer.lineWidth = 0.5f ;
-        CGPathMoveToPoint(solidShapePath, NULL, 15, 0);
-        CGPathAddLineToPoint(solidShapePath, NULL, 15,self.height*0.5);
-        [_topLineLayer setPath:solidShapePath];
-        CGPathRelease(solidShapePath);
     }
     return _topLineLayer;
 }
@@ -131,14 +156,6 @@
 {
     if (!_bottomLineLayer) {
         _bottomLineLayer = [CAShapeLayer layer];
-        CGMutablePathRef solidShapePath =  CGPathCreateMutable();
-        [_bottomLineLayer setFillColor:[[UIColor clearColor] CGColor]];
-        [_bottomLineLayer setStrokeColor:[UIColor ssj_colorWithHex:self.chartItem.circleColor].CGColor];
-        _bottomLineLayer.lineWidth = 0.5f ;
-        CGPathMoveToPoint(solidShapePath, NULL, 15, self.height*0.5);
-        CGPathAddLineToPoint(solidShapePath, NULL, 15,self.height);
-        [_bottomLineLayer setPath:solidShapePath];
-        CGPathRelease(solidShapePath);
     }
     return _bottomLineLayer;
 }

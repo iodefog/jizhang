@@ -28,6 +28,8 @@
 #pragma mark - Lifecycle
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+        
+        _billType = SSJBillTypeSurplus;
         self.navigationItem.title = @"选择导出时间";
         self.hidesBottomBarWhenPushed = YES;
     }
@@ -38,7 +40,8 @@
     [super viewDidLoad];
     
     [self.view ssj_showLoadingIndicator];
-    [SSJMagicExportStore queryAllBillDateWithBillType:_billType booksId:_booksId success:^(NSArray<NSDate *> *result) {
+    [SSJMagicExportStore queryAllBillDateWithBillType:_billType booksId:_booksId billTypeId:_billTypeId success:^(NSArray<NSDate *> *result) {
+        
         [self.view ssj_hideLoadingIndicator];
         if (result.count) {
             _billDates = result;
@@ -49,9 +52,10 @@
             [self.calendarView reload];
             [self.calendarView scrollToDate:_beginDate];
         }
+        
     } failure:^(NSError *error) {
         [self.view ssj_hideLoadingIndicator];
-        [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
+        [self showError:error];
     }];
 }
 
@@ -138,6 +142,16 @@
     _calendarView.highlightColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
     [_calendarView reload];
     [_calendarView updateAppearance];
+}
+
+- (void)showError:(NSError *)error {
+    NSString *message = nil;
+#ifdef DEBUG
+    message = [error localizedDescription];
+#else
+    message = SSJ_ERROR_MESSAGE;
+#endif
+    [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:message action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
 }
 
 #pragma mark - Getter

@@ -28,6 +28,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable NSString *)curveGraphView:(SSJReportFormsCurveGraphView *)graphView suspensionTitleAtAxisXIndex:(NSUInteger)index;
 
+- (BOOL)curveGraphView:(SSJReportFormsCurveGraphView *)graphView shouldShowValuePointForCurveAtIndex:(NSUInteger)curveIndex axisXIndex:(NSUInteger)axisXIndex;
+
 @end
 
 @protocol SSJReportFormsCurveGraphViewDelegate <NSObject>
@@ -56,6 +58,31 @@ NS_ASSUME_NONNULL_BEGIN
  Y轴刻度数量，默认6
  */
 @property (nonatomic) NSUInteger axisYCount;
+
+/**
+ Y轴刻度上的最大值
+ */
+@property (nonatomic, readonly) CGFloat maxValue;
+
+/**
+ X轴的刻度数量
+ */
+@property (nonatomic, readonly) NSUInteger axisXCount;
+
+/**
+ 曲线数量
+ */
+@property (nonatomic, readonly) NSUInteger curveCount;
+
+/**
+ 当前滚动至中间的X轴下标
+ */
+@property (nonatomic, readonly) NSUInteger currentIndex;
+
+/**
+ 当前可见的X轴下标
+ */
+@property (nonatomic, strong, readonly) NSMutableArray<NSNumber *> *visibleIndexs;
 
 /**
  曲线的Y轴坐标浮动范围，只有top、bottom的值有效，默认{46, 0, 56, 0}

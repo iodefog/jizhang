@@ -341,7 +341,7 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
     
     // 存储当前同步用户数据
     NSArray *userArr = tableInfo[@"bk_user"];
-    if (![userArr isKindOfClass:[NSArray class]]) {
+    if (userArr && ![userArr isKindOfClass:[NSArray class]]) {
         if (error) {
             *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"服务端返回的bk_user数据格式错误"}];
         }

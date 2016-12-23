@@ -39,6 +39,8 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
 
 @property (nonatomic, strong) NSMutableArray<SSJReportFormsCurveCellItem *> *items;
 
+@property (nonatomic, strong) NSMutableArray<NSNumber *> *visibleIndexs;
+
 @property (nonatomic, strong) UIColor *defaultCurveColor;
 
 @property (nonatomic) CGFloat maxValue;
@@ -77,6 +79,7 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
         _suspensionItems = [[NSMutableArray alloc] init];
         _values = [[NSMutableArray alloc] init];
         _items = [[NSMutableArray alloc] init];
+        _visibleIndexs = [[NSMutableArray alloc] init];
         _defaultCurveColor = [UIColor redColor];
         
         [self addSubview:self.gridView];
@@ -89,6 +92,7 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
 
 - (void)layoutSubviews {
     
+    [self updateVisibleIndex];
     [self caculateCurvePoint];
     [self updateDotsAndLabelsPosition];
     
@@ -156,6 +160,7 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
     
     _userScrolled = YES;
     _currentIndex = indexPath.item;
+    [self updateVisibleIndex];
     [self updateBallonAndLablesTitle];
     [self updateDotsAndLabelsPosition];
     [self updateContentOffset:YES];
@@ -191,6 +196,7 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
         
         _userScrolled = YES;
         _currentIndex = indexPath.item;
+        [self updateVisibleIndex];
         [self updateBallonAndLablesTitle];
         [self updateDotsAndLabelsPosition];
         [self updateContentOffset:YES];
@@ -209,56 +215,6 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
             }
         }
     }
-    
-//    CGFloat rightGap = _collectionView.width - (_collectionView.contentSize.width - _collectionView.contentOffset.x);
-//    
-//    if (_collectionView.contentOffset.x == -_collectionView.contentInset.left) {
-//        
-//        _currentIndex = 0;
-//        [self updateBallonAndLablesTitle];
-//        [self updateDotsAndLabelsPosition];
-//        
-//        for (SSJReportFormsCurveDot *dot in _dots) {
-//            dot.hidden = !_showBalloon;
-//        }
-//        
-//        for (UILabel *label in _labels) {
-//            label.hidden = !_showBalloon;
-//        }
-//
-//        if (_delegate && [_delegate respondsToSelector:@selector(curveGraphView:didScrollToAxisXIndex:)]) {
-//            [_delegate curveGraphView:self didScrollToAxisXIndex:_currentIndex];
-//        }
-//
-//    } else if (rightGap == _collectionView.contentInset.right) {
-//        
-//        _currentIndex = _axisXCount - 1;
-//        [self updateBallonAndLablesTitle];
-//        [self updateDotsAndLabelsPosition];
-//        
-//        for (SSJReportFormsCurveDot *dot in _dots) {
-//            dot.hidden = !_showBalloon;
-//        }
-//        
-//        for (UILabel *label in _labels) {
-//            label.hidden = !_showBalloon;
-//        }
-//        
-//        if (_delegate && [_delegate respondsToSelector:@selector(curveGraphView:didScrollToAxisXIndex:)]) {
-//            [_delegate curveGraphView:self didScrollToAxisXIndex:_currentIndex];
-//        }
-//        
-//    } else {
-//        
-//        NSIndexPath *indexPath = [self indexPathForCenterX];
-//        if (indexPath && indexPath.item >= 0) {
-//            _userScrolled = YES;
-//            _currentIndex = indexPath.item;
-//            [self updateBallonAndLablesTitle];
-//            [self updateDotsAndLabelsPosition];
-//            [self updateContentOffsetWithIndexPath:indexPath animated:YES];
-//        }
-//    }
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
@@ -268,6 +224,7 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
         if (indexPath && indexPath.item >= 0 && indexPath.item < _axisXCount) {
             _userScrolled = YES;
             _currentIndex = indexPath.item;
+            [self updateVisibleIndex];
             [self updateBallonAndLablesTitle];
             [self updateDotsAndLabelsPosition];
             [self updateContentOffset:YES];
@@ -327,6 +284,7 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
         _suspensionView.unitSpace = _unitAxisXLength;
         CGFloat offsetX = (_currentIndex + 0.5) * _unitAxisXLength - _collectionView.width * 0.5;
         [_collectionView setContentOffset:CGPointMake(offsetX, 0) animated:NO];
+        [self updateVisibleIndex];
         [self setNeedsLayout];
     }
 }
@@ -393,6 +351,10 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
 - (void)setShowValuePoint:(BOOL)showValuePoint {
     if (_showValuePoint != showValuePoint) {
         _showValuePoint = showValuePoint;
+        
+        if ([_dataSource respondsToSelector:@selector(curveGraphView:shouldShowValuePointForCurveAtIndex:axisXIndex:)]) {
+            return;
+        }
         
         for (SSJReportFormsCurveCellItem *cellItem in _items) {
             for (SSJReportFormsCurveViewItem *curveItem in cellItem.curveItems) {
@@ -476,6 +438,7 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
     _hasReloaded = YES;
     _maxValue = 0;
     _currentIndex = 0;
+    [self updateVisibleIndex];
     
     [_collectionView reloadData];
     
@@ -505,6 +468,8 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
             return;
         }
     }
+    
+    [self updateVisibleIndex];
     
     [self updateContentOffset:NO];
     
@@ -552,6 +517,7 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
     
     _userScrolled = NO;
     _currentIndex = index;
+    [self updateVisibleIndex];
     [self updateBallonAndLablesTitle];
     [self updateDotsAndLabelsPosition];
     [self updateContentOffset:animted];
@@ -590,6 +556,9 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
 }
 
 - (void)reorganiseItems {
+    
+    BOOL responsed = [_dataSource respondsToSelector:@selector(curveGraphView:shouldShowValuePointForCurveAtIndex:axisXIndex:)];
+    
     for (int axisXIdx = 0; axisXIdx < _axisXCount + 1; axisXIdx ++) {
         
         SSJReportFormsCurveCellItem *cellItem = [[SSJReportFormsCurveCellItem alloc] init];
@@ -633,9 +602,15 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
             if (axisXIdx < _axisXCount) {
                 NSArray *valuesPerAxis = _values[axisXIdx + 1];
                 CGFloat value = [valuesPerAxis[curveIdx] floatValue];
-                curveItem.showValue = _showValuePoint;
                 curveItem.value = [NSString stringWithFormat:@"%.2f", value];
-                curveItem.showDot = _showValuePoint;
+                
+                BOOL showValuePoint = _showValuePoint;
+                if (responsed) {
+                    showValuePoint = [_dataSource curveGraphView:self shouldShowValuePointForCurveAtIndex:curveIdx axisXIndex:axisXIdx];
+                }
+                
+                curveItem.showValue = showValuePoint;
+                curveItem.showDot = showValuePoint;
             }
             
             [curveItems addObject:curveItem];
@@ -819,6 +794,45 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
             [label sizeToFit];
         }
     }
+}
+
+- (void)updateVisibleIndex {
+    
+    if (_unitAxisXLength <= 0 || _axisXCount == 0) {
+        return;
+    }
+    
+    [_visibleIndexs removeAllObjects];
+    
+    int scope = self.width * 0.5 / _unitAxisXLength;
+    int minIndex = MAX((int)_currentIndex - scope, 0);
+    int maxIndex = MIN((int)_axisXCount - 1, (int)_currentIndex + scope);
+    
+    for (NSUInteger idx = minIndex; idx <= maxIndex; idx ++) {
+        [_visibleIndexs addObject:@(idx)];
+    }
+    
+//    NSArray *visibleIndex = [_collectionView indexPathsForVisibleItems];
+//    for (NSIndexPath *indexPath in visibleIndex) {
+//        if (indexPath.item < 0 || indexPath.item >= _items.count - 1) {
+//            continue;
+//        }
+//        
+//        UICollectionViewLayoutAttributes *layout = [_collectionView layoutAttributesForItemAtIndexPath:indexPath];
+//        if (CGRectGetMaxX(layout.frame) >= 0 && CGRectGetMaxX(layout.frame) <= _collectionView.contentOffset.x + _collectionView.width) {
+//            [_visibleIndexs addObject:@(indexPath.item)];
+//        }
+//    }
+//    
+//    [_visibleIndexs sortUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+//        if ([obj1 intValue] < [obj2 intValue]) {
+//            return NSOrderedAscending;
+//        } else if ([obj1 intValue] > [obj2 intValue]) {
+//            return NSOrderedDescending;
+//        } else {
+//            return NSOrderedSame;
+//        }
+//    }];
 }
 
 - (NSIndexPath *)indexPathForCenterX {

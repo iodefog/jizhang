@@ -351,7 +351,7 @@ static const CGFloat kSeparatorFormViewHeight = 88;
             break;
             
         case SSJTimeDimensionWeek:
-            _curveView.unitAxisXLength = self.width / 4;
+            _curveView.unitAxisXLength = self.width / 5;
             break;
             
         case SSJTimeDimensionUnknown:

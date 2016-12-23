@@ -76,7 +76,7 @@
     _dot.center = _item.endPoint;
     
     [_valueLab sizeToFit];
-    _valueLab.leftTop = CGPointMake(_item.endPoint.x + _dot.outerRadius, _item.endPoint.y + _dot.outerRadius);
+    _valueLab.leftTop = CGPointMake(_item.endPoint.x + _dot.outerRadius, _item.endPoint.y);
 }
 
 - (void)drawRect:(CGRect)rect {
@@ -114,7 +114,7 @@
     [self addObserver];
     
     [self updateDot];
-    [self updateDot];
+    [self updateValueLabel];
     if (needsToRedraw) {
         [self setNeedsDisplay];
     }
