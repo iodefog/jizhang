@@ -440,8 +440,6 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
     _currentIndex = 0;
     [self updateVisibleIndex];
     
-    [_collectionView reloadData];
-    
     [_curveColors removeAllObjects];
     [_values removeAllObjects];
     [_items removeAllObjects];
@@ -459,12 +457,14 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
     
     _axisXCount = [_dataSource numberOfAxisXInCurveGraphView:self];
     if (_axisXCount == 0) {
+        [_collectionView reloadData];
         return;
     }
     
     if ([_dataSource respondsToSelector:@selector(numberOfCurveInCurveGraphView:)]) {
         _curveCount = [_dataSource numberOfCurveInCurveGraphView:self];
         if (_curveCount == 0) {
+            [_collectionView reloadData];
             return;
         }
     }
@@ -497,6 +497,7 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
     [self caculateCurvePoint];
     
     [_gridView reloadData];
+    [_collectionView reloadData];
 }
 
 - (void)scrollToAxisXAtIndex:(NSUInteger)index animated:(BOOL)animted {
