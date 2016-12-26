@@ -17,4 +17,13 @@
     return self;
 }
 
+- (NSString *)debugDescription {
+    return [NSString stringWithFormat:@"%@:%@", self, @{@"leftTitle1":_leftTitle1 ?: [NSNull null],
+                                                        @"leftTitle2":_leftTitle2 ?: [NSNull null],
+                                                        @"rightTitle":_rightTitle ?: [NSNull null],
+                                                        @"progressColorValue":_progressColorValue ?: [NSNull null],
+                                                        @"scale":@(_scale),
+                                                        @"billTypeId":_billTypeId ?: [NSNull null]}];
+}
+
 @end

@@ -38,7 +38,7 @@
 }
 
 - (void)layoutSubviews {
-    _surfaceView.frame = CGRectMake(0, 0, self.width * _progress, self.height);
+    _surfaceView.frame = CGRectMake(0, 0, self.width * MIN(1, _progress), self.height);
 }
 
 - (void)setFillColor:(UIColor *)fillColor {
@@ -48,7 +48,7 @@
 - (void)setProgress:(CGFloat)progress {
     if (_progress != progress) {
         _progress = progress;
-        _surfaceView.frame = CGRectMake(0, 0, self.width * MAX(1, _progress), self.height);
+        _surfaceView.frame = CGRectMake(0, 0, self.width * MIN(1, _progress), self.height);
     }
 }
 
