@@ -22,7 +22,7 @@
 
 static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
 
-@interface SSJSummaryBooksViewController ()<UITableViewDataSource, UITableViewDelegate, UITabBarControllerDelegate, SSJReportFormsPercentCircleDataSource, SSJReportFormsScaleAxisViewDelegate,SSJReportFormsCurveGraphViewDelegate>
+@interface SSJSummaryBooksViewController ()<UITableViewDataSource, UITableViewDelegate, UITabBarControllerDelegate, SSJReportFormsPercentCircleDataSource, SSJReportFormsScaleAxisViewDelegate, SSJReportFormsCurveGraphViewDataSource, SSJReportFormsCurveGraphViewDelegate>
 
 
 @property(nonatomic, strong) SSJSummaryBooksTableViewHeader *header;
@@ -91,16 +91,16 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
 - (SSJSummaryBooksTableViewHeader *)header{
     if (!_header) {
         _header = [[SSJSummaryBooksTableViewHeader alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 1138)];
+        _header.curveView.dataSource = self;
         _header.curveView.delegate = self;
         _header.chartView.dataSource = self;
         _header.dateAxisView.delegate = self;
         __weak typeof(self) weakSelf = self;
         _header.periodSelectBlock = ^(){
-            weakSelf.currentPeriod = [weakSelf.periods ssj_safeObjectAtIndex:weakSelf.header.dateAxisView.selectedIndex];
-            [weakSelf reloadAllDatas];
+            [weakSelf reloadCurveViewData];
         };
         _header.incomeOrExpentureSelectBlock = ^(){
-            [weakSelf reloadDatasCurrentPeriod];
+            [weakSelf reloadChartViewData];
             [weakSelf updateIncomeAndPaymentLabels];
         };
         [_header.addOrDeleteCustomPeriodBtn addTarget:self action:@selector(customPeriodBtnAction) forControlEvents:UIControlEventTouchUpInside];
@@ -202,29 +202,134 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
     return nil;
 }
 
+#pragma mark - SSJReportFormsCurveGraphViewDataSource
+- (NSUInteger)numberOfAxisXInCurveGraphView:(SSJReportFormsCurveGraphView *)graphView {
+    return _curveItems.count;
+}
+
+- (NSUInteger)numberOfCurveInCurveGraphView:(SSJReportFormsCurveGraphView *)graphView {
+    return 2;
+}
+
+- (CGFloat)curveGraphView:(SSJReportFormsCurveGraphView *)graphView valueForCurveAtIndex:(NSUInteger)curveIndex axisXIndex:(NSUInteger)axisXIndex {
+    
+    SSJReportFormsCurveModel *model = [_curveItems ssj_safeObjectAtIndex:axisXIndex];
+    if (curveIndex == 0) {  // 支出
+        return model.payment;
+    } else if (curveIndex == 1) { // 收入
+        return model.income;
+    } else {
+        return 0;
+    }
+}
+
+- (NSString *)curveGraphView:(SSJReportFormsCurveGraphView *)graphView titleAtAxisXIndex:(NSUInteger)index {
+    SSJReportFormsCurveModel *model = [_curveItems ssj_safeObjectAtIndex:index];
+    switch ([_header dimension]) {
+        case SSJTimeDimensionDay: {
+            return [model.startDate formattedDateWithFormat:@"dd日"];
+        }
+            break;
+            
+        case SSJTimeDimensionWeek: {
+            NSString *startDateStr = [model.startDate formattedDateWithFormat:@"MM/dd"];
+            NSString *endDateStr = [model.endDate formattedDateWithFormat:@"MM/dd"];
+            return [NSString stringWithFormat:@"%@~%@", startDateStr, endDateStr];
+        }
+            break;
+            
+        case SSJTimeDimensionMonth: {
+            return [model.startDate formattedDateWithFormat:@"MM月"];
+        }
+            break;
+            
+        case SSJTimeDimensionUnknown: {
+            return nil;
+        }
+            break;
+    }
+}
+
+- (UIColor *)curveGraphView:(SSJReportFormsCurveGraphView *)graphView colorForCurveAtIndex:(NSUInteger)curveIndex {
+    if (curveIndex == 0) { // 支出
+        return [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurvePaymentColor];
+    } else if (curveIndex == 1) { // 收入
+        return [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurveIncomeColor];
+    } else {
+        return nil;
+    }
+}
+
+- (nullable NSString *)curveGraphView:(SSJReportFormsCurveGraphView *)graphView suspensionTitleAtAxisXIndex:(NSUInteger)index {
+    
+    SSJReportFormsCurveModel *model = [_curveItems ssj_safeObjectAtIndex:index];
+    if (index == 0) {
+        switch ([_header dimension]) {
+            case SSJTimeDimensionDay:
+                return [model.startDate formattedDateWithFormat:@"M月"];
+                break;
+                
+            case SSJTimeDimensionWeek:
+                return [model.startDate formattedDateWithFormat:@"yyyy年"];
+                break;
+                
+            case SSJTimeDimensionMonth:
+                return [model.startDate formattedDateWithFormat:@"yyyy年"];
+                break;
+                
+            case SSJTimeDimensionUnknown:
+                break;
+        }
+    }
+    
+    SSJReportFormsCurveModel *lastModel = [_curveItems ssj_safeObjectAtIndex:index - 1];
+    switch ([_header dimension]) {
+        case SSJTimeDimensionDay:
+            if (model.startDate.year != lastModel.startDate.year
+                || model.startDate.month != lastModel.startDate.month) {
+                return [model.startDate formattedDateWithFormat:@"M月"];
+            }
+            
+            break;
+            
+        case SSJTimeDimensionWeek:
+            if (model.startDate.year != lastModel.startDate.year) {
+                return [model.startDate formattedDateWithFormat:@"yyyy年"];
+            }
+            
+            break;
+            
+        case SSJTimeDimensionMonth:
+            if (model.startDate.year != lastModel.startDate.year) {
+                return [model.startDate formattedDateWithFormat:@"yyyy年"];
+            }
+            
+            break;
+            
+        case SSJTimeDimensionUnknown:
+            break;
+    }
+    
+    return nil;
+}
+
 #pragma mark - SSJReportFormsCurveGraphViewDelegate
-//- (NSUInteger)numberOfAxisXInCurveGraphView:(SSJReportFormsCurveGraphView *)graphView {
-//    return _curveItems.count;
-//}
-//
-//- (NSString *)curveGraphView:(SSJReportFormsCurveGraphView *)graphView titleAtAxisXIndex:(NSUInteger)index {
-//    SSJReportFormsCurveModel *model = [_curveItems ssj_safeObjectAtIndex:index];
-//    return model.time;
-//}
-//
-//- (CGFloat)curveGraphView:(SSJReportFormsCurveGraphView *)graphView paymentValueAtAxisXIndex:(NSUInteger)index {
-//    SSJReportFormsCurveModel *model = [_curveItems ssj_safeObjectAtIndex:index];
-//    return [model.payment floatValue];
-//}
-//
-//- (CGFloat)curveGraphView:(SSJReportFormsCurveGraphView *)graphView incomeValueAtAxisXIndex:(NSUInteger)index {
-//    SSJReportFormsCurveModel *model = [_curveItems ssj_safeObjectAtIndex:index];
-//    return [model.income floatValue];
-//}
-//
-//- (void)curveGraphView:(SSJReportFormsCurveGraphView *)graphView didScrollToAxisXIndex:(NSUInteger)index {
-//
-//}
+- (NSString *)curveGraphView:(SSJReportFormsCurveGraphView *)graphView titleForBallonAtAxisXIndex:(NSUInteger)index {
+    SSJReportFormsCurveModel *model = [_curveItems ssj_safeObjectAtIndex:index];
+    NSString *surplusStr = [NSString stringWithFormat:@"%f", (model.income - model.payment)];
+    return [NSString stringWithFormat:@"结余%@", [surplusStr ssj_moneyDecimalDisplayWithDigits:2]];
+}
+
+- (NSString *)curveGraphView:(SSJReportFormsCurveGraphView *)graphView titleForBallonLabelAtCurveIndex:(NSUInteger)curveIndex axisXIndex:(NSUInteger)axisXIndex {
+    SSJReportFormsCurveModel *model = [_curveItems ssj_safeObjectAtIndex:axisXIndex];
+    if (curveIndex == 0) { // 支出
+        return [NSString stringWithFormat:@"支出%@", [[NSString stringWithFormat:@"%f", model.payment] ssj_moneyDecimalDisplayWithDigits:2]];
+    } else if (curveIndex == 1) { // 收入
+        return [NSString stringWithFormat:@"收入%@", [[NSString stringWithFormat:@"%f", model.income] ssj_moneyDecimalDisplayWithDigits:2]];
+    } else {
+        return nil;
+    }
+}
 
 #pragma mark - Private
 //  更新总收入\总支出
@@ -236,85 +341,63 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
     }
 }
 
-// 查询某个周期内的流水统计
-- (void)reloadDatasCurrentPeriod {
-    if (!self.currentPeriod) {
-        return;
-    }
-    [self.view ssj_showLoadingIndicator];
-    SSJDatePeriod *period;
-    if (_customPeriod) {
-        period = _customPeriod;
-    }else{
-        if (_periods.count) {
-            period = [_periods ssj_safeObjectAtIndex:self.header.dateAxisView.selectedIndex];
+//  重新加载数据
+- (void)reloadAllDatas {
+    
+    SSJDatePeriod *period = _customPeriod ?: _currentPeriod;
+    [SSJReportFormsUtil queryForDefaultTimeDimensionWithStartDate:period.startDate endDate:period.endDate booksId:@"all" billTypeId:nil success:^(SSJTimeDimension timeDimension) {
+        
+        if (timeDimension != SSJTimeDimensionUnknown) {
+            _header.dimension = timeDimension;
         }
-    }
+        
+        [self reloadCurveViewData];
+        [self reloadChartViewData];
+        
+    } failure:^(NSError *error) {
+        [self.view ssj_hideLoadingIndicator];
+        [self showError:error];
+    }];
+}
+
+// 加载折线图的数据
+- (void)reloadCurveViewData {
+    SSJDatePeriod *period = _customPeriod ?: _currentPeriod;
+    [SSJReportFormsUtil queryForBillStatisticsWithTimeDimension:[_header dimension] booksId:@"all" billTypeId:nil startDate:period.startDate endDate:period.endDate success:^(NSDictionary *result) {
+        
+        [self.view ssj_hideLoadingIndicator];
+        _curveItems = result[SSJReportFormsCurveModelListKey];
+        
+        if (_curveItems.count == 0) {
+            self.header.curveViewHasDataOrNot = NO;
+            self.chargeDatas = nil;
+            [self.tableView reloadData];
+            return;
+        }
+        
+        [_header.curveView reloadData];
+        if (_curveItems.count >= 1) {
+            [_header.curveView scrollToAxisXAtIndex:_curveItems.count - 1 animated:NO];
+        }
+        self.header.curveViewHasDataOrNot = YES;
+        
+    } failure:^(NSError *error) {
+        [self.view ssj_hideLoadingIndicator];
+        [self showError:error];
+    }];
+}
+
+- (void)reloadChartViewData {
     // 加载流水列表和饼状图的数据
+    SSJDatePeriod *period = _customPeriod ?: _currentPeriod;
     [SSJReportFormsUtil queryForIncomeOrPayType:!(int)_header.incomOrExpenseSelectSegment.selectedSegmentIndex booksId:@"all" startDate:period.startDate endDate:period.endDate success:^(NSArray<SSJReportFormsItem *> *result) {
         [self.view ssj_hideLoadingIndicator];
         [self organiseDatasWithResult:result];
     } failure:^(NSError *error) {
         [self.view ssj_hideLoadingIndicator];
-        [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
+        [self showError:error];
     }];
 }
-
-//  重新加载数据
-- (void)reloadAllDatas {
-    // 加载折线图的数据
-    SSJDatePeriod *period;
-    if (_customPeriod) {
-        period = _customPeriod;
-    }else{
-        if (_periods.count) {
-            period = [_periods ssj_safeObjectAtIndex:self.header.dateAxisView.selectedIndex];
-        }
-    }
-    
-    SSJTimeDimension dimension = SSJTimeDimensionDay;
-    if (_header.periodSelectSegment.selectedSegmentIndex == 0) {
-        dimension = SSJTimeDimensionWeek;
-    } else if (_header.periodSelectSegment.selectedSegmentIndex == 1) {
-        dimension = SSJTimeDimensionMonth;
-    } else {
-        return;
-    }
-    
-    [SSJReportFormsUtil queryForBillStatisticsWithTimeDimension:dimension booksId:@"all" billTypeId:nil startDate:period.startDate endDate:period.endDate success:^(NSDictionary *result) {
-        [self.view ssj_hideLoadingIndicator];
-        _curveItems = result[SSJReportFormsCurveModelListKey];
-        
-        if (_curveItems.count > 0) {
-            [_header.curveView reloadData];
-            if (_curveItems.count >= 1) {
-                [_header.curveView scrollToAxisXAtIndex:_curveItems.count - 1 animated:NO];
-            }
-            
-            SSJReportFormsCurveModel *curveModel = [_curveItems ssj_safeObjectAtIndex:_curveItems.count - 1];
-            SSJDatePeriod *currentPeriod = [SSJDatePeriod datePeriodWithStartDate:curveModel.startDate endDate:curveModel.endDate];
-            _currentPeriod = currentPeriod;
-            // 加载流水列表和饼状图的数据
-            [SSJReportFormsUtil queryForIncomeOrPayType:!(int)_header.incomOrExpenseSelectSegment.selectedSegmentIndex booksId:@"all" startDate:period.startDate endDate:period.endDate success:^(NSArray<SSJReportFormsItem *> *result) {
-                [self.view ssj_hideLoadingIndicator];
-                [self organiseDatasWithResult:result];
-            } failure:^(NSError *error) {
-                [self.view ssj_hideLoadingIndicator];
-                [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
-            }];
-            self.header.curveViewHasDataOrNot = YES;
-        } else {
-            self.header.curveViewHasDataOrNot = NO;
-            self.chargeDatas = nil;
-            [self.tableView reloadData];
-        }
-        
-    } failure:^(NSError *error) {
-        [self.view ssj_hideLoadingIndicator];
-        [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
-    }];
-}
-
 
 // 加载日期选择的数据
 - (void)reloadAxisView{
@@ -323,7 +406,7 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
         weakSelf.header.totalIncome = income;
         weakSelf.header.totalExpenture = expenture;
     } failure:^(NSError *error) {
-        
+        [self showError:error];
     }];
 
     
@@ -350,23 +433,16 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
         _periods = periods;
         [_header.dateAxisView reloadData];
         
-        if (_periods.count) {
-            if (_periods.count >= 1) {
-                _header.dateAxisView.selectedIndex = _periods.count - 1;
-            }
-        }
+        NSInteger selectedIndex = (_currentPeriod ? [_periods indexOfObject:_currentPeriod] : _periods.count - 1);
+        _header.dateAxisView.selectedIndex = selectedIndex;
+        _currentPeriod = [_periods ssj_safeObjectAtIndex:selectedIndex];
         
-        if (!_periods.count) {
-            _header.addOrDeleteCustomPeriodBtn.hidden = YES;
-        }else{
-            _currentPeriod = [_periods ssj_safeObjectAtIndex:_header.dateAxisView.selectedIndex];
-            _header.addOrDeleteCustomPeriodBtn.hidden = NO;
-        }
+        _header.addOrDeleteCustomPeriodBtn.hidden = !_periods.count;
         
         [self reloadAllDatas];
     } failure:^(NSError *error) {
         [self.view ssj_hideLoadingIndicator];
-        [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
+        [self showError:error];
     }];
 
 }
@@ -451,19 +527,24 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
 }
 
 - (void)enterCalendarVC {
-    __weak typeof(self) wself = self;
     SSJMagicExportCalendarViewController *calendarVC = [[SSJMagicExportCalendarViewController alloc] init];
     calendarVC.title = @"自定义时间";
     calendarVC.billType = SSJBillTypeSurplus;
-
     calendarVC.completion = ^(NSDate *selectedBeginDate, NSDate *selectedEndDate) {
         _customPeriod = [SSJDatePeriod datePeriodWithStartDate:selectedBeginDate endDate:selectedEndDate];
-        
         _header.customPeriod = _customPeriod;
-
-        [wself reloadDatasCurrentPeriod];
     };
     [self.navigationController pushViewController:calendarVC animated:YES];
+}
+
+- (void)showError:(NSError *)error {
+    NSString *message = nil;
+#ifdef DEBUG
+    message = [error localizedDescription];
+#else
+    message = SSJ_ERROR_MESSAGE;
+#endif
+    [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:message action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
 }
 
 - (void)updateAppearanceAfterThemeChanged{

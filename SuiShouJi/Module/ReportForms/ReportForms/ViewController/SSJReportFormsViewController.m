@@ -221,6 +221,8 @@ static NSString *const kSegmentTitleIncome = @"收入";
         SSJReportFormsBillTypeDetailViewController *billTypeDetailController = [[SSJReportFormsBillTypeDetailViewController alloc] init];
         billTypeDetailController.billTypeID = curveListItem.billTypeId;
         billTypeDetailController.title = curveListItem.leftTitle1;
+        billTypeDetailController.customPeriod = _customPeriod;
+        billTypeDetailController.selectedPeriod = _selectedPeriod;
         [self.navigationController pushViewController:billTypeDetailController animated:YES];
     }
 }

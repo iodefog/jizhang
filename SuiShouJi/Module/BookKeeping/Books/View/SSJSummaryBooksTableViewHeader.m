@@ -14,6 +14,9 @@
 
 @property(nonatomic, strong) SSJSummaryBooksHeaderView *summaryHeader;
 
+//  周期选择(日周月)
+@property (nonatomic, strong) SSJSegmentedControl *periodSelectSegment;
+
 @property(nonatomic, strong) UIView *backColorView;
 
 @property(nonatomic, strong) UILabel *firstLineLab;
@@ -46,6 +49,8 @@
         [self addSubview:self.chartNoResultView];
         [self addSubview:self.customPeriodBtn];
         [self addSubview:self.addOrDeleteCustomPeriodBtn];
+        
+        [self updateAppearance];
     }
     return self;
 }
@@ -68,17 +73,15 @@
     self.incomOrExpenseSelectSegment.centerX = self.width / 2;
     self.chartView.leftTop = CGPointMake(0, self.incomOrExpenseSelectSegment.bottom + 29);
     self.chartNoResultView.frame = self.chartView.frame;
-//    CGRect hollowFrame = UIEdgeInsetsInsetRect(self.chartView.circleFrame, UIEdgeInsetsMake(self.chartView.circleThickness, self.chartView.circleThickness, self.chartView.circleThickness, self.chartView.circleThickness));
-//    self.incomeAndPaymentTitleLab.frame = CGRectMake(hollowFrame.origin.x, (hollowFrame.size.height - 38) * 0.5 + hollowFrame.origin.y, hollowFrame.size.width, 15);
-//    self.incomeAndPaymentMoneyLab.frame = CGRectMake(hollowFrame.origin.x, (hollowFrame.size.height - 38) * 0.5 + hollowFrame.origin.y + 20, hollowFrame.size.width, 18);
-//    self.addOrDeleteCustomPeriodBtn.frame = CGRectMake(self.width - 50, self.dateAxisView.top, 50, 50);
+    
+    [self updateCurveUnitAxisXLength];
+    self.addOrDeleteCustomPeriodBtn.frame = CGRectMake(self.width - 50, self.dateAxisView.top, 50, 50);
 }
 
 - (SSJPercentCircleView *)chartView{
     if (!_chartView) {
         _chartView = [[SSJPercentCircleView alloc] initWithFrame:CGRectMake(0, 0, self.width, 320) insets:UIEdgeInsetsMake(80, 80, 80, 80) thickness:39];
         _chartView.backgroundColor = [UIColor clearColor];
-        [_chartView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
         [_chartView ssj_setBorderStyle:SSJBorderStyleBottom];
         [_chartView ssj_setBorderWidth:1];
     }
@@ -88,7 +91,8 @@
 - (SSJReportFormsCurveGraphView *)curveView {
     if (!_curveView) {
         _curveView = [[SSJReportFormsCurveGraphView alloc] initWithFrame:CGRectMake(0, 0, self.width, 384)];
-        [_curveView updateAppearanceAccordToTheme];
+        _curveView.showBalloon = YES;
+        _curveView.showCurveShadow = YES;
         _curveView.backgroundColor = [UIColor clearColor];
     }
     return _curveView;
@@ -98,21 +102,15 @@
     if (!_dateAxisView) {
         _dateAxisView = [[SSJReportFormsScaleAxisView alloc] initWithFrame:CGRectMake(0, 0, self.width, 50)];
         _dateAxisView.backgroundColor = [UIColor clearColor];
-        _dateAxisView.scaleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-        _dateAxisView.selectedScaleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
     }
     return _dateAxisView;
 }
 
 - (SSJSegmentedControl *)periodSelectSegment {
     if (!_periodSelectSegment) {
-        _periodSelectSegment = [[SSJSegmentedControl alloc] initWithItems:@[@"周",@"月"]];
+        _periodSelectSegment = [[SSJSegmentedControl alloc] initWithItems:@[@"日", @"周",@"月"]];
         _periodSelectSegment.size = CGSizeMake(150, 30);
         _periodSelectSegment.font = [UIFont systemFontOfSize:15];
-        _periodSelectSegment.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-        _periodSelectSegment.selectedBorderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
-        [_periodSelectSegment setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]} forState:UIControlStateNormal];
-        [_periodSelectSegment setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]} forState:UIControlStateSelected];
         _periodSelectSegment.tag = 100;
         [_periodSelectSegment addTarget:self action:@selector(segmentControlValueDidChange:) forControlEvents:UIControlEventValueChanged];
 
@@ -123,12 +121,8 @@
 - (SSJSegmentedControl *)incomOrExpenseSelectSegment {
     if (!_incomOrExpenseSelectSegment) {
         _incomOrExpenseSelectSegment = [[SSJSegmentedControl alloc] initWithItems:@[@"支出",@"收入"]];
-        _incomOrExpenseSelectSegment.size = CGSizeMake(150, 30);
+        _incomOrExpenseSelectSegment.size = CGSizeMake(225, 30);
         _incomOrExpenseSelectSegment.font = [UIFont systemFontOfSize:15];
-        _incomOrExpenseSelectSegment.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-        _incomOrExpenseSelectSegment.selectedBorderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
-        [_incomOrExpenseSelectSegment setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]} forState:UIControlStateNormal];
-        [_incomOrExpenseSelectSegment setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]} forState:UIControlStateSelected];
         _incomOrExpenseSelectSegment.tag = 101;
         [_incomOrExpenseSelectSegment addTarget:self action:@selector(segmentControlValueDidChange:) forControlEvents:UIControlEventValueChanged];
 
@@ -139,7 +133,6 @@
 -(UILabel *)firstLineLab{
     if (!_firstLineLab) {
         _firstLineLab = [[UILabel alloc]init];
-        _firstLineLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         _firstLineLab.font = [UIFont systemFontOfSize:12];
         _firstLineLab.text = @"总账本折线图趋势";
         [_firstLineLab sizeToFit];
@@ -150,7 +143,6 @@
 -(UILabel *)secondLineLab{
     if (!_secondLineLab) {
         _secondLineLab = [[UILabel alloc]init];
-        _secondLineLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         _secondLineLab.font = [UIFont systemFontOfSize:12];
         _secondLineLab.text = @"总账本饼图明细";
         [_secondLineLab sizeToFit];
@@ -170,8 +162,6 @@
         _customPeriodBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _customPeriodBtn.frame = CGRectMake(0, self.dateAxisView.top + 10, 0, 30);
         _customPeriodBtn.titleLabel.font = [UIFont systemFontOfSize:15];
-        [_customPeriodBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] forState:UIControlStateNormal];
-        _customPeriodBtn.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor].CGColor;
         _customPeriodBtn.layer.borderWidth = 1;
         _customPeriodBtn.layer.cornerRadius = 15;
         _customPeriodBtn.hidden = YES;
@@ -209,7 +199,7 @@
 - (UIView *)backColorView{
     if (!_backColorView) {
         _backColorView = [[UIView alloc]init];
-        _backColorView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+
     }
     return _backColorView;
 }
@@ -285,6 +275,7 @@
 
 - (void)segmentControlValueDidChange:(SSJSegmentedControl *)sender{
     if (sender.tag == 100) {
+        [self updateCurveUnitAxisXLength];
         if (self.periodSelectBlock) {
             self.periodSelectBlock();
         }
@@ -295,8 +286,83 @@
     }
 }
 
-- (void)updateAfterThemeChange{
+- (void)updateCurveUnitAxisXLength {
+    switch ([self dimension]) {
+        case SSJTimeDimensionDay:
+        case SSJTimeDimensionMonth:
+            _curveView.unitAxisXLength = self.width / 7;
+            break;
+            
+        case SSJTimeDimensionWeek:
+            _curveView.unitAxisXLength = self.width / 5;
+            break;
+            
+        case SSJTimeDimensionUnknown:
+            break;
+    }
+}
+
+- (SSJTimeDimension)dimension {
+    if (_periodSelectSegment.selectedSegmentIndex == 0) {
+        return SSJTimeDimensionDay;
+    } else if (_periodSelectSegment.selectedSegmentIndex == 1) {
+        return SSJTimeDimensionWeek;
+    } else if (_periodSelectSegment.selectedSegmentIndex == 2) {
+        return SSJTimeDimensionMonth;
+    } else {
+        return SSJTimeDimensionUnknown;
+    }
+}
+
+- (void)setDimension:(SSJTimeDimension)dimension {
+    switch (dimension) {
+        case SSJTimeDimensionDay:
+            _periodSelectSegment.selectedSegmentIndex = 0;
+            break;
+            
+        case SSJTimeDimensionWeek:
+            _periodSelectSegment.selectedSegmentIndex = 1;
+            break;
+            
+        case SSJTimeDimensionMonth:
+            _periodSelectSegment.selectedSegmentIndex = 2;
+            break;
+            
+        case SSJTimeDimensionUnknown:
+            break;
+    }
+}
+
+- (void)updateAppearance {
     self.backColorView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+    
+    [_chartView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
+    
+    _dateAxisView.scaleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    _dateAxisView.selectedScaleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
+    
+    _periodSelectSegment.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    _periodSelectSegment.selectedBorderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
+    [_periodSelectSegment setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]} forState:UIControlStateNormal];
+    [_periodSelectSegment setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]} forState:UIControlStateSelected];
+    
+    _incomOrExpenseSelectSegment.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    _incomOrExpenseSelectSegment.selectedBorderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
+    [_incomOrExpenseSelectSegment setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]} forState:UIControlStateNormal];
+    [_incomOrExpenseSelectSegment setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]} forState:UIControlStateSelected];
+    
+    _firstLineLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    
+    _secondLineLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    
+    [_customPeriodBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] forState:UIControlStateNormal];
+    _customPeriodBtn.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor].CGColor;
+    
+    [_curveView reloadData];
+    _curveView.scaleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor];
+    _curveView.balloonTitleAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:13],
+                                          NSForegroundColorAttributeName:[UIColor whiteColor],
+                                          NSBackgroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor]};
 }
 
 @end

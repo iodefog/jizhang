@@ -133,6 +133,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     if (self.item.ID.length && self.item.incomeOrExpence == 0) {
         _lastSelectedIndex = 1;
         [self.scrollView setContentOffset:CGPointMake(self.scrollView.width, 0)];
+        self.customNaviBar.selectedBillType = SSJBillTypeIncome;
     }
     
     [self updateNavigationRightItem];

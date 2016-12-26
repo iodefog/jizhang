@@ -25,14 +25,15 @@ typedef NS_OPTIONS(NSUInteger, SSJReportFormCanYinChartCellSegmentStyle) {
 
 @property (nonatomic) SSJReportFormCanYinChartCellSegmentStyle segmentStyle;
 
-@property (nonatomic) NSString *leftText;
+@property (nonatomic, copy) NSString *leftText;
 
-@property (nonatomic) NSString *centerText;
+@property (nonatomic, copy) NSString *centerText;
 
-@property (nonatomic) NSString *rightText;
+@property (nonatomic, copy) NSString *rightText;
 
 /**
  颜色
  */
 @property (nonatomic, copy) NSString *circleColor;
+
 @end

@@ -8,6 +8,7 @@
 
 #import "SSJReportFormsBillTypeDetailViewController.h"
 #import "SSJMagicExportCalendarViewController.h"
+#import "SSJBillingChargeViewController.h"
 #import "SSJReportFormsScaleAxisView.h"
 #import "SCYSlidePagingHeaderView.h"
 #import "SSJReportFormsCurveGraphView.h"
@@ -64,6 +65,8 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
 
 @property (nonatomic, strong) NSArray<SSJReportFormsCurveModel *> *curveModels;
 
+@property (nonatomic, strong) NSMutableArray<SSJReportFormsCurveModel *> *filterCurveModels;
+
 @property (nonatomic, strong) NSMutableArray<SSJReportFormCanYinChartCellItem *> *cellItems;
 
 @property (nonatomic) SSJTimeDimension dimesion;
@@ -87,6 +90,7 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         
         _dimesion = SSJTimeDimensionMonth;
+        _filterCurveModels = [[NSMutableArray alloc] init];
         _cellItems = [[NSMutableArray alloc] init];
         self.hidesBottomBarWhenPushed = YES;
     }
@@ -107,15 +111,17 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
     [self.headerView addSubview:self.separatorFormView];
     
     [self updateAppearance];
+    [self updateCustomPeriodBtn];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    [self.view ssj_showLoadingIndicator];
-    
     _isPayment = [SSJReportFormsUtil isPaymentWithBillTypeId:_billTypeID];
     _colorValue = [SSJReportFormsUtil billTypeColorWithBillTypeId:_billTypeID];
+    
+    [self updateSubveiwsHidden];
+    [self.view ssj_showLoadingIndicator];
     
     [SSJReportFormsUtil queryForPeriodListWithIncomeOrPayType:SSJBillTypeSurplus booksId:nil success:^(NSArray<SSJDatePeriod *> *periods) {
         
@@ -124,6 +130,12 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
         _periods = periods;
         
         [self updateSubveiwsHidden];
+        
+        if (_periods.count == 0) {
+            [self.view ssj_showWatermarkWithCustomView:self.noDataRemindView animated:YES target:nil action:nil];
+        } else {
+            [self.view ssj_hideWatermark:YES];
+        }
         
         if (_periods.count > 0) {
             
@@ -170,6 +182,14 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    SSJReportFormsCurveModel *curveModel = [_filterCurveModels ssj_safeObjectAtIndex:indexPath.row];
+    
+    SSJBillingChargeViewController *chargeListController = [[SSJBillingChargeViewController alloc] init];
+    chargeListController.ID = _billTypeID;
+    chargeListController.period = [SSJDatePeriod datePeriodWithStartDate:curveModel.startDate endDate:curveModel.endDate];
+    chargeListController.color = [UIColor ssj_colorWithHex:_colorValue];
+    [self.navigationController pushViewController:chargeListController animated:YES];
 }
 
 #pragma mark - SSJReportFormsScaleAxisViewDelegate
@@ -472,7 +492,7 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
         if (timeDimension == SSJTimeDimensionUnknown) {
             _tableView.hidden = YES;
             [self.view ssj_showWatermarkWithCustomView:self.noDataRemindView animated:YES target:nil action:nil];
-            return ;
+            return;
         }
         
         _tableView.hidden = NO;
@@ -508,30 +528,31 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
 
 - (void)reorganiseCellItems {
     
-    NSMutableArray *tmpModels = [[NSMutableArray alloc] init];
+    [_filterCurveModels removeAllObjects];
     
-    for (NSNumber *indexNumber in _curveView.visibleIndexs) {
-        int index = [indexNumber doubleValue];
+    [_curveView.visibleIndexs enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(NSNumber * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        
+        int index = [obj doubleValue];
         SSJReportFormsCurveModel *model = [_curveModels ssj_safeObjectAtIndex:index];
         double money = _isPayment ? model.payment : model.income;
         
         if (money) {
-            [tmpModels addObject:model];
+            [_filterCurveModels addObject:model];
         }
-    }
+    }];
     
     [_cellItems removeAllObjects];
     
-    for (int i = 0; i < tmpModels.count; i ++) {
-        SSJReportFormsCurveModel *model = [tmpModels ssj_safeObjectAtIndex:i];
+    for (int i = 0; i < _filterCurveModels.count; i ++) {
+        SSJReportFormsCurveModel *model = [_filterCurveModels ssj_safeObjectAtIndex:i];
         double money = _isPayment ? model.payment : model.income;
         
         SSJReportFormCanYinChartCellItem *item = [[SSJReportFormCanYinChartCellItem alloc] init];
-        if (_curveView.visibleIndexs.count == 1) {
+        if (_filterCurveModels.count == 1) {
             item.segmentStyle = SSJReportFormCanYinChartCellSegmentStyleNone;
         } else if (i == 0) {
             item.segmentStyle = SSJReportFormCanYinChartCellSegmentStyleBottom;
-        } else if (i == tmpModels.count - 1) {
+        } else if (i == _filterCurveModels.count - 1) {
             item.segmentStyle = SSJReportFormCanYinChartCellSegmentStyleTop;
         } else {
             item.segmentStyle = SSJReportFormCanYinChartCellSegmentStyleTop | SSJReportFormCanYinChartCellSegmentStyleBottom;
@@ -565,6 +586,9 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
     
     [_curveView reloadData];
     _curveView.scaleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor];
+    _curveView.balloonTitleAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:13],
+                                          NSForegroundColorAttributeName:[UIColor whiteColor],
+                                          NSBackgroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor]};
     _curveView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     [_curveView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
     
@@ -585,9 +609,6 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
         _customPeriodBtn.hidden = YES;
         _addOrDeleteCustomPeriodBtn.hidden = YES;
         self.tableView.hidden = YES;
-        
-        [self.view ssj_showWatermarkWithCustomView:self.noDataRemindView animated:YES target:nil action:nil];
-        
         return;
     }
     
@@ -601,7 +622,6 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
     
     _addOrDeleteCustomPeriodBtn.hidden = NO;
     self.tableView.hidden = NO;
-    [self.view ssj_hideWatermark:YES];
 }
 
 - (void)updateDimension:(SSJTimeDimension)dimension {
@@ -748,7 +768,6 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
         _customPeriodBtn.titleLabel.font = [UIFont systemFontOfSize:15];
         _customPeriodBtn.layer.borderWidth = 1;
         _customPeriodBtn.layer.cornerRadius = 15;
-        _customPeriodBtn.hidden = YES;
         [_customPeriodBtn addTarget:self action:@selector(enterCalendarVC) forControlEvents:UIControlEventTouchUpInside];
     }
     return _customPeriodBtn;

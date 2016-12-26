@@ -28,6 +28,10 @@
         [self.contentView addSubview:self.categoryBtn];
         [self updateAppearance];
         self.selectionStyle = UITableViewCellSelectionStyleNone;
+        
+#warning test
+        _categoryBtn.layer.borderColor = [UIColor redColor].CGColor;
+        _categoryBtn.layer.borderWidth = 1;
     }
     return self;
 }
@@ -37,7 +41,7 @@
     
     _chartView.frame = self.contentView.bounds;
     _categoryBtn.size = CGSizeMake(50, 50);
-    _categoryBtn.center = CGPointMake(self.contentView.width * 0.9, 0.12);
+    _categoryBtn.rightTop = CGPointMake(self.contentView.width, 10);
 }
 
 #pragma mark - Overwrite
@@ -80,6 +84,13 @@
                                      NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor]};
     _chartView.bottomTitleAttribute = @{NSFontAttributeName:[UIFont systemFontOfSize:12],
                                         NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]};
+    
+    self.listMenu.normalTitleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    self.listMenu.selectedTitleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
+    self.listMenu.fillColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
+    self.listMenu.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
+    self.listMenu.normalImageColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    self.listMenu.selectedImageColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
 }
 
 #pragma mark - Event

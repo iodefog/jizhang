@@ -28,9 +28,6 @@
 //  月份收支图表
 @property (nonatomic, strong) SSJPercentCircleView *chartView;
 
-//  周期选择(日周月)
-@property (nonatomic, strong) SSJSegmentedControl *periodSelectSegment;
-
 //  支出或者收入选择(0为支出,1为收入)
 @property (nonatomic, strong) SSJSegmentedControl *incomOrExpenseSelectSegment;
 
@@ -53,5 +50,9 @@
 @property(nonatomic) BOOL curveViewHasDataOrNot;
 
 @property(nonatomic) BOOL chartViewHasDataOrNot;
+
+@property (nonatomic) SSJTimeDimension dimension;
+
+- (void)updateAppearance;
 
 @end

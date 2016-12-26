@@ -8,14 +8,27 @@
 
 #import "SSJBaseViewController.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class SSJDatePeriod;
 
 @interface SSJReportFormsBillTypeDetailViewController : SSJBaseViewController
 
+/**
+ 收支类别id
+ */
 @property (nonatomic, strong) NSString *billTypeID;
 
-@property (nonatomic, copy) SSJDatePeriod *customPeriod;
+/**
+ 默认的自定义时间周期
+ */
+@property (nonatomic, copy, nullable) SSJDatePeriod *customPeriod;
 
-@property (nonatomic, copy) SSJDatePeriod *selectedPeriod;
+/**
+ 默认选中的时间周期
+ */
+@property (nonatomic, copy, nullable) SSJDatePeriod *selectedPeriod;
 
 @end
+
+NS_ASSUME_NONNULL_END
