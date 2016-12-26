@@ -16,6 +16,8 @@
 
 - (void)showInView:(UIView *)view atPoint:(CGPoint)point;
 
+- (void)showInWindowAtPoint:(CGPoint)point;
+
 - (void)dismiss;
 
 @end

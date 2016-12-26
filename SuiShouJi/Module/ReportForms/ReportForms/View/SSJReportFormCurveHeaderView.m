@@ -383,8 +383,9 @@ static const CGFloat kSeparatorFormViewHeight = 88;
     if (_descView.superview) {
         [_descView dismiss];
     } else {
-        CGPoint showPoint = [_questionBtn convertPoint:CGPointMake(_questionBtn.width * 0.5, _questionBtn.height - 5) toView:self];
-        [_descView showInView:self atPoint:showPoint];
+        UIWindow *window = [UIApplication sharedApplication].keyWindow;
+        CGPoint showPoint = [_questionBtn convertPoint:CGPointMake(_questionBtn.width * 0.5, _questionBtn.height - 5) toView:window];
+        [_descView showInWindowAtPoint:showPoint];
     }
 }
 

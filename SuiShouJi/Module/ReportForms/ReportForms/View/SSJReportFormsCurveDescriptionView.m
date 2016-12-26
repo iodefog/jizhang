@@ -9,12 +9,27 @@
 #import "SSJReportFormsCurveDescriptionView.h"
 #import "SSJDatePeriod.h"
 
+@interface SSJReportFormsCurveDescriptionBackView : UIControl
+
+@end
+
+@implementation SSJReportFormsCurveDescriptionBackView
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event {
+    [super touchesBegan:touches withEvent:event];
+    [self sendActionsForControlEvents:UIControlEventTouchDown];
+}
+
+@end
+
 const UIEdgeInsets kTextInset = {15, 5, 10, 5};
 
 const CGFloat kSuperMargin = 5;
 
 
 @interface SSJReportFormsCurveDescriptionView ()
+
+@property (nonatomic, strong) SSJReportFormsCurveDescriptionBackView *backgroundView;
 
 @property (nonatomic, strong) UILabel *label;
 
@@ -90,12 +105,46 @@ const CGFloat kSuperMargin = 5;
     }
 }
 
+- (void)showInWindowAtPoint:(CGPoint)point {
+    UIWindow *window = [UIApplication sharedApplication].keyWindow;
+    
+    if (self.superview == window) {
+        return;
+    }
+    
+    [window addSubview:self.backgroundView];
+    [window addSubview:self];
+    
+    [self sizeToFit];
+
+    self.left = kSuperMargin;
+    self.top = point.y;
+    self.alpha = 0;
+    
+    _showPoint = [self.superview convertPoint:point toView:self];
+    
+    [UIView animateWithDuration:0.25 animations:^{
+        self.alpha = 1;
+    }];
+}
+
 - (void)dismiss {
     if (self.superview) {
+        [self.backgroundView removeFromSuperview];
         [UIView transitionWithView:self.superview duration:0.25 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
             [self removeFromSuperview];
         } completion:NULL];
     }
+}
+
+- (SSJReportFormsCurveDescriptionBackView *)backgroundView {
+    if (!_backgroundView) {
+        UIWindow *window = [UIApplication sharedApplication].keyWindow;
+        _backgroundView = [[SSJReportFormsCurveDescriptionBackView alloc] initWithFrame:window.bounds];
+        _backgroundView.backgroundColor = [UIColor clearColor];
+        [_backgroundView addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchDown];
+    }
+    return _backgroundView;
 }
 
 @end

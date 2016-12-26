@@ -30,7 +30,7 @@
     if (self = [super initWithFrame:frame]) {
         _surfaceView = [[UIView alloc] init];
         [self addSubview:_surfaceView];
-        self.backgroundColor = [UIColor ssj_colorWithHex:@"cacaca"];
+        self.backgroundColor = [UIColor ssj_colorWithHex:@"f6f6f6"];
         self.clipsToBounds = YES;
         self.layer.cornerRadius = 3;
     }
