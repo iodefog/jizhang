@@ -61,7 +61,7 @@
                 // 如果本地有一条已经删除的数据,则抛弃这条数据
                 if (isExsit) {
                     // 判断本地是否已经存在这条数据
-                    if (![db executeUpdate:@"update bk_credit_repayment set iinstalmentcount = ?, capplydate = ?, ccardid = ?, repaymentmoney = ?, ipoundagerate = ?, cmemo = ?, operatortype = ?, cwritedate = ?, iversion = ?, crepaymentmonth = ? where crepaymentid = ? and cwritedate < ? and cuserid = ?",instalmentcount,applydate,cardid,money,poundagerate,memo,operatortype,writedate,version,month,repaymentid,writedate,userId]) {
+                    if (![db executeUpdate:@"update bk_credit_repayment set iinstalmentcount = ?, capplydate = ?, ccardid = ?, repaymentmoney = ?, ipoundagerate = ?, cmemo = ?, operatortype = ?, cwritedate = ?, iversion = ?, crepaymentmonth = ? where crepayme ntid = ? and cwritedate < ? and cuserid = ?",instalmentcount,applydate,cardid,money,poundagerate,memo,operatortype,writedate,version,month,repaymentid,writedate,userId]) {
                         return NO;
                     }
                 } else {
