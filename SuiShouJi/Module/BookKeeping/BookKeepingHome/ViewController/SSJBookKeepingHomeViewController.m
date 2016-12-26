@@ -42,7 +42,9 @@
 #import "SSJMultiFunctionButtonView.h"
 #import "SSJBookKeepingHomeBar.h"
 #import "SSJBookKeepingHomeEvaluatePopView.h"
-BOOL kHomeNeedLoginPop;
+#import "SSJLoginPopView.h"
+#import "SSJBookKeepingHomePopView.h"
+
 
 @interface SSJBookKeepingHomeViewController ()<SSJMultiFunctionButtonDelegate>
 
@@ -73,9 +75,17 @@ BOOL kHomeNeedLoginPop;
 @property (nonatomic) long currentMonth;
 @property (nonatomic) long currentDay;
 
+/**
+ 预算超支弹框是否弹过
+ */
+@property (nonatomic, assign) BOOL isBudgetOverrunsPopViewShow;
+
 // 保存用户哪个账本的预算提醒过 @{userId:@[booksType, ...], ...}
 @property (nonatomic, strong) NSMutableDictionary *budgetRemindInfo;
-
+/**
+ <#注释#>
+ */
+@property (nonatomic, strong) SSJBookKeepingHomePopView *keepingHomePopView;
 @end
 
 @implementation SSJBookKeepingHomeViewController{
@@ -96,7 +106,6 @@ BOOL kHomeNeedLoginPop;
         self.statisticsTitle = @"首页";
         self.extendedLayoutIncludesOpaqueBars = YES;
         self.automaticallyAdjustsScrollViewInsets = NO;
-        _budgetRemindInfo = [NSMutableDictionary dictionary];
 //        [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleLightContent];
     }
     return self;
@@ -118,7 +127,6 @@ BOOL kHomeNeedLoginPop;
         }
     }];
 //    _hasLoad = YES;
-    [self popIfNeeded];
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
     self.extendedLayoutIncludesOpaqueBars = YES;
     [self getCurrentDate];
@@ -146,6 +154,7 @@ BOOL kHomeNeedLoginPop;
         self.homeBar.leftButton.item = currentBooksItem;
         self.homeBar.leftButton.tintColor = [UIColor ssj_colorWithHex:currentBooksItem.booksColor];
     }
+    [self whichViewShouldPopToHomeView];//弹框
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -173,8 +182,7 @@ BOOL kHomeNeedLoginPop;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(continueLoading) name:SSJHomeContinueLoadingNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(syncDidFail) name:SSJSyncDataFailureNotification object:nil];
 
-    SSJBookKeepingHomeEvaluatePopView *evaluate = [[SSJBookKeepingHomeEvaluatePopView alloc] initWithFrame:CGRectMake(0, 0, SSJSCREENWITH, SSJSCREENHEIGHT)];
-    [evaluate showEvaluatePopView];
+    
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -586,22 +594,19 @@ BOOL kHomeNeedLoginPop;
 - (SSJBookKeepingHomeEvaluatePopView *)evaluatePopView
 {
     if (!_evaluatePopView) {
-        _evaluatePopView = [[SSJBookKeepingHomeEvaluatePopView alloc] initWithFrame:self.view.bounds];
-//        //好评
-//        _evaluatePopView.favorableReceptionBtnClickBlock = ^{
-//        
-//        };
-//        //稍后再说
-//        _evaluatePopView.laterBtnClickBlock = ^{
-//        
-//        };
-//        //不在显示
-//        _evaluatePopView.notShowAgainBtnClickBlock = ^{
-//            
-//        };
+        _evaluatePopView = [[SSJBookKeepingHomeEvaluatePopView alloc] initWithFrame:CGRectMake(0, 0, SSJSCREENWITH, SSJSCREENHEIGHT)];
     }
     return _evaluatePopView;
 }
+
+- (SSJBookKeepingHomePopView *)keepingHomePopView
+{
+    if (!_keepingHomePopView) {
+        _keepingHomePopView = [SSJBookKeepingHomePopView BookKeepingHomePopView];
+    }
+    return _keepingHomePopView;
+}
+
 
 #pragma mark - Event
 - (void)rightBarButtonClicked {
@@ -639,39 +644,6 @@ BOOL kHomeNeedLoginPop;
 }
 
 #pragma mark - Private
-- (void)popIfNeeded {
-    __weak typeof(self) weakSelf = self;
-    if ([[NSUserDefaults standardUserDefaults]objectForKey:SSJLastLoggedUserItemKey] && !SSJIsUserLogined() && kHomeNeedLoginPop) {
-        kHomeNeedLoginPop = NO;
-        
-        [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:@"当前未登录，请登录后再去记账吧~" action:[SSJAlertViewAction actionWithTitle:@"关闭" handler:NULL], [SSJAlertViewAction actionWithTitle:@"立即登录" handler:^(SSJAlertViewAction * _Nonnull action) {
-            SSJLoginViewController *loginVc = [[SSJLoginViewController alloc]init];
-            [weakSelf.navigationController pushViewController:loginVc animated:YES];
-        }], nil];
-    }
-    if (![[NSUserDefaults standardUserDefaults]boolForKey:SSJHaveLoginOrRegistKey]) {
-        NSDate *currentDate = [NSDate date];
-        NSDate *lastPopTime = [[NSUserDefaults standardUserDefaults]objectForKey:SSJLastPopTimeKey];
-        NSTimeInterval time=[currentDate timeIntervalSinceDate:lastPopTime];
-        int days=((int)time)/(3600*24);
-        if (days >= 1) {
-            SSJBookKeepingHomePopView *popView = [SSJBookKeepingHomePopView BookKeepingHomePopView];
-            popView.frame = [UIScreen mainScreen].bounds;
-            popView.loginBtnClickBlock = ^(){
-                SSJLoginViewController *loginVC = [[SSJLoginViewController alloc]init];
-                loginVC.backController = weakSelf;
-                [weakSelf.navigationController pushViewController:loginVC animated:YES];
-            };
-            popView.registerBtnClickBlock = ^(){
-                SSJRegistGetVerViewController *registerVC = [[SSJRegistGetVerViewController alloc]init];
-                registerVC.backController = weakSelf;
-                [weakSelf.navigationController pushViewController:registerVC animated:YES];
-            };
-            [[UIApplication sharedApplication].keyWindow addSubview:popView];
-            [[NSUserDefaults standardUserDefaults]setObject:currentDate forKey:SSJLastPopTimeKey];
-        }
-    }
-}
 
 - (void)updateAppearanceAfterThemeChanged {
     [super updateAppearanceAfterThemeChanged];
@@ -850,11 +822,12 @@ BOOL kHomeNeedLoginPop;
             if (model.isRemind
                 && !model.isAlreadyReminded
                 && ![remindedBookTypes containsObject:booksType]
-                && model.remindMoney >= model.budgetMoney - model.payMoney) {
-                
+                && (model.remindMoney >= model.budgetMoney - model.payMoney)
+                && (![[UIApplication sharedApplication].keyWindow.subviews containsObject:self.evaluatePopView])
+                && (![[UIApplication sharedApplication].keyWindow.subviews containsObject:self.keepingHomePopView])) {
                 self.remindView.model = model;
                 [self.remindView show];
-                
+                self.isBudgetOverrunsPopViewShow = YES;
                 NSMutableArray *tmpRemindBookTypes = [remindedBookTypes mutableCopy];
                 if (!tmpRemindBookTypes) {
                     tmpRemindBookTypes = [NSMutableArray array];
@@ -866,7 +839,7 @@ BOOL kHomeNeedLoginPop;
             }
         }
     } failure:^(NSError * _Nullable error) {
-        NSLog(@"%@",error.localizedDescription);
+        SSJPRINT(@"%@",error.localizedDescription);
     }];
 }
 
@@ -890,5 +863,27 @@ BOOL kHomeNeedLoginPop;
         
     }];
 }
+
+- (void)whichViewShouldPopToHomeView
+{
+    //当前版本是否显示过弹框()
+    int type = [[[NSUserDefaults standardUserDefaults] objectForKey:SSJEvaluateSelecatedKey] intValue];
+    if(type == SSJEvaluateSelecatedTypeNotShowAgain && SSJLaunchTimesForCurrentVersion() <= 1){//更新新版本继续弹出,当前版本是第一次启动并且上一个版本选择了高冷无视更新为还未选择
+        self.evaluatePopView.evaluateSelecatedType = SSJEvaluateSelecatedTypeUnKnow;
+    }
+    
+    //1.定期登录提示
+    if ([self.keepingHomePopView popLoginViewWithNav:self.navigationController backController:self] == YES) return;
+    
+    //2预算超支
+    //3.退出登录后
+    if ([SSJLoginPopView popIfNeededWithNav:self.navigationController backController:self] == YES) return;
+    //4.评分
+    if (self.isBudgetOverrunsPopViewShow == NO) {
+        if ([self.evaluatePopView showEvaluatePopView] == YES) return;
+    }
+}
+
+
 
 @end

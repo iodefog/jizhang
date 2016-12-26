@@ -19,4 +19,5 @@ typedef void(^registerBtnClickBlock)();
 @property (nonatomic, copy) registerBtnClickBlock registerBtnClickBlock;
 
 + (id)BookKeepingHomePopView;
+- (BOOL)popLoginViewWithNav:(UINavigationController *)nav backController:(UIViewController *)backVC;
 @end

@@ -38,7 +38,7 @@ typedef void(^NotShowAgainBtnClickBlock)();
 /**
  *  显示
  */
-- (void)showEvaluatePopView;
+- (BOOL)showEvaluatePopView;
 
 /**
  *  设置启动时间，判断是否为新用户
