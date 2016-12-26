@@ -282,8 +282,8 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
     if (_unitAxisXLength != unitAxisXLength) {
         _unitAxisXLength = unitAxisXLength;
         _suspensionView.unitSpace = _unitAxisXLength;
-        CGFloat offsetX = (_currentIndex + 0.5) * _unitAxisXLength - _collectionView.width * 0.5;
-        [_collectionView setContentOffset:CGPointMake(offsetX, 0) animated:NO];
+        [self updateContentInset];
+        [self updateContentOffset:NO];
         [self updateVisibleIndex];
         [self setNeedsLayout];
     }
@@ -787,6 +787,10 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
     }
     
     for (int curveIdx = 0; curveIdx < _curveCount; curveIdx ++) {
+        
+        if (_labels.count <= curveIdx) {
+            break;
+        }
         
         UILabel *label = _labels[curveIdx];
         
