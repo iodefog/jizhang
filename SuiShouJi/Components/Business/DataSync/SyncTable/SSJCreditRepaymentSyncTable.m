@@ -50,7 +50,7 @@
         NSString *month = recordInfo[@"crepaymentmonth"];
         BOOL isExsit = NO;
         NSInteger localOperatortype = 0;
-        FMResultSet *resultSet = [db executeQuery:@"select * from bk_credit_repayment where cuserid = ? and repaymentid = ?",userid,repaymentid];
+        FMResultSet *resultSet = [db executeQuery:@"select * from bk_credit_repayment where cuserid = ? and crepaymentid = ?",userid,repaymentid];
         while ([resultSet next]) {
             isExsit = YES;
             localOperatortype = [resultSet intForColumn:@"operatortype"];

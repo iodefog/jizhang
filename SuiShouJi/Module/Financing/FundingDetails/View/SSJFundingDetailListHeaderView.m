@@ -182,7 +182,7 @@
         self.dateLabel.text = dateStr;
         [self.dateLabel sizeToFit];
         double totalMoney = creditCardItem.income - creditCardItem.expenture + creditCardItem.instalmentMoney;
-        double moneyNeedToRepay = creditCardItem.income - creditCardItem.expenture + creditCardItem.repaymentMoney + creditCardItem.repaymentForOtherMonthMoney;
+        double moneyNeedToRepay = creditCardItem.income - creditCardItem.expenture + creditCardItem.repaymentMoney - creditCardItem.repaymentForOtherMonthMoney;
         if (creditCardItem.instalmentMoney > 0) {
             if (totalMoney < 0) {
                 self.subLab.text = [NSString stringWithFormat:@"(账单已分期,本期应还金额为%@元)",[[NSString stringWithFormat:@"%f",fabs(totalMoney)]  ssj_moneyDecimalDisplayWithDigits:2]];
