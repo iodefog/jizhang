@@ -130,8 +130,8 @@
         _titleLabel.text = @"选择日期";
         _titleLabel.textAlignment = NSTextAlignmentCenter;
         _titleLabel.font = [UIFont systemFontOfSize:18];
-        _titleLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
-        [_topView ssj_setBorderColor:[UIColor ssj_colorWithHex:@"cccccc"]];
+        _titleLabel.textColor = [UIColor ssj_colorWithHex:@"#393939"];
+        [_topView ssj_setBorderColor:[UIColor ssj_colorWithHex:@"#cccccc"]];
         [_topView ssj_setBorderStyle:SSJBorderStyleBottom];
         [_topView ssj_setBorderWidth:1];
         [_titleLabel sizeToFit];
