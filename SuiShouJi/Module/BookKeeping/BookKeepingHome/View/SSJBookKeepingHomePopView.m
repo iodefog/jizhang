@@ -7,7 +7,8 @@
 //
 
 #import "SSJBookKeepingHomePopView.h"
-
+#import "SSJLoginViewController.h"
+#import "SSJRegistGetVerViewController.h"
 @interface SSJBookKeepingHomePopView()
 @property (weak, nonatomic) IBOutlet UIButton *registerButton;
 @property (weak, nonatomic) IBOutlet UIButton *loginButton;
@@ -55,5 +56,33 @@
     // Drawing code
 }
 */
+
+- (BOOL)popLoginViewWithNav:(UINavigationController *)nav backController:(UIViewController *)backVC{
+    if (![[NSUserDefaults standardUserDefaults]boolForKey:SSJHaveLoginOrRegistKey]) {
+        NSDate *currentDate = [NSDate date];
+        NSDate *lastPopTime = [[NSUserDefaults standardUserDefaults]objectForKey:SSJLastPopTimeKey];
+        NSTimeInterval time=[currentDate timeIntervalSinceDate:lastPopTime];
+        int days=((int)time)/(3600*24);
+        if (days >= 1) {
+            
+            self.frame = [UIScreen mainScreen].bounds;
+            self.loginBtnClickBlock = ^(){
+                SSJLoginViewController *loginVC = [[SSJLoginViewController alloc]init];
+                loginVC.backController = backVC;
+                [nav pushViewController:loginVC animated:YES];
+            };
+            self.registerBtnClickBlock = ^(){
+                SSJRegistGetVerViewController *registerVC = [[SSJRegistGetVerViewController alloc]init];
+                registerVC.backController = backVC;
+                [nav pushViewController:registerVC animated:YES];
+            };
+            [[UIApplication sharedApplication].keyWindow addSubview:self];
+            [[NSUserDefaults standardUserDefaults]setObject:currentDate forKey:SSJLastPopTimeKey];
+            return YES;
+        }
+    }
+    return NO;
+}
+
 
 @end
