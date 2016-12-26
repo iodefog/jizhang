@@ -243,8 +243,7 @@
     [_topTitleLab sizeToFit];
     [_bottomTitleLab sizeToFit];
     
-    CGRect outerCircleFrame = UIEdgeInsetsInsetRect(self.bounds, _circleInsets);
-    CGRect innerCircleFrame = UIEdgeInsetsInsetRect(outerCircleFrame, UIEdgeInsetsMake(_circleThickness, _circleThickness, _circleThickness, _circleThickness));
+    CGRect innerCircleFrame = UIEdgeInsetsInsetRect(_circleFrame, UIEdgeInsetsMake(_circleThickness, _circleThickness, _circleThickness, _circleThickness));
     
     CGFloat obliqueLength = CGRectGetWidth(innerCircleFrame) * 0.5; // 斜边
     CGFloat edgeLenth_1 = (_topTitleLab.height + _bottomTitleLab.height + _gapBetweenTitles) * 0.5; // 对边
