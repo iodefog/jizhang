@@ -28,10 +28,6 @@
         [self.contentView addSubview:self.categoryBtn];
         [self updateAppearance];
         self.selectionStyle = UITableViewCellSelectionStyleNone;
-        
-#warning test
-        _categoryBtn.layer.borderColor = [UIColor redColor].CGColor;
-        _categoryBtn.layer.borderWidth = 1;
     }
     return self;
 }
@@ -95,11 +91,22 @@
 
 #pragma mark - Event
 - (void)categoryBtnAction {
-    [self.listMenu showInView:self atPoint:CGPointMake(CGRectGetMidX(_categoryBtn.frame), CGRectGetMaxY(_categoryBtn.frame))];
+    [self.listMenu showInView:self atPoint:CGPointMake(CGRectGetMidX(_categoryBtn.frame), CGRectGetMaxY(_categoryBtn.frame) - 10)];
 }
 
 - (void)listMenuSelectAction {
     _option = _listMenu.selectedIndex;
+    
+    switch (_option) {
+        case SSJReportFormsMemberAndCategoryOptionCategory:
+            [_categoryBtn setImage:[UIImage imageNamed:@"reportForms_category_button"] forState:UIControlStateNormal];
+            break;
+            
+        case SSJReportFormsMemberAndCategoryOptionMember:
+            [_categoryBtn setImage:[UIImage imageNamed:@"reportForms_member_button"] forState:UIControlStateNormal];
+            break;
+    }
+    
     if (_selectOptionHandle) {
         _selectOptionHandle(self);
     }
@@ -111,10 +118,12 @@
     switch (_option) {
         case SSJReportFormsMemberAndCategoryOptionCategory:
             self.listMenu.selectedIndex = 0;
+            [_categoryBtn setImage:[UIImage imageNamed:@"reportForms_category_button"] forState:UIControlStateNormal];
             break;
             
         case SSJReportFormsMemberAndCategoryOptionMember:
             self.listMenu.selectedIndex = 1;
+            [_categoryBtn setImage:[UIImage imageNamed:@"reportForms_member_button"] forState:UIControlStateNormal];
             break;
     }
 }
