@@ -273,7 +273,7 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
     }
     
 #ifdef DEBUG
-    [syncData writeToFile:@"/Users/oldlang/Desktop/sync_data.txt" atomically:YES];
+    [syncData writeToFile:@"/Users/ricky/Desktop/sync_data.txt" atomically:YES];
 #endif
     
     return syncData;

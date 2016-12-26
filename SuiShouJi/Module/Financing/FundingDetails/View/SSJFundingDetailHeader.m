@@ -9,9 +9,13 @@
 #import "SSJFundingDetailHeader.h"
 
 @interface SSJFundingDetailHeader()
+
 @property (nonatomic,strong) UIView *seperatorView;
+
 @property (nonatomic,strong) UILabel *incomeLabel;
+
 @property (nonatomic,strong) UILabel *expenceLabel;
+
 @end
 
 @implementation SSJFundingDetailHeader

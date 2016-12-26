@@ -34,7 +34,8 @@
             && [db executeUpdate:@"delete from bk_user_bill where cuserid = ?", userId]
             && [db executeUpdate:@"delete from bk_books_type where cuserid = ?", userId]
             && [db executeUpdate:@"delete from bk_dailysum_charge where cuserid = ?", userId]
-            && [db executeUpdate:@"delete from bk_sync where cuserid = ?", userId]) {
+            && [db executeUpdate:@"delete from bk_sync where cuserid = ?", userId]
+            && [db executeUpdate:@"delete from bk_credit_repayment where cuserid = ?", userId]) {
             
             [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:^(SSJDataSynchronizeType type) {
                 if (success) {
