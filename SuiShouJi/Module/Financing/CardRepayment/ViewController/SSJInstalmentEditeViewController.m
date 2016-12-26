@@ -301,7 +301,7 @@ static NSString *const kTitle6 = @"分期申请日";
             return;
         }
     }
-    if ([self checkTheInstalCountWithMonth:self.repaymentModel.repaymentMonth] > 0) {
+    if ([self checkTheInstalCountWithMonth:self.repaymentModel.repaymentMonth] > 0 && !self.chargeItem) {
         [CDAutoHideMessageHUD showMessage:@"每个账单周期只能申请一次分期哦"];
         return;
     }
