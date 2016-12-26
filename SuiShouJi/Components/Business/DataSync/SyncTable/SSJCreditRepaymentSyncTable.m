@@ -61,11 +61,11 @@
                 // 如果本地有一条已经删除的数据,则抛弃这条数据
                 if (isExsit) {
                     // 判断本地是否已经存在这条数据
-                    if (![db executeUpdate:@"update bk_credit_repayment set iinstalmentcount = ?, capplydate = ?, ccardid = ?, repaymentmoney = ?, ipoundagerate = ?, cmemo = ?, operatortype = ?, cwritedate = ?, iversion = ?, crepaymentmonth = ? where crepaymentid = ? and cwritedate < ?",instalmentcount,applydate,cardid,money,poundagerate,memo,operatortype,writedate,version,month,repaymentid,writedate]) {
+                    if (![db executeUpdate:@"update bk_credit_repayment set iinstalmentcount = ?, capplydate = ?, ccardid = ?, repaymentmoney = ?, ipoundagerate = ?, cmemo = ?, operatortype = ?, cwritedate = ?, iversion = ?, crepaymentmonth = ? where crepaymentid = ? and cwritedate < ? and cuserid = ?",instalmentcount,applydate,cardid,money,poundagerate,memo,operatortype,writedate,version,month,repaymentid,writedate,userId]) {
                         return NO;
                     }
                 } else {
-                    if (![db executeUpdate:@"insert into bk_credit_repayment (crepaymentid,iinstalmentcount,capplydate,ccardid,repaymentmoney,ipoundagerate,cmemo,operatortype,cwritedate,iversion,crepaymentmonth) values (?,?,?,?,?,?,?,?,?,?,?)",repaymentid,instalmentcount,applydate,cardid,money,poundagerate,memo,operatortype,writedate,version,month]) {
+                    if (![db executeUpdate:@"insert into bk_credit_repayment (crepaymentid,iinstalmentcount,capplydate,ccardid,repaymentmoney,ipoundagerate,cmemo,operatortype,cwritedate,iversion,crepaymentmonth,cuserid) values (?,?,?,?,?,?,?,?,?,?,?,?)",repaymentid,instalmentcount,applydate,cardid,money,poundagerate,memo,operatortype,writedate,version,month,userId]) {
                         return NO;
                     }
                 }

@@ -44,7 +44,7 @@
         [self addSubview:self.moneyLabel];
         [self addSubview:self.subLab];
         [self addSubview:self.subDetailLab];
-        [self addSubview:self.payOffImage];
+//        [self addSubview:self.payOffImage];
     }
     return self;
 }

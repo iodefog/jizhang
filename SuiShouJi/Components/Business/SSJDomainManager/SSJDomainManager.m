@@ -16,7 +16,7 @@ static NSString *const kSSJDomainKey = @"SSJDomainManagerKey";
 
 static NSString *const kDefaultDomain = @"https://jz.9188.com";
 static NSString *const kTestDomain = @"http://192.168.1.51:10012/";
-static NSString *const kTestImageDomain = @"http://account.gs.9188.com/";
+static NSString *const kTestImageDomain = @"http://account.gs.9188.com/jz";
 
 @implementation SSJDomainManager
 
