@@ -24,18 +24,14 @@ static NSString *const kCellId = @"cellId";
 
 @implementation SSJLoanChangeChargeSelectionControl
 
-- (instancetype)initWithLoanType:(SSJLoanType)loanType {
+- (instancetype)initWithTitles:(NSArray *)titles{
     if (self = [super initWithFrame:CGRectZero]) {
         self.backgroundColor = [UIColor clearColor];
-        self.loanType = loanType;
+        self.titles = titles;
         [self addSubview:self.tableView];
         [self updateAppearance];
     }
     return self;
-}
-
-- (instancetype)initWithFrame:(CGRect)frame {
-    return [self initWithLoanType:SSJLoanTypeLend];
 }
 
 - (void)layoutSubviews {
@@ -46,18 +42,18 @@ static NSString *const kCellId = @"cellId";
     return CGSizeMake([UIApplication sharedApplication].keyWindow.width, kRowHeight * 3 + kGap + 1);
 }
 
-- (void)setLoanType:(SSJLoanType)loanType {
-    _loanType = loanType;
-    switch (_loanType) {
-        case SSJLoanTypeLend:
-            self.titles = @[@[@"收款", @"追加借出"], @[@"取消"]];
-            break;
-            
-        case SSJLoanTypeBorrow:
-            self.titles = @[@[@"还款", @"追加欠款"], @[@"取消"]];
-            break;
-    }
-}
+//- (void)setLoanType:(SSJLoanType)loanType {
+//    _loanType = loanType;
+//    switch (_loanType) {
+//        case SSJLoanTypeLend:
+//            self.titles = @[@[@"收款", @"追加借出"], @[@"取消"]];
+//            break;
+//            
+//        case SSJLoanTypeBorrow:
+//            self.titles = @[@[@"还款", @"追加欠款"], @[@"取消"]];
+//            break;
+//    }
+//}
 
 - (void)show {
     if (self.superview) {
@@ -123,13 +119,14 @@ static NSString *const kCellId = @"cellId";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    NSString *title = [self.titles ssj_safeObjectAtIndex:indexPath];
     if (indexPath.section == 0 && indexPath.row == 0) {
         if (_selectionHandle) {
-            _selectionHandle(SSJLoanCompoundChargeTypeRepayment);
+            _selectionHandle(title);
         }
     } else if (indexPath.section == 0 && indexPath.row == 1) {
         if (_selectionHandle) {
-            _selectionHandle(SSJLoanCompoundChargeTypeAdd);
+            _selectionHandle(title);
         }
     }
     [self dismiss];

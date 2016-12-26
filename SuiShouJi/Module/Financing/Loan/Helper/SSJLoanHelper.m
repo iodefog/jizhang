@@ -718,7 +718,7 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         
-        FMResultSet *resultSet = [db executeQuery:@"select ifunsid, ibillid, loanid, cuserid, imoney, cmemo, cbilldate, cwritedate from bk_user_charge where ichargeid = ? and operatortype <> 2", chargeId];
+        FMResultSet *resultSet = [db executeQuery:@"select ifunsid, ibillid, cid, cuserid, imoney, cmemo, cbilldate, cwritedate from bk_user_charge where ichargeid = ? and operatortype <> 2", chargeId];
         
         NSString *billDateStr = nil;
         NSString *writeDateStr = nil;
@@ -729,7 +729,7 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
         while ([resultSet next]) {
             NSString *fundId = [resultSet stringForColumn:@"ifunsid"];
             NSString *billId = [resultSet stringForColumn:@"ibillid"];
-            NSString *loanId = [resultSet stringForColumn:@"loanid"];
+            NSString *loanId = [resultSet stringForColumn:@"cid"];
             NSString *userId = [resultSet stringForColumn:@"cuserid"];
             NSString *memo = [resultSet stringForColumn:@"cmemo"];
             double money = [resultSet doubleForColumn:@"imoney"];
@@ -764,7 +764,7 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
             return;
         }
         
-        resultSet = [db executeQuery:@"select ichargeid, ifunsid, ibillid, imoney, cmemo from bk_user_charge where ichargeid <> ? and cuserid = ? and loanid = ? and cbilldate = ? and cwritedate = ? and operatortype <> 2", model1.chargeId, model1.userId, model1.loanId, billDateStr, writeDateStr];
+        resultSet = [db executeQuery:@"select ichargeid, ifunsid, ibillid, imoney, cmemo from bk_user_charge where ichargeid <> ? and cuserid = ? and cid = ? and ichargetype = ? and cbilldate = ? and cwritedate = ? and operatortype <> 2", model1.chargeId, model1.userId, model1.loanId, @(SSJChargeIdTypeLoan) , billDateStr, writeDateStr];
         
         while ([resultSet next]) {
             NSString *chargeId = [resultSet stringForColumn:@"ichargeid"];

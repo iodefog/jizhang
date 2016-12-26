@@ -716,28 +716,38 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
 - (SSJLoanChangeChargeSelectionControl *)changeChargeSelectionView {
     if (!_changeChargeSelectionView) {
         __weak typeof(self) wself = self;
-        _changeChargeSelectionView = [[SSJLoanChangeChargeSelectionControl alloc] initWithLoanType:_loanModel.type];
-        _changeChargeSelectionView.selectionHandle = ^(SSJLoanCompoundChargeType value){
+        NSArray *titles = [NSArray array];
+        if (_loanModel.type == SSJLoanTypeLend) {
+            titles = @[@[@"收款", @"追加借出"], @[@"取消"]];
+        } else if(_loanModel.type == SSJLoanTypeBorrow) {
+            titles = @[@[@"还款", @"追加欠款"], @[@"取消"]];
+        }
+        _changeChargeSelectionView = [[SSJLoanChangeChargeSelectionControl alloc] initWithTitles:titles];
+        _changeChargeSelectionView.selectionHandle = ^(NSString * title){
             SSJLoanChargeAddOrEditViewController *addOrEditVC = [[SSJLoanChargeAddOrEditViewController alloc] init];
             addOrEditVC.edited = NO;
             addOrEditVC.loanId = wself.loanID;
-            addOrEditVC.chargeType = value;
+            if ([title isEqualToString:@"收款"] || [title isEqualToString:@"还款"]) {
+                addOrEditVC.chargeType = SSJLoanCompoundChargeTypeRepayment;
+            } else {
+                addOrEditVC.chargeType = SSJLoanCompoundChargeTypeAdd;
+            }
             [wself.navigationController pushViewController:addOrEditVC animated:YES];
             
             switch (wself.loanModel.type) {
                 case SSJLoanTypeLend:
-                    if (value == SSJLoanCompoundChargeTypeRepayment) {
+                    if ([title isEqualToString:@"收款"]) {
                         [MobClick event:@"loan_refund"];
-                    } else if (value == SSJLoanCompoundChargeTypeAdd) {
+                    } else if ([title isEqualToString:@"追加借出"]) {
                         [MobClick event:@"loan_additional"];
                     }
                     
                     break;
                     
                 case SSJLoanTypeBorrow:
-                    if (value == SSJLoanCompoundChargeTypeRepayment) {
+                    if ([title isEqualToString:@"还款"]) {
                         [MobClick event:@"owed_refund"];
-                    } else if (value == SSJLoanCompoundChargeTypeAdd) {
+                    } else if ([title isEqualToString:@"追加欠款"]) {
                         [MobClick event:@"owed_additional"];
                     }
 
