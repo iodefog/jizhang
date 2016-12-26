@@ -139,6 +139,7 @@ static NSString *const kSSJReportFormsCurveSuspensionHeaderViewID = @"kSSJReport
         _tableView.sectionHeaderHeight = unitSpace;
         _tableView.rowHeight = unitSpace;
         [_tableView reloadData];
+        _tableView.contentOffset = CGPointMake(0, _contentOffsetX);
     }
 }
 
@@ -152,6 +153,7 @@ static NSString *const kSSJReportFormsCurveSuspensionHeaderViewID = @"kSSJReport
 - (void)setItems:(NSArray<SSJReportFormsCurveSuspensionViewItem *> *)items {
     _items = items;
     [_tableView reloadData];
+    _tableView.contentOffset = CGPointMake(0, _contentOffsetX);
 }
 
 #pragma mark - UITableViewDataSource
