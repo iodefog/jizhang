@@ -75,7 +75,7 @@ static const CGFloat kSeparatorFormViewHeight = 88;
     [self updateCurveUnitAxisXLength];
     [_curveView ssj_relayoutBorder];
     
-    _questionBtn.frame = CGRectMake(74, _curveView.height - 30, 30, 30);
+    _questionBtn.frame = CGRectMake(60, _curveView.height - 28, 28, 28);
 }
 
 - (CGSize)sizeThatFits:(CGSize)size {
