@@ -53,11 +53,14 @@
 
 - (void)updateAppearance {
     self.imageView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
-    self.listMenu.normalTitleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-    self.listMenu.selectedTitleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    
+    self.listMenu.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
     self.listMenu.fillColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
     self.listMenu.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
-    self.listMenu.normalImageColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    for (SSJListMenuItem *item in self.listMenu.items) {
+        item.normalTitleColor = SSJ_MAIN_COLOR;
+        item.normalImageColor = SSJ_SECONDARY_COLOR;
+    }
 }
 
 - (void)tapAction {
@@ -87,18 +90,6 @@
     }
 }
 
-- (NSArray *)listItems {
-    SSJListMenuItem *item1 = [[SSJListMenuItem alloc] init];
-    item1.imageName = @"reportForms_category";
-    item1.title = @"总预算";
-    
-    SSJListMenuItem *item2 = [[SSJListMenuItem alloc] init];
-    item2.imageName = @"reportForms_member";
-    item2.title = @"分类预算";
-    
-    return [NSMutableArray arrayWithObjects:item1, item2, nil];
-}
-
 - (UIImageView *)imageView {
     if (!_imageView) {
         UIImage *image = [[UIImage imageNamed:@"budget_add"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
@@ -110,7 +101,18 @@
 - (SSJListMenu *)listMenu {
     if (!_listMenu) {
         _listMenu = [[SSJListMenu alloc] init];
-        _listMenu.items = [self listItems];
+        _listMenu.items = @[[SSJListMenuItem itemWithImageName:@"reportForms_category"
+                                                         title:@"总预算"
+                                              normalTitleColor:SSJ_MAIN_COLOR
+                                            selectedTitleColor:nil
+                                              normalImageColor:SSJ_SECONDARY_COLOR
+                                            selectedImageColor:nil],
+                            [SSJListMenuItem itemWithImageName:@"reportForms_member"
+                                                         title:@"分类预算"
+                                              normalTitleColor:SSJ_MAIN_COLOR
+                                            selectedTitleColor:nil
+                                              normalImageColor:SSJ_SECONDARY_COLOR
+                                            selectedImageColor:nil]];
         _listMenu.width = 124;
         [_listMenu addTarget:self action:@selector(listMenuSelectAction) forControlEvents:UIControlEventValueChanged];
     }

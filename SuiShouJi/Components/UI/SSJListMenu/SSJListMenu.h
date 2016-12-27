@@ -19,34 +19,24 @@
 @property (nonatomic) NSInteger selectedIndex;
 
 /**
- 标题未选中状态颜色
+ 边框颜色，默认lightGrayColor
  */
-@property (nonatomic, strong) UIColor *normalTitleColor;
+@property (nonatomic, strong) UIColor *borderColor;
 
 /**
- 标题选中状态颜色
- */
-@property (nonatomic, strong) UIColor *selectedTitleColor;
-
-/**
- 图片未选中状态颜色
- */
-@property (nonatomic, strong) UIColor *normalImageColor;
-
-/**
- 图片选中状态颜色
- */
-@property (nonatomic, strong) UIColor *selectedImageColor;
-
-/**
- 背景填充色
+ 背景填充色，默认whiteColor
  */
 @property (nonatomic, strong) UIColor *fillColor;
 
 /**
- cell分割线颜色
+ cell分割线颜色，默认lightGrayColor
  */
 @property (nonatomic, strong) UIColor *separatorColor;
+
+/**
+ cell分割线内凹，只有left、right两个值有效，默认｛0，10，0，10｝
+ */
+@property (nonatomic) UIEdgeInsets separatorInset;
 
 /**
  标题大小，默认16号字
@@ -79,7 +69,7 @@
 @property (nonatomic) CGFloat gapBetweenImageAndTitle;
 
 /**
- 每行的内凹，默认｛0， 10， 0， 10｝此属性会影响布局
+ 每行内容的布局范围，默认｛0， 10， 0， 10｝
  */
 @property (nonatomic) UIEdgeInsets contentInsets;
 

@@ -15,6 +15,8 @@ static const CGFloat kGap = 5;
 
 static const CGFloat kTriangleHeight = 8;
 
+static const CGFloat kCornerRadius = 2;
+
 @interface SSJListMenu () <UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
@@ -35,6 +37,9 @@ static const CGFloat kTriangleHeight = 8;
     if (self = [super initWithFrame:frame]) {
         
         _selectedIndex = -1;
+        _borderColor = [UIColor lightGrayColor];
+        _fillColor = [UIColor whiteColor];
+        _separatorColor = [UIColor lightGrayColor];
         _titleFontSize = 16;
         _rowHeight = 44;
         _minDisplayRowCount = 0;
@@ -95,40 +100,11 @@ static const CGFloat kTriangleHeight = 8;
     [self updateCellItems];
 }
 
-- (void)setNormalTitleColor:(UIColor *)normalTitleColor {
-    if (CGColorEqualToColor(_normalTitleColor.CGColor, normalTitleColor.CGColor)) {
-        return;
+- (void)setBorderColor:(UIColor *)borderColor {
+    if (!CGColorEqualToColor(_borderColor.CGColor, borderColor.CGColor)) {
+        _borderColor = borderColor;
+        _outlineLayer.strokeColor = _borderColor.CGColor;
     }
-    
-    _normalTitleColor = normalTitleColor;
-    [self updateCellItems];
-}
-
-- (void)setSelectedTitleColor:(UIColor *)selectedTitleColor {
-    if (CGColorEqualToColor(_selectedTitleColor.CGColor, selectedTitleColor.CGColor)) {
-        return;
-    }
-    
-    _selectedTitleColor = selectedTitleColor;
-    [self updateCellItems];
-}
-
-- (void)setNormalImageColor:(UIColor *)normalImageColor {
-    if (CGColorEqualToColor(_normalImageColor.CGColor, normalImageColor.CGColor)) {
-        return;
-    }
-    
-    _normalImageColor = normalImageColor;
-    [self updateCellItems];
-}
-
-- (void)setSelectedImageColor:(UIColor *)selectedImageColor {
-    if (CGColorEqualToColor(_selectedImageColor.CGColor, selectedImageColor.CGColor)) {
-        return;
-    }
-    
-    _selectedImageColor = selectedImageColor;
-    [self updateCellItems];
 }
 
 - (void)setFillColor:(UIColor *)fillColor {
@@ -139,6 +115,13 @@ static const CGFloat kTriangleHeight = 8;
 - (void)setSeparatorColor:(UIColor *)separatorColor {
     _separatorColor = separatorColor;
     _tableView.separatorColor = _separatorColor;
+}
+
+- (void)setSeparatorInset:(UIEdgeInsets)separatorInset {
+    if (!UIEdgeInsetsEqualToEdgeInsets(_separatorInset, separatorInset)) {
+        _separatorInset = separatorInset;
+        _tableView.separatorInset = _separatorInset;
+    }
 }
 
 - (void)setMinDisplayRowCount:(CGFloat)minDisplayRowCount {
@@ -221,13 +204,14 @@ static const CGFloat kTriangleHeight = 8;
         _showPoint = point;
         CGFloat vertexX = [self vertexXWithShowPoint:_showPoint inView:view];
         
-        UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, kTriangleHeight, self.width, self.height - kTriangleHeight) cornerRadius:2];
-        [path moveToPoint:CGPointMake(vertexX, 0)];
-        [path addLineToPoint:CGPointMake(vertexX - kTriangleHeight * 0.8, kTriangleHeight)];
-        [path addLineToPoint:CGPointMake(vertexX + kTriangleHeight * 0.8, kTriangleHeight)];
-        [path closePath];
+//        UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, kTriangleHeight, self.width, self.height - kTriangleHeight) cornerRadius:2];
+//        [path moveToPoint:CGPointMake(vertexX, 0)];
+//        [path addLineToPoint:CGPointMake(vertexX - kTriangleHeight * 0.8, kTriangleHeight)];
+//        [path addLineToPoint:CGPointMake(vertexX + kTriangleHeight * 0.8, kTriangleHeight)];
+//        [path closePath];
+//        _outlineLayer.path = path.CGPath;
         
-        _outlineLayer.path = path.CGPath;
+        _outlineLayer.path = [self drawPathWithVertexX:vertexX].CGPath;
         
         CGFloat scale = vertexX / self.width;
         
@@ -293,11 +277,19 @@ static const CGFloat kTriangleHeight = 8;
         SSJListMenuCellItem *cellItem = [[SSJListMenuCellItem alloc] init];
         cellItem.imageName = item.imageName;
         cellItem.title = item.title;
-        cellItem.titleColor = idx == _selectedIndex ? _normalTitleColor : _selectedTitleColor;
         cellItem.titleFont = [UIFont systemFontOfSize:_titleFontSize];
         cellItem.gapBetweenImageAndTitle = _gapBetweenImageAndTitle;
         cellItem.contentAlignment = _contentAlignment;
         cellItem.contentInset = _contentInsets;
+        
+        if (idx == _selectedIndex) {
+            cellItem.titleColor = item.selectedTitleColor ?: item.normalTitleColor;
+            cellItem.imageColor = item.selectedImageColor ?: item.normalImageColor;
+        } else {
+            cellItem.titleColor = item.normalTitleColor;
+            cellItem.imageColor = item.normalImageColor;
+        }
+        
         [_cellItems addObject:cellItem];
     }
     
@@ -314,19 +306,43 @@ static const CGFloat kTriangleHeight = 8;
     }
 }
 
-- (void)updateCellItems {
-    UIColor *selectedColor = _selectedTitleColor ?: _normalTitleColor;
-    UIColor *selectedImageColor = _selectedImageColor ?: _normalImageColor;
+- (UIBezierPath *)drawPathWithVertexX:(CGFloat)vertexX {
+    UIBezierPath *path = [UIBezierPath bezierPath];
+    //    path.lineJoinStyle = kCGLineJoinRound;
+    [path moveToPoint:CGPointMake(vertexX - kTriangleHeight * 0.8, kTriangleHeight)];
+    [path addLineToPoint:CGPointMake(vertexX, 0)];
+    [path addLineToPoint:CGPointMake(vertexX + kTriangleHeight * 0.8, kTriangleHeight)];
+    [path addLineToPoint:CGPointMake(self.width - kCornerRadius, kTriangleHeight)];
+    [path addArcWithCenter:CGPointMake(self.width - kCornerRadius, kTriangleHeight + kCornerRadius) radius:kCornerRadius startAngle:-M_PI_2 endAngle:0 clockwise:YES];
+    [path addLineToPoint:CGPointMake(self.width, self.height - kCornerRadius)];
+    [path addArcWithCenter:CGPointMake(self.width - kCornerRadius, self.height - kCornerRadius) radius:kCornerRadius startAngle:0 endAngle:M_PI_2 clockwise:YES];
+    [path addLineToPoint:CGPointMake(kCornerRadius, self.height)];
+    [path addArcWithCenter:CGPointMake(kCornerRadius, self.height - kCornerRadius) radius:kCornerRadius startAngle:M_PI_2 endAngle:M_PI clockwise:YES];
+    [path addLineToPoint:CGPointMake(0, kTriangleHeight + kCornerRadius)];
+    [path addArcWithCenter:CGPointMake(kCornerRadius, kTriangleHeight + kCornerRadius) radius:kCornerRadius startAngle:M_PI endAngle:M_PI * 1.5 clockwise:YES];
+    [path closePath];
     
+    return path;
+}
+
+- (void)updateCellItems {
     for (int i = 0; i < _cellItems.count; i ++) {
+        SSJListMenuItem *item = _items[i];
+        
         SSJListMenuCellItem *cellItem = _cellItems[i];
-        cellItem.titleColor = i == _selectedIndex ? selectedColor : _normalTitleColor;
-        cellItem.imageColor = i == _selectedIndex ? selectedImageColor : _normalImageColor;
         cellItem.titleFont = [UIFont systemFontOfSize:_titleFontSize];
         cellItem.imageSize = _imageSize;
         cellItem.gapBetweenImageAndTitle = _gapBetweenImageAndTitle;
         cellItem.contentInset = _contentInsets;
         cellItem.contentAlignment = _contentAlignment;
+        
+        if (i == _selectedIndex) {
+            cellItem.titleColor = item.selectedTitleColor ?: item.normalTitleColor;
+            cellItem.imageColor = item.selectedImageColor ?: item.normalImageColor;
+        } else {
+            cellItem.titleColor = item.normalTitleColor;
+            cellItem.imageColor = item.normalImageColor;
+        }
     }
 }
 
@@ -372,7 +388,7 @@ static const CGFloat kTriangleHeight = 8;
         _tableView.backgroundColor = [UIColor clearColor];
         _tableView.separatorColor = _separatorColor;
         [_tableView ssj_clearExtendSeparator];
-        [_tableView setSeparatorInset:UIEdgeInsetsMake(0, 10, 0, 10)];
+        [_tableView setSeparatorInset:_separatorInset];
     }
     return _tableView;
 }
@@ -381,8 +397,11 @@ static const CGFloat kTriangleHeight = 8;
     if (!_outlineLayer) {
         _outlineLayer = [CAShapeLayer layer];
         _outlineLayer.fillColor = _fillColor.CGColor;
+        _outlineLayer.strokeColor = _borderColor.CGColor;
+        _outlineLayer.lineWidth = 1;
         _outlineLayer.shadowOpacity = 0.5;
         _outlineLayer.shadowOffset = CGSizeMake(0, 3);
+        _outlineLayer.lineJoin = kCALineJoinRound;
     }
     return _outlineLayer;
 }
