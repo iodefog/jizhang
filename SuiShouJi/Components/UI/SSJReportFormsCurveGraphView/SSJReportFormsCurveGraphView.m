@@ -282,8 +282,8 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
     if (_unitAxisXLength != unitAxisXLength) {
         _unitAxisXLength = unitAxisXLength;
         _suspensionView.unitSpace = _unitAxisXLength;
-        CGFloat offsetX = (_currentIndex + 0.5) * _unitAxisXLength - _collectionView.width * 0.5;
-        [_collectionView setContentOffset:CGPointMake(offsetX, 0) animated:NO];
+        [self updateContentInset];
+        [self updateContentOffset:NO];
         [self updateVisibleIndex];
         [self setNeedsLayout];
     }
@@ -440,8 +440,6 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
     _currentIndex = 0;
     [self updateVisibleIndex];
     
-    [_collectionView reloadData];
-    
     [_curveColors removeAllObjects];
     [_values removeAllObjects];
     [_items removeAllObjects];
@@ -455,16 +453,19 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
     [_suspensionItems removeAllObjects];
     
     _ballonView.title = nil;
-    _suspensionView.items = nil;
     
     _axisXCount = [_dataSource numberOfAxisXInCurveGraphView:self];
     if (_axisXCount == 0) {
+        [_collectionView reloadData];
+        _suspensionView.items = nil;
         return;
     }
     
     if ([_dataSource respondsToSelector:@selector(numberOfCurveInCurveGraphView:)]) {
         _curveCount = [_dataSource numberOfCurveInCurveGraphView:self];
         if (_curveCount == 0) {
+            [_collectionView reloadData];
+            _suspensionView.items = nil;
             return;
         }
     }
@@ -479,12 +480,11 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
     
     [self reorganiseItems];
     
-    [self reorganiseDotsAndLabels];
-    
     [self reorganiseSuspensionViewItem];
     
+    [self reorganiseDotsAndLabels];
+    
     [self updateBallonAndLablesTitle];
-    [self updateDotsAndLabelsPosition];
     
     int index = 0;
     int topDigit = _maxValue;
@@ -495,8 +495,11 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
     _maxValue = (topDigit + 1) * pow(10, index);
     
     [self caculateCurvePoint];
+    [self updateDotsAndLabelsPosition];
     
     [_gridView reloadData];
+    [_collectionView reloadData];
+    _suspensionView.items = _suspensionItems;
 }
 
 - (void)scrollToAxisXAtIndex:(NSUInteger)index animated:(BOOL)animted {
@@ -698,8 +701,6 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
         item.rowCount = rowCount;
         [_suspensionItems addObject:item];
     }
-    
-    _suspensionView.items = _suspensionItems;
 }
 
 - (void)caculateCurvePoint {
@@ -786,6 +787,10 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
     }
     
     for (int curveIdx = 0; curveIdx < _curveCount; curveIdx ++) {
+        
+        if (_labels.count <= curveIdx) {
+            break;
+        }
         
         UILabel *label = _labels[curveIdx];
         

@@ -140,14 +140,14 @@ NSString *const SSJEvaluateSelecatedKey = @"SSJEvaluateSelecatedKey";
 
 
 #pragma mark - Action
-- (void)showEvaluatePopView
+- (BOOL)showEvaluatePopView
 {
-    //当前版本是否显示过弹框()
+//    //当前版本是否显示过弹框()
     int type = [[[NSUserDefaults standardUserDefaults] objectForKey:SSJEvaluateSelecatedKey] intValue];
-    if(type == SSJEvaluateSelecatedTypeNotShowAgain && SSJLaunchTimesForCurrentVersion() <= 1){//更新新版本继续弹出,当前版本是第一次启动并且上一个版本选择了高冷无视更新为还未选择
-        self.evaluateSelecatedType = SSJEvaluateSelecatedTypeUnKnow;
-        return;
-    }
+//    if(type == SSJEvaluateSelecatedTypeNotShowAgain && SSJLaunchTimesForCurrentVersion() <= 1){//更新新版本继续弹出,当前版本是第一次启动并且上一个版本选择了高冷无视更新为还未选择
+//        self.evaluateSelecatedType = SSJEvaluateSelecatedTypeUnKnow;
+//        return NO;
+//    }
     
     if (SSJLaunchTimesForCurrentVersion() > 1) {//当前版本不是第一次启动
         switch (type) {
@@ -160,6 +160,7 @@ NSString *const SSJEvaluateSelecatedKey = @"SSJEvaluateSelecatedKey";
                     
                 }else if([[[NSUserDefaults standardUserDefaults] objectForKey:@"SSJNewUserKey"] intValue] == 1){//老用户
                     [self show];
+                    return YES;
                 }
             }
                 break;
@@ -176,9 +177,10 @@ NSString *const SSJEvaluateSelecatedKey = @"SSJEvaluateSelecatedKey";
                 break;
         }
     }
+    return NO;
 }
 
-- (void)showAfterFiveDays{
+- (BOOL)showAfterFiveDays{
     NSDate *currentDate = [NSDate date];
     NSDate *lastPopTime = [[NSUserDefaults standardUserDefaults]objectForKey:SSJApplicationLunchTimeKey];
     NSTimeInterval time = [currentDate timeIntervalSinceDate:lastPopTime];
@@ -187,9 +189,11 @@ NSString *const SSJEvaluateSelecatedKey = @"SSJEvaluateSelecatedKey";
     if (days > 5) {
         //弹出
         [self show];
+        //更新时间
+        [[NSUserDefaults standardUserDefaults] setObject:currentDate forKey:SSJApplicationLunchTimeKey];
+        return YES;
     }
-    //更新时间
-    [[NSUserDefaults standardUserDefaults] setObject:currentDate forKey:SSJApplicationLunchTimeKey];
+    return NO;
 }
 
 + (BOOL)SSJIsNewUser

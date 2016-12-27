@@ -26,7 +26,7 @@
         _titleFont = [UIFont systemFontOfSize:12];
         _titleColor = [UIColor grayColor];
         _lineColor = [UIColor grayColor];
-        _lineWith = 1;
+        _lineWith = 1 / [UIScreen mainScreen].scale;
         
         _spaceNumbers = [[NSMutableArray alloc] init];
         _titles = [[NSMutableArray alloc] init];

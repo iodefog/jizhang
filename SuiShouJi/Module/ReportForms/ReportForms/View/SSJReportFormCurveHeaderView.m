@@ -75,7 +75,7 @@ static const CGFloat kSeparatorFormViewHeight = 88;
     [self updateCurveUnitAxisXLength];
     [_curveView ssj_relayoutBorder];
     
-    _questionBtn.frame = CGRectMake(74, _curveView.height - 30, 30, 30);
+    _questionBtn.frame = CGRectMake(60, _curveView.height - 28, 28, 28);
 }
 
 - (CGSize)sizeThatFits:(CGSize)size {
@@ -97,7 +97,10 @@ static const CGFloat kSeparatorFormViewHeight = 88;
     }
     
     [self updateCurveUnitAxisXLength];
+    
     [self updateQuestionBtnHidden];
+    
+    [_descView dismiss];
     
     if (_changeTimePeriodHandle) {
         _changeTimePeriodHandle(self);
@@ -288,6 +291,8 @@ static const CGFloat kSeparatorFormViewHeight = 88;
     
     [self updateQuestionBtnHidden];
     
+    [_descView dismiss];
+    
     [_curveView reloadData];
     [_curveView scrollToAxisXAtIndex:(_item.curveModels.count - 1) animated:NO];
     [self updateCurveUnitAxisXLength];
@@ -383,9 +388,8 @@ static const CGFloat kSeparatorFormViewHeight = 88;
     if (_descView.superview) {
         [_descView dismiss];
     } else {
-        UIWindow *window = [UIApplication sharedApplication].keyWindow;
-        CGPoint showPoint = [_questionBtn convertPoint:CGPointMake(_questionBtn.width * 0.5, _questionBtn.height - 5) toView:window];
-        [_descView showInWindowAtPoint:showPoint];
+        CGPoint showPoint = [_questionBtn convertPoint:CGPointMake(_questionBtn.width * 0.5, _questionBtn.height - 5) toView:self.superview];
+        [_descView showInView:self.superview atPoint:showPoint];
     }
 }
 
