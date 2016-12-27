@@ -11,6 +11,7 @@
 @implementation SSJStrikeLineLabel
 
 - (void)drawRect:(CGRect)rect {
+    [super drawRect:rect];
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetLineCap(context, kCGLineCapRound);
     CGContextSetLineWidth(context, 1);  //线宽
