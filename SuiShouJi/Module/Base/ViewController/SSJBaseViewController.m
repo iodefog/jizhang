@@ -19,7 +19,7 @@
 #import "SSJReportFormsViewController.h"
 #import "SSJRecordMakingViewController.h"
 
-@interface SSJBaseViewController () <UIGestureRecognizerDelegate, UITextFieldDelegate>
+@interface SSJBaseViewController () <UIGestureRecognizerDelegate>
 
 @property (nonatomic, strong) UIImageView *backgroundView;
 
@@ -40,6 +40,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         _appliesTheme = YES;
+        _showNavigationBarBaseLine = YES;
         self.extendedLayoutIncludesOpaqueBars = YES;
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadDataIfNeeded) name:SSJSyncDataSuccessNotification object:nil];
@@ -57,19 +58,22 @@
     
     if (_appliesTheme) {
         if (SSJ_CURRENT_THEME.needBlurOrNot) {
-            if ([self isKindOfClass:[SSJReportFormsViewController class]] || [self isKindOfClass:[SSJRecordMakingViewController class]]) {
+            if ([self isKindOfClass:[SSJReportFormsViewController class]]
+                || [self isKindOfClass:[SSJRecordMakingViewController class]]) {
                 _backgroundView = [[UIImageView alloc] initWithImage:[[UIImage ssj_compatibleThemeImageNamed:@"background"] blurredImageWithRadius:2.f iterations:20 tintColor:[UIColor clearColor]]];
-            }else{
+            } else {
                 _backgroundView = [[UIImageView alloc] initWithImage:[UIImage ssj_compatibleThemeImageNamed:@"background"]];
             }
-        }else{
+        } else {
             _backgroundView = [[UIImageView alloc] initWithImage:[UIImage ssj_compatibleThemeImageNamed:@"background"]];
         }
+        
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateAppearanceAfterThemeChanged) name:SSJThemeDidChangeNotification object:nil];
 
         _backgroundView.frame = self.view.bounds;
         [self.view addSubview:_backgroundView];
     }
+    
     if (self.navigationController && [[self.navigationController viewControllers] count] > 1) {
         if (!self.navigationItem.leftBarButtonItem) {
             [self ssj_showBackButtonWithTarget:self selector:@selector(goBackAction)];
@@ -80,9 +84,10 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    if ([self isKindOfClass:[SSJBookKeepingHomeViewController class]] || [self isKindOfClass:[SSJBooksTypeSelectViewController class]]) {
+    if ([self isKindOfClass:[SSJBookKeepingHomeViewController class]]
+        || [self isKindOfClass:[SSJBooksTypeSelectViewController class]]) {
         self.mm_drawerController.openDrawerGestureModeMask = MMOpenDrawerGestureModeAll;
-    }else{
+    } else {
         self.mm_drawerController.openDrawerGestureModeMask = MMOpenDrawerGestureModeNone;
     }
     
@@ -94,10 +99,10 @@
     [super viewDidAppear:animated];
     [MobClick beginLogPageView:[self statisticsTitle]];
     if (self.navigationController && [[self.navigationController viewControllers] count] > 1) {
-        self.navigationController.interactivePopGestureRecognizer.enabled=YES;
+        self.navigationController.interactivePopGestureRecognizer.enabled = YES;
         self.navigationController.interactivePopGestureRecognizer.delegate = self;
-    }else{
-        self.navigationController.interactivePopGestureRecognizer.enabled=NO;
+    } else {
+        self.navigationController.interactivePopGestureRecognizer.enabled = NO;
         self.navigationController.interactivePopGestureRecognizer.delegate = nil;
     }
 }
@@ -285,10 +290,16 @@
 - (void)updateNavigationAppearance {
     SSJThemeModel *themeModel = _appliesTheme ? [SSJThemeSetting currentThemeModel] : [SSJThemeSetting defaultThemeModel];
     self.navigationController.navigationBar.tintColor = [UIColor ssj_colorWithHex:themeModel.naviBarTintColor];
-    [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:themeModel.naviBarBackgroundColor alpha:themeModel.backgroundAlpha] size:CGSizeZero] forBarMetrics:UIBarMetricsDefault];
     self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:21],
                                                                     NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:themeModel.naviBarTitleColor]};
+    
+    if (_showNavigationBarBaseLine) {
+        UIColor *lineColor = _navigationBarBaseLineColor ?: [UIColor ssj_colorWithHex:themeModel.cellSeparatorColor alpha:themeModel.cellSeparatorAlpha];
+        [self.navigationController.navigationBar setShadowImage:[UIImage ssj_imageWithColor:lineColor size:CGSizeMake(0, 0.5)]];
+    } else {
+        [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
+    }
 }
 
 @end

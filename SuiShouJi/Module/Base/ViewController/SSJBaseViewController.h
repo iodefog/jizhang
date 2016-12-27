@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "SSJBaseNetworkService.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface SSJBaseViewController : UIViewController <SSJBaseNetworkServiceDelegate>
 
 /**
@@ -19,7 +21,7 @@
 /**
  *  统计标题
  */
-@property (nonatomic, copy) NSString *statisticsTitle;
+@property (nonatomic, copy, nullable) NSString *statisticsTitle;
 
 /**
  *  点击是否隐藏键盘，默认为NO
@@ -36,6 +38,16 @@
  *  注意：要在初始化方法中设置
  */
 @property (nonatomic) BOOL appliesTheme;
+
+/**
+ 是否显示导航栏底部的线，默认YES
+ */
+@property (nonatomic) BOOL showNavigationBarBaseLine;
+
+/**
+ 导航栏底部线的颜色，如果不传值就根据appliesTheme采用对应的颜色，appliesTheme为YES就用当前主题的颜色，appliesTheme为NO就用默认主题的颜色
+ */
+@property (nonatomic, strong, nullable) UIColor *navigationBarBaseLineColor;
 
 /**
  *  导航栏返回按钮点击事件
@@ -58,3 +70,5 @@
 - (void)updateAppearanceAfterThemeChanged;
 
 @end
+
+NS_ASSUME_NONNULL_END

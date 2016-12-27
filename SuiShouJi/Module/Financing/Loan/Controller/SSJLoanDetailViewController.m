@@ -59,6 +59,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.hidesBottomBarWhenPushed = YES;
+        self.navigationBarBaseLineColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:0.5];
         self.section1Items = [[NSMutableArray alloc] init];
         self.section2Items = [[NSMutableArray alloc] init];
     }
@@ -84,7 +85,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     [self loadData];
     
     self.navigationController.navigationBar.tintColor = [UIColor ssj_colorWithHex:@"#FFFFFF"];
-    [self.navigationController.navigationBar setShadowImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:@"#FFFFFF" alpha:0.5] size:CGSizeMake(0, 0.5)]];
+//    [self.navigationController.navigationBar setShadowImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:@"#FFFFFF" alpha:0.5] size:CGSizeMake(0, 0.5)]];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:self.fundColor] size:CGSizeZero] forBarMetrics:UIBarMetricsDefault];
     self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:21],
                                                                     NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"#FFFFFF"]};
