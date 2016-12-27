@@ -159,7 +159,7 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    [self ssj_remindUserToSetMotionPasswordIfNeeded];
+//    [self ssj_remindUserToSetMotionPasswordIfNeeded];
 }
 
 - (void)viewDidLoad {
