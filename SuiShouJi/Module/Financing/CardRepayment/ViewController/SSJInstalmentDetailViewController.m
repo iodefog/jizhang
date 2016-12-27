@@ -133,6 +133,7 @@ static NSString *const SSJInstalmentDetailMutiLabCellIdentifier = @"SSJInstalmen
             repaymentModifyCell.cellDetail = [NSString stringWithFormat:@"%@",self.chargeItem.billDate];
         } else if ([title isEqualToString:kTitle6]) {
             repaymentModifyCell.cellDetail = self.repaymentModel.cardName;
+            repaymentModifyCell.cellDetailLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         }
         return repaymentModifyCell;
     }
