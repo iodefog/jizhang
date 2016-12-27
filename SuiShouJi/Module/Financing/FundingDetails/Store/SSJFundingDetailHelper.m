@@ -391,7 +391,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
         } else {
             newcardItem.hasMadeInstalment = NO;
         }
-        newcardItem.cardExpence = newcardItem.cardExpence + instalMoney;
+        newcardItem.cardExpence = newcardItem.cardExpence - instalMoney;
         SSJDispatchMainAsync(^{
             if (success) {
                 success(result,newcardItem);
