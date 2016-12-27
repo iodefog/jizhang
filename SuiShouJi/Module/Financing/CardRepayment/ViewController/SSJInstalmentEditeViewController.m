@@ -173,6 +173,7 @@ static NSString *const kTitle6 = @"分期申请日";
         dateSelectCell.detailLabel.text = [self.repaymentModel.applyDate formattedDateWithFormat:@"yyyy-MM-dd"];
         [dateSelectCell setNeedsLayout];
         _instalDateLab = dateSelectCell.subtitleLabel;
+        dateSelectCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         [self updatePoundageLab];
         return dateSelectCell;
     }else{
@@ -184,13 +185,14 @@ static NSString *const kTitle6 = @"分期申请日";
         }else {
             repaymentModifyCell.cellInput.hidden = YES;
         }
-        if (([title isEqualToString:kTitle2] || [title isEqualToString:kTitle6])) {
+        if ([title isEqualToString:kTitle2]) {
             repaymentModifyCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }else{
             repaymentModifyCell.accessoryType = UITableViewCellAccessoryNone;
         }
         if ([title isEqualToString:kTitle1]) {
             repaymentModifyCell.cellDetail = @"分期还款";
+            repaymentModifyCell.cellDetailLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         }else if ([title isEqualToString:kTitle2]) {
             repaymentModifyCell.cellDetail = [self.repaymentModel.repaymentMonth formattedDateWithFormat:@"yyyy年MM月"];
         }else if ([title isEqualToString:kTitle3]) {

@@ -9,9 +9,11 @@
 #import "SSJChargeCircleModifyCell.h"
 
 @interface SSJChargeCircleModifyCell()
-@property(nonatomic, strong) UILabel *cellDetailLabel;
+
 @property(nonatomic, strong) UIImageView *cellImage;
+
 @property(nonatomic, strong) UIImageView *typeImageView;
+
 @end
 
 @implementation SSJChargeCircleModifyCell

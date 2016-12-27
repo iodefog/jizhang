@@ -216,7 +216,7 @@
                 if (creditCardItem.instalmentMoney > 0) {
                     // 本期分过期
                     self.subLab.text = [NSString stringWithFormat:@"(账单已分期,本期应还金额为0.00元)"];
-                    self.subDetailLab.text = [NSString stringWithFormat:@"%.2f",creditCardItem.instalmentMoney];
+                    self.subDetailLab.text = [NSString stringWithFormat:@"-%.2f",creditCardItem.instalmentMoney];
                     self.payOffImage.hidden = YES;
                 } else {
                     // 本期未分期代表已经还清
@@ -225,9 +225,15 @@
                     self.subDetailLab.text = @"";
                 }
             } else {
-                self.subLab.text = @"";
-                self.subDetailLab.text = @"";
-                self.payOffImage.hidden = YES;
+                if (creditCardItem.instalmentMoney > 0) {
+                    self.subLab.text = [NSString stringWithFormat:@"(账单已分期,本期应还金额为0.00元)"];
+                    self.subDetailLab.text = [NSString stringWithFormat:@"-%.2f",creditCardItem.instalmentMoney];
+                    self.payOffImage.hidden = YES;
+                } else {
+                    self.subLab.text = @"";
+                    self.subDetailLab.text = @"";
+                    self.payOffImage.hidden = YES;
+                }
             }
 
         }

@@ -45,7 +45,7 @@
                 NSString *repaymentStr = [db stringForQuery:@"select crepaymentMonth from bk_credit_repayment where crepaymentid = ?",item.sundryId];
                 model.repaymentMonth = [NSDate dateWithString:repaymentStr formatString:@"yyyy-MM"];
                 model.repaymentId = item.sundryId;
-                if ([fundParent isEqualToString:@"3"]) {
+                if ([item.billId isEqualToString:@"3"]) {
                     model.cardId = item.fundId;
                     model.cardName = [db stringForQuery:@"select cacctname from bk_fund_info where cfundid = ?",model.cardId];
                     model.repaymentSourceFoundId = [db stringForQuery:@"select ifunsid from bk_user_charge where cwritedate = ? and ichargeid <> ? and ichargetype = ?",item.editeDate,item.ID,@(SSJChargeIdTypeRepayment)];
