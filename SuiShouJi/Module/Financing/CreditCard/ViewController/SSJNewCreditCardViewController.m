@@ -520,7 +520,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 }
 
 - (void)billDateSettleMentButtonClicked{
-    if (!self.billDateSettleMentButton.isOn) {
+    if (!self.billDateSettleMentButton.isOn && self.item.hasMadeInstalment) {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:@"您使用了\"分期还款功能\",需\"以账单日结算\",否则每月账单会错乱哦" preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *comfirmAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:NULL];
         [alert addAction:comfirmAction];
