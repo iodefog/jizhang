@@ -1772,6 +1772,11 @@
 		9CC9F4791DD4176C001E1606 /* SSJBooksParentSelectCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CC9F4781DD4176C001E1606 /* SSJBooksParentSelectCell.m */; };
 		9CC9F47D1DD42681001E1606 /* SSJBooksParentSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CC9F47C1DD42681001E1606 /* SSJBooksParentSelectView.m */; };
 		9CCF521F1DFE57B00078B950 /* SSJInstalmentDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CCF521E1DFE57B00078B950 /* SSJInstalmentDetailViewController.m */; };
+		9CD26C7E1E1217B000276401 /* SSJStrikeLineLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD26C7D1E1217AF00276401 /* SSJStrikeLineLabel.m */; };
+		9CD26C7F1E1217B000276401 /* SSJStrikeLineLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD26C7D1E1217AF00276401 /* SSJStrikeLineLabel.m */; };
+		9CD26C801E1217B000276401 /* SSJStrikeLineLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD26C7D1E1217AF00276401 /* SSJStrikeLineLabel.m */; };
+		9CD26C811E1217B100276401 /* SSJStrikeLineLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD26C7D1E1217AF00276401 /* SSJStrikeLineLabel.m */; };
+		9CD26C821E1217B100276401 /* SSJStrikeLineLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD26C7D1E1217AF00276401 /* SSJStrikeLineLabel.m */; };
 		9CD5168C1D9D00960040480B /* SSJHistoryHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD5168B1D9D00960040480B /* SSJHistoryHeader.m */; };
 		9CD5168D1D9D02550040480B /* SSJHistoryHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD5168B1D9D00960040480B /* SSJHistoryHeader.m */; };
 		9CD5168E1D9D02560040480B /* SSJHistoryHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD5168B1D9D00960040480B /* SSJHistoryHeader.m */; };
@@ -3601,6 +3606,8 @@
 		9CC9F47B1DD42681001E1606 /* SSJBooksParentSelectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBooksParentSelectView.h; sourceTree = "<group>"; };
 		9CC9F47C1DD42681001E1606 /* SSJBooksParentSelectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBooksParentSelectView.m; sourceTree = "<group>"; };
 		9CCF521E1DFE57B00078B950 /* SSJInstalmentDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJInstalmentDetailViewController.m; sourceTree = "<group>"; };
+		9CD26C7C1E1217AF00276401 /* SSJStrikeLineLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJStrikeLineLabel.h; sourceTree = "<group>"; };
+		9CD26C7D1E1217AF00276401 /* SSJStrikeLineLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJStrikeLineLabel.m; sourceTree = "<group>"; };
 		9CD5168A1D9D00960040480B /* SSJHistoryHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJHistoryHeader.h; sourceTree = "<group>"; };
 		9CD5168B1D9D00960040480B /* SSJHistoryHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJHistoryHeader.m; sourceTree = "<group>"; };
 		9CD9BB591CFD2DAA0061803B /* SSJBookkeepingTreeHelpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookkeepingTreeHelpViewController.h; sourceTree = "<group>"; };
@@ -5760,6 +5767,8 @@
 				9C53772C1D752BF3002B230A /* SSJCreditCardDetailHeader.m */,
 				9C5377321D756B51002B230A /* SSJCreditCardListCell.h */,
 				9C5377331D756B51002B230A /* SSJCreditCardListCell.m */,
+				9CD26C7C1E1217AF00276401 /* SSJStrikeLineLabel.h */,
+				9CD26C7D1E1217AF00276401 /* SSJStrikeLineLabel.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -7993,6 +8002,7 @@
 				7DBA56A41D6D32B700C02D79 /* SSJBookKeepingRiminderCircleView.m in Sources */,
 				7DBA56A51D6D32B700C02D79 /* SSJPasswordModifyCell.m in Sources */,
 				7DBA56A61D6D32B700C02D79 /* SSJListMenuCellItem.m in Sources */,
+				9CD26C801E1217B000276401 /* SSJStrikeLineLabel.m in Sources */,
 				9C6D660F1D82B7AA0081A7CE /* SSJInterestDetailViewController.m in Sources */,
 				7DFD30541D75268D00A0D7A0 /* SSJCategoryEditableCollectionViewCell.m in Sources */,
 				7DBA56A71D6D32B700C02D79 /* SSJWeiXinLoginHelper.m in Sources */,
@@ -8303,6 +8313,7 @@
 				9C3899A21DC9D99700715732 /* SSJCustomCategoryItem.m in Sources */,
 				9C2A67661D194CA70010F1DA /* SSJGradientMaskView.m in Sources */,
 				9C2A67671D194CA70010F1DA /* SSJBookkeepingTreeCheckInModel.m in Sources */,
+				9CD26C7F1E1217B000276401 /* SSJStrikeLineLabel.m in Sources */,
 				9C2A67681D194CA70010F1DA /* SSJChargeDetailMemoCell.m in Sources */,
 				9C2A67691D194CA70010F1DA /* SSJDatePeriod.m in Sources */,
 				7D766A551D87DFE5004F8F82 /* SSJReminderWeekDaySelectView.m in Sources */,
@@ -9113,6 +9124,7 @@
 				9CECFC641D6D41A700DB2C8B /* SSJGuideLastContentView.m in Sources */,
 				9CECFC651D6D41A700DB2C8B /* SSJBookkeepingTreeHelpViewController.m in Sources */,
 				9CECFC661D6D41A700DB2C8B /* SSJChargeCicleModifyViewController.m in Sources */,
+				9CD26C811E1217B100276401 /* SSJStrikeLineLabel.m in Sources */,
 				9CECFC671D6D41A700DB2C8B /* SSJCalendarCollectionViewCell.m in Sources */,
 				9C17B5401DEED811000D6C99 /* SSJBooksColorAndIconSelectView.m in Sources */,
 				9CECFC681D6D41A700DB2C8B /* SSJLoadMoreCollectionViewCell.m in Sources */,
@@ -9550,6 +9562,7 @@
 				9CEC00151D6D41EB00DB2C8B /* SSJMagicExportCalendarWeekView.m in Sources */,
 				9CEC00161D6D41EB00DB2C8B /* SSJGuideContentView.m in Sources */,
 				9CEC00171D6D41EB00DB2C8B /* SSJDebugUtil.m in Sources */,
+				9CD26C821E1217B100276401 /* SSJStrikeLineLabel.m in Sources */,
 				9C9A0C251D6D95B3002AF046 /* SSJUserRemindSyncTable.m in Sources */,
 				9C9A0C4D1D6D96AC002AF046 /* SSJColorSelectViewController.m in Sources */,
 				9CEC00181D6D41EB00DB2C8B /* SSJBookKeepingRiminderCircleView.m in Sources */,
@@ -10176,6 +10189,7 @@
 				7D6B12B71D4B6C190036BF4E /* SSJReportFormsSwitchControl.m in Sources */,
 				7D5F334C1CEAE6C10086B67E /* SSJCalendarView.m in Sources */,
 				9CD9BC0F1CFD2DAA0061803B /* SSJMagicExportService.m in Sources */,
+				9CD26C7E1E1217B000276401 /* SSJStrikeLineLabel.m in Sources */,
 				7DFD30591D75288D00A0D7A0 /* SSJCategoryEditableCollectionViewCellItem.m in Sources */,
 				91C2E81B1DF7D69E003ADABE /* SSJMineHomeViewController.m in Sources */,
 				9CD9BC1E1CFD2DAA0061803B /* SSJPortraitUploadNetworkService.m in Sources */,

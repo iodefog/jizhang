@@ -15,7 +15,7 @@
     [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
         NSString *userid = SSJUSERID();
         NSMutableDictionary *tempdic = [[NSMutableDictionary alloc]init];
-        FMResultSet * transferResult = [db executeQuery:@"select substr(a.cbilldate,0,7) as cmonth , a.* , b.cacctname , b.cfundid , b.cicoin , b.operatortype as fundoperatortype , b.cparent from bk_user_charge as a, bk_fund_info as b where a.ibillid in (3,4) and a.operatortype != 2 and a.cuserid = ? and a.ifunsid = b.cfundid and ((length(a.cid) = 0 or a.cid is null) and a.ichargetype = ?) order by cmonth desc , cwritedate desc , ibillid asc",userid,@(SSJChargeIdTypeLoan)];
+        FMResultSet * transferResult = [db executeQuery:@"select substr(a.cbilldate,0,7) as cmonth , a.* , b.cacctname , b.cfundid , b.cicoin , b.operatortype as fundoperatortype , b.cparent from bk_user_charge as a, bk_fund_info as b where a.ibillid in (3,4) and a.operatortype != 2 and a.cuserid = ? and a.ifunsid = b.cfundid and a.ichargetype = ? order by cmonth desc , cwritedate desc , ibillid asc",userid,@(SSJChargeIdTypeNormal)];
         if (!transferResult) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{
@@ -37,7 +37,6 @@
             item.chargeImage = [transferResult stringForColumn:@"CIMGURL"];
             item.chargeThumbImage = [transferResult stringForColumn:@"THUMBURL"];
             item.chargeMemo = [transferResult stringForColumn:@"CMEMO"];
-            item.configId = [transferResult stringForColumn:@"ICONFIGID"];
             item.billDate = [transferResult stringForColumn:@"CBILLDATE"];
             item.fundName = [transferResult stringForColumn:@"CACCTNAME"];
             item.fundOperatorType = [transferResult intForColumn:@"fundoperatortype"];

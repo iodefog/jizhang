@@ -101,14 +101,14 @@
 
 - (NSTimer *)timer{
     if (!_timer) {
-        _timer = [NSTimer timerWithTimeInterval:1 target:self selector:@selector(updateCurrentSecond) userInfo:nil repeats:YES];
+        _timer = [NSTimer timerWithTimeInterval:0.1 target:self selector:@selector(updateCurrentSecond) userInfo:nil repeats:YES];
         [[NSRunLoop currentRunLoop] addTimer:_timer forMode:NSRunLoopCommonModes];
     }
     return _timer;
 }
 
 - (void)updateCurrentSecond{
-    _currentSecond = _currentSecond + 1;
+    _currentSecond = _currentSecond + 0.1;
     if (_currentSecond > 8) {
         [self dismiss];
         UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;

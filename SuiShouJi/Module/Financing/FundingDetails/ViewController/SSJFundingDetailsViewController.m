@@ -26,6 +26,7 @@
 #import "SSJFundingDetailNoDataView.h"
 #import "SSJCreditCardDetailHeader.h"
 #import "SSJCreditCardListCell.h"
+#import "SSJLoanChangeChargeSelectionControl.h"
 
 #import "SSJLoanChargeDetailViewController.h"
 #import "SSJLoanChargeAddOrEditViewController.h"
@@ -48,12 +49,21 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
 
 @interface SSJFundingDetailsViewController ()
 @property (nonatomic,strong) SSJFundingDetailHeader *header;
+
 @property (nonatomic, strong) NSArray *datas;
+
 @property (nonatomic,strong) UIBarButtonItem *rightButton;
+
 @property(nonatomic, strong)  NSMutableArray *listItems;
+
 @property(nonatomic, strong) SSJFundingDetailNoDataView *noDataHeader;
+
 @property(nonatomic, strong) SSJCreditCardItem *cardItem;
+
 @property(nonatomic, strong) SSJCreditCardDetailHeader *creditCardHeader;
+
+@property(nonatomic, strong) SSJLoanChangeChargeSelectionControl *repaymentPopView;
+
 @property(nonatomic, strong) UIButton *repaymentButton;
 @end
 
@@ -409,6 +419,28 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
     return _repaymentButton;
 }
 
+- (SSJLoanChangeChargeSelectionControl *)repaymentPopView {
+    if (!_repaymentPopView) {
+        __weak typeof(self) wself = self;
+        _repaymentPopView = [[SSJLoanChangeChargeSelectionControl alloc] initWithTitles:@[@[@"还款",@"账单分期\n(仅支持账单分期)"],@[@"取消"]]];
+        _repaymentPopView.selectionHandle = ^(NSString * title){
+            if ([title isEqualToString:@"还款"]) {
+                SSJCreditCardRepaymentViewController *repaymentVC = [[SSJCreditCardRepaymentViewController alloc]init];
+                SSJRepaymentModel *model = [[SSJRepaymentModel alloc]init];
+                SSJCreditCardItem *item = (SSJCreditCardItem *)wself.item;
+                model.cardId = item.cardId;
+                model.cardName = item.cardName;
+                model.cardBillingDay = item.cardBillingDay;
+                repaymentVC.repaymentModel = model;
+                [wself.navigationController pushViewController:repaymentVC animated:YES];
+            } else {
+                [wself enterInstalmentVc];
+            }
+        };
+    }
+    return _repaymentPopView;
+}
+
 #pragma mark - Event
 -(void)rightButtonClicked:(id)sender{
     if ([self.item isKindOfClass:[SSJCreditCardItem class]]) {
@@ -427,26 +459,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
 }
 
 -(void)repaymentButtonClicked:(id)sender{
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-    __weak typeof(self) weakSelf = self;
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:NULL];
-    UIAlertAction *repaymentAction = [UIAlertAction actionWithTitle:@"还款" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        SSJCreditCardRepaymentViewController *repaymentVC = [[SSJCreditCardRepaymentViewController alloc]init];
-        SSJRepaymentModel *model = [[SSJRepaymentModel alloc]init];
-        SSJCreditCardItem *item = (SSJCreditCardItem *)self.item;
-        model.cardId = item.cardId;
-        model.cardName = item.cardName;
-        model.cardBillingDay = item.cardBillingDay;
-        repaymentVC.repaymentModel = model;
-        [weakSelf.navigationController pushViewController:repaymentVC animated:YES];
-    }];
-    UIAlertAction *instalAction = [UIAlertAction actionWithTitle:@"账单分期" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [weakSelf enterInstalmentVc];
-    }];
-    [alert addAction:repaymentAction];
-    [alert addAction:instalAction];
-    [alert addAction:cancelAction];
-    [self.navigationController presentViewController:alert animated:YES completion:NULL];
+    [self.repaymentPopView show];
 }
 
 #pragma mark - Private

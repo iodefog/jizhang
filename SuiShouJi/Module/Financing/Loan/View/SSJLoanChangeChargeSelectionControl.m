@@ -99,6 +99,7 @@ static NSString *const kCellId = @"cellId";
     cell.textLabel.textAlignment = NSTextAlignmentCenter;
     cell.textLabel.text = [_titles ssj_objectAtIndexPath:indexPath];
     cell.contentView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
+    cell.textLabel.numberOfLines = 0;
     
     if (indexPath.section == 0) {
         cell.textLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
