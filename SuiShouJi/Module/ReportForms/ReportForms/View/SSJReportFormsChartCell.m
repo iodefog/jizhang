@@ -131,7 +131,7 @@
 #pragma mark - Getter
 - (SSJPercentCircleView *)chartView {
     if (!_chartView) {
-        _chartView = [[SSJPercentCircleView alloc] initWithFrame:CGRectZero insets:UIEdgeInsetsMake(80, 80, 80, 80) thickness:39];
+        _chartView = [[SSJPercentCircleView alloc] initWithFrame:CGRectZero insets:UIEdgeInsetsMake(80, 80, 80, 80) thickness:30];
         _chartView.dataSource = self;
         [_chartView ssj_setBorderStyle:SSJBorderStyleBottom];
         [_chartView ssj_setBorderWidth:1];

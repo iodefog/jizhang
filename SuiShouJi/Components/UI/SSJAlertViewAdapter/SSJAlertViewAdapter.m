@@ -146,3 +146,17 @@
 }
 
 @end
+
+@implementation SSJAlertViewAdapter (SSJDebug)
+
++ (void)showError:(NSError *)error {
+    NSString *message = nil;
+#ifdef DEBUG
+    message = [error localizedDescription];
+#else
+    message = SSJ_ERROR_MESSAGE;
+#endif
+    [self showAlertViewWithTitle:@"出错了" message:message action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
+}
+
+@end

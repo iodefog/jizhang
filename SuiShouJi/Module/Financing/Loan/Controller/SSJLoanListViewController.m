@@ -167,37 +167,37 @@ static NSString *const kLoanListCellId = @"kLoanListCellId";
     [_amountView updateAppearance];
 }
 
-// 如果没有未结清数据就加载全部数据
-- (void)loadAllDataIfHasNoUnclearedData {
-    [self.view ssj_showLoadingIndicator];
-    [SSJLoanHelper queryForLoanModelsWithFundID:_item.fundingID colseOutState:0 success:^(NSArray<SSJLoanModel *> * _Nonnull list) {
-        if (list.count == 0) {
-            [SSJLoanHelper queryForLoanModelsWithFundID:_item.fundingID colseOutState:2 success:^(NSArray<SSJLoanModel *> * _Nonnull list) {
-                [self.view ssj_hideLoadingIndicator];
-                self.list = list;
-                [self.tableView reloadData];
-                [self updateAmount];
-                
-                if (list.count == 0) {
-                    [self.view ssj_showWatermarkWithImageName:@"" animated:YES target:nil action:NULL];
-                } else {
-                    [self.view ssj_hideWatermark:YES];
-                }
-            } failure:^(NSError * _Nonnull error) {
-                [self.view ssj_hideLoadingIndicator];
-                [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
-            }];
-        } else {
-            [self.view ssj_hideLoadingIndicator];
-            self.list = list;
-            [self.tableView reloadData];
-            [self updateAmount];
-        }
-    } failure:^(NSError * _Nonnull error) {
-        [self.view ssj_hideLoadingIndicator];
-        [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
-    }];
-}
+//// 如果没有未结清数据就加载全部数据
+//- (void)loadAllDataIfHasNoUnclearedData {
+//    [self.view ssj_showLoadingIndicator];
+//    [SSJLoanHelper queryForLoanModelsWithFundID:_item.fundingID colseOutState:0 success:^(NSArray<SSJLoanModel *> * _Nonnull list) {
+//        if (list.count == 0) {
+//            [SSJLoanHelper queryForLoanModelsWithFundID:_item.fundingID colseOutState:2 success:^(NSArray<SSJLoanModel *> * _Nonnull list) {
+//                [self.view ssj_hideLoadingIndicator];
+//                self.list = list;
+//                [self.tableView reloadData];
+//                [self updateAmount];
+//                
+//                if (list.count == 0) {
+//                    [self.view ssj_showWatermarkWithImageName:@"" animated:YES target:nil action:NULL];
+//                } else {
+//                    [self.view ssj_hideWatermark:YES];
+//                }
+//            } failure:^(NSError * _Nonnull error) {
+//                [self.view ssj_hideLoadingIndicator];
+//                [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
+//            }];
+//        } else {
+//            [self.view ssj_hideLoadingIndicator];
+//            self.list = list;
+//            [self.tableView reloadData];
+//            [self updateAmount];
+//        }
+//    } failure:^(NSError * _Nonnull error) {
+//        [self.view ssj_hideLoadingIndicator];
+//        [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
+//    }];
+//}
 
 - (void)reloadDataAccordingToHeaderViewIndex {
     [self.view ssj_showLoadingIndicator];
