@@ -263,6 +263,7 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         
+        // 查询当前用户所有有效的支出类别
         FMResultSet *resultSet = [db executeQuery:@"select a.cbillid, b.cname, b.ccolor from bk_user_bill as a, bk_bill_type as b where a.cuserid = ? and a.cbillid = b.id and b.itype = 1 and b.istate <> 2", userid];
         if (!resultSet) {
             if (failure) {
@@ -283,6 +284,7 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
         }
         [resultSet close];
         
+        // 查询用户的预算详情
         resultSet = [db executeQuery:@"select ibid, itype, cbilltype, imoney, iremindmoney, csdate, cedate, istate, iremind, ihasremind, cbooksid, islastday from bk_user_budget where ibid = ? and operatortype <> 2", ID];
         if (!resultSet) {
             SSJDispatch_main_async_safe(^{
@@ -299,7 +301,7 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
         
         SSJBudgetDetailHeaderViewItem *headerItem = [SSJBudgetDetailHeaderViewItem itemWithBudgetModel:budgetModel billMapping:mapping];
         
-        //  查询不同收支类型相应的金额、名称、图标、颜色
+        //  查询预算范围内不同收支类型相应的金额、名称、图标、颜色
         NSMutableString *query = [NSMutableString stringWithFormat:@"select sum(a.imoney), b.ccoin, b.ccolor, b.cname, b.id from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = '%@' and a.operatortype <> 2 and a.cbilldate >= '%@'and a.cbilldate <= '%@' and a.cbilldate <= datetime('now', 'localtime') and a.cbooksid = '%@' and b.itype = 1 and b.istate <> 2", userid, budgetModel.beginDate, budgetModel.endDate, budgetModel.booksId];
         
         if (![budgetModel.billIds isEqualToArray:@[@"all"]]) {
@@ -401,29 +403,16 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
 }
 
 + (void)queryForBudgetIdListWithType:(SSJBudgetPeriodType)type billIds:(NSArray *)billIds success:(void(^)(NSDictionary *result))success failure:(void (^)(NSError *error))failure {
+    
     NSString *userid = SSJUSERID();
-    SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:userid];
-    if (!userItem.currentBooksId.length) {
-        userItem.currentBooksId = SSJUSERID();
-    }
+    NSString *booksId = SSJGetCurrentBooksType();
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         
-        NSArray *sortedBillIds = [billIds sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
-            if ([obj1 intValue] < [obj2 intValue]) {
-                return NSOrderedAscending;
-            } else if ([obj1 intValue] > [obj2 intValue]) {
-                return NSOrderedDescending;
-            } else {
-                return NSOrderedSame;
-            }
-        }];
-        
-        NSString *billIdStr = [sortedBillIds componentsJoinedByString:@","];
-        
+        NSString *billIdStr = [self billTypeStringWithBillTypeArr:billIds];
         NSString *today = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"];
         
-        FMResultSet *resultSet = [db executeQuery:@"select ibid, csdate, cedate from bk_user_budget where cuserid = ? and itype = ? and cbilltype = ? and operatortype <> 2 and csdate <= ? and cbooksid = ? order by csdate", userid, @(type), billIdStr, today, userItem.currentBooksId];
+        FMResultSet *resultSet = [db executeQuery:@"select ibid, csdate, cedate from bk_user_budget where cuserid = ? and itype = ? and cbilltype = ? and operatortype <> 2 and csdate <= ? and cbooksid = ? order by csdate", userid, @(type), billIdStr, today, booksId];
         if (!resultSet) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{
