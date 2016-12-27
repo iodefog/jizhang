@@ -158,17 +158,21 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
     
-    _dateAxisView.frame = CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, 50);
-    [_dateAxisView ssj_relayoutBorder];
-    
-    _addOrDeleteCustomPeriodBtn.frame = CGRectMake(self.view.width - 50, SSJ_NAVIBAR_BOTTOM, 50, 50);
-    _separatorFormView.frame = CGRectMake(0, kSpaceHeight, self.view.width, kSeparatorFormViewHeight);
-    _timeDemisionControl.frame = CGRectMake(0, _separatorFormView.bottom + kSpaceHeight, self.view.width, kTimePeriodSegmentControlHeight);
-    _curveView.frame = CGRectMake(0, _timeDemisionControl.bottom, self.view.width, kCurveViewHeight);
-    [_curveView ssj_relayoutBorder];
-    _headerView.frame = CGRectMake(0, 0, self.view.width, kSpaceHeight * 3 + kTimePeriodSegmentControlHeight + kCurveViewHeight + kSeparatorFormViewHeight);
-    _tableView.frame = CGRectMake(0, self.dateAxisView.bottom, self.view.width, self.view.height - self.dateAxisView.bottom);
-    _questionBtn.frame = CGRectMake(60, _curveView.height - 30, 30, 30);
+//    _dateAxisView.frame = CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, 50);
+//    [_dateAxisView ssj_relayoutBorder];
+//    
+//    _addOrDeleteCustomPeriodBtn.frame = CGRectMake(self.view.width - 50, SSJ_NAVIBAR_BOTTOM, 50, 50);
+//    
+//    _separatorFormView.frame = CGRectMake(0, kSpaceHeight, self.view.width, kSeparatorFormViewHeight);
+//    
+//    _timeDemisionControl.frame = CGRectMake(0, _separatorFormView.bottom + kSpaceHeight, self.view.width, kTimePeriodSegmentControlHeight);
+//    
+//    _curveView.frame = CGRectMake(0, _timeDemisionControl.bottom, self.view.width, kCurveViewHeight);
+//    [_curveView ssj_relayoutBorder];
+//
+//    _tableView.frame = CGRectMake(0, self.dateAxisView.bottom, self.view.width, self.view.height - self.dateAxisView.bottom);
+//    
+//    _questionBtn.frame = CGRectMake(60, _curveView.height - 30, 30, 30);
 }
 
 #pragma mark - UITableViewDataSource
@@ -772,6 +776,7 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
 - (UIButton *)addOrDeleteCustomPeriodBtn {
     if (!_addOrDeleteCustomPeriodBtn) {
         _addOrDeleteCustomPeriodBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        _addOrDeleteCustomPeriodBtn.frame = CGRectMake(self.view.width - 50, SSJ_NAVIBAR_BOTTOM, 50, 50);
         [_addOrDeleteCustomPeriodBtn setImage:[UIImage ssj_themeImageWithName:@"reportForms_edit"] forState:UIControlStateNormal];
         [_addOrDeleteCustomPeriodBtn addTarget:self action:@selector(customPeriodBtnAction) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -780,7 +785,7 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
 
 - (SSJReportFormsScaleAxisView *)dateAxisView {
     if (!_dateAxisView) {
-        _dateAxisView = [[SSJReportFormsScaleAxisView alloc] init];
+        _dateAxisView = [[SSJReportFormsScaleAxisView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, 50)];
         _dateAxisView.delegate = self;
         [_dateAxisView ssj_setBorderWidth:1];
         [_dateAxisView ssj_setBorderStyle:SSJBorderStyleBottom];
@@ -790,7 +795,7 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
 
 - (SSJSeparatorFormView *)separatorFormView {
     if (!_separatorFormView) {
-        _separatorFormView = [[SSJSeparatorFormView alloc] init];
+        _separatorFormView = [[SSJSeparatorFormView alloc] initWithFrame:CGRectMake(0, kSpaceHeight, self.view.width, kSeparatorFormViewHeight)];
         _separatorFormView.separatorColor = [UIColor whiteColor];
         _separatorFormView.dataSource = self;
     }
@@ -799,7 +804,7 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
 
 - (SCYSlidePagingHeaderView *)timeDemisionControl {
     if (!_timeDemisionControl) {
-        _timeDemisionControl = [[SCYSlidePagingHeaderView alloc] init];
+        _timeDemisionControl = [[SCYSlidePagingHeaderView alloc] initWithFrame:CGRectMake(0, kSeparatorFormViewHeight + kSpaceHeight * 2, self.view.width, kTimePeriodSegmentControlHeight)];
         _timeDemisionControl.customDelegate = self;
         _timeDemisionControl.buttonClickAnimated = YES;
         _timeDemisionControl.titles = @[@"日", @"周", @"月"];
@@ -809,7 +814,7 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
 
 - (SSJReportFormsCurveGraphView *)curveView {
     if (!_curveView) {
-        _curveView = [[SSJReportFormsCurveGraphView alloc] init];
+        _curveView = [[SSJReportFormsCurveGraphView alloc] initWithFrame:CGRectMake(0, kSeparatorFormViewHeight + kTimePeriodSegmentControlHeight + kSpaceHeight * 2, self.view.width, kCurveViewHeight)];
         _curveView.dataSource = self;
         _curveView.delegate = self;
         _curveView.showValuePoint = YES;
@@ -822,7 +827,7 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
 
 - (UIView *)headerView {
     if (!_headerView) {
-        _headerView = [[UIView alloc] initWithFrame:CGRectZero];
+        _headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, kSpaceHeight * 3 + kTimePeriodSegmentControlHeight + kCurveViewHeight + kSeparatorFormViewHeight)];
         _headerView.backgroundColor = [UIColor clearColor];
     }
     return _headerView;
@@ -830,7 +835,7 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
 
 - (UITableView *)tableView {
     if (!_tableView) {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.dateAxisView.bottom, self.view.width, self.view.height - self.dateAxisView.bottom) style:UITableViewStylePlain];
         _tableView.backgroundColor = [UIColor clearColor];
         _tableView.rowHeight = 55;
         _tableView.sectionHeaderHeight = 0;
@@ -838,8 +843,8 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
         _tableView.dataSource = self;
         _tableView.delegate = self;
         _tableView.separatorInset = UIEdgeInsetsMake(0, 30, 0, 0);
-        _tableView.tableFooterView = [[UIView alloc] init];
-        _tableView.tableFooterView.height = 36;
+        _tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, _tableView.width, 36)];
+        _tableView.tableFooterView.backgroundColor = [UIColor clearColor];
         [_tableView registerClass:[SSJReportFormCanYinChartCell class] forCellReuseIdentifier:kSSJReportFormCanYinChartCellId];
     }
     return _tableView;
@@ -848,6 +853,7 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
 - (UIButton *)questionBtn {
     if (!_questionBtn) {
         _questionBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        _questionBtn.frame = CGRectMake(60, _curveView.height - 30, 30, 30);
         [_questionBtn setImage:[[UIImage imageNamed:@"reportForms_question"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
         [_questionBtn addTarget:self action:@selector(questionBtnAction) forControlEvents:UIControlEventTouchUpInside];
     }
