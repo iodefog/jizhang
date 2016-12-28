@@ -924,6 +924,10 @@
 		9119A7FF1E0CB7B500374B62 /* SSJReportFormCanYinChartCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 91FD904C1E0B8319001C64B7 /* SSJReportFormCanYinChartCell.m */; };
 		9119A8001E0CB7B500374B62 /* SSJReportFormCanYinChartCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 91FD904C1E0B8319001C64B7 /* SSJReportFormCanYinChartCell.m */; };
 		9119A8011E0CB7B600374B62 /* SSJReportFormCanYinChartCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 91FD904C1E0B8319001C64B7 /* SSJReportFormCanYinChartCell.m */; };
+		914DFECA1E13AD8600866818 /* SSJInstalmentEditeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C18C0231DF7F84E00BC0971 /* SSJInstalmentEditeViewController.m */; };
+		914DFED21E13AD8700866818 /* SSJInstalmentEditeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C18C0231DF7F84E00BC0971 /* SSJInstalmentEditeViewController.m */; };
+		914DFED31E13AD8700866818 /* SSJInstalmentEditeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C18C0231DF7F84E00BC0971 /* SSJInstalmentEditeViewController.m */; };
+		914DFED41E13AD8800866818 /* SSJInstalmentEditeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C18C0231DF7F84E00BC0971 /* SSJInstalmentEditeViewController.m */; };
 		915A1AED1E10F02200F73C7B /* SSJLoginPopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 915A1AEC1E10F02200F73C7B /* SSJLoginPopView.m */; };
 		915A1AF81E10F53400F73C7B /* SSJLoginPopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 915A1AEC1E10F02200F73C7B /* SSJLoginPopView.m */; };
 		915A1AF91E10F53400F73C7B /* SSJLoginPopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 915A1AEC1E10F02200F73C7B /* SSJLoginPopView.m */; };
@@ -7910,6 +7914,7 @@
 				7DD5F8EF1DF509F100430533 /* SSJBudgetCategorySelectionControl.m in Sources */,
 				7DF19EDA1D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m in Sources */,
 				9119A7FF1E0CB7B500374B62 /* SSJReportFormCanYinChartCell.m in Sources */,
+				914DFED21E13AD8700866818 /* SSJInstalmentEditeViewController.m in Sources */,
 				7DBA56651D6D32B700C02D79 /* SSJSegmentedControl.m in Sources */,
 				7DBA56661D6D32B700C02D79 /* (null) in Sources */,
 				7DBA56671D6D32B700C02D79 /* SSJCustomCollectionViewFlowLayout.m in Sources */,
@@ -8518,6 +8523,7 @@
 				9C2A67E81D194CA70010F1DA /* SSJWeiXinLoginHelper.m in Sources */,
 				7D87AEB21D66DF3F0024D33C /* SSJUserRemindSyncTable.m in Sources */,
 				9C2A67EA1D194CA70010F1DA /* SSJMagicExportCalendarViewController.m in Sources */,
+				914DFECA1E13AD8600866818 /* SSJInstalmentEditeViewController.m in Sources */,
 				9C17B5421DEED836000D6C99 /* SSJSummaryBooksTableViewHeader.m in Sources */,
 				7D36AC571D46FDAE006526B3 /* SSJDatabaseVersion6.m in Sources */,
 				9C0AB1711D670BB30082B971 /* SSJCreditCardEditeCell.m in Sources */,
@@ -9117,6 +9123,7 @@
 				9CECFC5D1D6D41A700DB2C8B /* main.m in Sources */,
 				9CECFC5E1D6D41A700DB2C8B /* UIImageView+SSJTheme.m in Sources */,
 				7D4A795F1DD2F01000E905F4 /* SSJLoanChangeChargeSelectionControl.m in Sources */,
+				914DFED31E13AD8700866818 /* SSJInstalmentEditeViewController.m in Sources */,
 				91F7FD2C1DFA8CD3005F4B6B /* SSJChatMessageItem.m in Sources */,
 				9CECFC5F1D6D41A700DB2C8B /* SSJRegistCompleteViewController.m in Sources */,
 				9CECFC601D6D41A700DB2C8B /* SSJListMenuItem.m in Sources */,
@@ -9470,6 +9477,7 @@
 				9CECFFD31D6D41EB00DB2C8B /* SSJCalenderDetailViewController.m in Sources */,
 				9C77DBAA1DE6E31200CD64A2 /* SimulateIDFA.m in Sources */,
 				9119A8011E0CB7B600374B62 /* SSJReportFormCanYinChartCell.m in Sources */,
+				914DFED41E13AD8800866818 /* SSJInstalmentEditeViewController.m in Sources */,
 				7DFD305D1D75288D00A0D7A0 /* SSJCategoryEditableCollectionViewCellItem.m in Sources */,
 				9CECFFD41D6D41EB00DB2C8B /* SSJBudgetDetailViewController.m in Sources */,
 				9CECFFD51D6D41EB00DB2C8B /* SSJThemeImageCollectionViewCell.m in Sources */,
