@@ -63,7 +63,8 @@
         self.moneyLabel.right = self.expandImage.left - 10;
         self.moneyLabel.centerY = self.dateLabel.centerY;
         self.subLab.left = self.dateLabel.left;
-        self.subLab.top = self.height / 2 + 5;
+        self.subLab.height = self.height / 2 + 7;
+        self.subLab.bottom = self.height;
         self.subDetailLab.right = self.expandImage.right;
         self.subDetailLab.centerY = self.subLab.centerY;
         [self ssj_relayoutBorder];
@@ -192,11 +193,14 @@
                 if (creditCardItem.repaymentMoney > 0) {
                     // 本期还过款
                     self.subLab.text = [NSString stringWithFormat:@"(本期已还%@元,分期%@元)",[[NSString stringWithFormat:@"%f",fabs(creditCardItem.repaymentMoney)]  ssj_moneyDecimalDisplayWithDigits:2],[[NSString stringWithFormat:@"%f",fabs(creditCardItem.instalmentMoney)]  ssj_moneyDecimalDisplayWithDigits:2]];
+                    self.subLab.width = SSJSCREENWITH;
                     self.subDetailLab.text = [NSString stringWithFormat:@"-%.2f",creditCardItem.instalmentMoney];
                 } else {
                     // 本期未还过款
                     self.subLab.text = [NSString stringWithFormat:@"(账单已分期,本期应还金额为%@元)",[[NSString stringWithFormat:@"%f",fabs(moneyNeedToRepay)]  ssj_moneyDecimalDisplayWithDigits:2]];
+                    self.subLab.numberOfLines = 0;
                     self.subDetailLab.text = [NSString stringWithFormat:@"-%.2f",creditCardItem.instalmentMoney];
+                    self.subLab.width = SSJSCREENWITH - 80;
                 }
             } else {
                 // 本期没有分期过
