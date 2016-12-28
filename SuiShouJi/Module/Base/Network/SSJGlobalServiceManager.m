@@ -75,18 +75,15 @@
            sessionConfiguration:(NSURLSessionConfiguration *)configuration {
     if (self = [super initWithBaseURL:url sessionConfiguration:configuration]) {
         _services = [[NSMutableArray alloc] init];
-        self.securityPolicy = [self customSecurityPolicy];
+        self.securityPolicy = [self securityPolicyWithPinningMode:AFSSLPinningModeCertificate];
     }
     return self;
 }
 
-- (AFSecurityPolicy*)customSecurityPolicy {
-    // /先导入证书
-    NSString *cerPath = [[NSBundle mainBundle] pathForResource:@"https" ofType:@"cer"];//证书的路径
-    NSData *certData = [NSData dataWithContentsOfFile:cerPath];
+- (AFSecurityPolicy *)securityPolicyWithPinningMode:(AFSSLPinningMode)pinningMode {
     
     // AFSSLPinningModeCertificate 使用证书验证模式
-    AFSecurityPolicy *securityPolicy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModeCertificate];
+    AFSecurityPolicy *securityPolicy = [AFSecurityPolicy policyWithPinningMode:pinningMode];
     
     // allowInvalidCertificates 是否允许无效证书（也就是自建的证书），默认为NO
     // 如果是需要验证自建证书，需要设置为YES
@@ -97,8 +94,7 @@
     //置为NO，主要用于这种情况：客户端请求的是子域名，而证书上的是另外一个域名。因为SSL证书上的域名是独立的，假如证书上注册的域名是www.google.com，那么mail.google.com是无法验证通过的；当然，有钱可以注册通配符的域名*.google.com，但这个还是比较贵的。
     //如置为NO，建议自己添加对应域名的校验逻辑。
     securityPolicy.validatesDomainName = self.validatesDomainName;
-    
-    securityPolicy.pinnedCertificates = @[certData];
+    securityPolicy.validatesCertificateChain = NO; // 不用验证整个服务器的证书串，因为目前服务器包含客户端没有的证书
     
     return securityPolicy;
 }
@@ -106,13 +102,14 @@
 - (void)setSSLPinningMode:(AFSSLPinningMode)SSLPinningMode {
     if (_SSLPinningMode != SSLPinningMode) {
         _SSLPinningMode = SSLPinningMode;
-        self.securityPolicy = [AFSecurityPolicy policyWithPinningMode:SSLPinningMode];
-        if (SSLPinningMode == AFSSLPinningModePublicKey ||
-            SSLPinningMode == AFSSLPinningModeCertificate) {
+        self.securityPolicy = [self securityPolicyWithPinningMode:_SSLPinningMode];
+        
+//        if (SSLPinningMode == AFSSLPinningModePublicKey ||
+//            SSLPinningMode == AFSSLPinningModeCertificate) {
 //            if ([[NSFileManager defaultManager] fileExistsAtPath:SSJSSLCertificatePath()]) {
 //                [self p_reloadPinnedCertificates];
 //            }
-        }
+//        }
     }
 }
 

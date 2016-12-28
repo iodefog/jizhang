@@ -290,6 +290,7 @@
 		7D768A7D1C96C93A00CB75B0 /* SSJSynchronizeTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D768A7C1C96C93A00CB75B0 /* SSJSynchronizeTask.m */; };
 		7D768A801C96CA4400CB75B0 /* SSJSynchronizeTaskQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D768A7F1C96CA4400CB75B0 /* SSJSynchronizeTaskQueue.m */; };
 		7D768A831C97E76400CB75B0 /* SSJDatabaseVersion1.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D768A821C97E76400CB75B0 /* SSJDatabaseVersion1.m */; };
+		7D81DBB91E1369560072DB7E /* youyuwo.cer in Resources */ = {isa = PBXBuildFile; fileRef = 7D81DBB81E1369560072DB7E /* youyuwo.cer */; };
 		7D87AE861D63079C0024D33C /* SSJDatabaseVersion8.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D87AE851D63079C0024D33C /* SSJDatabaseVersion8.m */; };
 		7D87AE871D63079C0024D33C /* SSJDatabaseVersion8.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D87AE851D63079C0024D33C /* SSJDatabaseVersion8.m */; };
 		7D87AE961D6319770024D33C /* SSJLoanHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D87AE951D6319770024D33C /* SSJLoanHelper.m */; };
@@ -1034,7 +1035,7 @@
 		9C18C0241DF7F84F00BC0971 /* SSJInstalmentEditeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C18C0231DF7F84E00BC0971 /* SSJInstalmentEditeViewController.m */; };
 		9C18C02E1DF9323C00BC0971 /* SSJInstalmentDateSelectCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C18C02D1DF9323C00BC0971 /* SSJInstalmentDateSelectCell.m */; };
 		9C20A87F1D41E43A00F3D77F /* SSJMemberManagerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C20A87E1D41E43A00F3D77F /* SSJMemberManagerViewController.m */; };
-		9C23EA4D1DDAD4FE0003C5AB /* https.cer in Resources */ = {isa = PBXBuildFile; fileRef = 9C23EA4C1DDAD4FE0003C5AB /* https.cer */; };
+		9C23EA4D1DDAD4FE0003C5AB /* 9188.cer in Resources */ = {isa = PBXBuildFile; fileRef = 9C23EA4C1DDAD4FE0003C5AB /* 9188.cer */; };
 		9C246BA41DCADB7600C61C34 /* SSJDatabaseVersion10.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C246BA21DCADB7600C61C34 /* SSJDatabaseVersion10.m */; };
 		9C24CFBB1D76C9ED0095D150 /* SSJBooksTypeItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C24CFAF1D76C9ED0095D150 /* SSJBooksTypeItem.m */; };
 		9C24CFBC1D76C9ED0095D150 /* SSJBooksTypeStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C24CFB21D76C9ED0095D150 /* SSJBooksTypeStore.m */; };
@@ -1752,10 +1753,10 @@
 		9CAF731A1E03E8CB0061ADB8 /* SSJHomeLoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CAF730E1E03E8C40061ADB8 /* SSJHomeLoadingView.m */; };
 		9CAF731C1E03EAD90061ADB8 /* xiaomao.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9CAF731B1E03EAD90061ADB8 /* xiaomao.gif */; };
 		9CAF731E1E03EAE50061ADB8 /* homeLoading.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9CAF731D1E03EAE50061ADB8 /* homeLoading.gif */; };
-		9CC0AEC71DEEE12F0085AC65 /* https.cer in Resources */ = {isa = PBXBuildFile; fileRef = 9C23EA4C1DDAD4FE0003C5AB /* https.cer */; };
-		9CC0AEC81DEEE12F0085AC65 /* https.cer in Resources */ = {isa = PBXBuildFile; fileRef = 9C23EA4C1DDAD4FE0003C5AB /* https.cer */; };
-		9CC0AED01DEEE12F0085AC65 /* https.cer in Resources */ = {isa = PBXBuildFile; fileRef = 9C23EA4C1DDAD4FE0003C5AB /* https.cer */; };
-		9CC0AED11DEEE1300085AC65 /* https.cer in Resources */ = {isa = PBXBuildFile; fileRef = 9C23EA4C1DDAD4FE0003C5AB /* https.cer */; };
+		9CC0AEC71DEEE12F0085AC65 /* 9188.cer in Resources */ = {isa = PBXBuildFile; fileRef = 9C23EA4C1DDAD4FE0003C5AB /* 9188.cer */; };
+		9CC0AEC81DEEE12F0085AC65 /* 9188.cer in Resources */ = {isa = PBXBuildFile; fileRef = 9C23EA4C1DDAD4FE0003C5AB /* 9188.cer */; };
+		9CC0AED01DEEE12F0085AC65 /* 9188.cer in Resources */ = {isa = PBXBuildFile; fileRef = 9C23EA4C1DDAD4FE0003C5AB /* 9188.cer */; };
+		9CC0AED11DEEE1300085AC65 /* 9188.cer in Resources */ = {isa = PBXBuildFile; fileRef = 9C23EA4C1DDAD4FE0003C5AB /* 9188.cer */; };
 		9CC2C4EE1D7EBF760024BC74 /* SSJBookKeepingHomeBooksButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1A9CAA1D7D76AE0032BA0D /* SSJBookKeepingHomeBooksButton.m */; };
 		9CC2C4F61D7EBF770024BC74 /* SSJBookKeepingHomeBooksButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1A9CAA1D7D76AE0032BA0D /* SSJBookKeepingHomeBooksButton.m */; };
 		9CC2C4F71D7EBF770024BC74 /* SSJBookKeepingHomeBooksButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1A9CAA1D7D76AE0032BA0D /* SSJBookKeepingHomeBooksButton.m */; };
@@ -3129,6 +3130,7 @@
 		7D768A811C97E76400CB75B0 /* SSJDatabaseVersion1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJDatabaseVersion1.h; sourceTree = "<group>"; };
 		7D768A821C97E76400CB75B0 /* SSJDatabaseVersion1.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDatabaseVersion1.m; sourceTree = "<group>"; };
 		7D768A841C97E78600CB75B0 /* SSJDatabaseVersionProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJDatabaseVersionProtocol.h; sourceTree = "<group>"; };
+		7D81DBB81E1369560072DB7E /* youyuwo.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = youyuwo.cer; sourceTree = "<group>"; };
 		7D87AE841D63079C0024D33C /* SSJDatabaseVersion8.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJDatabaseVersion8.h; sourceTree = "<group>"; };
 		7D87AE851D63079C0024D33C /* SSJDatabaseVersion8.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDatabaseVersion8.m; sourceTree = "<group>"; };
 		7D87AE941D6319770024D33C /* SSJLoanHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJLoanHelper.h; sourceTree = "<group>"; };
@@ -3382,7 +3384,7 @@
 		9C1A9CAA1D7D76AE0032BA0D /* SSJBookKeepingHomeBooksButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBookKeepingHomeBooksButton.m; sourceTree = "<group>"; };
 		9C20A87D1D41E43A00F3D77F /* SSJMemberManagerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMemberManagerViewController.h; sourceTree = "<group>"; };
 		9C20A87E1D41E43A00F3D77F /* SSJMemberManagerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMemberManagerViewController.m; sourceTree = "<group>"; };
-		9C23EA4C1DDAD4FE0003C5AB /* https.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = https.cer; sourceTree = "<group>"; };
+		9C23EA4C1DDAD4FE0003C5AB /* 9188.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = 9188.cer; sourceTree = "<group>"; };
 		9C246BA21DCADB7600C61C34 /* SSJDatabaseVersion10.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDatabaseVersion10.m; sourceTree = "<group>"; };
 		9C246BA31DCADB7600C61C34 /* SSJDatabaseVersion10.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJDatabaseVersion10.h; sourceTree = "<group>"; };
 		9C24CFAE1D76C9ED0095D150 /* SSJBooksTypeItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBooksTypeItem.h; sourceTree = "<group>"; };
@@ -5283,7 +5285,8 @@
 		9C23EA4B1DDAD4FE0003C5AB /* certificates */ = {
 			isa = PBXGroup;
 			children = (
-				9C23EA4C1DDAD4FE0003C5AB /* https.cer */,
+				7D81DBB81E1369560072DB7E /* youyuwo.cer */,
+				9C23EA4C1DDAD4FE0003C5AB /* 9188.cer */,
 			);
 			path = certificates;
 			sourceTree = "<group>";
@@ -7273,7 +7276,7 @@
 				7DBA58101D6D32B700C02D79 /* youyu-Info.plist in Resources */,
 				7DBA58251D6D32B700C02D79 /* sr_refresh@2x.png in Resources */,
 				7DBA58261D6D32B700C02D79 /* SSJBookKeepingHomePopView.xib in Resources */,
-				9CC0AEC81DEEE12F0085AC65 /* https.cer in Resources */,
+				9CC0AEC81DEEE12F0085AC65 /* 9188.cer in Resources */,
 				7DBA585F1D6D32B700C02D79 /* rain_sound.wav in Resources */,
 				7DBA58871D6D32B700C02D79 /* Assets.xcassets in Resources */,
 				7DBA589F1D6D32B700C02D79 /* yw_1222.jpg in Resources */,
@@ -7294,7 +7297,7 @@
 			files = (
 				9C2A68BD1D194CA70010F1DA /* pushsound.wav in Resources */,
 				9C2A69091D194CA70010F1DA /* SSJCalenderTableViewNoDataHeader.xib in Resources */,
-				9CC0AEC71DEEE12F0085AC65 /* https.cer in Resources */,
+				9CC0AEC71DEEE12F0085AC65 /* 9188.cer in Resources */,
 				9C2A691B1D194CA70010F1DA /* mydatabase.db in Resources */,
 				9C2A69331D194CA70010F1DA /* LaunchScreen.storyboard in Resources */,
 				9C2A69501D194CA70010F1DA /* sr_refresh@2x.png in Resources */,
@@ -7324,7 +7327,7 @@
 				9CEC01841D6D41EB00DB2C8B /* youyu-Info.plist in Resources */,
 				9CEC01991D6D41EB00DB2C8B /* sr_refresh@2x.png in Resources */,
 				9CEC019A1D6D41EB00DB2C8B /* SSJBookKeepingHomePopView.xib in Resources */,
-				9CC0AED11DEEE1300085AC65 /* https.cer in Resources */,
+				9CC0AED11DEEE1300085AC65 /* 9188.cer in Resources */,
 				9CEC01D31D6D41EB00DB2C8B /* rain_sound.wav in Resources */,
 				9CEC01FB1D6D41EB00DB2C8B /* Assets.xcassets in Resources */,
 				9CEC02131D6D41EB00DB2C8B /* yw_1222.jpg in Resources */,
@@ -7350,7 +7353,7 @@
 				9CECFD8C1D6D41A700DB2C8B /* youyu-Info.plist in Resources */,
 				9CECFDA11D6D41A700DB2C8B /* sr_refresh@2x.png in Resources */,
 				9CECFDA21D6D41A700DB2C8B /* SSJBookKeepingHomePopView.xib in Resources */,
-				9CC0AED01DEEE12F0085AC65 /* https.cer in Resources */,
+				9CC0AED01DEEE12F0085AC65 /* 9188.cer in Resources */,
 				9CECFDDB1D6D41A700DB2C8B /* rain_sound.wav in Resources */,
 				9CECFE031D6D41A700DB2C8B /* Assets.xcassets in Resources */,
 				9CECFE1B1D6D41A700DB2C8B /* yw_1222.jpg in Resources */,
@@ -7374,10 +7377,11 @@
 				7D5F33511CEAE6C10086B67E /* SSJCalenderTableViewNoDataHeader.xib in Resources */,
 				7D6AAB751C3233190007C0A3 /* mydatabase.db in Resources */,
 				BD543C4F1C1A6DBC00910D61 /* LaunchScreen.storyboard in Resources */,
-				9C23EA4D1DDAD4FE0003C5AB /* https.cer in Resources */,
+				9C23EA4D1DDAD4FE0003C5AB /* 9188.cer in Resources */,
 				9C2A6AA21D195E7B0010F1DA /* youyu-Info.plist in Resources */,
 				BD0432F11C1A77BB0051E7AB /* sr_refresh@2x.png in Resources */,
 				7D5F332C1CEAE6C10086B67E /* SSJBookKeepingHomePopView.xib in Resources */,
+				7D81DBB91E1369560072DB7E /* youyuwo.cer in Resources */,
 				7D4A430A1CC63755002F0264 /* rain_sound.wav in Resources */,
 				BD543C4C1C1A6DBC00910D61 /* Assets.xcassets in Resources */,
 				9C3277591CE471A900109C4C /* yw_1222.jpg in Resources */,
