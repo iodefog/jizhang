@@ -10,10 +10,20 @@
 
 @implementation SSJListMenuItem
 
-+ (instancetype)itemWithImageName:(NSString *)imageName title:(NSString *)title {
++ (instancetype)itemWithImageName:(NSString *)imageName
+                            title:(NSString *)title
+                 normalTitleColor:(UIColor *)normalTitleColor
+               selectedTitleColor:(UIColor *)selectedTitleColor
+                 normalImageColor:(UIColor *)normalImageColor
+               selectedImageColor:(UIColor *)selectedImageColor {
+    
     SSJListMenuItem *item = [[SSJListMenuItem alloc] init];
     item.imageName = imageName;
     item.title = title;
+    item.normalTitleColor = normalTitleColor;
+    item.selectedTitleColor = selectedTitleColor;
+    item.normalImageColor = normalImageColor;
+    item.selectedImageColor = selectedImageColor;
     return item;
 }
 

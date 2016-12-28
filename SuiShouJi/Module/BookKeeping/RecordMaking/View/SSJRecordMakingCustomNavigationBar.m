@@ -185,10 +185,13 @@
     _titles = titles;
     
     NSMutableArray *items = [[NSMutableArray alloc] init];
+    
     for (NSString *title in _titles) {
-        [items addObject:[SSJListMenuItem itemWithImageName:nil title:title]];
+        [items addObject:[SSJListMenuItem itemWithImageName:nil title:title normalTitleColor:SSJ_MAIN_COLOR selectedTitleColor:nil normalImageColor:nil selectedImageColor:nil]];
     }
-    [items addObject:[SSJListMenuItem itemWithImageName:nil title:@"添加账本"]];
+    
+    [items addObject:[SSJListMenuItem itemWithImageName:nil title:@"添加账本" normalTitleColor:SSJ_SECONDARY_COLOR selectedTitleColor:nil normalImageColor:nil selectedImageColor:nil]];
+    
     self.booksMenu.items = items;
     self.booksMenu.maxDisplayRowCount = 6.5;
     _selectedTitleIndex = -1;
@@ -229,27 +232,27 @@
 - (void)updateAppearance {
     self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarBackgroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     
-    UIColor *mainColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-    UIColor *marcatoColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
-    UIColor *secondaryColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    _backOffBtn.tintColor = SSJ_MARCATO_COLOR;
     
-    _backOffBtn.tintColor = marcatoColor;
+    [_managerBtn setTitleColor:SSJ_MARCATO_COLOR forState:UIControlStateNormal];
+    [_managerBtn setTitleColor:[SSJ_MARCATO_COLOR colorWithAlphaComponent:0.5] forState:UIControlStateHighlighted];
     
-    [_managerBtn setTitleColor:marcatoColor forState:UIControlStateNormal];
-    [_managerBtn setTitleColor:[marcatoColor colorWithAlphaComponent:0.5] forState:UIControlStateHighlighted];
+    _titleLab.textColor = SSJ_MARCATO_COLOR;
     
-    _titleLab.textColor = marcatoColor;
+    _arrow.strokeColor = SSJ_SECONDARY_COLOR.CGColor;
     
-    _arrow.strokeColor = secondaryColor.CGColor;
+    _segmentCtrl.borderColor = SSJ_SECONDARY_COLOR;
+    _segmentCtrl.selectedBorderColor = SSJ_MARCATO_COLOR;
+    [_segmentCtrl setTitleTextAttributes:@{NSForegroundColorAttributeName:SSJ_SECONDARY_COLOR} forState:UIControlStateNormal];
+    [_segmentCtrl setTitleTextAttributes:@{NSForegroundColorAttributeName:SSJ_MARCATO_COLOR} forState:UIControlStateSelected];
     
-    _segmentCtrl.borderColor = secondaryColor;
-    _segmentCtrl.selectedBorderColor = marcatoColor;
-    [_segmentCtrl setTitleTextAttributes:@{NSForegroundColorAttributeName:secondaryColor} forState:UIControlStateNormal];
-    [_segmentCtrl setTitleTextAttributes:@{NSForegroundColorAttributeName:marcatoColor} forState:UIControlStateSelected];
+    for (int i = 0; i < self.booksMenu.items.count; i ++) {
+        SSJListMenuItem *item = self.booksMenu.items[i];
+        item.normalTitleColor = (i == self.booksMenu.items.count - 1) ? SSJ_SECONDARY_COLOR : SSJ_MAIN_COLOR;
+    }
     
-    self.booksMenu.normalTitleColor = mainColor;
-    self.booksMenu.selectedTitleColor = mainColor;
     self.booksMenu.fillColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
+    self.booksMenu.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
     self.booksMenu.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
 }
 
@@ -275,7 +278,7 @@
 - (UILabel *)titleLab {
     if (!_titleLab) {
         _titleLab = [[UILabel alloc] init];
-        _titleLab.font = [UIFont systemFontOfSize:16];
+        _titleLab.font = [UIFont systemFontOfSize:13];
     }
     return _titleLab;
 }
@@ -292,6 +295,7 @@
     if (!_booksMenu) {
         _booksMenu = [[SSJListMenu alloc] initWithFrame:CGRectMake(0, 0, 104, 0)];
         _booksMenu.maxDisplayRowCount = 5.5;
+        _booksMenu.titleFontSize = 13;
         [_booksMenu addTarget:self action:@selector(selectBookAction) forControlEvents:UIControlEventValueChanged];
     }
     return _booksMenu;
@@ -301,11 +305,11 @@
     if (!_arrow) {
         UIBezierPath *path = [UIBezierPath bezierPath];
         [path moveToPoint:CGPointZero];
-        [path addLineToPoint:CGPointMake(7, 8)];
-        [path addLineToPoint:CGPointMake(14, 0)];
+        [path addLineToPoint:CGPointMake(6, 7)];
+        [path addLineToPoint:CGPointMake(12, 0)];
         
         _arrow = [CAShapeLayer layer];
-        _arrow.size = CGSizeMake(14, 8);
+        _arrow.size = CGSizeMake(12, 7);
         _arrow.path = path.CGPath;
         _arrow.lineWidth = 1;
         _arrow.fillColor = [UIColor clearColor].CGColor;

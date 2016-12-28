@@ -85,7 +85,7 @@
         }
     }
     
-    self.imageView.centerY = self.textLabel.centerY = self.contentView.height * 0.5;
+    self.imageView.centerY = self.textLabel.centerY = CGRectGetMidY(contentFrame);
 }
 
 - (void)setCellItem:(SSJBaseItem *)cellItem {

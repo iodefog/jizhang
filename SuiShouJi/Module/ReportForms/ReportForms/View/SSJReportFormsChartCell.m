@@ -81,12 +81,15 @@
     _chartView.bottomTitleAttribute = @{NSFontAttributeName:[UIFont systemFontOfSize:12],
                                         NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]};
     
-    self.listMenu.normalTitleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-    self.listMenu.selectedTitleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
     self.listMenu.fillColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
+    self.listMenu.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
     self.listMenu.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
-    self.listMenu.normalImageColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-    self.listMenu.selectedImageColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
+    for (SSJListMenuItem *item in self.listMenu.items) {
+        item.normalTitleColor = SSJ_MAIN_COLOR;
+        item.selectedTitleColor = SSJ_MARCATO_COLOR;
+        item.normalImageColor = SSJ_SECONDARY_COLOR;
+        item.selectedImageColor = SSJ_MARCATO_COLOR;
+    }
 }
 
 #pragma mark - Event
@@ -150,8 +153,18 @@
 - (SSJListMenu *)listMenu {
     if (!_listMenu) {
         _listMenu = [[SSJListMenu alloc] init];
-        _listMenu.items = @[[SSJListMenuItem itemWithImageName:@"reportForms_category" title:@"分类"],
-                            [SSJListMenuItem itemWithImageName:@"reportForms_member" title:@"成员"]];
+        _listMenu.items = @[[SSJListMenuItem itemWithImageName:@"reportForms_category"
+                                                         title:@"分类"
+                                              normalTitleColor:SSJ_MAIN_COLOR
+                                            selectedTitleColor:SSJ_MARCATO_COLOR
+                                              normalImageColor:SSJ_SECONDARY_COLOR
+                                            selectedImageColor:SSJ_MARCATO_COLOR],
+                            [SSJListMenuItem itemWithImageName:@"reportForms_member"
+                                                         title:@"成员"
+                                              normalTitleColor:SSJ_MAIN_COLOR
+                                            selectedTitleColor:SSJ_MARCATO_COLOR
+                                              normalImageColor:SSJ_SECONDARY_COLOR
+                                            selectedImageColor:SSJ_MARCATO_COLOR]];
         _listMenu.width = 104;
         [_listMenu addTarget:self action:@selector(listMenuSelectAction) forControlEvents:UIControlEventValueChanged];
     }

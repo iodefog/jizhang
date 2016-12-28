@@ -99,4 +99,15 @@ alpha:(a)]
 //  tabbar高度
 #define SSJ_TABBAR_HEIGHT self.tabBarController.tabBar.height
 
+#pragma mark - Theme
+
+// 主要颜色
+#define SSJ_MAIN_COLOR [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor]
+
+// 强调颜色
+#define SSJ_MARCATO_COLOR [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]
+
+// 次要颜色
+#define SSJ_SECONDARY_COLOR [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]
+
 #endif
