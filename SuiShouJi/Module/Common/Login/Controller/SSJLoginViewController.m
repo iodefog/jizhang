@@ -108,6 +108,7 @@
     [self.view addSubview:scrollView];
     
     [self ssj_showBackButtonWithTarget:self selector:@selector(goBackAction)];
+    self.showNavigationBarBaseLine = NO;
 }
 
 -(void)viewWillAppear:(BOOL)animated{

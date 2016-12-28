@@ -198,7 +198,7 @@ static NSString *const kTitle6 = @"分期申请日";
         }else if ([title isEqualToString:kTitle3]) {
             repaymentModifyCell.accessoryView = self.instalmentCountView;
         }else if ([title isEqualToString:kTitle4]) {
-            if (self.repaymentModel.repaymentMoney != 0) {
+            if ([self.repaymentModel.repaymentMoney doubleValue] != 0) {
                 repaymentModifyCell.cellInput.text = [NSString stringWithFormat:@"%@",self.repaymentModel.repaymentMoney];
             }
             repaymentModifyCell.cellInput.attributedPlaceholder = [[NSAttributedString alloc]initWithString:@"0.00" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
@@ -414,14 +414,14 @@ static NSString *const kTitle6 = @"分期申请日";
 #pragma mark - private
 - (void)updatePoundageLab{
     double principalMoney;
-    if (self.repaymentModel.instalmentCout) {
+    if (self.repaymentModel.instalmentCout && [self.repaymentModel.repaymentMoney doubleValue] > 0) {
         principalMoney = [self.repaymentModel.repaymentMoney doubleValue] / self.repaymentModel.instalmentCout;
     } else {
         principalMoney = 0;
     }
     NSString *pripalStr = [[NSString stringWithFormat:@"%f",principalMoney] ssj_moneyDecimalDisplayWithDigits:2];
     double poundageMoney;
-    if (self.repaymentModel.instalmentCout) {
+    if (self.repaymentModel.instalmentCout && [self.repaymentModel.repaymentMoney doubleValue] > 0 && [self.repaymentModel.poundageRate doubleValue] > 0 ) {
         poundageMoney = [self.repaymentModel.repaymentMoney doubleValue] * [self.repaymentModel.poundageRate doubleValue];
     } else {
         poundageMoney = 0;
