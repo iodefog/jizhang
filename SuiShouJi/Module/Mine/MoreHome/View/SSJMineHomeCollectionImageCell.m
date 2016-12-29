@@ -24,7 +24,7 @@
        [self.contentView addSubview:self.nameLabel];
         [self.contentView addSubview:self.bottomLabel];
         self.bottomLabel.textAlignment = NSTextAlignmentCenter;
-        self.bottomLabel.font = [UIFont systemFontOfSize:12];
+        self.bottomLabel.font = [UIFont systemFontOfSize:11];
         [self ssj_setBorderStyle:SSJBorderStyleBottom | SSJBorderStyleLeft];
         [self ssj_setBorderWidth:1];
         [self ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];

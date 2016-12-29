@@ -184,6 +184,7 @@ static NSString *const kTitle6 = @"分期申请日";
         _fenQiLab = fenQiCell.subtitleLabel;
         fenQiCell.textField.keyboardType = UIKeyboardTypeDecimalPad;
         fenQiCell.textField.tag = 101;
+        fenQiCell.textField.delegate = self;
         if ([self.repaymentModel.repaymentMoney doubleValue] > 0) {
             fenQiCell.textField.text = [NSString stringWithFormat:@"%.2f",[self.repaymentModel.repaymentMoney doubleValue]];
         }
@@ -298,12 +299,12 @@ static NSString *const kTitle6 = @"分期申请日";
     }
     if (self.repaymentModel.cardBillingDay < self.repaymentModel.cardRepaymentDay) {
         if (!([[[NSDate dateWithYear:self.repaymentModel.repaymentMonth.year month:self.repaymentModel.repaymentMonth.month day:self.repaymentModel.cardBillingDay] dateBySubtractingMonths:1] isEarlierThanOrEqualTo:self.repaymentModel.applyDate] && [[NSDate dateWithYear:self.repaymentModel.repaymentMonth.year month:self.repaymentModel.repaymentMonth.month day:self.repaymentModel.cardRepaymentDay] isLaterThanOrEqualTo:self.repaymentModel.applyDate])) {
-            [CDAutoHideMessageHUD showMessage:@"分期分期只能在账单日和还款日之间申请哦"];
+            [CDAutoHideMessageHUD showMessage:@"分期日期只能在账单日和还款日之间申请哦"];
             return;
         }
     } else {
         if (!([[[NSDate dateWithYear:self.repaymentModel.repaymentMonth.year month:self.repaymentModel.repaymentMonth.month day:self.repaymentModel.cardBillingDay] dateBySubtractingMonths:1] isEarlierThanOrEqualTo:self.repaymentModel.applyDate] && [[[NSDate dateWithYear:self.repaymentModel.repaymentMonth.year month:self.repaymentModel.repaymentMonth.month day:self.repaymentModel.cardRepaymentDay] dateByAddingMonths:1] isLaterThanOrEqualTo:self.repaymentModel.applyDate])) {
-            [CDAutoHideMessageHUD showMessage:@"分期分期只能在账单日和还款日之间申请哦"];
+            [CDAutoHideMessageHUD showMessage:@"分期日期只能在账单日和还款日之间申请哦"];
             return;
         }
     }
