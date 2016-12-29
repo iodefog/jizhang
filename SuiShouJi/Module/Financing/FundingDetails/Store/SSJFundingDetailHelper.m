@@ -418,7 +418,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
         case 5: return @"星期四";
         case 6: return @"星期五";
         case 7: return @"星期六";
-
+            
         default: return nil;
     }
 }

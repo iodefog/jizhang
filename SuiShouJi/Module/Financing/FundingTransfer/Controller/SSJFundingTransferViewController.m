@@ -186,10 +186,10 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
         if (!_transferInItem) {
             circleModifyCell.cellDetail = @"请选择转入账户";
         }else{
-            if ([_transferOutItem isKindOfClass:[SSJFundingItem class]]) {
+            if ([_transferInItem isKindOfClass:[SSJFundingItem class]]) {
                 circleModifyCell.cellDetail = ((SSJFundingItem *)_transferInItem).fundingName;
                 circleModifyCell.cellTypeImageName = ((SSJFundingItem *)_transferInItem).fundingIcon;
-            }else if ([_transferOutItem isKindOfClass:[SSJCreditCardItem class]]) {
+            }else if ([_transferInItem isKindOfClass:[SSJCreditCardItem class]]) {
                 circleModifyCell.cellDetail = ((SSJCreditCardItem *)_transferInItem).cardName;
                 circleModifyCell.cellTypeImageName = @"ft_creditcard";
             }
@@ -314,7 +314,6 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
                 [weakSelf.navigationController pushViewController:NewFundingVC animated:YES];
             }
             [weakSelf.tableView reloadData];
-            
             [weakSelf.transferOutFundingTypeSelect dismiss];
         };
     }
@@ -372,11 +371,9 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
 }
 
 -(void)saveButtonClicked:(id)sender{
-    if (self.item == nil) {
-        if (_transferInItem == nil || _transferOutItem == nil) {
-            [CDAutoHideMessageHUD showMessage:@"请选择资金账户"];
-            return;
-        }
+    if (_transferInItem == nil || _transferInItem == nil) {
+        [CDAutoHideMessageHUD showMessage:@"请选择资金账户"];
+        return;
     }
     __block NSString *transferInId;
     __block NSString *transferOutId;
@@ -416,9 +413,11 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
             if (![db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFUNSID , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE  , CBILLDATE , CBOOKSID , CMEMO) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",SSJUUID(),userid,_moneyInput.text,@"3",transferInId,@"",@"",writedate,@(SSJSyncVersion()),[NSNumber numberWithInt:0],weakSelf.item.transferDate,booksid,_memoInput.text])
             {
                 *rollback = YES;
+                return;
             }
             if (![db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFUNSID , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE  , CBILLDATE , CBOOKSID , CMEMO) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",SSJUUID(),userid,_moneyInput.text,@"4",transferOutId,@"",@"",writedate,@(SSJSyncVersion()),[NSNumber numberWithInt:0],weakSelf.item.transferDate,booksid,_memoInput.text]) {
                 *rollback = YES;
+                return;
             }
             SSJDispatch_main_async_safe(^(){
                 [self.navigationController popViewControllerAnimated:YES];
@@ -426,9 +425,11 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
         }else{
             if (![db executeUpdate:@"update bk_user_charge set imoney = ? , ifunsid = ? , cwritedate = ? , iversion = ? , operatortype = 1 , cmemo = ? , cbilldate = ? where ichargeid = ? and cuserid = ?",[NSNumber numberWithDouble:[_moneyInput.text doubleValue]],transferInId,writedate,@(SSJSyncVersion()),_memoInput.text,weakSelf.item.transferDate,weakSelf.item.transferInChargeId,userid]) {
                 *rollback = YES;
+                return;
             }
             if (![db executeUpdate:@"update bk_user_charge set imoney = ? , ifunsid = ? , cwritedate = ? , iversion = ? , operatortype = 1 , cmemo = ? , cbilldate = ? where ichargeid = ? and cuserid = ?",[NSNumber numberWithDouble:[_moneyInput.text doubleValue]],transferOutId,writedate,@(SSJSyncVersion()),_memoInput.text,weakSelf.item.transferDate,weakSelf.item.transferOutChargeId,userid]) {
                 *rollback = YES;
+                return;
             }
             weakSelf.item.transferOutId = transferOutId ? : weakSelf.item.transferOutId;
             weakSelf.item.transferInId = transferInId ? : weakSelf.item.transferInId;
