@@ -12,6 +12,7 @@
 
 #import "TPKeyboardAvoidingTableView.h"
 #import "SSJChargeCircleModifyCell.h"
+#import "SSJAddOrEditLoanMultiLabelCell.h"
 #import "SSJFundingTypeSelectView.h"
 #import "SSJReminderDateSelectView.h"
 
@@ -95,6 +96,9 @@ static NSString *const kTitle6 = @"还款账单月份";
 
 #pragma mark - UITableViewDelegate
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (indexPath.section == 0 && indexPath.row == 1) {
+        return 65;
+    }
     return 55;
 }
 
@@ -145,6 +149,40 @@ static NSString *const kTitle6 = @"还款账单月份";
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
     NSString *image = [self.images ssj_objectAtIndexPath:indexPath];
+    if (indexPath.section == 0 && indexPath.row == 1) {
+        static NSString *cellId = @"tempCellID";
+        SSJAddOrEditLoanMultiLabelCell *fenQiCell = [tableView dequeueReusableCellWithIdentifier:cellId];
+        if (!fenQiCell) {
+            fenQiCell = [[SSJAddOrEditLoanMultiLabelCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellId];
+        }
+        fenQiCell.imageView.image = [[UIImage imageNamed:image] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        fenQiCell.textLabel.text = title;
+//        _fenQiLab = fenQiCell.subtitleLabel;
+        fenQiCell.textField.keyboardType = UIKeyboardTypeDecimalPad;
+        fenQiCell.textField.tag = 100;
+        if ([self.repaymentModel.repaymentMoney doubleValue] > 0) {
+            fenQiCell.textField.text = [NSString stringWithFormat:@"%.2f",[self.repaymentModel.repaymentMoney doubleValue]];
+        }
+        fenQiCell.haspercentLab = NO;
+        fenQiCell.textField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
+        [fenQiCell setNeedsLayout];
+        fenQiCell.textField.attributedPlaceholder = [[NSAttributedString alloc]initWithString:@"0.00" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+#warning 该账单周期内总欠款
+        NSString *totalArrearStr = [[NSString stringWithFormat:@"%f",11.5] ssj_moneyDecimalDisplayWithDigits:2];
+        if ([self.repaymentModel.repaymentMoney doubleValue] > 0) {
+            totalArrearStr = [[NSString stringWithFormat:@"%@",self.repaymentModel.repaymentMoney] ssj_moneyDecimalDisplayWithDigits:2];
+        }
+        
+        NSString *oldStr = [NSString stringWithFormat:@"该账单周期内总欠款为%@元",totalArrearStr];
+        NSRange range = [oldStr rangeOfString:totalArrearStr];
+        NSMutableAttributedString *attStr = [[NSMutableAttributedString alloc]initWithString:oldStr];
+        [attStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] range:range];
+        fenQiCell.subtitleLabel.attributedText = attStr;
+        [fenQiCell.subtitleLabel sizeToFit];
+
+        return fenQiCell;
+    }
+    
     SSJChargeCircleModifyCell *repaymentModifyCell = [tableView dequeueReusableCellWithIdentifier:SSJRepaymentEditeCellIdentifier];
     repaymentModifyCell.cellTitle = title;
     repaymentModifyCell.cellImageName = image;
@@ -160,13 +198,6 @@ static NSString *const kTitle6 = @"还款账单月份";
     }
     if ([title isEqualToString:kTitle1]) {
         repaymentModifyCell.cellDetail = self.repaymentModel.cardName;
-    }else if ([title isEqualToString:kTitle2]) {
-        if (self.repaymentModel.repaymentMoney != 0) {
-            repaymentModifyCell.cellInput.text = [[NSString stringWithFormat:@"%@",self.repaymentModel.repaymentMoney] ssj_moneyDecimalDisplayWithDigits:2];
-        }
-        repaymentModifyCell.cellInput.attributedPlaceholder = [[NSAttributedString alloc]initWithString:@"0.00" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
-        repaymentModifyCell.cellInput.tag = 100;
-        repaymentModifyCell.cellInput.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
     }else if ([title isEqualToString:kTitle3]) {
         repaymentModifyCell.cellInput.attributedPlaceholder = [[NSAttributedString alloc]initWithString:@"选填" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         repaymentModifyCell.cellInput.tag = 101;
