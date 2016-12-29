@@ -12,12 +12,14 @@
 
 @protocol SSJReportFormsScaleAxisViewDelegate <NSObject>
 
+@required
 - (NSUInteger)numberOfAxisInScaleAxisView:(SSJReportFormsScaleAxisView *)scaleAxisView;
 
 - (NSString *)scaleAxisView:(SSJReportFormsScaleAxisView *)scaleAxisView titleForAxisAtIndex:(NSUInteger)index;
 
 - (CGFloat)scaleAxisView:(SSJReportFormsScaleAxisView *)scaleAxisView heightForAxisAtIndex:(NSUInteger)index;
 
+@optional
 - (void)scaleAxisView:(SSJReportFormsScaleAxisView *)scaleAxisView didSelectedScaleAxisAtIndex:(NSUInteger)index;
 
 @end
@@ -29,6 +31,8 @@
 @property (nonatomic, weak) id<SSJReportFormsScaleAxisViewDelegate> delegate;
 
 @property (nonatomic) NSUInteger selectedIndex;
+
+@property (nonatomic, readonly) NSUInteger axisCount;
 
 @property (nonatomic, strong) UIColor *scaleColor;
 

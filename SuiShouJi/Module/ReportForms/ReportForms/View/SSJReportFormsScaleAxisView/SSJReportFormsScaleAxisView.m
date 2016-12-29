@@ -21,6 +21,8 @@ static NSString *const kCellId = @"SSJReportFormsScaleAxisCell";
 
 @property (nonatomic, strong) UICollectionView *collectionView;
 
+@property (nonatomic) NSUInteger axisCount;
+
 @end
 
 @implementation SSJReportFormsScaleAxisView
@@ -53,11 +55,19 @@ static NSString *const kCellId = @"SSJReportFormsScaleAxisCell";
 }
 
 - (void)reloadData {
-    [_collectionView reloadData];
-    self.selectedIndex = 0;
+    if (_delegate && [_delegate respondsToSelector:@selector(numberOfAxisInScaleAxisView:)]) {
+        _axisCount = [_delegate numberOfAxisInScaleAxisView:self];
+        [_collectionView reloadData];
+        self.selectedIndex = 0;
+    }
 }
 
 - (void)setSelectedIndex:(NSUInteger)selectedIndex {
+    if (selectedIndex >= _axisCount) {
+        SSJPRINT(@"selectedIndex不能大于axisCount");
+        return;
+    }
+    
     if (_selectedIndex != selectedIndex) {
         _selectedIndex = selectedIndex;
         [_collectionView setContentOffset:CGPointMake(kItemWidth * (_selectedIndex + 0.5) - _collectionView.width * 0.5 + kHorizontalContentInset, 0) animated:NO];
@@ -66,10 +76,7 @@ static NSString *const kCellId = @"SSJReportFormsScaleAxisCell";
 
 #pragma mark - UICollectionViewDataSource
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    if (_delegate && [_delegate respondsToSelector:@selector(numberOfAxisInScaleAxisView:)]) {
-        return [_delegate numberOfAxisInScaleAxisView:self];
-    }
-    return 0;
+    return _axisCount;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {

@@ -373,7 +373,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
             [_dateAxisView reloadData];
             
             NSUInteger selectedIndex = _selectedPeriod ? [_periods indexOfObject:_selectedPeriod] : NSNotFound;
-            _dateAxisView.selectedIndex = (selectedIndex != NSNotFound) ? selectedIndex : _periods.count - 1;
+            _dateAxisView.selectedIndex = (selectedIndex != NSNotFound) ? selectedIndex : _periods.count - 3;
             _selectedPeriod = [_periods ssj_safeObjectAtIndex:_dateAxisView.selectedIndex];
             
             [self reloadDatasInPeriod:(_customPeriod ?: _selectedPeriod)];
