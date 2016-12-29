@@ -85,6 +85,8 @@
         
         self.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         [self updateAppearance];
+        
+        self.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     return self;
 }
