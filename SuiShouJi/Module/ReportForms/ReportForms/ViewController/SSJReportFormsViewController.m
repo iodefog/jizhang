@@ -654,6 +654,8 @@ static NSString *const kSegmentTitleIncome = @"收入";
     
     self.tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
     
+    [self.curveHeaderView updateAppearanceAccordingToTheme];
+    
     if (_customPeriod) {
         [self.addOrDeleteCustomPeriodBtn setImage:[UIImage ssj_themeImageWithName:@"reportForms_delete"] forState:UIControlStateNormal];
     } else {
