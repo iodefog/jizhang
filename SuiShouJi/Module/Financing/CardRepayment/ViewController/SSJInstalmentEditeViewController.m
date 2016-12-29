@@ -54,6 +54,7 @@ static NSString *const kTitle6 = @"分期申请日";
 @implementation SSJInstalmentEditeViewController{
     UILabel *_instalDateLab;
     UILabel *_poundageLab;
+    UILabel *_fenQiLab;
 }
 
 - (void)dealloc {
@@ -70,6 +71,7 @@ static NSString *const kTitle6 = @"分期申请日";
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.titles = @[@[kTitle1,kTitle2,kTitle3],@[kTitle4,kTitle5,kTitle6]];
+//    loan_expires
     self.images = @[@[@"loan_person",@"loan_money",@"loan_memo"],@[@"card_zhanghu",@"",@"loan_expires"]];
     [self.tableView registerClass:[SSJChargeCircleModifyCell class] forCellReuseIdentifier:SSJInstalmentCellIdentifier];
     [self.tableView registerClass:[SSJAddOrEditLoanMultiLabelCell class] forCellReuseIdentifier:SSJPoundageCellIdentifier];
@@ -101,8 +103,7 @@ static NSString *const kTitle6 = @"分期申请日";
 
 #pragma mark - UITableViewDelegate
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
-    if ([title isEqualToString:kTitle5] || [title isEqualToString:kTitle6]) {
+    if (indexPath.section == 1) {
         return 65;
     }
     return 55;
@@ -168,7 +169,7 @@ static NSString *const kTitle6 = @"分期申请日";
         return poundageModifyCell;
     }else if([title isEqualToString:kTitle6]) {
         SSJInstalmentDateSelectCell *dateSelectCell = [tableView dequeueReusableCellWithIdentifier:SSJInstalmentDateSelectCellIdentifier];
-        dateSelectCell.imageView.image = [[UIImage imageNamed:@"loan_yield"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        dateSelectCell.imageView.image = [[UIImage imageNamed:image] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         dateSelectCell.textLabel.text = title;
         dateSelectCell.detailLabel.text = [self.repaymentModel.applyDate formattedDateWithFormat:@"yyyy-MM-dd"];
         [dateSelectCell setNeedsLayout];
@@ -176,15 +177,26 @@ static NSString *const kTitle6 = @"分期申请日";
         dateSelectCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         [self updatePoundageLab];
         return dateSelectCell;
+    }else if ([title isEqualToString:kTitle4]){
+        SSJAddOrEditLoanMultiLabelCell *fenQiCell = [tableView dequeueReusableCellWithIdentifier:SSJPoundageCellIdentifier];
+        fenQiCell.imageView.image = [[UIImage imageNamed:image] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        fenQiCell.textLabel.text = title;
+        _fenQiLab = fenQiCell.subtitleLabel;
+        fenQiCell.textField.keyboardType = UIKeyboardTypeDecimalPad;
+        fenQiCell.textField.tag = 101;
+        if ([self.repaymentModel.repaymentMoney doubleValue] > 0) {
+            fenQiCell.textField.text = [NSString stringWithFormat:@"%.2f",[self.repaymentModel.repaymentMoney doubleValue]];
+        }
+        fenQiCell.haspercentLab = NO;
+        [fenQiCell setNeedsLayout];
+        fenQiCell.textField.attributedPlaceholder = [[NSAttributedString alloc]initWithString:@"0.00" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+        [self updatePoundageLab];
+        return fenQiCell;
+        
     }else{
         SSJChargeCircleModifyCell *repaymentModifyCell = [tableView dequeueReusableCellWithIdentifier:SSJInstalmentCellIdentifier];
         repaymentModifyCell.cellTitle = title;
         repaymentModifyCell.cellImageName = image;
-        if ([title isEqualToString:kTitle4]) {
-            repaymentModifyCell.cellInput.hidden = NO;
-        }else {
-            repaymentModifyCell.cellInput.hidden = YES;
-        }
         if ([title isEqualToString:kTitle2]) {
             repaymentModifyCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }else{
@@ -197,14 +209,6 @@ static NSString *const kTitle6 = @"分期申请日";
             repaymentModifyCell.cellDetail = [self.repaymentModel.repaymentMonth formattedDateWithFormat:@"yyyy年MM月"];
         }else if ([title isEqualToString:kTitle3]) {
             repaymentModifyCell.accessoryView = self.instalmentCountView;
-        }else if ([title isEqualToString:kTitle4]) {
-            if ([self.repaymentModel.repaymentMoney doubleValue] != 0) {
-                repaymentModifyCell.cellInput.text = [NSString stringWithFormat:@"%@",self.repaymentModel.repaymentMoney];
-            }
-            repaymentModifyCell.cellInput.attributedPlaceholder = [[NSAttributedString alloc]initWithString:@"0.00" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
-            repaymentModifyCell.cellInput.tag = 101;
-            repaymentModifyCell.cellInput.keyboardType = UIKeyboardTypeDecimalPad;
-            [self updatePoundageLab];
         }
         return repaymentModifyCell;
     }
@@ -405,6 +409,7 @@ static NSString *const kTitle6 = @"分期申请日";
         __weak typeof(self) weakSelf = self;
         _repaymentMonthSelectView.timerSetBlock = ^(NSDate *date){
             weakSelf.repaymentModel.repaymentMonth = date;
+            #warning 该账单周期内总欠款
             [weakSelf.tableView reloadData];
         };
     }
@@ -414,6 +419,14 @@ static NSString *const kTitle6 = @"分期申请日";
 #pragma mark - private
 - (void)updatePoundageLab{
     double principalMoney;
+#warning 该账单周期内总欠款
+    NSString *totalArrearStr = [[NSString stringWithFormat:@"%f",11.5] ssj_moneyDecimalDisplayWithDigits:2];
+    NSString *oldStr = [NSString stringWithFormat:@"该账单周期内总欠款为%@元",totalArrearStr];
+    NSRange range = [oldStr rangeOfString:totalArrearStr];
+    NSMutableAttributedString *attStr = [[NSMutableAttributedString alloc]initWithString:oldStr];
+    [attStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] range:range];
+    _fenQiLab.attributedText = attStr;
+    [_fenQiLab sizeToFit];
     if (self.repaymentModel.instalmentCout && [self.repaymentModel.repaymentMoney doubleValue] > 0) {
         principalMoney = [self.repaymentModel.repaymentMoney doubleValue] / self.repaymentModel.instalmentCout;
     } else {

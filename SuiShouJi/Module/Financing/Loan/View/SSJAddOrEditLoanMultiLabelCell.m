@@ -44,6 +44,16 @@
     return self;
 }
 
+
+- (void)setHaspercentLab:(BOOL)haspercentLab
+{
+    _haspercentLab = haspercentLab;
+    if (haspercentLab == NO) {
+        _percentLab.text = @"";
+        [_percentLab sizeToFit];
+    }
+    self.subtitleLabel.right = self.width - 10;
+}
 - (void)layoutSubviews {
     [super layoutSubviews];
     

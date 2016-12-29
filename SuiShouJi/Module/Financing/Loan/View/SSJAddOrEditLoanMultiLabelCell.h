@@ -13,5 +13,8 @@
 @property (nonatomic, strong) UILabel *subtitleLabel;
 
 @property (nonatomic, strong) UITextField *textField;
-
+/**
+ 没有%
+ */
+@property (nonatomic, assign) BOOL haspercentLab;
 @end

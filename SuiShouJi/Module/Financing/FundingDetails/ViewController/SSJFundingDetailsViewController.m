@@ -588,6 +588,11 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
     model.cardName = self.cardItem.cardName;
     model.cardBillingDay = self.cardItem.cardBillingDay;
     model.cardRepaymentDay = self.cardItem.cardRepaymentDay;
+    //mzl
+//    SSJFundingDetailListItem *item = (SSJFundingDetailListItem *)[self.listItems ssj_safeObjectAtIndex:0];
+//    if (item) {
+//        model.totalArrears = item.income - item.expenture > 0 ? 0 :item.expenture - item.income;
+//    }
     instalmentVc.repaymentModel = model;
     [self.navigationController pushViewController:instalmentVc animated:YES];
 }
