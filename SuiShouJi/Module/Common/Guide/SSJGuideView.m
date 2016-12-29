@@ -124,7 +124,7 @@
         _pageControl.pageImage = [[UIImage imageNamed:@"dian_nor"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         _pageControl.currentPageImage = [[UIImage imageNamed:@"dian_sel"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         _pageControl.spaceBetweenPages = 20.0;
-        _pageControl.tintColor = [UIColor whiteColor];
+        _pageControl.tintColor = [UIColor ssj_colorWithHex:@"aad97f"];
         [_pageControl addTarget:self action:@selector(pageControlAction) forControlEvents:UIControlEventValueChanged];
     }
     return _pageControl;
@@ -137,7 +137,7 @@
         _beginButton.layer.cornerRadius = 6;
         _beginButton.frame = CGRectMake(0, 0, 158, 44);
         _beginButton.titleLabel.font = [UIFont systemFontOfSize:18];
-        [_beginButton setTitle:@"立即体验" forState:UIControlStateNormal];
+//        [_beginButton setTitle:@"立即体验" forState:UIControlStateNormal];
         [_beginButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
 //        [_beginButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"f17272"] forState:UIControlStateNormal];
         [_beginButton setBackgroundImage:[UIImage imageNamed:@"guide_btn_background"] forState:UIControlStateNormal];
