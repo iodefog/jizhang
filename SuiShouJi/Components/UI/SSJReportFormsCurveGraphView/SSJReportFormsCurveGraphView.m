@@ -95,6 +95,7 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
     [self updateVisibleIndex];
     [self caculateCurvePoint];
     [self updateDotsAndLabelsPosition];
+//    [self updateBallonHeight];
     
     [_gridView reloadData];
     
@@ -163,6 +164,7 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
     [self updateVisibleIndex];
     [self updateBallonAndLablesTitle];
     [self updateDotsAndLabelsPosition];
+//    [self updateBallonHeight];
     [self updateContentOffset:YES];
 }
 
@@ -199,6 +201,7 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
         [self updateVisibleIndex];
         [self updateBallonAndLablesTitle];
         [self updateDotsAndLabelsPosition];
+//        [self updateBallonHeight];
         [self updateContentOffset:YES];
         
         if (_currentIndex == 0 || _currentIndex == _axisXCount - 1) {
@@ -227,6 +230,7 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
             [self updateVisibleIndex];
             [self updateBallonAndLablesTitle];
             [self updateDotsAndLabelsPosition];
+//            [self updateBallonHeight];
             [self updateContentOffset:YES];
         }
     }
@@ -496,6 +500,7 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
     
     [self caculateCurvePoint];
     [self updateDotsAndLabelsPosition];
+//    [self updateBallonHeight];
     
     [_gridView reloadData];
     [_collectionView reloadData];
@@ -523,6 +528,7 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
     [self updateVisibleIndex];
     [self updateBallonAndLablesTitle];
     [self updateDotsAndLabelsPosition];
+//    [self updateBallonHeight];
     [self updateContentOffset:animted];
 }
 
@@ -777,6 +783,33 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
     }
 }
 
+/**
+ 根据当前的最大值调整中间气球的高度
+ */
+- (void)updateBallonHeight {
+//    if (_maxValue == 0) {
+//        return;
+//    }
+//    
+//    NSUInteger currentIndex = _currentIndex + 1;
+//    if (_values.count <= currentIndex) {
+//        return;
+//    }
+//    
+//    NSArray *values = _values[currentIndex];
+//    if (![values isKindOfClass:[NSArray class]]) {
+//        return;
+//    }
+//
+//    CGFloat maxValue = [[values valueForKeyPath:@"@max.floatValue"] floatValue];
+//    CGFloat maxCurveHeight = (self.height - _curveInsets.top - _curveInsets.bottom);
+//    CGFloat y = self.height - _curveInsets.bottom - maxValue / _maxValue * maxCurveHeight;
+//    
+//    _ballonView.top = MAX(y - 55, 10);
+//    _ballonView.height = self.height - _curveInsets.bottom - _ballonView.top;
+//    _ballonView.centerX = self.width * 0.5;
+}
+
 - (void)updateBallonAndLablesTitle {
     if (!_showBalloon || !_hasReloaded) {
         return;
@@ -867,6 +900,10 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
     if (!_ballonView) {
         _ballonView = [[SSJReportFormsCurveBalloonView alloc] init];
         _ballonView.hidden = !_showBalloon;
+        
+#warning test
+//        _ballonView.layer.borderColor = [UIColor redColor].CGColor;
+//        _ballonView.layer.borderWidth = 1;
     }
     return _ballonView;
 }
