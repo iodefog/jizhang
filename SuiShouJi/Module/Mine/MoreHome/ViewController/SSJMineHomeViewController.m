@@ -377,7 +377,7 @@ static BOOL kNeedBannerDisplay = YES;
     
     //广告
     for (SSJListAdItem *listAdItem in self.bannerService.item.listAdItems) {
-        if (listAdItem.hidden) {
+        if (!listAdItem.hidden) {
             [self.adItems addObject:listAdItem];
            NSInteger index = [self.adItems indexOfObject:listAdItem];
             [self.adItemsArray insertObject:listAdItem atIndex:index];
@@ -385,6 +385,21 @@ static BOOL kNeedBannerDisplay = YES;
         }
     }
 }
+
+- (void)server:(SSJBaseNetworkService *)service didFailLoadWithError:(NSError *)error
+{
+    //广告
+    for (SSJListAdItem *listAdItem in self.bannerService.item.listAdItems) {
+        if (listAdItem.hidden) {
+            [self.adItems addObject:listAdItem];
+            NSInteger index = [self.adItems indexOfObject:listAdItem];
+            [self.adItemsArray insertObject:listAdItem atIndex:index];
+            [self.collectionView reloadData];
+        }
+    }
+    [self.collectionView reloadData];
+}
+
 
 #pragma mark - UMSocialUIDelegate
 -(void)didFinishGetUMSocialDataInViewController:(UMSocialResponseEntity *)response
