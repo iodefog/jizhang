@@ -52,6 +52,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     if (self = [super initWithNibName:nil bundle:nil]) {
         self.title = @"注册";
         self.countdown = kCountdownLimit;
+        self.showNavigationBarBaseLine = NO;
 //        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange) name:UITextFieldTextDidChangeNotification object:nil];
     }
     return self;

@@ -40,6 +40,7 @@
     if (self = [super initWithNibName:nil bundle:nil]) {
         self.title = @"注册";
         self.hidesBottomBarWhenPushed = YES;
+        self.showNavigationBarBaseLine = NO;
 //        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange) name:UITextFieldTextDidChangeNotification object:nil];
     }
     return self;

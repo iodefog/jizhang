@@ -47,6 +47,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.title = @"忘记密码";
+        self.showNavigationBarBaseLine = NO;
 //        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange) name:UITextFieldTextDidChangeNotification object:nil];
     }
     return self;
