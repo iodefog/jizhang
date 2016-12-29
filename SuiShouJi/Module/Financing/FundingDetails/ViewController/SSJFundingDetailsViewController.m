@@ -308,7 +308,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
             SSJBillingChargeCellItem *cellItem = (SSJBillingChargeCellItem *)item;
             int billId = [cellItem.billId intValue];
             
-            if (cellItem.loanId) {
+            if (cellItem.idType == SSJChargeIdTypeLoan) {
                 // 满足以下条件跳转详情页面，否则跳转编辑页面
                 // 1.借贷已结清 2.流水类别是转入／转出，只有创建借贷或结清时才回生成这两种流水 3.余额变更
                 BOOL closeOut = [SSJFundingDetailHelper queryCloseOutStateWithLoanId:cellItem.loanId];
