@@ -122,7 +122,7 @@
         _curveLayer.shadowColor = _item.curveColor.CGColor;
         _curveLayer.shadowOpacity = 0.3;
         _curveLayer.shadowOffset = _item.shadowOffset;
-        _curveLayer.shadowRadius = 1;
+        _curveLayer.shadowRadius = 1.2;
     }
 }
 

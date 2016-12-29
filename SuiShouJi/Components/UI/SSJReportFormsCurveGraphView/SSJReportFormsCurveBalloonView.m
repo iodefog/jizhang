@@ -107,7 +107,7 @@ static const CGFloat kTailHeight = 4;
         _headerLayer.shadowColor = _ballonColor.CGColor;
         _headerLayer.shadowOpacity = 0.3;
         _headerLayer.shadowOffset = CGSizeMake(0, 10);
-        _headerLayer.shadowRadius = 1;
+        _headerLayer.shadowRadius = 1.2;
     }
     return _headerLayer;
 }
