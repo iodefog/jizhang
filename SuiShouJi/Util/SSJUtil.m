@@ -18,7 +18,13 @@ NSString* SSJURLWithAPI(NSString* api) {
 }
 
 NSString* SSJImageURLWithAPI(NSString* api) {
-    return [[NSURL URLWithString:api relativeToURL:[NSURL URLWithString:[SSJDomainManager imageDomain]]] absoluteString];
+    if (api) {
+        return [[SSJDomainManager imageDomain] stringByAppendingString:api];
+    } else {
+        return nil;
+    }
+    
+//    return [[NSURL URLWithString:api relativeToURL:[NSURL URLWithString:[SSJDomainManager imageDomain]]] absoluteString];
 }
 
 NSString *SSJAppName() {
@@ -411,7 +417,7 @@ NSString *SSJGetChargeImageUrl(NSString *imageName){
         imageName = [NSString stringWithFormat:@"%@.jpg",imageName];
     }
     NSString *path = [NSString stringWithFormat:@"/image/sync/%@", imageName];
-    return [[NSURL URLWithString:path relativeToURL:[NSURL URLWithString:[SSJDomainManager imageDomain]]] absoluteString];
+    return SSJImageURLWithAPI(path);
 }
 
 void SSJDispatchMainSync(void (^block)(void)) {

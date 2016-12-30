@@ -76,11 +76,11 @@
     
     _segmentCtrl.size = CGSizeMake(250, 24);
     _segmentCtrl.centerX = self.width * 0.5;
-    _segmentCtrl.top = 34 + statusBarHeight;
+    _segmentCtrl.top = 40 + statusBarHeight;
 }
 
 - (CGSize)sizeThatFits:(CGSize)size {
-    return CGSizeMake(SSJSCREENWITH, 68 + SSJ_STATUSBAR_HEIGHT);
+    return CGSizeMake(SSJSCREENWITH, 74 + SSJ_STATUSBAR_HEIGHT);
 }
 
 #pragma mark - Event
