@@ -367,6 +367,10 @@ static const void *kSSJLoadingIndicatorKey = &kSSJLoadingIndicatorKey;
     [[self ssj_indicator] stopAnimating];
 }
 
+- (void)ssj_relayoutLoadingIndicator {
+    [self ssj_indicator].center = CGPointMake(self.width * 0.5, self.height * 0.5);
+}
+
 - (UIActivityIndicatorView *)ssj_indicator {
     UIActivityIndicatorView *indicator = objc_getAssociatedObject(self, kSSJLoadingIndicatorKey);
     if (indicator) {
@@ -376,7 +380,6 @@ static const void *kSSJLoadingIndicatorKey = &kSSJLoadingIndicatorKey;
     if (!indicator) {
         indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
         indicator.layer.zPosition = 100;
-        indicator.color = [UIColor redColor];
         objc_setAssociatedObject(self, kSSJLoadingIndicatorKey, indicator, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
         return indicator;
     }

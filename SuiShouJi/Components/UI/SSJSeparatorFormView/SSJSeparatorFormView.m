@@ -33,17 +33,17 @@
 
 @interface SSJSeparatorFormViewCell : UIView
 
-@property (nonatomic, strong) SSJSeparatorFormViewCellItem *item;
-
-@property (nonatomic) UIEdgeInsets contentInsets;
-
-@end
-
-@interface SSJSeparatorFormViewCell ()
-
 @property (nonatomic, strong) UILabel *topLab;
 
 @property (nonatomic, strong) UILabel *bottomLab;
+
+@property (nonatomic, strong) SSJSeparatorFormViewCellItem *item;
+
+@property (nonatomic, strong) UIActivityIndicatorView *topIndicator;
+
+@property (nonatomic, strong) UIActivityIndicatorView *bottomIndicator;
+
+@property (nonatomic) UIEdgeInsets contentInsets;
 
 @end
 
@@ -57,29 +57,40 @@
     if (self = [super initWithFrame:frame]) {
         _topLab = [[UILabel alloc] init];
         _topLab.adjustsFontSizeToFitWidth = YES;
+        _topLab.textAlignment = NSTextAlignmentCenter;
         [self addSubview:_topLab];
         
         _bottomLab = [[UILabel alloc] init];
         _bottomLab.adjustsFontSizeToFitWidth = YES;
+        _bottomLab.textAlignment = NSTextAlignmentCenter;
         [self addSubview:_bottomLab];
+        
+        _topIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        [self addSubview:_topIndicator];
+        
+        _bottomIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        [self addSubview:_bottomIndicator];
     }
     return self;
 }
 
 - (void)layoutSubviews {
-    [_topLab sizeToFit];
-    [_bottomLab sizeToFit];
     
     CGRect contentFrame = UIEdgeInsetsInsetRect(self.bounds, self.contentInsets);
-    _topLab.width = MIN(CGRectGetWidth(contentFrame), _topLab.width);
-    _bottomLab.width = MIN(CGRectGetWidth(contentFrame), _bottomLab.width);
+    _topLab.width = CGRectGetWidth(contentFrame);
+    _bottomLab.width = CGRectGetWidth(contentFrame);
     
+    _topLab.height = _item.topTitleFont.pointSize;
+    _bottomLab.height = _item.bottomTitleFont.pointSize;
     
     CGFloat baseGap = (self.height - _topLab.height - _bottomLab.height) * 0.2;
     CGFloat top = baseGap * 2;
     _topLab.top = top;
     _bottomLab.top = _topLab.bottom + baseGap;
     _topLab.centerX = _bottomLab.centerX = self.width * 0.5;
+    
+    _topIndicator.center = _topLab.center;
+    _bottomIndicator.center = _bottomLab.center;
 }
 
 - (void)setItem:(SSJSeparatorFormViewCellItem *)item {
@@ -131,7 +142,7 @@
 
 @interface SSJSeparatorFormView ()
 
-@property (nonatomic, strong) NSMutableArray *cells;
+@property (nonatomic, strong) NSMutableArray<NSArray *> *cells;
 
 @property (nonatomic, strong) NSMutableArray<UIView *> *horizontalSeparators;
 
@@ -181,8 +192,7 @@
 - (void)reloadData {
     if (!_dataSource
         || ![_dataSource respondsToSelector:@selector(numberOfRowsInSeparatorFormView:)]
-        || ![_dataSource respondsToSelector:@selector(separatorFormView:numberOfCellsInRow:)
-             ]
+        || ![_dataSource respondsToSelector:@selector(separatorFormView:numberOfCellsInRow:)]
         || ![_dataSource respondsToSelector:@selector(separatorFormView:itemForCellAtIndex:)]) {
         return;
     }
@@ -241,6 +251,54 @@
         
         [_cells addObject:rowCells];
     }
+}
+
+- (void)showTopLoadingIndicatorAtRowIndex:(NSUInteger)rowIndex cellIndex:(NSUInteger)cellIndex {
+    SSJSeparatorFormViewCell *cell = [self cellAtRowIndex:rowIndex cellIndex:cellIndex];
+    if (cell) {
+        cell.topLab.hidden = YES;
+        [cell.topIndicator startAnimating];
+    }
+}
+
+- (void)hideTopLoadingIndicatorAtRowIndex:(NSUInteger)rowIndex cellIndex:(NSUInteger)cellIndex {
+    SSJSeparatorFormViewCell *cell = [self cellAtRowIndex:rowIndex cellIndex:cellIndex];
+    if (cell) {
+        cell.topLab.hidden = NO;
+        [cell.topIndicator stopAnimating];
+    }
+}
+
+- (void)showBottomLoadingIndicatorAtRowIndex:(NSUInteger)rowIndex cellIndex:(NSUInteger)cellIndex {
+    SSJSeparatorFormViewCell *cell = [self cellAtRowIndex:rowIndex cellIndex:cellIndex];
+    if (cell) {
+        cell.bottomLab.hidden = NO;
+        [cell.bottomIndicator startAnimating];
+    }
+}
+
+- (void)hideBottomLoadingIndicatorAtRowIndex:(NSUInteger)rowIndex cellIndex:(NSUInteger)cellIndex {
+    SSJSeparatorFormViewCell *cell = [self cellAtRowIndex:rowIndex cellIndex:cellIndex];
+    if (cell) {
+        cell.bottomLab.hidden = NO;
+        [cell.bottomIndicator stopAnimating];
+    }
+}
+
+- (SSJSeparatorFormViewCell *)cellAtRowIndex:(NSUInteger)rowIndex cellIndex:(NSUInteger)cellIndex {
+    if (_cells.count <= rowIndex) {
+        SSJPRINT(@"rowIndex必须小于%d", (int)_cells.count);
+        return nil;
+    }
+    
+    NSArray *rowCells = _cells[rowIndex];
+    if (rowCells.count <= cellIndex) {
+        SSJPRINT(@"cellIndex必须小于%d", (int)rowCells.count);
+        return nil;
+    }
+    
+    SSJSeparatorFormViewCell *cell = rowCells[cellIndex];
+    return cell;
 }
 
 - (void)setSeparatorColor:(UIColor *)separatorColor {

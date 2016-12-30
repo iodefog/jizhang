@@ -36,6 +36,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)reloadData;
 
+- (void)showTopLoadingIndicatorAtRowIndex:(NSUInteger)rowIndex cellIndex:(NSUInteger)cellIndex;
+
+- (void)hideTopLoadingIndicatorAtRowIndex:(NSUInteger)rowIndex cellIndex:(NSUInteger)cellIndex;
+
+- (void)showBottomLoadingIndicatorAtRowIndex:(NSUInteger)rowIndex cellIndex:(NSUInteger)cellIndex;
+
+- (void)hideBottomLoadingIndicatorAtRowIndex:(NSUInteger)rowIndex cellIndex:(NSUInteger)cellIndex;
+
 @end
 
 @interface SSJSeparatorFormViewCellItem : NSObject

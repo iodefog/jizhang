@@ -462,6 +462,7 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
     if (_axisXCount == 0) {
         [_collectionView reloadData];
         _suspensionView.items = nil;
+        _ballonView.hidden = YES;
         return;
     }
     
@@ -470,9 +471,12 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
         if (_curveCount == 0) {
             [_collectionView reloadData];
             _suspensionView.items = nil;
+            _ballonView.hidden = YES;
             return;
         }
     }
+    
+    _ballonView.hidden = !_showBalloon;
     
     [self updateVisibleIndex];
     
