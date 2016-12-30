@@ -18,7 +18,7 @@ static NSString *const kCellId = @"cellId";
 
 @property (nonatomic, strong) UITableView *tableView;
 
-@property (nonatomic, strong) NSArray *titles;
+@property (nonatomic, strong) NSMutableArray *titles;
 
 @end
 
@@ -96,17 +96,23 @@ static NSString *const kCellId = @"cellId";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     SSJBaseTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellId forIndexPath:indexPath];
-    cell.textLabel.textAlignment = NSTextAlignmentCenter;
-    cell.textLabel.text = [_titles ssj_objectAtIndexPath:indexPath];
-    cell.contentView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
-    cell.textLabel.numberOfLines = 0;
-    
-    if (indexPath.section == 0) {
-        cell.textLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-    } else if (indexPath.section == 1) {
-        cell.textLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    if ([[_titles ssj_objectAtIndexPath:indexPath] isKindOfClass:[NSAttributedString class]]) {
+        cell.textLabel.textAlignment = NSTextAlignmentCenter;
+        cell.contentView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
+        cell.textLabel.numberOfLines = 0;
+        cell.textLabel.attributedText = [_titles ssj_objectAtIndexPath:indexPath];
+    } else {
+        cell.textLabel.textAlignment = NSTextAlignmentCenter;
+        cell.textLabel.text = [_titles ssj_objectAtIndexPath:indexPath];
+        cell.contentView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
+        cell.textLabel.numberOfLines = 0;
+        if (indexPath.section == 0) {
+            cell.textLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+        } else if (indexPath.section == 1) {
+            cell.textLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+        }
     }
-    
+
     return cell;
 }
 
@@ -149,9 +155,11 @@ static NSString *const kCellId = @"cellId";
 }
 
 - (void)setAttributtedText:(NSAttributedString *)attributedtext forIndex:(NSInteger)index {
-    NSIndexPath *currentIndex = [NSIndexPath indexPathForRow:index inSection:0];
-    SSJBaseTableViewCell *currentCell = [self.tableView cellForRowAtIndexPath:currentIndex];
-    currentCell.textLabel.attributedText = attributedtext;
+    NSMutableArray *subTitles = [[self.titles objectAtIndex:0] mutableCopy];
+    if ([subTitles objectAtIndex:index]) {
+        [subTitles replaceObjectAtIndex:index withObject:attributedtext];
+    }
+    [self.titles replaceObjectAtIndex:0 withObject:subTitles];
 }
 
 @end
