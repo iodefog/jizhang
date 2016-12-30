@@ -88,9 +88,9 @@ static NSString *const kTitle6 = @"分期申请日";
         self.repaymentModel.instalmentCout = 1;
         NSDate *repaymentDate = [NSDate date];
         if (repaymentDate.day < self.repaymentModel.cardBillingDay) {
-            repaymentDate = [repaymentDate dateBySubtractingMonths:2];
-        }else {
             repaymentDate = [repaymentDate dateBySubtractingMonths:1];
+        }else {
+            repaymentDate = repaymentDate;
         }
         self.repaymentModel.repaymentMonth = repaymentDate;
         self.title = @"新建账单分期";
@@ -250,7 +250,11 @@ static NSString *const kTitle6 = @"分期申请日";
             }
         }else if (textField.tag == 101) {
             textField.text = [textField.text ssj_reserveDecimalDigits:2 intDigits:0];
-            self.repaymentModel.repaymentMoney = [NSDecimalNumber decimalNumberWithString:textField.text];
+            if (textField.text.length) {
+                self.repaymentModel.repaymentMoney = [NSDecimalNumber decimalNumberWithString:textField.text];
+            } else {
+                self.repaymentModel.repaymentMoney = [NSDecimalNumber decimalNumberWithString:@"0.00"];
+            }
         }else if (textField.tag == 102) {
             textField.text = [textField.text ssj_reserveDecimalDigits:2 intDigits:0];
             if ([textField.text doubleValue] > 100) {
@@ -420,20 +424,20 @@ static NSString *const kTitle6 = @"分期申请日";
 
 #pragma mark - private
 - (void)updatePoundageLab{
-    double principalMoney;
 #warning 该账单周期内总欠款
     NSString *totalArrearStr = [[NSString stringWithFormat:@"%f",11.5] ssj_moneyDecimalDisplayWithDigits:2];
     NSString *oldStr = [NSString stringWithFormat:@"该账单周期内总欠款为%@元",totalArrearStr];
     _fenQiLab.attributedText = [oldStr attributeStrWithTargetStr:totalArrearStr range:NSMakeRange(0, 0) color:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]];
     [_fenQiLab sizeToFit];
-    if (self.repaymentModel.instalmentCout && [self.repaymentModel.repaymentMoney doubleValue] > 0) {
+    double principalMoney;
+    if (self.repaymentModel.instalmentCout) {
         principalMoney = [self.repaymentModel.repaymentMoney doubleValue] / self.repaymentModel.instalmentCout;
     } else {
         principalMoney = 0;
     }
     NSString *pripalStr = [[NSString stringWithFormat:@"%f",principalMoney] ssj_moneyDecimalDisplayWithDigits:2];
     double poundageMoney;
-    if (self.repaymentModel.instalmentCout && [self.repaymentModel.repaymentMoney doubleValue] > 0 && [self.repaymentModel.poundageRate doubleValue] > 0 ) {
+    if (self.repaymentModel.instalmentCout) {
         poundageMoney = [self.repaymentModel.repaymentMoney doubleValue] * [self.repaymentModel.poundageRate doubleValue];
     } else {
         poundageMoney = 0;

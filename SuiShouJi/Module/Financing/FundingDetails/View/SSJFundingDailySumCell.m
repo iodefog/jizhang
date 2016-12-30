@@ -21,7 +21,7 @@
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier]) {
-        self.backgroundColor = [UIColor clearColor];
+        self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         [self.contentView addSubview:self.dateLabel];
         [self.contentView addSubview:self.moneyLabel];

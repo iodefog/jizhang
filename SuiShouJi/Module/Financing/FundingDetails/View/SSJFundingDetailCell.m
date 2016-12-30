@@ -13,8 +13,6 @@
 
 @interface SSJFundingDetailCell()
 
-@property (nonatomic, strong) UILabel *moneyLab;
-
 @property(nonatomic, strong) UIImageView *memoImage;
 
 @property(nonatomic, strong) UIImageView *haveImage;

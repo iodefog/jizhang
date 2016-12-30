@@ -240,6 +240,12 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                 item.money = [NSString stringWithFormat:@"+%.2f",money];
                 newcardItem.cardIncome = newcardItem.cardIncome + money;
             }
+            if (item.idType == SSJChargeIdTypeCircleConfig) {
+                item.configId = [resultSet stringForColumn:@"sundryid"];
+            }
+            if (item.idType == SSJChargeIdTypeLoan) {
+                item.loanId = [resultSet stringForColumn:@"sundryid"];
+            }
             if (item.loanId.length) {
                 // 先判断他是借入还是借出
                 if (item.loanType) {
@@ -418,7 +424,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
         case 5: return @"星期四";
         case 6: return @"星期五";
         case 7: return @"星期六";
-
+            
         default: return nil;
     }
 }
