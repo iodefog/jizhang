@@ -55,4 +55,35 @@
     return result;
 }
 
+
+- (NSMutableAttributedString *)attributeStrWithTargetStr:(NSString *)targetStr range:(NSRange)range color:(UIColor *)color
+{
+    if (self.length < 1) return nil;
+    NSMutableAttributedString *attStr = [[NSMutableAttributedString alloc]initWithString:self];
+    if (targetStr.length < 1 && range.length < 1) return attStr;
+    if (!color) return attStr;
+    if(range.length > 0){
+        [attStr addAttribute:NSForegroundColorAttributeName value:color range:range];
+    }else if (targetStr.length > 0) {
+        NSRange targetRange = [self rangeOfString:targetStr];
+        if (targetRange.length < 1) return attStr;
+        [attStr addAttribute:NSForegroundColorAttributeName value:color range:targetRange];
+    }
+    return attStr;
+}
+
+- (NSMutableAttributedString *)attributeStrWithTargetStr:(NSString *)targetStr range:(NSRange)range attributedDictionary:(NSDictionary *)attriDic
+{
+    if (self.length < 1) return nil;
+    NSMutableAttributedString *attStr = [[NSMutableAttributedString alloc]initWithString:self];
+    if (targetStr.length < 1 && range.length < 1) return attStr;
+    if(range.length > 0){
+        [attStr addAttributes:attriDic range:range];
+    }else if (targetStr.length > 0) {
+        NSRange targetRange = [self rangeOfString:targetStr];
+        if (targetRange.length < 1) return attStr;
+         [attStr addAttributes:attriDic range:targetRange];
+    }
+    return attStr;
+}
 @end
