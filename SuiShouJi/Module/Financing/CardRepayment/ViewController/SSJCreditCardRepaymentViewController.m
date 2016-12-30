@@ -15,6 +15,7 @@
 #import "SSJAddOrEditLoanMultiLabelCell.h"
 #import "SSJFundingTypeSelectView.h"
 #import "SSJReminderDateSelectView.h"
+#import "NSMutableAttributedString+AttributeStr.h"
 
 #import "SSJFinancingHomeHelper.h"
 #import "SSJRepaymentStore.h"
@@ -172,12 +173,8 @@ static NSString *const kTitle6 = @"还款账单月份";
         if ([self.repaymentModel.repaymentMoney doubleValue] > 0) {
             totalArrearStr = [[NSString stringWithFormat:@"%@",self.repaymentModel.repaymentMoney] ssj_moneyDecimalDisplayWithDigits:2];
         }
-        
         NSString *oldStr = [NSString stringWithFormat:@"该账单周期内总欠款为%@元",totalArrearStr];
-        NSRange range = [oldStr rangeOfString:totalArrearStr];
-        NSMutableAttributedString *attStr = [[NSMutableAttributedString alloc]initWithString:oldStr];
-        [attStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] range:range];
-        fenQiCell.subtitleLabel.attributedText = attStr;
+        fenQiCell.subtitleLabel.attributedText = [NSMutableAttributedString attributeStrWithOldStr:oldStr targetStr:totalArrearStr range:NSMakeRange(0, 0) color:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]];;
         [fenQiCell.subtitleLabel sizeToFit];
 
         return fenQiCell;
