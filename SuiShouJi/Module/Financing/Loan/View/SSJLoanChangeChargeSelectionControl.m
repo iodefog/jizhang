@@ -24,10 +24,10 @@ static NSString *const kCellId = @"cellId";
 
 @implementation SSJLoanChangeChargeSelectionControl
 
-- (instancetype)initWithTitles:(NSArray *)titles{
+- (instancetype)initWithTitles:(NSMutableArray *)titles{
     if (self = [super initWithFrame:CGRectZero]) {
         self.backgroundColor = [UIColor clearColor];
-        self.titles = titles;
+        self.titles = [titles mutableCopy];
         [self addSubview:self.tableView];
         [self updateAppearance];
     }
