@@ -402,34 +402,34 @@ static NSString *const kSegmentTitleIncome = @"收入";
     if (_titleSegmentCtrl.selectedSegmentIndex == 0) {
         switch (_selectedOption) {
             case SSJReportFormsMemberAndCategoryOptionCategory: {
-                [self.view ssj_showLoadingIndicator];
+                [self.tableView ssj_showLoadingIndicator];
                 [SSJReportFormsUtil queryForIncomeOrPayType:[self currentType]
                                                     booksId:_currentBooksId
                                                   startDate:period.startDate
                                                     endDate:period.endDate
                                                     success:^(NSArray<SSJReportFormsItem *> *result) {
-                    [self.view ssj_hideLoadingIndicator];
+                    [self.tableView ssj_hideLoadingIndicator];
                     self.tableView.tableHeaderView = nil;
                     [self reorganiseChartTableVieDatasWithOriginalData:result];
                 } failure:^(NSError *error) {
                     [self showError:error];
-                    [self.view ssj_hideLoadingIndicator];
+                    [self.tableView ssj_hideLoadingIndicator];
                 }];
             }
                 break;
                 
             case SSJReportFormsMemberAndCategoryOptionMember: {
-                [self.view ssj_showLoadingIndicator];
+                [self.tableView ssj_showLoadingIndicator];
                 [SSJReportFormsUtil queryForMemberChargeWithType:[self currentType]
                                                        startDate:period.startDate
                                                          endDate:period.endDate
                                                          success:^(NSArray<SSJReportFormsItem *> *result) {
-                    [self.view ssj_hideLoadingIndicator];
+                    [self.tableView ssj_hideLoadingIndicator];
                     self.tableView.tableHeaderView = nil;
                     [self reorganiseChartTableVieDatasWithOriginalData:result];
                 } failure:^(NSError *error) {
                     [self showError:error];
-                    [self.view ssj_hideLoadingIndicator];
+                    [self.tableView ssj_hideLoadingIndicator];
                 }];
             }
                 break;

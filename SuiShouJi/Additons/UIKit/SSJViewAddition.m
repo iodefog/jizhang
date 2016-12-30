@@ -355,15 +355,12 @@ static const void *kSSJLoadingIndicatorKey = &kSSJLoadingIndicatorKey;
 
 - (void)ssj_showLoadingIndicator {
     UIActivityIndicatorView *indicatorView = [self ssj_indicator];
-    if (indicatorView.superview) {
-        return;
-    }
     indicatorView.center = CGPointMake(self.width * 0.5, self.height * 0.5);
     [indicatorView startAnimating];
-
-    [UIView transitionWithView:self duration:0.25 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+    
+    if (indicatorView.superview != self) {
         [self addSubview:indicatorView];
-    } completion:NULL];
+    }
 }
 
 - (void)ssj_hideLoadingIndicator {
@@ -378,6 +375,8 @@ static const void *kSSJLoadingIndicatorKey = &kSSJLoadingIndicatorKey;
     
     if (!indicator) {
         indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        indicator.layer.zPosition = 100;
+        indicator.color = [UIColor redColor];
         objc_setAssociatedObject(self, kSSJLoadingIndicatorKey, indicator, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
         return indicator;
     }
