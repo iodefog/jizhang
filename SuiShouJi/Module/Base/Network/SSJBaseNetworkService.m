@@ -52,7 +52,8 @@
     SSJGlobalServiceManager *manager = [self p_customManager];
     
     NSDictionary *paramsDic = [self packParameters:params];
-    NSString *fullUrlString = [[NSURL URLWithString:urlString relativeToURL:[NSURL URLWithString:[SSJDomainManager domain]]] absoluteString];
+    
+    NSString *fullUrlString = SSJURLWithAPI(urlString);
     
     switch (_httpMethod) {
         case SSJBaseNetworkServiceHttpMethodPOST: {

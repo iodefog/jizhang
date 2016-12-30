@@ -267,7 +267,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 
 - (SSJRecordMakingBillTypeInputView *)billTypeInputView {
     if (!_billTypeInputView) {
-        _billTypeInputView = [[SSJRecordMakingBillTypeInputView alloc] initWithFrame:CGRectMake(0, self.customNaviBar.bottom, self.view.width, 91)];
+        _billTypeInputView = [[SSJRecordMakingBillTypeInputView alloc] initWithFrame:CGRectMake(0, self.customNaviBar.bottom, self.view.width, 70)];
         _billTypeInputView.fillColor = INPUT_DEFAULT_COLOR;
         _billTypeInputView.moneyInput.delegate = self;
         if (_item.money) {

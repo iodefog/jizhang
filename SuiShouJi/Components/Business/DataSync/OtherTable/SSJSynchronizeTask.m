@@ -52,10 +52,8 @@
 
 - (NSURLSessionUploadTask *)constructingBodyWithBlock:(void (^)(id <AFMultipartFormData> formData))block headerParams:(NSDictionary *)prarms toUrlPath:(NSString *)path completionHandler:(void (^)(NSURLResponse *response, id responseObject, NSError *error))completionHandler {
     //  创建请求
-    NSString *urlString = [[NSURL URLWithString:path relativeToURL:[NSURL URLWithString:[SSJDomainManager domain]]] absoluteString];
-    
     NSError *tError = nil;
-    NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] multipartFormRequestWithMethod:@"POST" URLString:urlString parameters:nil constructingBodyWithBlock:block error:&tError];
+    NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] multipartFormRequestWithMethod:@"POST" URLString:SSJURLWithAPI(path) parameters:nil constructingBodyWithBlock:block error:&tError];
     
     if (tError) {
         if (completionHandler) {
