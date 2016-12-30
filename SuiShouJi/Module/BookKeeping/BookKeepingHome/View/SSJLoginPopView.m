@@ -10,7 +10,7 @@
 #import "SSJLoginViewController.h"
 #import "SSJBookKeepingHomePopView.h"
 #import "SSJRegistGetVerViewController.h"
-BOOL kHomeNeedLoginPop;
+BOOL kHomeNeedLoginPop = YES;
 @implementation SSJLoginPopView
 
 + (BOOL)popIfNeededWithNav:(UINavigationController *)nav backController:(UIViewController *)backVC {
@@ -19,7 +19,7 @@ BOOL kHomeNeedLoginPop;
             SSJLoginViewController *loginVc = [[SSJLoginViewController alloc]init];
             [nav pushViewController:loginVc animated:YES];
         }], nil];
-        kHomeNeedLoginPop = YES;
+        kHomeNeedLoginPop = NO;
         return YES;
     }
     return NO;
