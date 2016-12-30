@@ -10,5 +10,9 @@
 #import "SSJBillingChargeCellItem.h"
 
 @interface SSJFundingDetailCell : SSJBaseTableViewCell
+
 @property(nonatomic, strong) SSJBillingChargeCellItem *item;
+
+@property (nonatomic, strong) UILabel *moneyLab;
+
 @end

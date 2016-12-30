@@ -67,6 +67,7 @@ static NSString *const kFundingListFirstLineCellID = @"kFundingListFirstLineCell
     if (indexPath.section == 0) {
         SSJFundingDetailCell *cell = [tableView dequeueReusableCellWithIdentifier:kFundingDetailCellID];
         cell.item = self.chargeItem;
+        cell.moneyLab.text = [[NSString stringWithFormat:@"%f",fabs([self.chargeItem.money doubleValue])] ssj_moneyDecimalDisplayWithDigits:2];
         return cell;
     }
     if (indexPath.section == 1) {

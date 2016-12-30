@@ -87,9 +87,9 @@ static NSString *const kTitle6 = @"分期申请日";
         self.repaymentModel.instalmentCout = 1;
         NSDate *repaymentDate = [NSDate date];
         if (repaymentDate.day < self.repaymentModel.cardBillingDay) {
-            repaymentDate = [repaymentDate dateBySubtractingMonths:2];
-        }else {
             repaymentDate = [repaymentDate dateBySubtractingMonths:1];
+        }else {
+            repaymentDate = repaymentDate;
         }
         self.repaymentModel.repaymentMonth = repaymentDate;
         self.title = @"新建账单分期";

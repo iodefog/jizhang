@@ -311,7 +311,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
             if (cellItem.idType == SSJChargeIdTypeLoan) {
                 // 满足以下条件跳转详情页面，否则跳转编辑页面
                 // 1.借贷已结清 2.流水类别是转入／转出，只有创建借贷或结清时才回生成这两种流水 3.余额变更
-                BOOL closeOut = [SSJFundingDetailHelper queryCloseOutStateWithLoanId:cellItem.loanId];
+                BOOL closeOut = [SSJFundingDetailHelper queryCloseOutStateWithLoanId:cellItem.sundryId];
                 if (closeOut || billId == 3 || billId == 4 || billId == 9 || billId == 10) {
                     SSJLoanChargeDetailViewController *detailController = [[SSJLoanChargeDetailViewController alloc] init];
                     detailController.chargeId = cellItem.ID;
@@ -423,6 +423,11 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
     if (!_repaymentPopView) {
         __weak typeof(self) wself = self;
         _repaymentPopView = [[SSJLoanChangeChargeSelectionControl alloc] initWithTitles:@[@[@"还款",@"账单分期\n(仅支持账单分期)"],@[@"取消"]]];
+        NSString *originalStr = @"账单分期\n(仅支持账单分期)";
+        NSMutableAttributedString *attributedStr = [[NSMutableAttributedString alloc] initWithString:originalStr];
+        [attributedStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] range:[originalStr rangeOfString:@"(仅支持账单分期)"]];
+        [attributedStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:13] range:[originalStr rangeOfString:@"(仅支持账单分期)"]];
+        [_repaymentPopView setAttributtedText:attributedStr forIndex:1];
         _repaymentPopView.selectionHandle = ^(NSString * title){
             if ([title isEqualToString:@"还款"]) {
                 SSJCreditCardRepaymentViewController *repaymentVC = [[SSJCreditCardRepaymentViewController alloc]init];

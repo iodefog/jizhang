@@ -19,6 +19,8 @@
 
 - (instancetype)initWithTitles:(NSArray *)titles;
 
+- (void)setAttributtedText:(NSAttributedString *)attributedtext forIndex:(NSInteger)index;
+
 - (void)show;
 
 - (void)updateAppearance;

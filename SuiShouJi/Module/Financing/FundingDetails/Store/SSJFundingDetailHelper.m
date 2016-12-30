@@ -240,6 +240,12 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                 item.money = [NSString stringWithFormat:@"+%.2f",money];
                 newcardItem.cardIncome = newcardItem.cardIncome + money;
             }
+            if (item.idType == SSJChargeIdTypeCircleConfig) {
+                item.configId = [resultSet stringForColumn:@"sundryid"];
+            }
+            if (item.idType == SSJChargeIdTypeLoan) {
+                item.loanId = [resultSet stringForColumn:@"sundryid"];
+            }
             if (item.loanId.length) {
                 // 先判断他是借入还是借出
                 if (item.loanType) {

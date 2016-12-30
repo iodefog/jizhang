@@ -172,6 +172,30 @@
     return cardBalance;
 }
 
++ (void)queryTheTotalExpenceForCardItem:(SSJCreditCardItem *)cardItem
+                                    month:(NSDate *)currentMonth
+                                  Success:(void (^)(double sumMoney))success
+                                  failure:(void (^)(NSError *error))failure {
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        double sumMoney = 0;
+        NSString *currentDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"];
+        NSString *userId = SSJUSERID();
+        NSDate *firstDate = [[NSDate dateWithYear:currentMonth.year month:currentMonth.month day:cardItem.cardBillingDay] dateBySubtractingMonths:1];
+        NSDate *seconDate = [[NSDate dateWithYear:currentMonth.year month:currentMonth.month day:cardItem.cardBillingDay] dateByAddingDays:1];
+        double currentIncome = [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and (a.cbilldate <= ? or ichargetype = ?) and b.itype = 0 and a.ifunsid = ? and a.cbilldate >= ? and a.cbilldate <= ?",userId,currentDate,@(SSJChargeIdTypeLoan),cardItem.cardId,[firstDate formattedDateWithFormat:@"yyyy-MM-dd"],[seconDate formattedDateWithFormat:@"yyyy-MM-dd"]];
+        double currentExpence = [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and (a.cbilldate <= ? or ichargetype = ?) and b.itype = 1 and a.ifunsid = ? and a.cbilldate >= ? and a.cbilldate <= ?",userId,currentDate,@(SSJChargeIdTypeLoan),cardItem.cardId,[firstDate formattedDateWithFormat:@"yyyy-MM-dd"],[seconDate formattedDateWithFormat:@"yyyy-MM-dd"]];
+        double currentRepaymentMoney = [db doubleForQuery:@"select sum(repaymentmoney) from bk_credit_repayment where crepaymentmonth = ? and cuserid = ? and operatortype <> 2 and ichargetype = ? and iinstalmentcount = 0",[currentMonth formattedDateWithFormat:@"yyyy-MM"],userId,@(SSJChargeIdTypeRepayment)];
+        double currentInstalMoney = [db doubleForQuery:@"select sum(repaymentmoney) from bk_credit_repayment where crepaymentmonth = ? and cuserid = ? and operatortype <> 2 and ichargetype = ? and iinstalmentcount > 0",[currentMonth formattedDateWithFormat:@"yyyy-MM"],userId,@(SSJChargeIdTypeRepayment)];
+        double currentRepaymentForOtherMonth = [db doubleForQuery:@"select sum(repaymentmoney) from bk_credit_repayment where crepaymentmonth <> ? and cuserid = ? and operatortype <> 2 and ichargetype = ? and iinstalmentcount = 0 and capplydate >= ? and capplydate <= ?",[currentMonth formattedDateWithFormat:@"yyyy-MM"],userId,@(SSJChargeIdTypeRepayment),[firstDate formattedDateWithFormat:@"yyyy-MM-dd"],[seconDate formattedDateWithFormat:@"yyyy-MM-dd"]];
+        sumMoney = currentIncome - currentExpence + currentRepaymentMoney + currentInstalMoney - currentRepaymentForOtherMonth;
+        SSJDispatch_main_async_safe(^{
+            if (success) {
+                success(sumMoney);
+            }
+        });
+    }];
+}
+
 + (BOOL)deleteCreditCardWithCardItem:(SSJCreditCardItem *)item
              inDatabase:(FMDatabase *)db
               forUserId:(NSString *)userId

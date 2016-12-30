@@ -148,4 +148,10 @@ static NSString *const kCellId = @"cellId";
     return _tableView;
 }
 
+- (void)setAttributtedText:(NSAttributedString *)attributedtext forIndex:(NSInteger)index {
+    NSIndexPath *currentIndex = [NSIndexPath indexPathForRow:index inSection:0];
+    SSJBaseTableViewCell *currentCell = [self.tableView cellForRowAtIndexPath:currentIndex];
+    currentCell.textLabel.attributedText = attributedtext;
+}
+
 @end

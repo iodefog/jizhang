@@ -53,6 +53,7 @@ typedef NS_ENUM(NSInteger, SSJChargeIdType) {
     SSJChargeIdTypeCircleConfig = 1,  // 周期记账
     SSJChargeIdTypeLoan = 2,          // 借贷
     SSJChargeIdTypeRepayment = 3,     // 还款
+    SSJChargeIdTypeTransfer = 4,      // 转账
 };
 
 //  预算周期
