@@ -121,6 +121,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
     [self.view addSubview:self.tableView];
     
     [self updateAppearance];
+    [self updateSubveiwsHidden];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -368,6 +369,12 @@ static NSString *const kSegmentTitleIncome = @"收入";
         
         [self updateSubveiwsHidden];
         
+        if (_periods.count == 0) {
+            [self.view ssj_showWatermarkWithCustomView:self.noDataRemindView animated:YES target:nil action:nil];
+        } else {
+            [self.view ssj_hideWatermark:YES];
+        }
+        
         if (_periods.count > 0) {
             
             [_dateAxisView reloadData];
@@ -476,9 +483,6 @@ static NSString *const kSegmentTitleIncome = @"收入";
         _customPeriodBtn.hidden = YES;
         _addOrDeleteCustomPeriodBtn.hidden = YES;
         self.tableView.hidden = YES;
-        
-        [self.view ssj_showWatermarkWithCustomView:self.noDataRemindView animated:YES target:nil action:nil];
-        
         return;
     }
     
@@ -492,7 +496,6 @@ static NSString *const kSegmentTitleIncome = @"收入";
     
     _addOrDeleteCustomPeriodBtn.hidden = NO;
     self.tableView.hidden = NO;
-    [self.view ssj_hideWatermark:YES];
 }
 
 - (void)updateCurveHeaderItemWithCurveModels:(NSArray<SSJReportFormsCurveModel *> *)curveModels period:(SSJDatePeriod *)period {
