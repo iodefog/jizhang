@@ -740,7 +740,7 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
 - (NSString *)timeWithModel:(SSJReportFormsCurveModel *)model {
     switch ([self currentDemension]) {
         case SSJTimeDimensionDay: {
-            return [model.startDate formattedDateWithFormat:@"dd日"];
+            return [model.startDate formattedDateWithFormat:@"dd"];
         }
             break;
             

@@ -10,11 +10,11 @@
 
 @interface SSJReportFormsCurveViewItem : NSObject
 
+@property (nonatomic) BOOL showCurve;
+
 @property (nonatomic) CGPoint startPoint;
 
 @property (nonatomic) CGPoint endPoint;
-
-@property (nonatomic) BOOL showCurve;
 
 @property (nonatomic) CGFloat curveWidth;
 
@@ -24,7 +24,7 @@
 
 @property (nonatomic) CGFloat shadowWidth;
 
-@property (nonatomic) CGPoint shadowOffset;
+@property (nonatomic) CGSize shadowOffset;
 
 @property (nonatomic) CGFloat shadowAlpha;
 

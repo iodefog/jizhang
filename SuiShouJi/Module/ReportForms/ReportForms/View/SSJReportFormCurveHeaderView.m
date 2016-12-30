@@ -132,7 +132,7 @@ static const CGFloat kSeparatorFormViewHeight = 88;
     SSJReportFormsCurveModel *model = [self.item.curveModels ssj_safeObjectAtIndex:index];
     switch (_item.timeDimension) {
         case SSJTimeDimensionDay: {
-            return [model.startDate formattedDateWithFormat:@"dd日"];
+            return [model.startDate formattedDateWithFormat:@"dd"];
         }
             break;
             

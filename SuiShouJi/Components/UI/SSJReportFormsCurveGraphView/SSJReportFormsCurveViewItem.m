@@ -14,7 +14,8 @@
     return (CGColorEqualToColor(_curveColor.CGColor, item.curveColor.CGColor)
             && CGPointEqualToPoint(_startPoint, item.startPoint)
             && CGPointEqualToPoint(_endPoint, item.endPoint)
-            && CGPointEqualToPoint(_shadowOffset, item.shadowOffset)
+            && CGSizeEqualToSize(_shadowOffset, item.shadowOffset)
+            && _showCurve == item.showCurve
             && _showShadow == item.showShadow
             && _shadowWidth == item.shadowWidth
             && _shadowAlpha == item.shadowAlpha
@@ -22,13 +23,14 @@
 }
 
 - (NSString *)debugDescription {
-    return [NSString stringWithFormat:@"%@:%@", self, @{@"startPoint":NSStringFromCGPoint(_startPoint),
+    return [NSString stringWithFormat:@"%@:%@", self, @{@"showCurve":@(_showCurve),
+                                                        @"startPoint":NSStringFromCGPoint(_startPoint),
                                                         @"endPoint":NSStringFromCGPoint(_endPoint),
                                                         @"curveWidth":@(_curveWidth),
                                                         @"curveColor":_curveColor ?: [NSNull null],
                                                         @"showShadow":@(_showShadow),
                                                         @"shadowWidth":@(_shadowWidth),
-                                                        @"shadowOffset":NSStringFromCGPoint(_shadowOffset),
+                                                        @"shadowOffset":NSStringFromCGSize(_shadowOffset),
                                                         @"shadowAlpha":@(_shadowAlpha),
                                                         @"showValue":@(_showValue),
                                                         @"value":_value ?: [NSNull null],

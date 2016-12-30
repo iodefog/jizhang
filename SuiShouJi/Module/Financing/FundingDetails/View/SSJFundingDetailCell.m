@@ -128,7 +128,7 @@
             [self.typeLabel sizeToFit];
         }
     }else{
-        if (item.loanId.length) {
+        if (item.idType == SSJChargeIdTypeLoan) {
             if (item.loanType == SSJLoanTypeLend) {
                 // 借出
                 switch (item.loanChargeType) {
