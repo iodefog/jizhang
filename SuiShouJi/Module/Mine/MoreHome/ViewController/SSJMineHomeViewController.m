@@ -372,7 +372,6 @@ static BOOL kNeedBannerDisplay = YES;
         }else{
             self.lineView.top = 0;
         }
-        
     }
     
     //广告
@@ -381,9 +380,9 @@ static BOOL kNeedBannerDisplay = YES;
             [self.adItems addObject:listAdItem];
            NSInteger index = [self.adItems indexOfObject:listAdItem];
             [self.adItemsArray insertObject:listAdItem atIndex:index];
-            [self.collectionView reloadData];
         }
     }
+    [self.collectionView reloadData];
 }
 
 - (void)server:(SSJBaseNetworkService *)service didFailLoadWithError:(NSError *)error
@@ -394,7 +393,6 @@ static BOOL kNeedBannerDisplay = YES;
             [self.adItems addObject:listAdItem];
             NSInteger index = [self.adItems indexOfObject:listAdItem];
             [self.adItemsArray insertObject:listAdItem atIndex:index];
-            [self.collectionView reloadData];
         }
     }
     [self.collectionView reloadData];
