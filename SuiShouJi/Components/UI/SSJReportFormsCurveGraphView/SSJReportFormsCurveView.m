@@ -10,11 +10,29 @@
 #import "SSJReportFormsCurveViewItem.h"
 #import "SSJReportFormsCurveDot.h"
 
+@interface _SSJReportFormsCurveShapeView : UIView
+
+@property (nonatomic, strong, readonly) CAShapeLayer *layer;
+
+@end
+
+@implementation _SSJReportFormsCurveShapeView
+
++ (Class)layerClass {
+    return [CAShapeLayer class];
+}
+
+- (CAShapeLayer *)layer {
+    return (CAShapeLayer *)[super layer];
+}
+
+@end
+
 @interface SSJReportFormsCurveView ()
 
 @property (nonatomic, strong) UIBezierPath *curvePath;
 
-@property (nonatomic, strong) CAShapeLayer *curveLayer;
+@property (nonatomic, strong) _SSJReportFormsCurveShapeView *curveView;
 
 @property (nonatomic, strong) SSJReportFormsCurveDot *dot;
 
@@ -69,8 +87,8 @@
         
         _curvePath = [UIBezierPath bezierPath];
         
-        _curveLayer = [CAShapeLayer layer];
-        [self.layer addSublayer:_curveLayer];
+        _curveView = [[_SSJReportFormsCurveShapeView alloc] init];
+        [self addSubview:_curveView];
         
         _dot = [[SSJReportFormsCurveDot alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
         _dot.outerRadius = 8;
@@ -97,7 +115,7 @@
     [_valueLab sizeToFit];
     _valueLab.leftTop = CGPointMake(_item.endPoint.x + _dot.outerRadius, _item.endPoint.y);
     
-    _curveLayer.frame = self.bounds;
+    _curveView.frame = self.bounds;
     _maskCurveLayer.frame = self.bounds;
 }
 
@@ -122,7 +140,7 @@
     [self updateDot];
     [self updateValueLabel];
     
-    _curveLayer.hidden = !_item.showCurve;
+    _curveView.hidden = !_item.showCurve;
     if (needsToUpdateCurve) {
         [self updateCurve];
     }
@@ -132,11 +150,11 @@
 
 - (void)updateCurve {
     if (!_item.showCurve) {
-        _curveLayer.hidden = YES;
+        _curveView.hidden = YES;
         return;
     }
     
-    _curveLayer.hidden = NO;
+    _curveView.hidden = NO;
     
     CGFloat offset = (_item.endPoint.x - _item.startPoint.x) * 0.35;
     CGPoint controlPoint1 = CGPointMake(_item.startPoint.x + offset, _item.startPoint.y);
@@ -146,16 +164,16 @@
     [_curvePath moveToPoint:_item.startPoint];
     [_curvePath addCurveToPoint:_item.endPoint controlPoint1:controlPoint1 controlPoint2:controlPoint2];
     
-    _curveLayer.path = _curvePath.CGPath;
-    _curveLayer.lineWidth = _item.curveWidth;
-    _curveLayer.strokeColor = _item.curveColor.CGColor;
-    _curveLayer.fillColor = [UIColor clearColor].CGColor;
+    _curveView.layer.path = _curvePath.CGPath;
+    _curveView.layer.lineWidth = _item.curveWidth;
+    _curveView.layer.strokeColor = _item.curveColor.CGColor;
+    _curveView.layer.fillColor = [UIColor clearColor].CGColor;
     
     if (_item.showShadow) {
-        _curveLayer.shadowColor = _item.curveColor.CGColor;
-        _curveLayer.shadowOpacity = 0.3;
-        _curveLayer.shadowOffset = _item.shadowOffset;
-        _curveLayer.shadowRadius = 1.2;
+        _curveView.layer.shadowColor = _item.curveColor.CGColor;
+        _curveView.layer.shadowOpacity = 0.3;
+        _curveView.layer.shadowOffset = _item.shadowOffset;
+        _curveView.layer.shadowRadius = 1.2;
     }
     
     [self takeScreenShot];
@@ -166,23 +184,23 @@
     
     _maskCurveLayer.hidden = YES;
     
-    if (CGRectIsEmpty(self.bounds) || !_item.showCurve || _curveLayer.hidden) {
+    if (CGRectIsEmpty(self.bounds) || !_item.showCurve || _curveView.hidden) {
         return;
     }
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), [[self class] sharedQueue], ^{
         
-        if (CGRectIsEmpty(self.bounds) || !_item.showCurve || _curveLayer.hidden) {
+        if (CGRectIsEmpty(self.bounds) || !_item.showCurve || _curveView.hidden) {
             return;
         }
         
-        UIImage *screentShot = [_curveLayer ssj_takeScreenShotWithSize:_curveLayer.size opaque:NO scale:0];;
+        UIImage *screentShot = [_curveView ssj_takeScreenShotWithSize:_curveView.size opaque:NO scale:0];;
         
         dispatch_sync(dispatch_get_main_queue(), ^{
             _maskCurveLayer.image = screentShot;
             _maskCurveLayer.size = screentShot.size;
             
-            _curveLayer.hidden = YES;
+            _curveView.hidden = YES;
             _maskCurveLayer.hidden = NO;
         });
     });
