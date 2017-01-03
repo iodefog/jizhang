@@ -181,8 +181,6 @@
     [self.mm_drawerController setCloseDrawerGestureModeMask:MMCloseDrawerGestureModeAll];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(continueLoading) name:SSJHomeContinueLoadingNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(syncDidFail) name:SSJSyncDataFailureNotification object:nil];
-
-    
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -194,7 +192,7 @@
     [self getCurrentDate];
     [self.tableView reloadData];
     [self.floatingDateView removeFromSuperview];
-    [self.mutiFunctionButton removeFromSuperview];
+    [self.mutiFunctionButton dismiss];
     _dateViewHasDismiss = YES;
 }
 
@@ -340,7 +338,7 @@
     }else {
         if (scrollView.contentOffset.y > - 20 && self.items.count != 0)  {
             [self.floatingDateView show];
-            [self.mutiFunctionButton show];
+            [self.mutiFunctionButton showOnView:self.view];
         }
         CGPoint currentPostion = [self.view convertPoint:CGPointMake(self.view.width / 2, self.view.height / 2) toView:self.tableView];
         NSInteger currentRow = [self.tableView indexPathForRowAtPoint:currentPostion].row;
@@ -883,7 +881,6 @@
         if ([self.evaluatePopView showEvaluatePopView] == YES) return;
     }
 }
-
 
 
 @end

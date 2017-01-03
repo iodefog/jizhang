@@ -127,6 +127,9 @@ static NSString *const kCellId = @"cellId";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
+    if ([title isKindOfClass:[NSMutableAttributedString class]]) {
+        title = ((NSMutableAttributedString *)title).string;
+    }
     if (indexPath.section == 0 && indexPath.row == 0) {
         if (_selectionHandle) {
             _selectionHandle(title);

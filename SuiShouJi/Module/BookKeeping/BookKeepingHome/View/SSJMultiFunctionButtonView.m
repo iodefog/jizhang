@@ -44,16 +44,14 @@ static const CGFloat kButtonGap = 8.0;
     }
 }
 
-- (void)show {
+- (void)showOnView:(UIView *)view{
     
     if (self.superview) {
         return;
     }
     
-    UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
-    
-    [keyWindow addSubview:self];
-    self.leftBottom = CGPointMake(20, keyWindow.height - 104);
+    [view addSubview:self];
+    self.leftBottom = CGPointMake(20, view.height - 104);
     self.alpha = 0;
     self.size = CGSizeMake(kButtonWidth, kButtonWidth);
     self.buttonStatus = YES;

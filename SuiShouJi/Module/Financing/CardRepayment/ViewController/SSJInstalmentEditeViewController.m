@@ -20,6 +20,7 @@
 #import "SSJDatabaseQueue.h"
 #import "SSJFinancingHomeHelper.h"
 #import "NSMutableAttributedString+AttributeStr.h"
+#import "SSJCreditCardStore.h"
 
 static NSString *const SSJInstalmentCellIdentifier = @"SSJInstalmentCellIdentifier";
 
@@ -192,9 +193,8 @@ static NSString *const kTitle6 = @"分期申请日";
         fenQiCell.haspercentLab = NO;
         [fenQiCell setNeedsLayout];
         fenQiCell.textField.attributedPlaceholder = [[NSAttributedString alloc]initWithString:@"0.00" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
-        [self updatePoundageLab];
+        [self updateFenqiLab];
         return fenQiCell;
-        
     }else{
         SSJChargeCircleModifyCell *repaymentModifyCell = [tableView dequeueReusableCellWithIdentifier:SSJInstalmentCellIdentifier];
         repaymentModifyCell.cellTitle = title;
@@ -416,7 +416,7 @@ static NSString *const kTitle6 = @"分期申请日";
         _repaymentMonthSelectView.timerSetBlock = ^(NSDate *date){
             weakSelf.repaymentModel.repaymentMonth = date;
             #warning 该账单周期内总欠款
-            [weakSelf.tableView reloadData];
+            [weakSelf updateFenqiLab];
         };
     }
     return _repaymentMonthSelectView;
@@ -425,10 +425,7 @@ static NSString *const kTitle6 = @"分期申请日";
 #pragma mark - private
 - (void)updatePoundageLab{
 #warning 该账单周期内总欠款
-    NSString *totalArrearStr = [[NSString stringWithFormat:@"%f",11.5] ssj_moneyDecimalDisplayWithDigits:2];
-    NSString *oldStr = [NSString stringWithFormat:@"该账单周期内总欠款为%@元",totalArrearStr];
-    _fenQiLab.attributedText = [NSMutableAttributedString attributeStrWithOldStr:oldStr targetStr:totalArrearStr range:NSMakeRange(0, 0) color:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]];
-    [_fenQiLab sizeToFit];
+
     double principalMoney;
     if (self.repaymentModel.instalmentCout) {
         principalMoney = [self.repaymentModel.repaymentMoney doubleValue] / self.repaymentModel.instalmentCout;
@@ -456,6 +453,21 @@ static NSString *const kTitle6 = @"分期申请日";
     [secondAtrributeStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] range:[secondStr rangeOfString:sumMoneyStr]];
     _instalDateLab.attributedText = secondAtrributeStr;
     [_instalDateLab sizeToFit];
+}
+
+- (void)updateFenqiLab{
+    [SSJCreditCardStore queryTheTotalExpenceForCardId:self.repaymentModel.cardId cardBillingDay:self.repaymentModel.cardBillingDay month:self.repaymentModel.repaymentMonth Success:^(double sumMoney) {
+        if (sumMoney > 0) {
+            sumMoney = 0;
+        }
+        NSString *totalArrearStr = [[NSString stringWithFormat:@"%f",fabs(sumMoney)] ssj_moneyDecimalDisplayWithDigits:2];
+        NSString *oldStr = [NSString stringWithFormat:@"该账单周期内总欠款为%@元",totalArrearStr];
+        _fenQiLab.attributedText = [NSMutableAttributedString attributeStrWithOldStr:oldStr targetStr:totalArrearStr range:NSMakeRange(0, 0) color:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]];
+        [_fenQiLab sizeToFit];
+    } failure:^(NSError *error) {
+        
+    }];
+
 }
 
 - (NSInteger)checkTheInstalCountWithMonth:(NSDate *)month{

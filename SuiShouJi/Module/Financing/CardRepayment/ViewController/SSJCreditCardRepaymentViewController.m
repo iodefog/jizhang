@@ -19,6 +19,7 @@
 
 #import "SSJFinancingHomeHelper.h"
 #import "SSJRepaymentStore.h"
+#import "SSJCreditCardStore.h"
 
 #import "SSJFundingItem.h"
 #import "SSJCreditCardItem.h"
@@ -51,7 +52,9 @@ static NSString *const kTitle6 = @"还款账单月份";
 
 @end
 
-@implementation SSJCreditCardRepaymentViewController
+@implementation SSJCreditCardRepaymentViewController{
+    UILabel *_fenQiLab;
+}
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextFieldTextDidChangeNotification object:nil];
@@ -168,13 +171,11 @@ static NSString *const kTitle6 = @"还款账单月份";
         fenQiCell.textField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
         [fenQiCell setNeedsLayout];
         fenQiCell.textField.attributedPlaceholder = [[NSAttributedString alloc]initWithString:@"0.00" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
-#warning 该账单周期内总欠款
-        NSString *totalArrearStr = [[NSString stringWithFormat:@"%f",11.5] ssj_moneyDecimalDisplayWithDigits:2];
         if ([self.repaymentModel.repaymentMoney doubleValue] > 0) {
-            totalArrearStr = [[NSString stringWithFormat:@"%@",self.repaymentModel.repaymentMoney] ssj_moneyDecimalDisplayWithDigits:2];
+            fenQiCell.textField.text = [[NSString stringWithFormat:@"%@",self.repaymentModel.repaymentMoney] ssj_moneyDecimalDisplayWithDigits:2];
         }
-        NSString *oldStr = [NSString stringWithFormat:@"该账单周期内总欠款为%@元",totalArrearStr];
-        fenQiCell.subtitleLabel.attributedText = [NSMutableAttributedString attributeStrWithOldStr:oldStr targetStr:totalArrearStr range:NSMakeRange(0, 0) color:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]];;
+        _fenQiLab = fenQiCell.subtitleLabel;
+        [self updateFenqiLab];
         [fenQiCell.subtitleLabel sizeToFit];
 
         return fenQiCell;
@@ -248,7 +249,6 @@ static NSString *const kTitle6 = @"还款账单月份";
         [CDAutoHideMessageHUD showMessage:@"本期账单还没有出不能还款哦"];
         return;
     }
-
     __weak typeof(self) weakSelf = self;
     [SSJRepaymentStore saveRepaymentWithRepaymentModel:self.repaymentModel Success:^{
         [weakSelf.navigationController popViewControllerAnimated:YES];
@@ -351,6 +351,7 @@ static NSString *const kTitle6 = @"还款账单月份";
         __weak typeof(self) weakSelf = self;
         _repaymentMonthSelectView.timerSetBlock = ^(NSDate *date){
             weakSelf.repaymentModel.repaymentMonth = date;
+            [weakSelf updateFenqiLab];
             [weakSelf.tableView reloadData];
         };
     }
@@ -390,6 +391,20 @@ static NSString *const kTitle6 = @"还款账单月份";
     }
 }
 
+- (void)updateFenqiLab{
+    [SSJCreditCardStore queryTheTotalExpenceForCardId:self.repaymentModel.cardId cardBillingDay:self.repaymentModel.cardBillingDay month:self.repaymentModel.repaymentMonth Success:^(double sumMoney) {
+        if (sumMoney > 0) {
+            sumMoney = 0;
+        }
+        NSString *totalArrearStr = [[NSString stringWithFormat:@"%f",fabs(sumMoney)] ssj_moneyDecimalDisplayWithDigits:2];
+        NSString *oldStr = [NSString stringWithFormat:@"该账单周期内总欠款为%@元",totalArrearStr];
+        _fenQiLab.attributedText = [NSMutableAttributedString attributeStrWithOldStr:oldStr targetStr:totalArrearStr range:NSMakeRange(0, 0) color:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]];
+        [_fenQiLab sizeToFit];
+    } failure:^(NSError *error) {
+        
+    }];
+    
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

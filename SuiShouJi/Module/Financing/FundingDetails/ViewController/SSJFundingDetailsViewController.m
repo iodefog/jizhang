@@ -436,6 +436,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
                 model.cardId = item.cardId;
                 model.cardName = item.cardName;
                 model.cardBillingDay = item.cardBillingDay;
+                model.cardRepaymentDay = item.cardRepaymentDay;
                 repaymentVC.repaymentModel = model;
                 [wself.navigationController pushViewController:repaymentVC animated:YES];
             } else {

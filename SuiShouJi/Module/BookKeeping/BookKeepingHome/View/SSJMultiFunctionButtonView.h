@@ -37,7 +37,7 @@
 @property(nonatomic, strong) UIColor *mainButtonSelectedColor;
 
 
-- (void)show;
+- (void)showOnView:(UIView *)view;
 
 - (void)dismiss;
 
