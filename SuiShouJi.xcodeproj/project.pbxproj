@@ -956,10 +956,6 @@
 		9119A7FF1E0CB7B500374B62 /* SSJReportFormCanYinChartCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 91FD904C1E0B8319001C64B7 /* SSJReportFormCanYinChartCell.m */; };
 		9119A8001E0CB7B500374B62 /* SSJReportFormCanYinChartCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 91FD904C1E0B8319001C64B7 /* SSJReportFormCanYinChartCell.m */; };
 		9119A8011E0CB7B600374B62 /* SSJReportFormCanYinChartCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 91FD904C1E0B8319001C64B7 /* SSJReportFormCanYinChartCell.m */; };
-		914DFECA1E13AD8600866818 /* SSJInstalmentEditeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C18C0231DF7F84E00BC0971 /* SSJInstalmentEditeViewController.m */; };
-		914DFED21E13AD8700866818 /* SSJInstalmentEditeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C18C0231DF7F84E00BC0971 /* SSJInstalmentEditeViewController.m */; };
-		914DFED31E13AD8700866818 /* SSJInstalmentEditeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C18C0231DF7F84E00BC0971 /* SSJInstalmentEditeViewController.m */; };
-		914DFED41E13AD8800866818 /* SSJInstalmentEditeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C18C0231DF7F84E00BC0971 /* SSJInstalmentEditeViewController.m */; };
 		915A1AED1E10F02200F73C7B /* SSJLoginPopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 915A1AEC1E10F02200F73C7B /* SSJLoginPopView.m */; };
 		915A1AF81E10F53400F73C7B /* SSJLoginPopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 915A1AEC1E10F02200F73C7B /* SSJLoginPopView.m */; };
 		915A1AF91E10F53400F73C7B /* SSJLoginPopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 915A1AEC1E10F02200F73C7B /* SSJLoginPopView.m */; };

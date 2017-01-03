@@ -53,14 +53,22 @@
 - (void)setCellItem:(SSJReportFormsCurveCellItem *)cellItem {
     _cellItem = cellItem;
     
-    [_curveViews makeObjectsPerformSelector:@selector(removeFromSuperview)];
-    [_curveViews removeAllObjects];
-    
-    for (SSJReportFormsCurveViewItem *item in _cellItem.curveItems) {
-        SSJReportFormsCurveView *curveView = [[SSJReportFormsCurveView alloc] init];
-        curveView.item = item;
-        [self addSubview:curveView];
-        [_curveViews addObject:curveView];
+    if (_curveViews.count == _cellItem.curveItems.count) {
+        for (int i = 0; i < _cellItem.curveItems.count; i ++) {
+            SSJReportFormsCurveViewItem *item = _cellItem.curveItems[i];
+            SSJReportFormsCurveView *curveView = _curveViews[i];
+            curveView.item = item;
+        }
+    } else {
+        [_curveViews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+        [_curveViews removeAllObjects];
+        
+        for (SSJReportFormsCurveViewItem *item in _cellItem.curveItems) {
+            SSJReportFormsCurveView *curveView = [[SSJReportFormsCurveView alloc] init];
+            curveView.item = item;
+            [self addSubview:curveView];
+            [_curveViews addObject:curveView];
+        }
     }
     
     _scale.backgroundColor = _cellItem.scaleColor;
@@ -68,6 +76,7 @@
     _titleLab.text = _cellItem.title;
     _titleLab.textColor = _cellItem.titleColor;
     _titleLab.font = _cellItem.titleFont;
+    
     [self setNeedsLayout];
 }
 

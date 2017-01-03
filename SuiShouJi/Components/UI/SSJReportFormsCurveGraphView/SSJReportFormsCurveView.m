@@ -20,6 +20,8 @@
 
 @property (nonatomic, strong) UILabel *valueLab;
 
+@property (nonatomic, strong) UIImageView *maskCurveLayer;
+
 @property (nonatomic, strong) NSSet *observedCurveProperies;
 
 @property (nonatomic, strong) NSSet *observedDotProperies;
@@ -29,6 +31,15 @@
 @end
 
 @implementation SSJReportFormsCurveView
+
++ (dispatch_queue_t)sharedQueue {
+    static dispatch_queue_t queue = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        queue = dispatch_queue_create("com.ShuiShouJi.SSJReportFormsCurveViewQueue", DISPATCH_QUEUE_SERIAL);
+    });
+    return queue;
+}
 
 - (void)dealloc {
     [self removeObserver];
@@ -69,6 +80,12 @@
         _valueLab = [[UILabel alloc] init];
         [self addSubview:_valueLab];
         
+        _maskCurveLayer = [[UIImageView alloc] init];
+        [self addSubview:_maskCurveLayer];
+        
+        _maskCurveLayer.layer.borderColor = [UIColor blackColor].CGColor;
+        _maskCurveLayer.layer.borderWidth = 1;
+        
         self.backgroundColor = [UIColor clearColor];
     }
     return self;
@@ -79,6 +96,14 @@
     
     [_valueLab sizeToFit];
     _valueLab.leftTop = CGPointMake(_item.endPoint.x + _dot.outerRadius, _item.endPoint.y);
+    
+    _curveLayer.frame = self.bounds;
+    _maskCurveLayer.frame = self.bounds;
+}
+
+- (void)setFrame:(CGRect)frame {
+    [super setFrame:frame];
+    [self takeScreenShot];
 }
 
 - (void)setItem:(SSJReportFormsCurveViewItem *)item {
@@ -98,12 +123,20 @@
     [self updateValueLabel];
     
     _curveLayer.hidden = !_item.showCurve;
-    if (needsToUpdateCurve && _item.showCurve) {
+    if (needsToUpdateCurve) {
         [self updateCurve];
     }
 }
 
 - (void)updateCurve {
+    if (!_item.showCurve) {
+        _curveLayer.hidden = YES;
+        _maskCurveLayer.hidden = YES;
+        return;
+    }
+    
+    _curveLayer.hidden = NO;
+    _maskCurveLayer.hidden = YES;
     
     CGFloat offset = (_item.endPoint.x - _item.startPoint.x) * 0.35;
     CGPoint controlPoint1 = CGPointMake(_item.startPoint.x + offset, _item.startPoint.y);
@@ -124,6 +157,46 @@
         _curveLayer.shadowOffset = _item.shadowOffset;
         _curveLayer.shadowRadius = 1.2;
     }
+    
+    [self takeScreenShot];
+}
+
+//  渲染成图片，铺在表面上，隐藏其它的界面元素，以提高流畅度
+- (void)takeScreenShot {
+    
+    _maskCurveLayer.hidden = YES;
+    
+    if (CGRectIsEmpty(self.bounds) || !_item.showCurve) {
+        return;
+    }
+    
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), [[self class] sharedQueue], ^{
+//        
+//        if (CGRectIsEmpty(self.bounds) || !_item.showCurve) {
+//            return;
+//        }
+//        
+//        UIImage *screentShot = [self ssj_takeScreenShotWithSize:self.size opaque:NO scale:0];;
+//        
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            _maskCurveLayer.image = screentShot;
+//            _maskCurveLayer.size = screentShot.size;
+//            
+//            _curveLayer.hidden = YES;
+//            _maskCurveLayer.hidden = NO;
+//        });
+//    });
+    
+//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+//        UIImage *screentShot = [_curveLayer ssj_takeScreenShotWithSize:self.size opaque:NO scale:0];
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            _maskCurveLayer.image = screentShot;
+//            _maskCurveLayer.size = screentShot.size;
+//            
+//            _curveLayer.hidden = YES;
+//            _maskCurveLayer.hidden = NO;
+//        });
+//    });
 }
 
 - (void)updateDot {
