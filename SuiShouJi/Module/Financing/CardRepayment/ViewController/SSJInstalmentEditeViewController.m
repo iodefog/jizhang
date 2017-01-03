@@ -19,7 +19,6 @@
 #import "SSJRepaymentStore.h"
 #import "SSJDatabaseQueue.h"
 #import "SSJFinancingHomeHelper.h"
-#import "NSMutableAttributedString+AttributeStr.h"
 #import "SSJCreditCardStore.h"
 
 static NSString *const SSJInstalmentCellIdentifier = @"SSJInstalmentCellIdentifier";
@@ -462,7 +461,7 @@ static NSString *const kTitle6 = @"分期申请日";
         }
         NSString *totalArrearStr = [[NSString stringWithFormat:@"%f",fabs(sumMoney)] ssj_moneyDecimalDisplayWithDigits:2];
         NSString *oldStr = [NSString stringWithFormat:@"该账单周期内总欠款为%@元",totalArrearStr];
-        _fenQiLab.attributedText = [NSMutableAttributedString attributeStrWithOldStr:oldStr targetStr:totalArrearStr range:NSMakeRange(0, 0) color:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]];
+        _fenQiLab.attributedText = [oldStr attributeStrWithTargetStr:totalArrearStr range:NSMakeRange(0, 0) color:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]];
         [_fenQiLab sizeToFit];
     } failure:^(NSError *error) {
         
