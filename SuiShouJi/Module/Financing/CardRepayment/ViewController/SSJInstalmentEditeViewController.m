@@ -323,7 +323,7 @@ static NSString *const kTitle6 = @"分期申请日";
         [CDAutoHideMessageHUD showMessage:@"分期金额不能大于当期账单金额哦"];
         return;
     }
-    if (self.repaymentModel.instalmentCout != self.originalRepaymentModel.instalmentCout || self.repaymentModel.repaymentMoney != self.originalRepaymentModel.repaymentMoney || self.repaymentModel.poundageRate != self.originalRepaymentModel.poundageRate) {
+    if ((self.repaymentModel.instalmentCout != self.originalRepaymentModel.instalmentCout || self.repaymentModel.repaymentMoney != self.originalRepaymentModel.repaymentMoney || self.repaymentModel.poundageRate != self.originalRepaymentModel.poundageRate) && self.repaymentModel.repaymentId.length) {
         __weak typeof(self) weakSelf = self;
         UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:NULL];
         UIAlertAction *comfirm = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
@@ -332,7 +332,6 @@ static NSString *const kTitle6 = @"分期申请日";
                     if ([viewcontroller isKindOfClass:[SSJFundingDetailsViewController class]]) {
                         [weakSelf.navigationController popToViewController:viewcontroller animated:YES];
                     }
-                \
                 }
             } failure:^(NSError *error) {
                 
@@ -340,11 +339,11 @@ static NSString *const kTitle6 = @"分期申请日";
         }];
         NSString *massage;
         if (self.originalRepaymentModel.poundageRate > 0) {
-            massage = [NSString stringWithFormat:@"若修改分期还款，则先前生成的%d期相关流水将被删除并根据新的设置重新生成哦，你确定要执行吗？",self.originalRepaymentModel.instalmentCout * 2];
+            massage = [NSString stringWithFormat:@"若修改分期还款，则先前生成的%ld期相关流水将被删除并根据新的设置重新生成哦，你确定要执行吗？",(long)self.originalRepaymentModel.instalmentCout * 2];
         } else {
             massage = [NSString stringWithFormat:@"若修改分期还款，则先前生成的%ld期相关流水将被删除并根据新的设置重新生成哦，你确定要执行吗？",(long)self.originalRepaymentModel.instalmentCout];
         }
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:massage preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:massage preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:cancel];
         [alert addAction:comfirm];
         [self.navigationController presentViewController:alert animated:YES completion:NULL];
@@ -445,6 +444,7 @@ static NSString *const kTitle6 = @"分期申请日";
         _repaymentMonthSelectView.timerSetBlock = ^(NSDate *date){
             weakSelf.repaymentModel.repaymentMonth = date;
             [weakSelf updateFenqiLab];
+            [weakSelf.tableView reloadData];
         };
     }
     return _repaymentMonthSelectView;

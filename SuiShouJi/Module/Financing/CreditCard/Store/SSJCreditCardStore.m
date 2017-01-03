@@ -169,9 +169,9 @@
             });
             return;
         }
-        NSString *firstBillingDay = [[NSDate dateWithYear:[NSDate date].year month:month - 1 day:billingDay] formattedDateWithFormat:@"yyyy-MM-dd"];
-        NSString *secondBillingDay = [[NSDate dateWithYear:[NSDate date].year month:month day:billingDay] formattedDateWithFormat:@"yyyy-MM-dd"];
-        double cardExpense = [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge a, bk_bill_type b where a.ibillid =  b.id and a.cuserid = ? and a.operatortype <> 2 and b.itype = 1 and a.cbilldate >= ? and a.cbilldate < ? and a.ifunsid = ?",userId,firstBillingDay,secondBillingDay,cardId];
+        NSString *firstBillingDay = [[[NSDate dateWithYear:[NSDate date].year month:month day:billingDay] dateBySubtractingMonths:1] formattedDateWithFormat:@"yyyy-MM-dd"];
+        NSString *secondBillingDay = [[[NSDate dateWithYear:[NSDate date].year month:month day:billingDay] dateBySubtractingDays:1  ] formattedDateWithFormat:@"yyyy-MM-dd"];
+        double cardExpense = [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge a, bk_bill_type b where a.ibillid =  b.id and a.cuserid = ? and a.operatortype <> 2 and b.itype = 1 and a.cbilldate > ? and a.cbilldate < ? and a.ifunsid = ?",userId,firstBillingDay,secondBillingDay,cardId];
         cardBalance = cardExpense;
     }];
     return cardBalance;
@@ -187,7 +187,7 @@
         NSString *currentDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"];
         NSString *userId = SSJUSERID();
         NSDate *firstDate = [[NSDate dateWithYear:currentMonth.year month:currentMonth.month day:billingDay] dateBySubtractingMonths:1];
-        NSDate *seconDate = [[NSDate dateWithYear:currentMonth.year month:currentMonth.month day:billingDay] dateByAddingDays:1];
+        NSDate *seconDate = [[NSDate dateWithYear:currentMonth.year month:currentMonth.month day:billingDay] dateBySubtractingDays:1];
         double currentIncome = [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and (a.cbilldate <= ? or ichargetype = ?) and b.itype = 0 and a.ifunsid = ? and a.cbilldate >= ? and a.cbilldate <= ?",userId,currentDate,@(SSJChargeIdTypeLoan),cardId,[firstDate formattedDateWithFormat:@"yyyy-MM-dd"],[seconDate formattedDateWithFormat:@"yyyy-MM-dd"]];
         double currentExpence = [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and (a.cbilldate <= ? or ichargetype = ?) and b.itype = 1 and a.ifunsid = ? and a.cbilldate >= ? and a.cbilldate <= ?",userId,currentDate,@(SSJChargeIdTypeLoan),cardId,[firstDate formattedDateWithFormat:@"yyyy-MM-dd"],[seconDate formattedDateWithFormat:@"yyyy-MM-dd"]];
         double currentRepaymentMoney = [db doubleForQuery:@"select sum(repaymentmoney) from bk_credit_repayment where crepaymentmonth = ? and cuserid = ? and operatortype <> 2 and iinstalmentcount = 0",[currentMonth formattedDateWithFormat:@"yyyy-MM"],userId];
