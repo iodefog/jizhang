@@ -83,8 +83,8 @@
         _maskCurveLayer = [[UIImageView alloc] init];
         [self addSubview:_maskCurveLayer];
         
-        _maskCurveLayer.layer.borderColor = [UIColor blackColor].CGColor;
-        _maskCurveLayer.layer.borderWidth = 1;
+//        _maskCurveLayer.layer.borderColor = [UIColor blackColor].CGColor;
+//        _maskCurveLayer.layer.borderWidth = 1;
         
         self.backgroundColor = [UIColor clearColor];
     }
@@ -133,12 +133,10 @@
 - (void)updateCurve {
     if (!_item.showCurve) {
         _curveLayer.hidden = YES;
-        _maskCurveLayer.hidden = YES;
         return;
     }
     
     _curveLayer.hidden = NO;
-    _maskCurveLayer.hidden = YES;
     
     CGFloat offset = (_item.endPoint.x - _item.startPoint.x) * 0.35;
     CGPoint controlPoint1 = CGPointMake(_item.startPoint.x + offset, _item.startPoint.y);
@@ -172,33 +170,22 @@
         return;
     }
     
-//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), [[self class] sharedQueue], ^{
-//        
-//        if (CGRectIsEmpty(self.bounds) || !_item.showCurve) {
-//            return;
-//        }
-//        
-//        UIImage *screentShot = [self ssj_takeScreenShotWithSize:self.size opaque:NO scale:0];;
-//        
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            _maskCurveLayer.image = screentShot;
-//            _maskCurveLayer.size = screentShot.size;
-//            
-//            _curveLayer.hidden = YES;
-//            _maskCurveLayer.hidden = NO;
-//        });
-//    });
-    
-//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-//        UIImage *screentShot = [_curveLayer ssj_takeScreenShotWithSize:self.size opaque:NO scale:0];
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            _maskCurveLayer.image = screentShot;
-//            _maskCurveLayer.size = screentShot.size;
-//            
-//            _curveLayer.hidden = YES;
-//            _maskCurveLayer.hidden = NO;
-//        });
-//    });
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), [[self class] sharedQueue], ^{
+        
+        if (CGRectIsEmpty(self.bounds) || !_item.showCurve) {
+            return;
+        }
+        
+        UIImage *screentShot = [self ssj_takeScreenShotWithSize:self.size opaque:NO scale:0];;
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            _maskCurveLayer.image = screentShot;
+            _maskCurveLayer.size = screentShot.size;
+            
+            _curveLayer.hidden = YES;
+            _maskCurveLayer.hidden = NO;
+        });
+    });
 }
 
 - (void)updateDot {
