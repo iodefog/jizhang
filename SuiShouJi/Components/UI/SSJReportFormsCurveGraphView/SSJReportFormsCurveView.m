@@ -166,19 +166,19 @@
     
     _maskCurveLayer.hidden = YES;
     
-    if (CGRectIsEmpty(self.bounds) || !_item.showCurve) {
+    if (CGRectIsEmpty(self.bounds) || !_item.showCurve || _curveLayer.hidden) {
         return;
     }
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), [[self class] sharedQueue], ^{
         
-        if (CGRectIsEmpty(self.bounds) || !_item.showCurve) {
+        if (CGRectIsEmpty(self.bounds) || !_item.showCurve || _curveLayer.hidden) {
             return;
         }
         
-        UIImage *screentShot = [self ssj_takeScreenShotWithSize:self.size opaque:NO scale:0];;
+        UIImage *screentShot = [_curveLayer ssj_takeScreenShotWithSize:_curveLayer.size opaque:NO scale:0];;
         
-        dispatch_async(dispatch_get_main_queue(), ^{
+        dispatch_sync(dispatch_get_main_queue(), ^{
             _maskCurveLayer.image = screentShot;
             _maskCurveLayer.size = screentShot.size;
             
