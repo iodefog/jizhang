@@ -16,4 +16,6 @@
 
 @property(nonatomic, strong) SSJRepaymentModel *repaymentModel;
 
+@property(nonatomic, strong) SSJRepaymentModel *originalRepaymentModel;
+
 @end

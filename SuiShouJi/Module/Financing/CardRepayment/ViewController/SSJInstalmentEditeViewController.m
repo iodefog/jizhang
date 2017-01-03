@@ -72,6 +72,9 @@ static NSString *const kTitle6 = @"分期申请日";
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.titles = @[@[kTitle1,kTitle2,kTitle3],@[kTitle4,kTitle5,kTitle6]];
+    if (self.repaymentModel.repaymentId.length) {
+        self.originalRepaymentModel = [self.repaymentModel copy];
+    }
 //    loan_expires
     self.images = @[@[@"loan_person",@"loan_money",@"loan_memo"],@[@"card_zhanghu",@"",@"loan_expires"]];
     [self.tableView registerClass:[SSJChargeCircleModifyCell class] forCellReuseIdentifier:SSJInstalmentCellIdentifier];
@@ -312,7 +315,7 @@ static NSString *const kTitle6 = @"分期申请日";
             return;
         }
     }
-    if ([self checkTheInstalCountWithMonth:self.repaymentModel.repaymentMonth] > 0 && !self.chargeItem) {
+    if ([self checkTheInstalCountWithMonth:self.repaymentModel.repaymentMonth] > 0 && !self.repaymentModel.repaymentId.length) {
         [CDAutoHideMessageHUD showMessage:@"每个账单周期只能申请一次分期哦"];
         return;
     }
@@ -320,16 +323,43 @@ static NSString *const kTitle6 = @"分期申请日";
         [CDAutoHideMessageHUD showMessage:@"分期金额不能大于当期账单金额哦"];
         return;
     }
-    __weak typeof(self) weakSelf = self;
-    [SSJRepaymentStore saveRepaymentWithRepaymentModel:self.repaymentModel Success:^{
-        for (UIViewController *viewcontroller in self.navigationController.viewControllers) {
-            if ([viewcontroller isKindOfClass:[SSJFundingDetailsViewController class]]) {
-                [weakSelf.navigationController popToViewController:viewcontroller animated:YES];
-            }
+    if (self.repaymentModel.instalmentCout != self.originalRepaymentModel.instalmentCout || self.repaymentModel.repaymentMoney != self.originalRepaymentModel.repaymentMoney || self.repaymentModel.poundageRate != self.originalRepaymentModel.poundageRate) {
+        __weak typeof(self) weakSelf = self;
+        UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:NULL];
+        UIAlertAction *comfirm = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [SSJRepaymentStore saveRepaymentWithRepaymentModel:self.repaymentModel Success:^{
+                for (UIViewController *viewcontroller in self.navigationController.viewControllers) {
+                    if ([viewcontroller isKindOfClass:[SSJFundingDetailsViewController class]]) {
+                        [weakSelf.navigationController popToViewController:viewcontroller animated:YES];
+                    }
+                \
+                }
+            } failure:^(NSError *error) {
+                
+            }];
+        }];
+        NSString *massage;
+        if (self.originalRepaymentModel.poundageRate > 0) {
+            massage = [NSString stringWithFormat:@"若修改分期还款，则先前生成的%d期相关流水将被删除并根据新的设置重新生成哦，你确定要执行吗？",self.originalRepaymentModel.instalmentCout * 2];
+        } else {
+            massage = [NSString stringWithFormat:@"若修改分期还款，则先前生成的%ld期相关流水将被删除并根据新的设置重新生成哦，你确定要执行吗？",(long)self.originalRepaymentModel.instalmentCout];
         }
-    } failure:^(NSError *error) {
-        
-    }];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:massage preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:cancel];
+        [alert addAction:comfirm];
+        [self.navigationController presentViewController:alert animated:YES completion:NULL];
+    } else {
+        __weak typeof(self) weakSelf = self;
+        [SSJRepaymentStore saveRepaymentWithRepaymentModel:self.repaymentModel Success:^{
+            for (UIViewController *viewcontroller in self.navigationController.viewControllers) {
+                if ([viewcontroller isKindOfClass:[SSJFundingDetailsViewController class]]) {
+                    [weakSelf.navigationController popToViewController:viewcontroller animated:YES];
+                }
+            }
+        } failure:^(NSError *error) {
+            
+        }];
+    }
 }
 
 - (void)deleteButtonClicked{
@@ -414,7 +444,6 @@ static NSString *const kTitle6 = @"分期申请日";
         __weak typeof(self) weakSelf = self;
         _repaymentMonthSelectView.timerSetBlock = ^(NSDate *date){
             weakSelf.repaymentModel.repaymentMonth = date;
-            #warning 该账单周期内总欠款
             [weakSelf updateFenqiLab];
         };
     }
@@ -423,7 +452,6 @@ static NSString *const kTitle6 = @"分期申请日";
 
 #pragma mark - private
 - (void)updatePoundageLab{
-#warning 该账单周期内总欠款
 
     double principalMoney;
     if (self.repaymentModel.instalmentCout) {

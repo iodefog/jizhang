@@ -8,7 +8,7 @@
 
 #import "SSJBaseItem.h"
 
-@interface SSJRepaymentModel : SSJBaseItem
+@interface SSJRepaymentModel : SSJBaseItem <NSCopying>
 
 // 还款id
 @property(nonatomic, strong) NSString *repaymentId;

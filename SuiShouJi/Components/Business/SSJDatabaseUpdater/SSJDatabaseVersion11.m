@@ -16,7 +16,13 @@
     NSError *error = [self updateUserChargeTableWithDatabase:db];
     if (error) {
         return error;
-    }       
+    }
+    
+    error = [self updateCreditRepaymentTableWithDatabase:db];
+    if (error) {
+        return error;
+    }
+    
     return nil;
 }
 
@@ -61,6 +67,14 @@
     
     // 将临时表数据插入新表
     if (![db executeUpdate:@"insert into BK_USER_CHARGE select * from TMP_USER_CHARGE"]) {
+        return [db lastError];
+    }
+    
+    return nil;
+}
+
++ (NSError *)updateCreditRepaymentTableWithDatabase:(FMDatabase *)db {
+    if (![db executeUpdate:@"create table BK_CREDIT_REPAYMENT (CREPAYMENTID TEXT, IINSTALMENTCOUNT INTEGER, CAPPLYDATE TEXT, CCARDID TEXT, REPAYMENTMONEY TEXT, IPOUNDAGERATE NUMERIC, CMEMO TEXT, CUSERID TEXT, OPERATORTYPE INTEGER, CWRITEDATE TEXT, IVERSION INTEGER, CREPAYMENTMONTH TEXT)"]) {
         return [db lastError];
     }
     
