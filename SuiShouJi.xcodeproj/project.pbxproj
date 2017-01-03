@@ -956,11 +956,6 @@
 		9119A7FF1E0CB7B500374B62 /* SSJReportFormCanYinChartCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 91FD904C1E0B8319001C64B7 /* SSJReportFormCanYinChartCell.m */; };
 		9119A8001E0CB7B500374B62 /* SSJReportFormCanYinChartCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 91FD904C1E0B8319001C64B7 /* SSJReportFormCanYinChartCell.m */; };
 		9119A8011E0CB7B600374B62 /* SSJReportFormCanYinChartCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 91FD904C1E0B8319001C64B7 /* SSJReportFormCanYinChartCell.m */; };
-		914A95EC1E164CED00B30E8D /* NSMutableAttributedString+AttributeStr.m in Sources */ = {isa = PBXBuildFile; fileRef = 914A95EB1E164CED00B30E8D /* NSMutableAttributedString+AttributeStr.m */; };
-		914A95ED1E164CED00B30E8D /* NSMutableAttributedString+AttributeStr.m in Sources */ = {isa = PBXBuildFile; fileRef = 914A95EB1E164CED00B30E8D /* NSMutableAttributedString+AttributeStr.m */; };
-		914A95EE1E164CED00B30E8D /* NSMutableAttributedString+AttributeStr.m in Sources */ = {isa = PBXBuildFile; fileRef = 914A95EB1E164CED00B30E8D /* NSMutableAttributedString+AttributeStr.m */; };
-		914A95EF1E164CED00B30E8D /* NSMutableAttributedString+AttributeStr.m in Sources */ = {isa = PBXBuildFile; fileRef = 914A95EB1E164CED00B30E8D /* NSMutableAttributedString+AttributeStr.m */; };
-		914A95F01E164CED00B30E8D /* NSMutableAttributedString+AttributeStr.m in Sources */ = {isa = PBXBuildFile; fileRef = 914A95EB1E164CED00B30E8D /* NSMutableAttributedString+AttributeStr.m */; };
 		915A1AED1E10F02200F73C7B /* SSJLoginPopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 915A1AEC1E10F02200F73C7B /* SSJLoginPopView.m */; };
 		915A1AF81E10F53400F73C7B /* SSJLoginPopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 915A1AEC1E10F02200F73C7B /* SSJLoginPopView.m */; };
 		915A1AF91E10F53400F73C7B /* SSJLoginPopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 915A1AEC1E10F02200F73C7B /* SSJLoginPopView.m */; };
@@ -3372,8 +3367,6 @@
 		7DFFD5C51D67201E000FDAA6 /* SSJAddOrEditLoanViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJAddOrEditLoanViewController.m; sourceTree = "<group>"; };
 		910DD68E1DF7B47E00A73F0C /* SSJMineHomeCollectionImageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMineHomeCollectionImageCell.h; sourceTree = "<group>"; };
 		910DD68F1DF7B47E00A73F0C /* SSJMineHomeCollectionImageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMineHomeCollectionImageCell.m; sourceTree = "<group>"; };
-		914A95EA1E164CED00B30E8D /* NSMutableAttributedString+AttributeStr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableAttributedString+AttributeStr.h"; sourceTree = "<group>"; };
-		914A95EB1E164CED00B30E8D /* NSMutableAttributedString+AttributeStr.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableAttributedString+AttributeStr.m"; sourceTree = "<group>"; };
 		915A1AEB1E10F02200F73C7B /* SSJLoginPopView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJLoginPopView.h; sourceTree = "<group>"; };
 		915A1AEC1E10F02200F73C7B /* SSJLoginPopView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJLoginPopView.m; sourceTree = "<group>"; };
 		916012031DF7D86C00BF571C /* SSJHeaderBannerImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJHeaderBannerImageView.h; sourceTree = "<group>"; };
@@ -6609,8 +6602,6 @@
 		BD0432F91C1A78B40051E7AB /* Foundation */ = {
 			isa = PBXGroup;
 			children = (
-				914A95EA1E164CED00B30E8D /* NSMutableAttributedString+AttributeStr.h */,
-				914A95EB1E164CED00B30E8D /* NSMutableAttributedString+AttributeStr.m */,
 				BD0432FA1C1A78B40051E7AB /* NSString+MoneyDisplayFormat.h */,
 				BD0432FB1C1A78B40051E7AB /* NSString+MoneyDisplayFormat.m */,
 				BD0432FC1C1A78B40051E7AB /* SSJArrayAddition.h */,
@@ -7971,7 +7962,6 @@
 				7DBA56701D6D32B700C02D79 /* SSJMagicExportViewController.m in Sources */,
 				7DFD30461D75217300A0D7A0 /* SSJCategoryEditableCollectionView.m in Sources */,
 				7DBA56711D6D32B700C02D79 /* SSJAlertViewAdapter.m in Sources */,
-				914A95EE1E164CED00B30E8D /* NSMutableAttributedString+AttributeStr.m in Sources */,
 				7D4A79751DD46D6100E905F4 /* SSJLoanChargeAddOrEditViewController.m in Sources */,
 				9C9A0C921D73CDC7002AF046 /* SSJCreditCardItem.m in Sources */,
 				7DBA56721D6D32B700C02D79 /* SSJConstant.m in Sources */,
@@ -8620,7 +8610,6 @@
 				7D6CC90B1E0A798400FF6133 /* SSJReportFormsCurveGridView.m in Sources */,
 				9C2A68071D194CA70010F1DA /* SSJUserDefaultDataCreater.m in Sources */,
 				9C2A68081D194CA70010F1DA /* SSJBudgetModel.m in Sources */,
-				914A95ED1E164CED00B30E8D /* NSMutableAttributedString+AttributeStr.m in Sources */,
 				9C2A680A1D194CA70010F1DA /* SSJLoginService.m in Sources */,
 				9C2A680B1D194CA70010F1DA /* SSJMagicExportSelectDateView.m in Sources */,
 				9C2A680C1D194CA70010F1DA /* SSJBookKeepingHomeViewController.m in Sources */,
@@ -8843,7 +8832,6 @@
 				9CECFB681D6D41A700DB2C8B /* SSJFinancingHomePopView.m in Sources */,
 				9CECFB691D6D41A700DB2C8B /* SSJBookkeepingTreeView.m in Sources */,
 				9CECFB6A1D6D41A700DB2C8B /* SSJReportFormsCurveModel.m in Sources */,
-				914A95EF1E164CED00B30E8D /* NSMutableAttributedString+AttributeStr.m in Sources */,
 				9CECFB6B1D6D41A700DB2C8B /* SSJRecordMakingViewController.m in Sources */,
 				9CECFB6C1D6D41A700DB2C8B /* SCYMotionEncryptionUitlities.m in Sources */,
 				7D738A911DAB267F000CD629 /* SSJDatabaseVersion9.m in Sources */,
@@ -9558,7 +9546,6 @@
 				7DF19EDC1D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m in Sources */,
 				9CECFFD91D6D41EB00DB2C8B /* SSJSegmentedControl.m in Sources */,
 				9CECFFDA1D6D41EB00DB2C8B /* (null) in Sources */,
-				914A95F01E164CED00B30E8D /* NSMutableAttributedString+AttributeStr.m in Sources */,
 				9CECFFDB1D6D41EB00DB2C8B /* SSJCustomCollectionViewFlowLayout.m in Sources */,
 				9CECFFDC1D6D41EB00DB2C8B /* SSJBillingChargeHelper.m in Sources */,
 				9CECFFDD1D6D41EB00DB2C8B /* SSJForgetPasswordSecondStepViewController.m in Sources */,
@@ -10228,7 +10215,6 @@
 				9CE2F89C1D9B9020008099C1 /* SSJSearchBar.m in Sources */,
 				BD0432F51C1A77BB0051E7AB /* TPKeyboardAvoidingScrollView.m in Sources */,
 				9C9D0B7D1D01867D003A9F4E /* SSJBillTypeSelectViewController.m in Sources */,
-				914A95EC1E164CED00B30E8D /* NSMutableAttributedString+AttributeStr.m in Sources */,
 				7D5F332D1CEAE6C10086B67E /* SSJBookKeepingHomeTableViewCell.m in Sources */,
 				7D6CC8F61E0A731C00FF6133 /* SSJReportFormsCurveBalloonView.m in Sources */,
 				9C9A0C901D73CDB7002AF046 /* SSJNewCreditCardViewController.m in Sources */,

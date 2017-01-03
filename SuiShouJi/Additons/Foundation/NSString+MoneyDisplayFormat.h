@@ -19,4 +19,14 @@
 
 -(NSString *)ssj_moneyDecimalDisplayWithDigits:(int)digits;
 
+
+/**
+ * oldStr :需要转换的字符串
+ * targetStr: 需要改变颜色的字符串
+ * range: 需要改变文字的字符串的位置(targetStr和range传一个就可以)
+ * color: 需要改变的文字颜色
+ */
+- (NSMutableAttributedString *)attributeStrWithTargetStr:(NSString *)targetStr range:(NSRange)range color:(UIColor *)color;
+
+- (NSMutableAttributedString *)attributeStrWithTargetStr:(NSString *)targetStr range:(NSRange)range attributedDictionary:(NSDictionary *)attriDic;
 @end
