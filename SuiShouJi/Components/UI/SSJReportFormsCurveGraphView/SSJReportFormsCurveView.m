@@ -126,6 +126,8 @@
     if (needsToUpdateCurve) {
         [self updateCurve];
     }
+    
+    [self setNeedsLayout];
 }
 
 - (void)updateCurve {
