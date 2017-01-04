@@ -593,8 +593,6 @@ static NSString *const kSegmentTitleIncome = @"收入";
         return;
     }
     
-    double maxMoney = [[result valueForKeyPath:@"@max.money"] doubleValue];
-    
     //  将datas按照收支类型所占比例从大到小进行排序
     NSArray *sortedItems = [result sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
         SSJReportFormsItem *item1 = obj1;
@@ -607,6 +605,9 @@ static NSString *const kSegmentTitleIncome = @"收入";
             return NSOrderedSame;
         }
     }];
+    
+    SSJReportFormsItem *firstItem = [sortedItems firstObject];
+    double maxMoney = firstItem.money;
     
     for (SSJReportFormsItem *item in sortedItems) {
         SSJReportFormCurveListCellItem *curveListItem = [[SSJReportFormCurveListCellItem alloc] init];
