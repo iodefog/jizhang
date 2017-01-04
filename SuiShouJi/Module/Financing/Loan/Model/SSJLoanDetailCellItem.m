@@ -23,7 +23,7 @@
     return item;
 }
 
-- (CGFloat)cellHeight {
+- (CGFloat)rowHeight {
     if (self.bottomTitle.length) {
         return 74;
     } else {
@@ -63,12 +63,14 @@
                     icon = @"loan_receipt";
                     title = @"收款";
                     subtitle = [NSString stringWithFormat:@"－%.2f", model.money];
+                    bottomTitle = [[NSAttributedString alloc] initWithString:model.memo];
                     break;
                     
                 case SSJLoanCompoundChargeTypeAdd:
                     icon = @"loan_append";
                     title = @"追加借出";
                     subtitle = [NSString stringWithFormat:@"＋%.2f", model.money];
+                    bottomTitle = [[NSAttributedString alloc] initWithString:model.memo];
                     break;
                     
                 case SSJLoanCompoundChargeTypeCloseOut:
@@ -110,12 +112,14 @@
                     icon = @"loan_repayment";
                     title = @"还款";
                     subtitle = [NSString stringWithFormat:@"＋%.2f", model.money];
+                    bottomTitle = [[NSAttributedString alloc] initWithString:model.memo];
                     break;
                     
                 case SSJLoanCompoundChargeTypeAdd:
                     icon = @"loan_append";
                     title = @"追加欠款";
                     subtitle = [NSString stringWithFormat:@"－%.2f", model.money];
+                    bottomTitle = [[NSAttributedString alloc] initWithString:model.memo];
                     break;
                     
                 case SSJLoanCompoundChargeTypeCloseOut:
@@ -143,7 +147,9 @@
 + (NSAttributedString *)bottomTitleWithChargeModel:(SSJLoanChargeModel *)model {
     NSString *money = [NSString stringWithFormat:@"%.2f", model.oldMoney];
     NSString *bottomStr = [NSString stringWithFormat:@"由原先的%@元变更", money];
-    return [[NSMutableAttributedString alloc] initWithString:bottomStr attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]}];
+    NSMutableAttributedString *attributeStr = [[NSMutableAttributedString alloc] initWithString:bottomStr];
+    [attributeStr setAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]} range:[bottomStr rangeOfString:money]];
+    return attributeStr;
 }
 
 @end
