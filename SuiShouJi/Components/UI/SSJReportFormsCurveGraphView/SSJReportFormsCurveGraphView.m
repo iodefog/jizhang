@@ -496,13 +496,9 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
     
     [self updateBallonAndLablesTitle];
     
-    int index = 0;
-    int topDigit = _maxValue;
-    while (topDigit >= 10) {
-        topDigit = topDigit / 10;
-        index ++;
-    }
-    _maxValue = (topDigit + 1) * pow(10, index);
+    int approach = pow(10, (int)log10(_maxValue));
+    double remainder = _maxValue / approach - (int)(_maxValue / approach);
+    _maxValue = remainder == 0 ? _maxValue : ((int)(_maxValue / approach) + 1) * approach;
     
     [self caculateCurvePoint];
     [self updateDotsAndLabelsPosition];
