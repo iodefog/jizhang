@@ -24,6 +24,26 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) SSJReportFormCurveHeaderViewItem *item;
 
 /**
+ <#Description#>
+ */
+- (void)showLoadingOnSeparatorForm;
+
+/**
+ <#Description#>
+ */
+- (void)hideLoadingOnSeparatorForm;
+
+/**
+ <#Description#>
+ */
+- (void)showLoadingOnCurve;
+
+/**
+ <#Description#>
+ */
+- (void)hideLoadingOnCurve;
+
+/**
  根据主题更新界面
  */
 - (void)updateAppearanceAccordingToTheme;

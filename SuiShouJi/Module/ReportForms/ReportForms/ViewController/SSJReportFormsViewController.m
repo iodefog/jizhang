@@ -121,6 +121,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
     [self.view addSubview:self.tableView];
     
     [self updateAppearance];
+    [self updateSubveiwsHidden];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -368,6 +369,12 @@ static NSString *const kSegmentTitleIncome = @"收入";
         
         [self updateSubveiwsHidden];
         
+        if (_periods.count == 0) {
+            [self.view ssj_showWatermarkWithCustomView:self.noDataRemindView animated:YES target:nil action:nil];
+        } else {
+            [self.view ssj_hideWatermark:YES];
+        }
+        
         if (_periods.count > 0) {
             
             [_dateAxisView reloadData];
@@ -393,42 +400,46 @@ static NSString *const kSegmentTitleIncome = @"收入";
     }
     
     if (_titleSegmentCtrl.selectedSegmentIndex == 0) {
+        
+        [self.datas removeAllObjects];
+        [self.tableView reloadData];
+        self.tableView.tableHeaderView = nil;
+        [self.tableView ssj_showLoadingIndicator];
+        
         switch (_selectedOption) {
             case SSJReportFormsMemberAndCategoryOptionCategory: {
-                [self.view ssj_showLoadingIndicator];
-                [SSJReportFormsUtil queryForIncomeOrPayType:[self currentType]
-                                                    booksId:_currentBooksId
-                                                  startDate:period.startDate
-                                                    endDate:period.endDate
-                                                    success:^(NSArray<SSJReportFormsItem *> *result) {
-                    [self.view ssj_hideLoadingIndicator];
-                    self.tableView.tableHeaderView = nil;
+                [SSJReportFormsUtil queryForIncomeOrPayType:[self currentType] booksId:_currentBooksId startDate:period.startDate endDate:period.endDate success:^(NSArray<SSJReportFormsItem *> *result) {
+                    [self.tableView ssj_hideLoadingIndicator];
                     [self reorganiseChartTableVieDatasWithOriginalData:result];
+                    [self.tableView reloadData];
                 } failure:^(NSError *error) {
                     [self showError:error];
-                    [self.view ssj_hideLoadingIndicator];
+                    [self.tableView ssj_hideLoadingIndicator];
                 }];
             }
                 break;
                 
             case SSJReportFormsMemberAndCategoryOptionMember: {
-                [self.view ssj_showLoadingIndicator];
-                [SSJReportFormsUtil queryForMemberChargeWithType:[self currentType]
-                                                       startDate:period.startDate
-                                                         endDate:period.endDate
-                                                         success:^(NSArray<SSJReportFormsItem *> *result) {
-                    [self.view ssj_hideLoadingIndicator];
-                    self.tableView.tableHeaderView = nil;
+                [self.tableView ssj_showLoadingIndicator];
+                [SSJReportFormsUtil queryForMemberChargeWithType:[self currentType] startDate:period.startDate endDate:period.endDate success:^(NSArray<SSJReportFormsItem *> *result) {
+                    [self.tableView ssj_hideLoadingIndicator];
                     [self reorganiseChartTableVieDatasWithOriginalData:result];
+                    [self.tableView reloadData];
                 } failure:^(NSError *error) {
                     [self showError:error];
-                    [self.view ssj_hideLoadingIndicator];
+                    [self.tableView ssj_hideLoadingIndicator];
                 }];
             }
                 break;
         }
     } else if (_titleSegmentCtrl.selectedSegmentIndex == 1) {
-        [self.view ssj_showLoadingIndicator];
+        
+        [self.datas removeAllObjects];
+        [self.tableView reloadData];
+        self.tableView.tableHeaderView = self.curveHeaderView;
+        
+        [self.curveHeaderView showLoadingOnSeparatorForm];
+        [self.curveHeaderView showLoadingOnCurve];
         
         [SSJReportFormsUtil queryForDefaultTimeDimensionWithStartDate:period.startDate endDate:period.endDate booksId:_currentBooksId billTypeId:nil success:^(SSJTimeDimension timeDimension) {
             
@@ -442,30 +453,33 @@ static NSString *const kSegmentTitleIncome = @"收入";
                 
                 [SSJReportFormsUtil queryForIncomeOrPayType:[self currentType] booksId:_currentBooksId startDate:period.startDate endDate:period.endDate success:^(NSArray<SSJReportFormsItem *> *list) {
                     
-                    [self.view ssj_hideLoadingIndicator];
+                    [self.curveHeaderView hideLoadingOnSeparatorForm];
+                    [self.curveHeaderView hideLoadingOnCurve];
                     
                     self.curveHeaderView.item = _curveHeaderItem;
+                    
                     if (_curveHeaderItem.curveModels.count == 0) {
                         self.tableView.tableHeaderView = nil;
-                    } else {
-                        self.tableView.tableHeaderView = self.curveHeaderView;
                     }
                     
                     [self reorganiseCurveTableDataWithOriginalData:list];
                     
                 } failure:^(NSError *error) {
                     [self showError:error];
-                    [self.view ssj_hideLoadingIndicator];
+                    [self.curveHeaderView hideLoadingOnSeparatorForm];
+                    [self.curveHeaderView hideLoadingOnCurve];
                 }];
                 
             } failure:^(NSError *error) {
-                [self.view ssj_hideLoadingIndicator];
                 [self showError:error];
+                [self.curveHeaderView hideLoadingOnSeparatorForm];
+                [self.curveHeaderView hideLoadingOnCurve];
             }];
             
         } failure:^(NSError *error) {
             [self showError:error];
-            [self.view ssj_hideLoadingIndicator];
+            [self.curveHeaderView hideLoadingOnSeparatorForm];
+            [self.curveHeaderView hideLoadingOnCurve];
         }];
     }
 }
@@ -476,9 +490,6 @@ static NSString *const kSegmentTitleIncome = @"收入";
         _customPeriodBtn.hidden = YES;
         _addOrDeleteCustomPeriodBtn.hidden = YES;
         self.tableView.hidden = YES;
-        
-        [self.view ssj_showWatermarkWithCustomView:self.noDataRemindView animated:YES target:nil action:nil];
-        
         return;
     }
     
@@ -492,7 +503,6 @@ static NSString *const kSegmentTitleIncome = @"收入";
     
     _addOrDeleteCustomPeriodBtn.hidden = NO;
     self.tableView.hidden = NO;
-    [self.view ssj_hideWatermark:YES];
 }
 
 - (void)updateCurveHeaderItemWithCurveModels:(NSArray<SSJReportFormsCurveModel *> *)curveModels period:(SSJDatePeriod *)period {
@@ -578,7 +588,6 @@ static NSString *const kSegmentTitleIncome = @"收入";
     }];
     
     [self.datas addObjectsFromArray:cellItems];
-    [self.tableView reloadData];
 }
 
 // 组织折线图下方的列表数据
@@ -781,20 +790,22 @@ static NSString *const kSegmentTitleIncome = @"收入";
 
 - (SSJReportFormCurveHeaderView *)curveHeaderView {
     if (!_curveHeaderView) {
-        _curveHeaderView = [[SSJReportFormCurveHeaderView alloc] init];
         __weak typeof(self) wself = self;
+        _curveHeaderView = [[SSJReportFormCurveHeaderView alloc] init];
         _curveHeaderView.changeTimePeriodHandle = ^(SSJReportFormCurveHeaderView *view) {
             SSJDatePeriod *period = wself.customPeriod ?: [wself.periods ssj_safeObjectAtIndex:wself.dateAxisView.selectedIndex];
             
+            [wself.curveHeaderView showLoadingOnCurve];
             [SSJReportFormsUtil queryForBillStatisticsWithTimeDimension:view.item.timeDimension booksId:wself.currentBooksId billTypeId:nil startDate:period.startDate endDate:period.endDate success:^(NSDictionary *result) {
                 
-                [wself.view ssj_hideLoadingIndicator];
+                [wself.curveHeaderView hideLoadingOnCurve];
+                
                 [wself updateCurveHeaderItemWithCurveModels:result[SSJReportFormsCurveModelListKey] period:period];
                 wself.curveHeaderView.item = wself.curveHeaderItem;
                 
             } failure:^(NSError *error) {
-                [wself.view ssj_hideLoadingIndicator];
                 [wself showError:error];
+                [wself.curveHeaderView hideLoadingOnCurve];
             }];
             
             switch (view.item.timeDimension) {

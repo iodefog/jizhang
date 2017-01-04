@@ -41,6 +41,8 @@ static const CGFloat kSeparatorFormViewHeight = 88;
 
 @property (nonatomic, strong) SSJSeparatorFormViewCellItem *dailyCostItem;
 
+@property (nonatomic) BOOL showCurveLoading;
+
 @end
 
 @implementation SSJReportFormCurveHeaderView
@@ -57,6 +59,7 @@ static const CGFloat kSeparatorFormViewHeight = 88;
         
         [self updateAppearanceAccordingToTheme];
         [self updateQuestionBtnHidden];
+        [self reloadSeparatorFormViewData];
         
         [self sizeToFit];
     }
@@ -74,6 +77,7 @@ static const CGFloat kSeparatorFormViewHeight = 88;
     _curveView.curveInsets = UIEdgeInsetsMake(50, 0, 50, 0);
     [self updateCurveUnitAxisXLength];
     [_curveView ssj_relayoutBorder];
+    [_curveView ssj_relayoutLoadingIndicator];
     
     _questionBtn.frame = CGRectMake(60, _curveView.height - 28, 28, 28);
 }
@@ -109,6 +113,9 @@ static const CGFloat kSeparatorFormViewHeight = 88;
 
 #pragma mark - SSJReportFormsCurveGraphViewDataSource
 - (NSUInteger)numberOfAxisXInCurveGraphView:(SSJReportFormsCurveGraphView *)graphView {
+    if (_showCurveLoading) {
+        return 0;
+    }
     return self.item.curveModels.count;
 }
 
@@ -297,30 +304,31 @@ static const CGFloat kSeparatorFormViewHeight = 88;
     [_curveView scrollToAxisXAtIndex:(_item.curveModels.count - 1) animated:NO];
     [self updateCurveUnitAxisXLength];
     
-    _incomeItem = [SSJSeparatorFormViewCellItem itemWithTopTitle:_item.generalIncome
-                                                     bottomTitle:@"总收入"
-                                                   topTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurveIncomeColor]
-                                                bottomTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]
-                                                    topTitleFont:[UIFont systemFontOfSize:18]
-                                                 bottomTitleFont:[UIFont systemFontOfSize:12]
-                                                   contentInsets:UIEdgeInsetsZero];
-    
-    _paymentItem = [SSJSeparatorFormViewCellItem itemWithTopTitle:_item.generalPayment
-                                                      bottomTitle:@"总支出"
-                                                    topTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurvePaymentColor]
-                                                 bottomTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]
-                                                     topTitleFont:[UIFont systemFontOfSize:18]
-                                                  bottomTitleFont:[UIFont systemFontOfSize:12]
-                                                    contentInsets:UIEdgeInsetsZero];
-    
-    _dailyCostItem = [SSJSeparatorFormViewCellItem itemWithTopTitle:_item.dailyCost
-                                                        bottomTitle:@"日均花费（元）"
-                                                      topTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor]
-                                                   bottomTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]
-                                                       topTitleFont:[UIFont systemFontOfSize:18]
-                                                    bottomTitleFont:[UIFont systemFontOfSize:12]
-                                                      contentInsets:UIEdgeInsetsZero];
-    [_separatorFormView reloadData];
+    [self reloadSeparatorFormViewData];
+}
+
+- (void)showLoadingOnSeparatorForm {
+    [_separatorFormView showTopLoadingIndicatorAtRowIndex:0 cellIndex:0];
+    [_separatorFormView showTopLoadingIndicatorAtRowIndex:0 cellIndex:1];
+    [_separatorFormView showTopLoadingIndicatorAtRowIndex:0 cellIndex:2];
+}
+
+- (void)hideLoadingOnSeparatorForm {
+    [_separatorFormView hideTopLoadingIndicatorAtRowIndex:0 cellIndex:0];
+    [_separatorFormView hideTopLoadingIndicatorAtRowIndex:0 cellIndex:1];
+    [_separatorFormView hideTopLoadingIndicatorAtRowIndex:0 cellIndex:2];
+}
+
+- (void)showLoadingOnCurve {
+    _showCurveLoading = YES;
+    [_curveView reloadData];
+    [_curveView ssj_showLoadingIndicator];
+}
+
+- (void)hideLoadingOnCurve {
+    _showCurveLoading = NO;
+    [_curveView reloadData];
+    [_curveView ssj_hideLoadingIndicator];
 }
 
 - (void)updateAppearanceAccordingToTheme {
@@ -381,6 +389,33 @@ static const CGFloat kSeparatorFormViewHeight = 88;
         case SSJTimeDimensionUnknown:
             break;
     }
+}
+
+- (void)reloadSeparatorFormViewData {
+    _incomeItem = [SSJSeparatorFormViewCellItem itemWithTopTitle:_item.generalIncome
+                                                     bottomTitle:@"总收入"
+                                                   topTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurveIncomeColor]
+                                                bottomTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]
+                                                    topTitleFont:[UIFont systemFontOfSize:18]
+                                                 bottomTitleFont:[UIFont systemFontOfSize:12]
+                                                   contentInsets:UIEdgeInsetsZero];
+    
+    _paymentItem = [SSJSeparatorFormViewCellItem itemWithTopTitle:_item.generalPayment
+                                                      bottomTitle:@"总支出"
+                                                    topTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurvePaymentColor]
+                                                 bottomTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]
+                                                     topTitleFont:[UIFont systemFontOfSize:18]
+                                                  bottomTitleFont:[UIFont systemFontOfSize:12]
+                                                    contentInsets:UIEdgeInsetsZero];
+    
+    _dailyCostItem = [SSJSeparatorFormViewCellItem itemWithTopTitle:_item.dailyCost
+                                                        bottomTitle:@"日均花费（元）"
+                                                      topTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor]
+                                                   bottomTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]
+                                                       topTitleFont:[UIFont systemFontOfSize:18]
+                                                    bottomTitleFont:[UIFont systemFontOfSize:12]
+                                                      contentInsets:UIEdgeInsetsZero];
+    [_separatorFormView reloadData];
 }
 
 #pragma mark - Event

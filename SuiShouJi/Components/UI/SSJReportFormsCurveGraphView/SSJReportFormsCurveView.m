@@ -10,21 +10,45 @@
 #import "SSJReportFormsCurveViewItem.h"
 #import "SSJReportFormsCurveDot.h"
 
+@interface _SSJReportFormsCurveShapeView : UIView
+
+@property (nonatomic, strong, readonly) CAShapeLayer *layer;
+
+@end
+
+@implementation _SSJReportFormsCurveShapeView
+
++ (Class)layerClass {
+    return [CAShapeLayer class];
+}
+
+- (CAShapeLayer *)layer {
+    return (CAShapeLayer *)[super layer];
+}
+
+@end
+
 @interface SSJReportFormsCurveView ()
 
 @property (nonatomic, strong) UIBezierPath *curvePath;
 
-@property (nonatomic, strong) CAShapeLayer *curveLayer;
+@property (nonatomic, strong) _SSJReportFormsCurveShapeView *curveView;
 
 @property (nonatomic, strong) SSJReportFormsCurveDot *dot;
 
 @property (nonatomic, strong) UILabel *valueLab;
+
+@property (nonatomic, strong) UIImageView *maskCurveView;
 
 @property (nonatomic, strong) NSSet *observedCurveProperies;
 
 @property (nonatomic, strong) NSSet *observedDotProperies;
 
 @property (nonatomic, strong) NSSet *observedLabelProperies;
+
+@property (nonatomic, strong) NSOperationQueue *queue;
+
+@property (nonatomic) BOOL layouted;
 
 @end
 
@@ -58,8 +82,8 @@
         
         _curvePath = [UIBezierPath bezierPath];
         
-        _curveLayer = [CAShapeLayer layer];
-        [self.layer addSublayer:_curveLayer];
+        _curveView = [[_SSJReportFormsCurveShapeView alloc] init];
+        [self addSubview:_curveView];
         
         _dot = [[SSJReportFormsCurveDot alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
         _dot.outerRadius = 8;
@@ -68,6 +92,15 @@
         
         _valueLab = [[UILabel alloc] init];
         [self addSubview:_valueLab];
+        
+        _maskCurveView = [[UIImageView alloc] init];
+        [self addSubview:_maskCurveView];
+        
+//        _maskCurveView.layer.borderColor = [UIColor blackColor].CGColor;
+//        _maskCurveView.layer.borderWidth = 1;
+        
+        _queue = [[NSOperationQueue alloc] init];
+        _queue.maxConcurrentOperationCount = 1;
         
         self.backgroundColor = [UIColor clearColor];
     }
@@ -79,7 +112,20 @@
     
     [_valueLab sizeToFit];
     _valueLab.leftTop = CGPointMake(_item.endPoint.x + _dot.outerRadius, _item.endPoint.y);
+    
+    _curveView.frame = self.bounds;
+    _maskCurveView.frame = self.bounds;
+    
+    if (!_layouted) {
+        _layouted = YES;
+        [self takeScreenShot];
+    }
 }
+
+//- (void)setFrame:(CGRect)frame {
+//    [super setFrame:frame];
+//    [self takeScreenShot];
+//}
 
 - (void)setItem:(SSJReportFormsCurveViewItem *)item {
     
@@ -88,7 +134,7 @@
         return;
     }
     
-    BOOL needsToUpdateCurve = (!_item || ![_item isCurveInfoEqualToItem:item]);
+//    BOOL needsToUpdateCurve = (!_item || ![_item isCurveInfoEqualToItem:item]);
     
     [self removeObserver];
     _item = item;
@@ -97,13 +143,21 @@
     [self updateDot];
     [self updateValueLabel];
     
-    _curveLayer.hidden = !_item.showCurve;
-    if (needsToUpdateCurve && _item.showCurve) {
+    if (_item.showCurve) {
         [self updateCurve];
+        [self takeScreenShot];
     }
+    
+    [self setNeedsLayout];
 }
 
 - (void)updateCurve {
+    if (!_item.showCurve) {
+        _curveView.hidden = YES;
+        return;
+    }
+    
+    _curveView.hidden = NO;
     
     CGFloat offset = (_item.endPoint.x - _item.startPoint.x) * 0.35;
     CGPoint controlPoint1 = CGPointMake(_item.startPoint.x + offset, _item.startPoint.y);
@@ -113,17 +167,59 @@
     [_curvePath moveToPoint:_item.startPoint];
     [_curvePath addCurveToPoint:_item.endPoint controlPoint1:controlPoint1 controlPoint2:controlPoint2];
     
-    _curveLayer.path = _curvePath.CGPath;
-    _curveLayer.lineWidth = _item.curveWidth;
-    _curveLayer.strokeColor = _item.curveColor.CGColor;
-    _curveLayer.fillColor = [UIColor clearColor].CGColor;
+    _curveView.layer.path = _curvePath.CGPath;
+    _curveView.layer.lineWidth = _item.curveWidth;
+    _curveView.layer.strokeColor = _item.curveColor.CGColor;
+    _curveView.layer.fillColor = [UIColor clearColor].CGColor;
     
     if (_item.showShadow) {
-        _curveLayer.shadowColor = _item.curveColor.CGColor;
-        _curveLayer.shadowOpacity = 0.3;
-        _curveLayer.shadowOffset = _item.shadowOffset;
-        _curveLayer.shadowRadius = 1.2;
+        _curveView.layer.shadowColor = _item.curveColor.CGColor;
+        _curveView.layer.shadowOpacity = 0.3;
+        _curveView.layer.shadowOffset = _item.shadowOffset;
+        _curveView.layer.shadowRadius = 1.2;
     }
+}
+
+// 渲染成图片，铺在表面上，隐藏其它的界面元素，以提高流畅度
+- (void)takeScreenShot {
+    
+    _maskCurveView.hidden = YES;
+    [_queue cancelAllOperations];
+    
+    BOOL flag = NO;
+    for (NSOperation *operation in [_queue operations]) {
+        if (operation.isExecuting) {
+            flag = YES;
+            break;
+        }
+    }
+    
+    if (CGRectIsEmpty(_curveView.bounds) || _curveView.hidden) {
+        return;
+    }
+    
+    [_queue addOperationWithBlock:^{
+        if (CGRectIsEmpty(_curveView.bounds) || _curveView.hidden) {
+            return;
+        }
+        
+        UIImage *screentShot = [_curveView ssj_takeScreenShotWithSize:_curveView.size opaque:NO scale:0];
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            if (CGRectIsEmpty(_curveView.bounds) || _curveView.hidden) {
+                return;
+            }
+            
+            if (flag) {
+                return;
+            }
+            
+            _maskCurveView.image = screentShot;
+            _maskCurveView.size = screentShot.size;
+            
+            _curveView.hidden = YES;
+            _maskCurveView.hidden = NO;
+        }];
+    }];
 }
 
 - (void)updateDot {
@@ -143,6 +239,7 @@
     
     if ([_observedCurveProperies containsObject:keyPath]) {
         [self updateCurve];
+        [self takeScreenShot];
     } else if ([_observedDotProperies containsObject:keyPath]) {
         [self updateDot];
     } else if ([_observedLabelProperies containsObject:keyPath]) {
