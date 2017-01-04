@@ -130,15 +130,10 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
 
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     SSJReportFormsCurveCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kSSJReportFormsCurveCellID forIndexPath:indexPath];
-    
     if (_items.count > indexPath.item) {
         SSJReportFormsCurveCellItem *item = [_items objectAtIndex:indexPath.item];
         cell.cellItem = item;
     }
-    
-#warning test
-//    cell.layer.borderColor = [UIColor redColor].CGColor;
-//    cell.layer.borderWidth = 1;
     
     return cell;
 }
@@ -166,6 +161,13 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
     [self updateDotsAndLabelsPosition];
 //    [self updateBallonHeight];
     [self updateContentOffset:YES];
+}
+
+- (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
+//    if (_items.count > indexPath.item) {
+//        SSJReportFormsCurveCellItem *item = [_items objectAtIndex:indexPath.item];
+//        ((SSJReportFormsCurveCell *)cell).cellItem = item;
+//    }
 }
 
 #pragma mark - UICollectionViewDelegateFlowLayout

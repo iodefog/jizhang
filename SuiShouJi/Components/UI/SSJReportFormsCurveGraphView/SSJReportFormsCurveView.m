@@ -46,18 +46,11 @@
 
 @property (nonatomic, strong) NSSet *observedLabelProperies;
 
+@property (nonatomic, strong) NSOperationQueue *queue;
+
 @end
 
 @implementation SSJReportFormsCurveView
-
-+ (dispatch_queue_t)sharedQueue {
-    static dispatch_queue_t queue = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        queue = dispatch_queue_create("com.ShuiShouJi.SSJReportFormsCurveViewQueue", DISPATCH_QUEUE_SERIAL);
-    });
-    return queue;
-}
 
 - (void)dealloc {
     [self removeObserver];
@@ -98,11 +91,14 @@
         _valueLab = [[UILabel alloc] init];
         [self addSubview:_valueLab];
         
-        _maskCurveLayer = [[UIImageView alloc] init];
-        [self addSubview:_maskCurveLayer];
+//        _maskCurveLayer = [[UIImageView alloc] init];
+//        [self addSubview:_maskCurveLayer];
         
-//        _maskCurveLayer.layer.borderColor = [UIColor blackColor].CGColor;
-//        _maskCurveLayer.layer.borderWidth = 1;
+        _maskCurveLayer.layer.borderColor = [UIColor blackColor].CGColor;
+        _maskCurveLayer.layer.borderWidth = 1;
+        
+        _queue = [[NSOperationQueue alloc] init];
+        _queue.maxConcurrentOperationCount = 1;
         
         self.backgroundColor = [UIColor clearColor];
     }
@@ -121,7 +117,7 @@
 
 - (void)setFrame:(CGRect)frame {
     [super setFrame:frame];
-    [self takeScreenShot];
+//    [self takeScreenShot];
 }
 
 - (void)setItem:(SSJReportFormsCurveViewItem *)item {
@@ -131,7 +127,7 @@
         return;
     }
     
-    BOOL needsToUpdateCurve = (!_item || ![_item isCurveInfoEqualToItem:item]);
+//    BOOL needsToUpdateCurve = (!_item || ![_item isCurveInfoEqualToItem:item]);
     
     [self removeObserver];
     _item = item;
@@ -140,8 +136,7 @@
     [self updateDot];
     [self updateValueLabel];
     
-    _curveView.hidden = !_item.showCurve;
-    if (needsToUpdateCurve) {
+    if (_item.showCurve) {
         [self updateCurve];
     }
     
@@ -175,35 +170,49 @@
         _curveView.layer.shadowOffset = _item.shadowOffset;
         _curveView.layer.shadowRadius = 1.2;
     }
-    
-    [self takeScreenShot];
 }
 
-//  渲染成图片，铺在表面上，隐藏其它的界面元素，以提高流畅度
+// 渲染成图片，铺在表面上，隐藏其它的界面元素，以提高流畅度
 - (void)takeScreenShot {
+    static BOOL flag = NO;
     
     _maskCurveLayer.hidden = YES;
+    [_queue cancelAllOperations];
     
-    if (CGRectIsEmpty(self.bounds) || !_item.showCurve || _curveView.hidden) {
+    flag = NO;
+    for (NSOperation *operation in [_queue operations]) {
+        if (operation.isExecuting) {
+            flag = YES;
+            break;
+        }
+    }
+    
+    if (CGRectIsEmpty(_curveView.bounds) || _curveView.hidden) {
         return;
     }
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), [[self class] sharedQueue], ^{
-        
-        if (CGRectIsEmpty(self.bounds) || !_item.showCurve || _curveView.hidden) {
+    [_queue addOperationWithBlock:^{
+        if (CGRectIsEmpty(_curveView.bounds) || _curveView.hidden) {
             return;
         }
         
-        UIImage *screentShot = [_curveView ssj_takeScreenShotWithSize:_curveView.size opaque:NO scale:0];;
-        
-        dispatch_sync(dispatch_get_main_queue(), ^{
+        UIImage *screentShot = [_curveView ssj_takeScreenShotWithSize:_curveView.size opaque:NO scale:0];
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            if (CGRectIsEmpty(_curveView.bounds) || _curveView.hidden) {
+                return;
+            }
+            
+            if (flag) {
+                return;
+            }
+            
             _maskCurveLayer.image = screentShot;
             _maskCurveLayer.size = screentShot.size;
             
             _curveView.hidden = YES;
             _maskCurveLayer.hidden = NO;
-        });
-    });
+        }];
+    }];
 }
 
 - (void)updateDot {
@@ -223,6 +232,7 @@
     
     if ([_observedCurveProperies containsObject:keyPath]) {
         [self updateCurve];
+//        [self takeScreenShot];
     } else if ([_observedDotProperies containsObject:keyPath]) {
         [self updateDot];
     } else if ([_observedLabelProperies containsObject:keyPath]) {
