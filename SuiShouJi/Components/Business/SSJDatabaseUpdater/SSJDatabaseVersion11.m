@@ -37,6 +37,10 @@
         return [db lastError];
     }
     
+    if (![db executeUpdate:@"update bk_user_charge set ichargetype = ? and cid = loanid where length(loanid) = 0 and length(iconfigid) = 0",@(SSJChargeIdTypeNormal)]) {
+        return [db lastError];
+    }
+    
     if (![db executeUpdate:@"update bk_user_charge set ichargetype = ? and cid = loanid where length(loanid) > 0",@(SSJChargeIdTypeLoan)]) {
         return [db lastError];
     }
@@ -51,7 +55,7 @@
     }
     
     // 将原来表中的纪录插入到临时表中
-    if (![db executeUpdate:@"insert into TMP_USER_CHARGE select ICHARGEID, CUSERID, IMONEY,  IBILLID, IFUNSID, CADDDATE , IOLDMONEY, IBALANCE, CBILLDATE, CMEMO, CIMGURL,  THUMBURL, IVERSION, CWRITEDATE, OPERATORTYPE, CBOOKSID, CLIENTADDDATE, ICHARGETYPE , CID from BK_BILL_TYPE"]) {
+    if (![db executeUpdate:@"insert into TMP_USER_CHARGE select ICHARGEID, CUSERID, IMONEY,  IBILLID, IFUNSID, CADDDATE , IOLDMONEY, IBALANCE, CBILLDATE, CMEMO, CIMGURL,  THUMBURL, IVERSION, CWRITEDATE, OPERATORTYPE, CBOOKSID, CLIENTADDDATE, ICHARGETYPE , CID from BK_USER_CHARGE"]) {
         return [db lastError];
     }
     
