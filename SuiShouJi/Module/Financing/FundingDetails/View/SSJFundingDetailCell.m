@@ -114,7 +114,11 @@
         SSJRepaymentModel *repaymentModel = [SSJRepaymentStore queryRepaymentModelWithChargeItem:item];
         if ([item.billId isEqualToString:@"3"] || [item.billId isEqualToString:@"4"]) {
             // 如果是信用卡还款
-            self.typeLabel.text = [NSString stringWithFormat:@"%ld月账单还款",(long)repaymentModel.repaymentMonth.month];
+            if ([item.fundParent isEqualToString:@"3"]) {
+                self.typeLabel.text = [NSString stringWithFormat:@"%ld月账单还款",(long)repaymentModel.repaymentMonth.month];
+            } else {
+                self.typeLabel.text = [NSString stringWithFormat:@"%@还款—%ld月账单还款",repaymentModel.cardName,(long)repaymentModel.repaymentMonth.month];
+            }
             [self.typeLabel sizeToFit];
         }else if([item.billId isEqualToString:@"11"]) {
             // 如果是信用卡分期本金
