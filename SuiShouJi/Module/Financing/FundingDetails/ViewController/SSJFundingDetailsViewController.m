@@ -430,15 +430,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
         [_repaymentPopView setAttributtedText:attributedStr forIndex:1];
         _repaymentPopView.selectionHandle = ^(NSString * title){
             if ([title isEqualToString:@"还款"]) {
-                SSJCreditCardRepaymentViewController *repaymentVC = [[SSJCreditCardRepaymentViewController alloc]init];
-                SSJRepaymentModel *model = [[SSJRepaymentModel alloc]init];
-                SSJCreditCardItem *item = (SSJCreditCardItem *)wself.item;
-                model.cardId = item.cardId;
-                model.cardName = item.cardName;
-                model.cardBillingDay = item.cardBillingDay;
-                model.cardRepaymentDay = item.cardRepaymentDay;
-                repaymentVC.repaymentModel = model;
-                [wself.navigationController pushViewController:repaymentVC animated:YES];
+                [wself enterRepaymentVc];
             } else {
                 [wself enterInstalmentVc];
             }
@@ -601,6 +593,46 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
 //    }
     instalmentVc.repaymentModel = model;
     [self.navigationController pushViewController:instalmentVc animated:YES];
+}
+
+- (void)enterRepaymentVc {
+    if (self.cardItem.cardBillingDay == 0 && self.cardItem.cardRepaymentDay == 0) {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:@"请先去设置账单日和还款日哦" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:NULL];
+        __weak typeof(self) weakSelf = self;
+        UIAlertAction *comfirm = [UIAlertAction actionWithTitle:@"去设置" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            SSJNewCreditCardViewController *creditCardVc = [[SSJNewCreditCardViewController alloc]init];
+            creditCardVc.cardId = self.cardItem.cardId;
+            [weakSelf.navigationController pushViewController:creditCardVc animated:YES];
+        }];
+        [alert addAction:cancel];
+        [alert addAction:comfirm];
+        [self.navigationController presentViewController:alert animated:YES completion:NULL];
+        return;
+    }
+    if (!self.cardItem.settleAtRepaymentDay) {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:@"使用分期付款需信用卡设置为以账单日结算哦!" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:NULL];
+        __weak typeof(self) weakSelf = self;
+        UIAlertAction *comfirm = [UIAlertAction actionWithTitle:@"去设置" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            SSJNewCreditCardViewController *creditCardVc = [[SSJNewCreditCardViewController alloc]init];
+            creditCardVc.cardId = self.cardItem.cardId;
+            [weakSelf.navigationController pushViewController:creditCardVc animated:YES];
+        }];
+        [alert addAction:cancel];
+        [alert addAction:comfirm];
+        [self.navigationController presentViewController:alert animated:YES completion:NULL];
+        return;
+    }
+    SSJCreditCardRepaymentViewController *repaymentVC = [[SSJCreditCardRepaymentViewController alloc]init];
+    SSJRepaymentModel *model = [[SSJRepaymentModel alloc]init];
+    SSJCreditCardItem *item = (SSJCreditCardItem *)self.item;
+    model.cardId = item.cardId;
+    model.cardName = item.cardName;
+    model.cardBillingDay = item.cardBillingDay;
+    model.cardRepaymentDay = item.cardRepaymentDay;
+    repaymentVC.repaymentModel = model;
+    [self.navigationController pushViewController:repaymentVC animated:YES];
 }
 
 - (void)didReceiveMemoryWarning {
