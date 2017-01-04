@@ -154,12 +154,12 @@
         self.homeBar.leftButton.item = currentBooksItem;
         self.homeBar.leftButton.tintColor = [UIColor ssj_colorWithHex:currentBooksItem.booksColor];
     }
-    [self whichViewShouldPopToHomeView];//弹框
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
 //    [self ssj_remindUserToSetMotionPasswordIfNeeded];
+    [self whichViewShouldPopToHomeView];//弹框
 }
 
 - (void)viewDidLoad {
