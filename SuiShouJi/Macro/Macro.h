@@ -57,6 +57,9 @@ alpha:(a)]
 //  角度转换
 #define degreesToRadians(x)(M_PI*x/180.0)
 
+//  系统字体大小
+#define systemFontSize(x) [UIFont systemFontOfSize:(x)]
+
 //  根据屏幕宽度比例计算宽度
 #define SSJ_SCALE_WIDTH(x) CGRectGetWidth([UIScreen mainScreen].bounds) / 320 * (x)
 
