@@ -37,15 +37,15 @@
         return [db lastError];
     }
     
-    if (![db executeUpdate:@"update bk_user_charge set ichargetype = ?, cid = loanid where length(loanid) = 0 and length(iconfigid) = 0",@(SSJChargeIdTypeNormal)]) {
-        return [db lastError];
-    }
-    
     if (![db executeUpdate:@"update bk_user_charge set ichargetype = ?, cid = loanid where length(loanid) > 0",@(SSJChargeIdTypeLoan)]) {
         return [db lastError];
     }
     
     if (![db executeUpdate:@"update bk_user_charge set ichargetype = ?, cid = iconfigid where length(iconfigid) > 0",@(SSJChargeIdTypeCircleConfig)]) {
+        return [db lastError];
+    }
+    
+    if (![db executeUpdate:@"update bk_user_charge set ichargetype = ? where ichargetype is null",@(SSJChargeIdTypeNormal)]) {
         return [db lastError];
     }
     
