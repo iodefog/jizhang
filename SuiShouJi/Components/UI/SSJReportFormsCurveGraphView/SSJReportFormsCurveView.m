@@ -38,7 +38,7 @@
 
 @property (nonatomic, strong) UILabel *valueLab;
 
-@property (nonatomic, strong) UIImageView *maskCurveLayer;
+@property (nonatomic, strong) UIImageView *maskCurveView;
 
 @property (nonatomic, strong) NSSet *observedCurveProperies;
 
@@ -47,6 +47,8 @@
 @property (nonatomic, strong) NSSet *observedLabelProperies;
 
 @property (nonatomic, strong) NSOperationQueue *queue;
+
+@property (nonatomic) BOOL layouted;
 
 @end
 
@@ -91,11 +93,11 @@
         _valueLab = [[UILabel alloc] init];
         [self addSubview:_valueLab];
         
-//        _maskCurveLayer = [[UIImageView alloc] init];
-//        [self addSubview:_maskCurveLayer];
+        _maskCurveView = [[UIImageView alloc] init];
+        [self addSubview:_maskCurveView];
         
-        _maskCurveLayer.layer.borderColor = [UIColor blackColor].CGColor;
-        _maskCurveLayer.layer.borderWidth = 1;
+        _maskCurveView.layer.borderColor = [UIColor blackColor].CGColor;
+        _maskCurveView.layer.borderWidth = 1;
         
         _queue = [[NSOperationQueue alloc] init];
         _queue.maxConcurrentOperationCount = 1;
@@ -112,13 +114,18 @@
     _valueLab.leftTop = CGPointMake(_item.endPoint.x + _dot.outerRadius, _item.endPoint.y);
     
     _curveView.frame = self.bounds;
-    _maskCurveLayer.frame = self.bounds;
+    _maskCurveView.frame = self.bounds;
+    
+    if (!_layouted) {
+        _layouted = YES;
+        [self takeScreenShot];
+    }
 }
 
-- (void)setFrame:(CGRect)frame {
-    [super setFrame:frame];
+//- (void)setFrame:(CGRect)frame {
+//    [super setFrame:frame];
 //    [self takeScreenShot];
-}
+//}
 
 - (void)setItem:(SSJReportFormsCurveViewItem *)item {
     
@@ -138,6 +145,7 @@
     
     if (_item.showCurve) {
         [self updateCurve];
+        [self takeScreenShot];
     }
     
     [self setNeedsLayout];
@@ -174,12 +182,11 @@
 
 // 渲染成图片，铺在表面上，隐藏其它的界面元素，以提高流畅度
 - (void)takeScreenShot {
-    static BOOL flag = NO;
     
-    _maskCurveLayer.hidden = YES;
+    _maskCurveView.hidden = YES;
     [_queue cancelAllOperations];
     
-    flag = NO;
+    BOOL flag = NO;
     for (NSOperation *operation in [_queue operations]) {
         if (operation.isExecuting) {
             flag = YES;
@@ -190,6 +197,31 @@
     if (CGRectIsEmpty(_curveView.bounds) || _curveView.hidden) {
         return;
     }
+    
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//        [_queue addOperationWithBlock:^{
+//            if (CGRectIsEmpty(_curveView.bounds) || _curveView.hidden) {
+//                return;
+//            }
+//            
+//            UIImage *screentShot = [_curveView ssj_takeScreenShotWithSize:_curveView.size opaque:NO scale:0];
+//            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+//                if (CGRectIsEmpty(_curveView.bounds) || _curveView.hidden) {
+//                    return;
+//                }
+//                
+//                if (flag) {
+////                    return;
+//                }
+//                
+//                _maskCurveView.image = screentShot;
+//                _maskCurveView.size = screentShot.size;
+//                
+//                _curveView.hidden = YES;
+//                _maskCurveView.hidden = NO;
+//            }];
+//        }];
+//    });
     
     [_queue addOperationWithBlock:^{
         if (CGRectIsEmpty(_curveView.bounds) || _curveView.hidden) {
@@ -203,14 +235,14 @@
             }
             
             if (flag) {
-                return;
+//                return;
             }
             
-            _maskCurveLayer.image = screentShot;
-            _maskCurveLayer.size = screentShot.size;
+            _maskCurveView.image = screentShot;
+            _maskCurveView.size = screentShot.size;
             
             _curveView.hidden = YES;
-            _maskCurveLayer.hidden = NO;
+            _maskCurveView.hidden = NO;
         }];
     }];
 }
@@ -232,7 +264,7 @@
     
     if ([_observedCurveProperies containsObject:keyPath]) {
         [self updateCurve];
-//        [self takeScreenShot];
+        [self takeScreenShot];
     } else if ([_observedDotProperies containsObject:keyPath]) {
         [self updateDot];
     } else if ([_observedLabelProperies containsObject:keyPath]) {
