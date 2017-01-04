@@ -96,8 +96,8 @@
         _maskCurveView = [[UIImageView alloc] init];
         [self addSubview:_maskCurveView];
         
-        _maskCurveView.layer.borderColor = [UIColor blackColor].CGColor;
-        _maskCurveView.layer.borderWidth = 1;
+//        _maskCurveView.layer.borderColor = [UIColor blackColor].CGColor;
+//        _maskCurveView.layer.borderWidth = 1;
         
         _queue = [[NSOperationQueue alloc] init];
         _queue.maxConcurrentOperationCount = 1;
@@ -198,31 +198,6 @@
         return;
     }
     
-//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//        [_queue addOperationWithBlock:^{
-//            if (CGRectIsEmpty(_curveView.bounds) || _curveView.hidden) {
-//                return;
-//            }
-//            
-//            UIImage *screentShot = [_curveView ssj_takeScreenShotWithSize:_curveView.size opaque:NO scale:0];
-//            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-//                if (CGRectIsEmpty(_curveView.bounds) || _curveView.hidden) {
-//                    return;
-//                }
-//                
-//                if (flag) {
-////                    return;
-//                }
-//                
-//                _maskCurveView.image = screentShot;
-//                _maskCurveView.size = screentShot.size;
-//                
-//                _curveView.hidden = YES;
-//                _maskCurveView.hidden = NO;
-//            }];
-//        }];
-//    });
-    
     [_queue addOperationWithBlock:^{
         if (CGRectIsEmpty(_curveView.bounds) || _curveView.hidden) {
             return;
@@ -235,7 +210,7 @@
             }
             
             if (flag) {
-//                return;
+                return;
             }
             
             _maskCurveView.image = screentShot;
