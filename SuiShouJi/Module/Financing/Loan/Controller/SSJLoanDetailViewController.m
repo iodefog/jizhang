@@ -123,6 +123,18 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
 }
 
 #pragma mark - UITableViewDelegate
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.section == 0) {
+        SSJLoanDetailCellItem *cellItem = [self.section1Items ssj_safeObjectAtIndex:indexPath.row];
+        return cellItem.rowHeight;
+    } else if (indexPath.section == 1) {
+        SSJLoanDetailCellItem *cellItem = [self.section2Items ssj_safeObjectAtIndex:indexPath.row];
+        return cellItem.rowHeight;
+    } else {
+        return 0;
+    }
+}
+
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     if (section == 1) {
         return 40;
@@ -621,7 +633,6 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
         _tableView.backgroundColor = [UIColor clearColor];
         [_tableView setTableFooterView:[[UIView alloc] init]];
         [_tableView registerClass:[SSJLoanDetailCell class] forCellReuseIdentifier:kSSJLoanDetailCellID];
-        _tableView.rowHeight = 54;
         _tableView.sectionFooterHeight = 0;
 //        _tableView.contentInset = UIEdgeInsetsMake(0, 0, 54, 0);
         _tableView.separatorInset = UIEdgeInsetsMake(0, 12, 0, 0);

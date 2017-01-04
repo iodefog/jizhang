@@ -439,7 +439,7 @@ static const CGFloat kBottomViewHeight = 398;
 
 - (SSJPercentCircleView *)circleView {
     if (!_circleView) {
-        _circleView = [[SSJPercentCircleView alloc] initWithFrame:CGRectMake(0, 70, self.width, 320) insets:UIEdgeInsetsMake(80, 80, 80, 80) thickness:39];
+        _circleView = [[SSJPercentCircleView alloc] initWithFrame:CGRectMake(0, 70, self.width, 320) insets:UIEdgeInsetsMake(80, 80, 80, 80) thickness:30];
         _circleView.backgroundColor = [UIColor clearColor];
         _circleView.dataSource = self;
     }
