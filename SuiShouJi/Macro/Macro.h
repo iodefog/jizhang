@@ -99,6 +99,8 @@ alpha:(a)]
 //  tabbar高度
 #define SSJ_TABBAR_HEIGHT self.tabBarController.tabBar.height
 
+#define SSJ_KEYWINDOW [UIApplication sharedApplication].keyWindow
+
 #pragma mark - Theme
 
 // 主要颜色
