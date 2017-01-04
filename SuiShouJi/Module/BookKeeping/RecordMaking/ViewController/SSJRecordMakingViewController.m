@@ -197,7 +197,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     return _customNaviBar;
 }
 
--(SSJDateSelectedView*)DateSelectedView{
+-(SSJDateSelectedView*)DateSelectedView {
     if (!_DateSelectedView) {
         _DateSelectedView = [[SSJDateSelectedView alloc]initWithFrame:[UIScreen mainScreen].bounds forYear:self.selectedYear Month:self.selectedMonth Day:self.selectedDay];
 //        _DateSelectedView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
@@ -867,7 +867,9 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     }
     
     [SSJRecordMakingStore saveChargeWithChargeItem:self.item Success:^(SSJBillingChargeCellItem *editeItem){
-        SSJSelectBooksType(editeItem.booksId);
+        if (![editeItem.booksId isEqualToString:SSJGetCurrentBooksType()]) {
+            SSJSelectBooksType(editeItem.booksId);
+        }
         if (weakSelf.addNewChargeBlock) {
             weakSelf.addNewChargeBlock(@[editeItem]);
         }
