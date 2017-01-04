@@ -75,6 +75,7 @@
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         
         self.textLabel.font = [UIFont systemFontOfSize:12];
+        self.textLabel.backgroundColor = [UIColor clearColor];
         
         _rightLabel = [[UILabel alloc] init];
         _rightLabel.font = [UIFont systemFontOfSize:12];
