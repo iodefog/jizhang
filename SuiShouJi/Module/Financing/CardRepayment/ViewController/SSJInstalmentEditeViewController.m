@@ -31,7 +31,7 @@ static NSString *const kTitle1 = @"还款方式";
 static NSString *const kTitle2 = @"账单分期月份";
 static NSString *const kTitle3 = @"期数";
 static NSString *const kTitle4 = @"申请分期金额";
-static NSString *const kTitle5 = @"手续费";
+static NSString *const kTitle5 = @"手续费率";
 static NSString *const kTitle6 = @"分期申请日";
 
 @interface SSJInstalmentEditeViewController ()<UITextFieldDelegate,UITableViewDelegate,UITableViewDataSource>
@@ -347,6 +347,7 @@ static NSString *const kTitle6 = @"分期申请日";
         [alert addAction:cancel];
         [alert addAction:comfirm];
         [self.navigationController presentViewController:alert animated:YES completion:NULL];
+        return;
     } else {
         __weak typeof(self) weakSelf = self;
         [SSJRepaymentStore saveRepaymentWithRepaymentModel:self.repaymentModel Success:^{
@@ -358,6 +359,7 @@ static NSString *const kTitle6 = @"分期申请日";
         } failure:^(NSError *error) {
             
         }];
+        return;
     }
 }
 
