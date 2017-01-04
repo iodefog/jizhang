@@ -40,7 +40,7 @@
     return CGSizeMake(92, 36);
 }
 
-- (void)show {
+- (void)showOnView:(UIView *)view {
     if (self.superview) {
         return;
     }

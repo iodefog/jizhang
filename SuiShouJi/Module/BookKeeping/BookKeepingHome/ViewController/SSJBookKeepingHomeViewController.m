@@ -191,7 +191,7 @@
     self.selectIndex = nil;
     [self getCurrentDate];
     [self.tableView reloadData];
-    [self.floatingDateView removeFromSuperview];
+    [self.floatingDateView dismiss];
     [self.mutiFunctionButton dismiss];
     _dateViewHasDismiss = YES;
 }
@@ -337,7 +337,7 @@
 
     }else {
         if (scrollView.contentOffset.y > - 20 && self.items.count != 0)  {
-            [self.floatingDateView show];
+            [self.floatingDateView showOnView:self.view];
             [self.mutiFunctionButton showOnView:self.view];
         }
         CGPoint currentPostion = [self.view convertPoint:CGPointMake(self.view.width / 2, self.view.height / 2) toView:self.tableView];

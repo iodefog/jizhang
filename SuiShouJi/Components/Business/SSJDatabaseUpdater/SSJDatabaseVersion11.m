@@ -23,6 +23,11 @@
         return error;
     }
     
+    error = [self updateBillTypeTableWithDatabase:db];
+    if (error) {
+        return error;
+    }
+    
     return nil;
 }
 
@@ -79,6 +84,19 @@
 
 + (NSError *)updateCreditRepaymentTableWithDatabase:(FMDatabase *)db {
     if (![db executeUpdate:@"create table BK_CREDIT_REPAYMENT (CREPAYMENTID TEXT, IINSTALMENTCOUNT INTEGER, CAPPLYDATE TEXT, CCARDID TEXT, REPAYMENTMONEY TEXT, IPOUNDAGERATE NUMERIC, CMEMO TEXT, CUSERID TEXT, OPERATORTYPE INTEGER, CWRITEDATE TEXT, IVERSION INTEGER, CREPAYMENTMONTH TEXT)"]) {
+        return [db lastError];
+    }
+    
+    return nil;
+}
+
+
++ (NSError *)updateBillTypeTableWithDatabase:(FMDatabase *)db {
+    if (![db executeUpdate:@"insert into BK_BILL_TYPE values ('11','信用卡分期本金','1','ft_cash','#fc7a60',2,0,'','','')"]) {
+        return [db lastError];
+    }
+    
+    if (![db executeUpdate:@"insert into BK_BILL_TYPE values ('12','信用卡分期手续费','1','bt_shouxufei','#ccb530',2,0,'','','')"]) {
         return [db lastError];
     }
     
