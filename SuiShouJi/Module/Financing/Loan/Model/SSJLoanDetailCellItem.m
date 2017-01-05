@@ -63,14 +63,18 @@
                     icon = @"loan_receipt";
                     title = @"收款";
                     subtitle = [NSString stringWithFormat:@"－%.2f", model.money];
-                    bottomTitle = [[NSAttributedString alloc] initWithString:model.memo];
+                    if (model.memo) {
+                        bottomTitle = [[NSAttributedString alloc] initWithString:model.memo];
+                    }
                     break;
                     
                 case SSJLoanCompoundChargeTypeAdd:
                     icon = @"loan_append";
                     title = @"追加借出";
                     subtitle = [NSString stringWithFormat:@"＋%.2f", model.money];
-                    bottomTitle = [[NSAttributedString alloc] initWithString:model.memo];
+                    if (model.memo) {
+                        bottomTitle = [[NSAttributedString alloc] initWithString:model.memo];
+                    }
                     break;
                     
                 case SSJLoanCompoundChargeTypeCloseOut:
@@ -112,14 +116,18 @@
                     icon = @"loan_repayment";
                     title = @"还款";
                     subtitle = [NSString stringWithFormat:@"＋%.2f", model.money];
-                    bottomTitle = [[NSAttributedString alloc] initWithString:model.memo];
+                    if (model.memo) {
+                        bottomTitle = [[NSAttributedString alloc] initWithString:model.memo];
+                    }
                     break;
                     
                 case SSJLoanCompoundChargeTypeAdd:
                     icon = @"loan_append";
                     title = @"追加欠款";
                     subtitle = [NSString stringWithFormat:@"－%.2f", model.money];
-                    bottomTitle = [[NSAttributedString alloc] initWithString:model.memo];
+                    if (model.memo) {
+                        bottomTitle = [[NSAttributedString alloc] initWithString:model.memo];
+                    }
                     break;
                     
                 case SSJLoanCompoundChargeTypeCloseOut:
