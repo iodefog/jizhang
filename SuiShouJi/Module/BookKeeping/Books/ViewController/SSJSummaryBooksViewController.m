@@ -390,13 +390,15 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
 - (void)reloadChartViewData {
     // 加载流水列表和饼状图的数据
     SSJDatePeriod *period = _customPeriod ?: _currentPeriod;
-    [SSJReportFormsUtil queryForIncomeOrPayType:!(int)_header.incomOrExpenseSelectSegment.selectedSegmentIndex booksId:@"all" startDate:period.startDate endDate:period.endDate success:^(NSArray<SSJReportFormsItem *> *result) {
-        [self.view ssj_hideLoadingIndicator];
-        [self organiseDatasWithResult:result];
-    } failure:^(NSError *error) {
-        [self.view ssj_hideLoadingIndicator];
-        [self showError:error];
-    }];
+    if (period) {
+        [SSJReportFormsUtil queryForIncomeOrPayType:!(int)_header.incomOrExpenseSelectSegment.selectedSegmentIndex booksId:@"all" startDate:period.startDate endDate:period.endDate success:^(NSArray<SSJReportFormsItem *> *result) {
+            [self.view ssj_hideLoadingIndicator];
+            [self organiseDatasWithResult:result];
+        } failure:^(NSError *error) {
+            [self.view ssj_hideLoadingIndicator];
+            [self showError:error];
+        }];
+    }
 }
 
 // 加载日期选择的数据

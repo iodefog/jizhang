@@ -183,6 +183,7 @@
         _curveNoResultView = [[SSJBudgetNodataRemindView alloc]init];
         _curveNoResultView.image = @"budget_no_data";
         _curveNoResultView.title = @"报表空空如也";
+        _curveNoResultView.hidden = YES;
     }
     return _curveNoResultView;
 }
@@ -192,6 +193,7 @@
         _chartNoResultView = [[SSJBudgetNodataRemindView alloc]init];
         _chartNoResultView.image = @"budget_no_data";
         _chartNoResultView.title = @"报表空空如也";
+        _chartNoResultView.hidden = YES;
     }
     return _chartNoResultView;
 }
