@@ -337,12 +337,7 @@ static NSString *const kTitle6 = @"分期申请日";
                 
             }];
         }];
-        NSString *massage;
-        if (self.originalRepaymentModel.poundageRate > 0) {
-            massage = [NSString stringWithFormat:@"若修改分期还款，则先前生成的%ld期相关流水将被删除并根据新的设置重新生成哦，你确定要执行吗？",(long)self.originalRepaymentModel.instalmentCout * 2];
-        } else {
-            massage = [NSString stringWithFormat:@"若修改分期还款，则先前生成的%ld期相关流水将被删除并根据新的设置重新生成哦，你确定要执行吗？",(long)self.originalRepaymentModel.instalmentCout];
-        }
+        NSString *massage = [NSString stringWithFormat:@"若修改分期还款，则先前生成的%ld期相关流水将被删除并根据新的设置重新生成哦，你确定要执行吗？",(long)self.originalRepaymentModel.instalmentCout * 2];
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:massage preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:cancel];
         [alert addAction:comfirm];
