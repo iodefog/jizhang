@@ -395,7 +395,6 @@ static NSString *const kSegmentTitleIncome = @"收入";
 // 查询某个周期内的流水统计
 - (void)reloadDatasInPeriod:(SSJDatePeriod *)period {
     if (!period) {
-        SSJPRINT(@"参数period不能为nil");
         return;
     }
     
