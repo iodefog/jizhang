@@ -329,7 +329,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
                     repaymentVc.chargeItem = cellItem;
                     [self.navigationController pushViewController:repaymentVc animated:YES];
                 }else {
-                    SSJInstalmentDetailViewController *instalmentDetailVc = [[SSJInstalmentDetailViewController alloc]init];
+                    SSJInstalmentDetailViewController *instalmentDetailVc = [[SSJInstalmentDetailViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
                     instalmentDetailVc.chargeItem = cellItem;
                     [self.navigationController pushViewController:instalmentDetailVc animated:YES];
                 }
@@ -422,8 +422,8 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
 - (SSJLoanChangeChargeSelectionControl *)repaymentPopView {
     if (!_repaymentPopView) {
         __weak typeof(self) wself = self;
-        _repaymentPopView = [[SSJLoanChangeChargeSelectionControl alloc] initWithTitles:@[@[@"还款",@"账单分期\n(仅支持账单分期)"],@[@"取消"]]];
-        NSString *originalStr = @"账单分期\n(仅支持账单分期)";
+        _repaymentPopView = [[SSJLoanChangeChargeSelectionControl alloc] initWithTitles:@[@[@"还款",@"分期还款\n(仅支持账单分期)"],@[@"取消"]]];
+        NSString *originalStr = @"分期还款\n(仅支持账单分期)";
         NSMutableAttributedString *attributedStr = [[NSMutableAttributedString alloc] initWithString:originalStr];
         [attributedStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] range:[originalStr rangeOfString:@"(仅支持账单分期)"]];
         [attributedStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:13] range:[originalStr rangeOfString:@"(仅支持账单分期)"]];

@@ -42,7 +42,7 @@
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
 
-    [self getDateFromDatebase];
+    [self getDataFromDataBase];
 }
 
 
@@ -114,7 +114,7 @@
     [self.navigationController pushViewController:circleChargeModifyVC animated:YES];
 }
 
--(void)getDateFromDatebase{
+-(void)getDataFromDataBase{
     [self.tableView ssj_showLoadingIndicator];
     __weak typeof(self) weakSelf = self;
     [SSJCircleChargeStore queryForChargeListWithSuccess:^(NSArray<SSJBillingChargeCellItem *> *result) {
@@ -171,7 +171,7 @@
 }
 
 -(void)reloadDataAfterSync{
-    [self getDateFromDatebase];
+    [self getDataFromDataBase];
 }
 
 - (void)didReceiveMemoryWarning {

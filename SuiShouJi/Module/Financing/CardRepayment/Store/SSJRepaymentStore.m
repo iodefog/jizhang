@@ -165,7 +165,8 @@
                     NSDate *billdate = model.applyDate;
                     billdate = [billdate dateByAddingMonths:i];
                     double principalMoney = [model.repaymentMoney doubleValue] / model.instalmentCout;
-                    if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cbooksid, ibillid, ifunsid, imoney, cbilldate, cmemo, cuserid, iversion, operatortype, cwritedate, ichargetype, cid) values (?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?, ?)",chargeid,booksId,@"11",model.cardId,@(principalMoney),[billdate formattedDateWithFormat:@"yyyy-MM-dd"],model.memo,userID,@(SSJSyncVersion()),writeDate,@(SSJChargeIdTypeRepayment),model.repaymentId]) {
+                    NSString *principalMoneyStr = [[NSString stringWithFormat:@"%f",principalMoney] ssj_moneyDecimalDisplayWithDigits:2];
+                    if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cbooksid, ibillid, ifunsid, imoney, cbilldate, cmemo, cuserid, iversion, operatortype, cwritedate, ichargetype, cid) values (?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?, ?)",chargeid,booksId,@"11",model.cardId,principalMoneyStr,[billdate formattedDateWithFormat:@"yyyy-MM-dd"],model.memo,userID,@(SSJSyncVersion()),writeDate,@(SSJChargeIdTypeRepayment),model.repaymentId]) {
                         *rollback = YES;
                         if (failure) {
                             SSJDispatch_main_async_safe(^{
@@ -173,9 +174,10 @@
                             });
                         }
                     }
-                    if (model.poundageRate) {
+                    if ([model.poundageRate doubleValue]) {
                         double poundageMoney = [model.repaymentMoney doubleValue] * [model.poundageRate doubleValue];
-                        if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cbooksid, ibillid, ifunsid, imoney, cbilldate, cmemo, cuserid, iversion, operatortype, cwritedate, ichargetype, cid) values (?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?, ?)",poundageChargeId,booksId,@"12",model.cardId,@(poundageMoney),[billdate formattedDateWithFormat:@"yyyy-MM-dd"],model.memo,userID,@(SSJSyncVersion()),writeDate,@(SSJChargeIdTypeRepayment),model.repaymentId]) {
+                        NSString *poundageMoneyStr = [[NSString stringWithFormat:@"%f",poundageMoney] ssj_moneyDecimalDisplayWithDigits:2];
+                        if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cbooksid, ibillid, ifunsid, imoney, cbilldate, cmemo, cuserid, iversion, operatortype, cwritedate, ichargetype, cid) values (?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?, ?)",poundageChargeId,booksId,@"12",model.cardId,poundageMoneyStr,[billdate formattedDateWithFormat:@"yyyy-MM-dd"],model.memo,userID,@(SSJSyncVersion()),writeDate,@(SSJChargeIdTypeRepayment),model.repaymentId]) {
                             *rollback = YES;
                             if (failure) {
                                 SSJDispatch_main_async_safe(^{
@@ -211,7 +213,8 @@
                     NSDate *billdate = model.applyDate;
                     billdate = [billdate dateByAddingMonths:i];
                     double principalMoney = [model.repaymentMoney doubleValue] / model.instalmentCout;
-                    if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cbooksid, ibillid, ifunsid, imoney, cbilldate, cmemo, cuserid, iversion, operatortype, cwritedate, ichargetype, cid) values (?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?, ?)",chargeid,booksId,@"11",model.cardId,@(principalMoney),[billdate formattedDateWithFormat:@"yyyy-MM-dd"],model.memo,userID,@(SSJSyncVersion()),writeDate,@(SSJChargeIdTypeRepayment),model.repaymentId]) {
+                    NSString *principalMoneyStr = [[NSString stringWithFormat:@"%f",principalMoney] ssj_moneyDecimalDisplayWithDigits:2];
+                    if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cbooksid, ibillid, ifunsid, imoney, cbilldate, cmemo, cuserid, iversion, operatortype, cwritedate, ichargetype, cid) values (?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?, ?)",chargeid,booksId,@"11",model.cardId,principalMoneyStr,[billdate formattedDateWithFormat:@"yyyy-MM-dd"],model.memo,userID,@(SSJSyncVersion()),writeDate,@(SSJChargeIdTypeRepayment),model.repaymentId]) {
                         *rollback = YES;
                         if (failure) {
                             SSJDispatch_main_async_safe(^{
@@ -219,9 +222,10 @@
                             });
                         }
                     }
-                    if (model.poundageRate) {
+                    if ([model.poundageRate doubleValue]) {
                         double poundageMoney = [model.repaymentMoney doubleValue] * [model.poundageRate doubleValue];
-                        if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cbooksid, ibillid, ifunsid, imoney, cbilldate, cmemo, cuserid, iversion, operatortype, cwritedate, ichargetype, cid) values (?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?, ?)",poundageChargeId,booksId,@"12",model.cardId,@(poundageMoney),[billdate formattedDateWithFormat:@"yyyy-MM-dd"],model.memo,userID,@(SSJSyncVersion()),writeDate,@(SSJChargeIdTypeRepayment),model.repaymentId]) {
+                        NSString *poundageMoneyStr = [[NSString stringWithFormat:@"%f",poundageMoney] ssj_moneyDecimalDisplayWithDigits:2];
+                        if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cbooksid, ibillid, ifunsid, imoney, cbilldate, cmemo, cuserid, iversion, operatortype, cwritedate, ichargetype, cid) values (?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?, ?)",poundageChargeId,booksId,@"12",model.cardId,poundageMoneyStr,[billdate formattedDateWithFormat:@"yyyy-MM-dd"],model.memo,userID,@(SSJSyncVersion()),writeDate,@(SSJChargeIdTypeRepayment),model.repaymentId]) {
                             *rollback = YES;
                             if (failure) {
                                 SSJDispatch_main_async_safe(^{

@@ -82,7 +82,7 @@
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"393939"],NSFontAttributeName:[UIFont systemFontOfSize:21]};
 //    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
     [self getCurrentDate];
-    [self getDataFromDateBase];
+    [self getDataFromDataBase];
 }
 
 -(void)viewDidLayoutSubviews{
@@ -195,14 +195,14 @@
         _calendarView.year = _currentYear;
         _calendarView.month = _currentMonth;
         _calendarView.day = _currentDay;
-        [self getDataFromDateBase];
+        [self getDataFromDataBase];
         __weak typeof(self) weakSelf = self;
         _calendarView.DateSelectedBlock = ^(long year , long month ,long day ,  NSString *selectDate){
             weakSelf.selectedYear = year;
             weakSelf.selectedMonth = month ;
             weakSelf.selectedDay = day;
             weakSelf.selectDate = selectDate;
-            [weakSelf getDataFromDateBase];
+            [weakSelf getDataFromDataBase];
             [weakSelf.view setNeedsLayout];
         };
     }
@@ -279,7 +279,7 @@
     self.calendarView.year = self.selectedYear;
     self.calendarView.month = self.selectedMonth;
     self.calendarView.day = 0;
-    [self getDataFromDateBase];
+    [self getDataFromDataBase];
 }
 
 -(void)minusButtonClicked:(UIButton*)button{
@@ -293,10 +293,10 @@
     self.calendarView.year = self.selectedYear;
     self.calendarView.month = self.selectedMonth;
     self.calendarView.day = 0;
-    [self getDataFromDateBase];
+    [self getDataFromDataBase];
 }
 
--(void)getDataFromDateBase{
+-(void)getDataFromDataBase{
     __weak typeof(self) weakSelf = self;
     [self.view ssj_showLoadingIndicator];
     [SSJCalenderHelper queryDataInYear:self.selectedYear month:self.selectedMonth success:^(NSMutableDictionary *data) {

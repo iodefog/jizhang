@@ -1,39 +1,45 @@
 platform :ios, '7.0'
-pod 'AFNetworking', '~> 2.5'
 
-pod 'UMengSocialCOM'
+inhibit_all_warnings!
 
-pod 'YYKeyboardManager'
+def shared_pods
+    pod 'AFNetworking', '~> 2.5'
+    pod 'UMengSocialCOM'
+    pod 'YYKeyboardManager'
+    pod 'YYText'
+    pod 'Meiqia', '~> 3.3.1'
+    #pod 'MLeaksFinder', '~> 0.2.0'
+    pod 'JSPatch'
+    pod 'MMDrawerController', '~> 0.5.7'
+    pod 'SDWebImage', '~>3.7'
+    pod 'SDWebImage/WebP'
+    pod 'MJExtension'
+    pod 'UMengAnalytics-NO-IDFA'
+    pod 'FMDB'
+    pod 'iOS-WebP', '0.4'
+    pod 'DateTools'
+    #pod 'UMengFeedback', '~> 2.3.4'
+    pod 'ZYCornerRadius', '~> 0.5.1'
+    pod 'FLAnimatedImage', '~> 1.0'
+    pod 'LxThroughPointsBezier', '~> 1.0.0'
+end
 
-pod 'YYText'
+target 'SuiShouJi'  do
+    shared_pods
+end
 
-pod 'Meiqia', '~> 3.3.1'
+target 'youyujizhang'  do
+    shared_pods
+end
 
-#pod 'MLeaksFinder', '~> 0.2.0'
+target 'JiZhangGuanJia'  do
+    shared_pods
+end
 
-platform :ios, '6.0'
-pod 'JSPatch'
+target 'YouYuJiZhangBen'  do
+    shared_pods
+end
 
-pod 'MMDrawerController', '~> 0.5.7'
-
-platform :ios, '6.1'
-pod 'SDWebImage', '~>3.7'
-pod 'SDWebImage/WebP'
-
-pod 'MJExtension'
-pod 'UMengAnalytics-NO-IDFA'
-
-pod 'FMDB'
-
-#pod 'FMDB/SQLCipher'
-
-pod 'iOS-WebP', '0.4'
-
-pod 'DateTools'
-
-#pod 'UMengFeedback', '~> 2.3.4'
-
-pod 'ZYCornerRadius', '~> 0.5.1'
-pod 'FLAnimatedImage', '~> 1.0'
-pod 'LxThroughPointsBezier', '~> 1.0.0'
-
+target 'YouYuJiZhangLiCai'  do
+    shared_pods
+end

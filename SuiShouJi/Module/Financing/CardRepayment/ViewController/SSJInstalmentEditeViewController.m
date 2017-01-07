@@ -88,7 +88,7 @@ static NSString *const kTitle6 = @"分期申请日";
     [super viewWillAppear:animated];
     if (!self.chargeItem && !self.repaymentModel.repaymentId) {
         self.repaymentModel.applyDate = [NSDate date];
-        self.repaymentModel.instalmentCout = 1;
+        self.repaymentModel.instalmentCout = 3;
         NSDate *repaymentDate = [NSDate date];
         if (repaymentDate.day < self.repaymentModel.cardBillingDay) {
             repaymentDate = [repaymentDate dateBySubtractingMonths:1];
@@ -124,14 +124,14 @@ static NSString *const kTitle6 = @"分期申请日";
     return nil;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section  {
     if (section == 1) {
         return 80 ;
     }
     return 0.1f;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
     if ([title isEqualToString:kTitle6]) {
@@ -145,11 +145,11 @@ static NSString *const kTitle6 = @"分期申请日";
 
 
 #pragma mark - UITableViewDataSource
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return [self.titles[section] count];
 }
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return self.titles.count;
 }
 
@@ -227,6 +227,20 @@ static NSString *const kTitle6 = @"分期申请日";
 
 -(BOOL)textFieldShouldReturn:(UITextField *)textField{
     [textField resignFirstResponder];
+    return YES;
+}
+
+- (BOOL)textFieldShouldClear:(UITextField *)textField {
+    if (textField.tag == 101) {
+        self.repaymentModel.repaymentMoney = [NSDecimalNumber decimalNumberWithString:@"0.00"];
+    }
+    
+    if (textField.tag == 102) {
+        self.repaymentModel.poundageRate = [NSDecimalNumber decimalNumberWithString:@"0.00"];
+    }
+    
+    [self updatePoundageLab];
+    
     return YES;
 }
 
@@ -337,7 +351,7 @@ static NSString *const kTitle6 = @"分期申请日";
                 
             }];
         }];
-        NSString *massage = [NSString stringWithFormat:@"若修改分期还款，则先前生成的%ld期相关流水将被删除并根据新的设置重新生成哦，你确定要执行吗？",(long)self.originalRepaymentModel.instalmentCout * 2];
+        NSString *massage = [NSString stringWithFormat:@"若修改分期还款，则先前生成的%ld期相关流水将被删除并根据新的设置重新生成哦，你确定要执行吗？",(long)self.originalRepaymentModel.instalmentCout];
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:massage preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:cancel];
         [alert addAction:comfirm];

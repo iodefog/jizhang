@@ -118,7 +118,7 @@
     [self.mm_drawerController setGestureCompletionBlock:^(MMDrawerController *drawerController, UIGestureRecognizer *gesture) {
         __strong typeof(weakSelf) sself = weakSelf;
         if (drawerController.openSide == MMDrawerSideNone) {
-            [weakSelf getDateFromDatebase];
+            [weakSelf getDataFromDataBase];
         }
         if (!sself->_dateViewHasDismiss) {
             [weakSelf.floatingDateView dismiss];
@@ -147,7 +147,7 @@
     
     //  数据库初始化完成后再查询数据
     if (self.isDatabaseInitFinished) {
-        [self getDateFromDatebase];
+        [self getDataFromDataBase];
         [self reloadBudgetData];
         NSString *booksid = SSJGetCurrentBooksType();
         SSJBooksTypeItem *currentBooksItem = [SSJBooksTypeStore queryCurrentBooksTypeForBooksId:booksid];
@@ -448,7 +448,7 @@
     bookKeepingCell.deleteButtonClickBlock = ^{
         [MobClick event:@"main_record_edit"];
         weakSelf.selectIndex = nil;
-        [weakSelf getDateFromDatebase];
+        [weakSelf getDataFromDataBase];
         [weakSelf.tableView reloadData];
         [SSJBudgetDatabaseHelper queryForCurrentBudgetListWithSuccess:^(NSArray<SSJBudgetModel *> * _Nonnull result) {
             self.homeBar.budgetButton.model = [result firstObject];
@@ -663,7 +663,7 @@
     }
 }
 
-- (void)getDateFromDatebase{
+- (void)getDataFromDataBase{
     [self.tableView ssj_showLoadingIndicator];
     __weak typeof(self) weakSelf = self;
     if (self.allowRefresh) {
@@ -708,6 +708,7 @@
                 }
             }else{
                 weakSelf.tableView.tableHeaderView = nil;
+                [self.tableView ssj_hideLoadingIndicator];
                 weakSelf.items = [[NSMutableArray alloc]initWithArray:[result objectForKey:SSJOrginalChargeArrKey]];
                 NSMutableArray *newAddArr = [NSMutableArray arrayWithArray:[result objectForKey:SSJNewAddChargeArrKey]];
                 NSMutableDictionary *sumDic = [NSMutableDictionary dictionaryWithDictionary:[result objectForKey:SSJChargeCountSummaryKey]];
@@ -744,7 +745,7 @@
                 [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
             }
         } failure:^(NSError *error) {
-            
+            [self.tableView ssj_hideLoadingIndicator];
         }];
     }
 }
@@ -777,10 +778,10 @@
     // 防止数据同步在动画完成前，导致动画重复执行
     if (!self.hasLoad) {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [self getDateFromDatebase];
+            [self getDataFromDataBase];
         });
     } else {
-        [self getDateFromDatebase];
+        [self getDataFromDataBase];
     }
     [self stopLoading];
     [self reloadBudgetData];
@@ -790,7 +791,7 @@
 }
 
 - (void)reloadDataAfterInitDatabase {
-    [self getDateFromDatebase];
+    [self getDataFromDataBase];
     
     [self reloadBudgetData];
     
@@ -800,7 +801,7 @@
 }
 
 - (void)reloadAfterBooksTypeChange{
-    [self getDateFromDatebase];
+    [self getDataFromDataBase];
     
     [self reloadBudgetData];
     
@@ -844,7 +845,7 @@
 -(void)reloadWithAnimation{
     self.allowRefresh = YES;
     self.hasLoad = NO;
-    [self getDateFromDatebase];
+    [self getDataFromDataBase];
 }
 
 - (void)stopLoading {

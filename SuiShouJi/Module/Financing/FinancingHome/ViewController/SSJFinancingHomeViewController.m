@@ -67,7 +67,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
     [super viewWillAppear:animated];
 //    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
     self.navigationItem.rightBarButtonItem.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-    [self getDateFromDateBase];
+    [self getDataFromDataBase];
     if (![[NSUserDefaults standardUserDefaults]boolForKey:SSJHaveEnterFundingHomeKey]) {
         SSJFinancingHomePopView *popView = [[[NSBundle mainBundle] loadNibNamed:@"SSJFinancingHomePopView" owner:nil options:nil] ssj_safeObjectAtIndex:0];
         popView.frame = [UIScreen mainScreen].bounds;
@@ -186,7 +186,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 //            [SSJCreditCardStore deleteCreditCardWithCardItem:deleteItem Success:^{
 //                //            [weakSelf.items removeObjectAtIndex:deleteIndex.item];
 //                //            [weakSelf.collectionView deleteItemsAtIndexPaths:@[deleteIndex]];
-//                [weakSelf getDateFromDateBase];
+//                [weakSelf getDataFromDataBase];
 //                [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
 //            } failure:^(NSError *error) {
 //                
@@ -325,9 +325,11 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 }
 
 #pragma mark - Private
--(void)getDateFromDateBase{
+-(void)getDataFromDataBase{
     __weak typeof(self) weakSelf = self;
-    [self.collectionView ssj_showLoadingIndicator];
+    if (!self.items.count) {
+        [self.collectionView ssj_showLoadingIndicator];
+    }
     [SSJFinancingHomeHelper queryForFundingSumMoney:^(double result) {
         if (weakSelf.hiddenButton.selected) {
             weakSelf.headerView.balanceAmount = [NSString stringWithFormat:@"%.2f",result];
@@ -368,7 +370,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 - (void)deleteFundingItem:(SSJBaseItem *)item type:(BOOL)type{
     __weak typeof(self) weakSelf = self;
     [SSJFinancingHomeHelper deleteFundingWithFundingItem:item deleteType:type Success:^{
-        [weakSelf getDateFromDateBase];
+        [weakSelf getDataFromDataBase];
         [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
     } failure:^(NSError *error) {
         NSLog(@"%@",[error localizedDescription]);
@@ -390,7 +392,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 }
 
 -(void)reloadDataAfterSync{
-    [self getDateFromDateBase];
+    [self getDataFromDataBase];
 }
 
 -(void)updateAppearanceAfterThemeChanged{
