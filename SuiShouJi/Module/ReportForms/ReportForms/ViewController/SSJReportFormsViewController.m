@@ -195,6 +195,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
 
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [MobClick event:@"forms_bar_chart"];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     SSJBaseItem *item = [self.datas ssj_safeObjectAtIndex:indexPath.row];
@@ -339,6 +340,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
 }
 
 - (void)selectBookAction {
+    [MobClick event:@"forms_open_account_books"];
     [self.mm_drawerController toggleDrawerSide:MMDrawerSideLeft animated:YES completion:^(BOOL finished) {
 //        if (!_dateViewHasDismiss) {
 //            [self.floatingDateView dismiss];

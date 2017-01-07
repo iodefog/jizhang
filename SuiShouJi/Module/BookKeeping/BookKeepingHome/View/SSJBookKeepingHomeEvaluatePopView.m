@@ -227,6 +227,7 @@ NSString *const SSJEvaluateSelecatedKey = @"SSJEvaluateSelecatedKey";
 
 - (void)favorableButtonClicked
 {
+    [MobClick event:@"evaluate_good"];
     NSString *appstoreUrlStr = [SSJSettingForSource() objectForKey:@"AppStoreUrl"];
     NSURL *url = [NSURL URLWithString:appstoreUrlStr];
     if ([[UIApplication sharedApplication] canOpenURL:url]) {
@@ -239,12 +240,14 @@ NSString *const SSJEvaluateSelecatedKey = @"SSJEvaluateSelecatedKey";
 
 - (void)latterButtonClicked
 {
+    [MobClick event:@"evaluate_later"];
     self.evaluateSelecatedType = SSJEvaluateSelecatedTypeLatter;
     [self dismiss];
 }
 
 - (void)notShowAgainButtonClicked
 {
+    [MobClick event:@"evaluate_not_show"];
     self.evaluateSelecatedType = SSJEvaluateSelecatedTypeNotShowAgain;
     [self dismiss];
 }

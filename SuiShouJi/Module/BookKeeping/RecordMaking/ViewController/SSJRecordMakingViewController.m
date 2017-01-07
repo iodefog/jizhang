@@ -177,6 +177,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         _customNaviBar = [[SSJRecordMakingCustomNavigationBar alloc] init];
         _customNaviBar.titles = @[@"test1", @"test2"];
         _customNaviBar.selectBookHandle = ^(SSJRecordMakingCustomNavigationBar *naviBar) {
+            [MobClick event:@"addRecord_changeBooks"];//记一笔-切换账本
             wself.item.booksId = [wself.booksIds ssj_safeObjectAtIndex:naviBar.selectedTitleIndex];
             [wself.currentInput becomeFirstResponder];
             [wself loadCategoryAndBooksList];

@@ -281,15 +281,25 @@ static const CGFloat kSeparatorFormViewHeight = 88;
     
     switch (_item.timeDimension) {
         case SSJTimeDimensionDay:
+        {
+            [MobClick event:@"forms_line_day"];
             [_timePeriodSegmentControl setSelectedIndex:0 animated:NO];
+        }
+            
             break;
             
         case SSJTimeDimensionWeek:
+        {
+            [MobClick event:@"forms_line_week"];
             [_timePeriodSegmentControl setSelectedIndex:1 animated:NO];
+        }
             break;
             
         case SSJTimeDimensionMonth:
+        {
+            [MobClick event:@"forms_line_month"];
             [_timePeriodSegmentControl setSelectedIndex:2 animated:NO];
+        }
             break;
             
         case SSJTimeDimensionUnknown:

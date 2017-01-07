@@ -190,7 +190,7 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
+    [MobClick event:@"forms_item_detail"];
     SSJReportFormsCurveModel *curveModel = [_filterCurveModels ssj_safeObjectAtIndex:indexPath.row];
     
     SSJBillingChargeViewController *chargeListController = [[SSJBillingChargeViewController alloc] init];
@@ -275,14 +275,18 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
     if (index == 0) {
         switch ([self currentDemension]) {
             case SSJTimeDimensionDay:
+                [MobClick event:@"forms_classify_cycle_day"];
                 return [model.startDate formattedDateWithFormat:@"M月"];
+                
                 break;
                 
             case SSJTimeDimensionWeek:
+                [MobClick event:@"forms_classify_cycle_week"];
                 return [model.startDate formattedDateWithFormat:@"yyyy年"];
                 break;
                 
             case SSJTimeDimensionMonth:
+                [MobClick event:@"forms_classify_cycle_month"];
                 return [model.startDate formattedDateWithFormat:@"yyyy年"];
                 break;
                 
@@ -424,6 +428,7 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
 
 #pragma mark - Event
 - (void)enterCalendarVC {
+    [MobClick event:@"form_item_date_custom"];
     __weak typeof(self) wself = self;
     SSJMagicExportCalendarViewController *calendarVC = [[SSJMagicExportCalendarViewController alloc] init];
     calendarVC.title = @"自定义时间";
