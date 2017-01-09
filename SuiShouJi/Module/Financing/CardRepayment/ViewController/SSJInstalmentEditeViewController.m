@@ -342,7 +342,13 @@ static NSString *const kTitle6 = @"分期申请日";
         [CDAutoHideMessageHUD showMessage:@"分期金额不能大于当期账单金额哦"];
         return;
     }
-    if ((self.repaymentModel.instalmentCout != self.originalRepaymentModel.instalmentCout || self.repaymentModel.repaymentMoney != self.originalRepaymentModel.repaymentMoney || self.repaymentModel.poundageRate != self.originalRepaymentModel.poundageRate) && self.repaymentModel.repaymentId.length) {
+    if ((self.repaymentModel.instalmentCout != self.originalRepaymentModel.instalmentCout
+         || self.repaymentModel.repaymentMoney != self.originalRepaymentModel.repaymentMoney
+         || self.repaymentModel.poundageRate != self.originalRepaymentModel.poundageRate)
+        && self.repaymentModel.repaymentId.length) {
+        
+        [self.view endEditing:YES];
+        
         __weak typeof(self) weakSelf = self;
         UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:NULL];
         UIAlertAction *comfirm = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {

@@ -75,18 +75,15 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     [self.view addSubview:self.closeOutBtn];
     [self.tableView addSubview:self.stampView];
     self.stampView.layer.zPosition = 100;
-    
-    [self updateAppearance];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
     [self loadData];
+    [self updateAppearance];
     
     self.navigationController.navigationBar.tintColor = [UIColor ssj_colorWithHex:@"#FFFFFF"];
-//    [self.navigationController.navigationBar setShadowImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:@"#FFFFFF" alpha:0.5] size:CGSizeMake(0, 0.5)]];
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:self.fundColor] size:CGSizeZero] forBarMetrics:UIBarMetricsDefault];
     self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:21],
                                                                     NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"#FFFFFF"]};
 }
@@ -195,6 +192,12 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
 
 #pragma mark - Private
 - (void)updateAppearance {
+    UIColor *headerColor = (SSJ_CURRENT_THEME.ID != SSJDefaultThemeID && SSJ_CURRENT_THEME.financingDetailHeaderColor) ? [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailHeaderColor alpha:SSJ_CURRENT_THEME.financingDetailHeaderAlpha] : [UIColor ssj_colorWithHex:self.fundColor];
+    
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:headerColor size:CGSizeZero] forBarMetrics:UIBarMetricsDefault];
+    
+    self.headerView.backgroundColor = headerColor;
+    
     _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
     [_changeSectionHeaderView updateAppearance];
     [_changeChargeSelectionView updateAppearance];
@@ -634,7 +637,6 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
         [_tableView setTableFooterView:[[UIView alloc] init]];
         [_tableView registerClass:[SSJLoanDetailCell class] forCellReuseIdentifier:kSSJLoanDetailCellID];
         _tableView.sectionFooterHeight = 0;
-//        _tableView.contentInset = UIEdgeInsetsMake(0, 0, 54, 0);
         _tableView.separatorInset = UIEdgeInsetsMake(0, 12, 0, 0);
     }
     return _tableView;
@@ -703,7 +705,6 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
 - (SSJSeparatorFormView *)headerView {
     if (!_headerView) {
         _headerView = [[SSJSeparatorFormView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, 174)];
-        _headerView.backgroundColor = [UIColor ssj_colorWithHex:self.fundColor];
         _headerView.separatorColor = [UIColor whiteColor];
         _headerView.horizontalSeparatorInset = UIEdgeInsetsMake(0, 42, 0, 42);
         _headerView.verticalSeparatorInset = UIEdgeInsetsMake(22, 0, 22, 0);
