@@ -10,6 +10,10 @@
 
 @interface SSJHomeBillStickyNoteView : UIView
 extern NSString *const SSJShowBillNoteKey;
-//显示账单
-- (void)showBillNote;
+//打开2016账单
+@property (nonatomic, copy) void(^openBillNoteBlock)();
+
+//关闭账单
+@property (nonatomic, copy) void(^closeBillNoteBlock)();
+
 @end

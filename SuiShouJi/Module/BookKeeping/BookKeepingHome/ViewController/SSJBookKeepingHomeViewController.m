@@ -44,7 +44,12 @@
 #import "SSJBookKeepingHomeEvaluatePopView.h"
 #import "SSJLoginPopView.h"
 #import "SSJBookKeepingHomePopView.h"
-
+#import "SSJHomeBillStickyNoteView.h"
+#import "SSJBillNoteWebViewController.h"
+#import "SSJAlertViewAdapter.h"
+#import "SSJAlertViewAction.h"
+#import "SSJLoginViewController+SSJCategory.h"
+#import "SSJRegistCheckAuthCodeViewController.h"
 
 @interface SSJBookKeepingHomeViewController ()<SSJMultiFunctionButtonDelegate>
 
@@ -86,6 +91,8 @@
  <#注释#>
  */
 @property (nonatomic, strong) SSJBookKeepingHomePopView *keepingHomePopView;
+
+@property (nonatomic, strong) SSJHomeBillStickyNoteView *billStickyNoteView;
 @end
 
 @implementation SSJBookKeepingHomeViewController{
@@ -170,6 +177,14 @@
     [self.view addSubview:self.bookKeepingHeader];
     [self.view addSubview:self.homeButton];
     [self.view addSubview:self.statusLabel];
+    //判断是否显示过2016账单
+#warning fffffffffffffffffff
+    //    if (![[[NSUserDefaults standardUserDefaults] objectForKey:SSJShowBillNoteKey] isEqualToString:@"1"]) {//没显示过
+    //显示
+    [self.view addSubview:self.billStickyNoteView];
+    
+    //    }
+
     self.tableView.frame = self.view.frame;
 //    self.newlyAddChargeArr = [[NSMutableArray alloc]init];
 //    self.tableView.backgroundColor = [UIColor whiteColor];
@@ -214,6 +229,9 @@
     self.statusLabel.height = 21;
     self.statusLabel.top = self.homeButton.bottom;
     self.statusLabel.centerX = self.view.width / 2;
+    self.billStickyNoteView.size = CGSizeMake(self.view.width, 109);
+    self.billStickyNoteView.centerX = self.view.centerX;
+    self.billStickyNoteView.top = self.tableView.top;
 }
 
 - (BOOL)prefersStatusBarHidden {
@@ -603,6 +621,38 @@
         _keepingHomePopView = [SSJBookKeepingHomePopView BookKeepingHomePopView];
     }
     return _keepingHomePopView;
+}
+
+- (SSJHomeBillStickyNoteView *)billStickyNoteView
+{
+    __weak typeof(self) weakSelf = self;
+    if (!_billStickyNoteView) {
+        _billStickyNoteView = [[SSJHomeBillStickyNoteView alloc] init];
+        _billStickyNoteView.closeBillNoteBlock = ^{
+#warning 更新布局
+        };
+        
+        _billStickyNoteView.openBillNoteBlock = ^{
+            //如果没有登录
+            if (!SSJIsUserLogined()) {
+                [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:@"请登录后再查看2016账单吧！" action:[SSJAlertViewAction actionWithTitle:@"注册" handler:^(SSJAlertViewAction *action) {
+                    SSJRegistCheckAuthCodeViewController *registerVC = [[SSJRegistCheckAuthCodeViewController alloc] init];
+                    registerVC.hidesBottomBarWhenPushed = YES;
+                    [weakSelf.navigationController pushViewController:registerVC animated:YES];
+                }],[SSJAlertViewAction actionWithTitle:@"登录" handler:^(SSJAlertViewAction *action) {
+                    [SSJLoginViewController reloginIfNeeded];
+                }],nil];
+
+            }else{
+                //跳转2016账单
+                SSJBillNoteWebViewController *billVC = [[SSJBillNoteWebViewController alloc] init];
+                billVC.hidesBottomBarWhenPushed = YES;
+                [weakSelf.navigationController pushViewController:billVC animated:YES];
+                
+            }
+        };
+    }
+    return _billStickyNoteView;
 }
 
 
