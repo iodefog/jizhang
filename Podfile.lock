@@ -28,6 +28,30 @@ PODS:
   - JSPatch (1.1.2):
     - JSPatch/Core (= 1.1.2)
   - JSPatch/Core (1.1.2)
+  - libwebp (0.5.1):
+    - libwebp/core (= 0.5.1)
+    - libwebp/dec (= 0.5.1)
+    - libwebp/demux (= 0.5.1)
+    - libwebp/dsp (= 0.5.1)
+    - libwebp/enc (= 0.5.1)
+    - libwebp/mux (= 0.5.1)
+    - libwebp/utils (= 0.5.1)
+    - libwebp/webp (= 0.5.1)
+  - libwebp/core (0.5.1):
+    - libwebp/webp
+  - libwebp/dec (0.5.1):
+    - libwebp/core
+  - libwebp/demux (0.5.1):
+    - libwebp/core
+  - libwebp/dsp (0.5.1):
+    - libwebp/core
+  - libwebp/enc (0.5.1):
+    - libwebp/core
+  - libwebp/mux (0.5.1):
+    - libwebp/core
+  - libwebp/utils (0.5.1):
+    - libwebp/core
+  - libwebp/webp (0.5.1)
   - LxThroughPointsBezier (1.0.0)
   - Meiqia (3.3.4.1):
     - Meiqia/MeiqiaSDK (= 3.3.4.1)
@@ -48,6 +72,10 @@ PODS:
     - MMDrawerController/Core
   - MMDrawerController/Subclass (0.5.7):
     - MMDrawerController/Core
+  - SDWebImage/Core (3.8.2)
+  - SDWebImage/WebP (3.8.2):
+    - libwebp
+    - SDWebImage/Core
   - UMengAnalytics-NO-IDFA (4.1.9)
   - UMengSocialCOM (5.2.1)
   - YYKeyboardManager (1.0.1)
@@ -64,6 +92,7 @@ DEPENDENCIES:
   - Meiqia (~> 3.3.1)
   - MJExtension
   - MMDrawerController (~> 0.5.7)
+  - SDWebImage/WebP
   - UMengAnalytics-NO-IDFA
   - UMengSocialCOM
   - YYKeyboardManager
@@ -76,16 +105,18 @@ SPEC CHECKSUMS:
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
   FMDB: 854a0341b4726e53276f2a8996f06f1b80f9259a
   JSPatch: 741205ebb2e2238c223a436e4c8cf75cf40a345f
+  libwebp: b9126f8982a95370cf4eaad9bb3fefd57f052c15
   LxThroughPointsBezier: fdebe18dd4ddab9406d9827db77a078b4738b00f
   Meiqia: 2be3baaf2b023484b8cd3985bc2dad6db36732a1
   MJExtension: 5932755f451458eefa24239358817f8d291240c7
   MMDrawerController: 7a4cf8e25596bf2434e03ce50d22a8608ddee6a1
+  SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
   UMengAnalytics-NO-IDFA: 985292af177111685325c90c321094172b95d2cb
   UMengSocialCOM: 074c135ce349aa4c8848d3fb8458757bcb6ffb67
   YYKeyboardManager: ff53d2e80d1808567a7f004028bd200d9469a89f
   YYText: 5c461d709e24d55a182d1441c41dc639a18a4849
   ZYCornerRadius: 526dfd5b860008e57abf7be4a887f4630c3018f0
 
-PODFILE CHECKSUM: 983bbe71b74f487604db984dc911c59e533552ce
+PODFILE CHECKSUM: 83b69bd2d12b3eeb101bd0b2948ee36406776bd6
 
 COCOAPODS: 1.2.0.beta.1
