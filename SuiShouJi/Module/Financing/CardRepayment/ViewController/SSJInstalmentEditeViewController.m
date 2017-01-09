@@ -385,15 +385,22 @@ static NSString *const kTitle6 = @"分期申请日";
 
 - (void)deleteButtonClicked{
     __weak typeof(self) weakSelf = self;
-    [SSJRepaymentStore deleteRepaymentWithRepaymentModel:self.repaymentModel Success:^{
-        for (UIViewController *viewcontroller in self.navigationController.viewControllers) {
-            if ([viewcontroller isKindOfClass:[SSJFundingDetailsViewController class]]) {
-                [weakSelf.navigationController popToViewController:viewcontroller animated:YES];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"您确定要删除此分期设置吗?删除后先前生前的分期本金和手续费流水将被一并删除哦?" message:@"" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:NULL];
+    UIAlertAction *comfirm = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [weakSelf.navigationController presentViewController:alert animated:YES completion:NULL];    [SSJRepaymentStore deleteRepaymentWithRepaymentModel:self.repaymentModel Success:^{
+            for (UIViewController *viewcontroller in self.navigationController.viewControllers) {
+                if ([viewcontroller isKindOfClass:[SSJFundingDetailsViewController class]]) {
+                    [weakSelf.navigationController popToViewController:viewcontroller animated:YES];
+                }
             }
-        }
-    } failure:^(NSError *error) {
-        
+        } failure:^(NSError *error) {
+            
+        }];
     }];
+    [alert addAction:cancel];
+    [alert addAction:comfirm];
+
 }
 
 #pragma mark - Getter

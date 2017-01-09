@@ -51,7 +51,7 @@
     if (!_descLab) {
         _descLab = [[UILabel alloc]init];
         _descLab.numberOfLines = 0;
-        _descLab.text = @"涵盖记账理财、玩转信用卡、查询公积金，还有其它实用金融小工具搭配，省钱赚钱等多样资讯给你愉快的金融服务。\n\n本记账APP隶属于有鱼金融集团";
+        _descLab.text = @"关注公众号，了解有鱼记账最新资讯动态，学习记账理财知识，轻松理出“鱼”钱~";
         _descLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _descLab.font = [UIFont systemFontOfSize:15];
     }
@@ -61,7 +61,7 @@
 -(UILabel *)iconDesLab{
     if (!_iconDesLab) {
         _iconDesLab = [[UILabel alloc]init];
-        _iconDesLab.text = @"有鱼微金融";
+        _iconDesLab.text = @"有鱼记账本";
         _iconDesLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         _iconDesLab.font = [UIFont systemFontOfSize:13];
         [_iconDesLab sizeToFit];                                                                                                                                                                                                                                               

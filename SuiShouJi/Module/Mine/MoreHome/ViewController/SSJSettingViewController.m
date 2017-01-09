@@ -200,7 +200,7 @@ static NSString *const kTitle8 = @"点击上方微信号复制，接着去微信
     if ([title isEqualToString:kTitle7]) {
         SSJAlertViewAction *comfirmAction = [SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction * _Nonnull action) {
             UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-            pasteboard.string = @"youyuwjr";
+            pasteboard.string = @"youyujz";
             [WXApi openWXApp];
         }];
         SSJAlertViewAction *cancelAction = [SSJAlertViewAction actionWithTitle:@"取消" handler:NULL];
@@ -228,13 +228,13 @@ static NSString *const kTitle8 = @"点击上方微信号复制，接着去微信
     if ([title isEqualToString:kTitle8]) {
         mineHomeCell.customAccessoryType = UITableViewCellAccessoryNone;
         mineHomeCell.cellSubTitle = title;
-    }else{
+    } else {
         mineHomeCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         mineHomeCell.cellTitle = title;
         if ([[self.titles ssj_objectAtIndexPath:indexPath] isEqualToString:@"检查更新"]) {
             mineHomeCell.cellDetail = [NSString stringWithFormat:@"v%@",SSJAppVersion()];
-        }else if([mineHomeCell.cellTitle isEqualToString:kTitle7]){
-            mineHomeCell.cellDetail = @"youyuwjr";
+        } else if([mineHomeCell.cellTitle isEqualToString:kTitle7]) {
+            mineHomeCell.cellDetail = @"youyujz";
         }
     }
     return mineHomeCell;
