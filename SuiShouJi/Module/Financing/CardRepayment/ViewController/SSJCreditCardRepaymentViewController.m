@@ -128,7 +128,7 @@ static NSString *const kTitle6 = @"还款账单月份";
     NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
     if ([title isEqualToString:kTitle4]) {
         self.fundSelectView.selectFundID = self.repaymentModel.repaymentSourceFoundId;
-        self.fundSelectView.exceptionIDs = @[self.repaymentModel.cardId];
+        self.fundSelectView.needCreditOrNot = NO;
         [self.fundSelectView show];
     }else if ([title isEqualToString:kTitle5]) {
         self.repaymentTimeView.currentDate = self.repaymentModel.applyDate;
@@ -266,18 +266,11 @@ static NSString *const kTitle6 = @"还款账单月份";
 
 - (void)deleteButtonClicked{
     __weak typeof(self) weakSelf = self;
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"您确定要删除此分期设置吗?删除后先前生前的分期本金和手续费流水将被一并删除哦?" message:@"" preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:NULL];
-    UIAlertAction *comfirm = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-        [SSJRepaymentStore deleteRepaymentWithRepaymentModel:self.repaymentModel Success:^{
-            [weakSelf.navigationController popViewControllerAnimated:YES];
-        } failure:^(NSError *error) {
-            
-        }];
+    [SSJRepaymentStore deleteRepaymentWithRepaymentModel:self.repaymentModel Success:^{
+        [weakSelf.navigationController popViewControllerAnimated:YES];
+    } failure:^(NSError *error) {
+        
     }];
-    [alert addAction:cancel];
-    [alert addAction:comfirm];
-    [self.navigationController presentViewController:alert animated:YES completion:NULL];
 }
 
 #pragma mark - Getter

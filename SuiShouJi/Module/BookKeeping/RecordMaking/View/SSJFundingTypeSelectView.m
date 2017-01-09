@@ -32,6 +32,7 @@
         [self addSubview:self.tableview];
         self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
 //        [self addSubview:self.addNewTypeButtonView];
+        self.needCreditOrNot = YES;
         [self addSubview:self.titleView];
     }
     return self;
@@ -191,7 +192,7 @@
             item.fundingID = [rs stringForColumn:@"CFUNDID"];
             item.fundingName = [rs stringForColumn:@"CACCTNAME"];
             item.fundingParent = [rs stringForColumn:@"CPARENT"];
-            if (![weakSelf.exceptionIDs containsObject:item.fundingID]) {
+            if (!(!self.needCreditOrNot && [item.fundingParent isEqualToString:@"3"])) {
                 [_items addObject:item];
             }
         }
@@ -204,9 +205,9 @@
         });
     }];
 }
-
-- (void)setExceptionIDs:(NSArray *)exceptionIDs{
-    _exceptionIDs = exceptionIDs;
+    
+- (void)setNeedCreditOrNot:(BOOL)needCreditOrNot {
+    _needCreditOrNot = needCreditOrNot;
 }
 
 -(void)reloadDate{
