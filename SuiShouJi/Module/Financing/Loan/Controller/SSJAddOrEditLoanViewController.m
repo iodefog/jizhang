@@ -390,18 +390,19 @@ const int kMemoMaxLength = 15;
         
         if (textField.tag == kLenderTag) {
             
-            if (textField.text.length > kLenderMaxLength) {
-                textField.text = [textField.text substringToIndex:kLenderMaxLength];
-                switch (self.loanModel.type) {
-                    case SSJLoanTypeLend:
-                        [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"借款人不能超过%d个字", kLenderMaxLength]];
-                        break;
-                        
-                    case SSJLoanTypeBorrow:
-                        [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"欠款人不能超过%d个字", kLenderMaxLength]];
-                        break;
-                }
-            }
+//            if (textField.text.length > kLenderMaxLength
+//                && ![[textField textInputMode].primaryLanguage isEqualToString:@"zh-Hans"]) {
+//                textField.text = [textField.text substringToIndex:kLenderMaxLength];
+//                switch (self.loanModel.type) {
+//                    case SSJLoanTypeLend:
+//                        [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"借款人不能超过%d个字", kLenderMaxLength]];
+//                        break;
+//                        
+//                    case SSJLoanTypeBorrow:
+//                        [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"欠款人不能超过%d个字", kLenderMaxLength]];
+//                        break;
+//                }
+//            }
             
             self.loanModel.lender = textField.text;
             self.reminderItem.borrowtarget = textField.text;
@@ -412,18 +413,19 @@ const int kMemoMaxLength = 15;
             NSString *tmpMoneyStr = [textField.text stringByReplacingOccurrencesOfString:@"¥" withString:@""];
             tmpMoneyStr = [tmpMoneyStr ssj_reserveDecimalDigits:2 intDigits:0];
             
-            if (tmpMoneyStr.length > 11) {
-                tmpMoneyStr = [tmpMoneyStr substringToIndex:11];
-                switch (self.loanModel.type) {
-                    case SSJLoanTypeLend:
-                        [CDAutoHideMessageHUD showMessage:@"借款金额不能超过11位"];
-                        break;
-                        
-                    case SSJLoanTypeBorrow:
-                        [CDAutoHideMessageHUD showMessage:@"欠款金额不能超过11位"];
-                        break;
-                }
-            }
+//            if (tmpMoneyStr.length > 11
+//                && ![[textField textInputMode].primaryLanguage isEqualToString:@"zh-Hans"]) {
+//                tmpMoneyStr = [tmpMoneyStr substringToIndex:11];
+//                switch (self.loanModel.type) {
+//                    case SSJLoanTypeLend:
+//                        [CDAutoHideMessageHUD showMessage:@"借款金额不能超过11位"];
+//                        break;
+//                        
+//                    case SSJLoanTypeBorrow:
+//                        [CDAutoHideMessageHUD showMessage:@"欠款金额不能超过11位"];
+//                        break;
+//                }
+//            }
             
             textField.text = [NSString stringWithFormat:@"¥%@", tmpMoneyStr];
             self.loanModel.jMoney = [tmpMoneyStr doubleValue];
@@ -433,10 +435,11 @@ const int kMemoMaxLength = 15;
             
         } else if (textField.tag == kMemoTag) {
             
-            if (textField.text.length > kMemoMaxLength) {
-                textField.text = [textField.text substringToIndex:kMemoMaxLength];
-                [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"备注不能超过%d个字", kMemoMaxLength]];
-            }
+//            if (textField.text.length > kMemoMaxLength
+//                && ![[textField textInputMode].primaryLanguage isEqualToString:@"zh-Hans"]) {
+//                textField.text = [textField.text substringToIndex:kMemoMaxLength];
+//                [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"备注不能超过%d个字", kMemoMaxLength]];
+//            }
             self.loanModel.memo = textField.text;
             
         } else if (textField.tag == kRateTag) {
