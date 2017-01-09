@@ -76,7 +76,7 @@ PODS:
   - SDWebImage/WebP (3.8.2):
     - libwebp
     - SDWebImage/Core
-  - UMengAnalytics-NO-IDFA (4.1.9)
+  - UMengAnalytics (4.1.10)
   - UMengSocialCOM (5.2.1)
   - YYKeyboardManager (1.0.1)
   - YYText (1.0.7)
@@ -93,7 +93,7 @@ DEPENDENCIES:
   - MJExtension
   - MMDrawerController (~> 0.5.7)
   - SDWebImage/WebP
-  - UMengAnalytics-NO-IDFA
+  - UMengAnalytics
   - UMengSocialCOM
   - YYKeyboardManager
   - YYText
@@ -111,12 +111,12 @@ SPEC CHECKSUMS:
   MJExtension: 5932755f451458eefa24239358817f8d291240c7
   MMDrawerController: 7a4cf8e25596bf2434e03ce50d22a8608ddee6a1
   SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
-  UMengAnalytics-NO-IDFA: 985292af177111685325c90c321094172b95d2cb
+  UMengAnalytics: 40585031b7eb085534c68a951b394731e7166257
   UMengSocialCOM: 074c135ce349aa4c8848d3fb8458757bcb6ffb67
   YYKeyboardManager: ff53d2e80d1808567a7f004028bd200d9469a89f
   YYText: 5c461d709e24d55a182d1441c41dc639a18a4849
   ZYCornerRadius: 526dfd5b860008e57abf7be4a887f4630c3018f0
 
-PODFILE CHECKSUM: 83b69bd2d12b3eeb101bd0b2948ee36406776bd6
+PODFILE CHECKSUM: 53576a1c276b2a5ececc99f23f500e12df058c10
 
 COCOAPODS: 1.2.0.beta.1

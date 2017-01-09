@@ -13,7 +13,7 @@ def shared_pods
     pod 'MMDrawerController', '~> 0.5.7'
     pod 'SDWebImage/WebP'
     pod 'MJExtension'
-    pod 'UMengAnalytics-NO-IDFA'
+    pod 'UMengAnalytics'
     pod 'FMDB'
     pod 'DateTools'
     #pod 'UMengFeedback', '~> 2.3.4'
