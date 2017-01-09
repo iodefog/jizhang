@@ -3,7 +3,7 @@ platform :ios, '7.0'
 inhibit_all_warnings!
 
 def shared_pods
-    pod 'AFNetworking', '~> 2.5'
+    pod 'AFNetworking', '~> 2.5.4'
     pod 'UMengSocialCOM'
     pod 'YYKeyboardManager'
     pod 'YYText'
