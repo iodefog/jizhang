@@ -299,6 +299,8 @@
 		7D18984473F6E10EF09232A3DA6745F4 /* MMDrawerController+Subclass.h in Headers */ = {isa = PBXBuildFile; fileRef = B25E723EDF49CEC0659289D46A9D2D71 /* MMDrawerController+Subclass.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7D55F6FA016D0705BB189B3F8D3B5F2F /* dec_if.h in Headers */ = {isa = PBXBuildFile; fileRef = B749849179D2D2DEE2DCF0AB0682EFC6 /* dec_if.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7D64199693A2E622715CBA95F23DFF41 /* picture_tools.c in Sources */ = {isa = PBXBuildFile; fileRef = 65D39EAEB5766C6BE46345BED0224581 /* picture_tools.c */; settings = {COMPILER_FLAGS = "-D_THREAD_SAFE -fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		7D80DFC91E2362EB007FFCF5 /* MQMessageFactoryHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 7D80DFC71E2362EB007FFCF5 /* MQMessageFactoryHelper.h */; };
+		7D80DFCA1E2362EB007FFCF5 /* MQMessageFactoryHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D80DFC81E2362EB007FFCF5 /* MQMessageFactoryHelper.m */; };
 		7DB80B08A85AC41BB835B8179345A74F /* SDImageCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 92FD7B5AF229A28A909C976AB721DBBD /* SDImageCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E1EE515D4A4342A49D2B9E6EFFB2FAC /* UIView+WebCacheOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = BCA848F803F63191385F316AA9F72D9E /* UIView+WebCacheOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E3A5EFDA61F5086CCF4503D0976220C /* webpenc.c in Sources */ = {isa = PBXBuildFile; fileRef = FB9B194611FD76A99E2A4521BCE2B375 /* webpenc.c */; settings = {COMPILER_FLAGS = "-D_THREAD_SAFE -fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
@@ -1534,6 +1536,8 @@
 		7CA524CC6015B5E28809DB3F11BB3822 /* MQWindowUtil.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = MQWindowUtil.m; path = "Meiqia-SDK-files/MQChatViewController/Utils/MQWindowUtil.m"; sourceTree = "<group>"; };
 		7CD5F83C8D295E6636CE6A3FAD44D5B3 /* MEIQIA_FBLCDFontView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = MEIQIA_FBLCDFontView.m; path = "Meiqia-SDK-files/MQChatViewController/Vendors/FBDigitalFont/MEIQIA_FBLCDFontView.m"; sourceTree = "<group>"; };
 		7D04970AA279F8CD7E108AE327D798CF /* muxi.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = muxi.h; path = src/mux/muxi.h; sourceTree = "<group>"; };
+		7D80DFC71E2362EB007FFCF5 /* MQMessageFactoryHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MQMessageFactoryHelper.h; path = "Meiqia-SDK-files/MQChatViewController/MessageModels/MQMessageFactoryHelper.h"; sourceTree = "<group>"; };
+		7D80DFC81E2362EB007FFCF5 /* MQMessageFactoryHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MQMessageFactoryHelper.m; path = "Meiqia-SDK-files/MQChatViewController/MessageModels/MQMessageFactoryHelper.m"; sourceTree = "<group>"; };
 		7DF173DA93F9DD64CCFD7ABDDEFE355D /* Pods-YouYuJiZhangBen-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-YouYuJiZhangBen-resources.sh"; sourceTree = "<group>"; };
 		7E483C42406F21DD4EAA5E3F63E12E52 /* AFNetworkActivityIndicatorManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AFNetworkActivityIndicatorManager.h; path = "UIKit+AFNetworking/AFNetworkActivityIndicatorManager.h"; sourceTree = "<group>"; };
 		7E717087A9C70A5CC02DFAE135B6B767 /* libwebp.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = libwebp.xcconfig; sourceTree = "<group>"; };
@@ -3093,6 +3097,8 @@
 		E018C2B3A47E7C3A607D691ED03664D3 /* MQChatViewController */ = {
 			isa = PBXGroup;
 			children = (
+				7D80DFC71E2362EB007FFCF5 /* MQMessageFactoryHelper.h */,
+				7D80DFC81E2362EB007FFCF5 /* MQMessageFactoryHelper.m */,
 				59DBC2C9BEAB8338D4241647AD211CA2 /* amrFileCodec.h */,
 				DAF0B6CCF6BF67F118C0D6832AE01096 /* amrFileCodec.mm */,
 				B749849179D2D2DEE2DCF0AB0682EFC6 /* dec_if.h */,
@@ -3632,6 +3638,7 @@
 				3AB5D9C39898BE6F799456FAB7E5918D /* AFHTTPSessionManager.h in Headers */,
 				85F1F72928AD9456F7B09ADE2B068946 /* AFNetworkActivityIndicatorManager.h in Headers */,
 				EF429519462916C7AA098340A55D207A /* AFNetworking.h in Headers */,
+				7D80DFC91E2362EB007FFCF5 /* MQMessageFactoryHelper.h in Headers */,
 				D8EE830D94B6F86F25EF490933642370 /* AFNetworkReachabilityManager.h in Headers */,
 				2A15612698778DBFB97B2187A639BB30 /* AFSecurityPolicy.h in Headers */,
 				2BC1B5F5D50F83191EA5BFCA1B6334CE /* AFURLConnectionOperation.h in Headers */,
@@ -4547,6 +4554,7 @@
 				D795FDDAF077F9CA21580278B2B10365 /* AFHTTPRequestOperation.m in Sources */,
 				0B32768D32F7F8DD5F69BEC8C2058770 /* AFHTTPRequestOperationManager.m in Sources */,
 				7E6B0CD10AF8C723010D29737FACF469 /* AFHTTPSessionManager.m in Sources */,
+				7D80DFCA1E2362EB007FFCF5 /* MQMessageFactoryHelper.m in Sources */,
 				9B2E973FF7B97E280A73274053EA92F9 /* AFNetworkActivityIndicatorManager.m in Sources */,
 				8DADAFE31DDC1A8E973977B19E64A3BB /* AFNetworking-dummy.m in Sources */,
 				8C72D6866E5B5015A7D1B39D9FE61D28 /* AFNetworkReachabilityManager.m in Sources */,
