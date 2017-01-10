@@ -49,7 +49,7 @@
 #import "SSJAlertViewAdapter.h"
 #import "SSJAlertViewAction.h"
 #import "SSJLoginViewController+SSJCategory.h"
-#import "SSJRegistCheckAuthCodeViewController.h"
+#import "SSJRegistGetVerViewController.h"
 
 @interface SSJBookKeepingHomeViewController ()<SSJMultiFunctionButtonDelegate>
 
@@ -636,7 +636,7 @@
             //如果没有登录
             if (!SSJIsUserLogined()) {
                 [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:@"请登录后再查看2016账单吧！" action:[SSJAlertViewAction actionWithTitle:@"注册" handler:^(SSJAlertViewAction *action) {
-                    SSJRegistCheckAuthCodeViewController *registerVC = [[SSJRegistCheckAuthCodeViewController alloc] init];
+                    SSJRegistGetVerViewController *registerVC = [[SSJRegistGetVerViewController alloc] init];
                     registerVC.hidesBottomBarWhenPushed = YES;
                     [weakSelf.navigationController pushViewController:registerVC animated:YES];
                 }],[SSJAlertViewAction actionWithTitle:@"登录" handler:^(SSJAlertViewAction *action) {
@@ -647,7 +647,8 @@
                 //跳转2016账单
                 SSJBillNoteWebViewController *billVC = [[SSJBillNoteWebViewController alloc] init];
                 billVC.hidesBottomBarWhenPushed = YES;
-                [weakSelf.navigationController pushViewController:billVC animated:YES];
+//                [weakSelf.navigationController pushViewController:billVC animated:YES];
+                [weakSelf presentViewController:billVC animated:YES completion:nil];
                 
             }
         };

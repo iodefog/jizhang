@@ -86,6 +86,7 @@ NSString *const SSJShowBillNoteKey = @"SSJShowBillNoteKey";
 #pragma mark - Event
 - (void)closeBillNote
 {
+    [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:SSJShowBillNoteKey];
     if (self.superview && self.closeBillNoteBlock) {
         [self removeFromSuperview];
         self.closeBillNoteBlock();
