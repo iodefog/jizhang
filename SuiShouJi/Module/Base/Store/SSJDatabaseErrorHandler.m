@@ -72,13 +72,25 @@
     [dic setValue:currentDate forKey:@"cdate"];
     [dic setValue:@(0) forKey:@"uploaded"];
     [errorArray addObject:dic];
-    [errorArray writeToFile:jsonPath atomically:YES];//写入
+//    [errorArray writeToFile:jsonPath atomically:YES];//写入
+    
+    if ([[dic objectForKey:@"uploaded"] intValue] == 0) {
+        //数据库名称
+        NSString *cFileName = [dic objectForKey:@"cfilename"];
+        NSString *sqlName = cFileName.length ? cFileName : [NSString stringWithFormat:@"db_error_%ld",(long)[[NSDate date] timeIntervalSince1970]];
+        
+        //存储数据库名称
+        [dic setValue:sqlName forKey:@"cfilename"];
+        [self zipSqlWithName:sqlName];//压缩
+        //再次写入
+        [errorArray writeToFile:jsonPath atomically:YES];
+    }
 }
 
 //压缩数据库上传错误信息
 + (void)upLoadData
 {
-//    for (int i=0; i<5; i++) {
+//    for (int i=0; i<2; i++) {
 //        NSError *error;
 //        [self writeToFileWithError:error];//将错误写入文件
 //    }
@@ -97,46 +109,38 @@
 + (void)uploadData:(NSInteger)index array:(NSArray *)arr
 {
     if (index < 0)return;
-    dispatch_async([self sharedQueue], ^{
         NSDictionary *dic = [arr ssj_safeObjectAtIndex:index];
         if ([[dic objectForKey:@"uploaded"] intValue] == 0) {
-            //数据库名称
+//            //数据库名称
             NSString *cFileName = [dic objectForKey:@"cfilename"];
             NSString *sqlName = cFileName.length ? cFileName : [NSString stringWithFormat:@"db_error_%ld",(long)[[NSDate date] timeIntervalSince1970]];
-            
-            //存储数据库名称
-            [dic setValue:sqlName forKey:@"cfilename"];
             NSData *zipData = [self zipSqlWithName:sqlName];
-            //再次写入
-            [arr writeToFile:jsonPath atomically:YES];
+            if (!zipData) return;
             [self uploadData:zipData completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
                 if (error)return;
-                NSHTTPURLResponse *tResponse = (NSHTTPURLResponse *)response;
-                NSString *contentType = tResponse.allHeaderFields[@"Content-Type"];
-                
-                //  返回的是json数据格式
-                NSError *err;
-                if ([contentType isEqualToString:@"text/json;charset=UTF-8"]) {
-                    NSDictionary *responseInfo = [NSJSONSerialization JSONObjectWithData:responseObject options:0 error:&err];
-                    NSInteger code = [responseInfo[@"code"] integerValue];
-                    if (code == 1) {
-                        //修改此记录的上传状态（uploaded），并删除数据库文件
-                        [dic setValue:@(1) forKey:@"uploaded"];
-                        [self removeSqlFileWithName:sqlName];
-                        //再次写入
-                        [arr writeToFile:jsonPath atomically:YES];
-                        [self uploadData:index-1 array:arr];//上传下一个
-                    }else{
-                        [self uploadData:index-1 array:arr];//上传下一个
+                dispatch_async([self sharedQueue], ^{
+                    NSHTTPURLResponse *tResponse = (NSHTTPURLResponse *)response;
+                    NSString *contentType = tResponse.allHeaderFields[@"Content-Type"];
+                    //  返回的是json数据格式
+                    NSError *err;
+                    if ([contentType isEqualToString:@"text/json;charset=UTF-8"]) {
+                        NSDictionary *responseInfo = [NSJSONSerialization JSONObjectWithData:responseObject options:0 error:&err];
+                        NSInteger code = [responseInfo[@"code"] integerValue];
+                        if (code == 1) {
+                            //修改此记录的上传状态（uploaded），并删除数据库文件
+                            [dic setValue:@(1) forKey:@"uploaded"];
+                            [self removeSqlFileWithName:sqlName];
+                            //再次写入
+                            [arr writeToFile:jsonPath atomically:YES];
+                        }
                     }
-                }else{
                     [self uploadData:index-1 array:arr];//上传下一个
-                }
+                });
             } parametersDic:dic fileName:sqlName];
+            
         }else{
             [self uploadData:index-1 array:arr];//上传下一个
         }
-    });
 }
 
 + (void)removeSqlFileWithName:(NSString *)name
