@@ -82,10 +82,6 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     
     [self loadData];
     [self updateAppearance];
-    
-    self.navigationController.navigationBar.tintColor = [UIColor ssj_colorWithHex:@"#FFFFFF"];
-    self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:21],
-                                                                    NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"#FFFFFF"]};
 }
 
 - (void)updateAppearanceAfterThemeChanged {
@@ -195,6 +191,9 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     UIColor *headerColor = (SSJ_CURRENT_THEME.ID != SSJDefaultThemeID && SSJ_CURRENT_THEME.financingDetailHeaderColor) ? [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailHeaderColor alpha:SSJ_CURRENT_THEME.financingDetailHeaderAlpha] : [UIColor ssj_colorWithHex:self.fundColor];
     
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:headerColor size:CGSizeZero] forBarMetrics:UIBarMetricsDefault];
+    self.navigationController.navigationBar.tintColor = [UIColor ssj_colorWithHex:@"#FFFFFF"];
+    self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:21],
+                                                                    NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"#FFFFFF"]};
     
     self.headerView.backgroundColor = headerColor;
     
