@@ -8,6 +8,7 @@
 
 #import "SSJBillNoteWebViewController.h"
 #import "UMSocial.h"
+#import "SSJViewAddition.h"
 @interface SSJBillNoteWebViewController ()<UIWebViewDelegate,UMSocialUIDelegate>
 /**
  截图的image
@@ -53,8 +54,7 @@
 
 
 - (UIImage*)screenView:(UIView *)view {
-    CGRect rect = view.frame;
-    UIGraphicsBeginImageContext(rect.size);
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(view.width, view.height - SSJ_NAVIBAR_BOTTOM), NO, 0.0);
     CGContextRef context = UIGraphicsGetCurrentContext();
     [view.layer renderInContext:context];
     UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
@@ -66,18 +66,20 @@
 #pragma mark - UIWebViewDelegate
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
-    float oldHeight = webView.frame.size.height * [UIScreen mainScreen].scale;
+    float oldHeight = webView.frame.size.height;
     float height = [[webView stringByEvaluatingJavaScriptFromString:@"document.body.offsetHeight;"] floatValue];
     CGRect frame = webView.frame;
-    frame.size.height = height * [UIScreen mainScreen].scale;
+    frame.size.height = height;
     webView.scrollView.contentSize = CGSizeMake(0, height);
     webView.frame = frame;
-    self.shareImage = [self screenView:webView];
-//    [self saveImageToPhotos:self.shareImage];
+//    self.shareImage = [self screenView:webView];
+    self.shareImage = [webView ssj_takeScreenShotWithSize:webView.size opaque:YES scale:0];
+    [self saveImageToPhotos:self.shareImage];
     frame.size.height = oldHeight;
     webView.frame = frame;
 }
 
+#pragma mark - Event
 - (void)backButtonClicked
 {
     __weak typeof(self)weakSelf = self;
@@ -86,8 +88,15 @@
             }],nil];
 }
 
+- (UIImage *)newImageWithOldImage:(UIImage *)oldImage OtherImage:(UIImage *)otherImage
+{
+    
+    return nil;
+}
+
 - (void)shareMyBill
 {
+    if (!self.shareImage) return;
     // 微信分享  纯图片
     [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
     
@@ -122,11 +131,10 @@
 
 -(void)didSelectSocialPlatform:(NSString *)platformName withSocialData:(UMSocialData *)socialData
 {
-    if (platformName == UMShareToSina) {
-        socialData.shareText = [NSString stringWithFormat:@"%@ %@",SSJDetailSettingForSource(@"ShareTitle"),SSJDetailSettingForSource(@"ShareUrl")];
-        socialData.shareImage = [UIImage imageNamed:SSJDetailSettingForSource(@"WeiboBanner")];
+    if (platformName == UMShareToWechatSession) {
+        socialData.shareImage = self.shareImage;
     }else{
-        socialData.shareText = SSJDetailSettingForSource(@"ShareContent");
+        
     }
 }
 
