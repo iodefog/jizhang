@@ -216,22 +216,44 @@
     self.homeBar.leftTop = CGPointMake(0, 0);
     self.bookKeepingHeader.size = CGSizeMake(self.view.width, 136);
     self.bookKeepingHeader.top = self.homeBar.bottom;
-    if (!SSJ_CURRENT_THEME.tabBarBackgroundImage.length) {
-        self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.bookKeepingHeader.bottom - SSJ_TABBAR_HEIGHT);
-    }else{
-        self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.bookKeepingHeader.bottom);
-    }
-    self.tableView.top = self.bookKeepingHeader.bottom;
-    self.clearView.frame = self.view.frame;
     self.homeButton.size = CGSizeMake(106, 106);
     self.homeButton.top = self.bookKeepingHeader.bottom - 60;
     self.homeButton.centerX = self.view.width / 2;
+    self.billStickyNoteView.centerX = self.view.centerX;
+    self.billStickyNoteView.width = self.view.width;
+    self.billStickyNoteView.top = self.homeButton.bottom;
+    BOOL haveShowTheNoteView = [[[NSUserDefaults standardUserDefaults] objectForKey:SSJShowBillNoteKey] boolValue];
+    if (!haveShowTheNoteView) {
+        //没显示过
+        self.billStickyNoteView.height = 105;
+    } else {
+        self.billStickyNoteView.height = 0;
+    }
+    if (!SSJ_CURRENT_THEME.tabBarBackgroundImage.length) {
+        if (!haveShowTheNoteView) {
+            self.tableView.top = self.billStickyNoteView.bottom;
+            self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.billStickyNoteView.height - SSJ_TABBAR_HEIGHT);
+            self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
+        } else {
+            self.tableView.top = self.bookKeepingHeader.bottom;
+            self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.bookKeepingHeader.bottom - SSJ_TABBAR_HEIGHT);
+            self.tableView.contentInset = UIEdgeInsetsMake(46, 0, 0, 0);
+        }
+    }else{
+        if (!haveShowTheNoteView) {
+            self.tableView.top = self.billStickyNoteView.bottom;
+            self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.billStickyNoteView.height);
+            self.tableView.contentInset = UIEdgeInsetsMake(0, 0, SSJ_TABBAR_HEIGHT, 0);
+        } else {
+            self.tableView.top = self.bookKeepingHeader.bottom;
+            self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.bookKeepingHeader.bottom);
+            self.tableView.contentInset = UIEdgeInsetsMake(46, 0, SSJ_TABBAR_HEIGHT, 0);
+        }
+    }
+    self.clearView.frame = self.view.frame;
     self.statusLabel.height = 21;
     self.statusLabel.top = self.homeButton.bottom;
     self.statusLabel.centerX = self.view.width / 2;
-    self.billStickyNoteView.size = CGSizeMake(self.view.width, 109);
-    self.billStickyNoteView.centerX = self.view.centerX;
-    self.billStickyNoteView.top = self.tableView.top;
 }
 
 - (BOOL)prefersStatusBarHidden {
@@ -394,7 +416,7 @@
     }
 }
 
--(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
+-(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
     if (self.items.count == 0) {
         return;
     }else{
@@ -489,11 +511,7 @@
 -(SSJHomeTableView *)tableView{
     if (!_tableView) {
         _tableView = [[SSJHomeTableView alloc]init];
-        if (!SSJ_CURRENT_THEME.tabBarBackgroundImage.length) {
-            _tableView.contentInset = UIEdgeInsetsMake(46, 0, 0, 0);
-        }else{
-            _tableView.contentInset = UIEdgeInsetsMake(46, 0, SSJ_TABBAR_HEIGHT, 0);
-        }
+
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.showsVerticalScrollIndicator = NO;
@@ -629,7 +647,7 @@
     if (!_billStickyNoteView) {
         _billStickyNoteView = [[SSJHomeBillStickyNoteView alloc] init];
         _billStickyNoteView.closeBillNoteBlock = ^{
-#warning 更新布局
+            [weakSelf.view layoutIfNeeded];
         };
         
         _billStickyNoteView.openBillNoteBlock = ^{
