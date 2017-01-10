@@ -10869,7 +10869,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
+				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhangAppStore;
 				PRODUCT_NAME = SuiShouJi;
 				PROVISIONING_PROFILE = "9a87925c-5f46-4ff3-a416-6d554befb528";
 				PROVISIONING_PROFILE_SPECIFIER = JiZhangAppStoreDeve;
@@ -10906,7 +10906,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
+				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhangAppStore;
 				PRODUCT_NAME = SuiShouJi;
 				PROVISIONING_PROFILE = "49fe08fa-6102-40c0-ad98-acd2bd01c901";
 				PROVISIONING_PROFILE_SPECIFIER = JiZhangAppStoreDistribute;
