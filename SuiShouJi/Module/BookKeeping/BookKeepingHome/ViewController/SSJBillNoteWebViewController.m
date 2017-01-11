@@ -47,7 +47,7 @@
 //    
 //    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"navigation_backOff"] style:UIBarButtonItemStylePlain target:self action:@selector(backButtonClicked)];
     [[UIApplication sharedApplication] setStatusBarHidden:YES];
-    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"file:///Users/yicai/Downloads/jizhang/index.html"]];
+    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"http://192.168.2.192:3000"]];
     [self.webView loadRequest:request];
     self.view.backgroundColor = [UIColor whiteColor];
     

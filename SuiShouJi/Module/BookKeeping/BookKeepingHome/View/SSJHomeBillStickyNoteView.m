@@ -97,7 +97,6 @@ NSString *const SSJShowBillNoteKey = @"SSJShowBillNoteKey";
 - (void)openBillNote
 {
     if (self.openBillNoteBlock) {
-        [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:SSJShowBillNoteKey];
         self.openBillNoteBlock();
     }
 }
