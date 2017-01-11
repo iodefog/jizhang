@@ -55,6 +55,7 @@ NSString *const SSJShowBillNoteKey = @"SSJShowBillNoteKey";
     if (!_noteButton) {
         _noteButton = [[UIButton alloc] init];
         [_noteButton setImage:[UIImage imageNamed:@"home_bill_note"] forState:UIControlStateNormal];
+        [_noteButton setImage:[UIImage imageNamed:@"home_bill_note"] forState:UIControlStateHighlighted];
         [_noteButton sizeToFit];
         [_noteButton addTarget:self action:@selector(openBillNote) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -96,6 +97,7 @@ NSString *const SSJShowBillNoteKey = @"SSJShowBillNoteKey";
 - (void)openBillNote
 {
     if (self.openBillNoteBlock) {
+        [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:SSJShowBillNoteKey];
         self.openBillNoteBlock();
     }
 }

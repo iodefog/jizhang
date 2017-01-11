@@ -47,7 +47,7 @@
 //    
 //    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"navigation_backOff"] style:UIBarButtonItemStylePlain target:self action:@selector(backButtonClicked)];
     [[UIApplication sharedApplication] setStatusBarHidden:YES];
-    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"http://shemei0515.com/"]];
+    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"file:///Users/yicai/Downloads/jizhang/index.html"]];
     [self.webView loadRequest:request];
     self.view.backgroundColor = [UIColor whiteColor];
     
@@ -60,12 +60,14 @@
     [super viewWillAppear:animated];
     [[UIApplication sharedApplication] setStatusBarHidden:YES];
 }
+
 - (void)viewWillLayoutSubviews
 {
     [super viewWillLayoutSubviews];
     self.noticeLabel.frame = CGRectMake(0, 44, self.view.width, 34);
 }
 
+#pragma mark - Lazy
 - (UIWebView *)webView
 {
     if (!_webView) {
@@ -106,8 +108,7 @@
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
 //    float oldHeight = webView.frame.size.height;
-    float height = [[webView stringByEvaluatingJavaScriptFromString:@"document.body.offsetHeight;"] floatValue];
-    self.totalWebViewHeight = height;
+   
 //    CGRect frame = webView.frame;
 //    frame.size.height = height;
 //    webView.scrollView.contentSize = CGSizeMake(0, height);
@@ -153,8 +154,10 @@
 //截图
 - (void)screenImage
 {
+    float height = [[self.webView stringByEvaluatingJavaScriptFromString:@"document.body.offsetHeight;"] floatValue];
+//    self.totalWebViewHeight = height;
     float oldHeight = self.webView.frame.size.height;
-    float height = self.totalWebViewHeight;
+//    float height = self.totalWebViewHeight;
     CGRect frame = self.webView.frame;
     frame.size.height = height;
     self.webView.scrollView.contentSize = CGSizeMake(0, height);
@@ -166,7 +169,7 @@
     self.webView.frame = frame;
     
     //截图完毕回复动图oc调用js方法
-//    [self.webView stringByEvaluatingJavaScriptFromString:@"alert('test js OC');"];
+//    [self.webView stringByEvaluatingJavaScriptFromString:@"alert();"];
 
 }
 
@@ -187,7 +190,6 @@
 - (void)shareMyBill
 {
     [self screenImage];//截图
-    return;
     if (!self.shareImage) return;
     // 微信分享  纯图片
     [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
