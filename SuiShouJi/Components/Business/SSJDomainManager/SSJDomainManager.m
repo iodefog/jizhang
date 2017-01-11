@@ -22,14 +22,14 @@ static NSString *const kTestImageDomain = @"http://account.gs.9188.com/jz";
 
 + (NSString *)domain {
 //    return kTestDomain;
-//    return [self formalDomain];
-    return kDefaultDomain;
+    return [self formalDomain];
+//    return kDefaultDomain;
 }
 
 + (NSString *)imageDomain {
 //    return kTestImageDomain;
-//    return [self formalDomain];
-    return kDefaultDomain;
+    return [self formalDomain];
+//    return kDefaultDomain;
 }
 
 + (void)requestDomain {
