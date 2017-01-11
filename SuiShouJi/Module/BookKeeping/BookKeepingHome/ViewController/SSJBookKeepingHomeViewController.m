@@ -226,13 +226,15 @@
     if (!haveShowTheNoteView) {
         //没显示过
         self.billStickyNoteView.height = 105;
+        self.billStickyNoteView.hidden = NO;
     } else {
         self.billStickyNoteView.height = 0;
+        self.billStickyNoteView.hidden = YES;
     }
     if (!SSJ_CURRENT_THEME.tabBarBackgroundImage.length) {
         if (!haveShowTheNoteView) {
             self.tableView.top = self.billStickyNoteView.bottom;
-            self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.billStickyNoteView.height - SSJ_TABBAR_HEIGHT);
+            self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.billStickyNoteView.bottom - SSJ_TABBAR_HEIGHT);
             self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
         } else {
             self.tableView.top = self.bookKeepingHeader.bottom;
@@ -242,7 +244,7 @@
     }else{
         if (!haveShowTheNoteView) {
             self.tableView.top = self.billStickyNoteView.bottom;
-            self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.billStickyNoteView.height);
+            self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.billStickyNoteView.bottom);
             self.tableView.contentInset = UIEdgeInsetsMake(0, 0, SSJ_TABBAR_HEIGHT, 0);
         } else {
             self.tableView.top = self.bookKeepingHeader.bottom;
@@ -333,7 +335,7 @@
 #pragma mark - UIScrollViewDelegate
 -(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
     [self.homeButton stopLoading];
-    if (scrollView.contentOffset.y < - 80) {
+    if (scrollView.contentOffset.y < - scrollView.contentInset.top - 34) {
         _isRefreshing = NO;
         
         [MobClick event:@"pull_add_record"];
@@ -349,7 +351,7 @@
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
-    if (scrollView.contentOffset.y <= -46) {
+    if (scrollView.contentOffset.y <= - scrollView.contentInset.top) {
         [SSJBudgetDatabaseHelper queryForCurrentBudgetListWithSuccess:^(NSArray<SSJBudgetModel *> * _Nonnull result) {
             self.homeBar.budgetButton.model = [result firstObject];
             self.homeBar.budgetButton.button.enabled = YES;
@@ -357,13 +359,13 @@
             NSLog(@"%@",error.localizedDescription);
         }];
     }
-    if (scrollView.contentOffset.y < - 46) {
+    if (scrollView.contentOffset.y < - scrollView.contentInset.top) {
         if (!_dateViewHasDismiss) {
             [self.floatingDateView dismiss];
             [self.mutiFunctionButton dismiss];
             _dateViewHasDismiss = YES;
         }
-        self.tableView.lineHeight = - scrollView.contentOffset.y;
+        self.tableView.lineHeight = - scrollView.contentOffset.y - scrollView.contentInset.top;
         if (self.items.count == 0) {
             self.tableView.hasData = NO;
         }else{
@@ -376,7 +378,7 @@
         }
 
     }else {
-        if (scrollView.contentOffset.y > - 20 && self.items.count != 0)  {
+        if (scrollView.contentOffset.y > MAX(- 20, - scrollView.contentInset.top)  && self.items.count != 0)  {
             [self.floatingDateView showOnView:self.view];
             [self.mutiFunctionButton showOnView:self.view];
         }
@@ -407,7 +409,7 @@
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
-    if (scrollView.contentOffset.y <= -46) {
+    if (scrollView.contentOffset.y <= - scrollView.contentInset.top) {
         if (!_dateViewHasDismiss) {
             [self.floatingDateView dismiss];
             [self.mutiFunctionButton dismiss];
