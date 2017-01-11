@@ -9,8 +9,8 @@
 #import "SSJBillNoteWebViewController.h"
 #import "UMSocial.h"
 #import "SSJViewAddition.h"
-@interface SSJBillNoteWebViewController ()<UIWebViewDelegate,UMSocialUIDelegate>
-//,UIScrollViewDelegate
+@interface SSJBillNoteWebViewController ()<UIWebViewDelegate,UMSocialUIDelegate,UIScrollViewDelegate>
+//
 /**
  截图的image
  */
@@ -47,10 +47,14 @@
 //    
 //    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"navigation_backOff"] style:UIBarButtonItemStylePlain target:self action:@selector(backButtonClicked)];
     [[UIApplication sharedApplication] setStatusBarHidden:YES];
-    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"http://shemei0515.com"]];
+    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"http://shemei0515.com/"]];
     [self.webView loadRequest:request];
     self.view.backgroundColor = [UIColor whiteColor];
+    
+    
+    [self performSelector:@selector(shareMyBill) withObject:nil afterDelay:5];
 }
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -101,18 +105,31 @@
 #pragma mark - UIWebViewDelegate
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
-    float oldHeight = webView.frame.size.height;
+//    float oldHeight = webView.frame.size.height;
     float height = [[webView stringByEvaluatingJavaScriptFromString:@"document.body.offsetHeight;"] floatValue];
     self.totalWebViewHeight = height;
-    CGRect frame = webView.frame;
-    frame.size.height = height;
-    webView.scrollView.contentSize = CGSizeMake(0, height);
-    webView.frame = frame;
-//    self.shareImage = [self screenView:webView];
-    self.shareImage = [webView ssj_takeScreenShotWithSize:webView.size opaque:YES scale:0];
-    [self saveImageToPhotos:self.shareImage];
-    frame.size.height = oldHeight;
-    webView.frame = frame;
+//    CGRect frame = webView.frame;
+//    frame.size.height = height;
+//    webView.scrollView.contentSize = CGSizeMake(0, height);
+//    webView.frame = frame;
+////    self.shareImage = [self screenView:webView];
+//    self.shareImage = [webView ssj_takeScreenShotWithSize:webView.size opaque:YES scale:0];
+//    [self saveImageToPhotos:self.shareImage];
+//    frame.size.height = oldHeight;
+//    webView.frame = frame;
+    
+}
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
+{
+    if ([request.URL.absoluteString containsString:@"backtolast"]) {//返回
+        [self backButtonClicked];
+        return NO;
+    }
+    if ([request.URL.absoluteString containsString:@"sharemybill"]) {//分享
+        [self shareMyBill];//分享
+        return NO;
+    }
+    return YES;
 }
 
 
@@ -120,12 +137,9 @@
 #pragma mark - Event
 - (void)backButtonClicked
 {
-//    __weak typeof(self)weakSelf = self;
-//    [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"再次查看2016年账单，可点击'更多'上方的广告栏哦！" action:[SSJAlertViewAction actionWithTitle:@"知道了" handler:^(SSJAlertViewAction *action) {
-//    [self.navigationController popViewControllerAnimated:YES];
-//            }],nil];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
+
 
 #pragma mark - Private
 - (void)showNoticeLabel
@@ -134,6 +148,26 @@
     [UIView animateWithDuration:0.5 animations:^{
         weakSelf.noticeLabel.alpha = 1;
     }];
+}
+
+//截图
+- (void)screenImage
+{
+    float oldHeight = self.webView.frame.size.height;
+    float height = self.totalWebViewHeight;
+    CGRect frame = self.webView.frame;
+    frame.size.height = height;
+    self.webView.scrollView.contentSize = CGSizeMake(0, height);
+    self.webView.frame = frame;
+//    self.shareImage = [self screenView:self.webView];
+    self.shareImage = [self.webView ssj_takeScreenShotWithSize:self.webView.size opaque:YES scale:0];
+    [self saveImageToPhotos:self.shareImage];
+    frame.size.height = oldHeight;
+    self.webView.frame = frame;
+    
+    //截图完毕回复动图oc调用js方法
+//    [self.webView stringByEvaluatingJavaScriptFromString:@"alert('test js OC');"];
+
 }
 
 - (void)hiddenNoticeLabel
@@ -152,6 +186,8 @@
 
 - (void)shareMyBill
 {
+    [self screenImage];//截图
+    return;
     if (!self.shareImage) return;
     // 微信分享  纯图片
     [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
@@ -172,19 +208,6 @@
 - (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo{
     NSLog(@"success");
 }
-
-#pragma mark - UIScrollViewDelegate
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
-    NSLog(@"scrollView.contentOffset.y = %f",scrollView.contentOffset.y);
-    if (scrollView.contentOffset.y > self.totalWebViewHeight - SSJSCREENHEIGHT) {
-        //显示提示标签
-        [self showNoticeLabel];
-    }else{
-        [self hiddenNoticeLabel];
-    }
-}
-
 
 #pragma mark - UMSocialUIDelegate
 -(void)didFinishGetUMSocialDataInViewController:(UMSocialResponseEntity *)response
