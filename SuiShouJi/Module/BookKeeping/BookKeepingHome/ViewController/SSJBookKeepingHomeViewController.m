@@ -659,9 +659,9 @@
                     registerVC.hidesBottomBarWhenPushed = YES;
                     [weakSelf.navigationController pushViewController:registerVC animated:YES];
                 }],[SSJAlertViewAction actionWithTitle:@"登录" handler:^(SSJAlertViewAction *action) {
-                    [SSJLoginViewController reloginIfNeeded];
+                    SSJLoginViewController *loginVC = [[SSJLoginViewController alloc] init];
+                    [weakSelf.navigationController pushViewController:loginVC animated:YES];
                 }],nil];
-
             }else{
                 //跳转2016账单
                 SSJBillNoteWebViewController *billVC = [[SSJBillNoteWebViewController alloc] init];
