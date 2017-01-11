@@ -647,6 +647,7 @@
     if (!_billStickyNoteView) {
         _billStickyNoteView = [[SSJHomeBillStickyNoteView alloc] init];
         _billStickyNoteView.closeBillNoteBlock = ^{
+            [weakSelf.tableView setContentOffset:CGPointMake(0, 0)];
             [weakSelf.view layoutIfNeeded];
         };
         
