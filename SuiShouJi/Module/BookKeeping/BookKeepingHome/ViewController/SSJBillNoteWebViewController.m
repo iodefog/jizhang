@@ -52,7 +52,7 @@
     self.view.backgroundColor = [UIColor whiteColor];
     
     
-    [self performSelector:@selector(shareMyBill) withObject:nil afterDelay:5];
+//    [self performSelector:@selector(shareMyBill) withObject:nil afterDelay:5];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -119,6 +119,8 @@
 //    frame.size.height = oldHeight;
 //    webView.frame = frame;
     
+//    float height = [[self.webView stringByEvaluatingJavaScriptFromString:@"document.body.offsetHeight;"] floatValue];
+    
 }
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
@@ -139,6 +141,7 @@
 - (void)backButtonClicked
 {
     [self dismissViewControllerAnimated:YES completion:nil];
+//    [self screenImage];
 }
 
 
@@ -154,7 +157,11 @@
 //截图
 - (void)screenImage
 {
-    float height = [[self.webView stringByEvaluatingJavaScriptFromString:@"document.body.offsetHeight;"] floatValue];
+    //切换成静态
+    [self.webView stringByEvaluatingJavaScriptFromString:@"dynamicToStatic();"];
+//    NSString *js = [NSString stringWithFormat:@"dynamicToStatic();"];
+//    [self.webView stringByEvaluatingJavaScriptFromString:js];
+    float height = [[self.webView stringByEvaluatingJavaScriptFromString:@"document.getElementsByClassName('static')[0].offsetHeight;"] floatValue];
 //    self.totalWebViewHeight = height;
     float oldHeight = self.webView.frame.size.height;
 //    float height = self.totalWebViewHeight;
@@ -169,7 +176,7 @@
     self.webView.frame = frame;
     
     //截图完毕回复动图oc调用js方法
-//    [self.webView stringByEvaluatingJavaScriptFromString:@"alert();"];
+    [self.webView stringByEvaluatingJavaScriptFromString:@"staticToDynamic();"];
 
 }
 
