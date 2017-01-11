@@ -98,7 +98,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
         [SSJCircleChargeStore queryDefualtItemWithIncomeOrExpence:1 Success:^(SSJBillingChargeCellItem *item) {
             item.incomeOrExpence = 1;
             weakSelf.item = item;
-            [weakSelf.tableView reloadData];
+            [self reloadMenberItems];
         } failure:^(NSError *error) {
             
         }];
@@ -108,8 +108,8 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
             memberItem.memberId = [NSString stringWithFormat:@"%@-0",SSJUSERID()];
             memberItem.memberName = @"我";
             self.item.membersItem = [@[memberItem] mutableCopy];
-            [self.tableView reloadData];
         }
+        [self reloadMenberItems];
     }
 }
 
@@ -613,6 +613,23 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 
 
 #pragma mark - Private
+- (void)reloadMenberItems {
+    __weak typeof(self) weakSelf = self;
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        for (SSJChargeMemberItem *memberItem in weakSelf.item.membersItem) {
+            FMResultSet *result = [db executeQuery:@"select * from bk_member where cmemberid = ?",memberItem.memberId];
+            while ([result next]) {
+                memberItem.memberId = [result stringForColumn:@"cmemberid"];
+                memberItem.memberName = [result stringForColumn:@"cname"];
+                memberItem.memberColor = [result stringForColumn:@"ccolor"];
+            }
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf.tableView reloadData];
+        });
+    }];
+}
+
 -(void)takePhoto{
     UIImagePickerControllerSourceType sourceType = UIImagePickerControllerSourceTypeCamera;
     if ([UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypeCamera])

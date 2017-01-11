@@ -143,6 +143,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES animated:YES];
     [self loadCategoryAndBooksList];
+    [self reloadMenberItems];
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -766,6 +767,23 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     }];
 }
 
+- (void)reloadMenberItems {
+    __weak typeof(self) weakSelf = self;
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        for (SSJChargeMemberItem *memberItem in weakSelf.item.membersItem) {
+            FMResultSet *result = [db executeQuery:@"select * from bk_member where cmemberid = ?",memberItem.memberId];
+            while ([result next]) {
+                memberItem.memberId = [result stringForColumn:@"cmemberid"];
+                memberItem.memberName = [result stringForColumn:@"cname"];
+                memberItem.memberColor = [result stringForColumn:@"ccolor"];
+            }
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf updateMembers];
+        });
+    }];
+}
+
 -(void)getmembersForTheCharge{
     __weak typeof(self) weakSelf = self;
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
@@ -784,15 +802,15 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
             }else{
                 SSJChargeMemberItem *item = [[SSJChargeMemberItem alloc]init];
                 item.memberId = [NSString stringWithFormat:@"%@-0",SSJUSERID()];
-                item.memberName = @"我";
-                item.memberColor = @"#fc7a60";
+                item.memberName = [db stringForQuery:@"select cname from bk_member where cmemberid = ?",item.memberId];
+                item.memberColor = [db stringForQuery:@"select ccolor from bk_member where cmemberid = ?",item.memberId];
                 weakSelf.item.membersItem = [NSMutableArray arrayWithObjects:item, nil];
             }
         }else{
             SSJChargeMemberItem *item = [[SSJChargeMemberItem alloc]init];
             item.memberId = [NSString stringWithFormat:@"%@-0",SSJUSERID()];
-            item.memberName = @"我";
-            item.memberColor = @"#fc7a60";
+            item.memberName = [db stringForQuery:@"select cname from bk_member where cmemberid = ?",item.memberId];
+            item.memberColor = [db stringForQuery:@"select ccolor from bk_member where cmemberid = ?",item.memberId];
             weakSelf.item.membersItem = [NSMutableArray arrayWithObjects:item, nil];
         }
         dispatch_async(dispatch_get_main_queue(), ^{
