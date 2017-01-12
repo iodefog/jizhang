@@ -250,10 +250,12 @@ static BOOL kNeedBannerDisplay = YES;
     
     //  给个好评
     if ([item.adTitle isEqualToString:kTitle6]) {
-        NSString *appstoreUrlStr = [SSJSettingForSource() objectForKey:@"AppStoreUrl"];
-        NSURL *url = [NSURL URLWithString:appstoreUrlStr];
-        if ([[UIApplication sharedApplication] canOpenURL:url]) {
-            [[UIApplication sharedApplication] openURL:url];
+        NSString *urlStr = SSJAppStoreUrl();
+        if (urlStr) {
+            NSURL *url = [NSURL URLWithString:urlStr];
+            if ([[UIApplication sharedApplication] canOpenURL:url]) {
+                [[UIApplication sharedApplication] openURL:url];
+            }
         }
         return;
     }
