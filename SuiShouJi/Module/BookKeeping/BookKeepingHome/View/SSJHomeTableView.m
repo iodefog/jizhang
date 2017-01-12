@@ -74,8 +74,4 @@
     self.backgroundColor = [UIColor clearColor];
 }
 
-- (void)setContentOffset:(CGPoint)contentOffset animated:(BOOL)animated {
-    [super setContentOffset:contentOffset animated:animated];
-}
-
 @end
