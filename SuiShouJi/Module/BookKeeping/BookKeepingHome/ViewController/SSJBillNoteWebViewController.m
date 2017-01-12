@@ -41,8 +41,11 @@
 //    self.view.backgroundColor = [UIColor whiteColor];
 //    
 //    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"navigation_backOff"] style:UIBarButtonItemStylePlain target:self action:@selector(backButtonClicked)];
+    
     [[UIApplication sharedApplication] setStatusBarHidden:YES];
-    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"http://192.168.2.192:3000/"]];
+    if (!SSJUSERID().length) return;
+    NSString *urlStr = [NSString stringWithFormat:@"http://192.168.2.192:3000?userid=%@",SSJUSERID()];
+    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlStr]];
     [self.webView loadRequest:request];
     self.view.backgroundColor = [UIColor whiteColor];
 }
