@@ -656,11 +656,8 @@
         _billStickyNoteView.openBillNoteBlock = ^{
             //如果没有登录
             if (!SSJIsUserLogined()) {
-                [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:@"请登录后再查看2016账单吧！" action:[SSJAlertViewAction actionWithTitle:@"注册" handler:^(SSJAlertViewAction *action) {
-                    SSJRegistGetVerViewController *registerVC = [[SSJRegistGetVerViewController alloc] init];
-                    registerVC.hidesBottomBarWhenPushed = YES;
-                    [weakSelf.navigationController pushViewController:registerVC animated:YES];
-                }],[SSJAlertViewAction actionWithTitle:@"登录" handler:^(SSJAlertViewAction *action) {
+                [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:@"请登录后再查看2016账单吧！" action:[SSJAlertViewAction actionWithTitle:@"关闭" handler:^(SSJAlertViewAction *action) {
+                }],[SSJAlertViewAction actionWithTitle:@"立即登录" handler:^(SSJAlertViewAction *action) {
                     SSJLoginViewController *loginVC = [[SSJLoginViewController alloc] init];
                     [weakSelf.navigationController pushViewController:loginVC animated:YES];
                 }],nil];
@@ -670,7 +667,8 @@
                 billVC.hidesBottomBarWhenPushed = YES;
 //                [weakSelf.navigationController pushViewController:billVC animated:YES];
                 [weakSelf presentViewController:billVC animated:YES completion:nil];
-                
+                [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:SSJShowBillNoteKey];
+                [[NSUserDefaults standardUserDefaults] synchronize];
             }
         };
     }

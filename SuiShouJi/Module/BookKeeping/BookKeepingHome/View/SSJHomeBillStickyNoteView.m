@@ -32,7 +32,6 @@ NSString *const SSJShowBillNoteKey = @"SSJShowBillNoteKey";
         [self.layer addSublayer:self.lineLayer];
         [self addSubview:self.noteButton];
         [self addSubview:self.closeButton];
-        [[NSUserDefaults standardUserDefaults] setObject:@"0" forKey:SSJShowBillNoteKey];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateAfterThemeChange) name:SSJThemeDidChangeNotification object:nil] ;
     }
     return self;
@@ -55,6 +54,7 @@ NSString *const SSJShowBillNoteKey = @"SSJShowBillNoteKey";
     if (!_noteButton) {
         _noteButton = [[UIButton alloc] init];
         [_noteButton setImage:[UIImage imageNamed:@"home_bill_note"] forState:UIControlStateNormal];
+        [_noteButton setImage:[UIImage imageNamed:@"home_bill_note"] forState:UIControlStateHighlighted];
         [_noteButton sizeToFit];
         [_noteButton addTarget:self action:@selector(openBillNote) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -87,6 +87,7 @@ NSString *const SSJShowBillNoteKey = @"SSJShowBillNoteKey";
 - (void)closeBillNote
 {
     [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:SSJShowBillNoteKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
     if (self.superview && self.closeBillNoteBlock) {
         [self removeFromSuperview];
         self.closeBillNoteBlock();
