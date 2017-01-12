@@ -14,7 +14,7 @@
 /**
  截图的image
  */
-@property (nonatomic, strong) UIImage *shareImage;
+@property (nonatomic, strong) NSData *shareImage;
 
 @property (nonatomic, strong) UIWebView *webView;
 /**
@@ -42,7 +42,7 @@
 //    
 //    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"navigation_backOff"] style:UIBarButtonItemStylePlain target:self action:@selector(backButtonClicked)];
     [[UIApplication sharedApplication] setStatusBarHidden:YES];
-    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"192.168.2.192:3000"]];
+    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"http://192.168.2.192:3000/"]];
     [self.webView loadRequest:request];
     self.view.backgroundColor = [UIColor whiteColor];
 }
@@ -65,19 +65,6 @@
     return _webView;
 }
 
-
-
-
-- (UIImage*)screenView:(UIView *)view {
-    UIGraphicsBeginImageContextWithOptions(CGSizeMake(view.width, view.height - SSJ_NAVIBAR_BOTTOM), NO, 0.0);
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    [view.layer renderInContext:context];
-    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return img;
-    
-}
-
 #pragma mark - UIWebViewDelegate
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
@@ -97,6 +84,11 @@
     return YES;
 }
 
+- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
+{
+    SSJPRINT(@"error = %@",error.localizedDescription);
+}
+
 
 
 #pragma mark - Event
@@ -105,13 +97,12 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-
+#pragma mark - Private
 //截图
 - (void)screenImage
 {
     //如果截图不存在
     if (!self.shareImage){
-        
         //切换成静态
         [self.webView stringByEvaluatingJavaScriptFromString:@"dynamicToStatic();"];
         float height = [[self.webView stringByEvaluatingJavaScriptFromString:@"document.getElementsByClassName('static')[0].offsetHeight;"] floatValue];
@@ -120,9 +111,9 @@
         frame.size.height = height;
         self.webView.scrollView.contentSize = CGSizeMake(0, height);
         self.webView.frame = frame;
-        self.shareImage = [self.webView ssj_takeScreenShotWithSize:self.webView.size opaque:YES scale:0];
-
-        [self saveImageToPhotos:self.shareImage];
+        UIImage *origImage = [self.webView ssj_takeScreenShotWithSize:self.webView.size opaque:YES scale:0];
+        self.shareImage = UIImageJPEGRepresentation(origImage, 1);
+//        [self saveImageToPhotos:origImage];
         frame.size.height = oldHeight;
         self.webView.frame = frame;
         
@@ -152,6 +143,16 @@
 }
 - (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo{
     NSLog(@"success");
+}
+
+- (UIImage*)screenView:(UIView *)view {
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(view.width, view.height - SSJ_NAVIBAR_BOTTOM), NO, 0.0);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    [view.layer renderInContext:context];
+    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return img;
+    
 }
 
 #pragma mark - UMSocialUIDelegate
