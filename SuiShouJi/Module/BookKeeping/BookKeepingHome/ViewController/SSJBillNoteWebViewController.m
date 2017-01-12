@@ -21,10 +21,6 @@
  webView的高度
  */
 @property (nonatomic, assign) CGFloat totalWebViewHeight;
-/**
- 提示标签
- */
-@property (nonatomic, strong) UILabel *noticeLabel;
 
 @end
 
@@ -33,7 +29,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.view addSubview:self.webView];
-    [self.view addSubview:self.noticeLabel];
     self.title = @"2016年——我的有鱼账单";
 //    self.navigationController.navigationBar.shadowImage = [[UIImage alloc] init];
 //    [self.navigationController.navigationBar setTitleTextAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:17],NSForegroundColorAttributeName:[UIColor whiteColor]}];
@@ -50,21 +45,12 @@
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"http://192.168.2.192:3000"]];
     [self.webView loadRequest:request];
     self.view.backgroundColor = [UIColor whiteColor];
-    
-    
-//    [self performSelector:@selector(shareMyBill) withObject:nil afterDelay:5];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     [[UIApplication sharedApplication] setStatusBarHidden:YES];
-}
-
-- (void)viewWillLayoutSubviews
-{
-    [super viewWillLayoutSubviews];
-    self.noticeLabel.frame = CGRectMake(0, 44, self.view.width, 34);
 }
 
 #pragma mark - Lazy
@@ -80,18 +66,6 @@
 }
 
 
-- (UILabel *)noticeLabel
-{
-    if (!_noticeLabel) {
-        _noticeLabel = [[UILabel alloc] init];
-        _noticeLabel.backgroundColor = [UIColor ssj_colorWithHex:@"0394e0"];
-        _noticeLabel.textColor = [UIColor ssj_colorWithHex:@"c5e8ff"];
-        _noticeLabel.font = [UIFont systemFontOfSize:13];
-        _noticeLabel.text = @"   再次查看2016年账单，可点击'更多'上方的广告栏哦！";
-        _noticeLabel.alpha = 0;
-    }
-    return _noticeLabel;
-}
 
 
 - (UIImage*)screenView:(UIView *)view {
@@ -107,19 +81,7 @@
 #pragma mark - UIWebViewDelegate
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
-//    float oldHeight = webView.frame.size.height;
-   
-//    CGRect frame = webView.frame;
-//    frame.size.height = height;
-//    webView.scrollView.contentSize = CGSizeMake(0, height);
-//    webView.frame = frame;
-////    self.shareImage = [self screenView:webView];
-//    self.shareImage = [webView ssj_takeScreenShotWithSize:webView.size opaque:YES scale:0];
-//    [self saveImageToPhotos:self.shareImage];
-//    frame.size.height = oldHeight;
-//    webView.frame = frame;
-    
-//    float height = [[self.webView stringByEvaluatingJavaScriptFromString:@"document.body.offsetHeight;"] floatValue];
+    SSJPRINT(@"finish");
     
 }
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
@@ -141,59 +103,33 @@
 - (void)backButtonClicked
 {
     [self dismissViewControllerAnimated:YES completion:nil];
-//    [self screenImage];
 }
 
-
-#pragma mark - Private
-- (void)showNoticeLabel
-{
-    __weak typeof(self) weakSelf = self;
-    [UIView animateWithDuration:0.5 animations:^{
-        weakSelf.noticeLabel.alpha = 1;
-    }];
-}
 
 //截图
 - (void)screenImage
 {
-    //切换成静态
-    [self.webView stringByEvaluatingJavaScriptFromString:@"dynamicToStatic();"];
-//    NSString *js = [NSString stringWithFormat:@"dynamicToStatic();"];
-//    [self.webView stringByEvaluatingJavaScriptFromString:js];
-    float height = [[self.webView stringByEvaluatingJavaScriptFromString:@"document.getElementsByClassName('static')[0].offsetHeight;"] floatValue];
-//    self.totalWebViewHeight = height;
-    float oldHeight = self.webView.frame.size.height;
-//    float height = self.totalWebViewHeight;
-    CGRect frame = self.webView.frame;
-    frame.size.height = height;
-    self.webView.scrollView.contentSize = CGSizeMake(0, height);
-    self.webView.frame = frame;
-//    self.shareImage = [self screenView:self.webView];
-    self.shareImage = [self.webView ssj_takeScreenShotWithSize:self.webView.size opaque:YES scale:0];
-    [self saveImageToPhotos:self.shareImage];
-    frame.size.height = oldHeight;
-    self.webView.frame = frame;
-    
-    //截图完毕回复动图oc调用js方法
-    [self.webView stringByEvaluatingJavaScriptFromString:@"staticToDynamic();"];
+    //如果截图不存在
+    if (!self.shareImage){
+        
+        //切换成静态
+        [self.webView stringByEvaluatingJavaScriptFromString:@"dynamicToStatic();"];
+        float height = [[self.webView stringByEvaluatingJavaScriptFromString:@"document.getElementsByClassName('static')[0].offsetHeight;"] floatValue];
+        float oldHeight = self.webView.frame.size.height;
+        CGRect frame = self.webView.frame;
+        frame.size.height = height;
+        self.webView.scrollView.contentSize = CGSizeMake(0, height);
+        self.webView.frame = frame;
+        self.shareImage = [self.webView ssj_takeScreenShotWithSize:self.webView.size opaque:YES scale:0];
 
+        [self saveImageToPhotos:self.shareImage];
+        frame.size.height = oldHeight;
+        self.webView.frame = frame;
+        
+        //截图完毕回复动图oc调用js方法
+        [self.webView stringByEvaluatingJavaScriptFromString:@"staticToDynamic();"];
+    }
 }
-
-- (void)hiddenNoticeLabel
-{
-    __weak typeof(self) weakSelf = self;
-    [UIView animateWithDuration:0.5 animations:^{
-        weakSelf.noticeLabel.alpha = 0;
-    }];
-}
-
-- (UIImage *)newImageWithOldImage:(UIImage *)oldImage OtherImage:(UIImage *)otherImage
-{
-    
-    return nil;
-}
-
 - (void)shareMyBill
 {
     [self screenImage];//截图
