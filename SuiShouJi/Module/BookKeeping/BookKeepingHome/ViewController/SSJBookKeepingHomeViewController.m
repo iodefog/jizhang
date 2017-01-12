@@ -669,6 +669,8 @@
                 [weakSelf presentViewController:billVC animated:YES completion:nil];
                 [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:SSJShowBillNoteKey];
                 [[NSUserDefaults standardUserDefaults] synchronize];
+                [weakSelf.billStickyNoteView removeFromSuperview];
+                [weakSelf.view layoutIfNeeded];
             }
         };
     }
