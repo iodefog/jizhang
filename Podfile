@@ -14,7 +14,7 @@ def shared_pods
     pod 'SDWebImage/WebP'
     pod 'MJExtension'
     pod 'UMengAnalytics'
-    pod 'FMDB'
+#    pod 'FMDB'
     pod 'DateTools'
     #pod 'UMengFeedback', '~> 2.3.4'
     pod 'ZYCornerRadius', '~> 0.5.1'

@@ -6,7 +6,7 @@
 //  Copyright © 2015年 ___9188___. All rights reserved.
 //
 
-#import <FMDB/FMDB.h>
+#import "FMDB.h"
 
 @interface SSJDatabaseQueue : FMDatabaseQueue
 

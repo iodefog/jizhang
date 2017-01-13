@@ -22,9 +22,6 @@ PODS:
     - AFNetworking/NSURLSession
   - DateTools (1.7.0)
   - FLAnimatedImage (1.0.12)
-  - FMDB (2.6.2):
-    - FMDB/standard (= 2.6.2)
-  - FMDB/standard (2.6.2)
   - JSPatch (1.1.2):
     - JSPatch/Core (= 1.1.2)
   - JSPatch/Core (1.1.2)
@@ -86,7 +83,6 @@ DEPENDENCIES:
   - AFNetworking (~> 2.5.4)
   - DateTools
   - FLAnimatedImage (~> 1.0)
-  - FMDB
   - JSPatch
   - LxThroughPointsBezier (~> 1.0.0)
   - Meiqia (~> 3.3.1)
@@ -103,7 +99,6 @@ SPEC CHECKSUMS:
   AFNetworking: 05edc0ac4c4c8cf57bcf4b84be5b0744b6d8e71e
   DateTools: 53288ee8b905fdc75897a1e6b5cc0144b14cba60
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
-  FMDB: 854a0341b4726e53276f2a8996f06f1b80f9259a
   JSPatch: 741205ebb2e2238c223a436e4c8cf75cf40a345f
   libwebp: b9126f8982a95370cf4eaad9bb3fefd57f052c15
   LxThroughPointsBezier: fdebe18dd4ddab9406d9827db77a078b4738b00f
@@ -117,6 +112,6 @@ SPEC CHECKSUMS:
   YYText: 5c461d709e24d55a182d1441c41dc639a18a4849
   ZYCornerRadius: 526dfd5b860008e57abf7be4a887f4630c3018f0
 
-PODFILE CHECKSUM: d5833fad31afd3c803b21397cdd4077f46cf679c
+PODFILE CHECKSUM: 2b1a39dfcb5a2e71479b82da5ba37190a1ecbae4
 
 COCOAPODS: 1.1.1
