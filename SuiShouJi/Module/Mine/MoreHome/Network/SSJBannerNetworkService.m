@@ -12,12 +12,11 @@
 
 - (void)requestBannersList{
     self.showLodingIndicator = NO;
-    if ([[SSJDomainManager domain] isEqualToString:kDefaultDomain]) {
-        [self request:@"https://jz.youyuwo.com/app/new_banners.json" params:nil];
-    } else {
-        [self request:@"https://jz.youyuwo.com/app/banner_test.json" params:nil];
-    }
-
+#ifdef DEBUG
+    [self request:@"https://jz.youyuwo.com/app/banner_test.json" params:nil];
+#else
+    [self request:@"https://jz.youyuwo.com/app/new_banners.json" params:nil];
+#endif
 }
 
 - (void)requestDidFinish:(NSDictionary *)rootElement{

@@ -14,22 +14,28 @@ const int kMaxRequestFailureTimes = 2;
 
 static NSString *const kSSJDomainKey = @"SSJDomainManagerKey";
 
-//static NSString *const kTestDomain = @"http://192.168.83.66:18095/";  // 正式环境
+static NSString *const kDefaultDomain = @"https://jz.youyuwo.com";
+
 static NSString *const kTestDomain = @"http://192.168.1.51:10012/";
+
 static NSString *const kTestImageDomain = @"http://account.gs.9188.com/jz";
 
 @implementation SSJDomainManager
 
 + (NSString *)domain {
-//    return kTestDomain;
+#ifdef DEBUG
+    return kTestDomain;
+#else
     return [self formalDomain];
-//    return kDefaultDomain;
+#endif
 }
 
 + (NSString *)imageDomain {
-//    return kTestImageDomain;
+#ifdef DEBUG
+    return kTestImageDomain;
+#else
     return [self formalDomain];
-//    return kDefaultDomain;
+#endif
 }
 
 + (void)requestDomain {

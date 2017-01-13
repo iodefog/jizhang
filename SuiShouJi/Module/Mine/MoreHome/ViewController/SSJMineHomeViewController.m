@@ -145,18 +145,6 @@ static BOOL kNeedBannerDisplay = YES;
             _titleArr = [@[kTitle1 , kTitle2 , kTitle3 , kTitle4 , kTitle5 , kTitle6 , kTitle7] mutableCopy];
         }
     }
-
-    //遍历images、titles生产广告模型
-    [self.adItemsArray removeAllObjects];
-    for (NSInteger i=0; i<self.titles.count; i++) {
-        SSJListAdItem *item = [[SSJListAdItem alloc] init];
-        item.adTitle = [self.titles ssj_safeObjectAtIndex:i];
-        item.imageName = [self.images ssj_safeObjectAtIndex:i];
-        item.imageUrl = nil;
-        item.hidden = NO;
-        item.url = nil;//不需要跳转网页
-        [self.adItemsArray addObject:item];
-    }
     
     __weak typeof(self) weakSelf = self;
     [self getUserInfo:^(SSJUserInfoItem *item){
@@ -250,10 +238,12 @@ static BOOL kNeedBannerDisplay = YES;
     
     //  给个好评
     if ([item.adTitle isEqualToString:kTitle6]) {
-        NSString *appstoreUrlStr = [SSJSettingForSource() objectForKey:@"AppStoreUrl"];
-        NSURL *url = [NSURL URLWithString:appstoreUrlStr];
-        if ([[UIApplication sharedApplication] canOpenURL:url]) {
-            [[UIApplication sharedApplication] openURL:url];
+        NSString *urlStr = SSJAppStoreUrl();
+        if (urlStr) {
+            NSURL *url = [NSURL URLWithString:urlStr];
+            if ([[UIApplication sharedApplication] canOpenURL:url]) {
+                [[UIApplication sharedApplication] openURL:url];
+            }
         }
         return;
     }
@@ -373,20 +363,29 @@ static BOOL kNeedBannerDisplay = YES;
             self.lineView.top = 0;
         }
     }
-    
-    //广告
-    for (SSJListAdItem *listAdItem in self.bannerService.item.listAdItems) {
-        if (!listAdItem.hidden) {
-            [self.adItems addObject:listAdItem];
-           NSInteger index = [self.adItems indexOfObject:listAdItem];
-            [self.adItemsArray insertObject:listAdItem atIndex:index];
-        }
-    }
+    [self loadDataArray];
     [self.collectionView reloadData];
 }
 
 - (void)server:(SSJBaseNetworkService *)service didFailLoadWithError:(NSError *)error
 {
+    [self loadDataArray];
+    [self.collectionView reloadData];
+}
+
+- (void)loadDataArray
+{
+    //遍历images、titles生产广告模型
+    [self.adItemsArray removeAllObjects];
+    for (NSInteger i=0; i<self.titles.count; i++) {
+        SSJListAdItem *item = [[SSJListAdItem alloc] init];
+        item.adTitle = [self.titles ssj_safeObjectAtIndex:i];
+        item.imageName = [self.images ssj_safeObjectAtIndex:i];
+        item.imageUrl = nil;
+        item.hidden = NO;
+        item.url = nil;//不需要跳转网页
+        [self.adItemsArray addObject:item];
+    }
     //广告
     for (SSJListAdItem *listAdItem in self.bannerService.item.listAdItems) {
         if (!listAdItem.hidden) {
@@ -395,10 +394,9 @@ static BOOL kNeedBannerDisplay = YES;
             [self.adItemsArray insertObject:listAdItem atIndex:index];
         }
     }
-    [self.collectionView reloadData];
+    
+
 }
-
-
 #pragma mark - UMSocialUIDelegate
 -(void)didFinishGetUMSocialDataInViewController:(UMSocialResponseEntity *)response
 {

@@ -228,14 +228,18 @@ NSString *const SSJEvaluateSelecatedKey = @"SSJEvaluateSelecatedKey";
 - (void)favorableButtonClicked
 {
     [MobClick event:@"evaluate_good"];
-    NSString *appstoreUrlStr = [SSJSettingForSource() objectForKey:@"AppStoreUrl"];
-    NSURL *url = [NSURL URLWithString:appstoreUrlStr];
+    
+    NSString *urlStr = SSJAppStoreUrl();
+    if (!urlStr) {
+        return;
+    }
+    
+    NSURL *url = [NSURL URLWithString:SSJAppStoreUrl()];
     if ([[UIApplication sharedApplication] canOpenURL:url]) {
         [[UIApplication sharedApplication] openURL:url];
     }
     self.evaluateSelecatedType = SSJEvaluateSelecatedTypeHighPraise;
     [self dismiss];
-    
 }
 
 - (void)latterButtonClicked
