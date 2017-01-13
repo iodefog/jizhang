@@ -20,6 +20,7 @@
 #import "SSJDatabaseQueue.h"
 #import "SSJFinancingHomeHelper.h"
 #import "SSJCreditCardStore.h"
+#import "SSJDataSynchronizer.h"
 
 static NSString *const SSJInstalmentCellIdentifier = @"SSJInstalmentCellIdentifier";
 
@@ -358,8 +359,9 @@ static NSString *const kTitle6 = @"分期申请日";
                         [weakSelf.navigationController popToViewController:viewcontroller animated:YES];
                     }
                 }
+                [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
             } failure:^(NSError *error) {
-                
+                [SSJAlertViewAdapter showError:error];
             }];
         }];
         NSString *massage = [NSString stringWithFormat:@"若修改分期还款，则先前生成的%ld期相关流水将被删除并根据新的设置重新生成哦，你确定要执行吗？",(long)self.originalRepaymentModel.instalmentCout];
@@ -376,8 +378,9 @@ static NSString *const kTitle6 = @"分期申请日";
                     [weakSelf.navigationController popToViewController:viewcontroller animated:YES];
                 }
             }
+            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
         } failure:^(NSError *error) {
-            
+            [SSJAlertViewAdapter showError:error];
         }];
         return;
     }
@@ -394,8 +397,9 @@ static NSString *const kTitle6 = @"分期申请日";
                     [weakSelf.navigationController popToViewController:viewcontroller animated:YES];
                 }
             }
+            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
         } failure:^(NSError *error) {
-            
+            [SSJAlertViewAdapter showError:error];
         }];
     }];
     [alert addAction:cancel];

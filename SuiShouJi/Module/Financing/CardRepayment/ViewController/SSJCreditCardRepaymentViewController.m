@@ -22,6 +22,7 @@
 
 #import "SSJFundingItem.h"
 #import "SSJCreditCardItem.h"
+#import "SSJDataSynchronizer.h"
 
 static NSString *const SSJRepaymentEditeCellIdentifier = @"SSJRepaymentEditeCellIdentifier";
 
@@ -259,16 +260,18 @@ static NSString *const kTitle6 = @"还款账单月份";
     __weak typeof(self) weakSelf = self;
     [SSJRepaymentStore saveRepaymentWithRepaymentModel:self.repaymentModel Success:^{
         [weakSelf.navigationController popViewControllerAnimated:YES];
+        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
     } failure:^(NSError *error) {
-
+        [SSJAlertViewAdapter showError:error];
     }];
 }
 
 - (void)deleteButtonClicked{
     [SSJRepaymentStore deleteRepaymentWithRepaymentModel:self.repaymentModel Success:^{
         [self.navigationController popViewControllerAnimated:YES];
+        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
     } failure:^(NSError *error) {
-        
+        [SSJAlertViewAdapter showError:error];
     }];
 }
 
