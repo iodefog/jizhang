@@ -14,6 +14,8 @@
 
 + (NSString *)imageDomain;
 
++ (NSString *)formalDomain;
+
 + (void)requestDomain;
 
 @end
