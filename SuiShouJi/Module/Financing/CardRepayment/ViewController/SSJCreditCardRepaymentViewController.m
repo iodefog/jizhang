@@ -22,6 +22,7 @@
 
 #import "SSJFundingItem.h"
 #import "SSJCreditCardItem.h"
+#import "SSJDataSynchronizer.h"
 
 static NSString *const SSJRepaymentEditeCellIdentifier = @"SSJRepaymentEditeCellIdentifier";
 
@@ -128,7 +129,7 @@ static NSString *const kTitle6 = @"还款账单月份";
     NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
     if ([title isEqualToString:kTitle4]) {
         self.fundSelectView.selectFundID = self.repaymentModel.repaymentSourceFoundId;
-        self.fundSelectView.needCreditOrNot = NO;
+        self.fundSelectView.exceptionIDs = @[self.repaymentModel.cardId];
         [self.fundSelectView show];
     }else if ([title isEqualToString:kTitle5]) {
         self.repaymentTimeView.currentDate = self.repaymentModel.applyDate;
@@ -259,17 +260,18 @@ static NSString *const kTitle6 = @"还款账单月份";
     __weak typeof(self) weakSelf = self;
     [SSJRepaymentStore saveRepaymentWithRepaymentModel:self.repaymentModel Success:^{
         [weakSelf.navigationController popViewControllerAnimated:YES];
+        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
     } failure:^(NSError *error) {
-
+        [SSJAlertViewAdapter showError:error];
     }];
 }
 
 - (void)deleteButtonClicked{
-    __weak typeof(self) weakSelf = self;
     [SSJRepaymentStore deleteRepaymentWithRepaymentModel:self.repaymentModel Success:^{
-        [weakSelf.navigationController popViewControllerAnimated:YES];
+        [self.navigationController popViewControllerAnimated:YES];
+        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
     } failure:^(NSError *error) {
-        
+        [SSJAlertViewAdapter showError:error];
     }];
 }
 
@@ -305,6 +307,7 @@ static NSString *const kTitle6 = @"还款账单月份";
 -(SSJFundingTypeSelectView *)fundSelectView{
     if (!_fundSelectView) {
         _fundSelectView = [[SSJFundingTypeSelectView alloc]init];
+        _fundSelectView.needCreditOrNot = NO;
         __weak typeof(self) weakSelf = self;
         _fundSelectView.fundingTypeSelectBlock = ^(SSJFundingItem *item){
             if (item.fundingID.length) {

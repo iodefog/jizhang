@@ -17,6 +17,8 @@ static NSString *const kDefaultDomain = @"https://jz.youyuwo.com";
 
 + (NSString *)imageDomain;
 
++ (NSString *)formalDomain;
+
 + (void)requestDomain;
 
 @end

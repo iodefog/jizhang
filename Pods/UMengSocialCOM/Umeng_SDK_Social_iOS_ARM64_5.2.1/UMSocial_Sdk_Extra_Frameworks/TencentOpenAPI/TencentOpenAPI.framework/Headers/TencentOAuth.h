@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "sdkdef.h"
 #import "TencentOAuthObject.h"
-#import <TencentOpenAPI/TencentApiInterface.h> 
+#import "TencentApiInterface.h"
 
 @protocol TencentSessionDelegate;
 @protocol TencentLoginDelegate;

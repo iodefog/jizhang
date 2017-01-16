@@ -15,7 +15,7 @@
 
 #define documentPath [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject]
 #define writePath [documentPath stringByAppendingPathComponent:@"db_error"]
-#define jsonPath [writePath stringByAppendingPathComponent:@"db_error_list.json"]
+#define jsonPath [writePath stringByAppendingPathComponent:@"db_error_list.plist"]
 @interface SSJDatabaseErrorHandler()
 @end
 
@@ -108,6 +108,7 @@
 
 + (void)uploadData:(NSInteger)index array:(NSArray *)arr
 {
+    if (!([SSJNetworkReachabilityManager networkReachabilityStatus] == SSJNetworkReachabilityStatusReachableViaWiFi)) return;
     if (index < 0)return;
         NSDictionary *dic = [arr ssj_safeObjectAtIndex:index];
         if ([[dic objectForKey:@"uploaded"] intValue] == 0) {

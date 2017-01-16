@@ -192,18 +192,17 @@ static const NSUInteger kMaxLoadUpdateItmes = 0; //  加载更新信息失败的
 //  前往升级
 - (void)gotoUpdate {
     NSURL *updateUrl = [NSURL URLWithString:self.networkService.url];
-    if (SSJIsAppStoreSource()) {
-        //  appstore渠道包
-        UIWebView *webView = [[UIWebView alloc] init];
-        NSURLRequest *request = [NSURLRequest requestWithURL:updateUrl];
-        [webView loadRequest:request];
-        [SSJVisibalController().view addSubview:webView];
-    } else {
-        //  企业渠道包
-        if ([[UIApplication sharedApplication] canOpenURL:updateUrl]) {
-            [[UIApplication sharedApplication] openURL:updateUrl];
-        }
-    }
+    
+    //  appstore渠道包
+    UIWebView *webView = [[UIWebView alloc] init];
+    NSURLRequest *request = [NSURLRequest requestWithURL:updateUrl];
+    [webView loadRequest:request];
+    [SSJVisibalController().view addSubview:webView];
+    
+//    //  企业渠道包
+//    if ([[UIApplication sharedApplication] canOpenURL:updateUrl]) {
+//        [[UIApplication sharedApplication] openURL:updateUrl];
+//    }
 }
 
 @end

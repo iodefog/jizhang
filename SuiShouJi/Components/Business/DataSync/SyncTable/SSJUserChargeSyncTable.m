@@ -42,6 +42,10 @@
 
 + (BOOL)shouldMergeRecord:(NSDictionary *)record forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError *__autoreleasing *)error {
     
+    if ([record[@"ichargetype"] integerValue] > 4) {
+        return NO;
+    }
+    
     NSString *billId = record[@"ibillid"];
     NSString *fundId = record[@"ifunsid"];
     NSString *configId = record[@"cid"];  //  定期记账配置id可已为空（仅一次）

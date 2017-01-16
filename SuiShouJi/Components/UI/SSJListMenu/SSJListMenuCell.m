@@ -103,7 +103,9 @@
     
     SSJListMenuCellItem *item = (SSJListMenuCellItem *)self.cellItem;
     
-    self.imageView.image = [[UIImage imageNamed:item.imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    if (item.imageName) {
+        self.imageView.image = [[UIImage imageNamed:item.imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    }
     self.imageView.tintColor = item.imageColor;
     
     self.textLabel.text = item.title;

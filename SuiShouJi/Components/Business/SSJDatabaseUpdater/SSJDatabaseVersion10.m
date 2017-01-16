@@ -7,7 +7,7 @@
 //
 
 #import "SSJDatabaseVersion10.h"
-#import <FMDB/FMDB.h>
+#import "FMDB.h"
 
 static NSString *const kBillIdKey = @"kBillIdKey";
 static NSString *const kUserIdKey = @"kUserIdKey";

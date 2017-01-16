@@ -20,6 +20,7 @@
 #import "SSJDatabaseQueue.h"
 #import "SSJFinancingHomeHelper.h"
 #import "SSJCreditCardStore.h"
+#import "SSJDataSynchronizer.h"
 
 static NSString *const SSJInstalmentCellIdentifier = @"SSJInstalmentCellIdentifier";
 
@@ -223,6 +224,11 @@ static NSString *const kTitle6 = @"分期申请日";
     if (textField.tag == 101){
         self.repaymentModel.repaymentMoney = [NSDecimalNumber decimalNumberWithString:textField.text];
     }
+    
+    if (textField.tag == 102){
+        NSString *poudageStr = [[NSString stringWithFormat:@"%f",[textField.text doubleValue] / 100] ssj_moneyDecimalDisplayWithDigits:2];
+        self.repaymentModel.poundageRate = [NSDecimalNumber decimalNumberWithString:poudageStr];
+    }
 }
 
 -(BOOL)textFieldShouldReturn:(UITextField *)textField{
@@ -319,12 +325,12 @@ static NSString *const kTitle6 = @"分期申请日";
         return;
     }
     if (self.repaymentModel.cardBillingDay < self.repaymentModel.cardRepaymentDay) {
-        if (!([[[NSDate dateWithYear:self.repaymentModel.repaymentMonth.year month:self.repaymentModel.repaymentMonth.month day:self.repaymentModel.cardBillingDay] dateBySubtractingMonths:1] isEarlierThanOrEqualTo:self.repaymentModel.applyDate] && [[NSDate dateWithYear:self.repaymentModel.repaymentMonth.year month:self.repaymentModel.repaymentMonth.month day:self.repaymentModel.cardRepaymentDay] isLaterThanOrEqualTo:self.repaymentModel.applyDate])) {
+        if (!([[NSDate dateWithYear:self.repaymentModel.repaymentMonth.year month:self.repaymentModel.repaymentMonth.month day:self.repaymentModel.cardBillingDay]isEarlierThanOrEqualTo:self.repaymentModel.applyDate] && [[NSDate dateWithYear:self.repaymentModel.repaymentMonth.year month:self.repaymentModel.repaymentMonth.month day:self.repaymentModel.cardRepaymentDay] isLaterThanOrEqualTo:self.repaymentModel.applyDate])) {
             [CDAutoHideMessageHUD showMessage:@"分期日期只能在账单日和还款日之间申请哦"];
             return;
         }
     } else {
-        if (!([[[NSDate dateWithYear:self.repaymentModel.repaymentMonth.year month:self.repaymentModel.repaymentMonth.month day:self.repaymentModel.cardBillingDay] dateBySubtractingMonths:1] isEarlierThanOrEqualTo:self.repaymentModel.applyDate] && [[[NSDate dateWithYear:self.repaymentModel.repaymentMonth.year month:self.repaymentModel.repaymentMonth.month day:self.repaymentModel.cardRepaymentDay] dateByAddingMonths:1] isLaterThanOrEqualTo:self.repaymentModel.applyDate])) {
+        if (!([[NSDate dateWithYear:self.repaymentModel.repaymentMonth.year month:self.repaymentModel.repaymentMonth.month day:self.repaymentModel.cardBillingDay] isEarlierThanOrEqualTo:self.repaymentModel.applyDate] && [[[NSDate dateWithYear:self.repaymentModel.repaymentMonth.year month:self.repaymentModel.repaymentMonth.month day:self.repaymentModel.cardRepaymentDay] dateByAddingMonths:1] isLaterThanOrEqualTo:self.repaymentModel.applyDate])) {
             [CDAutoHideMessageHUD showMessage:@"分期日期只能在账单日和还款日之间申请哦"];
             return;
         }
@@ -337,7 +343,13 @@ static NSString *const kTitle6 = @"分期申请日";
         [CDAutoHideMessageHUD showMessage:@"分期金额不能大于当期账单金额哦"];
         return;
     }
-    if ((self.repaymentModel.instalmentCout != self.originalRepaymentModel.instalmentCout || self.repaymentModel.repaymentMoney != self.originalRepaymentModel.repaymentMoney || self.repaymentModel.poundageRate != self.originalRepaymentModel.poundageRate) && self.repaymentModel.repaymentId.length) {
+    if ((self.repaymentModel.instalmentCout != self.originalRepaymentModel.instalmentCout
+         || self.repaymentModel.repaymentMoney != self.originalRepaymentModel.repaymentMoney
+         || self.repaymentModel.poundageRate != self.originalRepaymentModel.poundageRate)
+        && self.repaymentModel.repaymentId.length) {
+        
+        [self.view endEditing:YES];
+        
         __weak typeof(self) weakSelf = self;
         UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:NULL];
         UIAlertAction *comfirm = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
@@ -347,8 +359,9 @@ static NSString *const kTitle6 = @"分期申请日";
                         [weakSelf.navigationController popToViewController:viewcontroller animated:YES];
                     }
                 }
+                [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
             } failure:^(NSError *error) {
-                
+                [SSJAlertViewAdapter showError:error];
             }];
         }];
         NSString *massage = [NSString stringWithFormat:@"若修改分期还款，则先前生成的%ld期相关流水将被删除并根据新的设置重新生成哦，你确定要执行吗？",(long)self.originalRepaymentModel.instalmentCout];
@@ -365,8 +378,9 @@ static NSString *const kTitle6 = @"分期申请日";
                     [weakSelf.navigationController popToViewController:viewcontroller animated:YES];
                 }
             }
+            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
         } failure:^(NSError *error) {
-            
+            [SSJAlertViewAdapter showError:error];
         }];
         return;
     }
@@ -383,14 +397,14 @@ static NSString *const kTitle6 = @"分期申请日";
                     [weakSelf.navigationController popToViewController:viewcontroller animated:YES];
                 }
             }
+            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
         } failure:^(NSError *error) {
-            
+            [SSJAlertViewAdapter showError:error];
         }];
     }];
     [alert addAction:cancel];
     [alert addAction:comfirm];
-    [self.navigationController presentViewController:alert animated:YES completion:NULL];
-
+    [self.navigationController presentViewController:alert animated:YES completion:NULL];    
 }
 
 #pragma mark - Getter

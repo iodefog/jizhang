@@ -9,27 +9,41 @@
 #import "SSJDomainManager.h"
 #import "AFHTTPSessionManager.h"
 
+static NSString *const SSJDefaultFormalDomain = @"http://jz.youyuwo.com";
+
+static NSString *const SSJTestDomain = @"http://192.168.1.51:10012/";
+
+static NSString *const SSJTestImageDomain = @"http://account.gs.9188.com/jz";
+
 // 请求失败后重试的最大次数
 const int kMaxRequestFailureTimes = 2;
 
 static NSString *const kSSJDomainKey = @"SSJDomainManagerKey";
 
-//static NSString *const kTestDomain = @"http://192.168.83.66:18095/";  // 正式环境
-static NSString *const kTestDomain = @"http://192.168.1.51:10012/";
-static NSString *const kTestImageDomain = @"http://account.gs.9188.com/jz";
-
 @implementation SSJDomainManager
 
 + (NSString *)domain {
-    return kTestDomain;
-//    return [self formalDomain];
-//    return kDefaultDomain;
+#ifdef DEBUG
+    return SSJTestDomain;
+#else
+    return [self formalDomain];
+#endif
 }
 
 + (NSString *)imageDomain {
-    return kTestImageDomain;
-//    return [self formalDomain];
-//    return kDefaultDomain;
+#ifdef DEBUG
+    return SSJTestImageDomain;
+#else
+    return [self formalDomain];
+#endif
+}
+
++ (NSString *)formalDomain {
+    NSString *domain = [[NSUserDefaults standardUserDefaults] stringForKey:kSSJDomainKey];
+    if (domain.length) {
+        return domain;
+    }
+    return SSJDefaultFormalDomain;
 }
 
 + (void)requestDomain {
@@ -67,14 +81,6 @@ static NSString *const kTestImageDomain = @"http://account.gs.9188.com/jz";
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     manager.requestSerializer.timeoutInterval = 60;
     return manager;
-}
-
-+ (NSString *)formalDomain {
-    NSString *domain = [[NSUserDefaults standardUserDefaults] stringForKey:kSSJDomainKey];
-    if (domain.length) {
-        return domain;
-    }
-    return kDefaultDomain;
 }
 
 + (void)validateDomain:(NSString *)domain success:(void (^)(NSString *domain))success failure:(void(^)(NSError *error))failure {

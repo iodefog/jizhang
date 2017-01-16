@@ -23,6 +23,13 @@ NSString* SSJURLWithAPI(NSString* api);
 NSString* SSJImageURLWithAPI(NSString* api);
 
 /**
+ 返回bundle id
+
+ @return bundle id
+ */
+NSString *SSJBundleID();
+
+/**
  *  返回本地APP名字
  *
  *  @return (NSString *)
@@ -74,7 +81,6 @@ NSString *SSJLastPatchVersion();
  */
 BOOL SSJSavePatchVersion(NSInteger patchVersion);
 
-
 /**
  *  返回当前控制器
  *
@@ -90,16 +96,11 @@ UIViewController *SSJVisibalController();
 NSString *SSJDefaultSource();
 
 /**
- *  是否为苹果市场的渠道包
+ 返回苹果商店下载地址
+ 
+ @return 苹果商店下载地址
  */
-BOOL SSJIsAppStoreSource();
-
-/**
- *  返回当前渠道的配置的字典
- *
- *  @return (NSDictionary *)
- */
-NSDictionary* SSJSettingForSource();
+NSString *SSJAppStoreUrl();
 
 /**
  *  返回当前渠道具体配置

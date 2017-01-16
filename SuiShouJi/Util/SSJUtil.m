@@ -27,6 +27,10 @@ NSString* SSJImageURLWithAPI(NSString* api) {
 //    return [[NSURL URLWithString:api relativeToURL:[NSURL URLWithString:[SSJDomainManager imageDomain]]] absoluteString];
 }
 
+NSString *SSJBundleID() {
+    return [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleIdentifier"];
+}
+
 NSString *SSJAppName() {
     NSString *strAppname = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleDisplayName"];
     return strAppname;
@@ -184,35 +188,29 @@ NSDictionary* SSJProjectSettings(){
 NSString* SSJDefaultSource() {
     NSDictionary* dic = SSJProjectSettings();
     if (dic){
-        return [dic objectForKey:@"DefaultSource"];
-    }else {
+        NSDictionary *info = [dic objectForKey:SSJBundleID()];
+        return [info objectForKey:@"source"];
+    } else {
         return nil;
     }
 }
 
-BOOL SSJIsAppStoreSource() {
+NSString *SSJAppStoreUrl() {
     NSDictionary* dic = SSJProjectSettings();
-    NSArray *appStoreSources = [dic objectForKey:@"AppStoreSources"];
-    if ([appStoreSources isKindOfClass:[NSArray class]]) {
-        return [appStoreSources containsObject:SSJDefaultSource()];
-    }
-    return NO;
-}
-
-NSDictionary* SSJSettingForSource(){
-    NSDictionary* dic = SSJProjectSettings();
-    if (dic) {
-        return [[dic objectForKey:@"Setting"] objectForKey:SSJDefaultSource()];
-    }else{
+    if (dic){
+        NSDictionary *info = [dic objectForKey:SSJBundleID()];
+        return [info objectForKey:@"AppStoreUrl"];
+    } else {
         return nil;
     }
 }
 
 NSString* SSJDetailSettingForSource(NSString *key){
     NSDictionary* dic = SSJProjectSettings();
-    if (dic) {
-        return [NSString stringWithFormat:@"%@",[[[dic objectForKey:@"Setting"] objectForKey:SSJDefaultSource()] objectForKey:key]];
-    }else{
+    if (dic){
+        NSDictionary *info = [dic objectForKey:SSJBundleID()];
+        return [info objectForKey:key];
+    } else {
         return nil;
     }
 }

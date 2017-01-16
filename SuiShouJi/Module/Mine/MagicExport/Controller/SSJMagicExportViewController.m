@@ -498,6 +498,7 @@
         UIView *leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 20, _emailTextField.height)];
         _emailTextField.leftView = leftView;
         _emailTextField.leftViewMode = UITextFieldViewModeAlways;
+        _emailTextField.keyboardType = UIKeyboardTypeEmailAddress;
     }
     return _emailTextField;
 }
