@@ -547,12 +547,5 @@ static const void *kShowViewsIdentifier = &kShowViewsIdentifier;
     return [self.layer ssj_takeScreenShotWithSize:size opaque:opaque scale:scale];
 }
 
-- (UIImage *)ssj_takeScreenShotForTableView {
-    if (![self isKindOfClass:[UITableView class]]) {
-        return nil;
-    }
-    return nil;
-}
-
 @end
 
