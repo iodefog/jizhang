@@ -43,7 +43,7 @@ NSString *const SSJShowBillNoteKey = @"SSJShowBillNoteKey";
     self.lineLayer.top = 0;
     self.lineLayer.left = (self.width - self.lineLayer.width) * 0.5;
     self.noteButton.centerX = self.centerX;
-    self.noteButton.top = CGRectGetMaxY(self.lineLayer.frame);
+    self.noteButton.top = CGRectGetMaxY(self.lineLayer.frame) - 18;
     self.closeButton.top = self.noteButton.top + 20;
     self.closeButton.right = self.noteButton.right - 10;
 }
@@ -65,7 +65,7 @@ NSString *const SSJShowBillNoteKey = @"SSJShowBillNoteKey";
 {
     if (!_lineLayer) {
         _lineLayer = [CALayer layer];
-        _lineLayer.size = CGSizeMake(1, 22);
+        _lineLayer.size = CGSizeMake(1, 40);
         _lineLayer.contentsScale = [UIScreen mainScreen].scale;
         [_lineLayer setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha].CGColor];
     }

@@ -146,18 +146,17 @@ static BOOL kNeedBannerDisplay = YES;
         }
     }
 
-    //遍历images、titles生产广告模型
-    [self.adItemsArray removeAllObjects];
-    for (NSInteger i=0; i<self.titles.count; i++) {
-        SSJListAdItem *item = [[SSJListAdItem alloc] init];
-        item.adTitle = [self.titles ssj_safeObjectAtIndex:i];
-        item.imageName = [self.images ssj_safeObjectAtIndex:i];
-        item.imageUrl = nil;
-        item.hidden = NO;
-        item.url = nil;//不需要跳转网页
-        [self.adItemsArray addObject:item];
-    }
-    
+//    //遍历images、titles生产广告模型
+//    [self.adItemsArray removeAllObjects];
+//    for (NSInteger i=0; i<self.titles.count; i++) {
+//        SSJListAdItem *item = [[SSJListAdItem alloc] init];
+//        item.adTitle = [self.titles ssj_safeObjectAtIndex:i];
+//        item.imageName = [self.images ssj_safeObjectAtIndex:i];
+//        item.imageUrl = nil;
+//        item.hidden = NO;
+//        item.url = nil;//不需要跳转网页
+//        [self.adItemsArray addObject:item];
+//    }
     __weak typeof(self) weakSelf = self;
     [self getUserInfo:^(SSJUserInfoItem *item){
         weakSelf.header.item = item;
@@ -375,6 +374,17 @@ static BOOL kNeedBannerDisplay = YES;
     }
     
     //广告
+    //遍历images、titles生产广告模型
+    [self.adItemsArray removeAllObjects];
+    for (NSInteger i=0; i<self.titles.count; i++) {
+        SSJListAdItem *item = [[SSJListAdItem alloc] init];
+        item.adTitle = [self.titles ssj_safeObjectAtIndex:i];
+        item.imageName = [self.images ssj_safeObjectAtIndex:i];
+        item.imageUrl = nil;
+        item.hidden = NO;
+        item.url = nil;//不需要跳转网页
+        [self.adItemsArray addObject:item];
+    }
     for (SSJListAdItem *listAdItem in self.bannerService.item.listAdItems) {
         if (!listAdItem.hidden) {
             [self.adItems addObject:listAdItem];
@@ -388,6 +398,17 @@ static BOOL kNeedBannerDisplay = YES;
 - (void)server:(SSJBaseNetworkService *)service didFailLoadWithError:(NSError *)error
 {
     //广告
+    //遍历images、titles生产广告模型
+    [self.adItemsArray removeAllObjects];
+    for (NSInteger i=0; i<self.titles.count; i++) {
+        SSJListAdItem *item = [[SSJListAdItem alloc] init];
+        item.adTitle = [self.titles ssj_safeObjectAtIndex:i];
+        item.imageName = [self.images ssj_safeObjectAtIndex:i];
+        item.imageUrl = nil;
+        item.hidden = NO;
+        item.url = nil;//不需要跳转网页
+        [self.adItemsArray addObject:item];
+    }
     for (SSJListAdItem *listAdItem in self.bannerService.item.listAdItems) {
         if (!listAdItem.hidden) {
             [self.adItems addObject:listAdItem];
