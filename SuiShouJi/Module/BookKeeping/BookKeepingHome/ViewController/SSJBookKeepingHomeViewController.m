@@ -51,7 +51,7 @@
 #import "SSJLoginViewController+SSJCategory.h"
 #import "SSJRegistGetVerViewController.h"
 
-@interface SSJBookKeepingHomeViewController ()<SSJMultiFunctionButtonDelegate>
+@interface SSJBookKeepingHomeViewController () <UITabBarControllerDelegate, SSJMultiFunctionButtonDelegate>
 
 @property (nonatomic,strong) NSMutableArray *items;
 @property (nonatomic,strong) UIButton *button;
@@ -118,10 +118,36 @@
     return self;
 }
 
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    self.view.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:self.homeBar];
+    [self.view addSubview:self.tableView];
+    [self.view addSubview:self.bookKeepingHeader];
+    [self.view addSubview:self.homeButton];
+    [self.view addSubview:self.statusLabel];
+    [self.view addSubview:self.billStickyNoteView];
+    self.tableView.frame = self.view.frame;
+    //    self.newlyAddChargeArr = [[NSMutableArray alloc]init];
+    //    self.tableView.backgroundColor = [UIColor whiteColor];
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.view.backgroundColor = [UIColor whiteColor];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadAfterBooksTypeChange) name:SSJBooksTypeDidChangeNotification object:nil];
+    [self.mm_drawerController setMaximumLeftDrawerWidth:SSJSCREENWITH * 0.8];
+    [self.mm_drawerController setOpenDrawerGestureModeMask:MMOpenDrawerGestureModeAll];
+    [self.mm_drawerController setCloseDrawerGestureModeMask:MMCloseDrawerGestureModeAll];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(continueLoading) name:SSJHomeContinueLoadingNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(syncDidFail) name:SSJSyncDataFailureNotification object:nil];
+}
+
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    
+    self.tabBarController.delegate = self;
+    
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
+    
     __weak typeof(self) weakSelf = self;
-    [self.navigationController setNavigationBarHidden:YES animated:NO];
     [self.mm_drawerController setGestureCompletionBlock:^(MMDrawerController *drawerController, UIGestureRecognizer *gesture) {
         __strong typeof(weakSelf) sself = weakSelf;
         if (drawerController.openSide == MMDrawerSideNone) {
@@ -169,31 +195,13 @@
     [self whichViewShouldPopToHomeView];//弹框
 }
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    self.view.backgroundColor = [UIColor whiteColor];
-    [self.view addSubview:self.homeBar];
-    [self.view addSubview:self.tableView];
-    [self.view addSubview:self.bookKeepingHeader];
-    [self.view addSubview:self.homeButton];
-    [self.view addSubview:self.statusLabel];
-    [self.view addSubview:self.billStickyNoteView];
-    self.tableView.frame = self.view.frame;
-//    self.newlyAddChargeArr = [[NSMutableArray alloc]init];
-//    self.tableView.backgroundColor = [UIColor whiteColor];
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    self.view.backgroundColor = [UIColor whiteColor];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadAfterBooksTypeChange) name:SSJBooksTypeDidChangeNotification object:nil];
-    [self.mm_drawerController setMaximumLeftDrawerWidth:SSJSCREENWITH * 0.8];
-    [self.mm_drawerController setOpenDrawerGestureModeMask:MMOpenDrawerGestureModeAll];
-    [self.mm_drawerController setCloseDrawerGestureModeMask:MMCloseDrawerGestureModeAll];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(continueLoading) name:SSJHomeContinueLoadingNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(syncDidFail) name:SSJSyncDataFailureNotification object:nil];
-}
-
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
+    // 如果不是present一个控制器就显示导航栏
+    if (!self.navigationController.presentedViewController) {
+        [[self navigationController] setNavigationBarHidden:NO animated:YES];
+    }
 //    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
     self.selectIndex = nil;
     [self getCurrentDate];
@@ -203,10 +211,10 @@
     _dateViewHasDismiss = YES;
 }
 
-- (void)viewDidDisappear:(BOOL)animated{
-    [super viewDidDisappear:animated];
-    [[self navigationController] setNavigationBarHidden:NO animated:NO];
-}
+//- (void)viewDidDisappear:(BOOL)animated{
+//    [super viewDidDisappear:animated];
+//    [[self navigationController] setNavigationBarHidden:NO animated:NO];
+//}
 
 -(void)viewDidLayoutSubviews{
     [super viewDidLayoutSubviews];
@@ -328,6 +336,26 @@
     }
 }
 
+#pragma mark - UITabBarControllerDelegate
+- (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController {
+    if ([viewController isKindOfClass:[UINavigationController class]]) {
+        UINavigationController *naviController = (UINavigationController *)viewController;
+        if (naviController.topViewController == self) {
+            [self.navigationController setNavigationBarHidden:YES animated:NO];
+        }
+    }
+    
+    return YES;
+}
+
+//- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
+//    if ([viewController isKindOfClass:[UINavigationController class]]) {
+//        UINavigationController *naviController = (UINavigationController *)viewController;
+//        if (naviController.topViewController == self) {
+//            [self.navigationController setNavigationBarHidden:YES animated:NO];
+//        }
+//    }
+//}
 
 #pragma mark - UIScrollViewDelegate
 -(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{

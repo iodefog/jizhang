@@ -90,6 +90,10 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
 //    }];
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+}
+
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     [self.searchBar.searchTextInput resignFirstResponder];
