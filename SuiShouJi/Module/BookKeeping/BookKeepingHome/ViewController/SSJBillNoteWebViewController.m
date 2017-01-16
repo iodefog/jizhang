@@ -81,8 +81,11 @@
         [self backButtonClicked];
         return NO;
     }
-    if ([request.URL.absoluteString containsString:@"sharemybill"]) {//分享
+    if ([request.URL.absoluteString containsString:@"sharemybillok"]) {
         [self shareMyBill];//分享
+        return NO;
+    }
+    if ([request.URL.absoluteString containsString:@"lastpage"]) {  
         return NO;
     }
     return YES;
@@ -107,8 +110,7 @@
 {
     //如果截图不存在
     if (!self.shareImage){
-        //切换成静态
-        [self.webView stringByEvaluatingJavaScriptFromString:@"dynamicToStatic();"];
+//        sleep(0.2);
         float height = [[self.webView stringByEvaluatingJavaScriptFromString:@"document.getElementsByClassName('static')[0].offsetHeight;"] floatValue];
         float oldHeight = self.webView.frame.size.height;
         CGRect frame = self.webView.frame;
@@ -117,14 +119,15 @@
         self.webView.frame = frame;
         UIImage *origImage = [self.webView ssj_takeScreenShotWithSize:self.webView.size opaque:YES scale:0];
         self.shareImage = UIImageJPEGRepresentation(origImage, 0.9);
-//        [self saveImageToPhotos:origImage];
+        //        [self saveImageToPhotos:origImage];
         frame.size.height = oldHeight;
         self.webView.frame = frame;
-        
-        //截图完毕回复动图oc调用js方法
-        [self.webView stringByEvaluatingJavaScriptFromString:@"staticToDynamic();"];
     }
+    //截图完毕回复动图oc调用js方法
+    [self.webView stringByEvaluatingJavaScriptFromString:@"staticToDynamic();"];
 }
+
+
 - (void)shareMyBill
 {
     [self screenImage];//截图
@@ -138,7 +141,7 @@
                                          appKey:SSJDetailSettingForSource(@"UMAppKey")
                                       shareText:nil
                                      shareImage:self.shareImage
-                                shareToSnsNames:@[ UMShareToWechatSession, UMShareToWechatTimeline,UMShareToQQ, UMShareToSina]
+                                shareToSnsNames:@[UMShareToWechatTimeline, UMShareToWechatSession, UMShareToQQ, UMShareToSina]
                                        delegate:self];
 //    NSData *imgData = self.shareImage;
 //    QQApiImageObject *imgObj = [QQApiImageObject objectWithData:imgData
@@ -182,11 +185,11 @@
 
 -(void)didSelectSocialPlatform:(NSString *)platformName withSocialData:(UMSocialData *)socialData
 {
-    if (platformName == UMShareToWechatSession) {
+//    if (platformName == UMShareToWechatSession) {
         socialData.shareImage = self.shareImage;
-    }else{
-        
-    }
+//    }else{
+//        
+//    }
 }
 
 
