@@ -45,7 +45,13 @@
     
     [[UIApplication sharedApplication] setStatusBarHidden:YES];
     if (!SSJUSERID().length) return;
-    NSString *urlStr = [NSString stringWithFormat:@"http://192.168.2.192:3000?userid=%@",SSJUSERID()];
+//    NSString *urlStr = [NSString stringWithFormat:@"http://jz.youyuwo.com/5/zd?userid=%@",SSJUSERID()];
+    NSString *urlStr = nil;
+    if (self.urlStr.length) {
+        urlStr = self.urlStr;
+    }else{
+        urlStr = [NSString stringWithFormat:@"http://jz.youyuwo.com/5/zd/?userid=%@",SSJUSERID()];
+    }
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlStr]];
     [self.webView loadRequest:request];
     self.view.backgroundColor = [UIColor whiteColor];

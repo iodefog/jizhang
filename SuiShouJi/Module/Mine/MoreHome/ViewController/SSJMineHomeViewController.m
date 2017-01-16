@@ -49,6 +49,7 @@
 #import "SSJHeaderBannerImageView.h"
 #import "SSJProductAdviceViewController.h"
 #import "SSJPersonalDetailItem.h"
+#import "SSJBillNoteWebViewController.h"
 
 static NSString *const kTitle1 = @"提醒";
 static NSString *const kTitle2 = @"主题皮肤";
@@ -386,7 +387,7 @@ static BOOL kNeedBannerDisplay = YES;
         [self.adItemsArray addObject:item];
     }
     for (SSJListAdItem *listAdItem in self.bannerService.item.listAdItems) {
-        if (!listAdItem.hidden) {
+        if (listAdItem.hidden) {
             [self.adItems addObject:listAdItem];
            NSInteger index = [self.adItems indexOfObject:listAdItem];
             [self.adItemsArray insertObject:listAdItem atIndex:index];
@@ -685,8 +686,19 @@ static BOOL kNeedBannerDisplay = YES;
 #pragma mark - headerBannerImageView
 - (void)pushToViewControllerWithUrl:(NSString *)urlStr
 {
+    if ([urlStr containsString:@"http://jz.youyuwo.com/5/zd/"]) {
+        SSJBillNoteWebViewController *bilVc = [[SSJBillNoteWebViewController alloc] init];
+        bilVc.urlStr = urlStr;
+        [self presentViewController:bilVc animated:YES completion:nil];
+        return;
+    }
     SSJAdWebViewController *webVc = [SSJAdWebViewController webViewVCWithURL:[NSURL URLWithString:urlStr]];
     [self.navigationController pushViewController:webVc animated:YES];
+}
+
+- (void)pushToViewControllerWithVC:(UIViewController *)vc
+{
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)closeBanner

@@ -13,6 +13,7 @@
 @protocol SSJHeaderBannerImageViewDelegate <NSObject>
 
 - (void)pushToViewControllerWithUrl:(NSString *)urlStr;
+- (void)pushToViewControllerWithVC:(UIViewController *)vc;
 - (void)closeBanner;
 
 @end

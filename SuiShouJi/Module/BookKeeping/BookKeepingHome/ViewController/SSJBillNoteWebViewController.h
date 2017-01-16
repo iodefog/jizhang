@@ -11,5 +11,8 @@
 @interface SSJBillNoteWebViewController : UIViewController
 
 @property (nonatomic, copy) void(^backButtonClickBlock)();
-
+/**
+ <#注释#>
+ */
+@property (nonatomic, copy) NSString *urlStr;
 @end
