@@ -9,7 +9,7 @@
 //#import "SSJNormalWebViewController.h"
 
 @interface SSJBillNoteWebViewController : UIViewController
-//SSJNormalWebViewController
-//
+
+@property (nonatomic, copy) void(^backButtonClickBlock)();
 
 @end

@@ -102,6 +102,9 @@
 - (void)backButtonClicked
 {
     [self dismissViewControllerAnimated:YES completion:nil];
+    if (self.backButtonClickBlock) {
+        self.backButtonClickBlock();
+    }
 }
 
 #pragma mark - Private

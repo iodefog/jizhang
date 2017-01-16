@@ -232,7 +232,6 @@
         if (!haveShowTheNoteView) {
             self.tableView.top = self.billStickyNoteView.bottom;
             self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.billStickyNoteView.bottom - SSJ_TABBAR_HEIGHT);
-            self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
         } else {
             self.tableView.top = self.bookKeepingHeader.bottom;
             self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.bookKeepingHeader.bottom - SSJ_TABBAR_HEIGHT);
@@ -247,6 +246,7 @@
             self.tableView.top = self.bookKeepingHeader.bottom;
             self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.bookKeepingHeader.bottom);
             self.tableView.contentInset = UIEdgeInsetsMake(46, 0, SSJ_TABBAR_HEIGHT, 0);
+            self.tableView.contentOffset = CGPointMake(0, 46);
         }
     }
     self.clearView.frame = self.view.frame;
@@ -646,8 +646,8 @@
     if (!_billStickyNoteView) {
         _billStickyNoteView = [[SSJHomeBillStickyNoteView alloc] init];
         _billStickyNoteView.closeBillNoteBlock = ^{
-            [weakSelf.tableView setContentOffset:CGPointMake(0, 0)];
             [weakSelf.view layoutIfNeeded];
+            [weakSelf.tableView setContentOffset:CGPointMake(0, -46)];
         };
         
         _billStickyNoteView.openBillNoteBlock = ^{
@@ -661,6 +661,9 @@
             }else{
                 //跳转2016账单
                 SSJBillNoteWebViewController *billVC = [[SSJBillNoteWebViewController alloc] init];
+                billVC.backButtonClickBlock = ^(){
+                    [weakSelf.tableView setContentOffset:CGPointMake(0, -46)];
+                };
                 billVC.hidesBottomBarWhenPushed = YES;
 //                [weakSelf.navigationController pushViewController:billVC animated:YES];
                 [weakSelf presentViewController:billVC animated:YES completion:nil];
