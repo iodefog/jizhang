@@ -204,4 +204,6 @@
  */
 - (UIImage *)ssj_takeScreenShotWithSize:(CGSize)size opaque:(BOOL)opaque scale:(CGFloat)scale;
 
+- (UIImage *)ssj_takeScreenShotForTableView;
+
 @end
