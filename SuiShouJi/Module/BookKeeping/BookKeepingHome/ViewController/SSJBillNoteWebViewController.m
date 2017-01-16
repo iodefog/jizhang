@@ -9,6 +9,7 @@
 #import "SSJBillNoteWebViewController.h"
 #import "UMSocial.h"
 #import "SSJViewAddition.h"
+#import <TencentOpenAPI/QQApiInterface.h>
 @interface SSJBillNoteWebViewController ()<UIWebViewDelegate,UMSocialUIDelegate,UIScrollViewDelegate>
 //
 /**
@@ -115,7 +116,7 @@
         self.webView.scrollView.contentSize = CGSizeMake(0, height);
         self.webView.frame = frame;
         UIImage *origImage = [self.webView ssj_takeScreenShotWithSize:self.webView.size opaque:YES scale:0];
-        self.shareImage = UIImageJPEGRepresentation(origImage, 1);
+        self.shareImage = UIImageJPEGRepresentation(origImage, 0.9);
 //        [self saveImageToPhotos:origImage];
         frame.size.height = oldHeight;
         self.webView.frame = frame;
@@ -139,6 +140,15 @@
                                      shareImage:self.shareImage
                                 shareToSnsNames:@[ UMShareToWechatSession, UMShareToWechatTimeline,UMShareToQQ, UMShareToSina]
                                        delegate:self];
+//    NSData *imgData = self.shareImage;
+//    QQApiImageObject *imgObj = [QQApiImageObject objectWithData:imgData
+//                                               previewImageData:nil
+//                                                          title:@"QQ互联测试"
+//                                                    description:@"QQ互联测试分享"];
+//    SendMessageToQQReq *req = [SendMessageToQQReq reqWithContent:imgObj];
+//
+//    //将内容分享到qq
+//    QQApiSendResultCode sent = [QQApiInterface sendReq:req];
 }
 - (void)saveImageToPhotos:(UIImage *)image{
     //用C语言
