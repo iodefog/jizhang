@@ -138,7 +138,7 @@ static NSString *const kHeadBannerCellID = @"SSJHeaderBannerCollectionViewCellID
             return;
         }
         if (self.delegate && [self.delegate respondsToSelector:@selector(pushToViewControllerWithUrl:)]) {
-            [self.delegate pushToViewControllerWithUrl:[NSString stringWithFormat:@"%@?cuserid=%@",item.bannerUrl,SSJUSERID()]];
+            [self.delegate pushToViewControllerWithUrl:[NSString stringWithFormat:@"%@?cuserId=%@",item.bannerUrl,SSJUSERID()]];
         }
     }else{
         if (self.delegate && [self.delegate respondsToSelector:@selector(pushToViewControllerWithUrl:)]) {
