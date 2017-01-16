@@ -50,7 +50,7 @@
     if (self.urlStr.length) {
         urlStr = self.urlStr;
     }else{
-        urlStr = [NSString stringWithFormat:@"http://jz.youyuwo.com/5/zd/?userid=%@",SSJUSERID()];
+        urlStr = [NSString stringWithFormat:@"http://jz.youyuwo.com/5/zd/?cuserid=%@",SSJUSERID()];
     }
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlStr]];
     [self.webView loadRequest:request];
