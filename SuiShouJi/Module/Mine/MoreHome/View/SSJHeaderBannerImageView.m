@@ -10,6 +10,7 @@
 #import "SSJHeaderBannerCollectionViewCell.h"
 #import "SSJAdWebViewController.h"
 #import "SSJBannerItem.h"
+#import "SSJLoginViewController.h"
 @interface SSJHeaderBannerImageView()<UICollectionViewDelegateFlowLayout,UICollectionViewDataSource,UICollectionViewDelegate>
 @property (nonatomic, strong) UICollectionView *collectionView;
 /**
@@ -123,10 +124,31 @@ static NSString *const kHeadBannerCellID = @"SSJHeaderBannerCollectionViewCellID
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     SSJBannerItem *item = self.bannerItemArray[indexPath.item];
-    if (self.delegate && [self.delegate respondsToSelector:@selector(pushToViewControllerWithUrl:)]) {
-        [self.delegate pushToViewControllerWithUrl:item.bannerUrl];
+    //是账单
+    if ([item.bannerUrl containsString:@"http://jz.youyuwo.com/5/zd"]) {
+        if (!SSJIsUserLogined()) {
+            __weak typeof(self) weakSelf = self;
+            [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:@"请登录后再查看2016账单吧！" action:[SSJAlertViewAction actionWithTitle:@"关闭" handler:^(SSJAlertViewAction *action) {
+            }],[SSJAlertViewAction actionWithTitle:@"立即登录" handler:^(SSJAlertViewAction *action) {
+                if (weakSelf.delegate && [weakSelf.delegate respondsToSelector:@selector(pushToViewControllerWithVC:)]) {
+                    SSJLoginViewController *loginVC = [[SSJLoginViewController alloc] init];
+                    [weakSelf.delegate pushToViewControllerWithVC:loginVC];
+                }
+            }],nil];
+            return;
+        }
+        if (self.delegate && [self.delegate respondsToSelector:@selector(pushToViewControllerWithUrl:)]) {
+            [self.delegate pushToViewControllerWithUrl:[NSString stringWithFormat:@"%@?cuserid=%@",item.bannerUrl,SSJUSERID()]];
+        }
+    }else{
+        if (self.delegate && [self.delegate respondsToSelector:@selector(pushToViewControllerWithUrl:)]) {
+            [self.delegate pushToViewControllerWithUrl:item.bannerUrl];
+        }
+
     }
-}
+
+    
+    }
 
 
 @end
