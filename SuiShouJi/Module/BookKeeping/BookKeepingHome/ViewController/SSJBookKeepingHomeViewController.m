@@ -177,14 +177,7 @@
     [self.view addSubview:self.bookKeepingHeader];
     [self.view addSubview:self.homeButton];
     [self.view addSubview:self.statusLabel];
-    //判断是否显示过2016账单
-#warning fffffffffffffffffff
-    //    if (![[[NSUserDefaults standardUserDefaults] objectForKey:SSJShowBillNoteKey] isEqualToString:@"1"]) {//没显示过
-    //显示
     [self.view addSubview:self.billStickyNoteView];
-    
-    //    }
-
     self.tableView.frame = self.view.frame;
 //    self.newlyAddChargeArr = [[NSMutableArray alloc]init];
 //    self.tableView.backgroundColor = [UIColor whiteColor];
@@ -201,7 +194,6 @@
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
-    [[self navigationController] setNavigationBarHidden:NO animated:NO];
 //    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
     self.selectIndex = nil;
     [self getCurrentDate];
@@ -209,6 +201,11 @@
     [self.floatingDateView dismiss];
     [self.mutiFunctionButton dismiss];
     _dateViewHasDismiss = YES;
+}
+
+- (void)viewDidDisappear:(BOOL)animated{
+    [super viewDidDisappear:animated];
+    [[self navigationController] setNavigationBarHidden:NO animated:NO];
 }
 
 -(void)viewDidLayoutSubviews{
