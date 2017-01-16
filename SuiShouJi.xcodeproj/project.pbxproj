@@ -1042,11 +1042,6 @@
 		91E0B9A21E01244900D8516E /* SSJBookKeepingHomeEvaluatePopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 91E0B9921E01140900D8516E /* SSJBookKeepingHomeEvaluatePopView.m */; };
 		91E0B9A31E01244A00D8516E /* SSJBookKeepingHomeEvaluatePopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 91E0B9921E01140900D8516E /* SSJBookKeepingHomeEvaluatePopView.m */; };
 		91E0B9A41E01244A00D8516E /* SSJBookKeepingHomeEvaluatePopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 91E0B9921E01140900D8516E /* SSJBookKeepingHomeEvaluatePopView.m */; };
-		91EBE4351E000139002564C4 /* SSJMoreProductAdviceTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 91EBE4341E000139002564C4 /* SSJMoreProductAdviceTableViewCell.xib */; };
-		91EBE4361E000139002564C4 /* SSJMoreProductAdviceTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 91EBE4341E000139002564C4 /* SSJMoreProductAdviceTableViewCell.xib */; };
-		91EBE4371E000139002564C4 /* SSJMoreProductAdviceTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 91EBE4341E000139002564C4 /* SSJMoreProductAdviceTableViewCell.xib */; };
-		91EBE4381E000139002564C4 /* SSJMoreProductAdviceTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 91EBE4341E000139002564C4 /* SSJMoreProductAdviceTableViewCell.xib */; };
-		91EBE4391E000139002564C4 /* SSJMoreProductAdviceTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 91EBE4341E000139002564C4 /* SSJMoreProductAdviceTableViewCell.xib */; };
 		91F7FD1B1DFA7D3C005F4B6B /* SSJMoreProductAdviceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 91F7FD1A1DFA7D3C005F4B6B /* SSJMoreProductAdviceTableViewCell.m */; };
 		91F7FD1C1DFA7D3C005F4B6B /* SSJMoreProductAdviceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 91F7FD1A1DFA7D3C005F4B6B /* SSJMoreProductAdviceTableViewCell.m */; };
 		91F7FD1D1DFA7D3C005F4B6B /* SSJMoreProductAdviceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 91F7FD1A1DFA7D3C005F4B6B /* SSJMoreProductAdviceTableViewCell.m */; };
@@ -3452,7 +3447,6 @@
 		91C2E81A1DF7D69E003ADABE /* SSJMineHomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMineHomeViewController.m; sourceTree = "<group>"; };
 		91E0B9911E01140900D8516E /* SSJBookKeepingHomeEvaluatePopView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookKeepingHomeEvaluatePopView.h; sourceTree = "<group>"; };
 		91E0B9921E01140900D8516E /* SSJBookKeepingHomeEvaluatePopView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBookKeepingHomeEvaluatePopView.m; sourceTree = "<group>"; };
-		91EBE4341E000139002564C4 /* SSJMoreProductAdviceTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SSJMoreProductAdviceTableViewCell.xib; sourceTree = "<group>"; };
 		91F7FD191DFA7D3C005F4B6B /* SSJMoreProductAdviceTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMoreProductAdviceTableViewCell.h; sourceTree = "<group>"; };
 		91F7FD1A1DFA7D3C005F4B6B /* SSJMoreProductAdviceTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMoreProductAdviceTableViewCell.m; sourceTree = "<group>"; };
 		91F7FD271DFA8CD3005F4B6B /* SSJChatMessageItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJChatMessageItem.h; sourceTree = "<group>"; };
@@ -6332,7 +6326,6 @@
 				916E32071DF967C1003C18D4 /* SSJProductAdviceTableHeaderView.m */,
 				91F7FD191DFA7D3C005F4B6B /* SSJMoreProductAdviceTableViewCell.h */,
 				91F7FD1A1DFA7D3C005F4B6B /* SSJMoreProductAdviceTableViewCell.m */,
-				91EBE4341E000139002564C4 /* SSJMoreProductAdviceTableViewCell.xib */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -7452,7 +7445,6 @@
 				7DBA589F1D6D32B700C02D79 /* yw_1222.jpg in Resources */,
 				7DBA58CA1D6D32B700C02D79 /* sr_refresh.png in Resources */,
 				7DBA59381D6D32B700C02D79 /* ProjectSettings.plist in Resources */,
-				91EBE4371E000139002564C4 /* SSJMoreProductAdviceTableViewCell.xib in Resources */,
 				7DC4875D1DF6629700C27B69 /* Localizable.strings in Resources */,
 				9CFBAC3B1E07D4E300C55814 /* homeDefualtLoading.gif in Resources */,
 				9CFBAC3F1E07D4EC00C55814 /* xiaomao.gif in Resources */,
@@ -7476,7 +7468,6 @@
 				9C2A69511D194CA70010F1DA /* SSJBookKeepingHomePopView.xib in Resources */,
 				9C2A69871D194CA70010F1DA /* rain_sound.wav in Resources */,
 				9C2A69AD1D194CA70010F1DA /* Assets.xcassets in Resources */,
-				91EBE4361E000139002564C4 /* SSJMoreProductAdviceTableViewCell.xib in Resources */,
 				9C2A69C31D194CA70010F1DA /* yw_1222.jpg in Resources */,
 				7DC4875C1DF6629700C27B69 /* Localizable.strings in Resources */,
 				9C2A69EE1D194CA70010F1DA /* sr_refresh.png in Resources */,
@@ -7503,7 +7494,6 @@
 				9CEC02131D6D41EB00DB2C8B /* yw_1222.jpg in Resources */,
 				9CEC023E1D6D41EB00DB2C8B /* sr_refresh.png in Resources */,
 				9CEC02AD1D6D41EB00DB2C8B /* ProjectSettings.plist in Resources */,
-				91EBE4391E000139002564C4 /* SSJMoreProductAdviceTableViewCell.xib in Resources */,
 				7DC4875F1DF6629700C27B69 /* Localizable.strings in Resources */,
 				9CFBAC3D1E07D4E600C55814 /* homeDefualtLoading.gif in Resources */,
 				9CFBAC411E07D4EC00C55814 /* xiaomao.gif in Resources */,
@@ -7529,7 +7519,6 @@
 				9CECFE1B1D6D41A700DB2C8B /* yw_1222.jpg in Resources */,
 				9CECFE461D6D41A700DB2C8B /* sr_refresh.png in Resources */,
 				9CECFEB51D6D41A700DB2C8B /* ProjectSettings.plist in Resources */,
-				91EBE4381E000139002564C4 /* SSJMoreProductAdviceTableViewCell.xib in Resources */,
 				7DC4875E1DF6629700C27B69 /* Localizable.strings in Resources */,
 				9CFBAC3C1E07D4E600C55814 /* homeDefualtLoading.gif in Resources */,
 				9CFBAC401E07D4EC00C55814 /* xiaomao.gif in Resources */,
@@ -7559,7 +7548,6 @@
 				9CFBAC321E07D4DE00C55814 /* homeDefualtLoading.gif in Resources */,
 				9CAF731E1E03EAE50061ADB8 /* homeLoading.gif in Resources */,
 				7D4EF8941C4B5625003C4B20 /* ProjectSettings.plist in Resources */,
-				91EBE4351E000139002564C4 /* SSJMoreProductAdviceTableViewCell.xib in Resources */,
 				7DC4875B1DF6629700C27B69 /* Localizable.strings in Resources */,
 				9C94717C1CEB224C00D69079 /* SSJFinancingHomePopView.xib in Resources */,
 				BD543C4A1C1A6DBC00910D61 /* Main.storyboard in Resources */,
