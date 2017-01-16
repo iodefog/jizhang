@@ -11,21 +11,33 @@
 #import "SSJPersonalDetailHelper.h"
 #import "UIImageView+CornerRadius.h"
 @interface SSJMoreProductAdviceTableViewCell()
-@property (weak, nonatomic) IBOutlet UILabel *timeLabel;
-@property (weak, nonatomic) IBOutlet UIButton *textButton;
-@property (weak, nonatomic) IBOutlet UIButton *otherTextButton;
-@property (weak, nonatomic) IBOutlet UIImageView *otherIconView;
-@property (weak, nonatomic) IBOutlet UIImageView *iconView;
+//@property (weak, nonatomic) IBOutlet UILabel *timeLabel;
+//@property (weak, nonatomic) IBOutlet UIButton *textButton;
+//@property (weak, nonatomic) IBOutlet UIButton *otherTextButton;
+//@property (weak, nonatomic) IBOutlet UIImageView *otherIconView;
+//@property (weak, nonatomic) IBOutlet UIImageView *iconView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *timeHeightConst;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *otherButtonWidthConst;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *buttonWidthConst;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *textBtnHeightConst;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *otherTextBtnHeightConst;
 
+@property (strong, nonatomic) UILabel *timeLabel;
+@property (strong, nonatomic) UIButton *textButton;
+@property (strong, nonatomic) UIButton *otherTextButton;
+@property (strong, nonatomic) UIImageView *otherIconView;
+@property (strong, nonatomic) UIImageView *iconView;
 
 @end
 @implementation SSJMoreProductAdviceTableViewCell
 
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    if (self = [super initWithFrame:frame]) {
+        
+    }
+    return self;
+}
 - (void)awakeFromNib
 {
     [super awakeFromNib];
@@ -46,7 +58,7 @@
     [_textButton.titleLabel setPreferredMaxLayoutWidth:SSJSCREENWITH - 2*(_iconView.width + 25)];
     [_otherTextButton.titleLabel setPreferredMaxLayoutWidth:SSJSCREENWITH - 2*(_iconView.width + 25)];
     
-    _textButton.layer.cornerRadius = 5;
+    
     _otherTextButton.layer.cornerRadius = 5;
     [_textButton clipsToBounds];
     [_otherTextButton clipsToBounds];
@@ -123,5 +135,35 @@
     bounds=[string boundingRectWithSize:CGSizeMake(width, CGFLOAT_MAX) options:NSStringDrawingTruncatesLastVisibleLine|NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin attributes:parameterDict context:nil];
     return bounds.size.height;
 }
+
+#pragma mark - Lazy
+- (UILabel *)timeLabel
+{
+    if (!_timeLabel) {
+        _timeLabel = [[UILabel alloc] init];
+    }
+    return _timeLabel;
+}
+
+- (UIButton *)textButton
+{
+    if (!_textButton) {
+        _textButton = [[UIButton alloc] init];
+        _textButton.backgroundColor = [UIColor ssj_colorWithHex:@"DDDDDD"];
+        _textButton.layer.cornerRadius = 5;
+    }
+    return _textButton;
+}
+
+- (UIButton *)otherTextButton
+{
+    if (!_otherTextButton) {
+        _otherTextButton = [[UIButton alloc] init];
+        _otherTextButton.backgroundColor = [UIColor ssj_colorWithHex:@"FDEDEF"];
+        _otherTextButton.layer.cornerRadius = 5;
+    }
+    return _otherTextButton;
+}
+
 
 @end
