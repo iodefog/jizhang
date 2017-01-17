@@ -401,7 +401,7 @@ static BOOL kNeedBannerDisplay = YES;
         [self.adItemsArray addObject:item];
     }
     for (SSJListAdItem *listAdItem in self.bannerService.item.listAdItems) {
-        if (!listAdItem.hidden) {
+        if (listAdItem.hidden) {
             [self.adItems addObject:listAdItem];
             NSInteger index = [self.adItems indexOfObject:listAdItem];
             [self.adItemsArray insertObject:listAdItem atIndex:index];
