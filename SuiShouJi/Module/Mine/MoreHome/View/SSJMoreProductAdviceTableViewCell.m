@@ -50,7 +50,7 @@
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    self.timeLabel.frame = CGRectMake(0, 10, self.width, self.timeLabelHeight);
+    self.timeLabel.frame = CGRectMake(0, 10, self.width, 21);
     self.otherIconView.frame = CGRectMake(20, CGRectGetMaxY(self.timeLabel.frame) + 2, 30, 30);
     self.otherTextButton.left = CGRectGetMaxX(self.otherIconView.frame) + 10;
     self.iconView.right = self.width - 20;
@@ -135,6 +135,9 @@
 {
     if (!_timeLabel) {
         _timeLabel = [[UILabel alloc] init];
+        _timeLabel.textAlignment = NSTextAlignmentCenter;
+        _timeLabel.font = [UIFont systemFontOfSize:12];
+        _timeLabel.textColor = [UIColor ssj_colorWithHex:@"999999"];
     }
     return _timeLabel;
 }
@@ -147,6 +150,8 @@
         _textButton.layer.cornerRadius = 5;
         _textButton.titleLabel.numberOfLines = 0;
         [_textButton clipsToBounds];
+        [_textButton setTitleColor:[UIColor ssj_colorWithHex:@"333333"] forState:UIControlStateNormal];
+        _textButton.titleLabel.font = [UIFont systemFontOfSize:16];
         [_textButton.titleLabel setPreferredMaxLayoutWidth:SSJSCREENWITH - 2*(_iconView.width + 25)];
     }
     return _textButton;
@@ -159,6 +164,9 @@
         _otherTextButton.backgroundColor = [UIColor ssj_colorWithHex:@"FDEDEF"];
         _otherTextButton.layer.cornerRadius = 5;
         _otherTextButton.titleLabel.numberOfLines = 0;
+        [_otherTextButton clipsToBounds];
+        [_otherTextButton setTitleColor:[UIColor ssj_colorWithHex:@"333333"] forState:UIControlStateNormal];
+        _otherTextButton.titleLabel.font = [UIFont systemFontOfSize:16];
         [_otherIconView clipsToBounds];
         [_otherTextButton.titleLabel setPreferredMaxLayoutWidth:SSJSCREENWITH - 2*(_iconView.width + 25)];
     }
