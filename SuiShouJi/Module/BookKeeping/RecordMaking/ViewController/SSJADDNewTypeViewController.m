@@ -363,10 +363,11 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 
 #pragma mark - private
 - (void)loadData {
-    [self.view ssj_showLoadingIndicator];
+    
     if (_titleSegmentView.selectedSegmentIndex == 0
         && _featuredCategoryCollectionView.items.count == 0) {
         
+        [self.view ssj_showLoadingIndicator];
         [SSJCategoryListHelper queryForUnusedCategoryListWithIncomeOrExpenture:_incomeOrExpence
                                                                         custom:0
                                                                        booksId:self.booksId
@@ -391,6 +392,7 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
         if (self.customCategorySwitchConrol.selectedIndex == 0
             && _customCategoryCollectionView.items.count == 0) {
             
+            [self.view ssj_showLoadingIndicator];
             [SSJCategoryListHelper queryForUnusedCategoryListWithIncomeOrExpenture:_incomeOrExpence
                                                                             custom:1
                                                                            booksId:self.booksId
@@ -414,6 +416,7 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
         } else if (self.customCategorySwitchConrol.selectedIndex == 1
                    && _newOrEditCategoryView.images.count == 0) {
             // 查询自定义类别图标
+            [self.view ssj_showLoadingIndicator];
             [SSJCategoryListHelper queryCustomCategoryImagesWithIncomeOrExpenture:_incomeOrExpence success:^(NSArray<NSString *> *images) {
                 [self.view ssj_hideLoadingIndicator];
                 [self updateButtons];

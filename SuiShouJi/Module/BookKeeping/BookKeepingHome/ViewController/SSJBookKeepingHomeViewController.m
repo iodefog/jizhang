@@ -958,9 +958,7 @@
         }else{
             self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.bookKeepingHeader.bottom);
         }
-    } completion:^(BOOL finished) {
-        
-    }];
+    } completion:NULL];
 }
 
 - (void)whichViewShouldPopToHomeView
