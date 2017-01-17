@@ -43,7 +43,6 @@
 //    
 //    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"navigation_backOff"] style:UIBarButtonItemStylePlain target:self action:@selector(backButtonClicked)];
     
-    [[UIApplication sharedApplication] setStatusBarHidden:YES];
     if (!SSJUSERID().length) return;
 //    NSString *urlStr = [NSString stringWithFormat:@"http://jz.youyuwo.com/5/zd?userid=%@",SSJUSERID()];
     NSString *urlStr = nil;
@@ -201,6 +200,9 @@
 //    }
 }
 
-
-
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [[UIApplication sharedApplication] setStatusBarHidden:NO];
+}
 @end
