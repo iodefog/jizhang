@@ -128,12 +128,11 @@ NSString *SSJPhoneModel(){
 
 UIViewController* SSJFindTopModelViewController(UIViewController* vc){
     if (vc.presentedViewController) {
-        UIViewController *presenter = vc.presentedViewController;
-        while (presenter) {
-            if ([presenter isKindOfClass:[UIAlertController class]]) {
+        while (vc.presentedViewController) {
+            if ([vc.presentedViewController isKindOfClass:[UIAlertController class]]) {
                 break;
             }
-            vc = presenter;
+            vc = vc.presentedViewController;
         }
     }
     
