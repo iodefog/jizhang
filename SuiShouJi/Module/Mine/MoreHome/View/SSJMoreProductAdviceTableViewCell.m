@@ -50,14 +50,20 @@
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    self.timeLabel.frame = CGRectMake(0, 10, self.width, 21);
-    self.otherIconView.frame = CGRectMake(20, CGRectGetMaxY(self.timeLabel.frame) + 2, 30, 30);
+    self.timeLabel.leftTop = CGPointMake(0, 10);
+    self.timeLabel.width = self.width;
+    self.otherIconView.left = 20;
     self.otherTextButton.left = CGRectGetMaxX(self.otherIconView.frame) + 10;
     self.iconView.right = self.width - 20;
     self.textButton.right = CGRectGetMinX(self.iconView.frame) - 10;
-    self.otherTextButton.top = self.otherIconView.top = self.textButton.top = self.iconView.top;
+    
 }
 
+- (void)displayFrame
+{
+//    self.otherTextButton.top = self.timeLabelHeight + 10;
+    self.otherTextButton.top = self.otherIconView.top = self.textButton.top = self.iconView.top = self.timeLabelHeight + 10;
+}
 
 + (SSJMoreProductAdviceTableViewCell *)cellWithTableView:(UITableView *)tableView
 {
@@ -86,8 +92,8 @@
         [self settingShowTextButton:self.textButton showIconView:self.iconView hideTextButton:self.otherTextButton hideIconView:self.otherIconView];
     }else{//系统回复
         [self settingShowTextButton:self.otherTextButton showIconView:self.otherIconView hideTextButton:self.textButton hideIconView:self.iconView];
-        
     }
+    [self displayFrame];//布局frame
 }
 
 /**
@@ -107,13 +113,14 @@
     }else if(self.message.isSystem == YES){//系统
         [showTextButton setTitle:self.message.content forState:UIControlStateNormal];
     }
+    CGSize size = [self heightOfString:showTextButton.titleLabel.text font:[UIFont systemFontOfSize:16] width:SSJSCREENWITH - 2*(_iconView.width + 30)];
     // 设置按钮的高度就是titleLabel的高度
-    CGFloat buttonH = [self heightOfString:showTextButton.titleLabel.text font:[UIFont systemFontOfSize:16] width:SSJSCREENWITH - 2*(_iconView.width + 30)].height + 20;
+    CGFloat buttonH = size.height + 20;
+    CGFloat buttonW = size.width + 20;
     showTextButton.height = buttonH;
+    showTextButton.width = buttonW;
     hideTextButton.height = 0;
-    
-    // 强制更新
-    [showTextButton layoutIfNeeded];
+    hideTextButton.width = 0;
     
     // 计算当前cell的高度
     CGFloat timeH = self.message.isHiddenTime == YES ? 0 : 21;
@@ -149,6 +156,7 @@
         _textButton.backgroundColor = [UIColor ssj_colorWithHex:@"DDDDDD"];
         _textButton.layer.cornerRadius = 5;
         _textButton.titleLabel.numberOfLines = 0;
+        _textButton.titleEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10);
         [_textButton clipsToBounds];
         [_textButton setTitleColor:[UIColor ssj_colorWithHex:@"333333"] forState:UIControlStateNormal];
         _textButton.titleLabel.font = [UIFont systemFontOfSize:16];
@@ -164,6 +172,7 @@
         _otherTextButton.backgroundColor = [UIColor ssj_colorWithHex:@"FDEDEF"];
         _otherTextButton.layer.cornerRadius = 5;
         _otherTextButton.titleLabel.numberOfLines = 0;
+        _otherTextButton.titleEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10);
         [_otherTextButton clipsToBounds];
         [_otherTextButton setTitleColor:[UIColor ssj_colorWithHex:@"333333"] forState:UIControlStateNormal];
         _otherTextButton.titleLabel.font = [UIFont systemFontOfSize:16];
