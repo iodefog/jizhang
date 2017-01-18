@@ -22,8 +22,8 @@
 
 
 @interface SSJCalendarViewController ()
+
 @property (nonatomic,strong) UIBarButtonItem *rightBarButton;
-@property (nonatomic,strong) SSJCalendarView *calendarView;
 @property (nonatomic,strong) UILabel *dateLabel;
 @property (nonatomic,strong) UIButton *plusButton;
 @property (nonatomic,strong) UIButton *minusButton;
@@ -32,11 +32,16 @@
 @property (nonatomic,strong) UILabel *firstLineLabel;
 @property (nonatomic,strong) UILabel *secondLineLabel;
 @property (nonatomic,strong) UIButton *recordMakingButton;
+@property(nonatomic, strong) UITableView *tableView;
+
+@property(nonatomic, strong) SSJCalenderTableViewNoDataHeader *nodataHeader;
+@property (nonatomic,strong) SSJCalendarView *calendarView;
+@property(nonatomic, strong) UIButton *shareButton;
+
 @property (nonatomic,strong) NSMutableArray *items;
 @property (nonatomic,strong) NSString *selectDate;
 @property (nonatomic,strong) NSMutableDictionary *data;
-@property(nonatomic, strong) SSJCalenderTableViewNoDataHeader *nodataHeader;
-@property(nonatomic, strong) UITableView *tableView;
+
 @property (nonatomic) long selectedYear;
 @property (nonatomic) long selectedMonth;
 @property (nonatomic) long selectedDay;
@@ -258,7 +263,22 @@
     return _nodataHeader;
 }
 
-
+- (UIButton *)shareButton {
+    if (!_shareButton) {
+        _shareButton = [[UIButton alloc]initWithFrame:CGRectMake(0, self.view.height - 50, self.view.width, 50)];
+        [_shareButton setTitle:@"还款" forState:UIControlStateNormal];
+        [_shareButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        if ([SSJCurrentThemeID() isEqualToString:SSJDefaultThemeID]) {
+            [_shareButton setTitleColor:[UIColor ssj_colorWithHex:@"#373737"] forState:UIControlStateNormal];
+            [_shareButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"#CCCCCC" alpha:0.8] forState:UIControlStateNormal];
+        } else{
+            [_shareButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] forState:UIControlStateNormal];
+            [_shareButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor alpha:0.8] forState:UIControlStateNormal];
+        }
+        [_shareButton addTarget:self action:@selector(shareButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _shareButton;
+}
 
 #pragma mark - private
 -(void)getCurrentDate{

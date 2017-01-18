@@ -1844,6 +1844,11 @@
 		9CC0AEC81DEEE12F0085AC65 /* 9188.cer in Resources */ = {isa = PBXBuildFile; fileRef = 9C23EA4C1DDAD4FE0003C5AB /* 9188.cer */; };
 		9CC0AED01DEEE12F0085AC65 /* 9188.cer in Resources */ = {isa = PBXBuildFile; fileRef = 9C23EA4C1DDAD4FE0003C5AB /* 9188.cer */; };
 		9CC0AED11DEEE1300085AC65 /* 9188.cer in Resources */ = {isa = PBXBuildFile; fileRef = 9C23EA4C1DDAD4FE0003C5AB /* 9188.cer */; };
+		9CC0B2B11E2DEFF800495D53 /* SSJCalenderScreenShotHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CC0B2B01E2DEFF800495D53 /* SSJCalenderScreenShotHelper.m */; };
+		9CC0B2B91E2DF05300495D53 /* SSJCalenderScreenShotHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CC0B2B01E2DEFF800495D53 /* SSJCalenderScreenShotHelper.m */; };
+		9CC0B2BA1E2DF05300495D53 /* SSJCalenderScreenShotHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CC0B2B01E2DEFF800495D53 /* SSJCalenderScreenShotHelper.m */; };
+		9CC0B2BB1E2DF05400495D53 /* SSJCalenderScreenShotHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CC0B2B01E2DEFF800495D53 /* SSJCalenderScreenShotHelper.m */; };
+		9CC0B2BC1E2DF05400495D53 /* SSJCalenderScreenShotHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CC0B2B01E2DEFF800495D53 /* SSJCalenderScreenShotHelper.m */; };
 		9CC2C4EE1D7EBF760024BC74 /* SSJBookKeepingHomeBooksButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1A9CAA1D7D76AE0032BA0D /* SSJBookKeepingHomeBooksButton.m */; };
 		9CC2C4F61D7EBF770024BC74 /* SSJBookKeepingHomeBooksButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1A9CAA1D7D76AE0032BA0D /* SSJBookKeepingHomeBooksButton.m */; };
 		9CC2C4F71D7EBF770024BC74 /* SSJBookKeepingHomeBooksButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1A9CAA1D7D76AE0032BA0D /* SSJBookKeepingHomeBooksButton.m */; };
@@ -3713,6 +3718,8 @@
 		9CAF730E1E03E8C40061ADB8 /* SSJHomeLoadingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJHomeLoadingView.m; sourceTree = "<group>"; };
 		9CAF731B1E03EAD90061ADB8 /* xiaomao.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = xiaomao.gif; sourceTree = "<group>"; };
 		9CAF731D1E03EAE50061ADB8 /* homeLoading.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = homeLoading.gif; sourceTree = "<group>"; };
+		9CC0B2AF1E2DEFF800495D53 /* SSJCalenderScreenShotHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCalenderScreenShotHelper.h; sourceTree = "<group>"; };
+		9CC0B2B01E2DEFF800495D53 /* SSJCalenderScreenShotHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCalenderScreenShotHelper.m; sourceTree = "<group>"; };
 		9CC452BF1D9B59EE0044FA87 /* SSJMultiFunctionButtonView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMultiFunctionButtonView.h; sourceTree = "<group>"; };
 		9CC452C01D9B59EE0044FA87 /* SSJMultiFunctionButtonView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMultiFunctionButtonView.m; sourceTree = "<group>"; };
 		9CC452CD1D9B62A90044FA87 /* SSJSearchHistoryItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJSearchHistoryItem.h; sourceTree = "<group>"; };
@@ -4586,6 +4593,8 @@
 			children = (
 				7D5F328F1CEAE6C10086B67E /* SSJCalenderHelper.h */,
 				7D5F32901CEAE6C10086B67E /* SSJCalenderHelper.m */,
+				9CC0B2AF1E2DEFF800495D53 /* SSJCalenderScreenShotHelper.h */,
+				9CC0B2B01E2DEFF800495D53 /* SSJCalenderScreenShotHelper.m */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -8163,6 +8172,7 @@
 				91F7FD2B1DFA8CD3005F4B6B /* SSJChatMessageItem.m in Sources */,
 				7DBA568B1D6D32B700C02D79 /* SSJChargeDetailMemberCell.m in Sources */,
 				9C91AE201D94D8C700B585AA /* SSJSearchResultItem.m in Sources */,
+				9CC0B2BA1E2DF05300495D53 /* SSJCalenderScreenShotHelper.m in Sources */,
 				9C24CFC91D76CA060095D150 /* SSJBooksTypeStore.m in Sources */,
 				7DDB6F151E25D81F00B6A68A /* SSJDatabaseVersion11.m in Sources */,
 				7DBA568C1D6D32B700C02D79 /* SSJImageSynchronizeTask.m in Sources */,
@@ -8510,6 +8520,7 @@
 				9C2A67591D194CA70010F1DA /* SSJStringAddition.m in Sources */,
 				9C2A675A1D194CA70010F1DA /* SSJHomeBarCalenderButton.m in Sources */,
 				9C9323F71D9DFA9500EBD216 /* SSJSearchResultHeader.m in Sources */,
+				9CC0B2B91E2DF05300495D53 /* SSJCalenderScreenShotHelper.m in Sources */,
 				7D3EAD2C1DCC340100E5B2B2 /* SSJLoanChargeModel.m in Sources */,
 				9C2A675B1D194CA70010F1DA /* SSJForgetPassowrdNetworkService.m in Sources */,
 				7D1DB4371D6AA924006C2AC2 /* SSJLoanListSectionHeaderAmountView.m in Sources */,
@@ -9322,6 +9333,7 @@
 				9CECFC3D1D6D41A700DB2C8B /* SSJRecordMakingCategoryItem.m in Sources */,
 				9CECFC3E1D6D41A700DB2C8B /* SSJFundingTransferDetailItem.m in Sources */,
 				7DF532951E13BBB3009A6F6C /* SSJRepaymentStore.m in Sources */,
+				9CC0B2BB1E2DF05400495D53 /* SSJCalenderScreenShotHelper.m in Sources */,
 				9CECFC3F1D6D41A700DB2C8B /* SSJMagicExportResultCheckMarkView.m in Sources */,
 				9CECFC401D6D41A700DB2C8B /* SSJChargeCircleTimeSelectView.m in Sources */,
 				9CECFC411D6D41A700DB2C8B /* SSJPasswordModifyViewController.m in Sources */,
@@ -9780,6 +9792,7 @@
 				91F7FD2D1DFA8CD3005F4B6B /* SSJChatMessageItem.m in Sources */,
 				9CECFFF91D6D41EB00DB2C8B /* SSJCalenderDetailHeader.m in Sources */,
 				9CECFFFA1D6D41EB00DB2C8B /* SSJNewCategoryCollectionView.m in Sources */,
+				9CC0B2BC1E2DF05400495D53 /* SSJCalenderScreenShotHelper.m in Sources */,
 				9CECFFFB1D6D41EB00DB2C8B /* SSJMemberSelectView.m in Sources */,
 				7DDB6F171E25D82000B6A68A /* SSJDatabaseVersion11.m in Sources */,
 				9CECFFFC1D6D41EB00DB2C8B /* SSJChargeCircleSelectView.m in Sources */,
@@ -10485,6 +10498,7 @@
 				7DF19ED81D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m in Sources */,
 				9CD9BC031CFD2DAA0061803B /* SSJBookkeepingTreeDescView.m in Sources */,
 				9CD9BC431CFD2E470061803B /* SSJFundingTransferViewController.m in Sources */,
+				9CC0B2B11E2DEFF800495D53 /* SSJCalenderScreenShotHelper.m in Sources */,
 				7D5F33341CEAE6C10086B67E /* SSJScrollTextView.m in Sources */,
 				9CF594021D63FFBB00006594 /* SSJModifyFundingTableViewCell.m in Sources */,
 				7D4EF8821C43B10C003C4B20 /* SSJFundAccountTable.m in Sources */,
