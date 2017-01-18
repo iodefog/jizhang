@@ -11,7 +11,6 @@
 @implementation SSJBannerNetworkService
 
 - (void)requestBannersList{
-    self.showLodingIndicator = !self.isLoadSuccess;
     NSString *api = @"http://jz.youyuwo.com/app/banner_2.0.json";
     
     NSString *urlStr = [[NSURL URLWithString:api relativeToURL:[NSURL URLWithString:[SSJDomainManager formalDomain]]] absoluteString];
