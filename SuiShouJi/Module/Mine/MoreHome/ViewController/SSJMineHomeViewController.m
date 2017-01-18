@@ -404,8 +404,13 @@ static BOOL kNeedBannerDisplay = YES;
 
 - (void)server:(SSJBaseNetworkService *)service didFailLoadWithError:(NSError *)error
 {
-    [self loadDataArray];
-    [self.collectionView reloadData];
+    if ([service isKindOfClass:[SSJBannerNetworkService class]]) {
+        [self loadDataArray];
+        [self.collectionView reloadData];
+    }
+    if ([service isKindOfClass:[SSJNewDotNetworkService class]]) {
+        
+    }
 }
 
 - (void)loadDataArray
