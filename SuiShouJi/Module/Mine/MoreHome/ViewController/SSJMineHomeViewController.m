@@ -146,22 +146,7 @@ static BOOL kNeedBannerDisplay = YES;
             _titleArr = [@[kTitle1 , kTitle2 , kTitle3 , kTitle4 , kTitle5 , kTitle6 , kTitle7] mutableCopy];
         }
     }
-    
-    //遍历images、titles生产广告模型
-//    [self.adItemsArray removeAllObjects];
-    NSMutableArray *tempArray = [NSMutableArray array];
-    for (NSInteger i=0; i<self.titles.count; i++) {
-        SSJListAdItem *item = [[SSJListAdItem alloc] init];
-        item.adTitle = [self.titles ssj_safeObjectAtIndex:i];
-        item.imageName = [self.images ssj_safeObjectAtIndex:i];
-        item.imageUrl = nil;
-        item.hidden = NO;
-        item.url = nil;//不需要跳转网页
-        [tempArray addObject:item];
-    }
-//    [self.adItemsArray addObject:item];
-    self.adItemsArray = tempArray;
-    
+
     __weak typeof(self) weakSelf = self;
     [self getUserInfo:^(SSJUserInfoItem *item){
         weakSelf.header.item = item;
@@ -392,8 +377,6 @@ static BOOL kNeedBannerDisplay = YES;
 
 - (void)loadDataArray
 {
-
-    //广告
     //遍历images、titles生产广告模型
     [self.adItemsArray removeAllObjects];
     for (NSInteger i=0; i<self.titles.count; i++) {
@@ -405,6 +388,7 @@ static BOOL kNeedBannerDisplay = YES;
         item.url = nil;//不需要跳转网页
         [self.adItemsArray addObject:item];
     }
+    
     for (SSJListAdItem *listAdItem in self.bannerService.item.listAdItems) {
         if (listAdItem.hidden) {
             [self.adItems addObject:listAdItem];
