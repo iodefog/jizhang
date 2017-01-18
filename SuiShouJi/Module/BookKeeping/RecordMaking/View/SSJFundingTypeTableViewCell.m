@@ -96,13 +96,13 @@
     _fundingImage.image = [UIImage imageNamed:self.item.fundingIcon];
 }
 
--(void)setCellTitle:(NSString *)cellTitle{
+-(void)setCellTitle:(NSString *)cellTitle {
     _cellTitle = cellTitle;
     self.fundingTitle.text = cellTitle;
     [self.fundingTitle sizeToFit];
 }
 
--(void)updateCellAppearanceAfterThemeChanged{
+-(void)updateCellAppearanceAfterThemeChanged {
     [super updateCellAppearanceAfterThemeChanged];
 //    self.backgroundColor = [UIColor clearColor];
     self.checkMark.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
