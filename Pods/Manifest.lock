@@ -50,6 +50,7 @@ PODS:
     - libwebp/core
   - libwebp/webp (0.5.1)
   - LxThroughPointsBezier (1.0.0)
+  - Masonry (1.0.2)
   - Meiqia (3.3.4.1):
     - Meiqia/MeiqiaSDK (= 3.3.4.1)
     - Meiqia/MQChatViewController (= 3.3.4.1)
@@ -85,6 +86,7 @@ DEPENDENCIES:
   - FLAnimatedImage (~> 1.0)
   - JSPatch
   - LxThroughPointsBezier (~> 1.0.0)
+  - Masonry
   - Meiqia (~> 3.3.1)
   - MJExtension
   - MMDrawerController (~> 0.5.7)
@@ -102,6 +104,7 @@ SPEC CHECKSUMS:
   JSPatch: 741205ebb2e2238c223a436e4c8cf75cf40a345f
   libwebp: b9126f8982a95370cf4eaad9bb3fefd57f052c15
   LxThroughPointsBezier: fdebe18dd4ddab9406d9827db77a078b4738b00f
+  Masonry: 7c429b56da9d4ee0bbb3ed77a5ea710d6a5df39e
   Meiqia: 2be3baaf2b023484b8cd3985bc2dad6db36732a1
   MJExtension: 5932755f451458eefa24239358817f8d291240c7
   MMDrawerController: 7a4cf8e25596bf2434e03ce50d22a8608ddee6a1
@@ -112,6 +115,6 @@ SPEC CHECKSUMS:
   YYText: 5c461d709e24d55a182d1441c41dc639a18a4849
   ZYCornerRadius: 526dfd5b860008e57abf7be4a887f4630c3018f0
 
-PODFILE CHECKSUM: 2b1a39dfcb5a2e71479b82da5ba37190a1ecbae4
+PODFILE CHECKSUM: e194c25b09d0881f7372c4b111edf282be80db29
 
 COCOAPODS: 1.1.1
