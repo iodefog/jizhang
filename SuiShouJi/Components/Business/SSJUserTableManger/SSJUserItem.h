@@ -77,6 +77,9 @@
 // 用户导出数据的邮箱地址
 @property(nonatomic, copy) NSString *email;
 
+// 用户最后一条建议回复时间
+@property(nonatomic, copy) NSString *adviceTime;
+
 + (NSDictionary *)propertyMapping;
 
 @end
