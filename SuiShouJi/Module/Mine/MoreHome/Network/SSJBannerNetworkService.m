@@ -13,12 +13,7 @@
 - (void)requestBannersList{
     self.showLodingIndicator = NO;
     
-    NSString *api = nil;
-#ifdef DEBUG
-    api = @"/app/banner_test.json";
-#else
-    api = @"/app/new_banners.json";
-#endif
+    NSString *api = @"http://jz.youyuwo.com/app/banner_2.0.json";
     
     NSString *urlStr = [[NSURL URLWithString:api relativeToURL:[NSURL URLWithString:[SSJDomainManager formalDomain]]] absoluteString];
     [self request:urlStr params:nil];

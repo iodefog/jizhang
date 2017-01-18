@@ -225,6 +225,8 @@ static const void *kBorderLayerKey  = &kBorderLayerKey;
 
 static const void *kOriginalContentSizeKey = &kOriginalContentSizeKey;
 static const void *kDefaultWatermarkKey = &kDefaultWatermarkKey;
+static const void *kWatermarkShowedKey = &kWatermarkShowedKey;
+
 static const NSTimeInterval kAnimationDuration = 0.25;
 
 @implementation UIView (SSJWatermark)
@@ -232,8 +234,17 @@ static const NSTimeInterval kAnimationDuration = 0.25;
 - (void)ssj_showWatermarkWithImageName:(NSString *)imageName animated:(BOOL)animated target:(id)target action:(SEL)action {
     UIImageView *watermark = objc_getAssociatedObject(self, kDefaultWatermarkKey);
     
+    if (watermark == self) {
+        return;
+    }
+    
     if (![watermark isKindOfClass:[UIImageView class]]) {
-        [watermark removeFromSuperview];
+        
+        if (watermark) {
+            objc_setAssociatedObject(watermark, kWatermarkShowedKey, @(NO), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+            [watermark removeFromSuperview];
+        }
+        
         watermark = [[UIImageView alloc] init];
         objc_setAssociatedObject(self, kDefaultWatermarkKey, watermark, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
@@ -262,14 +273,13 @@ static const NSTimeInterval kAnimationDuration = 0.25;
         [watermark addGestureRecognizer:tapGesture];
     }
     
-    if (watermark.superview != self) {
-        [self addSubview:watermark];
-        
-        watermark.alpha = 0;
-        [UIView animateWithDuration:(animated ? kAnimationDuration : 0) animations:^{
-            watermark.alpha = 1;
-        } completion:nil];
-    }
+    [self addSubview:watermark];
+    objc_setAssociatedObject(watermark, kWatermarkShowedKey, @(YES), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    
+    watermark.alpha = 0;
+    [UIView animateWithDuration:(animated ? kAnimationDuration : 0) animations:^{
+        watermark.alpha = 1;
+    } completion:nil];
 }
 
 - (void)ssj_showWatermarkWithCustomView:(UIView *)view animated:(BOOL)animated target:(id)target action:(SEL)action {
@@ -279,11 +289,19 @@ static const NSTimeInterval kAnimationDuration = 0.25;
         return;
     }
     
-    if (watermark != view) {
-        [watermark removeFromSuperview];
-        watermark = view;
-        objc_setAssociatedObject(self, kDefaultWatermarkKey, watermark, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    if (watermark.superview == self
+        && watermark == view
+        && [objc_getAssociatedObject(watermark, kWatermarkShowedKey) boolValue]) {
+        return;
     }
+    
+    if (watermark) {
+        objc_setAssociatedObject(watermark, kWatermarkShowedKey, @(NO), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        [watermark removeFromSuperview];
+    }
+    
+    watermark = view;
+    objc_setAssociatedObject(self, kDefaultWatermarkKey, watermark, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     
     if ([self isKindOfClass:[UIScrollView class]]) {
         UIScrollView *scrollView = (UIScrollView *)self;
@@ -304,30 +322,38 @@ static const NSTimeInterval kAnimationDuration = 0.25;
         [watermark addGestureRecognizer:tapGesture];
     }
     
-    if (watermark.superview != self) {
-        [self addSubview:watermark];
-        
-        watermark.alpha = 0;
-        [UIView animateWithDuration:(animated ? kAnimationDuration : 0) animations:^{
-            watermark.alpha = 1;
-        } completion:nil];
-    }
+    [self addSubview:watermark];
+    objc_setAssociatedObject(watermark, kWatermarkShowedKey, @(YES), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    
+    watermark.alpha = 0;
+    [UIView animateWithDuration:(animated ? kAnimationDuration : 0) animations:^{
+        watermark.alpha = 1;
+    } completion:nil];
 }
 
 - (void)ssj_hideWatermark:(BOOL)animated {
     UIView *watermark = objc_getAssociatedObject(self, kDefaultWatermarkKey);
     
     if (watermark.superview == self) {
+        
+        objc_setAssociatedObject(watermark, kWatermarkShowedKey, @(NO), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        
         [UIView animateWithDuration:(animated ? kAnimationDuration : 0) animations:^{
             watermark.alpha = 0;
         } completion:^(BOOL finished) {
+            if ([objc_getAssociatedObject(watermark, kWatermarkShowedKey) boolValue]) {
+                return;
+            }
+            
             [watermark removeFromSuperview];
+            
             if (watermark.gestureRecognizers.count!=0) {
                 UIGestureRecognizer *gesrure = [watermark.gestureRecognizers objectAtIndex:0];
                 if (gesrure) {
                     [watermark removeGestureRecognizer:gesrure];
                 }
             }
+            
             if ([self isKindOfClass:[UIScrollView class]]) {
                 UIScrollView *scrollView = (UIScrollView *)self;
                 CGSize originalSize = [objc_getAssociatedObject(self, kOriginalContentSizeKey) CGSizeValue];
@@ -342,6 +368,14 @@ static const NSTimeInterval kAnimationDuration = 0.25;
     if (watermark.superview == self) {
         watermark.center = CGPointMake(self.width * 0.5, self.height * 0.5);
     }
+}
+
+- (BOOL)ssj_isWatermarkShowed {
+    return [objc_getAssociatedObject(self, kWatermarkShowedKey) boolValue];
+}
+
+- (void)ssj_setWatermarkShowed:(BOOL)showed {
+    objc_setAssociatedObject(self, kWatermarkShowedKey, @(showed), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 @end

@@ -480,6 +480,7 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
         
         if (timeDimension == SSJTimeDimensionUnknown) {
             _tableView.hidden = YES;
+            [self.view ssj_hideLoadingIndicator];
             [self.view ssj_showWatermarkWithCustomView:self.noDataRemindView animated:YES target:nil action:nil];
             return;
         }
