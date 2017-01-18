@@ -11,46 +11,58 @@
 #import "SSJPersonalDetailHelper.h"
 #import "UIImageView+CornerRadius.h"
 @interface SSJMoreProductAdviceTableViewCell()
-@property (weak, nonatomic) IBOutlet UILabel *timeLabel;
-@property (weak, nonatomic) IBOutlet UIButton *textButton;
-@property (weak, nonatomic) IBOutlet UIButton *otherTextButton;
-@property (weak, nonatomic) IBOutlet UIImageView *otherIconView;
-@property (weak, nonatomic) IBOutlet UIImageView *iconView;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *timeHeightConst;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *otherButtonWidthConst;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *buttonWidthConst;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *textBtnHeightConst;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *otherTextBtnHeightConst;
 
+@property (strong, nonatomic) UILabel *timeLabel;
+@property (strong, nonatomic) UIButton *textButton;
+@property (strong, nonatomic) UIButton *otherTextButton;
+@property (strong, nonatomic) UIImageView *iconView;
+@property (strong, nonatomic) UIImageView *otherIconView;
+/**
+ timeLabel的高度
+ */
+@property (nonatomic, assign) CGFloat timeLabelHeight;
 
 @end
 @implementation SSJMoreProductAdviceTableViewCell
 
-- (void)awakeFromNib
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
-    [super awakeFromNib];
-//    _iconView.image = [UIImage imageNamed:@"defualt_portrait"];
-    [_iconView zy_cornerRadiusAdvance:15 rectCornerType:UIRectCornerAllCorners];
-    [SSJPersonalDetailHelper queryUserDetailWithsuccess:^(SSJPersonalDetailItem *data) {
-        if ([data.iconUrl hasPrefix:@"http"]) {
-            [_iconView sd_setImageWithURL:[NSURL URLWithString:data.iconUrl] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
-        }else{
-            [_iconView sd_setImageWithURL:[NSURL URLWithString:SSJImageURLWithAPI(data.iconUrl)] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
-        }
-    } failure:^(NSError *error) {
-        _iconView.image = [UIImage imageNamed:@"defualt_portrait"];
-    }];
+    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+        [self.contentView addSubview:self.timeLabel];
+        [self.contentView addSubview:self.textButton];
+        [self.contentView addSubview:self.otherIconView];
+        [self.contentView addSubview:self.iconView];
+        [self.contentView addSubview:self.otherTextButton];
+        //头像
+        [SSJPersonalDetailHelper queryUserDetailWithsuccess:^(SSJPersonalDetailItem *data) {
+            if ([data.iconUrl hasPrefix:@"http"]) {
+                [self.iconView sd_setImageWithURL:[NSURL URLWithString:data.iconUrl] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
+            }else{
+                [self.iconView sd_setImageWithURL:[NSURL URLWithString:SSJImageURLWithAPI(data.iconUrl)] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
+            }
+        } failure:^(NSError *error) {
+            self.iconView.image = [UIImage imageNamed:@"defualt_portrait"];
+        }];
+    }
+    return self;
+}
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    self.timeLabel.leftTop = CGPointMake(0, 10);
+    self.timeLabel.width = self.width;
+    self.otherIconView.left = 20;
+    self.otherTextButton.left = CGRectGetMaxX(self.otherIconView.frame) + 10;
+    self.iconView.right = self.width - 20;
+    self.textButton.right = CGRectGetMinX(self.iconView.frame) - 10;
     
-    _textButton.titleLabel.numberOfLines = 0;
-    _otherTextButton.titleLabel.numberOfLines = 0;
-    [_textButton.titleLabel setPreferredMaxLayoutWidth:SSJSCREENWITH - 2*(_iconView.width + 25)];
-    [_otherTextButton.titleLabel setPreferredMaxLayoutWidth:SSJSCREENWITH - 2*(_iconView.width + 25)];
-    
-    _textButton.layer.cornerRadius = 5;
-    _otherTextButton.layer.cornerRadius = 5;
-    [_textButton clipsToBounds];
-    [_otherTextButton clipsToBounds];
-    _buttonWidthConst.constant = _otherButtonWidthConst.constant = SSJSCREENWITH - 2*(_iconView.width + 30);
+}
+
+- (void)displayFrame
+{
+//    self.otherTextButton.top = self.timeLabelHeight + 10;
+    self.otherTextButton.top = self.otherIconView.top = self.textButton.top = self.iconView.top = self.timeLabelHeight + 10;
 }
 
 + (SSJMoreProductAdviceTableViewCell *)cellWithTableView:(UITableView *)tableView
@@ -58,7 +70,7 @@
     static NSString *cellId = @"SSJMoreProductAdviceTableViewCellId";
     SSJMoreProductAdviceTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
     if (!cell) {
-        cell = [[[NSBundle mainBundle] loadNibNamed:@"SSJMoreProductAdviceTableViewCell" owner:nil options:nil] firstObject];
+        cell = [[SSJMoreProductAdviceTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     return cell;
@@ -70,18 +82,18 @@
     
     if (message.isHiddenTime == YES) { // 隐藏时间
         self.timeLabel.hidden = YES;
-        _timeHeightConst.constant = 0;
+        self.timeLabel.height = self.timeLabelHeight = 0;
     } else { // 显示时间
         self.timeLabel.text = message.dateStr;
         self.timeLabel.hidden = NO;
-        _timeHeightConst.constant = 21;
+        self.timeLabel.height = self.timeLabelHeight = 21;
     }
     if (message.isSystem == NO) {//建议
         [self settingShowTextButton:self.textButton showIconView:self.iconView hideTextButton:self.otherTextButton hideIconView:self.otherIconView];
     }else{//系统回复
         [self settingShowTextButton:self.otherTextButton showIconView:self.otherIconView hideTextButton:self.textButton hideIconView:self.iconView];
-        
     }
+    [self displayFrame];//布局frame
 }
 
 /**
@@ -101,13 +113,14 @@
     }else if(self.message.isSystem == YES){//系统
         [showTextButton setTitle:self.message.content forState:UIControlStateNormal];
     }
+    CGSize size = [self heightOfString:showTextButton.titleLabel.text font:[UIFont systemFontOfSize:16] width:SSJSCREENWITH - 2*(_iconView.width + 30)];
     // 设置按钮的高度就是titleLabel的高度
-    CGFloat buttonH = [self heightOfString:showTextButton.titleLabel.text font:[UIFont systemFontOfSize:16] width:SSJSCREENWITH - 2*(_iconView.width + 30)] + 20;
-    _textBtnHeightConst.constant = buttonH;
-    _otherTextBtnHeightConst.constant = buttonH;
-    
-    // 强制更新
-    [showTextButton layoutIfNeeded];
+    CGFloat buttonH = size.height + 20;
+    CGFloat buttonW = size.width + 20;
+    showTextButton.height = buttonH;
+    showTextButton.width = buttonW;
+    hideTextButton.height = 0;
+    hideTextButton.width = 0;
     
     // 计算当前cell的高度
     CGFloat timeH = self.message.isHiddenTime == YES ? 0 : 21;
@@ -116,12 +129,77 @@
 }
 
 //字符串文字的高度
-- (CGFloat)heightOfString:(NSString *)string font:(UIFont *)font width:(CGFloat)width
+- (CGSize) heightOfString:(NSString *)string font:(UIFont *)font width:(CGFloat)width
 {
     CGRect bounds;
     NSDictionary * parameterDict=[NSDictionary dictionaryWithObject:font forKey:NSFontAttributeName];
     bounds=[string boundingRectWithSize:CGSizeMake(width, CGFLOAT_MAX) options:NSStringDrawingTruncatesLastVisibleLine|NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin attributes:parameterDict context:nil];
-    return bounds.size.height;
+    return bounds.size;
+}
+
+#pragma mark - Lazy
+- (UILabel *)timeLabel
+{
+    if (!_timeLabel) {
+        _timeLabel = [[UILabel alloc] init];
+        _timeLabel.textAlignment = NSTextAlignmentCenter;
+        _timeLabel.font = [UIFont systemFontOfSize:12];
+        _timeLabel.textColor = [UIColor ssj_colorWithHex:@"999999"];
+    }
+    return _timeLabel;
+}
+
+- (UIButton *)textButton
+{
+    if (!_textButton) {
+        _textButton = [[UIButton alloc] init];
+        _textButton.backgroundColor = [UIColor ssj_colorWithHex:@"DDDDDD"];
+        _textButton.layer.cornerRadius = 5;
+        _textButton.titleLabel.numberOfLines = 0;
+        _textButton.titleEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10);
+        [_textButton clipsToBounds];
+        [_textButton setTitleColor:[UIColor ssj_colorWithHex:@"333333"] forState:UIControlStateNormal];
+        _textButton.titleLabel.font = [UIFont systemFontOfSize:16];
+        [_textButton.titleLabel setPreferredMaxLayoutWidth:SSJSCREENWITH - 2*(_iconView.width + 25)];
+    }
+    return _textButton;
+}
+
+- (UIButton *)otherTextButton
+{
+    if (!_otherTextButton) {
+        _otherTextButton = [[UIButton alloc] init];
+        _otherTextButton.backgroundColor = [UIColor ssj_colorWithHex:@"FDEDEF"];
+        _otherTextButton.layer.cornerRadius = 5;
+        _otherTextButton.titleLabel.numberOfLines = 0;
+        _otherTextButton.titleEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10);
+        [_otherTextButton clipsToBounds];
+        [_otherTextButton setTitleColor:[UIColor ssj_colorWithHex:@"333333"] forState:UIControlStateNormal];
+        _otherTextButton.titleLabel.font = [UIFont systemFontOfSize:16];
+        [_otherIconView clipsToBounds];
+        [_otherTextButton.titleLabel setPreferredMaxLayoutWidth:SSJSCREENWITH - 2*(_iconView.width + 25)];
+    }
+    return _otherTextButton;
+}
+
+- (UIImageView *)iconView
+{
+    if (!_iconView) {
+        _iconView = [[UIImageView alloc] init];
+        _iconView.size = CGSizeMake(30, 30);
+        [_iconView zy_cornerRadiusAdvance:15 rectCornerType:UIRectCornerAllCorners];
+    }
+    return _iconView;
+}
+
+- (UIImageView *)otherIconView
+{
+    if (!_otherIconView) {
+        _otherIconView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"more_productAdvice_system"]];
+        _otherIconView.size = CGSizeMake(30, 30);
+        
+    }
+    return _otherIconView;
 }
 
 @end
