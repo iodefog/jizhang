@@ -11,13 +11,23 @@
 @interface SSJListAdItem : SSJBaseItem
 
 // 广告标题
-@property(nonatomic, strong) NSString *adTitle;
+@property(nonatomic, copy) NSString *adTitle;
 
 // 广告是否需要隐藏
 @property(nonatomic) BOOL hidden;
 
 //广告跳转页面
-@property(nonatomic, strong) NSString *url;
+@property(nonatomic, copy) NSString *url;
+
+//图片url
 @property (nonatomic, copy) NSString *imageUrl;
+
+//图片名字
 @property (nonatomic, copy) NSString *imageName;
+
+/**
+ 是否显示小红点
+ */
+@property (nonatomic, assign) BOOL isShowDot;
+
 @end

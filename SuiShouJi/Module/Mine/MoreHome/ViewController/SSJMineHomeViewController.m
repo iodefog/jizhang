@@ -50,6 +50,7 @@
 #import "SSJProductAdviceViewController.h"
 #import "SSJPersonalDetailItem.h"
 #import "SSJBillNoteWebViewController.h"
+#import "SSJNewDotNetworkService.h"
 
 static NSString *const kTitle1 = @"提醒";
 static NSString *const kTitle2 = @"主题皮肤";
@@ -83,6 +84,8 @@ static BOOL kNeedBannerDisplay = YES;
 @property (nonatomic, strong) UICollectionView *collectionView;
 @property (nonatomic, strong) SSJHeaderBannerImageView *headerBannerImageView;//头部banner
 @property(nonatomic, strong) SSJBannerNetworkService *bannerService;
+
+@property (nonatomic, strong) SSJNewDotNetworkService *dotService;
 @property(nonatomic, strong) SSJBannerHeaderView *bannerHeader;
 @property (nonatomic, strong) YWFeedbackKit *feedbackKit;
 @property(nonatomic, strong) SSJPersonalDetailItem *personalDetailItem;
@@ -139,7 +142,12 @@ static BOOL kNeedBannerDisplay = YES;
             _titleArr = [@[kTitle1 , kTitle2 , kTitle3 , kTitle4 , kTitle5 , kTitle6 , kTitle7] mutableCopy];
         }
     }
-    
+    [self orgDataToModel];
+    [self.collectionView reloadData];
+}
+
+- (void)orgDataToModel
+{
     NSMutableArray *tempArray = [NSMutableArray array];
     for (NSInteger i=0; i<self.titles.count; i++) {
         SSJListAdItem *item = [[SSJListAdItem alloc] init];
@@ -147,11 +155,11 @@ static BOOL kNeedBannerDisplay = YES;
         item.imageName = [self.images ssj_safeObjectAtIndex:i];
         item.imageUrl = nil;
         item.hidden = NO;
+        item.isShowDot = NO;//默认都不显示小红点
         item.url = nil;//不需要跳转网页
         [tempArray addObject:item];
     }
     self.adItemsArray = tempArray;
-    [self.collectionView reloadData];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -372,19 +380,26 @@ static BOOL kNeedBannerDisplay = YES;
 
 #pragma mark - SSJBaseNetworkService
 -(void)serverDidFinished:(SSJBaseNetworkService *)service{
-    //banner
-    if (self.bannerService.item.bannerItems.count) {
-        UICollectionViewFlowLayout *collectionViewLayout = (UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout;
-        if (kNeedBannerDisplay == YES) {
-            collectionViewLayout.headerReferenceSize = CGSizeMake(SSJSCREENWITH, kBannerHeight);
-            self.lineView.top = kBannerHeight;
-        }else{
-            self.lineView.top = 0;
+    if ([service isKindOfClass:[SSJBannerNetworkService class]]) {
+        //banner
+        if (self.bannerService.item.bannerItems.count) {
+            UICollectionViewFlowLayout *collectionViewLayout = (UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout;
+            if (kNeedBannerDisplay == YES) {
+                collectionViewLayout.headerReferenceSize = CGSizeMake(SSJSCREENWITH, kBannerHeight);
+                self.lineView.top = kBannerHeight;
+            }else{
+                self.lineView.top = 0;
+            }
         }
+        
+        [self loadDataArray];
+        [self.collectionView reloadData];
     }
-
-    [self loadDataArray];
-    [self.collectionView reloadData];
+    
+    if ([service isKindOfClass:[SSJNewDotNetworkService class]]) {
+    //更改模型数据
+        
+    }
 }
 
 - (void)server:(SSJBaseNetworkService *)service didFailLoadWithError:(NSError *)error
@@ -396,18 +411,7 @@ static BOOL kNeedBannerDisplay = YES;
 - (void)loadDataArray
 {
     //遍历images、titles生产广告模型
-    [self.adItemsArray removeAllObjects];
-    NSMutableArray *tempArray = [NSMutableArray array];
-    for (NSInteger i=0; i<self.titles.count; i++) {
-        SSJListAdItem *item = [[SSJListAdItem alloc] init];
-        item.adTitle = [self.titles ssj_safeObjectAtIndex:i];
-        item.imageName = [self.images ssj_safeObjectAtIndex:i];
-        item.imageUrl = nil;
-        item.hidden = NO;
-        item.url = nil;//不需要跳转网页
-        [tempArray addObject:item];
-    }
-    self.adItemsArray = tempArray;
+    [self orgDataToModel];
     
     for (SSJListAdItem *listAdItem in self.bannerService.item.listAdItems) {
         if (listAdItem.hidden) {
@@ -465,6 +469,15 @@ static BOOL kNeedBannerDisplay = YES;
         _bannerService.httpMethod = SSJBaseNetworkServiceHttpMethodGET;
     }
     return _bannerService;
+}
+
+- (SSJNewDotNetworkService *)dotService
+{
+    if (!_dotService) {
+        _dotService = [[SSJNewDotNetworkService alloc] initWithDelegate:self];
+        _dotService.httpMethod = SSJBaseNetworkServiceHttpMethodGET;
+    }
+    return _dotService;
 }
 
 
