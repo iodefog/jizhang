@@ -72,7 +72,7 @@
  *
  *  @return (UIImage *) 改变颜色后的图片
  */
-- (UIImage *)imageWithColor:(UIColor *)color;
+- (UIImage *)ssj_imageWithColor:(UIColor *)color;
 
 /**
  *  对图片做高斯模糊
@@ -84,6 +84,16 @@
  *  @return (UIImage *) 高斯模糊后的图片
  */
 - (UIImage *)blurredImageWithRadius:(CGFloat)radius iterations:(NSUInteger)iterations tintColor:(UIColor *)tintColor;
+
+
+
+/**
+ 获取图片中某个点的颜色
+
+ @param point 需要获取的位置
+ @return (UIColor *)获取到的颜色
+ */
+- (UIColor *)ssj_getPixelColorAtLocation:(CGPoint)point;
 
 @end
 
