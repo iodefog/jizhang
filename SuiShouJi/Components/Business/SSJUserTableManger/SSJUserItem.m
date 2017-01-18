@@ -36,7 +36,8 @@
                     @"defaultBooksTypeState":@"cdefaultbookstypestate",
                     @"openId":@"copenid",
                     @"remindSettingMotionPWD":@"remindsettingmotionpwd",
-                    @"email":@"cemail"};
+                    @"email":@"cemail",
+                    @"adviceTime" : @"cadvicetime"};
     }
     return mapping;
 }
@@ -64,6 +65,7 @@
     [aCoder encodeObject:_openId forKey:@"openId"];
     [aCoder encodeObject:_remindSettingMotionPWD forKey:@"remindSettingMotionPWD"];
     [aCoder encodeObject:_email forKey:@"email"];
+    [aCoder encodeObject:_adviceTime forKey:@"adviceTime"];
 }
 
 - (nullable instancetype)initWithCoder:(NSCoder *)aDecoder {
@@ -89,6 +91,7 @@
         _openId = [aDecoder decodeObjectForKey:@"openId"];
         _remindSettingMotionPWD = [aDecoder decodeObjectForKey:@"remindSettingMotionPWD"];
         _email = [aDecoder decodeObjectForKey:@"email"];
+        _adviceTime = [aDecoder decodeObjectForKey:@"adviceTime"];
      }
     return self;
 }
@@ -118,7 +121,7 @@
     userItem.openId = _openId;
     userItem.remindSettingMotionPWD = _remindSettingMotionPWD;
     userItem.email = _email;
-    
+    userItem.adviceTime = _adviceTime;
     return userItem;
 }
 

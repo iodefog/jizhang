@@ -13,6 +13,8 @@
 @property (nonatomic, strong) UILabel *nameLabel;
 @property (nonatomic, strong) UILabel *bottomLabel;
 //@property (nonatomic, strong) SSJListAdItem *adItem;
+
+@property (nonatomic, strong) UIView *dotView;
 @end
 
 @implementation SSJMineHomeCollectionImageCell
@@ -23,8 +25,8 @@
         [self.contentView addSubview:self.topImage];
        [self.contentView addSubview:self.nameLabel];
         [self.contentView addSubview:self.bottomLabel];
-        self.bottomLabel.textAlignment = NSTextAlignmentCenter;
-        self.bottomLabel.font = [UIFont systemFontOfSize:11];
+        [self.contentView addSubview:self.dotView];
+        
         [self ssj_setBorderStyle:SSJBorderStyleBottom | SSJBorderStyleRight];
         [self ssj_setBorderWidth:1];
         [self ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
@@ -42,6 +44,7 @@
     
     self.nameLabel.frame = CGRectMake(0, CGRectGetMaxY(self.topImage.frame) + 15, self.width, 20);
     self.bottomLabel.frame = CGRectMake(0, CGRectGetMaxY(self.nameLabel.frame), self.width, 15);
+    self.dotView.rightTop = CGPointMake(self.width * 0.5 + 17, 23);
 }
 
 
@@ -49,12 +52,6 @@
 {
     if (adItem.url.length && adItem.imageUrl.length) {//是广告
         [self.topImage sd_setImageWithURL:[NSURL URLWithString:adItem.imageUrl] placeholderImage:nil];
-//            [self.topImage sd_setImageWithURL:[NSURL URLWithString:adItem.imageUrl] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-//                if (image) {
-//                    
-//                }
-//            }];
-    
     }else {
         _topImage.image = [UIImage imageNamed:adItem.imageName];
     }
@@ -68,13 +65,6 @@
         self.nameLabel.frame = CGRectMake(0, CGRectGetMaxY(self.topImage.frame) + 15, self.width, 20);
         self.bottomLabel.frame = CGRectMake(0, CGRectGetMaxY(self.nameLabel.frame), self.width, 15);
     }
-    
-//    //边框
-//    if ((indexPath.row + 1) % kColum == 0) {
-//        //第三列
-//        [self ssj_setBorderWidth:0.5];
-//    }
-
 }
 #pragma mark Lazy
 - (UIImageView *)topImage
@@ -95,7 +85,6 @@
         _nameLabel.textAlignment = NSTextAlignmentCenter;
         _nameLabel.font = [UIFont systemFontOfSize:16];
         _nameLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-//        [_nameLabel sizeToFit];
         _nameLabel.backgroundColor = [UIColor clearColor];
     }
     return _nameLabel;
@@ -109,11 +98,24 @@
         _bottomLabel.font = [UIFont systemFontOfSize:12];
         _bottomLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         _bottomLabel.backgroundColor = [UIColor clearColor];
-//        [_bottomLabel sizeToFit];
+        _bottomLabel.textAlignment = NSTextAlignmentCenter;
+        _bottomLabel.font = [UIFont systemFontOfSize:11];
     }
     return _bottomLabel;
 }
 
+- (UIView *)dotView
+{
+    if (!_dotView) {
+        _dotView = [[UIView alloc] init];
+        _dotView.backgroundColor = [UIColor ssj_colorWithHex:@"eb4a64"];
+        _dotView.size = CGSizeMake(5, 5);
+        _dotView.layer.cornerRadius = 2.5;
+        _dotView.hidden = YES;
+        [_dotView clipsToBounds];
+    }
+    return _dotView;
+}
 
 -(void)updateCellAppearanceAfterThemeChanged {
     self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
