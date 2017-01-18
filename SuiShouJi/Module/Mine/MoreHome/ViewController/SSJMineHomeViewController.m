@@ -111,6 +111,47 @@ static BOOL kNeedBannerDisplay = YES;
     [super viewDidLoad];
     [self.view addSubview:self.header];
     [self.view addSubview:self.collectionView];
+    [self loadOriDataArray];//固定数组
+}
+
+- (void)loadOriDataArray
+{
+    //  根据审核状态显示响应的内容，“给个好评”在审核期间不能被看到，否则可能会被拒绝-
+    if ([SSJStartChecker sharedInstance].isInReview) {
+        if ([SSJDefaultSource() isEqualToString:@"11501"] || [SSJDefaultSource() isEqualToString:@"11502"]) {
+            self.images = [@[@"more_tixing", @"more_pifu", @"more_zhouqi",@"more_daochu", @"more_share", @"more_fankui", @"more_shezhi"] mutableCopy];
+            self.titles = [@[kTitle1 , kTitle2 , kTitle3, kTitle4,kTitle8,kTitle5 , kTitle7] mutableCopy];
+            _titleArr = [@[kTitle1 , kTitle2 , kTitle3 , kTitle4 , kTitle8 , kTitle5 , kTitle7] mutableCopy];
+        } else{
+            self.images = [@[@"more_tixing", @"more_pifu", @"more_zhouqi",@"more_daochu", @"more_fankui", @"more_shezhi"] mutableCopy];
+            self.titles = [@[kTitle1 , kTitle2 , kTitle3, kTitle4,kTitle5 , kTitle7] mutableCopy];
+            _titleArr = [@[kTitle1 , kTitle2 , kTitle3 , kTitle4 , kTitle5 , kTitle7] mutableCopy];
+        }
+        
+    } else {
+        if ([SSJDefaultSource() isEqualToString:@"11501"] || [SSJDefaultSource() isEqualToString:@"11502"]) {
+            self.images = [@[@"more_tixing", @"more_pifu",@"more_zhouqi",@"more_daochu", @"more_share", @"more_fankui", @"more_haoping", @"more_shezhi"] mutableCopy];
+            self.titles = [@[kTitle1 , kTitle2 , kTitle3, kTitle4,kTitle8, kTitle5 , kTitle6 , kTitle7]mutableCopy];
+            _titleArr = [@[kTitle1 , kTitle2 , kTitle3 , kTitle4 , kTitle8 , kTitle5 , kTitle6 , kTitle7] mutableCopy];
+        } else{
+            self.images = [@[@"more_tixing", @"more_pifu", @"more_zhouqi",@"more_daochu", @"more_fankui", @"more_haoping", @"more_shezhi"] mutableCopy];
+            self.titles = [@[kTitle1 , kTitle2 , kTitle3, kTitle4, kTitle5 , kTitle6 , kTitle7] mutableCopy];
+            _titleArr = [@[kTitle1 , kTitle2 , kTitle3 , kTitle4 , kTitle5 , kTitle6 , kTitle7] mutableCopy];
+        }
+    }
+    
+    NSMutableArray *tempArray = [NSMutableArray array];
+    for (NSInteger i=0; i<self.titles.count; i++) {
+        SSJListAdItem *item = [[SSJListAdItem alloc] init];
+        item.adTitle = [self.titles ssj_safeObjectAtIndex:i];
+        item.imageName = [self.images ssj_safeObjectAtIndex:i];
+        item.imageUrl = nil;
+        item.hidden = NO;
+        item.url = nil;//不需要跳转网页
+        [tempArray addObject:item];
+    }
+    self.adItemsArray = tempArray;
+    [self.collectionView reloadData];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -123,29 +164,6 @@ static BOOL kNeedBannerDisplay = YES;
     
     [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
-    //  根据审核状态显示响应的内容，“给个好评”在审核期间不能被看到，否则可能会被拒绝-
-    if ([SSJStartChecker sharedInstance].isInReview) {
-        if ([SSJDefaultSource() isEqualToString:@"11501"] || [SSJDefaultSource() isEqualToString:@"11502"]) {
-            self.images = [@[@"more_tixing", @"more_pifu", @"more_zhouqi",@"more_daochu", @"more_share", @"more_fankui", @"more_shezhi"] mutableCopy];
-            self.titles = [@[kTitle1 , kTitle2 , kTitle3, kTitle4,kTitle8,kTitle5 , kTitle7] mutableCopy];
-            _titleArr = [@[kTitle1 , kTitle2 , kTitle3 , kTitle4 , kTitle8 , kTitle5 , kTitle7] mutableCopy];
-        } else{
-            self.images = [@[@"more_tixing", @"more_pifu", @"more_zhouqi",@"more_daochu", @"more_fankui", @"more_shezhi"] mutableCopy];
-            self.titles = [@[kTitle1 , kTitle2 , kTitle3, kTitle4,kTitle5 , kTitle7] mutableCopy];
-            _titleArr = [@[kTitle1 , kTitle2 , kTitle3 , kTitle4 , kTitle5 , kTitle7] mutableCopy];
-        }
-
-    } else {
-        if ([SSJDefaultSource() isEqualToString:@"11501"] || [SSJDefaultSource() isEqualToString:@"11502"]) {
-            self.images = [@[@"more_tixing", @"more_pifu",@"more_zhouqi",@"more_daochu", @"more_share", @"more_fankui", @"more_haoping", @"more_shezhi"] mutableCopy];
-            self.titles = [@[kTitle1 , kTitle2 , kTitle3, kTitle4,kTitle8, kTitle5 , kTitle6 , kTitle7]mutableCopy];
-            _titleArr = [@[kTitle1 , kTitle2 , kTitle3 , kTitle4 , kTitle8 , kTitle5 , kTitle6 , kTitle7] mutableCopy];
-        } else{
-            self.images = [@[@"more_tixing", @"more_pifu", @"more_zhouqi",@"more_daochu", @"more_fankui", @"more_haoping", @"more_shezhi"] mutableCopy];
-            self.titles = [@[kTitle1 , kTitle2 , kTitle3, kTitle4, kTitle5 , kTitle6 , kTitle7] mutableCopy];
-            _titleArr = [@[kTitle1 , kTitle2 , kTitle3 , kTitle4 , kTitle5 , kTitle6 , kTitle7] mutableCopy];
-        }
-    }
 
     __weak typeof(self) weakSelf = self;
     [self getUserInfo:^(SSJUserInfoItem *item){
@@ -188,7 +206,7 @@ static BOOL kNeedBannerDisplay = YES;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
-    return self.adItemsArray.count;
+    return self.adItemsArray.count ;
 }
 
 -(UICollectionViewCell*)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
@@ -379,6 +397,7 @@ static BOOL kNeedBannerDisplay = YES;
 {
     //遍历images、titles生产广告模型
     [self.adItemsArray removeAllObjects];
+    NSMutableArray *tempArray = [NSMutableArray array];
     for (NSInteger i=0; i<self.titles.count; i++) {
         SSJListAdItem *item = [[SSJListAdItem alloc] init];
         item.adTitle = [self.titles ssj_safeObjectAtIndex:i];
@@ -386,8 +405,9 @@ static BOOL kNeedBannerDisplay = YES;
         item.imageUrl = nil;
         item.hidden = NO;
         item.url = nil;//不需要跳转网页
-        [self.adItemsArray addObject:item];
+        [tempArray addObject:item];
     }
+    self.adItemsArray = tempArray;
     
     for (SSJListAdItem *listAdItem in self.bannerService.item.listAdItems) {
         if (listAdItem.hidden) {
