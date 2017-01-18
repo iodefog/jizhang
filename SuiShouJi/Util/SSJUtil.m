@@ -129,6 +129,9 @@ NSString *SSJPhoneModel(){
 UIViewController* SSJFindTopModelViewController(UIViewController* vc){
     if (vc.presentedViewController) {
         while (vc.presentedViewController) {
+            if ([vc.presentedViewController isKindOfClass:[UIAlertController class]]) {
+                break;
+            }
             vc = vc.presentedViewController;
         }
     }
@@ -140,11 +143,24 @@ UIViewController* SSJFindTopModelViewController(UIViewController* vc){
     
     if ([vc isKindOfClass:[UINavigationController class]]) {
         UINavigationController *navController = (UINavigationController*)vc;
-        vc = SSJFindTopModelViewController([navController visibleViewController]);
+        vc = SSJFindTopModelViewController([navController topViewController]);
     }
     
-    if ([vc isKindOfClass:[UIAlertController class]]) {
-        vc = vc.presentingViewController;
+    if ([vc isKindOfClass:[MMDrawerController class]]) {
+        MMDrawerController *drawer = (MMDrawerController *)vc;
+        switch (drawer.openSide) {
+            case MMDrawerSideNone:
+                vc = SSJFindTopModelViewController(drawer.centerViewController);
+                break;
+                
+            case MMDrawerSideLeft:
+                vc = SSJFindTopModelViewController(drawer.leftDrawerViewController);
+                break;
+                
+            case MMDrawerSideRight:
+                vc = SSJFindTopModelViewController(drawer.rightDrawerViewController);
+                break;
+        }
     }
     
     return vc;
@@ -153,26 +169,35 @@ UIViewController* SSJFindTopModelViewController(UIViewController* vc){
 UIViewController* SSJVisibalController() {
     
     UIViewController* appRootViewController = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
-    if ([appRootViewController isKindOfClass:[MMDrawerController class]]) {
-        MMDrawerController *drawerController = (MMDrawerController *)appRootViewController;
-        if (drawerController.presentedViewController) {
-            return SSJFindTopModelViewController(drawerController);
-        } else {
-            switch (drawerController.openSide) {
-                case MMDrawerSideNone:
-                    return SSJFindTopModelViewController(drawerController.centerViewController);
-                    
-                case MMDrawerSideLeft:
-                    return SSJFindTopModelViewController(drawerController.leftDrawerViewController);
-                    
-                case MMDrawerSideRight:
-                    return SSJFindTopModelViewController(drawerController.rightDrawerViewController);
-                    
-            }
-        }
-    } else {
-        return appRootViewController;
-    }
+    return SSJFindTopModelViewController(appRootViewController);
+    
+//    if ([appRootViewController isKindOfClass:[MMDrawerController class]]) {
+//        
+//        MMDrawerController *drawerController = (MMDrawerController *)appRootViewController;
+//        MMDrawerController *topDrawerController = drawerController;
+//        if (drawerController.presentedViewController) {
+//            UIViewController *topController = SSJFindTopModelViewController(drawerController);
+//            if (![topController isKindOfClass:[MMDrawerController class]]) {
+//                return topController;
+//            }
+//            
+//            topDrawerController = (MMDrawerController *)topController;
+//        }
+//        
+//        switch (topDrawerController.openSide) {
+//            case MMDrawerSideNone:
+//                return SSJFindTopModelViewController(topDrawerController.centerViewController);
+//                
+//            case MMDrawerSideLeft:
+//                return SSJFindTopModelViewController(topDrawerController.leftDrawerViewController);
+//                
+//            case MMDrawerSideRight:
+//                return SSJFindTopModelViewController(topDrawerController.rightDrawerViewController);
+//                
+//        }
+//    } else {
+//        return appRootViewController;
+//    }
 }
 
 

@@ -141,7 +141,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self.navigationController setNavigationBarHidden:YES animated:YES];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
     [self loadCategoryAndBooksList];
     [self reloadMenberItems];
 }

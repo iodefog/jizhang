@@ -44,9 +44,14 @@
 #import "SSJBookKeepingHomeEvaluatePopView.h"
 #import "SSJLoginPopView.h"
 #import "SSJBookKeepingHomePopView.h"
+#import "SSJHomeBillStickyNoteView.h"
+#import "SSJBillNoteWebViewController.h"
+#import "SSJAlertViewAdapter.h"
+#import "SSJAlertViewAction.h"
+#import "SSJLoginViewController+SSJCategory.h"
+#import "SSJRegistGetVerViewController.h"
 
-
-@interface SSJBookKeepingHomeViewController ()<SSJMultiFunctionButtonDelegate>
+@interface SSJBookKeepingHomeViewController () <UITabBarControllerDelegate, SSJMultiFunctionButtonDelegate>
 
 @property (nonatomic,strong) NSMutableArray *items;
 @property (nonatomic,strong) UIButton *button;
@@ -86,6 +91,8 @@
  <#注释#>
  */
 @property (nonatomic, strong) SSJBookKeepingHomePopView *keepingHomePopView;
+
+@property (nonatomic, strong) SSJHomeBillStickyNoteView *billStickyNoteView;
 @end
 
 @implementation SSJBookKeepingHomeViewController{
@@ -111,10 +118,36 @@
     return self;
 }
 
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    self.view.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:self.homeBar];
+    [self.view addSubview:self.tableView];
+    [self.view addSubview:self.bookKeepingHeader];
+    [self.view addSubview:self.homeButton];
+    [self.view addSubview:self.statusLabel];
+    [self.view addSubview:self.billStickyNoteView];
+    self.tableView.frame = self.view.frame;
+    //    self.newlyAddChargeArr = [[NSMutableArray alloc]init];
+    //    self.tableView.backgroundColor = [UIColor whiteColor];
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.view.backgroundColor = [UIColor whiteColor];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadAfterBooksTypeChange) name:SSJBooksTypeDidChangeNotification object:nil];
+    [self.mm_drawerController setMaximumLeftDrawerWidth:SSJSCREENWITH * 0.8];
+    [self.mm_drawerController setOpenDrawerGestureModeMask:MMOpenDrawerGestureModeAll];
+    [self.mm_drawerController setCloseDrawerGestureModeMask:MMCloseDrawerGestureModeAll];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(continueLoading) name:SSJHomeContinueLoadingNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(syncDidFail) name:SSJSyncDataFailureNotification object:nil];
+}
+
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    
+    self.tabBarController.delegate = self;
+    
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
+    
     __weak typeof(self) weakSelf = self;
-    [self.navigationController setNavigationBarHidden:YES animated:NO];
     [self.mm_drawerController setGestureCompletionBlock:^(MMDrawerController *drawerController, UIGestureRecognizer *gesture) {
         __strong typeof(weakSelf) sself = weakSelf;
         if (drawerController.openSide == MMDrawerSideNone) {
@@ -162,31 +195,13 @@
     [self whichViewShouldPopToHomeView];//弹框
 }
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    self.view.backgroundColor = [UIColor whiteColor];
-    [self.view addSubview:self.homeBar];
-    [self.view addSubview:self.tableView];
-    [self.view addSubview:self.bookKeepingHeader];
-    [self.view addSubview:self.homeButton];
-    [self.view addSubview:self.statusLabel];
-    self.tableView.frame = self.view.frame;
-//    self.newlyAddChargeArr = [[NSMutableArray alloc]init];
-//    self.tableView.backgroundColor = [UIColor whiteColor];
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    self.view.backgroundColor = [UIColor whiteColor];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadAfterBooksTypeChange) name:SSJBooksTypeDidChangeNotification object:nil];
-    [self.mm_drawerController setMaximumLeftDrawerWidth:SSJSCREENWITH * 0.8];
-    [self.mm_drawerController setOpenDrawerGestureModeMask:MMOpenDrawerGestureModeAll];
-    [self.mm_drawerController setCloseDrawerGestureModeMask:MMCloseDrawerGestureModeAll];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(continueLoading) name:SSJHomeContinueLoadingNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(syncDidFail) name:SSJSyncDataFailureNotification object:nil];
-}
-
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
-    [[self navigationController] setNavigationBarHidden:NO animated:NO];
+    // 如果不是present一个控制器就显示导航栏
+    if (!self.navigationController.presentedViewController) {
+        [[self navigationController] setNavigationBarHidden:NO animated:YES];
+    }
 //    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
     self.selectIndex = nil;
     [self getCurrentDate];
@@ -196,21 +211,53 @@
     _dateViewHasDismiss = YES;
 }
 
+//- (void)viewDidDisappear:(BOOL)animated{
+//    [super viewDidDisappear:animated];
+//    [[self navigationController] setNavigationBarHidden:NO animated:NO];
+//}
+
 -(void)viewDidLayoutSubviews{
     [super viewDidLayoutSubviews];
     self.homeBar.leftTop = CGPointMake(0, 0);
     self.bookKeepingHeader.size = CGSizeMake(self.view.width, 136);
     self.bookKeepingHeader.top = self.homeBar.bottom;
-    if (!SSJ_CURRENT_THEME.tabBarBackgroundImage.length) {
-        self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.bookKeepingHeader.bottom - SSJ_TABBAR_HEIGHT);
-    }else{
-        self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.bookKeepingHeader.bottom);
-    }
-    self.tableView.top = self.bookKeepingHeader.bottom;
-    self.clearView.frame = self.view.frame;
     self.homeButton.size = CGSizeMake(106, 106);
     self.homeButton.top = self.bookKeepingHeader.bottom - 60;
     self.homeButton.centerX = self.view.width / 2;
+    self.billStickyNoteView.centerX = self.view.centerX;
+    self.billStickyNoteView.width = self.view.width;
+    self.billStickyNoteView.top = self.homeButton.bottom;
+    BOOL haveShowTheNoteView = [[[NSUserDefaults standardUserDefaults] objectForKey:SSJShowBillNoteKey] boolValue];
+    if (!haveShowTheNoteView) {
+        //没显示过
+        self.billStickyNoteView.height = 105;
+        self.billStickyNoteView.hidden = NO;
+    } else {
+        self.billStickyNoteView.height = 0;
+        self.billStickyNoteView.hidden = YES;
+    }
+    if (!SSJ_CURRENT_THEME.tabBarBackgroundImage.length) {
+        if (!haveShowTheNoteView) {
+            self.tableView.top = self.billStickyNoteView.bottom;
+            self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.billStickyNoteView.bottom - SSJ_TABBAR_HEIGHT);
+        } else {
+            self.tableView.top = self.bookKeepingHeader.bottom;
+            self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.bookKeepingHeader.bottom - SSJ_TABBAR_HEIGHT);
+            self.tableView.contentInset = UIEdgeInsetsMake(46, 0, 0, 0);
+        }
+    }else{
+        if (!haveShowTheNoteView) {
+            self.tableView.top = self.billStickyNoteView.bottom;
+            self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.billStickyNoteView.bottom);
+            self.tableView.contentInset = UIEdgeInsetsMake(0, 0, SSJ_TABBAR_HEIGHT, 0);
+        } else {
+            self.tableView.top = self.bookKeepingHeader.bottom;
+            self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.bookKeepingHeader.bottom);
+            self.tableView.contentInset = UIEdgeInsetsMake(46, 0, SSJ_TABBAR_HEIGHT, 0);
+            self.tableView.contentOffset = CGPointMake(0, 46);
+        }
+    }
+    self.clearView.frame = self.view.frame;
     self.statusLabel.height = 21;
     self.statusLabel.top = self.homeButton.bottom;
     self.statusLabel.centerX = self.view.width / 2;
@@ -289,11 +336,31 @@
     }
 }
 
+#pragma mark - UITabBarControllerDelegate
+- (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController {
+    if ([viewController isKindOfClass:[UINavigationController class]]) {
+        UINavigationController *naviController = (UINavigationController *)viewController;
+        if (naviController.topViewController == self) {
+            [self.navigationController setNavigationBarHidden:YES animated:NO];
+        }
+    }
+    
+    return YES;
+}
+
+//- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
+//    if ([viewController isKindOfClass:[UINavigationController class]]) {
+//        UINavigationController *naviController = (UINavigationController *)viewController;
+//        if (naviController.topViewController == self) {
+//            [self.navigationController setNavigationBarHidden:YES animated:NO];
+//        }
+//    }
+//}
 
 #pragma mark - UIScrollViewDelegate
 -(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
     [self.homeButton stopLoading];
-    if (scrollView.contentOffset.y < - 80) {
+    if (scrollView.contentOffset.y < - scrollView.contentInset.top - 34) {
         _isRefreshing = NO;
         
         [MobClick event:@"pull_add_record"];
@@ -309,7 +376,7 @@
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
-    if (scrollView.contentOffset.y <= -46) {
+    if (scrollView.contentOffset.y <= - scrollView.contentInset.top) {
         [SSJBudgetDatabaseHelper queryForCurrentBudgetListWithSuccess:^(NSArray<SSJBudgetModel *> * _Nonnull result) {
             self.homeBar.budgetButton.model = [result firstObject];
             self.homeBar.budgetButton.button.enabled = YES;
@@ -317,13 +384,13 @@
             NSLog(@"%@",error.localizedDescription);
         }];
     }
-    if (scrollView.contentOffset.y < - 46) {
+    if (scrollView.contentOffset.y < - scrollView.contentInset.top) {
         if (!_dateViewHasDismiss) {
             [self.floatingDateView dismiss];
             [self.mutiFunctionButton dismiss];
             _dateViewHasDismiss = YES;
         }
-        self.tableView.lineHeight = - scrollView.contentOffset.y;
+        self.tableView.lineHeight = - scrollView.contentOffset.y - scrollView.contentInset.top;
         if (self.items.count == 0) {
             self.tableView.hasData = NO;
         }else{
@@ -336,7 +403,7 @@
         }
 
     }else {
-        if (scrollView.contentOffset.y > - 20 && self.items.count != 0)  {
+        if (scrollView.contentOffset.y > MAX(- 20, - scrollView.contentInset.top)  && self.items.count != 0)  {
             [self.floatingDateView showOnView:self.view];
             [self.mutiFunctionButton showOnView:self.view];
         }
@@ -367,7 +434,7 @@
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
-    if (scrollView.contentOffset.y <= -46) {
+    if (scrollView.contentOffset.y <= - scrollView.contentInset.top) {
         if (!_dateViewHasDismiss) {
             [self.floatingDateView dismiss];
             [self.mutiFunctionButton dismiss];
@@ -376,7 +443,7 @@
     }
 }
 
--(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
+-(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
     if (self.items.count == 0) {
         return;
     }else{
@@ -471,11 +538,7 @@
 -(SSJHomeTableView *)tableView{
     if (!_tableView) {
         _tableView = [[SSJHomeTableView alloc]init];
-        if (!SSJ_CURRENT_THEME.tabBarBackgroundImage.length) {
-            _tableView.contentInset = UIEdgeInsetsMake(46, 0, 0, 0);
-        }else{
-            _tableView.contentInset = UIEdgeInsetsMake(46, 0, SSJ_TABBAR_HEIGHT, 0);
-        }
+
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.showsVerticalScrollIndicator = NO;
@@ -603,6 +666,43 @@
         _keepingHomePopView = [SSJBookKeepingHomePopView BookKeepingHomePopView];
     }
     return _keepingHomePopView;
+}
+
+- (SSJHomeBillStickyNoteView *)billStickyNoteView
+{
+    __weak typeof(self) weakSelf = self;
+    if (!_billStickyNoteView) {
+        _billStickyNoteView = [[SSJHomeBillStickyNoteView alloc] init];
+        _billStickyNoteView.closeBillNoteBlock = ^{
+            [weakSelf.view layoutIfNeeded];
+            [weakSelf.tableView setContentOffset:CGPointMake(0, -46)];
+        };
+        
+        _billStickyNoteView.openBillNoteBlock = ^{
+            //如果没有登录
+            if (!SSJIsUserLogined()) {
+                [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:@"请登录后再查看2016账单吧！" action:[SSJAlertViewAction actionWithTitle:@"关闭" handler:^(SSJAlertViewAction *action) {
+                }],[SSJAlertViewAction actionWithTitle:@"立即登录" handler:^(SSJAlertViewAction *action) {
+                    SSJLoginViewController *loginVC = [[SSJLoginViewController alloc] init];
+                    [weakSelf.navigationController pushViewController:loginVC animated:YES];
+                }],nil];
+            }else{
+                //跳转2016账单
+                SSJBillNoteWebViewController *billVC = [[SSJBillNoteWebViewController alloc] init];
+                billVC.backButtonClickBlock = ^(){
+                    [weakSelf.tableView setContentOffset:CGPointMake(0, -46)];
+                };
+                billVC.hidesBottomBarWhenPushed = YES;
+//                [weakSelf.navigationController pushViewController:billVC animated:YES];
+                [weakSelf presentViewController:billVC animated:YES completion:nil];
+                [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:SSJShowBillNoteKey];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+                [weakSelf.billStickyNoteView removeFromSuperview];
+                [weakSelf.view layoutIfNeeded];
+            }
+        };
+    }
+    return _billStickyNoteView;
 }
 
 
@@ -858,9 +958,7 @@
         }else{
             self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.bookKeepingHeader.bottom);
         }
-    } completion:^(BOOL finished) {
-        
-    }];
+    } completion:NULL];
 }
 
 - (void)whichViewShouldPopToHomeView
