@@ -92,6 +92,7 @@ static BOOL kNeedBannerDisplay = YES;
 
 @property (nonatomic, strong) UIView *lineView;
 @property (nonatomic, strong) NSMutableArray<SSJListAdItem *> *adItems;//服务器返回的广告
+@property (nonatomic, strong) NSMutableArray<SSJListAdItem *> *localAdItems;//本地固定的广告
 @property (nonatomic, strong) NSMutableArray<SSJListAdItem *> *adItemsArray;//合并之后的广告
 @end
 
@@ -155,11 +156,11 @@ static BOOL kNeedBannerDisplay = YES;
         item.imageName = [self.images ssj_safeObjectAtIndex:i];
         item.imageUrl = nil;
         item.hidden = NO;
-        item.isShowDot = NO;//默认都不显示小红点
         item.url = nil;//不需要跳转网页
         [tempArray addObject:item];
     }
-    self.adItemsArray = tempArray;
+    self.localAdItems = tempArray;
+    self.adItemsArray = self.localAdItems;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -325,9 +326,16 @@ static BOOL kNeedBannerDisplay = YES;
         MQChatViewManager *chatViewManager = [[MQChatViewManager alloc] init];
         [chatViewManager pushMQChatViewControllerInViewController:self];
     }*/
+    //建议与咨询
     if ([item.adTitle isEqualToString:kTitle5]) {
         SSJProductAdviceViewController *adviceVC = [[SSJProductAdviceViewController alloc] init];
         [adviceVC setHidesBottomBarWhenPushed:YES];
+        //更改模型数据
+        for (SSJListAdItem *item in self.localAdItems) {
+            if ([item.adTitle isEqualToString:kTitle5]) {//建议与咨询
+                item.isShowDot = YES;
+            }
+        }
         [self.navigationController pushViewController:adviceVC animated:YES];
     }
     
@@ -353,6 +361,12 @@ static BOOL kNeedBannerDisplay = YES;
     //主题
     if ([item.adTitle isEqualToString:kTitle2]) {
         SSJThemeHomeViewController *themeVC = [[SSJThemeHomeViewController alloc]init];
+        //更改模型数据
+        for (SSJListAdItem *item in self.localAdItems) {
+            if ([item.adTitle isEqualToString:kTitle2]) {//主题皮肤
+                item.isShowDot = YES;
+            }
+        }
         [self.navigationController pushViewController:themeVC animated:YES];
     }
     
@@ -398,7 +412,14 @@ static BOOL kNeedBannerDisplay = YES;
     
     if ([service isKindOfClass:[SSJNewDotNetworkService class]]) {
     //更改模型数据
-        
+        for (SSJListAdItem *item in self.localAdItems) {
+            if ([item.adTitle isEqualToString:kTitle2]) {//主题皮肤
+                item.isShowDot = YES;
+            }
+            if ([item.adTitle isEqualToString:kTitle5]) {//建议与咨询
+                item.isShowDot = YES;
+            }
+        }
     }
 }
 
@@ -571,6 +592,14 @@ static BOOL kNeedBannerDisplay = YES;
         _adItemsArray = [NSMutableArray array];
     }
     return _adItemsArray;
+}
+
+- (NSMutableArray<SSJListAdItem *> *)localAdItems
+{
+    if (!_localAdItems) {
+        _localAdItems = [NSMutableArray array];
+    }
+    return _localAdItems;
 }
 
 - (UIView *)lineView

@@ -65,8 +65,14 @@
         self.nameLabel.frame = CGRectMake(0, CGRectGetMaxY(self.topImage.frame) + 15, self.width, 20);
         self.bottomLabel.frame = CGRectMake(0, CGRectGetMaxY(self.nameLabel.frame), self.width, 15);
     }
+    //是否显示小红点
+    if ([adItem.adTitle isEqualToString:@"主题皮肤"] || [adItem.adTitle isEqualToString:@"建议与咨询"]) {
+        self.dotView.hidden = !adItem.isShowDot;
+    }else {
+        self.dotView.hidden = YES;
+    }
 }
-#pragma mark Lazy
+#pragma mark - Lazy
 - (UIImageView *)topImage
 {
     if (!_topImage) {
