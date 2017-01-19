@@ -10,6 +10,8 @@ def shared_pods
     pod 'Meiqia', '~> 3.3.1'
     #pod 'MLeaksFinder', '~> 0.2.0'
     pod 'JSPatch'
+    pod 'JSPatch/Extensions'
+    pod 'JSPatch/JPCFunction'
     pod 'MMDrawerController', '~> 0.5.7'
     pod 'SDWebImage/WebP'
     pod 'MJExtension'

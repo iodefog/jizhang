@@ -23,18 +23,18 @@ static NSString *const kSSJDomainKey = @"SSJDomainManagerKey";
 @implementation SSJDomainManager
 
 + (NSString *)domain {
-#ifdef DEBUG
-    return SSJTestDomain;
-#else
+#ifdef PRODUCTION
     return [self formalDomain];
+#else
+    return SSJTestDomain;
 #endif
 }
 
 + (NSString *)imageDomain {
-#ifdef DEBUG
-    return SSJTestImageDomain;
-#else
+#ifdef PRODUCTION
     return [self formalDomain];
+#else
+    return SSJTestImageDomain;
 #endif
 }
 
@@ -66,9 +66,7 @@ static NSString *const kSSJDomainKey = @"SSJDomainManagerKey";
             [self validateDomain:domain success:^(NSString *domain) {
                 [[NSUserDefaults standardUserDefaults] setObject:domain forKey:kSSJDomainKey];
                 [[NSUserDefaults standardUserDefaults] synchronize];
-            } failure:^(NSError *error) {
-                
-            }];
+            } failure:NULL];
             
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
             [self requestAfterFailureIfNeeded];
