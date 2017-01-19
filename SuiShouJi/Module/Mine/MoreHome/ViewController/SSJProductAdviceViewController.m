@@ -169,7 +169,17 @@
     
     //遍历排序后的数组判断是否显示时间同一天的不显示，否则显示
     SSJChatMessageItem *lastItem;
+    BOOL isStop = NO;
     for (SSJChatMessageItem *item in arr) {
+        //得到最新一条回复的时间并存储到数据库中
+        if (item.isSystem == YES && isStop == NO) {//是系统
+            SSJUserItem *userItem = [[SSJUserItem alloc] init];
+            userItem.userId = SSJUSERID();
+            userItem.adviceTime = item.dateStr;
+            //存储
+            [SSJUserTableManager saveUserItem:userItem];
+            isStop = YES;
+        }
         if ([lastItem.date isSameDay:item.date]) {
             item.isHiddenTime = YES;
         }
@@ -177,6 +187,9 @@
     }
     self.chartMessageArray = [NSMutableArray arrayWithArray:arr];
     [self.tableView reloadData];
+    
+    
+    
 }
 
 #pragma mark -Lazy
