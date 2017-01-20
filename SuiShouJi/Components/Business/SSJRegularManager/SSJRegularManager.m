@@ -128,7 +128,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
         return NO;
     }
     
-    
+    [db executeUpdate:@"select max(uc.cbilldate), tc.* from bk_user_charge as uc, bk_transfer_cycle as tc where uc.cuserid = ? and uc.cuserid = tc.cuserid and uc."];
     
     return YES;
 }
