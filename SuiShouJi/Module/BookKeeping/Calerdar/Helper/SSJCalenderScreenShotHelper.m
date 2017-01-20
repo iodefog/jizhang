@@ -54,6 +54,26 @@
         CGSize yearSize = [yearStr sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:21]}];
         [weekDayStr drawInRect:CGRectMake(0, 0, 0, 0) withAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:21],NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"#222222"]}];
         
+        // 写上总收入
+        NSString *incomeTitleStr = @"总收入:";
+        CGSize incomeTitleSize = [yearStr sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13]}];
+        [incomeTitleStr drawInRect:CGRectMake(0, 0, 0, 0) withAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13],NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+
+        // 写上收入金额
+        NSString *incomeStr = [[NSString stringWithFormat:@"%f",income] ssj_moneyDecimalDisplayWithDigits:2];
+        CGSize incomeSize = [yearStr sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13]}];
+        [incomeStr drawInRect:CGRectMake(0, 0, 0, 0) withAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13],NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurveIncomeColor]}];
+        
+        // 写上总支出
+        NSString *expenceTitleStr = @"总支出:";
+        CGSize expenceTitleSize = [yearStr sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13]}];
+        [expenceTitleStr drawInRect:CGRectMake(0, 0, 0, 0) withAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13],NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+        
+        // 写上支出金额
+        NSString *expenceStr = [[NSString stringWithFormat:@"%f",expence] ssj_moneyDecimalDisplayWithDigits:2];
+        CGSize expenceSize = [yearStr sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13]}];
+        [expenceStr drawInRect:CGRectMake(0, 0, 0, 0) withAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13],NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurvePaymentColor]}];
+        
         
         UIGraphicsEndImageContext();
     });
