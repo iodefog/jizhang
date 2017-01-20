@@ -122,6 +122,17 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
     }];
 }
 
++ (BOOL)supplementCyclicTransferForUserId:(NSString *)userId inDatabase:(FMDatabase *)db rollback:(BOOL *)rollback {
+    if (!userId || !userId.length) {
+        SSJPRINT(@">>> SSJ Warning:userid must not be nil or empty");
+        return NO;
+    }
+    
+    
+    
+    return YES;
+}
+
 + (BOOL)supplementBookkeepingForUserId:(NSString *)userId inDatabase:(FMDatabase *)db rollback:(BOOL *)rollback {
     
     if (!userId || !userId.length) {
