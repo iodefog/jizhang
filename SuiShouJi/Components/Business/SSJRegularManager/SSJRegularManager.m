@@ -128,7 +128,17 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
         return NO;
     }
     
-    [db executeUpdate:@"select max(uc.cbilldate), tc.* from bk_user_charge as uc, bk_transfer_cycle as tc where uc.cuserid = ? and uc.cuserid = tc.cuserid and uc."];
+    // 查询当前用户有效周期转账生成的最近一次的流水记录
+    FMResultSet *resultSet = [db executeQuery:@"select max(uc.cbilldate), tc.* from bk_user_charge as uc, bk_transfer_cycle as tc where uc.cuserid = ? and uc.cuserid = tc.cuserid and uc.ichargetype = 5 and uc.cid like (tc.icycleid || '-%') and tc.operatortype <> 2 and tc.istate <> 0 group by tc.icycleid"];
+    if (!resultSet) {
+        return NO;
+    }
+    
+    NSMutableArray *cycleIds = [[NSMutableArray alloc] init];
+    while ([resultSet next]) {
+        
+    }
+    [resultSet close];
     
     return YES;
 }
