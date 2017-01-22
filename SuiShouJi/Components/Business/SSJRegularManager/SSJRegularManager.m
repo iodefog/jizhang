@@ -122,6 +122,111 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
     }];
 }
 
++ (BOOL)supplementCyclicTransferForUserId:(NSString *)userId inDatabase:(FMDatabase *)db rollback:(BOOL *)rollback {
+    if (!userId || !userId.length) {
+        SSJPRINT(@">>> SSJ Warning:userid must not be nil or empty");
+        return NO;
+    }
+    
+    // 根据最近一次周期转账流水计算出需要补充的流水
+    FMResultSet *resultSet = [db executeQuery:@"select max(uc.cbilldate), tc.* from bk_user_charge as uc, bk_transfer_cycle as tc where uc.cuserid = ? and uc.cuserid = tc.cuserid and uc.ichargetype = 5 and uc.cid like (tc.icycleid || '-%') and tc.operatortype <> 2 and tc.istate <> 0 and uc.cbilldate <= datetime('now', 'localtime') group by tc.icycleid", userId];
+    if (!resultSet) {
+        return NO;
+    }
+    
+    NSMutableArray *cycleIds = [[NSMutableArray alloc] init];
+    NSMutableArray *chargeList = [[NSMutableArray alloc] init];
+    
+    while ([resultSet next]) {
+        
+        NSString *cycleId = [resultSet stringForColumn:@"icycleid"];
+        [cycleIds addObject:[NSString stringWithFormat:@"'%@'", cycleId]];
+        
+        int periodType = [resultSet intForColumn:@"icycletype"];
+        
+        NSString *billDateStr = [resultSet stringForColumn:@"max(a.cbilldate)"];
+        NSDate *billDate = [NSDate dateWithString:billDateStr formatString:@"yyyy-MM-dd"];
+        NSDate *beginDate = [NSDate dateWithString:[resultSet stringForColumn:@"cbegindate"] formatString:@"yyyy-MM-dd"];
+        NSDate *fromDate = [billDate compare:beginDate] == NSOrderedDescending ? billDate : beginDate;
+        
+        NSDate *endDate = [NSDate dateWithString:[resultSet stringForColumn:@"cenddate"] formatString:@"yyyy-MM-dd"];
+        NSDate *currentDate = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:[NSDate date].day];
+        NSDate *toDate = [endDate compare:currentDate] == NSOrderedAscending ? endDate : currentDate;
+        
+        NSArray *billDates = [self billDatesFromDate:fromDate toDate:toDate periodType:periodType containFromDate:NO];
+        
+        [self organiseChargeListWithResultSet:resultSet chargeList:chargeList billDates:billDates userId:userId];
+    }
+    [resultSet close];
+    
+    // 查询没有生成过流水的周期转账，根据起始日期、结束日期及当天日期得出需要补充的流水
+    NSMutableString *sql = [[NSMutableString alloc] initWithString:@"select * from bk_transfer_cycle where cuserid = ? and operatortype <> 2 and istate = 1"];
+    NSString *cycleIdStr = [cycleIds componentsJoinedByString:@","];
+    if (cycleIdStr.length) {
+        [sql appendFormat:@" and icycleid not in (%@)", cycleIdStr];
+    }
+    resultSet = [db executeQuery:sql, userId];
+    if (!resultSet) {
+        return NO;
+    }
+    
+    while ([resultSet next]) {
+        int periodType = [resultSet intForColumn:@"icycletype"];
+        NSDate *fromDate = [NSDate dateWithString:[resultSet stringForColumn:@"cbegindate"] formatString:@"yyyy-MM-dd"];
+        NSDate *endDate = [NSDate dateWithString:[resultSet stringForColumn:@"cenddate"] formatString:@"yyyy-MM-dd"];
+        NSDate *currentDate = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:[NSDate date].day];
+        NSDate *toDate = [endDate compare:currentDate] == NSOrderedAscending ? endDate : currentDate;
+        NSArray *billDates = [self billDatesFromDate:fromDate toDate:toDate periodType:periodType containFromDate:NO];
+        
+        [self organiseChargeListWithResultSet:resultSet chargeList:chargeList billDates:billDates userId:userId];
+    }
+    [resultSet close];
+    
+    return YES;
+}
+
++ (void)organiseChargeListWithResultSet:(FMResultSet *)resultSet chargeList:(NSMutableArray *)chargeList billDates:(NSArray *)billDates userId:(NSString *)userId {
+    for (NSDate *date in billDates) {
+        
+        NSString *cycleId = [resultSet stringForColumn:@"icycleid"];
+        NSString *money = [resultSet stringForColumn:@"imoney"];
+        NSString *billDate = [date formattedDateWithFormat:@"yyyy-MM-dd"];
+        NSString *memo = [resultSet stringForColumn:@"cmemo"];
+        NSString *transferInId = [resultSet stringForColumn:@"ctransferinaccountid"];
+        NSString *transferOutId = [resultSet stringForColumn:@"ctransferoutaccountid"];
+        NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        
+        NSDictionary *transferInChargeInfo = @{@"ichargeid":SSJUUID(),
+                                               @"cuserid":userId,
+                                               @"imoney":money,
+                                               @"ibillid":@3,
+                                               @"ifunsid":transferInId,
+                                               @"cid":cycleId,
+                                               @"ichargetype":@5,
+                                               @"cbilldate":billDate,
+                                               @"cmemo":memo,
+                                               @"iversion": @(SSJSyncVersion()),
+                                               @"cwritedate":writeDate,
+                                               @"operatortype":@0};
+        
+        NSDictionary *transferOutChargeInfo = @{@"ichargeid":SSJUUID(),
+                                                @"cuserid":userId,
+                                                @"imoney":money,
+                                                @"ibillid":@4,
+                                                @"ifunsid":transferOutId,
+                                                @"cid":cycleId,
+                                                @"ichargetype":@5,
+                                                @"cbilldate":billDate,
+                                                @"cmemo":memo,
+                                                @"iversion": @(SSJSyncVersion()),
+                                                @"cwritedate":writeDate,
+                                                @"operatortype":@0};
+        
+        [chargeList addObject:transferInChargeInfo];
+        [chargeList addObject:transferOutChargeInfo];
+    }
+}
+
 + (BOOL)supplementBookkeepingForUserId:(NSString *)userId inDatabase:(FMDatabase *)db rollback:(BOOL *)rollback {
     
     if (!userId || !userId.length) {
@@ -162,10 +267,15 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
         
         [configIdArr addObject:[NSString stringWithFormat:@"'%@'", configId]];
         
-        int periodType = [resultSet intForColumn:@"itype"];
         NSString *billDateStr = [resultSet stringForColumn:@"max(a.cbilldate)"];
-        NSDate *billDate = [NSDate dateWithString:billDateStr formatString:@"yyyy-MM-dd"];
-        NSArray *billDates = [self billDatesFromDate:billDate periodType:periodType containFromDate:NO];
+        NSDate *fromDate = [NSDate dateWithString:billDateStr formatString:@"yyyy-MM-dd"];
+        
+        NSDate *currentDate = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:[NSDate date].day];
+        NSDate *toDate = [endDate compare:currentDate] == NSOrderedAscending ? endDate : currentDate;
+        
+        int periodType = [resultSet intForColumn:@"itype"];
+        
+        NSArray *billDates = [self billDatesFromDate:fromDate toDate:toDate periodType:periodType containFromDate:NO];
         
         for (NSDate *billDate in billDates) {
             if ([endDate isEarlierThan:billDate]) {
@@ -222,8 +332,13 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
         
         int periodType = [resultSet intForColumn:@"itype"];
         NSString *billDateStr = [resultSet stringForColumn:@"cbilldate"];
-        NSDate *billDate = [NSDate dateWithString:billDateStr formatString:@"yyyy-MM-dd"];
-        NSArray *tmpBillDates = [self billDatesFromDate:billDate periodType:periodType containFromDate:YES];
+        NSDate *fromDate = [NSDate dateWithString:billDateStr formatString:@"yyyy-MM-dd"];
+        
+        NSDate *currentDate = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:[NSDate date].day];
+        NSDate *toDate = [endDate compare:currentDate] == NSOrderedAscending ? endDate : currentDate;
+        
+        NSArray *tmpBillDates = [self billDatesFromDate:fromDate toDate:toDate periodType:periodType containFromDate:YES];
+        
         NSMutableArray *billDates = [tmpBillDates mutableCopy];
         if (!billDates) {
             billDates = [NSMutableArray array];
@@ -361,24 +476,22 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
     return periods;
 }
 
-+ (NSArray *)billDatesFromDate:(NSDate *)date periodType:(int)periodType containFromDate:(BOOL)contained {
++ (NSArray<NSDate *> *)billDatesFromDate:(NSDate *)fromDate toDate:(NSDate *)toDate periodType:(int)periodType containFromDate:(BOOL)contained {
     //  如果date为空或晚于当前日期，就返回nil
-    if (!date || [[NSDate date] compare:date] == NSOrderedAscending) {
+    if (!fromDate || !toDate || [fromDate compare:toDate] == NSOrderedDescending) {
         return nil;
     }
     
-    NSDate *nowDate = [NSDate date];
-    nowDate = [NSDate dateWithYear:nowDate.year month:nowDate.month day:nowDate.day];
     int dayInterval = contained ? 0 : 1;
     
     switch (periodType) {
             // 每天
         case 0: {
-            NSInteger daycount = [nowDate daysFrom:date];
+            NSInteger daycount = [toDate daysFrom:fromDate];
 //            daycount ++;
             NSMutableArray *billDates = [NSMutableArray arrayWithCapacity:daycount];
             for (int i = dayInterval; i <= daycount; i ++) {
-                [billDates addObject:[date dateByAddingDays:i]];
+                [billDates addObject:[fromDate dateByAddingDays:i]];
             }
             return billDates;
             
@@ -386,11 +499,11 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
             
             // 每个工作日
         case 1: {
-            NSInteger daycount = [nowDate daysFrom:date];
+            NSInteger daycount = [toDate daysFrom:fromDate];
 //            daycount ++;
             NSMutableArray *billDates = [NSMutableArray arrayWithCapacity:daycount];
             for (int i = dayInterval; i <= daycount; i ++) {
-                NSDate *billDate = [date dateByAddingDays:i];
+                NSDate *billDate = [fromDate dateByAddingDays:i];
                 if (![billDate isWeekend]) {
                     [billDates addObject:billDate];
                 }
@@ -401,11 +514,11 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
             
             // 每个周末
         case 2: {
-            NSInteger daycount = [nowDate daysFrom:date];
+            NSInteger daycount = [toDate daysFrom:fromDate];
 //            daycount ++;
             NSMutableArray *billDates = [NSMutableArray arrayWithCapacity:daycount];
             for (int i = dayInterval; i <= daycount; i ++) {
-                NSDate *billDate = [date dateByAddingDays:i];
+                NSDate *billDate = [fromDate dateByAddingDays:i];
                 if ([billDate isWeekend]) {
                     [billDates addObject:billDate];
                 }
@@ -416,12 +529,12 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
             
             // 每周
         case 3: {
-            NSInteger weekCount = [SSJDatePeriod periodCountFromDate:date toDate:nowDate periodType:SSJDatePeriodTypeWeek];
+            NSInteger weekCount = [SSJDatePeriod periodCountFromDate:fromDate toDate:toDate periodType:SSJDatePeriodTypeWeek];
 //            weekCount ++;
             NSMutableArray *billDates = [NSMutableArray arrayWithCapacity:weekCount];
             for (int i = dayInterval; i <= weekCount; i ++) {
-                NSDate *newDate = [date dateByAddingWeeks:i];
-                if ([newDate compare:nowDate] != NSOrderedDescending) {
+                NSDate *newDate = [fromDate dateByAddingWeeks:i];
+                if ([newDate compare:toDate] != NSOrderedDescending) {
                     [billDates addObject:newDate];
                 }
             }
@@ -431,12 +544,12 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
             
             // 每月
         case 4: {
-            NSInteger monthCount = [SSJDatePeriod periodCountFromDate:date toDate:nowDate periodType:SSJDatePeriodTypeMonth];
+            NSInteger monthCount = [SSJDatePeriod periodCountFromDate:fromDate toDate:toDate periodType:SSJDatePeriodTypeMonth];
 //            monthCount ++;
             NSMutableArray *billDates = [NSMutableArray arrayWithCapacity:monthCount];
             for (int i = dayInterval; i <= monthCount; i ++) {
-                NSDate *newDate = [date dateByAddingMonths:i];
-                if ([newDate compare:nowDate] != NSOrderedDescending) {
+                NSDate *newDate = [fromDate dateByAddingMonths:i];
+                if ([newDate compare:toDate] != NSOrderedDescending) {
                     [billDates addObject:newDate];
                 }
             }
@@ -446,13 +559,13 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
             
             // 每月最后一天
         case 5: {
-            NSInteger monthCount = [SSJDatePeriod periodCountFromDate:date toDate:nowDate periodType:SSJDatePeriodTypeMonth];
+            NSInteger monthCount = [SSJDatePeriod periodCountFromDate:fromDate toDate:toDate periodType:SSJDatePeriodTypeMonth];
 //            monthCount ++;
             NSMutableArray *billDates = [NSMutableArray arrayWithCapacity:monthCount];
             for (int i = dayInterval; i <= monthCount; i ++) {
-                NSDate *tDate = [date dateByAddingMonths:i];
+                NSDate *tDate = [fromDate dateByAddingMonths:i];
                 NSDate *newDate = [NSDate dateWithYear:[tDate year] month:[tDate month] day:[tDate daysInMonth]];
-                if ([newDate compare:nowDate] != NSOrderedDescending) {
+                if ([newDate compare:toDate] != NSOrderedDescending) {
                     [billDates addObject:newDate];
                 }
             }
@@ -462,12 +575,12 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
             
             // 每年
         case 6: {
-            NSInteger yearCount = [SSJDatePeriod periodCountFromDate:date toDate:nowDate periodType:SSJDatePeriodTypeYear];
+            NSInteger yearCount = [SSJDatePeriod periodCountFromDate:fromDate toDate:toDate periodType:SSJDatePeriodTypeYear];
 //            yearCount ++;
             NSMutableArray *billDates = [NSMutableArray arrayWithCapacity:yearCount];
             for (int i = dayInterval; i <= yearCount; i ++) {
-                NSDate *newDate = [date dateByAddingYears:i];
-                if ([newDate compare:nowDate] != NSOrderedDescending) {
+                NSDate *newDate = [fromDate dateByAddingYears:i];
+                if ([newDate compare:toDate] != NSOrderedDescending) {
                     [billDates addObject:newDate];
                 }
             }
