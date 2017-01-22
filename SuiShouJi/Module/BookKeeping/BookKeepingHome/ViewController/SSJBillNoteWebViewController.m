@@ -10,6 +10,7 @@
 #import "UMSocial.h"
 #import "SSJViewAddition.h"
 #import <TencentOpenAPI/QQApiInterface.h>
+#import "CDAutoHideMessageHUD.h"
 @interface SSJBillNoteWebViewController ()<UIWebViewDelegate,UMSocialUIDelegate,UIScrollViewDelegate>
 //
 /**
@@ -98,8 +99,20 @@
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
 {
-    SSJPRINT(@"error = %@",error.localizedDescription);
+    //显示返回按钮
+    UIButton *backButton = [[UIButton alloc] init];
+    [backButton setTitle:@"关闭" forState:UIControlStateNormal];
+    [backButton addTarget:self action:@selector(backButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+    [backButton setTitleColor:[UIColor ssj_colorWithHex:@"333333"] forState:UIControlStateNormal];
+    backButton.right = self.webView.right - 50;
+    backButton.top = 10;
+    [backButton sizeToFit];
+    [self.view addSubview:backButton];
+    
+    NSString *errorMessage = SSJMessageWithErrorCode(error);
+    [CDAutoHideMessageHUD showMessage:errorMessage ?: SSJ_ERROR_MESSAGE];
 }
+
 
 
 
