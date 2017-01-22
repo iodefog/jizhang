@@ -192,7 +192,7 @@
     return _tableView;
 }
 
--(SSJCalendarView *)calendarView{
+- (SSJCalendarView *)calendarView {
     if (_calendarView == nil) {
         _calendarView = [[SSJCalendarView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 270)];
         _calendarView.calendar.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];

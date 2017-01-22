@@ -149,7 +149,7 @@ static BOOL kNeedBannerDisplay = YES;
 - (void)orgDataToModel
 {
     NSMutableArray *tempArray = [NSMutableArray array];
-    for (NSInteger i=0; i<self.titles.count; i++) {
+    for (NSInteger i=0; i < self.titles.count; i++) {
         SSJListAdItem *item = [[SSJListAdItem alloc] init];
         item.adTitle = [self.titles ssj_safeObjectAtIndex:i];
         item.imageName = [self.images ssj_safeObjectAtIndex:i];

@@ -410,7 +410,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
         if ([SSJCurrentThemeID() isEqualToString:SSJDefaultThemeID]) {
             [_repaymentButton setTitleColor:[UIColor ssj_colorWithHex:@"#373737"] forState:UIControlStateNormal];
             [_repaymentButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"#CCCCCC" alpha:0.8] forState:UIControlStateNormal];
-        } else{
+        } else {
             [_repaymentButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] forState:UIControlStateNormal];
             [_repaymentButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor alpha:0.8] forState:UIControlStateNormal];
         }

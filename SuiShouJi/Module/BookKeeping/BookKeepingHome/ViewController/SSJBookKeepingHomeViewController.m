@@ -254,7 +254,7 @@
             self.tableView.top = self.bookKeepingHeader.bottom;
             self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.bookKeepingHeader.bottom);
             self.tableView.contentInset = UIEdgeInsetsMake(46, 0, SSJ_TABBAR_HEIGHT, 0);
-            self.tableView.contentOffset = CGPointMake(0, 46);
+//            self.tableView.contentOffset = CGPointMake(0, 46);
         }
     }
     self.clearView.frame = self.view.frame;

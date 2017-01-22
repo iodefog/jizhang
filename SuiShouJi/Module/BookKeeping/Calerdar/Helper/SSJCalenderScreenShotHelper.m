@@ -74,7 +74,10 @@
         CGSize expenceSize = [yearStr sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13]}];
         [expenceStr drawInRect:CGRectMake(0, 0, 0, 0) withAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13],NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurvePaymentColor]}];
         
-        
+        [image drawInRect:CGRectMake(0, 0, width, image.size.height)];
+
+        [qrImage drawInRect:CGRectMake(0, 0, width, qrImageHeight)];
+
         UIGraphicsEndImageContext();
     });
     return nil;
