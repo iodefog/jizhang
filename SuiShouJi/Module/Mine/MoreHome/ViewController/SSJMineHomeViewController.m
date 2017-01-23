@@ -522,7 +522,6 @@ static BOOL kNeedBannerDisplay = YES;
         _collectionView.dataSource = self;
         _collectionView.delegate = self;
         [_collectionView addSubview:self.lineView];
-        self.lineView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         _collectionView.backgroundColor = [UIColor clearColor];
     }
     return _collectionView;
@@ -606,7 +605,7 @@ static BOOL kNeedBannerDisplay = YES;
 {
     if (!_lineView) {
         _lineView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SSJSCREENWITH, 0.5)];
-        self.lineView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
+        _lineView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
     }
     return _lineView;
 }
@@ -667,7 +666,7 @@ static BOOL kNeedBannerDisplay = YES;
     [super updateAppearanceAfterThemeChanged];
     [self.header updateAfterThemeChange];
 //    _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
-    self.lineView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
+    self.lineView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
 }
 
 //-(void)getCircleChargeState {
