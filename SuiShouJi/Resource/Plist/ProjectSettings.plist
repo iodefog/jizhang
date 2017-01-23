@@ -200,5 +200,38 @@
 		<key>AppStoreUrl</key>
 		<string>https://itunes.apple.com/cn/app/you-yu-ji-zhang-li-cai-zui/id1147038726?l=zh&amp;ls=1&amp;mt=8</string>
 	</dict>
+	<key>com.youyu.jizhangbao</key>
+	<dict>
+		<key>source</key>
+		<string>11506</string>
+		<key>WeiXinKey</key>
+		<string></string>
+		<key>WeiXinSecret</key>
+		<string></string>
+		<key>QQAppId</key>
+		<string></string>
+		<key>QQAppKey</key>
+		<string></string>
+		<key>YWAppKey</key>
+		<string></string>
+		<key>WeiBoAppKey</key>
+		<string></string>
+		<key>WeiBoSecret</key>
+		<string></string>
+		<key>UMAppKey</key>
+		<string>5885c723a325114db20005aa</string>
+		<key>ShareTitle</key>
+		<string></string>
+		<key>ShareUrl</key>
+		<string></string>
+		<key>ShareContent</key>
+		<string></string>
+		<key>ShareIcon</key>
+		<string></string>
+		<key>WeiboBanner</key>
+		<string></string>
+		<key>AppStoreUrl</key>
+		<string>https://itunes.apple.com/us/app/you-yu-ji-zhang-bao-ge-ren/id1198079862?l=zh&amp;ls=1&amp;mt=8</string>
+	</dict>
 </dict>
 </plist>
