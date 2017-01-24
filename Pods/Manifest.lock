@@ -25,6 +25,10 @@ PODS:
   - JSPatch (1.1.2):
     - JSPatch/Core (= 1.1.2)
   - JSPatch/Core (1.1.2)
+  - JSPatch/Extensions (1.1.2):
+    - JSPatch/Core
+  - JSPatch/JPCFunction (1.1.2):
+    - JSPatch/Core
   - libwebp (0.5.1):
     - libwebp/core (= 0.5.1)
     - libwebp/dec (= 0.5.1)
@@ -85,6 +89,8 @@ DEPENDENCIES:
   - DateTools
   - FLAnimatedImage (~> 1.0)
   - JSPatch
+  - JSPatch/Extensions
+  - JSPatch/JPCFunction
   - LxThroughPointsBezier (~> 1.0.0)
   - Masonry
   - Meiqia (~> 3.3.1)
@@ -115,6 +121,6 @@ SPEC CHECKSUMS:
   YYText: 5c461d709e24d55a182d1441c41dc639a18a4849
   ZYCornerRadius: 526dfd5b860008e57abf7be4a887f4630c3018f0
 
-PODFILE CHECKSUM: 98f6c4a2929104004564c9b51a7bfbb35c2ab104
+PODFILE CHECKSUM: 771a09ac9cede48e1c01c766df51fecb470acb11
 
 COCOAPODS: 1.1.1
