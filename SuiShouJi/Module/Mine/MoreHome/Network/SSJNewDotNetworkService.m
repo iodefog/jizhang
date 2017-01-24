@@ -7,21 +7,43 @@
 //
 
 #import "SSJNewDotNetworkService.h"
-
+#import "SSJThemeAndAdviceDotItem.h"
+#import "SSJUserTableManager.h"
 @implementation SSJNewDotNetworkService
-- (void)requestTheme:(NSString *)themeVersion adviceTime:(NSDate *)date
+- (void)requestThemeAndAdviceUpdate
 {
     self.showLodingIndicator = NO;
-    NSMutableDictionary *dict=[[NSMutableDictionary alloc]init];
-//    [dict setObject:SSJUSERID() forKey:@"cuserid"];
-//    [dict setObject:themeVersion forKey:@"isystem"];
-//    [dict setObject:date forKey:@"cversion"];
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    [dict setObject:SSJUSERID() forKey:@"cuserid"];
+//    [dict setObject:@"1.9.0" forKey:@"releaseVersion"];
+//    [dict setObject:@"f7b8bb8f-c860-4a84-8bfc-905bb0756388" forKey:@"cuserid"];
+    [self request:@"admin/checkRemind.go" params:dict];
 }
 
 - (void)requestDidFinish:(id)rootElement
 {
-    if ([rootElement isKindOfClass:[NSDictionary class]]) {
-        
+    if ([rootElement isKindOfClass:[NSDictionary class]] && [self.returnCode isEqualToString:@"1"]) {
+        //转模型
+        NSDictionary *result = [[NSDictionary dictionaryWithDictionary:rootElement] objectForKey:@"results"];
+        self.dotItem = [SSJThemeAndAdviceDotItem mj_objectWithKeyValues:result];
+        self.dotItem.creplyDate = [NSDate dateWithString:self.dotItem.creplydate formatString:@"yyyy-MM-dd HH:mm:ss"];
+        SSJUserItem *userItem = [SSJUserTableManager queryUserItemForID:SSJUSERID()];
+        self.dotItem.hasThemeUpdate = [[self themeVersion] doubleValue] < [self.dotItem.themeVersion doubleValue];
+        if (self.dotItem.creplydate.length < 1) {
+            self.dotItem.hasAdviceUpdate = NO ;
+        }else if (self.dotItem.creplydate.length > 0 && userItem.adviceTime.length < 1) {
+            self.dotItem.hasAdviceUpdate = YES; 
+        } else {
+            self.dotItem.hasAdviceUpdate = [self.dotItem.creplyDate compare:[NSDate dateWithString:userItem.adviceTime formatString:@"yyyy-MM-dd HH:mm:ss.SSS"]] == NSOrderedAscending;
+        }
     }
+}
+
+
+
+- (NSString *)themeVersion
+{
+    NSString *themeStr = [[NSUserDefaults standardUserDefaults] objectForKey:kThemeVersionKey];
+    return themeStr.length > 0 ? themeStr : SSJCurrentThemeID();
 }
 @end

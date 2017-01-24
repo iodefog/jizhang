@@ -136,8 +136,9 @@
         if (item.creplyContent.length) {//如果回复内容存在
             SSJChatMessageItem *chartMessageItem = [[SSJChatMessageItem alloc] init];
             chartMessageItem.isSystem = YES;
-            [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss.0"];
+            [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
             NSDate *tempDate = [formatter dateFromString:item.creplyDate];
+            chartMessageItem.creplyDate = item.creplyDate;
             [formatter setDateFormat:@"yyyy-MM-dd"];
             NSString *string = [formatter stringFromDate:tempDate];
             chartMessageItem.dateStr = string;
@@ -149,8 +150,9 @@
         if (item.cContent.length) {//如果建议内容存在
             SSJChatMessageItem *chartMessageItem = [[SSJChatMessageItem alloc] init];
             chartMessageItem.isSystem = NO;
-            [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss.0"];
+            [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
             NSDate *tempDate = [formatter dateFromString:item.caddDate];
+            chartMessageItem.caddDate = item.caddDate;
             [formatter setDateFormat:@"yyyy-MM-dd"];
             NSString *string = [formatter stringFromDate:tempDate];
             chartMessageItem.dateStr = string;
@@ -175,7 +177,7 @@
         if (item.isSystem == YES && isStop == NO) {//是系统
             SSJUserItem *userItem = [[SSJUserItem alloc] init];
             userItem.userId = SSJUSERID();
-            userItem.adviceTime = item.dateStr;
+            userItem.adviceTime = item.creplyDate;
             //存储
             [SSJUserTableManager saveUserItem:userItem];
             isStop = YES;
@@ -202,7 +204,7 @@
     return _adviceService;
 }
 
-- ( TPKeyboardAvoidingTableView*)tableView
+- (TPKeyboardAvoidingTableView *)tableView
 {
     if (!_tableView) {
         _tableView = [[TPKeyboardAvoidingTableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];

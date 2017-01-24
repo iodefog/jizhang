@@ -52,6 +52,8 @@
 #import "SSJBillNoteWebViewController.h"
 #import "SSJNewDotNetworkService.h"
 
+#import "SSJThemeAndAdviceDotItem.h"
+
 static NSString *const kTitle1 = @"提醒";
 static NSString *const kTitle2 = @"主题皮肤";
 static NSString *const kTitle3 = @"周期记账";
@@ -92,6 +94,7 @@ static BOOL kNeedBannerDisplay = YES;
 
 @property (nonatomic, strong) UIView *lineView;
 @property (nonatomic, strong) NSMutableArray<SSJListAdItem *> *adItems;//服务器返回的广告
+@property (nonatomic, strong) NSMutableArray<SSJListAdItem *> *localAdItems;//本地固定的广告
 @property (nonatomic, strong) NSMutableArray<SSJListAdItem *> *adItemsArray;//合并之后的广告
 @end
 
@@ -155,16 +158,17 @@ static BOOL kNeedBannerDisplay = YES;
         item.imageName = [self.images ssj_safeObjectAtIndex:i];
         item.imageUrl = nil;
         item.hidden = NO;
-        item.isShowDot = NO;//默认都不显示小红点
         item.url = nil;//不需要跳转网页
         [tempArray addObject:item];
     }
-    self.adItemsArray = tempArray;
+    self.localAdItems = tempArray;
+    self.adItemsArray = self.localAdItems;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self.bannerService requestBannersList];
+    [self.dotService requestThemeAndAdviceUpdate];
     
     if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
         [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
@@ -325,9 +329,16 @@ static BOOL kNeedBannerDisplay = YES;
         MQChatViewManager *chatViewManager = [[MQChatViewManager alloc] init];
         [chatViewManager pushMQChatViewControllerInViewController:self];
     }*/
+    //建议与咨询
     if ([item.adTitle isEqualToString:kTitle5]) {
         SSJProductAdviceViewController *adviceVC = [[SSJProductAdviceViewController alloc] init];
         [adviceVC setHidesBottomBarWhenPushed:YES];
+        //更改模型数据
+        for (SSJListAdItem *item in self.localAdItems) {
+            if ([item.adTitle isEqualToString:kTitle5]) {//建议与咨询
+                item.isShowDot = NO;
+            }
+        }
         [self.navigationController pushViewController:adviceVC animated:YES];
     }
     
@@ -353,6 +364,15 @@ static BOOL kNeedBannerDisplay = YES;
     //主题
     if ([item.adTitle isEqualToString:kTitle2]) {
         SSJThemeHomeViewController *themeVC = [[SSJThemeHomeViewController alloc]init];
+        //更改模型数据
+        for (SSJListAdItem *item in self.localAdItems) {
+            if ([item.adTitle isEqualToString:kTitle2]) {//主题皮肤
+                item.isShowDot = NO;
+                
+                [[NSUserDefaults standardUserDefaults] setObject:self.dotService.dotItem.themeVersion.length > 0 ? self.dotService.dotItem.themeVersion : SSJCurrentThemeID() forKey:kThemeVersionKey];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+            }
+        }
         [self.navigationController pushViewController:themeVC animated:YES];
     }
     
@@ -391,33 +411,32 @@ static BOOL kNeedBannerDisplay = YES;
                 self.lineView.top = 0;
             }
         }
-        
         [self loadDataArray];
-        [self.collectionView reloadData];
     }
     
     if ([service isKindOfClass:[SSJNewDotNetworkService class]]) {
-    //更改模型数据
-        
+        //更改模型数据
+        for (SSJListAdItem *item in self.localAdItems) {
+            if ([item.adTitle isEqualToString:kTitle2]) {//主题皮肤
+                item.isShowDot = self.dotService.dotItem.hasThemeUpdate;
+            }
+            if ([item.adTitle isEqualToString:kTitle5]) {//建议与咨询
+                item.isShowDot = self.dotService.dotItem.hasAdviceUpdate;
+            }
+        }
     }
+    [self.collectionView reloadData];
 }
 
 - (void)server:(SSJBaseNetworkService *)service didFailLoadWithError:(NSError *)error
 {
-    if ([service isKindOfClass:[SSJBannerNetworkService class]]) {
-        [self loadDataArray];
-        [self.collectionView reloadData];
-    }
-    if ([service isKindOfClass:[SSJNewDotNetworkService class]]) {
-        
-    }
+    [self loadDataArray];
+    [self.collectionView reloadData];
 }
 
 - (void)loadDataArray
 {
-    //遍历images、titles生产广告模型
-    [self orgDataToModel];
-    
+//插入广告模型
     for (SSJListAdItem *listAdItem in self.bannerService.item.listAdItems) {
         if (listAdItem.hidden) {
             [self.adItems addObject:listAdItem];
@@ -425,9 +444,9 @@ static BOOL kNeedBannerDisplay = YES;
             [self.adItemsArray insertObject:listAdItem atIndex:index];
         }
     }
-    
-
 }
+
+
 #pragma mark - UMSocialUIDelegate
 -(void)didFinishGetUMSocialDataInViewController:(UMSocialResponseEntity *)response
 {
@@ -501,7 +520,6 @@ static BOOL kNeedBannerDisplay = YES;
         _collectionView.dataSource = self;
         _collectionView.delegate = self;
         [_collectionView addSubview:self.lineView];
-        self.lineView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         _collectionView.backgroundColor = [UIColor clearColor];
     }
     return _collectionView;
@@ -573,11 +591,19 @@ static BOOL kNeedBannerDisplay = YES;
     return _adItemsArray;
 }
 
+- (NSMutableArray<SSJListAdItem *> *)localAdItems
+{
+    if (!_localAdItems) {
+        _localAdItems = [NSMutableArray array];
+    }
+    return _localAdItems;
+}
+
 - (UIView *)lineView
 {
     if (!_lineView) {
         _lineView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SSJSCREENWITH, 0.5)];
-        self.lineView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
+        _lineView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
     }
     return _lineView;
 }
@@ -638,7 +664,7 @@ static BOOL kNeedBannerDisplay = YES;
     [super updateAppearanceAfterThemeChanged];
     [self.header updateAfterThemeChange];
 //    _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
-    self.lineView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
+    self.lineView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
 }
 
 //-(void)getCircleChargeState {
@@ -708,7 +734,7 @@ static BOOL kNeedBannerDisplay = YES;
         [self presentViewController:bilVc animated:YES completion:nil];
         return;
     }
-    SSJAdWebViewController *webVc = [SSJAdWebViewController webViewVCWithURL:[NSURL URLWithString:urlStr]];
+    SSJNormalWebViewController *webVc = [SSJNormalWebViewController webViewVCWithURL:[NSURL URLWithString:urlStr]];
     [self.navigationController pushViewController:webVc animated:YES];
 }
 

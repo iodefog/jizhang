@@ -8,7 +8,12 @@
 
 #import "SSJBaseNetworkService.h"
 
+static NSString *const kThemeVersionKey = @"kThemeVersionKey";
+@class SSJThemeAndAdviceDotItem;
 @interface SSJNewDotNetworkService : SSJBaseNetworkService
+
+@property (nonatomic, strong) SSJThemeAndAdviceDotItem *dotItem;
 //当前主题版本号，最新一条建议回复时间
-- (void)requestTheme:(NSString *)themeVersion adviceTime:(NSDate *)date;
+- (void)requestThemeAndAdviceUpdate;
+
 @end
