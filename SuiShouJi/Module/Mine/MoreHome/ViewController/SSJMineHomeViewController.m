@@ -52,6 +52,8 @@
 #import "SSJBillNoteWebViewController.h"
 #import "SSJNewDotNetworkService.h"
 
+#import "SSJThemeAndAdviceDotItem.h"
+
 static NSString *const kTitle1 = @"提醒";
 static NSString *const kTitle2 = @"主题皮肤";
 static NSString *const kTitle3 = @"周期记账";
@@ -166,6 +168,7 @@ static BOOL kNeedBannerDisplay = YES;
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self.bannerService requestBannersList];
+    [self.dotService requestThemeAndAdviceUpdate];
     
     if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
         [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
@@ -333,7 +336,7 @@ static BOOL kNeedBannerDisplay = YES;
         //更改模型数据
         for (SSJListAdItem *item in self.localAdItems) {
             if ([item.adTitle isEqualToString:kTitle5]) {//建议与咨询
-                item.isShowDot = YES;
+                item.isShowDot = NO;
             }
         }
         [self.navigationController pushViewController:adviceVC animated:YES];
@@ -364,7 +367,10 @@ static BOOL kNeedBannerDisplay = YES;
         //更改模型数据
         for (SSJListAdItem *item in self.localAdItems) {
             if ([item.adTitle isEqualToString:kTitle2]) {//主题皮肤
-                item.isShowDot = YES;
+                item.isShowDot = NO;
+                
+                [[NSUserDefaults standardUserDefaults] setObject:self.dotService.dotItem.themeVersion.length > 0 ? self.dotService.dotItem.themeVersion : SSJCurrentThemeID() forKey:kThemeVersionKey];
+                [[NSUserDefaults standardUserDefaults] synchronize];
             }
         }
         [self.navigationController pushViewController:themeVC animated:YES];
@@ -405,40 +411,32 @@ static BOOL kNeedBannerDisplay = YES;
                 self.lineView.top = 0;
             }
         }
-        
         [self loadDataArray];
-        [self.collectionView reloadData];
     }
     
     if ([service isKindOfClass:[SSJNewDotNetworkService class]]) {
-    //更改模型数据
+        //更改模型数据
         for (SSJListAdItem *item in self.localAdItems) {
             if ([item.adTitle isEqualToString:kTitle2]) {//主题皮肤
-                item.isShowDot = YES;
+                item.isShowDot = self.dotService.dotItem.hasThemeUpdate;
             }
             if ([item.adTitle isEqualToString:kTitle5]) {//建议与咨询
-                item.isShowDot = YES;
+                item.isShowDot = self.dotService.dotItem.hasAdviceUpdate;
             }
         }
     }
+    [self.collectionView reloadData];
 }
 
 - (void)server:(SSJBaseNetworkService *)service didFailLoadWithError:(NSError *)error
 {
-    if ([service isKindOfClass:[SSJBannerNetworkService class]]) {
-        [self loadDataArray];
-        [self.collectionView reloadData];
-    }
-    if ([service isKindOfClass:[SSJNewDotNetworkService class]]) {
-        
-    }
+    [self loadDataArray];
+    [self.collectionView reloadData];
 }
 
 - (void)loadDataArray
 {
-    //遍历images、titles生产广告模型
-    [self orgDataToModel];
-    
+//插入广告模型
     for (SSJListAdItem *listAdItem in self.bannerService.item.listAdItems) {
         if (listAdItem.hidden) {
             [self.adItems addObject:listAdItem];
@@ -446,9 +444,9 @@ static BOOL kNeedBannerDisplay = YES;
             [self.adItemsArray insertObject:listAdItem atIndex:index];
         }
     }
-    
-
 }
+
+
 #pragma mark - UMSocialUIDelegate
 -(void)didFinishGetUMSocialDataInViewController:(UMSocialResponseEntity *)response
 {
@@ -736,7 +734,7 @@ static BOOL kNeedBannerDisplay = YES;
         [self presentViewController:bilVc animated:YES completion:nil];
         return;
     }
-    SSJAdWebViewController *webVc = [SSJAdWebViewController webViewVCWithURL:[NSURL URLWithString:urlStr]];
+    SSJNormalWebViewController *webVc = [SSJNormalWebViewController webViewVCWithURL:[NSURL URLWithString:urlStr]];
     [self.navigationController pushViewController:webVc animated:YES];
 }
 
