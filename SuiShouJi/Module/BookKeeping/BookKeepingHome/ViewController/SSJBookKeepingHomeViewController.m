@@ -371,7 +371,7 @@
             weakSelf.newlyAddChargeArr = [NSMutableArray arrayWithArray:chargeIdArr];
         };
         UINavigationController *recordNav = [[UINavigationController alloc]initWithRootViewController:recordmakingVC];
-        [weakSelf presentViewController:recordNav animated:YES completion:NULL];
+        [self presentViewController:recordNav animated:YES completion:NULL];
     }
 }
 
