@@ -280,7 +280,14 @@
             
         case SSJBudgetPeriodTypeYear: {
             NSInteger selectedMonth = [_pickerView selectedRowInComponent:0] + 1;
-            NSInteger selectedDay = [_pickerView selectedRowInComponent:1] + 1;
+            NSInteger selectedDay = 0;
+            if (selectedMonth == 2 && [_pickerView selectedRowInComponent:1] == 28) {
+                NSDate *today = [NSDate date];
+                NSDate *tmpDate = [NSDate dateWithYear:today.year month:2 day:1];
+                selectedDay = [tmpDate daysInMonth];
+            } else {
+                selectedDay = [_pickerView selectedRowInComponent:1] + 1;
+            }
             NSDate *selectedDate = [NSDate dateWithYear:currentDate.year month:selectedMonth day:selectedDay];
             
             if ([selectedDate compare:currentDate] == NSOrderedAscending) {
