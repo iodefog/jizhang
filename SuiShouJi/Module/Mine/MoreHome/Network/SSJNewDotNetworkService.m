@@ -34,7 +34,7 @@
         }else if (self.dotItem.creplydate.length > 0 && userItem.adviceTime.length < 1) {
             self.dotItem.hasAdviceUpdate = YES; 
         } else {
-            self.dotItem.hasAdviceUpdate = [self.dotItem.creplyDate compare:[NSDate dateWithString:userItem.adviceTime formatString:@"yyyy-MM-dd HH:mm:ss.SSS"]] == NSOrderedAscending;
+            self.dotItem.hasAdviceUpdate = [self.dotItem.creplyDate compare:[NSDate dateWithString:userItem.adviceTime formatString:@"yyyy-MM-dd HH:mm:ss.SSS"]] == NSOrderedDescending;
         }
     }
 }
@@ -44,6 +44,6 @@
 - (NSString *)themeVersion
 {
     NSString *themeStr = [[NSUserDefaults standardUserDefaults] objectForKey:kThemeVersionKey];
-    return themeStr.length > 0 ? themeStr : SSJCurrentThemeID();
+    return themeStr.length > 0 ? themeStr : @"-1";
 }
 @end
