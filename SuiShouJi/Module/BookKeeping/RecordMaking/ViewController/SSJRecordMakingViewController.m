@@ -1056,7 +1056,8 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
                                            name:item.title
                                           color:item.colorValue
                                           image:item.imageName
-                                          order:order state:0
+                                          order:order
+                                          state:0
                                         booksId:self.item.booksId
                                         Success:NULL
                                         failure:^(NSError *error) {
