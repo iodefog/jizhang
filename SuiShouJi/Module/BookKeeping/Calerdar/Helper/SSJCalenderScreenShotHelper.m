@@ -56,7 +56,7 @@
         // 写上年份
         NSString *yearStr = [NSString stringWithFormat:@"%04ld",(long)date.year];
         CGSize yearSize = [yearStr sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:21]}];
-        [weekDayStr drawInRect:CGRectMake(0, 0, 0, 0) withAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:21],NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"#222222"]}];
+        [weekDayStr drawInRect:CGRectMake(firstImageCenterY + dateSize.height / 2 + 15, firstImageCenterX - dateSize.width / 2 - 10 - yearSize.width / 2, yearSize.height, yearSize.width) withAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:21],NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"#222222"]}];
         
         // 写上总收入
         NSString *incomeTitleStr = @"总收入:";
