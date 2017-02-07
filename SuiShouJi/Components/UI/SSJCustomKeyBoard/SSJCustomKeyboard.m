@@ -60,8 +60,6 @@ static id _instance;
 - (instancetype)initWithFrame:(CGRect)frame{
     if (self = [super initWithFrame:frame]) {
         self.backgroundColor = [UIColor ssj_colorWithHex:@"f1f1f1"];
-        _buttonHeight = self.height / 4;
-        _buttonWight = self.width / 4;
         self.decimalModel = NO;
         self.numButtonArray = [[NSMutableArray alloc]init];
         self.backgroundColor = [UIColor clearColor];
@@ -83,6 +81,9 @@ static id _instance;
 }
 
 -(void)layoutSubviews{
+    [super layoutSubviews];
+    _buttonHeight = self.height / 4;
+    _buttonWight = self.width / 4;
     for (int i = 0; i < 9; i ++) {
         ((SSJCustomKeyBoardButton*)([self.numButtonArray ssj_safeObjectAtIndex:i])).frame = CGRectMake(i % 3 * _buttonWight, i / 3 * _buttonHeight, _buttonWight, _buttonHeight);
     }
@@ -230,7 +231,7 @@ static id _instance;
         [_MinusButton setImage:[[UIImage imageNamed:@"minus"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
         _MinusButton.titleLabel.font = [UIFont systemFontOfSize:15];
         [_MinusButton setTintColor:_titleColor];
-        [_MinusButton addTarget:self action:@selector(keyboardBtnTouched:) forControlEvents:UIControlEventTouchUpInside];\
+        [_MinusButton addTarget:self action:@selector(keyboardBtnTouched:) forControlEvents:UIControlEventTouchUpInside];
         _MinusButton.titleLabel.font = [UIFont systemFontOfSize:24];
         _MinusButton.backgroundColor = [UIColor clearColor];
         _MinusButton.layer.borderColor = _separatorColor.CGColor;
