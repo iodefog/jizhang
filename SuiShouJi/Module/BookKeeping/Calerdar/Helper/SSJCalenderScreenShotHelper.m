@@ -10,18 +10,22 @@
 
 @implementation SSJCalenderScreenShotHelper
 
-+ (UIImage *)screenShotForCalenderWithCellImage:(UIImage *)image Date:(NSDate *)date income:(double)income expence:(double)expence{
++ (void)screenShotForCalenderWithCellImage:(UIImage *)image Date:(NSDate *)date income:(double)income expence:(double)expence imageBlock:(void (^)(UIImage *image))imageBlock {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        UIImage *headerImage = [UIImage imageNamed:@""];
-        UIImage *qrImage = [UIImage imageNamed:@""];
+        UIImage *shareImage = nil;
+        
+        UIImage *headerImage = [UIImage imageNamed:@"calendar_shareheader"];
+        
+        UIImage *qrImage = [UIImage imageNamed:@"calendar_qrImage"];
+        
         UIImage *backImage = [UIImage ssj_themeImageWithName:@"background"];
+        
         double width = image.size.width;
+        
         // 调整两张图的宽和高
         double headerImageHeight = headerImage.size.height * width / headerImage.size.width;
-        double qrImageHeight = qrImage.size.height * width / qrImage.size.width;
-        double wholeHeight = MAX(headerImageHeight + qrImageHeight + image.size.height + 48, SSJSCREENWITH);
+        double wholeHeight = MAX(headerImageHeight + 130 + image.size.height + 48, SSJSCREENWITH);
         [headerImage ssj_scaleImageWithSize:CGSizeMake(width, headerImageHeight)];
-        [qrImage ssj_scaleImageWithSize:CGSizeMake(width, qrImageHeight)];
         [backImage ssj_scaleImageWithSize:CGSizeMake(SSJSCREENWITH, SSJSCREENHEIGHT)];
 
         // 开始绘制
@@ -38,6 +42,7 @@
         
         // 绘制第一张图
         [headerImage drawInRect:CGRectMake(0, 0, width, headerImageHeight)];
+        
         float firstImageCenterX = CGRectGetMidX(CGRectMake(0, 0, width, headerImageHeight));
         float firstImageCenterY = CGRectGetMidY(CGRectMake(0, 0, width, headerImageHeight));
         
@@ -60,31 +65,44 @@
         
         // 写上总收入
         NSString *incomeTitleStr = @"总收入:";
-        CGSize incomeTitleSize = [yearStr sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13]}];
-        [incomeTitleStr drawInRect:CGRectMake(0, 0, 0, 0) withAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13],NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+        CGSize incomeTitleSize = [incomeTitleStr sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13]}];
+        [incomeTitleStr drawInRect:CGRectMake(10, headerImageHeight + 25 - incomeTitleSize.height / 2, incomeTitleSize.width, incomeTitleSize.height) withAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13],NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
 
         // 写上收入金额
         NSString *incomeStr = [[NSString stringWithFormat:@"%f",income] ssj_moneyDecimalDisplayWithDigits:2];
-        CGSize incomeSize = [yearStr sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13]}];
-        [incomeStr drawInRect:CGRectMake(0, 0, 0, 0) withAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13],NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurveIncomeColor]}];
-        
-        // 写上总支出
-        NSString *expenceTitleStr = @"总支出:";
-        CGSize expenceTitleSize = [yearStr sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13]}];
-        [expenceTitleStr drawInRect:CGRectMake(0, 0, 0, 0) withAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13],NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+        CGSize incomeSize = [incomeStr sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13]}];
+        [incomeStr drawInRect:CGRectMake(10 + incomeTitleSize.width + 5, headerImageHeight + 25 - incomeSize.height / 2, incomeSize.width, incomeSize.height) withAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13],NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurveIncomeColor]}];
         
         // 写上支出金额
         NSString *expenceStr = [[NSString stringWithFormat:@"%f",expence] ssj_moneyDecimalDisplayWithDigits:2];
-        CGSize expenceSize = [yearStr sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13]}];
-        [expenceStr drawInRect:CGRectMake(0, 0, 0, 0) withAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13],NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurvePaymentColor]}];
+        CGSize expenceSize = [expenceStr sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13]}];
+        [expenceStr drawInRect:CGRectMake(width - expenceSize.width - 10, headerImageHeight + 25 - expenceSize.height / 2, expenceSize.width, expenceSize.height) withAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13],NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurvePaymentColor]}];
         
-        [image drawInRect:CGRectMake(0, 0, width, image.size.height)];
+        // 写上总支出
+        NSString *expenceTitleStr = @"总支出:";
+        CGSize expenceTitleSize = [expenceTitleStr sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13]}];
+        [expenceTitleStr drawInRect:CGRectMake(width - expenceSize.width - 15 - expenceTitleSize.width, headerImageHeight + 25 - expenceTitleSize.height / 2, expenceTitleSize.width, expenceTitleSize.height) withAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13],NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+        
+        
+        // 把cell的截图画上去
+        [image drawInRect:CGRectMake(0, headerImageHeight + 50, width, image.size.height)];
+        
+        // 把二维码的图画上去
+        [qrImage drawInRect:CGRectMake(width / 2 - qrImage.size.width / 2, wholeHeight - 65 - qrImage.size.height / 2, expenceSize.width, expenceSize.height)];
+        
+        // 把二维码下面的字写上去
+        NSString *qrStr = @"长按识别图中二维码,下载有鱼记账";
+        CGSize qrStrSize = [qrStr sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13]}];
+        [qrStr drawInRect:CGRectMake((width - qrStrSize.width) / 2, wholeHeight - 65 - qrStrSize.height / 2, qrStrSize.width, qrStrSize.height) withAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13],NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
 
-        [qrImage drawInRect:CGRectMake(0, 0, width, qrImageHeight)];
-
+        shareImage = UIGraphicsGetImageFromCurrentImageContext();
+        
         UIGraphicsEndImageContext();
+        
+        SSJDispatch_main_async_safe(^{
+            imageBlock(shareImage);
+        });
     });
-    return nil;
 }
 
 + (NSString *)stringFromWeekday:(NSInteger)weekday {
