@@ -78,6 +78,29 @@ typedef NS_ENUM(NSInteger, SSJTimeDimension) {
     SSJTimeDimensionMonth = 2
 };
 
+/**
+ 循环周期类型
+
+ - SSJCyclePeriodTypeOnce: 仅一次
+ - SSJCyclePeriodTypeDaily: 每天
+ - SSJCyclePeriodTypeWorkday: 每个工作日
+ - SSJCyclePeriodTypePerWeekend: 每周末
+ - SSJCyclePeriodTypeWeekly: 每周
+ - SSJCyclePeriodTypePerMonth: 每周末（周六、周日）
+ - SSJCyclePeriodTypeLastDayPerMonth: 每月最后一天
+ - SSJCyclePeriodTypePerYear: 每年
+ */
+typedef NS_ENUM(NSInteger, SSJCyclePeriodType) {
+    SSJCyclePeriodTypeOnce = -1,
+    SSJCyclePeriodTypeDaily = 0,
+    SSJCyclePeriodTypeWorkday = 1,
+    SSJCyclePeriodTypePerWeekend = 2,
+    SSJCyclePeriodTypeWeekly = 3,
+    SSJCyclePeriodTypePerMonth = 4,
+    SSJCyclePeriodTypeLastDayPerMonth = 5,
+    SSJCyclePeriodTypePerYear = 6
+};
+
 ///------------------------------------------
 /// @name 基本数据常量
 ///------------------------------------------
