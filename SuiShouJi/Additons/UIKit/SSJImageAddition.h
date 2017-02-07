@@ -97,3 +97,9 @@
 
 @end
 
+@interface UIImage (SSJImageCompound)
+
++ (UIImage *)verticalImageFromArray:(NSArray *)imagesArray;
+
+@end
+
