@@ -36,7 +36,9 @@ static NSString *const kSyncTypeKey = @"kSyncTypeKey";
             }
             return;
         }
+
         
+
         while ([resultSet next]) {
             NSString *imageName = [resultSet stringForColumn:@"cimgname"];
             if (![imageName hasSuffix:@".jpg"]) {
