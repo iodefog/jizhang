@@ -30,6 +30,6 @@
                               Success:(void(^)())success
                               failure:(void (^)(NSError *error))failure;
 
-+ (void)saveCycleTransferRecordWithID:(NSString *)ID transferOutAccountId:(NSString *)transferOutAccountId transferInAccountId:(NSString *)transferInAccountId money:(float)money memo:(NSString *)memo
++ (void)saveCycleTransferRecordWithID:(NSString *)ID transferOutAccountId:(NSString *)transferOutAccountId transferInAccountId:(NSString *)transferInAccountId money:(float)money memo:(NSString *)memo;
 
 @end

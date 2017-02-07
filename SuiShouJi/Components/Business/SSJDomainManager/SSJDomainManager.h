@@ -8,10 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-static NSString *const kDefaultDomain = @"https://jz.youyuwo.com";
-
 @interface SSJDomainManager : NSObject
-
 
 + (NSString *)domain;
 

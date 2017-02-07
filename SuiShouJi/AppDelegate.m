@@ -183,6 +183,7 @@ NSDate *SCYEnterBackgroundTime() {
         [SSJDatabaseErrorHandler uploadFileData];
     });
     [SSJDatabaseErrorHandler uploadFileData];
+    
     return YES;
 }
 
