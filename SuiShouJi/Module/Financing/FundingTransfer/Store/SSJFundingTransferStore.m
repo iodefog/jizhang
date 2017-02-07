@@ -189,4 +189,53 @@
     }];
 }
 
++ (void)deleteCycleTransferRecordWithID:(NSString *)ID
+                                success:(nullable void (^)())success
+                                failure:(nullable void (^)(NSError *error))failure {
+    
+    NSString *userid = SSJUSERID();
+    NSString *writeDate = [[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+    
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        if ([db executeUpdate:@"update bk_transfer_cycle set operatortype = 2, cwritedate = ?, iversion = ? where cuserid = ? and icycleid = ?", writeDate, @(SSJSyncVersion()), userid, ID]) {
+            if (success) {
+                SSJDispatchMainAsync(^{
+                    success();
+                });
+            }
+        } else {
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure([db lastError]);
+                });
+            }
+        }
+    }];
+}
+
++ (void)updateCycleTransferRecordStateWithID:(NSString *)ID
+                                      opened:(BOOL)opened
+                                     success:(nullable void (^)())success
+                                     failure:(nullable void (^)(NSError *error))failure {
+    
+    NSString *userid = SSJUSERID();
+    NSString *writeDate = [[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+    
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        if ([db executeUpdate:@"update bk_transfer_cycle set istate = ?, operatortype = 1, cwritedate = ?, iversion = ? where cuserid = ? and icycleid = ?", @(opened), writeDate, @(SSJSyncVersion()), userid, ID]) {
+            if (success) {
+                SSJDispatchMainAsync(^{
+                    success();
+                });
+            }
+        } else {
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure([db lastError]);
+                });
+            }
+        }
+    }];
+}
+
 @end

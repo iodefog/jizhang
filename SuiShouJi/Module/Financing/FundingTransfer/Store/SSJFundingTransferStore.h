@@ -43,6 +43,8 @@ NS_ASSUME_NONNULL_BEGIN
  @param cyclePeriodType 周期转账类型
  @param beginDate cyclePeriodType如果是SSJCyclePeriodTypeOnce，就是转账日期；如果是其他值，就是起始日期
  @param endDate cyclePeriodType如果是SSJCyclePeriodTypeOnce，就不需要传值；如果是其他值，就是结束日期
+ @param success 成功回调
+ @param failure 失败回调
  */
 + (void)saveCycleTransferRecordWithID:(NSString *)ID
                   transferInAccountId:(NSString *)transferInAccountId
@@ -54,6 +56,30 @@ NS_ASSUME_NONNULL_BEGIN
                               endDate:(nullable NSString *)endDate
                               success:(nullable void (^)())success
                               failure:(nullable void (^)(NSError *error))failure;
+
+/**
+ 删除周期转账
+
+ @param ID 周期转账id
+ @param success 成功回调
+ @param failure 失败回调
+ */
++ (void)deleteCycleTransferRecordWithID:(NSString *)ID
+                                success:(nullable void (^)())success
+                                failure:(nullable void (^)(NSError *error))failure;
+
+/**
+ 更新周期记账的开关状态
+
+ @param ID 周期转账id
+ @param opened 是否开启
+ @param success 成功回调
+ @param failure 失败回调
+ */
++ (void)updateCycleTransferRecordStateWithID:(NSString *)ID
+                                      opened:(BOOL)opened
+                                     success:(nullable void (^)())success
+                                     failure:(nullable void (^)(NSError *error))failure;
 
 
 @end
