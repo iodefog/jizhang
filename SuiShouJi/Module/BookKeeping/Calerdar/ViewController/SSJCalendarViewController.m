@@ -18,6 +18,7 @@
 
 #import "SSJDatabaseQueue.h"
 #import "SSJCalenderHelper.h"
+#import "SSJCalenderScreenShotHelper.h"
 #import "FMDB.h"
 
 
@@ -75,6 +76,7 @@
     self.navigationItem.titleView = self.dateChangeView;
     [self.view addSubview:self.calendarView];
     [self.view addSubview:self.tableView];
+    [self.view addSubview:self.shareButton];
     [self.tableView registerClass:[SSJFundingDetailDateHeader class] forHeaderFooterViewReuseIdentifier:@"FundingDetailDateHeader"];
     [self.tableView registerClass:[SSJBillingChargeCell class] forCellReuseIdentifier:@"BillingChargeCellIdentifier"];
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"canleder_jia"] style:UIBarButtonItemStylePlain target:self action:@selector(rightButtonClicked:)];
@@ -100,6 +102,13 @@
     self.calendarView.frame = CGRectMake(0, 64, self.view.width, self.calendarView.viewHeight);
     self.tableView.top = self.calendarView.bottom;
     self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.calendarView.viewHeight - 64);
+    if (self.items.count) {
+        self.shareButton.hidden = NO;
+        self.shareButton.leftBottom = CGPointMake(0, self.view.bottom);
+        self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 50, 0);
+    } else {
+        self.shareButton.hidden = YES;
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -266,7 +275,7 @@
 - (UIButton *)shareButton {
     if (!_shareButton) {
         _shareButton = [[UIButton alloc]initWithFrame:CGRectMake(0, self.view.height - 50, self.view.width, 50)];
-        [_shareButton setTitle:@"还款" forState:UIControlStateNormal];
+        [_shareButton setTitle:@"分享" forState:UIControlStateNormal];
         [_shareButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         if ([SSJCurrentThemeID() isEqualToString:SSJDefaultThemeID]) {
             [_shareButton setTitleColor:[UIColor ssj_colorWithHex:@"#373737"] forState:UIControlStateNormal];
@@ -275,17 +284,34 @@
             [_shareButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] forState:UIControlStateNormal];
             [_shareButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor alpha:0.8] forState:UIControlStateNormal];
         }
+        _shareButton.hidden = YES;
         [_shareButton addTarget:self action:@selector(shareButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _shareButton;
 }
 
-#pragma mark - private
--(void)getCurrentDate{
-    NSDate *now = [NSDate date];
-    _currentYear = now.year;
-    _currentDay = now.day;
-    _currentMonth = now.month;
+#pragma mark - Event
+-(void)minusButtonClicked:(UIButton*)button{
+    self.selectedMonth = self.selectedMonth - 1;
+    if (self.selectedMonth == 0) {
+        self.selectedMonth = 12;
+        self.selectedYear = self.selectedYear - 1;
+    }
+    self.dateLabel.text = [NSString stringWithFormat:@"%ld年%ld月",self.selectedYear,self.selectedMonth];
+    [self.dateLabel  sizeToFit];
+    self.calendarView.year = self.selectedYear;
+    self.calendarView.month = self.selectedMonth;
+    self.calendarView.day = 0;
+    [self getDataFromDataBase];
+}
+
+-(void)rightButtonClicked:(id)sender{
+    SSJRecordMakingViewController *recordMakingVC = [[SSJRecordMakingViewController alloc]init];
+    recordMakingVC.selectedDay = self.selectedDay;
+    recordMakingVC.selectedMonth = self.selectedMonth;
+    recordMakingVC.selectedYear = self.selectedYear;
+    UINavigationController *recordNav = [[UINavigationController alloc]initWithRootViewController:recordMakingVC];
+    [self presentViewController:recordNav animated:YES completion:NULL];
 }
 
 -(void)plusButtonClicked:(UIButton*)button{
@@ -302,18 +328,23 @@
     [self getDataFromDataBase];
 }
 
--(void)minusButtonClicked:(UIButton*)button{
-    self.selectedMonth = self.selectedMonth - 1;
-    if (self.selectedMonth == 0) {
-        self.selectedMonth = 12;
-        self.selectedYear = self.selectedYear - 1;
-    }
-    self.dateLabel.text = [NSString stringWithFormat:@"%ld年%ld月",self.selectedYear,self.selectedMonth];
-    [self.dateLabel  sizeToFit];
-    self.calendarView.year = self.selectedYear;
-    self.calendarView.month = self.selectedMonth;
-    self.calendarView.day = 0;
-    [self getDataFromDataBase];
+- (void)closeButtonClicked:(id)sender{
+    [self ssj_backOffAction];
+}
+
+- (void)shareButtonClicked:(id)sender{
+    UIImage *screenShot = [SSJCalenderScreenShotHelper screenShotForTableView:self.tableView];
+    NSData * imageData = UIImagePNGRepresentation(screenShot);
+    NSString * fullPathToFile = [SSJDocumentPath() stringByAppendingPathComponent:@"test.png"];
+    [imageData writeToFile:fullPathToFile atomically:NO];
+}
+
+#pragma mark - private
+-(void)getCurrentDate{
+    NSDate *now = [NSDate date];
+    _currentYear = now.year;
+    _currentDay = now.day;
+    _currentMonth = now.month;
 }
 
 -(void)getDataFromDataBase{
@@ -339,16 +370,6 @@
     }];
 }
 
-
--(void)rightButtonClicked:(id)sender{
-    SSJRecordMakingViewController *recordMakingVC = [[SSJRecordMakingViewController alloc]init];
-    recordMakingVC.selectedDay = self.selectedDay;
-    recordMakingVC.selectedMonth = self.selectedMonth;
-    recordMakingVC.selectedYear = self.selectedYear;
-    UINavigationController *recordNav = [[UINavigationController alloc]initWithRootViewController:recordMakingVC];
-    [self presentViewController:recordNav animated:YES completion:NULL];
-}
-
 //-(void)getHaveRecordOrNotForDate:(NSString *)date WithSuccess:(void(^)(bool result))success
 //                         failure:(void (^)(NSError * _Nullable error))failure{
 //    __weak typeof(self) weakSelf = self;
@@ -364,11 +385,6 @@
     self.needAnimation = YES;
     [self.tableView reloadData];
 }
-
--(void)closeButtonClicked:(id)sender{
-    [self ssj_backOffAction];
-}
-
 
 /*
 #pragma mark - Navigation

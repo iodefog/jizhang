@@ -119,4 +119,38 @@
     }
 }
 
++ (UIImage *)screenShotForTableView:(UITableView *)tableview {
+    NSMutableArray *screenshots = [NSMutableArray array];
+    for (int section=0; section < tableview.numberOfSections; section++) {
+
+        //cell
+        for (int row = 0; row< [tableview numberOfRowsInSection:section]; row++) {
+            NSIndexPath *cellIndexPath = [NSIndexPath indexPathForRow:row inSection:section];
+            UIImage *cellScreenshot = [self screenshotForTableView:tableview AtCellAtIndexPath:cellIndexPath];
+            if (cellScreenshot) [screenshots addObject:cellScreenshot];
+            
+            if (section == tableview.numberOfSections - 1 && row == [tableview numberOfRowsInSection:section] - 1) {
+                [tableview scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+            }
+        }
+        
+
+    }
+    
+    return [UIImage verticalImageFromArray:screenshots];
+}
+
+/**
+ *  截取cell
+ */
++ (UIImage *)screenshotForTableView:(UITableView *)tableView AtCellAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    [tableView beginUpdates];
+    [tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
+    [tableView endUpdates];
+    
+    return [cell ssj_takeScreenShot];
+}
+
 @end
