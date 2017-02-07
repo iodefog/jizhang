@@ -8582,7 +8582,7 @@
 				ORGANIZATIONNAME = "___9188___";
 				TargetAttributes = {
 					7D08A0931E4999D30085A8FB = {
-						DevelopmentTeam = 262HTD8ZSJ;
+						DevelopmentTeam = 7RVBV2MALK;
 					};
 					7DA139EA1E35AED7000490A4 = {
 						DevelopmentTeam = 262HTD8ZSJ;
@@ -13055,9 +13055,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuJiZhangGuanJia;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Wen Chen (262HTD8ZSJ)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Wen Chen (262HTD8ZSJ)";
-				DEVELOPMENT_TEAM = 262HTD8ZSJ;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Wen Chen (KD93ZP94R3)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Wen Chen (KD93ZP94R3)";
+				DEVELOPMENT_TEAM = 7RVBV2MALK;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -13078,8 +13078,8 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.youyujizhangguanjia;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "e1b12052-3986-45e4-a9b1-2a111c6eb0b6";
-				PROVISIONING_PROFILE_SPECIFIER = YouYuJiZhangBaoDis;
+				PROVISIONING_PROFILE = "b46001b5-dbf9-4241-a5d9-10f5baa8daa8";
+				PROVISIONING_PROFILE_SPECIFIER = YYJiZhangGuanJiaDev;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = 1;
