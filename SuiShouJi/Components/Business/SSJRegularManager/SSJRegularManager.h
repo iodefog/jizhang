@@ -27,40 +27,42 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)performRegularTaskWithLocalNotification:(UILocalNotification *)notification;
 
 /**
- *  补充相应用户的记账流水
+ 同步补充循环记录（周期记账、周期转账、预算）
+
+ @param userId 用户id
+ @return 是否成功
+ */
++ (BOOL)supplementCycleRecordsForUserId:(NSString *)userId;
+
+/**
+ 异步补充循环记录（周期记账、周期转账、预算）
+
+ @param userId 用户id
+ @param success 成功的回调
+ @param failure 失败的回调
+ */
++ (void)supplementCycleRecordsForUserId:(NSString *)userId success:(nullable void(^)())success failure:(nullable void (^)(NSError *error))failure;
+
+/**
+ *  根据周期记账补充记账流水
  *
  *  @param BOOL 是否补充成功
  */
-+ (BOOL)supplementBookkeepingIfNeededForUserId:(NSString *)userId;
++ (BOOL)supplementBookkeepingForUserId:(NSString *)userId inDatabase:(FMDatabase *)db;
 
 /**
  *  补充相应用户的预算流水
  *
  *  @param BOOL 是否补充成功
  */
-+ (BOOL)supplementBudgetIfNeededForUserId:(NSString *)userId;
++ (BOOL)supplementBudgetForUserId:(NSString *)userId inDatabase:(FMDatabase *)db;
 
 /**
- *  异步补充相应用户的记账流水
+ *  根据周期转账补充记账流水
  *
- *  @param userId 用户id
- *  @param success 成功的回调
- *  @param failure 失败的回调
+ *  @param BOOL 是否补充成功
  */
-+ (void)supplementBookkeepingIfNeededForUserId:(NSString *)userId
-                                   withSuccess:(nullable void(^)())success
-                                       failure:(nullable void (^)(NSError *error))failure;
-
-/**
- *  异步补充相应用户的预算流水
- *
- *  @param userId 用户id
- *  @param success 成功的回调
- *  @param failure 失败的回调
- */
-+ (void)supplementBudgetIfNeededForUserId:(NSString *)userId
-                              withSuccess:(nullable void(^)())success
-                                  failure:(nullable void (^)(NSError *error))failure;
++ (BOOL)supplementCyclicTransferForUserId:(NSString *)userId inDatabase:(FMDatabase *)db;
 
 @end
 

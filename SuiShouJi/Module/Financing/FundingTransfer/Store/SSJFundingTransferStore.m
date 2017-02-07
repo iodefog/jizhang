@@ -9,6 +9,7 @@
 #import "SSJFundingTransferStore.h"
 #import "SSJDatabaseQueue.h"
 #import "SSJBillingChargeCellItem.h"
+#import "SSJRegularManager.h"
 
 @implementation SSJFundingTransferStore
 + (void)queryForFundingTransferListWithSuccess:(void(^)(NSMutableDictionary *result))success failure:(void (^)(NSError *error))failure {
@@ -141,7 +142,51 @@
             });
         }
     }];
+}
+
++ (void)saveCycleTransferRecordWithID:(NSString *)ID
+                  transferInAccountId:(NSString *)transferInAccountId
+                 transferOutAccountId:(NSString *)transferOutAccountId
+                                money:(float)money
+                                 memo:(nullable NSString *)memo
+                      cyclePeriodType:(SSJCyclePeriodType)cyclePeriodType
+                            beginDate:(NSString *)beginDate
+                              endDate:(nullable NSString *)endDate
+                              success:(nullable void (^)())success
+                              failure:(nullable void (^)(NSError *error))failure {
     
+    NSString *userId = SSJUSERID();
+    
+    [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
+        
+        BOOL existed = [db boolForQuery:@"select count(1) from bk_tansfer_cycle where cuserid = ? and icycleid = ?", userId, ID];
+        
+        BOOL successful = YES;
+        NSString *writeDateStr = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        
+        if (existed) {
+            successful = [db executeUpdate:@"update bk_tansfer_cycle set ctransferinaccountid = ?, ctransferoutaccountid = ?, imoney = ?, cmemo = ?, icycletype = ?, cbegindate = ?, cenddate = ?, cwritedate = ?, iversion = ?, operatortype = 1 where cuserid = ? and icycleid = ? and operatortype <> 2", transferInAccountId, transferOutAccountId, @(money), memo, @(cyclePeriodType), beginDate, endDate, writeDateStr, @(SSJSyncVersion()), userId, ID];
+        } else {
+            successful = [db executeUpdate:@"insert into bk_tansfer_cycle (icycleid, cuserid, ctransferinaccountid, ctransferoutaccountid, imoney, cmemo, icycletype, cbegindate, cenddate, clientadddate, cwritedate, iversion, operatortype) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", ID, userId, transferInAccountId, transferOutAccountId, @(money), memo, @(cyclePeriodType), beginDate, endDate, writeDateStr, writeDateStr, @(SSJSyncVersion()), @0];
+        }
+        
+        if (!successful || [SSJRegularManager supplementCyclicTransferForUserId:userId inDatabase:db]) {
+            *rollback = YES;
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure([db lastError]);
+                });
+            }
+            
+            return ;
+        }
+        
+        if (success) {
+            SSJDispatchMainAsync(^{
+                success();
+            });
+        }
+    }];
 }
 
 @end

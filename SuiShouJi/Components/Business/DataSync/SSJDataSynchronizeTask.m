@@ -419,9 +419,8 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
         }
     }];
     
-    // 合并数据完成后根据定期记账和定期预算进行补充；即使补充失败，也不影响同步，在其他时机可以再次补充
-    [SSJRegularManager supplementBookkeepingIfNeededForUserId:self.userId];
-    [SSJRegularManager supplementBudgetIfNeededForUserId:self.userId];
+    // 合并数据完成后补充周期记账、周期转账、预算；即使补充失败，也不影响同步，在其他时机可以再次补充
+    [SSJRegularManager supplementCycleRecordsForUserId:self.userId];
     
     // 用户流水表中存在，但是成员流水表中不存在的流水插入到成员流水表中，默认就是用户自己的
     [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
