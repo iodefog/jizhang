@@ -41,7 +41,7 @@
         // 如果长度超过总长度,则在下面补充纯色背景
         if (wholeHeight > backImage.size.height) {
             UIImage *colorImage = [UIImage ssj_imageWithColor:[backImage ssj_getPixelColorAtLocation:CGPointMake(backImage.size.width, backImage.size.height)] size:CGSizeMake(backImage.size.width, wholeHeight - backImage.size.height)];
-            [colorImage drawInRect:CGRectMake(0, wholeHeight - SSJSCREENHEIGHT, width, wholeHeight - backImage.size.height)];
+            [colorImage drawInRect:CGRectMake(0, SSJSCREENHEIGHT, width, wholeHeight - backImage.size.height)];
         }
         
         // 绘制第一张图
@@ -91,7 +91,7 @@
         // 把cell的截图画上去
         for (UIImage *image in images) {
             NSInteger index = [images indexOfObject:image];
-            [image drawInRect:CGRectMake(0, headerImageHeight + index * 90, width, 90)];
+            [image drawInRect:CGRectMake(0, headerImageHeight + index * 90 + 48, width, 90)];
 
         }
         
@@ -158,7 +158,7 @@
     [tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
     [tableView endUpdates];
     
-    return [cell ssj_takeScreenShotWithSize:cell.size opaque:YES scale:0];
+    return [cell ssj_takeScreenShotWithSize:cell.size opaque:NO scale:0];
 }
 
 @end
