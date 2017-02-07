@@ -56,11 +56,10 @@
 }
 
 - (void)layoutSubviews {
+    [super layoutSubviews];
     CGFloat statusBarHeight = SSJ_STATUSBAR_HEIGHT;
-    
     _backOffBtn.frame = CGRectMake(5, 6 + statusBarHeight, 44, 30);
-    _managerBtn.frame = CGRectMake(self.width - 43, 6 + statusBarHeight, 35, 30);
-    
+    _managerBtn.rightTop = CGPointMake(self.width - 20, 6 + statusBarHeight);
     _containerView.size = CGSizeMake(100, 26);
     _containerView.centerX = self.width * 0.5;
     _containerView.top = statusBarHeight + 5;
@@ -157,6 +156,8 @@
 - (void)updateRightButtonTitle {
     NSString *title = _managed ? @"完成" : @"管理";
     [_managerBtn setTitle:NSLocalizedString(title, nil) forState:UIControlStateNormal];
+    [_managerBtn.titleLabel sizeToFit];
+    [_managerBtn sizeToFit];
 }
 
 - (void)updateSegmentCtrlSelctedIndex {
