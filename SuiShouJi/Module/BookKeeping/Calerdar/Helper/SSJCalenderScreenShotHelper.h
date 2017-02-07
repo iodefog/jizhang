@@ -10,8 +10,8 @@
 
 @interface SSJCalenderScreenShotHelper : NSObject
 
-+ (UIImage *)screenShotForTableView:(UITableView *)tableview;
++ (NSArray *)screenShotForTableView:(UITableView *)tableview;
 
-+ (void)screenShotForCalenderWithCellImage:(UIImage *)image Date:(NSDate *)date income:(double)income expence:(double)expence imageBlock:(void (^)(UIImage *image))imageBlock;
++ (void)screenShotForCalenderWithCellImages:(NSArray *)images Date:(NSDate *)date income:(double)income expence:(double)expence imageBlock:(void (^)(UIImage *image))imageBlock;
 
 @end

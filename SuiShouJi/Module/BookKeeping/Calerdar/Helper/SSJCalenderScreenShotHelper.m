@@ -10,7 +10,7 @@
 
 @implementation SSJCalenderScreenShotHelper
 
-+ (void)screenShotForCalenderWithCellImage:(UIImage *)image Date:(NSDate *)date income:(double)income expence:(double)expence imageBlock:(void (^)(UIImage *image))imageBlock {
++ (void)screenShotForCalenderWithCellImages:(NSArray *)images Date:(NSDate *)date income:(double)income expence:(double)expence imageBlock:(void (^)(UIImage *image))imageBlock {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         UIImage *shareImage = nil;
         
@@ -24,11 +24,11 @@
             backImage = [UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(SSJSCREENWITH, SSJSCREENHEIGHT)];
         }
         
-        double width = image.size.width;
+        double width = SSJSCREENWITH;
         
         // 调整两张图的宽和高
         double headerImageHeight = headerImage.size.height * width / headerImage.size.width;
-        double wholeHeight = MAX(headerImageHeight + 130 + image.size.height + 48, SSJSCREENHEIGHT);
+        double wholeHeight = MAX(headerImageHeight + 130 + 90 * images.count + 48, SSJSCREENHEIGHT);
         [headerImage ssj_scaleImageWithSize:CGSizeMake(width, headerImageHeight)];
         [backImage ssj_scaleImageWithSize:CGSizeMake(SSJSCREENWITH, SSJSCREENHEIGHT)];
 
@@ -89,7 +89,11 @@
         
         
         // 把cell的截图画上去
-        [image drawInRect:CGRectMake(0, headerImageHeight + 50, width, image.size.height)];
+        for (UIImage *image in images) {
+            NSInteger index = [images indexOfObject:image];
+            [image drawInRect:CGRectMake(0, headerImageHeight + index * 90, width, 90)];
+
+        }
         
         // 把二维码的图画上去
         [qrImage drawInRect:CGRectMake(width / 2 - qrImage.size.width / 2, wholeHeight - 65 - qrImage.size.height / 2, qrImage.size.width, qrImage.size.height)];
@@ -123,7 +127,7 @@
     }
 }
 
-+ (UIImage *)screenShotForTableView:(UITableView *)tableview {
++ (NSArray *)screenShotForTableView:(UITableView *)tableview {
     NSMutableArray *screenshots = [NSMutableArray array];
     for (int section=0; section < tableview.numberOfSections; section++) {
 
@@ -141,7 +145,7 @@
 
     }
     
-    return [UIImage verticalImageFromArray:screenshots];
+    return screenshots;
 }
 
 /**
