@@ -4079,7 +4079,6 @@
 		7D07B6961CF2C1F300B9C390 /* SSJLoginHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJLoginHelper.h; sourceTree = "<group>"; };
 		7D07B6971CF2C1F300B9C390 /* SSJLoginHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJLoginHelper.m; sourceTree = "<group>"; };
 		7D08A2D51E4999D40085A8FB /* YouYuJiZhangGuanJia.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = YouYuJiZhangGuanJia.app; path = SuiShouJi.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		7D08A2D61E4999D70085A8FB /* YouYuJiZhangBao copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "YouYuJiZhangBao copy-Info.plist"; path = "/Users/oldlang/jizhang/BookKeeping/YouYuJiZhangBao copy-Info.plist"; sourceTree = "<absolute>"; };
 		7D098C772A14820300C86957 /* SSJDatabaseErrorHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJDatabaseErrorHandler.h; sourceTree = "<group>"; };
 		7D098C782A14820300C86957 /* SSJDatabaseErrorHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDatabaseErrorHandler.m; sourceTree = "<group>"; };
 		7D1D7F411C86BBD90001F72A /* SSJUserChargePeriodConfigSyncTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJUserChargePeriodConfigSyncTable.h; sourceTree = "<group>"; };
@@ -4402,7 +4401,6 @@
 		7D9F5BC91D6D9CA600362CFA /* SSJLoanDateSelectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJLoanDateSelectionView.h; sourceTree = "<group>"; };
 		7D9F5BCA1D6D9CA600362CFA /* SSJLoanDateSelectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJLoanDateSelectionView.m; sourceTree = "<group>"; };
 		7DA13C2C1E35AED7000490A4 /* YouYuJiZhangBao.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = YouYuJiZhangBao.app; path = SuiShouJi.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		7DA13C341E35AED8000490A4 /* SuiShouJi copy4-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "SuiShouJi copy4-Info.plist"; path = "/Users/oldlang/jizhang/BookKeeping/SuiShouJi copy4-Info.plist"; sourceTree = "<absolute>"; };
 		7DA6EDD01D2B5CAE0097F06C /* SSJThemeModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJThemeModel.h; sourceTree = "<group>"; };
 		7DA6EDD11D2B5CAE0097F06C /* SSJThemeModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJThemeModel.m; sourceTree = "<group>"; };
 		7DA6EDE51D2BC21E0097F06C /* SSJTheme.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SSJTheme.h; sourceTree = "<group>"; };
@@ -8178,8 +8176,6 @@
 				BD543C3D1C1A6DBC00910D61 /* Products */,
 				72D2CCC3D3120C3CD45EDEB9 /* Frameworks */,
 				E6893A8F0ECE55E957399C9D /* Pods */,
-				7DA13C341E35AED8000490A4 /* SuiShouJi copy4-Info.plist */,
-				7D08A2D61E4999D70085A8FB /* YouYuJiZhangBao copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};

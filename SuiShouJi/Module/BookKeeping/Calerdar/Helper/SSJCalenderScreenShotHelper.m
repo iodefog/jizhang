@@ -19,12 +19,16 @@
         UIImage *qrImage = [UIImage imageNamed:@"calendar_qrImage"];
         
         UIImage *backImage = [UIImage ssj_themeImageWithName:@"background"];
+    
+        if (!backImage) {
+            backImage = [UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(SSJSCREENWITH, SSJSCREENHEIGHT)];
+        }
         
         double width = image.size.width;
         
         // 调整两张图的宽和高
         double headerImageHeight = headerImage.size.height * width / headerImage.size.width;
-        double wholeHeight = MAX(headerImageHeight + 130 + image.size.height + 48, SSJSCREENWITH);
+        double wholeHeight = MAX(headerImageHeight + 130 + image.size.height + 48, SSJSCREENHEIGHT);
         [headerImage ssj_scaleImageWithSize:CGSizeMake(width, headerImageHeight)];
         [backImage ssj_scaleImageWithSize:CGSizeMake(SSJSCREENWITH, SSJSCREENHEIGHT)];
 
@@ -60,8 +64,8 @@
 
         // 写上年份
         NSString *yearStr = [NSString stringWithFormat:@"%04ld",(long)date.year];
-        CGSize yearSize = [yearStr sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:21]}];
-        [weekDayStr drawInRect:CGRectMake(firstImageCenterY + dateSize.height / 2 + 15, firstImageCenterX - dateSize.width / 2 - 10 - yearSize.width / 2, yearSize.height, yearSize.width) withAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:21],NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"#222222"]}];
+        CGSize yearSize = [yearStr sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13]}];
+        [yearStr drawInRect:CGRectMake(firstImageCenterX - dateSize.width / 2 - 10 - yearSize.width / 2, firstImageCenterY + dateSize.height / 2 + 5, yearSize.width, yearSize.height) withAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13],NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"#222222"]}];
         
         // 写上总收入
         NSString *incomeTitleStr = @"总收入:";
@@ -88,7 +92,7 @@
         [image drawInRect:CGRectMake(0, headerImageHeight + 50, width, image.size.height)];
         
         // 把二维码的图画上去
-        [qrImage drawInRect:CGRectMake(width / 2 - qrImage.size.width / 2, wholeHeight - 65 - qrImage.size.height / 2, expenceSize.width, expenceSize.height)];
+        [qrImage drawInRect:CGRectMake(width / 2 - qrImage.size.width / 2, wholeHeight - 65 - qrImage.size.height / 2, qrImage.size.width, qrImage.size.height)];
         
         // 把二维码下面的字写上去
         NSString *qrStr = @"长按识别图中二维码,下载有鱼记账";
@@ -150,7 +154,7 @@
     [tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
     [tableView endUpdates];
     
-    return [cell ssj_takeScreenShot];
+    return [cell ssj_takeScreenShotWithSize:cell.size opaque:YES scale:0];
 }
 
 @end

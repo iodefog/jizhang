@@ -337,6 +337,11 @@
     NSData * imageData = UIImagePNGRepresentation(screenShot);
     NSString * fullPathToFile = [SSJDocumentPath() stringByAppendingPathComponent:@"test.png"];
     [imageData writeToFile:fullPathToFile atomically:NO];
+//    [SSJCalenderScreenShotHelper screenShotForCalenderWithCellImage:screenShot Date:[NSDate dateWithString:self.selectDate formatString:@"yyyy-MM-dd"] income:0 expence:0 imageBlock:^(UIImage *image) {
+//        NSData * imageData = UIImagePNGRepresentation(image);
+//        NSString * fullPathToFile = [SSJDocumentPath() stringByAppendingPathComponent:@"test.png"];
+//        [imageData writeToFile:fullPathToFile atomically:NO];
+//    }];
 }
 
 #pragma mark - private
