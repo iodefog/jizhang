@@ -143,7 +143,6 @@
             NSString *string = [formatter stringFromDate:tempDate];
             chartMessageItem.dateStr = string;
             chartMessageItem.date = tempDate;
-            chartMessageItem.date = [formatter dateFromString:string];
             chartMessageItem.content = item.creplyContent;
             [tempArr addObject:chartMessageItem];
         }

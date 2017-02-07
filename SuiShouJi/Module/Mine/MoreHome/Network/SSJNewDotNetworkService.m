@@ -15,8 +15,6 @@
     self.showLodingIndicator = NO;
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
     [dict setObject:SSJUSERID() forKey:@"cuserid"];
-//    [dict setObject:@"1.9.0" forKey:@"releaseVersion"];
-//    [dict setObject:@"f7b8bb8f-c860-4a84-8bfc-905bb0756388" forKey:@"cuserid"];
     [self request:@"admin/checkRemind.go" params:dict];
 }
 
@@ -34,7 +32,7 @@
         }else if (self.dotItem.creplydate.length > 0 && userItem.adviceTime.length < 1) {
             self.dotItem.hasAdviceUpdate = YES; 
         } else {
-            self.dotItem.hasAdviceUpdate = [self.dotItem.creplyDate compare:[NSDate dateWithString:userItem.adviceTime formatString:@"yyyy-MM-dd HH:mm:ss.SSS"]] == NSOrderedAscending;
+            self.dotItem.hasAdviceUpdate = [self.dotItem.creplyDate compare:[NSDate dateWithString:userItem.adviceTime formatString:@"yyyy-MM-dd HH:mm:ss.SSS"]] == NSOrderedDescending;
         }
     }
 }
@@ -44,6 +42,6 @@
 - (NSString *)themeVersion
 {
     NSString *themeStr = [[NSUserDefaults standardUserDefaults] objectForKey:kThemeVersionKey];
-    return themeStr.length > 0 ? themeStr : SSJCurrentThemeID();
+    return themeStr.length > 0 ? themeStr : @"-1";
 }
 @end

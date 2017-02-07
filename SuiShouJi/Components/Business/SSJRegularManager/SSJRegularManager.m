@@ -87,15 +87,15 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
                                        failure:(void (^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
         if ([self supplementBookkeepingForUserId:userId inDatabase:db rollback:rollback]) {
-            if (failure) {
-                SSJDispatch_main_async_safe(^{
-                    failure([db lastError]);
-                });
-            }
-        } else {
             if (success) {
                 SSJDispatch_main_async_safe(^{
                     success();
+                });
+            }
+        } else {
+            if (failure) {
+                SSJDispatch_main_async_safe(^{
+                    failure([db lastError]);
                 });
             }
         }
@@ -134,8 +134,8 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
         return NO;
     }
     
-    NSMutableArray *cycleIds = [[NSMutableArray alloc] init];
-    NSMutableArray *chargeList = [[NSMutableArray alloc] init];
+    NSMutableArray *cycleIds = [[NSMutableArray alloc] init];   // 生成过流水的周期转账id
+    NSMutableArray *chargeList = [[NSMutableArray alloc] init]; // 需要创建的流水列表
     
     while ([resultSet next]) {
         
@@ -149,9 +149,12 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
         NSDate *beginDate = [NSDate dateWithString:[resultSet stringForColumn:@"cbegindate"] formatString:@"yyyy-MM-dd"];
         NSDate *fromDate = [billDate compare:beginDate] == NSOrderedDescending ? billDate : beginDate;
         
-        NSDate *endDate = [NSDate dateWithString:[resultSet stringForColumn:@"cenddate"] formatString:@"yyyy-MM-dd"];
-        NSDate *currentDate = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:[NSDate date].day];
-        NSDate *toDate = [endDate compare:currentDate] == NSOrderedAscending ? endDate : currentDate;
+        NSDate *toDate = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:[NSDate date].day];
+        NSString *endDateStr = [resultSet stringForColumn:@"cenddate"];
+        if (endDateStr) {
+            NSDate *endDate = [NSDate dateWithString:endDateStr formatString:@"yyyy-MM-dd"];
+            toDate = [endDate compare:toDate] == NSOrderedAscending ? endDate : toDate;
+        }
         
         NSArray *billDates = [self billDatesFromDate:fromDate toDate:toDate periodType:periodType containFromDate:NO];
         
@@ -161,10 +164,11 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
     
     // 查询没有生成过流水的周期转账，根据起始日期、结束日期及当天日期得出需要补充的流水
     NSMutableString *sql = [[NSMutableString alloc] initWithString:@"select * from bk_transfer_cycle where cuserid = ? and operatortype <> 2 and istate = 1"];
-    NSString *cycleIdStr = [cycleIds componentsJoinedByString:@","];
-    if (cycleIdStr.length) {
+    if (cycleIds.count) {
+        NSString *cycleIdStr = [cycleIds componentsJoinedByString:@","];
         [sql appendFormat:@" and icycleid not in (%@)", cycleIdStr];
     }
+    
     resultSet = [db executeQuery:sql, userId];
     if (!resultSet) {
         return NO;
@@ -173,14 +177,29 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
     while ([resultSet next]) {
         int periodType = [resultSet intForColumn:@"icycletype"];
         NSDate *fromDate = [NSDate dateWithString:[resultSet stringForColumn:@"cbegindate"] formatString:@"yyyy-MM-dd"];
-        NSDate *endDate = [NSDate dateWithString:[resultSet stringForColumn:@"cenddate"] formatString:@"yyyy-MM-dd"];
+        
+        NSString *endDateStr = [resultSet stringForColumn:@"cenddate"];
+        NSDate *toDate = nil;
+        if (endDateStr) {
+            toDate = [NSDate dateWithString:endDateStr formatString:@"yyyy-MM-dd"];
+        }
+        
         NSDate *currentDate = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:[NSDate date].day];
-        NSDate *toDate = [endDate compare:currentDate] == NSOrderedAscending ? endDate : currentDate;
+        toDate = [toDate compare:currentDate] == NSOrderedAscending ? toDate : currentDate;
+        
         NSArray *billDates = [self billDatesFromDate:fromDate toDate:toDate periodType:periodType containFromDate:NO];
         
         [self organiseChargeListWithResultSet:resultSet chargeList:chargeList billDates:billDates userId:userId];
     }
     [resultSet close];
+    
+    // 插入补充的转账流水
+    for (NSDictionary *chargeInfo in chargeList) {
+        if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cid, ichargetype, cbilldate, cmemo, iversion, cwritedate, operatortype) values (:ichargeid, :cuserid, :imoney, :ibillid, :ifunsid, :cid, :ichargetype, :cbilldate, :cmemo, :iversion, :cwritedate, :operatortype)" withParameterDictionary:chargeInfo]) {
+            *rollback = YES;
+            return NO;
+        }
+    }
     
     return YES;
 }

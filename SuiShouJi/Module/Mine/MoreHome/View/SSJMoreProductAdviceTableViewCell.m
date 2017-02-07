@@ -113,7 +113,8 @@
     }else if(self.message.isSystem == YES){//系统
         [showTextButton setTitle:self.message.content forState:UIControlStateNormal];
     }
-    CGSize size = [self heightOfString:showTextButton.titleLabel.text font:[UIFont systemFontOfSize:16] width:SSJSCREENWITH - 2*(_iconView.width + 30)];
+    
+    CGSize size = [self sizeOfString:showTextButton.titleLabel.text font:[UIFont systemFontOfSize:16] width:SSJSCREENWITH - 2*(_iconView.width + 30)];
     // 设置按钮的高度就是titleLabel的高度
     CGFloat buttonH = size.height + 20;
     CGFloat buttonW = size.width + 20;
@@ -129,7 +130,7 @@
 }
 
 //字符串文字的高度
-- (CGSize) heightOfString:(NSString *)string font:(UIFont *)font width:(CGFloat)width
+- (CGSize)sizeOfString:(NSString *)string font:(UIFont *)font width:(CGFloat)width
 {
     CGRect bounds;
     NSDictionary * parameterDict=[NSDictionary dictionaryWithObject:font forKey:NSFontAttributeName];

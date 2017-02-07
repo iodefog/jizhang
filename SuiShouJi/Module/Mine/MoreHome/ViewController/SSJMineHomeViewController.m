@@ -369,8 +369,11 @@ static BOOL kNeedBannerDisplay = YES;
             if ([item.adTitle isEqualToString:kTitle2]) {//主题皮肤
                 item.isShowDot = NO;
                 
-                [[NSUserDefaults standardUserDefaults] setObject:self.dotService.dotItem.themeVersion.length > 0 ? self.dotService.dotItem.themeVersion : SSJCurrentThemeID() forKey:kThemeVersionKey];
-                [[NSUserDefaults standardUserDefaults] synchronize];
+                if (self.dotService.dotItem.themeVersion.length > 0 && ![self.dotService.dotItem.themeVersion isEqualToString:[[NSUserDefaults standardUserDefaults] objectForKey:kThemeVersionKey]]) {
+                    [[NSUserDefaults standardUserDefaults] setObject:self.dotService.dotItem.themeVersion forKey:kThemeVersionKey];
+                    [[NSUserDefaults standardUserDefaults] synchronize];
+                }
+                
             }
         }
         [self.navigationController pushViewController:themeVC animated:YES];

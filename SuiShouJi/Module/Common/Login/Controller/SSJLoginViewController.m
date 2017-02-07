@@ -358,6 +358,7 @@
     //  如果有finishHandle，就通过finishHandle来控制页面流程，否则走默认流程
     [[NSUserDefaults standardUserDefaults]setBool:YES forKey:SSJHaveLoginOrRegistKey];
     [[NSUserDefaults standardUserDefaults]setInteger:self.loginService.loginType forKey:SSJUserLoginTypeKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
     
     //  如果用户手势密码开启，进入手势密码页面
     SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"motionPWD", @"motionPWDState"] forUserId:SSJUSERID()];
