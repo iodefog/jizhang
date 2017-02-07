@@ -38,21 +38,25 @@
         
         // 绘制第一张图
         [headerImage drawInRect:CGRectMake(0, 0, width, headerImageHeight)];
+        float firstImageCenterX = CGRectGetMidX(CGRectMake(0, 0, width, headerImageHeight));
+        float firstImageCenterY = CGRectGetMidY(CGRectMake(0, 0, width, headerImageHeight));
         
         // 写上日期
         NSString *dateStr = [date formattedDateWithFormat:@"MM/dd"];
         CGSize dateSize = [dateStr sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:21]}];
-        [dateStr drawInRect:CGRectMake(0, 0, 0, 0) withAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:21],NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"#222222"]}];
+        
+        [dateStr drawInRect:CGRectMake(firstImageCenterX - 10 - dateSize.width, firstImageCenterY - dateSize.height / 2, dateSize.width, dateSize.width) withAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:21],NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"#222222"]}];
+
         
         // 写上星期
         NSString *weekDayStr = [NSString stringWithFormat:@"%@",[self stringFromWeekday:date.weekday]];
         CGSize weekDaySize = [weekDayStr sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:21]}];
-        [weekDayStr drawInRect:CGRectMake(0, 0, 0, 0) withAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:21],NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"#222222"]}];
+        [weekDayStr drawInRect:CGRectMake(firstImageCenterX + 10, firstImageCenterY - weekDaySize.height / 2, weekDaySize.width, weekDaySize.width) withAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:21],NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"#222222"]}];
 
         // 写上年份
         NSString *yearStr = [NSString stringWithFormat:@"%04ld",(long)date.year];
         CGSize yearSize = [yearStr sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:21]}];
-        [weekDayStr drawInRect:CGRectMake(0, 0, 0, 0) withAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:21],NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"#222222"]}];
+        [weekDayStr drawInRect:CGRectMake(firstImageCenterY + dateSize.height / 2 + 15, firstImageCenterX - dateSize.width / 2 - 10 - yearSize.width / 2, yearSize.height, yearSize.width) withAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:21],NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"#222222"]}];
         
         // 写上总收入
         NSString *incomeTitleStr = @"总收入:";

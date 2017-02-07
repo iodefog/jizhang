@@ -8,6 +8,7 @@
 
 @implementation SSJDatabaseVersion12
 
+
 + (NSError *)startUpgradeInDatabase:(FMDatabase *)db {
 
     NSError *error = [self updateUserChargeTableWithDatabase:db];
@@ -24,6 +25,11 @@
         return [db lastError];
     }
 
+    FMResultSet *resultSet =  [db executeQuery:@"select "];
+
+    while ([resultSet next]) {
+
+    }
     
     return nil;
 }
