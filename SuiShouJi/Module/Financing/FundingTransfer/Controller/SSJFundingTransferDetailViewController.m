@@ -110,7 +110,7 @@ static NSString * SSJTransferDetailHeaderIdentifier = @"transferDetailHeader";
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     NSDictionary *monthInfo = [self.datas ssj_safeObjectAtIndex:section];
     SSJTransferDetailHeader *header = [[SSJTransferDetailHeader alloc] init];
-    header = [monthInfo objectForKey:SSJFundingTransferStoreMonthKey];
+    header.date = [monthInfo objectForKey:SSJFundingTransferStoreMonthKey];
     return header;
 }
 

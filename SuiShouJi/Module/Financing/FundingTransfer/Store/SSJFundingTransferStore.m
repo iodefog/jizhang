@@ -73,8 +73,8 @@ NSString *SSJFundingTransferStoreListKey = @"SSJFundingTransferStoreListKey";
         
         // 相同年份月份的数据整合到一起
         for (SSJFundingTransferDetailItem *item in tempList) {
-            NSDate *currentDate = [NSDate dateWithString:item.transferDate formatString:@"yyyy-MM"];
-            if (!lastDate || [lastDate compare:currentDate] != NSOrderedSame) {
+            NSDate *currentDate = [NSDate dateWithString:item.transferDate formatString:@"yyyy-MM-dd"];
+            if (!lastDate || lastDate.year != currentDate.year || lastDate.month != currentDate.month) {
                 NSMutableDictionary *monthInfo = [NSMutableDictionary dictionary];
                 [monthInfo setObject:currentDate forKey:SSJFundingTransferStoreMonthKey];
                 
