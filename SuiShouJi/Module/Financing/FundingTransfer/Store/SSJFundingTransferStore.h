@@ -11,6 +11,9 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+extern NSString *SSJFundingTransferStoreMonthKey;
+extern NSString *SSJFundingTransferStoreListKey;
+
 @interface SSJFundingTransferStore : NSObject
 
 /**
@@ -80,6 +83,18 @@ NS_ASSUME_NONNULL_BEGIN
                                       opened:(BOOL)opened
                                      success:(nullable void (^)())success
                                      failure:(nullable void (^)(NSError *error))failure;
+
+/**
+ 查询周期转账列表；
+ 查询结果数据结构：
+ @[@{SSJFundingTransferStoreMonthKey:@(月份), 
+     SSJFundingTransferStoreListKey:@[SSJFundingTransferDetailItem, ...]}, ...]
+
+ @param success 成功回调
+ @param failure 失败回调
+ */
++ (void)queryCycleTransferRecordsListWithSuccess:(nullable void (^)(NSArray <NSDictionary *>*))success
+                                         failure:(nullable void (^)(NSError *error))failure;
 
 
 @end
