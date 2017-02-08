@@ -44,26 +44,16 @@
     return _dateLabel;
 }
 
--(void)setCurrentMonth:(NSString *)currentMonth{
-    _currentMonth = currentMonth;
-    NSInteger month = [[[_currentMonth componentsSeparatedByString:@"-"] lastObject] integerValue];
-    NSInteger year = [[[_currentMonth componentsSeparatedByString:@"-"] firstObject] integerValue];
-    if ([_currentMonth isEqualToString:[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM"]]) {
+- (void)setDate:(NSDate *)date {
+    NSDate *currentDate = [NSDate date];
+    if (date.year == currentDate.year && date.month == currentDate.month) {
         self.dateLabel.text = @"本月";
-    }else if([_currentMonth hasPrefix:[NSString stringWithFormat:@"%ld",[NSDate date].year]]){
-        self.dateLabel.text = [NSString stringWithFormat:@"%ld月",month];
-    }else{
-        self.dateLabel.text = [NSString stringWithFormat:@"%ld年%ld月",year,month];
+    } else if (date.year == currentDate.year && date.month != currentDate.month) {
+        self.dateLabel.text = [NSString stringWithFormat:@"%d月", (int)date.month];
+    } else {
+        self.dateLabel.text = [NSString stringWithFormat:@"%d年%d月", (int)date.year, (int)date.month];
     }
     [self.dateLabel sizeToFit];
 }
-
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
-}
-*/
 
 @end

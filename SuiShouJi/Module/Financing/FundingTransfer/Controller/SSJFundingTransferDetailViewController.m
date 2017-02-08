@@ -18,7 +18,7 @@ static NSString * SSJTransferDetailHeaderIdentifier = @"transferDetailHeader";
 
 
 @interface SSJFundingTransferDetailViewController ()
-@property(nonatomic, strong) NSDictionary *datas;
+@property(nonatomic, strong) NSArray *datas;
 @end
 
 @implementation SSJFundingTransferDetailViewController
@@ -42,16 +42,16 @@ static NSString * SSJTransferDetailHeaderIdentifier = @"transferDetailHeader";
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     __weak typeof(self) weakSelf = self;
-    [SSJFundingTransferStore queryForFundingTransferListWithSuccess:^(NSMutableDictionary *result) {
-        if ([result allKeys].count) {
+    [SSJFundingTransferStore queryForFundingTransferListWithSuccess:^(NSArray <NSDictionary *>*result) {
+        if (result.count) {
             [self.tableView ssj_hideWatermark:YES];
         }else{
             [self.tableView ssj_showWatermarkWithImageName:@"founds_transfer_none" animated:NO target:self action:NULL];
         }
-        weakSelf.datas = [NSDictionary dictionaryWithDictionary:result];
+        weakSelf.datas = result;
         [weakSelf.tableView reloadData];
     } failure:^(NSError *error) {
-        
+        [SSJAlertViewAdapter showError:error];
     }];
 }
 
@@ -75,71 +75,43 @@ static NSString * SSJTransferDetailHeaderIdentifier = @"transferDetailHeader";
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    NSArray* arr = [self.datas allKeys];
-    arr = [arr sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2){
-        NSComparisonResult result = [obj1 compare:obj2];
-        return result==NSOrderedAscending;
-    }];
-    NSArray *items = [self.datas objectForKey:[arr ssj_safeObjectAtIndex:indexPath.section]];
+    
+    NSDictionary *monthInfo = [self.datas ssj_safeObjectAtIndex:indexPath.section];
+    NSArray *items = [monthInfo objectForKey:SSJFundingTransferStoreListKey];
+    
     SSJFundingTransferDetailItem *item = [items ssj_safeObjectAtIndex:indexPath.row];
     SSJFundingTransferEditeViewController *transferEditeVc = [[SSJFundingTransferEditeViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
     transferEditeVc.item = item;
     [self.navigationController pushViewController:transferEditeVc animated:YES];
 }
 
-
 #pragma mark - UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    NSArray* arr = [self.datas allKeys];
-    arr = [arr sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2){
-        NSComparisonResult result = [obj1 compare:obj2];
-        return result==NSOrderedAscending;
-    }];
-    NSArray *items = [self.datas objectForKey:[arr ssj_safeObjectAtIndex:section]];
+    NSDictionary *monthInfo = [self.datas ssj_safeObjectAtIndex:section];
+    NSArray *items = [monthInfo objectForKey:SSJFundingTransferStoreListKey];
     return items.count;
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return [self.datas allKeys].count;
+    return self.datas.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSArray* arr = [self.datas allKeys];
-    arr = [arr sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2){
-        NSComparisonResult result = [obj1 compare:obj2];
-        return result==NSOrderedAscending;
-    }];
-    NSArray *items = [self.datas objectForKey:[arr ssj_safeObjectAtIndex:indexPath.section]];    SSJFundingTransferDetailItem *item = [items ssj_safeObjectAtIndex:indexPath.row];
+    NSDictionary *monthInfo = [self.datas ssj_safeObjectAtIndex:indexPath.section];
+    NSArray *items = [monthInfo objectForKey:SSJFundingTransferStoreListKey];
+    SSJFundingTransferDetailItem *item = [items ssj_safeObjectAtIndex:indexPath.row];
+    
     SSJFundingTransferDetailCell * cell = [tableView dequeueReusableCellWithIdentifier:SSJTransferDetailCellIdentifier forIndexPath:indexPath];
     cell.item = item;
+    
     return cell;
 }
 
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
-    SSJTransferDetailHeader *header = [[SSJTransferDetailHeader alloc]init];
-    NSArray* arr = [self.datas allKeys];
-    arr = [arr sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2){
-        NSComparisonResult result = [obj1 compare:obj2];
-        return result==NSOrderedAscending;
-    }];
-    header.currentMonth = [arr ssj_safeObjectAtIndex:section];
+    NSDictionary *monthInfo = [self.datas ssj_safeObjectAtIndex:section];
+    SSJTransferDetailHeader *header = [[SSJTransferDetailHeader alloc] init];
+    header = [monthInfo objectForKey:SSJFundingTransferStoreMonthKey];
     return header;
 }
-
-#pragma mark - Getter
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

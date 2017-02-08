@@ -15,12 +15,12 @@ NS_ASSUME_NONNULL_BEGIN
 @interface SSJRegularManager : NSObject
 
 /**
- *  注册定期任务通知（定期记账、定期预算）
+ *  注册定期任务通知（定期记账、定期预算、周期转账）
  */
 + (void)registerRegularTaskNotification;
 
 /**
- *  执行定期任务（检测是否需要补充记账流水、预算），在收到本地通知的方法中调用application:didReceiveLocalNotification:
+ *  执行定期任务（检测是否需要补充记账流水、预算、周期转账），在收到本地通知的方法中调用application:didReceiveLocalNotification:
  *
  *  @param notification 本地通知对象，传入application:didReceiveLocalNotification:中的notification参数
  */

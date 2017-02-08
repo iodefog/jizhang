@@ -327,8 +327,24 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
         return NO;
     }
     
+    // 查询最大的周期转账流水的cid后缀
+    FMResultSet *resultSet = [db executeQuery:@"select max(cast(substr(uc.cid, legnth(tc.icycleid) + 2) as int)) as suffix, tc.icycleid from bk_user_charge as uc, bk_transfer_cycle as tc where uc.cuserid = ? and tc.cuserid = uc.cuserid and uc.ichargetype = 5 and uc.cid like (tc.icycleid || '-%') and tc.operatortype <> 2 and tc.istate <> 0 group by tc.icycleid", userId];
+    if (!resultSet) {
+        return NO;
+    }
+    
+    NSMutableDictionary *cidSuffixMapping = [[NSMutableDictionary alloc] init]; // 周期转账id和最大cid后缀的映射
+    while ([resultSet next]) {
+        NSString *suffix = [resultSet stringForColumn:@"suffix"];
+        NSString *cycleId = [resultSet stringForColumn:@"icycleid"];
+        if (suffix && cycleId) {
+            [cidSuffixMapping setObject:suffix forKey:cycleId];
+        }
+    }
+    [resultSet close];
+    
     // 根据最近一次周期转账流水计算出需要补充的流水
-    FMResultSet *resultSet = [db executeQuery:@"select max(uc.cbilldate), tc.* from bk_user_charge as uc, bk_transfer_cycle as tc where uc.cuserid = ? and uc.cuserid = tc.cuserid and uc.ichargetype = 5 and uc.cid like (tc.icycleid || '-%') and tc.operatortype <> 2 and tc.istate <> 0 and uc.cbilldate <= datetime('now', 'localtime') group by tc.icycleid", userId];
+    resultSet = [db executeQuery:@"select max(uc.cbilldate), tc.* from bk_user_charge as uc, bk_transfer_cycle as tc where uc.cuserid = ? and uc.cuserid = tc.cuserid and uc.ichargetype = 5 and uc.cid like (tc.icycleid || '-%') and tc.operatortype <> 2 and tc.istate <> 0 and uc.cbilldate <= datetime('now', 'localtime') group by tc.icycleid", userId];
     if (!resultSet) {
         return NO;
     }
@@ -357,7 +373,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
         
         NSArray *billDates = [self billDatesFromDate:fromDate toDate:toDate periodType:periodType containFromDate:NO];
         
-        [self organiseChargeListWithResultSet:resultSet chargeList:chargeList billDates:billDates userId:userId];
+        [self organiseChargeListWithResultSet:resultSet chargeList:chargeList billDates:billDates userId:userId suffixMapping:cidSuffixMapping];
     }
     [resultSet close];
     
@@ -388,7 +404,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
         
         NSArray *billDates = [self billDatesFromDate:fromDate toDate:toDate periodType:periodType containFromDate:NO];
         
-        [self organiseChargeListWithResultSet:resultSet chargeList:chargeList billDates:billDates userId:userId];
+        [self organiseChargeListWithResultSet:resultSet chargeList:chargeList billDates:billDates userId:userId suffixMapping:cidSuffixMapping];
     }
     [resultSet close];
     
@@ -402,23 +418,26 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
     return YES;
 }
 
-+ (void)organiseChargeListWithResultSet:(FMResultSet *)resultSet chargeList:(NSMutableArray *)chargeList billDates:(NSArray *)billDates userId:(NSString *)userId {
++ (void)organiseChargeListWithResultSet:(FMResultSet *)resultSet chargeList:(NSMutableArray *)chargeList billDates:(NSArray *)billDates userId:(NSString *)userId suffixMapping:(NSDictionary *)mapping {
+    
+    NSString *cycleId = [resultSet stringForColumn:@"icycleid"];
+    NSString *money = [resultSet stringForColumn:@"imoney"];
+    NSString *memo = [resultSet stringForColumn:@"cmemo"];
+    NSString *transferInId = [resultSet stringForColumn:@"ctransferinaccountid"];
+    NSString *transferOutId = [resultSet stringForColumn:@"ctransferoutaccountid"];
+    int cidSuffix = [mapping[cycleId] intValue];
+    
     for (NSDate *date in billDates) {
-        
-        NSString *cycleId = [resultSet stringForColumn:@"icycleid"];
-        NSString *money = [resultSet stringForColumn:@"imoney"];
         NSString *billDate = [date formattedDateWithFormat:@"yyyy-MM-dd"];
-        NSString *memo = [resultSet stringForColumn:@"cmemo"];
-        NSString *transferInId = [resultSet stringForColumn:@"ctransferinaccountid"];
-        NSString *transferOutId = [resultSet stringForColumn:@"ctransferoutaccountid"];
         NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        NSString *cid = [NSString stringWithFormat:@"%@-%d", cycleId, ++cidSuffix];
         
         NSDictionary *transferInChargeInfo = @{@"ichargeid":SSJUUID(),
                                                @"cuserid":userId,
                                                @"imoney":money,
                                                @"ibillid":@3,
                                                @"ifunsid":transferInId,
-                                               @"cid":cycleId,
+                                               @"cid":cid,
                                                @"ichargetype":@5,
                                                @"cbilldate":billDate,
                                                @"cmemo":memo,
@@ -431,7 +450,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
                                                 @"imoney":money,
                                                 @"ibillid":@4,
                                                 @"ifunsid":transferOutId,
-                                                @"cid":cycleId,
+                                                @"cid":cid,
                                                 @"ichargetype":@5,
                                                 @"cbilldate":billDate,
                                                 @"cmemo":memo,

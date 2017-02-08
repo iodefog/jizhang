@@ -22,7 +22,7 @@ extern NSString *SSJFundingTransferStoreListKey;
  *  @param success 查询成功的回调
  *  @param failure 查询失败的回调
  */
-+ (void)queryForFundingTransferListWithSuccess:(void(^)(NSMutableDictionary *result))success
++ (void)queryForFundingTransferListWithSuccess:(void(^)(NSArray <NSDictionary *>*result))success
                                        failure:(void (^)(NSError *error))failure;
 
 /**
@@ -87,7 +87,7 @@ extern NSString *SSJFundingTransferStoreListKey;
 /**
  查询周期转账列表；
  查询结果数据结构：
- @[@{SSJFundingTransferStoreMonthKey:@(月份), 
+ @[@{SSJFundingTransferStoreMonthKey:NSDate,
      SSJFundingTransferStoreListKey:@[SSJFundingTransferDetailItem, ...]}, ...]
 
  @param success 成功回调
