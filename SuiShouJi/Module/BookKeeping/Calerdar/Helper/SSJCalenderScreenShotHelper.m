@@ -30,7 +30,7 @@
         double headerImageHeight = headerImage.size.height * width / headerImage.size.width;
         double wholeHeight = MAX(headerImageHeight + 130 + 90 * images.count + 48, SSJSCREENHEIGHT);
         [headerImage ssj_scaleImageWithSize:CGSizeMake(width, headerImageHeight)];
-        [backImage ssj_scaleImageWithSize:CGSizeMake(SSJSCREENWITH, SSJSCREENHEIGHT)];
+//        [backImage ssj_scaleImageWithSize:CGSizeMake(SSJSCREENWITH, SSJSCREENHEIGHT)];
 
         // 开始绘制
         UIGraphicsBeginImageContext(CGSizeMake(width, wholeHeight));
@@ -40,8 +40,8 @@
         
         // 如果长度超过总长度,则在下面补充纯色背景
         if (wholeHeight > backImage.size.height) {
-            UIImage *colorImage = [UIImage ssj_imageWithColor:[backImage ssj_getPixelColorAtLocation:CGPointMake(backImage.size.width, backImage.size.height)] size:CGSizeMake(backImage.size.width, wholeHeight - backImage.size.height)];
-            [colorImage drawInRect:CGRectMake(0, SSJSCREENHEIGHT, width, wholeHeight - backImage.size.height)];
+            UIImage *colorImage = [UIImage ssj_imageWithColor:[backImage ssj_getPixelColorAtLocation:CGPointMake(backImage.size.width - 1, backImage.size.height - 1)] size:CGSizeMake(backImage.size.width, wholeHeight - backImage.size.height)];
+            [colorImage drawInRect:CGRectMake(0, backImage.size.height, width, wholeHeight - backImage.size.height)];
         }
         
         // 绘制第一张图
