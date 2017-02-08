@@ -136,7 +136,7 @@
 - (UIImageView *)marker {
     if (!_marker) {
         _marker = [[UIImageView alloc] init];
-        _marker.image = [[UIImage imageNamed:@"calender_star"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        _marker.image = [[UIImage imageNamed:@"calendar_star"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         [_marker sizeToFit];
     }
     return _marker;

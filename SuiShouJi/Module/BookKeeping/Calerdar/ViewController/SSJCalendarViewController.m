@@ -54,6 +54,8 @@
     long _currentYear;
     long _currentMonth;
     long _currentDay;
+    float _currentIncome;
+    float _currentExpenture;
 }
 #pragma mark - Lifecycle
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -333,7 +335,7 @@
 }
 
 - (void)shareButtonClicked:(id)sender{
-    NSArray *screenShots = [SSJCalenderScreenShotHelper screenShotForTableView:self.tableView];
+    NSArray * screenShots = [SSJCalenderScreenShotHelper screenShotForTableView:self.tableView];
     [SSJCalenderScreenShotHelper screenShotForCalenderWithCellImages:screenShots Date:[NSDate dateWithString:self.selectDate formatString:@"yyyy-MM-dd"] income:0 expence:0 imageBlock:^(UIImage *image) {
         NSData * imageData = UIImagePNGRepresentation(image);
         NSString * fullPathToFile = [SSJDocumentPath() stringByAppendingPathComponent:@"test.png"];
