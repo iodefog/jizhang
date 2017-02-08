@@ -2259,6 +2259,13 @@
 		9C18C0171DF68FB700BC0971 /* SSJMonthSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C18C0161DF68FB700BC0971 /* SSJMonthSelectView.m */; };
 		9C18C0241DF7F84F00BC0971 /* SSJInstalmentEditeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C18C0231DF7F84E00BC0971 /* SSJInstalmentEditeViewController.m */; };
 		9C18C02E1DF9323C00BC0971 /* SSJInstalmentDateSelectCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C18C02D1DF9323C00BC0971 /* SSJInstalmentDateSelectCell.m */; };
+		9C1E4C171E4ACD5C00CA5843 /* SSJCalendarTabelViewHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1E4C161E4ACD5C00CA5843 /* SSJCalendarTabelViewHeaderView.m */; };
+		9C1E4C181E4ACD5C00CA5843 /* SSJCalendarTabelViewHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1E4C161E4ACD5C00CA5843 /* SSJCalendarTabelViewHeaderView.m */; };
+		9C1E4C191E4ACD5C00CA5843 /* SSJCalendarTabelViewHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1E4C161E4ACD5C00CA5843 /* SSJCalendarTabelViewHeaderView.m */; };
+		9C1E4C1A1E4ACD5C00CA5843 /* SSJCalendarTabelViewHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1E4C161E4ACD5C00CA5843 /* SSJCalendarTabelViewHeaderView.m */; };
+		9C1E4C1B1E4ACD5C00CA5843 /* SSJCalendarTabelViewHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1E4C161E4ACD5C00CA5843 /* SSJCalendarTabelViewHeaderView.m */; };
+		9C1E4C1C1E4ACD5C00CA5843 /* SSJCalendarTabelViewHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1E4C161E4ACD5C00CA5843 /* SSJCalendarTabelViewHeaderView.m */; };
+		9C1E4C1D1E4ACD5C00CA5843 /* SSJCalendarTabelViewHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1E4C161E4ACD5C00CA5843 /* SSJCalendarTabelViewHeaderView.m */; };
 		9C20A87F1D41E43A00F3D77F /* SSJMemberManagerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C20A87E1D41E43A00F3D77F /* SSJMemberManagerViewController.m */; };
 		9C23EA4D1DDAD4FE0003C5AB /* 9188.cer in Resources */ = {isa = PBXBuildFile; fileRef = 9C23EA4C1DDAD4FE0003C5AB /* 9188.cer */; };
 		9C246BA41DCADB7600C61C34 /* SSJDatabaseVersion10.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C246BA21DCADB7600C61C34 /* SSJDatabaseVersion10.m */; };
@@ -4648,6 +4655,8 @@
 		9C18C0311DFA856600BC0971 /* SSJInstalmentDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJInstalmentDetailViewController.h; sourceTree = "<group>"; };
 		9C1A9CA91D7D76AE0032BA0D /* SSJBookKeepingHomeBooksButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookKeepingHomeBooksButton.h; sourceTree = "<group>"; };
 		9C1A9CAA1D7D76AE0032BA0D /* SSJBookKeepingHomeBooksButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBookKeepingHomeBooksButton.m; sourceTree = "<group>"; };
+		9C1E4C151E4ACD5C00CA5843 /* SSJCalendarTabelViewHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCalendarTabelViewHeaderView.h; sourceTree = "<group>"; };
+		9C1E4C161E4ACD5C00CA5843 /* SSJCalendarTabelViewHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCalendarTabelViewHeaderView.m; sourceTree = "<group>"; };
 		9C20A87D1D41E43A00F3D77F /* SSJMemberManagerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMemberManagerViewController.h; sourceTree = "<group>"; };
 		9C20A87E1D41E43A00F3D77F /* SSJMemberManagerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMemberManagerViewController.m; sourceTree = "<group>"; };
 		9C23EA4C1DDAD4FE0003C5AB /* 9188.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = 9188.cer; sourceTree = "<group>"; };
@@ -5827,6 +5836,8 @@
 				9C1723861D52D3D100BB13DE /* SSJCanlenderChargeDetailCell.m */,
 				9C1723901D5327F500BB13DE /* SSJCalenderDetailHeader.h */,
 				9C1723911D5327F600BB13DE /* SSJCalenderDetailHeader.m */,
+				9C1E4C151E4ACD5C00CA5843 /* SSJCalendarTabelViewHeaderView.h */,
+				9C1E4C161E4ACD5C00CA5843 /* SSJCalendarTabelViewHeaderView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -9438,6 +9449,7 @@
 				7D08A14C1E4999D30085A8FB /* SSJFundingTypeSelectView.m in Sources */,
 				7D08A14D1E4999D30085A8FB /* SSJReminderEditeViewController.m in Sources */,
 				7D08A14E1E4999D30085A8FB /* SSJViewControllerAddition.m in Sources */,
+				9C1E4C1D1E4ACD5C00CA5843 /* SSJCalendarTabelViewHeaderView.m in Sources */,
 				7D08A14F1E4999D30085A8FB /* SSJUserItem.m in Sources */,
 				7D08A1501E4999D30085A8FB /* SSJMemoMakingView.m in Sources */,
 				7D08A1511E4999D30085A8FB /* SSJMineHomeTableViewHeader.m in Sources */,
@@ -9975,6 +9987,7 @@
 				7DA13AA31E35AED7000490A4 /* SSJFundingTypeSelectView.m in Sources */,
 				7DA13AA41E35AED7000490A4 /* SSJReminderEditeViewController.m in Sources */,
 				7DA13AA51E35AED7000490A4 /* SSJViewControllerAddition.m in Sources */,
+				9C1E4C1C1E4ACD5C00CA5843 /* SSJCalendarTabelViewHeaderView.m in Sources */,
 				7DA13AA61E35AED7000490A4 /* SSJUserItem.m in Sources */,
 				7DA13AA71E35AED7000490A4 /* SSJMemoMakingView.m in Sources */,
 				7DA13AA81E35AED7000490A4 /* SSJMineHomeTableViewHeader.m in Sources */,
@@ -10779,6 +10792,7 @@
 				9C3899A31DC9D99700715732 /* SSJCustomCategoryItem.m in Sources */,
 				7D6CC91C1E0A799400FF6133 /* SSJReportFormsCurveView.m in Sources */,
 				7DBA56E51D6D32B700C02D79 /* SSJCircleChargeStore.m in Sources */,
+				9C1E4C191E4ACD5C00CA5843 /* SSJCalendarTabelViewHeaderView.m in Sources */,
 				7DF532A41E13BC0F009A6F6C /* SSJInstalmentDateSelectCell.m in Sources */,
 				7DBA56E61D6D32B700C02D79 /* SSJDatabaseVersion2.m in Sources */,
 				7DBA56E71D6D32B700C02D79 /* SCYMotionEncryptionView.m in Sources */,
@@ -11317,6 +11331,7 @@
 				9C2A68201D194CA70010F1DA /* SSJCircleChargeStore.m in Sources */,
 				9C2A68211D194CA70010F1DA /* SSJDatabaseVersion2.m in Sources */,
 				9C2A68221D194CA70010F1DA /* SCYMotionEncryptionView.m in Sources */,
+				9C1E4C181E4ACD5C00CA5843 /* SSJCalendarTabelViewHeaderView.m in Sources */,
 				9C2A68231D194CA70010F1DA /* SSJGuideLastContentView.m in Sources */,
 				9C2A68241D194CA70010F1DA /* SSJBookkeepingTreeHelpViewController.m in Sources */,
 				9C2A68251D194CA70010F1DA /* SSJChargeCicleModifyViewController.m in Sources */,
@@ -11855,6 +11870,7 @@
 				91F7FD2C1DFA8CD3005F4B6B /* SSJChatMessageItem.m in Sources */,
 				9CECFC5F1D6D41A700DB2C8B /* SSJRegistCompleteViewController.m in Sources */,
 				9CECFC601D6D41A700DB2C8B /* SSJListMenuItem.m in Sources */,
+				9C1E4C1A1E4ACD5C00CA5843 /* SSJCalendarTabelViewHeaderView.m in Sources */,
 				9C3899A41DC9D99700715732 /* SSJCustomCategoryItem.m in Sources */,
 				9CECFC611D6D41A700DB2C8B /* SSJCircleChargeStore.m in Sources */,
 				9CECFC621D6D41A700DB2C8B /* SSJDatabaseVersion2.m in Sources */,
@@ -12393,6 +12409,7 @@
 				9CEC00541D6D41EB00DB2C8B /* SSJDateAddition.m in Sources */,
 				7D6CC91E1E0A799500FF6133 /* SSJReportFormsCurveView.m in Sources */,
 				9CEC00551D6D41EB00DB2C8B /* main.m in Sources */,
+				9C1E4C1B1E4ACD5C00CA5843 /* SSJCalendarTabelViewHeaderView.m in Sources */,
 				7DF532A61E13BC10009A6F6C /* SSJInstalmentDateSelectCell.m in Sources */,
 				9CEC00561D6D41EB00DB2C8B /* UIImageView+SSJTheme.m in Sources */,
 				9CEC00571D6D41EB00DB2C8B /* SSJRegistCompleteViewController.m in Sources */,
@@ -12741,6 +12758,7 @@
 				7D581EB51C5106CE00E202A2 /* SSJBaseSyncTable.m in Sources */,
 				9C18C02E1DF9323C00BC0971 /* SSJInstalmentDateSelectCell.m in Sources */,
 				7DBA55271D6AE05B00C02D79 /* SSJLoanListCellItem.m in Sources */,
+				9C1E4C171E4ACD5C00CA5843 /* SSJCalendarTabelViewHeaderView.m in Sources */,
 				7DEF54601C75F82A00A90153 /* SSJPercentCircleNodeItem.m in Sources */,
 				9C9471811CEB224C00D69079 /* SSJFundingListDayItem.m in Sources */,
 				9CD9BC681CFFD3600061803B /* SSJChargeCircleModifyCell.m in Sources */,

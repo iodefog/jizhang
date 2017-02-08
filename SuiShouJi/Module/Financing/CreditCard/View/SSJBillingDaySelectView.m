@@ -151,7 +151,7 @@
 -(UIPickerView *)dateSelect{
     if (!_dateSelect) {
         _dateSelect = [[UIPickerView alloc]initWithFrame:CGRectMake(0, 0, self.width, 300)];
-        _dateSelect.backgroundColor = [UIColor whiteColor];
+        _dateSelect.backgroundColor = [UIColor redColor];
         _dateSelect.delegate = self;
         _dateSelect.dataSource = self;
     }
@@ -167,6 +167,7 @@
 
 -(void)closeButtonClicked:(id)sender{
     [self dismiss];
+    UIDatePicker
 }
 
 -(void)setCurrentDate:(NSInteger)currentDate{
