@@ -10,11 +10,20 @@
 
 @interface SSJFundingTransferDetailItem : NSObject
 
+// 周期转账id
+@property (nonatomic, strong) NSString *ID;
+
 //转账金额
 @property(nonatomic, strong) NSString *transferMoney;
 
 //转账时间
 @property(nonatomic, strong) NSString *transferDate;
+
+// 周期转账起始时间
+@property(nonatomic, strong) NSString *beginDate;
+
+// 周期转账结束时间
+@property(nonatomic, strong) NSString *endDate;
 
 //转入账户的id
 @property(nonatomic, strong) NSString *transferInId;
@@ -51,4 +60,11 @@
 
 //是否可编辑
 @property(nonatomic) BOOL editable;
+
+// 是否开启
+@property (nonatomic) BOOL opened;
+
+// 周期转账循环类型
+@property (nonatomic) SSJCyclePeriodType cycleType;
+
 @end
