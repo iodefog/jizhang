@@ -11,6 +11,7 @@
 #import "SSJFundingTypeSelectView.h"
 #import "TPKeyboardAvoidingTableView.h"
 #import "SSJChargeCircleTimeSelectView.h"
+#import "SSJFundingTransferPeriodSelectionView.h"
 #import "SSJDatabaseQueue.h"
 #import "SSJDataSynchronizer.h"
 #import "SSJCreditCardItem.h"
@@ -24,6 +25,9 @@ static NSString *const kTitle2 = @"转入账户";
 static NSString *const kTitle3 = @"转账金额";
 static NSString *const kTitle4 = @"备注";
 static NSString *const kTitle5 = @"转账日期";
+static NSString *const kTitle6 = @"循环周期";
+static NSString *const kTitle7 = @"周期起始日";
+static NSString *const kTitle8 = @"周期结束日";
 
 static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEditeCellIdentifier";
 
@@ -38,6 +42,8 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
 @property (nonatomic,strong) SSJFundingTypeSelectView *transferOutFundingTypeSelect;
 
 @property(nonatomic, strong) SSJChargeCircleTimeSelectView *chargeCircleTimeView;
+
+@property (nonatomic, strong) SSJFundingTransferPeriodSelectionView *periodSelectionView;
 
 @property(nonatomic, strong) UIView *saveFooterView;
 
@@ -67,8 +73,8 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
 - (void)viewDidLoad {
     [super viewDidLoad];
 //    self.view.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
-    self.titles = @[@[@"转出账户",@"转入账户"],@[@"转账金额"],@[@"备注",@"转账日期"]];
-    self.images = @[@[@"founds_zhuanchuzhanghu",@"founds_zhuanruzhanghu"],@[@"loan_money"],@[@"loan_memo",@"loan_calendar"]];
+    self.titles = @[@[kTitle1, kTitle2], @[kTitle3, kTitle4, kTitle5, kTitle6]];
+    self.images = @[@[@"founds_zhuanchuzhanghu", @"founds_zhuanruzhanghu"], @[@"loan_money", @"loan_memo", @"loan_calendar", @"xuhuan_xuhuan"]];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(transferTextDidChange) name:UITextFieldTextDidChangeNotification object:nil];
     [self.view addSubview:self.tableView];
     if (self.item != nil) {
@@ -89,6 +95,16 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
     }
     [self.tableView registerClass:[SSJChargeCircleModifyCell class] forCellReuseIdentifier:SSJFundingTransferEditeCellIdentifier];
 
+}
+
+- (void)updateTitlesAndImages {
+    if (_item.cycleType == SSJCyclePeriodTypeOnce) {
+        self.titles = @[@[kTitle1, kTitle2], @[kTitle3, kTitle4, kTitle5, kTitle6]];
+        self.images = @[@[@"founds_zhuanchuzhanghu", @"founds_zhuanruzhanghu"], @[@"loan_money", @"loan_memo", @"loan_calendar", @"xuhuan_xuhuan"]];
+    } else {
+        self.titles = @[@[kTitle1, kTitle2], @[kTitle3, kTitle4, kTitle5, kTitle6]];
+        self.images = @[@[@"founds_zhuanchuzhanghu", @"founds_zhuanruzhanghu"], @[@"loan_money", @"loan_memo", @"loan_calendar", @"xuhuan_xuhuan"]];
+    }
 }
 
 //-(void)viewWillAppear:(BOOL)animated{
@@ -215,10 +231,13 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
         circleModifyCell.cellInput.hidden = YES;
         circleModifyCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         circleModifyCell.cellDetail = self.item.transferDate;
+    }else if ([title isEqualToString:kTitle6]) {
+        circleModifyCell.cellInput.hidden = YES;
+        circleModifyCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        circleModifyCell.cellDetail = SSJTitleForCycleType(self.periodSelectionView.selectedType);
     }
     return circleModifyCell;
 }
-
 
 #pragma mark - UITextFieldDelegate
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
@@ -364,6 +383,14 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
     return _chargeCircleTimeView;
 }
 
+- (SSJFundingTransferPeriodSelectionView *)periodSelectionView {
+    if (!_periodSelectionView) {
+        _periodSelectionView = [[SSJFundingTransferPeriodSelectionView alloc] init];
+        [_periodSelectionView addTarget:self action:@selector(periodSelectionViewAction) forControlEvents:UIControlEventValueChanged];
+    }
+    return _periodSelectionView;
+}
+
 #pragma mark - Event
 -(void)rightButtonClicked:(id)sender{
     SSJFundingTransferDetailViewController *transferDetailVc = [[SSJFundingTransferDetailViewController alloc]init];
@@ -449,6 +476,11 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
     }];
     
     [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+}
+
+- (void)periodSelectionViewAction {
+    
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
 }
 
 #pragma mark - Private

@@ -472,3 +472,39 @@ NSString *SSJLastPatchVersion(){
     return [[NSUserDefaults standardUserDefaults] objectForKey:SSJLastPatchVersionKey];
 }
 
+NSString *SSJTitleForCycleType(SSJCyclePeriodType type) {
+    switch (type) {
+        case SSJCyclePeriodTypeOnce:
+            return @"仅一次";
+            break;
+            
+        case SSJCyclePeriodTypeDaily:
+            return @"每天";
+            break;
+            
+        case SSJCyclePeriodTypeWorkday:
+            return @"每个工作日";
+            break;
+            
+        case SSJCyclePeriodTypePerWeekend:
+            return @"每个周末（周六、周日）";
+            break;
+            
+        case SSJCyclePeriodTypeWeekly:
+            return @"每周";
+            break;
+            
+        case SSJCyclePeriodTypePerMonth:
+            return @"每月";
+            break;
+            
+        case SSJCyclePeriodTypeLastDayPerMonth:
+            return @"每月最后一天";
+            break;
+            
+        case SSJCyclePeriodTypePerYear:
+            return @"每年";
+            break;
+    }
+}
+

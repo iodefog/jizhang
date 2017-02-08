@@ -252,4 +252,6 @@ void SSJDispatchMainSync(void (^block)(void));
 
 void SSJDispatchMainAsync(void (^block)(void));
 
+NSString *SSJTitleForCycleType(SSJCyclePeriodType type);
+
 
