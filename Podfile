@@ -44,3 +44,11 @@ end
 target 'YouYuJiZhangLiCai'  do
     shared_pods
 end
+
+target 'YouYuJiZhangBao'  do
+    shared_pods
+end
+
+target 'YouYuJiZhangGuanJia'  do
+    shared_pods
+end

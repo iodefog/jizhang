@@ -25,10 +25,6 @@ PODS:
   - JSPatch (1.1.2):
     - JSPatch/Core (= 1.1.2)
   - JSPatch/Core (1.1.2)
-  - JSPatch/Extensions (1.1.2):
-    - JSPatch/Core
-  - JSPatch/JPCFunction (1.1.2):
-    - JSPatch/Core
   - libwebp (0.5.1):
     - libwebp/core (= 0.5.1)
     - libwebp/dec (= 0.5.1)
@@ -53,7 +49,6 @@ PODS:
   - libwebp/utils (0.5.1):
     - libwebp/core
   - libwebp/webp (0.5.1)
-  - Masonry (1.0.2)
   - Meiqia (3.3.4.1):
     - Meiqia/MeiqiaSDK (= 3.3.4.1)
     - Meiqia/MQChatViewController (= 3.3.4.1)
@@ -89,9 +84,6 @@ DEPENDENCIES:
   - DateTools
   - FLAnimatedImage (~> 1.0)
   - JSPatch
-  - JSPatch/Extensions
-  - JSPatch/JPCFunction
-  - Masonry
   - Meiqia (~> 3.3.1)
   - MJExtension
   - MMDrawerController (~> 0.5.7)
@@ -109,7 +101,6 @@ SPEC CHECKSUMS:
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
   JSPatch: 741205ebb2e2238c223a436e4c8cf75cf40a345f
   libwebp: b9126f8982a95370cf4eaad9bb3fefd57f052c15
-  Masonry: 7c429b56da9d4ee0bbb3ed77a5ea710d6a5df39e
   Meiqia: 2be3baaf2b023484b8cd3985bc2dad6db36732a1
   MJExtension: 5932755f451458eefa24239358817f8d291240c7
   MMDrawerController: 7a4cf8e25596bf2434e03ce50d22a8608ddee6a1
@@ -121,6 +112,6 @@ SPEC CHECKSUMS:
   YYText: 5c461d709e24d55a182d1441c41dc639a18a4849
   ZYCornerRadius: 526dfd5b860008e57abf7be4a887f4630c3018f0
 
-PODFILE CHECKSUM: b2bd5cd7091acbb54113ce17f1f73b0e8312d08f
+PODFILE CHECKSUM: 7f066ffa506618fffe0a758f422b956d53dfd23f
 
 COCOAPODS: 1.1.1

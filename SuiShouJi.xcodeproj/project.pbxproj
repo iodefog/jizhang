@@ -9,11 +9,6 @@
 /* Begin PBXBuildFile section */
 		1630EE3F5F21A9D6BC03EFF1 /* libPods-JiZhangGuanJia.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 28D54CCC52994B95633CA5E3 /* libPods-JiZhangGuanJia.a */; };
 		275BC0E75B7EA4D9F9473DD4 /* libPods-YouYuJiZhangLiCai.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F9099E967EA40B5B4F591EA5 /* libPods-YouYuJiZhangLiCai.a */; };
-		677B3207C51B9427CF044580 /* SSJDatabaseVersion12.m in Sources */ = {isa = PBXBuildFile; fileRef = 677B31BC05B2FC4A9FC30E83 /* SSJDatabaseVersion12.m */; };
-		677B335F81AF40FF3D3DBB4E /* SSJDatabaseVersion12.m in Sources */ = {isa = PBXBuildFile; fileRef = 677B31BC05B2FC4A9FC30E83 /* SSJDatabaseVersion12.m */; };
-		677B344C20D8A072243227BC /* SSJDatabaseVersion12.m in Sources */ = {isa = PBXBuildFile; fileRef = 677B31BC05B2FC4A9FC30E83 /* SSJDatabaseVersion12.m */; };
-		677B34CF9A6CD85C1FA6231D /* SSJDatabaseVersion12.m in Sources */ = {isa = PBXBuildFile; fileRef = 677B31BC05B2FC4A9FC30E83 /* SSJDatabaseVersion12.m */; };
-		677B3D52E8AEC460D1F5F310 /* SSJDatabaseVersion12.m in Sources */ = {isa = PBXBuildFile; fileRef = 677B31BC05B2FC4A9FC30E83 /* SSJDatabaseVersion12.m */; };
 		72BB5896AF4A38FC4F8B3B48 /* libPods-YouYuJiZhangBen.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD18AB4DEF381D69AB77158 /* libPods-YouYuJiZhangBen.a */; };
 		7CDDB9314C402641187B10A1 /* libPods-youyujizhang.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 348DA5EFAB1C2E711E07E558 /* libPods-youyujizhang.a */; };
 		7D00D8051DFA9CC00007A8FB /* SSJReportFormsChartCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D00D8041DFA9CC00007A8FB /* SSJReportFormsChartCell.m */; };
@@ -612,13 +607,6 @@
 		7D24ED911D9E6F8E003C4248 /* SSJBudgetDetailHeaderViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D24ED8E1D9E6F8E003C4248 /* SSJBudgetDetailHeaderViewItem.m */; };
 		7D24ED921D9E6F8E003C4248 /* SSJBudgetDetailHeaderViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D24ED8E1D9E6F8E003C4248 /* SSJBudgetDetailHeaderViewItem.m */; };
 		7D24ED931D9E6F8E003C4248 /* SSJBudgetDetailHeaderViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D24ED8E1D9E6F8E003C4248 /* SSJBudgetDetailHeaderViewItem.m */; };
-		7D28B5EC1E4B413300C06D90 /* SSJFundingTransferPeriodSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D28B5EB1E4B413300C06D90 /* SSJFundingTransferPeriodSelectionView.m */; };
-		7D28B5ED1E4B413300C06D90 /* SSJFundingTransferPeriodSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D28B5EB1E4B413300C06D90 /* SSJFundingTransferPeriodSelectionView.m */; };
-		7D28B5EE1E4B413300C06D90 /* SSJFundingTransferPeriodSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D28B5EB1E4B413300C06D90 /* SSJFundingTransferPeriodSelectionView.m */; };
-		7D28B5EF1E4B413300C06D90 /* SSJFundingTransferPeriodSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D28B5EB1E4B413300C06D90 /* SSJFundingTransferPeriodSelectionView.m */; };
-		7D28B5F01E4B413300C06D90 /* SSJFundingTransferPeriodSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D28B5EB1E4B413300C06D90 /* SSJFundingTransferPeriodSelectionView.m */; };
-		7D28B5F11E4B413300C06D90 /* SSJFundingTransferPeriodSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D28B5EB1E4B413300C06D90 /* SSJFundingTransferPeriodSelectionView.m */; };
-		7D28B5F21E4B413300C06D90 /* SSJFundingTransferPeriodSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D28B5EB1E4B413300C06D90 /* SSJFundingTransferPeriodSelectionView.m */; };
 		7D2930151D76E917003EF6D8 /* SSJEditBillTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2930141D76E917003EF6D8 /* SSJEditBillTypeViewController.m */; };
 		7D2930161D76E917003EF6D8 /* SSJEditBillTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2930141D76E917003EF6D8 /* SSJEditBillTypeViewController.m */; };
 		7D2930171D76E917003EF6D8 /* SSJEditBillTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2930141D76E917003EF6D8 /* SSJEditBillTypeViewController.m */; };
@@ -1571,6 +1559,7 @@
 		7DBA55C01D6D32B700C02D79 /* SSJTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433141C1A78B40051E7AB /* SSJTableView.m */; };
 		7DBA55C21D6D32B700C02D79 /* SSJListMenuCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B12D11D4CBC140036BF4E /* SSJListMenuCell.m */; };
 		7DBA55C31D6D32B700C02D79 /* SSJBookkeepingTreeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB5C1CFD2DAA0061803B /* SSJBookkeepingTreeViewController.m */; };
+		7DBA55C51D6D32B700C02D79 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		7DBA55C61D6D32B700C02D79 /* SSJLoadMoreCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433831C1A8DA50051E7AB /* SSJLoadMoreCell.m */; };
 		7DBA55C71D6D32B700C02D79 /* SSJThemeDownLoadCompleteService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61AAA61D5B30DE005DC9BD /* SSJThemeDownLoadCompleteService.m */; };
 		7DBA55C81D6D32B700C02D79 /* SSJHomeReminderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32571CEAE6C10086B67E /* SSJHomeReminderView.m */; };
@@ -1632,6 +1621,7 @@
 		7DBA56001D6D32B700C02D79 /* SSJForgotPSWResetService.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF3A1C4751EA000E6CC9 /* SSJForgotPSWResetService.m */; };
 		7DBA56011D6D32B700C02D79 /* SSJReportFormsScaleAxisCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD9D0C31CF6E2A6005AF735 /* SSJReportFormsScaleAxisCell.m */; };
 		7DBA56021D6D32B700C02D79 /* SSJNewBaseTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD04338C1C1A8DA50051E7AB /* SSJNewBaseTableViewController.m */; };
+		7DBA56031D6D32B700C02D79 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		7DBA56041D6D32B700C02D79 /* SSJMotionPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBE41CFD2DAA0061803B /* SSJMotionPasswordViewController.m */; };
 		7DBA56051D6D32B700C02D79 /* SSJFundingDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9471561CEB224C00D69079 /* SSJFundingDetailCell.m */; };
 		7DBA56061D6D32B700C02D79 /* SSJMotionPasswordSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBE21CFD2DAA0061803B /* SSJMotionPasswordSettingViewController.m */; };
@@ -1728,6 +1718,7 @@
 		7DBA56631D6D32B700C02D79 /* SSJCircleChargeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBC41CFD2DAA0061803B /* SSJCircleChargeCell.m */; };
 		7DBA56641D6D32B700C02D79 /* SSJUserChargePeriodConfigSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D1D7F421C86BBD90001F72A /* SSJUserChargePeriodConfigSyncTable.m */; };
 		7DBA56651D6D32B700C02D79 /* SSJSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D99D4641C357703006EB113 /* SSJSegmentedControl.m */; };
+		7DBA56661D6D32B700C02D79 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		7DBA56671D6D32B700C02D79 /* SSJCustomCollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32F21CEAE6C10086B67E /* SSJCustomCollectionViewFlowLayout.m */; };
 		7DBA56681D6D32B700C02D79 /* SSJBillingChargeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B23FC1C3A1B63009A74A8 /* SSJBillingChargeHelper.m */; };
 		7DBA56691D6D32B700C02D79 /* SSJForgetPasswordSecondStepViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE6E8731C5641B6001C9138 /* SSJForgetPasswordSecondStepViewController.m */; };
@@ -1789,6 +1780,7 @@
 		7DBA56A51D6D32B700C02D79 /* SSJPasswordModifyCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBF61CFD2DAA0061803B /* SSJPasswordModifyCell.m */; };
 		7DBA56A61D6D32B700C02D79 /* SSJListMenuCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B12D31D4CBC140036BF4E /* SSJListMenuCellItem.m */; };
 		7DBA56A71D6D32B700C02D79 /* SSJWeiXinLoginHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C2E02731CAE419600C5F764 /* SSJWeiXinLoginHelper.m */; };
+		7DBA56A81D6D32B700C02D79 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		7DBA56A91D6D32B700C02D79 /* SSJMagicExportCalendarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB8B1CFD2DAA0061803B /* SSJMagicExportCalendarViewController.m */; };
 		7DBA56AA1D6D32B700C02D79 /* SSJMineHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBC61CFD2DAA0061803B /* SSJMineHeaderView.m */; };
 		7DBA56AB1D6D32B700C02D79 /* SSJRegistCheckAuthCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF501C4751EA000E6CC9 /* SSJRegistCheckAuthCodeViewController.m */; };
@@ -1805,6 +1797,7 @@
 		7DBA56B81D6D32B700C02D79 /* SSJBaseCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433881C1A8DA50051E7AB /* SSJBaseCollectionViewController.m */; };
 		7DBA56B91D6D32B700C02D79 /* SSJCalenderTableViewNoDataHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32A01CEAE6C10086B67E /* SSJCalenderTableViewNoDataHeader.m */; };
 		7DBA56BA1D6D32B700C02D79 /* SSJBookkeepingTreeStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB6A1CFD2DAA0061803B /* SSJBookkeepingTreeStore.m */; };
+		7DBA56BC1D6D32B700C02D79 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		7DBA56BD1D6D32B700C02D79 /* SSJChargeReminderTimeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBC21CFD2DAA0061803B /* SSJChargeReminderTimeView.m */; };
 		7DBA56BE1D6D32B700C02D79 /* SSJCanlenderChargeDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1723861D52D3D100BB13DE /* SSJCanlenderChargeDetailCell.m */; };
 		7DBA56BF1D6D32B700C02D79 /* SSJDatabaseVersion5.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE0896E1D333ED4008431D6 /* SSJDatabaseVersion5.m */; };
@@ -1868,6 +1861,7 @@
 		7DBA56FC1D6D32B700C02D79 /* SSJThemeSetting.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE4A7DA1D20C0BA00F05BF0 /* SSJThemeSetting.m */; };
 		7DBA56FD1D6D32B700C02D79 /* SSJFundingTypeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F330C1CEAE6C10086B67E /* SSJFundingTypeTableViewCell.m */; };
 		7DBA56FE1D6D32B700C02D79 /* SSJBookkeepingTreeDescView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB6D1CFD2DAA0061803B /* SSJBookkeepingTreeDescView.m */; };
+		7DBA56FF1D6D32B700C02D79 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		7DBA57001D6D32B700C02D79 /* SSJFundingTransferViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BC411CFD2E470061803B /* SSJFundingTransferViewController.m */; };
 		7DBA57011D6D32B700C02D79 /* SSJScrollTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F325D1CEAE6C10086B67E /* SSJScrollTextView.m */; };
 		7DBA57021D6D32B700C02D79 /* SSJFundAccountTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4EF8811C43B10C003C4B20 /* SSJFundAccountTable.m */; };
@@ -1878,11 +1872,13 @@
 		7DBA57071D6D32B700C02D79 /* SSJMineSyncButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBCF1CFD2DAA0061803B /* SSJMineSyncButton.m */; };
 		7DBA57081D6D32B700C02D79 /* SSJThemeCollectionHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C66F1351D211FE60094125D /* SSJThemeCollectionHeaderView.m */; };
 		7DBA57091D6D32B700C02D79 /* SSJPagingNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = BD04339D1C1A99170051E7AB /* SSJPagingNetworkService.m */; };
+		7DBA570A1D6D32B700C02D79 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		7DBA570B1D6D32B700C02D79 /* SCYMotionEncryptionTriangleLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE69C341C8EC401001D31C1 /* SCYMotionEncryptionTriangleLayer.m */; };
 		7DBA570C1D6D32B700C02D79 /* SSJSyncSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBDE1CFD2DAA0061803B /* SSJSyncSettingViewController.m */; };
 		7DBA570D1D6D32B700C02D79 /* SSJADDNewTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F33221CEAE6C10086B67E /* SSJADDNewTypeViewController.m */; };
 		7DBA570F1D6D32B700C02D79 /* SSJMagicExportCalendarViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBA31CFD2DAA0061803B /* SSJMagicExportCalendarViewCell.m */; };
 		7DBA57101D6D32B700C02D79 /* SSJThemeUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D8F7C371D2CAED200F7DF6A /* SSJThemeUtil.m */; };
+		7DBA57111D6D32B700C02D79 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		7DBA57121D6D32B700C02D79 /* SSJReportFormsIncomeAndPayCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6AAB691C313BA70007C0A3 /* SSJReportFormsIncomeAndPayCell.m */; };
 		7DBA57131D6D32B700C02D79 /* SSJThemeManagerCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C65CA0A1D4B39AE0058D0A4 /* SSJThemeManagerCollectionViewCell.m */; };
 		7DBA57141D6D32B700C02D79 /* SSJUnlimitedScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6AAB621C312C500007C0A3 /* SSJUnlimitedScrollView.m */; };
@@ -2143,11 +2139,6 @@
 		915A1AFB1E10F53500F73C7B /* SSJLoginPopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 915A1AEC1E10F02200F73C7B /* SSJLoginPopView.m */; };
 		916012051DF7D86C00BF571C /* SSJHeaderBannerImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 916012041DF7D86C00BF571C /* SSJHeaderBannerImageView.m */; };
 		916012081DF7DC3B00BF571C /* SSJHeaderBannerCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 916012071DF7DC3B00BF571C /* SSJHeaderBannerCollectionViewCell.m */; };
-		9160DC3B1E2F672600419CC2 /* SSJNewDotNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9160DC3A1E2F672600419CC2 /* SSJNewDotNetworkService.m */; };
-		9160DC3C1E2F672600419CC2 /* SSJNewDotNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9160DC3A1E2F672600419CC2 /* SSJNewDotNetworkService.m */; };
-		9160DC3D1E2F672600419CC2 /* SSJNewDotNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9160DC3A1E2F672600419CC2 /* SSJNewDotNetworkService.m */; };
-		9160DC3E1E2F672600419CC2 /* SSJNewDotNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9160DC3A1E2F672600419CC2 /* SSJNewDotNetworkService.m */; };
-		9160DC3F1E2F672600419CC2 /* SSJNewDotNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9160DC3A1E2F672600419CC2 /* SSJNewDotNetworkService.m */; };
 		916E31D81DF8EECF003C18D4 /* SSJMineHomeCollectionImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 910DD68F1DF7B47E00A73F0C /* SSJMineHomeCollectionImageCell.m */; };
 		916E31D91DF8EED1003C18D4 /* SSJMineHomeCollectionImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 910DD68F1DF7B47E00A73F0C /* SSJMineHomeCollectionImageCell.m */; };
 		916E31DA1DF8EED1003C18D4 /* SSJMineHomeCollectionImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 910DD68F1DF7B47E00A73F0C /* SSJMineHomeCollectionImageCell.m */; };
@@ -2174,20 +2165,6 @@
 		916E320A1DF967C1003C18D4 /* SSJProductAdviceTableHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 916E32071DF967C1003C18D4 /* SSJProductAdviceTableHeaderView.m */; };
 		916E320B1DF967C1003C18D4 /* SSJProductAdviceTableHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 916E32071DF967C1003C18D4 /* SSJProductAdviceTableHeaderView.m */; };
 		916E320C1DF967C1003C18D4 /* SSJProductAdviceTableHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 916E32071DF967C1003C18D4 /* SSJProductAdviceTableHeaderView.m */; };
-		916F18DC1E4C715300AE5F98 /* SSJNewDotNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9160DC3A1E2F672600419CC2 /* SSJNewDotNetworkService.m */; };
-		916F18DD1E4C715300AE5F98 /* SSJNewDotNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9160DC3A1E2F672600419CC2 /* SSJNewDotNetworkService.m */; };
-		916F18E01E4C72C900AE5F98 /* SSJHomeCalendarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 916F18DF1E4C72C900AE5F98 /* SSJHomeCalendarView.m */; };
-		916F18E11E4C72C900AE5F98 /* SSJHomeCalendarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 916F18DF1E4C72C900AE5F98 /* SSJHomeCalendarView.m */; };
-		916F18E21E4C72C900AE5F98 /* SSJHomeCalendarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 916F18DF1E4C72C900AE5F98 /* SSJHomeCalendarView.m */; };
-		916F18E31E4C72C900AE5F98 /* SSJHomeCalendarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 916F18DF1E4C72C900AE5F98 /* SSJHomeCalendarView.m */; };
-		916F18E41E4C72C900AE5F98 /* SSJHomeCalendarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 916F18DF1E4C72C900AE5F98 /* SSJHomeCalendarView.m */; };
-		916F18E51E4C72C900AE5F98 /* SSJHomeCalendarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 916F18DF1E4C72C900AE5F98 /* SSJHomeCalendarView.m */; };
-		916F18E61E4C72C900AE5F98 /* SSJHomeCalendarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 916F18DF1E4C72C900AE5F98 /* SSJHomeCalendarView.m */; };
-		918A32C91E35EA1B002C4685 /* SSJThemeAndAdviceDotItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 918A32C81E35EA1B002C4685 /* SSJThemeAndAdviceDotItem.m */; };
-		918A32CA1E35EA1B002C4685 /* SSJThemeAndAdviceDotItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 918A32C81E35EA1B002C4685 /* SSJThemeAndAdviceDotItem.m */; };
-		918A32CB1E35EA1B002C4685 /* SSJThemeAndAdviceDotItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 918A32C81E35EA1B002C4685 /* SSJThemeAndAdviceDotItem.m */; };
-		918A32CC1E35EA1B002C4685 /* SSJThemeAndAdviceDotItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 918A32C81E35EA1B002C4685 /* SSJThemeAndAdviceDotItem.m */; };
-		918A32CD1E35EA1B002C4685 /* SSJThemeAndAdviceDotItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 918A32C81E35EA1B002C4685 /* SSJThemeAndAdviceDotItem.m */; };
 		91A846AC1E237A5D00D2D0BE /* SSJHomeBillStickyNoteView.m in Sources */ = {isa = PBXBuildFile; fileRef = 91A846AB1E237A5D00D2D0BE /* SSJHomeBillStickyNoteView.m */; };
 		91A846AD1E237A5D00D2D0BE /* SSJHomeBillStickyNoteView.m in Sources */ = {isa = PBXBuildFile; fileRef = 91A846AB1E237A5D00D2D0BE /* SSJHomeBillStickyNoteView.m */; };
 		91A846AE1E237A5D00D2D0BE /* SSJHomeBillStickyNoteView.m in Sources */ = {isa = PBXBuildFile; fileRef = 91A846AB1E237A5D00D2D0BE /* SSJHomeBillStickyNoteView.m */; };
@@ -2204,6 +2181,11 @@
 		91E0B9A21E01244900D8516E /* SSJBookKeepingHomeEvaluatePopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 91E0B9921E01140900D8516E /* SSJBookKeepingHomeEvaluatePopView.m */; };
 		91E0B9A31E01244A00D8516E /* SSJBookKeepingHomeEvaluatePopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 91E0B9921E01140900D8516E /* SSJBookKeepingHomeEvaluatePopView.m */; };
 		91E0B9A41E01244A00D8516E /* SSJBookKeepingHomeEvaluatePopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 91E0B9921E01140900D8516E /* SSJBookKeepingHomeEvaluatePopView.m */; };
+		91EBE4351E000139002564C4 /* SSJMoreProductAdviceTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 91EBE4341E000139002564C4 /* SSJMoreProductAdviceTableViewCell.xib */; };
+		91EBE4361E000139002564C4 /* SSJMoreProductAdviceTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 91EBE4341E000139002564C4 /* SSJMoreProductAdviceTableViewCell.xib */; };
+		91EBE4371E000139002564C4 /* SSJMoreProductAdviceTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 91EBE4341E000139002564C4 /* SSJMoreProductAdviceTableViewCell.xib */; };
+		91EBE4381E000139002564C4 /* SSJMoreProductAdviceTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 91EBE4341E000139002564C4 /* SSJMoreProductAdviceTableViewCell.xib */; };
+		91EBE4391E000139002564C4 /* SSJMoreProductAdviceTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 91EBE4341E000139002564C4 /* SSJMoreProductAdviceTableViewCell.xib */; };
 		91F7FD1B1DFA7D3C005F4B6B /* SSJMoreProductAdviceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 91F7FD1A1DFA7D3C005F4B6B /* SSJMoreProductAdviceTableViewCell.m */; };
 		91F7FD1C1DFA7D3C005F4B6B /* SSJMoreProductAdviceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 91F7FD1A1DFA7D3C005F4B6B /* SSJMoreProductAdviceTableViewCell.m */; };
 		91F7FD1D1DFA7D3C005F4B6B /* SSJMoreProductAdviceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 91F7FD1A1DFA7D3C005F4B6B /* SSJMoreProductAdviceTableViewCell.m */; };
@@ -2990,11 +2972,6 @@
 		9CC0AEC81DEEE12F0085AC65 /* 9188.cer in Resources */ = {isa = PBXBuildFile; fileRef = 9C23EA4C1DDAD4FE0003C5AB /* 9188.cer */; };
 		9CC0AED01DEEE12F0085AC65 /* 9188.cer in Resources */ = {isa = PBXBuildFile; fileRef = 9C23EA4C1DDAD4FE0003C5AB /* 9188.cer */; };
 		9CC0AED11DEEE1300085AC65 /* 9188.cer in Resources */ = {isa = PBXBuildFile; fileRef = 9C23EA4C1DDAD4FE0003C5AB /* 9188.cer */; };
-		9CC0B2B11E2DEFF800495D53 /* SSJCalenderScreenShotHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CC0B2B01E2DEFF800495D53 /* SSJCalenderScreenShotHelper.m */; };
-		9CC0B2B91E2DF05300495D53 /* SSJCalenderScreenShotHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CC0B2B01E2DEFF800495D53 /* SSJCalenderScreenShotHelper.m */; };
-		9CC0B2BA1E2DF05300495D53 /* SSJCalenderScreenShotHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CC0B2B01E2DEFF800495D53 /* SSJCalenderScreenShotHelper.m */; };
-		9CC0B2BB1E2DF05400495D53 /* SSJCalenderScreenShotHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CC0B2B01E2DEFF800495D53 /* SSJCalenderScreenShotHelper.m */; };
-		9CC0B2BC1E2DF05400495D53 /* SSJCalenderScreenShotHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CC0B2B01E2DEFF800495D53 /* SSJCalenderScreenShotHelper.m */; };
 		9CC2C4EE1D7EBF760024BC74 /* SSJBookKeepingHomeBooksButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1A9CAA1D7D76AE0032BA0D /* SSJBookKeepingHomeBooksButton.m */; };
 		9CC2C4F61D7EBF770024BC74 /* SSJBookKeepingHomeBooksButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1A9CAA1D7D76AE0032BA0D /* SSJBookKeepingHomeBooksButton.m */; };
 		9CC2C4F71D7EBF770024BC74 /* SSJBookKeepingHomeBooksButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1A9CAA1D7D76AE0032BA0D /* SSJBookKeepingHomeBooksButton.m */; };
@@ -3126,6 +3103,7 @@
 		9CEC00191D6D41EB00DB2C8B /* SSJPasswordModifyCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBF61CFD2DAA0061803B /* SSJPasswordModifyCell.m */; };
 		9CEC001A1D6D41EB00DB2C8B /* SSJListMenuCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B12D31D4CBC140036BF4E /* SSJListMenuCellItem.m */; };
 		9CEC001B1D6D41EB00DB2C8B /* SSJWeiXinLoginHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C2E02731CAE419600C5F764 /* SSJWeiXinLoginHelper.m */; };
+		9CEC001C1D6D41EB00DB2C8B /* (null) in Sources */ = {isa = PBXBuildFile; };
 		9CEC001D1D6D41EB00DB2C8B /* SSJMagicExportCalendarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB8B1CFD2DAA0061803B /* SSJMagicExportCalendarViewController.m */; };
 		9CEC001E1D6D41EB00DB2C8B /* SSJMineHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBC61CFD2DAA0061803B /* SSJMineHeaderView.m */; };
 		9CEC001F1D6D41EB00DB2C8B /* SSJRegistCheckAuthCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF501C4751EA000E6CC9 /* SSJRegistCheckAuthCodeViewController.m */; };
@@ -3142,6 +3120,7 @@
 		9CEC002C1D6D41EB00DB2C8B /* SSJBaseCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433881C1A8DA50051E7AB /* SSJBaseCollectionViewController.m */; };
 		9CEC002D1D6D41EB00DB2C8B /* SSJCalenderTableViewNoDataHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32A01CEAE6C10086B67E /* SSJCalenderTableViewNoDataHeader.m */; };
 		9CEC002E1D6D41EB00DB2C8B /* SSJBookkeepingTreeStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB6A1CFD2DAA0061803B /* SSJBookkeepingTreeStore.m */; };
+		9CEC00301D6D41EB00DB2C8B /* (null) in Sources */ = {isa = PBXBuildFile; };
 		9CEC00311D6D41EB00DB2C8B /* SSJChargeReminderTimeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBC21CFD2DAA0061803B /* SSJChargeReminderTimeView.m */; };
 		9CEC00321D6D41EB00DB2C8B /* SSJCanlenderChargeDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1723861D52D3D100BB13DE /* SSJCanlenderChargeDetailCell.m */; };
 		9CEC00331D6D41EB00DB2C8B /* SSJDatabaseVersion5.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE0896E1D333ED4008431D6 /* SSJDatabaseVersion5.m */; };
@@ -3205,6 +3184,7 @@
 		9CEC00701D6D41EB00DB2C8B /* SSJThemeSetting.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE4A7DA1D20C0BA00F05BF0 /* SSJThemeSetting.m */; };
 		9CEC00711D6D41EB00DB2C8B /* SSJFundingTypeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F330C1CEAE6C10086B67E /* SSJFundingTypeTableViewCell.m */; };
 		9CEC00721D6D41EB00DB2C8B /* SSJBookkeepingTreeDescView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB6D1CFD2DAA0061803B /* SSJBookkeepingTreeDescView.m */; };
+		9CEC00731D6D41EB00DB2C8B /* (null) in Sources */ = {isa = PBXBuildFile; };
 		9CEC00741D6D41EB00DB2C8B /* SSJFundingTransferViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BC411CFD2E470061803B /* SSJFundingTransferViewController.m */; };
 		9CEC00751D6D41EB00DB2C8B /* SSJScrollTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F325D1CEAE6C10086B67E /* SSJScrollTextView.m */; };
 		9CEC00761D6D41EB00DB2C8B /* SSJFundAccountTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4EF8811C43B10C003C4B20 /* SSJFundAccountTable.m */; };
@@ -3215,11 +3195,13 @@
 		9CEC007B1D6D41EB00DB2C8B /* SSJMineSyncButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBCF1CFD2DAA0061803B /* SSJMineSyncButton.m */; };
 		9CEC007C1D6D41EB00DB2C8B /* SSJThemeCollectionHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C66F1351D211FE60094125D /* SSJThemeCollectionHeaderView.m */; };
 		9CEC007D1D6D41EB00DB2C8B /* SSJPagingNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = BD04339D1C1A99170051E7AB /* SSJPagingNetworkService.m */; };
+		9CEC007E1D6D41EB00DB2C8B /* (null) in Sources */ = {isa = PBXBuildFile; };
 		9CEC007F1D6D41EB00DB2C8B /* SCYMotionEncryptionTriangleLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE69C341C8EC401001D31C1 /* SCYMotionEncryptionTriangleLayer.m */; };
 		9CEC00801D6D41EB00DB2C8B /* SSJSyncSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBDE1CFD2DAA0061803B /* SSJSyncSettingViewController.m */; };
 		9CEC00811D6D41EB00DB2C8B /* SSJADDNewTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F33221CEAE6C10086B67E /* SSJADDNewTypeViewController.m */; };
 		9CEC00831D6D41EB00DB2C8B /* SSJMagicExportCalendarViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBA31CFD2DAA0061803B /* SSJMagicExportCalendarViewCell.m */; };
 		9CEC00841D6D41EB00DB2C8B /* SSJThemeUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D8F7C371D2CAED200F7DF6A /* SSJThemeUtil.m */; };
+		9CEC00851D6D41EB00DB2C8B /* (null) in Sources */ = {isa = PBXBuildFile; };
 		9CEC00861D6D41EB00DB2C8B /* SSJReportFormsIncomeAndPayCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6AAB691C313BA70007C0A3 /* SSJReportFormsIncomeAndPayCell.m */; };
 		9CEC00871D6D41EB00DB2C8B /* SSJThemeManagerCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C65CA0A1D4B39AE0058D0A4 /* SSJThemeManagerCollectionViewCell.m */; };
 		9CEC00881D6D41EB00DB2C8B /* SSJUnlimitedScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6AAB621C312C500007C0A3 /* SSJUnlimitedScrollView.m */; };
@@ -3293,6 +3275,7 @@
 		9CECFB3C1D6D41A700DB2C8B /* SSJTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433141C1A78B40051E7AB /* SSJTableView.m */; };
 		9CECFB3E1D6D41A700DB2C8B /* SSJListMenuCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B12D11D4CBC140036BF4E /* SSJListMenuCell.m */; };
 		9CECFB3F1D6D41A700DB2C8B /* SSJBookkeepingTreeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB5C1CFD2DAA0061803B /* SSJBookkeepingTreeViewController.m */; };
+		9CECFB411D6D41A700DB2C8B /* (null) in Sources */ = {isa = PBXBuildFile; };
 		9CECFB421D6D41A700DB2C8B /* SSJLoadMoreCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433831C1A8DA50051E7AB /* SSJLoadMoreCell.m */; };
 		9CECFB431D6D41A700DB2C8B /* SSJThemeDownLoadCompleteService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61AAA61D5B30DE005DC9BD /* SSJThemeDownLoadCompleteService.m */; };
 		9CECFB441D6D41A700DB2C8B /* SSJHomeReminderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32571CEAE6C10086B67E /* SSJHomeReminderView.m */; };
@@ -3353,6 +3336,7 @@
 		9CECFB7C1D6D41A700DB2C8B /* SSJForgotPSWResetService.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF3A1C4751EA000E6CC9 /* SSJForgotPSWResetService.m */; };
 		9CECFB7D1D6D41A700DB2C8B /* SSJReportFormsScaleAxisCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD9D0C31CF6E2A6005AF735 /* SSJReportFormsScaleAxisCell.m */; };
 		9CECFB7E1D6D41A700DB2C8B /* SSJNewBaseTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD04338C1C1A8DA50051E7AB /* SSJNewBaseTableViewController.m */; };
+		9CECFB7F1D6D41A700DB2C8B /* (null) in Sources */ = {isa = PBXBuildFile; };
 		9CECFB801D6D41A700DB2C8B /* SSJMotionPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBE41CFD2DAA0061803B /* SSJMotionPasswordViewController.m */; };
 		9CECFB811D6D41A700DB2C8B /* SSJFundingDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9471561CEB224C00D69079 /* SSJFundingDetailCell.m */; };
 		9CECFB821D6D41A700DB2C8B /* SSJMotionPasswordSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBE21CFD2DAA0061803B /* SSJMotionPasswordSettingViewController.m */; };
@@ -3449,6 +3433,7 @@
 		9CECFBDF1D6D41A700DB2C8B /* SSJCircleChargeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBC41CFD2DAA0061803B /* SSJCircleChargeCell.m */; };
 		9CECFBE01D6D41A700DB2C8B /* SSJUserChargePeriodConfigSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D1D7F421C86BBD90001F72A /* SSJUserChargePeriodConfigSyncTable.m */; };
 		9CECFBE11D6D41A700DB2C8B /* SSJSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D99D4641C357703006EB113 /* SSJSegmentedControl.m */; };
+		9CECFBE21D6D41A700DB2C8B /* (null) in Sources */ = {isa = PBXBuildFile; };
 		9CECFBE31D6D41A700DB2C8B /* SSJCustomCollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32F21CEAE6C10086B67E /* SSJCustomCollectionViewFlowLayout.m */; };
 		9CECFBE41D6D41A700DB2C8B /* SSJBillingChargeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B23FC1C3A1B63009A74A8 /* SSJBillingChargeHelper.m */; };
 		9CECFBE51D6D41A700DB2C8B /* SSJForgetPasswordSecondStepViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE6E8731C5641B6001C9138 /* SSJForgetPasswordSecondStepViewController.m */; };
@@ -3510,6 +3495,7 @@
 		9CECFC211D6D41A700DB2C8B /* SSJPasswordModifyCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBF61CFD2DAA0061803B /* SSJPasswordModifyCell.m */; };
 		9CECFC221D6D41A700DB2C8B /* SSJListMenuCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B12D31D4CBC140036BF4E /* SSJListMenuCellItem.m */; };
 		9CECFC231D6D41A700DB2C8B /* SSJWeiXinLoginHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C2E02731CAE419600C5F764 /* SSJWeiXinLoginHelper.m */; };
+		9CECFC241D6D41A700DB2C8B /* (null) in Sources */ = {isa = PBXBuildFile; };
 		9CECFC251D6D41A700DB2C8B /* SSJMagicExportCalendarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB8B1CFD2DAA0061803B /* SSJMagicExportCalendarViewController.m */; };
 		9CECFC261D6D41A700DB2C8B /* SSJMineHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBC61CFD2DAA0061803B /* SSJMineHeaderView.m */; };
 		9CECFC271D6D41A700DB2C8B /* SSJRegistCheckAuthCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF501C4751EA000E6CC9 /* SSJRegistCheckAuthCodeViewController.m */; };
@@ -3526,6 +3512,7 @@
 		9CECFC341D6D41A700DB2C8B /* SSJBaseCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433881C1A8DA50051E7AB /* SSJBaseCollectionViewController.m */; };
 		9CECFC351D6D41A700DB2C8B /* SSJCalenderTableViewNoDataHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32A01CEAE6C10086B67E /* SSJCalenderTableViewNoDataHeader.m */; };
 		9CECFC361D6D41A700DB2C8B /* SSJBookkeepingTreeStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB6A1CFD2DAA0061803B /* SSJBookkeepingTreeStore.m */; };
+		9CECFC381D6D41A700DB2C8B /* (null) in Sources */ = {isa = PBXBuildFile; };
 		9CECFC391D6D41A700DB2C8B /* SSJChargeReminderTimeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBC21CFD2DAA0061803B /* SSJChargeReminderTimeView.m */; };
 		9CECFC3A1D6D41A700DB2C8B /* SSJCanlenderChargeDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1723861D52D3D100BB13DE /* SSJCanlenderChargeDetailCell.m */; };
 		9CECFC3B1D6D41A700DB2C8B /* SSJDatabaseVersion5.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE0896E1D333ED4008431D6 /* SSJDatabaseVersion5.m */; };
@@ -3589,6 +3576,7 @@
 		9CECFC781D6D41A700DB2C8B /* SSJThemeSetting.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE4A7DA1D20C0BA00F05BF0 /* SSJThemeSetting.m */; };
 		9CECFC791D6D41A700DB2C8B /* SSJFundingTypeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F330C1CEAE6C10086B67E /* SSJFundingTypeTableViewCell.m */; };
 		9CECFC7A1D6D41A700DB2C8B /* SSJBookkeepingTreeDescView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB6D1CFD2DAA0061803B /* SSJBookkeepingTreeDescView.m */; };
+		9CECFC7B1D6D41A700DB2C8B /* (null) in Sources */ = {isa = PBXBuildFile; };
 		9CECFC7C1D6D41A700DB2C8B /* SSJFundingTransferViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BC411CFD2E470061803B /* SSJFundingTransferViewController.m */; };
 		9CECFC7D1D6D41A700DB2C8B /* SSJScrollTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F325D1CEAE6C10086B67E /* SSJScrollTextView.m */; };
 		9CECFC7E1D6D41A700DB2C8B /* SSJFundAccountTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4EF8811C43B10C003C4B20 /* SSJFundAccountTable.m */; };
@@ -3599,11 +3587,13 @@
 		9CECFC831D6D41A700DB2C8B /* SSJMineSyncButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBCF1CFD2DAA0061803B /* SSJMineSyncButton.m */; };
 		9CECFC841D6D41A700DB2C8B /* SSJThemeCollectionHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C66F1351D211FE60094125D /* SSJThemeCollectionHeaderView.m */; };
 		9CECFC851D6D41A700DB2C8B /* SSJPagingNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = BD04339D1C1A99170051E7AB /* SSJPagingNetworkService.m */; };
+		9CECFC861D6D41A700DB2C8B /* (null) in Sources */ = {isa = PBXBuildFile; };
 		9CECFC871D6D41A700DB2C8B /* SCYMotionEncryptionTriangleLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE69C341C8EC401001D31C1 /* SCYMotionEncryptionTriangleLayer.m */; };
 		9CECFC881D6D41A700DB2C8B /* SSJSyncSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBDE1CFD2DAA0061803B /* SSJSyncSettingViewController.m */; };
 		9CECFC891D6D41A700DB2C8B /* SSJADDNewTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F33221CEAE6C10086B67E /* SSJADDNewTypeViewController.m */; };
 		9CECFC8B1D6D41A700DB2C8B /* SSJMagicExportCalendarViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBA31CFD2DAA0061803B /* SSJMagicExportCalendarViewCell.m */; };
 		9CECFC8C1D6D41A700DB2C8B /* SSJThemeUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D8F7C371D2CAED200F7DF6A /* SSJThemeUtil.m */; };
+		9CECFC8D1D6D41A700DB2C8B /* (null) in Sources */ = {isa = PBXBuildFile; };
 		9CECFC8E1D6D41A700DB2C8B /* SSJReportFormsIncomeAndPayCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6AAB691C313BA70007C0A3 /* SSJReportFormsIncomeAndPayCell.m */; };
 		9CECFC8F1D6D41A700DB2C8B /* SSJThemeManagerCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C65CA0A1D4B39AE0058D0A4 /* SSJThemeManagerCollectionViewCell.m */; };
 		9CECFC901D6D41A700DB2C8B /* SSJUnlimitedScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6AAB621C312C500007C0A3 /* SSJUnlimitedScrollView.m */; };
@@ -3676,6 +3666,7 @@
 		9CECFF341D6D41EB00DB2C8B /* SSJTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433141C1A78B40051E7AB /* SSJTableView.m */; };
 		9CECFF361D6D41EB00DB2C8B /* SSJListMenuCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B12D11D4CBC140036BF4E /* SSJListMenuCell.m */; };
 		9CECFF371D6D41EB00DB2C8B /* SSJBookkeepingTreeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB5C1CFD2DAA0061803B /* SSJBookkeepingTreeViewController.m */; };
+		9CECFF391D6D41EB00DB2C8B /* (null) in Sources */ = {isa = PBXBuildFile; };
 		9CECFF3A1D6D41EB00DB2C8B /* SSJLoadMoreCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433831C1A8DA50051E7AB /* SSJLoadMoreCell.m */; };
 		9CECFF3B1D6D41EB00DB2C8B /* SSJThemeDownLoadCompleteService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61AAA61D5B30DE005DC9BD /* SSJThemeDownLoadCompleteService.m */; };
 		9CECFF3C1D6D41EB00DB2C8B /* SSJHomeReminderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32571CEAE6C10086B67E /* SSJHomeReminderView.m */; };
@@ -3736,6 +3727,7 @@
 		9CECFF741D6D41EB00DB2C8B /* SSJForgotPSWResetService.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF3A1C4751EA000E6CC9 /* SSJForgotPSWResetService.m */; };
 		9CECFF751D6D41EB00DB2C8B /* SSJReportFormsScaleAxisCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD9D0C31CF6E2A6005AF735 /* SSJReportFormsScaleAxisCell.m */; };
 		9CECFF761D6D41EB00DB2C8B /* SSJNewBaseTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD04338C1C1A8DA50051E7AB /* SSJNewBaseTableViewController.m */; };
+		9CECFF771D6D41EB00DB2C8B /* (null) in Sources */ = {isa = PBXBuildFile; };
 		9CECFF781D6D41EB00DB2C8B /* SSJMotionPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBE41CFD2DAA0061803B /* SSJMotionPasswordViewController.m */; };
 		9CECFF791D6D41EB00DB2C8B /* SSJFundingDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9471561CEB224C00D69079 /* SSJFundingDetailCell.m */; };
 		9CECFF7A1D6D41EB00DB2C8B /* SSJMotionPasswordSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBE21CFD2DAA0061803B /* SSJMotionPasswordSettingViewController.m */; };
@@ -3832,6 +3824,7 @@
 		9CECFFD71D6D41EB00DB2C8B /* SSJCircleChargeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBC41CFD2DAA0061803B /* SSJCircleChargeCell.m */; };
 		9CECFFD81D6D41EB00DB2C8B /* SSJUserChargePeriodConfigSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D1D7F421C86BBD90001F72A /* SSJUserChargePeriodConfigSyncTable.m */; };
 		9CECFFD91D6D41EB00DB2C8B /* SSJSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D99D4641C357703006EB113 /* SSJSegmentedControl.m */; };
+		9CECFFDA1D6D41EB00DB2C8B /* (null) in Sources */ = {isa = PBXBuildFile; };
 		9CECFFDB1D6D41EB00DB2C8B /* SSJCustomCollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32F21CEAE6C10086B67E /* SSJCustomCollectionViewFlowLayout.m */; };
 		9CECFFDC1D6D41EB00DB2C8B /* SSJBillingChargeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B23FC1C3A1B63009A74A8 /* SSJBillingChargeHelper.m */; };
 		9CECFFDD1D6D41EB00DB2C8B /* SSJForgetPasswordSecondStepViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE6E8731C5641B6001C9138 /* SSJForgetPasswordSecondStepViewController.m */; };
@@ -3911,6 +3904,7 @@
 		9CFBAC471E07E6F700C55814 /* SSJCreditRepaymentSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CFBAC431E07E6F700C55814 /* SSJCreditRepaymentSyncTable.m */; };
 		9CFBAC481E07E6F700C55814 /* SSJCreditRepaymentSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CFBAC431E07E6F700C55814 /* SSJCreditRepaymentSyncTable.m */; };
 		A3F86B7BFBA3F62C302818B9 /* libPods-SuiShouJi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DCB8AA1DC23E6D40C33EB5B /* libPods-SuiShouJi.a */; };
+		B39301A128D168E2CA563B59 /* libPods-YouYuJiZhangGuanJia.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 54C394CC554BE2031E6172C1 /* libPods-YouYuJiZhangGuanJia.a */; };
 		BD0432EF1C1A77BB0051E7AB /* CDPointActivityIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0432D81C1A77BB0051E7AB /* CDPointActivityIndicator.m */; };
 		BD0432F01C1A77BB0051E7AB /* sr_refresh.png in Resources */ = {isa = PBXBuildFile; fileRef = BD0432DA1C1A77BB0051E7AB /* sr_refresh.png */; };
 		BD0432F11C1A77BB0051E7AB /* sr_refresh@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BD0432DB1C1A77BB0051E7AB /* sr_refresh@2x.png */; };
@@ -3982,6 +3976,7 @@
 		BD70DF671C4751EA000E6CC9 /* SSJRegistNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF571C4751EA000E6CC9 /* SSJRegistNetworkService.m */; };
 		BD70DF6B1C4B26B3000E6CC9 /* UIViewController+SSJPageFlow.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF6A1C4B26B3000E6CC9 /* UIViewController+SSJPageFlow.m */; };
 		BDC01FF31C2D92E3008B1F75 /* CDAutoHideMessageHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = BDC01FF21C2D92E3008B1F75 /* CDAutoHideMessageHUD.m */; };
+		E1CEB4191E8A8B165BBAC41C /* libPods-YouYuJiZhangBao.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D1A7ECDE4745F51DE93EF377 /* libPods-YouYuJiZhangBao.a */; };
 		E84F9798AF83397BBA7DDAD6 /* libPods-SuiShouJi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DCB8AA1DC23E6D40C33EB5B /* libPods-SuiShouJi.a */; };
 /* End PBXBuildFile section */
 
@@ -4003,27 +3998,16 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0254E364AA6A718DADFBB3E4 /* Pods-SuiShouJi.release-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SuiShouJi.release-production.xcconfig"; path = "Pods/Target Support Files/Pods-SuiShouJi/Pods-SuiShouJi.release-production.xcconfig"; sourceTree = "<group>"; };
-		0293AE0416F5E4A3F013D11D /* Pods-SuiShouJi.debug-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SuiShouJi.debug-test.xcconfig"; path = "Pods/Target Support Files/Pods-SuiShouJi/Pods-SuiShouJi.debug-test.xcconfig"; sourceTree = "<group>"; };
-		1B895A9618C21A67E80B977B /* Pods-YouYuJiZhangLiCai.release-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangLiCai.release-production.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangLiCai/Pods-YouYuJiZhangLiCai.release-production.xcconfig"; sourceTree = "<group>"; };
+		13DED3B91912A4CA23981548 /* Pods-YouYuJiZhangGuanJia.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangGuanJia.debug.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangGuanJia/Pods-YouYuJiZhangGuanJia.debug.xcconfig"; sourceTree = "<group>"; };
 		1BCD58B8B9CBEA7ED5E6BDD4 /* Pods-JiZhangGuanJia.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JiZhangGuanJia.debug.xcconfig"; path = "Pods/Target Support Files/Pods-JiZhangGuanJia/Pods-JiZhangGuanJia.debug.xcconfig"; sourceTree = "<group>"; };
-		20AD3C2B85F3BBBAC87D1915 /* Pods-YouYuJiZhangLiCai.debug-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangLiCai.debug-test.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangLiCai/Pods-YouYuJiZhangLiCai.debug-test.xcconfig"; sourceTree = "<group>"; };
-		21DE9FB1A4D6AE3217ECFA3A /* Pods-YouYuJiZhangLiCai.release-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangLiCai.release-test.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangLiCai/Pods-YouYuJiZhangLiCai.release-test.xcconfig"; sourceTree = "<group>"; };
 		28D54CCC52994B95633CA5E3 /* libPods-JiZhangGuanJia.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-JiZhangGuanJia.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2DEF1E8E40DA1003C5D69150 /* Pods-YouYuJiZhangLiCai.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangLiCai.release.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangLiCai/Pods-YouYuJiZhangLiCai.release.xcconfig"; sourceTree = "<group>"; };
 		348DA5EFAB1C2E711E07E558 /* libPods-youyujizhang.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-youyujizhang.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		34961CC770212A1952F076D7 /* Pods-JiZhangGuanJia.debug-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JiZhangGuanJia.debug-production.xcconfig"; path = "Pods/Target Support Files/Pods-JiZhangGuanJia/Pods-JiZhangGuanJia.debug-production.xcconfig"; sourceTree = "<group>"; };
-		3702E63F5BADCB2297038131 /* Pods-JiZhangGuanJia.release-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JiZhangGuanJia.release-test.xcconfig"; path = "Pods/Target Support Files/Pods-JiZhangGuanJia/Pods-JiZhangGuanJia.release-test.xcconfig"; sourceTree = "<group>"; };
-		3A4D4185B850D1815AADC9B9 /* Pods-youyujizhang.release-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-youyujizhang.release-production.xcconfig"; path = "Pods/Target Support Files/Pods-youyujizhang/Pods-youyujizhang.release-production.xcconfig"; sourceTree = "<group>"; };
+		3B725E607F2304D98F82B2A3 /* Pods-SuiShouJi.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SuiShouJi.release.xcconfig"; path = "Pods/Target Support Files/Pods-SuiShouJi/Pods-SuiShouJi.release.xcconfig"; sourceTree = "<group>"; };
 		409F6679D47EFA5753A58706 /* Pods-youyujizhang.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-youyujizhang.release.xcconfig"; path = "Pods/Target Support Files/Pods-youyujizhang/Pods-youyujizhang.release.xcconfig"; sourceTree = "<group>"; };
-		47DC0E8C7D9EDF12EA88DED4 /* Pods-YouYuJiZhangBen.release-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangBen.release-production.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangBen/Pods-YouYuJiZhangBen.release-production.xcconfig"; sourceTree = "<group>"; };
-		49E4D8FB52FA1A0F2DE98086 /* Pods-SuiShouJi.release-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SuiShouJi.release-test.xcconfig"; path = "Pods/Target Support Files/Pods-SuiShouJi/Pods-SuiShouJi.release-test.xcconfig"; sourceTree = "<group>"; };
-		4BBE3799BF873355BD237283 /* Pods-youyujizhang.release-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-youyujizhang.release-test.xcconfig"; path = "Pods/Target Support Files/Pods-youyujizhang/Pods-youyujizhang.release-test.xcconfig"; sourceTree = "<group>"; };
 		4DCB8AA1DC23E6D40C33EB5B /* libPods-SuiShouJi.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SuiShouJi.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		55FB426833A78CE202A88098 /* Pods-SuiShouJi.debug-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SuiShouJi.debug-production.xcconfig"; path = "Pods/Target Support Files/Pods-SuiShouJi/Pods-SuiShouJi.debug-production.xcconfig"; sourceTree = "<group>"; };
-		677B31BC05B2FC4A9FC30E83 /* SSJDatabaseVersion12.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDatabaseVersion12.m; sourceTree = "<group>"; };
-		677B3555003FE00C699926A4 /* SSJDatabaseVersion12.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJDatabaseVersion12.h; sourceTree = "<group>"; };
-		6E70CA34C65052613EDC23DB /* Pods-YouYuJiZhangBen.debug-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangBen.debug-production.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangBen/Pods-YouYuJiZhangBen.debug-production.xcconfig"; sourceTree = "<group>"; };
+		54C394CC554BE2031E6172C1 /* libPods-YouYuJiZhangGuanJia.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-YouYuJiZhangGuanJia.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5899867574AEB0396C49AE15 /* Pods-SuiShouJi.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SuiShouJi.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SuiShouJi/Pods-SuiShouJi.debug.xcconfig"; sourceTree = "<group>"; };
 		71971C49348189D6064D4695 /* Pods-YouYuJiZhangBen.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangBen.debug.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangBen/Pods-YouYuJiZhangBen.debug.xcconfig"; sourceTree = "<group>"; };
 		7D00D8031DFA9CC00007A8FB /* SSJReportFormsChartCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormsChartCell.h; sourceTree = "<group>"; };
 		7D00D8041DFA9CC00007A8FB /* SSJReportFormsChartCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReportFormsChartCell.m; sourceTree = "<group>"; };
@@ -4035,7 +4019,8 @@
 		7D07B6941CF2AC4900B9C390 /* SSJJsPatchItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJJsPatchItem.m; sourceTree = "<group>"; };
 		7D07B6961CF2C1F300B9C390 /* SSJLoginHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJLoginHelper.h; sourceTree = "<group>"; };
 		7D07B6971CF2C1F300B9C390 /* SSJLoginHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJLoginHelper.m; sourceTree = "<group>"; };
-		7D08A2D51E4999D40085A8FB /* YouYuJiZhangGuanJia.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = YouYuJiZhangGuanJia.app; path = SuiShouJi.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7D08A2D51E4999D40085A8FB /* YouYuJiZhangGuanJia.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YouYuJiZhangGuanJia.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7D08A2D61E4999D70085A8FB /* YouYuJiZhangBao copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "YouYuJiZhangBao copy-Info.plist"; path = "/Users/oldlang/jizhang/BookKeeping/YouYuJiZhangBao copy-Info.plist"; sourceTree = "<absolute>"; };
 		7D098C772A14820300C86957 /* SSJDatabaseErrorHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJDatabaseErrorHandler.h; sourceTree = "<group>"; };
 		7D098C782A14820300C86957 /* SSJDatabaseErrorHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDatabaseErrorHandler.m; sourceTree = "<group>"; };
 		7D1D7F411C86BBD90001F72A /* SSJUserChargePeriodConfigSyncTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJUserChargePeriodConfigSyncTable.h; sourceTree = "<group>"; };
@@ -4050,8 +4035,6 @@
 		7D22E2931D89519B00474B11 /* SSJLoginViewController+SSJCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SSJLoginViewController+SSJCategory.m"; sourceTree = "<group>"; };
 		7D24ED8D1D9E6F8E003C4248 /* SSJBudgetDetailHeaderViewItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBudgetDetailHeaderViewItem.h; sourceTree = "<group>"; };
 		7D24ED8E1D9E6F8E003C4248 /* SSJBudgetDetailHeaderViewItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBudgetDetailHeaderViewItem.m; sourceTree = "<group>"; };
-		7D28B5EA1E4B413300C06D90 /* SSJFundingTransferPeriodSelectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFundingTransferPeriodSelectionView.h; sourceTree = "<group>"; };
-		7D28B5EB1E4B413300C06D90 /* SSJFundingTransferPeriodSelectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFundingTransferPeriodSelectionView.m; sourceTree = "<group>"; };
 		7D2930131D76E917003EF6D8 /* SSJEditBillTypeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJEditBillTypeViewController.h; sourceTree = "<group>"; };
 		7D2930141D76E917003EF6D8 /* SSJEditBillTypeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJEditBillTypeViewController.m; sourceTree = "<group>"; };
 		7D2B23F11C3A1225009A74A8 /* SSJBillingChargeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBillingChargeViewController.h; sourceTree = "<group>"; };
@@ -4359,7 +4342,8 @@
 		7D9E4A521D0FFBEF00EE254D /* SSJMagicExportBookTypeSelectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMagicExportBookTypeSelectionCell.m; sourceTree = "<group>"; };
 		7D9F5BC91D6D9CA600362CFA /* SSJLoanDateSelectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJLoanDateSelectionView.h; sourceTree = "<group>"; };
 		7D9F5BCA1D6D9CA600362CFA /* SSJLoanDateSelectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJLoanDateSelectionView.m; sourceTree = "<group>"; };
-		7DA13C2C1E35AED7000490A4 /* YouYuJiZhangBao.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = YouYuJiZhangBao.app; path = SuiShouJi.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7DA13C2C1E35AED7000490A4 /* YouYuJiZhangBao.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YouYuJiZhangBao.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7DA13C341E35AED8000490A4 /* SuiShouJi copy4-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "SuiShouJi copy4-Info.plist"; path = "/Users/oldlang/jizhang/BookKeeping/SuiShouJi copy4-Info.plist"; sourceTree = "<absolute>"; };
 		7DA6EDD01D2B5CAE0097F06C /* SSJThemeModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJThemeModel.h; sourceTree = "<group>"; };
 		7DA6EDD11D2B5CAE0097F06C /* SSJThemeModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJThemeModel.m; sourceTree = "<group>"; };
 		7DA6EDE51D2BC21E0097F06C /* SSJTheme.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SSJTheme.h; sourceTree = "<group>"; };
@@ -4544,8 +4528,6 @@
 		7DFFD5BD1D670BB7000FDAA6 /* SSJLoanListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJLoanListCell.m; sourceTree = "<group>"; };
 		7DFFD5C41D67201E000FDAA6 /* SSJAddOrEditLoanViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJAddOrEditLoanViewController.h; sourceTree = "<group>"; };
 		7DFFD5C51D67201E000FDAA6 /* SSJAddOrEditLoanViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJAddOrEditLoanViewController.m; sourceTree = "<group>"; };
-		7FA0ADF46B0556AB3A749227 /* Pods-youyujizhang.debug-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-youyujizhang.debug-test.xcconfig"; path = "Pods/Target Support Files/Pods-youyujizhang/Pods-youyujizhang.debug-test.xcconfig"; sourceTree = "<group>"; };
-		815F9F2F587CE772D9879229 /* Pods-JiZhangGuanJia.release-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JiZhangGuanJia.release-production.xcconfig"; path = "Pods/Target Support Files/Pods-JiZhangGuanJia/Pods-JiZhangGuanJia.release-production.xcconfig"; sourceTree = "<group>"; };
 		8243DAE18B924886B7E827E5 /* Pods-youyujizhang.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-youyujizhang.debug.xcconfig"; path = "Pods/Target Support Files/Pods-youyujizhang/Pods-youyujizhang.debug.xcconfig"; sourceTree = "<group>"; };
 		8ED51442757E13C0CDA434AA /* Pods-YouYuJiZhangBen.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangBen.release.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangBen/Pods-YouYuJiZhangBen.release.xcconfig"; sourceTree = "<group>"; };
 		910DD68E1DF7B47E00A73F0C /* SSJMineHomeCollectionImageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMineHomeCollectionImageCell.h; sourceTree = "<group>"; };
@@ -4556,16 +4538,10 @@
 		916012041DF7D86C00BF571C /* SSJHeaderBannerImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJHeaderBannerImageView.m; sourceTree = "<group>"; };
 		916012061DF7DC3B00BF571C /* SSJHeaderBannerCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJHeaderBannerCollectionViewCell.h; sourceTree = "<group>"; };
 		916012071DF7DC3B00BF571C /* SSJHeaderBannerCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJHeaderBannerCollectionViewCell.m; sourceTree = "<group>"; };
-		9160DC391E2F672600419CC2 /* SSJNewDotNetworkService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJNewDotNetworkService.h; sourceTree = "<group>"; };
-		9160DC3A1E2F672600419CC2 /* SSJNewDotNetworkService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJNewDotNetworkService.m; sourceTree = "<group>"; };
 		916E31E91DF95231003C18D4 /* SSJProductAdviceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJProductAdviceViewController.h; sourceTree = "<group>"; };
 		916E31EA1DF95231003C18D4 /* SSJProductAdviceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJProductAdviceViewController.m; sourceTree = "<group>"; };
 		916E32061DF967C1003C18D4 /* SSJProductAdviceTableHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJProductAdviceTableHeaderView.h; sourceTree = "<group>"; };
 		916E32071DF967C1003C18D4 /* SSJProductAdviceTableHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJProductAdviceTableHeaderView.m; sourceTree = "<group>"; };
-		916F18DE1E4C72C900AE5F98 /* SSJHomeCalendarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJHomeCalendarView.h; sourceTree = "<group>"; };
-		916F18DF1E4C72C900AE5F98 /* SSJHomeCalendarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJHomeCalendarView.m; sourceTree = "<group>"; };
-		918A32C71E35EA1B002C4685 /* SSJThemeAndAdviceDotItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJThemeAndAdviceDotItem.h; sourceTree = "<group>"; };
-		918A32C81E35EA1B002C4685 /* SSJThemeAndAdviceDotItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJThemeAndAdviceDotItem.m; sourceTree = "<group>"; };
 		91A846AA1E237A5D00D2D0BE /* SSJHomeBillStickyNoteView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJHomeBillStickyNoteView.h; sourceTree = "<group>"; };
 		91A846AB1E237A5D00D2D0BE /* SSJHomeBillStickyNoteView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJHomeBillStickyNoteView.m; sourceTree = "<group>"; };
 		91A846B81E237AEA00D2D0BE /* SSJBillNoteWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBillNoteWebViewController.h; sourceTree = "<group>"; };
@@ -4585,7 +4561,7 @@
 		91F7FD371DFAB94A005F4B6B /* SSJAdviceItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJAdviceItem.m; sourceTree = "<group>"; };
 		91FD904B1E0B8319001C64B7 /* SSJReportFormCanYinChartCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormCanYinChartCell.h; sourceTree = "<group>"; };
 		91FD904C1E0B8319001C64B7 /* SSJReportFormCanYinChartCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReportFormCanYinChartCell.m; sourceTree = "<group>"; };
-		96D05FD3A6D1AF2E3A43D98C /* Pods-YouYuJiZhangLiCai.debug-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangLiCai.debug-production.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangLiCai/Pods-YouYuJiZhangLiCai.debug-production.xcconfig"; sourceTree = "<group>"; };
+		9892BFAB47044275B53028C0 /* Pods-YouYuJiZhangBao.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangBao.debug.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangBao/Pods-YouYuJiZhangBao.debug.xcconfig"; sourceTree = "<group>"; };
 		9C0AB1671D670BAE0082B971 /* SSJCreditCardEditeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCreditCardEditeCell.h; sourceTree = "<group>"; };
 		9C0AB1681D670BAE0082B971 /* SSJCreditCardEditeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCreditCardEditeCell.m; sourceTree = "<group>"; };
 		9C141B801D23BD920095E336 /* SSJThemeImageCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJThemeImageCollectionViewCell.h; sourceTree = "<group>"; };
@@ -4822,8 +4798,6 @@
 		9CAF730E1E03E8C40061ADB8 /* SSJHomeLoadingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJHomeLoadingView.m; sourceTree = "<group>"; };
 		9CAF731B1E03EAD90061ADB8 /* xiaomao.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = xiaomao.gif; sourceTree = "<group>"; };
 		9CAF731D1E03EAE50061ADB8 /* homeLoading.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = homeLoading.gif; sourceTree = "<group>"; };
-		9CC0B2AF1E2DEFF800495D53 /* SSJCalenderScreenShotHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCalenderScreenShotHelper.h; sourceTree = "<group>"; };
-		9CC0B2B01E2DEFF800495D53 /* SSJCalenderScreenShotHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCalenderScreenShotHelper.m; sourceTree = "<group>"; };
 		9CC452BF1D9B59EE0044FA87 /* SSJMultiFunctionButtonView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMultiFunctionButtonView.h; sourceTree = "<group>"; };
 		9CC452C01D9B59EE0044FA87 /* SSJMultiFunctionButtonView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMultiFunctionButtonView.m; sourceTree = "<group>"; };
 		9CC452CD1D9B62A90044FA87 /* SSJSearchHistoryItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJSearchHistoryItem.h; sourceTree = "<group>"; };
@@ -5018,7 +4992,8 @@
 		9CFBAC311E07D4DE00C55814 /* homeDefualtLoading.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = homeDefualtLoading.gif; sourceTree = "<group>"; };
 		9CFBAC421E07E6F700C55814 /* SSJCreditRepaymentSyncTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCreditRepaymentSyncTable.h; sourceTree = "<group>"; };
 		9CFBAC431E07E6F700C55814 /* SSJCreditRepaymentSyncTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCreditRepaymentSyncTable.m; sourceTree = "<group>"; };
-		A5B05CEDF4C5EA0ACB757AB7 /* Pods-YouYuJiZhangBen.debug-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangBen.debug-test.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangBen/Pods-YouYuJiZhangBen.debug-test.xcconfig"; sourceTree = "<group>"; };
+		A667F7088E87A8C8B73EC269 /* Pods-YouYuJiZhangGuanJia.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangGuanJia.release.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangGuanJia/Pods-YouYuJiZhangGuanJia.release.xcconfig"; sourceTree = "<group>"; };
+		B628019ECCD0A5E2646A5A09 /* Pods-YouYuJiZhangBao.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangBao.release.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangBao/Pods-YouYuJiZhangBao.release.xcconfig"; sourceTree = "<group>"; };
 		BD0432CC1C1A772A0051E7AB /* Macro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Macro.h; sourceTree = "<group>"; };
 		BD0432D71C1A77BB0051E7AB /* CDPointActivityIndicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDPointActivityIndicator.h; sourceTree = "<group>"; };
 		BD0432D81C1A77BB0051E7AB /* CDPointActivityIndicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDPointActivityIndicator.m; sourceTree = "<group>"; };
@@ -5158,14 +5133,13 @@
 		BD70DF571C4751EA000E6CC9 /* SSJRegistNetworkService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJRegistNetworkService.m; sourceTree = "<group>"; };
 		BD70DF691C4B26B3000E6CC9 /* UIViewController+SSJPageFlow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+SSJPageFlow.h"; sourceTree = "<group>"; };
 		BD70DF6A1C4B26B3000E6CC9 /* UIViewController+SSJPageFlow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+SSJPageFlow.m"; sourceTree = "<group>"; };
+		BDA2EF151C8EB89E007DD45F /* TencentOpenAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TencentOpenAPI.framework; sourceTree = "<group>"; };
 		BDC01FF11C2D92E3008B1F75 /* CDAutoHideMessageHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDAutoHideMessageHUD.h; sourceTree = "<group>"; };
 		BDC01FF21C2D92E3008B1F75 /* CDAutoHideMessageHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDAutoHideMessageHUD.m; sourceTree = "<group>"; };
-		CB7363C1C6FE737D6FCE9670 /* Pods-JiZhangGuanJia.debug-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JiZhangGuanJia.debug-test.xcconfig"; path = "Pods/Target Support Files/Pods-JiZhangGuanJia/Pods-JiZhangGuanJia.debug-test.xcconfig"; sourceTree = "<group>"; };
 		CFF6621CBAC638A24B0361A7 /* Pods-YouYuJiZhangLiCai.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangLiCai.debug.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangLiCai/Pods-YouYuJiZhangLiCai.debug.xcconfig"; sourceTree = "<group>"; };
-		D0F6A217294B151BAE8FB0A3 /* Pods-youyujizhang.debug-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-youyujizhang.debug-production.xcconfig"; path = "Pods/Target Support Files/Pods-youyujizhang/Pods-youyujizhang.debug-production.xcconfig"; sourceTree = "<group>"; };
+		D1A7ECDE4745F51DE93EF377 /* libPods-YouYuJiZhangBao.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-YouYuJiZhangBao.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAD18AB4DEF381D69AB77158 /* libPods-YouYuJiZhangBen.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-YouYuJiZhangBen.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB9B0038A884FAF5FA1CEB4F /* Pods-JiZhangGuanJia.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JiZhangGuanJia.release.xcconfig"; path = "Pods/Target Support Files/Pods-JiZhangGuanJia/Pods-JiZhangGuanJia.release.xcconfig"; sourceTree = "<group>"; };
-		EBB57E4942412E08AB3C3151 /* Pods-YouYuJiZhangBen.release-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangBen.release-test.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangBen/Pods-YouYuJiZhangBen.release-test.xcconfig"; sourceTree = "<group>"; };
 		F9099E967EA40B5B4F591EA5 /* libPods-YouYuJiZhangLiCai.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-YouYuJiZhangLiCai.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -5188,6 +5162,7 @@
 				7D08A2B61E4999D30085A8FB /* YWFeedbackFMWK.framework in Frameworks */,
 				7D08A2B71E4999D30085A8FB /* Security.framework in Frameworks */,
 				7D08A2B81E4999D30085A8FB /* WQConnectorBundle.framework in Frameworks */,
+				B39301A128D168E2CA563B59 /* libPods-YouYuJiZhangGuanJia.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5209,6 +5184,7 @@
 				7DA13C0D1E35AED7000490A4 /* YWFeedbackFMWK.framework in Frameworks */,
 				7DA13C0E1E35AED7000490A4 /* Security.framework in Frameworks */,
 				7DA13C0F1E35AED7000490A4 /* WQConnectorBundle.framework in Frameworks */,
+				E1CEB4191E8A8B165BBAC41C /* libPods-YouYuJiZhangBao.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5348,6 +5324,7 @@
 				9C3276EF1CE4615200109C4C /* AudioToolbox.framework */,
 				9C3276ED1CE4614700109C4C /* libz.tbd */,
 				7D4A431D1CC86F51002F0264 /* AVFoundation.framework */,
+				BDA2EF151C8EB89E007DD45F /* TencentOpenAPI.framework */,
 				7DAD4B171C4FAF42004B7FF0 /* ImageIO.framework */,
 				BD0E43F61C21365100F9179D /* Security.framework */,
 				28D54CCC52994B95633CA5E3 /* libPods-JiZhangGuanJia.a */,
@@ -5355,6 +5332,8 @@
 				DAD18AB4DEF381D69AB77158 /* libPods-YouYuJiZhangBen.a */,
 				F9099E967EA40B5B4F591EA5 /* libPods-YouYuJiZhangLiCai.a */,
 				348DA5EFAB1C2E711E07E558 /* libPods-youyujizhang.a */,
+				D1A7ECDE4745F51DE93EF377 /* libPods-YouYuJiZhangBao.a */,
+				54C394CC554BE2031E6172C1 /* libPods-YouYuJiZhangGuanJia.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -5738,8 +5717,6 @@
 			children = (
 				7D5F328F1CEAE6C10086B67E /* SSJCalenderHelper.h */,
 				7D5F32901CEAE6C10086B67E /* SSJCalenderHelper.m */,
-				9CC0B2AF1E2DEFF800495D53 /* SSJCalenderScreenShotHelper.h */,
-				9CC0B2B01E2DEFF800495D53 /* SSJCalenderScreenShotHelper.m */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -5756,8 +5733,6 @@
 		7D5F32941CEAE6C10086B67E /* View */ = {
 			isa = PBXGroup;
 			children = (
-				916F18DE1E4C72C900AE5F98 /* SSJHomeCalendarView.h */,
-				916F18DF1E4C72C900AE5F98 /* SSJHomeCalendarView.m */,
 				7D5F32951CEAE6C10086B67E /* SSJCalendarCollectionViewCell.h */,
 				7D5F32961CEAE6C10086B67E /* SSJCalendarCollectionViewCell.m */,
 				7D5F32971CEAE6C10086B67E /* SSJCalendarView.h */,
@@ -6483,8 +6458,6 @@
 				9C246BA21DCADB7600C61C34 /* SSJDatabaseVersion10.m */,
 				9C7C511C1DF5615E0032705C /* SSJDatabaseVersion11.h */,
 				9C7C511D1DF5615E0032705C /* SSJDatabaseVersion11.m */,
-				677B31BC05B2FC4A9FC30E83 /* SSJDatabaseVersion12.m */,
-				677B3555003FE00C699926A4 /* SSJDatabaseVersion12.h */,
 			);
 			path = SSJDatabaseUpdater;
 			sourceTree = "<group>";
@@ -7434,8 +7407,6 @@
 				91F7FD281DFA8CD3005F4B6B /* SSJChatMessageItem.m */,
 				91F7FD361DFAB94A005F4B6B /* SSJAdviceItem.h */,
 				91F7FD371DFAB94A005F4B6B /* SSJAdviceItem.m */,
-				918A32C71E35EA1B002C4685 /* SSJThemeAndAdviceDotItem.h */,
-				918A32C81E35EA1B002C4685 /* SSJThemeAndAdviceDotItem.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -7453,8 +7424,6 @@
 				9C9DD65F1D4768F5001FA3C5 /* SSJClearUserDataService.m */,
 				91F7FD2E1DFA9EF9005F4B6B /* SSJProductAdviceNetWorkService.h */,
 				91F7FD2F1DFA9EF9005F4B6B /* SSJProductAdviceNetWorkService.m */,
-				9160DC391E2F672600419CC2 /* SSJNewDotNetworkService.h */,
-				9160DC3A1E2F672600419CC2 /* SSJNewDotNetworkService.m */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -7498,6 +7467,7 @@
 				916E32071DF967C1003C18D4 /* SSJProductAdviceTableHeaderView.m */,
 				91F7FD191DFA7D3C005F4B6B /* SSJMoreProductAdviceTableViewCell.h */,
 				91F7FD1A1DFA7D3C005F4B6B /* SSJMoreProductAdviceTableViewCell.m */,
+				91EBE4341E000139002564C4 /* SSJMoreProductAdviceTableViewCell.xib */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -7663,8 +7633,6 @@
 				9CD9BC531CFEAAAE0061803B /* SSJTransferDetailHeader.m */,
 				9CD9BC621CFEBCA40061803B /* SSJFundingTransferEdite.h */,
 				9CD9BC631CFEBCA40061803B /* SSJFundingTransferEdite.m */,
-				7D28B5EA1E4B413300C06D90 /* SSJFundingTransferPeriodSelectionView.h */,
-				7D28B5EB1E4B413300C06D90 /* SSJFundingTransferPeriodSelectionView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -8115,6 +8083,8 @@
 				BD543C3D1C1A6DBC00910D61 /* Products */,
 				72D2CCC3D3120C3CD45EDEB9 /* Frameworks */,
 				E6893A8F0ECE55E957399C9D /* Pods */,
+				7DA13C341E35AED8000490A4 /* SuiShouJi copy4-Info.plist */,
+				7D08A2D61E4999D70085A8FB /* YouYuJiZhangBao copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -8346,26 +8316,12 @@
 				2DEF1E8E40DA1003C5D69150 /* Pods-YouYuJiZhangLiCai.release.xcconfig */,
 				8243DAE18B924886B7E827E5 /* Pods-youyujizhang.debug.xcconfig */,
 				409F6679D47EFA5753A58706 /* Pods-youyujizhang.release.xcconfig */,
-				CB7363C1C6FE737D6FCE9670 /* Pods-JiZhangGuanJia.debug-test.xcconfig */,
-				34961CC770212A1952F076D7 /* Pods-JiZhangGuanJia.debug-production.xcconfig */,
-				3702E63F5BADCB2297038131 /* Pods-JiZhangGuanJia.release-test.xcconfig */,
-				815F9F2F587CE772D9879229 /* Pods-JiZhangGuanJia.release-production.xcconfig */,
-				0293AE0416F5E4A3F013D11D /* Pods-SuiShouJi.debug-test.xcconfig */,
-				55FB426833A78CE202A88098 /* Pods-SuiShouJi.debug-production.xcconfig */,
-				49E4D8FB52FA1A0F2DE98086 /* Pods-SuiShouJi.release-test.xcconfig */,
-				0254E364AA6A718DADFBB3E4 /* Pods-SuiShouJi.release-production.xcconfig */,
-				A5B05CEDF4C5EA0ACB757AB7 /* Pods-YouYuJiZhangBen.debug-test.xcconfig */,
-				6E70CA34C65052613EDC23DB /* Pods-YouYuJiZhangBen.debug-production.xcconfig */,
-				EBB57E4942412E08AB3C3151 /* Pods-YouYuJiZhangBen.release-test.xcconfig */,
-				47DC0E8C7D9EDF12EA88DED4 /* Pods-YouYuJiZhangBen.release-production.xcconfig */,
-				20AD3C2B85F3BBBAC87D1915 /* Pods-YouYuJiZhangLiCai.debug-test.xcconfig */,
-				96D05FD3A6D1AF2E3A43D98C /* Pods-YouYuJiZhangLiCai.debug-production.xcconfig */,
-				21DE9FB1A4D6AE3217ECFA3A /* Pods-YouYuJiZhangLiCai.release-test.xcconfig */,
-				1B895A9618C21A67E80B977B /* Pods-YouYuJiZhangLiCai.release-production.xcconfig */,
-				7FA0ADF46B0556AB3A749227 /* Pods-youyujizhang.debug-test.xcconfig */,
-				D0F6A217294B151BAE8FB0A3 /* Pods-youyujizhang.debug-production.xcconfig */,
-				4BBE3799BF873355BD237283 /* Pods-youyujizhang.release-test.xcconfig */,
-				3A4D4185B850D1815AADC9B9 /* Pods-youyujizhang.release-production.xcconfig */,
+				5899867574AEB0396C49AE15 /* Pods-SuiShouJi.debug.xcconfig */,
+				3B725E607F2304D98F82B2A3 /* Pods-SuiShouJi.release.xcconfig */,
+				9892BFAB47044275B53028C0 /* Pods-YouYuJiZhangBao.debug.xcconfig */,
+				B628019ECCD0A5E2646A5A09 /* Pods-YouYuJiZhangBao.release.xcconfig */,
+				13DED3B91912A4CA23981548 /* Pods-YouYuJiZhangGuanJia.debug.xcconfig */,
+				A667F7088E87A8C8B73EC269 /* Pods-YouYuJiZhangGuanJia.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -8377,9 +8333,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7D08A2D21E4999D30085A8FB /* Build configuration list for PBXNativeTarget "YouYuJiZhangGuanJia" */;
 			buildPhases = (
+				D5BE237FD9961E3E5F59193C /* [CP] Check Pods Manifest.lock */,
 				7D08A0951E4999D30085A8FB /* Sources */,
 				7D08A2A81E4999D30085A8FB /* Frameworks */,
 				7D08A2BA1E4999D30085A8FB /* Resources */,
+				E8A2C184C8D7381A27CCD96E /* [CP] Embed Pods Frameworks */,
+				48AA12A1E7C2938463D4C3AE /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -8394,9 +8353,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7DA13C291E35AED7000490A4 /* Build configuration list for PBXNativeTarget "YouYuJiZhangBao" */;
 			buildPhases = (
+				3434A1FA5629E89C6387C495 /* [CP] Check Pods Manifest.lock */,
 				7DA139EC1E35AED7000490A4 /* Sources */,
 				7DA13BFF1E35AED7000490A4 /* Frameworks */,
 				7DA13C111E35AED7000490A4 /* Resources */,
+				EB88810B3A1B30F8D98E4C9D /* [CP] Embed Pods Frameworks */,
+				E963EDFE5DCDB7C8E7A385DF /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -8563,7 +8525,7 @@
 					};
 					BD543C3B1C1A6DBC00910D61 = {
 						CreatedOnToolsVersion = 7.2;
-						DevelopmentTeam = 747363KXQ6;
+						DevelopmentTeam = 534SCE47WT;
 					};
 					BD543C541C1A6DBC00910D61 = {
 						CreatedOnToolsVersion = 7.2;
@@ -8678,6 +8640,7 @@
 				7DBA589F1D6D32B700C02D79 /* yw_1222.jpg in Resources */,
 				7DBA58CA1D6D32B700C02D79 /* sr_refresh.png in Resources */,
 				7DBA59381D6D32B700C02D79 /* ProjectSettings.plist in Resources */,
+				91EBE4371E000139002564C4 /* SSJMoreProductAdviceTableViewCell.xib in Resources */,
 				7DC4875D1DF6629700C27B69 /* Localizable.strings in Resources */,
 				9CFBAC3B1E07D4E300C55814 /* homeDefualtLoading.gif in Resources */,
 				9CFBAC3F1E07D4EC00C55814 /* xiaomao.gif in Resources */,
@@ -8701,6 +8664,7 @@
 				9C2A69511D194CA70010F1DA /* SSJBookKeepingHomePopView.xib in Resources */,
 				9C2A69871D194CA70010F1DA /* rain_sound.wav in Resources */,
 				9C2A69AD1D194CA70010F1DA /* Assets.xcassets in Resources */,
+				91EBE4361E000139002564C4 /* SSJMoreProductAdviceTableViewCell.xib in Resources */,
 				9C2A69C31D194CA70010F1DA /* yw_1222.jpg in Resources */,
 				7DC4875C1DF6629700C27B69 /* Localizable.strings in Resources */,
 				9C2A69EE1D194CA70010F1DA /* sr_refresh.png in Resources */,
@@ -8727,6 +8691,7 @@
 				9CEC02131D6D41EB00DB2C8B /* yw_1222.jpg in Resources */,
 				9CEC023E1D6D41EB00DB2C8B /* sr_refresh.png in Resources */,
 				9CEC02AD1D6D41EB00DB2C8B /* ProjectSettings.plist in Resources */,
+				91EBE4391E000139002564C4 /* SSJMoreProductAdviceTableViewCell.xib in Resources */,
 				7DC4875F1DF6629700C27B69 /* Localizable.strings in Resources */,
 				9CFBAC3D1E07D4E600C55814 /* homeDefualtLoading.gif in Resources */,
 				9CFBAC411E07D4EC00C55814 /* xiaomao.gif in Resources */,
@@ -8752,6 +8717,7 @@
 				9CECFE1B1D6D41A700DB2C8B /* yw_1222.jpg in Resources */,
 				9CECFE461D6D41A700DB2C8B /* sr_refresh.png in Resources */,
 				9CECFEB51D6D41A700DB2C8B /* ProjectSettings.plist in Resources */,
+				91EBE4381E000139002564C4 /* SSJMoreProductAdviceTableViewCell.xib in Resources */,
 				7DC4875E1DF6629700C27B69 /* Localizable.strings in Resources */,
 				9CFBAC3C1E07D4E600C55814 /* homeDefualtLoading.gif in Resources */,
 				9CFBAC401E07D4EC00C55814 /* xiaomao.gif in Resources */,
@@ -8781,6 +8747,7 @@
 				9CFBAC321E07D4DE00C55814 /* homeDefualtLoading.gif in Resources */,
 				9CAF731E1E03EAE50061ADB8 /* homeLoading.gif in Resources */,
 				7D4EF8941C4B5625003C4B20 /* ProjectSettings.plist in Resources */,
+				91EBE4351E000139002564C4 /* SSJMoreProductAdviceTableViewCell.xib in Resources */,
 				7DC4875B1DF6629700C27B69 /* Localizable.strings in Resources */,
 				9C94717C1CEB224C00D69079 /* SSJFinancingHomePopView.xib in Resources */,
 				BD543C4A1C1A6DBC00910D61 /* Main.storyboard in Resources */,
@@ -8834,6 +8801,21 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-YouYuJiZhangBen/Pods-YouYuJiZhangBen-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		3434A1FA5629E89C6387C495 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
 		3B2534A50FD910D29A354356 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -8847,6 +8829,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-youyujizhang/Pods-youyujizhang-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		48AA12A1E7C2938463D4C3AE /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-YouYuJiZhangGuanJia/Pods-YouYuJiZhangGuanJia-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		4B4AE35F4B43893D40CC9BE4 /* [CP] Copy Pods Resources */ = {
@@ -9014,6 +9011,21 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-youyujizhang/Pods-youyujizhang-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		D5BE237FD9961E3E5F59193C /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
 		DDCD4E7CD2023DDEE0A45788 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -9027,6 +9039,51 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SuiShouJi/Pods-SuiShouJi-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E8A2C184C8D7381A27CCD96E /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-YouYuJiZhangGuanJia/Pods-YouYuJiZhangGuanJia-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E963EDFE5DCDB7C8E7A385DF /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-YouYuJiZhangBao/Pods-YouYuJiZhangBao-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		EB88810B3A1B30F8D98E4C9D /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-YouYuJiZhangBao/Pods-YouYuJiZhangBao-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -9181,7 +9238,6 @@
 				7D08A1241E4999D30085A8FB /* SSJNewBaseTableViewController.m in Sources */,
 				7D08A1251E4999D30085A8FB /* UICountingLabel.m in Sources */,
 				7D08A1261E4999D30085A8FB /* SSJLoanChargeAddOrEditViewController.m in Sources */,
-				7D28B5F21E4B413300C06D90 /* SSJFundingTransferPeriodSelectionView.m in Sources */,
 				7D08A1271E4999D30085A8FB /* SSJMotionPasswordViewController.m in Sources */,
 				7D08A1281E4999D30085A8FB /* SSJFundingDetailCell.m in Sources */,
 				7D08A1291E4999D30085A8FB /* SSJLoanModel.m in Sources */,
@@ -9440,7 +9496,6 @@
 				7D08A2261E4999D30085A8FB /* SSJChargeReminderTimeView.m in Sources */,
 				7D08A2271E4999D30085A8FB /* SSJCanlenderChargeDetailCell.m in Sources */,
 				7D08A2281E4999D30085A8FB /* SSJColorSelectCollectionViewCell.m in Sources */,
-				916F18DD1E4C715300AE5F98 /* SSJNewDotNetworkService.m in Sources */,
 				7D08A2291E4999D30085A8FB /* SSJDatabaseVersion5.m in Sources */,
 				7D08A22A1E4999D30085A8FB /* SSJRegularManager.m in Sources */,
 				7D08A22B1E4999D30085A8FB /* SSJBooksEditeOrNewViewController.m in Sources */,
@@ -9540,7 +9595,6 @@
 				7D08A2891E4999D30085A8FB /* SSJHomeBudgetButton.m in Sources */,
 				7D08A28A1E4999D30085A8FB /* SSJReportFormsCurveSuspensionView.m in Sources */,
 				7D08A28B1E4999D30085A8FB /* SSJStartViewManager.m in Sources */,
-				916F18E61E4C72C900AE5F98 /* SSJHomeCalendarView.m in Sources */,
 				7D08A28C1E4999D30085A8FB /* SSJReportFormsSwitchYearControl.m in Sources */,
 				7D08A28D1E4999D30085A8FB /* SSJReportFormsNoDataCell.m in Sources */,
 				7D08A28E1E4999D30085A8FB /* SSJMineSyncButton.m in Sources */,
@@ -9721,7 +9775,6 @@
 				7DA13A7B1E35AED7000490A4 /* SSJNewBaseTableViewController.m in Sources */,
 				7DA13A7C1E35AED7000490A4 /* UICountingLabel.m in Sources */,
 				7DA13A7D1E35AED7000490A4 /* SSJLoanChargeAddOrEditViewController.m in Sources */,
-				7D28B5F11E4B413300C06D90 /* SSJFundingTransferPeriodSelectionView.m in Sources */,
 				7DA13A7E1E35AED7000490A4 /* SSJMotionPasswordViewController.m in Sources */,
 				7DA13A7F1E35AED7000490A4 /* SSJFundingDetailCell.m in Sources */,
 				7DA13A801E35AED7000490A4 /* SSJLoanModel.m in Sources */,
@@ -9980,7 +10033,6 @@
 				7DA13B7D1E35AED7000490A4 /* SSJChargeReminderTimeView.m in Sources */,
 				7DA13B7E1E35AED7000490A4 /* SSJCanlenderChargeDetailCell.m in Sources */,
 				7DA13B7F1E35AED7000490A4 /* SSJColorSelectCollectionViewCell.m in Sources */,
-				916F18DC1E4C715300AE5F98 /* SSJNewDotNetworkService.m in Sources */,
 				7DA13B801E35AED7000490A4 /* SSJDatabaseVersion5.m in Sources */,
 				7DA13B811E35AED7000490A4 /* SSJRegularManager.m in Sources */,
 				7DA13B821E35AED7000490A4 /* SSJBooksEditeOrNewViewController.m in Sources */,
@@ -10080,7 +10132,6 @@
 				7DA13BE01E35AED7000490A4 /* SSJHomeBudgetButton.m in Sources */,
 				7DA13BE11E35AED7000490A4 /* SSJReportFormsCurveSuspensionView.m in Sources */,
 				7DA13BE21E35AED7000490A4 /* SSJStartViewManager.m in Sources */,
-				916F18E51E4C72C900AE5F98 /* SSJHomeCalendarView.m in Sources */,
 				7DA13BE31E35AED7000490A4 /* SSJReportFormsSwitchYearControl.m in Sources */,
 				7DA13BE41E35AED7000490A4 /* SSJReportFormsNoDataCell.m in Sources */,
 				7DA13BE51E35AED7000490A4 /* SSJMineSyncButton.m in Sources */,
@@ -10168,6 +10219,7 @@
 				9C9324061D9E591E00EBD216 /* SSJSearchResultOrderHeader.m in Sources */,
 				7DBA55C21D6D32B700C02D79 /* SSJListMenuCell.m in Sources */,
 				7DBA55C31D6D32B700C02D79 /* SSJBookkeepingTreeViewController.m in Sources */,
+				7DBA55C51D6D32B700C02D79 /* (null) in Sources */,
 				7DBA55C61D6D32B700C02D79 /* SSJLoadMoreCell.m in Sources */,
 				7DBA55C71D6D32B700C02D79 /* SSJThemeDownLoadCompleteService.m in Sources */,
 				7D24ED911D9E6F8E003C4248 /* SSJBudgetDetailHeaderViewItem.m in Sources */,
@@ -10234,7 +10286,6 @@
 				7DBA55F71D6D32B700C02D79 /* SSJCategoryListHelper.m in Sources */,
 				7DBA55F81D6D32B700C02D79 /* SSJFundingDetailDateHeader.m in Sources */,
 				9C9A0C1A1D6D9578002AF046 /* SSJColorSelectCollectionViewCell.m in Sources */,
-				918A32CB1E35EA1B002C4685 /* SSJThemeAndAdviceDotItem.m in Sources */,
 				7DBA55F91D6D32B700C02D79 /* SSJBudgetEditUnitTextField.m in Sources */,
 				7DBA55FA1D6D32B700C02D79 /* SSJBudgetEditTextFieldCell.m in Sources */,
 				7DBA55FB1D6D32B700C02D79 /* SSJMagicExportCalendarDateView.m in Sources */,
@@ -10247,6 +10298,7 @@
 				7DBA56001D6D32B700C02D79 /* SSJForgotPSWResetService.m in Sources */,
 				7DBA56011D6D32B700C02D79 /* SSJReportFormsScaleAxisCell.m in Sources */,
 				7DBA56021D6D32B700C02D79 /* SSJNewBaseTableViewController.m in Sources */,
+				7DBA56031D6D32B700C02D79 /* (null) in Sources */,
 				7DBA56041D6D32B700C02D79 /* SSJMotionPasswordViewController.m in Sources */,
 				7D8C7EA21D6F19BA00D72E2D /* SSJLoanCloseOutViewController.m in Sources */,
 				7DBA56051D6D32B700C02D79 /* SSJFundingDetailCell.m in Sources */,
@@ -10298,7 +10350,6 @@
 				7DBA56231D6D32B700C02D79 /* SSJColorAddition.m in Sources */,
 				9C9A0CA21D73D1B6002AF046 /* SSJNewCreditCardViewController.m in Sources */,
 				7DBA56241D6D32B700C02D79 /* SSJCircleChargeTypeSelectView.m in Sources */,
-				7D28B5EE1E4B413300C06D90 /* SSJFundingTransferPeriodSelectionView.m in Sources */,
 				7DBA56251D6D32B700C02D79 /* UIBarButtonItem+CDCategory.m in Sources */,
 				7DBA56261D6D32B700C02D79 /* SSJListMenu.m in Sources */,
 				7DBA56271D6D32B700C02D79 /* SSJFinancingHomeViewController.m in Sources */,
@@ -10389,6 +10440,7 @@
 				9119A7FF1E0CB7B500374B62 /* SSJReportFormCanYinChartCell.m in Sources */,
 				7DF532881E13BB80009A6F6C /* SSJInstalmentEditeViewController.m in Sources */,
 				7DBA56651D6D32B700C02D79 /* SSJSegmentedControl.m in Sources */,
+				7DBA56661D6D32B700C02D79 /* (null) in Sources */,
 				7DBA56671D6D32B700C02D79 /* SSJCustomCollectionViewFlowLayout.m in Sources */,
 				9CAF73181E03E8CA0061ADB8 /* SSJHomeLoadingView.m in Sources */,
 				7DBA56681D6D32B700C02D79 /* SSJBillingChargeHelper.m in Sources */,
@@ -10417,7 +10469,6 @@
 				9C6D66271D86BD260081A7CE /* SSJBannerItem.m in Sources */,
 				7DBA56791D6D32B700C02D79 /* SSJButtonAddition.m in Sources */,
 				7DBA567A1D6D32B700C02D79 /* SSJSyncTable.m in Sources */,
-				9160DC3D1E2F672600419CC2 /* SSJNewDotNetworkService.m in Sources */,
 				7DBA567B1D6D32B700C02D79 /* SSJAboutusTableViewCell.m in Sources */,
 				7DBA567C1D6D32B700C02D79 /* SSJMemberSyncTable.m in Sources */,
 				9CD5168E1D9D02560040480B /* SSJHistoryHeader.m in Sources */,
@@ -10446,7 +10497,6 @@
 				91F7FD2B1DFA8CD3005F4B6B /* SSJChatMessageItem.m in Sources */,
 				7DBA568B1D6D32B700C02D79 /* SSJChargeDetailMemberCell.m in Sources */,
 				9C91AE201D94D8C700B585AA /* SSJSearchResultItem.m in Sources */,
-				9CC0B2BA1E2DF05300495D53 /* SSJCalenderScreenShotHelper.m in Sources */,
 				9C24CFC91D76CA060095D150 /* SSJBooksTypeStore.m in Sources */,
 				7DDB6F151E25D81F00B6A68A /* SSJDatabaseVersion11.m in Sources */,
 				7DBA568C1D6D32B700C02D79 /* SSJImageSynchronizeTask.m in Sources */,
@@ -10493,6 +10543,7 @@
 				7DFD30541D75268D00A0D7A0 /* SSJCategoryEditableCollectionViewCell.m in Sources */,
 				7DBA56A71D6D32B700C02D79 /* SSJWeiXinLoginHelper.m in Sources */,
 				9C77DBA81DE6E31200CD64A2 /* SimulateIDFA.m in Sources */,
+				7DBA56A81D6D32B700C02D79 /* (null) in Sources */,
 				7DBA56A91D6D32B700C02D79 /* SSJMagicExportCalendarViewController.m in Sources */,
 				7DB9F8541DFFED2E0084E998 /* SSJReportFormCurveListCellItem.m in Sources */,
 				7DBA56AA1D6D32B700C02D79 /* SSJMineHeaderView.m in Sources */,
@@ -10515,6 +10566,7 @@
 				7DBA56BA1D6D32B700C02D79 /* SSJBookkeepingTreeStore.m in Sources */,
 				9C24D00D1D7838F90095D150 /* SSJLocalNotificationHelper.m in Sources */,
 				7DD49BF61DB78A4A00318AF9 /* UICountingLabel.m in Sources */,
+				7DBA56BC1D6D32B700C02D79 /* (null) in Sources */,
 				7DBA56BD1D6D32B700C02D79 /* SSJChargeReminderTimeView.m in Sources */,
 				7DBA56BE1D6D32B700C02D79 /* SSJCanlenderChargeDetailCell.m in Sources */,
 				915A1AF91E10F53400F73C7B /* SSJLoginPopView.m in Sources */,
@@ -10606,6 +10658,7 @@
 				7DBA56FD1D6D32B700C02D79 /* SSJFundingTypeTableViewCell.m in Sources */,
 				7DAA383F1D952330000ED16E /* SSJBudgetBillTypeSelectionViewController.m in Sources */,
 				7DBA56FE1D6D32B700C02D79 /* SSJBookkeepingTreeDescView.m in Sources */,
+				7DBA56FF1D6D32B700C02D79 /* (null) in Sources */,
 				7DBA57001D6D32B700C02D79 /* SSJFundingTransferViewController.m in Sources */,
 				7DBA57011D6D32B700C02D79 /* SSJScrollTextView.m in Sources */,
 				7DBA57021D6D32B700C02D79 /* SSJFundAccountTable.m in Sources */,
@@ -10620,9 +10673,9 @@
 				7DBA57071D6D32B700C02D79 /* SSJMineSyncButton.m in Sources */,
 				7DBA57081D6D32B700C02D79 /* SSJThemeCollectionHeaderView.m in Sources */,
 				9C91AE271D94DEB400B585AA /* SSJSearchingViewController.m in Sources */,
-				916F18E21E4C72C900AE5F98 /* SSJHomeCalendarView.m in Sources */,
 				7DBA57091D6D32B700C02D79 /* SSJPagingNetworkService.m in Sources */,
 				9C24CFC51D76CA000095D150 /* SSJBooksTypeItem.m in Sources */,
+				7DBA570A1D6D32B700C02D79 /* (null) in Sources */,
 				9C7C9E6B1DB706E10095F49B /* SSJSearchResultSummaryItem.m in Sources */,
 				7DBA570B1D6D32B700C02D79 /* SCYMotionEncryptionTriangleLayer.m in Sources */,
 				9C9A0C171D6D9567002AF046 /* SSJLoanSyncTable.m in Sources */,
@@ -10631,6 +10684,7 @@
 				7DBA570D1D6D32B700C02D79 /* SSJADDNewTypeViewController.m in Sources */,
 				7DBA570F1D6D32B700C02D79 /* SSJMagicExportCalendarViewCell.m in Sources */,
 				7DBA57101D6D32B700C02D79 /* SSJThemeUtil.m in Sources */,
+				7DBA57111D6D32B700C02D79 /* (null) in Sources */,
 				7DBA57121D6D32B700C02D79 /* SSJReportFormsIncomeAndPayCell.m in Sources */,
 				7DBA57131D6D32B700C02D79 /* SSJThemeManagerCollectionViewCell.m in Sources */,
 				7DBA57141D6D32B700C02D79 /* SSJUnlimitedScrollView.m in Sources */,
@@ -10648,7 +10702,6 @@
 				7DAA38551D952AA0000ED16E /* SSJBudgetBillTypeSelectionCellItem.m in Sources */,
 				7DAA38471D952A8B000ED16E /* SSJBudgetBillTypeSelectionCell.m in Sources */,
 				7DBA571C1D6D32B700C02D79 /* SSJNickNameModifyView.m in Sources */,
-				677B34CF9A6CD85C1FA6231D /* SSJDatabaseVersion12.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -10791,7 +10844,6 @@
 				9C2A67591D194CA70010F1DA /* SSJStringAddition.m in Sources */,
 				9C2A675A1D194CA70010F1DA /* SSJHomeBarCalenderButton.m in Sources */,
 				9C9323F71D9DFA9500EBD216 /* SSJSearchResultHeader.m in Sources */,
-				9CC0B2B91E2DF05300495D53 /* SSJCalenderScreenShotHelper.m in Sources */,
 				7D3EAD2C1DCC340100E5B2B2 /* SSJLoanChargeModel.m in Sources */,
 				9C2A675B1D194CA70010F1DA /* SSJForgetPassowrdNetworkService.m in Sources */,
 				7D1DB4371D6AA924006C2AC2 /* SSJLoanListSectionHeaderAmountView.m in Sources */,
@@ -10838,7 +10890,6 @@
 				7D2BF36B1D59CCE7008A93FF /* SSJMagicExportSuccessAlertView.m in Sources */,
 				9C2A67781D194CA70010F1DA /* SSJFundingTypeSelectView.m in Sources */,
 				7DC3187E1E2882A300932644 /* FMDatabasePool.m in Sources */,
-				7D28B5ED1E4B413300C06D90 /* SSJFundingTransferPeriodSelectionView.m in Sources */,
 				9C2A67791D194CA70010F1DA /* SSJViewControllerAddition.m in Sources */,
 				7DE089701D333ED4008431D6 /* SSJDatabaseVersion5.m in Sources */,
 				9CF594231D654AC900006594 /* SSJReminderItem.m in Sources */,
@@ -10912,7 +10963,6 @@
 				9C2A67A11D194CA70010F1DA /* SSJFinancingHomeitem.m in Sources */,
 				9C2A67A21D194CA70010F1DA /* SSJBudgetTypeModel.m in Sources */,
 				9C2A67A31D194CA70010F1DA /* SSJPercentCircleNode.m in Sources */,
-				918A32CA1E35EA1B002C4685 /* SSJThemeAndAdviceDotItem.m in Sources */,
 				9CF0AC111D58754800475C5B /* SSJAdWebViewController.m in Sources */,
 				9C2A67A41D194CA70010F1DA /* SSJBaseSyncTable.m in Sources */,
 				9C2A67A51D194CA70010F1DA /* SSJPercentCircleNodeItem.m in Sources */,
@@ -10932,7 +10982,6 @@
 				9C2A67B01D194CA70010F1DA /* SSJBaselineTextField.m in Sources */,
 				9CF0AC101D58753700475C5B /* SSJDataClearHelper.m in Sources */,
 				9C2A67B11D194CA70010F1DA /* SSJCircleChargeCell.m in Sources */,
-				9160DC3C1E2F672600419CC2 /* SSJNewDotNetworkService.m in Sources */,
 				7DF5328F1E13BBA7009A6F6C /* SSJRepaymentModel.m in Sources */,
 				9C2A67B21D194CA70010F1DA /* SSJUserChargePeriodConfigSyncTable.m in Sources */,
 				9CF594031D63FFBB00006594 /* SSJModifyFundingTableViewCell.m in Sources */,
@@ -11160,7 +11209,6 @@
 				7D6CC9171E0A798F00FF6133 /* SSJReportFormsCurveCellItem.m in Sources */,
 				9C2A68401D194CA70010F1DA /* SSJMineSyncButton.m in Sources */,
 				7D6B12D71D4CBC140036BF4E /* SSJListMenu.m in Sources */,
-				916F18E11E4C72C900AE5F98 /* SSJHomeCalendarView.m in Sources */,
 				7D87AE871D63079C0024D33C /* SSJDatabaseVersion8.m in Sources */,
 				9C2A68411D194CA70010F1DA /* SSJPagingNetworkService.m in Sources */,
 				9CF5940B1D63FFBB00006594 /* SSJModifyFundingViewController.m in Sources */,
@@ -11188,7 +11236,6 @@
 				9119A7F71E0CB7B400374B62 /* SSJReportFormCanYinChartCell.m in Sources */,
 				9C2A68511D194CA70010F1DA /* SSJPageControl.m in Sources */,
 				9C2A68521D194CA70010F1DA /* SSJNickNameModifyView.m in Sources */,
-				677B3207C51B9427CF044580 /* SSJDatabaseVersion12.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -11246,6 +11293,7 @@
 				9C9324071D9E591E00EBD216 /* SSJSearchResultOrderHeader.m in Sources */,
 				9CECFB3E1D6D41A700DB2C8B /* SSJListMenuCell.m in Sources */,
 				9CECFB3F1D6D41A700DB2C8B /* SSJBookkeepingTreeViewController.m in Sources */,
+				9CECFB411D6D41A700DB2C8B /* (null) in Sources */,
 				9CECFB421D6D41A700DB2C8B /* SSJLoadMoreCell.m in Sources */,
 				9CECFB431D6D41A700DB2C8B /* SSJThemeDownLoadCompleteService.m in Sources */,
 				7D24ED921D9E6F8E003C4248 /* SSJBudgetDetailHeaderViewItem.m in Sources */,
@@ -11263,7 +11311,6 @@
 				9CECFB4E1D6D41A700DB2C8B /* SSJCalenderDetailCell.m in Sources */,
 				9CECFB4F1D6D41A700DB2C8B /* SSJDownLoadProgressButton.m in Sources */,
 				9CECFB501D6D41A700DB2C8B /* SSJCalenderCellItem.m in Sources */,
-				918A32CC1E35EA1B002C4685 /* SSJThemeAndAdviceDotItem.m in Sources */,
 				9CECFB511D6D41A700DB2C8B /* SSJBudgetNodataRemindView.m in Sources */,
 				9C17B5381DEED7F1000D6C99 /* SSJThemeDownLoaderManger.m in Sources */,
 				9CECFB521D6D41A700DB2C8B /* CDAutoHideMessageHUD.m in Sources */,
@@ -11326,6 +11373,7 @@
 				7DB9F8551DFFED2E0084E998 /* SSJReportFormCurveListCellItem.m in Sources */,
 				9C77DBB81DE70B3100CD64A2 /* SSJCustomJsonSerializer.m in Sources */,
 				9CECFB7E1D6D41A700DB2C8B /* SSJNewBaseTableViewController.m in Sources */,
+				9CECFB7F1D6D41A700DB2C8B /* (null) in Sources */,
 				9CECFB801D6D41A700DB2C8B /* SSJMotionPasswordViewController.m in Sources */,
 				7D8C7EA31D6F19BA00D72E2D /* SSJLoanCloseOutViewController.m in Sources */,
 				7D6CC90D1E0A798400FF6133 /* SSJReportFormsCurveGridView.m in Sources */,
@@ -11378,7 +11426,6 @@
 				9CECFB9B1D6D41A700DB2C8B /* SSJViewControllerAddition.m in Sources */,
 				7DF532A11E13BBD1009A6F6C /* SSJMonthSelectView.m in Sources */,
 				9CECFB9C1D6D41A700DB2C8B /* SSJUserItem.m in Sources */,
-				7D28B5EF1E4B413300C06D90 /* SSJFundingTransferPeriodSelectionView.m in Sources */,
 				9CECFB9D1D6D41A700DB2C8B /* SSJMemoMakingView.m in Sources */,
 				9CECFB9E1D6D41A700DB2C8B /* SSJMineHomeTableViewHeader.m in Sources */,
 				9CECFB9F1D6D41A700DB2C8B /* SSJColorAddition.m in Sources */,
@@ -11474,6 +11521,7 @@
 				9CECFBE01D6D41A700DB2C8B /* SSJUserChargePeriodConfigSyncTable.m in Sources */,
 				7DF19EDB1D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m in Sources */,
 				9CECFBE11D6D41A700DB2C8B /* SSJSegmentedControl.m in Sources */,
+				9CECFBE21D6D41A700DB2C8B /* (null) in Sources */,
 				9CECFBE31D6D41A700DB2C8B /* SSJCustomCollectionViewFlowLayout.m in Sources */,
 				9CECFBE41D6D41A700DB2C8B /* SSJBillingChargeHelper.m in Sources */,
 				9CECFBE51D6D41A700DB2C8B /* SSJForgetPasswordSecondStepViewController.m in Sources */,
@@ -11483,7 +11531,6 @@
 				9CECFBE91D6D41A700DB2C8B /* SSJBudgetEditAccountDaySelectionView.m in Sources */,
 				7DC3187B1E2882A300932644 /* FMDatabaseAdditions.m in Sources */,
 				9CECFBEA1D6D41A700DB2C8B /* SSJCircleChargeSettingViewController.m in Sources */,
-				9160DC3E1E2F672600419CC2 /* SSJNewDotNetworkService.m in Sources */,
 				9CECFBEB1D6D41A700DB2C8B /* SSJFontAddition.m in Sources */,
 				9CECFBEC1D6D41A700DB2C8B /* SSJMagicExportViewController.m in Sources */,
 				7DFD30471D75217300A0D7A0 /* SSJCategoryEditableCollectionView.m in Sources */,
@@ -11574,6 +11621,7 @@
 				7DFD30551D75268D00A0D7A0 /* SSJCategoryEditableCollectionViewCell.m in Sources */,
 				9CECFC231D6D41A700DB2C8B /* SSJWeiXinLoginHelper.m in Sources */,
 				7DC318671E2882A300932644 /* FMDatabase+FTS3.m in Sources */,
+				9CECFC241D6D41A700DB2C8B /* (null) in Sources */,
 				9CECFC251D6D41A700DB2C8B /* SSJMagicExportCalendarViewController.m in Sources */,
 				9CECFC261D6D41A700DB2C8B /* SSJMineHeaderView.m in Sources */,
 				9C17B52C1DEED7B1000D6C99 /* SSJBooksParentSelectView.m in Sources */,
@@ -11598,6 +11646,7 @@
 				916E31DA1DF8EED1003C18D4 /* SSJMineHomeCollectionImageCell.m in Sources */,
 				9C24D00E1D7838F90095D150 /* SSJLocalNotificationHelper.m in Sources */,
 				7DD49BF71DB78A4A00318AF9 /* UICountingLabel.m in Sources */,
+				9CECFC381D6D41A700DB2C8B /* (null) in Sources */,
 				916E320B1DF967C1003C18D4 /* SSJProductAdviceTableHeaderView.m in Sources */,
 				9C77DBB01DE6ED2200CD64A2 /* SSJIdfaUploadService.m in Sources */,
 				9CECFC391D6D41A700DB2C8B /* SSJChargeReminderTimeView.m in Sources */,
@@ -11607,7 +11656,6 @@
 				9CECFC3D1D6D41A700DB2C8B /* SSJRecordMakingCategoryItem.m in Sources */,
 				9CECFC3E1D6D41A700DB2C8B /* SSJFundingTransferDetailItem.m in Sources */,
 				7DF532951E13BBB3009A6F6C /* SSJRepaymentStore.m in Sources */,
-				9CC0B2BB1E2DF05400495D53 /* SSJCalenderScreenShotHelper.m in Sources */,
 				9CECFC3F1D6D41A700DB2C8B /* SSJMagicExportResultCheckMarkView.m in Sources */,
 				9CECFC401D6D41A700DB2C8B /* SSJChargeCircleTimeSelectView.m in Sources */,
 				9CECFC411D6D41A700DB2C8B /* SSJPasswordModifyViewController.m in Sources */,
@@ -11686,6 +11734,7 @@
 				7DAA38401D952330000ED16E /* SSJBudgetBillTypeSelectionViewController.m in Sources */,
 				7D6CC9051E0A797D00FF6133 /* SSJReportFormsCurveBalloonView.m in Sources */,
 				9CECFC7A1D6D41A700DB2C8B /* SSJBookkeepingTreeDescView.m in Sources */,
+				9CECFC7B1D6D41A700DB2C8B /* (null) in Sources */,
 				9CECFC7C1D6D41A700DB2C8B /* SSJFundingTransferViewController.m in Sources */,
 				9CECFC7D1D6D41A700DB2C8B /* SSJScrollTextView.m in Sources */,
 				9CECFC7E1D6D41A700DB2C8B /* SSJFundAccountTable.m in Sources */,
@@ -11700,9 +11749,9 @@
 				9119A8001E0CB7B500374B62 /* SSJReportFormCanYinChartCell.m in Sources */,
 				9CECFC841D6D41A700DB2C8B /* SSJThemeCollectionHeaderView.m in Sources */,
 				9C91AE281D94DEB400B585AA /* SSJSearchingViewController.m in Sources */,
-				916F18E31E4C72C900AE5F98 /* SSJHomeCalendarView.m in Sources */,
 				9CECFC851D6D41A700DB2C8B /* SSJPagingNetworkService.m in Sources */,
 				9C24CFC61D76CA000095D150 /* SSJBooksTypeItem.m in Sources */,
+				9CECFC861D6D41A700DB2C8B /* (null) in Sources */,
 				9C7C9E6C1DB706E10095F49B /* SSJSearchResultSummaryItem.m in Sources */,
 				9CECFC871D6D41A700DB2C8B /* SCYMotionEncryptionTriangleLayer.m in Sources */,
 				7D4A79761DD46D6100E905F4 /* SSJLoanChargeAddOrEditViewController.m in Sources */,
@@ -11711,6 +11760,7 @@
 				9CECFC891D6D41A700DB2C8B /* SSJADDNewTypeViewController.m in Sources */,
 				9CECFC8B1D6D41A700DB2C8B /* SSJMagicExportCalendarViewCell.m in Sources */,
 				9CECFC8C1D6D41A700DB2C8B /* SSJThemeUtil.m in Sources */,
+				9CECFC8D1D6D41A700DB2C8B /* (null) in Sources */,
 				9CECFC8E1D6D41A700DB2C8B /* SSJReportFormsIncomeAndPayCell.m in Sources */,
 				9CECFC8F1D6D41A700DB2C8B /* SSJThemeManagerCollectionViewCell.m in Sources */,
 				9CECFC901D6D41A700DB2C8B /* SSJUnlimitedScrollView.m in Sources */,
@@ -11728,7 +11778,6 @@
 				7DAA38481D952A8B000ED16E /* SSJBudgetBillTypeSelectionCell.m in Sources */,
 				9C17B54C1DEED8A1000D6C99 /* SSJSummaryBooksHeaderView.m in Sources */,
 				9CECFC981D6D41A700DB2C8B /* SSJNickNameModifyView.m in Sources */,
-				677B335F81AF40FF3D3DBB4E /* SSJDatabaseVersion12.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -11785,6 +11834,7 @@
 				9C9324081D9E591E00EBD216 /* SSJSearchResultOrderHeader.m in Sources */,
 				9CECFF361D6D41EB00DB2C8B /* SSJListMenuCell.m in Sources */,
 				9CECFF371D6D41EB00DB2C8B /* SSJBookkeepingTreeViewController.m in Sources */,
+				9CECFF391D6D41EB00DB2C8B /* (null) in Sources */,
 				9CECFF3A1D6D41EB00DB2C8B /* SSJLoadMoreCell.m in Sources */,
 				9CECFF3B1D6D41EB00DB2C8B /* SSJThemeDownLoadCompleteService.m in Sources */,
 				7D24ED931D9E6F8E003C4248 /* SSJBudgetDetailHeaderViewItem.m in Sources */,
@@ -11854,7 +11904,6 @@
 				9CECFF691D6D41EB00DB2C8B /* SSJWaveWaterView.m in Sources */,
 				9CECFF6A1D6D41EB00DB2C8B /* SSJClearUserDataService.m in Sources */,
 				9CECFF6B1D6D41EB00DB2C8B /* SSJCategoryListHelper.m in Sources */,
-				918A32CD1E35EA1B002C4685 /* SSJThemeAndAdviceDotItem.m in Sources */,
 				9CECFF6C1D6D41EB00DB2C8B /* SSJFundingDetailDateHeader.m in Sources */,
 				9C9A0C1C1D6D9579002AF046 /* SSJColorSelectCollectionViewCell.m in Sources */,
 				9CECFF6D1D6D41EB00DB2C8B /* SSJBudgetEditUnitTextField.m in Sources */,
@@ -11870,6 +11919,7 @@
 				9CECFF741D6D41EB00DB2C8B /* SSJForgotPSWResetService.m in Sources */,
 				9CECFF751D6D41EB00DB2C8B /* SSJReportFormsScaleAxisCell.m in Sources */,
 				9CECFF761D6D41EB00DB2C8B /* SSJNewBaseTableViewController.m in Sources */,
+				9CECFF771D6D41EB00DB2C8B /* (null) in Sources */,
 				9CECFF781D6D41EB00DB2C8B /* SSJMotionPasswordViewController.m in Sources */,
 				7D8C7EA41D6F19BA00D72E2D /* SSJLoanCloseOutViewController.m in Sources */,
 				9CECFF791D6D41EB00DB2C8B /* SSJFundingDetailCell.m in Sources */,
@@ -11918,7 +11968,6 @@
 				9CECFF941D6D41EB00DB2C8B /* SSJUserItem.m in Sources */,
 				9CECFF951D6D41EB00DB2C8B /* SSJMemoMakingView.m in Sources */,
 				9CECFF961D6D41EB00DB2C8B /* SSJMineHomeTableViewHeader.m in Sources */,
-				7D28B5F01E4B413300C06D90 /* SSJFundingTransferPeriodSelectionView.m in Sources */,
 				9CECFF971D6D41EB00DB2C8B /* SSJColorAddition.m in Sources */,
 				9C9A0CA31D73D1B7002AF046 /* SSJNewCreditCardViewController.m in Sources */,
 				9CECFF981D6D41EB00DB2C8B /* SSJCircleChargeTypeSelectView.m in Sources */,
@@ -12024,6 +12073,7 @@
 				7DF5329A1E13BBBE009A6F6C /* SSJAdviceItem.m in Sources */,
 				7DF19EDC1D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m in Sources */,
 				9CECFFD91D6D41EB00DB2C8B /* SSJSegmentedControl.m in Sources */,
+				9CECFFDA1D6D41EB00DB2C8B /* (null) in Sources */,
 				9CECFFDB1D6D41EB00DB2C8B /* SSJCustomCollectionViewFlowLayout.m in Sources */,
 				9CECFFDC1D6D41EB00DB2C8B /* SSJBillingChargeHelper.m in Sources */,
 				9CECFFDD1D6D41EB00DB2C8B /* SSJForgetPasswordSecondStepViewController.m in Sources */,
@@ -12037,7 +12087,6 @@
 				7DFD30481D75217300A0D7A0 /* SSJCategoryEditableCollectionView.m in Sources */,
 				9CECFFE51D6D41EB00DB2C8B /* SSJAlertViewAdapter.m in Sources */,
 				9C9A0C941D73CDC8002AF046 /* SSJCreditCardItem.m in Sources */,
-				9160DC3F1E2F672600419CC2 /* SSJNewDotNetworkService.m in Sources */,
 				9CECFFE61D6D41EB00DB2C8B /* SSJConstant.m in Sources */,
 				9CECFFE71D6D41EB00DB2C8B /* SSJDailySumChargeTable.m in Sources */,
 				9C4EBCA11D7D1D0E00BE4982 /* SSJThirdPartLoginItem.m in Sources */,
@@ -12066,7 +12115,6 @@
 				91F7FD2D1DFA8CD3005F4B6B /* SSJChatMessageItem.m in Sources */,
 				9CECFFF91D6D41EB00DB2C8B /* SSJCalenderDetailHeader.m in Sources */,
 				9CECFFFA1D6D41EB00DB2C8B /* SSJNewCategoryCollectionView.m in Sources */,
-				9CC0B2BC1E2DF05400495D53 /* SSJCalenderScreenShotHelper.m in Sources */,
 				9CECFFFB1D6D41EB00DB2C8B /* SSJMemberSelectView.m in Sources */,
 				7DDB6F171E25D82000B6A68A /* SSJDatabaseVersion11.m in Sources */,
 				9CECFFFC1D6D41EB00DB2C8B /* SSJChargeCircleSelectView.m in Sources */,
@@ -12119,6 +12167,7 @@
 				7DFD30561D75268D00A0D7A0 /* SSJCategoryEditableCollectionViewCell.m in Sources */,
 				9CEC001B1D6D41EB00DB2C8B /* SSJWeiXinLoginHelper.m in Sources */,
 				9C17B52D1DEED7B1000D6C99 /* SSJBooksParentSelectView.m in Sources */,
+				9CEC001C1D6D41EB00DB2C8B /* (null) in Sources */,
 				9CEC001D1D6D41EB00DB2C8B /* SSJMagicExportCalendarViewController.m in Sources */,
 				9CEC001E1D6D41EB00DB2C8B /* SSJMineHeaderView.m in Sources */,
 				7DDB6D271DB9A57200D823AE /* SSJDomainManager.m in Sources */,
@@ -12144,6 +12193,7 @@
 				9CEC002C1D6D41EB00DB2C8B /* SSJBaseCollectionViewController.m in Sources */,
 				9CEC002D1D6D41EB00DB2C8B /* SSJCalenderTableViewNoDataHeader.m in Sources */,
 				9CEC002E1D6D41EB00DB2C8B /* SSJBookkeepingTreeStore.m in Sources */,
+				9CEC00301D6D41EB00DB2C8B /* (null) in Sources */,
 				7D6CC9161E0A798D00FF6133 /* SSJReportFormsCurveCell.m in Sources */,
 				9CEC00311D6D41EB00DB2C8B /* SSJChargeReminderTimeView.m in Sources */,
 				7DC318811E2882A300932644 /* FMDatabasePool.m in Sources */,
@@ -12227,6 +12277,7 @@
 				9CEC00711D6D41EB00DB2C8B /* SSJFundingTypeTableViewCell.m in Sources */,
 				7DAA38411D952330000ED16E /* SSJBudgetBillTypeSelectionViewController.m in Sources */,
 				9CEC00721D6D41EB00DB2C8B /* SSJBookkeepingTreeDescView.m in Sources */,
+				9CEC00731D6D41EB00DB2C8B /* (null) in Sources */,
 				9CEC00741D6D41EB00DB2C8B /* SSJFundingTransferViewController.m in Sources */,
 				9CEC00751D6D41EB00DB2C8B /* SSJScrollTextView.m in Sources */,
 				916E31DF1DF8EEE2003C18D4 /* SSJHeaderBannerImageView.m in Sources */,
@@ -12240,10 +12291,10 @@
 				9CEC007A1D6D41EB00DB2C8B /* SSJReportFormsSwitchYearControl.m in Sources */,
 				9CEC007B1D6D41EB00DB2C8B /* SSJMineSyncButton.m in Sources */,
 				9CEC007C1D6D41EB00DB2C8B /* SSJThemeCollectionHeaderView.m in Sources */,
-				916F18E41E4C72C900AE5F98 /* SSJHomeCalendarView.m in Sources */,
 				9C91AE291D94DEB400B585AA /* SSJSearchingViewController.m in Sources */,
 				9CEC007D1D6D41EB00DB2C8B /* SSJPagingNetworkService.m in Sources */,
 				9C24CFC71D76CA010095D150 /* SSJBooksTypeItem.m in Sources */,
+				9CEC007E1D6D41EB00DB2C8B /* (null) in Sources */,
 				9CEC007F1D6D41EB00DB2C8B /* SCYMotionEncryptionTriangleLayer.m in Sources */,
 				7D4A79771DD46D6100E905F4 /* SSJLoanChargeAddOrEditViewController.m in Sources */,
 				9C9A0C191D6D9569002AF046 /* SSJLoanSyncTable.m in Sources */,
@@ -12251,6 +12302,7 @@
 				9CEC00811D6D41EB00DB2C8B /* SSJADDNewTypeViewController.m in Sources */,
 				9CEC00831D6D41EB00DB2C8B /* SSJMagicExportCalendarViewCell.m in Sources */,
 				9CEC00841D6D41EB00DB2C8B /* SSJThemeUtil.m in Sources */,
+				9CEC00851D6D41EB00DB2C8B /* (null) in Sources */,
 				9CEC00861D6D41EB00DB2C8B /* SSJReportFormsIncomeAndPayCell.m in Sources */,
 				9CEC00871D6D41EB00DB2C8B /* SSJThemeManagerCollectionViewCell.m in Sources */,
 				9CEC00881D6D41EB00DB2C8B /* SSJUnlimitedScrollView.m in Sources */,
@@ -12268,7 +12320,6 @@
 				7DAA38491D952A8B000ED16E /* SSJBudgetBillTypeSelectionCell.m in Sources */,
 				9C17B54D1DEED8A1000D6C99 /* SSJSummaryBooksHeaderView.m in Sources */,
 				9CEC00901D6D41EB00DB2C8B /* SSJNickNameModifyView.m in Sources */,
-				677B3D52E8AEC460D1F5F310 /* SSJDatabaseVersion12.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -12530,7 +12581,6 @@
 				BD70DF601C4751EA000E6CC9 /* SSJGuideView.m in Sources */,
 				7D9F5BCB1D6D9CA600362CFA /* SSJLoanDateSelectionView.m in Sources */,
 				7D5C862E1D2F96D300C73A9A /* SSJThemePlugin.m in Sources */,
-				916F18E01E4C72C900AE5F98 /* SSJHomeCalendarView.m in Sources */,
 				BD04331D1C1A78B40051E7AB /* SSJDataAddition.m in Sources */,
 				9C9471761CEB224C00D69079 /* SSJFinancingHomeitem.m in Sources */,
 				9C4EBC951D7D1C4B00BE4982 /* SSJThirdPartLoginItem.m in Sources */,
@@ -12572,7 +12622,6 @@
 				7DC5F4171DDC655200672539 /* SSJLoanInterestTypeAlertView.m in Sources */,
 				BD0433231C1A78B40051E7AB /* SSJFontAddition.m in Sources */,
 				9CD9BC0E1CFD2DAA0061803B /* SSJMagicExportViewController.m in Sources */,
-				918A32C91E35EA1B002C4685 /* SSJThemeAndAdviceDotItem.m in Sources */,
 				7DC318871E2882A300932644 /* FMResultSet.m in Sources */,
 				9CD5168C1D9D00960040480B /* SSJHistoryHeader.m in Sources */,
 				BD33FD2E1C4B2E4C006A6942 /* SSJAlertViewAdapter.m in Sources */,
@@ -12682,7 +12731,6 @@
 				9C1723871D52D3D100BB13DE /* SSJCanlenderChargeDetailCell.m in Sources */,
 				9CF594001D63FFBB00006594 /* SSJColorSelectCollectionViewCell.m in Sources */,
 				7DE0896F1D333ED4008431D6 /* SSJDatabaseVersion5.m in Sources */,
-				9160DC3B1E2F672600419CC2 /* SSJNewDotNetworkService.m in Sources */,
 				7D1D7F4A1C87EC660001F72A /* SSJRegularManager.m in Sources */,
 				9C24CFD61D76CC250095D150 /* SSJBooksEditeOrNewViewController.m in Sources */,
 				7D6CC8F71E0A731C00FF6133 /* SSJReportFormsCurveCell.m in Sources */,
@@ -12772,7 +12820,6 @@
 				7DF19ED81D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m in Sources */,
 				9CD9BC031CFD2DAA0061803B /* SSJBookkeepingTreeDescView.m in Sources */,
 				9CD9BC431CFD2E470061803B /* SSJFundingTransferViewController.m in Sources */,
-				9CC0B2B11E2DEFF800495D53 /* SSJCalenderScreenShotHelper.m in Sources */,
 				7D5F33341CEAE6C10086B67E /* SSJScrollTextView.m in Sources */,
 				9CF594021D63FFBB00006594 /* SSJModifyFundingTableViewCell.m in Sources */,
 				7D4EF8821C43B10C003C4B20 /* SSJFundAccountTable.m in Sources */,
@@ -12800,7 +12847,6 @@
 				9C7C9E691DB706DC0095F49B /* SSJSearchResultSummaryItem.m in Sources */,
 				9C65CA0B1D4B39AE0058D0A4 /* SSJThemeManagerCollectionViewCell.m in Sources */,
 				7D87AEB11D66DF3F0024D33C /* SSJUserRemindSyncTable.m in Sources */,
-				7D28B5EC1E4B413300C06D90 /* SSJFundingTransferPeriodSelectionView.m in Sources */,
 				7D6AAB631C312C500007C0A3 /* SSJUnlimitedScrollView.m in Sources */,
 				7D5F333B1CEAE6C10086B67E /* SSJBudgetListCellItem.m in Sources */,
 				9CD9BC2C1CFD2DAA0061803B /* SSJSyncSettingTableViewCell.m in Sources */,
@@ -12811,7 +12857,6 @@
 				BD0432F21C1A77BB0051E7AB /* SRRefreshView.m in Sources */,
 				7D6AAB671C3130220007C0A3 /* SSJPageControl.m in Sources */,
 				9CD9BC381CFD2DAA0061803B /* SSJNickNameModifyView.m in Sources */,
-				677B344C20D8A072243227BC /* SSJDatabaseVersion12.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -12880,6 +12925,7 @@
 /* Begin XCBuildConfiguration section */
 		7D08A2D31E4999D30085A8FB /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 13DED3B91912A4CA23981548 /* Pods-YouYuJiZhangGuanJia.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuJiZhangGuanJia;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -12917,6 +12963,7 @@
 		};
 		7D08A2D41E4999D30085A8FB /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A667F7088E87A8C8B73EC269 /* Pods-YouYuJiZhangGuanJia.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuJiZhangGuanJia;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -12951,548 +12998,9 @@
 			};
 			name = Release;
 		};
-		7D5738D61E2F4D3C006F4AA2 /* Debug-production */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 55FB426833A78CE202A88098 /* Pods-SuiShouJi.debug-production.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co. Ltd.";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co. Ltd.";
-				DEVELOPMENT_TEAM = 747363KXQ6;
-				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
-				);
-				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					"COCOAPODS=1",
-					"SD_WEBP=1",
-				);
-				INFOPLIST_FILE = SuiShouJi/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
-				PRODUCT_NAME = SuiShouJi;
-				PROVISIONING_PROFILE = "25f5d9b1-62eb-4061-a252-d6f785f59782";
-				PROVISIONING_PROFILE_SPECIFIER = JiZhangEnterpriseAdHoc;
-				SWIFT_OBJC_BRIDGING_HEADER = "";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				TARGETED_DEVICE_FAMILY = 1;
-			};
-			name = "Debug-production";
-		};
-		7D5738D71E2F4D3C006F4AA2 /* Debug-production */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = D0F6A217294B151BAE8FB0A3 /* Pods-youyujizhang.debug-production.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Xiaoyong Wu (8WX4Y5V9K8)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Xiaoyong Wu (8WX4Y5V9K8)";
-				DEVELOPMENT_TEAM = E25A2E4ZN2;
-				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/AlipayZF",
-					"$(PROJECT_DIR)",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
-				);
-				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					"COCOAPODS=1",
-					"SD_WEBP=1",
-				);
-				INFOPLIST_FILE = "$(SRCROOT)/SuiShouJi/youyu-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/AlipayZF",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMengFeedback/UMFeedback_iOS_2.3.4/UMengFeedback_SDK",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMengFeedback/UMFeedback_iOS_2.3.4/UMengFeedback_SDK/UMOpus",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_5.2.1",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/SinaSSO",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/Wechat",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhang;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "a56fd33a-a686-41d2-8cd2-e0a953a5f2e4";
-				PROVISIONING_PROFILE_SPECIFIER = youyujizhangAppStoreDeve;
-				SWIFT_OBJC_BRIDGING_HEADER = "";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-			};
-			name = "Debug-production";
-		};
-		7D5738D81E2F4D3C006F4AA2 /* Debug-production */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 34961CC770212A1952F076D7 /* Pods-JiZhangGuanJia.debug-production.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = JiZhangGuanJia;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: dai xumian (SS244Q3QSZ)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: dai xumian (SS244Q3QSZ)";
-				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/AlipayZF",
-					"$(PROJECT_DIR)",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
-				);
-				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					"COCOAPODS=1",
-					"SD_WEBP=1",
-				);
-				INFOPLIST_FILE = "SuiShouJi copy-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/AlipayZF",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMengFeedback/UMFeedback_iOS_2.3.4/UMengFeedback_SDK",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMengFeedback/UMFeedback_iOS_2.3.4/UMengFeedback_SDK/UMOpus",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_5.2.1",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/SinaSSO",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/Wechat",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhangguanjia;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "26319b74-4d35-4298-91a4-4bc90f9b8258";
-				SWIFT_OBJC_BRIDGING_HEADER = "";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-			};
-			name = "Debug-production";
-		};
-		7D5738D91E2F4D3C006F4AA2 /* Debug-production */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6E70CA34C65052613EDC23DB /* Pods-YouYuJiZhangBen.debug-production.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuJiZhangBen;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: dai menglin (2Z4WFTCYDJ)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: dai menglin (2Z4WFTCYDJ)";
-				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/AlipayZF",
-					"$(PROJECT_DIR)",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
-				);
-				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					"COCOAPODS=1",
-					"SD_WEBP=1",
-				);
-				INFOPLIST_FILE = "SuiShouJi copy2-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/AlipayZF",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMengFeedback/UMFeedback_iOS_2.3.4/UMengFeedback_SDK",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMengFeedback/UMFeedback_iOS_2.3.4/UMengFeedback_SDK/UMOpus",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_5.2.1",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/SinaSSO",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/Wechat",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhangben;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "6006d513-3fc0-4850-8601-d473d8dcaafd";
-				SWIFT_OBJC_BRIDGING_HEADER = "";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-			};
-			name = "Debug-production";
-		};
-		7D5738DA1E2F4D3C006F4AA2 /* Debug-production */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 96D05FD3A6D1AF2E3A43D98C /* Pods-YouYuJiZhangLiCai.debug-production.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuJiZhangLiCai;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Wu Can (2ZP363JWTL)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Wu Can (2ZP363JWTL)";
-				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/AlipayZF",
-					"$(PROJECT_DIR)",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
-				);
-				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					"COCOAPODS=1",
-					"SD_WEBP=1",
-				);
-				INFOPLIST_FILE = "SuiShouJi copy3-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/AlipayZF",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMengFeedback/UMFeedback_iOS_2.3.4/UMengFeedback_SDK",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMengFeedback/UMFeedback_iOS_2.3.4/UMengFeedback_SDK/UMOpus",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_5.2.1",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/SinaSSO",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/Wechat",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhanglicai;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "e6c69c88-f91c-4ee1-ab81-bb118f514fd6";
-				SWIFT_OBJC_BRIDGING_HEADER = "";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-			};
-			name = "Debug-production";
-		};
-		7D5738DB1E2F4D3C006F4AA2 /* Debug-production */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Vendor/AlipayZF",
-				);
-				INFOPLIST_FILE = SuiShouJiTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Vendor/AlipayZF",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = caiyi.SuiShouJiTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SuiShouJi.app/SuiShouJi";
-			};
-			name = "Debug-production";
-		};
-		7D5738DC1E2F4D3C006F4AA2 /* Debug-production */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				INFOPLIST_FILE = SuiShouJiUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = caiyi.SuiShouJiUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_TARGET_NAME = SuiShouJi;
-				USES_XCTRUNNER = YES;
-			};
-			name = "Debug-production";
-		};
-		7D5738DD1E2F4D78006F4AA2 /* Release-production */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				ENABLE_NS_ASSERTIONS = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_PREPROCESSOR_DEFINITIONS = "PRODUCTION=1";
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				MTL_ENABLE_DEBUG_INFO = NO;
-				SDKROOT = iphoneos;
-				VALIDATE_PRODUCT = YES;
-			};
-			name = "Release-production";
-		};
-		7D5738DE1E2F4D78006F4AA2 /* Release-production */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0254E364AA6A718DADFBB3E4 /* Pods-SuiShouJi.release-production.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co. Ltd.";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co. Ltd.";
-				DEVELOPMENT_TEAM = 747363KXQ6;
-				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
-				);
-				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					"COCOAPODS=1",
-					"SD_WEBP=1",
-				);
-				INFOPLIST_FILE = SuiShouJi/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				ONLY_ACTIVE_ARCH = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
-				PRODUCT_NAME = SuiShouJi;
-				PROVISIONING_PROFILE = "25f5d9b1-62eb-4061-a252-d6f785f59782";
-				PROVISIONING_PROFILE_SPECIFIER = JiZhangEnterpriseAdHoc;
-				SWIFT_OBJC_BRIDGING_HEADER = "";
-				TARGETED_DEVICE_FAMILY = 1;
-			};
-			name = "Release-production";
-		};
-		7D5738DF1E2F4D78006F4AA2 /* Release-production */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3A4D4185B850D1815AADC9B9 /* Pods-youyujizhang.release-production.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Xiaoyong Wu (E25A2E4ZN2)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Xiaoyong Wu (E25A2E4ZN2)";
-				DEVELOPMENT_TEAM = E25A2E4ZN2;
-				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/AlipayZF",
-					"$(PROJECT_DIR)",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
-				);
-				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					"COCOAPODS=1",
-					"SD_WEBP=1",
-				);
-				INFOPLIST_FILE = "$(SRCROOT)/SuiShouJi/youyu-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/AlipayZF",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMengFeedback/UMFeedback_iOS_2.3.4/UMengFeedback_SDK",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMengFeedback/UMFeedback_iOS_2.3.4/UMengFeedback_SDK/UMOpus",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_5.2.1",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/SinaSSO",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/Wechat",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhang;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "4f90dc0a-abbc-4b9d-8078-d82276a69e60";
-				PROVISIONING_PROFILE_SPECIFIER = youyujizhangAppStoreDis;
-				SWIFT_OBJC_BRIDGING_HEADER = "";
-			};
-			name = "Release-production";
-		};
-		7D5738E01E2F4D78006F4AA2 /* Release-production */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 815F9F2F587CE772D9879229 /* Pods-JiZhangGuanJia.release-production.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = JiZhangGuanJia;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: dai xumian (9HCRD5N85G)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: dai xumian (9HCRD5N85G)";
-				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/AlipayZF",
-					"$(PROJECT_DIR)",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
-				);
-				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					"COCOAPODS=1",
-					"SD_WEBP=1",
-				);
-				INFOPLIST_FILE = "SuiShouJi copy-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/AlipayZF",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMengFeedback/UMFeedback_iOS_2.3.4/UMengFeedback_SDK",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMengFeedback/UMFeedback_iOS_2.3.4/UMengFeedback_SDK/UMOpus",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_5.2.1",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/SinaSSO",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/Wechat",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhangguanjia;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "a3578fd9-6eae-4566-aca5-ab536a992bca";
-				SWIFT_OBJC_BRIDGING_HEADER = "";
-			};
-			name = "Release-production";
-		};
-		7D5738E11E2F4D78006F4AA2 /* Release-production */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 47DC0E8C7D9EDF12EA88DED4 /* Pods-YouYuJiZhangBen.release-production.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuJiZhangBen;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: dai menglin (K63W8Y2JZS)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: dai menglin (K63W8Y2JZS)";
-				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/AlipayZF",
-					"$(PROJECT_DIR)",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
-				);
-				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					"COCOAPODS=1",
-					"SD_WEBP=1",
-				);
-				INFOPLIST_FILE = "SuiShouJi copy2-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/AlipayZF",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMengFeedback/UMFeedback_iOS_2.3.4/UMengFeedback_SDK",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMengFeedback/UMFeedback_iOS_2.3.4/UMengFeedback_SDK/UMOpus",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_5.2.1",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/SinaSSO",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/Wechat",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhangben;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "6000200f-6460-4a18-99bc-801a0d0bdd1a";
-				SWIFT_OBJC_BRIDGING_HEADER = "";
-			};
-			name = "Release-production";
-		};
-		7D5738E21E2F4D78006F4AA2 /* Release-production */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1B895A9618C21A67E80B977B /* Pods-YouYuJiZhangLiCai.release-production.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuJiZhangLiCai;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Wu Can (GZ7Q3299CT)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Wu Can (GZ7Q3299CT)";
-				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/AlipayZF",
-					"$(PROJECT_DIR)",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
-				);
-				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					"COCOAPODS=1",
-					"SD_WEBP=1",
-				);
-				INFOPLIST_FILE = "SuiShouJi copy3-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/AlipayZF",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMengFeedback/UMFeedback_iOS_2.3.4/UMengFeedback_SDK",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMengFeedback/UMFeedback_iOS_2.3.4/UMengFeedback_SDK/UMOpus",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_5.2.1",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/SinaSSO",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/Wechat",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhanglicai;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "3624541f-ed23-46a4-970b-eca8ae759684";
-				SWIFT_OBJC_BRIDGING_HEADER = "";
-			};
-			name = "Release-production";
-		};
-		7D5738E31E2F4D78006F4AA2 /* Release-production */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Vendor/AlipayZF",
-				);
-				INFOPLIST_FILE = SuiShouJiTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Vendor/AlipayZF",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = caiyi.SuiShouJiTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SuiShouJi.app/SuiShouJi";
-			};
-			name = "Release-production";
-		};
-		7D5738E41E2F4D78006F4AA2 /* Release-production */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				INFOPLIST_FILE = SuiShouJiUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = caiyi.SuiShouJiUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_TARGET_NAME = SuiShouJi;
-				USES_XCTRUNNER = YES;
-			};
-			name = "Release-production";
-		};
 		7DA13C2A1E35AED7000490A4 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9892BFAB47044275B53028C0 /* Pods-YouYuJiZhangBao.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuJiZhangBao;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -13520,8 +13028,8 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhangbao;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "e1b12052-3986-45e4-a9b1-2a111c6eb0b6";
-				PROVISIONING_PROFILE_SPECIFIER = YouYuJiZhangBaoDis;
+				PROVISIONING_PROFILE = "281b6065-ab02-4582-a0e5-bae1f7df9367";
+				PROVISIONING_PROFILE_SPECIFIER = YYJiZhangBaoDev;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -13530,6 +13038,7 @@
 		};
 		7DA13C2B1E35AED7000490A4 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B628019ECCD0A5E2646A5A09 /* Pods-YouYuJiZhangBao.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuJiZhangBao;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -13557,16 +13066,16 @@
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhangbao;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "e1b12052-3986-45e4-a9b1-2a111c6eb0b6";
-				PROVISIONING_PROFILE_SPECIFIER = YouYuJiZhangBaoDis;
+				PROVISIONING_PROFILE = "47771e49-430f-4d45-b255-eb79843eb7ed";
+				PROVISIONING_PROFILE_SPECIFIER = YYJiZhangBaoAdHoc;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
-		7DBA59891D6D32B700C02D79 /* Debug-test */ = {
+		7DBA59891D6D32B700C02D79 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = CB7363C1C6FE737D6FCE9670 /* Pods-JiZhangGuanJia.debug-test.xcconfig */;
+			baseConfigurationReference = 1BCD58B8B9CBEA7ED5E6BDD4 /* Pods-JiZhangGuanJia.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = JiZhangGuanJia;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -13607,11 +13116,11 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
-			name = "Debug-test";
+			name = Debug;
 		};
-		7DBA598A1D6D32B700C02D79 /* Release-test */ = {
+		7DBA598A1D6D32B700C02D79 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3702E63F5BADCB2297038131 /* Pods-JiZhangGuanJia.release-test.xcconfig */;
+			baseConfigurationReference = DB9B0038A884FAF5FA1CEB4F /* Pods-JiZhangGuanJia.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = JiZhangGuanJia;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -13651,11 +13160,11 @@
 				PROVISIONING_PROFILE = "a3578fd9-6eae-4566-aca5-ab536a992bca";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 			};
-			name = "Release-test";
+			name = Release;
 		};
-		9C2A6A9B1D194CA70010F1DA /* Debug-test */ = {
+		9C2A6A9B1D194CA70010F1DA /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7FA0ADF46B0556AB3A749227 /* Pods-youyujizhang.debug-test.xcconfig */;
+			baseConfigurationReference = 8243DAE18B924886B7E827E5 /* Pods-youyujizhang.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -13698,11 +13207,11 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
-			name = "Debug-test";
+			name = Debug;
 		};
-		9C2A6A9C1D194CA70010F1DA /* Release-test */ = {
+		9C2A6A9C1D194CA70010F1DA /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4BBE3799BF873355BD237283 /* Pods-youyujizhang.release-test.xcconfig */;
+			baseConfigurationReference = 409F6679D47EFA5753A58706 /* Pods-youyujizhang.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -13744,53 +13253,11 @@
 				PROVISIONING_PROFILE_SPECIFIER = youyujizhangAppStoreDis;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 			};
-			name = "Release-test";
+			name = Release;
 		};
-		9CA79C361E49CBF40096B6AD /* Debug-test */ = {
+		9CEC02FE1D6D41EB00DB2C8B /* Debug */ = {
 			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = SuiShouJi;
-			};
-			name = "Debug-test";
-		};
-		9CA79C371E49CBF40096B6AD /* Release-test */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = SuiShouJi;
-			};
-			name = "Release-test";
-		};
-		9CA79C381E49CBF40096B6AD /* Release-production */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = SuiShouJi;
-			};
-			name = "Release-production";
-		};
-		9CA79C391E49CBF40096B6AD /* Debug-test */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = SuiShouJi;
-			};
-			name = "Debug-test";
-		};
-		9CA79C3A1E49CBF40096B6AD /* Release-test */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = SuiShouJi;
-			};
-			name = "Release-test";
-		};
-		9CA79C3B1E49CBF40096B6AD /* Release-production */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = SuiShouJi;
-			};
-			name = "Release-production";
-		};
-		9CEC02FE1D6D41EB00DB2C8B /* Debug-test */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 20AD3C2B85F3BBBAC87D1915 /* Pods-YouYuJiZhangLiCai.debug-test.xcconfig */;
+			baseConfigurationReference = CFF6621CBAC638A24B0361A7 /* Pods-YouYuJiZhangLiCai.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuJiZhangLiCai;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -13831,11 +13298,11 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
-			name = "Debug-test";
+			name = Debug;
 		};
-		9CEC02FF1D6D41EB00DB2C8B /* Release-test */ = {
+		9CEC02FF1D6D41EB00DB2C8B /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 21DE9FB1A4D6AE3217ECFA3A /* Pods-YouYuJiZhangLiCai.release-test.xcconfig */;
+			baseConfigurationReference = 2DEF1E8E40DA1003C5D69150 /* Pods-YouYuJiZhangLiCai.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuJiZhangLiCai;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -13875,11 +13342,11 @@
 				PROVISIONING_PROFILE = "3624541f-ed23-46a4-970b-eca8ae759684";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 			};
-			name = "Release-test";
+			name = Release;
 		};
-		9CECFF061D6D41A700DB2C8B /* Debug-test */ = {
+		9CECFF061D6D41A700DB2C8B /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A5B05CEDF4C5EA0ACB757AB7 /* Pods-YouYuJiZhangBen.debug-test.xcconfig */;
+			baseConfigurationReference = 71971C49348189D6064D4695 /* Pods-YouYuJiZhangBen.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuJiZhangBen;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -13920,11 +13387,11 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
-			name = "Debug-test";
+			name = Debug;
 		};
-		9CECFF071D6D41A700DB2C8B /* Release-test */ = {
+		9CECFF071D6D41A700DB2C8B /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = EBB57E4942412E08AB3C3151 /* Pods-YouYuJiZhangBen.release-test.xcconfig */;
+			baseConfigurationReference = 8ED51442757E13C0CDA434AA /* Pods-YouYuJiZhangBen.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuJiZhangBen;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -13964,9 +13431,9 @@
 				PROVISIONING_PROFILE = "6000200f-6460-4a18-99bc-801a0d0bdd1a";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 			};
-			name = "Release-test";
+			name = Release;
 		};
-		BD543C671C1A6DBC00910D61 /* Debug-test */ = {
+		BD543C671C1A6DBC00910D61 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -13996,8 +13463,8 @@
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
 					"DEBUG=1",
+					"$(inherited)",
 				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -14010,9 +13477,9 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 			};
-			name = "Debug-test";
+			name = Debug;
 		};
-		BD543C681C1A6DBC00910D61 /* Release-test */ = {
+		BD543C681C1A6DBC00910D61 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -14039,7 +13506,6 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_PREPROCESSOR_DEFINITIONS = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -14051,18 +13517,18 @@
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
-			name = "Release-test";
+			name = Release;
 		};
-		BD543C6A1C1A6DBC00910D61 /* Debug-test */ = {
+		BD543C6A1C1A6DBC00910D61 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0293AE0416F5E4A3F013D11D /* Pods-SuiShouJi.debug-test.xcconfig */;
+			baseConfigurationReference = 5899867574AEB0396C49AE15 /* Pods-SuiShouJi.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Can Wu (7Z729NG4UD)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Can Wu (7Z729NG4UD)";
-				DEVELOPMENT_TEAM = 747363KXQ6;
+				CODE_SIGN_IDENTITY = "iPhone Developer: XiaoYong  Wu (6CF3K2UQ7J)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: XiaoYong  Wu (6CF3K2UQ7J)";
+				DEVELOPMENT_TEAM = 534SCE47WT;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -14081,26 +13547,26 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
+				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhangAppStore;
 				PRODUCT_NAME = SuiShouJi;
-				PROVISIONING_PROFILE = "9395e777-7c74-4eb4-8840-b46530e22ddb";
-				PROVISIONING_PROFILE_SPECIFIER = JiZhangEnterpriseDevelopment;
+				PROVISIONING_PROFILE = "9a87925c-5f46-4ff3-a416-6d554befb528";
+				PROVISIONING_PROFILE_SPECIFIER = JiZhangAppStoreDeve;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
-			name = "Debug-test";
+			name = Debug;
 		};
-		BD543C6B1C1A6DBC00910D61 /* Release-test */ = {
+		BD543C6B1C1A6DBC00910D61 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 49E4D8FB52FA1A0F2DE98086 /* Pods-SuiShouJi.release-test.xcconfig */;
+			baseConfigurationReference = 3B725E607F2304D98F82B2A3 /* Pods-SuiShouJi.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Can Wu (7Z729NG4UD)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Can Wu (7Z729NG4UD)";
-				DEVELOPMENT_TEAM = 747363KXQ6;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co.,Ltd (534SCE47WT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co.,Ltd (534SCE47WT)";
+				DEVELOPMENT_TEAM = 534SCE47WT;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -14119,16 +13585,16 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				ONLY_ACTIVE_ARCH = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
+				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhangAppStore;
 				PRODUCT_NAME = SuiShouJi;
-				PROVISIONING_PROFILE = "9395e777-7c74-4eb4-8840-b46530e22ddb";
-				PROVISIONING_PROFILE_SPECIFIER = JiZhangEnterpriseDevelopment;
+				PROVISIONING_PROFILE = "49fe08fa-6102-40c0-ad98-acd2bd01c901";
+				PROVISIONING_PROFILE_SPECIFIER = JiZhangAppStoreDistribute;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
-			name = "Release-test";
+			name = Release;
 		};
-		BD543C6D1C1A6DBC00910D61 /* Debug-test */ = {
+		BD543C6D1C1A6DBC00910D61 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -14146,9 +13612,9 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SuiShouJi.app/SuiShouJi";
 			};
-			name = "Debug-test";
+			name = Debug;
 		};
-		BD543C6E1C1A6DBC00910D61 /* Release-test */ = {
+		BD543C6E1C1A6DBC00910D61 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -14166,9 +13632,9 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SuiShouJi.app/SuiShouJi";
 			};
-			name = "Release-test";
+			name = Release;
 		};
-		BD543C701C1A6DBC00910D61 /* Debug-test */ = {
+		BD543C701C1A6DBC00910D61 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				INFOPLIST_FILE = SuiShouJiUITests/Info.plist;
@@ -14178,9 +13644,9 @@
 				TEST_TARGET_NAME = SuiShouJi;
 				USES_XCTRUNNER = YES;
 			};
-			name = "Debug-test";
+			name = Debug;
 		};
-		BD543C711C1A6DBC00910D61 /* Release-test */ = {
+		BD543C711C1A6DBC00910D61 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				INFOPLIST_FILE = SuiShouJiUITests/Info.plist;
@@ -14190,7 +13656,7 @@
 				TEST_TARGET_NAME = SuiShouJi;
 				USES_XCTRUNNER = YES;
 			};
-			name = "Release-test";
+			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
@@ -14200,9 +13666,6 @@
 			buildConfigurations = (
 				7D08A2D31E4999D30085A8FB /* Debug */,
 				7D08A2D41E4999D30085A8FB /* Release */,
-				9CA79C391E49CBF40096B6AD /* Debug-test */,
-				9CA79C3A1E49CBF40096B6AD /* Release-test */,
-				9CA79C3B1E49CBF40096B6AD /* Release-production */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -14212,9 +13675,6 @@
 			buildConfigurations = (
 				7DA13C2A1E35AED7000490A4 /* Debug */,
 				7DA13C2B1E35AED7000490A4 /* Release */,
-				9CA79C361E49CBF40096B6AD /* Debug-test */,
-				9CA79C371E49CBF40096B6AD /* Release-test */,
-				9CA79C381E49CBF40096B6AD /* Release-production */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -14222,89 +13682,74 @@
 		7DBA59881D6D32B700C02D79 /* Build configuration list for PBXNativeTarget "JiZhangGuanJia" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				7DBA59891D6D32B700C02D79 /* Debug-test */,
-				7D5738D81E2F4D3C006F4AA2 /* Debug-production */,
-				7DBA598A1D6D32B700C02D79 /* Release-test */,
-				7D5738E01E2F4D78006F4AA2 /* Release-production */,
+				7DBA59891D6D32B700C02D79 /* Debug */,
+				7DBA598A1D6D32B700C02D79 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "Release-test";
+			defaultConfigurationName = Release;
 		};
 		9C2A6A9A1D194CA70010F1DA /* Build configuration list for PBXNativeTarget "youyujizhang" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				9C2A6A9B1D194CA70010F1DA /* Debug-test */,
-				7D5738D71E2F4D3C006F4AA2 /* Debug-production */,
-				9C2A6A9C1D194CA70010F1DA /* Release-test */,
-				7D5738DF1E2F4D78006F4AA2 /* Release-production */,
+				9C2A6A9B1D194CA70010F1DA /* Debug */,
+				9C2A6A9C1D194CA70010F1DA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "Release-test";
+			defaultConfigurationName = Release;
 		};
 		9CEC02FD1D6D41EB00DB2C8B /* Build configuration list for PBXNativeTarget "YouYuJiZhangLiCai" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				9CEC02FE1D6D41EB00DB2C8B /* Debug-test */,
-				7D5738DA1E2F4D3C006F4AA2 /* Debug-production */,
-				9CEC02FF1D6D41EB00DB2C8B /* Release-test */,
-				7D5738E21E2F4D78006F4AA2 /* Release-production */,
+				9CEC02FE1D6D41EB00DB2C8B /* Debug */,
+				9CEC02FF1D6D41EB00DB2C8B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "Release-test";
+			defaultConfigurationName = Release;
 		};
 		9CECFF051D6D41A700DB2C8B /* Build configuration list for PBXNativeTarget "YouYuJiZhangBen" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				9CECFF061D6D41A700DB2C8B /* Debug-test */,
-				7D5738D91E2F4D3C006F4AA2 /* Debug-production */,
-				9CECFF071D6D41A700DB2C8B /* Release-test */,
-				7D5738E11E2F4D78006F4AA2 /* Release-production */,
+				9CECFF061D6D41A700DB2C8B /* Debug */,
+				9CECFF071D6D41A700DB2C8B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "Release-test";
+			defaultConfigurationName = Release;
 		};
 		BD543C371C1A6DBC00910D61 /* Build configuration list for PBXProject "SuiShouJi" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				BD543C671C1A6DBC00910D61 /* Debug-test */,
-				BD543C681C1A6DBC00910D61 /* Release-test */,
-				7D5738DD1E2F4D78006F4AA2 /* Release-production */,
+				BD543C671C1A6DBC00910D61 /* Debug */,
+				BD543C681C1A6DBC00910D61 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "Release-test";
+			defaultConfigurationName = Release;
 		};
 		BD543C691C1A6DBC00910D61 /* Build configuration list for PBXNativeTarget "SuiShouJi" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				BD543C6A1C1A6DBC00910D61 /* Debug-test */,
-				7D5738D61E2F4D3C006F4AA2 /* Debug-production */,
-				BD543C6B1C1A6DBC00910D61 /* Release-test */,
-				7D5738DE1E2F4D78006F4AA2 /* Release-production */,
+				BD543C6A1C1A6DBC00910D61 /* Debug */,
+				BD543C6B1C1A6DBC00910D61 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "Release-test";
+			defaultConfigurationName = Release;
 		};
 		BD543C6C1C1A6DBC00910D61 /* Build configuration list for PBXNativeTarget "SuiShouJiTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				BD543C6D1C1A6DBC00910D61 /* Debug-test */,
-				7D5738DB1E2F4D3C006F4AA2 /* Debug-production */,
-				BD543C6E1C1A6DBC00910D61 /* Release-test */,
-				7D5738E31E2F4D78006F4AA2 /* Release-production */,
+				BD543C6D1C1A6DBC00910D61 /* Debug */,
+				BD543C6E1C1A6DBC00910D61 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "Release-test";
+			defaultConfigurationName = Release;
 		};
 		BD543C6F1C1A6DBC00910D61 /* Build configuration list for PBXNativeTarget "SuiShouJiUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				BD543C701C1A6DBC00910D61 /* Debug-test */,
-				7D5738DC1E2F4D3C006F4AA2 /* Debug-production */,
-				BD543C711C1A6DBC00910D61 /* Release-test */,
-				7D5738E41E2F4D78006F4AA2 /* Release-production */,
+				BD543C701C1A6DBC00910D61 /* Debug */,
+				BD543C711C1A6DBC00910D61 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "Release-test";
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
