@@ -328,7 +328,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
     }
     
     // 查询最大的周期转账流水的cid后缀
-    FMResultSet *resultSet = [db executeQuery:@"select max(cast(substr(uc.cid, legnth(tc.icycleid) + 2) as int)) as suffix, tc.icycleid from bk_user_charge as uc, bk_transfer_cycle as tc where uc.cuserid = ? and tc.cuserid = uc.cuserid and uc.ichargetype = 5 and uc.cid like (tc.icycleid || '-%') and tc.operatortype <> 2 and tc.istate <> 0 group by tc.icycleid", userId];
+    FMResultSet *resultSet = [db executeQuery:@"select max(cast(substr(uc.cid, length(tc.icycleid) + 2) as int)) as suffix, tc.icycleid from bk_user_charge as uc, bk_transfer_cycle as tc where uc.cuserid = ? and tc.cuserid = uc.cuserid and uc.ichargetype = 5 and uc.cid like (tc.icycleid || '-%') and tc.operatortype <> 2 and tc.istate <> 0 group by tc.icycleid", userId];
     if (!resultSet) {
         return NO;
     }
