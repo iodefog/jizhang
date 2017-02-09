@@ -24,7 +24,8 @@ typedef NS_OPTIONS(NSInteger, SSJDatePickerComponent) {
 
 @interface SSJHomeCalendarView : UIControl
 
-@property (nonatomic) SSJDatePickerMode datePickerMode;
+//@property (nonatomic) SSJDatePickerMode datePickerMode;
+
 @property (nonatomic, strong) NSDate *date;
 /**
  最小时间默认年份在2001-2038之间
@@ -34,10 +35,31 @@ typedef NS_OPTIONS(NSInteger, SSJDatePickerComponent) {
  最大时间默认年份在2001-2038之间
  */
 @property (nonatomic, strong) NSDate *maxDate;
-//- (void)setDate:(NSDate *)date animated:(BOOL)animated;
+
+//显示，消失
+@property (nonatomic, copy) void(^dismissBlock)();
+@property (nonatomic, copy) void(^showBlock)();
+
+/**
+ 背景颜色
+ */
+@property (nonatomic, copy) NSString *bgColor;
+/**
+ 分割线颜色
+ */
+@property (nonatomic, copy) NSString *separatorColor;
+/**
+ 主色调
+ */
+@property (nonatomic, copy) NSString *mainColor;
+
+//选择日期按钮返回选中的时间
+@property (nonatomic, copy) void(^confirmBlock)(NSDate *selecteDate);
 
 - (void)setTitleColor:(UIColor *)color forComponent:(SSJDatePickerComponent)component;
 
 - (void)setFillColor:(UIColor *)color forComponent:(SSJDatePickerComponent)component;
 
+- (void)show;
+- (void)dismiss;
 @end
