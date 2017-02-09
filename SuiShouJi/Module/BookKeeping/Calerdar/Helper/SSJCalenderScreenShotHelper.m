@@ -10,7 +10,7 @@
 
 @implementation SSJCalenderScreenShotHelper
 
-+ (void)screenShotForCalenderWithCellImage:(UIImage *)image Date:(NSDate *)date income:(double)income expence:(double)expence imageBlock:(void (^)(UIImage *image))imageBlock {
++ (void)screenShotForCalenderWithCellImages:(NSArray *)images Date:(NSDate *)date income:(double)income expence:(double)expence imageBlock:(void (^)(UIImage *image))imageBlock {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         UIImage *shareImage = nil;
         
@@ -19,14 +19,18 @@
         UIImage *qrImage = [UIImage imageNamed:@"calendar_qrImage"];
         
         UIImage *backImage = [UIImage ssj_themeImageWithName:@"background"];
+    
+        if (!backImage) {
+            backImage = [UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(SSJSCREENWITH, SSJSCREENHEIGHT)];
+        }
         
-        double width = image.size.width;
+        double width = SSJSCREENWITH;
         
         // 调整两张图的宽和高
         double headerImageHeight = headerImage.size.height * width / headerImage.size.width;
-        double wholeHeight = MAX(headerImageHeight + 130 + image.size.height + 48, SSJSCREENWITH);
+        double wholeHeight = MAX(headerImageHeight + 130 + 90 * images.count + 48, SSJSCREENHEIGHT);
         [headerImage ssj_scaleImageWithSize:CGSizeMake(width, headerImageHeight)];
-        [backImage ssj_scaleImageWithSize:CGSizeMake(SSJSCREENWITH, SSJSCREENHEIGHT)];
+//        [backImage ssj_scaleImageWithSize:CGSizeMake(SSJSCREENWITH, SSJSCREENHEIGHT)];
 
         // 开始绘制
         UIGraphicsBeginImageContext(CGSizeMake(width, wholeHeight));
@@ -36,8 +40,8 @@
         
         // 如果长度超过总长度,则在下面补充纯色背景
         if (wholeHeight > backImage.size.height) {
-            UIImage *colorImage = [UIImage ssj_imageWithColor:[backImage ssj_getPixelColorAtLocation:CGPointMake(backImage.size.width, backImage.size.height)] size:CGSizeMake(backImage.size.width, wholeHeight - backImage.size.height)];
-            [colorImage drawInRect:CGRectMake(0, wholeHeight - SSJSCREENHEIGHT, width, wholeHeight - backImage.size.height)];
+            UIImage *colorImage = [UIImage ssj_imageWithColor:[backImage ssj_getPixelColorAtLocation:CGPointMake(backImage.size.width - 1, backImage.size.height - 1)] size:CGSizeMake(backImage.size.width, wholeHeight - backImage.size.height)];
+            [colorImage drawInRect:CGRectMake(0, backImage.size.height, width, wholeHeight - backImage.size.height)];
         }
         
         // 绘制第一张图
@@ -60,8 +64,8 @@
 
         // 写上年份
         NSString *yearStr = [NSString stringWithFormat:@"%04ld",(long)date.year];
-        CGSize yearSize = [yearStr sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:21]}];
-        [weekDayStr drawInRect:CGRectMake(firstImageCenterY + dateSize.height / 2 + 15, firstImageCenterX - dateSize.width / 2 - 10 - yearSize.width / 2, yearSize.height, yearSize.width) withAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:21],NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"#222222"]}];
+        CGSize yearSize = [yearStr sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13]}];
+        [yearStr drawInRect:CGRectMake(firstImageCenterX - dateSize.width / 2 - 10 - yearSize.width / 2, firstImageCenterY + dateSize.height / 2 + 5, yearSize.width, yearSize.height) withAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13],NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"#222222"]}];
         
         // 写上总收入
         NSString *incomeTitleStr = @"总收入:";
@@ -85,10 +89,14 @@
         
         
         // 把cell的截图画上去
-        [image drawInRect:CGRectMake(0, headerImageHeight + 50, width, image.size.height)];
+        for (UIImage *image in images) {
+            NSInteger index = [images indexOfObject:image];
+            [image drawInRect:CGRectMake(0, headerImageHeight + index * 90 + 48, width, 90)];
+
+        }
         
         // 把二维码的图画上去
-        [qrImage drawInRect:CGRectMake(width / 2 - qrImage.size.width / 2, wholeHeight - 65 - qrImage.size.height / 2, expenceSize.width, expenceSize.height)];
+        [qrImage drawInRect:CGRectMake(width / 2 - qrImage.size.width / 2, wholeHeight - 65 - qrImage.size.height / 2, qrImage.size.width, qrImage.size.height)];
         
         // 把二维码下面的字写上去
         NSString *qrStr = @"长按识别图中二维码,下载有鱼记账";
@@ -117,6 +125,40 @@
             
         default: return nil;
     }
+}
+
++ (NSArray *)screenShotForTableView:(UITableView *)tableview {
+    NSMutableArray *screenshots = [NSMutableArray array];
+    for (int section=0; section < tableview.numberOfSections; section++) {
+
+        //cell
+        for (int row = 0; row< [tableview numberOfRowsInSection:section]; row++) {
+            NSIndexPath *cellIndexPath = [NSIndexPath indexPathForRow:row inSection:section];
+            UIImage *cellScreenshot = [self screenshotForTableView:tableview AtCellAtIndexPath:cellIndexPath];
+            if (cellScreenshot) [screenshots addObject:cellScreenshot];
+            
+            if (section == tableview.numberOfSections - 1 && row == [tableview numberOfRowsInSection:section] - 1) {
+                [tableview scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+            }
+        }
+        
+
+    }
+    
+    return screenshots;
+}
+
+/**
+ *  截取cell
+ */
++ (UIImage *)screenshotForTableView:(UITableView *)tableView AtCellAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    [tableView beginUpdates];
+    [tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
+    [tableView endUpdates];
+    
+    return [cell ssj_takeScreenShotWithSize:cell.size opaque:NO scale:0];
 }
 
 @end
