@@ -564,12 +564,10 @@
 		7D08A2B11E4999D30085A8FB /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C3276ED1CE4614700109C4C /* libz.tbd */; };
 		7D08A2B21E4999D30085A8FB /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D4A431D1CC86F51002F0264 /* AVFoundation.framework */; };
 		7D08A2B31E4999D30085A8FB /* AmrCodecFMWK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C32774B1CE471A900109C4C /* AmrCodecFMWK.framework */; };
-		7D08A2B41E4999D30085A8FB /* libZipZap.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DAD4B151C4FAE85004B7FF0 /* libZipZap.a */; };
 		7D08A2B51E4999D30085A8FB /* UTDID.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C32774D1CE471A900109C4C /* UTDID.framework */; };
 		7D08A2B61E4999D30085A8FB /* YWFeedbackFMWK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C3277521CE471A900109C4C /* YWFeedbackFMWK.framework */; };
 		7D08A2B71E4999D30085A8FB /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD0E43F61C21365100F9179D /* Security.framework */; };
 		7D08A2B81E4999D30085A8FB /* WQConnectorBundle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C32774F1CE471A900109C4C /* WQConnectorBundle.framework */; };
-		7D08A2B91E4999D30085A8FB /* libPods-SuiShouJi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DCB8AA1DC23E6D40C33EB5B /* libPods-SuiShouJi.a */; };
 		7D08A2BB1E4999D30085A8FB /* pushsound.wav in Resources */ = {isa = PBXBuildFile; fileRef = BD6C388E1C910A8F000E2E42 /* pushsound.wav */; };
 		7D08A2BC1E4999D30085A8FB /* xiaomao.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9CAF731B1E03EAD90061ADB8 /* xiaomao.gif */; };
 		7D08A2BD1E4999D30085A8FB /* SSJCalenderTableViewNoDataHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7D5F32A11CEAE6C10086B67E /* SSJCalenderTableViewNoDataHeader.xib */; };
@@ -1447,12 +1445,10 @@
 		7DA13C081E35AED7000490A4 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C3276ED1CE4614700109C4C /* libz.tbd */; };
 		7DA13C091E35AED7000490A4 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D4A431D1CC86F51002F0264 /* AVFoundation.framework */; };
 		7DA13C0A1E35AED7000490A4 /* AmrCodecFMWK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C32774B1CE471A900109C4C /* AmrCodecFMWK.framework */; };
-		7DA13C0B1E35AED7000490A4 /* libZipZap.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DAD4B151C4FAE85004B7FF0 /* libZipZap.a */; };
 		7DA13C0C1E35AED7000490A4 /* UTDID.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C32774D1CE471A900109C4C /* UTDID.framework */; };
 		7DA13C0D1E35AED7000490A4 /* YWFeedbackFMWK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C3277521CE471A900109C4C /* YWFeedbackFMWK.framework */; };
 		7DA13C0E1E35AED7000490A4 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD0E43F61C21365100F9179D /* Security.framework */; };
 		7DA13C0F1E35AED7000490A4 /* WQConnectorBundle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C32774F1CE471A900109C4C /* WQConnectorBundle.framework */; };
-		7DA13C101E35AED7000490A4 /* libPods-SuiShouJi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DCB8AA1DC23E6D40C33EB5B /* libPods-SuiShouJi.a */; };
 		7DA13C121E35AED7000490A4 /* pushsound.wav in Resources */ = {isa = PBXBuildFile; fileRef = BD6C388E1C910A8F000E2E42 /* pushsound.wav */; };
 		7DA13C131E35AED7000490A4 /* xiaomao.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9CAF731B1E03EAD90061ADB8 /* xiaomao.gif */; };
 		7DA13C141E35AED7000490A4 /* SSJCalenderTableViewNoDataHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7D5F32A11CEAE6C10086B67E /* SSJCalenderTableViewNoDataHeader.xib */; };
@@ -1492,7 +1488,6 @@
 		7DAA38561D952AA0000ED16E /* SSJBudgetBillTypeSelectionCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DAA38521D952AA0000ED16E /* SSJBudgetBillTypeSelectionCellItem.m */; };
 		7DAA38571D952AA0000ED16E /* SSJBudgetBillTypeSelectionCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DAA38521D952AA0000ED16E /* SSJBudgetBillTypeSelectionCellItem.m */; };
 		7DABCA661D0E5A32002886E8 /* SSJReportFormsCurveDescriptionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DABCA651D0E5A32002886E8 /* SSJReportFormsCurveDescriptionView.m */; };
-		7DAD4B161C4FAE85004B7FF0 /* libZipZap.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DAD4B151C4FAE85004B7FF0 /* libZipZap.a */; };
 		7DB429011CAE3E5000B46F32 /* SSJDatabaseVersion2.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DB429001CAE3E5000B46F32 /* SSJDatabaseVersion2.m */; };
 		7DB6140C1D2F4BB6009A6F87 /* SCYWinCowryHomeBannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DB6140B1D2F4BB6009A6F87 /* SCYWinCowryHomeBannerView.m */; };
 		7DB9F81A1DFFC8C90084E998 /* SSJReportFormsNoDataCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DB9F8191DFFC8C90084E998 /* SSJReportFormsNoDataCell.m */; };
@@ -1905,7 +1900,6 @@
 		7DBA57251D6D32B700C02D79 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C3276ED1CE4614700109C4C /* libz.tbd */; };
 		7DBA57261D6D32B700C02D79 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D4A431D1CC86F51002F0264 /* AVFoundation.framework */; };
 		7DBA57271D6D32B700C02D79 /* AmrCodecFMWK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C32774B1CE471A900109C4C /* AmrCodecFMWK.framework */; };
-		7DBA57281D6D32B700C02D79 /* libZipZap.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DAD4B151C4FAE85004B7FF0 /* libZipZap.a */; };
 		7DBA57291D6D32B700C02D79 /* UTDID.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C32774D1CE471A900109C4C /* UTDID.framework */; };
 		7DBA572A1D6D32B700C02D79 /* YWFeedbackFMWK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C3277521CE471A900109C4C /* YWFeedbackFMWK.framework */; };
 		7DBA572B1D6D32B700C02D79 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD0E43F61C21365100F9179D /* Security.framework */; };
@@ -2618,7 +2612,6 @@
 		9C2A685B1D194CA70010F1DA /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C3276ED1CE4614700109C4C /* libz.tbd */; };
 		9C2A685C1D194CA70010F1DA /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D4A431D1CC86F51002F0264 /* AVFoundation.framework */; };
 		9C2A685D1D194CA70010F1DA /* AmrCodecFMWK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C32774B1CE471A900109C4C /* AmrCodecFMWK.framework */; };
-		9C2A685E1D194CA70010F1DA /* libZipZap.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DAD4B151C4FAE85004B7FF0 /* libZipZap.a */; };
 		9C2A685F1D194CA70010F1DA /* UTDID.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C32774D1CE471A900109C4C /* UTDID.framework */; };
 		9C2A68601D194CA70010F1DA /* YWFeedbackFMWK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C3277521CE471A900109C4C /* YWFeedbackFMWK.framework */; };
 		9C2A68611D194CA70010F1DA /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD0E43F61C21365100F9179D /* Security.framework */; };
@@ -3230,7 +3223,6 @@
 		9CEC00991D6D41EB00DB2C8B /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C3276ED1CE4614700109C4C /* libz.tbd */; };
 		9CEC009A1D6D41EB00DB2C8B /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D4A431D1CC86F51002F0264 /* AVFoundation.framework */; };
 		9CEC009B1D6D41EB00DB2C8B /* AmrCodecFMWK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C32774B1CE471A900109C4C /* AmrCodecFMWK.framework */; };
-		9CEC009C1D6D41EB00DB2C8B /* libZipZap.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DAD4B151C4FAE85004B7FF0 /* libZipZap.a */; };
 		9CEC009D1D6D41EB00DB2C8B /* UTDID.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C32774D1CE471A900109C4C /* UTDID.framework */; };
 		9CEC009E1D6D41EB00DB2C8B /* YWFeedbackFMWK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C3277521CE471A900109C4C /* YWFeedbackFMWK.framework */; };
 		9CEC009F1D6D41EB00DB2C8B /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD0E43F61C21365100F9179D /* Security.framework */; };
@@ -3623,7 +3615,6 @@
 		9CECFCA11D6D41A700DB2C8B /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C3276ED1CE4614700109C4C /* libz.tbd */; };
 		9CECFCA21D6D41A700DB2C8B /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D4A431D1CC86F51002F0264 /* AVFoundation.framework */; };
 		9CECFCA31D6D41A700DB2C8B /* AmrCodecFMWK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C32774B1CE471A900109C4C /* AmrCodecFMWK.framework */; };
-		9CECFCA41D6D41A700DB2C8B /* libZipZap.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DAD4B151C4FAE85004B7FF0 /* libZipZap.a */; };
 		9CECFCA51D6D41A700DB2C8B /* UTDID.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C32774D1CE471A900109C4C /* UTDID.framework */; };
 		9CECFCA61D6D41A700DB2C8B /* YWFeedbackFMWK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C3277521CE471A900109C4C /* YWFeedbackFMWK.framework */; };
 		9CECFCA71D6D41A700DB2C8B /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD0E43F61C21365100F9179D /* Security.framework */; };
@@ -3984,58 +3975,10 @@
 		BD70DF671C4751EA000E6CC9 /* SSJRegistNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF571C4751EA000E6CC9 /* SSJRegistNetworkService.m */; };
 		BD70DF6B1C4B26B3000E6CC9 /* UIViewController+SSJPageFlow.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF6A1C4B26B3000E6CC9 /* UIViewController+SSJPageFlow.m */; };
 		BDC01FF31C2D92E3008B1F75 /* CDAutoHideMessageHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = BDC01FF21C2D92E3008B1F75 /* CDAutoHideMessageHUD.m */; };
+		E84F9798AF83397BBA7DDAD6 /* libPods-SuiShouJi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DCB8AA1DC23E6D40C33EB5B /* libPods-SuiShouJi.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		7DE27FA31CB50F4600D5EB41 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 7DE27F991CB50F4600D5EB41 /* ZipZap.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = D87BA1F81B3D6DEA00ED7EB3;
-			remoteInfo = "ZipZap (iOS Framework)";
-		};
-		7DE27FA51CB50F4600D5EB41 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 7DE27F991CB50F4600D5EB41 /* ZipZap.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = D899CFB0162C5EEB00112F49;
-			remoteInfo = "ZipZap (iOS Static Library)";
-		};
-		7DE27FA71CB50F4600D5EB41 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 7DE27F991CB50F4600D5EB41 /* ZipZap.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = D8D140D31B423B1100C411B0;
-			remoteInfo = "ZipZap (OS X Framework)";
-		};
-		7DE27FA91CB50F4600D5EB41 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 7DE27F991CB50F4600D5EB41 /* ZipZap.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = D899CF82162C5EC100112F49;
-			remoteInfo = "ZipZap (OS X Static Library)";
-		};
-		7DE27FAB1CB50F4600D5EB41 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 7DE27F991CB50F4600D5EB41 /* ZipZap.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = BF8624CB1BB7495200C12EEE;
-			remoteInfo = "ZipZap (tvOS Framework)";
-		};
-		7DE27FAD1CB50F4600D5EB41 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 7DE27F991CB50F4600D5EB41 /* ZipZap.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = BF8624EF1BB74B1F00C12EEE;
-			remoteInfo = "ZipZap (tvOS Static Library)";
-		};
-		7DE27FAF1CB50F4600D5EB41 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 7DE27F991CB50F4600D5EB41 /* ZipZap.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = D899CF96162C5EC100112F49;
-			remoteInfo = ZipZapTests;
-		};
 		BD543C561C1A6DBC00910D61 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BD543C341C1A6DBC00910D61 /* Project object */;
@@ -4053,14 +3996,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		082026F7FFDC63104CC58256 /* Pods-SuiShouJi.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SuiShouJi.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SuiShouJi/Pods-SuiShouJi.debug.xcconfig"; sourceTree = "<group>"; };
 		1BCD58B8B9CBEA7ED5E6BDD4 /* Pods-JiZhangGuanJia.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JiZhangGuanJia.debug.xcconfig"; path = "Pods/Target Support Files/Pods-JiZhangGuanJia/Pods-JiZhangGuanJia.debug.xcconfig"; sourceTree = "<group>"; };
 		28D54CCC52994B95633CA5E3 /* libPods-JiZhangGuanJia.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-JiZhangGuanJia.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2DEF1E8E40DA1003C5D69150 /* Pods-YouYuJiZhangLiCai.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangLiCai.release.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangLiCai/Pods-YouYuJiZhangLiCai.release.xcconfig"; sourceTree = "<group>"; };
 		348DA5EFAB1C2E711E07E558 /* libPods-youyujizhang.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-youyujizhang.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3B725E607F2304D98F82B2A3 /* Pods-SuiShouJi.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SuiShouJi.release.xcconfig"; path = "Pods/Target Support Files/Pods-SuiShouJi/Pods-SuiShouJi.release.xcconfig"; sourceTree = "<group>"; };
 		409F6679D47EFA5753A58706 /* Pods-youyujizhang.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-youyujizhang.release.xcconfig"; path = "Pods/Target Support Files/Pods-youyujizhang/Pods-youyujizhang.release.xcconfig"; sourceTree = "<group>"; };
 		4DCB8AA1DC23E6D40C33EB5B /* libPods-SuiShouJi.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SuiShouJi.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		6CA7E190BC6D1A81EC3B038F /* Pods-SuiShouJi.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SuiShouJi.release.xcconfig"; path = "Pods/Target Support Files/Pods-SuiShouJi/Pods-SuiShouJi.release.xcconfig"; sourceTree = "<group>"; };
+		5899867574AEB0396C49AE15 /* Pods-SuiShouJi.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SuiShouJi.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SuiShouJi/Pods-SuiShouJi.debug.xcconfig"; sourceTree = "<group>"; };
 		71971C49348189D6064D4695 /* Pods-YouYuJiZhangBen.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangBen.debug.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangBen/Pods-YouYuJiZhangBen.debug.xcconfig"; sourceTree = "<group>"; };
 		7D00D8031DFA9CC00007A8FB /* SSJReportFormsChartCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormsChartCell.h; sourceTree = "<group>"; };
 		7D00D8041DFA9CC00007A8FB /* SSJReportFormsChartCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReportFormsChartCell.m; sourceTree = "<group>"; };
@@ -4408,7 +4351,6 @@
 		7DAA38521D952AA0000ED16E /* SSJBudgetBillTypeSelectionCellItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBudgetBillTypeSelectionCellItem.m; sourceTree = "<group>"; };
 		7DABCA641D0E5A32002886E8 /* SSJReportFormsCurveDescriptionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormsCurveDescriptionView.h; sourceTree = "<group>"; };
 		7DABCA651D0E5A32002886E8 /* SSJReportFormsCurveDescriptionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReportFormsCurveDescriptionView.m; sourceTree = "<group>"; };
-		7DAD4B151C4FAE85004B7FF0 /* libZipZap.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libZipZap.a; path = "ZipZap/build/Debug-iphoneos/libZipZap.a"; sourceTree = "<group>"; };
 		7DAD4B171C4FAF42004B7FF0 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		7DB428FF1CAE3E5000B46F32 /* SSJDatabaseVersion2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJDatabaseVersion2.h; sourceTree = "<group>"; };
 		7DB429001CAE3E5000B46F32 /* SSJDatabaseVersion2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDatabaseVersion2.m; sourceTree = "<group>"; };
@@ -4506,7 +4448,6 @@
 		7DE0896E1D333ED4008431D6 /* SSJDatabaseVersion5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDatabaseVersion5.m; sourceTree = "<group>"; };
 		7DE1FC691DD1CBE500B2D4AD /* SSJLoanDetailChargeChangeHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJLoanDetailChargeChangeHeaderView.h; sourceTree = "<group>"; };
 		7DE1FC6A1DD1CBE500B2D4AD /* SSJLoanDetailChargeChangeHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJLoanDetailChargeChangeHeaderView.m; sourceTree = "<group>"; };
-		7DE27F991CB50F4600D5EB41 /* ZipZap.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ZipZap.xcodeproj; path = ZipZap/ZipZap.xcodeproj; sourceTree = "<group>"; };
 		7DE2E9111C9C291C001868F5 /* SSJUmengManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJUmengManager.h; sourceTree = "<group>"; };
 		7DE2E9121C9C291C001868F5 /* SSJUmengManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJUmengManager.m; sourceTree = "<group>"; };
 		7DE3AD741C5F26D5009B2131 /* SSJDataSynchronizeTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJDataSynchronizeTask.h; sourceTree = "<group>"; };
@@ -5209,12 +5150,10 @@
 				7D08A2B11E4999D30085A8FB /* libz.tbd in Frameworks */,
 				7D08A2B21E4999D30085A8FB /* AVFoundation.framework in Frameworks */,
 				7D08A2B31E4999D30085A8FB /* AmrCodecFMWK.framework in Frameworks */,
-				7D08A2B41E4999D30085A8FB /* libZipZap.a in Frameworks */,
 				7D08A2B51E4999D30085A8FB /* UTDID.framework in Frameworks */,
 				7D08A2B61E4999D30085A8FB /* YWFeedbackFMWK.framework in Frameworks */,
 				7D08A2B71E4999D30085A8FB /* Security.framework in Frameworks */,
 				7D08A2B81E4999D30085A8FB /* WQConnectorBundle.framework in Frameworks */,
-				7D08A2B91E4999D30085A8FB /* libPods-SuiShouJi.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5232,12 +5171,10 @@
 				7DA13C081E35AED7000490A4 /* libz.tbd in Frameworks */,
 				7DA13C091E35AED7000490A4 /* AVFoundation.framework in Frameworks */,
 				7DA13C0A1E35AED7000490A4 /* AmrCodecFMWK.framework in Frameworks */,
-				7DA13C0B1E35AED7000490A4 /* libZipZap.a in Frameworks */,
 				7DA13C0C1E35AED7000490A4 /* UTDID.framework in Frameworks */,
 				7DA13C0D1E35AED7000490A4 /* YWFeedbackFMWK.framework in Frameworks */,
 				7DA13C0E1E35AED7000490A4 /* Security.framework in Frameworks */,
 				7DA13C0F1E35AED7000490A4 /* WQConnectorBundle.framework in Frameworks */,
-				7DA13C101E35AED7000490A4 /* libPods-SuiShouJi.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5255,7 +5192,6 @@
 				7DBA57251D6D32B700C02D79 /* libz.tbd in Frameworks */,
 				7DBA57261D6D32B700C02D79 /* AVFoundation.framework in Frameworks */,
 				7DBA57271D6D32B700C02D79 /* AmrCodecFMWK.framework in Frameworks */,
-				7DBA57281D6D32B700C02D79 /* libZipZap.a in Frameworks */,
 				7DBA57291D6D32B700C02D79 /* UTDID.framework in Frameworks */,
 				7DBA572A1D6D32B700C02D79 /* YWFeedbackFMWK.framework in Frameworks */,
 				7DBA572B1D6D32B700C02D79 /* Security.framework in Frameworks */,
@@ -5278,7 +5214,6 @@
 				9C2A685B1D194CA70010F1DA /* libz.tbd in Frameworks */,
 				9C2A685C1D194CA70010F1DA /* AVFoundation.framework in Frameworks */,
 				9C2A685D1D194CA70010F1DA /* AmrCodecFMWK.framework in Frameworks */,
-				9C2A685E1D194CA70010F1DA /* libZipZap.a in Frameworks */,
 				9C2A685F1D194CA70010F1DA /* UTDID.framework in Frameworks */,
 				9C2A68601D194CA70010F1DA /* YWFeedbackFMWK.framework in Frameworks */,
 				9C2A68611D194CA70010F1DA /* Security.framework in Frameworks */,
@@ -5301,7 +5236,6 @@
 				9CEC00991D6D41EB00DB2C8B /* libz.tbd in Frameworks */,
 				9CEC009A1D6D41EB00DB2C8B /* AVFoundation.framework in Frameworks */,
 				9CEC009B1D6D41EB00DB2C8B /* AmrCodecFMWK.framework in Frameworks */,
-				9CEC009C1D6D41EB00DB2C8B /* libZipZap.a in Frameworks */,
 				9CEC009D1D6D41EB00DB2C8B /* UTDID.framework in Frameworks */,
 				9CEC009E1D6D41EB00DB2C8B /* YWFeedbackFMWK.framework in Frameworks */,
 				9CEC009F1D6D41EB00DB2C8B /* Security.framework in Frameworks */,
@@ -5324,7 +5258,6 @@
 				9CECFCA11D6D41A700DB2C8B /* libz.tbd in Frameworks */,
 				9CECFCA21D6D41A700DB2C8B /* AVFoundation.framework in Frameworks */,
 				9CECFCA31D6D41A700DB2C8B /* AmrCodecFMWK.framework in Frameworks */,
-				9CECFCA41D6D41A700DB2C8B /* libZipZap.a in Frameworks */,
 				9CECFCA51D6D41A700DB2C8B /* UTDID.framework in Frameworks */,
 				9CECFCA61D6D41A700DB2C8B /* YWFeedbackFMWK.framework in Frameworks */,
 				9CECFCA71D6D41A700DB2C8B /* Security.framework in Frameworks */,
@@ -5347,12 +5280,12 @@
 				9C3276EE1CE4614700109C4C /* libz.tbd in Frameworks */,
 				7D4A431E1CC86F51002F0264 /* AVFoundation.framework in Frameworks */,
 				9C3277541CE471A900109C4C /* AmrCodecFMWK.framework in Frameworks */,
-				7DAD4B161C4FAE85004B7FF0 /* libZipZap.a in Frameworks */,
 				9C3277561CE471A900109C4C /* UTDID.framework in Frameworks */,
 				9C32775B1CE471A900109C4C /* YWFeedbackFMWK.framework in Frameworks */,
 				BD0E43F71C21365100F9179D /* Security.framework in Frameworks */,
 				9C3277581CE471A900109C4C /* WQConnectorBundle.framework in Frameworks */,
 				A3F86B7BFBA3F62C302818B9 /* libPods-SuiShouJi.a in Frameworks */,
+				E84F9798AF83397BBA7DDAD6 /* libPods-SuiShouJi.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5383,7 +5316,6 @@
 				7D4A431D1CC86F51002F0264 /* AVFoundation.framework */,
 				BDA2EF151C8EB89E007DD45F /* TencentOpenAPI.framework */,
 				7DAD4B171C4FAF42004B7FF0 /* ImageIO.framework */,
-				7DAD4B151C4FAE85004B7FF0 /* libZipZap.a */,
 				BD0E43F61C21365100F9179D /* Security.framework */,
 				28D54CCC52994B95633CA5E3 /* libPods-JiZhangGuanJia.a */,
 				4DCB8AA1DC23E6D40C33EB5B /* libPods-SuiShouJi.a */,
@@ -6427,20 +6359,6 @@
 				7DDDA7FF1CBE53A60029ADAC /* UIView+SSJViewAnimatioin.m */,
 			);
 			path = Animation;
-			sourceTree = "<group>";
-		};
-		7DE27F9A1CB50F4600D5EB41 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				7DE27FA41CB50F4600D5EB41 /* ZipZap.framework */,
-				7DE27FA61CB50F4600D5EB41 /* libZipZap.a */,
-				7DE27FA81CB50F4600D5EB41 /* ZipZap.framework */,
-				7DE27FAA1CB50F4600D5EB41 /* libZipZap.a */,
-				7DE27FAC1CB50F4600D5EB41 /* ZipZap.framework */,
-				7DE27FAE1CB50F4600D5EB41 /* libZipZap.a */,
-				7DE27FB01CB50F4600D5EB41 /* ZipZapTests.xctest */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		7DE2E9101C9C28F5001868F5 /* UmengManager */ = {
@@ -8147,7 +8065,6 @@
 		BD543C331C1A6DBC00910D61 = {
 			isa = PBXGroup;
 			children = (
-				7DE27F991CB50F4600D5EB41 /* ZipZap.xcodeproj */,
 				BD543C3E1C1A6DBC00910D61 /* SuiShouJi */,
 				BD543C581C1A6DBC00910D61 /* SuiShouJiTests */,
 				BD543C631C1A6DBC00910D61 /* SuiShouJiUITests */,
@@ -8381,14 +8298,14 @@
 			children = (
 				1BCD58B8B9CBEA7ED5E6BDD4 /* Pods-JiZhangGuanJia.debug.xcconfig */,
 				DB9B0038A884FAF5FA1CEB4F /* Pods-JiZhangGuanJia.release.xcconfig */,
-				082026F7FFDC63104CC58256 /* Pods-SuiShouJi.debug.xcconfig */,
-				6CA7E190BC6D1A81EC3B038F /* Pods-SuiShouJi.release.xcconfig */,
 				71971C49348189D6064D4695 /* Pods-YouYuJiZhangBen.debug.xcconfig */,
 				8ED51442757E13C0CDA434AA /* Pods-YouYuJiZhangBen.release.xcconfig */,
 				CFF6621CBAC638A24B0361A7 /* Pods-YouYuJiZhangLiCai.debug.xcconfig */,
 				2DEF1E8E40DA1003C5D69150 /* Pods-YouYuJiZhangLiCai.release.xcconfig */,
 				8243DAE18B924886B7E827E5 /* Pods-youyujizhang.debug.xcconfig */,
 				409F6679D47EFA5753A58706 /* Pods-youyujizhang.release.xcconfig */,
+				5899867574AEB0396C49AE15 /* Pods-SuiShouJi.debug.xcconfig */,
+				3B725E607F2304D98F82B2A3 /* Pods-SuiShouJi.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -8400,12 +8317,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7D08A2D21E4999D30085A8FB /* Build configuration list for PBXNativeTarget "YouYuJiZhangGuanJia" */;
 			buildPhases = (
-				7D08A0941E4999D30085A8FB /* [CP] Check Pods Manifest.lock */,
 				7D08A0951E4999D30085A8FB /* Sources */,
 				7D08A2A81E4999D30085A8FB /* Frameworks */,
 				7D08A2BA1E4999D30085A8FB /* Resources */,
-				7D08A2D01E4999D30085A8FB /* [CP] Embed Pods Frameworks */,
-				7D08A2D11E4999D30085A8FB /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -8420,12 +8334,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7DA13C291E35AED7000490A4 /* Build configuration list for PBXNativeTarget "YouYuJiZhangBao" */;
 			buildPhases = (
-				7DA139EB1E35AED7000490A4 /* [CP] Check Pods Manifest.lock */,
 				7DA139EC1E35AED7000490A4 /* Sources */,
 				7DA13BFF1E35AED7000490A4 /* Frameworks */,
 				7DA13C111E35AED7000490A4 /* Resources */,
-				7DA13C271E35AED7000490A4 /* [CP] Embed Pods Frameworks */,
-				7DA13C281E35AED7000490A4 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -8618,12 +8529,6 @@
 			mainGroup = BD543C331C1A6DBC00910D61;
 			productRefGroup = BD543C3D1C1A6DBC00910D61 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 7DE27F9A1CB50F4600D5EB41 /* Products */;
-					ProjectRef = 7DE27F991CB50F4600D5EB41 /* ZipZap.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				BD543C3B1C1A6DBC00910D61 /* SuiShouJi */,
@@ -8638,58 +8543,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		7DE27FA41CB50F4600D5EB41 /* ZipZap.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = ZipZap.framework;
-			remoteRef = 7DE27FA31CB50F4600D5EB41 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		7DE27FA61CB50F4600D5EB41 /* libZipZap.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libZipZap.a;
-			remoteRef = 7DE27FA51CB50F4600D5EB41 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		7DE27FA81CB50F4600D5EB41 /* ZipZap.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = ZipZap.framework;
-			remoteRef = 7DE27FA71CB50F4600D5EB41 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		7DE27FAA1CB50F4600D5EB41 /* libZipZap.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libZipZap.a;
-			remoteRef = 7DE27FA91CB50F4600D5EB41 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		7DE27FAC1CB50F4600D5EB41 /* ZipZap.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = ZipZap.framework;
-			remoteRef = 7DE27FAB1CB50F4600D5EB41 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		7DE27FAE1CB50F4600D5EB41 /* libZipZap.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libZipZap.a;
-			remoteRef = 7DE27FAD1CB50F4600D5EB41 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		7DE27FB01CB50F4600D5EB41 /* ZipZapTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = ZipZapTests.xctest;
-			remoteRef = 7DE27FAF1CB50F4600D5EB41 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		7D08A2BA1E4999D30085A8FB /* Resources */ = {
@@ -9014,96 +8867,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		7D08A0941E4999D30085A8FB /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		7D08A2D01E4999D30085A8FB /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SuiShouJi/Pods-SuiShouJi-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		7D08A2D11E4999D30085A8FB /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SuiShouJi/Pods-SuiShouJi-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		7DA139EB1E35AED7000490A4 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		7DA13C271E35AED7000490A4 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SuiShouJi/Pods-SuiShouJi-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		7DA13C281E35AED7000490A4 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SuiShouJi/Pods-SuiShouJi-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		7F384EDE547D146520592FD0 /* [CP] Embed Pods Frameworks */ = {
@@ -13050,7 +12813,6 @@
 /* Begin XCBuildConfiguration section */
 		7D08A2D31E4999D30085A8FB /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 082026F7FFDC63104CC58256 /* Pods-SuiShouJi.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuJiZhangGuanJia;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -13088,7 +12850,6 @@
 		};
 		7D08A2D41E4999D30085A8FB /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6CA7E190BC6D1A81EC3B038F /* Pods-SuiShouJi.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuJiZhangGuanJia;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -13125,7 +12886,6 @@
 		};
 		7DA13C2A1E35AED7000490A4 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 082026F7FFDC63104CC58256 /* Pods-SuiShouJi.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuJiZhangBao;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -13163,7 +12923,6 @@
 		};
 		7DA13C2B1E35AED7000490A4 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6CA7E190BC6D1A81EC3B038F /* Pods-SuiShouJi.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuJiZhangBao;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -13646,7 +13405,7 @@
 		};
 		BD543C6A1C1A6DBC00910D61 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 082026F7FFDC63104CC58256 /* Pods-SuiShouJi.debug.xcconfig */;
+			baseConfigurationReference = 5899867574AEB0396C49AE15 /* Pods-SuiShouJi.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -13684,7 +13443,7 @@
 		};
 		BD543C6B1C1A6DBC00910D61 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6CA7E190BC6D1A81EC3B038F /* Pods-SuiShouJi.release.xcconfig */;
+			baseConfigurationReference = 3B725E607F2304D98F82B2A3 /* Pods-SuiShouJi.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;

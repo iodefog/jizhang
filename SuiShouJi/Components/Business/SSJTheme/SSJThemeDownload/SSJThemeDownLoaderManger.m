@@ -10,8 +10,8 @@
 #import "NSString+SSJTheme.h"
 #import "AFNetworking.h"
 #import "SSJThemeModel.h"
-#import <ZipZap/ZipZap.h>
 #import "SSJGlobalServiceManager.h"
+#import "ZipArchive.h"
 
 @interface SSJThemeDownLoaderProgressBlocker : NSObject
 
@@ -124,7 +124,7 @@ static id _instance;
             [tProgress removeObserver:self forKeyPath:@"fractionCompleted"];
             
             NSError *tError = nil;
-            [self unzipUrl:filePath path:[NSString ssj_themeDirectory] error:&tError];
+            [SSZipArchive unzipFileAtPath:filePath.path toDestination:[NSString ssj_themeDirectory] overwrite:NO password:nil error:&tError];
             
             // 不管解压是否成功，把压缩包删除，否则可能会导致以后下载相同压缩包不能覆盖的奇葩问题
             [[NSFileManager defaultManager] removeItemAtURL:filePath error:&error];
@@ -232,33 +232,4 @@ static id _instance;
     }
 }
 
-//  将data进行解压
-- (BOOL)unzipUrl:(NSURL *)Url path:(NSString *)path error:(NSError **)error {
-    ZZArchive *archive = [ZZArchive archiveWithURL:Url error:error];
-    if (*error) {
-        return NO;
-    }
-    
-    NSFileManager * fileManager = [NSFileManager defaultManager];
-    for (ZZArchiveEntry* entry in archive.entries) {
-        // Some archives don‘t have a separate entry for each directory
-        // and just include the directory‘s name in the filename.
-        // Make sure that directory exists before writing a file into it.
-        NSArray * arr = [entry.fileName componentsSeparatedByString:@"/"];
-        NSInteger index = [entry.fileName length] - 1 - [[arr lastObject] length];
-        NSString * aimPath = [entry.fileName substringToIndex:index];
-        [fileManager createDirectoryAtPath:[NSString stringWithFormat:@"%@/%@", path, aimPath] withIntermediateDirectories:YES attributes:nil error:error];
-        if (*error) {
-            return NO;
-        }
-        
-        NSData * data = [entry newDataWithError:nil];
-        if ([fileManager fileExistsAtPath:[NSString stringWithFormat:@"%@/%@", path, entry.fileName]]) {
-            [fileManager removeItemAtPath:[NSString stringWithFormat:@"%@/%@", path, entry.fileName] error:NULL];
-        }
-        [data writeToFile:[NSString stringWithFormat:@"%@/%@", path, entry.fileName] atomically:YES];
-    }
-    
-    return YES;
-}
 @end
