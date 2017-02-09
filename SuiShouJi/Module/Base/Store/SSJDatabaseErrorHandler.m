@@ -7,11 +7,11 @@
 //
 
 #import "SSJDatabaseErrorHandler.h"
-#import <ZipZap/ZipZap.h>
 #import "SSJGlobalServiceManager.h"
 #import "AFNetworking.h"
 #import "SSJDomainManager.h"
 #import "SSJNetworkReachabilityManager.h"
+#import "ZipArchive.h"
 
 #define documentPath [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject]
 #define writePath [documentPath stringByAppendingPathComponent:@"db_error"]
@@ -178,11 +178,9 @@
         return [NSData dataWithContentsOfFile:dataPath];
     }
     //压缩文件目录
-    NSError *tError = nil;
-    NSString *sqlPath = writePath;
-    NSData *data = [NSData dataWithContentsOfFile:SSJSQLitePath()];
-    //压缩
-    NSData *zipData = [self zipData:data error:&tError sqlPath:sqlPath sqlName:name];
+    NSString *zipPath = [writePath stringByAppendingPathComponent:name];
+    [SSZipArchive createZipFileAtPath:zipPath withFilesAtPaths:@[SSJSQLitePath()]];
+    NSData *zipData = [NSData dataWithContentsOfFile:zipPath];
     
     return zipData;
 }
@@ -222,27 +220,6 @@
     NSURLSessionUploadTask *task = [manager uploadTaskWithStreamedRequest:request progress:nil completionHandler:completionHandler];
 
     [task resume];
-}
-
-
-//  将data进行zip压缩
-+ (NSData *)zipData:(NSData *)data error:(NSError **)error sqlPath:(NSString *)sqlPath sqlName:(NSString *)sqlName {
-    NSString *zipPath = [sqlPath stringByAppendingPathComponent:sqlName];
-    ZZArchive *newArchive = [[ZZArchive alloc] initWithURL:[NSURL fileURLWithPath:zipPath]
-                                                   options:@{ZZOpenOptionsCreateIfMissingKey:@YES}
-                                                     error:error];
-    NSString *name = [sqlName stringByAppendingPathExtension:@"db"];
-    ZZArchiveEntry *entry = [ZZArchiveEntry archiveEntryWithFileName:name
-                                                            compress:YES
-                                                           dataBlock:^(NSError **error) {
-                                                               return data;
-                                                           }];
-    
-    if (![newArchive updateEntries:@[entry] error:error]) {
-        return nil;
-    }
-    
-    return [NSData dataWithContentsOfFile:zipPath options:NSDataReadingUncached error:error];
 }
 
 
