@@ -23,7 +23,7 @@
 #import "SSJBooksEditeOrNewViewController.h"
 #import "SSJCustomKeyboard.h"
 #import "SSJCalendarView.h"
-#import "SSJDateSelectedView.h"
+//#import "SSJDateSelectedView.h"
 #import "SSJFundingTypeSelectView.h"
 #import "SSJRecordMakingBillTypeInputView.h"
 #import "SSJRecordMakingBillTypeSelectionView.h"
@@ -36,7 +36,7 @@
 #import "SSJRecordMakingStore.h"
 #import "SSJBooksTypeStore.h"
 #import "SSJCreditCardItem.h"
-
+#import "SSJHomeCalendarView.h"
 #define INPUT_DEFAULT_COLOR [UIColor ssj_colorWithHex:@"#dddddd"]
 
 static const NSTimeInterval kAnimationDuration = 0.25;
@@ -51,7 +51,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 
 @property (nonatomic,strong) UIImage *selectedImage;
 
-@property (nonatomic,strong) SSJDateSelectedView *DateSelectedView;
+@property (nonatomic,strong) SSJHomeCalendarView *dateSelectedView;
 
 @property (nonatomic,strong) SSJFundingTypeSelectView *FundingTypeSelectView;
 
@@ -150,7 +150,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     [super viewDidAppear:animated];
     if (![self showGuideViewIfNeeded]) {
         [self.FundingTypeSelectView dismiss];
-        [self.DateSelectedView dismiss];
+//        [self.dateSelectedView dismiss];
         if (_needToDismiss) {
             [self.memberSelectView dismiss];
             [self.billTypeInputView.moneyInput becomeFirstResponder];
@@ -199,30 +199,33 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     return _customNaviBar;
 }
 
--(SSJDateSelectedView*)DateSelectedView {
-    if (!_DateSelectedView) {
-        _DateSelectedView = [[SSJDateSelectedView alloc]initWithFrame:[UIScreen mainScreen].bounds forYear:self.selectedYear Month:self.selectedMonth Day:self.selectedDay];
-//        _DateSelectedView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
+- (SSJHomeCalendarView*)dateSelectedView {
+    if (!_dateSelectedView) {
+        _dateSelectedView = [[SSJHomeCalendarView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 300)];
         __weak typeof(self) weakSelf = self;
-        _DateSelectedView.calendarView.DateSelectedBlock = ^(long year , long month ,long day,  NSString *selectDate){
-//            if (weakSelf.selectChargeCircleType != -1
-//                && (year < weakSelf.currentYear || month < weakSelf.currentMonth || day < weakSelf.currentDay)) {
-//                [CDAutoHideMessageHUD showMessage:@""];
-//                return;
-//            }
-            weakSelf.selectedDay = day;
-            weakSelf.selectedMonth = month;
-            weakSelf.selectedYear = year;
-            weakSelf.item.billDate = selectDate;
-            [weakSelf.accessoryView.dateBtn setTitle:[NSString stringWithFormat:@"%ld月",weakSelf.selectedMonth] forState:UIControlStateNormal];
-            [weakSelf.accessoryView.dateBtn setTitle:[NSString stringWithFormat:@"%ld月%ld日", month, day] forState:UIControlStateNormal];
-            [weakSelf.DateSelectedView dismiss];
-        };
-        _DateSelectedView.dismissBlock = ^{
+//        _dateSelectedView.calendarView.DateSelectedBlock = ^(long year , long month ,long day,  NSString *selectDate){
+////            if (weakSelf.selectChargeCircleType != -1
+////                && (year < weakSelf.currentYear || month < weakSelf.currentMonth || day < weakSelf.currentDay)) {
+////                [CDAutoHideMessageHUD showMessage:@""];
+////                return;
+////            }
+//            weakSelf.selectedDay = day;
+//            weakSelf.selectedMonth = month;
+//            weakSelf.selectedYear = year;
+//            weakSelf.item.billDate = selectDate;
+//            [weakSelf.accessoryView.dateBtn setTitle:[NSString stringWithFormat:@"%ld月",weakSelf.selectedMonth] forState:UIControlStateNormal];
+//            [weakSelf.accessoryView.dateBtn setTitle:[NSString stringWithFormat:@"%ld月%ld日", month, day] forState:UIControlStateNormal];
+//            [weakSelf.dateSelectedView dismiss];
+//        };
+        _dateSelectedView.dismissBlock = ^{
             [weakSelf.billTypeInputView.moneyInput becomeFirstResponder];
         };
+        _dateSelectedView.confirmBlock = ^(NSDate *date){
+//            NSLog(@"%@",date);
+        };
+        
     }
-    return _DateSelectedView;
+    return _dateSelectedView;
 }
 
 -(SSJFundingTypeSelectView *)FundingTypeSelectView{
@@ -522,7 +525,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 
 - (void)selectBillDateAction {
     [MobClick event:@"addRecord_calendar"];
-    [self.DateSelectedView show];
+    [self.dateSelectedView show];
     [_billTypeInputView.moneyInput resignFirstResponder];
     [_accessoryView.memoView resignFirstResponder];
 }
