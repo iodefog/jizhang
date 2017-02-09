@@ -9,8 +9,8 @@
 #import "SSJFundingTransferPeriodSelectionView.h"
 #import "SSJBaseTableViewCell.h"
 
-static const CGFloat kTitleHeight = 50;
-static const CGFloat kRowHeight = 52;
+static const CGFloat kTitleHeight = 48;
+static const CGFloat kRowHeight = 50;
 
 static NSString *kCellID = @"cellID";
 
@@ -32,13 +32,13 @@ static NSString *kCellID = @"cellID";
     if (self = [super initWithFrame:frame]) {
         _selectedType = SSJCyclePeriodTypeOnce;
         _cycleTypes = @[@(SSJCyclePeriodTypeOnce),
-                            @(SSJCyclePeriodTypeDaily),
-                            @(SSJCyclePeriodTypeWorkday),
-                            @(SSJCyclePeriodTypePerWeekend),
-                            @(SSJCyclePeriodTypeWeekly),
-                            @(SSJCyclePeriodTypePerMonth),
-                            @(SSJCyclePeriodTypeLastDayPerMonth),
-                            @(SSJCyclePeriodTypePerYear)];
+                        @(SSJCyclePeriodTypeDaily),
+                        @(SSJCyclePeriodTypeWorkday),
+                        @(SSJCyclePeriodTypePerWeekend),
+                        @(SSJCyclePeriodTypeWeekly),
+                        @(SSJCyclePeriodTypePerMonth),
+                        @(SSJCyclePeriodTypeLastDayPerMonth),
+                        @(SSJCyclePeriodTypePerYear)];
         
         [self addSubview:self.titleLab];
         [self addSubview:self.tableView];
@@ -136,7 +136,7 @@ static NSString *kCellID = @"cellID";
 - (UITableView *)tableView {
     if (!_tableView) {
         _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
-        _tableView.rowHeight = 44;
+        _tableView.rowHeight = kRowHeight;
         _tableView.dataSource = self;
         _tableView.delegate = self;
         _tableView.backgroundColor = [UIColor clearColor];

@@ -108,12 +108,15 @@
         shouldSelect = _shouldSelectDateAction(self, selectedDate);
     }
     
-    if (shouldSelect) {
-        [self dismiss];
-        _selectedDate = selectedDate;
-        if (_selectDateAction) {
-            _selectDateAction(self);
-        }
+    if (!shouldSelect) {
+        _datePicker.date = _selectedDate;
+        return;
+    }
+    
+    [self dismiss];
+    _selectedDate = selectedDate;
+    if (_selectDateAction) {
+        _selectDateAction(self);
     }
 }
 
