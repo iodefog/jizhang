@@ -15,6 +15,7 @@
 @property (nonatomic, strong) UIButton *comfirmButton;
 @property (nonatomic, strong) UIButton *closeButton;
 @property (nonatomic, strong) UILabel *titleLabel;
+@property (nonatomic, strong) UIView *horuAndMinuBgView;//时，分对应的背景颜色
 @property (nonatomic, strong) NSDateFormatter *formatter;
 
 /**
@@ -52,6 +53,7 @@
     self.datePicker.frame = CGRectMake(0,self.topView.height,self.width,self.height - self.topView.height);
     self.titleLabel.centerX = self.centerX;
     self.titleLabel.centerY = self.closeButton.centerY;
+    self.horuAndMinuBgView.frame = CGRectMake(0, 0, 0, 0);
 }
 
 #pragma mark - Lazy
@@ -109,6 +111,14 @@
     return _titleLabel;
 }
 
+- (UIView *)horuAndMinuBgView
+{
+    if (!_horuAndMinuBgView) {
+        _horuAndMinuBgView = [[UIView alloc] init];
+    }
+    return _horuAndMinuBgView;
+}
+
 - (void)defaultSelectedcomponents
 {
     NSDate *cuDate = self.date ? self.date : [NSDate date];
@@ -118,8 +128,8 @@
     NSInteger integer = [self.monthDayWeekArray indexOfObject:seleDate];
     [self pickerView:_datePicker didSelectRow:integer inComponent:1];//选中
     [_datePicker selectRow:integer inComponent:1 animated:YES];
-    [_datePicker selectRow:[self.hourArray indexOfObject:[NSString stringWithFormat:@"%02ld",[self componentsWithDate:cuDate].hour]] inComponent:2 animated:YES];
-    NSInteger min = [self.minuteArray indexOfObject:[NSString stringWithFormat:@"%02ld",[self componentsWithDate:cuDate].minute]];
+    [_datePicker selectRow:[self.hourArray indexOfObject:[NSString stringWithFormat:@"%02ld",(long)[self componentsWithDate:cuDate].hour]] inComponent:2 animated:YES];
+    NSInteger min = [self.minuteArray indexOfObject:[NSString stringWithFormat:@"%02ld",(long)[self componentsWithDate:cuDate].minute]];
     [_datePicker selectRow:min inComponent:4 animated:YES];
 }
 
