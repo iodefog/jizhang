@@ -22,8 +22,8 @@ extern NSString *SSJFundingTransferStoreListKey;
  *  @param success 查询成功的回调
  *  @param failure 查询失败的回调
  */
-+ (void)queryForFundingTransferListWithSuccess:(void(^)(NSArray <NSDictionary *>*result))success
-                                       failure:(void (^)(NSError *error))failure;
++ (void)queryForFundingTransferListWithSuccess:(nullable void(^)(NSArray <NSDictionary *>*result))success
+                                       failure:(nullable void (^)(NSError *error))failure;
 
 /**
  *  删除某条转账
@@ -32,8 +32,8 @@ extern NSString *SSJFundingTransferStoreListKey;
  *  @param failure 查询失败的回调
  */
 + (void)deleteFundingTransferWithItem:(SSJFundingTransferDetailItem *)item
-                              Success:(void(^)())success
-                              failure:(void (^)(NSError *error))failure;
+                              Success:(nullable void(^)())success
+                              failure:(nullable void (^)(NSError *error))failure;
 
 /**
  新建或编辑周期转账，根据转账id判断此记录如果存在就编辑，反之就新建

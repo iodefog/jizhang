@@ -46,8 +46,10 @@ static const void * kSSJDatabaseQueueSpecificKey = &kSSJDatabaseQueueSpecificKey
         
         NSError *error = [db lastError];
         if (error.code != 0) {
-            [SSJAlertViewAdapter showError:error];
             [SSJDatabaseErrorHandler handleError:error];
+            SSJDispatchMainAsync(^{
+                [SSJAlertViewAdapter showError:error];
+            });
         }
     }];
 }
@@ -61,8 +63,10 @@ static const void * kSSJDatabaseQueueSpecificKey = &kSSJDatabaseQueueSpecificKey
         
         NSError *error = [db lastError];
         if (error.code != 0) {
-            [SSJAlertViewAdapter showError:error];
             [SSJDatabaseErrorHandler handleError:error];
+            SSJDispatchMainAsync(^{
+                [SSJAlertViewAdapter showError:error];
+            });
         }
         
         *rollback = shouldRollback;
@@ -78,8 +82,10 @@ static const void * kSSJDatabaseQueueSpecificKey = &kSSJDatabaseQueueSpecificKey
         
         NSError *error = [db lastError];
         if (error.code != 0) {
-            [SSJAlertViewAdapter showError:error];
             [SSJDatabaseErrorHandler handleError:error];
+            SSJDispatchMainAsync(^{
+                [SSJAlertViewAdapter showError:error];
+            });
         }
         
         *rollback = shouldRollback;
