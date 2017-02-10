@@ -46,7 +46,7 @@ extern NSString *SSJFundingTransferStoreListKey;
  @param cyclePeriodType 周期转账类型
  @param beginDate cyclePeriodType如果是SSJCyclePeriodTypeOnce，就是转账日期；如果是其他值，就是起始日期
  @param endDate cyclePeriodType如果是SSJCyclePeriodTypeOnce，就不需要传值；如果是其他值，就是结束日期
- @param success 成功回调
+ @param success 成功回调；isExisted参数表示存储这条记录前是否已经存在
  @param failure 失败回调
  */
 + (void)saveCycleTransferRecordWithID:(NSString *)ID
@@ -57,7 +57,7 @@ extern NSString *SSJFundingTransferStoreListKey;
                       cyclePeriodType:(SSJCyclePeriodType)cyclePeriodType
                             beginDate:(NSString *)beginDate
                               endDate:(nullable NSString *)endDate
-                              success:(nullable void (^)())success
+                              success:(nullable void (^)(BOOL isExisted))success
                               failure:(nullable void (^)(NSError *error))failure;
 
 /**

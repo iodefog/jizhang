@@ -128,7 +128,7 @@ NSString *SSJFundingTransferStoreListKey = @"SSJFundingTransferStoreListKey";
                       cyclePeriodType:(SSJCyclePeriodType)cyclePeriodType
                             beginDate:(NSString *)beginDate
                               endDate:(nullable NSString *)endDate
-                              success:(nullable void (^)())success
+                              success:(nullable void (^)(BOOL isExisted))success
                               failure:(nullable void (^)(NSError *error))failure {
     
     NSString *userId = SSJUSERID();
@@ -158,7 +158,7 @@ NSString *SSJFundingTransferStoreListKey = @"SSJFundingTransferStoreListKey";
         
         if (success) {
             SSJDispatchMainAsync(^{
-                success();
+                success(existed);
             });
         }
     }];

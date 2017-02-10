@@ -15,6 +15,7 @@
 @property (nonatomic, strong) UIButton *comfirmButton;
 @property (nonatomic, strong) UIButton *closeButton;
 @property (nonatomic, strong) UILabel *titleLabel;
+@property (nonatomic, strong) UIView *horuAndMinuBgView;//时，分对应的背景颜色
 @property (nonatomic, strong) NSDateFormatter *formatter;
 
 /**
@@ -37,6 +38,7 @@
 {
     if ([super initWithFrame:frame]) {
         [self addSubview:self.topView];
+        [self addSubview:self.horuAndMinuBgView];
         [self addSubview:self.datePicker];
         //主题通知
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCellAppearanceAfterThemeChanged) name:SSJThemeDidChangeNotification object:nil];
@@ -52,6 +54,7 @@
     self.datePicker.frame = CGRectMake(0,self.topView.height,self.width,self.height - self.topView.height);
     self.titleLabel.centerX = self.centerX;
     self.titleLabel.centerY = self.closeButton.centerY;
+    self.horuAndMinuBgView.frame = CGRectMake(220,self.datePicker.centerY - 22, self.width - 20, 43);
 }
 
 #pragma mark - Lazy
@@ -109,6 +112,14 @@
     return _titleLabel;
 }
 
+- (UIView *)horuAndMinuBgView
+{
+    if (!_horuAndMinuBgView) {
+        _horuAndMinuBgView = [[UIView alloc] init];
+    }
+    return _horuAndMinuBgView;
+}
+
 - (void)defaultSelectedcomponents
 {
     NSDate *cuDate = self.date ? self.date : [NSDate date];
@@ -118,8 +129,8 @@
     NSInteger integer = [self.monthDayWeekArray indexOfObject:seleDate];
     [self pickerView:_datePicker didSelectRow:integer inComponent:1];//选中
     [_datePicker selectRow:integer inComponent:1 animated:YES];
-    [_datePicker selectRow:[self.hourArray indexOfObject:[NSString stringWithFormat:@"%02ld",[self componentsWithDate:cuDate].hour]] inComponent:2 animated:YES];
-    NSInteger min = [self.minuteArray indexOfObject:[NSString stringWithFormat:@"%02ld",[self componentsWithDate:cuDate].minute]];
+    [_datePicker selectRow:[self.hourArray indexOfObject:[NSString stringWithFormat:@"%02ld",(long)[self componentsWithDate:cuDate].hour]] inComponent:2 animated:YES];
+    NSInteger min = [self.minuteArray indexOfObject:[NSString stringWithFormat:@"%02ld",(long)[self componentsWithDate:cuDate].minute]];
     [_datePicker selectRow:min inComponent:4 animated:YES];
 }
 
@@ -181,7 +192,7 @@
 - (NSArray *)hourArray
 {
     if (!_hourArray) {
-        _hourArray = @[@"01",@"02",@"03",@"04",@"05",@"06",@"07",@"08",@"09",@"10",@"11",@"12",@"13",@"14",@"15",@"16",@"17",@"18",@"19",@"20",@"21",@"22",@"23",@"24"];
+        _hourArray = @[@"00",@"01",@"02",@"03",@"04",@"05",@"06",@"07",@"08",@"09",@"10",@"11",@"12",@"13",@"14",@"15",@"16",@"17",@"18",@"19",@"20",@"21",@"22",@"23"];
     }
     return _hourArray;
 }
@@ -313,7 +324,7 @@
     if (component == 0) {
         return 50;
     }else if (component == 1){
-        return 140;
+        return 150;
     }else if (component == 3 || component == 5) {
         return 20;
     }
@@ -408,6 +419,7 @@
     
     self.titleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
+    self.horuAndMinuBgView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailHeaderColor alpha:0.1];
 }
 
 - (void)dealloc

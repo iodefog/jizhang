@@ -20,6 +20,7 @@
 #import "SSJFundingTransferDetailViewController.h"
 #import "SSJFundingTypeSelectViewController.h"
 #import "FMDB.h"
+#import "SSJFundingTransferStore.h"
 
 static NSString *const kTransOutAcctName = @"转出账户";
 static NSString *const kTransInAcctName = @"转入账户";
@@ -34,7 +35,7 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
 
 @interface SSJFundingTransferViewController ()<UITableViewDelegate,UITableViewDataSource>
 
-@property(nonatomic, strong) TPKeyboardAvoidingTableView *tableView;
+@property (nonatomic, strong) TPKeyboardAvoidingTableView *tableView;
 
 @property (nonatomic,strong) UIBarButtonItem *rightButton;
 
@@ -50,11 +51,13 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
 
 @property (nonatomic, strong) SSJLoanDateSelectionView *endDateSelectionView;
 
-@property(nonatomic, strong) UIView *saveFooterView;
+@property (nonatomic, strong) UIView *saveFooterView;
 
-@property(nonatomic, strong) NSArray *titles;
+@property (nonatomic, strong) UIButton *saveButton;
 
-@property(nonatomic, strong) NSArray *images;
+@property (nonatomic, strong) NSArray *titles;
+
+@property (nonatomic, strong) NSArray *images;
 
 @end
 
@@ -97,6 +100,7 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
         self.title = @"编辑转账";
     }else{
         self.item = [[SSJFundingTransferDetailItem alloc]init];
+        self.item.ID = SSJUUID();
         self.item.cycleType = SSJCyclePeriodTypeOnce;
         self.item.transferDate = self.item.beginDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"];
         self.navigationItem.rightBarButtonItem = self.rightButton;
@@ -363,17 +367,25 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
 -(UIView *)saveFooterView{
     if (_saveFooterView == nil) {
         _saveFooterView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 80)];
-        UIButton *saveButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, _saveFooterView.width - 20, 40)];
-        [saveButton setTitle:@"保存" forState:UIControlStateNormal];
-        saveButton.layer.cornerRadius = 3.f;
-        saveButton.layer.masksToBounds = YES;
-        [saveButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];
-        [saveButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [saveButton addTarget:self action:@selector(saveButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
-        saveButton.center = CGPointMake(_saveFooterView.width / 2, _saveFooterView.height / 2);
-        [_saveFooterView addSubview:saveButton];
+        self.saveButton.center = CGPointMake(_saveFooterView.width / 2, _saveFooterView.height / 2);
+        [_saveFooterView addSubview:self.saveButton];
     }
     return _saveFooterView;
+}
+
+- (UIButton *)saveButton {
+    if (!_saveButton) {
+        _saveButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, _saveFooterView.width - 20, 40)];
+        _saveButton.layer.cornerRadius = 3.f;
+        _saveButton.layer.masksToBounds = YES;
+        [_saveButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];
+        [_saveButton ssj_setBackgroundColor:[[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] colorWithAlphaComponent:0.5] forState:UIControlStateDisabled];
+        [_saveButton setTitle:@"保存" forState:UIControlStateNormal];
+        [_saveButton setTitle:nil forState:UIControlStateDisabled];
+        [_saveButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [_saveButton addTarget:self action:@selector(saveButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _saveButton;
 }
 
 -(SSJChargeCircleTimeSelectView *)transferDateSelectionView{
@@ -487,49 +499,71 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
         [CDAutoHideMessageHUD showMessage:@"备注最多输入15个字哦"];
         return;
     }
-    __block NSString *booksid = SSJGetCurrentBooksType();
-    __weak typeof(self) weakSelf = self;
-    [[SSJDatabaseQueue sharedInstance]asyncInTransaction:^(FMDatabase *db , BOOL *rollback){
-        NSString *userid = SSJUSERID();
-        NSString *writedate = [[NSDate date] ssj_systemCurrentDateWithFormat:@"YYYY-MM-dd HH:mm:ss.SSS"];
-        if (!self.item.transferInChargeId.length && !self.item.transferOutChargeId.length) {
-            if (![db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFUNSID , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE  , CBILLDATE , CBOOKSID , CMEMO) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",SSJUUID(),userid,_moneyInput.text,@"3",transferInId,@"",@"",writedate,@(SSJSyncVersion()),[NSNumber numberWithInt:0],weakSelf.item.transferDate,booksid,_memoInput.text])
-            {
-                *rollback = YES;
-                return;
+    
+    _saveButton.enabled = NO;
+    [_saveButton ssj_showLoadingIndicator];
+    [SSJFundingTransferStore saveCycleTransferRecordWithID:_item.ID transferInAccountId:transferInId transferOutAccountId:transferOutId money:[_item.transferMoney doubleValue] memo:_item.transferMemo cyclePeriodType:_item.cycleType beginDate:_item.beginDate endDate:_item.endDate success:^(BOOL isExisted) {
+        
+        _saveButton.enabled = YES;
+        [_saveButton ssj_hideLoadingIndicator];
+        
+        if (isExisted) {
+            if (_editeCompleteBlock) {
+                _editeCompleteBlock(_item);
             }
-            if (![db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFUNSID , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE  , CBILLDATE , CBOOKSID , CMEMO) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",SSJUUID(),userid,_moneyInput.text,@"4",transferOutId,@"",@"",writedate,@(SSJSyncVersion()),[NSNumber numberWithInt:0],weakSelf.item.transferDate,booksid,_memoInput.text]) {
-                *rollback = YES;
-                return;
-            }
-            SSJDispatch_main_async_safe(^(){
-                [self.navigationController popViewControllerAnimated:YES];
-            });
-        }else{
-            if (![db executeUpdate:@"update bk_user_charge set imoney = ? , ifunsid = ? , cwritedate = ? , iversion = ? , operatortype = 1 , cmemo = ? , cbilldate = ? where ichargeid = ? and cuserid = ?",[NSNumber numberWithDouble:[_moneyInput.text doubleValue]],transferInId,writedate,@(SSJSyncVersion()),_memoInput.text,weakSelf.item.transferDate,weakSelf.item.transferInChargeId,userid]) {
-                *rollback = YES;
-                return;
-            }
-            if (![db executeUpdate:@"update bk_user_charge set imoney = ? , ifunsid = ? , cwritedate = ? , iversion = ? , operatortype = 1 , cmemo = ? , cbilldate = ? where ichargeid = ? and cuserid = ?",[NSNumber numberWithDouble:[_moneyInput.text doubleValue]],transferOutId,writedate,@(SSJSyncVersion()),_memoInput.text,weakSelf.item.transferDate,weakSelf.item.transferOutChargeId,userid]) {
-                *rollback = YES;
-                return;
-            }
-            weakSelf.item.transferOutId = transferOutId ? : weakSelf.item.transferOutId;
-            weakSelf.item.transferInId = transferInId ? : weakSelf.item.transferInId;
-            weakSelf.item.transferOutName = transferOutName ? : weakSelf.item.transferOutName;
-            weakSelf.item.transferInName = transferInName ? : weakSelf.item.transferInName;
-            weakSelf.item.transferMoney = _moneyInput.text;
-            weakSelf.item.transferMemo = _memoInput.text;
-            SSJDispatch_main_async_safe(^(){
-                if (weakSelf.editeCompleteBlock) {
-                    weakSelf.editeCompleteBlock(weakSelf.item);
-                }
-                [self.navigationController popViewControllerAnimated:YES];
-                
-            });
         }
         
+        [self.navigationController popViewControllerAnimated:YES];
+        
+    } failure:^(NSError * _Nonnull error) {
+        _saveButton.enabled = YES;
+        [_saveButton ssj_hideLoadingIndicator];
     }];
+    
+    
+//    __block NSString *booksid = SSJGetCurrentBooksType();
+//    __weak typeof(self) weakSelf = self;
+//    [[SSJDatabaseQueue sharedInstance]asyncInTransaction:^(FMDatabase *db , BOOL *rollback){
+//        NSString *userid = SSJUSERID();
+//        NSString *writedate = [[NSDate date] ssj_systemCurrentDateWithFormat:@"YYYY-MM-dd HH:mm:ss.SSS"];
+//        if (!self.item.transferInChargeId.length && !self.item.transferOutChargeId.length) {
+//            if (![db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFUNSID , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE  , CBILLDATE , CBOOKSID , CMEMO) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",SSJUUID(),userid,_moneyInput.text,@"3",transferInId,@"",@"",writedate,@(SSJSyncVersion()),[NSNumber numberWithInt:0],weakSelf.item.transferDate,booksid,_memoInput.text])
+//            {
+//                *rollback = YES;
+//                return;
+//            }
+//            if (![db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFUNSID , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE  , CBILLDATE , CBOOKSID , CMEMO) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",SSJUUID(),userid,_moneyInput.text,@"4",transferOutId,@"",@"",writedate,@(SSJSyncVersion()),[NSNumber numberWithInt:0],weakSelf.item.transferDate,booksid,_memoInput.text]) {
+//                *rollback = YES;
+//                return;
+//            }
+//            SSJDispatch_main_async_safe(^(){
+//                [self.navigationController popViewControllerAnimated:YES];
+//            });
+//        }else{
+//            if (![db executeUpdate:@"update bk_user_charge set imoney = ? , ifunsid = ? , cwritedate = ? , iversion = ? , operatortype = 1 , cmemo = ? , cbilldate = ? where ichargeid = ? and cuserid = ?",[NSNumber numberWithDouble:[_moneyInput.text doubleValue]],transferInId,writedate,@(SSJSyncVersion()),_memoInput.text,weakSelf.item.transferDate,weakSelf.item.transferInChargeId,userid]) {
+//                *rollback = YES;
+//                return;
+//            }
+//            if (![db executeUpdate:@"update bk_user_charge set imoney = ? , ifunsid = ? , cwritedate = ? , iversion = ? , operatortype = 1 , cmemo = ? , cbilldate = ? where ichargeid = ? and cuserid = ?",[NSNumber numberWithDouble:[_moneyInput.text doubleValue]],transferOutId,writedate,@(SSJSyncVersion()),_memoInput.text,weakSelf.item.transferDate,weakSelf.item.transferOutChargeId,userid]) {
+//                *rollback = YES;
+//                return;
+//            }
+//            weakSelf.item.transferOutId = transferOutId ? : weakSelf.item.transferOutId;
+//            weakSelf.item.transferInId = transferInId ? : weakSelf.item.transferInId;
+//            weakSelf.item.transferOutName = transferOutName ? : weakSelf.item.transferOutName;
+//            weakSelf.item.transferInName = transferInName ? : weakSelf.item.transferInName;
+//            weakSelf.item.transferMoney = _moneyInput.text;
+//            weakSelf.item.transferMemo = _memoInput.text;
+//            SSJDispatch_main_async_safe(^(){
+//                if (weakSelf.editeCompleteBlock) {
+//                    weakSelf.editeCompleteBlock(weakSelf.item);
+//                }
+//                [self.navigationController popViewControllerAnimated:YES];
+//                
+//            });
+//        }
+//        
+//    }];
     
     [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
 }
