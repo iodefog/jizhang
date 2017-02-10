@@ -216,7 +216,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 
 #pragma mark - SSJEditableCollectionViewDelegate
 - (BOOL)collectionView:(SSJEditableCollectionView *)collectionView shouldBeginEditingWhenPressAtIndexPath:(NSIndexPath *)indexPath{
-    [MobClick event:@"fund_sort"];
+    [SSJAnaliyticsManager event:@"fund_sort"];
     return YES;
 }
 
@@ -232,7 +232,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 }
 
 - (void)collectionViewDidEndEditing:(SSJEditableCollectionView *)collectionView{
-    [MobClick event:@"account_book_sort"];
+    [SSJAnaliyticsManager event:@"account_book_sort"];
     [SSJFinancingHomeHelper SaveFundingOderWithItems:self.items error:nil];
 }
 
@@ -388,7 +388,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 -(void)transferButtonClicked{
     SSJFundingTransferViewController *fundingTransferVC = [[SSJFundingTransferViewController alloc]init];
     [self.navigationController pushViewController:fundingTransferVC animated:YES];
-    [MobClick event:@"fund_transform"];
+    [SSJAnaliyticsManager event:@"fund_transform"];
 }
 
 -(void)reloadDataAfterSync{

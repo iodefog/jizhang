@@ -75,16 +75,17 @@
 }
 
 + (void)queryBalanceForDate:(NSString*)date
-             success:(void (^)(double data))success
+             success:(void (^)(double income , double expence))success
              failure:(void (^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
-        double dailySum = 0;
+        double income = 0;
+        double expence = 0;
         NSString *userId = SSJUSERID();
         NSString *booksid = [db stringForQuery:@"select ccurrentbooksid from bk_user where cuserid = ?",userId];
         if (!booksid.length) {
             booksid = userId;
         }
-        FMResultSet *result = [db executeQuery:@"SELECT SUMAMOUNT FROM BK_DAILYSUM_CHARGE WHERE CBILLDATE = ? AND CUSERID = ? and cbooksid = ?",date,userId,booksid];
+        FMResultSet *result = [db executeQuery:@"SELECT * FROM BK_DAILYSUM_CHARGE WHERE CBILLDATE = ? AND CUSERID = ? and cbooksid = ?",date,userId,booksid];
         if (!result) {
             SSJDispatch_main_async_safe(^{
                 failure([db lastError]);
@@ -92,10 +93,11 @@
             return;
         }
         while ([result next]) {
-            dailySum = [result doubleForColumn:@"SUMAMOUNT"];
+            income = [result doubleForColumn:@"INCOMEAMOUNT"];
+            expence = [result doubleForColumn:@"EXPENCEAMOUNT"];
         }
         SSJDispatch_main_async_safe(^{
-            success(dailySum);
+            success(income,expence);
         });
     }];
 }

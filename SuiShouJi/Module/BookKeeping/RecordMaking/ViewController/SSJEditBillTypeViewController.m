@@ -155,13 +155,13 @@
         _categoryEditView = [[SSJNewOrEditCustomCategoryView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM + 10, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM - 10)];
         _categoryEditView.selectImageAction = ^(SSJNewOrEditCustomCategoryView *view) {
             if (wself.model.type) {
-                [MobClick event:@"add_user_bill_in_custom"];
+                [SSJAnaliyticsManager event:@"add_user_bill_in_custom"];
             }else{
-                [MobClick event:@"add_user_bill_out_custom"];
+                [SSJAnaliyticsManager event:@"add_user_bill_out_custom"];
             }
         };
         _categoryEditView.selectColorAction = ^(SSJNewOrEditCustomCategoryView *view) {
-            [MobClick event:@"add_user_bill_color"];
+            [SSJAnaliyticsManager event:@"add_user_bill_color"];
         };
     }
     return _categoryEditView;

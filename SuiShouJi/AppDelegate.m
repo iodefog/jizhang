@@ -50,6 +50,8 @@
 #import <AdSupport/ASIdentifierManager.h>
 #import "SimulateIDFA.h"
 #import "SSJDatabaseErrorHandler.h"
+#import "SSJAnaliyticsManager.h"
+
 //  进入后台超过的时限后进入锁屏
 static const NSTimeInterval kLockScreenDelay = 60;
 
@@ -92,6 +94,8 @@ NSDate *SCYEnterBackgroundTime() {
     
     [SSJUmengManager umengTrack];
     [SSJUmengManager umengShare];
+    [SSJAnaliyticsManager SSJAnaliytics];
+    
     [MQManager setScheduledAgentWithAgentId:@"" agentGroupId:SSJMQDefualtGroupId scheduleRule:MQScheduleRulesRedirectGroup];
 //    [self uploadIdfa];
     

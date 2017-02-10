@@ -481,11 +481,11 @@ static NSUInteger kClostOutDateTag = 1004;
             
             switch (_loanModel.type) {
                 case SSJLoanTypeLend:
-                    [MobClick event:@"end_loan"];
+                    [SSJAnaliyticsManager event:@"end_loan"];
                     break;
                     
                 case SSJLoanTypeBorrow:
-                    [MobClick event:@"end_owed"];
+                    [SSJAnaliyticsManager event:@"end_owed"];
                     break;
             }
         } failure:^(NSError * _Nonnull error) {

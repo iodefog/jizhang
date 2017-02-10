@@ -57,7 +57,7 @@ static NSString *const kMemberTableViewCellIdentifier = @"kMemberTableViewCellId
     if (item.memberId.length) {
         newMemberVc.originalItem = item;
     }else{
-        [MobClick event:@"dialog_add_member"];
+        [SSJAnaliyticsManager event:@"dialog_add_member"];
     }
     [self.navigationController pushViewController:newMemberVc animated:YES];
 }
@@ -76,7 +76,7 @@ static NSString *const kMemberTableViewCellIdentifier = @"kMemberTableViewCellId
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     SSJChargeMemberItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
-    [MobClick event:@"delete_member"];
+    [SSJAnaliyticsManager event:@"delete_member"];
     [self deleteMemberWithMemberId:item.memberId];
     [self.items removeObjectAtIndex:indexPath.row];
     [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
@@ -151,7 +151,7 @@ static NSString *const kMemberTableViewCellIdentifier = @"kMemberTableViewCellId
 
 - (void)saveMemberOrder{
     __weak typeof(self) weakSelf = self;
-    [MobClick event:@"account_book_sort"];
+    [SSJAnaliyticsManager event:@"account_book_sort"];
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSString *userId = SSJUSERID();
         NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];

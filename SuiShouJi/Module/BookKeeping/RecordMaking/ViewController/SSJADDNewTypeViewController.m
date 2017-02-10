@@ -102,9 +102,9 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 //- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
 //    if (collectionView == _featuredCategoryCollectionView) {
 //        if (self.incomeOrExpence) {
-//            [MobClick event:@"add_user_bill_in"];
+//            [SSJAnaliyticsManager event:@"add_user_bill_in"];
 //        }else{
-//            [MobClick event:@"add_user_bill_out"];
+//            [SSJAnaliyticsManager event:@"add_user_bill_out"];
 //        }
 //        _newCategorySelectedIndex = indexPath.item;
 //        for (int i = 0; i < _items.count; i ++) {
@@ -146,10 +146,10 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 - (void)managerItemAction {
     if (_titleSegmentView.selectedSegmentIndex == 0) {
         _featuredCategoryCollectionView.editing = YES;
-        [MobClick event:@"build_in_type_manage"];
+        [SSJAnaliyticsManager event:@"build_in_type_manage"];
     } else if (_titleSegmentView.selectedSegmentIndex == 1) {
         _customCategoryCollectionView.editing = YES;
-        [MobClick event:@"custom_type_manage"];
+        [SSJAnaliyticsManager event:@"custom_type_manage"];
     }
 }
 
@@ -259,7 +259,7 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
     } else if (_titleSegmentView.selectedSegmentIndex == 1
                && _customCategorySwitchConrol.selectedIndex == 0) {
         selectedItems = _customCategoryCollectionView.selectedItems;
-        [MobClick event:@"custom_type_edit"];
+        [SSJAnaliyticsManager event:@"custom_type_edit"];
     }
     
     if (selectedItems.count == 0) {
@@ -334,7 +334,7 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
         [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL]];
     }];
     
-    [MobClick event:@"build_in_type_deletec"];
+    [SSJAnaliyticsManager event:@"build_in_type_deletec"];
 }
 
 - (void)customDeleteButtonAction {
@@ -358,7 +358,7 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
         [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL]];
     }];
     
-    [MobClick event:@"custom_type_delete"];
+    [SSJAnaliyticsManager event:@"custom_type_delete"];
 }
 
 #pragma mark - private
@@ -672,13 +672,13 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
         _newOrEditCategoryView = [[SSJNewOrEditCustomCategoryView alloc] initWithFrame:CGRectMake(self.scrollView.width, self.customCategorySwitchConrol.bottom + 10, self.scrollView.width, self.scrollView.height - self.customCategorySwitchConrol.bottom - 10)];
         _newOrEditCategoryView.selectImageAction = ^(SSJNewOrEditCustomCategoryView *view) {
             if (wself.incomeOrExpence) {
-                [MobClick event:@"add_user_bill_in_custom"];
+                [SSJAnaliyticsManager event:@"add_user_bill_in_custom"];
             }else{
-                [MobClick event:@"add_user_bill_out_custom"];
+                [SSJAnaliyticsManager event:@"add_user_bill_out_custom"];
             }
         };
         _newOrEditCategoryView.selectColorAction = ^(SSJNewOrEditCustomCategoryView *view) {
-            [MobClick event:@"add_user_bill_color"];
+            [SSJAnaliyticsManager event:@"add_user_bill_color"];
         };
         _newOrEditCategoryView.hidden = YES;
     }

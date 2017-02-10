@@ -45,7 +45,7 @@
 -(UIImageView *)starImage{
     if (!_starImage) {
         _starImage = [[UIImageView alloc]init];
-        _starImage.image = [[UIImage imageNamed:@"calender_star"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        _starImage.image = [[UIImage imageNamed:@"calendar_star"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     }
     return _starImage;
 }

@@ -174,10 +174,12 @@
 //    //将内容分享到qq
 //    QQApiSendResultCode sent = [QQApiInterface sendReq:req];
 }
+
 - (void)saveImageToPhotos:(UIImage *)image{
     //用C语言
     UIImageWriteToSavedPhotosAlbum(image, self, @selector(image:didFinishSavingWithError:contextInfo:), nil);
 }
+
 - (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo{
     NSLog(@"success");
 }

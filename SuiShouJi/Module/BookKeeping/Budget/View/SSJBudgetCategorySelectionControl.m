@@ -81,10 +81,10 @@
 - (void)listMenuSelectAction {
     if (self.listMenu.selectedIndex == 0) {
         _option = SSJBudgetCategorySelectionControlOptionMajor;
-        [MobClick event:@"budget_total"];
+        [SSJAnaliyticsManager event:@"budget_total"];
         [self sendActionsForControlEvents:UIControlEventValueChanged];
     } else if (self.listMenu.selectedIndex == 1) {
-        [MobClick event:@"budget_classify"];
+        [SSJAnaliyticsManager event:@"budget_classify"];
         _option = SSJBudgetCategorySelectionControlOptionSecondary;
         [self sendActionsForControlEvents:UIControlEventValueChanged];
     } else {

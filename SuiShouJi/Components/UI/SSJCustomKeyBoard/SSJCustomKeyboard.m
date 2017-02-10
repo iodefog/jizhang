@@ -88,15 +88,15 @@ static id _instance;
         ((SSJCustomKeyBoardButton*)([self.numButtonArray ssj_safeObjectAtIndex:i])).frame = CGRectMake(i % 3 * _buttonWight, i / 3 * _buttonHeight, _buttonWight, _buttonHeight);
     }
     self.DecimalButton.size = CGSizeMake(_buttonWight, _buttonHeight);
-    self.DecimalButton.leftBottom = CGPointMake(0, self.bottom);
+    self.DecimalButton.leftTop = CGPointMake(0, 3*self.height/4);
     self.ZeroButton.size = CGSizeMake(_buttonWight, _buttonHeight);
-    self.ZeroButton.leftBottom = CGPointMake(self.DecimalButton.right, self.bottom);
+    self.ZeroButton.leftTop = CGPointMake(self.DecimalButton.right, 3*self.height/4);
     self.PlusButton.size = CGSizeMake(_buttonWight, _buttonHeight);
     self.PlusButton.rightTop = CGPointMake(self.right, 0);
     self.MinusButton.size = CGSizeMake(_buttonWight, _buttonHeight);
     self.MinusButton.rightTop = CGPointMake(self.width, self.PlusButton.bottom);
     self.BackspaceButton.size = CGSizeMake(_buttonWight, _buttonHeight);
-    self.BackspaceButton.leftBottom = CGPointMake(self.ZeroButton.right, self.bottom);
+    self.BackspaceButton.leftTop = CGPointMake(self.ZeroButton.right, 3*self.height/4);
     self.ComfirmButton.size = CGSizeMake(_buttonWight, _buttonHeight * 2);
     self.ComfirmButton.rightBottom = CGPointMake(self.width, self.height);
 }

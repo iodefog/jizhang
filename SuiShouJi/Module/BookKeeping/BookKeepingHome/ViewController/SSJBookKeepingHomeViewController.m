@@ -363,7 +363,7 @@
     if (scrollView.contentOffset.y < - scrollView.contentInset.top - 34) {
         _isRefreshing = NO;
         
-        [MobClick event:@"pull_add_record"];
+        [SSJAnaliyticsManager event:@"pull_add_record"];
 
         __weak typeof(self) weakSelf = self;
         SSJRecordMakingViewController *recordmakingVC = [[SSJRecordMakingViewController alloc]init];
@@ -454,12 +454,12 @@
 #pragma mark - SSJMultiFunctionButtonDelegate
 - (void)multiFunctionButtonView:(SSJMultiFunctionButtonView *)buttonView willSelectButtonAtIndex:(NSUInteger)index{
     if (index == 1) {
-        [MobClick event:@"main_to_top"];
+        [SSJAnaliyticsManager event:@"main_to_top"];
         [self.tableView setContentOffset:CGPointMake(0, -46) animated:YES];
         [self.floatingDateView dismiss];
         [self.mutiFunctionButton dismiss];
     }else if (index == 2){
-        [MobClick event:@"main_search"];
+        [SSJAnaliyticsManager event:@"main_search"];
         SSJSearchingViewController *searchVC = [[SSJSearchingViewController alloc]init];
         [self.navigationController pushViewController:searchVC animated:YES];
     }
@@ -496,7 +496,7 @@
     };
     bookKeepingCell.editeBtnClickBlock = ^(SSJBookKeepingHomeTableViewCell *cell)
     {
-        [MobClick event:@"main_record_delete"];
+        [SSJAnaliyticsManager event:@"main_record_delete"];
 
         SSJRecordMakingViewController *recordMakingVc = [[SSJRecordMakingViewController alloc]init];
         recordMakingVc.item = cell.item;
@@ -513,7 +513,7 @@
         [weakSelf.navigationController pushViewController:imageBrowserVC animated:YES];
     };
     bookKeepingCell.deleteButtonClickBlock = ^{
-        [MobClick event:@"main_record_edit"];
+        [SSJAnaliyticsManager event:@"main_record_edit"];
         weakSelf.selectIndex = nil;
         [weakSelf getDataFromDataBase];
         [weakSelf.tableView reloadData];

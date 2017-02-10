@@ -494,17 +494,17 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
             switch (self.loanModel.type) {
                 case SSJLoanTypeLend:
                     if (self.loanModel.closeOut) {
-                        [MobClick event:@"loan_end_detail"];
+                        [SSJAnaliyticsManager event:@"loan_end_detail"];
                     } else {
-                        [MobClick event:@"loan_detail"];
+                        [SSJAnaliyticsManager event:@"loan_detail"];
                     }
                     break;
                     
                 case SSJLoanTypeBorrow:
                     if (self.loanModel.closeOut) {
-                        [MobClick event:@"owed_end_detail"];
+                        [SSJAnaliyticsManager event:@"owed_end_detail"];
                     } else {
-                        [MobClick event:@"owed_detail"];
+                        [SSJAnaliyticsManager event:@"owed_detail"];
                     }
                     break;
             }
@@ -578,11 +578,11 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     
     switch (_loanModel.type) {
         case SSJLoanTypeLend:
-            [MobClick event:@"edit_loan"];
+            [SSJAnaliyticsManager event:@"edit_loan"];
             break;
             
         case SSJLoanTypeBorrow:
-            [MobClick event:@"edit_owed"];
+            [SSJAnaliyticsManager event:@"edit_owed"];
             break;
     }
 }
@@ -599,11 +599,11 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     
     switch (self.loanModel.type) {
         case SSJLoanTypeLend:
-            [MobClick event:@"loan_modify"];
+            [SSJAnaliyticsManager event:@"loan_modify"];
             break;
             
         case SSJLoanTypeBorrow:
-            [MobClick event:@"owed_modify"];
+            [SSJAnaliyticsManager event:@"owed_modify"];
             break;
     }
 }
@@ -616,11 +616,11 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     
     switch (self.loanModel.type) {
         case SSJLoanTypeLend:
-            [MobClick event:@"loan_delete"];
+            [SSJAnaliyticsManager event:@"loan_delete"];
             break;
             
         case SSJLoanTypeBorrow:
-            [MobClick event:@"owed_delete"];
+            [SSJAnaliyticsManager event:@"owed_delete"];
             break;
     }
 }
@@ -749,18 +749,18 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
             switch (wself.loanModel.type) {
                 case SSJLoanTypeLend:
                     if ([title isEqualToString:@"收款"]) {
-                        [MobClick event:@"loan_refund"];
+                        [SSJAnaliyticsManager event:@"loan_refund"];
                     } else if ([title isEqualToString:@"追加借出"]) {
-                        [MobClick event:@"loan_additional"];
+                        [SSJAnaliyticsManager event:@"loan_additional"];
                     }
                     
                     break;
                     
                 case SSJLoanTypeBorrow:
                     if ([title isEqualToString:@"还款"]) {
-                        [MobClick event:@"owed_refund"];
+                        [SSJAnaliyticsManager event:@"owed_refund"];
                     } else if ([title isEqualToString:@"追加欠款"]) {
-                        [MobClick event:@"owed_additional"];
+                        [SSJAnaliyticsManager event:@"owed_additional"];
                     }
 
                     break;

@@ -558,11 +558,11 @@ const int kMemoMaxLength = 15;
     if (switchCtrl.on) {
         switch (self.loanModel.type) {
             case SSJLoanTypeLend:
-                [MobClick event:@"loan_interest"];
+                [SSJAnaliyticsManager event:@"loan_interest"];
                 break;
                 
             case SSJLoanTypeBorrow:
-                [MobClick event:@"owed_interest"];
+                [SSJAnaliyticsManager event:@"owed_interest"];
                 break;
         }
     }
@@ -578,11 +578,11 @@ const int kMemoMaxLength = 15;
     if (switchCtrl.on) {
         switch (self.loanModel.type) {
             case SSJLoanTypeLend:
-                [MobClick event:@"loan_remind"];
+                [SSJAnaliyticsManager event:@"loan_remind"];
                 break;
                 
             case SSJLoanTypeBorrow:
-                [MobClick event:@"owed_remind"];
+                [SSJAnaliyticsManager event:@"owed_remind"];
                 break;
         }
     }
@@ -1168,11 +1168,11 @@ const int kMemoMaxLength = 15;
             
             switch (wself.loanModel.type) {
                 case SSJLoanTypeLend:
-                    [MobClick event:@"loan_change_borrow_date"];
+                    [SSJAnaliyticsManager event:@"loan_change_borrow_date"];
                     break;
                     
                 case SSJLoanTypeBorrow:
-                    [MobClick event:@"owed_change_borrow_date"];
+                    [SSJAnaliyticsManager event:@"owed_change_borrow_date"];
                     break;
             }
         };
@@ -1196,11 +1196,11 @@ const int kMemoMaxLength = 15;
             
             switch (weakSelf.loanModel.type) {
                 case SSJLoanTypeLend:
-                    [MobClick event:@"loan_change_pay_date"];
+                    [SSJAnaliyticsManager event:@"loan_change_pay_date"];
                     break;
                     
                 case SSJLoanTypeBorrow:
-                    [MobClick event:@"owed_change_pay_date"];
+                    [SSJAnaliyticsManager event:@"owed_change_pay_date"];
                     break;
             }
         };
