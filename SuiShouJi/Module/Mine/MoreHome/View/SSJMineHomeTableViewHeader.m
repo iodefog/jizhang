@@ -10,6 +10,8 @@
 #import "SSJMineSyncButton.h"
 #import "SSJUserItem.h"
 #import "SSJUserTableManager.h"
+#define kTopViewHeight 125
+#define kBottomViewHeight 45
 
 @interface SSJMineHomeTableViewHeader()
 @property (nonatomic, strong) SSJMineHeaderView *headPotraitImage;
@@ -18,7 +20,7 @@
 @property(nonatomic, strong) UIButton *checkInButton;
 @property(nonatomic, strong) UILabel *geXingSignLabel;
 @property(nonatomic, strong) UIView *verticalSepertorLine;
-@property(nonatomic, strong) UIImageView *backImage;
+//@property(nonatomic, strong) UIImageView *backImage;
 @property(nonatomic, strong) UIButton *loginButton;
 @property(nonatomic, strong) SSJMineSyncButton *syncButton;
 @property (nonatomic, strong) UIImageView *dengjiImage;
@@ -31,7 +33,6 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        [self addSubview:self.backImage];
         [self addSubview:self.headPotraitImage];
         [self addSubview:self.nicknameLabel];
         [self addSubview:self.geXingSignLabel];
@@ -41,40 +42,37 @@
         [self addSubview:self.verticalSepertorLine];
         [self addSubview:self.loginButton];
         [self addSubview:self.dengjiImage];
-        if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
-            self.backImage.hidden = NO;
-            self.verticalSepertorLine.hidden = YES;
-        }else{
-            self.backImage.hidden = YES;
-            self.verticalSepertorLine.hidden = NO;
             self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
-        }
+        [self ssj_setBorderStyle:SSJBorderStyleBottom];
+        [self ssj_setBorderWidth:1.f];
+        [self ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
+
     }
     return self;
 }
 
 -(void)layoutSubviews{
     [super layoutSubviews];
-    self.backImage.frame = self.bounds;
-    self.loginButton.size = CGSizeMake(self.width, self.height - 50);
+//    self.backImage.frame = self.bounds;
+    self.loginButton.size = CGSizeMake(self.width, self.height - kBottomViewHeight);
     self.loginButton.leftTop = CGPointMake(0, 0);
     self.headPotraitImage.size = CGSizeMake(64, 64);
     self.headPotraitImage.left = 20;
-    self.headPotraitImage.top = 60;
+    self.headPotraitImage.centerY = (self.height - kBottomViewHeight) * 0.5 + 15;
     self.nicknameLabel.top = self.headPotraitImage.top + 15;
     self.nicknameLabel.left = self.geXingSignLabel.left = CGRectGetMaxX(self.headPotraitImage.frame) + 10;
     self.geXingSignLabel.top = CGRectGetMaxY(self.nicknameLabel.frame);
     self.geXingSignLabel.size = CGSizeMake(self.width - CGRectGetMinX(self.geXingSignLabel.frame), 21);
     self.dengjiImage.left = CGRectGetMaxX(self.nicknameLabel.frame) + 10;
     self.dengjiImage.centerY = self.nicknameLabel.centerY;
-    self.syncButton.size = CGSizeMake(self.width / 2 , 50);
+    self.syncButton.size = CGSizeMake(self.width / 2 , kBottomViewHeight);
     self.syncButton.leftBottom = CGPointMake(0, self.height);
     [self.syncButton ssj_relayoutBorder];
-    self.checkInButton.size = CGSizeMake(self.width / 2 , 50);
+    self.checkInButton.size = CGSizeMake(self.width / 2 , kBottomViewHeight);
     self.checkInButton.rightBottom = CGPointMake(self.width, self.height);
     [self.checkInButton ssj_relayoutBorder];
     self.verticalSepertorLine.centerX = self.width / 2;
-    self.verticalSepertorLine.centerY = self.height - 25;
+    self.verticalSepertorLine.centerY = self.height - 23;
 }
 
 - (void)setShouldSyncBlock:(BOOL (^)())shouldSyncBlock {
@@ -128,11 +126,8 @@
         _checkInButton.titleLabel.font = [UIFont systemFontOfSize:16];
         [_checkInButton ssj_setBorderStyle:SSJBorderStyleTop];
         [_checkInButton ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
-        if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
-            [_checkInButton ssj_setBorderWidth:0];
-        }else{
            [_checkInButton ssj_setBorderWidth:1.f / [UIScreen mainScreen].scale];
-        }
+
         
         [_checkInButton addTarget:self action:@selector(checkInButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -144,11 +139,7 @@
         _syncButton = [[SSJMineSyncButton alloc]init];
         [_syncButton ssj_setBorderStyle:SSJBorderStyleTop];
         [_syncButton ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
-        if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
-            [_syncButton ssj_setBorderWidth:0];
-        }else{
             [_syncButton ssj_setBorderWidth:1.f / [UIScreen mainScreen].scale];
-        }
     }
     return _syncButton;
 }
@@ -161,13 +152,13 @@
     return _loginButton;
 }
 
--(UIImageView *)backImage{
-    if (!_backImage) {
-        _backImage = [[UIImageView alloc]init];
-        _backImage.image = [UIImage imageNamed:@"more_bg"];
-    }
-    return _backImage;
-}
+//-(UIImageView *)backImage{
+//    if (!_backImage) {
+//        _backImage = [[UIImageView alloc]init];
+//        _backImage.image = [UIImage imageNamed:@"more_bg"];
+//    }
+//    return _backImage;
+//}
 
 -(UIView *)verticalSepertorLine{
     if (!_verticalSepertorLine) {
@@ -297,18 +288,10 @@
 }
 
 - (void)updateAfterThemeChange{
-    if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
-        self.backImage.hidden = NO;
-        [self.checkInButton ssj_setBorderWidth:0];
-        [self.syncButton ssj_setBorderWidth:0];
-        self.verticalSepertorLine.hidden = YES;
-    }else{
-        self.backImage.hidden = YES;
-        self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
-        [self.checkInButton ssj_setBorderWidth:1.f / [UIScreen mainScreen].scale];
-        [self.syncButton ssj_setBorderWidth:1.f / [UIScreen mainScreen].scale];
-        self.verticalSepertorLine.hidden = NO;
-    }
+    self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+    [self ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
+    [self.checkInButton ssj_setBorderWidth:1.f / [UIScreen mainScreen].scale];
+    [self.syncButton ssj_setBorderWidth:1.f / [UIScreen mainScreen].scale];
     self.geXingSignLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.moreHomeSubtitleColor];
     self.nicknameLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.moreHomeTitleColor];
     self.checkInLevelLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.moreHomeSubtitleColor];  

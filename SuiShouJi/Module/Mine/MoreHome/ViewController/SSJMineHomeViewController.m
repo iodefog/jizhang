@@ -169,11 +169,6 @@ static BOOL kNeedBannerDisplay = YES;
     [super viewWillAppear:animated];
     [self.bannerService requestBannersList];
     [self.dotService requestThemeAndAdviceUpdate];
-    
-    if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
-        [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
-    }
-    
     [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
 
@@ -198,10 +193,10 @@ static BOOL kNeedBannerDisplay = YES;
 
 -(void)viewDidLayoutSubviews{
     [super viewDidLayoutSubviews];
-    self.header.size = CGSizeMake(self.view.width, 219);
+    self.header.size = CGSizeMake(self.view.width, 170);
     self.header.leftTop = CGPointMake(0, 0);
     self.collectionView.size = CGSizeMake(self.view.width, self.view.height - self.header.bottom - self.tabBarController.tabBar.height);
-    self.collectionView.top = self.header.bottom;
+    self.collectionView.top = self.header.bottom + 10;
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -532,7 +527,7 @@ static BOOL kNeedBannerDisplay = YES;
 -(SSJMineHomeTableViewHeader *)header {
     if (!_header) {
         __weak typeof(self) weakSelf = self;
-        _header = [[SSJMineHomeTableViewHeader alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 135)];
+        _header = [[SSJMineHomeTableViewHeader alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 170)];
         _header.HeaderClickedBlock = ^(){
             [weakSelf loginButtonClicked];
         };
@@ -667,7 +662,9 @@ static BOOL kNeedBannerDisplay = YES;
     [super updateAppearanceAfterThemeChanged];
     [self.header updateAfterThemeChange];
 //    _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
+//  self.collectionView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     self.lineView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
+
 }
 
 //-(void)getCircleChargeState {
