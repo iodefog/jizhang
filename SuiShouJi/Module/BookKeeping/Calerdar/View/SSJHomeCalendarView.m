@@ -38,6 +38,7 @@
 {
     if ([super initWithFrame:frame]) {
         [self addSubview:self.topView];
+        [self addSubview:self.horuAndMinuBgView];
         [self addSubview:self.datePicker];
         //主题通知
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCellAppearanceAfterThemeChanged) name:SSJThemeDidChangeNotification object:nil];
@@ -53,7 +54,7 @@
     self.datePicker.frame = CGRectMake(0,self.topView.height,self.width,self.height - self.topView.height);
     self.titleLabel.centerX = self.centerX;
     self.titleLabel.centerY = self.closeButton.centerY;
-    self.horuAndMinuBgView.frame = CGRectMake(0, 0, 0, 0);
+    self.horuAndMinuBgView.frame = CGRectMake(220,self.datePicker.centerY - 22, self.width - 20, 43);
 }
 
 #pragma mark - Lazy
@@ -323,7 +324,7 @@
     if (component == 0) {
         return 50;
     }else if (component == 1){
-        return 140;
+        return 150;
     }else if (component == 3 || component == 5) {
         return 20;
     }
@@ -418,6 +419,7 @@
     
     self.titleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
+    self.horuAndMinuBgView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailHeaderColor alpha:0.1];
 }
 
 - (void)dealloc

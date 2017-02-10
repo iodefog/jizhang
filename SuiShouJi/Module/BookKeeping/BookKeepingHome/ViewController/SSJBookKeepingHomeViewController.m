@@ -126,7 +126,7 @@
     [self.view addSubview:self.bookKeepingHeader];
     [self.view addSubview:self.homeButton];
     [self.view addSubview:self.statusLabel];
-    [self.view addSubview:self.billStickyNoteView];
+//    [self.view addSubview:self.billStickyNoteView];//mzl新年账单
     self.tableView.frame = self.view.frame;
     //    self.newlyAddChargeArr = [[NSMutableArray alloc]init];
     //    self.tableView.backgroundColor = [UIColor whiteColor];
@@ -224,18 +224,18 @@
     self.homeButton.size = CGSizeMake(106, 106);
     self.homeButton.top = self.bookKeepingHeader.bottom - 60;
     self.homeButton.centerX = self.view.width / 2;
-    self.billStickyNoteView.centerX = self.view.centerX;
-    self.billStickyNoteView.width = self.view.width;
-    self.billStickyNoteView.top = self.homeButton.bottom;
-    BOOL haveShowTheNoteView = [[[NSUserDefaults standardUserDefaults] objectForKey:SSJShowBillNoteKey] boolValue];
-    if (!haveShowTheNoteView) {
-        //没显示过
-        self.billStickyNoteView.height = 105;
-        self.billStickyNoteView.hidden = NO;
-    } else {
-        self.billStickyNoteView.height = 0;
-        self.billStickyNoteView.hidden = YES;
-    }
+//    self.billStickyNoteView.centerX = self.view.centerX;
+//    self.billStickyNoteView.width = self.view.width;
+//    self.billStickyNoteView.top = self.homeButton.bottom;
+    BOOL haveShowTheNoteView = YES;//是否显示过新年账单默认显示过了//[[[NSUserDefaults standardUserDefaults] objectForKey:SSJShowBillNoteKey] boolValue];
+//    if (!haveShowTheNoteView) {
+//        //没显示过
+//        self.billStickyNoteView.height = 105;
+//        self.billStickyNoteView.hidden = NO;
+//    } else {
+//        self.billStickyNoteView.height = 0;
+//        self.billStickyNoteView.hidden = YES;
+//    }
     if (!SSJ_CURRENT_THEME.tabBarBackgroundImage.length) {
         if (!haveShowTheNoteView) {
             self.tableView.top = self.billStickyNoteView.bottom;
@@ -697,7 +697,7 @@
                 [weakSelf presentViewController:billVC animated:YES completion:nil];
                 [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:SSJShowBillNoteKey];
                 [[NSUserDefaults standardUserDefaults] synchronize];
-                [weakSelf.billStickyNoteView removeFromSuperview];
+//                [weakSelf.billStickyNoteView removeFromSuperview];
                 [weakSelf.view layoutIfNeeded];
             }
         };
