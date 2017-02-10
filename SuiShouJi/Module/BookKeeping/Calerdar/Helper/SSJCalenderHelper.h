@@ -31,6 +31,6 @@
  *  @param failure 查询失败的回调
  */
 + (void)queryBalanceForDate:(NSString*)date
-                    success:(void (^)(double data))success
+                    success:(void (^)(double income , double expence))success
                     failure:(void (^)(NSError *error))failure;
 @end

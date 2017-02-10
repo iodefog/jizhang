@@ -20,7 +20,7 @@
 #import "SSJDatePeriod.h"
 #import "SSJDataSynchronizer.h"
 #import "SSJUserTableManager.h"
-#import <UMMobClick/MobClick.h>
+//#import <UMSSJAnaliyticsManager/SSJAnaliyticsManager.h>
 
 static NSString *const kBudgetEditLabelCellId = @"kBudgetEditLabelCellId";
 static NSString *const kBudgetEditTextFieldCellId = @"kBudgetEditTextFieldCellId";
@@ -720,20 +720,20 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         
         switch (self.model.type) {
             case SSJBudgetPeriodTypeWeek:
-                [MobClick event:@"budget_cycle_week"];
+                [SSJAnaliyticsManager event:@"budget_cycle_week"];
                 break;
                 
             case SSJBudgetPeriodTypeMonth:
-                [MobClick event:@"budget_cycle_month"];
+                [SSJAnaliyticsManager event:@"budget_cycle_month"];
                 break;
                 
             case SSJBudgetPeriodTypeYear:
-                [MobClick event:@"budget_cycle_year"];
+                [SSJAnaliyticsManager event:@"budget_cycle_year"];
                 break;
         }
         
         if (![self.model.billIds isEqualToArray:@[@"all"]]) {
-            [MobClick event:@"budget_add_part"];
+            [SSJAnaliyticsManager event:@"budget_add_part"];
         }
         
     } failure:^(NSError * _Nonnull error) {
@@ -778,7 +778,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         wself.model.billIds = controller.selectedTypeList;
     };
     [self.navigationController pushViewController:billTypeSelectionController animated:YES];
-    [MobClick event:@"budget_pick_bill_type"];
+    [SSJAnaliyticsManager event:@"budget_pick_bill_type"];
 }
 
 #pragma mark - Getter

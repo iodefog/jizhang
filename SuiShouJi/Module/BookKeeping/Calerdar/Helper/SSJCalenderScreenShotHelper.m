@@ -28,7 +28,7 @@
         
         // 调整两张图的宽和高
         double headerImageHeight = headerImage.size.height * width / headerImage.size.width;
-        double wholeHeight = MAX(headerImageHeight + 130 + 90 * images.count + 48, SSJSCREENHEIGHT);
+        double wholeHeight = MAX(headerImageHeight + 140 + 90 * images.count + 48, SSJSCREENHEIGHT);
         [headerImage ssj_scaleImageWithSize:CGSizeMake(width, headerImageHeight)];
 //        [backImage ssj_scaleImageWithSize:CGSizeMake(SSJSCREENWITH, SSJSCREENHEIGHT)];
 
@@ -96,12 +96,12 @@
         }
         
         // 把二维码的图画上去
-        [qrImage drawInRect:CGRectMake(width / 2 - qrImage.size.width / 2, wholeHeight - 65 - qrImage.size.height / 2, qrImage.size.width, qrImage.size.height)];
+        [qrImage drawInRect:CGRectMake(width / 2 - qrImage.size.width / 2, wholeHeight - 70 - qrImage.size.height / 2, qrImage.size.width, qrImage.size.height)];
         
         // 把二维码下面的字写上去
         NSString *qrStr = @"长按识别图中二维码,下载有鱼记账";
         CGSize qrStrSize = [qrStr sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13]}];
-        [qrStr drawInRect:CGRectMake((width - qrStrSize.width) / 2, wholeHeight - 65 - qrStrSize.height / 2, qrStrSize.width, qrStrSize.height) withAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13],NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+        [qrStr drawInRect:CGRectMake((width - qrStrSize.width) / 2, wholeHeight - 65 + qrImage.size.height / 2, qrStrSize.width, qrStrSize.height) withAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13],NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
 
         shareImage = UIGraphicsGetImageFromCurrentImageContext();
         

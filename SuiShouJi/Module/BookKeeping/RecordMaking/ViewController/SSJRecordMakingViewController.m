@@ -178,7 +178,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         _customNaviBar = [[SSJRecordMakingCustomNavigationBar alloc] init];
         _customNaviBar.titles = @[@"test1", @"test2"];
         _customNaviBar.selectBookHandle = ^(SSJRecordMakingCustomNavigationBar *naviBar) {
-            [MobClick event:@"addRecord_changeBooks"];//记一笔-切换账本
+            [SSJAnaliyticsManager event:@"addRecord_changeBooks"];//记一笔-切换账本
             wself.item.booksId = [wself.booksIds ssj_safeObjectAtIndex:naviBar.selectedTitleIndex];
             [wself.currentInput becomeFirstResponder];
             [wself loadCategoryAndBooksList];
@@ -424,7 +424,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     if (textField == _billTypeInputView.moneyInput
         || textField == _accessoryView.memoView) {
         [self makeArecord];
-        [MobClick event:@"addRecord_save"];
+        [SSJAnaliyticsManager event:@"addRecord_save"];
     }
     return YES;
 }
@@ -504,10 +504,10 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 
 - (void)segmentPressed {
     if (_customNaviBar.selectedBillType == SSJBillTypePay) {
-        [MobClick event:@"addRecord_type_out"];
+        [SSJAnaliyticsManager event:@"addRecord_type_out"];
         [_scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
     } else if (_customNaviBar.selectedBillType == SSJBillTypeIncome) {
-        [MobClick event:@"addRecord_type_in"];
+        [SSJAnaliyticsManager event:@"addRecord_type_in"];
         [_scrollView setContentOffset:CGPointMake(_scrollView.width, 0) animated:YES];
     }
     
@@ -518,14 +518,14 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 }
 
 - (void)selectFundAccountAction {
-    [MobClick event:@"addRecord_fund"];
+    [SSJAnaliyticsManager event:@"addRecord_fund"];
     [self.FundingTypeSelectView show];
     [_billTypeInputView.moneyInput resignFirstResponder];
     [_accessoryView.memoView resignFirstResponder];
 }
 
 - (void)selectBillDateAction {
-    [MobClick event:@"addRecord_calendar"];
+    [SSJAnaliyticsManager event:@"addRecord_calendar"];
     [self.dateSelectedView show];
     [_billTypeInputView.moneyInput resignFirstResponder];
     [_accessoryView.memoView resignFirstResponder];
@@ -535,7 +535,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     if (_selectedImage || self.item.chargeImage.length != 0) {
         SSJImaageBrowseViewController *imageBrowserVC = [[SSJImaageBrowseViewController alloc]init];
         __weak typeof(self) weakSelf = self;
-        [MobClick event:@"addRecord_camera"];
+        [SSJAnaliyticsManager event:@"addRecord_camera"];
         imageBrowserVC.DeleteImageBlock = ^(){
             weakSelf.selectedImage = nil;
             weakSelf.item.chargeImage = @"";
@@ -561,7 +561,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 }
 
 - (void)selectMemberAction{
-    [MobClick event:@"addRecord_member"];
+    [SSJAnaliyticsManager event:@"addRecord_member"];
     self.memberSelectView.selectedMemberItems = [self.item.membersItem mutableCopy];
     self.memberSelectView.chargeId = self.item.ID;
     [self.memberSelectView show];
@@ -570,7 +570,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 }
 
 //- (void)selectPeriodAction {
-//    [MobClick event:@"addRecord_cycle"];
+//    [SSJAnaliyticsManager event:@"addRecord_cycle"];
 //    self.ChargeCircleSelectView.selectCircleType = _selectChargeCircleType;
 //    [self.ChargeCircleSelectView show];
 //    [_billTypeInputView.moneyInput resignFirstResponder];
@@ -611,7 +611,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     }
     
     if (_customNaviBar.managed) {
-        [MobClick event:@"addRecord_manage"];
+        [SSJAnaliyticsManager event:@"addRecord_manage"];
     } else {
         [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
     }
@@ -879,7 +879,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     self.item.chargeMemo = _accessoryView.memoView.text;
     
     if (self.item.chargeMemo && self.item.ID.length) {
-        [MobClick event:@"addRecord_memo"];
+        [SSJAnaliyticsManager event:@"addRecord_memo"];
     }
     
     if (_selectedImage != nil) {
@@ -929,7 +929,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     
     billTypeView.deleteAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView, SSJRecordMakingBillTypeSelectionCellItem *item) {
         [wself deleteItem:item ofItems:selectionView.items];
-        [MobClick event:@"bill_type_delete"];
+        [SSJAnaliyticsManager event:@"bill_type_delete"];
     };
     
     billTypeView.shouldDeleteAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView, SSJRecordMakingBillTypeSelectionCellItem *item) {

@@ -155,7 +155,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
             [alert addAction:comfirmAction];
             [self.navigationController presentViewController:alert animated:YES completion:NULL];
         } else {
-            [MobClick event:@"credit_bill_date"];
+            [SSJAnaliyticsManager event:@"credit_bill_date"];
             self.billingDateSelectView.currentDate = self.item.cardBillingDay;
             [self.billingDateSelectView show];
         }
@@ -169,7 +169,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
             [alert addAction:comfirmAction];
             [self.navigationController presentViewController:alert animated:YES completion:NULL];
         } else {
-            [MobClick event:@"credit_payment_date"];
+            [SSJAnaliyticsManager event:@"credit_payment_date"];
             self.repaymentDateSelectView.currentDate = self.item.cardRepaymentDay;
             [self.repaymentDateSelectView show];
         }
@@ -484,7 +484,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         self.remindItem.remindState = self.remindStateButton.isOn;
     }else{
         if (self.remindStateButton.isOn) {
-            [MobClick event:@"credit_remind"];
+            [SSJAnaliyticsManager event:@"credit_remind"];
             SSJReminderEditeViewController *remindEditeVc = [[SSJReminderEditeViewController alloc]init];
             remindEditeVc.needToSave = NO;
             SSJReminderItem *item = [[SSJReminderItem alloc]init];

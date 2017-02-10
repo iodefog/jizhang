@@ -17,7 +17,7 @@
 #import "SSJDataSynchronizer.h"
 #import "SSJCreditCardItem.h"
 #import "SSJChargeCircleModifyCell.h"
-#import "SSJFundingTransferDetailViewController.h"
+#import "SSJFundingTransferListViewController.h"
 #import "SSJFundingTypeSelectViewController.h"
 #import "FMDB.h"
 #import "SSJFundingTransferStore.h"
@@ -461,7 +461,7 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
 
 #pragma mark - Event
 -(void)rightButtonClicked:(id)sender{
-    SSJFundingTransferDetailViewController *transferDetailVc = [[SSJFundingTransferDetailViewController alloc]init];
+    SSJFundingTransferListViewController *transferDetailVc = [[SSJFundingTransferListViewController alloc]init];
     [self.navigationController pushViewController:transferDetailVc animated:YES];
 }
 

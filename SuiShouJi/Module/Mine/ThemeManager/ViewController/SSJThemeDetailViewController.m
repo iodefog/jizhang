@@ -124,10 +124,10 @@ static NSString *const kCellId = @"SSJThemeImageCollectionViewCell";
         [((UIButton *)sender) setTitle:@"" forState:UIControlStateNormal];
         [[SSJThemeDownLoaderManger sharedInstance] downloadThemeWithItem:self.item success:^(SSJThemeItem *item){
             [SSJThemeSetting switchToThemeID:weakSelf.item.themeId];
-            [MobClick event:@"download_skin" attributes:@{@"ID":item.themeId,@"Name":item.themeTitle}];
+            [SSJAnaliyticsManager event:@"download_skin" extra:item.themeTitle];
             SSJThemeDownLoadCompleteService *downloadCompleteService = [[SSJThemeDownLoadCompleteService alloc]initWithDelegate:nil];
             [downloadCompleteService downloadCompleteThemeWithThemeId:item.themeId];
-            [MobClick event:@"open_skin" attributes:@{@"ID":item.themeId,@"Name":item.themeTitle}];
+            [SSJAnaliyticsManager event:@"open_skin" extra:item.themeTitle];
             UITabBarController *tabVC = (UITabBarController *)((MMDrawerController *)[UIApplication sharedApplication].keyWindow.rootViewController).centerViewController;
             tabVC.selectedIndex = 0;
             [weakSelf.navigationController popToRootViewControllerAnimated:YES];
@@ -145,7 +145,7 @@ static NSString *const kCellId = @"SSJThemeImageCollectionViewCell";
         } forID:self.item.themeId];
     }else if ([((UIButton *)sender).titleLabel.text isEqualToString:@"启用"]){
         [SSJThemeSetting switchToThemeID:self.item.themeId];
-        [MobClick event:@"open_skin" attributes:@{@"ID":self.item.themeId,@"Name":self.item.themeTitle}];
+        [SSJAnaliyticsManager event:@"open_skin" extra:self.item.themeTitle];
         [self.navigationController popToRootViewControllerAnimated:YES];
     }
 }

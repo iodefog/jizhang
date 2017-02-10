@@ -328,7 +328,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
     }
     
     // 查询最大的周期转账流水的cid后缀
-    FMResultSet *resultSet = [db executeQuery:@"select max(cast(substr(uc.cid, length(tc.icycleid) + 2) as int)) as suffix, tc.icycleid from bk_user_charge as uc, bk_transfer_cycle as tc where uc.cuserid = ? and tc.cuserid = uc.cuserid and uc.ichargetype = 5 and uc.cid like (tc.icycleid || '-%') and tc.operatortype <> 2 and tc.istate <> 0 group by tc.icycleid", userId];
+    FMResultSet *resultSet = [db executeQuery:@"select max(cast(substr(uc.cid, length(tc.icycleid) + 2) as int)) as suffix, tc.icycleid from bk_user_charge as uc, bk_transfer_cycle as tc where uc.cuserid = ? and tc.cuserid = uc.cuserid and uc.ichargetype = 5 and uc.cid like (tc.icycleid || '-%') and tc.operatortype <> 2 and tc.istate = 1 and tc.icycletype <> -1 group by tc.icycleid", userId];
     if (!resultSet) {
         return NO;
     }
@@ -344,7 +344,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
     [resultSet close];
     
     // 根据最近一次周期转账流水计算出需要补充的流水
-    resultSet = [db executeQuery:@"select max(uc.cbilldate), tc.* from bk_user_charge as uc, bk_transfer_cycle as tc where uc.cuserid = ? and uc.cuserid = tc.cuserid and uc.ichargetype = 5 and uc.cid like (tc.icycleid || '-%') and tc.operatortype <> 2 and tc.istate <> 0 and uc.cbilldate <= datetime('now', 'localtime') group by tc.icycleid", userId];
+    resultSet = [db executeQuery:@"select max(uc.cbilldate), tc.* from bk_user_charge as uc, bk_transfer_cycle as tc where uc.cuserid = ? and uc.cuserid = tc.cuserid and uc.ichargetype = 5 and uc.cid like (tc.icycleid || '-%') and tc.operatortype <> 2 and tc.istate = 1 and tc.icycletype <> -1 and uc.cbilldate <= datetime('now', 'localtime') group by tc.icycleid", userId];
     if (!resultSet) {
         return NO;
     }
@@ -378,7 +378,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
     [resultSet close];
     
     // 查询没有生成过流水的周期转账，根据起始日期、结束日期及当天日期得出需要补充的流水
-    NSMutableString *sql = [[NSMutableString alloc] initWithString:@"select * from bk_transfer_cycle where cuserid = ? and operatortype <> 2 and istate = 1"];
+    NSMutableString *sql = [[NSMutableString alloc] initWithString:@"select * from bk_transfer_cycle where cuserid = ? and operatortype <> 2 and istate = 1 and icycletype <> -1"];
     if (cycleIds.count) {
         NSString *cycleIdStr = [cycleIds componentsJoinedByString:@","];
         [sql appendFormat:@" and icycleid not in (%@)", cycleIdStr];

@@ -114,7 +114,7 @@ static NSString *const kLodingViewAnimationKey = @"lodingViewAnimationKey";
 //-(void)startLoading{
 //    _startTime = CFAbsoluteTimeGetCurrent();
 //    
-//    [MobClick event:@"15"];
+//    [SSJAnaliyticsManager event:@"15"];
 //    
 //    self.recordMakingButton.layer.borderColor = [UIColor clearColor].CGColor;
 //

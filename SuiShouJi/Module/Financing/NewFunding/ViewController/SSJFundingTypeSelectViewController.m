@@ -67,7 +67,7 @@
         addLoanController.enterFromFundTypeList = YES;
         [self.navigationController pushViewController:addLoanController animated:YES];
         
-        [MobClick event:@"add_loan"];
+        [SSJAnaliyticsManager event:@"add_loan"];
         
     }else if ([item.fundingID isEqualToString:@"11"]){
         
@@ -76,7 +76,7 @@
         addLoanController.enterFromFundTypeList = YES;
         [self.navigationController pushViewController:addLoanController animated:YES];
         
-        [MobClick event:@"add_owed"];
+        [SSJAnaliyticsManager event:@"add_owed"];
         
     }else if ([item.fundingID isEqualToString:@"3"]){
         SSJNewCreditCardViewController *newCreditCardVc = [[SSJNewCreditCardViewController alloc]init];

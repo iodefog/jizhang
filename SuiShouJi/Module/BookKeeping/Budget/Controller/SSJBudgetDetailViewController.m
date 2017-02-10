@@ -197,7 +197,7 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
         }];
         
         if (![self.budgetModel.billIds isEqualToArray:@[@"all"]]) {
-            [MobClick event:@"budget_part_detail"];
+            [SSJAnaliyticsManager event:@"budget_part_detail"];
         }
         
     } failure:^(NSError * _Nullable error) {

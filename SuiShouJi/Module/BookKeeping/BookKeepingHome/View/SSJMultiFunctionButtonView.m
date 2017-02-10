@@ -229,9 +229,9 @@ static const CGFloat kButtonGap = 8.0;
         if (selectedIndex == _mainButtonIndex) {
             self.buttonStatus = !self.buttonStatus;
             if (self.buttonStatus) {
-                [MobClick event:@"main_float_collapsed"];
+                [SSJAnaliyticsManager event:@"main_float_collapsed"];
             }else{
-                [MobClick event:@"main_float_expand"];
+                [SSJAnaliyticsManager event:@"main_float_expand"];
             }
         }
         if (_customDelegate && [_customDelegate respondsToSelector:@selector(multiFunctionButtonView:willSelectButtonAtIndex:)]) {

@@ -151,7 +151,7 @@
             [_slidePageView setButtonImage:[UIImage ssj_themeImageWithName:@"search_ordernormal"] layoutType:SSJButtonLayoutTypeImageRightTitleLeft spaceBetweenImageAndTitle:13 forControlState:UIControlStateNormal atIndex:0];
             [_slidePageView setButtonImage:[UIImage imageNamed:@"search_orderasc"] layoutType:SSJButtonLayoutTypeImageRightTitleLeft spaceBetweenImageAndTitle:13 forControlState:UIControlStateNormal atIndex:1];
             [self.slidePageView setSelectedIndex:1 animated:YES];
-            [MobClick event:@"search_order_money"];
+            [SSJAnaliyticsManager event:@"search_order_money"];
             break;
         }
             
@@ -159,7 +159,7 @@
             [_slidePageView setButtonImage:[UIImage ssj_themeImageWithName:@"search_ordernormal"] layoutType:SSJButtonLayoutTypeImageRightTitleLeft spaceBetweenImageAndTitle:13 forControlState:UIControlStateNormal atIndex:0];
             [_slidePageView setButtonImage:[UIImage ssj_themeImageWithName:@"search_orderdesc"] layoutType:SSJButtonLayoutTypeImageRightTitleLeft spaceBetweenImageAndTitle:13 forControlState:UIControlStateNormal atIndex:1];
             [self.slidePageView setSelectedIndex:1 animated:YES];
-            [MobClick event:@"search_order_money"];
+            [SSJAnaliyticsManager event:@"search_order_money"];
             break;
         }
             
@@ -167,7 +167,7 @@
             [_slidePageView setButtonImage:[UIImage ssj_themeImageWithName:@"search_orderasc"] layoutType:SSJButtonLayoutTypeImageRightTitleLeft spaceBetweenImageAndTitle:13 forControlState:UIControlStateNormal atIndex:0];
             [_slidePageView setButtonImage:[UIImage ssj_themeImageWithName:@"search_ordernormal"] layoutType:SSJButtonLayoutTypeImageRightTitleLeft spaceBetweenImageAndTitle:13 forControlState:UIControlStateNormal atIndex:1];
             [self.slidePageView setSelectedIndex:0 animated:YES];
-            [MobClick event:@"search_order_time"];
+            [SSJAnaliyticsManager event:@"search_order_time"];
             break;
         }
             
@@ -175,7 +175,7 @@
             [_slidePageView setButtonImage:[UIImage ssj_themeImageWithName:@"search_orderdesc"] layoutType:SSJButtonLayoutTypeImageRightTitleLeft spaceBetweenImageAndTitle:13 forControlState:UIControlStateNormal atIndex:0];
             [_slidePageView setButtonImage:[UIImage ssj_themeImageWithName:@"search_ordernormal"] layoutType:SSJButtonLayoutTypeImageRightTitleLeft spaceBetweenImageAndTitle:13 forControlState:UIControlStateNormal atIndex:1];
             [self.slidePageView setSelectedIndex:0 animated:YES];
-            [MobClick event:@"search_order_time"];
+            [SSJAnaliyticsManager event:@"search_order_time"];
             break;
         }
             

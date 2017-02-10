@@ -9,7 +9,7 @@
 
 #import "SSJBaseViewController.h"
 #import "UIViewController+SSJPageFlow.h"
-#import <UMMobClick/MobClick.h>
+//#import <ume/SSJAnaliyticsManager.h>
 #import "SSJLoginViewController.h"
 #import "SSJUserTableManager.h"
 #import "UIViewController+MMDrawerController.h"
@@ -97,7 +97,7 @@
 
 - (void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-    [MobClick beginLogPageView:[self statisticsTitle]];
+    [SSJAnaliyticsManager beginLogPageView:[self statisticsTitle]];
     if (self.navigationController && [[self.navigationController viewControllers] count] > 1) {
         self.navigationController.interactivePopGestureRecognizer.enabled = YES;
         self.navigationController.interactivePopGestureRecognizer.delegate = self;
@@ -109,7 +109,7 @@
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    [MobClick endLogPageView:[self statisticsTitle]];
+    [SSJAnaliyticsManager endLogPageView:[self statisticsTitle]];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {

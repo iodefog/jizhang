@@ -275,7 +275,7 @@
 
 -(void)deleteButtonClicked:(id)sender{
     [self dismiss];
-    [MobClick event:@"delete_account_book"];
+    [SSJAnaliyticsManager event:@"delete_account_book"];
     if (self.deleteButtonClickedBlock) {
         self.deleteButtonClickedBlock(self.item);
     }

@@ -161,11 +161,11 @@ static NSString *const kSegmentTitleIncome = @"收入";
             
             switch (wself.selectedOption) {
                 case SSJReportFormsMemberAndCategoryOptionCategory:
-                    [MobClick event:@"form_category"];
+                    [SSJAnaliyticsManager event:@"form_category"];
                     break;
                     
                 case SSJReportFormsMemberAndCategoryOptionMember:
-                    [MobClick event:@"form_member"];
+                    [SSJAnaliyticsManager event:@"form_member"];
                     break;
             }
         };
@@ -195,7 +195,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
 
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [MobClick event:@"forms_bar_chart"];
+    [SSJAnaliyticsManager event:@"forms_bar_chart"];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     SSJBaseItem *item = [self.datas ssj_safeObjectAtIndex:indexPath.row];
@@ -214,7 +214,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
         [self.navigationController pushViewController:billingChargeVC animated:YES];
         
         if (tmpItem.isMember) {
-            [MobClick event:@"form_member_detail"];
+            [SSJAnaliyticsManager event:@"form_member_detail"];
         }
     } else if ([item isKindOfClass:[SSJReportFormCurveListCellItem class]]) {
         
@@ -275,9 +275,9 @@ static NSString *const kSegmentTitleIncome = @"收入";
     }
     
     if (_payAndIncomeSegmentControl.selectedIndex == 0) {
-        [MobClick event:@"form_out"];
+        [SSJAnaliyticsManager event:@"form_out"];
     } else if (_payAndIncomeSegmentControl.selectedIndex == 1) {
-        [MobClick event:@"form_in"];
+        [SSJAnaliyticsManager event:@"form_in"];
     }
 }
 
@@ -314,7 +314,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
 - (void)scaleAxisView:(SSJReportFormsScaleAxisView *)scaleAxisView didSelectedScaleAxisAtIndex:(NSUInteger)index {
     _selectedPeriod = [_periods ssj_safeObjectAtIndex:index];
     [self reloadDatasInPeriod:_selectedPeriod];
-    [MobClick event:@"form_date_picked"];
+    [SSJAnaliyticsManager event:@"form_date_picked"];
 }
 
 #pragma mark - Event
@@ -333,14 +333,14 @@ static NSString *const kSegmentTitleIncome = @"收入";
         
         [self reloadDatasInPeriod:_selectedPeriod];
         
-        [MobClick event:@"form_date_custom_delete"];
+        [SSJAnaliyticsManager event:@"form_date_custom_delete"];
     } else {
         [self enterCalendarVC];
     }
 }
 
 - (void)selectBookAction {
-    [MobClick event:@"forms_open_account_books"];
+    [SSJAnaliyticsManager event:@"forms_open_account_books"];
     [self.mm_drawerController toggleDrawerSide:MMDrawerSideLeft animated:YES completion:^(BOOL finished) {
 //        if (!_dateViewHasDismiss) {
 //            [self.floatingDateView dismiss];
@@ -724,7 +724,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
     };
     [self.navigationController pushViewController:calendarVC animated:YES];
     
-    [MobClick event:@"form_date_custom"];
+    [SSJAnaliyticsManager event:@"form_date_custom"];
 }
 
 #pragma mark - LazyLoading
@@ -811,15 +811,15 @@ static NSString *const kSegmentTitleIncome = @"收入";
             
             switch (view.item.timeDimension) {
                 case SSJTimeDimensionDay:
-                    [MobClick event:@"form_curve_day"];
+                    [SSJAnaliyticsManager event:@"form_curve_day"];
                     break;
                     
                 case SSJTimeDimensionWeek:
-                    [MobClick event:@"form_curve_week"];
+                    [SSJAnaliyticsManager event:@"form_curve_week"];
                     break;
                     
                 case SSJTimeDimensionMonth:
-                    [MobClick event:@"form_curve_month"];
+                    [SSJAnaliyticsManager event:@"form_curve_month"];
                     break;
                     
                 case SSJTimeDimensionUnknown:

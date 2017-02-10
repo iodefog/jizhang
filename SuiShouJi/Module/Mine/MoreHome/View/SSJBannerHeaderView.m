@@ -39,7 +39,7 @@
         __weak typeof(self) weakSelf = self;
         _banner.tapAction = ^(SCYWinCowryHomeBannerView *view, NSUInteger tapIndex){
             SSJBannerItem *item = [weakSelf.items ssj_safeObjectAtIndex:tapIndex];
-            [MobClick event:@"mine_banner" attributes:@{@"bannerUrl":item.bannerUrl}];
+            [SSJAnaliyticsManager event:@"mine_banner" extra:item.bannerUrl];
             if (weakSelf.bannerClickedBlock) {
                 weakSelf.bannerClickedBlock(item.bannerUrl,item.bannerName);
             }
@@ -58,7 +58,7 @@
 }
 
 -(void)closeButtonClick:(id)sender{
-    [MobClick event:@"mine_banner_close"];
+    [SSJAnaliyticsManager event:@"mine_banner_close"];
     if (self.closeButtonClickBlock) {
         self.closeButtonClickBlock();
     }

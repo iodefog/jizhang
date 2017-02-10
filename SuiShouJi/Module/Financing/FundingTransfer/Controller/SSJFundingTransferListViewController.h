@@ -6,7 +6,10 @@
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
 
+// 转账记录
+
 #import "SSJNewBaseTableViewController.h"
 
-@interface SSJFundingTransferDetailViewController : SSJNewBaseTableViewController
+@interface SSJFundingTransferListViewController : SSJNewBaseTableViewController
+
 @end

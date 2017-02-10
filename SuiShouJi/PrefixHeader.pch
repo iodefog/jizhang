@@ -40,6 +40,8 @@
 #import "UIImageView+WebCache.h"
 #import "NSDate+DateTools.h"
 #import <UMMobClick/MobClick.h>
+#import <YYAnalytics/YYAnalytics.h>
+#import "SSJAnaliyticsManager.h"
 #import "MQChatViewManager.h"
 #import "SSJTheme.h"
 
