@@ -9,6 +9,11 @@
 #import <Foundation/Foundation.h>
 #import "SSJFundingTransferDetailItem.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
+extern NSString *SSJFundingTransferStoreMonthKey;
+extern NSString *SSJFundingTransferStoreListKey;
+
 @interface SSJFundingTransferStore : NSObject
 
 /**
@@ -17,7 +22,7 @@
  *  @param success 查询成功的回调
  *  @param failure 查询失败的回调
  */
-+ (void)queryForFundingTransferListWithSuccess:(void(^)(NSMutableDictionary *result))success
++ (void)queryForFundingTransferListWithSuccess:(void(^)(NSArray <NSDictionary *>*result))success
                                        failure:(void (^)(NSError *error))failure;
 
 /**
@@ -30,6 +35,68 @@
                               Success:(void(^)())success
                               failure:(void (^)(NSError *error))failure;
 
-+ (void)saveCycleTransferRecordWithID:(NSString *)ID transferOutAccountId:(NSString *)transferOutAccountId transferInAccountId:(NSString *)transferInAccountId money:(float)money memo:(NSString *)memo;
+/**
+ 新建或编辑周期转账，根据转账id判断此记录如果存在就编辑，反之就新建
+
+ @param ID 转账id
+ @param transferOutAccountId 转出账户id
+ @param transferInAccountId 转入账户id
+ @param money 转账金额
+ @param memo 转账备注
+ @param cyclePeriodType 周期转账类型
+ @param beginDate cyclePeriodType如果是SSJCyclePeriodTypeOnce，就是转账日期；如果是其他值，就是起始日期
+ @param endDate cyclePeriodType如果是SSJCyclePeriodTypeOnce，就不需要传值；如果是其他值，就是结束日期
+ @param success 成功回调
+ @param failure 失败回调
+ */
++ (void)saveCycleTransferRecordWithID:(NSString *)ID
+                  transferInAccountId:(NSString *)transferInAccountId
+                 transferOutAccountId:(NSString *)transferOutAccountId
+                                money:(float)money
+                                 memo:(nullable NSString *)memo
+                      cyclePeriodType:(SSJCyclePeriodType)cyclePeriodType
+                            beginDate:(NSString *)beginDate
+                              endDate:(nullable NSString *)endDate
+                              success:(nullable void (^)())success
+                              failure:(nullable void (^)(NSError *error))failure;
+
+/**
+ 删除周期转账
+
+ @param ID 周期转账id
+ @param success 成功回调
+ @param failure 失败回调
+ */
++ (void)deleteCycleTransferRecordWithID:(NSString *)ID
+                                success:(nullable void (^)())success
+                                failure:(nullable void (^)(NSError *error))failure;
+
+/**
+ 更新周期记账的开关状态
+
+ @param ID 周期转账id
+ @param opened 是否开启
+ @param success 成功回调
+ @param failure 失败回调
+ */
++ (void)updateCycleTransferRecordStateWithID:(NSString *)ID
+                                      opened:(BOOL)opened
+                                     success:(nullable void (^)())success
+                                     failure:(nullable void (^)(NSError *error))failure;
+
+/**
+ 查询周期转账列表；
+ 查询结果数据结构：
+ @[@{SSJFundingTransferStoreMonthKey:NSDate,
+     SSJFundingTransferStoreListKey:@[SSJFundingTransferDetailItem, ...]}, ...]
+
+ @param success 成功回调
+ @param failure 失败回调
+ */
++ (void)queryCycleTransferRecordsListWithSuccess:(nullable void (^)(NSArray <NSDictionary *>*))success
+                                         failure:(nullable void (^)(NSError *error))failure;
+
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface SSJTransferDetailHeader : UIView
-@property(nonatomic, strong) NSString *currentMonth;
+
+@property(nonatomic, strong) NSDate *date;
 
 @end

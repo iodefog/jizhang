@@ -197,8 +197,7 @@ NSDate *SCYEnterBackgroundTime() {
     [SSJJspatchAnalyze SSJJsPatchAnalyzePatch];
     
     // 当程序从后台进入前台，检测是否自动补充定期记账和预算，因为程序在后台不能收到本地通知
-    [SSJRegularManager supplementBookkeepingIfNeededForUserId:SSJUSERID() withSuccess:NULL failure:NULL];
-    [SSJRegularManager supplementBudgetIfNeededForUserId:SSJUSERID() withSuccess:NULL failure:NULL];
+    [SSJRegularManager supplementCycleRecordsForUserId:SSJUSERID() success:NULL failure:NULL];
 }
 
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {

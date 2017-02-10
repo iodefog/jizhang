@@ -23,10 +23,6 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
 
 @implementation SSJRegularManager
 
-//+ (void)load {
-//    [self registerRegularTaskNotification];
-//}
-
 + (void)registerRegularTaskNotification {
     if ([UIApplication instancesRespondToSelector:@selector(registerUserNotificationSettings:)]) {
         [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeNone categories:nil]];
@@ -60,193 +56,61 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
 + (void)performRegularTaskWithLocalNotification:(UILocalNotification *)notification {
     NSString *notificationId = notification.userInfo[SSJRegularManagerNotificationIdKey];
     if ([notificationId isEqualToString:SSJRegularManagerNotificationIdValue]) {
-        [self supplementBookkeepingIfNeededForUserId:SSJUSERID() withSuccess:NULL failure:NULL];
-        [self supplementBudgetIfNeededForUserId:SSJUSERID() withSuccess:NULL failure:NULL];
+        [self supplementCycleRecordsForUserId:SSJUSERID() success:NULL failure:NULL];
     }
 }
 
-+ (BOOL)supplementBookkeepingIfNeededForUserId:(NSString *)userId {
-    __block BOOL successfull = YES;
++ (BOOL)supplementCycleRecordsForUserId:(NSString *)userId {
+    __block BOOL successfull = NO;
     [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
-        successfull = [self supplementBookkeepingForUserId:userId inDatabase:db rollback:rollback];
-    }];
-    return successfull;
-}
-
-+ (BOOL)supplementBudgetIfNeededForUserId:(NSString *)userId {
-    __block BOOL successfull = YES;
-    [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
-        successfull = [self supplementBudgetForUserId:userId inDatabase:db rollback:rollback];
-    }];
-    return successfull;
-    
-}
-
-+ (void)supplementBookkeepingIfNeededForUserId:(NSString *)userId
-                                   withSuccess:(void(^)())success
-                                       failure:(void (^)(NSError *error))failure {
-    [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
-        if ([self supplementBookkeepingForUserId:userId inDatabase:db rollback:rollback]) {
-            if (success) {
-                SSJDispatch_main_async_safe(^{
-                    success();
-                });
-            }
-        } else {
-            if (failure) {
-                SSJDispatch_main_async_safe(^{
-                    failure([db lastError]);
-                });
-            }
-        }
-    }];
-}
-
-+ (void)supplementBudgetIfNeededForUserId:(NSString *)userId
-                              withSuccess:(void(^)())success
-                                  failure:(void (^)(NSError *error))failure {
-    [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
-        if ([self supplementBudgetForUserId:userId inDatabase:db rollback:rollback]) {
-            if (success) {
-                SSJDispatch_main_async_safe(^{
-                    success();
-                });
-            }
-        } else {
-            if (failure) {
-                SSJDispatch_main_async_safe(^{
-                    failure([db lastError]);
-                });
-            }
-        }
-    }];
-}
-
-+ (BOOL)supplementCyclicTransferForUserId:(NSString *)userId inDatabase:(FMDatabase *)db rollback:(BOOL *)rollback {
-    if (!userId || !userId.length) {
-        SSJPRINT(@">>> SSJ Warning:userid must not be nil or empty");
-        return NO;
-    }
-    
-    // 根据最近一次周期转账流水计算出需要补充的流水
-    FMResultSet *resultSet = [db executeQuery:@"select max(uc.cbilldate), tc.* from bk_user_charge as uc, bk_transfer_cycle as tc where uc.cuserid = ? and uc.cuserid = tc.cuserid and uc.ichargetype = 5 and uc.cid like (tc.icycleid || '-%') and tc.operatortype <> 2 and tc.istate <> 0 and uc.cbilldate <= datetime('now', 'localtime') group by tc.icycleid", userId];
-    if (!resultSet) {
-        return NO;
-    }
-    
-    NSMutableArray *cycleIds = [[NSMutableArray alloc] init];   // 生成过流水的周期转账id
-    NSMutableArray *chargeList = [[NSMutableArray alloc] init]; // 需要创建的流水列表
-    
-    while ([resultSet next]) {
         
-        NSString *cycleId = [resultSet stringForColumn:@"icycleid"];
-        [cycleIds addObject:[NSString stringWithFormat:@"'%@'", cycleId]];
-        
-        int periodType = [resultSet intForColumn:@"icycletype"];
-        
-        NSString *billDateStr = [resultSet stringForColumn:@"max(a.cbilldate)"];
-        NSDate *billDate = [NSDate dateWithString:billDateStr formatString:@"yyyy-MM-dd"];
-        NSDate *beginDate = [NSDate dateWithString:[resultSet stringForColumn:@"cbegindate"] formatString:@"yyyy-MM-dd"];
-        NSDate *fromDate = [billDate compare:beginDate] == NSOrderedDescending ? billDate : beginDate;
-        
-        NSDate *toDate = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:[NSDate date].day];
-        NSString *endDateStr = [resultSet stringForColumn:@"cenddate"];
-        if (endDateStr) {
-            NSDate *endDate = [NSDate dateWithString:endDateStr formatString:@"yyyy-MM-dd"];
-            toDate = [endDate compare:toDate] == NSOrderedAscending ? endDate : toDate;
-        }
-        
-        NSArray *billDates = [self billDatesFromDate:fromDate toDate:toDate periodType:periodType containFromDate:NO];
-        
-        [self organiseChargeListWithResultSet:resultSet chargeList:chargeList billDates:billDates userId:userId];
-    }
-    [resultSet close];
-    
-    // 查询没有生成过流水的周期转账，根据起始日期、结束日期及当天日期得出需要补充的流水
-    NSMutableString *sql = [[NSMutableString alloc] initWithString:@"select * from bk_transfer_cycle where cuserid = ? and operatortype <> 2 and istate = 1"];
-    if (cycleIds.count) {
-        NSString *cycleIdStr = [cycleIds componentsJoinedByString:@","];
-        [sql appendFormat:@" and icycleid not in (%@)", cycleIdStr];
-    }
-    
-    resultSet = [db executeQuery:sql, userId];
-    if (!resultSet) {
-        return NO;
-    }
-    
-    while ([resultSet next]) {
-        int periodType = [resultSet intForColumn:@"icycletype"];
-        NSDate *fromDate = [NSDate dateWithString:[resultSet stringForColumn:@"cbegindate"] formatString:@"yyyy-MM-dd"];
-        
-        NSString *endDateStr = [resultSet stringForColumn:@"cenddate"];
-        NSDate *toDate = nil;
-        if (endDateStr) {
-            toDate = [NSDate dateWithString:endDateStr formatString:@"yyyy-MM-dd"];
-        }
-        
-        NSDate *currentDate = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:[NSDate date].day];
-        toDate = [toDate compare:currentDate] == NSOrderedAscending ? toDate : currentDate;
-        
-        NSArray *billDates = [self billDatesFromDate:fromDate toDate:toDate periodType:periodType containFromDate:NO];
-        
-        [self organiseChargeListWithResultSet:resultSet chargeList:chargeList billDates:billDates userId:userId];
-    }
-    [resultSet close];
-    
-    // 插入补充的转账流水
-    for (NSDictionary *chargeInfo in chargeList) {
-        if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cid, ichargetype, cbilldate, cmemo, iversion, cwritedate, operatortype) values (:ichargeid, :cuserid, :imoney, :ibillid, :ifunsid, :cid, :ichargetype, :cbilldate, :cmemo, :iversion, :cwritedate, :operatortype)" withParameterDictionary:chargeInfo]) {
+        if (![self supplementBookkeepingForUserId:userId inDatabase:db]) {
             *rollback = YES;
-            return NO;
+            return;
         }
-    }
+        
+        if (![self supplementBudgetForUserId:userId inDatabase:db]) {
+            *rollback = YES;
+            return;
+        }
+        
+        if (![self supplementCyclicTransferForUserId:userId inDatabase:db]) {
+            *rollback = YES;
+            return;
+        }
+        
+        successfull = YES;
+        
+    }];
+    return successfull;
+}
+
++ (void)supplementCycleRecordsForUserId:(NSString *)userId success:(nullable void(^)())success failure:(nullable void (^)(NSError *error))failure {
     
-    return YES;
+    [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
+        
+        if (![self supplementBookkeepingForUserId:userId inDatabase:db]
+            || ![self supplementBudgetForUserId:userId inDatabase:db]
+            || ![self supplementCyclicTransferForUserId:userId inDatabase:db]) {
+            
+            *rollback = YES;
+            if (failure) {
+                SSJDispatch_main_async_safe(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        }
+        
+        if (success) {
+            SSJDispatch_main_async_safe(^{
+                success();
+            });
+        }
+    }];
 }
 
-+ (void)organiseChargeListWithResultSet:(FMResultSet *)resultSet chargeList:(NSMutableArray *)chargeList billDates:(NSArray *)billDates userId:(NSString *)userId {
-    for (NSDate *date in billDates) {
-        
-        NSString *cycleId = [resultSet stringForColumn:@"icycleid"];
-        NSString *money = [resultSet stringForColumn:@"imoney"];
-        NSString *billDate = [date formattedDateWithFormat:@"yyyy-MM-dd"];
-        NSString *memo = [resultSet stringForColumn:@"cmemo"];
-        NSString *transferInId = [resultSet stringForColumn:@"ctransferinaccountid"];
-        NSString *transferOutId = [resultSet stringForColumn:@"ctransferoutaccountid"];
-        NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-        
-        NSDictionary *transferInChargeInfo = @{@"ichargeid":SSJUUID(),
-                                               @"cuserid":userId,
-                                               @"imoney":money,
-                                               @"ibillid":@3,
-                                               @"ifunsid":transferInId,
-                                               @"cid":cycleId,
-                                               @"ichargetype":@5,
-                                               @"cbilldate":billDate,
-                                               @"cmemo":memo,
-                                               @"iversion": @(SSJSyncVersion()),
-                                               @"cwritedate":writeDate,
-                                               @"operatortype":@0};
-        
-        NSDictionary *transferOutChargeInfo = @{@"ichargeid":SSJUUID(),
-                                                @"cuserid":userId,
-                                                @"imoney":money,
-                                                @"ibillid":@4,
-                                                @"ifunsid":transferOutId,
-                                                @"cid":cycleId,
-                                                @"ichargetype":@5,
-                                                @"cbilldate":billDate,
-                                                @"cmemo":memo,
-                                                @"iversion": @(SSJSyncVersion()),
-                                                @"cwritedate":writeDate,
-                                                @"operatortype":@0};
-        
-        [chargeList addObject:transferInChargeInfo];
-        [chargeList addObject:transferOutChargeInfo];
-    }
-}
-
-+ (BOOL)supplementBookkeepingForUserId:(NSString *)userId inDatabase:(FMDatabase *)db rollback:(BOOL *)rollback {
++ (BOOL)supplementBookkeepingForUserId:(NSString *)userId inDatabase:(FMDatabase *)db {
     
     if (!userId || !userId.length) {
         SSJPRINT(@">>> SSJ Warning:userid must not be nil or empty");
@@ -304,14 +168,12 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
             NSString *chargeId = SSJUUID();
             
             if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cid, ichargetype, cbilldate, cmemo, cimgurl, thumburl, cbooksid, iversion, cwritedate, operatortype) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)", chargeId, userId, money, billId, funsid, configId, @(SSJChargeIdTypeCircleConfig), billDateStr, memo, imgUrl, thumbUrl, booksId, @(SSJSyncVersion()), writeDate]) {
-                *rollback = YES;
                 return NO;
             }
             
             // 根据周期记账配置成员生成成员流水
             for (NSString *memberId in memberIds) {
                 if (![db executeUpdate:@"insert into bk_member_charge (ichargeid, cmemberid, imoney, iversion, cwritedate, operatortype) values (?, ?, ?, ?, ?, ?)", chargeId, memberId, @(memberMoney), @(SSJSyncVersion()), writeDate, @0]) {
-                    *rollback = YES;
                     return NO;
                 }
             }
@@ -377,14 +239,12 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
             
             NSString *billDateStr = [billDate formattedDateWithFormat:@"yyyy-MM-dd"];
             if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cid, ichargetype, cbilldate, cmemo, cimgurl, thumburl, cbooksid, iversion, cwritedate, operatortype) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", chargeId, userId, money, billId, funsid, configId, @(SSJChargeIdTypeCircleConfig), billDateStr, memo, imgUrl, thumbUrl, booksid, @(SSJSyncVersion()), writeDate, @0]) {
-                *rollback = YES;
                 return NO;
             }
             
             // 根据周期记账配置成员生成成员流水
             for (NSString *memberId in memberIds) {
                 if (![db executeUpdate:@"insert into bk_member_charge (ichargeid, cmemberid, imoney, iversion, cwritedate, operatortype) values (?, ?, ?, ?, ?, ?)", chargeId, memberId, @(memberMoney), @(SSJSyncVersion()), writeDate, @0]) {
-                    *rollback = YES;
                     return NO;
                 }
             }
@@ -400,14 +260,13 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
     
     //  更新每日流水统计表
     if (![SSJDailySumChargeTable updateDailySumChargeForUserId:userId inDatabase:db]) {
-        *rollback = YES;
         return NO;
     }
     
     return YES;
 }
 
-+ (BOOL)supplementBudgetForUserId:(NSString *)userId inDatabase:(FMDatabase *)db rollback:(BOOL *)rollback {
++ (BOOL)supplementBudgetForUserId:(NSString *)userId inDatabase:(FMDatabase *)db {
     //  根据周期类型、支出类型分类，查询离今天最近的一次预算
     FMResultSet *resultSet = [db executeQuery:@"select itype, imoney, iremindmoney, cbilltype, iremind, max(cedate), operatortype, istate, cbooksid, islastday from bk_user_budget where cuserid = ? and csdate <= datetime('now', 'localtime') group by itype, cbilltype, cbooksid", userId];
     if (!resultSet) {
@@ -451,7 +310,6 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
             NSString *endDate = [period.EndDate formattedDateWithFormat:@"yyyy-MM-dd"];
             
             if (![db executeUpdate:@"insert into bk_user_budget (ibid, cuserid, itype, imoney, iremindmoney, csdate, cedate, istate, ccadddate, cbilltype, iremind, ihasremind, cbooksid, islastday, cwritedate, iversion, operatortype) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?, 0)", SSJUUID(), userId, @(itype), imoney, iremindmoney, beginDate, endDate, @1, currentDateStr, cbilltype, @(iremind), booksId, @(isLastDay), currentDateStr, @(SSJSyncVersion())]) {
-                *rollback = YES;
                 [resultSet close];
                 return NO;
             }
@@ -461,6 +319,148 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
     [resultSet close];
     
     return YES;
+}
+
++ (BOOL)supplementCyclicTransferForUserId:(NSString *)userId inDatabase:(FMDatabase *)db {
+    if (!userId || !userId.length) {
+        SSJPRINT(@">>> SSJ Warning:userid must not be nil or empty");
+        return NO;
+    }
+    
+    // 查询最大的周期转账流水的cid后缀
+    FMResultSet *resultSet = [db executeQuery:@"select max(cast(substr(uc.cid, length(tc.icycleid) + 2) as int)) as suffix, tc.icycleid from bk_user_charge as uc, bk_transfer_cycle as tc where uc.cuserid = ? and tc.cuserid = uc.cuserid and uc.ichargetype = 5 and uc.cid like (tc.icycleid || '-%') and tc.operatortype <> 2 and tc.istate <> 0 group by tc.icycleid", userId];
+    if (!resultSet) {
+        return NO;
+    }
+    
+    NSMutableDictionary *cidSuffixMapping = [[NSMutableDictionary alloc] init]; // 周期转账id和最大cid后缀的映射
+    while ([resultSet next]) {
+        NSString *suffix = [resultSet stringForColumn:@"suffix"];
+        NSString *cycleId = [resultSet stringForColumn:@"icycleid"];
+        if (suffix && cycleId) {
+            [cidSuffixMapping setObject:suffix forKey:cycleId];
+        }
+    }
+    [resultSet close];
+    
+    // 根据最近一次周期转账流水计算出需要补充的流水
+    resultSet = [db executeQuery:@"select max(uc.cbilldate), tc.* from bk_user_charge as uc, bk_transfer_cycle as tc where uc.cuserid = ? and uc.cuserid = tc.cuserid and uc.ichargetype = 5 and uc.cid like (tc.icycleid || '-%') and tc.operatortype <> 2 and tc.istate <> 0 and uc.cbilldate <= datetime('now', 'localtime') group by tc.icycleid", userId];
+    if (!resultSet) {
+        return NO;
+    }
+    
+    NSMutableArray *cycleIds = [[NSMutableArray alloc] init];   // 生成过流水的周期转账id
+    NSMutableArray *chargeList = [[NSMutableArray alloc] init]; // 需要创建的流水列表
+    
+    while ([resultSet next]) {
+        
+        NSString *cycleId = [resultSet stringForColumn:@"icycleid"];
+        [cycleIds addObject:[NSString stringWithFormat:@"'%@'", cycleId]];
+        
+        int periodType = [resultSet intForColumn:@"icycletype"];
+        
+        NSString *billDateStr = [resultSet stringForColumn:@"max(a.cbilldate)"];
+        NSDate *billDate = [NSDate dateWithString:billDateStr formatString:@"yyyy-MM-dd"];
+        NSDate *beginDate = [NSDate dateWithString:[resultSet stringForColumn:@"cbegindate"] formatString:@"yyyy-MM-dd"];
+        NSDate *fromDate = [billDate compare:beginDate] == NSOrderedDescending ? billDate : beginDate;
+        
+        NSDate *toDate = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:[NSDate date].day];
+        NSString *endDateStr = [resultSet stringForColumn:@"cenddate"];
+        if (endDateStr) {
+            NSDate *endDate = [NSDate dateWithString:endDateStr formatString:@"yyyy-MM-dd"];
+            toDate = [endDate compare:toDate] == NSOrderedAscending ? endDate : toDate;
+        }
+        
+        NSArray *billDates = [self billDatesFromDate:fromDate toDate:toDate periodType:periodType containFromDate:NO];
+        
+        [self organiseChargeListWithResultSet:resultSet chargeList:chargeList billDates:billDates userId:userId suffixMapping:cidSuffixMapping];
+    }
+    [resultSet close];
+    
+    // 查询没有生成过流水的周期转账，根据起始日期、结束日期及当天日期得出需要补充的流水
+    NSMutableString *sql = [[NSMutableString alloc] initWithString:@"select * from bk_transfer_cycle where cuserid = ? and operatortype <> 2 and istate = 1"];
+    if (cycleIds.count) {
+        NSString *cycleIdStr = [cycleIds componentsJoinedByString:@","];
+        [sql appendFormat:@" and icycleid not in (%@)", cycleIdStr];
+    }
+    
+    resultSet = [db executeQuery:sql, userId];
+    if (!resultSet) {
+        return NO;
+    }
+    
+    while ([resultSet next]) {
+        int periodType = [resultSet intForColumn:@"icycletype"];
+        NSDate *fromDate = [NSDate dateWithString:[resultSet stringForColumn:@"cbegindate"] formatString:@"yyyy-MM-dd"];
+        
+        NSString *endDateStr = [resultSet stringForColumn:@"cenddate"];
+        NSDate *toDate = nil;
+        if (endDateStr) {
+            toDate = [NSDate dateWithString:endDateStr formatString:@"yyyy-MM-dd"];
+        }
+        
+        NSDate *currentDate = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:[NSDate date].day];
+        toDate = [toDate compare:currentDate] == NSOrderedAscending ? toDate : currentDate;
+        
+        NSArray *billDates = [self billDatesFromDate:fromDate toDate:toDate periodType:periodType containFromDate:NO];
+        
+        [self organiseChargeListWithResultSet:resultSet chargeList:chargeList billDates:billDates userId:userId suffixMapping:cidSuffixMapping];
+    }
+    [resultSet close];
+    
+    // 插入补充的转账流水
+    for (NSDictionary *chargeInfo in chargeList) {
+        if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cid, ichargetype, cbilldate, cmemo, iversion, cwritedate, operatortype) values (:ichargeid, :cuserid, :imoney, :ibillid, :ifunsid, :cid, :ichargetype, :cbilldate, :cmemo, :iversion, :cwritedate, :operatortype)" withParameterDictionary:chargeInfo]) {
+            return NO;
+        }
+    }
+    
+    return YES;
+}
+
++ (void)organiseChargeListWithResultSet:(FMResultSet *)resultSet chargeList:(NSMutableArray *)chargeList billDates:(NSArray *)billDates userId:(NSString *)userId suffixMapping:(NSDictionary *)mapping {
+    
+    NSString *cycleId = [resultSet stringForColumn:@"icycleid"];
+    NSString *money = [resultSet stringForColumn:@"imoney"];
+    NSString *memo = [resultSet stringForColumn:@"cmemo"];
+    NSString *transferInId = [resultSet stringForColumn:@"ctransferinaccountid"];
+    NSString *transferOutId = [resultSet stringForColumn:@"ctransferoutaccountid"];
+    int cidSuffix = [mapping[cycleId] intValue];
+    
+    for (NSDate *date in billDates) {
+        NSString *billDate = [date formattedDateWithFormat:@"yyyy-MM-dd"];
+        NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        NSString *cid = [NSString stringWithFormat:@"%@-%d", cycleId, ++cidSuffix];
+        
+        NSDictionary *transferInChargeInfo = @{@"ichargeid":SSJUUID(),
+                                               @"cuserid":userId,
+                                               @"imoney":money,
+                                               @"ibillid":@3,
+                                               @"ifunsid":transferInId,
+                                               @"cid":cid,
+                                               @"ichargetype":@5,
+                                               @"cbilldate":billDate,
+                                               @"cmemo":memo,
+                                               @"iversion": @(SSJSyncVersion()),
+                                               @"cwritedate":writeDate,
+                                               @"operatortype":@0};
+        
+        NSDictionary *transferOutChargeInfo = @{@"ichargeid":SSJUUID(),
+                                                @"cuserid":userId,
+                                                @"imoney":money,
+                                                @"ibillid":@4,
+                                                @"ifunsid":transferOutId,
+                                                @"cid":cid,
+                                                @"ichargetype":@5,
+                                                @"cbilldate":billDate,
+                                                @"cmemo":memo,
+                                                @"iversion": @(SSJSyncVersion()),
+                                                @"cwritedate":writeDate,
+                                                @"operatortype":@0};
+        
+        [chargeList addObject:transferInChargeInfo];
+        [chargeList addObject:transferOutChargeInfo];
+    }
 }
 
 + (NSArray *)periodsWithAccountday:(NSDate *)accountday untilDate:(NSDate *)untilDate type:(int)type isLastDay:(BOOL)isLastDay {
@@ -567,7 +567,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
             NSMutableArray *billDates = [NSMutableArray arrayWithCapacity:monthCount];
             for (int i = dayInterval; i <= monthCount; i ++) {
                 NSDate *newDate = [fromDate dateByAddingMonths:i];
-                if ([newDate compare:toDate] != NSOrderedDescending) {
+                if (newDate.day == fromDate.day && [newDate compare:toDate] != NSOrderedDescending) {
                     [billDates addObject:newDate];
                 }
             }

@@ -21,7 +21,7 @@ def shared_pods
     #pod 'UMengFeedback', '~> 2.3.4'
     pod 'ZYCornerRadius', '~> 0.5.1'
     pod 'FLAnimatedImage', '~> 1.0'
-    pod 'LxThroughPointsBezier', '~> 1.0.0'
+    pod 'SSZipArchive'
     pod 'Masonry'
 end
 
@@ -42,5 +42,13 @@ target 'YouYuJiZhangBen'  do
 end
 
 target 'YouYuJiZhangLiCai'  do
+    shared_pods
+end
+
+target 'YouYuJiZhangBao'  do
+    shared_pods
+end
+
+target 'YouYuJiZhangGuanJia'  do
     shared_pods
 end

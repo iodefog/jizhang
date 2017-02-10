@@ -11,6 +11,8 @@
 #import "SSJFundingTypeSelectView.h"
 #import "TPKeyboardAvoidingTableView.h"
 #import "SSJChargeCircleTimeSelectView.h"
+#import "SSJLoanDateSelectionView.h"
+#import "SSJFundingTransferPeriodSelectionView.h"
 #import "SSJDatabaseQueue.h"
 #import "SSJDataSynchronizer.h"
 #import "SSJCreditCardItem.h"
@@ -19,11 +21,14 @@
 #import "SSJFundingTypeSelectViewController.h"
 #import "FMDB.h"
 
-static NSString *const kTitle1 = @"转出账户";
-static NSString *const kTitle2 = @"转入账户";
-static NSString *const kTitle3 = @"转账金额";
-static NSString *const kTitle4 = @"备注";
-static NSString *const kTitle5 = @"转账日期";
+static NSString *const kTransOutAcctName = @"转出账户";
+static NSString *const kTransInAcctName = @"转入账户";
+static NSString *const kMoney = @"转账金额";
+static NSString *const kMemo = @"备注";
+static NSString *const kTransDate = @"转账日期";
+static NSString *const kCyclePeriod = @"循环周期";
+static NSString *const kBeginDate = @"周期起始日";
+static NSString *const kEndDate = @"周期结束日";
 
 static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEditeCellIdentifier";
 
@@ -37,7 +42,13 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
 
 @property (nonatomic,strong) SSJFundingTypeSelectView *transferOutFundingTypeSelect;
 
-@property(nonatomic, strong) SSJChargeCircleTimeSelectView *chargeCircleTimeView;
+@property(nonatomic, strong) SSJChargeCircleTimeSelectView *transferDateSelectionView;
+
+@property (nonatomic, strong) SSJFundingTransferPeriodSelectionView *periodSelectionView;
+
+@property (nonatomic, strong) SSJLoanDateSelectionView *beginDateSelectionView;
+
+@property (nonatomic, strong) SSJLoanDateSelectionView *endDateSelectionView;
 
 @property(nonatomic, strong) UIView *saveFooterView;
 
@@ -55,6 +66,10 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
 }
 
 #pragma mark - Lifecycle
+-(void)dealloc{
+    [[NSNotificationCenter defaultCenter]removeObserver:self];
+}
+
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.title = @"转账";
@@ -67,8 +82,6 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
 - (void)viewDidLoad {
     [super viewDidLoad];
 //    self.view.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
-    self.titles = @[@[@"转出账户",@"转入账户"],@[@"转账金额"],@[@"备注",@"转账日期"]];
-    self.images = @[@[@"founds_zhuanchuzhanghu",@"founds_zhuanruzhanghu"],@[@"loan_money"],@[@"loan_memo",@"loan_calendar"]];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(transferTextDidChange) name:UITextFieldTextDidChangeNotification object:nil];
     [self.view addSubview:self.tableView];
     if (self.item != nil) {
@@ -84,11 +97,12 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
         self.title = @"编辑转账";
     }else{
         self.item = [[SSJFundingTransferDetailItem alloc]init];
-        self.item.transferDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"];
+        self.item.cycleType = SSJCyclePeriodTypeOnce;
+        self.item.transferDate = self.item.beginDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"];
         self.navigationItem.rightBarButtonItem = self.rightButton;
     }
+    [self updateTitlesAndImages];
     [self.tableView registerClass:[SSJChargeCircleModifyCell class] forCellReuseIdentifier:SSJFundingTransferEditeCellIdentifier];
-
 }
 
 //-(void)viewWillAppear:(BOOL)animated{
@@ -98,10 +112,6 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
 //    }else{
 //    }
 //}
-
--(void)dealloc{
-    [[NSNotificationCenter defaultCenter]removeObserver:self];
-}
 
 #pragma mark - UITableViewDelegate
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -129,25 +139,32 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
-    if ([title isEqualToString:kTitle1]) {
+    if ([title isEqualToString:kTransOutAcctName]) {
         if ([_transferOutItem isKindOfClass:[SSJFundingItem class]]) {
             self.transferOutFundingTypeSelect.selectFundID = ((SSJFundingItem *)_transferOutItem).fundingID;
-        }else if ([_transferInItem isKindOfClass:[SSJCreditCardItem class]]) {
+        } else if ([_transferInItem isKindOfClass:[SSJCreditCardItem class]]) {
             self.transferOutFundingTypeSelect.selectFundID = ((SSJCreditCardItem *)_transferOutItem).cardId;
         }
         [self.transferOutFundingTypeSelect show];
-    }else if ([title isEqualToString:kTitle2]){
+    } else if ([title isEqualToString:kTransInAcctName]) {
         if ([_transferInItem isKindOfClass:[SSJFundingItem class]]) {
             self.transferInFundingTypeSelect.selectFundID = ((SSJFundingItem *)_transferInItem).fundingID;
         }else if ([_transferInItem isKindOfClass:[SSJCreditCardItem class]]) {
             self.transferInFundingTypeSelect.selectFundID = ((SSJCreditCardItem *)_transferInItem).cardId;
         }
         [self.transferInFundingTypeSelect show];
-    }else if ([title isEqualToString:kTitle5]){
-        [self.chargeCircleTimeView show];
+    } else if ([title isEqualToString:kTransDate]) {
+        [self.transferDateSelectionView show];
+    } else if ([title isEqualToString:kCyclePeriod]) {
+        [self.periodSelectionView show];
+    } else if ([title isEqualToString:kBeginDate]) {
+        self.beginDateSelectionView.selectedDate = [NSDate dateWithString:self.item.beginDate formatString:@"yyyy-MM-dd"];
+        [self.beginDateSelectionView show];
+    } else if ([title isEqualToString:kEndDate]) {
+        self.endDateSelectionView.selectedDate = [NSDate dateWithString:(self.item.endDate ?: self.item.beginDate) formatString:@"yyyy-MM-dd"];
+        [self.endDateSelectionView show];
     }
 }
-
 
 #pragma mark - UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -164,7 +181,7 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
     SSJChargeCircleModifyCell *circleModifyCell = [tableView dequeueReusableCellWithIdentifier:SSJFundingTransferEditeCellIdentifier];
     circleModifyCell.cellTitle = title;
     circleModifyCell.cellImageName = image;
-    if ([title isEqualToString:kTitle1]) {
+    if ([title isEqualToString:kTransOutAcctName]) {
         circleModifyCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         circleModifyCell.cellInput.hidden = YES;
         if (!_transferOutItem) {
@@ -180,7 +197,7 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
 
         }
 //        _moneyInput = circleModifyCell.cellInput;
-    }else if ([title isEqualToString:kTitle2]) {
+    }else if ([title isEqualToString:kTransInAcctName]) {
         circleModifyCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         circleModifyCell.cellInput.hidden = YES;
         if (!_transferInItem) {
@@ -194,7 +211,7 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
                 circleModifyCell.cellTypeImageName = @"ft_creditcard";
             }
         }
-    }else if ([title isEqualToString:kTitle3]) {
+    }else if ([title isEqualToString:kMoney]) {
         circleModifyCell.cellInput.hidden = NO;
         if (self.item.transferMoney.length) {
             circleModifyCell.cellInput.text = [NSString stringWithFormat:@"%.2f",[self.item.transferMoney doubleValue]];
@@ -204,21 +221,32 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
         circleModifyCell.cellInput.delegate = self;
         circleModifyCell.cellInput.tag = 100;
         _moneyInput = circleModifyCell.cellInput;
-    }else if ([title isEqualToString:kTitle4]) {
+    }else if ([title isEqualToString:kMemo]) {
         circleModifyCell.cellInput.hidden = NO;
         circleModifyCell.cellInput.attributedPlaceholder = [[NSAttributedString alloc]initWithString:@"(选填)" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         circleModifyCell.cellInput.text = self.item.transferMemo;
         circleModifyCell.cellInput.tag = 101;
         circleModifyCell.cellInput.delegate = self;
         _memoInput = circleModifyCell.cellInput;
-    }else if ([title isEqualToString:kTitle5]) {
+    }else if ([title isEqualToString:kTransDate]) {
         circleModifyCell.cellInput.hidden = YES;
         circleModifyCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         circleModifyCell.cellDetail = self.item.transferDate;
+    }else if ([title isEqualToString:kCyclePeriod]) {
+        circleModifyCell.cellInput.hidden = YES;
+        circleModifyCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        circleModifyCell.cellDetail = SSJTitleForCycleType(self.periodSelectionView.selectedType);
+    }else if ([title isEqualToString:kBeginDate]) {
+        circleModifyCell.cellInput.hidden = YES;
+        circleModifyCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        circleModifyCell.cellDetail = self.item.beginDate;
+    }else if ([title isEqualToString:kEndDate]) {
+        circleModifyCell.cellInput.hidden = YES;
+        circleModifyCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        circleModifyCell.cellDetail = self.item.endDate ?: @"选填";
     }
     return circleModifyCell;
 }
-
 
 #pragma mark - UITextFieldDelegate
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
@@ -348,20 +376,75 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
     return _saveFooterView;
 }
 
--(SSJChargeCircleTimeSelectView *)chargeCircleTimeView{
-    if (!_chargeCircleTimeView) {
-        _chargeCircleTimeView = [[SSJChargeCircleTimeSelectView alloc]initWithFrame:self.view.bounds];
-        _chargeCircleTimeView.maxDate = [NSDate date];
-        _chargeCircleTimeView.timeIsTooLateBlock = ^(){
+-(SSJChargeCircleTimeSelectView *)transferDateSelectionView{
+    if (!_transferDateSelectionView) {
+        _transferDateSelectionView = [[SSJChargeCircleTimeSelectView alloc]initWithFrame:self.view.bounds];
+        _transferDateSelectionView.maxDate = [NSDate date];
+        _transferDateSelectionView.timeIsTooLateBlock = ^(){
             [CDAutoHideMessageHUD showMessage:@"转账时间不能大于当前时间哦"];
         };
         __weak typeof(self) weakSelf = self;
-        _chargeCircleTimeView.timerSetBlock = ^(NSString *dateStr){
+        _transferDateSelectionView.timerSetBlock = ^(NSString *dateStr){
             weakSelf.item.transferDate = dateStr;
             [weakSelf.tableView reloadData];
         };
     }
-    return _chargeCircleTimeView;
+    return _transferDateSelectionView;
+}
+
+- (SSJFundingTransferPeriodSelectionView *)periodSelectionView {
+    if (!_periodSelectionView) {
+        _periodSelectionView = [[SSJFundingTransferPeriodSelectionView alloc] init];
+        _periodSelectionView.selectedType = _item.cycleType;
+        [_periodSelectionView addTarget:self action:@selector(periodSelectionViewAction) forControlEvents:UIControlEventValueChanged];
+    }
+    return _periodSelectionView;
+}
+
+- (SSJLoanDateSelectionView *)beginDateSelectionView {
+    if (!_beginDateSelectionView) {
+        __weak typeof(self) wself = self;
+        _beginDateSelectionView = [[SSJLoanDateSelectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 244)];
+        _beginDateSelectionView.shouldSelectDateAction = ^BOOL(SSJLoanDateSelectionView *view, NSDate *date) {
+            NSDate *currentDate = [NSDate date];
+            currentDate = [NSDate dateWithYear:currentDate.year month:currentDate.month day:currentDate.day];
+            if ([date compare:currentDate] == NSOrderedAscending) {
+                [CDAutoHideMessageHUD showMessage:@"起始日期不能早于今天"];
+                return NO;
+            }
+            return YES;
+        };
+        _beginDateSelectionView.selectDateAction = ^(SSJLoanDateSelectionView *view) {
+            wself.item.beginDate = [view.selectedDate formattedDateWithFormat:@"yyyy-MM-dd"];
+            [wself.tableView reloadData];
+        };
+    }
+    return _beginDateSelectionView;
+}
+
+- (SSJLoanDateSelectionView *)endDateSelectionView {
+    if (!_endDateSelectionView) {
+        __weak typeof(self) weakSelf = self;
+        _endDateSelectionView = [[SSJLoanDateSelectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 244)];
+        _endDateSelectionView.shouldSelectDateAction = ^BOOL(SSJLoanDateSelectionView *view, NSDate *date) {
+            NSDate *beginDate = [NSDate dateWithString:weakSelf.item.beginDate formatString:@"yyyy-MM-dd"];
+            if ([date compare:beginDate] == NSOrderedAscending) {
+                [CDAutoHideMessageHUD showMessage:@"结束日期不能早于起始日期"];
+                return NO;
+            }
+            return YES;
+        };
+        _endDateSelectionView.selectDateAction = ^(SSJLoanDateSelectionView *view) {
+            weakSelf.item.endDate = [view.selectedDate formattedDateWithFormat:@"yyyy-MM-dd"];
+            [weakSelf.tableView reloadData];
+        };
+        _endDateSelectionView.leftButtonItem = [SSJLoanDateSelectionButtonItem buttonItemWithTitle:@"清空" image:nil color:[UIColor ssj_colorWithHex:SSJOverrunRedColorValue] action:^{
+            weakSelf.item.endDate = nil;
+            [weakSelf.tableView reloadData];
+            [weakSelf.endDateSelectionView dismiss];
+        }];
+    }
+    return _endDateSelectionView;
 }
 
 #pragma mark - Event
@@ -451,7 +534,22 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
     [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
 }
 
+- (void)periodSelectionViewAction {
+    _item.cycleType = self.periodSelectionView.selectedType;
+    [self updateTitlesAndImages];
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationFade];
+}
+
 #pragma mark - Private
+- (void)updateTitlesAndImages {
+    if (_item.cycleType == SSJCyclePeriodTypeOnce) {
+        self.titles = @[@[kTransOutAcctName, kTransInAcctName], @[kMoney, kMemo], @[kCyclePeriod, kTransDate]];
+        self.images = @[@[@"founds_zhuanchuzhanghu", @"founds_zhuanruzhanghu"], @[@"loan_money", @"loan_memo"], @[@"xuhuan_xuhuan", @"loan_calendar"]];
+    } else {
+        self.titles = @[@[kTransOutAcctName, kTransInAcctName], @[kMoney, kMemo], @[kCyclePeriod, kBeginDate, kEndDate]];
+        self.images = @[@[@"founds_zhuanchuzhanghu", @"founds_zhuanruzhanghu"], @[@"loan_money", @"loan_memo"], @[@"xuhuan_xuhuan", @"loan_calendar", @"xunhuan_end"]];
+    }
+}
 
 - (void)transferTextDidChange{
     [self setupTextFiledNum:_moneyInput num:2];

@@ -29,21 +29,27 @@
 #import "SSJUserTableManager.h"
 #import "SSJRegularManager.h"
 
-#import <ZipZap/ZipZap.h>
-
 #import "SSJLoginViewController+SSJCategory.h"
 #import "SSJLocalNotificationStore.h"
 #import "SSJLocalNotificationHelper.h"
 #import "SSJDomainManager.h"
 
+#import "ZipArchive.h"
+
 //
 static const NSTimeInterval kTimeoutInterval = 30;
 
-//  同步文件名称
-static NSString *const kSyncFileName = @"sync_data.json";
+static NSString *const kSyncFileDirectory = @"sync_files";
 
-//  压缩文件名称
-static NSString *const kSyncZipFileName = @"sync_data.zip";
+// 上传的同步文件名称
+static NSString *const kUploadSyncFileName = @"upload_sync_data.json";
+
+static NSString *const kDownloadSyncFileDirectory = @"download_sync_files";
+
+// 上传的压缩文件名称
+static NSString *const kUploadSyncZipFileName = @"upload_sync_data.zip";
+
+static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
 
 @interface SSJDataSynchronizeTask ()
 
@@ -419,9 +425,8 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
         }
     }];
     
-    // 合并数据完成后根据定期记账和定期预算进行补充；即使补充失败，也不影响同步，在其他时机可以再次补充
-    [SSJRegularManager supplementBookkeepingIfNeededForUserId:self.userId];
-    [SSJRegularManager supplementBudgetIfNeededForUserId:self.userId];
+    // 合并数据完成后补充周期记账、周期转账、预算；即使补充失败，也不影响同步，在其他时机可以再次补充
+    [SSJRegularManager supplementCycleRecordsForUserId:self.userId];
     
     // 用户流水表中存在，但是成员流水表中不存在的流水插入到成员流水表中，默认就是用户自己的
     [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
@@ -462,39 +467,53 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
 
 //  将data进行zip压缩
 - (NSData *)zipData:(NSData *)data error:(NSError **)error {
-    NSString *zipPath = [SSJDocumentPath() stringByAppendingPathComponent:kSyncZipFileName];
-    ZZArchive *newArchive = [[ZZArchive alloc] initWithURL:[NSURL fileURLWithPath:zipPath]
-                                                   options:@{ZZOpenOptionsCreateIfMissingKey:@YES}
-                                                     error:error];
-    
-    //    ZZArchive *newArchive = [[ZZArchive alloc] initWithData:data options:@{ZZOpenOptionsCreateIfMissingKey:@YES} error:error];
-    
-    ZZArchiveEntry *entry = [ZZArchiveEntry archiveEntryWithFileName:kSyncFileName
-                                                            compress:YES
-                                                           dataBlock:^(NSError **error) {
-                                                               return data;
-                                                           }];
-    
-    if (![newArchive updateEntries:@[entry] error:error]) {
+    NSString *syncFilePath = [[self syncFileDirectory] stringByAppendingPathComponent:kUploadSyncFileName];
+    if (![data writeToFile:syncFilePath options:NSDataWritingAtomic error:error]) {
         return nil;
     }
     
-    //    CFStringRef UTI = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef)[zipPath pathExtension], NULL);
-    //    CFStringRef MIMEType = UTTypeCopyPreferredTagWithClass (UTI, kUTTagClassMIMEType);
+    NSString *zipPath = [[self syncFileDirectory] stringByAppendingPathComponent:kUploadSyncZipFileName];
+    if (![SSZipArchive createZipFileAtPath:zipPath withFilesAtPaths:@[syncFilePath]]) {
+        if (error) {
+            *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"压缩文件发生错误"}];
+        }
+        return nil;
+    }
     
-    return [NSData dataWithContentsOfFile:zipPath options:NSDataReadingUncached error:error];
+    return [NSData dataWithContentsOfFile:zipPath];
 }
 
 //  将data进行解压
 - (NSData *)unzipData:(NSData *)data error:(NSError **)error {
-    //    ZZArchive *archive = [ZZArchive archiveWithURL:[NSURL fileURLWithPath:@"/Users/oldlang/Desktop/test/sync_data.txt.zip"] error:error];
-    ZZArchive *archive = [ZZArchive archiveWithData:data error:error];
-    if (archive.entries.count > 0) {
-        ZZArchiveEntry *entry = archive.entries[0];
-        return [entry newDataWithError:error];
+    NSString *zipFilePath = [[self syncFileDirectory] stringByAppendingPathComponent:kDownloadSyncZipFileName];
+    if (![data writeToFile:zipFilePath options:NSDataWritingAtomic error:error]) {
+        return nil;
     }
     
-    return nil;
+    NSString *unzipDirectory = [[self syncFileDirectory] stringByAppendingPathComponent:kDownloadSyncFileDirectory];
+    if (![SSZipArchive unzipFileAtPath:zipFilePath toDestination:unzipDirectory overwrite:NO password:nil error:error]) {
+        return nil;
+    }
+    
+    NSArray *tempFileList = [[NSArray alloc] initWithArray:[[NSFileManager defaultManager] contentsOfDirectoryAtPath:unzipDirectory error:nil]];
+    NSString *jsonFileName = [tempFileList lastObject];
+    if (![jsonFileName.pathExtension isEqualToString:@"json"]) {
+        [[NSFileManager defaultManager] removeItemAtPath:unzipDirectory error:nil];
+        return nil;
+    }
+    
+    NSData *unzipData = [NSData dataWithContentsOfFile:[unzipDirectory stringByAppendingPathComponent:jsonFileName]];
+    [[NSFileManager defaultManager] removeItemAtPath:unzipDirectory error:nil];
+    
+    return unzipData;
+}
+
+- (NSString *)syncFileDirectory {
+    NSString *directory = [SSJDocumentPath() stringByAppendingPathComponent:kSyncFileDirectory];
+    if (![[NSFileManager defaultManager] fileExistsAtPath:directory isDirectory:nil]) {
+        [[NSFileManager defaultManager] createDirectoryAtPath:directory withIntermediateDirectories:YES attributes:nil error:nil];
+    }
+    return directory;
 }
 
 @end
