@@ -227,7 +227,7 @@ static const CGFloat kSeparatorFormViewHeight = 88;
 
 #pragma mark - SSJReportFormsCurveGraphViewDelegate
 - (void)curveGraphView:(SSJReportFormsCurveGraphView *)graphView didScrollToAxisXIndex:(NSUInteger)index {
-    [MobClick event:@"form_curve_move"];
+    [SSJAnaliyticsManager event:@"form_curve_move"];
 }
 
 - (NSString *)curveGraphView:(SSJReportFormsCurveGraphView *)graphView titleForBallonAtAxisXIndex:(NSUInteger)index {
@@ -282,7 +282,7 @@ static const CGFloat kSeparatorFormViewHeight = 88;
     switch (_item.timeDimension) {
         case SSJTimeDimensionDay:
         {
-            [MobClick event:@"forms_line_day"];
+            [SSJAnaliyticsManager event:@"forms_line_day"];
             [_timePeriodSegmentControl setSelectedIndex:0 animated:NO];
         }
             
@@ -290,14 +290,14 @@ static const CGFloat kSeparatorFormViewHeight = 88;
             
         case SSJTimeDimensionWeek:
         {
-            [MobClick event:@"forms_line_week"];
+            [SSJAnaliyticsManager event:@"forms_line_week"];
             [_timePeriodSegmentControl setSelectedIndex:1 animated:NO];
         }
             break;
             
         case SSJTimeDimensionMonth:
         {
-            [MobClick event:@"forms_line_month"];
+            [SSJAnaliyticsManager event:@"forms_line_month"];
             [_timePeriodSegmentControl setSelectedIndex:2 animated:NO];
         }
             break;

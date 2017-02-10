@@ -76,7 +76,7 @@ static NSString *const kMemberTableViewCellIdentifier = @"kMemberTableViewCellId
             self.selectedMemberDidChangeBlock(self.selectedMemberItems);
         }
     }else{
-        [MobClick event:@"dialog_add_member"];
+        [SSJAnaliyticsManager event:@"dialog_add_member"];
         [self dismiss];
         if (self.addNewMemberBlock) {
             self.addNewMemberBlock();

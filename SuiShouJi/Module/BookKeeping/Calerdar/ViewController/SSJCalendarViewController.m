@@ -12,7 +12,7 @@
 #import "SSJBillingChargeCellItem.h"
 #import "SSJBillingChargeCell.h"
 #import "SSJCalenderTableViewNoDataHeader.h"
-#import "SSJFundingDetailDateHeader.h"
+#import "SSJCalendarTabelViewHeaderView.h"
 #import "SSJCalenderDetailViewController.h"
 #import "SSJCalenderTableViewCell.h"
 
@@ -20,9 +20,12 @@
 #import "SSJCalenderHelper.h"
 #import "SSJCalenderScreenShotHelper.h"
 #import "FMDB.h"
+#import "UMSocial.h"
+#import <TencentOpenAPI/QQApiInterface.h>
 
 
-@interface SSJCalendarViewController ()
+
+@interface SSJCalendarViewController ()<UMSocialUIDelegate>
 
 @property (nonatomic,strong) UIBarButtonItem *rightBarButton;
 @property (nonatomic,strong) UILabel *dateLabel;
@@ -79,7 +82,7 @@
     [self.view addSubview:self.calendarView];
     [self.view addSubview:self.tableView];
     [self.view addSubview:self.shareButton];
-    [self.tableView registerClass:[SSJFundingDetailDateHeader class] forHeaderFooterViewReuseIdentifier:@"FundingDetailDateHeader"];
+    [self.tableView registerClass:[SSJCalendarTabelViewHeaderView class] forHeaderFooterViewReuseIdentifier:@"FundingDetailDateHeader"];
     [self.tableView registerClass:[SSJBillingChargeCell class] forCellReuseIdentifier:@"BillingChargeCellIdentifier"];
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"canleder_jia"] style:UIBarButtonItemStylePlain target:self action:@selector(rightButtonClicked:)];
     self.navigationItem.rightBarButtonItem = rightItem;
@@ -105,9 +108,13 @@
     self.tableView.top = self.calendarView.bottom;
     self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.calendarView.viewHeight - 64);
     if (self.items.count) {
-        self.shareButton.hidden = NO;
-        self.shareButton.leftBottom = CGPointMake(0, self.view.bottom);
-        self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 50, 0);
+        if ([SSJDefaultSource() isEqualToString:@"11501"] || [SSJDefaultSource() isEqualToString:@"11502"]) {
+            self.shareButton.hidden = NO;
+            self.shareButton.leftBottom = CGPointMake(0, self.view.bottom);
+            self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 50, 0);
+        } else {
+            self.shareButton.hidden = YES;
+        }
     } else {
         self.shareButton.hidden = YES;
     }
@@ -127,7 +134,7 @@
     if (self.items.count == 0) {
         return 0.1f;
     }
-    return 44;
+    return 65;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -162,20 +169,11 @@
     if (self.items.count == 0) {
         return nil;
     }
-    SSJFundingDetailDateHeader *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:@"FundingDetailDateHeader"];
-    headerView.dateLabel.text = [NSString stringWithFormat:@"%ld年%02ld月%02ld日",self.selectedYear,self.selectedMonth,self.selectedDay];
-    [headerView.dateLabel sizeToFit];
-    [SSJCalenderHelper queryBalanceForDate:self.selectDate success:^(double data) {
-        if (data > 0) {
-            headerView.balanceLabel.text = [NSString stringWithFormat:@"+%.2f",data];
-            [headerView.balanceLabel sizeToFit];
-        }else{
-            headerView.balanceLabel.text = [NSString stringWithFormat:@"%.2f",data];
-            [headerView.balanceLabel sizeToFit];
-        }
-    } failure:^(NSError *error) {
-        
-    }];
+    SSJCalendarTabelViewHeaderView *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:@"FundingDetailDateHeader"];
+    headerView.currentDateStr = [NSString stringWithFormat:@"%ld.%02ld.%02ld",self.selectedYear,self.selectedMonth,self.selectedDay];
+    headerView.income = _currentIncome;
+    headerView.expence = _currentExpenture;
+    headerView.balance = _currentIncome - _currentExpenture;
     return headerView;
 }
 
@@ -190,7 +188,7 @@
 #pragma mark - Getter
 -(UITableView *)tableView{
     if (!_tableView) {
-        _tableView = [[UITableView alloc]init];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height) style:UITableViewStylePlain];
         _tableView.backgroundColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:0.1];
         _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
         [_tableView ssj_clearExtendSeparator];
@@ -236,7 +234,7 @@
         [_dateLabel sizeToFit];
         _plusButton = [[UIButton alloc]init];
         _plusButton.frame = CGRectMake(0, 0, 20, 28);
-        [_plusButton setImage:[[UIImage imageNamed:@"reportForms_right"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+        [_plusButton setImage:[[UIImage imageNamed:@"calendar_right"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
         _plusButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor];
 
         [_plusButton addTarget:self action:@selector(plusButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
@@ -244,7 +242,7 @@
         [_plusButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         _minusButton = [[UIButton alloc]init];
         _minusButton.frame = CGRectMake(0, 0, 20, 28);
-        [_minusButton setImage:[[UIImage imageNamed:@"reportForms_left"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+        [_minusButton setImage:[[UIImage imageNamed:@"calendar_left"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
         _minusButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor];
         [_minusButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         _minusButton.titleLabel.font = [UIFont systemFontOfSize:18];
@@ -335,11 +333,13 @@
 }
 
 - (void)shareButtonClicked:(id)sender{
+    __weak typeof(self) weakSelf = self;
     NSArray * screenShots = [SSJCalenderScreenShotHelper screenShotForTableView:self.tableView];
-    [SSJCalenderScreenShotHelper screenShotForCalenderWithCellImages:screenShots Date:[NSDate dateWithString:self.selectDate formatString:@"yyyy-MM-dd"] income:0 expence:0 imageBlock:^(UIImage *image) {
+    [SSJCalenderScreenShotHelper screenShotForCalenderWithCellImages:screenShots Date:[NSDate dateWithString:self.selectDate formatString:@"yyyy-MM-dd"] income:_currentIncome expence:_currentExpenture imageBlock:^(UIImage *image) {
         NSData * imageData = UIImagePNGRepresentation(image);
         NSString * fullPathToFile = [SSJDocumentPath() stringByAppendingPathComponent:@"test.png"];
         [imageData writeToFile:fullPathToFile atomically:NO];
+        [weakSelf shareTheBillWithImage:image];
     }];
 }
 
@@ -364,7 +364,13 @@
             }else{
                 self.tableView.tableHeaderView = nil;
             }
-            [weakSelf reloadWithAnimation];
+            [SSJCalenderHelper queryBalanceForDate:self.selectDate success:^(double income , double expence) {
+                _currentIncome = income;
+                _currentExpenture = expence;
+                [weakSelf reloadWithAnimation];
+            } failure:^(NSError *error) {
+                
+            }];
         }
         weakSelf.calendarView.data = data;
         [weakSelf.view ssj_hideLoadingIndicator];
@@ -388,6 +394,23 @@
 -(void)reloadWithAnimation{
     self.needAnimation = YES;
     [self.tableView reloadData];
+}
+
+- (void)shareTheBillWithImage:(UIImage *)image {
+    if (!image) return;
+    
+    // 微信分享  纯图片
+    [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
+    
+    // QQ分享消息类型分为图文、纯图片，QQ空间分享只支持图文分享（图片文字缺一不可）
+    [UMSocialData defaultData].extConfig.qqData.qqMessageType = UMSocialQQMessageTypeImage;
+    [UMSocialSnsService presentSnsIconSheetView:self
+                                         appKey:SSJDetailSettingForSource(@"UMAppKey")
+                                      shareText:nil
+                                     shareImage:image
+                                shareToSnsNames:@[UMShareToWechatTimeline, UMShareToWechatSession, UMShareToQQ, UMShareToSina]
+                                       delegate:self];
+
 }
 
 /*

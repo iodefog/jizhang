@@ -10,4 +10,12 @@
 
 @interface SSJCalendarTabelViewHeaderView : UITableViewHeaderFooterView
 
+@property(nonatomic) double income;
+
+@property(nonatomic) double expence;
+
+@property(nonatomic) double balance;
+
+@property(nonatomic, strong) NSString *currentDateStr;
+
 @end

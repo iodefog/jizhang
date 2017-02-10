@@ -1,0 +1,6 @@
+framework module YYAnalytics {
+  umbrella header "YYAnalytics.h"
+
+  export *
+  module * { export * }
+}

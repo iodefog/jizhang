@@ -136,8 +136,8 @@
         [((UIButton *)sender) setTitle:@"" forState:UIControlStateNormal];
         [[SSJThemeDownLoaderManger sharedInstance] downloadThemeWithItem:self.item success:^(SSJThemeItem *item){
             [SSJThemeSetting switchToThemeID:item.themeId];
-            [MobClick event:@"download_skin" attributes:@{@"ID":item.themeId,@"Name":item.themeTitle}];
-            [MobClick event:@"open_skin" attributes:@{@"ID":item.themeId,@"Name":   item.themeTitle}];
+            [SSJAnaliyticsManager event:@"download_skin" extra:item.themeTitle];
+            [SSJAnaliyticsManager event:@"open_skin" extra:item.themeTitle];
             SSJThemeDownLoadCompleteService *downloadCompleteService = [[SSJThemeDownLoadCompleteService alloc]initWithDelegate:nil];
             [downloadCompleteService downloadCompleteThemeWithThemeId:item.themeId];
             if (weakSelf.themeChangeBlock) {
@@ -151,7 +151,7 @@
         [[SSJThemeDownLoaderManger sharedInstance] addProgressHandler:_downloadHandler forID:self.item.themeId];
     }else if ([((UIButton *)sender).titleLabel.text isEqualToString:@"启用"]){
         [SSJThemeSetting switchToThemeID:self.item.themeId];
-        [MobClick event:@"open_skin" attributes:@{@"ID":self.item.themeId,@"Name":self.item.themeTitle}];
+        [SSJAnaliyticsManager event:@"open_skin" extra:self.item.themeTitle];
         if (self.themeChangeBlock) {
             self.themeChangeBlock();
         }

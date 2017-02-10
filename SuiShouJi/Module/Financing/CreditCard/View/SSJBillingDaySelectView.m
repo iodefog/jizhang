@@ -167,7 +167,6 @@
 
 -(void)closeButtonClicked:(id)sender{
     [self dismiss];
-    UIDatePicker
 }
 
 -(void)setCurrentDate:(NSInteger)currentDate{

@@ -87,7 +87,7 @@ static BOOL kNeedBannerDisplay = YES;
 //    self.mm_drawerController.openDrawerGestureModeMask = MMOpenDrawerGestureModeAll;
     [self.adService requestBannersList];
     [self.header startAnimating];
-    [MobClick event:@"main_account_book"];
+    [SSJAnaliyticsManager event:@"main_account_book"];
     [self getDateFromDB];
     [self.mm_drawerController setMaximumLeftDrawerWidth:SSJSCREENWITH * 0.8];
     [self.mm_drawerController setOpenDrawerGestureModeMask:MMOpenDrawerGestureModeAll];
@@ -145,11 +145,12 @@ static BOOL kNeedBannerDisplay = YES;
         }
     }else{
         if (![item.booksName isEqualToString:@"添加账本"]) {
-            [MobClick event:@"change_account_book" attributes:@{@"账本名称":item.booksName}];
+            [SSJAnaliyticsManager event:@"change_account_book" extra:item.booksName
+             ];
             SSJSelectBooksType(item.booksId);
             [self.collectionView reloadData];
             [self.mm_drawerController closeDrawerAnimated:YES completion:NULL];
-        }else{
+        } else {
             [self.parentSelectView show];
 
         }
@@ -219,7 +220,7 @@ static BOOL kNeedBannerDisplay = YES;
 
 #pragma mark - SSJEditableCollectionViewDelegate
 - (BOOL)collectionView:(SSJEditableCollectionView *)collectionView shouldBeginEditingWhenPressAtIndexPath:(NSIndexPath *)indexPath{
-    [MobClick event:@"fund_sort"];
+    [SSJAnaliyticsManager event:@"fund_sort"];
     if (indexPath.row == self.items.count - 1) {
         return NO;
     }
@@ -286,7 +287,7 @@ static BOOL kNeedBannerDisplay = YES;
     self.deleteButton.hidden = !self.rightButton.isSelected;
     if (self.rightButton.isSelected) {
         self.adView.hidden = YES;
-        [MobClick event:@"accountbook_manage"];
+        [SSJAnaliyticsManager event:@"accountbook_manage"];
     }else{
         self.adView.hidden = NO;
         [self.collectionView endEditing];
@@ -298,7 +299,7 @@ static BOOL kNeedBannerDisplay = YES;
 }
 
 - (void)editeButtonClicked:(id)sender{
-    [MobClick event:@"accountbook_edit"];
+    [SSJAnaliyticsManager event:@"accountbook_edit"];
 
     SSJBooksEditeOrNewViewController *booksEditeVc = [[SSJBooksEditeOrNewViewController alloc]init];
     booksEditeVc.item = [self.selectedBooks firstObject];
@@ -409,7 +410,7 @@ static BOOL kNeedBannerDisplay = YES;
         _header = [[SSJBooksHeaderView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 178)];
         __weak typeof(self) weakSelf = self;
         _header.buttonClickBlock = ^(){
-            [MobClick event:@"account_all_booksType"];
+            [SSJAnaliyticsManager event:@"account_all_booksType"];
             SSJSummaryBooksViewController *summaryVc = [[SSJSummaryBooksViewController alloc]init];
             [weakSelf.navigationController pushViewController:summaryVc animated:YES];
         };

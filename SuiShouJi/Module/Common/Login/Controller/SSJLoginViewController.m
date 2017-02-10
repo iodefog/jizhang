@@ -257,7 +257,7 @@
 
 -(void)forgetButtonClicked:(id)sender{
     __weak typeof(self) weakSelf = self;
-    [MobClick event:@"login_forget_pwd"];
+    [SSJAnaliyticsManager event:@"login_forget_pwd"];
 
     SSJForgetPasswordFirstStepViewController *forgetVC = [[SSJForgetPasswordFirstStepViewController alloc] init];
     forgetVC.backController = self.backController;
@@ -269,7 +269,7 @@
 
 -(void)registerButtonClicked:(id)sender{
     __weak typeof(self) weakSelf = self;
-    [MobClick event:@"login_register"];
+    [SSJAnaliyticsManager event:@"login_register"];
 
     SSJRegistGetVerViewController *registerVc = [[SSJRegistGetVerViewController alloc] init];
     registerVc.finishHandle = ^(UIViewController *controller){
@@ -296,7 +296,7 @@
 }
 
 -(void)qqLoginButtonClicked:(id)sender{
-    [MobClick event:@"login_qq"];
+    [SSJAnaliyticsManager event:@"login_qq"];
     __weak typeof(self) weakSelf = self;
     [[SSJThirdPartyLoginManger shareInstance].qqLogin qqLoginWithSucessBlock:^(SSJThirdPartLoginItem *item) {
         [SSJThirdPartyLoginManger shareInstance].qqLogin = nil;
@@ -306,7 +306,7 @@
 }
 
 -(void)weixinLoginButtonClicked:(id)sender{
-    [MobClick event:@"login_weichat"];
+    [SSJAnaliyticsManager event:@"login_weichat"];
     __weak typeof(self) weakSelf = self;
     [[SSJThirdPartyLoginManger shareInstance].weixinLogin weixinLoginWithSucessBlock:^(SSJThirdPartLoginItem *item) {
         [SSJThirdPartyLoginManger shareInstance].qqLogin = nil;

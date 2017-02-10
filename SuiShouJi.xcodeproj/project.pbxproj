@@ -2266,6 +2266,27 @@
 		9C1E4C1B1E4ACD5C00CA5843 /* SSJCalendarTabelViewHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1E4C161E4ACD5C00CA5843 /* SSJCalendarTabelViewHeaderView.m */; };
 		9C1E4C1C1E4ACD5C00CA5843 /* SSJCalendarTabelViewHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1E4C161E4ACD5C00CA5843 /* SSJCalendarTabelViewHeaderView.m */; };
 		9C1E4C1D1E4ACD5C00CA5843 /* SSJCalendarTabelViewHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1E4C161E4ACD5C00CA5843 /* SSJCalendarTabelViewHeaderView.m */; };
+		9C1E4C3A1E4C043D00CA5843 /* SSJAnaliyticsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1E4C391E4C043D00CA5843 /* SSJAnaliyticsManager.m */; };
+		9C1E4C3B1E4C043D00CA5843 /* SSJAnaliyticsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1E4C391E4C043D00CA5843 /* SSJAnaliyticsManager.m */; };
+		9C1E4C3C1E4C043D00CA5843 /* SSJAnaliyticsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1E4C391E4C043D00CA5843 /* SSJAnaliyticsManager.m */; };
+		9C1E4C3D1E4C043D00CA5843 /* SSJAnaliyticsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1E4C391E4C043D00CA5843 /* SSJAnaliyticsManager.m */; };
+		9C1E4C3E1E4C043D00CA5843 /* SSJAnaliyticsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1E4C391E4C043D00CA5843 /* SSJAnaliyticsManager.m */; };
+		9C1E4C3F1E4C043D00CA5843 /* SSJAnaliyticsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1E4C391E4C043D00CA5843 /* SSJAnaliyticsManager.m */; };
+		9C1E4C401E4C043D00CA5843 /* SSJAnaliyticsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1E4C391E4C043D00CA5843 /* SSJAnaliyticsManager.m */; };
+		9C1E4C431E4C37A200CA5843 /* YYAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C1E4C421E4C37A200CA5843 /* YYAnalytics.framework */; };
+		9C1E4C441E4C37A200CA5843 /* YYAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C1E4C421E4C37A200CA5843 /* YYAnalytics.framework */; };
+		9C1E4C451E4C37A200CA5843 /* YYAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C1E4C421E4C37A200CA5843 /* YYAnalytics.framework */; };
+		9C1E4C461E4C37A200CA5843 /* YYAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C1E4C421E4C37A200CA5843 /* YYAnalytics.framework */; };
+		9C1E4C471E4C37A200CA5843 /* YYAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C1E4C421E4C37A200CA5843 /* YYAnalytics.framework */; };
+		9C1E4C481E4C37A200CA5843 /* YYAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C1E4C421E4C37A200CA5843 /* YYAnalytics.framework */; };
+		9C1E4C491E4C37A300CA5843 /* YYAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C1E4C421E4C37A200CA5843 /* YYAnalytics.framework */; };
+		9C1E4C4C1E4C619600CA5843 /* SSJCalendarTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1E4C4B1E4C619600CA5843 /* SSJCalendarTableViewCell.m */; };
+		9C1E4C4D1E4C619600CA5843 /* SSJCalendarTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1E4C4B1E4C619600CA5843 /* SSJCalendarTableViewCell.m */; };
+		9C1E4C4E1E4C619600CA5843 /* SSJCalendarTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1E4C4B1E4C619600CA5843 /* SSJCalendarTableViewCell.m */; };
+		9C1E4C4F1E4C619600CA5843 /* SSJCalendarTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1E4C4B1E4C619600CA5843 /* SSJCalendarTableViewCell.m */; };
+		9C1E4C501E4C619600CA5843 /* SSJCalendarTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1E4C4B1E4C619600CA5843 /* SSJCalendarTableViewCell.m */; };
+		9C1E4C511E4C619600CA5843 /* SSJCalendarTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1E4C4B1E4C619600CA5843 /* SSJCalendarTableViewCell.m */; };
+		9C1E4C521E4C619600CA5843 /* SSJCalendarTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1E4C4B1E4C619600CA5843 /* SSJCalendarTableViewCell.m */; };
 		9C20A87F1D41E43A00F3D77F /* SSJMemberManagerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C20A87E1D41E43A00F3D77F /* SSJMemberManagerViewController.m */; };
 		9C23EA4D1DDAD4FE0003C5AB /* 9188.cer in Resources */ = {isa = PBXBuildFile; fileRef = 9C23EA4C1DDAD4FE0003C5AB /* 9188.cer */; };
 		9C246BA41DCADB7600C61C34 /* SSJDatabaseVersion10.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C246BA21DCADB7600C61C34 /* SSJDatabaseVersion10.m */; };
@@ -4657,6 +4678,11 @@
 		9C1A9CAA1D7D76AE0032BA0D /* SSJBookKeepingHomeBooksButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBookKeepingHomeBooksButton.m; sourceTree = "<group>"; };
 		9C1E4C151E4ACD5C00CA5843 /* SSJCalendarTabelViewHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCalendarTabelViewHeaderView.h; sourceTree = "<group>"; };
 		9C1E4C161E4ACD5C00CA5843 /* SSJCalendarTabelViewHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCalendarTabelViewHeaderView.m; sourceTree = "<group>"; };
+		9C1E4C381E4C043D00CA5843 /* SSJAnaliyticsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJAnaliyticsManager.h; sourceTree = "<group>"; };
+		9C1E4C391E4C043D00CA5843 /* SSJAnaliyticsManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJAnaliyticsManager.m; sourceTree = "<group>"; };
+		9C1E4C421E4C37A200CA5843 /* YYAnalytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = YYAnalytics.framework; sourceTree = "<group>"; };
+		9C1E4C4A1E4C619600CA5843 /* SSJCalendarTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCalendarTableViewCell.h; sourceTree = "<group>"; };
+		9C1E4C4B1E4C619600CA5843 /* SSJCalendarTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCalendarTableViewCell.m; sourceTree = "<group>"; };
 		9C20A87D1D41E43A00F3D77F /* SSJMemberManagerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMemberManagerViewController.h; sourceTree = "<group>"; };
 		9C20A87E1D41E43A00F3D77F /* SSJMemberManagerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMemberManagerViewController.m; sourceTree = "<group>"; };
 		9C23EA4C1DDAD4FE0003C5AB /* 9188.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = 9188.cer; sourceTree = "<group>"; };
@@ -5224,6 +5250,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9C1E4C491E4C37A300CA5843 /* YYAnalytics.framework in Frameworks */,
 				7D08A2AA1E4999D30085A8FB /* SystemConfiguration.framework in Frameworks */,
 				7D08A2AB1E4999D30085A8FB /* CoreTelephony.framework in Frameworks */,
 				7D08A2AC1E4999D30085A8FB /* UTMini.framework in Frameworks */,
@@ -5247,6 +5274,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9C1E4C481E4C37A200CA5843 /* YYAnalytics.framework in Frameworks */,
 				7DA13C011E35AED7000490A4 /* SystemConfiguration.framework in Frameworks */,
 				7DA13C021E35AED7000490A4 /* CoreTelephony.framework in Frameworks */,
 				7DA13C031E35AED7000490A4 /* UTMini.framework in Frameworks */,
@@ -5270,6 +5298,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9C1E4C451E4C37A200CA5843 /* YYAnalytics.framework in Frameworks */,
 				7DBA571E1D6D32B700C02D79 /* SystemConfiguration.framework in Frameworks */,
 				7DBA571F1D6D32B700C02D79 /* CoreTelephony.framework in Frameworks */,
 				7DBA57201D6D32B700C02D79 /* UTMini.framework in Frameworks */,
@@ -5293,6 +5322,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9C1E4C441E4C37A200CA5843 /* YYAnalytics.framework in Frameworks */,
 				9C2A68541D194CA70010F1DA /* SystemConfiguration.framework in Frameworks */,
 				9C2A68551D194CA70010F1DA /* CoreTelephony.framework in Frameworks */,
 				9C2A68561D194CA70010F1DA /* UTMini.framework in Frameworks */,
@@ -5316,6 +5346,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9C1E4C471E4C37A200CA5843 /* YYAnalytics.framework in Frameworks */,
 				9CEC00921D6D41EB00DB2C8B /* SystemConfiguration.framework in Frameworks */,
 				9CEC00931D6D41EB00DB2C8B /* CoreTelephony.framework in Frameworks */,
 				9CEC00941D6D41EB00DB2C8B /* UTMini.framework in Frameworks */,
@@ -5339,6 +5370,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9C1E4C461E4C37A200CA5843 /* YYAnalytics.framework in Frameworks */,
 				9CECFC9A1D6D41A700DB2C8B /* SystemConfiguration.framework in Frameworks */,
 				9CECFC9B1D6D41A700DB2C8B /* CoreTelephony.framework in Frameworks */,
 				9CECFC9C1D6D41A700DB2C8B /* UTMini.framework in Frameworks */,
@@ -5362,6 +5394,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9C1E4C431E4C37A200CA5843 /* YYAnalytics.framework in Frameworks */,
 				9C3276F41CE4616900109C4C /* SystemConfiguration.framework in Frameworks */,
 				9C3276F21CE4615C00109C4C /* CoreTelephony.framework in Frameworks */,
 				9C3277571CE471A900109C4C /* UTMini.framework in Frameworks */,
@@ -5838,6 +5871,8 @@
 				9C1723911D5327F600BB13DE /* SSJCalenderDetailHeader.m */,
 				9C1E4C151E4ACD5C00CA5843 /* SSJCalendarTabelViewHeaderView.h */,
 				9C1E4C161E4ACD5C00CA5843 /* SSJCalendarTabelViewHeaderView.m */,
+				9C1E4C4A1E4C619600CA5843 /* SSJCalendarTableViewCell.h */,
+				9C1E4C4B1E4C619600CA5843 /* SSJCalendarTableViewCell.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -6027,6 +6062,7 @@
 		7D6AAB5E1C312C340007C0A3 /* Business */ = {
 			isa = PBXGroup;
 			children = (
+				9C1E4C371E4C03EB00CA5843 /* SSJAnaliytisManager */,
 				7DF07DF31DD0265800B0AF97 /* SSJAccountsMerger */,
 				7DDB6D191DB9A55000D823AE /* SSJDomainManager */,
 				7DE4A7CF1D20C01900F05BF0 /* SSJTheme */,
@@ -6667,6 +6703,23 @@
 				9C17FF1B1CE96ED90016EE4C /* SSJCustomKeyboard.m */,
 			);
 			path = SSJCustomKeyBoard;
+			sourceTree = "<group>";
+		};
+		9C1E4C371E4C03EB00CA5843 /* SSJAnaliytisManager */ = {
+			isa = PBXGroup;
+			children = (
+				9C1E4C381E4C043D00CA5843 /* SSJAnaliyticsManager.h */,
+				9C1E4C391E4C043D00CA5843 /* SSJAnaliyticsManager.m */,
+			);
+			name = SSJAnaliytisManager;
+			sourceTree = "<group>";
+		};
+		9C1E4C411E4C37A200CA5843 /* YYAnalytics */ = {
+			isa = PBXGroup;
+			children = (
+				9C1E4C421E4C37A200CA5843 /* YYAnalytics.framework */,
+			);
+			path = YYAnalytics;
 			sourceTree = "<group>";
 		};
 		9C23EA4B1DDAD4FE0003C5AB /* certificates */ = {
@@ -7895,6 +7948,7 @@
 		BD0432CD1C1A77BB0051E7AB /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				9C1E4C411E4C37A200CA5843 /* YYAnalytics */,
 				7DC318491E2882A300932644 /* FMDB */,
 				9C77DB971DE6E31200CD64A2 /* SimulateIDFA */,
 				7DDB6D461DBA063600D823AE /* GTMBase64 */,
@@ -9590,6 +9644,7 @@
 				7D08A1D81E4999D30085A8FB /* SSJBudgetEditSwitchCtrlCell.m in Sources */,
 				7D08A1D91E4999D30085A8FB /* SSJPercentCircleAdditionGroupNode.m in Sources */,
 				7D08A1DA1E4999D30085A8FB /* SSJCreditRepaymentSyncTable.m in Sources */,
+				9C1E4C401E4C043D00CA5843 /* SSJAnaliyticsManager.m in Sources */,
 				7D08A1DB1E4999D30085A8FB /* SSJDataClearHelper.m in Sources */,
 				7D08A1DC1E4999D30085A8FB /* SSJLoanListSectionHeaderAmountView.m in Sources */,
 				7D08A1DD1E4999D30085A8FB /* SSJCalenderDetailHeader.m in Sources */,
@@ -9673,6 +9728,7 @@
 				7D08A22B1E4999D30085A8FB /* SSJBooksEditeOrNewViewController.m in Sources */,
 				7D08A22C1E4999D30085A8FB /* SSJReportFormsCurveCell.m in Sources */,
 				7D08A22D1E4999D30085A8FB /* SSJRecordMakingCategoryItem.m in Sources */,
+				9C1E4C521E4C619600CA5843 /* SSJCalendarTableViewCell.m in Sources */,
 				7D08A22E1E4999D30085A8FB /* SSJFundingTransferDetailItem.m in Sources */,
 				7D08A22F1E4999D30085A8FB /* FMDatabaseAdditions.m in Sources */,
 				7D08A2301E4999D30085A8FB /* SSJMagicExportResultCheckMarkView.m in Sources */,
@@ -10128,6 +10184,7 @@
 				7DA13B2F1E35AED7000490A4 /* SSJBudgetEditSwitchCtrlCell.m in Sources */,
 				7DA13B301E35AED7000490A4 /* SSJPercentCircleAdditionGroupNode.m in Sources */,
 				7DA13B311E35AED7000490A4 /* SSJCreditRepaymentSyncTable.m in Sources */,
+				9C1E4C3F1E4C043D00CA5843 /* SSJAnaliyticsManager.m in Sources */,
 				7DA13B321E35AED7000490A4 /* SSJDataClearHelper.m in Sources */,
 				7DA13B331E35AED7000490A4 /* SSJLoanListSectionHeaderAmountView.m in Sources */,
 				7DA13B341E35AED7000490A4 /* SSJCalenderDetailHeader.m in Sources */,
@@ -10211,6 +10268,7 @@
 				7DA13B821E35AED7000490A4 /* SSJBooksEditeOrNewViewController.m in Sources */,
 				7DA13B831E35AED7000490A4 /* SSJReportFormsCurveCell.m in Sources */,
 				7DA13B841E35AED7000490A4 /* SSJRecordMakingCategoryItem.m in Sources */,
+				9C1E4C511E4C619600CA5843 /* SSJCalendarTableViewCell.m in Sources */,
 				7DA13B851E35AED7000490A4 /* SSJFundingTransferDetailItem.m in Sources */,
 				7DA13B861E35AED7000490A4 /* FMDatabaseAdditions.m in Sources */,
 				7DA13B871E35AED7000490A4 /* SSJMagicExportResultCheckMarkView.m in Sources */,
@@ -10662,6 +10720,7 @@
 				7DBA56881D6D32B700C02D79 /* SSJChargeCircleSelectView.m in Sources */,
 				7DBA56891D6D32B700C02D79 /* SSJUserChargeSyncTable.m in Sources */,
 				7DB9F82A1DFFC9230084E998 /* SSJReportFormsNoDataCellItem.m in Sources */,
+				9C1E4C4E1E4C619600CA5843 /* SSJCalendarTableViewCell.m in Sources */,
 				9C91AE191D93A4BB00B585AA /* SSJChargeSearchingStore.m in Sources */,
 				7DBA568A1D6D32B700C02D79 /* SSJPatchUpdateService.m in Sources */,
 				9C77DBAF1DE6ED2200CD64A2 /* SSJIdfaUploadService.m in Sources */,
@@ -10796,6 +10855,7 @@
 				7DF532A41E13BC0F009A6F6C /* SSJInstalmentDateSelectCell.m in Sources */,
 				7DBA56E61D6D32B700C02D79 /* SSJDatabaseVersion2.m in Sources */,
 				7DBA56E71D6D32B700C02D79 /* SCYMotionEncryptionView.m in Sources */,
+				9C1E4C3C1E4C043D00CA5843 /* SSJAnaliyticsManager.m in Sources */,
 				9CE2F8A61D9B94AA008099C1 /* SSJSearchBar.m in Sources */,
 				7DBA56E81D6D32B700C02D79 /* SSJGuideLastContentView.m in Sources */,
 				7DBA56E91D6D32B700C02D79 /* SSJBookkeepingTreeHelpViewController.m in Sources */,
@@ -11201,6 +11261,7 @@
 				9C2A67C81D194CA70010F1DA /* SSJCustomKeyboard.m in Sources */,
 				9C2A67C91D194CA70010F1DA /* SSJBorderButton.m in Sources */,
 				9C2A67CA1D194CA70010F1DA /* SSJReportFormsPeriodModel.m in Sources */,
+				9C1E4C4D1E4C619600CA5843 /* SSJCalendarTableViewCell.m in Sources */,
 				9C2A67CB1D194CA70010F1DA /* SSJBookkeepingTreeHelpCell.m in Sources */,
 				9C2A67CC1D194CA70010F1DA /* SSJBudgetEditSwitchCtrlCell.m in Sources */,
 				9CF0AC0E1D58750A00475C5B /* SSJChargeDetailMemberCell.m in Sources */,
@@ -11335,6 +11396,7 @@
 				9C2A68231D194CA70010F1DA /* SSJGuideLastContentView.m in Sources */,
 				9C2A68241D194CA70010F1DA /* SSJBookkeepingTreeHelpViewController.m in Sources */,
 				9C2A68251D194CA70010F1DA /* SSJChargeCicleModifyViewController.m in Sources */,
+				9C1E4C3B1E4C043D00CA5843 /* SSJAnaliyticsManager.m in Sources */,
 				9C2A68261D194CA70010F1DA /* SSJCalendarCollectionViewCell.m in Sources */,
 				9CFBAC451E07E6F700C55814 /* SSJCreditRepaymentSyncTable.m in Sources */,
 				7DF19ED91D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m in Sources */,
@@ -11740,6 +11802,7 @@
 				9CECFBFD1D6D41A700DB2C8B /* SSJBookkeepingTreeHelpCell.m in Sources */,
 				9CECFBFE1D6D41A700DB2C8B /* SSJBudgetEditSwitchCtrlCell.m in Sources */,
 				9CECFBFF1D6D41A700DB2C8B /* SSJPercentCircleAdditionGroupNode.m in Sources */,
+				9C1E4C4F1E4C619600CA5843 /* SSJCalendarTableViewCell.m in Sources */,
 				9CECFC001D6D41A700DB2C8B /* SSJDataClearHelper.m in Sources */,
 				9CECFC011D6D41A700DB2C8B /* SSJCalenderDetailHeader.m in Sources */,
 				9CECFC021D6D41A700DB2C8B /* SSJNewCategoryCollectionView.m in Sources */,
@@ -11874,6 +11937,7 @@
 				9C3899A41DC9D99700715732 /* SSJCustomCategoryItem.m in Sources */,
 				9CECFC611D6D41A700DB2C8B /* SSJCircleChargeStore.m in Sources */,
 				9CECFC621D6D41A700DB2C8B /* SSJDatabaseVersion2.m in Sources */,
+				9C1E4C3D1E4C043D00CA5843 /* SSJAnaliyticsManager.m in Sources */,
 				9CECFC631D6D41A700DB2C8B /* SCYMotionEncryptionView.m in Sources */,
 				9CE2F8A71D9B94AB008099C1 /* SSJSearchBar.m in Sources */,
 				9CECFC641D6D41A700DB2C8B /* SSJGuideLastContentView.m in Sources */,
@@ -12279,6 +12343,7 @@
 				7D8C7E9D1D6EE01300D72E2D /* SSJLoanDetailCellItem.m in Sources */,
 				9CECFFF41D6D41EB00DB2C8B /* SSJReportFormsPeriodModel.m in Sources */,
 				7DB9F82C1DFFC9230084E998 /* SSJReportFormsNoDataCellItem.m in Sources */,
+				9C1E4C501E4C619600CA5843 /* SSJCalendarTableViewCell.m in Sources */,
 				9CECFFF51D6D41EB00DB2C8B /* SSJBookkeepingTreeHelpCell.m in Sources */,
 				9CECFFF61D6D41EB00DB2C8B /* SSJBudgetEditSwitchCtrlCell.m in Sources */,
 				9CECFFF71D6D41EB00DB2C8B /* SSJPercentCircleAdditionGroupNode.m in Sources */,
@@ -12413,6 +12478,7 @@
 				7DF532A61E13BC10009A6F6C /* SSJInstalmentDateSelectCell.m in Sources */,
 				9CEC00561D6D41EB00DB2C8B /* UIImageView+SSJTheme.m in Sources */,
 				9CEC00571D6D41EB00DB2C8B /* SSJRegistCompleteViewController.m in Sources */,
+				9C1E4C3E1E4C043D00CA5843 /* SSJAnaliyticsManager.m in Sources */,
 				9CEC00581D6D41EB00DB2C8B /* SSJListMenuItem.m in Sources */,
 				9CEC00591D6D41EB00DB2C8B /* SSJCircleChargeStore.m in Sources */,
 				9CEC005A1D6D41EB00DB2C8B /* SSJDatabaseVersion2.m in Sources */,
@@ -12707,6 +12773,7 @@
 				7DD9D0C71CF6E2A6005AF735 /* SSJReportFormsScaleAxisView.m in Sources */,
 				7DE4A7EC1D20DD8C00F05BF0 /* UIImage+SSJTheme.m in Sources */,
 				7D5F33421CEAE6C10086B67E /* SSJBudgetEditLabelCell.m in Sources */,
+				9C1E4C4C1E4C619600CA5843 /* SSJCalendarTableViewCell.m in Sources */,
 				7D5F334F1CEAE6C10086B67E /* SSJCalenderTableViewCell.m in Sources */,
 				7D36AC521D461D80006526B3 /* SSJMemberChargeSyncTable.m in Sources */,
 				7D5F33281CEAE6C10086B67E /* SSJBookKeepingButton.m in Sources */,
@@ -13022,6 +13089,7 @@
 				7D87AEB11D66DF3F0024D33C /* SSJUserRemindSyncTable.m in Sources */,
 				7D6AAB631C312C500007C0A3 /* SSJUnlimitedScrollView.m in Sources */,
 				7D5F333B1CEAE6C10086B67E /* SSJBudgetListCellItem.m in Sources */,
+				9C1E4C3A1E4C043D00CA5843 /* SSJAnaliyticsManager.m in Sources */,
 				9CD9BC2C1CFD2DAA0061803B /* SSJSyncSettingTableViewCell.m in Sources */,
 				9C9471891CEB224C00D69079 /* SSJFundingDetailsViewController.m in Sources */,
 				7D5F33791CEAE6C10086B67E /* SSJCustomKeyBoardButton.m in Sources */,
@@ -13113,6 +13181,8 @@
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
 				);
 				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -13151,6 +13221,8 @@
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
 				);
 				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -13188,6 +13260,8 @@
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
 				);
 				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -13200,13 +13274,107 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"AFNetworking\"",
+					"-l\"APOpenSdk\"",
+					"-l\"DateTools\"",
+					"-l\"FLAnimatedImage\"",
+					"-l\"JSPatch\"",
+					"-l\"LWApiSDK\"",
+					"-l\"LxThroughPointsBezier\"",
+					"-l\"MJExtension\"",
+					"-l\"MMDrawerController\"",
+					"-l\"Masonry\"",
+					"-l\"Meiqia\"",
+					"-l\"SDWebImage\"",
+					"-l\"SocialAlipayShare\"",
+					"-l\"SocialFacebook\"",
+					"-l\"SocialInstagram\"",
+					"-l\"SocialLaiWang\"",
+					"-l\"SocialLine\"",
+					"-l\"SocialQQ\"",
+					"-l\"SocialSinaSSO\"",
+					"-l\"SocialTumblr\"",
+					"-l\"SocialTwitter\"",
+					"-l\"SocialWechat\"",
+					"-l\"SocialWhatsapp\"",
+					"-l\"UMSocial_Sdk_5.2.1\"",
+					"-l\"UMSocial_Sdk_Comment_5.2.1\"",
+					"-l\"WeChatSDK\"",
+					"-l\"WeiboSDK\"",
+					"-l\"YYKeyboardManager\"",
+					"-l\"YYText\"",
+					"-l\"ZYCornerRadius\"",
+					"-l\"iconv\"",
+					"-l\"icucore\"",
+					"-l\"libwebp\"",
+					"-l\"opencore-amrnb\"",
+					"-l\"opencore-amrwb\"",
+					"-l\"sqlite3\"",
+					"-l\"stdc++\"",
+					"-l\"z\"",
+					"-framework",
+					"\"AVFoundation\"",
+					"-framework",
+					"\"Accelerate\"",
+					"-framework",
+					"\"Accounts\"",
+					"-framework",
+					"\"CoreData\"",
+					"-framework",
+					"\"CoreFoundation\"",
+					"-framework",
+					"\"CoreGraphics\"",
+					"-framework",
+					"\"CoreTelephony\"",
+					"-framework",
+					"\"CoreText\"",
+					"-framework",
+					"\"FBSDKCoreKit\"",
+					"-framework",
+					"\"FBSDKLoginKit\"",
+					"-framework",
+					"\"FBSDKShareKit\"",
+					"-framework",
+					"\"Fabric\"",
+					"-framework",
+					"\"Foundation\"",
+					"-framework",
+					"\"ImageIO\"",
+					"-framework",
+					"\"MeiQiaSDK\"",
+					"-framework",
+					"\"MobileCoreServices\"",
+					"-framework",
+					"\"QuartzCore\"",
+					"-framework",
+					"\"Security\"",
+					"-framework",
+					"\"Social\"",
+					"-framework",
+					"\"SystemConfiguration\"",
+					"-framework",
+					"\"TencentOpenAPI\"",
+					"-framework",
+					"\"TwitterCore\"",
+					"-framework",
+					"\"TwitterKit\"",
+					"-framework",
+					"\"UIKit\"",
+					"-framework",
+					"\"UMMobClick\"",
+					"-weak_framework",
+					"\"JavaScriptCore\"",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
 				PRODUCT_NAME = SuiShouJi;
 				PROVISIONING_PROFILE = "25f5d9b1-62eb-4061-a252-d6f785f59782";
 				PROVISIONING_PROFILE_SPECIFIER = JiZhangEnterpriseAdHoc;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = "Debug-production";
 		};
@@ -13228,6 +13396,8 @@
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
 				);
 				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -13274,6 +13444,8 @@
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
 				);
 				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -13319,6 +13491,8 @@
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
 				);
 				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -13364,6 +13538,8 @@
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
 				);
 				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -13472,15 +13648,17 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co. Ltd.";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co. Ltd.";
-				DEVELOPMENT_TEAM = 747363KXQ6;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co.,Ltd (534SCE47WT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co.,Ltd (534SCE47WT)";
+				DEVELOPMENT_TEAM = 534SCE47WT;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
 				);
 				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -13493,12 +13671,106 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"AFNetworking\"",
+					"-l\"APOpenSdk\"",
+					"-l\"DateTools\"",
+					"-l\"FLAnimatedImage\"",
+					"-l\"JSPatch\"",
+					"-l\"LWApiSDK\"",
+					"-l\"LxThroughPointsBezier\"",
+					"-l\"MJExtension\"",
+					"-l\"MMDrawerController\"",
+					"-l\"Masonry\"",
+					"-l\"Meiqia\"",
+					"-l\"SDWebImage\"",
+					"-l\"SocialAlipayShare\"",
+					"-l\"SocialFacebook\"",
+					"-l\"SocialInstagram\"",
+					"-l\"SocialLaiWang\"",
+					"-l\"SocialLine\"",
+					"-l\"SocialQQ\"",
+					"-l\"SocialSinaSSO\"",
+					"-l\"SocialTumblr\"",
+					"-l\"SocialTwitter\"",
+					"-l\"SocialWechat\"",
+					"-l\"SocialWhatsapp\"",
+					"-l\"UMSocial_Sdk_5.2.1\"",
+					"-l\"UMSocial_Sdk_Comment_5.2.1\"",
+					"-l\"WeChatSDK\"",
+					"-l\"WeiboSDK\"",
+					"-l\"YYKeyboardManager\"",
+					"-l\"YYText\"",
+					"-l\"ZYCornerRadius\"",
+					"-l\"iconv\"",
+					"-l\"icucore\"",
+					"-l\"libwebp\"",
+					"-l\"opencore-amrnb\"",
+					"-l\"opencore-amrwb\"",
+					"-l\"sqlite3\"",
+					"-l\"stdc++\"",
+					"-l\"z\"",
+					"-framework",
+					"\"AVFoundation\"",
+					"-framework",
+					"\"Accelerate\"",
+					"-framework",
+					"\"Accounts\"",
+					"-framework",
+					"\"CoreData\"",
+					"-framework",
+					"\"CoreFoundation\"",
+					"-framework",
+					"\"CoreGraphics\"",
+					"-framework",
+					"\"CoreTelephony\"",
+					"-framework",
+					"\"CoreText\"",
+					"-framework",
+					"\"FBSDKCoreKit\"",
+					"-framework",
+					"\"FBSDKLoginKit\"",
+					"-framework",
+					"\"FBSDKShareKit\"",
+					"-framework",
+					"\"Fabric\"",
+					"-framework",
+					"\"Foundation\"",
+					"-framework",
+					"\"ImageIO\"",
+					"-framework",
+					"\"MeiQiaSDK\"",
+					"-framework",
+					"\"MobileCoreServices\"",
+					"-framework",
+					"\"QuartzCore\"",
+					"-framework",
+					"\"Security\"",
+					"-framework",
+					"\"Social\"",
+					"-framework",
+					"\"SystemConfiguration\"",
+					"-framework",
+					"\"TencentOpenAPI\"",
+					"-framework",
+					"\"TwitterCore\"",
+					"-framework",
+					"\"TwitterKit\"",
+					"-framework",
+					"\"UIKit\"",
+					"-framework",
+					"\"UMMobClick\"",
+					"-weak_framework",
+					"\"JavaScriptCore\"",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
 				PRODUCT_NAME = SuiShouJi;
-				PROVISIONING_PROFILE = "25f5d9b1-62eb-4061-a252-d6f785f59782";
-				PROVISIONING_PROFILE_SPECIFIER = JiZhangEnterpriseAdHoc;
+				PROVISIONING_PROFILE = "24808e2a-a81f-4f91-9ef4-b19ac8e2d20d";
+				PROVISIONING_PROFILE_SPECIFIER = JiZhangAppstoreAdHoc;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = "Release-production";
 		};
@@ -13520,6 +13792,8 @@
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
 				);
 				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -13565,6 +13839,8 @@
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
 				);
 				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -13609,6 +13885,8 @@
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
 				);
 				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -13653,6 +13931,8 @@
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
 				);
 				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -13721,13 +14001,15 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Wen Chen (262HTD8ZSJ)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Wen Chen (262HTD8ZSJ)";
-				DEVELOPMENT_TEAM = 262HTD8ZSJ;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
 				);
 				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -13742,8 +14024,8 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhangbao;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "e1b12052-3986-45e4-a9b1-2a111c6eb0b6";
-				PROVISIONING_PROFILE_SPECIFIER = YouYuJiZhangBaoDis;
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -13766,6 +14048,8 @@
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
 				);
 				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -13804,6 +14088,8 @@
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
 				);
 				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -13849,6 +14135,8 @@
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
 				);
 				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -13894,6 +14182,8 @@
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
 				);
 				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -13941,6 +14231,8 @@
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
 				);
 				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -13972,6 +14264,11 @@
 		9CA79C361E49CBF40096B6AD /* Debug-test */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
+				);
 				PRODUCT_NAME = SuiShouJi;
 			};
 			name = "Debug-test";
@@ -13979,6 +14276,11 @@
 		9CA79C371E49CBF40096B6AD /* Release-test */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
+				);
 				PRODUCT_NAME = SuiShouJi;
 			};
 			name = "Release-test";
@@ -13986,6 +14288,11 @@
 		9CA79C381E49CBF40096B6AD /* Release-production */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
+				);
 				PRODUCT_NAME = SuiShouJi;
 			};
 			name = "Release-production";
@@ -13993,6 +14300,11 @@
 		9CA79C391E49CBF40096B6AD /* Debug-test */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
+				);
 				PRODUCT_NAME = SuiShouJi;
 			};
 			name = "Debug-test";
@@ -14000,6 +14312,11 @@
 		9CA79C3A1E49CBF40096B6AD /* Release-test */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
+				);
 				PRODUCT_NAME = SuiShouJi;
 			};
 			name = "Release-test";
@@ -14007,6 +14324,11 @@
 		9CA79C3B1E49CBF40096B6AD /* Release-production */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
+				);
 				PRODUCT_NAME = SuiShouJi;
 			};
 			name = "Release-production";
@@ -14028,6 +14350,8 @@
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
 				);
 				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -14073,6 +14397,8 @@
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
 				);
 				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -14117,6 +14443,8 @@
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
 				);
 				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -14162,6 +14490,8 @@
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
 				);
 				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -14292,6 +14622,8 @@
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
 				);
 				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -14304,13 +14636,107 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"AFNetworking\"",
+					"-l\"APOpenSdk\"",
+					"-l\"DateTools\"",
+					"-l\"FLAnimatedImage\"",
+					"-l\"JSPatch\"",
+					"-l\"LWApiSDK\"",
+					"-l\"LxThroughPointsBezier\"",
+					"-l\"MJExtension\"",
+					"-l\"MMDrawerController\"",
+					"-l\"Masonry\"",
+					"-l\"Meiqia\"",
+					"-l\"SDWebImage\"",
+					"-l\"SocialAlipayShare\"",
+					"-l\"SocialFacebook\"",
+					"-l\"SocialInstagram\"",
+					"-l\"SocialLaiWang\"",
+					"-l\"SocialLine\"",
+					"-l\"SocialQQ\"",
+					"-l\"SocialSinaSSO\"",
+					"-l\"SocialTumblr\"",
+					"-l\"SocialTwitter\"",
+					"-l\"SocialWechat\"",
+					"-l\"SocialWhatsapp\"",
+					"-l\"UMSocial_Sdk_5.2.1\"",
+					"-l\"UMSocial_Sdk_Comment_5.2.1\"",
+					"-l\"WeChatSDK\"",
+					"-l\"WeiboSDK\"",
+					"-l\"YYKeyboardManager\"",
+					"-l\"YYText\"",
+					"-l\"ZYCornerRadius\"",
+					"-l\"iconv\"",
+					"-l\"icucore\"",
+					"-l\"libwebp\"",
+					"-l\"opencore-amrnb\"",
+					"-l\"opencore-amrwb\"",
+					"-l\"sqlite3\"",
+					"-l\"stdc++\"",
+					"-l\"z\"",
+					"-framework",
+					"\"AVFoundation\"",
+					"-framework",
+					"\"Accelerate\"",
+					"-framework",
+					"\"Accounts\"",
+					"-framework",
+					"\"CoreData\"",
+					"-framework",
+					"\"CoreFoundation\"",
+					"-framework",
+					"\"CoreGraphics\"",
+					"-framework",
+					"\"CoreTelephony\"",
+					"-framework",
+					"\"CoreText\"",
+					"-framework",
+					"\"FBSDKCoreKit\"",
+					"-framework",
+					"\"FBSDKLoginKit\"",
+					"-framework",
+					"\"FBSDKShareKit\"",
+					"-framework",
+					"\"Fabric\"",
+					"-framework",
+					"\"Foundation\"",
+					"-framework",
+					"\"ImageIO\"",
+					"-framework",
+					"\"MeiQiaSDK\"",
+					"-framework",
+					"\"MobileCoreServices\"",
+					"-framework",
+					"\"QuartzCore\"",
+					"-framework",
+					"\"Security\"",
+					"-framework",
+					"\"Social\"",
+					"-framework",
+					"\"SystemConfiguration\"",
+					"-framework",
+					"\"TencentOpenAPI\"",
+					"-framework",
+					"\"TwitterCore\"",
+					"-framework",
+					"\"TwitterKit\"",
+					"-framework",
+					"\"UIKit\"",
+					"-framework",
+					"\"UMMobClick\"",
+					"-weak_framework",
+					"\"JavaScriptCore\"",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
 				PRODUCT_NAME = SuiShouJi;
-				PROVISIONING_PROFILE = "9395e777-7c74-4eb4-8840-b46530e22ddb";
+				PROVISIONING_PROFILE = "233639f4-6ed0-4f30-8b52-fc269e95c5a5";
 				PROVISIONING_PROFILE_SPECIFIER = JiZhangEnterpriseDevelopment;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = "Debug-test";
 		};
@@ -14321,15 +14747,17 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Can Wu (7Z729NG4UD)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Can Wu (7Z729NG4UD)";
-				DEVELOPMENT_TEAM = 747363KXQ6;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co.,Ltd (534SCE47WT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co.,Ltd (534SCE47WT)";
+				DEVELOPMENT_TEAM = 534SCE47WT;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
 				);
 				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -14342,12 +14770,106 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"AFNetworking\"",
+					"-l\"APOpenSdk\"",
+					"-l\"DateTools\"",
+					"-l\"FLAnimatedImage\"",
+					"-l\"JSPatch\"",
+					"-l\"LWApiSDK\"",
+					"-l\"LxThroughPointsBezier\"",
+					"-l\"MJExtension\"",
+					"-l\"MMDrawerController\"",
+					"-l\"Masonry\"",
+					"-l\"Meiqia\"",
+					"-l\"SDWebImage\"",
+					"-l\"SocialAlipayShare\"",
+					"-l\"SocialFacebook\"",
+					"-l\"SocialInstagram\"",
+					"-l\"SocialLaiWang\"",
+					"-l\"SocialLine\"",
+					"-l\"SocialQQ\"",
+					"-l\"SocialSinaSSO\"",
+					"-l\"SocialTumblr\"",
+					"-l\"SocialTwitter\"",
+					"-l\"SocialWechat\"",
+					"-l\"SocialWhatsapp\"",
+					"-l\"UMSocial_Sdk_5.2.1\"",
+					"-l\"UMSocial_Sdk_Comment_5.2.1\"",
+					"-l\"WeChatSDK\"",
+					"-l\"WeiboSDK\"",
+					"-l\"YYKeyboardManager\"",
+					"-l\"YYText\"",
+					"-l\"ZYCornerRadius\"",
+					"-l\"iconv\"",
+					"-l\"icucore\"",
+					"-l\"libwebp\"",
+					"-l\"opencore-amrnb\"",
+					"-l\"opencore-amrwb\"",
+					"-l\"sqlite3\"",
+					"-l\"stdc++\"",
+					"-l\"z\"",
+					"-framework",
+					"\"AVFoundation\"",
+					"-framework",
+					"\"Accelerate\"",
+					"-framework",
+					"\"Accounts\"",
+					"-framework",
+					"\"CoreData\"",
+					"-framework",
+					"\"CoreFoundation\"",
+					"-framework",
+					"\"CoreGraphics\"",
+					"-framework",
+					"\"CoreTelephony\"",
+					"-framework",
+					"\"CoreText\"",
+					"-framework",
+					"\"FBSDKCoreKit\"",
+					"-framework",
+					"\"FBSDKLoginKit\"",
+					"-framework",
+					"\"FBSDKShareKit\"",
+					"-framework",
+					"\"Fabric\"",
+					"-framework",
+					"\"Foundation\"",
+					"-framework",
+					"\"ImageIO\"",
+					"-framework",
+					"\"MeiQiaSDK\"",
+					"-framework",
+					"\"MobileCoreServices\"",
+					"-framework",
+					"\"QuartzCore\"",
+					"-framework",
+					"\"Security\"",
+					"-framework",
+					"\"Social\"",
+					"-framework",
+					"\"SystemConfiguration\"",
+					"-framework",
+					"\"TencentOpenAPI\"",
+					"-framework",
+					"\"TwitterCore\"",
+					"-framework",
+					"\"TwitterKit\"",
+					"-framework",
+					"\"UIKit\"",
+					"-framework",
+					"\"UMMobClick\"",
+					"-weak_framework",
+					"\"JavaScriptCore\"",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
 				PRODUCT_NAME = SuiShouJi;
-				PROVISIONING_PROFILE = "9395e777-7c74-4eb4-8840-b46530e22ddb";
-				PROVISIONING_PROFILE_SPECIFIER = JiZhangEnterpriseDevelopment;
+				PROVISIONING_PROFILE = "24808e2a-a81f-4f91-9ef4-b19ac8e2d20d";
+				PROVISIONING_PROFILE_SPECIFIER = JiZhangAppstoreAdHoc;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = "Release-test";
 		};

@@ -122,21 +122,21 @@ static NSString *const kLoanListCellId = @"kLoanListCellId";
     
     if (index == 0) {
         if ([_item.fundingID isEqualToString:@"10"]) {
-            [MobClick event:@"loan_tab_no_end"];
+            [SSJAnaliyticsManager event:@"loan_tab_no_end"];
         } else if ([_item.fundingID isEqualToString:@"11"]) {
-            [MobClick event:@"owed_tab_no_end"];
+            [SSJAnaliyticsManager event:@"owed_tab_no_end"];
         }
     } else if (index == 1) {
         if ([_item.fundingID isEqualToString:@"10"]) {
-            [MobClick event:@"loan_tab_end"];
+            [SSJAnaliyticsManager event:@"loan_tab_end"];
         } else if ([_item.fundingID isEqualToString:@"11"]) {
-            [MobClick event:@"owed_tab_end"];
+            [SSJAnaliyticsManager event:@"owed_tab_end"];
         }
     } else if (index == 2) {
         if ([_item.fundingID isEqualToString:@"10"]) {
-            [MobClick event:@"loan_tab_all"];
+            [SSJAnaliyticsManager event:@"loan_tab_all"];
         } else if ([_item.fundingID isEqualToString:@"11"]) {
-            [MobClick event:@"owed_tab_all"];
+            [SSJAnaliyticsManager event:@"owed_tab_all"];
         }
     }
 }
@@ -146,10 +146,10 @@ static NSString *const kLoanListCellId = @"kLoanListCellId";
     SSJAddOrEditLoanViewController *addLoanVC = [[SSJAddOrEditLoanViewController alloc] init];
     if ([_item.fundingParent isEqualToString:@"10"]) {
         addLoanVC.type = SSJLoanTypeLend;
-        [MobClick event:@"add_loan"];
+        [SSJAnaliyticsManager event:@"add_loan"];
     } else if ([_item.fundingParent isEqualToString:@"11"]) {
         addLoanVC.type = SSJLoanTypeBorrow;
-        [MobClick event:@"add_owed"];
+        [SSJAnaliyticsManager event:@"add_owed"];
     }
     
     [self.navigationController pushViewController:addLoanVC animated:YES];

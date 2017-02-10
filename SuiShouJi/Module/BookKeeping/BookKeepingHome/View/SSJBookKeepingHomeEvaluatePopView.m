@@ -227,7 +227,7 @@ NSString *const SSJEvaluateSelecatedKey = @"SSJEvaluateSelecatedKey";
 
 - (void)favorableButtonClicked
 {
-    [MobClick event:@"evaluate_good"];
+    [SSJAnaliyticsManager event:@"evaluate_good"];
     
     NSString *urlStr = SSJAppStoreUrl();
     if (!urlStr) {
@@ -244,14 +244,14 @@ NSString *const SSJEvaluateSelecatedKey = @"SSJEvaluateSelecatedKey";
 
 - (void)latterButtonClicked
 {
-    [MobClick event:@"evaluate_later"];
+    [SSJAnaliyticsManager event:@"evaluate_later"];
     self.evaluateSelecatedType = SSJEvaluateSelecatedTypeLatter;
     [self dismiss];
 }
 
 - (void)notShowAgainButtonClicked
 {
-    [MobClick event:@"evaluate_not_show"];
+    [SSJAnaliyticsManager event:@"evaluate_not_show"];
     self.evaluateSelecatedType = SSJEvaluateSelecatedTypeNotShowAgain;
     [self dismiss];
 }

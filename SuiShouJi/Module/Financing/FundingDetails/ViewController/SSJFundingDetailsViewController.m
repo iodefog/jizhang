@@ -430,7 +430,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
         [_repaymentPopView setAttributtedText:attributedStr forIndex:1];
         _repaymentPopView.selectionHandle = ^(NSString * title){
             if ([title isEqualToString:@"还款"]) {
-                [MobClick event:@"credit_quick_repayment"];
+                [SSJAnaliyticsManager event:@"credit_quick_repayment"];
                 [wself enterRepaymentVc];
             } else {
                 [wself enterInstalmentVc];
@@ -453,7 +453,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
         financingItem.fundingAmount = _totalIncome - _totalExpence;
         newFundingVC.item = financingItem;
         [self.navigationController pushViewController:newFundingVC animated:YES];
-        [MobClick event:@"fund_edit"];
+        [SSJAnaliyticsManager event:@"fund_edit"];
     }
 }
 
@@ -592,7 +592,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
 //    if (item) {
 //        model.totalArrears = item.income - item.expenture > 0 ? 0 :item.expenture - item.income;
 //    }
-    [MobClick event:@"credit_stages_repayment"];
+    [SSJAnaliyticsManager event:@"credit_stages_repayment"];
     instalmentVc.repaymentModel = model;
     [self.navigationController pushViewController:instalmentVc animated:YES];
 }

@@ -124,23 +124,23 @@ static NSString * SSJBooksParentSelectCellIdentifier = @"SSJBooksParentSelectCel
     SSJBooksParentSelectCell * cell = (SSJBooksParentSelectCell *)[collectionView cellForItemAtIndexPath:indexPath];
     switch (indexPath.item) {
         case 0:
-            [MobClick event:@"book_type_richang"];
+            [SSJAnaliyticsManager event:@"book_type_richang"];
             break;
  
         case 1:
-            [MobClick event:@"book_type_shengyi"];
+            [SSJAnaliyticsManager event:@"book_type_shengyi"];
             break;
 
         case 2:
-            [MobClick event:@"book_type_jiehun"];
+            [SSJAnaliyticsManager event:@"book_type_jiehun"];
             break;
 
         case 3:
-            [MobClick event:@"book_type_zhuangxiu"];
+            [SSJAnaliyticsManager event:@"book_type_zhuangxiu"];
             break;
 
         case 4:
-            [MobClick event:@"book_type_lvxing"];
+            [SSJAnaliyticsManager event:@"book_type_lvxing"];
             break;
 
         default:
