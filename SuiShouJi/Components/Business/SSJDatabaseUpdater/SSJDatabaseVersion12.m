@@ -25,10 +25,8 @@
         return [db lastError];
     }
 
-    FMResultSet *resultSet =  [db executeQuery:@"select "];
-
-    while ([resultSet next]) {
-
+    if (![db executeUpdate:@"update bk_user_charge set "]) {
+        
     }
     
     return nil;

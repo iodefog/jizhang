@@ -525,7 +525,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 
 - (void)selectBillDateAction {
     [SSJAnaliyticsManager event:@"addRecord_calendar"];
-    [self.DateSelectedView show];
+    [self.dateSelectedView show];
     [_billTypeInputView.moneyInput resignFirstResponder];
     [_accessoryView.memoView resignFirstResponder];
 }

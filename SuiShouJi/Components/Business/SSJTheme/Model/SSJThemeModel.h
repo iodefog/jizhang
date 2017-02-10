@@ -181,16 +181,16 @@
 // 资金详情背景颜色透明度
 @property (nonatomic) CGFloat financingDetailHeaderAlpha;
 
-// 资金详情背景颜色
+// 资金详情主要文字颜色
 @property (nonatomic, copy) NSString *financingDetailMainColor;
 
-// 资金详情背景颜色透明度
+// 资金详情主要文字透明度
 @property (nonatomic) CGFloat financingDetailMainAlpha;
 
-// 资金详情背景颜色
+// 资金详情次要文字颜色
 @property (nonatomic, copy) NSString *financingDetailSecondaryColor;
 
-// 资金详情背景颜色透明度
+// 资金详情次要文字透明度
 @property (nonatomic) CGFloat financingDetailSecondaryAlpha;
 
 @end
