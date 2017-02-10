@@ -52,6 +52,14 @@ typedef NS_OPTIONS(NSInteger, SSJDatePickerComponent) {
  主色调
  */
 @property (nonatomic, copy) NSString *mainColor;
+/**
+ 警告日期（用户选择了日期大于这个日期就会提醒用户无法选择）
+ */
+@property (nonatomic, strong) NSDate *warningDate;
+/**
+ 警告提醒
+ */
+@property (nonatomic, copy) NSString *warningString;
 
 //选择日期按钮返回选中的时间
 @property (nonatomic, copy) void(^confirmBlock)(NSDate *selecteDate);
