@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "DFF574CDD606896E274E3371441052B10480B888",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "DFF574CDD606896E274E3371441052B10480B888" : 9223372036854775807,
+    "82DF43EF5CA016D15C41E0AF1AF686E9973475B7" : 9223372036854775807
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "1746B935-D8C0-4792-B057-FFB98493416A",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "DFF574CDD606896E274E3371441052B10480B888" : "BookKeeping\/",
+    "82DF43EF5CA016D15C41E0AF1AF686E9973475B7" : "BookKeeping\/ZipZap\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "SuiShouJi",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "SuiShouJi.xcworkspace",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/pixelglow\/ZipZap.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "82DF43EF5CA016D15C41E0AF1AF686E9973475B7"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "http:\/\/gitlab.gs.9188.com\/caiyi.financial.huishuaka.tools\/accountbook_ios.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "DFF574CDD606896E274E3371441052B10480B888"
+    }
+  ]
+}

@@ -46,6 +46,7 @@ static const void * kSSJDatabaseQueueSpecificKey = &kSSJDatabaseQueueSpecificKey
         
         NSError *error = [db lastError];
         if (error.code != 0) {
+            [SSJAlertViewAdapter showError:error];
             [SSJDatabaseErrorHandler handleError:error];
         }
     }];
@@ -60,6 +61,7 @@ static const void * kSSJDatabaseQueueSpecificKey = &kSSJDatabaseQueueSpecificKey
         
         NSError *error = [db lastError];
         if (error.code != 0) {
+            [SSJAlertViewAdapter showError:error];
             [SSJDatabaseErrorHandler handleError:error];
         }
         
@@ -76,6 +78,7 @@ static const void * kSSJDatabaseQueueSpecificKey = &kSSJDatabaseQueueSpecificKey
         
         NSError *error = [db lastError];
         if (error.code != 0) {
+            [SSJAlertViewAdapter showError:error];
             [SSJDatabaseErrorHandler handleError:error];
         }
         
