@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "9C2A67071D194CA70010F1DA"
-               BuildableName = "youyujizhang.app"
+               BuildableName = "SuiShouJi.app"
                BlueprintName = "youyujizhang"
                ReferencedContainer = "container:SuiShouJi.xcodeproj">
             </BuildableReference>
@@ -33,7 +33,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "9C2A67071D194CA70010F1DA"
-            BuildableName = "youyujizhang.app"
+            BuildableName = "SuiShouJi.app"
             BlueprintName = "youyujizhang"
             ReferencedContainer = "container:SuiShouJi.xcodeproj">
          </BuildableReference>
@@ -56,7 +56,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "9C2A67071D194CA70010F1DA"
-            BuildableName = "youyujizhang.app"
+            BuildableName = "SuiShouJi.app"
             BlueprintName = "youyujizhang"
             ReferencedContainer = "container:SuiShouJi.xcodeproj">
          </BuildableReference>
@@ -75,7 +75,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "9C2A67071D194CA70010F1DA"
-            BuildableName = "youyujizhang.app"
+            BuildableName = "SuiShouJi.app"
             BlueprintName = "youyujizhang"
             ReferencedContainer = "container:SuiShouJi.xcodeproj">
          </BuildableReference>
