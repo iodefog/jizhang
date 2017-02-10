@@ -157,7 +157,15 @@ NSString *SSJFundingTransferStoreListKey = @"SSJFundingTransferStoreListKey";
         }
         
         if (cyclePeriodType == SSJCyclePeriodTypeOnce) {
-//            [db executeUpdate:@""]
+            if (![self createOnceTransferChargesInDatabase:db ID:ID transferInAccountId:transferInAccountId transferOutAccountId:transferOutAccountId money:money memo:memo billDate:beginDate userId:userId]) {
+                *rollback = YES;
+                if (failure) {
+                    SSJDispatchMainAsync(^{
+                        failure([db lastError]);
+                    });
+                }
+                return;
+            }
         } else {
             if (![SSJRegularManager supplementCyclicTransferForUserId:userId inDatabase:db]) {
                 *rollback = YES;
@@ -176,6 +184,43 @@ NSString *SSJFundingTransferStoreListKey = @"SSJFundingTransferStoreListKey";
             });
         }
     }];
+}
+
+/**
+ 创建仅一次周期转账对应的流水
+ */
++ (BOOL)createOnceTransferChargesInDatabase:(FMDatabase *)db
+                                         ID:(NSString *)ID
+                        transferInAccountId:(NSString *)transferInAccountId
+                       transferOutAccountId:(NSString *)transferOutAccountId
+                                      money:(float)money
+                                       memo:(nullable NSString *)memo
+                                   billDate:(NSString *)billDate
+                                     userId:(NSString *)userId {
+    
+    // 查询是否有匹配仅一次转账的流水
+    BOOL chargeExisted = [db boolForQuery:@"select count(1) from bk_user_charge where cuserid = ? and cid like (? || '-%') and operatortype != 2 and cbilldate = ? and ichargetype = 5", userId, ID, billDate];
+    
+    if (!chargeExisted) {
+        
+        // 查询当前周期转账生成的流水cid后缀最大值
+        int cidSuffix = [db intForQuery:@"select max(cast(substr(uc.cid, length(tc.icycleid) + 2) as int)) from bk_user_charge as uc, bk_transfer_cycle as tc where uc.cuserid = ? and uc.ichargetype = 5 and uc.cid like (? || '-%')", userId, ID] + 1;
+        
+        NSString *cid = [NSString stringWithFormat:@"%@-%d", ID, cidSuffix];
+        NSString *writeDateStr = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"];
+        
+        // 创建转入流水
+        if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cbilldate, cmemo, ichargetype, cid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", SSJUUID(), userId, @(money), @3, transferInAccountId, billDate, memo, @5, cid, @(SSJSyncVersion()), @0, writeDateStr]) {
+            return NO;
+        }
+        
+        // 创建转出流水
+        if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cbilldate, cmemo, ichargetype, cid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", SSJUUID(), userId, @(money), @4, transferOutAccountId, billDate, memo, @5, cid, @(SSJSyncVersion()), @0, writeDateStr]) {
+            return NO;
+        }
+    }
+    
+    return YES;
 }
 
 + (void)deleteCycleTransferRecordWithID:(NSString *)ID
@@ -261,7 +306,7 @@ NSString *SSJFundingTransferStoreListKey = @"SSJFundingTransferStoreListKey";
             item.cycleType = [resultSet intForColumn:@"icycletype"];
             item.opened = [resultSet boolForColumn:@"istate"];
             
-            NSDate *currentDate = [NSDate dateWithString:item.beginDate formatString:@"yyyy-MM"];
+            NSDate *currentDate = [NSDate dateWithString:item.beginDate formatString:@"yyyy-MM-dd"];
             
             if (!lastDate || [lastDate compare:currentDate] != NSOrderedSame) {
                 NSMutableDictionary *monthInfo = [[NSMutableDictionary alloc] init];

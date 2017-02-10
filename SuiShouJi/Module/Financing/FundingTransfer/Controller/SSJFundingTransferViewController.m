@@ -85,7 +85,7 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
 - (void)viewDidLoad {
     [super viewDidLoad];
 //    self.view.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(transferTextDidChange) name:UITextFieldTextDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(transferTextDidChange:) name:UITextFieldTextDidChangeNotification object:nil];
     [self.view addSubview:self.tableView];
     if (self.item != nil) {
         _transferOutItem = [[SSJFundingItem alloc]init];
@@ -585,8 +585,13 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
     }
 }
 
-- (void)transferTextDidChange{
-    [self setupTextFiledNum:_moneyInput num:2];
+- (void)transferTextDidChange:(NSNotification *)notification {
+    if (notification.object == _moneyInput) {
+        [self setupTextFiledNum:_moneyInput num:2];
+        _item.transferMoney = _moneyInput.text;
+    } else if (notification.object == _memoInput) {
+        _item.transferMemo = _memoInput.text;
+    }
 }
 
 //-(void)transferTextDidChange{
@@ -657,20 +662,5 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
 -(void)closeButtonClicked:(id)sender{
     [self ssj_backOffAction];
 }
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end
