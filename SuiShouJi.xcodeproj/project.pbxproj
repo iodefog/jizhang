@@ -645,6 +645,13 @@
 		7D46328A1D2100E90040BABD /* UIImage+SSJTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE4A7EB1D20DD8C00F05BF0 /* UIImage+SSJTheme.m */; };
 		7D46328E1D21029F0040BABD /* UIImageView+SSJTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D46328D1D21029F0040BABD /* UIImageView+SSJTheme.m */; };
 		7D46328F1D21029F0040BABD /* UIImageView+SSJTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D46328D1D21029F0040BABD /* UIImageView+SSJTheme.m */; };
+		7D481B811E4DB39600060E1A /* SSJFundingTransferListPeriodCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D481B801E4DB39600060E1A /* SSJFundingTransferListPeriodCell.m */; };
+		7D481B821E4DB39600060E1A /* SSJFundingTransferListPeriodCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D481B801E4DB39600060E1A /* SSJFundingTransferListPeriodCell.m */; };
+		7D481B831E4DB39600060E1A /* SSJFundingTransferListPeriodCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D481B801E4DB39600060E1A /* SSJFundingTransferListPeriodCell.m */; };
+		7D481B841E4DB39600060E1A /* SSJFundingTransferListPeriodCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D481B801E4DB39600060E1A /* SSJFundingTransferListPeriodCell.m */; };
+		7D481B851E4DB39600060E1A /* SSJFundingTransferListPeriodCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D481B801E4DB39600060E1A /* SSJFundingTransferListPeriodCell.m */; };
+		7D481B861E4DB39600060E1A /* SSJFundingTransferListPeriodCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D481B801E4DB39600060E1A /* SSJFundingTransferListPeriodCell.m */; };
+		7D481B871E4DB39600060E1A /* SSJFundingTransferListPeriodCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D481B801E4DB39600060E1A /* SSJFundingTransferListPeriodCell.m */; };
 		7D4A430A1CC63755002F0264 /* rain_sound.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D4A43091CC63755002F0264 /* rain_sound.wav */; };
 		7D4A431E1CC86F51002F0264 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D4A431D1CC86F51002F0264 /* AVFoundation.framework */; };
 		7D4A795C1DD2F01000E905F4 /* SSJLoanChangeChargeSelectionControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4A795B1DD2F01000E905F4 /* SSJLoanChangeChargeSelectionControl.m */; };
@@ -4142,6 +4149,8 @@
 		7D41A6951D1415F30043FD81 /* SSJNetworkReachabilityManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJNetworkReachabilityManager.m; sourceTree = "<group>"; };
 		7D46328C1D21029F0040BABD /* UIImageView+SSJTheme.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+SSJTheme.h"; sourceTree = "<group>"; };
 		7D46328D1D21029F0040BABD /* UIImageView+SSJTheme.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+SSJTheme.m"; sourceTree = "<group>"; };
+		7D481B7F1E4DB39600060E1A /* SSJFundingTransferListPeriodCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFundingTransferListPeriodCell.h; sourceTree = "<group>"; };
+		7D481B801E4DB39600060E1A /* SSJFundingTransferListPeriodCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFundingTransferListPeriodCell.m; sourceTree = "<group>"; };
 		7D4A43091CC63755002F0264 /* rain_sound.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = rain_sound.wav; sourceTree = "<group>"; };
 		7D4A431D1CC86F51002F0264 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		7D4A795A1DD2F01000E905F4 /* SSJLoanChangeChargeSelectionControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJLoanChangeChargeSelectionControl.h; sourceTree = "<group>"; };
@@ -7757,6 +7766,8 @@
 				9CD9BC531CFEAAAE0061803B /* SSJTransferDetailHeader.m */,
 				9CD9BC621CFEBCA40061803B /* SSJFundingTransferEdite.h */,
 				9CD9BC631CFEBCA40061803B /* SSJFundingTransferEdite.m */,
+				7D481B7F1E4DB39600060E1A /* SSJFundingTransferListPeriodCell.h */,
+				7D481B801E4DB39600060E1A /* SSJFundingTransferListPeriodCell.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -9577,6 +9588,7 @@
 				7D08A1FE1E4999D30085A8FB /* SSJBooksHeaderView.m in Sources */,
 				7D08A1FF1E4999D30085A8FB /* FMDatabase+FTS3.m in Sources */,
 				7D08A2001E4999D30085A8FB /* SSJThemeManagerViewController.m in Sources */,
+				7D481B871E4DB39600060E1A /* SSJFundingTransferListPeriodCell.m in Sources */,
 				7D08A2011E4999D30085A8FB /* SSJCalendarViewController.m in Sources */,
 				7D08A2021E4999D30085A8FB /* SSJThemeService.m in Sources */,
 				7D08A2031E4999D30085A8FB /* SSJLocalNotificationStore.m in Sources */,
@@ -10123,6 +10135,7 @@
 				7DA13B551E35AED7000490A4 /* SSJBooksHeaderView.m in Sources */,
 				7DA13B561E35AED7000490A4 /* FMDatabase+FTS3.m in Sources */,
 				7DA13B571E35AED7000490A4 /* SSJThemeManagerViewController.m in Sources */,
+				7D481B861E4DB39600060E1A /* SSJFundingTransferListPeriodCell.m in Sources */,
 				7DA13B581E35AED7000490A4 /* SSJCalendarViewController.m in Sources */,
 				7DA13B591E35AED7000490A4 /* SSJThemeService.m in Sources */,
 				7DA13B5A1E35AED7000490A4 /* SSJLocalNotificationStore.m in Sources */,
@@ -10799,6 +10812,7 @@
 				9CFBAC461E07E6F700C55814 /* SSJCreditRepaymentSyncTable.m in Sources */,
 				7DBA56FD1D6D32B700C02D79 /* SSJFundingTypeTableViewCell.m in Sources */,
 				7DAA383F1D952330000ED16E /* SSJBudgetBillTypeSelectionViewController.m in Sources */,
+				7D481B831E4DB39600060E1A /* SSJFundingTransferListPeriodCell.m in Sources */,
 				7DBA56FE1D6D32B700C02D79 /* SSJBookkeepingTreeDescView.m in Sources */,
 				7DBA56FF1D6D32B700C02D79 /* (null) in Sources */,
 				7DBA57001D6D32B700C02D79 /* SSJFundingTransferViewController.m in Sources */,
@@ -11376,6 +11390,7 @@
 				9C2A68491D194CA70010F1DA /* SSJReportFormsIncomeAndPayCell.m in Sources */,
 				9C2A684A1D194CA70010F1DA /* SSJUnlimitedScrollView.m in Sources */,
 				9C2A684B1D194CA70010F1DA /* SSJBudgetListCellItem.m in Sources */,
+				7D481B821E4DB39600060E1A /* SSJFundingTransferListPeriodCell.m in Sources */,
 				9C2A684C1D194CA70010F1DA /* SSJSyncSettingTableViewCell.m in Sources */,
 				7DC318831E2882A300932644 /* FMDatabaseQueue.m in Sources */,
 				9C2A684D1D194CA70010F1DA /* SSJFundingDetailsViewController.m in Sources */,
@@ -11893,6 +11908,7 @@
 				9CECFC791D6D41A700DB2C8B /* SSJFundingTypeTableViewCell.m in Sources */,
 				7DAA38401D952330000ED16E /* SSJBudgetBillTypeSelectionViewController.m in Sources */,
 				7D6CC9051E0A797D00FF6133 /* SSJReportFormsCurveBalloonView.m in Sources */,
+				7D481B841E4DB39600060E1A /* SSJFundingTransferListPeriodCell.m in Sources */,
 				9CECFC7A1D6D41A700DB2C8B /* SSJBookkeepingTreeDescView.m in Sources */,
 				9CECFC7B1D6D41A700DB2C8B /* (null) in Sources */,
 				9CECFC7C1D6D41A700DB2C8B /* SSJFundingTransferViewController.m in Sources */,
@@ -12444,6 +12460,7 @@
 				9CFBAC481E07E6F700C55814 /* SSJCreditRepaymentSyncTable.m in Sources */,
 				9CEC00701D6D41EB00DB2C8B /* SSJThemeSetting.m in Sources */,
 				9CEC00711D6D41EB00DB2C8B /* SSJFundingTypeTableViewCell.m in Sources */,
+				7D481B851E4DB39600060E1A /* SSJFundingTransferListPeriodCell.m in Sources */,
 				7DAA38411D952330000ED16E /* SSJBudgetBillTypeSelectionViewController.m in Sources */,
 				9CEC00721D6D41EB00DB2C8B /* SSJBookkeepingTreeDescView.m in Sources */,
 				9CEC00731D6D41EB00DB2C8B /* (null) in Sources */,
@@ -12742,6 +12759,7 @@
 				7DC3186E1E2882A300932644 /* FMDatabase+InMemoryOnDiskIO.m in Sources */,
 				9C9323EE1D9D28BB00EBD216 /* SSJSearchBarAddition.m in Sources */,
 				7DA6EDD21D2B5CAE0097F06C /* SSJThemeModel.m in Sources */,
+				7D481B811E4DB39600060E1A /* SSJFundingTransferListPeriodCell.m in Sources */,
 				7DC487651DF6B42E00C27B69 /* SSJRecordMakingCustomNavigationBar.m in Sources */,
 				7D3955551C606BAF004D807C /* SSJStartUpgradeAlertView.m in Sources */,
 				BD0433911C1A8DA50051E7AB /* SSJBaseNetworkService.m in Sources */,
