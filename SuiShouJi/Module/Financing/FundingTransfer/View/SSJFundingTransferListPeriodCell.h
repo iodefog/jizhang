@@ -7,7 +7,10 @@
 //
 
 #import "SSJBaseTableViewCell.h"
+#import "SSJFundingTransferListPeriodCellItem.h"
 
 @interface SSJFundingTransferListPeriodCell : SSJBaseTableViewCell
+
+@property (nonatomic, copy) void (^switchCtrlAction)(BOOL, SSJFundingTransferListPeriodCell *);
 
 @end

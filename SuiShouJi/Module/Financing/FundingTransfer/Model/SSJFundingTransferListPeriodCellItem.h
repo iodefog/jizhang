@@ -7,9 +7,12 @@
 //
 
 #import "SSJBaseItem.h"
-#import <UIKit/UIKit.h>
+
+@class SSJFundingTransferDetailItem;
 
 @interface SSJFundingTransferListPeriodCellItem : SSJBaseItem
+
+@property (nonatomic, strong) NSString *transferId;
 
 @property (nonatomic, strong) UIImage *fundLogo;
 
@@ -24,5 +27,7 @@
 @property (nonatomic, strong) NSString *money;
 
 @property (nonatomic) BOOL opened;
+
++ (instancetype)cellItemWithTransferDetailItem:(SSJFundingTransferDetailItem *)item;
 
 @end

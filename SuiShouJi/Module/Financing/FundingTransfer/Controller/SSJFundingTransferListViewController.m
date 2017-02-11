@@ -18,7 +18,7 @@
 #import "SSJFundingTransferViewController.h"
 
 static NSString * SSJTransferDetailCellIdentifier = @"transferDetailCell";
-static NSString * SSJTransferDetailHeaderIdentifier = @"transferDetailHeader";
+static NSString * SSJTransferPeriodCellIdentifier = @"SSJTransferPeriodCellIdentifier";
 
 static NSString *const kNormalTransferTitle = @"转账流水";
 static NSString *const kPeriodTransferTitle = @"周期转账";
@@ -49,6 +49,7 @@ static NSString *const kPeriodTransferTitle = @"周期转账";
     self.tableView.top = self.segmentHeaderCtrl.bottom;
     self.tableView.height = self.view.height - self.tableView.top;
     [self.tableView registerClass:[SSJFundingTransferDetailCell class] forCellReuseIdentifier:SSJTransferDetailCellIdentifier];
+    [self.tableView registerClass:[SSJFundingTransferListPeriodCell class] forCellReuseIdentifier:SSJTransferPeriodCellIdentifier];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -107,10 +108,22 @@ static NSString *const kPeriodTransferTitle = @"周期转账";
     NSArray *items = [monthInfo objectForKey:SSJFundingTransferStoreListKey];
     SSJFundingTransferDetailItem *item = [items ssj_safeObjectAtIndex:indexPath.row];
     
-    SSJFundingTransferDetailCell *cell = [tableView dequeueReusableCellWithIdentifier:SSJTransferDetailCellIdentifier forIndexPath:indexPath];
-    cell.item = item;
-    
-    return cell;
+    NSString *selectedTitle = [_segmentHeaderCtrl.titles ssj_safeObjectAtIndex:_segmentHeaderCtrl.selectedIndex];
+    if ([selectedTitle isEqualToString:kNormalTransferTitle]) {
+        SSJFundingTransferDetailCell *cell = [tableView dequeueReusableCellWithIdentifier:SSJTransferDetailCellIdentifier forIndexPath:indexPath];
+        cell.item = item;
+        return cell;
+    } else if ([selectedTitle isEqualToString:kPeriodTransferTitle]) {
+        SSJFundingTransferListPeriodCell *periodCell = [tableView dequeueReusableCellWithIdentifier:SSJTransferPeriodCellIdentifier forIndexPath:indexPath];
+        periodCell.cellItem = [SSJFundingTransferListPeriodCellItem cellItemWithTransferDetailItem:item];
+        periodCell.switchCtrlAction = ^(BOOL opened, SSJFundingTransferListPeriodCell *cell) {
+            SSJFundingTransferListPeriodCellItem *periodItem = cell.cellItem;
+            [SSJFundingTransferStore updateCycleTransferRecordStateWithID:periodItem.transferId opened:opened success:NULL failure:NULL];
+        };
+        return periodCell;
+    } else {
+        return [UITableViewCell new];
+    }
 }
 
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
