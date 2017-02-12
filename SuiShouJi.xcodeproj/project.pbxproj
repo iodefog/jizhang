@@ -708,6 +708,13 @@
 		7D22A3861E4F16AC00190CEB /* UIBarButtonItem+CDCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D22A3111E4F16AC00190CEB /* UIBarButtonItem+CDCategory.m */; };
 		7D22A3871E4F16AC00190CEB /* UIBarButtonItem+CDCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D22A3111E4F16AC00190CEB /* UIBarButtonItem+CDCategory.m */; };
 		7D22A3881E4F16AC00190CEB /* UIBarButtonItem+CDCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D22A3111E4F16AC00190CEB /* UIBarButtonItem+CDCategory.m */; };
+		7D22A38C1E5041A800190CEB /* SSJFundingTransferChargeDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D22A38B1E5041A800190CEB /* SSJFundingTransferChargeDetailViewController.m */; };
+		7D22A38D1E5041A800190CEB /* SSJFundingTransferChargeDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D22A38B1E5041A800190CEB /* SSJFundingTransferChargeDetailViewController.m */; };
+		7D22A38E1E5041A800190CEB /* SSJFundingTransferChargeDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D22A38B1E5041A800190CEB /* SSJFundingTransferChargeDetailViewController.m */; };
+		7D22A38F1E5041A800190CEB /* SSJFundingTransferChargeDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D22A38B1E5041A800190CEB /* SSJFundingTransferChargeDetailViewController.m */; };
+		7D22A3901E5041A800190CEB /* SSJFundingTransferChargeDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D22A38B1E5041A800190CEB /* SSJFundingTransferChargeDetailViewController.m */; };
+		7D22A3911E5041A800190CEB /* SSJFundingTransferChargeDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D22A38B1E5041A800190CEB /* SSJFundingTransferChargeDetailViewController.m */; };
+		7D22A3921E5041A800190CEB /* SSJFundingTransferChargeDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D22A38B1E5041A800190CEB /* SSJFundingTransferChargeDetailViewController.m */; };
 		7D22E2941D89519B00474B11 /* SSJLoginViewController+SSJCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D22E2931D89519B00474B11 /* SSJLoginViewController+SSJCategory.m */; };
 		7D22E2951D89519B00474B11 /* SSJLoginViewController+SSJCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D22E2931D89519B00474B11 /* SSJLoginViewController+SSJCategory.m */; };
 		7D24ED8F1D9E6F8E003C4248 /* SSJBudgetDetailHeaderViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D24ED8E1D9E6F8E003C4248 /* SSJBudgetDetailHeaderViewItem.m */; };
@@ -4146,6 +4153,8 @@
 		7D22A30F1E4F16AC00190CEB /* SSJViewControllerAddition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJViewControllerAddition.m; sourceTree = "<group>"; };
 		7D22A3101E4F16AC00190CEB /* UIBarButtonItem+CDCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBarButtonItem+CDCategory.h"; sourceTree = "<group>"; };
 		7D22A3111E4F16AC00190CEB /* UIBarButtonItem+CDCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIBarButtonItem+CDCategory.m"; sourceTree = "<group>"; };
+		7D22A38A1E5041A800190CEB /* SSJFundingTransferChargeDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFundingTransferChargeDetailViewController.h; sourceTree = "<group>"; };
+		7D22A38B1E5041A800190CEB /* SSJFundingTransferChargeDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFundingTransferChargeDetailViewController.m; sourceTree = "<group>"; };
 		7D22E2921D89519B00474B11 /* SSJLoginViewController+SSJCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SSJLoginViewController+SSJCategory.h"; sourceTree = "<group>"; };
 		7D22E2931D89519B00474B11 /* SSJLoginViewController+SSJCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SSJLoginViewController+SSJCategory.m"; sourceTree = "<group>"; };
 		7D24ED8D1D9E6F8E003C4248 /* SSJBudgetDetailHeaderViewItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBudgetDetailHeaderViewItem.h; sourceTree = "<group>"; };
@@ -7806,6 +7815,8 @@
 				9CD9BC4C1CFDBFB40061803B /* SSJFundingTransferListViewController.m */,
 				9CD9BC5C1CFEB12E0061803B /* SSJFundingTransferEditeViewController.h */,
 				9CD9BC5D1CFEB12E0061803B /* SSJFundingTransferEditeViewController.m */,
+				7D22A38A1E5041A800190CEB /* SSJFundingTransferChargeDetailViewController.h */,
+				7D22A38B1E5041A800190CEB /* SSJFundingTransferChargeDetailViewController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -9433,6 +9444,7 @@
 				7DCA2A2D1E4C9D0800B60F4F /* SSJHomeCalendarView.m in Sources */,
 				7D08A1531E4999D30085A8FB /* SSJCircleChargeTypeSelectView.m in Sources */,
 				7D08A1541E4999D30085A8FB /* SSJBooksTypeStore.m in Sources */,
+				7D22A3921E5041A800190CEB /* SSJFundingTransferChargeDetailViewController.m in Sources */,
 				7D22A3571E4F16AC00190CEB /* SSJImageAddition.m in Sources */,
 				7D08A1561E4999D30085A8FB /* SSJAccountsMerger.m in Sources */,
 				7D08A1571E4999D30085A8FB /* SSJBillNoteWebViewController.m in Sources */,
@@ -9981,6 +9993,7 @@
 				7DCA2A2C1E4C9D0700B60F4F /* SSJHomeCalendarView.m in Sources */,
 				7DA13AAA1E35AED7000490A4 /* SSJCircleChargeTypeSelectView.m in Sources */,
 				7DA13AAB1E35AED7000490A4 /* SSJBooksTypeStore.m in Sources */,
+				7D22A3911E5041A800190CEB /* SSJFundingTransferChargeDetailViewController.m in Sources */,
 				7D22A3561E4F16AC00190CEB /* SSJImageAddition.m in Sources */,
 				7DA13AAD1E35AED7000490A4 /* SSJAccountsMerger.m in Sources */,
 				7DA13AAE1E35AED7000490A4 /* SSJBillNoteWebViewController.m in Sources */,
@@ -10524,6 +10537,7 @@
 				7DCA2A171E4C9CD800B60F4F /* SSJFundingTransferPeriodSelectionView.m in Sources */,
 				7DBA56241D6D32B700C02D79 /* SSJCircleChargeTypeSelectView.m in Sources */,
 				7D22A3841E4F16AC00190CEB /* UIBarButtonItem+CDCategory.m in Sources */,
+				7D22A38E1E5041A800190CEB /* SSJFundingTransferChargeDetailViewController.m in Sources */,
 				7DBA56261D6D32B700C02D79 /* SSJListMenu.m in Sources */,
 				7DBA56271D6D32B700C02D79 /* SSJFinancingHomeViewController.m in Sources */,
 				7DBA56281D6D32B700C02D79 /* SSJBookKeepingHomePopView.m in Sources */,
@@ -10981,6 +10995,7 @@
 				9C56E1311D1A87640057895D /* SSJRecordMakingStore.m in Sources */,
 				7D36AC481D461704006526B3 /* SSJMemberSyncTable.m in Sources */,
 				9C2A673C1D194CA70010F1DA /* SSJFinancingHomeHeader.m in Sources */,
+				7D22A38D1E5041A800190CEB /* SSJFundingTransferChargeDetailViewController.m in Sources */,
 				7D6B12DD1D4CBC140036BF4E /* SSJListMenuItem.m in Sources */,
 				9C2A673D1D194CA70010F1DA /* SSJMineHomeImageCell.m in Sources */,
 				9C2A673E1D194CA70010F1DA /* SSJDatabaseVersion1.m in Sources */,
@@ -11622,6 +11637,7 @@
 				7DF532A11E13BBD1009A6F6C /* SSJMonthSelectView.m in Sources */,
 				7DCA2A181E4C9CD800B60F4F /* SSJFundingTransferPeriodSelectionView.m in Sources */,
 				7D22A3851E4F16AC00190CEB /* UIBarButtonItem+CDCategory.m in Sources */,
+				7D22A38F1E5041A800190CEB /* SSJFundingTransferChargeDetailViewController.m in Sources */,
 				9CECFB9C1D6D41A700DB2C8B /* SSJUserItem.m in Sources */,
 				9CECFB9D1D6D41A700DB2C8B /* SSJMemoMakingView.m in Sources */,
 				9CECFB9E1D6D41A700DB2C8B /* SSJMineHomeTableViewHeader.m in Sources */,
@@ -12175,6 +12191,7 @@
 				9CECFF951D6D41EB00DB2C8B /* SSJMemoMakingView.m in Sources */,
 				7DCA2A191E4C9CD900B60F4F /* SSJFundingTransferPeriodSelectionView.m in Sources */,
 				7D22A3861E4F16AC00190CEB /* UIBarButtonItem+CDCategory.m in Sources */,
+				7D22A3901E5041A800190CEB /* SSJFundingTransferChargeDetailViewController.m in Sources */,
 				9CECFF961D6D41EB00DB2C8B /* SSJMineHomeTableViewHeader.m in Sources */,
 				9C9A0CA31D73D1B7002AF046 /* SSJNewCreditCardViewController.m in Sources */,
 				9CECFF981D6D41EB00DB2C8B /* SSJCircleChargeTypeSelectView.m in Sources */,
@@ -12948,6 +12965,7 @@
 				BD0433981C1A8DA50051E7AB /* SSJBaseCollectionViewController.m in Sources */,
 				7D5F33501CEAE6C10086B67E /* SSJCalenderTableViewNoDataHeader.m in Sources */,
 				9CD9BC021CFD2DAA0061803B /* SSJBookkeepingTreeStore.m in Sources */,
+				7D22A38C1E5041A800190CEB /* SSJFundingTransferChargeDetailViewController.m in Sources */,
 				9CF594221D654AC900006594 /* SSJReminderItem.m in Sources */,
 				7D098C792A14820300C86957 /* SSJDatabaseErrorHandler.m in Sources */,
 				9CD9BC231CFD2DAA0061803B /* SSJChargeReminderTimeView.m in Sources */,

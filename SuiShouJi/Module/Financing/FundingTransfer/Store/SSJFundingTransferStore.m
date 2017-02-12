@@ -208,7 +208,7 @@ NSString *SSJFundingTransferStoreListKey = @"SSJFundingTransferStoreListKey";
         int cidSuffix = [db intForQuery:@"select max(cast(substr(uc.cid, length(tc.icycleid) + 2) as int)) from bk_user_charge as uc, bk_transfer_cycle as tc where uc.cuserid = ? and uc.ichargetype = 5 and uc.cid like (? || '-%')", userId, ID] + 1;
         
         NSString *cid = [NSString stringWithFormat:@"%@-%d", ID, cidSuffix];
-        NSString *writeDateStr = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"];
+        NSString *writeDateStr = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         
         // 创建转入流水
         if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cbilldate, cmemo, ichargetype, cid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", SSJUUID(), userId, @(money), @3, transferInAccountId, billDate, memo, @5, cid, @(SSJSyncVersion()), @0, writeDateStr]) {
