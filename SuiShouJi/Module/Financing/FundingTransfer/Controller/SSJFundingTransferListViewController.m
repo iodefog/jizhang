@@ -14,8 +14,8 @@
 #import "SCYSlidePagingHeaderView.h"
 #import "SCYSlidePagingHeaderView+SSJTheme.h"
 #import "SSJFundingTransferListPeriodCell.h"
-#import "SSJFundingTransferEditeViewController.h"
 #import "SSJFundingTransferViewController.h"
+#import "SSJFundingTransferChargeDetailViewController.h"
 
 static NSString * SSJTransferDetailCellIdentifier = @"transferDetailCell";
 static NSString * SSJTransferPeriodCellIdentifier = @"SSJTransferPeriodCellIdentifier";
@@ -89,9 +89,9 @@ static NSString *const kPeriodTransferTitle = @"周期转账";
     
     NSString *selectedTitle = [_segmentHeaderCtrl.titles ssj_safeObjectAtIndex:_segmentHeaderCtrl.selectedIndex];
     if ([selectedTitle isEqualToString:kNormalTransferTitle]) {
-        SSJFundingTransferEditeViewController *transferEditeVc = [[SSJFundingTransferEditeViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
-        transferEditeVc.item = item;
-        [self.navigationController pushViewController:transferEditeVc animated:YES];
+        SSJFundingTransferChargeDetailViewController *transferVC = [[SSJFundingTransferChargeDetailViewController alloc] init];
+        transferVC.item = item;
+        [self.navigationController pushViewController:transferVC animated:YES];
     } else if ([selectedTitle isEqualToString:kPeriodTransferTitle]) {
         SSJFundingTransferViewController *periodTransferVC = [[SSJFundingTransferViewController alloc] init];
         periodTransferVC.item = item;

@@ -224,6 +224,65 @@ NSString *SSJFundingTransferStoreListKey = @"SSJFundingTransferStoreListKey";
     return YES;
 }
 
++ (void)saveTransferChargeWithTransInChargeId:(NSString *)transInChargeId
+                             transOutChargeId:(NSString *)transOutChargeId
+                                transInAcctId:(NSString *)transInAcctId
+                               transOutAcctId:(NSString *)transOutAcctId
+                                        money:(float)money
+                                         memo:(NSString *)memo
+                                     billDate:(NSString *)billDate
+                                      success:(nullable void (^)())success
+                                      failure:(nullable void (^)(NSError *error))failure {
+    
+    if (!transInChargeId || !transOutChargeId) {
+        failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"转入流水id／转出流水id不能为nil"}]);
+        return;
+    }
+    
+    if (!transInAcctId || !transOutAcctId) {
+        failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"转入资金账户id／转出资金账户id不能为nil"}]);
+        return;
+    }
+    
+    if (!billDate) {
+        failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"billdate不能为nil"}]);
+        return;
+    }
+    
+    [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
+        
+        NSString *writeDateStr = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        
+        // 更新转入流水
+        if (![db executeUpdate:@"update bk_user_charge set imoney = ?, ifunsid = ?, cbilldate = ?, cmemo = ?, cwritedate = ?, iversion = ?, operatortype = 1 where ichargeid = ? and operatortype != 2", @(money), transInAcctId, billDate, memo, writeDateStr, @(SSJSyncVersion()), transInChargeId]) {
+            *rollback = YES;
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        }
+        
+        // 更新转出流水
+        if (![db executeUpdate:@"update bk_user_charge set imoney = ?, ifunsid = ?, cbilldate = ?, cmemo = ?, cwritedate = ?, iversion = ?, operatortype = 1 where ichargeid = ? and operatortype != 2", @(money), transOutAcctId, billDate, memo, writeDateStr, @(SSJSyncVersion()), transOutChargeId]) {
+            *rollback = YES;
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        }
+        
+        if (success) {
+            SSJDispatchMainAsync(^{
+                success();
+            });
+        }
+    }];
+}
+
 + (void)deleteCycleTransferRecordWithID:(NSString *)ID
                                 success:(nullable void (^)())success
                                 failure:(nullable void (^)(NSError *error))failure {

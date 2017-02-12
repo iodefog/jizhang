@@ -61,6 +61,29 @@ extern NSString *SSJFundingTransferStoreListKey;
                               failure:(nullable void (^)(NSError *error))failure;
 
 /**
+ 编辑周期转账流水
+
+ @param transInChargeId <#transInChargeId description#>
+ @param transOutChargeId <#transOutChargeId description#>
+ @param transInAcctId <#transInAcctId description#>
+ @param transOutAcctId <#transOutAcctId description#>
+ @param money <#money description#>
+ @param memo <#memo description#>
+ @param billDate <#billDate description#>
+ @param success <#success description#>
+ @param failure <#failure description#>
+ */
++ (void)saveTransferChargeWithTransInChargeId:(NSString *)transInChargeId
+                             transOutChargeId:(NSString *)transOutChargeId
+                                transInAcctId:(NSString *)transInAcctId
+                               transOutAcctId:(NSString *)transOutAcctId
+                                        money:(float)money
+                                         memo:(NSString *)memo
+                                     billDate:(NSString *)billDate
+                                      success:(nullable void (^)())success
+                                      failure:(nullable void (^)(NSError *error))failure;
+
+/**
  删除周期转账
 
  @param ID 周期转账id

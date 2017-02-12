@@ -6,8 +6,12 @@
 //  Copyright © 2017年 ___9188___. All rights reserved.
 //
 
-#import "SSJNewBaseTableViewController.h"
+#import "SSJBaseViewController.h"
 
-@interface SSJFundingTransferChargeDetailViewController : SSJNewBaseTableViewController
+@class SSJFundingTransferDetailItem;
+
+@interface SSJFundingTransferChargeDetailViewController : SSJBaseViewController
+
+@property(nonatomic, strong) SSJFundingTransferDetailItem *item;
 
 @end
