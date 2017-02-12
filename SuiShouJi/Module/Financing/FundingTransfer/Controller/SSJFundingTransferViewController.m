@@ -39,7 +39,9 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
 
 @property (nonatomic, strong) TPKeyboardAvoidingTableView *tableView;
 
-@property (nonatomic,strong) UIBarButtonItem *rightButton;
+@property (nonatomic,strong) UIBarButtonItem *transferRecordsButton;
+
+@property (nonatomic,strong) UIBarButtonItem *deleteButtonItem;
 
 @property (nonatomic,strong) SSJFundingTypeSelectView *transferInFundingTypeSelect;
 
@@ -77,7 +79,6 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-        self.title = @"转账";
         self.hideKeyboradWhenTouch = YES;
         self.hidesBottomBarWhenPushed = YES;
     }
@@ -105,14 +106,16 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
             _item.transferDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"];
         }
         
-        self.navigationItem.rightBarButtonItem = nil;
         self.title = @"编辑转账";
+        self.navigationItem.rightBarButtonItem = self.deleteButtonItem;
     }else{
-        self.item = [[SSJFundingTransferDetailItem alloc]init];
+        self.item = [[SSJFundingTransferDetailItem alloc] init];
         self.item.ID = SSJUUID();
         self.item.cycleType = SSJCyclePeriodTypeOnce;
         self.item.transferDate = self.item.beginDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"];
-        self.navigationItem.rightBarButtonItem = self.rightButton;
+        
+        self.title = @"转账";
+        self.navigationItem.rightBarButtonItem = self.transferRecordsButton;
     }
     [self updateTitlesAndImages];
     [self.tableView registerClass:[SSJChargeCircleModifyCell class] forCellReuseIdentifier:SSJFundingTransferEditeCellIdentifier];
@@ -291,12 +294,18 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
 }
 
 #pragma mark - Getter
--(UIBarButtonItem *)rightButton{
-    if (!_rightButton) {
-        _rightButton = [[UIBarButtonItem alloc]initWithTitle:@"转账记录" style:UIBarButtonItemStylePlain target:self action:@selector(rightButtonClicked:)];
-        _rightButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTintColor];
+-(UIBarButtonItem *)transferRecordsButton{
+    if (!_transferRecordsButton) {
+        _transferRecordsButton = [[UIBarButtonItem alloc]initWithTitle:@"转账记录" style:UIBarButtonItemStylePlain target:self action:@selector(transferRecordsButtonAction)];
     }
-    return _rightButton;
+    return _transferRecordsButton;
+}
+
+- (UIBarButtonItem *)deleteButtonItem {
+    if (!_deleteButtonItem) {
+        _deleteButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(deleteAction)];
+    }
+    return _deleteButtonItem;
 }
 
 -(SSJFundingTypeSelectView *)transferInFundingTypeSelect{
@@ -471,9 +480,21 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
 }
 
 #pragma mark - Event
--(void)rightButtonClicked:(id)sender{
+- (void)transferRecordsButtonAction {
     SSJFundingTransferListViewController *transferDetailVc = [[SSJFundingTransferListViewController alloc]init];
     [self.navigationController pushViewController:transferDetailVc animated:YES];
+}
+
+- (void)deleteAction {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:@"确定删除该项记录?" preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:NULL]];
+    [alert addAction:[UIAlertAction actionWithTitle:@"确认" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [SSJFundingTransferStore deleteCycleTransferRecordWithID:_item.ID success:^{
+            [self.navigationController popViewControllerAnimated:YES];
+            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+        } failure:NULL];
+    }]];
+    [self presentViewController:alert animated:YES completion:NULL];
 }
 
 -(void)saveButtonClicked:(id)sender{
