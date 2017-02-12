@@ -85,11 +85,18 @@ static NSString *const kPeriodTransferTitle = @"周期转账";
     
     NSDictionary *monthInfo = [self.datas ssj_safeObjectAtIndex:indexPath.section];
     NSArray *items = [monthInfo objectForKey:SSJFundingTransferStoreListKey];
-    
     SSJFundingTransferDetailItem *item = [items ssj_safeObjectAtIndex:indexPath.row];
-    SSJFundingTransferEditeViewController *transferEditeVc = [[SSJFundingTransferEditeViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
-    transferEditeVc.item = item;
-    [self.navigationController pushViewController:transferEditeVc animated:YES];
+    
+    NSString *selectedTitle = [_segmentHeaderCtrl.titles ssj_safeObjectAtIndex:_segmentHeaderCtrl.selectedIndex];
+    if ([selectedTitle isEqualToString:kNormalTransferTitle]) {
+        SSJFundingTransferEditeViewController *transferEditeVc = [[SSJFundingTransferEditeViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
+        transferEditeVc.item = item;
+        [self.navigationController pushViewController:transferEditeVc animated:YES];
+    } else if ([selectedTitle isEqualToString:kPeriodTransferTitle]) {
+        SSJFundingTransferViewController *periodTransferVC = [[SSJFundingTransferViewController alloc] init];
+        periodTransferVC.item = item;
+        [self.navigationController pushViewController:periodTransferVC animated:YES];
+    }
 }
 
 #pragma mark - UITableViewDataSource
