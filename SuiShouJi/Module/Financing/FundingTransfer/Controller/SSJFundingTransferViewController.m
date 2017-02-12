@@ -250,7 +250,7 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
     }else if ([title isEqualToString:kCyclePeriod]) {
         circleModifyCell.cellInput.hidden = YES;
         circleModifyCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        circleModifyCell.cellDetail = SSJTitleForCycleType(self.periodSelectionView.selectedType);
+        circleModifyCell.cellDetail = SSJTitleForCycleType(_item.cycleType);
     }else if ([title isEqualToString:kBeginDate]) {
         circleModifyCell.cellInput.hidden = YES;
         circleModifyCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -370,7 +370,7 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-        _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellIndicatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
+        _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
     }
     return _tableView;
 }
