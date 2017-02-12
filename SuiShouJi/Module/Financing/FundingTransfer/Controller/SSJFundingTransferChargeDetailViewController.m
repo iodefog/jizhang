@@ -15,6 +15,7 @@
 #import "SSJFundingTransferDetailItem.h"
 #import "SSJCreditCardItem.h"
 #import "SSJFundingTransferStore.h"
+#import "SSJDataSynchronizer.h"
 
 static NSString *const kMoneyImage = @"loan_money";
 static NSString *const kTransOutAcctImage = @"founds_zhuanchuzhanghu";
@@ -273,6 +274,7 @@ static const NSInteger kMemoTag = 1002;
         [_saveButton ssj_hideLoadingIndicator];
         [self.navigationController popViewControllerAnimated:YES];
         [CDAutoHideMessageHUD showMessage:@"保存成功"];
+        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
     } failure:^(NSError * _Nonnull error) {
         _saveButton.enabled = YES;
         [_saveButton ssj_hideLoadingIndicator];
@@ -286,6 +288,7 @@ static const NSInteger kMemoTag = 1002;
         [SSJFundingTransferStore deleteFundingTransferWithItem:self.item Success:^{
             [CDAutoHideMessageHUD showMessage:@"删除成功"];
             [self.navigationController popViewControllerAnimated:YES];
+            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
         } failure:NULL];
     }]];
     [self presentViewController:alert animated:YES completion:NULL];
