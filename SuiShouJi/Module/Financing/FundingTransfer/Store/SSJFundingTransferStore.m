@@ -279,7 +279,7 @@ NSString *SSJFundingTransferStoreListKey = @"SSJFundingTransferStoreListKey";
     NSString *userid = SSJUSERID();
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        FMResultSet *resultSet = [db executeQuery:@"select tc.*, fund_in.cacctname as transferInAcctName, fund_in.cicoin as transferInAcctIcon, fund_out.cacctname as transferOutAcctName, fund_out.cicoin as transferOutAcctIcon from bk_transfer_cycle as tc, bk_fund_info as fund_in, bk_fund_info as fund_out where tc.ctransferinaccountid = fund_in.cfundid and tc.ctransferoutaccountid = fund_out.cfundid and tc.cuserid = ? and tc.cuserid = fund_in.cuserid and tc.cuserid = fund_out.cuserid and tc.icycletype <> -1 and tc.operatortype <> 2 order by tc.cbegindate desc, tc.imoney desc", userid];
+        FMResultSet *resultSet = [db executeQuery:@"select tc.*, fund_in.cacctname as transferInAcctName, fund_in.cicoin as transferInAcctIcon, fund_in.cfundid as transferInAcctID, fund_out.cacctname as transferOutAcctName, fund_out.cicoin as transferOutAcctIcon, fund_out.cfundid as transferOutAcctID from bk_transfer_cycle as tc, bk_fund_info as fund_in, bk_fund_info as fund_out where tc.ctransferinaccountid = fund_in.cfundid and tc.ctransferoutaccountid = fund_out.cfundid and tc.cuserid = ? and tc.cuserid = fund_in.cuserid and tc.cuserid = fund_out.cuserid and tc.icycletype <> -1 and tc.operatortype <> 2 order by tc.cbegindate desc, tc.imoney desc", userid];
         
         if (!resultSet) {
             if (failure) {
@@ -303,6 +303,8 @@ NSString *SSJFundingTransferStoreListKey = @"SSJFundingTransferStoreListKey";
             item.transferOutName = [resultSet stringForColumn:@"transferOutAcctName"];
             item.transferInImage = [resultSet stringForColumn:@"transferInAcctIcon"];
             item.transferOutImage = [resultSet stringForColumn:@"transferOutAcctIcon"];
+            item.transferInId = [resultSet stringForColumn:@"transferInAcctID"];
+            item.transferOutId = [resultSet stringForColumn:@"transferOutAcctID"];
             item.transferMemo = [resultSet stringForColumn:@"cmemo"];
             item.cycleType = [resultSet intForColumn:@"icycletype"];
             item.opened = [resultSet boolForColumn:@"istate"];

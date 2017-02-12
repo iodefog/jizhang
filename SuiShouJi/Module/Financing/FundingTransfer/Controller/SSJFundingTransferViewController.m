@@ -87,7 +87,7 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
 //    self.view.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(transferTextDidChange:) name:UITextFieldTextDidChangeNotification object:nil];
     [self.view addSubview:self.tableView];
-    if (self.item != nil) {
+    if (self.item) {
         _transferOutItem = [[SSJFundingItem alloc]init];
         _transferInItem = [[SSJFundingItem alloc]init];
         ((SSJFundingItem *)_transferInItem).fundingID = self.item.transferInId;
@@ -96,6 +96,13 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
         ((SSJFundingItem *)_transferOutItem).fundingID = self.item.transferOutId;
         ((SSJFundingItem *)_transferOutItem).fundingIcon = self.item.transferOutImage;
         ((SSJFundingItem *)_transferOutItem).fundingName = self.item.transferOutName;
+        
+        if (_item.cycleType == SSJCyclePeriodTypeOnce) {
+            _item.beginDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"];
+        } else {
+            _item.transferDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"];
+        }
+        
         self.navigationItem.rightBarButtonItem = nil;
         self.title = @"编辑转账";
     }else{
