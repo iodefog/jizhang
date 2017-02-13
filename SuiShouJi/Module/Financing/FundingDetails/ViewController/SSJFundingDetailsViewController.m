@@ -33,7 +33,7 @@
 #import "SSJCreditCardRepaymentViewController.h"
 #import "SSJFundingDetailsViewController.h"
 #import "SSJNewCreditCardViewController.h"
-#import "SSJFundingTransferEditeViewController.h"
+#import "SSJFundingTransferChargeDetailViewController.h"
 #import "SSJCalenderDetailViewController.h"
 #import "SSJInstalmentEditeViewController.h"
 #import "SSJInstalmentDetailViewController.h"
@@ -335,7 +335,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
                 }
             } else {
                 if (billId == 3 || billId == 4) {
-                    SSJFundingTransferEditeViewController *transferVc = [[SSJFundingTransferEditeViewController alloc] init];
+                    SSJFundingTransferChargeDetailViewController *transferVc = [[SSJFundingTransferChargeDetailViewController alloc] init];
                     transferVc.chargeItem = (SSJBillingChargeCellItem*)item;
                     [self.navigationController pushViewController:transferVc animated:YES];
                 } else {

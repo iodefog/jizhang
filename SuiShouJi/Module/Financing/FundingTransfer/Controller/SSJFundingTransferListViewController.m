@@ -13,11 +13,12 @@
 #import "SSJTransferDetailHeader.h"
 #import "SCYSlidePagingHeaderView.h"
 #import "SCYSlidePagingHeaderView+SSJTheme.h"
-#import "SSJFundingTransferEditeViewController.h"
+#import "SSJFundingTransferListPeriodCell.h"
 #import "SSJFundingTransferViewController.h"
+#import "SSJFundingTransferChargeDetailViewController.h"
 
 static NSString * SSJTransferDetailCellIdentifier = @"transferDetailCell";
-static NSString * SSJTransferDetailHeaderIdentifier = @"transferDetailHeader";
+static NSString * SSJTransferPeriodCellIdentifier = @"SSJTransferPeriodCellIdentifier";
 
 static NSString *const kNormalTransferTitle = @"转账流水";
 static NSString *const kPeriodTransferTitle = @"周期转账";
@@ -27,7 +28,7 @@ static NSString *const kPeriodTransferTitle = @"周期转账";
 
 @property (nonatomic, strong) NSArray *datas;
 
-@property (nonatomic, strong) SCYSlidePagingHeaderView *switchCtrl;
+@property (nonatomic, strong) SCYSlidePagingHeaderView *segmentHeaderCtrl;
 
 @end
 
@@ -44,10 +45,11 @@ static NSString *const kPeriodTransferTitle = @"周期转账";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self.view addSubview:self.switchCtrl];
-    self.tableView.top = self.switchCtrl.bottom;
+    [self.view addSubview:self.segmentHeaderCtrl];
+    self.tableView.top = self.segmentHeaderCtrl.bottom;
     self.tableView.height = self.view.height - self.tableView.top;
     [self.tableView registerClass:[SSJFundingTransferDetailCell class] forCellReuseIdentifier:SSJTransferDetailCellIdentifier];
+    [self.tableView registerClass:[SSJFundingTransferListPeriodCell class] forCellReuseIdentifier:SSJTransferPeriodCellIdentifier];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -57,7 +59,7 @@ static NSString *const kPeriodTransferTitle = @"周期转账";
 
 - (void)updateAppearanceAfterThemeChanged {
     [super updateAppearanceAfterThemeChanged];
-    [self.switchCtrl updateAppearanceAccordingToTheme];
+    [self.segmentHeaderCtrl updateAppearanceAccordingToTheme];
 }
 
 #pragma mark - UITableViewDelegate
@@ -83,11 +85,18 @@ static NSString *const kPeriodTransferTitle = @"周期转账";
     
     NSDictionary *monthInfo = [self.datas ssj_safeObjectAtIndex:indexPath.section];
     NSArray *items = [monthInfo objectForKey:SSJFundingTransferStoreListKey];
-    
     SSJFundingTransferDetailItem *item = [items ssj_safeObjectAtIndex:indexPath.row];
-    SSJFundingTransferEditeViewController *transferEditeVc = [[SSJFundingTransferEditeViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
-    transferEditeVc.item = item;
-    [self.navigationController pushViewController:transferEditeVc animated:YES];
+    
+    NSString *selectedTitle = [_segmentHeaderCtrl.titles ssj_safeObjectAtIndex:_segmentHeaderCtrl.selectedIndex];
+    if ([selectedTitle isEqualToString:kNormalTransferTitle]) {
+        SSJFundingTransferChargeDetailViewController *transferVC = [[SSJFundingTransferChargeDetailViewController alloc] init];
+        transferVC.item = item;
+        [self.navigationController pushViewController:transferVC animated:YES];
+    } else if ([selectedTitle isEqualToString:kPeriodTransferTitle]) {
+        SSJFundingTransferViewController *periodTransferVC = [[SSJFundingTransferViewController alloc] init];
+        periodTransferVC.item = item;
+        [self.navigationController pushViewController:periodTransferVC animated:YES];
+    }
 }
 
 #pragma mark - UITableViewDataSource
@@ -106,10 +115,22 @@ static NSString *const kPeriodTransferTitle = @"周期转账";
     NSArray *items = [monthInfo objectForKey:SSJFundingTransferStoreListKey];
     SSJFundingTransferDetailItem *item = [items ssj_safeObjectAtIndex:indexPath.row];
     
-    SSJFundingTransferDetailCell *cell = [tableView dequeueReusableCellWithIdentifier:SSJTransferDetailCellIdentifier forIndexPath:indexPath];
-    cell.item = item;
-    
-    return cell;
+    NSString *selectedTitle = [_segmentHeaderCtrl.titles ssj_safeObjectAtIndex:_segmentHeaderCtrl.selectedIndex];
+    if ([selectedTitle isEqualToString:kNormalTransferTitle]) {
+        SSJFundingTransferDetailCell *cell = [tableView dequeueReusableCellWithIdentifier:SSJTransferDetailCellIdentifier forIndexPath:indexPath];
+        cell.item = item;
+        return cell;
+    } else if ([selectedTitle isEqualToString:kPeriodTransferTitle]) {
+        SSJFundingTransferListPeriodCell *periodCell = [tableView dequeueReusableCellWithIdentifier:SSJTransferPeriodCellIdentifier forIndexPath:indexPath];
+        periodCell.cellItem = [SSJFundingTransferListPeriodCellItem cellItemWithTransferDetailItem:item];
+        periodCell.switchCtrlAction = ^(BOOL opened, SSJFundingTransferListPeriodCell *cell) {
+            SSJFundingTransferListPeriodCellItem *periodItem = cell.cellItem;
+            [SSJFundingTransferStore updateCycleTransferRecordStateWithID:periodItem.transferId opened:opened success:NULL failure:NULL];
+        };
+        return periodCell;
+    } else {
+        return [UITableViewCell new];
+    }
 }
 
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
@@ -130,7 +151,7 @@ static NSString *const kPeriodTransferTitle = @"周期转账";
         [self.view ssj_showLoadingIndicator];
     }
     
-    NSString *selectedTitle = [_switchCtrl.titles ssj_safeObjectAtIndex:_switchCtrl.selectedIndex];
+    NSString *selectedTitle = [_segmentHeaderCtrl.titles ssj_safeObjectAtIndex:_segmentHeaderCtrl.selectedIndex];
     if ([selectedTitle isEqualToString:kNormalTransferTitle]) {
         [SSJFundingTransferStore queryForFundingTransferListWithSuccess:^(NSArray<NSDictionary *> * _Nonnull result) {
             _datas = result;
@@ -159,18 +180,18 @@ static NSString *const kPeriodTransferTitle = @"周期转账";
 }
 
 #pragma mark - LazyLoading
-- (SCYSlidePagingHeaderView *)switchCtrl {
-    if (!_switchCtrl) {
-        _switchCtrl = [[SCYSlidePagingHeaderView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, 36)];
-        _switchCtrl.customDelegate = self;
-        _switchCtrl.buttonClickAnimated = YES;
-        _switchCtrl.titles = @[kNormalTransferTitle, kPeriodTransferTitle];
-        [_switchCtrl setTabSize:CGSizeMake(_switchCtrl.width * 0.5, 3)];
-        [_switchCtrl ssj_setBorderWidth:1];
-        [_switchCtrl ssj_setBorderStyle:SSJBorderStyleBottom];
-        [_switchCtrl updateAppearanceAccordingToTheme];
+- (SCYSlidePagingHeaderView *)segmentHeaderCtrl {
+    if (!_segmentHeaderCtrl) {
+        _segmentHeaderCtrl = [[SCYSlidePagingHeaderView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, 36)];
+        _segmentHeaderCtrl.customDelegate = self;
+        _segmentHeaderCtrl.buttonClickAnimated = YES;
+        _segmentHeaderCtrl.titles = @[kNormalTransferTitle, kPeriodTransferTitle];
+        [_segmentHeaderCtrl setTabSize:CGSizeMake(_segmentHeaderCtrl.width * 0.5, 3)];
+        [_segmentHeaderCtrl ssj_setBorderWidth:1];
+        [_segmentHeaderCtrl ssj_setBorderStyle:SSJBorderStyleBottom];
+        [_segmentHeaderCtrl updateAppearanceAccordingToTheme];
     }
-    return _switchCtrl;
+    return _segmentHeaderCtrl;
 }
 
 @end

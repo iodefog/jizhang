@@ -402,7 +402,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
         NSDate *currentDate = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:[NSDate date].day];
         toDate = [toDate compare:currentDate] == NSOrderedAscending ? toDate : currentDate;
         
-        NSArray *billDates = [self billDatesFromDate:fromDate toDate:toDate periodType:periodType containFromDate:NO];
+        NSArray *billDates = [self billDatesFromDate:fromDate toDate:toDate periodType:periodType containFromDate:YES];
         
         [self organiseChargeListWithResultSet:resultSet chargeList:chargeList billDates:billDates userId:userId suffixMapping:cidSuffixMapping];
     }
@@ -440,7 +440,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
                                                @"cid":cid,
                                                @"ichargetype":@5,
                                                @"cbilldate":billDate,
-                                               @"cmemo":memo,
+                                               @"cmemo":memo ?: @"",
                                                @"iversion": @(SSJSyncVersion()),
                                                @"cwritedate":writeDate,
                                                @"operatortype":@0};
@@ -453,7 +453,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
                                                 @"cid":cid,
                                                 @"ichargetype":@5,
                                                 @"cbilldate":billDate,
-                                                @"cmemo":memo,
+                                                @"cmemo":memo ?: @"",
                                                 @"iversion": @(SSJSyncVersion()),
                                                 @"cwritedate":writeDate,
                                                 @"operatortype":@0};
