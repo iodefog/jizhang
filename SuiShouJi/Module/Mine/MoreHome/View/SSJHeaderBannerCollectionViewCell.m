@@ -15,6 +15,7 @@
 {
     if (self = [super initWithFrame:frame]) {
         [self addSubview:self.imageView];
+        self.backgroundColor = [UIColor clearColor];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCellAppearanceAfterThemeChanged) name:SSJThemeDidChangeNotification object:nil];
         [self updateCellAppearanceAfterThemeChanged];
     }
@@ -47,7 +48,7 @@
 }
 
 -(void)updateCellAppearanceAfterThemeChanged{
-    self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+//    self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
 }
 
 - (void)dealloc

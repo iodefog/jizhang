@@ -26,8 +26,9 @@
        [self.contentView addSubview:self.nameLabel];
         [self.contentView addSubview:self.bottomLabel];
         [self.contentView addSubview:self.dotView];
-        
-        [self ssj_setBorderStyle:SSJBorderStyleBottom | SSJBorderStyleRight];
+//        self.backgroundColor = [UIColor clearColor];
+//        self.contentView.backgroundColor = [UIColor clearColor];
+        [self ssj_setBorderStyle:SSJBorderStyleBottom];
         [self ssj_setBorderWidth:1];
         [self ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
        self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];

@@ -24,6 +24,7 @@ static NSString *const kHeadBannerCellID = @"SSJHeaderBannerCollectionViewCellID
 
 - (instancetype)initWithFrame:(CGRect)frame{
     if (self = [super initWithFrame:frame]) {
+        self.backgroundColor = [UIColor clearColor];
         [self addSubview:self.collectionView];
         [self addSubview:self.closeButton];
     }
@@ -36,7 +37,7 @@ static NSString *const kHeadBannerCellID = @"SSJHeaderBannerCollectionViewCellID
         UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
         layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
         layout.minimumLineSpacing = 5;
-        layout.minimumInteritemSpacing = 0;
+        layout.sectionInset = UIEdgeInsetsMake(0, 0, 10, 0);
         _collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
         [_collectionView registerClass:[SSJHeaderBannerCollectionViewCell class] forCellWithReuseIdentifier:kHeadBannerCellID];
         _collectionView.bounces = NO;
@@ -114,9 +115,9 @@ static NSString *const kHeadBannerCellID = @"SSJHeaderBannerCollectionViewCellID
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (self.bannerItemArray.count == 1) {
-        return CGSizeMake(SSJSCREENWITH, kBannerHeight);
+        return CGSizeMake(SSJSCREENWITH, kBannerHeight - 10);
     }else{
-        return CGSizeMake(285, kBannerHeight);
+        return CGSizeMake(285, kBannerHeight - 10);
     }
 }
 
