@@ -74,9 +74,14 @@
         _datePicker = [[UIPickerView alloc] init];
         _datePicker.delegate = self;
         _datePicker.dataSource = self;
-        [self defaultSelectedcomponents];//设置默认选中行和列
     }
     return _datePicker;
+}
+
+- (void)setDate:(NSDate *)date
+{
+    _date = date;
+    [self defaultSelectedcomponents];//设置默认选中行和列
 }
 
 - (UIButton *)comfirmButton
