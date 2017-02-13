@@ -42,10 +42,18 @@
     self.cellSubTitleLabel.centerY = self.height / 2;
     
     if (self.contentView.width == self.width) {
-        self.cellDetailLabel.width = MIN(self.cellDetailLabel.width, self.contentView.width - self.cellTitleLabel.right - 20);
+        CGFloat maxDetailLabelWith = self.contentView.width - 10 - self.cellTitleLabel.right - 10;
+        if (self.typeImageView.image && !self.typeImageView.hidden) {
+            maxDetailLabelWith = maxDetailLabelWith - self.typeImageView.width - 10;
+        }
+        self.cellDetailLabel.width = MIN(self.cellDetailLabel.width, maxDetailLabelWith);
         self.cellDetailLabel.right = self.contentView.width - 10;
     }else{
-        self.cellDetailLabel.width = MIN(self.cellDetailLabel.width, self.contentView.width - self.cellTitleLabel.right - 10);
+        CGFloat maxDetailLabelWith = self.contentView.width - self.cellTitleLabel.right - 10;
+        if (self.typeImageView.image && !self.typeImageView.hidden) {
+            maxDetailLabelWith = maxDetailLabelWith - self.typeImageView.width - 10;
+        }
+        self.cellDetailLabel.width = MIN(self.cellDetailLabel.width, maxDetailLabelWith);
         self.cellDetailLabel.right = self.contentView.width;
     }
     self.cellDetailLabel.centerY = self.height / 2;
@@ -57,7 +65,7 @@
         self.cellImageView.right = self.contentView.width;
     }
     self.cellImageView.centerY = self.height / 2;
-    self.cellInput.size = CGSizeMake(self.width / 2, self.height);
+    self.cellInput.size = CGSizeMake(self.width - 10 - self.cellTitleLabel.right - 10, self.height);
     self.cellInput.right = self.width - 10;
     self.cellInput.centerY = self.height / 2;
     self.typeImageView.right = self.cellDetailLabel.left - 10;

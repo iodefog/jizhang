@@ -31,8 +31,6 @@ static NSString *const kCyclePeriod = @"循环周期";
 static NSString *const kBeginDate = @"周期起始日";
 static NSString *const kEndDate = @"周期结束日";
 
-static const int kMaxMoneyLength = 9;
-
 static NSString *const kCreatePeriodTransferTimesKey = @"kCreatePeriodTransferTimesKey";
 
 static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEditeCellIdentifier";
@@ -443,7 +441,12 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
             NSDate *currentDate = [NSDate date];
             currentDate = [NSDate dateWithYear:currentDate.year month:currentDate.month day:currentDate.day];
             if ([date compare:currentDate] == NSOrderedAscending) {
-                [CDAutoHideMessageHUD showMessage:@"起始日期不能早于今天"];
+                [CDAutoHideMessageHUD showMessage:@"起始日期不能早于今天哦"];
+                return NO;
+            }
+            NSDate *endDate = [NSDate dateWithString:_item.endDate formatString:@"yyyy-MM-dd"];
+            if ([date compare:endDate] == NSOrderedDescending) {
+                [CDAutoHideMessageHUD showMessage:@"起始日期不能晚于结束日期哦"];
                 return NO;
             }
             return YES;
@@ -463,7 +466,7 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
         _endDateSelectionView.shouldSelectDateAction = ^BOOL(SSJLoanDateSelectionView *view, NSDate *date) {
             NSDate *beginDate = [NSDate dateWithString:weakSelf.item.beginDate formatString:@"yyyy-MM-dd"];
             if ([date compare:beginDate] == NSOrderedAscending) {
-                [CDAutoHideMessageHUD showMessage:@"结束日期不能早于起始日期"];
+                [CDAutoHideMessageHUD showMessage:@"结束日期不能早于起始日期哦"];
                 return NO;
             }
             return YES;
@@ -532,9 +535,6 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
     }else if (_memoInput.text.length > 15){
         [CDAutoHideMessageHUD showMessage:@"备注最多输入15个字哦"];
         return;
-    }else if (_moneyInput.text.length > kMaxMoneyLength){
-        [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"金额不能超过%d位数哦", kMaxMoneyLength]];
-        return;
     }
     
     _saveButton.enabled = NO;
@@ -585,10 +585,7 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
 
 - (void)transferTextDidChange:(NSNotification *)notification {
     if (notification.object == _moneyInput) {
-        if (_moneyInput.text.length > kMaxMoneyLength) {
-            _moneyInput.text = [_moneyInput.text substringToIndex:kMaxMoneyLength];
-        }
-        [self setupTextFiledNum:_moneyInput num:2];
+        _moneyInput.text = [_moneyInput.text ssj_reserveDecimalDigits:2 intDigits:9];
         _item.transferMoney = _moneyInput.text;
     } else if (notification.object == _memoInput) {
         _item.transferMemo = _memoInput.text;
@@ -628,37 +625,37 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
 //}
 
 
-/**
- *   限制输入框小数点(输入框只改变时候调用valueChange)
- *
- *  @param TF  输入框
- *  @param num 小数点后限制位数
- */
--(void)setupTextFiledNum:(UITextField *)TF num:(int)num
-{
-    NSString *str = [TF.text stringByReplacingOccurrencesOfString:@"¥" withString:@""];
-    NSArray *arr = [TF.text componentsSeparatedByString:@"."];
-    if ([str isEqualToString:@"0."] || [str isEqualToString:@"."]) {
-        TF.text = @"0.";
-    }else if (str.length == 2) {
-        if ([str floatValue] == 0) {
-            TF.text = @"0";
-        }else if(arr.count < 2){
-            TF.text = [NSString stringWithFormat:@"%d",[str intValue]];
-        }
-    }
-    
-    if (arr.count > 2) {
-        TF.text = [NSString stringWithFormat:@"%@.%@",arr[0],arr[1]];
-    }
-    
-    if (arr.count == 2) {
-        NSString * lastStr = arr.lastObject;
-        if (lastStr.length > num) {
-            TF.text = [NSString stringWithFormat:@"%@.%@",arr[0],[lastStr substringToIndex:num]];
-        }
-    }
-}
+///**
+// *   限制输入框小数点(输入框只改变时候调用valueChange)
+// *
+// *  @param TF  输入框
+// *  @param num 小数点后限制位数
+// */
+//-(void)setupTextFiledNum:(UITextField *)TF num:(int)num
+//{
+//    NSString *str = [TF.text stringByReplacingOccurrencesOfString:@"¥" withString:@""];
+//    NSArray *arr = [TF.text componentsSeparatedByString:@"."];
+//    if ([str isEqualToString:@"0."] || [str isEqualToString:@"."]) {
+//        TF.text = @"0.";
+//    }else if (str.length == 2) {
+//        if ([str floatValue] == 0) {
+//            TF.text = @"0";
+//        }else if(arr.count < 2){
+//            TF.text = [NSString stringWithFormat:@"%d",[str intValue]];
+//        }
+//    }
+//    
+//    if (arr.count > 2) {
+//        TF.text = [NSString stringWithFormat:@"%@.%@",arr[0],arr[1]];
+//    }
+//    
+//    if (arr.count == 2) {
+//        NSString * lastStr = arr.lastObject;
+//        if (lastStr.length > num) {
+//            TF.text = [NSString stringWithFormat:@"%@.%@",arr[0],[lastStr substringToIndex:num]];
+//        }
+//    }
+//}
 
 - (BOOL)isFirstTimeCreate {
     NSInteger times = [[NSUserDefaults standardUserDefaults] integerForKey:kCreatePeriodTransferTimesKey];
