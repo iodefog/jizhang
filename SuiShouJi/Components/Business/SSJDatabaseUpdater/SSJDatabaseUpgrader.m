@@ -78,7 +78,8 @@ static const int kDatabaseVersion = 12;
              @8:[SSJDatabaseVersion8 class],
              @9:[SSJDatabaseVersion9 class],
              @10:[SSJDatabaseVersion10 class],
-             @11:[SSJDatabaseVersion11 class]};
+             @11:[SSJDatabaseVersion11 class],
+             @12:[SSJDatabaseVersion12 class]};
 }
 
 @end

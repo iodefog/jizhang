@@ -31,6 +31,8 @@ static NSString *const kCyclePeriod = @"循环周期";
 static NSString *const kBeginDate = @"周期起始日";
 static NSString *const kEndDate = @"周期结束日";
 
+static const int kMaxMoneyLength = 9;
+
 static NSString *const kCreatePeriodTransferTimesKey = @"kCreatePeriodTransferTimesKey";
 
 static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEditeCellIdentifier";
@@ -530,6 +532,9 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
     }else if (_memoInput.text.length > 15){
         [CDAutoHideMessageHUD showMessage:@"备注最多输入15个字哦"];
         return;
+    }else if (_moneyInput.text.length > kMaxMoneyLength){
+        [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"金额不能超过%d位数哦", kMaxMoneyLength]];
+        return;
     }
     
     _saveButton.enabled = NO;
@@ -580,6 +585,9 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
 
 - (void)transferTextDidChange:(NSNotification *)notification {
     if (notification.object == _moneyInput) {
+        if (_moneyInput.text.length > kMaxMoneyLength) {
+            _moneyInput.text = [_moneyInput.text substringToIndex:kMaxMoneyLength];
+        }
         [self setupTextFiledNum:_moneyInput num:2];
         _item.transferMoney = _moneyInput.text;
     } else if (notification.object == _memoInput) {

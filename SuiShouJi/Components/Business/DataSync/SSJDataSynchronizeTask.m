@@ -20,6 +20,7 @@
 #import "SSJLoanSyncTable.h"
 #import "SSJUserCreditSyncTable.h"
 #import "SSJCreditRepaymentSyncTable.h"
+#import "SSJTransferCycleSyncTable.h"
 
 #import "SSJSyncTable.h"
 
@@ -76,6 +77,7 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
                                                    [SSJUserBudgetSyncTable class], nil];
         
         NSSet *thirdLayer = [NSSet setWithObjects:[SSJUserChargePeriodConfigSyncTable class],
+                                                  [SSJTransferCycleSyncTable class],
                                                   [SSJLoanSyncTable class], nil];
         
         NSSet *fourthLayer = [NSSet setWithObjects:[SSJUserChargeSyncTable class], nil];
@@ -462,6 +464,17 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
         
         NSString *sqlStr = [NSString stringWithFormat:@"update bk_books_type set cicoin = 'bk_moren' where cbooksid not in ('%@', '%@', '%@', '%@', '%@') and cuserid = '%@' and (length(cicoin) == 0 or cicoin is null)", booksID1, booksID2, booksID3, booksID4, booksID5, self.userId];
         [db executeUpdate:sqlStr];
+    }];
+    
+    // 将没有新加字段cdetaildate的流水补上
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+        
+        [db executeUpdate:@"update bk_user_charge set cdetaildate = '00:00' where ichargetype = ?", @(SSJChargeIdTypeCircleConfig)];
+        
+        [db executeUpdate:@"update bk_user_charge set cdetaildate = (select substr(clientadddate,12,5) from bk_user_charge) where length(clientadddate) > 0 and ichargetype <> ?", @(SSJChargeIdTypeCircleConfig)];
+        
+        [db executeUpdate:@"update bk_user_charge set cdetaildate = (select substr(cwritedate,12,5) from bk_user_charge) where length(cdetaildate) = 0 or cdetaildate is null"];
+        
     }];
 }
 
