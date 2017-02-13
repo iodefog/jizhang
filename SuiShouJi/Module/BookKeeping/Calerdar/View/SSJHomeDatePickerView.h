@@ -25,9 +25,9 @@ typedef NS_ENUM(NSInteger, SSJDatePickerMode) {
 //    SSJDatePickerComponentMinute = 1 << 4
 //};
 
-@class SSJHomeCalendarViewButtonItem;
+@class SSJHomeDatePickerViewButtonItem;
 
-@interface SSJHomeCalendarView : UIControl
+@interface SSJHomeDatePickerView : UIControl
 
 //@property (nonatomic) SSJDatePickerMode datePickerMode;
 
@@ -41,12 +41,12 @@ typedef NS_ENUM(NSInteger, SSJDatePickerMode) {
  */
 @property (nonatomic, strong) NSDate *maxDate;
 
-@property (nonatomic, copy) BOOL(^shouldConfirmBlock)(SSJHomeCalendarView *view, NSDate *selecteDate);
+@property (nonatomic, copy) BOOL(^shouldConfirmBlock)(SSJHomeDatePickerView *view, NSDate *selecteDate);
 
 //选择日期按钮返回选中的时间
-@property (nonatomic, copy) void(^confirmBlock)(SSJHomeCalendarView *view);
+@property (nonatomic, copy) void(^confirmBlock)(SSJHomeDatePickerView *view);
 
-@property (nonatomic, copy) void(^closeBlock)(SSJHomeCalendarView *view);
+@property (nonatomic, copy) void(^closeBlock)(SSJHomeDatePickerView *view);
 
 /**
  背景颜色
@@ -70,10 +70,10 @@ typedef NS_ENUM(NSInteger, SSJDatePickerMode) {
 @property (nonatomic, copy, nullable) NSString *warningString;
 
 // 自定义左侧按钮，默认nil，如果有值，就取代默认的取消按钮
-@property (nonatomic, strong, nullable) SSJHomeCalendarViewButtonItem *leftButtonItem;
+@property (nonatomic, strong, nullable) SSJHomeDatePickerViewButtonItem *leftButtonItem;
 
 // 自定义右侧按钮，默认nil，如果有值，就取代默认的确认按钮
-@property (nonatomic, strong, nullable) SSJHomeCalendarViewButtonItem *rightButtonItem;
+@property (nonatomic, strong, nullable) SSJHomeDatePickerViewButtonItem *rightButtonItem;
 
 //- (void)setTitleColor:(UIColor *)color forComponent:(SSJDatePickerComponent)component;
 //
@@ -82,11 +82,10 @@ typedef NS_ENUM(NSInteger, SSJDatePickerMode) {
 - (void)show;
 
 - (void)dismiss;
+
 @end
 
-typedef void(^SSJHomeCalendarViewButtonItemAction)();
-
-@interface SSJHomeCalendarViewButtonItem : NSObject
+@interface SSJHomeDatePickerViewButtonItem : NSObject
 
 @property (nonatomic, strong, nullable) NSString *title;
 

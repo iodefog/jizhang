@@ -11,7 +11,7 @@
 #import "TPKeyboardAvoidingTableView.h"
 #import "SSJChargeCircleModifyCell.h"
 #import "SSJFundingTypeSelectView.h"
-#import "SSJLoanDateSelectionView.h"
+#import "SSJHomeDatePickerView.h"
 #import "SSJFundingTransferDetailItem.h"
 #import "SSJCreditCardItem.h"
 #import "SSJFundingTransferStore.h"
@@ -67,7 +67,7 @@ static const NSInteger kMemoTag = 1002;
 
 @property (nonatomic, strong) SSJFundingTypeSelectView *transferOutFundingTypeSelect;
 
-@property (nonatomic, strong) SSJLoanDateSelectionView *dateSelectionView;
+@property (nonatomic, strong) SSJHomeDatePickerView *dateSelectionView;
 
 @end
 
@@ -201,7 +201,7 @@ static const NSInteger kMemoTag = 1002;
         self.transferInFundingTypeSelect.selectFundID = _item.transferInId;
         [self.transferInFundingTypeSelect show];
     } else if ([model.title isEqualToString:kTransDate]) {
-        self.dateSelectionView.selectedDate = [NSDate dateWithString:self.item.transferDate formatString:@"yyyy-MM-dd"];
+        self.dateSelectionView.date = [NSDate dateWithString:self.item.transferDate formatString:@"yyyy-MM-dd"];
         [self.dateSelectionView show];
     }
 }
@@ -415,11 +415,11 @@ static const NSInteger kMemoTag = 1002;
     return _transferOutFundingTypeSelect;
 }
 
-- (SSJLoanDateSelectionView *)dateSelectionView {
+- (SSJHomeDatePickerView *)dateSelectionView {
     if (!_dateSelectionView) {
         __weak typeof(self) wself = self;
-        _dateSelectionView = [[SSJLoanDateSelectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 244)];
-        _dateSelectionView.shouldSelectDateAction = ^BOOL(SSJLoanDateSelectionView *view, NSDate *date) {
+        _dateSelectionView = [[SSJHomeDatePickerView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 244)];
+        _dateSelectionView.shouldConfirmBlock = ^BOOL(SSJHomeDatePickerView *view, NSDate *date) {
             NSDate *currentDate = [NSDate date];
             currentDate = [NSDate dateWithYear:currentDate.year month:currentDate.month day:currentDate.day];
             if ([date compare:currentDate] == NSOrderedDescending) {
@@ -428,8 +428,8 @@ static const NSInteger kMemoTag = 1002;
             }
             return YES;
         };
-        _dateSelectionView.selectDateAction = ^(SSJLoanDateSelectionView *view) {
-            wself.item.transferDate = [view.selectedDate formattedDateWithFormat:@"yyyy-MM-dd"];
+        _dateSelectionView.confirmBlock = ^(SSJHomeDatePickerView *view) {
+            wself.item.transferDate = [view.date formattedDateWithFormat:@"yyyy-MM-dd"];
             [wself.tableView reloadData];
         };
     }

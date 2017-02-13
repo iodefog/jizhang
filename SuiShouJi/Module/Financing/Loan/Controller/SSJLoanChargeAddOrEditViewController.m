@@ -13,7 +13,7 @@
 #import "SSJAddOrEditLoanTextFieldCell.h"
 #import "TPKeyboardAvoidingTableView.h"
 #import "SSJLoanFundAccountSelectionView.h"
-#import "SSJLoanDateSelectionView.h"
+#import "SSJHomeDatePickerView.h"
 #import "SSJLoanInterestTypeAlertView.h"
 #import "UIView+SSJViewAnimatioin.h"
 #import "SSJFundingItem.h"
@@ -41,7 +41,7 @@ static NSUInteger kDateTag = 1005;
 @property (nonatomic, strong) SSJLoanFundAccountSelectionView *fundingSelectionView;
 
 // 日期选择控件
-@property (nonatomic, strong) SSJLoanDateSelectionView *dateSelectionView;
+@property (nonatomic, strong) SSJHomeDatePickerView *dateSelectionView;
 
 @property (nonatomic, strong) SSJLoanInterestTypeAlertView *interestTypeAlertView;
 
@@ -193,7 +193,7 @@ static NSUInteger kDateTag = 1005;
         [self.fundingSelectionView show];
     } else if (tag == kDateTag) {
         [self.view endEditing:YES];
-        self.dateSelectionView.selectedDate = self.compoundModel.chargeModel.billDate;
+        self.dateSelectionView.date = self.compoundModel.chargeModel.billDate;
         [self.dateSelectionView show];
     }
 }
@@ -889,19 +889,12 @@ static NSUInteger kDateTag = 1005;
     return _fundingSelectionView;
 }
 
-- (SSJLoanDateSelectionView *)dateSelectionView {
+- (SSJHomeDatePickerView *)dateSelectionView {
     if (!_dateSelectionView) {
         __weak typeof(self) weakSelf = self;
-        _dateSelectionView = [[SSJLoanDateSelectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 244)];
-        _dateSelectionView.selectedDate = self.compoundModel.chargeModel.billDate;
-        _dateSelectionView.selectDateAction = ^(SSJLoanDateSelectionView *view) {
-            weakSelf.compoundModel.chargeModel.billDate = view.selectedDate;
-            weakSelf.compoundModel.targetChargeModel.billDate = view.selectedDate;
-            weakSelf.compoundModel.interestChargeModel.billDate = view.selectedDate;
-            [weakSelf updateInterest];
-            [weakSelf.tableView reloadData];
-        };
-        _dateSelectionView.shouldSelectDateAction = ^BOOL(SSJLoanDateSelectionView *view, NSDate *date) {
+        _dateSelectionView = [[SSJHomeDatePickerView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 244)];
+        _dateSelectionView.date = self.compoundModel.chargeModel.billDate;
+        _dateSelectionView.shouldConfirmBlock = ^BOOL(SSJHomeDatePickerView *view, NSDate *date) {
             if ([date compare:weakSelf.loanModel.borrowDate] == NSOrderedAscending) {
                 if (weakSelf.chargeType == SSJLoanCompoundChargeTypeRepayment) {
                     switch (weakSelf.loanModel.type) {
@@ -920,6 +913,13 @@ static NSUInteger kDateTag = 1005;
                 return NO;
             }
             return YES;
+        };
+        _dateSelectionView.confirmBlock = ^(SSJHomeDatePickerView *view) {
+            weakSelf.compoundModel.chargeModel.billDate = view.date;
+            weakSelf.compoundModel.targetChargeModel.billDate = view.date;
+            weakSelf.compoundModel.interestChargeModel.billDate = view.date;
+            [weakSelf updateInterest];
+            [weakSelf.tableView reloadData];
         };
     }
     return _dateSelectionView;

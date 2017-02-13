@@ -140,53 +140,20 @@
 @implementation NSString (SSJDecimal)
 
 - (NSString *)ssj_reserveDecimalDigits:(int)decimalDigits intDigits:(int)intDigits {
-//    NSArray *arr = [self componentsSeparatedByString:@"."];
-//    NSString *intPart = [arr objectAtIndex:0];
-//    if (intDigits > 0) {
-//        if (intPart.length > intDigits) {
-//            intPart = [intPart substringToIndex:intDigits];
-//        }
-//    }
-//    if ([self isEqualToString:@"0."] || [self isEqualToString:@"."]) {
-//        return @"0.";
-//    }else if (self.length == 2) {
-//        if ([self floatValue] == 0) {
-//            return @"0";
-//        }else if(arr.count < 2){
-//            return [NSString stringWithFormat:@"%@",intPart];
-//        }
-//    }
-//    
-//    if (arr.count > 2) {
-//        return [NSString stringWithFormat:@"%@.%@",intPart,arr[1]];
-//    }
-//    
-//    if (arr.count == 2) {
-//        NSString * lastStr = arr.lastObject;
-//        if (lastStr.length > decimalDigits) {
-//            return [NSString stringWithFormat:@"%@.%@",intPart,[lastStr substringToIndex:DecimalDigits]];
-//        }
-//    }
-//    
-//    if(arr.count < 2){
-//        return [NSString stringWithFormat:@"%@",intPart];
-//    }
-//    return self;
-    
     NSArray *arr = [self componentsSeparatedByString:@"."];
     if (arr.count == 1) {
         NSString *intPart = [arr firstObject];
         if (intPart.length > 0) {
             intPart = [NSString stringWithFormat:@"%lld", [intPart longLongValue]];
         }
-        if (intPart.length > intDigits) {
+        if (intDigits > 0 && intPart.length > intDigits) {
             intPart = [intPart substringToIndex:intDigits];
         }
         return intPart;
     } else if (arr.count > 1) {
         NSString *intPart = [arr firstObject];
         intPart = [NSString stringWithFormat:@"%lld", [intPart longLongValue]];
-        if (intPart.length > intDigits) {
+        if (intDigits > 0 && intPart.length > intDigits) {
             intPart = [intPart substringToIndex:intDigits];
         }
         

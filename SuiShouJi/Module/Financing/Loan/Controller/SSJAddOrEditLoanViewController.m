@@ -16,7 +16,7 @@
 #import "SSJAddOrEditLoanTextFieldCell.h"
 #import "SSJAddOrEditLoanMultiLabelCell.h"
 #import "SSJLoanFundAccountSelectionView.h"
-#import "SSJLoanDateSelectionView.h"
+#import "SSJHomeDatePickerView.h"
 #import "TPKeyboardAvoidingTableView.h"
 #import "SSJLoanHelper.h"
 #import "SSJLocalNotificationStore.h"
@@ -48,10 +48,10 @@ const int kMemoMaxLength = 15;
 @property (nonatomic, strong) SSJLoanFundAccountSelectionView *fundingSelectionView;
 
 // 借贷日
-@property (nonatomic, strong) SSJLoanDateSelectionView *borrowDateSelectionView;
+@property (nonatomic, strong) SSJHomeDatePickerView *borrowDateSelectionView;
 
 // 期限日
-@property (nonatomic, strong) SSJLoanDateSelectionView *repaymentDateSelectionView;
+@property (nonatomic, strong) SSJHomeDatePickerView *repaymentDateSelectionView;
 
 @property (nonatomic, strong) SSJReminderItem *reminderItem;
 
@@ -345,11 +345,11 @@ const int kMemoMaxLength = 15;
         [self.fundingSelectionView show];
     } else if ([indexPath compare:[NSIndexPath indexPathForRow:0 inSection:1]] == NSOrderedSame) {
         [self.view endEditing:YES];
-        self.borrowDateSelectionView.selectedDate = self.loanModel.borrowDate;
+        self.borrowDateSelectionView.date = self.loanModel.borrowDate;
         [self.borrowDateSelectionView show];
     } else if ([indexPath compare:[NSIndexPath indexPathForRow:1 inSection:1]] == NSOrderedSame) {
         [self.view endEditing:YES];
-        self.repaymentDateSelectionView.selectedDate = [self paymentDate];
+        self.repaymentDateSelectionView.date = [self paymentDate];
         [self.repaymentDateSelectionView show];
     } else if ([indexPath compare:[NSIndexPath indexPathForRow:0 inSection:3]] == NSOrderedSame) {
         if (_reminderItem) {
@@ -390,20 +390,6 @@ const int kMemoMaxLength = 15;
         
         if (textField.tag == kLenderTag) {
             
-//            if (textField.text.length > kLenderMaxLength
-//                && ![[textField textInputMode].primaryLanguage isEqualToString:@"zh-Hans"]) {
-//                textField.text = [textField.text substringToIndex:kLenderMaxLength];
-//                switch (self.loanModel.type) {
-//                    case SSJLoanTypeLend:
-//                        [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"借款人不能超过%d个字", kLenderMaxLength]];
-//                        break;
-//                        
-//                    case SSJLoanTypeBorrow:
-//                        [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"欠款人不能超过%d个字", kLenderMaxLength]];
-//                        break;
-//                }
-//            }
-            
             self.loanModel.lender = textField.text;
             self.reminderItem.borrowtarget = textField.text;
             [self updateRemindName];
@@ -411,22 +397,7 @@ const int kMemoMaxLength = 15;
         } else if (textField.tag == kMoneyTag) {
             
             NSString *tmpMoneyStr = [textField.text stringByReplacingOccurrencesOfString:@"¥" withString:@""];
-            tmpMoneyStr = [tmpMoneyStr ssj_reserveDecimalDigits:2 intDigits:0];
-            
-//            if (tmpMoneyStr.length > 11
-//                && ![[textField textInputMode].primaryLanguage isEqualToString:@"zh-Hans"]) {
-//                tmpMoneyStr = [tmpMoneyStr substringToIndex:11];
-//                switch (self.loanModel.type) {
-//                    case SSJLoanTypeLend:
-//                        [CDAutoHideMessageHUD showMessage:@"借款金额不能超过11位"];
-//                        break;
-//                        
-//                    case SSJLoanTypeBorrow:
-//                        [CDAutoHideMessageHUD showMessage:@"欠款金额不能超过11位"];
-//                        break;
-//                }
-//            }
-            
+            tmpMoneyStr = [tmpMoneyStr ssj_reserveDecimalDigits:2 intDigits:9];
             textField.text = [NSString stringWithFormat:@"¥%@", tmpMoneyStr];
             self.loanModel.jMoney = [tmpMoneyStr doubleValue];
             
@@ -434,12 +405,7 @@ const int kMemoMaxLength = 15;
             [self updateInterest];
             
         } else if (textField.tag == kMemoTag) {
-            
-//            if (textField.text.length > kMemoMaxLength
-//                && ![[textField textInputMode].primaryLanguage isEqualToString:@"zh-Hans"]) {
-//                textField.text = [textField.text substringToIndex:kMemoMaxLength];
-//                [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"备注不能超过%d个字", kMemoMaxLength]];
-//            }
+
             self.loanModel.memo = textField.text;
             
         } else if (textField.tag == kRateTag) {
@@ -754,7 +720,7 @@ const int kMemoMaxLength = 15;
         return NO;
     }
     
-    if (self.loanModel.interest && self.loanModel.rate >= 1) {
+    if (self.loanModel.interest && self.loanModel.rate > 1) {
         [CDAutoHideMessageHUD showMessage:@"收益率不能大于100％"];
         return NO;
     }
@@ -1152,16 +1118,19 @@ const int kMemoMaxLength = 15;
     return _fundingSelectionView;
 }
 
-- (SSJLoanDateSelectionView *)borrowDateSelectionView {
+- (SSJHomeDatePickerView *)borrowDateSelectionView {
     if (!_borrowDateSelectionView) {
         __weak typeof(self) wself = self;
-        _borrowDateSelectionView = [[SSJLoanDateSelectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 244)];
-        _borrowDateSelectionView.selectDateAction = ^(SSJLoanDateSelectionView *view) {
+        _borrowDateSelectionView = [[SSJHomeDatePickerView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 244)];
+        _borrowDateSelectionView.shouldConfirmBlock = ^BOOL(SSJHomeDatePickerView *view, NSDate *date) {
+            return [wself validateBorrowDate:date];
+        };
+        _borrowDateSelectionView.confirmBlock = ^(SSJHomeDatePickerView *view) {
             
-            wself.loanModel.borrowDate = view.selectedDate;
+            wself.loanModel.borrowDate = view.date;
             
-            if (wself.reminderItem.remindDate && [view.selectedDate compare:wself.reminderItem.remindDate] == NSOrderedDescending) {
-                wself.reminderItem.remindDate = view.selectedDate;
+            if (wself.reminderItem.remindDate && [view.date compare:wself.reminderItem.remindDate] == NSOrderedDescending) {
+                wself.reminderItem.remindDate = view.date;
             }
             
             [wself.tableView reloadData];
@@ -1176,22 +1145,20 @@ const int kMemoMaxLength = 15;
                     break;
             }
         };
-        _borrowDateSelectionView.shouldSelectDateAction = ^BOOL(SSJLoanDateSelectionView *view, NSDate *date) {
-            return [wself validateBorrowDate:date];
-        };
     }
     return _borrowDateSelectionView;
 }
 
-- (SSJLoanDateSelectionView *)repaymentDateSelectionView {
+- (SSJHomeDatePickerView *)repaymentDateSelectionView {
     if (!_repaymentDateSelectionView) {
         __weak typeof(self) weakSelf = self;
-        _repaymentDateSelectionView = [[SSJLoanDateSelectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 244)];
-        _repaymentDateSelectionView.selectDateAction = ^(SSJLoanDateSelectionView *view) {
+        _repaymentDateSelectionView = [[SSJHomeDatePickerView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 244)];
+        _repaymentDateSelectionView.leftButtonItem = [SSJHomeDatePickerViewButtonItem buttonItemWithTitle:@"清空" titleColor:[UIColor ssj_colorWithHex:SSJOverrunRedColorValue] image:nil];
+        _repaymentDateSelectionView.confirmBlock = ^(SSJHomeDatePickerView *view) {
             if (weakSelf.reminderItem) {
-                weakSelf.reminderItem.remindDate = view.selectedDate;
+                weakSelf.reminderItem.remindDate = view.date;
             }
-            weakSelf.loanModel.repaymentDate = view.selectedDate;
+            weakSelf.loanModel.repaymentDate = view.date;
             [weakSelf.tableView reloadData];
             
             switch (weakSelf.loanModel.type) {
@@ -1204,7 +1171,7 @@ const int kMemoMaxLength = 15;
                     break;
             }
         };
-        _repaymentDateSelectionView.shouldSelectDateAction = ^BOOL(SSJLoanDateSelectionView *view, NSDate *date) {
+        _repaymentDateSelectionView.shouldConfirmBlock = ^BOOL(SSJHomeDatePickerView *view, NSDate *date) {
             if ([date compare:weakSelf.loanModel.borrowDate] == NSOrderedAscending) {
                 switch (weakSelf.loanModel.type) {
                     case SSJLoanTypeLend:
@@ -1219,17 +1186,11 @@ const int kMemoMaxLength = 15;
             }
             return YES;
         };
-        
-        __weak typeof(_repaymentDateSelectionView) weakDateSelectionView = _repaymentDateSelectionView;
-        _repaymentDateSelectionView.leftButtonItem = [SSJLoanDateSelectionButtonItem buttonItemWithTitle:@"清空"
-                                                                                                   image:nil
-                                                                                                   color:[UIColor ssj_colorWithHex:SSJOverrunRedColorValue]
-                                                                                                  action:^{
-                                                                                                      weakSelf.reminderItem.remindDate = [weakSelf paymentDate];
-                                                                                                      weakSelf.loanModel.repaymentDate = nil;
-                                                                                                      [weakSelf.tableView reloadData];
-                                                                                                      [weakDateSelectionView dismiss];
-        }];
+        _repaymentDateSelectionView.closeBlock = ^(SSJHomeDatePickerView *view) {
+            weakSelf.reminderItem.remindDate = [weakSelf paymentDate];
+            weakSelf.loanModel.repaymentDate = nil;
+            [weakSelf.tableView reloadData];
+        };
     }
     return _repaymentDateSelectionView;
 }

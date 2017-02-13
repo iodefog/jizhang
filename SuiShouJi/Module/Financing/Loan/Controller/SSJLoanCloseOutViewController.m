@@ -12,7 +12,7 @@
 #import "SSJAddOrEditLoanLabelCell.h"
 #import "SSJAddOrEditLoanTextFieldCell.h"
 #import "SSJLoanFundAccountSelectionView.h"
-#import "SSJLoanDateSelectionView.h"
+#import "SSJHomeDatePickerView.h"
 #import "SSJLoanHelper.h"
 #import "SSJDataSynchronizer.h"
 #import "SSJFundingItem.h"
@@ -38,7 +38,7 @@ static NSUInteger kClostOutDateTag = 1004;
 @property (nonatomic, strong) SSJLoanFundAccountSelectionView *fundingSelectionView;
 
 // 结清日
-@property (nonatomic, strong) SSJLoanDateSelectionView *endDateSelectionView;
+@property (nonatomic, strong) SSJHomeDatePickerView *endDateSelectionView;
 
 @property (nonatomic, strong) NSArray *titles;
 
@@ -171,7 +171,7 @@ static NSUInteger kClostOutDateTag = 1004;
         [self.fundingSelectionView show];
     } else if ([indexPath compare:[NSIndexPath indexPathForRow:0 inSection:2]] == NSOrderedSame) {
         [self.view endEditing:YES];
-        self.endDateSelectionView.selectedDate = self.loanModel.endDate;
+        self.endDateSelectionView.date = self.loanModel.endDate;
         [self.endDateSelectionView show];
     }
 }
@@ -594,17 +594,16 @@ static NSUInteger kClostOutDateTag = 1004;
     return _fundingSelectionView;
 }
 
-- (SSJLoanDateSelectionView *)endDateSelectionView {
+- (SSJHomeDatePickerView *)endDateSelectionView {
     if (!_endDateSelectionView) {
         __weak typeof(self) weakSelf = self;
-        _endDateSelectionView = [[SSJLoanDateSelectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 244)];
-        _endDateSelectionView.selectedDate = _loanModel.endDate;
-        _endDateSelectionView.selectDateAction = ^(SSJLoanDateSelectionView *view) {
-            
-            weakSelf.loanModel.endDate = view.selectedDate;
-            weakSelf.compoundModel.chargeModel.billDate = view.selectedDate;
-            weakSelf.compoundModel.targetChargeModel.billDate = view.selectedDate;
-            weakSelf.compoundModel.interestChargeModel.billDate = view.selectedDate;
+        _endDateSelectionView = [[SSJHomeDatePickerView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 244)];
+        _endDateSelectionView.date = _loanModel.endDate;
+        _endDateSelectionView.confirmBlock = ^(SSJHomeDatePickerView *view) {
+            weakSelf.loanModel.endDate = view.date;
+            weakSelf.compoundModel.chargeModel.billDate = view.date;
+            weakSelf.compoundModel.targetChargeModel.billDate = view.date;
+            weakSelf.compoundModel.interestChargeModel.billDate = view.date;
             
 //            [weakSelf organiseTitles];
 //            [weakSelf organiseImages];
@@ -615,7 +614,7 @@ static NSUInteger kClostOutDateTag = 1004;
             [weakSelf.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
             [weakSelf.tableView reloadSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationFade];
         };
-        _endDateSelectionView.shouldSelectDateAction = ^BOOL(SSJLoanDateSelectionView *view, NSDate *date) {
+        _endDateSelectionView.shouldConfirmBlock = ^BOOL(SSJHomeDatePickerView *view, NSDate *date) {
             return [weakSelf validateEndDate:date];
         };
     }

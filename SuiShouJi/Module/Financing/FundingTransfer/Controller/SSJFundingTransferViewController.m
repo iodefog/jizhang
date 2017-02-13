@@ -11,7 +11,7 @@
 #import "SSJFundingTypeSelectView.h"
 #import "TPKeyboardAvoidingTableView.h"
 #import "SSJChargeCircleTimeSelectView.h"
-#import "SSJLoanDateSelectionView.h"
+#import "SSJHomeDatePickerView.h"
 #import "SSJFundingTransferPeriodSelectionView.h"
 #import "SSJDatabaseQueue.h"
 #import "SSJDataSynchronizer.h"
@@ -51,9 +51,9 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
 
 @property (nonatomic, strong) SSJFundingTransferPeriodSelectionView *periodSelectionView;
 
-@property (nonatomic, strong) SSJLoanDateSelectionView *beginDateSelectionView;
+@property (nonatomic, strong) SSJHomeDatePickerView *beginDateSelectionView;
 
-@property (nonatomic, strong) SSJLoanDateSelectionView *endDateSelectionView;
+@property (nonatomic, strong) SSJHomeDatePickerView *endDateSelectionView;
 
 @property (nonatomic, strong) UIView *saveFooterView;
 
@@ -174,10 +174,10 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
     } else if ([title isEqualToString:kCyclePeriod]) {
         [self.periodSelectionView show];
     } else if ([title isEqualToString:kBeginDate]) {
-        self.beginDateSelectionView.selectedDate = [NSDate dateWithString:self.item.beginDate formatString:@"yyyy-MM-dd"];
+        self.beginDateSelectionView.date = [NSDate dateWithString:self.item.beginDate formatString:@"yyyy-MM-dd"];
         [self.beginDateSelectionView show];
     } else if ([title isEqualToString:kEndDate]) {
-        self.endDateSelectionView.selectedDate = [NSDate dateWithString:(self.item.endDate ?: self.item.beginDate) formatString:@"yyyy-MM-dd"];
+        self.endDateSelectionView.date = [NSDate dateWithString:(self.item.endDate ?: self.item.beginDate) formatString:@"yyyy-MM-dd"];
         [self.endDateSelectionView show];
     }
 }
@@ -433,11 +433,11 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
     return _periodSelectionView;
 }
 
-- (SSJLoanDateSelectionView *)beginDateSelectionView {
+- (SSJHomeDatePickerView *)beginDateSelectionView {
     if (!_beginDateSelectionView) {
         __weak typeof(self) wself = self;
-        _beginDateSelectionView = [[SSJLoanDateSelectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 244)];
-        _beginDateSelectionView.shouldSelectDateAction = ^BOOL(SSJLoanDateSelectionView *view, NSDate *date) {
+        _beginDateSelectionView = [[SSJHomeDatePickerView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 244)];
+        _beginDateSelectionView.shouldConfirmBlock = ^BOOL(SSJHomeDatePickerView *view, NSDate *date) {
             NSDate *currentDate = [NSDate date];
             currentDate = [NSDate dateWithYear:currentDate.year month:currentDate.month day:currentDate.day];
             if ([date compare:currentDate] == NSOrderedAscending) {
@@ -451,19 +451,20 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
             }
             return YES;
         };
-        _beginDateSelectionView.selectDateAction = ^(SSJLoanDateSelectionView *view) {
-            wself.item.beginDate = [view.selectedDate formattedDateWithFormat:@"yyyy-MM-dd"];
+        _beginDateSelectionView.confirmBlock = ^(SSJHomeDatePickerView *view) {
+            wself.item.beginDate = [view.date formattedDateWithFormat:@"yyyy-MM-dd"];
             [wself.tableView reloadData];
         };
     }
     return _beginDateSelectionView;
 }
 
-- (SSJLoanDateSelectionView *)endDateSelectionView {
+- (SSJHomeDatePickerView *)endDateSelectionView {
     if (!_endDateSelectionView) {
         __weak typeof(self) weakSelf = self;
-        _endDateSelectionView = [[SSJLoanDateSelectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 244)];
-        _endDateSelectionView.shouldSelectDateAction = ^BOOL(SSJLoanDateSelectionView *view, NSDate *date) {
+        _endDateSelectionView = [[SSJHomeDatePickerView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 244)];
+        _endDateSelectionView.leftButtonItem = [SSJHomeDatePickerViewButtonItem buttonItemWithTitle:@"清空" titleColor:[UIColor ssj_colorWithHex:SSJOverrunRedColorValue] image:nil];
+        _endDateSelectionView.shouldConfirmBlock = ^BOOL(SSJHomeDatePickerView *view, NSDate *date) {
             NSDate *beginDate = [NSDate dateWithString:weakSelf.item.beginDate formatString:@"yyyy-MM-dd"];
             if ([date compare:beginDate] == NSOrderedAscending) {
                 [CDAutoHideMessageHUD showMessage:@"结束日期不能早于起始日期哦"];
@@ -471,15 +472,14 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
             }
             return YES;
         };
-        _endDateSelectionView.selectDateAction = ^(SSJLoanDateSelectionView *view) {
-            weakSelf.item.endDate = [view.selectedDate formattedDateWithFormat:@"yyyy-MM-dd"];
+        _endDateSelectionView.confirmBlock = ^(SSJHomeDatePickerView *view) {
+            weakSelf.item.endDate = [view.date formattedDateWithFormat:@"yyyy-MM-dd"];
             [weakSelf.tableView reloadData];
         };
-        _endDateSelectionView.leftButtonItem = [SSJLoanDateSelectionButtonItem buttonItemWithTitle:@"清空" image:nil color:[UIColor ssj_colorWithHex:SSJOverrunRedColorValue] action:^{
+        _endDateSelectionView.closeBlock = ^(SSJHomeDatePickerView *view) {
             weakSelf.item.endDate = nil;
             [weakSelf.tableView reloadData];
-            [weakSelf.endDateSelectionView dismiss];
-        }];
+        };
     }
     return _endDateSelectionView;
 }

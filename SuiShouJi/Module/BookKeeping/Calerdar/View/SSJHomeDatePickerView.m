@@ -6,9 +6,9 @@
 //  Copyright © 2017年 ___9188___. All rights reserved.
 //
 
-#import "SSJHomeCalendarView.h"
+#import "SSJHomeDatePickerView.h"
 #import "NSDate+DateTools.h"
-@interface SSJHomeCalendarView() <UIPickerViewDelegate,UIPickerViewDataSource>
+@interface SSJHomeDatePickerView() <UIPickerViewDelegate,UIPickerViewDataSource>
 
 @property (nonatomic, strong) UIPickerView *datePicker;
 @property (nonatomic, strong) UIView *topView;
@@ -32,7 +32,7 @@
 @property (nonatomic, strong) NSCalendar *calendar;
 @end
 
-@implementation SSJHomeCalendarView
+@implementation SSJHomeDatePickerView
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
@@ -55,16 +55,32 @@
     self.titleLabel.centerX = self.centerX;
     self.titleLabel.centerY = self.closeButton.centerY;
     self.horuAndMinuBgView.frame = CGRectMake(220,self.datePicker.centerY - 22, self.width - 20, 43);
+    self.closeButton.leftTop = CGPointMake(15, 15);
+    self.comfirmButton.rightTop = CGPointMake(self.width - 15, 15);
 }
 
-- (void)setLeftButtonItem:(SSJHomeCalendarViewButtonItem *)leftButtonItem {
-    _leftButtonItem = leftButtonItem;
-    [self updateButton:self.closeButton buttonItem:self.leftButtonItem];
+- (void)setLeftButtonItem:(SSJHomeDatePickerViewButtonItem *)leftButtonItem {
+    if (_leftButtonItem != leftButtonItem) {
+        _leftButtonItem = leftButtonItem;
+        [self setNeedsLayout];
+        if (_leftButtonItem) {
+            [self updateButton:self.closeButton buttonItem:self.leftButtonItem];
+        } else {
+            [_closeButton setImage:[[UIImage imageNamed:@"close"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+        }
+    }
 }
 
-- (void)setRightButtonItem:(SSJHomeCalendarViewButtonItem *)rightButtonItem {
-    _rightButtonItem = rightButtonItem;
-    [self updateButton:self.comfirmButton buttonItem:self.rightButtonItem];
+- (void)setRightButtonItem:(SSJHomeDatePickerViewButtonItem *)rightButtonItem {
+    if (_rightButtonItem != rightButtonItem) {
+        _rightButtonItem = rightButtonItem;
+        [self setNeedsLayout];
+        if (_rightButtonItem) {
+            [self updateButton:self.comfirmButton buttonItem:self.rightButtonItem];
+        } else {
+            [_comfirmButton setImage:[[UIImage imageNamed:@"checkmark"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+        }
+    }
 }
 
 #pragma mark - Lazy
@@ -307,10 +323,11 @@
     }
 }
 
-- (void)updateButton:(UIButton *)button buttonItem:(SSJHomeCalendarViewButtonItem *)item {
+- (void)updateButton:(UIButton *)button buttonItem:(SSJHomeDatePickerViewButtonItem *)item {
     [button setTitle:item.title forState:UIControlStateNormal];
     [button setTitleColor:item.titleColor forState:UIControlStateNormal];
     [button setImage:item.image forState:UIControlStateNormal];
+    [button sizeToFit];
 }
 
 #pragma mark - UIPickerViewDelegate
@@ -454,13 +471,13 @@
 }
 @end
 
-@implementation SSJHomeCalendarViewButtonItem
+@implementation SSJHomeDatePickerViewButtonItem
 
 + (instancetype)buttonItemWithTitle:(nullable NSString *)title
                          titleColor:(nullable UIColor *)titleColor
                               image:(nullable UIImage *)image {
     
-    SSJHomeCalendarViewButtonItem *item = [[SSJHomeCalendarViewButtonItem alloc] init];
+    SSJHomeDatePickerViewButtonItem *item = [[SSJHomeDatePickerViewButtonItem alloc] init];
     item.title = title;
     item.titleColor = titleColor;
     item.image = image;

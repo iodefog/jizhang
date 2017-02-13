@@ -36,7 +36,7 @@
 #import "SSJRecordMakingStore.h"
 #import "SSJBooksTypeStore.h"
 #import "SSJCreditCardItem.h"
-#import "SSJHomeCalendarView.h"
+#import "SSJHomeDatePickerView.h"
 #define INPUT_DEFAULT_COLOR [UIColor ssj_colorWithHex:@"#dddddd"]
 
 static const NSTimeInterval kAnimationDuration = 0.25;
@@ -51,7 +51,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 
 @property (nonatomic,strong) UIImage *selectedImage;
 
-@property (nonatomic,strong) SSJHomeCalendarView *dateSelectedView;
+@property (nonatomic,strong) SSJHomeDatePickerView *dateSelectedView;
 
 @property (nonatomic,strong) SSJFundingTypeSelectView *FundingTypeSelectView;
 
@@ -199,22 +199,22 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     return _customNaviBar;
 }
 
-- (SSJHomeCalendarView*)dateSelectedView {
+- (SSJHomeDatePickerView *)dateSelectedView {
     if (!_dateSelectedView) {
-        _dateSelectedView = [[SSJHomeCalendarView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 300)];
+        _dateSelectedView = [[SSJHomeDatePickerView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 300)];
         _dateSelectedView.warningDate = [NSDate date];
         __weak typeof(self) weakSelf = self;
-        _dateSelectedView.closeBlock = ^(SSJHomeCalendarView *view) {
+        _dateSelectedView.closeBlock = ^(SSJHomeDatePickerView *view) {
             [weakSelf.billTypeInputView.moneyInput becomeFirstResponder];
         };
-        _dateSelectedView.shouldConfirmBlock = ^BOOL(SSJHomeCalendarView *view, NSDate *selecteDate) {
+        _dateSelectedView.shouldConfirmBlock = ^BOOL(SSJHomeDatePickerView *view, NSDate *selecteDate) {
             if ([[NSDate date] compare:selecteDate] == NSOrderedAscending) {
                 [CDAutoHideMessageHUD showMessage:@"不能记未来日期的账哦"];
                 return NO;
             }
             return YES;
         };
-        _dateSelectedView.confirmBlock = ^(SSJHomeCalendarView *view) {
+        _dateSelectedView.confirmBlock = ^(SSJHomeDatePickerView *view) {
             weakSelf.selectedDay = view.date.day;
             weakSelf.selectedMonth = view.date.month;
             weakSelf.selectedYear = view.date.year;
