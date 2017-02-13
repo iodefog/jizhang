@@ -48,7 +48,7 @@
  @param intDigits 保留的整数位数，如果是0，整数位就不做任何处理
  @return 处理后的字符串
  */
-- (NSString *)ssj_reserveDecimalDigits:(int)DecimalDigits intDigits:(int)intDigits;
+- (NSString *)ssj_reserveDecimalDigits:(int)decimalDigits intDigits:(int)intDigits;
 
 @end
 

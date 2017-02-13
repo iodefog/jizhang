@@ -139,40 +139,66 @@
 
 @implementation NSString (SSJDecimal)
 
-- (NSString *)ssj_reserveDecimalDigits:(int)DecimalDigits intDigits:(int)intDigits {
+- (NSString *)ssj_reserveDecimalDigits:(int)decimalDigits intDigits:(int)intDigits {
+//    NSArray *arr = [self componentsSeparatedByString:@"."];
+//    NSString *intPart = [arr objectAtIndex:0];
+//    if (intDigits > 0) {
+//        if (intPart.length > intDigits) {
+//            intPart = [intPart substringToIndex:intDigits];
+//        }
+//    }
+//    if ([self isEqualToString:@"0."] || [self isEqualToString:@"."]) {
+//        return @"0.";
+//    }else if (self.length == 2) {
+//        if ([self floatValue] == 0) {
+//            return @"0";
+//        }else if(arr.count < 2){
+//            return [NSString stringWithFormat:@"%@",intPart];
+//        }
+//    }
+//    
+//    if (arr.count > 2) {
+//        return [NSString stringWithFormat:@"%@.%@",intPart,arr[1]];
+//    }
+//    
+//    if (arr.count == 2) {
+//        NSString * lastStr = arr.lastObject;
+//        if (lastStr.length > decimalDigits) {
+//            return [NSString stringWithFormat:@"%@.%@",intPart,[lastStr substringToIndex:DecimalDigits]];
+//        }
+//    }
+//    
+//    if(arr.count < 2){
+//        return [NSString stringWithFormat:@"%@",intPart];
+//    }
+//    return self;
+    
     NSArray *arr = [self componentsSeparatedByString:@"."];
-    NSString *intPart = [arr objectAtIndex:0];
-    if (intDigits > 0) {
+    if (arr.count == 1) {
+        NSString *intPart = [arr firstObject];
+        if (intPart.length > 0) {
+            intPart = [NSString stringWithFormat:@"%lld", [intPart longLongValue]];
+        }
         if (intPart.length > intDigits) {
             intPart = [intPart substringToIndex:intDigits];
         }
-    }
-    if ([self isEqualToString:@"0."] || [self isEqualToString:@"."]) {
-        return @"0.";
-    }else if (self.length == 2) {
-        if ([self floatValue] == 0) {
-            return @"0";
-        }else if(arr.count < 2){
-            return [NSString stringWithFormat:@"%@",intPart];
+        return intPart;
+    } else if (arr.count > 1) {
+        NSString *intPart = [arr firstObject];
+        intPart = [NSString stringWithFormat:@"%lld", [intPart longLongValue]];
+        if (intPart.length > intDigits) {
+            intPart = [intPart substringToIndex:intDigits];
         }
-    }
-    
-    if (arr.count > 2) {
-        return [NSString stringWithFormat:@"%@.%@",intPart,arr[1]];
-    }
-    
-    if (arr.count == 2) {
-        NSString * lastStr = arr.lastObject;
-        if (lastStr.length > DecimalDigits) {
-            return [NSString stringWithFormat:@"%@.%@",intPart,[lastStr substringToIndex:DecimalDigits]];
+        
+        NSString *decimalPart = [arr objectAtIndex:1];
+        if (decimalPart.length > decimalDigits) {
+            decimalPart = [decimalPart substringToIndex:decimalDigits];
         }
+        
+        return [NSString stringWithFormat:@"%@.%@", intPart, decimalPart];
+    } else {
+        return self;
     }
-    
-    if(arr.count < 2){
-        return [NSString stringWithFormat:@"%@",intPart];
-    }
-    
-    return self;
 }
 
 @end
