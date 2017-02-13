@@ -34,6 +34,8 @@ static NSString *const kCellId = @"SSJChargeCircleModifyCell";
 static const NSInteger kMoneyTag = 1001;
 static const NSInteger kMemoTag = 1002;
 
+static const int kMaxMoneyLength = 9;
+
 @interface __SSJFundingTransferChargeDetailModel : NSObject
 
 @property (nonatomic, strong) NSString *image;
@@ -233,6 +235,9 @@ static const NSInteger kMemoTag = 1002;
 - (void)transferTextDidChange:(NSNotification *)notification {
     UITextField *textField = notification.object;
     if (textField.tag == kMoneyTag) {
+        if (textField.text.length > kMaxMoneyLength) {
+            textField.text = [textField.text substringToIndex:kMaxMoneyLength];
+        }
         textField.text = [textField.text ssj_reserveDecimalDigits:2 intDigits:0];
         _item.transferMoney = textField.text;
     } else if (textField.tag == kMemoTag) {
@@ -247,6 +252,11 @@ static const NSInteger kMemoTag = 1002;
 }
 
 - (BOOL)checkModelValid {
+    if (_item.transferMoney.length > kMaxMoneyLength) {
+        [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"金额不能超过%d位数哦", kMaxMoneyLength]];
+        return NO;
+    }
+    
     if ([_item.transferMoney floatValue] <= 0) {
         [CDAutoHideMessageHUD showMessage:@"请输入有效金额"];
         return NO;
