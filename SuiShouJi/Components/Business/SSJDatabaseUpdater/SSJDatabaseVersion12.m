@@ -15,6 +15,11 @@
     if (error) {
         return error;
     }
+    
+    error = [self createTransferCycleTableWithDatabase:db];
+    if (error) {
+        return error;
+    }
 
     return nil;
 }
@@ -35,6 +40,13 @@
         return [db lastError];
     }
     
+    return nil;
+}
+
++ (NSError *)createTransferCycleTableWithDatabase:(FMDatabase *)db {
+    if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS BK_TRANSFER_CYCLE (ICYCLEID TEXT, CUSERID TEXT NOT NULL, CTRANSFERINACCOUNTID TEXT NOT NULL, CTRANSFEROUTACCOUNTID TEXT NOT NULL, IMONEY REAL, CMEMO TEXT, ICYCLETYPE INTEGER, CBEGINDATE TEXT NOT NULL, CENDDATE TEXT, ISTATE INTEGER DEFAULT 1, CLIENTADDDATE TEXT NOT NULL, CWRITEDATE TEXT NOT NULL, IVERSION INTEGER, OPERATORTYPE INTEGER, PRIMARY KEY(ICYCLEID))"]) {
+        return [db lastError];
+    }
     return nil;
 }
 
