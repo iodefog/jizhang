@@ -221,6 +221,14 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
             [weakSelf.billTypeInputView.moneyInput becomeFirstResponder];
         };
         _dateSelectedView.confirmBlock = ^(NSDate *date){
+            weakSelf.selectedDay = date.day;
+            weakSelf.selectedMonth = date.month;
+            weakSelf.selectedYear = date.year;
+            weakSelf.item.billDate = [NSString stringWithFormat:@"%04ld-%02ld-%02ld",(long)date.year,(long)date.month,(long)date.day];
+            weakSelf.item.billDetailDate = [NSString stringWithFormat:@"%02ld:%02ld",(long)date.hour,(long)date.minute];
+//            [weakSelf.accessoryView.dateBtn setTitle:[NSString stringWithFormat:@"%ld月",weakSelf.selectedMonth] forState:UIControlStateNormal];
+            [weakSelf.accessoryView.dateBtn setTitle:[NSString stringWithFormat:@"%ld月%ld日", weakSelf.selectedMonth, weakSelf.selectedDay] forState:UIControlStateNormal];
+            [weakSelf.dateSelectedView dismiss];
 //            NSLog(@"%@",date);
         };
         
