@@ -11,7 +11,11 @@
 @implementation SSJBannerNetworkService
 
 - (void)requestBannersList{
+#ifdef DEBUG
     NSString *api = @"/app/banner_test.json";
+#else
+    NSString *api = @"http://jz.youyuwo.com/app/banner_2.0.json";
+#endif
     
     NSString *urlStr = [[NSURL URLWithString:api relativeToURL:[NSURL URLWithString:[SSJDomainManager formalDomain]]] absoluteString];
     [self request:urlStr params:nil];
