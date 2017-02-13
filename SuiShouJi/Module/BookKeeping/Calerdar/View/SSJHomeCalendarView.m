@@ -242,7 +242,7 @@
         if (self.warningDate && [self.warningDate compare:self.maxDate] != NSOrderedDescending) {//如果设置了警告时间&&提醒时间小于等于最大时间
             if ([self.warningDate compare:selectedDate] == NSOrderedAscending) {
                 //提醒
-                [CDAutoHideMessageHUD showMessage:self.warningString.length ? self.warningString : @"选择日期不能大于限制日期哦"];
+                [CDAutoHideMessageHUD showMessage:self.warningString.length ? self.warningString : @"不能记未来日期的账哦"];
                 //回到默认日期
                 [self defaultSelectedcomponents];
                 return;
