@@ -283,7 +283,7 @@ static const NSInteger kMemoTag = 1002;
     
     _saveButton.enabled = NO;
     [_saveButton ssj_showLoadingIndicator];
-    [SSJFundingTransferStore saveTransferChargeWithTransInChargeId:_item.transferInChargeId transOutChargeId:_item.transferOutChargeId transInAcctId:_item.transferInId transOutAcctId:_item.transferOutId money:[_item.transferMoney floatValue] memo:_item.transferMemo billDate:_item.transferDate success:^{
+    [SSJFundingTransferStore saveTransferChargeWithTransInChargeId:_item.transferInChargeId transOutChargeId:_item.transferOutChargeId transInAcctId:_item.transferInId transOutAcctId:_item.transferOutId money:[_item.transferMoney doubleValue] memo:_item.transferMemo billDate:_item.transferDate success:^{
         _saveButton.enabled = YES;
         [_saveButton ssj_hideLoadingIndicator];
         [self.navigationController popViewControllerAnimated:YES];

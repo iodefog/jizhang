@@ -124,7 +124,7 @@ NSString *SSJFundingTransferStoreListKey = @"SSJFundingTransferStoreListKey";
 + (void)saveCycleTransferRecordWithID:(NSString *)ID
                   transferInAccountId:(NSString *)transferInAccountId
                  transferOutAccountId:(NSString *)transferOutAccountId
-                                money:(float)money
+                                money:(double)money
                                  memo:(nullable NSString *)memo
                       cyclePeriodType:(SSJCyclePeriodType)cyclePeriodType
                             beginDate:(NSString *)beginDate
@@ -194,7 +194,7 @@ NSString *SSJFundingTransferStoreListKey = @"SSJFundingTransferStoreListKey";
                                          ID:(NSString *)ID
                         transferInAccountId:(NSString *)transferInAccountId
                        transferOutAccountId:(NSString *)transferOutAccountId
-                                      money:(float)money
+                                      money:(double)money
                                        memo:(nullable NSString *)memo
                                    billDate:(NSString *)billDate
                                      userId:(NSString *)userId {
@@ -228,7 +228,7 @@ NSString *SSJFundingTransferStoreListKey = @"SSJFundingTransferStoreListKey";
                              transOutChargeId:(NSString *)transOutChargeId
                                 transInAcctId:(NSString *)transInAcctId
                                transOutAcctId:(NSString *)transOutAcctId
-                                        money:(float)money
+                                        money:(double)money
                                          memo:(NSString *)memo
                                      billDate:(NSString *)billDate
                                       success:(nullable void (^)())success

@@ -51,10 +51,6 @@
     return self;
 }
 
-- (void)layoutSubviews {
-    [super layoutSubviews];
-}
-
 - (void)setCellItem:(__kindof SSJBaseItem *)cellItem {
     if (![cellItem isKindOfClass:[SSJFundingTransferListPeriodCellItem class]]) {
         return;
@@ -71,7 +67,7 @@
     _memoLab.text = item.memo;
     _separator.hidden = !(item.memo.length > 0);
     _dateLab.text = item.date;
-    _moneyLab.text = item.money;
+    _moneyLab.text = [NSString stringWithFormat:@"%.2f", [item.money doubleValue]];
     _switchCtrl.on = item.opened;
 }
 

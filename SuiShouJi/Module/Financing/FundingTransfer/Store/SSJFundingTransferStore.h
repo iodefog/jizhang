@@ -54,7 +54,7 @@ extern NSString *SSJFundingTransferStoreListKey;
 + (void)saveCycleTransferRecordWithID:(NSString *)ID
                   transferInAccountId:(NSString *)transferInAccountId
                  transferOutAccountId:(NSString *)transferOutAccountId
-                                money:(float)money
+                                money:(double)money
                                  memo:(nullable NSString *)memo
                       cyclePeriodType:(SSJCyclePeriodType)cyclePeriodType
                             beginDate:(NSString *)beginDate
@@ -79,7 +79,7 @@ extern NSString *SSJFundingTransferStoreListKey;
                              transOutChargeId:(NSString *)transOutChargeId
                                 transInAcctId:(NSString *)transInAcctId
                                transOutAcctId:(NSString *)transOutAcctId
-                                        money:(float)money
+                                        money:(double)money
                                          memo:(NSString *)memo
                                      billDate:(NSString *)billDate
                                       success:(nullable void (^)())success
