@@ -202,6 +202,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 - (SSJHomeCalendarView*)dateSelectedView {
     if (!_dateSelectedView) {
         _dateSelectedView = [[SSJHomeCalendarView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 300)];
+        _dateSelectedView.warningDate = [NSDate date];
         __weak typeof(self) weakSelf = self;
 //        _dateSelectedView.calendarView.DateSelectedBlock = ^(long year , long month ,long day,  NSString *selectDate){
 ////            if (weakSelf.selectChargeCircleType != -1

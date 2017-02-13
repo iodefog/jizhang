@@ -226,7 +226,6 @@
 
 - (void)comfirmButtonClicked
 {
-    [self dismiss];
     if (_confirmBlock) {
         //选择的时间
         NSDate *date = [self.monthDayWeekArray ssj_safeObjectAtIndex:[self.datePicker selectedRowInComponent:1]];
@@ -236,8 +235,16 @@
         NSString *minuStr = [self.minuteArray ssj_safeObjectAtIndex:[self.datePicker selectedRowInComponent:4]];
         NSString *dateStr = [NSString stringWithFormat:@"%@ %@时%@分",yearMonDayStr,hourStr,minuStr];
         NSDate *selectedDate = [NSDate dateWithString:dateStr formatString:@"yyyy年MM月dd日 EEEHH时mm分"];
+        if (self.warningDate && [self.warningDate compare:self.maxDate] != NSOrderedDescending) {//如果设置了警告时间&&提醒时间小于等于最大时间
+            if ([self.warningDate compare:selectedDate] == NSOrderedAscending) {
+                //提醒
+                [CDAutoHideMessageHUD showMessage:self.warningString.length ? self.warningString : @"选择日期不能大于限制日期哦"];
+                return;
+            }
+        }
         _confirmBlock(selectedDate);
     }
+    [self dismiss];
 }
 
 - (void)show

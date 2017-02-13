@@ -88,6 +88,7 @@ NSString *SSJFundingTransferStoreListKey = @"SSJFundingTransferStoreListKey";
                 NSMutableArray *list = monthInfo[SSJFundingTransferStoreListKey];
                 [list addObject:item];
             }
+            lastDate = currentDate;
         }
         
         if (success) {
@@ -135,30 +136,148 @@ NSString *SSJFundingTransferStoreListKey = @"SSJFundingTransferStoreListKey";
     
     [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
         
-        BOOL existed = [db boolForQuery:@"select count(1) from bk_tansfer_cycle where cuserid = ? and icycleid = ?", userId, ID];
+        BOOL existed = [db boolForQuery:@"select count(1) from bk_transfer_cycle where cuserid = ? and icycleid = ?", userId, ID];
         
         BOOL successful = YES;
         NSString *writeDateStr = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         
         if (existed) {
-            successful = [db executeUpdate:@"update bk_tansfer_cycle set ctransferinaccountid = ?, ctransferoutaccountid = ?, imoney = ?, cmemo = ?, icycletype = ?, cbegindate = ?, cenddate = ?, cwritedate = ?, iversion = ?, operatortype = 1 where cuserid = ? and icycleid = ? and operatortype <> 2", transferInAccountId, transferOutAccountId, @(money), memo, @(cyclePeriodType), beginDate, endDate, writeDateStr, @(SSJSyncVersion()), userId, ID];
+            successful = [db executeUpdate:@"update bk_transfer_cycle set ctransferinaccountid = ?, ctransferoutaccountid = ?, imoney = ?, cmemo = ?, icycletype = ?, cbegindate = ?, cenddate = ?, cwritedate = ?, iversion = ?, operatortype = 1 where cuserid = ? and icycleid = ? and operatortype <> 2", transferInAccountId, transferOutAccountId, @(money), memo, @(cyclePeriodType), beginDate, endDate, writeDateStr, @(SSJSyncVersion()), userId, ID];
         } else {
-            successful = [db executeUpdate:@"insert into bk_tansfer_cycle (icycleid, cuserid, ctransferinaccountid, ctransferoutaccountid, imoney, cmemo, icycletype, cbegindate, cenddate, clientadddate, cwritedate, iversion, operatortype) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", ID, userId, transferInAccountId, transferOutAccountId, @(money), memo, @(cyclePeriodType), beginDate, endDate, writeDateStr, writeDateStr, @(SSJSyncVersion()), @0];
+            successful = [db executeUpdate:@"insert into bk_transfer_cycle (icycleid, cuserid, ctransferinaccountid, ctransferoutaccountid, imoney, cmemo, icycletype, cbegindate, cenddate, clientadddate, cwritedate, iversion, operatortype) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", ID, userId, transferInAccountId, transferOutAccountId, @(money), memo, @(cyclePeriodType), beginDate, endDate, writeDateStr, writeDateStr, @(SSJSyncVersion()), @0];
         }
         
-        if (!successful || [SSJRegularManager supplementCyclicTransferForUserId:userId inDatabase:db]) {
+        if (!successful) {
             *rollback = YES;
             if (failure) {
                 SSJDispatchMainAsync(^{
                     failure([db lastError]);
                 });
             }
-            return ;
+            return;
+        }
+        
+        if (cyclePeriodType == SSJCyclePeriodTypeOnce) {
+            if (![self createOnceTransferChargesInDatabase:db ID:ID transferInAccountId:transferInAccountId transferOutAccountId:transferOutAccountId money:money memo:memo billDate:beginDate userId:userId]) {
+                *rollback = YES;
+                if (failure) {
+                    SSJDispatchMainAsync(^{
+                        failure([db lastError]);
+                    });
+                }
+                return;
+            }
+        } else {
+            if (![SSJRegularManager supplementCyclicTransferForUserId:userId inDatabase:db]) {
+                *rollback = YES;
+                if (failure) {
+                    SSJDispatchMainAsync(^{
+                        failure([db lastError]);
+                    });
+                }
+                return;
+            }
         }
         
         if (success) {
             SSJDispatchMainAsync(^{
                 success(existed);
+            });
+        }
+    }];
+}
+
+/**
+ 创建仅一次周期转账对应的流水
+ */
++ (BOOL)createOnceTransferChargesInDatabase:(FMDatabase *)db
+                                         ID:(NSString *)ID
+                        transferInAccountId:(NSString *)transferInAccountId
+                       transferOutAccountId:(NSString *)transferOutAccountId
+                                      money:(float)money
+                                       memo:(nullable NSString *)memo
+                                   billDate:(NSString *)billDate
+                                     userId:(NSString *)userId {
+    
+    // 查询是否有匹配仅一次转账的流水
+    BOOL chargeExisted = [db boolForQuery:@"select count(1) from bk_user_charge where cuserid = ? and cid like (? || '-%') and operatortype != 2 and cbilldate = ? and ichargetype = 5", userId, ID, billDate];
+    
+    if (!chargeExisted) {
+        
+        // 查询当前周期转账生成的流水cid后缀最大值
+        int cidSuffix = [db intForQuery:@"select max(cast(substr(uc.cid, length(tc.icycleid) + 2) as int)) from bk_user_charge as uc, bk_transfer_cycle as tc where uc.cuserid = ? and uc.ichargetype = 5 and uc.cid like (? || '-%')", userId, ID] + 1;
+        
+        NSString *cid = [NSString stringWithFormat:@"%@-%d", ID, cidSuffix];
+        NSString *writeDateStr = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        
+        // 创建转入流水
+        if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cbilldate, cmemo, ichargetype, cid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", SSJUUID(), userId, @(money), @3, transferInAccountId, billDate, memo, @5, cid, @(SSJSyncVersion()), @0, writeDateStr]) {
+            return NO;
+        }
+        
+        // 创建转出流水
+        if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cbilldate, cmemo, ichargetype, cid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", SSJUUID(), userId, @(money), @4, transferOutAccountId, billDate, memo, @5, cid, @(SSJSyncVersion()), @0, writeDateStr]) {
+            return NO;
+        }
+    }
+    
+    return YES;
+}
+
++ (void)saveTransferChargeWithTransInChargeId:(NSString *)transInChargeId
+                             transOutChargeId:(NSString *)transOutChargeId
+                                transInAcctId:(NSString *)transInAcctId
+                               transOutAcctId:(NSString *)transOutAcctId
+                                        money:(float)money
+                                         memo:(NSString *)memo
+                                     billDate:(NSString *)billDate
+                                      success:(nullable void (^)())success
+                                      failure:(nullable void (^)(NSError *error))failure {
+    
+    if (!transInChargeId || !transOutChargeId) {
+        failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"转入流水id／转出流水id不能为nil"}]);
+        return;
+    }
+    
+    if (!transInAcctId || !transOutAcctId) {
+        failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"转入资金账户id／转出资金账户id不能为nil"}]);
+        return;
+    }
+    
+    if (!billDate) {
+        failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"billdate不能为nil"}]);
+        return;
+    }
+    
+    [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
+        
+        NSString *writeDateStr = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        
+        // 更新转入流水
+        if (![db executeUpdate:@"update bk_user_charge set imoney = ?, ifunsid = ?, cbilldate = ?, cmemo = ?, cwritedate = ?, iversion = ?, operatortype = 1 where ichargeid = ? and operatortype != 2", @(money), transInAcctId, billDate, memo, writeDateStr, @(SSJSyncVersion()), transInChargeId]) {
+            *rollback = YES;
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        }
+        
+        // 更新转出流水
+        if (![db executeUpdate:@"update bk_user_charge set imoney = ?, ifunsid = ?, cbilldate = ?, cmemo = ?, cwritedate = ?, iversion = ?, operatortype = 1 where ichargeid = ? and operatortype != 2", @(money), transOutAcctId, billDate, memo, writeDateStr, @(SSJSyncVersion()), transOutChargeId]) {
+            *rollback = YES;
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        }
+        
+        if (success) {
+            SSJDispatchMainAsync(^{
+                success();
             });
         }
     }];
@@ -219,7 +338,7 @@ NSString *SSJFundingTransferStoreListKey = @"SSJFundingTransferStoreListKey";
     NSString *userid = SSJUSERID();
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        FMResultSet *resultSet = [db executeQuery:@"select tc.*, fund_in.cacctname as transferInAcctName, fund_in.cicoin as transferInAcctIcon, fund_out.cacctname as transferOutAcctName, fund_out.cicoin as transferOutAcctIcon from bk_transfer_cycle as tc, bk_fund_info as fund_in, bk_fund_info as fund_out where tc.ctransferinaccountid = fund_in.cfundid and tc.ctransferoutaccountid = fund_out.cfundid and tc.cuserid = ? and tc.cuserid = fund_in.cuserid and tc.cuserid = fund_out.cuserid and tc.icycletype <> -1 and tc.operatortype <> 2 order by tc.cbegindate desc, tc.imoney desc", userid];
+        FMResultSet *resultSet = [db executeQuery:@"select tc.*, fund_in.cacctname as transferInAcctName, fund_in.cicoin as transferInAcctIcon, fund_in.cfundid as transferInAcctID, fund_out.cacctname as transferOutAcctName, fund_out.cicoin as transferOutAcctIcon, fund_out.cfundid as transferOutAcctID from bk_transfer_cycle as tc, bk_fund_info as fund_in, bk_fund_info as fund_out where tc.ctransferinaccountid = fund_in.cfundid and tc.ctransferoutaccountid = fund_out.cfundid and tc.cuserid = ? and tc.cuserid = fund_in.cuserid and tc.cuserid = fund_out.cuserid and tc.icycletype <> -1 and tc.operatortype <> 2 order by tc.cbegindate desc, tc.imoney desc", userid];
         
         if (!resultSet) {
             if (failure) {
@@ -243,13 +362,15 @@ NSString *SSJFundingTransferStoreListKey = @"SSJFundingTransferStoreListKey";
             item.transferOutName = [resultSet stringForColumn:@"transferOutAcctName"];
             item.transferInImage = [resultSet stringForColumn:@"transferInAcctIcon"];
             item.transferOutImage = [resultSet stringForColumn:@"transferOutAcctIcon"];
+            item.transferInId = [resultSet stringForColumn:@"transferInAcctID"];
+            item.transferOutId = [resultSet stringForColumn:@"transferOutAcctID"];
             item.transferMemo = [resultSet stringForColumn:@"cmemo"];
             item.cycleType = [resultSet intForColumn:@"icycletype"];
             item.opened = [resultSet boolForColumn:@"istate"];
             
-            NSDate *currentDate = [NSDate dateWithString:item.beginDate formatString:@"yyyy-MM"];
+            NSDate *currentDate = [NSDate dateWithString:item.beginDate formatString:@"yyyy-MM-dd"];
             
-            if (!lastDate || [lastDate compare:currentDate] != NSOrderedSame) {
+            if (!lastDate || lastDate.year != currentDate.year || lastDate.month != currentDate.month) {
                 NSMutableDictionary *monthInfo = [[NSMutableDictionary alloc] init];
                 [monthInfo setObject:currentDate forKey:SSJFundingTransferStoreMonthKey];
                 
@@ -419,6 +540,57 @@ NSString *SSJFundingTransferStoreListKey = @"SSJFundingTransferStoreListKey";
         item.editable = NO;
     }
     return item;
+}
+
++ (void)queryFundingTransferDetailItemWithBillingChargeCellItem:(SSJBillingChargeCellItem *)chargeItem
+                                                        success:(void (^)(SSJFundingTransferDetailItem *))success
+                                                        failure:(nullable void (^)(NSError *error))failure {
+    
+    NSString *userId = SSJUSERID();
+    
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        
+        SSJFundingTransferDetailItem *tansferItem = [[SSJFundingTransferDetailItem alloc]init];
+        
+        if ([chargeItem.billId integerValue] == 3) {
+            tansferItem.transferDate = chargeItem.billDate;
+            tansferItem.transferInId = chargeItem.fundId;
+            tansferItem.transferOutId = [db stringForQuery:@"select ifunsid from bk_user_charge where substr(cwritedate,1,19) = ? and cuserid = ? and ifunsid <> ? limit 1",[chargeItem.editeDate substringWithRange:NSMakeRange(0, 19)],userId,tansferItem.transferInId];
+            NSCharacterSet *set = [NSCharacterSet characterSetWithCharactersInString:@"+-"];
+            tansferItem.transferMoney = [chargeItem.money stringByTrimmingCharactersInSet:set];
+            tansferItem.transferInName = [db stringForQuery:@"select cacctname from bk_fund_info where cfundid = ?",tansferItem.transferInId];
+            tansferItem.transferOutName = chargeItem.transferSource;
+            tansferItem.transferInImage = [db stringForQuery:@"select cicoin from bk_fund_info where cfundid = ?",tansferItem.transferInId];
+            tansferItem.transferOutImage = [db stringForQuery:@"select a.cicoin from bk_fund_info a, bk_user_charge b where a.cfundid = b.ifunsid and substr(b.cwritedate,1,19) = ? and a.cfundid <> ?",[chargeItem.editeDate substringWithRange:NSMakeRange(0, 19)],tansferItem.transferInId];
+            tansferItem.transferMemo = chargeItem.chargeMemo;
+            tansferItem.transferInChargeId = chargeItem.ID;
+            tansferItem.transferOutChargeId = [db stringForQuery:@"select ichargeid from bk_user_charge where substr(cwritedate,1,19) = ? and cuserid = ? and ifunsid <> ?",[chargeItem.editeDate substringWithRange:NSMakeRange(0, 19)],userId,tansferItem.transferInId];
+            NSString *transferInParent = [db stringForQuery:@"select cparent from bk_fund_info where cfundid = ?",tansferItem.transferInId];
+            NSString *transferOutParent = [db stringForQuery:@"select cparent from bk_fund_info where cfundid = ?",tansferItem.transferOutId];
+            
+        } else {
+            tansferItem.transferDate = chargeItem.billDate;
+            tansferItem.transferOutId = chargeItem.fundId;
+            NSCharacterSet *set = [NSCharacterSet characterSetWithCharactersInString:@"+-"];
+            tansferItem.transferMoney = [chargeItem.money stringByTrimmingCharactersInSet:set];
+            tansferItem.transferInId = [db stringForQuery:@"select ifunsid from bk_user_charge where substr(cwritedate,1,19) = ? and cuserid = ? and ifunsid <> ?",[chargeItem.editeDate substringWithRange:NSMakeRange(0, 19)],userId,tansferItem.transferOutId];
+            tansferItem.transferOutName = [db stringForQuery:@"select cacctname from bk_fund_info where cfundid = ?",tansferItem.transferOutId];
+            tansferItem.transferInName = chargeItem.transferSource;
+            tansferItem.transferOutImage = [db stringForQuery:@"select cicoin from bk_fund_info where cfundid = ?",tansferItem.transferOutId];
+            tansferItem.transferInImage = [db stringForQuery:@"select a.cicoin from bk_fund_info a, bk_user_charge b where a.cfundid = b.ifunsid and substr(b.cwritedate,1,19) = ? and a.cfundid <> ?",[chargeItem.editeDate substringWithRange:NSMakeRange(0, 19)],tansferItem.transferOutId];
+            tansferItem.transferMemo = chargeItem.chargeMemo;
+            tansferItem.transferOutChargeId = chargeItem.ID;
+            tansferItem.transferInChargeId = [db stringForQuery:@"select ichargeid from bk_user_charge where substr(cwritedate,1,19) = ? and cuserid = ? and ifunsid <> ?",[chargeItem.editeDate substringWithRange:NSMakeRange(0, 19)],userId,tansferItem.transferOutId];
+            NSString *transferInParent = [db stringForQuery:@"select cparent from bk_fund_info where cfundid = ?",tansferItem.transferInId];
+            NSString *transferOutParent = [db stringForQuery:@"select cparent from bk_fund_info where cfundid = ?",tansferItem.transferOutId];
+        }
+        
+        if (success) {
+            SSJDispatchMainSync(^(){
+                success(tansferItem);
+            });
+        }
+    }];
 }
 
 @end

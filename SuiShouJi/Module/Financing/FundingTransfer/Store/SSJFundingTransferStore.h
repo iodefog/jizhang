@@ -11,6 +11,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class SSJBillingChargeCellItem;
+
 extern NSString *SSJFundingTransferStoreMonthKey;
 extern NSString *SSJFundingTransferStoreListKey;
 
@@ -22,8 +24,8 @@ extern NSString *SSJFundingTransferStoreListKey;
  *  @param success 查询成功的回调
  *  @param failure 查询失败的回调
  */
-+ (void)queryForFundingTransferListWithSuccess:(void(^)(NSArray <NSDictionary *>*result))success
-                                       failure:(void (^)(NSError *error))failure;
++ (void)queryForFundingTransferListWithSuccess:(nullable void(^)(NSArray <NSDictionary *>*result))success
+                                       failure:(nullable void (^)(NSError *error))failure;
 
 /**
  *  删除某条转账
@@ -32,8 +34,8 @@ extern NSString *SSJFundingTransferStoreListKey;
  *  @param failure 查询失败的回调
  */
 + (void)deleteFundingTransferWithItem:(SSJFundingTransferDetailItem *)item
-                              Success:(void(^)())success
-                              failure:(void (^)(NSError *error))failure;
+                              Success:(nullable void(^)())success
+                              failure:(nullable void (^)(NSError *error))failure;
 
 /**
  新建或编辑周期转账，根据转账id判断此记录如果存在就编辑，反之就新建
@@ -59,6 +61,29 @@ extern NSString *SSJFundingTransferStoreListKey;
                               endDate:(nullable NSString *)endDate
                               success:(nullable void (^)(BOOL isExisted))success
                               failure:(nullable void (^)(NSError *error))failure;
+
+/**
+ 编辑周期转账流水
+
+ @param transInChargeId <#transInChargeId description#>
+ @param transOutChargeId <#transOutChargeId description#>
+ @param transInAcctId <#transInAcctId description#>
+ @param transOutAcctId <#transOutAcctId description#>
+ @param money <#money description#>
+ @param memo <#memo description#>
+ @param billDate <#billDate description#>
+ @param success <#success description#>
+ @param failure <#failure description#>
+ */
++ (void)saveTransferChargeWithTransInChargeId:(NSString *)transInChargeId
+                             transOutChargeId:(NSString *)transOutChargeId
+                                transInAcctId:(NSString *)transInAcctId
+                               transOutAcctId:(NSString *)transOutAcctId
+                                        money:(float)money
+                                         memo:(NSString *)memo
+                                     billDate:(NSString *)billDate
+                                      success:(nullable void (^)())success
+                                      failure:(nullable void (^)(NSError *error))failure;
 
 /**
  删除周期转账
@@ -95,6 +120,10 @@ extern NSString *SSJFundingTransferStoreListKey;
  */
 + (void)queryCycleTransferRecordsListWithSuccess:(nullable void (^)(NSArray <NSDictionary *>*))success
                                          failure:(nullable void (^)(NSError *error))failure;
+
++ (void)queryFundingTransferDetailItemWithBillingChargeCellItem:(SSJBillingChargeCellItem *)chargeItem
+                                                        success:(void (^)(SSJFundingTransferDetailItem *))success
+                                                        failure:(nullable void (^)(NSError *error))failure;
 
 
 @end

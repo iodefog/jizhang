@@ -10,6 +10,8 @@
 #import "SSJFundingTransferDetailItem.h"
 #import "SSJBillingChargeCellItem.h"
 
+SSJ_DEPRECATED
+
 @interface SSJFundingTransferEditeViewController : SSJNewBaseTableViewController<UIActionSheetDelegate>
 @property(nonatomic, strong) SSJFundingTransferDetailItem *item;
 @property(nonatomic, strong) SSJBillingChargeCellItem *chargeItem;

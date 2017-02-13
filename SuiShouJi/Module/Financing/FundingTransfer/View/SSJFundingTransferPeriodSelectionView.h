@@ -16,4 +16,6 @@
 
 - (void)dismiss;
 
+- (void)updateAppearanceAccordingToTheme;
+
 @end

@@ -146,6 +146,7 @@ static BOOL kNeedBannerDisplay = YES;
         }
     }
     [self orgDataToModel];
+    [self additionOrgDataToModel];
     [self.collectionView reloadData];
 }
 
@@ -165,15 +166,24 @@ static BOOL kNeedBannerDisplay = YES;
     self.adItemsArray = self.localAdItems;
 }
 
+- (void)additionOrgDataToModel
+{
+//    NSMutableArray *tempArray = [NSMutableArray array];
+    while (self.adItemsArray.count % 3 != 0) {
+        SSJListAdItem *item = [[SSJListAdItem alloc] init];
+        item.adTitle = @"";
+        item.imageName = @"";
+        item.imageUrl = nil;
+        item.hidden = NO;
+        item.url = nil;//不需要跳转网页
+        [self.adItemsArray addObject:item];
+    }
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self.bannerService requestBannersList];
     [self.dotService requestThemeAndAdviceUpdate];
-    
-    if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
-        [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
-    }
-    
     [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
 
@@ -198,10 +208,10 @@ static BOOL kNeedBannerDisplay = YES;
 
 -(void)viewDidLayoutSubviews{
     [super viewDidLayoutSubviews];
-    self.header.size = CGSizeMake(self.view.width, 219);
+    self.header.size = CGSizeMake(self.view.width, 170);
     self.header.leftTop = CGPointMake(0, 0);
     self.collectionView.size = CGSizeMake(self.view.width, self.view.height - self.header.bottom - self.tabBarController.tabBar.height);
-    self.collectionView.top = self.header.bottom;
+    self.collectionView.top = self.header.bottom + 10;
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -440,6 +450,9 @@ static BOOL kNeedBannerDisplay = YES;
 - (void)loadDataArray
 {
 //插入广告模型
+    [self.adItemsArray removeAllObjects];
+    [self.adItems removeAllObjects];
+    [self orgDataToModel];
     for (SSJListAdItem *listAdItem in self.bannerService.item.listAdItems) {
         if (listAdItem.hidden) {
             [self.adItems addObject:listAdItem];
@@ -447,6 +460,7 @@ static BOOL kNeedBannerDisplay = YES;
             [self.adItemsArray insertObject:listAdItem atIndex:index];
         }
     }
+    [self additionOrgDataToModel];
 }
 
 
@@ -532,7 +546,7 @@ static BOOL kNeedBannerDisplay = YES;
 -(SSJMineHomeTableViewHeader *)header {
     if (!_header) {
         __weak typeof(self) weakSelf = self;
-        _header = [[SSJMineHomeTableViewHeader alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 135)];
+        _header = [[SSJMineHomeTableViewHeader alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 170)];
         _header.HeaderClickedBlock = ^(){
             [weakSelf loginButtonClicked];
         };
@@ -667,7 +681,9 @@ static BOOL kNeedBannerDisplay = YES;
     [super updateAppearanceAfterThemeChanged];
     [self.header updateAfterThemeChange];
 //    _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
+//  self.collectionView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     self.lineView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
+
 }
 
 //-(void)getCircleChargeState {

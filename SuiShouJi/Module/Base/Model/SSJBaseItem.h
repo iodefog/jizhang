@@ -6,7 +6,7 @@
 //  Copyright (c) 2015年 ___9188___. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 @interface SSJBaseItem : NSObject <NSCopying>
 

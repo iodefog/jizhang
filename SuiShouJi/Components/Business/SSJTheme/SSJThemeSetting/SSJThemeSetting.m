@@ -101,8 +101,8 @@
     model.cellIndicatorColor = @"#cccccc";
     model.cellSelectionStyle = UITableViewCellSelectionStyleGray;
     model.statusBarStyle = UIStatusBarStyleDefault;
-    model.moreHomeTitleColor = @"#FFFFFF";
-    model.moreHomeSubtitleColor = @"#fab9bf";
+    model.moreHomeTitleColor = @"#393939";
+    model.moreHomeSubtitleColor = @"#999999";
     model.recordHomeBorderColor = @"#eb4a64";
     model.recordHomeButtonBackgroundColor = @"#FFFFFF";
     model.recordHomeCalendarColor = @"#a7a7a7";

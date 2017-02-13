@@ -43,7 +43,7 @@ static NSString *kCellID = @"cellID";
         [self addSubview:self.titleLab];
         [self addSubview:self.tableView];
         [self sizeToFit];
-        self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
+        [self updateAppearanceAccordingToTheme];
     }
     return self;
 }
@@ -90,6 +90,15 @@ static NSString *kCellID = @"cellID";
     } timeInterval:0.25 fininshed:NULL];
 }
 
+- (void)updateAppearanceAccordingToTheme {
+    self.titleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    [self.tableView reloadData];
+    [self.tableView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor]];
+    self.tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
+    self.accessoryView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
+    self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
+}
+
 #pragma mark - UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return _cycleTypes.count;
@@ -101,12 +110,12 @@ static NSString *kCellID = @"cellID";
         cell = [[SSJBaseTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellID];
         cell.backgroundColor = [UIColor clearColor];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.textLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     }
     
     SSJCyclePeriodType type = [[_cycleTypes ssj_safeObjectAtIndex:indexPath.row] integerValue];
     cell.textLabel.text = SSJTitleForCycleType(type);
     cell.accessoryView = type == _selectedType ? self.accessoryView : nil;
+    cell.textLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     
     return cell;
 }
@@ -127,7 +136,6 @@ static NSString *kCellID = @"cellID";
         _titleLab = [[UILabel alloc] init];
         _titleLab.backgroundColor = [UIColor clearColor];
         _titleLab.text = @"周期";
-        _titleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _titleLab.textAlignment = NSTextAlignmentCenter;
     }
     return _titleLab;
@@ -140,13 +148,11 @@ static NSString *kCellID = @"cellID";
         _tableView.dataSource = self;
         _tableView.delegate = self;
         _tableView.backgroundColor = [UIColor clearColor];
-        _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellIndicatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
         _tableView.separatorInset = UIEdgeInsetsZero;
         _tableView.scrollEnabled = NO;
         
         [_tableView ssj_setBorderWidth:2];
         [_tableView ssj_setBorderStyle:SSJBorderStyleTop];
-        [_tableView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellIndicatorColor]];
     }
     return _tableView;
 }
@@ -154,7 +160,6 @@ static NSString *kCellID = @"cellID";
 - (UIImageView *)accessoryView {
     if (!_accessoryView) {
         _accessoryView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"checkmark"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
-        _accessoryView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
     }
     return _accessoryView;
 }

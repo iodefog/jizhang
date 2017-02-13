@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#define kBannerHeight 90
+#define kBannerHeight 100
 @class SSJBannerItem;
 
 @protocol SSJHeaderBannerImageViewDelegate <NSObject>

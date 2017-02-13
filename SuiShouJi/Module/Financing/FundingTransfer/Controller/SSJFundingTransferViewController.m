@@ -17,7 +17,7 @@
 #import "SSJDataSynchronizer.h"
 #import "SSJCreditCardItem.h"
 #import "SSJChargeCircleModifyCell.h"
-#import "SSJFundingTransferDetailViewController.h"
+#import "SSJFundingTransferListViewController.h"
 #import "SSJFundingTypeSelectViewController.h"
 #import "FMDB.h"
 #import "SSJFundingTransferStore.h"
@@ -31,13 +31,17 @@ static NSString *const kCyclePeriod = @"循环周期";
 static NSString *const kBeginDate = @"周期起始日";
 static NSString *const kEndDate = @"周期结束日";
 
+static NSString *const kCreatePeriodTransferTimesKey = @"kCreatePeriodTransferTimesKey";
+
 static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEditeCellIdentifier";
 
 @interface SSJFundingTransferViewController ()<UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic, strong) TPKeyboardAvoidingTableView *tableView;
 
-@property (nonatomic,strong) UIBarButtonItem *rightButton;
+@property (nonatomic,strong) UIBarButtonItem *transferRecordsButton;
+
+@property (nonatomic,strong) UIBarButtonItem *deleteButtonItem;
 
 @property (nonatomic,strong) SSJFundingTypeSelectView *transferInFundingTypeSelect;
 
@@ -75,7 +79,6 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-        self.title = @"转账";
         self.hideKeyboradWhenTouch = YES;
         self.hidesBottomBarWhenPushed = YES;
     }
@@ -85,9 +88,9 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
 - (void)viewDidLoad {
     [super viewDidLoad];
 //    self.view.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(transferTextDidChange) name:UITextFieldTextDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(transferTextDidChange:) name:UITextFieldTextDidChangeNotification object:nil];
     [self.view addSubview:self.tableView];
-    if (self.item != nil) {
+    if (self.item) {
         _transferOutItem = [[SSJFundingItem alloc]init];
         _transferInItem = [[SSJFundingItem alloc]init];
         ((SSJFundingItem *)_transferInItem).fundingID = self.item.transferInId;
@@ -96,14 +99,23 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
         ((SSJFundingItem *)_transferOutItem).fundingID = self.item.transferOutId;
         ((SSJFundingItem *)_transferOutItem).fundingIcon = self.item.transferOutImage;
         ((SSJFundingItem *)_transferOutItem).fundingName = self.item.transferOutName;
-        self.navigationItem.rightBarButtonItem = nil;
+        
+        if (_item.cycleType == SSJCyclePeriodTypeOnce) {
+            _item.beginDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"];
+        } else {
+            _item.transferDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"];
+        }
+        
         self.title = @"编辑转账";
+        self.navigationItem.rightBarButtonItem = self.deleteButtonItem;
     }else{
-        self.item = [[SSJFundingTransferDetailItem alloc]init];
+        self.item = [[SSJFundingTransferDetailItem alloc] init];
         self.item.ID = SSJUUID();
         self.item.cycleType = SSJCyclePeriodTypeOnce;
         self.item.transferDate = self.item.beginDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"];
-        self.navigationItem.rightBarButtonItem = self.rightButton;
+        
+        self.title = @"转账";
+        self.navigationItem.rightBarButtonItem = self.transferRecordsButton;
     }
     [self updateTitlesAndImages];
     [self.tableView registerClass:[SSJChargeCircleModifyCell class] forCellReuseIdentifier:SSJFundingTransferEditeCellIdentifier];
@@ -224,13 +236,15 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
         circleModifyCell.cellInput.keyboardType = UIKeyboardTypeDecimalPad;
         circleModifyCell.cellInput.delegate = self;
         circleModifyCell.cellInput.tag = 100;
+        circleModifyCell.cellInput.clearButtonMode = UITextFieldViewModeNever;
         _moneyInput = circleModifyCell.cellInput;
     }else if ([title isEqualToString:kMemo]) {
         circleModifyCell.cellInput.hidden = NO;
-        circleModifyCell.cellInput.attributedPlaceholder = [[NSAttributedString alloc]initWithString:@"(选填)" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+        circleModifyCell.cellInput.attributedPlaceholder = [[NSAttributedString alloc]initWithString:@"15个字内(选填)" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         circleModifyCell.cellInput.text = self.item.transferMemo;
         circleModifyCell.cellInput.tag = 101;
         circleModifyCell.cellInput.delegate = self;
+        circleModifyCell.cellInput.clearButtonMode = UITextFieldViewModeWhileEditing;
         _memoInput = circleModifyCell.cellInput;
     }else if ([title isEqualToString:kTransDate]) {
         circleModifyCell.cellInput.hidden = YES;
@@ -239,7 +253,7 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
     }else if ([title isEqualToString:kCyclePeriod]) {
         circleModifyCell.cellInput.hidden = YES;
         circleModifyCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        circleModifyCell.cellDetail = SSJTitleForCycleType(self.periodSelectionView.selectedType);
+        circleModifyCell.cellDetail = SSJTitleForCycleType(_item.cycleType);
     }else if ([title isEqualToString:kBeginDate]) {
         circleModifyCell.cellInput.hidden = YES;
         circleModifyCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -280,12 +294,18 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
 }
 
 #pragma mark - Getter
--(UIBarButtonItem *)rightButton{
-    if (!_rightButton) {
-        _rightButton = [[UIBarButtonItem alloc]initWithTitle:@"转账记录" style:UIBarButtonItemStylePlain target:self action:@selector(rightButtonClicked:)];
-        _rightButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTintColor];
+-(UIBarButtonItem *)transferRecordsButton{
+    if (!_transferRecordsButton) {
+        _transferRecordsButton = [[UIBarButtonItem alloc]initWithTitle:@"转账记录" style:UIBarButtonItemStylePlain target:self action:@selector(transferRecordsButtonAction)];
     }
-    return _rightButton;
+    return _transferRecordsButton;
+}
+
+- (UIBarButtonItem *)deleteButtonItem {
+    if (!_deleteButtonItem) {
+        _deleteButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(deleteAction)];
+    }
+    return _deleteButtonItem;
 }
 
 -(SSJFundingTypeSelectView *)transferInFundingTypeSelect{
@@ -359,7 +379,7 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-        _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellIndicatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
+        _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
     }
     return _tableView;
 }
@@ -460,9 +480,21 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
 }
 
 #pragma mark - Event
--(void)rightButtonClicked:(id)sender{
-    SSJFundingTransferDetailViewController *transferDetailVc = [[SSJFundingTransferDetailViewController alloc]init];
+- (void)transferRecordsButtonAction {
+    SSJFundingTransferListViewController *transferDetailVc = [[SSJFundingTransferListViewController alloc]init];
     [self.navigationController pushViewController:transferDetailVc animated:YES];
+}
+
+- (void)deleteAction {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:@"确定删除该项记录?" preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:NULL]];
+    [alert addAction:[UIAlertAction actionWithTitle:@"确认" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [SSJFundingTransferStore deleteCycleTransferRecordWithID:_item.ID success:^{
+            [self.navigationController popViewControllerAnimated:YES];
+            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+        } failure:NULL];
+    }]];
+    [self presentViewController:alert animated:YES completion:NULL];
 }
 
 -(void)saveButtonClicked:(id)sender{
@@ -502,70 +534,31 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
     
     _saveButton.enabled = NO;
     [_saveButton ssj_showLoadingIndicator];
-    [SSJFundingTransferStore saveCycleTransferRecordWithID:_item.ID transferInAccountId:transferInId transferOutAccountId:transferOutId money:[_item.transferMoney doubleValue] memo:_item.transferMemo cyclePeriodType:_item.cycleType beginDate:_item.beginDate endDate:_item.endDate success:^(BOOL isExisted) {
+    NSString *dateStr = _item.cycleType == SSJCyclePeriodTypeOnce ? _item.transferDate : _item.beginDate;
+    [SSJFundingTransferStore saveCycleTransferRecordWithID:_item.ID transferInAccountId:transferInId transferOutAccountId:transferOutId money:[_item.transferMoney doubleValue] memo:_item.transferMemo cyclePeriodType:_item.cycleType beginDate:dateStr endDate:_item.endDate success:^(BOOL isExisted) {
         
         _saveButton.enabled = YES;
         [_saveButton ssj_hideLoadingIndicator];
         
-        if (isExisted) {
-            if (_editeCompleteBlock) {
-                _editeCompleteBlock(_item);
-            }
+//        if (isExisted) {
+//            if (_editeCompleteBlock) {
+//                _editeCompleteBlock(_item);
+//            }
+//        }
+        
+        if ([self isFirstTimeCreate] && _item.cycleType != SSJCyclePeriodTypeOnce) {
+            [self addCreateTiems];
+            [self showFirstTimeCreateAlert];
+        } else {
+            [self.navigationController popViewControllerAnimated:YES];
         }
         
-        [self.navigationController popViewControllerAnimated:YES];
+        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
         
     } failure:^(NSError * _Nonnull error) {
         _saveButton.enabled = YES;
         [_saveButton ssj_hideLoadingIndicator];
     }];
-    
-    
-//    __block NSString *booksid = SSJGetCurrentBooksType();
-//    __weak typeof(self) weakSelf = self;
-//    [[SSJDatabaseQueue sharedInstance]asyncInTransaction:^(FMDatabase *db , BOOL *rollback){
-//        NSString *userid = SSJUSERID();
-//        NSString *writedate = [[NSDate date] ssj_systemCurrentDateWithFormat:@"YYYY-MM-dd HH:mm:ss.SSS"];
-//        if (!self.item.transferInChargeId.length && !self.item.transferOutChargeId.length) {
-//            if (![db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFUNSID , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE  , CBILLDATE , CBOOKSID , CMEMO) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",SSJUUID(),userid,_moneyInput.text,@"3",transferInId,@"",@"",writedate,@(SSJSyncVersion()),[NSNumber numberWithInt:0],weakSelf.item.transferDate,booksid,_memoInput.text])
-//            {
-//                *rollback = YES;
-//                return;
-//            }
-//            if (![db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFUNSID , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE  , CBILLDATE , CBOOKSID , CMEMO) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",SSJUUID(),userid,_moneyInput.text,@"4",transferOutId,@"",@"",writedate,@(SSJSyncVersion()),[NSNumber numberWithInt:0],weakSelf.item.transferDate,booksid,_memoInput.text]) {
-//                *rollback = YES;
-//                return;
-//            }
-//            SSJDispatch_main_async_safe(^(){
-//                [self.navigationController popViewControllerAnimated:YES];
-//            });
-//        }else{
-//            if (![db executeUpdate:@"update bk_user_charge set imoney = ? , ifunsid = ? , cwritedate = ? , iversion = ? , operatortype = 1 , cmemo = ? , cbilldate = ? where ichargeid = ? and cuserid = ?",[NSNumber numberWithDouble:[_moneyInput.text doubleValue]],transferInId,writedate,@(SSJSyncVersion()),_memoInput.text,weakSelf.item.transferDate,weakSelf.item.transferInChargeId,userid]) {
-//                *rollback = YES;
-//                return;
-//            }
-//            if (![db executeUpdate:@"update bk_user_charge set imoney = ? , ifunsid = ? , cwritedate = ? , iversion = ? , operatortype = 1 , cmemo = ? , cbilldate = ? where ichargeid = ? and cuserid = ?",[NSNumber numberWithDouble:[_moneyInput.text doubleValue]],transferOutId,writedate,@(SSJSyncVersion()),_memoInput.text,weakSelf.item.transferDate,weakSelf.item.transferOutChargeId,userid]) {
-//                *rollback = YES;
-//                return;
-//            }
-//            weakSelf.item.transferOutId = transferOutId ? : weakSelf.item.transferOutId;
-//            weakSelf.item.transferInId = transferInId ? : weakSelf.item.transferInId;
-//            weakSelf.item.transferOutName = transferOutName ? : weakSelf.item.transferOutName;
-//            weakSelf.item.transferInName = transferInName ? : weakSelf.item.transferInName;
-//            weakSelf.item.transferMoney = _moneyInput.text;
-//            weakSelf.item.transferMemo = _memoInput.text;
-//            SSJDispatch_main_async_safe(^(){
-//                if (weakSelf.editeCompleteBlock) {
-//                    weakSelf.editeCompleteBlock(weakSelf.item);
-//                }
-//                [self.navigationController popViewControllerAnimated:YES];
-//                
-//            });
-//        }
-//        
-//    }];
-    
-    [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
 }
 
 - (void)periodSelectionViewAction {
@@ -585,8 +578,13 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
     }
 }
 
-- (void)transferTextDidChange{
-    [self setupTextFiledNum:_moneyInput num:2];
+- (void)transferTextDidChange:(NSNotification *)notification {
+    if (notification.object == _moneyInput) {
+        [self setupTextFiledNum:_moneyInput num:2];
+        _item.transferMoney = _moneyInput.text;
+    } else if (notification.object == _memoInput) {
+        _item.transferMemo = _memoInput.text;
+    }
 }
 
 //-(void)transferTextDidChange{
@@ -654,23 +652,23 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
     }
 }
 
--(void)closeButtonClicked:(id)sender{
-    [self ssj_backOffAction];
+- (BOOL)isFirstTimeCreate {
+    NSInteger times = [[NSUserDefaults standardUserDefaults] integerForKey:kCreatePeriodTransferTimesKey];
+    return times == 0;
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (void)addCreateTiems {
+    NSInteger times = [[NSUserDefaults standardUserDefaults] integerForKey:kCreatePeriodTransferTimesKey];
+    [[NSUserDefaults standardUserDefaults] setInteger:++times forKey:kCreatePeriodTransferTimesKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (void)showFirstTimeCreateAlert {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:@"创建成功，修改或查看设置的周期转账可在”转账记录---周期转账“里查看哦！" preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:@"知道了" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self.navigationController popViewControllerAnimated:YES];
+    }]];
+    [self presentViewController:alert animated:YES completion:NULL];
 }
-*/
 
 @end

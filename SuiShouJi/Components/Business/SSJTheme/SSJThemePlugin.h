@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "SSJReportFormsCurveGraphView.h"
 
 @interface SSJThemePlugin : NSObject
 

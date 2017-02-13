@@ -16,7 +16,6 @@
 
 @end
 
-
 @implementation SSJBookKeepingHomeDateView
 
 - (instancetype)initWithFrame:(CGRect)frame
