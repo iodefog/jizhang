@@ -20,6 +20,7 @@
 
 - (void)requestDidFinish:(id)rootElement
 {
+    [super requestDidFinish:rootElement];
     if ([rootElement isKindOfClass:[NSDictionary class]] && [self.returnCode isEqualToString:@"1"]) {
         //转模型
         NSDictionary *result = [[NSDictionary dictionaryWithDictionary:rootElement] objectForKey:@"results"];

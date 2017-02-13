@@ -146,6 +146,7 @@ static BOOL kNeedBannerDisplay = YES;
         }
     }
     [self orgDataToModel];
+    [self additionOrgDataToModel];
     [self.collectionView reloadData];
 }
 
@@ -163,6 +164,20 @@ static BOOL kNeedBannerDisplay = YES;
     }
     self.localAdItems = tempArray;
     self.adItemsArray = self.localAdItems;
+}
+
+- (void)additionOrgDataToModel
+{
+//    NSMutableArray *tempArray = [NSMutableArray array];
+    while (self.adItemsArray.count % 3 != 0) {
+        SSJListAdItem *item = [[SSJListAdItem alloc] init];
+        item.adTitle = @"";
+        item.imageName = @"";
+        item.imageUrl = nil;
+        item.hidden = NO;
+        item.url = nil;//不需要跳转网页
+        [self.adItemsArray addObject:item];
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -435,6 +450,9 @@ static BOOL kNeedBannerDisplay = YES;
 - (void)loadDataArray
 {
 //插入广告模型
+    [self.adItemsArray removeAllObjects];
+    [self.adItems removeAllObjects];
+    [self orgDataToModel];
     for (SSJListAdItem *listAdItem in self.bannerService.item.listAdItems) {
         if (listAdItem.hidden) {
             [self.adItems addObject:listAdItem];
@@ -442,6 +460,7 @@ static BOOL kNeedBannerDisplay = YES;
             [self.adItemsArray insertObject:listAdItem atIndex:index];
         }
     }
+    [self additionOrgDataToModel];
 }
 
 
