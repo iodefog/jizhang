@@ -32,6 +32,9 @@
 // 流水时间
 @property (nonatomic,strong) NSString *billDate;
 
+// 流水具体时间(格式HH:mm)
+@property (nonatomic,strong) NSString *billDetailDate;
+
 // 资金帐户编号
 @property (nonatomic,strong) NSString *fundId;
 
