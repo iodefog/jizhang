@@ -441,7 +441,12 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
             NSDate *currentDate = [NSDate date];
             currentDate = [NSDate dateWithYear:currentDate.year month:currentDate.month day:currentDate.day];
             if ([date compare:currentDate] == NSOrderedAscending) {
-                [CDAutoHideMessageHUD showMessage:@"起始日期不能早于今天"];
+                [CDAutoHideMessageHUD showMessage:@"起始日期不能早于今天哦"];
+                return NO;
+            }
+            NSDate *endDate = [NSDate dateWithString:_item.endDate formatString:@"yyyy-MM-dd"];
+            if ([date compare:endDate] == NSOrderedDescending) {
+                [CDAutoHideMessageHUD showMessage:@"起始日期不能晚于结束日期哦"];
                 return NO;
             }
             return YES;
@@ -461,7 +466,7 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
         _endDateSelectionView.shouldSelectDateAction = ^BOOL(SSJLoanDateSelectionView *view, NSDate *date) {
             NSDate *beginDate = [NSDate dateWithString:weakSelf.item.beginDate formatString:@"yyyy-MM-dd"];
             if ([date compare:beginDate] == NSOrderedAscending) {
-                [CDAutoHideMessageHUD showMessage:@"结束日期不能早于起始日期"];
+                [CDAutoHideMessageHUD showMessage:@"结束日期不能早于起始日期哦"];
                 return NO;
             }
             return YES;
