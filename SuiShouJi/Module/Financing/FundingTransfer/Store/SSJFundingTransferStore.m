@@ -542,4 +542,55 @@ NSString *SSJFundingTransferStoreListKey = @"SSJFundingTransferStoreListKey";
     return item;
 }
 
++ (void)queryFundingTransferDetailItemWithBillingChargeCellItem:(SSJBillingChargeCellItem *)chargeItem
+                                                        success:(void (^)(SSJFundingTransferDetailItem *))success
+                                                        failure:(nullable void (^)(NSError *error))failure {
+    
+    NSString *userId = SSJUSERID();
+    
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        
+        SSJFundingTransferDetailItem *tansferItem = [[SSJFundingTransferDetailItem alloc]init];
+        
+        if ([chargeItem.billId integerValue] == 3) {
+            tansferItem.transferDate = chargeItem.billDate;
+            tansferItem.transferInId = chargeItem.fundId;
+            tansferItem.transferOutId = [db stringForQuery:@"select ifunsid from bk_user_charge where substr(cwritedate,1,19) = ? and cuserid = ? and ifunsid <> ? limit 1",[chargeItem.editeDate substringWithRange:NSMakeRange(0, 19)],userId,tansferItem.transferInId];
+            NSCharacterSet *set = [NSCharacterSet characterSetWithCharactersInString:@"+-"];
+            tansferItem.transferMoney = [chargeItem.money stringByTrimmingCharactersInSet:set];
+            tansferItem.transferInName = [db stringForQuery:@"select cacctname from bk_fund_info where cfundid = ?",tansferItem.transferInId];
+            tansferItem.transferOutName = chargeItem.transferSource;
+            tansferItem.transferInImage = [db stringForQuery:@"select cicoin from bk_fund_info where cfundid = ?",tansferItem.transferInId];
+            tansferItem.transferOutImage = [db stringForQuery:@"select a.cicoin from bk_fund_info a, bk_user_charge b where a.cfundid = b.ifunsid and substr(b.cwritedate,1,19) = ? and a.cfundid <> ?",[chargeItem.editeDate substringWithRange:NSMakeRange(0, 19)],tansferItem.transferInId];
+            tansferItem.transferMemo = chargeItem.chargeMemo;
+            tansferItem.transferInChargeId = chargeItem.ID;
+            tansferItem.transferOutChargeId = [db stringForQuery:@"select ichargeid from bk_user_charge where substr(cwritedate,1,19) = ? and cuserid = ? and ifunsid <> ?",[chargeItem.editeDate substringWithRange:NSMakeRange(0, 19)],userId,tansferItem.transferInId];
+            NSString *transferInParent = [db stringForQuery:@"select cparent from bk_fund_info where cfundid = ?",tansferItem.transferInId];
+            NSString *transferOutParent = [db stringForQuery:@"select cparent from bk_fund_info where cfundid = ?",tansferItem.transferOutId];
+            
+        } else {
+            tansferItem.transferDate = chargeItem.billDate;
+            tansferItem.transferOutId = chargeItem.fundId;
+            NSCharacterSet *set = [NSCharacterSet characterSetWithCharactersInString:@"+-"];
+            tansferItem.transferMoney = [chargeItem.money stringByTrimmingCharactersInSet:set];
+            tansferItem.transferInId = [db stringForQuery:@"select ifunsid from bk_user_charge where substr(cwritedate,1,19) = ? and cuserid = ? and ifunsid <> ?",[chargeItem.editeDate substringWithRange:NSMakeRange(0, 19)],userId,tansferItem.transferOutId];
+            tansferItem.transferOutName = [db stringForQuery:@"select cacctname from bk_fund_info where cfundid = ?",tansferItem.transferOutId];
+            tansferItem.transferInName = chargeItem.transferSource;
+            tansferItem.transferOutImage = [db stringForQuery:@"select cicoin from bk_fund_info where cfundid = ?",tansferItem.transferOutId];
+            tansferItem.transferInImage = [db stringForQuery:@"select a.cicoin from bk_fund_info a, bk_user_charge b where a.cfundid = b.ifunsid and substr(b.cwritedate,1,19) = ? and a.cfundid <> ?",[chargeItem.editeDate substringWithRange:NSMakeRange(0, 19)],tansferItem.transferOutId];
+            tansferItem.transferMemo = chargeItem.chargeMemo;
+            tansferItem.transferOutChargeId = chargeItem.ID;
+            tansferItem.transferInChargeId = [db stringForQuery:@"select ichargeid from bk_user_charge where substr(cwritedate,1,19) = ? and cuserid = ? and ifunsid <> ?",[chargeItem.editeDate substringWithRange:NSMakeRange(0, 19)],userId,tansferItem.transferOutId];
+            NSString *transferInParent = [db stringForQuery:@"select cparent from bk_fund_info where cfundid = ?",tansferItem.transferInId];
+            NSString *transferOutParent = [db stringForQuery:@"select cparent from bk_fund_info where cfundid = ?",tansferItem.transferOutId];
+        }
+        
+        if (success) {
+            SSJDispatchMainSync(^(){
+                success(tansferItem);
+            });
+        }
+    }];
+}
+
 @end

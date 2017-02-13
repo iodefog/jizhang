@@ -11,6 +11,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class SSJBillingChargeCellItem;
+
 extern NSString *SSJFundingTransferStoreMonthKey;
 extern NSString *SSJFundingTransferStoreListKey;
 
@@ -118,6 +120,10 @@ extern NSString *SSJFundingTransferStoreListKey;
  */
 + (void)queryCycleTransferRecordsListWithSuccess:(nullable void (^)(NSArray <NSDictionary *>*))success
                                          failure:(nullable void (^)(NSError *error))failure;
+
++ (void)queryFundingTransferDetailItemWithBillingChargeCellItem:(SSJBillingChargeCellItem *)chargeItem
+                                                        success:(void (^)(SSJFundingTransferDetailItem *))success
+                                                        failure:(nullable void (^)(NSError *error))failure;
 
 
 @end

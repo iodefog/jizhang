@@ -8,10 +8,23 @@
 
 #import "SSJBaseViewController.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class SSJFundingTransferDetailItem;
+@class SSJBillingChargeCellItem;
 
 @interface SSJFundingTransferChargeDetailViewController : SSJBaseViewController
 
-@property(nonatomic, strong) SSJFundingTransferDetailItem *item;
+/**
+ 从转账记录列表页面进入时必穿
+ */
+@property(nonatomic, strong, nullable) SSJFundingTransferDetailItem *item;
+
+/**
+ 从资金详情页的流水列表中进入时必穿
+ */
+@property(nonatomic, strong, nullable) SSJBillingChargeCellItem *chargeItem;
 
 @end
+
+NS_ASSUME_NONNULL_END

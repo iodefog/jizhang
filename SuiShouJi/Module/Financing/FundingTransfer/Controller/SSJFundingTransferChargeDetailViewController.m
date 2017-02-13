@@ -93,6 +93,20 @@ static const NSInteger kMemoTag = 1002;
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(deleteAction)];
     [self.view addSubview:self.tableView];
     [self updateAppearance];
+    
+    if (!_item && _chargeItem) {
+        self.tableView.hidden = YES;
+        [self.view ssj_showLoadingIndicator];
+        [SSJFundingTransferStore queryFundingTransferDetailItemWithBillingChargeCellItem:_chargeItem success:^(SSJFundingTransferDetailItem * _Nonnull item) {
+            _item = item;
+            self.tableView.hidden = NO;
+            [self.tableView reloadData];
+            [self.view ssj_hideLoadingIndicator];
+        } failure:^(NSError * _Nonnull error) {
+            self.tableView.hidden = NO;
+            [self.view ssj_hideLoadingIndicator];
+        }];
+    }
 }
 
 - (void)updateAppearanceAfterThemeChanged {
@@ -227,7 +241,7 @@ static const NSInteger kMemoTag = 1002;
 }
 
 - (void)updateAppearance {
-    _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellIndicatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
+    _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
     [_saveButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];
     [_saveButton ssj_setBackgroundColor:[[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] colorWithAlphaComponent:0.5] forState:UIControlStateDisabled];
 }
