@@ -238,6 +238,8 @@
             if ([self.warningDate compare:selectedDate] == NSOrderedAscending) {
                 //提醒
                 [CDAutoHideMessageHUD showMessage:self.warningString.length ? self.warningString : @"选择日期不能大于限制日期哦"];
+                //回到默认日期
+                [self defaultSelectedcomponents];
                 return;
             }
         }
