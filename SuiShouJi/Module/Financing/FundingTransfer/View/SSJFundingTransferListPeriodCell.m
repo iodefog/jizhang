@@ -114,11 +114,13 @@
     }];
     [_cycleTitleLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(_cycleLogo.mas_right).offset(5);
+        make.right.mas_lessThanOrEqualTo(_switchCtrl.mas_left).offset(-10);
         make.centerY.mas_equalTo(_cycleLogo);
     }];
     [_separator mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(0.5, 13));
         make.left.mas_equalTo(_cycleTitleLab.mas_right).offset(10);
+        make.right.mas_lessThanOrEqualTo(_switchCtrl.mas_left).offset(-10);
         make.centerY.mas_equalTo(_cycleTitleLab);
     }];
     [_memoLab mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -127,6 +129,7 @@
         make.right.mas_lessThanOrEqualTo(_switchCtrl.mas_left).offset(-10);
     }];
     [_switchCtrl mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(54, 30));
         make.top.mas_equalTo(_moneyLab.mas_bottom).offset(10);
         make.right.mas_equalTo(_moneyLab);
     }];
