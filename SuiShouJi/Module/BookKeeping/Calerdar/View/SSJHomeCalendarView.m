@@ -57,6 +57,16 @@
     self.horuAndMinuBgView.frame = CGRectMake(220,self.datePicker.centerY - 22, self.width - 20, 43);
 }
 
+- (void)setLeftButtonItem:(SSJHomeCalendarViewButtonItem *)leftButtonItem {
+    _leftButtonItem = leftButtonItem;
+    [self updateButton:self.closeButton buttonItem:self.leftButtonItem];
+}
+
+- (void)setRightButtonItem:(SSJHomeCalendarViewButtonItem *)rightButtonItem {
+    _rightButtonItem = rightButtonItem;
+    [self updateButton:self.comfirmButton buttonItem:self.rightButtonItem];
+}
+
 #pragma mark - Lazy
 - (UIView *)topView
 {
@@ -225,32 +235,37 @@
 #pragma mark - Action
 - (void)closeButtonClicked
 {
+    if (_closeBlock) {
+        _closeBlock(self);
+    }
     [self dismiss];
 }
 
 - (void)comfirmButtonClicked
 {
-    if (_confirmBlock) {
-        //选择的时间
-        NSDate *date = [self.monthDayWeekArray ssj_safeObjectAtIndex:[self.datePicker selectedRowInComponent:1]];
-        [self.formatter setDateFormat:@"yyyy年MM月dd日 EEE"];
-        NSString *yearMonDayStr = [self.formatter stringFromDate:date];
-        NSString *hourStr = [self.hourArray ssj_safeObjectAtIndex:[self.datePicker selectedRowInComponent:2]];
-        NSString *minuStr = [self.minuteArray ssj_safeObjectAtIndex:[self.datePicker selectedRowInComponent:4]];
-        NSString *dateStr = [NSString stringWithFormat:@"%@ %@时%@分",yearMonDayStr,hourStr,minuStr];
-        NSDate *selectedDate = [NSDate dateWithString:dateStr formatString:@"yyyy年MM月dd日 EEEHH时mm分"];
-        if (self.warningDate && [self.warningDate compare:self.maxDate] != NSOrderedDescending) {//如果设置了警告时间&&提醒时间小于等于最大时间
-            if ([self.warningDate compare:selectedDate] == NSOrderedAscending) {
-                //提醒
-                [CDAutoHideMessageHUD showMessage:self.warningString.length ? self.warningString : @"不能记未来日期的账哦"];
-                //回到默认日期
-                [self defaultSelectedcomponents];
-                return;
-            }
-        }
-        _confirmBlock(selectedDate);
+    //选择的时间
+    NSDate *date = [self.monthDayWeekArray ssj_safeObjectAtIndex:[self.datePicker selectedRowInComponent:1]];
+    [self.formatter setDateFormat:@"yyyy年MM月dd日 EEE"];
+    NSString *yearMonDayStr = [self.formatter stringFromDate:date];
+    NSString *hourStr = [self.hourArray ssj_safeObjectAtIndex:[self.datePicker selectedRowInComponent:2]];
+    NSString *minuStr = [self.minuteArray ssj_safeObjectAtIndex:[self.datePicker selectedRowInComponent:4]];
+    NSString *dateStr = [NSString stringWithFormat:@"%@ %@时%@分",yearMonDayStr,hourStr,minuStr];
+    NSDate *selectedDate = [NSDate dateWithString:dateStr formatString:@"yyyy年MM月dd日 EEEHH时mm分"];
+    
+    BOOL shouldConfirm = YES;
+    if (_shouldConfirmBlock) {
+        shouldConfirm = _shouldConfirmBlock(self, selectedDate);
     }
-    [self dismiss];
+    
+    if (shouldConfirm) {
+        self.date = selectedDate;
+        [self dismiss];
+        if (_confirmBlock) {
+            _confirmBlock(self);
+        }
+    } else {
+        [self defaultSelectedcomponents];
+    }
 }
 
 - (void)show
@@ -260,11 +275,7 @@
     self.top = keyWindow.height;
     [keyWindow ssj_showViewWithBackView:self backColor:[UIColor blackColor] alpha:0.3 target:self touchAction:@selector(dismiss) animation:^{
         self.bottom = keyWindow.height;
-    } timeInterval:0.25 fininshed:^(BOOL complation) {
-        if (_showBlock) {
-            _showBlock();
-        }
-    }];
+    } timeInterval:0.25 fininshed:NULL];
 }
 
 - (void)dismiss
@@ -275,18 +286,14 @@
     
     [self.superview ssj_hideBackViewForView:self animation:^{
         self.top = keyWindow.bottom;
-    } timeInterval:0.25 fininshed:^(BOOL complation) {
-        if (_dismissBlock) {
-            _dismissBlock();
-        }
-    }];
+    } timeInterval:0.25 fininshed:NULL];
 }
 #pragma mark - Private
-- (void)setTitleColor:(UIColor *)color forComponent:(SSJDatePickerComponent)component
-{}
-
-- (void)setFillColor:(UIColor *)color forComponent:(SSJDatePickerComponent)component
-{}
+//- (void)setTitleColor:(UIColor *)color forComponent:(SSJDatePickerComponent)component
+//{}
+//
+//- (void)setFillColor:(UIColor *)color forComponent:(SSJDatePickerComponent)component
+//{}
 
 // 改变分割线的颜色
 - (void)changeSpearatorLineColor
@@ -298,6 +305,12 @@
             speartorView.backgroundColor = [UIColor ssj_colorWithHex:self.separatorColor ? self.separatorColor : SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
         }
     }
+}
+
+- (void)updateButton:(UIButton *)button buttonItem:(SSJHomeCalendarViewButtonItem *)item {
+    [button setTitle:item.title forState:UIControlStateNormal];
+    [button setTitleColor:item.titleColor forState:UIControlStateNormal];
+    [button setImage:item.image forState:UIControlStateNormal];
 }
 
 #pragma mark - UIPickerViewDelegate
@@ -439,4 +452,19 @@
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
+@end
+
+@implementation SSJHomeCalendarViewButtonItem
+
++ (instancetype)buttonItemWithTitle:(nullable NSString *)title
+                         titleColor:(nullable UIColor *)titleColor
+                              image:(nullable UIImage *)image {
+    
+    SSJHomeCalendarViewButtonItem *item = [[SSJHomeCalendarViewButtonItem alloc] init];
+    item.title = title;
+    item.titleColor = titleColor;
+    item.image = image;
+    return item;
+}
+
 @end
