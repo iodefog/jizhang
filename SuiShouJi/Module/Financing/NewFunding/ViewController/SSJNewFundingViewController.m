@@ -32,10 +32,15 @@
 
 }
 
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.title = @"添加资金账户";
         self.hidesBottomBarWhenPushed = YES;
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(transferTextDidChange:) name:UITextFieldTextDidChangeNotification object:nil];
     }
     return self;
 }
@@ -158,10 +163,10 @@
 
 #pragma mark - UITextFieldDelegate
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
-    NSInteger existedLength = textField.text.length;
-    NSInteger selectedLength = range.length;
-    NSInteger replaceLength = string.length;
-    if (textField == _nameTextField || textField == _memoTextField) {
+//    NSInteger existedLength = textField.text.length;
+//    NSInteger selectedLength = range.length;
+//    NSInteger replaceLength = string.length;
+    /*if (textField == _nameTextField || textField == _memoTextField) {
         if (string.length == 0) return YES;
         if (existedLength - selectedLength + replaceLength > 13) {
             if (textField == _nameTextField) {
@@ -171,10 +176,10 @@
             }
             return NO;
         }
-    }else if (textField == _amountTextField){
+    }else */if (textField == _amountTextField){
         NSCharacterSet *cs = [[NSCharacterSet characterSetWithCharactersInString:NUM] invertedSet];
         NSString *filtered = [[string componentsSeparatedByCharactersInSet:cs] componentsJoinedByString:@""];
-        if (![string isEqualToString:filtered] || (existedLength - selectedLength + replaceLength > 13)) {
+        if (![string isEqualToString:filtered]) {
             return NO;
         }
     }
@@ -233,6 +238,15 @@
         [CDAutoHideMessageHUD showMessage:@"请输入资金账户名称"];
         return;
     }
+    if (_nameTextField.text.length > 13) {
+        [CDAutoHideMessageHUD showMessage:@"账户名称不能超过13个字"];
+        return;
+    }
+    if (_memoTextField.text.length > 15) {
+        [CDAutoHideMessageHUD showMessage:@"备注不能超过15个字"];
+        return;
+    }
+    
     NSString *fundId = SSJUUID();
     NSString *fundName = _nameTextField.text;
     double fundAmount = [_amountTextField.text doubleValue];
@@ -276,19 +290,23 @@
     [self ssj_backOffAction];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (void)transferTextDidChange:(NSNotification *)notification {
+    UITextField *textField = notification.object;
+    if (textField == _amountTextField) {
+        if ([textField.text rangeOfString:@"+"].location != NSNotFound) {
+            NSString *nunberStr = [textField.text stringByReplacingOccurrencesOfString:@"+" withString:@""];
+            nunberStr = [textField.text stringByReplacingOccurrencesOfString:@"-" withString:@""];
+            nunberStr = [nunberStr ssj_reserveDecimalDigits:2 intDigits:9];
+            textField.text = [NSString stringWithFormat:@"+%@", nunberStr];
+        } else if ([textField.text rangeOfString:@"-"].location != NSNotFound) {
+            NSString *nunberStr = [textField.text stringByReplacingOccurrencesOfString:@"+" withString:@""];
+            nunberStr = [textField.text stringByReplacingOccurrencesOfString:@"-" withString:@""];
+            nunberStr = [nunberStr ssj_reserveDecimalDigits:2 intDigits:9];
+            textField.text = [NSString stringWithFormat:@"-%@", nunberStr];
+        } else {
+            textField.text = [textField.text ssj_reserveDecimalDigits:2 intDigits:9];
+        }
+    }
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end
