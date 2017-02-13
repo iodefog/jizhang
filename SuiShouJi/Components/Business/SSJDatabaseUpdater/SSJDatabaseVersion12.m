@@ -31,12 +31,12 @@
         return [db lastError];
     }
     
-    if (![db executeUpdate:@"update bk_user_charge set cdetaildate = '00:00' where ichargetype = ?",SSJChargeIdTypeCircleConfig]) {
+    if (![db executeUpdate:@"update bk_user_charge set cdetaildate = '00:00' where ichargetype = ?", @(SSJChargeIdTypeCircleConfig)]) {
         return [db lastError];
     }
 
     // 修改记账时分字段
-    if (![db executeUpdate:@"update bk_user_charge set cdetaildate = (select substr(clientadddate,12,5) from bk_user_charge) where length(clientadddate) > 0 and ichargetype <> ?",SSJChargeIdTypeCircleConfig]) {
+    if (![db executeUpdate:@"update bk_user_charge set cdetaildate = (select substr(clientadddate,12,5) from bk_user_charge) where length(clientadddate) > 0 and ichargetype <> ?", @(SSJChargeIdTypeCircleConfig)]) {
         return [db lastError];
     }
     
