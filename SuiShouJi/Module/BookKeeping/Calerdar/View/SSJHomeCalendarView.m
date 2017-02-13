@@ -152,7 +152,6 @@
 {
     if (!_formatter) {
         _formatter = [[NSDateFormatter alloc] init];
-        self.formatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"zh_CN"];
     }
     return _formatter;
 }
