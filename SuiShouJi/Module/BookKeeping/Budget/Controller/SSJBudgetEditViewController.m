@@ -184,7 +184,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
     if (textField.tag == kBudgetMoneyTextFieldTag) {
         NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
         text = [text stringByReplacingOccurrencesOfString:@"￥" withString:@""];
-        text = [text ssj_reserveDecimalDigits:2 intDigits:0];
+        text = [text ssj_reserveDecimalDigits:2 intDigits:9];
         textField.text = [NSString stringWithFormat:@"￥%@", text];
         
         self.model.budgetMoney = [text doubleValue];

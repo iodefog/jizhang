@@ -466,11 +466,11 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
             self.item.cardName = textField.text;
         }
         if (textField.tag == 101){
-            textField.text = [textField.text ssj_reserveDecimalDigits:2 intDigits:0];
+            textField.text = [textField.text ssj_reserveDecimalDigits:2 intDigits:9];
             self.item.cardLimit = [textField.text doubleValue];
         }
         if (textField.tag == 102){
-            textField.text = [textField.text ssj_reserveDecimalDigits:2 intDigits:0];
+            textField.text = [textField.text ssj_reserveDecimalDigits:2 intDigits:9];
             self.item.cardBalance = [textField.text doubleValue];
         }
         if (textField.tag == 103){
@@ -550,7 +550,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     }else if (textField.tag == 102){
         NSCharacterSet *cs = [[NSCharacterSet characterSetWithCharactersInString:NUM] invertedSet];
         NSString *filtered = [[string componentsSeparatedByCharactersInSet:cs] componentsJoinedByString:@""];
-        if (![string isEqualToString:filtered] || (existedLength - selectedLength + replaceLength > 13)) {
+        if (![string isEqualToString:filtered]) {
             return NO;
         }
     }

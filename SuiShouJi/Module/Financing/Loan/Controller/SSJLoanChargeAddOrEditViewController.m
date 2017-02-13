@@ -393,10 +393,6 @@ static NSUInteger kDateTag = 1005;
             NSString *tmpMoneyStr = [textField.text stringByReplacingOccurrencesOfString:@"¥" withString:@""];
             tmpMoneyStr = [tmpMoneyStr ssj_reserveDecimalDigits:2 intDigits:0];
             
-            if (tmpMoneyStr.length > 11) {
-                tmpMoneyStr = [tmpMoneyStr substringToIndex:11];
-            }
-            
             if (self.chargeType == SSJLoanCompoundChargeTypeRepayment) {
                 if (self.surplus - [tmpMoneyStr doubleValue] < 0) {
                     
@@ -424,7 +420,7 @@ static NSUInteger kDateTag = 1005;
         } else if (textField.tag == kInterestTag) {
             
             NSString *tmpMoneyStr = [textField.text stringByReplacingOccurrencesOfString:@"¥" withString:@""];
-            tmpMoneyStr = [tmpMoneyStr ssj_reserveDecimalDigits:2 intDigits:0];
+            tmpMoneyStr = [tmpMoneyStr ssj_reserveDecimalDigits:2 intDigits:9];
             textField.text = [NSString stringWithFormat:@"¥%@", tmpMoneyStr];
             self.compoundModel.interestChargeModel.money = [tmpMoneyStr doubleValue];
             

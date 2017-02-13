@@ -405,7 +405,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     if (_billTypeInputView.moneyInput == textField) {
         NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
-        textField.text = [text ssj_reserveDecimalDigits:2 intDigits:10];
+        textField.text = [text ssj_reserveDecimalDigits:2 intDigits:9];
         return NO;
     } else if (_accessoryView.memoView == textField) {
         NSString *text = textField.text ? : @"";
