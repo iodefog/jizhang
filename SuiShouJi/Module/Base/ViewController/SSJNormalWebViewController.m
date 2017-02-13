@@ -24,7 +24,10 @@
 @property (nonatomic, strong) NSURL *webViewCurrentURL;
 @property (nonatomic, strong) UIProgressView *progressView;
 @property (nonatomic, strong) UILabel *lblinkURL;
-
+/**
+ titleView
+ */
+@property (nonatomic, strong) UILabel *titleLabel;
 @end
 
 @implementation SSJNormalWebViewController
@@ -66,6 +69,12 @@
     if (self.url!=nil) {
         [self loadURL:self.url];
     }
+    self.navigationItem.titleView = self.titleLabel;
+}
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+    self.titleLabel.centerX = self.view.centerX;
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -105,6 +114,17 @@
         [self.webView insertSubview:_lblinkURL belowSubview:self.webView.scrollView];
     }
     return _lblinkURL;
+}
+
+- (UILabel *)titleLabel
+{
+    if (!_titleLabel) {
+        _titleLabel = [[UILabel alloc] init];
+        _titleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+        _titleLabel.textAlignment = NSTextAlignmentCenter;
+        _titleLabel.font = systemFontSize(18);
+    }
+    return _titleLabel;
 }
 
 - (UIProgressView *)progressView{
@@ -328,7 +348,9 @@
         }
     }else{
         if(self.showPageTitleInNavigationBar) {
-            self.navigationItem.title = [self.webView stringByEvaluatingJavaScriptFromString:@"document.title"];
+            self.titleLabel.text = [self.webView stringByEvaluatingJavaScriptFromString:@"document.title"];
+            [self.titleLabel sizeToFit];
+            self.titleLabel.leftTop = CGPointMake((self.webView.width - self.titleLabel.width) * 0.5, (44 - self.titleLabel.height) * 0.5);
         }
     }
 }
