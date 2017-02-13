@@ -53,7 +53,7 @@
             editeItem = item;
             editeItem.operatorType = 0;
             //新建流水
-            if (![db executeUpdate:@"insert into bk_user_charge (ichargeid , cuserid , imoney , ibillid , ifunsid  , cwritedate , iversion , operatortype , cbilldate , cmemo , cbooksid, cimgurl, thumburl,clientadddate) values(?,?,?,?,?,?,?,0,?,?,?,?,?,?)",item.ID,userId,moneyStr,item.billId,item.fundId,editeTime,@(SSJSyncVersion()),item.billDate,item.chargeMemo,item.booksId,item.chargeImage,item.chargeThumbImage,editeTime]) {
+            if (![db executeUpdate:@"insert into bk_user_charge (ichargeid , cuserid , imoney , ibillid , ifunsid  , cwritedate , iversion , operatortype , cbilldate , cmemo , cbooksid, cimgurl, thumburl, clientadddate, cdetaildate) values(?,?,?,?,?,?,?,0,?,?,?,?,?,?,?)",item.ID,userId,moneyStr,item.billId,item.fundId,editeTime,@(SSJSyncVersion()),item.billDate,item.chargeMemo,item.booksId,item.chargeImage,item.chargeThumbImage,editeTime,item.billDetailDate]) {
                 *rollback = YES;
                 if (failure) {
                     SSJDispatch_main_async_safe(^{
@@ -171,7 +171,7 @@
             [originResult close];
             double originMoney = [originItem.money doubleValue];
             //更新流水表
-            if (![db executeUpdate:@"update bk_user_charge set imoney = ? , ibillid = ? , ifunsid = ? , cwritedate = ? , operatortype = 1 , cbilldate = ? , iversion = ? , cmemo = ?  ,cimgurl = ? , thumburl = ?, cbooksid = ? where ichargeid = ? and cuserid = ?",moneyStr,item.billId,item.fundId,[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],item.billDate,@(SSJSyncVersion()),item.chargeMemo,item.chargeImage, item.chargeThumbImage, item.booksId,item.ID,userId]) {
+            if (![db executeUpdate:@"update bk_user_charge set imoney = ? , ibillid = ? , ifunsid = ? , cwritedate = ? , operatortype = 1 , cbilldate = ? , iversion = ? , cmemo = ?  ,cimgurl = ? , thumburl = ?, cbooksid = ?, cdetaildate = ? where ichargeid = ? and cuserid = ?",moneyStr,item.billId,item.fundId,[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],item.billDate,@(SSJSyncVersion()),item.chargeMemo,item.chargeImage, item.chargeThumbImage, item.booksId,item.billDetailDate,item.ID,userId]) {
                 *rollback = YES;
                 if (failure) {
                     SSJDispatch_main_async_safe(^{

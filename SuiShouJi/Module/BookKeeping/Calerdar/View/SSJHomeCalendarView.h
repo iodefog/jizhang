@@ -38,6 +38,7 @@ typedef NS_OPTIONS(NSInteger, SSJDatePickerComponent) {
 
 //显示，消失
 @property (nonatomic, copy) void(^dismissBlock)();
+
 @property (nonatomic, copy) void(^showBlock)();
 
 /**
