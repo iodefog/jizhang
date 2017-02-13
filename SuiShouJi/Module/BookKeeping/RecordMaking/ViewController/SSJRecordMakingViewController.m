@@ -533,7 +533,10 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 }
 
 - (void)selectBillDateAction {
+    NSString *currentDateStr = [NSString stringWithFormat:@"%@ %@",self.item.billDate,self.item.billDetailDate];
+    NSDate *currentDate = [NSDate dateWithString:currentDateStr formatString:@"yyyy-MM-dd HH:mm"];
     [SSJAnaliyticsManager event:@"addRecord_calendar"];
+    self.dateSelectedView.date = currentDate;
     [self.dateSelectedView show];
     [_billTypeInputView.moneyInput resignFirstResponder];
     [_accessoryView.memoView resignFirstResponder];
@@ -642,6 +645,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         if (_selectedDay == 0) {
             self.selectedDay = _currentDay;
         }
+        self.item.billDetailDate = [[NSDate date] formattedDateWithFormat:@"HH:mm"];
     }else{
         if (self.item.ID.length == 0) {
             self.selectedYear = _currentYear;

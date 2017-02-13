@@ -74,9 +74,14 @@
         _datePicker = [[UIPickerView alloc] init];
         _datePicker.delegate = self;
         _datePicker.dataSource = self;
-        [self defaultSelectedcomponents];//设置默认选中行和列
     }
     return _datePicker;
+}
+
+- (void)setDate:(NSDate *)date
+{
+    _date = date;
+    [self defaultSelectedcomponents];//设置默认选中行和列
 }
 
 - (UIButton *)comfirmButton
@@ -152,7 +157,6 @@
 {
     if (!_formatter) {
         _formatter = [[NSDateFormatter alloc] init];
-        self.formatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"zh_CN"];
     }
     return _formatter;
 }
@@ -239,6 +243,8 @@
             if ([self.warningDate compare:selectedDate] == NSOrderedAscending) {
                 //提醒
                 [CDAutoHideMessageHUD showMessage:self.warningString.length ? self.warningString : @"选择日期不能大于限制日期哦"];
+                //回到默认日期
+                [self defaultSelectedcomponents];
                 return;
             }
         }

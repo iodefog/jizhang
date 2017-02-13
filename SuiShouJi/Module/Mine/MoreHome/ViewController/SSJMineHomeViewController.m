@@ -166,9 +166,12 @@ static BOOL kNeedBannerDisplay = YES;
     self.adItemsArray = self.localAdItems;
 }
 
+
+/**
+ 处理如果不是3的倍数的时候空出的位置部分底部线，和背景的问题
+ */
 - (void)additionOrgDataToModel
 {
-//    NSMutableArray *tempArray = [NSMutableArray array];
     while (self.adItemsArray.count % 3 != 0) {
         SSJListAdItem *item = [[SSJListAdItem alloc] init];
         item.adTitle = @"";
@@ -754,6 +757,7 @@ static BOOL kNeedBannerDisplay = YES;
         return;
     }
     SSJNormalWebViewController *webVc = [SSJNormalWebViewController webViewVCWithURL:[NSURL URLWithString:urlStr]];
+    webVc.showPageTitleInNavigationBar = YES;
     [self.navigationController pushViewController:webVc animated:YES];
 }
 
