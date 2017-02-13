@@ -40,12 +40,16 @@
     self.cellTitleLabel.centerY = self.height / 2;
     self.cellSubTitleLabel.left = 16;
     self.cellSubTitleLabel.centerY = self.height / 2;
+    
     if (self.contentView.width == self.width) {
+        self.cellDetailLabel.width = MIN(self.cellDetailLabel.width, self.contentView.width - self.cellTitleLabel.right - 20);
         self.cellDetailLabel.right = self.contentView.width - 10;
     }else{
+        self.cellDetailLabel.width = MIN(self.cellDetailLabel.width, self.contentView.width - self.cellTitleLabel.right - 10);
         self.cellDetailLabel.right = self.contentView.width;
     }
     self.cellDetailLabel.centerY = self.height / 2;
+    
     self.cellImageView.size = CGSizeMake(30, 30);
     if (self.contentView.width == self.width) {
         self.cellImageView.right = self.width - 10;
