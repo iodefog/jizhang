@@ -77,15 +77,20 @@ static CGFloat kBottomTitleSize = 22;
         
         CGSize topSize = [topStr sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:kTopTitleSize]}];
         CGSize bottomSize = [bottomStr sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:kBottomTitleSize]}];
+        bottomSize.width = MIN(bottomSize.width, self.width - _outerBorderWidth * 2);
         
         CGFloat top = (self.height - topSize.height - bottomSize.height - kTitleGap) * 0.5;
         CGRect topRect = CGRectMake((self.width - topSize.width) * 0.5, top, topSize.width, topSize.height);
         CGRect bottomRect = CGRectMake((self.width - bottomSize.width) * 0.5, CGRectGetMaxY(topRect) + kTitleGap, bottomSize.width, bottomSize.height);
         
+        NSMutableParagraphStyle *paragraph = [[NSMutableParagraphStyle alloc] init];
+        paragraph.lineBreakMode = NSLineBreakByTruncatingTail;
         [topStr drawInRect:topRect withAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:kTopTitleSize],
-                                                    NSForegroundColorAttributeName:[UIColor whiteColor]}];
+                                                    NSForegroundColorAttributeName:[UIColor whiteColor],
+                                                    NSParagraphStyleAttributeName:paragraph}];
         [bottomStr drawInRect:bottomRect withAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:kBottomTitleSize],
-                                                          NSForegroundColorAttributeName:[UIColor whiteColor]}];
+                                                          NSForegroundColorAttributeName:[UIColor whiteColor],
+                                                          NSParagraphStyleAttributeName:paragraph}];
     }
 }
 

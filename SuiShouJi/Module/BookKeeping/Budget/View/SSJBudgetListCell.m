@@ -55,7 +55,10 @@
     
     self.typeLab.center = CGPointMake(self.contentView.width * 0.5, 30);
     self.periodLab.center = CGPointMake(self.contentView.width * 0.5, 55);
+    CGFloat maxWidth = (self.contentView.width - 20) * 0.5;
+    self.paymentLab.width = MIN(self.paymentLab.width, maxWidth);
     self.paymentLab.leftBottom = CGPointMake(10, self.contentView.height - 15);
+    self.budgetLab.width = MIN(self.budgetLab.width, maxWidth);
     self.budgetLab.rightBottom = CGPointMake(self.contentView.width - 10, self.contentView.height - 15);
     self.waveView.center = CGPointMake(self.contentView.width * 0.5, self.contentView.height * 0.56);
 }
