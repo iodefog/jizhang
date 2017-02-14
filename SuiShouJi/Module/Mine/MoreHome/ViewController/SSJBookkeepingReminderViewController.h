@@ -8,6 +8,8 @@
 
 #import "SSJNewBaseTableViewController.h"
 
+SSJ_DEPRECATED
+
 @interface SSJBookkeepingReminderViewController : SSJNewBaseTableViewController
 
 @end

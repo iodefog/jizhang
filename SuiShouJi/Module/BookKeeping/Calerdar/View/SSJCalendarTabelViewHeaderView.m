@@ -28,6 +28,8 @@
         [self addSubview:self.incomeLabel];
         [self addSubview:self.expenceLabel];
         [self addSubview:self.balanceLabel];
+        self.backgroundView = [[UIView alloc] init];
+        self.backgroundView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCellAppearanceAfterThemeChanged) name:SSJThemeDidChangeNotification object:nil];
     }
     return self;
@@ -103,6 +105,7 @@
     } else {
         self.balanceLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurvePaymentColor];
     }
+    self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
 }
 
 - (void)setIncome:(double)income {

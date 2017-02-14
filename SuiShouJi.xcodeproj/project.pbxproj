@@ -2390,13 +2390,6 @@
 		9C1E4C3E1E4C043D00CA5843 /* SSJAnaliyticsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1E4C391E4C043D00CA5843 /* SSJAnaliyticsManager.m */; };
 		9C1E4C3F1E4C043D00CA5843 /* SSJAnaliyticsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1E4C391E4C043D00CA5843 /* SSJAnaliyticsManager.m */; };
 		9C1E4C401E4C043D00CA5843 /* SSJAnaliyticsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1E4C391E4C043D00CA5843 /* SSJAnaliyticsManager.m */; };
-		9C1E4C431E4C37A200CA5843 /* YYAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C1E4C421E4C37A200CA5843 /* YYAnalytics.framework */; };
-		9C1E4C441E4C37A200CA5843 /* YYAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C1E4C421E4C37A200CA5843 /* YYAnalytics.framework */; };
-		9C1E4C451E4C37A200CA5843 /* YYAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C1E4C421E4C37A200CA5843 /* YYAnalytics.framework */; };
-		9C1E4C461E4C37A200CA5843 /* YYAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C1E4C421E4C37A200CA5843 /* YYAnalytics.framework */; };
-		9C1E4C471E4C37A200CA5843 /* YYAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C1E4C421E4C37A200CA5843 /* YYAnalytics.framework */; };
-		9C1E4C481E4C37A200CA5843 /* YYAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C1E4C421E4C37A200CA5843 /* YYAnalytics.framework */; };
-		9C1E4C491E4C37A300CA5843 /* YYAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C1E4C421E4C37A200CA5843 /* YYAnalytics.framework */; };
 		9C1E4C4C1E4C619600CA5843 /* SSJCalendarTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1E4C4B1E4C619600CA5843 /* SSJCalendarTableViewCell.m */; };
 		9C1E4C4D1E4C619600CA5843 /* SSJCalendarTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1E4C4B1E4C619600CA5843 /* SSJCalendarTableViewCell.m */; };
 		9C1E4C4E1E4C619600CA5843 /* SSJCalendarTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1E4C4B1E4C619600CA5843 /* SSJCalendarTableViewCell.m */; };
@@ -3079,6 +3072,8 @@
 		9C9A0CA21D73D1B6002AF046 /* SSJNewCreditCardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9A0C8D1D73CDB7002AF046 /* SSJNewCreditCardViewController.m */; };
 		9C9A0CA31D73D1B7002AF046 /* SSJNewCreditCardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9A0C8D1D73CDB7002AF046 /* SSJNewCreditCardViewController.m */; };
 		9C9A0CA41D73D1B8002AF046 /* SSJNewCreditCardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9A0C8D1D73CDB7002AF046 /* SSJNewCreditCardViewController.m */; };
+		9C9A42FB1E51BE4F00C1D7ED /* YYAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C9A42FA1E51BE4F00C1D7ED /* YYAnalytics.framework */; };
+		9C9A42FD1E51C09700C1D7ED /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C9A42FC1E51C09700C1D7ED /* CoreLocation.framework */; };
 		9C9D0B7D1D01867D003A9F4E /* SSJBillTypeSelectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9D0B7C1D01867D003A9F4E /* SSJBillTypeSelectViewController.m */; };
 		9C9D0B801D01898E003A9F4E /* SSJBillTypeSelectCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9D0B7F1D01898E003A9F4E /* SSJBillTypeSelectCell.m */; };
 		9C9D0B831D07B015003A9F4E /* SSJChargeCircleTimeSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9D0B821D07B015003A9F4E /* SSJChargeCircleTimeSelectView.m */; };
@@ -4724,7 +4719,6 @@
 		9C1E4C161E4ACD5C00CA5843 /* SSJCalendarTabelViewHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCalendarTabelViewHeaderView.m; sourceTree = "<group>"; };
 		9C1E4C381E4C043D00CA5843 /* SSJAnaliyticsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJAnaliyticsManager.h; sourceTree = "<group>"; };
 		9C1E4C391E4C043D00CA5843 /* SSJAnaliyticsManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJAnaliyticsManager.m; sourceTree = "<group>"; };
-		9C1E4C421E4C37A200CA5843 /* YYAnalytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = YYAnalytics.framework; sourceTree = "<group>"; };
 		9C1E4C4A1E4C619600CA5843 /* SSJCalendarTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCalendarTableViewCell.h; sourceTree = "<group>"; };
 		9C1E4C4B1E4C619600CA5843 /* SSJCalendarTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCalendarTableViewCell.m; sourceTree = "<group>"; };
 		9C20A87D1D41E43A00F3D77F /* SSJMemberManagerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMemberManagerViewController.h; sourceTree = "<group>"; };
@@ -4912,6 +4906,8 @@
 		9C9A0C8D1D73CDB7002AF046 /* SSJNewCreditCardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJNewCreditCardViewController.m; sourceTree = "<group>"; };
 		9C9A0C951D73CE07002AF046 /* SSJBillingDaySelectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBillingDaySelectView.h; sourceTree = "<group>"; };
 		9C9A0C961D73CE07002AF046 /* SSJBillingDaySelectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBillingDaySelectView.m; sourceTree = "<group>"; };
+		9C9A42FA1E51BE4F00C1D7ED /* YYAnalytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = YYAnalytics.framework; sourceTree = "<group>"; };
+		9C9A42FC1E51C09700C1D7ED /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		9C9D0B7B1D01867D003A9F4E /* SSJBillTypeSelectViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBillTypeSelectViewController.h; sourceTree = "<group>"; };
 		9C9D0B7C1D01867D003A9F4E /* SSJBillTypeSelectViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBillTypeSelectViewController.m; sourceTree = "<group>"; };
 		9C9D0B7E1D01898E003A9F4E /* SSJBillTypeSelectCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBillTypeSelectCell.h; sourceTree = "<group>"; };
@@ -5262,7 +5258,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9C1E4C491E4C37A300CA5843 /* YYAnalytics.framework in Frameworks */,
 				7D08A2AA1E4999D30085A8FB /* SystemConfiguration.framework in Frameworks */,
 				7D08A2AB1E4999D30085A8FB /* CoreTelephony.framework in Frameworks */,
 				7D08A2AC1E4999D30085A8FB /* UTMini.framework in Frameworks */,
@@ -5285,7 +5280,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9C1E4C481E4C37A200CA5843 /* YYAnalytics.framework in Frameworks */,
 				7DA13C011E35AED7000490A4 /* SystemConfiguration.framework in Frameworks */,
 				7DA13C021E35AED7000490A4 /* CoreTelephony.framework in Frameworks */,
 				7DA13C031E35AED7000490A4 /* UTMini.framework in Frameworks */,
@@ -5308,7 +5302,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9C1E4C451E4C37A200CA5843 /* YYAnalytics.framework in Frameworks */,
 				7DBA571E1D6D32B700C02D79 /* SystemConfiguration.framework in Frameworks */,
 				7DBA571F1D6D32B700C02D79 /* CoreTelephony.framework in Frameworks */,
 				7DBA57201D6D32B700C02D79 /* UTMini.framework in Frameworks */,
@@ -5331,7 +5324,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9C1E4C441E4C37A200CA5843 /* YYAnalytics.framework in Frameworks */,
 				9C2A68541D194CA70010F1DA /* SystemConfiguration.framework in Frameworks */,
 				9C2A68551D194CA70010F1DA /* CoreTelephony.framework in Frameworks */,
 				9C2A68561D194CA70010F1DA /* UTMini.framework in Frameworks */,
@@ -5354,7 +5346,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9C1E4C471E4C37A200CA5843 /* YYAnalytics.framework in Frameworks */,
 				9CEC00921D6D41EB00DB2C8B /* SystemConfiguration.framework in Frameworks */,
 				9CEC00931D6D41EB00DB2C8B /* CoreTelephony.framework in Frameworks */,
 				9CEC00941D6D41EB00DB2C8B /* UTMini.framework in Frameworks */,
@@ -5377,7 +5368,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9C1E4C461E4C37A200CA5843 /* YYAnalytics.framework in Frameworks */,
 				9CECFC9A1D6D41A700DB2C8B /* SystemConfiguration.framework in Frameworks */,
 				9CECFC9B1D6D41A700DB2C8B /* CoreTelephony.framework in Frameworks */,
 				9CECFC9C1D6D41A700DB2C8B /* UTMini.framework in Frameworks */,
@@ -5400,7 +5390,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9C1E4C431E4C37A200CA5843 /* YYAnalytics.framework in Frameworks */,
+				9C9A42FD1E51C09700C1D7ED /* CoreLocation.framework in Frameworks */,
+				9C9A42FB1E51BE4F00C1D7ED /* YYAnalytics.framework in Frameworks */,
 				9C3276F41CE4616900109C4C /* SystemConfiguration.framework in Frameworks */,
 				9C3276F21CE4615C00109C4C /* CoreTelephony.framework in Frameworks */,
 				9C3277571CE471A900109C4C /* UTMini.framework in Frameworks */,
@@ -5440,6 +5431,7 @@
 		72D2CCC3D3120C3CD45EDEB9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9C9A42FC1E51C09700C1D7ED /* CoreLocation.framework */,
 				9C3276F31CE4616900109C4C /* SystemConfiguration.framework */,
 				9C3276F11CE4615C00109C4C /* CoreTelephony.framework */,
 				9C3276EF1CE4615200109C4C /* AudioToolbox.framework */,
@@ -6769,14 +6761,6 @@
 			name = SSJAnaliytisManager;
 			sourceTree = "<group>";
 		};
-		9C1E4C411E4C37A200CA5843 /* YYAnalytics */ = {
-			isa = PBXGroup;
-			children = (
-				9C1E4C421E4C37A200CA5843 /* YYAnalytics.framework */,
-			);
-			path = YYAnalytics;
-			sourceTree = "<group>";
-		};
 		9C23EA4B1DDAD4FE0003C5AB /* certificates */ = {
 			isa = PBXGroup;
 			children = (
@@ -7327,6 +7311,14 @@
 				9C9A0C8D1D73CDB7002AF046 /* SSJNewCreditCardViewController.m */,
 			);
 			path = ViewController;
+			sourceTree = "<group>";
+		};
+		9C9A42F91E51BE4F00C1D7ED /* YYAnalytics */ = {
+			isa = PBXGroup;
+			children = (
+				9C9A42FA1E51BE4F00C1D7ED /* YYAnalytics.framework */,
+			);
+			path = YYAnalytics;
 			sourceTree = "<group>";
 		};
 		9C9D588E1E0144BF00E04213 /* GifImage */ = {
@@ -8011,7 +8003,7 @@
 		BD0432CD1C1A77BB0051E7AB /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
-				9C1E4C411E4C37A200CA5843 /* YYAnalytics */,
+				9C9A42F91E51BE4F00C1D7ED /* YYAnalytics */,
 				7DC318491E2882A300932644 /* FMDB */,
 				9C77DB971DE6E31200CD64A2 /* SimulateIDFA */,
 				7DDB6D461DBA063600D823AE /* GTMBase64 */,
@@ -13971,7 +13963,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhangAppStore;
 				PRODUCT_NAME = SuiShouJi;
-				PROVISIONING_PROFILE = "9a87925c-5f46-4ff3-a416-6d554befb528";
+				PROVISIONING_PROFILE = "ba2c5f75-9aa4-4854-9f27-958134f073cb";
 				PROVISIONING_PROFILE_SPECIFIER = JiZhangAppStoreDeve;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";

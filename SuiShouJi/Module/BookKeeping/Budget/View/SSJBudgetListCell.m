@@ -55,9 +55,18 @@
     
     self.typeLab.center = CGPointMake(self.contentView.width * 0.5, 30);
     self.periodLab.center = CGPointMake(self.contentView.width * 0.5, 55);
+    
+    self.waveView.center = CGPointMake(self.contentView.width * 0.5, self.contentView.height * 0.56);
+    
+    CGFloat maxWidth = 0;
+    if (self.paymentLab.width + self.budgetLab.width > self.contentView.width - 20) {
+        CGFloat reduction = (self.paymentLab.width + self.budgetLab.width - (self.contentView.width - 20)) * 0.5;
+        self.paymentLab.width -= reduction;
+        self.budgetLab.width -= reduction;
+    }
+    
     self.paymentLab.leftBottom = CGPointMake(10, self.contentView.height - 15);
     self.budgetLab.rightBottom = CGPointMake(self.contentView.width - 10, self.contentView.height - 15);
-    self.waveView.center = CGPointMake(self.contentView.width * 0.5, self.contentView.height * 0.56);
 }
 
 - (void)setCellItem:(SSJBaseItem *)cellItem {

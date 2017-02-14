@@ -199,8 +199,10 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         
     } else if (textField.tag == kBudgetRemindScaleTextFieldTag) {
         NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
+        if ([text doubleValue] > 100) {
+            text = @"100.0";
+        }
         textField.text = [text ssj_reserveDecimalDigits:1 intDigits:0];
-
         self.remindPercent = MIN([textField.text doubleValue], 100) / 100;
         self.model.remindMoney = self.remindPercent * self.model.budgetMoney;
         
