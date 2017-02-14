@@ -557,11 +557,6 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
     }
 }
 
-- (BOOL)shouldShowAlert {
-    NSDate *date = [NSDate dateWithString:_item.beginDate formatString:@"yyyy-MM-dd"];
-    return _item.cycleType == SSJCyclePeriodTypePerMonth && (date.day == 29 || date.day == 30 || date.day == 31);
-}
-
 - (void)periodSelectionViewAction {
     _item.cycleType = self.periodSelectionView.selectedType;
     [self updateTitlesAndImages];
@@ -694,6 +689,11 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
         _saveButton.enabled = YES;
         [_saveButton ssj_hideLoadingIndicator];
     }];
+}
+
+- (BOOL)shouldShowAlert {
+    NSDate *date = [NSDate dateWithString:_item.beginDate formatString:@"yyyy-MM-dd"];
+    return _item.cycleType == SSJCyclePeriodTypePerMonth && (date.day == 29 || date.day == 30 || date.day == 31);
 }
 
 @end
