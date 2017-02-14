@@ -16,6 +16,10 @@
 
 @property (nonatomic,strong) UILabel *expenceLabel;
 
+@property(nonatomic, strong) UILabel *totalIncomeLabel;
+
+@property(nonatomic, strong) UILabel *totalExpenceLabel;
+
 @end
 
 @implementation SSJFundingDetailHeader
@@ -95,6 +99,7 @@
             _totalExpenceLabel.textColor = [UIColor whiteColor];
         }
         _totalExpenceLabel.textAlignment = NSTextAlignmentCenter;
+        _totalExpenceLabel.adjustsFontSizeToFitWidth = YES;
     }
     return _totalExpenceLabel;
 }
@@ -110,9 +115,37 @@
             _totalIncomeLabel.textColor = [UIColor whiteColor];
         }
         _totalIncomeLabel.textAlignment = NSTextAlignmentCenter;
+        _totalIncomeLabel.adjustsFontSizeToFitWidth = YES;
     }
     return _totalIncomeLabel;
 }
+
+- (void)setExpence:(double)expence {
+    NSString *expenceStr = [[NSString stringWithFormat:@"%f",expence] ssj_moneyDecimalDisplayWithDigits:2];
+    CGSize expenceSize = [expenceStr sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:24]}];
+    if (expenceSize.width > self.width / 2 - 10) {
+        self.totalExpenceLabel.width = self.width / 2 - 10;
+        self.totalExpenceLabel.height = expenceSize.height;
+        self.totalExpenceLabel.text = expenceStr;
+    } else {
+        self.totalExpenceLabel.text = expenceStr;
+        [self.totalExpenceLabel sizeToFit];
+    }
+}
+
+- (void)setIncome:(double)income {
+    NSString *incomeStr = [[NSString stringWithFormat:@"%f",income] ssj_moneyDecimalDisplayWithDigits:2];
+    CGSize incomeSize = [incomeStr sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:24]}];
+    if (incomeSize.width > self.width / 2 - 10) {
+        self.totalIncomeLabel.width = self.width / 2 - 10;
+        self.totalIncomeLabel.height = incomeSize.height;
+        self.totalIncomeLabel.text = incomeStr;
+    } else {
+        self.totalIncomeLabel.text = incomeStr;
+        [self.totalIncomeLabel sizeToFit];
+    }
+}
+
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.

@@ -28,7 +28,7 @@
         
         // 调整两张图的宽和高
         double headerImageHeight = headerImage.size.height * width / headerImage.size.width;
-        double wholeHeight = MAX(headerImageHeight + 140 + 90 * images.count + 48, SSJSCREENHEIGHT);
+        double wholeHeight = MAX(headerImageHeight + 140 + 65 * images.count + 48, SSJSCREENHEIGHT);
         [headerImage ssj_scaleImageWithSize:CGSizeMake(width, headerImageHeight)];
 //        [backImage ssj_scaleImageWithSize:CGSizeMake(SSJSCREENWITH, SSJSCREENHEIGHT)];
 
@@ -91,9 +91,11 @@
         // 把cell的截图画上去
         for (UIImage *image in images) {
             NSInteger index = [images indexOfObject:image];
-            [image drawInRect:CGRectMake(0, headerImageHeight + index * 90 + 48, width, 90)];
-
+            [image drawInRect:CGRectMake(0, headerImageHeight + index * 65 + 48, width, 65)];
         }
+    
+        UIImage *lineImage = [UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha] size:CGSizeMake(width, 1 / [UIScreen mainScreen].scale)];
+        [lineImage drawInRect:CGRectMake(0, headerImageHeight + 48, width, 1)];
         
         // 把二维码的图画上去
         [qrImage drawInRect:CGRectMake(width / 2 - qrImage.size.width / 2, wholeHeight - 70 - qrImage.size.height / 2, qrImage.size.width, qrImage.size.height)];
@@ -128,6 +130,7 @@
 }
 
 + (NSArray *)screenShotForTableView:(UITableView *)tableview {
+    [tableview scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
     NSMutableArray *screenshots = [NSMutableArray array];
     for (int section=0; section < tableview.numberOfSections; section++) {
 

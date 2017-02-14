@@ -209,10 +209,8 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
                 }
                 _totalIncome = fundingItem.fundingIncome;
                 _totalExpence = fundingItem.fundingExpence;
-                weakSelf.header.totalIncomeLabel.text = [NSString stringWithFormat:@"%.2f",fundingItem.fundingIncome];
-                [weakSelf.header.totalIncomeLabel sizeToFit];
-                weakSelf.header.totalExpenceLabel.text = [NSString stringWithFormat:@"%.2f",fundingItem.fundingExpence];
-                [weakSelf.header.totalExpenceLabel sizeToFit];
+                weakSelf.header.income = fundingItem.fundingIncome;
+                weakSelf.header.expence = fundingItem.fundingExpence;
                 weakSelf.title = fundingItem.fundingName;
                 if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID] || !SSJ_CURRENT_THEME.financingDetailHeaderColor.length) {
                     [weakSelf.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:fundingItem.fundingColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
@@ -532,10 +530,8 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
                 }
                 _totalIncome = fundingItem.fundingIncome;
                 _totalExpence = fundingItem.fundingExpence;
-                weakSelf.header.totalIncomeLabel.text = [NSString stringWithFormat:@"%.2f",fundingItem.fundingIncome];
-                [weakSelf.header.totalIncomeLabel sizeToFit];
-                weakSelf.header.totalExpenceLabel.text = [NSString stringWithFormat:@"%.2f",fundingItem.fundingExpence];
-                [weakSelf.header.totalExpenceLabel sizeToFit];
+                weakSelf.header.income = fundingItem.fundingIncome;
+                weakSelf.header.expence = fundingItem.fundingExpence;
                 weakSelf.title = fundingItem.fundingName;
                 if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID] || !SSJ_CURRENT_THEME.financingDetailHeaderColor.length) {
                     [weakSelf.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:fundingItem.fundingColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];

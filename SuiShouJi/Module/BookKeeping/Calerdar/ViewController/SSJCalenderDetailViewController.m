@@ -226,6 +226,7 @@
             weakSelf.item.incomeOrExpence = [chargeResult boolForColumn:@"ITYPE"];
             weakSelf.item.fundName = [chargeResult stringForColumn:@"cacctname"];
             weakSelf.item.booksId = [chargeResult stringForColumn:@"cbooksid"];
+            weakSelf.item.billDetailDate = [chargeResult stringForColumn:@"cdetaildate"];
             if (!weakSelf.item.booksId.length) {
                 weakSelf.item.booksId = SSJUSERID();
             }

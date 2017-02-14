@@ -10,8 +10,9 @@
 
 @interface SSJFundingDetailHeader : UIView
 
-@property(nonatomic, strong) UILabel *totalIncomeLabel;
+@property(nonatomic) double income;
 
-@property(nonatomic, strong) UILabel *totalExpenceLabel;
+@property(nonatomic) double expence;
+
 
 @end

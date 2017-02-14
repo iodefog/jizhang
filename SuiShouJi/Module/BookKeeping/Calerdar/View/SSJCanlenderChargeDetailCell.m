@@ -143,14 +143,23 @@
 
 - (void)setItem:(SSJBillingChargeCellItem *)item{
     _item = item;
-    self.dateDetailLab.text = _item.billDate;
+    self.dateDetailLab.text = [NSString stringWithFormat:@"%@  %@",_item.billDate,_item.billDetailDate];
     [self.dateDetailLab sizeToFit];
     self.fundDetailLab.text = _item.fundName;
     [self.fundDetailLab sizeToFit];
     self.booksDetailLab.text = _item.booksName;
     [self.booksDetailLab sizeToFit];
-    self.memoDetailLab.text = _item.chargeMemo;
-    [self.memoDetailLab sizeToFit];
+    CGSize memoSize = [_item.chargeMemo sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:15]}];
+
+    if (memoSize.width > self.width - _memoLab.width - 30) {
+        self.memoDetailLab.text = _item.chargeMemo;
+        self.memoDetailLab.width = self.width - _memoLab.width - 30;
+        self.memoDetailLab.height = memoSize.height;
+        self.memoDetailLab.textAlignment = NSTextAlignmentLeft;
+    } else {
+        self.memoDetailLab.text = _item.chargeMemo;
+        [self.memoDetailLab sizeToFit];
+    }
     [self setNeedsLayout];
 }
 

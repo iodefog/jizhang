@@ -103,13 +103,15 @@
             }
             return;
         }
-        if (![self generateBooksTypeForBooksItem:item indatabase:db forUserId:userId]) {
-            if (failure) {
-                SSJDispatch_main_async_safe(^{
-                    failure([db lastError]);
-                });
+        if (![db boolForQuery:@"select count(*) from BK_BOOKS_TYPE where CBOOKSID = ?", booksid]) {
+            if (![self generateBooksTypeForBooksItem:item indatabase:db forUserId:userId]) {
+                if (failure) {
+                    SSJDispatch_main_async_safe(^{
+                        failure([db lastError]);
+                    });
+                }
+                return;
             }
-            return;
         }
         if (success) {
             SSJDispatch_main_async_safe(^{

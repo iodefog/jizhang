@@ -61,6 +61,7 @@
     if (!_photo) {
         _photo = [[UIImageView alloc] init];
         _photo.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+        _photo.image = [UIImage imageNamed:@"mark_pic"];
     }
     return _photo;
 }
@@ -94,6 +95,7 @@
     if (!_typeLab) {
         _typeLab = [[UILabel alloc] init];
         _typeLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+        _typeLab.font = [UIFont systemFontOfSize:16];
     }
     return _typeLab;
 }
@@ -102,6 +104,7 @@
     if (!_memoLab) {
         _memoLab = [[UILabel alloc] init];
         _memoLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+        _memoLab.font = [UIFont systemFontOfSize:13];
     }
     return _memoLab;
 }
@@ -110,6 +113,7 @@
     if (!_moneyLab) {
         _moneyLab = [[UILabel alloc] init];
         _moneyLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+        _moneyLab.font = [UIFont systemFontOfSize:16];
     }
     return _moneyLab;
 }
@@ -133,12 +137,12 @@
     self.typeImage.contentScaleFactor = [UIScreen mainScreen].scale * self.typeImage.image.size.width / (30 * 0.75);
     self.typeLab.text = item.typeName;
     self.photo.hidden = !item.chargeImage.length;
-    self.separator.hidden = !item.chargeImage.length && !item.chargeMemo.length;
+    self.separator.hidden = !(item.chargeImage.length && item.chargeMemo.length);
     self.memoLab.text = item.chargeMemo;
     if (!item.incomeOrExpence) {
-        self.moneyLab.text = [NSString stringWithFormat:@"+%@",item.money];
+        self.moneyLab.text = [NSString stringWithFormat:@"+%@",[item.money ssj_moneyDecimalDisplayWithDigits:2]];
     } else {
-        self.moneyLab.text = [NSString stringWithFormat:@"-%@",item.money];
+        self.moneyLab.text = [NSString stringWithFormat:@"-%@",[item.money ssj_moneyDecimalDisplayWithDigits:2]];
     }
     [self customUpdateConstraints];
 }
