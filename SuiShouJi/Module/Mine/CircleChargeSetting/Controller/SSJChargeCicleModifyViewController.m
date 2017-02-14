@@ -375,13 +375,9 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 #pragma mark - UITextFieldDelegate
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
     if (textField.tag == 100) {
-        NSInteger existedLength = textField.text.length;
-        NSInteger selectedLength = range.length;
-        NSInteger replaceLength = string.length;
-        if (existedLength - selectedLength + replaceLength > 10) {
-            [CDAutoHideMessageHUD showMessage:@"金额不能超过10位"];
-            return NO;
-        }
+        NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
+        textField.text = [text ssj_reserveDecimalDigits:2 intDigits:9];
+        return NO;
     }
     return YES;
 }
