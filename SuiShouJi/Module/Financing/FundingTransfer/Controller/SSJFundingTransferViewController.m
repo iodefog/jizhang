@@ -63,6 +63,8 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
 
 @property (nonatomic, strong) NSArray *images;
 
+@property (nonatomic) BOOL alertShowed;
+
 @end
 
 @implementation SSJFundingTransferViewController{
@@ -117,6 +119,9 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
         self.title = @"转账";
         self.navigationItem.rightBarButtonItem = self.transferRecordsButton;
     }
+    
+    _alertShowed = [self shouldShowAlert];
+    
     [self updateTitlesAndImages];
     [self.tableView registerClass:[SSJChargeCircleModifyCell class] forCellReuseIdentifier:SSJFundingTransferEditeCellIdentifier];
 }
@@ -537,33 +542,24 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
         return;
     }
     
-    _saveButton.enabled = NO;
-    [_saveButton ssj_showLoadingIndicator];
-    NSString *dateStr = _item.cycleType == SSJCyclePeriodTypeOnce ? _item.transferDate : _item.beginDate;
-    [SSJFundingTransferStore saveCycleTransferRecordWithID:_item.ID transferInAccountId:transferInId transferOutAccountId:transferOutId money:[_item.transferMoney doubleValue] memo:_item.transferMemo cyclePeriodType:_item.cycleType beginDate:dateStr endDate:_item.endDate success:^(BOOL isExisted) {
+    [self.view endEditing:YES];
+    if (!_alertShowed && [self shouldShowAlert]) {
+        NSDate *date = [NSDate dateWithString:_item.beginDate formatString:@"yyyy-MM-dd"];
+        NSString *message = [NSString stringWithFormat:@"每月不一定都有%d号哦，没有的月份将自动跳过不生成该转账记录哦！", date.day];
         
-        _saveButton.enabled = YES;
-        [_saveButton ssj_hideLoadingIndicator];
-        
-//        if (isExisted) {
-//            if (_editeCompleteBlock) {
-//                _editeCompleteBlock(_item);
-//            }
-//        }
-        
-        if ([self isFirstTimeCreate] && _item.cycleType != SSJCyclePeriodTypeOnce) {
-            [self addCreateTiems];
-            [self showFirstTimeCreateAlert];
-        } else {
-            [self.navigationController popViewControllerAnimated:YES];
-        }
-        
-        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
-        
-    } failure:^(NSError * _Nonnull error) {
-        _saveButton.enabled = YES;
-        [_saveButton ssj_hideLoadingIndicator];
-    }];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:@"知道了" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self saveWithTransInAcctId:transferInId transOutAcctId:transferOutId];
+        }]];
+        [self presentViewController:alert animated:YES completion:NULL];
+    } else {
+        [self saveWithTransInAcctId:transferInId transOutAcctId:transferOutId];
+    }
+}
+
+- (BOOL)shouldShowAlert {
+    NSDate *date = [NSDate dateWithString:_item.beginDate formatString:@"yyyy-MM-dd"];
+    return _item.cycleType == SSJCyclePeriodTypePerMonth && (date.day == 29 || date.day == 30 || date.day == 31);
 }
 
 - (void)periodSelectionViewAction {
@@ -674,6 +670,30 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
         [self.navigationController popViewControllerAnimated:YES];
     }]];
     [self presentViewController:alert animated:YES completion:NULL];
+}
+
+- (void)saveWithTransInAcctId:(NSString *)transInAcctId transOutAcctId:(NSString *)transOutAcctId {
+    _saveButton.enabled = NO;
+    [_saveButton ssj_showLoadingIndicator];
+    NSString *dateStr = _item.cycleType == SSJCyclePeriodTypeOnce ? _item.transferDate : _item.beginDate;
+    [SSJFundingTransferStore saveCycleTransferRecordWithID:_item.ID transferInAccountId:transInAcctId transferOutAccountId:transOutAcctId money:[_item.transferMoney doubleValue] memo:_item.transferMemo cyclePeriodType:_item.cycleType beginDate:dateStr endDate:_item.endDate success:^(BOOL isExisted) {
+        
+        _saveButton.enabled = YES;
+        [_saveButton ssj_hideLoadingIndicator];
+        
+        if ([self isFirstTimeCreate] && _item.cycleType != SSJCyclePeriodTypeOnce) {
+            [self addCreateTiems];
+            [self showFirstTimeCreateAlert];
+        } else {
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+        
+        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+        
+    } failure:^(NSError * _Nonnull error) {
+        _saveButton.enabled = YES;
+        [_saveButton ssj_hideLoadingIndicator];
+    }];
 }
 
 @end
