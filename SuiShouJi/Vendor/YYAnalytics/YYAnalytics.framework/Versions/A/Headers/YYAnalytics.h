@@ -29,9 +29,13 @@ NS_ASSUME_NONNULL_BEGIN
 //用户退出登录调用
 + (void)loginOut;
 
+//是否自动检查网络状态，默认为NO；若不使用自动检查网络状态，则可使用setNetWorkStatus: 手动设置网络状态
++ (void)setAutoDetectNetWorkStatusEnable:(BOOL)yesOrNO;
 //设置用户网络状态，使用kYYAnalyticsNetWorkStatus值
 + (void)setNetWorkStatus:(NSString *)netWorkStaus;
 
+////是否自动定位，默认为NO; 若不使用自动定位，则可使用setLongtitude:Latitude: 手动设置位置信息
++ (void)setAutoLocationEnable:(BOOL)yesOrNO;
 //设置用户经纬度信息
 + (void)setLongtitude:(CGFloat)longtitude Latitude:(CGFloat)latitude;
 

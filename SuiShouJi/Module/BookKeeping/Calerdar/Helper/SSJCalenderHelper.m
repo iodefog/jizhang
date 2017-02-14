@@ -53,6 +53,7 @@
             item.chargeImage = [resultSet stringForColumn:@"cimgurl"];
             item.chargeThumbImage = [resultSet stringForColumn:@"thumburl"];
             item.idType = [resultSet intForColumn:@"ichargetype"];
+            item.billDetailDate = [resultSet stringForColumn:@"cdetaildate"];
             if (item.idType == SSJChargeIdTypeCircleConfig) {
                 item.configId = [resultSet stringForColumn:@"cid"];
             }

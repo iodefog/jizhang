@@ -7,7 +7,14 @@
 //
 
 #import "SSJBaseTableViewCell.h"
+#import "SSJBillingChargeCellItem.h"
 
 @interface SSJCalendarTableViewCell : SSJBaseTableViewCell
+
+@property(nonatomic, strong) SSJBillingChargeCellItem *item;
+
+@property(nonatomic) BOOL isLastRow;
+
+@property(nonatomic) BOOL isFirstRow;
 
 @end

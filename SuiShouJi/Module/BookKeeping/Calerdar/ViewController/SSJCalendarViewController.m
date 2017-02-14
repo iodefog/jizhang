@@ -9,7 +9,7 @@
 #import "SSJCalendarViewController.h"
 #import "SSJCalendarView.h"
 #import "SSJRecordMakingViewController.h"
-#import "SSJBillingChargeCellItem.h"
+#import "SSJCalendarTableViewCell.h"
 #import "SSJBillingChargeCell.h"
 #import "SSJCalenderTableViewNoDataHeader.h"
 #import "SSJCalendarTabelViewHeaderView.h"
@@ -66,7 +66,7 @@
         self.statisticsTitle = @"日历";
         self.hidesBottomBarWhenPushed = YES;
         self.extendedLayoutIncludesOpaqueBars = YES;
-        self.automaticallyAdjustsScrollViewInsets = NO;
+//        self.automaticallyAdjustsScrollViewInsets = NO;
     }
     return self;
 }
@@ -83,7 +83,7 @@
     [self.view addSubview:self.tableView];
     [self.view addSubview:self.shareButton];
     [self.tableView registerClass:[SSJCalendarTabelViewHeaderView class] forHeaderFooterViewReuseIdentifier:@"FundingDetailDateHeader"];
-    [self.tableView registerClass:[SSJBillingChargeCell class] forCellReuseIdentifier:@"BillingChargeCellIdentifier"];
+    [self.tableView registerClass:[SSJCalendarTableViewCell class] forCellReuseIdentifier:@"BillingChargeCellIdentifier"];
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"canleder_jia"] style:UIBarButtonItemStylePlain target:self action:@selector(rightButtonClicked:)];
     self.navigationItem.rightBarButtonItem = rightItem;
 
@@ -127,7 +127,7 @@
 
 #pragma mark - UITableViewDelegate
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 90;
+    return 65;
 }   
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
@@ -139,8 +139,8 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    SSJCalenderTableViewCell *cell = (SSJCalenderTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
-    SSJBillingChargeCellItem *item = (SSJBillingChargeCellItem*)cell.cellItem;
+    SSJCalendarTableViewCell *cell = (SSJCalendarTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
+    SSJBillingChargeCellItem *item = cell.item;
     SSJCalenderDetailViewController *CalenderDetailVC = [[SSJCalenderDetailViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
     CalenderDetailVC.item = item;
     [self.navigationController pushViewController:CalenderDetailVC animated:YES];
@@ -178,9 +178,20 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    SSJBillingChargeCell *cell = [tableView dequeueReusableCellWithIdentifier:@"BillingChargeCellIdentifier" forIndexPath:indexPath];
+    SSJCalendarTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"BillingChargeCellIdentifier" forIndexPath:indexPath];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    [cell setCellItem:[self.items ssj_safeObjectAtIndex:indexPath.row]];
+    cell.item  = [self.items ssj_safeObjectAtIndex:indexPath.row];
+    if (indexPath.row == 0) {
+        cell.isFirstRow = YES;
+    } else {
+        cell.isFirstRow = NO;
+    }
+    
+    if (indexPath.row == self.items.count - 1) {
+        cell.isLastRow = YES;
+    } else {
+        cell.isLastRow = NO;
+    }
     return cell;
 }
 
@@ -188,9 +199,9 @@
 #pragma mark - Getter
 -(UITableView *)tableView{
     if (!_tableView) {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height) style:UITableViewStylePlain];
-        _tableView.backgroundColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:0.1];
-        _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height) style:UITableViewStyleGrouped];
+        _tableView.backgroundColor = [UIColor clearColor];
+        _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         [_tableView ssj_clearExtendSeparator];
         _tableView.delegate = self;
         _tableView.dataSource = self;
@@ -204,7 +215,7 @@
 - (SSJCalendarView *)calendarView {
     if (_calendarView == nil) {
         _calendarView = [[SSJCalendarView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 270)];
-        _calendarView.calendar.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+        _calendarView.calendar.backgroundColor = [UIColor clearColor];
         _calendarView.isSelectOnly = NO;
         _calendarView.year = _currentYear;
         _calendarView.month = _currentMonth;
