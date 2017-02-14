@@ -11,7 +11,7 @@
 #import "TPKeyboardAvoidingTableView.h"
 #import "SSJChargeCircleModifyCell.h"
 #import "SSJFundingTypeSelectView.h"
-#import "SSJLoanDateSelectionView.h"
+#import "SSJHomeDatePickerView.h"
 #import "SSJFundingTransferDetailItem.h"
 #import "SSJCreditCardItem.h"
 #import "SSJFundingTransferStore.h"
@@ -33,8 +33,6 @@ static NSString *const kCellId = @"SSJChargeCircleModifyCell";
 
 static const NSInteger kMoneyTag = 1001;
 static const NSInteger kMemoTag = 1002;
-
-static const int kMaxMoneyLength = 9;
 
 @interface __SSJFundingTransferChargeDetailModel : NSObject
 
@@ -69,7 +67,7 @@ static const int kMaxMoneyLength = 9;
 
 @property (nonatomic, strong) SSJFundingTypeSelectView *transferOutFundingTypeSelect;
 
-@property (nonatomic, strong) SSJLoanDateSelectionView *dateSelectionView;
+@property (nonatomic, strong) SSJHomeDatePickerView *dateSelectionView;
 
 @end
 
@@ -203,7 +201,7 @@ static const int kMaxMoneyLength = 9;
         self.transferInFundingTypeSelect.selectFundID = _item.transferInId;
         [self.transferInFundingTypeSelect show];
     } else if ([model.title isEqualToString:kTransDate]) {
-        self.dateSelectionView.selectedDate = [NSDate dateWithString:self.item.transferDate formatString:@"yyyy-MM-dd"];
+        self.dateSelectionView.date = [NSDate dateWithString:self.item.transferDate formatString:@"yyyy-MM-dd"];
         [self.dateSelectionView show];
     }
 }
@@ -235,10 +233,7 @@ static const int kMaxMoneyLength = 9;
 - (void)transferTextDidChange:(NSNotification *)notification {
     UITextField *textField = notification.object;
     if (textField.tag == kMoneyTag) {
-        if (textField.text.length > kMaxMoneyLength) {
-            textField.text = [textField.text substringToIndex:kMaxMoneyLength];
-        }
-        textField.text = [textField.text ssj_reserveDecimalDigits:2 intDigits:0];
+        textField.text = [textField.text ssj_reserveDecimalDigits:2 intDigits:9];
         _item.transferMoney = textField.text;
     } else if (textField.tag == kMemoTag) {
         _item.transferMemo = textField.text;
@@ -252,11 +247,6 @@ static const int kMaxMoneyLength = 9;
 }
 
 - (BOOL)checkModelValid {
-    if (_item.transferMoney.length > kMaxMoneyLength) {
-        [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"金额不能超过%d位数哦", kMaxMoneyLength]];
-        return NO;
-    }
-    
     if ([_item.transferMoney floatValue] <= 0) {
         [CDAutoHideMessageHUD showMessage:@"请输入有效金额"];
         return NO;
@@ -293,7 +283,7 @@ static const int kMaxMoneyLength = 9;
     
     _saveButton.enabled = NO;
     [_saveButton ssj_showLoadingIndicator];
-    [SSJFundingTransferStore saveTransferChargeWithTransInChargeId:_item.transferInChargeId transOutChargeId:_item.transferOutChargeId transInAcctId:_item.transferInId transOutAcctId:_item.transferOutId money:[_item.transferMoney floatValue] memo:_item.transferMemo billDate:_item.transferDate success:^{
+    [SSJFundingTransferStore saveTransferChargeWithTransInChargeId:_item.transferInChargeId transOutChargeId:_item.transferOutChargeId transInAcctId:_item.transferInId transOutAcctId:_item.transferOutId money:[_item.transferMoney doubleValue] memo:_item.transferMemo billDate:_item.transferDate success:^{
         _saveButton.enabled = YES;
         [_saveButton ssj_hideLoadingIndicator];
         [self.navigationController popViewControllerAnimated:YES];
@@ -425,11 +415,11 @@ static const int kMaxMoneyLength = 9;
     return _transferOutFundingTypeSelect;
 }
 
-- (SSJLoanDateSelectionView *)dateSelectionView {
+- (SSJHomeDatePickerView *)dateSelectionView {
     if (!_dateSelectionView) {
         __weak typeof(self) wself = self;
-        _dateSelectionView = [[SSJLoanDateSelectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 244)];
-        _dateSelectionView.shouldSelectDateAction = ^BOOL(SSJLoanDateSelectionView *view, NSDate *date) {
+        _dateSelectionView = [[SSJHomeDatePickerView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 244)];
+        _dateSelectionView.shouldConfirmBlock = ^BOOL(SSJHomeDatePickerView *view, NSDate *date) {
             NSDate *currentDate = [NSDate date];
             currentDate = [NSDate dateWithYear:currentDate.year month:currentDate.month day:currentDate.day];
             if ([date compare:currentDate] == NSOrderedDescending) {
@@ -438,8 +428,8 @@ static const int kMaxMoneyLength = 9;
             }
             return YES;
         };
-        _dateSelectionView.selectDateAction = ^(SSJLoanDateSelectionView *view) {
-            wself.item.transferDate = [view.selectedDate formattedDateWithFormat:@"yyyy-MM-dd"];
+        _dateSelectionView.confirmBlock = ^(SSJHomeDatePickerView *view) {
+            wself.item.transferDate = [view.date formattedDateWithFormat:@"yyyy-MM-dd"];
             [wself.tableView reloadData];
         };
     }

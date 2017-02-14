@@ -271,7 +271,7 @@ static NSString *const kTitle6 = @"分期申请日";
                 textField.text = @"";
             }
         }else if (textField.tag == 101) {
-            textField.text = [textField.text ssj_reserveDecimalDigits:2 intDigits:0];
+            textField.text = [textField.text ssj_reserveDecimalDigits:2 intDigits:9];
             if (textField.text.length) {
                 self.repaymentModel.repaymentMoney = [NSDecimalNumber decimalNumberWithString:textField.text];
             } else {

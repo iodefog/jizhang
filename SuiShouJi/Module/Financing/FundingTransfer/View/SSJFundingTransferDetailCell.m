@@ -105,7 +105,7 @@
     _item = item;
     self.dateLabel.text = [_item.transferDate substringWithRange:NSMakeRange(5, 5)];
     [self.dateLabel sizeToFit];
-    self.moneyLabel.text = [NSString stringWithFormat:@"%.2f",[_item.transferMoney floatValue]];
+    self.moneyLabel.text = [NSString stringWithFormat:@"%.2f",[_item.transferMoney doubleValue]];
     [self.moneyLabel sizeToFit];
     self.transferSourceLabel.text = [NSString stringWithFormat:@"%@转到%@",_item.transferOutName,_item.transferInName];
     [self.transferSourceLabel sizeToFit];

@@ -359,7 +359,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
         
         int periodType = [resultSet intForColumn:@"icycletype"];
         
-        NSString *billDateStr = [resultSet stringForColumn:@"max(a.cbilldate)"];
+        NSString *billDateStr = [resultSet stringForColumn:@"max(uc.cbilldate)"];
         NSDate *billDate = [NSDate dateWithString:billDateStr formatString:@"yyyy-MM-dd"];
         NSDate *beginDate = [NSDate dateWithString:[resultSet stringForColumn:@"cbegindate"] formatString:@"yyyy-MM-dd"];
         NSDate *fromDate = [billDate compare:beginDate] == NSOrderedDescending ? billDate : beginDate;

@@ -93,7 +93,7 @@ static BOOL kNeedBannerDisplay = YES;
 @property(nonatomic, strong) SSJPersonalDetailItem *personalDetailItem;
 
 @property (nonatomic, strong) UIView *lineView;
-@property (nonatomic, strong) NSMutableArray<SSJListAdItem *> *adItems;//服务器返回的广告
+//@property (nonatomic, strong) NSMutableArray<SSJListAdItem *> *adItems;//服务器返回的广告
 @property (nonatomic, strong) NSMutableArray<SSJListAdItem *> *localAdItems;//本地固定的广告
 @property (nonatomic, strong) NSMutableArray<SSJListAdItem *> *adItemsArray;//合并之后的广告
 @end
@@ -146,6 +146,7 @@ static BOOL kNeedBannerDisplay = YES;
         }
     }
     [self orgDataToModel];
+    self.adItemsArray = self.localAdItems;
     [self additionOrgDataToModel];
     [self.collectionView reloadData];
 }
@@ -163,7 +164,6 @@ static BOOL kNeedBannerDisplay = YES;
         [tempArray addObject:item];
     }
     self.localAdItems = tempArray;
-    self.adItemsArray = self.localAdItems;
 }
 
 
@@ -446,23 +446,25 @@ static BOOL kNeedBannerDisplay = YES;
 
 - (void)server:(SSJBaseNetworkService *)service didFailLoadWithError:(NSError *)error
 {
-    [self loadDataArray];
+//    [self loadDataArray];
+    self.adItemsArray = self.localAdItems;
     [self.collectionView reloadData];
 }
 
 - (void)loadDataArray
 {
 //插入广告模型
-    [self.adItemsArray removeAllObjects];
-    [self.adItems removeAllObjects];
-    [self orgDataToModel];
+    NSMutableArray *tempArray = [NSMutableArray array];
     for (SSJListAdItem *listAdItem in self.bannerService.item.listAdItems) {
         if (listAdItem.hidden) {
-            [self.adItems addObject:listAdItem];
-            NSInteger index = [self.adItems indexOfObject:listAdItem];
-            [self.adItemsArray insertObject:listAdItem atIndex:index];
+            [tempArray addObject:listAdItem];
         }
     }
+    
+    for (SSJListAdItem *item in self.localAdItems) {
+        [tempArray addObject:item];
+    }
+    self.adItemsArray = tempArray;
     [self additionOrgDataToModel];
 }
 

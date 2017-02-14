@@ -120,7 +120,7 @@
 {
     if (!_titleLabel) {
         _titleLabel = [[UILabel alloc] init];
-        _titleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+        _titleLabel.textColor = [UIColor ssj_colorWithHex:@"333333"];
         _titleLabel.textAlignment = NSTextAlignmentCenter;
         _titleLabel.font = systemFontSize(18);
     }

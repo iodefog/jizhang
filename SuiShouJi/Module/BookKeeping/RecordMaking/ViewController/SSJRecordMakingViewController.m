@@ -36,7 +36,7 @@
 #import "SSJRecordMakingStore.h"
 #import "SSJBooksTypeStore.h"
 #import "SSJCreditCardItem.h"
-#import "SSJHomeCalendarView.h"
+#import "SSJHomeDatePickerView.h"
 #define INPUT_DEFAULT_COLOR [UIColor ssj_colorWithHex:@"#dddddd"]
 
 static const NSTimeInterval kAnimationDuration = 0.25;
@@ -51,7 +51,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 
 @property (nonatomic,strong) UIImage *selectedImage;
 
-@property (nonatomic,strong) SSJHomeCalendarView *dateSelectedView;
+@property (nonatomic,strong) SSJHomeDatePickerView *dateSelectedView;
 
 @property (nonatomic,strong) SSJFundingTypeSelectView *FundingTypeSelectView;
 
@@ -199,40 +199,31 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     return _customNaviBar;
 }
 
-- (SSJHomeCalendarView*)dateSelectedView {
+- (SSJHomeDatePickerView *)dateSelectedView {
     if (!_dateSelectedView) {
-        _dateSelectedView = [[SSJHomeCalendarView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 300)];
+        _dateSelectedView = [[SSJHomeDatePickerView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 300)];
         _dateSelectedView.warningDate = [NSDate date];
         __weak typeof(self) weakSelf = self;
-//        _dateSelectedView.calendarView.DateSelectedBlock = ^(long year , long month ,long day,  NSString *selectDate){
-////            if (weakSelf.selectChargeCircleType != -1
-////                && (year < weakSelf.currentYear || month < weakSelf.currentMonth || day < weakSelf.currentDay)) {
-////                [CDAutoHideMessageHUD showMessage:@""];
-////                return;
-////            }
-//            weakSelf.selectedDay = day;
-//            weakSelf.selectedMonth = month;
-//            weakSelf.selectedYear = year;
-//            weakSelf.item.billDate = selectDate;
-//            [weakSelf.accessoryView.dateBtn setTitle:[NSString stringWithFormat:@"%ld月",weakSelf.selectedMonth] forState:UIControlStateNormal];
-//            [weakSelf.accessoryView.dateBtn setTitle:[NSString stringWithFormat:@"%ld月%ld日", month, day] forState:UIControlStateNormal];
-//            [weakSelf.dateSelectedView dismiss];
-//        };
-        _dateSelectedView.dismissBlock = ^{
+        _dateSelectedView.closeBlock = ^(SSJHomeDatePickerView *view) {
             [weakSelf.billTypeInputView.moneyInput becomeFirstResponder];
         };
-        _dateSelectedView.confirmBlock = ^(NSDate *date){
-            weakSelf.selectedDay = date.day;
-            weakSelf.selectedMonth = date.month;
-            weakSelf.selectedYear = date.year;
-            weakSelf.item.billDate = [NSString stringWithFormat:@"%04ld-%02ld-%02ld",(long)date.year,(long)date.month,(long)date.day];
-            weakSelf.item.billDetailDate = [NSString stringWithFormat:@"%02ld:%02ld",(long)date.hour,(long)date.minute];
-//            [weakSelf.accessoryView.dateBtn setTitle:[NSString stringWithFormat:@"%ld月",weakSelf.selectedMonth] forState:UIControlStateNormal];
+        _dateSelectedView.shouldConfirmBlock = ^BOOL(SSJHomeDatePickerView *view, NSDate *selecteDate) {
+            if ([[NSDate date] compare:selecteDate] == NSOrderedAscending) {
+                [CDAutoHideMessageHUD showMessage:@"不能记未来日期的账哦"];
+                return NO;
+            }
+            return YES;
+        };
+        _dateSelectedView.confirmBlock = ^(SSJHomeDatePickerView *view) {
+            weakSelf.selectedDay = view.date.day;
+            weakSelf.selectedMonth = view.date.month;
+            weakSelf.selectedYear = view.date.year;
+            weakSelf.item.billDate = [NSString stringWithFormat:@"%04ld-%02ld-%02ld",(long)view.date.year,(long)view.date.month,(long)view.date.day];
+            weakSelf.item.billDetailDate = [NSString stringWithFormat:@"%02ld:%02ld",(long)view.date.hour,(long)view.date.minute];
             [weakSelf.accessoryView.dateBtn setTitle:[NSString stringWithFormat:@"%ld月%ld日", weakSelf.selectedMonth, weakSelf.selectedDay] forState:UIControlStateNormal];
             [weakSelf.dateSelectedView dismiss];
-//            NSLog(@"%@",date);
+            [weakSelf.billTypeInputView.moneyInput becomeFirstResponder];
         };
-        
     }
     return _dateSelectedView;
 }
@@ -414,7 +405,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     if (_billTypeInputView.moneyInput == textField) {
         NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
-        textField.text = [text ssj_reserveDecimalDigits:2 intDigits:10];
+        textField.text = [text ssj_reserveDecimalDigits:2 intDigits:9];
         return NO;
     } else if (_accessoryView.memoView == textField) {
         NSString *text = textField.text ? : @"";

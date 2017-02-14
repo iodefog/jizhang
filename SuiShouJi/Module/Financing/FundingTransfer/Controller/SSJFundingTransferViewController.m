@@ -11,7 +11,7 @@
 #import "SSJFundingTypeSelectView.h"
 #import "TPKeyboardAvoidingTableView.h"
 #import "SSJChargeCircleTimeSelectView.h"
-#import "SSJLoanDateSelectionView.h"
+#import "SSJHomeDatePickerView.h"
 #import "SSJFundingTransferPeriodSelectionView.h"
 #import "SSJDatabaseQueue.h"
 #import "SSJDataSynchronizer.h"
@@ -30,8 +30,6 @@ static NSString *const kTransDate = @"转账日期";
 static NSString *const kCyclePeriod = @"循环周期";
 static NSString *const kBeginDate = @"周期起始日";
 static NSString *const kEndDate = @"周期结束日";
-
-static const int kMaxMoneyLength = 9;
 
 static NSString *const kCreatePeriodTransferTimesKey = @"kCreatePeriodTransferTimesKey";
 
@@ -53,9 +51,9 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
 
 @property (nonatomic, strong) SSJFundingTransferPeriodSelectionView *periodSelectionView;
 
-@property (nonatomic, strong) SSJLoanDateSelectionView *beginDateSelectionView;
+@property (nonatomic, strong) SSJHomeDatePickerView *beginDateSelectionView;
 
-@property (nonatomic, strong) SSJLoanDateSelectionView *endDateSelectionView;
+@property (nonatomic, strong) SSJHomeDatePickerView *endDateSelectionView;
 
 @property (nonatomic, strong) UIView *saveFooterView;
 
@@ -176,10 +174,10 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
     } else if ([title isEqualToString:kCyclePeriod]) {
         [self.periodSelectionView show];
     } else if ([title isEqualToString:kBeginDate]) {
-        self.beginDateSelectionView.selectedDate = [NSDate dateWithString:self.item.beginDate formatString:@"yyyy-MM-dd"];
+        self.beginDateSelectionView.date = [NSDate dateWithString:self.item.beginDate formatString:@"yyyy-MM-dd"];
         [self.beginDateSelectionView show];
     } else if ([title isEqualToString:kEndDate]) {
-        self.endDateSelectionView.selectedDate = [NSDate dateWithString:(self.item.endDate ?: self.item.beginDate) formatString:@"yyyy-MM-dd"];
+        self.endDateSelectionView.date = [NSDate dateWithString:(self.item.endDate ?: self.item.beginDate) formatString:@"yyyy-MM-dd"];
         [self.endDateSelectionView show];
     }
 }
@@ -435,48 +433,53 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
     return _periodSelectionView;
 }
 
-- (SSJLoanDateSelectionView *)beginDateSelectionView {
+- (SSJHomeDatePickerView *)beginDateSelectionView {
     if (!_beginDateSelectionView) {
         __weak typeof(self) wself = self;
-        _beginDateSelectionView = [[SSJLoanDateSelectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 244)];
-        _beginDateSelectionView.shouldSelectDateAction = ^BOOL(SSJLoanDateSelectionView *view, NSDate *date) {
+        _beginDateSelectionView = [[SSJHomeDatePickerView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 244)];
+        _beginDateSelectionView.shouldConfirmBlock = ^BOOL(SSJHomeDatePickerView *view, NSDate *date) {
             NSDate *currentDate = [NSDate date];
             currentDate = [NSDate dateWithYear:currentDate.year month:currentDate.month day:currentDate.day];
             if ([date compare:currentDate] == NSOrderedAscending) {
-                [CDAutoHideMessageHUD showMessage:@"起始日期不能早于今天"];
+                [CDAutoHideMessageHUD showMessage:@"起始日期不能早于今天哦"];
+                return NO;
+            }
+            NSDate *endDate = [NSDate dateWithString:_item.endDate formatString:@"yyyy-MM-dd"];
+            if ([date compare:endDate] == NSOrderedDescending) {
+                [CDAutoHideMessageHUD showMessage:@"起始日期不能晚于结束日期哦"];
                 return NO;
             }
             return YES;
         };
-        _beginDateSelectionView.selectDateAction = ^(SSJLoanDateSelectionView *view) {
-            wself.item.beginDate = [view.selectedDate formattedDateWithFormat:@"yyyy-MM-dd"];
+        _beginDateSelectionView.confirmBlock = ^(SSJHomeDatePickerView *view) {
+            wself.item.beginDate = [view.date formattedDateWithFormat:@"yyyy-MM-dd"];
             [wself.tableView reloadData];
         };
     }
     return _beginDateSelectionView;
 }
 
-- (SSJLoanDateSelectionView *)endDateSelectionView {
+- (SSJHomeDatePickerView *)endDateSelectionView {
     if (!_endDateSelectionView) {
         __weak typeof(self) weakSelf = self;
-        _endDateSelectionView = [[SSJLoanDateSelectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 244)];
-        _endDateSelectionView.shouldSelectDateAction = ^BOOL(SSJLoanDateSelectionView *view, NSDate *date) {
+        _endDateSelectionView = [[SSJHomeDatePickerView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 244)];
+        _endDateSelectionView.leftButtonItem = [SSJHomeDatePickerViewButtonItem buttonItemWithTitle:@"清空" titleColor:[UIColor ssj_colorWithHex:SSJOverrunRedColorValue] image:nil];
+        _endDateSelectionView.shouldConfirmBlock = ^BOOL(SSJHomeDatePickerView *view, NSDate *date) {
             NSDate *beginDate = [NSDate dateWithString:weakSelf.item.beginDate formatString:@"yyyy-MM-dd"];
             if ([date compare:beginDate] == NSOrderedAscending) {
-                [CDAutoHideMessageHUD showMessage:@"结束日期不能早于起始日期"];
+                [CDAutoHideMessageHUD showMessage:@"结束日期不能早于起始日期哦"];
                 return NO;
             }
             return YES;
         };
-        _endDateSelectionView.selectDateAction = ^(SSJLoanDateSelectionView *view) {
-            weakSelf.item.endDate = [view.selectedDate formattedDateWithFormat:@"yyyy-MM-dd"];
+        _endDateSelectionView.confirmBlock = ^(SSJHomeDatePickerView *view) {
+            weakSelf.item.endDate = [view.date formattedDateWithFormat:@"yyyy-MM-dd"];
             [weakSelf.tableView reloadData];
         };
-        _endDateSelectionView.leftButtonItem = [SSJLoanDateSelectionButtonItem buttonItemWithTitle:@"清空" image:nil color:[UIColor ssj_colorWithHex:SSJOverrunRedColorValue] action:^{
+        _endDateSelectionView.closeBlock = ^(SSJHomeDatePickerView *view) {
             weakSelf.item.endDate = nil;
             [weakSelf.tableView reloadData];
-            [weakSelf.endDateSelectionView dismiss];
-        }];
+        };
     }
     return _endDateSelectionView;
 }
@@ -532,9 +535,6 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
     }else if (_memoInput.text.length > 15){
         [CDAutoHideMessageHUD showMessage:@"备注最多输入15个字哦"];
         return;
-    }else if (_moneyInput.text.length > kMaxMoneyLength){
-        [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"金额不能超过%d位数哦", kMaxMoneyLength]];
-        return;
     }
     
     _saveButton.enabled = NO;
@@ -585,10 +585,7 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
 
 - (void)transferTextDidChange:(NSNotification *)notification {
     if (notification.object == _moneyInput) {
-        if (_moneyInput.text.length > kMaxMoneyLength) {
-            _moneyInput.text = [_moneyInput.text substringToIndex:kMaxMoneyLength];
-        }
-        [self setupTextFiledNum:_moneyInput num:2];
+        _moneyInput.text = [_moneyInput.text ssj_reserveDecimalDigits:2 intDigits:9];
         _item.transferMoney = _moneyInput.text;
     } else if (notification.object == _memoInput) {
         _item.transferMemo = _memoInput.text;
@@ -628,37 +625,37 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
 //}
 
 
-/**
- *   限制输入框小数点(输入框只改变时候调用valueChange)
- *
- *  @param TF  输入框
- *  @param num 小数点后限制位数
- */
--(void)setupTextFiledNum:(UITextField *)TF num:(int)num
-{
-    NSString *str = [TF.text stringByReplacingOccurrencesOfString:@"¥" withString:@""];
-    NSArray *arr = [TF.text componentsSeparatedByString:@"."];
-    if ([str isEqualToString:@"0."] || [str isEqualToString:@"."]) {
-        TF.text = @"0.";
-    }else if (str.length == 2) {
-        if ([str floatValue] == 0) {
-            TF.text = @"0";
-        }else if(arr.count < 2){
-            TF.text = [NSString stringWithFormat:@"%d",[str intValue]];
-        }
-    }
-    
-    if (arr.count > 2) {
-        TF.text = [NSString stringWithFormat:@"%@.%@",arr[0],arr[1]];
-    }
-    
-    if (arr.count == 2) {
-        NSString * lastStr = arr.lastObject;
-        if (lastStr.length > num) {
-            TF.text = [NSString stringWithFormat:@"%@.%@",arr[0],[lastStr substringToIndex:num]];
-        }
-    }
-}
+///**
+// *   限制输入框小数点(输入框只改变时候调用valueChange)
+// *
+// *  @param TF  输入框
+// *  @param num 小数点后限制位数
+// */
+//-(void)setupTextFiledNum:(UITextField *)TF num:(int)num
+//{
+//    NSString *str = [TF.text stringByReplacingOccurrencesOfString:@"¥" withString:@""];
+//    NSArray *arr = [TF.text componentsSeparatedByString:@"."];
+//    if ([str isEqualToString:@"0."] || [str isEqualToString:@"."]) {
+//        TF.text = @"0.";
+//    }else if (str.length == 2) {
+//        if ([str floatValue] == 0) {
+//            TF.text = @"0";
+//        }else if(arr.count < 2){
+//            TF.text = [NSString stringWithFormat:@"%d",[str intValue]];
+//        }
+//    }
+//    
+//    if (arr.count > 2) {
+//        TF.text = [NSString stringWithFormat:@"%@.%@",arr[0],arr[1]];
+//    }
+//    
+//    if (arr.count == 2) {
+//        NSString * lastStr = arr.lastObject;
+//        if (lastStr.length > num) {
+//            TF.text = [NSString stringWithFormat:@"%@.%@",arr[0],[lastStr substringToIndex:num]];
+//        }
+//    }
+//}
 
 - (BOOL)isFirstTimeCreate {
     NSInteger times = [[NSUserDefaults standardUserDefaults] integerForKey:kCreatePeriodTransferTimesKey];
