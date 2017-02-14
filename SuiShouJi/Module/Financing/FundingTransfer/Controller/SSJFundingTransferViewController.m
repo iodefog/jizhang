@@ -442,6 +442,7 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
     if (!_beginDateSelectionView) {
         __weak typeof(self) wself = self;
         _beginDateSelectionView = [[SSJHomeDatePickerView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 244)];
+        _beginDateSelectionView.datePickerMode = SSJDatePickerModeDate;
         _beginDateSelectionView.shouldConfirmBlock = ^BOOL(SSJHomeDatePickerView *view, NSDate *date) {
             NSDate *currentDate = [NSDate date];
             currentDate = [NSDate dateWithYear:currentDate.year month:currentDate.month day:currentDate.day];
@@ -468,6 +469,7 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
     if (!_endDateSelectionView) {
         __weak typeof(self) weakSelf = self;
         _endDateSelectionView = [[SSJHomeDatePickerView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 244)];
+        _endDateSelectionView.datePickerMode = SSJDatePickerModeDate;
         _endDateSelectionView.leftButtonItem = [SSJHomeDatePickerViewButtonItem buttonItemWithTitle:@"清空" titleColor:[UIColor ssj_colorWithHex:SSJOverrunRedColorValue] image:nil];
         _endDateSelectionView.shouldConfirmBlock = ^BOOL(SSJHomeDatePickerView *view, NSDate *date) {
             NSDate *beginDate = [NSDate dateWithString:weakSelf.item.beginDate formatString:@"yyyy-MM-dd"];
