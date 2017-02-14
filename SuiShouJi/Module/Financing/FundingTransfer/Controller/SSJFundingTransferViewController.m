@@ -10,7 +10,6 @@
 #import "SSJFundingItem.h"
 #import "SSJFundingTypeSelectView.h"
 #import "TPKeyboardAvoidingTableView.h"
-#import "SSJChargeCircleTimeSelectView.h"
 #import "SSJHomeDatePickerView.h"
 #import "SSJFundingTransferPeriodSelectionView.h"
 #import "SSJDatabaseQueue.h"
@@ -47,7 +46,7 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
 
 @property (nonatomic,strong) SSJFundingTypeSelectView *transferOutFundingTypeSelect;
 
-@property(nonatomic, strong) SSJChargeCircleTimeSelectView *transferDateSelectionView;
+@property(nonatomic, strong) SSJHomeDatePickerView *transferDateSelectionView;
 
 @property (nonatomic, strong) SSJFundingTransferPeriodSelectionView *periodSelectionView;
 
@@ -175,6 +174,7 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
         }
         [self.transferInFundingTypeSelect show];
     } else if ([title isEqualToString:kTransDate]) {
+        self.transferDateSelectionView.date = [NSDate dateWithString:self.item.transferDate formatString:@"yyyy-MM-dd"];
         [self.transferDateSelectionView show];
     } else if ([title isEqualToString:kCyclePeriod]) {
         [self.periodSelectionView show];
@@ -413,16 +413,21 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
     return _saveButton;
 }
 
--(SSJChargeCircleTimeSelectView *)transferDateSelectionView{
+-(SSJHomeDatePickerView *)transferDateSelectionView{
     if (!_transferDateSelectionView) {
-        _transferDateSelectionView = [[SSJChargeCircleTimeSelectView alloc]initWithFrame:self.view.bounds];
-        _transferDateSelectionView.maxDate = [NSDate date];
-        _transferDateSelectionView.timeIsTooLateBlock = ^(){
-            [CDAutoHideMessageHUD showMessage:@"转账时间不能大于当前时间哦"];
+        _transferDateSelectionView = [[SSJHomeDatePickerView alloc]initWithFrame:self.view.bounds];
+        _transferDateSelectionView.shouldConfirmBlock = ^(SSJHomeDatePickerView *view, NSDate *selecteDate) {
+            NSDate *currentDate = [NSDate date];
+            currentDate = [NSDate dateWithYear:currentDate.year month:currentDate.month day:currentDate.day];
+            if ([selecteDate compare:currentDate] == NSOrderedDescending) {
+                [CDAutoHideMessageHUD showMessage:@"转账时间不能大于当前时间哦"];
+                return NO;
+            }
+            return YES;
         };
         __weak typeof(self) weakSelf = self;
-        _transferDateSelectionView.timerSetBlock = ^(NSString *dateStr){
-            weakSelf.item.transferDate = dateStr;
+        _transferDateSelectionView.confirmBlock = ^(SSJHomeDatePickerView *view) {
+            weakSelf.item.transferDate = [view.date formattedDateWithFormat:@"yyyy-MM-dd"];;
             [weakSelf.tableView reloadData];
         };
     }

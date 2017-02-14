@@ -32,7 +32,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 #import "SSJChargeCircleSelectView.h"
 #import "SSJBillTypeSelectViewController.h"
 #import "SSJFundingTypeSelectViewController.h"
-#import "SSJChargeCircleTimeSelectView.h"
+#import "SSJHomeDatePickerView.h"
 #import "SSJCircleChargeTypeSelectView.h"
 #import "SSJImaageBrowseViewController.h"
 #import "SSJRecordMakingCategoryItem.h"
@@ -50,8 +50,8 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 @property(nonatomic, strong) UIView *saveFooterView;
 @property(nonatomic, strong) SSJFundingTypeSelectView *fundSelectView;
 @property(nonatomic, strong) SSJChargeCircleSelectView *circleSelectView;
-@property(nonatomic, strong) SSJChargeCircleTimeSelectView *chargeCircleTimeView;
-@property(nonatomic, strong) SSJChargeCircleTimeSelectView *chargeCircleEndTimeView;
+@property(nonatomic, strong) SSJHomeDatePickerView *chargeCircleTimeView;
+@property(nonatomic, strong) SSJHomeDatePickerView *chargeCircleEndTimeView;
 @property(nonatomic, strong) SSJCircleChargeTypeSelectView *chargeTypeSelectView;
 @property(nonatomic, strong) SSJMemberSelectView *memberSelectView;
 @property(nonatomic, strong) UIImage *selectedImage;
@@ -194,9 +194,9 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
             NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
             [dateFormatter setDateFormat:@"yyyy-MM-dd"];
             NSDate* date = [dateFormatter dateFromString:self.item.billDate];
-            self.chargeCircleTimeView.currentDate = date;
+            self.chargeCircleTimeView.date = date;
         }else{
-            self.chargeCircleTimeView.currentDate = [NSDate date];
+            self.chargeCircleTimeView.date = [NSDate date];
         }
         [self.chargeCircleTimeView show];
     }
@@ -230,18 +230,11 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
         }
     }
     if ([title isEqualToString:kTitle12]) {
-        NSDate *startDate = [NSDate date];
-        if (self.item.billDate.length) {
-            NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
-            [dateFormatter setDateFormat:@"yyyy-MM-dd"];
-            NSDate* date = [dateFormatter dateFromString:self.item.billDate];
-            startDate = date;
-        }else{
-            startDate = [NSDate date];
+        NSDate *startDate = [NSDate dateWithString:(self.item.chargeCircleEndDate ?: self.item.billDate) formatString:@"yyyy-MM-dd"];
+        if (startDate) {
+            self.chargeCircleEndTimeView.date = startDate;
+            [self.chargeCircleEndTimeView show];
         }
-        startDate = [NSDate dateWithString:self.item.billDate formatString:@"yyyy-MM-dd"];
-        self.chargeCircleEndTimeView.minimumDate = startDate;
-        [self.chargeCircleEndTimeView show];
     }
 }
 
@@ -475,35 +468,52 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
     return _circleSelectView;
 }
 
--(SSJChargeCircleTimeSelectView *)chargeCircleTimeView{
+-(SSJHomeDatePickerView *)chargeCircleTimeView{
     if (!_chargeCircleTimeView) {
-        _chargeCircleTimeView = [[SSJChargeCircleTimeSelectView alloc]initWithFrame:self.view.bounds];
-        _chargeCircleTimeView.minimumDate = [NSDate date];
-        _chargeCircleTimeView.timeIsTooEarlyBlock = ^(){
-            [CDAutoHideMessageHUD showMessage:@"不能设置历史日期的周期记账哦"];
+        _chargeCircleTimeView = [[SSJHomeDatePickerView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 244)];
+        _chargeCircleTimeView.datePickerMode = SSJDatePickerModeDate;
+        _chargeCircleTimeView.shouldConfirmBlock = ^(SSJHomeDatePickerView *view, NSDate *selecteDate) {
+            NSDate *currentDate = [NSDate date];
+            currentDate = [NSDate dateWithYear:currentDate.year month:currentDate.month day:currentDate.day];
+            if ([selecteDate compare:currentDate] == NSOrderedAscending) {
+                [CDAutoHideMessageHUD showMessage:@"不能设置历史日期的周期记账哦"];
+                return NO;
+            }
+            NSDate *endDate = [NSDate dateWithString:self.item.chargeCircleEndDate formatString:@"yyyy-MM-dd"];
+            if (endDate && [selecteDate compare:endDate] == NSOrderedDescending) {
+                [CDAutoHideMessageHUD showMessage:@"起始日期不能晚于结束日期哦"];
+                return NO;
+            }
+            return YES;
         };
         __weak typeof(self) weakSelf = self;
-        _chargeCircleTimeView.timerSetBlock = ^(NSString *dateStr){
-            weakSelf.item.billDate = dateStr;
+        _chargeCircleTimeView.confirmBlock = ^(SSJHomeDatePickerView *view) {
+            weakSelf.item.billDate = [view.date formattedDateWithFormat:@"yyyy-MM-dd"];
             [weakSelf.tableView reloadData];
         };
     }
     return _chargeCircleTimeView;
 }
 
--(SSJChargeCircleTimeSelectView *)chargeCircleEndTimeView{
+-(SSJHomeDatePickerView *)chargeCircleEndTimeView{
     if (!_chargeCircleEndTimeView) {
-        _chargeCircleEndTimeView = [[SSJChargeCircleTimeSelectView alloc]initWithFrame:self.view.bounds];
-        _chargeCircleEndTimeView.needClearButtonOrNot = YES;
-        _chargeCircleEndTimeView.timeIsTooEarlyBlock = ^(){
-            [CDAutoHideMessageHUD showMessage:@"结束日期不能早于起始日期哦~"];
+        _chargeCircleEndTimeView = [[SSJHomeDatePickerView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 244)];
+        _chargeCircleEndTimeView.datePickerMode = SSJDatePickerModeDate;
+        _chargeCircleEndTimeView.leftButtonItem = [SSJHomeDatePickerViewButtonItem buttonItemWithTitle:@"清空" titleColor:[UIColor ssj_colorWithHex:SSJOverrunRedColorValue] image:nil];
+        _chargeCircleEndTimeView.shouldConfirmBlock = ^(SSJHomeDatePickerView *view, NSDate *selecteDate) {
+            NSDate *beginDate = [NSDate dateWithString:self.item.billDate formatString:@"yyyy-MM-dd"];
+            if ([selecteDate compare:beginDate] == NSOrderedAscending) {
+                [CDAutoHideMessageHUD showMessage:@"结束日期不能早于起始日期哦"];
+                return NO;
+            }
+            return YES;
         };
         __weak typeof(self) weakSelf = self;
-        _chargeCircleEndTimeView.timerSetBlock = ^(NSString *dateStr){
-            weakSelf.item.chargeCircleEndDate = dateStr;
+        _chargeCircleEndTimeView.confirmBlock = ^(SSJHomeDatePickerView *view) {
+            weakSelf.item.chargeCircleEndDate = [view.date formattedDateWithFormat:@"yyyy-MM-dd"];
             [weakSelf.tableView reloadData];
         };
-        _chargeCircleEndTimeView.clearButtonClickBlcok = ^(){
+        _chargeCircleEndTimeView.closeBlock = ^(SSJHomeDatePickerView *view) {
             weakSelf.item.chargeCircleEndDate = nil;
             [weakSelf.tableView reloadData];
         };
