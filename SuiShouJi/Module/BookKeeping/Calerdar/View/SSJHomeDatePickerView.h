@@ -29,7 +29,7 @@ typedef NS_ENUM(NSInteger, SSJDatePickerMode) {
 
 @interface SSJHomeDatePickerView : UIControl
 
-//@property (nonatomic) SSJDatePickerMode datePickerMode;
+@property (nonatomic) SSJDatePickerMode datePickerMode;
 
 @property (nonatomic, strong) NSDate *date;
 /**
