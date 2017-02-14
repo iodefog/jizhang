@@ -33,7 +33,8 @@
              @"iversion",
              @"ichargetype",
              @"cid",
-             @"operatortype"];
+             @"operatortype",
+             @"cdetaildate"];
 }
 
 + (NSArray *)primaryKeys {

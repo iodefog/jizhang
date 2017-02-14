@@ -34,6 +34,10 @@
     return self;
 }
 
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (void)layoutSubviews {
     [super layoutSubviews];
     self.dateLabel.left = 10;
@@ -44,10 +48,6 @@
     self.incomeLabel.centerY = self.dateLabel.bottom + 10;
     self.expenceLabel.right = self.width - 10;
     self.expenceLabel.centerY = self.dateLabel.bottom + 10;
-}
-
-- (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (UILabel *)dateLabel {

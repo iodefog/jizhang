@@ -60,6 +60,7 @@
     float _currentIncome;
     float _currentExpenture;
 }
+
 #pragma mark - Lifecycle
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
@@ -111,7 +112,7 @@
         if ([SSJDefaultSource() isEqualToString:@"11501"] || [SSJDefaultSource() isEqualToString:@"11502"]) {
             self.shareButton.hidden = NO;
             self.shareButton.leftBottom = CGPointMake(0, self.view.bottom);
-            self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 50, 0);
+            self.tableView.contentInset = UIEdgeInsetsMake(-35, 0, 50, 0);
         } else {
             self.shareButton.hidden = YES;
         }
@@ -373,7 +374,7 @@
             if (((NSArray *)[data objectForKey:weakSelf.selectDate]).count == 0) {
                 self.tableView.tableHeaderView = self.nodataHeader;
             }else{
-                self.tableView.tableHeaderView = nil;
+                self.tableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectZero];
             }
             [SSJCalenderHelper queryBalanceForDate:self.selectDate success:^(double income , double expence) {
                 _currentIncome = income;

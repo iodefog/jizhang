@@ -708,7 +708,7 @@
 
 #pragma mark - Event
 - (void)rightBarButtonClicked {
-    SSJCalendarViewController *calendarVC = [[SSJCalendarViewController alloc]init];
+    SSJCalendarViewController *calendarVC = [[SSJCalendarViewController alloc] init];
     [self.navigationController pushViewController:calendarVC animated:YES];
 }
 
