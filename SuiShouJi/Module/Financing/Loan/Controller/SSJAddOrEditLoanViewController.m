@@ -1122,6 +1122,7 @@ const int kMemoMaxLength = 15;
     if (!_borrowDateSelectionView) {
         __weak typeof(self) wself = self;
         _borrowDateSelectionView = [[SSJHomeDatePickerView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 244)];
+        _borrowDateSelectionView.datePickerMode = SSJDatePickerModeDate;
         _borrowDateSelectionView.shouldConfirmBlock = ^BOOL(SSJHomeDatePickerView *view, NSDate *date) {
             return [wself validateBorrowDate:date];
         };
@@ -1153,6 +1154,7 @@ const int kMemoMaxLength = 15;
     if (!_repaymentDateSelectionView) {
         __weak typeof(self) weakSelf = self;
         _repaymentDateSelectionView = [[SSJHomeDatePickerView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 244)];
+        _repaymentDateSelectionView.datePickerMode = SSJDatePickerModeDate;
         _repaymentDateSelectionView.leftButtonItem = [SSJHomeDatePickerViewButtonItem buttonItemWithTitle:@"清空" titleColor:[UIColor ssj_colorWithHex:SSJOverrunRedColorValue] image:nil];
         _repaymentDateSelectionView.confirmBlock = ^(SSJHomeDatePickerView *view) {
             if (weakSelf.reminderItem) {

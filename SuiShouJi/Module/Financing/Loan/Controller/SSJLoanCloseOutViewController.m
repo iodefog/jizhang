@@ -595,6 +595,7 @@ static NSUInteger kClostOutDateTag = 1004;
     if (!_endDateSelectionView) {
         __weak typeof(self) weakSelf = self;
         _endDateSelectionView = [[SSJHomeDatePickerView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 244)];
+        _endDateSelectionView.datePickerMode = SSJDatePickerModeDate;
         _endDateSelectionView.date = _loanModel.endDate;
         _endDateSelectionView.confirmBlock = ^(SSJHomeDatePickerView *view) {
             weakSelf.loanModel.endDate = view.date;

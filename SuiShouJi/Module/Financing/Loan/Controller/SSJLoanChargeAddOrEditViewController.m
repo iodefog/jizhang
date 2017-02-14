@@ -889,6 +889,7 @@ static NSUInteger kDateTag = 1005;
     if (!_dateSelectionView) {
         __weak typeof(self) weakSelf = self;
         _dateSelectionView = [[SSJHomeDatePickerView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 244)];
+        _dateSelectionView.datePickerMode = SSJDatePickerModeDate;
         _dateSelectionView.date = self.compoundModel.chargeModel.billDate;
         _dateSelectionView.shouldConfirmBlock = ^BOOL(SSJHomeDatePickerView *view, NSDate *date) {
             if ([date compare:weakSelf.loanModel.borrowDate] == NSOrderedAscending) {
