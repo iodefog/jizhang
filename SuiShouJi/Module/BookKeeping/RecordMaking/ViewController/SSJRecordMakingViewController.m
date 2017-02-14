@@ -202,6 +202,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 - (SSJHomeDatePickerView *)dateSelectedView {
     if (!_dateSelectedView) {
         _dateSelectedView = [[SSJHomeDatePickerView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 300)];
+        _dateSelectedView.datePickerMode = SSJDatePickerModeYearDateAndTime;
         _dateSelectedView.warningDate = [NSDate date];
         __weak typeof(self) weakSelf = self;
         _dateSelectedView.closeBlock = ^(SSJHomeDatePickerView *view) {

@@ -17,19 +17,24 @@
 @property (nonatomic, strong) UILabel *titleLabel;
 @property (nonatomic, strong) UIView *horuAndMinuBgView;//时，分对应的背景颜色
 @property (nonatomic, strong) NSDateFormatter *formatter;
+@property (nonatomic, strong) NSCalendar *calendar;
 
 /**
- 年数组
+ 内容数组
  */
-@property (nonatomic, strong) NSArray *yearArray;
-@property (nonatomic, strong) NSMutableArray *monthDayWeekArray;
-@property (nonatomic, strong) NSArray *hourArray;
-@property (nonatomic, strong) NSArray *minuteArray;
+@property (nonatomic, strong) NSMutableArray<NSString *> *yearArray;
+@property (nonatomic, strong) NSMutableArray<NSDate *> *monthDayWeekArray;
+@property (nonatomic, strong) NSArray<NSString *> *hourArray;
+@property (nonatomic, strong) NSArray<NSString *> *minuteArray;
+@property (nonatomic, strong) NSArray<NSString *> *monthArray;
+@property (nonatomic, strong) NSMutableArray<NSString *> *dayArray;
+@property (nonatomic, strong) NSArray<NSString *> *amPmArray;
+
 /**
  数据源
  */
-@property (nonatomic, strong) NSArray *dataArray;
-@property (nonatomic, strong) NSCalendar *calendar;
+@property (nonatomic, strong) NSMutableArray *dataArray;
+
 @end
 
 @implementation SSJHomeDatePickerView
@@ -154,15 +159,48 @@
 - (void)defaultSelectedcomponents
 {
     NSDate *cuDate = self.date ? self.date : [NSDate date];
-    [self.formatter setDateFormat:@"yyyy-MM月dd日 EEE"];
-    NSString *dateStr = [self.formatter stringFromDate:cuDate];
-    NSDate *seleDate = [self.formatter dateFromString:dateStr];
-    NSInteger integer = [self.monthDayWeekArray indexOfObject:seleDate];
-    [self pickerView:_datePicker didSelectRow:integer inComponent:1];//选中
-    [_datePicker selectRow:integer inComponent:1 animated:YES];
-    [_datePicker selectRow:[self.hourArray indexOfObject:[NSString stringWithFormat:@"%02ld",(long)[self componentsWithDate:cuDate].hour]] inComponent:2 animated:YES];
-    NSInteger min = [self.minuteArray indexOfObject:[NSString stringWithFormat:@"%02ld",(long)[self componentsWithDate:cuDate].minute]];
-    [_datePicker selectRow:min inComponent:4 animated:YES];
+    [self.formatter setDateFormat:@"yyyy年MM月dd日 HH:mm"];
+    NSString *cuDateStr = [self.formatter stringFromDate:cuDate];
+    if (self.datePickerMode == SSJDatePickerModeTime) {
+        NSInteger amPmIndex = cuDate.hour <= 12 ? 0 : 1;//上午下午
+        NSInteger row2 = [self.hourArray indexOfObject:[NSString stringWithFormat:@"%ld",cuDate.hour > 12 ? cuDate.hour - 12 : cuDate.hour]];
+        NSInteger row3 = [self.minuteArray indexOfObject:[NSString stringWithFormat:@"%02ld",cuDate.minute]];
+        [self.datePicker selectRow:amPmIndex inComponent:0 animated:YES];
+        [self.datePicker selectRow:row2 inComponent:1 animated:YES];
+        [self.datePicker selectRow:row3 inComponent:2 animated:YES];
+    } else if (self.datePickerMode == SSJDatePickerModeDate) {
+        NSInteger row1 = [self.yearArray indexOfObject:[NSString stringWithFormat:@"%ld年",cuDate.year]];
+        NSInteger row2 = [self.monthArray indexOfObject:[NSString stringWithFormat:@"%ld月",cuDate.month]];
+        NSInteger row3 = [self.dayArray indexOfObject:[NSString stringWithFormat:@"%ld日",cuDate.day]];
+        [self.datePicker selectRow:row1 inComponent:0 animated:YES];
+        [self.datePicker selectRow:row2 inComponent:1 animated:YES];
+        [self pickerView:_datePicker didSelectRow:row2 inComponent:1];
+        [self.datePicker selectRow:row3 inComponent:2 animated:YES];
+    } else if (self.datePickerMode == SSJDatePickerModeDateAndTime) {
+        [self.formatter setDateFormat:@"yyyy-MM月dd日 EEE"];
+        NSString *dateStr = [self.formatter stringFromDate:cuDate];
+        NSDate *seleDate = [self.formatter dateFromString:dateStr];
+        NSInteger integer = [self.monthDayWeekArray indexOfObject:seleDate];
+        [self pickerView:_datePicker didSelectRow:integer inComponent:0];//选中
+        [_datePicker selectRow:integer inComponent:0 animated:YES];
+        NSInteger amPmIndex = cuDate.hour <= 12 ? 0 : 1;//上午下午
+        NSInteger row2 = [self.hourArray indexOfObject:[NSString stringWithFormat:@"%ld",cuDate.hour > 12 ? cuDate.hour - 12 : cuDate.hour]];
+        NSInteger row3 = [self.minuteArray indexOfObject:[NSString stringWithFormat:@"%02ld",cuDate.minute]];
+        [_datePicker selectRow:amPmIndex inComponent:1 animated:YES];
+        [_datePicker selectRow:row2 inComponent:2 animated:YES];
+        [_datePicker selectRow:row3 inComponent:3 animated:YES];
+        
+    } else if (self.datePickerMode == SSJDatePickerModeYearDateAndTime) {
+        [self.formatter setDateFormat:@"yyyy-MM月dd日 EEE"];
+        NSString *dateStr = [self.formatter stringFromDate:cuDate];
+        NSDate *seleDate = [self.formatter dateFromString:dateStr];
+        NSInteger integer = [self.monthDayWeekArray indexOfObject:seleDate];
+        [self pickerView:_datePicker didSelectRow:integer inComponent:1];//选中
+        [_datePicker selectRow:integer inComponent:1 animated:YES];
+        [_datePicker selectRow:[self.hourArray indexOfObject:[NSString stringWithFormat:@"%02ld",(long)[self componentsWithDate:cuDate].hour]] inComponent:2 animated:YES];
+        NSInteger min = [self.minuteArray indexOfObject:[NSString stringWithFormat:@"%02ld",(long)[self componentsWithDate:cuDate].minute]];
+        [_datePicker selectRow:min inComponent:4 animated:YES];
+    }
 }
 
 - (NSCalendar *)calendar
@@ -187,16 +225,22 @@
     return _formatter;
 }
 
-- (NSArray *)yearArray
+
+- (NSMutableArray<NSString *> *)yearArray
 {
     if (!_yearArray) {
-        _yearArray = @[@" "];
+        _yearArray = [NSMutableArray array];
+        if (self.datePickerMode == SSJDatePickerModeYearDateAndTime) {
+            [_yearArray addObject:@" "];
+        } else if(self.datePickerMode == SSJDatePickerModeDate) {
+            [self setUpYearArray];
+        }
     }
     return _yearArray;
 }
 
 
-- (NSMutableArray *)monthDayWeekArray
+- (NSMutableArray<NSDate *> *)monthDayWeekArray
 {
     if (!_monthDayWeekArray) {
         _monthDayWeekArray = [NSMutableArray array];
@@ -219,15 +263,20 @@
     return _monthDayWeekArray;
 }
 
-- (NSArray *)hourArray
+- (NSArray<NSString *> *)hourArray
 {
+    
     if (!_hourArray) {
-        _hourArray = @[@"00",@"01",@"02",@"03",@"04",@"05",@"06",@"07",@"08",@"09",@"10",@"11",@"12",@"13",@"14",@"15",@"16",@"17",@"18",@"19",@"20",@"21",@"22",@"23"];
+        if (self.datePickerMode == SSJDatePickerModeTime || self.datePickerMode == SSJDatePickerModeDateAndTime) {
+            _hourArray = @[@"1",@"2",@"3",@"4",@"5",@"6",@"7",@"8",@"9",@"10",@"11",@"12"];
+        } else {
+            _hourArray = @[@"00",@"01",@"02",@"03",@"04",@"05",@"06",@"07",@"08",@"09",@"10",@"11",@"12",@"13",@"14",@"15",@"16",@"17",@"18",@"19",@"20",@"21",@"22",@"23"];
+        }
     }
     return _hourArray;
 }
 
-- (NSArray *)minuteArray
+- (NSArray<NSString *> *)minuteArray
 {
     if (!_minuteArray) {
         NSMutableArray *tempArr = [NSMutableArray array];
@@ -239,11 +288,59 @@
     return _minuteArray;
 }
 
-- (NSArray *)dataArray
+- (NSArray<NSString *> *)monthArray
+{
+    if (!_monthArray) {
+        _monthArray = @[@"1月",@"2月",@"3月",@"4月",@"5月",@"6月",@"7月",@"8月",@"9月",@"10月",@"11月",@"12月"];
+    }
+    return _monthArray;
+}
+
+- (NSMutableArray<NSString *> *)dayArray
+{
+    if (!_dayArray) {
+        _dayArray = [NSMutableArray array];
+        //默认当前月的天数
+        NSDate *currentDate = self.date ? self.date : [NSDate date];
+        NSInteger days = [self howManyDaysInThisYear:currentDate.year withMonth:currentDate.month];
+        _dayArray = [self setUpDayArrayWithDays:days];
+    }
+    return _dayArray;
+}
+
+- (NSArray<NSString *> *)amPmArray
+{
+    if (!_amPmArray) {
+        _amPmArray = @[@"上午",@"下午"];
+    }
+    return _amPmArray;
+}
+
+- (NSMutableArray *)dataArray
 {
     if (!_dataArray) {
-        _dataArray = @[self.yearArray,self.monthDayWeekArray,self.hourArray,@[@"时"],self.minuteArray,@[@"分"]];
-        [self.datePicker reloadAllComponents];
+        _dataArray  = [NSMutableArray array];
+        if (self.datePickerMode == SSJDatePickerModeTime) {
+            [_dataArray addObject:self.amPmArray];
+            [_dataArray addObject:self.hourArray];
+            [_dataArray addObject:self.minuteArray];
+        } else if (self.datePickerMode == SSJDatePickerModeDate) {
+            [_dataArray addObject:self.yearArray];
+            [_dataArray addObject:self.monthArray];
+            [_dataArray addObject:self.dayArray];
+        } else if (self.datePickerMode == SSJDatePickerModeDateAndTime) {
+            [_dataArray addObject:self.monthDayWeekArray];
+            [_dataArray addObject:self.amPmArray];
+            [_dataArray addObject:self.hourArray];
+            [_dataArray addObject:self.minuteArray];
+        } else if (self.datePickerMode == SSJDatePickerModeYearDateAndTime) {
+            [_dataArray addObject:self.yearArray];
+            [_dataArray addObject:self.monthDayWeekArray];
+            [_dataArray addObject:self.hourArray];
+            [_dataArray addObject:@[@"时"]];
+            [_dataArray addObject:self.minuteArray];
+            [_dataArray addObject:@[@"分"]];
+        }
     }
     return _dataArray;
 }
@@ -259,14 +356,50 @@
 
 - (void)comfirmButtonClicked
 {
-    //选择的时间
-    NSDate *date = [self.monthDayWeekArray ssj_safeObjectAtIndex:[self.datePicker selectedRowInComponent:1]];
-    [self.formatter setDateFormat:@"yyyy年MM月dd日 EEE"];
-    NSString *yearMonDayStr = [self.formatter stringFromDate:date];
-    NSString *hourStr = [self.hourArray ssj_safeObjectAtIndex:[self.datePicker selectedRowInComponent:2]];
-    NSString *minuStr = [self.minuteArray ssj_safeObjectAtIndex:[self.datePicker selectedRowInComponent:4]];
-    NSString *dateStr = [NSString stringWithFormat:@"%@ %@时%@分",yearMonDayStr,hourStr,minuStr];
-    NSDate *selectedDate = [NSDate dateWithString:dateStr formatString:@"yyyy年MM月dd日 EEEHH时mm分"];
+    NSDate *cuDate = [NSDate date];
+    NSString *language = [self getPreferredLanguage];
+    NSString *amStr = @"上午";
+    NSString *pmStr = @"下午";
+    if ([language isEqualToString:@"en-US"]) {
+        amStr = @"AM";
+        pmStr = @"PM";
+    }
+    NSDate *selectedDate = nil;//选择的时间
+    if (self.datePickerMode == SSJDatePickerModeTime) {
+        NSInteger index1 = [self.datePicker selectedRowInComponent:0];//上午下午
+        NSInteger index2 = [self.datePicker selectedRowInComponent:1];//时
+        NSInteger index3 = [self.datePicker selectedRowInComponent:2];//分
+        [self.formatter setDateFormat:@"yyyy年MM月dd日"];
+        NSString *dateStr = [NSString stringWithFormat:@"%@ %@ %@:%@",[self.formatter stringFromDate:cuDate],index1 == 0 ? amStr : pmStr,[self.hourArray ssj_safeObjectAtIndex:index2],[self.minuteArray ssj_safeObjectAtIndex:index3]];
+        selectedDate = [NSDate dateWithString:dateStr formatString:@"yyyy年MM月dd日 aa h:mm"];
+    } else if (self.datePickerMode == SSJDatePickerModeDate) {
+        NSInteger index1 = [self.datePicker selectedRowInComponent:0];//年
+        NSInteger index2 = [self.datePicker selectedRowInComponent:1];//月
+        NSInteger index3 = [self.datePicker selectedRowInComponent:2];//日
+        NSString *indexStr1 = [self.yearArray ssj_safeObjectAtIndex:index1];
+        NSString *indexStr2 = [self.monthArray ssj_safeObjectAtIndex:index2];
+        NSString *indexStr3 = [self.dayArray ssj_safeObjectAtIndex:index3];
+        selectedDate = [NSDate dateWithYear:[[indexStr1 substringToIndex:indexStr1.length - 1] integerValue] month:[[indexStr2 substringToIndex:indexStr2.length - 1] integerValue] day:[[indexStr3 substringToIndex:indexStr3.length - 1] integerValue] hour:0 minute:0 second:0];
+    } else if (self.datePickerMode == SSJDatePickerModeDateAndTime) {
+        NSInteger index1 = [self.datePicker selectedRowInComponent:0];//月日周
+        NSInteger index2 = [self.datePicker selectedRowInComponent:1];//上午，下午
+        NSInteger index3 = [self.datePicker selectedRowInComponent:2];//时
+        NSInteger index4 = [self.datePicker selectedRowInComponent:3];//分
+        NSDate *indexStr1 = [self.monthDayWeekArray ssj_safeObjectAtIndex:index1];
+        [self.formatter setDateFormat:@"yyyy年MM月dd日 EEE"];
+        NSString *str = [self.formatter stringFromDate:indexStr1];
+        NSString *dateStr = [NSString stringWithFormat:@"%@ %@:%@ %@",str,[self.hourArray ssj_safeObjectAtIndex:index3],[self.minuteArray ssj_safeObjectAtIndex:index4],index2 == 0 ? amStr : pmStr];
+        selectedDate = [NSDate dateWithString:dateStr formatString:@"yyyy年MM月dd日 EEE h:mm aa"];
+    } else if (self.datePickerMode == SSJDatePickerModeYearDateAndTime) {
+        //选择的时间
+        NSDate *date = [self.monthDayWeekArray ssj_safeObjectAtIndex:[self.datePicker selectedRowInComponent:1]];
+        [self.formatter setDateFormat:@"yyyy年MM月dd日 EEE"];
+        NSString *yearMonDayStr = [self.formatter stringFromDate:date];
+        NSString *hourStr = [self.hourArray ssj_safeObjectAtIndex:[self.datePicker selectedRowInComponent:2]];
+        NSString *minuStr = [self.minuteArray ssj_safeObjectAtIndex:[self.datePicker selectedRowInComponent:4]];
+        NSString *dateStr = [NSString stringWithFormat:@"%@ %@时%@分",yearMonDayStr,hourStr,minuStr];
+        selectedDate = [NSDate dateWithString:dateStr formatString:@"yyyy年MM月dd日 EEEHH时mm分"];
+    }
     
     BOOL shouldConfirm = YES;
     if (_shouldConfirmBlock) {
@@ -305,11 +438,58 @@
     } timeInterval:0.25 fininshed:NULL];
 }
 #pragma mark - Private
-//- (void)setTitleColor:(UIColor *)color forComponent:(SSJDatePickerComponent)component
-//{}
-//
-//- (void)setFillColor:(UIColor *)color forComponent:(SSJDatePickerComponent)component
-//{}
+
+/**
+ 遍历取出所有的年
+ */
+- (void)setUpYearArray
+{
+    //默认年份在2001-2038之间
+    if (!self.minDate) {
+        self.minDate = [NSDate dateWithYear:2001 month:1 day:1];
+    }
+    if (!self.maxDate) {
+        self.maxDate = [NSDate dateWithYear:2038 month:1 day:1];
+    }
+    for (NSInteger i = self.minDate.year; i <= self.maxDate.year; i++) {
+        [_yearArray addObject:[NSString stringWithFormat:@"%ld年",i]];
+    }
+}
+
+- (NSMutableArray *)setUpDayArrayWithDays:(NSInteger)day
+{
+    NSMutableArray *array = [NSMutableArray array];
+    for (NSInteger i = 1;i <= day; i++) {
+        [array addObject:[NSString stringWithFormat:@"%ld日",i]];
+    }
+    return array;
+}
+
+/**
+ 获取某年某月的天数
+ @param NSInteger <#NSInteger description#>
+ @return <#return value description#>
+ */
+- (NSInteger)howManyDaysInThisYear:(NSInteger)year withMonth:(NSInteger)month{
+    if((month == 1) || (month == 3) || (month == 5) || (month == 7) || (month == 8) || (month == 10) || (month == 12))
+        return 31 ;
+    
+    if((month == 4) || (month == 6) || (month == 9) || (month == 11))
+        return 30;
+    
+    if((year % 4 == 1) || (year % 4 == 2) || (year % 4 == 3))
+    {
+        return 28;
+    }
+    
+    if(year % 400 == 0)
+        return 29;
+    
+    if(year % 100 == 0)
+        return 28;
+    
+    return 29;
+}
 
 // 改变分割线的颜色
 - (void)changeSpearatorLineColor
@@ -323,6 +503,18 @@
     }
 }
 
+/**
+ *得到本机现在用的语言
+ * en:英文  zh-Hans:简体中文   zh-Hant:繁体中文    ja:日本  ......
+ */
+- (NSString*)getPreferredLanguage
+{
+    NSUserDefaults* defs = [NSUserDefaults standardUserDefaults];
+    NSArray* languages = [defs objectForKey:@"AppleLanguages"];
+    NSString* preferredLang = [languages ssj_safeObjectAtIndex:0];
+    return preferredLang;
+}
+
 - (void)updateButton:(UIButton *)button buttonItem:(SSJHomeDatePickerViewButtonItem *)item {
     [button setTitle:item.title forState:UIControlStateNormal];
     [button setTitleColor:item.titleColor forState:UIControlStateNormal];
@@ -334,13 +526,39 @@
 // 选中某一行的时候调用
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
 {
-    //取出时间
-    if (component == 1) {
-        [self.formatter setDateFormat:@"yyyy年"];
-        NSString *dateStr = [self.formatter stringFromDate:[self.monthDayWeekArray ssj_safeObjectAtIndex:row]];
-        //显示年
-        self.yearArray = @[dateStr];
-        [self.datePicker reloadComponent:0];
+    if (self.datePickerMode == SSJDatePickerModeTime) {
+        
+        return;
+    }
+    if (self.datePickerMode == SSJDatePickerModeDate && component == 1) {//选中月份
+        NSInteger yearIndex = [pickerView selectedRowInComponent:0];//取出选中的年
+        NSString *yearStr = [self.yearArray ssj_safeObjectAtIndex:yearIndex];
+        NSInteger year = [[yearStr substringToIndex:yearStr.length - 1] integerValue];
+        //月
+        NSString *monthStr = [self.monthArray ssj_safeObjectAtIndex:row];
+        NSInteger month = [[monthStr substringToIndex:monthStr.length - 1] integerValue];
+        //计算日数组
+        NSInteger days = [self howManyDaysInThisYear:year withMonth:month];
+        //更新日数组
+        self.dayArray = [self setUpDayArrayWithDays:days];
+        //刷新日所在的列
+        [pickerView reloadComponent:2];
+        return;
+    }
+    if (self.datePickerMode == SSJDatePickerModeDateAndTime) {
+        
+        return;
+    }
+    if (self.datePickerMode == SSJDatePickerModeYearDateAndTime) {
+        //取出时间
+        if (component == 1) {
+            [self.formatter setDateFormat:@"yyyy年MM月dd日"];
+            NSString *dateStr = [self.formatter stringFromDate:[self.monthDayWeekArray ssj_safeObjectAtIndex:row]];
+            //显示年
+            self.yearArray = [NSMutableArray arrayWithObject:dateStr];
+            [self.datePicker reloadComponent:0];
+        }
+        return;
     }
 }
 
@@ -351,9 +569,11 @@
     return self.dataArray.count;
 }
 
-
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
 {
+    if (component == 2 && self.datePickerMode == SSJDatePickerModeDate) {
+        return self.dayArray.count;
+    }
     return ((NSArray *)[self.dataArray ssj_safeObjectAtIndex:component]).count;
 }
 
@@ -364,26 +584,27 @@
 
 - (CGFloat)pickerView:(UIPickerView *)pickerView widthForComponent:(NSInteger)component
 {
-    if (component == 0) {
-        return 50;
-    }else if (component == 1){
-        return 150;
-    }else if (component == 3 || component == 5) {
-        return 20;
+    if (self.datePickerMode == SSJDatePickerModeDateAndTime) {
+        if (component == 0) {
+            return 180;
+        }else if (component == 1){
+            return 40;
+        }
+        return (self.width - 240) / 2;
     }
-    return (self.width - 230) / 3;
-}
 
-//- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
-//{
-//    if (component == 0) {
-//        return [self.yearArray firstObject];
-//    } else if (component == 1) {
-//        [self.formatter setDateFormat:@"MM月dd日 EEE"];
-//        return [self.formatter stringFromDate:self.monthDayWeekArray[row]];
-//    }
-//    return [[self.dataArray ssj_safeObjectAtIndex:component] ssj_safeObjectAtIndex:row];
-//}
+    if (self.datePickerMode == SSJDatePickerModeYearDateAndTime) {
+        if (component == 0) {
+            return 50;
+        }else if (component == 1){
+            return 150;
+        }else if (component == 3 || component == 5) {
+            return 20;
+        }
+        return (self.width - 230) / 3;
+    }
+    return self.width / 3;
+}
 
 
 - (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view
@@ -391,19 +612,71 @@
     CGFloat width = [pickerView rowSizeForComponent:component].width;
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, width, 40)];
     label.textAlignment = NSTextAlignmentCenter;
-        if (component == 0 ) {
-            label.font = systemFontSize(11);
-            label.textColor = [UIColor ssj_colorWithHex:self.mainColor ? self.mainColor : SSJ_CURRENT_THEME.mainColor];
-        }else if (component == 1){
-            label.font = systemFontSize(19);
-            label.textColor = [UIColor ssj_colorWithHex:self.mainColor ? self.mainColor : SSJ_CURRENT_THEME.mainColor];
-        }else if (component == 2 || component == 4) {
-            label.font = systemFontSize(21);
-            label.textColor = [UIColor ssj_colorWithHex:self.mainColor ? self.mainColor : SSJ_CURRENT_THEME.mainColor];
-        }else {
-            label.font = systemFontSize(11);
-            label.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
+    if (self.datePickerMode == SSJDatePickerModeTime) {
+        [self datePickerModeTime:label viewForRow:row forComponent:component];
+    } else if (self.datePickerMode == SSJDatePickerModeDate) {
+        [self datePickerModeDate:label viewForRow:row forComponent:component];
+    } else if (self.datePickerMode == SSJDatePickerModeDateAndTime) {
+        [self datePickerModeDateAndTime:label viewForRow:row forComponent:component];
+    } else if (self.datePickerMode == SSJDatePickerModeYearDateAndTime) {
+        [self datePickerModeYearDateAndTime:label viewForRow:row forComponent:component];
+    }
+    return label;
+}
+
+- (void)datePickerModeTime:(UIView *)view viewForRow:(NSInteger)row forComponent:(NSInteger)component
+{
+    UILabel *label = (UILabel *)view;
+    label.font = systemFontSize(19);
+    label.textColor = [UIColor ssj_colorWithHex:self.mainColor ? self.mainColor : SSJ_CURRENT_THEME.mainColor];
+    label.text = [[self.dataArray ssj_safeObjectAtIndex:component] ssj_safeObjectAtIndex:row];
+}
+- (void)datePickerModeDate:(UIView *)view viewForRow:(NSInteger)row forComponent:(NSInteger)component
+{
+    UILabel *label = (UILabel *)view;
+    label.font = systemFontSize(19);
+    label.textColor = [UIColor ssj_colorWithHex:self.mainColor ? self.mainColor : SSJ_CURRENT_THEME.mainColor];
+    if (component == 2) {
+        label.text = [self.dayArray ssj_safeObjectAtIndex:row];
+    } else {
+        label.text = [[self.dataArray ssj_safeObjectAtIndex:component] ssj_safeObjectAtIndex:row];
+    }
+}
+- (void)datePickerModeDateAndTime:(UIView *)view viewForRow:(NSInteger)row forComponent:(NSInteger)component
+{
+    UILabel *label = (UILabel *)view;
+    label.font = systemFontSize(19);
+    label.textColor = [UIColor ssj_colorWithHex:self.mainColor ? self.mainColor : SSJ_CURRENT_THEME.mainColor];
+    if (component == 0) {
+        BOOL isToday = [self.monthDayWeekArray[row] isSameDay:[NSDate date]];
+        if (isToday) {
+            label.text = @"今天";
+        } else {
+            [self.formatter setDateFormat:@"MM月dd日 EEE"];
+            label.text = [self.formatter stringFromDate:self.monthDayWeekArray[row]];
         }
+        
+    } else {
+        label.text = [[self.dataArray ssj_safeObjectAtIndex:component] ssj_safeObjectAtIndex:row];
+    }
+    
+}
+- (void)datePickerModeYearDateAndTime:(UIView *)view viewForRow:(NSInteger)row forComponent:(NSInteger)component
+{
+    UILabel *label = (UILabel *)view;
+    if (component == 0 ) {
+        label.font = systemFontSize(11);
+        label.textColor = [UIColor ssj_colorWithHex:self.mainColor ? self.mainColor : SSJ_CURRENT_THEME.mainColor];
+    }else if (component == 1){
+        label.font = systemFontSize(19);
+        label.textColor = [UIColor ssj_colorWithHex:self.mainColor ? self.mainColor : SSJ_CURRENT_THEME.mainColor];
+    }else if (component == 2 || component == 4) {
+        label.font = systemFontSize(21);
+        label.textColor = [UIColor ssj_colorWithHex:self.mainColor ? self.mainColor : SSJ_CURRENT_THEME.mainColor];
+    }else {
+        label.font = systemFontSize(11);
+        label.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
+    }
     
     if (component == 0) {
         label.text = [self.yearArray firstObject];
@@ -416,9 +689,7 @@
     
     //分割线颜色
     [self changeSpearatorLineColor];
-    return label;
 }
-
 
 /*
 - (NSAttributedString *)pickerView:(UIPickerView *)pickerView attributedTitleForRow:(NSInteger)row forComponent:(NSInteger)component
