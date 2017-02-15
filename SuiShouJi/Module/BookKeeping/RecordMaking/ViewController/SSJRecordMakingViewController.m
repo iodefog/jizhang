@@ -204,6 +204,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         _dateSelectedView = [[SSJHomeDatePickerView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 300)];
         _dateSelectedView.datePickerMode = SSJDatePickerModeYearDateAndTime;
         _dateSelectedView.warningDate = [NSDate date];
+        _dateSelectedView.maxDate = [NSDate date];
         __weak typeof(self) weakSelf = self;
         _dateSelectedView.closeBlock = ^(SSJHomeDatePickerView *view) {
             [weakSelf.billTypeInputView.moneyInput becomeFirstResponder];

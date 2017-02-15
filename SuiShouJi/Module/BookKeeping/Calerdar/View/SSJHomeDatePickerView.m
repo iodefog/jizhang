@@ -59,7 +59,7 @@
     self.datePicker.frame = CGRectMake(0,self.topView.height,self.width,self.height - self.topView.height);
     self.titleLabel.centerX = self.centerX;
     self.titleLabel.centerY = self.closeButton.centerY;
-    self.horuAndMinuBgView.frame = CGRectMake(220,self.datePicker.centerY - 22, self.width - 20, 43);
+    self.horuAndMinuBgView.frame = CGRectMake(240,self.datePicker.centerY - 22, self.width - 240, 43);
     self.closeButton.leftTop = CGPointMake(15, 15);
     self.comfirmButton.rightTop = CGPointMake(self.width - 15, 15);
 }
@@ -609,11 +609,11 @@
         if (component == 0) {
             return 50;
         }else if (component == 1){
-            return 150;
+            return 180;
         }else if (component == 3 || component == 5) {
             return 20;
         }
-        return (self.width - 230) / 3;
+        return (self.width - 250) / 3;
     }
     return self.width / 3;
 }
@@ -684,6 +684,7 @@
         label.textColor = [UIColor ssj_colorWithHex:self.mainColor ? self.mainColor : SSJ_CURRENT_THEME.mainColor];
     }else if (component == 2 || component == 4) {
         label.font = systemFontSize(21);
+        label.textAlignment = NSTextAlignmentRight;
         label.textColor = [UIColor ssj_colorWithHex:self.mainColor ? self.mainColor : SSJ_CURRENT_THEME.mainColor];
     }else {
         label.font = systemFontSize(11);
@@ -745,7 +746,7 @@
     
     self.titleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
-    self.horuAndMinuBgView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailHeaderColor alpha:0.1];
+    self.horuAndMinuBgView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainFillColor alpha:1];
 }
 
 - (void)dealloc
