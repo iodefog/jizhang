@@ -333,6 +333,7 @@
         case SSJTimeDimensionUnknown:
             break;
     }
+    [self updateCurveUnitAxisXLength];
 }
 
 - (void)updateAppearance {
