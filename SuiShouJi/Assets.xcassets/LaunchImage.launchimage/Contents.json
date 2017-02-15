@@ -4,7 +4,7 @@
       "extent" : "full-screen",
       "idiom" : "iphone",
       "subtype" : "736h",
-      "filename" : "1242.png",
+      "filename" : "1024.png",
       "minimum-system-version" : "8.0",
       "orientation" : "portrait",
       "scale" : "3x"
@@ -38,7 +38,7 @@
     {
       "orientation" : "portrait",
       "idiom" : "ipad",
-      "filename" : "768(2).png",
+      "filename" : "768.png",
       "extent" : "full-screen",
       "minimum-system-version" : "7.0",
       "scale" : "1x"
@@ -46,7 +46,7 @@
     {
       "orientation" : "portrait",
       "idiom" : "ipad",
-      "filename" : "2048(1).png",
+      "filename" : "2048.png",
       "extent" : "full-screen",
       "minimum-system-version" : "7.0",
       "scale" : "2x"
