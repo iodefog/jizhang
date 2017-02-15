@@ -415,7 +415,8 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
 
 -(SSJHomeDatePickerView *)transferDateSelectionView{
     if (!_transferDateSelectionView) {
-        _transferDateSelectionView = [[SSJHomeDatePickerView alloc]initWithFrame:self.view.bounds];
+        _transferDateSelectionView = [[SSJHomeDatePickerView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 244)];
+        _transferDateSelectionView.datePickerMode = SSJDatePickerModeDate;
         _transferDateSelectionView.shouldConfirmBlock = ^(SSJHomeDatePickerView *view, NSDate *selecteDate) {
             NSDate *currentDate = [NSDate date];
             currentDate = [NSDate dateWithYear:currentDate.year month:currentDate.month day:currentDate.day];
