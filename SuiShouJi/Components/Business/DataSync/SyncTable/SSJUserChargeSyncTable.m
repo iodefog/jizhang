@@ -66,7 +66,7 @@
         }
     }
     
-    //  查询fund_info中是否有对应的资金帐户
+    //  查询fund_info中是否有对应的资金账户
     if (![db boolForQuery:@"select count(*) from bk_fund_info where cuserid = ? and cfundid = ?", userId, fundId]) {
         return NO;
     }

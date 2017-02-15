@@ -251,7 +251,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
         }
     }
     
-//    //  根据流水表更新资金帐户余额表和每日流水统计表
+//    //  根据流水表更新资金账户余额表和每日流水统计表
 //    if (![SSJFundAccountTable updateBalanceForUserId:userId inDatabase:db]
 //        || ![SSJDailySumChargeTable updateDailySumChargeForUserId:userId inDatabase:db]) {
 //        *rollback = YES;

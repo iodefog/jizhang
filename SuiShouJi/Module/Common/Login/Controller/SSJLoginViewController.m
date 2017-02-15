@@ -317,7 +317,7 @@
 
 #pragma mark - Private
 -(void)comfirmTologin{
-    //  只要登录就设置用户为已注册，因为9188帐户、第三方登录没有注册就可以登录
+    //  只要登录就设置用户为已注册，因为9188账户、第三方登录没有注册就可以登录
     self.loginService.item.registerState = @"1";
     if (![SSJUserTableManager saveUserItem:self.loginService.item]
         || !SSJSaveAppId(self.loginService.appid)

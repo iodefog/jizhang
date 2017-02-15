@@ -36,7 +36,7 @@
 }
 
 + (void)createDefaultFundAccountsWithError:(NSError **)error {
-    //  创建默认的资金帐户
+    //  创建默认的资金账户
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
         NSError *tError = [self createDefaultFundAccountsIfNeededForUserId:SSJUSERID() inDatabase:db];
         if (error) {
@@ -46,7 +46,7 @@
 }
 
 + (void)asyncCreateDefaultFundAccountsWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure {
-    //  创建默认的资金帐户
+    //  创建默认的资金账户
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSError *error = [self createDefaultFundAccountsIfNeededForUserId:SSJUSERID() inDatabase:db];
         if (error) {
@@ -221,7 +221,7 @@
     return nil;
 }
 
-//  如果当前用户没有创建过默认的资金帐户，则创建默认资金帐户
+//  如果当前用户没有创建过默认的资金账户，则创建默认资金账户
 + (NSError *)createDefaultFundAccountsIfNeededForUserId:(NSString *)userId inDatabase:(FMDatabase *)db {
     if (!userId.length) {
         return [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"current user id is invalid"}];

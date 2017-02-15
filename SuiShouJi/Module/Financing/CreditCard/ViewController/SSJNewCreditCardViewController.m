@@ -88,14 +88,14 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     self.images = @[@[@"loan_person",@"card_zhanghu"],@[@"loan_yield",@"loan_money",@"loan_memo"],@[@"loan_expires",@"",@""],@[@"loan_clock",@"card_yanse"]];
 
     if (!self.cardId.length) {
-        self.title = @"添加资金帐户";
+        self.title = @"添加资金账户";
         self.item = [[SSJCreditCardItem alloc]init];
         self.item.settleAtRepaymentDay = YES;
         self.item.cardBillingDay = 1;
         self.item.cardRepaymentDay = 10;
         self.item.cardColor = @"#fc7a60";
     }else{
-        self.title = @"编辑资金帐户";
+        self.title = @"编辑资金账户";
         UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(rightButtonClicked:)];
         self.navigationItem.rightBarButtonItem = rightItem;
         self.item = [SSJCreditCardStore queryCreditCardDetailWithCardId:self.cardId];
@@ -365,18 +365,20 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     if (![numberPre evaluateWithObject:_balaceInput.text] && [_balaceInput.text doubleValue] != 0) {
         [CDAutoHideMessageHUD showMessage:@"请输入正确金额"];
         return;
-    }
-    if (!self.item.cardName.length) {
+    } else if (!self.item.cardName.length) {
         [CDAutoHideMessageHUD showMessage:@"请输入信用卡名称"];
         return;
-    }else if (self.item.cardLimit == 0) {
+    } else if (self.item.cardName.length > 13) {
+        [CDAutoHideMessageHUD showMessage:@"账户名称不能超过13个字"];
+        return;
+    } else if (self.item.cardLimit == 0) {
         [CDAutoHideMessageHUD showMessage:@"信用卡额度不能为0"];
         return;
-    }
-    if (self.item.cardMemo.length > 13) {
-        [CDAutoHideMessageHUD showMessage:@"信用卡备注不能超过13个字"];
+    } else if (self.item.cardMemo.length > 15) {
+        [CDAutoHideMessageHUD showMessage:@"信用卡备注不能超过15个字"];
         return;
     }
+    
     if (!self.remindItem.remindId.length) {
         self.item.remindId = self.remindItem.remindId;
     }
@@ -432,7 +434,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 
 - (void)rightButtonClicked:(id)sender{
     __weak typeof(self) weakSelf = self;
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"确定要删除该资金帐户吗?" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"确定要删除该资金账户吗?" preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:NULL];
     UIAlertAction *comfirm = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
         if (weakSelf.item.chargeCount) {
@@ -470,7 +472,19 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
             self.item.cardLimit = [textField.text doubleValue];
         }
         if (textField.tag == 102){
-            textField.text = [textField.text ssj_reserveDecimalDigits:2 intDigits:9];
+            if ([textField.text rangeOfString:@"+"].location != NSNotFound) {
+                NSString *nunberStr = [textField.text stringByReplacingOccurrencesOfString:@"+" withString:@""];
+                nunberStr = [textField.text stringByReplacingOccurrencesOfString:@"-" withString:@""];
+                nunberStr = [nunberStr ssj_reserveDecimalDigits:2 intDigits:9];
+                textField.text = [NSString stringWithFormat:@"+%@", nunberStr];
+            } else if ([textField.text rangeOfString:@"-"].location != NSNotFound) {
+                NSString *nunberStr = [textField.text stringByReplacingOccurrencesOfString:@"+" withString:@""];
+                nunberStr = [textField.text stringByReplacingOccurrencesOfString:@"-" withString:@""];
+                nunberStr = [nunberStr ssj_reserveDecimalDigits:2 intDigits:9];
+                textField.text = [NSString stringWithFormat:@"-%@", nunberStr];
+            } else {
+                textField.text = [textField.text ssj_reserveDecimalDigits:2 intDigits:9];
+            }
             self.item.cardBalance = [textField.text doubleValue];
         }
         if (textField.tag == 103){
@@ -533,7 +547,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 
 #pragma mark - UITextFieldDelegate
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
-    NSInteger existedLength = textField.text.length;
+    /*NSInteger existedLength = textField.text.length;
     NSInteger selectedLength = range.length;
     NSInteger replaceLength = string.length;
     NSString *newStr = [textField.text stringByReplacingCharactersInRange:range withString:string];
@@ -547,14 +561,14 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
             }
             return NO;
         }
-    }else if (textField.tag == 102){
+    }else*/ if (textField.tag == 102){
         NSCharacterSet *cs = [[NSCharacterSet characterSetWithCharactersInString:NUM] invertedSet];
         NSString *filtered = [[string componentsSeparatedByCharactersInSet:cs] componentsJoinedByString:@""];
         if (![string isEqualToString:filtered]) {
             return NO;
         }
     }
-    if (textField.tag == 100) {
+    /*if (textField.tag == 100) {
         self.item.cardName = newStr;
     }else if (textField.tag == 101){
         self.item.cardLimit = [newStr doubleValue];
@@ -562,7 +576,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         self.item.cardBalance = [newStr doubleValue];
     }else if (textField.tag == 103){
         self.item.cardMemo = newStr;
-    }
+    }*/
     return YES;
 }
 

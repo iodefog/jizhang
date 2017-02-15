@@ -13,7 +13,7 @@
 @interface SSJFundAccountTable : NSObject
 
 /**
- *  更新资金帐户金额表中当前用户的余额
+ *  更新资金账户金额表中当前用户的余额
  *
  *  @param db FMDatabase实例
  *  @return 是否更新成功

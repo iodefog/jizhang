@@ -31,7 +31,7 @@
 + (void)asyncCreateDefaultSyncRecordWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure;
 
 /**
- *  创建指定用户默认的资金帐户
+ *  创建指定用户默认的资金账户
  *
  *  @param userId 用户id
  *  @param db     数据库对象
@@ -41,7 +41,7 @@
 + (NSError *)createDefaultFundAccountsIfNeededForUserId:(NSString *)userId inDatabase:(FMDatabase *)db;
 
 /**
- *  同步创建当前用户默认的资金帐户
+ *  同步创建当前用户默认的资金账户
  *
  *  @param success  成功的回调
  *  @param failure  失败的回调
@@ -50,7 +50,7 @@
 + (void)createDefaultFundAccountsWithError:(NSError **)error;
 
 /**
- *  异步创建当前用户默认的资金帐户
+ *  异步创建当前用户默认的资金账户
  *
  *  @param success  成功的回调
  *  @param failure  失败的回调
@@ -141,7 +141,7 @@
 + (void)asyncCreateDefaultBillTypesIfNeededWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure;
 
 /**
- *  异步创建当前用户默认的所有数据（同步表、资金帐户、收支类型、账本、成员）
+ *  异步创建当前用户默认的所有数据（同步表、资金账户、收支类型、账本、成员）
  *
  *  @param success  成功的回调
  *  @param failure  失败的回调

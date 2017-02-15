@@ -12,7 +12,7 @@
 @implementation SSJFundAccountTable
 
 + (BOOL)updateBalanceForUserId:(NSString *)userId inDatabase:(FMDatabase *)db {
-    //  清空资金帐户余额表，再根据用户资金帐户表重新创建记录
+    //  清空资金账户余额表，再根据用户资金账户表重新创建记录
     if (![db executeUpdate:@"delete from bk_funs_acct where cuserid = ?", userId]) {
         return NO;
     }
@@ -23,14 +23,14 @@
     
     NSString *today = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"];
     
-    //  从截止到今天有效的记账流水中，查询各个资金帐户的总收入、总支出
+    //  从截止到今天有效的记账流水中，查询各个资金账户的总收入、总支出
     __block FMResultSet *result = [db executeQuery:@"select A.IFUNSID, sum(A.IMONEY), B.ITYPE from BK_USER_CHARGE as A, BK_BILL_TYPE as B where A.IBILLID = B.ID and A.CUSERID = ? and A.OPERATORTYPE <> 2 and (A.CBILLDATE <= ? or length(A.LOANID) > 0) group by A.IFUNSID, B.ITYPE", userId, today, today];
     if (!result) {
         SSJPRINT(@">>>SSJ warning\n message:%@\n error:%@", [db lastErrorMessage], [db lastError]);
         return NO;
     }
     
-    //  创建字典，key是资金帐户id，value是金额变化
+    //  创建字典，key是资金账户id，value是金额变化
     NSMutableDictionary *moneyInfo = [NSMutableDictionary dictionary];
     
     while ([result next]) {
@@ -57,7 +57,7 @@
     
     __block BOOL success = YES;
     
-    //  遍历moneyInfo，根据key（资金帐户id）查询BK_FUNS_ACCT表中是否存在相应的记录，存在就修改为最新的金额
+    //  遍历moneyInfo，根据key（资金账户id）查询BK_FUNS_ACCT表中是否存在相应的记录，存在就修改为最新的金额
     [moneyInfo enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
         if (![db executeUpdate:@"update BK_FUNS_ACCT set IBALANCE = ? where CFUNDID = ? and CUSERID = ?", obj, key, userId]) {
             SSJPRINT(@">>>SSJ warning:\n message:%@\n error:%@", [db lastErrorMessage], [db lastError]);
