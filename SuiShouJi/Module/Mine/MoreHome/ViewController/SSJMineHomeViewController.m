@@ -786,7 +786,7 @@ static BOOL kNeedBannerDisplay = YES;
     }
     SSJNormalWebViewController *webVc = [SSJNormalWebViewController webViewVCWithURL:[NSURL URLWithString:urlStr]];
     if (title.length) {
-        webVc.titleString = title;
+        webVc.title = title;
     } else {
         webVc.showPageTitleInNavigationBar = YES;
     }

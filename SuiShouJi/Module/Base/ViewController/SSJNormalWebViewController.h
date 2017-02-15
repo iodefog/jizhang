@@ -38,11 +38,6 @@
 @property (nonatomic, assign) BOOL showPageTitleInNavigationBar;
 
 /**
- titleView
- */
-@property (nonatomic, copy) NSString *titleString;
-
-/**
  *  是否隐藏工具条,默认隐藏(YES)
  */
 @property (nonatomic, assign) BOOL toolBarHidden;

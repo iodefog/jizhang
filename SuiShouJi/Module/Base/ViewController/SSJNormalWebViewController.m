@@ -70,11 +70,13 @@
     if (self.url!=nil) {
         [self loadURL:self.url];
     }
+    
     self.navigationItem.titleView = self.titleLabel;
 }
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
+    [self.webView setFrame:self.view.bounds];
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -95,7 +97,6 @@
 - (UIWebView *)webView{
     if (_webView==nil) {
         _webView = [[UIWebView alloc] init];
-        [_webView setFrame:self.view.bounds];
         [_webView setDelegate:self];
         [_webView setMultipleTouchEnabled:YES];
         [_webView setScalesPageToFit:YES];
@@ -209,10 +210,17 @@
     [self.webView loadHTMLString:HTMLString baseURL:nil];
 }
 
-- (void)setTitleString:(NSString *)titleString
+//- (void)setTitleString:(NSString *)titleString
+//{
+//    _titleString = titleString;
+//    self.titleLabel.text = self.title;
+//    [self.titleLabel sizeToFit];
+//    self.titleLabel.leftTop = CGPointMake((self.webView.width - self.titleLabel.width) * 0.5, (44 - self.titleLabel.height) * 0.5);
+//}
+
+- (void)setTitle:(NSString *)title
 {
-    _titleString = titleString;
-    self.titleLabel.text = titleString;
+    self.titleLabel.text = title;
     [self.titleLabel sizeToFit];
     self.titleLabel.leftTop = CGPointMake((self.webView.width - self.titleLabel.width) * 0.5, (44 - self.titleLabel.height) * 0.5);
 }
