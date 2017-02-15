@@ -85,6 +85,10 @@ static BOOL kNeedBannerDisplay = YES;
 //@property(nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UICollectionView *collectionView;
 @property (nonatomic, strong) SSJHeaderBannerImageView *headerBannerImageView;//头部banner
+/**
+ 默认主题底部背景
+ */
+@property (nonatomic, strong) UIImageView *bottomBgView;
 @property(nonatomic, strong) SSJBannerNetworkService *bannerService;
 
 @property (nonatomic, strong) SSJNewDotNetworkService *dotService;
@@ -116,6 +120,12 @@ static BOOL kNeedBannerDisplay = YES;
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.view addSubview:self.header];
+    [self.view addSubview:self.bottomBgView];
+    if ([SSJCurrentThemeID() isEqualToString:SSJDefaultThemeID]) {
+        self.bottomBgView.hidden = NO;
+    } else {
+        self.bottomBgView.hidden = YES;
+    }
     [self.view addSubview:self.collectionView];
     [self loadOriDataArray];//固定数组
 }
@@ -215,6 +225,8 @@ static BOOL kNeedBannerDisplay = YES;
     self.header.leftTop = CGPointMake(0, 0);
     self.collectionView.size = CGSizeMake(self.view.width, self.view.height - self.header.bottom - self.tabBarController.tabBar.height);
     self.collectionView.top = self.header.bottom + 10;
+    self.bottomBgView.centerX = self.view.centerX;
+    self.bottomBgView.bottom = self.view.bottom;
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -630,6 +642,14 @@ static BOOL kNeedBannerDisplay = YES;
     return _lineView;
 }
 
+- (UIImageView *)bottomBgView
+{
+    if (!_bottomBgView) {
+        _bottomBgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"more_bottom_bgimage"]];
+    }
+    return _bottomBgView;
+}
+
 #pragma mark - Event
 -(void)takePhoto {
     UIImagePickerControllerSourceType sourceType = UIImagePickerControllerSourceTypeCamera;
@@ -688,6 +708,11 @@ static BOOL kNeedBannerDisplay = YES;
 //    _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
 //  self.collectionView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     self.lineView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
+    if ([SSJCurrentThemeID() isEqualToString:SSJDefaultThemeID]) {
+        self.bottomBgView.hidden = NO;
+    } else {
+        self.bottomBgView.hidden = YES;
+    }
 
 }
 
