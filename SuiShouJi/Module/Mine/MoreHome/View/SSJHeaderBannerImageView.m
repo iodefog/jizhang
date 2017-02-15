@@ -138,12 +138,12 @@ static NSString *const kHeadBannerCellID = @"SSJHeaderBannerCollectionViewCellID
             }],nil];
             return;
         }
-        if (self.delegate && [self.delegate respondsToSelector:@selector(pushToViewControllerWithUrl:)]) {
-            [self.delegate pushToViewControllerWithUrl:[NSString stringWithFormat:@"%@?cuserId=%@",item.bannerUrl,SSJUSERID()]];
+        if (self.delegate && [self.delegate respondsToSelector:@selector(pushToViewControllerWithUrl:title:)]) {
+            [self.delegate pushToViewControllerWithUrl:[NSString stringWithFormat:@"%@?cuserId=%@",item.bannerUrl,SSJUSERID()] title:item.bannerName];
         }
     }else{
-        if (self.delegate && [self.delegate respondsToSelector:@selector(pushToViewControllerWithUrl:)]) {
-            [self.delegate pushToViewControllerWithUrl:item.bannerUrl];
+        if (self.delegate && [self.delegate respondsToSelector:@selector(pushToViewControllerWithUrl:title:)]) {
+            [self.delegate pushToViewControllerWithUrl:item.bannerUrl title:item.bannerName];
         }
 
     }

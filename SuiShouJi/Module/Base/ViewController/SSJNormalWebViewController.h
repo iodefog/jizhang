@@ -37,7 +37,6 @@
  */
 @property (nonatomic, assign) BOOL showPageTitleInNavigationBar;
 
-
 /**
  *  是否隐藏工具条,默认隐藏(YES)
  */

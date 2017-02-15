@@ -25,7 +25,7 @@
         //转模型
         NSDictionary *result = [[NSDictionary dictionaryWithDictionary:rootElement] objectForKey:@"results"];
         self.dotItem = [SSJThemeAndAdviceDotItem mj_objectWithKeyValues:result];
-        self.dotItem.creplyDate = [NSDate dateWithString:self.dotItem.creplydate formatString:@"yyyy-MM-dd HH:mm:ss"];
+        self.dotItem.creplyDate = [NSDate dateWithString:self.dotItem.creplydate formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
         SSJUserItem *userItem = [SSJUserTableManager queryUserItemForID:SSJUSERID()];
         self.dotItem.hasThemeUpdate = [[self themeVersion] doubleValue] < [self.dotItem.themeVersion doubleValue];
         if (self.dotItem.creplydate.length < 1) {
