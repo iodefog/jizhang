@@ -76,7 +76,7 @@ typedef NS_ENUM(NSInteger, SSJDatePickerMode) {
 /**
  时分背景颜色
  */
-@property (nonatomic, copy) NSString *horuAndMinuBgViewBgColor;
+@property (nonatomic, strong) UIColor *horuAndMinuBgViewBgColor;
 
 // 自定义左侧按钮，默认nil，如果有值，就取代默认的取消按钮
 @property (nonatomic, strong, nullable) SSJHomeDatePickerViewButtonItem *leftButtonItem;

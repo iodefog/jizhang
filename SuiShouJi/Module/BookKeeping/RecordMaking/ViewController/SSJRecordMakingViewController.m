@@ -202,6 +202,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 - (SSJHomeDatePickerView *)dateSelectedView {
     if (!_dateSelectedView) {
         _dateSelectedView = [[SSJHomeDatePickerView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 300)];
+        _dateSelectedView.horuAndMinuBgViewBgColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainFillColor alpha:1];
         _dateSelectedView.datePickerMode = SSJDatePickerModeYearDateAndTime;
         _dateSelectedView.warningDate = [NSDate date];
         _dateSelectedView.maxDate = [NSDate date];

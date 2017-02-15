@@ -471,7 +471,9 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 -(SSJHomeDatePickerView *)chargeCircleTimeView{
     if (!_chargeCircleTimeView) {
         _chargeCircleTimeView = [[SSJHomeDatePickerView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 244)];
+        _chargeCircleTimeView.horuAndMinuBgViewBgColor = [UIColor clearColor];;
         _chargeCircleTimeView.datePickerMode = SSJDatePickerModeDate;
+        __weak typeof(self)weakSelf = self;
         _chargeCircleTimeView.shouldConfirmBlock = ^(SSJHomeDatePickerView *view, NSDate *selecteDate) {
             NSDate *currentDate = [NSDate date];
             currentDate = [NSDate dateWithYear:currentDate.year month:currentDate.month day:currentDate.day];
@@ -479,14 +481,13 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
                 [CDAutoHideMessageHUD showMessage:@"不能设置历史日期的周期记账哦"];
                 return NO;
             }
-            NSDate *endDate = [NSDate dateWithString:self.item.chargeCircleEndDate formatString:@"yyyy-MM-dd"];
+            NSDate *endDate = [NSDate dateWithString:weakSelf.item.chargeCircleEndDate formatString:@"yyyy-MM-dd"];
             if (endDate && [selecteDate compare:endDate] == NSOrderedDescending) {
                 [CDAutoHideMessageHUD showMessage:@"起始日期不能晚于结束日期哦"];
                 return NO;
             }
             return YES;
         };
-        __weak typeof(self) weakSelf = self;
         _chargeCircleTimeView.confirmBlock = ^(SSJHomeDatePickerView *view) {
             weakSelf.item.billDate = [view.date formattedDateWithFormat:@"yyyy-MM-dd"];
             [weakSelf.tableView reloadData];
@@ -498,6 +499,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 -(SSJHomeDatePickerView *)chargeCircleEndTimeView{
     if (!_chargeCircleEndTimeView) {
         _chargeCircleEndTimeView = [[SSJHomeDatePickerView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 244)];
+        _chargeCircleTimeView.horuAndMinuBgViewBgColor = [UIColor clearColor];;
         _chargeCircleEndTimeView.datePickerMode = SSJDatePickerModeDate;
         _chargeCircleEndTimeView.leftButtonItem = [SSJHomeDatePickerViewButtonItem buttonItemWithTitle:@"清空" titleColor:[UIColor ssj_colorWithHex:SSJOverrunRedColorValue] image:nil];
         _chargeCircleEndTimeView.shouldConfirmBlock = ^(SSJHomeDatePickerView *view, NSDate *selecteDate) {

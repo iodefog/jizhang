@@ -352,6 +352,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 -(SSJHomeDatePickerView *)reminderTimeView{
     if (!_reminderTimeView) {
         _reminderTimeView = [[SSJHomeDatePickerView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 360)];
+        _reminderTimeView.horuAndMinuBgViewBgColor = [UIColor clearColor];
         _reminderTimeView.datePickerMode = SSJDatePickerModeTime;
         __weak typeof(self) weakSelf = self;
         _reminderTimeView.confirmBlock = ^(SSJHomeDatePickerView *view){
@@ -365,6 +366,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 -(SSJHomeDatePickerView *)dateSelectView{
     if (!_dateSelectView) {
         _dateSelectView = [[SSJHomeDatePickerView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 360)];
+        _dateSelectView.horuAndMinuBgViewBgColor = [UIColor clearColor];
         _dateSelectView.datePickerMode = SSJDatePickerModeDate;
         __weak typeof(self) weakSelf = self;
         _dateSelectView.shouldConfirmBlock = ^BOOL(SSJHomeDatePickerView *view, NSDate *selecteDate){

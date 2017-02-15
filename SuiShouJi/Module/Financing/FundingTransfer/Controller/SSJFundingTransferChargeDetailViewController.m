@@ -419,6 +419,7 @@ static const NSInteger kMemoTag = 1002;
     if (!_dateSelectionView) {
         __weak typeof(self) wself = self;
         _dateSelectionView = [[SSJHomeDatePickerView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 244)];
+        _dateSelectionView.horuAndMinuBgViewBgColor = [UIColor clearColor];;
         _dateSelectionView.datePickerMode = SSJDatePickerModeDate;
         _dateSelectionView.shouldConfirmBlock = ^BOOL(SSJHomeDatePickerView *view, NSDate *date) {
             NSDate *currentDate = [NSDate date];

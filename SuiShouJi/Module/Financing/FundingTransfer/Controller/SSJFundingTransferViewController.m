@@ -416,6 +416,7 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
 -(SSJHomeDatePickerView *)transferDateSelectionView{
     if (!_transferDateSelectionView) {
         _transferDateSelectionView = [[SSJHomeDatePickerView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 244)];
+        _transferDateSelectionView.horuAndMinuBgViewBgColor = [UIColor clearColor];
         _transferDateSelectionView.datePickerMode = SSJDatePickerModeDate;
         _transferDateSelectionView.shouldConfirmBlock = ^(SSJHomeDatePickerView *view, NSDate *selecteDate) {
             NSDate *currentDate = [NSDate date];
@@ -448,6 +449,7 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
     if (!_beginDateSelectionView) {
         __weak typeof(self) wself = self;
         _beginDateSelectionView = [[SSJHomeDatePickerView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 244)];
+        _beginDateSelectionView.horuAndMinuBgViewBgColor = [UIColor clearColor];;
         _beginDateSelectionView.datePickerMode = SSJDatePickerModeDate;
         _beginDateSelectionView.shouldConfirmBlock = ^BOOL(SSJHomeDatePickerView *view, NSDate *date) {
             NSDate *currentDate = [NSDate date];
@@ -456,7 +458,7 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
                 [CDAutoHideMessageHUD showMessage:@"起始日期不能早于今天哦"];
                 return NO;
             }
-            NSDate *endDate = [NSDate dateWithString:_item.endDate formatString:@"yyyy-MM-dd"];
+            NSDate *endDate = [NSDate dateWithString:wself.item.endDate formatString:@"yyyy-MM-dd"];
             if ([date compare:endDate] == NSOrderedDescending) {
                 [CDAutoHideMessageHUD showMessage:@"起始日期不能晚于结束日期哦"];
                 return NO;
@@ -475,6 +477,7 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
     if (!_endDateSelectionView) {
         __weak typeof(self) weakSelf = self;
         _endDateSelectionView = [[SSJHomeDatePickerView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 244)];
+        _endDateSelectionView.horuAndMinuBgViewBgColor = [UIColor clearColor];;
         _endDateSelectionView.datePickerMode = SSJDatePickerModeDate;
         _endDateSelectionView.leftButtonItem = [SSJHomeDatePickerViewButtonItem buttonItemWithTitle:@"清空" titleColor:[UIColor ssj_colorWithHex:SSJOverrunRedColorValue] image:nil];
         _endDateSelectionView.shouldConfirmBlock = ^BOOL(SSJHomeDatePickerView *view, NSDate *date) {
@@ -553,7 +556,7 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
     [self.view endEditing:YES];
     if (!_alertShowed && [self shouldShowAlert]) {
         NSDate *date = [NSDate dateWithString:_item.beginDate formatString:@"yyyy-MM-dd"];
-        NSString *message = [NSString stringWithFormat:@"每月不一定都有%d号哦，没有的月份将自动跳过不生成该转账记录哦！", date.day];
+        NSString *message = [NSString stringWithFormat:@"每月不一定都有%ld号哦，没有的月份将自动跳过不生成该转账记录哦！", date.day];
         
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:@"知道了" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
