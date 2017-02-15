@@ -746,7 +746,7 @@
     
     self.titleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
-    self.horuAndMinuBgView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainFillColor alpha:1];
+    self.horuAndMinuBgView.backgroundColor = self.horuAndMinuBgViewBgColor ? [UIColor ssj_colorWithHex:self.horuAndMinuBgViewBgColor] : [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainFillColor alpha:1];
 }
 
 - (void)dealloc
