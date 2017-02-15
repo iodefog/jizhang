@@ -227,7 +227,7 @@ static BOOL kNeedBannerDisplay = YES;
     self.collectionView.top = self.header.bottom;
     self.collectionView.contentInset = UIEdgeInsetsMake(10, 0, 0, 0);
     self.bottomBgView.centerX = self.view.centerX;
-    self.bottomBgView.bottom = self.view.bottom;
+    self.bottomBgView.bottom = self.view.bottom - SSJ_TABBAR_HEIGHT;
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
