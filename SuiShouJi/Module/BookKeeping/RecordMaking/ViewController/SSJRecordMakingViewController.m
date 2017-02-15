@@ -206,9 +206,6 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         _dateSelectedView.warningDate = [NSDate date];
         _dateSelectedView.maxDate = [NSDate date];
         __weak typeof(self) weakSelf = self;
-        _dateSelectedView.closeBlock = ^(SSJHomeDatePickerView *view) {
-            [weakSelf.billTypeInputView.moneyInput becomeFirstResponder];
-        };
         _dateSelectedView.shouldConfirmBlock = ^BOOL(SSJHomeDatePickerView *view, NSDate *selecteDate) {
             if ([[NSDate date] compare:selecteDate] == NSOrderedAscending) {
                 [CDAutoHideMessageHUD showMessage:@"不能记未来日期的账哦"];
@@ -224,6 +221,8 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
             weakSelf.item.billDetailDate = [NSString stringWithFormat:@"%02ld:%02ld",(long)view.date.hour,(long)view.date.minute];
             [weakSelf.accessoryView.dateBtn setTitle:[NSString stringWithFormat:@"%ld月%ld日", weakSelf.selectedMonth, weakSelf.selectedDay] forState:UIControlStateNormal];
             [weakSelf.dateSelectedView dismiss];
+        };
+        _dateSelectedView.dismissBlock = ^(SSJHomeDatePickerView *view) {
             [weakSelf.billTypeInputView.moneyInput becomeFirstResponder];
         };
     }
