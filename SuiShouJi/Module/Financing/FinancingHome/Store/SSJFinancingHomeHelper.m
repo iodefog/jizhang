@@ -192,9 +192,9 @@
                     }
                 }
             }else{
-                //如果是普通资金帐户
+                //如果是普通资金账户
                 if (!type) {
-                    // 如果保留数据只要删掉资金帐户
+                    // 如果保留数据只要删掉资金账户
                     if (![db executeUpdate:@"update bk_fund_info set operatortype = 2 , cwritedate = ? , iversion = ? where cfundid = ?",writeDate,@(SSJSyncVersion()),fundingItem.fundingID]) {
                         if (failure) {
                             *rollback = YES;
@@ -205,7 +205,7 @@
                         return;
                     };
                 }else{
-                    // 如果不保留先删掉资金帐户
+                    // 如果不保留先删掉资金账户
                     if (![db executeUpdate:@"update bk_fund_info set operatortype = 2 , cwritedate = ? , iversion = ? where cfundid = ?",writeDate,@(SSJSyncVersion()),fundingItem.fundingID]) {
                         if (failure) {
                             *rollback = YES;
@@ -216,7 +216,7 @@
                         return;
                     };
                     
-                    //找出所有和当前资金帐户有关的借贷
+                    //找出所有和当前资金账户有关的借贷
                     FMResultSet *resultSet = [db executeQuery:@"select * from bk_loan where loanid in (select cid from bk_user_charge where ifunsid = ? and operatortype <> 2 and ichargetype = ?)", fundingItem.fundingID,@(SSJChargeIdTypeLoan)];
                     NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:0];
                     while ([resultSet next]) {
@@ -293,7 +293,7 @@
             // 如果是信用卡账户
             SSJCreditCardItem *cardItem = (SSJCreditCardItem *)item;
             if (!type) {
-                //删掉资金帐户
+                //删掉资金账户
                 if (![db executeUpdate:@"update bk_fund_info set operatortype = 2 , cwritedate = ? , iversion = ? where cfundid = ?",writeDate,@(SSJSyncVersion()),cardItem.cardId]) {
                     *rollback = YES;
                     if (failure) {

@@ -43,13 +43,13 @@
 //  注册状态（0:未注册 1:已注册）
 @property (nonatomic, copy) NSString *registerState;
 
-//  默认资金帐户创建状态（0:为创建 1:已创建）
+//  默认资金账户创建状态（0:为创建 1:已创建）
 @property (nonatomic, copy) NSString *defaultFundAcctState;
 //
-//  默认资金帐户创建状态（0:为创建 1:已创建）
+//  默认资金账户创建状态（0:为创建 1:已创建）
 @property (nonatomic, copy) NSString *defaultBooksTypeState;
 //
-//  默认资金帐户创建状态（0:为创建 1:已创建）
+//  默认资金账户创建状态（0:为创建 1:已创建）
 @property (nonatomic, copy) NSString *defaultMemberState;
 
 //  个性签名

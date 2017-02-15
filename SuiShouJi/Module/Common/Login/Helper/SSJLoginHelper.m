@@ -48,7 +48,7 @@
 
 + (void)updateTableWhenLoginWithServices:(SSJLoginService *)service{
     [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
-        //  merge登陆接口返回的收支类型、资金帐户、账本
+        //  merge登陆接口返回的收支类型、资金账户、账本
         [SSJBooksTypeSyncTable mergeRecords:service.booksTypeArray forUserId:SSJUSERID() inDatabase:db error:nil];
         //  更新父类型为空的账本
         [self updateBooksParentIfNeededForUserId:SSJUSERID() inDatabase:db error:nil];
@@ -62,7 +62,7 @@
         //  更新排序字段为空的收支类型
         [self updateBillTypeOrderIfNeededForUserId:SSJUSERID() inDatabase:db error:nil];
         
-        //  如果登录没有返回任何资金帐户，说明服务器没有保存任何资金记录，就给用户创建默认的
+        //  如果登录没有返回任何资金账户，说明服务器没有保存任何资金记录，就给用户创建默认的
         [SSJUserDefaultDataCreater createDefaultFundAccountsIfNeededForUserId:SSJUSERID() inDatabase:db];
         
         //  如果登录没有返回任何账本类型，说明服务器没有保存任何账本类型，就给用户创建默认的
@@ -75,7 +75,7 @@
             [SSJUserDefaultDataCreater createDefaultMembersForUserId:SSJUSERID() inDatabase:db];
         }
         
-        //        //  更新资金帐户余额
+        //        //  更新资金账户余额
         //        [SSJFundAccountTable updateBalanceForUserId:SSJUSERID() inDatabase:db];
     }];
 

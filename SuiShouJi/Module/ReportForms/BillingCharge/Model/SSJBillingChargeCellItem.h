@@ -35,16 +35,16 @@
 // 流水具体时间(格式HH:mm)
 @property (nonatomic,strong) NSString *billDetailDate;
 
-// 资金帐户编号
+// 资金账户编号
 @property (nonatomic,strong) NSString *fundId;
 
-// 资金帐户名称
+// 资金账户名称
 @property (nonatomic,strong) NSString *fundName;
 
-// 资金帐户图片名称
+// 资金账户图片名称
 @property (nonatomic,strong) NSString *fundImage;
 
-// 资金帐户操作类型
+// 资金账户操作类型
 @property (nonatomic) NSInteger fundOperatorType;
 
 // 资金账户的父类

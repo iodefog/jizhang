@@ -376,7 +376,7 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
         [SSJUserTableManager saveUserItem:userItem];
     }
     
-    // 合并顺序：1.收支类型 2.资金帐户 3.定期记账 4.记账流水 5.预算
+    // 合并顺序：1.收支类型 2.资金账户 3.定期记账 4.记账流水 5.预算
     __block BOOL mergeSuccess = YES;
     __block BOOL updateVersionSuccess = YES;
     

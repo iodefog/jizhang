@@ -157,7 +157,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
     cell.item = item;
     cell.editeModel = _editeModel;
     cell.deleteButtonClickBlock = ^(SSJFinancingHomeCell *cell,NSInteger chargeCount){
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"确定要删除该资金帐户吗?" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"确定要删除该资金账户吗?" preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:NULL];
         UIAlertAction *comfirm = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
             if (chargeCount) {

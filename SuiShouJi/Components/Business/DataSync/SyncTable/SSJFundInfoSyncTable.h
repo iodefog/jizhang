@@ -6,7 +6,7 @@
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
 
-// 用户资金帐户
+// 用户资金账户
 
 #import "SSJBaseSyncTable.h"
 
