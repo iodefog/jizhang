@@ -43,7 +43,7 @@
 
 + (BOOL)shouldMergeRecord:(NSDictionary *)record forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError *__autoreleasing *)error {
     
-    if ([record[@"ichargetype"] integerValue] > 4) {
+    if ([record[@"ichargetype"] integerValue] > SSJChargeIdTypeCyclicTransfer) {
         return NO;
     }
     
