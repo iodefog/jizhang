@@ -221,6 +221,7 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
             } else {
 #ifdef DEBUG
                 [SSJAlertViewAdapter showAlertViewWithTitle:@"数据同步失败" message:error.localizedDescription action:[SSJAlertViewAction actionWithTitle:@"确认" handler:NULL], nil];
+                [SSJAnaliyticsManager event:@"sync_failed" extra:error.localizedDescription];
 #endif
             }
             
