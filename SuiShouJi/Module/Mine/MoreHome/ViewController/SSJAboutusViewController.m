@@ -66,7 +66,7 @@ static NSString *const kTitle3 = @"联系客服";
     
     //  团队简介
     if ([title isEqualToString:kTitle1]) {
-        SSJNormalWebViewController *webVc = [SSJNormalWebViewController webViewVCWithURL:[NSURL URLWithString:@"http://1.9188.com/h5/about_shq/about.html"]];
+        SSJNormalWebViewController *webVc = [SSJNormalWebViewController webViewVCWithURL:[NSURL URLWithString:@"http://jz.youyuwo.com/about.html"]];
         webVc.title = @"关于我们";
         [self.navigationController pushViewController:webVc animated:YES];
     }

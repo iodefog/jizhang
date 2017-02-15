@@ -59,7 +59,7 @@
     self.datePicker.frame = CGRectMake(0,self.topView.height,self.width,self.height - self.topView.height);
     self.titleLabel.centerX = self.centerX;
     self.titleLabel.centerY = self.closeButton.centerY;
-    self.horuAndMinuBgView.frame = CGRectMake(240,self.datePicker.centerY - 22, self.width - 240, 43);
+    self.horuAndMinuBgView.frame = CGRectMake(200,self.datePicker.centerY - 22, self.width - 200, 43);
     self.closeButton.leftTop = CGPointMake(15, 15);
     self.comfirmButton.rightTop = CGPointMake(self.width - 15, 15);
 }
@@ -607,13 +607,13 @@
 
     if (self.datePickerMode == SSJDatePickerModeYearDateAndTime) {
         if (component == 0) {
-            return 50;
+            return 45;
         }else if (component == 1){
-            return 180;
+            return 150;
         }else if (component == 3 || component == 5) {
             return 20;
         }
-        return (self.width - 250) / 3;
+        return (self.width - 220) / 3;
     }
     return self.width / 3;
 }
