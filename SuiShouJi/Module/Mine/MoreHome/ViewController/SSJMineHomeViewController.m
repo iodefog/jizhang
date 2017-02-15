@@ -224,7 +224,8 @@ static BOOL kNeedBannerDisplay = YES;
     self.header.size = CGSizeMake(self.view.width, 170);
     self.header.leftTop = CGPointMake(0, 0);
     self.collectionView.size = CGSizeMake(self.view.width, self.view.height - self.header.bottom - self.tabBarController.tabBar.height);
-    self.collectionView.top = self.header.bottom + 10;
+    self.collectionView.top = self.header.bottom;
+    self.collectionView.contentInset = UIEdgeInsetsMake(10, 0, 0, 0);
     self.bottomBgView.centerX = self.view.centerX;
     self.bottomBgView.bottom = self.view.bottom;
 }
@@ -775,7 +776,7 @@ static BOOL kNeedBannerDisplay = YES;
 
 
 #pragma mark - headerBannerImageView
-- (void)pushToViewControllerWithUrl:(NSString *)urlStr
+- (void)pushToViewControllerWithUrl:(NSString *)urlStr title:(NSString *)title
 {
     if ([urlStr containsString:@"http://jz.youyuwo.com/5/zd/"]) {
         SSJBillNoteWebViewController *bilVc = [[SSJBillNoteWebViewController alloc] init];
@@ -784,7 +785,11 @@ static BOOL kNeedBannerDisplay = YES;
         return;
     }
     SSJNormalWebViewController *webVc = [SSJNormalWebViewController webViewVCWithURL:[NSURL URLWithString:urlStr]];
-    webVc.showPageTitleInNavigationBar = YES;
+    if (title.length) {
+        webVc.title = title;
+    } else {
+        webVc.showPageTitleInNavigationBar = YES;
+    }
     [self.navigationController pushViewController:webVc animated:YES];
 }
 
