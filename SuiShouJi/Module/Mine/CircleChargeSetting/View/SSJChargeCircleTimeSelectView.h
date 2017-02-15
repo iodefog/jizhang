@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+SSJ_DEPRECATED
+
 @interface SSJChargeCircleTimeSelectView : UIView
 
 // 选择日期的回调

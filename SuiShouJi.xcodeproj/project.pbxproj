@@ -314,7 +314,6 @@
 		7D08A1C31E4999D30085A8FB /* SSJReminderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF594351D66B4EA00006594 /* SSJReminderViewController.m */; };
 		7D08A1C41E4999D30085A8FB /* UIViewController+SSJPageFlow.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF6A1C4B26B3000E6CC9 /* UIViewController+SSJPageFlow.m */; };
 		7D08A1C51E4999D30085A8FB /* SSJProductAdviceTableHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 916E32071DF967C1003C18D4 /* SSJProductAdviceTableHeaderView.m */; };
-		7D08A1C61E4999D30085A8FB /* SSJBookkeepingReminderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBD81CFD2DAA0061803B /* SSJBookkeepingReminderViewController.m */; };
 		7D08A1C71E4999D30085A8FB /* SSJCustomCategoryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3899A01DC9D99700715732 /* SSJCustomCategoryItem.m */; };
 		7D08A1C81E4999D30085A8FB /* SSJReminderWeekDaySelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6D65EA1D826B700081A7CE /* SSJReminderWeekDaySelectView.m */; };
 		7D08A1C91E4999D30085A8FB /* SSJBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD04338A1C1A8DA50051E7AB /* SSJBaseViewController.m */; };
@@ -1318,7 +1317,6 @@
 		7DA13B1A1E35AED7000490A4 /* SSJReminderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF594351D66B4EA00006594 /* SSJReminderViewController.m */; };
 		7DA13B1B1E35AED7000490A4 /* UIViewController+SSJPageFlow.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF6A1C4B26B3000E6CC9 /* UIViewController+SSJPageFlow.m */; };
 		7DA13B1C1E35AED7000490A4 /* SSJProductAdviceTableHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 916E32071DF967C1003C18D4 /* SSJProductAdviceTableHeaderView.m */; };
-		7DA13B1D1E35AED7000490A4 /* SSJBookkeepingReminderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBD81CFD2DAA0061803B /* SSJBookkeepingReminderViewController.m */; };
 		7DA13B1E1E35AED7000490A4 /* SSJCustomCategoryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3899A01DC9D99700715732 /* SSJCustomCategoryItem.m */; };
 		7DA13B1F1E35AED7000490A4 /* SSJReminderWeekDaySelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6D65EA1D826B700081A7CE /* SSJReminderWeekDaySelectView.m */; };
 		7DA13B201E35AED7000490A4 /* SSJBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD04338A1C1A8DA50051E7AB /* SSJBaseViewController.m */; };
@@ -1825,7 +1823,6 @@
 		7DBA56721D6D32B700C02D79 /* SSJConstant.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433321C1A82110051E7AB /* SSJConstant.m */; };
 		7DBA56731D6D32B700C02D79 /* SSJDailySumChargeTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4EF8841C43B1A3003C4B20 /* SSJDailySumChargeTable.m */; };
 		7DBA56751D6D32B700C02D79 /* UIViewController+SSJPageFlow.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF6A1C4B26B3000E6CC9 /* UIViewController+SSJPageFlow.m */; };
-		7DBA56761D6D32B700C02D79 /* SSJBookkeepingReminderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBD81CFD2DAA0061803B /* SSJBookkeepingReminderViewController.m */; };
 		7DBA56781D6D32B700C02D79 /* SSJBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD04338A1C1A8DA50051E7AB /* SSJBaseViewController.m */; };
 		7DBA567A1D6D32B700C02D79 /* SSJSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D581EB71C5107C300E202A2 /* SSJSyncTable.m */; };
 		7DBA567B1D6D32B700C02D79 /* SSJAboutusTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBBC1CFD2DAA0061803B /* SSJAboutusTableViewCell.m */; };
@@ -2609,7 +2606,6 @@
 		9C2A67BF1D194CA70010F1DA /* SSJConstant.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433321C1A82110051E7AB /* SSJConstant.m */; };
 		9C2A67C01D194CA70010F1DA /* SSJDailySumChargeTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4EF8841C43B1A3003C4B20 /* SSJDailySumChargeTable.m */; };
 		9C2A67C21D194CA70010F1DA /* UIViewController+SSJPageFlow.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF6A1C4B26B3000E6CC9 /* UIViewController+SSJPageFlow.m */; };
-		9C2A67C31D194CA70010F1DA /* SSJBookkeepingReminderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBD81CFD2DAA0061803B /* SSJBookkeepingReminderViewController.m */; };
 		9C2A67C41D194CA70010F1DA /* SSJBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD04338A1C1A8DA50051E7AB /* SSJBaseViewController.m */; };
 		9C2A67C61D194CA70010F1DA /* SSJSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D581EB71C5107C300E202A2 /* SSJSyncTable.m */; };
 		9C2A67C71D194CA70010F1DA /* SSJAboutusTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBBC1CFD2DAA0061803B /* SSJAboutusTableViewCell.m */; };
@@ -3175,7 +3171,6 @@
 		9CD9BC2B1CFD2DAA0061803B /* SSJNoneCircleChargeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBD11CFD2DAA0061803B /* SSJNoneCircleChargeView.m */; };
 		9CD9BC2C1CFD2DAA0061803B /* SSJSyncSettingTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBD31CFD2DAA0061803B /* SSJSyncSettingTableViewCell.m */; };
 		9CD9BC2D1CFD2DAA0061803B /* SSJAboutusViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBD61CFD2DAA0061803B /* SSJAboutusViewController.m */; };
-		9CD9BC2E1CFD2DAA0061803B /* SSJBookkeepingReminderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBD81CFD2DAA0061803B /* SSJBookkeepingReminderViewController.m */; };
 		9CD9BC301CFD2DAA0061803B /* SSJSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBDC1CFD2DAA0061803B /* SSJSettingViewController.m */; };
 		9CD9BC311CFD2DAA0061803B /* SSJSyncSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBDE1CFD2DAA0061803B /* SSJSyncSettingViewController.m */; };
 		9CD9BC321CFD2DAA0061803B /* SSJMotionPasswordSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBE21CFD2DAA0061803B /* SSJMotionPasswordSettingViewController.m */; };
@@ -3561,7 +3556,6 @@
 		9CECFBEE1D6D41A700DB2C8B /* SSJConstant.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433321C1A82110051E7AB /* SSJConstant.m */; };
 		9CECFBEF1D6D41A700DB2C8B /* SSJDailySumChargeTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4EF8841C43B1A3003C4B20 /* SSJDailySumChargeTable.m */; };
 		9CECFBF11D6D41A700DB2C8B /* UIViewController+SSJPageFlow.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF6A1C4B26B3000E6CC9 /* UIViewController+SSJPageFlow.m */; };
-		9CECFBF21D6D41A700DB2C8B /* SSJBookkeepingReminderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBD81CFD2DAA0061803B /* SSJBookkeepingReminderViewController.m */; };
 		9CECFBF41D6D41A700DB2C8B /* SSJBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD04338A1C1A8DA50051E7AB /* SSJBaseViewController.m */; };
 		9CECFBF61D6D41A700DB2C8B /* SSJSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D581EB71C5107C300E202A2 /* SSJSyncTable.m */; };
 		9CECFBF71D6D41A700DB2C8B /* SSJAboutusTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBBC1CFD2DAA0061803B /* SSJAboutusTableViewCell.m */; };
@@ -3936,7 +3930,6 @@
 		9CECFFE61D6D41EB00DB2C8B /* SSJConstant.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433321C1A82110051E7AB /* SSJConstant.m */; };
 		9CECFFE71D6D41EB00DB2C8B /* SSJDailySumChargeTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4EF8841C43B1A3003C4B20 /* SSJDailySumChargeTable.m */; };
 		9CECFFE91D6D41EB00DB2C8B /* UIViewController+SSJPageFlow.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF6A1C4B26B3000E6CC9 /* UIViewController+SSJPageFlow.m */; };
-		9CECFFEA1D6D41EB00DB2C8B /* SSJBookkeepingReminderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBD81CFD2DAA0061803B /* SSJBookkeepingReminderViewController.m */; };
 		9CECFFEC1D6D41EB00DB2C8B /* SSJBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD04338A1C1A8DA50051E7AB /* SSJBaseViewController.m */; };
 		9CECFFEE1D6D41EB00DB2C8B /* SSJSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D581EB71C5107C300E202A2 /* SSJSyncTable.m */; };
 		9CECFFEF1D6D41EB00DB2C8B /* SSJAboutusTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBBC1CFD2DAA0061803B /* SSJAboutusTableViewCell.m */; };
@@ -5047,8 +5040,6 @@
 		9CD9BBD31CFD2DAA0061803B /* SSJSyncSettingTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJSyncSettingTableViewCell.m; sourceTree = "<group>"; };
 		9CD9BBD51CFD2DAA0061803B /* SSJAboutusViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJAboutusViewController.h; sourceTree = "<group>"; };
 		9CD9BBD61CFD2DAA0061803B /* SSJAboutusViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJAboutusViewController.m; sourceTree = "<group>"; };
-		9CD9BBD71CFD2DAA0061803B /* SSJBookkeepingReminderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SSJBookkeepingReminderViewController.h; path = ViewController/SSJBookkeepingReminderViewController.h; sourceTree = "<group>"; };
-		9CD9BBD81CFD2DAA0061803B /* SSJBookkeepingReminderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SSJBookkeepingReminderViewController.m; path = ViewController/SSJBookkeepingReminderViewController.m; sourceTree = "<group>"; };
 		9CD9BBDB1CFD2DAA0061803B /* SSJSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJSettingViewController.h; sourceTree = "<group>"; };
 		9CD9BBDC1CFD2DAA0061803B /* SSJSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJSettingViewController.m; sourceTree = "<group>"; };
 		9CD9BBDD1CFD2DAA0061803B /* SSJSyncSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJSyncSettingViewController.h; sourceTree = "<group>"; };
@@ -6237,15 +6228,6 @@
 				7D6CC8F51E0A731C00FF6133 /* SSJReportFormsCurveViewItem.m */,
 			);
 			path = SSJReportFormsCurveGraphView;
-			sourceTree = "<group>";
-		};
-		7D766A451D87AAAE004F8F82 /* Deprecated */ = {
-			isa = PBXGroup;
-			children = (
-				9CD9BBD71CFD2DAA0061803B /* SSJBookkeepingReminderViewController.h */,
-				9CD9BBD81CFD2DAA0061803B /* SSJBookkeepingReminderViewController.m */,
-			);
-			name = Deprecated;
 			sourceTree = "<group>";
 		};
 		7D768A701C926B6600CB75B0 /* SSJBorderButton */ = {
@@ -7569,7 +7551,6 @@
 		9CD9BBAC1CFD2DAA0061803B /* MoreHome */ = {
 			isa = PBXGroup;
 			children = (
-				7D766A451D87AAAE004F8F82 /* Deprecated */,
 				9CD9BBB51CFD2DAA0061803B /* Network */,
 				9CD9BBAD1CFD2DAA0061803B /* Helper */,
 				9CD9BBB01CFD2DAA0061803B /* Model */,
@@ -9547,7 +9528,6 @@
 				7D08A1C41E4999D30085A8FB /* UIViewController+SSJPageFlow.m in Sources */,
 				7D08A1C51E4999D30085A8FB /* SSJProductAdviceTableHeaderView.m in Sources */,
 				7D22A35E1E4F16AC00190CEB /* SSJLayerAddition.m in Sources */,
-				7D08A1C61E4999D30085A8FB /* SSJBookkeepingReminderViewController.m in Sources */,
 				7D08A1C71E4999D30085A8FB /* SSJCustomCategoryItem.m in Sources */,
 				7D08A1C81E4999D30085A8FB /* SSJReminderWeekDaySelectView.m in Sources */,
 				7D08A1C91E4999D30085A8FB /* SSJBaseViewController.m in Sources */,
@@ -10096,7 +10076,6 @@
 				7DA13B1B1E35AED7000490A4 /* UIViewController+SSJPageFlow.m in Sources */,
 				7DA13B1C1E35AED7000490A4 /* SSJProductAdviceTableHeaderView.m in Sources */,
 				7D22A35D1E4F16AC00190CEB /* SSJLayerAddition.m in Sources */,
-				7DA13B1D1E35AED7000490A4 /* SSJBookkeepingReminderViewController.m in Sources */,
 				7DA13B1E1E35AED7000490A4 /* SSJCustomCategoryItem.m in Sources */,
 				7DA13B1F1E35AED7000490A4 /* SSJReminderWeekDaySelectView.m in Sources */,
 				7DA13B201E35AED7000490A4 /* SSJBaseViewController.m in Sources */,
@@ -10640,7 +10619,6 @@
 				9C4EBC9F1D7D1D0C00BE4982 /* SSJThirdPartLoginItem.m in Sources */,
 				9C24CFD21D76CA130095D150 /* SSJBooksTypeEditeView.m in Sources */,
 				7DBA56751D6D32B700C02D79 /* UIViewController+SSJPageFlow.m in Sources */,
-				7DBA56761D6D32B700C02D79 /* SSJBookkeepingReminderViewController.m in Sources */,
 				7DBA56781D6D32B700C02D79 /* SSJBaseViewController.m in Sources */,
 				9C6D66271D86BD260081A7CE /* SSJBannerItem.m in Sources */,
 				7DCA2A1D1E4C9CE600B60F4F /* SSJNewDotNetworkService.m in Sources */,
@@ -11200,7 +11178,6 @@
 				9C2A67C01D194CA70010F1DA /* SSJDailySumChargeTable.m in Sources */,
 				9C6D660E1D82B7AA0081A7CE /* SSJInterestDetailViewController.m in Sources */,
 				9C2A67C21D194CA70010F1DA /* UIViewController+SSJPageFlow.m in Sources */,
-				9C2A67C31D194CA70010F1DA /* SSJBookkeepingReminderViewController.m in Sources */,
 				9C2A67C41D194CA70010F1DA /* SSJBaseViewController.m in Sources */,
 				7D6CC9071E0A798000FF6133 /* SSJReportFormsCurveSuspensionView.m in Sources */,
 				7DF07E0F1DD086CF00B0AF97 /* SSJSeparatorFormView.m in Sources */,
@@ -11745,7 +11722,6 @@
 				7D6CC9011E0A797900FF6133 /* SSJReportFormsCurveGraphView.m in Sources */,
 				9CECFBF11D6D41A700DB2C8B /* UIViewController+SSJPageFlow.m in Sources */,
 				7DCA2A1E1E4C9CE600B60F4F /* SSJNewDotNetworkService.m in Sources */,
-				9CECFBF21D6D41A700DB2C8B /* SSJBookkeepingReminderViewController.m in Sources */,
 				7DB9F81D1DFFC8C90084E998 /* SSJReportFormsNoDataCell.m in Sources */,
 				9CECFBF41D6D41A700DB2C8B /* SSJBaseViewController.m in Sources */,
 				9C6D66281D86BD270081A7CE /* SSJBannerItem.m in Sources */,
@@ -12305,7 +12281,6 @@
 				9C4EBCA11D7D1D0E00BE4982 /* SSJThirdPartLoginItem.m in Sources */,
 				9C24CFD31D76CA140095D150 /* SSJBooksTypeEditeView.m in Sources */,
 				9CECFFE91D6D41EB00DB2C8B /* UIViewController+SSJPageFlow.m in Sources */,
-				9CECFFEA1D6D41EB00DB2C8B /* SSJBookkeepingReminderViewController.m in Sources */,
 				9CECFFEC1D6D41EB00DB2C8B /* SSJBaseViewController.m in Sources */,
 				9C6D66291D86BD270081A7CE /* SSJBannerItem.m in Sources */,
 				9CECFFEE1D6D41EB00DB2C8B /* SSJSyncTable.m in Sources */,
@@ -12861,7 +12836,6 @@
 				BD70DF6B1C4B26B3000E6CC9 /* UIViewController+SSJPageFlow.m in Sources */,
 				916E32081DF967C1003C18D4 /* SSJProductAdviceTableHeaderView.m in Sources */,
 				7D22A36D1E4F16AC00190CEB /* SSJTableView.m in Sources */,
-				9CD9BC2E1CFD2DAA0061803B /* SSJBookkeepingReminderViewController.m in Sources */,
 				9C3899A11DC9D99700715732 /* SSJCustomCategoryItem.m in Sources */,
 				9C6D65EB1D826B700081A7CE /* SSJReminderWeekDaySelectView.m in Sources */,
 				BD0433991C1A8DA50051E7AB /* SSJBaseViewController.m in Sources */,
