@@ -86,7 +86,6 @@
 }
 
 - (UILabel *)balanceLabel {
-    
     if (!_balanceLabel) {
         _balanceLabel = [[UILabel alloc] init];
         _balanceLabel.font = [UIFont systemFontOfSize:16];
@@ -126,6 +125,11 @@
 
 - (void)setBalance:(double)balance {
     NSString *balanceStr = [[NSString stringWithFormat:@"%f",balance] ssj_moneyDecimalDisplayWithDigits:2];
+    if (balance > 0) {
+        _balanceLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurveIncomeColor];
+    } else {
+        _balanceLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurvePaymentColor];
+    }
     self.balanceLabel.text = balanceStr;
     [self.balanceLabel sizeToFit];
 }

@@ -32,6 +32,13 @@
     return [self.string sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:self.textFont]}];
 }
 
+- (void)ajustFontWithSize:(CGSize)size {
+    UILabel *lab = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, size.width, size.height)];
+    lab.adjustsFontSizeToFitWidth = YES;
+    lab.text = self.string;
+    self.textFont = [lab.font pointSize];
+}
+
 -(void)setString:(NSString *)string{
     _string = string;
     int validNumCount = 0;

@@ -178,6 +178,7 @@
 - (UIImageView *)cellImage{
     if (!_cellImage) {
         _cellImage = [[UIImageView alloc]init];
+        _cellImage.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     }
     return _cellImage;
 }
@@ -235,7 +236,7 @@
 
 - (void)setCellImageName:(NSString *)cellImageName{
     _cellImageName = cellImageName;
-    self.cellImage.image = [UIImage imageNamed:_cellImageName];
+    self.cellImage.image = [[UIImage imageNamed:_cellImageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     [self.cellImage sizeToFit];
 }
 
@@ -277,6 +278,13 @@
 - (void)setCellColor:(NSString *)cellColor{
     _cellColor = cellColor;
     self.colorView.backgroundColor = [UIColor ssj_colorWithHex:_cellColor];
+}
+
+- (void)updateCellAppearanceAfterThemeChanged {
+    [super updateCellAppearanceAfterThemeChanged];
+    _cellImage.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    _subTitleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    _textInput.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
 }
 
 /*

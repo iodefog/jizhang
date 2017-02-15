@@ -59,7 +59,6 @@
         _incomeView.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _incomeView.textFont = 20;
         _incomeView.totalAnimationDuration = 1.f;
-
     }
     return _incomeView;
 }
@@ -100,16 +99,32 @@
 
 -(void)setIncome:(NSString *)income{
     _income = income;
-    self.incomeView.string = _income;
-    [self.incomeView sizeToFit];
+    CGSize incomeSize = [_income sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:20]}];
+    if (incomeSize.width > self.width / 2 - self.buttonWidth / 3) {
+        [self.incomeView ajustFontWithSize:CGSizeMake(self.width / 2 - self.buttonWidth / 3 - 10, incomeSize.height)];
+        self.incomeView.string = _income;
+    } else {
+        self.incomeView.string = _income;
+        [self.incomeView sizeToFit];
+    }
     [self setNeedsLayout];
 }
 
 -(void)setExpenditure:(NSString *)expenditure{
     _expenditure = expenditure;
-    self.expenditureView.string = _expenditure;
-    [self.expenditureView sizeToFit];
+    CGSize expenditureSize = [_expenditure sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:20]}];
+    if (expenditureSize.width > self.width / 2 - self.buttonWidth / 3) {
+        [self.expenditureView ajustFontWithSize:CGSizeMake(self.width / 2 - self.buttonWidth / 3 - 10, expenditureSize.height)];
+        self.expenditureView.string = _expenditure;
+    } else {
+        self.expenditureView.string = _expenditure;
+        [self.expenditureView sizeToFit];
+    }
     [self setNeedsLayout];
+}
+
+- (void)setButtonWidth:(double)buttonWidth {
+    _buttonWidth = buttonWidth;
 }
 
 - (void)updateAfterThemeChange{

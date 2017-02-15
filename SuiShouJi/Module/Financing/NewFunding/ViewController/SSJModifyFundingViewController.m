@@ -168,7 +168,7 @@
             [NewFundingCell.typeTitle sizeToFit];
             NewFundingCell.typeImage.image = [UIImage imageNamed:_selectIcoin];
             NewFundingCell.cellDetail.enabled = NO;
-            NewFundingCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            NewFundingCell.customAccessoryType = UITableViewCellAccessoryNone;
         }
             break;
         case 4:{

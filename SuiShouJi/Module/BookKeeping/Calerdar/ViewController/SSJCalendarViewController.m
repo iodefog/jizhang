@@ -216,7 +216,7 @@
 - (SSJCalendarView *)calendarView {
     if (_calendarView == nil) {
         _calendarView = [[SSJCalendarView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 270)];
-        _calendarView.calendar.backgroundColor = [UIColor clearColor];
+        _calendarView.calendar.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         _calendarView.isSelectOnly = NO;
         _calendarView.year = _currentYear;
         _calendarView.month = _currentMonth;
@@ -289,13 +289,10 @@
         _shareButton = [[UIButton alloc]initWithFrame:CGRectMake(0, self.view.height - 50, self.view.width, 50)];
         [_shareButton setTitle:@"分享" forState:UIControlStateNormal];
         [_shareButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        if ([SSJCurrentThemeID() isEqualToString:SSJDefaultThemeID]) {
-            [_shareButton setTitleColor:[UIColor ssj_colorWithHex:@"#373737"] forState:UIControlStateNormal];
-            [_shareButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"#CCCCCC" alpha:0.8] forState:UIControlStateNormal];
-        } else{
-            [_shareButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] forState:UIControlStateNormal];
-            [_shareButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor alpha:0.8] forState:UIControlStateNormal];
-        }
+        [_shareButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [_shareButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] forState:UIControlStateNormal];
+        [_shareButton setImage:[UIImage imageNamed:@"calender_fenxiang"] forState:UIControlStateNormal];
+        [_shareButton setSpaceBetweenImageAndTitle:10];
         _shareButton.hidden = YES;
         [_shareButton addTarget:self action:@selector(shareButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }

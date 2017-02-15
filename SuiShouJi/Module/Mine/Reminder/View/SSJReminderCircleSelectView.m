@@ -36,6 +36,7 @@
         [self addSubview:self.pickerView];
         [self addSubview:self.topView];
         [self sizeToFit];
+        self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
     }
     return self;
 }
