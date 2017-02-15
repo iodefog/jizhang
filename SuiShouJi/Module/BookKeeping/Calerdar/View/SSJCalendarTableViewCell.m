@@ -207,7 +207,7 @@
     [_moneyLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(self.contentView.mas_centerY);
         make.right.equalTo(self.contentView.mas_right).with.offset(-10);
-        make.leftMargin.greaterThanOrEqualTo(self.memoLab.mas_right).with.offset(10);
+        make.left.greaterThanOrEqualTo(self.memoLab.mas_right).with.offset(10);
     }];
 }
 

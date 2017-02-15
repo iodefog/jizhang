@@ -18,6 +18,10 @@
 
 @property(nonatomic, strong) UILabel *balanceLabel;
 
+@property(nonatomic, strong) UIView *topSeparator;
+
+@property(nonatomic, strong) UIView *bottomSeparator;
+
 @end
 
 @implementation SSJCalendarTabelViewHeaderView
@@ -28,6 +32,8 @@
         [self addSubview:self.incomeLabel];
         [self addSubview:self.expenceLabel];
         [self addSubview:self.balanceLabel];
+        [self addSubview:self.topSeparator];
+        [self addSubview:self.bottomSeparator];
         self.backgroundView = [[UIView alloc] init];
         self.backgroundView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         [self.backgroundView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
@@ -53,6 +59,9 @@
     self.incomeLabel.centerY = self.dateLabel.bottom + 10;
     self.expenceLabel.right = self.width - 10;
     self.expenceLabel.centerY = self.dateLabel.bottom + 10;
+    self.topSeparator.width = self.bottomSeparator.width = self.width;
+    self.topSeparator.leftTop = CGPointMake(0, 0);
+    self.bottomSeparator.leftBottom = CGPointMake(0, self.height);
 }
 
 - (UILabel *)dateLabel {
@@ -97,6 +106,22 @@
     }
     
     return _balanceLabel;
+}
+
+- (UIView *)topSeparator {
+    if (!_topSeparator) {
+        _topSeparator = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.width, 1 / [UIScreen mainScreen].scale)];
+        _topSeparator.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
+    }
+    return _topSeparator;
+}
+
+- (UIView *)bottomSeparator {
+    if (!_bottomSeparator) {
+        _bottomSeparator = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.width, 1 / [UIScreen mainScreen].scale)];
+        _bottomSeparator.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
+    }
+    return _bottomSeparator;
 }
 
 - (void)updateCellAppearanceAfterThemeChanged {
