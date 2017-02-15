@@ -224,7 +224,8 @@ static BOOL kNeedBannerDisplay = YES;
     self.header.size = CGSizeMake(self.view.width, 170);
     self.header.leftTop = CGPointMake(0, 0);
     self.collectionView.size = CGSizeMake(self.view.width, self.view.height - self.header.bottom - self.tabBarController.tabBar.height);
-    self.collectionView.top = self.header.bottom + 10;
+    self.collectionView.top = self.header.bottom;
+    self.collectionView.contentInset = UIEdgeInsetsMake(10, 0, 0, 0);
     self.bottomBgView.centerX = self.view.centerX;
     self.bottomBgView.bottom = self.view.bottom;
 }
