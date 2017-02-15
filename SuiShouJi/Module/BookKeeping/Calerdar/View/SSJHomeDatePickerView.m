@@ -258,9 +258,9 @@
         [self.formatter setDateFormat:@"yyyy-MM月dd日 EEE"];
         NSDate *date = self.minDate;
         while ([date compare:self.maxDate] != NSOrderedDescending) {
-            NSString *string = [self.formatter stringFromDate:date];
-            NSDate *date1 = [self.formatter dateFromString:string];
-            [_monthDayWeekArray addObject:date1];
+//            NSString *string = [self.formatter stringFromDate:date];
+//            NSDate *date1 = [self.formatter dateFromString:string];
+            [_monthDayWeekArray addObject:date];
             date = [date dateByAddingDays:1];
         }
     }
@@ -428,7 +428,11 @@
     self.top = keyWindow.height;
     [keyWindow ssj_showViewWithBackView:self backColor:[UIColor blackColor] alpha:0.3 target:self touchAction:@selector(dismiss) animation:^{
         self.bottom = keyWindow.height;
-    } timeInterval:0.25 fininshed:NULL];
+    } timeInterval:0.25 fininshed:^(BOOL finished) {
+        if (_showBlock) {
+            _showBlock(self);
+        }
+    }];
 }
 
 - (void)dismiss
@@ -439,7 +443,11 @@
     
     [self.superview ssj_hideBackViewForView:self animation:^{
         self.top = keyWindow.bottom;
-    } timeInterval:0.25 fininshed:NULL];
+    } timeInterval:0.25 fininshed:^(BOOL complation) {
+        if (_dismissBlock) {
+            _dismissBlock(self);
+        }
+    }];
 }
 #pragma mark - Private
 

@@ -48,6 +48,10 @@ typedef NS_ENUM(NSInteger, SSJDatePickerMode) {
 
 @property (nonatomic, copy) void(^closeBlock)(SSJHomeDatePickerView *view);
 
+@property (nonatomic, copy) void(^showBlock)(SSJHomeDatePickerView *view);
+
+@property (nonatomic, copy) void(^dismissBlock)(SSJHomeDatePickerView *view);
+
 /**
  背景颜色
  */

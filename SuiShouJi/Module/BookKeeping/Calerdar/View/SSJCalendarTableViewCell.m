@@ -187,6 +187,7 @@
     }];
     
     [_photo mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(19, 19));
         make.left.equalTo(self.typeImage.mas_right).with.offset(10);
         make.top.equalTo(self.typeImage.mas_centerY).with.offset(5);
     }];
