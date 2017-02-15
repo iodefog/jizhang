@@ -36,6 +36,7 @@
         [self addSubview:self.topView];
         [self getYearsArray];
         [self.datePicker reloadAllComponents];
+        self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
         [self sizeToFit];
     }
     return self;
@@ -118,7 +119,7 @@
     if (component == 0) {
         label.text = [self.years objectAtIndex:row];
         label.font = [UIFont systemFontOfSize:18];
-        label.textColor = [UIColor ssj_colorWithHex:@"#393939"];
+        label.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         label.textAlignment = NSTextAlignmentRight;
         [label sizeToFit];
     }else{

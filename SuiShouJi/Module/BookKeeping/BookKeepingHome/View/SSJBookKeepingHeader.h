@@ -26,6 +26,8 @@
 
 @property(nonatomic,strong)SSJScrollTextView *incomeView;
 
+@property(nonatomic) double buttonWidth;
+
 //当前月份
 @property (nonatomic)long currentMonth;
 

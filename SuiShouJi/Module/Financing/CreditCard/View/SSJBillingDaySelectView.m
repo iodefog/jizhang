@@ -43,6 +43,7 @@
         }else{
             self.dateArr = self.shortArr;
         }
+        self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
         [self addSubview:self.dateSelect];
         [self addSubview:self.topView];
         [self sizeToFit];
@@ -83,7 +84,7 @@
     [super layoutSubviews];
     self.dateSelect.bottom = self.height;
     self.topView.size = CGSizeMake(self.width, 50);
-    self.topView.leftTop = CGPointMake(0, self.dateSelect.top);
+    self.topView.leftTop = CGPointMake(0, 0);
     self.titleLabel.center = CGPointMake(self.topView.width / 2, self.topView.height / 2);
     self.closeButton.centerY = self.topView.height / 2;
     self.closeButton.left = 10;
@@ -116,7 +117,7 @@
     UILabel *label = [[UILabel alloc]init];
     label.text = [_dateArr objectAtIndex:row];
     label.font = [UIFont systemFontOfSize:18];
-    label.textColor = [UIColor ssj_colorWithHex:@"#393939"];
+    label.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     [label sizeToFit];
     return label;
 }
@@ -125,12 +126,11 @@
 -(UIView *)topView{
     if (!_topView) {
         _topView = [[UIView alloc]init];
-        _topView.backgroundColor = [UIColor whiteColor];
         _titleLabel = [[UILabel alloc]init];
         _titleLabel.text = @"选择日期";
         _titleLabel.textAlignment = NSTextAlignmentCenter;
         _titleLabel.font = [UIFont systemFontOfSize:18];
-        _titleLabel.textColor = [UIColor ssj_colorWithHex:@"#393939"];
+        _titleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         [_topView ssj_setBorderColor:[UIColor ssj_colorWithHex:@"#cccccc"]];
         [_topView ssj_setBorderStyle:SSJBorderStyleBottom];
         [_topView ssj_setBorderWidth:1];
@@ -151,7 +151,6 @@
 -(UIPickerView *)dateSelect{
     if (!_dateSelect) {
         _dateSelect = [[UIPickerView alloc]initWithFrame:CGRectMake(0, 0, self.width, 300)];
-        _dateSelect.backgroundColor = [UIColor redColor];
         _dateSelect.delegate = self;
         _dateSelect.dataSource = self;
     }

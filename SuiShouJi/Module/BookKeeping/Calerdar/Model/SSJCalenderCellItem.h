@@ -24,4 +24,7 @@
 //当前日期有没有数据
 @property (nonatomic) BOOL haveDataOrNot;
 
+//当前日期有没有数据
+@property (nonatomic) double backGroundAlpha;
+
 @end

@@ -573,6 +573,7 @@
     if (!_bookKeepingHeader) {
         _bookKeepingHeader = [[SSJBookKeepingHeader alloc]init];
         _bookKeepingHeader.frame = CGRectMake(0, 0, self.view.width, 132);
+        _bookKeepingHeader.buttonWidth = self.homeButton.width;
     }
     return _bookKeepingHeader;
 }

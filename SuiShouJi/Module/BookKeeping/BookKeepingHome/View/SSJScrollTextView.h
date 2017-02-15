@@ -23,4 +23,6 @@
 
 //是否需要滚动(默认为NO)
 @property(nonatomic) BOOL scrollAble;
+
+- (void)ajustFontWithSize:(CGSize)size;
 @end

@@ -264,8 +264,9 @@
                         item.isSelectable = YES;
                         [self.items addObject:item];
                     }else{
-                        item.backGroundColor = @"cccccc";
-                        item.titleColor = @"FFFFFF";
+                        item.backGroundColor = SSJ_CURRENT_THEME.marcatoColor;
+                        item.backGroundAlpha = 0.3;
+                        item.titleColor = SSJ_CURRENT_THEME.mainColor;
                         item.isSelectable = YES;
                         [self.items addObject:item];
                     }
