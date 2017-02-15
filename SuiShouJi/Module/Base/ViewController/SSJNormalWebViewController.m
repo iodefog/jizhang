@@ -28,6 +28,7 @@
  titleView
  */
 @property (nonatomic, strong) UILabel *titleLabel;
+
 @end
 
 @implementation SSJNormalWebViewController
@@ -46,7 +47,7 @@
         self.extendedLayoutIncludesOpaqueBars = YES;
         self.toolBarHidden=YES;
         self.showURLInNavigationBar = NO;
-        self.showPageTitleInNavigationBar = NO;
+//        self.showPageTitleInNavigationBar = NO;
         self.hidesBottomBarWhenPushed=YES;
         self.progressViewTintColor=[UIColor ssj_colorWithHex:@"#eb4a64"];
     }
@@ -74,7 +75,6 @@
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
-    self.titleLabel.centerX = self.view.centerX;
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -207,6 +207,14 @@
 
 - (void)loadHTMLString:(NSString *)HTMLString {
     [self.webView loadHTMLString:HTMLString baseURL:nil];
+}
+
+- (void)setTitleString:(NSString *)titleString
+{
+    _titleString = titleString;
+    self.titleLabel.text = titleString;
+    [self.titleLabel sizeToFit];
+    self.titleLabel.leftTop = CGPointMake((self.webView.width - self.titleLabel.width) * 0.5, (44 - self.titleLabel.height) * 0.5);
 }
 
 #pragma mark - UIWebViewDelegate

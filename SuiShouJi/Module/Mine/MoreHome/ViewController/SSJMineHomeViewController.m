@@ -776,7 +776,7 @@ static BOOL kNeedBannerDisplay = YES;
 
 
 #pragma mark - headerBannerImageView
-- (void)pushToViewControllerWithUrl:(NSString *)urlStr
+- (void)pushToViewControllerWithUrl:(NSString *)urlStr title:(NSString *)title
 {
     if ([urlStr containsString:@"http://jz.youyuwo.com/5/zd/"]) {
         SSJBillNoteWebViewController *bilVc = [[SSJBillNoteWebViewController alloc] init];
@@ -785,7 +785,11 @@ static BOOL kNeedBannerDisplay = YES;
         return;
     }
     SSJNormalWebViewController *webVc = [SSJNormalWebViewController webViewVCWithURL:[NSURL URLWithString:urlStr]];
-    webVc.showPageTitleInNavigationBar = YES;
+    if (title.length) {
+        webVc.titleString = title;
+    } else {
+        webVc.showPageTitleInNavigationBar = YES;
+    }
     [self.navigationController pushViewController:webVc animated:YES];
 }
 
