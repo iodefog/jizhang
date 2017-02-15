@@ -161,14 +161,15 @@
     NSDate *systemDate = [NSDate date];
     NSDate *cuDate = self.date ? self.date : systemDate;
     
-    NSInteger year = cuDate.year ? cuDate.year : systemDate.year;
-    NSInteger month = cuDate.month ? cuDate.month : systemDate.month;
-    NSInteger day = cuDate.day ? cuDate.day : systemDate.day;
-    NSInteger hour = cuDate.hour ? cuDate.hour : 12;
-    NSInteger minute = cuDate.minute ? cuDate.minute : 0;
-    NSInteger amPmIndex = hour <= 12 ? 0 : 1;//上午下午
+    NSInteger year = cuDate.year;
+    NSInteger month = cuDate.month;
+    NSInteger day = cuDate.day;
+    NSInteger hour = cuDate.hour;
+    NSInteger minute = cuDate.minute;
+    NSInteger amPmIndex = hour < 12 ? 0 : 1;//上午下午
     if (self.datePickerMode == SSJDatePickerModeTime) {
-        NSInteger row2 = [self.hourArray indexOfObject:[NSString stringWithFormat:@"%ld",hour > 12 ? hour - 12 : hour]];
+        NSString *hourStr = (hour == 0) ? @"12" : [NSString stringWithFormat:@"%ld",hour > 12 ? hour - 12 : hour];
+        NSInteger row2 = [self.hourArray indexOfObject:hourStr];
         NSInteger row3 = [self.minuteArray indexOfObject:[NSString stringWithFormat:@"%02ld",minute]];
         [self.datePicker selectRow:amPmIndex inComponent:0 animated:YES];
         [self.datePicker selectRow:row2 inComponent:1 animated:YES];

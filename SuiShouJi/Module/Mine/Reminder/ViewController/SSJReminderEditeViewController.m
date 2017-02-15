@@ -32,8 +32,6 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 
 @property(nonatomic, strong) NSArray *titles;
 
-@property(nonatomic, strong) NSDate *nextRemindDate;
-
 @property(nonatomic, strong) SSJHomeDatePickerView *reminderTimeView;
 
 @property(nonatomic, strong) SSJReminderCircleSelectView *circleSelectView;
@@ -237,7 +235,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     if ([title isEqualToString:kTitle5]) {
         newReminderCell.type = SSJCreditCardCellTypeDetail;
         newReminderCell.cellTitle = title;
-        newReminderCell.cellDetail = [self.nextRemindDate formattedDateWithStyle:NSDateFormatterFullStyle];
+        newReminderCell.cellDetail = [self.item.remindDate formattedDateWithStyle:NSDateFormatterFullStyle];
         newReminderCell.selectionStyle = UITableViewCellSelectionStyleNone;
         newReminderCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
@@ -253,7 +251,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         self.item.remindCycle = 0;
         self.item.remindType = SSJReminderTypeNormal;
     }
-    self.nextRemindDate = [SSJLocalNotificationHelper calculateNexRemindDateWithStartDate:self.item.remindDate remindCycle:self.item.remindCycle remindAtEndOfMonth:self.item.remindAtTheEndOfMonth];
+    self.item.remindDate = [SSJLocalNotificationHelper calculateNexRemindDateWithStartDate:self.item.remindDate remindCycle:self.item.remindCycle remindAtEndOfMonth:self.item.remindAtTheEndOfMonth];
     [self.tableView reloadData];
 }
 
@@ -368,7 +366,8 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         _dateSelectView.datePickerMode = SSJDatePickerModeDate;
         __weak typeof(self) weakSelf = self;
         _dateSelectView.shouldConfirmBlock = ^BOOL(SSJHomeDatePickerView *view, NSDate *selecteDate){
-            if ([selecteDate isEarlierThan:[NSDate date]]) {
+            NSDate *remindDate = [NSDate dateWithYear:selecteDate.year month:selecteDate.month day:selecteDate.day hour:weakSelf.item.remindDate.hour minute:weakSelf.item.remindDate.minute second:weakSelf.item.remindDate.second];
+            if ([remindDate isEarlierThan:[NSDate date]]) {
                 [CDAutoHideMessageHUD showMessage:@"不能设置历史日期的提醒哦"];
                 return NO;
             }
