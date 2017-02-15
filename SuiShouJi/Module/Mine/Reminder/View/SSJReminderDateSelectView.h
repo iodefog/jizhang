@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+SSJ_DEPRECATED
+
 @interface SSJReminderDateSelectView : UIView
 
 @property(nonatomic, strong) NSDate *currentDate;

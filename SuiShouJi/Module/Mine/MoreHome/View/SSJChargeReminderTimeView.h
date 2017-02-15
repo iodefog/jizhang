@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+SSJ_DEPRECATED
+
 @interface SSJChargeReminderTimeView : UIView
 //选择时间回调
 typedef void (^timerSetBlock)(NSString *time , NSDate *date);

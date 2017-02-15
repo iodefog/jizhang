@@ -33,8 +33,8 @@
         [self.contentView addSubview:self.backView];
         [self.backView addSubview:self.deleteButton];
         [self.backView addSubview:self.fundingImage];
-        [self.backView addSubview:self.fundingNameLabel];
         [self.backView addSubview:self.fundingBalanceLabel];
+        [self.backView addSubview:self.fundingNameLabel];
         [self.backView addSubview:self.fundingMemoLabel];
         [self.backView addSubview:self.cardMemoLabel];
         [self.backView addSubview:self.cardBillingDayLabel];
@@ -55,6 +55,7 @@
     if ([_item isKindOfClass:[SSJFinancingHomeitem class]]) {
         SSJFinancingHomeitem *fundItem = (SSJFinancingHomeitem *)_item;
         self.fundingBalanceLabel.centerY = self.backView.height / 2;
+        self.fundingBalanceLabel.right = self.backView.width - 10;
         if (!fundItem.fundingMemo.length) {
             self.fundingNameLabel.left = self.fundingImage.right + 10;
             self.fundingNameLabel.centerY = self.backView.height / 2;
@@ -64,10 +65,15 @@
             self.fundingMemoLabel.top = self.backView.height / 2 + 3;
             self.fundingMemoLabel.left = self.fundingImage.right + 10;
         }
-        self.fundingBalanceLabel.width = self.backView.width - MAX(self.fundingNameLabel.right, self.fundingMemoLabel.right) - 20;
-        self.fundingBalanceLabel.right = self.backView.width - 10;
+        if (self.fundingNameLabel.right > self.fundingBalanceLabel.left) {
+            self.fundingNameLabel.width = self.fundingBalanceLabel.left - self.fundingNameLabel.left - 20;
+        }
+        if (self.fundingMemoLabel.right > self.fundingBalanceLabel.left) {
+            self.fundingMemoLabel.width = self.fundingBalanceLabel.left - self.fundingMemoLabel.left - 20;
+        }
     }else{
         SSJCreditCardItem *carditem = (SSJCreditCardItem *)_item;
+        self.fundingBalanceLabel.right = self.backView.width - 10;
         self.fundingNameLabel.bottom = self.backView.height / 2 - 3;
         self.fundingNameLabel.left = self.fundingImage.right + 10;
         self.fundingMemoLabel.top = self.backView.height / 2 + 3;
@@ -77,15 +83,18 @@
         }else{
             self.fundingBalanceLabel.centerY = self.fundingNameLabel.centerY;
         }
-        self.fundingBalanceLabel.right = self.backView.width - 10;
-//        self.fundingNameLabel.width = self.fundingBalanceLabel.left - self.fundingImage.right - 20; 
         self.cardMemoLabel.width = self.fundingBalanceLabel.left - self.fundingNameLabel.right - 10;
         self.cardMemoLabel.left = self.fundingNameLabel.right + 10;
         self.cardMemoLabel.centerY = self.fundingNameLabel.centerY;
         self.cardBillingDayLabel.right = self.backView.width - 10;
         self.cardBillingDayLabel.centerY = self.fundingMemoLabel.centerY;
-        self.fundingBalanceLabel.width = self.backView.width - MAX(self.fundingNameLabel.right, self.fundingMemoLabel.right) - 20;
         self.fundingBalanceLabel.right = self.backView.width - 10;
+        if (self.fundingNameLabel.right > self.fundingBalanceLabel.left) {
+            self.fundingNameLabel.width = self.fundingBalanceLabel.left - self.fundingNameLabel.left - 20;
+        }
+        if (self.fundingMemoLabel.right > self.fundingBalanceLabel.left) {
+            self.fundingMemoLabel.width = self.fundingBalanceLabel.left - self.fundingMemoLabel.left - 20;
+        }
     }
 }
 

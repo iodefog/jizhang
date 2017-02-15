@@ -16,6 +16,7 @@
 #import "SSJReminderCircleSelectView.h"
 #import "SSJLocalNotificationHelper.h"
 #import "SSJDataSynchronizer.h"
+#import "SSJHomeDatePickerView.h"
 
 static NSString *const kTitle1 = @"提醒名称";
 static NSString *const kTitle2 = @"备注";
@@ -33,11 +34,11 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 
 @property(nonatomic, strong) NSDate *nextRemindDate;
 
-@property(nonatomic, strong) SSJChargeReminderTimeView *reminderTimeView;
+@property(nonatomic, strong) SSJHomeDatePickerView *reminderTimeView;
 
 @property(nonatomic, strong) SSJReminderCircleSelectView *circleSelectView;
 
-@property(nonatomic, strong) SSJReminderDateSelectView *dateSelectView;
+@property(nonatomic, strong) SSJHomeDatePickerView *dateSelectView;
 
 @property(nonatomic, strong) UIView *saveFooterView;
 
@@ -106,11 +107,11 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
     if ([title isEqualToString:kTitle4]) {
-        self.reminderTimeView.currentDate = self.item.remindDate;
+        self.reminderTimeView.date = self.item.remindDate;
         [self.reminderTimeView show];
     }
     if ([title isEqualToString:kTitle5]) {
-        self.dateSelectView.currentDate = self.item.remindDate;
+        self.dateSelectView.date = self.item.remindDate;
         [self.dateSelectView show];
     }
     if ([title isEqualToString:kTitle3]) {
@@ -348,32 +349,40 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     return _circleSelectView;
 }
 
--(SSJChargeReminderTimeView *)reminderTimeView{
+-(SSJHomeDatePickerView *)reminderTimeView{
     if (!_reminderTimeView) {
-        _reminderTimeView = [[SSJChargeReminderTimeView alloc]initWithFrame:self.view.bounds];
+        _reminderTimeView = [[SSJHomeDatePickerView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 360)];
+        _reminderTimeView.datePickerMode = SSJDatePickerModeTime;
         __weak typeof(self) weakSelf = self;
-        _reminderTimeView.timerSetBlock = ^(NSString *time , NSDate *date){
-            weakSelf.item.remindDate = [NSDate dateWithYear:weakSelf.item.remindDate.year month:weakSelf.item.remindDate.month day:weakSelf.item.remindDate.day hour:date.hour minute:date.minute second:date.second];
+        _reminderTimeView.confirmBlock = ^(SSJHomeDatePickerView *view){
+            weakSelf.item.remindDate = [NSDate dateWithYear:weakSelf.item.remindDate.year month:weakSelf.item.remindDate.month day:weakSelf.item.remindDate.day hour:view.date.hour minute:view.date.minute second:view.date.second];
             [weakSelf initdata];
         };
     }
     return _reminderTimeView;
 }
 
--(SSJReminderDateSelectView *)dateSelectView{
+-(SSJHomeDatePickerView *)dateSelectView{
     if (!_dateSelectView) {
-        _dateSelectView = [[SSJReminderDateSelectView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 500)];
-        _dateSelectView.minmumDate = [NSDate date];
+        _dateSelectView = [[SSJHomeDatePickerView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 360)];
+        _dateSelectView.datePickerMode = SSJDatePickerModeDate;
         __weak typeof(self) weakSelf = self;
-        _dateSelectView.dateSetBlock = ^(NSDate *date){
-            if (date.day > 28) {
+        _dateSelectView.shouldConfirmBlock = ^BOOL(SSJHomeDatePickerView *view, NSDate *selecteDate){
+            if ([selecteDate isEarlierThan:[NSDate date]]) {
+                [CDAutoHideMessageHUD showMessage:@"不能设置历史日期的提醒哦"];
+                return NO;
+            }
+            return YES;
+        };
+        _dateSelectView.confirmBlock = ^(SSJHomeDatePickerView *view){
+            if (view.date.day > 28) {
                 [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@"每月不一定都有30号哦，是否将无30号的月份提醒设置跳过？或自动将无30号的月份的提醒设置在每月最后一天？" action:[SSJAlertViewAction actionWithTitle:@"部分月份设在最后一天" handler:^(SSJAlertViewAction * _Nonnull action) {
                     weakSelf.item.remindAtTheEndOfMonth = 1;
                 }],[SSJAlertViewAction actionWithTitle:@"自动跳过" handler:^(SSJAlertViewAction * _Nonnull action) {
                     weakSelf.item.remindAtTheEndOfMonth = 0;
                 }],nil];
             }
-            weakSelf.item.remindDate = [NSDate dateWithYear:date.year month:date.month day:date.day hour:weakSelf.item.remindDate.hour minute:weakSelf.item.remindDate.minute second:weakSelf.item.remindDate.second];
+            weakSelf.item.remindDate = [NSDate dateWithYear:view.date.year month:view.date.month day:view.date.day hour:weakSelf.item.remindDate.hour minute:weakSelf.item.remindDate.minute second:weakSelf.item.remindDate.second];
             [weakSelf initdata];
         };
     }
