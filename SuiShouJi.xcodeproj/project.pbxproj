@@ -758,6 +758,12 @@
 		7D3F4B4B1E55991E004B5962 /* SSJDatabaseVersion12.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6167321E4D605A00D9209A /* SSJDatabaseVersion12.m */; };
 		7D3F4B4C1E55991F004B5962 /* SSJDatabaseVersion12.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6167321E4D605A00D9209A /* SSJDatabaseVersion12.m */; };
 		7D3F4B4D1E559920004B5962 /* SSJDatabaseVersion12.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6167321E4D605A00D9209A /* SSJDatabaseVersion12.m */; };
+		7D3F4B4E1E559A47004B5962 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C9A42FC1E51C09700C1D7ED /* CoreLocation.framework */; };
+		7D3F4B4F1E559A4D004B5962 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C9A42FC1E51C09700C1D7ED /* CoreLocation.framework */; };
+		7D3F4B501E559A52004B5962 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C9A42FC1E51C09700C1D7ED /* CoreLocation.framework */; };
+		7D3F4B511E559A56004B5962 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C9A42FC1E51C09700C1D7ED /* CoreLocation.framework */; };
+		7D3F4B521E559A5D004B5962 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C9A42FC1E51C09700C1D7ED /* CoreLocation.framework */; };
+		7D3F4B531E559A62004B5962 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C9A42FC1E51C09700C1D7ED /* CoreLocation.framework */; };
 		7D41A6961D1415F30043FD81 /* SSJNetworkReachabilityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D41A6951D1415F30043FD81 /* SSJNetworkReachabilityManager.m */; };
 		7D46328A1D2100E90040BABD /* UIImage+SSJTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE4A7EB1D20DD8C00F05BF0 /* UIImage+SSJTheme.m */; };
 		7D46328E1D21029F0040BABD /* UIImageView+SSJTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D46328D1D21029F0040BABD /* UIImageView+SSJTheme.m */; };
@@ -5189,6 +5195,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D3F4B531E559A62004B5962 /* CoreLocation.framework in Frameworks */,
 				7D08A2AA1E4999D30085A8FB /* SystemConfiguration.framework in Frameworks */,
 				7D08A2AB1E4999D30085A8FB /* CoreTelephony.framework in Frameworks */,
 				7D08A2AD1E4999D30085A8FB /* AudioToolbox.framework in Frameworks */,
@@ -5204,6 +5211,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D3F4B521E559A5D004B5962 /* CoreLocation.framework in Frameworks */,
 				7DA13C011E35AED7000490A4 /* SystemConfiguration.framework in Frameworks */,
 				7DA13C021E35AED7000490A4 /* CoreTelephony.framework in Frameworks */,
 				7DA13C041E35AED7000490A4 /* AudioToolbox.framework in Frameworks */,
@@ -5219,6 +5227,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D3F4B4F1E559A4D004B5962 /* CoreLocation.framework in Frameworks */,
 				7DBA571E1D6D32B700C02D79 /* SystemConfiguration.framework in Frameworks */,
 				7DBA571F1D6D32B700C02D79 /* CoreTelephony.framework in Frameworks */,
 				7DBA57211D6D32B700C02D79 /* AudioToolbox.framework in Frameworks */,
@@ -5234,6 +5243,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D3F4B4E1E559A47004B5962 /* CoreLocation.framework in Frameworks */,
 				9C2A68541D194CA70010F1DA /* SystemConfiguration.framework in Frameworks */,
 				9C2A68551D194CA70010F1DA /* CoreTelephony.framework in Frameworks */,
 				9C2A68571D194CA70010F1DA /* AudioToolbox.framework in Frameworks */,
@@ -5249,6 +5259,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D3F4B511E559A56004B5962 /* CoreLocation.framework in Frameworks */,
 				9CEC00921D6D41EB00DB2C8B /* SystemConfiguration.framework in Frameworks */,
 				9CEC00931D6D41EB00DB2C8B /* CoreTelephony.framework in Frameworks */,
 				9CEC00951D6D41EB00DB2C8B /* AudioToolbox.framework in Frameworks */,
@@ -5264,6 +5275,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D3F4B501E559A52004B5962 /* CoreLocation.framework in Frameworks */,
 				9CECFC9A1D6D41A700DB2C8B /* SystemConfiguration.framework in Frameworks */,
 				9CECFC9B1D6D41A700DB2C8B /* CoreTelephony.framework in Frameworks */,
 				9CECFC9D1D6D41A700DB2C8B /* AudioToolbox.framework in Frameworks */,
@@ -13402,6 +13414,8 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
+				INFOPLIST_FILE = "SuiShouJi copy-Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhangguanjia;
 				PRODUCT_NAME = SuiShouJi;
 			};
 			name = Debug;
@@ -13417,6 +13431,8 @@
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
 				);
 				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
+				INFOPLIST_FILE = "SuiShouJi copy-Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhangguanjia;
 				PRODUCT_NAME = SuiShouJi;
 			};
 			name = Release;
@@ -13433,6 +13449,7 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
+				INFOPLIST_FILE = "SuiShouJi copy3-Info.plist";
 				PRODUCT_NAME = SuiShouJi;
 			};
 			name = Debug;
