@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface SSJAnaliyticsManager : NSObject
 
 + (void)SSJAnaliytics;
@@ -32,6 +34,8 @@
 
 //自定义事件统计
 + (void)event:(NSString *)eventId;
-+ (void)event:(NSString *)eventId extra:(  NSString *)extra;
++ (void)event:(NSString *)eventId extra:(nullable  NSString *)extra;
 
 @end
+
+NS_ASSUME_NONNULL_END

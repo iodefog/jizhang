@@ -20,6 +20,7 @@
 #import "SSJFundingTypeSelectViewController.h"
 #import "FMDB.h"
 #import "SSJFundingTransferStore.h"
+#import "SSJAnaliyticsManager.h"
 
 static NSString *const kTransOutAcctName = @"转出账户";
 static NSString *const kTransInAcctName = @"转入账户";
@@ -178,12 +179,14 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
         [self.transferDateSelectionView show];
     } else if ([title isEqualToString:kCyclePeriod]) {
         [self.periodSelectionView show];
+        [SSJAnaliyticsManager event:@"add_transfer_cycle"];
     } else if ([title isEqualToString:kBeginDate]) {
         self.beginDateSelectionView.date = [NSDate dateWithString:self.item.beginDate formatString:@"yyyy-MM-dd"];
         [self.beginDateSelectionView show];
     } else if ([title isEqualToString:kEndDate]) {
         self.endDateSelectionView.date = [NSDate dateWithString:(self.item.endDate ?: self.item.beginDate) formatString:@"yyyy-MM-dd"];
         [self.endDateSelectionView show];
+        [SSJAnaliyticsManager event:@"add_transfer_end_date"];
     }
 }
 

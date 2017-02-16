@@ -196,6 +196,18 @@
     return cell;
 }
 
+#pragma mark - UMSocialUIDelegate
+- (void)didSelectSocialPlatform:(NSString *)platformName withSocialData:(UMSocialData *)socialData {
+    if (platformName == UMShareToWechatSession) {
+        [SSJAnaliyticsManager event:@"calendar_share_weixin"];
+    } else if (platformName == UMShareToWechatTimeline) {
+        [SSJAnaliyticsManager event:@"calendar_share_weixin_cycle"];
+    } else if (platformName == UMShareToSina) {
+        [SSJAnaliyticsManager event:@"calendar_share_weibo"];
+    } else if (platformName == UMShareToQQ) {
+        [SSJAnaliyticsManager event:@"calendar_share_QQ"];
+    }
+}
 
 #pragma mark - Getter
 -(UITableView *)tableView{
@@ -344,6 +356,7 @@
 - (void)shareButtonClicked:(id)sender{
     __weak typeof(self) weakSelf = self;
     NSArray * screenShots = [SSJCalenderScreenShotHelper screenShotForTableView:self.tableView];
+    [SSJAnaliyticsManager event:@"calendar_share"];
     [SSJCalenderScreenShotHelper screenShotForCalenderWithCellImages:screenShots Date:[NSDate dateWithString:self.selectDate formatString:@"yyyy-MM-dd"] income:_currentIncome expence:_currentExpenture imageBlock:^(UIImage *image) {
         NSData * imageData = UIImagePNGRepresentation(image);
         NSString * fullPathToFile = [SSJDocumentPath() stringByAppendingPathComponent:@"test.png"];

@@ -340,6 +340,14 @@
         [SSJBookkeepingTreeHelper loadTreeGifImageDataWithUrlPath:_loginService.checkInModel.treeGifUrl finish:NULL];
     }
     
+    NSString *userName;
+    if (self.loginService.item.nickName.length) {
+        userName = self.loginService.item.nickName;
+    } else {
+        userName = self.loginService.item.mobileNo;
+    }
+    
+    [SSJAnaliyticsManager setUserId:SSJUSERID() userName:userName];
     [CDAutoHideMessageHUD showMessage:@"登录成功"];
     [[NSNotificationCenter defaultCenter]postNotificationName:SSJLoginOrRegisterNotification object:nil];
     [SSJLocalNotificationHelper cancelLocalNotificationWithKey:SSJReminderNotificationKey];
