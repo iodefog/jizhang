@@ -29,7 +29,7 @@ target 'SuiShouJi'  do
     shared_pods
 end
 
-target 'youyujizhang'  do
+target 'YouYuJiZhang'  do
     shared_pods
 end
 
@@ -50,5 +50,9 @@ target 'YouYuJiZhangBao'  do
 end
 
 target 'YouYuJiZhangGuanJia'  do
+    shared_pods
+end
+
+target 'SuiShouJiEnterprise'  do
     shared_pods
 end
