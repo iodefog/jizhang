@@ -752,6 +752,12 @@
 		7D3F4B451E555AD6004B5962 /* YYAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C9A42FA1E51BE4F00C1D7ED /* YYAnalytics.framework */; };
 		7D3F4B461E555AD7004B5962 /* YYAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C9A42FA1E51BE4F00C1D7ED /* YYAnalytics.framework */; };
 		7D3F4B471E555AD7004B5962 /* YYAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C9A42FA1E51BE4F00C1D7ED /* YYAnalytics.framework */; };
+		7D3F4B481E55991D004B5962 /* SSJDatabaseVersion12.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6167321E4D605A00D9209A /* SSJDatabaseVersion12.m */; };
+		7D3F4B491E55991E004B5962 /* SSJDatabaseVersion12.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6167321E4D605A00D9209A /* SSJDatabaseVersion12.m */; };
+		7D3F4B4A1E55991E004B5962 /* SSJDatabaseVersion12.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6167321E4D605A00D9209A /* SSJDatabaseVersion12.m */; };
+		7D3F4B4B1E55991E004B5962 /* SSJDatabaseVersion12.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6167321E4D605A00D9209A /* SSJDatabaseVersion12.m */; };
+		7D3F4B4C1E55991F004B5962 /* SSJDatabaseVersion12.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6167321E4D605A00D9209A /* SSJDatabaseVersion12.m */; };
+		7D3F4B4D1E559920004B5962 /* SSJDatabaseVersion12.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6167321E4D605A00D9209A /* SSJDatabaseVersion12.m */; };
 		7D41A6961D1415F30043FD81 /* SSJNetworkReachabilityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D41A6951D1415F30043FD81 /* SSJNetworkReachabilityManager.m */; };
 		7D46328A1D2100E90040BABD /* UIImage+SSJTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE4A7EB1D20DD8C00F05BF0 /* UIImage+SSJTheme.m */; };
 		7D46328E1D21029F0040BABD /* UIImageView+SSJTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D46328D1D21029F0040BABD /* UIImageView+SSJTheme.m */; };
@@ -9197,6 +9203,7 @@
 				7D08A1041E4999D30085A8FB /* SSJStartChecker.m in Sources */,
 				7D08A1051E4999D30085A8FB /* SSJLoanChargeModel.m in Sources */,
 				7D08A1061E4999D30085A8FB /* SSJReportFormsChartCellItem.m in Sources */,
+				7D3F4B4D1E559920004B5962 /* SSJDatabaseVersion12.m in Sources */,
 				7D08A1071E4999D30085A8FB /* SSJFundingTransferEdite.m in Sources */,
 				7D08A1081E4999D30085A8FB /* SSJSummaryBooksHeaderView.m in Sources */,
 				7D08A1091E4999D30085A8FB /* SSJLoanDetailCell.m in Sources */,
@@ -9745,6 +9752,7 @@
 				7DA13A5B1E35AED7000490A4 /* SSJStartChecker.m in Sources */,
 				7DA13A5C1E35AED7000490A4 /* SSJLoanChargeModel.m in Sources */,
 				7DA13A5D1E35AED7000490A4 /* SSJReportFormsChartCellItem.m in Sources */,
+				7D3F4B4C1E55991F004B5962 /* SSJDatabaseVersion12.m in Sources */,
 				7DA13A5E1E35AED7000490A4 /* SSJFundingTransferEdite.m in Sources */,
 				7DA13A5F1E35AED7000490A4 /* SSJSummaryBooksHeaderView.m in Sources */,
 				7DA13A601E35AED7000490A4 /* SSJLoanDetailCell.m in Sources */,
@@ -10574,6 +10582,7 @@
 				7DBA56B31D6D32B700C02D79 /* SSJThemeDetailViewController.m in Sources */,
 				7DBA56B41D6D32B700C02D79 /* CDPointActivityIndicator.m in Sources */,
 				7DBA56B51D6D32B700C02D79 /* SSJBookkeepingTreeCheckInService.m in Sources */,
+				7D3F4B491E55991E004B5962 /* SSJDatabaseVersion12.m in Sources */,
 				7DBA56B61D6D32B700C02D79 /* SSJRegistOrderView.m in Sources */,
 				9C9A0C411D6D9687002AF046 /* SSJLoanFundAccountSelectionView.m in Sources */,
 				7DBA56B71D6D32B700C02D79 /* SSJPercentCircleViewItem.m in Sources */,
@@ -11121,6 +11130,7 @@
 				9C2A67F51D194CA70010F1DA /* SSJBookkeepingTreeCheckInService.m in Sources */,
 				9C2A67F61D194CA70010F1DA /* SSJRegistOrderView.m in Sources */,
 				9C2A67F71D194CA70010F1DA /* SSJPercentCircleViewItem.m in Sources */,
+				7D3F4B481E55991D004B5962 /* SSJDatabaseVersion12.m in Sources */,
 				9C2A67F81D194CA70010F1DA /* SSJBaseCollectionViewController.m in Sources */,
 				9C47E6F41D224BF8005F338A /* SSJThemeService.m in Sources */,
 				9CAF73171E03E8CA0061ADB8 /* SSJHomeLoadingView.m in Sources */,
@@ -11672,6 +11682,7 @@
 				9CECFC2D1D6D41A700DB2C8B /* SSJScrollTextLayer.m in Sources */,
 				9C26FDB21DD3058C0086F94F /* SSJBooksHeaderView.m in Sources */,
 				9CECFC2E1D6D41A700DB2C8B /* SSJFundingDailySumCell.m in Sources */,
+				7D3F4B4A1E55991E004B5962 /* SSJDatabaseVersion12.m in Sources */,
 				9CECFC2F1D6D41A700DB2C8B /* SSJThemeDetailViewController.m in Sources */,
 				9CECFC301D6D41A700DB2C8B /* CDPointActivityIndicator.m in Sources */,
 				9CECFC311D6D41A700DB2C8B /* SSJBookkeepingTreeCheckInService.m in Sources */,
@@ -12225,6 +12236,7 @@
 				9CEC00201D6D41EB00DB2C8B /* SSJRegistNetworkService.m in Sources */,
 				9CEC00231D6D41EB00DB2C8B /* SSJDataSynchronizer.m in Sources */,
 				9CEC00241D6D41EB00DB2C8B /* SSJFinancingHomeCell.m in Sources */,
+				7D3F4B4B1E55991E004B5962 /* SSJDatabaseVersion12.m in Sources */,
 				9CEC00251D6D41EB00DB2C8B /* SSJScrollTextLayer.m in Sources */,
 				9CEC00261D6D41EB00DB2C8B /* SSJFundingDailySumCell.m in Sources */,
 				9C26FDB31DD3058D0086F94F /* SSJBooksHeaderView.m in Sources */,
