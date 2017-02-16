@@ -96,6 +96,7 @@ static NSString *const kPeriodTransferTitle = @"周期转账";
         SSJFundingTransferViewController *periodTransferVC = [[SSJFundingTransferViewController alloc] init];
         periodTransferVC.item = item;
         [self.navigationController pushViewController:periodTransferVC animated:YES];
+        [SSJAnaliyticsManager event:@"auto_transfer_detail"];
     }
 }
 
@@ -143,6 +144,9 @@ static NSString *const kPeriodTransferTitle = @"周期转账";
 #pragma mark - SCYSlidePagingHeaderViewDelegate
 - (void)slidePagingHeaderView:(SCYSlidePagingHeaderView *)headerView didSelectButtonAtIndex:(NSUInteger)index {
     [self loadDataAccordingToCurrentIndex];
+    if (index == 1) {
+        [SSJAnaliyticsManager event:@"transfer_record_cycle"];
+    }
 }
 
 #pragma mark - Private
