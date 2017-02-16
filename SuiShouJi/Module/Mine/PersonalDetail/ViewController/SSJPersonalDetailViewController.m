@@ -264,6 +264,7 @@ extern BOOL kHomeNeedLoginPop;
         [SSJUserTableManager reloadUserIdWithError:nil];
         [SSJUserDefaultDataCreater asyncCreateAllDefaultDataWithSuccess:NULL failure:NULL];
         [weakSelf.tableView reloadData];
+        [SSJAnaliyticsManager loginOut];
         [weakSelf.navigationController popViewControllerAnimated:YES];
     }], nil];
 }
