@@ -215,6 +215,10 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
             return YES;
         };
         _dateSelectedView.confirmBlock = ^(SSJHomeDatePickerView *view) {
+            NSDate *currentDetailDate = [NSDate dateWithString:weakSelf.item.billDetailDate formatString:@"HH:mm"];
+            if (view.date.hour != currentDetailDate.hour || view.date.minute != currentDetailDate.minute) {
+                [SSJAnaliyticsManager event:@"add_record_time_select"];
+            }
             weakSelf.selectedDay = view.date.day;
             weakSelf.selectedMonth = view.date.month;
             weakSelf.selectedYear = view.date.year;
