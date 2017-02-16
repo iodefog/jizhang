@@ -4193,7 +4193,6 @@
 		9CECFB3B1D6D41A700DB2C8B /* SSJBannerHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE7D7841D2F4EA40013E97B /* SSJBannerHeaderView.m */; };
 		9CECFB3E1D6D41A700DB2C8B /* SSJListMenuCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B12D11D4CBC140036BF4E /* SSJListMenuCell.m */; };
 		9CECFB3F1D6D41A700DB2C8B /* SSJBookkeepingTreeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB5C1CFD2DAA0061803B /* SSJBookkeepingTreeViewController.m */; };
-		9CECFB411D6D41A700DB2C8B /* BuildFile in Sources */ = {isa = PBXBuildFile; };
 		9CECFB421D6D41A700DB2C8B /* SSJLoadMoreCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433831C1A8DA50051E7AB /* SSJLoadMoreCell.m */; };
 		9CECFB431D6D41A700DB2C8B /* SSJThemeDownLoadCompleteService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61AAA61D5B30DE005DC9BD /* SSJThemeDownLoadCompleteService.m */; };
 		9CECFB441D6D41A700DB2C8B /* SSJHomeReminderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32571CEAE6C10086B67E /* SSJHomeReminderView.m */; };
@@ -4253,7 +4252,6 @@
 		9CECFB7C1D6D41A700DB2C8B /* SSJForgotPSWResetService.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF3A1C4751EA000E6CC9 /* SSJForgotPSWResetService.m */; };
 		9CECFB7D1D6D41A700DB2C8B /* SSJReportFormsScaleAxisCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD9D0C31CF6E2A6005AF735 /* SSJReportFormsScaleAxisCell.m */; };
 		9CECFB7E1D6D41A700DB2C8B /* SSJNewBaseTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD04338C1C1A8DA50051E7AB /* SSJNewBaseTableViewController.m */; };
-		9CECFB7F1D6D41A700DB2C8B /* BuildFile in Sources */ = {isa = PBXBuildFile; };
 		9CECFB801D6D41A700DB2C8B /* SSJMotionPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBE41CFD2DAA0061803B /* SSJMotionPasswordViewController.m */; };
 		9CECFB811D6D41A700DB2C8B /* SSJFundingDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9471561CEB224C00D69079 /* SSJFundingDetailCell.m */; };
 		9CECFB821D6D41A700DB2C8B /* SSJMotionPasswordSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBE21CFD2DAA0061803B /* SSJMotionPasswordSettingViewController.m */; };
@@ -4343,7 +4341,6 @@
 		9CECFBDF1D6D41A700DB2C8B /* SSJCircleChargeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBC41CFD2DAA0061803B /* SSJCircleChargeCell.m */; };
 		9CECFBE01D6D41A700DB2C8B /* SSJUserChargePeriodConfigSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D1D7F421C86BBD90001F72A /* SSJUserChargePeriodConfigSyncTable.m */; };
 		9CECFBE11D6D41A700DB2C8B /* SSJSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D99D4641C357703006EB113 /* SSJSegmentedControl.m */; };
-		9CECFBE21D6D41A700DB2C8B /* BuildFile in Sources */ = {isa = PBXBuildFile; };
 		9CECFBE31D6D41A700DB2C8B /* SSJCustomCollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32F21CEAE6C10086B67E /* SSJCustomCollectionViewFlowLayout.m */; };
 		9CECFBE41D6D41A700DB2C8B /* SSJBillingChargeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B23FC1C3A1B63009A74A8 /* SSJBillingChargeHelper.m */; };
 		9CECFBE51D6D41A700DB2C8B /* SSJForgetPasswordSecondStepViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE6E8731C5641B6001C9138 /* SSJForgetPasswordSecondStepViewController.m */; };
@@ -4401,7 +4398,6 @@
 		9CECFC211D6D41A700DB2C8B /* SSJPasswordModifyCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBF61CFD2DAA0061803B /* SSJPasswordModifyCell.m */; };
 		9CECFC221D6D41A700DB2C8B /* SSJListMenuCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B12D31D4CBC140036BF4E /* SSJListMenuCellItem.m */; };
 		9CECFC231D6D41A700DB2C8B /* SSJWeiXinLoginHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C2E02731CAE419600C5F764 /* SSJWeiXinLoginHelper.m */; };
-		9CECFC241D6D41A700DB2C8B /* BuildFile in Sources */ = {isa = PBXBuildFile; };
 		9CECFC251D6D41A700DB2C8B /* SSJMagicExportCalendarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB8B1CFD2DAA0061803B /* SSJMagicExportCalendarViewController.m */; };
 		9CECFC261D6D41A700DB2C8B /* SSJMineHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBC61CFD2DAA0061803B /* SSJMineHeaderView.m */; };
 		9CECFC271D6D41A700DB2C8B /* SSJRegistCheckAuthCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF501C4751EA000E6CC9 /* SSJRegistCheckAuthCodeViewController.m */; };
@@ -4418,7 +4414,6 @@
 		9CECFC341D6D41A700DB2C8B /* SSJBaseCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433881C1A8DA50051E7AB /* SSJBaseCollectionViewController.m */; };
 		9CECFC351D6D41A700DB2C8B /* SSJCalenderTableViewNoDataHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32A01CEAE6C10086B67E /* SSJCalenderTableViewNoDataHeader.m */; };
 		9CECFC361D6D41A700DB2C8B /* SSJBookkeepingTreeStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB6A1CFD2DAA0061803B /* SSJBookkeepingTreeStore.m */; };
-		9CECFC381D6D41A700DB2C8B /* BuildFile in Sources */ = {isa = PBXBuildFile; };
 		9CECFC391D6D41A700DB2C8B /* SSJChargeReminderTimeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBC21CFD2DAA0061803B /* SSJChargeReminderTimeView.m */; };
 		9CECFC3A1D6D41A700DB2C8B /* SSJCanlenderChargeDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1723861D52D3D100BB13DE /* SSJCanlenderChargeDetailCell.m */; };
 		9CECFC3B1D6D41A700DB2C8B /* SSJDatabaseVersion5.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE0896E1D333ED4008431D6 /* SSJDatabaseVersion5.m */; };
@@ -4480,7 +4475,6 @@
 		9CECFC781D6D41A700DB2C8B /* SSJThemeSetting.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE4A7DA1D20C0BA00F05BF0 /* SSJThemeSetting.m */; };
 		9CECFC791D6D41A700DB2C8B /* SSJFundingTypeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F330C1CEAE6C10086B67E /* SSJFundingTypeTableViewCell.m */; };
 		9CECFC7A1D6D41A700DB2C8B /* SSJBookkeepingTreeDescView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB6D1CFD2DAA0061803B /* SSJBookkeepingTreeDescView.m */; };
-		9CECFC7B1D6D41A700DB2C8B /* BuildFile in Sources */ = {isa = PBXBuildFile; };
 		9CECFC7C1D6D41A700DB2C8B /* SSJFundingTransferViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BC411CFD2E470061803B /* SSJFundingTransferViewController.m */; };
 		9CECFC7D1D6D41A700DB2C8B /* SSJScrollTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F325D1CEAE6C10086B67E /* SSJScrollTextView.m */; };
 		9CECFC7E1D6D41A700DB2C8B /* SSJFundAccountTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4EF8811C43B10C003C4B20 /* SSJFundAccountTable.m */; };
@@ -4491,13 +4485,11 @@
 		9CECFC831D6D41A700DB2C8B /* SSJMineSyncButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBCF1CFD2DAA0061803B /* SSJMineSyncButton.m */; };
 		9CECFC841D6D41A700DB2C8B /* SSJThemeCollectionHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C66F1351D211FE60094125D /* SSJThemeCollectionHeaderView.m */; };
 		9CECFC851D6D41A700DB2C8B /* SSJPagingNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = BD04339D1C1A99170051E7AB /* SSJPagingNetworkService.m */; };
-		9CECFC861D6D41A700DB2C8B /* BuildFile in Sources */ = {isa = PBXBuildFile; };
 		9CECFC871D6D41A700DB2C8B /* SCYMotionEncryptionTriangleLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE69C341C8EC401001D31C1 /* SCYMotionEncryptionTriangleLayer.m */; };
 		9CECFC881D6D41A700DB2C8B /* SSJSyncSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBDE1CFD2DAA0061803B /* SSJSyncSettingViewController.m */; };
 		9CECFC891D6D41A700DB2C8B /* SSJADDNewTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F33221CEAE6C10086B67E /* SSJADDNewTypeViewController.m */; };
 		9CECFC8B1D6D41A700DB2C8B /* SSJMagicExportCalendarViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBA31CFD2DAA0061803B /* SSJMagicExportCalendarViewCell.m */; };
 		9CECFC8C1D6D41A700DB2C8B /* SSJThemeUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D8F7C371D2CAED200F7DF6A /* SSJThemeUtil.m */; };
-		9CECFC8D1D6D41A700DB2C8B /* BuildFile in Sources */ = {isa = PBXBuildFile; };
 		9CECFC8E1D6D41A700DB2C8B /* SSJReportFormsIncomeAndPayCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6AAB691C313BA70007C0A3 /* SSJReportFormsIncomeAndPayCell.m */; };
 		9CECFC8F1D6D41A700DB2C8B /* SSJThemeManagerCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C65CA0A1D4B39AE0058D0A4 /* SSJThemeManagerCollectionViewCell.m */; };
 		9CECFC901D6D41A700DB2C8B /* SSJUnlimitedScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6AAB621C312C500007C0A3 /* SSJUnlimitedScrollView.m */; };
@@ -4626,19 +4618,38 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		004889EB34083108A8612BCE /* Pods-YouYuJiZhangBao.debug-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangBao.debug-test.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangBao/Pods-YouYuJiZhangBao.debug-test.xcconfig"; sourceTree = "<group>"; };
 		13DED3B91912A4CA23981548 /* Pods-YouYuJiZhangGuanJia.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangGuanJia.debug.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangGuanJia/Pods-YouYuJiZhangGuanJia.debug.xcconfig"; sourceTree = "<group>"; };
 		1BCD58B8B9CBEA7ED5E6BDD4 /* Pods-JiZhangGuanJia.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JiZhangGuanJia.debug.xcconfig"; path = "Pods/Target Support Files/Pods-JiZhangGuanJia/Pods-JiZhangGuanJia.debug.xcconfig"; sourceTree = "<group>"; };
+		21EA1E50547213D6FCC8FD05 /* Pods-SuiShouJi.release-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SuiShouJi.release-test.xcconfig"; path = "Pods/Target Support Files/Pods-SuiShouJi/Pods-SuiShouJi.release-test.xcconfig"; sourceTree = "<group>"; };
 		28D54CCC52994B95633CA5E3 /* libPods-JiZhangGuanJia.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-JiZhangGuanJia.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2DEF1E8E40DA1003C5D69150 /* Pods-YouYuJiZhangLiCai.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangLiCai.release.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangLiCai/Pods-YouYuJiZhangLiCai.release.xcconfig"; sourceTree = "<group>"; };
+		2F9C994248D269CADC0E5844 /* Pods-YouYuJiZhang.debug-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhang.debug-test.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhang/Pods-YouYuJiZhang.debug-test.xcconfig"; sourceTree = "<group>"; };
+		3107DC1ABD197F0C5FAC4C5F /* Pods-YouYuJiZhangBao.release-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangBao.release-production.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangBao/Pods-YouYuJiZhangBao.release-production.xcconfig"; sourceTree = "<group>"; };
 		348DA5EFAB1C2E711E07E558 /* libPods-youyujizhang.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-youyujizhang.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		39E3B4D62A92E52E9A7D3272 /* Pods-SuiShouJi.debug-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SuiShouJi.debug-production.xcconfig"; path = "Pods/Target Support Files/Pods-SuiShouJi/Pods-SuiShouJi.debug-production.xcconfig"; sourceTree = "<group>"; };
 		3B725E607F2304D98F82B2A3 /* Pods-SuiShouJi.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SuiShouJi.release.xcconfig"; path = "Pods/Target Support Files/Pods-SuiShouJi/Pods-SuiShouJi.release.xcconfig"; sourceTree = "<group>"; };
+		3BA1F23EADDF47271B5AA7AB /* Pods-YouYuJiZhang.release-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhang.release-test.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhang/Pods-YouYuJiZhang.release-test.xcconfig"; sourceTree = "<group>"; };
+		3D28921C2AB227ED349FA128 /* Pods-YouYuJiZhangLiCai.release-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangLiCai.release-test.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangLiCai/Pods-YouYuJiZhangLiCai.release-test.xcconfig"; sourceTree = "<group>"; };
+		408D479324B9408204BAA12F /* Pods-YouYuJiZhangGuanJia.release-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangGuanJia.release-test.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangGuanJia/Pods-YouYuJiZhangGuanJia.release-test.xcconfig"; sourceTree = "<group>"; };
 		409F6679D47EFA5753A58706 /* Pods-youyujizhang.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-youyujizhang.release.xcconfig"; path = "Pods/Target Support Files/Pods-youyujizhang/Pods-youyujizhang.release.xcconfig"; sourceTree = "<group>"; };
+		43C0A79A61524E1A06BBC6B7 /* Pods-SuiShouJiEnterprise.release-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SuiShouJiEnterprise.release-production.xcconfig"; path = "Pods/Target Support Files/Pods-SuiShouJiEnterprise/Pods-SuiShouJiEnterprise.release-production.xcconfig"; sourceTree = "<group>"; };
 		4BE2668A2D3687E35A1F7D0D /* libPods-YouYuJiZhang.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-YouYuJiZhang.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4DCB8AA1DC23E6D40C33EB5B /* libPods-SuiShouJi.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SuiShouJi.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4EF45D0DA6D692497985E773 /* Pods-JiZhangGuanJia.release-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JiZhangGuanJia.release-test.xcconfig"; path = "Pods/Target Support Files/Pods-JiZhangGuanJia/Pods-JiZhangGuanJia.release-test.xcconfig"; sourceTree = "<group>"; };
+		53D02BD02F89C64D5FED1E49 /* Pods-YouYuJiZhangGuanJia.debug-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangGuanJia.debug-production.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangGuanJia/Pods-YouYuJiZhangGuanJia.debug-production.xcconfig"; sourceTree = "<group>"; };
 		54C394CC554BE2031E6172C1 /* libPods-YouYuJiZhangGuanJia.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-YouYuJiZhangGuanJia.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		559995F82A41A31A1EDB66F7 /* Pods-YouYuJiZhangBao.release-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangBao.release-test.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangBao/Pods-YouYuJiZhangBao.release-test.xcconfig"; sourceTree = "<group>"; };
 		5899867574AEB0396C49AE15 /* Pods-SuiShouJi.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SuiShouJi.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SuiShouJi/Pods-SuiShouJi.debug.xcconfig"; sourceTree = "<group>"; };
+		59B9709CD0561A8AD4BDF638 /* Pods-SuiShouJi.debug-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SuiShouJi.debug-test.xcconfig"; path = "Pods/Target Support Files/Pods-SuiShouJi/Pods-SuiShouJi.debug-test.xcconfig"; sourceTree = "<group>"; };
+		5DE4695CC7C0CB804EB71885 /* Pods-JiZhangGuanJia.debug-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JiZhangGuanJia.debug-production.xcconfig"; path = "Pods/Target Support Files/Pods-JiZhangGuanJia/Pods-JiZhangGuanJia.debug-production.xcconfig"; sourceTree = "<group>"; };
+		65878DD07FDCAFFEA4BEEC33 /* Pods-SuiShouJiEnterprise.debug-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SuiShouJiEnterprise.debug-production.xcconfig"; path = "Pods/Target Support Files/Pods-SuiShouJiEnterprise/Pods-SuiShouJiEnterprise.debug-production.xcconfig"; sourceTree = "<group>"; };
+		6B2E92DAE4FF9F6B4E6CFC2B /* Pods-SuiShouJi.release-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SuiShouJi.release-production.xcconfig"; path = "Pods/Target Support Files/Pods-SuiShouJi/Pods-SuiShouJi.release-production.xcconfig"; sourceTree = "<group>"; };
 		6C381B92A98C172708D0DC43 /* Pods-YouYuJiZhang.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhang.release.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhang/Pods-YouYuJiZhang.release.xcconfig"; sourceTree = "<group>"; };
+		6F2EEF0F70C445C4640A9664 /* Pods-YouYuJiZhangGuanJia.debug-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangGuanJia.debug-test.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangGuanJia/Pods-YouYuJiZhangGuanJia.debug-test.xcconfig"; sourceTree = "<group>"; };
+		707BC1A755735A473617E88C /* Pods-SuiShouJiEnterprise.debug-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SuiShouJiEnterprise.debug-test.xcconfig"; path = "Pods/Target Support Files/Pods-SuiShouJiEnterprise/Pods-SuiShouJiEnterprise.debug-test.xcconfig"; sourceTree = "<group>"; };
 		71971C49348189D6064D4695 /* Pods-YouYuJiZhangBen.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangBen.debug.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangBen/Pods-YouYuJiZhangBen.debug.xcconfig"; sourceTree = "<group>"; };
+		7BDCA1EC0DEE649B1ED1D06F /* Pods-YouYuJiZhangGuanJia.release-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangGuanJia.release-production.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangGuanJia/Pods-YouYuJiZhangGuanJia.release-production.xcconfig"; sourceTree = "<group>"; };
 		7D00D8031DFA9CC00007A8FB /* SSJReportFormsChartCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormsChartCell.h; sourceTree = "<group>"; };
 		7D00D8041DFA9CC00007A8FB /* SSJReportFormsChartCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReportFormsChartCell.m; sourceTree = "<group>"; };
 		7D00D80A1DFAA3D30007A8FB /* SSJReportFormsChartCellItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormsChartCellItem.h; sourceTree = "<group>"; };
@@ -5219,7 +5230,9 @@
 		7DFFD5BD1D670BB7000FDAA6 /* SSJLoanListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJLoanListCell.m; sourceTree = "<group>"; };
 		7DFFD5C41D67201E000FDAA6 /* SSJAddOrEditLoanViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJAddOrEditLoanViewController.h; sourceTree = "<group>"; };
 		7DFFD5C51D67201E000FDAA6 /* SSJAddOrEditLoanViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJAddOrEditLoanViewController.m; sourceTree = "<group>"; };
+		814F3E7FF23E2CA5B535C5DE /* Pods-YouYuJiZhang.release-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhang.release-production.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhang/Pods-YouYuJiZhang.release-production.xcconfig"; sourceTree = "<group>"; };
 		8243DAE18B924886B7E827E5 /* Pods-youyujizhang.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-youyujizhang.debug.xcconfig"; path = "Pods/Target Support Files/Pods-youyujizhang/Pods-youyujizhang.debug.xcconfig"; sourceTree = "<group>"; };
+		8E88665EC4BCCDEADDBBF76D /* Pods-YouYuJiZhangBen.release-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangBen.release-production.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangBen/Pods-YouYuJiZhangBen.release-production.xcconfig"; sourceTree = "<group>"; };
 		8ED51442757E13C0CDA434AA /* Pods-YouYuJiZhangBen.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangBen.release.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangBen/Pods-YouYuJiZhangBen.release.xcconfig"; sourceTree = "<group>"; };
 		910DD68E1DF7B47E00A73F0C /* SSJMineHomeCollectionImageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMineHomeCollectionImageCell.h; sourceTree = "<group>"; };
 		910DD68F1DF7B47E00A73F0C /* SSJMineHomeCollectionImageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMineHomeCollectionImageCell.m; sourceTree = "<group>"; };
@@ -5677,8 +5690,12 @@
 		9CFBAC421E07E6F700C55814 /* SSJCreditRepaymentSyncTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCreditRepaymentSyncTable.h; sourceTree = "<group>"; };
 		9CFBAC431E07E6F700C55814 /* SSJCreditRepaymentSyncTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCreditRepaymentSyncTable.m; sourceTree = "<group>"; };
 		9FFD30CB9DFEC254EA2C4274 /* libPods-SuiShouJiEnterprise.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SuiShouJiEnterprise.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A2AF6367657D967EE92CE822 /* Pods-JiZhangGuanJia.release-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JiZhangGuanJia.release-production.xcconfig"; path = "Pods/Target Support Files/Pods-JiZhangGuanJia/Pods-JiZhangGuanJia.release-production.xcconfig"; sourceTree = "<group>"; };
 		A667F7088E87A8C8B73EC269 /* Pods-YouYuJiZhangGuanJia.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangGuanJia.release.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangGuanJia/Pods-YouYuJiZhangGuanJia.release.xcconfig"; sourceTree = "<group>"; };
 		A684F38344A33CFE5F75ADF5 /* Pods-SuiShouJiEnterprise.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SuiShouJiEnterprise.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SuiShouJiEnterprise/Pods-SuiShouJiEnterprise.debug.xcconfig"; sourceTree = "<group>"; };
+		A70B0B07CD477B0A509E403F /* Pods-SuiShouJiEnterprise.release-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SuiShouJiEnterprise.release-test.xcconfig"; path = "Pods/Target Support Files/Pods-SuiShouJiEnterprise/Pods-SuiShouJiEnterprise.release-test.xcconfig"; sourceTree = "<group>"; };
+		A7E4DE2394D1465918C3F390 /* Pods-YouYuJiZhangBen.debug-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangBen.debug-production.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangBen/Pods-YouYuJiZhangBen.debug-production.xcconfig"; sourceTree = "<group>"; };
+		AFA0E86A33C63DB5D6AEB327 /* Pods-JiZhangGuanJia.debug-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JiZhangGuanJia.debug-test.xcconfig"; path = "Pods/Target Support Files/Pods-JiZhangGuanJia/Pods-JiZhangGuanJia.debug-test.xcconfig"; sourceTree = "<group>"; };
 		B628019ECCD0A5E2646A5A09 /* Pods-YouYuJiZhangBao.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangBao.release.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangBao/Pods-YouYuJiZhangBao.release.xcconfig"; sourceTree = "<group>"; };
 		BD0432CC1C1A772A0051E7AB /* Macro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Macro.h; sourceTree = "<group>"; };
 		BD0432D71C1A77BB0051E7AB /* CDPointActivityIndicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDPointActivityIndicator.h; sourceTree = "<group>"; };
@@ -5789,12 +5806,19 @@
 		BDA2EF151C8EB89E007DD45F /* TencentOpenAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TencentOpenAPI.framework; sourceTree = "<group>"; };
 		BDC01FF11C2D92E3008B1F75 /* CDAutoHideMessageHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDAutoHideMessageHUD.h; sourceTree = "<group>"; };
 		BDC01FF21C2D92E3008B1F75 /* CDAutoHideMessageHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDAutoHideMessageHUD.m; sourceTree = "<group>"; };
+		C456BDB9A1174F4A4B005EB9 /* Pods-YouYuJiZhangBao.debug-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangBao.debug-production.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangBao/Pods-YouYuJiZhangBao.debug-production.xcconfig"; sourceTree = "<group>"; };
 		C940E901F298A3A24076E517 /* Pods-YouYuJiZhang.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhang.debug.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhang/Pods-YouYuJiZhang.debug.xcconfig"; sourceTree = "<group>"; };
+		CAA8E44768CD8C6BF10DACE5 /* Pods-YouYuJiZhangBen.release-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangBen.release-test.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangBen/Pods-YouYuJiZhangBen.release-test.xcconfig"; sourceTree = "<group>"; };
 		CFF6621CBAC638A24B0361A7 /* Pods-YouYuJiZhangLiCai.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangLiCai.debug.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangLiCai/Pods-YouYuJiZhangLiCai.debug.xcconfig"; sourceTree = "<group>"; };
 		D1A7ECDE4745F51DE93EF377 /* libPods-YouYuJiZhangBao.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-YouYuJiZhangBao.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAD18AB4DEF381D69AB77158 /* libPods-YouYuJiZhangBen.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-YouYuJiZhangBen.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB9B0038A884FAF5FA1CEB4F /* Pods-JiZhangGuanJia.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JiZhangGuanJia.release.xcconfig"; path = "Pods/Target Support Files/Pods-JiZhangGuanJia/Pods-JiZhangGuanJia.release.xcconfig"; sourceTree = "<group>"; };
+		DE4F08E5858DEDD62A2262C8 /* Pods-YouYuJiZhang.debug-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhang.debug-production.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhang/Pods-YouYuJiZhang.debug-production.xcconfig"; sourceTree = "<group>"; };
+		E38835B4B811DB254C8C71D4 /* Pods-YouYuJiZhangLiCai.debug-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangLiCai.debug-production.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangLiCai/Pods-YouYuJiZhangLiCai.debug-production.xcconfig"; sourceTree = "<group>"; };
+		E46D461943E8EB50EC47585D /* Pods-YouYuJiZhangBen.debug-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangBen.debug-test.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangBen/Pods-YouYuJiZhangBen.debug-test.xcconfig"; sourceTree = "<group>"; };
 		F1BFD9B2FA7E263C7101F5E8 /* Pods-SuiShouJiEnterprise.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SuiShouJiEnterprise.release.xcconfig"; path = "Pods/Target Support Files/Pods-SuiShouJiEnterprise/Pods-SuiShouJiEnterprise.release.xcconfig"; sourceTree = "<group>"; };
+		F36B3F26385C626176D7A485 /* Pods-YouYuJiZhangLiCai.release-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangLiCai.release-production.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangLiCai/Pods-YouYuJiZhangLiCai.release-production.xcconfig"; sourceTree = "<group>"; };
+		F8D4E0B8A39DD37EA1FCC6CB /* Pods-YouYuJiZhangLiCai.debug-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangLiCai.debug-test.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangLiCai/Pods-YouYuJiZhangLiCai.debug-test.xcconfig"; sourceTree = "<group>"; };
 		F9099E967EA40B5B4F591EA5 /* libPods-YouYuJiZhangLiCai.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-YouYuJiZhangLiCai.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -8985,6 +9009,38 @@
 				F1BFD9B2FA7E263C7101F5E8 /* Pods-SuiShouJiEnterprise.release.xcconfig */,
 				C940E901F298A3A24076E517 /* Pods-YouYuJiZhang.debug.xcconfig */,
 				6C381B92A98C172708D0DC43 /* Pods-YouYuJiZhang.release.xcconfig */,
+				AFA0E86A33C63DB5D6AEB327 /* Pods-JiZhangGuanJia.debug-test.xcconfig */,
+				5DE4695CC7C0CB804EB71885 /* Pods-JiZhangGuanJia.debug-production.xcconfig */,
+				4EF45D0DA6D692497985E773 /* Pods-JiZhangGuanJia.release-test.xcconfig */,
+				A2AF6367657D967EE92CE822 /* Pods-JiZhangGuanJia.release-production.xcconfig */,
+				59B9709CD0561A8AD4BDF638 /* Pods-SuiShouJi.debug-test.xcconfig */,
+				39E3B4D62A92E52E9A7D3272 /* Pods-SuiShouJi.debug-production.xcconfig */,
+				21EA1E50547213D6FCC8FD05 /* Pods-SuiShouJi.release-test.xcconfig */,
+				6B2E92DAE4FF9F6B4E6CFC2B /* Pods-SuiShouJi.release-production.xcconfig */,
+				707BC1A755735A473617E88C /* Pods-SuiShouJiEnterprise.debug-test.xcconfig */,
+				65878DD07FDCAFFEA4BEEC33 /* Pods-SuiShouJiEnterprise.debug-production.xcconfig */,
+				A70B0B07CD477B0A509E403F /* Pods-SuiShouJiEnterprise.release-test.xcconfig */,
+				43C0A79A61524E1A06BBC6B7 /* Pods-SuiShouJiEnterprise.release-production.xcconfig */,
+				2F9C994248D269CADC0E5844 /* Pods-YouYuJiZhang.debug-test.xcconfig */,
+				DE4F08E5858DEDD62A2262C8 /* Pods-YouYuJiZhang.debug-production.xcconfig */,
+				3BA1F23EADDF47271B5AA7AB /* Pods-YouYuJiZhang.release-test.xcconfig */,
+				814F3E7FF23E2CA5B535C5DE /* Pods-YouYuJiZhang.release-production.xcconfig */,
+				004889EB34083108A8612BCE /* Pods-YouYuJiZhangBao.debug-test.xcconfig */,
+				C456BDB9A1174F4A4B005EB9 /* Pods-YouYuJiZhangBao.debug-production.xcconfig */,
+				559995F82A41A31A1EDB66F7 /* Pods-YouYuJiZhangBao.release-test.xcconfig */,
+				3107DC1ABD197F0C5FAC4C5F /* Pods-YouYuJiZhangBao.release-production.xcconfig */,
+				E46D461943E8EB50EC47585D /* Pods-YouYuJiZhangBen.debug-test.xcconfig */,
+				A7E4DE2394D1465918C3F390 /* Pods-YouYuJiZhangBen.debug-production.xcconfig */,
+				CAA8E44768CD8C6BF10DACE5 /* Pods-YouYuJiZhangBen.release-test.xcconfig */,
+				8E88665EC4BCCDEADDBBF76D /* Pods-YouYuJiZhangBen.release-production.xcconfig */,
+				6F2EEF0F70C445C4640A9664 /* Pods-YouYuJiZhangGuanJia.debug-test.xcconfig */,
+				53D02BD02F89C64D5FED1E49 /* Pods-YouYuJiZhangGuanJia.debug-production.xcconfig */,
+				408D479324B9408204BAA12F /* Pods-YouYuJiZhangGuanJia.release-test.xcconfig */,
+				7BDCA1EC0DEE649B1ED1D06F /* Pods-YouYuJiZhangGuanJia.release-production.xcconfig */,
+				F8D4E0B8A39DD37EA1FCC6CB /* Pods-YouYuJiZhangLiCai.debug-test.xcconfig */,
+				E38835B4B811DB254C8C71D4 /* Pods-YouYuJiZhangLiCai.debug-production.xcconfig */,
+				3D28921C2AB227ED349FA128 /* Pods-YouYuJiZhangLiCai.release-test.xcconfig */,
+				F36B3F26385C626176D7A485 /* Pods-YouYuJiZhangLiCai.release-production.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -13214,7 +13270,6 @@
 				9C9324071D9E591E00EBD216 /* SSJSearchResultOrderHeader.m in Sources */,
 				9CECFB3E1D6D41A700DB2C8B /* SSJListMenuCell.m in Sources */,
 				9CECFB3F1D6D41A700DB2C8B /* SSJBookkeepingTreeViewController.m in Sources */,
-				9CECFB411D6D41A700DB2C8B /* BuildFile in Sources */,
 				9CECFB421D6D41A700DB2C8B /* SSJLoadMoreCell.m in Sources */,
 				9CECFB431D6D41A700DB2C8B /* SSJThemeDownLoadCompleteService.m in Sources */,
 				7D24ED921D9E6F8E003C4248 /* SSJBudgetDetailHeaderViewItem.m in Sources */,
@@ -13298,7 +13353,6 @@
 				7D22A31C1E4F16AC00190CEB /* SSJArrayAddition.m in Sources */,
 				9C77DBB81DE70B3100CD64A2 /* SSJCustomJsonSerializer.m in Sources */,
 				9CECFB7E1D6D41A700DB2C8B /* SSJNewBaseTableViewController.m in Sources */,
-				9CECFB7F1D6D41A700DB2C8B /* BuildFile in Sources */,
 				9CECFB801D6D41A700DB2C8B /* SSJMotionPasswordViewController.m in Sources */,
 				7D8C7EA31D6F19BA00D72E2D /* SSJLoanCloseOutViewController.m in Sources */,
 				7D6CC90D1E0A798400FF6133 /* SSJReportFormsCurveGridView.m in Sources */,
@@ -13446,7 +13500,6 @@
 				9CECFBE01D6D41A700DB2C8B /* SSJUserChargePeriodConfigSyncTable.m in Sources */,
 				7DF19EDB1D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m in Sources */,
 				9CECFBE11D6D41A700DB2C8B /* SSJSegmentedControl.m in Sources */,
-				9CECFBE21D6D41A700DB2C8B /* BuildFile in Sources */,
 				9CECFBE31D6D41A700DB2C8B /* SSJCustomCollectionViewFlowLayout.m in Sources */,
 				9CECFBE41D6D41A700DB2C8B /* SSJBillingChargeHelper.m in Sources */,
 				9CECFBE51D6D41A700DB2C8B /* SSJForgetPasswordSecondStepViewController.m in Sources */,
@@ -13547,7 +13600,6 @@
 				7DFD30551D75268D00A0D7A0 /* SSJCategoryEditableCollectionViewCell.m in Sources */,
 				9CECFC231D6D41A700DB2C8B /* SSJWeiXinLoginHelper.m in Sources */,
 				7DC318671E2882A300932644 /* FMDatabase+FTS3.m in Sources */,
-				9CECFC241D6D41A700DB2C8B /* BuildFile in Sources */,
 				9CECFC251D6D41A700DB2C8B /* SSJMagicExportCalendarViewController.m in Sources */,
 				9CECFC261D6D41A700DB2C8B /* SSJMineHeaderView.m in Sources */,
 				9C17B52C1DEED7B1000D6C99 /* SSJBooksParentSelectView.m in Sources */,
@@ -13573,7 +13625,6 @@
 				916E31DA1DF8EED1003C18D4 /* SSJMineHomeCollectionImageCell.m in Sources */,
 				9C24D00E1D7838F90095D150 /* SSJLocalNotificationHelper.m in Sources */,
 				7DD49BF71DB78A4A00318AF9 /* UICountingLabel.m in Sources */,
-				9CECFC381D6D41A700DB2C8B /* BuildFile in Sources */,
 				916E320B1DF967C1003C18D4 /* SSJProductAdviceTableHeaderView.m in Sources */,
 				9C77DBB01DE6ED2200CD64A2 /* SSJIdfaUploadService.m in Sources */,
 				9CECFC391D6D41A700DB2C8B /* SSJChargeReminderTimeView.m in Sources */,
@@ -13666,7 +13717,6 @@
 				7D6CC9051E0A797D00FF6133 /* SSJReportFormsCurveBalloonView.m in Sources */,
 				7D481B841E4DB39600060E1A /* SSJFundingTransferListPeriodCell.m in Sources */,
 				9CECFC7A1D6D41A700DB2C8B /* SSJBookkeepingTreeDescView.m in Sources */,
-				9CECFC7B1D6D41A700DB2C8B /* BuildFile in Sources */,
 				9CECFC7C1D6D41A700DB2C8B /* SSJFundingTransferViewController.m in Sources */,
 				9CECFC7D1D6D41A700DB2C8B /* SSJScrollTextView.m in Sources */,
 				9CECFC7E1D6D41A700DB2C8B /* SSJFundAccountTable.m in Sources */,
@@ -13685,7 +13735,6 @@
 				9CECFC851D6D41A700DB2C8B /* SSJPagingNetworkService.m in Sources */,
 				7DCA2A391E4D74A500B60F4F /* SCYSlidePagingHeaderView+SSJTheme.m in Sources */,
 				9C24CFC61D76CA000095D150 /* SSJBooksTypeItem.m in Sources */,
-				9CECFC861D6D41A700DB2C8B /* BuildFile in Sources */,
 				9C7C9E6C1DB706E10095F49B /* SSJSearchResultSummaryItem.m in Sources */,
 				9CECFC871D6D41A700DB2C8B /* SCYMotionEncryptionTriangleLayer.m in Sources */,
 				7D4A79761DD46D6100E905F4 /* SSJLoanChargeAddOrEditViewController.m in Sources */,
@@ -13694,7 +13743,6 @@
 				9CECFC891D6D41A700DB2C8B /* SSJADDNewTypeViewController.m in Sources */,
 				9CECFC8B1D6D41A700DB2C8B /* SSJMagicExportCalendarViewCell.m in Sources */,
 				9CECFC8C1D6D41A700DB2C8B /* SSJThemeUtil.m in Sources */,
-				9CECFC8D1D6D41A700DB2C8B /* BuildFile in Sources */,
 				9CECFC8E1D6D41A700DB2C8B /* SSJReportFormsIncomeAndPayCell.m in Sources */,
 				9CECFC8F1D6D41A700DB2C8B /* SSJThemeManagerCollectionViewCell.m in Sources */,
 				9CECFC901D6D41A700DB2C8B /* SSJUnlimitedScrollView.m in Sources */,
@@ -14328,9 +14376,9 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		7D08A2D31E4999D30085A8FB /* Debug */ = {
+		7D08A2D31E4999D30085A8FB /* Debug-test */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 13DED3B91912A4CA23981548 /* Pods-YouYuJiZhangGuanJia.debug.xcconfig */;
+			baseConfigurationReference = 6F2EEF0F70C445C4640A9664 /* Pods-YouYuJiZhangGuanJia.debug-test.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuJiZhangGuanJia;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -14366,11 +14414,11 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
-			name = Debug;
+			name = "Debug-test";
 		};
-		7D08A2D41E4999D30085A8FB /* Release */ = {
+		7D08A2D41E4999D30085A8FB /* Release-test */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A667F7088E87A8C8B73EC269 /* Pods-YouYuJiZhangGuanJia.release.xcconfig */;
+			baseConfigurationReference = 408D479324B9408204BAA12F /* Pods-YouYuJiZhangGuanJia.release-test.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuJiZhangGuanJia;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -14405,11 +14453,11 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
-			name = Release;
+			name = "Release-test";
 		};
-		7DA13C2A1E35AED7000490A4 /* Debug */ = {
+		7DA13C2A1E35AED7000490A4 /* Debug-test */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9892BFAB47044275B53028C0 /* Pods-YouYuJiZhangBao.debug.xcconfig */;
+			baseConfigurationReference = 004889EB34083108A8612BCE /* Pods-YouYuJiZhangBao.debug-test.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuJiZhangBao;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -14445,11 +14493,11 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
-			name = Debug;
+			name = "Debug-test";
 		};
-		7DA13C2B1E35AED7000490A4 /* Release */ = {
+		7DA13C2B1E35AED7000490A4 /* Release-test */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B628019ECCD0A5E2646A5A09 /* Pods-YouYuJiZhangBao.release.xcconfig */;
+			baseConfigurationReference = 559995F82A41A31A1EDB66F7 /* Pods-YouYuJiZhangBao.release-test.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuJiZhangBao;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -14484,806 +14532,58 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
-			name = Release;
+			name = "Release-test";
 		};
-		7DBB3A6B1E55C0A70075E638 /* Debug */ = {
+		7DA8F9921E55CFB4006BE13B /* Debug-production */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C940E901F298A3A24076E517 /* Pods-YouYuJiZhang.debug.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Xiaoyong Wu (8WX4Y5V9K8)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Xiaoyong Wu (8WX4Y5V9K8)";
-				DEVELOPMENT_TEAM = E25A2E4ZN2;
-				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
-				);
-				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
 					"$(inherited)",
-					"COCOAPODS=1",
-					"SD_WEBP=1",
+					"PRODUCTION=1",
 				);
-				INFOPLIST_FILE = "$(SRCROOT)/SuiShouJi/Resource/Plist/YouYuJiZhang-Info.plist";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-ObjC",
-					"-l\"AFNetworking\"",
-					"-l\"APOpenSdk\"",
-					"-l\"DateTools\"",
-					"-l\"FLAnimatedImage\"",
-					"-l\"JSPatch\"",
-					"-l\"LWApiSDK\"",
-					"-l\"MJExtension\"",
-					"-l\"MMDrawerController\"",
-					"-l\"Masonry\"",
-					"-l\"Meiqia\"",
-					"-l\"SDWebImage\"",
-					"-l\"SocialAlipayShare\"",
-					"-l\"SocialFacebook\"",
-					"-l\"SocialInstagram\"",
-					"-l\"SocialLaiWang\"",
-					"-l\"SocialLine\"",
-					"-l\"SocialQQ\"",
-					"-l\"SocialSinaSSO\"",
-					"-l\"SocialTumblr\"",
-					"-l\"SocialTwitter\"",
-					"-l\"SocialWechat\"",
-					"-l\"SocialWhatsapp\"",
-					"-l\"UMSocial_Sdk_5.2.1\"",
-					"-l\"UMSocial_Sdk_Comment_5.2.1\"",
-					"-l\"WeChatSDK\"",
-					"-l\"WeiboSDK\"",
-					"-l\"YYKeyboardManager\"",
-					"-l\"YYText\"",
-					"-l\"ZYCornerRadius\"",
-					"-l\"iconv\"",
-					"-l\"icucore\"",
-					"-l\"libwebp\"",
-					"-l\"opencore-amrnb\"",
-					"-l\"opencore-amrwb\"",
-					"-l\"sqlite3\"",
-					"-l\"stdc++\"",
-					"-l\"z\"",
-					"-framework",
-					"\"AVFoundation\"",
-					"-framework",
-					"\"Accelerate\"",
-					"-framework",
-					"\"Accounts\"",
-					"-framework",
-					"\"CoreData\"",
-					"-framework",
-					"\"CoreFoundation\"",
-					"-framework",
-					"\"CoreGraphics\"",
-					"-framework",
-					"\"CoreTelephony\"",
-					"-framework",
-					"\"CoreText\"",
-					"-framework",
-					"\"FBSDKCoreKit\"",
-					"-framework",
-					"\"FBSDKLoginKit\"",
-					"-framework",
-					"\"FBSDKShareKit\"",
-					"-framework",
-					"\"Fabric\"",
-					"-framework",
-					"\"Foundation\"",
-					"-framework",
-					"\"ImageIO\"",
-					"-framework",
-					"\"MeiQiaSDK\"",
-					"-framework",
-					"\"MobileCoreServices\"",
-					"-framework",
-					"\"QuartzCore\"",
-					"-framework",
-					"\"Security\"",
-					"-framework",
-					"\"Social\"",
-					"-framework",
-					"\"SystemConfiguration\"",
-					"-framework",
-					"\"TencentOpenAPI\"",
-					"-framework",
-					"\"TwitterCore\"",
-					"-framework",
-					"\"TwitterKit\"",
-					"-framework",
-					"\"UIKit\"",
-					"-framework",
-					"\"UMMobClick\"",
-					"-weak_framework",
-					"\"JavaScriptCore\"",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhang;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "128b3236-a860-4050-b803-189e85c77974";
-				PROVISIONING_PROFILE_SPECIFIER = youyujizhangAppStoreDeve;
-				SWIFT_OBJC_BRIDGING_HEADER = "";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				TARGETED_DEVICE_FAMILY = 1;
+				SDKROOT = iphoneos;
 			};
-			name = Debug;
+			name = "Debug-production";
 		};
-		7DBB3A6C1E55C0A70075E638 /* Release */ = {
+		7DA8F9931E55CFB4006BE13B /* Debug-production */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6C381B92A98C172708D0DC43 /* Pods-YouYuJiZhang.release.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co.,Ltd (534SCE47WT)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co.,Ltd (534SCE47WT)";
-				DEVELOPMENT_TEAM = E25A2E4ZN2;
-				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
-				);
-				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					"COCOAPODS=1",
-					"SD_WEBP=1",
-				);
-				INFOPLIST_FILE = "$(SRCROOT)/SuiShouJi/Resource/Plist/YouYuJiZhang-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-ObjC",
-					"-l\"AFNetworking\"",
-					"-l\"APOpenSdk\"",
-					"-l\"DateTools\"",
-					"-l\"FLAnimatedImage\"",
-					"-l\"JSPatch\"",
-					"-l\"LWApiSDK\"",
-					"-l\"MJExtension\"",
-					"-l\"MMDrawerController\"",
-					"-l\"Masonry\"",
-					"-l\"Meiqia\"",
-					"-l\"SDWebImage\"",
-					"-l\"SocialAlipayShare\"",
-					"-l\"SocialFacebook\"",
-					"-l\"SocialInstagram\"",
-					"-l\"SocialLaiWang\"",
-					"-l\"SocialLine\"",
-					"-l\"SocialQQ\"",
-					"-l\"SocialSinaSSO\"",
-					"-l\"SocialTumblr\"",
-					"-l\"SocialTwitter\"",
-					"-l\"SocialWechat\"",
-					"-l\"SocialWhatsapp\"",
-					"-l\"UMSocial_Sdk_5.2.1\"",
-					"-l\"UMSocial_Sdk_Comment_5.2.1\"",
-					"-l\"WeChatSDK\"",
-					"-l\"WeiboSDK\"",
-					"-l\"YYKeyboardManager\"",
-					"-l\"YYText\"",
-					"-l\"ZYCornerRadius\"",
-					"-l\"iconv\"",
-					"-l\"icucore\"",
-					"-l\"libwebp\"",
-					"-l\"opencore-amrnb\"",
-					"-l\"opencore-amrwb\"",
-					"-l\"sqlite3\"",
-					"-l\"stdc++\"",
-					"-l\"z\"",
-					"-framework",
-					"\"AVFoundation\"",
-					"-framework",
-					"\"Accelerate\"",
-					"-framework",
-					"\"Accounts\"",
-					"-framework",
-					"\"CoreData\"",
-					"-framework",
-					"\"CoreFoundation\"",
-					"-framework",
-					"\"CoreGraphics\"",
-					"-framework",
-					"\"CoreTelephony\"",
-					"-framework",
-					"\"CoreText\"",
-					"-framework",
-					"\"FBSDKCoreKit\"",
-					"-framework",
-					"\"FBSDKLoginKit\"",
-					"-framework",
-					"\"FBSDKShareKit\"",
-					"-framework",
-					"\"Fabric\"",
-					"-framework",
-					"\"Foundation\"",
-					"-framework",
-					"\"ImageIO\"",
-					"-framework",
-					"\"MeiQiaSDK\"",
-					"-framework",
-					"\"MobileCoreServices\"",
-					"-framework",
-					"\"QuartzCore\"",
-					"-framework",
-					"\"Security\"",
-					"-framework",
-					"\"Social\"",
-					"-framework",
-					"\"SystemConfiguration\"",
-					"-framework",
-					"\"TencentOpenAPI\"",
-					"-framework",
-					"\"TwitterCore\"",
-					"-framework",
-					"\"TwitterKit\"",
-					"-framework",
-					"\"UIKit\"",
-					"-framework",
-					"\"UMMobClick\"",
-					"-weak_framework",
-					"\"JavaScriptCore\"",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhang;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "4f90dc0a-abbc-4b9d-8078-d82276a69e60";
-				PROVISIONING_PROFILE_SPECIFIER = youyujizhangAppStoreDis;
-				SWIFT_OBJC_BRIDGING_HEADER = "";
-				TARGETED_DEVICE_FAMILY = 1;
-			};
-			name = Release;
-		};
-		7DBB3CB81E55C2EE0075E638 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = CFF6621CBAC638A24B0361A7 /* Pods-YouYuJiZhangLiCai.debug.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuJiZhangLiCai;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: XiaoYong  Wu (6CF3K2UQ7J)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: XiaoYong  Wu (6CF3K2UQ7J)";
-				DEVELOPMENT_TEAM = GZ7Q3299CT;
-				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
-				);
-				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					"COCOAPODS=1",
-					"SD_WEBP=1",
-				);
-				INFOPLIST_FILE = "$(SRCROOT)/SuiShouJi/Resource/Plist/YouYuJiZhangLiCai-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-ObjC",
-					"-l\"AFNetworking\"",
-					"-l\"APOpenSdk\"",
-					"-l\"DateTools\"",
-					"-l\"FLAnimatedImage\"",
-					"-l\"JSPatch\"",
-					"-l\"LWApiSDK\"",
-					"-l\"MJExtension\"",
-					"-l\"MMDrawerController\"",
-					"-l\"Masonry\"",
-					"-l\"Meiqia\"",
-					"-l\"SDWebImage\"",
-					"-l\"SocialAlipayShare\"",
-					"-l\"SocialFacebook\"",
-					"-l\"SocialInstagram\"",
-					"-l\"SocialLaiWang\"",
-					"-l\"SocialLine\"",
-					"-l\"SocialQQ\"",
-					"-l\"SocialSinaSSO\"",
-					"-l\"SocialTumblr\"",
-					"-l\"SocialTwitter\"",
-					"-l\"SocialWechat\"",
-					"-l\"SocialWhatsapp\"",
-					"-l\"UMSocial_Sdk_5.2.1\"",
-					"-l\"UMSocial_Sdk_Comment_5.2.1\"",
-					"-l\"WeChatSDK\"",
-					"-l\"WeiboSDK\"",
-					"-l\"YYKeyboardManager\"",
-					"-l\"YYText\"",
-					"-l\"ZYCornerRadius\"",
-					"-l\"iconv\"",
-					"-l\"icucore\"",
-					"-l\"libwebp\"",
-					"-l\"opencore-amrnb\"",
-					"-l\"opencore-amrwb\"",
-					"-l\"sqlite3\"",
-					"-l\"stdc++\"",
-					"-l\"z\"",
-					"-framework",
-					"\"AVFoundation\"",
-					"-framework",
-					"\"Accelerate\"",
-					"-framework",
-					"\"Accounts\"",
-					"-framework",
-					"\"CoreData\"",
-					"-framework",
-					"\"CoreFoundation\"",
-					"-framework",
-					"\"CoreGraphics\"",
-					"-framework",
-					"\"CoreTelephony\"",
-					"-framework",
-					"\"CoreText\"",
-					"-framework",
-					"\"FBSDKCoreKit\"",
-					"-framework",
-					"\"FBSDKLoginKit\"",
-					"-framework",
-					"\"FBSDKShareKit\"",
-					"-framework",
-					"\"Fabric\"",
-					"-framework",
-					"\"Foundation\"",
-					"-framework",
-					"\"ImageIO\"",
-					"-framework",
-					"\"MeiQiaSDK\"",
-					"-framework",
-					"\"MobileCoreServices\"",
-					"-framework",
-					"\"QuartzCore\"",
-					"-framework",
-					"\"Security\"",
-					"-framework",
-					"\"Social\"",
-					"-framework",
-					"\"SystemConfiguration\"",
-					"-framework",
-					"\"TencentOpenAPI\"",
-					"-framework",
-					"\"TwitterCore\"",
-					"-framework",
-					"\"TwitterKit\"",
-					"-framework",
-					"\"UIKit\"",
-					"-framework",
-					"\"UMMobClick\"",
-					"-weak_framework",
-					"\"JavaScriptCore\"",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhanglicai;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "e6c69c88-f91c-4ee1-ab81-bb118f514fd6";
-				PROVISIONING_PROFILE_SPECIFIER = YouYuJiZhangLiCaiDev;
-				SWIFT_OBJC_BRIDGING_HEADER = "";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				TARGETED_DEVICE_FAMILY = 1;
-			};
-			name = Debug;
-		};
-		7DBB3CB91E55C2EE0075E638 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2DEF1E8E40DA1003C5D69150 /* Pods-YouYuJiZhangLiCai.release.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuJiZhangLiCai;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Wu Can (GZ7Q3299CT)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Wu Can (GZ7Q3299CT)";
-				DEVELOPMENT_TEAM = GZ7Q3299CT;
-				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
-				);
-				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					"COCOAPODS=1",
-					"SD_WEBP=1",
-				);
-				INFOPLIST_FILE = "$(SRCROOT)/SuiShouJi/Resource/Plist/YouYuJiZhangLiCai-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-ObjC",
-					"-l\"AFNetworking\"",
-					"-l\"APOpenSdk\"",
-					"-l\"DateTools\"",
-					"-l\"FLAnimatedImage\"",
-					"-l\"JSPatch\"",
-					"-l\"LWApiSDK\"",
-					"-l\"MJExtension\"",
-					"-l\"MMDrawerController\"",
-					"-l\"Masonry\"",
-					"-l\"Meiqia\"",
-					"-l\"SDWebImage\"",
-					"-l\"SocialAlipayShare\"",
-					"-l\"SocialFacebook\"",
-					"-l\"SocialInstagram\"",
-					"-l\"SocialLaiWang\"",
-					"-l\"SocialLine\"",
-					"-l\"SocialQQ\"",
-					"-l\"SocialSinaSSO\"",
-					"-l\"SocialTumblr\"",
-					"-l\"SocialTwitter\"",
-					"-l\"SocialWechat\"",
-					"-l\"SocialWhatsapp\"",
-					"-l\"UMSocial_Sdk_5.2.1\"",
-					"-l\"UMSocial_Sdk_Comment_5.2.1\"",
-					"-l\"WeChatSDK\"",
-					"-l\"WeiboSDK\"",
-					"-l\"YYKeyboardManager\"",
-					"-l\"YYText\"",
-					"-l\"ZYCornerRadius\"",
-					"-l\"iconv\"",
-					"-l\"icucore\"",
-					"-l\"libwebp\"",
-					"-l\"opencore-amrnb\"",
-					"-l\"opencore-amrwb\"",
-					"-l\"sqlite3\"",
-					"-l\"stdc++\"",
-					"-l\"z\"",
-					"-framework",
-					"\"AVFoundation\"",
-					"-framework",
-					"\"Accelerate\"",
-					"-framework",
-					"\"Accounts\"",
-					"-framework",
-					"\"CoreData\"",
-					"-framework",
-					"\"CoreFoundation\"",
-					"-framework",
-					"\"CoreGraphics\"",
-					"-framework",
-					"\"CoreTelephony\"",
-					"-framework",
-					"\"CoreText\"",
-					"-framework",
-					"\"FBSDKCoreKit\"",
-					"-framework",
-					"\"FBSDKLoginKit\"",
-					"-framework",
-					"\"FBSDKShareKit\"",
-					"-framework",
-					"\"Fabric\"",
-					"-framework",
-					"\"Foundation\"",
-					"-framework",
-					"\"ImageIO\"",
-					"-framework",
-					"\"MeiQiaSDK\"",
-					"-framework",
-					"\"MobileCoreServices\"",
-					"-framework",
-					"\"QuartzCore\"",
-					"-framework",
-					"\"Security\"",
-					"-framework",
-					"\"Social\"",
-					"-framework",
-					"\"SystemConfiguration\"",
-					"-framework",
-					"\"TencentOpenAPI\"",
-					"-framework",
-					"\"TwitterCore\"",
-					"-framework",
-					"\"TwitterKit\"",
-					"-framework",
-					"\"UIKit\"",
-					"-framework",
-					"\"UMMobClick\"",
-					"-weak_framework",
-					"\"JavaScriptCore\"",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhanglicai;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "3624541f-ed23-46a4-970b-eca8ae759684";
-				PROVISIONING_PROFILE_SPECIFIER = YouYuJiZhangLiCaiDis;
-				SWIFT_OBJC_BRIDGING_HEADER = "";
-				TARGETED_DEVICE_FAMILY = 1;
-			};
-			name = Release;
-		};
-		7DBB3F061E55C4220075E638 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1BCD58B8B9CBEA7ED5E6BDD4 /* Pods-JiZhangGuanJia.debug.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = JiZhangGuanJia;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: XiaoYong  Wu (6CF3K2UQ7J)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: XiaoYong  Wu (6CF3K2UQ7J)";
-				DEVELOPMENT_TEAM = 9HCRD5N85G;
-				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
-				);
-				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					"COCOAPODS=1",
-					"SD_WEBP=1",
-				);
-				INFOPLIST_FILE = "$(SRCROOT)/SuiShouJi/Resource/Plist/JiZhangGuanJia-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-ObjC",
-					"-l\"AFNetworking\"",
-					"-l\"APOpenSdk\"",
-					"-l\"DateTools\"",
-					"-l\"FLAnimatedImage\"",
-					"-l\"JSPatch\"",
-					"-l\"LWApiSDK\"",
-					"-l\"MJExtension\"",
-					"-l\"MMDrawerController\"",
-					"-l\"Masonry\"",
-					"-l\"Meiqia\"",
-					"-l\"SDWebImage\"",
-					"-l\"SocialAlipayShare\"",
-					"-l\"SocialFacebook\"",
-					"-l\"SocialInstagram\"",
-					"-l\"SocialLaiWang\"",
-					"-l\"SocialLine\"",
-					"-l\"SocialQQ\"",
-					"-l\"SocialSinaSSO\"",
-					"-l\"SocialTumblr\"",
-					"-l\"SocialTwitter\"",
-					"-l\"SocialWechat\"",
-					"-l\"SocialWhatsapp\"",
-					"-l\"UMSocial_Sdk_5.2.1\"",
-					"-l\"UMSocial_Sdk_Comment_5.2.1\"",
-					"-l\"WeChatSDK\"",
-					"-l\"WeiboSDK\"",
-					"-l\"YYKeyboardManager\"",
-					"-l\"YYText\"",
-					"-l\"ZYCornerRadius\"",
-					"-l\"iconv\"",
-					"-l\"icucore\"",
-					"-l\"libwebp\"",
-					"-l\"opencore-amrnb\"",
-					"-l\"opencore-amrwb\"",
-					"-l\"sqlite3\"",
-					"-l\"stdc++\"",
-					"-l\"z\"",
-					"-framework",
-					"\"AVFoundation\"",
-					"-framework",
-					"\"Accelerate\"",
-					"-framework",
-					"\"Accounts\"",
-					"-framework",
-					"\"CoreData\"",
-					"-framework",
-					"\"CoreFoundation\"",
-					"-framework",
-					"\"CoreGraphics\"",
-					"-framework",
-					"\"CoreTelephony\"",
-					"-framework",
-					"\"CoreText\"",
-					"-framework",
-					"\"FBSDKCoreKit\"",
-					"-framework",
-					"\"FBSDKLoginKit\"",
-					"-framework",
-					"\"FBSDKShareKit\"",
-					"-framework",
-					"\"Fabric\"",
-					"-framework",
-					"\"Foundation\"",
-					"-framework",
-					"\"ImageIO\"",
-					"-framework",
-					"\"MeiQiaSDK\"",
-					"-framework",
-					"\"MobileCoreServices\"",
-					"-framework",
-					"\"QuartzCore\"",
-					"-framework",
-					"\"Security\"",
-					"-framework",
-					"\"Social\"",
-					"-framework",
-					"\"SystemConfiguration\"",
-					"-framework",
-					"\"TencentOpenAPI\"",
-					"-framework",
-					"\"TwitterCore\"",
-					"-framework",
-					"\"TwitterKit\"",
-					"-framework",
-					"\"UIKit\"",
-					"-framework",
-					"\"UMMobClick\"",
-					"-weak_framework",
-					"\"JavaScriptCore\"",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhangguanjia;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "26319b74-4d35-4298-91a4-4bc90f9b8258";
-				PROVISIONING_PROFILE_SPECIFIER = JiZhangGuanJiaDev;
-				SWIFT_OBJC_BRIDGING_HEADER = "";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				TARGETED_DEVICE_FAMILY = 1;
-			};
-			name = Debug;
-		};
-		7DBB3F071E55C4220075E638 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = DB9B0038A884FAF5FA1CEB4F /* Pods-JiZhangGuanJia.release.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = JiZhangGuanJia;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co.,Ltd (534SCE47WT)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co.,Ltd (534SCE47WT)";
-				DEVELOPMENT_TEAM = 9HCRD5N85G;
-				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
-				);
-				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					"COCOAPODS=1",
-					"SD_WEBP=1",
-				);
-				INFOPLIST_FILE = "$(SRCROOT)/SuiShouJi/Resource/Plist/JiZhangGuanJia-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-ObjC",
-					"-l\"AFNetworking\"",
-					"-l\"APOpenSdk\"",
-					"-l\"DateTools\"",
-					"-l\"FLAnimatedImage\"",
-					"-l\"JSPatch\"",
-					"-l\"LWApiSDK\"",
-					"-l\"MJExtension\"",
-					"-l\"MMDrawerController\"",
-					"-l\"Masonry\"",
-					"-l\"Meiqia\"",
-					"-l\"SDWebImage\"",
-					"-l\"SocialAlipayShare\"",
-					"-l\"SocialFacebook\"",
-					"-l\"SocialInstagram\"",
-					"-l\"SocialLaiWang\"",
-					"-l\"SocialLine\"",
-					"-l\"SocialQQ\"",
-					"-l\"SocialSinaSSO\"",
-					"-l\"SocialTumblr\"",
-					"-l\"SocialTwitter\"",
-					"-l\"SocialWechat\"",
-					"-l\"SocialWhatsapp\"",
-					"-l\"UMSocial_Sdk_5.2.1\"",
-					"-l\"UMSocial_Sdk_Comment_5.2.1\"",
-					"-l\"WeChatSDK\"",
-					"-l\"WeiboSDK\"",
-					"-l\"YYKeyboardManager\"",
-					"-l\"YYText\"",
-					"-l\"ZYCornerRadius\"",
-					"-l\"iconv\"",
-					"-l\"icucore\"",
-					"-l\"libwebp\"",
-					"-l\"opencore-amrnb\"",
-					"-l\"opencore-amrwb\"",
-					"-l\"sqlite3\"",
-					"-l\"stdc++\"",
-					"-l\"z\"",
-					"-framework",
-					"\"AVFoundation\"",
-					"-framework",
-					"\"Accelerate\"",
-					"-framework",
-					"\"Accounts\"",
-					"-framework",
-					"\"CoreData\"",
-					"-framework",
-					"\"CoreFoundation\"",
-					"-framework",
-					"\"CoreGraphics\"",
-					"-framework",
-					"\"CoreTelephony\"",
-					"-framework",
-					"\"CoreText\"",
-					"-framework",
-					"\"FBSDKCoreKit\"",
-					"-framework",
-					"\"FBSDKLoginKit\"",
-					"-framework",
-					"\"FBSDKShareKit\"",
-					"-framework",
-					"\"Fabric\"",
-					"-framework",
-					"\"Foundation\"",
-					"-framework",
-					"\"ImageIO\"",
-					"-framework",
-					"\"MeiQiaSDK\"",
-					"-framework",
-					"\"MobileCoreServices\"",
-					"-framework",
-					"\"QuartzCore\"",
-					"-framework",
-					"\"Security\"",
-					"-framework",
-					"\"Social\"",
-					"-framework",
-					"\"SystemConfiguration\"",
-					"-framework",
-					"\"TencentOpenAPI\"",
-					"-framework",
-					"\"TwitterCore\"",
-					"-framework",
-					"\"TwitterKit\"",
-					"-framework",
-					"\"UIKit\"",
-					"-framework",
-					"\"UMMobClick\"",
-					"-weak_framework",
-					"\"JavaScriptCore\"",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhangguanjia;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "a3578fd9-6eae-4566-aca5-ab536a992bca";
-				PROVISIONING_PROFILE_SPECIFIER = JiZhangGuanJiaDis;
-				SWIFT_OBJC_BRIDGING_HEADER = "";
-				TARGETED_DEVICE_FAMILY = 1;
-			};
-			name = Release;
-		};
-		7DBB41551E55C4E00075E638 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = A684F38344A33CFE5F75ADF5 /* Pods-SuiShouJiEnterprise.debug.xcconfig */;
+			baseConfigurationReference = 65878DD07FDCAFFEA4BEEC33 /* Pods-SuiShouJiEnterprise.debug-production.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -15412,322 +14712,11 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
-			name = Debug;
+			name = "Debug-production";
 		};
-		7DBB41561E55C4E00075E638 /* Release */ = {
+		7DA8F9941E55CFB4006BE13B /* Debug-production */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F1BFD9B2FA7E263C7101F5E8 /* Pods-SuiShouJiEnterprise.release.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co. Ltd.";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co. Ltd.";
-				DEVELOPMENT_TEAM = 747363KXQ6;
-				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
-				);
-				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					"COCOAPODS=1",
-					"SD_WEBP=1",
-				);
-				INFOPLIST_FILE = "$(SRCROOT)/SuiShouJi/Resource/Plist/SuiShouJiEnterprise-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-ObjC",
-					"-l\"AFNetworking\"",
-					"-l\"APOpenSdk\"",
-					"-l\"DateTools\"",
-					"-l\"FLAnimatedImage\"",
-					"-l\"JSPatch\"",
-					"-l\"LWApiSDK\"",
-					"-l\"MJExtension\"",
-					"-l\"MMDrawerController\"",
-					"-l\"Masonry\"",
-					"-l\"Meiqia\"",
-					"-l\"SDWebImage\"",
-					"-l\"SocialAlipayShare\"",
-					"-l\"SocialFacebook\"",
-					"-l\"SocialInstagram\"",
-					"-l\"SocialLaiWang\"",
-					"-l\"SocialLine\"",
-					"-l\"SocialQQ\"",
-					"-l\"SocialSinaSSO\"",
-					"-l\"SocialTumblr\"",
-					"-l\"SocialTwitter\"",
-					"-l\"SocialWechat\"",
-					"-l\"SocialWhatsapp\"",
-					"-l\"UMSocial_Sdk_5.2.1\"",
-					"-l\"UMSocial_Sdk_Comment_5.2.1\"",
-					"-l\"WeChatSDK\"",
-					"-l\"WeiboSDK\"",
-					"-l\"YYKeyboardManager\"",
-					"-l\"YYText\"",
-					"-l\"ZYCornerRadius\"",
-					"-l\"iconv\"",
-					"-l\"icucore\"",
-					"-l\"libwebp\"",
-					"-l\"opencore-amrnb\"",
-					"-l\"opencore-amrwb\"",
-					"-l\"sqlite3\"",
-					"-l\"stdc++\"",
-					"-l\"z\"",
-					"-framework",
-					"\"AVFoundation\"",
-					"-framework",
-					"\"Accelerate\"",
-					"-framework",
-					"\"Accounts\"",
-					"-framework",
-					"\"CoreData\"",
-					"-framework",
-					"\"CoreFoundation\"",
-					"-framework",
-					"\"CoreGraphics\"",
-					"-framework",
-					"\"CoreTelephony\"",
-					"-framework",
-					"\"CoreText\"",
-					"-framework",
-					"\"FBSDKCoreKit\"",
-					"-framework",
-					"\"FBSDKLoginKit\"",
-					"-framework",
-					"\"FBSDKShareKit\"",
-					"-framework",
-					"\"Fabric\"",
-					"-framework",
-					"\"Foundation\"",
-					"-framework",
-					"\"ImageIO\"",
-					"-framework",
-					"\"MeiQiaSDK\"",
-					"-framework",
-					"\"MobileCoreServices\"",
-					"-framework",
-					"\"QuartzCore\"",
-					"-framework",
-					"\"Security\"",
-					"-framework",
-					"\"Social\"",
-					"-framework",
-					"\"SystemConfiguration\"",
-					"-framework",
-					"\"TencentOpenAPI\"",
-					"-framework",
-					"\"TwitterCore\"",
-					"-framework",
-					"\"TwitterKit\"",
-					"-framework",
-					"\"UIKit\"",
-					"-framework",
-					"\"UMMobClick\"",
-					"-weak_framework",
-					"\"JavaScriptCore\"",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "35e9fd68-6381-436a-b7b0-0bd107641524";
-				PROVISIONING_PROFILE_SPECIFIER = JiZhangEnterpriseAdHoc;
-				SWIFT_OBJC_BRIDGING_HEADER = "";
-				TARGETED_DEVICE_FAMILY = 1;
-			};
-			name = Release;
-		};
-		9CECFF061D6D41A700DB2C8B /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 71971C49348189D6064D4695 /* Pods-YouYuJiZhangBen.debug.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuJiZhangBen;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: dai menglin (2Z4WFTCYDJ)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: dai menglin (2Z4WFTCYDJ)";
-				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/AlipayZF",
-					"$(PROJECT_DIR)",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
-				);
-				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					"COCOAPODS=1",
-					"SD_WEBP=1",
-				);
-				INFOPLIST_FILE = "$(SRCROOT)/SuiShouJi/Resource/Plist/YouYuJiZhangBen-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/AlipayZF",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMengFeedback/UMFeedback_iOS_2.3.4/UMengFeedback_SDK",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMengFeedback/UMFeedback_iOS_2.3.4/UMengFeedback_SDK/UMOpus",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_5.2.1",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/SinaSSO",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/Wechat",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhangben;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "6006d513-3fc0-4850-8601-d473d8dcaafd";
-				SWIFT_OBJC_BRIDGING_HEADER = "";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-			};
-			name = Debug;
-		};
-		9CECFF071D6D41A700DB2C8B /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8ED51442757E13C0CDA434AA /* Pods-YouYuJiZhangBen.release.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuJiZhangBen;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: dai menglin (K63W8Y2JZS)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: dai menglin (K63W8Y2JZS)";
-				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/AlipayZF",
-					"$(PROJECT_DIR)",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
-				);
-				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					"COCOAPODS=1",
-					"SD_WEBP=1",
-				);
-				INFOPLIST_FILE = "$(SRCROOT)/SuiShouJi/Resource/Plist/YouYuJiZhangBen-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/AlipayZF",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMengFeedback/UMFeedback_iOS_2.3.4/UMengFeedback_SDK",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMengFeedback/UMFeedback_iOS_2.3.4/UMengFeedback_SDK/UMOpus",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_5.2.1",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/SinaSSO",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/Wechat",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhangben;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "6000200f-6460-4a18-99bc-801a0d0bdd1a";
-				SWIFT_OBJC_BRIDGING_HEADER = "";
-			};
-			name = Release;
-		};
-		BD543C671C1A6DBC00910D61 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_TESTABILITY = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				MTL_ENABLE_DEBUG_INFO = YES;
-				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = iphoneos;
-			};
-			name = Debug;
-		};
-		BD543C681C1A6DBC00910D61 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				ENABLE_NS_ASSERTIONS = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				MTL_ENABLE_DEBUG_INFO = NO;
-				SDKROOT = iphoneos;
-				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
-		};
-		BD543C6A1C1A6DBC00910D61 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5899867574AEB0396C49AE15 /* Pods-SuiShouJi.debug.xcconfig */;
+			baseConfigurationReference = 39E3B4D62A92E52E9A7D3272 /* Pods-SuiShouJi.debug-production.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -15856,11 +14845,742 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
-			name = Debug;
+			name = "Debug-production";
 		};
-		BD543C6B1C1A6DBC00910D61 /* Release */ = {
+		7DA8F9951E55CFB4006BE13B /* Debug-production */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3B725E607F2304D98F82B2A3 /* Pods-SuiShouJi.release.xcconfig */;
+			baseConfigurationReference = DE4F08E5858DEDD62A2262C8 /* Pods-YouYuJiZhang.debug-production.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Xiaoyong Wu (8WX4Y5V9K8)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Xiaoyong Wu (8WX4Y5V9K8)";
+				DEVELOPMENT_TEAM = E25A2E4ZN2;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
+				);
+				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
+					"SD_WEBP=1",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/SuiShouJi/Resource/Plist/YouYuJiZhang-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"AFNetworking\"",
+					"-l\"APOpenSdk\"",
+					"-l\"DateTools\"",
+					"-l\"FLAnimatedImage\"",
+					"-l\"JSPatch\"",
+					"-l\"LWApiSDK\"",
+					"-l\"MJExtension\"",
+					"-l\"MMDrawerController\"",
+					"-l\"Masonry\"",
+					"-l\"Meiqia\"",
+					"-l\"SDWebImage\"",
+					"-l\"SocialAlipayShare\"",
+					"-l\"SocialFacebook\"",
+					"-l\"SocialInstagram\"",
+					"-l\"SocialLaiWang\"",
+					"-l\"SocialLine\"",
+					"-l\"SocialQQ\"",
+					"-l\"SocialSinaSSO\"",
+					"-l\"SocialTumblr\"",
+					"-l\"SocialTwitter\"",
+					"-l\"SocialWechat\"",
+					"-l\"SocialWhatsapp\"",
+					"-l\"UMSocial_Sdk_5.2.1\"",
+					"-l\"UMSocial_Sdk_Comment_5.2.1\"",
+					"-l\"WeChatSDK\"",
+					"-l\"WeiboSDK\"",
+					"-l\"YYKeyboardManager\"",
+					"-l\"YYText\"",
+					"-l\"ZYCornerRadius\"",
+					"-l\"iconv\"",
+					"-l\"icucore\"",
+					"-l\"libwebp\"",
+					"-l\"opencore-amrnb\"",
+					"-l\"opencore-amrwb\"",
+					"-l\"sqlite3\"",
+					"-l\"stdc++\"",
+					"-l\"z\"",
+					"-framework",
+					"\"AVFoundation\"",
+					"-framework",
+					"\"Accelerate\"",
+					"-framework",
+					"\"Accounts\"",
+					"-framework",
+					"\"CoreData\"",
+					"-framework",
+					"\"CoreFoundation\"",
+					"-framework",
+					"\"CoreGraphics\"",
+					"-framework",
+					"\"CoreTelephony\"",
+					"-framework",
+					"\"CoreText\"",
+					"-framework",
+					"\"FBSDKCoreKit\"",
+					"-framework",
+					"\"FBSDKLoginKit\"",
+					"-framework",
+					"\"FBSDKShareKit\"",
+					"-framework",
+					"\"Fabric\"",
+					"-framework",
+					"\"Foundation\"",
+					"-framework",
+					"\"ImageIO\"",
+					"-framework",
+					"\"MeiQiaSDK\"",
+					"-framework",
+					"\"MobileCoreServices\"",
+					"-framework",
+					"\"QuartzCore\"",
+					"-framework",
+					"\"Security\"",
+					"-framework",
+					"\"Social\"",
+					"-framework",
+					"\"SystemConfiguration\"",
+					"-framework",
+					"\"TencentOpenAPI\"",
+					"-framework",
+					"\"TwitterCore\"",
+					"-framework",
+					"\"TwitterKit\"",
+					"-framework",
+					"\"UIKit\"",
+					"-framework",
+					"\"UMMobClick\"",
+					"-weak_framework",
+					"\"JavaScriptCore\"",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhang;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "128b3236-a860-4050-b803-189e85c77974";
+				PROVISIONING_PROFILE_SPECIFIER = youyujizhangAppStoreDeve;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = "Debug-production";
+		};
+		7DA8F9961E55CFB4006BE13B /* Debug-production */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A7E4DE2394D1465918C3F390 /* Pods-YouYuJiZhangBen.debug-production.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuJiZhangBen;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer: dai menglin (2Z4WFTCYDJ)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: dai menglin (2Z4WFTCYDJ)";
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/AlipayZF",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
+				);
+				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
+					"SD_WEBP=1",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/SuiShouJi/Resource/Plist/YouYuJiZhangBen-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/AlipayZF",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMengFeedback/UMFeedback_iOS_2.3.4/UMengFeedback_SDK",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMengFeedback/UMFeedback_iOS_2.3.4/UMengFeedback_SDK/UMOpus",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_5.2.1",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/SinaSSO",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/Wechat",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhangben;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "6006d513-3fc0-4850-8601-d473d8dcaafd";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = "Debug-production";
+		};
+		7DA8F9971E55CFB4006BE13B /* Debug-production */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = C456BDB9A1174F4A4B005EB9 /* Pods-YouYuJiZhangBao.debug-production.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuJiZhangBao;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Wen Chen (262HTD8ZSJ)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Wen Chen (262HTD8ZSJ)";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
+				);
+				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
+					"SD_WEBP=1",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/SuiShouJi/Resource/Plist/YouYuJiZhangBao-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhangbao;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = "Debug-production";
+		};
+		7DA8F9981E55CFB4006BE13B /* Debug-production */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 53D02BD02F89C64D5FED1E49 /* Pods-YouYuJiZhangGuanJia.debug-production.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuJiZhangGuanJia;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Wen Chen (KD93ZP94R3)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Wen Chen (KD93ZP94R3)";
+				DEVELOPMENT_TEAM = 7RVBV2MALK;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
+				);
+				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
+					"SD_WEBP=1",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/SuiShouJi/Resource/Plist/YouYuJiZhangGuanJia-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.youyujizhangguanjia;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "b46001b5-dbf9-4241-a5d9-10f5baa8daa8";
+				PROVISIONING_PROFILE_SPECIFIER = YYJiZhangGuanJiaDev;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = "Debug-production";
+		};
+		7DA8F9991E55CFB4006BE13B /* Debug-production */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E38835B4B811DB254C8C71D4 /* Pods-YouYuJiZhangLiCai.debug-production.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuJiZhangLiCai;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer: XiaoYong  Wu (6CF3K2UQ7J)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: XiaoYong  Wu (6CF3K2UQ7J)";
+				DEVELOPMENT_TEAM = GZ7Q3299CT;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
+				);
+				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
+					"SD_WEBP=1",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/SuiShouJi/Resource/Plist/YouYuJiZhangLiCai-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"AFNetworking\"",
+					"-l\"APOpenSdk\"",
+					"-l\"DateTools\"",
+					"-l\"FLAnimatedImage\"",
+					"-l\"JSPatch\"",
+					"-l\"LWApiSDK\"",
+					"-l\"MJExtension\"",
+					"-l\"MMDrawerController\"",
+					"-l\"Masonry\"",
+					"-l\"Meiqia\"",
+					"-l\"SDWebImage\"",
+					"-l\"SocialAlipayShare\"",
+					"-l\"SocialFacebook\"",
+					"-l\"SocialInstagram\"",
+					"-l\"SocialLaiWang\"",
+					"-l\"SocialLine\"",
+					"-l\"SocialQQ\"",
+					"-l\"SocialSinaSSO\"",
+					"-l\"SocialTumblr\"",
+					"-l\"SocialTwitter\"",
+					"-l\"SocialWechat\"",
+					"-l\"SocialWhatsapp\"",
+					"-l\"UMSocial_Sdk_5.2.1\"",
+					"-l\"UMSocial_Sdk_Comment_5.2.1\"",
+					"-l\"WeChatSDK\"",
+					"-l\"WeiboSDK\"",
+					"-l\"YYKeyboardManager\"",
+					"-l\"YYText\"",
+					"-l\"ZYCornerRadius\"",
+					"-l\"iconv\"",
+					"-l\"icucore\"",
+					"-l\"libwebp\"",
+					"-l\"opencore-amrnb\"",
+					"-l\"opencore-amrwb\"",
+					"-l\"sqlite3\"",
+					"-l\"stdc++\"",
+					"-l\"z\"",
+					"-framework",
+					"\"AVFoundation\"",
+					"-framework",
+					"\"Accelerate\"",
+					"-framework",
+					"\"Accounts\"",
+					"-framework",
+					"\"CoreData\"",
+					"-framework",
+					"\"CoreFoundation\"",
+					"-framework",
+					"\"CoreGraphics\"",
+					"-framework",
+					"\"CoreTelephony\"",
+					"-framework",
+					"\"CoreText\"",
+					"-framework",
+					"\"FBSDKCoreKit\"",
+					"-framework",
+					"\"FBSDKLoginKit\"",
+					"-framework",
+					"\"FBSDKShareKit\"",
+					"-framework",
+					"\"Fabric\"",
+					"-framework",
+					"\"Foundation\"",
+					"-framework",
+					"\"ImageIO\"",
+					"-framework",
+					"\"MeiQiaSDK\"",
+					"-framework",
+					"\"MobileCoreServices\"",
+					"-framework",
+					"\"QuartzCore\"",
+					"-framework",
+					"\"Security\"",
+					"-framework",
+					"\"Social\"",
+					"-framework",
+					"\"SystemConfiguration\"",
+					"-framework",
+					"\"TencentOpenAPI\"",
+					"-framework",
+					"\"TwitterCore\"",
+					"-framework",
+					"\"TwitterKit\"",
+					"-framework",
+					"\"UIKit\"",
+					"-framework",
+					"\"UMMobClick\"",
+					"-weak_framework",
+					"\"JavaScriptCore\"",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhanglicai;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "e6c69c88-f91c-4ee1-ab81-bb118f514fd6";
+				PROVISIONING_PROFILE_SPECIFIER = YouYuJiZhangLiCaiDev;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = "Debug-production";
+		};
+		7DA8F99A1E55CFB4006BE13B /* Debug-production */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5DE4695CC7C0CB804EB71885 /* Pods-JiZhangGuanJia.debug-production.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = JiZhangGuanJia;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer: XiaoYong  Wu (6CF3K2UQ7J)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: XiaoYong  Wu (6CF3K2UQ7J)";
+				DEVELOPMENT_TEAM = 9HCRD5N85G;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
+				);
+				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
+					"SD_WEBP=1",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/SuiShouJi/Resource/Plist/JiZhangGuanJia-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"AFNetworking\"",
+					"-l\"APOpenSdk\"",
+					"-l\"DateTools\"",
+					"-l\"FLAnimatedImage\"",
+					"-l\"JSPatch\"",
+					"-l\"LWApiSDK\"",
+					"-l\"MJExtension\"",
+					"-l\"MMDrawerController\"",
+					"-l\"Masonry\"",
+					"-l\"Meiqia\"",
+					"-l\"SDWebImage\"",
+					"-l\"SocialAlipayShare\"",
+					"-l\"SocialFacebook\"",
+					"-l\"SocialInstagram\"",
+					"-l\"SocialLaiWang\"",
+					"-l\"SocialLine\"",
+					"-l\"SocialQQ\"",
+					"-l\"SocialSinaSSO\"",
+					"-l\"SocialTumblr\"",
+					"-l\"SocialTwitter\"",
+					"-l\"SocialWechat\"",
+					"-l\"SocialWhatsapp\"",
+					"-l\"UMSocial_Sdk_5.2.1\"",
+					"-l\"UMSocial_Sdk_Comment_5.2.1\"",
+					"-l\"WeChatSDK\"",
+					"-l\"WeiboSDK\"",
+					"-l\"YYKeyboardManager\"",
+					"-l\"YYText\"",
+					"-l\"ZYCornerRadius\"",
+					"-l\"iconv\"",
+					"-l\"icucore\"",
+					"-l\"libwebp\"",
+					"-l\"opencore-amrnb\"",
+					"-l\"opencore-amrwb\"",
+					"-l\"sqlite3\"",
+					"-l\"stdc++\"",
+					"-l\"z\"",
+					"-framework",
+					"\"AVFoundation\"",
+					"-framework",
+					"\"Accelerate\"",
+					"-framework",
+					"\"Accounts\"",
+					"-framework",
+					"\"CoreData\"",
+					"-framework",
+					"\"CoreFoundation\"",
+					"-framework",
+					"\"CoreGraphics\"",
+					"-framework",
+					"\"CoreTelephony\"",
+					"-framework",
+					"\"CoreText\"",
+					"-framework",
+					"\"FBSDKCoreKit\"",
+					"-framework",
+					"\"FBSDKLoginKit\"",
+					"-framework",
+					"\"FBSDKShareKit\"",
+					"-framework",
+					"\"Fabric\"",
+					"-framework",
+					"\"Foundation\"",
+					"-framework",
+					"\"ImageIO\"",
+					"-framework",
+					"\"MeiQiaSDK\"",
+					"-framework",
+					"\"MobileCoreServices\"",
+					"-framework",
+					"\"QuartzCore\"",
+					"-framework",
+					"\"Security\"",
+					"-framework",
+					"\"Social\"",
+					"-framework",
+					"\"SystemConfiguration\"",
+					"-framework",
+					"\"TencentOpenAPI\"",
+					"-framework",
+					"\"TwitterCore\"",
+					"-framework",
+					"\"TwitterKit\"",
+					"-framework",
+					"\"UIKit\"",
+					"-framework",
+					"\"UMMobClick\"",
+					"-weak_framework",
+					"\"JavaScriptCore\"",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhangguanjia;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "26319b74-4d35-4298-91a4-4bc90f9b8258";
+				PROVISIONING_PROFILE_SPECIFIER = JiZhangGuanJiaDev;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = "Debug-production";
+		};
+		7DA8F99B1E55CFB4006BE13B /* Debug-production */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Vendor/AlipayZF",
+				);
+				INFOPLIST_FILE = SuiShouJiTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Vendor/AlipayZF",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = caiyi.SuiShouJiTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SuiShouJi.app/SuiShouJi";
+			};
+			name = "Debug-production";
+		};
+		7DA8F99C1E55CFB4006BE13B /* Debug-production */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = SuiShouJiUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = caiyi.SuiShouJiUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = SuiShouJi;
+				USES_XCTRUNNER = YES;
+			};
+			name = "Debug-production";
+		};
+		7DA8F99D1E55CFBE006BE13B /* Release-production */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = "PRODUCTION=1";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = "Release-production";
+		};
+		7DA8F99E1E55CFBE006BE13B /* Release-production */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43C0A79A61524E1A06BBC6B7 /* Pods-SuiShouJiEnterprise.release-production.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co. Ltd.";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co. Ltd.";
+				DEVELOPMENT_TEAM = 747363KXQ6;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
+				);
+				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
+					"SD_WEBP=1",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/SuiShouJi/Resource/Plist/SuiShouJiEnterprise-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"AFNetworking\"",
+					"-l\"APOpenSdk\"",
+					"-l\"DateTools\"",
+					"-l\"FLAnimatedImage\"",
+					"-l\"JSPatch\"",
+					"-l\"LWApiSDK\"",
+					"-l\"MJExtension\"",
+					"-l\"MMDrawerController\"",
+					"-l\"Masonry\"",
+					"-l\"Meiqia\"",
+					"-l\"SDWebImage\"",
+					"-l\"SocialAlipayShare\"",
+					"-l\"SocialFacebook\"",
+					"-l\"SocialInstagram\"",
+					"-l\"SocialLaiWang\"",
+					"-l\"SocialLine\"",
+					"-l\"SocialQQ\"",
+					"-l\"SocialSinaSSO\"",
+					"-l\"SocialTumblr\"",
+					"-l\"SocialTwitter\"",
+					"-l\"SocialWechat\"",
+					"-l\"SocialWhatsapp\"",
+					"-l\"UMSocial_Sdk_5.2.1\"",
+					"-l\"UMSocial_Sdk_Comment_5.2.1\"",
+					"-l\"WeChatSDK\"",
+					"-l\"WeiboSDK\"",
+					"-l\"YYKeyboardManager\"",
+					"-l\"YYText\"",
+					"-l\"ZYCornerRadius\"",
+					"-l\"iconv\"",
+					"-l\"icucore\"",
+					"-l\"libwebp\"",
+					"-l\"opencore-amrnb\"",
+					"-l\"opencore-amrwb\"",
+					"-l\"sqlite3\"",
+					"-l\"stdc++\"",
+					"-l\"z\"",
+					"-framework",
+					"\"AVFoundation\"",
+					"-framework",
+					"\"Accelerate\"",
+					"-framework",
+					"\"Accounts\"",
+					"-framework",
+					"\"CoreData\"",
+					"-framework",
+					"\"CoreFoundation\"",
+					"-framework",
+					"\"CoreGraphics\"",
+					"-framework",
+					"\"CoreTelephony\"",
+					"-framework",
+					"\"CoreText\"",
+					"-framework",
+					"\"FBSDKCoreKit\"",
+					"-framework",
+					"\"FBSDKLoginKit\"",
+					"-framework",
+					"\"FBSDKShareKit\"",
+					"-framework",
+					"\"Fabric\"",
+					"-framework",
+					"\"Foundation\"",
+					"-framework",
+					"\"ImageIO\"",
+					"-framework",
+					"\"MeiQiaSDK\"",
+					"-framework",
+					"\"MobileCoreServices\"",
+					"-framework",
+					"\"QuartzCore\"",
+					"-framework",
+					"\"Security\"",
+					"-framework",
+					"\"Social\"",
+					"-framework",
+					"\"SystemConfiguration\"",
+					"-framework",
+					"\"TencentOpenAPI\"",
+					"-framework",
+					"\"TwitterCore\"",
+					"-framework",
+					"\"TwitterKit\"",
+					"-framework",
+					"\"UIKit\"",
+					"-framework",
+					"\"UMMobClick\"",
+					"-weak_framework",
+					"\"JavaScriptCore\"",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "35e9fd68-6381-436a-b7b0-0bd107641524";
+				PROVISIONING_PROFILE_SPECIFIER = JiZhangEnterpriseAdHoc;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = "Release-production";
+		};
+		7DA8F99F1E55CFBE006BE13B /* Release-production */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6B2E92DAE4FF9F6B4E6CFC2B /* Pods-SuiShouJi.release-production.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -15988,9 +15708,529 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
-			name = Release;
+			name = "Release-production";
 		};
-		BD543C6D1C1A6DBC00910D61 /* Debug */ = {
+		7DA8F9A01E55CFBE006BE13B /* Release-production */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 814F3E7FF23E2CA5B535C5DE /* Pods-YouYuJiZhang.release-production.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co.,Ltd (534SCE47WT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co.,Ltd (534SCE47WT)";
+				DEVELOPMENT_TEAM = E25A2E4ZN2;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
+				);
+				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
+					"SD_WEBP=1",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/SuiShouJi/Resource/Plist/YouYuJiZhang-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"AFNetworking\"",
+					"-l\"APOpenSdk\"",
+					"-l\"DateTools\"",
+					"-l\"FLAnimatedImage\"",
+					"-l\"JSPatch\"",
+					"-l\"LWApiSDK\"",
+					"-l\"MJExtension\"",
+					"-l\"MMDrawerController\"",
+					"-l\"Masonry\"",
+					"-l\"Meiqia\"",
+					"-l\"SDWebImage\"",
+					"-l\"SocialAlipayShare\"",
+					"-l\"SocialFacebook\"",
+					"-l\"SocialInstagram\"",
+					"-l\"SocialLaiWang\"",
+					"-l\"SocialLine\"",
+					"-l\"SocialQQ\"",
+					"-l\"SocialSinaSSO\"",
+					"-l\"SocialTumblr\"",
+					"-l\"SocialTwitter\"",
+					"-l\"SocialWechat\"",
+					"-l\"SocialWhatsapp\"",
+					"-l\"UMSocial_Sdk_5.2.1\"",
+					"-l\"UMSocial_Sdk_Comment_5.2.1\"",
+					"-l\"WeChatSDK\"",
+					"-l\"WeiboSDK\"",
+					"-l\"YYKeyboardManager\"",
+					"-l\"YYText\"",
+					"-l\"ZYCornerRadius\"",
+					"-l\"iconv\"",
+					"-l\"icucore\"",
+					"-l\"libwebp\"",
+					"-l\"opencore-amrnb\"",
+					"-l\"opencore-amrwb\"",
+					"-l\"sqlite3\"",
+					"-l\"stdc++\"",
+					"-l\"z\"",
+					"-framework",
+					"\"AVFoundation\"",
+					"-framework",
+					"\"Accelerate\"",
+					"-framework",
+					"\"Accounts\"",
+					"-framework",
+					"\"CoreData\"",
+					"-framework",
+					"\"CoreFoundation\"",
+					"-framework",
+					"\"CoreGraphics\"",
+					"-framework",
+					"\"CoreTelephony\"",
+					"-framework",
+					"\"CoreText\"",
+					"-framework",
+					"\"FBSDKCoreKit\"",
+					"-framework",
+					"\"FBSDKLoginKit\"",
+					"-framework",
+					"\"FBSDKShareKit\"",
+					"-framework",
+					"\"Fabric\"",
+					"-framework",
+					"\"Foundation\"",
+					"-framework",
+					"\"ImageIO\"",
+					"-framework",
+					"\"MeiQiaSDK\"",
+					"-framework",
+					"\"MobileCoreServices\"",
+					"-framework",
+					"\"QuartzCore\"",
+					"-framework",
+					"\"Security\"",
+					"-framework",
+					"\"Social\"",
+					"-framework",
+					"\"SystemConfiguration\"",
+					"-framework",
+					"\"TencentOpenAPI\"",
+					"-framework",
+					"\"TwitterCore\"",
+					"-framework",
+					"\"TwitterKit\"",
+					"-framework",
+					"\"UIKit\"",
+					"-framework",
+					"\"UMMobClick\"",
+					"-weak_framework",
+					"\"JavaScriptCore\"",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhang;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "4f90dc0a-abbc-4b9d-8078-d82276a69e60";
+				PROVISIONING_PROFILE_SPECIFIER = youyujizhangAppStoreDis;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = "Release-production";
+		};
+		7DA8F9A11E55CFBE006BE13B /* Release-production */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8E88665EC4BCCDEADDBBF76D /* Pods-YouYuJiZhangBen.release-production.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuJiZhangBen;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: dai menglin (K63W8Y2JZS)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: dai menglin (K63W8Y2JZS)";
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/AlipayZF",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
+				);
+				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
+					"SD_WEBP=1",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/SuiShouJi/Resource/Plist/YouYuJiZhangBen-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/AlipayZF",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMengFeedback/UMFeedback_iOS_2.3.4/UMengFeedback_SDK",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMengFeedback/UMFeedback_iOS_2.3.4/UMengFeedback_SDK/UMOpus",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_5.2.1",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/SinaSSO",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/Wechat",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhangben;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "6000200f-6460-4a18-99bc-801a0d0bdd1a";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+			};
+			name = "Release-production";
+		};
+		7DA8F9A21E55CFBE006BE13B /* Release-production */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3107DC1ABD197F0C5FAC4C5F /* Pods-YouYuJiZhangBao.release-production.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuJiZhangBao;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Wen Chen (262HTD8ZSJ)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Wen Chen (262HTD8ZSJ)";
+				DEVELOPMENT_TEAM = 262HTD8ZSJ;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
+				);
+				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
+					"SD_WEBP=1",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/SuiShouJi/Resource/Plist/YouYuJiZhangBao-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhangbao;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "e1b12052-3986-45e4-a9b1-2a111c6eb0b6";
+				PROVISIONING_PROFILE_SPECIFIER = YouYuJiZhangBaoDis;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = "Release-production";
+		};
+		7DA8F9A31E55CFBE006BE13B /* Release-production */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7BDCA1EC0DEE649B1ED1D06F /* Pods-YouYuJiZhangGuanJia.release-production.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuJiZhangGuanJia;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Wen Chen (7RVBV2MALK)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Wen Chen (7RVBV2MALK)";
+				DEVELOPMENT_TEAM = 7RVBV2MALK;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
+				);
+				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
+					"SD_WEBP=1",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/SuiShouJi/Resource/Plist/YouYuJiZhangGuanJia-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.youyujizhangguanjia;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "a201d9cd-d3e8-45d2-a7e6-c2a795451f92";
+				PROVISIONING_PROFILE_SPECIFIER = YYJiZhangGuanJiaAppStore;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = "Release-production";
+		};
+		7DA8F9A41E55CFBE006BE13B /* Release-production */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = F36B3F26385C626176D7A485 /* Pods-YouYuJiZhangLiCai.release-production.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuJiZhangLiCai;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Wu Can (GZ7Q3299CT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Wu Can (GZ7Q3299CT)";
+				DEVELOPMENT_TEAM = GZ7Q3299CT;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
+				);
+				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
+					"SD_WEBP=1",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/SuiShouJi/Resource/Plist/YouYuJiZhangLiCai-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"AFNetworking\"",
+					"-l\"APOpenSdk\"",
+					"-l\"DateTools\"",
+					"-l\"FLAnimatedImage\"",
+					"-l\"JSPatch\"",
+					"-l\"LWApiSDK\"",
+					"-l\"MJExtension\"",
+					"-l\"MMDrawerController\"",
+					"-l\"Masonry\"",
+					"-l\"Meiqia\"",
+					"-l\"SDWebImage\"",
+					"-l\"SocialAlipayShare\"",
+					"-l\"SocialFacebook\"",
+					"-l\"SocialInstagram\"",
+					"-l\"SocialLaiWang\"",
+					"-l\"SocialLine\"",
+					"-l\"SocialQQ\"",
+					"-l\"SocialSinaSSO\"",
+					"-l\"SocialTumblr\"",
+					"-l\"SocialTwitter\"",
+					"-l\"SocialWechat\"",
+					"-l\"SocialWhatsapp\"",
+					"-l\"UMSocial_Sdk_5.2.1\"",
+					"-l\"UMSocial_Sdk_Comment_5.2.1\"",
+					"-l\"WeChatSDK\"",
+					"-l\"WeiboSDK\"",
+					"-l\"YYKeyboardManager\"",
+					"-l\"YYText\"",
+					"-l\"ZYCornerRadius\"",
+					"-l\"iconv\"",
+					"-l\"icucore\"",
+					"-l\"libwebp\"",
+					"-l\"opencore-amrnb\"",
+					"-l\"opencore-amrwb\"",
+					"-l\"sqlite3\"",
+					"-l\"stdc++\"",
+					"-l\"z\"",
+					"-framework",
+					"\"AVFoundation\"",
+					"-framework",
+					"\"Accelerate\"",
+					"-framework",
+					"\"Accounts\"",
+					"-framework",
+					"\"CoreData\"",
+					"-framework",
+					"\"CoreFoundation\"",
+					"-framework",
+					"\"CoreGraphics\"",
+					"-framework",
+					"\"CoreTelephony\"",
+					"-framework",
+					"\"CoreText\"",
+					"-framework",
+					"\"FBSDKCoreKit\"",
+					"-framework",
+					"\"FBSDKLoginKit\"",
+					"-framework",
+					"\"FBSDKShareKit\"",
+					"-framework",
+					"\"Fabric\"",
+					"-framework",
+					"\"Foundation\"",
+					"-framework",
+					"\"ImageIO\"",
+					"-framework",
+					"\"MeiQiaSDK\"",
+					"-framework",
+					"\"MobileCoreServices\"",
+					"-framework",
+					"\"QuartzCore\"",
+					"-framework",
+					"\"Security\"",
+					"-framework",
+					"\"Social\"",
+					"-framework",
+					"\"SystemConfiguration\"",
+					"-framework",
+					"\"TencentOpenAPI\"",
+					"-framework",
+					"\"TwitterCore\"",
+					"-framework",
+					"\"TwitterKit\"",
+					"-framework",
+					"\"UIKit\"",
+					"-framework",
+					"\"UMMobClick\"",
+					"-weak_framework",
+					"\"JavaScriptCore\"",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhanglicai;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "3624541f-ed23-46a4-970b-eca8ae759684";
+				PROVISIONING_PROFILE_SPECIFIER = YouYuJiZhangLiCaiDis;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = "Release-production";
+		};
+		7DA8F9A51E55CFBE006BE13B /* Release-production */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A2AF6367657D967EE92CE822 /* Pods-JiZhangGuanJia.release-production.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = JiZhangGuanJia;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co.,Ltd (534SCE47WT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co.,Ltd (534SCE47WT)";
+				DEVELOPMENT_TEAM = 9HCRD5N85G;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
+				);
+				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
+					"SD_WEBP=1",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/SuiShouJi/Resource/Plist/JiZhangGuanJia-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"AFNetworking\"",
+					"-l\"APOpenSdk\"",
+					"-l\"DateTools\"",
+					"-l\"FLAnimatedImage\"",
+					"-l\"JSPatch\"",
+					"-l\"LWApiSDK\"",
+					"-l\"MJExtension\"",
+					"-l\"MMDrawerController\"",
+					"-l\"Masonry\"",
+					"-l\"Meiqia\"",
+					"-l\"SDWebImage\"",
+					"-l\"SocialAlipayShare\"",
+					"-l\"SocialFacebook\"",
+					"-l\"SocialInstagram\"",
+					"-l\"SocialLaiWang\"",
+					"-l\"SocialLine\"",
+					"-l\"SocialQQ\"",
+					"-l\"SocialSinaSSO\"",
+					"-l\"SocialTumblr\"",
+					"-l\"SocialTwitter\"",
+					"-l\"SocialWechat\"",
+					"-l\"SocialWhatsapp\"",
+					"-l\"UMSocial_Sdk_5.2.1\"",
+					"-l\"UMSocial_Sdk_Comment_5.2.1\"",
+					"-l\"WeChatSDK\"",
+					"-l\"WeiboSDK\"",
+					"-l\"YYKeyboardManager\"",
+					"-l\"YYText\"",
+					"-l\"ZYCornerRadius\"",
+					"-l\"iconv\"",
+					"-l\"icucore\"",
+					"-l\"libwebp\"",
+					"-l\"opencore-amrnb\"",
+					"-l\"opencore-amrwb\"",
+					"-l\"sqlite3\"",
+					"-l\"stdc++\"",
+					"-l\"z\"",
+					"-framework",
+					"\"AVFoundation\"",
+					"-framework",
+					"\"Accelerate\"",
+					"-framework",
+					"\"Accounts\"",
+					"-framework",
+					"\"CoreData\"",
+					"-framework",
+					"\"CoreFoundation\"",
+					"-framework",
+					"\"CoreGraphics\"",
+					"-framework",
+					"\"CoreTelephony\"",
+					"-framework",
+					"\"CoreText\"",
+					"-framework",
+					"\"FBSDKCoreKit\"",
+					"-framework",
+					"\"FBSDKLoginKit\"",
+					"-framework",
+					"\"FBSDKShareKit\"",
+					"-framework",
+					"\"Fabric\"",
+					"-framework",
+					"\"Foundation\"",
+					"-framework",
+					"\"ImageIO\"",
+					"-framework",
+					"\"MeiQiaSDK\"",
+					"-framework",
+					"\"MobileCoreServices\"",
+					"-framework",
+					"\"QuartzCore\"",
+					"-framework",
+					"\"Security\"",
+					"-framework",
+					"\"Social\"",
+					"-framework",
+					"\"SystemConfiguration\"",
+					"-framework",
+					"\"TencentOpenAPI\"",
+					"-framework",
+					"\"TwitterCore\"",
+					"-framework",
+					"\"TwitterKit\"",
+					"-framework",
+					"\"UIKit\"",
+					"-framework",
+					"\"UMMobClick\"",
+					"-weak_framework",
+					"\"JavaScriptCore\"",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhangguanjia;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "a3578fd9-6eae-4566-aca5-ab536a992bca";
+				PROVISIONING_PROFILE_SPECIFIER = JiZhangGuanJiaDis;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = "Release-production";
+		};
+		7DA8F9A61E55CFBE006BE13B /* Release-production */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -16008,9 +16248,1525 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SuiShouJi.app/SuiShouJi";
 			};
-			name = Debug;
+			name = "Release-production";
 		};
-		BD543C6E1C1A6DBC00910D61 /* Release */ = {
+		7DA8F9A71E55CFBE006BE13B /* Release-production */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = SuiShouJiUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = caiyi.SuiShouJiUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = SuiShouJi;
+				USES_XCTRUNNER = YES;
+			};
+			name = "Release-production";
+		};
+		7DBB3A6B1E55C0A70075E638 /* Debug-test */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2F9C994248D269CADC0E5844 /* Pods-YouYuJiZhang.debug-test.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Xiaoyong Wu (8WX4Y5V9K8)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Xiaoyong Wu (8WX4Y5V9K8)";
+				DEVELOPMENT_TEAM = E25A2E4ZN2;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
+				);
+				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
+					"SD_WEBP=1",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/SuiShouJi/Resource/Plist/YouYuJiZhang-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"AFNetworking\"",
+					"-l\"APOpenSdk\"",
+					"-l\"DateTools\"",
+					"-l\"FLAnimatedImage\"",
+					"-l\"JSPatch\"",
+					"-l\"LWApiSDK\"",
+					"-l\"MJExtension\"",
+					"-l\"MMDrawerController\"",
+					"-l\"Masonry\"",
+					"-l\"Meiqia\"",
+					"-l\"SDWebImage\"",
+					"-l\"SocialAlipayShare\"",
+					"-l\"SocialFacebook\"",
+					"-l\"SocialInstagram\"",
+					"-l\"SocialLaiWang\"",
+					"-l\"SocialLine\"",
+					"-l\"SocialQQ\"",
+					"-l\"SocialSinaSSO\"",
+					"-l\"SocialTumblr\"",
+					"-l\"SocialTwitter\"",
+					"-l\"SocialWechat\"",
+					"-l\"SocialWhatsapp\"",
+					"-l\"UMSocial_Sdk_5.2.1\"",
+					"-l\"UMSocial_Sdk_Comment_5.2.1\"",
+					"-l\"WeChatSDK\"",
+					"-l\"WeiboSDK\"",
+					"-l\"YYKeyboardManager\"",
+					"-l\"YYText\"",
+					"-l\"ZYCornerRadius\"",
+					"-l\"iconv\"",
+					"-l\"icucore\"",
+					"-l\"libwebp\"",
+					"-l\"opencore-amrnb\"",
+					"-l\"opencore-amrwb\"",
+					"-l\"sqlite3\"",
+					"-l\"stdc++\"",
+					"-l\"z\"",
+					"-framework",
+					"\"AVFoundation\"",
+					"-framework",
+					"\"Accelerate\"",
+					"-framework",
+					"\"Accounts\"",
+					"-framework",
+					"\"CoreData\"",
+					"-framework",
+					"\"CoreFoundation\"",
+					"-framework",
+					"\"CoreGraphics\"",
+					"-framework",
+					"\"CoreTelephony\"",
+					"-framework",
+					"\"CoreText\"",
+					"-framework",
+					"\"FBSDKCoreKit\"",
+					"-framework",
+					"\"FBSDKLoginKit\"",
+					"-framework",
+					"\"FBSDKShareKit\"",
+					"-framework",
+					"\"Fabric\"",
+					"-framework",
+					"\"Foundation\"",
+					"-framework",
+					"\"ImageIO\"",
+					"-framework",
+					"\"MeiQiaSDK\"",
+					"-framework",
+					"\"MobileCoreServices\"",
+					"-framework",
+					"\"QuartzCore\"",
+					"-framework",
+					"\"Security\"",
+					"-framework",
+					"\"Social\"",
+					"-framework",
+					"\"SystemConfiguration\"",
+					"-framework",
+					"\"TencentOpenAPI\"",
+					"-framework",
+					"\"TwitterCore\"",
+					"-framework",
+					"\"TwitterKit\"",
+					"-framework",
+					"\"UIKit\"",
+					"-framework",
+					"\"UMMobClick\"",
+					"-weak_framework",
+					"\"JavaScriptCore\"",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhang;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "128b3236-a860-4050-b803-189e85c77974";
+				PROVISIONING_PROFILE_SPECIFIER = youyujizhangAppStoreDeve;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = "Debug-test";
+		};
+		7DBB3A6C1E55C0A70075E638 /* Release-test */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3BA1F23EADDF47271B5AA7AB /* Pods-YouYuJiZhang.release-test.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co.,Ltd (534SCE47WT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co.,Ltd (534SCE47WT)";
+				DEVELOPMENT_TEAM = E25A2E4ZN2;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
+				);
+				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
+					"SD_WEBP=1",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/SuiShouJi/Resource/Plist/YouYuJiZhang-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"AFNetworking\"",
+					"-l\"APOpenSdk\"",
+					"-l\"DateTools\"",
+					"-l\"FLAnimatedImage\"",
+					"-l\"JSPatch\"",
+					"-l\"LWApiSDK\"",
+					"-l\"MJExtension\"",
+					"-l\"MMDrawerController\"",
+					"-l\"Masonry\"",
+					"-l\"Meiqia\"",
+					"-l\"SDWebImage\"",
+					"-l\"SocialAlipayShare\"",
+					"-l\"SocialFacebook\"",
+					"-l\"SocialInstagram\"",
+					"-l\"SocialLaiWang\"",
+					"-l\"SocialLine\"",
+					"-l\"SocialQQ\"",
+					"-l\"SocialSinaSSO\"",
+					"-l\"SocialTumblr\"",
+					"-l\"SocialTwitter\"",
+					"-l\"SocialWechat\"",
+					"-l\"SocialWhatsapp\"",
+					"-l\"UMSocial_Sdk_5.2.1\"",
+					"-l\"UMSocial_Sdk_Comment_5.2.1\"",
+					"-l\"WeChatSDK\"",
+					"-l\"WeiboSDK\"",
+					"-l\"YYKeyboardManager\"",
+					"-l\"YYText\"",
+					"-l\"ZYCornerRadius\"",
+					"-l\"iconv\"",
+					"-l\"icucore\"",
+					"-l\"libwebp\"",
+					"-l\"opencore-amrnb\"",
+					"-l\"opencore-amrwb\"",
+					"-l\"sqlite3\"",
+					"-l\"stdc++\"",
+					"-l\"z\"",
+					"-framework",
+					"\"AVFoundation\"",
+					"-framework",
+					"\"Accelerate\"",
+					"-framework",
+					"\"Accounts\"",
+					"-framework",
+					"\"CoreData\"",
+					"-framework",
+					"\"CoreFoundation\"",
+					"-framework",
+					"\"CoreGraphics\"",
+					"-framework",
+					"\"CoreTelephony\"",
+					"-framework",
+					"\"CoreText\"",
+					"-framework",
+					"\"FBSDKCoreKit\"",
+					"-framework",
+					"\"FBSDKLoginKit\"",
+					"-framework",
+					"\"FBSDKShareKit\"",
+					"-framework",
+					"\"Fabric\"",
+					"-framework",
+					"\"Foundation\"",
+					"-framework",
+					"\"ImageIO\"",
+					"-framework",
+					"\"MeiQiaSDK\"",
+					"-framework",
+					"\"MobileCoreServices\"",
+					"-framework",
+					"\"QuartzCore\"",
+					"-framework",
+					"\"Security\"",
+					"-framework",
+					"\"Social\"",
+					"-framework",
+					"\"SystemConfiguration\"",
+					"-framework",
+					"\"TencentOpenAPI\"",
+					"-framework",
+					"\"TwitterCore\"",
+					"-framework",
+					"\"TwitterKit\"",
+					"-framework",
+					"\"UIKit\"",
+					"-framework",
+					"\"UMMobClick\"",
+					"-weak_framework",
+					"\"JavaScriptCore\"",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhang;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "4f90dc0a-abbc-4b9d-8078-d82276a69e60";
+				PROVISIONING_PROFILE_SPECIFIER = youyujizhangAppStoreDis;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = "Release-test";
+		};
+		7DBB3CB81E55C2EE0075E638 /* Debug-test */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = F8D4E0B8A39DD37EA1FCC6CB /* Pods-YouYuJiZhangLiCai.debug-test.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuJiZhangLiCai;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer: XiaoYong  Wu (6CF3K2UQ7J)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: XiaoYong  Wu (6CF3K2UQ7J)";
+				DEVELOPMENT_TEAM = GZ7Q3299CT;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
+				);
+				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
+					"SD_WEBP=1",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/SuiShouJi/Resource/Plist/YouYuJiZhangLiCai-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"AFNetworking\"",
+					"-l\"APOpenSdk\"",
+					"-l\"DateTools\"",
+					"-l\"FLAnimatedImage\"",
+					"-l\"JSPatch\"",
+					"-l\"LWApiSDK\"",
+					"-l\"MJExtension\"",
+					"-l\"MMDrawerController\"",
+					"-l\"Masonry\"",
+					"-l\"Meiqia\"",
+					"-l\"SDWebImage\"",
+					"-l\"SocialAlipayShare\"",
+					"-l\"SocialFacebook\"",
+					"-l\"SocialInstagram\"",
+					"-l\"SocialLaiWang\"",
+					"-l\"SocialLine\"",
+					"-l\"SocialQQ\"",
+					"-l\"SocialSinaSSO\"",
+					"-l\"SocialTumblr\"",
+					"-l\"SocialTwitter\"",
+					"-l\"SocialWechat\"",
+					"-l\"SocialWhatsapp\"",
+					"-l\"UMSocial_Sdk_5.2.1\"",
+					"-l\"UMSocial_Sdk_Comment_5.2.1\"",
+					"-l\"WeChatSDK\"",
+					"-l\"WeiboSDK\"",
+					"-l\"YYKeyboardManager\"",
+					"-l\"YYText\"",
+					"-l\"ZYCornerRadius\"",
+					"-l\"iconv\"",
+					"-l\"icucore\"",
+					"-l\"libwebp\"",
+					"-l\"opencore-amrnb\"",
+					"-l\"opencore-amrwb\"",
+					"-l\"sqlite3\"",
+					"-l\"stdc++\"",
+					"-l\"z\"",
+					"-framework",
+					"\"AVFoundation\"",
+					"-framework",
+					"\"Accelerate\"",
+					"-framework",
+					"\"Accounts\"",
+					"-framework",
+					"\"CoreData\"",
+					"-framework",
+					"\"CoreFoundation\"",
+					"-framework",
+					"\"CoreGraphics\"",
+					"-framework",
+					"\"CoreTelephony\"",
+					"-framework",
+					"\"CoreText\"",
+					"-framework",
+					"\"FBSDKCoreKit\"",
+					"-framework",
+					"\"FBSDKLoginKit\"",
+					"-framework",
+					"\"FBSDKShareKit\"",
+					"-framework",
+					"\"Fabric\"",
+					"-framework",
+					"\"Foundation\"",
+					"-framework",
+					"\"ImageIO\"",
+					"-framework",
+					"\"MeiQiaSDK\"",
+					"-framework",
+					"\"MobileCoreServices\"",
+					"-framework",
+					"\"QuartzCore\"",
+					"-framework",
+					"\"Security\"",
+					"-framework",
+					"\"Social\"",
+					"-framework",
+					"\"SystemConfiguration\"",
+					"-framework",
+					"\"TencentOpenAPI\"",
+					"-framework",
+					"\"TwitterCore\"",
+					"-framework",
+					"\"TwitterKit\"",
+					"-framework",
+					"\"UIKit\"",
+					"-framework",
+					"\"UMMobClick\"",
+					"-weak_framework",
+					"\"JavaScriptCore\"",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhanglicai;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "e6c69c88-f91c-4ee1-ab81-bb118f514fd6";
+				PROVISIONING_PROFILE_SPECIFIER = YouYuJiZhangLiCaiDev;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = "Debug-test";
+		};
+		7DBB3CB91E55C2EE0075E638 /* Release-test */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3D28921C2AB227ED349FA128 /* Pods-YouYuJiZhangLiCai.release-test.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuJiZhangLiCai;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Wu Can (GZ7Q3299CT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Wu Can (GZ7Q3299CT)";
+				DEVELOPMENT_TEAM = GZ7Q3299CT;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
+				);
+				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
+					"SD_WEBP=1",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/SuiShouJi/Resource/Plist/YouYuJiZhangLiCai-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"AFNetworking\"",
+					"-l\"APOpenSdk\"",
+					"-l\"DateTools\"",
+					"-l\"FLAnimatedImage\"",
+					"-l\"JSPatch\"",
+					"-l\"LWApiSDK\"",
+					"-l\"MJExtension\"",
+					"-l\"MMDrawerController\"",
+					"-l\"Masonry\"",
+					"-l\"Meiqia\"",
+					"-l\"SDWebImage\"",
+					"-l\"SocialAlipayShare\"",
+					"-l\"SocialFacebook\"",
+					"-l\"SocialInstagram\"",
+					"-l\"SocialLaiWang\"",
+					"-l\"SocialLine\"",
+					"-l\"SocialQQ\"",
+					"-l\"SocialSinaSSO\"",
+					"-l\"SocialTumblr\"",
+					"-l\"SocialTwitter\"",
+					"-l\"SocialWechat\"",
+					"-l\"SocialWhatsapp\"",
+					"-l\"UMSocial_Sdk_5.2.1\"",
+					"-l\"UMSocial_Sdk_Comment_5.2.1\"",
+					"-l\"WeChatSDK\"",
+					"-l\"WeiboSDK\"",
+					"-l\"YYKeyboardManager\"",
+					"-l\"YYText\"",
+					"-l\"ZYCornerRadius\"",
+					"-l\"iconv\"",
+					"-l\"icucore\"",
+					"-l\"libwebp\"",
+					"-l\"opencore-amrnb\"",
+					"-l\"opencore-amrwb\"",
+					"-l\"sqlite3\"",
+					"-l\"stdc++\"",
+					"-l\"z\"",
+					"-framework",
+					"\"AVFoundation\"",
+					"-framework",
+					"\"Accelerate\"",
+					"-framework",
+					"\"Accounts\"",
+					"-framework",
+					"\"CoreData\"",
+					"-framework",
+					"\"CoreFoundation\"",
+					"-framework",
+					"\"CoreGraphics\"",
+					"-framework",
+					"\"CoreTelephony\"",
+					"-framework",
+					"\"CoreText\"",
+					"-framework",
+					"\"FBSDKCoreKit\"",
+					"-framework",
+					"\"FBSDKLoginKit\"",
+					"-framework",
+					"\"FBSDKShareKit\"",
+					"-framework",
+					"\"Fabric\"",
+					"-framework",
+					"\"Foundation\"",
+					"-framework",
+					"\"ImageIO\"",
+					"-framework",
+					"\"MeiQiaSDK\"",
+					"-framework",
+					"\"MobileCoreServices\"",
+					"-framework",
+					"\"QuartzCore\"",
+					"-framework",
+					"\"Security\"",
+					"-framework",
+					"\"Social\"",
+					"-framework",
+					"\"SystemConfiguration\"",
+					"-framework",
+					"\"TencentOpenAPI\"",
+					"-framework",
+					"\"TwitterCore\"",
+					"-framework",
+					"\"TwitterKit\"",
+					"-framework",
+					"\"UIKit\"",
+					"-framework",
+					"\"UMMobClick\"",
+					"-weak_framework",
+					"\"JavaScriptCore\"",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhanglicai;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "3624541f-ed23-46a4-970b-eca8ae759684";
+				PROVISIONING_PROFILE_SPECIFIER = YouYuJiZhangLiCaiDis;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = "Release-test";
+		};
+		7DBB3F061E55C4220075E638 /* Debug-test */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = AFA0E86A33C63DB5D6AEB327 /* Pods-JiZhangGuanJia.debug-test.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = JiZhangGuanJia;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer: XiaoYong  Wu (6CF3K2UQ7J)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: XiaoYong  Wu (6CF3K2UQ7J)";
+				DEVELOPMENT_TEAM = 9HCRD5N85G;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
+				);
+				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
+					"SD_WEBP=1",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/SuiShouJi/Resource/Plist/JiZhangGuanJia-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"AFNetworking\"",
+					"-l\"APOpenSdk\"",
+					"-l\"DateTools\"",
+					"-l\"FLAnimatedImage\"",
+					"-l\"JSPatch\"",
+					"-l\"LWApiSDK\"",
+					"-l\"MJExtension\"",
+					"-l\"MMDrawerController\"",
+					"-l\"Masonry\"",
+					"-l\"Meiqia\"",
+					"-l\"SDWebImage\"",
+					"-l\"SocialAlipayShare\"",
+					"-l\"SocialFacebook\"",
+					"-l\"SocialInstagram\"",
+					"-l\"SocialLaiWang\"",
+					"-l\"SocialLine\"",
+					"-l\"SocialQQ\"",
+					"-l\"SocialSinaSSO\"",
+					"-l\"SocialTumblr\"",
+					"-l\"SocialTwitter\"",
+					"-l\"SocialWechat\"",
+					"-l\"SocialWhatsapp\"",
+					"-l\"UMSocial_Sdk_5.2.1\"",
+					"-l\"UMSocial_Sdk_Comment_5.2.1\"",
+					"-l\"WeChatSDK\"",
+					"-l\"WeiboSDK\"",
+					"-l\"YYKeyboardManager\"",
+					"-l\"YYText\"",
+					"-l\"ZYCornerRadius\"",
+					"-l\"iconv\"",
+					"-l\"icucore\"",
+					"-l\"libwebp\"",
+					"-l\"opencore-amrnb\"",
+					"-l\"opencore-amrwb\"",
+					"-l\"sqlite3\"",
+					"-l\"stdc++\"",
+					"-l\"z\"",
+					"-framework",
+					"\"AVFoundation\"",
+					"-framework",
+					"\"Accelerate\"",
+					"-framework",
+					"\"Accounts\"",
+					"-framework",
+					"\"CoreData\"",
+					"-framework",
+					"\"CoreFoundation\"",
+					"-framework",
+					"\"CoreGraphics\"",
+					"-framework",
+					"\"CoreTelephony\"",
+					"-framework",
+					"\"CoreText\"",
+					"-framework",
+					"\"FBSDKCoreKit\"",
+					"-framework",
+					"\"FBSDKLoginKit\"",
+					"-framework",
+					"\"FBSDKShareKit\"",
+					"-framework",
+					"\"Fabric\"",
+					"-framework",
+					"\"Foundation\"",
+					"-framework",
+					"\"ImageIO\"",
+					"-framework",
+					"\"MeiQiaSDK\"",
+					"-framework",
+					"\"MobileCoreServices\"",
+					"-framework",
+					"\"QuartzCore\"",
+					"-framework",
+					"\"Security\"",
+					"-framework",
+					"\"Social\"",
+					"-framework",
+					"\"SystemConfiguration\"",
+					"-framework",
+					"\"TencentOpenAPI\"",
+					"-framework",
+					"\"TwitterCore\"",
+					"-framework",
+					"\"TwitterKit\"",
+					"-framework",
+					"\"UIKit\"",
+					"-framework",
+					"\"UMMobClick\"",
+					"-weak_framework",
+					"\"JavaScriptCore\"",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhangguanjia;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "26319b74-4d35-4298-91a4-4bc90f9b8258";
+				PROVISIONING_PROFILE_SPECIFIER = JiZhangGuanJiaDev;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = "Debug-test";
+		};
+		7DBB3F071E55C4220075E638 /* Release-test */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4EF45D0DA6D692497985E773 /* Pods-JiZhangGuanJia.release-test.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = JiZhangGuanJia;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co.,Ltd (534SCE47WT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co.,Ltd (534SCE47WT)";
+				DEVELOPMENT_TEAM = 9HCRD5N85G;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
+				);
+				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
+					"SD_WEBP=1",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/SuiShouJi/Resource/Plist/JiZhangGuanJia-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"AFNetworking\"",
+					"-l\"APOpenSdk\"",
+					"-l\"DateTools\"",
+					"-l\"FLAnimatedImage\"",
+					"-l\"JSPatch\"",
+					"-l\"LWApiSDK\"",
+					"-l\"MJExtension\"",
+					"-l\"MMDrawerController\"",
+					"-l\"Masonry\"",
+					"-l\"Meiqia\"",
+					"-l\"SDWebImage\"",
+					"-l\"SocialAlipayShare\"",
+					"-l\"SocialFacebook\"",
+					"-l\"SocialInstagram\"",
+					"-l\"SocialLaiWang\"",
+					"-l\"SocialLine\"",
+					"-l\"SocialQQ\"",
+					"-l\"SocialSinaSSO\"",
+					"-l\"SocialTumblr\"",
+					"-l\"SocialTwitter\"",
+					"-l\"SocialWechat\"",
+					"-l\"SocialWhatsapp\"",
+					"-l\"UMSocial_Sdk_5.2.1\"",
+					"-l\"UMSocial_Sdk_Comment_5.2.1\"",
+					"-l\"WeChatSDK\"",
+					"-l\"WeiboSDK\"",
+					"-l\"YYKeyboardManager\"",
+					"-l\"YYText\"",
+					"-l\"ZYCornerRadius\"",
+					"-l\"iconv\"",
+					"-l\"icucore\"",
+					"-l\"libwebp\"",
+					"-l\"opencore-amrnb\"",
+					"-l\"opencore-amrwb\"",
+					"-l\"sqlite3\"",
+					"-l\"stdc++\"",
+					"-l\"z\"",
+					"-framework",
+					"\"AVFoundation\"",
+					"-framework",
+					"\"Accelerate\"",
+					"-framework",
+					"\"Accounts\"",
+					"-framework",
+					"\"CoreData\"",
+					"-framework",
+					"\"CoreFoundation\"",
+					"-framework",
+					"\"CoreGraphics\"",
+					"-framework",
+					"\"CoreTelephony\"",
+					"-framework",
+					"\"CoreText\"",
+					"-framework",
+					"\"FBSDKCoreKit\"",
+					"-framework",
+					"\"FBSDKLoginKit\"",
+					"-framework",
+					"\"FBSDKShareKit\"",
+					"-framework",
+					"\"Fabric\"",
+					"-framework",
+					"\"Foundation\"",
+					"-framework",
+					"\"ImageIO\"",
+					"-framework",
+					"\"MeiQiaSDK\"",
+					"-framework",
+					"\"MobileCoreServices\"",
+					"-framework",
+					"\"QuartzCore\"",
+					"-framework",
+					"\"Security\"",
+					"-framework",
+					"\"Social\"",
+					"-framework",
+					"\"SystemConfiguration\"",
+					"-framework",
+					"\"TencentOpenAPI\"",
+					"-framework",
+					"\"TwitterCore\"",
+					"-framework",
+					"\"TwitterKit\"",
+					"-framework",
+					"\"UIKit\"",
+					"-framework",
+					"\"UMMobClick\"",
+					"-weak_framework",
+					"\"JavaScriptCore\"",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhangguanjia;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "a3578fd9-6eae-4566-aca5-ab536a992bca";
+				PROVISIONING_PROFILE_SPECIFIER = JiZhangGuanJiaDis;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = "Release-test";
+		};
+		7DBB41551E55C4E00075E638 /* Debug-test */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 707BC1A755735A473617E88C /* Pods-SuiShouJiEnterprise.debug-test.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Can Wu (7Z729NG4UD)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Can Wu (7Z729NG4UD)";
+				DEVELOPMENT_TEAM = 747363KXQ6;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
+				);
+				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
+					"SD_WEBP=1",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/SuiShouJi/Resource/Plist/SuiShouJiEnterprise-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"AFNetworking\"",
+					"-l\"APOpenSdk\"",
+					"-l\"DateTools\"",
+					"-l\"FLAnimatedImage\"",
+					"-l\"JSPatch\"",
+					"-l\"LWApiSDK\"",
+					"-l\"MJExtension\"",
+					"-l\"MMDrawerController\"",
+					"-l\"Masonry\"",
+					"-l\"Meiqia\"",
+					"-l\"SDWebImage\"",
+					"-l\"SocialAlipayShare\"",
+					"-l\"SocialFacebook\"",
+					"-l\"SocialInstagram\"",
+					"-l\"SocialLaiWang\"",
+					"-l\"SocialLine\"",
+					"-l\"SocialQQ\"",
+					"-l\"SocialSinaSSO\"",
+					"-l\"SocialTumblr\"",
+					"-l\"SocialTwitter\"",
+					"-l\"SocialWechat\"",
+					"-l\"SocialWhatsapp\"",
+					"-l\"UMSocial_Sdk_5.2.1\"",
+					"-l\"UMSocial_Sdk_Comment_5.2.1\"",
+					"-l\"WeChatSDK\"",
+					"-l\"WeiboSDK\"",
+					"-l\"YYKeyboardManager\"",
+					"-l\"YYText\"",
+					"-l\"ZYCornerRadius\"",
+					"-l\"iconv\"",
+					"-l\"icucore\"",
+					"-l\"libwebp\"",
+					"-l\"opencore-amrnb\"",
+					"-l\"opencore-amrwb\"",
+					"-l\"sqlite3\"",
+					"-l\"stdc++\"",
+					"-l\"z\"",
+					"-framework",
+					"\"AVFoundation\"",
+					"-framework",
+					"\"Accelerate\"",
+					"-framework",
+					"\"Accounts\"",
+					"-framework",
+					"\"CoreData\"",
+					"-framework",
+					"\"CoreFoundation\"",
+					"-framework",
+					"\"CoreGraphics\"",
+					"-framework",
+					"\"CoreTelephony\"",
+					"-framework",
+					"\"CoreText\"",
+					"-framework",
+					"\"FBSDKCoreKit\"",
+					"-framework",
+					"\"FBSDKLoginKit\"",
+					"-framework",
+					"\"FBSDKShareKit\"",
+					"-framework",
+					"\"Fabric\"",
+					"-framework",
+					"\"Foundation\"",
+					"-framework",
+					"\"ImageIO\"",
+					"-framework",
+					"\"MeiQiaSDK\"",
+					"-framework",
+					"\"MobileCoreServices\"",
+					"-framework",
+					"\"QuartzCore\"",
+					"-framework",
+					"\"Security\"",
+					"-framework",
+					"\"Social\"",
+					"-framework",
+					"\"SystemConfiguration\"",
+					"-framework",
+					"\"TencentOpenAPI\"",
+					"-framework",
+					"\"TwitterCore\"",
+					"-framework",
+					"\"TwitterKit\"",
+					"-framework",
+					"\"UIKit\"",
+					"-framework",
+					"\"UMMobClick\"",
+					"-weak_framework",
+					"\"JavaScriptCore\"",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "5047025f-df26-4af1-9a5a-f3b506386eb4";
+				PROVISIONING_PROFILE_SPECIFIER = JiZhangEnterpriseDevelopment;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = "Debug-test";
+		};
+		7DBB41561E55C4E00075E638 /* Release-test */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A70B0B07CD477B0A509E403F /* Pods-SuiShouJiEnterprise.release-test.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co. Ltd.";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co. Ltd.";
+				DEVELOPMENT_TEAM = 747363KXQ6;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
+				);
+				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
+					"SD_WEBP=1",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/SuiShouJi/Resource/Plist/SuiShouJiEnterprise-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"AFNetworking\"",
+					"-l\"APOpenSdk\"",
+					"-l\"DateTools\"",
+					"-l\"FLAnimatedImage\"",
+					"-l\"JSPatch\"",
+					"-l\"LWApiSDK\"",
+					"-l\"MJExtension\"",
+					"-l\"MMDrawerController\"",
+					"-l\"Masonry\"",
+					"-l\"Meiqia\"",
+					"-l\"SDWebImage\"",
+					"-l\"SocialAlipayShare\"",
+					"-l\"SocialFacebook\"",
+					"-l\"SocialInstagram\"",
+					"-l\"SocialLaiWang\"",
+					"-l\"SocialLine\"",
+					"-l\"SocialQQ\"",
+					"-l\"SocialSinaSSO\"",
+					"-l\"SocialTumblr\"",
+					"-l\"SocialTwitter\"",
+					"-l\"SocialWechat\"",
+					"-l\"SocialWhatsapp\"",
+					"-l\"UMSocial_Sdk_5.2.1\"",
+					"-l\"UMSocial_Sdk_Comment_5.2.1\"",
+					"-l\"WeChatSDK\"",
+					"-l\"WeiboSDK\"",
+					"-l\"YYKeyboardManager\"",
+					"-l\"YYText\"",
+					"-l\"ZYCornerRadius\"",
+					"-l\"iconv\"",
+					"-l\"icucore\"",
+					"-l\"libwebp\"",
+					"-l\"opencore-amrnb\"",
+					"-l\"opencore-amrwb\"",
+					"-l\"sqlite3\"",
+					"-l\"stdc++\"",
+					"-l\"z\"",
+					"-framework",
+					"\"AVFoundation\"",
+					"-framework",
+					"\"Accelerate\"",
+					"-framework",
+					"\"Accounts\"",
+					"-framework",
+					"\"CoreData\"",
+					"-framework",
+					"\"CoreFoundation\"",
+					"-framework",
+					"\"CoreGraphics\"",
+					"-framework",
+					"\"CoreTelephony\"",
+					"-framework",
+					"\"CoreText\"",
+					"-framework",
+					"\"FBSDKCoreKit\"",
+					"-framework",
+					"\"FBSDKLoginKit\"",
+					"-framework",
+					"\"FBSDKShareKit\"",
+					"-framework",
+					"\"Fabric\"",
+					"-framework",
+					"\"Foundation\"",
+					"-framework",
+					"\"ImageIO\"",
+					"-framework",
+					"\"MeiQiaSDK\"",
+					"-framework",
+					"\"MobileCoreServices\"",
+					"-framework",
+					"\"QuartzCore\"",
+					"-framework",
+					"\"Security\"",
+					"-framework",
+					"\"Social\"",
+					"-framework",
+					"\"SystemConfiguration\"",
+					"-framework",
+					"\"TencentOpenAPI\"",
+					"-framework",
+					"\"TwitterCore\"",
+					"-framework",
+					"\"TwitterKit\"",
+					"-framework",
+					"\"UIKit\"",
+					"-framework",
+					"\"UMMobClick\"",
+					"-weak_framework",
+					"\"JavaScriptCore\"",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "35e9fd68-6381-436a-b7b0-0bd107641524";
+				PROVISIONING_PROFILE_SPECIFIER = JiZhangEnterpriseAdHoc;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = "Release-test";
+		};
+		9CECFF061D6D41A700DB2C8B /* Debug-test */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E46D461943E8EB50EC47585D /* Pods-YouYuJiZhangBen.debug-test.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuJiZhangBen;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer: dai menglin (2Z4WFTCYDJ)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: dai menglin (2Z4WFTCYDJ)";
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/AlipayZF",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
+				);
+				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
+					"SD_WEBP=1",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/SuiShouJi/Resource/Plist/YouYuJiZhangBen-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/AlipayZF",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMengFeedback/UMFeedback_iOS_2.3.4/UMengFeedback_SDK",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMengFeedback/UMFeedback_iOS_2.3.4/UMengFeedback_SDK/UMOpus",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_5.2.1",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/SinaSSO",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/Wechat",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhangben;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "6006d513-3fc0-4850-8601-d473d8dcaafd";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = "Debug-test";
+		};
+		9CECFF071D6D41A700DB2C8B /* Release-test */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = CAA8E44768CD8C6BF10DACE5 /* Pods-YouYuJiZhangBen.release-test.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuJiZhangBen;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: dai menglin (K63W8Y2JZS)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: dai menglin (K63W8Y2JZS)";
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/AlipayZF",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
+				);
+				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
+					"SD_WEBP=1",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/SuiShouJi/Resource/Plist/YouYuJiZhangBen-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/AlipayZF",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMengFeedback/UMFeedback_iOS_2.3.4/UMengFeedback_SDK",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMengFeedback/UMFeedback_iOS_2.3.4/UMengFeedback_SDK/UMOpus",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_5.2.1",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/SinaSSO",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/Wechat",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhangben;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "6000200f-6460-4a18-99bc-801a0d0bdd1a";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+			};
+			name = "Release-test";
+		};
+		BD543C671C1A6DBC00910D61 /* Debug-test */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = "Debug-test";
+		};
+		BD543C681C1A6DBC00910D61 /* Release-test */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = "Release-test";
+		};
+		BD543C6A1C1A6DBC00910D61 /* Debug-test */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 59B9709CD0561A8AD4BDF638 /* Pods-SuiShouJi.debug-test.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer: XiaoYong  Wu (6CF3K2UQ7J)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: XiaoYong  Wu (6CF3K2UQ7J)";
+				DEVELOPMENT_TEAM = 534SCE47WT;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
+				);
+				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
+					"SD_WEBP=1",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/SuiShouJi/Resource/Plist/SuiShouJi-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"AFNetworking\"",
+					"-l\"APOpenSdk\"",
+					"-l\"DateTools\"",
+					"-l\"FLAnimatedImage\"",
+					"-l\"JSPatch\"",
+					"-l\"LWApiSDK\"",
+					"-l\"MJExtension\"",
+					"-l\"MMDrawerController\"",
+					"-l\"Masonry\"",
+					"-l\"Meiqia\"",
+					"-l\"SDWebImage\"",
+					"-l\"SocialAlipayShare\"",
+					"-l\"SocialFacebook\"",
+					"-l\"SocialInstagram\"",
+					"-l\"SocialLaiWang\"",
+					"-l\"SocialLine\"",
+					"-l\"SocialQQ\"",
+					"-l\"SocialSinaSSO\"",
+					"-l\"SocialTumblr\"",
+					"-l\"SocialTwitter\"",
+					"-l\"SocialWechat\"",
+					"-l\"SocialWhatsapp\"",
+					"-l\"UMSocial_Sdk_5.2.1\"",
+					"-l\"UMSocial_Sdk_Comment_5.2.1\"",
+					"-l\"WeChatSDK\"",
+					"-l\"WeiboSDK\"",
+					"-l\"YYKeyboardManager\"",
+					"-l\"YYText\"",
+					"-l\"ZYCornerRadius\"",
+					"-l\"iconv\"",
+					"-l\"icucore\"",
+					"-l\"libwebp\"",
+					"-l\"opencore-amrnb\"",
+					"-l\"opencore-amrwb\"",
+					"-l\"sqlite3\"",
+					"-l\"stdc++\"",
+					"-l\"z\"",
+					"-framework",
+					"\"AVFoundation\"",
+					"-framework",
+					"\"Accelerate\"",
+					"-framework",
+					"\"Accounts\"",
+					"-framework",
+					"\"CoreData\"",
+					"-framework",
+					"\"CoreFoundation\"",
+					"-framework",
+					"\"CoreGraphics\"",
+					"-framework",
+					"\"CoreTelephony\"",
+					"-framework",
+					"\"CoreText\"",
+					"-framework",
+					"\"FBSDKCoreKit\"",
+					"-framework",
+					"\"FBSDKLoginKit\"",
+					"-framework",
+					"\"FBSDKShareKit\"",
+					"-framework",
+					"\"Fabric\"",
+					"-framework",
+					"\"Foundation\"",
+					"-framework",
+					"\"ImageIO\"",
+					"-framework",
+					"\"MeiQiaSDK\"",
+					"-framework",
+					"\"MobileCoreServices\"",
+					"-framework",
+					"\"QuartzCore\"",
+					"-framework",
+					"\"Security\"",
+					"-framework",
+					"\"Social\"",
+					"-framework",
+					"\"SystemConfiguration\"",
+					"-framework",
+					"\"TencentOpenAPI\"",
+					"-framework",
+					"\"TwitterCore\"",
+					"-framework",
+					"\"TwitterKit\"",
+					"-framework",
+					"\"UIKit\"",
+					"-framework",
+					"\"UMMobClick\"",
+					"-weak_framework",
+					"\"JavaScriptCore\"",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhangAppStore;
+				PRODUCT_NAME = SuiShouJi;
+				PROVISIONING_PROFILE = "ba2c5f75-9aa4-4854-9f27-958134f073cb";
+				PROVISIONING_PROFILE_SPECIFIER = JiZhangAppStoreDeve;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = "Debug-test";
+		};
+		BD543C6B1C1A6DBC00910D61 /* Release-test */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 21EA1E50547213D6FCC8FD05 /* Pods-SuiShouJi.release-test.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co.,Ltd (534SCE47WT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co.,Ltd (534SCE47WT)";
+				DEVELOPMENT_TEAM = 534SCE47WT;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
+				);
+				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
+					"SD_WEBP=1",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/SuiShouJi/Resource/Plist/SuiShouJi-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"AFNetworking\"",
+					"-l\"APOpenSdk\"",
+					"-l\"DateTools\"",
+					"-l\"FLAnimatedImage\"",
+					"-l\"JSPatch\"",
+					"-l\"LWApiSDK\"",
+					"-l\"MJExtension\"",
+					"-l\"MMDrawerController\"",
+					"-l\"Masonry\"",
+					"-l\"Meiqia\"",
+					"-l\"SDWebImage\"",
+					"-l\"SocialAlipayShare\"",
+					"-l\"SocialFacebook\"",
+					"-l\"SocialInstagram\"",
+					"-l\"SocialLaiWang\"",
+					"-l\"SocialLine\"",
+					"-l\"SocialQQ\"",
+					"-l\"SocialSinaSSO\"",
+					"-l\"SocialTumblr\"",
+					"-l\"SocialTwitter\"",
+					"-l\"SocialWechat\"",
+					"-l\"SocialWhatsapp\"",
+					"-l\"UMSocial_Sdk_5.2.1\"",
+					"-l\"UMSocial_Sdk_Comment_5.2.1\"",
+					"-l\"WeChatSDK\"",
+					"-l\"WeiboSDK\"",
+					"-l\"YYKeyboardManager\"",
+					"-l\"YYText\"",
+					"-l\"ZYCornerRadius\"",
+					"-l\"iconv\"",
+					"-l\"icucore\"",
+					"-l\"libwebp\"",
+					"-l\"opencore-amrnb\"",
+					"-l\"opencore-amrwb\"",
+					"-l\"sqlite3\"",
+					"-l\"stdc++\"",
+					"-l\"z\"",
+					"-framework",
+					"\"AVFoundation\"",
+					"-framework",
+					"\"Accelerate\"",
+					"-framework",
+					"\"Accounts\"",
+					"-framework",
+					"\"CoreData\"",
+					"-framework",
+					"\"CoreFoundation\"",
+					"-framework",
+					"\"CoreGraphics\"",
+					"-framework",
+					"\"CoreTelephony\"",
+					"-framework",
+					"\"CoreText\"",
+					"-framework",
+					"\"FBSDKCoreKit\"",
+					"-framework",
+					"\"FBSDKLoginKit\"",
+					"-framework",
+					"\"FBSDKShareKit\"",
+					"-framework",
+					"\"Fabric\"",
+					"-framework",
+					"\"Foundation\"",
+					"-framework",
+					"\"ImageIO\"",
+					"-framework",
+					"\"MeiQiaSDK\"",
+					"-framework",
+					"\"MobileCoreServices\"",
+					"-framework",
+					"\"QuartzCore\"",
+					"-framework",
+					"\"Security\"",
+					"-framework",
+					"\"Social\"",
+					"-framework",
+					"\"SystemConfiguration\"",
+					"-framework",
+					"\"TencentOpenAPI\"",
+					"-framework",
+					"\"TwitterCore\"",
+					"-framework",
+					"\"TwitterKit\"",
+					"-framework",
+					"\"UIKit\"",
+					"-framework",
+					"\"UMMobClick\"",
+					"-weak_framework",
+					"\"JavaScriptCore\"",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhangAppStore;
+				PRODUCT_NAME = SuiShouJi;
+				PROVISIONING_PROFILE = "49fe08fa-6102-40c0-ad98-acd2bd01c901";
+				PROVISIONING_PROFILE_SPECIFIER = JiZhangAppStoreDistribute;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = "Release-test";
+		};
+		BD543C6D1C1A6DBC00910D61 /* Debug-test */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -16028,9 +17784,29 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SuiShouJi.app/SuiShouJi";
 			};
-			name = Release;
+			name = "Debug-test";
 		};
-		BD543C701C1A6DBC00910D61 /* Debug */ = {
+		BD543C6E1C1A6DBC00910D61 /* Release-test */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Vendor/AlipayZF",
+				);
+				INFOPLIST_FILE = SuiShouJiTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Vendor/AlipayZF",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = caiyi.SuiShouJiTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SuiShouJi.app/SuiShouJi";
+			};
+			name = "Release-test";
+		};
+		BD543C701C1A6DBC00910D61 /* Debug-test */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				INFOPLIST_FILE = SuiShouJiUITests/Info.plist;
@@ -16040,9 +17816,9 @@
 				TEST_TARGET_NAME = SuiShouJi;
 				USES_XCTRUNNER = YES;
 			};
-			name = Debug;
+			name = "Debug-test";
 		};
-		BD543C711C1A6DBC00910D61 /* Release */ = {
+		BD543C711C1A6DBC00910D61 /* Release-test */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				INFOPLIST_FILE = SuiShouJiUITests/Info.plist;
@@ -16052,7 +17828,7 @@
 				TEST_TARGET_NAME = SuiShouJi;
 				USES_XCTRUNNER = YES;
 			};
-			name = Release;
+			name = "Release-test";
 		};
 /* End XCBuildConfiguration section */
 
@@ -16060,101 +17836,123 @@
 		7D08A2D21E4999D30085A8FB /* Build configuration list for PBXNativeTarget "YouYuJiZhangGuanJia" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				7D08A2D31E4999D30085A8FB /* Debug */,
-				7D08A2D41E4999D30085A8FB /* Release */,
+				7D08A2D31E4999D30085A8FB /* Debug-test */,
+				7DA8F9981E55CFB4006BE13B /* Debug-production */,
+				7D08A2D41E4999D30085A8FB /* Release-test */,
+				7DA8F9A31E55CFBE006BE13B /* Release-production */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = "Release-test";
 		};
 		7DA13C291E35AED7000490A4 /* Build configuration list for PBXNativeTarget "YouYuJiZhangBao" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				7DA13C2A1E35AED7000490A4 /* Debug */,
-				7DA13C2B1E35AED7000490A4 /* Release */,
+				7DA13C2A1E35AED7000490A4 /* Debug-test */,
+				7DA8F9971E55CFB4006BE13B /* Debug-production */,
+				7DA13C2B1E35AED7000490A4 /* Release-test */,
+				7DA8F9A21E55CFBE006BE13B /* Release-production */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = "Release-test";
 		};
 		7DBB3A6A1E55C0A70075E638 /* Build configuration list for PBXNativeTarget "YouYuJiZhang" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				7DBB3A6B1E55C0A70075E638 /* Debug */,
-				7DBB3A6C1E55C0A70075E638 /* Release */,
+				7DBB3A6B1E55C0A70075E638 /* Debug-test */,
+				7DA8F9951E55CFB4006BE13B /* Debug-production */,
+				7DBB3A6C1E55C0A70075E638 /* Release-test */,
+				7DA8F9A01E55CFBE006BE13B /* Release-production */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = "Release-test";
 		};
 		7DBB3CB71E55C2EE0075E638 /* Build configuration list for PBXNativeTarget "YouYuJiZhangLiCai" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				7DBB3CB81E55C2EE0075E638 /* Debug */,
-				7DBB3CB91E55C2EE0075E638 /* Release */,
+				7DBB3CB81E55C2EE0075E638 /* Debug-test */,
+				7DA8F9991E55CFB4006BE13B /* Debug-production */,
+				7DBB3CB91E55C2EE0075E638 /* Release-test */,
+				7DA8F9A41E55CFBE006BE13B /* Release-production */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = "Release-test";
 		};
 		7DBB3F051E55C4220075E638 /* Build configuration list for PBXNativeTarget "JiZhangGuanJia" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				7DBB3F061E55C4220075E638 /* Debug */,
-				7DBB3F071E55C4220075E638 /* Release */,
+				7DBB3F061E55C4220075E638 /* Debug-test */,
+				7DA8F99A1E55CFB4006BE13B /* Debug-production */,
+				7DBB3F071E55C4220075E638 /* Release-test */,
+				7DA8F9A51E55CFBE006BE13B /* Release-production */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = "Release-test";
 		};
 		7DBB41541E55C4E00075E638 /* Build configuration list for PBXNativeTarget "SuiShouJiEnterprise" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				7DBB41551E55C4E00075E638 /* Debug */,
-				7DBB41561E55C4E00075E638 /* Release */,
+				7DBB41551E55C4E00075E638 /* Debug-test */,
+				7DA8F9931E55CFB4006BE13B /* Debug-production */,
+				7DBB41561E55C4E00075E638 /* Release-test */,
+				7DA8F99E1E55CFBE006BE13B /* Release-production */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = "Release-test";
 		};
 		9CECFF051D6D41A700DB2C8B /* Build configuration list for PBXNativeTarget "YouYuJiZhangBen" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				9CECFF061D6D41A700DB2C8B /* Debug */,
-				9CECFF071D6D41A700DB2C8B /* Release */,
+				9CECFF061D6D41A700DB2C8B /* Debug-test */,
+				7DA8F9961E55CFB4006BE13B /* Debug-production */,
+				9CECFF071D6D41A700DB2C8B /* Release-test */,
+				7DA8F9A11E55CFBE006BE13B /* Release-production */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = "Release-test";
 		};
 		BD543C371C1A6DBC00910D61 /* Build configuration list for PBXProject "SuiShouJi" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				BD543C671C1A6DBC00910D61 /* Debug */,
-				BD543C681C1A6DBC00910D61 /* Release */,
+				BD543C671C1A6DBC00910D61 /* Debug-test */,
+				7DA8F9921E55CFB4006BE13B /* Debug-production */,
+				BD543C681C1A6DBC00910D61 /* Release-test */,
+				7DA8F99D1E55CFBE006BE13B /* Release-production */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = "Release-test";
 		};
 		BD543C691C1A6DBC00910D61 /* Build configuration list for PBXNativeTarget "SuiShouJi" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				BD543C6A1C1A6DBC00910D61 /* Debug */,
-				BD543C6B1C1A6DBC00910D61 /* Release */,
+				BD543C6A1C1A6DBC00910D61 /* Debug-test */,
+				7DA8F9941E55CFB4006BE13B /* Debug-production */,
+				BD543C6B1C1A6DBC00910D61 /* Release-test */,
+				7DA8F99F1E55CFBE006BE13B /* Release-production */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = "Release-test";
 		};
 		BD543C6C1C1A6DBC00910D61 /* Build configuration list for PBXNativeTarget "SuiShouJiTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				BD543C6D1C1A6DBC00910D61 /* Debug */,
-				BD543C6E1C1A6DBC00910D61 /* Release */,
+				BD543C6D1C1A6DBC00910D61 /* Debug-test */,
+				7DA8F99B1E55CFB4006BE13B /* Debug-production */,
+				BD543C6E1C1A6DBC00910D61 /* Release-test */,
+				7DA8F9A61E55CFBE006BE13B /* Release-production */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = "Release-test";
 		};
 		BD543C6F1C1A6DBC00910D61 /* Build configuration list for PBXNativeTarget "SuiShouJiUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				BD543C701C1A6DBC00910D61 /* Debug */,
-				BD543C711C1A6DBC00910D61 /* Release */,
+				BD543C701C1A6DBC00910D61 /* Debug-test */,
+				7DA8F99C1E55CFB4006BE13B /* Debug-production */,
+				BD543C711C1A6DBC00910D61 /* Release-test */,
+				7DA8F9A71E55CFBE006BE13B /* Release-production */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = "Release-test";
 		};
 /* End XCConfigurationList section */
 	};
