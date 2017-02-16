@@ -23,6 +23,7 @@ def shared_pods
     pod 'FLAnimatedImage', '~> 1.0'
     pod 'SSZipArchive'
     pod 'Masonry'
+    pod 'ReactiveCocoa'
 end
 
 target 'SuiShouJi'  do
