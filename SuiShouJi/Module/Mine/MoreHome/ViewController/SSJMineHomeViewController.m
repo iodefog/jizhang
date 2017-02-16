@@ -42,7 +42,6 @@
 #import "UIImageView+WebCache.h"
 #import "SSJDataSynchronizer.h"
 #import "SSJStartChecker.h"
-#import <YWFeedbackFMWK/YWFeedbackKit.h>
 #import "UIViewController+SSJMotionPassword.h"
 #import "UMSocial.h"
 #import "SSJMineHomeCollectionImageCell.h"
@@ -93,7 +92,7 @@ static BOOL kNeedBannerDisplay = YES;
 
 @property (nonatomic, strong) SSJNewDotNetworkService *dotService;
 @property(nonatomic, strong) SSJBannerHeaderView *bannerHeader;
-@property (nonatomic, strong) YWFeedbackKit *feedbackKit;
+
 @property(nonatomic, strong) SSJPersonalDetailItem *personalDetailItem;
 
 @property (nonatomic, strong) UIView *lineView;
@@ -583,39 +582,6 @@ static BOOL kNeedBannerDisplay = YES;
         };
     }
     return _header;
-}
-
--(YWFeedbackKit *)feedbackKit {
-    if (!_feedbackKit) {
-        NSString *avtarUrl;
-        if ([_userItem.cicon hasPrefix:@"http"]) {
-            avtarUrl = _userItem.cicon;
-        }else{
-            avtarUrl = SSJImageURLWithAPI(_userItem.cicon);
-        }
-        _feedbackKit = [[YWFeedbackKit alloc] initWithAppKey:SSJDetailSettingForSource(@"YWAppKey")];
-        _feedbackKit.customUIPlist = @{@"bgColor":@"#ffffff",
-                                       @"color":@"#393939",
-                                       @"avatar":avtarUrl ?: @""};
-        _feedbackKit.extInfo = @{@"userid":_userItem.cuserid ,
-                                 @"loginType":@(SSJUserLoginType()),
-                                 @"mobileNo":_userItem.cmobileno ?: @""};
-        __weak typeof(self) weakSelf = self;
-        [_feedbackKit getUnreadCountWithCompletionBlock:^(NSNumber *unreadCount, NSError *error) {
-            if (!error) {
-                NSLog(@"%@",unreadCount);
-                if ([unreadCount integerValue] > 0) {
-                    _hasUreadMassage = YES;
-                }else{
-                    _hasUreadMassage = NO;
-                }
-                [weakSelf.collectionView reloadData];
-            }else{
-                NSLog(@"%@",[error localizedDescription]);
-            }
-        }];
-    }
-    return _feedbackKit;
 }
 
 - (NSMutableArray<SSJListAdItem *> *)adItemsArray
