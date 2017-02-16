@@ -11,7 +11,6 @@
 #import "SSJUserItem.h"
 #import "SSJUserInfoItem.h"
 #import "SSJUserTableManager.h"
-#import <YWFeedbackFMWK/YWFeedbackKit.h>
 #import "SSJProductAdviceNetWorkService.h"
 #import "TPKeyboardAvoidingTableView.h"
 #import "SSJMoreProductAdviceTableViewCell.h"
