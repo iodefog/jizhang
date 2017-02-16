@@ -27,6 +27,8 @@
 #import "SSJLoginViewController.h"
 #import "SSJMotionPasswordSettingViewController.h"
 #import "SSJLoginViewController+SSJCategory.h"
+#import "SSJGlobalServiceManager.h"
+#import "ZipArchive.h"
 
 static NSString *const kTitle0 = @"手势密码";
 static NSString *const kTitle1 = @"自动同步设置";
@@ -36,6 +38,7 @@ static NSString *const kTitle6 = @"关于我们";
 static NSString *const kTitle5 = @"检查更新";
 static NSString *const kTitle7 = @"微信公众号";
 static NSString *const kTitle8 = @"点击上方微信号复制，接着去微信查找即可";
+static NSString *const kTitle9 = @"上传日志";
 
 
 @interface SSJSettingViewController ()
@@ -64,15 +67,15 @@ static NSString *const kTitle8 = @"点击上方微信号复制，接着去微信
     [super viewWillAppear:animated];
     if ([SSJStartChecker sharedInstance].isInReview) {
         if ([WXApi isWXAppInstalled]) {
-            self.titles = @[@[kTitle0], @[kTitle1], @[kTitle2 , kTitle3], @[kTitle6] ,@[kTitle7,kTitle8]];
+            self.titles = @[@[kTitle0], @[kTitle1], @[kTitle2 , kTitle3 , kTitle9], @[kTitle6] ,@[kTitle7,kTitle8]];
         }else{
-            self.titles = @[@[kTitle1], @[kTitle2 , kTitle3], @[kTitle6]];
+            self.titles = @[@[kTitle1], @[kTitle2 , kTitle3 , kTitle9], @[kTitle6]];
         }
     } else {
         if ([WXApi isWXAppInstalled]) {
-            self.titles = @[@[kTitle0], @[kTitle1], @[kTitle2 , kTitle3] , @[kTitle5], @[kTitle6],@[kTitle7,kTitle8]];
+            self.titles = @[@[kTitle0], @[kTitle1], @[kTitle2 , kTitle3 , kTitle9] , @[kTitle5], @[kTitle6],@[kTitle7,kTitle8]];
         }else{
-            self.titles = @[@[kTitle0], @[kTitle1], @[kTitle2 , kTitle3] , @[kTitle5], @[kTitle6]];
+            self.titles = @[@[kTitle0], @[kTitle1], @[kTitle2 , kTitle3 , kTitle9] , @[kTitle5], @[kTitle6]];
         }
     }
     
@@ -161,7 +164,9 @@ static NSString *const kTitle8 = @"点击上方微信号复制，接着去微信
 //        webVc.title = @"用户协议与隐私说明";
 //        [self.navigationController pushViewController:webVc animated:YES];
 //    }
-//    
+//
+    
+    
     //  检查更新
     if ([title isEqualToString:kTitle5]) {
         [[SSJStartChecker sharedInstance] checkWithSuccess:^(BOOL isInReview, SSJAppUpdateType type) {
@@ -206,6 +211,16 @@ static NSString *const kTitle8 = @"点击上方微信号复制，接着去微信
         SSJAlertViewAction *cancelAction = [SSJAlertViewAction actionWithTitle:@"取消" handler:NULL];
         [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@"复制微信号成功啦，现在就跳转到微信在搜索栏粘贴，即刻关注我们吧！" action:cancelAction,comfirmAction,nil];
     }
+    
+    if ([title isEqualToString:kTitle9]) {
+        NSError *tError = nil;
+        NSData *zipData = [self zipDatabaseWithError:&tError];
+        [self uploadData:zipData BaseWithcompletionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
+            if (!error) {
+                [CDAutoHideMessageHUD showMessage:@"上传成功"];
+            }
+        }];
+    }
 }
 
 #pragma mark - UITableViewDataSource
@@ -247,6 +262,60 @@ static NSString *const kTitle8 = @"点击上方微信号复制，接着去微信
     }
     return _weixinFooter;
 }
+
+- (void)uploadData:(NSData *)data BaseWithcompletionHandler:(void (^)(NSURLResponse *response, id responseObject, NSError *error))completionHandler {
+#ifdef DEBUG
+    [data writeToFile:@"/Users/ricky/Desktop/db_error.zip" atomically:YES];
+#endif
+    
+    SSJGlobalServiceManager *sessionManager = [SSJGlobalServiceManager standardManager];
+    
+    NSError *tError = nil;
+    NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] multipartFormRequestWithMethod:@"POST" URLString:SSJURLWithAPI(@"/admin/applog.go") parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+        NSString *fileName = [NSString stringWithFormat:@"ios_error_db_%ld.zip", (long)[NSDate date].timeIntervalSince1970];
+        [formData appendPartWithFileData:data name:@"zip" fileName:fileName mimeType:@"application/zip"];
+    } error:&tError];
+    
+    //  封装参数，传入请求头
+    NSString *userId = SSJUSERID();
+    NSString *version = [UIDevice currentDevice].identifierForVendor.UUIDString;
+    NSString *phoneOs = [NSString stringWithFormat:@"%f",SSJSystemVersion()];
+    NSString *model = SSJPhoneModel();
+    NSString *date = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss"];
+
+    NSDictionary *parameters = @{@"cuserId":userId,
+                                 @"releaseversion":version,
+                                 @"cmodel":model,
+                                 @"cphoneos":phoneOs,
+                                 @"cdate":date,
+                                 @"itype":@"2"};
+    
+    [parameters enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+        [request setValue:obj forHTTPHeaderField:key];
+    }];
+    
+    request.timeoutInterval = 60;
+    
+    //  开始上传
+    
+    NSURLSessionUploadTask *task = [sessionManager uploadTaskWithStreamedRequest:request progress:nil completionHandler:completionHandler];
+    
+    [task resume];
+}
+
+//  将data进行zip压缩
+- (NSData *)zipDatabaseWithError:(NSError **)error {
+    NSString *zipPath = [SSJDocumentPath() stringByAppendingPathComponent:@"db_error.zip"];
+    if (![SSZipArchive createZipFileAtPath:zipPath withFilesAtPaths:@[SSJSQLitePath()]]) {
+        if (error) {
+            *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"压缩文件发生错误"}];
+        }
+        return nil;
+    }
+    
+    return [NSData dataWithContentsOfFile:zipPath];
+}
+
 
 #pragma mark - Action
 - (void)login {

@@ -97,7 +97,7 @@ NSDate *SCYEnterBackgroundTime() {
     [SSJAnaliyticsManager SSJAnaliytics];
     
     [MQManager setScheduledAgentWithAgentId:@"" agentGroupId:SSJMQDefualtGroupId scheduleRule:MQScheduleRulesRedirectGroup];
-//    [self uploadIdfa];
+    [self uploadIdfa];
     
     [self initializeDatabaseWithFinishHandler:^{
         //  启动时强制同步一次

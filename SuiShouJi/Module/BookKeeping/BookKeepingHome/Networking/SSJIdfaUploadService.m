@@ -21,11 +21,21 @@
 
 - (void)uploadIdfaWithIdfaStr:(NSString *)str Success:(void (^)(NSString *idfaStr))success{
     NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity:0];
-    [dict setObject:str forKey:@"idfa"];
+    NSString *appId = SSJDetailSettingForSource(@"appleID");
+    NSString *strKey=@"iwannapie?!";
+    NSTimeInterval timestamp = [[NSDate date] timeIntervalSince1970];
+    NSString *signMsg = [NSString stringWithFormat:@"appid=%@&idfa=%@&timestamp=%f&key=%@",appId,str,timestamp,strKey];
+    signMsg = [[signMsg ssj_md5HexDigest] uppercaseString];
+    
+    [dict setObject:appId ?: @"" forKey:@"appid"];
+    [dict setObject:str ?: @"" forKey:@"idfa"];
+    [dict setObject:@(timestamp) forKey:@"timestamp"];
     [dict setObject:SSJDefaultSource() forKey:@"source"];
+    [dict setObject:strKey forKey:@"key"];
+    [dict setObject:signMsg forKey:@"signMsg"];
+    
     self.idfaStr = str;
-    self.responseSerializer = [SSJCustomJsonSerializer serializer];
-    [self request:SSJURLWithAPI(@"http://iphone.app.huishuaka.com/credit/iosIdfaSave.go") params:dict];
+    [self request:SSJURLWithAPI(@"aso/addIdfa.go") params:dict];
     self.successBlock = success;
 }
 
