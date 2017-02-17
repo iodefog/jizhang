@@ -12,7 +12,7 @@ static NSString *const kAnimationKey = @"kAnimationKey";
 
 static const NSTimeInterval kDuration = 0.8;
 
-@interface SSJMagicExportResultCheckMarkView ()
+@interface SSJMagicExportResultCheckMarkView () <CAAnimationDelegate>
 
 @property (nonatomic, copy) void (^finish)();
 

@@ -870,5 +870,9 @@ static NSString *const kDateFormat = @"yyyy-MM-dd HH:mm:ss.SSS";
 
 @implementation SSJAccountsMergeMemberChargeTable
 
+- (BOOL)mergeFromUserID:(NSString *)userId1 toUserId:(NSString *)userId2 version:(int64_t)version inDatabase:(FMDatabase *)db error:(NSError **)error {
+    return YES;
+}
+
 @end
 

@@ -902,10 +902,6 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
     if (!_ballonView) {
         _ballonView = [[SSJReportFormsCurveBalloonView alloc] init];
         _ballonView.hidden = !_showBalloon;
-        
-#warning test
-//        _ballonView.layer.borderColor = [UIColor redColor].CGColor;
-//        _ballonView.layer.borderWidth = 1;
     }
     return _ballonView;
 }
@@ -923,10 +919,6 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
         _collectionView.backgroundColor = [UIColor clearColor];
         [_collectionView registerClass:[SSJReportFormsCurveCell class] forCellWithReuseIdentifier:kSSJReportFormsCurveCellID];
         _collectionView.showsHorizontalScrollIndicator = NO;
-        
-#warning test
-//        _collectionView.layer.borderWidth = 1;
-//        _collectionView.layer.borderColor = [UIColor blackColor].CGColor;
     }
     return _collectionView;
 }

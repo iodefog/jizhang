@@ -17,7 +17,7 @@ static NSString *const kBorderColorAnimationKey = @"kBorderColorAnimationKey";
 static NSString *const kTransformAnimationKey = @"kTransformAnimationKey";
 static NSString *const kTextColorAnimationKey = @"kTextColorAnimationKey";
 
-@interface SSJRecordMakingBillTypeSelectionCell ()
+@interface SSJRecordMakingBillTypeSelectionCell () <CAAnimationDelegate>
 
 @property (nonatomic, strong) UIImageView *imageView;
 
