@@ -55,7 +55,7 @@ static const NSInteger kMemoTag = 1002;
 
 @end
 
-@interface SSJFundingTransferChargeDetailViewController () <UITextFieldDelegate>
+@interface SSJFundingTransferChargeDetailViewController () <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
 
 @property (nonatomic, strong) NSArray <NSArray <__SSJFundingTransferChargeDetailModel *>*>*models;
 

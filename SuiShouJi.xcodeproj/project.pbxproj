@@ -9251,7 +9251,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0810;
-				ORGANIZATIONNAME = ___9188___;
+				ORGANIZATIONNAME = "___9188___";
 				TargetAttributes = {
 					7D08A0931E4999D30085A8FB = {
 						DevelopmentTeam = 7RVBV2MALK;
@@ -14595,8 +14595,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
 				);
@@ -15460,8 +15458,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
 				);
@@ -17071,8 +17067,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
 				);
@@ -17204,8 +17198,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
-					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/YYAnalytics",
 				);

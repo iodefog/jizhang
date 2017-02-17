@@ -12,7 +12,4 @@
 
 @interface SSJUserBillSyncTable : SSJBaseSyncTable
 
-// 登录时候userbill的合并逻辑
-+ (BOOL)mergeWhenLoginWithRecords:(NSArray *)records forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error;
-
 @end

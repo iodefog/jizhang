@@ -58,7 +58,6 @@
     
     self.waveView.center = CGPointMake(self.contentView.width * 0.5, self.contentView.height * 0.56);
     
-    CGFloat maxWidth = 0;
     if (self.paymentLab.width + self.budgetLab.width > self.contentView.width - 20) {
         CGFloat reduction = (self.paymentLab.width + self.budgetLab.width - (self.contentView.width - 20)) * 0.5;
         self.paymentLab.width -= reduction;
