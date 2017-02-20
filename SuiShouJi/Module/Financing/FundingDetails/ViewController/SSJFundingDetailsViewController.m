@@ -424,6 +424,8 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
         NSString *originalStr = @"分期还款\n(仅支持账单分期)";
         NSMutableAttributedString *attributedStr = [[NSMutableAttributedString alloc] initWithString:originalStr];
         [attributedStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] range:[originalStr rangeOfString:@"(仅支持账单分期)"]];
+        [attributedStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:[originalStr rangeOfString:@"分期还款"]];
+
         [attributedStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:13] range:[originalStr rangeOfString:@"(仅支持账单分期)"]];
         [_repaymentPopView setAttributtedText:attributedStr forIndex:1];
         _repaymentPopView.selectionHandle = ^(NSString * title){

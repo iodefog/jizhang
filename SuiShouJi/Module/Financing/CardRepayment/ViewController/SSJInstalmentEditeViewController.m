@@ -15,6 +15,7 @@
 #import "SSJChargeCircleModifyCell.h"
 #import "SSJAddOrEditLoanMultiLabelCell.h"
 #import "SSJInstalmentDateSelectCell.h"
+#import "SSJHomeDatePickerView.h"
 
 #import "SSJRepaymentStore.h"
 #import "SSJDatabaseQueue.h"
@@ -45,7 +46,7 @@ static NSString *const kTitle6 = @"分期申请日";
 
 @property(nonatomic, strong) NSArray *images;
 
-@property(nonatomic, strong) SSJReminderDateSelectView *repaymentTimeView;
+@property(nonatomic, strong) SSJHomeDatePickerView *repaymentTimeView;
 
 @property(nonatomic, strong) SSJMonthSelectView *repaymentMonthSelectView;
 
@@ -136,7 +137,7 @@ static NSString *const kTitle6 = @"分期申请日";
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
     if ([title isEqualToString:kTitle6]) {
-        self.repaymentTimeView.currentDate = self.repaymentModel.applyDate;
+        self.repaymentTimeView.date = self.repaymentModel.applyDate;
         [self.repaymentTimeView show];
     }else if ([title isEqualToString:kTitle2]) {
         self.repaymentMonthSelectView.currentDate = self.repaymentModel.repaymentMonth;
@@ -458,12 +459,13 @@ static NSString *const kTitle6 = @"分期申请日";
     return _instalmentCountView;
 }
 
-- (SSJReminderDateSelectView *)repaymentTimeView{
+- (SSJHomeDatePickerView *)repaymentTimeView{
     if (!_repaymentTimeView) {
-        _repaymentTimeView = [[SSJReminderDateSelectView alloc]initWithFrame:self.view.bounds];
+        _repaymentTimeView = [[SSJHomeDatePickerView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 350)];
+        _repaymentTimeView.datePickerMode = SSJDatePickerModeDate;
         __weak typeof(self) weakSelf = self;
-        _repaymentTimeView.dateSetBlock = ^(NSDate *date){
-            weakSelf.repaymentModel.applyDate = date;
+        _repaymentTimeView.confirmBlock = ^(SSJHomeDatePickerView *view){
+            weakSelf.repaymentModel.applyDate = view.date;
             [weakSelf.tableView reloadData];
         };
     }
