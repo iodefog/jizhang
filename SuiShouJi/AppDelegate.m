@@ -97,6 +97,7 @@ NSDate *SCYEnterBackgroundTime() {
     [SSJAnaliyticsManager SSJAnaliytics];
     
     [MQManager setScheduledAgentWithAgentId:@"" agentGroupId:SSJMQDefualtGroupId scheduleRule:MQScheduleRulesRedirectGroup];
+    
     [self uploadIdfa];
     
     [self initializeDatabaseWithFinishHandler:^{
@@ -347,18 +348,20 @@ NSDate *SCYEnterBackgroundTime() {
 
 // 上传idfa
 - (void)uploadIdfa{
-    NSString *idfa;
-    if ([ASIdentifierManager sharedManager].advertisingTrackingEnabled) {
-        idfa = [NSString stringWithFormat:@"%@",[ASIdentifierManager sharedManager].advertisingIdentifier];
-    } else{
-        idfa = [SimulateIDFA createSimulateIDFA];
-    }
-    NSString *lastUploadIdfa = [[NSUserDefaults standardUserDefaults] objectForKey:SSJLastSavedIdfaKey];
-    if (![lastUploadIdfa isEqualToString:idfa] || !lastUploadIdfa) {
-        [self.uploadService uploadIdfaWithIdfaStr:idfa Success:^(NSString *idfaStr) {
-            [[NSUserDefaults standardUserDefaults] setObject:idfaStr forKey:SSJLastSavedIdfaKey];
-        }];
-    }
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        NSString *idfa;
+        if ([ASIdentifierManager sharedManager].advertisingTrackingEnabled) {
+            idfa = [NSString stringWithFormat:@"%@",[ASIdentifierManager sharedManager].advertisingIdentifier];
+        } else{
+            idfa = [SimulateIDFA createSimulateIDFA];
+        }
+        NSString *lastUploadIdfa = [[NSUserDefaults standardUserDefaults] objectForKey:SSJLastSavedIdfaKey];
+        if (![lastUploadIdfa isEqualToString:idfa] || !lastUploadIdfa) {
+            [self.uploadService uploadIdfaWithIdfaStr:idfa Success:^(NSString *idfaStr) {
+                [[NSUserDefaults standardUserDefaults] setObject:idfaStr forKey:SSJLastSavedIdfaKey];
+            }];
+        }
+    });
 }
     
 #pragma mark - qq快登
