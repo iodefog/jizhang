@@ -293,10 +293,13 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
-    SSJBookKeepingHomeListItem *item = [self.items objectAtIndex:section];
-    SSJBookKeepingHomeHeaderView *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kHeaderId];
-    headerView.item = item;
-    return headerView;
+    if (self.items.count) {
+        SSJBookKeepingHomeListItem *item = [self.items objectAtIndex:section];
+        SSJBookKeepingHomeHeaderView *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kHeaderId];
+        headerView.item = item;
+        return headerView;
+    }
+    return nil;
 }
 
 //-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -350,8 +353,11 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 
 #pragma mark - UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    SSJBookKeepingHomeListItem *listItem = [self.items objectAtIndex:section];
-    return listItem.chargeItems.count;
+    if (self.items.count) {
+        SSJBookKeepingHomeListItem *listItem = [self.items objectAtIndex:section];
+        return listItem.chargeItems.count;
+    }
+    return 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -553,8 +559,8 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 
 -(SSJHomeTableView *)tableView{
     if (!_tableView) {
-        _tableView = [[SSJHomeTableView alloc] init];
-//        _tableView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+        _tableView = [[SSJHomeTableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
+        _tableView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.showsVerticalScrollIndicator = NO;
