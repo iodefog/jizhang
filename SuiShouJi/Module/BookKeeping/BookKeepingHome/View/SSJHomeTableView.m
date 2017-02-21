@@ -14,13 +14,13 @@
 
 @implementation SSJHomeTableView
 
-- (instancetype)initWithFrame:(CGRect)frame
+- (instancetype)initWithFrame:(CGRect)frame style:(UITableViewStyle)style
 {
-    self = [super initWithFrame:frame];
+    self = [super initWithFrame:frame style:style];
     if (self) {
         [self addSubview:self.lineView];
         self.backgroundColor = [UIColor clearColor];
-        [self ssj_clearExtendSeparator];
+//        [self ssj_clearExtendSeparator];
         if ([self respondsToSelector:@selector(setSeparatorInset:)]) {
             [self setSeparatorInset:UIEdgeInsetsZero];
         }
@@ -30,10 +30,10 @@
 
 -(void)layoutSubviews{
     [super layoutSubviews];
-//    self.lineView.top = 0;
 //    self.lineView.height = 0;
     self.lineView.centerX = self.width / 2;
     self.lineView.height = self.lineHeight + 1;
+//  self.lineView.top = 0;
     self.lineView.top = -self.lineHeight;
 }
 
