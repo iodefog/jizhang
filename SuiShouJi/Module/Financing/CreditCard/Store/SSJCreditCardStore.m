@@ -171,7 +171,7 @@
         }
         NSString *firstBillingDay = [[[NSDate dateWithYear:[NSDate date].year month:month day:billingDay] dateBySubtractingMonths:1] formattedDateWithFormat:@"yyyy-MM-dd"];
         NSString *secondBillingDay = [[[NSDate dateWithYear:[NSDate date].year month:month day:billingDay] dateBySubtractingDays:1 ] formattedDateWithFormat:@"yyyy-MM-dd"];
-        double cardExpense = [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge a, bk_bill_type b where a.ibillid =  b.id and a.cuserid = ? and a.operatortype <> 2 and b.itype = 1 and a.cbilldate => ? and a.cbilldate <= ? and a.ifunsid = ?",userId,firstBillingDay,secondBillingDay,cardId];
+        double cardExpense = [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge a, bk_bill_type b where a.ibillid =  b.id and a.cuserid = ? and a.operatortype <> 2 and b.itype = 1 and a.cbilldate >= ? and a.cbilldate <= ? and a.ifunsid = ?",userId,firstBillingDay,secondBillingDay,cardId];
         cardBalance = cardExpense;
     }];
     return cardBalance;
