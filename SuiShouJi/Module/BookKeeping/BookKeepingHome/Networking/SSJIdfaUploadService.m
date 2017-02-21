@@ -27,7 +27,7 @@
     NSString *signMsg = [NSString stringWithFormat:@"appid=%@&idfa=%@&timestamp=%f&key=%@",appId,str,timestamp,strKey];
     signMsg = [[signMsg ssj_md5HexDigest] uppercaseString];
     
-    [dict setObject:appId ?: @"" forKey:@"appid"];
+    [dict setObject:appId ?: @"" forKey:@"asoAppid"];
     [dict setObject:str ?: @"" forKey:@"idfa"];
     [dict setObject:@(timestamp) forKey:@"timestamp"];
     [dict setObject:SSJDefaultSource() forKey:@"source"];

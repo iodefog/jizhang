@@ -110,7 +110,7 @@
     string = [string stringByReplacingCharactersInRange:range withString:text];
     if (string.length > self.maxLength) {
         if (self.typeErrorBlock) {
-            self.typeErrorBlock([NSString stringWithFormat:@"最多只能输入%ld个字",self.maxLength]);
+            self.typeErrorBlock([NSString stringWithFormat:@"最多只能输入%d个字",self.maxLength]);
         }
         return NO;
     }

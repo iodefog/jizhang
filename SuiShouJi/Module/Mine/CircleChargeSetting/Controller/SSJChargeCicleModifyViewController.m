@@ -502,15 +502,15 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
         _chargeCircleTimeView.horuAndMinuBgViewBgColor = [UIColor clearColor];;
         _chargeCircleEndTimeView.datePickerMode = SSJDatePickerModeDate;
         _chargeCircleEndTimeView.leftButtonItem = [SSJHomeDatePickerViewButtonItem buttonItemWithTitle:@"清空" titleColor:[UIColor ssj_colorWithHex:SSJOverrunRedColorValue] image:nil];
+        __weak typeof(self) weakSelf = self;
         _chargeCircleEndTimeView.shouldConfirmBlock = ^(SSJHomeDatePickerView *view, NSDate *selecteDate) {
-            NSDate *beginDate = [NSDate dateWithString:self.item.billDate formatString:@"yyyy-MM-dd"];
+            NSDate *beginDate = [NSDate dateWithString:weakSelf.item.billDate formatString:@"yyyy-MM-dd"];
             if ([selecteDate compare:beginDate] == NSOrderedAscending) {
                 [CDAutoHideMessageHUD showMessage:@"结束日期不能早于起始日期哦"];
                 return NO;
             }
             return YES;
         };
-        __weak typeof(self) weakSelf = self;
         _chargeCircleEndTimeView.confirmBlock = ^(SSJHomeDatePickerView *view) {
             weakSelf.item.chargeCircleEndDate = [view.date formattedDateWithFormat:@"yyyy-MM-dd"];
             [weakSelf.tableView reloadData];

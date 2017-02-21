@@ -40,7 +40,7 @@
                 }
             }else {
                 //是还款的情况
-                NSString *fundParent = [db stringForQuery:@"select cparent from bk_fund_info where cfundid = ?",item.fundId];
+//                NSString *fundParent = [db stringForQuery:@"select cparent from bk_fund_info where cfundid = ?",item.fundId];
                 model.applyDate = [NSDate dateWithString:item.billDate formatString:@"yyyy-MM-dd"];
                 NSString *repaymentStr = [db stringForQuery:@"select crepaymentMonth from bk_credit_repayment where crepaymentid = ?",item.sundryId];
                 model.repaymentMonth = [NSDate dateWithString:repaymentStr formatString:@"yyyy-MM"];

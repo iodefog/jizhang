@@ -48,8 +48,13 @@
         //主题通知
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCellAppearanceAfterThemeChanged) name:SSJThemeDidChangeNotification object:nil];
         [self themeChanged];//主题颜色
+        [self sizeToFit];
     }
     return self;
+}
+
+- (CGSize)sizeThatFits:(CGSize)size{
+    return CGSizeMake([UIApplication sharedApplication].keyWindow.width, 360);
 }
 
 - (void)layoutSubviews

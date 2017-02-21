@@ -75,7 +75,7 @@
     [super layoutSubviews];
     self.datePicker.bottom = self.height;
     self.topView.size = CGSizeMake(self.width, 50);
-    self.topView.leftTop = CGPointMake(0, self.datePicker.top);
+    self.topView.leftTop = CGPointMake(0, 0);
     self.titleLabel.center = CGPointMake(self.topView.width / 2, self.topView.height / 2);
     self.closeButton.centerY = self.topView.height / 2;
     self.closeButton.left = 10;
@@ -136,7 +136,6 @@
 -(UIPickerView *)datePicker{
     if (!_datePicker) {
         _datePicker = [[UIPickerView alloc]initWithFrame:CGRectMake(0, 0, self.width, 300)];
-        _datePicker.backgroundColor = [UIColor whiteColor];
         _datePicker.delegate = self;
         _datePicker.dataSource = self;
     }
@@ -146,7 +145,6 @@
 -(UIView *)topView{
     if (!_topView) {
         _topView = [[UIView alloc]init];
-        _topView.backgroundColor = [UIColor whiteColor];
         _titleLabel = [[UILabel alloc]init];
         _titleLabel.text = @"选择日期";
         _titleLabel.textAlignment = NSTextAlignmentCenter;

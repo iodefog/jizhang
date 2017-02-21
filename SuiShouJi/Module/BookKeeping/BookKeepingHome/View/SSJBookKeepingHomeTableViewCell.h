@@ -9,6 +9,8 @@
 #import "SSJBaseTableViewCell.h"
 #import "SSJBillingChargeCellItem.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface SSJBookKeepingHomeTableViewCell : SSJBaseTableViewCell
 
 typedef void(^beginEditeBtnClickBlock)(SSJBookKeepingHomeTableViewCell *cell);
@@ -58,3 +60,5 @@ typedef void(^imageClickBlock)(SSJBillingChargeCellItem *item);
 -(void)animatedShowCellWithDistance:(float)distance delay:(float)delay completion:(void (^ __nullable)())completion;
 
 @end
+
+NS_ASSUME_NONNULL_END

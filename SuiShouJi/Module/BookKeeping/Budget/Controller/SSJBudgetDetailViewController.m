@@ -20,8 +20,6 @@
 #import "SSJReportFormsItem.h"
 #import "SSJDatePeriod.h"
 
-static const CGFloat kHeaderMargin = 8;
-
 static NSString *const kDateFomat = @"yyyy-MM-dd";
 
 static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";

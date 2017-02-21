@@ -84,7 +84,7 @@
 @property (nonatomic) BOOL isOnOrNot;
 
 //记账的下标
-@property(nonatomic) NSInteger chargeIndex;
+@property(nonatomic, strong) NSIndexPath *chargeIndex;
 
 //操作类型
 @property(nonatomic) NSInteger operatorType;

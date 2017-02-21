@@ -121,7 +121,7 @@
             NSDictionary *userDict = @{@"remindItem":remindDic,
                                        @"key":SSJReminderNotificationKey};
             notification.userInfo = userDict;
-            notification.repeatInterval = NSWeekCalendarUnit;
+            notification.repeatInterval = NSCalendarUnitWeekOfYear;
             notification.fireDate = fireDate;
             [notificationsArr addObject:notification];
         }
@@ -165,7 +165,7 @@
                                                @"key":SSJReminderNotificationKey};
                     notification.userInfo = userDict;
                     notification.fireDate = [firstDayOfTheWeek dateByAddingDays:i];
-                    notification.repeatInterval = NSWeekCalendarUnit;
+                    notification.repeatInterval = NSCalendarUnitWeekOfYear;
                     [notificationsArr addObject:notification];
                 }
             }else{
@@ -182,7 +182,7 @@
                                                @"key":SSJReminderNotificationKey};
                     notification.userInfo = userDict;
                     notification.fireDate = [fireDate dateBySubtractingDays:i];
-                    notification.repeatInterval = NSWeekCalendarUnit;
+                    notification.repeatInterval = NSCalendarUnitWeekOfYear;
                     [notificationsArr addObject:notification];
                 }
             }
@@ -331,7 +331,7 @@
                                            @"key":SSJReminderNotificationKey};
                 notification.userInfo = userDict;
                 notification.fireDate = [firstDayOfTheWeek dateByAddingDays:i];
-                notification.repeatInterval = NSWeekdayCalendarUnit;
+                notification.repeatInterval = NSCalendarUnitWeekday;
                 [notificationsArr addObject:notification];
             }
         }

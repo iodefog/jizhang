@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "SSJReminderItem.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface SSJLocalNotificationHelper : NSObject
 
 /**
@@ -41,4 +43,8 @@
 + (void)cancelLocalNotificationWithUserId:(NSString * __nonnull)userId;
 
 + (NSDate *)calculateNexRemindDateWithStartDate:(NSDate *)date remindCycle:(NSInteger)remindCycle remindAtEndOfMonth:(BOOL)remindAtEndOfMonth;
+
 @end
+
+NS_ASSUME_NONNULL_END
+

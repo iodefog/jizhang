@@ -30,8 +30,6 @@
 
 @property (nonatomic) CGFloat budgetValue;
 
-@property (nonatomic) CGFloat rowHeight;
-
 // 是否总预算
 @property (nonatomic) BOOL isMajor;
 

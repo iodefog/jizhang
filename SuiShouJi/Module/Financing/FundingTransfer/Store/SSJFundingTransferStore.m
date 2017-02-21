@@ -565,8 +565,8 @@ NSString *SSJFundingTransferStoreListKey = @"SSJFundingTransferStoreListKey";
             tansferItem.transferMemo = chargeItem.chargeMemo;
             tansferItem.transferInChargeId = chargeItem.ID;
             tansferItem.transferOutChargeId = [db stringForQuery:@"select ichargeid from bk_user_charge where substr(cwritedate,1,19) = ? and cuserid = ? and ifunsid <> ?",[chargeItem.editeDate substringWithRange:NSMakeRange(0, 19)],userId,tansferItem.transferInId];
-            NSString *transferInParent = [db stringForQuery:@"select cparent from bk_fund_info where cfundid = ?",tansferItem.transferInId];
-            NSString *transferOutParent = [db stringForQuery:@"select cparent from bk_fund_info where cfundid = ?",tansferItem.transferOutId];
+//            NSString *transferInParent = [db stringForQuery:@"select cparent from bk_fund_info where cfundid = ?",tansferItem.transferInId];
+//            NSString *transferOutParent = [db stringForQuery:@"select cparent from bk_fund_info where cfundid = ?",tansferItem.transferOutId];
             
         } else {
             tansferItem.transferDate = chargeItem.billDate;
@@ -581,8 +581,8 @@ NSString *SSJFundingTransferStoreListKey = @"SSJFundingTransferStoreListKey";
             tansferItem.transferMemo = chargeItem.chargeMemo;
             tansferItem.transferOutChargeId = chargeItem.ID;
             tansferItem.transferInChargeId = [db stringForQuery:@"select ichargeid from bk_user_charge where substr(cwritedate,1,19) = ? and cuserid = ? and ifunsid <> ?",[chargeItem.editeDate substringWithRange:NSMakeRange(0, 19)],userId,tansferItem.transferOutId];
-            NSString *transferInParent = [db stringForQuery:@"select cparent from bk_fund_info where cfundid = ?",tansferItem.transferInId];
-            NSString *transferOutParent = [db stringForQuery:@"select cparent from bk_fund_info where cfundid = ?",tansferItem.transferOutId];
+//            NSString *transferInParent = [db stringForQuery:@"select cparent from bk_fund_info where cfundid = ?",tansferItem.transferInId];
+//            NSString *transferOutParent = [db stringForQuery:@"select cparent from bk_fund_info where cfundid = ?",tansferItem.transferOutId];
         }
         
         if (success) {
