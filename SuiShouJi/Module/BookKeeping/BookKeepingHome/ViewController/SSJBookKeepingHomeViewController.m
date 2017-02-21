@@ -350,7 +350,8 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 
 #pragma mark - UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return self.items.count;
+    SSJBookKeepingHomeListItem *listItem = [self.items objectAtIndex:section];
+    return listItem.chargeItems.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -552,8 +553,8 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 
 -(SSJHomeTableView *)tableView{
     if (!_tableView) {
-        _tableView = [[SSJHomeTableView alloc]init];
-
+        _tableView = [[SSJHomeTableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
+        _tableView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.showsVerticalScrollIndicator = NO;
