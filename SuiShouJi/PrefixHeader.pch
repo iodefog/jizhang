@@ -44,5 +44,6 @@
 #import "SSJAnaliyticsManager.h"
 #import "MQChatViewManager.h"
 #import "SSJTheme.h"
+#import "Masonry.h"
 
 #endif
