@@ -201,6 +201,8 @@
 		<string></string>
 		<key>AppStoreUrl</key>
 		<string>https://itunes.apple.com/cn/app/you-yu-ji-zhang-li-cai-zui/id1147038726?l=zh&amp;ls=1&amp;mt=8</string>
+		<key>appleID</key>
+		<string>1147038726</string>
 	</dict>
 	<key>com.youyu.jizhangbao</key>
 	<dict>
