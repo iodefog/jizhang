@@ -553,8 +553,8 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 
 -(SSJHomeTableView *)tableView{
     if (!_tableView) {
-        _tableView = [[SSJHomeTableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
-        _tableView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+        _tableView = [[SSJHomeTableView alloc] init];
+//        _tableView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.showsVerticalScrollIndicator = NO;
