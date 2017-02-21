@@ -8,6 +8,7 @@
 
 #import "SSJBookKeepingHomeHelper.h"
 #import "SSJBillingChargeCellItem.h"
+#import "SSJBookKeepingHomeListItem.h"
 #import "SSJDatabaseQueue.h"
 
 NSString *const SSJIncomeSumlKey = @"SSJIncomeSumlKey";
@@ -57,9 +58,10 @@ NSString *const SSJDateStartIndexDicKey = @"SSJDateStartIndexDicKey";
         NSMutableDictionary *tempDic = [NSMutableDictionary dictionary];
         NSMutableDictionary *startIndex = [NSMutableDictionary dictionary];
         NSString *lastDate = @"";
-        int count = 0;
-        int chargeCount = 0;
-        FMResultSet *chargeResult = [db executeQuery:@"select a.cbilldate , a.imoney , a.ichargeid , a.ibillid , a.cwritedate  ,a.ifunsid , a.cuserid , a.cimgurl ,  a.thumburl ,a.cmemo , a.operatortype as chargeoperatortype , a.clientadddate , a.cdetaildate, b.cname, b.ccoin, b.ccolor, b.itype from (select cbilldate , imoney , ichargeid , ibillid , cwritedate  ,ifunsid , cuserid , cmemo ,  cimgurl ,  thumburl , operatortype, cbooksid , clientadddate , cdetaildate from (select cbilldate , imoney , ichargeid , ibillid , cwritedate , ifunsid , cuserid , cmemo ,  cimgurl , thumburl , operatortype , cbooksid , clientadddate , cdetaildate from bk_user_charge where operatortype != 2 and cbooksid = ?) where cuserid = ? union select * from (select cbilldate , sumamount as imoney , '' as ichargeid , '-1' as ibillid , '3'||substr(cwritedate,2) as cwritedate , '' as ifunsid , cuserid , '' as cmemo , '' as cimgurl , '' as thumburl ,  0 as operatortype , cbooksid , '3'||substr(cwritedate,2) as clientadddate , '25:00' as cdetaildate from bk_dailysum_charge where cuserid = ? and cbooksid = ? order by cbilldate desc , cdetaildate desc)) as a left join bk_bill_type as b on a.ibillid = b.id where a.cbilldate <= ? and (b.istate <> 2 or b.istate is null) order by a.cbilldate desc , a.cdetaildate desc ,a.clientadddate desc , a.cwritedate desc",booksid,userid,userid,booksid,[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"]];
+        int totalCount = 0;
+        int section = 0;
+        int row = 0;
+        FMResultSet *chargeResult = [db executeQuery:@"select a.* , bt.cname, bt.ccoin, bt.ccolor, bt.itype from bk_user_charge uc , bk_bill_type bt where uc.ibillid = bt.id and uc.cbilldate <= ? and uc.cuserid = ? and uc.cbooksid = ? and bt.istate <> 2 order by uc.cbilldate desc , uc.clientadddate desc , uc.cwritedate desc",[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"],userid,booksid];
         if (!chargeResult) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{
@@ -86,18 +88,35 @@ NSString *const SSJDateStartIndexDicKey = @"SSJDateStartIndexDicKey";
             item.billDate = [chargeResult stringForColumn:@"CBILLDATE"];
             item.clientAddDate = [chargeResult stringForColumn:@"clientadddate"];
             item.billDetailDate = [chargeResult stringForColumn:@"cdetaildate"];
-            if ([item.billId isEqualToString:@"-1"]) {
-                [startIndex setObject:@(count) forKey:item.billDate];
-            }
             if (![item.billDate isEqualToString:lastDate]) {
+                SSJBookKeepingHomeListItem *listItem = [[SSJBookKeepingHomeListItem alloc]init];
+                listItem.chargeItems = [NSMutableArray arrayWithCapacity:0];
+                listItem.date = item.billDate;
+                if (item.incomeOrExpence) {
+                    listItem.balance = - [item.money doubleValue];
+                }else{
+                    listItem.balance = [item.money doubleValue];
+                }
                 lastDate = item.billDate;
-                chargeCount = 0;
-//                [summaryDic setValue:@(chargeCount) forKey:item.billDate];
+                row = 0;
+                section ++;
+                item.chargeIndex = [NSIndexPath indexPathForRow:row inSection:section];
+                [listItem.chargeItems addObject:item];
+                [summaryDic setObject:@(totalCount) forKey:item.billDate];
+                [originalChargeArr addObject:listItem];
+                //                [summaryDic setValue:@(chargeCount) forKey:item.billDate];
             }else{
-                chargeCount = [[summaryDic valueForKey:item.billDate] intValue] + 1;
-                [summaryDic setValue:@(chargeCount) forKey:item.billDate];
+                SSJBookKeepingHomeListItem *listItem = [originalChargeArr lastObject];
+                if (item.incomeOrExpence) {
+                    listItem.balance = listItem.balance - [item.money doubleValue];
+                }else{
+                    listItem.balance = listItem.balance + [item.money doubleValue];
+                }
+                row ++;
+                item.chargeIndex = [NSIndexPath indexPathForRow:row inSection:section];
+                [listItem.chargeItems addObject:item];
+                [summaryDic setObject:@(totalCount) forKey:item.billDate];
             }
-            item.chargeIndex = count;
             // 将新增的数据独立拿出一个数组
             for (int i = 0; i < newCharge.count; i++) {
                 SSJBillingChargeCellItem *newItem = [newCharge ssj_safeObjectAtIndex:i];
@@ -105,8 +124,9 @@ NSString *const SSJDateStartIndexDicKey = @"SSJDateStartIndexDicKey";
                     [newAddChargeArr addObject:item];
                 }
             }
+            
             [originalChargeArr addObject:item];
-            count++;
+//            count++;
         }
         // 在每日的流水总数中减掉新增的数量
         for (int i = 0; i < newAddChargeArr.count; i++) {
