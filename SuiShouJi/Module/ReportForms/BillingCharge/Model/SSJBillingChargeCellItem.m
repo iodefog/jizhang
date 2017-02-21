@@ -22,7 +22,25 @@
     item.chargeImage = self.chargeImage;
     item.chargeThumbImage = self.chargeThumbImage;
     item.configId = self.configId;
+    item.booksId = self.booksId;
+    item.booksName = self.booksName;
+    item.chargeCircleType = self.chargeCircleType;
+    item.chargeCircleEndDate = self.chargeCircleEndDate;
+    item.isOnOrNot = self.isOnOrNot;
+    item.chargeIndex = self.chargeIndex;
+    item.operatorType = self.operatorType;
     item.transferSource = self.transferSource;
+    item.membersItem = self.membersItem;
+    item.newlyAddMembers = self.newlyAddMembers;
+    item.deletedMembers = self.deletedMembers;
+    item.loanId = self.loanId;
+    item.loanChargeType = self.loanChargeType;
+    item.loanType = self.loanType;
+    item.loanSource = self.loanSource;
+    item.clientAddDate = self.clientAddDate;
+    item.idType = self.idType;
+    item.sundryId = self.sundryId;
+
     return item;
 }
 
@@ -48,7 +66,7 @@
                                                        @"booksName":(_booksName ?: [NSNull null]),
                                                        @"chargeCircleType":@(_chargeCircleType),
                                                        @"isOnOrNot":@(_isOnOrNot),
-                                                       @"chargeIndex":@(_chargeIndex),
+                                                       @"chargeIndex":_chargeIndex,
                                                        @"operatorType":@(_operatorType),
                                                        @"transferSource":(_transferSource ?: [NSNull null]),
                                                        @"membersItem":(_membersItem ?: [NSNull null]),

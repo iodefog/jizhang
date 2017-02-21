@@ -61,7 +61,7 @@ NSString *const SSJDateStartIndexDicKey = @"SSJDateStartIndexDicKey";
         int totalCount = 0;
         int section = 0;
         int row = 0;
-        FMResultSet *chargeResult = [db executeQuery:@"select a.* , bt.cname, bt.ccoin, bt.ccolor, bt.itype from bk_user_charge uc , bk_bill_type bt where uc.ibillid = bt.id and uc.cbilldate <= ? and uc.cuserid = ? and uc.cbooksid = ? and bt.istate <> 2 order by uc.cbilldate desc , uc.clientadddate desc , uc.cwritedate desc",[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"],userid,booksid];
+        FMResultSet *chargeResult = [db executeQuery:@"select uc.* , uc.operatortype as chargeoperatortype, bt.cname, bt.ccoin, bt.ccolor, bt.itype from bk_user_charge uc , bk_bill_type bt where uc.ibillid = bt.id and uc.cbilldate <= ? and uc.cuserid = ? and uc.cbooksid = ? and bt.istate <> 2 order by uc.cbilldate desc , uc.clientadddate desc , uc.cwritedate desc",[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"],userid,booksid];
         if (!chargeResult) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{
@@ -102,7 +102,8 @@ NSString *const SSJDateStartIndexDicKey = @"SSJDateStartIndexDicKey";
                 section ++;
                 item.chargeIndex = [NSIndexPath indexPathForRow:row inSection:section];
                 [listItem.chargeItems addObject:item];
-                [summaryDic setObject:@(totalCount) forKey:item.billDate];
+                [summaryDic setObject:@(row) forKey:item.billDate];
+                totalCount = totalCount + 2;
                 [originalChargeArr addObject:listItem];
                 //                [summaryDic setValue:@(chargeCount) forKey:item.billDate];
             }else{
@@ -113,9 +114,10 @@ NSString *const SSJDateStartIndexDicKey = @"SSJDateStartIndexDicKey";
                     listItem.balance = listItem.balance + [item.money doubleValue];
                 }
                 row ++;
+                totalCount ++;
                 item.chargeIndex = [NSIndexPath indexPathForRow:row inSection:section];
                 [listItem.chargeItems addObject:item];
-                [summaryDic setObject:@(totalCount) forKey:item.billDate];
+                [summaryDic setObject:@(row) forKey:item.billDate];
             }
             // 将新增的数据独立拿出一个数组
             for (int i = 0; i < newCharge.count; i++) {
@@ -125,7 +127,6 @@ NSString *const SSJDateStartIndexDicKey = @"SSJDateStartIndexDicKey";
                 }
             }
             
-            [originalChargeArr addObject:item];
 //            count++;
         }
         // 在每日的流水总数中减掉新增的数量
