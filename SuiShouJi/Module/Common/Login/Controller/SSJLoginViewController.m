@@ -59,9 +59,9 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 
 @property (nonatomic,strong)UITextField *tfRegPasswordNum;
 
-@property (nonatomic,copy)NSString *strUserAccount;
-
-@property (nonatomic,copy)NSString *strUserPassword;
+//@property (nonatomic,copy)NSString *strUserAccount;
+//
+//@property (nonatomic,copy)NSString *strUserPassword;
 
 @property (nonatomic,strong)UIButton *loginButton;
 
@@ -87,7 +87,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 
 @property (nonatomic, strong) TPKeyboardAvoidingScrollView *scrollView;
 
-@property (nonatomic, strong) TPKeyboardAvoidingScrollView *centerScrollView;
+@property (nonatomic, strong) UIView *centerScrollView;
 
 @property (nonatomic, strong) UIView *numSecretBgView;
 
@@ -142,17 +142,26 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         self.statisticsTitle = @"登录";
-//        self.appliesTheme = NO;
-//        self.edgesForExtendedLayout = UIRectEdgeNone;
-//        self.automaticallyAdjustsScrollViewInsets = NO;
+        self.appliesTheme = NO;
+        self.extendedLayoutIncludesOpaqueBars = YES;
+        self.automaticallyAdjustsScrollViewInsets = NO;
         self.hidesBottomBarWhenPushed = YES;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updatetextfield:) name:UITextFieldTextDidChangeNotification object:nil];
+
+
     }
     return self;
 }
+
+- (UIStatusBarStyle)preferredStatusBarStyle {
+    return UIStatusBarStyleLightContent;
+}
+
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -194,19 +203,20 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     self.showNavigationBarBaseLine = NO;
     [self.scrollView addSubview:self.triangleView];
     
+    
 }
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     
     [self.tfPhoneNum becomeFirstResponder];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
-    
-    if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
-        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
-        self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
-        self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:21],
-                                                                        NSForegroundColorAttributeName:[UIColor whiteColor]};
-    }
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+//    if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
+//        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+//        self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+//        self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:21],
+//                                                                        NSForegroundColorAttributeName:[UIColor whiteColor]};
+//    }
 }
 
 -(void)viewDidLayoutSubviews{
@@ -301,6 +311,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     if (service == self.registerService) {//获取验证码
         if ([self.registerService.returnCode isEqualToString:@"1"]) {
             [CDAutoHideMessageHUD showMessage:@"验证码发送成功"];
+            [self beginCountdownIfNeeded];//倒计时
             self.phoneNum = self.tfRegPhoneNum.text;
         } else if ([self.registerService.returnCode isEqualToString:@"1001"]) {
             
@@ -340,7 +351,8 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 //                registCompleteVC.finishHandle = self.finishHandle;
 //                self.phoneNum = self.mobileNo;
                 self.codeNum = self.registerNextService.authCode;
-                self.centerScrollView.contentOffset = self.centerScrollView.contentOffset = CGPointMake(SSJSCREENWITH * 2, 0);
+//                self.centerScrollView.contentOffset = CGPointMake(SSJSCREENWITH * 2, 0);
+                self.centerScrollView.left = - 2 *SSJSCREENWITH;
 //                [self.navigationController pushViewController:registCompleteVC animated:YES];
                 
             }
@@ -461,10 +473,12 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         //清空数据
         self.tfRegYanZhenNum.text = nil;
         self.tfRegPhoneNum.text = nil;
+        self.regNextBtn.enabled = NO;
         sender.selected = !sender.selected;
         [UIView animateWithDuration:0.2 animations:^{
             self.triangleView.centerX = self.loginTitleButton.centerX;
-            self.centerScrollView.contentOffset = CGPointZero;
+//            self.centerScrollView.contentOffset = CGPointZero;
+            self.centerScrollView.left = 0;
         }];
     }else if (sender.tag == 101) {
         [self.loginService loadLoginModelWithPassWord:self.tfPassword.text AndUserAccount:self.tfPhoneNum.text];
@@ -491,11 +505,12 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         //清空数据
         self.tfPhoneNum.text = nil;
         self.tfPassword.text = nil;
+        self.loginButton.enabled = NO;
         if (sender.selected == YES)return;
         sender.selected = !sender.selected;
         [UIView animateWithDuration:0.3 animations:^{
             self.triangleView.centerX = self.registerTitleButton.centerX;
-            self.centerScrollView.contentOffset = CGPointMake(SSJSCREENWITH, 0);
+            self.centerScrollView.left = -SSJSCREENWITH;
         }];
         return;
     }
@@ -573,7 +588,6 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         [CDAutoHideMessageHUD showMessage:@"请先输入手机号"];
         return;
     }
-    [self beginCountdownIfNeeded];
     [self.registerService getAuthCodeWithMobileNo:self.tfRegPhoneNum.text];
 }
 
@@ -735,7 +749,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 
 - (void)updateConstraints
 {
-       self.scrollView.frame = self.view.bounds;
+    self.scrollView.frame = self.view.bounds;
     self.topView.frame = CGRectMake(0, 0, self.view.width, 206);
     
     self.loginTitleButton.frame = CGRectMake(0, self.topView.height - 45, self.view.width * 0.5, 45);
@@ -746,7 +760,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     self.triangleView.centerX = self.loginTitleButton.centerX;
     self.triangleView.bottom = self.topView.bottom;
     
-    self.centerScrollView.frame = CGRectMake(0, CGRectGetMaxY(self.topView.frame), self.view.width, self.view.height - self.topView.height);
+    self.centerScrollView.frame = CGRectMake(0, CGRectGetMaxY(self.topView.frame), self.view.width*3, self.view.height - self.topView.height);
     
     self.numSecretBgView.frame = CGRectMake(15, 35, self.view.width - 30, 100);
     
@@ -769,14 +783,16 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         self.leftSeperatorLine.left =  (self.view.width - self.thirdPartyLoginLabel.width) * 0.5 - 55;
         self.rightSeperatorLine.left = CGRectGetMaxX(self.thirdPartyLoginLabel.frame) + 10;
         self.leftSeperatorLine.height = self.rightSeperatorLine.height = 1.0f / [UIScreen mainScreen].scale;
-        if (![WXApi isWXAppInstalled]) {
+        if ([WXApi isWXAppInstalled]) {//安装微信
             self.weixinLoginButton.top = self.tencentLoginButton.top = CGRectGetMaxY(self.thirdPartyLoginLabel.frame) + 25;
-            self.weixinLoginButton.centerX = self.thirdPartyLoginLabel.centerX - 25;
-            self.tencentLoginButton.centerX = self.thirdPartyLoginLabel.centerX + 25;
+            self.weixinLoginButton.centerX = self.thirdPartyLoginLabel.centerX - 50;
+            self.tencentLoginButton.centerX = self.thirdPartyLoginLabel.centerX + 50;
+            self.weixinLoginButton.hidden = NO;
             
         } else {
             self.tencentLoginButton.top = CGRectGetMaxY(self.thirdPartyLoginLabel.frame) + 25;
             self.tencentLoginButton.centerX = self.thirdPartyLoginLabel.centerX;
+            self.weixinLoginButton.hidden = YES;
         }
     }
     
@@ -820,15 +836,15 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     return _scrollView;
 }
 
-- (TPKeyboardAvoidingScrollView *)centerScrollView
+- (UIView *)centerScrollView
 {
     if (!_centerScrollView) {
-        _centerScrollView = [[TPKeyboardAvoidingScrollView alloc] init];
-        _centerScrollView.delegate = self;
-        _centerScrollView.contentSize = CGSizeMake(SSJSCREENWITH * 3, 0);
-        _centerScrollView.showsHorizontalScrollIndicator = NO;
-        _centerScrollView.scrollEnabled = NO;
-        _centerScrollView.pagingEnabled = YES;
+        _centerScrollView = [[UIView alloc] init];
+//        _centerScrollView.delegate = self;
+//        _centerScrollView.contentSize = CGSizeMake(SSJSCREENWITH * 3, 0);
+//        _centerScrollView.showsHorizontalScrollIndicator = NO;
+//        _centerScrollView.scrollEnabled = NO;
+//        _centerScrollView.pagingEnabled = YES;
     }
     return _centerScrollView;
 }
@@ -895,11 +911,13 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         _tfPhoneNum.textColor = [UIColor ssj_colorWithHex:@"333333"];
         _tfPhoneNum.clearButtonMode = UITextFieldViewModeWhileEditing;
         _tfPhoneNum.placeholder = @"请输入手机号";
+        _tfPhoneNum.font = [UIFont systemFontOfSize:16];
         [_tfPhoneNum setValue:[UIColor ssj_colorWithHex:@"999999"] forKeyPath:@"_placeholderLabel.textColor"];
+        [_tfPhoneNum setValue:[UIFont systemFontOfSize:13] forKeyPath:@"_placeholderLabel.font"];
         [_tfPhoneNum ssj_setBorderStyle:SSJBorderStyleBottom];
         [_tfPhoneNum ssj_setBorderWidth:1];
         [_tfPhoneNum ssj_setBorderColor:[UIColor ssj_colorWithHex:@"cccccc"]];
-        _tfPhoneNum.font = [UIFont systemFontOfSize:16];
+        
         _tfPhoneNum.delegate = self;
         _tfPhoneNum.keyboardType = UIKeyboardTypeNumberPad;
         _tfPhoneNum.leftView = leftView;
@@ -917,11 +935,13 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         _tfRegPhoneNum.textColor = [UIColor ssj_colorWithHex:@"333333"];
         _tfRegPhoneNum.clearButtonMode = UITextFieldViewModeWhileEditing;
         _tfRegPhoneNum.placeholder = @"请输入手机号";
+        _tfRegPhoneNum.font = [UIFont systemFontOfSize:16];
         [_tfRegPhoneNum setValue:[UIColor ssj_colorWithHex:@"999999"] forKeyPath:@"_placeholderLabel.textColor"];
+        [_tfRegPhoneNum setValue:[UIFont systemFontOfSize:13] forKeyPath:@"_placeholderLabel.font"];
         [_tfRegPhoneNum ssj_setBorderStyle:SSJBorderStyleBottom];
         [_tfRegPhoneNum ssj_setBorderWidth:1];
         [_tfRegPhoneNum ssj_setBorderColor:[UIColor ssj_colorWithHex:@"cccccc"]];
-        _tfRegPhoneNum.font = [UIFont systemFontOfSize:16];
+        
         _tfRegPhoneNum.delegate = self;
         _tfRegPhoneNum.keyboardType = UIKeyboardTypeNumberPad;
         _tfRegPhoneNum.leftView = leftView;
@@ -944,8 +964,10 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         _tfPassword.textColor = [UIColor ssj_colorWithHex:@"333333"];
         _tfPassword.clearButtonMode = UITextFieldViewModeWhileEditing;
         _tfPassword.placeholder = @"请输入账户密码";
-        [_tfPassword setValue:[UIColor ssj_colorWithHex:@"999999"] forKeyPath:@"_placeholderLabel.textColor"];
         _tfPassword.font = [UIFont systemFontOfSize:16];
+        [_tfPassword setValue:[UIColor ssj_colorWithHex:@"999999"] forKeyPath:@"_placeholderLabel.textColor"];
+        [_tfPassword setValue:[UIFont systemFontOfSize:13] forKeyPath:@"_placeholderLabel.font"];
+        
         _tfPassword.keyboardType = UIKeyboardTypeASCIICapable;
         _tfPassword.delegate = self;
         _tfPassword.leftView = leftView;
@@ -970,8 +992,10 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         _tfRegPasswordNum.textColor = [UIColor ssj_colorWithHex:@"333333"];
         _tfRegPasswordNum.clearButtonMode = UITextFieldViewModeWhileEditing;
         _tfRegPasswordNum.placeholder = @"请输入账户密码";
-        [_tfRegPasswordNum setValue:[UIColor ssj_colorWithHex:@"999999"] forKeyPath:@"_placeholderLabel.textColor"];
         _tfRegPasswordNum.font = [UIFont systemFontOfSize:16];
+        [_tfRegPasswordNum setValue:[UIColor ssj_colorWithHex:@"999999"] forKeyPath:@"_placeholderLabel.textColor"];
+        [_tfRegPasswordNum setValue:[UIFont systemFontOfSize:13] forKeyPath:@"_placeholderLabel.font"];
+        
         _tfRegPasswordNum.keyboardType = UIKeyboardTypeASCIICapable;
         _tfRegPasswordNum.delegate = self;
         _tfRegPasswordNum.leftView = leftView;
@@ -992,9 +1016,11 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         _tfRegYanZhenNum.textColor = [UIColor ssj_colorWithHex:@"333333"];
         _tfRegYanZhenNum.clearButtonMode = UITextFieldViewModeWhileEditing;
         _tfRegYanZhenNum.placeholder = @"请输入验证码";
-        [_tfRegYanZhenNum setValue:[UIColor ssj_colorWithHex:@"999999"] forKeyPath:@"_placeholderLabel.textColor"];
         _tfRegYanZhenNum.font = [UIFont systemFontOfSize:16];
-        _tfRegYanZhenNum.keyboardType = UIKeyboardTypeASCIICapable;
+        [_tfRegYanZhenNum setValue:[UIColor ssj_colorWithHex:@"999999"] forKeyPath:@"_placeholderLabel.textColor"];
+        [_tfRegYanZhenNum setValue:[UIFont systemFontOfSize:13] forKeyPath:@"_placeholderLabel.font"];
+        
+        _tfRegYanZhenNum.keyboardType = UIKeyboardTypeNumberPad;
         _tfRegYanZhenNum.delegate = self;
         _tfRegYanZhenNum.leftView = leftView;
         _tfRegYanZhenNum.rightView = self.getAuthCodeBtn;
@@ -1088,8 +1114,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         _forgetButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _forgetButton.titleLabel.font = [UIFont systemFontOfSize:13];
         [_forgetButton setTitle:@"忘记密码?" forState:UIControlStateNormal];
-        [_forgetButton setTitleColor:[UIColor ssj_colorWithHex:@"333333"] forState:UIControlStateNormal];
-        _forgetButton.titleLabel.font = [UIFont systemFontOfSize:15];
+        [_forgetButton setTitleColor:[UIColor ssj_colorWithHex:@"666666"] forState:UIControlStateNormal];
         [_forgetButton addTarget:self action:@selector(forgetButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         [_forgetButton sizeToFit];
     }
@@ -1133,7 +1158,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 -(UIView *)leftSeperatorLine{
     if (!_leftSeperatorLine) {
         _leftSeperatorLine = [[UIView alloc]init];
-        _leftSeperatorLine.backgroundColor = [UIColor ssj_colorWithHex:@"666666"];
+        _leftSeperatorLine.backgroundColor = [UIColor ssj_colorWithHex:@"666666" alpha:0.2];
     }
     return _leftSeperatorLine;
 }
@@ -1141,7 +1166,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 -(UIView *)rightSeperatorLine{
     if (!_rightSeperatorLine) {
         _rightSeperatorLine = [[UIView alloc]init];
-        _rightSeperatorLine.backgroundColor = [UIColor ssj_colorWithHex:@"666666"];
+        _rightSeperatorLine.backgroundColor = [UIColor ssj_colorWithHex:@"666666" alpha:0.2];
     }
     return _rightSeperatorLine;
 }
@@ -1152,8 +1177,8 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         _thirdPartyLoginLabel = [[UILabel alloc]init];
         _thirdPartyLoginLabel.text = @"使用第三方登录";
         [_thirdPartyLoginLabel sizeToFit];
-        _thirdPartyLoginLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginSecondaryColor];
-        _thirdPartyLoginLabel.font = [UIFont systemFontOfSize:15];
+        _thirdPartyLoginLabel.textColor = [UIColor ssj_colorWithHex:@"666666"];
+        _thirdPartyLoginLabel.font = [UIFont systemFontOfSize:13];
         _thirdPartyLoginLabel.textAlignment = NSTextAlignmentCenter;
         [_thirdPartyLoginLabel sizeToFit];
     }
@@ -1202,7 +1227,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     if (!_getAuthCodeBtn) {
         _getAuthCodeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _getAuthCodeBtn.size = CGSizeMake(95, 30);
-        _getAuthCodeBtn.titleLabel.font = [UIFont systemFontOfSize:15];
+        _getAuthCodeBtn.titleLabel.font = [UIFont systemFontOfSize:13];
         [_getAuthCodeBtn setTitle:@"获取验证码" forState:UIControlStateNormal];
         [_getAuthCodeBtn setTitleColor:[UIColor ssj_colorWithHex:@"#333333"] forState:UIControlStateNormal];
         [_getAuthCodeBtn setTitleColor:[UIColor ssj_colorWithHex:@"#666666"] forState:UIControlStateDisabled];
