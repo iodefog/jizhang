@@ -17,6 +17,6 @@
 
 @property(nonatomic, strong) NSMutableArray <SSJBillingChargeCellItem *> *chargeItems;
 
-@property(nonatomic) NSInteger *totalCount;
+@property(nonatomic) NSInteger totalCount;
 
 @end
