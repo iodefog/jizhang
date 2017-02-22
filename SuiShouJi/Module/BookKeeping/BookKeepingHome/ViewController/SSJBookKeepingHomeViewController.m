@@ -284,7 +284,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
-    return 0;
+    return 0.1;
 }
 
 

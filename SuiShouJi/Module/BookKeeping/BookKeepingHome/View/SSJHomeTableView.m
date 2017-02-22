@@ -21,9 +21,9 @@
         [self addSubview:self.lineView];
         self.backgroundColor = [UIColor clearColor];
 //        [self ssj_clearExtendSeparator];
-        if ([self respondsToSelector:@selector(setSeparatorInset:)]) {
-            [self setSeparatorInset:UIEdgeInsetsZero];
-        }
+//        if ([self respondsToSelector:@selector(setSeparatorInset:)]) {
+//            [self setSeparatorInset:UIEdgeInsetsZero];
+//        }
     }
     return self;
 }
