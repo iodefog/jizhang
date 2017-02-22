@@ -79,7 +79,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 @property(nonatomic, strong) NSString *currentExpenditure;
 @property(nonatomic, strong) UIImageView *backImage;
 @property(nonatomic, strong) NSMutableArray *newlyAddChargeArr;
-@property(nonatomic, strong) NSMutableArray *newlyAddIndexArr;
+@property(nonatomic, strong) NSMutableArray *newlyAddSectionArr;
 @property (nonatomic) long currentYear;
 @property (nonatomic) long currentMonth;
 @property (nonatomic) long currentDay;
@@ -294,7 +294,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     if (self.items.count) {
-        SSJBookKeepingHomeListItem *item = [self.items objectAtIndex:section];
+        SSJBookKeepingHomeListItem *item = [self.items ssj_safeObjectAtIndex:section];
         SSJBookKeepingHomeHeaderView *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kHeaderId];
         headerView.item = item;
         return headerView;
@@ -302,59 +302,95 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
     return nil;
 }
 
-//-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
-//    SSJBookKeepingHomeTableViewCell * currentCell = (SSJBookKeepingHomeTableViewCell *)cell;
-//    SSJBillingChargeCellItem *item = currentCell.item;
-//    if ([self.newlyAddIndexArr containsObject:@(indexPath.row)]) {
-//        if (item.operatorType == 0) {
-//            currentCell.categoryImageButton.transform = CGAffineTransformMakeTranslation(0,  - currentCell.height / 2);
-//            currentCell.expenditureLabel.alpha = 0;
-//            currentCell.expentureMemoLabel.alpha = 0;
-//            currentCell.incomeLabel.alpha = 0;
-//            currentCell.incomeMemoLabel.alpha = 0;
-//            if (item.incomeOrExpence) {
-//                currentCell.expenditureLabel.transform = CGAffineTransformMakeScale(0, 0);
-//                currentCell.expentureMemoLabel.transform = CGAffineTransformMakeScale(0, 0);
-//                currentCell.expentureImage.layer.transform = CATransform3DMakeRotation(degreesToRadians(90) , 1, -1, 0);
-//            }else{
-//                currentCell.incomeLabel.transform = CGAffineTransformMakeScale(0, 0);
-//                currentCell.incomeMemoLabel.transform = CGAffineTransformMakeScale(0, 0);
-//                currentCell.IncomeImage.layer.transform = CATransform3DMakeRotation(degreesToRadians(90) , -1, -1, 0);
-//            }
-//            [UIView animateWithDuration:0.7 animations:^{
-//                currentCell.expenditureLabel.alpha = 1;
-//                currentCell.expentureMemoLabel.alpha = 1;
-//                currentCell.incomeLabel.alpha = 1;
-//                currentCell.incomeMemoLabel.alpha = 1;
-//                currentCell.categoryImageButton.transform = CGAffineTransformIdentity;
-//                currentCell.expenditureLabel.transform = CGAffineTransformIdentity;
-//                currentCell.incomeLabel.transform = CGAffineTransformIdentity;
-//                currentCell.expentureMemoLabel.transform = CGAffineTransformIdentity;
-//                currentCell.incomeMemoLabel.transform = CGAffineTransformIdentity;
-//                currentCell.expentureImage.layer.transform = CATransform3DIdentity;
-//                currentCell.IncomeImage.layer.transform = CATransform3DIdentity;
-//            } completion:^(BOOL finished) {
-//                [currentCell shake];
-//            }];
-//        }else{
-//            [currentCell shake];
-//        }
-//        [self.newlyAddIndexArr removeObject:@(indexPath.row)];
-//    }else{
-//        if (!self.hasLoad) {
-//            __weak typeof(self) weakSelf = self;
-//            [currentCell animatedShowCellWithDistance:self.view.height + indexPath.row * 130 delay:0.2 * (indexPath.row + 1) completion:^{
-//                weakSelf.hasLoad = YES;
-//            }];
-//
-//        }
-//    }
-//}
+-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
+    SSJBookKeepingHomeTableViewCell * currentCell = (SSJBookKeepingHomeTableViewCell *)cell;
+    SSJBillingChargeCellItem *item = currentCell.item;
+    if ([self.newlyAddChargeArr containsObject:item]) {
+        if (item.operatorType == 0) {
+            currentCell.categoryImageButton.transform = CGAffineTransformMakeTranslation(0,  - currentCell.height / 2);
+            currentCell.expenditureLabel.alpha = 0;
+            currentCell.expentureMemoLabel.alpha = 0;
+            currentCell.incomeLabel.alpha = 0;
+            currentCell.incomeMemoLabel.alpha = 0;
+            if (item.incomeOrExpence) {
+                currentCell.expenditureLabel.transform = CGAffineTransformMakeScale(0, 0);
+                currentCell.expentureMemoLabel.transform = CGAffineTransformMakeScale(0, 0);
+                currentCell.expentureImage.layer.transform = CATransform3DMakeRotation(degreesToRadians(90) , 1, -1, 0);
+            }else{
+                currentCell.incomeLabel.transform = CGAffineTransformMakeScale(0, 0);
+                currentCell.incomeMemoLabel.transform = CGAffineTransformMakeScale(0, 0);
+                currentCell.IncomeImage.layer.transform = CATransform3DMakeRotation(degreesToRadians(90) , -1, -1, 0);
+            }
+            [UIView animateWithDuration:0.7 animations:^{
+                currentCell.expenditureLabel.alpha = 1;
+                currentCell.expentureMemoLabel.alpha = 1;
+                currentCell.incomeLabel.alpha = 1;
+                currentCell.incomeMemoLabel.alpha = 1;
+                currentCell.categoryImageButton.transform = CGAffineTransformIdentity;
+                currentCell.expenditureLabel.transform = CGAffineTransformIdentity;
+                currentCell.incomeLabel.transform = CGAffineTransformIdentity;
+                currentCell.expentureMemoLabel.transform = CGAffineTransformIdentity;
+                currentCell.incomeMemoLabel.transform = CGAffineTransformIdentity;
+                currentCell.expentureImage.layer.transform = CATransform3DIdentity;
+                currentCell.IncomeImage.layer.transform = CATransform3DIdentity;
+            } completion:^(BOOL finished) {
+                [currentCell shake];
+            }];
+        }else{
+            [currentCell shake];
+        }
+        [self.newlyAddChargeArr removeObject:item];
+    }else{
+        if (!self.hasLoad && self.items.count) {
+            __weak typeof(self) weakSelf = self;
+            SSJBookKeepingHomeListItem *item = [self.items ssj_safeObjectAtIndex:indexPath.section];
+            [currentCell animatedShowCellWithDistance:self.view.height + indexPath.row * 130 delay:0.2 * (item.totalCount + indexPath.row) completion:^{
+                weakSelf.hasLoad = YES;
+            }];
+
+        }
+    }
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section{
+    SSJBookKeepingHomeHeaderView * currentHeader = (SSJBookKeepingHomeHeaderView *)view;
+    SSJBookKeepingHomeListItem *item = currentHeader.item;
+    if ([self.newlyAddChargeArr containsObject:item]) {
+        currentHeader.categoryImageButton.transform = CGAffineTransformMakeTranslation(0,  - currentHeader.height / 2);
+        currentHeader.expenditureLabel.alpha = 0;
+        currentHeader.incomeLabel.alpha = 0;
+        if (item.balance < 0) {
+            currentHeader.expenditureLabel.transform = CGAffineTransformMakeScale(0, 0);
+        }else{
+            currentHeader.incomeLabel.transform = CGAffineTransformMakeScale(0, 0);
+        }
+        [UIView animateWithDuration:0.7 animations:^{
+            currentHeader.expenditureLabel.alpha = 1;
+            currentHeader.incomeLabel.alpha = 1;
+            currentHeader.categoryImageButton.transform = CGAffineTransformIdentity;
+            currentHeader.expenditureLabel.transform = CGAffineTransformIdentity;
+            currentHeader.incomeLabel.transform = CGAffineTransformIdentity;
+        } completion:^(BOOL finished) {
+            [currentHeader shake];
+        }];
+
+        [self.newlyAddChargeArr removeObject:item];
+    }else{
+        if (!self.hasLoad && self.items.count) {
+            __weak typeof(self) weakSelf = self;
+            SSJBookKeepingHomeListItem *item = [self.items ssj_safeObjectAtIndex:section];
+            [currentHeader animatedShowCellWithDistance:self.view.height + item.totalCount * 130 delay:0.2 * item.totalCount completion:^{
+                weakSelf.hasLoad = YES;
+            }];
+            
+        }
+    }
+}
 
 #pragma mark - UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     if (self.items.count) {
-        SSJBookKeepingHomeListItem *listItem = [self.items objectAtIndex:section];
+        SSJBookKeepingHomeListItem *listItem = [self.items ssj_safeObjectAtIndex:section];
         return listItem.chargeItems.count;
     }
     return 0;
@@ -820,60 +856,23 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
         }];
         _startTime = CFAbsoluteTimeGetCurrent();
         [SSJBookKeepingHomeHelper queryForChargeListExceptNewCharge:self.newlyAddChargeArr Success:^(NSDictionary *result) {
-//            _endTime = CFAbsoluteTimeGetCurrent();
-//            NSLog(@"查询%ld条数据耗时%f秒",((NSArray *)[result objectForKey:SSJOrginalChargeArrKey]).count,_endTime - _startTime);
-//            [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:[NSString stringWithFormat:@"查询%ld条数据耗时%f",((NSArray *)[result objectForKey:SSJOrginalChargeArrKey]).count,_endTime - _startTime] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL],NULL];
-
-//            if (!((NSArray *)[result objectForKey:SSJNewAddChargeArrKey]).count) {
-//                weakSelf.items = [[NSMutableArray alloc]initWithArray:[result objectForKey:SSJOrginalChargeArrKey]];
-//                [weakSelf.tableView reloadData];
-//                [weakSelf.tableView ssj_hideLoadingIndicator];
-//                if (((NSArray *)[result objectForKey:SSJOrginalChargeArrKey]).count == 0) {
-//                    weakSelf.tableView.tableHeaderView = self.noDataHeader;
-//                }else{
-//                    weakSelf.tableView.tableHeaderView = nil;
-//                }
-//            }else{
-//                weakSelf.tableView.tableHeaderView = nil;
-//                [self.tableView ssj_hideLoadingIndicator];
-//                weakSelf.items = [[NSMutableArray alloc]initWithArray:[result objectForKey:SSJOrginalChargeArrKey]];
-//                NSMutableArray *newAddArr = [NSMutableArray arrayWithArray:[result objectForKey:SSJNewAddChargeArrKey]];
-//                NSMutableDictionary *sumDic = [NSMutableDictionary dictionaryWithDictionary:[result objectForKey:SSJChargeCountSummaryKey]];
-//                NSMutableDictionary *startIndex = [NSMutableDictionary dictionaryWithDictionary:[result objectForKey:SSJDateStartIndexDicKey]];
-//                if (weakSelf.items.count == [weakSelf.tableView numberOfRowsInSection:0] + newAddArr.count || weakSelf.items.count == [weakSelf.tableView numberOfRowsInSection:0] + newAddArr.count + 1) {
-//                    for (int i = 0; i < newAddArr.count; i++) {
-//                        weakSelf.newlyAddIndexArr = [NSMutableArray arrayWithCapacity:0];
-//                        SSJBillingChargeCellItem *item = [newAddArr objectAtIndex:i];
-//                        [weakSelf.newlyAddIndexArr addObject:@(item.chargeIndex)];
-//                        if (item.operatorType == 0) {
-//                            [weakSelf.tableView beginUpdates];
-//                            if ([[sumDic valueForKey:item.billDate] intValue] == 0) {
-//                                [weakSelf.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:item.chargeIndex - 1 inSection:0],[NSIndexPath indexPathForRow:item.chargeIndex inSection:0]] withRowAnimation:UITableViewRowAnimationTop];
-//                            }else{
-//                                [weakSelf.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:item.chargeIndex inSection:0]] withRowAnimation:UITableViewRowAnimationTop];
-//                            }
-//                            [weakSelf.tableView endUpdates];
-//                            [weakSelf.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:[[startIndex objectForKey:item.billDate] integerValue] inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-//                            if (item.chargeIndex == weakSelf.items.count - 1) {
-//                                [weakSelf.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:item.chargeIndex - 2 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-//                            }
-//                        }else{
-//                            weakSelf.items = [[NSMutableArray alloc]initWithArray:[result objectForKey:SSJOrginalChargeArrKey]];
-//                            [weakSelf.tableView reloadData];
-//                        }
-//                        [weakSelf.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:item.chargeIndex - 1 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
-//                    }
-//
-//                }else{
-//                    [weakSelf.tableView reloadData];
-//                }
-//                [weakSelf.newlyAddChargeArr removeAllObjects];
-//                
-//                [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
-//            }
-
             weakSelf.items = [[NSMutableArray alloc]initWithArray:[result objectForKey:SSJOrginalChargeArrKey]];
-            [weakSelf.tableView reloadData];
+            weakSelf.newlyAddChargeArr = [[NSMutableArray alloc]initWithArray:[result objectForKey:SSJNewAddChargeArrKey]];
+            weakSelf.newlyAddSectionArr = [[NSMutableArray alloc]initWithArray:[result objectForKey:SSJNewAddChargeSectionArrKey]];
+//
+            if (weakSelf.newlyAddChargeArr.count) {
+                for (SSJBillingChargeCellItem *item in weakSelf.newlyAddChargeArr) {
+                    [weakSelf.tableView beginUpdates];
+                    if ([weakSelf.newlyAddSectionArr containsObject:@(item.chargeIndex.section)]) {
+                        [self.tableView insertSections:[NSIndexSet indexSetWithIndex:item.chargeIndex.section] withRowAnimation:UITableViewRowAnimationTop];
+                    }
+                    [self.tableView insertRowsAtIndexPaths:@[item.chargeIndex] withRowAnimation:UITableViewRowAnimationTop];
+                    [weakSelf.tableView endUpdates];
+                }
+                
+            } else {
+                [weakSelf.tableView reloadData];
+            }
             [weakSelf.tableView ssj_hideLoadingIndicator];
         } failure:^(NSError *error) {
             [self.tableView ssj_hideLoadingIndicator];

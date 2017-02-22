@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "SSJBookKeepingHomeListItem.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface SSJBookKeepingHomeHeaderView : UITableViewHeaderFooterView
 
 @property (nonatomic,strong) UILabel *incomeLabel;
@@ -22,5 +24,11 @@
 @property(nonatomic, strong) SSJBookKeepingHomeListItem *item;
 
 @property(nonatomic) BOOL isAnimating;
+
+-(void)shake ;
+
+-(void)animatedShowCellWithDistance:(float)distance delay:(float)delay completion:(void (^ __nullable)())completion;
+
+NS_ASSUME_NONNULL_END
 
 @end

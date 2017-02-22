@@ -15,8 +15,7 @@ NSString *const SSJIncomeSumlKey = @"SSJIncomeSumlKey";
 NSString *const SSJExpentureSumKey = @"SSJExpentureSumKey";
 NSString *const SSJOrginalChargeArrKey = @"SSJOrginalChargeArrKey";
 NSString *const SSJNewAddChargeArrKey = @"SSJNewAddChargeArrKey";
-NSString *const SSJChargeCountSummaryKey = @"SSJChargeCountSummaryKey";
-NSString *const SSJDateStartIndexDicKey = @"SSJDateStartIndexDicKey";
+NSString *const SSJNewAddChargeSectionArrKey = @"SSJNewAddChargeSectionArrKey";
 
 @implementation SSJBookKeepingHomeHelper
 
@@ -54,9 +53,9 @@ NSString *const SSJDateStartIndexDicKey = @"SSJDateStartIndexDicKey";
         NSString *userid = SSJUSERID();
         NSMutableArray *originalChargeArr = [NSMutableArray array];
         NSMutableArray *newAddChargeArr = [NSMutableArray array];
+        NSMutableArray *newSectionArr = [NSMutableArray array];
         NSMutableDictionary *summaryDic = [NSMutableDictionary dictionaryWithCapacity:0];
         NSMutableDictionary *tempDic = [NSMutableDictionary dictionary];
-        NSMutableDictionary *startIndex = [NSMutableDictionary dictionary];
         NSString *lastDate = @"";
         NSInteger totalCount = 0;
         int section = 0;
@@ -103,7 +102,7 @@ NSString *const SSJDateStartIndexDicKey = @"SSJDateStartIndexDicKey";
                 section ++;
                 item.chargeIndex = [NSIndexPath indexPathForRow:row inSection:section];
                 [listItem.chargeItems addObject:item];
-                [summaryDic setObject:@(row) forKey:item.billDate];
+                [summaryDic setObject:@(row + 1) forKey:item.billDate];
                 totalCount = totalCount + 2;
                 [originalChargeArr addObject:listItem];
                 //                [summaryDic setValue:@(chargeCount) forKey:item.billDate];
@@ -118,7 +117,7 @@ NSString *const SSJDateStartIndexDicKey = @"SSJDateStartIndexDicKey";
                 totalCount ++;
                 item.chargeIndex = [NSIndexPath indexPathForRow:row inSection:section];
                 [listItem.chargeItems addObject:item];
-                [summaryDic setObject:@(row) forKey:item.billDate];
+                [summaryDic setObject:@(row + 1) forKey:item.billDate];
             }
             // 将新增的数据独立拿出一个数组
             for (int i = 0; i < newCharge.count; i++) {
@@ -127,7 +126,6 @@ NSString *const SSJDateStartIndexDicKey = @"SSJDateStartIndexDicKey";
                     [newAddChargeArr addObject:item];
                 }
             }
-            
 //            count++;
         }
         // 在每日的流水总数中减掉新增的数量
@@ -135,11 +133,13 @@ NSString *const SSJDateStartIndexDicKey = @"SSJDateStartIndexDicKey";
             SSJBillingChargeCellItem *item = [newAddChargeArr ssj_safeObjectAtIndex:i];
             int chargeCount = [[summaryDic valueForKey:item.billDate] intValue];
             [summaryDic setValue:@(chargeCount - 1) forKey:item.billDate];
+            if (chargeCount - 1 == 0) {
+                [newSectionArr addObject:@(item.chargeIndex.section)];
+            }
         }
         [tempDic setObject:originalChargeArr forKey:SSJOrginalChargeArrKey];
         [tempDic setObject:newAddChargeArr forKey:SSJNewAddChargeArrKey];
-        [tempDic setObject:summaryDic forKey:SSJChargeCountSummaryKey];
-        [tempDic setObject:startIndex forKey:SSJDateStartIndexDicKey];
+        [tempDic setObject:newSectionArr forKey:SSJNewAddChargeSectionArrKey];
         if (success) {
             SSJDispatch_main_async_safe(^{
                 success(tempDic);
