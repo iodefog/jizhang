@@ -859,39 +859,49 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
             weakSelf.items = [[NSMutableArray alloc]initWithArray:[result objectForKey:SSJOrginalChargeArrKey]];
             weakSelf.newlyAddChargeArr = [[NSMutableArray alloc]initWithArray:[result objectForKey:SSJNewAddChargeArrKey]];
             weakSelf.newlyAddSectionArr = [[NSMutableArray alloc]initWithArray:[result objectForKey:SSJNewAddChargeSectionArrKey]];
-//
-            if (weakSelf.newlyAddChargeArr.count) {
-                
-                if ([weakSelf.tableView numberOfSections]) {
-                    NSInteger maxSection = [weakSelf.tableView numberOfSections] - 1;
+            
+            if (weakSelf.items) {
+                if (weakSelf.newlyAddChargeArr.count) {
                     
-                    NSIndexPath *currentMaxIndex = [NSIndexPath indexPathForRow:[weakSelf.tableView numberOfRowsInSection:maxSection] - 1 inSection:maxSection];
-                    
-                    for (SSJBillingChargeCellItem *item in weakSelf.newlyAddChargeArr) {
-                        [weakSelf.tableView beginUpdates];
-                        if ([weakSelf.newlyAddSectionArr containsObject:@(item.chargeIndex.section)]) {
-                            [self.tableView insertSections:[NSIndexSet indexSetWithIndex:item.chargeIndex.section] withRowAnimation:UITableViewRowAnimationTop];
+                    if ([weakSelf.tableView numberOfSections]) {
+                        NSInteger maxSection = [weakSelf.tableView numberOfSections] - 1;
+                        
+                        NSIndexPath *currentMaxIndex = [NSIndexPath indexPathForRow:[weakSelf.tableView numberOfRowsInSection:maxSection] - 1 inSection:maxSection];
+                        
+                        for (SSJBillingChargeCellItem *item in weakSelf.newlyAddChargeArr) {
+                            [weakSelf.tableView beginUpdates];
+                            if ([weakSelf.newlyAddSectionArr containsObject:@(item.chargeIndex.section)]) {
+                                [self.tableView insertSections:[NSIndexSet indexSetWithIndex:item.chargeIndex.section] withRowAnimation:UITableViewRowAnimationTop];
+                            }
+                            if (item.chargeIndex.section > maxSection) {
+                                [weakSelf.tableView scrollToRowAtIndexPath:currentMaxIndex atScrollPosition:UITableViewScrollPositionTop animated:YES];
+                            } else {
+                                [weakSelf.tableView scrollToRowAtIndexPath:item.chargeIndex atScrollPosition:UITableViewScrollPositionTop animated:NO];
+                            }
+                            [self.tableView insertRowsAtIndexPaths:@[item.chargeIndex] withRowAnimation:UITableViewRowAnimationTop];
+                            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:item.chargeIndex.section] withRowAnimation:UITableViewRowAnimationNone];
+                            [weakSelf.tableView endUpdates];
                         }
-                        [self.tableView insertRowsAtIndexPaths:@[item.chargeIndex] withRowAnimation:UITableViewRowAnimationTop];
-                        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:item.chargeIndex.section] withRowAnimation:UITableViewRowAnimationNone];
-                        [weakSelf.tableView endUpdates];
+                        [weakSelf.tableView reloadRowsAtIndexPaths:@[currentMaxIndex] withRowAnimation:UITableViewRowAnimationNone];
+                    } else {
+                        for (SSJBillingChargeCellItem *item in weakSelf.newlyAddChargeArr) {
+                            [weakSelf.tableView beginUpdates];
+                            if ([weakSelf.newlyAddSectionArr containsObject:@(item.chargeIndex.section)]) {
+                                [self.tableView insertSections:[NSIndexSet indexSetWithIndex:item.chargeIndex.section] withRowAnimation:UITableViewRowAnimationTop];
+                            }
+                            [self.tableView insertRowsAtIndexPaths:@[item.chargeIndex] withRowAnimation:UITableViewRowAnimationTop];
+                            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:item.chargeIndex.section] withRowAnimation:UITableViewRowAnimationNone];
+                            [weakSelf.tableView endUpdates];
+                        }
                     }
-                    [weakSelf.tableView reloadRowsAtIndexPaths:@[currentMaxIndex] withRowAnimation:UITableViewRowAnimationNone];
+                    
                 } else {
-                    for (SSJBillingChargeCellItem *item in weakSelf.newlyAddChargeArr) {
-                        [weakSelf.tableView beginUpdates];
-                        if ([weakSelf.newlyAddSectionArr containsObject:@(item.chargeIndex.section)]) {
-                            [self.tableView insertSections:[NSIndexSet indexSetWithIndex:item.chargeIndex.section] withRowAnimation:UITableViewRowAnimationTop];
-                        }
-                        [self.tableView insertRowsAtIndexPaths:@[item.chargeIndex] withRowAnimation:UITableViewRowAnimationTop];
-                        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:item.chargeIndex.section] withRowAnimation:UITableViewRowAnimationNone];
-                        [weakSelf.tableView endUpdates];
-                    }
+                    [weakSelf.tableView reloadData];
                 }
-                
             } else {
-                [weakSelf.tableView reloadData];
+                
             }
+            
             [weakSelf.tableView ssj_hideLoadingIndicator];
         } failure:^(NSError *error) {
             [self.tableView ssj_hideLoadingIndicator];
