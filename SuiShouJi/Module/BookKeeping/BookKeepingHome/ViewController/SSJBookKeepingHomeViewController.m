@@ -859,7 +859,6 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
             weakSelf.items = [[NSMutableArray alloc]initWithArray:[result objectForKey:SSJOrginalChargeArrKey]];
             weakSelf.newlyAddChargeArr = [[NSMutableArray alloc]initWithArray:[result objectForKey:SSJNewAddChargeArrKey]];
             weakSelf.newlyAddSectionArr = [[NSMutableArray alloc]initWithArray:[result objectForKey:SSJNewAddChargeSectionArrKey]];
-                
             if (weakSelf.items) {
                 if (weakSelf.newlyAddChargeArr.count) {
                     

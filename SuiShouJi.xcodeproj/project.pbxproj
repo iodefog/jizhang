@@ -5313,6 +5313,7 @@
 		9C1E4C161E4ACD5C00CA5843 /* SSJCalendarTabelViewHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCalendarTabelViewHeaderView.m; sourceTree = "<group>"; };
 		9C1E4C4A1E4C619600CA5843 /* SSJCalendarTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCalendarTableViewCell.h; sourceTree = "<group>"; };
 		9C1E4C4B1E4C619600CA5843 /* SSJCalendarTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCalendarTableViewCell.m; sourceTree = "<group>"; };
+		9C1FB7271E5DB9570086551E /* SuiShouJiEnterprise.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SuiShouJiEnterprise.entitlements; sourceTree = "<group>"; };
 		9C20A87D1D41E43A00F3D77F /* SSJMemberManagerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMemberManagerViewController.h; sourceTree = "<group>"; };
 		9C20A87E1D41E43A00F3D77F /* SSJMemberManagerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMemberManagerViewController.m; sourceTree = "<group>"; };
 		9C23EA4C1DDAD4FE0003C5AB /* 9188.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = 9188.cer; sourceTree = "<group>"; };
@@ -8806,6 +8807,7 @@
 		BD543C331C1A6DBC00910D61 = {
 			isa = PBXGroup;
 			children = (
+				9C1FB7271E5DB9570086551E /* SuiShouJiEnterprise.entitlements */,
 				BD543C3E1C1A6DBC00910D61 /* SuiShouJi */,
 				BD543C581C1A6DBC00910D61 /* SuiShouJiTests */,
 				BD543C631C1A6DBC00910D61 /* SuiShouJiUITests */,
@@ -9313,6 +9315,11 @@
 					};
 					7DBB3F0C1E55C4E00075E638 = {
 						DevelopmentTeam = 747363KXQ6;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 					BD543C3B1C1A6DBC00910D61 = {
 						CreatedOnToolsVersion = 7.2;
@@ -14654,6 +14661,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = SuiShouJiEnterprise.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Can Wu (7Z729NG4UD)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Can Wu (7Z729NG4UD)";
 				DEVELOPMENT_TEAM = 747363KXQ6;
@@ -15521,6 +15529,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = SuiShouJiEnterprise.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co. Ltd.";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co. Ltd.";
 				DEVELOPMENT_TEAM = 747363KXQ6;
@@ -17134,6 +17143,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = SuiShouJiEnterprise.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Can Wu (7Z729NG4UD)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Can Wu (7Z729NG4UD)";
 				DEVELOPMENT_TEAM = 747363KXQ6;
@@ -17265,6 +17275,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = SuiShouJiEnterprise.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co. Ltd.";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co. Ltd.";
 				DEVELOPMENT_TEAM = 747363KXQ6;

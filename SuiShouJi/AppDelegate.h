@@ -11,8 +11,9 @@
 #import "WXApi.h"
 #import "SSJWeiXinLoginHelper.h"
 #import "SSJBaseNetworkService.h"
+#import "SSJGeTuiManager.h"
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate,WXApiDelegate,SSJBaseNetworkServiceDelegate>
+@interface AppDelegate : UIResponder <UIApplicationDelegate,WXApiDelegate,SSJBaseNetworkServiceDelegate,GeTuiSdkDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 

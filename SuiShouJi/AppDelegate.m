@@ -92,9 +92,9 @@ NSDate *SCYEnterBackgroundTime() {
 //    [JPEngine evaluateScript:script];
 #endif
     
-    [SSJUmengManager umengTrack];
     [SSJUmengManager umengShare];
     [SSJAnaliyticsManager SSJAnaliytics];
+    [SSJGeTuiManager SSJGeTuiManagerWithDelegate:self];
     
     [MQManager setScheduledAgentWithAgentId:@"" agentGroupId:SSJMQDefualtGroupId scheduleRule:MQScheduleRulesRedirectGroup];
     
@@ -428,5 +428,21 @@ NSDate *SCYEnterBackgroundTime() {
     }];
     return loanId;
 }
+
+#pragma mark - 远程通知有关的
+/** 远程通知注册成功委托 */
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    NSString *token = [[deviceToken description] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
+    token = [token stringByReplacingOccurrencesOfString:@" " withString:@""];
+    
+    // [ GTSdk ]：向个推服务器注册deviceToken
+    [GeTuiSdk registerDeviceToken:token];
+}
+
+/** 远程通知注册失败委托 */
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
+    NSLog(@"\n>>>[DeviceToken Error]:%@\n\n", error.description);
+}
+
 
 @end

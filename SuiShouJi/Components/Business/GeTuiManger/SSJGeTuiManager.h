@@ -7,7 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "GeTuiSdk.h"
 
 @interface SSJGeTuiManager : NSObject
+
++ (void)SSJGeTuiManagerWithDelegate:(id<GeTuiSdkDelegate>)delegate;
 
 @end
