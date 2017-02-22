@@ -201,7 +201,6 @@
 		7D08A1531E4999D30085A8FB /* SSJCircleChargeTypeSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9D0B851D080E09003A9F4E /* SSJCircleChargeTypeSelectView.m */; };
 		7D08A1541E4999D30085A8FB /* SSJBooksTypeStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C24CFB21D76C9ED0095D150 /* SSJBooksTypeStore.m */; };
 		7D08A1561E4999D30085A8FB /* SSJAccountsMerger.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DF07DF51DD0265800B0AF97 /* SSJAccountsMerger.m */; };
-		7D08A1571E4999D30085A8FB /* SSJBillNoteWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 91A846B91E237AEA00D2D0BE /* SSJBillNoteWebViewController.m */; };
 		7D08A1581E4999D30085A8FB /* SSJListMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B12CF1D4CBC140036BF4E /* SSJListMenu.m */; };
 		7D08A1591E4999D30085A8FB /* SSJAddOrEditLoanTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DBA553D1D6AFFE900C02D79 /* SSJAddOrEditLoanTextFieldCell.m */; };
 		7D08A15A1E4999D30085A8FB /* SSJBudgetProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D567E3B1D9D1632006512C8 /* SSJBudgetProgressView.m */; };
@@ -10151,7 +10150,6 @@
 				7D22A3921E5041A800190CEB /* SSJFundingTransferChargeDetailViewController.m in Sources */,
 				7D22A3571E4F16AC00190CEB /* SSJImageAddition.m in Sources */,
 				7D08A1561E4999D30085A8FB /* SSJAccountsMerger.m in Sources */,
-				7D08A1571E4999D30085A8FB /* SSJBillNoteWebViewController.m in Sources */,
 				7D08A1581E4999D30085A8FB /* SSJListMenu.m in Sources */,
 				7D08A1591E4999D30085A8FB /* SSJAddOrEditLoanTextFieldCell.m in Sources */,
 				7D08A15A1E4999D30085A8FB /* SSJBudgetProgressView.m in Sources */,

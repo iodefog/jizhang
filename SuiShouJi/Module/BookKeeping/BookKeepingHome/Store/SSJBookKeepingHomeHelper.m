@@ -58,7 +58,7 @@ NSString *const SSJDateStartIndexDicKey = @"SSJDateStartIndexDicKey";
         NSMutableDictionary *tempDic = [NSMutableDictionary dictionary];
         NSMutableDictionary *startIndex = [NSMutableDictionary dictionary];
         NSString *lastDate = @"";
-        int totalCount = 0;
+        NSInteger totalCount = 0;
         int section = 0;
         int row = 0;
         FMResultSet *chargeResult = [db executeQuery:@"select uc.* , uc.operatortype as chargeoperatortype, bt.cname, bt.ccoin, bt.ccolor, bt.itype from bk_user_charge uc , bk_bill_type bt where uc.ibillid = bt.id and uc.cbilldate <= ? and uc.cuserid = ? and uc.cbooksid = ? and bt.istate <> 2 order by uc.cbilldate desc , uc.clientadddate desc , uc.cwritedate desc",[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"],userid,booksid];
@@ -92,6 +92,7 @@ NSString *const SSJDateStartIndexDicKey = @"SSJDateStartIndexDicKey";
                 SSJBookKeepingHomeListItem *listItem = [[SSJBookKeepingHomeListItem alloc]init];
                 listItem.chargeItems = [NSMutableArray arrayWithCapacity:0];
                 listItem.date = item.billDate;
+                listItem.totalCount = totalCount;
                 if (item.incomeOrExpence) {
                     listItem.balance = - [item.money doubleValue];
                 }else{

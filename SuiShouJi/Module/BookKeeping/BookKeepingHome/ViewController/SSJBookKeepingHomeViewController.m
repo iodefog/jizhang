@@ -289,7 +289,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 
 
 -(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
-    return nil;
+    return [UIView new];
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
@@ -367,7 +367,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
         bookKeepingCell = [[SSJBookKeepingHomeTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
     }
     bookKeepingCell.isEdite = ([indexPath compare:self.selectIndex] == NSOrderedSame);
-    if (indexPath.row == [self.tableView numberOfRowsInSection:0] - 1) {
+    if (indexPath.row == [self.tableView numberOfRowsInSection:indexPath.section] - 1 && indexPath.section == self.items.count - 1) {
         bookKeepingCell.isLastRowOrNot = NO;
     }else{
         bookKeepingCell.isLastRowOrNot = YES;
@@ -415,6 +415,10 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
         }];
     };
     return bookKeepingCell;
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return self.items.count;
 }
 
 
@@ -561,7 +565,6 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
     if (!_tableView) {
         _tableView = [[SSJHomeTableView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height) style:UITableViewStyleGrouped];
         _tableView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
-//        _tableView.tableFooterView = nil;
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.showsVerticalScrollIndicator = NO;
