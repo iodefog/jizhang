@@ -100,7 +100,7 @@ NSString *const SSJNewAddChargeSectionArrKey = @"SSJNewAddChargeSectionArrKey";
                 lastDate = item.billDate;
                 row = 0;
                 section ++;
-                item.chargeIndex = [NSIndexPath indexPathForRow:row inSection:section];
+                item.chargeIndex = [NSIndexPath indexPathForRow:row inSection:section - 1];
                 [listItem.chargeItems addObject:item];
                 [summaryDic setObject:@(row + 1) forKey:item.billDate];
                 totalCount = totalCount + 2;
