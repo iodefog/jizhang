@@ -35,14 +35,29 @@
 #import "SSJStartChecker.h"
 #import "SSJLocalNotificationHelper.h"
 #import "SSJHomeLoadingView.h"
+#import "SSJRegistNetworkService.h"
+#import "SSJNormalWebViewController.h"
 
-@interface SSJLoginViewController () <UITextFieldDelegate>
+static const NSInteger kCountdownLimit = 60;    //  倒计时时限
+@interface SSJLoginViewController () <UITextFieldDelegate,UIScrollViewDelegate>
 
 @property (nonatomic, strong) SSJLoginService *loginService;
 
-@property (nonatomic,strong)SSJBaselineTextField *tfPhoneNum;
+@property (nonatomic, strong) SSJRegistNetworkService *registerService;
 
-@property (nonatomic,strong)SSJBaselineTextField *tfPassword;
+@property (nonatomic, strong) SSJRegistNetworkService *registerNextService;
+
+@property (nonatomic, strong) SSJRegistNetworkService *registCompleteService;
+
+@property (nonatomic,strong)UITextField *tfPhoneNum;
+
+@property (nonatomic,strong)UITextField *tfPassword;
+
+@property (nonatomic,strong)UITextField *tfRegPhoneNum;
+
+@property (nonatomic,strong)UITextField *tfRegYanZhenNum;
+
+@property (nonatomic,strong)UITextField *tfRegPasswordNum;
 
 @property (nonatomic,copy)NSString *strUserAccount;
 
@@ -50,7 +65,11 @@
 
 @property (nonatomic,strong)UIButton *loginButton;
 
+@property (nonatomic,strong)UIButton *loginTitleButton;
+
 @property (nonatomic,strong)UIButton *registerButton;
+
+@property (nonatomic,strong)UIButton *registerTitleButton;
 
 @property (nonatomic,strong)UIButton *forgetButton;
 
@@ -65,6 +84,51 @@
 @property (nonatomic,strong)UILabel *thirdPartyLoginLabel;
 
 @property(nonatomic, strong) SSJHomeLoadingView *loadingView;
+
+@property (nonatomic, strong) TPKeyboardAvoidingScrollView *scrollView;
+
+@property (nonatomic, strong) TPKeyboardAvoidingScrollView *centerScrollView;
+
+@property (nonatomic, strong) UIView *numSecretBgView;
+
+@property (nonatomic, strong) UIView *numRegSecretBgView;
+
+/**
+ 三角形尖块
+ */
+@property (nonatomic, strong) UIImageView *triangleView;
+/**
+ 顶部uiimgeview
+ */
+@property (nonatomic, strong) UIImageView *topView;
+
+//  倒计时定时器
+@property (nonatomic, strong) NSTimer *countdownTimer;
+
+//  倒计时
+@property (nonatomic) NSInteger countdown;
+//验证码
+@property (nonatomic, strong) UIButton *getAuthCodeBtn;
+
+//下一步
+@property (nonatomic, strong) UIButton *regNextBtn;
+
+@property (nonatomic, strong) UIButton *agreeButton;
+
+@property (nonatomic, strong) UIButton *protocolButton;
+
+/**
+ 手机
+ */
+@property (nonatomic, copy) NSString *phoneNum;
+/**
+ code
+ */
+@property (nonatomic, copy) NSString *codeNum;
+/**
+ 密码
+ */
+@property (nonatomic, copy) NSString *mimaNum;
 @end
 
 @implementation SSJLoginViewController
@@ -78,43 +142,61 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         self.statisticsTitle = @"登录";
-//        self.hideKeyboradWhenTouch = YES;
+//        self.appliesTheme = NO;
+//        self.edgesForExtendedLayout = UIRectEdgeNone;
+//        self.automaticallyAdjustsScrollViewInsets = NO;
         self.hidesBottomBarWhenPushed = YES;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updatetextfield:) name:UITextFieldTextDidChangeNotification object:nil];
     }
     return self;
 }
-
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
-    TPKeyboardAvoidingScrollView *scrollView = [[TPKeyboardAvoidingScrollView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height)];
-    if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
-        self.backgroundView.image = [UIImage ssj_compatibleImageNamed:@"login_bg"];
-    }
-    [scrollView addSubview:self.tfPhoneNum];
-    [scrollView addSubview:self.tfPassword];
-    [scrollView addSubview:self.loginButton];
-    [scrollView addSubview:self.forgetButton];
-    [scrollView addSubview:self.registerButton];
+    self.view.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:self.scrollView];
+    [self.scrollView addSubview:self.topView];
+    [self.scrollView addSubview:self.centerScrollView];
+    [self.centerScrollView addSubview:self.numSecretBgView];
+    [self.numSecretBgView addSubview:self.tfPhoneNum];
+    [self.numSecretBgView addSubview:self.tfPassword];
+    [self.centerScrollView addSubview:self.loginButton];
+    [self.centerScrollView addSubview:self.forgetButton];
+    [self.scrollView addSubview:self.registerTitleButton];
+    [self.scrollView addSubview:self.loginTitleButton];
+    
+    //注册
+    [self.centerScrollView addSubview:self.numRegSecretBgView];
+    [self.numRegSecretBgView addSubview:self.tfRegPhoneNum];
+    [self.numRegSecretBgView addSubview:self.tfRegYanZhenNum];
+    [self.centerScrollView addSubview:self.regNextBtn];
+    
+    [self.centerScrollView addSubview:self.tfRegPasswordNum];
+    [self.centerScrollView addSubview:self.registerButton];
+    [self.centerScrollView addSubview:self.agreeButton];
+    [self.centerScrollView addSubview:self.protocolButton];
+    
     // 只有9188、有鱼并且没有审核的情况下，显示第三方登录
     if ([SSJDefaultSource() isEqualToString:@"11501"]
-         || [SSJDefaultSource() isEqualToString:@"11502"]) {
-        [scrollView addSubview:self.thirdPartyLoginLabel];
-        [scrollView addSubview:self.leftSeperatorLine];
-        [scrollView addSubview:self.rightSeperatorLine];
-        [scrollView addSubview:self.tencentLoginButton];
-        [scrollView addSubview:self.weixinLoginButton];
+        || [SSJDefaultSource() isEqualToString:@"11502"]) {
+//        [self.centerScrollView addSubview:self.seperatorLine];
+        [self.centerScrollView addSubview:self.thirdPartyLoginLabel];
+        [self.centerScrollView addSubview:self.leftSeperatorLine];
+        [self.centerScrollView addSubview:self.rightSeperatorLine];
+        [self.centerScrollView addSubview:self.tencentLoginButton];
+        [self.centerScrollView addSubview:self.weixinLoginButton];
     }
-    [self.view addSubview:scrollView];
     
     [self ssj_showBackButtonWithTarget:self selector:@selector(goBackAction)];
     self.showNavigationBarBaseLine = NO;
+    [self.scrollView addSubview:self.triangleView];
+    
 }
-
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    
-//    NSLog(@"%d", self.navigationController.navigationBarHidden);
     
     [self.tfPhoneNum becomeFirstResponder];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
@@ -129,55 +211,8 @@
 
 -(void)viewDidLayoutSubviews{
     [super viewDidLayoutSubviews];
+    [self updateConstraints];
     if (SSJSCREENWITH == 320 && SSJSCREENHEIGHT == 480) {
-        self.tfPhoneNum.top = 45;
-        self.tfPassword.top = self.tfPhoneNum.bottom + 10;
-        self.loginButton.top = self.tfPassword.bottom + 35;
-        self.loginButton.centerX = self.view.width / 2;
-        self.registerButton.leftTop = CGPointMake(self.loginButton.left, self.loginButton.bottom + 20);
-        self.forgetButton.rightTop = CGPointMake(self.loginButton.right, self.registerButton.bottom + 17);
-        self.thirdPartyLoginLabel.centerX = self.view.width / 2;
-        self.thirdPartyLoginLabel.bottom = self.view.height - 110;
-            self.tencentLoginButton.centerX = self.view.width / 2 - 50;
-            self.tencentLoginButton.centerY = self.view.height - 55;
-            self.weixinLoginButton.centerX = self.view.width / 2 + 50;
-            self.weixinLoginButton.centerY = self.view.height - 55;
-            self.weixinLoginButton.hidden = NO;
-
-        self.leftSeperatorLine.size = CGSizeMake((self.view.width - self.thirdPartyLoginLabel.width - 10) / 2, 1.0f / [UIScreen mainScreen].scale);
-        self.leftSeperatorLine.centerY = self.thirdPartyLoginLabel.centerY;
-        self.leftSeperatorLine.left = 0;
-        self.rightSeperatorLine.size = CGSizeMake((self.view.width - self.thirdPartyLoginLabel.width - 10) / 2, 1.0f / [UIScreen mainScreen].scale);
-        self.rightSeperatorLine.centerY = self.thirdPartyLoginLabel.centerY;
-        self.rightSeperatorLine.right = self.view.width;
-
-    }else{
-        self.tfPhoneNum.top = 90;
-        self.tfPassword.top = self.tfPhoneNum.bottom + 10;
-        self.loginButton.top = self.tfPassword.bottom + 40;
-        self.loginButton.centerX = self.view.width / 2;
-        self.registerButton.leftTop = CGPointMake(self.loginButton.left, self.loginButton.bottom + 25);
-        self.forgetButton.rightTop = CGPointMake(self.loginButton.right, self.registerButton.bottom + 20);
-        self.thirdPartyLoginLabel.centerX = self.view.width / 2;
-        self.thirdPartyLoginLabel.bottom = self.view.height - 150;
-        if ([WXApi isWXAppInstalled]) {
-            self.weixinLoginButton.centerX = self.view.width / 2 - 50;
-            self.tencentLoginButton.centerY = self.view.height - 75;
-            self.tencentLoginButton.centerX = self.view.width / 2 + 50;
-            self.weixinLoginButton.centerY = self.view.height - 75;
-            self.weixinLoginButton.hidden = NO;
-        }else{
-            self.tencentLoginButton.centerX = self.view.width / 2;
-            self.tencentLoginButton.centerY = self.view.height - 75;
-            self.weixinLoginButton.hidden = YES;
-        }
-        self.leftSeperatorLine.size = CGSizeMake((self.view.width - self.thirdPartyLoginLabel.width - 10) / 2, 1.0f / [UIScreen mainScreen].scale);
-        self.leftSeperatorLine.centerY = self.thirdPartyLoginLabel.centerY;
-        self.leftSeperatorLine.left = 0;
-        self.rightSeperatorLine.size = CGSizeMake((self.view.width - self.thirdPartyLoginLabel.width - 10) / 2, 1.0f / [UIScreen mainScreen].scale);
-        self.rightSeperatorLine.centerY = self.thirdPartyLoginLabel.centerY;
-        self.rightSeperatorLine.right = self.view.width;
-
     }
 }
 
@@ -198,45 +233,197 @@
     return true;
 }
 
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    NSString *text = textField.text ? : @"";
+    text = [text stringByReplacingCharactersInRange:range withString:string];
+    
+    if (textField == self.tfRegPhoneNum || textField == self.tfPhoneNum) {
+        if (text.length > 11) {
+            [CDAutoHideMessageHUD showMessage:@"最多只能输入11位手机号" inView:self.view.window duration:1];
+            return NO;
+        }
+    } else if (textField == self.tfRegYanZhenNum) {
+        if (text.length > 6) {
+            [CDAutoHideMessageHUD showMessage:@"最多只能输入6位" inView:self.view.window duration:1];
+            return NO;
+        }
+    } else if (textField == self.tfRegPasswordNum){
+        NSString *text = textField.text ? : @"";
+        text = [text stringByReplacingCharactersInRange:range withString:string];
+        if (text.length > 15) {
+            [CDAutoHideMessageHUD showMessage:@"最多只能输入15位" inView:self.view.window duration:1];
+            return NO;
+        }
+    }
+    return YES;
+}
+
 #pragma mark - SSJBaseNetworkServiceDelegate
 -(void)serverDidFinished:(SSJBaseNetworkService *)service{
     [super serverDidFinished:service];
     
-    if (![service.returnCode isEqualToString:@"1"]) {
-        return;
-    }
+    if (![service.returnCode isEqualToString:@"1"]) return;
     
-    if ([[NSUserDefaults standardUserDefaults] objectForKey:SSJLastLoggedUserItemKey]) {
-        __weak typeof(self) weakSelf = self;
-        NSData *lastUserData = [[NSUserDefaults standardUserDefaults] objectForKey:SSJLastLoggedUserItemKey];
-        SSJUserItem *lastUserItem = [NSKeyedUnarchiver unarchiveObjectWithData:lastUserData];
-        if (![self.loginService.item.mobileNo isEqualToString:lastUserItem.mobileNo] || !([self.loginService.item.openId isEqualToString:lastUserItem.openId] && lastUserItem.openId.length && self.loginService.item.openId.length) || ![self.loginService.item.loginType isEqualToString:lastUserItem.loginType]) {
-            NSString *userName;
-            int loginType = [lastUserItem.loginType intValue];
-            if (loginType == 0) {
-                userName = [lastUserItem.mobileNo stringByReplacingCharactersInRange:NSMakeRange(4, 4) withString:@"****"];
+    if (service == self.loginService) {//登陆
+        if ([[NSUserDefaults standardUserDefaults] objectForKey:SSJLastLoggedUserItemKey]) {
+            __weak typeof(self) weakSelf = self;
+            NSData *lastUserData = [[NSUserDefaults standardUserDefaults] objectForKey:SSJLastLoggedUserItemKey];
+            SSJUserItem *lastUserItem = [NSKeyedUnarchiver unarchiveObjectWithData:lastUserData];
+            if (![self.loginService.item.mobileNo isEqualToString:lastUserItem.mobileNo] || !([self.loginService.item.openId isEqualToString:lastUserItem.openId] && lastUserItem.openId.length && self.loginService.item.openId.length) || ![self.loginService.item.loginType isEqualToString:lastUserItem.loginType]) {
+                NSString *userName;
+                int loginType = [lastUserItem.loginType intValue];
+                if (loginType == 0) {
+                    userName = [lastUserItem.mobileNo stringByReplacingCharactersInRange:NSMakeRange(4, 4) withString:@"****"];
+                }else{
+                    userName = lastUserItem.nickName;
+                }
+                NSString *message;
+                if (loginType == 0) {
+                    message = [NSString stringWithFormat:@"您已使用过手机号%@登陆过,确定使用新账户登录",userName];
+                }else if (loginType == 1) {
+                    message = [NSString stringWithFormat:@"您已使用过QQ:%@登陆过,确定使用新账户登录",userName];
+                }else if (loginType == 2) {
+                    message = [NSString stringWithFormat:@"您已使用过微信:%@登陆过,确定使用新账户登录",userName];
+                }
+                
+                [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:message action:[SSJAlertViewAction actionWithTitle:@"取消" handler:NULL], [SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction * _Nonnull action) {
+                    [weakSelf comfirmTologin];
+                }], nil];
             }else{
-                userName = lastUserItem.nickName;
+                [self comfirmTologin];
             }
-            NSString *message;
-            if (loginType == 0) {
-                message = [NSString stringWithFormat:@"您已使用过手机号%@登陆过,确定使用新账户登录",userName];
-            }else if (loginType == 1) {
-                message = [NSString stringWithFormat:@"您已使用过QQ:%@登陆过,确定使用新账户登录",userName];
-            }else if (loginType == 2) {
-                message = [NSString stringWithFormat:@"您已使用过微信:%@登陆过,确定使用新账户登录",userName];
-            }
-            
-            [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:message action:[SSJAlertViewAction actionWithTitle:@"取消" handler:NULL], [SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction * _Nonnull action) {
-                [weakSelf comfirmTologin];
-            }], nil];
         }else{
             [self comfirmTologin];
         }
-    }else{
-        [self comfirmTologin];
+        return;
+    }
+    
+    if (service == self.registerService) {//获取验证码
+        if ([self.registerService.returnCode isEqualToString:@"1"]) {
+            [CDAutoHideMessageHUD showMessage:@"验证码发送成功"];
+            self.phoneNum = self.tfRegPhoneNum.text;
+        } else if ([self.registerService.returnCode isEqualToString:@"1001"]) {
+            
+            __weak typeof(self) weakSelf = self;
+            SSJAlertViewAction *cancelAction = [SSJAlertViewAction actionWithTitle:@"取消" handler:NULL];
+            SSJAlertViewAction *forgetAction = [SSJAlertViewAction actionWithTitle:@"忘记密码" handler:^(SSJAlertViewAction *action) {
+                SSJForgetPasswordFirstStepViewController *forgetVC = [[SSJForgetPasswordFirstStepViewController alloc] init];
+                forgetVC.mobileNo = self.registerService.mobileNo;
+                forgetVC.finishHandle = self.finishHandle;
+                [weakSelf.navigationController pushViewController:forgetVC animated:YES];
+            }];
+            [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:@"该手机号已经被注册，若忘记密码，请使用忘记密码功能找回密码" action:cancelAction, forgetAction, nil];
+            
+        } else {
+            NSString *message = service.desc.length > 0 ? service.desc : SSJ_ERROR_MESSAGE;
+            [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:message action:[SSJAlertViewAction actionWithTitle:@"确认" handler:NULL], nil];
+        }
+        return;
+    }
+    
+    if (service == self.registerNextService) { //下一步校验验证码
+        if (self.registerNextService.interfaceType == SSJRegistNetworkServiceTypeGetAuthCode) {
+            //  获取验证码
+            if ([self.registerNextService.returnCode isEqualToString:@"1"]) {
+            //进入输入密码页面
+                [CDAutoHideMessageHUD showMessage:@"验证码发送成功" inView:self.view.window duration:1];
+            } else {
+                self.getAuthCodeBtn.enabled = YES;
+            }
+            
+        } else if (self.registerNextService.interfaceType == SSJRegistNetworkServiceTypeCheckAuthCode) {
+            //  校验验证码校验成功
+            if ([self.registerNextService.returnCode isEqualToString:@"1"]) {
+//                SSJRegistCompleteViewController *registCompleteVC = [[SSJRegistCompleteViewController alloc] init];
+//                registCompleteVC.mobileNo = self.mobileNo;
+//                registCompleteVC.authCode = self.registerNextService.authCode;
+//                registCompleteVC.finishHandle = self.finishHandle;
+//                self.phoneNum = self.mobileNo;
+                self.codeNum = self.registerNextService.authCode;
+                self.centerScrollView.contentOffset = self.centerScrollView.contentOffset = CGPointMake(SSJSCREENWITH * 2, 0);
+//                [self.navigationController pushViewController:registCompleteVC animated:YES];
+                
+            }
+        }
+        return;
+    }
+    
+    if (service == self.registCompleteService) {
+        if ([self.registCompleteService.returnCode isEqualToString:@"1"]) {
+            
+            NSDictionary *resultInfo = [service.rootElement objectForKey:@"results"];
+            
+            if (resultInfo) {
+                [[NSUserDefaults standardUserDefaults] setBool:YES forKey:SSJHaveLoginOrRegistKey];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+                
+                SSJUserItem *userItem = [[SSJUserItem alloc] init];
+                userItem.userId = SSJUSERID();
+                userItem.mobileNo = self.registCompleteService.mobileNo;
+                userItem.registerState = @"1";
+                
+                //  只有保存用户登录信息成功后才算登录成功
+                if ([SSJUserTableManager saveUserItem:userItem]
+                    && SSJSaveAppId(resultInfo[@"appId"] ?: @"")
+                    && SSJSaveAccessToken(resultInfo[@"accessToken"] ?: @"")
+                    && SSJSaveUserLogined(YES)) {
+                    
+                    [[NSNotificationCenter defaultCenter] postNotificationName:SSJLoginOrRegisterNotification object:self];
+                    
+                    [self.tfRegPasswordNum resignFirstResponder];
+                    self.mimaNum = self.tfRegPasswordNum.text;
+                    [CDAutoHideMessageHUD showMessage:@"注册成功"];
+//                    [self.navigationController popViewControllerAnimated:YES];
+                    //  如果用户手势密码开启，进入手势密码页面
+                    SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"motionPWD", @"motionPWDState"] forUserId:SSJUSERID()];
+                    if ([userItem.motionPWDState boolValue]) {
+                        
+                        SSJMotionPasswordViewController *motionVC = [[SSJMotionPasswordViewController alloc] init];
+                        motionVC.finishHandle = self.finishHandle;
+                        motionVC.backController = self.backController;
+                        if (userItem.motionPWD.length) {
+                            motionVC.type = SSJMotionPasswordViewControllerTypeVerification;
+                        } else {
+                            motionVC.type = SSJMotionPasswordViewControllerTypeSetting;
+                        }
+                        [self.navigationController pushViewController:motionVC animated:YES];
+                        
+                        return;
+                    }
+                    
+                    if (self.finishHandle) {
+                        self.finishHandle(self);
+                    }
+                    return;
+                }
+            }
+        }
+        
+        [self.tfRegPasswordNum becomeFirstResponder];
+        [self showErrorMessage:(self.registCompleteService.desc.length ? self.registCompleteService.desc : SSJ_ERROR_MESSAGE)];
+        
     }
 }
+
+#pragma mark - UIScrollViewDelegate
+//- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+//{
+//    
+//}
+//
+//- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+//{
+//    self.triangleView.centerX = scrollView.contentOffset.x * 0.5 + SSJSCREENWITH * 0.25;
+//    if (self.triangleView.centerX < self.view.centerX) {
+//        //登陆
+//        self.registerTitleButton.selected = NO;
+//        self.loginTitleButton.selected = YES;
+//    } else {
+//        //注册
+//        self.registerTitleButton.selected = YES;
+//        self.loginTitleButton.selected = NO;
+//    }
+//}
 
 #pragma mark - Notification
 -(void)updatetextfield:(id)sender{
@@ -246,13 +433,44 @@
         }else{
         self.loginButton.enabled = NO;
         }
+        return;
+    }
+    
+    if (self.tfRegPhoneNum.isFirstResponder || self.tfRegYanZhenNum.isFirstResponder) {
+        if (self.tfRegPhoneNum.text.length > 0 && self.tfRegYanZhenNum.text.length == 6) {
+            self.regNextBtn.enabled = YES;
+        }else {
+            self.regNextBtn.enabled = NO;
+        }
+    }
+    
+    if (self.tfRegPasswordNum.isFirstResponder) {
+        if (self.tfRegPasswordNum.text.length >= 6 && self.agreeButton.selected == YES) {
+            self.registerButton.enabled = YES;
+        } else {
+            self.registerButton.enabled = NO;
+        }
     }
 }
 
 #pragma mark - Event
--(void)loginButtonClicked:(id)sender{
-    [self.loginService loadLoginModelWithPassWord:self.tfPassword.text AndUserAccount:self.tfPhoneNum.text];
-    [self.tfPassword resignFirstResponder];
+-(void)loginButtonClicked:(UIButton *)sender{
+    if (sender.tag == 100) {
+        self.registerTitleButton.selected = NO;
+        if (sender.selected == YES)return;
+        //清空数据
+        self.tfRegYanZhenNum.text = nil;
+        self.tfRegPhoneNum.text = nil;
+        sender.selected = !sender.selected;
+        [UIView animateWithDuration:0.2 animations:^{
+            self.triangleView.centerX = self.loginTitleButton.centerX;
+            self.centerScrollView.contentOffset = CGPointZero;
+        }];
+    }else if (sender.tag == 101) {
+        [self.loginService loadLoginModelWithPassWord:self.tfPassword.text AndUserAccount:self.tfPhoneNum.text];
+        [self.tfPassword resignFirstResponder];
+    }
+   
 }
 
 -(void)forgetButtonClicked:(id)sender{
@@ -267,24 +485,46 @@
     [self.navigationController pushViewController:forgetVC animated:YES];
 }
 
--(void)registerButtonClicked:(id)sender{
-    __weak typeof(self) weakSelf = self;
-    [SSJAnaliyticsManager event:@"login_register"];
+-(void)registerButtonClicked:(UIButton *)sender{//注册
+    if (sender.tag == 200) {
+        self.loginTitleButton.selected = NO;
+        //清空数据
+        self.tfPhoneNum.text = nil;
+        self.tfPassword.text = nil;
+        if (sender.selected == YES)return;
+        sender.selected = !sender.selected;
+        [UIView animateWithDuration:0.3 animations:^{
+            self.triangleView.centerX = self.registerTitleButton.centerX;
+            self.centerScrollView.contentOffset = CGPointMake(SSJSCREENWITH, 0);
+        }];
+        return;
+    }
+//    __weak typeof(self) weakSelf = self;
+//    [SSJAnaliyticsManager event:@"login_register"];
+//
+//    SSJRegistGetVerViewController *registerVc = [[SSJRegistGetVerViewController alloc] init];
+//    registerVc.finishHandle = ^(UIViewController *controller){
+//        //  如果是忘记密码，就返回到登录页面
+//        if ([controller isKindOfClass:[SSJForgetPasswordSecondStepViewController class]]) {
+//            [weakSelf.navigationController popToViewController:weakSelf animated:YES];
+//        } else {
+//            if (weakSelf.finishHandle) {
+//                weakSelf.finishHandle(weakSelf);
+//            } else {
+//                [weakSelf ssj_backOffAction];
+//            }
+//        }
+//    };
+//    [self.navigationController pushViewController:registerVc animated:YES];
+    NSString * regex = @"^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,15}$";
+    NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
+    BOOL isMatch = [pred evaluateWithObject:self.tfRegPasswordNum.text];
+    if (isMatch) {
+        [self.registCompleteService setPasswordWithMobileNo:self.phoneNum authCode:self.codeNum password:self.tfRegPasswordNum.text];
+    } else {
+        [CDAutoHideMessageHUD showMessage:@"只能输入6-15位字母、数字组合"];
+    }
 
-    SSJRegistGetVerViewController *registerVc = [[SSJRegistGetVerViewController alloc] init];
-    registerVc.finishHandle = ^(UIViewController *controller){
-        //  如果是忘记密码，就返回到登录页面
-        if ([controller isKindOfClass:[SSJForgetPasswordSecondStepViewController class]]) {
-            [weakSelf.navigationController popToViewController:weakSelf animated:YES];
-        } else {
-            if (weakSelf.finishHandle) {
-                weakSelf.finishHandle(weakSelf);
-            } else {
-                [weakSelf ssj_backOffAction];
-            }
-        }
-    };
-    [self.navigationController pushViewController:registerVc animated:YES];
 }
 
 - (void)goBackAction {
@@ -313,6 +553,58 @@
         [SSJThirdPartyLoginManger shareInstance].weixinLogin = nil;
         [weakSelf.loginService loadLoginModelWithLoginItem:item];
     }];
+    
+}
+
+- (void)showSecret:(UIButton *)button
+{
+    button.selected = !button.selected;
+    if (button.tag == 300) {
+        self.tfPassword.secureTextEntry = button.selected;
+    } else if(button.tag == 301) {
+        self.tfRegPasswordNum.secureTextEntry = button.selected;
+    }
+}
+
+//  获取验证码
+- (void)getAuthCodeAction
+{
+    if (!self.tfRegPhoneNum.text.length) {
+        [CDAutoHideMessageHUD showMessage:@"请先输入手机号"];
+        return;
+    }
+    [self beginCountdownIfNeeded];
+    [self.registerService getAuthCodeWithMobileNo:self.tfRegPhoneNum.text];
+}
+
+- (void)regNextButtonClicked:(UIButton *)btn {//下一步
+    if (!self.tfRegYanZhenNum.text.length) {
+        [CDAutoHideMessageHUD showMessage:@"请先输入验证码"];
+        return;
+    }
+    
+    if (!self.tfRegPhoneNum.text.length) {
+        [CDAutoHideMessageHUD showMessage:@"请先输入手机号码"];
+        return;
+    }
+    [self.registerNextService checkAuthCodeWithMobileNo:self.tfRegPhoneNum.text authCode:self.tfRegYanZhenNum.text];
+}
+
+//  同意、不同意协议
+- (void)agreeProtocaolAction {
+        self.agreeButton.selected = !self.agreeButton.selected;
+    if (self.agreeButton.selected && self.tfRegPasswordNum.text.length >= 6) {
+        self.registerButton.enabled = YES;
+    }else{
+        self.registerButton.enabled = NO;
+    }
+}
+
+//  查看协议
+- (void)checkProtocolAction {
+    SSJNormalWebViewController *userAgreementVC = [SSJNormalWebViewController webViewVCWithURL:[NSURL URLWithString:SSJUserProtocolUrl]];
+    userAgreementVC.title = @"用户协定";
+    [self.navigationController pushViewController:userAgreementVC animated:YES];
 }
 
 #pragma mark - Private
@@ -392,14 +684,185 @@
         [self ssj_backOffAction];
     }
 }
+/**
+ *  画三角形
+ */
+- (UIImageView *)drawTriangle
+{
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(10, 5), NO, [[UIScreen mainScreen] scale]);
+    // 1.获得上下文
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    // 2.画三角形
+    CGContextMoveToPoint(ctx, 0, 5);
+    CGContextAddLineToPoint(ctx, 5, 0);
+    CGContextAddLineToPoint(ctx, 10, 5);
+    CGContextSetFillColorWithColor(ctx, [UIColor whiteColor].CGColor);
+    // 关闭路径(连接起点和最后一个点)
+    CGContextClosePath(ctx);
+    CGContextFillPath(ctx);
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
+    return imageView;
+}
+
+//  开始倒计时
+- (void)beginCountdownIfNeeded {
+    if (!self.countdownTimer.valid) {
+        self.countdown = kCountdownLimit;
+        self.countdownTimer = [NSTimer timerWithTimeInterval:1 target:self selector:@selector(updateCountdown) userInfo:nil repeats:YES];
+        [[NSRunLoop currentRunLoop] addTimer:self.countdownTimer forMode:NSRunLoopCommonModes];
+        [self.countdownTimer fire];
+    }
+}
+
+//  更新倒计时
+- (void)updateCountdown {
+    if (self.countdown > 0) {
+        self.getAuthCodeBtn.enabled = NO;
+        [self.getAuthCodeBtn setTitle:[NSString stringWithFormat:@"%ds",(int)self.countdown] forState:UIControlStateDisabled];
+    } else {
+        self.getAuthCodeBtn.enabled = YES;
+        [self.countdownTimer invalidate];
+    }
+    self.countdown --;
+}
+
+- (void)showErrorMessage:(NSString *)message {
+    SSJAlertViewAction *sureAction = [SSJAlertViewAction actionWithTitle:@"确定" handler:NULL];
+    [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:message action:sureAction, nil];
+}
+
+- (void)updateConstraints
+{
+       self.scrollView.frame = self.view.bounds;
+    self.topView.frame = CGRectMake(0, 0, self.view.width, 206);
+    
+    self.loginTitleButton.frame = CGRectMake(0, self.topView.height - 45, self.view.width * 0.5, 45);
+    self.registerTitleButton.left = self.view.width * 0.5;
+    self.registerTitleButton.bottom = self.topView.bottom;
+    self.registerTitleButton.height = 45;
+    self.registerTitleButton.width = self.view.width * 0.5;
+    self.triangleView.centerX = self.loginTitleButton.centerX;
+    self.triangleView.bottom = self.topView.bottom;
+    
+    self.centerScrollView.frame = CGRectMake(0, CGRectGetMaxY(self.topView.frame), self.view.width, self.view.height - self.topView.height);
+    
+    self.numSecretBgView.frame = CGRectMake(15, 35, self.view.width - 30, 100);
+    
+    self.tfPhoneNum.frame = CGRectMake(0, 0, self.numSecretBgView.width, 50);
+    self.tfPassword.frame = CGRectMake(0, CGRectGetMaxY(self.tfPhoneNum.frame), self.numSecretBgView.width, 50);
+    
+    self.loginButton.frame = CGRectMake(15, CGRectGetMaxY(self.numSecretBgView.frame) + 25, self.view.width - 30, 44);
+
+    self.forgetButton.right = self.view.width - 15;
+    self.forgetButton.top= CGRectGetMaxY(self.loginButton.frame) + 15;
+    
+    // 只有9188、有鱼并且没有审核的情况下，显示第三方登录
+    if ([SSJDefaultSource() isEqualToString:@"11501"]
+        || [SSJDefaultSource() isEqualToString:@"11502"]) {
+        self.thirdPartyLoginLabel.centerX = SSJSCREENWITH * 0.5;
+        self.thirdPartyLoginLabel.top = CGRectGetMaxY(self.forgetButton.frame) + 100;
+        
+        self.leftSeperatorLine.centerY = self.rightSeperatorLine.centerY = self.thirdPartyLoginLabel.centerY;
+        self.leftSeperatorLine.width = self.rightSeperatorLine.width = 45;
+        self.leftSeperatorLine.left =  (self.view.width - self.thirdPartyLoginLabel.width) * 0.5 - 55;
+        self.rightSeperatorLine.left = CGRectGetMaxX(self.thirdPartyLoginLabel.frame) + 10;
+        self.leftSeperatorLine.height = self.rightSeperatorLine.height = 1.0f / [UIScreen mainScreen].scale;
+        if (![WXApi isWXAppInstalled]) {
+            self.weixinLoginButton.top = self.tencentLoginButton.top = CGRectGetMaxY(self.thirdPartyLoginLabel.frame) + 25;
+            self.weixinLoginButton.centerX = self.thirdPartyLoginLabel.centerX - 25;
+            self.tencentLoginButton.centerX = self.thirdPartyLoginLabel.centerX + 25;
+            
+        } else {
+            self.tencentLoginButton.top = CGRectGetMaxY(self.thirdPartyLoginLabel.frame) + 25;
+            self.tencentLoginButton.centerX = self.thirdPartyLoginLabel.centerX;
+        }
+    }
+    
+    //注册
+    self.numRegSecretBgView.size = self.numSecretBgView.size;
+    self.numRegSecretBgView.top = self.numSecretBgView.top;
+    self.numRegSecretBgView.left = SSJSCREENWITH + 15;
+    
+    self.tfRegPhoneNum.frame = CGRectMake(0, 0, self.numSecretBgView.width, 50);
+    self.tfRegYanZhenNum.frame = CGRectMake(0, CGRectGetMaxY(self.tfRegPhoneNum.frame), self.numSecretBgView.width, 50);
+    
+    self.regNextBtn.size = self.loginButton.size;
+    self.regNextBtn.left = SSJSCREENWITH + 15;
+    self.regNextBtn.top = self.loginButton.top;
+    
+    self.tfRegPasswordNum.top = self.numSecretBgView.top;
+    self.tfRegPasswordNum.height = self.tfRegPhoneNum.height;
+    self.tfRegPasswordNum.left = SSJSCREENWITH *2 + 15;
+    self.tfRegPasswordNum.width = self.numSecretBgView.width;
+    
+    self.registerButton.top = CGRectGetMaxY(self.tfRegPasswordNum.frame) + 20;
+    self.registerButton.left = self.tfRegPasswordNum.left;
+    self.registerButton.width = self.tfRegPasswordNum.width;
+    self.registerButton.height = 45;
+    
+    self.agreeButton.left = self.registerButton.left;
+    self.agreeButton.top = CGRectGetMaxY(self.registerButton.frame) + 15;
+    
+    self.protocolButton.left = CGRectGetMaxX(self.agreeButton.frame) + 3;
+    self.protocolButton.centerY = self.agreeButton.centerY;
+    
+}
+
 
 #pragma mark - Getter
+- (TPKeyboardAvoidingScrollView *)scrollView
+{
+    if (!_scrollView) {
+        _scrollView = [[TPKeyboardAvoidingScrollView alloc] init];
+    }
+    return _scrollView;
+}
+
+- (TPKeyboardAvoidingScrollView *)centerScrollView
+{
+    if (!_centerScrollView) {
+        _centerScrollView = [[TPKeyboardAvoidingScrollView alloc] init];
+        _centerScrollView.delegate = self;
+        _centerScrollView.contentSize = CGSizeMake(SSJSCREENWITH * 3, 0);
+        _centerScrollView.showsHorizontalScrollIndicator = NO;
+        _centerScrollView.scrollEnabled = NO;
+        _centerScrollView.pagingEnabled = YES;
+    }
+    return _centerScrollView;
+}
+
 - (SSJLoginService *)loginService{
     if (_loginService==nil) {
         _loginService=[[SSJLoginService alloc]initWithDelegate:self];
         _loginService.showLodingIndicator = YES;
     }
     return _loginService;
+}
+
+- (SSJRegistNetworkService *)registerService {
+    if (!_registerService) {
+        _registerService = [[SSJRegistNetworkService alloc] initWithDelegate:self type:SSJRegistAndForgetPasswordTypeRegist];
+        _registerService.showLodingIndicator = YES;
+    }
+    return _registerService;
+}
+
+- (SSJRegistNetworkService *)registerNextService {
+    if (!_registerNextService) {
+        _registerNextService = [[SSJRegistNetworkService alloc] initWithDelegate:self type:SSJRegistAndForgetPasswordTypeRegist];
+        _registerNextService.showLodingIndicator = YES;
+    }
+    return _registerNextService;
+}
+
+- (SSJRegistNetworkService *)registCompleteService {
+    if (!_registCompleteService) {
+        _registCompleteService = [[SSJRegistNetworkService alloc] initWithDelegate:self type:SSJRegistAndForgetPasswordTypeRegist];
+        _registCompleteService.showLodingIndicator = YES;
+    }
+    return _registCompleteService;
 }
 
 - (SSJHomeLoadingView *)loadingView{
@@ -423,22 +886,19 @@
 //}
 
 
--(SSJBaselineTextField*)tfPhoneNum{
+- (UITextField*)tfPhoneNum{
     if (!_tfPhoneNum) {
-        UIImageView *image = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"login_username"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
-        image.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginSecondaryColor];
-        UIView *leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 40, 47)];
-        [leftView addSubview:image];
-        image.center = CGPointMake(20, 23);
-        
-        _tfPhoneNum = [[SSJBaselineTextField alloc]initWithFrame:CGRectMake(11, 0, self.view.width - 22, 47) contentHeight:34];
-        _tfPhoneNum.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginSecondaryColor];
-        _tfPhoneNum.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor];
+        UIImageView *leftView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 30, 50)];
+        leftView.image = [UIImage imageNamed:@"zhuanghu"];
+        leftView.contentMode = UIViewContentModeCenter;
+        _tfPhoneNum = [[UITextField alloc] init];
+        _tfPhoneNum.textColor = [UIColor ssj_colorWithHex:@"333333"];
         _tfPhoneNum.clearButtonMode = UITextFieldViewModeWhileEditing;
         _tfPhoneNum.placeholder = @"请输入手机号";
-        [_tfPhoneNum setValue:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginSecondaryColor] forKeyPath:@"_placeholderLabel.textColor"];
-        _tfPhoneNum.normalLineColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginSecondaryColor];
-        _tfPhoneNum.highlightLineColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginSecondaryColor];
+        [_tfPhoneNum setValue:[UIColor ssj_colorWithHex:@"999999"] forKeyPath:@"_placeholderLabel.textColor"];
+        [_tfPhoneNum ssj_setBorderStyle:SSJBorderStyleBottom];
+        [_tfPhoneNum ssj_setBorderWidth:1];
+        [_tfPhoneNum ssj_setBorderColor:[UIColor ssj_colorWithHex:@"cccccc"]];
         _tfPhoneNum.font = [UIFont systemFontOfSize:16];
         _tfPhoneNum.delegate = self;
         _tfPhoneNum.keyboardType = UIKeyboardTypeNumberPad;
@@ -448,84 +908,200 @@
     return _tfPhoneNum;
 }
 
--(SSJBaselineTextField*)tfPassword{
+- (UITextField*)tfRegPhoneNum{
+    if (!_tfRegPhoneNum) {
+        UIImageView *leftView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 30, 50)];
+        leftView.image = [UIImage imageNamed:@"zhuanghu"];
+        leftView.contentMode = UIViewContentModeCenter;
+        _tfRegPhoneNum = [[UITextField alloc] init];
+        _tfRegPhoneNum.textColor = [UIColor ssj_colorWithHex:@"333333"];
+        _tfRegPhoneNum.clearButtonMode = UITextFieldViewModeWhileEditing;
+        _tfRegPhoneNum.placeholder = @"请输入手机号";
+        [_tfRegPhoneNum setValue:[UIColor ssj_colorWithHex:@"999999"] forKeyPath:@"_placeholderLabel.textColor"];
+        [_tfRegPhoneNum ssj_setBorderStyle:SSJBorderStyleBottom];
+        [_tfRegPhoneNum ssj_setBorderWidth:1];
+        [_tfRegPhoneNum ssj_setBorderColor:[UIColor ssj_colorWithHex:@"cccccc"]];
+        _tfRegPhoneNum.font = [UIFont systemFontOfSize:16];
+        _tfRegPhoneNum.delegate = self;
+        _tfRegPhoneNum.keyboardType = UIKeyboardTypeNumberPad;
+        _tfRegPhoneNum.leftView = leftView;
+        _tfRegPhoneNum.leftViewMode = UITextFieldViewModeAlways;
+    }
+    return _tfRegPhoneNum;
+}
+
+-(UITextField*)tfPassword{
     if (!_tfPassword) {
-        UIImageView *image = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"login_password"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
-        image.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginSecondaryColor];
-        UIView *leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 40, 47)];
-        [leftView addSubview:image];
-        image.center = CGPointMake(20, 23);
-        _tfPassword = [[SSJBaselineTextField alloc]initWithFrame:CGRectMake(11, 47, self.view.width - 22, 47) contentHeight:34];
-        _tfPassword.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginSecondaryColor];
-        _tfPassword.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor];
+        UIImageView *leftView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 30, 50)];
+        leftView.image = [UIImage imageNamed:@"mima"];
+        leftView.contentMode = UIViewContentModeCenter;
+        UIButton *rightView = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 40, 50)];
+        [rightView setImage:[UIImage imageNamed:@"founds_xianshi"] forState:UIControlStateNormal];
+        [rightView setImage:[UIImage imageNamed:@"founds_yincang"] forState:UIControlStateSelected];
+        [rightView addTarget:self action:@selector(showSecret:) forControlEvents:UIControlEventTouchUpInside];
+        rightView.tag = 300;
+        _tfPassword = [[UITextField alloc] init];
+        _tfPassword.textColor = [UIColor ssj_colorWithHex:@"333333"];
         _tfPassword.clearButtonMode = UITextFieldViewModeWhileEditing;
-        _tfPassword.placeholder = @"请输入密码";
-        [_tfPassword setValue:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginSecondaryColor] forKeyPath:@"_placeholderLabel.textColor"];
-        _tfPassword.normalLineColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginSecondaryColor];
-        _tfPassword.highlightLineColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginSecondaryColor];
+        _tfPassword.placeholder = @"请输入账户密码";
+        [_tfPassword setValue:[UIColor ssj_colorWithHex:@"999999"] forKeyPath:@"_placeholderLabel.textColor"];
         _tfPassword.font = [UIFont systemFontOfSize:16];
-        _tfPassword.secureTextEntry = YES;
         _tfPassword.keyboardType = UIKeyboardTypeASCIICapable;
         _tfPassword.delegate = self;
         _tfPassword.leftView = leftView;
+        _tfPassword.rightView = rightView;
         _tfPassword.leftViewMode = UITextFieldViewModeAlways;
+        _tfPassword.rightViewMode = UITextFieldViewModeAlways;
     }
     return _tfPassword;
 }
 
--(UIButton*)loginButton{
+-(UITextField*)tfRegPasswordNum{
+    if (!_tfRegPasswordNum) {
+        UIImageView *leftView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 30, 50)];
+        leftView.image = [UIImage imageNamed:@"mima"];
+        leftView.contentMode = UIViewContentModeCenter;
+        UIButton *rightView = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 40, 50)];
+        [rightView setImage:[UIImage imageNamed:@"founds_xianshi"] forState:UIControlStateNormal];
+        [rightView setImage:[UIImage imageNamed:@"founds_yincang"] forState:UIControlStateSelected];
+        [rightView addTarget:self action:@selector(showSecret:) forControlEvents:UIControlEventTouchUpInside];
+        rightView.tag = 301;
+        _tfRegPasswordNum = [[UITextField alloc] init];
+        _tfRegPasswordNum.textColor = [UIColor ssj_colorWithHex:@"333333"];
+        _tfRegPasswordNum.clearButtonMode = UITextFieldViewModeWhileEditing;
+        _tfRegPasswordNum.placeholder = @"请输入账户密码";
+        [_tfRegPasswordNum setValue:[UIColor ssj_colorWithHex:@"999999"] forKeyPath:@"_placeholderLabel.textColor"];
+        _tfRegPasswordNum.font = [UIFont systemFontOfSize:16];
+        _tfRegPasswordNum.keyboardType = UIKeyboardTypeASCIICapable;
+        _tfRegPasswordNum.delegate = self;
+        _tfRegPasswordNum.leftView = leftView;
+        _tfRegPasswordNum.rightView = rightView;
+        _tfRegPasswordNum.leftViewMode = UITextFieldViewModeAlways;
+        _tfRegPasswordNum.rightViewMode = UITextFieldViewModeAlways;
+        _tfRegPasswordNum.backgroundColor = [UIColor ssj_colorWithHex:@"cccccc" alpha:0.1];
+    }
+    return _tfRegPasswordNum;
+}
+
+-(UITextField*)tfRegYanZhenNum{
+    if (!_tfRegYanZhenNum) {
+        UIImageView *leftView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 30, 50)];
+        leftView.image = [UIImage imageNamed:@"yanzheng"];
+        leftView.contentMode = UIViewContentModeCenter;
+        _tfRegYanZhenNum = [[UITextField alloc] init];
+        _tfRegYanZhenNum.textColor = [UIColor ssj_colorWithHex:@"333333"];
+        _tfRegYanZhenNum.clearButtonMode = UITextFieldViewModeWhileEditing;
+        _tfRegYanZhenNum.placeholder = @"请输入验证码";
+        [_tfRegYanZhenNum setValue:[UIColor ssj_colorWithHex:@"999999"] forKeyPath:@"_placeholderLabel.textColor"];
+        _tfRegYanZhenNum.font = [UIFont systemFontOfSize:16];
+        _tfRegYanZhenNum.keyboardType = UIKeyboardTypeASCIICapable;
+        _tfRegYanZhenNum.delegate = self;
+        _tfRegYanZhenNum.leftView = leftView;
+        _tfRegYanZhenNum.rightView = self.getAuthCodeBtn;
+        _tfRegYanZhenNum.leftViewMode = UITextFieldViewModeAlways;
+        _tfRegYanZhenNum.rightViewMode = UITextFieldViewModeAlways;
+        
+    }
+    return _tfRegYanZhenNum;
+}
+
+- (UIButton*)loginButton{
     if (!_loginButton) {
         _loginButton = [[UIButton alloc]init];
-        _loginButton.size = CGSizeMake(self.view.width - 22, 47);
-        _loginButton.clipsToBounds = YES;
-        _loginButton.titleLabel.font = [UIFont systemFontOfSize:21];
-        _loginButton.layer.cornerRadius = 3;
+        _loginButton.titleLabel.font = [UIFont systemFontOfSize:19];
         _loginButton.enabled = NO;
         [_loginButton setTitle:@"登录" forState:UIControlStateNormal];
-        [_loginButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginButtonTitleColor] forState:UIControlStateNormal];
-        _loginButton.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor];
+        [_loginButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [_loginButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"f9cbd0"] forState:UIControlStateDisabled];
+        [_loginButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"ea4a64"] forState:UIControlStateNormal];
+        _loginButton.layer.cornerRadius = 4;
+        _loginButton.clipsToBounds = YES;
+        _loginButton.tag = 101;
         [_loginButton addTarget:self action:@selector(loginButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _loginButton;
 }
 
--(UIButton*)registerButton{
+- (UIButton*)loginTitleButton{
+    if (!_loginTitleButton) {
+        _loginTitleButton = [[UIButton alloc]init];
+        _loginTitleButton.selected = YES;
+        _loginTitleButton.titleLabel.font = [UIFont systemFontOfSize:14];
+        [_loginTitleButton setTitle:@"登录" forState:UIControlStateNormal];
+        [_loginTitleButton setTitleColor:[UIColor ssj_colorWithHex:@"eb4a64" alpha:0.6] forState:UIControlStateNormal];
+        [_loginTitleButton setTitleColor:[UIColor ssj_colorWithHex:@"eb4a64"] forState:UIControlStateSelected];
+        _loginTitleButton.tag = 100;
+        
+        [_loginTitleButton addTarget:self action:@selector(loginButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _loginTitleButton;
+}
+
+- (UIButton*)registerButton{
     if (!_registerButton) {
         _registerButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        _registerButton.size = CGSizeMake(self.view.width - 22, 47);
-        _registerButton.clipsToBounds = YES;
-        _registerButton.layer.cornerRadius = 3;
-        _registerButton.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor].CGColor;
-        _registerButton.layer.borderWidth = 1.0f;
-        _registerButton.titleLabel.font = [UIFont systemFontOfSize:21];
+        _registerButton.titleLabel.font = [UIFont systemFontOfSize:19];
         [_registerButton setTitle:@"注册" forState:UIControlStateNormal];
-        [_registerButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor] forState:UIControlStateNormal];
-        [_registerButton ssj_setBackgroundColor:[UIColor clearColor] forState:UIControlStateNormal];
+        [_registerButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [_registerButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"f9cbd0"] forState:UIControlStateDisabled];
+        [_registerButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"ea4a64"] forState:UIControlStateNormal];
+        _registerButton.layer.cornerRadius = 4;
+        _registerButton.clipsToBounds = YES;
+        _registerButton.tag = 201;
+        _registerButton.enabled = NO;
         [_registerButton addTarget:self action:@selector(registerButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _registerButton;
+}
+
+- (UIButton*)regNextBtn{
+    if (!_regNextBtn) {
+        _regNextBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        _regNextBtn.titleLabel.font = [UIFont systemFontOfSize:19];
+        [_regNextBtn setTitle:@"下一步" forState:UIControlStateNormal];
+        [_regNextBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [_regNextBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"f9cbd0"] forState:UIControlStateDisabled];
+        [_regNextBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"ea4a64"] forState:UIControlStateNormal];
+        _regNextBtn.enabled = NO;
+        _regNextBtn.layer.cornerRadius = 4;
+        _regNextBtn.clipsToBounds = YES;
+        [_regNextBtn addTarget:self action:@selector(regNextButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _regNextBtn;
+}
+
+- (UIButton*)registerTitleButton{
+    if (!_registerTitleButton) {
+        _registerTitleButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        _registerTitleButton.titleLabel.font = [UIFont systemFontOfSize:14];
+        [_registerTitleButton setTitle:@"注册" forState:UIControlStateNormal];
+        [_registerTitleButton setTitleColor:[UIColor ssj_colorWithHex:@"eb4a64" alpha:0.6] forState:UIControlStateNormal];
+        [_registerTitleButton setTitleColor:[UIColor ssj_colorWithHex:@"eb4a64"] forState:UIControlStateSelected];
+        _registerTitleButton.tag = 200;
+        [_registerTitleButton addTarget:self action:@selector(registerButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _registerTitleButton;
 }
 
 -(UIButton*)forgetButton{
     if (!_forgetButton) {
         _forgetButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _forgetButton.titleLabel.font = [UIFont systemFontOfSize:13];
-        [_forgetButton setRight:self.loginButton.right];
         [_forgetButton setTitle:@"忘记密码?" forState:UIControlStateNormal];
-        [_forgetButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginSecondaryColor] forState:UIControlStateNormal];
+        [_forgetButton setTitleColor:[UIColor ssj_colorWithHex:@"333333"] forState:UIControlStateNormal];
         _forgetButton.titleLabel.font = [UIFont systemFontOfSize:15];
         [_forgetButton addTarget:self action:@selector(forgetButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         [_forgetButton sizeToFit];
-        _forgetButton.rightTop = CGPointMake(self.view.width - 14, self.loginButton.bottom + 15);
     }
     return _forgetButton;
 }
 
 -(UIButton *)tencentLoginButton{
     if (!_tencentLoginButton) {
-        _tencentLoginButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 50, 70)];
-        [_tencentLoginButton setImage:[[UIImage imageNamed:@"more_qq"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+        _tencentLoginButton = [[UIButton alloc]init];
+        [_tencentLoginButton setImage:[UIImage imageNamed:@"login_qq"] forState:UIControlStateNormal];
         [_tencentLoginButton setTitle:@"腾讯QQ" forState:UIControlStateNormal];
+        _tencentLoginButton.size = CGSizeMake(35, 35);
         [_tencentLoginButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor] forState:UIControlStateNormal];
         _tencentLoginButton.titleLabel.font = [UIFont systemFontOfSize:13];
         _tencentLoginButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor];
@@ -539,8 +1115,9 @@
 
 -(UIButton *)weixinLoginButton{
     if (!_weixinLoginButton) {
-        _weixinLoginButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 50, 70)];
-        [_weixinLoginButton setImage:[[UIImage imageNamed:@"more_weixin"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+        _weixinLoginButton = [[UIButton alloc]init];
+        [_weixinLoginButton setImage:[UIImage imageNamed:@"login_weixin"] forState:UIControlStateNormal];
+        _weixinLoginButton.size = CGSizeMake(35, 35);
         [_weixinLoginButton setTitle:@"微信" forState:UIControlStateNormal];
         [_weixinLoginButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor] forState:UIControlStateNormal];
         _weixinLoginButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor];
@@ -556,7 +1133,7 @@
 -(UIView *)leftSeperatorLine{
     if (!_leftSeperatorLine) {
         _leftSeperatorLine = [[UIView alloc]init];
-        _leftSeperatorLine.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginSecondaryColor];
+        _leftSeperatorLine.backgroundColor = [UIColor ssj_colorWithHex:@"666666"];
     }
     return _leftSeperatorLine;
 }
@@ -564,10 +1141,11 @@
 -(UIView *)rightSeperatorLine{
     if (!_rightSeperatorLine) {
         _rightSeperatorLine = [[UIView alloc]init];
-        _rightSeperatorLine.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginSecondaryColor];
+        _rightSeperatorLine.backgroundColor = [UIColor ssj_colorWithHex:@"666666"];
     }
     return _rightSeperatorLine;
 }
+
 
 -(UILabel *)thirdPartyLoginLabel{
     if (!_thirdPartyLoginLabel) {
@@ -577,8 +1155,93 @@
         _thirdPartyLoginLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginSecondaryColor];
         _thirdPartyLoginLabel.font = [UIFont systemFontOfSize:15];
         _thirdPartyLoginLabel.textAlignment = NSTextAlignmentCenter;
+        [_thirdPartyLoginLabel sizeToFit];
     }
     return _thirdPartyLoginLabel;
 }
 
+- (UIImageView *)triangleView
+{
+    if (!_triangleView) {
+        _triangleView = [self drawTriangle];
+    }
+    return _triangleView;
+}
+
+- (UIImageView *)topView
+{
+    if (!_topView) {
+        _topView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"pic_login"]];
+    }
+    return _topView;
+}
+
+- (UIView *)numSecretBgView
+{
+    if (!_numSecretBgView) {
+        _numSecretBgView = [[UIView alloc] init];
+        _numSecretBgView.backgroundColor = [UIColor ssj_colorWithHex:@"cccccc" alpha:0.1];
+        _numSecretBgView.layer.cornerRadius = 4;
+        _numSecretBgView.clipsToBounds = YES;
+    }
+    return _numSecretBgView;
+}
+
+- (UIView *)numRegSecretBgView
+{
+    if (!_numRegSecretBgView) {
+        _numRegSecretBgView = [[UIView alloc] init];
+        _numRegSecretBgView.backgroundColor = [UIColor ssj_colorWithHex:@"cccccc" alpha:0.1];
+        _numRegSecretBgView.layer.cornerRadius = 4;
+        _numRegSecretBgView.clipsToBounds = YES;
+    }
+    return _numRegSecretBgView;
+}
+
+- (UIButton *)getAuthCodeBtn {
+    if (!_getAuthCodeBtn) {
+        _getAuthCodeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        _getAuthCodeBtn.size = CGSizeMake(95, 30);
+        _getAuthCodeBtn.titleLabel.font = [UIFont systemFontOfSize:15];
+        [_getAuthCodeBtn setTitle:@"获取验证码" forState:UIControlStateNormal];
+        [_getAuthCodeBtn setTitleColor:[UIColor ssj_colorWithHex:@"#333333"] forState:UIControlStateNormal];
+        [_getAuthCodeBtn setTitleColor:[UIColor ssj_colorWithHex:@"#666666"] forState:UIControlStateDisabled];
+        [_getAuthCodeBtn addTarget:self action:@selector(getAuthCodeAction) forControlEvents:UIControlEventTouchUpInside];
+        [_getAuthCodeBtn ssj_setBorderColor:[UIColor ssj_colorWithHex:@"f9cbd0"]];
+        [_getAuthCodeBtn ssj_setBorderStyle:SSJBorderStyleLeft];
+        [_getAuthCodeBtn ssj_setBorderWidth:2];
+        [_getAuthCodeBtn ssj_setBorderInsets:UIEdgeInsetsMake(4, 5, 4, 5)];
+    }
+    return _getAuthCodeBtn;
+}
+
+- (UIButton *)agreeButton {
+    if (!_agreeButton) {
+        _agreeButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        _agreeButton.size = CGSizeMake(12, 12);
+        _agreeButton.selected = YES;
+        [_agreeButton setImage:nil forState:UIControlStateNormal];
+        [_agreeButton setImage:[[UIImage imageNamed:@"register_agreement"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateSelected];
+        _agreeButton.tintColor = [UIColor ssj_colorWithHex:@"ea4a64"];
+        [_agreeButton addTarget:self action:@selector(agreeProtocaolAction) forControlEvents:UIControlEventTouchUpInside];
+        [_agreeButton ssj_setBorderWidth:1];
+        [_agreeButton ssj_setBorderStyle:SSJBorderStyleAll];
+        [_agreeButton ssj_setBorderColor:[UIColor ssj_colorWithHex:@"ea4a64"]];
+    }
+    return _agreeButton;
+}
+
+- (UIButton *)protocolButton {
+    if (!_protocolButton) {
+        _protocolButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        _protocolButton.titleLabel.font = [UIFont systemFontOfSize:12];
+        [_protocolButton setTitle:@"我已阅读并同意用户协定" forState:UIControlStateNormal];
+        [_protocolButton setTitleColor:[UIColor ssj_colorWithHex:@"666666"] forState:UIControlStateNormal];
+        [_protocolButton sizeToFit];
+        [_protocolButton addTarget:self action:@selector(checkProtocolAction) forControlEvents:UIControlEventTouchUpInside];
+        _protocolButton.left = self.agreeButton.right + 10;
+        _protocolButton.centerY = self.agreeButton.centerY;
+    }
+    return _protocolButton;
+}
 @end
