@@ -17,7 +17,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 
 @interface SSJForgetPasswordFirstStepViewController () <UITextFieldDelegate>
 
-//@property (nonatomic, strong) TPKeyboardAvoidingScrollView *scrollView;
+@property (nonatomic, strong) TPKeyboardAvoidingScrollView *scrollView;
 
 @property (nonatomic, strong) UITextField *phoneNoField;
 
@@ -25,7 +25,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 
 @property (nonatomic, strong) UIButton *getAuthCodeBtn;
 
-@property (nonatomic, strong) UIButton *nextButton;
+//@property (nonatomic, strong) UIButton *nextButton;
 
 @property (nonatomic, strong) SSJRegistNetworkService *networkService;
 /**
@@ -51,7 +51,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
  */
 @property (nonatomic, strong) UILabel *forgetPassWordLabel;
 @property (nonatomic, strong) UIView *centerScrollViewOne;
-@property (nonatomic, strong) UIView *centerScrollViewTwo;
+//@property (nonatomic, strong) UIView *centerScrollViewTwo;
 
 //设置密码
 @property (nonatomic, strong) UITextField *passwordField;
@@ -91,22 +91,19 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         self.phoneNoField.text = self.mobileNo;
     }
     
-    [self.view addSubview:self.topView];
-    [self.view addSubview:self.forgetPassWordLabel];
-    [self.view addSubview:self.triangleView];
+    [self.view addSubview:self.scrollView];
+    [self.scrollView addSubview:self.topView];
+    [self.scrollView addSubview:self.forgetPassWordLabel];
+    [self.scrollView addSubview:self.triangleView];
     
-    [self.view addSubview:self.centerScrollViewOne];
+    [self.scrollView addSubview:self.centerScrollViewOne];
     
     [self.centerScrollViewOne addSubview:self.numRegSecretBgView];
     [self.numRegSecretBgView addSubview:self.phoneNoField];
     [self.numRegSecretBgView addSubview:self.authCodeField];
-    [self.centerScrollViewOne addSubview:self.nextButton];
-    self.centerScrollViewOne.hidden = NO;
     
-    [self.view addSubview:self.centerScrollViewTwo];
-    [self.centerScrollViewTwo addSubview:self.passwordField];
-    [self.centerScrollViewTwo addSubview:self.setPasswordButton];
-    self.centerScrollViewTwo.hidden = YES;
+    [self.numRegSecretBgView addSubview:self.passwordField];
+    [self.centerScrollViewOne addSubview:self.setPasswordButton];
     
 //    [self upateNextButtonState];
 }
@@ -211,10 +208,9 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
             self.authCode = self.networkService.authCode;
 //            [self.navigationController pushViewController:secondVC animated:YES];
             self.forgetPassWordLabel.text = @"设置密码";
-            self.centerScrollViewOne.hidden = YES;
-            self.centerScrollViewTwo.hidden = NO;
             [self.centerScrollViewOne endEditing:YES];
-            [self.passwordField becomeFirstResponder];
+            //找回密码
+            [self.networkService setPasswordWithMobileNo:self.mobileNo authCode:self.authCodeField.text password:self.passwordField.text];
         }
     }
 }
@@ -229,21 +225,13 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 
 #pragma mark - Notification
 - (void)textDidChange {
-    if ([self.phoneNoField isFirstResponder] || [self.authCodeField isFirstResponder]) {
-        if (self.phoneNoField.text.length == 11 && self.authCodeField.text.length == 6) {
-            self.nextButton.enabled = YES;
-        } else {
-            self.nextButton.enabled = NO;
+    if ([self.phoneNoField isFirstResponder] || [self.authCodeField isFirstResponder] || [self.passwordField isFirstResponder]) {
+        if (self.phoneNoField.text.length == 11 && self.authCodeField.text.length == 6 && self.passwordField.text.length >= 6) {
+            self.setPasswordButton.enabled = YES;
+        }else {
+            self.setPasswordButton.enabled = NO;
         }
         return;
-    }
-    
-    if ([self.passwordField isFirstResponder]) {
-        if (self.passwordField.text.length < 6) {
-            self.setPasswordButton.enabled = NO;
-        }else {
-            self.setPasswordButton.enabled = YES;
-        }
     }
 }
 
@@ -270,14 +258,11 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         [CDAutoHideMessageHUD showMessage:@"请先输入验证码"];
         return;
     }
+    [self finishBtnAction];//验证密码是否合格
     
     [self.networkService checkAuthCodeWithMobileNo:self.phoneNoField.text authCode:self.authCodeField.text];
 }
 
-- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
-{
-    [self.view endEditing:YES];
-}
 
 #pragma mark - Private
 //  开始倒计时
@@ -337,9 +322,9 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
     BOOL isMatch = [pred evaluateWithObject:self.passwordField.text];
     if (isMatch) {
-        [self.networkService setPasswordWithMobileNo:self.mobileNo authCode:self.authCodeField.text password:self.passwordField.text];
     } else {
         [CDAutoHideMessageHUD showMessage:@"只能输入6-15位字母、数字组合"];
+        return;
     }
 }
 
@@ -351,32 +336,29 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 
 - (void)updateConstraints
 {
-//    self.scrollView.frame = self.view.bounds;
     self.topView.frame = CGRectMake(0, 0, self.view.width, 206);
     self.forgetPassWordLabel.centerX = SSJSCREENWITH * 0.5;
     self.forgetPassWordLabel.bottom = self.topView.bottom - 10;
     
     self.triangleView.centerX = self.view.centerX;
     self.triangleView.bottom = self.topView.bottom;
-    self.centerScrollViewOne.frame = CGRectMake(0, CGRectGetMaxY(self.topView.frame), self.view.width*2, SSJSCREENHEIGHT - self.topView.height);
-    self.centerScrollViewTwo.frame = CGRectMake(0, CGRectGetMaxY(self.topView.frame), self.view.width*2, SSJSCREENHEIGHT - self.topView.height);
+    self.centerScrollViewOne.frame = CGRectMake(0, CGRectGetMaxY(self.topView.frame), self.view.width, SSJSCREENHEIGHT - self.topView.height);
     
-    self.numRegSecretBgView.frame = CGRectMake(15, 35, self.view.width - 30, 100);
+    self.numRegSecretBgView.frame = CGRectMake(15, 35, self.view.width - 30, 150);
     self.phoneNoField.frame = CGRectMake(0, 0, self.numRegSecretBgView.width, 50);
     self.authCodeField.frame = CGRectMake(0, CGRectGetMaxY(self.phoneNoField.frame), self.numRegSecretBgView.width, 50);
-    
-    self.nextButton.frame = CGRectMake(15, CGRectGetMaxY(self.numRegSecretBgView.frame) + 25, self.view.width - 30, 44);
 
     //输入密码
-    self.passwordField.top = 35;
+    self.passwordField.top = CGRectGetMaxY(self.authCodeField.frame);
     self.passwordField.height = 50;
-    self.passwordField.left = 15;
+    self.passwordField.left = 0;
     self.passwordField.width = SSJSCREENWITH - 30;
     
-    self.setPasswordButton.top = CGRectGetMaxY(self.passwordField.frame) + 25;
-    self.setPasswordButton.left = self.passwordField.left;
+    self.setPasswordButton.top = CGRectGetMaxY(self.numRegSecretBgView.frame) + 25;
+    self.setPasswordButton.left = self.numRegSecretBgView.left;
     self.setPasswordButton.width = self.passwordField.width;
-    self.setPasswordButton.height = self.nextButton.height;
+    self.setPasswordButton.height = 45;
+    [self.authCodeField ssj_relayoutBorder];
 }
 
 #pragma mark - Getter
@@ -389,13 +371,16 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 }
 
 
-//- (TPKeyboardAvoidingScrollView *)scrollView {
-//    if (!_scrollView) {
-//        _scrollView = [[TPKeyboardAvoidingScrollView alloc] initWithFrame:self.view.bounds];
-//        _scrollView.bounces = NO;
-//    }
-//    return _scrollView;
-//}
+- (TPKeyboardAvoidingScrollView *)scrollView {
+    if (!_scrollView) {
+        _scrollView = [[TPKeyboardAvoidingScrollView alloc] initWithFrame:self.view.bounds];
+        _scrollView.bounces = NO;
+        _scrollView.showsHorizontalScrollIndicator = NO;
+        _scrollView.showsVerticalScrollIndicator = NO;
+        _scrollView.contentSize = CGSizeMake(0, self.view.height);
+    }
+    return _scrollView;
+}
 
 - (UITextField *)phoneNoField {
     if (!_phoneNoField) {
@@ -432,7 +417,9 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         [_authCodeField setValue:[UIColor ssj_colorWithHex:@"999999"] forKeyPath:@"_placeholderLabel.textColor"];
         _authCodeField.font = systemFontSize(16);
         [_authCodeField setValue:[UIFont systemFontOfSize:13] forKeyPath:@"_placeholderLabel.font"];
-        
+        [_authCodeField ssj_setBorderColor:[UIColor ssj_colorWithHex:@"cccccc"]];
+        [_authCodeField ssj_setBorderStyle:SSJBorderStyleBottom | SSJBorderStyleTop];
+        [_authCodeField ssj_setBorderWidth:1];
         _authCodeField.font = [UIFont systemFontOfSize:16];
         _authCodeField.keyboardType = UIKeyboardTypeNumberPad;
         _authCodeField.delegate = self;
@@ -469,7 +456,6 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         _passwordField.rightView = rightView;
         _passwordField.leftViewMode = UITextFieldViewModeAlways;
         _passwordField.rightViewMode = UITextFieldViewModeAlways;
-        _passwordField.backgroundColor = [UIColor ssj_colorWithHex:@"cccccc" alpha:0.1];
         _passwordField.layer.cornerRadius = 4;
         _passwordField.clipsToBounds = YES;
     }
@@ -510,21 +496,21 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 //    return _nextButton;
 //}
 
-- (UIButton *)nextButton {
-    if (!_nextButton) {
-        _nextButton = [[UIButton alloc] init];
-        _nextButton.titleLabel.font = systemFontSize(19);
-        [_nextButton setTitle:@"下一步" forState:UIControlStateNormal];
-        [_nextButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [_nextButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"f9cbd0"] forState:UIControlStateDisabled];
-        [_nextButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"ea4a64"] forState:UIControlStateNormal];
-        _nextButton.layer.cornerRadius = 4;
-        _nextButton.clipsToBounds = YES;
-        _nextButton.enabled = NO;
-        [_nextButton addTarget:self action:@selector(nextBtnAction) forControlEvents:UIControlEventTouchUpInside];
-    }
-    return _nextButton;
-}
+//- (UIButton *)nextButton {
+//    if (!_nextButton) {
+//        _nextButton = [[UIButton alloc] init];
+//        _nextButton.titleLabel.font = systemFontSize(19);
+//        [_nextButton setTitle:@"下一步" forState:UIControlStateNormal];
+//        [_nextButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+//        [_nextButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"f9cbd0"] forState:UIControlStateDisabled];
+//        [_nextButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"ea4a64"] forState:UIControlStateNormal];
+//        _nextButton.layer.cornerRadius = 4;
+//        _nextButton.clipsToBounds = YES;
+//        _nextButton.enabled = NO;
+//        [_nextButton addTarget:self action:@selector(nextBtnAction) forControlEvents:UIControlEventTouchUpInside];
+//    }
+//    return _nextButton;
+//}
 
 - (UIImageView *)topView
 {
@@ -546,7 +532,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 {
     if (!_numRegSecretBgView) {
         _numRegSecretBgView = [[UIView alloc] init];
-        _numRegSecretBgView.backgroundColor = [UIColor ssj_colorWithHex:@"cccccc" alpha:0.1];
+        _numRegSecretBgView.backgroundColor = [UIColor ssj_colorWithHex:@"cccccc" alpha:0.2];
         _numRegSecretBgView.layer.cornerRadius = 4;
         _numRegSecretBgView.clipsToBounds = YES;
     }
@@ -572,26 +558,19 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     return _centerScrollViewOne;
 }
 
-- (UIView *)centerScrollViewTwo
-{
-    if (!_centerScrollViewTwo) {
-        _centerScrollViewTwo = [[UIView alloc] init];
-    }
-    return _centerScrollViewTwo;
-}
 
 - (UIButton *)setPasswordButton {
     if (!_setPasswordButton) {
         _setPasswordButton = [[UIButton alloc] init];
         _setPasswordButton.titleLabel.font = systemFontSize(19);
         [_setPasswordButton setTitle:@"确定" forState:UIControlStateNormal];
-        [_nextButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [_setPasswordButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_setPasswordButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"f9cbd0"] forState:UIControlStateDisabled];
         [_setPasswordButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"ea4a64"] forState:UIControlStateNormal];
-        _nextButton.layer.cornerRadius = 4;
+        _setPasswordButton.layer.cornerRadius = 4;
         _setPasswordButton.clipsToBounds = YES;
         _setPasswordButton.enabled = NO;
-        [_setPasswordButton addTarget:self action:@selector(finishBtnAction) forControlEvents:UIControlEventTouchUpInside];
+        [_setPasswordButton addTarget:self action:@selector(nextBtnAction) forControlEvents:UIControlEventTouchUpInside];
     }
     return _setPasswordButton;
 }
