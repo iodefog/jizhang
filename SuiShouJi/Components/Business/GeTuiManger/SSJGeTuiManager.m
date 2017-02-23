@@ -29,14 +29,14 @@
     appKey = SSJDetailSettingForSource(@"GeTuiTestAppSecret");
 #endif
     [GeTuiSdk startSdkWithAppId:appID appKey:appKey appSecret:appSecret delegate:delegate];
-    
+    [self registerRemoteNotificationWithDelegate:delegate];
 }
 
-- (void)registerRemoteNotification {
++ (void)registerRemoteNotificationWithDelegate:(id)delegate {
     if ([[UIDevice currentDevice].systemVersion floatValue] >= 10.0) {
         
         UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
-        center.delegate = self;
+        center.delegate = delegate;
         [center requestAuthorizationWithOptions:(UNAuthorizationOptionBadge | UNAuthorizationOptionSound | UNAuthorizationOptionAlert | UNAuthorizationOptionCarPlay) completionHandler:^(BOOL granted, NSError *_Nullable error) {
             if (!error) {
                 NSLog(@"request authorization succeeded!");
