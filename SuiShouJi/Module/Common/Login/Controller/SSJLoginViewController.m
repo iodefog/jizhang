@@ -575,12 +575,12 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 
 - (void)showSecret:(UIButton *)button
 {
-    button.selected = !button.selected;
     if (button.tag == 300) {
         self.tfPassword.secureTextEntry = button.selected;
     } else if(button.tag == 301) {
         self.tfRegPasswordNum.secureTextEntry = button.selected;
     }
+    button.selected = !button.selected;
 }
 
 //  获取验证码
@@ -853,7 +853,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     if ([SSJDefaultSource() isEqualToString:@"11501"]
         || [SSJDefaultSource() isEqualToString:@"11502"]) {
         self.thirdPartyLoginLabel.centerX = SSJSCREENWITH * 0.5;
-        self.thirdPartyLoginLabel.bottom = self.centerScrollViewOne.height - 80;
+        self.thirdPartyLoginLabel.bottom = self.centerScrollViewOne.height - 100;
         
         self.leftSeperatorLine.centerY = self.rightSeperatorLine.centerY = self.thirdPartyLoginLabel.centerY;
         self.leftSeperatorLine.width = self.rightSeperatorLine.width = 45;
@@ -1050,8 +1050,8 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         leftView.image = [UIImage imageNamed:@"mima"];
         leftView.contentMode = UIViewContentModeCenter;
         UIButton *rightView = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 40, 50)];
-        [rightView setImage:[UIImage imageNamed:@"founds_xianshi"] forState:UIControlStateNormal];
-        [rightView setImage:[UIImage imageNamed:@"founds_yincang"] forState:UIControlStateSelected];
+        [rightView setImage:[UIImage imageNamed:@"founds_xianshi"] forState:UIControlStateSelected];
+        [rightView setImage:[UIImage imageNamed:@"founds_yincang"] forState:UIControlStateNormal];
         [rightView addTarget:self action:@selector(showSecret:) forControlEvents:UIControlEventTouchUpInside];
         rightView.tag = 300;
         _tfPassword = [[UITextField alloc] init];
@@ -1068,6 +1068,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         _tfPassword.rightView = rightView;
         _tfPassword.leftViewMode = UITextFieldViewModeAlways;
         _tfPassword.rightViewMode = UITextFieldViewModeAlways;
+        self.tfPassword.secureTextEntry = YES;
     }
     return _tfPassword;
 }
@@ -1078,14 +1079,14 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         leftView.image = [UIImage imageNamed:@"mima"];
         leftView.contentMode = UIViewContentModeCenter;
         UIButton *rightView = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 40, 50)];
-        [rightView setImage:[UIImage imageNamed:@"founds_xianshi"] forState:UIControlStateNormal];
-        [rightView setImage:[UIImage imageNamed:@"founds_yincang"] forState:UIControlStateSelected];
+        [rightView setImage:[UIImage imageNamed:@"founds_xianshi"] forState:UIControlStateSelected];
+        [rightView setImage:[UIImage imageNamed:@"founds_yincang"] forState:UIControlStateNormal];
         [rightView addTarget:self action:@selector(showSecret:) forControlEvents:UIControlEventTouchUpInside];
         rightView.tag = 301;
         _tfRegPasswordNum = [[UITextField alloc] init];
         _tfRegPasswordNum.textColor = [UIColor ssj_colorWithHex:@"333333"];
         _tfRegPasswordNum.clearButtonMode = UITextFieldViewModeWhileEditing;
-        _tfRegPasswordNum.placeholder = @"请输入至少6位密码";
+        _tfRegPasswordNum.placeholder = @"请输入6~15位数字和字母组合的密码";
         _tfRegPasswordNum.font = [UIFont systemFontOfSize:16];
         [_tfRegPasswordNum setValue:[UIColor ssj_colorWithHex:@"999999"] forKeyPath:@"_placeholderLabel.textColor"];
         [_tfRegPasswordNum setValue:[UIFont systemFontOfSize:13] forKeyPath:@"_placeholderLabel.font"];
@@ -1097,6 +1098,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         _tfRegPasswordNum.leftViewMode = UITextFieldViewModeAlways;
         _tfRegPasswordNum.rightViewMode = UITextFieldViewModeAlways;
 //        _tfRegPasswordNum.backgroundColor = [UIColor ssj_colorWithHex:@"cccccc" alpha:0.1];
+        self.tfRegPasswordNum.secureTextEntry = YES;
     }
     return _tfRegPasswordNum;
 }
@@ -1222,7 +1224,8 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         _tencentLoginButton = [[UIButton alloc]init];
         [_tencentLoginButton setImage:[UIImage imageNamed:@"login_qq"] forState:UIControlStateNormal];
         [_tencentLoginButton setTitle:@"腾讯QQ" forState:UIControlStateNormal];
-        _tencentLoginButton.size = CGSizeMake(35, 35);
+//        _tencentLoginButton.size = CGSizeMake(35, 35);
+        [_tencentLoginButton sizeToFit];
         [_tencentLoginButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor] forState:UIControlStateNormal];
         _tencentLoginButton.titleLabel.font = [UIFont systemFontOfSize:13];
         _tencentLoginButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor];
@@ -1238,7 +1241,8 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     if (!_weixinLoginButton) {
         _weixinLoginButton = [[UIButton alloc]init];
         [_weixinLoginButton setImage:[UIImage imageNamed:@"login_weixin"] forState:UIControlStateNormal];
-        _weixinLoginButton.size = CGSizeMake(35, 35);
+//        _weixinLoginButton.size = CGSizeMake(35, 35);
+        [_weixinLoginButton sizeToFit];
         [_weixinLoginButton setTitle:@"微信" forState:UIControlStateNormal];
         [_weixinLoginButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor] forState:UIControlStateNormal];
         _weixinLoginButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor];

@@ -314,7 +314,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 
 - (void)finishBtnAction {
     if (!self.passwordField.text.length) {
-        [CDAutoHideMessageHUD showMessage:@"请输入您的新密码"];
+        [CDAutoHideMessageHUD showMessage:@"请输入6~15位数字和字母组合的密码"];
         return;
     }
     
