@@ -22,6 +22,7 @@ def shared_pods
     pod 'ZYCornerRadius', '~> 0.5.1'
     pod 'FLAnimatedImage', '~> 1.0'
     pod 'SSZipArchive'
+    pod 'GTSDK'
     pod 'Masonry'
     pod 'ReactiveCocoa'
 end

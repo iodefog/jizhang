@@ -52,6 +52,10 @@
 #import "SSJDatabaseErrorHandler.h"
 #import "SSJAnaliyticsManager.h"
 
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_10_0
+#import <UserNotifications/UserNotifications.h>
+#endif
+
 //  进入后台超过的时限后进入锁屏
 static const NSTimeInterval kLockScreenDelay = 60;
 
@@ -92,9 +96,9 @@ NSDate *SCYEnterBackgroundTime() {
 //    [JPEngine evaluateScript:script];
 #endif
     
-    [SSJUmengManager umengTrack];
     [SSJUmengManager umengShare];
     [SSJAnaliyticsManager SSJAnaliytics];
+    [SSJGeTuiManager SSJGeTuiManagerWithDelegate:self];
     
     [MQManager setScheduledAgentWithAgentId:@"" agentGroupId:SSJMQDefualtGroupId scheduleRule:MQScheduleRulesRedirectGroup];
     
@@ -412,6 +416,7 @@ NSDate *SCYEnterBackgroundTime() {
 
 }
 
+
 #pragma mark - 获取当前推送的账户id
 - (NSString *)getCreditCardIdForRemindId:(NSString *)remindID{
     __block NSString *cardId;
@@ -428,5 +433,58 @@ NSDate *SCYEnterBackgroundTime() {
     }];
     return loanId;
 }
+
+#pragma mark - 远程通知有关的
+/** 远程通知注册成功委托 */
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    NSString *token = [[deviceToken description] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
+    token = [token stringByReplacingOccurrencesOfString:@" " withString:@""];
+    
+    // [ GTSdk ]：向个推服务器注册deviceToken
+    [GeTuiSdk registerDeviceToken:token];
+}
+
+/** 远程通知注册失败委托 */
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
+    NSLog(@"\n>>>[DeviceToken Error]:%@\n\n", error.description);
+}
+
+#pragma mark - APP运行中接收到通知(推送)处理 - iOS 10以下版本收到推送
+
+/** APP已经接收到“远程”通知(推送) - 透传推送消息  */
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))completionHandler {
+    
+    // [ GTSdk ]：将收到的APNs信息传给个推统计
+    [GeTuiSdk handleRemoteNotification:userInfo];
+    
+    // 控制台打印接收APNs信息
+    NSLog(@"\n>>>[Receive RemoteNotification]:%@\n\n", userInfo);
+    
+    completionHandler(UIBackgroundFetchResultNewData);
+}
+
+#pragma mark - iOS 10中收到推送消息
+
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_10_0
+//  iOS 10: App在前台获取到通知
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler {
+    
+    NSLog(@"willPresentNotification：%@", notification.request.content.userInfo);
+    
+    // 根据APP需要，判断是否要提示用户Badge、Sound、Alert
+    completionHandler(UNNotificationPresentationOptionBadge | UNNotificationPresentationOptionSound | UNNotificationPresentationOptionAlert);
+}
+
+//  iOS 10: 点击通知进入App时触发
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)())completionHandler {
+    
+    NSLog(@"didReceiveNotification：%@", response.notification.request.content.userInfo);
+    
+    // [ GTSdk ]：将收到的APNs信息传给个推统计
+    [GeTuiSdk handleRemoteNotification:response.notification.request.content.userInfo];
+    
+    completionHandler();
+}
+#endif
 
 @end

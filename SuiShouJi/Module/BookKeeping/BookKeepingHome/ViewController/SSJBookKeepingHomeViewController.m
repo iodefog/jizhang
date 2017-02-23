@@ -859,11 +859,11 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
             weakSelf.items = [[NSMutableArray alloc]initWithArray:[result objectForKey:SSJOrginalChargeArrKey]];
             weakSelf.newlyAddChargeArr = [[NSMutableArray alloc]initWithArray:[result objectForKey:SSJNewAddChargeArrKey]];
             weakSelf.newlyAddSectionArr = [[NSMutableArray alloc]initWithArray:[result objectForKey:SSJNewAddChargeSectionArrKey]];
-            
             if (weakSelf.items) {
                 if (weakSelf.newlyAddChargeArr.count) {
                     
                     if ([weakSelf.tableView numberOfSections]) {
+                        
                         NSInteger maxSection = [weakSelf.tableView numberOfSections] - 1;
                         
                         NSIndexPath *currentMaxIndex = [NSIndexPath indexPathForRow:[weakSelf.tableView numberOfRowsInSection:maxSection] - 1 inSection:maxSection];
@@ -874,7 +874,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
                                 [self.tableView insertSections:[NSIndexSet indexSetWithIndex:item.chargeIndex.section] withRowAnimation:UITableViewRowAnimationTop];
                             }
                             if (item.chargeIndex.section > maxSection) {
-                                [weakSelf.tableView scrollToRowAtIndexPath:currentMaxIndex atScrollPosition:UITableViewScrollPositionTop animated:YES];
+                                [weakSelf.tableView scrollToRowAtIndexPath:currentMaxIndex atScrollPosition:UITableViewScrollPositionTop animated:NO];
                             } else {
                                 [weakSelf.tableView scrollToRowAtIndexPath:item.chargeIndex atScrollPosition:UITableViewScrollPositionTop animated:NO];
                             }

@@ -9,6 +9,7 @@
 #import "SSJLoginService.h"
 #import "SSJUserInfoItem.h"
 #import "SSJCustomCategoryItem.h"
+#import "GeTuiSdk.h"
 
 @interface SSJLoginService ()
 
@@ -59,10 +60,13 @@
     NSString *imei = [UIDevice currentDevice].identifierForVendor.UUIDString;
     
     //手机型号
-    NSString* phoneModel = SSJPhoneModel();
+    NSString *phoneModel = SSJPhoneModel();
+    
+    //个推id
+    NSString *getuiId = [GeTuiSdk clientId];
     
     //手机系统版本
-    NSString* phoneVersion = [[UIDevice currentDevice] systemVersion];
+    NSString *phoneVersion = [[UIDevice currentDevice] systemVersion];
     
     NSString *encryptPassword = [password stringByAppendingString:@"http://www.9188.com/"];
     encryptPassword = [[encryptPassword ssj_md5HexDigest] lowercaseString];
@@ -80,6 +84,7 @@
     [dict setObject:imei forKey:@"cimei"];
     [dict setObject:phoneModel forKey:@"cmodel"];
     [dict setObject:phoneVersion forKey:@"cphoneos"];
+    [dict setObject:getuiId ?: @"" forKey:@"cgetuiid"];
     [self request:SSJURLWithAPI(@"/user/login.go") params:dict];
 }
 
@@ -107,6 +112,10 @@
     
     //手机系统版本
     NSString* phoneVersion = [[UIDevice currentDevice] systemVersion];
+    
+    //个推id
+    NSString *getuiId = [GeTuiSdk clientId];
+
     [dict setObject:strAcctID forKey:@"merchantacctId"];
     [dict setObject:strSignType forKey:@"signType"];
     [dict setObject:strmd5Sign forKey:@"signMsg"];
@@ -120,6 +129,7 @@
     [dict setObject:phoneVersion forKey:@"cphoneos"];
     [dict setObject:item.userGender forKey:@"cgender"];
     [dict setObject:item.unionId forKey:@"cunionid"];
+    [dict setObject:getuiId ?: @"" forKey:@"cgetuiid"];
 
     [self request:SSJURLWithAPI(@"/oauth/oauthlogin.go") params:dict];
 }
