@@ -911,7 +911,6 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
                         
                         [self.tableView insertRowsAtIndexPaths:@[item.chargeIndex] withRowAnimation:UITableViewRowAnimationTop];
                         needToReload = ([currentMaxIndex compare:item.chargeIndex] != NSOrderedSame) && needToReload;
-                        [self.newlyAddChargeArr removeObject:item];
                     }
                     
                     if (needToReload) {
@@ -923,6 +922,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
                     SSJBillingChargeCellItem *lastItem = [weakSelf.newlyAddChargeArr lastObject];
                     [weakSelf.tableView scrollToRowAtIndexPath:lastItem.chargeIndex atScrollPosition:UITableViewScrollPositionBottom animated:NO];
                     
+                    [self.newlyAddChargeArr removeAllObjects];
                 } else {
                     [weakSelf.tableView reloadData];
                 }
