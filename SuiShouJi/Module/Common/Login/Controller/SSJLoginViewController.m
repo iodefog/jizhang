@@ -87,7 +87,9 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 
 @property (nonatomic, strong) TPKeyboardAvoidingScrollView *scrollView;
 
-@property (nonatomic, strong) UIView *centerScrollView;
+@property (nonatomic, strong) UIView *centerScrollViewOne;
+@property (nonatomic, strong) UIView *centerScrollViewTwo;
+@property (nonatomic, strong) UIView *centerScrollViewThree;
 
 @property (nonatomic, strong) UIView *numSecretBgView;
 
@@ -141,14 +143,12 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil{
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        self.statisticsTitle = @"登录";
         self.appliesTheme = NO;
+        self.backgroundView.hidden = YES;
         self.extendedLayoutIncludesOpaqueBars = YES;
         self.automaticallyAdjustsScrollViewInsets = NO;
         self.hidesBottomBarWhenPushed = YES;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updatetextfield:) name:UITextFieldTextDidChangeNotification object:nil];
-
-
     }
     return self;
 }
@@ -160,51 +160,58 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+//    [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
+//    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.scrollView];
     [self.scrollView addSubview:self.topView];
-    [self.scrollView addSubview:self.centerScrollView];
-    [self.centerScrollView addSubview:self.numSecretBgView];
-    [self.numSecretBgView addSubview:self.tfPhoneNum];
-    [self.numSecretBgView addSubview:self.tfPassword];
-    [self.centerScrollView addSubview:self.loginButton];
-    [self.centerScrollView addSubview:self.forgetButton];
     [self.scrollView addSubview:self.registerTitleButton];
     [self.scrollView addSubview:self.loginTitleButton];
     
-    //注册
-    [self.centerScrollView addSubview:self.numRegSecretBgView];
+    //登录
+    [self.scrollView addSubview:self.centerScrollViewOne];
+    [self.centerScrollViewOne addSubview:self.numSecretBgView];
+    [self.numSecretBgView addSubview:self.tfPhoneNum];
+    [self.numSecretBgView addSubview:self.tfPassword];
+    [self.centerScrollViewOne addSubview:self.loginButton];
+    [self.centerScrollViewOne addSubview:self.forgetButton];
+    self.centerScrollViewOne.hidden = NO;
+    
+    //注册1
+    [self.scrollView addSubview:self.centerScrollViewTwo];
+    [self.centerScrollViewTwo addSubview:self.numRegSecretBgView];
     [self.numRegSecretBgView addSubview:self.tfRegPhoneNum];
     [self.numRegSecretBgView addSubview:self.tfRegYanZhenNum];
-    [self.centerScrollView addSubview:self.regNextBtn];
+    [self.centerScrollViewTwo addSubview:self.regNextBtn];
+    self.centerScrollViewTwo.hidden = YES;
     
-    [self.centerScrollView addSubview:self.tfRegPasswordNum];
-    [self.centerScrollView addSubview:self.registerButton];
-    [self.centerScrollView addSubview:self.agreeButton];
-    [self.centerScrollView addSubview:self.protocolButton];
+    //注册2
+    [self.scrollView addSubview:self.centerScrollViewThree];
+    [self.centerScrollViewThree addSubview:self.tfRegPasswordNum];
+    [self.centerScrollViewThree addSubview:self.registerButton];
+    [self.centerScrollViewThree addSubview:self.agreeButton];
+    [self.centerScrollViewThree addSubview:self.protocolButton];
+    self.centerScrollViewThree.hidden = YES;
     
     // 只有9188、有鱼并且没有审核的情况下，显示第三方登录
     if ([SSJDefaultSource() isEqualToString:@"11501"]
         || [SSJDefaultSource() isEqualToString:@"11502"]) {
 //        [self.centerScrollView addSubview:self.seperatorLine];
-        [self.centerScrollView addSubview:self.thirdPartyLoginLabel];
-        [self.centerScrollView addSubview:self.leftSeperatorLine];
-        [self.centerScrollView addSubview:self.rightSeperatorLine];
-        [self.centerScrollView addSubview:self.tencentLoginButton];
-        [self.centerScrollView addSubview:self.weixinLoginButton];
+        [self.centerScrollViewOne addSubview:self.thirdPartyLoginLabel];
+        [self.centerScrollViewOne addSubview:self.leftSeperatorLine];
+        [self.centerScrollViewOne addSubview:self.rightSeperatorLine];
+        [self.centerScrollViewOne addSubview:self.tencentLoginButton];
+        [self.centerScrollViewOne addSubview:self.weixinLoginButton];
     }
     
     [self ssj_showBackButtonWithTarget:self selector:@selector(goBackAction)];
     self.showNavigationBarBaseLine = NO;
     [self.scrollView addSubview:self.triangleView];
-    
-    
 }
+
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     
@@ -219,17 +226,17 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 //    }
 }
 
--(void)viewDidLayoutSubviews{
-    [super viewDidLayoutSubviews];
+-(void)viewWillLayoutSubviews{
+    [super viewWillLayoutSubviews];
     [self updateConstraints];
-    if (SSJSCREENWITH == 320 && SSJSCREENHEIGHT == 480) {
-    }
 }
 
 -(void)viewDidDisappear:(BOOL)animated{
     [super viewDidDisappear:animated];
     [self.loginService cancel];
-//    [self.navigationController setNavigationBarHidden:NO];
+    [self.registerService cancel];
+    [self.registerNextService cancel];
+    [self.registCompleteService cancel];
 }
 
 
@@ -271,8 +278,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 #pragma mark - SSJBaseNetworkServiceDelegate
 -(void)serverDidFinished:(SSJBaseNetworkService *)service{
     [super serverDidFinished:service];
-    
-    if (![service.returnCode isEqualToString:@"1"]) return;
+//    if (![service.returnCode isEqualToString:@"1"]) return;
     
     if (service == self.loginService) {//登陆
         if ([[NSUserDefaults standardUserDefaults] objectForKey:SSJLastLoggedUserItemKey]) {
@@ -319,8 +325,20 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
             SSJAlertViewAction *cancelAction = [SSJAlertViewAction actionWithTitle:@"取消" handler:NULL];
             SSJAlertViewAction *forgetAction = [SSJAlertViewAction actionWithTitle:@"忘记密码" handler:^(SSJAlertViewAction *action) {
                 SSJForgetPasswordFirstStepViewController *forgetVC = [[SSJForgetPasswordFirstStepViewController alloc] init];
-                forgetVC.mobileNo = self.registerService.mobileNo;
-                forgetVC.finishHandle = self.finishHandle;
+                forgetVC.mobileNo = weakSelf.registerService.mobileNo;
+                forgetVC.finishHandle = weakSelf.finishHandle;
+                forgetVC.finishPassHandle = ^(NSString *num){
+                    weakSelf.tfPhoneNum.text = num;
+                    weakSelf.centerScrollViewOne.hidden = NO;
+                    weakSelf.centerScrollViewTwo.hidden = YES;
+                    weakSelf.centerScrollViewThree.hidden = YES;
+                    if (num.length < 1) {
+                        [weakSelf.tfPhoneNum becomeFirstResponder];
+                    } else {
+                        [weakSelf.tfPassword becomeFirstResponder];
+                    }
+                };
+                [weakSelf.view endEditing:YES];
                 [weakSelf.navigationController pushViewController:forgetVC animated:YES];
             }];
             [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:@"该手机号已经被注册，若忘记密码，请使用忘记密码功能找回密码" action:cancelAction, forgetAction, nil];
@@ -352,9 +370,13 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 //                self.phoneNum = self.mobileNo;
                 self.codeNum = self.registerNextService.authCode;
 //                self.centerScrollView.contentOffset = CGPointMake(SSJSCREENWITH * 2, 0);
-                self.centerScrollView.left = - 2 *SSJSCREENWITH;
+                self.centerScrollViewTwo.hidden = YES;
+                self.centerScrollViewThree.hidden = NO;
+                self.centerScrollViewOne.hidden = YES;
+                [self.tfRegPasswordNum becomeFirstResponder];
+                [self.centerScrollViewOne endEditing:YES];
+                [self.centerScrollViewThree endEditing:YES];
 //                [self.navigationController pushViewController:registCompleteVC animated:YES];
-                
             }
         }
         return;
@@ -418,25 +440,6 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 }
 
 #pragma mark - UIScrollViewDelegate
-//- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
-//{
-//    
-//}
-//
-//- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-//{
-//    self.triangleView.centerX = scrollView.contentOffset.x * 0.5 + SSJSCREENWITH * 0.25;
-//    if (self.triangleView.centerX < self.view.centerX) {
-//        //登陆
-//        self.registerTitleButton.selected = NO;
-//        self.loginTitleButton.selected = YES;
-//    } else {
-//        //注册
-//        self.registerTitleButton.selected = YES;
-//        self.loginTitleButton.selected = NO;
-//    }
-//}
-
 #pragma mark - Notification
 -(void)updatetextfield:(id)sender{
     if (self.tfPhoneNum.isFirstResponder || self.tfPassword.isFirstResponder) {
@@ -477,8 +480,12 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         sender.selected = !sender.selected;
         [UIView animateWithDuration:0.2 animations:^{
             self.triangleView.centerX = self.loginTitleButton.centerX;
-//            self.centerScrollView.contentOffset = CGPointZero;
-            self.centerScrollView.left = 0;
+            self.centerScrollViewOne.hidden = NO;
+            [self.tfPhoneNum becomeFirstResponder];
+            self.centerScrollViewTwo.hidden = YES;
+            self.centerScrollViewThree.hidden = YES;
+            [self.centerScrollViewTwo endEditing:YES];
+            [self.centerScrollViewThree endEditing:YES];
         }];
     }else if (sender.tag == 101) {
         [self.loginService loadLoginModelWithPassWord:self.tfPassword.text AndUserAccount:self.tfPhoneNum.text];
@@ -506,11 +513,17 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         self.tfPhoneNum.text = nil;
         self.tfPassword.text = nil;
         self.loginButton.enabled = NO;
+        self.centerScrollViewOne.hidden = YES;
+        self.centerScrollViewTwo.hidden = NO;
+        [self.tfRegPhoneNum becomeFirstResponder];
+        self.centerScrollViewThree.hidden = YES;
+        [self.centerScrollViewOne endEditing:YES];
+        [self.centerScrollViewThree endEditing:YES];
         if (sender.selected == YES)return;
         sender.selected = !sender.selected;
         [UIView animateWithDuration:0.3 animations:^{
             self.triangleView.centerX = self.registerTitleButton.centerX;
-            self.centerScrollView.left = -SSJSCREENWITH;
+            
         }];
         return;
     }
@@ -535,11 +548,10 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
     BOOL isMatch = [pred evaluateWithObject:self.tfRegPasswordNum.text];
     if (isMatch) {
-        [self.registCompleteService setPasswordWithMobileNo:self.phoneNum authCode:self.codeNum password:self.tfRegPasswordNum.text];
+        [self.registCompleteService setPasswordWithMobileNo:self.tfRegPasswordNum.text authCode:self.codeNum password:self.tfRegPasswordNum.text];
     } else {
         [CDAutoHideMessageHUD showMessage:@"只能输入6-15位字母、数字组合"];
     }
-
 }
 
 - (void)goBackAction {
@@ -589,6 +601,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         return;
     }
     [self.registerService getAuthCodeWithMobileNo:self.tfRegPhoneNum.text];
+    self.registerService.showMessageIfErrorOccured = NO;
 }
 
 - (void)regNextButtonClicked:(UIButton *)btn {//下一步
@@ -749,7 +762,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 
 - (void)updateConstraints
 {
-    self.scrollView.frame = self.view.bounds;
+//    self.scrollView.frame = self.view.bounds;
     self.topView.frame = CGRectMake(0, 0, self.view.width, 206);
     
     self.loginTitleButton.frame = CGRectMake(0, self.topView.height - 45, self.view.width * 0.5, 45);
@@ -760,7 +773,9 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     self.triangleView.centerX = self.loginTitleButton.centerX;
     self.triangleView.bottom = self.topView.bottom;
     
-    self.centerScrollView.frame = CGRectMake(0, CGRectGetMaxY(self.topView.frame), self.view.width*3, self.view.height - self.topView.height);
+    self.centerScrollViewOne.frame = CGRectMake(0, CGRectGetMaxY(self.topView.frame), self.view.width, self.view.height - self.topView.height);
+    self.centerScrollViewTwo.frame = CGRectMake(0, CGRectGetMaxY(self.topView.frame), self.view.width, self.view.height - self.topView.height);
+    self.centerScrollViewThree.frame = CGRectMake(0, CGRectGetMaxY(self.topView.frame), self.view.width, self.view.height - self.topView.height);
     
     self.numSecretBgView.frame = CGRectMake(15, 35, self.view.width - 30, 100);
     
@@ -776,7 +791,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     if ([SSJDefaultSource() isEqualToString:@"11501"]
         || [SSJDefaultSource() isEqualToString:@"11502"]) {
         self.thirdPartyLoginLabel.centerX = SSJSCREENWITH * 0.5;
-        self.thirdPartyLoginLabel.top = CGRectGetMaxY(self.forgetButton.frame) + 100;
+        self.thirdPartyLoginLabel.bottom = self.centerScrollViewOne.height - 80;
         
         self.leftSeperatorLine.centerY = self.rightSeperatorLine.centerY = self.thirdPartyLoginLabel.centerY;
         self.leftSeperatorLine.width = self.rightSeperatorLine.width = 45;
@@ -785,8 +800,8 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         self.leftSeperatorLine.height = self.rightSeperatorLine.height = 1.0f / [UIScreen mainScreen].scale;
         if ([WXApi isWXAppInstalled]) {//安装微信
             self.weixinLoginButton.top = self.tencentLoginButton.top = CGRectGetMaxY(self.thirdPartyLoginLabel.frame) + 25;
-            self.weixinLoginButton.centerX = self.thirdPartyLoginLabel.centerX - 50;
-            self.tencentLoginButton.centerX = self.thirdPartyLoginLabel.centerX + 50;
+            self.weixinLoginButton.centerX = self.thirdPartyLoginLabel.centerX - 40;
+            self.tencentLoginButton.centerX = self.thirdPartyLoginLabel.centerX + 40;
             self.weixinLoginButton.hidden = NO;
             
         } else {
@@ -799,18 +814,18 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     //注册
     self.numRegSecretBgView.size = self.numSecretBgView.size;
     self.numRegSecretBgView.top = self.numSecretBgView.top;
-    self.numRegSecretBgView.left = SSJSCREENWITH + 15;
+    self.numRegSecretBgView.left = 15;
     
     self.tfRegPhoneNum.frame = CGRectMake(0, 0, self.numSecretBgView.width, 50);
     self.tfRegYanZhenNum.frame = CGRectMake(0, CGRectGetMaxY(self.tfRegPhoneNum.frame), self.numSecretBgView.width, 50);
     
     self.regNextBtn.size = self.loginButton.size;
-    self.regNextBtn.left = SSJSCREENWITH + 15;
+    self.regNextBtn.left = 15;
     self.regNextBtn.top = self.loginButton.top;
     
     self.tfRegPasswordNum.top = self.numSecretBgView.top;
     self.tfRegPasswordNum.height = self.tfRegPhoneNum.height;
-    self.tfRegPasswordNum.left = SSJSCREENWITH *2 + 15;
+    self.tfRegPasswordNum.left = 15;
     self.tfRegPasswordNum.width = self.numSecretBgView.width;
     
     self.registerButton.top = CGRectGetMaxY(self.tfRegPasswordNum.frame) + 20;
@@ -831,22 +846,37 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 - (TPKeyboardAvoidingScrollView *)scrollView
 {
     if (!_scrollView) {
-        _scrollView = [[TPKeyboardAvoidingScrollView alloc] init];
+        _scrollView = [[TPKeyboardAvoidingScrollView alloc] initWithFrame:self.view.bounds];
+//        _scrollView.contentSize = CGSizeMake(0,SSJSCREENHEIGHT > 667 ? SSJSCREENHEIGHT : 667);
+//        _scrollView.showsHorizontalScrollIndicator = NO;
+//        _scrollView.showsVerticalScrollIndicator = NO;
+        _scrollView.bounces = NO;
     }
     return _scrollView;
 }
 
-- (UIView *)centerScrollView
+- (UIView *)centerScrollViewOne
 {
-    if (!_centerScrollView) {
-        _centerScrollView = [[UIView alloc] init];
-//        _centerScrollView.delegate = self;
-//        _centerScrollView.contentSize = CGSizeMake(SSJSCREENWITH * 3, 0);
-//        _centerScrollView.showsHorizontalScrollIndicator = NO;
-//        _centerScrollView.scrollEnabled = NO;
-//        _centerScrollView.pagingEnabled = YES;
+    if (!_centerScrollViewOne) {
+        _centerScrollViewOne = [[UIView alloc] init];
     }
-    return _centerScrollView;
+    return _centerScrollViewOne;
+}
+
+- (UIView *)centerScrollViewTwo
+{
+    if (!_centerScrollViewTwo) {
+        _centerScrollViewTwo = [[UIView alloc] init];
+    }
+    return _centerScrollViewTwo;
+}
+
+- (UIView *)centerScrollViewThree
+{
+    if (!_centerScrollViewThree) {
+        _centerScrollViewThree = [[UIView alloc] init];
+    }
+    return _centerScrollViewThree;
 }
 
 - (SSJLoginService *)loginService{
