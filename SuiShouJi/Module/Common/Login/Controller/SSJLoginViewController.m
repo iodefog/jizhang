@@ -318,6 +318,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         if ([self.registerService.returnCode isEqualToString:@"1"]) {
             [CDAutoHideMessageHUD showMessage:@"验证码发送成功"];
             [self beginCountdownIfNeeded];//倒计时
+            [self.tfRegYanZhenNum becomeFirstResponder];
             self.phoneNum = self.tfRegPhoneNum.text;
         } else if ([self.registerService.returnCode isEqualToString:@"1001"]) {
             
@@ -375,7 +376,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
                 self.centerScrollViewOne.hidden = YES;
                 [self.tfRegPasswordNum becomeFirstResponder];
                 [self.centerScrollViewOne endEditing:YES];
-                [self.centerScrollViewThree endEditing:YES];
+                [self.centerScrollViewTwo endEditing:YES];
 //                [self.navigationController pushViewController:registCompleteVC animated:YES];
             }
         }
@@ -472,11 +473,14 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 -(void)loginButtonClicked:(UIButton *)sender{
     if (sender.tag == 100) {
         self.registerTitleButton.selected = NO;
-        if (sender.selected == YES)return;
+        if (sender.selected == YES) return;
         //清空数据
         self.tfRegYanZhenNum.text = nil;
         self.tfRegPhoneNum.text = nil;
+        self.tfRegYanZhenNum.text = nil;
         self.regNextBtn.enabled = NO;
+        [self.countdownTimer invalidate];//停止倒计时
+        self.countdownTimer = nil;
         sender.selected = !sender.selected;
         [UIView animateWithDuration:0.2 animations:^{
             self.triangleView.centerX = self.loginTitleButton.centerX;
@@ -548,7 +552,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
     BOOL isMatch = [pred evaluateWithObject:self.tfRegPasswordNum.text];
     if (isMatch) {
-        [self.registCompleteService setPasswordWithMobileNo:self.tfRegPasswordNum.text authCode:self.codeNum password:self.tfRegPasswordNum.text];
+        [self.registCompleteService setPasswordWithMobileNo:self.tfRegPhoneNum.text authCode:self.codeNum password:self.tfRegPasswordNum.text];
     } else {
         [CDAutoHideMessageHUD showMessage:@"只能输入6-15位字母、数字组合"];
     }
@@ -600,6 +604,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         [CDAutoHideMessageHUD showMessage:@"请先输入手机号"];
         return;
     }
+    
     [self.registerService getAuthCodeWithMobileNo:self.tfRegPhoneNum.text];
     self.registerService.showMessageIfErrorOccured = NO;
 }
