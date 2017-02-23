@@ -462,7 +462,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
             [SSJAnaliyticsManager event:@"main_record_edit"];
             weakSelf.selectIndex = nil;
             [weakSelf getDataFromDataBase];
-            [weakSelf.tableView reloadData];
+//            [weakSelf.tableView reloadData];
             [SSJBudgetDatabaseHelper queryForCurrentBudgetListWithSuccess:^(NSArray<SSJBudgetModel *> * _Nonnull result) {
                 self.homeBar.budgetButton.model = [result firstObject];
             } failure:^(NSError * _Nullable error) {
@@ -911,6 +911,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
                         
                         [self.tableView insertRowsAtIndexPaths:@[item.chargeIndex] withRowAnimation:UITableViewRowAnimationTop];
                         needToReload = ([currentMaxIndex compare:item.chargeIndex] != NSOrderedSame) && needToReload;
+                        [self.newlyAddChargeArr removeObject:item];
                     }
                     
                     if (needToReload) {
