@@ -17,7 +17,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 
 @interface SSJForgetPasswordFirstStepViewController () <UITextFieldDelegate>
 
-@property (nonatomic, strong) TPKeyboardAvoidingScrollView *scrollView;
+//@property (nonatomic, strong) TPKeyboardAvoidingScrollView *scrollView;
 
 @property (nonatomic, strong) UITextField *phoneNoField;
 
@@ -50,7 +50,8 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
  <#注释#>
  */
 @property (nonatomic, strong) UILabel *forgetPassWordLabel;
-@property (nonatomic, strong) UIView *centerScrollView;
+@property (nonatomic, strong) UIView *centerScrollViewOne;
+@property (nonatomic, strong) UIView *centerScrollViewTwo;
 
 //设置密码
 @property (nonatomic, strong) UITextField *passwordField;
@@ -85,21 +86,27 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
     self.view.backgroundColor = [UIColor whiteColor];
-    [self.view addSubview:self.scrollView];
-    [self.scrollView addSubview:self.topView];
-    [self.scrollView addSubview:self.forgetPassWordLabel];
-    [self.scrollView addSubview:self.triangleView];
+    if (self.mobileNo.length) {
+        self.phoneNoField.text = self.mobileNo;
+    }
     
-    [self.scrollView addSubview:self.centerScrollView];
-    [self.centerScrollView addSubview:self.passwordField];
-    [self.centerScrollView addSubview:self.numRegSecretBgView];
+    [self.view addSubview:self.topView];
+    [self.view addSubview:self.forgetPassWordLabel];
+    [self.view addSubview:self.triangleView];
+    
+    [self.view addSubview:self.centerScrollViewOne];
+    
+    [self.centerScrollViewOne addSubview:self.numRegSecretBgView];
     [self.numRegSecretBgView addSubview:self.phoneNoField];
     [self.numRegSecretBgView addSubview:self.authCodeField];
-    [self.centerScrollView addSubview:self.nextButton];
-    [self.centerScrollView addSubview:self.setPasswordButton];
-
+    [self.centerScrollViewOne addSubview:self.nextButton];
+    self.centerScrollViewOne.hidden = NO;
+    
+    [self.view addSubview:self.centerScrollViewTwo];
+    [self.centerScrollViewTwo addSubview:self.passwordField];
+    [self.centerScrollViewTwo addSubview:self.setPasswordButton];
+    self.centerScrollViewTwo.hidden = YES;
     
 //    [self upateNextButtonState];
 }
@@ -134,6 +141,13 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     }
 }
 
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [self.networkService cancel];
+}
+
+
 #pragma mark - UITextFieldDelegate
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     NSString *text = textField.text ? : @"";
@@ -166,8 +180,9 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
             __weak typeof(self) weakSelf = self;
             SSJAlertViewAction *sureAction = [SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction *action) {
                 //            [[NSNotificationCenter defaultCenter] postNotificationName:SCYUpdateUserInfoNotification object:self];
-                if (weakSelf.finishHandle) {
-                    weakSelf.finishHandle(weakSelf);
+                [self.navigationController popViewControllerAnimated:NO];
+                if (weakSelf.finishPassHandle) {
+                    weakSelf.finishPassHandle(weakSelf.phoneNoField.text);
                 }
             }];
             
@@ -196,7 +211,10 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
             self.authCode = self.networkService.authCode;
 //            [self.navigationController pushViewController:secondVC animated:YES];
             self.forgetPassWordLabel.text = @"设置密码";
-            self.centerScrollView.left = -SSJSCREENWITH;
+            self.centerScrollViewOne.hidden = YES;
+            self.centerScrollViewTwo.hidden = NO;
+            [self.centerScrollViewOne endEditing:YES];
+            [self.passwordField becomeFirstResponder];
         }
     }
 }
@@ -254,6 +272,11 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     }
     
     [self.networkService checkAuthCodeWithMobileNo:self.phoneNoField.text authCode:self.authCodeField.text];
+}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+{
+    [self.view endEditing:YES];
 }
 
 #pragma mark - Private
@@ -328,14 +351,15 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 
 - (void)updateConstraints
 {
-    self.scrollView.frame = self.view.bounds;
+//    self.scrollView.frame = self.view.bounds;
     self.topView.frame = CGRectMake(0, 0, self.view.width, 206);
     self.forgetPassWordLabel.centerX = SSJSCREENWITH * 0.5;
     self.forgetPassWordLabel.bottom = self.topView.bottom - 10;
     
-    self.triangleView.centerX = self.scrollView.centerX;
+    self.triangleView.centerX = self.view.centerX;
     self.triangleView.bottom = self.topView.bottom;
-    self.centerScrollView.frame = CGRectMake(0, CGRectGetMaxY(self.topView.frame), self.view.width*2, SSJSCREENHEIGHT - self.topView.height);
+    self.centerScrollViewOne.frame = CGRectMake(0, CGRectGetMaxY(self.topView.frame), self.view.width*2, SSJSCREENHEIGHT - self.topView.height);
+    self.centerScrollViewTwo.frame = CGRectMake(0, CGRectGetMaxY(self.topView.frame), self.view.width*2, SSJSCREENHEIGHT - self.topView.height);
     
     self.numRegSecretBgView.frame = CGRectMake(15, 35, self.view.width - 30, 100);
     self.phoneNoField.frame = CGRectMake(0, 0, self.numRegSecretBgView.width, 50);
@@ -344,12 +368,9 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     self.nextButton.frame = CGRectMake(15, CGRectGetMaxY(self.numRegSecretBgView.frame) + 25, self.view.width - 30, 44);
 
     //输入密码
-//    @property (nonatomic, strong) UITextField *passwordField;
-//    
-//    @property (nonatomic, strong) UIButton *setPasswordButton;
     self.passwordField.top = 35;
     self.passwordField.height = 50;
-    self.passwordField.left = SSJSCREENWITH + 15;
+    self.passwordField.left = 15;
     self.passwordField.width = SSJSCREENWITH - 30;
     
     self.setPasswordButton.top = CGRectGetMaxY(self.passwordField.frame) + 25;
@@ -368,14 +389,13 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 }
 
 
-- (TPKeyboardAvoidingScrollView *)scrollView {
-    if (!_scrollView) {
-        _scrollView = [[TPKeyboardAvoidingScrollView alloc] init];
-        _scrollView.contentSize = CGSizeZero;
-        _scrollView.scrollEnabled = NO;
-    }
-    return _scrollView;
-}
+//- (TPKeyboardAvoidingScrollView *)scrollView {
+//    if (!_scrollView) {
+//        _scrollView = [[TPKeyboardAvoidingScrollView alloc] initWithFrame:self.view.bounds];
+//        _scrollView.bounces = NO;
+//    }
+//    return _scrollView;
+//}
 
 - (UITextField *)phoneNoField {
     if (!_phoneNoField) {
@@ -414,7 +434,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         [_authCodeField setValue:[UIFont systemFontOfSize:13] forKeyPath:@"_placeholderLabel.font"];
         
         _authCodeField.font = [UIFont systemFontOfSize:16];
-        _authCodeField.keyboardType = UIKeyboardTypeASCIICapable;
+        _authCodeField.keyboardType = UIKeyboardTypeNumberPad;
         _authCodeField.delegate = self;
         _authCodeField.leftView = leftView;
         _authCodeField.rightView = self.getAuthCodeBtn;
@@ -544,12 +564,20 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     return _forgetPassWordLabel;
 }
 
-- (UIView *)centerScrollView
+- (UIView *)centerScrollViewOne
 {
-    if (!_centerScrollView) {
-        _centerScrollView = [[UIView alloc] init];
+    if (!_centerScrollViewOne) {
+        _centerScrollViewOne = [[UIView alloc] init];
     }
-    return _centerScrollView;
+    return _centerScrollViewOne;
+}
+
+- (UIView *)centerScrollViewTwo
+{
+    if (!_centerScrollViewTwo) {
+        _centerScrollViewTwo = [[UIView alloc] init];
+    }
+    return _centerScrollViewTwo;
 }
 
 - (UIButton *)setPasswordButton {

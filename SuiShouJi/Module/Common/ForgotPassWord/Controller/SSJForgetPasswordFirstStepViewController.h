@@ -12,5 +12,8 @@
 @interface SSJForgetPasswordFirstStepViewController : SSJBaseViewController
 
 @property (nonatomic, copy) NSString *mobileNo;
-
+/**
+ <#注释#>
+ */
+@property (nonatomic, copy) void (^finishPassHandle)(NSString *phoneNum);
 @end
