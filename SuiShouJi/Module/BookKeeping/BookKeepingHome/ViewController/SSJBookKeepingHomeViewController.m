@@ -276,18 +276,23 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 
 #pragma mark - UITableViewDelegate
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    if (self.items.count) {
+    SSJBookKeepingHomeListItem *listItem = [self.items ssj_safeObjectAtIndex:indexPath.section];
+    if ([listItem.date isEqualToString:@"-1"]) {
+        return 244;
+    } else {
         return 80;
     }
-    return 244;
+
 }
 
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    if (self.items.count) {
+    SSJBookKeepingHomeListItem *listItem = [self.items ssj_safeObjectAtIndex:section];
+    if ([listItem.date isEqualToString:@"-1"]) {
+        return 0.1;
+    } else {
         return 80;
     }
-    return 0.1;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
@@ -300,7 +305,8 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
-    if (self.items.count) {
+    SSJBookKeepingHomeListItem *item = [self.items ssj_safeObjectAtIndex:section];
+    if (![item.date isEqualToString:@"-1"]) {
         SSJBookKeepingHomeListItem *item = [self.items ssj_safeObjectAtIndex:section];
         SSJBookKeepingHomeHeaderView *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kHeaderId];
         headerView.item = item;
@@ -310,7 +316,8 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
-    if (self.items.count) {
+    SSJBookKeepingHomeListItem *item = [self.items ssj_safeObjectAtIndex:indexPath.section];
+    if (![item.date isEqualToString:@"-1"]) {
         SSJBookKeepingHomeTableViewCell * currentCell = (SSJBookKeepingHomeTableViewCell *)cell;
         SSJBillingChargeCellItem *item = currentCell.item;
         if ([self.newlyAddChargeArr containsObject:item]) {
@@ -398,15 +405,17 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 
 #pragma mark - UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    if (self.items.count) {
-        SSJBookKeepingHomeListItem *listItem = [self.items ssj_safeObjectAtIndex:section];
+    SSJBookKeepingHomeListItem *listItem = [self.items ssj_safeObjectAtIndex:section];
+    if ([listItem.date isEqualToString:@"-1"]) {
+        return 1;
+    } else {
         return listItem.chargeItems.count;
     }
-    return 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (self.items.count) {
+    SSJBookKeepingHomeListItem *listItem = [self.items ssj_safeObjectAtIndex:indexPath.section];
+    if (![listItem.date isEqualToString:@"-1"]) {
         static NSString *cellId = @"SSJBookKeepingCell";
         SSJBookKeepingHomeTableViewCell *bookKeepingCell = [tableView dequeueReusableCellWithIdentifier:cellId];
         if (!bookKeepingCell) {
@@ -462,20 +471,17 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
         };
         return bookKeepingCell;
     } else {
-        static NSString *cellId = @"SSJBookKeepingNoDataCell";
-        SSJBookKeepingHomeNoDataCell *noDataCell = [tableView dequeueReusableCellWithIdentifier:cellId];
-        if (!noDataCell) {
-            noDataCell = [[SSJBookKeepingHomeNoDataCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
-        }
-        return noDataCell;
+            static NSString *cellId = @"SSJBookKeepingNoDataCell";
+            SSJBookKeepingHomeNoDataCell *noDataCell = [tableView dequeueReusableCellWithIdentifier:cellId];
+            if (!noDataCell) {
+                noDataCell = [[SSJBookKeepingHomeNoDataCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+            }
+            return noDataCell;
     }
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    if (self.items.count) {
-        return self.items.count;
-    }
-    return 1;
+    return self.items.count;
 }
 
 
@@ -534,11 +540,6 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
             _dateViewHasDismiss = YES;
         }
         self.tableView.lineHeight = - scrollView.contentOffset.y - scrollView.contentInset.top;
-        if (self.items.count == 0) {
-            self.tableView.hasData = NO;
-        }else{
-            self.tableView.hasData = YES;
-        }
         if (!scrollView.decelerating && !_isRefreshing) {
             [self.homeButton startAnimating];
             
@@ -555,6 +556,9 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
         if (currentSection <= self.items.count && self.items.count) {
             SSJBookKeepingHomeListItem *listItem = [self.items objectAtIndex:currentSection];
 //            bookKeepingCell.item = [listItem.chargeItems ssj_safeObjectAtIndex:indexPath.row];
+            if ([listItem.date isEqualToString:@"-1"]) {
+                return;
+            }
             self.floatingDateView.currentDate = listItem.date;
             _isRefreshing = NO;
             if (self.items.count == 0) {
@@ -877,10 +881,20 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
         }];
         _startTime = CFAbsoluteTimeGetCurrent();
         [SSJBookKeepingHomeHelper queryForChargeListExceptNewCharge:self.newlyAddChargeArr Success:^(NSDictionary *result) {
+            
+            if ([((SSJBookKeepingHomeListItem *)[weakSelf.items objectAtIndex:0]).date isEqualToString:@"-1"]) {
+                [weakSelf.tableView beginUpdates];
+                [weakSelf.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+                [weakSelf.tableView deleteSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
+                [weakSelf.tableView endUpdates];
+
+            }
+            
             weakSelf.items = [[NSMutableArray alloc]initWithArray:[result objectForKey:SSJOrginalChargeArrKey]];
             weakSelf.newlyAddChargeArr = [[NSMutableArray alloc]initWithArray:[result objectForKey:SSJNewAddChargeArrKey]];
             weakSelf.newlyAddSectionArr = [[NSMutableArray alloc]initWithArray:[result objectForKey:SSJNewAddChargeSectionArrKey]];
-            if (weakSelf.items) {
+            if (weakSelf.items.count) {
+                self.tableView.hasData = YES;
                 if (weakSelf.newlyAddChargeArr.count) {
                     
                     if ([weakSelf.tableView numberOfSections]) {
@@ -894,13 +908,13 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
                             if ([weakSelf.newlyAddSectionArr containsObject:@(item.chargeIndex.section)]) {
                                 [self.tableView insertSections:[NSIndexSet indexSetWithIndex:item.chargeIndex.section] withRowAnimation:UITableViewRowAnimationTop];
                             }
-                            if (item.chargeIndex.section > maxSection) {
-                                [weakSelf.tableView scrollToRowAtIndexPath:currentMaxIndex atScrollPosition:UITableViewScrollPositionTop animated:NO];
-                            } else {
-                                [weakSelf.tableView scrollToRowAtIndexPath:item.chargeIndex atScrollPosition:UITableViewScrollPositionTop animated:NO];
-                            }
+//                            if (item.chargeIndex.section > maxSection) {
+//                                [weakSelf.tableView scrollToRowAtIndexPath:currentMaxIndex atScrollPosition:UITableViewScrollPositionTop animated:NO];
+//                            } else {
+//                                [weakSelf.tableView scrollToRowAtIndexPath:item.chargeIndex atScrollPosition:UITableViewScrollPositionTop animated:NO];
+//                            }
                             [self.tableView insertRowsAtIndexPaths:@[item.chargeIndex] withRowAnimation:UITableViewRowAnimationTop];
-                            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:item.chargeIndex.section] withRowAnimation:UITableViewRowAnimationNone];
+//                            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:item.chargeIndex.section] withRowAnimation:UITableViewRowAnimationNone];
                             [weakSelf.tableView endUpdates];
                         }
                         [weakSelf.tableView reloadRowsAtIndexPaths:@[currentMaxIndex] withRowAnimation:UITableViewRowAnimationNone];
@@ -920,6 +934,10 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
                     [weakSelf.tableView reloadData];
                 }
             } else {
+                self.tableView.hasData = NO;
+                SSJBookKeepingHomeListItem *listItem = [[SSJBookKeepingHomeListItem alloc] init];
+                listItem.date = @"-1";
+                [weakSelf.items addObject:listItem];
                 [weakSelf.tableView reloadData];
             }
             
