@@ -58,7 +58,7 @@
     self.loginButton.leftTop = CGPointMake(0, 0);
     self.headPotraitImage.size = CGSizeMake(64, 64);
     self.headPotraitImage.left = 20;
-    self.headPotraitImage.centerY = (self.height - kBottomViewHeight) * 0.5 + 15;
+    self.headPotraitImage.centerY = (self.height - kBottomViewHeight) * 0.5;
     self.nicknameLabel.top = self.headPotraitImage.top + 15;
     self.nicknameLabel.left = self.geXingSignLabel.left = CGRectGetMaxX(self.headPotraitImage.frame) + 10;
     self.geXingSignLabel.top = CGRectGetMaxY(self.nicknameLabel.frame);
@@ -178,19 +178,19 @@
 
 
 #pragma mark Setter
--(void)setItem:(SSJUserInfoItem *)item{
+-(void)setItem:(SSJUserItem *)item{
     _item = item;
     if (SSJIsUserLogined()) {
         NSString *iconStr;
-        if ([item.cicon hasPrefix:@"http"]) {
-            iconStr = item.cicon;
+        if ([item.icon hasPrefix:@"http"]) {
+            iconStr = item.icon;
         }else{
-            iconStr = SSJImageURLWithAPI(item.cicon);
+            iconStr = SSJImageURLWithAPI(item.icon);
         }
         if (item.realName == nil || [item.realName isEqualToString:@""]) {
             //手机号登陆
-            if (item.cmobileno.length == 11) {
-                NSString *phoneNum = [item.cmobileno stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
+            if (item.mobileNo.length == 11) {
+                NSString *phoneNum = [item.mobileNo stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
                 self.nicknameLabel.text = phoneNum;
             }
         }else{

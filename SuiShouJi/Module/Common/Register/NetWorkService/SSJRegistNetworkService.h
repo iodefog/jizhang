@@ -35,6 +35,9 @@ typedef NS_ENUM(NSInteger, SSJRegistNetworkServiceType) {
 //  密码
 @property (readonly, nonatomic, copy) NSString *password;
 
+//  userId
+@property(nonatomic, strong) NSString *userID;
+
 /**
  *  获取验证码
  *

@@ -6,7 +6,6 @@
 //  Copyright © 2015年 ___9188___. All rights reserved.
 //
 
-#import "SSJMineHomeViewController.h"
 #import "SSJMineHomeTableViewHeader.h"
 #import "SSJMineHomeImageCell.h"
 #import "SSJSyncSettingViewController.h"
@@ -38,6 +37,8 @@
 #import "SSJReminderViewController.h"
 #import "SSJBookKeepingHomeViewController.h"
 #import "SSJListAdItem.h"
+#import "SSJMineHomeViewController.h"
+#import "SSJScrollalbleAnnounceView.h"
 
 #import "UIImageView+WebCache.h"
 #import "SSJDataSynchronizer.h"
@@ -84,6 +85,8 @@ static BOOL kNeedBannerDisplay = YES;
 //@property(nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UICollectionView *collectionView;
 @property (nonatomic, strong) SSJHeaderBannerImageView *headerBannerImageView;//头部banner
+
+@property(nonatomic, strong) SSJScrollalbleAnnounceView *announcementView;
 /**
  默认主题底部背景
  */
@@ -103,14 +106,13 @@ static BOOL kNeedBannerDisplay = YES;
 
 @implementation SSJMineHomeViewController{
     NSMutableArray *_titleArr;
-    SSJUserInfoItem *_userItem;
     BOOL _hasUreadMassage;
 }
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-        self.statisticsTitle = @"更多";
-        self.extendedLayoutIncludesOpaqueBars = YES;
+        self.title = @"更多";
+        self.extendedLayoutIncludesOpaqueBars = NO;
         self.automaticallyAdjustsScrollViewInsets = NO;
     }
     return self;
@@ -118,6 +120,7 @@ static BOOL kNeedBannerDisplay = YES;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self.view addSubview:self.announcementView];
     [self.view addSubview:self.header];
     [self.view addSubview:self.bottomBgView];
     if ([SSJCurrentThemeID() isEqualToString:SSJDefaultThemeID]) {
@@ -129,88 +132,34 @@ static BOOL kNeedBannerDisplay = YES;
     [self loadOriDataArray];//固定数组
 }
 
-- (void)loadOriDataArray
-{
-    //  根据审核状态显示响应的内容，“给个好评”在审核期间不能被看到，否则可能会被拒绝-
-    if ([SSJStartChecker sharedInstance].isInReview) {
-        if ([SSJDefaultSource() isEqualToString:@"11501"] || [SSJDefaultSource() isEqualToString:@"11502"]) {
-            self.images = [@[@"more_tixing", @"more_pifu", @"more_zhouqi",@"more_daochu", @"more_share", @"more_fankui", @"more_shezhi"] mutableCopy];
-            self.titles = [@[kTitle1 , kTitle2 , kTitle3, kTitle4,kTitle8,kTitle5 , kTitle7] mutableCopy];
-            _titleArr = [@[kTitle1 , kTitle2 , kTitle3 , kTitle4 , kTitle8 , kTitle5 , kTitle7] mutableCopy];
-        } else{
-            self.images = [@[@"more_tixing", @"more_pifu", @"more_zhouqi",@"more_daochu", @"more_fankui", @"more_shezhi"] mutableCopy];
-            self.titles = [@[kTitle1 , kTitle2 , kTitle3, kTitle4,kTitle5 , kTitle7] mutableCopy];
-            _titleArr = [@[kTitle1 , kTitle2 , kTitle3 , kTitle4 , kTitle5 , kTitle7] mutableCopy];
-        }
-        
-    } else {
-        if ([SSJDefaultSource() isEqualToString:@"11501"] || [SSJDefaultSource() isEqualToString:@"11502"]) {
-            self.images = [@[@"more_tixing", @"more_pifu",@"more_zhouqi",@"more_daochu", @"more_share", @"more_fankui", @"more_haoping", @"more_shezhi"] mutableCopy];
-            self.titles = [@[kTitle1 , kTitle2 , kTitle3, kTitle4,kTitle8, kTitle5 , kTitle6 , kTitle7]mutableCopy];
-            _titleArr = [@[kTitle1 , kTitle2 , kTitle3 , kTitle4 , kTitle8 , kTitle5 , kTitle6 , kTitle7] mutableCopy];
-        } else{
-            self.images = [@[@"more_tixing", @"more_pifu", @"more_zhouqi",@"more_daochu", @"more_fankui", @"more_haoping", @"more_shezhi"] mutableCopy];
-            self.titles = [@[kTitle1 , kTitle2 , kTitle3, kTitle4, kTitle5 , kTitle6 , kTitle7] mutableCopy];
-            _titleArr = [@[kTitle1 , kTitle2 , kTitle3 , kTitle4 , kTitle5 , kTitle6 , kTitle7] mutableCopy];
-        }
-    }
-    [self orgDataToModel];
-    self.adItemsArray = self.localAdItems;
-    [self additionOrgDataToModel];
-    [self.collectionView reloadData];
-}
-
-- (void)orgDataToModel
-{
-    NSMutableArray *tempArray = [NSMutableArray array];
-    for (NSInteger i=0; i < self.titles.count; i++) {
-        SSJListAdItem *item = [[SSJListAdItem alloc] init];
-        item.adTitle = [self.titles ssj_safeObjectAtIndex:i];
-        item.imageName = [self.images ssj_safeObjectAtIndex:i];
-        item.imageUrl = nil;
-        item.hidden = NO;
-        item.url = nil;//不需要跳转网页
-        [tempArray addObject:item];
-    }
-    self.localAdItems = tempArray;
-}
-
-
-/**
- 处理如果不是3的倍数的时候空出的位置部分底部线，和背景的问题
- */
-- (void)additionOrgDataToModel
-{
-    while (self.adItemsArray.count % 3 != 0) {
-        SSJListAdItem *item = [[SSJListAdItem alloc] init];
-        item.adTitle = @"";
-        item.imageName = @"";
-        item.imageUrl = nil;
-        item.hidden = NO;
-        item.url = nil;//不需要跳转网页
-        [self.adItemsArray addObject:item];
-    }
-}
-
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self.bannerService requestBannersList];
     [self.dotService requestThemeAndAdviceUpdate];
-    [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
-
-    __weak typeof(self) weakSelf = self;
-    [self getUserInfo:^(SSJUserInfoItem *item){
-        weakSelf.header.item = item;
-        _userItem = item;
-    }];
+        
+    SSJUserItem *item = [SSJUserTableManager queryUserItemForID:SSJUSERID()];\
+    self.header.item = item;
     [self.header setSignStr];//设置签名
     
     SSJBookkeepingTreeCheckInModel *checkInModel = [SSJBookkeepingTreeStore queryCheckInInfoWithUserId:SSJUSERID() error:nil];
     self.header.checkInLevel = [SSJBookkeepingTreeHelper treeLevelForDays:checkInModel.checkInTimes];
     
-//    [self getCircleChargeState];
+    //    [self getCircleChargeState];
     self.navigationItem.rightBarButtonItem.tintColor = [UIColor ssj_colorWithHex:@"eb4a64"];
+    NSMutableArray *annoucements = [NSMutableArray arrayWithCapacity:0];
+    SSJAnnouceMentItem *item1 = [[SSJAnnouceMentItem alloc] init];
+    item1.announcementTitle = @"3131223j1ijdioaj";
+    item1.announcementType = SSJAnnouceMentTypeHot;
+    [annoucements addObject:item1];
+    SSJAnnouceMentItem *item2 = [[SSJAnnouceMentItem alloc] init];
+    item2.announcementTitle = @"danuidhauhduiahd283818938";
+    item2.announcementType = SSJAnnouceMentTypeNew;
+    [annoucements addObject:item2];
+    SSJAnnouceMentItem *item3 = [[SSJAnnouceMentItem alloc] init];
+    item3.announcementTitle = @"31e3131qeweqweqe";
+    item3.announcementType = SSJAnnouceMentTypeHot;
+    [annoucements addObject:item3];
+    self.announcementView.items = annoucements;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -221,8 +170,8 @@ static BOOL kNeedBannerDisplay = YES;
 -(void)viewDidLayoutSubviews{
     [super viewDidLayoutSubviews];
     self.header.size = CGSizeMake(self.view.width, 170);
-    self.header.leftTop = CGPointMake(0, 0);
-    self.collectionView.size = CGSizeMake(self.view.width, self.view.height - self.header.bottom - self.tabBarController.tabBar.height);
+    self.header.leftTop = CGPointMake(0, self.announcementView.bottom);
+    self.collectionView.size = CGSizeMake(self.view.width, self.view.height - self.header.bottom);
     self.collectionView.top = self.header.bottom;
     self.collectionView.contentInset = UIEdgeInsetsMake(10, 0, 0, 0);
     self.bottomBgView.centerX = self.view.centerX;
@@ -253,6 +202,7 @@ static BOOL kNeedBannerDisplay = YES;
     [cell setAdItem:[self.adItemsArray ssj_safeObjectAtIndex:indexPath.item] indexPath:indexPath];
     return cell;
 }
+
 #pragma mark - UICollectionViewDelegateFlowLayout
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -276,6 +226,7 @@ static BOOL kNeedBannerDisplay = YES;
     //    }
     return nil;
 }
+
 -(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
     return UIEdgeInsetsMake(0, 0, 0, 0);//分别为上、左、下、右
@@ -317,43 +268,7 @@ static BOOL kNeedBannerDisplay = YES;
         [self.navigationController pushViewController:circleChargeSettingVC animated:YES];
         return;
     }
-    
-    //    //  记账树
-    //    if ([title isEqualToString:kTitle4]) {
-    //        SSJBookkeepingTreeViewController *treeVC = [[SSJBookkeepingTreeViewController alloc] init];
-    //        [self.navigationController pushViewController:treeVC animated:YES];
-    //        return;
-    //    }
-    
-    //    //  把APP推荐给好友
-    //    if ([title isEqualToString:kTitle5]) {
-    //        [UMSocialSnsService presentSnsIconSheetView:self
-    //                                             appKey:kUMAppKey
-    //                                          shareText:@"财务管理第一步，从记录消费生活开始!"
-    //                                         shareImage:[UIImage imageNamed:@"icon"]
-    //                                    shareToSnsNames:[NSArray arrayWithObjects:UMShareToQQ,UMShareToSina,UMShareToWechatSession,UMShareToWechatTimeline,nil]
-    //                                           delegate:self];
-    //    }
-    
-    //意见反馈
-    /*if ([item.adTitle isEqualToString:kTitle5]) {
-        SSJUserItem *userItem = [SSJUserTableManager queryUserItemForID:SSJUSERID()];
-        NSDictionary* clientCustomizedAttrs = @{@"userid": userItem.userId ?: @"",
-                                                @"openid": userItem.openId ?: @"",
-                                                @"nickname": userItem.realName ?: @"",
-                                                @"tel": userItem.mobileNo ?: @"",
-                                                @"登录方式": userItem.loginType ?: @"",
-                                                @"注册状态": userItem.registerState ?: @"",
-                                                @"应用名称": SSJAppName(),
-                                                @"应用版本号": SSJAppVersion(),
-                                                @"手机型号" : SSJPhoneModel()
-                                                };
-        [MQManager setClientInfo:clientCustomizedAttrs completion:^(BOOL success , NSError *error) {
-            
-        }];
-        MQChatViewManager *chatViewManager = [[MQChatViewManager alloc] init];
-        [chatViewManager pushMQChatViewControllerInViewController:self];
-    }*/
+
     //建议与咨询
     if ([item.adTitle isEqualToString:kTitle5]) {
         SSJProductAdviceViewController *adviceVC = [[SSJProductAdviceViewController alloc] init];
@@ -617,6 +532,13 @@ static BOOL kNeedBannerDisplay = YES;
     return _bottomBgView;
 }
 
+- (SSJScrollalbleAnnounceView *)announcementView {
+    if (!_announcementView) {
+        _announcementView = [[SSJScrollalbleAnnounceView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 34)];
+    }
+    return _announcementView;
+}
+
 #pragma mark - Event
 -(void)takePhoto {
     UIImagePickerControllerSourceType sourceType = UIImagePickerControllerSourceTypeCamera;
@@ -643,29 +565,9 @@ static BOOL kNeedBannerDisplay = YES;
     [self presentViewController:picker animated:YES completion:^{}];
 }
 
-
--(void)getUserInfo:(void (^)(SSJUserInfoItem *item))UserInfo {
-    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db){
-        FMResultSet *rs = [db executeQuery:@"SELECT * FROM BK_USER WHERE CUSERID = ?",SSJUSERID()];
-        SSJUserInfoItem *item = [[SSJUserInfoItem alloc]init];
-        while ([rs next]) {
-            item.cuserid = [rs stringForColumn:@"CUSERID"];
-            item.cmobileno = [rs stringForColumn:@"CMOBILENO"];
-            item.cicon = [rs stringForColumn:@"CICONS"];
-            item.realName = [rs stringForColumn:@"CNICKID"];
-        }
-        SSJDispatch_main_async_safe(^(){
-            UserInfo(item);
-        });
-    }];
-}
-
 -(void)reloadDataAfterSync {
-    __weak typeof(self) weakSelf = self;
-    [self getUserInfo:^(SSJUserInfoItem *item){
-        weakSelf.header.item = item;
-        _userItem = item;
-    }];
+    SSJUserItem *item = [SSJUserTableManager queryUserItemForID:SSJUSERID()];
+    self.header.item = item;
 }
 
 #pragma mark - Private
@@ -717,6 +619,70 @@ static BOOL kNeedBannerDisplay = YES;
     };
     [self.navigationController pushViewController:loginVc animated:YES];
 }
+
+- (void)loadOriDataArray
+{
+    //  根据审核状态显示响应的内容，“给个好评”在审核期间不能被看到，否则可能会被拒绝-
+    if ([SSJStartChecker sharedInstance].isInReview) {
+        if ([SSJDefaultSource() isEqualToString:@"11501"] || [SSJDefaultSource() isEqualToString:@"11502"]) {
+            self.images = [@[@"more_tixing", @"more_pifu", @"more_zhouqi",@"more_daochu", @"more_share", @"more_fankui", @"more_shezhi"] mutableCopy];
+            self.titles = [@[kTitle1 , kTitle2 , kTitle3, kTitle4,kTitle8,kTitle5 , kTitle7] mutableCopy];
+            _titleArr = [@[kTitle1 , kTitle2 , kTitle3 , kTitle4 , kTitle8 , kTitle5 , kTitle7] mutableCopy];
+        } else{
+            self.images = [@[@"more_tixing", @"more_pifu", @"more_zhouqi",@"more_daochu", @"more_fankui", @"more_shezhi"] mutableCopy];
+            self.titles = [@[kTitle1 , kTitle2 , kTitle3, kTitle4,kTitle5 , kTitle7] mutableCopy];
+            _titleArr = [@[kTitle1 , kTitle2 , kTitle3 , kTitle4 , kTitle5 , kTitle7] mutableCopy];
+        }
+        
+    } else {
+        if ([SSJDefaultSource() isEqualToString:@"11501"] || [SSJDefaultSource() isEqualToString:@"11502"]) {
+            self.images = [@[@"more_tixing", @"more_pifu",@"more_zhouqi",@"more_daochu", @"more_share", @"more_fankui", @"more_haoping", @"more_shezhi"] mutableCopy];
+            self.titles = [@[kTitle1 , kTitle2 , kTitle3, kTitle4,kTitle8, kTitle5 , kTitle6 , kTitle7]mutableCopy];
+            _titleArr = [@[kTitle1 , kTitle2 , kTitle3 , kTitle4 , kTitle8 , kTitle5 , kTitle6 , kTitle7] mutableCopy];
+        } else{
+            self.images = [@[@"more_tixing", @"more_pifu", @"more_zhouqi",@"more_daochu", @"more_fankui", @"more_haoping", @"more_shezhi"] mutableCopy];
+            self.titles = [@[kTitle1 , kTitle2 , kTitle3, kTitle4, kTitle5 , kTitle6 , kTitle7] mutableCopy];
+            _titleArr = [@[kTitle1 , kTitle2 , kTitle3 , kTitle4 , kTitle5 , kTitle6 , kTitle7] mutableCopy];
+        }
+    }
+    [self orgDataToModel];
+    self.adItemsArray = self.localAdItems;
+    [self additionOrgDataToModel];
+    [self.collectionView reloadData];
+}
+
+- (void)orgDataToModel
+{
+    NSMutableArray *tempArray = [NSMutableArray array];
+    for (NSInteger i=0; i < self.titles.count; i++) {
+        SSJListAdItem *item = [[SSJListAdItem alloc] init];
+        item.adTitle = [self.titles ssj_safeObjectAtIndex:i];
+        item.imageName = [self.images ssj_safeObjectAtIndex:i];
+        item.imageUrl = nil;
+        item.hidden = NO;
+        item.url = nil;//不需要跳转网页
+        [tempArray addObject:item];
+    }
+    self.localAdItems = tempArray;
+}
+
+
+/**
+ 处理如果不是3的倍数的时候空出的位置部分底部线，和背景的问题
+ */
+- (void)additionOrgDataToModel
+{
+    while (self.adItemsArray.count % 3 != 0) {
+        SSJListAdItem *item = [[SSJListAdItem alloc] init];
+        item.adTitle = @"";
+        item.imageName = @"";
+        item.imageUrl = nil;
+        item.hidden = NO;
+        item.url = nil;//不需要跳转网页
+        [self.adItemsArray addObject:item];
+    }
+}
+
 
 #pragma mark - UIImagePickerControllerDelegate
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info

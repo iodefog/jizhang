@@ -98,4 +98,13 @@
     }
 }
 
+- (void)requestDidFinish:(NSDictionary *)rootElement {
+    if (self.interfaceType == SSJRegistNetworkServiceTypeSetPassword
+        && self.type == SSJRegistAndForgetPasswordTypeRegist
+        && [self.returnCode isEqualToString:@"1"]) {
+
+    }
+}
+
+
 @end

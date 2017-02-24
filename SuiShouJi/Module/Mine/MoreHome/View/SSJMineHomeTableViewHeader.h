@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "SSJMineHeaderView.h"
-#import "SSJUserInfoItem.h"
+#import "SSJUserItem.h"
 #import "SSJBookkeepingTreeHelper.h"
 
 
@@ -16,7 +16,7 @@
 
 //+ (id)MineHomeHeader;
 
-@property(nonatomic, strong) SSJUserInfoItem *item;
+@property(nonatomic, strong) SSJUserItem *item;
 
 @property(nonatomic) SSJBookkeepingTreeLevel checkInLevel;
  

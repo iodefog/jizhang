@@ -5346,8 +5346,6 @@
 		9C1E4C161E4ACD5C00CA5843 /* SSJCalendarTabelViewHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCalendarTabelViewHeaderView.m; sourceTree = "<group>"; };
 		9C1E4C4A1E4C619600CA5843 /* SSJCalendarTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCalendarTableViewCell.h; sourceTree = "<group>"; };
 		9C1E4C4B1E4C619600CA5843 /* SSJCalendarTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCalendarTableViewCell.m; sourceTree = "<group>"; };
-		9C1FB7281E5DC2630086551E /* SuiShouJi.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = SuiShouJi.entitlements; path = SuiShouJi/SuiShouJi.entitlements; sourceTree = "<group>"; };
-		9C1FB72A1E5DC75F0086551E /* SuiShouJiEnterprise.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SuiShouJiEnterprise.entitlements; sourceTree = "<group>"; };
 		9C20A87D1D41E43A00F3D77F /* SSJMemberManagerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMemberManagerViewController.h; sourceTree = "<group>"; };
 		9C20A87E1D41E43A00F3D77F /* SSJMemberManagerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMemberManagerViewController.m; sourceTree = "<group>"; };
 		9C23EA4C1DDAD4FE0003C5AB /* 9188.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = 9188.cer; sourceTree = "<group>"; };
@@ -5387,6 +5385,7 @@
 		9C3276EF1CE4615200109C4C /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		9C3276F11CE4615C00109C4C /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		9C3276F31CE4616900109C4C /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		9C348E211E6005A300D76681 /* SuiShouJi.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SuiShouJi.entitlements; sourceTree = "<group>"; };
 		9C38999F1DC9D99700715732 /* SSJCustomCategoryItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCustomCategoryItem.h; sourceTree = "<group>"; };
 		9C3899A01DC9D99700715732 /* SSJCustomCategoryItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCustomCategoryItem.m; sourceTree = "<group>"; };
 		9C40F1A61D4F6015003FF1C6 /* SSJWeixinFooter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJWeixinFooter.h; sourceTree = "<group>"; };
@@ -8849,8 +8848,6 @@
 		BD543C331C1A6DBC00910D61 = {
 			isa = PBXGroup;
 			children = (
-				9C1FB72A1E5DC75F0086551E /* SuiShouJiEnterprise.entitlements */,
-				9C1FB7281E5DC2630086551E /* SuiShouJi.entitlements */,
 				BD543C3E1C1A6DBC00910D61 /* SuiShouJi */,
 				BD543C581C1A6DBC00910D61 /* SuiShouJiTests */,
 				BD543C631C1A6DBC00910D61 /* SuiShouJiUITests */,
@@ -8880,6 +8877,7 @@
 		BD543C3E1C1A6DBC00910D61 /* SuiShouJi */ = {
 			isa = PBXGroup;
 			children = (
+				9C348E211E6005A300D76681 /* SuiShouJi.entitlements */,
 				7D22A2ED1E4F16AC00190CEB /* Additons */,
 				BD04336F1C1A8DA50051E7AB /* Module */,
 				7D6AAB5D1C312C340007C0A3 /* Components */,
