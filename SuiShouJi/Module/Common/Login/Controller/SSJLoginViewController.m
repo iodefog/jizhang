@@ -439,7 +439,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 #pragma mark - Notification
 -(void)updatetextfield:(id)sender{
     if (self.tfPhoneNum.isFirstResponder || self.tfPassword.isFirstResponder) {
-        if (self.tfPhoneNum.text.length != 0 && self.tfPassword.text.length >= 1) {
+        if (self.tfPhoneNum.text.length == 11 && self.tfPassword.text.length >= 1) {
             self.loginButton.enabled = YES;
         }else{
         self.loginButton.enabled = NO;
@@ -448,7 +448,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     }
     
     if (self.tfRegPhoneNum.isFirstResponder || self.tfRegYanZhenNum.isFirstResponder || self.tfRegPasswordNum.isFirstResponder) {
-        if (self.tfRegPhoneNum.text.length > 0 && self.tfRegYanZhenNum.text.length == 6 && self.tfRegPasswordNum.text.length >= 1 && self.agreeButton.selected == YES) {
+        if (self.tfRegPhoneNum.text.length == 11 && self.tfRegYanZhenNum.text.length == 6 && self.tfRegPasswordNum.text.length >= 1 && self.agreeButton.selected == YES) {
             self.registerButton.enabled = YES;
         } else {
             self.registerButton.enabled = NO;
