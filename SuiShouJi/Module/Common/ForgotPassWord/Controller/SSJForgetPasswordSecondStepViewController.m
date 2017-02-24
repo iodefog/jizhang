@@ -11,6 +11,7 @@
 #import "SSJBaselineTextField.h"
 #import "SSJRegistNetworkService.h"
 #import "SSJBorderButton.h"
+#import "SSJUserTableManager.h"
 
 @interface SSJForgetPasswordSecondStepViewController () <UITextFieldDelegate>
 
@@ -95,6 +96,7 @@
                 weakSelf.finishHandle(weakSelf);
             }
         }];
+        
         
         [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:@"设置密码成功" action:sureAction, nil];
         

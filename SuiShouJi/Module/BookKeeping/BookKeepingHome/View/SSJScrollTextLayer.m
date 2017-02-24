@@ -7,9 +7,13 @@
 //
 
 #import "SSJScrollTextLayer.h"
+
 @interface SSJScrollTextLayer()
+
 @property(nonatomic, strong) CADisplayLink *timer;
+
 @end
+
 @implementation SSJScrollTextLayer{
     int _currentNum;
 }

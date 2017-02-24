@@ -16,33 +16,9 @@ NSString *const SSJExpentureSumKey = @"SSJExpentureSumKey";
 NSString *const SSJOrginalChargeArrKey = @"SSJOrginalChargeArrKey";
 NSString *const SSJNewAddChargeArrKey = @"SSJNewAddChargeArrKey";
 NSString *const SSJNewAddChargeSectionArrKey = @"SSJNewAddChargeSectionArrKey";
+NSString *const SSJMonthSumDicKey = @"SSJMonthSumDicKey";
 
 @implementation SSJBookKeepingHomeHelper
-
-//+ (void)queryForChargeListWithSuccess:(void(^)(NSArray<SSJBillingChargeCellItem *> *result))success
-//                              failure:(void (^)(NSError *error))failure {
-//    [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
-//        NSString *userid = SSJUSERID();
-//        NSMutableArray *chargeList = [NSMutableArray array];
-//        FMResultSet *chargeResult = [db executeQuery:@"SELECT A.CBILLDATE , A.IMONEY , A.ICHARGEID , A.IBILLID , A.CWRITEDATE  ,A.IFUNSID , A.CUSERID , A.CIMGURL ,  A.THUMBURL ,A.CMEMO , A.ICONFIGID , B.CNAME, B.CCOIN, B.CCOLOR, B.ITYPE , C.ITYPE AS CHARGECIRCLE , C.OPERATORTYPE  AS CONFIGOPERATORTYPE FROM (SELECT CBILLDATE , IMONEY , ICHARGEID , IBILLID , CWRITEDATE  ,IFUNSID , CUSERID , CMEMO ,  CIMGURL ,  THUMBURL , ICONFIGID FROM (SELECT CBILLDATE , IMONEY , ICHARGEID , IBILLID , CWRITEDATE , IFUNSID , CUSERID , CMEMO ,  CIMGURL , THUMBURL , ICONFIGID FROM BK_USER_CHARGE WHERE CBILLDATE IN (SELECT CBILLDATE FROM BK_DAILYSUM_CHARGE ORDER BY CBILLDATE DESC)  AND OPERATORTYPE != 2) WHERE IBILLID != '1' AND IBILLID != '2' AND IBILLID != '3' AND IBILLID != '4' AND CUSERID = ? UNION SELECT * FROM (SELECT CBILLDATE , SUMAMOUNT AS IMONEY , ICHARGEID , IBILLID , '3'||substr(cwritedate,2) AS CWRITEDATE , IFUNSID , CUSERID , '' AS CMEMO , '' AS CIMGURL , '' AS THUMBURL , '' AS ICONFIGID FROM BK_DAILYSUM_CHARGE WHERE CUSERID = ? ORDER BY CBILLDATE DESC)) AS A LEFT JOIN BK_BILL_TYPE AS B ON A.IBILLID = B.ID LEFT JOIN BK_CHARGE_PERIOD_CONFIG AS C ON A.ICONFIGID = C.ICONFIGID WHERE A.CBILLDATE <= ?  ORDER BY A.CBILLDATE DESC , A.CWRITEDATE DESC",SSJGetCurrentBooksType(),userid,userid,[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"]];
-//        if (!chargeResult) {
-//            if (failure) {
-//                SSJDispatch_main_async_safe(^{
-//                    failure([db lastError]);
-//                });
-//            }
-//            return;
-//        }
-//        while ([chargeResult next]) {
-//            [chargeList addObject:[self chargeItemWithResultSet:chargeResult inDatabase:db]];
-//        }
-//        if (success) {
-//            SSJDispatch_main_async_safe(^{
-//                success(chargeList);
-//            });
-//        }
-//    }];
-//}
 
 + (void)queryForChargeListExceptNewCharge:(NSArray *)newCharge
                               Success:(void(^)(NSDictionary *result))success
@@ -55,10 +31,11 @@ NSString *const SSJNewAddChargeSectionArrKey = @"SSJNewAddChargeSectionArrKey";
         NSMutableArray *newAddChargeArr = [NSMutableArray array];
         NSMutableArray *newSectionArr = [NSMutableArray array];
         NSMutableDictionary *summaryDic = [NSMutableDictionary dictionaryWithCapacity:0];
+        NSMutableDictionary *monthSummaryDic = [NSMutableDictionary dictionaryWithCapacity:0];
         NSMutableDictionary *tempDic = [NSMutableDictionary dictionary];
         NSString *lastDate = @"";
         NSInteger totalCount = 0;
-        NSString *currentMonth = @"";
+        NSString *lastMonth = @"";
         int section = 0;
         int row = 0;
         FMResultSet *chargeResult = [db executeQuery:@"select uc.* , uc.operatortype as chargeoperatortype, bt.cname, bt.ccoin, bt.ccolor, bt.itype from bk_user_charge uc , bk_bill_type bt where uc.ibillid = bt.id and uc.cbilldate <= ? and uc.cuserid = ? and uc.cbooksid = ? and uc.operatortype <> 2 and bt.istate <> 2 order by uc.cbilldate desc , uc.clientadddate desc , uc.cwritedate desc",[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"],userid,booksid];
@@ -88,6 +65,12 @@ NSString *const SSJNewAddChargeSectionArrKey = @"SSJNewAddChargeSectionArrKey";
             item.billDate = [chargeResult stringForColumn:@"CBILLDATE"];
             item.clientAddDate = [chargeResult stringForColumn:@"clientadddate"];
             item.billDetailDate = [chargeResult stringForColumn:@"cdetaildate"];
+            NSString *currentMonth = [item.billDate substringWithRange:NSMakeRange(0, 7)];
+            if (![currentMonth isEqualToString:lastMonth]) {
+                
+            } else {
+                
+            }
             if (![item.billDate isEqualToString:lastDate]) {
                 SSJBookKeepingHomeListItem *listItem = [[SSJBookKeepingHomeListItem alloc]init];
                 listItem.chargeItems = [NSMutableArray arrayWithCapacity:0];
