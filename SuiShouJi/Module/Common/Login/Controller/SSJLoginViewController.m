@@ -37,6 +37,7 @@
 #import "SSJHomeLoadingView.h"
 #import "SSJRegistNetworkService.h"
 #import "SSJNormalWebViewController.h"
+#import "NSString+MoneyDisplayFormat.h"
 
 static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 @interface SSJLoginViewController () <UITextFieldDelegate,UIScrollViewDelegate>
@@ -136,6 +137,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
  <#注释#>
  */
 @property (nonatomic, assign) BOOL isRegisterToForgetPassword;
+
 @end
 
 @implementation SSJLoginViewController
@@ -336,35 +338,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
             [self.tfRegYanZhenNum becomeFirstResponder];
             self.phoneNum = self.tfRegPhoneNum.text;
         } else if ([self.registerService.returnCode isEqualToString:@"1001"]) {
-            
-            __weak typeof(self) weakSelf = self;
-            SSJAlertViewAction *cancelAction = [SSJAlertViewAction actionWithTitle:@"取消" handler:NULL];
-            SSJAlertViewAction *forgetAction = [SSJAlertViewAction actionWithTitle:@"忘记密码" handler:^(SSJAlertViewAction *action) {
-                SSJForgetPasswordFirstStepViewController *forgetVC = [[SSJForgetPasswordFirstStepViewController alloc] init];
-                self.isRegisterToForgetPassword = YES;
-                forgetVC.mobileNo = weakSelf.registerService.mobileNo;
-                forgetVC.finishHandle = weakSelf.finishHandle;
-                forgetVC.finishPassHandle = ^(NSString *num){
-                    weakSelf.tfPhoneNum.text = num;
-                    weakSelf.centerScrollViewOne.hidden = NO;
-                    weakSelf.centerScrollViewTwo.hidden = YES;
-//                    weakSelf.centerScrollViewThree.hidden = YES;
-                    self.triangleView.centerX = self.loginTitleButton.centerX;
-                    [weakSelf.centerScrollViewTwo endEditing:YES];
-//                    [weakSelf.centerScrollViewThree endEditing:YES];
-                    weakSelf.loginTitleButton.selected = YES;
-                    weakSelf.registerTitleButton.selected = NO;
-                    if (num.length < 1) {
-                        [weakSelf.tfPhoneNum becomeFirstResponder];
-                    } else {
-                        [weakSelf.tfPassword becomeFirstResponder];
-                    }
-                };
-                [weakSelf.view endEditing:YES];
-                [weakSelf.navigationController pushViewController:forgetVC animated:YES];
-            }];
-            [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:@"该手机号已经被注册，若忘记密码，请使用忘记密码功能找回密码" action:cancelAction, forgetAction, nil];
-            
+            [self showAlertWhenPhoneNumalreadyExists];
         } else {
             NSString *message = service.desc.length > 0 ? service.desc : SSJ_ERROR_MESSAGE;
             [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:message action:[SSJAlertViewAction actionWithTitle:@"确认" handler:NULL], nil];
@@ -465,7 +439,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 #pragma mark - Notification
 -(void)updatetextfield:(id)sender{
     if (self.tfPhoneNum.isFirstResponder || self.tfPassword.isFirstResponder) {
-        if (self.tfPhoneNum.text.length != 0 && self.tfPassword.text.length >= 6) {
+        if (self.tfPhoneNum.text.length == 11 && self.tfPassword.text.length >= 1) {
             self.loginButton.enabled = YES;
         }else{
         self.loginButton.enabled = NO;
@@ -474,7 +448,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     }
     
     if (self.tfRegPhoneNum.isFirstResponder || self.tfRegYanZhenNum.isFirstResponder || self.tfRegPasswordNum.isFirstResponder) {
-        if (self.tfRegPhoneNum.text.length > 0 && self.tfRegYanZhenNum.text.length == 6 && self.tfRegPasswordNum.text.length >= 6 && self.agreeButton.selected == YES) {
+        if (self.tfRegPhoneNum.text.length == 11 && self.tfRegYanZhenNum.text.length == 6 && self.tfRegPasswordNum.text.length >= 1 && self.agreeButton.selected == YES) {
             self.registerButton.enabled = YES;
         } else {
             self.registerButton.enabled = NO;
@@ -601,12 +575,12 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 
 - (void)showSecret:(UIButton *)button
 {
-    button.selected = !button.selected;
     if (button.tag == 300) {
         self.tfPassword.secureTextEntry = button.selected;
     } else if(button.tag == 301) {
         self.tfRegPasswordNum.secureTextEntry = button.selected;
     }
+    button.selected = !button.selected;
 }
 
 //  获取验证码
@@ -637,7 +611,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 //  同意、不同意协议
 - (void)agreeProtocaolAction {
         self.agreeButton.selected = !self.agreeButton.selected;
-    if (self.tfRegPhoneNum.text.length > 0 && self.tfRegYanZhenNum.text.length == 6 && self.tfRegPasswordNum.text.length >= 6 && self.agreeButton.selected == YES) {
+    if (self.tfRegPhoneNum.text.length > 0 && self.tfRegYanZhenNum.text.length == 6 && self.tfRegPasswordNum.text.length >= 1 && self.agreeButton.selected == YES) {
         self.registerButton.enabled = YES;
     }else{
         self.registerButton.enabled = NO;
@@ -795,6 +769,59 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:message action:sureAction, nil];
 }
 
+
+/**
+ 当手机号已经存在的时候弹框
+ */
+- (void)showAlertWhenPhoneNumalreadyExists
+{
+    __weak typeof(self) weakSelf = self;
+    NSString *oldStr = @"该手机号已经被注册，若忘记密码，请使用忘记密码功能找回密码。";
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"" message:oldStr preferredStyle:UIAlertControllerStyleAlert];
+    
+    //修改标题的内容，字号，颜色。使用的key值是“attributedTitle”
+    NSMutableAttributedString *attMessate = [oldStr attributeStrWithTargetStr:@"忘记密码" range:NSMakeRange(0, 0) color:[UIColor ssj_colorWithHex:@"ea4a64"]];
+    [attMessate addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:14] range:NSMakeRange(0, attMessate.length - 1)];
+    
+    //修改按钮的颜色，同上可以使用同样的方法修改内容，样式
+    UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"忘记密码" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        SSJForgetPasswordFirstStepViewController *forgetVC = [[SSJForgetPasswordFirstStepViewController alloc] init];
+        self.isRegisterToForgetPassword = YES;
+        forgetVC.mobileNo = weakSelf.registerService.mobileNo;
+        forgetVC.finishHandle = weakSelf.finishHandle;
+        forgetVC.finishPassHandle = ^(NSString *num){
+            weakSelf.tfPhoneNum.text = num;
+            weakSelf.centerScrollViewOne.hidden = NO;
+            weakSelf.centerScrollViewTwo.hidden = YES;
+            self.triangleView.centerX = self.loginTitleButton.centerX;
+            [weakSelf.centerScrollViewTwo endEditing:YES];
+            weakSelf.loginTitleButton.selected = YES;
+            weakSelf.registerTitleButton.selected = NO;
+            if (num.length < 1) {
+                [weakSelf.tfPhoneNum becomeFirstResponder];
+            } else {
+                [weakSelf.tfPassword becomeFirstResponder];
+            }
+        };
+        [weakSelf.view endEditing:YES];
+        [weakSelf.navigationController pushViewController:forgetVC animated:YES];
+    }];
+    
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+    if (SSJSystemVersion() >= 8.3) {
+        [defaultAction setValue:[UIColor ssj_colorWithHex:@"ea4a64"] forKey:@"_titleTextColor"];
+        [cancelAction setValue:[UIColor ssj_colorWithHex:@"444444"] forKey:@"_titleTextColor"];
+        [alertController setValue:attMessate forKey:@"attributedMessage"];
+    }
+        
+    
+    
+    [alertController addAction:defaultAction];
+    [alertController addAction:cancelAction];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
+}
+
 - (void)updateConstraints
 {
 //    self.scrollView.frame = self.view.bounds;
@@ -826,7 +853,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     if ([SSJDefaultSource() isEqualToString:@"11501"]
         || [SSJDefaultSource() isEqualToString:@"11502"]) {
         self.thirdPartyLoginLabel.centerX = SSJSCREENWITH * 0.5;
-        self.thirdPartyLoginLabel.bottom = self.centerScrollViewOne.height - 80;
+        self.thirdPartyLoginLabel.bottom = self.centerScrollViewOne.height - 100;
         
         self.leftSeperatorLine.centerY = self.rightSeperatorLine.centerY = self.thirdPartyLoginLabel.centerY;
         self.leftSeperatorLine.width = self.rightSeperatorLine.width = 45;
@@ -1023,8 +1050,8 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         leftView.image = [UIImage imageNamed:@"mima"];
         leftView.contentMode = UIViewContentModeCenter;
         UIButton *rightView = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 40, 50)];
-        [rightView setImage:[UIImage imageNamed:@"founds_xianshi"] forState:UIControlStateNormal];
-        [rightView setImage:[UIImage imageNamed:@"founds_yincang"] forState:UIControlStateSelected];
+        [rightView setImage:[UIImage imageNamed:@"founds_xianshi"] forState:UIControlStateSelected];
+        [rightView setImage:[UIImage imageNamed:@"founds_yincang"] forState:UIControlStateNormal];
         [rightView addTarget:self action:@selector(showSecret:) forControlEvents:UIControlEventTouchUpInside];
         rightView.tag = 300;
         _tfPassword = [[UITextField alloc] init];
@@ -1041,6 +1068,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         _tfPassword.rightView = rightView;
         _tfPassword.leftViewMode = UITextFieldViewModeAlways;
         _tfPassword.rightViewMode = UITextFieldViewModeAlways;
+        self.tfPassword.secureTextEntry = YES;
     }
     return _tfPassword;
 }
@@ -1051,14 +1079,14 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         leftView.image = [UIImage imageNamed:@"mima"];
         leftView.contentMode = UIViewContentModeCenter;
         UIButton *rightView = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 40, 50)];
-        [rightView setImage:[UIImage imageNamed:@"founds_xianshi"] forState:UIControlStateNormal];
-        [rightView setImage:[UIImage imageNamed:@"founds_yincang"] forState:UIControlStateSelected];
+        [rightView setImage:[UIImage imageNamed:@"founds_xianshi"] forState:UIControlStateSelected];
+        [rightView setImage:[UIImage imageNamed:@"founds_yincang"] forState:UIControlStateNormal];
         [rightView addTarget:self action:@selector(showSecret:) forControlEvents:UIControlEventTouchUpInside];
         rightView.tag = 301;
         _tfRegPasswordNum = [[UITextField alloc] init];
         _tfRegPasswordNum.textColor = [UIColor ssj_colorWithHex:@"333333"];
         _tfRegPasswordNum.clearButtonMode = UITextFieldViewModeWhileEditing;
-        _tfRegPasswordNum.placeholder = @"请输入至少6位密码";
+        _tfRegPasswordNum.placeholder = @"请输入6~15位数字和字母组合的密码";
         _tfRegPasswordNum.font = [UIFont systemFontOfSize:16];
         [_tfRegPasswordNum setValue:[UIColor ssj_colorWithHex:@"999999"] forKeyPath:@"_placeholderLabel.textColor"];
         [_tfRegPasswordNum setValue:[UIFont systemFontOfSize:13] forKeyPath:@"_placeholderLabel.font"];
@@ -1070,6 +1098,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         _tfRegPasswordNum.leftViewMode = UITextFieldViewModeAlways;
         _tfRegPasswordNum.rightViewMode = UITextFieldViewModeAlways;
 //        _tfRegPasswordNum.backgroundColor = [UIColor ssj_colorWithHex:@"cccccc" alpha:0.1];
+        self.tfRegPasswordNum.secureTextEntry = YES;
     }
     return _tfRegPasswordNum;
 }
@@ -1195,7 +1224,8 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         _tencentLoginButton = [[UIButton alloc]init];
         [_tencentLoginButton setImage:[UIImage imageNamed:@"login_qq"] forState:UIControlStateNormal];
         [_tencentLoginButton setTitle:@"腾讯QQ" forState:UIControlStateNormal];
-        _tencentLoginButton.size = CGSizeMake(35, 35);
+//        _tencentLoginButton.size = CGSizeMake(35, 35);
+        [_tencentLoginButton sizeToFit];
         [_tencentLoginButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor] forState:UIControlStateNormal];
         _tencentLoginButton.titleLabel.font = [UIFont systemFontOfSize:13];
         _tencentLoginButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor];
@@ -1211,7 +1241,8 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     if (!_weixinLoginButton) {
         _weixinLoginButton = [[UIButton alloc]init];
         [_weixinLoginButton setImage:[UIImage imageNamed:@"login_weixin"] forState:UIControlStateNormal];
-        _weixinLoginButton.size = CGSizeMake(35, 35);
+//        _weixinLoginButton.size = CGSizeMake(35, 35);
+        [_weixinLoginButton sizeToFit];
         [_weixinLoginButton setTitle:@"微信" forState:UIControlStateNormal];
         [_weixinLoginButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor] forState:UIControlStateNormal];
         _weixinLoginButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor];
@@ -1329,7 +1360,8 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     if (!_protocolButton) {
         _protocolButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _protocolButton.titleLabel.font = [UIFont systemFontOfSize:12];
-        [_protocolButton setTitle:@"我已阅读并同意用户协定" forState:UIControlStateNormal];
+        NSString *oldStr = @"我已阅读并同意用户协定";
+        [_protocolButton setAttributedTitle:[oldStr attributeStrWithTargetStr:@"用户协定" range:NSMakeRange(0, 0) color:[UIColor ssj_colorWithHex:@"ea4a64"]] forState:UIControlStateNormal];
         [_protocolButton setTitleColor:[UIColor ssj_colorWithHex:@"666666"] forState:UIControlStateNormal];
         [_protocolButton sizeToFit];
         [_protocolButton addTarget:self action:@selector(checkProtocolAction) forControlEvents:UIControlEventTouchUpInside];
