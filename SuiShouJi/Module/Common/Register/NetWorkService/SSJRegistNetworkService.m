@@ -98,18 +98,4 @@
     }
 }
 
-//- (void)requestDidFinish:(NSDictionary *)rootElement {
-//    if (self.interfaceType == SSJRegistNetworkServiceTypeSetPassword
-//        && self.type == SSJRegistAndForgetPasswordTypeRegist
-//        && [self.returnCode isEqualToString:@"1"]) {
-//        
-//        NSDictionary *resultInfo = [rootElement objectForKey:@"results"];
-//        if (resultInfo) {
-//            SSJSaveAppId(resultInfo[@"appId"] ?: @"");
-//            SSJSaveAccessToken(resultInfo[@"accessToken"] ?: @"");
-//            SSJSaveUserLogined(YES);
-//        }
-//    }
-//}
-
 @end

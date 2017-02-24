@@ -12,6 +12,7 @@
 #import "SSJRegistNetworkService.h"
 #import "SSJForgetPasswordSecondStepViewController.h"
 #import "SSJBorderButton.h"
+#import "SSJUserTableManager.h"
 
 static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 

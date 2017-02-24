@@ -115,6 +115,7 @@
             userItem.userId = SSJUSERID();
             userItem.mobileNo = self.registCompleteService.mobileNo;
             userItem.registerState = @"1";
+            userItem.openId = @"";
             
             //  只有保存用户登录信息成功后才算登录成功
             if ([SSJUserTableManager saveUserItem:userItem]

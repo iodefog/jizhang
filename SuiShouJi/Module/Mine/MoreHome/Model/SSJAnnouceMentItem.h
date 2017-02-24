@@ -22,6 +22,8 @@ typedef NS_ENUM(NSUInteger, SSJAnnouceMentType) {
 
 @property(nonatomic, strong) NSString *announcementDate;
 
+@property(nonatomic, strong) NSString *announcementUrl;
+
 @property(nonatomic) BOOL needToShowOnHome;
 
 @property(nonatomic) SSJAnnouceMentType announcementType;
