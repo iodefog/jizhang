@@ -206,7 +206,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 #pragma mark - UICollectionViewDelegateFlowLayout
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-        return CGSizeMake(self.view.width - 20, 95);
+        return CGSizeMake(self.view.width - 20, 80);
 }
 
 -(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
@@ -263,7 +263,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
         UICollectionViewFlowLayout *flowLayout=[[UICollectionViewFlowLayout alloc]init];
         [flowLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
         flowLayout.minimumInteritemSpacing = 0;
-        flowLayout.minimumLineSpacing = 0;
+        flowLayout.minimumLineSpacing = 10;
         _collectionView=[[SSJEditableCollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:flowLayout];
         _collectionView.movedCellScale = 1.08;
         _collectionView.editDelegate=self;

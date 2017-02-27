@@ -3949,6 +3949,14 @@
 		9C3276F01CE4615200109C4C /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C3276EF1CE4615200109C4C /* AudioToolbox.framework */; };
 		9C3276F21CE4615C00109C4C /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C3276F11CE4615C00109C4C /* CoreTelephony.framework */; };
 		9C3276F41CE4616900109C4C /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C3276F31CE4616900109C4C /* SystemConfiguration.framework */; };
+		9C348E241E601E9A00D76681 /* SSJAnnouncementDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C348E231E601E9A00D76681 /* SSJAnnouncementDetailCell.m */; };
+		9C348E251E601E9F00D76681 /* SSJAnnouncementDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C348E231E601E9A00D76681 /* SSJAnnouncementDetailCell.m */; };
+		9C348E261E601E9F00D76681 /* SSJAnnouncementDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C348E231E601E9A00D76681 /* SSJAnnouncementDetailCell.m */; };
+		9C348E271E601EA000D76681 /* SSJAnnouncementDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C348E231E601E9A00D76681 /* SSJAnnouncementDetailCell.m */; };
+		9C348E281E601EA000D76681 /* SSJAnnouncementDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C348E231E601E9A00D76681 /* SSJAnnouncementDetailCell.m */; };
+		9C348E291E601EA100D76681 /* SSJAnnouncementDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C348E231E601E9A00D76681 /* SSJAnnouncementDetailCell.m */; };
+		9C348E2A1E601EA100D76681 /* SSJAnnouncementDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C348E231E601E9A00D76681 /* SSJAnnouncementDetailCell.m */; };
+		9C348E2B1E601EA200D76681 /* SSJAnnouncementDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C348E231E601E9A00D76681 /* SSJAnnouncementDetailCell.m */; };
 		9C3899A11DC9D99700715732 /* SSJCustomCategoryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3899A01DC9D99700715732 /* SSJCustomCategoryItem.m */; };
 		9C3899A41DC9D99700715732 /* SSJCustomCategoryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3899A01DC9D99700715732 /* SSJCustomCategoryItem.m */; };
 		9C40F1A81D4F6015003FF1C6 /* SSJWeixinFooter.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C40F1A71D4F6015003FF1C6 /* SSJWeixinFooter.m */; };
@@ -5385,7 +5393,9 @@
 		9C3276EF1CE4615200109C4C /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		9C3276F11CE4615C00109C4C /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		9C3276F31CE4616900109C4C /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
-		9C348E211E6005A300D76681 /* SuiShouJi.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SuiShouJi.entitlements; sourceTree = "<group>"; };
+		9C348E221E601E9A00D76681 /* SSJAnnouncementDetailCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJAnnouncementDetailCell.h; sourceTree = "<group>"; };
+		9C348E231E601E9A00D76681 /* SSJAnnouncementDetailCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJAnnouncementDetailCell.m; sourceTree = "<group>"; };
+		9C348E2D1E6021F700D76681 /* SuiShouJi.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = SuiShouJi.entitlements; sourceTree = "<group>"; };
 		9C38999F1DC9D99700715732 /* SSJCustomCategoryItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCustomCategoryItem.h; sourceTree = "<group>"; };
 		9C3899A01DC9D99700715732 /* SSJCustomCategoryItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCustomCategoryItem.m; sourceTree = "<group>"; };
 		9C40F1A61D4F6015003FF1C6 /* SSJWeixinFooter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJWeixinFooter.h; sourceTree = "<group>"; };
@@ -7498,6 +7508,14 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		9C348E2C1E6021F700D76681 /* Entitlements */ = {
+			isa = PBXGroup;
+			children = (
+				9C348E2D1E6021F700D76681 /* SuiShouJi.entitlements */,
+			);
+			path = Entitlements;
+			sourceTree = "<group>";
+		};
 		9C47BB7A1DF1498B0077ACF5 /* CardRepayment */ = {
 			isa = PBXGroup;
 			children = (
@@ -8289,6 +8307,8 @@
 				91F7FD1A1DFA7D3C005F4B6B /* SSJMoreProductAdviceTableViewCell.m */,
 				9C129A461E5EE4F20089146B /* SSJScrollalbleAnnounceView.h */,
 				9C129A471E5EE4F20089146B /* SSJScrollalbleAnnounceView.m */,
+				9C348E221E601E9A00D76681 /* SSJAnnouncementDetailCell.h */,
+				9C348E231E601E9A00D76681 /* SSJAnnouncementDetailCell.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -8812,6 +8832,7 @@
 		BD0E43EB1C2118E600F9179D /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				9C348E2C1E6021F700D76681 /* Entitlements */,
 				9C9D588E1E0144BF00E04213 /* GifImage */,
 				7DC4873F1DF655BA00C27B69 /* Localization */,
 				9C23EA4B1DDAD4FE0003C5AB /* certificates */,
@@ -8877,7 +8898,6 @@
 		BD543C3E1C1A6DBC00910D61 /* SuiShouJi */ = {
 			isa = PBXGroup;
 			children = (
-				9C348E211E6005A300D76681 /* SuiShouJi.entitlements */,
 				7D22A2ED1E4F16AC00190CEB /* Additons */,
 				BD04336F1C1A8DA50051E7AB /* Module */,
 				7D6AAB5D1C312C340007C0A3 /* Components */,
@@ -10307,6 +10327,7 @@
 				9C129A501E5EE9360089146B /* SSJAnnouceMentItem.m in Sources */,
 				7D08A1A81E4999D30085A8FB /* SSJReportFormCurveHeaderViewItem.m in Sources */,
 				7D08A1A91E4999D30085A8FB /* SSJBudgetDetailViewController.m in Sources */,
+				9C348E291E601EA100D76681 /* SSJAnnouncementDetailCell.m in Sources */,
 				7D08A1AA1E4999D30085A8FB /* SSJThemeImageCollectionViewCell.m in Sources */,
 				7D08A1AB1E4999D30085A8FB /* SSJBaselineTextField.m in Sources */,
 				7D08A1AC1E4999D30085A8FB /* SSJCircleChargeCell.m in Sources */,
@@ -11056,6 +11077,7 @@
 				7DA13BB61E35AED7000490A4 /* SSJProductAdviceViewController.m in Sources */,
 				7DA13BB71E35AED7000490A4 /* SSJLoanFundAccountSelectionView.m in Sources */,
 				7DA13BB81E35AED7000490A4 /* SSJCircleChargeStore.m in Sources */,
+				9C348E281E601EA000D76681 /* SSJAnnouncementDetailCell.m in Sources */,
 				7DA13BB91E35AED7000490A4 /* SSJDatabaseVersion2.m in Sources */,
 				7DA13BBA1E35AED7000490A4 /* SSJReportFormsCurveGraphView.m in Sources */,
 				7DA13BBB1E35AED7000490A4 /* SCYMotionEncryptionView.m in Sources */,
@@ -11611,6 +11633,7 @@
 				7DBB39FA1E55C0A70075E638 /* SSJListMenuItem.m in Sources */,
 				7DBB39FB1E55C0A70075E638 /* SSJProductAdviceViewController.m in Sources */,
 				7DBB39FC1E55C0A70075E638 /* SSJLoanFundAccountSelectionView.m in Sources */,
+				9C348E261E601E9F00D76681 /* SSJAnnouncementDetailCell.m in Sources */,
 				7DBB39FD1E55C0A70075E638 /* SSJCircleChargeStore.m in Sources */,
 				7DBB39FE1E55C0A70075E638 /* SSJDatabaseVersion2.m in Sources */,
 				7DBB39FF1E55C0A70075E638 /* SSJReportFormsCurveGraphView.m in Sources */,
@@ -12166,6 +12189,7 @@
 				7DBB3C461E55C2EE0075E638 /* SSJListMenuItem.m in Sources */,
 				7DBB3C471E55C2EE0075E638 /* SSJProductAdviceViewController.m in Sources */,
 				7DBB3C481E55C2EE0075E638 /* SSJLoanFundAccountSelectionView.m in Sources */,
+				9C348E2A1E601EA100D76681 /* SSJAnnouncementDetailCell.m in Sources */,
 				7DBB3C491E55C2EE0075E638 /* SSJCircleChargeStore.m in Sources */,
 				7DBB3C4A1E55C2EE0075E638 /* SSJDatabaseVersion2.m in Sources */,
 				7DBB3C4B1E55C2EE0075E638 /* SSJReportFormsCurveGraphView.m in Sources */,
@@ -12721,6 +12745,7 @@
 				7DBB3E931E55C4220075E638 /* SSJListMenuItem.m in Sources */,
 				7DBB3E941E55C4220075E638 /* SSJProductAdviceViewController.m in Sources */,
 				7DBB3E951E55C4220075E638 /* SSJLoanFundAccountSelectionView.m in Sources */,
+				9C348E2B1E601EA200D76681 /* SSJAnnouncementDetailCell.m in Sources */,
 				7DBB3E961E55C4220075E638 /* SSJCircleChargeStore.m in Sources */,
 				7DBB3E971E55C4220075E638 /* SSJDatabaseVersion2.m in Sources */,
 				7DBB3E981E55C4220075E638 /* SSJReportFormsCurveGraphView.m in Sources */,
@@ -13276,6 +13301,7 @@
 				7DBB40E11E55C4E00075E638 /* SSJListMenuItem.m in Sources */,
 				7DBB40E21E55C4E00075E638 /* SSJProductAdviceViewController.m in Sources */,
 				7DBB40E31E55C4E00075E638 /* SSJLoanFundAccountSelectionView.m in Sources */,
+				9C348E251E601E9F00D76681 /* SSJAnnouncementDetailCell.m in Sources */,
 				7DBB40E41E55C4E00075E638 /* SSJCircleChargeStore.m in Sources */,
 				7DBB40E51E55C4E00075E638 /* SSJDatabaseVersion2.m in Sources */,
 				7DBB40E61E55C4E00075E638 /* SSJReportFormsCurveGraphView.m in Sources */,
@@ -13492,6 +13518,7 @@
 				7D6CC90D1E0A798400FF6133 /* SSJReportFormsCurveGridView.m in Sources */,
 				9CECFB811D6D41A700DB2C8B /* SSJFundingDetailCell.m in Sources */,
 				7D70C1481E00E84300479E44 /* SSJReportFormCurveHeaderViewItem.m in Sources */,
+				9C348E271E601EA000D76681 /* SSJAnnouncementDetailCell.m in Sources */,
 				91E0B9A31E01244A00D8516E /* SSJBookKeepingHomeEvaluatePopView.m in Sources */,
 				9CECFB821D6D41A700DB2C8B /* SSJMotionPasswordSettingViewController.m in Sources */,
 				9C24CFCE1D76CA0E0095D150 /* SSJBooksTypeCollectionViewCell.m in Sources */,
@@ -14326,6 +14353,7 @@
 				7D22A38C1E5041A800190CEB /* SSJFundingTransferChargeDetailViewController.m in Sources */,
 				9CF594221D654AC900006594 /* SSJReminderItem.m in Sources */,
 				7D098C792A14820300C86957 /* SSJDatabaseErrorHandler.m in Sources */,
+				9C348E241E601E9A00D76681 /* SSJAnnouncementDetailCell.m in Sources */,
 				9CD9BC231CFD2DAA0061803B /* SSJChargeReminderTimeView.m in Sources */,
 				9C1723871D52D3D100BB13DE /* SSJCanlenderChargeDetailCell.m in Sources */,
 				9CF594001D63FFBB00006594 /* SSJColorSelectCollectionViewCell.m in Sources */,
@@ -14867,7 +14895,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = SuiShouJi/SuiShouJi.entitlements;
+				CODE_SIGN_ENTITLEMENTS = /Users/ricky/accountbook_ios/SuiShouJi/Resource/Entitlements/SuiShouJi.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer: XiaoYong  Wu (6CF3K2UQ7J)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: XiaoYong  Wu (6CF3K2UQ7J)";
 				DEVELOPMENT_TEAM = 534SCE47WT;
@@ -15735,7 +15763,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = SuiShouJi/SuiShouJi.entitlements;
+				CODE_SIGN_ENTITLEMENTS = /Users/ricky/accountbook_ios/SuiShouJi/Resource/Entitlements/SuiShouJi.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co.,Ltd (534SCE47WT)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co.,Ltd (534SCE47WT)";
 				DEVELOPMENT_TEAM = 534SCE47WT;
@@ -17661,7 +17689,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = SuiShouJi/SuiShouJi.entitlements;
+				CODE_SIGN_ENTITLEMENTS = /Users/ricky/accountbook_ios/SuiShouJi/Resource/Entitlements/SuiShouJi.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer: XiaoYong  Wu (6CF3K2UQ7J)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: XiaoYong  Wu (6CF3K2UQ7J)";
 				DEVELOPMENT_TEAM = 534SCE47WT;
@@ -17799,7 +17827,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = SuiShouJi/SuiShouJi.entitlements;
+				CODE_SIGN_ENTITLEMENTS = /Users/ricky/accountbook_ios/SuiShouJi/Resource/Entitlements/SuiShouJi.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co.,Ltd (534SCE47WT)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co.,Ltd (534SCE47WT)";
 				DEVELOPMENT_TEAM = 534SCE47WT;

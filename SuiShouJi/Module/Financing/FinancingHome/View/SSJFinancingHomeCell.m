@@ -13,6 +13,8 @@
 #import "SSJCreditCardStore.h"
 #import "SSJDatabaseQueue.h"
 
+static const CGFloat kRadius = 8.f;
+
 @interface SSJFinancingHomeCell()
 @property(nonatomic, strong) UILabel *fundingNameLabel;
 @property(nonatomic, strong) UILabel *fundingMemoLabel;
@@ -20,7 +22,7 @@
 @property(nonatomic, strong) UILabel *cardMemoLabel;
 @property(nonatomic, strong) UILabel *cardLimitLabel;
 @property(nonatomic, strong) UILabel *cardBillingDayLabel;
-@property(nonatomic, strong) UIView *backView;
+@property(nonatomic, strong) CAShapeLayer *backLayer;
 @property(nonatomic, strong) UIButton *deleteButton;
 @end
 
@@ -30,14 +32,14 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        [self.contentView addSubview:self.backView];
-        [self.backView addSubview:self.deleteButton];
-        [self.backView addSubview:self.fundingImage];
-        [self.backView addSubview:self.fundingBalanceLabel];
-        [self.backView addSubview:self.fundingNameLabel];
-        [self.backView addSubview:self.fundingMemoLabel];
-        [self.backView addSubview:self.cardMemoLabel];
-        [self.backView addSubview:self.cardBillingDayLabel];
+        [self.contentView.layer addSublayer:self.backLayer];
+        [self.contentView addSubview:self.deleteButton];
+        [self.contentView addSubview:self.fundingImage];
+        [self.contentView addSubview:self.fundingBalanceLabel];
+        [self.contentView addSubview:self.fundingNameLabel];
+        [self.contentView addSubview:self.fundingMemoLabel];
+        [self.contentView addSubview:self.cardMemoLabel];
+        [self.contentView addSubview:self.cardBillingDayLabel];
     }
     return self;
 }
@@ -45,24 +47,21 @@
 
 -(void)layoutSubviews{
     [super layoutSubviews];
-    self.backView.size = CGSizeMake(self.width, self.height - 10);
-    self.backView.centerX = self.contentView.width / 2;
-    self.backView.top = 5;
     self.fundingImage.left = 10;
-    self.fundingImage.centerY = self.backView.height / 2;
+    self.fundingImage.centerY = self.contentView.height / 2 + 5;
     self.deleteButton.size = CGSizeMake(30, 30);
     self.deleteButton.rightTop = CGPointMake(self.contentView.width, -5);
     if ([_item isKindOfClass:[SSJFinancingHomeitem class]]) {
         SSJFinancingHomeitem *fundItem = (SSJFinancingHomeitem *)_item;
-        self.fundingBalanceLabel.centerY = self.backView.height / 2;
-        self.fundingBalanceLabel.right = self.backView.width - 10;
+        self.fundingBalanceLabel.centerY = self.fundingImage.centerY;
+        self.fundingBalanceLabel.right = self.contentView.width - 10;
         if (!fundItem.fundingMemo.length) {
             self.fundingNameLabel.left = self.fundingImage.right + 10;
-            self.fundingNameLabel.centerY = self.backView.height / 2;
+            self.fundingNameLabel.centerY = self.fundingImage.centerY;
         }else{
-            self.fundingNameLabel.bottom = self.backView.height / 2 - 3;
+            self.fundingNameLabel.bottom = self.fundingImage.centerY - 3;
             self.fundingNameLabel.left = self.fundingImage.right + 10;
-            self.fundingMemoLabel.top = self.backView.height / 2 + 3;
+            self.fundingMemoLabel.top = self.fundingImage.centerY + 3;
             self.fundingMemoLabel.left = self.fundingImage.right + 10;
         }
         if (self.fundingNameLabel.right > self.fundingBalanceLabel.left) {
@@ -73,22 +72,22 @@
         }
     }else{
         SSJCreditCardItem *carditem = (SSJCreditCardItem *)_item;
-        self.fundingBalanceLabel.right = self.backView.width - 10;
-        self.fundingNameLabel.bottom = self.backView.height / 2 - 3;
+        self.fundingBalanceLabel.right = self.contentView.width - 10;
+        self.fundingNameLabel.bottom = self.fundingImage.centerY - 3;
         self.fundingNameLabel.left = self.fundingImage.right + 10;
-        self.fundingMemoLabel.top = self.backView.height / 2 + 3;
+        self.fundingMemoLabel.top = self.fundingImage.centerY + 3;
         self.fundingMemoLabel.left = self.fundingImage.right + 10;
         if (carditem.cardRepaymentDay == 0 && carditem.cardBillingDay == 0) {
-            self.fundingBalanceLabel.centerY = self.backView.height / 2;
+            self.fundingBalanceLabel.centerY = self.fundingImage.centerY;
         }else{
             self.fundingBalanceLabel.centerY = self.fundingNameLabel.centerY;
         }
         self.cardMemoLabel.width = self.fundingBalanceLabel.left - self.fundingNameLabel.right - 10;
         self.cardMemoLabel.left = self.fundingNameLabel.right + 10;
         self.cardMemoLabel.centerY = self.fundingNameLabel.centerY;
-        self.cardBillingDayLabel.right = self.backView.width - 10;
+        self.cardBillingDayLabel.right = self.contentView.width - 10;
         self.cardBillingDayLabel.centerY = self.fundingMemoLabel.centerY;
-        self.fundingBalanceLabel.right = self.backView.width - 10;
+        self.fundingBalanceLabel.right = self.contentView.width - 10;
         if (self.fundingNameLabel.right > self.fundingBalanceLabel.left) {
             self.fundingNameLabel.width = self.fundingBalanceLabel.left - self.fundingNameLabel.left - 20;
         }
@@ -98,12 +97,14 @@
     }
 }
 
--(UIView *)backView{
-    if (!_backView) {
-        _backView = [[UIView alloc]init];
-        _backView.layer.cornerRadius = 8.f;
+-(CALayer *)backLayer{
+    if (!_backLayer) {
+        _backLayer = [CAShapeLayer layer];
+        _backLayer.path = [self drawPathInRect:CGRectMake(5, 10, self.width - 10, self.height - 10)].CGPath;
+        _backLayer.shadowPath = [self drawPathInRect:CGRectMake(0, 8, self.width, self.height - 8)].CGPath;
+        _backLayer.shadowOpacity = 0.3;
     }
-    return _backView;
+    return _backLayer;
 }
 
 
@@ -111,7 +112,7 @@
     if (!_fundingNameLabel) {
         _fundingNameLabel = [[UILabel alloc]init];
         _fundingNameLabel.textColor = [UIColor whiteColor];
-        _fundingNameLabel.font = [UIFont systemFontOfSize:18];
+        _fundingNameLabel.font = [UIFont systemFontOfSize:16];
     }
     return _fundingNameLabel;
 }
@@ -120,7 +121,7 @@
     if (!_fundingBalanceLabel) {
         _fundingBalanceLabel = [[UILabel alloc]init];
         _fundingBalanceLabel.textColor = [UIColor whiteColor];
-        _fundingBalanceLabel.font = [UIFont systemFontOfSize:22];
+        _fundingBalanceLabel.font = [UIFont systemFontOfSize:20];
         _fundingBalanceLabel.textAlignment = NSTextAlignmentRight;
     }
     return _fundingBalanceLabel;
@@ -184,7 +185,8 @@
     _item = item;
     if ([_item isKindOfClass:[SSJFinancingHomeitem class]]) {
         SSJFinancingHomeitem *item = (SSJFinancingHomeitem *)_item;
-        self.backView.backgroundColor = [UIColor ssj_colorWithHex:item.fundingColor];
+        self.backLayer.fillColor = [UIColor ssj_colorWithHex:item.fundingColor].CGColor;
+        self.backLayer.shadowColor = [UIColor ssj_colorWithHex:item.fundingColor].CGColor;
         self.fundingNameLabel.text = item.fundingName;
         [self.fundingNameLabel sizeToFit];
         self.fundingBalanceLabel.hidden = NO;
@@ -201,7 +203,8 @@
         [self.cardLimitLabel sizeToFit];
     }else if([_item isKindOfClass:[SSJCreditCardItem class]]){
         SSJCreditCardItem *item = (SSJCreditCardItem *)_item;
-        self.backView.backgroundColor = [UIColor ssj_colorWithHex:item.cardColor];
+        self.backLayer.fillColor = [UIColor ssj_colorWithHex:item.cardColor].CGColor;
+        self.backLayer.shadowColor = [UIColor ssj_colorWithHex:item.cardColor].CGColor;
         self.fundingBalanceLabel.hidden = NO;
         self.fundingBalanceLabel.text = [NSString stringWithFormat:@"%.2f",item.cardBalance];
         [self.fundingBalanceLabel sizeToFit];
@@ -285,6 +288,11 @@
     if (self.deleteButtonClickBlock) {
         self.deleteButtonClickBlock(self,chargeCount);
     };
+}
+
+- (UIBezierPath *)drawPathInRect:(CGRect)rect {
+    UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:rect byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight cornerRadii:CGSizeMake(kRadius, kRadius)];
+    return path;
 }
 
 @end

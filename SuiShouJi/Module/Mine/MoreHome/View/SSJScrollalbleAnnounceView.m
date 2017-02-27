@@ -62,7 +62,7 @@
         _announceTextLayer.foregroundColor = [UIColor blackColor].CGColor;
         _announceTextLayer.contentsScale = [UIScreen mainScreen].scale;
         CATransition *transition = [[CATransition alloc]init];
-        transition.type = kCATransitionPush;
+        transition.type = @"cube";
         transition.subtype = kCATransitionFromTop;
         _announceTextLayer.actions = @{@"string":transition};
     }

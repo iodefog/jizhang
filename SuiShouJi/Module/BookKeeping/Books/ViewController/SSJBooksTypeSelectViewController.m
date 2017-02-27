@@ -295,6 +295,7 @@ static BOOL kNeedBannerDisplay = YES;
     }
     for (SSJBooksTypeItem *item in self.items) {
         item.editeModel = self.rightButton.isSelected;
+        item.selectToEdite = NO;
     }
 }
 
