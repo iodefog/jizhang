@@ -97,18 +97,18 @@ static const CGFloat kRadius = 8.f;
     }
 }
 
--(CALayer *)backLayer{
+-(CALayer *)backLayer {
     if (!_backLayer) {
         _backLayer = [CAShapeLayer layer];
         _backLayer.path = [self drawPathInRect:CGRectMake(5, 10, self.width - 10, self.height - 10)].CGPath;
         _backLayer.shadowPath = [self drawPathInRect:CGRectMake(0, 8, self.width, self.height - 8)].CGPath;
-        _backLayer.shadowOpacity = 0.3;
+        _backLayer.shadowOpacity = 0.4;
     }
     return _backLayer;
 }
 
 
--(UILabel *)fundingNameLabel{
+-(UILabel *)fundingNameLabel {
     if (!_fundingNameLabel) {
         _fundingNameLabel = [[UILabel alloc]init];
         _fundingNameLabel.textColor = [UIColor whiteColor];
@@ -117,7 +117,7 @@ static const CGFloat kRadius = 8.f;
     return _fundingNameLabel;
 }
 
--(UILabel *)fundingBalanceLabel{
+-(UILabel *)fundingBalanceLabel {
     if (!_fundingBalanceLabel) {
         _fundingBalanceLabel = [[UILabel alloc]init];
         _fundingBalanceLabel.textColor = [UIColor whiteColor];
@@ -127,7 +127,7 @@ static const CGFloat kRadius = 8.f;
     return _fundingBalanceLabel;
 }
 
--(UILabel *)fundingMemoLabel{
+-(UILabel *)fundingMemoLabel {
     if (!_fundingMemoLabel) {
         _fundingMemoLabel = [[UILabel alloc]init];
         _fundingMemoLabel.textColor = [UIColor whiteColor];
@@ -136,7 +136,7 @@ static const CGFloat kRadius = 8.f;
     return _fundingMemoLabel;
 }
 
-- (UILabel *)cardMemoLabel{
+- (UILabel *)cardMemoLabel {
     if (!_cardMemoLabel) {
         _cardMemoLabel = [[UILabel alloc]init];
         _cardMemoLabel.textColor = [UIColor whiteColor];
@@ -145,7 +145,7 @@ static const CGFloat kRadius = 8.f;
     return _cardMemoLabel;
 }
 
-- (UILabel *)cardLimitLabel{
+- (UILabel *)cardLimitLabel {
     if (!_cardLimitLabel) {
         _cardLimitLabel = [[UILabel alloc]init];
         _cardLimitLabel.textColor = [UIColor whiteColor];
@@ -154,7 +154,7 @@ static const CGFloat kRadius = 8.f;
     return _cardLimitLabel;
 }
 
-- (UILabel *)cardBillingDayLabel{
+- (UILabel *)cardBillingDayLabel {
     if (!_cardBillingDayLabel) {
         _cardBillingDayLabel = [[UILabel alloc]init];
         _cardBillingDayLabel.textColor = [UIColor whiteColor];
@@ -163,7 +163,7 @@ static const CGFloat kRadius = 8.f;
     return _cardBillingDayLabel;
 }
 
--(UIButton *)deleteButton{
+-(UIButton *)deleteButton {
     if (!_deleteButton) {
         _deleteButton = [[UIButton alloc]init];
         [_deleteButton setImage:[UIImage imageNamed:@"ft_delete"] forState:UIControlStateNormal];
@@ -173,7 +173,7 @@ static const CGFloat kRadius = 8.f;
 }
 
 
--(UIImageView *)fundingImage{
+-(UIImageView *)fundingImage {
     if (!_fundingImage) {
         _fundingImage = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 24, 24)];
         _fundingImage.tintColor = [UIColor whiteColor];
@@ -181,7 +181,7 @@ static const CGFloat kRadius = 8.f;
     return _fundingImage;
 }
 
--(void)setItem:(SSJBaseItem *)item{
+-(void)setItem:(SSJBaseItem *)item {
     _item = item;
     if ([_item isKindOfClass:[SSJFinancingHomeitem class]]) {
         SSJFinancingHomeitem *item = (SSJFinancingHomeitem *)_item;
@@ -246,7 +246,7 @@ static const CGFloat kRadius = 8.f;
                     }
                 }
             }
-
+            
             [self.cardBillingDayLabel sizeToFit];
             if ([repaymentDate isEarlierThan:billDate]) {
                 repaymentDate = [repaymentDate dateByAddingMonths:1];
@@ -268,7 +268,7 @@ static const CGFloat kRadius = 8.f;
             [self.fundingMemoLabel sizeToFit];
         }
     }
-
+    
     [self setNeedsLayout];
 }
 
