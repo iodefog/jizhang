@@ -9883,7 +9883,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0810;
-				ORGANIZATIONNAME = ___9188___;
+				ORGANIZATIONNAME = "___9188___";
 				TargetAttributes = {
 					7D08A0931E4999D30085A8FB = {
 						DevelopmentTeam = 7RVBV2MALK;
@@ -18590,7 +18590,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BCC89EE70E8C72F2151BFED7 /* Pods-9188JiZhangBen.debug-test.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = 9188jizhangben;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Shouwu Huang (5QLQ7SZF39)";
@@ -18723,7 +18723,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = AA2C404FF4C4201ADF0D39B0 /* Pods-9188JiZhangBen.debug-production.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = 9188jizhangben;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Shouwu Huang (5QLQ7SZF39)";
@@ -18856,7 +18856,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 7E2C437569BE5F61C549F4C5 /* Pods-9188JiZhangBen.release-test.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = 9188jizhangben;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Shouwu Huang (6563L5LUDM)";
@@ -18988,7 +18988,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 73027455F8F75CEC77E66AC1 /* Pods-9188JiZhangBen.release-production.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = 9188jizhangben;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Shouwu Huang (6563L5LUDM)";
