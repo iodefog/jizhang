@@ -21,14 +21,14 @@
 
 - (void)uploadIdfaWithIdfaStr:(NSString *)str Success:(void (^)(NSString *idfaStr))success{
     NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity:0];
-    NSString *appId = @"1080564439";
+    NSString *appId = SSJDetailSettingForSource(@"appleID");
     NSString *strKey=@"iwannapie?!";
     NSTimeInterval timestamp = [[NSDate date] timeIntervalSince1970];
-    NSString *signMsg = [NSString stringWithFormat:@"appid=%@&idfa=%@&timestamp=%f&key=%@",appId,@"12F2F698-5EE8-4462-8EAF-46A804618285",timestamp,strKey];
+    NSString *signMsg = [NSString stringWithFormat:@"appid=%@&idfa=%@&timestamp=%f&key=%@",appId,str,timestamp,strKey];
     signMsg = [[signMsg ssj_md5HexDigest] uppercaseString];
     
     [dict setObject:appId ?: @"" forKey:@"asoAppid"];
-    [dict setObject:@"12F2F698-5EE8-4462-8EAF-46A804618285" forKey:@"idfa"];
+    [dict setObject:str ?: @"" forKey:@"idfa"];
     [dict setObject:@(timestamp) forKey:@"timestamp"];
     [dict setObject:SSJDefaultSource() forKey:@"source"];
     [dict setObject:strKey forKey:@"key"];

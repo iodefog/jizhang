@@ -214,7 +214,7 @@
                     }
                 }else{
                     //修改每日汇总表
-                    if (![db executeUpdate:@"update bk_dailysum_charge set incomeamount = incomeamount + ? , sumamount = sumamount - ? where cuserid = ? and cbooksid = ? and cbilldate = ?",@(originMoney),@(originMoney),userId,originItem.booksId,originItem.billDate]) {
+                    if (![db executeUpdate:@"update bk_dailysum_charge set incomeamount = incomeamount - ? , sumamount = sumamount - ? where cuserid = ? and cbooksid = ? and cbilldate = ?",@(originMoney),@(originMoney),userId,originItem.booksId,originItem.billDate]) {
                         if (failure) {
                             SSJDispatch_main_async_safe(^{
                                 failure([db lastError]);
@@ -246,7 +246,7 @@
 
                 }else{
                     if ([db intForQuery:@"select count(1) from bk_dailysum_charge where cuserid = ? and cbooksid = ? and cbilldate = ?",userId,item.booksId,item.billDate]) {
-                        if (![db executeUpdate:@"update bk_dailysum_charge set incomeamount = incomeamount - ? , sumamount = sumamount + ? where cuserid = ? and cbooksid = ? and cbilldate = ?",@(money),@(money),userId,item.booksId,item.billDate]) {
+                        if (![db executeUpdate:@"update bk_dailysum_charge set incomeamount = incomeamount + ? , sumamount = sumamount + ? where cuserid = ? and cbooksid = ? and cbilldate = ?",@(money),@(money),userId,item.booksId,item.billDate]) {
                             if (failure) {
                                 SSJDispatch_main_async_safe(^{
                                     failure([db lastError]);

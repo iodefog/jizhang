@@ -213,6 +213,8 @@
 		<string></string>
 		<key>AppStoreUrl</key>
 		<string>https://itunes.apple.com/cn/app/you-yu-ji-zhang-li-cai-zui/id1147038726?l=zh&amp;ls=1&amp;mt=8</string>
+		<key>appleID</key>
+		<string>1147038726</string>
 	</dict>
 	<key>com.youyu.jizhangbao</key>
 	<dict>
@@ -279,6 +281,41 @@
 		<string></string>
 		<key>AppStoreUrl</key>
 		<string>https://itunes.apple.com/cn/app/you-yu-ji-zhang-guan-jia-ge/id1203148837?l=zh&amp;ls=1&amp;mt=8</string>
+	</dict>
+	<key>com.9188.jizhangben</key>
+	<dict>
+		<key>source</key>
+		<string>11508</string>
+		<key>WeiXinKey</key>
+		<string></string>
+		<key>WeiXinSecret</key>
+		<string></string>
+		<key>QQAppId</key>
+		<string></string>
+		<key>QQAppKey</key>
+		<string></string>
+		<key>YWAppKey</key>
+		<string></string>
+		<key>WeiBoAppKey</key>
+		<string></string>
+		<key>WeiBoSecret</key>
+		<string></string>
+		<key>UMAppKey</key>
+		<string>58996c1d3eae256b40000297</string>
+		<key>ShareTitle</key>
+		<string></string>
+		<key>ShareUrl</key>
+		<string></string>
+		<key>ShareContent</key>
+		<string></string>
+		<key>ShareIcon</key>
+		<string></string>
+		<key>WeiboBanner</key>
+		<string></string>
+		<key>AppStoreUrl</key>
+		<string>https://itunes.apple.com/cn/app/9188%E8%AE%B0%E8%B4%A6%E6%9C%AC-%E6%9C%80%E9%A2%86%E5%85%88%E5%85%A8%E8%83%BD%E8%AE%B0%E8%B4%A6%E6%9C%AC/id1209932099?l=zh&amp;ls=1&amp;mt=8</string>
+		<key>appleID</key>
+		<string>1209932099</string>
 	</dict>
 </dict>
 </plist>

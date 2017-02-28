@@ -58,3 +58,7 @@ end
 target 'SuiShouJiEnterprise'  do
     shared_pods
 end
+
+target '9188JiZhangBen'  do
+    shared_pods
+end
