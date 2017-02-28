@@ -232,25 +232,28 @@
     //  如果该用户一条资金账户都没有，就创建默认的资金账户（例如：用户登录时服务端么有该用户的数据）
     if (![db boolForQuery:@"select count(1) from bk_fund_info where cuserid = ?", userId]) {
         
-        [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID, CACCTNAME, CPARENT, CCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID, CICOIN, IORDER) SELECT ?, '现金', '1', '#fc7a60', ?, 0, ?, ?, CICOIN, 1 FROM BK_FUND_INFO WHERE CFUNDID= '1'", [NSString stringWithFormat:@"%@-1",userId], writeDate, @(SSJSyncVersion()), userId];
+        [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID, CACCTNAME, CPARENT, CCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID, CICOIN, IORDER, CSTARTCOLOR, CENDCOLOR) SELECT ?, '现金', '1', '#fc7a60', ?, 0, ?, ?, CICOIN, 1, '#fc6eac', '#fb92bd' FROM BK_FUND_INFO WHERE CFUNDID= '1'", [NSString stringWithFormat:@"%@-1",userId], writeDate, @(SSJSyncVersion()), userId];
         
-        [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID, CACCTNAME, CPARENT, CCOLOR , CWRITEDATE , OPERATORTYPE, IVERSION, CUSERID, CICOIN, IORDER) SELECT ?, '储蓄卡', '2', '#faa94a', ?, 0, ?, ?, CICOIN, 2 FROM BK_FUND_INFO WHERE CFUNDID= '2'",  [NSString stringWithFormat:@"%@-2",userId], writeDate, @(SSJSyncVersion()), userId];
+        [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID, CACCTNAME, CPARENT, CCOLOR , CWRITEDATE , OPERATORTYPE, IVERSION, CUSERID, CICOIN, IORDER, CSTARTCOLOR, CENDCOLOR) SELECT ?, '储蓄卡', '2', '#faa94a', ?, 0, ?, ?, CICOIN, 2, '#f96566', '#ff8989'  FROM BK_FUND_INFO WHERE CFUNDID= '2'",  [NSString stringWithFormat:@"%@-2",userId], writeDate, @(SSJSyncVersion()), userId];
         
-        [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID, CACCTNAME, CPARENT, CCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID, CICOIN, IORDER) SELECT ?, '信用卡', '3', '#8bb84a', ?, 0, ?, ?, CICOIN, 3 FROM BK_FUND_INFO WHERE CFUNDID= '3'",  [NSString stringWithFormat:@"%@-3",userId], writeDate, @(SSJSyncVersion()), userId];
+        [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID, CACCTNAME, CPARENT, CCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID, CICOIN, IORDER, CSTARTCOLOR, CENDCOLOR) SELECT ?, '信用卡', '3', '#8bb84a', ?, 0, ?, ?, CICOIN, 3, '#7c91f8', '#9fb0fc'  FROM BK_FUND_INFO WHERE CFUNDID= '3'",  [NSString stringWithFormat:@"%@-3",userId], writeDate, @(SSJSyncVersion()), userId];
         
-        [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID, CACCTNAME, CPARENT, CCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID, CICOIN, IORDER) SELECT ?, '支付宝', '7', '#5a98de', ?, 0, ?, ?, CICOIN, 4 FROM BK_FUND_INFO WHERE CFUNDID= '7'",  [NSString stringWithFormat:@"%@-4",userId] , writeDate, @(SSJSyncVersion()), userId];
+        [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID, CACCTNAME, CPARENT, CCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID, CICOIN, IORDER, CSTARTCOLOR, CENDCOLOR) SELECT ?, '支付宝', '14', '#5a98de', ?, 0, ?, ?, CICOIN, 4, '#7fb4f1', '#8ddcf0'  FROM BK_FUND_INFO WHERE CFUNDID= '7'",  [NSString stringWithFormat:@"%@-4",userId] , writeDate, @(SSJSyncVersion()), userId];
+        
+        [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID, CACCTNAME, CPARENT, CCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID, CICOIN, IORDER, CSTARTCOLOR, CENDCOLOR) SELECT ?, '微信钱包', '13', '#5a98de', ?, 0, ?, ?, CICOIN, 5, '#39d4da', '#7fe8e0'  FROM BK_FUND_INFO WHERE CFUNDID= '7'",  [NSString stringWithFormat:@"%@-7",userId] , writeDate, @(SSJSyncVersion()), userId];
     }
     
     // 因为借贷账户无法被删除，所以如果没有这两个账户就创建
     NSString *lendID = [NSString stringWithFormat:@"%@-5",userId];
     if (![db boolForQuery:@"select count(1) from bk_fund_info where cfundid = ?", lendID]) {
-        [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID, CACCTNAME, CPARENT, CCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID, CICOIN, IORDER) VALUES (?, '借出款', '10', '#a883d8', ?, 0, ?, ?, 'ft_jiechukuan', 5)", lendID, writeDate, @(SSJSyncVersion()), userId];
+        [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID, CACCTNAME, CPARENT, CCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID, CICOIN, IORDER, CSTARTCOLOR, CENDCOLOR) VALUES (?, '借出款', '10', '#a883d8', ?, 0, ?, ?, 'ft_jiechukuan', 6, '#55d696', '#9be2a1')", lendID, writeDate, @(SSJSyncVersion()), userId];
     }
     
     NSString *borrowID = [NSString stringWithFormat:@"%@-6",userId];
     if (![db boolForQuery:@"select count(1) from bk_fund_info where cfundid = ?", borrowID]) {
-        [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID, CACCTNAME, CPARENT, CCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID, CICOIN, IORDER) VALUES (?, '欠款', '11', '#ef6161', ?, 0, ?, ?, 'ft_qiankuan', 6)", borrowID, writeDate, @(SSJSyncVersion()), userId];
+        [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID, CACCTNAME, CPARENT, CCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID, CICOIN, IORDER, CSTARTCOLOR, CENDCOLOR) VALUES (?, '欠款', '11', '#ef6161', ?, 0, ?, ?, 'ft_qiankuan', 7, '#f9b656', '#f7cf70')", borrowID, writeDate, @(SSJSyncVersion()), userId];
     }
+    
     
     return nil;
 }
