@@ -238,9 +238,9 @@
         
         [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID, CACCTNAME, CPARENT, CCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID, CICOIN, IORDER, CSTARTCOLOR, CENDCOLOR) SELECT ?, '信用卡', '3', '#8bb84a', ?, 0, ?, ?, CICOIN, 3, '#7c91f8', '#9fb0fc'  FROM BK_FUND_INFO WHERE CFUNDID= '3'",  [NSString stringWithFormat:@"%@-3",userId], writeDate, @(SSJSyncVersion()), userId];
         
-        [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID, CACCTNAME, CPARENT, CCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID, CICOIN, IORDER, CSTARTCOLOR, CENDCOLOR) SELECT ?, '支付宝', '14', '#5a98de', ?, 0, ?, ?, CICOIN, 4, '#7fb4f1', '#8ddcf0'  FROM BK_FUND_INFO WHERE CFUNDID= '7'",  [NSString stringWithFormat:@"%@-4",userId] , writeDate, @(SSJSyncVersion()), userId];
+        [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID, CACCTNAME, CPARENT, CCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID, CICOIN, IORDER, CSTARTCOLOR, CENDCOLOR) SELECT ?, '支付宝', '14', '#5a98de', ?, 0, ?, ?, CICOIN, 4, '#7fb4f1', '#8ddcf0'  FROM BK_FUND_INFO WHERE CFUNDID= '14'",  [NSString stringWithFormat:@"%@-4",userId] , writeDate, @(SSJSyncVersion()), userId];
         
-        [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID, CACCTNAME, CPARENT, CCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID, CICOIN, IORDER, CSTARTCOLOR, CENDCOLOR) SELECT ?, '微信钱包', '13', '#5a98de', ?, 0, ?, ?, CICOIN, 5, '#39d4da', '#7fe8e0'  FROM BK_FUND_INFO WHERE CFUNDID= '7'",  [NSString stringWithFormat:@"%@-7",userId] , writeDate, @(SSJSyncVersion()), userId];
+        [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID, CACCTNAME, CPARENT, CCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID, CICOIN, IORDER, CSTARTCOLOR, CENDCOLOR) SELECT ?, '微信钱包', '13', '#5a98de', ?, 0, ?, ?, CICOIN, 5, '#39d4da', '#7fe8e0'  FROM BK_FUND_INFO WHERE CFUNDID= '13'",  [NSString stringWithFormat:@"%@-7",userId] , writeDate, @(SSJSyncVersion()), userId];
     }
     
     // 因为借贷账户无法被删除，所以如果没有这两个账户就创建
