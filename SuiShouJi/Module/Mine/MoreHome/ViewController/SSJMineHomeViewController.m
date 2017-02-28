@@ -38,7 +38,7 @@
 #import "SSJBookKeepingHomeViewController.h"
 #import "SSJListAdItem.h"
 #import "SSJMineHomeViewController.h"
-#import "SSJScrollalbleAnnounceView.h"
+#import "SSJAnaliyticsManager.h"
 
 #import "UIImageView+WebCache.h"
 #import "SSJDataSynchronizer.h"
@@ -51,6 +51,7 @@
 #import "SSJPersonalDetailItem.h"
 #import "SSJBillNoteWebViewController.h"
 #import "SSJNewDotNetworkService.h"
+#import "SSJScrollalbleAnnounceView.h"
 
 #import "SSJThemeAndAdviceDotItem.h"
 
