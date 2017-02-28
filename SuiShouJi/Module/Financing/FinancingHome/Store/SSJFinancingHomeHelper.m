@@ -40,6 +40,9 @@
             item.fundingParent = [fundingResult stringForColumn:@"CPARENT"];
             item.fundingMemo = [fundingResult stringForColumn:@"CMEMO"];
             item.fundingOrder = [fundingResult intForColumn:@"IORDER"];
+            item.startColor = [fundingResult stringForColumn:@"CSTARTCOLOR"];
+            item.endColor = [fundingResult stringForColumn:@"CENDCOLOR"];
+
             if (item.fundingOrder == 0) {
                 item.fundingOrder = count;
             }
@@ -49,7 +52,7 @@
             count ++;
         }
         [fundingResult close];
-        NSString *currentDate = [[NSDate date]formattedDateWithFormat:@"yyyy-MM-dd"];
+        NSString *currentDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"];
         for (SSJFinancingHomeitem *item in fundingList) {
             item.fundingAmount = [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and (a.cbilldate <= ? or ichargetype = ?) and b.itype = 0 and a.ifunsid = ?",userid,currentDate,@(SSJChargeIdTypeLoan),item.fundingID] - [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and (a.cbilldate <= ? or ichargetype = ?) and b.itype = 1 and a.ifunsid = ?",userid,currentDate,@(SSJChargeIdTypeLoan),item.fundingID];
             item.chargeCount = [db intForQuery:@"select count(1) from bk_user_charge where ifunsid = ? and cuserid = ? and operatortype <> 2",item.fundingID,userid];

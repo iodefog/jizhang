@@ -5927,7 +5927,7 @@
 		9C3899A01DC9D99700715732 /* SSJCustomCategoryItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCustomCategoryItem.m; sourceTree = "<group>"; };
 		9C3A2D3A1E658E8B00DFAE2C /* SSJDatabaseVersion13.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJDatabaseVersion13.h; sourceTree = "<group>"; };
 		9C3A2D3B1E658E8B00DFAE2C /* SSJDatabaseVersion13.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDatabaseVersion13.m; sourceTree = "<group>"; };
-		9C3A2D451E659D1300DFAE2C /* SuiShouJi.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SuiShouJi.entitlements; sourceTree = "<group>"; };
+		9C3A2D471E65A4C200DFAE2C /* SuiShouJi.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = SuiShouJi.entitlements; sourceTree = "<group>"; };
 		9C40F1A61D4F6015003FF1C6 /* SSJWeixinFooter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJWeixinFooter.h; sourceTree = "<group>"; };
 		9C40F1A71D4F6015003FF1C6 /* SSJWeixinFooter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJWeixinFooter.m; sourceTree = "<group>"; };
 		9C4121911D7EC9B100F29428 /* SSJReminderCircleSelectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReminderCircleSelectView.h; sourceTree = "<group>"; };
@@ -8075,6 +8075,14 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		9C3A2D461E65A4C200DFAE2C /* Entitlements */ = {
+			isa = PBXGroup;
+			children = (
+				9C3A2D471E65A4C200DFAE2C /* SuiShouJi.entitlements */,
+			);
+			path = Entitlements;
+			sourceTree = "<group>";
+		};
 		9C47BB7A1DF1498B0077ACF5 /* CardRepayment */ = {
 			isa = PBXGroup;
 			children = (
@@ -9393,6 +9401,7 @@
 		BD0E43EB1C2118E600F9179D /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				9C3A2D461E65A4C200DFAE2C /* Entitlements */,
 				9C9D588E1E0144BF00E04213 /* GifImage */,
 				7DC4873F1DF655BA00C27B69 /* Localization */,
 				9C23EA4B1DDAD4FE0003C5AB /* certificates */,
@@ -9459,7 +9468,6 @@
 		BD543C3E1C1A6DBC00910D61 /* SuiShouJi */ = {
 			isa = PBXGroup;
 			children = (
-				9C3A2D451E659D1300DFAE2C /* SuiShouJi.entitlements */,
 				7D22A2ED1E4F16AC00190CEB /* Additons */,
 				BD04336F1C1A8DA50051E7AB /* Module */,
 				7D6AAB5D1C312C340007C0A3 /* Components */,
@@ -9962,6 +9970,11 @@
 					};
 					7DBB3F0C1E55C4E00075E638 = {
 						DevelopmentTeam = 747363KXQ6;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 0;
+							};
+						};
 					};
 					9C3847251E641CAB00BF4AF9 = {
 						DevelopmentTeam = 6563L5LUDM;
@@ -9970,6 +9983,9 @@
 						CreatedOnToolsVersion = 7.2;
 						DevelopmentTeam = 534SCE47WT;
 						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
 							com.apple.Push = {
 								enabled = 1;
 							};
@@ -16060,7 +16076,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = SuiShouJi/SuiShouJi.entitlements;
+				CODE_SIGN_ENTITLEMENTS = /Users/ricky/accountbook_ios/SuiShouJi/Resource/Entitlements/SuiShouJi.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer: XiaoYong  Wu (6CF3K2UQ7J)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: XiaoYong  Wu (6CF3K2UQ7J)";
 				DEVELOPMENT_TEAM = 534SCE47WT;
@@ -16925,7 +16941,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = SuiShouJi/SuiShouJi.entitlements;
+				CODE_SIGN_ENTITLEMENTS = /Users/ricky/accountbook_ios/SuiShouJi/Resource/Entitlements/SuiShouJi.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co.,Ltd (534SCE47WT)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co.,Ltd (534SCE47WT)";
 				DEVELOPMENT_TEAM = 534SCE47WT;
@@ -19379,7 +19395,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = SuiShouJi/SuiShouJi.entitlements;
+				CODE_SIGN_ENTITLEMENTS = /Users/ricky/accountbook_ios/SuiShouJi/Resource/Entitlements/SuiShouJi.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer: XiaoYong  Wu (6CF3K2UQ7J)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: XiaoYong  Wu (6CF3K2UQ7J)";
 				DEVELOPMENT_TEAM = 534SCE47WT;
@@ -19513,7 +19529,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = SuiShouJi/SuiShouJi.entitlements;
+				CODE_SIGN_ENTITLEMENTS = /Users/ricky/accountbook_ios/SuiShouJi/Resource/Entitlements/SuiShouJi.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co.,Ltd (534SCE47WT)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co.,Ltd (534SCE47WT)";
 				DEVELOPMENT_TEAM = 534SCE47WT;

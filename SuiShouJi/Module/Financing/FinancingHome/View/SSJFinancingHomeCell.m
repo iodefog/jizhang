@@ -22,7 +22,7 @@ static const CGFloat kRadius = 8.f;
 @property(nonatomic, strong) UILabel *cardMemoLabel;
 @property(nonatomic, strong) UILabel *cardLimitLabel;
 @property(nonatomic, strong) UILabel *cardBillingDayLabel;
-@property(nonatomic, strong) CAShapeLayer *backLayer;
+@property(nonatomic, strong) CAGradientLayer *backLayer;
 @property(nonatomic, strong) UIButton *deleteButton;
 @end
 
@@ -97,12 +97,15 @@ static const CGFloat kRadius = 8.f;
     }
 }
 
--(CALayer *)backLayer {
+-(CAGradientLayer *)backLayer {
     if (!_backLayer) {
-        _backLayer = [CAShapeLayer layer];
-        _backLayer.path = [self drawPathInRect:CGRectMake(5, 10, self.width - 10, self.height - 10)].CGPath;
-        _backLayer.shadowPath = [self drawPathInRect:CGRectMake(0, 8, self.width, self.height - 8)].CGPath;
-        _backLayer.shadowOpacity = 0.4;
+        _backLayer = [CAGradientLayer layer];
+        _backLayer.frame = self.bounds;
+        CAShapeLayer *maskLayer = [CAShapeLayer layer];
+        maskLayer.path = [self drawPathInRect:CGRectMake(5, 10, self.width - 10, self.height - 10)].CGPath;
+        maskLayer.shadowPath = [self drawPathInRect:CGRectMake(0, 8, self.width, self.height - 8)].CGPath;
+        maskLayer.shadowOpacity = 0.4;
+        _backLayer.mask = maskLayer;
     }
     return _backLayer;
 }
@@ -185,7 +188,7 @@ static const CGFloat kRadius = 8.f;
     _item = item;
     if ([_item isKindOfClass:[SSJFinancingHomeitem class]]) {
         SSJFinancingHomeitem *item = (SSJFinancingHomeitem *)_item;
-        self.backLayer.fillColor = [UIColor ssj_colorWithHex:item.fundingColor].CGColor;
+        self.backLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:item.startColor].CGColor,(__bridge id)[UIColor ssj_colorWithHex:item.endColor].CGColor];
         self.backLayer.shadowColor = [UIColor ssj_colorWithHex:item.fundingColor].CGColor;
         self.fundingNameLabel.text = item.fundingName;
         [self.fundingNameLabel sizeToFit];
@@ -203,7 +206,7 @@ static const CGFloat kRadius = 8.f;
         [self.cardLimitLabel sizeToFit];
     }else if([_item isKindOfClass:[SSJCreditCardItem class]]){
         SSJCreditCardItem *item = (SSJCreditCardItem *)_item;
-        self.backLayer.fillColor = [UIColor ssj_colorWithHex:item.cardColor].CGColor;
+        self.backLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:item.startColor].CGColor,(__bridge id)[UIColor ssj_colorWithHex:item.endColor].CGColor];
         self.backLayer.shadowColor = [UIColor ssj_colorWithHex:item.cardColor].CGColor;
         self.fundingBalanceLabel.hidden = NO;
         self.fundingBalanceLabel.text = [NSString stringWithFormat:@"%.2f",item.cardBalance];
