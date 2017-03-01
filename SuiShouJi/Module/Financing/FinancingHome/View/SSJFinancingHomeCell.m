@@ -189,7 +189,7 @@ static const CGFloat kRadius = 8.f;
     if ([_item isKindOfClass:[SSJFinancingHomeitem class]]) {
         SSJFinancingHomeitem *item = (SSJFinancingHomeitem *)_item;
         self.backLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:item.startColor].CGColor,(__bridge id)[UIColor ssj_colorWithHex:item.endColor].CGColor];
-        self.backLayer.shadowColor = [UIColor ssj_colorWithHex:item.fundingColor].CGColor;
+        self.backLayer.shadowColor = [UIColor ssj_colorWithHex:item.startColor].CGColor;
         self.fundingNameLabel.text = item.fundingName;
         [self.fundingNameLabel sizeToFit];
         self.fundingBalanceLabel.hidden = NO;
@@ -207,7 +207,7 @@ static const CGFloat kRadius = 8.f;
     }else if([_item isKindOfClass:[SSJCreditCardItem class]]){
         SSJCreditCardItem *item = (SSJCreditCardItem *)_item;
         self.backLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:item.startColor].CGColor,(__bridge id)[UIColor ssj_colorWithHex:item.endColor].CGColor];
-        self.backLayer.shadowColor = [UIColor ssj_colorWithHex:item.cardColor].CGColor;
+        self.backLayer.shadowColor = [UIColor ssj_colorWithHex:item.startColor].CGColor;
         self.fundingBalanceLabel.hidden = NO;
         self.fundingBalanceLabel.text = [NSString stringWithFormat:@"%.2f",item.cardBalance];
         [self.fundingBalanceLabel sizeToFit];

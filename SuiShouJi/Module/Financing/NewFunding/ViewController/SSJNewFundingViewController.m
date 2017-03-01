@@ -75,16 +75,16 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.section == 4) {
-        SSJColorSelectViewController *colorSelectVC = [[SSJColorSelectViewController alloc]init];
-        colorSelectVC.fundingColor = _selectColor;
-        colorSelectVC.fundingAmount = [_amountTextField.text doubleValue];
-        colorSelectVC.fundingName = _nameTextField.text;
-        __weak typeof(self) weakSelf = self;
-        colorSelectVC.colorSelectedBlock = ^(NSString *selectColor){
-            _selectColor = selectColor;
-            [weakSelf.tableview reloadData];
-        };
-        [self.navigationController pushViewController:colorSelectVC animated:YES];
+//        SSJColorSelectViewController *colorSelectVC = [[SSJColorSelectViewController alloc]init];
+//        colorSelectVC.fundingColor = _selectColor;
+//        colorSelectVC.fundingAmount = [_amountTextField.text doubleValue];
+//        colorSelectVC.fundingName = _nameTextField.text;
+//        __weak typeof(self) weakSelf = self;
+//        colorSelectVC.colorSelectedBlock = ^(NSString *selectColor){
+//            _selectColor = selectColor;
+//            [weakSelf.tableview reloadData];
+//        };
+//        [self.navigationController pushViewController:colorSelectVC animated:YES];
     }
 //        else if (indexPath.section == 3) {
 //        SSJFundingTypeSelectViewController *fundingTypeVC = [[SSJFundingTypeSelectViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];

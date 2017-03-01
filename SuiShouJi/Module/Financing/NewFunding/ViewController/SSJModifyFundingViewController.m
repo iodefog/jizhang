@@ -94,14 +94,14 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.section == 4) {
         SSJColorSelectViewController *colorSelectVC = [[SSJColorSelectViewController alloc]init];
-        colorSelectVC.fundingColor = _selectColor;
-        colorSelectVC.fundingAmount = _amountValue;
-        colorSelectVC.fundingName = self.item.fundingName;
-        __weak typeof(self) weakSelf = self;
-        colorSelectVC.colorSelectedBlock = ^(NSString *selectColor){
-            _selectColor = selectColor;
-            [weakSelf.tableView reloadData];
-        };
+//        colorSelectVC.fundingColor = _selectColor;
+//        colorSelectVC.fundingAmount = _amountValue;
+//        colorSelectVC.fundingName = self.item.fundingName;
+//        __weak typeof(self) weakSelf = self;
+//        colorSelectVC.colorSelectedBlock = ^(NSString *selectColor){
+//            _selectColor = selectColor;
+//            [weakSelf.tableView reloadData];
+//        };
         [self.navigationController pushViewController:colorSelectVC animated:YES];
     }else if (indexPath.section == 3) {
 //        SSJFundingTypeSelectViewController *fundingTypeVC = [[SSJFundingTypeSelectViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];

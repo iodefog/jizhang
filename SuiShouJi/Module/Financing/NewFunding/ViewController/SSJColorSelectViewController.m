@@ -7,36 +7,49 @@
 //
 
 #import "SSJColorSelectViewController.h"
-#import "SSJColorSelectCollectionViewCell.h"
+#import "SSJGradientColorSelectCollectionViewCell.h"
 
 @interface SSJColorSelectViewController ()
+
 @property (nonatomic,strong) UICollectionView *collectionView;
+
 @property (nonatomic,strong) UIView *headerView;
+
 @property (nonatomic,strong) UILabel *nameLabel;
+
 @property (nonatomic,strong) UILabel *amountLabel;
+
 @property (nonatomic,strong) UIView *rightbuttonView;
 
 @end
 
 @implementation SSJColorSelectViewController{
     NSArray *_colorArray;
-    NSString *_selectColor;
+    SSJFinancingGradientColorItem *_selectColor;
 }
+
 #pragma mark - Lifecycle
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.title = @"选择颜色";
-        _colorArray = @[@"#fc7a60",@"#b1c23e",@"#25b4dd",@"#5a98de",@"#8bb84a",@"#a883db",@"#20cac0",@"#faa94a",@"#ef6161",@"#f16189",@"#ba2e8b",@"#3260b5",@"#d96421",@"#ba4747",@"#bda337"];
+        _colorArray = [SSJFinancingGradientColorItem defualtColors];
     }
     return self;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    if (!self.fundingColor || self.fundingColor.length == 0) {
+    if (!self.fundingColor) {
         _selectColor = _colorArray[0];
     }else{
         _selectColor = self.fundingColor;
+    }
+    for (SSJFinancingGradientColorItem *item in _colorArray) {
+        if ([_selectColor isEqual:item]) {
+            item.isSelected = YES;
+        } else {
+            item.isSelected = NO;
+        }
     }
     [self.view addSubview:self.headerView];
     [self.view addSubview:self.collectionView];
@@ -72,36 +85,39 @@
 }
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
-    SSJColorSelectCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ColorSelectCollectionViewCell" forIndexPath:indexPath];
+    SSJGradientColorSelectCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ColorSelectCollectionViewCell" forIndexPath:indexPath];
     cell.itemColor = _colorArray[indexPath.row];
-    if ([cell.itemColor isEqualToString:_selectColor]) {
-        cell.isSelected = YES;
-    }else{
-        cell.isSelected = NO;
-    }
     return cell;
 }
 
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
-    SSJColorSelectCollectionViewCell *cell = (SSJColorSelectCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
+    SSJGradientColorSelectCollectionViewCell *cell = (SSJGradientColorSelectCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
     _selectColor = cell.itemColor;
+    for (SSJFinancingGradientColorItem *item in _colorArray) {
+        NSInteger index = [_colorArray indexOfObject:item];
+        if (index == indexPath.item) {
+            item.isSelected = YES;
+        } else {
+            item.isSelected = NO;
+        }
+    }
     [UIView animateWithDuration:0.25 animations:^{
-        self.headerView.backgroundColor = [UIColor ssj_colorWithHex:_selectColor];
+//        self.headerView.backgroundColor = [UIColor ssj_colorWithHex:_selectColor];
     }];
-    [collectionView reloadData];
+//    [collectionView reloadData];
 }
 
 #pragma mark - UICollectionViewDelegateFlowLayout
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    CGFloat itemWidth = (self.view.width - 120) / 5;
-    return CGSizeMake(itemWidth, itemWidth);
+    CGFloat itemWidth = (self.view.width - 96) / 4;
+    return CGSizeMake(itemWidth, 40);
 }
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView
                         layout:(UICollectionViewLayout*)collectionViewLayout
         insetForSectionAtIndex:(NSInteger)section
 {
-    return UIEdgeInsetsMake(10, 10, 10, 10);
+    return UIEdgeInsetsMake(10, 15, 10, 15);
 }
 
 #pragma mark - Getter
@@ -109,13 +125,13 @@
     if (_collectionView==nil) {
         UICollectionViewFlowLayout *flowLayout=[[UICollectionViewFlowLayout alloc]init];
         [flowLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
-        flowLayout.minimumInteritemSpacing = 25;
-        flowLayout.minimumLineSpacing = 25;
+        flowLayout.minimumInteritemSpacing = 22;
+        flowLayout.minimumLineSpacing = 18;
         _collectionView =[[UICollectionView alloc]initWithFrame:CGRectZero collectionViewLayout:flowLayout];
         _collectionView.backgroundColor = [UIColor ssj_colorWithHex:@"ffffff" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         _collectionView.dataSource=self;
         _collectionView.delegate=self;
-        [_collectionView registerClass:[SSJColorSelectCollectionViewCell class]  forCellWithReuseIdentifier:@"ColorSelectCollectionViewCell"];
+        [_collectionView registerClass:[SSJGradientColorSelectCollectionViewCell class]  forCellWithReuseIdentifier:@"ColorSelectCollectionViewCell"];
     }
     return _collectionView;
 }
@@ -123,7 +139,7 @@
 -(UIView *)headerView{
     if (!_headerView) {
         _headerView = [[UIView alloc]init];
-        _headerView.backgroundColor = [UIColor ssj_colorWithHex:_selectColor];
+//        _headerView.backgroundColor = [UIColor ssj_colorWithHex:_selectColor];
         _nameLabel = [[UILabel alloc]init];
         _nameLabel.text = self.fundingName;
         _nameLabel.font = [UIFont systemFontOfSize:18];

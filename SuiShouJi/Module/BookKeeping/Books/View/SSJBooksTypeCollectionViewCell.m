@@ -42,6 +42,10 @@
     return self;
 }
 
+- (void)dealloc {
+    [self removeOberver];
+}
+
 -(void)layoutSubviews{
     [super layoutSubviews];
     self.seperatorLineView.size = CGSizeMake(2, self.height);

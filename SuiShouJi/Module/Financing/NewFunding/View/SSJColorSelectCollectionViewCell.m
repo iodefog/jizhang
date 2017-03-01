@@ -10,7 +10,7 @@
 
 
 @interface SSJColorSelectCollectionViewCell()
-@property (nonatomic,strong) CAGradientLayer *gradientLayer;
+@property (nonatomic,strong) UIView *smallCircleView;
 @end
 
 @implementation SSJColorSelectCollectionViewCell
@@ -19,37 +19,42 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-
+        self.layer.cornerRadius = self.height / 2;
+        [self addSubview:self.smallCircleView];
     }
     return self;
 }
 
 -(void)layoutSubviews{
     [super layoutSubviews];
+    self.smallCircleView.center = CGPointMake(self.width / 2, self.height / 2);
 }
 
--(CAGradientLayer *)gradientLayer{
-    if (!_gradientLayer) {
-        _gradientLayer = [CAGradientLayer layer];
-        _gradientLayer.cornerRadius = 8;
+-(UIView *)smallCircleView{
+    if (!_smallCircleView) {
+        _smallCircleView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.width / 2, self.height / 2)];
+        _smallCircleView.layer.cornerRadius = _smallCircleView.width / 2;
     }
-    return _gradientLayer;
+    return _smallCircleView;
 }
 
 -(void)setIsSelected:(BOOL)isSelected{
     _isSelected = isSelected;
-//    if (_isSelected == YES) {
-//        [UIView animateWithDuration:0.2 animations:^{
-//            self.smallCircleView.transform = CGAffineTransformMakeScale(2, 2);
-//        }completion:nil];
-//    }else{
-//        self.smallCircleView.transform = CGAffineTransformMakeScale(1, 1);
-//    }
+    if (_isSelected == YES) {
+        [UIView animateWithDuration:0.2 animations:^{
+            self.smallCircleView.transform = CGAffineTransformMakeScale(2, 2);
+        }completion:nil];
+    }else{
+        self.smallCircleView.transform = CGAffineTransformMakeScale(1, 1);
+    }
 
 }
 
--(void)setStartColor:(NSString *)startColor andEndColor:(NSString *)endColor{
-    self.gradientLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:startColor].CGColor,(__bridge id)[UIColor ssj_colorWithHex:endColor].CGColor];
+-(void)setItemColor:(NSString *)itemColor{
+    _itemColor = itemColor;
+    self.smallCircleView.backgroundColor = [UIColor ssj_colorWithHex:_itemColor];
+    self.layer.borderColor = [UIColor ssj_colorWithHex:_itemColor].CGColor;
+    self.layer.borderWidth = 1.0f;
 }
 
 @end

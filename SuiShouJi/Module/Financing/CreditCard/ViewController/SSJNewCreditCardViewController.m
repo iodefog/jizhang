@@ -178,13 +178,17 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     if ([title isEqualToString:kTitle10]) {
         SSJColorSelectViewController *colorSelectVc = [[SSJColorSelectViewController alloc]init];
         __weak typeof(self) weakSelf = self;
-        colorSelectVc.colorSelectedBlock = ^(NSString *selectColor){
-            weakSelf.item.cardColor = selectColor;
+        colorSelectVc.colorSelectedBlock = ^(SSJFinancingGradientColorItem *selectColor){
+            weakSelf.item.startColor = selectColor.startColor;
+            weakSelf.item.endColor = selectColor.endColor;
             [weakSelf.tableView reloadData];
         };
         colorSelectVc.fundingAmount = self.item.cardBalance;
         colorSelectVc.fundingName = self.item.cardName;
-        colorSelectVc.fundingColor = self.item.cardColor;
+        SSJFinancingGradientColorItem *item = [[SSJFinancingGradientColorItem alloc] init];
+        item.startColor = self.item.startColor;
+        item.endColor = self.item.endColor;
+        colorSelectVc.fundingColor = item;
         [self.navigationController pushViewController:colorSelectVc animated:YES];
     }
     
