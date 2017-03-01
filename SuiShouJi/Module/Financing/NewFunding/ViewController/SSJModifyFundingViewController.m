@@ -15,6 +15,7 @@
 #import "SSJDataSynchronizer.h"
 #import "SSJFinancingHomeHelper.h"
 #import "SSJCustomKeyboard.h"
+#import "SSJFinancingGradientColorItem.h"
 
 #import "FMDB.h"
 
@@ -32,7 +33,7 @@
     UITextField *_memoTextField;
     UITextField *_nameTextField;
     NSString *_selectParent;
-    NSString *_selectColor;
+    SSJFinancingGradientColorItem *_selectColor;
     NSString *_selectIcoin;
     double _amountValue;
 }
@@ -97,11 +98,11 @@
 //        colorSelectVC.fundingColor = _selectColor;
         colorSelectVC.fundingAmount = _amountValue;
         colorSelectVC.fundingName = self.item.fundingName;
-//        __weak typeof(self) weakSelf = self;
-//        colorSelectVC.colorSelectedBlock = ^(NSString *selectColor){
-//            _selectColor = selectColor;
-//            [weakSelf.tableView reloadData];
-//        };
+        __weak typeof(self) weakSelf = self;
+        colorSelectVC.colorSelectedBlock = ^(SSJFinancingGradientColorItem *selectColor){
+            _selectColor = selectColor;
+            [weakSelf.tableView reloadData];
+        };
         [self.navigationController pushViewController:colorSelectVC animated:YES];
     }else if (indexPath.section == 3) {
 //        SSJFundingTypeSelectViewController *fundingTypeVC = [[SSJFundingTypeSelectViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
@@ -173,7 +174,7 @@
             break;
         case 4:{
             NewFundingCell.selectionStyle = UITableViewCellSelectionStyleNone;
-            NewFundingCell.colorView.backgroundColor = [UIColor ssj_colorWithHex:_selectColor];
+//            NewFundingCell.colorView.backgroundColor = [UIColor ssj_colorWithHex:_selectColor];
             NewFundingCell.cellDetail.hidden = YES;
             NewFundingCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
@@ -302,7 +303,7 @@
                 *rollback = YES;
             }
         }
-        [db executeUpdate:@"UPDATE BK_FUND_INFO SET CACCTNAME = ? , CPARENT = ? , CCOLOR = ? , CICOIN = (SELECT CICOIN FROM BK_FUND_INFO WHERE CFUNDID = ?) , CMEMO = ? , IVERSION = ? , CWRITEDATE = ? , OPERATORTYPE = ? WHERE CFUNDID = ? AND CUSERID = ? ",_nameTextField.text,_selectParent,_selectColor, _selectParent , _memoTextField.text , @(SSJSyncVersion()), [[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"] , [NSNumber numberWithInt:1] ,weakSelf.item.fundingID,SSJUSERID()];
+        [db executeUpdate:@"UPDATE BK_FUND_INFO SET CACCTNAME = ? , CPARENT = ? , CCOLOR = ?, CSTARTCOLOR = ?, CENDCOLOR = ?, CICOIN = (SELECT CICOIN FROM BK_FUND_INFO WHERE CFUNDID = ?) , CMEMO = ? , IVERSION = ? , CWRITEDATE = ? , OPERATORTYPE = ? WHERE CFUNDID = ? AND CUSERID = ? ", _nameTextField.text, _selectParent, _selectColor.startColor, _selectColor.startColor, _selectColor.endColor, _selectParent, _memoTextField.text , @(SSJSyncVersion()), [[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"] , [NSNumber numberWithInt:1] ,weakSelf.item.fundingID,SSJUSERID()];
         dispatch_async(dispatch_get_main_queue(), ^(){
             [weakSelf.navigationController popViewControllerAnimated:YES];
         });

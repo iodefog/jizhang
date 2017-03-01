@@ -32,7 +32,7 @@
 #pragma mark - Lifecycle
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-        self.title = @"选择颜色";
+        self.title = @"编辑卡片颜色";
         _colorArray = [SSJFinancingGradientColorItem defualtColors];
     }
     return self;
