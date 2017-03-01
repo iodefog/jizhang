@@ -95,8 +95,8 @@
     if (indexPath.section == 4) {
         SSJColorSelectViewController *colorSelectVC = [[SSJColorSelectViewController alloc]init];
 //        colorSelectVC.fundingColor = _selectColor;
-//        colorSelectVC.fundingAmount = _amountValue;
-//        colorSelectVC.fundingName = self.item.fundingName;
+        colorSelectVC.fundingAmount = _amountValue;
+        colorSelectVC.fundingName = self.item.fundingName;
 //        __weak typeof(self) weakSelf = self;
 //        colorSelectVC.colorSelectedBlock = ^(NSString *selectColor){
 //            _selectColor = selectColor;

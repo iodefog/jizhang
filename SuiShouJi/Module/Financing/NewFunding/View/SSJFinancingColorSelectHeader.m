@@ -24,13 +24,32 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        
+        self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+        [self.layer addSublayer:self.backLayer];
+        [self addSubview:self.nameLab];
+        [self addSubview:self.balanceLab];
     }
     return self;
 }
 
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    self.backLayer.size = CGSizeMake(self.width - 30, self.height - 40);
+    self.backLayer.shadowPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, self.backLayer.width + 2, self.backLayer.height + 2) byRoundingCorners:UIRectCornerAllCorners cornerRadii:CGSizeMake(8, 8)].CGPath;
+    self.backLayer.position = CGPointMake(self.width / 2, self.height / 2);
+    if (self.nameLab.width + self.balanceLab.width > self.backLayer.width - 20) {
+        CGFloat reduction = (self.nameLab.width + self.balanceLab.width - (self.width - 20)) * 0.5;
+        self.nameLab.width -= reduction;
+        self.balanceLab.width -= reduction;
+    }
+    self.nameLab.left = self.backLayer.left + 10;
+    self.nameLab.centerY = self.height / 2;
+    self.balanceLab.right = self.backLayer.right - 10;
+    self.balanceLab.centerY = self.height / 2;
+}
+
 - (UILabel *)nameLab {
-    if (_nameLab) {
+    if (!_nameLab) {
         _nameLab = [[UILabel alloc] init];
         _nameLab.font = [UIFont systemFontOfSize:18];
         _nameLab.textColor = [UIColor whiteColor];
@@ -39,7 +58,7 @@
 }
 
 - (UILabel *)balanceLab {
-    if (_balanceLab) {
+    if (!_balanceLab) {
         _balanceLab = [[UILabel alloc] init];
         _balanceLab.font = [UIFont systemFontOfSize:18];
         _balanceLab.textColor = [UIColor whiteColor];
@@ -50,11 +69,8 @@
 - (CAGradientLayer *)backLayer {
     if (!_backLayer) {
         _backLayer = [CAGradientLayer layer];
-        _backLayer.frame = CGRectMake(0, 0, self.width - 30, self.height - 40);
-        _backLayer.position = self.center;
         _backLayer.cornerRadius = 8;
         _backLayer.shadowOpacity = 0.4;
-        _backLayer.shadowPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, _backLayer.width + 2, _backLayer.height + 2) byRoundingCorners:UIRectCornerAllCorners cornerRadii:CGSizeMake(8, 8)].CGPath;
     }
     return _backLayer;
 }

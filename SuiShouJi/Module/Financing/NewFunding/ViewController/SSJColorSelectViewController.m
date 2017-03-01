@@ -8,12 +8,13 @@
 
 #import "SSJColorSelectViewController.h"
 #import "SSJGradientColorSelectCollectionViewCell.h"
+#import "SSJFinancingColorSelectHeader.h"
 
 @interface SSJColorSelectViewController ()
 
 @property (nonatomic,strong) UICollectionView *collectionView;
 
-@property (nonatomic,strong) UIView *headerView;
+@property (nonatomic,strong) SSJFinancingColorSelectHeader *headerView;
 
 @property (nonatomic,strong) UILabel *nameLabel;
 
@@ -59,19 +60,8 @@
 }
 
 -(void)viewDidLayoutSubviews{
-    _headerView.top = SSJ_NAVIBAR_BOTTOM + 10;
-    _headerView.size = CGSizeMake(self.view.width, 63);
-    
-    if (_nameLabel.width + _amountLabel.width > self.view.width - 20) {
-        CGFloat reduction = (_nameLabel.width + _amountLabel.width - (self.view.width - 20)) * 0.5;
-        _nameLabel.width -= reduction;
-        _amountLabel.width -= reduction;
-    }
-    
-    _nameLabel.left = 10;
-    _nameLabel.centerY = self.headerView.height / 2;
-    _amountLabel.right = self.headerView.width - 10;
-    _amountLabel.centerY = self.headerView.height / 2;
+    _headerView.top = SSJ_NAVIBAR_BOTTOM;
+    _headerView.size = CGSizeMake(self.view.width, 110);
     self.collectionView.frame = CGRectMake(0, self.headerView.bottom, self.view.width, self.view.height - self.headerView.bottom);
 }
 
@@ -102,9 +92,8 @@
         }
     }
     [UIView animateWithDuration:0.25 animations:^{
-//        self.headerView.backgroundColor = [UIColor ssj_colorWithHex:_selectColor];
+        self.headerView.item = _selectColor;
     }];
-//    [collectionView reloadData];
 }
 
 #pragma mark - UICollectionViewDelegateFlowLayout
@@ -136,22 +125,13 @@
     return _collectionView;
 }
 
--(UIView *)headerView{
+-(SSJFinancingColorSelectHeader *)headerView{
     if (!_headerView) {
-        _headerView = [[UIView alloc]init];
+        _headerView = [[SSJFinancingColorSelectHeader alloc]init];
 //        _headerView.backgroundColor = [UIColor ssj_colorWithHex:_selectColor];
-        _nameLabel = [[UILabel alloc]init];
-        _nameLabel.text = self.fundingName;
-        _nameLabel.font = [UIFont systemFontOfSize:18];
-        _nameLabel.textColor = [UIColor whiteColor];
-        [_nameLabel sizeToFit];
-        _amountLabel = [[UILabel alloc]init];
-        _amountLabel.font = [UIFont systemFontOfSize:18];
-        _amountLabel.textColor = [UIColor whiteColor];
-        _amountLabel.text = [NSString stringWithFormat:@"%.2f",self.fundingAmount];
-        [_amountLabel sizeToFit];
-        [_headerView addSubview:_nameLabel];
-        [_headerView addSubview:_amountLabel];
+        _headerView.fundName = self.fundingName;
+        _headerView.fundBalance = [NSString stringWithFormat:@"%.2f",self.fundingAmount];
+        _headerView.item = _selectColor;
     }
     return _headerView;
 }
