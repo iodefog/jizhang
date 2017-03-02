@@ -75,9 +75,7 @@ static BOOL kNeedBannerDisplay = YES;
 //UITableViewDelegate,UITableViewDataSource,
 
 @property (nonatomic,strong) SSJMineHomeTableViewHeader *header;
-@property (nonatomic, strong) SSJPortraitUploadNetworkService *portraitUploadService;
 @property (nonatomic,strong) UIView *loggedFooterView;
-@property (nonatomic,strong) SSJUserInfoNetworkService *userInfoService;
 @property (nonatomic,strong) SSJUserInfoItem *item;
 @property (nonatomic, strong) NSMutableArray *titles;
 @property (nonatomic, strong) NSMutableArray *images;
@@ -182,7 +180,6 @@ static BOOL kNeedBannerDisplay = YES;
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     [UIApplication sharedApplication].statusBarHidden = NO;
-    [self.userInfoService cancel];
 }
 
 
@@ -686,23 +683,6 @@ static BOOL kNeedBannerDisplay = YES;
 
 
 #pragma mark - UIImagePickerControllerDelegate
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
-{
-    [picker dismissViewControllerAnimated:YES completion:^{}];
-    UIImage *image = [info objectForKey:UIImagePickerControllerEditedImage];
-    self.portraitUploadService=[[SSJPortraitUploadNetworkService alloc]init];
-    __weak typeof(self) weakSelf = self;
-    [self.portraitUploadService uploadimgWithIMG:image finishBlock:^(NSString *icon){
-//        weakSelf.header.headPotraitImage.headerImage.image = image;
-        [weakSelf.collectionView reloadData];
-        
-        SSJUserItem *userItem = [[SSJUserItem alloc] init];
-        userItem.userId = SSJUSERID();
-        userItem.icon = icon;
-        [SSJUserTableManager saveUserItem:userItem];
-    }];
-}
-
 -(void)backButtonClicked:(id)sender{
     [self dismissViewControllerAnimated:YES completion:nil];
 }

@@ -35,10 +35,21 @@
     }
     
     // 将原有付类型是网络账户的支付宝帐户的父类型改为支付宝
-    if (![db executeUpdate:@"update bk_fund_info set cparent = '14' where cacctname = '支付宝' and cparent = '7'"]) {
+    if (![db executeUpdate:@"update bk_fund_info set cparent = '14', cicoin = 'ft_zhifubao' where cacctname = '支付宝' and cparent = '7'"]) {
         return [db lastError];
     }
     
+    if (![db executeUpdate:@"insert into bk_fund_info (cfundid, cacctname, cicoin, cparent, cwritedate, operatortype) values (?, ?, ?, ?, ?, ?, ?)", @"13", @"微信钱包", @"ft_weixin", @"root", @"-1", @"0"]) {
+        return [db lastError];
+    }
+
+    if (![db executeUpdate:@"insert into bk_fund_info (cfundid, cacctname, cicoin, cparent, cwritedate, operatortype) values (?, ?, ?, ?, ?, ?, ?)", @"14", @"支付宝", @"ft_zhifubao", @"root", @"-1", @"0"]) {
+        return [db lastError];
+    }
+    
+    if (![db executeUpdate:@"update bk_fund_info set cmemo = '9188彩票等' where cfundid = '7'"]) {
+        return [db lastError];
+    }
     
     // 将没有渐变色的数据改成渐变色
     FMResultSet *result = [db executeQuery:@"select cfundid ,iorder from bk_fund_info where (length(cstartcolor) = 0 or cstartcolor is null) and cparent <> 'root'"];
