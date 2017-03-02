@@ -8,13 +8,15 @@
 
 #import "SSJBaseItem.h"
 
-@interface SSJAnnouceMentItem : SSJBaseItem
+@interface SSJAnnoucementItem : SSJBaseItem
 
 typedef NS_ENUM(NSUInteger, SSJAnnouceMentType) {
     SSJAnnouceMentTypeNormal = 0,        //  普通公告
-    SSJAnnouceMentTypeNew = 1,           //  热门公告
-    SSJAnnouceMentTypeHot = 2,           //  最新公告
+    SSJAnnouceMentTypeNew = 1,           //  最新公告
+    SSJAnnouceMentTypeHot = 2,           //  热门公告
 };
+
+@property(nonatomic, strong) NSString *announcementId;
 
 @property(nonatomic, strong) NSString *announcementTitle;
 

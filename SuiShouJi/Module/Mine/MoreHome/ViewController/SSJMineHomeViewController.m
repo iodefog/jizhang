@@ -18,7 +18,7 @@
 #import "SSJUserInfoNetworkService.h"
 #import "SSJDatabaseQueue.h"
 #import "SSJUserInfoItem.h"
-//#import "SSJBookkeepingReminderViewController.h"
+
 #import "SSJCircleChargeSettingViewController.h"
 #import "SSJThemeHomeViewController.h"
 #import "SSJMotionPasswordViewController.h"
@@ -51,7 +51,11 @@
 #import "SSJPersonalDetailItem.h"
 #import "SSJBillNoteWebViewController.h"
 #import "SSJNewDotNetworkService.h"
+#import "SSJAnnoucementService.h"
 #import "SSJScrollalbleAnnounceView.h"
+#import "SSJMoreHomeAnnouncementButton.h"
+#import "SSJNetworkReachabilityManager.h"
+
 
 #import "SSJThemeAndAdviceDotItem.h"
 
@@ -66,47 +70,50 @@ static NSString *const kTitle8 = @"分享APP";
 static NSString *const kHeaderViewID = @"headerViewIdentifier";
 static NSString *const kItemID = @"homeItemIdentifier";
 
-
-//static BOOL KHasEnterMineHome;
-
 static BOOL kNeedBannerDisplay = YES;
 
 @interface SSJMineHomeViewController ()<UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UMSocialUIDelegate,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,SSJHeaderBannerImageViewDelegate>
-//UITableViewDelegate,UITableViewDataSource,
 
 @property (nonatomic,strong) SSJMineHomeTableViewHeader *header;
-@property (nonatomic,strong) UIView *loggedFooterView;
-@property (nonatomic,strong) SSJUserInfoItem *item;
+
+@property(nonatomic, strong) SSJPersonalDetailItem *personalDetailItem;
+
+@property (nonatomic, strong) NSMutableArray<SSJListAdItem *> *localAdItems;//本地固定的广告
+
+@property (nonatomic, strong) NSMutableArray<SSJListAdItem *> *adItemsArray;//合并之后的广告
+
 @property (nonatomic, strong) NSMutableArray *titles;
+
 @property (nonatomic, strong) NSMutableArray *images;
-//@property (nonatomic,strong) NSString *circleChargeState;
-@property(nonatomic, strong) UIView *rightbuttonView;
-//@property(nonatomic, strong) UITableView *tableView;
+
 @property (nonatomic, strong) UICollectionView *collectionView;
+
 @property (nonatomic, strong) SSJHeaderBannerImageView *headerBannerImageView;//头部banner
 
 @property(nonatomic, strong) SSJScrollalbleAnnounceView *announcementView;
+
+@property(nonatomic, strong) SSJMoreHomeAnnouncementButton *rightButton;
+
+@property(nonatomic, strong) NSArray *announcements;
+
 /**
  默认主题底部背景
  */
 @property (nonatomic, strong) UIImageView *bottomBgView;
-@property(nonatomic, strong) SSJBannerNetworkService *bannerService;
 
-@property (nonatomic, strong) SSJNewDotNetworkService *dotService;
 @property(nonatomic, strong) SSJBannerHeaderView *bannerHeader;
 
-@property(nonatomic, strong) SSJPersonalDetailItem *personalDetailItem;
-
 @property (nonatomic, strong) UIView *lineView;
-//@property (nonatomic, strong) NSMutableArray<SSJListAdItem *> *adItems;//服务器返回的广告
-@property (nonatomic, strong) NSMutableArray<SSJListAdItem *> *localAdItems;//本地固定的广告
-@property (nonatomic, strong) NSMutableArray<SSJListAdItem *> *adItemsArray;//合并之后的广告
+
+@property (nonatomic, strong) SSJNewDotNetworkService *dotService;
+
+@property(nonatomic, strong) SSJBannerNetworkService *bannerService;
+
+@property(nonatomic, strong) SSJAnnoucementService *annoucementService;
+
 @end
 
-@implementation SSJMineHomeViewController{
-    NSMutableArray *_titleArr;
-    BOOL _hasUreadMassage;
-}
+@implementation SSJMineHomeViewController
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
@@ -135,30 +142,26 @@ static BOOL kNeedBannerDisplay = YES;
     [super viewWillAppear:animated];
     [self.bannerService requestBannersList];
     [self.dotService requestThemeAndAdviceUpdate];
-        
+    
+    if ([SSJNetworkReachabilityManager networkReachabilityStatus] == SSJNetworkReachabilityStatusNotReachable) {
+        [self getLocalAnnoucement];
+    } else {
+        [self.annoucementService requestAnnoucements];
+    }
+    
     SSJUserItem *item = [SSJUserTableManager queryUserItemForID:SSJUSERID()];\
     self.header.item = item;
     [self.header setSignStr];//设置签名
     
     SSJBookkeepingTreeCheckInModel *checkInModel = [SSJBookkeepingTreeStore queryCheckInInfoWithUserId:SSJUSERID() error:nil];
     self.header.checkInLevel = [SSJBookkeepingTreeHelper treeLevelForDays:checkInModel.checkInTimes];
+
+    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:self.rightButton];
+
+    self.navigationItem.rightBarButtonItem = rightItem;
     
     //    [self getCircleChargeState];
     self.navigationItem.rightBarButtonItem.tintColor = [UIColor ssj_colorWithHex:@"eb4a64"];
-    NSMutableArray *annoucements = [NSMutableArray arrayWithCapacity:0];
-    SSJAnnouceMentItem *item1 = [[SSJAnnouceMentItem alloc] init];
-    item1.announcementTitle = @"3131223j1ijdioaj";
-    item1.announcementType = SSJAnnouceMentTypeHot;
-    [annoucements addObject:item1];
-    SSJAnnouceMentItem *item2 = [[SSJAnnouceMentItem alloc] init];
-    item2.announcementTitle = @"danuidhauhduiahd283818938";
-    item2.announcementType = SSJAnnouceMentTypeNew;
-    [annoucements addObject:item2];
-    SSJAnnouceMentItem *item3 = [[SSJAnnouceMentItem alloc] init];
-    item3.announcementTitle = @"31e3131qeweqweqe";
-    item3.announcementType = SSJAnnouceMentTypeHot;
-    [annoucements addObject:item3];
-    self.announcementView.items = annoucements;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -366,6 +369,14 @@ static BOOL kNeedBannerDisplay = YES;
             }
         }
     }
+    
+    if ([service isKindOfClass:[SSJAnnoucementService class]]) {
+        NSArray *topAnnoucements = [self.annoucementService.annoucements subarrayWithRange:NSMakeRange(0, 3)];
+        self.announcementView.items = topAnnoucements;
+        self.rightButton.hasNewAnnoucements = self.annoucementService.hasNewAnnouceMent;
+        self.announcementView.height = 34;
+        [self.view setNeedsLayout];
+    }
     [self.collectionView reloadData];
 }
 
@@ -374,6 +385,7 @@ static BOOL kNeedBannerDisplay = YES;
 //    [self loadDataArray];
     self.adItemsArray = self.localAdItems;
     [self.collectionView reloadData];
+    [self getLocalAnnoucement];
 }
 
 - (void)loadDataArray
@@ -451,6 +463,12 @@ static BOOL kNeedBannerDisplay = YES;
     return _dotService;
 }
 
+- (SSJAnnoucementService *)annoucementService {
+    if (!_annoucementService) {
+        _annoucementService = [[SSJAnnoucementService alloc] initWithDelegate:self];
+    }
+    return _annoucementService;
+}
 
 - (UICollectionView *)collectionView
 {
@@ -532,9 +550,17 @@ static BOOL kNeedBannerDisplay = YES;
 
 - (SSJScrollalbleAnnounceView *)announcementView {
     if (!_announcementView) {
-        _announcementView = [[SSJScrollalbleAnnounceView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 34)];
+        _announcementView = [[SSJScrollalbleAnnounceView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 0)];
     }
     return _announcementView;
+}
+
+- (SSJMoreHomeAnnouncementButton *)rightButton {
+    if (!_rightButton) {
+        _rightButton = [[SSJMoreHomeAnnouncementButton alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
+        
+    }
+    return _rightButton;
 }
 
 #pragma mark - Event
@@ -580,7 +606,7 @@ static BOOL kNeedBannerDisplay = YES;
     } else {
         self.bottomBgView.hidden = YES;
     }
-
+    [self.rightButton updateAfterThemeChange];
 }
 
 //-(void)getCircleChargeState {
@@ -625,22 +651,18 @@ static BOOL kNeedBannerDisplay = YES;
         if ([SSJDefaultSource() isEqualToString:@"11501"] || [SSJDefaultSource() isEqualToString:@"11502"]) {
             self.images = [@[@"more_tixing", @"more_pifu", @"more_zhouqi",@"more_daochu", @"more_share", @"more_fankui", @"more_shezhi"] mutableCopy];
             self.titles = [@[kTitle1 , kTitle2 , kTitle3, kTitle4,kTitle8,kTitle5 , kTitle7] mutableCopy];
-            _titleArr = [@[kTitle1 , kTitle2 , kTitle3 , kTitle4 , kTitle8 , kTitle5 , kTitle7] mutableCopy];
         } else{
             self.images = [@[@"more_tixing", @"more_pifu", @"more_zhouqi",@"more_daochu", @"more_fankui", @"more_shezhi"] mutableCopy];
             self.titles = [@[kTitle1 , kTitle2 , kTitle3, kTitle4,kTitle5 , kTitle7] mutableCopy];
-            _titleArr = [@[kTitle1 , kTitle2 , kTitle3 , kTitle4 , kTitle5 , kTitle7] mutableCopy];
         }
         
     } else {
         if ([SSJDefaultSource() isEqualToString:@"11501"] || [SSJDefaultSource() isEqualToString:@"11502"]) {
             self.images = [@[@"more_tixing", @"more_pifu",@"more_zhouqi",@"more_daochu", @"more_share", @"more_fankui", @"more_haoping", @"more_shezhi"] mutableCopy];
             self.titles = [@[kTitle1 , kTitle2 , kTitle3, kTitle4,kTitle8, kTitle5 , kTitle6 , kTitle7]mutableCopy];
-            _titleArr = [@[kTitle1 , kTitle2 , kTitle3 , kTitle4 , kTitle8 , kTitle5 , kTitle6 , kTitle7] mutableCopy];
         } else{
             self.images = [@[@"more_tixing", @"more_pifu", @"more_zhouqi",@"more_daochu", @"more_fankui", @"more_haoping", @"more_shezhi"] mutableCopy];
             self.titles = [@[kTitle1 , kTitle2 , kTitle3, kTitle4, kTitle5 , kTitle6 , kTitle7] mutableCopy];
-            _titleArr = [@[kTitle1 , kTitle2 , kTitle3 , kTitle4 , kTitle5 , kTitle6 , kTitle7] mutableCopy];
         }
     }
     [self orgDataToModel];
@@ -678,6 +700,28 @@ static BOOL kNeedBannerDisplay = YES;
         item.hidden = NO;
         item.url = nil;//不需要跳转网页
         [self.adItemsArray addObject:item];
+    }
+}
+
+- (void)getLocalAnnoucement {
+    
+    NSString *directory = [SSJDocumentPath() stringByAppendingPathComponent:@"annoucements"];
+    
+    NSString *filePath = [directory stringByAppendingPathComponent:@"lastAnnoucements.json"];
+
+    NSData *data= [NSData dataWithContentsOfFile:filePath];
+    
+    
+    NSArray *jsonArr = [NSJSONSerialization JSONObjectWithData:data
+                                                       options:NSJSONReadingAllowFragments
+                                                         error:NULL];
+    
+    NSArray *annoucements = [SSJAnnoucementItem mj_objectArrayWithKeyValuesArray:jsonArr];
+
+    if (annoucements.count > 0) {
+        self.announcementView.items = annoucements;
+        self.announcementView.height = 34;
+        [self.view setNeedsLayout];
     }
 }
 
@@ -724,35 +768,5 @@ static BOOL kNeedBannerDisplay = YES;
     }
     [self.collectionView reloadData];
 }
-
-//-(SSJMineHomeTableViewHeader *)header{
-//    if (!_header) {
-//        _header = [SSJMineHomeTableViewHeader MineHomeHeader];
-//        _header.frame = CGRectMake(0, 0, self.view.width, 125);
-//        __weak typeof(self) weakSelf = self;
-//        _header.HeaderButtonClickedBlock = ^(){
-//            if (SSJIsUserLogined()) {
-//                SSJPersonalDetailViewController *personalDetailVc = [[SSJPersonalDetailViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
-//                [weakSelf.navigationController pushViewController:personalDetailVc animated:YES];
-//            }else{
-//                SSJLoginViewController *loginVC = [[SSJLoginViewController alloc]init];
-//                loginVC.backController = weakSelf;
-//                [weakSelf.navigationController pushViewController:loginVC animated:YES];
-//            }
-//        };
-//        _header.HeaderClickedBlock = ^(){
-//            if (!SSJIsUserLogined()) {
-//                SSJLoginViewController *loginVC = [[SSJLoginViewController alloc]init];
-//                loginVC.backController = weakSelf;
-//                [weakSelf.navigationController pushViewController:loginVC animated:YES];
-//            }else{
-//                SSJPersonalDetailViewController *personalDetailVc = [[SSJPersonalDetailViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
-//                [weakSelf.navigationController pushViewController:personalDetailVc animated:YES];
-//            }
-//        };
-//    }
-//    return _header;
-//}
-
 
 @end

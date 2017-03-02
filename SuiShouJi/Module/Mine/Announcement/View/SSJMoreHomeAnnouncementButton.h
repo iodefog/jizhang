@@ -10,4 +10,10 @@
 
 @interface SSJMoreHomeAnnouncementButton : UIView
 
+@property (nonatomic, copy) void (^buttonClickBlock)();
+
+@property (nonatomic) BOOL hasNewAnnoucements;
+
+- (void)updateAfterThemeChange;
+
 @end

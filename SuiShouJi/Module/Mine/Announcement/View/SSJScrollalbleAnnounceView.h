@@ -7,10 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "SSJAnnouceMentItem.h"
+#import "SSJAnnoucementItem.h"
 
 @interface SSJScrollalbleAnnounceView : UIView
 
-@property(nonatomic, strong) NSArray <SSJAnnouceMentItem *> *items;
+@property(nonatomic, strong) NSArray <SSJAnnoucementItem *> *items;
 
 @end

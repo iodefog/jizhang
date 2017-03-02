@@ -49,7 +49,7 @@
     [super layoutSubviews];
     self.headLab.left = 10;
     self.headLab.centerY = self.height / 2;
-    SSJAnnouceMentItem *currentItem = [self.items objectAtIndex:self.currentIndex];
+    SSJAnnoucementItem *currentItem = [self.items objectAtIndex:self.currentIndex];
     CGSize textLayerSize = [currentItem.announcementTitle sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13]}];
     self.announceTextLayer.size = CGSizeMake(self.width - self.headLab.right - 20 ,textLayerSize.height);
     self.announceTextLayer.left = self.headLab.right + 20;
@@ -88,7 +88,7 @@
     return _timer;
 }
 
-- (void)setItems:(NSArray<SSJAnnouceMentItem *> *)items{
+- (void)setItems:(NSArray<SSJAnnoucementItem *> *)items{
     _items = items;
     NSString *announcementStr = [items firstObject].announcementTitle;
     NSMutableAttributedString *attributeStr;
@@ -121,7 +121,7 @@
     if (self.currentIndex > self.items.count - 1) {
         self.currentIndex = 0;
     }
-    SSJAnnouceMentItem *currentItem = [self.items objectAtIndex:self.currentIndex];
+    SSJAnnoucementItem *currentItem = [self.items objectAtIndex:self.currentIndex];
     NSString *announcementStr = currentItem.announcementTitle;
     NSMutableAttributedString *attributeStr;
     if (currentItem.announcementType == SSJAnnouceMentTypeNew) {
@@ -149,7 +149,7 @@
 
 - (void)updateCellAppearanceAfterThemeChanged {
     _headLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-    SSJAnnouceMentItem *currentItem = [self.items objectAtIndex:self.currentIndex];
+    SSJAnnoucementItem *currentItem = [self.items objectAtIndex:self.currentIndex];
     NSString *announcementStr = currentItem.announcementTitle;
     NSMutableAttributedString *attributeStr;
     if (currentItem.announcementType == SSJAnnouceMentTypeNew) {

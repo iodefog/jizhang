@@ -9,5 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface SSJHeaderBannerCollectionViewCell : UICollectionViewCell
+
 - (void)setBannerImage:(NSString *)image;
+
 @end

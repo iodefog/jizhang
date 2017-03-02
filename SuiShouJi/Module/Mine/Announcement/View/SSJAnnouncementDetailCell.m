@@ -7,6 +7,7 @@
 //
 
 #import "SSJAnnouncementDetailCell.h"
+#import "SSJAnnoucementItem.h"
 
 @interface SSJAnnouncementDetailCell()
 
@@ -76,6 +77,16 @@
         make.right.mas_equalTo(self.contentView).with.offset(10);
         make.top.mas_equalTo(self.contentView.mas_centerY).with.offset(10);
     }];
+}
+
+- (void)setCellItem:(__kindof SSJBaseItem *)cellItem {
+    if (![cellItem isKindOfClass:[SSJAnnoucementItem class]]) {
+        return;
+    }
+    SSJAnnoucementItem *item = (SSJAnnoucementItem *)cellItem;
+    self.titleLab.text = item.announcementTitle;
+    self.dateLab.text = item.announcementDate;
+    self.contentLab.text = item.announcementContent;
 }
 
 /*

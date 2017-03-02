@@ -7,10 +7,15 @@
 //
 
 #import "SSJHeaderBannerCollectionViewCell.h"
+
 @interface SSJHeaderBannerCollectionViewCell()
+
 @property (nonatomic, strong) UIImageView *imageView;
+
 @end
+
 @implementation SSJHeaderBannerCollectionViewCell
+
 - (instancetype)initWithFrame:(CGRect)frame
 {
     if (self = [super initWithFrame:frame]) {
@@ -30,6 +35,7 @@
     }
     return _imageView;
 }
+
 - (void)setBannerImage:(NSString *)image
 {
     [self.imageView sd_setImageWithURL:[NSURL URLWithString:image]];

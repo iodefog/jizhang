@@ -7,8 +7,13 @@
 //
 
 #import "SSJBaseTableViewCell.h"
+
 @class SSJChatMessageItem;
+
 @interface SSJMoreProductAdviceTableViewCell : UITableViewCell
+
 + (SSJMoreProductAdviceTableViewCell *)cellWithTableView:(UITableView *)tableView;
+
 @property (nonatomic, strong) SSJChatMessageItem *message;
+
 @end

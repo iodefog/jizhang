@@ -22,16 +22,25 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        
+        [self addSubview:self.button];
+        [self addSubview:self.dotView];
+        self.hasNewAnnoucements = NO;
     }
     return self;
 }
 
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    self.button.frame = self.bounds;
+    self.dotView.rightTop = CGPointMake(0, self.width);
+}
 
 - (UIButton *)button {
     if (!_button) {
         _button = [[UIButton alloc] initWithFrame:self.bounds];
-        [_button setImage:[UIImage imageNamed:@"more_gonggao"] forState:UIControlStateNormal];
+        [_button setImage:[[UIImage imageNamed:@"more_gonggao"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+        _button.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTintColor];
+        [_button addTarget:self action:@selector(buttonCLickAction:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _button;
 }
@@ -47,6 +56,20 @@
         [_dotView clipsToBounds];
     }
     return _dotView;
+}
+
+- (void)buttonCLickAction:(id)sender {
+    if (self.buttonClickBlock) {
+        self.buttonClickBlock();
+    }
+}
+
+- (void)setHasNewAnnoucements:(BOOL)hasNewAnnoucements {
+    self.dotView.hidden = !hasNewAnnoucements;
+}
+
+- (void)updateAfterThemeChange {
+    _button.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTintColor];
 }
 
 /*
