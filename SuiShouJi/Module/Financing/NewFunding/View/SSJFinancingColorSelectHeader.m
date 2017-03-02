@@ -69,6 +69,8 @@
 - (CAGradientLayer *)backLayer {
     if (!_backLayer) {
         _backLayer = [CAGradientLayer layer];
+        _backLayer.startPoint = CGPointMake(0, 0.5);
+        _backLayer.endPoint = CGPointMake(1, 0.5);
         _backLayer.cornerRadius = 8;
         _backLayer.shadowOpacity = 0.4;
     }

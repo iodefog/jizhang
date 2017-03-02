@@ -28,8 +28,6 @@
     UITextField *_nameTextField;
     UITextField *_amountTextField;
     UITextField *_memoTextField;
-
-
 }
 
 - (void)dealloc {
@@ -47,8 +45,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    if (!_selectColor.length) {
-        _selectColor = @"#fc7a60";
+    if (!_selectColor) {
+        _selectColor = [[SSJFinancingGradientColorItem defualtColors] firstObject];
     }
     [self.view addSubview:self.tableview];
     self.navigationItem.rightBarButtonItem = self.rightButton;
@@ -75,16 +73,16 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.section == 4) {
-//        SSJColorSelectViewController *colorSelectVC = [[SSJColorSelectViewController alloc]init];
-//        colorSelectVC.fundingColor = _selectColor;
-//        colorSelectVC.fundingAmount = [_amountTextField.text doubleValue];
-//        colorSelectVC.fundingName = _nameTextField.text;
-//        __weak typeof(self) weakSelf = self;
-//        colorSelectVC.colorSelectedBlock = ^(NSString *selectColor){
-//            _selectColor = selectColor;
-//            [weakSelf.tableview reloadData];
-//        };
-//        [self.navigationController pushViewController:colorSelectVC animated:YES];
+        SSJColorSelectViewController *colorSelectVC = [[SSJColorSelectViewController alloc]init];
+        colorSelectVC.fundingColor = _selectColor;
+        colorSelectVC.fundingAmount = [_amountTextField.text doubleValue];
+        colorSelectVC.fundingName = _nameTextField.text;
+        __weak typeof(self) weakSelf = self;
+        colorSelectVC.colorSelectedBlock = ^(SSJFinancingGradientColorItem *selectColor){
+            _selectColor = selectColor;
+            [weakSelf.tableview reloadData];
+        };
+        [self.navigationController pushViewController:colorSelectVC animated:YES];
     }
 //        else if (indexPath.section == 3) {
 //        SSJFundingTypeSelectViewController *fundingTypeVC = [[SSJFundingTypeSelectViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
@@ -149,7 +147,7 @@
             break;
         case 4:{
             NewFundingCell.selectionStyle = UITableViewCellSelectionStyleNone;
-            NewFundingCell.colorView.backgroundColor = [UIColor ssj_colorWithHex:_selectColor];
+//            NewFundingCell.colorView.backgroundColor = [UIColor ssj_colorWithHex:_selectColor];
             NewFundingCell.cellText.text = @"选择颜色";
             NewFundingCell.cellText.enabled = NO;
             NewFundingCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -259,7 +257,7 @@
         return;
     }
     NSInteger maxOrder = [db intForQuery:@"select max(IORDER) from bk_fund_info where cuserid = ? and operatortype != 2",userId];
-    BOOL success = [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID,CACCTNAME,CPARENT,CCOLOR,CWRITEDATE,OPERATORTYPE,IVERSION,CMEMO,CUSERID,CADDDATE,IORDER) VALUES (?,?,?,?,?,?,?,?,?,?,?)",fundId,fundName,_selectParent,_selectColor,[[NSDate date] ssj_systemCurrentDateWithFormat:@"YYYY-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithInt:0],@(SSJSyncVersion()),fundMemo,userId,[[NSDate date] ssj_systemCurrentDateWithFormat:@"YYYY-MM-dd HH:mm:ss.SSS"],@(maxOrder + 1)];
+    BOOL success = [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID,CACCTNAME,CPARENT,CCOLOR,CSTARTCOLOR,CENDCOLOR,CWRITEDATE,OPERATORTYPE,IVERSION,CMEMO,CUSERID,CADDDATE,IORDER) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",fundId,fundName,_selectParent,_selectColor.startColor,_selectColor.startColor,_selectColor.endColor,[[NSDate date] ssj_systemCurrentDateWithFormat:@"YYYY-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithInt:0],@(SSJSyncVersion()),fundMemo,userId,[[NSDate date] ssj_systemCurrentDateWithFormat:@"YYYY-MM-dd HH:mm:ss.SSS"],@(maxOrder + 1)];
     [db executeUpdate:@"UPDATE BK_FUND_INFO SET CICOIN = (SELECT CICOIN FROM BK_FUND_INFO WHERE CFUNDID = ?) WHERE CFUNDID = ?",_selectParent,fundId];
     if (success) {
         if ([_amountTextField.text doubleValue] > 0) {
@@ -271,7 +269,7 @@
         item.fundingID = fundId;
         item.fundingName = fundName;
         item.fundingIcon = _selectIcoin;
-        item.fundingColor = _selectColor;
+        item.fundingColor = _selectColor.startColor;
         item.fundingBalance = fundAmount;
         item.fundingMemo = fundMemo;
         item.fundingParent = _selectParent;

@@ -101,10 +101,13 @@ static const CGFloat kRadius = 8.f;
     if (!_backLayer) {
         _backLayer = [CAGradientLayer layer];
         _backLayer.frame = self.bounds;
+        _backLayer.startPoint = CGPointMake(0, 0.5);
+        _backLayer.endPoint = CGPointMake(1, 0.5);
+        _backLayer.shadowRadius = 8;
         CAShapeLayer *maskLayer = [CAShapeLayer layer];
         maskLayer.path = [self drawPathInRect:CGRectMake(5, 10, self.width - 10, self.height - 10)].CGPath;
         maskLayer.shadowPath = [self drawPathInRect:CGRectMake(0, 8, self.width, self.height - 8)].CGPath;
-        maskLayer.shadowOpacity = 0.4;
+        maskLayer.shadowOpacity = 0.3;
         _backLayer.mask = maskLayer;
     }
     return _backLayer;

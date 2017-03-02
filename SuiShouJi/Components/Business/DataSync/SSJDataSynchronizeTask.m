@@ -22,10 +22,12 @@
 #import "SSJCreditRepaymentSyncTable.h"
 #import "SSJTransferCycleSyncTable.h"
 
+
 #import "SSJSyncTable.h"
 
 #import "SSJDatabaseQueue.h"
 #import "AFNetworking.h"
+#import "SSJFinancingGradientColorItem.h"
 
 #import "SSJUserTableManager.h"
 #import "SSJRegularManager.h"
@@ -475,6 +477,36 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
         
         [db executeUpdate:@"update bk_user_charge set cdetaildate = (select substr(cwritedate,12,5) from bk_user_charge where length(cdetaildate) = 0 or cdetaildate is null) where length(cdetaildate) = 0 or cdetaildate is null"];
         
+    }];
+    
+    // 将没有渐变色的数据改成渐变色
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+        FMResultSet *result = [db executeQuery:@"select cfundid ,iorder from bk_fund_info where (length(cstartcolor) = 0 or cstartcolor is null) and cparent <> 'root'"];
+        
+        NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:0];
+        
+        NSString *cwriteDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        
+        NSArray *colors = [SSJFinancingGradientColorItem defualtColors];
+        
+        while ([result next]) {
+            NSString *fundid = [result stringForColumn:@"cfundid"];
+            NSString *order = [result stringForColumn:@"iorder"];
+            NSDictionary *dic = @{@"fundid":fundid,
+                                  @"order":order};
+            [tempArr addObject:dic];
+        };
+        
+        for (NSDictionary *dict in tempArr) {
+            NSString *fundid = [dict objectForKey:@"fundid"];
+            NSString *order = [dict objectForKey:@"order"];
+            NSInteger index = [order integerValue] - 1;
+            if (index > 7) {
+                index = index - 7;
+            }
+            SSJFinancingGradientColorItem *item = [colors objectAtIndex:index];
+            [db executeUpdate:@"update bk_fund_info set cstartcolor = ? , cendcolor = ?, cwritedate = ?, iversion = ?, operatortype = 1 where cfundid = ?",item.startColor,item.endColor,cwriteDate,@(SSJSyncVersion()),fundid];
+        }
     }];
 }
 
