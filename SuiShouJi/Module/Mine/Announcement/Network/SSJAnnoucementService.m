@@ -8,7 +8,6 @@
 
 #import "SSJAnnoucementService.h"
 
-static NSString *const kLastAnnoucementIdKey = @"kLastAnnoucementIdKey";
 
 @implementation SSJAnnoucementService
 
@@ -59,5 +58,6 @@ static NSString *const kLastAnnoucementIdKey = @"kLastAnnoucementIdKey";
         [announceData writeToFile:filePath atomically:YES];
     }
 }
+
 
 @end

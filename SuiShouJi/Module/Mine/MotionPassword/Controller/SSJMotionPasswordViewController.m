@@ -108,7 +108,7 @@ static const int kVerifyFailureTimesLimit = 5;
     [super viewDidLoad];
     
     if ([SSJCurrentThemeID() isEqualToString:SSJDefaultThemeID]) {
-        self.backgroundView.image = [UIImage imageNamed:@"motion_background"];
+        self.backgroundView.image = [UIImage ssj_compatibleImageNamed:@"motion_background"];
     }
     
     [self.view addSubview:self.remindLab];

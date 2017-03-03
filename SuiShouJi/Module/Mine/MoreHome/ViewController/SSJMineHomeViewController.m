@@ -38,23 +38,24 @@
 #import "SSJBookKeepingHomeViewController.h"
 #import "SSJListAdItem.h"
 #import "SSJMineHomeViewController.h"
+#import "SSJAnnouncementsListViewController.h"
+
 #import "SSJAnaliyticsManager.h"
 
 #import "UIImageView+WebCache.h"
 #import "SSJDataSynchronizer.h"
 #import "SSJStartChecker.h"
 #import "UIViewController+SSJMotionPassword.h"
-#import "UMSocial.h"
 #import "SSJMineHomeCollectionImageCell.h"
 #import "SSJHeaderBannerImageView.h"
 #import "SSJProductAdviceViewController.h"
 #import "SSJPersonalDetailItem.h"
-#import "SSJBillNoteWebViewController.h"
 #import "SSJNewDotNetworkService.h"
 #import "SSJAnnoucementService.h"
 #import "SSJScrollalbleAnnounceView.h"
 #import "SSJMoreHomeAnnouncementButton.h"
 #import "SSJNetworkReachabilityManager.h"
+#import "SSJShareManager.h"
 
 
 #import "SSJThemeAndAdviceDotItem.h"
@@ -72,7 +73,7 @@ static NSString *const kItemID = @"homeItemIdentifier";
 
 static BOOL kNeedBannerDisplay = YES;
 
-@interface SSJMineHomeViewController ()<UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UMSocialUIDelegate,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,SSJHeaderBannerImageViewDelegate>
+@interface SSJMineHomeViewController ()<UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,SSJHeaderBannerImageViewDelegate>
 
 @property (nonatomic,strong) SSJMineHomeTableViewHeader *header;
 
@@ -323,20 +324,11 @@ static BOOL kNeedBannerDisplay = YES;
     //  把APP推荐给好友
     if ([item.adTitle isEqualToString:kTitle8]) {
         if ([SSJDefaultSource() isEqualToString:@"11501"]) {
-            [UMSocialSnsService presentSnsIconSheetView:self
-                                                 appKey:SSJDetailSettingForSource(@"UMAppKey")
-                                              shareText:@"财务管理第一步，从记录消费生活开始!"
-                                             shareImage:[UIImage imageNamed:SSJDetailSettingForSource(@"ShareIcon")]
-                                        shareToSnsNames:[NSArray arrayWithObjects:UMShareToQQ,UMShareToSina,UMShareToWechatSession,UMShareToWechatTimeline,nil]
-                                               delegate:self];
-        }else{
-            [UMSocialSnsService presentSnsIconSheetView:self
-                                                 appKey:SSJDetailSettingForSource(@"UMAppKey")
-                                              shareText:@"在这里，记录消费生活是件有趣简单的事儿，管家更有窍门。"
-                                             shareImage:[UIImage imageNamed:SSJDetailSettingForSource(@"ShareIcon")]
-                                        shareToSnsNames:[NSArray arrayWithObjects:UMShareToQQ,UMShareToSina,UMShareToWechatSession,UMShareToWechatTimeline,nil]
-                                               delegate:self];
+            [SSJShareManager shareWithType:SSJShareTypeUrl image:nil UrlStr:@"" title:@"" content:@"财务管理第一步，从记录消费生活开始!" PlatformType:UMSocialPlatformType_Sina | UMSocialPlatformType_WechatSession | UMSocialPlatformType_WechatTimeLine | UMSocialPlatformType_QQ inController:self ShareSuccess:NULL];
+        } else {
+            [SSJShareManager shareWithType:SSJShareTypeUrl image:nil UrlStr:@"" title:@"" content:@"在这里，记录消费生活是件有趣简单的事儿，管家更有窍门。" PlatformType:UMSocialPlatformType_Sina | UMSocialPlatformType_WechatSession | UMSocialPlatformType_WechatTimeLine | UMSocialPlatformType_QQ inController:self ShareSuccess:NULL];
         }
+        
     }
     
 
@@ -374,6 +366,7 @@ static BOOL kNeedBannerDisplay = YES;
         NSArray *topAnnoucements = [self.annoucementService.annoucements subarrayWithRange:NSMakeRange(0, 3)];
         self.announcementView.items = topAnnoucements;
         self.rightButton.hasNewAnnoucements = self.annoucementService.hasNewAnnouceMent;
+        self.announcements = [NSArray arrayWithArray:self.annoucementService.annoucements];
         self.announcementView.height = 34;
         [self.view setNeedsLayout];
     }
@@ -558,37 +551,17 @@ static BOOL kNeedBannerDisplay = YES;
 - (SSJMoreHomeAnnouncementButton *)rightButton {
     if (!_rightButton) {
         _rightButton = [[SSJMoreHomeAnnouncementButton alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
-        
+        __weak typeof(self) weakSelf = self;
+        _rightButton.buttonClickBlock = ^(){
+            SSJAnnouncementsListViewController *annoucementListVc = [[SSJAnnouncementsListViewController alloc] initWithTableViewStyle:UITableViewStyleGrouped];
+            annoucementListVc.items = weakSelf.announcements;
+            [weakSelf.navigationController pushViewController:annoucementListVc animated:YES];
+        };
     }
     return _rightButton;
 }
 
 #pragma mark - Event
--(void)takePhoto {
-    UIImagePickerControllerSourceType sourceType = UIImagePickerControllerSourceTypeCamera;
-    if ([UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypeCamera])
-    {
-        UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-        picker.delegate = self;
-        picker.allowsEditing = YES;
-        picker.sourceType = sourceType;
-        [self presentViewController:picker animated:YES completion:^{}];
-    }else
-    {
-        NSLog(@"模拟其中无法打开照相机,请在真机中使用");
-    }
-}
-
--(void)localPhoto {
-    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-    
-    picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-    picker.delegate = self;
-    //设置选择后的图片可被编辑
-    picker.allowsEditing = YES;
-    [self presentViewController:picker animated:YES completion:^{}];
-}
-
 -(void)reloadDataAfterSync {
     SSJUserItem *item = [SSJUserTableManager queryUserItemForID:SSJUSERID()];
     self.header.item = item;
@@ -726,7 +699,6 @@ static BOOL kNeedBannerDisplay = YES;
 }
 
 
-#pragma mark - UIImagePickerControllerDelegate
 -(void)backButtonClicked:(id)sender{
     [self dismissViewControllerAnimated:YES completion:nil];
 }
@@ -735,12 +707,12 @@ static BOOL kNeedBannerDisplay = YES;
 #pragma mark - headerBannerImageView
 - (void)pushToViewControllerWithUrl:(NSString *)urlStr title:(NSString *)title
 {
-    if ([urlStr containsString:@"http://jz.youyuwo.com/5/zd/"]) {
-        SSJBillNoteWebViewController *bilVc = [[SSJBillNoteWebViewController alloc] init];
-        bilVc.urlStr = urlStr;
-        [self presentViewController:bilVc animated:YES completion:nil];
-        return;
-    }
+//    if ([urlStr containsString:@"http://jz.youyuwo.com/5/zd/"]) {
+//        SSJBillNoteWebViewController *bilVc = [[SSJBillNoteWebViewController alloc] init];
+//        bilVc.urlStr = urlStr;
+//        [self presentViewController:bilVc animated:YES completion:nil];
+//        return;
+//    }
     SSJNormalWebViewController *webVc = [SSJNormalWebViewController webViewVCWithURL:[NSURL URLWithString:urlStr]];
     if (title.length) {
         webVc.title = title;

@@ -7,10 +7,9 @@
 //
 
 #import "SSJBillNoteWebViewController.h"
-#import "UMSocial.h"
 #import "SSJViewAddition.h"
 #import <TencentOpenAPI/QQApiInterface.h>
-#import "CDAutoHideMessageHUD.h"
+
 @interface SSJBillNoteWebViewController ()<UIWebViewDelegate,UMSocialUIDelegate,UIScrollViewDelegate>
 //
 /**

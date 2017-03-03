@@ -4,7 +4,6 @@ inhibit_all_warnings!
 
 def shared_pods
     pod 'AFNetworking', '~> 2.5.4'
-    pod 'UMengSocialCOM'
     pod 'YYKeyboardManager'
     pod 'YYText'
     pod 'Meiqia', '~> 3.3.1'
@@ -24,6 +23,16 @@ def shared_pods
     pod 'GTSDK'
     pod 'Masonry'
     pod 'ReactiveCocoa'
+    pod 'UMengUShare/UI'
+    # 集成新浪微博
+    pod 'UMengUShare/Social/Sina'
+    
+    # 集成微信
+    pod 'UMengUShare/Social/WeChat'
+    
+    # 集成QQ
+    pod 'UMengUShare/Social/QQ'
+
 end
 
 target 'SuiShouJi'  do

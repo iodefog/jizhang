@@ -32,7 +32,7 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
     self.button.frame = self.bounds;
-    self.dotView.rightTop = CGPointMake(0, self.width);
+    self.dotView.rightTop = CGPointMake(self.width, 0);
 }
 
 - (UIButton *)button {

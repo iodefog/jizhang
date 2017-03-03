@@ -8,6 +8,7 @@
 
 //#import "SSJNormalWebViewController.h"
 
+DEPRECATED_ATTRIBUTE
 @interface SSJBillNoteWebViewController : UIViewController
 
 @property (nonatomic, copy) void(^backButtonClickBlock)();

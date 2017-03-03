@@ -64,18 +64,18 @@
 
 - (void)setUpConstraints {
     [self.titleLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(self.contentView).with.offset(10);
+        make.left.mas_equalTo(self.contentView.left).with.offset(10);
         make.bottom.mas_equalTo(self.contentView.mas_centerY).with.offset(-10);
     }];
     
-    [self.dateLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(self.contentView).with.offset(10);
+    [self.contentLab mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(self.contentView.left).with.offset(10);
         make.top.mas_equalTo(self.contentView.mas_centerY).with.offset(10);
     }];
     
-    [self.contentLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.mas_equalTo(self.contentView).with.offset(10);
-        make.top.mas_equalTo(self.contentView.mas_centerY).with.offset(10);
+    [self.dateLab mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.mas_equalTo(self.contentView.right).with.offset(-10);
+        make.top.mas_equalTo(self.contentView.mas_centerY);
     }];
 }
 

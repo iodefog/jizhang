@@ -10,9 +10,8 @@
 
 #import "UMSocialWechatHandler.h"
 #import "UMSocialQQHandler.h"
-#import "UMSocialSinaSSOHandler.h"
+#import <UMSocialCore/UMSocialCore.h>
 #import <UMMobClick/MobClick.h>
-#import "UMSocial.h"
 
 
 @implementation SSJUmengManager
@@ -35,14 +34,13 @@
 
 /* 友盟分享 */
 + (void)umengShare{
-    [UMSocialData setAppKey:SSJDetailSettingForSource(@"UMAppKey")];
-    [UMSocialWechatHandler setWXAppId:SSJDetailSettingForSource(@"WeiXinKey") appSecret:SSJDetailSettingForSource(@"WeiXinSecret") url:SSJDetailSettingForSource(@"ShareUrl")];
-    [UMSocialData defaultData].extConfig.wechatSessionData.title = SSJDetailSettingForSource(@"ShareTitle");
-    [UMSocialData defaultData].extConfig.wechatTimelineData.title = SSJDetailSettingForSource(@"ShareTitle");
-    [UMSocialData defaultData].extConfig.wechatTimelineData.url = SSJDetailSettingForSource(@"ShareUrl");
-    [UMSocialSinaSSOHandler openNewSinaSSOWithAppKey:SSJDetailSettingForSource(@"WeiBoAppKey") secret:SSJDetailSettingForSource(@"WeiBoSecret") RedirectURL:SSJDetailSettingForSource(@"AppStoreUrl")];
-    [UMSocialQQHandler setQQWithAppId:SSJDetailSettingForSource(@"QQAppId") appKey:SSJDetailSettingForSource(@"QQAppKey") url:SSJDetailSettingForSource(@"ShareUrl")];
-    [UMSocialData defaultData].extConfig.qqData.title = SSJDetailSettingForSource(@"ShareTitle");
+    [[UMSocialManager defaultManager] setUmSocialAppkey:SSJDetailSettingForSource(@"UMAppKey")];
+    
+    [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_WechatSession | UMSocialPlatformType_WechatTimeLine appKey:SSJDetailSettingForSource(@"WeiXinKey") appSecret:SSJDetailSettingForSource(@"WeiXinSecret") redirectURL:SSJDetailSettingForSource(@"ShareUrl")];
+    [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_QQ appKey:SSJDetailSettingForSource(@"QQAppId") appSecret:nil redirectURL:SSJDetailSettingForSource(@"ShareUrl")];
+    
+    [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_Sina appKey:SSJDetailSettingForSource(@"WeiBoAppKey") appSecret:SSJDetailSettingForSource(@"WeiBoSecret") redirectURL:SSJDetailSettingForSource(@"ShareUrl")];
+
 }
 
 

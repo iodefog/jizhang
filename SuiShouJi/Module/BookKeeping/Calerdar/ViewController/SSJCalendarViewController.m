@@ -20,12 +20,12 @@
 #import "SSJCalenderHelper.h"
 #import "SSJCalenderScreenShotHelper.h"
 #import "FMDB.h"
-#import "UMSocial.h"
+#import "SSJShareManager.h"
 #import <TencentOpenAPI/QQApiInterface.h>
 
 
 
-@interface SSJCalendarViewController ()<UMSocialUIDelegate>
+@interface SSJCalendarViewController ()
 
 @property (nonatomic,strong) UIBarButtonItem *rightBarButton;
 @property (nonatomic,strong) UILabel *dateLabel;
@@ -194,19 +194,6 @@
         cell.isLastRow = NO;
     }
     return cell;
-}
-
-#pragma mark - UMSocialUIDelegate
-- (void)didSelectSocialPlatform:(NSString *)platformName withSocialData:(UMSocialData *)socialData {
-    if (platformName == UMShareToWechatSession) {
-        [SSJAnaliyticsManager event:@"calendar_share_weixin"];
-    } else if (platformName == UMShareToWechatTimeline) {
-        [SSJAnaliyticsManager event:@"calendar_share_weixin_cycle"];
-    } else if (platformName == UMShareToSina) {
-        [SSJAnaliyticsManager event:@"calendar_share_weibo"];
-    } else if (platformName == UMShareToQQ) {
-        [SSJAnaliyticsManager event:@"calendar_share_QQ"];
-    }
 }
 
 #pragma mark - Getter
@@ -421,18 +408,17 @@
 - (void)shareTheBillWithImage:(UIImage *)image {
     if (!image) return;
     
-    // 微信分享  纯图片
-    [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
-    
-    // QQ分享消息类型分为图文、纯图片，QQ空间分享只支持图文分享（图片文字缺一不可）
-    [UMSocialData defaultData].extConfig.qqData.qqMessageType = UMSocialQQMessageTypeImage;
-    [UMSocialSnsService presentSnsIconSheetView:self
-                                         appKey:SSJDetailSettingForSource(@"UMAppKey")
-                                      shareText:nil
-                                     shareImage:image
-                                shareToSnsNames:@[UMShareToWechatTimeline, UMShareToWechatSession, UMShareToQQ, UMShareToSina]
-                                       delegate:self];
-
+    [SSJShareManager shareWithType:SSJShareTypeImageOnly image:image UrlStr:nil title:@"" content:@"" PlatformType:UMSocialPlatformType_Sina | UMSocialPlatformType_WechatSession | UMSocialPlatformType_WechatTimeLine | UMSocialPlatformType_QQ inController:self ShareSuccess:^(UMSocialShareResponse *response) {
+        if (response.platformType == UMSocialPlatformType_WechatSession) {
+            [SSJAnaliyticsManager event:@"calendar_share_weixin"];
+        } else if (response.platformType == UMSocialPlatformType_WechatTimeLine) {
+            [SSJAnaliyticsManager event:@"calendar_share_weixin_cycle"];
+        } else if (response.platformType == UMSocialPlatformType_Sina) {
+            [SSJAnaliyticsManager event:@"calendar_share_weibo"];
+        } else if (response.platformType == UMSocialPlatformType_QQ) {
+            [SSJAnaliyticsManager event:@"calendar_share_QQ"];
+        }
+    }];
 }
 
 /*

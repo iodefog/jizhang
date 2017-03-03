@@ -613,7 +613,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 Copyright 2011 - 2015 UMeng.com. All rights reserved.
 
 
-## UMengSocialCOM
+## UMengUShare
 
 Copyright 2011 - 2016 UMeng.com. All rights reserved.
 

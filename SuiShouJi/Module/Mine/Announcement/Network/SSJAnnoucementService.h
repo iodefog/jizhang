@@ -9,6 +9,8 @@
 #import "SSJBaseNetworkService.h"
 #import "SSJAnnoucementItem.h"
 
+static NSString *const kLastAnnoucementIdKey = @"kLastAnnoucementIdKey";
+
 @interface SSJAnnoucementService : SSJBaseNetworkService
 
 @property(nonatomic, strong) NSArray <SSJAnnoucementItem *> *annoucements;
