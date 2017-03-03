@@ -55,7 +55,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     _cellTitleArray = @[@"账户名称",@"账户余额",@"备注",@"账户类型",@"选择颜色"];
-    _selectColor = self.item.fundingColor;
+    SSJFinancingGradientColorItem *item = [[SSJFinancingGradientColorItem alloc] init];
+    item.startColor = self.item.startColor;
+    item.endColor = self.item.endColor;
+
+    _selectColor = item;
     _selectParent = self.item.fundingParent;
     _selectIcoin = self.item.fundingIcon;
     _amountValue = self.item.fundingAmount;
@@ -95,7 +99,7 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.section == 4) {
         SSJColorSelectViewController *colorSelectVC = [[SSJColorSelectViewController alloc]init];
-//        colorSelectVC.fundingColor = _selectColor;
+        colorSelectVC.fundingColor = _selectColor;
         colorSelectVC.fundingAmount = _amountValue;
         colorSelectVC.fundingName = self.item.fundingName;
         __weak typeof(self) weakSelf = self;
@@ -105,14 +109,7 @@
         };
         [self.navigationController pushViewController:colorSelectVC animated:YES];
     }else if (indexPath.section == 3) {
-//        SSJFundingTypeSelectViewController *fundingTypeVC = [[SSJFundingTypeSelectViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
-//        __weak typeof(self) weakSelf = self;
-//        fundingTypeVC.typeSelectedBlock = ^(NSString *selectParent,NSString *selectIcon){
-//            _selectParent = selectParent;
-//            _selectIcoin = selectIcon;
-//            [weakSelf.tableView reloadData];
-//        };
-//        [self.navigationController pushViewController:fundingTypeVC animated:YES];
+
     }
 }
 

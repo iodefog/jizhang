@@ -10,6 +10,8 @@
 
 @interface SSJScrollalbleAnnounceView()
 
+@property(nonatomic, strong) UIView *backView;
+
 @property(nonatomic, strong) CATextLayer *announceTextLayer;
 
 @property(nonatomic, strong) UILabel *headLab;
@@ -26,14 +28,16 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
+        self.backgroundColor = [UIColor whiteColor];
+        [self addSubview:self.backView];
         [self addSubview:self.headLab];
         [self.layer addSublayer:self.announceTextLayer];
         self.currentIndex = 0;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCellAppearanceAfterThemeChanged) name:SSJThemeDidChangeNotification object:nil];
         if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
-            self.backgroundColor = [UIColor ssj_colorWithHex:@"eb4a64" alpha:0.1];
+            self.backView.backgroundColor = [UIColor ssj_colorWithHex:@"eb4a64" alpha:0.1];
         } else {
-            self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha + 0.1];
+            self.backView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha + 0.1];
         }
     }
     return self;
@@ -47,6 +51,7 @@
 
 - (void)layoutSubviews {
     [super layoutSubviews];
+    self.backView.frame = self.bounds;
     self.headLab.left = 10;
     self.headLab.centerY = self.height / 2;
     SSJAnnoucementItem *currentItem = [self.items objectAtIndex:self.currentIndex];
@@ -62,7 +67,7 @@
         _announceTextLayer.foregroundColor = [UIColor blackColor].CGColor;
         _announceTextLayer.contentsScale = [UIScreen mainScreen].scale;
         CATransition *transition = [[CATransition alloc]init];
-        transition.type = @"cube";
+        transition.type = kCATransitionPush;
         transition.subtype = kCATransitionFromTop;
         _announceTextLayer.actions = @{@"string":transition};
     }
@@ -78,6 +83,13 @@
         [_headLab sizeToFit];
     }
     return _headLab;
+}
+
+- (UIView *)backView {
+    if (!_backView) {
+        _backView = [[UIView alloc] initWithFrame:self.bounds];
+    }
+    return _backView;
 }
 
 - (NSTimer *)timer {
@@ -171,9 +183,9 @@
     }
     self.announceTextLayer.string = attributeStr;
     if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
-        self.backgroundColor = [UIColor ssj_colorWithHex:@"eb4a64" alpha:0.1];
+        self.backView.backgroundColor = [UIColor ssj_colorWithHex:@"eb4a64" alpha:0.1];
     } else {
-        self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha + 0.1];
+        self.backView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha + 0.1];
     }
 }
 
@@ -182,9 +194,6 @@
     if (self.announceClickedBlock) {
         self.announceClickedBlock(item);
     }
-}
-
-- (void)adjustTheTextLayerPosition {
 }
 
 

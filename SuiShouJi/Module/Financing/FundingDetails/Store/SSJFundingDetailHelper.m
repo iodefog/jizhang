@@ -187,7 +187,8 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
         [listItem.chargeArray addObjectsFromArray:tempDateArr];
         [resultSet close];
         fundingItem.fundingName = [db stringForQuery:@"select cacctname from bk_fund_info where cfundid = ? and cuserid = ?",ID,userid];
-        fundingItem.fundingColor = [db stringForQuery:@"select ccolor from bk_fund_info where cfundid = ? and cuserid = ?",ID,userid];
+        fundingItem.startColor = [db stringForQuery:@"select cstartcolor from bk_fund_info where cfundid = ? and cuserid = ?",ID,userid];
+        fundingItem.endColor = [db stringForQuery:@"select cstartcolor from bk_fund_info where cfundid = ? and cuserid = ?",ID,userid];
         SSJDispatchMainAsync(^{
             if (success) {
                 success(result,fundingItem);
@@ -383,7 +384,8 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
             }
         }
         [resultSet close];
-        newcardItem.cardColor = [db stringForQuery:@"select ccolor from bk_fund_info where cfundid = ? and cuserid = ?",cardItem.cardId,userid];
+        newcardItem.startColor = [db stringForQuery:@"select cstartcolor from bk_fund_info where cfundid = ? and cuserid = ?",cardItem.cardId,userid];
+        newcardItem.endColor = [db stringForQuery:@"select cendcolor from bk_fund_info where cfundid = ? and cuserid = ?",cardItem.cardId,userid];
         newcardItem.cardName = [db stringForQuery:@"select cacctname from bk_fund_info where cfundid = ? and cuserid = ?",cardItem.cardId,userid];
         for (SSJCreditCardListDetailItem *listItem in result) {
             listItem.instalmentMoney = [db doubleForQuery:@"select repaymentmoney from bk_credit_repayment where cuserid = ? and crepaymentmonth = ? and ccardid = ? and operatortype <> 2 and iinstalmentcount > 0",userid,listItem.month,cardItem.cardId];

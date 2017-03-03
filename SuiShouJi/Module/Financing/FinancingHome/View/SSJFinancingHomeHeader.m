@@ -9,16 +9,21 @@
 #import "SSJFinancingHomeHeader.h"
 
 @interface SSJFinancingHomeHeader()
+
 @property(nonatomic, strong) UILabel *balanceLabel;
+
+@property(nonatomic, strong) UILabel *balanceTitleLab;
 @end
 
 @implementation SSJFinancingHomeHeader
+
 - (instancetype)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
         self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         [self addSubview:self.balanceLabel];
+        [self addSubview:self.balanceTitleLab];
         [self addSubview:self.transferButton];
     }
     return self;
@@ -26,11 +31,11 @@
 
 -(void)layoutSubviews{
     [super layoutSubviews];
-    self.balanceLabel.centerY = self.height / 2;
-    self.balanceLabel.left = 10;
-    self.transferButton.size = CGSizeMake(100, 50);
-    self.transferButton.centerY = self.height / 2;
-    self.transferButton.right = self.width;
+    self.balanceLabel.bottom = self.height;
+    self.balanceLabel.left = 25;
+    self.transferButton.size = CGSizeMake(60, 24);
+    self.transferButton.bottom = self.height;
+    self.transferButton.right = self.width - 34;
     [self.transferButton ssj_relayoutBorder];
     [self.transferButton ssj_layoutContent];
 }
@@ -39,6 +44,7 @@
     if (!_balanceLabel) {
         _balanceLabel = [[UILabel alloc]init];
         _balanceLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+        _balanceLabel.font = [UIFont systemFontOfSize:22];
     }
     return _balanceLabel;
 }
@@ -57,6 +63,17 @@
         [_transferButton ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
     }
     return _transferButton;
+}
+
+- (UILabel *)balanceTitleLab {
+    if (!_balanceTitleLab) {
+        _balanceTitleLab = [[UILabel alloc] init];
+        _balanceTitleLab.font = [UIFont systemFontOfSize:12];
+        _balanceTitleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+        _balanceTitleLab.text = @"结余";
+        [_balanceTitleLab sizeToFit];
+    }
+    return _balanceTitleLab;
 }
 
 -(void)setBalanceAmount:(NSString *)balanceAmount{

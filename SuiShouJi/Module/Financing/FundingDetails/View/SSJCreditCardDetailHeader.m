@@ -10,6 +10,8 @@
 
 @interface SSJCreditCardDetailHeader()
 
+@property (nonatomic,strong) CAGradientLayer *backLayer;
+
 @property(nonatomic, strong) UILabel *balanceTitleLab;
 
 @property(nonatomic, strong) UILabel *balanceLab;
@@ -28,10 +30,6 @@
 
 @property(nonatomic, strong) UIView *horizontalSeperatorLine;
 
-@property(nonatomic, strong) UIView *firstVerticalSeperatorLine;
-
-@property(nonatomic, strong) UIView *secondVerticalSeperatorLine;
-
 @property(nonatomic, strong) UIView *bottomView;
 
 @property(nonatomic, strong) UILabel *incomeLab;
@@ -46,18 +44,18 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
+        self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+        [self.layer addSublayer:self.backLayer];
         [self addSubview:self.backGroundView];
-        [self addSubview:self.balanceTitleLab];
         [self addSubview:self.balanceLab];
+        [self addSubview:self.balanceTitleLab];
         [self addSubview:self.horizontalSeperatorLine];
-        [self addSubview:self.firstVerticalSeperatorLine];
-        [self addSubview:self.secondVerticalSeperatorLine];
         [self addSubview:self.billingDayTitleLab];
         [self addSubview:self.billingDayLab];
-        [self addSubview:self.limitTitleLab];
         [self addSubview:self.limitLab];
-        [self addSubview:self.repaymentDayTitleLab];
+        [self addSubview:self.limitTitleLab];
         [self addSubview:self.repaymentDayLab];
+        [self addSubview:self.repaymentDayTitleLab];
         [self addSubview:self.bottomView];
         [self addSubview:self.incomeLab];
         [self addSubview:self.expenceLab];
@@ -67,32 +65,29 @@
 
 - (void)layoutSubviews{
     [super layoutSubviews];
-    self.backGroundView.size = CGSizeMake(self.width, 193);
-    self.backGroundView.leftTop = CGPointMake(0, 0);
-    self.balanceTitleLab.top = 23;
-    self.balanceTitleLab.centerX = self.width / 2;
-    self.balanceLab.top = self.balanceTitleLab.top + 17;
+    self.backGroundView.size = CGSizeMake(self.width, 150);
+    self.backGroundView.top = 10;
+    self.backGroundView.centerX = self.width / 2;
+    self.balanceLab.top = self.backGroundView.top + 20;
     self.balanceLab.centerX = self.width / 2;
+    self.balanceTitleLab.top = self.balanceLab.bottom + 10;
+    self.balanceTitleLab.centerX = self.width / 2;
     self.horizontalSeperatorLine.top = 90;
     self.horizontalSeperatorLine.centerX = self.width / 2;
-    self.firstVerticalSeperatorLine.centerX = self.width / 2 - 63;
-    self.firstVerticalSeperatorLine.centerY = self.backGroundView.height / 2 + 45;
-    self.secondVerticalSeperatorLine.centerX = self.width / 2 + 63;
-    self.secondVerticalSeperatorLine.centerY = self.backGroundView.height / 2 + 45;
-    self.billingDayTitleLab.top = self.horizontalSeperatorLine.top + 22;
-    self.billingDayTitleLab.centerX = self.width / 2;
-    self.billingDayLab.top = self.billingDayTitleLab.bottom + 10;
-    self.billingDayLab.centerX = self.billingDayTitleLab.centerX;
-    self.limitTitleLab.top = self.horizontalSeperatorLine.bottom + 22;
-    self.limitTitleLab.centerX = self.firstVerticalSeperatorLine.left / 2;
-    self.limitLab.top = self.limitTitleLab.bottom + 10;
-    self.limitLab.centerX = self.limitTitleLab.centerX;
-    self.repaymentDayTitleLab.top = self.horizontalSeperatorLine.bottom + 22;
-    self.repaymentDayTitleLab.centerX = self.secondVerticalSeperatorLine.right + self.firstVerticalSeperatorLine.left / 2;
-    self.repaymentDayLab.top = self.repaymentDayTitleLab.bottom + 10;
-    self.repaymentDayLab.centerX = self.secondVerticalSeperatorLine.right + self.firstVerticalSeperatorLine.left / 2;
+    self.billingDayLab.top = self.horizontalSeperatorLine.top + 12;
+    self.billingDayLab.centerX = self.width / 2;
+    self.billingDayTitleLab.top = self.billingDayLab.bottom + 10;
+    self.billingDayTitleLab.centerX = self.billingDayLab.centerX;
+    self.limitLab.top = self.horizontalSeperatorLine.bottom + 12;
+    self.limitLab.centerX = (self.width / 2 - 10) / 2;
+    self.limitTitleLab.top = self.limitLab.bottom + 10;
+    self.limitTitleLab.centerX = self.limitLab.centerX;
+    self.repaymentDayLab.top = self.horizontalSeperatorLine.bottom + 12;
+    self.repaymentDayLab.centerX = self.width / 2 + (self.width / 2 - 10) / 2;
+    self.repaymentDayTitleLab.top = self.repaymentDayLab.bottom + 10;
+    self.repaymentDayTitleLab.centerX = self.repaymentDayLab.centerX;
     self.bottomView.size = CGSizeMake(self.width, 40);
-    self.bottomView.leftTop = CGPointMake(0, self.backGroundView.bottom);
+    self.bottomView.leftBottom = CGPointMake(0, self.height);
     if (self.totalIncome == 0 && self.totalExpence == 0) {
         self.incomeLab.hidden = YES;
         self.expenceLab.hidden = YES;
@@ -230,30 +225,6 @@
     return _horizontalSeperatorLine;
 }
 
--(UIView *)firstVerticalSeperatorLine{
-    if (!_firstVerticalSeperatorLine) {
-        _firstVerticalSeperatorLine = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 1 / [UIScreen mainScreen].scale, 40)];
-        if (SSJ_CURRENT_THEME.financingDetailSecondaryColor.length) {
-            _firstVerticalSeperatorLine.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailSecondaryColor alpha:SSJ_CURRENT_THEME.financingDetailSecondaryAlpha];
-        } else {
-            _firstVerticalSeperatorLine.backgroundColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:0.5];
-        }
-    }
-    return _firstVerticalSeperatorLine;
-}
-
--(UIView *)secondVerticalSeperatorLine{
-    if (!_secondVerticalSeperatorLine) {
-        _secondVerticalSeperatorLine = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 1 / [UIScreen mainScreen].scale, 40)];
-        if (SSJ_CURRENT_THEME.financingDetailSecondaryColor.length) {
-            _secondVerticalSeperatorLine.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailSecondaryColor alpha:SSJ_CURRENT_THEME.financingDetailSecondaryAlpha];
-        } else {
-            _secondVerticalSeperatorLine.backgroundColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:0.5];
-        }
-    }
-    return _secondVerticalSeperatorLine;
-}
-
 -(UIView *)backGroundView{
     if (!_backGroundView) {
         _backGroundView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 1 / [UIScreen mainScreen].scale, 40)];
@@ -287,6 +258,19 @@
     return _expenceLab;
 }
 
+- (CAGradientLayer *)backLayer {
+    if (!_backLayer) {
+        _backLayer = [CAGradientLayer layer];
+        _backLayer.cornerRadius = 8;
+        _backLayer.size = CGSizeMake(self.width - 30, 150);
+        _backLayer.position = CGPointMake(self.width / 2, 85);
+        _backLayer.shadowPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, _backLayer.width + 4, _backLayer.height + 4) byRoundingCorners:UIRectCornerAllCorners cornerRadii:CGSizeMake(8, 8)].CGPath;
+        _backLayer.shadowRadius = 10;
+        _backLayer.shadowOpacity = 0.3;
+    }
+    return _backLayer;
+}
+
 - (void)setItem:(SSJCreditCardItem *)item{
     _item = item;
     self.balanceLab.text = [NSString stringWithFormat:@"%.2f",_item.cardBalance];
@@ -309,6 +293,18 @@
         self.billingDayLab.text = @"未设置";
     }else{
         self.billingDayLab.text = [NSString stringWithFormat:@"每月%ld日",_item.cardBillingDay];
+    }
+    if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
+        self.backLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:item.startColor].CGColor,(__bridge id)[UIColor ssj_colorWithHex:item.endColor].CGColor];
+        self.backLayer.shadowColor = [UIColor ssj_colorWithHex:item.startColor].CGColor;
+    } else {
+        if (SSJ_CURRENT_THEME.financingDetailHeaderColor.length) {
+            self.backLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailHeaderColor].CGColor];
+            self.backLayer.shadowColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailHeaderColor].CGColor;
+        } else {
+            self.backLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:item.startColor].CGColor,(__bridge id)[UIColor ssj_colorWithHex:item.endColor].CGColor];
+            self.backLayer.shadowColor = [UIColor ssj_colorWithHex:item.startColor].CGColor;
+        }
     }
     [self.billingDayLab sizeToFit];
 }

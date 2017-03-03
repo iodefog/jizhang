@@ -8,12 +8,19 @@
 
 #import "SSJBaseTableViewCell.h"
 #import "SSJFundingDetailItem.h"
+#import "SSJFinancingGradientColorItem.h"
 
 @interface SSJModifyFundingTableViewCell : SSJBaseTableViewCell<UITextFieldDelegate>
+
 @property (nonatomic,strong) UILabel *cellTitle;
+
 @property (nonatomic,strong) UITextField *cellDetail;
+
 @property (nonatomic,strong) UIView *colorView;
+
 @property (nonatomic,strong) UILabel *typeTitle;
+
 @property (nonatomic,strong) UIImageView *typeImage;
 
+@property(nonatomic, strong) SSJFinancingGradientColorItem *item;
 @end

@@ -9,6 +9,9 @@
 #import "SSJModifyFundingTableViewCell.h"
 
 @interface SSJModifyFundingTableViewCell()
+
+@property(nonatomic, strong) CAGradientLayer *gradientLayer;
+
 @end
 
 @implementation SSJModifyFundingTableViewCell
@@ -83,6 +86,18 @@
         _typeTitle.font = [UIFont systemFontOfSize:15];
     }
     return _typeTitle;
+}
+
+- (CAGradientLayer *)gradientLayer {
+    if (!_gradientLayer) {
+        _gradientLayer = [CAGradientLayer layer];
+        _gradientLayer.size = CGSizeMake(50, 30);
+    }
+    return _gradientLayer;
+}
+
+- (void)setItem:(SSJFinancingGradientColorItem *)item {
+    _gradientLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:item.startColor].CGColor,(__bridge id)[UIColor ssj_colorWithHex:item.endColor].CGColor];
 }
 
 /*

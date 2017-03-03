@@ -10,6 +10,8 @@
 
 @interface SSJFundingDetailHeader()
 
+@property (nonatomic,strong) CAGradientLayer *backLayer;
+
 @property (nonatomic,strong) UIView *seperatorView;
 
 @property (nonatomic,strong) UILabel *incomeLabel;
@@ -27,26 +29,28 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        [self addSubview:self.incomeLabel];
+        self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+        [self.layer addSublayer:self.backLayer];
         [self addSubview:self.totalIncomeLabel];
+        [self addSubview:self.incomeLabel];
         [self addSubview:self.seperatorView];
-        [self addSubview:self.expenceLabel];
         [self addSubview:self.totalExpenceLabel];
+        [self addSubview:self.expenceLabel];
     }
     return self;
 }
 
 -(void)layoutSubviews{
-    self.incomeLabel.centerX = self.width / 2 / 2;
-    self.incomeLabel.top = 22;
-    self.totalIncomeLabel.centerX = self.width / 2 / 2;
-    self.totalIncomeLabel.top = self.incomeLabel.bottom + 15;
+    self.totalIncomeLabel.centerX = self.width / 2 - self.backLayer.width / 4;
+    self.totalIncomeLabel.bottom = self.height / 2;
+    self.incomeLabel.centerX = self.totalIncomeLabel.centerX;
+    self.incomeLabel.top = self.totalIncomeLabel.bottom + 15;
     self.seperatorView.size = CGSizeMake(1, 67);
     self.seperatorView.center = CGPointMake(self.width / 2, self.height / 2);
-    self.expenceLabel.centerX = self.width / 2  + self.width / 2 / 2;
-    self.expenceLabel.top = 22;
-    self.totalExpenceLabel.centerX = self.width / 2  + self.width / 2 / 2;
-    self.totalExpenceLabel.top = self.incomeLabel.bottom + 15;
+    self.totalExpenceLabel.centerX = self.width - self.backLayer.width / 4;
+    self.totalExpenceLabel.bottom = self.height / 2;
+    self.expenceLabel.centerX = self.totalExpenceLabel.centerX;
+    self.expenceLabel.top = self.totalExpenceLabel.bottom + 15;
 }
 
 -(UIView *)seperatorView{
@@ -65,7 +69,7 @@
         } else {
             _expenceLabel.textColor = [UIColor whiteColor];
         }
-        _expenceLabel.font = [UIFont systemFontOfSize:15];
+        _expenceLabel.font = [UIFont systemFontOfSize:11];
         _expenceLabel.textAlignment = NSTextAlignmentCenter;
         _expenceLabel.text = @"累计支出";
         [_expenceLabel sizeToFit];
@@ -81,7 +85,7 @@
         } else {
             _incomeLabel.textColor = [UIColor whiteColor];
         }
-        _incomeLabel.font = [UIFont systemFontOfSize:15];
+        _incomeLabel.font = [UIFont systemFontOfSize:11];
         _incomeLabel.textAlignment = NSTextAlignmentCenter;
         _incomeLabel.text = @"累计收入";
         [_incomeLabel sizeToFit];
@@ -120,6 +124,19 @@
     return _totalIncomeLabel;
 }
 
+- (CAGradientLayer *)backLayer {
+    if (!_backLayer) {
+        _backLayer = [CAGradientLayer layer];
+        _backLayer.cornerRadius = 8;
+        _backLayer.size = CGSizeMake(self.width - 30, self.height - 20);
+        _backLayer.position = CGPointMake(self.width / 2, self.height / 2);
+        _backLayer.shadowPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, _backLayer.width + 4, _backLayer.height + 4) byRoundingCorners:UIRectCornerAllCorners cornerRadii:CGSizeMake(8, 8)].CGPath;
+        _backLayer.shadowRadius = 10;
+        _backLayer.shadowOpacity = 0.3;
+    }
+    return _backLayer;
+}
+
 - (void)setExpence:(double)expence {
     NSString *expenceStr = [[NSString stringWithFormat:@"%f",expence] ssj_moneyDecimalDisplayWithDigits:2];
     CGSize expenceSize = [expenceStr sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:24]}];
@@ -143,6 +160,21 @@
     } else {
         self.totalIncomeLabel.text = incomeStr;
         [self.totalIncomeLabel sizeToFit];
+    }
+}
+
+- (void)setItem:(SSJFinancingGradientColorItem *)item {
+    if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
+        self.backLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:item.startColor].CGColor,(__bridge id)[UIColor ssj_colorWithHex:item.endColor].CGColor];
+        self.backLayer.shadowColor = [UIColor ssj_colorWithHex:item.startColor].CGColor;
+    } else {
+        if (SSJ_CURRENT_THEME.financingDetailHeaderColor.length) {
+            self.backLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailHeaderColor].CGColor];
+            self.backLayer.shadowColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailHeaderColor].CGColor;
+        } else {
+            self.backLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:item.startColor].CGColor,(__bridge id)[UIColor ssj_colorWithHex:item.endColor].CGColor];
+            self.backLayer.shadowColor = [UIColor ssj_colorWithHex:item.startColor].CGColor;
+        }
     }
 }
 

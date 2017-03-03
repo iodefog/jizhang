@@ -669,10 +669,13 @@ static BOOL kNeedBannerDisplay = YES;
 
     NSData *data= [NSData dataWithContentsOfFile:filePath];
     
+    NSArray *jsonArr;
     
-    NSArray *jsonArr = [NSJSONSerialization JSONObjectWithData:data
-                                                       options:NSJSONReadingAllowFragments
-                                                         error:NULL];
+    if (data) {
+         jsonArr = [NSJSONSerialization JSONObjectWithData:data
+                                                           options:NSJSONReadingAllowFragments
+                                                             error:NULL];
+    }
     
     NSArray *annoucements = [SSJAnnoucementItem mj_objectArrayWithKeyValuesArray:jsonArr];
 

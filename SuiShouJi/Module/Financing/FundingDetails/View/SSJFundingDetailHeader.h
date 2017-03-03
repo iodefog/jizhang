@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SSJFinancingGradientColorItem.h"
 
 @interface SSJFundingDetailHeader : UIView
 
@@ -14,5 +15,6 @@
 
 @property(nonatomic) double expence;
 
+@property(nonatomic, strong) SSJFinancingGradientColorItem *item;
 
 @end
