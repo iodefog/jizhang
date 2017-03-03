@@ -13,4 +13,6 @@
 
 @property(nonatomic, strong) NSArray <SSJAnnoucementItem *> *items;
 
+@property (nonatomic, copy) void (^announceClickedBlock)(SSJAnnoucementItem *item);
+
 @end

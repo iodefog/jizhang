@@ -177,6 +177,13 @@
     }
 }
 
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    SSJAnnoucementItem *item = [self.items ssj_safeObjectAtIndex:self.currentIndex];
+    if (self.announceClickedBlock) {
+        self.announceClickedBlock(item);
+    }
+}
+
 - (void)adjustTheTextLayerPosition {
 }
 

@@ -29,6 +29,7 @@
 #import "SSJPersonalDetailViewController.h"
 #import "SSJBookkeepingTreeViewController.h"
 #import "SSJMagicExportViewController.h"
+#import "SSJAnnouncementWebViewController.h"
 #import "SSJBookkeepingTreeHelper.h"
 #import "SSJBookkeepingTreeStore.h"
 #import "SSJBookkeepingTreeCheckInModel.h"
@@ -520,6 +521,14 @@ static BOOL kNeedBannerDisplay = YES;
 - (SSJScrollalbleAnnounceView *)announcementView {
     if (!_announcementView) {
         _announcementView = [[SSJScrollalbleAnnounceView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 0)];
+        __weak typeof(self) weakSelf = self;
+        _announcementView.announceClickedBlock = ^(SSJAnnoucementItem *item) {
+            if (item) {
+                SSJAnnouncementWebViewController *webVc = [SSJAnnouncementWebViewController webViewVCWithURL:[NSURL URLWithString:item.announcementUrl]];
+                webVc.item = item;
+                [weakSelf.navigationController pushViewController:webVc animated:YES];
+            }
+        };
     }
     return _announcementView;
 }

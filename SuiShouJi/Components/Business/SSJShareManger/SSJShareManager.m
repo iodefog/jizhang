@@ -23,17 +23,17 @@
     [UMSocialUIManager setPreDefinePlatforms:@[@(UMSocialPlatformType_Sina),@(UMSocialPlatformType_QQ),@(UMSocialPlatformType_WechatSession),@(UMSocialPlatformType_WechatTimeLine)]];
     [UMSocialUIManager showShareMenuViewInWindowWithPlatformSelectionBlock:^(UMSocialPlatformType platformType, NSDictionary *userInfo) {
         switch (type) {
-            case SSJShareTypeTextOnly: {
+            case SSJShareTypeUrl: {
                 [weakSelf shareWebPageWithUrlStr:str title:title content:content PlatformType:platformType inController:controller ShareSuccess:success];
             }
                 break;
                 
-            case SSJShareTypeImageOnly: {
+            case SSJShareTypeTextOnly: {
                 [weakSelf shareText:content PlatformType:platformType inController:controller ShareSuccess:success];
             }
                 break;
                 
-            case SSJShareTypeUrl: {
+            case SSJShareTypeImageOnly: {
                 [weakSelf shareImage:image PlatformType:platformType inController:controller ShareSuccess:success];
             }
                 break;
@@ -132,8 +132,6 @@
     
     //创建图片内容对象
     UMShareImageObject *shareObject = [[UMShareImageObject alloc] init];
-    //如果有缩略图，则设置缩略图
-    shareObject.thumbImage = [UIImage imageNamed:@"icon"];
     
     [shareObject setShareImage:image];
     

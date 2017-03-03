@@ -71,6 +71,7 @@ static NSString *const kAnnouncementCellIdentifier = @"kAnnouncementCellIdentifi
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     SSJAnnoucementItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
     SSJAnnouncementWebViewController *webVc = [SSJAnnouncementWebViewController webViewVCWithURL:[NSURL URLWithString:item.announcementUrl]];
+    webVc.item = item;
     [self.navigationController pushViewController:webVc animated:YES];
 }
 
