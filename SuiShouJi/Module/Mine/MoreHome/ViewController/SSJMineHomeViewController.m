@@ -324,9 +324,9 @@ static BOOL kNeedBannerDisplay = YES;
     //  把APP推荐给好友
     if ([item.adTitle isEqualToString:kTitle8]) {
         if ([SSJDefaultSource() isEqualToString:@"11501"]) {
-            [SSJShareManager shareWithType:SSJShareTypeUrl image:nil UrlStr:@"" title:@"" content:@"财务管理第一步，从记录消费生活开始!" PlatformType:UMSocialPlatformType_Sina | UMSocialPlatformType_WechatSession | UMSocialPlatformType_WechatTimeLine | UMSocialPlatformType_QQ inController:self ShareSuccess:NULL];
+            [SSJShareManager shareWithType:SSJShareTypeUrl image:nil UrlStr:SSJDetailSettingForSource(@"ShareUrl") title:SSJDetailSettingForSource(@"ShareTitle") content:@"财务管理第一步，从记录消费生活开始!" PlatformType:UMSocialPlatformType_Sina | UMSocialPlatformType_WechatSession | UMSocialPlatformType_WechatTimeLine | UMSocialPlatformType_QQ inController:self ShareSuccess:NULL];
         } else {
-            [SSJShareManager shareWithType:SSJShareTypeUrl image:nil UrlStr:@"" title:@"" content:@"在这里，记录消费生活是件有趣简单的事儿，管家更有窍门。" PlatformType:UMSocialPlatformType_Sina | UMSocialPlatformType_WechatSession | UMSocialPlatformType_WechatTimeLine | UMSocialPlatformType_QQ inController:self ShareSuccess:NULL];
+            [SSJShareManager shareWithType:SSJShareTypeUrl image:nil UrlStr:SSJDetailSettingForSource(@"ShareUrl") title:SSJDetailSettingForSource(@"ShareTitle") content:@"在这里，记录消费生活是件有趣简单的事儿，管家更有窍门。" PlatformType:UMSocialPlatformType_Sina | UMSocialPlatformType_WechatSession | UMSocialPlatformType_WechatTimeLine | UMSocialPlatformType_QQ inController:self ShareSuccess:NULL];
         }
         
     }
@@ -397,30 +397,6 @@ static BOOL kNeedBannerDisplay = YES;
     self.adItemsArray = tempArray;
     [self additionOrgDataToModel];
 }
-
-
-#pragma mark - UMSocialUIDelegate
--(void)didFinishGetUMSocialDataInViewController:(UMSocialResponseEntity *)response
-{
-    //根据responseCode得到发送结果,如果分享成功
-    if(response.responseCode == UMSResponseCodeSuccess)
-    {
-        [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@"分享成功" action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL],nil];
-    }else{
-        [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@"分享失败" action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL],nil];
-    }
-}
-
--(void)didSelectSocialPlatform:(NSString *)platformName withSocialData:(UMSocialData *)socialData
-{
-    if (platformName == UMShareToSina) {
-        socialData.shareText = [NSString stringWithFormat:@"%@ %@",SSJDetailSettingForSource(@"ShareTitle"),SSJDetailSettingForSource(@"ShareUrl")];
-        socialData.shareImage = [UIImage imageNamed:SSJDetailSettingForSource(@"WeiboBanner")];
-    }else{
-        socialData.shareText = SSJDetailSettingForSource(@"ShareContent");
-    }
-}
-
 
 #pragma mark - Getter
 -(SSJBannerHeaderView *)bannerHeader {

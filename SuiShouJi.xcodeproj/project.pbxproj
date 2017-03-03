@@ -549,7 +549,6 @@
 		7D08A2CB1E4999D30085A8FB /* ProjectSettings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7D4EF8931C4B5625003C4B20 /* ProjectSettings.plist */; };
 		7D08A2CD1E4999D30085A8FB /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7DC487611DF6629700C27B69 /* Localizable.strings */; };
 		7D08A2CE1E4999D30085A8FB /* SSJFinancingHomePopView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9C9471411CEB224C00D69079 /* SSJFinancingHomePopView.xib */; };
-		7D08A2CF1E4999D30085A8FB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BD543C481C1A6DBC00910D61 /* Main.storyboard */; };
 		7D098C792A14820300C86957 /* SSJDatabaseErrorHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D098C782A14820300C86957 /* SSJDatabaseErrorHandler.m */; };
 		7D098C7C2A14820300C86957 /* SSJDatabaseErrorHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D098C782A14820300C86957 /* SSJDatabaseErrorHandler.m */; };
 		7D0AEC431E31AD3F008FADDB /* SSJAdWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C2B19221D3E185200B987EE /* SSJAdWebViewController.m */; };
@@ -1369,7 +1368,6 @@
 		7DA13C221E35AED7000490A4 /* ProjectSettings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7D4EF8931C4B5625003C4B20 /* ProjectSettings.plist */; };
 		7DA13C241E35AED7000490A4 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7DC487611DF6629700C27B69 /* Localizable.strings */; };
 		7DA13C251E35AED7000490A4 /* SSJFinancingHomePopView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9C9471411CEB224C00D69079 /* SSJFinancingHomePopView.xib */; };
-		7DA13C261E35AED7000490A4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BD543C481C1A6DBC00910D61 /* Main.storyboard */; };
 		7DA6EDD21D2B5CAE0097F06C /* SSJThemeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DA6EDD11D2B5CAE0097F06C /* SSJThemeModel.m */; };
 		7DAA383D1D952330000ED16E /* SSJBudgetBillTypeSelectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DAA383C1D952330000ED16E /* SSJBudgetBillTypeSelectionViewController.m */; };
 		7DAA38401D952330000ED16E /* SSJBudgetBillTypeSelectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DAA383C1D952330000ED16E /* SSJBudgetBillTypeSelectionViewController.m */; };
@@ -1971,7 +1969,6 @@
 		7DBB3A641E55C0A70075E638 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7DC487611DF6629700C27B69 /* Localizable.strings */; };
 		7DBB3A651E55C0A70075E638 /* YouYuJiZhangBao-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7DBB381E1E55BE2F0075E638 /* YouYuJiZhangBao-Info.plist */; };
 		7DBB3A661E55C0A70075E638 /* SSJFinancingHomePopView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9C9471411CEB224C00D69079 /* SSJFinancingHomePopView.xib */; };
-		7DBB3A671E55C0A70075E638 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BD543C481C1A6DBC00910D61 /* Main.storyboard */; };
 		7DBB3A701E55C13F0075E638 /* YouYuJiZhang-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7DBB3A6F1E55C13F0075E638 /* YouYuJiZhang-Info.plist */; };
 		7DBB3A741E55C2EE0075E638 /* SSJAlertViewAction.m in Sources */ = {isa = PBXBuildFile; fileRef = BD33FD281C4B2E4C006A6942 /* SSJAlertViewAction.m */; };
 		7DBB3A751E55C2EE0075E638 /* SSJForgetPasswordFirstStepViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE6E8701C56419F001C9138 /* SSJForgetPasswordFirstStepViewController.m */; };
@@ -2545,7 +2542,6 @@
 		7DBB3CB11E55C2EE0075E638 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7DC487611DF6629700C27B69 /* Localizable.strings */; };
 		7DBB3CB21E55C2EE0075E638 /* YouYuJiZhangBao-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7DBB381E1E55BE2F0075E638 /* YouYuJiZhangBao-Info.plist */; };
 		7DBB3CB31E55C2EE0075E638 /* SSJFinancingHomePopView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9C9471411CEB224C00D69079 /* SSJFinancingHomePopView.xib */; };
-		7DBB3CB41E55C2EE0075E638 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BD543C481C1A6DBC00910D61 /* Main.storyboard */; };
 		7DBB3CBD1E55C3500075E638 /* YouYuJiZhangLiCai-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7DBB3CBC1E55C3500075E638 /* YouYuJiZhangLiCai-Info.plist */; };
 		7DBB3CC11E55C4220075E638 /* SSJAlertViewAction.m in Sources */ = {isa = PBXBuildFile; fileRef = BD33FD281C4B2E4C006A6942 /* SSJAlertViewAction.m */; };
 		7DBB3CC21E55C4220075E638 /* SSJForgetPasswordFirstStepViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE6E8701C56419F001C9138 /* SSJForgetPasswordFirstStepViewController.m */; };
@@ -3120,7 +3116,6 @@
 		7DBB3EFF1E55C4220075E638 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7DC487611DF6629700C27B69 /* Localizable.strings */; };
 		7DBB3F001E55C4220075E638 /* YouYuJiZhangBao-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7DBB381E1E55BE2F0075E638 /* YouYuJiZhangBao-Info.plist */; };
 		7DBB3F011E55C4220075E638 /* SSJFinancingHomePopView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9C9471411CEB224C00D69079 /* SSJFinancingHomePopView.xib */; };
-		7DBB3F021E55C4220075E638 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BD543C481C1A6DBC00910D61 /* Main.storyboard */; };
 		7DBB3F0B1E55C4530075E638 /* JiZhangGuanJia-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7DBB3F0A1E55C4530075E638 /* JiZhangGuanJia-Info.plist */; };
 		7DBB3F0F1E55C4E00075E638 /* SSJAlertViewAction.m in Sources */ = {isa = PBXBuildFile; fileRef = BD33FD281C4B2E4C006A6942 /* SSJAlertViewAction.m */; };
 		7DBB3F101E55C4E00075E638 /* SSJForgetPasswordFirstStepViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE6E8701C56419F001C9138 /* SSJForgetPasswordFirstStepViewController.m */; };
@@ -3696,7 +3691,6 @@
 		7DBB414E1E55C4E00075E638 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7DC487611DF6629700C27B69 /* Localizable.strings */; };
 		7DBB414F1E55C4E00075E638 /* YouYuJiZhangBao-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7DBB381E1E55BE2F0075E638 /* YouYuJiZhangBao-Info.plist */; };
 		7DBB41501E55C4E00075E638 /* SSJFinancingHomePopView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9C9471411CEB224C00D69079 /* SSJFinancingHomePopView.xib */; };
-		7DBB41511E55C4E00075E638 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BD543C481C1A6DBC00910D61 /* Main.storyboard */; };
 		7DBB415A1E55C5150075E638 /* SuiShouJiEnterprise-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7DBB41591E55C5150075E638 /* SuiShouJiEnterprise-Info.plist */; };
 		7DC318641E2882A300932644 /* FMDatabase+FTS3.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC3184D1E2882A300932644 /* FMDatabase+FTS3.m */; };
 		7DC318671E2882A300932644 /* FMDatabase+FTS3.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC3184D1E2882A300932644 /* FMDatabase+FTS3.m */; };
@@ -4675,7 +4669,6 @@
 		9C3849681E641CAB00BF4AF9 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7DC487611DF6629700C27B69 /* Localizable.strings */; };
 		9C3849691E641CAB00BF4AF9 /* YouYuJiZhangBao-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7DBB381E1E55BE2F0075E638 /* YouYuJiZhangBao-Info.plist */; };
 		9C38496A1E641CAB00BF4AF9 /* SSJFinancingHomePopView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9C9471411CEB224C00D69079 /* SSJFinancingHomePopView.xib */; };
-		9C38496B1E641CAB00BF4AF9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BD543C481C1A6DBC00910D61 /* Main.storyboard */; };
 		9C3849761E641D1100BF4AF9 /* 9188JiZhangBen-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9C3849751E641D1100BF4AF9 /* 9188JiZhangBen-Info.plist */; };
 		9C3899A11DC9D99700715732 /* SSJCustomCategoryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3899A01DC9D99700715732 /* SSJCustomCategoryItem.m */; };
 		9C3899A41DC9D99700715732 /* SSJCustomCategoryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3899A01DC9D99700715732 /* SSJCustomCategoryItem.m */; };
@@ -5357,7 +5350,6 @@
 		9CECFE461D6D41A700DB2C8B /* sr_refresh.png in Resources */ = {isa = PBXBuildFile; fileRef = BD0432DA1C1A77BB0051E7AB /* sr_refresh.png */; };
 		9CECFEB51D6D41A700DB2C8B /* ProjectSettings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7D4EF8931C4B5625003C4B20 /* ProjectSettings.plist */; };
 		9CECFED81D6D41A700DB2C8B /* SSJFinancingHomePopView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9C9471411CEB224C00D69079 /* SSJFinancingHomePopView.xib */; };
-		9CECFF031D6D41A700DB2C8B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BD543C481C1A6DBC00910D61 /* Main.storyboard */; };
 		9CF594001D63FFBB00006594 /* SSJGradientColorSelectCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF593EE1D63FFBB00006594 /* SSJGradientColorSelectCollectionViewCell.m */; };
 		9CF594021D63FFBB00006594 /* SSJModifyFundingTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF593F01D63FFBB00006594 /* SSJModifyFundingTableViewCell.m */; };
 		9CF594041D63FFBB00006594 /* SSJNewFundingTypeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF593F21D63FFBB00006594 /* SSJNewFundingTypeCell.m */; };
@@ -5412,7 +5404,6 @@
 		BD542B601CB5457800655EE2 /* SSJThirdPartyLoginManger.m in Sources */ = {isa = PBXBuildFile; fileRef = BD542B5F1CB5457800655EE2 /* SSJThirdPartyLoginManger.m */; };
 		BD543C411C1A6DBC00910D61 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BD543C401C1A6DBC00910D61 /* main.m */; };
 		BD543C441C1A6DBC00910D61 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BD543C431C1A6DBC00910D61 /* AppDelegate.m */; };
-		BD543C4A1C1A6DBC00910D61 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BD543C481C1A6DBC00910D61 /* Main.storyboard */; };
 		BD543C4C1C1A6DBC00910D61 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BD543C4B1C1A6DBC00910D61 /* Assets.xcassets */; };
 		BD543C4F1C1A6DBC00910D61 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BD543C4D1C1A6DBC00910D61 /* LaunchScreen.storyboard */; };
 		BD543C5A1C1A6DBC00910D61 /* SuiShouJiTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BD543C591C1A6DBC00910D61 /* SuiShouJiTests.m */; };
@@ -6684,7 +6675,6 @@
 		BD543C401C1A6DBC00910D61 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		BD543C421C1A6DBC00910D61 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		BD543C431C1A6DBC00910D61 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		BD543C491C1A6DBC00910D61 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		BD543C4B1C1A6DBC00910D61 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BD543C4E1C1A6DBC00910D61 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		BD543C551C1A6DBC00910D61 /* SuiShouJiTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SuiShouJiTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -9943,7 +9933,6 @@
 				BD0432CD1C1A77BB0051E7AB /* Vendor */,
 				BD0432CB1C1A772A0051E7AB /* Macro */,
 				BD543C3F1C1A6DBC00910D61 /* Supporting Files */,
-				BD543C481C1A6DBC00910D61 /* Main.storyboard */,
 				BD543C4B1C1A6DBC00910D61 /* Assets.xcassets */,
 				BD543C4D1C1A6DBC00910D61 /* LaunchScreen.storyboard */,
 			);
@@ -10521,7 +10510,6 @@
 				7D08A2CB1E4999D30085A8FB /* ProjectSettings.plist in Resources */,
 				7D08A2CD1E4999D30085A8FB /* Localizable.strings in Resources */,
 				7D08A2CE1E4999D30085A8FB /* SSJFinancingHomePopView.xib in Resources */,
-				7D08A2CF1E4999D30085A8FB /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -10547,7 +10535,6 @@
 				7DA13C221E35AED7000490A4 /* ProjectSettings.plist in Resources */,
 				7DA13C241E35AED7000490A4 /* Localizable.strings in Resources */,
 				7DA13C251E35AED7000490A4 /* SSJFinancingHomePopView.xib in Resources */,
-				7DA13C261E35AED7000490A4 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -10577,7 +10564,6 @@
 				7DBB3A641E55C0A70075E638 /* Localizable.strings in Resources */,
 				7DBB3A651E55C0A70075E638 /* YouYuJiZhangBao-Info.plist in Resources */,
 				7DBB3A661E55C0A70075E638 /* SSJFinancingHomePopView.xib in Resources */,
-				7DBB3A671E55C0A70075E638 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -10608,7 +10594,6 @@
 				7DBB3CB11E55C2EE0075E638 /* Localizable.strings in Resources */,
 				7DBB3CB21E55C2EE0075E638 /* YouYuJiZhangBao-Info.plist in Resources */,
 				7DBB3CB31E55C2EE0075E638 /* SSJFinancingHomePopView.xib in Resources */,
-				7DBB3CB41E55C2EE0075E638 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -10640,7 +10625,6 @@
 				7DBB3EFF1E55C4220075E638 /* Localizable.strings in Resources */,
 				7DBB3F001E55C4220075E638 /* YouYuJiZhangBao-Info.plist in Resources */,
 				7DBB3F011E55C4220075E638 /* SSJFinancingHomePopView.xib in Resources */,
-				7DBB3F021E55C4220075E638 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -10673,7 +10657,6 @@
 				7DBB414E1E55C4E00075E638 /* Localizable.strings in Resources */,
 				7DBB414F1E55C4E00075E638 /* YouYuJiZhangBao-Info.plist in Resources */,
 				7DBB41501E55C4E00075E638 /* SSJFinancingHomePopView.xib in Resources */,
-				7DBB41511E55C4E00075E638 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -10707,7 +10690,6 @@
 				9C3849681E641CAB00BF4AF9 /* Localizable.strings in Resources */,
 				9C3849691E641CAB00BF4AF9 /* YouYuJiZhangBao-Info.plist in Resources */,
 				9C38496A1E641CAB00BF4AF9 /* SSJFinancingHomePopView.xib in Resources */,
-				9C38496B1E641CAB00BF4AF9 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -10731,7 +10713,6 @@
 				9CFBAC401E07D4EC00C55814 /* xiaomao.gif in Resources */,
 				9CECFED81D6D41A700DB2C8B /* SSJFinancingHomePopView.xib in Resources */,
 				9C155F131E68572700FDFD18 /* MJRefresh.bundle in Resources */,
-				9CECFF031D6D41A700DB2C8B /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -10766,7 +10747,6 @@
 				7DC4875B1DF6629700C27B69 /* Localizable.strings in Resources */,
 				7DBB38221E55BE2F0075E638 /* YouYuJiZhangBao-Info.plist in Resources */,
 				9C94717C1CEB224C00D69079 /* SSJFinancingHomePopView.xib in Resources */,
-				BD543C4A1C1A6DBC00910D61 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -16428,14 +16408,6 @@
 			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
-		BD543C481C1A6DBC00910D61 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				BD543C491C1A6DBC00910D61 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		BD543C4D1C1A6DBC00910D61 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -16820,31 +16792,14 @@
 					"$(inherited)",
 					"-ObjC",
 					"-l\"AFNetworking\"",
-					"-l\"APOpenSdk\"",
 					"-l\"DateTools\"",
 					"-l\"FLAnimatedImage\"",
 					"-l\"JSPatch\"",
-					"-l\"LWApiSDK\"",
 					"-l\"MJExtension\"",
 					"-l\"MMDrawerController\"",
 					"-l\"Masonry\"",
 					"-l\"Meiqia\"",
 					"-l\"SDWebImage\"",
-					"-l\"SocialAlipayShare\"",
-					"-l\"SocialFacebook\"",
-					"-l\"SocialInstagram\"",
-					"-l\"SocialLaiWang\"",
-					"-l\"SocialLine\"",
-					"-l\"SocialQQ\"",
-					"-l\"SocialSinaSSO\"",
-					"-l\"SocialTumblr\"",
-					"-l\"SocialTwitter\"",
-					"-l\"SocialWechat\"",
-					"-l\"SocialWhatsapp\"",
-					"-l\"UMSocial_Sdk_5.2.1\"",
-					"-l\"UMSocial_Sdk_Comment_5.2.1\"",
-					"-l\"WeChatSDK\"",
-					"-l\"WeiboSDK\"",
 					"-l\"YYKeyboardManager\"",
 					"-l\"YYText\"",
 					"-l\"ZYCornerRadius\"",
@@ -16873,14 +16828,6 @@
 					"-framework",
 					"\"CoreText\"",
 					"-framework",
-					"\"FBSDKCoreKit\"",
-					"-framework",
-					"\"FBSDKLoginKit\"",
-					"-framework",
-					"\"FBSDKShareKit\"",
-					"-framework",
-					"\"Fabric\"",
-					"-framework",
 					"\"Foundation\"",
 					"-framework",
 					"\"ImageIO\"",
@@ -16896,12 +16843,6 @@
 					"\"Social\"",
 					"-framework",
 					"\"SystemConfiguration\"",
-					"-framework",
-					"\"TencentOpenAPI\"",
-					"-framework",
-					"\"TwitterCore\"",
-					"-framework",
-					"\"TwitterKit\"",
 					"-framework",
 					"\"UIKit\"",
 					"-framework",
@@ -17685,31 +17626,13 @@
 					"$(inherited)",
 					"-ObjC",
 					"-l\"AFNetworking\"",
-					"-l\"APOpenSdk\"",
-					"-l\"DateTools\"",
 					"-l\"FLAnimatedImage\"",
 					"-l\"JSPatch\"",
-					"-l\"LWApiSDK\"",
 					"-l\"MJExtension\"",
 					"-l\"MMDrawerController\"",
 					"-l\"Masonry\"",
 					"-l\"Meiqia\"",
 					"-l\"SDWebImage\"",
-					"-l\"SocialAlipayShare\"",
-					"-l\"SocialFacebook\"",
-					"-l\"SocialInstagram\"",
-					"-l\"SocialLaiWang\"",
-					"-l\"SocialLine\"",
-					"-l\"SocialQQ\"",
-					"-l\"SocialSinaSSO\"",
-					"-l\"SocialTumblr\"",
-					"-l\"SocialTwitter\"",
-					"-l\"SocialWechat\"",
-					"-l\"SocialWhatsapp\"",
-					"-l\"UMSocial_Sdk_5.2.1\"",
-					"-l\"UMSocial_Sdk_Comment_5.2.1\"",
-					"-l\"WeChatSDK\"",
-					"-l\"WeiboSDK\"",
 					"-l\"YYKeyboardManager\"",
 					"-l\"YYText\"",
 					"-l\"ZYCornerRadius\"",
@@ -17738,14 +17661,6 @@
 					"-framework",
 					"\"CoreText\"",
 					"-framework",
-					"\"FBSDKCoreKit\"",
-					"-framework",
-					"\"FBSDKLoginKit\"",
-					"-framework",
-					"\"FBSDKShareKit\"",
-					"-framework",
-					"\"Fabric\"",
-					"-framework",
 					"\"Foundation\"",
 					"-framework",
 					"\"ImageIO\"",
@@ -17761,12 +17676,6 @@
 					"\"Social\"",
 					"-framework",
 					"\"SystemConfiguration\"",
-					"-framework",
-					"\"TencentOpenAPI\"",
-					"-framework",
-					"\"TwitterCore\"",
-					"-framework",
-					"\"TwitterKit\"",
 					"-framework",
 					"\"UIKit\"",
 					"-framework",
@@ -20139,31 +20048,13 @@
 					"$(inherited)",
 					"-ObjC",
 					"-l\"AFNetworking\"",
-					"-l\"APOpenSdk\"",
-					"-l\"DateTools\"",
 					"-l\"FLAnimatedImage\"",
 					"-l\"JSPatch\"",
-					"-l\"LWApiSDK\"",
 					"-l\"MJExtension\"",
 					"-l\"MMDrawerController\"",
 					"-l\"Masonry\"",
 					"-l\"Meiqia\"",
 					"-l\"SDWebImage\"",
-					"-l\"SocialAlipayShare\"",
-					"-l\"SocialFacebook\"",
-					"-l\"SocialInstagram\"",
-					"-l\"SocialLaiWang\"",
-					"-l\"SocialLine\"",
-					"-l\"SocialQQ\"",
-					"-l\"SocialSinaSSO\"",
-					"-l\"SocialTumblr\"",
-					"-l\"SocialTwitter\"",
-					"-l\"SocialWechat\"",
-					"-l\"SocialWhatsapp\"",
-					"-l\"UMSocial_Sdk_5.2.1\"",
-					"-l\"UMSocial_Sdk_Comment_5.2.1\"",
-					"-l\"WeChatSDK\"",
-					"-l\"WeiboSDK\"",
 					"-l\"YYKeyboardManager\"",
 					"-l\"YYText\"",
 					"-l\"ZYCornerRadius\"",
@@ -20192,14 +20083,6 @@
 					"-framework",
 					"\"CoreText\"",
 					"-framework",
-					"\"FBSDKCoreKit\"",
-					"-framework",
-					"\"FBSDKLoginKit\"",
-					"-framework",
-					"\"FBSDKShareKit\"",
-					"-framework",
-					"\"Fabric\"",
-					"-framework",
 					"\"Foundation\"",
 					"-framework",
 					"\"ImageIO\"",
@@ -20215,12 +20098,6 @@
 					"\"Social\"",
 					"-framework",
 					"\"SystemConfiguration\"",
-					"-framework",
-					"\"TencentOpenAPI\"",
-					"-framework",
-					"\"TwitterCore\"",
-					"-framework",
-					"\"TwitterKit\"",
 					"-framework",
 					"\"UIKit\"",
 					"-framework",
@@ -20273,31 +20150,13 @@
 					"$(inherited)",
 					"-ObjC",
 					"-l\"AFNetworking\"",
-					"-l\"APOpenSdk\"",
-					"-l\"DateTools\"",
 					"-l\"FLAnimatedImage\"",
 					"-l\"JSPatch\"",
-					"-l\"LWApiSDK\"",
 					"-l\"MJExtension\"",
 					"-l\"MMDrawerController\"",
 					"-l\"Masonry\"",
 					"-l\"Meiqia\"",
 					"-l\"SDWebImage\"",
-					"-l\"SocialAlipayShare\"",
-					"-l\"SocialFacebook\"",
-					"-l\"SocialInstagram\"",
-					"-l\"SocialLaiWang\"",
-					"-l\"SocialLine\"",
-					"-l\"SocialQQ\"",
-					"-l\"SocialSinaSSO\"",
-					"-l\"SocialTumblr\"",
-					"-l\"SocialTwitter\"",
-					"-l\"SocialWechat\"",
-					"-l\"SocialWhatsapp\"",
-					"-l\"UMSocial_Sdk_5.2.1\"",
-					"-l\"UMSocial_Sdk_Comment_5.2.1\"",
-					"-l\"WeChatSDK\"",
-					"-l\"WeiboSDK\"",
 					"-l\"YYKeyboardManager\"",
 					"-l\"YYText\"",
 					"-l\"ZYCornerRadius\"",
@@ -20326,14 +20185,6 @@
 					"-framework",
 					"\"CoreText\"",
 					"-framework",
-					"\"FBSDKCoreKit\"",
-					"-framework",
-					"\"FBSDKLoginKit\"",
-					"-framework",
-					"\"FBSDKShareKit\"",
-					"-framework",
-					"\"Fabric\"",
-					"-framework",
 					"\"Foundation\"",
 					"-framework",
 					"\"ImageIO\"",
@@ -20349,12 +20200,6 @@
 					"\"Social\"",
 					"-framework",
 					"\"SystemConfiguration\"",
-					"-framework",
-					"\"TencentOpenAPI\"",
-					"-framework",
-					"\"TwitterCore\"",
-					"-framework",
-					"\"TwitterKit\"",
 					"-framework",
 					"\"UIKit\"",
 					"-framework",
