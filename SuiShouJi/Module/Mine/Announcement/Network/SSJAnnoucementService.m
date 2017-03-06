@@ -33,6 +33,7 @@
         [self saveAnnoucementAtLocalWithArr:announcementArr];
         self.annoucements = [SSJAnnoucementItem mj_objectArrayWithKeyValuesArray:announcementArr];
         self.hasNewAnnouceMent = [[results objectForKey:@"new_announcement"] boolValue];
+        self.totalPage = [[rootElement objectForKey:@"tp"] integerValue];
     }
 }
 

@@ -11,6 +11,8 @@
 
 @interface SSJAnnouncementsListViewController : SSJNewBaseTableViewController
 
-@property(nonatomic, strong) NSArray <SSJAnnoucementItem *> *items;
+@property(nonatomic, strong) NSMutableArray <SSJAnnoucementItem *> *items;
+
+@property(nonatomic) NSInteger totalPage;
 
 @end

@@ -20,8 +20,6 @@ static NSString *const kAnnouncementCellIdentifier = @"kAnnouncementCellIdentifi
 
 @property(nonatomic) NSInteger currentPage;
 
-@property(nonatomic) NSInteger totalPage;
-
 @end
 
 @implementation SSJAnnouncementsListViewController
@@ -41,11 +39,7 @@ static NSString *const kAnnouncementCellIdentifier = @"kAnnouncementCellIdentifi
     self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
         [self startPullRefresh];
     }];
-    
-    self.tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
-        [self startLoadMore];
-    }];
-
+    self.tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(startLoadMore)];
     // Do any additional setup after loading the view.
 }
 
@@ -55,6 +49,8 @@ static NSString *const kAnnouncementCellIdentifier = @"kAnnouncementCellIdentifi
         SSJAnnoucementItem *item = [self.items firstObject];
         [[NSUserDefaults standardUserDefaults] setObject:item.announcementId forKey:kLastAnnoucementIdKey];
         [[NSUserDefaults standardUserDefaults] synchronize];
+    } else {
+        [self.service requestAnnoucementsWithPage:1];
     }
 }
 
@@ -100,8 +96,15 @@ static NSString *const kAnnouncementCellIdentifier = @"kAnnouncementCellIdentifi
 #pragma mark - SSJBaseNetworkService
 -(void)serverDidFinished:(SSJBaseNetworkService *)service {
     [self.tableView.mj_header endRefreshing];
+    [self.tableView.mj_footer endRefreshing];
     if ([service.returnCode isEqualToString:@"1"]) {
-        self.items = self.service.annoucements;
+        if (self.currentPage == 1) {
+            [self.items removeAllObjects];
+            self.items = [self.service.annoucements mutableCopy];
+        } else {
+            [self.items addObjectsFromArray:self.service.annoucements];
+        }
+        self.totalPage = self.service.totalPage;
         [self.tableView reloadData];
     }
 }
@@ -120,15 +123,18 @@ static NSString *const kAnnouncementCellIdentifier = @"kAnnouncementCellIdentifi
 
 #pragma mark - Private
 - (void)startPullRefresh {
+    self.currentPage = 1;
     [self.service requestAnnoucementsWithPage:1];
 }
 
 - (void)startLoadMore {
     self.currentPage ++;
-    [self.service requestAnnoucementsWithPage:self.currentPage];
+    if (self.currentPage > self.totalPage) {
+        [self.tableView.mj_footer endRefreshingWithNoMoreData];
+    } else {
+        [self.service requestAnnoucementsWithPage:self.currentPage];
+    }
 }
-
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

@@ -546,7 +546,8 @@ static BOOL kNeedBannerDisplay = YES;
         __weak typeof(self) weakSelf = self;
         _rightButton.buttonClickBlock = ^(){
             SSJAnnouncementsListViewController *annoucementListVc = [[SSJAnnouncementsListViewController alloc] initWithTableViewStyle:UITableViewStyleGrouped];
-            annoucementListVc.items = weakSelf.announcements;
+            annoucementListVc.items = [weakSelf.announcements mutableCopy];
+            annoucementListVc.totalPage = weakSelf.annoucementService.totalPage;
             [weakSelf.navigationController pushViewController:annoucementListVc animated:YES];
         };
     }
