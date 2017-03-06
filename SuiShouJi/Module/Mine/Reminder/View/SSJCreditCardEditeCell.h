@@ -7,6 +7,7 @@
 //
 
 #import "SSJBaseTableViewCell.h"
+#import "SSJFinancingGradientColorItem.h"
 
 @interface SSJCreditCardEditeCell : SSJBaseTableViewCell
 
@@ -35,5 +36,7 @@ typedef NS_ENUM(NSInteger, SSJCreditCardCellType) {
 @property(nonatomic, strong) NSAttributedString *cellAtrributedDetail;
 
 @property(nonatomic, strong) NSString *cellColor;
+
+@property(nonatomic, strong) SSJFinancingGradientColorItem *colorItem;
 
 @end

@@ -22,6 +22,7 @@
         [self.contentView addSubview:self.cellDetail];
         [self.contentView addSubview:self.typeTitle];
         [self.contentView addSubview:self.typeImage];
+        [self.contentView.layer addSublayer:self.gradientLayer];
     }
     return self;
 }
@@ -42,7 +43,8 @@
     self.typeImage.size = CGSizeMake(22, 22);
     self.typeImage.right = self.typeTitle.left - 10;
     self.typeImage.centerY = self.height / 2;
-
+    self.gradientLayer.position = CGPointMake(0, self.height / 2);
+    self.gradientLayer.right = self.contentView.width - 10;
 }
 
 -(UILabel *)cellTitle{
@@ -92,6 +94,7 @@
     if (!_gradientLayer) {
         _gradientLayer = [CAGradientLayer layer];
         _gradientLayer.size = CGSizeMake(50, 30);
+        _gradientLayer.cornerRadius = 8.f;
     }
     return _gradientLayer;
 }

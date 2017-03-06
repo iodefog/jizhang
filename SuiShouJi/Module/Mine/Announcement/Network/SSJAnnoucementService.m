@@ -11,7 +11,7 @@
 
 @implementation SSJAnnoucementService
 
-- (void)requestAnnoucements {
+- (void)requestAnnoucementsWithPage:(NSInteger)page {
     NSString *lastAnnoucementIdStr = [[NSUserDefaults standardUserDefaults] objectForKey:kLastAnnoucementIdKey];
     
     NSInteger lastAnnoucementId = [lastAnnoucementIdStr integerValue];
@@ -20,7 +20,7 @@
     
     [dic setObject:@(lastAnnoucementId) forKey:@"aid"];
     
-    [dic setObject:@(0) forKey:@"pn"];
+    [dic setObject:@(page) forKey:@"pn"];
     
     [self request:SSJURLWithAPI(@"/admin/announcement.go") params:dic];
 }

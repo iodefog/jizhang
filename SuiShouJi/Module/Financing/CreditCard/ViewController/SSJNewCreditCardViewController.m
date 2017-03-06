@@ -93,7 +93,8 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         self.item.settleAtRepaymentDay = YES;
         self.item.cardBillingDay = 1;
         self.item.cardRepaymentDay = 10;
-        self.item.cardColor = @"#fc7a60";
+        self.item.startColor = [[SSJFinancingGradientColorItem defualtColors] firstObject].startColor;
+        self.item.endColor = [[SSJFinancingGradientColorItem defualtColors] firstObject].endColor;
     }else{
         self.title = @"编辑资金账户";
         UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(rightButtonClicked:)];
@@ -352,9 +353,12 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     // 编辑卡片颜色
     if ([title isEqualToString:kTitle10]) {
         newReminderCell.type = SSJCreditCardCellColorSelect;
-        newReminderCell.cellColor = self.item.cardColor;
         newReminderCell.cellTitle = title;
         newReminderCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        SSJFinancingGradientColorItem *item = [[SSJFinancingGradientColorItem alloc] init];
+        item.startColor = self.item.startColor;
+        item.endColor = self.item.endColor;
+        newReminderCell.colorItem = item;
     }
     return newReminderCell;
 }

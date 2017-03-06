@@ -46,7 +46,7 @@
 
 -(UILabel *)balanceLabel{
     if (!_balanceLabel) {
-        _balanceLabel = [[UILabel alloc]init];
+        _balanceLabel = [[UILabel alloc] init];
         _balanceLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _balanceLabel.font = [UIFont systemFontOfSize:22];
     }

@@ -148,6 +148,7 @@
         case 4:{
             NewFundingCell.selectionStyle = UITableViewCellSelectionStyleNone;
 //            NewFundingCell.colorView.backgroundColor = [UIColor ssj_colorWithHex:_selectColor];
+            NewFundingCell.colorItem = _selectColor;
             NewFundingCell.cellText.text = @"选择颜色";
             NewFundingCell.cellText.enabled = NO;
             NewFundingCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;

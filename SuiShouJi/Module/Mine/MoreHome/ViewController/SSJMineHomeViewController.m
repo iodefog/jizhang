@@ -148,7 +148,7 @@ static BOOL kNeedBannerDisplay = YES;
     if ([SSJNetworkReachabilityManager networkReachabilityStatus] == SSJNetworkReachabilityStatusNotReachable) {
         [self getLocalAnnoucement];
     } else {
-        [self.annoucementService requestAnnoucements];
+        [self.annoucementService requestAnnoucementsWithPage:1];
     }
     
     SSJUserItem *item = [SSJUserTableManager queryUserItemForID:SSJUSERID()];\
@@ -364,12 +364,19 @@ static BOOL kNeedBannerDisplay = YES;
     }
     
     if ([service isKindOfClass:[SSJAnnoucementService class]]) {
-        NSArray *topAnnoucements = [self.annoucementService.annoucements subarrayWithRange:NSMakeRange(0, 3)];
-        self.announcementView.items = topAnnoucements;
-        self.rightButton.hasNewAnnoucements = self.annoucementService.hasNewAnnouceMent;
-        self.announcements = [NSArray arrayWithArray:self.annoucementService.annoucements];
-        self.announcementView.height = 34;
-        [self.view setNeedsLayout];
+        NSArray *topAnnoucements = [NSArray array];
+        if (self.annoucementService.annoucements.count > 3) {
+            topAnnoucements = [self.annoucementService.annoucements subarrayWithRange:NSMakeRange(0, 3)];
+        } else {
+            topAnnoucements = self.annoucementService.annoucements;
+        }
+        if (topAnnoucements.count) {
+            self.announcementView.items = topAnnoucements;
+            self.rightButton.hasNewAnnoucements = self.annoucementService.hasNewAnnouceMent;
+            self.announcements = [NSArray arrayWithArray:self.annoucementService.annoucements];
+            self.announcementView.height = 34;
+            [self.view setNeedsLayout];
+        }
     }
     [self.collectionView reloadData];
 }

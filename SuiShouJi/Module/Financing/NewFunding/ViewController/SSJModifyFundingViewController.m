@@ -172,6 +172,7 @@
         case 4:{
             NewFundingCell.selectionStyle = UITableViewCellSelectionStyleNone;
 //            NewFundingCell.colorView.backgroundColor = [UIColor ssj_colorWithHex:_selectColor];
+            NewFundingCell.item = _selectColor;
             NewFundingCell.cellDetail.hidden = YES;
             NewFundingCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }

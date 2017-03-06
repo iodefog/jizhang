@@ -103,7 +103,7 @@
     // 判断是新增还是修改
     if (![db intForQuery:@"select count(1) from bk_fund_info where cfundid = ? and cuserid = ? and operatortype <> 2",item.cardId,userId]) {
         // 插入资金账户表
-        if (![db executeUpdate:@"insert into bk_fund_info (cfundid ,cacctname ,cicoin ,cparent ,ccolor ,cwritedate ,operatortype ,iversion ,cmemo ,cuserid , iorder ,idisplay) values (?,?,?,3,?,?,0,?,?,?,?,1)",item.cardId,item.cardName,@"ft_creditcard",item.cardColor,editeDate,@(SSJSyncVersion()),item.cardMemo,userId,@(maxOrder)]) {
+        if (![db executeUpdate:@"insert into bk_fund_info (cfundid ,cacctname ,cicoin ,cparent ,ccolor ,cwritedate ,operatortype ,iversion ,cmemo ,cuserid , iorder ,idisplay, cstartcolor, cendcolor) values (?,?,?,3,?,?,0,?,?,?,?,1,?,?)",item.cardId,item.cardName,@"ft_creditcard",item.cardColor,editeDate,@(SSJSyncVersion()),item.cardMemo,userId,@(maxOrder),item.startColor,item.endColor]) {
             return [db lastError];
         }
         
@@ -125,7 +125,7 @@
         }
     }else{
         // 修改资金账户
-        if (![db executeUpdate:@"update bk_fund_info set cacctname = ? ,ccolor = ?,cwritedate = ?,operatortype = 1,iversion = ?,cmemo = ? where cfundid = ? and cuserid = ?",item.cardName,item.cardColor,editeDate,@(SSJSyncVersion()),item.cardMemo,item.cardId,userId]) {
+        if (![db executeUpdate:@"update bk_fund_info set cacctname = ? ,ccolor = ?,cwritedate = ?,operatortype = 1,iversion = ?,cmemo = ?,cstartcolor = ?,cendcolor = ? where cfundid = ? and cuserid = ?",item.cardName,item.cardColor,editeDate,@(SSJSyncVersion()),item.cardMemo,item.startColor,item.endColor,item.cardId,userId]) {
             return [db lastError];
         }
         

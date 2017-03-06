@@ -15,8 +15,12 @@ static NSString *const kLastAnnoucementIdKey = @"kLastAnnoucementIdKey";
 
 @property(nonatomic, strong) NSArray <SSJAnnoucementItem *> *annoucements;
 
+@property(nonatomic) NSInteger currentPage;
+
+@property(nonatomic) NSInteger totalPage;
+
 @property(nonatomic) BOOL hasNewAnnouceMent;
 
-- (void)requestAnnoucements;
+- (void)requestAnnoucementsWithPage:(NSInteger)page;
 
 @end

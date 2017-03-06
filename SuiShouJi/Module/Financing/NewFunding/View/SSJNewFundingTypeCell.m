@@ -11,6 +11,8 @@
 
 @interface SSJNewFundingTypeCell()
 
+@property(nonatomic, strong) CAGradientLayer *gradientLayer;
+
 @end
 
 @implementation SSJNewFundingTypeCell
@@ -20,6 +22,7 @@
         [self.contentView addSubview:self.typeLabel];
         [self.contentView addSubview:self.colorView];
         [self.contentView addSubview:self.typeImage];
+        [self.contentView.layer addSublayer:self.gradientLayer];
     }
     return self;
 }
@@ -36,6 +39,8 @@
     self.typeImage.size = CGSizeMake(18, 18);
     self.typeImage.right = self.typeLabel.left - 10;
     self.typeImage.centerY = self.height / 2;
+    self.gradientLayer.position = CGPointMake(0, self.height / 2);
+    self.gradientLayer.right = self.contentView.width - 10;
 }
 
 -(UITextField *)cellText{
@@ -69,6 +74,19 @@
         _typeImage = [[UIImageView alloc]init];
     }
     return _typeImage;
+}
+
+- (CAGradientLayer *)gradientLayer {
+    if (!_gradientLayer) {
+        _gradientLayer = [CAGradientLayer layer];
+        _gradientLayer.size = CGSizeMake(50, 30);
+        _gradientLayer.cornerRadius = 8.f;
+    }
+    return _gradientLayer;
+}
+
+- (void)setColorItem:(SSJFinancingGradientColorItem *)colorItem {
+    _gradientLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:colorItem.startColor].CGColor,(__bridge id)[UIColor ssj_colorWithHex:colorItem.endColor].CGColor];
 }
 
 /*

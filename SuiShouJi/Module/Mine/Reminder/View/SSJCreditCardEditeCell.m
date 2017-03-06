@@ -20,7 +20,7 @@
 
 @property(nonatomic, strong) UILabel *detailLabel;
 
-@property(nonatomic, strong) UIView *colorView;
+@property(nonatomic, strong) CAGradientLayer *gradientLayer;
 
 @end
 
@@ -34,7 +34,7 @@
         [self.contentView addSubview:self.detailLabel];
         [self.contentView addSubview:self.cellDetailImage];
         [self.contentView addSubview:self.subTitleLabel];
-        [self.contentView addSubview:self.colorView];
+        [self.contentView.layer addSublayer:self.gradientLayer];
     }
     return self;
 }
@@ -56,7 +56,7 @@
             self.detailLabel.hidden = YES;
             self.cellDetailImage.hidden = YES;
             self.subTitleLabel.hidden = YES;
-            self.colorView.hidden = YES;
+            self.gradientLayer.hidden = YES;
         }
             break;
             
@@ -92,7 +92,7 @@
             self.cellDetailImage.hidden = NO;
             self.textInput.hidden = YES;
             self.subTitleLabel.hidden = YES;
-            self.colorView.hidden = YES;
+            self.gradientLayer.hidden = YES;
         }
             break;
             
@@ -128,7 +128,7 @@
             self.cellDetailImage.hidden = NO;
             self.textInput.hidden = YES;
             self.subTitleLabel.hidden = YES;
-            self.colorView.hidden = YES;
+            self.gradientLayer.hidden = YES;
         }
             break;
             
@@ -144,7 +144,7 @@
             self.cellDetailImage.hidden = NO;
             self.textInput.hidden = YES;
             self.subTitleLabel.hidden = NO;
-            self.colorView.hidden = YES;
+            self.gradientLayer.hidden = YES;
         }
             break;
             
@@ -154,16 +154,16 @@
             self.accessoryView.centerY = self.cellImage.centerY;
             self.titleLabel.left = self.cellImage.right + 10;
             self.titleLabel.centerY = self.contentView.height / 2;
+            self.gradientLayer.position = CGPointMake(0, self.height / 2);
             if (self.contentView.width == self.width) {
-                self.colorView.right = self.contentView.width - 10;
+                self.gradientLayer.right = self.contentView.width - 10;
             }else{
-                self.colorView.right = self.contentView.width;
+                self.gradientLayer.right = self.contentView.width;
             }
-            self.colorView.centerY = self.contentView.height / 2;
             self.titleLabel.hidden = NO;
             self.detailLabel.hidden = YES;
             self.cellDetailImage.hidden = YES;
-            self.colorView.hidden = NO;
+            self.gradientLayer.hidden = NO;
 
             self.textInput.hidden = YES;
             self.subTitleLabel.hidden = YES;
@@ -226,13 +226,20 @@
     return _textInput;
 }
 
-- (UIView *)colorView{
-    if (!_colorView) {
-        _colorView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 30, 30)];
-        _colorView.layer.cornerRadius = _colorView.width / 2;
+
+- (CAGradientLayer *)gradientLayer {
+    if (!_gradientLayer) {
+        _gradientLayer = [CAGradientLayer layer];
+        _gradientLayer.size = CGSizeMake(50, 30);
+        _gradientLayer.cornerRadius = 8.f;
     }
-    return _colorView;
+    return _gradientLayer;
 }
+
+- (void)setColorItem:(SSJFinancingGradientColorItem *)colorItem {
+    _gradientLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:colorItem.startColor].CGColor,(__bridge id)[UIColor ssj_colorWithHex:colorItem.endColor].CGColor];
+}
+
 
 - (void)setCellImageName:(NSString *)cellImageName{
     _cellImageName = cellImageName;
@@ -273,11 +280,6 @@
     _cellAtrributedDetail = cellAtrributedDetail;
     self.detailLabel.attributedText = _cellAtrributedDetail;
     [self.detailLabel sizeToFit];
-}
-
-- (void)setCellColor:(NSString *)cellColor{
-    _cellColor = cellColor;
-    self.colorView.backgroundColor = [UIColor ssj_colorWithHex:_cellColor];
 }
 
 - (void)updateCellAppearanceAfterThemeChanged {

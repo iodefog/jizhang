@@ -39,11 +39,11 @@
         return [db lastError];
     }
     
-    if (![db executeUpdate:@"insert into bk_fund_info (cfundid, cacctname, cicoin, cparent, cwritedate, operatortype) values (?, ?, ?, ?, ?, ?, ?)", @"13", @"微信钱包", @"ft_weixin", @"root", @"-1", @"0"]) {
+    if (![db executeUpdate:@"insert into bk_fund_info (cfundid, cacctname, cicoin, cparent, cwritedate, operatortype) values (?, ?, ?, ?, ?, ?)", @"13", @"微信钱包", @"ft_weixin", @"root", @"-1", @"0"]) {
         return [db lastError];
     }
 
-    if (![db executeUpdate:@"insert into bk_fund_info (cfundid, cacctname, cicoin, cparent, cwritedate, operatortype) values (?, ?, ?, ?, ?, ?, ?)", @"14", @"支付宝", @"ft_zhifubao", @"root", @"-1", @"0"]) {
+    if (![db executeUpdate:@"insert into bk_fund_info (cfundid, cacctname, cicoin, cparent, cwritedate, operatortype) values (?, ?, ?, ?, ?, ?)", @"14", @"支付宝", @"ft_zhifubao", @"root", @"-1", @"0"]) {
         return [db lastError];
     }
     

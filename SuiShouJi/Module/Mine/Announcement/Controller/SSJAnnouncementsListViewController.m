@@ -36,6 +36,11 @@ static NSString *const kAnnouncementCellIdentifier = @"kAnnouncementCellIdentifi
     self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
         [self startPullRefresh];
     }];
+    
+    self.tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
+        [self startLoadMore];
+    }];
+
     // Do any additional setup after loading the view.
 }
 
@@ -109,8 +114,13 @@ static NSString *const kAnnouncementCellIdentifier = @"kAnnouncementCellIdentifi
 
 #pragma mark - Private
 - (void)startPullRefresh {
-    [self.service requestAnnoucements];
+    [self.service requestAnnoucementsWithPage:1];
 }
+
+- (void)startLoadMore {
+    
+}
+
 
 
 - (void)didReceiveMemoryWarning {
