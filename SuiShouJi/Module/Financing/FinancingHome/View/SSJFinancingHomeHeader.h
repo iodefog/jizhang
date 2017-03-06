@@ -14,6 +14,10 @@
 
 @property(nonatomic, strong) UIButton *transferButton;
 
+@property(nonatomic, strong) UIButton *hiddenButton;
+
+@property (nonatomic, copy) void(^hiddenButtonClickBlock)();
+
 - (void)updateAfterThemeChange;
 
 @end

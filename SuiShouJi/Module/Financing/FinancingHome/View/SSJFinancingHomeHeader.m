@@ -13,6 +13,7 @@
 @property(nonatomic, strong) UILabel *balanceLabel;
 
 @property(nonatomic, strong) UILabel *balanceTitleLab;
+
 @end
 
 @implementation SSJFinancingHomeHeader
@@ -25,6 +26,7 @@
         [self addSubview:self.balanceLabel];
         [self addSubview:self.balanceTitleLab];
         [self addSubview:self.transferButton];
+        [self addSubview:self.hiddenButton];
     }
     return self;
 }
@@ -33,11 +35,13 @@
     [super layoutSubviews];
     self.balanceLabel.bottom = self.height;
     self.balanceLabel.left = 25;
+    self.balanceTitleLab.bottom = self.balanceLabel.top - 8;
+    self.balanceTitleLab.left = self.balanceLabel.left;
     self.transferButton.size = CGSizeMake(60, 24);
     self.transferButton.bottom = self.height;
     self.transferButton.right = self.width - 34;
-    [self.transferButton ssj_relayoutBorder];
-    [self.transferButton ssj_layoutContent];
+    self.hiddenButton.centerY = self.balanceLabel.centerY;
+    self.hiddenButton.left = self.balanceLabel.right + 10;
 }
 
 -(UILabel *)balanceLabel{
@@ -58,9 +62,7 @@
         _transferButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
         [_transferButton setTitle:@"转账" forState:UIControlStateNormal];
         [_transferButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] forState:UIControlStateNormal];
-        _transferButton.titleLabel.font = [UIFont systemFontOfSize:20];
-        [_transferButton ssj_setBorderStyle:SSJBorderStyleLeft];
-        [_transferButton ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
+        _transferButton.titleLabel.font = [UIFont systemFontOfSize:13];
     }
     return _transferButton;
 }
@@ -76,10 +78,28 @@
     return _balanceTitleLab;
 }
 
+-(UIButton *)hiddenButton{
+    if (!_hiddenButton) {
+        _hiddenButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 30, 30)];
+        [_hiddenButton setImage:[[UIImage imageNamed:@"founds_yincang"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+        [_hiddenButton setImage:[[UIImage imageNamed:@"founds_xianshi"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateSelected];
+        [_hiddenButton addTarget:self action:@selector(hiddenButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+        _hiddenButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    }
+    return _hiddenButton;
+}
+
 -(void)setBalanceAmount:(NSString *)balanceAmount{
     _balanceAmount = balanceAmount;
     self.balanceLabel.text = _balanceAmount;
     [self.balanceLabel sizeToFit];
+}
+
+#pragma mark - Event
+-(void)hiddenButtonClicked:(id)sender{
+    if (self.hiddenButtonClickBlock) {
+        self.hiddenButtonClickBlock();
+    }
 }
 
 - (void)updateAfterThemeChange{
