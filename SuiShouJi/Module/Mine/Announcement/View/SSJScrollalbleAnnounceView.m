@@ -103,6 +103,9 @@
 - (void)setItems:(NSArray<SSJAnnoucementItem *> *)items{
     _items = items;
     NSString *announcementStr = [items firstObject].announcementTitle;
+    if (!items.count) {
+        return;
+    }
     NSMutableAttributedString *attributeStr;
     if ([_items firstObject].announcementType == SSJAnnouceMentTypeNew) {
         announcementStr = [NSString stringWithFormat:@"【new】%@",announcementStr];

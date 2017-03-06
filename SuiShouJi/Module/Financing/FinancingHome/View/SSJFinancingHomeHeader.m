@@ -51,10 +51,10 @@
 
 -(UIButton *)transferButton{
     if (!_transferButton) {
-        _transferButton = [[UIButton alloc]init];
-        _transferButton.contentLayoutType = SSJButtonLayoutTypeDefault;
-        _transferButton.spaceBetweenImageAndTitle = 10;
-        [_transferButton setImage:[[UIImage imageNamed:@"zhuanzhang"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+        _transferButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 60, 24)];
+        _transferButton.layer.cornerRadius = 12;
+        _transferButton.layer.borderWidth = 1.f;
+        _transferButton.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor].CGColor;
         _transferButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
         [_transferButton setTitle:@"转账" forState:UIControlStateNormal];
         [_transferButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] forState:UIControlStateNormal];
@@ -78,17 +78,14 @@
 
 -(void)setBalanceAmount:(NSString *)balanceAmount{
     _balanceAmount = balanceAmount;
-    NSString *balanceStr = [NSString stringWithFormat:@"结余: %@",_balanceAmount];
-    NSMutableAttributedString *balace = [[NSMutableAttributedString alloc]initWithString:balanceStr];
-    [balace addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:20] range:[balanceStr rangeOfString:@"结余:"]];
-    [balace addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:22] range:[balanceStr rangeOfString:_balanceAmount]];
-    self.balanceLabel.attributedText = balace;
+    self.balanceLabel.text = _balanceAmount;
     [self.balanceLabel sizeToFit];
 }
 
 - (void)updateAfterThemeChange{
     self.balanceLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     self.transferButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
+    _transferButton.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor].CGColor;
     [self.transferButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] forState:UIControlStateNormal];
     [self.transferButton ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
 }
