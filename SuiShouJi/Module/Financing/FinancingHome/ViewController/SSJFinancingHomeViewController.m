@@ -77,7 +77,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 
 -(void)viewDidLayoutSubviews{
     [super viewDidLayoutSubviews];
-    self.headerView.size = CGSizeMake(self.view.width, 61);
+    self.headerView.size = CGSizeMake(self.view.width, 90);
     self.headerView.leftTop = CGPointMake(0, SSJ_NAVIBAR_BOTTOM);
 //    self.profitAmountLabel.left = self.profitLabel.right + 20;
 //    self.transferButton.size = CGSizeMake(65, 30);
@@ -269,7 +269,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 
 -(SSJFinancingHomeHeader *)headerView{
     if (!_headerView) {
-        _headerView = [[SSJFinancingHomeHeader alloc]init];
+        _headerView = [[SSJFinancingHomeHeader alloc] init];
         [_headerView.transferButton addTarget:self action:@selector(transferButtonClicked) forControlEvents:UIControlEventTouchUpInside];
         __weak typeof(self) weakSelf = self;
         _headerView.hiddenButtonClickBlock = ^(){

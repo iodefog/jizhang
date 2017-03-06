@@ -11,7 +11,9 @@
 
 @interface SSJBookKeepingHomeViewController : SSJBaseViewController
 <UITableViewDataSource,UITableViewDelegate>
+
 @property(nonatomic) BOOL hasLoad;
+
 @property(nonatomic) BOOL  allowRefresh;
 
 @property(nonatomic, strong) SSJHomeTableView *tableView;

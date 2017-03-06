@@ -18,6 +18,10 @@ static NSString *const kAnnouncementCellIdentifier = @"kAnnouncementCellIdentifi
 
 @property(nonatomic, strong) SSJAnnoucementService *service;
 
+@property(nonatomic) NSInteger currentPage;
+
+@property(nonatomic) NSInteger totalPage;
+
 @end
 
 @implementation SSJAnnouncementsListViewController
@@ -32,6 +36,7 @@ static NSString *const kAnnouncementCellIdentifier = @"kAnnouncementCellIdentifi
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.currentPage = 1;
     [self.tableView registerClass:[SSJAnnouncementDetailCell class] forCellReuseIdentifier:kAnnouncementCellIdentifier];
     self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
         [self startPullRefresh];
@@ -45,6 +50,7 @@ static NSString *const kAnnouncementCellIdentifier = @"kAnnouncementCellIdentifi
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
     if (self.items.count > 0) {
         SSJAnnoucementItem *item = [self.items firstObject];
         [[NSUserDefaults standardUserDefaults] setObject:item.announcementId forKey:kLastAnnoucementIdKey];
@@ -118,7 +124,8 @@ static NSString *const kAnnouncementCellIdentifier = @"kAnnouncementCellIdentifi
 }
 
 - (void)startLoadMore {
-    
+    self.currentPage ++;
+    [self.service requestAnnoucementsWithPage:self.currentPage];
 }
 
 
