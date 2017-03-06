@@ -96,7 +96,6 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
     [self.tableView registerClass:[SSJFundingDetailCell class] forCellReuseIdentifier:kFundingDetailCellID];
     [self.tableView registerClass:[SSJFundingDailySumCell class] forCellReuseIdentifier:kFundingListDailySumCellID];
     [self.tableView registerClass:[SSJCreditCardListCell class] forCellReuseIdentifier:kCreditCardListFirstLineCellID];
-
     [self.tableView registerClass:[SSJFundingDetailListFirstLineCell class] forCellReuseIdentifier:kFundingListFirstLineCellID];
     [self.view addSubview:self.noDataHeader];
     if ([self.item isKindOfClass:[SSJCreditCardItem class]]) {
