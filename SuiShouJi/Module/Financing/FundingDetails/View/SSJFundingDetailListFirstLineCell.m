@@ -27,9 +27,9 @@
 
 -(void)layoutSubviews{
     [super layoutSubviews];
-    self.incomeLabel.left = 10;
+    self.incomeLabel.left = 15;
     self.incomeLabel.centerY = self.contentView.height / 2;
-    self.expentureLabel.right = self.contentView.width - 10;
+    self.expentureLabel.right = self.contentView.width - 15;
     self.expentureLabel.centerY = self.contentView.height / 2;
 }
 

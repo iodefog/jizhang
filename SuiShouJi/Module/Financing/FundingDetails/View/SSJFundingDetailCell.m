@@ -57,9 +57,9 @@
     
     if (_item.chargeMemo.length == 0 && _item.chargeImage.length == 0){
         self.memoLabel.hidden = YES;
-        self.imageView.left = 10;
+        self.imageView.left = 15;
         self.imageView.size = CGSizeMake(imageDiam, imageDiam);
-        self.imageView.leftTop = CGPointMake(10, (self.contentView.height - imageDiam) * 0.5);
+        self.imageView.leftTop = CGPointMake(15, (self.contentView.height - imageDiam) * 0.5);
         self.imageView.layer.cornerRadius = imageDiam * 0.5;
         if (!self.item.loanId.length) {
             self.imageView.contentScaleFactor = [UIScreen mainScreen].scale * self.imageView.image.size.width / (imageDiam * 0.75);
@@ -69,7 +69,7 @@
     }else{
         self.memoLabel.hidden = NO;
         self.imageView.size = CGSizeMake(imageDiam, imageDiam);
-        self.imageView.left = 10;
+        self.imageView.left = 15;
         self.imageView.layer.cornerRadius = imageDiam * 0.5;
         if (!self.item.loanId.length) {
             self.imageView.contentScaleFactor = [UIScreen mainScreen].scale * self.imageView.image.size.width / (imageDiam * 0.75);
@@ -99,7 +99,7 @@
             self.memoLabel.leftBottom = CGPointMake(self.memoImage.right + 10, self.memoImage.bottom);
         }
     }
-    self.moneyLab.right = self.contentView.width - 10;
+    self.moneyLab.right = self.contentView.width - 15;
     self.moneyLab.centerY = self.contentView.height * 0.5;
     self.typeLabel.width = self.moneyLab.left - self.imageView.right - 20;
 }

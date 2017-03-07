@@ -23,9 +23,9 @@
 
 -(void)layoutSubviews{
     [super layoutSubviews];
-    self.dateLabel.left = 10;
+    self.dateLabel.left = 15;
     self.dateLabel.centerY = self.height / 2;
-    self.balanceLabel.right = self.width - 10;
+    self.balanceLabel.right = self.width - 15;
     self.balanceLabel.centerY = self.height / 2;
 }
 

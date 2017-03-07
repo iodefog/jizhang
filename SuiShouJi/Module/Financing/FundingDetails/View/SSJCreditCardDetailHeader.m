@@ -96,9 +96,9 @@
         self.expenceLab.hidden = NO;
 
     }
-    self.incomeLab.left = 10;
+    self.incomeLab.left = 15;
     self.incomeLab.centerY = self.bottomView.centerY;
-    self.expenceLab.right = self.width - 10;
+    self.expenceLab.right = self.width - 15;
     self.expenceLab.centerY = self.bottomView.centerY;
 }
 
@@ -243,8 +243,8 @@
 -(UILabel *)incomeLab{
     if (!_incomeLab) {
         _incomeLab = [[UILabel alloc]init];
-        _incomeLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        _incomeLab.font = [UIFont systemFontOfSize:15];
+        _incomeLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+        _incomeLab.font = [UIFont systemFontOfSize:13];
     }
     return _incomeLab;
 }
@@ -252,8 +252,8 @@
 -(UILabel *)expenceLab{
     if (!_expenceLab) {
         _expenceLab = [[UILabel alloc]init];
-        _expenceLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        _expenceLab.font = [UIFont systemFontOfSize:15];
+        _expenceLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+        _expenceLab.font = [UIFont systemFontOfSize:13];
     }
     return _expenceLab;
 }

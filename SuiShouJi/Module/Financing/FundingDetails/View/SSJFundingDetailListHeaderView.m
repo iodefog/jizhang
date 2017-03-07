@@ -55,10 +55,10 @@
     self.payOffImage.leftTop = CGPointMake(0, 0);
     if ([self.item isKindOfClass:[SSJCreditCardListDetailItem class]] && self.subLab.text.length) {
         self.btn.frame = self.bounds;
-        self.dateLabel.left = 10;
+        self.dateLabel.left = 15;
         self.dateLabel.bottom = self.height / 2 - 5;
         self.expandImage.size = CGSizeMake(16, 8);
-        self.expandImage.right = self.width - 10;
+        self.expandImage.right = self.width - 15;
         self.expandImage.centerY = self.dateLabel.centerY;
         self.moneyLabel.right = self.expandImage.left - 10;
         self.moneyLabel.centerY = self.dateLabel.centerY;
@@ -70,10 +70,10 @@
         [self ssj_relayoutBorder];
     } else {
         self.btn.frame = self.bounds;
-        self.dateLabel.left = 10;
+        self.dateLabel.left = 15;
         self.dateLabel.centerY = self.height / 2;
         self.expandImage.size = CGSizeMake(16, 8);
-        self.expandImage.right = self.width - 10;
+        self.expandImage.right = self.width - 15;
         self.expandImage.centerY = self.height / 2;
         self.moneyLabel.right = self.expandImage.left - 10;
         self.moneyLabel.centerY = self.height / 2;

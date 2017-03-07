@@ -31,9 +31,9 @@
 
 -(void)layoutSubviews{
     [super layoutSubviews];
-    self.dateLabel.left = 10;
+    self.dateLabel.left = 15;
     self.dateLabel.centerY = self.height / 2;
-    self.moneyLabel.right = self.contentView.width - 10;
+    self.moneyLabel.right = self.contentView.width - 15;
     self.moneyLabel.centerY = self.height / 2;
 }
 

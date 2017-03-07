@@ -35,13 +35,13 @@
 
 -(void)layoutSubviews{
     [super layoutSubviews];
-    self.incomeLab.left = 10;
+    self.incomeLab.left = 15;
     self.incomeLab.bottom = self.contentView.height / 2 - 7;
-    self.periodLab.left = 10;
+    self.periodLab.left = 15;
     self.periodLab.top = self.contentView.height / 2 + 7;
-    self.expenseLab.right = self.contentView.width - 10;
+    self.expenseLab.right = self.contentView.width - 15;
     self.expenseLab.bottom = self.contentView.height / 2 - 7;
-    self.daysLab.right = self.contentView.width - 10;
+    self.daysLab.right = self.contentView.width - 15;
     self.daysLab.top = self.contentView.height / 2 + 7;
 }
 

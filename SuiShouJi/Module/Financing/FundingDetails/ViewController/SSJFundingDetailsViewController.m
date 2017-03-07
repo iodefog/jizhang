@@ -343,7 +343,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
 
 -(SSJCreditCardDetailHeader *)creditCardHeader{
     if (!_creditCardHeader) {
-        _creditCardHeader = [[SSJCreditCardDetailHeader alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 223)];
+        _creditCardHeader = [[SSJCreditCardDetailHeader alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 213)];
         _creditCardHeader.backGroundView.backgroundColor = [UIColor ssj_colorWithHex:self.cardItem.cardColor];
         [_creditCardHeader ssj_setBorderColor:[UIColor whiteColor]];
         [_creditCardHeader ssj_setBorderStyle:SSJBorderStyleTop];
