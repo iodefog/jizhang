@@ -21,6 +21,8 @@
 
 @property(nonatomic, strong) UILabel *memoLabel;
 
+@property(nonatomic, strong) UIView *seperatorLine;
+
 @end
 
 @implementation SSJFundingDetailCell
@@ -39,9 +41,9 @@
         
         [self.contentView addSubview:self.haveImage];
         
-        [self.contentView addSubview:self.memoImage];
-        
         [self.contentView addSubview:self.memoLabel];
+        
+        [self.contentView addSubview:self.seperatorLine];
 
     }
     return self;
@@ -74,7 +76,7 @@
         }
         self.typeLabel.left = self.imageView.right + 10;
         self.typeLabel.centerY = self.height * 0.5;
-    }else{
+    } else {
         self.memoLabel.hidden = NO;
         self.imageView.size = CGSizeMake(imageDiam, imageDiam);
         self.imageView.left = 15;
@@ -82,33 +84,63 @@
         if (!self.item.loanId.length) {
             self.imageView.contentScaleFactor = [UIScreen mainScreen].scale * self.imageView.image.size.width / (imageDiam * 0.75);
         }
-        self.haveImage.size = CGSizeMake(19, 19);
-        self.memoImage.size = CGSizeMake(19, 19);
+        self.haveImage.size = CGSizeMake(12, 12);
+        
+        self.seperatorLine.size = CGSizeMake(2 / [UIScreen mainScreen].scale, 9);
+        
         self.typeLabel.left = self.imageView.right + 10;
+        
+        self.typeLabel.bottom = self.height / 2 - 5;
+        
+        self.imageView.centerY = self.height / 2;
+        
+        self.haveImage.top = self.imageView.centerY + 3;
 
-        if (_item.chargeMemo.length == 0 && _item.chargeImage.length != 0) {
-            self.imageView.top = 27;
-            self.typeLabel.bottom = self.imageView.centerY - 5;
-            self.haveImage.left = self.typeLabel.left;
-            self.haveImage.top = self.imageView.centerY + 5;
-        }else if (_item.chargeImage.length == 0 && _item.chargeMemo.length != 0){
-            self.imageView.top = 27;
-            self.typeLabel.bottom = self.imageView.centerY - 5;
-            self.memoImage.left = self.typeLabel.left;
-            self.memoImage.top = self.imageView.centerY + 5;
-            self.memoLabel.leftBottom = CGPointMake(self.memoImage.right + 10, self.memoImage.bottom);
-        }else{
-            self.imageView.top = 17;
-            self.typeLabel.bottom = self.imageView.centerY - 5;
-            self.haveImage.left = self.typeLabel.left;
-            self.haveImage.top = self.imageView.centerY + 5;
-            self.memoImage.left = self.haveImage.left;
-            self.memoImage.top = self.haveImage.bottom + 5;
-            self.memoLabel.leftBottom = CGPointMake(self.memoImage.right + 10, self.memoImage.bottom);
+        
+        self.haveImage.hidden = !_item.chargeImage.length;
+
+        self.seperatorLine.hidden = !_item.chargeImage.length || !_item.chargeMemo.length;
+
+        self.haveImage.top = self.height / 2 + 3;
+        
+        self.seperatorLine.centerY = self.haveImage.centerY;
+
+        self.memoLabel.centerY = self.haveImage.centerY;
+        
+        self.haveImage.left = self.typeLabel.left;
+        
+        self.seperatorLine.left = self.haveImage.right + 6;
+        
+        if (_item.chargeImage.length) {
+            
+            self.memoLabel.left = self.seperatorLine.right + 12;
+            
+        } else {
+            
+            self.memoLabel.left = self.typeLabel.left;
+            
         }
+
+        
+//        if (_item.chargeMemo.length == 0 && _item.chargeImage.length != 0) {
+//            self.haveImage.left = self.typeLabel.left;
+//            self.haveImage.top = self.imageView.centerY + 5;
+//        }else if (_item.chargeImage.length == 0 && _item.chargeMemo.length != 0){
+//            self.imageView.centerY = self.typeLabel.centerY;
+//            self.memoImage.left = self.typeLabel.left;
+//            self.memoImage.top = self.imageView.centerY + 5;
+//            self.memoLabel.leftBottom = CGPointMake(self.memoImage.right + 10, self.memoImage.bottom);
+//        }else{
+//            self.imageView.centerY = self.typeLabel.centerY;
+//            self.haveImage.left = self.typeLabel.left;
+//            self.haveImage.top = self.imageView.centerY + 5;
+//            self.memoImage.left = self.haveImage.left;
+//            self.memoImage.top = self.haveImage.bottom + 5;
+//            self.memoLabel.leftBottom = CGPointMake(self.memoImage.right + 10, self.memoImage.bottom);
+//        }
     }
     self.moneyLab.right = self.contentView.width - 15;
-    self.moneyLab.centerY = self.contentView.height * 0.5;
+    self.moneyLab.centerY = self.height / 2;
     self.typeLabel.width = self.moneyLab.left - self.imageView.right - 20;
 }
 
@@ -343,6 +375,22 @@
         _memoLabel.font = [UIFont systemFontOfSize:13];
     }
     return _memoLabel;
+}
+
+- (UIView *)seperatorLine {
+    if (!_seperatorLine) {
+        _seperatorLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 2 / [UIScreen mainScreen].scale, 9)];
+        _seperatorLine.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    }
+    return _seperatorLine;
+}
+
+- (void)updateCellAppearanceAfterThemeChanged {
+    [super updateCellAppearanceAfterThemeChanged];
+    _moneyLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    _typeLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    _memoLabel.font = [UIFont systemFontOfSize:13];
+    _seperatorLine.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
 }
 
 @end
