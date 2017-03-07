@@ -54,8 +54,6 @@
     self.tableView.top = SSJ_NAVIBAR_BOTTOM;
     [self.view becomeFirstResponder];
     self.navigationItem.rightBarButtonItem = self.rightBarButton;
-    [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:self.cellColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
     [self.tableView registerClass:[SSJCalenderTableViewCell class] forCellReuseIdentifier:@"CalenderTableViewCell"];
     [self.tableView registerClass:[SSJChargeDetailMemberCell class] forCellReuseIdentifier:@"ChargeDetailMemberCell"];
     [self.tableView registerClass:[SSJCanlenderChargeDetailCell class] forCellReuseIdentifier:@"CanlenderChargeDetailCell"];
@@ -65,10 +63,6 @@
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self getDataFromDb];
-    [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:self.item.colorValue] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
-    self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:21],
-                                                                    NSForegroundColorAttributeName:[UIColor whiteColor]};
 }
 
 #pragma mark - UITableViewDelegate

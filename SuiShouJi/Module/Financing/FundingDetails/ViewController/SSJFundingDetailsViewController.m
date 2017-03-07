@@ -231,6 +231,10 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
 #pragma mark - UITableViewDelegate
 - (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     SSJFundingDetailListHeaderView *headerView = [[SSJFundingDetailListHeaderView alloc]init];
+    headerView.layer.shadowOffset = CGSizeMake(0, 1);
+    headerView.layer.shadowOpacity = 0.08;
+    headerView.layer.shadowColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor].CGColor;
+    headerView.clipsToBounds = NO;
     headerView.item = [self.listItems objectAtIndex:section];
     __weak typeof(self) weakSelf = self;
     headerView.SectionHeaderClickedBlock = ^(){

@@ -483,7 +483,11 @@ static const int kVerifyFailureTimesLimit = 5;
         _verifyLoginPwdBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _verifyLoginPwdBtn.titleLabel.font = [UIFont systemFontOfSize:14];
         [_verifyLoginPwdBtn setTitle:@"忘记手势？可验证登录密码" forState:UIControlStateNormal];
-        [_verifyLoginPwdBtn setTitleColor:[[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.motionPasswordNormalColor] colorWithAlphaComponent:0.6] forState:UIControlStateNormal];
+        if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
+            [_verifyLoginPwdBtn setTitleColor:[[UIColor ssj_colorWithHex:@"#eb4a64"] colorWithAlphaComponent:0.6] forState:UIControlStateNormal];
+        } else {
+            [_verifyLoginPwdBtn setTitleColor:[[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.motionPasswordNormalColor] colorWithAlphaComponent:0.6] forState:UIControlStateNormal];
+        }
         [_verifyLoginPwdBtn addTarget:self action:@selector(forgetPasswordAction) forControlEvents:UIControlEventTouchUpInside];
         [_verifyLoginPwdBtn sizeToFit];
         _verifyLoginPwdBtn.centerX = self.view.width * 0.5;
@@ -497,7 +501,12 @@ static const int kVerifyFailureTimesLimit = 5;
         _forgetPwdBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _forgetPwdBtn.titleLabel.font = [UIFont systemFontOfSize:14];
         [_forgetPwdBtn setTitle:@"忘记手势密码" forState:UIControlStateNormal];
-        [_forgetPwdBtn setTitleColor:[[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.motionPasswordNormalColor] colorWithAlphaComponent:0.6] forState:UIControlStateNormal];
+        if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
+            [_forgetPwdBtn setTitleColor:[[UIColor ssj_colorWithHex:@"#eb4a64"] colorWithAlphaComponent:0.6] forState:UIControlStateNormal];
+        } else {
+            [_forgetPwdBtn setTitleColor:[[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.motionPasswordNormalColor] colorWithAlphaComponent:0.6] forState:UIControlStateNormal];
+        }
+
         [_forgetPwdBtn addTarget:self action:@selector(forgetPasswordAction) forControlEvents:UIControlEventTouchUpInside];
         [_forgetPwdBtn sizeToFit];
         _forgetPwdBtn.leftBottom = CGPointMake(15, self.view.height - 30);
@@ -510,7 +519,11 @@ static const int kVerifyFailureTimesLimit = 5;
         _changeAccountBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _changeAccountBtn.titleLabel.font = [UIFont systemFontOfSize:14];
         [_changeAccountBtn setTitle:@"使用其它账号登录" forState:UIControlStateNormal];
-        [_changeAccountBtn setTitleColor:[[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.motionPasswordNormalColor] colorWithAlphaComponent:0.6] forState:UIControlStateNormal];
+        if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
+            [_changeAccountBtn setTitleColor:[[UIColor ssj_colorWithHex:@"#eb4a64"] colorWithAlphaComponent:0.6] forState:UIControlStateNormal];
+        } else {
+            [_changeAccountBtn setTitleColor:[[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.motionPasswordNormalColor] colorWithAlphaComponent:0.6] forState:UIControlStateNormal];
+        }
         [_changeAccountBtn addTarget:self action:@selector(changeAccountAction) forControlEvents:UIControlEventTouchUpInside];
         [_changeAccountBtn sizeToFit];
         _changeAccountBtn.rightBottom = CGPointMake(self.view.width - 15, self.view.height - 30);

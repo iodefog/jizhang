@@ -28,7 +28,6 @@
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier]) {
         self.imageView.contentMode = UIViewContentModeCenter;
-        self.imageView.layer.borderWidth = 2 / [UIScreen mainScreen].scale;
     
         self.textLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         
@@ -54,6 +53,15 @@
     CGFloat imageDiam = 20;
     
     self.memoLabel.width = 200;
+    
+    
+    if ([_item.billId integerValue] > 1000 || _item.billId.length > 4) {
+        self.imageView.layer.borderWidth = 2 / [UIScreen mainScreen].scale;
+        self.imageView.contentMode = UIViewContentModeCenter;
+    } else {
+        self.imageView.layer.borderWidth = 0;
+        self.imageView.contentMode = UIViewContentModeScaleAspectFit;
+    }
     
     if (_item.chargeMemo.length == 0 && _item.chargeImage.length == 0){
         self.memoLabel.hidden = YES;

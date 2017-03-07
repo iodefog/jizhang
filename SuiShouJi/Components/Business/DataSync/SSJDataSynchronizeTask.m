@@ -500,7 +500,7 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
         for (NSDictionary *dict in tempArr) {
             NSString *fundid = [dict objectForKey:@"fundid"];
             NSString *order = [dict objectForKey:@"order"];
-            NSInteger index = [order integerValue] - 1;
+            NSInteger index = [order integerValue];
             if (index > 7) {
                 index = index - 7;
             }
