@@ -38,6 +38,9 @@
         _gradientLayer.startPoint = CGPointMake(0, 0.5);
         _gradientLayer.endPoint = CGPointMake(1, 0.5);
         _gradientLayer.cornerRadius = 8;
+        _gradientLayer.startPoint = CGPointMake(0, 0.5);
+        _gradientLayer.endPoint = CGPointMake(1, 0.5);
+
         _gradientLayer.shadowPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, self.width + 2, self.height + 2) byRoundingCorners:UIRectCornerAllCorners cornerRadii:CGSizeMake(8, 8)].CGPath;
     }
     return _gradientLayer;

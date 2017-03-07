@@ -77,7 +77,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 
 -(void)viewDidLayoutSubviews{
     [super viewDidLayoutSubviews];
-    self.headerView.size = CGSizeMake(self.view.width, 90);
+    self.headerView.size = CGSizeMake(self.view.width, 80);
     self.headerView.leftTop = CGPointMake(0, SSJ_NAVIBAR_BOTTOM);
 //    self.profitAmountLabel.left = self.profitLabel.right + 20;
 //    self.transferButton.size = CGSizeMake(65, 30);

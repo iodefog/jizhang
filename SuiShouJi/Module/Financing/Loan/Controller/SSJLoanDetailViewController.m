@@ -12,7 +12,7 @@
 #import "SSJLoanChargeDetailViewController.h"
 #import "SSJLoanChargeAddOrEditViewController.h"
 #import "SSJLoanDetailChargeChangeHeaderView.h"
-#import "SSJSeparatorFormView.h"
+#import "SSJFinancingDetailHeadeView.h"
 #import "SSJLoanDetailCell.h"
 #import "SSJLoanChangeChargeSelectionControl.h"
 #import "SSJLoanHelper.h"
@@ -21,7 +21,7 @@
 
 static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
 
-@interface SSJLoanDetailViewController () <UITableViewDataSource, UITableViewDelegate, SSJSeparatorFormViewDataSource>
+@interface SSJLoanDetailViewController () <UITableViewDataSource, UITableViewDelegate, SSJFinancingDetailHeadeViewDataSource>
 
 @property (nonatomic, strong) UITableView *tableView;
 
@@ -33,7 +33,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
 
 @property (nonatomic, strong) UIImageView *stampView;
 
-@property (nonatomic, strong) SSJSeparatorFormView *headerView;
+@property (nonatomic, strong) SSJFinancingDetailHeadeView *headerView;
 
 @property (nonatomic, strong) SSJLoanDetailChargeChangeHeaderView *changeSectionHeaderView;
 
@@ -174,28 +174,22 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
 }
 
 #pragma mark - SSJSeparatorFormViewDataSource
-- (NSUInteger)numberOfRowsInSeparatorFormView:(SSJSeparatorFormView *)view {
+- (NSUInteger)numberOfRowsInSeparatorFormView:(SSJFinancingDetailHeadeView *)view {
     return _headerItems.count;
 }
 
-- (NSUInteger)separatorFormView:(SSJSeparatorFormView *)view numberOfCellsInRow:(NSUInteger)row {
+- (NSUInteger)separatorFormView:(SSJFinancingDetailHeadeView *)view numberOfCellsInRow:(NSUInteger)row {
     return [[_headerItems ssj_safeObjectAtIndex:row] count];
 }
 
-- (SSJSeparatorFormViewCellItem *)separatorFormView:(SSJSeparatorFormView *)view itemForCellAtIndex:(NSIndexPath *)index {
+- (SSJFinancingDetailHeadeViewCellItem *)separatorFormView:(SSJFinancingDetailHeadeView *)view itemForCellAtIndex:(NSIndexPath *)index {
     return [_headerItems ssj_objectAtIndexPath:index];
 }
 
 #pragma mark - Private
 - (void)updateAppearance {
-    UIColor *headerColor = (SSJ_CURRENT_THEME.ID != SSJDefaultThemeID && SSJ_CURRENT_THEME.financingDetailHeaderColor) ? [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailHeaderColor alpha:SSJ_CURRENT_THEME.financingDetailHeaderAlpha] : [UIColor ssj_colorWithHex:self.fundColor];
     
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:headerColor size:CGSizeZero] forBarMetrics:UIBarMetricsDefault];
-    self.navigationController.navigationBar.tintColor = [UIColor ssj_colorWithHex:@"#FFFFFF"];
-    self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:21],
-                                                                    NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"#FFFFFF"]};
-    
-    self.headerView.backgroundColor = headerColor;
+    _headerView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     
     _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
     [_changeSectionHeaderView updateAppearance];
@@ -304,14 +298,14 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
             break;
     }
     
-    SSJSeparatorFormViewCellItem *surplusItem = [SSJSeparatorFormViewCellItem itemWithTopTitle:surplusTitle
+    SSJFinancingDetailHeadeViewCellItem *surplusItem = [SSJFinancingDetailHeadeViewCellItem itemWithTopTitle:surplusTitle
                                                                                    bottomTitle:surplusValue
                                                                                  topTitleColor:[UIColor whiteColor]
                                                                               bottomTitleColor:[UIColor whiteColor]
                                                                                   topTitleFont:[UIFont systemFontOfSize:11]
                                                                                bottomTitleFont:[UIFont systemFontOfSize:24] contentInsets:UIEdgeInsetsMake(0, 6, 0, 6)];
     
-    SSJSeparatorFormViewCellItem *sumItem = [SSJSeparatorFormViewCellItem itemWithTopTitle:sumTitle
+    SSJFinancingDetailHeadeViewCellItem *sumItem = [SSJFinancingDetailHeadeViewCellItem itemWithTopTitle:sumTitle
                                                                                bottomTitle:[NSString stringWithFormat:@"%.2f", loanSum]
                                                                              topTitleColor:[UIColor whiteColor]
                                                                           bottomTitleColor:[UIColor whiteColor]
@@ -319,9 +313,9 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
                                                                            bottomTitleFont:[UIFont systemFontOfSize:15]
                                                                              contentInsets:UIEdgeInsetsMake(0, 6, 0, 6)];
     
-    SSJSeparatorFormViewCellItem *interestItem = nil;
+    SSJFinancingDetailHeadeViewCellItem *interestItem = nil;
     if (interest > 0) {
-        interestItem = [SSJSeparatorFormViewCellItem itemWithTopTitle:interestTitle
+        interestItem = [SSJFinancingDetailHeadeViewCellItem itemWithTopTitle:interestTitle
                                                           bottomTitle:[NSString stringWithFormat:@"%.2f", interest]
                                                         topTitleColor:[UIColor whiteColor]
                                                      bottomTitleColor:[UIColor whiteColor]
@@ -329,7 +323,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
                                                       bottomTitleFont:[UIFont systemFontOfSize:15]
                                                         contentInsets:UIEdgeInsetsMake(0, 6, 0, 6)];
     } else {
-        interestItem = [SSJSeparatorFormViewCellItem itemWithTopTitle:paymentTitle
+        interestItem = [SSJFinancingDetailHeadeViewCellItem itemWithTopTitle:paymentTitle
                                                           bottomTitle:[NSString stringWithFormat:@"%.2f", payment]
                                                         topTitleColor:[UIColor whiteColor]
                                                      bottomTitleColor:[UIColor whiteColor]
@@ -338,7 +332,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
                                                         contentInsets:UIEdgeInsetsMake(0, 6, 0, 6)];
     }
     
-    SSJSeparatorFormViewCellItem *lenderItem = [SSJSeparatorFormViewCellItem itemWithTopTitle:lenderTitle
+    SSJFinancingDetailHeadeViewCellItem *lenderItem = [SSJFinancingDetailHeadeViewCellItem itemWithTopTitle:lenderTitle
                                                                                   bottomTitle:self.loanModel.lender
                                                                                 topTitleColor:[UIColor whiteColor]
                                                                              bottomTitleColor:[UIColor whiteColor]
@@ -487,6 +481,11 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
             
             [self.tableView reloadData];
             [self.headerView reloadData];
+            
+            SSJFinancingGradientColorItem *item = [[SSJFinancingGradientColorItem alloc] init];
+            item.startColor = model.startColor;
+            item.endColor = model.endColor;
+            self.headerView.colorItem = item;
             self.tableView.tableHeaderView = self.headerView;
             
             self.changeSectionHeaderView.title = [NSString stringWithFormat:@"变更记录：%d条", (int)self.section2Items.count];
@@ -701,9 +700,10 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     return _editItem;
 }
 
-- (SSJSeparatorFormView *)headerView {
+- (SSJFinancingDetailHeadeView *)headerView {
     if (!_headerView) {
-        _headerView = [[SSJSeparatorFormView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, 174)];
+        _headerView = [[SSJFinancingDetailHeadeView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, 174)];
+        _headerView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         _headerView.separatorColor = [UIColor whiteColor];
         _headerView.horizontalSeparatorInset = UIEdgeInsetsMake(0, 42, 0, 42);
         _headerView.verticalSeparatorInset = UIEdgeInsetsMake(22, 0, 22, 0);

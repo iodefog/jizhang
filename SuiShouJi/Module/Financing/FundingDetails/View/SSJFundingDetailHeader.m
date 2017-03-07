@@ -128,6 +128,8 @@
     if (!_backLayer) {
         _backLayer = [CAGradientLayer layer];
         _backLayer.cornerRadius = 8;
+        _backLayer.startPoint = CGPointMake(0, 0.5);
+        _backLayer.endPoint = CGPointMake(1, 0.5);
         _backLayer.size = CGSizeMake(self.width - 30, self.height - 20);
         _backLayer.position = CGPointMake(self.width / 2, self.height / 2);
         _backLayer.shadowPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, _backLayer.width + 4, _backLayer.height + 4) byRoundingCorners:UIRectCornerAllCorners cornerRadii:CGSizeMake(8, 8)].CGPath;

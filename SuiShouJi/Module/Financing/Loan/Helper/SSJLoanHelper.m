@@ -116,7 +116,7 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
     NSString *userId = SSJUSERID();
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        FMResultSet *resultSet = [db executeQuery:@"select * from bk_loan where loanid = ? and cuserid = ?", loanID, userId];
+        FMResultSet *resultSet = [db executeQuery:@"select l.* , fi.cstartcolor, fi.cendcolor from bk_loan l, bk_fund_info fi where l.loanid = ? and l.cuserid = ? and l.cthefundid = fi.cfundid", loanID, userId];
         if (!resultSet) {
             if (failure) {
                 SSJDispatchMainAsync(^{
@@ -148,6 +148,8 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
             model.operatorType = [resultSet intForColumn:@"operatorType"];
             model.version = [resultSet longLongIntForColumn:@"iversion"];
             model.writeDate = [NSDate dateWithString:[resultSet stringForColumn:@"cwritedate"] formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
+            model.startColor = [resultSet stringForColumn:@"cstartcolor"];
+            model.endColor = [resultSet stringForColumn:@"cendcolor"];
         }
         [resultSet close];
         

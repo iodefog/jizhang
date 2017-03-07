@@ -79,6 +79,8 @@
 - (CAGradientLayer *)gradientLayer {
     if (!_gradientLayer) {
         _gradientLayer = [CAGradientLayer layer];
+        _gradientLayer.startPoint = CGPointMake(0, 0.5);
+        _gradientLayer.endPoint = CGPointMake(1, 0.5);
         _gradientLayer.size = CGSizeMake(50, 30);
         _gradientLayer.cornerRadius = 8.f;
     }

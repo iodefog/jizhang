@@ -87,6 +87,10 @@ typedef NS_ENUM(NSUInteger, SSJLoanInterestType) {
 
 @property (nonatomic, copy) NSDate *writeDate;
 
+@property(nonatomic, copy, nullable) NSString *startColor;
+
+@property(nonatomic, copy, nullable) NSString *endColor;
+
 + (instancetype)modelWithResultSet:(FMResultSet *)resultSet;
 
 @end

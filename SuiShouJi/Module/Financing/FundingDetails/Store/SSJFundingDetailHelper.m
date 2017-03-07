@@ -188,7 +188,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
         [resultSet close];
         fundingItem.fundingName = [db stringForQuery:@"select cacctname from bk_fund_info where cfundid = ? and cuserid = ?",ID,userid];
         fundingItem.startColor = [db stringForQuery:@"select cstartcolor from bk_fund_info where cfundid = ? and cuserid = ?",ID,userid];
-        fundingItem.endColor = [db stringForQuery:@"select cstartcolor from bk_fund_info where cfundid = ? and cuserid = ?",ID,userid];
+        fundingItem.endColor = [db stringForQuery:@"select cendcolor from bk_fund_info where cfundid = ? and cuserid = ?",ID,userid];
         SSJDispatchMainAsync(^{
             if (success) {
                 success(result,fundingItem);
