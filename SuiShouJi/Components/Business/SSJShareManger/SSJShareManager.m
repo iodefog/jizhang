@@ -67,6 +67,7 @@
     //创建网页内容对象
     UMShareWebpageObject *shareObject = [UMShareWebpageObject shareObjectWithTitle:title descr:content thumImage:[UIImage imageNamed:icon]];
     
+    
     //设置网页地址
     shareObject.webpageUrl = str;
     

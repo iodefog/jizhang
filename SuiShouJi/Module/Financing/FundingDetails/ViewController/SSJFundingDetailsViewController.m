@@ -259,7 +259,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
             return 30;
         }
     }
-    SSJBaseItem *item = [self.listItems objectAtIndex:indexPath.section];
+    SSJBaseItem *item = [self.listItems ssj_safeObjectAtIndex:indexPath.section];
     if ([item isKindOfClass:[SSJCreditCardListDetailItem class]]) {
         return 65;
     }

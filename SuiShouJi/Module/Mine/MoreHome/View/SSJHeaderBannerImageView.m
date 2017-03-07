@@ -124,7 +124,7 @@ static NSString *const kHeadBannerCellID = @"SSJHeaderBannerCollectionViewCellID
 #pragma mark -UICollectionViewDelegate
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    SSJBannerItem *item = self.bannerItemArray[indexPath.item];
+    SSJBannerItem *item = [self.bannerItemArray ssj_safeObjectAtIndex:indexPath.row];
     //是账单
     if ([item.bannerUrl containsString:@"http://jz.youyuwo.com/5/zd"]) {
         if (!SSJIsUserLogined()) {

@@ -37,17 +37,6 @@ static NSString *const kFundingListFirstLineCellID = @"kFundingListFirstLineCell
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     self.title = @"详情";
-    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor],NSFontAttributeName:[UIFont systemFontOfSize:21]};
-    [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
-    [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
-    if ([self.fundItem isKindOfClass:[SSJCreditCardItem class]]) {
-        SSJCreditCardItem *cardItem = (SSJCreditCardItem *)self.fundItem;
-        [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:cardItem.cardColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
-    }else{
-        SSJFinancingHomeitem *financingItem = (SSJFinancingHomeitem *)self.fundItem;
-        [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:financingItem.fundingColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
-    }
-
 }
 
 #pragma mark - UITableViewDataSource
