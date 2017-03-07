@@ -28,7 +28,7 @@
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier]) {
         self.imageView.contentMode = UIViewContentModeCenter;
-        self.imageView.layer.borderWidth = 1 / [UIScreen mainScreen].scale;
+        self.imageView.layer.borderWidth = 2 / [UIScreen mainScreen].scale;
     
         self.textLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         
@@ -51,7 +51,7 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
     
-    CGFloat imageDiam = 40;
+    CGFloat imageDiam = 20;
     
     self.memoLabel.width = 200;
     
@@ -297,7 +297,7 @@
     if (!_moneyLab) {
         _moneyLab = [[UILabel alloc] init];
         _moneyLab.backgroundColor = [UIColor clearColor];
-        _moneyLab.font = [UIFont systemFontOfSize:20];
+        _moneyLab.font = [UIFont systemFontOfSize:16];
         _moneyLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     }
     return _moneyLab;
@@ -323,7 +323,7 @@
     if (!_typeLabel) {
         _typeLabel = [[UILabel alloc]init];
         _typeLabel.font = [UIFont systemFontOfSize:15];
-        _typeLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+        _typeLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     }
     return _typeLabel;
 }

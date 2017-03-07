@@ -97,7 +97,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
     [self.tableView registerClass:[SSJFundingDailySumCell class] forCellReuseIdentifier:kFundingListDailySumCellID];
     [self.tableView registerClass:[SSJCreditCardListCell class] forCellReuseIdentifier:kCreditCardListFirstLineCellID];
     [self.tableView registerClass:[SSJFundingDetailListFirstLineCell class] forCellReuseIdentifier:kFundingListFirstLineCellID];
-    [self.view addSubview:self.noDataHeader];
+    [self.tableView addSubview:self.noDataHeader];
     if ([self.item isKindOfClass:[SSJCreditCardItem class]]) {
         [self.view addSubview:self.repaymentButton];
         self.tableView.tableHeaderView = self.creditCardHeader;
@@ -322,9 +322,9 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
 -(SSJFundingDetailNoDataView *)noDataHeader{
     if (!_noDataHeader) {
         if ([self.item isKindOfClass:[SSJCreditCardItem class]]) {
-            _noDataHeader = [[SSJFundingDetailNoDataView alloc]initWithFrame:CGRectMake(0, 223 + SSJ_NAVIBAR_BOTTOM                           , self.view.width, self.view.height - 223 - SSJ_NAVIBAR_BOTTOM)];
+            _noDataHeader = [[SSJFundingDetailNoDataView alloc]initWithFrame:CGRectMake(0, 213 , self.view.width, self.view.height - 223 - SSJ_NAVIBAR_BOTTOM - 50)];
         }else{
-            _noDataHeader = [[SSJFundingDetailNoDataView alloc]initWithFrame:CGRectMake(0, 173 + SSJ_NAVIBAR_BOTTOM                           , self.view.width, self.view.height - 173 - SSJ_NAVIBAR_BOTTOM)];
+            _noDataHeader = [[SSJFundingDetailNoDataView alloc]initWithFrame:CGRectMake(0, 173 , self.view.width, self.view.height - 173 - SSJ_NAVIBAR_BOTTOM)];
         }
         _noDataHeader.hidden = YES;
     }
