@@ -33,6 +33,8 @@
     
         self.textLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         
+        self.separatorInset = UIEdgeInsetsMake(0, 15, 0, 15);
+        
         
         [self.contentView addSubview:self.moneyLab];
         self.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -52,7 +54,7 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
     
-    CGFloat imageDiam = 20;
+    CGFloat imageDiam = 26;
     
     self.memoLabel.width = 200;
     
@@ -95,7 +97,6 @@
         self.imageView.centerY = self.height / 2;
         
         self.haveImage.top = self.imageView.centerY + 3;
-
         
         self.haveImage.hidden = !_item.chargeImage.length;
 
@@ -120,6 +121,8 @@
             self.memoLabel.left = self.typeLabel.left;
             
         }
+        
+        self.memoLabel.width = self.memoLabel.left - self.moneyLab.left;
 
         
 //        if (_item.chargeMemo.length == 0 && _item.chargeImage.length != 0) {

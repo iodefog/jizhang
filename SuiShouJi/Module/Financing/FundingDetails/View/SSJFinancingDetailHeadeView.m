@@ -182,7 +182,7 @@
         
         for (NSUInteger cellIdx = 0; cellIdx < rowCells.count; cellIdx ++) {
             SSJFinancingDetailHeadeViewCell *cell = rowCells[cellIdx];
-            cell.frame = CGRectMake(cellWidth * cellIdx, rowHeight * rowIdx, cellWidth, rowHeight);
+            cell.frame = CGRectMake(self.backLayer.left + cellWidth * cellIdx, rowHeight * rowIdx, cellWidth, rowHeight);
             
             if (cellSeparators.count > cellIdx) {
                 UIView *cellSeparator = cellSeparators[cellIdx];

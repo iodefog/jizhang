@@ -49,7 +49,7 @@
     self.seperatorView.size = CGSizeMake(1, 67);
     self.seperatorView.center = CGPointMake(self.width / 2, self.height / 2);
     self.totalExpenceLabel.width = self.backLayer.width / 2 - 10;
-    self.totalExpenceLabel.centerX = self.width - self.backLayer.width / 4;
+    self.totalExpenceLabel.right = self.backLayer.right;
     self.totalExpenceLabel.bottom = self.height / 2;
     self.expenceLabel.centerX = self.totalExpenceLabel.centerX;
     self.expenceLabel.top = self.totalExpenceLabel.bottom + 15;
