@@ -41,12 +41,14 @@
 }
 
 -(void)layoutSubviews{
+    self.totalIncomeLabel.width = self.backLayer.width / 2 - 10;
     self.totalIncomeLabel.centerX = self.width / 2 - self.backLayer.width / 4;
     self.totalIncomeLabel.bottom = self.height / 2;
     self.incomeLabel.centerX = self.totalIncomeLabel.centerX;
     self.incomeLabel.top = self.totalIncomeLabel.bottom + 15;
     self.seperatorView.size = CGSizeMake(1, 67);
     self.seperatorView.center = CGPointMake(self.width / 2, self.height / 2);
+    self.totalExpenceLabel.width = self.backLayer.width / 2 - 10;
     self.totalExpenceLabel.centerX = self.width - self.backLayer.width / 4;
     self.totalExpenceLabel.bottom = self.height / 2;
     self.expenceLabel.centerX = self.totalExpenceLabel.centerX;
@@ -97,6 +99,7 @@
     if (!_totalExpenceLabel) {
         _totalExpenceLabel = [[UILabel alloc]init];
         _totalExpenceLabel.font = [UIFont systemFontOfSize:24];
+        _totalExpenceLabel.textAlignment = NSTextAlignmentCenter;
         if (SSJ_CURRENT_THEME.financingDetailMainColor.length) {
             _totalExpenceLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailMainColor alpha:SSJ_CURRENT_THEME.financingDetailMainAlpha];
         } else {
@@ -113,6 +116,7 @@
     if (!_totalIncomeLabel) {
         _totalIncomeLabel = [[UILabel alloc]init];
         _totalIncomeLabel.font = [UIFont systemFontOfSize:24];
+        _totalIncomeLabel.textAlignment = NSTextAlignmentCenter;
         if (SSJ_CURRENT_THEME.financingDetailMainColor.length) {
             _totalIncomeLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailMainColor alpha:SSJ_CURRENT_THEME.financingDetailMainAlpha];
         } else {

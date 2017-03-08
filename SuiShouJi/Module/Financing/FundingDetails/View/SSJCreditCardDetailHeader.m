@@ -74,16 +74,19 @@
     self.balanceTitleLab.centerX = self.width / 2;
     self.horizontalSeperatorLine.top = 90;
     self.horizontalSeperatorLine.centerX = self.width / 2;
+    self.billingDayLab.width = self.backLayer.width / 3;
     self.billingDayLab.top = self.horizontalSeperatorLine.top + 12;
     self.billingDayLab.centerX = self.width / 2;
     self.billingDayTitleLab.top = self.billingDayLab.bottom + 10;
     self.billingDayTitleLab.centerX = self.billingDayLab.centerX;
+    self.limitLab.width = self.backLayer.width / 3;
     self.limitLab.top = self.horizontalSeperatorLine.bottom + 12;
-    self.limitLab.centerX = (self.width / 2 - 10) / 2;
+    self.limitLab.left = self.backLayer.left;
     self.limitTitleLab.top = self.limitLab.bottom + 10;
     self.limitTitleLab.centerX = self.limitLab.centerX;
+    self.repaymentDayLab.width = self.backLayer.width / 3;
     self.repaymentDayLab.top = self.horizontalSeperatorLine.bottom + 12;
-    self.repaymentDayLab.centerX = self.width / 2 + (self.width / 2 - 10) / 2;
+    self.repaymentDayLab.right = self.backLayer.right;
     self.repaymentDayTitleLab.top = self.repaymentDayLab.bottom + 10;
     self.repaymentDayTitleLab.centerX = self.repaymentDayLab.centerX;
     self.bottomView.size = CGSizeMake(self.width, 40);
@@ -147,6 +150,7 @@
 -(UILabel *)limitLab{
     if (!_limitLab) {
         _limitLab = [[UILabel alloc]init];
+        _limitLab.textAlignment = NSTextAlignmentCenter;
         if (SSJ_CURRENT_THEME.financingDetailMainColor.length) {
             _limitLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailMainColor alpha:SSJ_CURRENT_THEME.financingDetailMainAlpha];
         } else {
@@ -175,6 +179,7 @@
 -(UILabel *)repaymentDayLab{
     if (!_repaymentDayLab) {
         _repaymentDayLab = [[UILabel alloc]init];
+        _repaymentDayLab.textAlignment = NSTextAlignmentCenter;
         if (SSJ_CURRENT_THEME.financingDetailMainColor.length) {
             _repaymentDayLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailMainColor alpha:SSJ_CURRENT_THEME.financingDetailMainAlpha];
         } else {
@@ -203,6 +208,8 @@
 -(UILabel *)billingDayLab{
     if (!_billingDayLab) {
         _billingDayLab = [[UILabel alloc]init];
+        _billingDayLab.textAlignment = NSTextAlignmentCenter;
+
         if (SSJ_CURRENT_THEME.financingDetailMainColor.length) {
             _billingDayLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailMainColor alpha:SSJ_CURRENT_THEME.financingDetailMainAlpha];
         } else {

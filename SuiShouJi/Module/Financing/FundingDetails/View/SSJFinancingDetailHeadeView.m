@@ -171,7 +171,7 @@
     for (NSUInteger rowIdx = 0; rowIdx < _cells.count; rowIdx ++) {
         
         NSArray *rowCells = _cells[rowIdx];
-        CGFloat cellWidth = self.width / rowCells.count;
+        CGFloat cellWidth = (self.width - 30) / rowCells.count;
         
         if (rowIdx < _horizontalSeparators.count) {
             UIView *rowSeparator = _horizontalSeparators[rowIdx];
