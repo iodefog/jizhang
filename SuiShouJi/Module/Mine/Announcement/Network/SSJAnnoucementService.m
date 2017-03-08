@@ -34,6 +34,12 @@
         self.annoucements = [SSJAnnoucementItem mj_objectArrayWithKeyValuesArray:announcementArr];
         self.hasNewAnnouceMent = [[results objectForKey:@"new_announcement"] boolValue];
         self.totalPage = [[rootElement objectForKey:@"tp"] integerValue];
+        NSArray *announcements = [[NSUserDefaults standardUserDefaults] objectForKey:SSJAnnouncementHaveReadKey];
+        for (SSJAnnoucementItem *item in self.annoucements) {
+            if ([announcements containsObject:item.announcementId]) {
+                item.haveReaded = YES;
+            }
+        }
     }
 }
 

@@ -34,6 +34,8 @@ NSString *const SSJLastLoggedUserItemKey = @"SSJLastLoggedUserItemKey";
 
 NSString *const SSJReminderNotificationKey = @"SSJReminderNotificationKey";
 
+NSString *const SSJAnnouncementHaveReadKey = @"SSJAnnouncementHaveReadKey";
+
 NSString *const SSJSyncDataSuccessNotification = @"SSJSyncDataSuccessNotification";
 
 NSString *const SSJSyncDataFailureNotification = @"SSJSyncDataFailureNotification";

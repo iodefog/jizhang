@@ -28,6 +28,8 @@ typedef NS_ENUM(NSUInteger, SSJAnnouceMentType) {
 
 @property(nonatomic) BOOL needToShowOnHome;
 
+@property(nonatomic) BOOL haveReaded;
+
 @property(nonatomic) SSJAnnouceMentType announcementType;
 
 @end

@@ -6579,7 +6579,7 @@
 		9CE2F89A1D9B9020008099C1 /* SSJSearchBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJSearchBar.h; sourceTree = "<group>"; };
 		9CE2F89B1D9B9020008099C1 /* SSJSearchBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJSearchBar.m; sourceTree = "<group>"; };
 		9CE377181E6837D800218655 /* SSJAnnouncementsListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJAnnouncementsListViewController.h; sourceTree = "<group>"; };
-		9CE377191E6837D800218655 /* SSJAnnouncementsListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJAnnouncementsListViewController.m; sourceTree = "<group>"; };
+		9CE377191E6837D800218655 /* SSJAnnouncementsListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 5; lastKnownFileType = sourcecode.c.objc; path = SSJAnnouncementsListViewController.m; sourceTree = "<group>"; };
 		9CE3771C1E6837D800218655 /* SSJAnnoucementItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJAnnoucementItem.h; sourceTree = "<group>"; };
 		9CE3771D1E6837D800218655 /* SSJAnnoucementItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJAnnoucementItem.m; sourceTree = "<group>"; };
 		9CE3771F1E6837D800218655 /* SSJAnnoucementService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJAnnoucementService.h; sourceTree = "<group>"; };

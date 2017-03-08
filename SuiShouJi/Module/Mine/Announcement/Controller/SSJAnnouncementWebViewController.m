@@ -23,6 +23,9 @@
         
         self.navigationItem.rightBarButtonItem = rightItem;
     }
+    
+    self.title = self.item.announcementTitle;
+    
     // Do any additional setup after loading the view.
 }
 

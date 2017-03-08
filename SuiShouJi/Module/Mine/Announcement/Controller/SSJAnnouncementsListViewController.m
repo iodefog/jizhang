@@ -75,12 +75,22 @@ static NSString *const kAnnouncementCellIdentifier = @"kAnnouncementCellIdentifi
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    SSJAnnoucementItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
-    SSJAnnouncementWebViewController *webVc = [SSJAnnouncementWebViewController webViewVCWithURL:[NSURL URLWithString:item.announcementUrl]];
-    webVc.item = item;
-    [self.navigationController pushViewController:webVc animated:YES];
-    
+     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+     SSJAnnoucementItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
+     SSJAnnouncementWebViewController *webVc = [SSJAnnouncementWebViewController webViewVCWithURL:[NSURL URLWithString:item.announcementUrl]];
+     webVc.item = item;
+     [self.navigationController pushViewController:webVc animated:YES];
+     
+     NSMutableArray *announcements = [[[NSUserDefaults standardUserDefaults] objectForKey:SSJAnnouncementHaveReadKey] mutableCopy];
+     if (!announcements) {
+          announcements = [NSMutableArray arrayWithObjects:item.announcementId, nil];
+     } else {
+          if (![announcements containsObject:item.announcementId]) {
+               [announcements addObject:item.announcementId];
+          }
+     }
+     [[NSUserDefaults standardUserDefaults] setObject:announcements forKey:SSJAnnouncementHaveReadKey];
+     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 #pragma mark - UITableViewDataSource
