@@ -80,6 +80,7 @@ static NSString *const kAnnouncementCellIdentifier = @"kAnnouncementCellIdentifi
     SSJAnnouncementWebViewController *webVc = [SSJAnnouncementWebViewController webViewVCWithURL:[NSURL URLWithString:item.announcementUrl]];
     webVc.item = item;
     [self.navigationController pushViewController:webVc animated:YES];
+    
 }
 
 #pragma mark - UITableViewDataSource

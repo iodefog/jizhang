@@ -54,4 +54,12 @@
     
 }
 
++ (void)pushToViewControllerWithUserInfo:(NSDictionary *)userInfo {
+    if (!userInfo) {
+        return;
+    }
+    
+    
+}
+
 @end

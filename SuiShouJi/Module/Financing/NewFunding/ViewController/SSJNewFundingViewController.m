@@ -30,6 +30,8 @@
 
 @property(nonatomic, strong) NSArray *images;
 
+@property(nonatomic, strong) UIView *footerView;
+
 @end
 
 @implementation SSJNewFundingViewController{
@@ -59,6 +61,7 @@
         self.item = [[SSJFinancingHomeitem alloc] init];
     } else {
         self.title = @"编辑资金账户";
+        self.navigationItem.rightBarButtonItem = self.rightButton;
     }
     
     if (!self.item.startColor.length || !self.item.endColor.length) {
@@ -73,7 +76,6 @@
     }
     
     [self.view addSubview:self.tableview];
-    self.navigationItem.rightBarButtonItem = self.rightButton;
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -87,7 +89,17 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    if (section == 1) {
+        return 80;
+    }
     return 0.1f;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
+    if (section == 1) {
+        return self.footerView;
+    }
+    return nil;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
@@ -208,6 +220,35 @@
     return YES;
 }
 
+#pragma mark - Event
+- (void)rightButtonClicked:(id)sender {
+    __weak typeof(self) weakSelf = self;
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"确定要删除该资金账户吗?" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:NULL];
+    UIAlertAction *comfirm = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+        if (weakSelf.item.chargeCount) {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"删除该资金后，是否将展示在首页和报表的流水及相关借贷数据一并删除" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *reserve = [UIAlertAction actionWithTitle:@"仅删除资金" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [weakSelf deleteFundingItem:weakSelf.item type:0];
+            }];
+            UIAlertAction *destructive = [UIAlertAction actionWithTitle:@"一并删除" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+                [weakSelf deleteFundingItem:weakSelf.item type:1];
+            }];
+            UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            }];
+            [alert addAction:reserve];
+            [alert addAction:destructive];
+            [alert addAction:cancel];
+            [weakSelf presentViewController:alert animated:YES completion:NULL];
+        }else{
+            [weakSelf deleteFundingItem:weakSelf.item type:0];
+        }
+    }];
+    [alert addAction:cancel];
+    [alert addAction:comfirm];
+    [self presentViewController:alert animated:YES completion:NULL];
+}
+
 #pragma mark - Getter
 -(TPKeyboardAvoidingTableView *)tableview{
     if (!_tableview) {
@@ -224,13 +265,39 @@
 
 -(UIBarButtonItem *)rightButton{
     if (!_rightButton) {
-        _rightButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"checkmark"] style:UIBarButtonItemStylePlain target:self action:@selector(rightButtonClicked)];
+        _rightButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(rightButtonClicked:)];
     }
     return _rightButton;
 }
 
+-(UIView *)footerView{
+    if (!_footerView) {
+        _footerView = [[UIView alloc]init];
+        _footerView.size = CGSizeMake(self.view.width, 80);
+        UIButton *comfirmButton = [[UIButton alloc]init];
+        comfirmButton.size = CGSizeMake(self.view.width - 40, 40);
+        comfirmButton.center = CGPointMake(_footerView.width / 2, _footerView.height / 2);
+        comfirmButton.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor];
+        comfirmButton.layer.cornerRadius = 4.0f;
+        [comfirmButton setTitle:@"保存" forState:UIControlStateNormal];
+        [comfirmButton addTarget:self action:@selector(saveButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+        [_footerView addSubview:comfirmButton];
+    }
+    return _footerView;
+}
+
 #pragma mark - Private
--(void)rightButtonClicked{
+- (void)deleteFundingItem:(SSJBaseItem *)item type:(BOOL)type{
+    __weak typeof(self) weakSelf = self;
+    [SSJFinancingHomeHelper deleteFundingWithFundingItem:item deleteType:type Success:^{
+        [weakSelf.navigationController popToRootViewControllerAnimated:YES];
+        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+    } failure:^(NSError *error) {
+        NSLog(@"%@",[error localizedDescription]);
+    }];
+}
+
+-(void)saveButtonClicked:(id)sender {
     NSString* number=@"^(\\-)?\\d+(\\.\\d{1,2})?$";
     NSPredicate *numberPre = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",number];
     if (![numberPre evaluateWithObject:_amountTextField.text]) {

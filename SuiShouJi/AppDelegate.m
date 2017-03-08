@@ -198,6 +198,8 @@ NSDate *SCYEnterBackgroundTime() {
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+    
+    [GeTuiSdk setBadge:0];
     //每次从后台进入打一次补丁
     [SSJJspatchAnalyze SSJJsPatchAnalyzePatch];
     
