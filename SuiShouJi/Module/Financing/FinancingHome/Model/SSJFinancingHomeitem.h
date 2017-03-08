@@ -26,6 +26,9 @@
 //账户父类
 @property (nonatomic,strong) NSString *fundingParent;
 
+//账户父类名称
+@property (nonatomic,strong) NSString *fundingParentName;
+
 //账户余额
 @property (nonatomic) double fundingAmount;
 
@@ -42,6 +45,8 @@
 
 //账户下流水数量
 @property(nonatomic) NSInteger chargeCount;
+
+@property(nonatomic) NSInteger fundOperatortype;
 
 //渐变的开始颜色
 @property(nonatomic, strong) NSString *startColor;

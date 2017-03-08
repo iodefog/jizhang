@@ -135,8 +135,7 @@
     if (!NewFundingCell) {
         NewFundingCell = [[SSJModifyFundingTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
     }
-    NewFundingCell.cellTitle.text = _cellTitleArray[indexPath.section];
-    [NewFundingCell.cellTitle sizeToFit];
+    NewFundingCell.cellTitle = _cellTitleArray[indexPath.section];
     switch (indexPath.section) {
         case 0:{
             NewFundingCell.selectionStyle = UITableViewCellSelectionStyleNone;

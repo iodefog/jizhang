@@ -13,12 +13,17 @@
 
 @property(nonatomic, strong) CAGradientLayer *gradientLayer;
 
+@property(nonatomic, strong) UIImageView *cellImageView;
+
+@property (nonatomic,strong) UITextField *cellTextLab;
+
 @end
 
 @implementation SSJNewFundingTypeCell
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
-        [self.contentView addSubview:self.cellText];
+        [self.contentView addSubview:self.cellImageView];
+        [self.contentView addSubview:self.cellTextLab];
         [self.contentView addSubview:self.typeLabel];
         [self.contentView addSubview:self.colorView];
         [self.contentView addSubview:self.typeImage];
@@ -29,13 +34,9 @@
 
 -(void)layoutSubviews{
     [super layoutSubviews];
-    self.cellText.frame = CGRectMake(20, 0, self.contentView.width - 20, self.contentView.height);
+    self.cellTextLab.frame = CGRectMake(self.cellImageView.right + 12, 0, self.contentView.width - self.cellImageView.right - 30, self.contentView.height);
     self.typeLabel.right = self.contentView.width - 10;
     self.typeLabel.centerY = self.contentView.height / 2;
-    self.colorView.size = CGSizeMake(30, 30);
-    self.colorView.layer.cornerRadius = 15;
-    self.colorView.right = self.contentView.width - 10;
-    self.colorView.centerY = self.contentView.height / 2;
     self.typeImage.size = CGSizeMake(18, 18);
     self.typeImage.right = self.typeLabel.left - 10;
     self.typeImage.centerY = self.height / 2;
@@ -43,14 +44,14 @@
     self.gradientLayer.right = self.contentView.width - 10;
 }
 
--(UITextField *)cellText{
-    if (!_cellText) {
-        _cellText = [[UITextField alloc]init];
-        _cellText.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        _cellText.font = [UIFont systemFontOfSize:18];
-        _cellText.textAlignment = NSTextAlignmentLeft;
+-(UITextField *)cellTextLab{
+    if (!_cellTextLab) {
+        _cellTextLab = [[UITextField alloc]init];
+        _cellTextLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+        _cellTextLab.font = [UIFont systemFontOfSize:18];
+        _cellTextLab.textAlignment = NSTextAlignmentLeft;
     }
-    return _cellText;
+    return _cellTextLab;
 }
 
 -(UILabel *)typeLabel{
@@ -87,8 +88,27 @@
     return _gradientLayer;
 }
 
+- (UIImageView *)cellImageView {
+    if (!_cellImageView) {
+        _cellImageView = [[UIImageView alloc] init];
+        _cellImageView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    }
+    return _cellImageView;
+}
+
+- (void)setCellImage:(NSString *)cellImage {
+    self.cellImageView.image = [[UIImage imageNamed:cellImage] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+}
+
 - (void)setColorItem:(SSJFinancingGradientColorItem *)colorItem {
     _gradientLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:colorItem.startColor].CGColor,(__bridge id)[UIColor ssj_colorWithHex:colorItem.endColor].CGColor];
+}
+
+- (void)updateCellAppearanceAfterThemeChanged {
+    [super updateCellAppearanceAfterThemeChanged];
+    _cellTextLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    _typeLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    _cellImageView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
 }
 
 /*

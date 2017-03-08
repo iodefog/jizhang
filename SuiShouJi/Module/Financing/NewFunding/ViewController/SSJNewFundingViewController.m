@@ -8,11 +8,12 @@
 
 #import "SSJNewFundingViewController.h"
 #import "TPKeyboardAvoidingTableView.h"
-#import "SSJNewFundingTypeCell.h"
+#import "SSJModifyFundingTableViewCell.h"
 #import "SSJColorSelectViewController.h"
 #import "SSJFundingTypeSelectViewController.h"
-#import "SSJFundingItem.h"
 #import "SSJDataSynchronizer.h"
+#import "SSJFinancingStore.h"
+#import "SSJFinancingHomeHelper.h"
 
 #import "FMDB.h"
 
@@ -20,8 +21,15 @@
 
 
 @interface SSJNewFundingViewController ()
+
 @property (nonatomic,strong) TPKeyboardAvoidingTableView *tableview;
+
 @property (nonatomic,strong) UIBarButtonItem *rightButton;
+
+@property(nonatomic, strong) NSArray *titles;
+
+@property(nonatomic, strong) NSArray *images;
+
 @end
 
 @implementation SSJNewFundingViewController{
@@ -36,7 +44,6 @@
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-        self.title = @"添加资金账户";
         self.hidesBottomBarWhenPushed = YES;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(transferTextDidChange:) name:UITextFieldTextDidChangeNotification object:nil];
     }
@@ -45,9 +52,26 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    if (!_selectColor) {
-        _selectColor = [[SSJFinancingGradientColorItem defualtColors] firstObject];
+    self.titles = @[@[@"账户名称",@"账户余额",@"备注"],@[@"账户类型",@"选择颜色"]];
+    self.images = @[@[@"fund_name",@"fund_balance",@"fund_memo"],@[@"fund_type",@"fund_color"]];
+    if (!self.item) {
+        self.title = @"添加资金账户";
+        self.item = [[SSJFinancingHomeitem alloc] init];
+    } else {
+        self.title = @"编辑资金账户";
     }
+    
+    if (!self.item.startColor.length || !self.item.endColor.length) {
+        self.item.startColor = [[SSJFinancingGradientColorItem defualtColors] firstObject].startColor;
+        self.item.endColor = [[SSJFinancingGradientColorItem defualtColors] firstObject].endColor;
+    }
+    
+    if (self.selectParent.length) {
+        self.item.fundingParentName = [SSJFinancingHomeHelper fundParentNameForFundingParent:self.selectParent];
+        self.item.fundingIcon = [SSJFinancingHomeHelper fundIconForFundingParent:self.selectParent];
+        self.item.fundingParent = self.selectParent;
+    }
+    
     [self.view addSubview:self.tableview];
     self.navigationItem.rightBarButtonItem = self.rightButton;
 }
@@ -72,14 +96,16 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    if (indexPath.section == 4) {
+    NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
+    if ([title isEqualToString:@"选择颜色"]) {
         SSJColorSelectViewController *colorSelectVC = [[SSJColorSelectViewController alloc]init];
         colorSelectVC.fundingColor = _selectColor;
         colorSelectVC.fundingAmount = [_amountTextField.text doubleValue];
         colorSelectVC.fundingName = _nameTextField.text;
         __weak typeof(self) weakSelf = self;
         colorSelectVC.colorSelectedBlock = ^(SSJFinancingGradientColorItem *selectColor){
-            _selectColor = selectColor;
+            weakSelf.item.startColor = selectColor.startColor;
+            weakSelf.item.endColor = selectColor.endColor;
             [weakSelf.tableview reloadData];
         };
         [self.navigationController pushViewController:colorSelectVC animated:YES];
@@ -99,63 +125,60 @@
 
 #pragma mark - UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 1;
+    return [self.titles[section] count];
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return 5;
+    return self.titles.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *cellId = @"SSJModifyFundingCell";
-    SSJNewFundingTypeCell *NewFundingCell = [tableView dequeueReusableCellWithIdentifier:cellId];
+    static NSString *cellId = @"SSJModifyFundingTableViewCell";
+    SSJModifyFundingTableViewCell *NewFundingCell = [tableView dequeueReusableCellWithIdentifier:cellId];
+    NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
     if (!NewFundingCell) {
-        NewFundingCell = [[SSJNewFundingTypeCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+        NewFundingCell = [[SSJModifyFundingTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
     }
-    switch (indexPath.section) {
-        case 0:{
-            NewFundingCell.selectionStyle = UITableViewCellSelectionStyleNone;
-            NewFundingCell.cellText.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入账户名称" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
-            _nameTextField = NewFundingCell.cellText;
-            _nameTextField.delegate = self;
-        }
-            break;
-        case 1:{
-            _amountTextField = NewFundingCell.cellText;
-            NewFundingCell.cellText.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入账户余额" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
-            NewFundingCell.cellText.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
-            _amountTextField.delegate = self;
-        }
-            break;
-        case 2:{
-            NewFundingCell.selectionStyle = UITableViewCellSelectionStyleNone;
-            NewFundingCell.cellText.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"备注说明" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
-            _memoTextField = NewFundingCell.cellText;
-            _memoTextField.delegate = self;
+    NewFundingCell.cellTitle = [self.titles ssj_objectAtIndexPath:indexPath];
+    NewFundingCell.cellImage = [self.images ssj_objectAtIndexPath:indexPath];
 
-        }
-            break;
-        case 3:{
-            NewFundingCell.selectionStyle = UITableViewCellSelectionStyleNone;
-            NewFundingCell.cellText.text = @"账户类型";
-            NewFundingCell.typeLabel.text = [self getParentFundingNameWithParentfundingID:self.selectParent];
-            NewFundingCell.typeImage.image = [UIImage imageNamed:self.selectIcoin];
-            [NewFundingCell.typeLabel sizeToFit];
-            NewFundingCell.cellText.enabled = NO;
-//            NewFundingCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        }
-            break;
-        case 4:{
-            NewFundingCell.selectionStyle = UITableViewCellSelectionStyleNone;
-//            NewFundingCell.colorView.backgroundColor = [UIColor ssj_colorWithHex:_selectColor];
-            NewFundingCell.colorItem = _selectColor;
-            NewFundingCell.cellText.text = @"选择颜色";
-            NewFundingCell.cellText.enabled = NO;
-            NewFundingCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        }
-            break;
-        default:
-            break;
+    if ([title isEqualToString:@"账户名称"]) {
+        NewFundingCell.selectionStyle = UITableViewCellSelectionStyleNone;
+        NewFundingCell.cellDetail.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入账户名称" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+        NewFundingCell.cellDetail.text = self.item.fundingName;
+        _nameTextField = NewFundingCell.cellDetail;
+        _nameTextField.delegate = self;
+
+    } else if ([title isEqualToString:@"账户余额"]) {
+        _amountTextField = NewFundingCell.cellDetail;
+        NewFundingCell.cellDetail.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入账户余额" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+        NewFundingCell.cellDetail.text = [[NSString stringWithFormat:@"%f",self.item.fundingAmount] ssj_moneyDecimalDisplayWithDigits:2];
+        NewFundingCell.cellDetail.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
+        _amountTextField.delegate = self;
+    } else if ([title isEqualToString:@"备注"]) {
+        NewFundingCell.selectionStyle = UITableViewCellSelectionStyleNone;
+        NewFundingCell.cellDetail.text = self.item.fundingMemo;
+        NewFundingCell.cellDetail.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"备注说明" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+        _memoTextField = NewFundingCell.cellDetail;
+        _memoTextField.delegate = self;
+    } else if ([title isEqualToString:@"账户类型"]) {
+        NewFundingCell.selectionStyle = UITableViewCellSelectionStyleNone;
+        NewFundingCell.typeImage.image = [UIImage imageNamed:self.item.fundingIcon];
+        NewFundingCell.typeTitle.text = self.item.fundingParentName;
+        [NewFundingCell.typeTitle sizeToFit];
+        NewFundingCell.cellDetail.enabled = NO;
+        NewFundingCell.cellDetail.hidden = YES;
+    } else if ([title isEqualToString:@"选择颜色"]) {
+        NewFundingCell.selectionStyle = UITableViewCellSelectionStyleNone;
+        SSJFinancingGradientColorItem *colorItem = [[SSJFinancingGradientColorItem alloc] init];
+        colorItem.startColor = self.item.startColor;
+        colorItem.endColor = self.item.endColor;
+        //            NewFundingCell.colorView.backgroundColor = [UIColor ssj_colorWithHex:_selectColor];
+        NewFundingCell.item = colorItem;
+        //            NewFundingCell.cellText.text = @"选择颜色";
+        NewFundingCell.cellDetail.enabled = NO;
+        NewFundingCell.cellDetail.hidden = YES;
+        NewFundingCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     return NewFundingCell;
 }
@@ -207,21 +230,6 @@
 }
 
 #pragma mark - Private
--(NSString*)getParentFundingNameWithParentfundingID:(NSString*)fundingID{
-    NSString *fundingName;
-    FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
-    if (![db open]) {
-        NSLog(@"Could not open db");
-        return nil;
-    }
-    FMResultSet *rs = [db executeQuery:@"SELECT CACCTNAME FROM BK_FUND_INFO WHERE CFUNDID = ?",fundingID];
-    while ([rs next]) {
-        fundingName = [rs stringForColumn:@"CACCTNAME"];
-    }
-    [db close];
-    return fundingName;
-}
-
 -(void)rightButtonClicked{
     NSString* number=@"^(\\-)?\\d+(\\.\\d{1,2})?$";
     NSPredicate *numberPre = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",number];
@@ -246,43 +254,26 @@
         return;
     }
     
-    NSString *fundId = SSJUUID();
-    NSString *fundName = _nameTextField.text;
-    double fundAmount = [_amountTextField.text doubleValue];
-    NSString *fundMemo = _memoTextField.text;
-    NSString *userId = SSJUSERID();
-
-    if([db intForQuery:@"SELECT COUNT(1) FROM BK_FUND_INFO WHERE CACCTNAME = ? AND CFUNDID <> ? AND CUSERID = ? AND OPERATORTYPE <> 2",_nameTextField.text,fundId,SSJUSERID()] > 0){
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"已有同名称账户，请换个名称吧。" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
-        [alert show];
-        return;
-    }
-    NSInteger maxOrder = [db intForQuery:@"select max(IORDER) from bk_fund_info where cuserid = ? and operatortype != 2",userId];
-    BOOL success = [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID,CACCTNAME,CPARENT,CCOLOR,CSTARTCOLOR,CENDCOLOR,CWRITEDATE,OPERATORTYPE,IVERSION,CMEMO,CUSERID,CADDDATE,IORDER) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",fundId,fundName,_selectParent,_selectColor.startColor,_selectColor.startColor,_selectColor.endColor,[[NSDate date] ssj_systemCurrentDateWithFormat:@"YYYY-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithInt:0],@(SSJSyncVersion()),fundMemo,userId,[[NSDate date] ssj_systemCurrentDateWithFormat:@"YYYY-MM-dd HH:mm:ss.SSS"],@(maxOrder + 1)];
-    [db executeUpdate:@"UPDATE BK_FUND_INFO SET CICOIN = (SELECT CICOIN FROM BK_FUND_INFO WHERE CFUNDID = ?) WHERE CFUNDID = ?",_selectParent,fundId];
-    if (success) {
-        if ([_amountTextField.text doubleValue] > 0) {
-            [db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFUNSID , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE  , CBILLDATE ) VALUES (?,?,?,?,?,?,?,?,?,?,?)",SSJUUID(),userId,[NSString stringWithFormat:@"%.2f",[_amountTextField.text doubleValue]],@"1",fundId,[NSNumber numberWithDouble:0],[NSNumber numberWithDouble:[_amountTextField.text doubleValue]],[[NSDate date] ssj_systemCurrentDateWithFormat:@"YYYY-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),[NSNumber numberWithInt:0],[[NSDate date] ssj_systemCurrentDateWithFormat:@"YYYY-MM-dd"]];
-        }else if([_amountTextField.text doubleValue] < 0){
-            [db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFUNSID , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE  , CBILLDATE ) VALUES (?,?,?,?,?,?,?,?,?,?,?)",SSJUUID(),userId,[NSString stringWithFormat:@"%.2f",[_amountTextField.text doubleValue]],@"2",fundId,[NSNumber numberWithDouble:0],[NSNumber numberWithDouble:[_amountTextField.text doubleValue]],[[NSDate date] ssj_systemCurrentDateWithFormat:@"YYYY-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),[NSNumber numberWithInt:0],[[NSDate date] ssj_systemCurrentDateWithFormat:@"YYYY-MM-dd"]];
-        }
-        SSJFundingItem *item = [[SSJFundingItem alloc]init];
-        item.fundingID = fundId;
-        item.fundingName = fundName;
-        item.fundingIcon = _selectIcoin;
-        item.fundingColor = _selectColor.startColor;
-        item.fundingBalance = fundAmount;
-        item.fundingMemo = fundMemo;
-        item.fundingParent = _selectParent;
-        if (self.addNewFundBlock) {
-            self.addNewFundBlock(item);
-        }
-    }
+    self.item.fundingName = _nameTextField.text;
+    self.item.fundingAmount = [_amountTextField.text doubleValue];
+    self.item.fundingMemo = _memoTextField.text;
     
-    [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
-    [db close];
-    UIViewController *viewControllerNeedToPop = [self.navigationController.viewControllers objectAtIndex:self.navigationController.viewControllers.count - 3];
-    [self.navigationController popToViewController:viewControllerNeedToPop animated:YES];
+    __weak typeof(self) weakSelf = self;
+    [SSJFinancingStore saveFundingItem:self.item Success:^(SSJFinancingHomeitem *item) {
+        if (weakSelf.addNewFundBlock) {
+            weakSelf.addNewFundBlock(item);
+        }
+        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+        if (item.fundOperatortype == 0) {
+            UIViewController *viewControllerNeedToPop = [self.navigationController.viewControllers ssj_safeObjectAtIndex:self.navigationController.viewControllers.count - 3];
+            [self.navigationController popToViewController:viewControllerNeedToPop animated:YES];
+        } else {
+            [weakSelf.navigationController popViewControllerAnimated:YES];
+
+        }
+    } failure:^(NSError *error) {
+        
+    }];
 }
 
 -(void)closeButtonClicked:(id)sender{

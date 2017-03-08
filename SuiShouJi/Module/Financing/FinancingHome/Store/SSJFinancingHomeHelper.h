@@ -46,4 +46,8 @@
 
 // 获取列表中有效的第一个资金item
 + (SSJFinancingHomeitem *)queryfirstFundItem;
+
++ (NSString *)fundParentNameForFundingParent:(NSString *)parent;
+
++ (NSString *)fundIconForFundingParent:(NSString *)parent;
 @end

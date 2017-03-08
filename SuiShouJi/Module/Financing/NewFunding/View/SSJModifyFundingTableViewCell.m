@@ -12,12 +12,17 @@
 
 @property(nonatomic, strong) CAGradientLayer *gradientLayer;
 
+@property(nonatomic, strong) UIImageView *cellImageView;
+
+@property (nonatomic,strong) UILabel *cellTextLab;
+
 @end
 
 @implementation SSJModifyFundingTableViewCell
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier]) {
-        [self.contentView addSubview:self.cellTitle];
+        [self.contentView addSubview:self.cellImageView];
+        [self.contentView addSubview:self.cellTextLab];
         [self.contentView addSubview:self.colorView];
         [self.contentView addSubview:self.cellDetail];
         [self.contentView addSubview:self.typeTitle];
@@ -29,10 +34,14 @@
 
 -(void)layoutSubviews{
     [super layoutSubviews];
-    self.cellTitle.left = 10;
-    self.cellTitle.centerY = self.height / 2;
-    self.cellDetail.size = self.contentView.size;
-    self.cellDetail.right = self.contentView.width - 10;
+    self.cellImageView.size = CGSizeMake(20, 20);
+    self.cellImageView.centerY = self.height / 2;
+    self.cellImageView.left = 20;
+    self.cellTextLab.left = self.cellImageView.right + 10;
+    self.cellTextLab.centerY = self.height / 2;
+    self.cellDetail.width = self.contentView.width - self.cellTextLab.right - 19;
+    self.cellDetail.height = self.contentView.height;
+    self.cellDetail.left = self.cellTextLab.right + 10;
     self.cellDetail.centerY = self.height / 2;
     self.colorView.size = CGSizeMake(30, 30);
     self.colorView.right = self.contentView.width - 10;
@@ -47,31 +56,25 @@
     self.gradientLayer.right = self.contentView.width - 10;
 }
 
--(UILabel *)cellTitle{
-    if (!_cellTitle) {
-        _cellTitle = [[UILabel alloc]init];
-        _cellTitle.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        _cellTitle.font = [UIFont systemFontOfSize:18];
+-(UILabel *)cellTextLab{
+    if (!_cellTextLab) {
+        _cellTextLab = [[UILabel alloc] init];
+        _cellTextLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+        _cellTextLab.font = [UIFont systemFontOfSize:18];
     }
-    return _cellTitle;
+    return _cellTextLab;
 }
+
 
 -(UITextField *)cellDetail{
     if (!_cellDetail) {
-        _cellDetail = [[UITextField alloc]init];
+        _cellDetail = [[UITextField alloc] init];
         _cellDetail.textAlignment = NSTextAlignmentRight;
         _cellDetail.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _cellDetail.font = [UIFont systemFontOfSize:15];
         _cellDetail.clearButtonMode = UITextFieldViewModeWhileEditing;
     }
     return _cellDetail;
-}
-
--(UIView *)colorView{
-    if (!_colorView) {
-        _colorView = [[UIView alloc]init];
-    }
-    return _colorView;
 }
 
 -(UIImageView *)typeImage{
@@ -90,6 +93,15 @@
     return _typeTitle;
 }
 
+- (UIImageView *)cellImageView {
+    if (!_cellImageView) {
+        _cellImageView = [[UIImageView alloc] init];
+        _cellImageView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    }
+    return _cellImageView;
+}
+
+
 - (CAGradientLayer *)gradientLayer {
     if (!_gradientLayer) {
         _gradientLayer = [CAGradientLayer layer];
@@ -103,6 +115,15 @@
 
 - (void)setItem:(SSJFinancingGradientColorItem *)item {
     _gradientLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:item.startColor].CGColor,(__bridge id)[UIColor ssj_colorWithHex:item.endColor].CGColor];
+}
+
+- (void)setCellImage:(NSString *)cellImage {
+    self.cellImageView.image = [[UIImage imageNamed:cellImage] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+}
+
+- (void)setCellTitle:(NSString *)cellTitle {
+    self.cellTextLab.text = cellTitle;
+    [self.cellTextLab sizeToFit];
 }
 
 /*

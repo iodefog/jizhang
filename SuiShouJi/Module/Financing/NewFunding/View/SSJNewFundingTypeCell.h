@@ -11,7 +11,7 @@
 
 @interface SSJNewFundingTypeCell : SSJBaseTableViewCell
 
-@property (nonatomic,strong) UITextField *cellText;
+@property(nonatomic, strong) NSString *cellText;
 
 @property (nonatomic,strong) UILabel *typeLabel;
 
@@ -20,5 +20,7 @@
 @property (nonatomic,strong) UIImageView *typeImage;
 
 @property(nonatomic, strong) SSJFinancingGradientColorItem *colorItem;
+
+@property(nonatomic, strong) NSString *cellImage;
 
 @end

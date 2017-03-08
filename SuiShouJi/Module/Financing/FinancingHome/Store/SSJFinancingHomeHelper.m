@@ -38,6 +38,7 @@
             item.fundingID = [fundingResult stringForColumn:@"CFUNDID"];
             item.fundingName = [fundingResult stringForColumn:@"CACCTNAME"];
             item.fundingParent = [fundingResult stringForColumn:@"CPARENT"];
+            item.fundingParentName = [self fundParentNameForFundingParent:item.fundingParent];
             item.fundingMemo = [fundingResult stringForColumn:@"CMEMO"];
             item.fundingOrder = [fundingResult intForColumn:@"IORDER"];
             item.startColor = [fundingResult stringForColumn:@"CSTARTCOLOR"];
@@ -424,6 +425,134 @@
         }
     }];
     return fundItem;
+}
+
++ (NSString *)fundIconForFundingParent:(NSString *)parent {
+    switch ([parent integerValue]) {
+        case 1:
+            return @"ft_cash";
+            break;
+            
+        case 2:
+            return @"ft_chuxuka";
+            break;
+            
+        case 3:
+            return @"ft_creditcard";
+            break;
+            
+        case 4:
+            return @"ft_invest";
+            break;
+            
+        case 5:
+            return @"ft_huobijijin";
+            break;
+            
+        case 6:
+            return @"ft_shiwuka";
+            break;
+            
+        case 7:
+            return @"ft_wangluochongzhi";
+            break;
+            
+        case 8:
+            return @"ft_house";
+            break;
+            
+        case 9:
+            return @"ft_yingshouqian";
+            break;
+            
+        case 10:
+            return @"ft_jiechukuan";
+            break;
+            
+        case 11:
+            return @"ft_qiankuan";
+            break;
+            
+        case 12:
+            return @"ft_shebao";
+            break;
+            
+        case 13:
+            return @"ft_weixin";
+            break;
+            
+        case 14:
+            return @"ft_zhifubao";
+            break;
+   
+        default:
+            break;
+    }
+    return @"";
+}
+
++ (NSString *)fundParentNameForFundingParent:(NSString *)parent {
+    switch ([parent integerValue]) {
+        case 1:
+            return @"现金";
+            break;
+            
+        case 2:
+            return @"储蓄卡";
+            break;
+            
+        case 3:
+            return @"信用卡";
+            break;
+            
+        case 4:
+            return @"投资账户";
+            break;
+            
+        case 5:
+            return @"货币基金";
+            break;
+            
+        case 6:
+            return @"实物储值卡";
+            break;
+            
+        case 7:
+            return @"网络充值账户";
+            break;
+            
+        case 8:
+            return @"住房公积金";
+            break;
+            
+        case 9:
+            return @"应收钱款";
+            break;
+            
+        case 10:
+            return @"借出款";
+            break;
+            
+        case 11:
+            return @"欠款";
+            break;
+            
+        case 12:
+            return @"社保";
+            break;
+            
+        case 13:
+            return @"微信钱包";
+            break;
+            
+        case 14:
+            return @"支付宝";
+            break;
+            
+        default:
+            break;
+    }
+    return @"";
 }
 
 @end

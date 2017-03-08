@@ -9,10 +9,11 @@
 #import "SSJBaseViewController.h"
 #import "SSJFundingItem.h"
 #import "SSJFinancingGradientColorItem.h"
+#import "SSJFinancingHomeitem.h"
 
 @interface SSJNewFundingViewController : SSJBaseViewController<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate>
 
-typedef void (^addNewFundBlock)(SSJFundingItem *newFundingItem);
+typedef void (^addNewFundBlock)(SSJFinancingHomeitem *newFundingItem);
 
 @property(nonatomic,copy) addNewFundBlock addNewFundBlock;
 
@@ -21,5 +22,7 @@ typedef void (^addNewFundBlock)(SSJFundingItem *newFundingItem);
 @property(nonatomic,copy) SSJFinancingGradientColorItem *selectColor;
 
 @property(nonatomic,copy) NSString *selectIcoin;
+
+@property (nonatomic,strong) SSJFinancingHomeitem *item;
 
 @end

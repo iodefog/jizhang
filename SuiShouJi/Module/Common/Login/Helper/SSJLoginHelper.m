@@ -13,6 +13,7 @@
 #import "SSJFundInfoSyncTable.h"
 #import "SSJBooksTypeSyncTable.h"
 #import "SSJUserBillSyncTable.h"
+#import "SSJFinancingGradientColorItem.h"
 
 @implementation SSJLoginHelper
 
@@ -46,6 +47,38 @@
     }
 }
 
++ (void)updateFundColorForUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
+    FMResultSet *result = [db executeQuery:@"select cfundid ,iorder from bk_fund_info where (length(cstartcolor) = 0 or cstartcolor is null) and cparent <> 'root'"];
+    
+    NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:0];
+    
+    NSString *cwriteDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+    
+    NSArray *colors = [SSJFinancingGradientColorItem defualtColors];
+    
+    while ([result next]) {
+        NSString *fundid = [result stringForColumn:@"cfundid"];
+        NSString *order = [result stringForColumn:@"iorder"];
+        NSDictionary *dic = @{@"fundid":fundid,
+                              @"order":order};
+        [tempArr addObject:dic];
+    };
+    
+    for (NSDictionary *dict in tempArr) {
+        NSString *fundid = [dict objectForKey:@"fundid"];
+        NSString *order = [dict objectForKey:@"order"];
+        NSInteger index = [order integerValue];
+        if (index > 7) {
+            index = index - 7;
+        }
+        SSJFinancingGradientColorItem *item = [colors objectAtIndex:index];
+        if (![db executeUpdate:@"update bk_fund_info set cstartcolor = ? , cendcolor = ?, cwritedate = ?, iversion = ?, operatortype = 1 where cfundid = ?",item.startColor,item.endColor,cwriteDate,@(SSJSyncVersion()),fundid]) {
+            *error = [db lastError];
+        }
+    }
+
+}
+
 + (void)updateTableWhenLoginWithServices:(SSJLoginService *)service{
     [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
         //  merge登陆接口返回的收支类型、资金账户、账本
@@ -62,6 +95,8 @@
         //  更新排序字段为空的收支类型
         [self updateBillTypeOrderIfNeededForUserId:SSJUSERID() inDatabase:db error:nil];
         
+        [self updateFundColorForUserId:SSJUSERID() inDatabase:db error:nil];
+        
         //  如果登录没有返回任何资金账户，说明服务器没有保存任何资金记录，就给用户创建默认的
         [SSJUserDefaultDataCreater createDefaultFundAccountsIfNeededForUserId:SSJUSERID() inDatabase:db];
         
@@ -75,8 +110,6 @@
             [SSJUserDefaultDataCreater createDefaultMembersForUserId:SSJUSERID() inDatabase:db];
         }
         
-        //        //  更新资金账户余额
-        //        [SSJFundAccountTable updateBalanceForUserId:SSJUSERID() inDatabase:db];
     }];
 
 }

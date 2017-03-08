@@ -38,6 +38,7 @@
 #import "SSJInstalmentEditeViewController.h"
 #import "SSJInstalmentDetailViewController.h"
 #import "SSJBalenceChangeDetailViewController.h"
+#import "SSJNewFundingViewController.h"
 
 #import "FMDB.h"
 
@@ -371,11 +372,15 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
     if (!_repaymentButton) {
         _repaymentButton = [[UIButton alloc]initWithFrame:CGRectMake(0, self.view.height - 50, self.view.width, 50)];
         [_repaymentButton setTitle:@"还款" forState:UIControlStateNormal];
-        [_repaymentButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.bookKeepingHomeMutiButtonSelectColor] forState:UIControlStateNormal];
         [_repaymentButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor] forState:UIControlStateNormal];
         _repaymentButton.titleLabel.font = [UIFont systemFontOfSize:19];
         [_repaymentButton ssj_setBorderWidth:1];
         [_repaymentButton ssj_setBorderStyle:SSJBorderStyleTop];
+        if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
+            [_repaymentButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.bookKeepingHomeMutiButtonSelectColor] forState:UIControlStateNormal];
+        } else {
+            [_repaymentButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] forState:UIControlStateNormal];
+        }
         [_repaymentButton ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
         [_repaymentButton addTarget:self action:@selector(repaymentButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -414,7 +419,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
         [self.navigationController pushViewController:creditCardVc animated:YES];
     }else{
         SSJFinancingHomeitem *financingItem = (SSJFinancingHomeitem *)self.item;
-        SSJModifyFundingViewController *newFundingVC = [[SSJModifyFundingViewController alloc]init];
+        SSJNewFundingViewController *newFundingVC = [[SSJNewFundingViewController alloc]init];
         financingItem.fundingAmount = _totalIncome - _totalExpence;
         newFundingVC.item = financingItem;
         [self.navigationController pushViewController:newFundingVC animated:YES];

@@ -90,7 +90,7 @@
     }else{
         SSJNewFundingViewController *normalFundingVc = [[SSJNewFundingViewController alloc]init];
         __weak typeof(self) weakSelf = self;
-        normalFundingVc.addNewFundBlock = ^(SSJFundingItem *item){
+        normalFundingVc.addNewFundBlock = ^(SSJFinancingHomeitem *item){
             if (weakSelf.addNewFundingBlock) {
                 weakSelf.addNewFundingBlock(item);
             }
