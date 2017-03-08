@@ -10,6 +10,14 @@
 
 @interface SSJPushInfoItem : SSJBaseItem
 
+@property(nonatomic, strong) NSString *pushId;
 
+@property(nonatomic) NSInteger pushType;
+
+@property(nonatomic, strong) NSString *pushTitle;
+
+@property(nonatomic, strong) NSString *pushDesc;
+
+@property(nonatomic, strong) NSString *pushTarget;
 
 @end

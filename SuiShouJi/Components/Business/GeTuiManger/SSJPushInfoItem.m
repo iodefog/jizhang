@@ -10,4 +10,15 @@
 
 @implementation SSJPushInfoItem
 
++ (NSDictionary *)replacedKeyFromPropertyName{
+    return @{
+             @"pushId" : @"pushid",
+             @"pushType" : @"type",
+             @"pushTitle" : @"title",
+             @"pushDesc" : @"desc",
+             @"pushTarget" : @"target"
+             };
+}
+
+
 @end
