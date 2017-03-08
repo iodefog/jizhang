@@ -38,7 +38,7 @@
     self.backLayer.shadowPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, self.backLayer.width + 2, self.backLayer.height + 2) byRoundingCorners:UIRectCornerAllCorners cornerRadii:CGSizeMake(8, 8)].CGPath;
     self.backLayer.position = CGPointMake(self.width / 2, self.height / 2);
     if (self.nameLab.width + self.balanceLab.width > self.backLayer.width - 20) {
-        CGFloat reduction = (self.nameLab.width + self.balanceLab.width - (self.width - 20)) * 0.5;
+        CGFloat reduction = (self.nameLab.width + self.balanceLab.width - (self.backLayer.width - 20)) * 0.5;
         self.nameLab.width -= reduction;
         self.balanceLab.width -= reduction;
     }

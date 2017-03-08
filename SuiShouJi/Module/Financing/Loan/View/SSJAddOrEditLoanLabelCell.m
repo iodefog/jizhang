@@ -61,6 +61,14 @@
     
     [_additionalIcon sizeToFit];
     _additionalIcon.rightTop = CGPointMake(_subtitleLabel.left - 8, (self.contentView.height - _additionalIcon.height) * 0.5);
+    
+    if (_additionalIcon.left < self.textLabel.right + 10) {
+        _additionalIcon.left = self.textLabel.right + 10;
+    }
+    
+    _subtitleLabel.width = _subtitleLabel.right - _additionalIcon.right - 5;
+    
+    _subtitleLabel.left = _additionalIcon.right + 5;
 }
 
 - (void)updateCellAppearanceAfterThemeChanged {
