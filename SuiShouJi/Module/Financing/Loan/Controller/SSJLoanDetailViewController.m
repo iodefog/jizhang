@@ -195,28 +195,14 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     [_changeSectionHeaderView updateAppearance];
     [_changeChargeSelectionView updateAppearance];
     
-    if ([SSJCurrentThemeID() isEqualToString:SSJDefaultThemeID]) {
-        
-        [_closeOutBtn setTitleColor:[UIColor ssj_colorWithHex:@"#E54747"] forState:UIControlStateNormal];
-        [_closeOutBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"#FFFFFF" alpha:0.8] forState:UIControlStateNormal];
-        
-        [_changeBtn setTitleColor:[UIColor ssj_colorWithHex:@"#373737"] forState:UIControlStateNormal];
-        [_changeBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"#CCCCCC" alpha:0.8] forState:UIControlStateNormal];
-        
-        [_deleteBtn setTitleColor:[UIColor ssj_colorWithHex:@"#373737"] forState:UIControlStateNormal];
-        [_deleteBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"#CCCCCC" alpha:0.8] forState:UIControlStateNormal];
-        
-    } else {
-        [_closeOutBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] forState:UIControlStateNormal];
-        [_closeOutBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"#FFFFFF" alpha:0.3] forState:UIControlStateNormal];
-        
-        [_changeBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] forState:UIControlStateNormal];
-        [_changeBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor alpha:0.8] forState:UIControlStateNormal];
-        
-        [_deleteBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] forState:UIControlStateNormal];
-        [_deleteBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor alpha:0.8] forState:UIControlStateNormal];
-    }
+    _closeOutBtn.backgroundColor = _deleteBtn.backgroundColor  = _changeBtn.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
     
+    [_closeOutBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.bookKeepingHomeMutiButtonSelectColor] forState:UIControlStateNormal];
+    
+    [_changeBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] forState:UIControlStateNormal];
+    
+    [_deleteBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.bookKeepingHomeMutiButtonSelectColor] forState:UIControlStateNormal];
+        
     [_changeBtn ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
     [_closeOutBtn ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
     [_deleteBtn ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
@@ -664,7 +650,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
         [_closeOutBtn addTarget:self action:@selector(closeOutBtnAction) forControlEvents:UIControlEventTouchUpInside];
         _closeOutBtn.hidden = YES;
         [_closeOutBtn ssj_setBorderWidth:1];
-        [_closeOutBtn ssj_setBorderStyle:SSJBorderStyleTop];
+        [_closeOutBtn ssj_setBorderStyle:SSJBorderStyleTop | SSJBorderStyleLeft];
     }
     return _closeOutBtn;
 }

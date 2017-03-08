@@ -330,7 +330,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
 -(SSJFundingDetailNoDataView *)noDataHeader{
     if (!_noDataHeader) {
         if ([self.item isKindOfClass:[SSJCreditCardItem class]]) {
-            _noDataHeader = [[SSJFundingDetailNoDataView alloc]initWithFrame:CGRectMake(0, 213 , self.view.width, self.view.height - 223 - SSJ_NAVIBAR_BOTTOM - 50)];
+            _noDataHeader = [[SSJFundingDetailNoDataView alloc]initWithFrame:CGRectMake(0, 213 , self.view.width, self.view.height - 213 - SSJ_NAVIBAR_BOTTOM - 50)];
         }else{
             _noDataHeader = [[SSJFundingDetailNoDataView alloc]initWithFrame:CGRectMake(0, 173 , self.view.width, self.view.height - 173 - SSJ_NAVIBAR_BOTTOM)];
         }
@@ -371,9 +371,12 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
     if (!_repaymentButton) {
         _repaymentButton = [[UIButton alloc]initWithFrame:CGRectMake(0, self.view.height - 50, self.view.width, 50)];
         [_repaymentButton setTitle:@"还款" forState:UIControlStateNormal];
-        [_repaymentButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [_repaymentButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] forState:UIControlStateNormal];
-        [_repaymentButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [_repaymentButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.bookKeepingHomeMutiButtonSelectColor] forState:UIControlStateNormal];
+        [_repaymentButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor] forState:UIControlStateNormal];
+        _repaymentButton.titleLabel.font = [UIFont systemFontOfSize:19];
+        [_repaymentButton ssj_setBorderWidth:1];
+        [_repaymentButton ssj_setBorderStyle:SSJBorderStyleTop];
+        [_repaymentButton ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
         [_repaymentButton addTarget:self action:@selector(repaymentButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _repaymentButton;
