@@ -8,6 +8,7 @@
 
 #import "SSJGeTuiManager.h"
 #import <UserNotifications/UserNotifications.h>
+#import "SSJPushInfoItem.h"
 
 @interface SSJGeTuiManager()
 
@@ -58,6 +59,10 @@
     if (!userInfo) {
         return;
     }
+    
+    NSDictionary *dic = [userInfo objectForKey:@"customKey"];
+    
+    [SSJPushInfoItem mj_objectWithKeyValues:dic];
     
     
 }

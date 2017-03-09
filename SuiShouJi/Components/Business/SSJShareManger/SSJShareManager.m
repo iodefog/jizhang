@@ -54,6 +54,10 @@
     //创建分享消息对象
     UMSocialMessageObject *messageObject = [UMSocialMessageObject messageObject];
     
+    messageObject.title = title;
+    
+    messageObject.text = content;
+    
     NSString *icon = @"";
     
     NSDictionary *infoPlist = [[NSBundle mainBundle] infoDictionary];

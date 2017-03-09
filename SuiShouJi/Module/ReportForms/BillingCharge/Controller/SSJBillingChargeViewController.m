@@ -9,7 +9,7 @@
 #import "SSJBillingChargeViewController.h"
 #import "SSJCalenderDetailViewController.h"
 #import "SSJBillingChargeHeaderView.h"
-#import "SSJBillingChargeCell.h"
+#import "SSJFundingDetailCell.h"
 #import "SSJBillingChargeHelper.h"
 #import "UIViewController+MMDrawerController.h"
 #import "SSJUserTableManager.h"
@@ -40,7 +40,7 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
     [super viewDidLoad];
     
     [self.view addSubview:self.tableView];
-    [self.tableView registerClass:[SSJBillingChargeCell class] forCellReuseIdentifier:kBillingChargeCellID];
+    [self.tableView registerClass:[SSJFundingDetailCell class] forCellReuseIdentifier:kBillingChargeCellID];
     [self.tableView registerClass:[SSJBillingChargeHeaderView class] forHeaderFooterViewReuseIdentifier:kBillingChargeHeaderViewID];
 }
 
@@ -67,10 +67,11 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    SSJBillingChargeCell *cell = [tableView dequeueReusableCellWithIdentifier:kBillingChargeCellID forIndexPath:indexPath];
+    SSJFundingDetailCell *cell = [tableView dequeueReusableCellWithIdentifier:kBillingChargeCellID forIndexPath:indexPath];
     NSDictionary *sectionInfo = [self.datas ssj_safeObjectAtIndex:(NSUInteger)indexPath.section];
     NSArray *datas = sectionInfo[SSJBillingChargeRecordKey];
-    [cell setCellItem:[datas ssj_safeObjectAtIndex:indexPath.row]];
+    SSJBillingChargeCellItem *selectedItem = [datas ssj_safeObjectAtIndex:indexPath.row];
+    cell.item = selectedItem;
     return cell;
 }
 
@@ -119,6 +120,16 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
 ////    view.backgroundColor = [UIColor redColor];
 //}
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSDictionary *sectionInfo = [self.datas ssj_safeObjectAtIndex:(NSUInteger)indexPath.section];
+    NSArray *datas = sectionInfo[SSJBillingChargeRecordKey];
+    SSJBillingChargeCellItem *selectedItem = [datas ssj_safeObjectAtIndex:indexPath.row];
+    if (selectedItem.chargeMemo.length || selectedItem.chargeImage.length) {
+        return 65;
+    }
+    return 50;
+}
+
 #pragma mark - Private
 - (void)reloadData {
     if (_isMemberCharge) {
@@ -154,13 +165,12 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
 #pragma mark - Getter
 - (UITableView *)tableView {
     if (!_tableView) {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM) style:UITableViewStylePlain];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM) style:UITableViewStyleGrouped];
         _tableView.dataSource = self;
         _tableView.delegate = self;
         _tableView.backgroundView = nil;
         _tableView.backgroundColor = [UIColor clearColor];
         _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
-        _tableView.rowHeight = 90;
         _tableView.sectionHeaderHeight = 40;
         [_tableView ssj_clearExtendSeparator];
         [_tableView setSeparatorInset:UIEdgeInsetsMake(0, 15, 0, 0)];

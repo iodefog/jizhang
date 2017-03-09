@@ -37,6 +37,7 @@
         
         
         [self.contentView addSubview:self.moneyLab];
+        
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         
         [self.contentView addSubview:self.typeLabel];
@@ -78,6 +79,7 @@
         }
         self.typeLabel.left = self.imageView.right + 10;
         self.typeLabel.centerY = self.height * 0.5;
+        self.seperatorLine.hidden = YES;
     } else {
         self.memoLabel.hidden = NO;
         self.imageView.size = CGSizeMake(imageDiam, imageDiam);
@@ -122,23 +124,13 @@
             
         }
         
-        self.memoLabel.width = self.memoLabel.left - self.moneyLab.left;
-        
-        if (_item.chargeImage.length) {
-            
-            self.memoLabel.left = self.seperatorLine.right + 12;
-            
-        } else {
-            
-            self.memoLabel.left = self.typeLabel.left;
-            
-        }
-        
     }
     
     self.moneyLab.right = self.contentView.width - 15;
     
     self.moneyLab.centerY = self.height / 2;
+    
+    self.memoLabel.width = self.moneyLab.left - self.memoLabel.left - 10;
     
     self.typeLabel.width = self.moneyLab.left - self.imageView.right - 20;
 }

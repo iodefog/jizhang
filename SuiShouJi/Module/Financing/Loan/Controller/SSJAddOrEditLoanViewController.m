@@ -175,7 +175,7 @@ const int kMemoMaxLength = 15;
                 break;
         }
         
-        cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"¥0.00" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+        cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"0.00" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         cell.textField.text = [NSString stringWithFormat:@"¥%.2f", self.loanModel.jMoney];
         cell.textField.keyboardType = UIKeyboardTypeDecimalPad;
         cell.textField.clearsOnBeginEditing = YES;
@@ -396,9 +396,9 @@ const int kMemoMaxLength = 15;
             
         } else if (textField.tag == kMoneyTag) {
             
-            NSString *tmpMoneyStr = [textField.text stringByReplacingOccurrencesOfString:@"¥" withString:@""];
+            NSString *tmpMoneyStr = textField.text;
             tmpMoneyStr = [tmpMoneyStr ssj_reserveDecimalDigits:2 intDigits:9];
-            textField.text = [NSString stringWithFormat:@"¥%@", tmpMoneyStr];
+            textField.text = [NSString stringWithFormat:@"%@", tmpMoneyStr];
             self.loanModel.jMoney = [tmpMoneyStr doubleValue];
             
             [self updateRemindName];

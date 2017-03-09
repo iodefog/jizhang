@@ -16,7 +16,7 @@
              @"pushType" : @"type",
              @"pushTitle" : @"title",
              @"pushDesc" : @"desc",
-             @"pushTarget" : @"target"
+             @"pushTarget" : @"iosTarget"
              };
 }
 

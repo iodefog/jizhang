@@ -37,7 +37,7 @@
 - (UILabel *)sumLabel {
     if (!_sumLabel) {
         _sumLabel = [[UILabel alloc] init];
-        _sumLabel.font = [UIFont systemFontOfSize:15];
+        _sumLabel.font = [UIFont systemFontOfSize:13];
         _sumLabel.textAlignment = NSTextAlignmentRight;
     }
     return _sumLabel;

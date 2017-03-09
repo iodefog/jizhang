@@ -635,7 +635,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     if (!_changeBtn) {
         _changeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _changeBtn.frame = CGRectMake(0, self.view.height - 54, self.view.width * 0.6, 54);
-        _changeBtn.titleLabel.font = [UIFont systemFontOfSize:22];
+        _changeBtn.titleLabel.font = [UIFont systemFontOfSize:19];
         [_changeBtn setTitle:@"变更" forState:UIControlStateNormal];
         [_changeBtn addTarget:self action:@selector(changeBtnAction) forControlEvents:UIControlEventTouchUpInside];
         _changeBtn.hidden = YES;
@@ -649,7 +649,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     if (!_closeOutBtn) {
         _closeOutBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _closeOutBtn.frame = CGRectMake(self.view.width * 0.6, self.view.height - 54, self.view.width * 0.4, 54);
-        _closeOutBtn.titleLabel.font = [UIFont systemFontOfSize:22];
+        _closeOutBtn.titleLabel.font = [UIFont systemFontOfSize:19];
         [_closeOutBtn setTitle:@"结清" forState:UIControlStateNormal];
         [_closeOutBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_closeOutBtn addTarget:self action:@selector(closeOutBtnAction) forControlEvents:UIControlEventTouchUpInside];
@@ -664,7 +664,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     if (!_deleteBtn) {
         _deleteBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _deleteBtn.frame = CGRectMake(0, self.view.height - 54, self.view.width, 54);
-        _deleteBtn.titleLabel.font = [UIFont systemFontOfSize:22];
+        _deleteBtn.titleLabel.font = [UIFont systemFontOfSize:19];
         [_deleteBtn setTitle:@"删除" forState:UIControlStateNormal];
         [_deleteBtn addTarget:self action:@selector(deleteBtnAction) forControlEvents:UIControlEventTouchUpInside];
         _deleteBtn.hidden = YES;
