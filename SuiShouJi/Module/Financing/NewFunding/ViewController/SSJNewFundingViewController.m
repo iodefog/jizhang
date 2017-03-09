@@ -298,6 +298,10 @@
 }
 
 -(void)saveButtonClicked:(id)sender {
+    self.item.fundingName = _nameTextField.text;
+    self.item.fundingAmount = [_amountTextField.text doubleValue];
+    self.item.fundingMemo = _memoTextField.text;
+    
     NSString* number=@"^(\\-)?\\d+(\\.\\d{1,2})?$";
     NSPredicate *numberPre = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",number];
     if (![numberPre evaluateWithObject:_amountTextField.text]) {
@@ -320,10 +324,6 @@
         [CDAutoHideMessageHUD showMessage:@"备注不能超过15个字"];
         return;
     }
-    
-    self.item.fundingName = _nameTextField.text;
-    self.item.fundingAmount = [_amountTextField.text doubleValue];
-    self.item.fundingMemo = _memoTextField.text;
     
     __weak typeof(self) weakSelf = self;
     [SSJFinancingStore saveFundingItem:self.item Success:^(SSJFinancingHomeitem *item) {
