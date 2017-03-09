@@ -187,7 +187,7 @@
             if (cellSeparators.count > cellIdx) {
                 UIView *cellSeparator = cellSeparators[cellIdx];
                 CGFloat top = rowHeight * rowIdx;
-                cellSeparator.frame = CGRectMake((cellIdx + 1) * cellWidth, top + _verticalSeparatorInset.top, SEPARATOR_WIDTH, rowHeight - _verticalSeparatorInset.top - _verticalSeparatorInset.bottom);
+                cellSeparator.frame = CGRectMake(self.backLayer.left + (cellIdx + 1) * cellWidth, top + _verticalSeparatorInset.top, SEPARATOR_WIDTH, rowHeight - _verticalSeparatorInset.top - _verticalSeparatorInset.bottom);
             }
         }
     }

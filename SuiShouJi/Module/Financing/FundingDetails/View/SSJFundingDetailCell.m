@@ -123,27 +123,23 @@
         }
         
         self.memoLabel.width = self.memoLabel.left - self.moneyLab.left;
-
         
-//        if (_item.chargeMemo.length == 0 && _item.chargeImage.length != 0) {
-//            self.haveImage.left = self.typeLabel.left;
-//            self.haveImage.top = self.imageView.centerY + 5;
-//        }else if (_item.chargeImage.length == 0 && _item.chargeMemo.length != 0){
-//            self.imageView.centerY = self.typeLabel.centerY;
-//            self.memoImage.left = self.typeLabel.left;
-//            self.memoImage.top = self.imageView.centerY + 5;
-//            self.memoLabel.leftBottom = CGPointMake(self.memoImage.right + 10, self.memoImage.bottom);
-//        }else{
-//            self.imageView.centerY = self.typeLabel.centerY;
-//            self.haveImage.left = self.typeLabel.left;
-//            self.haveImage.top = self.imageView.centerY + 5;
-//            self.memoImage.left = self.haveImage.left;
-//            self.memoImage.top = self.haveImage.bottom + 5;
-//            self.memoLabel.leftBottom = CGPointMake(self.memoImage.right + 10, self.memoImage.bottom);
-//        }
+        if (_item.chargeImage.length) {
+            
+            self.memoLabel.left = self.seperatorLine.right + 12;
+            
+        } else {
+            
+            self.memoLabel.left = self.typeLabel.left;
+            
+        }
+        
     }
+    
     self.moneyLab.right = self.contentView.width - 15;
+    
     self.moneyLab.centerY = self.height / 2;
+    
     self.typeLabel.width = self.moneyLab.left - self.imageView.right - 20;
 }
 
