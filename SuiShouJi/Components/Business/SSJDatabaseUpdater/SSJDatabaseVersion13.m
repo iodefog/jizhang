@@ -62,7 +62,7 @@
     
     while ([result next]) {
         NSString *fundid = [result stringForColumn:@"cfundid"];
-        NSString *order = [result stringForColumn:@"iorder"];
+        NSString *order = [result stringForColumn:@"iorder"] ?: @"";
         NSDictionary *dic = @{@"fundid":fundid,
                               @"order":order};
         [tempArr addObject:dic];
