@@ -26,7 +26,9 @@
              @"idisplay",
              @"cwritedate",
              @"iversion",
-             @"operatortype"];
+             @"operatortype",
+             @"cstartcolor",
+             @"cendcolor"];
 }
 
 + (NSArray *)primaryKeys {

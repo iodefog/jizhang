@@ -13,4 +13,6 @@
 
 + (void)SSJGeTuiManagerWithDelegate:(id<GeTuiSdkDelegate>)delegate;
 
++ (void)pushToViewControllerWithUserInfo:(NSDictionary *)userInfo;
+
 @end

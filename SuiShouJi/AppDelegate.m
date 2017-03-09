@@ -130,6 +130,7 @@ NSDate *SCYEnterBackgroundTime() {
                 [self pushToControllerWithNotification:notifcation];
             });
         }
+        
     }];
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
@@ -456,6 +457,10 @@ NSDate *SCYEnterBackgroundTime() {
 /** APP已经接收到“远程”通知(推送) - 透传推送消息  */
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))completionHandler {
     
+    if ([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
+        return;
+    }
+    
     // [ GTSdk ]：将收到的APNs信息传给个推统计
     [GeTuiSdk handleRemoteNotification:userInfo];
     
@@ -463,7 +468,14 @@ NSDate *SCYEnterBackgroundTime() {
     NSLog(@"\n>>>[Receive RemoteNotification]:%@\n\n", userInfo);
     
     completionHandler(UIBackgroundFetchResultNewData);
+    
+    [SSJGeTuiManager pushToViewControllerWithUserInfo:userInfo];
+    
 }
+
+//- (void)GeTuiSdkDidReceivePayloadData:(NSData *)payloadData andTaskId:(NSString *)taskId andMsgId:(NSString *)msgId andOffLine:(BOOL)offLine fromGtAppId:(NSString *)appId {
+//    
+//}
 
 #pragma mark - iOS 10中收到推送消息
 
