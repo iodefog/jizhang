@@ -130,6 +130,10 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
     return 50;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 40;
+}
+
 #pragma mark - Private
 - (void)reloadData {
     if (_isMemberCharge) {
@@ -171,7 +175,6 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
         _tableView.backgroundView = nil;
         _tableView.backgroundColor = [UIColor clearColor];
         _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
-        _tableView.sectionHeaderHeight = 40;
         [_tableView ssj_clearExtendSeparator];
         [_tableView setSeparatorInset:UIEdgeInsetsMake(0, 15, 0, 0)];
     }
