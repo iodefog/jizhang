@@ -23,19 +23,19 @@ static NSString *const kSSJDomainKey = @"SSJDomainManagerKey";
 @implementation SSJDomainManager
 
 + (NSString *)domain {
-//#ifdef PRODUCTION
-//    return [self formalDomain];
-//#else
+#ifdef PRODUCTION
+    return [self formalDomain];
+#else
     return SSJTestDomain;
-//#endif
+#endif
 }
 
 + (NSString *)imageDomain {
-//#ifdef PRODUCTION
-//    return [self formalDomain];
-//#else
+#ifdef PRODUCTION
+    return [self formalDomain];
+#else
     return SSJTestImageDomain;
-//#endif 
+#endif 
 }
 
 + (NSString *)formalDomain {
