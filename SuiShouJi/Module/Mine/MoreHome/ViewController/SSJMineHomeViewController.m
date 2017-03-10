@@ -175,7 +175,7 @@ static BOOL kNeedBannerDisplay = YES;
     [super viewDidLayoutSubviews];
     self.header.size = CGSizeMake(self.view.width, 170);
     self.header.leftTop = CGPointMake(0, self.announcementView.bottom);
-    self.collectionView.size = CGSizeMake(self.view.width, self.view.height - self.header.bottom);
+    self.collectionView.size = CGSizeMake(self.view.width, self.view.height - self.header.bottom - SSJ_TABBAR_HEIGHT);
     self.collectionView.top = self.header.bottom;
     self.collectionView.contentInset = UIEdgeInsetsMake(10, 0, 0, 0);
     self.bottomBgView.centerX = self.view.centerX;
