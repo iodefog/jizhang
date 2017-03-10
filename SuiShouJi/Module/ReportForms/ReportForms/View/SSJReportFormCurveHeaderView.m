@@ -403,7 +403,7 @@ static const CGFloat kSeparatorFormViewHeight = 88;
 
 - (void)reloadSeparatorFormViewData {
     _incomeItem = [SSJSeparatorFormViewCellItem itemWithTopTitle:_item.generalIncome
-                                                     bottomTitle:@"总收入"
+                                                     bottomTitle:@"期间收入"
                                                    topTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurveIncomeColor]
                                                 bottomTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]
                                                     topTitleFont:[UIFont systemFontOfSize:18]
@@ -411,15 +411,16 @@ static const CGFloat kSeparatorFormViewHeight = 88;
                                                    contentInsets:UIEdgeInsetsZero];
     
     _paymentItem = [SSJSeparatorFormViewCellItem itemWithTopTitle:_item.generalPayment
-                                                      bottomTitle:@"总支出"
+                                                      bottomTitle:@"期间支出"
                                                     topTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurvePaymentColor]
                                                  bottomTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]
                                                      topTitleFont:[UIFont systemFontOfSize:18]
                                                   bottomTitleFont:[UIFont systemFontOfSize:12]
                                                     contentInsets:UIEdgeInsetsZero];
     
-    _dailyCostItem = [SSJSeparatorFormViewCellItem itemWithTopTitle:_item.dailyCost
-                                                        bottomTitle:@"日均花费（元）"
+    double surplus = [_item.generalIncome doubleValue] - [_item.generalPayment doubleValue];
+    _dailyCostItem = [SSJSeparatorFormViewCellItem itemWithTopTitle:[NSString stringWithFormat:@"%.2f", surplus]
+                                                        bottomTitle:@"期间结余"
                                                       topTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor]
                                                    bottomTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]
                                                        topTitleFont:[UIFont systemFontOfSize:18]
