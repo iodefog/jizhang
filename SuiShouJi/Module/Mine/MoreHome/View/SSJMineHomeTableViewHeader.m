@@ -187,7 +187,7 @@
         }else{
             iconStr = SSJImageURLWithAPI(item.icon);
         }
-        if (item.realName == nil || [item.realName isEqualToString:@""]) {
+        if (item.nickName == nil || [item.nickName isEqualToString:@""]) {
             //手机号登陆
             if (item.mobileNo.length == 11) {
                 NSString *phoneNum = [item.mobileNo stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
@@ -195,7 +195,7 @@
             }
         }else{
             //三方登录
-            self.nicknameLabel.text = item.realName;
+            self.nicknameLabel.text = item.nickName;
         }
         [self.headPotraitImage.headerImage sd_setImageWithURL:[NSURL URLWithString:iconStr] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
         [self.nicknameLabel sizeToFit];

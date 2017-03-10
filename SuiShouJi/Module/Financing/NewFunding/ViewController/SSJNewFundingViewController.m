@@ -54,6 +54,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:) name:UITextFieldTextDidChangeNotification object:nil];
     self.titles = @[@[@"账户名称",@"账户余额",@"备注"],@[@"账户类型",@"选择颜色"]];
     self.images = @[@[@"fund_name",@"fund_balance",@"fund_memo"],@[@"fund_type",@"fund_color"]];
     if (!self.item) {
@@ -111,7 +112,12 @@
     NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
     if ([title isEqualToString:@"选择颜色"]) {
         SSJColorSelectViewController *colorSelectVC = [[SSJColorSelectViewController alloc]init];
-        colorSelectVC.fundingColor = _selectColor;
+        
+        SSJFinancingGradientColorItem *colorItem = [[SSJFinancingGradientColorItem alloc] init];
+        colorItem.startColor = self.item.startColor;
+        colorItem.endColor = self.item.endColor;
+        
+        colorSelectVC.fundingColor = colorItem;
         colorSelectVC.fundingAmount = [_amountTextField.text doubleValue];
         colorSelectVC.fundingName = _nameTextField.text;
         __weak typeof(self) weakSelf = self;
@@ -158,6 +164,7 @@
         NewFundingCell.selectionStyle = UITableViewCellSelectionStyleNone;
         NewFundingCell.cellDetail.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入账户名称" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         NewFundingCell.cellDetail.text = self.item.fundingName;
+        NewFundingCell.cellDetail.tag = 100;
         _nameTextField = NewFundingCell.cellDetail;
         _nameTextField.delegate = self;
 
@@ -165,12 +172,14 @@
         _amountTextField = NewFundingCell.cellDetail;
         NewFundingCell.cellDetail.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入账户余额" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         NewFundingCell.cellDetail.text = [[NSString stringWithFormat:@"%f",self.item.fundingAmount] ssj_moneyDecimalDisplayWithDigits:2];
+        NewFundingCell.cellDetail.tag = 101;
         NewFundingCell.cellDetail.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
         _amountTextField.delegate = self;
     } else if ([title isEqualToString:@"备注"]) {
         NewFundingCell.selectionStyle = UITableViewCellSelectionStyleNone;
         NewFundingCell.cellDetail.text = self.item.fundingMemo;
         NewFundingCell.cellDetail.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"备注说明" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+        NewFundingCell.cellDetail.tag = 102;
         _memoTextField = NewFundingCell.cellDetail;
         _memoTextField.delegate = self;
     } else if ([title isEqualToString:@"账户类型"]) {
@@ -220,6 +229,21 @@
     return YES;
 }
 
+-(void)textFieldDidEndEditing:(UITextField *)textField{
+    if ([textField isKindOfClass:[UITextField class]]) {
+        if (textField.tag == 100) {
+            self.item.fundingName = textField.text;
+        }
+        if (textField.tag == 101){
+            NSString *fundingBalance = [[NSString stringWithFormat:@"%f",[textField.text doubleValue]] ssj_moneyDecimalDisplayWithDigits:2];
+            self.item.fundingAmount = [fundingBalance doubleValue];
+        }
+        if (textField.tag == 102){
+            self.item.fundingMemo = textField.text;
+        }
+    }
+}
+
 #pragma mark - Event
 - (void)rightButtonClicked:(id)sender {
     __weak typeof(self) weakSelf = self;
@@ -247,6 +271,23 @@
     [alert addAction:cancel];
     [alert addAction:comfirm];
     [self presentViewController:alert animated:YES completion:NULL];
+}
+
+- (void)textDidChange:(NSNotification *)notification {
+    UITextField *textField = notification.object;
+    if ([textField isKindOfClass:[UITextField class]]) {
+        
+        if (textField.tag == 100) {
+            self.item.fundingName = textField.text;
+        }
+        if (textField.tag == 101){
+            NSString *fundingBalance = [[NSString stringWithFormat:@"%f",[textField.text doubleValue]] ssj_moneyDecimalDisplayWithDigits:2];
+            self.item.fundingAmount = [fundingBalance doubleValue];
+        }
+        if (textField.tag == 102){
+            self.item.fundingMemo = textField.text;
+        }
+    }
 }
 
 #pragma mark - Getter
