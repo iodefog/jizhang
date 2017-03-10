@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "SSJCreditCardItem.h"
+#import "SSJFinancingGradientColorItem.h"
 
 @interface SSJCreditCardDetailHeader : UIView
 
@@ -20,5 +21,7 @@
 @property(nonatomic) double cardBalance;
 
 @property(nonatomic, strong) UIView *backGroundView;
+
+@property(nonatomic, strong) SSJFinancingGradientColorItem *colorItem;
 
 @end

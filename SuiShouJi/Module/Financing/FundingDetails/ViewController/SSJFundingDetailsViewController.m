@@ -372,13 +372,13 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
         [_creditCardHeader ssj_setBorderColor:[UIColor whiteColor]];
         [_creditCardHeader ssj_setBorderStyle:SSJBorderStyleTop];
         [_creditCardHeader ssj_setBorderWidth:1 / [UIScreen mainScreen].scale];
-//        if ([_item isKindOfClass:[SSJCreditCardItem class]]) {
-//            SSJCreditCardItem *cardItem = (SSJCreditCardItem *)_item;
-//            SSJFinancingGradientColorItem *colorItem = [[SSJFinancingGradientColorItem alloc] init];
-//            colorItem.startColor = cardItem.startColor;
-//            colorItem.endColor = cardItem.endColor;
-//            _creditCardHeader.item = colorItem;
-//        }
+        if ([_item isKindOfClass:[SSJCreditCardItem class]]) {
+            SSJCreditCardItem *cardItem = (SSJCreditCardItem *)_item;
+            SSJFinancingGradientColorItem *colorItem = [[SSJFinancingGradientColorItem alloc] init];
+            colorItem.startColor = cardItem.startColor;
+            colorItem.endColor = cardItem.endColor;
+            _creditCardHeader.colorItem = colorItem;
+        }
     }
     return _creditCardHeader;
 }

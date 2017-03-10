@@ -336,6 +336,12 @@
     [self.balanceLab sizeToFit];
 }
 
+- (void)setColorItem:(SSJFinancingGradientColorItem *)colorItem {
+    self.backLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:colorItem.startColor].CGColor,(__bridge id)[UIColor ssj_colorWithHex:colorItem.endColor].CGColor];
+    self.backLayer.shadowColor = [UIColor ssj_colorWithHex:colorItem.startColor].CGColor;
+
+}
+
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
