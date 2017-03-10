@@ -17,14 +17,13 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+        
     
     if ([SSJDefaultSource() isEqualToString:@"11501"] | [SSJDefaultSource() isEqualToString:@"11502"]) {
         UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"home_bill_note_share"] style:UIBarButtonItemStylePlain target:self action:@selector(rightButtonClicked:)];
         
         self.navigationItem.rightBarButtonItem = rightItem;
     }
-    
-    self.title = self.item.announcementTitle;
     
     // Do any additional setup after loading the view.
 }
