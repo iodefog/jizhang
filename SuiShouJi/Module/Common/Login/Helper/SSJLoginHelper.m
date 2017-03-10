@@ -69,7 +69,7 @@
         NSString *order = [dict objectForKey:@"order"];
         NSInteger index = [order integerValue];
         if (index > 7) {
-            index = index - 7;
+            index = index % 7 - 1;
         }
         SSJFinancingGradientColorItem *item = [colors objectAtIndex:index];
         if (![db executeUpdate:@"update bk_fund_info set cstartcolor = ? , cendcolor = ?, cwritedate = ?, iversion = ?, operatortype = 1 where cfundid = ?",item.startColor,item.endColor,cwriteDate,@(SSJSyncVersion()),fundid]) {

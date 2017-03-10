@@ -47,7 +47,7 @@ static const CGFloat kRadius = 8.f;
 
 -(void)layoutSubviews{
     [super layoutSubviews];
-    self.fundingImage.left = 10;
+    self.fundingImage.left = 20;
     self.fundingImage.centerY = self.contentView.height / 2 + 5;
     self.deleteButton.size = CGSizeMake(30, 30);
     self.deleteButton.rightTop = CGPointMake(self.contentView.width, -5);
