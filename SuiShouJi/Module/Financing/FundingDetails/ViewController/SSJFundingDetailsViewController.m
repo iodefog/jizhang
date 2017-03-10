@@ -223,6 +223,16 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
     }else if([item isKindOfClass:[SSJBillingChargeCellItem class]]){
         SSJFundingDetailCell *cell = [tableView dequeueReusableCellWithIdentifier:kFundingDetailCellID forIndexPath:indexPath];
         cell.item = [((SSJFundingDetailListItem *)[self.listItems objectAtIndex:indexPath.section]).chargeArray objectAtIndex:indexPath.row - 1];
+        if (indexPath.row < [[((SSJFundingDetailListItem *)[self.listItems objectAtIndex:indexPath.section]) chargeArray] count]) {
+            SSJBaseItem *nextItem = [((SSJFundingDetailListItem *)[self.listItems objectAtIndex:indexPath.section]).chargeArray ssj_safeObjectAtIndex:indexPath.row];
+            if ([nextItem isKindOfClass:[SSJFundingListDayItem class]]) {
+                cell.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);
+            } else {
+                cell.separatorInset = UIEdgeInsetsMake(0, 15, 0, 15);
+            }
+        } else {
+            cell.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);
+        }
         return cell;
     }
     return [UITableViewCell new];
@@ -345,6 +355,13 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
         [_header ssj_setBorderColor:[UIColor whiteColor]];
         [_header ssj_setBorderStyle:SSJBorderStyleTop];
         [_header ssj_setBorderWidth:1 / [UIScreen mainScreen].scale];
+        if ([_item isKindOfClass:[SSJFinancingHomeitem class]]) {
+            SSJFinancingHomeitem *financingItem = (SSJFinancingHomeitem *)_item;
+            SSJFinancingGradientColorItem *colorItem = [[SSJFinancingGradientColorItem alloc] init];
+            colorItem.startColor = financingItem.startColor;
+            colorItem.endColor = financingItem.endColor;
+            _header.item = colorItem;
+        }
     }
     return _header;
 }
@@ -352,10 +369,16 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
 -(SSJCreditCardDetailHeader *)creditCardHeader{
     if (!_creditCardHeader) {
         _creditCardHeader = [[SSJCreditCardDetailHeader alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 213)];
-        _creditCardHeader.backGroundView.backgroundColor = [UIColor ssj_colorWithHex:self.cardItem.cardColor];
         [_creditCardHeader ssj_setBorderColor:[UIColor whiteColor]];
         [_creditCardHeader ssj_setBorderStyle:SSJBorderStyleTop];
         [_creditCardHeader ssj_setBorderWidth:1 / [UIScreen mainScreen].scale];
+//        if ([_item isKindOfClass:[SSJCreditCardItem class]]) {
+//            SSJCreditCardItem *cardItem = (SSJCreditCardItem *)_item;
+//            SSJFinancingGradientColorItem *colorItem = [[SSJFinancingGradientColorItem alloc] init];
+//            colorItem.startColor = cardItem.startColor;
+//            colorItem.endColor = cardItem.endColor;
+//            _creditCardHeader.item = colorItem;
+//        }
     }
     return _creditCardHeader;
 }

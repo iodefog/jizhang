@@ -566,9 +566,9 @@ static NSString *const kSegmentTitleIncome = @"收入";
         SSJReportFormsChartCellItem *chartCellItem = [[SSJReportFormsChartCellItem alloc] init];
         chartCellItem.chartItems = chartItems;
         if (_payAndIncomeSegmentControl.selectedIndex == 0) {
-            chartCellItem.title = @"总支出";
+            chartCellItem.title = @"期间支出";
         } else if (_payAndIncomeSegmentControl.selectedIndex == 1) {
-            chartCellItem.title = @"总收入";
+            chartCellItem.title = @"期间收入";
         }
         double amount = [[result valueForKeyPath:@"@sum.money"] doubleValue];
         chartCellItem.amount = [[NSString stringWithFormat:@"%f", amount] ssj_moneyDecimalDisplayWithDigits:2];

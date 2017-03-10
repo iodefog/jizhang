@@ -120,7 +120,7 @@ static BOOL kNeedBannerDisplay = YES;
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.title = @"更多";
-        self.extendedLayoutIncludesOpaqueBars = NO;
+        self.extendedLayoutIncludesOpaqueBars = YES;
         self.automaticallyAdjustsScrollViewInsets = NO;
     }
     return self;
@@ -527,7 +527,7 @@ static BOOL kNeedBannerDisplay = YES;
 
 - (SSJScrollalbleAnnounceView *)announcementView {
     if (!_announcementView) {
-        _announcementView = [[SSJScrollalbleAnnounceView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 0)];
+        _announcementView = [[SSJScrollalbleAnnounceView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, 0)];
         __weak typeof(self) weakSelf = self;
         _announcementView.announceClickedBlock = ^(SSJAnnoucementItem *item) {
             if (item) {

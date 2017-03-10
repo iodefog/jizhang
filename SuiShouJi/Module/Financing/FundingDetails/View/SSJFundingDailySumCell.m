@@ -25,10 +25,6 @@
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         [self.contentView addSubview:self.dateLabel];
         [self.contentView addSubview:self.moneyLabel];
-        self.separatorInset = UIEdgeInsetsMake(0, 15, 0, 15);
-        [self ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
-        [self ssj_setBorderStyle:SSJBorderStyleTop];
-        [self ssj_setBorderWidth:1];
     }
     return self;
 }
@@ -39,7 +35,6 @@
     self.dateLabel.centerY = self.height / 2;
     self.moneyLabel.right = self.contentView.width - 15;
     self.moneyLabel.centerY = self.height / 2;
-    [self ssj_relayoutBorder];
 }
 
 -(UILabel *)dateLabel{
