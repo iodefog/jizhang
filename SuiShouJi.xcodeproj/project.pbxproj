@@ -6345,7 +6345,7 @@
 		9C9471361CEB224C00D69079 /* SSJFinancingHomeHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFinancingHomeHelper.h; sourceTree = "<group>"; };
 		9C9471371CEB224C00D69079 /* SSJFinancingHomeHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFinancingHomeHelper.m; sourceTree = "<group>"; };
 		9C94713B1CEB224C00D69079 /* SSJFinancingHomeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFinancingHomeCell.h; sourceTree = "<group>"; };
-		9C94713C1CEB224C00D69079 /* SSJFinancingHomeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFinancingHomeCell.m; sourceTree = "<group>"; };
+		9C94713C1CEB224C00D69079 /* SSJFinancingHomeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFinancingHomeCell.m; sourceTree = "<group>"; wrapsLines = 0; };
 		9C94713D1CEB224C00D69079 /* SSJFinancingHomeHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFinancingHomeHeader.h; sourceTree = "<group>"; };
 		9C94713E1CEB224C00D69079 /* SSJFinancingHomeHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFinancingHomeHeader.m; sourceTree = "<group>"; };
 		9C94713F1CEB224C00D69079 /* SSJFinancingHomePopView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFinancingHomePopView.h; sourceTree = "<group>"; };
