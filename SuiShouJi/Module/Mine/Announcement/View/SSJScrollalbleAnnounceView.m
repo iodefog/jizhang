@@ -32,7 +32,7 @@
         [self addSubview:self.headLab];
         [self.layer addSublayer:self.announceTextLayer];
         self.currentIndex = 0;
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCellAppearanceAfterThemeChanged) name:SSJThemeDidChangeNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateAppearanceAfterThemeChanged) name:SSJThemeDidChangeNotification object:nil];
         if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
             self.backView.backgroundColor = [UIColor ssj_colorWithHex:@"eb4a64" alpha:0.1];
             self.backgroundColor = [UIColor whiteColor];
@@ -57,6 +57,7 @@
     SSJAnnoucementItem *currentItem = [self.items objectAtIndex:self.currentIndex];
     CGSize textLayerSize = [currentItem.announcementTitle sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13]}];
     self.announceTextLayer.size = CGSizeMake(self.width - self.headLab.right - 20 ,textLayerSize.height);
+//    self.announceTextLayer.position = CGPointMake(self.headLab.right + 20 + self.announceTextLayer.width, self.height / 2);
     self.announceTextLayer.left = self.headLab.right + 20;
     self.announceTextLayer.top = self.height / 2 - textLayerSize.height / 2;
 }
@@ -127,6 +128,8 @@
         [attributeStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:[announcementStr rangeOfString:[items firstObject].announcementTitle]];
     }
     self.announceTextLayer.string = attributeStr;
+    CGSize textLayerSize = [announcementStr sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13]}];
+    self.announceTextLayer.size = CGSizeMake(self.width - self.headLab.right - 20 ,textLayerSize.height);
     [self setNeedsLayout];
     [self.timer fire];
 }
@@ -162,7 +165,7 @@
     [self setNeedsLayout];
 }
 
-- (void)updateCellAppearanceAfterThemeChanged {
+- (void)updateAppearanceAfterThemeChanged {
     _headLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     SSJAnnoucementItem *currentItem = [self.items objectAtIndex:self.currentIndex];
     NSString *announcementStr = currentItem.announcementTitle;
@@ -185,6 +188,7 @@
         [attributeStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:[announcementStr rangeOfString:currentItem.announcementTitle]];
     }
     self.announceTextLayer.string = attributeStr;
+    
     if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
         self.backView.backgroundColor = [UIColor ssj_colorWithHex:@"eb4a64" alpha:0.1];
         self.backgroundColor = [UIColor whiteColor];

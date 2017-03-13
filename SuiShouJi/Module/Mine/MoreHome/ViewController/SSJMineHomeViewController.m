@@ -175,8 +175,8 @@ static BOOL kNeedBannerDisplay = YES;
     self.collectionView.size = CGSizeMake(self.view.width, self.view.height - self.header.bottom - SSJ_TABBAR_HEIGHT);
     self.collectionView.top = self.header.bottom;
     self.collectionView.contentInset = UIEdgeInsetsMake(10, 0, 0, 0);
-    self.bottomBgView.centerX = self.view.centerX;
-    self.bottomBgView.bottom = self.view.bottom - SSJ_TABBAR_HEIGHT;
+//    self.bottomBgView.centerX = self.view.centerX;
+//    self.bottomBgView.bottom = self.view.bottom - SSJ_TABBAR_HEIGHT;
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -192,7 +192,7 @@ static BOOL kNeedBannerDisplay = YES;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
-    return self.adItemsArray.count ;
+    return self.adItemsArray.count;
 }
 
 -(UICollectionViewCell*)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
@@ -225,6 +225,7 @@ static BOOL kNeedBannerDisplay = YES;
     //    如果底部视图
     if([kind isEqualToString:UICollectionElementKindSectionFooter]){
         self.bottomBgView =  [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:kFooterViewID forIndexPath:indexPath];
+        [self.bottomBgView setNeedsLayout];
         return self.bottomBgView;
     }
     
@@ -459,6 +460,8 @@ static BOOL kNeedBannerDisplay = YES;
         layout.headerReferenceSize = CGSizeMake(SSJSCREENWITH, 0);//头的高度
         if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
             layout.footerReferenceSize = CGSizeMake(SSJSCREENWITH, 150);//头的高度
+        } else {
+            layout.footerReferenceSize = CGSizeMake(SSJSCREENWITH, 0);//头的高度
         }
         _collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
         [_collectionView registerClass:[SSJMineHomeCollectionImageCell class] forCellWithReuseIdentifier:kItemID];
@@ -571,6 +574,7 @@ static BOOL kNeedBannerDisplay = YES;
         collectionViewLayout.footerReferenceSize = CGSizeMake(SSJSCREENWITH, 0);
     }
     [self.rightButton updateAfterThemeChange];
+    [self.announcementView updateAppearanceAfterThemeChanged];
 }
 
 //-(void)getCircleChargeState {

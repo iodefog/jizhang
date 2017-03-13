@@ -25,9 +25,14 @@
     return self;
 }
 
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    self.backImage.frame = CGRectMake(0, 0, self.width, self.height);
+}
+
 - (UIImageView *)backImage {
     if (!_backImage) {
-        _backImage = [[UIImageView alloc] initWithFrame:self.bounds];
+        _backImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.width, self.height)];
         _backImage.image = [UIImage imageNamed:@"more_bottom_bgimage"];
     }
     return _backImage;

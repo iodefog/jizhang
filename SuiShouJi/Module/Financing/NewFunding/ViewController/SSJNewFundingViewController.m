@@ -183,12 +183,12 @@
         _memoTextField = NewFundingCell.cellDetail;
         _memoTextField.delegate = self;
     } else if ([title isEqualToString:@"账户类型"]) {
-        NewFundingCell.selectionStyle = UITableViewCellSelectionStyleNone;
         NewFundingCell.typeImage.image = [UIImage imageNamed:self.item.fundingIcon];
         NewFundingCell.typeTitle.text = self.item.fundingParentName;
         [NewFundingCell.typeTitle sizeToFit];
         NewFundingCell.cellDetail.enabled = NO;
         NewFundingCell.cellDetail.hidden = YES;
+        NewFundingCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
     } else if ([title isEqualToString:@"选择颜色"]) {
         NewFundingCell.selectionStyle = UITableViewCellSelectionStyleNone;
         SSJFinancingGradientColorItem *colorItem = [[SSJFinancingGradientColorItem alloc] init];

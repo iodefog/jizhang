@@ -15,4 +15,6 @@
 
 @property (nonatomic, copy) void (^announceClickedBlock)(SSJAnnoucementItem *item);
 
+- (void)updateAppearanceAfterThemeChanged;
+
 @end
