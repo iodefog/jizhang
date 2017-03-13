@@ -84,6 +84,11 @@
     
     UIViewController *currentVc = SSJVisibalController();
     
+    if (![pushItem.pushTarget isEqualToString:@"SSJBooksTypeSelectViewController"]) {
+        [currentVc.mm_drawerController closeDrawerAnimated:NO completion:NULL];
+        currentVc = SSJVisibalController();
+    }
+    
     if (pushItem.pushType == 1) {
         if ([pushItem.pushTarget isEqualToString:@"SSJBookKeepingHomeViewController"]) {
             return;
