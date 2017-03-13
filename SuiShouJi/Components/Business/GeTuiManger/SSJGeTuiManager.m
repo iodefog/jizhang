@@ -130,7 +130,7 @@
             [currentVc.navigationController pushViewController:reminderVc animated:YES];
         }
 
-    } else if (pushItem.pushType == 1) {
+    } else if (pushItem.pushType == 0) {
         SSJNormalWebViewController *webVc = [SSJNormalWebViewController webViewVCWithURL:[NSURL URLWithString:pushItem.pushTarget]];
         [currentVc.navigationController pushViewController:webVc animated:YES];
     } else if (pushItem.pushType == 2) {
