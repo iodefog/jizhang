@@ -65,6 +65,7 @@
 - (void)setUpConstraints {
     [self.titleLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(self.contentView.left).with.offset(10);
+        make.width.mas_lessThanOrEqualTo(self.contentView.mas_width).with.offset(10);
         make.bottom.mas_equalTo(self.contentView.mas_centerY).with.offset(-10);
     }];
     

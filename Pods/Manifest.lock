@@ -23,13 +23,6 @@ PODS:
   - DateTools (2.0.0)
   - FLAnimatedImage (1.0.12)
   - GTSDK (1.5.3)
-  - JSPatch (1.1.3):
-    - JSPatch/Core (= 1.1.3)
-  - JSPatch/Core (1.1.3)
-  - JSPatch/Extensions (1.1.3):
-    - JSPatch/Core
-  - JSPatch/JPCFunction (1.1.3):
-    - JSPatch/Core
   - libwebp (0.5.1):
     - libwebp/core (= 0.5.1)
     - libwebp/dec (= 0.5.1)
@@ -107,9 +100,6 @@ DEPENDENCIES:
   - DateTools
   - FLAnimatedImage (~> 1.0)
   - GTSDK
-  - JSPatch
-  - JSPatch/Extensions
-  - JSPatch/JPCFunction
   - Masonry
   - Meiqia (~> 3.3.1)
   - MJExtension
@@ -131,7 +121,6 @@ SPEC CHECKSUMS:
   DateTools: 933ac9c490f21f92127cf690ccd8c397e0126caf
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
   GTSDK: 1b55fc5b0f29c7ea9061946f07aeee49ef70c90e
-  JSPatch: 02cfed591cb907bbfe80a346666e5a35fc2d349d
   libwebp: b9126f8982a95370cf4eaad9bb3fefd57f052c15
   Masonry: 7c429b56da9d4ee0bbb3ed77a5ea710d6a5df39e
   Meiqia: b4e962821038a85a6126136495a4c0f0dc1e2a26
@@ -146,6 +135,6 @@ SPEC CHECKSUMS:
   YYText: 5c461d709e24d55a182d1441c41dc639a18a4849
   ZYCornerRadius: 526dfd5b860008e57abf7be4a887f4630c3018f0
 
-PODFILE CHECKSUM: f97de5ec95056c51da8712043e524a3f022f76da
+PODFILE CHECKSUM: 0bae81812cd8368e04bfdad1c18ed7ad629d1d1b
 
 COCOAPODS: 1.2.0

@@ -44,14 +44,13 @@ static NSString *const kAnnouncementCellIdentifier = @"kAnnouncementCellIdentifi
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    if (self.items.count > 0) {
-        SSJAnnoucementItem *item = [self.items firstObject];
-        [[NSUserDefaults standardUserDefaults] setObject:item.announcementId forKey:kLastAnnoucementIdKey];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-    } else {
-        [self.service requestAnnoucementsWithPage:1];
-    }
+     [super viewWillAppear:animated];
+     [self.service requestAnnoucementsWithPage:1];
+     if (self.items.count > 0) {
+          SSJAnnoucementItem *item = [self.items firstObject];
+          [[NSUserDefaults standardUserDefaults] setObject:item.announcementId forKey:kLastAnnoucementIdKey];
+          [[NSUserDefaults standardUserDefaults] synchronize];
+     }
 }
 
 
@@ -108,18 +107,23 @@ static NSString *const kAnnouncementCellIdentifier = @"kAnnouncementCellIdentifi
 
 #pragma mark - SSJBaseNetworkService
 -(void)serverDidFinished:(SSJBaseNetworkService *)service {
-    [self.tableView.mj_header endRefreshing];
-    [self.tableView.mj_footer endRefreshing];
-    if ([service.returnCode isEqualToString:@"1"]) {
-        if (self.currentPage == 1) {
-            [self.items removeAllObjects];
-            self.items = [self.service.annoucements mutableCopy];
-        } else {
-            [self.items addObjectsFromArray:self.service.annoucements];
-        }
-        self.totalPage = self.service.totalPage;
-        [self.tableView reloadData];
-    }
+     [self.tableView.mj_header endRefreshing];
+     if (self.currentPage == self.totalPage) {
+          [self.tableView.mj_footer endRefreshingWithNoMoreData];
+     } else {
+          [self.tableView.mj_footer endRefreshing];
+          
+     }
+     if ([service.returnCode isEqualToString:@"1"]) {
+          if (self.currentPage == 1) {
+               [self.items removeAllObjects];
+               self.items = [self.service.annoucements mutableCopy];
+          } else {
+               [self.items addObjectsFromArray:self.service.annoucements];
+          }
+          self.totalPage = self.service.totalPage;
+          [self.tableView reloadData];
+     }
 }
 
 - (void)server:(SSJBaseNetworkService *)service didFailLoadWithError:(NSError *)error {

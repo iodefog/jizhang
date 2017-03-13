@@ -78,7 +78,6 @@ EOM
 }
 if [[ "$CONFIGURATION" == "Debug-test" ]]; then
   install_resource "DateTools/DateTools/DateTools/DateTools.bundle"
-  install_resource "JSPatch/JSPatch/JSPatch.js"
   install_resource "Meiqia/Meiqia-SDK-files/MQChatViewController/Assets/MQChatViewAsset.bundle"
   install_resource "UMengUShare/UShareSDK/UMSocialSDK/UMSocialSDKPromptResources.bundle"
   install_resource "UMengUShare/UShareSDK/SocialLibraries/QQ/TencentOpenApi_IOS_Bundle.bundle"
@@ -87,7 +86,6 @@ if [[ "$CONFIGURATION" == "Debug-test" ]]; then
 fi
 if [[ "$CONFIGURATION" == "Debug-production" ]]; then
   install_resource "DateTools/DateTools/DateTools/DateTools.bundle"
-  install_resource "JSPatch/JSPatch/JSPatch.js"
   install_resource "Meiqia/Meiqia-SDK-files/MQChatViewController/Assets/MQChatViewAsset.bundle"
   install_resource "UMengUShare/UShareSDK/UMSocialSDK/UMSocialSDKPromptResources.bundle"
   install_resource "UMengUShare/UShareSDK/SocialLibraries/QQ/TencentOpenApi_IOS_Bundle.bundle"
@@ -96,7 +94,6 @@ if [[ "$CONFIGURATION" == "Debug-production" ]]; then
 fi
 if [[ "$CONFIGURATION" == "Release-test" ]]; then
   install_resource "DateTools/DateTools/DateTools/DateTools.bundle"
-  install_resource "JSPatch/JSPatch/JSPatch.js"
   install_resource "Meiqia/Meiqia-SDK-files/MQChatViewController/Assets/MQChatViewAsset.bundle"
   install_resource "UMengUShare/UShareSDK/UMSocialSDK/UMSocialSDKPromptResources.bundle"
   install_resource "UMengUShare/UShareSDK/SocialLibraries/QQ/TencentOpenApi_IOS_Bundle.bundle"
@@ -105,7 +102,6 @@ if [[ "$CONFIGURATION" == "Release-test" ]]; then
 fi
 if [[ "$CONFIGURATION" == "Release-production" ]]; then
   install_resource "DateTools/DateTools/DateTools/DateTools.bundle"
-  install_resource "JSPatch/JSPatch/JSPatch.js"
   install_resource "Meiqia/Meiqia-SDK-files/MQChatViewController/Assets/MQChatViewAsset.bundle"
   install_resource "UMengUShare/UShareSDK/UMSocialSDK/UMSocialSDKPromptResources.bundle"
   install_resource "UMengUShare/UShareSDK/SocialLibraries/QQ/TencentOpenApi_IOS_Bundle.bundle"

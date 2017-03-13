@@ -34,11 +34,11 @@
 #import "SSJStartViewManager.h"
 #import "SSJStartViewManager.h"
 
-#import "SSJPatchUpdateService.h"
-#import "SSJJspatchAnalyze.h"
-#import "SSJJsPatchItem.h"
+//#import "SSJPatchUpdateService.h"
+//#import "SSJJspatchAnalyze.h"
+//#import "SSJJsPatchItem.h"
 #import "SSJBooksTypeSelectViewController.h"
-#import "JPEngine.h"
+//#import "JPEngine.h"
 #import "SSJNetworkReachabilityManager.h"
 #import "SSJUmengManager.h"
 #import "SSJLocalNotificationHelper.h"
@@ -145,7 +145,7 @@ NSDate *SCYEnterBackgroundTime() {
     //如果第一次打开记录当前时间
     if (SSJLaunchTimesForCurrentVersion() == 1) {
         [[NSUserDefaults standardUserDefaults]setObject:[NSDate date]forKey:SSJLastPopTimeKey];
-        [SSJJspatchAnalyze removePatch];
+//        [SSJJspatchAnalyze removePatch];
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [SSJThemeUpdate updateLocalThemesIfneeded];
         });
@@ -153,7 +153,7 @@ NSDate *SCYEnterBackgroundTime() {
     }
     
     //每次启动打一次补丁
-    [SSJJspatchAnalyze SSJJsPatchAnalyzePatch];
+//    [SSJJspatchAnalyze SSJJsPatchAnalyzePatch];
     
     //微信登录
     [WXApi registerApp:SSJDetailSettingForSource(@"WeiXinKey") withDescription:kWeiXinDescription];
@@ -202,7 +202,7 @@ NSDate *SCYEnterBackgroundTime() {
     
     [GeTuiSdk setBadge:0];
     //每次从后台进入打一次补丁
-    [SSJJspatchAnalyze SSJJsPatchAnalyzePatch];
+//    [SSJJspatchAnalyze SSJJsPatchAnalyzePatch];
     
     // 当程序从后台进入前台，检测是否自动补充定期记账和预算，因为程序在后台不能收到本地通知
     [SSJRegularManager supplementCycleRecordsForUserId:SSJUSERID() success:NULL failure:NULL];
