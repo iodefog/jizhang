@@ -46,7 +46,7 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
-    return 0.0f;
+    return 0.1f;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
@@ -81,23 +81,32 @@
     }else if ([item.fundingID isEqualToString:@"3"]){
         SSJNewCreditCardViewController *newCreditCardVc = [[SSJNewCreditCardViewController alloc]init];
         __weak typeof(self) weakSelf = self;
-        newCreditCardVc.addNewCardBlock = ^(SSJBaseItem *item){
+        newCreditCardVc.addNewCardBlock = ^(SSJBaseItem *newItem){
             if (weakSelf.addNewFundingBlock) {
-                weakSelf.addNewFundingBlock(item);
+                weakSelf.addNewFundingBlock(newItem);
             }
         };
         [self.navigationController pushViewController:newCreditCardVc animated:YES];
     }else{
-        SSJNewFundingViewController *normalFundingVc = [[SSJNewFundingViewController alloc]init];
-        __weak typeof(self) weakSelf = self;
-        normalFundingVc.addNewFundBlock = ^(SSJFinancingHomeitem *item){
-            if (weakSelf.addNewFundingBlock) {
-                weakSelf.addNewFundingBlock(item);
+        UINavigationController *lastVc = [self.navigationController.viewControllers objectAtIndex:self.navigationController.viewControllers.count - 2];
+        if ([lastVc isKindOfClass:[SSJNewFundingViewController class]]) {
+            if (![item.fundingID isEqualToString:@"3"] && ![item.fundingID isEqualToString:@"9"] && ![item.fundingID isEqualToString:@"10"] && ![item.fundingID isEqualToString:@"11"]) {
+                [self.navigationController popViewControllerAnimated:YES];
+                if (self.fundingParentSelectBlock) {
+                    self.fundingParentSelectBlock(item);
+                }
             }
-        };
-        normalFundingVc.selectParent = item.fundingID;
-        normalFundingVc.selectIcoin = item.fundingIcon;
-        [self.navigationController pushViewController:normalFundingVc animated:YES];
+        } else {
+            SSJNewFundingViewController *normalFundingVc = [[SSJNewFundingViewController alloc]init];
+            __weak typeof(self) weakSelf = self;
+            normalFundingVc.addNewFundBlock = ^(SSJFinancingHomeitem *newItem){
+                if (weakSelf.addNewFundingBlock) {
+                    weakSelf.addNewFundingBlock(newItem);
+                }
+            };
+            normalFundingVc.selectParent = item.fundingID;
+            [self.navigationController pushViewController:normalFundingVc animated:YES];
+        }
     }
 }
 
@@ -135,11 +144,19 @@
             item.fundingIcon = [rs stringForColumn:@"CICOIN"];
             item.fundingMemo = [rs stringForColumn:@"CMEMO"];
             item.fundingParent = [rs stringForColumn:@"CPARENT"];
-            if (![item.fundingID isEqualToString:@"9"]) {
-                if (weakSelf.needLoanOrNot || (![item.fundingID isEqualToString:@"10"] && ![item.fundingID isEqualToString:@"11"])) {
+            UINavigationController *lastVc = [self.navigationController.viewControllers objectAtIndex:self.navigationController.viewControllers.count - 2];
+            if ([lastVc isKindOfClass:[SSJNewFundingViewController class]]) {
+                if (![item.fundingID isEqualToString:@"3"] && ![item.fundingID isEqualToString:@"9"] && ![item.fundingID isEqualToString:@"10"] && ![item.fundingID isEqualToString:@"11"]) {
                     [tempArray addObject:item];
                 }
+            } else {
+                if (![item.fundingID isEqualToString:@"9"]) {
+                    if (weakSelf.needLoanOrNot || (![item.fundingID isEqualToString:@"10"] && ![item.fundingID isEqualToString:@"11"])) {
+                        [tempArray addObject:item];
+                    }
+                }
             }
+
         }
         NSArray *tempSortedArr =  [tempArray sortedArrayUsingComparator:^NSComparisonResult(SSJFundingItem *item1, SSJFundingItem *item2){
             if ([item1.fundingID intValue] > [item2.fundingID intValue]){

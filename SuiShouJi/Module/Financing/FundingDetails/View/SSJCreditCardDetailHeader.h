@@ -24,4 +24,6 @@
 
 @property(nonatomic, strong) SSJFinancingGradientColorItem *colorItem;
 
+- (void)updateAfterThemeChange;
+
 @end

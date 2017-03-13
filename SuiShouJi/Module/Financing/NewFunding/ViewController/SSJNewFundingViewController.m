@@ -127,17 +127,17 @@
             [weakSelf.tableview reloadData];
         };
         [self.navigationController pushViewController:colorSelectVC animated:YES];
+    } else if ([title isEqualToString:@"账户类型"]) {
+        SSJFundingTypeSelectViewController *fundingTypeVC = [[SSJFundingTypeSelectViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
+        __weak typeof(self) weakSelf = self;
+        fundingTypeVC.fundingParentSelectBlock = ^(SSJFundingItem *selectItem){
+            weakSelf.item.fundingParent = selectItem.fundingID;
+            weakSelf.item.fundingParentName = selectItem.fundingName;
+            weakSelf.item.fundingIcon = selectItem.fundingIcon;
+            [weakSelf.tableview reloadData];
+        };
+        [self.navigationController pushViewController:fundingTypeVC animated:YES];
     }
-//        else if (indexPath.section == 3) {
-//        SSJFundingTypeSelectViewController *fundingTypeVC = [[SSJFundingTypeSelectViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
-//        __weak typeof(self) weakSelf = self;
-//            fundingTypeVC.typeSelectedBlock = ^(NSString *selectParent , NSString *selectIcon){
-//            _selectParent = selectParent;
-//            _selectIcoin = selectIcon;
-//            [weakSelf.tableview reloadData];
-//        };
-//        [self.navigationController pushViewController:fundingTypeVC animated:YES];
-//    }
 }
 
 

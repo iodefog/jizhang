@@ -631,6 +631,11 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
     [self.navigationController pushViewController:repaymentVC animated:YES];
 }
 
+- (void)updateAppearanceAfterThemeChanged {
+    [self.creditCardHeader updateAfterThemeChange];
+    [self.header updateAfterThemeChange];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

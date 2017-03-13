@@ -307,12 +307,11 @@
         self.backLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:item.startColor].CGColor,(__bridge id)[UIColor ssj_colorWithHex:item.endColor].CGColor];
         self.backLayer.shadowColor = [UIColor ssj_colorWithHex:item.startColor].CGColor;
     } else {
+        self.backLayer.colors = nil;
         if (SSJ_CURRENT_THEME.financingDetailHeaderColor.length) {
-            self.backLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailHeaderColor].CGColor];
-            self.backLayer.shadowColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailHeaderColor].CGColor;
+            self.backLayer.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailHeaderColor alpha:SSJ_CURRENT_THEME.financingDetailHeaderAlpha].CGColor;
         } else {
-            self.backLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:item.startColor].CGColor,(__bridge id)[UIColor ssj_colorWithHex:item.endColor].CGColor];
-            self.backLayer.shadowColor = [UIColor ssj_colorWithHex:item.startColor].CGColor;
+            self.backLayer.backgroundColor = [UIColor ssj_colorWithHex:self.item.startColor].CGColor;
         }
     }
     [self.billingDayLab sizeToFit];
@@ -340,6 +339,23 @@
     self.backLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:colorItem.startColor].CGColor,(__bridge id)[UIColor ssj_colorWithHex:colorItem.endColor].CGColor];
     self.backLayer.shadowColor = [UIColor ssj_colorWithHex:colorItem.startColor].CGColor;
 
+}
+
+- (void)updateAfterThemeChange {
+    if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
+        _backLayer.shadowPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, _backLayer.width + 4, _backLayer.height + 4) byRoundingCorners:UIRectCornerAllCorners cornerRadii:CGSizeMake(8, 8)].CGPath;
+    }
+    if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
+        self.backLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:self.item.startColor].CGColor,(__bridge id)[UIColor ssj_colorWithHex:self.item.endColor].CGColor];
+        self.backLayer.shadowColor = [UIColor ssj_colorWithHex:self.item.startColor].CGColor;
+    } else {
+        self.backLayer.colors = nil;
+        if (SSJ_CURRENT_THEME.financingDetailHeaderColor.length) {
+            self.backLayer.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailHeaderColor alpha:SSJ_CURRENT_THEME.financingDetailHeaderAlpha].CGColor;
+        } else {
+            self.backLayer.backgroundColor = [UIColor ssj_colorWithHex:self.item.startColor].CGColor;
+        }
+    }
 }
 
 /*
