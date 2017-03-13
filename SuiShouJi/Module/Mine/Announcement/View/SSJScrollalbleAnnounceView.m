@@ -38,6 +38,7 @@
             self.backgroundColor = [UIColor whiteColor];
         } else {
             self.backView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha + 0.1];
+            self.backgroundColor = [UIColor clearColor];
         }
     }
     return self;
@@ -193,7 +194,8 @@
         self.backView.backgroundColor = [UIColor ssj_colorWithHex:@"eb4a64" alpha:0.1];
         self.backgroundColor = [UIColor whiteColor];
     } else {
-        self.backView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha + 0.1];
+        self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha + 0.1];
+        self.backgroundColor = [UIColor clearColor];
     }
 }
 

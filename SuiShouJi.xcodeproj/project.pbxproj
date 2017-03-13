@@ -66,7 +66,6 @@
 		7D08A0C91E4999D30085A8FB /* SSJLoadMoreCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433831C1A8DA50051E7AB /* SSJLoadMoreCell.m */; };
 		7D08A0CA1E4999D30085A8FB /* SSJThemeDownLoadCompleteService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61AAA61D5B30DE005DC9BD /* SSJThemeDownLoadCompleteService.m */; };
 		7D08A0CB1E4999D30085A8FB /* SSJHomeReminderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32571CEAE6C10086B67E /* SSJHomeReminderView.m */; };
-		7D08A0CC1E4999D30085A8FB /* SSJBookKeepingHomeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32431CEAE6C10086B67E /* SSJBookKeepingHomeHelper.m */; };
 		7D08A0CD1E4999D30085A8FB /* SSJBookKeepingHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32481CEAE6C10086B67E /* SSJBookKeepingHeader.m */; };
 		7D08A0CE1E4999D30085A8FB /* SSJBaseItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433731C1A8DA50051E7AB /* SSJBaseItem.m */; };
 		7D08A0CF1E4999D30085A8FB /* SSJChargeSearchingStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C91AE161D93A4BB00B585AA /* SSJChargeSearchingStore.m */; };
@@ -693,7 +692,6 @@
 		7D587E511CC0DF360058847B /* SSJStartViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D587E501CC0DF360058847B /* SSJStartViewManager.m */; };
 		7D587E5B1CC0DFF40058847B /* SSJServerLaunchView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D587E5A1CC0DFF40058847B /* SSJServerLaunchView.m */; };
 		7D5C862E1D2F96D300C73A9A /* SSJThemePlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5C862D1D2F96D300C73A9A /* SSJThemePlugin.m */; };
-		7D5F33271CEAE6C10086B67E /* SSJBookKeepingHomeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32431CEAE6C10086B67E /* SSJBookKeepingHomeHelper.m */; };
 		7D5F33281CEAE6C10086B67E /* SSJBookKeepingButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32461CEAE6C10086B67E /* SSJBookKeepingButton.m */; };
 		7D5F33291CEAE6C10086B67E /* SSJBookKeepingHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32481CEAE6C10086B67E /* SSJBookKeepingHeader.m */; };
 		7D5F332A1CEAE6C10086B67E /* SSJBookKeepingHomeNodateFooter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F324A1CEAE6C10086B67E /* SSJBookKeepingHomeNodateFooter.m */; };
@@ -882,7 +880,6 @@
 		7DA13A201E35AED7000490A4 /* SSJLoadMoreCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433831C1A8DA50051E7AB /* SSJLoadMoreCell.m */; };
 		7DA13A211E35AED7000490A4 /* SSJThemeDownLoadCompleteService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61AAA61D5B30DE005DC9BD /* SSJThemeDownLoadCompleteService.m */; };
 		7DA13A221E35AED7000490A4 /* SSJHomeReminderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32571CEAE6C10086B67E /* SSJHomeReminderView.m */; };
-		7DA13A231E35AED7000490A4 /* SSJBookKeepingHomeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32431CEAE6C10086B67E /* SSJBookKeepingHomeHelper.m */; };
 		7DA13A241E35AED7000490A4 /* SSJBookKeepingHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32481CEAE6C10086B67E /* SSJBookKeepingHeader.m */; };
 		7DA13A251E35AED7000490A4 /* SSJBaseItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433731C1A8DA50051E7AB /* SSJBaseItem.m */; };
 		7DA13A261E35AED7000490A4 /* SSJChargeSearchingStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C91AE161D93A4BB00B585AA /* SSJChargeSearchingStore.m */; };
@@ -1445,7 +1442,6 @@
 		7DBB385B1E55C0A70075E638 /* SSJLoadMoreCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433831C1A8DA50051E7AB /* SSJLoadMoreCell.m */; };
 		7DBB385C1E55C0A70075E638 /* SSJThemeDownLoadCompleteService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61AAA61D5B30DE005DC9BD /* SSJThemeDownLoadCompleteService.m */; };
 		7DBB385D1E55C0A70075E638 /* SSJHomeReminderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32571CEAE6C10086B67E /* SSJHomeReminderView.m */; };
-		7DBB385E1E55C0A70075E638 /* SSJBookKeepingHomeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32431CEAE6C10086B67E /* SSJBookKeepingHomeHelper.m */; };
 		7DBB385F1E55C0A70075E638 /* SSJBookKeepingHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32481CEAE6C10086B67E /* SSJBookKeepingHeader.m */; };
 		7DBB38601E55C0A70075E638 /* SSJBaseItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433731C1A8DA50051E7AB /* SSJBaseItem.m */; };
 		7DBB38611E55C0A70075E638 /* SSJChargeSearchingStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C91AE161D93A4BB00B585AA /* SSJChargeSearchingStore.m */; };
@@ -2014,7 +2010,6 @@
 		7DBB3AA71E55C2EE0075E638 /* SSJLoadMoreCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433831C1A8DA50051E7AB /* SSJLoadMoreCell.m */; };
 		7DBB3AA81E55C2EE0075E638 /* SSJThemeDownLoadCompleteService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61AAA61D5B30DE005DC9BD /* SSJThemeDownLoadCompleteService.m */; };
 		7DBB3AA91E55C2EE0075E638 /* SSJHomeReminderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32571CEAE6C10086B67E /* SSJHomeReminderView.m */; };
-		7DBB3AAA1E55C2EE0075E638 /* SSJBookKeepingHomeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32431CEAE6C10086B67E /* SSJBookKeepingHomeHelper.m */; };
 		7DBB3AAB1E55C2EE0075E638 /* SSJBookKeepingHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32481CEAE6C10086B67E /* SSJBookKeepingHeader.m */; };
 		7DBB3AAC1E55C2EE0075E638 /* SSJBaseItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433731C1A8DA50051E7AB /* SSJBaseItem.m */; };
 		7DBB3AAD1E55C2EE0075E638 /* SSJChargeSearchingStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C91AE161D93A4BB00B585AA /* SSJChargeSearchingStore.m */; };
@@ -2584,7 +2579,6 @@
 		7DBB3CF41E55C4220075E638 /* SSJLoadMoreCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433831C1A8DA50051E7AB /* SSJLoadMoreCell.m */; };
 		7DBB3CF51E55C4220075E638 /* SSJThemeDownLoadCompleteService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61AAA61D5B30DE005DC9BD /* SSJThemeDownLoadCompleteService.m */; };
 		7DBB3CF61E55C4220075E638 /* SSJHomeReminderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32571CEAE6C10086B67E /* SSJHomeReminderView.m */; };
-		7DBB3CF71E55C4220075E638 /* SSJBookKeepingHomeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32431CEAE6C10086B67E /* SSJBookKeepingHomeHelper.m */; };
 		7DBB3CF81E55C4220075E638 /* SSJBookKeepingHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32481CEAE6C10086B67E /* SSJBookKeepingHeader.m */; };
 		7DBB3CF91E55C4220075E638 /* SSJBaseItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433731C1A8DA50051E7AB /* SSJBaseItem.m */; };
 		7DBB3CFA1E55C4220075E638 /* SSJChargeSearchingStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C91AE161D93A4BB00B585AA /* SSJChargeSearchingStore.m */; };
@@ -3155,7 +3149,6 @@
 		7DBB3F421E55C4E00075E638 /* SSJLoadMoreCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433831C1A8DA50051E7AB /* SSJLoadMoreCell.m */; };
 		7DBB3F431E55C4E00075E638 /* SSJThemeDownLoadCompleteService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61AAA61D5B30DE005DC9BD /* SSJThemeDownLoadCompleteService.m */; };
 		7DBB3F441E55C4E00075E638 /* SSJHomeReminderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32571CEAE6C10086B67E /* SSJHomeReminderView.m */; };
-		7DBB3F451E55C4E00075E638 /* SSJBookKeepingHomeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32431CEAE6C10086B67E /* SSJBookKeepingHomeHelper.m */; };
 		7DBB3F461E55C4E00075E638 /* SSJBookKeepingHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32481CEAE6C10086B67E /* SSJBookKeepingHeader.m */; };
 		7DBB3F471E55C4E00075E638 /* SSJBaseItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433731C1A8DA50051E7AB /* SSJBaseItem.m */; };
 		7DBB3F481E55C4E00075E638 /* SSJChargeSearchingStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C91AE161D93A4BB00B585AA /* SSJChargeSearchingStore.m */; };
@@ -4128,7 +4121,6 @@
 		9C38475B1E641CAB00BF4AF9 /* SSJLoadMoreCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433831C1A8DA50051E7AB /* SSJLoadMoreCell.m */; };
 		9C38475C1E641CAB00BF4AF9 /* SSJThemeDownLoadCompleteService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61AAA61D5B30DE005DC9BD /* SSJThemeDownLoadCompleteService.m */; };
 		9C38475D1E641CAB00BF4AF9 /* SSJHomeReminderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32571CEAE6C10086B67E /* SSJHomeReminderView.m */; };
-		9C38475E1E641CAB00BF4AF9 /* SSJBookKeepingHomeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32431CEAE6C10086B67E /* SSJBookKeepingHomeHelper.m */; };
 		9C38475F1E641CAB00BF4AF9 /* SSJBookKeepingHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32481CEAE6C10086B67E /* SSJBookKeepingHeader.m */; };
 		9C3847601E641CAB00BF4AF9 /* SSJBaseItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433731C1A8DA50051E7AB /* SSJBaseItem.m */; };
 		9C3847611E641CAB00BF4AF9 /* SSJChargeSearchingStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C91AE161D93A4BB00B585AA /* SSJChargeSearchingStore.m */; };
@@ -4684,14 +4676,6 @@
 		9C3A2D731E66790200DFAE2C /* SSJBookKeepingHomeNoDataCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CB743CC1E65453C009746EE /* SSJBookKeepingHomeNoDataCell.m */; };
 		9C3A2D741E66790200DFAE2C /* SSJBookKeepingHomeNoDataCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CB743CC1E65453C009746EE /* SSJBookKeepingHomeNoDataCell.m */; };
 		9C3A2D751E66790300DFAE2C /* SSJBookKeepingHomeNoDataCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CB743CC1E65453C009746EE /* SSJBookKeepingHomeNoDataCell.m */; };
-		9C3A2D761E66791300DFAE2C /* SSJBookKeepingHomeListItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CB743C01E6544E9009746EE /* SSJBookKeepingHomeListItem.m */; };
-		9C3A2D771E66791300DFAE2C /* SSJBookKeepingHomeListItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CB743C01E6544E9009746EE /* SSJBookKeepingHomeListItem.m */; };
-		9C3A2D781E66791400DFAE2C /* SSJBookKeepingHomeListItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CB743C01E6544E9009746EE /* SSJBookKeepingHomeListItem.m */; };
-		9C3A2D791E66791400DFAE2C /* SSJBookKeepingHomeListItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CB743C01E6544E9009746EE /* SSJBookKeepingHomeListItem.m */; };
-		9C3A2D7A1E66791500DFAE2C /* SSJBookKeepingHomeListItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CB743C01E6544E9009746EE /* SSJBookKeepingHomeListItem.m */; };
-		9C3A2D7B1E66791500DFAE2C /* SSJBookKeepingHomeListItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CB743C01E6544E9009746EE /* SSJBookKeepingHomeListItem.m */; };
-		9C3A2D7C1E66791600DFAE2C /* SSJBookKeepingHomeListItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CB743C01E6544E9009746EE /* SSJBookKeepingHomeListItem.m */; };
-		9C3A2D7D1E66791700DFAE2C /* SSJBookKeepingHomeListItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CB743C01E6544E9009746EE /* SSJBookKeepingHomeListItem.m */; };
 		9C3A2D7E1E66792A00DFAE2C /* SSJColorSelectCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3A2D541E6673B500DFAE2C /* SSJColorSelectCollectionViewCell.m */; };
 		9C3A2D7F1E66792A00DFAE2C /* SSJColorSelectCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3A2D541E6673B500DFAE2C /* SSJColorSelectCollectionViewCell.m */; };
 		9C3A2D801E66792A00DFAE2C /* SSJColorSelectCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3A2D541E6673B500DFAE2C /* SSJColorSelectCollectionViewCell.m */; };
@@ -4764,6 +4748,8 @@
 		9C6CAF9F1E76416C00262FAF /* SSJMoreBackImageViewCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6CAF981E76416C00262FAF /* SSJMoreBackImageViewCollectionReusableView.m */; };
 		9C6CAFA01E76416C00262FAF /* SSJMoreBackImageViewCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6CAF981E76416C00262FAF /* SSJMoreBackImageViewCollectionReusableView.m */; };
 		9C6CAFA11E76416C00262FAF /* SSJMoreBackImageViewCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6CAF981E76416C00262FAF /* SSJMoreBackImageViewCollectionReusableView.m */; };
+		9C6CAFA41E76824300262FAF /* SSJBookKeepingHomeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6CAFA21E76824300262FAF /* SSJBookKeepingHomeHelper.m */; };
+		9C6CAFA71E76824B00262FAF /* SSJBookKeepingHomeListItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6CAFA51E76824B00262FAF /* SSJBookKeepingHomeListItem.m */; };
 		9C6D65EB1D826B700081A7CE /* SSJReminderWeekDaySelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6D65EA1D826B700081A7CE /* SSJReminderWeekDaySelectView.m */; };
 		9C6D660D1D82B7AA0081A7CE /* SSJInterestDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6D660C1D82B7AA0081A7CE /* SSJInterestDetailViewController.m */; };
 		9C6D66101D82B7AA0081A7CE /* SSJInterestDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6D660C1D82B7AA0081A7CE /* SSJInterestDetailViewController.m */; };
@@ -4881,7 +4867,6 @@
 		9CAF731C1E03EAD90061ADB8 /* xiaomao.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9CAF731B1E03EAD90061ADB8 /* xiaomao.gif */; };
 		9CAF731E1E03EAE50061ADB8 /* homeLoading.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9CAF731D1E03EAE50061ADB8 /* homeLoading.gif */; };
 		9CB743BE1E6544CB009746EE /* SSJAnaliyticsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CB743BD1E6544CB009746EE /* SSJAnaliyticsManager.m */; };
-		9CB743C31E6544E9009746EE /* SSJBookKeepingHomeListItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CB743C01E6544E9009746EE /* SSJBookKeepingHomeListItem.m */; };
 		9CB743C41E6544E9009746EE /* SSJMonthSummaryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CB743C21E6544E9009746EE /* SSJMonthSummaryItem.m */; };
 		9CB743C81E65450B009746EE /* SSJGeTuiManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CB743C71E65450B009746EE /* SSJGeTuiManager.m */; };
 		9CB743CD1E65453C009746EE /* SSJBookKeepingHomeHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CB743CA1E65453C009746EE /* SSJBookKeepingHomeHeaderView.m */; };
@@ -5057,7 +5042,6 @@
 		9CECFB421D6D41A700DB2C8B /* SSJLoadMoreCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433831C1A8DA50051E7AB /* SSJLoadMoreCell.m */; };
 		9CECFB431D6D41A700DB2C8B /* SSJThemeDownLoadCompleteService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61AAA61D5B30DE005DC9BD /* SSJThemeDownLoadCompleteService.m */; };
 		9CECFB441D6D41A700DB2C8B /* SSJHomeReminderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32571CEAE6C10086B67E /* SSJHomeReminderView.m */; };
-		9CECFB451D6D41A700DB2C8B /* SSJBookKeepingHomeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32431CEAE6C10086B67E /* SSJBookKeepingHomeHelper.m */; };
 		9CECFB461D6D41A700DB2C8B /* SSJBookKeepingHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32481CEAE6C10086B67E /* SSJBookKeepingHeader.m */; };
 		9CECFB471D6D41A700DB2C8B /* SSJBaseItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433731C1A8DA50051E7AB /* SSJBaseItem.m */; };
 		9CECFB481D6D41A700DB2C8B /* SSJMagicExportStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB951CFD2DAA0061803B /* SSJMagicExportStore.m */; };
@@ -5651,8 +5635,6 @@
 		7D587E5A1CC0DFF40058847B /* SSJServerLaunchView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJServerLaunchView.m; sourceTree = "<group>"; };
 		7D5C862C1D2F96D300C73A9A /* SSJThemePlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJThemePlugin.h; sourceTree = "<group>"; };
 		7D5C862D1D2F96D300C73A9A /* SSJThemePlugin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJThemePlugin.m; sourceTree = "<group>"; };
-		7D5F32421CEAE6C10086B67E /* SSJBookKeepingHomeHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SSJBookKeepingHomeHelper.h; path = ../Store/SSJBookKeepingHomeHelper.h; sourceTree = "<group>"; };
-		7D5F32431CEAE6C10086B67E /* SSJBookKeepingHomeHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SSJBookKeepingHomeHelper.m; path = ../Store/SSJBookKeepingHomeHelper.m; sourceTree = "<group>"; };
 		7D5F32451CEAE6C10086B67E /* SSJBookKeepingButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookKeepingButton.h; sourceTree = "<group>"; };
 		7D5F32461CEAE6C10086B67E /* SSJBookKeepingButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBookKeepingButton.m; sourceTree = "<group>"; };
 		7D5F32471CEAE6C10086B67E /* SSJBookKeepingHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookKeepingHeader.h; sourceTree = "<group>"; };
@@ -6289,6 +6271,10 @@
 		9C6CA7F01DCADACA0013A499 /* SSJThemeUpdate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJThemeUpdate.m; sourceTree = "<group>"; };
 		9C6CAF971E76416C00262FAF /* SSJMoreBackImageViewCollectionReusableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMoreBackImageViewCollectionReusableView.h; sourceTree = "<group>"; };
 		9C6CAF981E76416C00262FAF /* SSJMoreBackImageViewCollectionReusableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMoreBackImageViewCollectionReusableView.m; sourceTree = "<group>"; };
+		9C6CAFA21E76824300262FAF /* SSJBookKeepingHomeHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBookKeepingHomeHelper.m; sourceTree = "<group>"; };
+		9C6CAFA31E76824300262FAF /* SSJBookKeepingHomeHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookKeepingHomeHelper.h; sourceTree = "<group>"; };
+		9C6CAFA51E76824B00262FAF /* SSJBookKeepingHomeListItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBookKeepingHomeListItem.m; sourceTree = "<group>"; };
+		9C6CAFA61E76824B00262FAF /* SSJBookKeepingHomeListItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookKeepingHomeListItem.h; sourceTree = "<group>"; };
 		9C6D65E91D826B700081A7CE /* SSJReminderWeekDaySelectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReminderWeekDaySelectView.h; sourceTree = "<group>"; };
 		9C6D65EA1D826B700081A7CE /* SSJReminderWeekDaySelectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReminderWeekDaySelectView.m; sourceTree = "<group>"; };
 		9C6D660B1D82B7AA0081A7CE /* SSJInterestDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SSJInterestDetailViewController.h; path = ViewController/SSJInterestDetailViewController.h; sourceTree = "<group>"; };
@@ -6408,8 +6394,6 @@
 		9CAF731D1E03EAE50061ADB8 /* homeLoading.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = homeLoading.gif; sourceTree = "<group>"; };
 		9CB743BC1E6544CB009746EE /* SSJAnaliyticsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJAnaliyticsManager.h; sourceTree = "<group>"; };
 		9CB743BD1E6544CB009746EE /* SSJAnaliyticsManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJAnaliyticsManager.m; sourceTree = "<group>"; };
-		9CB743BF1E6544E9009746EE /* SSJBookKeepingHomeListItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SSJBookKeepingHomeListItem.h; path = ../Model/SSJBookKeepingHomeListItem.h; sourceTree = "<group>"; };
-		9CB743C01E6544E9009746EE /* SSJBookKeepingHomeListItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SSJBookKeepingHomeListItem.m; path = ../Model/SSJBookKeepingHomeListItem.m; sourceTree = "<group>"; };
 		9CB743C11E6544E9009746EE /* SSJMonthSummaryItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMonthSummaryItem.h; sourceTree = "<group>"; };
 		9CB743C21E6544E9009746EE /* SSJMonthSummaryItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMonthSummaryItem.m; sourceTree = "<group>"; };
 		9CB743C61E65450B009746EE /* SSJGeTuiManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJGeTuiManager.h; sourceTree = "<group>"; };
@@ -7234,8 +7218,8 @@
 		7D5F32411CEAE6C10086B67E /* Store */ = {
 			isa = PBXGroup;
 			children = (
-				9CB743BF1E6544E9009746EE /* SSJBookKeepingHomeListItem.h */,
-				9CB743C01E6544E9009746EE /* SSJBookKeepingHomeListItem.m */,
+				9C6CAFA21E76824300262FAF /* SSJBookKeepingHomeHelper.m */,
+				9C6CAFA31E76824300262FAF /* SSJBookKeepingHomeHelper.h */,
 			);
 			path = Store;
 			sourceTree = "<group>";
@@ -8460,10 +8444,10 @@
 		9C29319D1CEF1B1F00484F6E /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				9C6CAFA51E76824B00262FAF /* SSJBookKeepingHomeListItem.m */,
+				9C6CAFA61E76824B00262FAF /* SSJBookKeepingHomeListItem.h */,
 				9CB743C11E6544E9009746EE /* SSJMonthSummaryItem.h */,
 				9CB743C21E6544E9009746EE /* SSJMonthSummaryItem.m */,
-				7D5F32421CEAE6C10086B67E /* SSJBookKeepingHomeHelper.h */,
-				7D5F32431CEAE6C10086B67E /* SSJBookKeepingHomeHelper.m */,
 				7D07B6931CF2AC4900B9C390 /* SSJJsPatchItem.h */,
 				7D07B6941CF2AC4900B9C390 /* SSJJsPatchItem.m */,
 			);
@@ -11270,7 +11254,6 @@
 				7D08A0C91E4999D30085A8FB /* SSJLoadMoreCell.m in Sources */,
 				7D08A0CA1E4999D30085A8FB /* SSJThemeDownLoadCompleteService.m in Sources */,
 				7D08A0CB1E4999D30085A8FB /* SSJHomeReminderView.m in Sources */,
-				7D08A0CC1E4999D30085A8FB /* SSJBookKeepingHomeHelper.m in Sources */,
 				7D08A0CD1E4999D30085A8FB /* SSJBookKeepingHeader.m in Sources */,
 				7D08A0CE1E4999D30085A8FB /* SSJBaseItem.m in Sources */,
 				7D08A0CF1E4999D30085A8FB /* SSJChargeSearchingStore.m in Sources */,
@@ -11357,7 +11340,6 @@
 				7D08A1161E4999D30085A8FB /* SSJMagicExportCalendarDateView.m in Sources */,
 				9CEC60F71E702BBF0087B361 /* SSJAnnouncementsListViewController.m in Sources */,
 				7D08A1171E4999D30085A8FB /* SSJMagicExportBookTypeSelectionCell.m in Sources */,
-				9C3A2D791E66791400DFAE2C /* SSJBookKeepingHomeListItem.m in Sources */,
 				7D08A1181E4999D30085A8FB /* SSJLoanSyncTable.m in Sources */,
 				7D08A11A1E4999D30085A8FB /* SSJBookKeepingHomeBooksButton.m in Sources */,
 				9C3A2D721E66790100DFAE2C /* SSJBookKeepingHomeNoDataCell.m in Sources */,
@@ -11849,7 +11831,6 @@
 				7DA13A201E35AED7000490A4 /* SSJLoadMoreCell.m in Sources */,
 				7DA13A211E35AED7000490A4 /* SSJThemeDownLoadCompleteService.m in Sources */,
 				7DA13A221E35AED7000490A4 /* SSJHomeReminderView.m in Sources */,
-				7DA13A231E35AED7000490A4 /* SSJBookKeepingHomeHelper.m in Sources */,
 				7DA13A241E35AED7000490A4 /* SSJBookKeepingHeader.m in Sources */,
 				7DA13A251E35AED7000490A4 /* SSJBaseItem.m in Sources */,
 				7DA13A261E35AED7000490A4 /* SSJChargeSearchingStore.m in Sources */,
@@ -11936,7 +11917,6 @@
 				7DA13A6D1E35AED7000490A4 /* SSJMagicExportCalendarDateView.m in Sources */,
 				9CEC60F61E702BBE0087B361 /* SSJAnnouncementsListViewController.m in Sources */,
 				7DA13A6E1E35AED7000490A4 /* SSJMagicExportBookTypeSelectionCell.m in Sources */,
-				9C3A2D7A1E66791500DFAE2C /* SSJBookKeepingHomeListItem.m in Sources */,
 				7DA13A6F1E35AED7000490A4 /* SSJLoanSyncTable.m in Sources */,
 				7DA13A711E35AED7000490A4 /* SSJBookKeepingHomeBooksButton.m in Sources */,
 				9C3A2D711E66790100DFAE2C /* SSJBookKeepingHomeNoDataCell.m in Sources */,
@@ -12429,7 +12409,6 @@
 				7DBB385B1E55C0A70075E638 /* SSJLoadMoreCell.m in Sources */,
 				7DBB385C1E55C0A70075E638 /* SSJThemeDownLoadCompleteService.m in Sources */,
 				7DBB385D1E55C0A70075E638 /* SSJHomeReminderView.m in Sources */,
-				7DBB385E1E55C0A70075E638 /* SSJBookKeepingHomeHelper.m in Sources */,
 				7DBB385F1E55C0A70075E638 /* SSJBookKeepingHeader.m in Sources */,
 				7DBB38601E55C0A70075E638 /* SSJBaseItem.m in Sources */,
 				7DBB38611E55C0A70075E638 /* SSJChargeSearchingStore.m in Sources */,
@@ -12515,7 +12494,6 @@
 				7DBB38AA1E55C0A70075E638 /* SSJBudgetEditUnitTextField.m in Sources */,
 				9CEC60F41E702BBD0087B361 /* SSJAnnouncementsListViewController.m in Sources */,
 				7DBB38AB1E55C0A70075E638 /* SSJLoanChangeChargeSelectionControl.m in Sources */,
-				9C3A2D771E66791300DFAE2C /* SSJBookKeepingHomeListItem.m in Sources */,
 				7DBB38AC1E55C0A70075E638 /* SSJBudgetEditTextFieldCell.m in Sources */,
 				7DBB38AD1E55C0A70075E638 /* SSJInterestDetailViewController.m in Sources */,
 				9C3A2D6F1E66790000DFAE2C /* SSJBookKeepingHomeNoDataCell.m in Sources */,
@@ -13008,7 +12986,6 @@
 				7DBB3AA71E55C2EE0075E638 /* SSJLoadMoreCell.m in Sources */,
 				7DBB3AA81E55C2EE0075E638 /* SSJThemeDownLoadCompleteService.m in Sources */,
 				7DBB3AA91E55C2EE0075E638 /* SSJHomeReminderView.m in Sources */,
-				7DBB3AAA1E55C2EE0075E638 /* SSJBookKeepingHomeHelper.m in Sources */,
 				7DBB3AAB1E55C2EE0075E638 /* SSJBookKeepingHeader.m in Sources */,
 				7DBB3AAC1E55C2EE0075E638 /* SSJBaseItem.m in Sources */,
 				7DBB3AAD1E55C2EE0075E638 /* SSJChargeSearchingStore.m in Sources */,
@@ -13094,7 +13071,6 @@
 				7DBB3AF61E55C2EE0075E638 /* SSJBudgetEditUnitTextField.m in Sources */,
 				9CEC60F81E702BBF0087B361 /* SSJAnnouncementsListViewController.m in Sources */,
 				7DBB3AF71E55C2EE0075E638 /* SSJLoanChangeChargeSelectionControl.m in Sources */,
-				9C3A2D7B1E66791500DFAE2C /* SSJBookKeepingHomeListItem.m in Sources */,
 				7DBB3AF81E55C2EE0075E638 /* SSJBudgetEditTextFieldCell.m in Sources */,
 				7DBB3AF91E55C2EE0075E638 /* SSJInterestDetailViewController.m in Sources */,
 				9C3A2D731E66790200DFAE2C /* SSJBookKeepingHomeNoDataCell.m in Sources */,
@@ -13587,7 +13563,6 @@
 				7DBB3CF41E55C4220075E638 /* SSJLoadMoreCell.m in Sources */,
 				7DBB3CF51E55C4220075E638 /* SSJThemeDownLoadCompleteService.m in Sources */,
 				7DBB3CF61E55C4220075E638 /* SSJHomeReminderView.m in Sources */,
-				7DBB3CF71E55C4220075E638 /* SSJBookKeepingHomeHelper.m in Sources */,
 				7DBB3CF81E55C4220075E638 /* SSJBookKeepingHeader.m in Sources */,
 				7DBB3CF91E55C4220075E638 /* SSJBaseItem.m in Sources */,
 				7DBB3CFA1E55C4220075E638 /* SSJChargeSearchingStore.m in Sources */,
@@ -13673,7 +13648,6 @@
 				7DBB3D431E55C4220075E638 /* SSJBudgetEditUnitTextField.m in Sources */,
 				9CEC60F91E702BBF0087B361 /* SSJAnnouncementsListViewController.m in Sources */,
 				7DBB3D441E55C4220075E638 /* SSJLoanChangeChargeSelectionControl.m in Sources */,
-				9C3A2D7C1E66791600DFAE2C /* SSJBookKeepingHomeListItem.m in Sources */,
 				7DBB3D451E55C4220075E638 /* SSJBudgetEditTextFieldCell.m in Sources */,
 				7DBB3D461E55C4220075E638 /* SSJInterestDetailViewController.m in Sources */,
 				9C3A2D741E66790200DFAE2C /* SSJBookKeepingHomeNoDataCell.m in Sources */,
@@ -14166,7 +14140,6 @@
 				7DBB3F421E55C4E00075E638 /* SSJLoadMoreCell.m in Sources */,
 				7DBB3F431E55C4E00075E638 /* SSJThemeDownLoadCompleteService.m in Sources */,
 				7DBB3F441E55C4E00075E638 /* SSJHomeReminderView.m in Sources */,
-				7DBB3F451E55C4E00075E638 /* SSJBookKeepingHomeHelper.m in Sources */,
 				7DBB3F461E55C4E00075E638 /* SSJBookKeepingHeader.m in Sources */,
 				7DBB3F471E55C4E00075E638 /* SSJBaseItem.m in Sources */,
 				7DBB3F481E55C4E00075E638 /* SSJChargeSearchingStore.m in Sources */,
@@ -14252,7 +14225,6 @@
 				7DBB3F911E55C4E00075E638 /* SSJBudgetEditUnitTextField.m in Sources */,
 				9CEC60F31E702BBD0087B361 /* SSJAnnouncementsListViewController.m in Sources */,
 				7DBB3F921E55C4E00075E638 /* SSJLoanChangeChargeSelectionControl.m in Sources */,
-				9C3A2D761E66791300DFAE2C /* SSJBookKeepingHomeListItem.m in Sources */,
 				7DBB3F931E55C4E00075E638 /* SSJBudgetEditTextFieldCell.m in Sources */,
 				7DBB3F941E55C4E00075E638 /* SSJInterestDetailViewController.m in Sources */,
 				9C3A2D6E1E6678FF00DFAE2C /* SSJBookKeepingHomeNoDataCell.m in Sources */,
@@ -14745,7 +14717,6 @@
 				9C38475B1E641CAB00BF4AF9 /* SSJLoadMoreCell.m in Sources */,
 				9C38475C1E641CAB00BF4AF9 /* SSJThemeDownLoadCompleteService.m in Sources */,
 				9C38475D1E641CAB00BF4AF9 /* SSJHomeReminderView.m in Sources */,
-				9C38475E1E641CAB00BF4AF9 /* SSJBookKeepingHomeHelper.m in Sources */,
 				9C38475F1E641CAB00BF4AF9 /* SSJBookKeepingHeader.m in Sources */,
 				9C3847601E641CAB00BF4AF9 /* SSJBaseItem.m in Sources */,
 				9C3847611E641CAB00BF4AF9 /* SSJChargeSearchingStore.m in Sources */,
@@ -14831,7 +14802,6 @@
 				9C3847AA1E641CAB00BF4AF9 /* SSJBudgetEditUnitTextField.m in Sources */,
 				9CEC60FA1E702BC00087B361 /* SSJAnnouncementsListViewController.m in Sources */,
 				9C3847AB1E641CAB00BF4AF9 /* SSJLoanChangeChargeSelectionControl.m in Sources */,
-				9C3A2D7D1E66791700DFAE2C /* SSJBookKeepingHomeListItem.m in Sources */,
 				9C3847AC1E641CAB00BF4AF9 /* SSJBudgetEditTextFieldCell.m in Sources */,
 				9C3847AD1E641CAB00BF4AF9 /* SSJInterestDetailViewController.m in Sources */,
 				9C3A2D751E66790300DFAE2C /* SSJBookKeepingHomeNoDataCell.m in Sources */,
@@ -15288,7 +15258,6 @@
 				915A1AFA1E10F53500F73C7B /* SSJLoginPopView.m in Sources */,
 				7D22A37E1E4F16AC00190CEB /* SSJViewControllerAddition.m in Sources */,
 				9C17B53C1DEED7FF000D6C99 /* SSJThemeUpdate.m in Sources */,
-				9C3A2D781E66791400DFAE2C /* SSJBookKeepingHomeListItem.m in Sources */,
 				9C155EC21E68572700FDFD18 /* MJRefreshAutoGifFooter.m in Sources */,
 				9CECFB281D6D41A700DB2C8B /* SSJMagicExportCalendarHeaderView.m in Sources */,
 				7D567E3F1D9D1632006512C8 /* SSJBudgetProgressView.m in Sources */,
@@ -15324,7 +15293,6 @@
 				9C155EB01E68572700FDFD18 /* MJRefreshFooter.m in Sources */,
 				7D24ED921D9E6F8E003C4248 /* SSJBudgetDetailHeaderViewItem.m in Sources */,
 				9CECFB441D6D41A700DB2C8B /* SSJHomeReminderView.m in Sources */,
-				9CECFB451D6D41A700DB2C8B /* SSJBookKeepingHomeHelper.m in Sources */,
 				9CECFB461D6D41A700DB2C8B /* SSJBookKeepingHeader.m in Sources */,
 				9CECFB471D6D41A700DB2C8B /* SSJBaseItem.m in Sources */,
 				9C9A0C1E1D6D958B002AF046 /* SSJUserCreditSyncTable.m in Sources */,
@@ -15902,7 +15870,6 @@
 				BD0433961C1A8DA50051E7AB /* SSJLoadMoreCell.m in Sources */,
 				9C61AAA71D5B30DE005DC9BD /* SSJThemeDownLoadCompleteService.m in Sources */,
 				7D5F33311CEAE6C10086B67E /* SSJHomeReminderView.m in Sources */,
-				7D5F33271CEAE6C10086B67E /* SSJBookKeepingHomeHelper.m in Sources */,
 				7D5F33291CEAE6C10086B67E /* SSJBookKeepingHeader.m in Sources */,
 				BD04338F1C1A8DA50051E7AB /* SSJBaseItem.m in Sources */,
 				9C91AE171D93A4BB00B585AA /* SSJChargeSearchingStore.m in Sources */,
@@ -15927,6 +15894,7 @@
 				7D5F334A1CEAE6C10086B67E /* SSJCalenderCellItem.m in Sources */,
 				7D4CF7041D38D16D009CC8ED /* SSJBudgetNodataRemindView.m in Sources */,
 				BDC01FF31C2D92E3008B1F75 /* CDAutoHideMessageHUD.m in Sources */,
+				9C6CAFA41E76824300262FAF /* SSJBookKeepingHomeHelper.m in Sources */,
 				9C6CA7F11DCADACA0013A499 /* SSJThemeUpdate.m in Sources */,
 				9C53A3BA1D420A01003BA2F0 /* SSJNewMemberViewController.m in Sources */,
 				7D5F33771CEAE6C10086B67E /* SSJCategoryCollectionViewCell.m in Sources */,
@@ -16291,7 +16259,6 @@
 				9CD9BC4A1CFDA4990061803B /* SSJFundingTransferDetailItem.m in Sources */,
 				9C155F5F1E69128800FDFD18 /* SSJShareManager.m in Sources */,
 				7DC318781E2882A300932644 /* FMDatabaseAdditions.m in Sources */,
-				9CB743C31E6544E9009746EE /* SSJBookKeepingHomeListItem.m in Sources */,
 				9CD9BC191CFD2DAA0061803B /* SSJMagicExportResultCheckMarkView.m in Sources */,
 				9C9D0B831D07B015003A9F4E /* SSJChargeCircleTimeSelectView.m in Sources */,
 				9CE3772A1E6837D800218655 /* SSJAnnoucementService.m in Sources */,
@@ -16356,6 +16323,7 @@
 				BD0433971C1A8DA50051E7AB /* SSJLoadMoreCollectionViewCell.m in Sources */,
 				91F7FD1B1DFA7D3C005F4B6B /* SSJMoreProductAdviceTableViewCell.m in Sources */,
 				7DE2E9131C9C291C001868F5 /* SSJUmengManager.m in Sources */,
+				9C6CAFA71E76824B00262FAF /* SSJBookKeepingHomeListItem.m in Sources */,
 				7D5F33471CEAE6C10086B67E /* SSJBudgetListCell.m in Sources */,
 				9C24CFBB1D76C9ED0095D150 /* SSJBooksTypeItem.m in Sources */,
 				7D6B12B71D4B6C190036BF4E /* SSJReportFormsSwitchControl.m in Sources */,

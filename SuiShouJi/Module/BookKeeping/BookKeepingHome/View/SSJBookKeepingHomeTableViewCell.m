@@ -23,8 +23,8 @@
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
-        self.backgroundColor = [UIColor clearColor];
         self.isAnimating = NO;
+        self.backgroundColor = [UIColor clearColor];
         [self addSubview:self.toplineView];
         [self addSubview:self.bottomlineView];
         [self addSubview:self.categoryImageButton];
@@ -471,13 +471,13 @@
 
 - (void)updateCellAppearanceAfterThemeChanged {
     [super updateCellAppearanceAfterThemeChanged];
+    self.backgroundColor = [UIColor clearColor];
     self.incomeLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     self.expenditureLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     self.incomeMemoLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     self.expentureMemoLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     self.toplineView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor];
     self.bottomlineView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor];
-    self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
 }
 
 @end
