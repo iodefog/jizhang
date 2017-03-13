@@ -40,6 +40,7 @@
 
 - (void)updateCellAppearanceAfterThemeChanged{
     [super updateCellAppearanceAfterThemeChanged];
+    self.backgroundColor = [UIColor clearColor];
     [self.noDataView updateAfterThemeChanged];
 }
 

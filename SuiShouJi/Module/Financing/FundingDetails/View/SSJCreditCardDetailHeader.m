@@ -271,7 +271,9 @@
         _backLayer.cornerRadius = 8;
         _backLayer.size = CGSizeMake(self.width - 30, 150);
         _backLayer.position = CGPointMake(self.width / 2, 85);
-        _backLayer.shadowPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, _backLayer.width + 4, _backLayer.height + 4) byRoundingCorners:UIRectCornerAllCorners cornerRadii:CGSizeMake(8, 8)].CGPath;
+        if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
+            _backLayer.shadowPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, _backLayer.width + 4, _backLayer.height + 4) byRoundingCorners:UIRectCornerAllCorners cornerRadii:CGSizeMake(8, 8)].CGPath;
+        }
         _backLayer.startPoint = CGPointMake(0, 0.5);
         _backLayer.endPoint = CGPointMake(1, 0.5);
         _backLayer.shadowRadius = 10;

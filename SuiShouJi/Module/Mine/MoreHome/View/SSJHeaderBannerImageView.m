@@ -11,6 +11,9 @@
 #import "SSJAdWebViewController.h"
 #import "SSJBannerItem.h"
 #import "SSJLoginViewController.h"
+
+static NSString *const kHeadBannerCellID = @"SSJHeaderBannerCollectionViewCellID";
+
 @interface SSJHeaderBannerImageView()<UICollectionViewDelegateFlowLayout,UICollectionViewDataSource,UICollectionViewDelegate>
 @property (nonatomic, strong) UICollectionView *collectionView;
 /**
@@ -18,8 +21,9 @@
  */
 @property (nonatomic, strong) UIButton *closeButton;
 @end
+
 @implementation SSJHeaderBannerImageView
-static NSString *const kHeadBannerCellID = @"SSJHeaderBannerCollectionViewCellID";
+
 
 
 - (instancetype)initWithFrame:(CGRect)frame{

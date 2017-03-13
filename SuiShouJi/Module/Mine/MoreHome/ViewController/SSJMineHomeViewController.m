@@ -57,6 +57,7 @@
 #import "SSJMoreHomeAnnouncementButton.h"
 #import "SSJNetworkReachabilityManager.h"
 #import "SSJShareManager.h"
+#import "SSJMoreBackImageViewCollectionReusableView.h"
 
 
 #import "SSJThemeAndAdviceDotItem.h"
@@ -70,6 +71,8 @@ static NSString *const kTitle6 = @"给个好评";
 static NSString *const kTitle7 = @"设置";
 static NSString *const kTitle8 = @"分享APP";
 static NSString *const kHeaderViewID = @"headerViewIdentifier";
+static NSString *const kFooterViewID = @"footerViewIdentifier";
+
 static NSString *const kItemID = @"homeItemIdentifier";
 
 static BOOL kNeedBannerDisplay = YES;
@@ -101,7 +104,7 @@ static BOOL kNeedBannerDisplay = YES;
 /**
  默认主题底部背景
  */
-@property (nonatomic, strong) UIImageView *bottomBgView;
+@property (nonatomic, strong) SSJMoreBackImageViewCollectionReusableView *bottomBgView;
 
 @property(nonatomic, strong) SSJBannerHeaderView *bannerHeader;
 
@@ -130,12 +133,6 @@ static BOOL kNeedBannerDisplay = YES;
     [super viewDidLoad];
     [self.view addSubview:self.announcementView];
     [self.view addSubview:self.header];
-    [self.view addSubview:self.bottomBgView];
-    if ([SSJCurrentThemeID() isEqualToString:SSJDefaultThemeID]) {
-        self.bottomBgView.hidden = NO;
-    } else {
-        self.bottomBgView.hidden = YES;
-    }
     [self.view addSubview:self.collectionView];
     [self loadOriDataArray];//固定数组
 }
@@ -225,10 +222,12 @@ static BOOL kNeedBannerDisplay = YES;
         //添加头视图的内容
         return self.headerBannerImageView;
     }
-    //如果底部视图
-    //    if([kind isEqualToString:UICollectionElementKindSectionFooter]){
-    //
-    //    }
+    //    如果底部视图
+    if([kind isEqualToString:UICollectionElementKindSectionFooter]){
+        self.bottomBgView =  [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:kFooterViewID forIndexPath:indexPath];
+        return self.bottomBgView;
+    }
+    
     return nil;
 }
 
@@ -458,9 +457,13 @@ static BOOL kNeedBannerDisplay = YES;
         layout.sectionInset = UIEdgeInsetsMake(0, 0, 0, 0);
         layout.itemSize = CGSizeMake(SSJSCREENWITH/kColum, 100);
         layout.headerReferenceSize = CGSizeMake(SSJSCREENWITH, 0);//头的高度
+        if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
+            layout.footerReferenceSize = CGSizeMake(SSJSCREENWITH, 150);//头的高度
+        }
         _collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
         [_collectionView registerClass:[SSJMineHomeCollectionImageCell class] forCellWithReuseIdentifier:kItemID];
         [_collectionView registerClass:[SSJHeaderBannerImageView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:kHeaderViewID];//注册头
+        [_collectionView registerClass:[SSJMoreBackImageViewCollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:kFooterViewID];
         _collectionView.dataSource = self;
         _collectionView.delegate = self;
         [_collectionView addSubview:self.lineView];
@@ -519,14 +522,6 @@ static BOOL kNeedBannerDisplay = YES;
     return _lineView;
 }
 
-- (UIImageView *)bottomBgView
-{
-    if (!_bottomBgView) {
-        _bottomBgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"more_bottom_bgimage"]];
-    }
-    return _bottomBgView;
-}
-
 - (SSJScrollalbleAnnounceView *)announcementView {
     if (!_announcementView) {
         _announcementView = [[SSJScrollalbleAnnounceView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, 0)];
@@ -569,10 +564,11 @@ static BOOL kNeedBannerDisplay = YES;
 //    _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
 //  self.collectionView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     self.lineView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
-    if ([SSJCurrentThemeID() isEqualToString:SSJDefaultThemeID]) {
-        self.bottomBgView.hidden = NO;
+    UICollectionViewFlowLayout *collectionViewLayout = (UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout;
+    if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
+        collectionViewLayout.footerReferenceSize = CGSizeMake(SSJSCREENWITH, 150);
     } else {
-        self.bottomBgView.hidden = YES;
+        collectionViewLayout.footerReferenceSize = CGSizeMake(SSJSCREENWITH, 0);
     }
     [self.rightButton updateAfterThemeChange];
 }
