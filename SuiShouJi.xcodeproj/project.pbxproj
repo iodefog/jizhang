@@ -20312,7 +20312,7 @@
 				7DA8F9A31E55CFBE006BE13B /* Release-production */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "Release-test";
+			defaultConfigurationName = "Release-production";
 		};
 		7DA13C291E35AED7000490A4 /* Build configuration list for PBXNativeTarget "YouYuJiZhangBao" */ = {
 			isa = XCConfigurationList;
@@ -20323,7 +20323,7 @@
 				7DA8F9A21E55CFBE006BE13B /* Release-production */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "Release-test";
+			defaultConfigurationName = "Release-production";
 		};
 		7DBB3A6A1E55C0A70075E638 /* Build configuration list for PBXNativeTarget "YouYuJiZhang" */ = {
 			isa = XCConfigurationList;
@@ -20334,7 +20334,7 @@
 				7DA8F9A01E55CFBE006BE13B /* Release-production */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "Release-test";
+			defaultConfigurationName = "Release-production";
 		};
 		7DBB3CB71E55C2EE0075E638 /* Build configuration list for PBXNativeTarget "YouYuJiZhangLiCai" */ = {
 			isa = XCConfigurationList;
@@ -20345,7 +20345,7 @@
 				7DA8F9A41E55CFBE006BE13B /* Release-production */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "Release-test";
+			defaultConfigurationName = "Release-production";
 		};
 		7DBB3F051E55C4220075E638 /* Build configuration list for PBXNativeTarget "JiZhangGuanJia" */ = {
 			isa = XCConfigurationList;
@@ -20356,7 +20356,7 @@
 				7DA8F9A51E55CFBE006BE13B /* Release-production */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "Release-test";
+			defaultConfigurationName = "Release-production";
 		};
 		7DBB41541E55C4E00075E638 /* Build configuration list for PBXNativeTarget "SuiShouJiEnterprise" */ = {
 			isa = XCConfigurationList;
@@ -20367,7 +20367,7 @@
 				7DA8F99E1E55CFBE006BE13B /* Release-production */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "Release-test";
+			defaultConfigurationName = "Release-production";
 		};
 		9C38496E1E641CAB00BF4AF9 /* Build configuration list for PBXNativeTarget "9188JiZhangBen" */ = {
 			isa = XCConfigurationList;
@@ -20378,7 +20378,7 @@
 				9C3849721E641CAB00BF4AF9 /* Release-production */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "Release-test";
+			defaultConfigurationName = "Release-production";
 		};
 		9CECFF051D6D41A700DB2C8B /* Build configuration list for PBXNativeTarget "YouYuJiZhangBen" */ = {
 			isa = XCConfigurationList;
@@ -20389,7 +20389,7 @@
 				7DA8F9A11E55CFBE006BE13B /* Release-production */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "Release-test";
+			defaultConfigurationName = "Release-production";
 		};
 		BD543C371C1A6DBC00910D61 /* Build configuration list for PBXProject "SuiShouJi" */ = {
 			isa = XCConfigurationList;
@@ -20400,7 +20400,7 @@
 				7DA8F99D1E55CFBE006BE13B /* Release-production */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "Release-test";
+			defaultConfigurationName = "Release-production";
 		};
 		BD543C691C1A6DBC00910D61 /* Build configuration list for PBXNativeTarget "SuiShouJi" */ = {
 			isa = XCConfigurationList;
@@ -20411,7 +20411,7 @@
 				7DA8F99F1E55CFBE006BE13B /* Release-production */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "Release-test";
+			defaultConfigurationName = "Release-production";
 		};
 		BD543C6C1C1A6DBC00910D61 /* Build configuration list for PBXNativeTarget "SuiShouJiTests" */ = {
 			isa = XCConfigurationList;
@@ -20422,7 +20422,7 @@
 				7DA8F9A61E55CFBE006BE13B /* Release-production */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "Release-test";
+			defaultConfigurationName = "Release-production";
 		};
 		BD543C6F1C1A6DBC00910D61 /* Build configuration list for PBXNativeTarget "SuiShouJiUITests" */ = {
 			isa = XCConfigurationList;
@@ -20433,7 +20433,7 @@
 				7DA8F9A71E55CFBE006BE13B /* Release-production */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "Release-test";
+			defaultConfigurationName = "Release-production";
 		};
 /* End XCConfigurationList section */
 	};
