@@ -13,7 +13,7 @@
 typedef NS_ENUM(NSUInteger, MQState) {
     MQStateUninitialized,
     MQStateInitialized,
-    MQStateOffline, // not using
+    MQStateOffline,
     MQStateUnallocatedAgent,
     MQStateAllocatingAgent,
     MQStateAllocatedAgent,
