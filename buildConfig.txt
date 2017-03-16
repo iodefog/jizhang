@@ -4,8 +4,8 @@
     "buildScheme": "SuiShouJi",
     "infoplist": "SuiShouJi-info.plist",
     "appName": "SuiShouJi",
+    "appleId": "langxintong@9188.com",
+    "applePassWord": "AgronLang1989",
     "uploadToPgy": true,
-    "uploadToAppStore": false,
-    “appleId”: "langxintong@9188.com",
-    "applePassWord”: "AgronLang1989"
+    "uploadToAppStore": false
 }
