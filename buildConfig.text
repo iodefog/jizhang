@@ -1,0 +1,9 @@
+{
+    "buildTarget": "SuiShouJi",
+    "buildConfig": "Release-production",
+    "buildScheme": "SuiShouJi",
+    "infoplist": "SuiShouJi-info.plist",
+    "appName": "SuiShouJi",
+    "uploadToPgy": true,
+    "uploadToAppStore": false
+}
