@@ -5,5 +5,7 @@
     "infoplist": "SuiShouJi-info.plist",
     "appName": "SuiShouJi",
     "uploadToPgy": true,
-    "uploadToAppStore": false
+    "uploadToAppStore": false,
+    “appleId”: "langxintong@9188.com",
+    "applePassWord”: "AgronLang1989"
 }
