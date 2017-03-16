@@ -349,7 +349,7 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
                                          success:^{
         [_customCategoryCollectionView deleteItems:_customCategoryCollectionView.selectedItems];
         if (_customCategoryCollectionView.items.count == 0) {
-            [_customCategoryCollectionView ssj_showWatermarkWithCustomView:_noCustomCategoryRemindView animated:YES target:nil action:nil];
+            [_customCategoryCollectionView ssj_showWatermarkWithCustomView:self.noCustomCategoryRemindView animated:YES target:nil action:nil];
         } else {
             [_customCategoryCollectionView ssj_hideWatermark:YES];
         }
