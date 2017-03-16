@@ -203,6 +203,7 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
         
         [SSJCategoryListHelper querySameNameCategoryWithName:name
                                                      booksId:self.booksId
+                                             incomeOrExpence:self.incomeOrExpence
                                                      success:^(SSJBillModel *model) {
             if (model) {
                 if (model.operatorType == 2) {
