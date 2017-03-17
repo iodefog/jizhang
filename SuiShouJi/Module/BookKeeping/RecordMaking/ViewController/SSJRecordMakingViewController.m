@@ -966,7 +966,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     
     billTypeView.addAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView) {
         SSJADDNewTypeViewController *addNewTypeVc = [[SSJADDNewTypeViewController alloc]init];
-        addNewTypeVc.booksId = self.item.booksId;
+        addNewTypeVc.booksId = wself.item.booksId;
         addNewTypeVc.incomeOrExpence = wself.customNaviBar.selectedBillType;
         addNewTypeVc.addNewCategoryAction = ^(NSString *categoryId, BOOL incomeOrExpence){
             wself.item.billId = categoryId;
