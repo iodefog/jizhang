@@ -7,7 +7,7 @@ def shared_pods
     pod 'YYKeyboardManager'
     pod 'YYText'
     pod 'Meiqia', '~> 3.3.1'
-    #pod 'MLeaksFinder', '~> 0.2.0'
+#    pod 'MLeaksFinder'
 #    pod 'JSPatch'
 #    pod 'JSPatch/Extensions'
 #    pod 'JSPatch/JPCFunction'

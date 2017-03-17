@@ -144,13 +144,14 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     [self loadCategoryAndBooksList];
     [self reloadMenberItems];
+
 }
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
     if (![self showGuideViewIfNeeded]) {
         [self.FundingTypeSelectView dismiss];
-//        [self.dateSelectedView dismiss];
+        //        [self.dateSelectedView dismiss];
         if (_needToDismiss) {
             [self.memberSelectView dismiss];
             [self.billTypeInputView.moneyInput becomeFirstResponder];
