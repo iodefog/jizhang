@@ -88,6 +88,7 @@ NSString *SSJFundingTransferStoreListKey = @"SSJFundingTransferStoreListKey";
                 NSMutableArray *list = monthInfo[SSJFundingTransferStoreListKey];
                 [list addObject:item];
             }
+            lastDate = currentDate;
         }
         
         if (success) {
@@ -308,7 +309,7 @@ NSString *SSJFundingTransferStoreListKey = @"SSJFundingTransferStoreListKey";
             
             NSDate *currentDate = [NSDate dateWithString:item.beginDate formatString:@"yyyy-MM-dd"];
             
-            if (!lastDate || [lastDate compare:currentDate] != NSOrderedSame) {
+            if (!lastDate || lastDate.year != currentDate.year || lastDate.month != currentDate.month) {
                 NSMutableDictionary *monthInfo = [[NSMutableDictionary alloc] init];
                 [monthInfo setObject:currentDate forKey:SSJFundingTransferStoreMonthKey];
                 

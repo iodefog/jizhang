@@ -502,7 +502,8 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
     
     _saveButton.enabled = NO;
     [_saveButton ssj_showLoadingIndicator];
-    [SSJFundingTransferStore saveCycleTransferRecordWithID:_item.ID transferInAccountId:transferInId transferOutAccountId:transferOutId money:[_item.transferMoney doubleValue] memo:_item.transferMemo cyclePeriodType:_item.cycleType beginDate:_item.beginDate endDate:_item.endDate success:^(BOOL isExisted) {
+    NSString *dateStr = _item.cycleType == SSJCyclePeriodTypeOnce ? _item.transferDate : _item.beginDate;
+    [SSJFundingTransferStore saveCycleTransferRecordWithID:_item.ID transferInAccountId:transferInId transferOutAccountId:transferOutId money:[_item.transferMoney doubleValue] memo:_item.transferMemo cyclePeriodType:_item.cycleType beginDate:dateStr endDate:_item.endDate success:^(BOOL isExisted) {
         
         _saveButton.enabled = YES;
         [_saveButton ssj_hideLoadingIndicator];
