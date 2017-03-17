@@ -78,6 +78,7 @@
         _moneyInput = [[UITextField alloc]initWithFrame:CGRectMake(0, 0, 200, 44)];
         _moneyInput.tintColor = [UIColor whiteColor];
         _moneyInput.inputView = [SSJCustomKeyboard sharedInstance];
+//        _moneyInput.keyboardType = UIKeyboardTypeURL;
         _moneyInput.textColor = [UIColor whiteColor];
         _moneyInput.font = [UIFont systemFontOfSize:30];
         _moneyInput.textAlignment = NSTextAlignmentRight;

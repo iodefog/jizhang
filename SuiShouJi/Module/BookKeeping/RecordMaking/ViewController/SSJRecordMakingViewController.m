@@ -985,11 +985,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     
     billTypeView.dragAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView, BOOL isDragUp) {
         if (!selectionView.editing) {
-            if (isDragUp) {
-                [wself.currentInput resignFirstResponder];
-            } else {
-                [wself.currentInput becomeFirstResponder];
-            }
+            [wself.currentInput resignFirstResponder];
         }
     };
     
