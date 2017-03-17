@@ -144,6 +144,7 @@
  */
 + (void)querySameNameCategoryWithName:(NSString *)name
                               booksId:(NSString *)booksId
+                      incomeOrExpence:(BOOL)incomeOrExpence
                               success:(void(^)(SSJBillModel *model))success
                               failure:(void(^)(NSError *))failure;
 

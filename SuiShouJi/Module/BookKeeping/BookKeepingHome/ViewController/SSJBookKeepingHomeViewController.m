@@ -902,14 +902,18 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
                     BOOL needToReload = NO;
                     
                     for (SSJBillingChargeCellItem *item in weakSelf.newlyAddChargeArr) {
-                        if ([weakSelf.newlyAddSectionArr containsObject:@(item.chargeIndex.section)]) {
-                            [self.tableView insertSections:[NSIndexSet indexSetWithIndex:item.chargeIndex.section] withRowAnimation:UITableViewRowAnimationTop];
+                        if (item.operatorType == 0) {
+                            if ([weakSelf.newlyAddSectionArr containsObject:@(item.chargeIndex.section)]) {
+                                [self.tableView insertSections:[NSIndexSet indexSetWithIndex:item.chargeIndex.section] withRowAnimation:UITableViewRowAnimationTop];
+                            } else {
+                                [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:item.chargeIndex.section] withRowAnimation:UITableViewRowAnimationNone];
+                            }
+                            
+                            [self.tableView insertRowsAtIndexPaths:@[item.chargeIndex] withRowAnimation:UITableViewRowAnimationTop];
+                            needToReload = ([currentMaxIndex compare:item.chargeIndex] != NSOrderedSame) && needToReload;
                         } else {
-                            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:item.chargeIndex.section] withRowAnimation:UITableViewRowAnimationNone];
+                            [self.tableView reloadData];
                         }
-                        
-                        [self.tableView insertRowsAtIndexPaths:@[item.chargeIndex] withRowAnimation:UITableViewRowAnimationTop];
-                        needToReload = ([currentMaxIndex compare:item.chargeIndex] != NSOrderedSame) && needToReload;
                     }
                     
                     if (needToReload) {
