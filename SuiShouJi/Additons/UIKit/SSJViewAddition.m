@@ -300,8 +300,12 @@ static const NSTimeInterval kAnimationDuration = 0.25;
         [watermark removeFromSuperview];
     }
     
+    objc_setAssociatedObject(self, kDefaultWatermarkKey, view, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    
+    if (!view) {
+        return;
+    }
     watermark = view;
-    objc_setAssociatedObject(self, kDefaultWatermarkKey, watermark, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     
     if ([self isKindOfClass:[UIScrollView class]]) {
         UIScrollView *scrollView = (UIScrollView *)self;

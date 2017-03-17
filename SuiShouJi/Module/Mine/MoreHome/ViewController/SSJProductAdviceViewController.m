@@ -88,7 +88,7 @@
     SSJUserItem *userItem = [SSJUserTableManager queryUserItemForID:SSJUSERID()];
     NSDictionary* clientCustomizedAttrs = @{@"userid": userItem.userId ?: @"",
                                             @"openid": userItem.openId ?: @"",
-                                            @"nickname": userItem.realName ?: @"",
+                                            @"nickname": userItem.nickName ?: @"",
                                             @"tel": userItem.mobileNo ?: @"",
                                             @"登录方式": userItem.loginType ?: @"",
                                             @"注册状态": userItem.registerState ?: @"",
