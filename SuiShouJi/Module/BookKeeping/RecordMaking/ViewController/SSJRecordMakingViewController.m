@@ -144,11 +144,6 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     [self loadCategoryAndBooksList];
     [self reloadMenberItems];
-
-}
-
--(void)viewDidAppear:(BOOL)animated{
-    [super viewDidAppear:animated];
     if (![self showGuideViewIfNeeded]) {
         [self.FundingTypeSelectView dismiss];
         //        [self.dateSelectedView dismiss];
@@ -157,6 +152,11 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
             [self.billTypeInputView.moneyInput becomeFirstResponder];
         }
     }
+}
+
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -806,26 +806,26 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
                 FMResultSet *result = [db executeQuery:@"select * from bk_member_charge as a , bk_member as b  where a.ichargeid = ? and a.operatortype <> 2 and b.cuserid = ? and a.cmemberid = b.cmemberid",weakSelf.item.ID,SSJUSERID()];
                 NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:0];
                 while ([result next]) {
-                    SSJChargeMemberItem *item = [[SSJChargeMemberItem alloc]init];
-                    item.memberId = [result stringForColumn:@"cmemberid"];
-                    item.memberName = [result stringForColumn:@"cname"];
-                    item.memberColor = [result stringForColumn:@"ccolor"];
-                    [tempArr addObject:item];
+                    SSJChargeMemberItem *memberItem = [[SSJChargeMemberItem alloc]init];
+                    memberItem.memberId = [result stringForColumn:@"cmemberid"];
+                    memberItem.memberName = [result stringForColumn:@"cname"];
+                    memberItem.memberColor = [result stringForColumn:@"ccolor"];
+                    [tempArr addObject:memberItem];
                 }
                 weakSelf.item.membersItem= tempArr;
             }else{
-                SSJChargeMemberItem *item = [[SSJChargeMemberItem alloc]init];
-                item.memberId = [NSString stringWithFormat:@"%@-0",SSJUSERID()];
-                item.memberName = [db stringForQuery:@"select cname from bk_member where cmemberid = ?",item.memberId];
-                item.memberColor = [db stringForQuery:@"select ccolor from bk_member where cmemberid = ?",item.memberId];
-                weakSelf.item.membersItem = [NSMutableArray arrayWithObjects:item, nil];
+                SSJChargeMemberItem *memberItem = [[SSJChargeMemberItem alloc]init];
+                memberItem.memberId = [NSString stringWithFormat:@"%@-0",SSJUSERID()];
+                memberItem.memberName = [db stringForQuery:@"select cname from bk_member where cmemberid = ?",memberItem.memberId];
+                memberItem.memberColor = [db stringForQuery:@"select ccolor from bk_member where cmemberid = ?",memberItem.memberId];
+                weakSelf.item.membersItem = [NSMutableArray arrayWithObjects:memberItem, nil];
             }
         }else{
-            SSJChargeMemberItem *item = [[SSJChargeMemberItem alloc]init];
-            item.memberId = [NSString stringWithFormat:@"%@-0",SSJUSERID()];
-            item.memberName = [db stringForQuery:@"select cname from bk_member where cmemberid = ?",item.memberId];
-            item.memberColor = [db stringForQuery:@"select ccolor from bk_member where cmemberid = ?",item.memberId];
-            weakSelf.item.membersItem = [NSMutableArray arrayWithObjects:item, nil];
+            SSJChargeMemberItem *memberItem = [[SSJChargeMemberItem alloc]init];
+            memberItem.memberId = [NSString stringWithFormat:@"%@-0",SSJUSERID()];
+            memberItem.memberName = [db stringForQuery:@"select cname from bk_member where cmemberid = ?",memberItem.memberId];
+            memberItem.memberColor = [db stringForQuery:@"select ccolor from bk_member where cmemberid = ?",memberItem.memberId];
+            weakSelf.item.membersItem = [NSMutableArray arrayWithObjects:memberItem, nil];
         }
         dispatch_async(dispatch_get_main_queue(), ^{
             [weakSelf updateMembers];
