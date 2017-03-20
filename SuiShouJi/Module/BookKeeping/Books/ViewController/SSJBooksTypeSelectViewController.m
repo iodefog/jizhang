@@ -210,7 +210,7 @@ static BOOL kNeedBannerDisplay = YES;
     }else{
         itemWidth = (collectionViewWith - 24 - 45) / 3;
     }
-    return CGSizeMake(itemWidth, 100);
+    return CGSizeMake(itemWidth, itemWidth * 1.3);
 }
 
 -(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
