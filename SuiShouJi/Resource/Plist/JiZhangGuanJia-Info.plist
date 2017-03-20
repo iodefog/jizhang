@@ -201,8 +201,6 @@
 	<string>App需要您的同意,才能访问相册</string>
 	<key>UIFileSharingEnabled</key>
 	<false/>
-	<key>UIMainStoryboardFile</key>
-	<string>Main</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>
