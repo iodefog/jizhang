@@ -317,5 +317,38 @@
 		<key>appleID</key>
 		<string>1209932099</string>
 	</dict>
+	<key>com.beikejizhang.app</key>
+	<dict>
+		<key>source</key>
+		<string>11511</string>
+		<key>WeiXinKey</key>
+		<string></string>
+		<key>WeiXinSecret</key>
+		<string></string>
+		<key>QQAppId</key>
+		<string></string>
+		<key>QQAppKey</key>
+		<string></string>
+		<key>WeiBoAppKey</key>
+		<string></string>
+		<key>WeiBoSecret</key>
+		<string></string>
+		<key>UMAppKey</key>
+		<string>58d339917f2c746fed001da1</string>
+		<key>ShareTitle</key>
+		<string></string>
+		<key>ShareUrl</key>
+		<string></string>
+		<key>ShareContent</key>
+		<string></string>
+		<key>ShareIcon</key>
+		<string></string>
+		<key>WeiboBanner</key>
+		<string></string>
+		<key>AppStoreUrl</key>
+		<string>https://itunes.apple.com/us/app/%E8%B4%9D%E5%A3%B3%E8%AE%B0%E8%B4%A6-%E7%94%9F%E6%B4%BB%E8%8A%B1%E9%94%80%E5%90%88%E7%90%86%E6%B6%88%E8%B4%B9%E7%90%86%E8%B4%A2%E5%B0%8F%E5%8A%A9%E6%89%8B/id1218612331?l=zh&amp;ls=1&amp;mt=8</string>
+		<key>appleID</key>
+		<string>1218612331</string>
+	</dict>
 </dict>
 </plist>

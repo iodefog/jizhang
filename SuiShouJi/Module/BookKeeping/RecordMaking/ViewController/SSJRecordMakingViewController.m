@@ -925,6 +925,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         }
         
         UIWindow *window = [UIApplication sharedApplication].keyWindow;
+        _guideView.frame = window.bounds;
         [UIView transitionWithView:window duration:0.25 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
             [window addSubview:_guideView];
         } completion:NULL];
