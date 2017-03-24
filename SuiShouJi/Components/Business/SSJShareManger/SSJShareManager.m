@@ -79,7 +79,7 @@
     messageObject.shareObject = shareObject;
     
     //调用分享接口
-    [[UMSocialManager defaultManager] shareToPlatform:platformType messageObject:messageObject currentViewController:self completion:^(id data, NSError *error) {
+    [[UMSocialManager defaultManager] shareToPlatform:platformType messageObject:messageObject currentViewController:controller completion:^(id data, NSError *error) {
         if (error) {
             [CDAutoHideMessageHUD showMessage:@"分享失败"];
             UMSocialLogInfo(@"************Share fail with error %@*********",error);
@@ -110,7 +110,7 @@
     messageObject.text = text;
     
     //调用分享接口
-    [[UMSocialManager defaultManager] shareToPlatform:platformType messageObject:messageObject currentViewController:self completion:^(id data, NSError *error) {
+    [[UMSocialManager defaultManager] shareToPlatform:platformType messageObject:messageObject currentViewController:controller completion:^(id data, NSError *error) {
         if (error) {
             [CDAutoHideMessageHUD showMessage:@"分享失败"];
             SSJPRINT(@"************Share fail with error %@*********",error);
@@ -144,7 +144,7 @@
     messageObject.shareObject = shareObject;
     
     //调用分享接口
-    [[UMSocialManager defaultManager] shareToPlatform:platformType messageObject:messageObject currentViewController:self completion:^(id data, NSError *error) {
+    [[UMSocialManager defaultManager] shareToPlatform:platformType messageObject:messageObject currentViewController:controller completion:^(id data, NSError *error) {
         if (error) {
             [CDAutoHideMessageHUD showMessage:@"分享失败"];
             SSJPRINT(@"************Share fail with error %@*********",error);
