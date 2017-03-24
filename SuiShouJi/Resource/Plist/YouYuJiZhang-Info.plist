@@ -29,7 +29,7 @@
 			<string>weixin</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>wxf77f7a5867124dfd</string>
+				<string>wx1973e4bbb6b9d773</string>
 			</array>
 		</dict>
 		<dict>
@@ -39,7 +39,7 @@
 			<string>weibo</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>wb4058368695</string>
+				<string>wb2128876025</string>
 			</array>
 		</dict>
 		<dict>
@@ -49,7 +49,7 @@
 			<string>qq</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>QQ41deff49</string>
+				<string>QQ41e2278d</string>
 			</array>
 			<key>tencent1105086761</key>
 			<string></string>

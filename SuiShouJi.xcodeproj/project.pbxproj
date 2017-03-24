@@ -10928,8 +10928,8 @@
 				7DBB38261E55C0A70075E638 /* [CP] Check Pods Manifest.lock */,
 				7DBB38271E55C0A70075E638 /* Sources */,
 				7DBB3A461E55C0A70075E638 /* Frameworks */,
-				7DBB3A511E55C0A70075E638 /* Resources */,
 				7DBB3A681E55C0A70075E638 /* [CP] Embed Pods Frameworks */,
+				7DBB3A511E55C0A70075E638 /* Resources */,
 				7DBB3A691E55C0A70075E638 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
@@ -11121,7 +11121,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0810;
-				ORGANIZATIONNAME = ___9188___;
+				ORGANIZATIONNAME = "___9188___";
 				TargetAttributes = {
 					7D08A0931E4999D30085A8FB = {
 						DevelopmentTeam = 7RVBV2MALK;
