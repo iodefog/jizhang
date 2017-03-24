@@ -1,11 +1,11 @@
 {
-    "buildTarget": "SuiShouJi",
+    "buildTarget": "YouYuJiZhang",
     "buildConfig": "Release-production",
-    "buildScheme": "SuiShouJi",
-    "infoplist": "SuiShouJi-info.plist",
-    "appName": "SuiShouJi",
-    "appleId": "langxintong@9188.com",
-    "applePassWord": "AgronLang1989",
+    "buildScheme": "YouYuJiZhang",
+    "infoplist": "YouYuJiZhang-info.plist",
+    "appName": "YouYuJiZhang",
+    "appleId": "marsfan888@163.com",
+    "applePassWord": "IOS123456noe",
     "uploadToPgy": false,
     "uploadToAppStore": true
 }

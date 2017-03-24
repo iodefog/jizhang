@@ -66,7 +66,7 @@
 -(UILabel *)expenditureTitleLabel{
     if (!_expenditureTitleLabel) {
         _expenditureTitleLabel = [[UILabel alloc]init];
-        _expenditureTitleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+        _expenditureTitleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         _expenditureTitleLabel.font = [UIFont systemFontOfSize:13];
     }
     return _expenditureTitleLabel;
@@ -75,7 +75,7 @@
 -(UILabel *)incomeTitleLabel{
     if (!_incomeTitleLabel) {
         _incomeTitleLabel = [[UILabel alloc]init];
-        _incomeTitleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+        _incomeTitleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         _incomeTitleLabel.font = [UIFont systemFontOfSize:13];
     }
     return _incomeTitleLabel;

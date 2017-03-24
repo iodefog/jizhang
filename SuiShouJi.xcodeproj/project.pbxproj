@@ -6762,6 +6762,7 @@
 		9892BFAB47044275B53028C0 /* Pods-YouYuJiZhangBao.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangBao.debug.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangBao/Pods-YouYuJiZhangBao.debug.xcconfig"; sourceTree = "<group>"; };
 		9C0AB1671D670BAE0082B971 /* SSJCreditCardEditeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCreditCardEditeCell.h; sourceTree = "<group>"; };
 		9C0AB1681D670BAE0082B971 /* SSJCreditCardEditeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCreditCardEditeCell.m; sourceTree = "<group>"; };
+		9C111F9D1E84FDB900D87EA8 /* buildConfig.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = buildConfig.txt; sourceTree = "<group>"; };
 		9C13F73E1E8267D300AC5FA9 /* BeiKeJiZhang.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BeiKeJiZhang.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C13F7411E82688400AC5FA9 /* BeiKeJiZhang-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "BeiKeJiZhang-Info.plist"; sourceTree = "<group>"; };
 		9C13F7441E82691000AC5FA9 /* BeiKeJiZhang.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = BeiKeJiZhang.entitlements; sourceTree = "<group>"; };
@@ -10592,6 +10593,7 @@
 		BD543C331C1A6DBC00910D61 = {
 			isa = PBXGroup;
 			children = (
+				9C111F9D1E84FDB900D87EA8 /* buildConfig.txt */,
 				BD543C3E1C1A6DBC00910D61 /* SuiShouJi */,
 				BD543C581C1A6DBC00910D61 /* SuiShouJiTests */,
 				BD543C631C1A6DBC00910D61 /* SuiShouJiUITests */,
@@ -18317,8 +18319,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhang;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "128b3236-a860-4050-b803-189e85c77974";
-				PROVISIONING_PROFILE_SPECIFIER = youyujizhangAppStoreDeve;
+				PROVISIONING_PROFILE = "4f90dc0a-abbc-4b9d-8078-d82276a69e60";
+				PROVISIONING_PROFILE_SPECIFIER = youyujizhangAppStoreDis;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -19002,8 +19004,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co.,Ltd (534SCE47WT)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co.,Ltd (534SCE47WT)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Xiaoyong Wu (E25A2E4ZN2)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Xiaoyong Wu (E25A2E4ZN2)";
 				DEVELOPMENT_TEAM = E25A2E4ZN2;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -19631,8 +19633,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co.,Ltd (534SCE47WT)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co.,Ltd (534SCE47WT)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Xiaoyong Wu (E25A2E4ZN2)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Xiaoyong Wu (E25A2E4ZN2)";
 				DEVELOPMENT_TEAM = E25A2E4ZN2;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
