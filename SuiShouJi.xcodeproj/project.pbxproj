@@ -6763,6 +6763,7 @@
 		9C0AB1671D670BAE0082B971 /* SSJCreditCardEditeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCreditCardEditeCell.h; sourceTree = "<group>"; };
 		9C0AB1681D670BAE0082B971 /* SSJCreditCardEditeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCreditCardEditeCell.m; sourceTree = "<group>"; };
 		9C111F9D1E84FDB900D87EA8 /* buildConfig.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = buildConfig.txt; sourceTree = "<group>"; };
+		9C111F9F1E85117600D87EA8 /* YouYuJiZhang.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = YouYuJiZhang.entitlements; sourceTree = "<group>"; };
 		9C13F73E1E8267D300AC5FA9 /* BeiKeJiZhang.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BeiKeJiZhang.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C13F7411E82688400AC5FA9 /* BeiKeJiZhang-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "BeiKeJiZhang-Info.plist"; sourceTree = "<group>"; };
 		9C13F7441E82691000AC5FA9 /* BeiKeJiZhang.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = BeiKeJiZhang.entitlements; sourceTree = "<group>"; };
@@ -9163,6 +9164,7 @@
 		9C3A2D461E65A4C200DFAE2C /* Entitlements */ = {
 			isa = PBXGroup;
 			children = (
+				9C111F9F1E85117600D87EA8 /* YouYuJiZhang.entitlements */,
 				9C13F7441E82691000AC5FA9 /* BeiKeJiZhang.entitlements */,
 				9C3A2D471E65A4C200DFAE2C /* SuiShouJi.entitlements */,
 			);
@@ -11132,7 +11134,12 @@
 						DevelopmentTeam = 262HTD8ZSJ;
 					};
 					7DBB38251E55C0A70075E638 = {
-						DevelopmentTeam = E25A2E4ZN2;
+						DevelopmentTeam = 6LHW8D7QNZ;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 					7DBB3A711E55C2EE0075E638 = {
 						DevelopmentTeam = JFBU3W8R6E;
@@ -18229,9 +18236,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Xiaoyong Wu (8WX4Y5V9K8)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Xiaoyong Wu (8WX4Y5V9K8)";
-				DEVELOPMENT_TEAM = E25A2E4ZN2;
+				CODE_SIGN_ENTITLEMENTS = /Users/ricky/accountbook_ios/SuiShouJi/Resource/Entitlements/YouYuJiZhang.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Yutang Zhou (UCD7C6BN5E)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Yutang Zhou (UCD7C6BN5E)";
+				DEVELOPMENT_TEAM = 6LHW8D7QNZ;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -18319,8 +18327,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhang;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "4f90dc0a-abbc-4b9d-8078-d82276a69e60";
-				PROVISIONING_PROFILE_SPECIFIER = youyujizhangAppStoreDis;
+				PROVISIONING_PROFILE = "b8b8d95a-c622-4c4d-a041-8ce622d4d0f7";
+				PROVISIONING_PROFILE_SPECIFIER = youyujizhangDev;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -19004,9 +19012,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Xiaoyong Wu (E25A2E4ZN2)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Xiaoyong Wu (E25A2E4ZN2)";
-				DEVELOPMENT_TEAM = E25A2E4ZN2;
+				CODE_SIGN_ENTITLEMENTS = /Users/ricky/accountbook_ios/SuiShouJi/Resource/Entitlements/YouYuJiZhang.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Yutang Zhou (6LHW8D7QNZ)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Yutang Zhou (6LHW8D7QNZ)";
+				DEVELOPMENT_TEAM = 6LHW8D7QNZ;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -19094,8 +19103,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhang;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "4f90dc0a-abbc-4b9d-8078-d82276a69e60";
-				PROVISIONING_PROFILE_SPECIFIER = youyujizhangAppStoreDis;
+				PROVISIONING_PROFILE = "718b05a9-554f-44db-8080-ded490bdf8e3";
+				PROVISIONING_PROFILE_SPECIFIER = youyujizhangAppStore;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -19528,9 +19537,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Xiaoyong Wu (8WX4Y5V9K8)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Xiaoyong Wu (8WX4Y5V9K8)";
-				DEVELOPMENT_TEAM = E25A2E4ZN2;
+				CODE_SIGN_ENTITLEMENTS = /Users/ricky/accountbook_ios/SuiShouJi/Resource/Entitlements/YouYuJiZhang.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Yutang Zhou (UCD7C6BN5E)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Yutang Zhou (UCD7C6BN5E)";
+				DEVELOPMENT_TEAM = 6LHW8D7QNZ;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -19618,8 +19628,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhang;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "128b3236-a860-4050-b803-189e85c77974";
-				PROVISIONING_PROFILE_SPECIFIER = youyujizhangAppStoreDeve;
+				PROVISIONING_PROFILE = "b8b8d95a-c622-4c4d-a041-8ce622d4d0f7";
+				PROVISIONING_PROFILE_SPECIFIER = youyujizhangDev;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -19633,9 +19643,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Xiaoyong Wu (E25A2E4ZN2)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Xiaoyong Wu (E25A2E4ZN2)";
-				DEVELOPMENT_TEAM = E25A2E4ZN2;
+				CODE_SIGN_ENTITLEMENTS = /Users/ricky/accountbook_ios/SuiShouJi/Resource/Entitlements/YouYuJiZhang.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Yutang Zhou (6LHW8D7QNZ)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Yutang Zhou (6LHW8D7QNZ)";
+				DEVELOPMENT_TEAM = 6LHW8D7QNZ;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -19723,8 +19734,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhang;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "4f90dc0a-abbc-4b9d-8078-d82276a69e60";
-				PROVISIONING_PROFILE_SPECIFIER = youyujizhangAppStoreDis;
+				PROVISIONING_PROFILE = "718b05a9-554f-44db-8080-ded490bdf8e3";
+				PROVISIONING_PROFILE_SPECIFIER = youyujizhangAppStore;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
