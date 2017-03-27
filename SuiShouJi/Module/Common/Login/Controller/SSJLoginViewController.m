@@ -862,8 +862,8 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         self.leftSeperatorLine.height = self.rightSeperatorLine.height = 1.0f / [UIScreen mainScreen].scale;
         if ([WXApi isWXAppInstalled]) {//安装微信
             self.weixinLoginButton.top = self.tencentLoginButton.top = CGRectGetMaxY(self.thirdPartyLoginLabel.frame) + 25;
-            self.weixinLoginButton.centerX = self.thirdPartyLoginLabel.centerX - 40;
-            self.tencentLoginButton.centerX = self.thirdPartyLoginLabel.centerX + 40;
+            self.weixinLoginButton.centerX = self.thirdPartyLoginLabel.centerX - 90;
+            self.tencentLoginButton.centerX = self.thirdPartyLoginLabel.centerX + 90;
             self.weixinLoginButton.hidden = NO;
             
         } else {
@@ -1223,14 +1223,9 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     if (!_tencentLoginButton) {
         _tencentLoginButton = [[UIButton alloc]init];
         [_tencentLoginButton setImage:[UIImage imageNamed:@"login_qq"] forState:UIControlStateNormal];
-        [_tencentLoginButton setTitle:@"腾讯QQ" forState:UIControlStateNormal];
 //        _tencentLoginButton.size = CGSizeMake(35, 35);
         [_tencentLoginButton sizeToFit];
-        [_tencentLoginButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor] forState:UIControlStateNormal];
-        _tencentLoginButton.titleLabel.font = [UIFont systemFontOfSize:13];
         _tencentLoginButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor];
-        _tencentLoginButton.spaceBetweenImageAndTitle = 12;
-        _tencentLoginButton.contentLayoutType = SSJButtonLayoutTypeImageTopTitleBottom;
         _tencentLoginButton.contentMode = UIViewContentModeCenter;
         [_tencentLoginButton addTarget:self action:@selector(qqLoginButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -1243,12 +1238,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         [_weixinLoginButton setImage:[UIImage imageNamed:@"login_weixin"] forState:UIControlStateNormal];
 //        _weixinLoginButton.size = CGSizeMake(35, 35);
         [_weixinLoginButton sizeToFit];
-        [_weixinLoginButton setTitle:@"微信" forState:UIControlStateNormal];
-        [_weixinLoginButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor] forState:UIControlStateNormal];
         _weixinLoginButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor];
-        _weixinLoginButton.titleLabel.font = [UIFont systemFontOfSize:13];
-        _weixinLoginButton.spaceBetweenImageAndTitle = 12;
-        _weixinLoginButton.contentLayoutType = SSJButtonLayoutTypeImageTopTitleBottom;
         _weixinLoginButton.contentMode = UIViewContentModeCenter;
         [_weixinLoginButton addTarget:self action:@selector(weixinLoginButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
