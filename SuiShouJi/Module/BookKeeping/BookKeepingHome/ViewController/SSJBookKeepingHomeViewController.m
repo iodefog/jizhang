@@ -210,7 +210,6 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 //    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
     self.selectIndex = nil;
     [self getCurrentDate];
-    [self.tableView reloadData];
     [self.floatingDateView dismiss];
     [self.mutiFunctionButton dismiss];
     _dateViewHasDismiss = YES;

@@ -72,7 +72,11 @@
         NSString *fundid = [dict objectForKey:@"fundid"];
         NSString *order = [dict objectForKey:@"order"];
         NSInteger index = [order integerValue];
+        if (index > 1) {
+            index --;
+        }
         index = index - index / 7 * 7;
+    
 //        if (index > 7) {
 //            index = (index - 1) % 7;
 //        }
