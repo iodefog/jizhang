@@ -899,11 +899,13 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     }
     
     [SSJRecordMakingStore saveChargeWithChargeItem:self.item Success:^(SSJBillingChargeCellItem *editeItem){
+        BOOL hasChangeBooksType = NO;
         if (![editeItem.booksId isEqualToString:SSJGetCurrentBooksType()]) {
             SSJSelectBooksType(editeItem.booksId);
+            hasChangeBooksType = YES;
         }
         if (weakSelf.addNewChargeBlock) {
-            weakSelf.addNewChargeBlock(@[editeItem]);
+            weakSelf.addNewChargeBlock(@[editeItem],hasChangeBooksType);
         }
         [weakSelf goBackAction];
     } failure:^{
