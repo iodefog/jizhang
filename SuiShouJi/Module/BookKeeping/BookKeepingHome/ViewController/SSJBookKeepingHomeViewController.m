@@ -102,6 +102,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 @implementation SSJBookKeepingHomeViewController{
     BOOL _isRefreshing;
     BOOL _dateViewHasDismiss;
+    BOOL _hasChangeBooksType;
     CFAbsoluteTime _startTime;
     CFAbsoluteTime _endTime;
 }
@@ -151,7 +152,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
     self.tabBarController.delegate = self;
     
     [self.navigationController setNavigationBarHidden:YES animated:YES];
-    
+        
     __weak typeof(self) weakSelf = self;
     [self.mm_drawerController setGestureCompletionBlock:^(MMDrawerController *drawerController, UIGestureRecognizer *gesture) {
         __strong typeof(weakSelf) sself = weakSelf;
@@ -210,7 +211,6 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 //    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
     self.selectIndex = nil;
     [self getCurrentDate];
-    [self.tableView reloadData];
     [self.floatingDateView dismiss];
     [self.mutiFunctionButton dismiss];
     _dateViewHasDismiss = YES;
@@ -445,8 +445,9 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
             
             SSJRecordMakingViewController *recordMakingVc = [[SSJRecordMakingViewController alloc]init];
             recordMakingVc.item = cell.item;
-            recordMakingVc.addNewChargeBlock = ^(NSArray *chargeIdArr){
+            recordMakingVc.addNewChargeBlock = ^(NSArray *chargeIdArr ,BOOL hasChangeBooksType){
                 weakSelf.newlyAddChargeArr = [NSMutableArray arrayWithArray:chargeIdArr];
+                _hasChangeBooksType = hasChangeBooksType;
             };
             UINavigationController *recordNav = [[UINavigationController alloc]initWithRootViewController:recordMakingVc];
             [weakSelf presentViewController:recordNav animated:YES completion:NULL];
@@ -515,8 +516,9 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 
         __weak typeof(self) weakSelf = self;
         SSJRecordMakingViewController *recordmakingVC = [[SSJRecordMakingViewController alloc]init];
-        recordmakingVC.addNewChargeBlock = ^(NSArray *chargeIdArr){
+        recordmakingVC.addNewChargeBlock = ^(NSArray *chargeIdArr ,BOOL hasChangeBooksType){
             weakSelf.newlyAddChargeArr = [NSMutableArray arrayWithArray:chargeIdArr];
+            _hasChangeBooksType = hasChangeBooksType;
         };
         UINavigationController *recordNav = [[UINavigationController alloc]initWithRootViewController:recordmakingVC];
         [self presentViewController:recordNav animated:YES completion:NULL];
@@ -673,8 +675,9 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
         __weak typeof(self) weakSelf = self;
         _homeButton.recordMakingClickBlock = ^(){
             SSJRecordMakingViewController *recordmakingVC = [[SSJRecordMakingViewController alloc]init];
-            recordmakingVC.addNewChargeBlock = ^(NSArray *chargeIdArr){
+            recordmakingVC.addNewChargeBlock = ^(NSArray *chargeIdArr ,BOOL hasChangeBooksType){
                 weakSelf.newlyAddChargeArr = [NSMutableArray arrayWithArray:chargeIdArr];
+                _hasChangeBooksType = hasChangeBooksType;
             };
             UINavigationController *recordNav = [[UINavigationController alloc]initWithRootViewController:recordmakingVC];
             [weakSelf presentViewController:recordNav animated:YES completion:NULL];
@@ -887,7 +890,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
             
             if (weakSelf.items.count) {
                 self.tableView.hasData = YES;
-                if (weakSelf.newlyAddChargeArr.count) {
+                if (weakSelf.newlyAddChargeArr.count && !_hasChangeBooksType) {
                     
                     NSInteger maxSection = [weakSelf.tableView numberOfSections] - 1;
                     NSInteger rowCount = [weakSelf.tableView numberOfRowsInSection:maxSection];
@@ -995,6 +998,9 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 }
 
 - (void)reloadAfterBooksTypeChange{
+    
+    _hasChangeBooksType = YES;
+    
     [self getDataFromDataBase];
     
     [self reloadBudgetData];

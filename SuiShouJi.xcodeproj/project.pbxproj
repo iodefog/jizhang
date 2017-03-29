@@ -18296,7 +18296,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = /Users/ricky/accountbook_ios/SuiShouJi/Resource/Entitlements/YouYuJiZhang.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/SuiShouJi/Resource/Entitlements/YouYuJiZhang.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer: Yutang Zhou (UCD7C6BN5E)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Yutang Zhou (UCD7C6BN5E)";
 				DEVELOPMENT_TEAM = 6LHW8D7QNZ;
@@ -19072,7 +19072,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = /Users/ricky/accountbook_ios/SuiShouJi/Resource/Entitlements/YouYuJiZhang.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/SuiShouJi/Resource/Entitlements/YouYuJiZhang.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Yutang Zhou (6LHW8D7QNZ)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Yutang Zhou (6LHW8D7QNZ)";
 				DEVELOPMENT_TEAM = 6LHW8D7QNZ;
@@ -19597,7 +19597,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = /Users/ricky/accountbook_ios/SuiShouJi/Resource/Entitlements/YouYuJiZhang.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/SuiShouJi/Resource/Entitlements/YouYuJiZhang.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer: Yutang Zhou (UCD7C6BN5E)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Yutang Zhou (UCD7C6BN5E)";
 				DEVELOPMENT_TEAM = 6LHW8D7QNZ;
@@ -19703,7 +19703,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = /Users/ricky/accountbook_ios/SuiShouJi/Resource/Entitlements/YouYuJiZhang.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/SuiShouJi/Resource/Entitlements/YouYuJiZhang.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Yutang Zhou (6LHW8D7QNZ)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Yutang Zhou (6LHW8D7QNZ)";
 				DEVELOPMENT_TEAM = 6LHW8D7QNZ;
