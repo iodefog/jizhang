@@ -40,9 +40,6 @@ static const int kDatabaseVersion = 13;
         // 查询当前数据库的版本
         currentVersion = [db intForQuery:@"select max(version) from bk_db_version"];
         
-        // 升级成功的版本
-        int upgradeVersion = currentVersion;
-        
         for (int ver = currentVersion + 1; ver <= kDatabaseVersion; ver ++) {
             Class dbVersionClass = [[self databaseVersionInfo] objectForKey:@(ver)];
             if ([dbVersionClass conformsToProtocol:@protocol(SSJDatabaseVersionProtocol)]) {
@@ -55,13 +52,13 @@ static const int kDatabaseVersion = 13;
                     break;
                 }
                 
+                if (![db executeUpdate:@"insert into bk_db_version (version) values (?)", @(ver)]) {
+                    [db rollback];
+                    break;
+                }
+                
                 [db commit];
-                upgradeVersion = ver;
             }
-        }
-        
-        if (upgradeVersion > currentVersion) {
-            [db executeUpdate:@"insert into bk_db_version (version) values (?)", @(upgradeVersion)];
         }
     }];
     
