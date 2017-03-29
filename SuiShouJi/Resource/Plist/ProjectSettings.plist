@@ -84,6 +84,8 @@
 	</dict>
 	<key>com.youyu.jizhang</key>
 	<dict>
+		<key>appleID</key>
+		<string>1126210029</string>
 		<key>source</key>
 		<string>11502</string>
 		<key>WeiXinKey</key>

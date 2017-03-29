@@ -23,7 +23,7 @@
     NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity:0];
     NSString *appId = SSJDetailSettingForSource(@"appleID");
     NSString *strKey=@"iwannapie?!";
-    NSTimeInterval timestamp = [[NSDate date] timeIntervalSince1970];
+    NSTimeInterval timestamp = [[NSDate date] timeIntervalSince1970];   
     NSString *signMsg = [NSString stringWithFormat:@"appid=%@&idfa=%@&timestamp=%f&key=%@",appId,str,timestamp,strKey];
     signMsg = [[signMsg ssj_md5HexDigest] uppercaseString];
     
