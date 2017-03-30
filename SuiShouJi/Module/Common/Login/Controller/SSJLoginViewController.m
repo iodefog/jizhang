@@ -295,7 +295,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 #pragma mark - SSJBaseNetworkServiceDelegate
 -(void)serverDidFinished:(SSJBaseNetworkService *)service{
     [super serverDidFinished:service];
-//    if (![service.returnCode isEqualToString:@"1"]) return;
+    if (![service.returnCode isEqualToString:@"1"]) return;
     
     if (service == self.loginService) {//登陆
         if ([[NSUserDefaults standardUserDefaults] objectForKey:SSJLastLoggedUserItemKey]) {

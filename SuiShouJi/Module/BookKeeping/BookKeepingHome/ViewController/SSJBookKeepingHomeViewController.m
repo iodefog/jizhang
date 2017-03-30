@@ -892,11 +892,13 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
                 self.tableView.hasData = YES;
                 if (weakSelf.newlyAddChargeArr.count && !_hasChangeBooksType) {
                     
+                    SSJBillingChargeCellItem *currentItem = [weakSelf.newlyAddChargeArr firstObject];
+                    
                     NSInteger maxSection = [weakSelf.tableView numberOfSections] - 1;
                     NSInteger rowCount = [weakSelf.tableView numberOfRowsInSection:maxSection];
                     NSIndexPath *currentMaxIndex = [NSIndexPath indexPathForRow:rowCount - 1 inSection:maxSection];
                     
-                    [weakSelf.tableView beginUpdates];
+//                    [weakSelf.tableView beginUpdates];
                     
                     if (needToDelete) {
                         [weakSelf.tableView deleteSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
@@ -905,7 +907,10 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
                     BOOL needToReload = NO;
                     
                     for (SSJBillingChargeCellItem *item in weakSelf.newlyAddChargeArr) {
+                        
                         if (item.operatorType == 0) {
+                            [weakSelf.tableView beginUpdates];
+                            [weakSelf.tableView scrollToRowAtIndexPath:item.chargeIndex atScrollPosition:UITableViewScrollPositionBottom animated:NO];
                             if ([weakSelf.newlyAddSectionArr containsObject:@(item.chargeIndex.section)]) {
                                 [self.tableView insertSections:[NSIndexSet indexSetWithIndex:item.chargeIndex.section] withRowAnimation:UITableViewRowAnimationTop];
                             } else {
@@ -914,7 +919,9 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
                             
                             [self.tableView insertRowsAtIndexPaths:@[item.chargeIndex] withRowAnimation:UITableViewRowAnimationTop];
                             needToReload = ([currentMaxIndex compare:item.chargeIndex] != NSOrderedSame) && needToReload;
+                            [weakSelf.tableView endUpdates];
                         } else {
+                            [weakSelf.tableView scrollToRowAtIndexPath:item.chargeIndex atScrollPosition:UITableViewScrollPositionBottom animated:NO];
                             [self.tableView reloadData];
                         }
                     }
@@ -923,10 +930,8 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
                         [weakSelf.tableView reloadRowsAtIndexPaths:@[currentMaxIndex] withRowAnimation:UITableViewRowAnimationNone];
                     }
                     
-                    [weakSelf.tableView endUpdates];
+//                    [weakSelf.tableView endUpdates];
                     
-                    SSJBillingChargeCellItem *lastItem = [weakSelf.newlyAddChargeArr lastObject];
-                    [weakSelf.tableView scrollToRowAtIndexPath:lastItem.chargeIndex atScrollPosition:UITableViewScrollPositionBottom animated:NO];
                     
                     [self.newlyAddChargeArr removeAllObjects];
                 } else {
