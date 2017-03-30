@@ -297,7 +297,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     [super serverDidFinished:service];
 //    if (![service.returnCode isEqualToString:@"1"]) return;
     
-    if (service == self.loginService) {//登陆
+    if (service == self.loginService && [service.returnCode isEqualToString:@"1"]) {//登陆
         if ([[NSUserDefaults standardUserDefaults] objectForKey:SSJLastLoggedUserItemKey]) {
             __weak typeof(self) weakSelf = self;
             NSData *lastUserData = [[NSUserDefaults standardUserDefaults] objectForKey:SSJLastLoggedUserItemKey];
