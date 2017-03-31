@@ -900,9 +900,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
                     
 //                    [weakSelf.tableView beginUpdates];
                     
-                    if (needToDelete) {
-                        [weakSelf.tableView deleteSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
-                    }
+
                     
                     BOOL needToReload = NO;
                     
@@ -910,6 +908,10 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
                         
                         if (item.operatorType == 0) {
                             [weakSelf.tableView beginUpdates];
+                            if (needToDelete) {
+                                [weakSelf.tableView deleteSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
+                                needToDelete = NO;
+                            }
                             [weakSelf.tableView scrollToRowAtIndexPath:item.chargeIndex atScrollPosition:UITableViewScrollPositionBottom animated:NO];
                             if ([weakSelf.newlyAddSectionArr containsObject:@(item.chargeIndex.section)]) {
                                 [self.tableView insertSections:[NSIndexSet indexSetWithIndex:item.chargeIndex.section] withRowAnimation:UITableViewRowAnimationTop];

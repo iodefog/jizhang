@@ -352,5 +352,38 @@
 		<key>appleID</key>
 		<string>1218612331</string>
 	</dict>
+	<key>com.youyu.notepro</key>
+	<dict>
+		<key>appleID</key>
+		<string>1221777670</string>
+		<key>source</key>
+		<string>11513</string>
+		<key>WeiXinKey</key>
+		<string>wx1973e4bbb6b9d773</string>
+		<key>WeiXinSecret</key>
+		<string>b8d9ac7bdbd22a8df2e9651b5ab39c41</string>
+		<key>QQAppId</key>
+		<string>1105340301</string>
+		<key>QQAppKey</key>
+		<string>mW8hRwplNTlrUj3O</string>
+		<key>WeiBoAppKey</key>
+		<string>2128876025</string>
+		<key>WeiBoSecret</key>
+		<string>bcbf3b6f1f534d8e39b0b52418761921</string>
+		<key>UMAppKey</key>
+		<string>58ddd3e4310c932c240002eb</string>
+		<key>ShareTitle</key>
+		<string>有鱼记账，帮我把小家打理得更好。</string>
+		<key>ShareUrl</key>
+		<string>http://jz.9188.com/app/yy/index.html</string>
+		<key>ShareContent</key>
+		<string>在这里，记录消费生活是件有趣简单的事儿，管家更有窍门。</string>
+		<key>ShareIcon</key>
+		<string>youyu_icon</string>
+		<key>WeiboBanner</key>
+		<string>youyu_weibo_banner</string>
+		<key>AppStoreUrl</key>
+		<string>https://itunes.apple.com/us/app/%E6%9C%89%E9%B1%BC%E8%AE%B0%E8%B4%A6pro/id1221777670?l=zh&amp;ls=1&amp;mt=8</string>
+	</dict>
 </dict>
 </plist>
