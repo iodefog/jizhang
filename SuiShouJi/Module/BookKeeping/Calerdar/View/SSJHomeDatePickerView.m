@@ -181,8 +181,11 @@
         [self.datePicker selectRow:row3 inComponent:2 animated:YES];
     } else if (self.datePickerMode == SSJDatePickerModeDate) {
         NSInteger row1 = [self.yearArray indexOfObject:[NSString stringWithFormat:@"%ld年",year]];
+        if (row1>self.yearArray.count-1)return;
         NSInteger row2 = [self.monthArray indexOfObject:[NSString stringWithFormat:@"%ld月",month]];
+        if (row2>self.monthArray.count-1)return;
         NSInteger row3 = [self.dayArray indexOfObject:[NSString stringWithFormat:@"%ld日",day]];
+        if (row3>self.dayArray.count-1)return;
         [self.datePicker selectRow:row1 inComponent:0 animated:YES];
         [self.datePicker selectRow:row2 inComponent:1 animated:YES];
         [self pickerView:_datePicker didSelectRow:row2 inComponent:1];
@@ -192,10 +195,13 @@
         NSString *dateStr = [self.formatter stringFromDate:cuDate];
         NSDate *seleDate = [self.formatter dateFromString:dateStr];
         NSInteger integer = [self.monthDayWeekArray indexOfObject:seleDate];
+        if (integer>self.monthDayWeekArray.count-1)return;
         [self pickerView:_datePicker didSelectRow:integer inComponent:0];//选中
         [_datePicker selectRow:integer inComponent:0 animated:YES];
         NSInteger row2 = [self.hourArray indexOfObject:[NSString stringWithFormat:@"%ld",hour > 12 ? hour - 12 : hour]];
+        if (row2>self.hourArray.count-1)return;
         NSInteger row3 = [self.minuteArray indexOfObject:[NSString stringWithFormat:@"%02ld",minute]];
+        if (row3>self.minuteArray.count-1)return;
         [_datePicker selectRow:amPmIndex inComponent:1 animated:YES];
         [_datePicker selectRow:row2 inComponent:2 animated:YES];
         [_datePicker selectRow:row3 inComponent:3 animated:YES];
@@ -205,10 +211,14 @@
         NSString *dateStr = [self.formatter stringFromDate:cuDate];
         NSDate *seleDate = [self.formatter dateFromString:dateStr];
         NSInteger integer = [self.monthDayWeekArray indexOfObject:seleDate];
+        if (integer>self.monthDayWeekArray.count-1)return;
         [self pickerView:_datePicker didSelectRow:integer inComponent:1];//选中
         [_datePicker selectRow:integer inComponent:1 animated:YES];
-        [_datePicker selectRow:[self.hourArray indexOfObject:[NSString stringWithFormat:@"%02ld",(long)[self componentsWithDate:cuDate].hour]] inComponent:2 animated:YES];
+        NSInteger row2 = [self.hourArray indexOfObject:[NSString stringWithFormat:@"%02ld",(long)[self componentsWithDate:cuDate].hour]];
+        if (row2>self.hourArray.count-1)return;
+        [_datePicker selectRow:row2 inComponent:2 animated:YES];
         NSInteger min = [self.minuteArray indexOfObject:[NSString stringWithFormat:@"%02ld",(long)[self componentsWithDate:cuDate].minute]];
+        if (min>self.minuteArray.count-1)return;
         [_datePicker selectRow:min inComponent:4 animated:YES];
     }
 }
@@ -370,7 +380,7 @@
     NSString *language = [self getPreferredLanguage];
     NSString *amStr = @"上午";
     NSString *pmStr = @"下午";
-    if ([language isEqualToString:@"en"]) {
+    if ([language isEqualToString:@"en-US"]) {
         amStr = @"AM";
         pmStr = @"PM";
     }
@@ -473,6 +483,7 @@
         [_yearArray addObject:[NSString stringWithFormat:@"%ld年",i]];
     }
 }
+
 
 - (NSMutableArray *)setUpDayArrayWithDays:(NSInteger)day
 {
