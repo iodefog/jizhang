@@ -370,7 +370,7 @@
     NSString *language = [self getPreferredLanguage];
     NSString *amStr = @"上午";
     NSString *pmStr = @"下午";
-    if ([language isEqualToString:@"en-US"]) {
+    if ([language isEqualToString:@"en"]) {
         amStr = @"AM";
         pmStr = @"PM";
     }
