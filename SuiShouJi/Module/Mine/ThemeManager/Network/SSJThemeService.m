@@ -12,6 +12,7 @@
 
 - (void)requestThemeList{
     self.showLodingIndicator = YES;
+#warning test
     [self request:@"http://10.0.11.11/theme.json" params:nil];
 }
 
