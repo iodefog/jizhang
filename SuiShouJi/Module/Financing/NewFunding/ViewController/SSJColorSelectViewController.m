@@ -117,7 +117,7 @@
         flowLayout.minimumInteritemSpacing = 22;
         flowLayout.minimumLineSpacing = 18;
         _collectionView =[[UICollectionView alloc]initWithFrame:CGRectZero collectionViewLayout:flowLayout];
-        _collectionView.backgroundColor = [UIColor ssj_colorWithHex:@"ffffff" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+        _collectionView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         _collectionView.dataSource=self;
         _collectionView.delegate=self;
         [_collectionView registerClass:[SSJGradientColorSelectCollectionViewCell class]  forCellWithReuseIdentifier:@"ColorSelectCollectionViewCell"];
@@ -146,6 +146,11 @@
         self.colorSelectedBlock(_selectColor);
     }
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)updateAppearanceAfterThemeChanged {
+    _collectionView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+
 }
 
 - (void)didReceiveMemoryWarning {
