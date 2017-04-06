@@ -54,7 +54,7 @@
 }
 
 - (CGSize)sizeThatFits:(CGSize)size{
-    return CGSizeMake([UIApplication sharedApplication].keyWindow.width, 360);
+    return CGSizeMake([UIApplication sharedApplication].keyWindow.width, 288);
 }
 
 - (void)layoutSubviews
