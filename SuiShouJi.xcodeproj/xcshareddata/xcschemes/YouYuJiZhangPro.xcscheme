@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "9C80FC961E95E88E00B1BAAC"
-               BuildableName = "YouYuJiZhang.app"
-               BlueprintName = "YouYuJiZhang"
+               BlueprintIdentifier = "9C7D2CDC1E8DF8A80093001F"
+               BuildableName = "YouYuJiZhangPro.app"
+               BlueprintName = "YouYuJiZhangPro"
                ReferencedContainer = "container:SuiShouJi.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -32,9 +32,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "9C80FC961E95E88E00B1BAAC"
-            BuildableName = "YouYuJiZhang.app"
-            BlueprintName = "YouYuJiZhang"
+            BlueprintIdentifier = "9C7D2CDC1E8DF8A80093001F"
+            BuildableName = "YouYuJiZhangPro.app"
+            BlueprintName = "YouYuJiZhangPro"
             ReferencedContainer = "container:SuiShouJi.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -55,9 +55,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "9C80FC961E95E88E00B1BAAC"
-            BuildableName = "YouYuJiZhang.app"
-            BlueprintName = "YouYuJiZhang"
+            BlueprintIdentifier = "9C7D2CDC1E8DF8A80093001F"
+            BuildableName = "YouYuJiZhangPro.app"
+            BlueprintName = "YouYuJiZhangPro"
             ReferencedContainer = "container:SuiShouJi.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -74,9 +74,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "9C80FC961E95E88E00B1BAAC"
-            BuildableName = "YouYuJiZhang.app"
-            BlueprintName = "YouYuJiZhang"
+            BlueprintIdentifier = "9C7D2CDC1E8DF8A80093001F"
+            BuildableName = "YouYuJiZhangPro.app"
+            BlueprintName = "YouYuJiZhangPro"
             ReferencedContainer = "container:SuiShouJi.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
