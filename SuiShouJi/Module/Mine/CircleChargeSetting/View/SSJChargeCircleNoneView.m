@@ -20,7 +20,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.backgroundColor = [UIColor whiteColor];
+        self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         [self addSubview:self.seperatorLine];
         [self addSubview:self.noneImage];
         [self addSubview:self.nodataLabel];
@@ -31,7 +31,6 @@
 
 -(void)layoutSubviews{
     [super layoutSubviews];
-    self.backgroundColor = [UIColor ssj_colorWithHex:@"ffffff" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     self.seperatorLine.size = CGSizeMake(self.width, 10);
     self.seperatorLine.leftTop = CGPointMake(0, 0);
     self.noneImage.bottom = self.height / 2 - 10;
