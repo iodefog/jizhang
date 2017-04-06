@@ -898,9 +898,9 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
                     NSInteger rowCount = [weakSelf.tableView numberOfRowsInSection:maxSection];
                     NSIndexPath *currentMaxIndex = [NSIndexPath indexPathForRow:rowCount - 1 inSection:maxSection];
                     
-//                    [weakSelf.tableView beginUpdates];
+                    //                    [weakSelf.tableView beginUpdates];
                     
-
+                    
                     
                     BOOL needToReload = NO;
                     
@@ -912,13 +912,13 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
                                 [weakSelf.tableView deleteSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
                                 needToDelete = NO;
                             }
-                            [weakSelf.tableView scrollToRowAtIndexPath:item.chargeIndex atScrollPosition:UITableViewScrollPositionBottom animated:NO];
                             if ([weakSelf.newlyAddSectionArr containsObject:@(item.chargeIndex.section)]) {
                                 [self.tableView insertSections:[NSIndexSet indexSetWithIndex:item.chargeIndex.section] withRowAnimation:UITableViewRowAnimationTop];
                             } else {
                                 [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:item.chargeIndex.section] withRowAnimation:UITableViewRowAnimationNone];
                             }
-                            
+                            [weakSelf.tableView scrollToRowAtIndexPath:item.chargeIndex atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+
                             [self.tableView insertRowsAtIndexPaths:@[item.chargeIndex] withRowAnimation:UITableViewRowAnimationTop];
                             needToReload = ([currentMaxIndex compare:item.chargeIndex] != NSOrderedSame) && needToReload;
                             [weakSelf.tableView endUpdates];
@@ -932,7 +932,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
                         [weakSelf.tableView reloadRowsAtIndexPaths:@[currentMaxIndex] withRowAnimation:UITableViewRowAnimationNone];
                     }
                     
-//                    [weakSelf.tableView endUpdates];
+                    //                    [weakSelf.tableView endUpdates];
                     
                     
                     [self.newlyAddChargeArr removeAllObjects];
