@@ -157,7 +157,7 @@ NSDate *SCYEnterBackgroundTime() {
 //    [SSJJspatchAnalyze SSJJsPatchAnalyzePatch];
     
     //微信登录
-    [WXApi registerApp:SSJDetailSettingForSource(@"WeiXinKey") withDescription:kWeiXinDescription];
+    [WXApi registerApp:SSJDetailSettingForSource(@"WeiXinKey")];
     
     _startViewManager = [[SSJStartViewManager alloc] init];
     [_startViewManager showWithCompletion:^(SSJStartViewManager *manager){

@@ -205,11 +205,8 @@
 	</array>
 	<key>UIRequiresFullScreen</key>
 	<true/>
-<<<<<<< HEAD
 	<key>UIStatusBarHidden</key>
 	<false/>
-=======
->>>>>>> master
 	<key>UIStatusBarStyle</key>
 	<string>UIStatusBarStyleBlackOpaque</string>
 	<key>UISupportedInterfaceOrientations</key>
