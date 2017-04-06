@@ -30,7 +30,7 @@
 @property (nonatomic) BOOL isModifyCofig;
 
 
-typedef void (^addNewChargeBlock)(NSArray *chargeIdArr);
+typedef void (^addNewChargeBlock)(NSArray *chargeIdArr ,BOOL hasChangeBooksType);
 
 
 @property (nonatomic, copy) addNewChargeBlock addNewChargeBlock;

@@ -84,6 +84,8 @@
 	</dict>
 	<key>com.youyu.jizhang</key>
 	<dict>
+		<key>appleID</key>
+		<string>1126210029</string>
 		<key>source</key>
 		<string>11502</string>
 		<key>WeiXinKey</key>
@@ -316,6 +318,72 @@
 		<string>https://itunes.apple.com/cn/app/9188%E8%AE%B0%E8%B4%A6%E6%9C%AC-%E6%9C%80%E9%A2%86%E5%85%88%E5%85%A8%E8%83%BD%E8%AE%B0%E8%B4%A6%E6%9C%AC/id1209932099?l=zh&amp;ls=1&amp;mt=8</string>
 		<key>appleID</key>
 		<string>1209932099</string>
+	</dict>
+	<key>com.beikejizhang.app</key>
+	<dict>
+		<key>source</key>
+		<string>11511</string>
+		<key>WeiXinKey</key>
+		<string></string>
+		<key>WeiXinSecret</key>
+		<string></string>
+		<key>QQAppId</key>
+		<string></string>
+		<key>QQAppKey</key>
+		<string></string>
+		<key>WeiBoAppKey</key>
+		<string></string>
+		<key>WeiBoSecret</key>
+		<string></string>
+		<key>UMAppKey</key>
+		<string>58d339917f2c746fed001da1</string>
+		<key>ShareTitle</key>
+		<string></string>
+		<key>ShareUrl</key>
+		<string></string>
+		<key>ShareContent</key>
+		<string></string>
+		<key>ShareIcon</key>
+		<string></string>
+		<key>WeiboBanner</key>
+		<string></string>
+		<key>AppStoreUrl</key>
+		<string>https://itunes.apple.com/us/app/%E8%B4%9D%E5%A3%B3%E8%AE%B0%E8%B4%A6-%E7%94%9F%E6%B4%BB%E8%8A%B1%E9%94%80%E5%90%88%E7%90%86%E6%B6%88%E8%B4%B9%E7%90%86%E8%B4%A2%E5%B0%8F%E5%8A%A9%E6%89%8B/id1218612331?l=zh&amp;ls=1&amp;mt=8</string>
+		<key>appleID</key>
+		<string>1218612331</string>
+	</dict>
+	<key>com.youyu.notepro</key>
+	<dict>
+		<key>appleID</key>
+		<string>1221777670</string>
+		<key>source</key>
+		<string>11513</string>
+		<key>WeiXinKey</key>
+		<string>wx1973e4bbb6b9d773</string>
+		<key>WeiXinSecret</key>
+		<string>b8d9ac7bdbd22a8df2e9651b5ab39c41</string>
+		<key>QQAppId</key>
+		<string>1105340301</string>
+		<key>QQAppKey</key>
+		<string>mW8hRwplNTlrUj3O</string>
+		<key>WeiBoAppKey</key>
+		<string>2128876025</string>
+		<key>WeiBoSecret</key>
+		<string>bcbf3b6f1f534d8e39b0b52418761921</string>
+		<key>UMAppKey</key>
+		<string>58ddd3e4310c932c240002eb</string>
+		<key>ShareTitle</key>
+		<string>有鱼记账，帮我把小家打理得更好。</string>
+		<key>ShareUrl</key>
+		<string>http://jz.9188.com/app/yy/index.html</string>
+		<key>ShareContent</key>
+		<string>在这里，记录消费生活是件有趣简单的事儿，管家更有窍门。</string>
+		<key>ShareIcon</key>
+		<string>youyu_icon</string>
+		<key>WeiboBanner</key>
+		<string>youyu_weibo_banner</string>
+		<key>AppStoreUrl</key>
+		<string>https://itunes.apple.com/us/app/%E6%9C%89%E9%B1%BC%E8%AE%B0%E8%B4%A6pro/id1221777670?l=zh&amp;ls=1&amp;mt=8</string>
 	</dict>
 </dict>
 </plist>

@@ -60,7 +60,7 @@
     self.memoLabel.width = 200;
     
     
-    if ([_item.billId integerValue] > 1000 || _item.billId.length > 4) {
+    if ([_item.billId integerValue] >= 1000 || _item.billId.length > 4) {
         self.imageView.layer.borderWidth = 2 / [UIScreen mainScreen].scale;
         self.imageView.contentMode = UIViewContentModeCenter;
     } else {

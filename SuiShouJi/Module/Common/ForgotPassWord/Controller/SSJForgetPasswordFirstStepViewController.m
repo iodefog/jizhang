@@ -186,6 +186,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
             
             [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:@"设置密码成功" action:sureAction, nil];
             
+            
         } else {
             [self.passwordField becomeFirstResponder];
         }

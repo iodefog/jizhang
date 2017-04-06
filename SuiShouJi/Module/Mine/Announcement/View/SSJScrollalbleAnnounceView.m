@@ -34,10 +34,10 @@
         self.currentIndex = 0;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateAppearanceAfterThemeChanged) name:SSJThemeDidChangeNotification object:nil];
         if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
-            self.backView.backgroundColor = [UIColor ssj_colorWithHex:@"eb4a64" alpha:0.1];
+            self.backView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor alpha:0.1];
             self.backgroundColor = [UIColor whiteColor];
         } else {
-            self.backView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha + 0.1];
+            self.backView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor alpha:0.1];
             self.backgroundColor = [UIColor clearColor];
         }
     }
@@ -191,10 +191,10 @@
     self.announceTextLayer.string = attributeStr;
     
     if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
-        self.backView.backgroundColor = [UIColor ssj_colorWithHex:@"eb4a64" alpha:0.1];
+        self.backView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor alpha:0.1];
         self.backgroundColor = [UIColor whiteColor];
     } else {
-        self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha + 0.1];
+        self.backView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor alpha:0.1];
         self.backgroundColor = [UIColor clearColor];
     }
 }

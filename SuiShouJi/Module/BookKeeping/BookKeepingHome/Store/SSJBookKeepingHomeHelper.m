@@ -66,11 +66,6 @@ NSString *const SSJMonthSumDicKey = @"SSJMonthSumDicKey";
             item.clientAddDate = [chargeResult stringForColumn:@"clientadddate"];
             item.billDetailDate = [chargeResult stringForColumn:@"cdetaildate"];
             NSString *currentMonth = [item.billDate substringWithRange:NSMakeRange(0, 7)];
-            if (![currentMonth isEqualToString:lastMonth]) {
-                
-            } else {
-                
-            }
             if (![item.billDate isEqualToString:lastDate]) {
                 SSJBookKeepingHomeListItem *listItem = [[SSJBookKeepingHomeListItem alloc]init];
                 listItem.chargeItems = [NSMutableArray arrayWithCapacity:0];
@@ -99,7 +94,7 @@ NSString *const SSJMonthSumDicKey = @"SSJMonthSumDicKey";
                 }
                 row ++;
                 totalCount ++;
-                item.chargeIndex = [NSIndexPath indexPathForRow:row inSection:section];
+                item.chargeIndex = [NSIndexPath indexPathForRow:row inSection:section - 1];
                 [listItem.chargeItems addObject:item];
                 [summaryDic setObject:@(row + 1) forKey:item.billDate];
             }

@@ -43,10 +43,8 @@
 
 -(void)layoutSubviews{
     [super layoutSubviews];
-    self.toplineView.height = self.height / 2;
     self.toplineView.centerX = self.width / 2;
     self.toplineView.top = 0;
-    self.bottomlineView.height = self.height / 2;
     self.bottomlineView.centerX = self.width / 2;
     self.bottomlineView.bottom = self.height;
     if ([self.item.billId isEqualToString:@"-1"]) {
@@ -56,6 +54,8 @@
         self.categoryImageButton.size = CGSizeMake(38, 38);
         self.categoryImageButton.layer.cornerRadius = 19.f;
     }
+    self.bottomlineView.height = self.height / 2 - self.categoryImageButton.height / 2;
+    self.toplineView.height = self.height / 2 - self.categoryImageButton.height / 2;
     self.categoryImageButton.centerY = self.height * 0.5;
     self.categoryImageButton.centerX = self.width * 0.5;
     self.incomeLabel.rightBottom = CGPointMake(self.categoryImageButton.left - 5, self.height);

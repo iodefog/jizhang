@@ -70,3 +70,7 @@ end
 target '9188JiZhangBen'  do
     shared_pods
 end
+
+target 'BeiKeJiZhang'  do
+    shared_pods
+end

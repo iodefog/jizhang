@@ -72,9 +72,17 @@
         NSString *fundid = [dict objectForKey:@"fundid"];
         NSString *order = [dict objectForKey:@"order"];
         NSInteger index = [order integerValue];
-        if (index > 7) {
-            index = index % 7 - 1;
+        if (index > 1) {
+            index --;
         }
+        index = index - index / 7 * 7;
+    
+//        if (index > 7) {
+//            index = (index - 1) % 7;
+//        }
+//        if (index < 0) {
+//            index = 0;
+//        }
         SSJFinancingGradientColorItem *item = [colors objectAtIndex:index];
         if (![db executeUpdate:@"update bk_fund_info set cstartcolor = ? , cendcolor = ?, cwritedate = ?, iversion = ?, operatortype = 1 where cfundid = ?",item.startColor,item.endColor,cwriteDate,@(SSJSyncVersion()),fundid]) {
             return [db lastError];

@@ -12,14 +12,16 @@
 
 - (void)requestThemeList{
     self.showLodingIndicator = YES;
-    [self request:SSJURLWithAPI(@"/user/themes.go") params:nil];
+#warning test
+    [self request:@"http://10.0.11.11/theme.json" params:nil];
 }
 
 - (void)requestDidFinish:(NSDictionary *)rootElement{
     [super requestDidFinish:rootElement];
-    if ([self.returnCode isEqualToString:@"1"]) {
-        NSDictionary *results = [rootElement objectForKey:@"results"];
-        NSMutableArray *themeArray = [SSJThemeItem mj_objectArrayWithKeyValuesArray:[results objectForKey:@"themeconfig"]];
+#warning test
+//    if ([self.returnCode isEqualToString:@"1"]) {
+//        NSDictionary *results = [rootElement objectForKey:@"results"];
+        NSMutableArray *themeArray = [SSJThemeItem mj_objectArrayWithKeyValuesArray:[rootElement objectForKey:@"themeconfig"]];
         SSJThemeItem *item = [[SSJThemeItem alloc]init];
         item.themeId = @"0";
         item.themeTitle = @"官方白";
@@ -29,6 +31,6 @@
         if (self.success) {
             self.success(self.themes);
         }
-    }
+//    }
 }
 @end

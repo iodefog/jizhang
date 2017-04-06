@@ -9,6 +9,9 @@
 #import <UIKit/UIKit.h>
 
 @interface SSJFundingDetailDateHeader : UITableViewHeaderFooterView
+
 @property (nonatomic,strong) UILabel *dateLabel;
+
 @property (nonatomic,strong) UILabel *balanceLabel;
+
 @end

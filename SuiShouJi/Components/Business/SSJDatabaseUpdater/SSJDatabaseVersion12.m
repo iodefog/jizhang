@@ -32,9 +32,12 @@
 + (NSError *)updateUserChargeTableWithDatabase:(FMDatabase *)db {
 
     // 添加记账时分字段
-    if (![db executeUpdate:@"alter table bk_user_charge add cdetaildate text"]) {
-        return [db lastError];
+    if (![db columnExists:@"cdetaildate" inTableWithName:@"bk_user_charge"]) {
+        if (![db executeUpdate:@"alter table bk_user_charge add cdetaildate text"]) {
+            return [db lastError];
+        }
     }
+    
     
     if (![db executeUpdate:@"update bk_user_charge set cdetaildate = '00:00' where ichargetype = ?", @(SSJChargeIdTypeCircleConfig)]) {
         return [db lastError];
@@ -61,8 +64,11 @@
 
 + (NSError *)updateUserTableWithDatabase:(FMDatabase *)db {
     // 添加记账时分字段
-    if (![db executeUpdate:@"alter table bk_user add CADVICETIME TEXT"]) {
-        return [db lastError];
+    if (![db columnExists:@"CADVICETIME" inTableWithName:@"bk_user"]) {
+        if (![db executeUpdate:@"alter table bk_user add CADVICETIME TEXT"]) {
+            return [db lastError];
+        }
+
     }
     return nil;
 }

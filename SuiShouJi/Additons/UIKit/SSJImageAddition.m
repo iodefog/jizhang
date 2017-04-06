@@ -28,6 +28,16 @@
         }
     }
     
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        CGSize screenSize = [UIScreen mainScreen].bounds.size;
+        if (CGSizeEqualToSize(screenSize, CGSizeMake(320.0, 568.0))) {
+            image = [UIImage imageNamed:[NSString stringWithFormat:@"%@-568",imageName]];
+        } else if (CGSizeEqualToSize(screenSize, CGSizeMake(375.0, 667.0))) {
+            image = [UIImage imageNamed:[NSString stringWithFormat:@"%@-667",imageName]];
+        }
+    }
+    
+    
     if (!image) {
         image = [UIImage imageNamed:imageName];
     }
