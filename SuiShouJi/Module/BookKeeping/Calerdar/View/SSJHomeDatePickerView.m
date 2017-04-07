@@ -54,13 +54,13 @@
 }
 
 - (CGSize)sizeThatFits:(CGSize)size{
-    return CGSizeMake([UIApplication sharedApplication].keyWindow.width, 360);
+    return CGSizeMake([UIApplication sharedApplication].keyWindow.width, 250);
 }
 
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    self.topView.frame = CGRectMake(0,0,self.width,70);
+    self.topView.frame = CGRectMake(0,0,self.width,45);
     self.datePicker.frame = CGRectMake(0,self.topView.height,self.width,self.height - self.topView.height);
     self.titleLabel.centerX = self.centerX;
     self.titleLabel.centerY = self.closeButton.centerY;

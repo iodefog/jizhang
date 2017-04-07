@@ -81,7 +81,7 @@
         NSString *gString = [cString substringWithRange:range];
         range.location = 4;
         NSString *bString = [cString substringWithRange:range];
-        range.location = 4;
+        range.location = 6;
         NSString *aString = [cString substringWithRange:range];
         // Scan values
         unsigned int r, g, b ,a;

@@ -8,6 +8,7 @@
 
 #import "SSJRecordMakingStore.h"
 #import "SSJDatabaseQueue.h"
+#import "NSString+ReplaceUnicode.h"
 
 @implementation SSJRecordMakingStore
 
@@ -17,6 +18,7 @@
     [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
         NSString *userId = SSJUSERID();
         NSString *editeTime = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+                
         if (!item.booksId.length) {
             item.booksId = [db stringForQuery:@"select ccurrentbooksid from bk_user where cuserid = ?",userId];
         }
@@ -30,6 +32,8 @@
         if (!item.ID.length) {
             item.ID = SSJUUID();
         }
+        
+        
         if (item.chargeImage.length && !item.chargeThumbImage.length) {
             NSString *imageName = [item.chargeImage copy];
             if (![item.chargeImage hasSuffix:@".jpg"]) {

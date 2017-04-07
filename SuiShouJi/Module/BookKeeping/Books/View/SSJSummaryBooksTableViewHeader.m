@@ -369,7 +369,7 @@
     _curveView.scaleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor];
     _curveView.balloonTitleAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:13],
                                           NSForegroundColorAttributeName:[UIColor whiteColor],
-                                          NSBackgroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor]};
+                                          NSBackgroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.bookKeepingHomeMutiButtonSelectColor]};
 }
 
 @end
