@@ -30,10 +30,10 @@
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         CGSize screenSize = [UIScreen mainScreen].bounds.size;
-        if (CGSizeEqualToSize(screenSize, CGSizeMake(320.0, 568.0))) {
-            image = [UIImage imageNamed:[NSString stringWithFormat:@"%@-568",imageName]];
-        } else if (CGSizeEqualToSize(screenSize, CGSizeMake(375.0, 667.0))) {
-            image = [UIImage imageNamed:[NSString stringWithFormat:@"%@-667",imageName]];
+        if (CGSizeEqualToSize(screenSize, CGSizeMake(768.0, 1024.0))) {
+            image = [UIImage imageNamed:[NSString stringWithFormat:@"%@-1024",imageName]];
+        } else if (CGSizeEqualToSize(screenSize, CGSizeMake(1536.0, 2048.0))) {
+            image = [UIImage imageNamed:[NSString stringWithFormat:@"%@-2048",imageName]];
         }
     }
     

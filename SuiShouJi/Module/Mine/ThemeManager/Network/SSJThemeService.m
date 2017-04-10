@@ -19,7 +19,7 @@
     [super requestDidFinish:rootElement];
     if ([self.returnCode isEqualToString:@"1"]) {
         NSDictionary *results = [rootElement objectForKey:@"results"];
-        NSMutableArray *themeArray = [SSJThemeItem mj_objectArrayWithKeyValuesArray:results];
+        NSMutableArray *themeArray = [SSJThemeItem mj_objectArrayWithKeyValuesArray:[results objectForKey:@"themeconfig"]];
         SSJThemeItem *item = [[SSJThemeItem alloc]init];
         item.themeId = @"0";
         item.themeTitle = @"官方白";
