@@ -6771,18 +6771,6 @@
 		9CA5F0BB1DD02BF8003E72E8 /* SSJSummaryBooksHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CA5F0BA1DD02BF8003E72E8 /* SSJSummaryBooksHeaderView.m */; };
 		9CA5F0C51DD047DB003E72E8 /* SSJSummaryBooksTableViewHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CA5F0C41DD047DB003E72E8 /* SSJSummaryBooksTableViewHeader.m */; };
 		9CA5F0C91DD06479003E72E8 /* SSJSummaryBooksViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CA5F0C81DD06479003E72E8 /* SSJSummaryBooksViewController.m */; };
-		9CA6E39A1E964E52003D91AB /* NSString+ReplaceUnicode.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CA6E3991E964E52003D91AB /* NSString+ReplaceUnicode.m */; };
-		9CA6E39B1E964E52003D91AB /* NSString+ReplaceUnicode.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CA6E3991E964E52003D91AB /* NSString+ReplaceUnicode.m */; };
-		9CA6E39C1E964E52003D91AB /* NSString+ReplaceUnicode.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CA6E3991E964E52003D91AB /* NSString+ReplaceUnicode.m */; };
-		9CA6E39D1E964E52003D91AB /* NSString+ReplaceUnicode.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CA6E3991E964E52003D91AB /* NSString+ReplaceUnicode.m */; };
-		9CA6E39E1E964E52003D91AB /* NSString+ReplaceUnicode.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CA6E3991E964E52003D91AB /* NSString+ReplaceUnicode.m */; };
-		9CA6E39F1E964E52003D91AB /* NSString+ReplaceUnicode.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CA6E3991E964E52003D91AB /* NSString+ReplaceUnicode.m */; };
-		9CA6E3A01E964E52003D91AB /* NSString+ReplaceUnicode.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CA6E3991E964E52003D91AB /* NSString+ReplaceUnicode.m */; };
-		9CA6E3A11E964E52003D91AB /* NSString+ReplaceUnicode.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CA6E3991E964E52003D91AB /* NSString+ReplaceUnicode.m */; };
-		9CA6E3A21E964E52003D91AB /* NSString+ReplaceUnicode.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CA6E3991E964E52003D91AB /* NSString+ReplaceUnicode.m */; };
-		9CA6E3A31E964E52003D91AB /* NSString+ReplaceUnicode.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CA6E3991E964E52003D91AB /* NSString+ReplaceUnicode.m */; };
-		9CA6E3A41E964E52003D91AB /* NSString+ReplaceUnicode.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CA6E3991E964E52003D91AB /* NSString+ReplaceUnicode.m */; };
-		9CA6E3A51E964E52003D91AB /* NSString+ReplaceUnicode.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CA6E3991E964E52003D91AB /* NSString+ReplaceUnicode.m */; };
 		9CAF730F1E03E8C40061ADB8 /* SSJHomeLoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CAF730E1E03E8C40061ADB8 /* SSJHomeLoadingView.m */; };
 		9CAF73191E03E8CA0061ADB8 /* SSJHomeLoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CAF730E1E03E8C40061ADB8 /* SSJHomeLoadingView.m */; };
 		9CAF731C1E03EAD90061ADB8 /* xiaomao.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9CAF731B1E03EAD90061ADB8 /* xiaomao.gif */; };
@@ -8385,8 +8373,6 @@
 		9CA5F0C41DD047DB003E72E8 /* SSJSummaryBooksTableViewHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJSummaryBooksTableViewHeader.m; sourceTree = "<group>"; };
 		9CA5F0C71DD06479003E72E8 /* SSJSummaryBooksViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJSummaryBooksViewController.h; sourceTree = "<group>"; };
 		9CA5F0C81DD06479003E72E8 /* SSJSummaryBooksViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJSummaryBooksViewController.m; sourceTree = "<group>"; };
-		9CA6E3981E964E52003D91AB /* NSString+ReplaceUnicode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+ReplaceUnicode.h"; sourceTree = "<group>"; };
-		9CA6E3991E964E52003D91AB /* NSString+ReplaceUnicode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+ReplaceUnicode.m"; sourceTree = "<group>"; };
 		9CAF730D1E03E8C40061ADB8 /* SSJHomeLoadingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJHomeLoadingView.h; sourceTree = "<group>"; };
 		9CAF730E1E03E8C40061ADB8 /* SSJHomeLoadingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJHomeLoadingView.m; sourceTree = "<group>"; };
 		9CAF731B1E03EAD90061ADB8 /* xiaomao.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = xiaomao.gif; sourceTree = "<group>"; };
@@ -9065,8 +9051,6 @@
 				7D22A2F81E4F16AC00190CEB /* SSJObjectAddition.m */,
 				7D22A2F91E4F16AC00190CEB /* SSJStringAddition.h */,
 				7D22A2FA1E4F16AC00190CEB /* SSJStringAddition.m */,
-				9CA6E3981E964E52003D91AB /* NSString+ReplaceUnicode.h */,
-				9CA6E3991E964E52003D91AB /* NSString+ReplaceUnicode.m */,
 			);
 			path = Foundation;
 			sourceTree = "<group>";
@@ -13819,7 +13803,6 @@
 				7D08A14F1E4999D30085A8FB /* SSJUserItem.m in Sources */,
 				7D08A1501E4999D30085A8FB /* SSJMemoMakingView.m in Sources */,
 				7D08A1511E4999D30085A8FB /* SSJMineHomeTableViewHeader.m in Sources */,
-				9CA6E39F1E964E52003D91AB /* NSString+ReplaceUnicode.m in Sources */,
 				7DCA2A2D1E4C9D0800B60F4F /* SSJHomeDatePickerView.m in Sources */,
 				7D08A1531E4999D30085A8FB /* SSJCircleChargeTypeSelectView.m in Sources */,
 				7D08A1541E4999D30085A8FB /* SSJBooksTypeStore.m in Sources */,
@@ -14412,7 +14395,6 @@
 				7DA13AA61E35AED7000490A4 /* SSJUserItem.m in Sources */,
 				7DA13AA71E35AED7000490A4 /* SSJMemoMakingView.m in Sources */,
 				7DA13AA81E35AED7000490A4 /* SSJMineHomeTableViewHeader.m in Sources */,
-				9CA6E39E1E964E52003D91AB /* NSString+ReplaceUnicode.m in Sources */,
 				7DCA2A2C1E4C9D0700B60F4F /* SSJHomeDatePickerView.m in Sources */,
 				7DA13AAA1E35AED7000490A4 /* SSJCircleChargeTypeSelectView.m in Sources */,
 				7DA13AAB1E35AED7000490A4 /* SSJBooksTypeStore.m in Sources */,
@@ -15005,7 +14987,6 @@
 				7DBB3B301E55C2EE0075E638 /* SSJRegistGetVerViewController.m in Sources */,
 				7DBB3B311E55C2EE0075E638 /* SSJMagicExportSuccessAlertView.m in Sources */,
 				7DBB3B321E55C2EE0075E638 /* SSJFundingTypeSelectView.m in Sources */,
-				9CA6E3A01E964E52003D91AB /* NSString+ReplaceUnicode.m in Sources */,
 				7DBB3B331E55C2EE0075E638 /* SSJReminderEditeViewController.m in Sources */,
 				7DBB3B341E55C2EE0075E638 /* SSJUserItem.m in Sources */,
 				7DBB3B351E55C2EE0075E638 /* SSJMemoMakingView.m in Sources */,
@@ -15598,7 +15579,6 @@
 				7DBB3D7D1E55C4220075E638 /* SSJRegistGetVerViewController.m in Sources */,
 				7DBB3D7E1E55C4220075E638 /* SSJMagicExportSuccessAlertView.m in Sources */,
 				7DBB3D7F1E55C4220075E638 /* SSJFundingTypeSelectView.m in Sources */,
-				9CA6E3A11E964E52003D91AB /* NSString+ReplaceUnicode.m in Sources */,
 				7DBB3D801E55C4220075E638 /* SSJReminderEditeViewController.m in Sources */,
 				7DBB3D811E55C4220075E638 /* SSJUserItem.m in Sources */,
 				7DBB3D821E55C4220075E638 /* SSJMemoMakingView.m in Sources */,
@@ -16191,7 +16171,6 @@
 				7DBB3FCB1E55C4E00075E638 /* SSJRegistGetVerViewController.m in Sources */,
 				7DBB3FCC1E55C4E00075E638 /* SSJMagicExportSuccessAlertView.m in Sources */,
 				7DBB3FCD1E55C4E00075E638 /* SSJFundingTypeSelectView.m in Sources */,
-				9CA6E39B1E964E52003D91AB /* NSString+ReplaceUnicode.m in Sources */,
 				7DBB3FCE1E55C4E00075E638 /* SSJReminderEditeViewController.m in Sources */,
 				7DBB3FCF1E55C4E00075E638 /* SSJUserItem.m in Sources */,
 				7DBB3FD01E55C4E00075E638 /* SSJMemoMakingView.m in Sources */,
@@ -16634,7 +16613,6 @@
 				9C13F5121E8267D300AC5FA9 /* SSJBaseItem.m in Sources */,
 				9C13F5131E8267D300AC5FA9 /* SSJChargeSearchingStore.m in Sources */,
 				9C13F5141E8267D300AC5FA9 /* SSJMagicExportStore.m in Sources */,
-				9CA6E3A31E964E52003D91AB /* NSString+ReplaceUnicode.m in Sources */,
 				9C13F5151E8267D300AC5FA9 /* SSJImageAddition.m in Sources */,
 				9C13F5161E8267D300AC5FA9 /* SSJPasswordModifyService.m in Sources */,
 				9C13F5171E8267D300AC5FA9 /* SSJFundingTransferStore.m in Sources */,
@@ -17369,7 +17347,6 @@
 				9C3847E41E641CAB00BF4AF9 /* SSJRegistGetVerViewController.m in Sources */,
 				9C3847E51E641CAB00BF4AF9 /* SSJMagicExportSuccessAlertView.m in Sources */,
 				9C3847E61E641CAB00BF4AF9 /* SSJFundingTypeSelectView.m in Sources */,
-				9CA6E3A21E964E52003D91AB /* NSString+ReplaceUnicode.m in Sources */,
 				9C3847E71E641CAB00BF4AF9 /* SSJReminderEditeViewController.m in Sources */,
 				9C3847E81E641CAB00BF4AF9 /* SSJUserItem.m in Sources */,
 				9C3847E91E641CAB00BF4AF9 /* SSJMemoMakingView.m in Sources */,
@@ -17948,7 +17925,6 @@
 				9C7D2DA21E8DF8A80093001F /* SSJFinancingHomeHelper.m in Sources */,
 				9C7D2DA31E8DF8A80093001F /* SCYSlidePagingHeaderView+SSJTheme.m in Sources */,
 				9C7D2DA41E8DF8A80093001F /* FMTokenizers.m in Sources */,
-				9CA6E39A1E964E52003D91AB /* NSString+ReplaceUnicode.m in Sources */,
 				9C7D2DA51E8DF8A80093001F /* SSJBudgetDetailMiddleTitleView.m in Sources */,
 				9C7D2DA61E8DF8A80093001F /* SSJLoanDetailViewController.m in Sources */,
 				9C7D2DA71E8DF8A80093001F /* SSJBalenceChangeDetailViewController.m in Sources */,
@@ -18535,7 +18511,6 @@
 				9C7D30191E8DF96B0093001F /* SSJFinancingHomeHelper.m in Sources */,
 				9C7D301A1E8DF96B0093001F /* SCYSlidePagingHeaderView+SSJTheme.m in Sources */,
 				9C7D301B1E8DF96B0093001F /* FMTokenizers.m in Sources */,
-				9CA6E3A41E964E52003D91AB /* NSString+ReplaceUnicode.m in Sources */,
 				9C7D301C1E8DF96B0093001F /* SSJBudgetDetailMiddleTitleView.m in Sources */,
 				9C7D301D1E8DF96B0093001F /* SSJLoanDetailViewController.m in Sources */,
 				9C7D301E1E8DF96B0093001F /* SSJBalenceChangeDetailViewController.m in Sources */,
@@ -19279,7 +19254,6 @@
 				9C80FDF91E95E88E00B1BAAC /* SSJPercentCircleAdditionGroupNode.m in Sources */,
 				9C80FDFA1E95E88E00B1BAAC /* SSJCreditRepaymentSyncTable.m in Sources */,
 				9C80FDFB1E95E88E00B1BAAC /* SSJDataClearHelper.m in Sources */,
-				9CA6E3A51E964E52003D91AB /* NSString+ReplaceUnicode.m in Sources */,
 				9C80FDFC1E95E88E00B1BAAC /* SSJLoanListSectionHeaderAmountView.m in Sources */,
 				9C80FDFD1E95E88E00B1BAAC /* SSJCalenderDetailHeader.m in Sources */,
 				9C80FDFE1E95E88E00B1BAAC /* SSJNewCategoryCollectionView.m in Sources */,
@@ -19666,7 +19640,6 @@
 				7DB9F82B1DFFC9230084E998 /* SSJReportFormsNoDataCellItem.m in Sources */,
 				9CECFB831D6D41A700DB2C8B /* SSJForgotPSWSendVerCodeService.m in Sources */,
 				9CECFB841D6D41A700DB2C8B /* SSJMagicExportCalendarIndexPath.m in Sources */,
-				9CA6E39D1E964E52003D91AB /* NSString+ReplaceUnicode.m in Sources */,
 				7D22A3541E4F16AC00190CEB /* SSJImageAddition.m in Sources */,
 				9CECFB851D6D41A700DB2C8B /* SSJMotionPasswordLoginPasswordAlertView.m in Sources */,
 				9C9A0C151D6D9550002AF046 /* SSJReminderViewController.m in Sources */,
@@ -20457,7 +20430,6 @@
 				7DEF54631C76B46300A90153 /* SSJPercentCircleAdditionGroupNode.m in Sources */,
 				9CFBAC441E07E6F700C55814 /* SSJCreditRepaymentSyncTable.m in Sources */,
 				9C9DD6561D475A13001FA3C5 /* SSJDataClearHelper.m in Sources */,
-				9CA6E39C1E964E52003D91AB /* NSString+ReplaceUnicode.m in Sources */,
 				7D1DB4361D6AA924006C2AC2 /* SSJLoanListSectionHeaderAmountView.m in Sources */,
 				9C1723921D5327F700BB13DE /* SSJCalenderDetailHeader.m in Sources */,
 				7D5F337F1CEAE6C10086B67E /* SSJNewCategoryCollectionView.m in Sources */,

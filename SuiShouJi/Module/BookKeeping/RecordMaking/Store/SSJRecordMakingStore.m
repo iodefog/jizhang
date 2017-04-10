@@ -8,7 +8,6 @@
 
 #import "SSJRecordMakingStore.h"
 #import "SSJDatabaseQueue.h"
-#import "NSString+ReplaceUnicode.h"
 
 @implementation SSJRecordMakingStore
 
