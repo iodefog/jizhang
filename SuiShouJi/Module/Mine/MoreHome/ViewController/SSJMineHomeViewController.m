@@ -459,6 +459,15 @@ static BOOL kNeedBannerDisplay = YES;
         layout.itemSize = CGSizeMake(SSJSCREENWITH/kColum, 100);
         layout.headerReferenceSize = CGSizeMake(SSJSCREENWITH, 0);//头的高度
         if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
+            CGSize screenSize = [UIScreen mainScreen].bounds.size;
+            double footerHeight = 0;
+            if (CGSizeEqualToSize(screenSize, CGSizeMake(768.0, 1024.0))) {
+                footerHeight = 118;
+            } else if (CGSizeEqualToSize(screenSize, CGSizeMake(1536.0, 2048.0))) {
+                footerHeight = 236;
+            } else {
+                footerHeight = 150;
+            }
             layout.footerReferenceSize = CGSizeMake(SSJSCREENWITH, 150);//头的高度
         } else {
             layout.footerReferenceSize = CGSizeMake(SSJSCREENWITH, 0);//头的高度

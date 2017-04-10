@@ -147,35 +147,19 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
     SSJBaseItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
     __weak typeof(self) weakSelf = self;
     SSJFinancingHomeCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:SSJFinancingNormalCellIdentifier forIndexPath:indexPath];
-    if ([item isKindOfClass:[SSJFinancingHomeitem class]]) {
-        cell.financingItem = (SSJFinancingHomeitem *)item;
-        cell.creditItem = nil;
-    } else {
-        cell.creditItem = (SSJCreditCardItem *)item;
-        cell.financingItem = nil;
-
-    }
-
+    cell.item = item;
     cell.editeModel = _editeModel;
     cell.deleteButtonClickBlock = ^(SSJFinancingHomeCell *cell,NSInteger chargeCount){
-        SSJBaseItem *deleteItem;
-        if (cell.financingItem) {
-            deleteItem = cell.financingItem;
-        } else {
-            deleteItem = cell.creditItem;
-
-        }
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"确定要删除该资金账户吗?" preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:NULL];
         UIAlertAction *comfirm = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
             if (chargeCount) {
                 UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"删除该资金后，是否将展示在首页和报表的流水及相关借贷数据一并删除" preferredStyle:UIAlertControllerStyleAlert];
                 UIAlertAction *reserve = [UIAlertAction actionWithTitle:@"仅删除资金" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-
-                    [weakSelf deleteFundingItem:deleteItem type:0];
+                    [weakSelf deleteFundingItem:cell.item type:0];
                 }];
                 UIAlertAction *destructive = [UIAlertAction actionWithTitle:@"一并删除" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
-                    [weakSelf deleteFundingItem:deleteItem type:1];
+                    [weakSelf deleteFundingItem:cell.item type:1];
                 }];
                 UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
                 }];
@@ -184,7 +168,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
                 [alert addAction:cancel];
                 [weakSelf presentViewController:alert animated:YES completion:NULL];
             }else{
-                [weakSelf deleteFundingItem:deleteItem type:0];
+                [weakSelf deleteFundingItem:cell.item type:0];
             }
         }];
         [alert addAction:cancel];
@@ -361,9 +345,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
             [weakSelf.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:result.count - 1 inSection:0] atScrollPosition:UICollectionViewScrollPositionBottom animated:NO];
             weakSelf.newlyAddFundId = nil;
         }else{
-            if (!KHasEnterFinancingHome) {
-                [weakSelf.collectionView reloadData];
-            }
+            [weakSelf.collectionView reloadData];
         }
         [weakSelf.collectionView ssj_hideLoadingIndicator];
         
@@ -406,6 +388,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
     self.collectionView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     self.headerView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
 //    self.navigationItem.rightBarButtonItem.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    [self.collectionView reloadData];
 }
 
 - (void)didReceiveMemoryWarning {
