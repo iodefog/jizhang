@@ -160,7 +160,7 @@ static BOOL kNeedBannerDisplay = YES;
     self.navigationItem.rightBarButtonItem = rightItem;
     
     //    [self getCircleChargeState];
-    self.navigationItem.rightBarButtonItem.tintColor = [UIColor ssj_colorWithHex:@"eb4a64"];
+    self.navigationItem.rightBarButtonItem.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTintColor];
 }
 
 - (void)viewDidAppear:(BOOL)animated {

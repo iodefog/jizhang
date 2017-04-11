@@ -70,6 +70,7 @@
 
 - (void)updateAfterThemeChange {
     _button.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTintColor];
+    self.dotView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTintColor];
 }
 
 /*

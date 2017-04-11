@@ -193,4 +193,10 @@
 // 资金详情次要文字透明度
 @property (nonatomic) CGFloat financingDetailSecondaryAlpha;
 
+// 通屏按钮的背景色
+@property (nonatomic, copy) NSString *throughScreenButtonBackGroudColor;
+
+// 通屏按钮的透明度
+@property (nonatomic) CGFloat throughScreenButtonAlpha;
+
 @end

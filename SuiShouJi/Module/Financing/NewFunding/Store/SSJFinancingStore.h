@@ -15,4 +15,6 @@
                 Success:(void (^)(SSJFinancingHomeitem *item))success
                 failure:(void (^)(NSError *error))failure;
 
++ (BOOL)checkWhetherSameFundingNameExsitsWith:(SSJFinancingHomeitem *)item ;
+
 @end

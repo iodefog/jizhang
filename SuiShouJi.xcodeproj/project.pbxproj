@@ -11646,8 +11646,8 @@
 		9CF593F31D63FFBB00006594 /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
-				9CEC60F01E700F780087B361 /* SSJModifyFundingViewController.m */,
 				9CEC60F11E700F780087B361 /* SSJModifyFundingViewController.h */,
+				9CEC60F01E700F780087B361 /* SSJModifyFundingViewController.m */,
 				9CF593F41D63FFBB00006594 /* SSJColorSelectViewController.h */,
 				9CF593F51D63FFBB00006594 /* SSJColorSelectViewController.m */,
 				9CF593F61D63FFBB00006594 /* SSJFundingTypeSelectViewController.h */,
@@ -21022,7 +21022,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/SuiShouJi/Resource/Entitlements/SuiShouJi.entitlements";
+				CODE_SIGN_ENTITLEMENTS = SuiShouJi/Resource/Entitlements/SuiShouJi.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Pingxi Fan (Z6G7KSGD6Q)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Pingxi Fan (Z6G7KSGD6Q)";
 				DEVELOPMENT_TEAM = Z8SZ588DYT;
@@ -21694,7 +21694,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/SuiShouJi/Resource/Entitlements/SuiShouJi.entitlements";
+				CODE_SIGN_ENTITLEMENTS = SuiShouJi/Resource/Entitlements/SuiShouJi.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Pingxi Fan (Z8SZ588DYT)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Pingxi Fan (Z8SZ588DYT)";
 				DEVELOPMENT_TEAM = Z8SZ588DYT;
@@ -25293,7 +25293,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/SuiShouJi/Resource/Entitlements/SuiShouJi.entitlements";
+				CODE_SIGN_ENTITLEMENTS = SuiShouJi/Resource/Entitlements/SuiShouJi.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Pingxi Fan (Z6G7KSGD6Q)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Pingxi Fan (Z6G7KSGD6Q)";
 				DEVELOPMENT_TEAM = Z8SZ588DYT;
@@ -25394,7 +25394,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/SuiShouJi/Resource/Entitlements/SuiShouJi.entitlements";
+				CODE_SIGN_ENTITLEMENTS = SuiShouJi/Resource/Entitlements/SuiShouJi.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Pingxi Fan (Z8SZ588DYT)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Pingxi Fan (Z8SZ588DYT)";
 				DEVELOPMENT_TEAM = Z8SZ588DYT;

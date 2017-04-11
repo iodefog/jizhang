@@ -454,25 +454,46 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
     
     _featuredCategoryCollectionView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     
-    [_sureButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor alpha:0.8] forState:UIControlStateNormal];
+    [_featureDeleteButton ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor]];
+
+    [_customDeleteButton ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor]];
+
+    [_sureButton ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor]];
+
+    [_editButton ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor]];
+    
+    if (SSJ_CURRENT_THEME.throughScreenButtonBackGroudColor.length) {
+        [_featureDeleteButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.throughScreenButtonBackGroudColor alpha:SSJ_CURRENT_THEME.throughScreenButtonAlpha] forState:UIControlStateNormal];
+        
+        
+        [_customDeleteButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.throughScreenButtonBackGroudColor alpha:SSJ_CURRENT_THEME.throughScreenButtonAlpha] forState:UIControlStateNormal];
+        
+        [_sureButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.throughScreenButtonBackGroudColor alpha:SSJ_CURRENT_THEME.throughScreenButtonAlpha] forState:UIControlStateNormal];
+        
+        [_editButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.throughScreenButtonBackGroudColor alpha:SSJ_CURRENT_THEME.throughScreenButtonAlpha] forState:UIControlStateNormal];
+        
+    } else {
+        [_featureDeleteButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor alpha:0.8] forState:UIControlStateNormal];
+        
+        [_customDeleteButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor alpha:0.8] forState:UIControlStateNormal];
+        
+        [_sureButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor alpha:0.8] forState:UIControlStateNormal];
+
+        [_editButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor alpha:0.8] forState:UIControlStateNormal];
+
+    }
     
     if ([SSJCurrentThemeID() isEqualToString:SSJDefaultThemeID]) {
         [_featureDeleteButton setTitleColor:[UIColor ssj_colorWithHex:@"#eb4a64"] forState:UIControlStateNormal];
-        [_featureDeleteButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"#dddddd" alpha:0.8] forState:UIControlStateNormal];
         
         [_customDeleteButton setTitleColor:[UIColor ssj_colorWithHex:@"#eb4a64"] forState:UIControlStateNormal];
-        [_customDeleteButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"#f6f6f6"] forState:UIControlStateNormal];
         
-        [_editButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"#dddddd" alpha:0.8] forState:UIControlStateNormal];
         
     } else {
         [_featureDeleteButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] forState:UIControlStateNormal];
-        [_featureDeleteButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor alpha:0.8] forState:UIControlStateNormal];
         
         [_customDeleteButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] forState:UIControlStateNormal];
-        [_customDeleteButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"#FFFFFF" alpha:0.3] forState:UIControlStateNormal];
         
-        [_editButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor] forState:UIControlStateNormal];
     }
     
     [self updateEditButtonTitleColor];
@@ -706,7 +727,8 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
         _sureButton.frame = CGRectMake(0, self.view.height - 50, self.view.width, 50);
         _sureButton.titleLabel.font = [UIFont systemFontOfSize:20];
         [_sureButton setTitle:@"确定" forState:UIControlStateNormal];
-        [_sureButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [_sureButton ssj_setBorderStyle:SSJBorderStyleTop];
+        [_sureButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] forState:UIControlStateNormal];
         [_sureButton addTarget:self action:@selector(sureButtonAction) forControlEvents:UIControlEventTouchUpInside];
     }
     return _sureButton;
@@ -716,6 +738,7 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
     if (!_editButton) {
         _editButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _editButton.frame = CGRectMake(0, self.view.height - 54, self.view.width * 0.6, 54);
+        [_editButton ssj_setBorderStyle:SSJBorderStyleTop | SSJBorderStyleRight];
         _editButton.titleLabel.font = [UIFont systemFontOfSize:20];
         [_editButton addTarget:self action:@selector(editButtonAction) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -728,6 +751,7 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
         _featureDeleteButton.frame = CGRectMake(0, self.view.height - 54, self.view.width, 54);
         _featureDeleteButton.titleLabel.font = [UIFont systemFontOfSize:20];
         [_featureDeleteButton setTitle:@"删除" forState:UIControlStateNormal];
+        [_featureDeleteButton ssj_setBorderStyle:SSJBorderStyleTop];
         [_featureDeleteButton addTarget:self action:@selector(featureDeleteButtonAction) forControlEvents:UIControlEventTouchUpInside];
     }
     return _featureDeleteButton;
@@ -738,6 +762,7 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
         _customDeleteButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _customDeleteButton.frame = CGRectMake(self.view.width * 0.6, self.view.height - 54, self.view.width * 0.4, 54);
         _customDeleteButton.titleLabel.font = [UIFont systemFontOfSize:20];
+        [_customDeleteButton ssj_setBorderStyle:SSJBorderStyleTop];
         [_customDeleteButton setTitle:@"删除" forState:UIControlStateNormal];
         [_customDeleteButton addTarget:self action:@selector(customDeleteButtonAction) forControlEvents:UIControlEventTouchUpInside];
     }
