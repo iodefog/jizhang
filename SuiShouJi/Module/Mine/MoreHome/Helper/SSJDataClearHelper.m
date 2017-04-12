@@ -35,8 +35,12 @@
             && [db executeUpdate:@"delete from bk_books_type where cuserid = ?", userId]
             && [db executeUpdate:@"delete from bk_dailysum_charge where cuserid = ?", userId]
             && [db executeUpdate:@"delete from bk_sync where cuserid = ?", userId]
-            && [db executeUpdate:@"delete from bk_credit_repayment where cuserid = ?", userId]) {
-            
+            && [db executeUpdate:@"delete from bk_credit_repayment where cuserid = ?", userId]
+            && [db executeUpdate:@"delete from bk_loan where cuserid = ?", userId]
+            && [db executeUpdate:@"delete from bk_user_credit where cuserid = ?", userId]
+            && [db executeUpdate:@"delete from bk_transfer_cycle where cuserid = ?", userId]
+            && [db executeUpdate:@"delete from bk_user_remind where cuserid = ?", userId]) {
+              
             [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:^(SSJDataSynchronizeType type) {
                 if (success) {
                     success();
