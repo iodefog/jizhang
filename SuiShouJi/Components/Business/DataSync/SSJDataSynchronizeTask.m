@@ -176,6 +176,9 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
                 
                 //  将数据解压
                 NSError *tError = nil;
+//                NSString *path = [[NSBundle mainBundle]pathForResource:@"sync_data" ofType:@"json" ];
+//                NSData *jsonData = [[NSData alloc] initWithContentsOfFile:path];
+                
                 NSData *jsonData = [self unzipData:responseObject error:&tError];
                 
                 if (tError) {
