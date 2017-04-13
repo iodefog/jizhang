@@ -8210,8 +8210,7 @@
 		9C47E6EE1D222A26005F338A /* SSJDownLoadProgressButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDownLoadProgressButton.m; sourceTree = "<group>"; };
 		9C47E6F01D224BEF005F338A /* SSJThemeService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJThemeService.h; sourceTree = "<group>"; };
 		9C47E6F11D224BEF005F338A /* SSJThemeService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJThemeService.m; sourceTree = "<group>"; };
-		9C4C226F1E9E30C8000C5F15 /* 9188jizhangben.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 9188jizhangben.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		9C4C22701E9E30CC000C5F15 /* SuiShouJi copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "SuiShouJi copy-Info.plist"; path = "/Users/ricky/accountbook_ios/SuiShouJi copy-Info.plist"; sourceTree = "<absolute>"; };
+		9C4C226F1E9E30C8000C5F15 /* 9188JiZhangBen.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 9188JiZhangBen.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C4C22721E9F1B54000C5F15 /* 9188jizhangben.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = 9188jizhangben.entitlements; sourceTree = "<group>"; };
 		9C4EBC931D7D1C4B00BE4982 /* SSJThirdPartLoginItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJThirdPartLoginItem.h; sourceTree = "<group>"; };
 		9C4EBC941D7D1C4B00BE4982 /* SSJThirdPartLoginItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJThirdPartLoginItem.m; sourceTree = "<group>"; };
@@ -11982,7 +11981,6 @@
 				BD543C3D1C1A6DBC00910D61 /* Products */,
 				72D2CCC3D3120C3CD45EDEB9 /* Frameworks */,
 				E6893A8F0ECE55E957399C9D /* Pods */,
-				9C4C22701E9E30CC000C5F15 /* SuiShouJi copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -12002,7 +12000,7 @@
 				9C7D2F511E8DF8A80093001F /* YouYuJiZhangPro.app */,
 				9C7D31C81E8DF96B0093001F /* 9188JiZhangPro.app */,
 				9C80FF0E1E95E88E00B1BAAC /* YouYuJiZhang.app */,
-				9C4C226F1E9E30C8000C5F15 /* 9188jizhangben.app */,
+				9C4C226F1E9E30C8000C5F15 /* 9188JiZhangBen.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -12417,7 +12415,7 @@
 			);
 			name = 9188JiZhangBen;
 			productName = SuiShouJi;
-			productReference = 9C4C226F1E9E30C8000C5F15 /* 9188jizhangben.app */;
+			productReference = 9C4C226F1E9E30C8000C5F15 /* 9188JiZhangBen.app */;
 			productType = "com.apple.product-type.application";
 		};
 		9C7D2CDC1E8DF8A80093001F /* YouYuJiZhangPro */ = {
@@ -23406,7 +23404,7 @@
 					"COCOAPODS=1",
 					"SD_WEBP=1",
 				);
-				INFOPLIST_FILE = "SuiShouJi copy-Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/SuiShouJi/Resource/Plist/9188JiZhangBen-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
@@ -23507,7 +23505,7 @@
 					"COCOAPODS=1",
 					"SD_WEBP=1",
 				);
-				INFOPLIST_FILE = "SuiShouJi copy-Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/SuiShouJi/Resource/Plist/9188JiZhangBen-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
@@ -23609,7 +23607,7 @@
 					"COCOAPODS=1",
 					"SD_WEBP=1",
 				);
-				INFOPLIST_FILE = "SuiShouJi copy-Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/SuiShouJi/Resource/Plist/9188JiZhangBen-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
@@ -23709,7 +23707,7 @@
 					"COCOAPODS=1",
 					"SD_WEBP=1",
 				);
-				INFOPLIST_FILE = "SuiShouJi copy-Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/SuiShouJi/Resource/Plist/9188JiZhangBen-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
