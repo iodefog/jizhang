@@ -117,7 +117,7 @@
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
         NSString *userId = SSJUSERID();
         NSString *fundid = item.fundingID ? : @"";
-        NSInteger count = [db intForQuery:@"select count(1) from bk_fund_info where cuserid = ? and CACCTNAME = ? and cfundid <> ?",userId,item.fundingName,fundid];
+        NSInteger count = [db intForQuery:@"select count(1) from bk_fund_info where cuserid = ? and CACCTNAME = ? and cfundid <> ? and operatortype <> 2",userId,item.fundingName,fundid];
         if (count > 0 ) {
             exsit = YES;
         } else {
