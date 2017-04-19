@@ -46,6 +46,15 @@
         [self ssj_setBorderStyle:SSJBorderStyleBottom];
         [self ssj_setBorderWidth:1.f];
         [self ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
+        
+#ifdef PRODUCTION
+#else
+        UILabel *testLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.width, 30)];
+        testLabel.text = @"当前是测试环境";
+        testLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.moreHomeTitleColor];
+        testLabel.textAlignment = NSTextAlignmentCenter;
+        [self addSubview:testLabel];
+#endif
 
     }
     return self;
