@@ -28,9 +28,10 @@
 
 - (void)layoutSubviews{
     [super layoutSubviews];
-    self.booksImage.left = 0;
+//    self.booksImage.left = 0;
     self.booksImage.centerY = self.height / 2;
     self.button.frame = self.bounds;
+    self.booksImage.centerX = self.button.centerX;
 }
 
 - (UIButton *)button{

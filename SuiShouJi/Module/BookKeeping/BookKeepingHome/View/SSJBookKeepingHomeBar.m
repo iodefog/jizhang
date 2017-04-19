@@ -38,9 +38,9 @@
     if (self.isAnimating) {
         self.budgetButton.centerX = self.width / 2;
         self.budgetButton.top = 15;
-        self.leftButton.left = 10;
+        self.leftButton.left = 15;
         self.leftButton.centerY = self.budgetButton.centerY;
-        self.rightBarButton.right = self.width - 10;
+        self.rightBarButton.right = self.width - 15;
         self.rightBarButton.centerY = self.budgetButton.centerY;
         self.loadingView.centerX = self.statusLab.centerX = self.width / 2;
         self.loadingView.top = self.budgetButton.bottom + 5;
@@ -48,9 +48,9 @@
     } else {
         self.budgetButton.centerX = self.width / 2;
         self.budgetButton.bottom = self.height;
-        self.leftButton.left = 10;
+        self.leftButton.left = 15;
         self.leftButton.centerY = 10 + self.height / 2;
-        self.rightBarButton.right = self.width - 10;
+        self.rightBarButton.right = self.width - 15;
         self.rightBarButton.centerY = 10 + self.height / 2;
         self.loadingView.centerX = self.statusLab.centerX = self.width / 2;
         self.loadingView.top = self.budgetButton.bottom + 5;
@@ -74,7 +74,7 @@
 
 - (SSJHomeBarCalenderButton*)rightBarButton{
     if (!_rightBarButton) {
-        _rightBarButton = [[SSJHomeBarCalenderButton alloc]initWithFrame:CGRectMake(0, 0, 50, 30)];
+        _rightBarButton = [[SSJHomeBarCalenderButton alloc]initWithFrame:CGRectMake(0, 0, 30, 32)];
         //        buttonView.layer.borderColor = [UIColor redColor].CGColor;
         //        buttonView.layer.borderWidth = 1;
     }
