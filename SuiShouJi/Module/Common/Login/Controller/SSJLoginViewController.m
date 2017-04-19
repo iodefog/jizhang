@@ -224,6 +224,12 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         [self.centerScrollViewOne addSubview:self.rightSeperatorLine];
         [self.centerScrollViewOne addSubview:self.tencentLoginButton];
         [self.centerScrollViewOne addSubview:self.weixinLoginButton];
+    } else {
+        [self.centerScrollViewOne addSubview:self.thirdPartyLoginLabel];
+        [self.centerScrollViewOne addSubview:self.leftSeperatorLine];
+        [self.centerScrollViewOne addSubview:self.rightSeperatorLine];
+        [self.centerScrollViewOne addSubview:self.tencentLoginButton];
+
     }
     
     [self ssj_showBackButtonWithTarget:self selector:@selector(goBackAction)];
@@ -871,6 +877,17 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
             self.tencentLoginButton.centerX = self.thirdPartyLoginLabel.centerX;
             self.weixinLoginButton.hidden = YES;
         }
+    } else {
+        self.thirdPartyLoginLabel.centerX = SSJSCREENWITH * 0.5;
+        self.thirdPartyLoginLabel.bottom = self.centerScrollViewOne.height - 100;
+        self.leftSeperatorLine.centerY = self.rightSeperatorLine.centerY = self.thirdPartyLoginLabel.centerY;
+        self.leftSeperatorLine.width = self.rightSeperatorLine.width = 45;
+        self.leftSeperatorLine.left =  (self.view.width - self.thirdPartyLoginLabel.width) * 0.5 - 55;
+        self.rightSeperatorLine.left = CGRectGetMaxX(self.thirdPartyLoginLabel.frame) + 10;
+        self.leftSeperatorLine.height = self.rightSeperatorLine.height = 1.0f / [UIScreen mainScreen].scale;
+        self.tencentLoginButton.top = CGRectGetMaxY(self.thirdPartyLoginLabel.frame) + 25;
+        self.tencentLoginButton.centerX = self.thirdPartyLoginLabel.centerX;
+        self.weixinLoginButton.hidden = YES;
     }
     
     //注册

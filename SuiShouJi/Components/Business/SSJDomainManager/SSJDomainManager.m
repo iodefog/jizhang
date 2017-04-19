@@ -11,7 +11,7 @@
 
 static NSString *const SSJDefaultFormalDomain = @"http://jz.youyuwo.com";
 
-static NSString *const SSJTestDomain = @"http://192.168.1.51:10012/";
+static NSString *const SSJTestDomain = @"http://account.gs.9188.com/";
 
 static NSString *const SSJTestImageDomain = @"http://account.gs.9188.com/jz";
 
@@ -23,6 +23,8 @@ static NSString *const kSSJDomainKey = @"SSJDomainManagerKey";
 @implementation SSJDomainManager
 
 + (NSString *)domain {
+    return SSJTestDomain;
+
 #ifdef PRODUCTION
     return [self formalDomain];
 #else

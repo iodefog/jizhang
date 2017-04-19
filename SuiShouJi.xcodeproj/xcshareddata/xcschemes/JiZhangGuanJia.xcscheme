@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0820"
+   LastUpgradeVersion = "0830"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "7DBB3CBE1E55C4220075E638"
+               BlueprintIdentifier = "9C9CEE561EA5F73A007657FE"
                BuildableName = "JiZhangGuanJia.app"
                BlueprintName = "JiZhangGuanJia"
                ReferencedContainer = "container:SuiShouJi.xcodeproj">
@@ -32,7 +32,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "7DBB3CBE1E55C4220075E638"
+            BlueprintIdentifier = "9C9CEE561EA5F73A007657FE"
             BuildableName = "JiZhangGuanJia.app"
             BlueprintName = "JiZhangGuanJia"
             ReferencedContainer = "container:SuiShouJi.xcodeproj">
@@ -55,7 +55,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "7DBB3CBE1E55C4220075E638"
+            BlueprintIdentifier = "9C9CEE561EA5F73A007657FE"
             BuildableName = "JiZhangGuanJia.app"
             BlueprintName = "JiZhangGuanJia"
             ReferencedContainer = "container:SuiShouJi.xcodeproj">
@@ -65,7 +65,7 @@
       </AdditionalOptions>
    </LaunchAction>
    <ProfileAction
-      buildConfiguration = "Debug-test"
+      buildConfiguration = "Release-production"
       shouldUseLaunchSchemeArgsEnv = "YES"
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
@@ -74,7 +74,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "7DBB3CBE1E55C4220075E638"
+            BlueprintIdentifier = "9C9CEE561EA5F73A007657FE"
             BuildableName = "JiZhangGuanJia.app"
             BlueprintName = "JiZhangGuanJia"
             ReferencedContainer = "container:SuiShouJi.xcodeproj">
@@ -85,7 +85,7 @@
       buildConfiguration = "Debug-test">
    </AnalyzeAction>
    <ArchiveAction
-      buildConfiguration = "Debug-test"
+      buildConfiguration = "Release-production"
       revealArchiveInOrganizer = "YES">
    </ArchiveAction>
 </Scheme>
