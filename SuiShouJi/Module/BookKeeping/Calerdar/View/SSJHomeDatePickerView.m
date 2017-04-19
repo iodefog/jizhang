@@ -377,21 +377,36 @@
 - (void)comfirmButtonClicked
 {
     NSDate *cuDate = [NSDate date];
-    NSString *language = [self getPreferredLanguage];
-    NSString *amStr = @"上午";
-    NSString *pmStr = @"下午";
-    if ([language isEqualToString:@"en-US"]) {
-        amStr = @"AM";
-        pmStr = @"PM";
-    }
+    //    NSString *language = [self getPreferredLanguage];
+    NSString *amStr = [[NSCalendar currentCalendar] AMSymbol];
+    NSString *pmStr = [[NSCalendar currentCalendar] PMSymbol];
+    //    NSString *amStr = @"上午";
+    //    NSString *pmStr = @"下午";
+    //    if ([language containsString:@"en"]) {
+    //        amStr = @"AM";
+    //        pmStr = @"PM";
+    //    }
     NSDate *selectedDate = nil;//选择的时间
     if (self.datePickerMode == SSJDatePickerModeTime) {
         NSInteger index1 = [self.datePicker selectedRowInComponent:0];//上午下午
         NSInteger index2 = [self.datePicker selectedRowInComponent:1];//时
         NSInteger index3 = [self.datePicker selectedRowInComponent:2];//分
         [self.formatter setDateFormat:@"yyyy年MM月dd日"];
-        NSString *dateStr = [NSString stringWithFormat:@"%@ %@ %@:%@",[self.formatter stringFromDate:cuDate],index1 == 0 ? amStr : pmStr,[self.hourArray ssj_safeObjectAtIndex:index2],[self.minuteArray ssj_safeObjectAtIndex:index3]];
-        selectedDate = [NSDate dateWithString:dateStr formatString:@"yyyy年MM月dd日 aa h:mm"];
+        if ([self checkDateSetting24Hours] == YES) {//24小时制
+            NSString *hourStr = [self.hourArray ssj_safeObjectAtIndex:index2];
+            if (index1 == 0) {//上午
+                hourStr = hourStr;
+            } else {//下午
+                NSInteger hourValue = [hourStr integerValue] + 12;
+                hourStr = [NSString stringWithFormat:@"%ld",hourValue];
+            }
+            NSString *dateStr = [NSString stringWithFormat:@"%@ %@:%@",[self.formatter stringFromDate:cuDate],hourStr,[self.minuteArray ssj_safeObjectAtIndex:index3]];
+            selectedDate = [NSDate dateWithString:dateStr formatString:@"yyyy年MM月dd日 HH:mm"];
+        } else { //12小时制
+            NSString *dateStr = [NSString stringWithFormat:@"%@ %@ %@:%@",[self.formatter stringFromDate:cuDate],index1 == 0 ? amStr : pmStr,[self.hourArray ssj_safeObjectAtIndex:index2],[self.minuteArray ssj_safeObjectAtIndex:index3]];
+            selectedDate = [NSDate dateWithString:dateStr formatString:@"yyyy年MM月dd日 aa h:mm"];
+        }
+        //
     } else if (self.datePickerMode == SSJDatePickerModeDate) {
         NSInteger index1 = [self.datePicker selectedRowInComponent:0];//年
         NSInteger index2 = [self.datePicker selectedRowInComponent:1];//月
@@ -408,8 +423,20 @@
         NSDate *indexStr1 = [self.monthDayWeekArray ssj_safeObjectAtIndex:index1];
         [self.formatter setDateFormat:@"yyyy年MM月dd日 EEE"];
         NSString *str = [self.formatter stringFromDate:indexStr1];
-        NSString *dateStr = [NSString stringWithFormat:@"%@ %@:%@ %@",str,[self.hourArray ssj_safeObjectAtIndex:index3],[self.minuteArray ssj_safeObjectAtIndex:index4],index2 == 0 ? amStr : pmStr];
-        selectedDate = [NSDate dateWithString:dateStr formatString:@"yyyy年MM月dd日 EEE h:mm aa"];
+        if ([self checkDateSetting24Hours] == YES) {//24小时制
+            NSString *hourStr = [self.hourArray ssj_safeObjectAtIndex:index3];
+            if (index1 == 0) {//上午
+                hourStr = hourStr;
+            } else {//下午
+                NSInteger hourValue = [hourStr integerValue] + 12;
+                hourStr = [NSString stringWithFormat:@"%ld",hourValue];
+            }
+            NSString *dateStr = [NSString stringWithFormat:@"%@ %@:%@",[self.formatter stringFromDate:cuDate],hourStr,[self.minuteArray ssj_safeObjectAtIndex:index4]];
+            selectedDate = [NSDate dateWithString:dateStr formatString:@"yyyy年MM月dd日 HH:mm"];
+        } else { //12小时制
+            NSString *dateStr = [NSString stringWithFormat:@"%@ %@:%@ %@",str,[self.hourArray ssj_safeObjectAtIndex:index3],[self.minuteArray ssj_safeObjectAtIndex:index4],index2 == 0 ? amStr : pmStr];
+            selectedDate = [NSDate dateWithString:dateStr formatString:@"yyyy年MM月dd日 EEE h:mm aa"];
+        }
     } else if (self.datePickerMode == SSJDatePickerModeYearDateAndTime) {
         //选择的时间
         NSDate *date = [self.monthDayWeekArray ssj_safeObjectAtIndex:[self.datePicker selectedRowInComponent:1]];
@@ -417,6 +444,7 @@
         NSString *yearMonDayStr = [self.formatter stringFromDate:date];
         NSString *hourStr = [self.hourArray ssj_safeObjectAtIndex:[self.datePicker selectedRowInComponent:2]];
         NSString *minuStr = [self.minuteArray ssj_safeObjectAtIndex:[self.datePicker selectedRowInComponent:4]];
+        
         NSString *dateStr = [NSString stringWithFormat:@"%@ %@时%@分",yearMonDayStr,hourStr,minuStr];
         selectedDate = [NSDate dateWithString:dateStr formatString:@"yyyy年MM月dd日 EEEHH时mm分"];
     }
@@ -589,6 +617,19 @@
         }
         return;
     }
+}
+
+- (BOOL)checkDateSetting24Hours{
+    BOOL is24Hours = YES;
+    NSString *dateStr = [[NSDate date] descriptionWithLocale:[NSLocale currentLocale]];
+    NSArray  *sysbols = @[[[NSCalendar currentCalendar] AMSymbol],[[NSCalendar currentCalendar] PMSymbol]];
+    for (NSString *symbol in sysbols) {
+        if ([dateStr rangeOfString:symbol].location != NSNotFound) {//find
+            is24Hours = NO;
+            break;
+        }
+    }
+    return is24Hours;
 }
 
 #pragma mark - UIPickerViewDataSource
