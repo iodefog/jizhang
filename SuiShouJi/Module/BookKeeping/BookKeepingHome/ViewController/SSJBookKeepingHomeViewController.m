@@ -925,8 +925,8 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
                             [weakSelf.tableView scrollToRowAtIndexPath:item.chargeIndex atScrollPosition:UITableViewScrollPositionBottom animated:NO];
 
                         } else {
-                            [weakSelf.tableView scrollToRowAtIndexPath:item.chargeIndex atScrollPosition:UITableViewScrollPositionBottom animated:NO];
                             [self.tableView reloadData];
+                            [weakSelf.tableView scrollToRowAtIndexPath:item.chargeIndex atScrollPosition:UITableViewScrollPositionBottom animated:NO];
                         }
                     }
                     

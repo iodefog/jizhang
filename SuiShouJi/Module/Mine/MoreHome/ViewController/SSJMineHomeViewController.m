@@ -550,6 +550,7 @@ static BOOL kNeedBannerDisplay = YES;
                 [weakSelf.navigationController pushViewController:webVc animated:YES];
             }
         };
+//        _announcementView.hidden = YES;
     }
     return _announcementView;
 }
@@ -572,6 +573,7 @@ static BOOL kNeedBannerDisplay = YES;
 -(void)reloadDataAfterSync {
     SSJUserItem *item = [SSJUserTableManager queryUserItemForID:SSJUSERID()];
     self.header.item = item;
+    [self.header setSignStr];//设置签名
 }
 
 #pragma mark - Private
@@ -587,6 +589,7 @@ static BOOL kNeedBannerDisplay = YES;
     } else {
         collectionViewLayout.footerReferenceSize = CGSizeMake(SSJSCREENWITH, 0);
     }
+    
     [self.rightButton updateAfterThemeChange];
     [self.announcementView updateAppearanceAfterThemeChanged];
 }
@@ -706,6 +709,7 @@ static BOOL kNeedBannerDisplay = YES;
     if (annoucements.count > 0) {
         self.announcementView.items = annoucements;
         self.announcementView.height = 34;
+        self.announcementView.hidden = NO;
         [self.view setNeedsLayout];
     }
 }

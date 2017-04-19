@@ -13,7 +13,7 @@ static NSString *const SSJDefaultFormalDomain = @"http://jz.youyuwo.com";
 
 static NSString *const SSJTestDomain = @"http://account.gs.9188.com/";
 
-static NSString *const SSJTestImageDomain = @"http://account.gs.9188.com/jz";
+static NSString *const SSJTestImageDomain = @"http://account_img.gs.9188.com/ ";
 
 // 请求失败后重试的最大次数
 const int kMaxRequestFailureTimes = 2;
@@ -23,8 +23,6 @@ static NSString *const kSSJDomainKey = @"SSJDomainManagerKey";
 @implementation SSJDomainManager
 
 + (NSString *)domain {
-    return SSJTestDomain;
-
 #ifdef PRODUCTION
     return [self formalDomain];
 #else

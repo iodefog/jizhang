@@ -64,6 +64,7 @@
         self.subLab.bottom = self.height;
         self.subDetailLab.right = self.expandImage.right;
         self.subDetailLab.centerY = self.subLab.centerY;
+        self.subLab.width = self.subDetailLab.left - self.subLab.left - 10;
         [self ssj_relayoutBorder];
     } else {
         self.btn.frame = self.bounds;
