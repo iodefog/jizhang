@@ -287,9 +287,12 @@
     if (!_shareButton) {
         _shareButton = [[UIButton alloc]initWithFrame:CGRectMake(0, self.view.height - 50, self.view.width, 50)];
         [_shareButton setTitle:@"分享" forState:UIControlStateNormal];
-        [_shareButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [_shareButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [_shareButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] forState:UIControlStateNormal];
+        [_shareButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] forState:UIControlStateNormal];
+        if (SSJ_CURRENT_THEME.throughScreenButtonBackGroudColor.length) {
+            _shareButton.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.throughScreenButtonBackGroudColor alpha:SSJ_CURRENT_THEME.throughScreenButtonAlpha];
+        } else {
+            _shareButton.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor alpha:0.8];
+        }
         [_shareButton setImage:[UIImage imageNamed:@"calender_fenxiang"] forState:UIControlStateNormal];
         [_shareButton setSpaceBetweenImageAndTitle:10];
         _shareButton.hidden = YES;
@@ -419,6 +422,15 @@
             [SSJAnaliyticsManager event:@"calendar_share_QQ"];
         }
     }];
+}
+
+- (void)updateAppearanceAfterThemeChanged {
+    [super updateAppearanceAfterThemeChanged];
+    if (SSJ_CURRENT_THEME.throughScreenButtonBackGroudColor.length) {
+        _shareButton.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.throughScreenButtonBackGroudColor alpha:SSJ_CURRENT_THEME.throughScreenButtonAlpha];
+    } else {
+        _shareButton.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor alpha:0.8];
+    }
 }
 
 /*

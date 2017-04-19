@@ -371,7 +371,11 @@ static BOOL kNeedBannerDisplay = YES;
         [_editeButton setAttributedTitle:attributedTitle forState:UIControlStateNormal];
         [_editeButton setAttributedTitle:attributedDisableTitle forState:UIControlStateDisabled];
         _editeButton.enabled = NO;
-        _editeButton.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];                                                                                                                                                                                                                                                                                                                                                                                       
+        if (SSJ_CURRENT_THEME.throughScreenButtonBackGroudColor.length) {
+            _editeButton.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.throughScreenButtonBackGroudColor alpha:SSJ_CURRENT_THEME.throughScreenButtonAlpha];
+        } else {
+            _editeButton.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor alpha:0.8];
+        }
         [_editeButton addTarget:self action:@selector(editeButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         _editeButton.hidden = YES;
 
@@ -385,7 +389,11 @@ static BOOL kNeedBannerDisplay = YES;
         [_deleteButton setTitle:@"删除" forState:UIControlStateNormal];
         [_deleteButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] forState:UIControlStateNormal];
         _deleteButton.titleLabel.font = [UIFont systemFontOfSize:20];
-        _deleteButton.backgroundColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:0.2];
+        if (SSJ_CURRENT_THEME.throughScreenButtonBackGroudColor.length) {
+            _deleteButton.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.throughScreenButtonBackGroudColor alpha:SSJ_CURRENT_THEME.throughScreenButtonAlpha];
+        } else {
+            _deleteButton.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor alpha:0.8];
+        }
         [_deleteButton addTarget:self action:@selector(deleteButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         _deleteButton.hidden = YES;
     }

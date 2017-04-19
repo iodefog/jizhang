@@ -71,6 +71,8 @@
     [aCoder encodeFloat:_financingDetailMainAlpha forKey:@"financingDetailMainAlpha"];
     [aCoder encodeObject:_financingDetailSecondaryColor forKey:@"financingDetailSecondaryColor"];
     [aCoder encodeFloat:_financingDetailSecondaryAlpha forKey:@"financingDetailSecondaryAlpha"];
+    [aCoder encodeObject:_throughScreenButtonBackGroudColor forKey:@"throughScreenButtonBackGroudColor"];
+    [aCoder encodeFloat:_throughScreenButtonAlpha forKey:@"throughScreenButtonAlpha"];
 }
 
 - (nullable instancetype)initWithCoder:(NSCoder *)aDecoder {
@@ -135,6 +137,8 @@
         _financingDetailMainAlpha = [aDecoder decodeFloatForKey:@"financingDetailMainAlpha"];
         _financingDetailSecondaryColor = [aDecoder decodeObjectForKey:@"financingDetailSecondaryColor"];
         _financingDetailSecondaryAlpha = [aDecoder decodeFloatForKey:@"financingDetailSecondaryAlpha"];
+        _throughScreenButtonBackGroudColor = [aDecoder decodeObjectForKey:@"throughScreenButtonBackGroudColor"] ;
+        _throughScreenButtonAlpha = [aDecoder decodeFloatForKey:@"throughScreenButtonAlpha"];
     }
     return self;
 }

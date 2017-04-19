@@ -70,6 +70,15 @@
 
 - (void)updateAppearance {
     [_categoryEditView updateAppearance];
+    if (SSJ_CURRENT_THEME.throughScreenButtonBackGroudColor.length) {
+        [_sureButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.throughScreenButtonBackGroudColor alpha:SSJ_CURRENT_THEME.throughScreenButtonAlpha] forState:UIControlStateNormal];
+
+    } else {
+        
+        [_sureButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor alpha:0.8] forState:UIControlStateNormal];
+
+    }
+
     [_sureButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor alpha:0.8] forState:UIControlStateNormal];
 }
 

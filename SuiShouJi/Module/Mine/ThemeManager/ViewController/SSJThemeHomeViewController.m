@@ -119,12 +119,11 @@ static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
 
 #pragma mark - SSJBaseNetworkServiceDelegate
 - (void)serverDidFinished:(SSJBaseNetworkService *)service{
-#warning test
-//    if ([service.returnCode isEqualToString:@"1"]) {
+    if ([service.returnCode isEqualToString:@"1"]) {
         [self getThemeStatusForThemes:self.service.themes];
-//    }else{
-//        [self getThemeFromLocal];
-//    }
+    }else{
+        [self getThemeFromLocal];
+    }
 }
 
 - (void)server:(SSJBaseNetworkService *)service didFailLoadWithError:(NSError *)error{

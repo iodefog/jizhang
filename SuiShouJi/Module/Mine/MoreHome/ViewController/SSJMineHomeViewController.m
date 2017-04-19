@@ -70,6 +70,7 @@ static NSString *const kTitle5 = @"建议与咨询";
 static NSString *const kTitle6 = @"给个好评";
 static NSString *const kTitle7 = @"设置";
 static NSString *const kTitle8 = @"分享APP";
+static NSString *const kTitle9 = @"帮助";
 static NSString *const kHeaderViewID = @"headerViewIdentifier";
 static NSString *const kFooterViewID = @"footerViewIdentifier";
 
@@ -160,7 +161,7 @@ static BOOL kNeedBannerDisplay = YES;
     self.navigationItem.rightBarButtonItem = rightItem;
     
     //    [self getCircleChargeState];
-    self.navigationItem.rightBarButtonItem.tintColor = [UIColor ssj_colorWithHex:@"eb4a64"];
+    self.navigationItem.rightBarButtonItem.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTintColor];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -334,7 +335,11 @@ static BOOL kNeedBannerDisplay = YES;
         
     }
     
-
+    if ([item.adTitle isEqualToString:kTitle9]) {
+        SSJAdWebViewController *helpVc = [SSJAdWebViewController webViewVCWithURL:[NSURL URLWithString:@"http://jzcms.youyuwo.com/a/bangzhu/index.html"]];
+        helpVc.title = @"记账帮助";
+        [self.navigationController pushViewController:helpVc animated:YES];
+    }
 }
 
 #pragma mark - SSJBaseNetworkService
@@ -626,20 +631,20 @@ static BOOL kNeedBannerDisplay = YES;
     //  根据审核状态显示响应的内容，“给个好评”在审核期间不能被看到，否则可能会被拒绝-
     if ([SSJStartChecker sharedInstance].isInReview) {
         if ([SSJDefaultSource() isEqualToString:@"11501"] || [SSJDefaultSource() isEqualToString:@"11502"]) {
-            self.images = [@[@"more_tixing", @"more_pifu", @"more_zhouqi",@"more_daochu", @"more_share", @"more_fankui", @"more_shezhi"] mutableCopy];
-            self.titles = [@[kTitle1 , kTitle2 , kTitle3, kTitle4,kTitle8,kTitle5 , kTitle7] mutableCopy];
+            self.images = [@[@"more_tixing", @"more_pifu", @"more_zhouqi",@"more_daochu", @"more_share", @"more_fankui", @"more_shezhi",@"more_help"] mutableCopy];
+            self.titles = [@[kTitle1 , kTitle2 , kTitle3, kTitle4,kTitle8,kTitle5 , kTitle7, kTitle9 ] mutableCopy];
         } else{
-            self.images = [@[@"more_tixing", @"more_pifu", @"more_zhouqi",@"more_daochu", @"more_fankui", @"more_shezhi"] mutableCopy];
-            self.titles = [@[kTitle1 , kTitle2 , kTitle3, kTitle4,kTitle5 , kTitle7] mutableCopy];
+            self.images = [@[@"more_tixing", @"more_pifu", @"more_zhouqi",@"more_daochu", @"more_fankui", @"more_shezhi",@"more_help"] mutableCopy];
+            self.titles = [@[kTitle1 , kTitle2 , kTitle3, kTitle4,kTitle5 , kTitle7, kTitle9] mutableCopy];
         }
         
     } else {
         if ([SSJDefaultSource() isEqualToString:@"11501"] || [SSJDefaultSource() isEqualToString:@"11502"]) {
-            self.images = [@[@"more_tixing", @"more_pifu",@"more_zhouqi",@"more_daochu", @"more_share", @"more_fankui", @"more_haoping", @"more_shezhi"] mutableCopy];
-            self.titles = [@[kTitle1 , kTitle2 , kTitle3, kTitle4,kTitle8, kTitle5 , kTitle6 , kTitle7]mutableCopy];
+            self.images = [@[@"more_tixing", @"more_pifu",@"more_zhouqi",@"more_daochu", @"more_share", @"more_fankui", @"more_haoping", @"more_shezhi",@"more_help"] mutableCopy];
+            self.titles = [@[kTitle1 , kTitle2 , kTitle3, kTitle4,kTitle8, kTitle5 , kTitle6 , kTitle7, kTitle9]mutableCopy];
         } else{
-            self.images = [@[@"more_tixing", @"more_pifu", @"more_zhouqi",@"more_daochu", @"more_fankui", @"more_haoping", @"more_shezhi"] mutableCopy];
-            self.titles = [@[kTitle1 , kTitle2 , kTitle3, kTitle4, kTitle5 , kTitle6 , kTitle7] mutableCopy];
+            self.images = [@[@"more_tixing", @"more_pifu", @"more_zhouqi",@"more_daochu", @"more_fankui", @"more_haoping", @"more_shezhi",@"more_help"] mutableCopy];
+            self.titles = [@[kTitle1 , kTitle2 , kTitle3, kTitle4, kTitle5 , kTitle6 , kTitle7, kTitle9] mutableCopy];
         }
     }
     [self orgDataToModel];

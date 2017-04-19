@@ -69,7 +69,7 @@ static NSString *const kTitle9 = @"上传日志";
         if ([WXApi isWXAppInstalled]) {
             self.titles = @[@[kTitle0], @[kTitle1], @[kTitle2 , kTitle3 , kTitle9], @[kTitle6] ,@[kTitle7,kTitle8]];
         }else{
-            self.titles = @[@[kTitle1], @[kTitle2 , kTitle3 , kTitle9], @[kTitle6]];
+            self.titles = @[@[kTitle0], @[kTitle1], @[kTitle2 , kTitle3 , kTitle9], @[kTitle6]];
         }
     } else {
         if ([WXApi isWXAppInstalled]) {

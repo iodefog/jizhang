@@ -484,6 +484,10 @@
         case 14:
             return @"ft_zhifubao";
             break;
+            
+        case 15:
+            return @"ft_others";
+            break;
    
         default:
             break;
@@ -547,6 +551,10 @@
             
         case 14:
             return @"支付宝";
+            break;
+            
+        case 15:
+            return @"其他";
             break;
             
         default:

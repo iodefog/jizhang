@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "SSJDatabaseVersionProtocol.h"
+// 2.2.0
 
 @interface SSJDatabaseVersion13 : NSObject<SSJDatabaseVersionProtocol>
 

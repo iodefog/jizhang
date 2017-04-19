@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0820"
+   LastUpgradeVersion = "0830"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "9C3847251E641CAB00BF4AF9"
+               BlueprintIdentifier = "9C4C1FF71E9E30C8000C5F15"
                BuildableName = "9188JiZhangBen.app"
                BlueprintName = "9188JiZhangBen"
                ReferencedContainer = "container:SuiShouJi.xcodeproj">
@@ -32,7 +32,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "9C3847251E641CAB00BF4AF9"
+            BlueprintIdentifier = "9C4C1FF71E9E30C8000C5F15"
             BuildableName = "9188JiZhangBen.app"
             BlueprintName = "9188JiZhangBen"
             ReferencedContainer = "container:SuiShouJi.xcodeproj">
@@ -55,7 +55,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "9C3847251E641CAB00BF4AF9"
+            BlueprintIdentifier = "9C4C1FF71E9E30C8000C5F15"
             BuildableName = "9188JiZhangBen.app"
             BlueprintName = "9188JiZhangBen"
             ReferencedContainer = "container:SuiShouJi.xcodeproj">
@@ -65,7 +65,7 @@
       </AdditionalOptions>
    </LaunchAction>
    <ProfileAction
-      buildConfiguration = "Release-test"
+      buildConfiguration = "Release-production"
       shouldUseLaunchSchemeArgsEnv = "YES"
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
@@ -74,7 +74,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "9C3847251E641CAB00BF4AF9"
+            BlueprintIdentifier = "9C4C1FF71E9E30C8000C5F15"
             BuildableName = "9188JiZhangBen.app"
             BlueprintName = "9188JiZhangBen"
             ReferencedContainer = "container:SuiShouJi.xcodeproj">

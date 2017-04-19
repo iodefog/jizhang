@@ -276,7 +276,7 @@
         [CDAutoHideMessageHUD showMessage:@"备注不能超过15个字"];
         return;
     }
-    
+
     __weak typeof(self) weakSelf = self;
     __block NSString *currentDateStr = [[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"];
     [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db,BOOL *rollback){

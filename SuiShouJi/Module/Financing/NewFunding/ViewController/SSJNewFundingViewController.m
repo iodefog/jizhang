@@ -365,7 +365,11 @@
         [CDAutoHideMessageHUD showMessage:@"备注不能超过15个字"];
         return;
     }
-    
+    if ([SSJFinancingStore checkWhetherSameFundingNameExsitsWith:_item]) {
+        [CDAutoHideMessageHUD showMessage:@"已经有相同名称的资金帐户"];
+        return;
+
+    }
     __weak typeof(self) weakSelf = self;
     [SSJFinancingStore saveFundingItem:self.item Success:^(SSJFinancingHomeitem *item) {
         if (weakSelf.addNewFundBlock) {

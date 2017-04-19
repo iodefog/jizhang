@@ -917,11 +917,13 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
                             } else {
                                 [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:item.chargeIndex.section] withRowAnimation:UITableViewRowAnimationNone];
                             }
-                            [weakSelf.tableView scrollToRowAtIndexPath:item.chargeIndex atScrollPosition:UITableViewScrollPositionBottom animated:NO];
 
                             [self.tableView insertRowsAtIndexPaths:@[item.chargeIndex] withRowAnimation:UITableViewRowAnimationTop];
-                            needToReload = ([currentMaxIndex compare:item.chargeIndex] != NSOrderedSame) && needToReload;
+                            needToReload = [currentMaxIndex compare:item.chargeIndex] == NSOrderedAscending;
                             [weakSelf.tableView endUpdates];
+                            
+                            [weakSelf.tableView scrollToRowAtIndexPath:item.chargeIndex atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+
                         } else {
                             [weakSelf.tableView scrollToRowAtIndexPath:item.chargeIndex atScrollPosition:UITableViewScrollPositionBottom animated:NO];
                             [self.tableView reloadData];
@@ -934,6 +936,8 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
                     
                     //                    [weakSelf.tableView endUpdates];
                     
+                    
+                    [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
                     
                     [self.newlyAddChargeArr removeAllObjects];
                 } else {
