@@ -126,11 +126,11 @@
 		<key>WeiXinSecret</key>
 		<string></string>
 		<key>QQAppId</key>
-		<string></string>
+		<string>1105340301</string>
 		<key>QQAppKey</key>
-		<string></string>
+		<string>mW8hRwplNTlrUj3O</string>
 		<key>YWAppKey</key>
-		<string>23441285</string>
+		<string></string>
 		<key>WeiBoAppKey</key>
 		<string></string>
 		<key>WeiBoSecret</key>
@@ -384,6 +384,41 @@
 		<string>youyu_weibo_banner</string>
 		<key>AppStoreUrl</key>
 		<string>https://itunes.apple.com/us/app/%E6%9C%89%E9%B1%BC%E8%AE%B0%E8%B4%A6pro/id1221777670?l=zh&amp;ls=1&amp;mt=8</string>
+	</dict>
+	<key>com.9188.notepro</key>
+	<dict>
+		<key>appleID</key>
+		<string>1221777670</string>
+		<key>source</key>
+		<string>11502</string>
+		<key>WeiXinKey</key>
+		<string></string>
+		<key>WeiXinSecret</key>
+		<string></string>
+		<key>QQAppId</key>
+		<string>1105340301</string>
+		<key>QQAppKey</key>
+		<string>mW8hRwplNTlrUj3O</string>
+		<key>YWAppKey</key>
+		<string></string>
+		<key>WeiBoAppKey</key>
+		<string></string>
+		<key>WeiBoSecret</key>
+		<string></string>
+		<key>UMAppKey</key>
+		<string></string>
+		<key>ShareTitle</key>
+		<string></string>
+		<key>ShareUrl</key>
+		<string></string>
+		<key>ShareContent</key>
+		<string></string>
+		<key>ShareIcon</key>
+		<string></string>
+		<key>WeiboBanner</key>
+		<string></string>
+		<key>AppStoreUrl</key>
+		<string>https://itunes.apple.com/us/app/9188%E8%AE%B0%E8%B4%A6pro/id1221777670?l=zh&amp;ls=1&amp;mt=8</string>
 	</dict>
 </dict>
 </plist>
