@@ -303,7 +303,7 @@
 		<key>WeiBoSecret</key>
 		<string></string>
 		<key>UMAppKey</key>
-		<string>58996c1d3eae256b40000297</string>
+		<string>58f8753e8630f56022000460</string>
 		<key>ShareTitle</key>
 		<string></string>
 		<key>ShareUrl</key>
@@ -371,7 +371,7 @@
 		<key>WeiBoSecret</key>
 		<string>bcbf3b6f1f534d8e39b0b52418761921</string>
 		<key>UMAppKey</key>
-		<string>58ddd3e4310c932c240002eb</string>
+		<string>58f876e704e205746400082d</string>
 		<key>ShareTitle</key>
 		<string>有鱼记账，帮我把小家打理得更好。</string>
 		<key>ShareUrl</key>
@@ -390,11 +390,11 @@
 		<key>appleID</key>
 		<string>1221777670</string>
 		<key>source</key>
-		<string>11502</string>
+		<string>11512</string>
 		<key>WeiXinKey</key>
-		<string></string>
+		<string>wxb06593134b15aec0</string>
 		<key>WeiXinSecret</key>
-		<string></string>
+		<string>7889d35368974b1a4644a62d04788a57</string>
 		<key>QQAppId</key>
 		<string>1105340301</string>
 		<key>QQAppKey</key>
@@ -406,7 +406,7 @@
 		<key>WeiBoSecret</key>
 		<string></string>
 		<key>UMAppKey</key>
-		<string></string>
+		<string>58f876baa3251103e4000bf6</string>
 		<key>ShareTitle</key>
 		<string></string>
 		<key>ShareUrl</key>

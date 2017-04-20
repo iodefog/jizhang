@@ -217,7 +217,9 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     
     // 只有9188、有鱼并且没有审核的情况下，显示第三方登录
     if ([SSJDefaultSource() isEqualToString:@"11501"]
-        || [SSJDefaultSource() isEqualToString:@"11502"]) {
+        || [SSJDefaultSource() isEqualToString:@"11502"]
+        || [SSJDefaultSource() isEqualToString:@"11512"]
+        || [SSJDefaultSource() isEqualToString:@"11513"]) {
 //        [self.centerScrollView addSubview:self.seperatorLine];
         [self.centerScrollViewOne addSubview:self.thirdPartyLoginLabel];
         [self.centerScrollViewOne addSubview:self.leftSeperatorLine];
@@ -229,7 +231,6 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         [self.centerScrollViewOne addSubview:self.leftSeperatorLine];
         [self.centerScrollViewOne addSubview:self.rightSeperatorLine];
         [self.centerScrollViewOne addSubview:self.tencentLoginButton];
-
     }
     
     [self ssj_showBackButtonWithTarget:self selector:@selector(goBackAction)];
@@ -856,7 +857,9 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     
     // 只有9188、有鱼并且没有审核的情况下，显示第三方登录
     if ([SSJDefaultSource() isEqualToString:@"11501"]
-        || [SSJDefaultSource() isEqualToString:@"11502"]) {
+        || [SSJDefaultSource() isEqualToString:@"11502"]
+        || [SSJDefaultSource() isEqualToString:@"11512"]
+        || [SSJDefaultSource() isEqualToString:@"11513"]) {
         self.thirdPartyLoginLabel.centerX = SSJSCREENWITH * 0.5;
         self.thirdPartyLoginLabel.bottom = self.centerScrollViewOne.height - 100;
         
