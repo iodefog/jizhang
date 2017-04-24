@@ -10,7 +10,7 @@
 
 static const CGFloat kButtonWidth = 36.0;
 
-static const CGFloat kButtonGap = 8.0; 
+static const CGFloat kButtonGap = 15.0;
 
 @interface SSJMultiFunctionButtonView()
 
@@ -51,7 +51,7 @@ static const CGFloat kButtonGap = 8.0;
     }
     
     [view addSubview:self];
-    self.leftBottom = CGPointMake(20, view.height - 104);
+    self.leftBottom = CGPointMake(20, view.height - 84);
     self.alpha = 0;
     self.size = CGSizeMake(kButtonWidth, kButtonWidth);
     self.buttonStatus = YES;
@@ -88,7 +88,7 @@ static const CGFloat kButtonGap = 8.0;
     _buttonStatus = buttonStatus;
     if (_buttonStatus) {
         [self sizeToFit];
-        self.leftBottom = CGPointMake(20, SSJSCREENHEIGHT - 104);
+        self.leftBottom = CGPointMake(20, SSJSCREENHEIGHT - 84);
         for (UIButton *button in _buttons) {
             button.leftBottom = CGPointMake(0, self.height);
         }
@@ -127,7 +127,7 @@ static const CGFloat kButtonGap = 8.0;
                                  }
                              }
                              completion:^(BOOL complation) {
-                                 self.leftBottom = CGPointMake(20, SSJSCREENHEIGHT - 104);
+                                 self.leftBottom = CGPointMake(20, SSJSCREENHEIGHT - 84);
                                  [self sizeToFit];
                                  button.frame = CGRectMake(0, 0, kButtonWidth, kButtonWidth);
                                  if (i != _mainButtonIndex) {

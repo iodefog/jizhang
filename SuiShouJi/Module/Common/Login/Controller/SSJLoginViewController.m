@@ -651,6 +651,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 -(void)comfirmTologin{
     //  只要登录就设置用户为已注册，因为9188账户、第三方登录没有注册就可以登录
     self.loginService.item.registerState = @"1";
+//    if (!self.loginService.item) return;
     if (![SSJUserTableManager saveUserItem:self.loginService.item]
         || !SSJSaveAppId(self.loginService.appid)
         || !SSJSaveAccessToken(self.loginService.accesstoken)

@@ -16,6 +16,8 @@ typedef NS_ENUM(NSUInteger, SSJAnnouceMentType) {
     SSJAnnouceMentTypeHot = 2,           //  热门公告
 };
 
+@property(nonatomic, strong) NSString *announcementImg;
+
 @property(nonatomic, strong) NSString *announcementId;
 
 @property(nonatomic, strong) NSString *announcementTitle;
