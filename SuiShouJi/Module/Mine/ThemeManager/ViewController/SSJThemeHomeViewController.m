@@ -14,6 +14,7 @@
 #import "SSJThemeService.h"
 #import "MMDrawerController.h"
 #import "SSJThemeManagerViewController.h"
+#import "SSJBookKeepingHomeViewController.h"
 
 @interface SSJThemeHomeViewController ()<UICollectionViewDelegate,UICollectionViewDataSource>
 @property(nonatomic, strong) UILabel *hintLabel;
@@ -112,9 +113,18 @@ static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     SSJThemeItem *item = [self.items ssj_safeObjectAtIndex:indexPath.item];
-    SSJThemeDetailViewController *themeDetailVc = [[SSJThemeDetailViewController alloc]init];
-    themeDetailVc.item = item;
-    [self.navigationController pushViewController:themeDetailVc animated:YES];
+    if ([item.themeId isEqualToString:@"-1"]) {
+        UITabBarController *tabVC = (UITabBarController *)((MMDrawerController *)[UIApplication sharedApplication].keyWindow.rootViewController).centerViewController;
+        UINavigationController *firstNav = [tabVC.viewControllers objectAtIndex:0];
+        SSJBookKeepingHomeViewController *homeVc = [firstNav.viewControllers objectAtIndex:0];
+        tabVC.selectedIndex = 0;
+        [self.navigationController popViewControllerAnimated:YES];
+    } else {
+        SSJThemeDetailViewController *themeDetailVc = [[SSJThemeDetailViewController alloc]init];
+        themeDetailVc.item = item;
+        [self.navigationController pushViewController:themeDetailVc animated:YES];
+
+    }
 }
 
 #pragma mark - SSJBaseNetworkServiceDelegate
@@ -197,6 +207,10 @@ static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
         float imageHeight = (SSJSCREENWITH - 45) / 3 / imageRatio;
         item.cellHeight = imageHeight + 25 + [item.themeTitle sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:16]}].height + 26;
         [tempArr addObject:item];
+        SSJThemeItem *itemCustom = [[SSJThemeItem alloc]init];
+        itemCustom.themeId = @"-1";
+        itemCustom.themeTitle = @"自定义背景";
+        [tempArr insertObject:itemCustom atIndex:0];
     }
     [self getThemeStatusForThemes:tempArr];
 }
