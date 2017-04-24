@@ -11,11 +11,15 @@
 
 @interface SSJAnnouncementDetailCell()
 
+@property(nonatomic, strong) UIImageView *leftImageView;
+
 @property(nonatomic, strong) UILabel *titleLab;
 
 @property(nonatomic, strong) UILabel *dateLab;
 
 @property(nonatomic, strong) UILabel *contentLab;
+
+@property (nonatomic, strong) UILabel *readNumLab;
 
 @end
 
@@ -25,15 +29,26 @@
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         
+        [self addSubview:self.leftImageView];
         [self addSubview:self.titleLab];
         [self addSubview:self.dateLab];
         [self addSubview:self.contentLab];
+        [self addSubview:self.readNumLab];
         [self setUpConstraints];
 
     }
     return self;
 }
 
+#pragma mark - lazy
+- (UIImageView *)leftImageView
+{
+    if (!_leftImageView) {
+        _leftImageView = [[UIImageView alloc] init];
+        _leftImageView.contentMode = UIViewContentModeScaleAspectFit;
+    }
+    return _leftImageView;
+}
 
 - (UILabel *)titleLab {
     if (!_titleLab) {
@@ -62,21 +77,44 @@
     return _contentLab;
 }
 
+- (UILabel *)readNumLab
+{
+    if (!_readNumLab) {
+        _readNumLab = [[UILabel alloc] init];
+        _readNumLab.font = self.contentLab.font;
+        _readNumLab.textColor = self.contentLab.textColor;
+    }
+    return _readNumLab;
+}
+
 - (void)setUpConstraints {
+    
+    [self.leftImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(100, 80));
+        make.left.offset(15);
+        make.centerY.mas_equalTo(self);
+    }];
+    
     [self.titleLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(self.contentView.left).with.offset(10);
+        make.top.offset(18);
+        make.left.mas_equalTo(self.leftImageView.mas_right).with.offset(10);
         make.width.mas_lessThanOrEqualTo(self.contentView.mas_width).with.offset(-10);
-        make.bottom.mas_equalTo(self.contentView.mas_centerY).with.offset(-10);
+//        make.bottom.mas_equalTo(self.contentView.mas_centerY).with.offset(-10);
     }];
     
     [self.contentLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(self.contentView.left).with.offset(10);
-        make.top.mas_equalTo(self.contentView.mas_centerY).with.offset(10);
+        make.left.mas_equalTo(self.titleLab);
+        make.top.mas_equalTo(self.titleLab.mas_bottom).with.offset(8);
     }];
     
     [self.dateLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.mas_equalTo(self.contentView.right).with.offset(-10);
-        make.top.mas_equalTo(self.contentView.mas_centerY);
+        make.bottom.mas_equalTo(-18);
+    }];
+    
+    [self.readNumLab mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(self.contentLab);
+        make.bottom.mas_equalTo(self.dateLab);
     }];
 }
 
@@ -85,6 +123,7 @@
         return;
     }
     SSJAnnoucementItem *item = (SSJAnnoucementItem *)cellItem;
+    [self.leftImageView sd_setImageWithURL:[NSURL URLWithString:item.announcementImg] placeholderImage:[UIImage imageNamed:@"noneThumbImage"]];
     self.titleLab.text = item.announcementTitle;
     self.dateLab.text = item.announcementDate;
     self.contentLab.text = item.announcementContent;
@@ -104,7 +143,7 @@
         _titleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     }
     _dateLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-    _contentLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    _contentLab.textColor = _readNumLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
 }
 
 /*
