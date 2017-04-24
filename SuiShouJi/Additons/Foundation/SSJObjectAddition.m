@@ -41,4 +41,8 @@
     return nil;
 }
 
+- (NSString *)ssj_debugDescription {
+    return [NSString stringWithFormat:@"%@:%@", self, [self mj_keyValues].description];
+}
+
 @end

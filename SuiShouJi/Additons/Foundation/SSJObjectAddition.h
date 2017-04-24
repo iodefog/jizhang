@@ -12,4 +12,6 @@
 
 - (id)ssj_performSelector:(SEL)aSelector withArg:(id)arg,...;
 
+- (NSString *)ssj_debugDescription;
+
 @end
