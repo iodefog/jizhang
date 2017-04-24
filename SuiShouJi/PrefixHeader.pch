@@ -18,6 +18,7 @@
 #import "SSJUtil.h"
 #import "SSJUserUtil.h"
 
+#import "SSJObjectAddition.h"
 #import "SSJStringAddition.h"
 #import "SSJDataAddition.h"
 #import "SSJDateAddition.h"
