@@ -45,7 +45,10 @@
 {
     if (!_leftImageView) {
         _leftImageView = [[UIImageView alloc] init];
-        _leftImageView.contentMode = UIViewContentModeScaleAspectFit;
+//        _leftImageView.contentMode = UIViewContentModeScaleAspectFit;
+        _leftImageView.layer.cornerRadius = 4;
+        _leftImageView.layer.masksToBounds = YES;
+        [_leftImageView clipsToBounds];
     }
     return _leftImageView;
 }
@@ -55,6 +58,7 @@
         _titleLab = [[UILabel alloc] init];
         _titleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _titleLab.font = [UIFont systemFontOfSize:16];
+        _titleLab.numberOfLines = 0;
     }
     return _titleLab;
 }
@@ -81,8 +85,8 @@
 {
     if (!_readNumLab) {
         _readNumLab = [[UILabel alloc] init];
-        _readNumLab.font = self.contentLab.font;
-        _readNumLab.textColor = self.contentLab.textColor;
+        _readNumLab.font = self.dateLab.font;
+        _readNumLab.textColor = self.dateLab.textColor;
     }
     return _readNumLab;
 }
@@ -98,8 +102,9 @@
     [self.titleLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.offset(18);
         make.left.mas_equalTo(self.leftImageView.mas_right).with.offset(10);
-        make.width.mas_lessThanOrEqualTo(self.contentView.mas_width).with.offset(-10);
+//        make.width.mas_lessThanOrEqualTo(self.contentView.mas_width).with.offset(-10);
 //        make.bottom.mas_equalTo(self.contentView.mas_centerY).with.offset(-10);
+        make.right.mas_equalTo(-10);
     }];
     
     [self.contentLab mas_makeConstraints:^(MASConstraintMaker *make) {
