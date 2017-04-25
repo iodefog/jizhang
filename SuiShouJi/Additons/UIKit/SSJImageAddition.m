@@ -322,6 +322,21 @@
     return context;
 }
 
+/**
+ 圆角图片
+ */
+- (UIImage *)ssj_circleImage {
+    CGRect rect = {{0,0},self.size};
+    UIGraphicsBeginImageContextWithOptions(rect.size, NO, SSJSCREENSCALE);
+    CGContextAddEllipseInRect(UIGraphicsGetCurrentContext(), rect);
+    CGContextClip(UIGraphicsGetCurrentContext());
+    [self drawInRect:rect];
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return image;
+}
+
+
 @end
 
 @implementation UIImage (SSJImageCompound)
