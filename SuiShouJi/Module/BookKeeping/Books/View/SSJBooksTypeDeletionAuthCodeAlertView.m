@@ -22,6 +22,8 @@ static const CGFloat kGap = 15;
 
 - (BOOL)resignFirstResponder;
 
+- (BOOL)isFirstResponder;
+
 @end
 
 @interface SSJBooksTypeDeletionAuthCodeField () <UITextFieldDelegate>
@@ -45,7 +47,7 @@ static const CGFloat kGap = 15;
             UIView *view = [[UIView alloc] init];
             view.userInteractionEnabled = NO;
             view.layer.borderWidth = 1;
-            view.layer.borderColor = [UIColor blueColor].CGColor;
+            view.layer.borderColor = [UIColor ssj_colorWithHex:@"#dddddd"].CGColor;
             [self addSubview:view];
             [self.borderViews addObject:view];
         }
@@ -79,6 +81,10 @@ static const CGFloat kGap = 15;
 
 - (BOOL)resignFirstResponder {
     return [self.field resignFirstResponder];
+}
+
+- (BOOL)isFirstResponder {
+    return [self.field isFirstResponder];
 }
 
 - (void)textDidChange:(id)value {
@@ -185,6 +191,7 @@ static const CGFloat kAnimationDuration = 0.25;
     [super layoutSubviews];
     [self.cancelBtn ssj_relayoutBorder];
     [self.sureBtn ssj_relayoutBorder];
+    [self updateAuthCodeText];
 }
 
 - (void)updateConstraints {
@@ -194,12 +201,12 @@ static const CGFloat kAnimationDuration = 0.25;
         make.width.mas_equalTo(240);
     }];
     [self.authCodeLab mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.titleLab.mas_bottom).offset(10);
+        make.top.mas_equalTo(self.titleLab.mas_bottom).offset(15);
         make.centerX.mas_equalTo(self);
         make.size.mas_equalTo(CGSizeMake(148, 40));
     }];
     [self.authCodeField mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.authCodeLab.mas_bottom).offset(10);
+        make.top.mas_equalTo(self.authCodeLab.mas_bottom).offset(15);
         make.centerX.mas_equalTo(self);
         make.size.mas_equalTo(CGSizeMake(194, 35));
     }];
@@ -294,9 +301,18 @@ static const CGFloat kAnimationDuration = 0.25;
         [authCode appendFormat:@"%d", number];
     }
     self.authCode = [authCode copy];
+    [self updateAuthCodeText];
+}
+
+- (void)updateAuthCodeText {
+    if (CGRectIsEmpty(self.authCodeLab.bounds)) {
+        return;
+    }
+    CGSize textSize = [self.authCode sizeWithAttributes:@{NSFontAttributeName:self.authCodeLab.font}];
+    CGFloat kern = (self.authCodeLab.width - textSize.width) / (self.authCode.length + 1);
     NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
-    style.firstLineHeadIndent = 22;
-    self.authCodeLab.attributedText = [[NSAttributedString alloc] initWithString:authCode attributes:@{NSParagraphStyleAttributeName:style, NSKernAttributeName:@12}];
+    style.firstLineHeadIndent = kern;
+    self.authCodeLab.attributedText = [[NSAttributedString alloc] initWithString:self.authCode attributes:@{NSParagraphStyleAttributeName:style, NSKernAttributeName:@(kern)}];
 }
 
 - (void)setupBindings {
@@ -307,6 +323,9 @@ static const CGFloat kAnimationDuration = 0.25;
 
 #pragma mark - YYKeyboardObserver
 - (void)keyboardChangedWithTransition:(YYKeyboardTransition)transition {
+    if (![self.authCodeField isFirstResponder]) {
+        return;
+    }
     if (!transition.fromVisible && transition.toVisible) {
         self.backView.alpha = 0.3;
         self.centerY = (SSJ_KEYWINDOW.height - [YYKeyboardManager defaultManager].keyboardFrame.size.height) * 0.5;
@@ -331,7 +350,7 @@ static const CGFloat kAnimationDuration = 0.25;
 - (UILabel *)authCodeLab {
     if (!_authCodeLab) {
         _authCodeLab = [[UILabel alloc] init];
-        _authCodeLab.font = [UIFont systemFontOfSize:15];
+        _authCodeLab.font = [UIFont systemFontOfSize:20];
         _authCodeLab.textColor = [UIColor blackColor];
         _authCodeLab.backgroundColor = [UIColor lightGrayColor];
     }
