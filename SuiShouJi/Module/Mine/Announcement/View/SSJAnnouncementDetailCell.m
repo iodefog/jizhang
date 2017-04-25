@@ -45,10 +45,9 @@
 {
     if (!_leftImageView) {
         _leftImageView = [[UIImageView alloc] init];
-//        _leftImageView.contentMode = UIViewContentModeScaleAspectFit;
-        _leftImageView.layer.cornerRadius = 4;
-        _leftImageView.layer.masksToBounds = YES;
-        [_leftImageView clipsToBounds];
+        CAShapeLayer *layer = [CAShapeLayer layer];
+        layer.path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, 100, 80) cornerRadius:4].CGPath;
+        _leftImageView.layer.mask = layer;
     }
     return _leftImageView;
 }
@@ -97,6 +96,7 @@
         make.size.mas_equalTo(CGSizeMake(100, 80));
         make.left.offset(15);
         make.centerY.mas_equalTo(self);
+        
     }];
     
     [self.titleLab mas_makeConstraints:^(MASConstraintMaker *make) {
