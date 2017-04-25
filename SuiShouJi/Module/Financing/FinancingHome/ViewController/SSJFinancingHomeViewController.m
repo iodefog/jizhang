@@ -14,6 +14,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 
 
 #import "SSJFinancingHomeViewController.h"
+#import "SSJEditableCollectionView.h"
 #import "SSJFinancingHomeCell.h"
 #import "SSJFinancingHomeitem.h"
 #import "SSJFundingDetailsViewController.h"
@@ -32,11 +33,13 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 
 #import "FMDB.h"
 
-@interface SSJFinancingHomeViewController ()
+@interface SSJFinancingHomeViewController () <UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,SSJEditableCollectionViewDelegate,SSJEditableCollectionViewDataSource>
+
 @property (nonatomic,strong) SSJEditableCollectionView *collectionView;
 @property (nonatomic,strong) NSMutableArray *items;
 @property (nonatomic,strong) SSJFinancingHomeHeader *headerView;
 @property(nonatomic, strong) NSString *newlyAddFundId;
+
 @end
 
 @implementation SSJFinancingHomeViewController{

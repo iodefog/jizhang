@@ -7,7 +7,6 @@
 //
 
 #import "SSJBaseViewController.h"
-#import "SSJEditableCollectionView.h"
 
 @interface SSJBooksTypeSelectViewController : SSJBaseViewController<UICollectionViewDelegate,UICollectionViewDataSource>
 
