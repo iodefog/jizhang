@@ -2652,6 +2652,17 @@
 		7DF532A11E13BBD1009A6F6C /* SSJMonthSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C18C0161DF68FB700BC0971 /* SSJMonthSelectView.m */; };
 		7DF532A51E13BC0F009A6F6C /* SSJInstalmentDateSelectCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C18C02D1DF9323C00BC0971 /* SSJInstalmentDateSelectCell.m */; };
 		7DF8B9AD1CDC2B0000F461A6 /* SSJEditableCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DF8B9AC1CDC2B0000F461A6 /* SSJEditableCollectionView.m */; };
+		7DFB16271EAF18F500292DD3 /* SSJCustomThemeSelectCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61FD2C1EAE13FE00971F0F /* SSJCustomThemeSelectCollectionViewCell.m */; };
+		7DFB16281EAF18F600292DD3 /* SSJCustomThemeSelectCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61FD2C1EAE13FE00971F0F /* SSJCustomThemeSelectCollectionViewCell.m */; };
+		7DFB16291EAF18F700292DD3 /* SSJCustomThemeSelectCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61FD2C1EAE13FE00971F0F /* SSJCustomThemeSelectCollectionViewCell.m */; };
+		7DFB162A1EAF18F700292DD3 /* SSJCustomThemeSelectCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61FD2C1EAE13FE00971F0F /* SSJCustomThemeSelectCollectionViewCell.m */; };
+		7DFB162B1EAF18F700292DD3 /* SSJCustomThemeSelectCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61FD2C1EAE13FE00971F0F /* SSJCustomThemeSelectCollectionViewCell.m */; };
+		7DFB162C1EAF18F800292DD3 /* SSJCustomThemeSelectCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61FD2C1EAE13FE00971F0F /* SSJCustomThemeSelectCollectionViewCell.m */; };
+		7DFB162D1EAF18F900292DD3 /* SSJCustomThemeSelectCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61FD2C1EAE13FE00971F0F /* SSJCustomThemeSelectCollectionViewCell.m */; };
+		7DFB162E1EAF18FA00292DD3 /* SSJCustomThemeSelectCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61FD2C1EAE13FE00971F0F /* SSJCustomThemeSelectCollectionViewCell.m */; };
+		7DFB162F1EAF18FB00292DD3 /* SSJCustomThemeSelectCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61FD2C1EAE13FE00971F0F /* SSJCustomThemeSelectCollectionViewCell.m */; };
+		7DFB16301EAF18FC00292DD3 /* SSJCustomThemeSelectCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61FD2C1EAE13FE00971F0F /* SSJCustomThemeSelectCollectionViewCell.m */; };
+		7DFB16311EAF18FC00292DD3 /* SSJCustomThemeSelectCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61FD2C1EAE13FE00971F0F /* SSJCustomThemeSelectCollectionViewCell.m */; };
 		7DFCEDFB1D817532006F254A /* SSJRecordMakingMoveCategoryAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DFCEDFA1D817532006F254A /* SSJRecordMakingMoveCategoryAlertView.m */; };
 		7DFCEDFE1D817532006F254A /* SSJRecordMakingMoveCategoryAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DFCEDFA1D817532006F254A /* SSJRecordMakingMoveCategoryAlertView.m */; };
 		7DFD30441D75217300A0D7A0 /* SSJCategoryEditableCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DFD30431D75217300A0D7A0 /* SSJCategoryEditableCollectionView.m */; };
@@ -13754,6 +13765,7 @@
 				7D08A0F51E4999D30085A8FB /* SSJMagicExportCalendarView.m in Sources */,
 				7D08A0F61E4999D30085A8FB /* SSJDataSynchronizeTask.m in Sources */,
 				7D08A0F71E4999D30085A8FB /* SSJFundingTransferDetailCell.m in Sources */,
+				7DFB162B1EAF18F700292DD3 /* SSJCustomThemeSelectCollectionViewCell.m in Sources */,
 				7D08A0F81E4999D30085A8FB /* SCYMotionEncryptionCircleLayer.m in Sources */,
 				7D08A0F91E4999D30085A8FB /* SSJReportFormsUtil.m in Sources */,
 				7D08A0FA1E4999D30085A8FB /* SSJFundingDetailListHeaderView.m in Sources */,
@@ -14348,6 +14360,7 @@
 				7DA13A4C1E35AED7000490A4 /* SSJMagicExportCalendarView.m in Sources */,
 				7DA13A4D1E35AED7000490A4 /* SSJDataSynchronizeTask.m in Sources */,
 				7DA13A4E1E35AED7000490A4 /* SSJFundingTransferDetailCell.m in Sources */,
+				7DFB162A1EAF18F700292DD3 /* SSJCustomThemeSelectCollectionViewCell.m in Sources */,
 				7DA13A4F1E35AED7000490A4 /* SCYMotionEncryptionCircleLayer.m in Sources */,
 				7DA13A501E35AED7000490A4 /* SSJReportFormsUtil.m in Sources */,
 				7DA13A511E35AED7000490A4 /* SSJFundingDetailListHeaderView.m in Sources */,
@@ -14942,6 +14955,7 @@
 				7DBB3AD31E55C2EE0075E638 /* SSJPercentCircleView.m in Sources */,
 				7DBB3AD41E55C2EE0075E638 /* SSJPersonalDetailHelper.m in Sources */,
 				7DBB3AD51E55C2EE0075E638 /* SSJMagicExportCalendarView.m in Sources */,
+				7DFB162C1EAF18F800292DD3 /* SSJCustomThemeSelectCollectionViewCell.m in Sources */,
 				7DBB3AD61E55C2EE0075E638 /* SSJDataSynchronizeTask.m in Sources */,
 				7DBB3AD71E55C2EE0075E638 /* SSJSearchBarAddition.m in Sources */,
 				7DBB3AD81E55C2EE0075E638 /* SSJFundingTransferDetailCell.m in Sources */,
@@ -15536,6 +15550,7 @@
 				7DBB3F6E1E55C4E00075E638 /* SSJPercentCircleView.m in Sources */,
 				7DBB3F6F1E55C4E00075E638 /* SSJPersonalDetailHelper.m in Sources */,
 				7DBB3F701E55C4E00075E638 /* SSJMagicExportCalendarView.m in Sources */,
+				7DFB16281EAF18F600292DD3 /* SSJCustomThemeSelectCollectionViewCell.m in Sources */,
 				7DBB3F711E55C4E00075E638 /* SSJDataSynchronizeTask.m in Sources */,
 				7DBB3F721E55C4E00075E638 /* SSJSearchBarAddition.m in Sources */,
 				7DBB3F731E55C4E00075E638 /* SSJFundingTransferDetailCell.m in Sources */,
@@ -16354,6 +16369,7 @@
 				9C13F6161E8267D300AC5FA9 /* SSJBudgetEditAccountDaySelectionView.m in Sources */,
 				9C13F6171E8267D300AC5FA9 /* SSJCircleChargeSettingViewController.m in Sources */,
 				9C13F6181E8267D300AC5FA9 /* SSJLoanInterestTypeAlertView.m in Sources */,
+				7DFB162D1EAF18F900292DD3 /* SSJCustomThemeSelectCollectionViewCell.m in Sources */,
 				9C13F6191E8267D300AC5FA9 /* SSJMagicExportViewController.m in Sources */,
 				9C13F61A1E8267D300AC5FA9 /* FMResultSet.m in Sources */,
 				9C13F61B1E8267D300AC5FA9 /* SSJHistoryHeader.m in Sources */,
@@ -16784,6 +16800,7 @@
 				9C4C20A31E9E30C8000C5F15 /* SSJMotionPasswordSettingViewController.m in Sources */,
 				9C4C20A41E9E30C8000C5F15 /* SSJColorSelectCollectionViewCell.m in Sources */,
 				9C4C20A51E9E30C8000C5F15 /* SSJForgotPSWSendVerCodeService.m in Sources */,
+				7DFB16301EAF18FC00292DD3 /* SSJCustomThemeSelectCollectionViewCell.m in Sources */,
 				9C4C20A61E9E30C8000C5F15 /* SSJMagicExportCalendarIndexPath.m in Sources */,
 				9C4C20A71E9E30C8000C5F15 /* SSJMotionPasswordLoginPasswordAlertView.m in Sources */,
 				9C4C20A81E9E30C8000C5F15 /* SSJGradientMaskView.m in Sources */,
@@ -17365,6 +17382,7 @@
 				9C7D2D801E8DF8A80093001F /* SSJForgotPSWResetService.m in Sources */,
 				9C7D2D811E8DF8A80093001F /* SSJReportFormsScaleAxisCell.m in Sources */,
 				9C7D2D821E8DF8A80093001F /* SSJNewBaseTableViewController.m in Sources */,
+				7DFB16271EAF18F500292DD3 /* SSJCustomThemeSelectCollectionViewCell.m in Sources */,
 				9C7D2D831E8DF8A80093001F /* UICountingLabel.m in Sources */,
 				9C7D2D841E8DF8A80093001F /* SSJLoanChargeAddOrEditViewController.m in Sources */,
 				9C7D2D851E8DF8A80093001F /* UIBarButtonItem+CDCategory.m in Sources */,
@@ -17953,6 +17971,7 @@
 				9C7D2FF71E8DF96B0093001F /* SSJForgotPSWResetService.m in Sources */,
 				9C7D2FF81E8DF96B0093001F /* SSJReportFormsScaleAxisCell.m in Sources */,
 				9C7D2FF91E8DF96B0093001F /* SSJNewBaseTableViewController.m in Sources */,
+				7DFB162E1EAF18FA00292DD3 /* SSJCustomThemeSelectCollectionViewCell.m in Sources */,
 				9C7D2FFA1E8DF96B0093001F /* UICountingLabel.m in Sources */,
 				9C7D2FFB1E8DF96B0093001F /* SSJLoanChargeAddOrEditViewController.m in Sources */,
 				9C7D2FFC1E8DF96B0093001F /* UIBarButtonItem+CDCategory.m in Sources */,
@@ -18549,6 +18568,7 @@
 				9C80FD421E95E88E00B1BAAC /* SSJMotionPasswordSettingViewController.m in Sources */,
 				9C80FD431E95E88E00B1BAAC /* SSJColorSelectCollectionViewCell.m in Sources */,
 				9C80FD441E95E88E00B1BAAC /* SSJForgotPSWSendVerCodeService.m in Sources */,
+				7DFB162F1EAF18FB00292DD3 /* SSJCustomThemeSelectCollectionViewCell.m in Sources */,
 				9C80FD451E95E88E00B1BAAC /* SSJMagicExportCalendarIndexPath.m in Sources */,
 				9C80FD461E95E88E00B1BAAC /* SSJMotionPasswordLoginPasswordAlertView.m in Sources */,
 				9C80FD471E95E88E00B1BAAC /* SSJGradientMaskView.m in Sources */,
@@ -19138,6 +19158,7 @@
 				9C9CEF021EA5F73A007657FE /* SSJMotionPasswordSettingViewController.m in Sources */,
 				9C9CEF031EA5F73A007657FE /* SSJColorSelectCollectionViewCell.m in Sources */,
 				9C9CEF041EA5F73A007657FE /* SSJForgotPSWSendVerCodeService.m in Sources */,
+				7DFB16311EAF18FC00292DD3 /* SSJCustomThemeSelectCollectionViewCell.m in Sources */,
 				9C9CEF051EA5F73A007657FE /* SSJMagicExportCalendarIndexPath.m in Sources */,
 				9C9CEF061EA5F73A007657FE /* SSJMotionPasswordLoginPasswordAlertView.m in Sources */,
 				9C9CEF071EA5F73A007657FE /* SSJGradientMaskView.m in Sources */,
@@ -19608,6 +19629,7 @@
 				9CECFB3E1D6D41A700DB2C8B /* SSJListMenuCell.m in Sources */,
 				9CECFB3F1D6D41A700DB2C8B /* SSJBookkeepingTreeViewController.m in Sources */,
 				9CECFB421D6D41A700DB2C8B /* SSJLoadMoreCell.m in Sources */,
+				7DFB16291EAF18F700292DD3 /* SSJCustomThemeSelectCollectionViewCell.m in Sources */,
 				9C155EDD1E68572700FDFD18 /* MJRefreshBackGifFooter.m in Sources */,
 				9CECFB431D6D41A700DB2C8B /* SSJThemeDownLoadCompleteService.m in Sources */,
 				9C155EB01E68572700FDFD18 /* MJRefreshFooter.m in Sources */,

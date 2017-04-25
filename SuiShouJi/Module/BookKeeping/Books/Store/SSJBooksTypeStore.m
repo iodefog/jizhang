@@ -39,7 +39,6 @@
             if (item.booksOrder == 0) {
                 item.booksOrder = order;
             }
-            item.selectToEdite = NO;
             [booksList addObject:item];
             order ++;
         }
@@ -47,7 +46,6 @@
         item.booksName = @"添加账本";
         item.booksColor = @"#cccccc";
         item.booksIcoin = @"book_tianjia";
-        item.selectToEdite = NO;
         [booksList addObject:item];
         if (success) {
             SSJDispatch_main_async_safe(^{
