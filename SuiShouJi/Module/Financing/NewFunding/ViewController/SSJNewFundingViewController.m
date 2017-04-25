@@ -171,7 +171,7 @@
     } else if ([title isEqualToString:@"账户余额"]) {
         _amountTextField = NewFundingCell.cellDetail;
         NewFundingCell.cellDetail.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入账户余额" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
-        NewFundingCell.cellDetail.text = [[NSString stringWithFormat:@"%f",self.item.fundingAmount] ssj_moneyDecimalDisplayWithDigits:2];
+        NewFundingCell.cellDetail.text = self.item.fundingAmount > 0 ? [[NSString stringWithFormat:@"%f",self.item.fundingAmount]ssj_moneyDecimalDisplayWithDigits:2] :@"";
         NewFundingCell.cellDetail.tag = 101;
         NewFundingCell.cellDetail.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
         _amountTextField.delegate = self;
