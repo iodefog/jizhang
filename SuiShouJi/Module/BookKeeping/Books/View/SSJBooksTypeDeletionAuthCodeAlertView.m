@@ -153,6 +153,8 @@ static const CGFloat kAnimationDuration = 0.25;
 
 @property (nonatomic, strong) NSString *authCode;
 
+@property (nonatomic, strong) UIView *backView;
+
 @end
 
 @implementation SSJBooksTypeDeletionAuthCodeAlertView
@@ -212,18 +214,29 @@ static const CGFloat kAnimationDuration = 0.25;
         make.right.mas_equalTo(self);
         make.size.mas_equalTo(CGSizeMake(145, 50));
     }];
+    [self.backView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.edges.mas_equalTo(SSJ_KEYWINDOW);
+    }];
     [super updateConstraints];
 }
 
 - (void)show {
     self.authCodeField.authCode = nil;
-    [self.authCodeField becomeFirstResponder];
     [self genAuthCode];
-    [SSJ_KEYWINDOW ssj_showViewWithBackView:self backColor:[UIColor blackColor] alpha:0.3 target:nil touchAction:NULL animation:NULL timeInterval:kAnimationDuration fininshed:NULL];
+    self.centerX = SSJ_KEYWINDOW.width * 0.5;
+    self.top = SSJ_KEYWINDOW.height;
+    self.backView.alpha = 0;
+    if (!self.backView.superview) {
+        [SSJ_KEYWINDOW addSubview:self.backView];
+    }
+    if (!self.superview) {
+        [SSJ_KEYWINDOW addSubview:self];
+    }
+    [self.authCodeField becomeFirstResponder];
 }
 
 - (void)dismiss {
-    [self.superview ssj_hideBackViewForView:self animation:NULL timeInterval:kAnimationDuration fininshed:NULL];
+    [self.authCodeField resignFirstResponder];
 }
 
 - (void)cancelAction {
@@ -294,16 +307,12 @@ static const CGFloat kAnimationDuration = 0.25;
 
 #pragma mark - YYKeyboardObserver
 - (void)keyboardChangedWithTransition:(YYKeyboardTransition)transition {
-    if (!transition.fromVisible || transition.toVisible) {
-//        [self mas_updateConstraints:^(MASConstraintMaker *make) {
-//            make.centerX.mas_equalTo(self.superview);
-//            make.centerY.mas_equalTo(self.superview.mas_top).offset((SSJ_KEYWINDOW.height - [YYKeyboardManager defaultManager].keyboardFrame.size.height) * 0.5);
-//        }];
-        
-        [UIView animateWithDuration:kAnimationDuration animations:^{
-            self.centerX = self.superview.width * 0.5;
-            self.centerY = (SSJ_KEYWINDOW.height - [YYKeyboardManager defaultManager].keyboardFrame.size.height) * 0.5;
-        }];
+    if (!transition.fromVisible && transition.toVisible) {
+        self.backView.alpha = 0.3;
+        self.centerY = (SSJ_KEYWINDOW.height - [YYKeyboardManager defaultManager].keyboardFrame.size.height) * 0.5;
+    } else if (transition.fromVisible && !transition.toVisible) {
+        self.backView.alpha = 0;
+        self.top = SSJ_KEYWINDOW.bottom;
     }
 }
 
@@ -361,6 +370,14 @@ static const CGFloat kAnimationDuration = 0.25;
         [_sureBtn ssj_setBorderColor:[UIColor ssj_colorWithHex:@"#dddddd"]];
     }
     return _sureBtn;
+}
+
+- (UIView *)backView {
+    if (!_backView) {
+        _backView = [[UIView alloc] init];
+        _backView.backgroundColor = [UIColor blackColor];
+    }
+    return _backView;
 }
 
 @end
