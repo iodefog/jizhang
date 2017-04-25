@@ -95,6 +95,13 @@
  */
 - (UIColor *)ssj_getPixelColorAtLocation:(CGPoint)point;
 
+
+/**
+ 圆角图片
+ */
+- (UIImage *)ssj_circleImage;
+
+
 @end
 
 @interface UIImage (SSJImageCompound)

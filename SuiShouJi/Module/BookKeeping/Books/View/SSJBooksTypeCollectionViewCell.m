@@ -182,7 +182,6 @@
         self.booksIcionImage.transform = CATransform3DIdentity;
     }
     self.selectedButton.hidden = !_item.editeModel;
-    self.selectedButton.selected = _item.selectToEdite;
     [self setNeedsLayout];
 }
 

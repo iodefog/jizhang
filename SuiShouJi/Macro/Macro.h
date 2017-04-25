@@ -93,6 +93,9 @@ alpha:(a)]
 //  屏幕屏幕宽度
 #define SSJSCREENWITH CGRectGetWidth([UIScreen mainScreen].bounds)
 
+//  屏幕分辨率
+#define SSJSCREENSCALE [UIScreen mainScreen].scale
+
 //  状态栏高度
 #define SSJ_STATUSBAR_HEIGHT CGRectGetHeight([UIApplication sharedApplication].statusBarFrame)
 

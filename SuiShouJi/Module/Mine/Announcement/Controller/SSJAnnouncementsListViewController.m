@@ -53,6 +53,11 @@ static NSString *const kAnnouncementCellIdentifier = @"kAnnouncementCellIdentifi
      }
 }
 
+- (void)viewDidDisappear:(BOOL)animated
+{
+     [super viewDidDisappear:animated];
+     [self.service cancel];
+}
 
 #pragma mark - UITableViewDelegate
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {

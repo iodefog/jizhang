@@ -62,9 +62,12 @@
 
 -(UIImageView *)portraitImage{
     if (!_portraitImage) {
-        _portraitImage = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 60, 60)];
-        _portraitImage.layer.cornerRadius = 30.f;
-        _portraitImage.layer.masksToBounds = YES;
+        CGRect rect = CGRectMake(0, 0, 60, 60);
+        _portraitImage = [[UIImageView alloc]initWithFrame:rect];
+        CAShapeLayer *portLayer = [CAShapeLayer layer];
+        UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:rect cornerRadius:rect.size.width * 0.5];
+        portLayer.path = path.CGPath;
+        _portraitImage.layer.mask = portLayer;
     }
     return _portraitImage;
 }
@@ -103,13 +106,5 @@
     self.subTitleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
 }
 
-
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
-}
-*/
 
 @end

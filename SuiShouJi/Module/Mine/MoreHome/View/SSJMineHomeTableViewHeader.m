@@ -14,7 +14,7 @@
 #define kBottomViewHeight 45
 
 @interface SSJMineHomeTableViewHeader()
-@property (nonatomic, strong) SSJMineHeaderView *headPotraitImage;
+@property (nonatomic, strong) UIImageView *headPotraitImage;
 @property (nonatomic, strong) UILabel *nicknameLabel;
 @property(nonatomic, strong) UILabel *checkInLevelLabel;
 @property(nonatomic, strong) UIButton *checkInButton;
@@ -88,10 +88,14 @@
     self.syncButton.shouldSyncBlock = shouldSyncBlock;
 }
 
--(SSJMineHeaderView *)headPotraitImage{
+-(UIImageView *)headPotraitImage{
     if (!_headPotraitImage) {
-        _headPotraitImage = [[SSJMineHeaderView alloc]init];
-        _headPotraitImage.layer.cornerRadius = 32;
+        _headPotraitImage = [[UIImageView alloc]init];
+        CGRect rect = CGRectMake(0, 0, 64, 64);
+        CAShapeLayer *imagLayer = [CAShapeLayer layer];
+        UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:rect cornerRadius:rect.size.width * 0.5];
+        imagLayer.path = path.CGPath;
+        _headPotraitImage.layer.mask = imagLayer;
     }
     return _headPotraitImage;
 }
@@ -206,10 +210,11 @@
             //三方登录
             self.nicknameLabel.text = item.nickName;
         }
-        [self.headPotraitImage.headerImage sd_setImageWithURL:[NSURL URLWithString:iconStr] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
+        [self.headPotraitImage sd_setImageWithURL:[NSURL URLWithString:iconStr] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
+
         [self.nicknameLabel sizeToFit];
     } else {
-        self.headPotraitImage.headerImage.image = [UIImage imageNamed:@"defualt_portrait"];
+        self.headPotraitImage.image = [UIImage imageNamed:@"defualt_portrait"];
         self.nicknameLabel.text = @"待君登录";
         [self.nicknameLabel sizeToFit];
     }

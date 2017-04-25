@@ -47,5 +47,12 @@
 #import "SSJTheme.h"
 #import "Masonry.h"
 #import "MJRefresh.h"
+#import <ReactiveCocoa/ReactiveCocoa.h>
+#import <ReactiveCocoa/RACEXTScope.h>
+#import <ReactiveCocoa/RACReturnSignal.h>
+
+#import <ReactiveCocoa/ReactiveCocoa.h>
+#import <ReactiveCocoa/RACEXTScope.h>
+#import <ReactiveCocoa/RACReturnSignal.h>
 
 #endif
