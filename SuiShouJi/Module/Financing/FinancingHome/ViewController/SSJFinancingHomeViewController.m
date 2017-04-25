@@ -40,7 +40,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 @end
 
 @implementation SSJFinancingHomeViewController{
-    BOOL _editeModel;
+//    BOOL _editeModel;
 }
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -53,7 +53,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    _editeModel = NO;
+//    _editeModel = NO;
     [self.view addSubview:self.headerView];
     [self.view addSubview:self.collectionView];
     [self.collectionView registerClass:[SSJFinancingHomeCell class] forCellWithReuseIdentifier:SSJFinancingNormalCellIdentifier];
@@ -148,7 +148,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
     __weak typeof(self) weakSelf = self;
     SSJFinancingHomeCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:SSJFinancingNormalCellIdentifier forIndexPath:indexPath];
     cell.item = item;
-    cell.editeModel = _editeModel;
+//    cell.editeModel = _editeModel;
     cell.deleteButtonClickBlock = ^(SSJFinancingHomeCell *cell,NSInteger chargeCount){
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"确定要删除该资金账户吗?" preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:NULL];
@@ -218,10 +218,10 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 }
 
 - (void)collectionView:(SSJEditableCollectionView *)collectionView didBeginEditingWhenPressAtIndexPath:(NSIndexPath *)indexPath{
-    _editeModel = YES;
-    UIBarButtonItem *rightBarItem = [[UIBarButtonItem alloc]initWithTitle:@"完成" style:UIBarButtonItemStylePlain target:self action:@selector(collectionViewEndEditing)];
-    self.navigationItem.rightBarButtonItem = rightBarItem;
-    [self.collectionView reloadData];
+//    _editeModel = YES;
+//    UIBarButtonItem *rightBarItem = [[UIBarButtonItem alloc]initWithTitle:@"完成" style:UIBarButtonItemStylePlain target:self action:@selector(collectionViewEndEditing)];
+//    self.navigationItem.rightBarButtonItem = rightBarItem;
+//    [self.collectionView reloadData];
 }
 
 - (void)collectionViewDidEndEditing:(SSJEditableCollectionView *)collectionView{
@@ -365,7 +365,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 }
 
 -(void)collectionViewEndEditing{
-    _editeModel = NO;
+//    _editeModel = NO;
     [self.collectionView reloadData];
     UIBarButtonItem *rightButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"founds_jia"] style:UIBarButtonItemStylePlain target:self action:@selector(rightButtonClicked:)];
     self.navigationItem.rightBarButtonItem = rightButton;
