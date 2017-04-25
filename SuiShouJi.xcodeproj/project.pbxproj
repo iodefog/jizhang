@@ -4177,6 +4177,7 @@
 		9C61FD281EAE0CF500971F0F /* SSJHomeThemeModifyView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61FD1E1EAE0C2800971F0F /* SSJHomeThemeModifyView.m */; };
 		9C61FD291EAE0CF600971F0F /* SSJHomeThemeModifyView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61FD1E1EAE0C2800971F0F /* SSJHomeThemeModifyView.m */; };
 		9C61FD2A1EAE0CF700971F0F /* SSJHomeThemeModifyView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61FD1E1EAE0C2800971F0F /* SSJHomeThemeModifyView.m */; };
+		9C61FD2D1EAE13FE00971F0F /* SSJCustomThemeSelectCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61FD2C1EAE13FE00971F0F /* SSJCustomThemeSelectCollectionViewCell.m */; };
 		9C65CA0B1D4B39AE0058D0A4 /* SSJThemeManagerCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C65CA0A1D4B39AE0058D0A4 /* SSJThemeManagerCollectionViewCell.m */; };
 		9C66F11A1D20C19B0094125D /* SSJThemeHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C66F1191D20C19B0094125D /* SSJThemeHomeViewController.m */; };
 		9C66F11D1D20C40F0094125D /* SSJThemeHomeCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C66F11C1D20C40F0094125D /* SSJThemeHomeCollectionViewCell.m */; };
@@ -8258,6 +8259,8 @@
 		9C61AAA61D5B30DE005DC9BD /* SSJThemeDownLoadCompleteService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJThemeDownLoadCompleteService.m; sourceTree = "<group>"; };
 		9C61FD1D1EAE0C2800971F0F /* SSJHomeThemeModifyView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJHomeThemeModifyView.h; sourceTree = "<group>"; };
 		9C61FD1E1EAE0C2800971F0F /* SSJHomeThemeModifyView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJHomeThemeModifyView.m; sourceTree = "<group>"; };
+		9C61FD2B1EAE13FE00971F0F /* SSJCustomThemeSelectCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCustomThemeSelectCollectionViewCell.h; sourceTree = "<group>"; };
+		9C61FD2C1EAE13FE00971F0F /* SSJCustomThemeSelectCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCustomThemeSelectCollectionViewCell.m; sourceTree = "<group>"; };
 		9C65CA091D4B39AE0058D0A4 /* SSJThemeManagerCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJThemeManagerCollectionViewCell.h; sourceTree = "<group>"; };
 		9C65CA0A1D4B39AE0058D0A4 /* SSJThemeManagerCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJThemeManagerCollectionViewCell.m; sourceTree = "<group>"; };
 		9C66F1181D20C19B0094125D /* SSJThemeHomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJThemeHomeViewController.h; sourceTree = "<group>"; };
@@ -9361,6 +9364,8 @@
 				91A846AB1E237A5D00D2D0BE /* SSJHomeBillStickyNoteView.m */,
 				9C61FD1D1EAE0C2800971F0F /* SSJHomeThemeModifyView.h */,
 				9C61FD1E1EAE0C2800971F0F /* SSJHomeThemeModifyView.m */,
+				9C61FD2B1EAE13FE00971F0F /* SSJCustomThemeSelectCollectionViewCell.h */,
+				9C61FD2C1EAE13FE00971F0F /* SSJCustomThemeSelectCollectionViewCell.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -20305,6 +20310,7 @@
 				7DD9D0C61CF6E2A6005AF735 /* SSJReportFormsScaleAxisCell.m in Sources */,
 				BD04339A1C1A8DA50051E7AB /* SSJNewBaseTableViewController.m in Sources */,
 				7DD49BF41DB78A4A00318AF9 /* UICountingLabel.m in Sources */,
+				9C61FD2D1EAE13FE00971F0F /* SSJCustomThemeSelectCollectionViewCell.m in Sources */,
 				7D4A79731DD46D6100E905F4 /* SSJLoanChargeAddOrEditViewController.m in Sources */,
 				7D22A3821E4F16AC00190CEB /* UIBarButtonItem+CDCategory.m in Sources */,
 				9CD9BC331CFD2DAA0061803B /* SSJMotionPasswordViewController.m in Sources */,
