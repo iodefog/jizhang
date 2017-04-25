@@ -11,5 +11,5 @@
 @interface SSJDatabaseErrorHandler : NSObject
 
 + (void)handleError:(NSError *)error;
-+ (void)uploadFileData;
+
 @end

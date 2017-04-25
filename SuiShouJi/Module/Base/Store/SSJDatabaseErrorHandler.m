@@ -21,6 +21,10 @@
 
 @implementation SSJDatabaseErrorHandler
 
++ (void)load {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(uploadFileData) name:UIApplicationDidFinishLaunchingNotification object:nil];
+}
+
 + (void)handleError:(NSError *)error {
     if (!error) return;
     dispatch_async([self sharedQueue], ^{
