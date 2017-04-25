@@ -7,6 +7,7 @@
 //
 
 #import "SSJBooksTypeDeletionAuthCodeAlertView.h"
+#import "YYKeyboardManager.h"
 
 #pragma mark -
 #pragma mark - SSJBooksTypeDeletionAuthCodeField
@@ -17,9 +18,13 @@ static const CGFloat kGap = 15;
 
 @property (nonatomic, copy) NSString *authCode;
 
+- (BOOL)becomeFirstResponder;
+
+- (BOOL)resignFirstResponder;
+
 @end
 
-@interface SSJBooksTypeDeletionAuthCodeField ()
+@interface SSJBooksTypeDeletionAuthCodeField () <UITextFieldDelegate>
 
 @property (nonatomic) int codeDigits;
 
@@ -68,8 +73,17 @@ static const CGFloat kGap = 15;
     return self.field.attributedText.string;
 }
 
-- (void)textDidChange {
+- (BOOL)becomeFirstResponder {
+    return [self.field becomeFirstResponder];
+}
+
+- (BOOL)resignFirstResponder {
+    return [self.field resignFirstResponder];
+}
+
+- (void)textDidChange:(id)value {
     [self updateSpaceBetweenLetters];
+    [self sendActionsForControlEvents:UIControlEventAllEditingEvents];
 }
 
 - (void)updateSpaceBetweenLetters {
@@ -97,12 +111,21 @@ static const CGFloat kGap = 15;
     _field.attributedText = attributeText;
 }
 
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
+    if (text.length > self.codeDigits) {
+        return NO;
+    }
+    return YES;
+}
+
 - (UITextField *)field {
     if (!_field) {
         _field = [[UITextField alloc] init];
         _field.textColor = [UIColor blackColor];
         _field.keyboardType = UIKeyboardTypeNumberPad;
-        [_field addTarget:self action:@selector(textDidChange) forControlEvents:UIControlEventEditingChanged];
+        [_field addTarget:self action:@selector(textDidChange:) forControlEvents:UIControlEventAllEditingEvents];
+        _field.delegate = self;
     }
     return _field;
 }
@@ -116,7 +139,7 @@ static const int kAuthCodeDigits = 4;
 
 static const CGFloat kAnimationDuration = 0.25;
 
-@interface SSJBooksTypeDeletionAuthCodeAlertView ()
+@interface SSJBooksTypeDeletionAuthCodeAlertView () <YYKeyboardObserver>
 
 @property (nonatomic, strong) UILabel *titleLab;
 
@@ -136,16 +159,24 @@ static const CGFloat kAnimationDuration = 0.25;
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
+        self.clipsToBounds = YES;
+        self.layer.cornerRadius = 3;
+        self.backgroundColor = [UIColor whiteColor];
         [self addSubview:self.titleLab];
         [self addSubview:self.authCodeLab];
         [self addSubview:self.authCodeField];
         [self addSubview:self.cancelBtn];
         [self addSubview:self.sureBtn];
-        self.clipsToBounds = YES;
-        self.layer.cornerRadius = 3;
-        self.backgroundColor = [UIColor whiteColor];
+        [self sizeToFit];
+        [self setNeedsUpdateConstraints];
+        [[YYKeyboardManager defaultManager] addObserver:self];
+        [self setupBindings];
     }
     return self;
+}
+
+- (CGSize)sizeThatFits:(CGSize)size {
+    return CGSizeMake(290, 230);
 }
 
 - (void)layoutSubviews {
@@ -171,28 +202,23 @@ static const CGFloat kAnimationDuration = 0.25;
         make.size.mas_equalTo(CGSizeMake(194, 35));
     }];
     [self.cancelBtn mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.authCodeField.mas_bottom).offset(22);
         make.left.mas_equalTo(0);
         make.bottom.mas_equalTo(self);
         make.size.mas_equalTo(CGSizeMake(145, 50));
     }];
     [self.sureBtn mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.authCodeField.mas_bottom).offset(22);
         make.left.mas_equalTo(self.cancelBtn.mas_right);
         make.bottom.mas_equalTo(self);
         make.right.mas_equalTo(self);
         make.size.mas_equalTo(CGSizeMake(145, 50));
-    }];
-    [self mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.center.mas_equalTo(self.superview);
     }];
     [super updateConstraints];
 }
 
 - (void)show {
     self.authCodeField.authCode = nil;
+    [self.authCodeField becomeFirstResponder];
     [self genAuthCode];
-    [self setNeedsUpdateConstraints];
     [SSJ_KEYWINDOW ssj_showViewWithBackView:self backColor:[UIColor blackColor] alpha:0.3 target:nil touchAction:NULL animation:NULL timeInterval:kAnimationDuration fininshed:NULL];
 }
 
@@ -211,8 +237,41 @@ static const CGFloat kAnimationDuration = 0.25;
             self.finishVerification();
         }
     } else {
-        self.authCodeField.authCode = nil;
+        [CDAutoHideMessageHUD showMessage:@"输入错误，请重新输入"];
+        [self shake:^{
+            self.authCodeField.authCode = nil;
+        }];
     }
+}
+
+- (void)shake:(void(^)())completion {
+    [UIView animateKeyframesWithDuration:0.3 delay:0 options:UIViewKeyframeAnimationOptionCalculationModeLinear animations:^{
+        [UIView addKeyframeWithRelativeStartTime:0 relativeDuration:1.0 / 12 animations:^{
+            self.transform = CGAffineTransformMakeTranslation(-10, 0);
+        }];
+        [UIView addKeyframeWithRelativeStartTime:1.0 / 12 relativeDuration:1.0 / 6 animations:^{
+            self.transform = CGAffineTransformMakeTranslation(10, 0);
+        }];
+        [UIView addKeyframeWithRelativeStartTime:3.0 / 12 relativeDuration:1.0 / 6 animations:^{
+            self.transform = CGAffineTransformMakeTranslation(-10, 0);
+        }];
+        [UIView addKeyframeWithRelativeStartTime:5.0 / 12 relativeDuration:1.0 / 6 animations:^{
+            self.transform = CGAffineTransformMakeTranslation(10, 0);
+        }];
+        [UIView addKeyframeWithRelativeStartTime:7.0 / 12 relativeDuration:1.0 / 6 animations:^{
+            self.transform = CGAffineTransformMakeTranslation(-10, 0);
+        }];
+        [UIView addKeyframeWithRelativeStartTime:9.0 / 12 relativeDuration:1.0 / 6 animations:^{
+            self.transform = CGAffineTransformMakeTranslation(10, 0);
+        }];
+        [UIView addKeyframeWithRelativeStartTime:11.0 / 12 relativeDuration:1.0 / 12 animations:^{
+            self.transform = CGAffineTransformIdentity;
+        }];
+    } completion:^(BOOL finished) {
+        if (completion) {
+            completion();
+        }
+    }];
 }
 
 - (void)genAuthCode {
@@ -227,6 +286,28 @@ static const CGFloat kAnimationDuration = 0.25;
     self.authCodeLab.attributedText = [[NSAttributedString alloc] initWithString:authCode attributes:@{NSParagraphStyleAttributeName:style, NSKernAttributeName:@12}];
 }
 
+- (void)setupBindings {
+    RAC(self.sureBtn, enabled) = [[self.authCodeField rac_signalForControlEvents:UIControlEventAllEditingEvents] map:^id(SSJBooksTypeDeletionAuthCodeField *field) {
+        return @(field.authCode.length == kAuthCodeDigits);
+    }];
+}
+
+#pragma mark - YYKeyboardObserver
+- (void)keyboardChangedWithTransition:(YYKeyboardTransition)transition {
+    if (!transition.fromVisible || transition.toVisible) {
+//        [self mas_updateConstraints:^(MASConstraintMaker *make) {
+//            make.centerX.mas_equalTo(self.superview);
+//            make.centerY.mas_equalTo(self.superview.mas_top).offset((SSJ_KEYWINDOW.height - [YYKeyboardManager defaultManager].keyboardFrame.size.height) * 0.5);
+//        }];
+        
+        [UIView animateWithDuration:kAnimationDuration animations:^{
+            self.centerX = self.superview.width * 0.5;
+            self.centerY = (SSJ_KEYWINDOW.height - [YYKeyboardManager defaultManager].keyboardFrame.size.height) * 0.5;
+        }];
+    }
+}
+
+#pragma mark - Lazyloading
 - (UILabel *)titleLab {
     if (!_titleLab) {
         _titleLab = [[UILabel alloc] init];
@@ -274,6 +355,7 @@ static const CGFloat kAnimationDuration = 0.25;
         _sureBtn.titleLabel.font = [UIFont systemFontOfSize:18];
         [_sureBtn setTitle:@"删除" forState:UIControlStateNormal];
         [_sureBtn setTitleColor:[UIColor ssj_colorWithHex:@"#333333"] forState:UIControlStateNormal];
+        [_sureBtn setTitleColor:[[UIColor ssj_colorWithHex:@"#333333"] colorWithAlphaComponent:0.5] forState:UIControlStateDisabled];
         [_sureBtn addTarget:self action:@selector(sureAction) forControlEvents:UIControlEventTouchUpInside];
         [_sureBtn ssj_setBorderStyle:(SSJBorderStyleTop)];
         [_sureBtn ssj_setBorderColor:[UIColor ssj_colorWithHex:@"#dddddd"]];
