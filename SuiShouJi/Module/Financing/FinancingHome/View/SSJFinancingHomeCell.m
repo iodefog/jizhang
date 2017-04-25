@@ -33,7 +33,7 @@ static const CGFloat kRadius = 8.f;
     self = [super initWithFrame:frame];
     if (self) {
         [self.contentView.layer addSublayer:self.backLayer];
-        [self.contentView addSubview:self.deleteButton];
+//        [self.contentView addSubview:self.deleteButton];
         [self.contentView addSubview:self.fundingImage];
         [self.contentView addSubview:self.fundingBalanceLabel];
         [self.contentView addSubview:self.fundingNameLabel];
@@ -288,7 +288,7 @@ static const CGFloat kRadius = 8.f;
 
 -(void)setEditeModel:(BOOL)editeModel{
     _editeModel = editeModel;
-    self.deleteButton.hidden = !_editeModel;
+//    self.deleteButton.hidden = !_editeModel;
 }
 
 
