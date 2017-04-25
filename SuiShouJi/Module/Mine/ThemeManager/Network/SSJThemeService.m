@@ -20,11 +20,15 @@
     if ([self.returnCode isEqualToString:@"1"]) {
         NSDictionary *results = [rootElement objectForKey:@"results"];
         NSMutableArray *themeArray = [SSJThemeItem mj_objectArrayWithKeyValuesArray:[results objectForKey:@"themeconfig"]];
-        SSJThemeItem *item = [[SSJThemeItem alloc]init];
-        item.themeId = @"0";
-        item.themeTitle = @"官方白";
-        item.themeDesc = @"官方默认皮肤，羞羞萌萌的小猫伴你走过记账囧途，简约的初心设计与你一路相随。";
-        [themeArray insertObject:item atIndex:0];
+        SSJThemeItem *itemDefualt = [[SSJThemeItem alloc]init];
+        itemDefualt.themeId = @"0";
+        itemDefualt.themeTitle = @"官方白";
+        itemDefualt.themeDesc = @"官方默认皮肤，羞羞萌萌的小猫伴你走过记账囧途，简约的初心设计与你一路相随。";
+        [themeArray insertObject:itemDefualt atIndex:0];
+        SSJThemeItem *itemCustom = [[SSJThemeItem alloc]init];
+        itemCustom.themeId = @"-1";
+        itemCustom.themeTitle = @"自定义背景";
+        [themeArray insertObject:itemCustom atIndex:0];
         self.themes = [NSArray arrayWithArray:themeArray];
         if (self.success) {
             self.success(self.themes);

@@ -67,12 +67,14 @@
     self.themeSizeLabel.leftBottom = CGPointMake(self.themeTitleLabel.right + 10, self.themeTitleLabel.bottom);
     self.themeStatusLabel.leftTop = CGPointMake(self.themeTitleLabel.left, self.themeTitleLabel.bottom + 10);
     self.themeStatusButton.leftTop = self.themeStatusLabel.leftTop;
-    if (self.item.themeStatus != themeStatusInuse) {
-        self.themeStatusButton.hidden = NO;
-        self.themeStatusLabel.hidden = YES;
-    }else{
-        self.themeStatusButton.hidden = YES;
-        self.themeStatusLabel.hidden = NO;
+    if (![self.item.themeId isEqualToString:@"-1"]) {
+        if (self.item.themeStatus != themeStatusInuse) {
+            self.themeStatusButton.hidden = NO;
+            self.themeStatusLabel.hidden = YES;
+        }else{
+            self.themeStatusButton.hidden = YES;
+            self.themeStatusLabel.hidden = NO;
+        }
     }
 }
 
@@ -161,8 +163,27 @@
 -(void)setItem:(SSJThemeItem *)item{
     [[SSJThemeDownLoaderManger sharedInstance] removeProgressHandler:_downloadHandler forID:self.item.themeId];
     _item = item;
-    //判断是否是默认的主题
-    if (![_item.themeId isEqualToString:@"0"]) {
+    if ([_item.themeId isEqualToString:@"0"]) {
+        self.themeSizeLabel.hidden = YES;
+        self.themeTitleLabel.text = _item.themeTitle;
+        [self.themeTitleLabel sizeToFit];
+        if (_item.themeStatus == themeStatusInuse) {
+            self.themeStatusLabel.text = @"使用中";
+        }else {
+            [self.themeStatusButton.button setTitle:@"启用" forState:UIControlStateNormal];
+        }
+        self.themeImage.image = [UIImage imageNamed:@"theme_defualt"];
+        self.themeStatusLabel.hidden = NO;
+        self.themeStatusButton.hidden = NO;
+
+    } else if ([_item.themeId isEqualToString:@"-1"]) {
+        self.themeImage.image = [UIImage imageNamed:@"theme_custom"];
+        self.themeTitleLabel.text = _item.themeTitle;
+        [self.themeTitleLabel sizeToFit];
+        self.themeSizeLabel.hidden = YES;
+        self.themeStatusLabel.hidden = YES;
+        self.themeStatusButton.hidden = YES;
+    } else {
         self.themeTitleLabel.text = _item.themeTitle;
         [self.themeTitleLabel sizeToFit];
         self.themeSizeLabel.hidden = NO;
@@ -179,7 +200,7 @@
             [self.themeStatusButton.button setTitle:@"升级" forState:UIControlStateNormal];
         }
         [self.themeImage sd_setImageWithURL:[NSURL URLWithString:_item.themeImageUrl] placeholderImage:[UIImage imageNamed:@"noneImage"]];
-//        __weak typeof(self) weakSelf = self;
+        //        __weak typeof(self) weakSelf = self;
         if (self.item.isDownLoading) {
             [self.themeStatusButton.button setTitle:@"" forState:UIControlStateNormal];
             self.themeStatusButton.downloadMaskView.hidden = NO;
@@ -187,16 +208,8 @@
         }else{
             self.themeStatusButton.downloadMaskView.hidden = YES;
         }
-    }else{
-        self.themeSizeLabel.hidden = YES;
-        self.themeTitleLabel.text = _item.themeTitle;
-        [self.themeTitleLabel sizeToFit];
-        if (_item.themeStatus == themeStatusInuse) {
-            self.themeStatusLabel.text = @"使用中";
-        }else {
-            [self.themeStatusButton.button setTitle:@"启用" forState:UIControlStateNormal];
-        }
-        self.themeImage.image = [UIImage imageNamed:@"defualtImage"];
+        self.themeStatusLabel.hidden = NO;
+        self.themeStatusButton.hidden = NO;
     }
     [self setNeedsLayout];
 }

@@ -27,6 +27,7 @@ static BOOL kNeedBannerDisplay = YES;
 #import "SSJBooksParentSelectView.h"
 #import "SSJBooksAdView.h"
 #import "SSJBannerNetworkService.h"
+#import "SSJBooksTypeDeletionAuthCodeAlertView.h"
 
 @interface SSJBooksTypeSelectViewController ()<SSJEditableCollectionViewDelegate,SSJEditableCollectionViewDataSource>
 
@@ -49,6 +50,8 @@ static BOOL kNeedBannerDisplay = YES;
 @property(nonatomic, strong) SSJBooksAdView *adView;
 
 @property(nonatomic, strong) SSJBannerNetworkService *adService;
+
+@property (nonatomic, strong) SSJBooksTypeDeletionAuthCodeAlertView *authCodeAlertView;
 
 @end
 
@@ -316,25 +319,20 @@ static BOOL kNeedBannerDisplay = YES;
             [CDAutoHideMessageHUD showMessage:@"日常账本不能删除哦"];
             return;
         }
-        SSJAlertViewAction *comfirmAction = [SSJAlertViewAction actionWithTitle:@"删除" handler:^(SSJAlertViewAction * _Nonnull action) {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"删除该账本后，是否将涉及相关资金账户的流水一并删除？" preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *reserve = [UIAlertAction actionWithTitle:@"保留资金流水" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                [weakSelf deleteBooksWithType:0];
-            }];
-            UIAlertAction *destructive = [UIAlertAction actionWithTitle:@"一并删除" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
-                [weakSelf deleteBooksWithType:1];
-            }];
-            UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-            }];
-            [alert addAction:reserve];
-            [alert addAction:destructive];
-            [alert addAction:cancel];
-            [weakSelf presentViewController:alert animated:YES completion:NULL];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"删除后，相关资金账户的流水将一并删除，确定删除此《》吗？" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *destructive = [UIAlertAction actionWithTitle:@"删除" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+            [weakSelf sureToDelete];
         }];
-        SSJAlertViewAction *cancelAction = [SSJAlertViewAction actionWithTitle:@"取消" handler:NULL];
-        [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@"你确定要删除该账本吗?" action:cancelAction , comfirmAction, nil];
-
+        UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        }];
+        [alert addAction:destructive];
+        [alert addAction:cancel];
+        [weakSelf presentViewController:alert animated:YES completion:NULL];
     }
+}
+
+- (void)sureToDelete {
+    [self.authCodeAlertView show];
 }
 
 #pragma mark - Getter
@@ -484,6 +482,17 @@ static BOOL kNeedBannerDisplay = YES;
         _adView.hidden = YES;
     }
     return _adView;
+}
+
+- (SSJBooksTypeDeletionAuthCodeAlertView *)authCodeAlertView {
+    if (!_authCodeAlertView) {
+        __weak typeof(self) wself = self;
+        _authCodeAlertView = [[SSJBooksTypeDeletionAuthCodeAlertView alloc] init];
+        _authCodeAlertView.finishVerification = ^{
+            [wself deleteBooksWithType:1];
+        };
+    }
+    return _authCodeAlertView;
 }
 
 - (SSJBannerNetworkService *)adService{

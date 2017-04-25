@@ -18,6 +18,8 @@
 
 @property(nonatomic, strong) SSJHomeTableView *tableView;
 
+@property(nonatomic) BOOL needEditeThemeModel;
+
 //首页动画加载
 -(void)reloadWithAnimation;
 
