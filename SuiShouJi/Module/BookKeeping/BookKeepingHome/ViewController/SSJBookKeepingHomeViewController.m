@@ -51,6 +51,7 @@
 #import "SSJRegistGetVerViewController.h"
 #import "SSJBookKeepingHomeListItem.h"
 #import "SSJBookKeepingHomeHeaderView.h"
+#import "SSJHomeThemeModifyView.h"
 #import "SSJBookKeepingHomeNoDataCell.h"
 
 static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
@@ -97,6 +98,8 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 @property (nonatomic, strong) SSJBookKeepingHomePopView *keepingHomePopView;
 
 @property (nonatomic, strong) SSJHomeBillStickyNoteView *billStickyNoteView;
+
+@property(nonatomic, strong) SSJHomeThemeModifyView *themeModifyView;
 @end
 
 @implementation SSJBookKeepingHomeViewController{
@@ -168,6 +171,13 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 //    _hasLoad = YES;
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
     self.extendedLayoutIncludesOpaqueBars = YES;
+    
+//    if (self.needEditeThemeModel) {
+        [self.themeModifyView show];
+//    } else {
+//        self.themeModifyView.hidden = YES;
+//    }
+    
     [self getCurrentDate];
     
 //    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor],NSFontAttributeName:[UIFont systemFontOfSize:20]};
@@ -266,6 +276,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
     self.statusLabel.height = 21;
     self.statusLabel.top = self.homeButton.bottom;
     self.statusLabel.centerX = self.view.width / 2;
+    self.themeModifyView.leftBottom = CGPointMake(0, self.view.height);
 }
 
 - (BOOL)prefersStatusBarHidden {
@@ -793,6 +804,13 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 //        };
     }
     return _billStickyNoteView;
+}
+
+- (SSJHomeThemeModifyView *)themeModifyView {
+    if (!_themeModifyView) {
+        _themeModifyView = [[SSJHomeThemeModifyView alloc] init];
+    }
+    return _themeModifyView;
 }
 
 

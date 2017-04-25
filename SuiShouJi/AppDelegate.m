@@ -52,6 +52,7 @@
 #import "SimulateIDFA.h"
 #import "SSJDatabaseErrorHandler.h"
 #import "SSJAnaliyticsManager.h"
+#import "SSJCustomThemeManager.h"
 
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_10_0
 #import <UserNotifications/UserNotifications.h>
@@ -151,6 +152,12 @@ NSDate *SCYEnterBackgroundTime() {
             [SSJThemeUpdate updateLocalThemesIfneeded];
         });
         
+    }
+    
+    NSInteger appversion = [[SSJAppVersion() stringByReplacingOccurrencesOfString:@"." withString:@""] integerValue];
+    
+    if (SSJLaunchTimesForCurrentVersion() == 1 && appversion >= 240) {
+        [SSJCustomThemeManager initializeCustomTheme];
     }
     
     //每次启动打一次补丁

@@ -53,7 +53,9 @@
 }
 
 + (NSArray *)allThemeModels {
-    NSDictionary *modelInfo = [NSKeyedUnarchiver unarchiveObjectWithFile:[self settingFilePath]];
+    NSMutableDictionary *modelInfo = [NSKeyedUnarchiver unarchiveObjectWithFile:[self settingFilePath]];
+    [modelInfo removeObjectForKey:@"1000"];
+    [modelInfo removeObjectForKey:@"1001"];
     NSMutableArray *allModels = [NSMutableArray arrayWithObject:[self defaultThemeModel]];
     [allModels addObjectsFromArray:[modelInfo allValues]];
     return allModels;
