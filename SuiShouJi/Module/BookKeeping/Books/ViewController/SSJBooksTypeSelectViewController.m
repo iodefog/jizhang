@@ -54,10 +54,10 @@ static BOOL kNeedBannerDisplay = YES;
 
 @end
 
-@implementation SSJBooksTypeSelectViewController{
-    NSString *_selectBooksId;
-    NSIndexPath *_editingIndex;
-    BOOL _editeModel;
+@implementation SSJBooksTypeSelectViewController
+
+-(void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -76,7 +76,6 @@ static BOOL kNeedBannerDisplay = YES;
     [self.collectionView setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithCustomView:self.rightButton];
     self.navigationItem.rightBarButtonItem = rightItem;
-    _editeModel = NO;
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -96,13 +95,8 @@ static BOOL kNeedBannerDisplay = YES;
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     [self.header stopLoading];
-    _editeModel = NO;
     self.rightButton.selected = NO;
     [self.collectionView endEditing];
-}
-
--(void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 -(void)viewDidLayoutSubviews{
@@ -142,9 +136,7 @@ static BOOL kNeedBannerDisplay = YES;
 {
     NSString *booksid = SSJGetCurrentBooksType();
     SSJBooksTypeItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
-//    __weak typeof(self) weakSelf = self;
     SSJBooksTypeCollectionViewCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:SSJBooksTypeCellIdentifier forIndexPath:indexPath];
-    cell.editeModel = _editeModel;
     if ([item.booksId isEqualToString:booksid]) {
         cell.isSelected = YES;
     }else{
@@ -189,12 +181,11 @@ static BOOL kNeedBannerDisplay = YES;
 }
 
 - (void)collectionView:(SSJEditableCollectionView *)collectionView didBeginEditingWhenPressAtIndexPath:(NSIndexPath *)indexPath{
-    _editeModel = YES;
     self.rightButton.selected = YES;
     self.adView.hidden = YES;
     for (SSJBooksTypeItem *item in self.items) {
         if (![item.booksName isEqualToString:@"添加账本"]) {
-            item.editeModel = self.rightButton.isSelected;
+            item.editeModel = YES;
         }
     }
 }
@@ -235,7 +226,6 @@ static BOOL kNeedBannerDisplay = YES;
 
 #pragma mark - Event
 - (void)rightButtonClicked:(id)sender{
-    _editeModel = !_editeModel;
     self.rightButton.selected = !self.rightButton.isSelected;
     if (self.rightButton.isSelected) {
         self.adView.hidden = YES;
@@ -398,7 +388,6 @@ static BOOL kNeedBannerDisplay = YES;
             item.editeModel = NO;
         }
         self.adView.hidden = NO;
-        _editeModel = NO;
         [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
         [weakSelf getDateFromDB];
     } failure:^(NSError *error) {
