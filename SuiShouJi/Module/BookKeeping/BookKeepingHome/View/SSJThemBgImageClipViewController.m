@@ -112,24 +112,21 @@
     [self dismissViewControllerAnimated:YES completion:^{}];
 }
 
-//截图
-- (UIImage*)screenView:(UIView *)view {
-    UIGraphicsBeginImageContextWithOptions(CGSizeMake(view.width, view.height - SSJ_NAVIBAR_BOTTOM), NO, 0.0);
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    [view.layer renderInContext:context];
-    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return img;
-}
-
-
 - (void)cancelButtonClicked
 {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - Private
-
+//截图
+- (UIImage*)screenView:(UIView *)view {
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(view.width, view.height), NO, 0.0);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    [view.layer renderInContext:context];
+    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return img;
+}
 
 #pragma mark - Lazy
 - (UIScrollView *)scrollview
