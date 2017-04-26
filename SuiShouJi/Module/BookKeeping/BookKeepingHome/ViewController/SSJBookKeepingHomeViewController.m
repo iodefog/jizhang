@@ -54,10 +54,11 @@
 #import "SSJHomeThemeModifyView.h"
 #import "SSJBookKeepingHomeNoDataCell.h"
 #import "SSJCustomThemeManager.h"
+#import "SSJThemBgImageClipViewController.h"
 
 static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 
-@interface SSJBookKeepingHomeViewController () <UITabBarControllerDelegate, SSJMultiFunctionButtonDelegate>
+@interface SSJBookKeepingHomeViewController () <UITabBarControllerDelegate, SSJMultiFunctionButtonDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 
 @property (nonatomic,strong) NSMutableArray *items;
 @property (nonatomic,strong) UIButton *button;
@@ -626,6 +627,23 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
     }
 }
 
+#pragma mark - UIImagePickerControllerDelegate
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    [picker dismissViewControllerAnimated:YES completion:^{}];
+    UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
+    if (!image) return;
+    //图片编辑
+    SSJThemBgImageClipViewController *imageClipVC = [[SSJThemBgImageClipViewController alloc] init];
+    imageClipVC.normalImage = image;
+    imageClipVC.clipImageBlock = ^(UIImage *newImage) {
+        [SSJCustomThemeManager changeThemeWithLocalImage:newImage];
+    };
+    [self presentViewController:imageClipVC animated:YES completion:^{
+        
+    }];
+}
+
 #pragma mark - Getter
 //-(UIImageView *)backImage{
 //    if (!_backImage) {
@@ -808,16 +826,29 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 }
 
 - (SSJHomeThemeModifyView *)themeModifyView {
+    __weak __typeof(self)weakSelf = self;
     if (!_themeModifyView) {
         _themeModifyView = [[SSJHomeThemeModifyView alloc] init];
         _themeModifyView.themeSelectBlock = ^(NSString *selectTheme){
             [SSJCustomThemeManager changeThemeWithDefaultImageName:selectTheme];
         };
         _themeModifyView.themeSelectCustomImageBlock = ^(){
-
+            //访问相册
+            [weakSelf localPhoto];
         };
     }
     return _themeModifyView;
+}
+
+//选择相册
+-(void)localPhoto{
+    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+    
+    picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    picker.delegate = self;
+    //设置选择后的图片可被编辑
+//    picker.allowsEditing = YES;
+    [self presentViewController:picker animated:YES completion:^{}];
 }
 
 

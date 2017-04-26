@@ -10,7 +10,11 @@
 
 @interface SSJHomeThemeModifyView : UIView
 
+// 选中的主题
 @property(nonatomic, strong) NSString *seletctTheme;
+
+// 选中的字体颜色(0为白色,1为黑色)
+@property(nonatomic) BOOL selectType;
 
 @property (nonatomic, copy) void(^themeSelectBlock)(NSString *selectTheme);
 
