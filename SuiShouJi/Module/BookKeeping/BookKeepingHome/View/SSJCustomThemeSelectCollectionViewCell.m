@@ -29,6 +29,7 @@
         [self addSubview:self.imageView];
         [self addSubview:self.selectImage];
         [self addSubview:self.maskView];
+        [self addSubview:self.addImage];    
         self.clipsToBounds = YES;
         self.layer.cornerRadius = 13;
         self.layer.borderColor = [UIColor ssj_colorWithHex:@"#F5F5F5"].CGColor;

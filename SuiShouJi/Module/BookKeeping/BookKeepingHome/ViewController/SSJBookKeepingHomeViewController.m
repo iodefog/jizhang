@@ -814,7 +814,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
             [SSJCustomThemeManager changeThemeWithDefaultImageName:selectTheme];
         };
         _themeModifyView.themeSelectCustomImageBlock = ^(){
-
+            
         };
     }
     return _themeModifyView;
