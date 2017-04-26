@@ -79,10 +79,20 @@
 
 -(void)setTextFont:(int)textFont{
     _textFont = textFont;
+    for (CALayer *layer in self.layer.sublayers) {
+        if ([layer isKindOfClass:[CATextLayer class]]) {
+            ((CATextLayer *)layer).fontSize = textFont;
+        }
+    }
 }
 
 -(void)setTextColor:(UIColor *)textColor{
     _textColor = textColor;
+    for (CALayer *layer in self.layer.sublayers) {
+        if ([layer isKindOfClass:[CATextLayer class]]) {
+            ((CATextLayer *)layer).foregroundColor = textColor.CGColor;
+        }
+    }
 }
 
 -(void)setTotalAnimationDuration:(float)totalAnimationDuration{
