@@ -128,10 +128,11 @@ static const CGFloat kGap = 15;
 - (UITextField *)field {
     if (!_field) {
         _field = [[UITextField alloc] init];
-        _field.textColor = [UIColor blackColor];
+        _field.textColor = [UIColor ssj_colorWithHex:@"#333333"];
         _field.keyboardType = UIKeyboardTypeNumberPad;
         [_field addTarget:self action:@selector(textDidChange:) forControlEvents:UIControlEventAllEditingEvents];
         _field.delegate = self;
+        _field.font = [UIFont systemFontOfSize:21];
     }
     return _field;
 }
@@ -168,7 +169,7 @@ static const CGFloat kAnimationDuration = 0.25;
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         self.clipsToBounds = YES;
-        self.layer.cornerRadius = 3;
+        self.layer.cornerRadius = 5;
         self.backgroundColor = [UIColor whiteColor];
         [self addSubview:self.titleLab];
         [self addSubview:self.authCodeLab];
@@ -184,7 +185,7 @@ static const CGFloat kAnimationDuration = 0.25;
 }
 
 - (CGSize)sizeThatFits:(CGSize)size {
-    return CGSizeMake(290, 230);
+    return CGSizeMake(280, 270);
 }
 
 - (void)layoutSubviews {
@@ -196,30 +197,30 @@ static const CGFloat kAnimationDuration = 0.25;
 
 - (void)updateConstraints {
     [self.titleLab mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(14);
+        make.top.mas_equalTo(25);
         make.centerX.mas_equalTo(self);
-        make.width.mas_equalTo(240);
+        make.width.mas_equalTo(self);
     }];
     [self.authCodeLab mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.titleLab.mas_bottom).offset(15);
+        make.top.mas_equalTo(self.titleLab.mas_bottom).offset(25);
         make.centerX.mas_equalTo(self);
         make.size.mas_equalTo(CGSizeMake(148, 40));
     }];
     [self.authCodeField mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.authCodeLab.mas_bottom).offset(15);
+        make.top.mas_equalTo(self.authCodeLab.mas_bottom).offset(25);
         make.centerX.mas_equalTo(self);
-        make.size.mas_equalTo(CGSizeMake(194, 35));
+        make.size.mas_equalTo(CGSizeMake(205, 40));
     }];
     [self.cancelBtn mas_updateConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(0);
         make.bottom.mas_equalTo(self);
-        make.size.mas_equalTo(CGSizeMake(145, 50));
+        make.size.mas_equalTo(CGSizeMake(140, 50));
     }];
     [self.sureBtn mas_updateConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(self.cancelBtn.mas_right);
         make.bottom.mas_equalTo(self);
         make.right.mas_equalTo(self);
-        make.size.mas_equalTo(CGSizeMake(145, 50));
+        make.size.mas_equalTo(CGSizeMake(140, 50));
     }];
     [self.backView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.edges.mas_equalTo(SSJ_KEYWINDOW);
@@ -340,9 +341,12 @@ static const CGFloat kAnimationDuration = 0.25;
     if (!_titleLab) {
         _titleLab = [[UILabel alloc] init];
         _titleLab.font = [UIFont systemFontOfSize:13];
-        _titleLab.textColor = [UIColor ssj_colorWithHex:@"#999999"];
-        _titleLab.text = @"删除后将难以恢复，仍然删除，请输入下列验证码";
+        _titleLab.textColor = [UIColor ssj_colorWithHex:@"#333333"];
         _titleLab.numberOfLines = 0;
+        NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+        style.lineSpacing = 5;
+        style.alignment = NSTextAlignmentCenter;
+        _titleLab.attributedText = [[NSAttributedString alloc] initWithString:@"删除后将难以恢复\n仍然删除，请输入下列验证码" attributes:@{NSParagraphStyleAttributeName:style}];
     }
     return _titleLab;
 }
@@ -350,9 +354,9 @@ static const CGFloat kAnimationDuration = 0.25;
 - (UILabel *)authCodeLab {
     if (!_authCodeLab) {
         _authCodeLab = [[UILabel alloc] init];
-        _authCodeLab.font = [UIFont systemFontOfSize:20];
-        _authCodeLab.textColor = [UIColor blackColor];
-        _authCodeLab.backgroundColor = [UIColor lightGrayColor];
+        _authCodeLab.font = [UIFont systemFontOfSize:21];
+        _authCodeLab.textColor = [UIColor ssj_colorWithHex:@"#333333"];
+        _authCodeLab.backgroundColor = [UIColor ssj_colorWithHex:@"#cccccc"];
     }
     return _authCodeLab;
 }
@@ -382,8 +386,8 @@ static const CGFloat kAnimationDuration = 0.25;
         _sureBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _sureBtn.titleLabel.font = [UIFont systemFontOfSize:18];
         [_sureBtn setTitle:@"删除" forState:UIControlStateNormal];
-        [_sureBtn setTitleColor:[UIColor ssj_colorWithHex:@"#333333"] forState:UIControlStateNormal];
-        [_sureBtn setTitleColor:[[UIColor ssj_colorWithHex:@"#333333"] colorWithAlphaComponent:0.5] forState:UIControlStateDisabled];
+        [_sureBtn setTitleColor:[UIColor ssj_colorWithHex:@"#eb4a64"] forState:UIControlStateNormal];
+        [_sureBtn setTitleColor:[[UIColor ssj_colorWithHex:@"#eb4a64"] colorWithAlphaComponent:0.5] forState:UIControlStateDisabled];
         [_sureBtn addTarget:self action:@selector(sureAction) forControlEvents:UIControlEventTouchUpInside];
         [_sureBtn ssj_setBorderStyle:(SSJBorderStyleTop)];
         [_sureBtn ssj_setBorderColor:[UIColor ssj_colorWithHex:@"#dddddd"]];
@@ -394,7 +398,7 @@ static const CGFloat kAnimationDuration = 0.25;
 - (UIView *)backView {
     if (!_backView) {
         _backView = [[UIView alloc] init];
-        _backView.backgroundColor = [UIColor blackColor];
+        _backView.backgroundColor = [UIColor ssj_colorWithHex:@"#333333"];
     }
     return _backView;
 }
