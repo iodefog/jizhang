@@ -27,6 +27,7 @@ static BOOL kNeedBannerDisplay = YES;
 #import "SSJBooksParentSelectView.h"
 #import "SSJBooksAdView.h"
 #import "SSJBannerNetworkService.h"
+#import "SSJBooksTypeEditAlertView.h"
 #import "SSJBooksTypeDeletionAuthCodeAlertView.h"
 
 @interface SSJBooksTypeSelectViewController ()<SSJEditableCollectionViewDelegate,SSJEditableCollectionViewDataSource>
@@ -46,6 +47,8 @@ static BOOL kNeedBannerDisplay = YES;
 @property(nonatomic, strong) SSJBooksAdView *adView;
 
 @property(nonatomic, strong) SSJBannerNetworkService *adService;
+
+@property (nonatomic, strong) SSJBooksTypeEditAlertView *editAlertView;
 
 @property (nonatomic, strong) SSJBooksTypeDeletionAuthCodeAlertView *authCodeAlertView;
 
@@ -118,7 +121,7 @@ static BOOL kNeedBannerDisplay = YES;
     } else {
         if (_editeModel) {
             self.editBooksItem = item;
-            [self showEditAlertView];
+            [self.editAlertView show];
         } else {
             [SSJAnaliyticsManager event:@"change_account_book" extra:item.booksName
              ];
@@ -128,7 +131,6 @@ static BOOL kNeedBannerDisplay = YES;
         }
     }
 }
-
 
 #pragma mark - UICollectionViewDataSource
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
@@ -245,24 +247,6 @@ static BOOL kNeedBannerDisplay = YES;
     }
 }
 
-- (void)showEditAlertView {
-    __weak typeof(self) weakSelf = self;
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"请选择" message:nil preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:@"编辑账本" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [SSJAnaliyticsManager event:@"accountbook_edit"];
-        SSJBooksEditeOrNewViewController *booksEditeVc = [[SSJBooksEditeOrNewViewController alloc]init];
-        booksEditeVc.item = weakSelf.editBooksItem;
-        [weakSelf.navigationController pushViewController:booksEditeVc animated:YES];
-    }]];
-    if (![self.editBooksItem.booksId isEqualToString:SSJUSERID()]) {
-        [alert addAction:[UIAlertAction actionWithTitle:@"删除账本" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
-            [weakSelf.authCodeAlertView show];
-        }]];
-    }
-    [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:NULL]];
-    [weakSelf presentViewController:alert animated:YES completion:NULL];
-}
-
 #pragma mark - Getter
 -(SSJEditableCollectionView *)collectionView{
     if (_collectionView==nil) {
@@ -343,6 +327,20 @@ static BOOL kNeedBannerDisplay = YES;
     return _adView;
 }
 
+- (SSJBooksTypeEditAlertView *)editAlertView {
+    if (!_editAlertView) {
+        __weak typeof(self) wself = self;
+        _editAlertView = [[SSJBooksTypeEditAlertView alloc] init];
+        _editAlertView.editHandler = ^{
+            [wself enterBooksTypeEditController];
+        };
+        _editAlertView.deleteHandler = ^{
+            [wself.authCodeAlertView show];
+        };
+    }
+    return _editAlertView;
+}
+
 - (SSJBooksTypeDeletionAuthCodeAlertView *)authCodeAlertView {
     if (!_authCodeAlertView) {
         __weak typeof(self) wself = self;
@@ -398,6 +396,13 @@ static BOOL kNeedBannerDisplay = YES;
     } failure:^(NSError *error) {
         [SSJAlertViewAdapter showError:error];
     }];
+}
+
+- (void)enterBooksTypeEditController {
+    [SSJAnaliyticsManager event:@"accountbook_edit"];
+    SSJBooksEditeOrNewViewController *booksEditeVc = [[SSJBooksEditeOrNewViewController alloc]init];
+    booksEditeVc.item = self.editBooksItem;
+    [self.navigationController pushViewController:booksEditeVc animated:YES];
 }
 
 -(void)updateAppearanceAfterThemeChanged{

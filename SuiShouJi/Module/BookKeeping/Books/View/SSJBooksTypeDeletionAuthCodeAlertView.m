@@ -247,6 +247,7 @@ static const CGFloat kAnimationDuration = 0.25;
     [self.authCodeField resignFirstResponder];
 }
 
+#pragma mark - Event
 - (void)cancelAction {
     [self dismiss];
 }
@@ -265,6 +266,7 @@ static const CGFloat kAnimationDuration = 0.25;
     }
 }
 
+#pragma mark - Private
 - (void)shake:(void(^)())completion {
     [UIView animateKeyframesWithDuration:0.3 delay:0 options:UIViewKeyframeAnimationOptionCalculationModeLinear animations:^{
         [UIView addKeyframeWithRelativeStartTime:0 relativeDuration:1.0 / 12 animations:^{
@@ -320,6 +322,10 @@ static const CGFloat kAnimationDuration = 0.25;
     RAC(self.sureBtn, enabled) = [[self.authCodeField rac_signalForControlEvents:UIControlEventAllEditingEvents] map:^id(SSJBooksTypeDeletionAuthCodeField *field) {
         return @(field.authCode.length == kAuthCodeDigits);
     }];
+}
+
+- (void)updateAppearance {
+    
 }
 
 #pragma mark - YYKeyboardObserver
