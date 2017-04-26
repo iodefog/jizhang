@@ -457,7 +457,7 @@ NSDate *SCYEnterBackgroundTime() {
 
 /** 远程通知注册失败委托 */
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
-    NSLog(@"\n>>>[DeviceToken Error]:%@\n\n", error.description);
+    SSJPRINT(@"\n>>>[DeviceToken Error]:%@\n\n", error.description);
 }
 
 #pragma mark - APP运行中接收到通知(推送)处理 - iOS 10以下版本收到推送
@@ -473,7 +473,7 @@ NSDate *SCYEnterBackgroundTime() {
     [GeTuiSdk handleRemoteNotification:userInfo];
     
     // 控制台打印接收APNs信息
-    NSLog(@"\n>>>[Receive RemoteNotification]:%@\n\n", userInfo);
+    SSJPRINT(@"\n>>>[Receive RemoteNotification]:%@\n\n", userInfo);
     
     completionHandler(UIBackgroundFetchResultNewData);
     
@@ -491,7 +491,7 @@ NSDate *SCYEnterBackgroundTime() {
 //  iOS 10: App在前台获取到通知
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler {
     
-    NSLog(@"willPresentNotification：%@", notification.request.content.userInfo);
+    SSJPRINT(@"willPresentNotification：%@", notification.request.content.userInfo);
     
     // 根据APP需要，判断是否要提示用户Badge、Sound、Alert
     completionHandler(UNNotificationPresentationOptionBadge | UNNotificationPresentationOptionSound | UNNotificationPresentationOptionAlert);
@@ -500,7 +500,7 @@ NSDate *SCYEnterBackgroundTime() {
 //  iOS 10: 点击通知进入App时触发
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)())completionHandler {
     
-    NSLog(@"didReceiveNotification：%@", response.notification.request.content.userInfo);
+    SSJPRINT(@"didReceiveNotification：%@", response.notification.request.content.userInfo);
     
     // [ GTSdk ]：将收到的APNs信息传给个推统计
     [GeTuiSdk handleRemoteNotification:response.notification.request.content.userInfo];

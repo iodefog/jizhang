@@ -303,7 +303,7 @@
 		<key>WeiBoSecret</key>
 		<string></string>
 		<key>UMAppKey</key>
-		<string>58996c1d3eae256b40000297</string>
+		<string>58f8753e8630f56022000460</string>
 		<key>ShareTitle</key>
 		<string></string>
 		<key>ShareUrl</key>
@@ -371,7 +371,7 @@
 		<key>WeiBoSecret</key>
 		<string>bcbf3b6f1f534d8e39b0b52418761921</string>
 		<key>UMAppKey</key>
-		<string>58ddd3e4310c932c240002eb</string>
+		<string>58f876e704e205746400082d</string>
 		<key>ShareTitle</key>
 		<string>有鱼记账，帮我把小家打理得更好。</string>
 		<key>ShareUrl</key>
@@ -390,7 +390,52 @@
 		<key>appleID</key>
 		<string>1221777670</string>
 		<key>source</key>
-		<string>11502</string>
+		<string>11512</string>
+		<key>WeiXinKey</key>
+		<string>wxb06593134b15aec0</string>
+		<key>WeiXinSecret</key>
+		<string>7889d35368974b1a4644a62d04788a57</string>
+		<key>QQAppId</key>
+		<string>1105340301</string>
+		<key>QQAppKey</key>
+		<string>mW8hRwplNTlrUj3O</string>
+		<key>YWAppKey</key>
+		<string></string>
+		<key>WeiBoAppKey</key>
+		<string></string>
+		<key>WeiBoSecret</key>
+		<string></string>
+		<key>UMAppKey</key>
+		<string>58f876baa3251103e4000bf6</string>
+		<key>ShareTitle</key>
+		<string></string>
+		<key>ShareUrl</key>
+		<string></string>
+		<key>ShareContent</key>
+		<string></string>
+		<key>ShareIcon</key>
+		<string></string>
+		<key>WeiboBanner</key>
+		<string></string>
+		<key>AppStoreUrl</key>
+		<string>https://itunes.apple.com/us/app/9188%E8%AE%B0%E8%B4%A6pro/id1221777670?l=zh&amp;ls=1&amp;mt=8</string>
+	</dict>
+	<key>com.youyu.9188jizhangbao</key>
+	<dict>
+		<key>GeTuiAppSecret</key>
+		<string>Fx5ww60VDh9OC5V496qvG1</string>
+		<key>GeTuiTestAppSecret</key>
+		<string></string>
+		<key>GeTuiAppKey</key>
+		<string>o94ErdbmnQ7XaEOXAUgVA5</string>
+		<key>GeTuiTestAppKey</key>
+		<string></string>
+		<key>GeTuiAppID</key>
+		<string>5wARtCEMJP7DXpQYrNpFX6</string>
+		<key>GeTuTestiAppID</key>
+		<string></string>
+		<key>source</key>
+		<string>11510</string>
 		<key>WeiXinKey</key>
 		<string></string>
 		<key>WeiXinSecret</key>
@@ -406,7 +451,7 @@
 		<key>WeiBoSecret</key>
 		<string></string>
 		<key>UMAppKey</key>
-		<string></string>
+		<string>59000d9782b6355b500006b2</string>
 		<key>ShareTitle</key>
 		<string></string>
 		<key>ShareUrl</key>
@@ -418,7 +463,9 @@
 		<key>WeiboBanner</key>
 		<string></string>
 		<key>AppStoreUrl</key>
-		<string>https://itunes.apple.com/us/app/9188%E8%AE%B0%E8%B4%A6pro/id1221777670?l=zh&amp;ls=1&amp;mt=8</string>
+		<string>https://itunes.apple.com/cn/app/9188记账宝/id1230291938?l=zh&amp;ls=1&amp;mt=8</string>
+		<key>appleID</key>
+		<string>1230291938</string>
 	</dict>
 </dict>
 </plist>
