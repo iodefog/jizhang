@@ -420,5 +420,52 @@
 		<key>AppStoreUrl</key>
 		<string>https://itunes.apple.com/us/app/9188%E8%AE%B0%E8%B4%A6pro/id1221777670?l=zh&amp;ls=1&amp;mt=8</string>
 	</dict>
+	<key>com.youyu.9188jizhangbao</key>
+	<dict>
+		<key>GeTuiAppSecret</key>
+		<string>Fx5ww60VDh9OC5V496qvG1</string>
+		<key>GeTuiTestAppSecret</key>
+		<string></string>
+		<key>GeTuiAppKey</key>
+		<string>o94ErdbmnQ7XaEOXAUgVA5</string>
+		<key>GeTuiTestAppKey</key>
+		<string></string>
+		<key>GeTuiAppID</key>
+		<string>5wARtCEMJP7DXpQYrNpFX6</string>
+		<key>GeTuTestiAppID</key>
+		<string></string>
+		<key>source</key>
+		<string>11510</string>
+		<key>WeiXinKey</key>
+		<string></string>
+		<key>WeiXinSecret</key>
+		<string></string>
+		<key>QQAppId</key>
+		<string>1105340301</string>
+		<key>QQAppKey</key>
+		<string>mW8hRwplNTlrUj3O</string>
+		<key>YWAppKey</key>
+		<string></string>
+		<key>WeiBoAppKey</key>
+		<string></string>
+		<key>WeiBoSecret</key>
+		<string></string>
+		<key>UMAppKey</key>
+		<string>59000d9782b6355b500006b2</string>
+		<key>ShareTitle</key>
+		<string></string>
+		<key>ShareUrl</key>
+		<string></string>
+		<key>ShareContent</key>
+		<string></string>
+		<key>ShareIcon</key>
+		<string></string>
+		<key>WeiboBanner</key>
+		<string></string>
+		<key>AppStoreUrl</key>
+		<string>https://itunes.apple.com/cn/app/9188记账宝/id1230291938?l=zh&amp;ls=1&amp;mt=8</string>
+		<key>appleID</key>
+		<string>1230291938</string>
+	</dict>
 </dict>
 </plist>
