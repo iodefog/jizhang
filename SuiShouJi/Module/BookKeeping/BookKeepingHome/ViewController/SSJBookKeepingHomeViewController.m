@@ -53,6 +53,7 @@
 #import "SSJBookKeepingHomeHeaderView.h"
 #import "SSJHomeThemeModifyView.h"
 #import "SSJBookKeepingHomeNoDataCell.h"
+#import "SSJCustomThemeManager.h"
 
 static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 
@@ -809,6 +810,12 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 - (SSJHomeThemeModifyView *)themeModifyView {
     if (!_themeModifyView) {
         _themeModifyView = [[SSJHomeThemeModifyView alloc] init];
+        _themeModifyView.themeSelectBlock = ^(NSString *selectTheme){
+            [SSJCustomThemeManager changeThemeWithDefaultImageName:selectTheme];
+        };
+        _themeModifyView.themeSelectCustomImageBlock = ^(){
+
+        };
     }
     return _themeModifyView;
 }

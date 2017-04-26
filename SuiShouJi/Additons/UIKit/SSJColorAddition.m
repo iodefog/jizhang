@@ -15,6 +15,10 @@
     if ([cString hasPrefix:@"0X"]) cString = [cString substringFromIndex:2];
     if ([cString hasPrefix:@"#"]) cString = [cString substringFromIndex:1];
     
+    if (cString.length != 6) {
+        
+    }
+    
     // 区分颜色中是否带有alpha,如果后面是8位,则认为她当中有透明度
     if (cString.length == 8) {
         return [self ssj_colorWithAlphaHex:hexColor];
