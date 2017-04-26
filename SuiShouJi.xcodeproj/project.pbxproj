@@ -20938,6 +20938,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuJiZhangGuanJia;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Wen Chen (KD93ZP94R3)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Wen Chen (KD93ZP94R3)";
 				DEVELOPMENT_TEAM = 7RVBV2MALK;
@@ -20978,6 +20979,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuJiZhangGuanJia;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Wen Chen (7RVBV2MALK)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Wen Chen (7RVBV2MALK)";
 				DEVELOPMENT_TEAM = 7RVBV2MALK;
@@ -21017,6 +21019,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuJiZhangBao;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Wen Chen (262HTD8ZSJ)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Wen Chen (262HTD8ZSJ)";
 				DEVELOPMENT_TEAM = 262HTD8ZSJ;
@@ -21057,6 +21060,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuJiZhangBao;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Wen Chen (262HTD8ZSJ)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Wen Chen (262HTD8ZSJ)";
 				DEVELOPMENT_TEAM = 262HTD8ZSJ;
@@ -21143,6 +21147,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = 9188jizhang;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Can Wu (7Z729NG4UD)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Can Wu (7Z729NG4UD)";
 				DEVELOPMENT_TEAM = 747363KXQ6;
@@ -21351,6 +21356,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuJiZhangBen;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer: dai menglin (2Z4WFTCYDJ)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: dai menglin (2Z4WFTCYDJ)";
 				ENABLE_BITCODE = NO;
@@ -21398,6 +21404,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuJiZhangBao;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Wen Chen (262HTD8ZSJ)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Wen Chen (262HTD8ZSJ)";
 				DEVELOPMENT_TEAM = 262HTD8ZSJ;
@@ -21438,6 +21445,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuJiZhangGuanJia;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Wen Chen (KD93ZP94R3)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Wen Chen (KD93ZP94R3)";
 				DEVELOPMENT_TEAM = 7RVBV2MALK;
@@ -21478,6 +21486,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuJiZhangLiCai;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Yutang Zhou (AS9JQNECA2)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Yutang Zhou (AS9JQNECA2)";
 				DEVELOPMENT_TEAM = JFBU3W8R6E;
@@ -21608,6 +21617,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Vendor/AlipayZF",
@@ -21627,6 +21637,7 @@
 		7DA8F99C1E55CFB4006BE13B /* Debug-production */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				INFOPLIST_FILE = SuiShouJiUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = caiyi.SuiShouJiUITests;
@@ -21684,6 +21695,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = 9188jizhang;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co. Ltd.";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co. Ltd.";
 				DEVELOPMENT_TEAM = 747363KXQ6;
@@ -21889,6 +21901,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuJiZhangBen;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: dai menglin (K63W8Y2JZS)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: dai menglin (K63W8Y2JZS)";
 				ENABLE_BITCODE = NO;
@@ -21935,6 +21948,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuJiZhangBao;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Wen Chen (262HTD8ZSJ)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Wen Chen (262HTD8ZSJ)";
 				DEVELOPMENT_TEAM = 262HTD8ZSJ;
@@ -21974,6 +21988,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuJiZhangGuanJia;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Wen Chen (7RVBV2MALK)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Wen Chen (7RVBV2MALK)";
 				DEVELOPMENT_TEAM = 7RVBV2MALK;
@@ -22013,6 +22028,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuJiZhangLiCai;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Yutang Zhou (JFBU3W8R6E)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Yutang Zhou (JFBU3W8R6E)";
 				DEVELOPMENT_TEAM = JFBU3W8R6E;
@@ -22142,6 +22158,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Vendor/AlipayZF",
@@ -22161,6 +22178,7 @@
 		7DA8F9A71E55CFBE006BE13B /* Release-production */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				INFOPLIST_FILE = SuiShouJiUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = caiyi.SuiShouJiUITests;
@@ -22177,6 +22195,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuJiZhangLiCai;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Yutang Zhou (AS9JQNECA2)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Yutang Zhou (AS9JQNECA2)";
 				DEVELOPMENT_TEAM = JFBU3W8R6E;
@@ -22310,6 +22329,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuJiZhangLiCai;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Yutang Zhou (JFBU3W8R6E)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Yutang Zhou (JFBU3W8R6E)";
 				DEVELOPMENT_TEAM = JFBU3W8R6E;
@@ -22442,6 +22462,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = 9188jizhang;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Can Wu (7Z729NG4UD)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Can Wu (7Z729NG4UD)";
 				DEVELOPMENT_TEAM = 747363KXQ6;
@@ -22547,6 +22568,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = 9188jizhang;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co. Ltd.";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co. Ltd.";
 				DEVELOPMENT_TEAM = 747363KXQ6;
@@ -22651,6 +22673,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = BeiKeJiZhang;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = SuiShouJi/Resource/Entitlements/BeiKeJiZhang.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Can Wu (7Z729NG4UD)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Can Wu (7Z729NG4UD)";
@@ -22757,6 +22780,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = BeiKeJiZhang;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = SuiShouJi/Resource/Entitlements/BeiKeJiZhang.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Can Wu (7Z729NG4UD)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Can Wu (7Z729NG4UD)";
@@ -22863,6 +22887,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = BeiKeJiZhang;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = SuiShouJi/Resource/Entitlements/BeiKeJiZhang.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Shenzhen Ding Sheng Rui He Investment Co. Ltd. (67Z253P38K)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shenzhen Ding Sheng Rui He Investment Co. Ltd. (67Z253P38K)";
@@ -22968,6 +22993,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = BeiKeJiZhang;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = SuiShouJi/Resource/Entitlements/BeiKeJiZhang.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Shenzhen Ding Sheng Rui He Investment Co. Ltd. (67Z253P38K)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shenzhen Ding Sheng Rui He Investment Co. Ltd. (67Z253P38K)";
@@ -23073,6 +23099,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = 9188jizhangben;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/SuiShouJi/Resource/Entitlements/9188jizhangben.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer: Shouwu Huang (5QLQ7SZF39)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Shouwu Huang (5QLQ7SZF39)";
@@ -23174,6 +23201,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = 9188jizhangben;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/SuiShouJi/Resource/Entitlements/9188jizhangben.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer: Shouwu Huang (5QLQ7SZF39)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Shouwu Huang (5QLQ7SZF39)";
@@ -23276,6 +23304,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = 9188jizhangben;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/SuiShouJi/Resource/Entitlements/9188jizhangben.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Shouwu Huang (6563L5LUDM)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shouwu Huang (6563L5LUDM)";
@@ -23376,6 +23405,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = 9188jizhangben;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/SuiShouJi/Resource/Entitlements/9188jizhangben.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Shouwu Huang (6563L5LUDM)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shouwu Huang (6563L5LUDM)";
@@ -23476,6 +23506,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = SuiShouJi/Resource/Entitlements/YouYuJiZhangPro.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer: XiaoYong  Wu (6CF3K2UQ7J)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: XiaoYong  Wu (6CF3K2UQ7J)";
@@ -23577,6 +23608,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = SuiShouJi/Resource/Entitlements/YouYuJiZhangPro.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer: XiaoYong  Wu (6CF3K2UQ7J)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: XiaoYong  Wu (6CF3K2UQ7J)";
@@ -23679,6 +23711,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = SuiShouJi/Resource/Entitlements/YouYuJiZhangPro.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Pingxi Fan (5QMLP5Z59C)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Pingxi Fan (5QMLP5Z59C)";
@@ -23779,6 +23812,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = SuiShouJi/Resource/Entitlements/YouYuJiZhangPro.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Pingxi Fan (5QMLP5Z59C)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Pingxi Fan (5QMLP5Z59C)";
@@ -23879,6 +23913,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = 9188jizhang;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/SuiShouJi/Resource/Entitlements/SuiShouJi.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer: Pingxi Fan (9P35U59W23)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Pingxi Fan (9P35U59W23)";
@@ -23980,6 +24015,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = 9188jizhang;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/SuiShouJi/Resource/Entitlements/SuiShouJi.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer: Pingxi Fan (9P35U59W23)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Pingxi Fan (9P35U59W23)";
@@ -24082,6 +24118,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = 9188jizhang;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/SuiShouJi/Resource/Entitlements/SuiShouJi.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Pingxi Fan (5QMLP5Z59C)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Pingxi Fan (5QMLP5Z59C)";
@@ -24182,6 +24219,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = 9188jizhang;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/SuiShouJi/Resource/Entitlements/SuiShouJi.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Pingxi Fan (5QMLP5Z59C)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Pingxi Fan (5QMLP5Z59C)";
@@ -24689,6 +24727,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = JiZhangGuanJia;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/SuiShouJi/Resource/Entitlements/SuiShouJi.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer: Wen Chen (QTBTG29H4P)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Wen Chen (QTBTG29H4P)";
@@ -24790,6 +24829,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = JiZhangGuanJia;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/SuiShouJi/Resource/Entitlements/SuiShouJi.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer: Wen Chen (QTBTG29H4P)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Wen Chen (QTBTG29H4P)";
@@ -24892,6 +24932,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = JiZhangGuanJia;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/SuiShouJi/Resource/Entitlements/SuiShouJi.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Wen Chen (DHR24CJQ56)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Wen Chen (DHR24CJQ56)";
@@ -24992,6 +25033,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = JiZhangGuanJia;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/SuiShouJi/Resource/Entitlements/SuiShouJi.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Wen Chen (DHR24CJQ56)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Wen Chen (DHR24CJQ56)";
@@ -25092,6 +25134,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuJiZhangBen;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer: dai menglin (2Z4WFTCYDJ)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: dai menglin (2Z4WFTCYDJ)";
 				ENABLE_BITCODE = NO;
@@ -25139,6 +25182,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuJiZhangBen;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: dai menglin (K63W8Y2JZS)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: dai menglin (K63W8Y2JZS)";
 				ENABLE_BITCODE = NO;
@@ -25471,6 +25515,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Vendor/AlipayZF",
@@ -25491,6 +25536,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Vendor/AlipayZF",
@@ -25510,6 +25556,7 @@
 		BD543C701C1A6DBC00910D61 /* Debug-test */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				INFOPLIST_FILE = SuiShouJiUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = caiyi.SuiShouJiUITests;
@@ -25522,6 +25569,7 @@
 		BD543C711C1A6DBC00910D61 /* Release-test */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				INFOPLIST_FILE = SuiShouJiUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = caiyi.SuiShouJiUITests;
