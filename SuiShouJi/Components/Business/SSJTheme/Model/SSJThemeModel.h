@@ -199,4 +199,7 @@
 // 通屏按钮的透明度
 @property (nonatomic) CGFloat throughScreenButtonAlpha;
 
+// 通屏按钮的透明度
+@property (nonatomic, copy) NSString *customThemeBackImage;
+
 @end

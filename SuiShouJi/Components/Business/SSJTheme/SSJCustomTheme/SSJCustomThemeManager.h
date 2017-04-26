@@ -12,4 +12,6 @@
 
 + (void)initializeCustomTheme ;
 
++ (void)changeThemeWithDefaultImageName:(NSString *)name ;
+
 @end

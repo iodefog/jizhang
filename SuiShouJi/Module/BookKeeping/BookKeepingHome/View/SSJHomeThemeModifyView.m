@@ -27,7 +27,7 @@ static NSString *const kCellId = @"SSJCustomThemeSelectCollectionViewCell";
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.images = [NSMutableArray arrayWithArray:@[@"",@"theme_custom1",@"theme_custom2",@"theme_custom3",@"theme_custom4"]];
+        self.images = [NSMutableArray arrayWithArray:@[@"",@"theme_custom1_light",@"theme_custom2_light",@"theme_custom3_dark",@"theme_custom4_dark"]];
         [self addSubview:self.collectionView];
         [self addSubview:self.fontLab];
         [self.collectionView registerClass:[SSJCustomThemeSelectCollectionViewCell class] forCellWithReuseIdentifier:kCellId];

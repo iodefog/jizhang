@@ -73,6 +73,7 @@
     [aCoder encodeFloat:_financingDetailSecondaryAlpha forKey:@"financingDetailSecondaryAlpha"];
     [aCoder encodeObject:_throughScreenButtonBackGroudColor forKey:@"throughScreenButtonBackGroudColor"];
     [aCoder encodeFloat:_throughScreenButtonAlpha forKey:@"throughScreenButtonAlpha"];
+    [aCoder encodeObject:_customThemeBackImage forKey:@"_customThemeBackImage"];
 }
 
 - (nullable instancetype)initWithCoder:(NSCoder *)aDecoder {
@@ -139,6 +140,7 @@
         _financingDetailSecondaryAlpha = [aDecoder decodeFloatForKey:@"financingDetailSecondaryAlpha"];
         _throughScreenButtonBackGroudColor = [aDecoder decodeObjectForKey:@"throughScreenButtonBackGroudColor"] ;
         _throughScreenButtonAlpha = [aDecoder decodeFloatForKey:@"throughScreenButtonAlpha"];
+        _customThemeBackImage = [aDecoder decodeObjectForKey:@"_customThemeBackImage"];
     }
     return self;
 }
@@ -195,7 +197,8 @@
                                                           @"bookKeepingHomeMutiButtonNormalColor":_bookKeepingHomeMutiButtonNormalColor,
                                                           @"searchResultHeaderBackgroundColor":_searchResultHeaderBackgroundColor,
                                                           @"summaryBooksHeaderColor":_summaryBooksHeaderColor,
-                                                          @"summaryBooksHeaderAlpha":@(_summaryBooksHeaderAlpha)}];
+                                                          @"summaryBooksHeaderAlpha":@(_summaryBooksHeaderAlpha),
+                                                          @"customThemeBackImage":_customThemeBackImage}];
 }
 
 @end

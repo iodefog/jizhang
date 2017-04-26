@@ -171,31 +171,33 @@
     SSJAnnoucementItem *currentItem = [self.items objectAtIndex:self.currentIndex];
     NSString *announcementStr = currentItem.announcementTitle;
     NSMutableAttributedString *attributeStr;
-    if (currentItem.announcementType == SSJAnnouceMentTypeNew) {
-        announcementStr = [NSString stringWithFormat:@"【new】%@",announcementStr];
-        attributeStr = [[NSMutableAttributedString alloc] initWithString:announcementStr];
-        [attributeStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:13] range:NSMakeRange(0, attributeStr.length)];
-        [attributeStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] range:[announcementStr rangeOfString:@"【new】"]];
-        [attributeStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:[announcementStr rangeOfString:currentItem.announcementTitle]];
+    if (announcementStr.length) {
+        if (currentItem.announcementType == SSJAnnouceMentTypeNew) {
+            announcementStr = [NSString stringWithFormat:@"【new】%@",announcementStr];
+            attributeStr = [[NSMutableAttributedString alloc] initWithString:announcementStr];
+            [attributeStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:13] range:NSMakeRange(0, attributeStr.length)];
+            [attributeStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] range:[announcementStr rangeOfString:@"【new】"]];
+            [attributeStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:[announcementStr rangeOfString:currentItem.announcementTitle]];
+            
+        } else if([_items firstObject].announcementType == SSJAnnouceMentTypeNew) {
+            announcementStr = [NSString stringWithFormat:@"【hot】%@",announcementStr];
+            [attributeStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:13] range:NSMakeRange(0, attributeStr.length)];
+            [attributeStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] range:[announcementStr rangeOfString:@"【hot】"]];
+            [attributeStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:[announcementStr rangeOfString:currentItem.announcementTitle]];
+        } else {
+            announcementStr = [NSString stringWithFormat:@"%@",announcementStr];
+            [attributeStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:13] range:NSMakeRange(0, attributeStr.length)];
+            [attributeStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:[announcementStr rangeOfString:currentItem.announcementTitle]];
+        }
+        self.announceTextLayer.string = attributeStr;
         
-    } else if([_items firstObject].announcementType == SSJAnnouceMentTypeNew) {
-        announcementStr = [NSString stringWithFormat:@"【hot】%@",announcementStr];
-        [attributeStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:13] range:NSMakeRange(0, attributeStr.length)];
-        [attributeStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] range:[announcementStr rangeOfString:@"【hot】"]];
-        [attributeStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:[announcementStr rangeOfString:currentItem.announcementTitle]];
-    } else {
-        announcementStr = [NSString stringWithFormat:@"%@",announcementStr];
-        [attributeStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:13] range:NSMakeRange(0, attributeStr.length)];
-        [attributeStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:[announcementStr rangeOfString:currentItem.announcementTitle]];
-    }
-    self.announceTextLayer.string = attributeStr;
-    
-    if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
-        self.backView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor alpha:0.1];
-        self.backgroundColor = [UIColor whiteColor];
-    } else {
-        self.backView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor alpha:0.1];
-        self.backgroundColor = [UIColor clearColor];
+        if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
+            self.backView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor alpha:0.1];
+            self.backgroundColor = [UIColor whiteColor];
+        } else {
+            self.backView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor alpha:0.1];
+            self.backgroundColor = [UIColor clearColor];
+        }   
     }
 }
 
