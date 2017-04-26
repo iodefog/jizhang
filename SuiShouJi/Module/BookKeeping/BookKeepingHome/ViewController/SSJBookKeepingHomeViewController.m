@@ -630,7 +630,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 #pragma mark - UIImagePickerControllerDelegate
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
-    [picker dismissViewControllerAnimated:YES completion:^{}];
+    [picker dismissViewControllerAnimated:NO completion:^{}];
     UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
     if (!image) return;
     //图片编辑
