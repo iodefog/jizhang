@@ -117,6 +117,7 @@ static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
         UITabBarController *tabVC = (UITabBarController *)((MMDrawerController *)[UIApplication sharedApplication].keyWindow.rootViewController).centerViewController;
         UINavigationController *firstNav = [tabVC.viewControllers objectAtIndex:0];
         SSJBookKeepingHomeViewController *homeVc = [firstNav.viewControllers objectAtIndex:0];
+        homeVc.needEditeThemeModel = YES;
         tabVC.selectedIndex = 0;
         [self.navigationController popViewControllerAnimated:YES];
     } else {

@@ -9,6 +9,8 @@
 #import "SSJHomeThemeModifyView.h"
 #import "SSJCustomThemeSelectCollectionViewCell.h"
 
+#import "SSJCustomThemeManager.h"
+
 static NSString *const kCellId = @"SSJCustomThemeSelectCollectionViewCell";
 
 @interface SSJHomeThemeModifyView() <UICollectionViewDelegate,UICollectionViewDataSource>
@@ -39,7 +41,6 @@ static NSString *const kCellId = @"SSJCustomThemeSelectCollectionViewCell";
 
         [self.collectionView registerClass:[SSJCustomThemeSelectCollectionViewCell class] forCellWithReuseIdentifier:kCellId];
         self.backgroundColor = [UIColor ssj_colorWithHex:@"353535" alpha:0.6];
-        [self sizeToFit];
     }
     return self;
 }
@@ -55,7 +56,7 @@ static NSString *const kCellId = @"SSJCustomThemeSelectCollectionViewCell";
     self.fontLab.rightTop = CGPointMake(self.width / 2 - 20, 18);
     self.whiteButton.left = self.width / 2 + 20;
     self.whiteButton.centerY = self.fontLab.centerY;
-    self.blackButton.left = self.whiteButton.right + 20;
+    self.blackButton.left = self.whiteButton.right + 40;
     self.blackButton.centerY = self.fontLab.centerY;
 }
 
@@ -65,6 +66,7 @@ static NSString *const kCellId = @"SSJCustomThemeSelectCollectionViewCell";
         [flowLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
         flowLayout.minimumInteritemSpacing = 0;
         flowLayout.minimumLineSpacing = 20;
+        [flowLayout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
         _collectionView=[[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:flowLayout];
         _collectionView.delegate=self;
         _collectionView.dataSource=self;
@@ -89,7 +91,10 @@ static NSString *const kCellId = @"SSJCustomThemeSelectCollectionViewCell";
         _blackButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _blackButton.size = CGSizeMake(12, 12);
         _blackButton.layer.cornerRadius = 6.f;
+        _blackButton.layer.borderWidth  = 2.f;
+        _blackButton.layer.borderColor = [UIColor clearColor].CGColor;
         _blackButton.backgroundColor = [UIColor blackColor];
+        [_blackButton addTarget:self action:@selector(blackBlackButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _blackButton;
 }
@@ -99,7 +104,10 @@ static NSString *const kCellId = @"SSJCustomThemeSelectCollectionViewCell";
         _whiteButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _whiteButton.size = CGSizeMake(12, 12);
         _whiteButton.layer.cornerRadius = 6.f;
+        _whiteButton.layer.borderWidth  = 2.f;
+        _whiteButton.layer.borderColor = [UIColor clearColor].CGColor;
         _whiteButton.backgroundColor = [UIColor whiteColor];
+        [_whiteButton addTarget:self action:@selector(whiteButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _whiteButton;
 }
@@ -114,9 +122,20 @@ static NSString *const kCellId = @"SSJCustomThemeSelectCollectionViewCell";
         [self dismiss]; 
     } else {
         self.seletctTheme = [self.images objectAtIndex:indexPath.item];
+        if ([self.seletctTheme hasSuffix:@"dark"]) {
+            self.selectType = YES;
+            self.blackButton.layer.borderColor = [UIColor ssj_colorWithHex:@"#EB4762"].CGColor;
+            self.whiteButton.layer.borderColor = [UIColor clearColor].CGColor;
+
+        } else {
+            self.selectType = NO;
+            self.whiteButton.layer.borderColor = [UIColor ssj_colorWithHex:@"#EB4762"].CGColor;
+            self.blackButton.layer.borderColor = [UIColor clearColor].CGColor;
+        }
         [self.collectionView reloadData];
+        [SSJCustomThemeManager changeThemeWithDefaultImageName:self.seletctTheme type:self.selectType];
         if (self.themeSelectBlock) {
-            self.themeSelectBlock(self.seletctTheme);
+            self.themeSelectBlock(self.seletctTheme,self.selectType);
         }
     }
 }
@@ -163,7 +182,8 @@ static NSString *const kCellId = @"SSJCustomThemeSelectCollectionViewCell";
     
     UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
     
-    
+    [self sizeToFit];
+
     
     [keyWindow ssj_showViewWithBackView:self backColor:[UIColor clearColor] alpha:1 target:self touchAction:@selector(dismiss) animation:^{
         self.bottom = keyWindow.height;
@@ -177,10 +197,34 @@ static NSString *const kCellId = @"SSJCustomThemeSelectCollectionViewCell";
         return;
     }
     
-    
     [self.superview ssj_hideBackViewForView:self animation:^{
         [self removeFromSuperview];
     } timeInterval:0.25 fininshed:NULL];
+}
+
+//- (void)setSelectType:(BOOL)selectType {
+//    _selectType = selectType;
+//    if (!selectType) {
+//        self.whiteButton.layer.borderColor = [UIColor ssj_colorWithHex:@"#EB4762"].CGColor;
+//        self.blackButton.layer.borderColor = [UIColor clearColor].CGColor;
+//    } else {
+//        self.blackButton.layer.borderColor = [UIColor ssj_colorWithHex:@"#EB4762"].CGColor;
+//        self.whiteButton.layer.borderColor = [UIColor clearColor].CGColor;
+//    }
+//}
+
+- (void)blackBlackButtonClick:(id)sender{
+    self.selectType = YES;
+    self.blackButton.layer.borderColor = [UIColor ssj_colorWithHex:@"#EB4762"].CGColor;
+    self.whiteButton.layer.borderColor = [UIColor clearColor].CGColor;
+    [SSJCustomThemeManager changeThemeWithDefaultImageName:self.seletctTheme type:self.selectType];
+}
+
+- (void)whiteButtonClick:(id)sender{
+    self.selectType = NO;
+    self.whiteButton.layer.borderColor = [UIColor ssj_colorWithHex:@"#EB4762"].CGColor;
+    self.blackButton.layer.borderColor = [UIColor clearColor].CGColor;
+    [SSJCustomThemeManager changeThemeWithDefaultImageName:self.seletctTheme type:self.selectType];
 }
 
 /*

@@ -12,8 +12,8 @@
 
 + (void)initializeCustomTheme ;
 
-+ (void)changeThemeWithDefaultImageName:(NSString *)name;
++ (void)changeThemeWithDefaultImageName:(NSString *)name type:(BOOL)type;
 
-+ (void)changeThemeWithLocalImage:(UIImage *)image;
++ (void)changeThemeWithLocalImage:(UIImage *)image type:(BOOL)type;
 
 @end

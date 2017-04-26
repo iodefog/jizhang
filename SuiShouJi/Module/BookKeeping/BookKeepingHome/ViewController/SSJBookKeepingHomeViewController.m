@@ -174,12 +174,9 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
     self.extendedLayoutIncludesOpaqueBars = YES;
     
-//    if (self.needEditeThemeModel) {
+    if (_needEditeThemeModel) {
         [self.themeModifyView show];
-//    } else {
-//        self.themeModifyView.hidden = YES;
-//    }
-    
+    }
     [self getCurrentDate];
     
 //    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor],NSFontAttributeName:[UIFont systemFontOfSize:20]};
@@ -637,11 +634,9 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
     SSJThemBgImageClipViewController *imageClipVC = [[SSJThemBgImageClipViewController alloc] init];
     imageClipVC.normalImage = image;
     imageClipVC.clipImageBlock = ^(UIImage *newImage) {
-        [SSJCustomThemeManager changeThemeWithLocalImage:newImage];
+        [SSJCustomThemeManager changeThemeWithLocalImage:newImage type:0];
     };
-    [self presentViewController:imageClipVC animated:YES completion:^{
-        
-    }];
+    [self presentViewController:imageClipVC animated:YES completion:NULL];
 }
 
 #pragma mark - Getter
@@ -829,8 +824,8 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
     __weak __typeof(self)weakSelf = self;
     if (!_themeModifyView) {
         _themeModifyView = [[SSJHomeThemeModifyView alloc] init];
-        _themeModifyView.themeSelectBlock = ^(NSString *selectTheme){
-            [SSJCustomThemeManager changeThemeWithDefaultImageName:selectTheme];
+        _themeModifyView.themeSelectBlock = ^(NSString *selectTheme, BOOL selectType){
+
         };
         _themeModifyView.themeSelectCustomImageBlock = ^(){
             //访问相册

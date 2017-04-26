@@ -34,11 +34,12 @@
     }
 }
 
-+ (void)changeThemeWithDefaultImageName:(NSString *)name {
++ (void)changeThemeWithDefaultImageName:(NSString *)name type:(BOOL)type{
     NSString *themeId = [[name componentsSeparatedByString:@"_"] objectAtIndex:1];
-    if ([name hasSuffix:@"light"]) {
+    
+    if (!type) {
         SSJSetCurrentThemeID(@"1001");
-    } else if ([name hasSuffix:@"dark"]) {
+    } else {
         SSJSetCurrentThemeID(@"1000");
     }
     
@@ -55,9 +56,8 @@
             backGroudImageFullName = [NSString stringWithFormat:@"%@-667",themeId];
             backGroudImageName = [NSString stringWithFormat:@"%@-667@2x",@"background"];
         } else {
-            backGroudImageFullName = [NSString stringWithFormat:@"%@@%dx", themeId, (int)[UIScreen mainScreen].scale];
+            backGroudImageFullName = themeId;
             backGroudImageName = [NSString stringWithFormat:@"%@@%dx", @"background", (int)[UIScreen mainScreen].scale];
-
         }
     }
     
@@ -84,8 +84,46 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:SSJThemeDidChangeNotification object:nil userInfo:nil];
 }
 
-+ (void)changeThemeWithLocalImage:(UIImage *)image {
-
++ (void)changeThemeWithLocalImage:(UIImage *)image type:(BOOL)type {
+    
+    if (!type) {
+        SSJSetCurrentThemeID(@"1001");
+    } else {
+        SSJSetCurrentThemeID(@"1000");
+    }
+    
+    [SSJThemeSetting updateTabbarAppearance];
+    
+    NSString *backGroudImageName;
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+        CGSize screenSize = [UIScreen mainScreen].bounds.size;
+        if (CGSizeEqualToSize(screenSize, CGSizeMake(320.0, 568.0))) {
+            backGroudImageName = [NSString stringWithFormat:@"%@-568@2x",@"background"];
+        } else if (CGSizeEqualToSize(screenSize, CGSizeMake(375.0, 667.0))) {
+            backGroudImageName = [NSString stringWithFormat:@"%@-667@2x",@"background"];
+        } else {
+            backGroudImageName = [NSString stringWithFormat:@"%@@%dx", @"background", (int)[UIScreen mainScreen].scale];
+            
+        }
+    }
+    
+    //    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+    //        CGSize screenSize = [UIScreen mainScreen].bounds.size;
+    //        if (CGSizeEqualToSize(screenSize, CGSizeMake(768.0, 1024.0))) {
+    //            imageName = [NSString stringWithFormat:@"%@-1024",name];
+    //        } else if (CGSizeEqualToSize(screenSize, CGSizeMake(1536.0, 2048.0))) {
+    //            imageName = [NSString stringWithFormat:@"%@-2048",name];
+    //        }
+    //    }
+    NSString *currentThemeID = [SSJThemeSetting currentThemeModel].ID;
+    NSString *imagePath = [[[[NSString ssj_themeDirectory] stringByAppendingPathComponent:currentThemeID] stringByAppendingPathComponent:@"Img"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png",backGroudImageName]];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:imagePath]) {
+        [[NSFileManager defaultManager] removeItemAtPath:imagePath error:nil];
+        [[UIImage memoCache] removeObjectForKey:imagePath];
+    }
+    [UIImagePNGRepresentation(image) writeToFile:imagePath atomically:YES];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:SSJThemeDidChangeNotification object:nil userInfo:nil];
 }
 
 @end

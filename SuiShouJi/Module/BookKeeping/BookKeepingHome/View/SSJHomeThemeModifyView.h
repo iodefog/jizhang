@@ -16,7 +16,7 @@
 // 选中的字体颜色(0为白色,1为黑色)
 @property(nonatomic) BOOL selectType;
 
-@property (nonatomic, copy) void(^themeSelectBlock)(NSString *selectTheme);
+@property (nonatomic, copy) void(^themeSelectBlock)(NSString *selectTheme, BOOL selectType);
 
 @property (nonatomic, copy) void(^themeSelectCustomImageBlock)();
 
