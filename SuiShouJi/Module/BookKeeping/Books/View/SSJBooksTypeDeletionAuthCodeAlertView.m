@@ -24,6 +24,8 @@ static const CGFloat kGap = 15;
 
 - (BOOL)isFirstResponder;
 
+- (void)updateAppearance;
+
 @end
 
 @interface SSJBooksTypeDeletionAuthCodeField () <UITextFieldDelegate>
@@ -47,7 +49,6 @@ static const CGFloat kGap = 15;
             UIView *view = [[UIView alloc] init];
             view.userInteractionEnabled = NO;
             view.layer.borderWidth = 1;
-            view.layer.borderColor = [UIColor ssj_colorWithHex:@"#dddddd"].CGColor;
             [self addSubview:view];
             [self.borderViews addObject:view];
         }
@@ -85,6 +86,13 @@ static const CGFloat kGap = 15;
 
 - (BOOL)isFirstResponder {
     return [self.field isFirstResponder];
+}
+
+- (void)updateAppearance {
+    for (UIView *view in self.borderViews) {
+        view.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor].CGColor;
+    }
+    self.field.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
 }
 
 - (void)textDidChange:(id)value {
@@ -128,7 +136,6 @@ static const CGFloat kGap = 15;
 - (UITextField *)field {
     if (!_field) {
         _field = [[UITextField alloc] init];
-        _field.textColor = [UIColor ssj_colorWithHex:@"#333333"];
         _field.keyboardType = UIKeyboardTypeNumberPad;
         [_field addTarget:self action:@selector(textDidChange:) forControlEvents:UIControlEventAllEditingEvents];
         _field.delegate = self;
@@ -166,20 +173,25 @@ static const CGFloat kAnimationDuration = 0.25;
 
 @implementation SSJBooksTypeDeletionAuthCodeAlertView
 
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         self.clipsToBounds = YES;
         self.layer.cornerRadius = 5;
-        self.backgroundColor = [UIColor whiteColor];
         [self addSubview:self.titleLab];
         [self addSubview:self.authCodeLab];
         [self addSubview:self.authCodeField];
         [self addSubview:self.cancelBtn];
         [self addSubview:self.sureBtn];
         [self sizeToFit];
+        [self setupBindings];
+        [self updateAppearance];
         [self setNeedsUpdateConstraints];
         [[YYKeyboardManager defaultManager] addObserver:self];
-        [self setupBindings];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateAppearance) name:SSJThemeDidChangeNotification object:nil];
     }
     return self;
 }
@@ -325,7 +337,16 @@ static const CGFloat kAnimationDuration = 0.25;
 }
 
 - (void)updateAppearance {
-    
+    self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
+    self.titleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    self.authCodeLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    self.authCodeLab.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor];
+    [self.cancelBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] forState:UIControlStateNormal];
+    [self.cancelBtn ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor]];
+    [self.sureBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] forState:UIControlStateNormal];
+    [self.sureBtn setTitleColor:[[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] colorWithAlphaComponent:0.5] forState:UIControlStateDisabled];
+    [self.sureBtn ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor]];
+    [self.authCodeField updateAppearance];
 }
 
 #pragma mark - YYKeyboardObserver
@@ -347,7 +368,6 @@ static const CGFloat kAnimationDuration = 0.25;
     if (!_titleLab) {
         _titleLab = [[UILabel alloc] init];
         _titleLab.font = [UIFont systemFontOfSize:13];
-        _titleLab.textColor = [UIColor ssj_colorWithHex:@"#333333"];
         _titleLab.numberOfLines = 0;
         NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
         style.lineSpacing = 5;
@@ -361,8 +381,6 @@ static const CGFloat kAnimationDuration = 0.25;
     if (!_authCodeLab) {
         _authCodeLab = [[UILabel alloc] init];
         _authCodeLab.font = [UIFont systemFontOfSize:21];
-        _authCodeLab.textColor = [UIColor ssj_colorWithHex:@"#333333"];
-        _authCodeLab.backgroundColor = [UIColor ssj_colorWithHex:@"#cccccc"];
     }
     return _authCodeLab;
 }
@@ -379,10 +397,8 @@ static const CGFloat kAnimationDuration = 0.25;
         _cancelBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _cancelBtn.titleLabel.font = [UIFont systemFontOfSize:18];
         [_cancelBtn setTitle:@"取消" forState:UIControlStateNormal];
-        [_cancelBtn setTitleColor:[UIColor ssj_colorWithHex:@"#333333"] forState:UIControlStateNormal];
         [_cancelBtn addTarget:self action:@selector(cancelAction) forControlEvents:UIControlEventTouchUpInside];
         [_cancelBtn ssj_setBorderStyle:(SSJBorderStyleTop | SSJBorderStyleRight)];
-        [_cancelBtn ssj_setBorderColor:[UIColor ssj_colorWithHex:@"#dddddd"]];
     }
     return _cancelBtn;
 }
@@ -392,11 +408,8 @@ static const CGFloat kAnimationDuration = 0.25;
         _sureBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _sureBtn.titleLabel.font = [UIFont systemFontOfSize:18];
         [_sureBtn setTitle:@"删除" forState:UIControlStateNormal];
-        [_sureBtn setTitleColor:[UIColor ssj_colorWithHex:@"#eb4a64"] forState:UIControlStateNormal];
-        [_sureBtn setTitleColor:[[UIColor ssj_colorWithHex:@"#eb4a64"] colorWithAlphaComponent:0.5] forState:UIControlStateDisabled];
         [_sureBtn addTarget:self action:@selector(sureAction) forControlEvents:UIControlEventTouchUpInside];
         [_sureBtn ssj_setBorderStyle:(SSJBorderStyleTop)];
-        [_sureBtn ssj_setBorderColor:[UIColor ssj_colorWithHex:@"#dddddd"]];
     }
     return _sureBtn;
 }
