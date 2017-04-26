@@ -22,7 +22,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.backgroundColor = [UIColor clearColor];
+        self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         
         [self addSubview:self.leftButton];
         [self addSubview:self.rightBarButton];
@@ -121,6 +121,8 @@
         
     }
     self.loadingView.animatedImage = [FLAnimatedImage animatedImageWithGIFData:gifData];
+    self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+
 }
 
 - (void)setIsAnimating:(BOOL)isAnimating {

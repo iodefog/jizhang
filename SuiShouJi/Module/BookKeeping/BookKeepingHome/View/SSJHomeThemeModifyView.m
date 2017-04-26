@@ -108,10 +108,10 @@ static NSString *const kCellId = @"SSJCustomThemeSelectCollectionViewCell";
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.item == 0) {
-        [self dismiss];
         if (self.themeSelectCustomImageBlock) {
             self.themeSelectCustomImageBlock();
         }
+        [self dismiss]; 
     } else {
         self.seletctTheme = [self.images objectAtIndex:indexPath.item];
         [self.collectionView reloadData];

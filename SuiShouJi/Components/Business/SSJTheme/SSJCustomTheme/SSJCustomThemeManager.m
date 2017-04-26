@@ -41,6 +41,9 @@
     } else if ([name hasSuffix:@"dark"]) {
         SSJSetCurrentThemeID(@"1000");
     }
+    
+    [SSJThemeSetting updateTabbarAppearance];
+    
     NSString *backGroudImageFullName = themeId;
     NSString *backGroudImageName;
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
