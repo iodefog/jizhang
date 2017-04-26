@@ -13,7 +13,7 @@
 #import "SSJCreditCardStore.h"
 #import "SSJDatabaseQueue.h"
 
-static const CGFloat kRadius = 8.f;
+static const CGFloat kRadius = 12.f;
 
 @interface SSJFinancingHomeCell()
 @property(nonatomic, strong) UILabel *fundingNameLabel;
@@ -33,7 +33,7 @@ static const CGFloat kRadius = 8.f;
     self = [super initWithFrame:frame];
     if (self) {
         [self.contentView.layer addSublayer:self.backLayer];
-//        [self.contentView addSubview:self.deleteButton];
+        //        [self.contentView addSubview:self.deleteButton];
         [self.contentView addSubview:self.fundingImage];
         [self.contentView addSubview:self.fundingBalanceLabel];
         [self.contentView addSubview:self.fundingNameLabel];
@@ -103,11 +103,12 @@ static const CGFloat kRadius = 8.f;
         _backLayer.frame = self.bounds;
         _backLayer.startPoint = CGPointMake(0, 0.5);
         _backLayer.endPoint = CGPointMake(1, 0.5);
-        _backLayer.shadowRadius = 8;
+        _backLayer.shadowRadius = kRadius;
         CAShapeLayer *maskLayer = [CAShapeLayer layer];
         maskLayer.path = [self drawPathInRect:CGRectMake(5, 10, self.width - 10, self.height - 10)].CGPath;
-        maskLayer.shadowPath = [self drawPathInRect:CGRectMake(0, 8, self.width, self.height - 8)].CGPath;
-        maskLayer.shadowOpacity = 0.3;
+        maskLayer.shadowPath = [self drawPathInRect:CGRectMake(0, 6, self.width, self.height - 6)].CGPath;
+        maskLayer.shadowOpacity = 0.2;
+        maskLayer.shadowOffset = CGSizeMake(0, 0);
         _backLayer.mask = maskLayer;
     }
     return _backLayer;
@@ -269,12 +270,12 @@ static const CGFloat kRadius = 8.f;
                 repaymentDate = [repaymentDate dateBySubtractingMonths:1];
                 billDate = [billDate dateBySubtractingMonths:1];
             }
-//            if ([billDate isEarlierThanOrEqualTo:[NSDate date]] && [[NSDate date] isEarlierThanOrEqualTo:repaymentDate]) {
-//                float sumAmount = [SSJCreditCardStore queryCreditCardBalanceForTheMonth:billDate.month billingDay:item.cardBillingDay WithCardId:item.cardId];
-//                self.fundingMemoLabel.text = [NSString stringWithFormat:@"%ld月账单金额%.2f",billDate.month,sumAmount];
-//            }else{
+            //            if ([billDate isEarlierThanOrEqualTo:[NSDate date]] && [[NSDate date] isEarlierThanOrEqualTo:repaymentDate]) {
+            //                float sumAmount = [SSJCreditCardStore queryCreditCardBalanceForTheMonth:billDate.month billingDay:item.cardBillingDay WithCardId:item.cardId];
+            //                self.fundingMemoLabel.text = [NSString stringWithFormat:@"%ld月账单金额%.2f",billDate.month,sumAmount];
+            //            }else{
             self.fundingMemoLabel.text = [NSString stringWithFormat:@"信用卡额度%.2f",item.cardLimit];
-//            }
+            //            }
             [self.fundingMemoLabel sizeToFit];
         }else{
             self.fundingMemoLabel.text = [NSString stringWithFormat:@"信用卡额度%.2f",item.cardLimit];
@@ -288,7 +289,7 @@ static const CGFloat kRadius = 8.f;
 
 -(void)setEditeModel:(BOOL)editeModel{
     _editeModel = editeModel;
-//    self.deleteButton.hidden = !_editeModel;
+    //    self.deleteButton.hidden = !_editeModel;
 }
 
 
