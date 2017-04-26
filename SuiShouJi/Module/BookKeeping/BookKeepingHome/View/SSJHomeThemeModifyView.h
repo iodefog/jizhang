@@ -10,4 +10,15 @@
 
 @interface SSJHomeThemeModifyView : UIView
 
+@property(nonatomic, strong) NSString *seletctTheme;
+
+@property (nonatomic, copy) void(^themeSelectBlock)(NSString *selectTheme);
+
+@property (nonatomic, copy) void(^themeSelectCustomImageBlock)();
+
+- (void)dismiss ;
+
+- (void)show ;
+
+
 @end

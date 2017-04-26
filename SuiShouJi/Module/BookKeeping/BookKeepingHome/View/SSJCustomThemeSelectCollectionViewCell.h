@@ -14,5 +14,7 @@
 
 @property(nonatomic) BOOL isSelected;
 
+@property(nonatomic) BOOL isFirstCell;
+
 
 @end
