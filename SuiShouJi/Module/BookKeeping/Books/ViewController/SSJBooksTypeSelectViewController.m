@@ -116,12 +116,12 @@ static BOOL kNeedBannerDisplay = YES;
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     SSJBooksTypeItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
-    if ([item.booksName isEqualToString:@"添加账本"]) {
-        [self.parentSelectView show];
+    if (item.editeModel) {
+        self.editBooksItem = item;
+        [self.editAlertView show];
     } else {
-        if (_editeModel) {
-            self.editBooksItem = item;
-            [self.editAlertView show];
+        if ([item.booksName isEqualToString:@"添加账本"]) {
+            [self.parentSelectView show];
         } else {
             [SSJAnaliyticsManager event:@"change_account_book" extra:item.booksName
              ];
@@ -193,7 +193,9 @@ static BOOL kNeedBannerDisplay = YES;
     self.rightButton.selected = YES;
     self.adView.hidden = YES;
     for (SSJBooksTypeItem *item in self.items) {
-        item.editeModel = self.rightButton.isSelected;
+        if (![item.booksName isEqualToString:@"添加账本"]) {
+            item.editeModel = self.rightButton.isSelected;
+        }
     }
 }
 
@@ -243,7 +245,9 @@ static BOOL kNeedBannerDisplay = YES;
         [self.collectionView endEditing];
     }
     for (SSJBooksTypeItem *item in self.items) {
-        item.editeModel = self.rightButton.isSelected;
+        if (![item.booksName isEqualToString:@"添加账本"]) {
+            item.editeModel = self.rightButton.isSelected;
+        }
     }
 }
 
@@ -335,7 +339,11 @@ static BOOL kNeedBannerDisplay = YES;
             [wself enterBooksTypeEditController];
         };
         _editAlertView.deleteHandler = ^{
-            [wself.authCodeAlertView show];
+            if ([wself.editBooksItem.booksId isEqualToString:SSJUSERID()]) {
+                [CDAutoHideMessageHUD showMessage:@"日常账本无法删除"];
+            } else {
+                [wself.authCodeAlertView show];
+            }
         };
     }
     return _editAlertView;

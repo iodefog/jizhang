@@ -167,7 +167,7 @@ static const CGSize kButtonSize = {200, 40};
         _cancelBtn.titleLabel.font = [UIFont systemFontOfSize:16];
         [_cancelBtn setTitle:@"取消" forState:UIControlStateNormal];
         @weakify(self);
-        [[_deleteBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
+        [[_cancelBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
             @strongify(self);
             [self dismiss];
         }];

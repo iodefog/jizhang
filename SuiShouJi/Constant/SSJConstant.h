@@ -11,6 +11,7 @@
 ///------------------------------------------
 /// @name 枚举
 ///------------------------------------------
+#pragma mark - 枚举
 
 //  注册、忘记密码类型
 typedef NS_ENUM(NSInteger, SSJRegistAndForgetPasswordType) {
@@ -104,14 +105,15 @@ typedef NS_ENUM(NSInteger, SSJCyclePeriodType) {
 ///------------------------------------------
 /// @name 基本数据常量
 ///------------------------------------------
-
+#pragma mark - 基本数据常量
 extern const int64_t SSJDefaultSyncVersion;
 
+extern const float SSJMaskAlpha;
 
 ///------------------------------------------
 /// @name 字符串常量
 ///------------------------------------------
-
+#pragma mark - 字符串常量
 //
 extern NSString *const SSJErrorDomain;
 
@@ -161,6 +163,7 @@ extern NSString *const SSJOverrunRedColorValue;
 extern NSString *const SSJSurplusGreenColorValue;
 
 /** -------------------- KEY -------------------- */
+#pragma mark - KEY
 //保存上次弹窗的时间
 extern NSString *const SSJLastPopTimeKey;
 
@@ -192,6 +195,7 @@ extern NSString *const SSJReminderNotificationKey;
 extern NSString *const SSJAnnouncementHaveReadKey;
 
 /** --------------- Notification --------------- */
+#pragma mark - Notification
 //  数据同步成功通知
 extern NSString *const SSJSyncDataSuccessNotification;
 

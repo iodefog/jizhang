@@ -15,8 +15,6 @@
 
 typedef void (^selectButtonClickedBlock)(SSJBooksTypeItem *item);
 
-@property(nonatomic,copy) selectButtonClickedBlock selectButtonClickedBlock;
-
 @property(nonatomic) BOOL selectToEdite;
 
 @property(nonatomic) BOOL isSelected;
