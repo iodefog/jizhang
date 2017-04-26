@@ -35,12 +35,12 @@
 }
 
 + (void)changeThemeWithDefaultImageName:(NSString *)name {
+    NSString *themeId = [[name componentsSeparatedByString:@"_"] objectAtIndex:1];
     if ([name hasSuffix:@"light"]) {
         SSJSetCurrentThemeID(@"1001");
     } else if ([name hasSuffix:@"dark"]) {
         SSJSetCurrentThemeID(@"1000");
     }
-    NSString *themeId = [[name componentsSeparatedByString:@"_"] objectAtIndex:1];
     NSString *backGroudImageFullName = themeId;
     NSString *backGroudImageName;
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
@@ -74,12 +74,16 @@
     NSString *imagePath = [[[[NSString ssj_themeDirectory] stringByAppendingPathComponent:currentThemeID] stringByAppendingPathComponent:@"Img"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png",backGroudImageName]];
     if ([[NSFileManager defaultManager] fileExistsAtPath:imagePath]) {
         [[NSFileManager defaultManager] removeItemAtPath:imagePath error:nil];
+        [[UIImage memoCache] removeObjectForKey:imagePath];
     }
     [UIImagePNGRepresentation(backImage) writeToFile:imagePath atomically:YES];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:SSJThemeDidChangeNotification object:nil userInfo:nil];
 }
 
++ (void)changeThemeWithLocalImage:(UIImage *)image {
+
+}
 
 @end
 

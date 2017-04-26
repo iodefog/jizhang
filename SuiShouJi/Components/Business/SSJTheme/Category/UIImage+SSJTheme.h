@@ -16,4 +16,6 @@
 
 + (instancetype)ssj_compatibleThemeImageNamed:(NSString *)name;
 
++ (NSCache *)memoCache;
+
 @end
