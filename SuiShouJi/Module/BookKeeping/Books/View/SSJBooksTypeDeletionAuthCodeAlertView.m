@@ -223,17 +223,18 @@ static const CGFloat kAnimationDuration = 0.25;
         make.centerX.mas_equalTo(self);
         make.size.mas_equalTo(CGSizeMake(205, 40));
     }];
-    [self.cancelBtn mas_updateConstraints:^(MASConstraintMaker *make) {
+    [self.sureBtn mas_updateConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(0);
         make.bottom.mas_equalTo(self);
         make.size.mas_equalTo(CGSizeMake(140, 50));
     }];
-    [self.sureBtn mas_updateConstraints:^(MASConstraintMaker *make) {
+    [self.cancelBtn mas_updateConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(self.cancelBtn.mas_right);
         make.bottom.mas_equalTo(self);
         make.right.mas_equalTo(self);
         make.size.mas_equalTo(CGSizeMake(140, 50));
     }];
+    
     [self.backView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.edges.mas_equalTo(SSJ_KEYWINDOW);
     }];
@@ -331,9 +332,13 @@ static const CGFloat kAnimationDuration = 0.25;
 }
 
 - (void)setupBindings {
-    RAC(self.sureBtn, enabled) = [[self.authCodeField rac_signalForControlEvents:UIControlEventAllEditingEvents] map:^id(SSJBooksTypeDeletionAuthCodeField *field) {
+    RACSignal *sg_1 = [[self.authCodeField rac_signalForControlEvents:UIControlEventAllEditingEvents] map:^id(SSJBooksTypeDeletionAuthCodeField *field) {
         return @(field.authCode.length == kAuthCodeDigits);
     }];
+    RACSignal *sg_2 = [RACObserve(self.authCodeField, authCode) map:^id(NSString *authCode) {
+        return @(authCode.length == kAuthCodeDigits);
+    }];
+    RAC(self.sureBtn, enabled) = [RACSignal merge:@[sg_1, sg_2]];
 }
 
 - (void)updateAppearance {
@@ -341,11 +346,11 @@ static const CGFloat kAnimationDuration = 0.25;
     self.titleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     self.authCodeLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     self.authCodeLab.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor];
-    [self.cancelBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] forState:UIControlStateNormal];
-    [self.cancelBtn ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor]];
-    [self.sureBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] forState:UIControlStateNormal];
-    [self.sureBtn setTitleColor:[[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] colorWithAlphaComponent:0.5] forState:UIControlStateDisabled];
+    [self.sureBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] forState:UIControlStateNormal];
+    [self.sureBtn setTitleColor:[[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] colorWithAlphaComponent:0.5] forState:UIControlStateDisabled];
     [self.sureBtn ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor]];
+    [self.cancelBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] forState:UIControlStateNormal];
+    [self.cancelBtn ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor]];
     [self.authCodeField updateAppearance];
 }
 
@@ -398,7 +403,7 @@ static const CGFloat kAnimationDuration = 0.25;
         _cancelBtn.titleLabel.font = [UIFont systemFontOfSize:18];
         [_cancelBtn setTitle:@"取消" forState:UIControlStateNormal];
         [_cancelBtn addTarget:self action:@selector(cancelAction) forControlEvents:UIControlEventTouchUpInside];
-        [_cancelBtn ssj_setBorderStyle:(SSJBorderStyleTop | SSJBorderStyleRight)];
+        [_cancelBtn ssj_setBorderStyle:(SSJBorderStyleTop | SSJBorderStyleLeft)];
     }
     return _cancelBtn;
 }
