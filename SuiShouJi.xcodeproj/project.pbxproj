@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2037DEF73FC931CFDC333C7D /* libPods-9188JiZhangBen.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F84857880610A2DD87904A88 /* libPods-9188JiZhangBen.a */; };
 		2969FD659CB0F29A997B0743 /* libPods-YouYuJiZhang.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BE2668A2D3687E35A1F7D0D /* libPods-YouYuJiZhang.a */; };
 		43FB013EC6CC98DC90F5D913 /* libPods-YouYuJiZhangPro.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DC160CBD947F86ED6CD7DD86 /* libPods-YouYuJiZhangPro.a */; };
 		72BB5896AF4A38FC4F8B3B48 /* libPods-YouYuJiZhangBen.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD18AB4DEF381D69AB77158 /* libPods-YouYuJiZhangBen.a */; };
@@ -3270,10 +3271,6 @@
 		7DFB189D1EB0341E00292DD3 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C3276ED1CE4614700109C4C /* libz.tbd */; };
 		7DFB189E1EB0341E00292DD3 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D4A431D1CC86F51002F0264 /* AVFoundation.framework */; };
 		7DFB189F1EB0341E00292DD3 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD0E43F61C21365100F9179D /* Security.framework */; };
-		7DFB18A01EB0341E00292DD3 /* libPods-SuiShouJi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DCB8AA1DC23E6D40C33EB5B /* libPods-SuiShouJi.a */; };
-		7DFB18A11EB0341E00292DD3 /* libPods-SuiShouJi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DCB8AA1DC23E6D40C33EB5B /* libPods-SuiShouJi.a */; };
-		7DFB18A21EB0341E00292DD3 /* libPods-SuiShouJi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DCB8AA1DC23E6D40C33EB5B /* libPods-SuiShouJi.a */; };
-		7DFB18A31EB0341E00292DD3 /* libPods-YouYuJiZhang.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BE2668A2D3687E35A1F7D0D /* libPods-YouYuJiZhang.a */; };
 		7DFB18A51EB0341E00292DD3 /* pushsound.wav in Resources */ = {isa = PBXBuildFile; fileRef = BD6C388E1C910A8F000E2E42 /* pushsound.wav */; };
 		7DFB18A61EB0341E00292DD3 /* YouYuJiZhangBen-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7DBB381F1E55BE2F0075E638 /* YouYuJiZhangBen-Info.plist */; };
 		7DFB18A71EB0341E00292DD3 /* MJRefresh.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9C155E861E68572700FDFD18 /* MJRefresh.bundle */; };
@@ -3431,7 +3428,7 @@
 		9C13F4EF1E8267D300AC5FA9 /* SSJBillingChargeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B23F51C3A14D8009A74A8 /* SSJBillingChargeCell.m */; };
 		9C13F4F01E8267D300AC5FA9 /* SSJLoginViewController+SSJCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D22E2931D89519B00474B11 /* SSJLoginViewController+SSJCategory.m */; };
 		9C13F4F11E8267D300AC5FA9 /* SSJBannerItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6D66241D86BD220081A7CE /* SSJBannerItem.m */; };
-		9C13F4F21E8267D300AC5FA9 /* (null) in Sources */ = {isa = PBXBuildFile; };
+		9C13F4F21E8267D300AC5FA9 /* BuildFile in Sources */ = {isa = PBXBuildFile; };
 		9C13F4F31E8267D300AC5FA9 /* SSJSyncFileModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DDBB01F1C9AAA57003433D0 /* SSJSyncFileModel.m */; };
 		9C13F4F41E8267D300AC5FA9 /* SCYSlidePagingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD902961CE202790076929F /* SCYSlidePagingView.m */; };
 		9C13F4F51E8267D300AC5FA9 /* SSJDatabaseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D99D45B1C3522D7006EB113 /* SSJDatabaseQueue.m */; };
@@ -5042,7 +5039,7 @@
 		9C7D2CFA1E8DF8A80093001F /* SSJBillingChargeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B23F51C3A14D8009A74A8 /* SSJBillingChargeCell.m */; };
 		9C7D2CFB1E8DF8A80093001F /* SSJLoginViewController+SSJCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D22E2931D89519B00474B11 /* SSJLoginViewController+SSJCategory.m */; };
 		9C7D2CFC1E8DF8A80093001F /* SSJBannerItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6D66241D86BD220081A7CE /* SSJBannerItem.m */; };
-		9C7D2CFD1E8DF8A80093001F /* (null) in Sources */ = {isa = PBXBuildFile; };
+		9C7D2CFD1E8DF8A80093001F /* BuildFile in Sources */ = {isa = PBXBuildFile; };
 		9C7D2CFE1E8DF8A80093001F /* SSJSyncFileModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DDBB01F1C9AAA57003433D0 /* SSJSyncFileModel.m */; };
 		9C7D2CFF1E8DF8A80093001F /* SCYSlidePagingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD902961CE202790076929F /* SCYSlidePagingView.m */; };
 		9C7D2D001E8DF8A80093001F /* SSJDatabaseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D99D45B1C3522D7006EB113 /* SSJDatabaseQueue.m */; };
@@ -5658,7 +5655,7 @@
 		9C7D2F711E8DF96B0093001F /* SSJBillingChargeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B23F51C3A14D8009A74A8 /* SSJBillingChargeCell.m */; };
 		9C7D2F721E8DF96B0093001F /* SSJLoginViewController+SSJCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D22E2931D89519B00474B11 /* SSJLoginViewController+SSJCategory.m */; };
 		9C7D2F731E8DF96B0093001F /* SSJBannerItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6D66241D86BD220081A7CE /* SSJBannerItem.m */; };
-		9C7D2F741E8DF96B0093001F /* (null) in Sources */ = {isa = PBXBuildFile; };
+		9C7D2F741E8DF96B0093001F /* BuildFile in Sources */ = {isa = PBXBuildFile; };
 		9C7D2F751E8DF96B0093001F /* SSJSyncFileModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DDBB01F1C9AAA57003433D0 /* SSJSyncFileModel.m */; };
 		9C7D2F761E8DF96B0093001F /* SCYSlidePagingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD902961CE202790076929F /* SCYSlidePagingView.m */; };
 		9C7D2F771E8DF96B0093001F /* SSJDatabaseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D99D45B1C3522D7006EB113 /* SSJDatabaseQueue.m */; };
@@ -8172,10 +8169,13 @@
 		BD70DF671C4751EA000E6CC9 /* SSJRegistNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF571C4751EA000E6CC9 /* SSJRegistNetworkService.m */; };
 		BD70DF6B1C4B26B3000E6CC9 /* UIViewController+SSJPageFlow.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF6A1C4B26B3000E6CC9 /* UIViewController+SSJPageFlow.m */; };
 		BDC01FF31C2D92E3008B1F75 /* CDAutoHideMessageHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = BDC01FF21C2D92E3008B1F75 /* CDAutoHideMessageHUD.m */; };
+		C0E2B2A04AC1D7D09F602D08 /* libPods-JiZhangGuanJia.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 28D54CCC52994B95633CA5E3 /* libPods-JiZhangGuanJia.a */; };
 		C1EE302265126295E171EB49 /* libPods-YouYuJiZhangLiCai.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F9099E967EA40B5B4F591EA5 /* libPods-YouYuJiZhangLiCai.a */; };
+		D462D30AAB2CA0236A17BF13 /* libPods-SuiShouJi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DCB8AA1DC23E6D40C33EB5B /* libPods-SuiShouJi.a */; };
 		E1CEB4191E8A8B165BBAC41C /* libPods-YouYuJiZhangBao.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D1A7ECDE4745F51DE93EF377 /* libPods-YouYuJiZhangBao.a */; };
 		E84F9798AF83397BBA7DDAD6 /* libPods-SuiShouJi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DCB8AA1DC23E6D40C33EB5B /* libPods-SuiShouJi.a */; };
 		FC8C76456DC126984B2A120A /* libPods-9188JiZhangPro.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C67906F6CFFC0A3639C9DEC3 /* libPods-9188JiZhangPro.a */; };
+		FF577138BF64F6B9A399141B /* libPods-YouYuJiZhang.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BE2668A2D3687E35A1F7D0D /* libPods-YouYuJiZhang.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -8197,21 +8197,22 @@
 
 /* Begin PBXFileReference section */
 		004889EB34083108A8612BCE /* Pods-YouYuJiZhangBao.debug-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangBao.debug-test.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangBao/Pods-YouYuJiZhangBao.debug-test.xcconfig"; sourceTree = "<group>"; };
+		10B02F27B07D9E59BDE1CA2A /* Pods-YouYuJiZhang.release-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhang.release-test.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhang/Pods-YouYuJiZhang.release-test.xcconfig"; sourceTree = "<group>"; };
 		13DED3B91912A4CA23981548 /* Pods-YouYuJiZhangGuanJia.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangGuanJia.debug.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangGuanJia/Pods-YouYuJiZhangGuanJia.debug.xcconfig"; sourceTree = "<group>"; };
 		1BCD58B8B9CBEA7ED5E6BDD4 /* Pods-JiZhangGuanJia.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JiZhangGuanJia.debug.xcconfig"; path = "Pods/Target Support Files/Pods-JiZhangGuanJia/Pods-JiZhangGuanJia.debug.xcconfig"; sourceTree = "<group>"; };
+		1E51C22F9305214B776BE476 /* Pods-YouYuJiZhang.debug-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhang.debug-production.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhang/Pods-YouYuJiZhang.debug-production.xcconfig"; sourceTree = "<group>"; };
+		1E94BF472DA87D55A1CBED4F /* Pods-YouYuJiZhang.debug-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhang.debug-test.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhang/Pods-YouYuJiZhang.debug-test.xcconfig"; sourceTree = "<group>"; };
 		20DA9AF0E6D356E778C6EB44 /* Pods-SuiShouJiEnterprise.release-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SuiShouJiEnterprise.release-production.xcconfig"; path = "Pods/Target Support Files/Pods-SuiShouJiEnterprise/Pods-SuiShouJiEnterprise.release-production.xcconfig"; sourceTree = "<group>"; };
 		21EA1E50547213D6FCC8FD05 /* Pods-SuiShouJi.release-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SuiShouJi.release-test.xcconfig"; path = "Pods/Target Support Files/Pods-SuiShouJi/Pods-SuiShouJi.release-test.xcconfig"; sourceTree = "<group>"; };
 		2540479F536C7834E132C4B5 /* Pods-YouYuJiZhangPro.release-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangPro.release-production.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangPro/Pods-YouYuJiZhangPro.release-production.xcconfig"; sourceTree = "<group>"; };
 		28D54CCC52994B95633CA5E3 /* libPods-JiZhangGuanJia.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-JiZhangGuanJia.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D1CEF5E96BF59F42EAD3BC3 /* libPods-BeiKeJiZhang.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BeiKeJiZhang.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2DEF1E8E40DA1003C5D69150 /* Pods-YouYuJiZhangLiCai.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangLiCai.release.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangLiCai/Pods-YouYuJiZhangLiCai.release.xcconfig"; sourceTree = "<group>"; };
-		2F9C994248D269CADC0E5844 /* Pods-YouYuJiZhang.debug-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhang.debug-test.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhang/Pods-YouYuJiZhang.debug-test.xcconfig"; sourceTree = "<group>"; };
 		3107DC1ABD197F0C5FAC4C5F /* Pods-YouYuJiZhangBao.release-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangBao.release-production.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangBao/Pods-YouYuJiZhangBao.release-production.xcconfig"; sourceTree = "<group>"; };
 		348DA5EFAB1C2E711E07E558 /* libPods-youyujizhang.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-youyujizhang.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		39E3B4D62A92E52E9A7D3272 /* Pods-SuiShouJi.debug-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SuiShouJi.debug-production.xcconfig"; path = "Pods/Target Support Files/Pods-SuiShouJi/Pods-SuiShouJi.debug-production.xcconfig"; sourceTree = "<group>"; };
 		3A7C62F7DE57827B862626D4 /* Pods-9188JiZhangPro.debug-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-9188JiZhangPro.debug-production.xcconfig"; path = "Pods/Target Support Files/Pods-9188JiZhangPro/Pods-9188JiZhangPro.debug-production.xcconfig"; sourceTree = "<group>"; };
 		3B725E607F2304D98F82B2A3 /* Pods-SuiShouJi.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SuiShouJi.release.xcconfig"; path = "Pods/Target Support Files/Pods-SuiShouJi/Pods-SuiShouJi.release.xcconfig"; sourceTree = "<group>"; };
-		3BA1F23EADDF47271B5AA7AB /* Pods-YouYuJiZhang.release-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhang.release-test.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhang/Pods-YouYuJiZhang.release-test.xcconfig"; sourceTree = "<group>"; };
 		3D28921C2AB227ED349FA128 /* Pods-YouYuJiZhangLiCai.release-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangLiCai.release-test.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangLiCai/Pods-YouYuJiZhangLiCai.release-test.xcconfig"; sourceTree = "<group>"; };
 		408D479324B9408204BAA12F /* Pods-YouYuJiZhangGuanJia.release-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangGuanJia.release-test.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangGuanJia/Pods-YouYuJiZhangGuanJia.release-test.xcconfig"; sourceTree = "<group>"; };
 		409F6679D47EFA5753A58706 /* Pods-youyujizhang.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-youyujizhang.release.xcconfig"; path = "Pods/Target Support Files/Pods-youyujizhang/Pods-youyujizhang.release.xcconfig"; sourceTree = "<group>"; };
@@ -8226,6 +8227,7 @@
 		5DE4695CC7C0CB804EB71885 /* Pods-JiZhangGuanJia.debug-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JiZhangGuanJia.debug-production.xcconfig"; path = "Pods/Target Support Files/Pods-JiZhangGuanJia/Pods-JiZhangGuanJia.debug-production.xcconfig"; sourceTree = "<group>"; };
 		5E12FC9D6B49C5CFC7E59C45 /* Pods-9188JiZhangPro.release-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-9188JiZhangPro.release-test.xcconfig"; path = "Pods/Target Support Files/Pods-9188JiZhangPro/Pods-9188JiZhangPro.release-test.xcconfig"; sourceTree = "<group>"; };
 		6534E1884B88B3410A9AFE6E /* Pods-SuiShouJiEnterprise.debug-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SuiShouJiEnterprise.debug-production.xcconfig"; path = "Pods/Target Support Files/Pods-SuiShouJiEnterprise/Pods-SuiShouJiEnterprise.debug-production.xcconfig"; sourceTree = "<group>"; };
+		6914A4671174AA5C297802D2 /* Pods-YouYuJiZhang.release-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhang.release-production.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhang/Pods-YouYuJiZhang.release-production.xcconfig"; sourceTree = "<group>"; };
 		69D2F0A471A04C17E16C7FEB /* Pods-YouYuJiZhangPro.debug-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangPro.debug-production.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangPro/Pods-YouYuJiZhangPro.debug-production.xcconfig"; sourceTree = "<group>"; };
 		6B2E92DAE4FF9F6B4E6CFC2B /* Pods-SuiShouJi.release-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SuiShouJi.release-production.xcconfig"; path = "Pods/Target Support Files/Pods-SuiShouJi/Pods-SuiShouJi.release-production.xcconfig"; sourceTree = "<group>"; };
 		6C381B92A98C172708D0DC43 /* Pods-YouYuJiZhang.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhang.release.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhang/Pods-YouYuJiZhang.release.xcconfig"; sourceTree = "<group>"; };
@@ -8823,7 +8825,6 @@
 		7DFFD5C41D67201E000FDAA6 /* SSJAddOrEditLoanViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJAddOrEditLoanViewController.h; sourceTree = "<group>"; };
 		7DFFD5C51D67201E000FDAA6 /* SSJAddOrEditLoanViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJAddOrEditLoanViewController.m; sourceTree = "<group>"; };
 		7E2C437569BE5F61C549F4C5 /* Pods-9188JiZhangBen.release-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-9188JiZhangBen.release-test.xcconfig"; path = "Pods/Target Support Files/Pods-9188JiZhangBen/Pods-9188JiZhangBen.release-test.xcconfig"; sourceTree = "<group>"; };
-		814F3E7FF23E2CA5B535C5DE /* Pods-YouYuJiZhang.release-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhang.release-production.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhang/Pods-YouYuJiZhang.release-production.xcconfig"; sourceTree = "<group>"; };
 		8243DAE18B924886B7E827E5 /* Pods-youyujizhang.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-youyujizhang.debug.xcconfig"; path = "Pods/Target Support Files/Pods-youyujizhang/Pods-youyujizhang.debug.xcconfig"; sourceTree = "<group>"; };
 		87B6E587581D2C973B9CE0A0 /* Pods-BeiKeJiZhang.release-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BeiKeJiZhang.release-test.xcconfig"; path = "Pods/Target Support Files/Pods-BeiKeJiZhang/Pods-BeiKeJiZhang.release-test.xcconfig"; sourceTree = "<group>"; };
 		8E88665EC4BCCDEADDBBF76D /* Pods-YouYuJiZhangBen.release-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangBen.release-production.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangBen/Pods-YouYuJiZhangBen.release-production.xcconfig"; sourceTree = "<group>"; };
@@ -9520,7 +9521,6 @@
 		DB9B0038A884FAF5FA1CEB4F /* Pods-JiZhangGuanJia.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JiZhangGuanJia.release.xcconfig"; path = "Pods/Target Support Files/Pods-JiZhangGuanJia/Pods-JiZhangGuanJia.release.xcconfig"; sourceTree = "<group>"; };
 		DC160CBD947F86ED6CD7DD86 /* libPods-YouYuJiZhangPro.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-YouYuJiZhangPro.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD224C6E2E36CBA3226029D3 /* Pods-BeiKeJiZhang.release-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BeiKeJiZhang.release-production.xcconfig"; path = "Pods/Target Support Files/Pods-BeiKeJiZhang/Pods-BeiKeJiZhang.release-production.xcconfig"; sourceTree = "<group>"; };
-		DE4F08E5858DEDD62A2262C8 /* Pods-YouYuJiZhang.debug-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhang.debug-production.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhang/Pods-YouYuJiZhang.debug-production.xcconfig"; sourceTree = "<group>"; };
 		DF287708592603CEA9EF83AB /* Pods-BeiKeJiZhang.debug-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BeiKeJiZhang.debug-test.xcconfig"; path = "Pods/Target Support Files/Pods-BeiKeJiZhang/Pods-BeiKeJiZhang.debug-test.xcconfig"; sourceTree = "<group>"; };
 		E38835B4B811DB254C8C71D4 /* Pods-YouYuJiZhangLiCai.debug-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangLiCai.debug-production.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangLiCai/Pods-YouYuJiZhangLiCai.debug-production.xcconfig"; sourceTree = "<group>"; };
 		E46D461943E8EB50EC47585D /* Pods-YouYuJiZhangBen.debug-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangBen.debug-test.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangBen/Pods-YouYuJiZhangBen.debug-test.xcconfig"; sourceTree = "<group>"; };
@@ -9614,10 +9614,6 @@
 				7DFB189D1EB0341E00292DD3 /* libz.tbd in Frameworks */,
 				7DFB189E1EB0341E00292DD3 /* AVFoundation.framework in Frameworks */,
 				7DFB189F1EB0341E00292DD3 /* Security.framework in Frameworks */,
-				7DFB18A01EB0341E00292DD3 /* libPods-SuiShouJi.a in Frameworks */,
-				7DFB18A11EB0341E00292DD3 /* libPods-SuiShouJi.a in Frameworks */,
-				7DFB18A21EB0341E00292DD3 /* libPods-SuiShouJi.a in Frameworks */,
-				7DFB18A31EB0341E00292DD3 /* libPods-YouYuJiZhang.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -9652,6 +9648,7 @@
 				9C4C22471E9E30C8000C5F15 /* libPods-SuiShouJi.a in Frameworks */,
 				9C4C22481E9E30C8000C5F15 /* libPods-SuiShouJi.a in Frameworks */,
 				9C4C22491E9E30C8000C5F15 /* libPods-SuiShouJi.a in Frameworks */,
+				2037DEF73FC931CFDC333C7D /* libPods-9188JiZhangBen.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -9709,6 +9706,7 @@
 				9C80FEE71E95E88E00B1BAAC /* libPods-SuiShouJi.a in Frameworks */,
 				9C80FEE81E95E88E00B1BAAC /* libPods-SuiShouJi.a in Frameworks */,
 				2969FD659CB0F29A997B0743 /* libPods-YouYuJiZhang.a in Frameworks */,
+				FF577138BF64F6B9A399141B /* libPods-YouYuJiZhang.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -9727,6 +9725,7 @@
 				9C9CF0A61EA5F73A007657FE /* libPods-SuiShouJi.a in Frameworks */,
 				9C9CF0A71EA5F73A007657FE /* libPods-SuiShouJi.a in Frameworks */,
 				9C9CF0A81EA5F73A007657FE /* libPods-SuiShouJi.a in Frameworks */,
+				C0E2B2A04AC1D7D09F602D08 /* libPods-JiZhangGuanJia.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -9761,6 +9760,7 @@
 				A3F86B7BFBA3F62C302818B9 /* libPods-SuiShouJi.a in Frameworks */,
 				E84F9798AF83397BBA7DDAD6 /* libPods-SuiShouJi.a in Frameworks */,
 				B087CCAE080810E8AC52F3CE /* libPods-SuiShouJi.a in Frameworks */,
+				D462D30AAB2CA0236A17BF13 /* libPods-SuiShouJi.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -13081,10 +13081,6 @@
 				39E3B4D62A92E52E9A7D3272 /* Pods-SuiShouJi.debug-production.xcconfig */,
 				21EA1E50547213D6FCC8FD05 /* Pods-SuiShouJi.release-test.xcconfig */,
 				6B2E92DAE4FF9F6B4E6CFC2B /* Pods-SuiShouJi.release-production.xcconfig */,
-				2F9C994248D269CADC0E5844 /* Pods-YouYuJiZhang.debug-test.xcconfig */,
-				DE4F08E5858DEDD62A2262C8 /* Pods-YouYuJiZhang.debug-production.xcconfig */,
-				3BA1F23EADDF47271B5AA7AB /* Pods-YouYuJiZhang.release-test.xcconfig */,
-				814F3E7FF23E2CA5B535C5DE /* Pods-YouYuJiZhang.release-production.xcconfig */,
 				004889EB34083108A8612BCE /* Pods-YouYuJiZhangBao.debug-test.xcconfig */,
 				C456BDB9A1174F4A4B005EB9 /* Pods-YouYuJiZhangBao.debug-production.xcconfig */,
 				559995F82A41A31A1EDB66F7 /* Pods-YouYuJiZhangBao.release-test.xcconfig */,
@@ -13121,6 +13117,10 @@
 				69D2F0A471A04C17E16C7FEB /* Pods-YouYuJiZhangPro.debug-production.xcconfig */,
 				CBF9E3113464BE93EBD90F4A /* Pods-YouYuJiZhangPro.release-test.xcconfig */,
 				2540479F536C7834E132C4B5 /* Pods-YouYuJiZhangPro.release-production.xcconfig */,
+				1E94BF472DA87D55A1CBED4F /* Pods-YouYuJiZhang.debug-test.xcconfig */,
+				1E51C22F9305214B776BE476 /* Pods-YouYuJiZhang.debug-production.xcconfig */,
+				10B02F27B07D9E59BDE1CA2A /* Pods-YouYuJiZhang.release-test.xcconfig */,
+				6914A4671174AA5C297802D2 /* Pods-YouYuJiZhang.release-production.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -13212,12 +13212,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7DFB18C41EB0341E00292DD3 /* Build configuration list for PBXNativeTarget "9188JiZhangBao" */;
 			buildPhases = (
-				7DFB16511EB0341E00292DD3 /* [CP] Check Pods Manifest.lock */,
 				7DFB16521EB0341E00292DD3 /* Sources */,
 				7DFB18971EB0341E00292DD3 /* Frameworks */,
 				7DFB18A41EB0341E00292DD3 /* Resources */,
-				7DFB18C21EB0341E00292DD3 /* [CP] Embed Pods Frameworks */,
-				7DFB18C31EB0341E00292DD3 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -13431,7 +13428,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0810;
-				ORGANIZATIONNAME = "___9188___";
+				ORGANIZATIONNAME = ___9188___;
 				TargetAttributes = {
 					7D08A0931E4999D30085A8FB = {
 						DevelopmentTeam = 7RVBV2MALK;
@@ -14026,7 +14023,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		1D232FE2381AE3048A659CF0 /* [CP] Embed Pods Frameworks */ = {
@@ -14071,7 +14068,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		48AA12A1E7C2938463D4C3AE /* [CP] Copy Pods Resources */ = {
@@ -14101,7 +14098,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		7DBB3A721E55C2EE0075E638 /* [CP] Check Pods Manifest.lock */ = {
@@ -14116,7 +14113,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		7DBB3CB51E55C2EE0075E638 /* [CP] Embed Pods Frameworks */ = {
@@ -14161,7 +14158,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		7DBB41521E55C4E00075E638 /* [CP] Embed Pods Frameworks */ = {
@@ -14194,51 +14191,6 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SuiShouJiEnterprise/Pods-SuiShouJiEnterprise-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		7DFB16511EB0341E00292DD3 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		7DFB18C21EB0341E00292DD3 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-YouYuJiZhang/Pods-YouYuJiZhang-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		7DFB18C31EB0341E00292DD3 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-YouYuJiZhang/Pods-YouYuJiZhang-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		7F384EDE547D146520592FD0 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -14266,7 +14218,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		9C4C22681E9E30C8000C5F15 /* [CP] Embed Pods Frameworks */ = {
@@ -14281,7 +14233,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SuiShouJi/Pods-SuiShouJi-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-9188JiZhangBen/Pods-9188JiZhangBen-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		9C4C22691E9E30C8000C5F15 /* [CP] Copy Pods Resources */ = {
@@ -14296,7 +14248,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SuiShouJi/Pods-SuiShouJi-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-9188JiZhangBen/Pods-9188JiZhangBen-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		9C7D2CDD1E8DF8A80093001F /* [CP] Check Pods Manifest.lock */ = {
@@ -14311,7 +14263,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		9C7D2F4A1E8DF8A80093001F /* [CP] Embed Pods Frameworks */ = {
@@ -14356,7 +14308,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		9C7D31C11E8DF96B0093001F /* [CP] Embed Pods Frameworks */ = {
@@ -14401,7 +14353,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		9C80FF071E95E88E00B1BAAC /* [CP] Embed Pods Frameworks */ = {
@@ -14446,7 +14398,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		9C9CF0C71EA5F73A007657FE /* [CP] Embed Pods Frameworks */ = {
@@ -14461,7 +14413,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SuiShouJi/Pods-SuiShouJi-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-JiZhangGuanJia/Pods-JiZhangGuanJia-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		9C9CF0C81EA5F73A007657FE /* [CP] Copy Pods Resources */ = {
@@ -14476,7 +14428,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SuiShouJi/Pods-SuiShouJi-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-JiZhangGuanJia/Pods-JiZhangGuanJia-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		9EEA079F752C2669B9209682 /* [CP] Embed Pods Frameworks */ = {
@@ -14521,7 +14473,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		D5BE237FD9961E3E5F59193C /* [CP] Check Pods Manifest.lock */ = {
@@ -14536,7 +14488,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		DDCD4E7CD2023DDEE0A45788 /* [CP] Copy Pods Resources */ = {
@@ -17633,7 +17585,7 @@
 				9C13F4EF1E8267D300AC5FA9 /* SSJBillingChargeCell.m in Sources */,
 				9C13F4F01E8267D300AC5FA9 /* SSJLoginViewController+SSJCategory.m in Sources */,
 				9C13F4F11E8267D300AC5FA9 /* SSJBannerItem.m in Sources */,
-				9C13F4F21E8267D300AC5FA9 /* (null) in Sources */,
+				9C13F4F21E8267D300AC5FA9 /* BuildFile in Sources */,
 				9C13F4F31E8267D300AC5FA9 /* SSJSyncFileModel.m in Sources */,
 				9C13F4F41E8267D300AC5FA9 /* SCYSlidePagingView.m in Sources */,
 				9C13F4F51E8267D300AC5FA9 /* SSJDatabaseQueue.m in Sources */,
@@ -18827,7 +18779,7 @@
 				9C7D2CFA1E8DF8A80093001F /* SSJBillingChargeCell.m in Sources */,
 				9C7D2CFB1E8DF8A80093001F /* SSJLoginViewController+SSJCategory.m in Sources */,
 				9C7D2CFC1E8DF8A80093001F /* SSJBannerItem.m in Sources */,
-				9C7D2CFD1E8DF8A80093001F /* (null) in Sources */,
+				9C7D2CFD1E8DF8A80093001F /* BuildFile in Sources */,
 				9C7D2CFE1E8DF8A80093001F /* SSJSyncFileModel.m in Sources */,
 				9C7D2CFF1E8DF8A80093001F /* SCYSlidePagingView.m in Sources */,
 				9C7D2D001E8DF8A80093001F /* SSJDatabaseQueue.m in Sources */,
@@ -19424,7 +19376,7 @@
 				9C7D2F711E8DF96B0093001F /* SSJBillingChargeCell.m in Sources */,
 				9C7D2F721E8DF96B0093001F /* SSJLoginViewController+SSJCategory.m in Sources */,
 				9C7D2F731E8DF96B0093001F /* SSJBannerItem.m in Sources */,
-				9C7D2F741E8DF96B0093001F /* (null) in Sources */,
+				9C7D2F741E8DF96B0093001F /* BuildFile in Sources */,
 				9C7D2F751E8DF96B0093001F /* SSJSyncFileModel.m in Sources */,
 				9C7D2F761E8DF96B0093001F /* SCYSlidePagingView.m in Sources */,
 				9C7D2F771E8DF96B0093001F /* SSJDatabaseQueue.m in Sources */,
@@ -24157,7 +24109,6 @@
 		};
 		7DFB18C51EB0341E00292DD3 /* Debug-test */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2F9C994248D269CADC0E5844 /* Pods-YouYuJiZhang.debug-test.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = 9188JiZhangBao;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -24259,7 +24210,6 @@
 		};
 		7DFB18C61EB0341E00292DD3 /* Debug-production */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = DE4F08E5858DEDD62A2262C8 /* Pods-YouYuJiZhang.debug-production.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = 9188JiZhangBao;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -24362,7 +24312,6 @@
 		};
 		7DFB18C71EB0341E00292DD3 /* Release-test */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3BA1F23EADDF47271B5AA7AB /* Pods-YouYuJiZhang.release-test.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = 9188JiZhangBao;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -24463,7 +24412,6 @@
 		};
 		7DFB18C81EB0341E00292DD3 /* Release-production */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 814F3E7FF23E2CA5B535C5DE /* Pods-YouYuJiZhang.release-production.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = 9188JiZhangBao;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -24990,7 +24938,7 @@
 		};
 		9C4C226B1E9E30C8000C5F15 /* Debug-test */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 59B9709CD0561A8AD4BDF638 /* Pods-SuiShouJi.debug-test.xcconfig */;
+			baseConfigurationReference = BCC89EE70E8C72F2151BFED7 /* Pods-9188JiZhangBen.debug-test.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = 9188jizhangben;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -25092,7 +25040,7 @@
 		};
 		9C4C226C1E9E30C8000C5F15 /* Debug-production */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 39E3B4D62A92E52E9A7D3272 /* Pods-SuiShouJi.debug-production.xcconfig */;
+			baseConfigurationReference = AA2C404FF4C4201ADF0D39B0 /* Pods-9188JiZhangBen.debug-production.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = 9188jizhangben;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -25195,7 +25143,7 @@
 		};
 		9C4C226D1E9E30C8000C5F15 /* Release-test */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 21EA1E50547213D6FCC8FD05 /* Pods-SuiShouJi.release-test.xcconfig */;
+			baseConfigurationReference = 7E2C437569BE5F61C549F4C5 /* Pods-9188JiZhangBen.release-test.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = 9188jizhangben;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -25296,7 +25244,7 @@
 		};
 		9C4C226E1E9E30C8000C5F15 /* Release-production */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6B2E92DAE4FF9F6B4E6CFC2B /* Pods-SuiShouJi.release-production.xcconfig */;
+			baseConfigurationReference = 73027455F8F75CEC77E66AC1 /* Pods-9188JiZhangBen.release-production.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = 9188jizhangben;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -26211,7 +26159,7 @@
 		};
 		9C80FF0A1E95E88E00B1BAAC /* Debug-test */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2F9C994248D269CADC0E5844 /* Pods-YouYuJiZhang.debug-test.xcconfig */;
+			baseConfigurationReference = 1E94BF472DA87D55A1CBED4F /* Pods-YouYuJiZhang.debug-test.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -26313,7 +26261,7 @@
 		};
 		9C80FF0B1E95E88E00B1BAAC /* Debug-production */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = DE4F08E5858DEDD62A2262C8 /* Pods-YouYuJiZhang.debug-production.xcconfig */;
+			baseConfigurationReference = 1E51C22F9305214B776BE476 /* Pods-YouYuJiZhang.debug-production.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -26416,7 +26364,7 @@
 		};
 		9C80FF0C1E95E88E00B1BAAC /* Release-test */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3BA1F23EADDF47271B5AA7AB /* Pods-YouYuJiZhang.release-test.xcconfig */;
+			baseConfigurationReference = 10B02F27B07D9E59BDE1CA2A /* Pods-YouYuJiZhang.release-test.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -26517,7 +26465,7 @@
 		};
 		9C80FF0D1E95E88E00B1BAAC /* Release-production */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 814F3E7FF23E2CA5B535C5DE /* Pods-YouYuJiZhang.release-production.xcconfig */;
+			baseConfigurationReference = 6914A4671174AA5C297802D2 /* Pods-YouYuJiZhang.release-production.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -26618,7 +26566,7 @@
 		};
 		9C9CF0CA1EA5F73A007657FE /* Debug-test */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 59B9709CD0561A8AD4BDF638 /* Pods-SuiShouJi.debug-test.xcconfig */;
+			baseConfigurationReference = AFA0E86A33C63DB5D6AEB327 /* Pods-JiZhangGuanJia.debug-test.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = JiZhangGuanJia;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -26720,7 +26668,7 @@
 		};
 		9C9CF0CB1EA5F73A007657FE /* Debug-production */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 39E3B4D62A92E52E9A7D3272 /* Pods-SuiShouJi.debug-production.xcconfig */;
+			baseConfigurationReference = 5DE4695CC7C0CB804EB71885 /* Pods-JiZhangGuanJia.debug-production.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = JiZhangGuanJia;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -26823,7 +26771,7 @@
 		};
 		9C9CF0CC1EA5F73A007657FE /* Release-test */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 21EA1E50547213D6FCC8FD05 /* Pods-SuiShouJi.release-test.xcconfig */;
+			baseConfigurationReference = 4EF45D0DA6D692497985E773 /* Pods-JiZhangGuanJia.release-test.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = JiZhangGuanJia;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -26924,7 +26872,7 @@
 		};
 		9C9CF0CD1EA5F73A007657FE /* Release-production */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6B2E92DAE4FF9F6B4E6CFC2B /* Pods-SuiShouJi.release-production.xcconfig */;
+			baseConfigurationReference = A2AF6367657D967EE92CE822 /* Pods-JiZhangGuanJia.release-production.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = JiZhangGuanJia;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;

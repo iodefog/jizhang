@@ -21,8 +21,8 @@
 		02DAC7796E7545FAF98A54BC0BBE6031 /* MQEvaluationCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5099D78E624C4526C267FBB60786A6E1 /* MQEvaluationCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02F74B097B47AC73820B479B726378A1 /* hmac.h in Headers */ = {isa = PBXBuildFile; fileRef = A9194D70040167122C16F5ACF4D862E0 /* hmac.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		03679B48B01F2C5200615C4E7A6AE171 /* MEIQIA_CustomIOSAlertView.h in Headers */ = {isa = PBXBuildFile; fileRef = C2D80A1E7652EF80DD977249AD251C97 /* MEIQIA_CustomIOSAlertView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		03697FC58BA161C5782FFA4FF3F118D5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02FFAB48E5FD90D4DA3387E646D6B712 /* UIKit.framework */; };
 		03B1AF348EB2E189B74B150CE3B884F2 /* YYTextLine.h in Headers */ = {isa = PBXBuildFile; fileRef = 2041EAFE50592D50CB46427F6D812386 /* YYTextLine.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		03C7099F9C43B859AD0861CB94A3E196 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4FBE91ABFAD3F7B7DF30F7FD36D44AB /* ImageIO.framework */; };
 		04088AC8AD834C921873DB79FA402F7A /* AFNetworking-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = A720293DB5C1F4930F3B62F93BF1B74A /* AFNetworking-dummy.m */; };
 		0414E11C42CB46366207209D5BFAE326 /* MQBotMenuAnswerCellModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 3555DADAD125A8D18BB0D2D28FFFA50B /* MQBotMenuAnswerCellModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0458A2E5ADB7799DB4C8CEFF535E0BC1 /* decode.h in Headers */ = {isa = PBXBuildFile; fileRef = 0F36C7A4727D89016A2EDC2F8F251FF7 /* decode.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -37,7 +37,6 @@
 		06003FA49AA271E2E42BD60DBC48E364 /* MQChatAudioRecorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 19C0C7A136C2486A7F808BABA91B3360 /* MQChatAudioRecorder.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		060CCBAC655E26057B3A43519ADD5BE7 /* MQChatFileUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = 3DC650E4AE797D48B6B05E6AC71B617D /* MQChatFileUtil.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		06453B6851B540020E58096CAF9F66E4 /* RACIndexSetSequence.h in Headers */ = {isa = PBXBuildFile; fileRef = 3DC54B4809FFABBDA53B1F085F97E84B /* RACIndexSetSequence.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		06584D91AE9D99A46CA5704412054A82 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C18F5907F1665E9E3D4220FF23D59FAF /* Foundation.framework */; };
 		068ECC75829A7886952624F391607D1B /* MQMessageFormViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = EAD19C61E0E9A6024A15AABB140BA930 /* MQMessageFormViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		06D1753935240A30E589C02673C37D7C /* MQBotMenuCellModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 4E40FA9624B7D2F6961BA5A48ED01C9E /* MQBotMenuCellModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		06DE8450CA2FEC1A38FA251C0687C662 /* rescaler.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C832EBE4C111B9187D20A4D09F0EDAB /* rescaler.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -47,6 +46,7 @@
 		082C4213E9DD427F8C0A886BF3644610 /* AFHTTPRequestOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = E0B823B2C45B1FA5012503E5713192CC /* AFHTTPRequestOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		084CDBAEF3D8802E9496FDF052D126FC /* quant.c in Sources */ = {isa = PBXBuildFile; fileRef = 52CA50A2D32435CC28F12ACE9BFEAD98 /* quant.c */; settings = {COMPILER_FLAGS = "-D_THREAD_SAFE -fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		084D69438168BAE7026F2820330C77B7 /* ZYImageView.h in Headers */ = {isa = PBXBuildFile; fileRef = FAB89FBACA423F11F6FD26428BA973D3 /* ZYImageView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		086D769D5502B09EA34270C7D18EA268 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91A7282F4396B5E4395CC02457517099 /* Foundation.framework */; };
 		0930451B8AE49F0AD35F72024BF012B9 /* aescrypt.c in Sources */ = {isa = PBXBuildFile; fileRef = 1A324DAD69A8E57A0CD647EC58E28BC0 /* aescrypt.c */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0 -w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		09D0C935583B23349D4AF992F983B880 /* YYTextInput.h in Headers */ = {isa = PBXBuildFile; fileRef = 9382C3977C70DC4CBFFC2AF8E22E6909 /* YYTextInput.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		09F50B6E66AF86A6A62BA259B516EEE7 /* MQBotMenuAnswerCellModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 00FEEFC3558FD51955A68584582F2DFE /* MQBotMenuAnswerCellModel.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
@@ -54,10 +54,11 @@
 		0A80CE44DD2C2E1229361A710B2BE1A1 /* Pods-YouYuJiZhangPro-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = B98475BA4ABC70CBC8A1A55FDAF3137E /* Pods-YouYuJiZhangPro-dummy.m */; };
 		0A9B87BB88292D0011AF3C069FF853B0 /* MQDateFormatterUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B43696BABA4E71BC1225D4CE05276F2 /* MQDateFormatterUtil.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0B160F63F80B3C01935B68BDE9BED910 /* MJPropertyKey.m in Sources */ = {isa = PBXBuildFile; fileRef = C17919A241D7304EF3D7BF013C11E927 /* MJPropertyKey.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		0B354D90685808D1BEEF8661C4C52CB0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91A7282F4396B5E4395CC02457517099 /* Foundation.framework */; };
 		0B35D386E3D26AFC6CE3C38EC8FB1BCC /* MQVoiceCellModel.h in Headers */ = {isa = PBXBuildFile; fileRef = CFD85FA1E755366425399AE873BFE82A /* MQVoiceCellModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0B36C34892D2D7142D245786F35B3434 /* pwd2key.h in Headers */ = {isa = PBXBuildFile; fileRef = 11D9F356E297B87A855B9122E22FEDDC /* pwd2key.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		0B4E2EC7F7A04296B50EAB76B4A2228F /* RACTupleSequence.h in Headers */ = {isa = PBXBuildFile; fileRef = C2016810C2EC07F614A9B32125E514B0 /* RACTupleSequence.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		0C5D794509C61722DEA751878A3EE883 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C18F5907F1665E9E3D4220FF23D59FAF /* Foundation.framework */; };
+		0C772E699394A8A4CE55B43E9D684165 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91A7282F4396B5E4395CC02457517099 /* Foundation.framework */; };
 		0CD8B9C34B1EF19097D0A03EBB0743EB /* webp.c in Sources */ = {isa = PBXBuildFile; fileRef = B734F6A457C63FB8EAFB12CCC91E31E2 /* webp.c */; settings = {COMPILER_FLAGS = "-D_THREAD_SAFE -fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		0CF7FC50BB36BF0D161BDFE742901D47 /* vp8l.c in Sources */ = {isa = PBXBuildFile; fileRef = 1BA4E0D68C615B6C1B29AB017DD96156 /* vp8l.c */; settings = {COMPILER_FLAGS = "-D_THREAD_SAFE -fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		0D261228C417B22F7E46C6BC58EF0512 /* lossless_enc_sse2.c in Sources */ = {isa = PBXBuildFile; fileRef = 8A7AA52AE966D3915FEA7330620C0A28 /* lossless_enc_sse2.c */; settings = {COMPILER_FLAGS = "-D_THREAD_SAFE -fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
@@ -80,19 +81,20 @@
 		1080301A94086BED6328D06BDEA45D14 /* Pods-9188JiZhangPro-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 57488B60137FA815C6C84362B2F7EE8B /* Pods-9188JiZhangPro-dummy.m */; };
 		1093713A6204FEF6F08311EFF68319AE /* lossless_enc_neon.c in Sources */ = {isa = PBXBuildFile; fileRef = 6F37F58F081E99EA50AA41F4AEB2BC9D /* lossless_enc_neon.c */; settings = {COMPILER_FLAGS = "-D_THREAD_SAFE -fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		10F3CE98692F58D07A254A59A85B974B /* MEIQIA_AMR_Debug.h in Headers */ = {isa = PBXBuildFile; fileRef = 3F116CD5F7544D9687F7E8EE7344DC2C /* MEIQIA_AMR_Debug.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		1153EFD43D61288C329FC946C179FDF4 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76602606ADA2BD1C5DED19B1AD33AF4F /* MobileCoreServices.framework */; };
 		115A3ACDBD60B4AC3AA086C53AB4B613 /* RACEXTKeyPathCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = 856D1462B3C3560E3633D5CDD745686D /* RACEXTKeyPathCoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1181AC796CFB4358B33B198F9356014E /* MEIQIA_FBLCDFont.m in Sources */ = {isa = PBXBuildFile; fileRef = AE05AD33249DF348810DE72712F44F8C /* MEIQIA_FBLCDFont.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		120B848D6953E18A09C383C3FFCEC298 /* NSEnumerator+RACSequenceAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = A543ED617AC35C10C4F320F5A58A34CF /* NSEnumerator+RACSequenceAdditions.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		12306C036EDA46DA35102A18EE57DBA5 /* UITableViewHeaderFooterView+RACSignalSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = C88FD06149B0CCE371A7A0E8D6A30345 /* UITableViewHeaderFooterView+RACSignalSupport.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		127ED12217576AC48B04E757B7CFE25E /* MQTextCellModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7557FA57E1463DC4D7FAB723F0464FD3 /* MQTextCellModel.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		12E6173568DFCFA8A5ECE9917972D5C3 /* MKAnnotationView+RACSignalSupport.h in Headers */ = {isa = PBXBuildFile; fileRef = EDECDB02370B7D981C1BC35CDCA3D261 /* MKAnnotationView+RACSignalSupport.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		131F0BDC0AC2CAE0962837E2AB97F5A8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91A7282F4396B5E4395CC02457517099 /* Foundation.framework */; };
 		1328B8FE1F06A3718F8CCC10A46FAB1B /* bit_reader.h in Headers */ = {isa = PBXBuildFile; fileRef = A01EC83403CD1FB56972C49EA6CD2FF5 /* bit_reader.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1333B07F57B6FF8DEB7C809291433830 /* mztools.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C968098010FA37D7F944F787EF1AD1E /* mztools.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		13EEF18211CAF91BA53AB5BF780A31FA /* MQPreChatSubmitViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 6A451858AD5F0AA952199946100614CB /* MQPreChatSubmitViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		140ECED44739E2802BE4F9C157A4EB38 /* MQChatViewStyleGreen.h in Headers */ = {isa = PBXBuildFile; fileRef = 0671B97074D65645458FC571AD547EDB /* MQChatViewStyleGreen.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		14369F989085F5A02AB1255690D894CE /* MQImageCellModel.h in Headers */ = {isa = PBXBuildFile; fileRef = B7B622DC7F4AE43AB02831721C158D37 /* MQImageCellModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		14722C23BD3ADAB62D4D4AA6AE9511D8 /* RACEXTScope.h in Headers */ = {isa = PBXBuildFile; fileRef = A8A3F7B11011668196DB0D02BA9FC699 /* RACEXTScope.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		147CE6BA71259C3F31931336D6C5E7EB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6B4F32B830B4D066D0B53CB3094BFE0 /* UIKit.framework */; };
 		14E2FFD3859F1E1CEF2BE0BD056BB5DC /* UIImageView+HighlightedWebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 5474292232887A66FAC9171F7DBA8978 /* UIImageView+HighlightedWebCache.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		1648FF46C7E9BCC1952B649155A81D46 /* quant_levels.c in Sources */ = {isa = PBXBuildFile; fileRef = C41B77C7917A06460667671610921A7A /* quant_levels.c */; settings = {COMPILER_FLAGS = "-D_THREAD_SAFE -fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		16573270F07FC3C8801FAA5954487023 /* argb_sse2.c in Sources */ = {isa = PBXBuildFile; fileRef = A0E3495D6D9CCF1E8C41035DA1C5C3E7 /* argb_sse2.c */; settings = {COMPILER_FLAGS = "-D_THREAD_SAFE -fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
@@ -103,10 +105,12 @@
 		17AFC9350B90761B4602860ACF9FAF67 /* MQInputToolBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 6960FE6CD2023AF9DE1F52BF3C55D4D7 /* MQInputToolBar.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		17E4FD627CAEC4C9BB878D5227A36D80 /* MASConstraint.m in Sources */ = {isa = PBXBuildFile; fileRef = 2823E9F92209A8DD91E2450881129B00 /* MASConstraint.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		18E3EC0150562531E5586A690C07A79F /* MQDateFormatterUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 9398493614485DB272341968BFE6B161 /* MQDateFormatterUtil.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
-		197147D655ECC9968133CA43255501EF /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6B4F32B830B4D066D0B53CB3094BFE0 /* UIKit.framework */; };
+		1960B25D4B1419FC9DF44B47E053DBC0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91A7282F4396B5E4395CC02457517099 /* Foundation.framework */; };
 		19CF5C1CC627E163491E1711A45246A3 /* NSError+MQConvenient.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EEE3290BBA21A53281F1B2D0FFE6C63 /* NSError+MQConvenient.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		19F4F53B23ED0F6746609039FA28DA1A /* if_rom.h in Headers */ = {isa = PBXBuildFile; fileRef = FD6C6152B45C84CCAF007CE3545761E6 /* if_rom.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1A5E58D5A7968216E0A3F758F19DEF29 /* YYTextMagnifier.h in Headers */ = {isa = PBXBuildFile; fileRef = 27F73864942A0DBBB751B254AB5024DD /* YYTextMagnifier.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		1A79F90A35312EFB2FA2C7259EBE3529 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91A7282F4396B5E4395CC02457517099 /* Foundation.framework */; };
+		1AC31C49D7D1FBFF18701F2229E9CFE1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91A7282F4396B5E4395CC02457517099 /* Foundation.framework */; };
 		1B62C8A712F937181AD580EEE3515E48 /* MASViewAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 75AA9A151E16AB1846DD4F0FF533676D /* MASViewAttribute.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		1B683D5ACC87B4A6E4FCDBB03E5016E2 /* MQRefresh.h in Headers */ = {isa = PBXBuildFile; fileRef = AC13E88D7295B53E060C8D19E19127BB /* MQRefresh.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1B983CD02968B48CCCF8903A536433DF /* dec.c in Sources */ = {isa = PBXBuildFile; fileRef = B72AEF1EAF59FC9D0475C90E856F34C7 /* dec.c */; settings = {COMPILER_FLAGS = "-D_THREAD_SAFE -fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
@@ -126,12 +130,12 @@
 		1E8641DCAF455AC95A96F367F42EFFEC /* RACSequence.h in Headers */ = {isa = PBXBuildFile; fileRef = 1C9E93D15446091D0933D799B2F63A92 /* RACSequence.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1EF9AEB7A022D616A64070CF9C8C2DC7 /* NSString+RACSequenceAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 65AEC97CDBFC48007DCFBF907E69148F /* NSString+RACSequenceAdditions.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		1F56042CA316A2F3A33DAF3A3E81DF96 /* MQTextMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 79B8A85E455490543D796FF4F6C86658 /* MQTextMessageCell.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
-		1FAF98B3A33AD8BBB6C2FF638DC46F8D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C18F5907F1665E9E3D4220FF23D59FAF /* Foundation.framework */; };
 		1FBCBB982DEDE25CF9BAEF4968E71AFC /* MMDrawerController+Subclass.h in Headers */ = {isa = PBXBuildFile; fileRef = 5527D9DE1435376ED9D68EFA332552CF /* MMDrawerController+Subclass.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		208F8710908AD0FE1A566FEA8E0E9E3C /* MQTextMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 774BF668D7F1D1EDB4F316C45BF9BAE5 /* MQTextMessage.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		20F99B046C25FA463BA4BD66200A36DC /* cpu.c in Sources */ = {isa = PBXBuildFile; fileRef = A550654D36D719E5F3CEE382E4BC42B6 /* cpu.c */; settings = {COMPILER_FLAGS = "-D_THREAD_SAFE -fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		21D0899439056B65DDD23891F45E4FA3 /* AFURLConnectionOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 31D9D78C39FA8FBF0FE7E0CEBD27446A /* AFURLConnectionOperation.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		21D09671B990FAE8B474A39EC913C4C6 /* RACReturnSignal.m in Sources */ = {isa = PBXBuildFile; fileRef = 214E60174A834086EAC6D6D175E926A7 /* RACReturnSignal.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		21DF84E12DE986DEC013DC422A20F872 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37E5A58A8540F60147D08B633366795D /* Accelerate.framework */; };
 		21FCF3444E7C465B621EC45DE1C14591 /* MQBotWebViewBubbleAnswerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 31C9A87689198521D1C0731CFC950FEE /* MQBotWebViewBubbleAnswerCell.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		2258D800A362D8574EA713D2BA20D9B0 /* lossless_enc_sse41.c in Sources */ = {isa = PBXBuildFile; fileRef = F38247D73388D108CEC96F4EE7AC3B83 /* lossless_enc_sse41.c */; settings = {COMPILER_FLAGS = "-D_THREAD_SAFE -fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		229969C4D91306FA744FB7E389535B48 /* MQBotWebViewBubbleAnswerCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 7F37B1C548AE164FD18C6A12313B00F4 /* MQBotWebViewBubbleAnswerCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -145,7 +149,6 @@
 		24008ABD0726BA3706DACAAE7B593DFC /* aestab.c in Sources */ = {isa = PBXBuildFile; fileRef = 822256A5ABF70FE0D1143B2F38B14677 /* aestab.c */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0 -w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		247803D0CF8F9F8AA2C7DB1D3DCE3F3A /* UIView+YYText.h in Headers */ = {isa = PBXBuildFile; fileRef = D2BC8AD1470025AE479B479D976E2FB7 /* UIView+YYText.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		247D18D8AAE76A208CA3A90AB8625893 /* YYTextContainerView.h in Headers */ = {isa = PBXBuildFile; fileRef = 0139691262C84B6BF7153846511299F5 /* YYTextContainerView.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		248E87EF33096A42D079C1F9AB2F56F1 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D98DA3A84075820C418E03C54D2DF1A /* QuartzCore.framework */; };
 		2490C18E3D9416EBB616D7332F75CE1F /* YYTextAttribute.h in Headers */ = {isa = PBXBuildFile; fileRef = 988773A630BF3F0A7D6AC550A3738CA0 /* YYTextAttribute.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		24BE5844B5E54BA5620F4F59A65052FD /* MQMessageFormViewService.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C05781C4366A4E1D423C1DD77D6838D /* MQMessageFormViewService.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		24F2455B84EC299C49266F45A717988B /* RACEmptySignal.m in Sources */ = {isa = PBXBuildFile; fileRef = D0EC03ABF200405025B1336D4CB96C26 /* RACEmptySignal.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
@@ -208,6 +211,7 @@
 		34651078F55D2BBB749EB4135D031EF4 /* ioapi.c in Sources */ = {isa = PBXBuildFile; fileRef = DB850917A2E2D9321F53DE7B538252EA /* ioapi.c */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0 -w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		34A93BF8A2AB052E5511C3A867C39112 /* UIPasteboard+YYText.m in Sources */ = {isa = PBXBuildFile; fileRef = 20234756C89456782485AB34CFBC6909 /* UIPasteboard+YYText.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		34B5FC66C040E05E3E660964F54BC8CD /* ViewController+MASAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 82310E02B170975C2A56A459C6EB1C32 /* ViewController+MASAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		355E0EBDCF470CD50DEA5C091E605465 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91A7282F4396B5E4395CC02457517099 /* Foundation.framework */; };
 		356824C1D277D09002EB29F8357D0CAE /* MQMessageFormImageCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 57DCF31932BBCA4D0DECAE1FEB6053B8 /* MQMessageFormImageCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		356CFB92A9F525D6BEC18FA32152B18B /* RACKVOChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = C6EF9250A2A045BABA5610682B0BD6F2 /* RACKVOChannel.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		357777EC80AC013D44D320F4ADF0AFE3 /* MQFileDownloadMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 961B7236E0CCA43991B9487CB967DFEC /* MQFileDownloadMessage.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
@@ -216,11 +220,11 @@
 		36A1FD03B5F5654A8A8C852D53D40280 /* YYTextAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 086BF7FCEF6942A524A1EA22E4465B88 /* YYTextAttribute.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		36A563C9C0707402D755974EF68957F2 /* MQShareTransitioningDelegateImpl.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1C906FF51BA35E13BD8DA457A633D3 /* MQShareTransitioningDelegateImpl.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		3781C213C8FB04D63E43403E3A780DC0 /* MQChatViewManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 702FA0525779D32F6F0D0D122C9C5D6F /* MQChatViewManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		37945EAF8B3A282EDBF22996EC1957CB /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D81863A8F7D715A8B8092CF911055EEC /* CoreGraphics.framework */; };
 		37A18F953014AF0C408A4352BA8C2E52 /* common.h in Headers */ = {isa = PBXBuildFile; fileRef = 0747685422B3EF45200D7A18788B67D2 /* common.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37B46AFDFF102F68257E5A640791DB68 /* RACSubscriptionScheduler.m in Sources */ = {isa = PBXBuildFile; fileRef = F02AB7C149D8EBCAED7891B6112290C6 /* RACSubscriptionScheduler.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		381A317F952E2041C5BC765B8D1CDB1D /* YYTextAsyncLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 31E12666FEA53A86A27C401549C2DADF /* YYTextAsyncLayer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		383618C5D2927E7C50F6E26735611F9A /* RACScopedDisposable.m in Sources */ = {isa = PBXBuildFile; fileRef = 86AE77C1C2888689C4690E617ADCAB3B /* RACScopedDisposable.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
-		39382528219FC2C49FAE45FA04CE6FBB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C18F5907F1665E9E3D4220FF23D59FAF /* Foundation.framework */; };
 		3951A95E959AA86205CA3341D88DC6AA /* MQBotMenuMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = E42D8667C2118BF326BA5EE647EE338B /* MQBotMenuMessage.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		39540B88808DCF8078DFBDAA5F0A78D2 /* RACReplaySubject.h in Headers */ = {isa = PBXBuildFile; fileRef = C61543479799D584B5D09FE8D72458F5 /* RACReplaySubject.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		39DB2A091364CE0D3FA72BC9F9E85683 /* MQMessageFormConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = AB158BED1E606914A8DDCAE15D9BC826 /* MQMessageFormConfig.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
@@ -235,6 +239,8 @@
 		3C28F514E5EA580BCAF4ACDBBAEDAB94 /* MQChatViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BB862A50DDD6E3B62F8DD8D032FEA3D7 /* MQChatViewManager.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		3C5D93638F83613F6BE9E46C580225EB /* MQTipsCellModel.m in Sources */ = {isa = PBXBuildFile; fileRef = DADD0E78CD4D7FF52C343C74F1AC5E34 /* MQTipsCellModel.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		3D7E611D70F9689839818DBDB03CB238 /* enc.c in Sources */ = {isa = PBXBuildFile; fileRef = EF0F811D1DE3E2F41FB3909D87676BC7 /* enc.c */; settings = {COMPILER_FLAGS = "-D_THREAD_SAFE -fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		3DAD713FCC51849AC79975806C18611F /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76602606ADA2BD1C5DED19B1AD33AF4F /* MobileCoreServices.framework */; };
+		3DD92C5A06B4E55B2CC38CC359E70570 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91A7282F4396B5E4395CC02457517099 /* Foundation.framework */; };
 		3DE9DF1F594C866B7A6CB20969842842 /* MQFileDownloadCellModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 37279225C0D3AE13ABD6832CD811A7C8 /* MQFileDownloadCellModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3DEC8743AB328D7E779FC51F5FCAC85E /* MQChatAudioTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 5714E0B18BD98AB41A3AFC4F157338FB /* MQChatAudioTypes.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3E7832CD58DA37D854C62AFE7E9862CD /* MEIQIA_CafRecordWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4699E04FB709E5CE76745AEC7B59FD61 /* MEIQIA_CafRecordWriter.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
@@ -253,7 +259,6 @@
 		40E2B1FE5418398A12C2F866A2B723B0 /* MMDrawerController.m in Sources */ = {isa = PBXBuildFile; fileRef = EF44C8C23E6A9AB618672264DB1FB3BE /* MMDrawerController.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0 -w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		413D34E9CC1AA2BDD6619FE8D3FD4D67 /* quant_levels_dec.c in Sources */ = {isa = PBXBuildFile; fileRef = BA2FE0F35D2BBE33C5F13DCFC55FB18D /* quant_levels_dec.c */; settings = {COMPILER_FLAGS = "-D_THREAD_SAFE -fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		414E07A91814BB6EED847763A04805D1 /* RACImmediateScheduler.m in Sources */ = {isa = PBXBuildFile; fileRef = 33FD6D9E2DAC9B171753116C8787F76E /* RACImmediateScheduler.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
-		41CCEFBE0BB8EF2BF202660BD4CE95EF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C18F5907F1665E9E3D4220FF23D59FAF /* Foundation.framework */; };
 		4300D16A111D667519B2BF35E220EAB9 /* YYLabel.h in Headers */ = {isa = PBXBuildFile; fileRef = 1AB0C82CEE4600048C224E8890783F04 /* YYLabel.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43289F00BEC4AAAA02526969653515F5 /* RACMulticastConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 25317889DB86F94B069EFEDBACD4B223 /* RACMulticastConnection.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		44065E92CA1D709FB39940F561C49223 /* MEIQIA_FBSquareFont.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EAFE223DD0357D32D6E10F7699601F8 /* MEIQIA_FBSquareFont.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
@@ -264,7 +269,6 @@
 		45712282878615A0104E9B228D6F5843 /* delta_palettization.h in Headers */ = {isa = PBXBuildFile; fileRef = 1D7FA45ACCB9F2931E498E7DE4ABC6CB /* delta_palettization.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		460FF6C0BE20FA3278AAE481A5859788 /* aeskey.c in Sources */ = {isa = PBXBuildFile; fileRef = 88A76A0D93C37743615E9C79CCD0316F /* aeskey.c */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0 -w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		466BD03A83991A9A7E27B68A24613CCC /* ZYCornerRadius-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 98B236FF546ECBDC7836231C7169652B /* ZYCornerRadius-dummy.m */; };
-		46D40A0A518B7E8BD5803FE9D3A8F7EC /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8EF299A6F04EB11F73ACB0DDBB671EC8 /* Accelerate.framework */; };
 		4739845002CFAD58009C12658F6D3410 /* YYTextContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = D04747468FA3CB711B306E54790B16FC /* YYTextContainerView.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		4783DCC63473AA570829F4DD832D1E42 /* MMDrawerVisualState.h in Headers */ = {isa = PBXBuildFile; fileRef = 0F4A7A20DEA0C989C4F4902C03CD6D4B /* MMDrawerVisualState.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		47A6AE1E71027C28656E365D1268F02E /* RACScheduler.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F1A8B5544BE2CE2E9DE77A84A492EC5 /* RACScheduler.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
@@ -279,6 +283,7 @@
 		4B059872CAED052016A853BBBDBB94D2 /* UIControl+RACSignalSupportPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 99254542886888062963DFC2B898F3EC /* UIControl+RACSignalSupportPrivate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4B3F96284536C5A33D72698F96F9809B /* entropy.h in Headers */ = {isa = PBXBuildFile; fileRef = DB462BD13A5F5682C9C9E31654789655 /* entropy.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		4BCCF93591A22C4BA15328169C54CBA4 /* NSObject+RACPropertySubscribing.h in Headers */ = {isa = PBXBuildFile; fileRef = B2EBFE0ABBDA3CAFE04F65934CA32AF9 /* NSObject+RACPropertySubscribing.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C1F6D52EE84B63618668DD71AFE8186 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91A7282F4396B5E4395CC02457517099 /* Foundation.framework */; };
 		4C3CC2A6170981B07FABD9E745B52AE0 /* filters_sse2.c in Sources */ = {isa = PBXBuildFile; fileRef = 76927F97D3B92D8C365AE1ACAFEF2646 /* filters_sse2.c */; settings = {COMPILER_FLAGS = "-D_THREAD_SAFE -fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		4C5D41DF7E5677E3F9CFFDC7858C7390 /* MQTipsCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CFD8EB05E5007C6A3FA8189856443FC /* MQTipsCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C99F47EACEB891884DBFAA1B94DE31E /* YYTextTransaction.h in Headers */ = {isa = PBXBuildFile; fileRef = 5258E05927E16E1E3CDB3D549CFD7FDF /* YYTextTransaction.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -286,8 +291,10 @@
 		4DCDA7BB9A34B999A3C2B4DF58161956 /* RACDynamicSequence.m in Sources */ = {isa = PBXBuildFile; fileRef = 6499CCDA58A487351A20ECB0E13CFCC3 /* RACDynamicSequence.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		4E2E16ED74DFECEFB043914037E9A89D /* anim_decode.c in Sources */ = {isa = PBXBuildFile; fileRef = B47D2AB74142A3B58768D8305178978B /* anim_decode.c */; settings = {COMPILER_FLAGS = "-D_THREAD_SAFE -fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		4E8ECEA3C15201664748BB2770B5951A /* UIAlertView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = CFD9D8128F1B623DF7EEDF4EBC1AF83B /* UIAlertView+AFNetworking.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		4F1F09599D7D5DE922ADF31E6A5336E2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91A7282F4396B5E4395CC02457517099 /* Foundation.framework */; };
 		4F39240D8C2BDE8FF53C8DDEF59997DA /* RACDelegateProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E167CAA88BFAF9979AACE57A9BA4BEB /* RACDelegateProxy.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		4F4680FCBDDA862F7EF9A0E5E79400F5 /* UIImageView+CornerRadius.h in Headers */ = {isa = PBXBuildFile; fileRef = E81719B269AF40CC717D5ED1571639B0 /* UIImageView+CornerRadius.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4F983D567C088C8F1788901B604EA8FB /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 59BBBC47CFCF80E2680E0FF968F6635D /* QuartzCore.framework */; };
 		4FD926DBEDF34D8D4C53F1F194636BD1 /* MQWindowUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = 26E6F97331F0273A9828B737A31383B8 /* MQWindowUtil.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5145B14A4666DA0C71A42B778C9652DC /* enc_neon.c in Sources */ = {isa = PBXBuildFile; fileRef = 1337A96B7FC33172D1BFD1EB4DCD6A9E /* enc_neon.c */; settings = {COMPILER_FLAGS = "-D_THREAD_SAFE -fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		515F6210D7E3C106F9AAD71983A05AC1 /* MQWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE44AC2DEA8F3A37DC9EAE9D75C4023F /* MQWebViewController.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
@@ -330,13 +337,14 @@
 		5BCA652992820A0E87452283A7CA4F94 /* MASViewConstraint.h in Headers */ = {isa = PBXBuildFile; fileRef = CB85B6896D3B412CA69F3B0417A9CA00 /* MASViewConstraint.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5C6D917FDF6C03A1097573566EEBEA55 /* RACEXTRuntimeExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = C9EAA6565A3A7DC12980C67F9DEB6BAB /* RACEXTRuntimeExtensions.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		5CCFDFB8B67CB6E4AA34FD25A612E252 /* tree.c in Sources */ = {isa = PBXBuildFile; fileRef = FC309680F944BF11F50B8C078192D3AD /* tree.c */; settings = {COMPILER_FLAGS = "-D_THREAD_SAFE -fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
-		5D15A1DF878BDC9D91F545F1C07067E2 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A30C9FD7891230F0B384710335E2B0C /* SystemConfiguration.framework */; };
 		5D2A42976CA8D02A4B2E334D637FC716 /* RACKVOChannel.h in Headers */ = {isa = PBXBuildFile; fileRef = 04206D76F932C389AE59A5E56249ADC4 /* RACKVOChannel.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5D3D2B65E67DA485529F1770B5880FD5 /* MMDrawerBarButtonItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 33361623EAB773E1A96A7FBA93DDC19A /* MMDrawerBarButtonItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5D867400F2B0FF2B3B7A387787A592EF /* Pods-YouYuJiZhangBen-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 219762699B76574F5BEA970E56300C45 /* Pods-YouYuJiZhangBen-dummy.m */; };
+		5DC96ADE93852BC09E04D88274842D56 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B1D08D054E2872E998E780A7A172D4DE /* ImageIO.framework */; };
 		5DC9E501CB0B9297F9269A0F3D98826B /* ViewController+MASAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 885ABF0B129B8F6364618B1615F357BB /* ViewController+MASAdditions.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		5E1ED501318FFC9E31F9B87C71CF28C4 /* config.c in Sources */ = {isa = PBXBuildFile; fileRef = DEB763CA6681399B94FDEFCDAE597EA0 /* config.c */; settings = {COMPILER_FLAGS = "-D_THREAD_SAFE -fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		5E47B16A0A5C7904CED9F55679581113 /* RACBlockTrampoline.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FFE7AA49BD66B8653027B3ADF3FF148 /* RACBlockTrampoline.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5ECE6BC3B48C4A24DF3B0144BDC8957C /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6ABACF0E2CCDF791499F221573206322 /* AVFoundation.framework */; };
 		5EE041AF4F5E307EB797A3038E0CC727 /* RACCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = C032B6644C098142024E56929FB41943 /* RACCommand.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		5F8B7E6A86D05BA6B51457E8C74E1EFB /* YYTextArchiver.h in Headers */ = {isa = PBXBuildFile; fileRef = B2EE3364CF93E9B1B6A55C31DAB360F1 /* YYTextArchiver.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5F92676F64B4BF726B4C987D9C8640CF /* UIAlertView+RACSignalSupport.h in Headers */ = {isa = PBXBuildFile; fileRef = 3431CBE21D0D945E1F83C07146599304 /* UIAlertView+RACSignalSupport.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -351,16 +359,14 @@
 		61864C403B6E6D3CD633F97D92B9A7A5 /* picture_psnr.c in Sources */ = {isa = PBXBuildFile; fileRef = 5059D7A9508C07809AC99B1068265301 /* picture_psnr.c */; settings = {COMPILER_FLAGS = "-D_THREAD_SAFE -fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		61ACB4A312697B1B6B983A3901B8D56D /* webpi.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A476A659977022C8F87A219FB8DE8DA /* webpi.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		61E21EF34D30B1BB6A005C400FB1D8DE /* MQMessageFormCategoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 58C75FFFD65D5F4A84032DAA13E1AA5E /* MQMessageFormCategoryViewController.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
-		6218D72B32595097343D4DECCC1DDF69 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C18F5907F1665E9E3D4220FF23D59FAF /* Foundation.framework */; };
 		626AD6044EB271751C9AB894B1DE3908 /* YYKeyboardManager.h in Headers */ = {isa = PBXBuildFile; fileRef = D5A2CAE20E579B4E1DF19C9CACB8944C /* YYKeyboardManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		628127A100C4375F5727185E2DA5A6FF /* cost_sse2.c in Sources */ = {isa = PBXBuildFile; fileRef = 8FE023AA233810578BA07076ECC8EF64 /* cost_sse2.c */; settings = {COMPILER_FLAGS = "-D_THREAD_SAFE -fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		62DF6FF45E12C205B780CCADF723F782 /* enc_sse41.c in Sources */ = {isa = PBXBuildFile; fileRef = 8E60A3CDEAC4A94ED12ADDA8238C1BC3 /* enc_sse41.c */; settings = {COMPILER_FLAGS = "-D_THREAD_SAFE -fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		631AE66AE6B4BC534A478CF948290F29 /* SDWebImageCompat.m in Sources */ = {isa = PBXBuildFile; fileRef = 962983FFEBA50BA2F1CD811C26542C95 /* SDWebImageCompat.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		634470016BB65DC7592BB54F3CA0D97A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91A7282F4396B5E4395CC02457517099 /* Foundation.framework */; };
 		63A23652F86DEF110BA55F9EAB900350 /* NSString+RACSupport.h in Headers */ = {isa = PBXBuildFile; fileRef = 6DB6FF855FAB35A0C5E8248DF1D0E094 /* NSString+RACSupport.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		63E866168B957B572228422EBC2EC918 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C18F5907F1665E9E3D4220FF23D59FAF /* Foundation.framework */; };
 		6411F50FD6CF9168A343B67DD081AD87 /* UIActionSheet+RACSignalSupport.h in Headers */ = {isa = PBXBuildFile; fileRef = 66A89BCAF5A7EFE1B73E73E40A3BF8B8 /* UIActionSheet+RACSignalSupport.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6592D8F5F78BA4684F89E1BD26C7F036 /* YYTextUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 671CDD1FF44761709ABEC5575AE6EF32 /* YYTextUtilities.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		65FD86882BC4F3C15CA5B804539FBF5E /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4FBE91ABFAD3F7B7DF30F7FD36D44AB /* ImageIO.framework */; };
 		661088BE1C4D739F629CE074D32F6919 /* SDImageCache.h in Headers */ = {isa = PBXBuildFile; fileRef = F8DF7418CFD9546A1193FE39F0CBD8ED /* SDImageCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6631B2F86BCE95C70B396014B4C7DF78 /* MQEvaluationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F358893A9FB3B43DB23AFF593AC5A77 /* MQEvaluationCell.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		664068E9E8BC98768FE6F9095733204F /* NSObject+RACDescription.h in Headers */ = {isa = PBXBuildFile; fileRef = 87F1587171BAA6ED16E9C652A15C2A94 /* NSObject+RACDescription.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -369,7 +375,6 @@
 		66AAA321B6135C8AA983C507DF539650 /* RACStringSequence.h in Headers */ = {isa = PBXBuildFile; fileRef = 13CCCE3615BF329086F915B97CA99E00 /* RACStringSequence.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		66B08412BD3896C8C50E81557E2367DB /* alpha_processing_mips_dsp_r2.c in Sources */ = {isa = PBXBuildFile; fileRef = CEB88C3A4C189C03459ADD222948B2A9 /* alpha_processing_mips_dsp_r2.c */; settings = {COMPILER_FLAGS = "-D_THREAD_SAFE -fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		671A49D28E96E822FCAB7A15FA8BA7D1 /* MQFileDownloadCellModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BFDFEA51DC3DF78EA47F4722FAF28366 /* MQFileDownloadCellModel.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
-		67B469A648E034B3B74BBDE9CCA114B4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C18F5907F1665E9E3D4220FF23D59FAF /* Foundation.framework */; };
 		67C79C968B40AFC293CF9A96A58A533E /* format_constants.h in Headers */ = {isa = PBXBuildFile; fileRef = 4985C73E7E547903C64A51E50A666E17 /* format_constants.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6819635ACB6612E1BECD1910CB738F24 /* MEIQIA_FBLCDFontView.h in Headers */ = {isa = PBXBuildFile; fileRef = A3C9D341EF53C0515A504F37BAD75DF5 /* MEIQIA_FBLCDFontView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		685A0D10E9D6C8935E466D61184F1BE4 /* hmac.c in Sources */ = {isa = PBXBuildFile; fileRef = EC4BCBA716B443BCCC3F1CE0CF4DA169 /* hmac.c */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0 -w -Xanalyzer -analyzer-disable-all-checks"; }; };
@@ -384,6 +389,8 @@
 		6A9E76457516DF63B022F684BE2CBE78 /* dec_mips32.c in Sources */ = {isa = PBXBuildFile; fileRef = A47BDB3E92083043445B5A2EB8B283BB /* dec_mips32.c */; settings = {COMPILER_FLAGS = "-D_THREAD_SAFE -fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		6AB989ED1A5ECD123535924269153543 /* UISegmentedControl+RACSignalSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = E66B201FBFE8DD620471442780727BE6 /* UISegmentedControl+RACSignalSupport.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		6B3659A40E14E2DA04261F6E195F26C4 /* RACKVOTrampoline.h in Headers */ = {isa = PBXBuildFile; fileRef = 182425B63042EC2D79041AA88393648B /* RACKVOTrampoline.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6B6162D5289A886F722AC6F638524ED7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91A7282F4396B5E4395CC02457517099 /* Foundation.framework */; };
+		6B8C821EFDE6A70B9EBC1E7592B37E9A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 59BBBC47CFCF80E2680E0FF968F6635D /* QuartzCore.framework */; };
 		6C7F9265A751140942EAE54FC96048C6 /* RACSubscriber+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 16E264F16F1497EF97BAED9CB197E21A /* RACSubscriber+Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6C84F9E25141634982CF21F329408884 /* MJPropertyKey.h in Headers */ = {isa = PBXBuildFile; fileRef = B33D05A0D7DC180F64F304565FB57E32 /* MJPropertyKey.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6C94F8E4398408F9F481F83649FC13BA /* analysis.c in Sources */ = {isa = PBXBuildFile; fileRef = D006F81CB26FF77F3BCC82C81AD66E60 /* analysis.c */; settings = {COMPILER_FLAGS = "-D_THREAD_SAFE -fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
@@ -402,6 +409,7 @@
 		708018F4F6E741CBF3DD653B7378F4FD /* MQPullRefreshView.h in Headers */ = {isa = PBXBuildFile; fileRef = 13C03CD2D8C51FC6D59F593D5C74984F /* MQPullRefreshView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		71A15AE531B4DEB86C62019FE71736C4 /* MQEvaluationResultCellModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 63B8860FA4B48DBA24A603C497AB9327 /* MQEvaluationResultCellModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		73916AEFE0BDDA125605F1B9907774B0 /* lossless_enc.c in Sources */ = {isa = PBXBuildFile; fileRef = 4026DA178580F52CF22C14BF6381942A /* lossless_enc.c */; settings = {COMPILER_FLAGS = "-D_THREAD_SAFE -fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		73A9738DE07CA8CA65EEA573096E77BA /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76602606ADA2BD1C5DED19B1AD33AF4F /* MobileCoreServices.framework */; };
 		73D8229F798A4F1451807471A32502FB /* alpha_processing.c in Sources */ = {isa = PBXBuildFile; fileRef = 7D6F1C36DACECCE09F5D4C4B374B8D12 /* alpha_processing.c */; settings = {COMPILER_FLAGS = "-D_THREAD_SAFE -fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		7424CC487450B9453C80A8E5392E3B09 /* MQEvaluationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 71FDDCDBD6916F5E0C5215F0AE132EDC /* MQEvaluationView.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		744D0F1134894D258F8FF2BD80E36167 /* MQChatViewStyleDark.h in Headers */ = {isa = PBXBuildFile; fileRef = BDB71A38BADAB3EDEF875CAEFC4EFE22 /* MQChatViewStyleDark.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -429,11 +437,9 @@
 		7B1AFA2E3513B395351328F8A0056E45 /* idec.c in Sources */ = {isa = PBXBuildFile; fileRef = 2879AC87E1652243538D3AFAA4115B2A /* idec.c */; settings = {COMPILER_FLAGS = "-D_THREAD_SAFE -fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		7B31D1E37A1EB6A0265604AFC88E7134 /* NSLayoutConstraint+MASDebugAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 0B79C69F70D245FCA0E9FA654D964A2C /* NSLayoutConstraint+MASDebugAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7B33C57AB500AE7B4E48642F3E78F59D /* AFNetworkReachabilityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 2514C1E8D3F9C205C8BD3A9643361960 /* AFNetworkReachabilityManager.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
-		7BACF5A239B714D04F318BF89E39F5E0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C18F5907F1665E9E3D4220FF23D59FAF /* Foundation.framework */; };
-		7C00DC632CA96C2F11D16817DA3E3E0E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C18F5907F1665E9E3D4220FF23D59FAF /* Foundation.framework */; };
+		7BE4B5F594AD4C5C6B5DF246B85101E3 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D81863A8F7D715A8B8092CF911055EEC /* CoreGraphics.framework */; };
 		7C1CAE0EA22F0FC6A077C4D85240D331 /* UISlider+RACSignalSupport.h in Headers */ = {isa = PBXBuildFile; fileRef = 807B3B60F2B20F9CB09FD7C88F0C68E7 /* UISlider+RACSignalSupport.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7C600BB29E0973722BA0FAB14584F40F /* UIRefreshControl+AFNetworking.h in Headers */ = {isa = PBXBuildFile; fileRef = 85820E1A4FCBC54E7D9B42146D01CE49 /* UIRefreshControl+AFNetworking.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7C602602EF01522718B775C8C8A7C15A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C18F5907F1665E9E3D4220FF23D59FAF /* Foundation.framework */; };
 		7C967CB998327F50142805FECBCDC0ED /* NSObject+RACDeallocating.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C8B723ACEA5D1739BC33D63178BAAC2 /* NSObject+RACDeallocating.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		7C98DAD1ACCD7A73E9E7B84C241895F4 /* alphai.h in Headers */ = {isa = PBXBuildFile; fileRef = 8E418172B4989930CB0D95A6D0FE2AF1 /* alphai.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7CF778B2F5AA6CD198E281B1453511CA /* tree.c in Sources */ = {isa = PBXBuildFile; fileRef = 00F6A0504503B84929E03D23AE2E46C7 /* tree.c */; settings = {COMPILER_FLAGS = "-D_THREAD_SAFE -fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
@@ -442,7 +448,6 @@
 		7D9E333B65F9AB192A11CAE7CC04B828 /* SSZipArchive-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = AEC27160321A61EFAE72FD0FF2D8128B /* SSZipArchive-dummy.m */; };
 		7E592281AED657D0240BFF3990954958 /* MQWebViewBubbleCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 48B59A7E927978F6A4B4890A4E529F5E /* MQWebViewBubbleCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7FC97F693AE40787EC93B085D7459D34 /* MQRichTextMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 2D7CD1EBDAD93516A6A478834E068FAF /* MQRichTextMessage.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		80243E57025C9A5078889FC1F4F55E70 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C18F5907F1665E9E3D4220FF23D59FAF /* Foundation.framework */; };
 		8041BBDA38FAF9F03B18621F8B44902A /* MQWebViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = F26B42C43F4CE7A6E495AE4D9FAECA55 /* MQWebViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		80882E1FF767AE356D604C89749B637B /* MASCompositeConstraint.h in Headers */ = {isa = PBXBuildFile; fileRef = 12D5EF73808EC224E957C907D79DA118 /* MASCompositeConstraint.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		808E0531AE55BAB53AC5AE0F9CA70B82 /* demux.c in Sources */ = {isa = PBXBuildFile; fileRef = 6B7B8E715B1F4BE11EEFD1F3EDDCFF7D /* demux.c */; settings = {COMPILER_FLAGS = "-D_THREAD_SAFE -fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
@@ -460,6 +465,7 @@
 		8303E9AD1C4EDB253396CCEEE879AFD6 /* Masonry.h in Headers */ = {isa = PBXBuildFile; fileRef = D5BCD8F6E202B4365E10467EE9A248BA /* Masonry.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8319E0FE235CEB31C1BFED87FDE97D71 /* RACSerialDisposable.m in Sources */ = {isa = PBXBuildFile; fileRef = 771B692596DB146E5D1718A9F421ABBE /* RACSerialDisposable.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		832BF8D5B696CF248660681BD15B0676 /* MQBotMessageFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 17C05F5A96B45A102908CA54149A7A30 /* MQBotMessageFactory.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		83CD6EAB67AEB99B855EF643F9843710 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 59BBBC47CFCF80E2680E0FF968F6635D /* QuartzCore.framework */; };
 		8472A606C126C236048FA37137B97ADA /* MQChatAudioPlayer.h in Headers */ = {isa = PBXBuildFile; fileRef = CD756D9F770EFA47560D185D591C8A17 /* MQChatAudioPlayer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		849CCE88F82741465F6E3ECE2DD7A2BF /* YYTextEffectWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 48DF2FA720172EDE8B6638D66224BC80 /* YYTextEffectWindow.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		84AC1A9CE81AA381A4155BCC18332ED0 /* argb_mips_dsp_r2.c in Sources */ = {isa = PBXBuildFile; fileRef = C0E06879EF59F6DDC9B0CAAC1751849D /* argb_mips_dsp_r2.c */; settings = {COMPILER_FLAGS = "-D_THREAD_SAFE -fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
@@ -474,7 +480,6 @@
 		86A49A1520F45FC9A5E623DD33D1A034 /* MQChatViewTableDataSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 57119AC8022830D8836E7AA5BEEF6665 /* MQChatViewTableDataSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8701D6C87086D4B936A4F5EC1D8B2D63 /* YYTextLine.m in Sources */ = {isa = PBXBuildFile; fileRef = 1134C027325113C9A2FE44FB3D9B576B /* YYTextLine.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		871626B0A19901325E5E39E3A7060034 /* NSObject+RACDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = 110AD28C340BD27B085F773A25A14842 /* NSObject+RACDescription.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
-		875C5EEBE8A59F4C5843BF1A1D34DC63 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C18F5907F1665E9E3D4220FF23D59FAF /* Foundation.framework */; };
 		8790E4643DDC29BA100572910DB648EA /* YYTextLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A5AB2AAB496357137C048A0A37CFB49 /* YYTextLayout.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		87AE81317C05A84D216240CD4209B82D /* MQImageUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 35075CF2729F3DE327C881AB05DC9255 /* MQImageUtil.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		87D4735277D92AD14F92A8BE863580F6 /* unzip.h in Headers */ = {isa = PBXBuildFile; fileRef = BEC8C4EA86B2D1D4865770F7F3754D82 /* unzip.h */; settings = {ATTRIBUTES = (Project, ); }; };
@@ -523,6 +528,7 @@
 		920B92BD7F86C86405CAD5CABD30BC87 /* MQMessageFormConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FD258DDA34BECE68EEB4480B10B8371 /* MQMessageFormConfig.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		921EA8D412094140C8EA742D80903B54 /* thread.h in Headers */ = {isa = PBXBuildFile; fileRef = B68312C2621A67C5A4EE842485BCA052 /* thread.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		92DA908B9B7048D82437F9652D06A3EC /* sha1.c in Sources */ = {isa = PBXBuildFile; fileRef = 605C85A6B39C0F5FA98B5D1D3268C331 /* sha1.c */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0 -w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		92FC198530122992525F0286AD605846 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E77935360607B2D0D51F2F653003162B /* SystemConfiguration.framework */; };
 		93896186917D26DB8223D038E7C8578F /* UISegmentedControl+RACSignalSupport.h in Headers */ = {isa = PBXBuildFile; fileRef = 357E27FD6E1DAB184A8960DFB2F0E236 /* UISegmentedControl+RACSignalSupport.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		93B3C372D77E8E9BD1DBA216D08E9516 /* SSZipArchive.h in Headers */ = {isa = PBXBuildFile; fileRef = 3737EF309AB35446CF3A9B75E8A14912 /* SSZipArchive.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		93C97CE0CE8A8C94A9768E60BA45F018 /* UIControl+RACSignalSupportPrivate.m in Sources */ = {isa = PBXBuildFile; fileRef = C535F8D37D83156CB29C7637966D61DD /* UIControl+RACSignalSupportPrivate.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
@@ -530,14 +536,17 @@
 		94841B6EFB814F3E28597B36DBCD5F68 /* UIImage+WebP.h in Headers */ = {isa = PBXBuildFile; fileRef = 233719AECDE1068E21F8C57472A1F15C /* UIImage+WebP.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		948DC62CD03652643527495B25BA12EA /* RACEXTRuntimeExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 0356C9A8881F53DA0E6069421F736EE0 /* RACEXTRuntimeExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		94FE47D4244B0892226A4A4B11A5E217 /* MEIQIA_FBLCDFont.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EA816FED073C59A586433F35BF99E38 /* MEIQIA_FBLCDFont.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		9503243815B135877C5D0D654AF3DE67 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D85031946F7440329B2B785C07E5D34 /* CoreGraphics.framework */; };
 		95158F7D0FCEE9E66884232C386102A3 /* demux.h in Headers */ = {isa = PBXBuildFile; fileRef = 41607F7F520B6567EBD355A58B866582 /* demux.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9517501D5901BE1E7931C3324176D1F0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91A7282F4396B5E4395CC02457517099 /* Foundation.framework */; };
 		9543643B3EC4257B82608FAD20D83343 /* VoiceConverter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 04EA8055D4B426B6F25FA3491033A60E /* VoiceConverter.mm */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		9546250EAB1A52A8AF51DCC48027F65A /* RACEmptySequence.m in Sources */ = {isa = PBXBuildFile; fileRef = 84DFA995A5C675C332A865F9613B8CA5 /* RACEmptySequence.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		958AEB6FA80F1984A0DAC2DF6E565BDE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91A7282F4396B5E4395CC02457517099 /* Foundation.framework */; };
+		95BFF3885F79F8F50D9BAC619C1A0E45 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91A7282F4396B5E4395CC02457517099 /* Foundation.framework */; };
 		95C0735E5CD14E6380027D4EAAAE15D1 /* MQPreChatCells.h in Headers */ = {isa = PBXBuildFile; fileRef = 644F3DA4695B97FBAD8DAD1DC2422242 /* MQPreChatCells.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		95E1D2816E2330F64EE2F49A83FB60FF /* UIBarButtonItem+RACCommandSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 8944EFAD477417C3F4D7F9C3D5B90544 /* UIBarButtonItem+RACCommandSupport.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		961757CFB98F9BE0E2E8DDDE4FE7BDDE /* MQNamespacedDependencies.h in Headers */ = {isa = PBXBuildFile; fileRef = E08FED6E2319489D888019C11C9EFDE0 /* MQNamespacedDependencies.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96475BD1D3ED0BE77464F9B47D5425F7 /* dec_sse41.c in Sources */ = {isa = PBXBuildFile; fileRef = 371298B59887E43D51C157472C774E6E /* dec_sse41.c */; settings = {COMPILER_FLAGS = "-D_THREAD_SAFE -fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		9648A3808D3C4CDE98DF0A0C7EBAA680 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91A7282F4396B5E4395CC02457517099 /* Foundation.framework */; };
 		96686452245705DFFEBB7208C5B6729A /* RACChannel.h in Headers */ = {isa = PBXBuildFile; fileRef = 2D7D35DC20047E2CBF5BAEEBABF539D3 /* RACChannel.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96B1F45F8778CBFEC4B5258F0FC5E10D /* RACTestScheduler.m in Sources */ = {isa = PBXBuildFile; fileRef = F38E71143A33443D8B6D3DFFC0D9E0AC /* RACTestScheduler.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		9724ECF19D8258037F9A15461603E441 /* fileenc.h in Headers */ = {isa = PBXBuildFile; fileRef = F04F7B2411918F638F2C0035E039AA45 /* fileenc.h */; settings = {ATTRIBUTES = (Project, ); }; };
@@ -553,19 +562,16 @@
 		98B08E3AED2E063A76D8D27DBC8FA19A /* MQChatRegexUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 731BC0BB5F3F2116566E93DE284F88EB /* MQChatRegexUtil.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		98B3B0D31A6BDFC40E665D2C9D4358AD /* near_lossless.c in Sources */ = {isa = PBXBuildFile; fileRef = B381DC9919FA0FDD38C3C844D5F0F7A1 /* near_lossless.c */; settings = {COMPILER_FLAGS = "-D_THREAD_SAFE -fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		992C7B532CA3603657AA26A8FFD31B10 /* YYTextInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 81DFD62D07D94C1CB655EEB2F91383C6 /* YYTextInput.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
-		9942A61D4FF76978B3741F5452277699 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C18F5907F1665E9E3D4220FF23D59FAF /* Foundation.framework */; };
 		9A577E974FA6DC1915119C1ADD93FA88 /* huffman_encode.c in Sources */ = {isa = PBXBuildFile; fileRef = 090C4134C0E8745457457DE299E8F878 /* huffman_encode.c */; settings = {COMPILER_FLAGS = "-D_THREAD_SAFE -fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		9A74EBBB280BFFEA1E21406EC6D8F936 /* UIAlertView+AFNetworking.h in Headers */ = {isa = PBXBuildFile; fileRef = EA5FB64657C740A61CF34BE021823C79 /* UIAlertView+AFNetworking.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9AA3B8B66BF652C1F9B9213E0C139CB4 /* UITextView+RACSignalSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C1A9A586EDFCC3A3177D52FE2467F3F /* UITextView+RACSignalSupport.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		9ACC225A655E21451E0247A99BDBCF50 /* common_sse2.h in Headers */ = {isa = PBXBuildFile; fileRef = 3DDDECB9F2EF37506C7B1F0C8587AD82 /* common_sse2.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9AF28AFE6D97D4252AF35698329A4332 /* DateTools-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CACDD22095F7008BE842689FE62CA85 /* DateTools-dummy.m */; };
-		9BC7DF4DC1A2CA467D6B999E65D29C45 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14D7A4E4C54EE1ECF7DAA7BFA0FC288E /* AVFoundation.framework */; };
 		9C22273ADEDD4ACBE25A6D58D88D8EF0 /* UIViewController+MQHieriachy.m in Sources */ = {isa = PBXBuildFile; fileRef = A2E88F692F4A0F55B8A4224E0DEC595E /* UIViewController+MQHieriachy.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		9C34BA01F39C8C5BECAE7E8FB696BC8D /* MQTextMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 180AFF9AEE2BEFFD3CD86DDB1C4BF775 /* MQTextMessage.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9C4A5DDB30C822CE029BC3238804F578 /* UIActionSheet+RACSignalSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 1672775613341CE445C23EDC753E342A /* UIActionSheet+RACSignalSupport.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		9C7BC1E24535689E208D04A64F5486F2 /* extras.h in Headers */ = {isa = PBXBuildFile; fileRef = 5073829B7AE328EBDA70F5CF8702D894 /* extras.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9CB50CA2DD45CBF8954E204A6BDDFEDF /* RACQueueScheduler+Subclass.h in Headers */ = {isa = PBXBuildFile; fileRef = 5369F461680A2230AE09F4667650FA6B /* RACQueueScheduler+Subclass.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		9CFA329AAC2C4A4FE0D6631AC7353ECA /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C18F5907F1665E9E3D4220FF23D59FAF /* Foundation.framework */; };
 		9D1D58E97AAD1D9FAE78494CEC1FD2D8 /* dec_mips_dsp_r2.c in Sources */ = {isa = PBXBuildFile; fileRef = DE17309484BD2E34970AF95D3095FBEE /* dec_mips_dsp_r2.c */; settings = {COMPILER_FLAGS = "-D_THREAD_SAFE -fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		9D2AA103BB7FFCF3D9339278D5DD9C78 /* delta_palettization.c in Sources */ = {isa = PBXBuildFile; fileRef = 3231F19FC85CFBAEA97EC6F19D035E88 /* delta_palettization.c */; settings = {COMPILER_FLAGS = "-D_THREAD_SAFE -fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		9D4E16A789E00EE401017B0B99E1F363 /* UIImageView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 287F614BD1B9E2DA2860C80067F32985 /* UIImageView+AFNetworking.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
@@ -581,7 +587,6 @@
 		9FB6BCB44425AE1B860609F48E19B95E /* argb.c in Sources */ = {isa = PBXBuildFile; fileRef = D620CF87C74EDFBC251D9930CCF03C95 /* argb.c */; settings = {COMPILER_FLAGS = "-D_THREAD_SAFE -fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		A0313281F3922F6B3ED1BC81912CC3B2 /* MQStringSizeUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = 0402F492DF08B8FDE7256C0F0E67E12F /* MQStringSizeUtil.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A072A28CD1C4E8925AA46BC30E7EBB09 /* random.h in Headers */ = {isa = PBXBuildFile; fileRef = F4A5B54E5694196C42237E26979D873E /* random.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A0ABCDD5EA4383F555B7DB4B23E7B3C7 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71423B0369413AD29455968187F2FC66 /* MobileCoreServices.framework */; };
 		A0B89C12204AD3FAC3759AA682DED411 /* ioapi.h in Headers */ = {isa = PBXBuildFile; fileRef = 8829196ADA2481DD5328C83486498532 /* ioapi.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		A0C62518A7415489ADB8575A8AF9D54B /* filters_mips_dsp_r2.c in Sources */ = {isa = PBXBuildFile; fileRef = 579E1196EAD3F4FDC010403FCBC86BD9 /* filters_mips_dsp_r2.c */; settings = {COMPILER_FLAGS = "-D_THREAD_SAFE -fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		A12262312933C3A741DA0FC9671F68D3 /* DTTimePeriodCollection.h in Headers */ = {isa = PBXBuildFile; fileRef = 48876F9F12A3E95FA660CB9D83ACF68C /* DTTimePeriodCollection.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -599,9 +604,8 @@
 		A4BD494E63A48AFCC79715660686C929 /* AFURLConnectionOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 34CFADD43D888E8255680D137A048F3A /* AFURLConnectionOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A4EEF92AB92E67ABBE889A24B28640BD /* MQChatViewService.h in Headers */ = {isa = PBXBuildFile; fileRef = C80497CFCC598001692A86C7B823E246 /* MQChatViewService.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A507941AFDD8B970A94B26C055A1A49F /* MQBotRichTextMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 0AD98FFFBE3A9A1F3188608F42C34EEE /* MQBotRichTextMessage.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A5EE00249EB20F8FD5B2FDC1359E7204 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C18F5907F1665E9E3D4220FF23D59FAF /* Foundation.framework */; };
-		A5EE3E21AAFD6886ED692FE08E5FA966 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C18F5907F1665E9E3D4220FF23D59FAF /* Foundation.framework */; };
 		A619E2CFC2CDC7FC294B8E61B7A82637 /* MQMessageFormViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 83D35680B76258AA37D28DBD80698AF3 /* MQMessageFormViewManager.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		A624E14E3F6A0141BBF12094BD57E787 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91A7282F4396B5E4395CC02457517099 /* Foundation.framework */; };
 		A672307013D1A65CD18C0818E907E3DF /* NSString+MJExtension.h in Headers */ = {isa = PBXBuildFile; fileRef = 38F00A21C7C45621407C1820B8C9677F /* NSString+MJExtension.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A6A0083232E2F1D5F5FFC6B870CE7181 /* RACCompoundDisposable.m in Sources */ = {isa = PBXBuildFile; fileRef = 02F3F4FD5C7342540B4CFAB52CB8D14B /* RACCompoundDisposable.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		A6E748DC62AFFFF5D4529BEF822620AF /* RACSubscriptingAssignmentTrampoline.m in Sources */ = {isa = PBXBuildFile; fileRef = 32DFABA6704EC05050A890A29218A27D /* RACSubscriptingAssignmentTrampoline.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
@@ -609,19 +613,18 @@
 		A7BCD4EE35F169CC839761A34E31D67C /* MASLayoutConstraint.h in Headers */ = {isa = PBXBuildFile; fileRef = 760616F160C0B0368530E644B139061C /* MASLayoutConstraint.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A7CF8E4E979316F58A76AEA4A1E3BF52 /* UISwitch+RACSignalSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = FE8F17CA5C8C6B1164C4764708EC1ECA /* UISwitch+RACSignalSupport.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		A819F99BBE9696A48EF69E84057A1C03 /* MQMessageFormViewStyleBlue.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C20997BF73215C18B0639BB57ED763 /* MQMessageFormViewStyleBlue.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		A83D78910B1DB4D7596DEAA3D403E54B /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4BF54FE3416AF491C7A23692A31A6A3 /* Security.framework */; };
 		A854D9821D4C61BF7A0B7A9B78FAFBEF /* MQChatDeviceUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E5EAC8579A8A2E544C99BEAB5DF6C9B /* MQChatDeviceUtil.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		A8B2DC747A24B799221C588A4C17497F /* random.c in Sources */ = {isa = PBXBuildFile; fileRef = 59D856A54756976AF66675BA51916455 /* random.c */; settings = {COMPILER_FLAGS = "-D_THREAD_SAFE -fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		A8DD9C526D50C85A3DFB2C8153494348 /* RACGroupedSignal.m in Sources */ = {isa = PBXBuildFile; fileRef = 50D02A62069F6CD05E745C76B9FACC09 /* RACGroupedSignal.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		A92898C5779A3325CE5B2764D5EC8DDF /* MQChatViewTableDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E07A2DCCF0A4C796AE87ACDB38236CA /* MQChatViewTableDataSource.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
-		A943F959A7DAE0FE381A2166285D7A65 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85008159A113B241CCEFA49DBD477E98 /* CoreText.framework */; };
 		A96DED5305BBD170CB0FF362A700AB0B /* RACBehaviorSubject.m in Sources */ = {isa = PBXBuildFile; fileRef = A516FC3A0F38BCD1B578324457F8FE81 /* RACBehaviorSubject.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		A9A81FCF88FF85E2F4794BD030769D4C /* NSIndexSet+RACSequenceAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 02BA7CF92C6B12C8D6BF501CBADE0BB0 /* NSIndexSet+RACSequenceAdditions.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		AA0A06AA1A4B2BB34B1EF630F311884F /* MQImageMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 67FB8B353A93F30E1029AA9F976746C7 /* MQImageMessage.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		AA460504F5845C4D1533C63EF2F5F008 /* mztools.c in Sources */ = {isa = PBXBuildFile; fileRef = D558E8D6EC2204BFC2A0497E59DC2427 /* mztools.c */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0 -w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		AA5B2BD684FD1CD21E2771701B118000 /* NSParagraphStyle+YYText.h in Headers */ = {isa = PBXBuildFile; fileRef = 573A08604E0F79B9C9F564E1E37A4349 /* NSParagraphStyle+YYText.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		AACBC791BB1FB0FD6A325F6CD39308C3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C18F5907F1665E9E3D4220FF23D59FAF /* Foundation.framework */; };
+		AAA4AB20CC00AAB1BC56FF782BA668C3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91A7282F4396B5E4395CC02457517099 /* Foundation.framework */; };
 		AB00B97FA939D786A3047DB7A03E0314 /* UIImageView+AFNetworking.h in Headers */ = {isa = PBXBuildFile; fileRef = 035CCF8CAB9E10D16EBA17547F3583FE /* UIImageView+AFNetworking.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		AB0B11EFA631E4A6FD66361A9EABB556 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C18F5907F1665E9E3D4220FF23D59FAF /* Foundation.framework */; };
 		AB639BC25A45709253C87ABC482A2483 /* RACSubject.h in Headers */ = {isa = PBXBuildFile; fileRef = 70F51A83E9E3D509B6D4A3267E842E17 /* RACSubject.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AC2719A42CF9759F28A50852F29478E6 /* RACObjCRuntime.m in Sources */ = {isa = PBXBuildFile; fileRef = 421D42E8FD85FDDF8DAF6401D2CE913D /* RACObjCRuntime.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		AC540EAE293DA0ACBE27316C1639707B /* MQShareTransitioningDelegateImpl.h in Headers */ = {isa = PBXBuildFile; fileRef = C67F745064F473CC8663A1592BE588C5 /* MQShareTransitioningDelegateImpl.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -648,6 +651,7 @@
 		B0D5CCDB8416C13DCB7CDAEC629ED363 /* rescaler.c in Sources */ = {isa = PBXBuildFile; fileRef = 1844825FACFF57630473163B01021215 /* rescaler.c */; settings = {COMPILER_FLAGS = "-D_THREAD_SAFE -fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		B1963AF14ADBDA17DD2FF67BE004FA48 /* enc_mips_dsp_r2.c in Sources */ = {isa = PBXBuildFile; fileRef = EB39C5D2B1B54694D0BE3394E53CD32A /* enc_mips_dsp_r2.c */; settings = {COMPILER_FLAGS = "-D_THREAD_SAFE -fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		B249AAEAB7B6D60EAD8E13BCE143CAF5 /* MQBotWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EFC2EA9B3411DBD89B8DA0E2F85BD83 /* MQBotWebViewController.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		B2B644FFF44536141AB10747B05405BD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91A7282F4396B5E4395CC02457517099 /* Foundation.framework */; };
 		B2BEED26D1B85EC0CA30F575CD882179 /* backward_references.h in Headers */ = {isa = PBXBuildFile; fileRef = CD5BA14ADB6CDFE09A8EE0793D64B842 /* backward_references.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B2C47B2BA6A98E58A0062C49C0F4B543 /* AFHTTPRequestOperationManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 47403B3569663289F79B6BC89FA2FCDE /* AFHTTPRequestOperationManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B304B2CC42FE14A72D0B5884F662719C /* RACSignal+Operations.h in Headers */ = {isa = PBXBuildFile; fileRef = 05183723AB678AE742B10D57174BB12E /* RACSignal+Operations.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -666,7 +670,6 @@
 		B6206B1BE070E8E4C01DE1B98F9F2618 /* RACSequence.m in Sources */ = {isa = PBXBuildFile; fileRef = 1952B7E582C67F8BE321DBDB21105BA4 /* RACSequence.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		B62FC104C8C044FF23B13963E6671A68 /* MQChatBaseCell.h in Headers */ = {isa = PBXBuildFile; fileRef = B3EC0DE729A45D7370065280F88BA2E4 /* MQChatBaseCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B66F932754407FD75F66FED8FE9C822F /* UIDatePicker+RACSignalSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FEA1EDCC116DEB3D903CF5AA50CC687 /* UIDatePicker+RACSignalSupport.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
-		B6A780FBAE10EDE7356572316ACE0E8D /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71423B0369413AD29455968187F2FC66 /* MobileCoreServices.framework */; };
 		B6B21E4AC47855A3EF451D1CD0B91C7A /* NSObject+RACKVOWrapper.h in Headers */ = {isa = PBXBuildFile; fileRef = 410B98028C410B9A8D25D20CF89083B2 /* NSObject+RACKVOWrapper.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6B6A4F9BC7ACD3E104E8F34526B0DC7 /* bit_reader.c in Sources */ = {isa = PBXBuildFile; fileRef = 1FB1861E76224C29D0AD8D826C3643FD /* bit_reader.c */; settings = {COMPILER_FLAGS = "-D_THREAD_SAFE -fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		B6CA62184433F6504FF4DF85A676CD9E /* dec_if.h in Headers */ = {isa = PBXBuildFile; fileRef = 9ECA62B62A2B5D1B872A3FCA99F266DB /* dec_if.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -675,11 +678,12 @@
 		B7882E88847962797007C9C7226FEEE6 /* MQVoiceMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9322D4D33B1EB48AFBF0706CFD7A6794 /* MQVoiceMessageCell.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		B81B8EC7F33EC794A0FE43F455DE39D2 /* YYText.h in Headers */ = {isa = PBXBuildFile; fileRef = 020D1777D923FEE7B63619C9C209A295 /* YYText.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B862093CF8743EAA67307A4FC489832F /* MQFileDownloadCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 856D989B47FAF75B36428A6A76ADD713 /* MQFileDownloadCell.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		B867DBD8C9E8C9C78DDC39DC50C66F77 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD248527838729040781A1D7CCDD9136 /* CoreFoundation.framework */; };
 		B8AD70913BE6B36DE08D83C377D661F1 /* MQChatViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 45900E1E1EE083AB7D519F04E2E39C5B /* MQChatViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B91F83711587C8EC3472FFA549259023 /* UIButton+WebCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 418A720BC94F8A3B74F00815A75BBCBC /* UIButton+WebCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B9283D0519D3A35FFB119744D9C3758D /* MQBotRichTextMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D0FF4BB5B67A915C55CFCDA0B5D3901 /* MQBotRichTextMessage.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		B9C4F27ED92121F192A3E6F5098A6FB7 /* MASViewConstraint.m in Sources */ = {isa = PBXBuildFile; fileRef = F71003FB1627D54AD8B8F5D946FC85C9 /* MASViewConstraint.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
-		B9D49FD6FC4EAC4AA69368DDE7C277EA /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C18F5907F1665E9E3D4220FF23D59FAF /* Foundation.framework */; };
+		B9CD172130CB516C61A4B320C55BF165 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91A7282F4396B5E4395CC02457517099 /* Foundation.framework */; };
 		B9D70E9B8836C17D49BFDA585416B044 /* NSObject+RACSelectorSignal.h in Headers */ = {isa = PBXBuildFile; fileRef = 35BD1A22D85275224F474DC54096E285 /* NSObject+RACSelectorSignal.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B9DBB5138944A66E0B94E03F177083BD /* DTError.m in Sources */ = {isa = PBXBuildFile; fileRef = 3036D124B7A4FBE1D6A833B33A25A714 /* DTError.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		B9DD5A490B62DA9BB6F959A8C9115C98 /* UIGestureRecognizer+RACSignalSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = D157654F00DAD9C48D6CD64C3B56A7AE /* UIGestureRecognizer+RACSignalSupport.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
@@ -694,13 +698,12 @@
 		BC79D51CEC1A7F7CAAA53167BD32A1BD /* UIView+WebCacheOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = EB732F3D3F8C2D971B8C2FDE05C97533 /* UIView+WebCacheOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BC94DD4B12D6B4D30D15733E0505FE2E /* UIImagePickerController+RACSignalSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F8EEECF3DBCA1852CE350787DD80432 /* UIImagePickerController+RACSignalSupport.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		BCAD20B872D27052857EE85011482D99 /* YYTextRunDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1063F362841D0BFCD135C67C2FBBAEA6 /* YYTextRunDelegate.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
-		BCD20DD8AAF2B410A420A9EB7B5CF2E2 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A30C9FD7891230F0B384710335E2B0C /* SystemConfiguration.framework */; };
 		BD503CB0396895BAB3467CD7C961B781 /* RACDisposable.m in Sources */ = {isa = PBXBuildFile; fileRef = B8D75873B2A8BA97222113BE416FE96C /* RACDisposable.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		BD6E0812518702FF449B2FB0D81DBDFD /* RACTargetQueueScheduler.h in Headers */ = {isa = PBXBuildFile; fileRef = F1ACAF79981F647F1D8F76594B20C378 /* RACTargetQueueScheduler.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		BD809D8E61E313F877786D6C70232790 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D98DA3A84075820C418E03C54D2DF1A /* QuartzCore.framework */; };
 		BDD9492DB0FA936F2633D7D3FF3F5841 /* lossless_neon.c in Sources */ = {isa = PBXBuildFile; fileRef = 8EAD43800FA551FACCAC6112948D9CA5 /* lossless_neon.c */; settings = {COMPILER_FLAGS = "-D_THREAD_SAFE -fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		BDDA63A3245973C6B4475CB5FF2F28EB /* MQImageMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 59128C808F922DF4C243290B4C643D39 /* MQImageMessage.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BE519FCA47402EE21703A49056FB5409 /* MQChatEmojize.m in Sources */ = {isa = PBXBuildFile; fileRef = 1477AB21D40FC4A7EE345045E1E0C907 /* MQChatEmojize.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		BE98AE096F22239440E69F4A09C17ED2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91A7282F4396B5E4395CC02457517099 /* Foundation.framework */; };
 		BECFF9BD20286B4AEA6CD7B0A010897F /* MQChatFileUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = D4C7176CEA03A139866258157B139036 /* MQChatFileUtil.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		BF0F513DDD9E02D1C4DFE60C70CCE628 /* backward_references.c in Sources */ = {isa = PBXBuildFile; fileRef = A6F1AD7D7C3CED94066DC2B2EDDCCD9B /* backward_references.c */; settings = {COMPILER_FLAGS = "-D_THREAD_SAFE -fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		BF13B08A5DC2D8DA581D878F8507DFE0 /* RACScheduler+Subclass.h in Headers */ = {isa = PBXBuildFile; fileRef = 934AFEE001E87341ACC8358A34D9A7B4 /* RACScheduler+Subclass.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -727,7 +730,6 @@
 		C3903EF4B1A2DA0F8295667226CCB404 /* io.c in Sources */ = {isa = PBXBuildFile; fileRef = 82AFFCFA9E1F8F9769BE1518748E18D3 /* io.c */; settings = {COMPILER_FLAGS = "-D_THREAD_SAFE -fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		C3F2ACAAB4ADA80C1AE7686CD4975640 /* UIWebView+AFNetworking.h in Headers */ = {isa = PBXBuildFile; fileRef = BA790B706873DC93204DF935BF4A2920 /* UIWebView+AFNetworking.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C440026CC7DB2E34438E65806F429226 /* UIImageView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F8628839D3BAD927F2703334B4CBF80 /* UIImageView+WebCache.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
-		C4719F4FD2A15645716D7E2812E9CD7B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C18F5907F1665E9E3D4220FF23D59FAF /* Foundation.framework */; };
 		C487E77ECD9F73B320CD1D6CC8D04444 /* NSSet+RACSequenceAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 46637AD5072B703ED68FDABEBBE5AB78 /* NSSet+RACSequenceAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C55685C9D691C27AD4DDDCDC7BB47BF6 /* NSObject+RACLifting.m in Sources */ = {isa = PBXBuildFile; fileRef = 715DE87FCC4B16FADBCBEBE0FEFB717E /* NSObject+RACLifting.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		C57480B669B36DEFA560B169F28F9268 /* MQAnimatorPush.h in Headers */ = {isa = PBXBuildFile; fileRef = DA14682FE7BDC9687A17D899343F705C /* MQAnimatorPush.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -737,7 +739,7 @@
 		C643904F0D4B54EA1B5420C56825994A /* filter.c in Sources */ = {isa = PBXBuildFile; fileRef = BB1826413422A2D70160617C956CE788 /* filter.c */; settings = {COMPILER_FLAGS = "-D_THREAD_SAFE -fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		C6638D7F24DA73B125680940EC29DC3A /* MQImageUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = A3193C4575204B44EC20DE17E6B41DF5 /* MQImageUtil.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C66F9A344412800EA4BC731DF7FDB285 /* MMDrawerController.h in Headers */ = {isa = PBXBuildFile; fileRef = 56708A37F29AFF86FCA79DC2F36C285F /* MMDrawerController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		C698070E87E96F861A0FD83F792D2A8D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6B4F32B830B4D066D0B53CB3094BFE0 /* UIKit.framework */; };
+		C6A6BC17CFBFAD90F8F06F4E33FBDBDC /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91A7282F4396B5E4395CC02457517099 /* Foundation.framework */; };
 		C70CBBF1D24F9D8BDA13033C10B1A661 /* frame.c in Sources */ = {isa = PBXBuildFile; fileRef = 2F55A417A672332CD9A16A1A86FB2CBC /* frame.c */; settings = {COMPILER_FLAGS = "-D_THREAD_SAFE -fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		C72DB3A1D7043B0E274D59668F41A171 /* MQMessageFormInputModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C20717E06E0ED6C14FCC394D1CB49B5 /* MQMessageFormInputModel.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		C76663292D06095CE121FBA43418BB63 /* UITextField+RACSignalSupport.h in Headers */ = {isa = PBXBuildFile; fileRef = 2898395CABFE1FEBF8249C9EDE45761A /* UITextField+RACSignalSupport.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -759,9 +761,11 @@
 		C991F6EF1128F2FE619D6487D9A946D1 /* brg_endian.h in Headers */ = {isa = PBXBuildFile; fileRef = 945BCAE0EB352D575FEB5C0C27700E69 /* brg_endian.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		C99E162E9894E12101C6221862C86E32 /* MQCustomizedUIText.m in Sources */ = {isa = PBXBuildFile; fileRef = CB680BC0144DF1BF89D21C76F4E4956B /* MQCustomizedUIText.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		C9A27B5F66E584490740321F070C75A9 /* vp8i.h in Headers */ = {isa = PBXBuildFile; fileRef = 451F14503A2A786833C85717D681265B /* vp8i.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		CA83E5794E85AC84D31FB87AD94B0F5B /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 77DAFD170AFAB0625822C5104836D469 /* CoreText.framework */; };
 		CA905A517F33C2F512AFDB5B8A881E3B /* RACReturnSignal.h in Headers */ = {isa = PBXBuildFile; fileRef = 262B6CE8471B0A4509BAC59D1D2C2A22 /* RACReturnSignal.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CAAD013A4F1CE51A46C62662D76AEF4B /* MQBotAnswerCellModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 217DE1BCD23FBE5AB980F991D9B32E21 /* MQBotAnswerCellModel.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		CC0095B05FEF4C8C0B945F18A8A819BA /* FLAnimatedImage.m in Sources */ = {isa = PBXBuildFile; fileRef = ABECDE5EBF49D14D25B188AD3F255EAD /* FLAnimatedImage.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		CC419428FFF954F0B58DD2115A784CBC /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5CB9B7B007B3FFD28A084AEA674DF68 /* CoreTelephony.framework */; };
 		CC816CC8CF3B0F7F0CC2F36F6EACBFA3 /* RACValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEB9AC01C97CD54E2688CBF226E7207 /* RACValueTransformer.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		CC8BE65A8A31608D5E7AE0F75795EE65 /* UIRefreshControl+RACCommandSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C3D56A841C4196D8E80FF5344F5A6DD /* UIRefreshControl+RACCommandSupport.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		CCE243208D639C4D08444F2032AF5B6B /* MQBotWebViewBubbleAnswerCellModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6166124EB5EE4B1A4A027E3F494DEF72 /* MQBotWebViewBubbleAnswerCellModel.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
@@ -777,9 +781,8 @@
 		CF271738DE14CC9AA579B646C4F9C4FF /* picture_tools.c in Sources */ = {isa = PBXBuildFile; fileRef = F9E7A12B252A0582CF39FD320820F3DC /* picture_tools.c */; settings = {COMPILER_FLAGS = "-D_THREAD_SAFE -fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		CF64523CDDAF87BD65A7CA30F650E2FF /* MQChatRegexUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = 6FF2173A3FEBA870F9A232AEF22FF150 /* MQChatRegexUtil.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CF89F27A4B67535CDB04C59F98B49FAD /* DTTimePeriodGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 70BAE9E6435ED2BC74F078307FDFBFD5 /* DTTimePeriodGroup.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
-		CFA3951BBF878DC8B989742B081BB2EE /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65F236DA09F061AB69505FA338DAFEE1 /* CoreFoundation.framework */; };
+		D05C44928CCC6AB079A522D7D56391B3 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E77935360607B2D0D51F2F653003162B /* SystemConfiguration.framework */; };
 		D078920C9D1A419917C9C377BF82A19E /* UIGestureRecognizer+RACSignalSupport.h in Headers */ = {isa = PBXBuildFile; fileRef = ED8302CD1F4EEDA72B3A145C7F22E2CC /* UIGestureRecognizer+RACSignalSupport.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D0AB9F41C9599D9CF25D4F6B0310603A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C18F5907F1665E9E3D4220FF23D59FAF /* Foundation.framework */; };
 		D24F6392D3D6BCE58C00183FAC9FD26A /* MQImageMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BC4DAC055EA8A6A4D594FA73F38ECE37 /* MQImageMessageCell.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		D25C46411C153FEA9805C22A79AF5D83 /* UITableViewCell+RACSignalSupport.h in Headers */ = {isa = PBXBuildFile; fileRef = 6B5E75EB2762C883A260B7829474D145 /* UITableViewCell+RACSignalSupport.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D260975C2C9404D4148DA46DC7C83B5A /* MQToast.h in Headers */ = {isa = PBXBuildFile; fileRef = D2CD87A07A80F432AD6B558312C5FF27 /* MQToast.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -787,36 +790,33 @@
 		D27E6763A7739D25735C98E3BC86AF30 /* MQAGEmojiKeyBoardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 59A21BE53B6EACF8BD6FC17FE1B8F91F /* MQAGEmojiKeyBoardView.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		D2B536811C5A149E96096B192875C970 /* MEIQIA_MLAudioMeterObserver.h in Headers */ = {isa = PBXBuildFile; fileRef = E733A86E248640198FC8AC0EC2E291A9 /* MEIQIA_MLAudioMeterObserver.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D2DBB12E20FD6D319B9E3F845198851D /* RACImmediateScheduler.h in Headers */ = {isa = PBXBuildFile; fileRef = 96EFC12340B803ADED714A66B0F18D02 /* RACImmediateScheduler.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D3BDFD6F369883121754D75D0E27E61B /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B1D08D054E2872E998E780A7A172D4DE /* ImageIO.framework */; };
 		D3C0A5E667463652A89F5E4D0EB844D7 /* RACEmptySequence.h in Headers */ = {isa = PBXBuildFile; fileRef = A3F775172899427506195E4701191CFC /* RACEmptySequence.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D3C6A25D396129B46A3772A7C7989243 /* MQEvaluationResultCellModel.m in Sources */ = {isa = PBXBuildFile; fileRef = DF1EB2E5C3F792833740E4052466D967 /* MQEvaluationResultCellModel.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		D4CB54C01484AE1883F0D51227E726CC /* MQChatViewStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = C0FBF79D9F93A50C4BD9495EFDA866DF /* MQChatViewStyle.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		D4E42425E85CEC0651956A50C8F31A20 /* RACKVOProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = A383976315EF3CE6614BCD28ABC4191E /* RACKVOProxy.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
-		D52F053943265F83382B3CBD42B58B6D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C18F5907F1665E9E3D4220FF23D59FAF /* Foundation.framework */; };
 		D590149822653D429693166995A44B2B /* neon.h in Headers */ = {isa = PBXBuildFile; fileRef = 72544783EFBC854879326956084E54AF /* neon.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D5E4965476F00AA2B9C0064E232AD2A9 /* NSString+RACSequenceAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B68DCC84B83A8E84DD8645E33D10EC8 /* NSString+RACSequenceAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D5F3C9BFCF902CB1B1325720BFEE048B /* DTTimePeriod.m in Sources */ = {isa = PBXBuildFile; fileRef = A43123C8759F9D919A0142D1659570B2 /* DTTimePeriod.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		D60A11E001BF6F854BC3F93706583C6E /* RACTestScheduler.h in Headers */ = {isa = PBXBuildFile; fileRef = B5595EF090E2911BA2604A27DAABB422 /* RACTestScheduler.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D651DFBDEB250CA5EAE751C062DA03A8 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02FFAB48E5FD90D4DA3387E646D6B712 /* UIKit.framework */; };
 		D66CEE775651A41EA8D5B0A25876C01A /* MASConstraintMaker.h in Headers */ = {isa = PBXBuildFile; fileRef = 764812EDE50FDAA2B1E26790737EC3A9 /* MASConstraintMaker.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D67494BFC2FE75E69E731644785C7434 /* RACDynamicSignal.m in Sources */ = {isa = PBXBuildFile; fileRef = 2049AD4DBFDF8A84279087EA18BA4198 /* RACDynamicSignal.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		D6972D18E2B4BB6FF049F4755ED254BB /* MQBaseMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 39FF92A0B56C0C84D3C8139411F08026 /* MQBaseMessage.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		D6B019C31E889414B1D94E7012EBD4AA /* RACValueTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = 823E2C49FD86E889700B54576A480ACB /* RACValueTransformer.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D6D594781B453C22A124DFE4ED911048 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C18F5907F1665E9E3D4220FF23D59FAF /* Foundation.framework */; };
 		D6D9E8EB7ED769F9781E7BFDCD19000E /* NSString+MJExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 89AE0F7CB5E5330432DD8430860A9629 /* NSString+MJExtension.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		D7522F3D9FFC9D68114CB3E406DAFDED /* MEIQIA_HPGrowingTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = 999C92A0119080EB20F58E3E95E43B3C /* MEIQIA_HPGrowingTextView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D7C2B716573109B1C78CCFD7DA7E261B /* ZYImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC986C4F1846F560D351C2E4BB94BC8 /* ZYImageView.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		D7E4B5F3A1F1F90D7D0E9A8E4A84AEAC /* YYText-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 660712153E500B3F28C2B8B7A883E56B /* YYText-dummy.m */; };
-		D8A8E77BDE84A659F904624CD05822F1 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D98DA3A84075820C418E03C54D2DF1A /* QuartzCore.framework */; };
 		D8B14EE50DE356E8AFEC7590C37E850E /* MEIQIA_FBFontSymbol.h in Headers */ = {isa = PBXBuildFile; fileRef = FD96FAC901626D3AB6F3D57117AE4A57 /* MEIQIA_FBFontSymbol.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D9E9D3276F49946B1504435F3AE7E604 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD1F3128DB726FC62F9907D5A74C1AAB /* Security.framework */; };
 		DA53EC932870C2C1045046F298458FE7 /* RACEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = F3305113C6BC94A4AF03E92D28A44BC6 /* RACEvent.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
-		DB00EDB494AE03B236B78DB3D236BCEC /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71423B0369413AD29455968187F2FC66 /* MobileCoreServices.framework */; };
+		DAF1A523CE3E51282616DD185CE4876F /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76602606ADA2BD1C5DED19B1AD33AF4F /* MobileCoreServices.framework */; };
 		DB5E8E7F14647980D12A6C631F0EE2FD /* YYTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = DCF6DB8458F6AA062B0183AB1E6D2E66 /* YYTextView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DB6847EC3D2D0B2A1CA396815EB02095 /* UICollectionReusableView+RACSignalSupport.h in Headers */ = {isa = PBXBuildFile; fileRef = 03AF67F3BA665F5ED4278863E8288D5A /* UICollectionReusableView+RACSignalSupport.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DBAE9B631C99673A79C23FD893EA6FC7 /* SDWebImageDownloaderOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 418EA5B6ECC028290D907E6913E22846 /* SDWebImageDownloaderOperation.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		DBDF7668F4C5B0AF92EC7A1505335A1B /* MJExtension-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 522188B88B772DF78D1FC8173DFDA9CE /* MJExtension-dummy.m */; };
 		DC5DDAAB144E29976FC6AB11771550F2 /* MQToast.m in Sources */ = {isa = PBXBuildFile; fileRef = 818A30180493B6B926B667BFAA40E56C /* MQToast.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		DCCC0EB970AC3CF90B5DD9D333D913C5 /* SDWebImageDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8817A9C7C85EE7599733CBB962584097 /* SDWebImageDecoder.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
-		DCCF52E2DB0AEA7434CE125705D096A5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C18F5907F1665E9E3D4220FF23D59FAF /* Foundation.framework */; };
 		DD0AB9D14EFC5A729108BC66BFCABA43 /* MMDrawerController-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 75C1D0375F6CE8B3CBCB0AB77D16A867 /* MMDrawerController-dummy.m */; };
 		DD9E6C51D2306B1413E1881F89D735DC /* MQImageMessageCell.h in Headers */ = {isa = PBXBuildFile; fileRef = B4064306D864604A13AD80CF7C3B4E1B /* MQImageMessageCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DDC4A90F88FFB2900D5EEA9618625E9D /* decode_vp8.h in Headers */ = {isa = PBXBuildFile; fileRef = 596AA1233349A04D6A7F5BBB06463867 /* decode_vp8.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -832,6 +832,7 @@
 		E09294313EB077716B35AE98E98EFE62 /* RACTargetQueueScheduler.m in Sources */ = {isa = PBXBuildFile; fileRef = A23AF361D2F881B36996CF5C18AFCE47 /* RACTargetQueueScheduler.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		E0CA2B2CA879CFF2ABB2D095A930849F /* NSInvocation+RACTypeParsing.h in Headers */ = {isa = PBXBuildFile; fileRef = 7F08846849C0762F981C1A452FD000E3 /* NSInvocation+RACTypeParsing.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E138CABBD4474C9B299908F0D0B440DD /* RACIndexSetSequence.m in Sources */ = {isa = PBXBuildFile; fileRef = 154BE40E217D6B6B0AD10E846501EF41 /* RACIndexSetSequence.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		E1A498DCA1A06345EA4CF923BA45D94E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02FFAB48E5FD90D4DA3387E646D6B712 /* UIKit.framework */; };
 		E1B3C2A587E92C156B01A987161E9A1D /* MQWebViewBubbleCellModel.h in Headers */ = {isa = PBXBuildFile; fileRef = DA7937F1B41528BDDD22DEAA136D6DD8 /* MQWebViewBubbleCellModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E1C50385AFC27F41A720F9E3D1C7E1CD /* NSSet+RACSequenceAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = C4BC151632EEB2A46F7C6A92323C7916 /* NSSet+RACSequenceAdditions.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		E21B3111559A9AFC8417BE1FE199C4B6 /* Pods-YouYuJiZhangBao-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = C339C2B0AAC66EC7E2C4DA92F0B5825B /* Pods-YouYuJiZhangBao-dummy.m */; };
@@ -839,6 +840,7 @@
 		E28433A869519BA511C3A9C84E24EBF3 /* muxi.h in Headers */ = {isa = PBXBuildFile; fileRef = C7914E8AD30A35E2492E50C40006CB79 /* muxi.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E296DE5B005402C646F2DB67B4498632 /* MQInputContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 54175AFD594A5071EA48726949F40215 /* MQInputContentView.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		E2AD9E14FDAA9BACF99B2617699B4237 /* NSData+ImageContentType.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A4D9556D05D8D2DA7B584710F3459D2 /* NSData+ImageContentType.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		E2ED1575BFA9A98FAA4882F177C51D74 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02FFAB48E5FD90D4DA3387E646D6B712 /* UIKit.framework */; };
 		E37CFB75B53E1DF4E9219B7E3B152A85 /* RACDynamicSequence.h in Headers */ = {isa = PBXBuildFile; fileRef = D8D4C4E037DBF9C6D4441AF69013CA13 /* RACDynamicSequence.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E37FCAA70D30A9B4C050C4E4307E926D /* RACEmptySignal.h in Headers */ = {isa = PBXBuildFile; fileRef = B951894BDB6C208B2336144B82914559 /* RACEmptySignal.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E39CBE478B2C16FC3C4D0466E38D0B58 /* UIKit+AFNetworking.h in Headers */ = {isa = PBXBuildFile; fileRef = C8C8E00373ED73AE83925D30D0EC6FC5 /* UIKit+AFNetworking.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -848,13 +850,13 @@
 		E54494F7F1FA6FFCE10AA975D76C90F9 /* MQRecordView.m in Sources */ = {isa = PBXBuildFile; fileRef = E34238CD3DACC672F1473189FCDDCD95 /* MQRecordView.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		E55E49AE8646F33DC7E44C34CE816008 /* libwebp-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 048FF7B67369B952B243B73685A26C90 /* libwebp-dummy.m */; };
 		E5D1227CE9F2B006922E448C7E10BD4B /* vp8.c in Sources */ = {isa = PBXBuildFile; fileRef = E037BD4F31EC2B7F95DC76147E51C534 /* vp8.c */; settings = {COMPILER_FLAGS = "-D_THREAD_SAFE -fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
-		E60CFC9C2610A21EEE6164C7727D24D4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C18F5907F1665E9E3D4220FF23D59FAF /* Foundation.framework */; };
 		E65BCE53C63A48577A49EC6444897176 /* zip.c in Sources */ = {isa = PBXBuildFile; fileRef = E60EAA383146B5CB650C4598D7DA6247 /* zip.c */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0 -w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		E6E6F094D76EAE123560AB2133BCCF78 /* RACSignalSequence.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EBC436F54600A9ADDFE5D423DFBFB14 /* RACSignalSequence.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		E776BA2AAC82B7410DDA6EDFDD11A835 /* NSObject+MJProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = 379F3D6BDDE77650BD5EBBFAA51B62A8 /* NSObject+MJProperty.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		E7F92A87C2ABAE5BE555DA0CCB5511FD /* NSDictionary+RACSequenceAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = A4B2190EB1FDFACB8DCF617BF49A38E0 /* NSDictionary+RACSequenceAdditions.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		E82A6FCE08DC9E9B9A1F5083CE95F6E2 /* MQMessageFormViewManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 57E2C54986CF6BE87461A84399AC8D86 /* MQMessageFormViewManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E8440762CB06E8DA4D76C30B9ED1F734 /* alpha.c in Sources */ = {isa = PBXBuildFile; fileRef = 6BBD7719C2E688AB866333CCA49C3359 /* alpha.c */; settings = {COMPILER_FLAGS = "-D_THREAD_SAFE -fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		E85C19C40E93E318F601D7909ACC1740 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91A7282F4396B5E4395CC02457517099 /* Foundation.framework */; };
 		E88785AE0990B485BB76EF002E545E42 /* UIView+YYText.m in Sources */ = {isa = PBXBuildFile; fileRef = BE559FC288DBB9949BD54C83A5CA8130 /* UIView+YYText.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		E8B74DE343F987CF74F9E0AB4EA614D0 /* encode.h in Headers */ = {isa = PBXBuildFile; fileRef = 89C67A96367D00EE411749FFA5C1D617 /* encode.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E8C607F009A722D92F83A5299372A544 /* NSObject+RACLifting.h in Headers */ = {isa = PBXBuildFile; fileRef = 47862A3E3AF04490503B5B1EF53499F0 /* NSObject+RACLifting.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -882,12 +884,12 @@
 		F02C2EBEE2ABB7EB5B7C35FDDD7E4B4C /* MQMessageFormInputModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 0F36DB28E6C3D168274AA3394AD2C5B9 /* MQMessageFormInputModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F0A016D30BBEAF0266B75466B4ECA81A /* SDWebImageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FE61B8DAB54BB9CB5E7AD01C1F57585 /* SDWebImageManager.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		F0AAB3708F918BB169B92AD42FEBBF89 /* MEIQIA_FBBitmapFont.h in Headers */ = {isa = PBXBuildFile; fileRef = D28DA6099EDC6C4EBEF51013470E8681 /* MEIQIA_FBBitmapFont.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F0C04222DB7582A399FD9AE40C582875 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91A7282F4396B5E4395CC02457517099 /* Foundation.framework */; };
 		F17DB3E26A723489F3DEC46CFDB1877B /* MQChatViewStyleBlue.m in Sources */ = {isa = PBXBuildFile; fileRef = 266E4A3B427753CAFE2BB13C299616CE /* MQChatViewStyleBlue.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		F1BEAD4A883106AD1535C058106F84FF /* MQTabInputContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 59303124ACB99273FDF3B251EABFAB50 /* MQTabInputContentView.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		F1BED560D69C6CCA84BDE35FA059B3C1 /* MQMessageFormViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 146545A63B344C387FFF4F7A9C284D2D /* MQMessageFormViewController.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		F216351E389093977DB699E4733603FB /* RACObjCRuntime.h in Headers */ = {isa = PBXBuildFile; fileRef = A2E67A00F68348AEF5E9946DE39F7418 /* RACObjCRuntime.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F2369BCC1738C9451189FE34B03A67E9 /* UIImage+MQGenerate.m in Sources */ = {isa = PBXBuildFile; fileRef = FAFD37400B8900B3579F41AB1F6313B6 /* UIImage+MQGenerate.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
-		F2421625EFC505201BE1D80BD67B3F9B /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D85031946F7440329B2B785C07E5D34 /* CoreGraphics.framework */; };
 		F28EF3E848F3AB3EC7772E2EE4842DC0 /* MQBotWebViewBubbleAnswerCellModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 865714C964CEB3385B73C81463A09BA3 /* MQBotWebViewBubbleAnswerCellModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F3163F4867F54B89DEF21A4F6DE99ABF /* NSArray+MASAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = B764FD31C0A2C25A39245F42732B579D /* NSArray+MASAdditions.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		F35886E45AA826FDCEC1328DF87E67C2 /* SDWebImageDownloader.h in Headers */ = {isa = PBXBuildFile; fileRef = B30532802FF9A0EDE3FFBCF625EA472A /* SDWebImageDownloader.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -920,10 +922,8 @@
 		FC2250AE238E2FD6402CE11D3DF76ACC /* MEIQIA_HPTextViewInternal.h in Headers */ = {isa = PBXBuildFile; fileRef = B6FBEC23BD994B27163C4DB432F6BA85 /* MEIQIA_HPTextViewInternal.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FD2BA249F17A00655975A42937B8CE90 /* MQChatViewConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = F76475EFAE7FC74B9029EC4D90CD5DC3 /* MQChatViewConfig.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		FD8BADAE8D9F0BE811E5C696B19618E2 /* UIDatePicker+RACSignalSupport.h in Headers */ = {isa = PBXBuildFile; fileRef = 033B59AC6D601BBD27931026F76D2D48 /* UIDatePicker+RACSignalSupport.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		FF81E297D97DDAE52402DA694ACF1C1E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6B4F32B830B4D066D0B53CB3094BFE0 /* UIKit.framework */; };
+		FF5BA031E01EE7C1C57D8BCB01668F0D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91A7282F4396B5E4395CC02457517099 /* Foundation.framework */; };
 		FF9349827B4ECA2320C60E5CB700E198 /* NSParagraphStyle+YYText.m in Sources */ = {isa = PBXBuildFile; fileRef = D516499C4B1C88CABCA3C1A400685306 /* NSParagraphStyle+YYText.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
-		FFC57104C13D5E3BAC086E60935C6550 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71423B0369413AD29455968187F2FC66 /* MobileCoreServices.framework */; };
-		FFE87D4B57161F896D11B399B96F814C /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 095FD9143D94480E16640700C15C2890 /* CoreTelephony.framework */; };
 		FFEB317C9EC0128D8F43EEA1ECCD967B /* NSObject+RACPropertySubscribing.m in Sources */ = {isa = PBXBuildFile; fileRef = 4720E0493EDCD44D3913F49DC1D853D4 /* NSObject+RACPropertySubscribing.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 /* End PBXBuildFile section */
 
@@ -2130,6 +2130,7 @@
 		02AB9FB8C5D5BA1DFCD4758F1007B9CD /* sha1.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = sha1.h; path = SSZipArchive/aes/sha1.h; sourceTree = "<group>"; };
 		02BA7CF92C6B12C8D6BF501CBADE0BB0 /* NSIndexSet+RACSequenceAdditions.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSIndexSet+RACSequenceAdditions.m"; path = "ReactiveCocoa/NSIndexSet+RACSequenceAdditions.m"; sourceTree = "<group>"; };
 		02F3F4FD5C7342540B4CFAB52CB8D14B /* RACCompoundDisposable.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RACCompoundDisposable.m; path = ReactiveCocoa/RACCompoundDisposable.m; sourceTree = "<group>"; };
+		02FFAB48E5FD90D4DA3387E646D6B712 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		033B59AC6D601BBD27931026F76D2D48 /* UIDatePicker+RACSignalSupport.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIDatePicker+RACSignalSupport.h"; path = "ReactiveCocoa/UIDatePicker+RACSignalSupport.h"; sourceTree = "<group>"; };
 		0356C9A8881F53DA0E6069421F736EE0 /* RACEXTRuntimeExtensions.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RACEXTRuntimeExtensions.h; path = ReactiveCocoa/extobjc/RACEXTRuntimeExtensions.h; sourceTree = "<group>"; };
 		035CCF8CAB9E10D16EBA17547F3583FE /* UIImageView+AFNetworking.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIImageView+AFNetworking.h"; path = "UIKit+AFNetworking/UIImageView+AFNetworking.h"; sourceTree = "<group>"; };
@@ -2150,7 +2151,6 @@
 		0900FA61F5F0809D8427B9C557A715C6 /* MEIQIA_FBLCDFontView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = MEIQIA_FBLCDFontView.m; path = "Meiqia-SDK-files/MQChatViewController/Vendors/FBDigitalFont/MEIQIA_FBLCDFontView.m"; sourceTree = "<group>"; };
 		090C4134C0E8745457457DE299E8F878 /* huffman_encode.c */ = {isa = PBXFileReference; includeInIndex = 1; name = huffman_encode.c; path = src/utils/huffman_encode.c; sourceTree = "<group>"; };
 		09505D0B98F71C5DE317C2F81A99154C /* MQTextCellModel.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MQTextCellModel.h; path = "Meiqia-SDK-files/MQChatViewController/TableCells/CellModel/MQTextCellModel.h"; sourceTree = "<group>"; };
-		095FD9143D94480E16640700C15C2890 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.0.sdk/System/Library/Frameworks/CoreTelephony.framework; sourceTree = DEVELOPER_DIR; };
 		09603120948DC95F4908270C999E787E /* color_cache.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = color_cache.h; path = src/utils/color_cache.h; sourceTree = "<group>"; };
 		0985FD43415FC7A640CFA7CB4CB981C5 /* UIImage+MultiFormat.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIImage+MultiFormat.m"; path = "SDWebImage/UIImage+MultiFormat.m"; sourceTree = "<group>"; };
 		0999280C2561F0C84E216498ADED5DED /* AFNetworkActivityIndicatorManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AFNetworkActivityIndicatorManager.h; path = "UIKit+AFNetworking/AFNetworkActivityIndicatorManager.h"; sourceTree = "<group>"; };
@@ -2170,7 +2170,6 @@
 		0C3D56A841C4196D8E80FF5344F5A6DD /* UIRefreshControl+RACCommandSupport.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIRefreshControl+RACCommandSupport.m"; path = "ReactiveCocoa/UIRefreshControl+RACCommandSupport.m"; sourceTree = "<group>"; };
 		0D1E6C5916785E1AF995D0A76DF4E86C /* syntax.c */ = {isa = PBXFileReference; includeInIndex = 1; name = syntax.c; path = src/enc/syntax.c; sourceTree = "<group>"; };
 		0D60B9B72C38B5974C2BD296086EB0DF /* MQPreChatFormListViewController.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = MQPreChatFormListViewController.m; path = "Meiqia-SDK-files/MQChatViewController/Controllers/PreChatForm/MQPreChatFormListViewController.m"; sourceTree = "<group>"; };
-		0D85031946F7440329B2B785C07E5D34 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.0.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
 		0F1A8B5544BE2CE2E9DE77A84A492EC5 /* RACScheduler.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RACScheduler.m; path = ReactiveCocoa/RACScheduler.m; sourceTree = "<group>"; };
 		0F36C7A4727D89016A2EDC2F8F251FF7 /* decode.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = decode.h; path = src/webp/decode.h; sourceTree = "<group>"; };
 		0F36DB28E6C3D168274AA3394AD2C5B9 /* MQMessageFormInputModel.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MQMessageFormInputModel.h; path = "Meiqia-SDK-files/MQMessageForm/Config/MessageFormInputModel/MQMessageFormInputModel.h"; sourceTree = "<group>"; };
@@ -2203,7 +2202,6 @@
 		1477AB21D40FC4A7EE345045E1E0C907 /* MQChatEmojize.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = MQChatEmojize.m; path = "Meiqia-SDK-files/MQChatViewController/Utils/MQChatEmojize.m"; sourceTree = "<group>"; };
 		149E03E448202ED6A6BA79CC582E4707 /* Pods-SuiShouJiEnterprise-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-SuiShouJiEnterprise-frameworks.sh"; sourceTree = "<group>"; };
 		14C02A6CD949540A85EFF7C62D4C19CC /* UIImage+MQGenerate.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIImage+MQGenerate.h"; path = "Meiqia-SDK-files/MQChatViewController/Categories/UIImage+MQGenerate.h"; sourceTree = "<group>"; };
-		14D7A4E4C54EE1ECF7DAA7BFA0FC288E /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.0.sdk/System/Library/Frameworks/AVFoundation.framework; sourceTree = DEVELOPER_DIR; };
 		154BE40E217D6B6B0AD10E846501EF41 /* RACIndexSetSequence.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RACIndexSetSequence.m; path = ReactiveCocoa/RACIndexSetSequence.m; sourceTree = "<group>"; };
 		155388754A16CECE18E8E3076B7184F7 /* libSocialSina.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libSocialSina.a; path = UShareSDK/SocialLibraries/Sina/libSocialSina.a; sourceTree = "<group>"; };
 		15D1D471CCAC62AF10B4E6731386FC49 /* MQBundleUtil.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MQBundleUtil.h; path = "Meiqia-SDK-files/MQChatViewController/Utils/MQBundleUtil.h"; sourceTree = "<group>"; };
@@ -2238,7 +2236,6 @@
 		1C9E93D15446091D0933D799B2F63A92 /* RACSequence.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RACSequence.h; path = ReactiveCocoa/RACSequence.h; sourceTree = "<group>"; };
 		1CFF4285453E0F036C48E1A22112A9D2 /* MQBotMenuCell.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = MQBotMenuCell.m; path = "Meiqia-SDK-files/MQChatViewController/TableCells/CellView/MQBotMenuCell.m"; sourceTree = "<group>"; };
 		1D7FA45ACCB9F2931E498E7DE4ABC6CB /* delta_palettization.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = delta_palettization.h; path = src/enc/delta_palettization.h; sourceTree = "<group>"; };
-		1D98DA3A84075820C418E03C54D2DF1A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.0.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
 		1DF8236B3B9171A12A317DEE51801066 /* MQFileDownloadMessage.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MQFileDownloadMessage.h; path = "Meiqia-SDK-files/MQChatViewController/MessageModels/MQFileDownloadMessage.h"; sourceTree = "<group>"; };
 		1E0D6A730285610CE8902AC710C10643 /* Pods-YouYuJiZhang-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-YouYuJiZhang-frameworks.sh"; sourceTree = "<group>"; };
 		1E3EA8CC0D7F403F7BC3C20F7CA97442 /* RACEagerSequence.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RACEagerSequence.h; path = ReactiveCocoa/RACEagerSequence.h; sourceTree = "<group>"; };
@@ -2365,6 +2362,7 @@
 		379F3D6BDDE77650BD5EBBFAA51B62A8 /* NSObject+MJProperty.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSObject+MJProperty.m"; path = "MJExtension/NSObject+MJProperty.m"; sourceTree = "<group>"; };
 		37C11DF4403B79ED32C9FA86B0617041 /* MQImageViewerViewController.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MQImageViewerViewController.h; path = "Meiqia-SDK-files/MQChatViewController/Views/MQImageViewer/MQImageViewerViewController.h"; sourceTree = "<group>"; };
 		37D9F1760AB50792CDA725CCB41A1EEC /* lossless_enc_mips32.c */ = {isa = PBXFileReference; includeInIndex = 1; name = lossless_enc_mips32.c; path = src/dsp/lossless_enc_mips32.c; sourceTree = "<group>"; };
+		37E5A58A8540F60147D08B633366795D /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/Accelerate.framework; sourceTree = DEVELOPER_DIR; };
 		3802A83730947A6A63338F10420FB068 /* Pods-BeiKeJiZhang-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-BeiKeJiZhang-acknowledgements.plist"; sourceTree = "<group>"; };
 		382BC495535954811E95CED93E2BC39B /* YYTextRubyAnnotation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = YYTextRubyAnnotation.h; path = YYText/String/YYTextRubyAnnotation.h; sourceTree = "<group>"; };
 		389AAAD7C5D68C4F12B61D3497CFEB4C /* MQRecorderView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MQRecorderView.h; path = "Meiqia-SDK-files/MQChatViewController/Views/MQInputBar/FunctionView/MQRecorderView.h"; sourceTree = "<group>"; };
@@ -2527,6 +2525,7 @@
 		596AA1233349A04D6A7F5BBB06463867 /* decode_vp8.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = decode_vp8.h; path = src/dec/decode_vp8.h; sourceTree = "<group>"; };
 		59A21BE53B6EACF8BD6FC17FE1B8F91F /* MQAGEmojiKeyBoardView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = MQAGEmojiKeyBoardView.m; path = "Meiqia-SDK-files/MQChatViewController/Vendors/AGEmojiKeyboard/MQAGEmojiKeyBoardView.m"; sourceTree = "<group>"; };
 		59B586A031FC8BAB430810EA46D92646 /* Pods-JiZhangGuanJia.release-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-JiZhangGuanJia.release-production.xcconfig"; sourceTree = "<group>"; };
+		59BBBC47CFCF80E2680E0FF968F6635D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
 		59D856A54756976AF66675BA51916455 /* random.c */ = {isa = PBXFileReference; includeInIndex = 1; name = random.c; path = src/utils/random.c; sourceTree = "<group>"; };
 		5A19FA614BFE4667F5828860C6836F77 /* quant.c */ = {isa = PBXFileReference; includeInIndex = 1; name = quant.c; path = src/enc/quant.c; sourceTree = "<group>"; };
 		5AD513BC3B5565746788A5B658127BEA /* libReactiveCocoa.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = libReactiveCocoa.a; path = libReactiveCocoa.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2567,7 +2566,6 @@
 		6577448A146081CE72C14B1714C794B8 /* enc_mips32.c */ = {isa = PBXFileReference; includeInIndex = 1; name = enc_mips32.c; path = src/dsp/enc_mips32.c; sourceTree = "<group>"; };
 		65AEC97CDBFC48007DCFBF907E69148F /* NSString+RACSequenceAdditions.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSString+RACSequenceAdditions.m"; path = "ReactiveCocoa/NSString+RACSequenceAdditions.m"; sourceTree = "<group>"; };
 		65B4C4E08EB1F02FF20E3DFA739E20AC /* RACSignal.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RACSignal.m; path = ReactiveCocoa/RACSignal.m; sourceTree = "<group>"; };
-		65F236DA09F061AB69505FA338DAFEE1 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.0.sdk/System/Library/Frameworks/CoreFoundation.framework; sourceTree = DEVELOPER_DIR; };
 		660712153E500B3F28C2B8B7A883E56B /* YYText-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "YYText-dummy.m"; sourceTree = "<group>"; };
 		66218586977FFCB69345C1F1E0466CCC /* Pods-YouYuJiZhangGuanJia-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-YouYuJiZhangGuanJia-acknowledgements.markdown"; sourceTree = "<group>"; };
 		663E698CCDAEFF99BCE902A81C75CBF6 /* YYTextRubyAnnotation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = YYTextRubyAnnotation.m; path = YYText/String/YYTextRubyAnnotation.m; sourceTree = "<group>"; };
@@ -2584,6 +2582,7 @@
 		6A451858AD5F0AA952199946100614CB /* MQPreChatSubmitViewController.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MQPreChatSubmitViewController.h; path = "Meiqia-SDK-files/MQChatViewController/Controllers/PreChatForm/MQPreChatSubmitViewController.h"; sourceTree = "<group>"; };
 		6A8DE70E59D7246B7EA0E819C13B04F2 /* NSString+RACSupport.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSString+RACSupport.m"; path = "ReactiveCocoa/NSString+RACSupport.m"; sourceTree = "<group>"; };
 		6AAADCDC5A123A5E00FBB9D69F88FB2C /* aes.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = aes.h; path = SSZipArchive/aes/aes.h; sourceTree = "<group>"; };
+		6ABACF0E2CCDF791499F221573206322 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/AVFoundation.framework; sourceTree = DEVELOPER_DIR; };
 		6B1F4D3F6334A2796EA7B34273682978 /* MKAnnotationView+RACSignalSupport.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "MKAnnotationView+RACSignalSupport.m"; path = "ReactiveCocoa/MKAnnotationView+RACSignalSupport.m"; sourceTree = "<group>"; };
 		6B3630070825051E146840BA0C35C312 /* libSDWebImage.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = libSDWebImage.a; path = libSDWebImage.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		6B5E75EB2762C883A260B7829474D145 /* UITableViewCell+RACSignalSupport.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UITableViewCell+RACSignalSupport.h"; path = "ReactiveCocoa/UITableViewCell+RACSignalSupport.h"; sourceTree = "<group>"; };
@@ -2613,7 +2612,6 @@
 		70BAE9E6435ED2BC74F078307FDFBFD5 /* DTTimePeriodGroup.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = DTTimePeriodGroup.m; path = DateTools/DateTools/DTTimePeriodGroup.m; sourceTree = "<group>"; };
 		70F51A83E9E3D509B6D4A3267E842E17 /* RACSubject.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RACSubject.h; path = ReactiveCocoa/RACSubject.h; sourceTree = "<group>"; };
 		71262A5B1735A38BBC33C0A964824645 /* MEIQIA_HPTextViewInternal.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = MEIQIA_HPTextViewInternal.m; path = "Meiqia-SDK-files/MQChatViewController/Vendors/HPTextView/MEIQIA_HPTextViewInternal.m"; sourceTree = "<group>"; };
-		71423B0369413AD29455968187F2FC66 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.0.sdk/System/Library/Frameworks/MobileCoreServices.framework; sourceTree = DEVELOPER_DIR; };
 		715DE87FCC4B16FADBCBEBE0FEFB717E /* NSObject+RACLifting.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSObject+RACLifting.m"; path = "ReactiveCocoa/NSObject+RACLifting.m"; sourceTree = "<group>"; };
 		71A265381AA93EAC6B8353A09326FD06 /* libAFNetworking.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = libAFNetworking.a; path = libAFNetworking.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		71FDDCDBD6916F5E0C5215F0AE132EDC /* MQEvaluationView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = MQEvaluationView.m; path = "Meiqia-SDK-files/MQChatViewController/Views/MQEvaluationView/MQEvaluationView.m"; sourceTree = "<group>"; };
@@ -2636,10 +2634,12 @@
 		760616F160C0B0368530E644B139061C /* MASLayoutConstraint.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MASLayoutConstraint.h; path = Masonry/MASLayoutConstraint.h; sourceTree = "<group>"; };
 		7635F3DA545145C1A0355E22EDA64AAC /* RACDelegateProxy.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RACDelegateProxy.h; path = ReactiveCocoa/RACDelegateProxy.h; sourceTree = "<group>"; };
 		764812EDE50FDAA2B1E26790737EC3A9 /* MASConstraintMaker.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MASConstraintMaker.h; path = Masonry/MASConstraintMaker.h; sourceTree = "<group>"; };
+		76602606ADA2BD1C5DED19B1AD33AF4F /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/MobileCoreServices.framework; sourceTree = DEVELOPER_DIR; };
 		76927F97D3B92D8C365AE1ACAFEF2646 /* filters_sse2.c */ = {isa = PBXFileReference; includeInIndex = 1; name = filters_sse2.c; path = src/dsp/filters_sse2.c; sourceTree = "<group>"; };
 		771B692596DB146E5D1718A9F421ABBE /* RACSerialDisposable.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RACSerialDisposable.m; path = ReactiveCocoa/RACSerialDisposable.m; sourceTree = "<group>"; };
 		774BF668D7F1D1EDB4F316C45BF9BAE5 /* MQTextMessage.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = MQTextMessage.m; path = "Meiqia-SDK-files/MQChatViewController/MessageModels/MQTextMessage.m"; sourceTree = "<group>"; };
 		776CB30CBA35EC97FA68F98A5BBBF98E /* Pods-YouYuJiZhangPro-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-YouYuJiZhangPro-frameworks.sh"; sourceTree = "<group>"; };
+		77DAFD170AFAB0625822C5104836D469 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/CoreText.framework; sourceTree = DEVELOPER_DIR; };
 		78669B42A7DEEB5AB95CEBBD220ACC0A /* AFSecurityPolicy.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AFSecurityPolicy.h; path = AFNetworking/AFSecurityPolicy.h; sourceTree = "<group>"; };
 		79B8A85E455490543D796FF4F6C86658 /* MQTextMessageCell.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = MQTextMessageCell.m; path = "Meiqia-SDK-files/MQChatViewController/TableCells/CellView/MQTextMessageCell.m"; sourceTree = "<group>"; };
 		7A29F9D4F851F0000D0CABC217B19B45 /* Pods-SuiShouJiEnterprise-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-SuiShouJiEnterprise-acknowledgements.markdown"; sourceTree = "<group>"; };
@@ -2680,7 +2680,6 @@
 		84BA487F3C87325BA8AE0420C8FB0B0A /* RACMulticastConnection+Private.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "RACMulticastConnection+Private.h"; path = "ReactiveCocoa/RACMulticastConnection+Private.h"; sourceTree = "<group>"; };
 		84BBC4C3F8B8DD9AD623E4E2234FD2A9 /* YYTextMagnifier.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = YYTextMagnifier.m; path = YYText/Component/YYTextMagnifier.m; sourceTree = "<group>"; };
 		84DFA995A5C675C332A865F9613B8CA5 /* RACEmptySequence.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RACEmptySequence.m; path = ReactiveCocoa/RACEmptySequence.m; sourceTree = "<group>"; };
-		85008159A113B241CCEFA49DBD477E98 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.0.sdk/System/Library/Frameworks/CoreText.framework; sourceTree = DEVELOPER_DIR; };
 		851EC42E2BF31A7AE70208BA6CDE3B18 /* NSNotificationCenter+RACSupport.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSNotificationCenter+RACSupport.m"; path = "ReactiveCocoa/NSNotificationCenter+RACSupport.m"; sourceTree = "<group>"; };
 		856D1462B3C3560E3633D5CDD745686D /* RACEXTKeyPathCoding.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RACEXTKeyPathCoding.h; path = ReactiveCocoa/extobjc/RACEXTKeyPathCoding.h; sourceTree = "<group>"; };
 		856D989B47FAF75B36428A6A76ADD713 /* MQFileDownloadCell.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = MQFileDownloadCell.m; path = "Meiqia-SDK-files/MQChatViewController/TableCells/CellView/MQFileDownloadCell.m"; sourceTree = "<group>"; };
@@ -2709,7 +2708,6 @@
 		89BB2620CA4DD31D0F1A91B8B5C92F86 /* MEIQIA_MLAudioRecorder.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = MEIQIA_MLAudioRecorder.m; path = "Meiqia-SDK-files/MQChatViewController/Vendors/MLAudioRecorder/MEIQIA_MLAudioRecorder.m"; sourceTree = "<group>"; };
 		89C67A96367D00EE411749FFA5C1D617 /* encode.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = encode.h; path = src/webp/encode.h; sourceTree = "<group>"; };
 		89E51B687EB8E441A5B7AD20D1CDA2F5 /* RACPassthroughSubscriber.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RACPassthroughSubscriber.m; path = ReactiveCocoa/RACPassthroughSubscriber.m; sourceTree = "<group>"; };
-		8A30C9FD7891230F0B384710335E2B0C /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.0.sdk/System/Library/Frameworks/SystemConfiguration.framework; sourceTree = DEVELOPER_DIR; };
 		8A3EE7F05BE4B5D7D88410FF6451CFB1 /* libMeiqia.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = libMeiqia.a; path = libMeiqia.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A72F83E7563A0F66D3B19939E5B3C1B /* AFURLSessionManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AFURLSessionManager.m; path = AFNetworking/AFURLSessionManager.m; sourceTree = "<group>"; };
 		8A7AA52AE966D3915FEA7330620C0A28 /* lossless_enc_sse2.c */ = {isa = PBXFileReference; includeInIndex = 1; name = lossless_enc_sse2.c; path = src/dsp/lossless_enc_sse2.c; sourceTree = "<group>"; };
@@ -2727,7 +2725,6 @@
 		8EB0B7CF6D2517DD5F2924971E5015EE /* Pods-YouYuJiZhangBao-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-YouYuJiZhangBao-acknowledgements.plist"; sourceTree = "<group>"; };
 		8EC552C751183B674EBFA39E21BCA741 /* wav.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = wav.mm; path = "Meiqia-SDK-files/MQChatViewController/Vendors/VoiceConvert/amrwapper/wav.mm"; sourceTree = "<group>"; };
 		8EEF1D4A08EE42BBE90DFFE4AEE6A609 /* UIViewController+MQHieriachy.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIViewController+MQHieriachy.h"; path = "Meiqia-SDK-files/MQChatViewController/Categories/UIViewController+MQHieriachy.h"; sourceTree = "<group>"; };
-		8EF299A6F04EB11F73ACB0DDBB671EC8 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.0.sdk/System/Library/Frameworks/Accelerate.framework; sourceTree = DEVELOPER_DIR; };
 		8F3C907C7A66694268EC2A2F555E896C /* RACUnarySequence.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RACUnarySequence.h; path = ReactiveCocoa/RACUnarySequence.h; sourceTree = "<group>"; };
 		8F5C7B358D9B25A26CD71D7BCF13F5BA /* MQBaseMessage.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MQBaseMessage.h; path = "Meiqia-SDK-files/MQChatViewController/MessageModels/MQBaseMessage.h"; sourceTree = "<group>"; };
 		8F8EEECF3DBCA1852CE350787DD80432 /* UIImagePickerController+RACSignalSupport.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIImagePickerController+RACSignalSupport.m"; path = "ReactiveCocoa/UIImagePickerController+RACSignalSupport.m"; sourceTree = "<group>"; };
@@ -2738,6 +2735,7 @@
 		90D7D8F9122E817BD0B8668BBC47CFFF /* SSZipCommon.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SSZipCommon.h; path = SSZipArchive/SSZipCommon.h; sourceTree = "<group>"; };
 		91877F7A596CE281BA628BB3FC218A28 /* NSObject+RACKVOWrapper.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSObject+RACKVOWrapper.m"; path = "ReactiveCocoa/NSObject+RACKVOWrapper.m"; sourceTree = "<group>"; };
 		919C368EE2B31CA140ABEB543E46A923 /* NSObject+RACDeallocating.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSObject+RACDeallocating.h"; path = "ReactiveCocoa/NSObject+RACDeallocating.h"; sourceTree = "<group>"; };
+		91A7282F4396B5E4395CC02457517099 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		929610D96C730619B22A0872737544E9 /* RACArraySequence.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RACArraySequence.m; path = ReactiveCocoa/RACArraySequence.m; sourceTree = "<group>"; };
 		92A1F2B55F85C92873F55717415BCEDD /* AFNetworking.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = AFNetworking.xcconfig; sourceTree = "<group>"; };
 		92B57A74C4D5FD7345451939E39A04DB /* MQKeyboardController.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = MQKeyboardController.m; path = "Meiqia-SDK-files/MQChatViewController/Views/MCKeyboardController/MQKeyboardController.m"; sourceTree = "<group>"; };
@@ -2853,7 +2851,7 @@
 		AC48B3C7A540CF5E560A11A29F6ADD35 /* dec_clip_tables.c */ = {isa = PBXFileReference; includeInIndex = 1; name = dec_clip_tables.c; path = src/dsp/dec_clip_tables.c; sourceTree = "<group>"; };
 		ACA0C39143B5B72D4B83AA4E127983E0 /* MQVoiceCellModel.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = MQVoiceCellModel.m; path = "Meiqia-SDK-files/MQChatViewController/TableCells/CellModel/MQVoiceCellModel.m"; sourceTree = "<group>"; };
 		ACD7D2BF47908910131DC0211F9899DA /* MQEventMessage.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MQEventMessage.h; path = "Meiqia-SDK-files/MQChatViewController/MessageModels/MQEventMessage.h"; sourceTree = "<group>"; };
-		AD1F3128DB726FC62F9907D5A74C1AAB /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.0.sdk/System/Library/Frameworks/Security.framework; sourceTree = DEVELOPER_DIR; };
+		AD248527838729040781A1D7CCDD9136 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/CoreFoundation.framework; sourceTree = DEVELOPER_DIR; };
 		AD43ECDB9AD7F84F0217A1DAFD227F1E /* enc_sse2.c */ = {isa = PBXFileReference; includeInIndex = 1; name = enc_sse2.c; path = src/dsp/enc_sse2.c; sourceTree = "<group>"; };
 		AD9199D54A2C84E2E9C366F67734CA5A /* upsampling_mips_dsp_r2.c */ = {isa = PBXFileReference; includeInIndex = 1; name = upsampling_mips_dsp_r2.c; path = src/dsp/upsampling_mips_dsp_r2.c; sourceTree = "<group>"; };
 		ADC6FF8A69F1E7702A44967FAADD705C /* Masonry-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Masonry-prefix.pch"; sourceTree = "<group>"; };
@@ -2867,6 +2865,7 @@
 		B0F015150AB2E5F244F1197EE3039CCA /* MQTransitioningAnimation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = MQTransitioningAnimation.m; path = "Meiqia-SDK-files/MQChatViewController/Animation/MQTransitioningAnimation.m"; sourceTree = "<group>"; };
 		B13BD0D850D37618ECFCA781D46D8587 /* NSIndexSet+RACSequenceAdditions.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSIndexSet+RACSequenceAdditions.h"; path = "ReactiveCocoa/NSIndexSet+RACSequenceAdditions.h"; sourceTree = "<group>"; };
 		B15CB4A415C6C7E0AF63F29DBEDD754B /* RACTuple.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RACTuple.m; path = ReactiveCocoa/RACTuple.m; sourceTree = "<group>"; };
+		B1D08D054E2872E998E780A7A172D4DE /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/ImageIO.framework; sourceTree = DEVELOPER_DIR; };
 		B25635E5BECC21629E42DA3488C83087 /* MQPreChatFormViewModel.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = MQPreChatFormViewModel.m; path = "Meiqia-SDK-files/MQChatViewController/Controllers/PreChatForm/MQPreChatFormViewModel.m"; sourceTree = "<group>"; };
 		B2EBFE0ABBDA3CAFE04F65934CA32AF9 /* NSObject+RACPropertySubscribing.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSObject+RACPropertySubscribing.h"; path = "ReactiveCocoa/NSObject+RACPropertySubscribing.h"; sourceTree = "<group>"; };
 		B2EE3364CF93E9B1B6A55C31DAB360F1 /* YYTextArchiver.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = YYTextArchiver.h; path = YYText/String/YYTextArchiver.h; sourceTree = "<group>"; };
@@ -2888,7 +2887,6 @@
 		B5EB4124AB497841EFCEE17868AAA122 /* muxedit.c */ = {isa = PBXFileReference; includeInIndex = 1; name = muxedit.c; path = src/mux/muxedit.c; sourceTree = "<group>"; };
 		B65F92A84781473A82A397ACD778DF46 /* aes_via_ace.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = aes_via_ace.h; path = SSZipArchive/aes/aes_via_ace.h; sourceTree = "<group>"; };
 		B68312C2621A67C5A4EE842485BCA052 /* thread.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = thread.h; path = src/utils/thread.h; sourceTree = "<group>"; };
-		B6B4F32B830B4D066D0B53CB3094BFE0 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.0.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		B6FBEC23BD994B27163C4DB432F6BA85 /* MEIQIA_HPTextViewInternal.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MEIQIA_HPTextViewInternal.h; path = "Meiqia-SDK-files/MQChatViewController/Vendors/HPTextView/MEIQIA_HPTextViewInternal.h"; sourceTree = "<group>"; };
 		B72AEF1EAF59FC9D0475C90E856F34C7 /* dec.c */ = {isa = PBXFileReference; includeInIndex = 1; name = dec.c; path = src/dsp/dec.c; sourceTree = "<group>"; };
 		B734F6A457C63FB8EAFB12CCC91E31E2 /* webp.c */ = {isa = PBXFileReference; includeInIndex = 1; name = webp.c; path = src/dec/webp.c; sourceTree = "<group>"; };
@@ -2940,7 +2938,6 @@
 		C16E2687747E05794E441223C33F3303 /* WXApi.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = WXApi.h; path = UShareSDK/SocialLibraries/WeChat/WechatSDK/WXApi.h; sourceTree = "<group>"; };
 		C17919A241D7304EF3D7BF013C11E927 /* MJPropertyKey.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = MJPropertyKey.m; path = MJExtension/MJPropertyKey.m; sourceTree = "<group>"; };
 		C17C770B04B6A429588F3B628D9CA3BB /* YYTextAsyncLayer.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = YYTextAsyncLayer.m; path = YYText/Utility/YYTextAsyncLayer.m; sourceTree = "<group>"; };
-		C18F5907F1665E9E3D4220FF23D59FAF /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		C1A7F59CB750AE432C99AEA941743EC2 /* NSNotificationCenter+RACSupport.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSNotificationCenter+RACSupport.h"; path = "ReactiveCocoa/NSNotificationCenter+RACSupport.h"; sourceTree = "<group>"; };
 		C1E50D0F0BBE6CF8A5A9D731EE92DD87 /* Pods-9188JiZhangBen.debug-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-9188JiZhangBen.debug-test.xcconfig"; sourceTree = "<group>"; };
 		C1F7ECC926E5D0C5A5CC8CF31663984C /* libSSZipArchive.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = libSSZipArchive.a; path = libSSZipArchive.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -3043,6 +3040,7 @@
 		D76CDBD0F23C1DB318C424BFEC74BD05 /* RACStream+Private.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "RACStream+Private.h"; path = "ReactiveCocoa/RACStream+Private.h"; sourceTree = "<group>"; };
 		D7D2210EC88DD33DC6CF0EB108AFC2FD /* MQRichTextViewCell.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MQRichTextViewCell.h; path = "Meiqia-SDK-files/MQChatViewController/TableCells/CellView/MQRichTextViewCell.h"; sourceTree = "<group>"; };
 		D7FCA0D36E05E46B6B2F3C5D1F8DBDFC /* RACTupleSequence.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RACTupleSequence.m; path = ReactiveCocoa/RACTupleSequence.m; sourceTree = "<group>"; };
+		D81863A8F7D715A8B8092CF911055EEC /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
 		D85041C8E152F52FBA866A9D8A9EE52D /* wav.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = wav.h; path = "Meiqia-SDK-files/MQChatViewController/Vendors/VoiceConvert/amrwapper/wav.h"; sourceTree = "<group>"; };
 		D8D4C4E037DBF9C6D4441AF69013CA13 /* RACDynamicSequence.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RACDynamicSequence.h; path = ReactiveCocoa/RACDynamicSequence.h; sourceTree = "<group>"; };
 		D8DBFC12F041C1F319D9C63EE328612F /* MJExtension-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "MJExtension-prefix.pch"; sourceTree = "<group>"; };
@@ -3096,7 +3094,6 @@
 		E3A0AA51706C19FFBE423BD086D2163C /* RACSubscriptionScheduler.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RACSubscriptionScheduler.h; path = ReactiveCocoa/RACSubscriptionScheduler.h; sourceTree = "<group>"; };
 		E42D8667C2118BF326BA5EE647EE338B /* MQBotMenuMessage.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = MQBotMenuMessage.m; path = "Meiqia-SDK-files/MQChatViewController/MessageModels/MQBotMenuMessage.m"; sourceTree = "<group>"; };
 		E4F427AB5128C52339F5DF6229CD7F83 /* quant_levels_dec.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = quant_levels_dec.h; path = src/utils/quant_levels_dec.h; sourceTree = "<group>"; };
-		E4FBE91ABFAD3F7B7DF30F7FD36D44AB /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.0.sdk/System/Library/Frameworks/ImageIO.framework; sourceTree = DEVELOPER_DIR; };
 		E50B366D317C9B5EC17A0A966DD286D2 /* utils.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = utils.h; path = src/utils/utils.h; sourceTree = "<group>"; };
 		E5A3805CC21A02117071A1B8A8B0A8DB /* MJPropertyType.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MJPropertyType.h; path = MJExtension/MJPropertyType.h; sourceTree = "<group>"; };
 		E5DB85181A90A221440DAA670A5242C3 /* Pods-SuiShouJi.release-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-SuiShouJi.release-production.xcconfig"; sourceTree = "<group>"; };
@@ -3111,6 +3108,7 @@
 		E7222F6336D5F4B996AD463F5E521373 /* NSInvocation+RACTypeParsing.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSInvocation+RACTypeParsing.m"; path = "ReactiveCocoa/NSInvocation+RACTypeParsing.m"; sourceTree = "<group>"; };
 		E733A86E248640198FC8AC0EC2E291A9 /* MEIQIA_MLAudioMeterObserver.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MEIQIA_MLAudioMeterObserver.h; path = "Meiqia-SDK-files/MQChatViewController/Vendors/MLAudioRecorder/MEIQIA_MLAudioMeterObserver.h"; sourceTree = "<group>"; };
 		E743812029D915DAB26D608720FB32F9 /* NSURLConnection+RACSupport.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSURLConnection+RACSupport.m"; path = "ReactiveCocoa/NSURLConnection+RACSupport.m"; sourceTree = "<group>"; };
+		E77935360607B2D0D51F2F653003162B /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/SystemConfiguration.framework; sourceTree = DEVELOPER_DIR; };
 		E7960DBC93F33A08E9DBD325D16EA711 /* Pods-YouYuJiZhangBao-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-YouYuJiZhangBao-resources.sh"; sourceTree = "<group>"; };
 		E7AEF31750E14E1805EAD0F252883214 /* libPods-YouYuJiZhangLiCai.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = "libPods-YouYuJiZhangLiCai.a"; path = "libPods-YouYuJiZhangLiCai.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E7D9B88A911296AE5A99D6DE7F4D2BDC /* Pods-BeiKeJiZhang.debug-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-BeiKeJiZhang.debug-test.xcconfig"; sourceTree = "<group>"; };
@@ -3175,7 +3173,9 @@
 		F38247D73388D108CEC96F4EE7AC3B83 /* lossless_enc_sse41.c */ = {isa = PBXFileReference; includeInIndex = 1; name = lossless_enc_sse41.c; path = src/dsp/lossless_enc_sse41.c; sourceTree = "<group>"; };
 		F38E71143A33443D8B6D3DFFC0D9E0AC /* RACTestScheduler.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RACTestScheduler.m; path = ReactiveCocoa/RACTestScheduler.m; sourceTree = "<group>"; };
 		F4A5B54E5694196C42237E26979D873E /* random.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = random.h; path = src/utils/random.h; sourceTree = "<group>"; };
+		F4BF54FE3416AF491C7A23692A31A6A3 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/Security.framework; sourceTree = DEVELOPER_DIR; };
 		F5A7CE428A97953EC87ACAECDA5F2C7B /* MJFoundation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MJFoundation.h; path = MJExtension/MJFoundation.h; sourceTree = "<group>"; };
+		F5CB9B7B007B3FFD28A084AEA674DF68 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/CoreTelephony.framework; sourceTree = DEVELOPER_DIR; };
 		F5D99A3636166421619E31BA1B2E7362 /* MQMessageFormViewStyle.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = MQMessageFormViewStyle.m; path = "Meiqia-SDK-files/MQMessageForm/Config/Styles/MQMessageFormViewStyle.m"; sourceTree = "<group>"; };
 		F63FBFBAF28EA1617E9F7139E236B5FA /* Pods-SuiShouJiEnterprise.release-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-SuiShouJiEnterprise.release-test.xcconfig"; sourceTree = "<group>"; };
 		F6E9DC3D9D5BBAAEDB5DE7DC5E8824D9 /* RACUnit.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RACUnit.m; path = ReactiveCocoa/RACUnit.m; sourceTree = "<group>"; };
@@ -3219,8 +3219,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D52F053943265F83382B3CBD42B58B6D /* Foundation.framework in Frameworks */,
-				C698070E87E96F861A0FD83F792D2A8D /* UIKit.framework in Frameworks */,
+				355E0EBDCF470CD50DEA5C091E605465 /* Foundation.framework in Frameworks */,
+				E1A498DCA1A06345EA4CF923BA45D94E /* UIKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3228,7 +3228,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0C5D794509C61722DEA751878A3EE883 /* Foundation.framework in Frameworks */,
+				634470016BB65DC7592BB54F3CA0D97A /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3236,11 +3236,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F2421625EFC505201BE1D80BD67B3F9B /* CoreGraphics.framework in Frameworks */,
-				7C00DC632CA96C2F11D16817DA3E3E0E /* Foundation.framework in Frameworks */,
-				B6A780FBAE10EDE7356572316ACE0E8D /* MobileCoreServices.framework in Frameworks */,
-				D9E9D3276F49946B1504435F3AE7E604 /* Security.framework in Frameworks */,
-				BCD20DD8AAF2B410A420A9EB7B5CF2E2 /* SystemConfiguration.framework in Frameworks */,
+				37945EAF8B3A282EDBF22996EC1957CB /* CoreGraphics.framework in Frameworks */,
+				F0C04222DB7582A399FD9AE40C582875 /* Foundation.framework in Frameworks */,
+				DAF1A523CE3E51282616DD185CE4876F /* MobileCoreServices.framework in Frameworks */,
+				A83D78910B1DB4D7596DEAA3D403E54B /* Security.framework in Frameworks */,
+				92FC198530122992525F0286AD605846 /* SystemConfiguration.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3248,8 +3248,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7BACF5A239B714D04F318BF89E39F5E0 /* Foundation.framework in Frameworks */,
-				147CE6BA71259C3F31931336D6C5E7EB /* UIKit.framework in Frameworks */,
+				9648A3808D3C4CDE98DF0A0C7EBAA680 /* Foundation.framework in Frameworks */,
+				D651DFBDEB250CA5EAE751C062DA03A8 /* UIKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3257,7 +3257,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AB0B11EFA631E4A6FD66361A9EABB556 /* Foundation.framework in Frameworks */,
+				FF5BA031E01EE7C1C57D8BCB01668F0D /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3265,11 +3265,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9BC7DF4DC1A2CA467D6B999E65D29C45 /* AVFoundation.framework in Frameworks */,
-				FFE87D4B57161F896D11B399B96F814C /* CoreTelephony.framework in Frameworks */,
-				1FAF98B3A33AD8BBB6C2FF638DC46F8D /* Foundation.framework in Frameworks */,
-				FFC57104C13D5E3BAC086E60935C6550 /* MobileCoreServices.framework in Frameworks */,
-				5D15A1DF878BDC9D91F545F1C07067E2 /* SystemConfiguration.framework in Frameworks */,
+				5ECE6BC3B48C4A24DF3B0144BDC8957C /* AVFoundation.framework in Frameworks */,
+				CC419428FFF954F0B58DD2115A784CBC /* CoreTelephony.framework in Frameworks */,
+				B2B644FFF44536141AB10747B05405BD /* Foundation.framework in Frameworks */,
+				73A9738DE07CA8CA65EEA573096E77BA /* MobileCoreServices.framework in Frameworks */,
+				D05C44928CCC6AB079A522D7D56391B3 /* SystemConfiguration.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3277,7 +3277,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A5EE3E21AAFD6886ED692FE08E5FA966 /* Foundation.framework in Frameworks */,
+				6B6162D5289A886F722AC6F638524ED7 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3285,7 +3285,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AACBC791BB1FB0FD6A325F6CD39308C3 /* Foundation.framework in Frameworks */,
+				AAA4AB20CC00AAB1BC56FF782BA668C3 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3293,8 +3293,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				875C5EEBE8A59F4C5843BF1A1D34DC63 /* Foundation.framework in Frameworks */,
-				FF81E297D97DDAE52402DA694ACF1C1E /* UIKit.framework in Frameworks */,
+				95BFF3885F79F8F50D9BAC619C1A0E45 /* Foundation.framework in Frameworks */,
+				03697FC58BA161C5782FFA4FF3F118D5 /* UIKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3302,7 +3302,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7C602602EF01522718B775C8C8A7C15A /* Foundation.framework in Frameworks */,
+				1AC31C49D7D1FBFF18701F2229E9CFE1 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3310,11 +3310,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9503243815B135877C5D0D654AF3DE67 /* CoreGraphics.framework in Frameworks */,
-				B9D49FD6FC4EAC4AA69368DDE7C277EA /* Foundation.framework in Frameworks */,
-				03C7099F9C43B859AD0861CB94A3E196 /* ImageIO.framework in Frameworks */,
-				DB00EDB494AE03B236B78DB3D236BCEC /* MobileCoreServices.framework in Frameworks */,
-				248E87EF33096A42D079C1F9AB2F56F1 /* QuartzCore.framework in Frameworks */,
+				7BE4B5F594AD4C5C6B5DF246B85101E3 /* CoreGraphics.framework in Frameworks */,
+				0C772E699394A8A4CE55B43E9D684165 /* Foundation.framework in Frameworks */,
+				D3BDFD6F369883121754D75D0E27E61B /* ImageIO.framework in Frameworks */,
+				3DAD713FCC51849AC79975806C18611F /* MobileCoreServices.framework in Frameworks */,
+				6B8C821EFDE6A70B9EBC1E7592B37E9A /* QuartzCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3322,7 +3322,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				06584D91AE9D99A46CA5704412054A82 /* Foundation.framework in Frameworks */,
+				4C1F6D52EE84B63618668DD71AFE8186 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3330,7 +3330,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E60CFC9C2610A21EEE6164C7727D24D4 /* Foundation.framework in Frameworks */,
+				0B354D90685808D1BEEF8661C4C52CB0 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3338,7 +3338,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				39382528219FC2C49FAE45FA04CE6FBB /* Foundation.framework in Frameworks */,
+				4F1F09599D7D5DE922ADF31E6A5336E2 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3346,7 +3346,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9942A61D4FF76978B3741F5452277699 /* Foundation.framework in Frameworks */,
+				131F0BDC0AC2CAE0962837E2AB97F5A8 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3354,7 +3354,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D6D594781B453C22A124DFE4ED911048 /* Foundation.framework in Frameworks */,
+				1960B25D4B1419FC9DF44B47E053DBC0 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3362,7 +3362,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				41CCEFBE0BB8EF2BF202660BD4CE95EF /* Foundation.framework in Frameworks */,
+				958AEB6FA80F1984A0DAC2DF6E565BDE /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3370,7 +3370,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9CFA329AAC2C4A4FE0D6631AC7353ECA /* Foundation.framework in Frameworks */,
+				A624E14E3F6A0141BBF12094BD57E787 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3378,7 +3378,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C4719F4FD2A15645716D7E2812E9CD7B /* Foundation.framework in Frameworks */,
+				C6A6BC17CFBFAD90F8F06F4E33FBDBDC /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3386,7 +3386,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				80243E57025C9A5078889FC1F4F55E70 /* Foundation.framework in Frameworks */,
+				B9CD172130CB516C61A4B320C55BF165 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3394,7 +3394,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DCCF52E2DB0AEA7434CE125705D096A5 /* Foundation.framework in Frameworks */,
+				1A79F90A35312EFB2FA2C7259EBE3529 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3402,7 +3402,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A5EE00249EB20F8FD5B2FDC1359E7204 /* Foundation.framework in Frameworks */,
+				3DD92C5A06B4E55B2CC38CC359E70570 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3410,8 +3410,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				67B469A648E034B3B74BBDE9CCA114B4 /* Foundation.framework in Frameworks */,
-				65FD86882BC4F3C15CA5B804539FBF5E /* ImageIO.framework in Frameworks */,
+				9517501D5901BE1E7931C3324176D1F0 /* Foundation.framework in Frameworks */,
+				5DC96ADE93852BC09E04D88274842D56 /* ImageIO.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3419,13 +3419,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				46D40A0A518B7E8BD5803FE9D3A8F7EC /* Accelerate.framework in Frameworks */,
-				CFA3951BBF878DC8B989742B081BB2EE /* CoreFoundation.framework in Frameworks */,
-				A943F959A7DAE0FE381A2166285D7A65 /* CoreText.framework in Frameworks */,
-				D0AB9F41C9599D9CF25D4F6B0310603A /* Foundation.framework in Frameworks */,
-				A0ABCDD5EA4383F555B7DB4B23E7B3C7 /* MobileCoreServices.framework in Frameworks */,
-				BD809D8E61E313F877786D6C70232790 /* QuartzCore.framework in Frameworks */,
-				197147D655ECC9968133CA43255501EF /* UIKit.framework in Frameworks */,
+				21DF84E12DE986DEC013DC422A20F872 /* Accelerate.framework in Frameworks */,
+				B867DBD8C9E8C9C78DDC39DC50C66F77 /* CoreFoundation.framework in Frameworks */,
+				CA83E5794E85AC84D31FB87AD94B0F5B /* CoreText.framework in Frameworks */,
+				E85C19C40E93E318F601D7909ACC1740 /* Foundation.framework in Frameworks */,
+				1153EFD43D61288C329FC946C179FDF4 /* MobileCoreServices.framework in Frameworks */,
+				83CD6EAB67AEB99B855EF643F9843710 /* QuartzCore.framework in Frameworks */,
+				E2ED1575BFA9A98FAA4882F177C51D74 /* UIKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3433,7 +3433,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				63E866168B957B572228422EBC2EC918 /* Foundation.framework in Frameworks */,
+				086D769D5502B09EA34270C7D18EA268 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3441,8 +3441,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6218D72B32595097343D4DECCC1DDF69 /* Foundation.framework in Frameworks */,
-				D8A8E77BDE84A659F904624CD05822F1 /* QuartzCore.framework in Frameworks */,
+				BE98AE096F22239440E69F4A09C17ED2 /* Foundation.framework in Frameworks */,
+				4F983D567C088C8F1788901B604EA8FB /* QuartzCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3725,7 +3725,7 @@
 		24A86FE55145BF585FDB9D18A0A013B5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				D46DF4C2CDB71EE9A4734CCB31665995 /* iOS */,
+				439065D6AF4DC071A3A265BFF513310E /* iOS */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -3954,6 +3954,26 @@
 				A9D4038E06A776C5D4D3801DD5437A52 /* AFSecurityPolicy.m */,
 			);
 			name = Security;
+			sourceTree = "<group>";
+		};
+		439065D6AF4DC071A3A265BFF513310E /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				37E5A58A8540F60147D08B633366795D /* Accelerate.framework */,
+				6ABACF0E2CCDF791499F221573206322 /* AVFoundation.framework */,
+				AD248527838729040781A1D7CCDD9136 /* CoreFoundation.framework */,
+				D81863A8F7D715A8B8092CF911055EEC /* CoreGraphics.framework */,
+				F5CB9B7B007B3FFD28A084AEA674DF68 /* CoreTelephony.framework */,
+				77DAFD170AFAB0625822C5104836D469 /* CoreText.framework */,
+				91A7282F4396B5E4395CC02457517099 /* Foundation.framework */,
+				B1D08D054E2872E998E780A7A172D4DE /* ImageIO.framework */,
+				76602606ADA2BD1C5DED19B1AD33AF4F /* MobileCoreServices.framework */,
+				59BBBC47CFCF80E2680E0FF968F6635D /* QuartzCore.framework */,
+				F4BF54FE3416AF491C7A23692A31A6A3 /* Security.framework */,
+				E77935360607B2D0D51F2F653003162B /* SystemConfiguration.framework */,
+				02FFAB48E5FD90D4DA3387E646D6B712 /* UIKit.framework */,
+			);
+			name = iOS;
 			sourceTree = "<group>";
 		};
 		43C0612DFBB1DC7A583599456AA7FC15 /* Frameworks */ = {
@@ -5056,26 +5076,6 @@
 				E5F077EB2559CEF19909AC13FE43A28C /* libWeChatSDK.a */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		D46DF4C2CDB71EE9A4734CCB31665995 /* iOS */ = {
-			isa = PBXGroup;
-			children = (
-				8EF299A6F04EB11F73ACB0DDBB671EC8 /* Accelerate.framework */,
-				14D7A4E4C54EE1ECF7DAA7BFA0FC288E /* AVFoundation.framework */,
-				65F236DA09F061AB69505FA338DAFEE1 /* CoreFoundation.framework */,
-				0D85031946F7440329B2B785C07E5D34 /* CoreGraphics.framework */,
-				095FD9143D94480E16640700C15C2890 /* CoreTelephony.framework */,
-				85008159A113B241CCEFA49DBD477E98 /* CoreText.framework */,
-				C18F5907F1665E9E3D4220FF23D59FAF /* Foundation.framework */,
-				E4FBE91ABFAD3F7B7DF30F7FD36D44AB /* ImageIO.framework */,
-				71423B0369413AD29455968187F2FC66 /* MobileCoreServices.framework */,
-				1D98DA3A84075820C418E03C54D2DF1A /* QuartzCore.framework */,
-				AD1F3128DB726FC62F9907D5A74C1AAB /* Security.framework */,
-				8A30C9FD7891230F0B384710335E2B0C /* SystemConfiguration.framework */,
-				B6B4F32B830B4D066D0B53CB3094BFE0 /* UIKit.framework */,
-			);
-			name = iOS;
 			sourceTree = "<group>";
 		};
 		DBD98273159BD1E9E91414E51225487D /* Pods-BeiKeJiZhang */ = {
@@ -6497,7 +6497,7 @@
 		D41D8CD98F00B204E9800998ECF8427E /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0730;
+				LastSwiftUpdateCheck = 0830;
 				LastUpgradeCheck = 0700;
 			};
 			buildConfigurationList = 2D8E8EC45A3A1A1D94AE762CB5028504 /* Build configuration list for PBXProject "Pods" */;
@@ -8321,45 +8321,6 @@
 			};
 			name = "Release-production";
 		};
-		0767E1B880E6FD72924B4613EACB092F /* Debug-test */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGNING_REQUIRED = NO;
-				COPY_PHASE_STRIP = YES;
-				ENABLE_NS_ASSERTIONS = NO;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"POD_CONFIGURATION_DEBUG_TEST=1",
-					"$(inherited)",
-				);
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				PROVISIONING_PROFILE_SPECIFIER = NO_SIGNING/;
-				STRIP_INSTALLED_PRODUCT = NO;
-				VALIDATE_PRODUCT = YES;
-			};
-			name = "Debug-test";
-		};
 		0A04F0B83229070896DD3A08AE8CA5DB /* Debug-test */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4C31E0038B053AE421C8A6727A1B1025 /* Masonry.xcconfig */;
@@ -8382,45 +8343,6 @@
 				SKIP_INSTALL = YES;
 			};
 			name = "Debug-test";
-		};
-		0A66DE9D57F10DFFA7594304EA17AF94 /* Release-production */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGNING_REQUIRED = NO;
-				COPY_PHASE_STRIP = YES;
-				ENABLE_NS_ASSERTIONS = NO;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"POD_CONFIGURATION_RELEASE_PRODUCTION=1",
-					"$(inherited)",
-				);
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				PROVISIONING_PROFILE_SPECIFIER = NO_SIGNING/;
-				STRIP_INSTALLED_PRODUCT = NO;
-				VALIDATE_PRODUCT = YES;
-			};
-			name = "Release-production";
 		};
 		0A6994661B764F37271ECFA584424227 /* Debug-production */ = {
 			isa = XCBuildConfiguration;
@@ -8928,6 +8850,49 @@
 			};
 			name = "Debug-production";
 		};
+		234CD07D9BA4D0CBC3F307B5E44F928D /* Debug-test */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGNING_REQUIRED = NO;
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"POD_CONFIGURATION_DEBUG_TEST=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				PROVISIONING_PROFILE_SPECIFIER = NO_SIGNING/;
+				STRIP_INSTALLED_PRODUCT = NO;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = "Debug-test";
+		};
 		23B5A21935225B16198D5D2B31239126 /* Debug-test */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 544DB75C344E599F3A57725A0D448039 /* YYText.xcconfig */;
@@ -9180,6 +9145,50 @@
 				SKIP_INSTALL = YES;
 			};
 			name = "Debug-test";
+		};
+		3890D7C92DE120C2BA762135796CFA80 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGNING_REQUIRED = NO;
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"POD_CONFIGURATION_RELEASE=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				PROVISIONING_PROFILE_SPECIFIER = NO_SIGNING/;
+				STRIP_INSTALLED_PRODUCT = NO;
+				SYMROOT = "${SRCROOT}/../build";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
 		};
 		3A58AA9A730323E97D6B3D5FC1B5608D /* Release-production */ = {
 			isa = XCBuildConfiguration;
@@ -9572,6 +9581,54 @@
 			};
 			name = Release;
 		};
+		587B8ECC28E3A9FF4796C121925DC113 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGNING_REQUIRED = NO;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"POD_CONFIGURATION_DEBUG=1",
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				ONLY_ACTIVE_ARCH = YES;
+				PROVISIONING_PROFILE_SPECIFIER = NO_SIGNING/;
+				STRIP_INSTALLED_PRODUCT = NO;
+				SYMROOT = "${SRCROOT}/../build";
+			};
+			name = Debug;
+		};
 		5D6093DC184384D0074C328CB501C952 /* Debug-test */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = FAC103FFB3C6B65D89046813031191EC /* FLAnimatedImage.xcconfig */;
@@ -9779,11 +9836,12 @@
 			};
 			name = "Debug-production";
 		};
-		6B9B8C38F3CB806B4E409C1A23FBE92C /* Debug-production */ = {
+		6E9AED339D850015B995B1726245DD6A /* Release-test */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -9791,10 +9849,13 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGNING_REQUIRED = NO;
@@ -9802,7 +9863,7 @@
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"POD_CONFIGURATION_DEBUG_PRODUCTION=1",
+					"POD_CONFIGURATION_RELEASE_TEST=1",
 					"$(inherited)",
 				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -9816,7 +9877,7 @@
 				STRIP_INSTALLED_PRODUCT = NO;
 				VALIDATE_PRODUCT = YES;
 			};
-			name = "Debug-production";
+			name = "Release-test";
 		};
 		6F474D23441FB61CD8ACFE10EE4909E7 /* Debug-production */ = {
 			isa = XCBuildConfiguration;
@@ -10001,46 +10062,6 @@
 				SKIP_INSTALL = YES;
 			};
 			name = "Debug-test";
-		};
-		79B0C2E66EFA9917ED6EDDB8FC6A7684 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGNING_REQUIRED = NO;
-				COPY_PHASE_STRIP = YES;
-				ENABLE_NS_ASSERTIONS = NO;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"POD_CONFIGURATION_RELEASE=1",
-					"$(inherited)",
-				);
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				PROVISIONING_PROFILE_SPECIFIER = NO_SIGNING/;
-				STRIP_INSTALLED_PRODUCT = NO;
-				SYMROOT = "${SRCROOT}/../build";
-				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
 		};
 		7A620F6A18F2AE7118089689D2B5642A /* Debug-test */ = {
 			isa = XCBuildConfiguration;
@@ -10248,6 +10269,49 @@
 				SKIP_INSTALL = YES;
 			};
 			name = Debug;
+		};
+		89B9E1B9DF13CB873513E2B787EB408E /* Debug-production */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGNING_REQUIRED = NO;
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"POD_CONFIGURATION_DEBUG_PRODUCTION=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				PROVISIONING_PROFILE_SPECIFIER = NO_SIGNING/;
+				STRIP_INSTALLED_PRODUCT = NO;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = "Debug-production";
 		};
 		8B16F8BC6E426F2647F3FEEFC22CD763 /* Debug-production */ = {
 			isa = XCBuildConfiguration;
@@ -11192,50 +11256,6 @@
 			};
 			name = Release;
 		};
-		CF7953F66E785E8876EB4D370D777D50 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGNING_REQUIRED = NO;
-				COPY_PHASE_STRIP = NO;
-				ENABLE_TESTABILITY = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"POD_CONFIGURATION_DEBUG=1",
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE_SPECIFIER = NO_SIGNING/;
-				STRIP_INSTALLED_PRODUCT = NO;
-				SYMROOT = "${SRCROOT}/../build";
-			};
-			name = Debug;
-		};
 		D04475620F7D596AFA5C1BF575ED4644 /* Release-test */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1357158D90B7110DA06ED9F152630765 /* Pods-YouYuJiZhangPro.release-test.xcconfig */;
@@ -11880,45 +11900,6 @@
 			};
 			name = "Release-test";
 		};
-		F94AFA8182A1B42D5483AB2BFCF891D1 /* Release-test */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGNING_REQUIRED = NO;
-				COPY_PHASE_STRIP = YES;
-				ENABLE_NS_ASSERTIONS = NO;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"POD_CONFIGURATION_RELEASE_TEST=1",
-					"$(inherited)",
-				);
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				PROVISIONING_PROFILE_SPECIFIER = NO_SIGNING/;
-				STRIP_INSTALLED_PRODUCT = NO;
-				VALIDATE_PRODUCT = YES;
-			};
-			name = "Release-test";
-		};
 		FA8A1B7414937429A73ECA7E00A7E5F1 /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = A5066FE059385A7518244A5EED53F75A /* DateTools.xcconfig */;
@@ -11941,6 +11922,49 @@
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
+		};
+		FAAB2BB77421F7FCEB1407014CA785A1 /* Release-production */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGNING_REQUIRED = NO;
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"POD_CONFIGURATION_RELEASE_PRODUCTION=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				PROVISIONING_PROFILE_SPECIFIER = NO_SIGNING/;
+				STRIP_INSTALLED_PRODUCT = NO;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = "Release-production";
 		};
 		FC646FD2FAD9215EC6AC62D09824E6CD /* Debug-test */ = {
 			isa = XCBuildConfiguration;
@@ -12157,12 +12181,12 @@
 		2D8E8EC45A3A1A1D94AE762CB5028504 /* Build configuration list for PBXProject "Pods" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				CF7953F66E785E8876EB4D370D777D50 /* Debug */,
-				6B9B8C38F3CB806B4E409C1A23FBE92C /* Debug-production */,
-				0767E1B880E6FD72924B4613EACB092F /* Debug-test */,
-				79B0C2E66EFA9917ED6EDDB8FC6A7684 /* Release */,
-				0A66DE9D57F10DFFA7594304EA17AF94 /* Release-production */,
-				F94AFA8182A1B42D5483AB2BFCF891D1 /* Release-test */,
+				587B8ECC28E3A9FF4796C121925DC113 /* Debug */,
+				89B9E1B9DF13CB873513E2B787EB408E /* Debug-production */,
+				234CD07D9BA4D0CBC3F307B5E44F928D /* Debug-test */,
+				3890D7C92DE120C2BA762135796CFA80 /* Release */,
+				FAAB2BB77421F7FCEB1407014CA785A1 /* Release-production */,
+				6E9AED339D850015B995B1726245DD6A /* Release-test */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
