@@ -26,7 +26,7 @@ static NSString *const kAnnouncementCellIdentifier = @"kAnnouncementCellIdentifi
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-        self.title = @"消息";
+        self.title = @"有鱼头条";
         self.hidesBottomBarWhenPushed = YES;
     }
     return self;
