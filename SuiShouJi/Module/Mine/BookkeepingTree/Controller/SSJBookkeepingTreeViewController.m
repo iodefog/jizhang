@@ -13,7 +13,6 @@
 #import "SSJBookkeepingTreeHelpViewController.h"
 #import "UIView+SSJViewAnimatioin.h"
 #import "SSJBookkeepingTreeView.h"
-#import "AFNetworkReachabilityManager.h"
 #import "SSJBookkeepingTreeHelper.h"
 #import "CDPointActivityIndicator.h"
 #import <CoreMotion/CoreMotion.h>

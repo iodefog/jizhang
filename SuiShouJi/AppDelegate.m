@@ -40,16 +40,12 @@
 //#import "SSJJsPatchItem.h"
 #import "SSJBooksTypeSelectViewController.h"
 //#import "JPEngine.h"
-#import "SSJNetworkReachabilityManager.h"
 #import "SSJUmengManager.h"
 #import "SSJLocalNotificationHelper.h"
 #import "SSJLocalNotificationStore.h"
 #import "SSJThemeUpdate.h"
 #import "SSJDomainManager.h"
 #import "SSJLoanHelper.h"
-#import "SSJIdfaUploadService.h"
-#import <AdSupport/ASIdentifierManager.h>
-#import "SimulateIDFA.h"
 #import "SSJAnaliyticsManager.h"
 #import "SSJCustomThemeManager.h"
 
@@ -80,7 +76,6 @@ NSDate *SCYEnterBackgroundTime() {
 
 @property(nonatomic, strong) SSJGradientMaskView *maskView;
 
-@property(nonatomic, strong) SSJIdfaUploadService *uploadService;
 @end
 
 @implementation AppDelegate
@@ -102,8 +97,6 @@ NSDate *SCYEnterBackgroundTime() {
     [SSJGeTuiManager SSJGeTuiManagerWithDelegate:self];
     
     [MQManager setScheduledAgentWithAgentId:@"" agentGroupId:SSJMQDefualtGroupId scheduleRule:MQScheduleRulesRedirectGroup];
-    
-    [self uploadIdfa];
     
     [self initializeDatabaseWithFinishHandler:^{
         //  启动时强制同步一次
@@ -141,7 +134,6 @@ NSDate *SCYEnterBackgroundTime() {
     [self setRootViewController];
     
     [SSJThemeSetting updateTabbarAppearance];
-    [SSJNetworkReachabilityManager startMonitoring];
     
     //如果第一次打开记录当前时间
     if (SSJLaunchTimesForCurrentVersion() == 1) {
@@ -196,6 +188,21 @@ NSDate *SCYEnterBackgroundTime() {
     //保存app启动时间，判断是否为新用户
     [SSJBookKeepingHomeEvaluatePopView evaluatePopViewConfiguration];
     
+#warning test
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//        AFNetworkReachabilityManager *reachability = [AFNetworkReachabilityManager managerForDomain:@"www.baidu.com"];
+//        [reachability startMonitoring];
+//        [reachability setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
+//            NSLog(@"%d", (int)status);
+//        }];
+//        
+//        [[NSNotificationCenter defaultCenter] addObserverForName:AFNetworkingReachabilityDidChangeNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+//            NSLog(@"%@", note);
+//        }];
+//    });
+    
+    
+    
     return YES;
 }
 
@@ -246,13 +253,6 @@ NSDate *SCYEnterBackgroundTime() {
         _maskView = [[SSJGradientMaskView alloc]initWithFrame:CGRectMake(0, 0, SSJSCREENWITH, SSJSCREENHEIGHT)];
     }
     return _maskView;
-}
-
-- (SSJIdfaUploadService *)uploadService{
-    if (!_uploadService) {
-        _uploadService = [[SSJIdfaUploadService alloc]initWithDelegate:NULL];
-    }
-    return _uploadService;
 }
 
 #pragma mark - Private
@@ -353,24 +353,6 @@ NSDate *SCYEnterBackgroundTime() {
     }];
     
     [UIApplication sharedApplication].keyWindow.rootViewController = drawerController;
-}
-
-// 上传idfa
-- (void)uploadIdfa{
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        NSString *idfa;
-        if ([ASIdentifierManager sharedManager].advertisingTrackingEnabled) {
-            idfa = [NSString stringWithFormat:@"%@",[ASIdentifierManager sharedManager].advertisingIdentifier];
-        } else{
-            idfa = [SimulateIDFA createSimulateIDFA];
-        }
-        NSString *lastUploadIdfa = [[NSUserDefaults standardUserDefaults] objectForKey:SSJLastSavedIdfaKey];
-        if (![lastUploadIdfa isEqualToString:idfa] || !lastUploadIdfa) {
-            [self.uploadService uploadIdfaWithIdfaStr:idfa Success:^(NSString *idfaStr) {
-                [[NSUserDefaults standardUserDefaults] setObject:idfaStr forKey:SSJLastSavedIdfaKey];
-            }];
-        }
-    });
 }
     
 #pragma mark - qq快登
