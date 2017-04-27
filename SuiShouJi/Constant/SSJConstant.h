@@ -211,12 +211,6 @@ extern NSString *const SSJSyncImageFailureNotification;
 //  登录或者注册成功通知
 extern NSString *const SSJLoginOrRegisterNotification;
 
-//  显示同步中通知
-extern NSString *const SSJShowSyncLoadingNotification;
-
-//  隐藏同步中通知
-extern NSString *const SSJHideSyncLoadingNotification;
-
 //  初始化数据库开始的通知
 extern NSString *const SSJInitDatabaseDidBeginNotification;
 

@@ -403,6 +403,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
                     && SSJSaveAccessToken(resultInfo[@"accessToken"] ?: @"")
                     && SSJSaveUserLogined(YES)) {
                     
+                    [self syncData];
                     [[NSNotificationCenter defaultCenter] postNotificationName:SSJLoginOrRegisterNotification object:self];
                     
                     [self.tfRegPasswordNum resignFirstResponder];
@@ -687,14 +688,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     [SSJLocalNotificationHelper cancelLocalNotificationWithKey:SSJReminderNotificationKey];
     
     //  登陆成功后强制同步一次
-    [[NSNotificationCenter defaultCenter] postNotificationName:SSJShowSyncLoadingNotification object:self];
-    [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:^(SSJDataSynchronizeType type){
-        [[NSNotificationCenter defaultCenter] postNotificationName:SSJHideSyncLoadingNotification object:self];
-        [CDAutoHideMessageHUD showMessage:@"同步成功"];
-    } failure:^(SSJDataSynchronizeType type, NSError *error) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:SSJHideSyncLoadingNotification object:self];
-        [CDAutoHideMessageHUD showMessage:@"同步失败"];
-    }];
+    [self syncData];
     [self.loadingView show];
     
     //  如果有finishHandle，就通过finishHandle来控制页面流程，否则走默认流程
@@ -725,6 +719,14 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     } else {
         [self ssj_backOffAction];
     }
+}
+
+- (void)syncData {
+    [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:^(SSJDataSynchronizeType type){
+        [CDAutoHideMessageHUD showMessage:@"同步成功"];
+    } failure:^(SSJDataSynchronizeType type, NSError *error) {
+        [CDAutoHideMessageHUD showMessage:@"同步失败"];
+    }];
 }
 /**
  *  画三角形

@@ -50,10 +50,6 @@ NSString *const SSJSyncImageFailureNotification = @"SSJSyncImageFailureNotificat
 
 NSString *const SSJLoginOrRegisterNotification = @"SSJLoginOrRegisterNotification";
 
-NSString *const SSJShowSyncLoadingNotification = @"SSJShowSyncLoadingNotification";
-
-NSString *const SSJHideSyncLoadingNotification = @"SSJHideSyncLoadingNotification";
-
 NSString *const SSJInitDatabaseDidBeginNotification = @"SSJInitDatabaseDidBeginNotification";
 
 NSString *const SSJInitDatabaseDidFinishNotification = @"SSJInitDatabaseDidFinishNotification";
