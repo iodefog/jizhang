@@ -692,7 +692,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         [weakSelf.navigationController popToRootViewControllerAnimated:YES];
         [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
     } failure:^(NSError *error) {
-        NSLog(@"%@",[error localizedDescription]);
+        SSJPRINT(@"%@",[error localizedDescription]);
     }];
 }
 

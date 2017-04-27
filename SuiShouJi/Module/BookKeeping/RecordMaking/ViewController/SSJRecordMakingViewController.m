@@ -844,7 +844,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         [self presentViewController:picker animated:YES completion:^{}];
     }else
     {
-        NSLog(@"模拟其中无法打开照相机,请在真机中使用");
+        SSJPRINT(@"模拟其中无法打开照相机,请在真机中使用");
     }
 }
 

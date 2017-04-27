@@ -36,16 +36,16 @@
     
     if (resp.errCode == 0)
     {
-        NSLog(@"用户同意");
+        SSJPRINT(@"用户同意");
         if([resp isKindOfClass:[SendAuthResp class]]) {
             SendAuthResp *aresp=(SendAuthResp *)resp;
             [self getAccessTokenWithCode:aresp.code];
         }
         
     }else if (resp.errCode == -4){
-        NSLog(@"用户拒绝");
+        SSJPRINT(@"用户拒绝");
     }else if (resp.errCode == -2){
-        NSLog(@"用户取消");;
+        SSJPRINT(@"用户取消");;
     }
 }
 
@@ -78,7 +78,7 @@
                 NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
                 if ([dict objectForKey:@"errcode"])
                 {
-                    NSLog(@"%@",[dict objectForKey:@"errmsg"]);
+                    SSJPRINT(@"%@",[dict objectForKey:@"errmsg"]);
                 }else{
                     SSJThirdPartLoginItem *item = [[SSJThirdPartLoginItem alloc]init];
                     item.portraitURL = [dict objectForKey:@"headimgurl"] ? : @"";
