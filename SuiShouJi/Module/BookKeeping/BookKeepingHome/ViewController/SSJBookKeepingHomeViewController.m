@@ -476,7 +476,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
             [SSJBudgetDatabaseHelper queryForCurrentBudgetListWithSuccess:^(NSArray<SSJBudgetModel *> * _Nonnull result) {
                 self.homeBar.budgetButton.model = [result firstObject];
             } failure:^(NSError * _Nullable error) {
-                NSLog(@"%@",error.localizedDescription);
+                SSJPRINT(@"%@",error.localizedDescription);
             }];
         };
         return bookKeepingCell;
@@ -541,7 +541,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
             self.homeBar.budgetButton.model = [result firstObject];
             self.homeBar.budgetButton.button.enabled = YES;
         } failure:^(NSError * _Nullable error) {
-            NSLog(@"%@",error.localizedDescription);
+            SSJPRINT(@"%@",error.localizedDescription);
         }];
     }
     if (scrollView.contentOffset.y < - scrollView.contentInset.top) {

@@ -49,8 +49,6 @@
 #import "SSJAnaliyticsManager.h"
 #import "SSJCustomThemeManager.h"
 
-#import "SSJNetworkReachabilityManager.h"
-
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_10_0
 #import <UserNotifications/UserNotifications.h>
 #endif
@@ -87,8 +85,6 @@ NSDate *SCYEnterBackgroundTime() {
     // 此方法最好第一个调用
     SSJMigrateLaunchTimesInfo();
     SSJAddLaunchTimesForCurrentVersion();
-    
-    [SSJNetworkReachabilityManager startMonitoring];
 
 #ifdef DEBUG
 //    NSString *sourcePath = [[NSBundle mainBundle] pathForResource:@"patch1" ofType:@"js"];

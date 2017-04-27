@@ -16,7 +16,7 @@
                                failure:(void (^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         if (!userId.length) {
-            NSLog(@"userid不能为空");
+            SSJPRINT(@"userid不能为空");
             return;
         }
         NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:0];

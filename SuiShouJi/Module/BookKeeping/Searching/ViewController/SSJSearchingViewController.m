@@ -84,7 +84,7 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
 //    _startTime = CFAbsoluteTimeGetCurrent();
 //    [SSJChargeSearchingStore searchForChargeListWithSearchContent:@"餐饮" ListOrder:SSJChargeListOrderMoneyAscending Success:^(NSArray<SSJSearchResultItem *> *result) {
 //        _endTime = CFAbsoluteTimeGetCurrent();
-//        NSLog(@"查询%ld条数据耗时%f",result.count,_endTime - _startTime);
+//        SSJPRINT(@"查询%ld条数据耗时%f",result.count,_endTime - _startTime);
 //    } failure:^(NSError *error) {
 //        
 //    }];

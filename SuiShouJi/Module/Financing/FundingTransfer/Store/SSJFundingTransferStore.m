@@ -491,7 +491,7 @@ NSString *SSJFundingTransferStoreListKey = @"SSJFundingTransferStoreListKey";
 
 + (SSJFundingTransferDetailItem *)transferItemWithArray:(NSArray <SSJBillingChargeCellItem *>*)array{
     if (array.count != 2) {
-        NSLog(@"匹配失败,请检查数据");
+        SSJPRINT(@"匹配失败,请检查数据");
         return nil;
     }
     
@@ -506,15 +506,15 @@ NSString *SSJFundingTransferStoreListKey = @"SSJFundingTransferStoreListKey";
         }
     }
     if (![transferInItem.billId isEqualToString:@"3"]) {
-        NSLog(@"匹配失败,请检查数据");
+        SSJPRINT(@"匹配失败,请检查数据");
         return nil;
     }
     if (![transferInItem.money isEqualToString:transferOutItem.money]) {
-        NSLog(@"匹配失败,请检查数据");
+        SSJPRINT(@"匹配失败,请检查数据");
         return nil;
     }
     if (![transferOutItem.billId isEqualToString:@"4"]) {
-        NSLog(@"匹配失败,请检查数据");
+        SSJPRINT(@"匹配失败,请检查数据");
         return nil;
     }
     

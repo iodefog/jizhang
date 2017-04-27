@@ -39,13 +39,6 @@ static BOOL hasUploadIdfa = NO;
     }];
 }
 
-//- (SSJIdfaUploadService *)uploadService{
-//    if (!_uploadService) {
-//        _uploadService = [[SSJIdfaUploadService alloc] initWithDelegate:NULL];
-//    }
-//    return _uploadService;
-//}
-
 // 上传idfa
 + (void)uploadIdfa {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
