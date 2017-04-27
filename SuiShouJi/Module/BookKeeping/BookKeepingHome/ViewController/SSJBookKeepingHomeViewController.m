@@ -176,6 +176,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
     
     if (_needEditeThemeModel) {
         [self.themeModifyView show];
+        _needEditeThemeModel = NO;
     }
     [self getCurrentDate];
     
@@ -635,6 +636,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
     imageClipVC.normalImage = image;
     imageClipVC.clipImageBlock = ^(UIImage *newImage) {
         [SSJCustomThemeManager changeThemeWithLocalImage:newImage type:0];
+        [self.themeModifyView show];
     };
     [self presentViewController:imageClipVC animated:YES completion:NULL];
 }
@@ -651,7 +653,6 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 -(SSJHomeTableView *)tableView{
     if (!_tableView) {
         _tableView = [[SSJHomeTableView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height) style:UITableViewStyleGrouped];
-        _tableView.backgroundColor = [UIColor clearColor];
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.showsVerticalScrollIndicator = NO;

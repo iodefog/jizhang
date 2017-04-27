@@ -10,11 +10,10 @@
 
 @interface SSJCustomThemeSelectCollectionViewCell : UICollectionViewCell
 
-@property(nonatomic, strong) NSString *imageName;
-
 @property(nonatomic) BOOL isSelected;
 
 @property(nonatomic) BOOL isFirstCell;
 
+@property(nonatomic, strong) UIImageView *imageView;
 
 @end
