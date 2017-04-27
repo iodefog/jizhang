@@ -254,4 +254,10 @@ void SSJDispatchMainAsync(void (^block)(void));
 
 NSString *SSJTitleForCycleType(SSJCyclePeriodType type);
 
+/**
+ 毫秒级的整数时间戳
+
+ @return int64_t
+ */
+int64_t SSJMilliTimestamp();
 

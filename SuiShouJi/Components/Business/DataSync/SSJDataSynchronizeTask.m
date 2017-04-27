@@ -298,7 +298,7 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
     //  创建请求
     NSError *tError = nil;
     NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] multipartFormRequestWithMethod:@"POST" URLString:SSJURLWithAPI(@"/sync/syncdata.go") parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-        NSString *fileName = [NSString stringWithFormat:@"ios_sync_data_%ld.zip", (long)[NSDate date].timeIntervalSince1970];
+        NSString *fileName = [NSString stringWithFormat:@"ios_sync_data_%lld.zip", SSJMilliTimestamp()];
         [formData appendPartWithFileData:data name:@"zip" fileName:fileName mimeType:@"application/zip"];
     } error:&tError];
     
@@ -312,7 +312,7 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
     //  封装参数，传入请求头
     NSString *userId = self.userId;
     NSString *imei = [UIDevice currentDevice].identifierForVendor.UUIDString;
-    NSString *timestamp = [NSString stringWithFormat:@"%f", [NSDate date].timeIntervalSince1970];
+    NSString *timestamp = [NSString stringWithFormat:@"%lld", SSJMilliTimestamp()];
     NSString *source = SSJDefaultSource();
     NSString *iversion = [NSString stringWithFormat:@"%lld", self.lastSuccessSyncVersion];
     NSString *signStr = [[NSString stringWithFormat:@"%@%@%@%@%@%@", userId, imei, timestamp, source, iversion, SSJSyncPrivateKey] ssj_md5HexDigest];
