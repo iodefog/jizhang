@@ -3327,6 +3327,7 @@
 		7DFB18DD1EB07B9800292DD3 /* SSJBooksTypeEditAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DFB18D21EB07B9800292DD3 /* SSJBooksTypeEditAlertView.m */; };
 		7DFB18DE1EB07B9800292DD3 /* SSJBooksTypeEditAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DFB18D21EB07B9800292DD3 /* SSJBooksTypeEditAlertView.m */; };
 		7DFB18DF1EB07B9800292DD3 /* SSJBooksTypeEditAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DFB18D21EB07B9800292DD3 /* SSJBooksTypeEditAlertView.m */; };
+		7DFB18FE1EB19AFE00292DD3 /* SSJThemBgImageClipViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 915294901EB0718100C63264 /* SSJThemBgImageClipViewController.m */; };
 		7DFCEDFB1D817532006F254A /* SSJRecordMakingMoveCategoryAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DFCEDFA1D817532006F254A /* SSJRecordMakingMoveCategoryAlertView.m */; };
 		7DFCEDFE1D817532006F254A /* SSJRecordMakingMoveCategoryAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DFCEDFA1D817532006F254A /* SSJRecordMakingMoveCategoryAlertView.m */; };
 		7DFD30441D75217300A0D7A0 /* SSJCategoryEditableCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DFD30431D75217300A0D7A0 /* SSJCategoryEditableCollectionView.m */; };
@@ -17026,6 +17027,7 @@
 				7DFB16791EB0341E00292DD3 /* SSJAddNewTypeColorSelectionView.m in Sources */,
 				7DFB167A1EB0341E00292DD3 /* SSJUserInfoNetworkService.m in Sources */,
 				7DFB167B1EB0341E00292DD3 /* SSJServerLaunchView.m in Sources */,
+				7DFB18FE1EB19AFE00292DD3 /* SSJThemBgImageClipViewController.m in Sources */,
 				7DFB167C1EB0341E00292DD3 /* TPKeyboardAvoidingTableView.m in Sources */,
 				7DFB167D1EB0341E00292DD3 /* NSString+MoneyDisplayFormat.m in Sources */,
 				7DFB167E1EB0341E00292DD3 /* SSJMagicExportCalendarSwitchStartAndEndDateControl.m in Sources */,
