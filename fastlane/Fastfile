@@ -1,4 +1,4 @@
-lane :deploy do |options|
+lane :adhoc do |options|
   # 如果你用 pod install
   cocoapods
   # 不带adhoc参数，sigh会自动生成App Store证书(公司或个人帐户)
@@ -8,5 +8,6 @@ lane :deploy do |options|
     configuration:options[:config],
     scheme:options[:scheme],
     output_directory: options[:outpath],
+    clean:true
     )
 end
