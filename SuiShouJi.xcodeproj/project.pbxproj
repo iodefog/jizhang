@@ -10485,6 +10485,7 @@
 		7D6AAB5E1C312C340007C0A3 /* Business */ = {
 			isa = PBXGroup;
 			children = (
+				7DFB18FF1EB1BD3700292DD3 /* SSJIdfa */,
 				9C155F5C1E69128800FDFD18 /* SSJShareManger */,
 				9CB743C51E65450B009746EE /* GeTuiManger */,
 				9CB743BB1E6544CB009746EE /* SSJAnaliytisManager */,
@@ -11103,6 +11104,13 @@
 				7DF8B9AC1CDC2B0000F461A6 /* SSJEditableCollectionView.m */,
 			);
 			path = SSJEditableCollectionView;
+			sourceTree = "<group>";
+		};
+		7DFB18FF1EB1BD3700292DD3 /* SSJIdfa */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = SSJIdfa;
 			sourceTree = "<group>";
 		};
 		9C155E631E68572700FDFD18 /* MJRefresh */ = {
