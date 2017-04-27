@@ -113,7 +113,6 @@
             backGroudImageName = [NSString stringWithFormat:@"%@-667@2x",@"background"];
         } else {
             backGroudImageName = [NSString stringWithFormat:@"%@@%dx", @"background", (int)[UIScreen mainScreen].scale];
-            
         }
     }
     
@@ -125,14 +124,21 @@
     //            imageName = [NSString stringWithFormat:@"%@-2048",name];
     //        }
     //    }
-    NSString *currentThemeID = [SSJThemeSetting currentThemeModel].ID;
-    NSString *imagePath = [[[[NSString ssj_themeDirectory] stringByAppendingPathComponent:currentThemeID] stringByAppendingPathComponent:@"Img"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png",backGroudImageName]];
-    if ([[NSFileManager defaultManager] fileExistsAtPath:imagePath]) {
-        [[NSFileManager defaultManager] removeItemAtPath:imagePath error:nil];
-        [[UIImage memoCache] removeObjectForKey:imagePath];
+    if (image) {
+        NSString *backImageFolder = [[NSString ssj_themeDirectory] stringByAppendingPathComponent:@"customBackGround"];
+        if (![[NSFileManager defaultManager] fileExistsAtPath:backImageFolder]) {
+            [[NSFileManager defaultManager] createDirectoryAtPath:backImageFolder withIntermediateDirectories:YES attributes:nil error:nil];
+        }
+//        NSString *currentThemeID = [SSJThemeSetting currentThemeModel].ID;
+        NSString *imagePath = [backImageFolder stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png",backGroudImageName]];
+        if ([[NSFileManager defaultManager] fileExistsAtPath:imagePath]) {
+            [[NSFileManager defaultManager] removeItemAtPath:imagePath error:nil];
+            [[UIImage memoCache] removeObjectForKey:imagePath];
+        }
+        
+        [UIImagePNGRepresentation(image) writeToFile:imagePath atomically:YES];
     }
-    [UIImagePNGRepresentation(image) writeToFile:imagePath atomically:YES];
-    
+
     [[NSNotificationCenter defaultCenter] postNotificationName:SSJThemeDidChangeNotification object:nil userInfo:nil];
 }
 

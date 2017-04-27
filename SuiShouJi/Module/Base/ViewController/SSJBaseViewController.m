@@ -59,9 +59,15 @@
                 _backgroundView = [[UIImageView alloc] initWithImage:[[UIImage ssj_compatibleThemeImageNamed:@"background"] blurredImageWithRadius:2.f iterations:20 tintColor:[UIColor clearColor]]];
             } else {
                 _backgroundView = [[UIImageView alloc] initWithImage:[UIImage ssj_compatibleThemeImageNamed:@"background"]];
+                if ([SSJ_CURRENT_THEME.customThemeBackImage isEqualToString:@"background"]) {
+                    _backgroundView.image = [UIImage ssj_themeLocalBackGroundImage];
+                }
             }
         } else {
             _backgroundView = [[UIImageView alloc] initWithImage:[UIImage ssj_compatibleThemeImageNamed:@"background"]];
+            if ([SSJ_CURRENT_THEME.customThemeBackImage isEqualToString:@"background"]) {
+                _backgroundView.image = [UIImage ssj_themeLocalBackGroundImage];
+            }
         }
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateAppearanceAfterThemeChanged) name:SSJThemeDidChangeNotification object:nil];
@@ -142,6 +148,9 @@
 
 - (void)updateAppearanceAfterThemeChanged {
     [_backgroundView ssj_setCompatibleThemeImageWithName:@"background"];
+    if ([SSJ_CURRENT_THEME.customThemeBackImage isEqualToString:@"background"]) {
+        _backgroundView.image = [UIImage ssj_themeLocalBackGroundImage];
+    }
     [self updateNavigationAppearance];
     [[UIApplication sharedApplication] setStatusBarStyle:SSJ_CURRENT_THEME.statusBarStyle];
 }

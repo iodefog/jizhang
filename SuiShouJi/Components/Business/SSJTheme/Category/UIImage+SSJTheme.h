@@ -16,6 +16,8 @@
 
 + (instancetype)ssj_compatibleThemeImageNamed:(NSString *)name;
 
++ (instancetype)ssj_themeLocalBackGroundImage;
+
 + (NSCache *)memoCache;
 
 @end

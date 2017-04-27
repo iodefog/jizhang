@@ -25,8 +25,6 @@ static NSString *const kCellId = @"SSJCustomThemeSelectCollectionViewCell";
 
 @property(nonatomic, strong) UIButton *whiteButton;
 
-@property(nonatomic, strong) UIImage *customImage;
-
 @end
 
 @implementation SSJHomeThemeModifyView
@@ -129,7 +127,7 @@ static NSString *const kCellId = @"SSJCustomThemeSelectCollectionViewCell";
             self.whiteButton.layer.borderColor = [UIColor ssj_colorWithHex:@"#EB4762"].CGColor;
             self.blackButton.layer.borderColor = [UIColor clearColor].CGColor;
             [self.collectionView reloadData];
-            [SSJCustomThemeManager changeThemeWithLocalImage:self.customImage type:self.selectType];
+            [SSJCustomThemeManager changeThemeWithLocalImage:nil type:self.selectType];
         } else {
             if ([self.seletctTheme hasSuffix:@"dark"]) {
                 self.selectType = YES;
@@ -167,7 +165,7 @@ static NSString *const kCellId = @"SSJCustomThemeSelectCollectionViewCell";
         }
         NSString *imageName = [self.images objectAtIndex:indexPath.item];
         if ([imageName isEqualToString:@"background"]) {
-            cell.imageView.image = self.customImage;
+            cell.imageView.image = [UIImage ssj_themeLocalBackGroundImage];
         } else {
             cell.imageView.image = [UIImage imageNamed:[self.images objectAtIndex:indexPath.item]];
         }
@@ -234,7 +232,7 @@ static NSString *const kCellId = @"SSJCustomThemeSelectCollectionViewCell";
     self.selectType = YES;
     [self updateFontType];
     if ([self.seletctTheme isEqualToString:@"background"]) {
-        [SSJCustomThemeManager changeThemeWithLocalImage:self.customImage type:self.selectType];
+        [SSJCustomThemeManager changeThemeWithLocalImage:nil type:self.selectType];
     } else {
         [SSJCustomThemeManager changeThemeWithDefaultImageName:self.seletctTheme type:self.selectType];
     }
@@ -244,7 +242,7 @@ static NSString *const kCellId = @"SSJCustomThemeSelectCollectionViewCell";
     self.selectType = NO;
     [self updateFontType];
     if ([self.seletctTheme isEqualToString:@"background"]) {
-        [SSJCustomThemeManager changeThemeWithLocalImage:self.customImage type:self.selectType];
+        [SSJCustomThemeManager changeThemeWithLocalImage:nil type:self.selectType];
     } else {
         [SSJCustomThemeManager changeThemeWithDefaultImageName:self.seletctTheme type:self.selectType];
     }
@@ -252,20 +250,14 @@ static NSString *const kCellId = @"SSJCustomThemeSelectCollectionViewCell";
 
 - (void)getCurrentTheme {
     SSJThemeModel *currentTheme = [SSJThemeSetting currentThemeModel];
+    if ([UIImage ssj_themeLocalBackGroundImage]) {
+        self.images = @[@"",@"background",@"theme_custom1_light",@"theme_custom2_light",@"theme_custom3_dark",@"theme_custom4_dark"];
+    }
     if (currentTheme.customThemeBackImage.length) {
-        if ([currentTheme.customThemeBackImage isEqualToString:@"background"]) {
-            self.images = @[@"",@"background",@"theme_custom1_light",@"theme_custom2_light",@"theme_custom3_dark",@"theme_custom4_dark"];
-            self.seletctTheme = currentTheme.customThemeBackImage;
-            self.selectType = currentTheme.darkOrLight;
-            self.customImage = [UIImage ssj_compatibleThemeImageNamed:@"background"];
-            [self updateFontType];
-            [self.collectionView reloadData];
-        } else {
-            self.seletctTheme = currentTheme.customThemeBackImage;
-            self.selectType = currentTheme.darkOrLight;
-            [self updateFontType];
-            [self.collectionView reloadData];
-        }
+        self.seletctTheme = currentTheme.customThemeBackImage;
+        self.selectType = currentTheme.darkOrLight;
+        [self updateFontType];
+        [self.collectionView reloadData];
     }
 }
 

@@ -292,7 +292,6 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
     } else {
         return 80;
     }
-
 }
 
 
