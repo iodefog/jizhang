@@ -363,7 +363,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
         [weakSelf getDataFromDataBase];
         [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
     } failure:^(NSError *error) {
-        NSLog(@"%@",[error localizedDescription]);
+        SSJPRINT(@"%@",[error localizedDescription]);
     }];
 }
 

@@ -34,7 +34,7 @@
 
 - (void)requestDidFinish:(NSDictionary *)rootElement{
     [super requestDidFinish:rootElement];
-    NSLog(@"%@",self.desc);
+    SSJPRINT(@"%@",self.desc);
     if ([self.returnCode isEqualToString:@"1"]
         || [self.returnCode isEqualToString:@"-5555"]) {
         if (self.successBlock) {

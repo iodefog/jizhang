@@ -508,3 +508,7 @@ NSString *SSJTitleForCycleType(SSJCyclePeriodType type) {
     }
 }
 
+int64_t SSJMilliTimestamp() {
+    return (int64_t)([NSDate date].timeIntervalSince1970 * 1000);
+}
+

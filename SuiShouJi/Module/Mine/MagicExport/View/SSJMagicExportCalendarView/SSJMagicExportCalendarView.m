@@ -243,7 +243,7 @@ static NSString *const kCalendarHeaderId = @"kCalendarHeaderId";
     if (_endDate) {
         SSJDatePeriod *endPeriod = [SSJDatePeriod datePeriodWithPeriodType:SSJDatePeriodTypeMonth date:_endDate];
         if ([startPeriod compareWithPeriod:endPeriod] == SSJDatePeriodComparisonResultDescending) {
-            NSLog(@">>> 错误，启始月大于终止月");
+            SSJPRINT(@">>> 错误，启始月大于终止月");
             return NO;
         }
     }
@@ -256,7 +256,7 @@ static NSString *const kCalendarHeaderId = @"kCalendarHeaderId";
     if (_startDate) {
         SSJDatePeriod *startPeriod = [SSJDatePeriod datePeriodWithPeriodType:SSJDatePeriodTypeMonth date:_startDate];
         if ([startPeriod compareWithPeriod:endPeriod] == SSJDatePeriodComparisonResultDescending) {
-            NSLog(@">>> 错误，启始月大于终止月");
+            SSJPRINT(@">>> 错误，启始月大于终止月");
             return NO;
         }
     }

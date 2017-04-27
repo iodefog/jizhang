@@ -19,6 +19,8 @@
 
 @property(nonatomic, strong) UILabel *contentLab;
 
+@property (nonatomic, strong) UIImageView *readImage;
+
 @property (nonatomic, strong) UILabel *readNumLab;
 
 @end
@@ -33,9 +35,9 @@
         [self addSubview:self.titleLab];
         [self addSubview:self.dateLab];
         [self addSubview:self.contentLab];
+        [self addSubview:self.readImage];
         [self addSubview:self.readNumLab];
         [self setUpConstraints];
-
     }
     return self;
 }
@@ -90,6 +92,15 @@
     return _readNumLab;
 }
 
+- (UIImageView *)readImage
+{
+    if (!_readImage) {
+        _readImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"more_message_readyanjing"]];
+        [_readImage sizeToFit];
+    }
+    return _readImage;
+}
+
 - (void)setUpConstraints {
     
     [self.leftImageView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -117,8 +128,13 @@
         make.bottom.mas_equalTo(-18);
     }];
     
-    [self.readNumLab mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.readImage mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(self.contentLab);
+        make.bottom.mas_equalTo(self.dateLab).offset(-2);
+    }];
+    
+    [self.readNumLab mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(self.readImage.mas_right).offset(5);
         make.bottom.mas_equalTo(self.dateLab);
     }];
 }
@@ -137,6 +153,7 @@
     } else {
         _titleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     }
+    _readNumLab.text = item.announcementNumber;
 }
 
 - (void)updateCellAppearanceAfterThemeChanged {

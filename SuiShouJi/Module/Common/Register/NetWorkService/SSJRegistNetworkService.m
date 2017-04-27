@@ -34,14 +34,13 @@
     //  加签名参数，防止短信炸弹
     NSMutableDictionary *paramsDic = [NSMutableDictionary dictionaryWithCapacity:4];
     if (mobileNo) {
-        NSTimeInterval timestamp = [[NSDate date] timeIntervalSince1970];
+        NSNumber *timestamp = @(SSJMilliTimestamp());
         NSString *key = @"iwannapie?!";
-        NSString *signMsg = [NSString stringWithFormat:@"mobileNo=%@&timestamp=%f&key=%@",mobileNo,timestamp,key];
+        NSString *signMsg = [NSString stringWithFormat:@"mobileNo=%@&timestamp=%@&key=%@",mobileNo,timestamp,key];
         signMsg = [[signMsg ssj_md5HexDigest] uppercaseString];
         
-        
         [paramsDic setObject:mobileNo forKey:@"mobileNo"];
-        [paramsDic setObject:@(timestamp) forKey:@"timestamp"];
+        [paramsDic setObject:timestamp forKey:@"timestamp"];
         [paramsDic setObject:key forKey:@"key"];
         [paramsDic setObject:signMsg forKey:@"signMsg"];
     }

@@ -272,7 +272,7 @@ static NSString *const kTitle9 = @"上传日志";
     
     NSError *tError = nil;
     NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] multipartFormRequestWithMethod:@"POST" URLString:SSJURLWithAPI(@"/admin/applog.go") parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-        NSString *fileName = [NSString stringWithFormat:@"ios_error_db_%ld.zip", (long)[NSDate date].timeIntervalSince1970];
+        NSString *fileName = [NSString stringWithFormat:@"ios_error_db_%lld.zip", SSJMilliTimestamp()];
         [formData appendPartWithFileData:data name:@"zip" fileName:fileName mimeType:@"application/zip"];
     } error:&tError];
     

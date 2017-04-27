@@ -194,7 +194,7 @@ static BOOL kNeedBannerDisplay = YES;
     [SSJBooksTypeStore saveBooksOrderWithItems:self.items sucess:^{
         [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
     } failure:^(NSError *error) {
-        NSLog(@"%@",[error localizedDescription]);
+        SSJPRINT(@"%@",[error localizedDescription]);
     }];
 }
 

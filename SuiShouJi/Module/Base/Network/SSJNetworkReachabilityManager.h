@@ -15,6 +15,10 @@ typedef NS_ENUM(NSInteger, SSJNetworkReachabilityStatus) {
     SSJNetworkReachabilityStatusReachableViaWiFi = 2,
 };
 
+typedef void(^SSJNetworkReachabilityManagerBlock)(SSJNetworkReachabilityStatus status);
+
+@class SSJNetworkReachabilityObserver;
+
 @interface SSJNetworkReachabilityManager : NSObject
 
 + (void)startMonitoring;
@@ -24,5 +28,19 @@ typedef NS_ENUM(NSInteger, SSJNetworkReachabilityStatus) {
 + (SSJNetworkReachabilityStatus)networkReachabilityStatus;
 
 + (BOOL)isReachable;
+
++ (SSJNetworkReachabilityObserver *)observeReachabilityStatusChange:(SSJNetworkReachabilityManagerBlock)block;
+
++ (void)addObserverForReachabilityStatusChange:(SSJNetworkReachabilityObserver *)observer;
+
++ (void)removeObserverForReachabilityStatusChange:(SSJNetworkReachabilityObserver *)observer;
+
+@end
+
+@interface SSJNetworkReachabilityObserver : NSObject
+
+@property (nonatomic, copy, readonly) SSJNetworkReachabilityManagerBlock block;
+
+- (instancetype)initWithBlock:(SSJNetworkReachabilityManagerBlock)block;
 
 @end

@@ -235,7 +235,7 @@
 
 -(void)comfirmButtonClicked:(id)sender{
     [self dismiss];
-//    NSLog(@"-------%@",[self.textInput.text ssj_emojiFilter]);
+//    SSJPRINT(@"-------%@",[self.textInput.text ssj_emojiFilter]);
     if (self.comfirmButtonClickedBlock) {
         self.comfirmButtonClickedBlock([self.textInput.text ssj_emojiFilter]);
     }
