@@ -49,6 +49,8 @@
 #import "SSJAnaliyticsManager.h"
 #import "SSJCustomThemeManager.h"
 
+#import "SSJNetworkReachabilityManager.h"
+
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_10_0
 #import <UserNotifications/UserNotifications.h>
 #endif
@@ -85,6 +87,8 @@ NSDate *SCYEnterBackgroundTime() {
     // 此方法最好第一个调用
     SSJMigrateLaunchTimesInfo();
     SSJAddLaunchTimesForCurrentVersion();
+    
+    [SSJNetworkReachabilityManager startMonitoring];
 
 #ifdef DEBUG
 //    NSString *sourcePath = [[NSBundle mainBundle] pathForResource:@"patch1" ofType:@"js"];
@@ -187,21 +191,6 @@ NSDate *SCYEnterBackgroundTime() {
     
     //保存app启动时间，判断是否为新用户
     [SSJBookKeepingHomeEvaluatePopView evaluatePopViewConfiguration];
-    
-#warning test
-//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//        AFNetworkReachabilityManager *reachability = [AFNetworkReachabilityManager managerForDomain:@"www.baidu.com"];
-//        [reachability startMonitoring];
-//        [reachability setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
-//            NSLog(@"%d", (int)status);
-//        }];
-//        
-//        [[NSNotificationCenter defaultCenter] addObserverForName:AFNetworkingReachabilityDidChangeNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
-//            NSLog(@"%@", note);
-//        }];
-//    });
-    
-    
     
     return YES;
 }

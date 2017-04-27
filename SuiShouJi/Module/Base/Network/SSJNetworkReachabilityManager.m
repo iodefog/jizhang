@@ -37,13 +37,13 @@
 @implementation SSJNetworkReachabilityManager
 
 + (void)load {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startMonitoring) name:UIApplicationDidFinishLaunchingNotification object:NULL];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(test) name:UIApplicationDidEnterBackgroundNotification object:NULL];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startMonitoring) name:UIApplicationDidFinishLaunchingNotification object:NULL];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(test) name:UIApplicationDidEnterBackgroundNotification object:NULL];
 }
 
-+ (void)test {
-    NSLog(@"%d", (int)[self sharedManager].networkReachabilityStatus);
-}
+//+ (void)test {
+//    NSLog(@"%d", (int)[self sharedManager].networkReachabilityStatus);
+//}
 
 + (SSJNetworkReachabilityManager *)sharedManager {
     static dispatch_once_t onceToken;
