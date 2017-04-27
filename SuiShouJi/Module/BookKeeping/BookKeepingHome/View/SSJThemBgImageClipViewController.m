@@ -135,7 +135,7 @@
         _scrollview = [[UIScrollView alloc] init];
         _scrollview.delegate = self;
         _scrollview.minimumZoomScale = 0.2;
-        _scrollview.maximumZoomScale = 2;
+        _scrollview.maximumZoomScale = MAXFLOAT;
     }
     return _scrollview;
 }
