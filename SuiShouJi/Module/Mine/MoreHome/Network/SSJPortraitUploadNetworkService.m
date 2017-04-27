@@ -78,8 +78,8 @@
             }
         }else{
             [CDAutoHideMessageHUD showMessage:@"头像上传失败"];
-            NSLog(@"%@",strDesc);
-            NSLog(@"%ld",(long)strReturnCode);
+            SSJPRINT(@"%@",strDesc);
+            SSJPRINT(@"%ld",(long)strReturnCode);
         }
     }];
     [task resume];

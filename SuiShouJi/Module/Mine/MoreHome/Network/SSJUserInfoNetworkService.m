@@ -20,7 +20,7 @@
 
 - (void)requestDidFinish:(NSDictionary *)rootElement{
     [super requestDidFinish:rootElement];
-    NSLog(@"%@",self.desc);
+    SSJPRINT(@"%@",self.desc);
     if ([self.returnCode isEqualToString:@"1"]) {
         NSDictionary *result = [rootElement objectForKey:@"results"];
         self.item = [SSJUserInfoItem mj_objectWithKeyValues:result];

@@ -334,7 +334,7 @@
         [weakSelf.navigationController popToRootViewControllerAnimated:YES];
         [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
     } failure:^(NSError *error) {
-        NSLog(@"%@",[error localizedDescription]);
+        SSJPRINT(@"%@",[error localizedDescription]);
     }];
 }
 
@@ -351,7 +351,7 @@
     }
     FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
     if (![db open]) {
-        NSLog(@"Could not open db");
+        SSJPRINT(@"Could not open db");
     }
     if ([_nameTextField.text isEqualToString:@""]) {
         [CDAutoHideMessageHUD showMessage:@"请输入资金账户名称"];

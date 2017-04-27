@@ -399,10 +399,8 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
         [_repaymentButton setTitle:@"还款" forState:UIControlStateNormal];
         if (SSJ_CURRENT_THEME.throughScreenButtonBackGroudColor.length) {
             [_repaymentButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.throughScreenButtonBackGroudColor alpha:SSJ_CURRENT_THEME.throughScreenButtonAlpha] forState:UIControlStateNormal];
-            
         } else {
             [_repaymentButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor alpha:0.8] forState:UIControlStateNormal];
-            
         }
         _repaymentButton.titleLabel.font = [UIFont systemFontOfSize:19];
         [_repaymentButton ssj_setBorderWidth:1];

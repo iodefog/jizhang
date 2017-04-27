@@ -253,7 +253,7 @@
         [weakSelf.navigationController popToRootViewControllerAnimated:YES];
         [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
     } failure:^(NSError *error) {
-        NSLog(@"%@",[error localizedDescription]);
+        SSJPRINT(@"%@",[error localizedDescription]);
     }];
 }
 
@@ -313,7 +313,7 @@
     NSString *fundingName;
     FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
     if (![db open]) {
-        NSLog(@"Could not open db");
+        SSJPRINT(@"Could not open db");
         return nil;
     }
     FMResultSet *rs = [db executeQuery:@"SELECT CACCTNAME FROM BK_FUND_INFO WHERE CFUNDID = ?",fundingID];

@@ -48,7 +48,7 @@
     }
     
     if ([fireDate isEarlierThan:[NSDate date]] && item.remindCycle == 7) {
-        NSLog(@"%@早于当前日期,不能添加提醒",[fireDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss"]);
+        SSJPRINT(@"%@早于当前日期,不能添加提醒",[fireDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss"]);
         return;
     }
     

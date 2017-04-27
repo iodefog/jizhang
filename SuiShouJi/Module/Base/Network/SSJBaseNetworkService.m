@@ -197,7 +197,7 @@
         [SSJGlobalServiceManager removeService:self];
         
         NSHTTPURLResponse *httpUrlResponse = (NSHTTPURLResponse *)task.response;
-        NSLog(@"%@",httpUrlResponse.allHeaderFields);
+        SSJPRINT(@"%@",httpUrlResponse.allHeaderFields);
         
         SSJPRINT(@">>> response error:%@ URL:%@",[error localizedDescription], task.currentRequest.URL);
         if (self.delegate && [self.delegate respondsToSelector:@selector(server:didFailLoadWithError:)]) {

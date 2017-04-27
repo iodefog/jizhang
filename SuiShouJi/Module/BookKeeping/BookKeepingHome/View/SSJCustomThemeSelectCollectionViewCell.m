@@ -10,8 +10,6 @@
 
 @interface SSJCustomThemeSelectCollectionViewCell()
 
-@property(nonatomic, strong) UIImageView *imageView;
-
 @property(nonatomic, strong) UIImageView *selectImage;
 
 @property(nonatomic, strong) UIImageView *addImage;
@@ -81,7 +79,11 @@
 
 
 - (void)setImageName:(NSString *)imageName {
-    self.imageView.image = [UIImage imageNamed:imageName];
+    if ([imageName isEqualToString:@"background"]) {
+        self.imageView.image = [UIImage ssj_compatibleThemeImageNamed:imageName];
+    } else {
+        self.imageView.image = [UIImage imageNamed:imageName];
+    }
 }
 
 - (void)setIsSelected:(BOOL)isSelected {

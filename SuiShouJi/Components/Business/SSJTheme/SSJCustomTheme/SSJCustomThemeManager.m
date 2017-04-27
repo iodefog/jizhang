@@ -45,6 +45,11 @@
     
     [SSJThemeSetting updateTabbarAppearance];
     
+    SSJThemeModel *model = [SSJThemeSetting currentThemeModel];
+    model.customThemeBackImage = name;
+    model.darkOrLight = type;
+    [SSJThemeSetting addThemeModel:model];
+    
     NSString *backGroudImageFullName = themeId;
     NSString *backGroudImageName;
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
@@ -93,6 +98,11 @@
     }
     
     [SSJThemeSetting updateTabbarAppearance];
+    
+    SSJThemeModel *model = [SSJThemeSetting currentThemeModel];
+    model.customThemeBackImage = @"background";
+    model.darkOrLight = type;
+    [SSJThemeSetting addThemeModel:model];
     
     NSString *backGroudImageName;
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
