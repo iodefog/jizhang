@@ -16,17 +16,18 @@ typedef NS_ENUM(NSUInteger, SSJAnnouceMentType) {
     SSJAnnouceMentTypeHot = 2,           //  热门公告
 };
 
-@property(nonatomic, strong) NSString *announcementImg;
+@property(nonatomic, copy) NSString *announcementImg;
 
-@property(nonatomic, strong) NSString *announcementId;
+@property(nonatomic, copy) NSString *announcementId;
 
-@property(nonatomic, strong) NSString *announcementTitle;
+@property(nonatomic, copy) NSString *announcementTitle;
 
-@property(nonatomic, strong) NSString *announcementContent;
+@property(nonatomic, copy) NSString *announcementContent;
 
-@property(nonatomic, strong) NSString *announcementDate;
+@property(nonatomic, copy) NSString *announcementDate;
 
-@property(nonatomic, strong) NSString *announcementUrl;
+@property(nonatomic, copy) NSString *announcementUrl;
+@property(nonatomic, copy) NSString *announcementNumber; //公告点击次数
 
 @property(nonatomic) BOOL needToShowOnHome;
 
