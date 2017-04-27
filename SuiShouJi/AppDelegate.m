@@ -124,7 +124,6 @@ NSDate *SCYEnterBackgroundTime() {
                 [self pushToControllerWithNotification:notifcation];
             });
         }
-        
     }];
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];

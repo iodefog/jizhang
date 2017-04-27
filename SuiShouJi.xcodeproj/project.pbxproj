@@ -3349,6 +3349,8 @@
 		7DFB191C1EB1C1AB00292DD3 /* SSJIdfaUploadService.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DFB19021EB1C02B00292DD3 /* SSJIdfaUploadService.m */; };
 		7DFB191D1EB1C1AC00292DD3 /* SSJIdfaUploadService.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DFB19021EB1C02B00292DD3 /* SSJIdfaUploadService.m */; };
 		7DFB191E1EB1C1AC00292DD3 /* SSJIdfaUploadService.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DFB19021EB1C02B00292DD3 /* SSJIdfaUploadService.m */; };
+		7DFB191F1EB1E3E100292DD3 /* 1001.zip in Resources */ = {isa = PBXBuildFile; fileRef = 9C30AA881EAF6E9F008DD51D /* 1001.zip */; };
+		7DFB19201EB1E3E400292DD3 /* 1000.zip in Resources */ = {isa = PBXBuildFile; fileRef = 9C30AA891EAF6E9F008DD51D /* 1000.zip */; };
 		7DFCEDFB1D817532006F254A /* SSJRecordMakingMoveCategoryAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DFCEDFA1D817532006F254A /* SSJRecordMakingMoveCategoryAlertView.m */; };
 		7DFCEDFE1D817532006F254A /* SSJRecordMakingMoveCategoryAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DFCEDFA1D817532006F254A /* SSJRecordMakingMoveCategoryAlertView.m */; };
 		7DFD30441D75217300A0D7A0 /* SSJCategoryEditableCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DFD30431D75217300A0D7A0 /* SSJCategoryEditableCollectionView.m */; };
@@ -13694,7 +13696,9 @@
 				7DFB18B01EB0341E00292DD3 /* SSJBookKeepingHomePopView.xib in Resources */,
 				7DFB18B11EB0341E00292DD3 /* youyuwo.cer in Resources */,
 				7DFB18B21EB0341E00292DD3 /* YouYuJiZhangLiCai-Info.plist in Resources */,
+				7DFB19201EB1E3E400292DD3 /* 1000.zip in Resources */,
 				7DFB18B31EB0341E00292DD3 /* SuiShouJi-Info.plist in Resources */,
+				7DFB191F1EB1E3E100292DD3 /* 1001.zip in Resources */,
 				7DFB18B41EB0341E00292DD3 /* rain_sound.wav in Resources */,
 				7DFB18B51EB0341E00292DD3 /* Assets.xcassets in Resources */,
 				7DFB18B61EB0341E00292DD3 /* sr_refresh.png in Resources */,
