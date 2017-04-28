@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SSJButton.h"
 
 @class SSJRecordMakingBillTypeInputAccessoryView;
 
@@ -14,13 +15,13 @@
 
 @property (nonatomic, strong, readonly) UITextField *memoView;
 
-@property (nonatomic, strong, readonly) UIButton *accountBtn;
+@property (nonatomic, strong, readonly) SSJButton *accountBtn;
 
-@property (nonatomic, strong, readonly) UIButton *dateBtn;
+@property (nonatomic, strong, readonly) SSJButton *dateBtn;
 
-@property (nonatomic, strong, readonly) UIButton *photoBtn;
+@property (nonatomic, strong, readonly) SSJButton *photoBtn;
 
-@property (nonatomic, strong, readonly) UIButton *memberBtn;
+@property (nonatomic, strong, readonly) SSJButton *memberBtn;
 
 @property (nonatomic, strong) UIColor *buttonTitleNormalColor;
 

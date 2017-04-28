@@ -21,13 +21,13 @@
 
 @property (nonatomic, strong) UITextField *memoView;
 
-@property (nonatomic, strong) UIButton *accountBtn;
+@property (nonatomic, strong) SSJButton *accountBtn;
 
-@property (nonatomic, strong) UIButton *dateBtn;
+@property (nonatomic, strong) SSJButton *dateBtn;
 
-@property (nonatomic, strong) UIButton *photoBtn;
+@property (nonatomic, strong) SSJButton *photoBtn;
 
-@property (nonatomic, strong) UIButton *memberBtn;
+@property (nonatomic, strong) SSJButton *memberBtn;
 
 @end
 
@@ -48,7 +48,7 @@
         [self.bottomView addSubview:self.dateBtn];
         [self.bottomView addSubview:self.memberBtn];
         [self.bottomView addSubview:self.photoBtn];
-        
+
         [self.photoBtn addObserver:self forKeyPath:@"selected" options:NSKeyValueObservingOptionNew context:NULL];
     }
     return self;
@@ -98,7 +98,7 @@
 - (UIView *)topView {
     if (!_topView) {
         _topView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.width, 50)];
-        _topView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
+        _topView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainFillColor];
         
         UIImageView *img = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@""]];
         img.left = 10;
@@ -135,7 +135,6 @@
 - (UITextField *)memoView {
     if (!_memoView) {
         _memoView = [[UITextField alloc] initWithFrame:CGRectMake(40, 0, self.topView.width - 40, self.topView.height)];
-        _memoView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainFillColor];
         _memoView.font = [UIFont systemFontOfSize:13];
         _memoView.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _memoView.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"写点啥备注下" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
@@ -145,9 +144,9 @@
     return _memoView;
 }
 
-- (UIButton *)accountBtn {
+- (SSJButton *)accountBtn {
     if (!_accountBtn) {
-        _accountBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        _accountBtn = [[SSJButton alloc] init];
         _accountBtn.frame = CGRectMake(0, 0, 70, 24);
         _accountBtn.titleLabel.font = [UIFont systemFontOfSize:13];
 //        _accountBtn.layer.borderWidth = 1;
@@ -157,9 +156,9 @@
     return _accountBtn;
 }
 
-- (UIButton *)dateBtn {
+- (SSJButton *)dateBtn {
     if (!_dateBtn) {
-        _dateBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        _dateBtn = [[SSJButton alloc] init];
         _dateBtn.frame = CGRectMake(0, 0, 70, 24);
         _dateBtn.titleLabel.font = [UIFont systemFontOfSize:13];
 //        _dateBtn.layer.borderWidth = 1;
@@ -169,22 +168,22 @@
     return _dateBtn;
 }
 
-- (UIButton *)memberBtn {
+- (SSJButton *)memberBtn {
     if (!_memberBtn) {
-        _memberBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        _memberBtn = [[SSJButton alloc] init];
         _memberBtn.frame = CGRectMake(0, 0, 70, 24);
         _memberBtn.titleLabel.font = [UIFont systemFontOfSize:13];
 //        _memberBtn.layer.borderWidth = 1;
-        [_memberBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] forState:UIControlStateNormal];
+        [_memberBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] forState:SSJButtonStateNormal];
         _memberBtn.backgroundColor = SSJ_BUTTON_SELECTED_BORDER_COLOR;
         _memberBtn.layer.cornerRadius = _memberBtn.height * 0.5;
     }
     return _memberBtn;
 }
 
-- (UIButton *)photoBtn {
+- (SSJButton *)photoBtn {
     if (!_photoBtn) {
-        _photoBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        _photoBtn = [[SSJButton alloc] init];
         _photoBtn.frame = CGRectMake(0, 0, 70, 24);
         _photoBtn.titleLabel.font = [UIFont systemFontOfSize:13];
 //        _photoBtn.layer.borderWidth = 1;
