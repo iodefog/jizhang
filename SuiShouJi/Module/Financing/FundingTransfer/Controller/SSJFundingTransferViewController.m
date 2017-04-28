@@ -286,15 +286,14 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
 //        }
 //    }
     //mzl
-
-    if (textField.tag == 101) {
-        NSString *text = textField.text ? : @"";
-        text = [text stringByReplacingCharactersInRange:range withString:string];
-        if (text.length > 15) {
-            [CDAutoHideMessageHUD showMessage:@"最多只能输入15个字"];
-            return NO;
-        }
-    }
+//    if (textField.tag == 101) {
+//        NSString *text = textField.text ? : @"";
+//        text = [text stringByReplacingCharactersInRange:range withString:string];
+//        if (text.length > 15) {
+//            [CDAutoHideMessageHUD showMessage:@"最多只能输入15个字"];
+//            return NO;
+//        }
+//    }
     return YES;
 }
 
