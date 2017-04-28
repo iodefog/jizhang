@@ -50,6 +50,7 @@
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.navigationItem.title = @"记账树";
         self.hidesBottomBarWhenPushed = YES;
+        self.showNavigationBarBaseLine = NO;
     }
     return self;
 }

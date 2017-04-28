@@ -414,15 +414,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
         textField.text = [text ssj_reserveDecimalDigits:2 intDigits:9];
         return NO;
-    } else if (_accessoryView.memoView == textField) {
-        NSString *text = textField.text ? : @"";
-        text = [text stringByReplacingCharactersInRange:range withString:string];
-        if (text.length > 500) {
-            [CDAutoHideMessageHUD showMessage:@"最多只能输入500个字"];
-            return NO;
-        }
     }
-    
     return YES;
 }
 
@@ -881,6 +873,11 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     if (self.item.fundOperatorType == 2) {
         [_billTypeInputView.moneyInput becomeFirstResponder];
         [CDAutoHideMessageHUD showMessage:@"请先添加资金账户"];
+        return;
+    }
+    
+    if (_accessoryView.memoView.text > 500) {
+        [CDAutoHideMessageHUD showMessage:@"备注最多只能输入500个字"];
         return;
     }
     
