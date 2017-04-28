@@ -285,6 +285,16 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
 //            return NO;
 //        }
 //    }
+    //mzl
+
+    if (textField.tag == 101) {
+        NSString *text = textField.text ? : @"";
+        text = [text stringByReplacingCharactersInRange:range withString:string];
+        if (text.length > 15) {
+            [CDAutoHideMessageHUD showMessage:@"最多只能输入15个字"];
+            return NO;
+        }
+    }
     return YES;
 }
 
@@ -295,6 +305,8 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
         self.item.transferMemo = textField.text;
     }
 }
+
+
 
 -(BOOL)textFieldShouldReturn:(UITextField *)textField{
     [textField resignFirstResponder];
