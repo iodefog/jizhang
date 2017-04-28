@@ -8,12 +8,22 @@
 
 #import <UIKit/UIKit.h>
 
+@class SSJReportFormsScaleAxisCellItem;
+
 @interface SSJReportFormsScaleAxisCell : UICollectionViewCell
+
+@property (nonatomic, strong) SSJReportFormsScaleAxisCellItem *item;
+
+@end
+
+@interface SSJReportFormsScaleAxisCellItem : NSObject
 
 @property (nonatomic, copy) NSString *scaleValue;
 
 @property (nonatomic, strong) UIColor *scaleColor;
 
 @property (nonatomic) CGFloat scaleHeight;
+
+@property (nonatomic) BOOL scaleMarkShowed;
 
 @end
