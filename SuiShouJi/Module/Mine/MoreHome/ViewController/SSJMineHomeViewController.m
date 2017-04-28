@@ -209,7 +209,13 @@ static BOOL kNeedBannerDisplay = YES;
 #pragma mark - UICollectionViewDelegateFlowLayout
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    return CGSizeMake(SSJSCREENWITH / kColum, 100);
+    //最后一列
+    int itemWidth = floor(SSJSCREENWITH / kColum);
+    if ((indexPath.item+1) % kColum == 0) {
+        return CGSizeMake(SSJSCREENWITH - itemWidth * 2, 100);
+    } else {
+        return CGSizeMake(itemWidth, 100);
+    }
 }
 
 //  返回头视图
@@ -461,7 +467,7 @@ static BOOL kNeedBannerDisplay = YES;
         layout.minimumLineSpacing = 0;
         layout.minimumInteritemSpacing = 0;
         layout.sectionInset = UIEdgeInsetsMake(0, 0, 0, 0);
-        layout.itemSize = CGSizeMake(SSJSCREENWITH/kColum, 100);
+//        layout.itemSize = CGSizeMake(SSJSCREENWITH/kColum, 100);
         layout.headerReferenceSize = CGSizeMake(SSJSCREENWITH, 0);//头的高度
         if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
             CGSize screenSize = [UIScreen mainScreen].bounds.size;
