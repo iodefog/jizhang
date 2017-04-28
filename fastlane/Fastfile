@@ -4,10 +4,10 @@ lane :adhoc do |options|
   # 不带adhoc参数，sigh会自动生成App Store证书(公司或个人帐户)
   # sigh(adhoc: true)
   # 指定输出目录
-  ipa(
+  gym(
     configuration:options[:config],
     scheme:options[:scheme],
-    destination: options[:outpath],
+    output_directory: options[:outpath],
     clean:true
     )
 end

@@ -71,12 +71,12 @@
     _photoBtn.leftTop = CGPointMake(buttonWidth * 3, 0);
 
     CGFloat horizontalGap = (_bottomView.width - 280) * 0.2;
-    CGFloat verizonGap = (_bottomView.width - 24) * 0.5;
+    CGFloat verizonGap = (_bottomView.height - 24) * 0.5;
 //    _accountBtn.left = horizontalGap;
 //    _dateBtn.left = _accountBtn.right + horizontalGap;
 //    _memberBtn.left = _dateBtn.right + horizontalGap;
 //    _photoBtn.left = _memberBtn.right + horizontalGap;
-    _accountBtn.contentInset = _dateBtn.contentInset = _photoBtn.contentInset =_memberBtn.contentInset = UIEdgeInsetsMake(verizonGap / 2, horizontalGap, verizonGap, horizontalGap / 2);
+    _accountBtn.contentInset = _dateBtn.contentInset = _photoBtn.contentInset = _memberBtn.contentInset = UIEdgeInsetsMake(verizonGap / 2, horizontalGap, verizonGap, horizontalGap / 2);
 }
 
 - (void)setButtonTitleNormalColor:(UIColor *)buttonTitleNormalColor {
@@ -103,7 +103,7 @@
 
 - (void)observeValueForKeyPath:(nullable NSString *)keyPath ofObject:(nullable id)object change:(nullable NSDictionary<NSString*, id> *)change context:(nullable void *)context {
     if ([keyPath isEqualToString:@"selected"] && object == _photoBtn) {
-        _photoBtn.backgroundColor = _photoBtn.selected ? SSJ_BUTTON_SELECTED_BORDER_COLOR : SSJ_BUTTON_NORMAL_BORDER_COLOR;
+        [_photoBtn setBackgroundColor:_photoBtn.selected ? SSJ_BUTTON_SELECTED_BORDER_COLOR : SSJ_BUTTON_NORMAL_BORDER_COLOR forState:SSJButtonStateNormal];
     }
 }
 
@@ -163,8 +163,8 @@
         _accountBtn.frame = CGRectMake(0, 0, 70, 24);
         _accountBtn.titleLabel.font = [UIFont systemFontOfSize:13];
 //        _accountBtn.layer.borderWidth = 1;
-        _accountBtn.backgroundColor = SSJ_BUTTON_SELECTED_BORDER_COLOR;
-        _accountBtn.layer.cornerRadius = _accountBtn.height * 0.5;
+        [_accountBtn setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor] forState:SSJButtonStateNormal];
+        _accountBtn.cornerRadius = 12;
     }
     return _accountBtn;
 }
@@ -175,8 +175,8 @@
         _dateBtn.frame = CGRectMake(0, 0, 70, 24);
         _dateBtn.titleLabel.font = [UIFont systemFontOfSize:13];
 //        _dateBtn.layer.borderWidth = 1;
-        _dateBtn.backgroundColor = SSJ_BUTTON_SELECTED_BORDER_COLOR;
-        _dateBtn.layer.cornerRadius = _dateBtn.height * 0.5;
+        [_dateBtn setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor] forState:SSJButtonStateNormal];
+        _dateBtn.cornerRadius = 12;
     }
     return _dateBtn;
 }
@@ -188,8 +188,8 @@
         _memberBtn.titleLabel.font = [UIFont systemFontOfSize:13];
 //        _memberBtn.layer.borderWidth = 1;
         [_memberBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] forState:SSJButtonStateNormal];
-        _memberBtn.backgroundColor = SSJ_BUTTON_SELECTED_BORDER_COLOR;
-        _memberBtn.layer.cornerRadius = _memberBtn.height * 0.5;
+        [_memberBtn setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor] forState:SSJButtonStateNormal];
+        _memberBtn.cornerRadius = 12;
     }
     return _memberBtn;
 }
@@ -200,8 +200,8 @@
         _photoBtn.frame = CGRectMake(0, 0, 70, 24);
         _photoBtn.titleLabel.font = [UIFont systemFontOfSize:13];
 //        _photoBtn.layer.borderWidth = 1;
-        _photoBtn.backgroundColor = SSJ_BUTTON_SELECTED_BORDER_COLOR;
-        _photoBtn.layer.cornerRadius = _photoBtn.height * 0.5;
+        [_photoBtn setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor] forState:SSJButtonStateNormal];
+        _photoBtn.cornerRadius = 12;
     }
     return _photoBtn;
 }
