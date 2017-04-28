@@ -8978,7 +8978,6 @@
 		9C26923A1D9CB58D00B3B5DF /* SSJSearchHistoryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJSearchHistoryCell.m; sourceTree = "<group>"; };
 		9C26FDAD1DD2F9E80086F94F /* SSJBooksHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBooksHeaderView.h; sourceTree = "<group>"; };
 		9C26FDAE1DD2F9E80086F94F /* SSJBooksHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBooksHeaderView.m; sourceTree = "<group>"; };
-		9C2768271EA89FD100F7C9FC /* 9188JiZhangPro.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = 9188JiZhangPro.entitlements; path = ../../../9188JiZhangPro.entitlements; sourceTree = "<group>"; };
 		9C2ABB8B1CF7E969002FC79E /* SSJGradientMaskView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJGradientMaskView.h; sourceTree = "<group>"; };
 		9C2ABB8C1CF7E969002FC79E /* SSJGradientMaskView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJGradientMaskView.m; sourceTree = "<group>"; };
 		9C2B19211D3E185200B987EE /* SSJAdWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJAdWebViewController.h; sourceTree = "<group>"; };
@@ -11433,7 +11432,6 @@
 		9C3A2D461E65A4C200DFAE2C /* Entitlements */ = {
 			isa = PBXGroup;
 			children = (
-				9C2768271EA89FD100F7C9FC /* 9188JiZhangPro.entitlements */,
 				9C4C22721E9F1B54000C5F15 /* 9188jizhangben.entitlements */,
 				9C7D31CF1E8E0A210093001F /* YouYuJiZhangPro.entitlements */,
 				9C111F9F1E85117600D87EA8 /* YouYuJiZhang.entitlements */,
