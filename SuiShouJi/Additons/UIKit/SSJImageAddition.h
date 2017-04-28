@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "UIImage+WebP.h"
 
 
 @interface UIImage (SSJCategory)

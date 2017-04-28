@@ -150,6 +150,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil{
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+        self.title = SSJAppName();
         self.appliesTheme = NO;
         self.backgroundView.hidden = YES;
         self.extendedLayoutIncludesOpaqueBars = YES;
@@ -242,6 +243,9 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     [super viewWillAppear:animated];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    NSMutableDictionary *titleAttributes = [self.navigationController.navigationBar.titleTextAttributes mutableCopy];
+    [titleAttributes setObject:[UIColor whiteColor] forKey:NSForegroundColorAttributeName];
+    self.navigationController.navigationBar.titleTextAttributes = titleAttributes;
 //    if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
 //        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
 //        self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
