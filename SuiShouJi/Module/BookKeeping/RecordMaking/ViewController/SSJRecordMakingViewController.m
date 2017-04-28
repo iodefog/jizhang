@@ -225,7 +225,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
             weakSelf.selectedYear = view.date.year;
             weakSelf.item.billDate = [NSString stringWithFormat:@"%04ld-%02ld-%02ld",(long)view.date.year,(long)view.date.month,(long)view.date.day];
             weakSelf.item.billDetailDate = [NSString stringWithFormat:@"%02ld:%02ld",(long)view.date.hour,(long)view.date.minute];
-            [weakSelf.accessoryView.dateBtn setTitle:[NSString stringWithFormat:@"%ld月%ld日", weakSelf.selectedMonth, weakSelf.selectedDay] forState:UIControlStateNormal];
+            [weakSelf.accessoryView.dateBtn setTitle:[NSString stringWithFormat:@"%ld月%ld日", weakSelf.selectedMonth, weakSelf.selectedDay] forState:SSJButtonStateNormal];
             [weakSelf.dateSelectedView dismiss];
         };
         _dateSelectedView.dismissBlock = ^(SSJHomeDatePickerView *view) {
@@ -370,8 +370,8 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         [_accessoryView.dateBtn addTarget:self action:@selector(selectBillDateAction) forControlEvents:UIControlEventTouchUpInside];
         [_accessoryView.photoBtn addTarget:self action:@selector(selectPhotoAction) forControlEvents:UIControlEventTouchUpInside];
         [_accessoryView.memberBtn addTarget:self action:@selector(selectMemberAction) forControlEvents:UIControlEventTouchUpInside];
-        [_accessoryView.dateBtn setTitle:[NSString stringWithFormat:@"%ld月%ld日", _selectedMonth, _selectedDay] forState:UIControlStateNormal];
-        [_accessoryView.photoBtn setTitle:@"照片" forState:UIControlStateNormal];
+        [_accessoryView.dateBtn setTitle:[NSString stringWithFormat:@"%ld月%ld日", _selectedMonth, _selectedDay] forState:SSJButtonStateNormal];
+        [_accessoryView.photoBtn setTitle:@"照片" forState:SSJButtonStateNormal];
         _accessoryView.memoView.delegate = self;
         _accessoryView.memoView.text = _item.chargeMemo;
         _accessoryView.dateBtn.selected = YES;
@@ -1039,14 +1039,14 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 -(void)updateMembers{
     if (self.item.membersItem.count == 1) {
         SSJChargeMemberItem *item = [self.item.membersItem ssj_safeObjectAtIndex:0];
-        [self.accessoryView.memberBtn setTitle:item.memberName forState:UIControlStateNormal];
+        [self.accessoryView.memberBtn setTitle:item.memberName forState:SSJButtonStateNormal];
     }else{
-        [self.accessoryView.memberBtn setTitle:[NSString stringWithFormat:@"%ld人",self.item.membersItem.count] forState:UIControlStateNormal];
+        [self.accessoryView.memberBtn setTitle:[NSString stringWithFormat:@"%ld人",self.item.membersItem.count] forState:SSJButtonStateNormal];
     }
 }
 
 - (void)updateFundingType {
-    [self.accessoryView.accountBtn setTitle:self.item.fundName forState:UIControlStateNormal];
+    [self.accessoryView.accountBtn setTitle:self.item.fundName forState:SSJButtonStateNormal];
     self.accessoryView.accountBtn.selected = YES;
     self.FundingTypeSelectView.selectFundID = self.item.fundId;
 }
