@@ -124,19 +124,19 @@ static NSString *const kCellId = @"SSJCustomThemeSelectCollectionViewCell";
         self.seletctTheme = [self.images objectAtIndex:indexPath.item];
         if ([self.seletctTheme isEqualToString:@"background"]) {
             self.selectType = NO;
-            self.whiteButton.layer.borderColor = [UIColor ssj_colorWithHex:@"#EB4762"].CGColor;
-            self.blackButton.layer.borderColor = [UIColor clearColor].CGColor;
+            self.blackButton.layer.borderColor = [UIColor ssj_colorWithHex:@"#EB4762"].CGColor;
+            self.whiteButton.layer.borderColor = [UIColor clearColor].CGColor;
             [self.collectionView reloadData];
             [SSJCustomThemeManager changeThemeWithLocalImage:nil type:self.selectType];
         } else {
             if ([self.seletctTheme hasSuffix:@"dark"]) {
                 self.selectType = YES;
-                self.blackButton.layer.borderColor = [UIColor ssj_colorWithHex:@"#EB4762"].CGColor;
-                self.whiteButton.layer.borderColor = [UIColor clearColor].CGColor;
-            } else {
-                self.selectType = NO;
                 self.whiteButton.layer.borderColor = [UIColor ssj_colorWithHex:@"#EB4762"].CGColor;
                 self.blackButton.layer.borderColor = [UIColor clearColor].CGColor;
+            } else {
+                self.selectType = NO;
+                self.blackButton.layer.borderColor = [UIColor ssj_colorWithHex:@"#EB4762"].CGColor;
+                self.whiteButton.layer.borderColor = [UIColor clearColor].CGColor;
             }
             [self.collectionView reloadData];
             [SSJCustomThemeManager changeThemeWithDefaultImageName:self.seletctTheme type:self.selectType];
@@ -262,7 +262,7 @@ static NSString *const kCellId = @"SSJCustomThemeSelectCollectionViewCell";
 }
 
 - (void)updateFontType {
-    if (self.selectType) {
+    if (!self.selectType) {
         self.blackButton.layer.borderColor = [UIColor ssj_colorWithHex:@"#EB4762"].CGColor;
         self.whiteButton.layer.borderColor = [UIColor clearColor].CGColor;
     } else {

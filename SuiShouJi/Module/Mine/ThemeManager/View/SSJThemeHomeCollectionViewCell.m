@@ -17,6 +17,7 @@
 @property(nonatomic, strong) UILabel *themeTitleLabel;
 @property(nonatomic, strong) UILabel *themeSizeLabel;
 @property(nonatomic, strong) UILabel *themeStatusLabel;
+@property(nonatomic, strong) UIImageView *addImageView;
 @property(nonatomic, strong) SSJDownLoadProgressButton *themeStatusButton;
 
 @property (nonatomic, copy) void (^downloadHandler)(float progress);
@@ -44,7 +45,7 @@
         [self.contentView addSubview:self.themeSizeLabel];
         [self.contentView addSubview:self.themeStatusLabel];
         [self.contentView addSubview:self.themeStatusButton];
-        
+        [self.contentView addSubview:self.addImageView];
         __weak typeof(self) weakSelf = self;
         _downloadHandler = ^(float progress) {
             if (progress == 1) {
@@ -76,6 +77,7 @@
             self.themeStatusLabel.hidden = NO;
         }
     }
+    self.addImageView.center = self.themeImage.center;
 }
 
 -(UIImageView *)themeImage{
@@ -131,6 +133,15 @@
     return _themeStatusButton;
 }
 
+- (UIImageView *)addImageView {
+    if (!_addImageView) {
+        _addImageView = [[UIImageView alloc] init];
+        _addImageView.image = [UIImage imageNamed:@"theme_customadd"];
+        [_addImageView sizeToFit];
+    }
+    return _addImageView;
+}
+
 -(void)statusButtonClicked:(id)sender{
 //    __weak typeof(self) weakSelf = self;
     if(([((UIButton *)sender).titleLabel.text isEqualToString:@"下载"] || [((UIButton *)sender).titleLabel.text isEqualToString:@"升级"]) && ![[SSJThemeDownLoaderManger sharedInstance].downLoadingArr containsObject:self.item.themeId]) {
@@ -164,6 +175,7 @@
     [[SSJThemeDownLoaderManger sharedInstance] removeProgressHandler:_downloadHandler forID:self.item.themeId];
     _item = item;
     if ([_item.themeId isEqualToString:@"0"]) {
+        self.addImageView.hidden = YES;
         self.themeSizeLabel.hidden = YES;
         self.themeTitleLabel.text = _item.themeTitle;
         [self.themeTitleLabel sizeToFit];
@@ -177,6 +189,7 @@
         self.themeStatusButton.hidden = NO;
 
     } else if ([_item.themeId isEqualToString:@"-1"]) {
+        self.addImageView.hidden = NO;
         self.themeImage.image = [UIImage imageNamed:@"theme_custom"];
         self.themeTitleLabel.text = _item.themeTitle;
         [self.themeTitleLabel sizeToFit];
@@ -184,6 +197,7 @@
         self.themeStatusLabel.hidden = YES;
         self.themeStatusButton.hidden = YES;
     } else {
+        self.addImageView.hidden = YES;
         self.themeTitleLabel.text = _item.themeTitle;
         [self.themeTitleLabel sizeToFit];
         self.themeSizeLabel.hidden = NO;
