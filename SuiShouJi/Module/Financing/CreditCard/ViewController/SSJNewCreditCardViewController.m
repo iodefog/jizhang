@@ -27,7 +27,7 @@ static NSString *const kTitle1 = @"账户名称";
 static NSString *const kTitle2 = @"账户类型";
 static NSString *const kTitle3 = @"信用额度";
 static NSString *const kTitle4 = @"余额/欠款";
-static NSString *const kTitle5 = @"备注";
+static NSString *const kTitle5 = @"备注说明";
 static NSString *const kTitle6 = @"以账单日结算";
 static NSString *const kTitle7 = @"账单日";
 static NSString *const kTitle8 = @"还款日";
@@ -85,7 +85,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.titles = @[@[kTitle1,kTitle2],@[kTitle3,kTitle4,kTitle5],@[kTitle6,kTitle7,kTitle8],@[kTitle9,kTitle10]];
-    self.images = @[@[@"loan_person",@"card_zhanghu"],@[@"loan_yield",@"loan_money",@"loan_memo"],@[@"loan_expires",@"",@""],@[@"loan_clock",@"card_yanse"]];
+    self.images = @[@[@"loan_person",@"card_zhanghu"],@[@"loan_yield",@"loan_money",@"loan_memo"],@[@"loan_expires",@"loan_zhangdanri",@"loan_huankuanri"],@[@"loan_clock",@"card_yanse"]];
 
     if (!self.cardId.length) {
         self.title = @"添加资金账户";
@@ -293,7 +293,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     if ([title isEqualToString:kTitle5]) {
         newReminderCell.type = SSJCreditCardCellTypeTextField;
         newReminderCell.cellTitle = title;
-        newReminderCell.textInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"备注说明（选填）" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+        newReminderCell.textInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"选填" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         _memoInput = newReminderCell.textInput;
         newReminderCell.textInput.text = self.item.cardMemo;
         newReminderCell.textInput.delegate = self;
