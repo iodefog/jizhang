@@ -876,7 +876,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         return;
     }
     
-    if (_accessoryView.memoView.text > 500) {
+    if (_accessoryView.memoView.text.length > 500) {
         [CDAutoHideMessageHUD showMessage:@"备注最多只能输入500个字"];
         return;
     }
