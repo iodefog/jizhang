@@ -34,7 +34,7 @@ static const UIEdgeInsets kInnerInsets = {34, 14, 34, 14};
         [self addSubview:_labBackground];
         
         _ruleTitleLab = [[UILabel alloc] init];
-        _ruleTitleLab.font = [UIFont systemFontOfSize:14];
+        _ruleTitleLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         _ruleTitleLab.textColor = [UIColor whiteColor];
         _ruleTitleLab.backgroundColor = [UIColor clearColor];
         _ruleTitleLab.textAlignment = NSTextAlignmentCenter;
@@ -43,7 +43,7 @@ static const UIEdgeInsets kInnerInsets = {34, 14, 34, 14};
         [self addSubview:_ruleTitleLab];
         
         _ruleContentLab = [[UILabel alloc] init];
-        _ruleContentLab.font = [UIFont systemFontOfSize:14];
+        _ruleContentLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         _ruleContentLab.textColor = [UIColor blackColor];
         _ruleContentLab.backgroundColor = [UIColor clearColor];
         _ruleContentLab.numberOfLines = 0;

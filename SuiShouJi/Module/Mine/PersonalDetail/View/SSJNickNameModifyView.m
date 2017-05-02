@@ -152,7 +152,7 @@
     if (!_titleLabel) {
         _titleLabel = [[UILabel alloc]init];
         _titleLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
-        _titleLabel.font = [UIFont systemFontOfSize:14];
+        _titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(14);
         _titleLabel.text = self.title;
         [_titleLabel sizeToFit];
     }
@@ -163,7 +163,7 @@
     if (!_textInput) {
         _textInput = [[UITextView alloc]init];
         _textInput.textColor = [UIColor ssj_colorWithHex:@"393939"];
-        _textInput.font = [UIFont systemFontOfSize:15];
+        _textInput.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         _textInput.delegate = self;
         _textInput.autocorrectionType = UITextAutocorrectionTypeNo;
     }
@@ -174,7 +174,7 @@
     if (!_textLengthLabel) {
         _textLengthLabel = [[UILabel alloc]init];
         _textLengthLabel.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
-        _textLengthLabel.font = [UIFont systemFontOfSize:12];
+        _textLengthLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_5);
         _textLengthLabel.text = [NSString stringWithFormat:@"剩余%d个字",self.maxLength];
         [_textLengthLabel sizeToFit];
     }

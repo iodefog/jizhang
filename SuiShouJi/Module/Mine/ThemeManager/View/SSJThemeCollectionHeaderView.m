@@ -35,7 +35,7 @@
         _titleLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
         [_titleLabel ssj_setBorderStyle:SSJBorderStyleTop | SSJBorderStyleBottom];
         [_titleLabel ssj_setBorderColor:SSJ_DEFAULT_SEPARATOR_COLOR];
-        _titleLabel.font = [UIFont systemFontOfSize:18];
+        _titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2);
     }
     return _titleLabel;
 }

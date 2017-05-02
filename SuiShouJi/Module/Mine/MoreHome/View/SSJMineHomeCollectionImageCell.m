@@ -90,7 +90,7 @@
     if (!_nameLabel) {
         _nameLabel = [[UILabel alloc] init];
         _nameLabel.textAlignment = NSTextAlignmentCenter;
-        _nameLabel.font = [UIFont systemFontOfSize:16];
+        _nameLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         _nameLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _nameLabel.backgroundColor = [UIColor clearColor];
     }
@@ -102,11 +102,10 @@
     if (!_bottomLabel) {
         _bottomLabel = [[UILabel alloc] init];
         _bottomLabel.textAlignment = NSTextAlignmentCenter;
-        _bottomLabel.font = [UIFont systemFontOfSize:12];
+        _bottomLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_5);
         _bottomLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         _bottomLabel.backgroundColor = [UIColor clearColor];
         _bottomLabel.textAlignment = NSTextAlignmentCenter;
-        _bottomLabel.font = [UIFont systemFontOfSize:11];
     }
     return _bottomLabel;
 }
