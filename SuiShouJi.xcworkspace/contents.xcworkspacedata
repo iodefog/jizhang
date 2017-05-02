@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:SuiShouJi/Resource/customTheme/customBackGround.zip">
+   </FileRef>
+   <FileRef
       location = "group:SuiShouJi.xcodeproj">
    </FileRef>
    <FileRef

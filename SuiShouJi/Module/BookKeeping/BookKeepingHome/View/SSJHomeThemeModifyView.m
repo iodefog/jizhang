@@ -165,7 +165,7 @@ static NSString *const kCellId = @"SSJCustomThemeSelectCollectionViewCell";
         }
         NSString *imageName = [self.images objectAtIndex:indexPath.item];
         if ([imageName isEqualToString:@"background"]) {
-            cell.imageView.image = [UIImage ssj_themeLocalBackGroundImage];
+            cell.imageView.image = [UIImage ssj_themeLocalBackGroundImageName:imageName];
         } else {
             cell.imageView.image = [UIImage imageNamed:[self.images objectAtIndex:indexPath.item]];
         }
@@ -250,7 +250,7 @@ static NSString *const kCellId = @"SSJCustomThemeSelectCollectionViewCell";
 
 - (void)getCurrentTheme {
     SSJThemeModel *currentTheme = [SSJThemeSetting currentThemeModel];
-    if ([UIImage ssj_themeLocalBackGroundImage]) {
+    if ([UIImage ssj_themeLocalBackGroundImageName:@"background"]) {
         self.images = @[@"",@"background",@"theme_custom1_light",@"theme_custom2_light",@"theme_custom3_dark",@"theme_custom4_dark"];
     }
     if (currentTheme.customThemeBackImage.length) {

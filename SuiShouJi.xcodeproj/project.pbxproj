@@ -3428,6 +3428,7 @@
 		91F7FD331DFA9EF9005F4B6B /* SSJProductAdviceNetWorkService.m in Sources */ = {isa = PBXBuildFile; fileRef = 91F7FD2F1DFA9EF9005F4B6B /* SSJProductAdviceNetWorkService.m */; };
 		91F7FD381DFAB94A005F4B6B /* SSJAdviceItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 91F7FD371DFAB94A005F4B6B /* SSJAdviceItem.m */; };
 		91FD904D1E0B8319001C64B7 /* SSJReportFormCanYinChartCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 91FD904C1E0B8319001C64B7 /* SSJReportFormCanYinChartCell.m */; };
+		9C03D87D1EB8541E00D845DD /* customBackGround.zip in Resources */ = {isa = PBXBuildFile; fileRef = 9C03D87C1EB8541E00D845DD /* customBackGround.zip */; };
 		9C0AB1691D670BAE0082B971 /* SSJCreditCardEditeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0AB1681D670BAE0082B971 /* SSJCreditCardEditeCell.m */; };
 		9C13F4D71E8267D300AC5FA9 /* SSJAlertViewAction.m in Sources */ = {isa = PBXBuildFile; fileRef = BD33FD281C4B2E4C006A6942 /* SSJAlertViewAction.m */; };
 		9C13F4D81E8267D300AC5FA9 /* SSJForgetPasswordFirstStepViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE6E8701C56419F001C9138 /* SSJForgetPasswordFirstStepViewController.m */; };
@@ -8884,6 +8885,7 @@
 		91FD904B1E0B8319001C64B7 /* SSJReportFormCanYinChartCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormCanYinChartCell.h; sourceTree = "<group>"; };
 		91FD904C1E0B8319001C64B7 /* SSJReportFormCanYinChartCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReportFormCanYinChartCell.m; sourceTree = "<group>"; };
 		9892BFAB47044275B53028C0 /* Pods-YouYuJiZhangBao.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangBao.debug.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangBao/Pods-YouYuJiZhangBao.debug.xcconfig"; sourceTree = "<group>"; };
+		9C03D87C1EB8541E00D845DD /* customBackGround.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = customBackGround.zip; sourceTree = "<group>"; };
 		9C0AB1671D670BAE0082B971 /* SSJCreditCardEditeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCreditCardEditeCell.h; sourceTree = "<group>"; };
 		9C0AB1681D670BAE0082B971 /* SSJCreditCardEditeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCreditCardEditeCell.m; sourceTree = "<group>"; };
 		9C111F9D1E84FDB900D87EA8 /* buildConfig.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = buildConfig.txt; sourceTree = "<group>"; };
@@ -11423,6 +11425,7 @@
 		9C30AA871EAF6E7C008DD51D /* customTheme */ = {
 			isa = PBXGroup;
 			children = (
+				9C03D87C1EB8541E00D845DD /* customBackGround.zip */,
 				9C30AA881EAF6E9F008DD51D /* 1001.zip */,
 				9C30AA891EAF6E9F008DD51D /* 1000.zip */,
 			);
@@ -14019,6 +14022,7 @@
 				7DBB3CBD1E55C3500075E638 /* YouYuJiZhangLiCai-Info.plist in Resources */,
 				9C30AA8B1EAF6E9F008DD51D /* 1000.zip in Resources */,
 				7DBB38211E55BE2F0075E638 /* SuiShouJi-Info.plist in Resources */,
+				9C03D87D1EB8541E00D845DD /* customBackGround.zip in Resources */,
 				9C30AA8A1EAF6E9F008DD51D /* 1001.zip in Resources */,
 				7D4A430A1CC63755002F0264 /* rain_sound.wav in Resources */,
 				BD543C4C1C1A6DBC00910D61 /* Assets.xcassets in Resources */,
