@@ -16,12 +16,14 @@
 + (void)initializeCustomTheme {
     NSString *firstThemeDirectPath = [[NSString ssj_themeDirectory] stringByAppendingPathComponent:@"1000"];
     NSString *secondThemeDirectPath = [[NSString ssj_themeDirectory] stringByAppendingPathComponent:@"1001"];
+    NSString *themeBackDirectPath = [[NSString ssj_themeDirectory] stringByAppendingPathComponent:@"customBackGround"];
     if (![[NSFileManager defaultManager] fileExistsAtPath:firstThemeDirectPath] && ![[NSFileManager defaultManager] fileExistsAtPath:secondThemeDirectPath]) {
-        // 将两个主题解压
+        // 将两个主题解压和背景图
         NSString *firstThemePath = [[NSBundle mainBundle] pathForResource:@"1001" ofType:@"zip"];
         NSString *secondThemePath = [[NSBundle mainBundle] pathForResource:@"1000" ofType:@"zip"];
         [SSZipArchive unzipFileAtPath:firstThemePath toDestination:[NSString ssj_themeDirectory] overwrite:NO password:nil error:nil];
         [SSZipArchive unzipFileAtPath:secondThemePath toDestination:[NSString ssj_themeDirectory] overwrite:NO password:nil error:nil];
+
         // 将两个默认主题写入主题配置文件中
         NSData *firstThemeData = [NSData dataWithContentsOfFile:[firstThemeDirectPath stringByAppendingPathComponent:@"themeSettings.json"]];
         NSData *secondThemeData = [NSData dataWithContentsOfFile:[secondThemeDirectPath stringByAppendingPathComponent:@"themeSettings.json"]];
@@ -32,6 +34,13 @@
         [SSJThemeSetting addThemeModel:firstModel];
         [SSJThemeSetting addThemeModel:secondModel];
     }
+    if (![[NSFileManager defaultManager] fileExistsAtPath:[[NSString ssj_themeDirectory] stringByAppendingPathComponent:@"customBackGround"]]) {
+//        [[NSFileManager defaultManager] createDirectoryAtPath:[[NSString ssj_themeDirectory] stringByAppendingPathComponent:@"customBackGround"] withIntermediateDirectories:YES attributes:nil error:nil];
+        NSString *themeBackPath = [[NSBundle mainBundle] pathForResource:@"customBackGround" ofType:@"zip"];
+        NSError *error = nil;
+        [SSZipArchive unzipFileAtPath:themeBackPath toDestination:[NSString ssj_themeDirectory] overwrite:YES password:nil error:&error];
+    }
+    
 }
 
 + (void)changeThemeWithDefaultImageName:(NSString *)name type:(BOOL)type{
@@ -46,26 +55,26 @@
     [SSJThemeSetting updateTabbarAppearance];
     
     SSJThemeModel *model = [SSJThemeSetting currentThemeModel];
-    model.customThemeBackImage = name;
+    model.customThemeBackImage = themeId;
     model.darkOrLight = type;
     [SSJThemeSetting addThemeModel:model];
     
-    NSString *backGroudImageFullName = themeId;
-    NSString *backGroudImageName;
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-        CGSize screenSize = [UIScreen mainScreen].bounds.size;
-        if (CGSizeEqualToSize(screenSize, CGSizeMake(320.0, 568.0))) {
-            backGroudImageFullName = [NSString stringWithFormat:@"%@-568",themeId];
-            backGroudImageName = [NSString stringWithFormat:@"%@-568@2x",@"background"];
-        } else if (CGSizeEqualToSize(screenSize, CGSizeMake(375.0, 667.0))) {
-            backGroudImageFullName = [NSString stringWithFormat:@"%@-667",themeId];
-            backGroudImageName = [NSString stringWithFormat:@"%@-667@2x",@"background"];
-        } else {
-            backGroudImageFullName = themeId;
-            backGroudImageName = [NSString stringWithFormat:@"%@@%dx", @"background", (int)[UIScreen mainScreen].scale];
-        }
-    }
-    
+//    NSString *backGroudImageFullName = themeId;
+//    NSString *backGroudImageName;
+//    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+//        CGSize screenSize = [UIScreen mainScreen].bounds.size;
+//        if (CGSizeEqualToSize(screenSize, CGSizeMake(320.0, 568.0))) {
+//            backGroudImageFullName = [NSString stringWithFormat:@"%@-568",themeId];
+//            backGroudImageName = [NSString stringWithFormat:@"%@-568@2x",@"background"];
+//        } else if (CGSizeEqualToSize(screenSize, CGSizeMake(375.0, 667.0))) {
+//            backGroudImageFullName = [NSString stringWithFormat:@"%@-667",themeId];
+//            backGroudImageName = [NSString stringWithFormat:@"%@-667@2x",@"background"];
+//        } else {
+//            backGroudImageFullName = themeId;
+//            backGroudImageName = [NSString stringWithFormat:@"%@@%dx", @"background", (int)[UIScreen mainScreen].scale];
+//        }
+//    }
+//    
 //    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
 //        CGSize screenSize = [UIScreen mainScreen].bounds.size;
 //        if (CGSizeEqualToSize(screenSize, CGSizeMake(768.0, 1024.0))) {
@@ -74,17 +83,17 @@
 //            imageName = [NSString stringWithFormat:@"%@-2048",name];
 //        }
 //    }
-    UIImage *backImage = [UIImage imageNamed:backGroudImageFullName];
-    if (!backImage) {
-        SSJPRINT(@"图片名称不正确");
-    }
-    NSString *currentThemeID = [SSJThemeSetting currentThemeModel].ID;
-    NSString *imagePath = [[[[NSString ssj_themeDirectory] stringByAppendingPathComponent:currentThemeID] stringByAppendingPathComponent:@"Img"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png",backGroudImageName]];
-    if ([[NSFileManager defaultManager] fileExistsAtPath:imagePath]) {
-        [[NSFileManager defaultManager] removeItemAtPath:imagePath error:nil];
-        [[UIImage memoCache] removeObjectForKey:imagePath];
-    }
-    [UIImagePNGRepresentation(backImage) writeToFile:imagePath atomically:YES];
+//    UIImage *backImage = [UIImage imageNamed:backGroudImageFullName];
+//    if (!backImage) {
+//        SSJPRINT(@"图片名称不正确");
+//    }
+//    NSString *currentThemeID = [SSJThemeSetting currentThemeModel].ID;
+//    NSString *imagePath = [[[[NSString ssj_themeDirectory] stringByAppendingPathComponent:currentThemeID] stringByAppendingPathComponent:@"Img"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png",backGroudImageName]];
+//    if ([[NSFileManager defaultManager] fileExistsAtPath:imagePath]) {
+//        [[NSFileManager defaultManager] removeItemAtPath:imagePath error:nil];
+//        [[UIImage memoCache] removeObjectForKey:imagePath];
+//    }
+//    [UIImagePNGRepresentation(backImage) writeToFile:imagePath atomically:YES];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:SSJThemeDidChangeNotification object:nil userInfo:nil];
 }

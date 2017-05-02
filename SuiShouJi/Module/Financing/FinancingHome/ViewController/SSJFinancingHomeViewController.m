@@ -207,7 +207,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 
 -(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
-    return UIEdgeInsetsMake(15, 10, 5, 10);
+    return UIEdgeInsetsMake(0, 10, 5, 10);
 }
 
 #pragma mark - SSJEditableCollectionViewDelegate

@@ -11,6 +11,7 @@
 #import "SSJThemeImageCollectionViewCell.h"
 #import "MMDrawerController.h"
 #import "SSJThemeDownLoadCompleteService.h"
+#import "SSJNetworkReachabilityManager.h"
 
 @interface SSJThemeDetailViewController ()<UICollectionViewDelegate,UICollectionViewDataSource>
 @property(nonatomic, strong) UIScrollView *scrollView;
@@ -119,35 +120,50 @@ static NSString *const kCellId = @"SSJThemeImageCollectionViewCell";
 
 #pragma mark - Event
 -(void)themeDownLoadButtonClicked:(id)sender{
-    __weak typeof(self) weakSelf = self;
     if([((UIButton *)sender).titleLabel.text isEqualToString:@"下载"] && ![[SSJThemeDownLoaderManger sharedInstance].downLoadingArr containsObject:self.item.themeId]) {
-        [((UIButton *)sender) setTitle:@"" forState:UIControlStateNormal];
-        [[SSJThemeDownLoaderManger sharedInstance] downloadThemeWithItem:self.item success:^(SSJThemeItem *item){
-            [SSJThemeSetting switchToThemeID:weakSelf.item.themeId];
-            [SSJAnaliyticsManager event:@"download_skin" extra:item.themeTitle];
-            SSJThemeDownLoadCompleteService *downloadCompleteService = [[SSJThemeDownLoadCompleteService alloc]initWithDelegate:nil];
-            [downloadCompleteService downloadCompleteThemeWithThemeId:item.themeId];
-            [SSJAnaliyticsManager event:@"open_skin" extra:item.themeTitle];
-            UITabBarController *tabVC = (UITabBarController *)((MMDrawerController *)[UIApplication sharedApplication].keyWindow.rootViewController).centerViewController;
-            tabVC.selectedIndex = 0;
-            [weakSelf.navigationController popToRootViewControllerAnimated:YES];
-        } failure:^(NSError *error) {
-            [CDAutoHideMessageHUD showMessage:@"下载失败"];
-            [weakSelf.themeDownLoadButton.button setTitle:@"下载" forState:UIControlStateNormal];
-        }];
-        [[SSJThemeDownLoaderManger sharedInstance] addProgressHandler:^(float progress) {
-            if (progress == 1) {
-                [weakSelf.themeDownLoadButton.button setTitle:@"启用" forState:UIControlStateNormal];
-            }else{
-                [weakSelf.themeDownLoadButton.button setTitle:@"" forState:UIControlStateNormal];
-            }
-            weakSelf.themeDownLoadButton.downloadProgress = progress;
-        } forID:self.item.themeId];
+        if ([SSJNetworkReachabilityManager networkReachabilityStatus] == SSJNetworkReachabilityStatusReachableViaWiFi) {
+            [self downloadTheme];
+        } else {
+            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:NULL];
+            UIAlertAction *comfirmAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [((UIButton *)sender) setTitle:@"" forState:UIControlStateNormal];
+                [self downloadTheme];
+            }];
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:NULL message:[NSString stringWithFormat:@"您现在处于非WIFI网络状态，该皮肤将耗费%@流量，是否下载？",self.item.themeSize] preferredStyle:UIAlertControllerStyleAlert];
+            [alert addAction:cancelAction];
+            [alert addAction:comfirmAction];
+            [SSJVisibalController().navigationController presentViewController:alert animated:YES completion:NULL];
+        }
     }else if ([((UIButton *)sender).titleLabel.text isEqualToString:@"启用"]){
         [SSJThemeSetting switchToThemeID:self.item.themeId];
         [SSJAnaliyticsManager event:@"open_skin" extra:self.item.themeTitle];
         [self.navigationController popToRootViewControllerAnimated:YES];
     }
+}
+
+- (void)downloadTheme {
+    __weak typeof(self) weakSelf = self;
+    [[SSJThemeDownLoaderManger sharedInstance] downloadThemeWithItem:self.item success:^(SSJThemeItem *item){
+        [SSJThemeSetting switchToThemeID:weakSelf.item.themeId];
+        [SSJAnaliyticsManager event:@"download_skin" extra:item.themeTitle];
+        SSJThemeDownLoadCompleteService *downloadCompleteService = [[SSJThemeDownLoadCompleteService alloc]initWithDelegate:nil];
+        [downloadCompleteService downloadCompleteThemeWithThemeId:item.themeId];
+        [SSJAnaliyticsManager event:@"open_skin" extra:item.themeTitle];
+        UITabBarController *tabVC = (UITabBarController *)((MMDrawerController *)[UIApplication sharedApplication].keyWindow.rootViewController).centerViewController;
+        tabVC.selectedIndex = 0;
+        [weakSelf.navigationController popToRootViewControllerAnimated:YES];
+    } failure:^(NSError *error) {
+        [CDAutoHideMessageHUD showMessage:@"下载失败"];
+        [weakSelf.themeDownLoadButton.button setTitle:@"下载" forState:UIControlStateNormal];
+    }];
+    [[SSJThemeDownLoaderManger sharedInstance] addProgressHandler:^(float progress) {
+        if (progress == 1) {
+            [weakSelf.themeDownLoadButton.button setTitle:@"启用" forState:UIControlStateNormal];
+        }else{
+            [weakSelf.themeDownLoadButton.button setTitle:@"" forState:UIControlStateNormal];
+        }
+        weakSelf.themeDownLoadButton.downloadProgress = progress;
+    } forID:self.item.themeId];
 }
 
 #pragma mark - Getter

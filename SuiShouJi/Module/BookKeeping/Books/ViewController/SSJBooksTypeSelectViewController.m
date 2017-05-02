@@ -251,7 +251,7 @@ static BOOL kNeedBannerDisplay = YES;
         }else{
             flowLayout.minimumInteritemSpacing = 15;
         }
-        _collectionView=[[SSJEditableCollectionView alloc] initWithFrame:CGRectMake(0, self.header.bottom, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM - 169) collectionViewLayout:flowLayout];
+        _collectionView=[[SSJEditableCollectionView alloc] initWithFrame:CGRectMake(0, self.header.bottom, self.view.width, self.view.height - self.header.bottom) collectionViewLayout:flowLayout];
         _collectionView.movedCellScale = 1.08;
         _collectionView.editDelegate=self;
         _collectionView.editDataSource=self;

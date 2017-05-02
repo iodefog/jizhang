@@ -124,19 +124,19 @@ static NSString *const kCellId = @"SSJCustomThemeSelectCollectionViewCell";
         self.seletctTheme = [self.images objectAtIndex:indexPath.item];
         if ([self.seletctTheme isEqualToString:@"background"]) {
             self.selectType = NO;
-            self.whiteButton.layer.borderColor = [UIColor ssj_colorWithHex:@"#EB4762"].CGColor;
-            self.blackButton.layer.borderColor = [UIColor clearColor].CGColor;
+            self.blackButton.layer.borderColor = [UIColor ssj_colorWithHex:@"#EB4762"].CGColor;
+            self.whiteButton.layer.borderColor = [UIColor clearColor].CGColor;
             [self.collectionView reloadData];
             [SSJCustomThemeManager changeThemeWithLocalImage:nil type:self.selectType];
         } else {
             if ([self.seletctTheme hasSuffix:@"dark"]) {
                 self.selectType = YES;
-                self.blackButton.layer.borderColor = [UIColor ssj_colorWithHex:@"#EB4762"].CGColor;
-                self.whiteButton.layer.borderColor = [UIColor clearColor].CGColor;
-            } else {
-                self.selectType = NO;
                 self.whiteButton.layer.borderColor = [UIColor ssj_colorWithHex:@"#EB4762"].CGColor;
                 self.blackButton.layer.borderColor = [UIColor clearColor].CGColor;
+            } else {
+                self.selectType = NO;
+                self.blackButton.layer.borderColor = [UIColor ssj_colorWithHex:@"#EB4762"].CGColor;
+                self.whiteButton.layer.borderColor = [UIColor clearColor].CGColor;
             }
             [self.collectionView reloadData];
             [SSJCustomThemeManager changeThemeWithDefaultImageName:self.seletctTheme type:self.selectType];
@@ -165,7 +165,7 @@ static NSString *const kCellId = @"SSJCustomThemeSelectCollectionViewCell";
         }
         NSString *imageName = [self.images objectAtIndex:indexPath.item];
         if ([imageName isEqualToString:@"background"]) {
-            cell.imageView.image = [UIImage ssj_themeLocalBackGroundImage];
+            cell.imageView.image = [UIImage ssj_themeLocalBackGroundImageName:imageName];
         } else {
             cell.imageView.image = [UIImage imageNamed:[self.images objectAtIndex:indexPath.item]];
         }
@@ -250,7 +250,7 @@ static NSString *const kCellId = @"SSJCustomThemeSelectCollectionViewCell";
 
 - (void)getCurrentTheme {
     SSJThemeModel *currentTheme = [SSJThemeSetting currentThemeModel];
-    if ([UIImage ssj_themeLocalBackGroundImage]) {
+    if ([UIImage ssj_themeLocalBackGroundImageName:@"background"]) {
         self.images = @[@"",@"background",@"theme_custom1_light",@"theme_custom2_light",@"theme_custom3_dark",@"theme_custom4_dark"];
     }
     if (currentTheme.customThemeBackImage.length) {
@@ -262,7 +262,7 @@ static NSString *const kCellId = @"SSJCustomThemeSelectCollectionViewCell";
 }
 
 - (void)updateFontType {
-    if (self.selectType) {
+    if (!self.selectType) {
         self.blackButton.layer.borderColor = [UIColor ssj_colorWithHex:@"#EB4762"].CGColor;
         self.whiteButton.layer.borderColor = [UIColor clearColor].CGColor;
     } else {
