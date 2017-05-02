@@ -118,4 +118,24 @@ alpha:(a)]
 // 次要颜色
 #define SSJ_SECONDARY_COLOR [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]
 
+
+#pragma mark -
+#pragma mark - Font
+
+#define SSJ_FONT_SIZE_1 20
+#define SSJ_FONT_SIZE_2 18
+#define SSJ_FONT_SIZE_3 16
+#define SSJ_FONT_SIZE_4 13
+#define SSJ_FONT_SIZE_5 11
+
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_9_0
+
+#define SSJ_REGULAR_FONT_SIZE(x) [UIFont fontWithName:@"PingFangSC-Regular" size:(x)]
+
+#else
+
+#define SSJ_REGULAR_FONT_SIZE(x) [UIFont systemFontOfSize:(x)]
+
+#endif
+
 #endif
