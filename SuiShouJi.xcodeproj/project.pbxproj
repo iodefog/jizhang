@@ -22165,8 +22165,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuJiZhangBao;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Wen Chen (262HTD8ZSJ)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Wen Chen (262HTD8ZSJ)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Wen Chen (ZW7DKJ39L3)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Wen Chen (ZW7DKJ39L3)";
 				DEVELOPMENT_TEAM = 262HTD8ZSJ;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -22545,8 +22545,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuJiZhangBao;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Wen Chen (262HTD8ZSJ)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Wen Chen (262HTD8ZSJ)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Wen Chen (QTBTG29H4P)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Wen Chen (ZW7DKJ39L3)";
 				DEVELOPMENT_TEAM = 262HTD8ZSJ;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
