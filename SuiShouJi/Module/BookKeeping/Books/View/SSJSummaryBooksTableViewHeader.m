@@ -49,7 +49,7 @@
         [self addSubview:self.chartNoResultView];
         [self addSubview:self.customPeriodBtn];
         [self addSubview:self.addOrDeleteCustomPeriodBtn];
-        
+        self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         [self updateAppearance];
     }
     return self;
