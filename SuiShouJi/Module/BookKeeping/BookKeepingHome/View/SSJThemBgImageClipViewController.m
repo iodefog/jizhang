@@ -121,7 +121,7 @@ static CGFloat imageScale = 0.8; //裁剪框和屏幕大小比例
     
     CGRect clipRect = CGRectMake(clipLeft, clipTop, clipSize.width, clipSize.height);
     self.selectedImage = [self imageFromView:self.view atFrame:clipRect];
-    [UIImagePNGRepresentation(self.selectedImage) writeToFile:@"/Users/yicai/Desktop/test.png" atomically:YES];
+//    [UIImagePNGRepresentation(self.selectedImage) writeToFile:@"/Users/yicai/Desktop/test.png" atomically:YES];
     if (!self.selectedImage) return;
     if (self.clipImageBlock) {
         self.clipImageBlock(self.selectedImage);
