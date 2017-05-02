@@ -589,7 +589,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
     lab.text = name.length >= 1 ? [name substringToIndex:1] : @"";
     lab.textColor = [UIColor ssj_colorWithHex:colorValue];
     lab.textAlignment = NSTextAlignmentCenter;
-    lab.font = [UIFont systemFontOfSize:16];
+    lab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
     
     return lab;
 }

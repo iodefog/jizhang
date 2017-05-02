@@ -395,8 +395,8 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
                                                   bottomTitle:bottomTitle
                                                 topTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor]
                                              bottomTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]
-                                                 topTitleFont:[UIFont systemFontOfSize:18]
-                                              bottomTitleFont:[UIFont systemFontOfSize:12]
+                                                 topTitleFont:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2)
+                                              bottomTitleFont:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_5)
                                                 contentInsets:UIEdgeInsetsZero];
         
     } else if (index.row == 1) {
@@ -406,8 +406,8 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
                                                   bottomTitle:@"最大值"
                                                 topTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor]
                                              bottomTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]
-                                                 topTitleFont:[UIFont systemFontOfSize:18]
-                                              bottomTitleFont:[UIFont systemFontOfSize:12]
+                                                 topTitleFont:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2)
+                                              bottomTitleFont:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_5)
                                                 contentInsets:UIEdgeInsetsZero];
         
     } else if (index.row == 2) {
@@ -417,8 +417,8 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
                                                   bottomTitle:@"合值"
                                                 topTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]
                                              bottomTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]
-                                                 topTitleFont:[UIFont systemFontOfSize:18]
-                                              bottomTitleFont:[UIFont systemFontOfSize:12]
+                                                 topTitleFont:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2)
+                                              bottomTitleFont:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_5)
                                                 contentInsets:UIEdgeInsetsZero];
         
     } else {

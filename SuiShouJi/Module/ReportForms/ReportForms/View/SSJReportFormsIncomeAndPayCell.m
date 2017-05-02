@@ -30,7 +30,7 @@ static const CGFloat imageDiam = 26;
         self.imageView.contentMode = UIViewContentModeCenter;
         self.imageView.layer.borderWidth = 1 / [UIScreen mainScreen].scale;
         
-        self.textLabel.font = [UIFont systemFontOfSize:18];
+        self.textLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         self.textLabel.backgroundColor = [UIColor clearColor];
         
         [self.contentView addSubview:self.memberNameLabel];
@@ -101,7 +101,7 @@ static const CGFloat imageDiam = 26;
     if (!_percentLabel) {
         _percentLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         _percentLabel.backgroundColor = [UIColor clearColor];
-        _percentLabel.font = [UIFont systemFontOfSize:18];
+        _percentLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
     }
     return _percentLabel;
 }
@@ -110,7 +110,7 @@ static const CGFloat imageDiam = 26;
     if (!_moneyLabel) {
         _moneyLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         _moneyLabel.backgroundColor = [UIColor clearColor];
-        _moneyLabel.font = [UIFont systemFontOfSize:18];
+        _moneyLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         _moneyLabel.textAlignment = NSTextAlignmentRight;
     }
     return _moneyLabel;
@@ -119,7 +119,7 @@ static const CGFloat imageDiam = 26;
 - (UILabel *)memberNameLabel {
     if (!_memberNameLabel) {
         _memberNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, imageDiam, imageDiam)];
-        _memberNameLabel.font = [UIFont systemFontOfSize:16];
+        _memberNameLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_7);
         _memberNameLabel.textAlignment = NSTextAlignmentCenter;
         _memberNameLabel.layer.borderWidth = 1 / [UIScreen mainScreen].scale;
         _memberNameLabel.layer.cornerRadius = imageDiam * 0.5;

@@ -36,7 +36,7 @@
         [self.contentView addSubview:self.ratioLabel];
         [self.contentView addSubview:self.amountLabel];
         self.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        self.dateLabel.font = self.ratioLabel.font = self.amountLabel.font = [UIFont systemFontOfSize:14];
+        self.dateLabel.font = self.ratioLabel.font = self.amountLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         [self updateAppearance];
     }
     return self;

@@ -18,7 +18,7 @@
         self.textLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2);
         
         _subtitleLabel = [[UILabel alloc] init];
-        _subtitleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(14);
+        _subtitleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_7);
         [self.contentView addSubview:_subtitleLabel];
         
         _detailLabel = [[UILabel alloc] init];
