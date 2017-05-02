@@ -152,7 +152,6 @@
 		7D08A1201E4999D30085A8FB /* SSJForgetPassowrdNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF361C4751EA000E6CC9 /* SSJForgetPassowrdNetworkService.m */; };
 		7D08A1211E4999D30085A8FB /* SSJBooksColorAndIconSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CA40E5E1DD481FC0001E9E3 /* SSJBooksColorAndIconSelectView.m */; };
 		7D08A1221E4999D30085A8FB /* SSJForgotPSWResetService.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF3A1C4751EA000E6CC9 /* SSJForgotPSWResetService.m */; };
-		7D08A1231E4999D30085A8FB /* SSJReportFormsScaleAxisCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD9D0C31CF6E2A6005AF735 /* SSJReportFormsScaleAxisCell.m */; };
 		7D08A1241E4999D30085A8FB /* SSJNewBaseTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD04338C1C1A8DA50051E7AB /* SSJNewBaseTableViewController.m */; };
 		7D08A1251E4999D30085A8FB /* UICountingLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD49BF31DB78A4A00318AF9 /* UICountingLabel.m */; };
 		7D08A1261E4999D30085A8FB /* SSJLoanChargeAddOrEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4A79721DD46D6100E905F4 /* SSJLoanChargeAddOrEditViewController.m */; };
@@ -213,7 +212,6 @@
 		7D08A1631E4999D30085A8FB /* SSJBudgetDetailHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F327A1CEAE6C10086B67E /* SSJBudgetDetailHeaderView.m */; };
 		7D08A1641E4999D30085A8FB /* SSJUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = BD04333F1C1A82730051E7AB /* SSJUtil.m */; };
 		7D08A1651E4999D30085A8FB /* SSJChatMessageItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 91F7FD281DFA8CD3005F4B6B /* SSJChatMessageItem.m */; };
-		7D08A1661E4999D30085A8FB /* SSJReportFormsScaleAxisView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD9D0C51CF6E2A6005AF735 /* SSJReportFormsScaleAxisView.m */; };
 		7D08A1671E4999D30085A8FB /* UIImage+SSJTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE4A7EB1D20DD8C00F05BF0 /* UIImage+SSJTheme.m */; };
 		7D08A1681E4999D30085A8FB /* SSJBudgetEditLabelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32801CEAE6C10086B67E /* SSJBudgetEditLabelCell.m */; };
 		7D08A1691E4999D30085A8FB /* SSJCalenderTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F329E1CEAE6C10086B67E /* SSJCalenderTableViewCell.m */; };
@@ -1003,7 +1001,6 @@
 		7DA13A771E35AED7000490A4 /* SSJForgetPassowrdNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF361C4751EA000E6CC9 /* SSJForgetPassowrdNetworkService.m */; };
 		7DA13A781E35AED7000490A4 /* SSJBooksColorAndIconSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CA40E5E1DD481FC0001E9E3 /* SSJBooksColorAndIconSelectView.m */; };
 		7DA13A791E35AED7000490A4 /* SSJForgotPSWResetService.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF3A1C4751EA000E6CC9 /* SSJForgotPSWResetService.m */; };
-		7DA13A7A1E35AED7000490A4 /* SSJReportFormsScaleAxisCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD9D0C31CF6E2A6005AF735 /* SSJReportFormsScaleAxisCell.m */; };
 		7DA13A7B1E35AED7000490A4 /* SSJNewBaseTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD04338C1C1A8DA50051E7AB /* SSJNewBaseTableViewController.m */; };
 		7DA13A7C1E35AED7000490A4 /* UICountingLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD49BF31DB78A4A00318AF9 /* UICountingLabel.m */; };
 		7DA13A7D1E35AED7000490A4 /* SSJLoanChargeAddOrEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4A79721DD46D6100E905F4 /* SSJLoanChargeAddOrEditViewController.m */; };
@@ -1064,7 +1061,6 @@
 		7DA13ABA1E35AED7000490A4 /* SSJBudgetDetailHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F327A1CEAE6C10086B67E /* SSJBudgetDetailHeaderView.m */; };
 		7DA13ABB1E35AED7000490A4 /* SSJUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = BD04333F1C1A82730051E7AB /* SSJUtil.m */; };
 		7DA13ABC1E35AED7000490A4 /* SSJChatMessageItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 91F7FD281DFA8CD3005F4B6B /* SSJChatMessageItem.m */; };
-		7DA13ABD1E35AED7000490A4 /* SSJReportFormsScaleAxisView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD9D0C51CF6E2A6005AF735 /* SSJReportFormsScaleAxisView.m */; };
 		7DA13ABE1E35AED7000490A4 /* UIImage+SSJTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE4A7EB1D20DD8C00F05BF0 /* UIImage+SSJTheme.m */; };
 		7DA13ABF1E35AED7000490A4 /* SSJBudgetEditLabelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32801CEAE6C10086B67E /* SSJBudgetEditLabelCell.m */; };
 		7DA13AC01E35AED7000490A4 /* SSJCalenderTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F329E1CEAE6C10086B67E /* SSJCalenderTableViewCell.m */; };
@@ -1570,7 +1566,6 @@
 		7DBB3B041E55C2EE0075E638 /* SSJViewAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D22A30D1E4F16AC00190CEB /* SSJViewAddition.m */; };
 		7DBB3B051E55C2EE0075E638 /* SSJBooksColorAndIconSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CA40E5E1DD481FC0001E9E3 /* SSJBooksColorAndIconSelectView.m */; };
 		7DBB3B061E55C2EE0075E638 /* SSJForgotPSWResetService.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF3A1C4751EA000E6CC9 /* SSJForgotPSWResetService.m */; };
-		7DBB3B071E55C2EE0075E638 /* SSJReportFormsScaleAxisCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD9D0C31CF6E2A6005AF735 /* SSJReportFormsScaleAxisCell.m */; };
 		7DBB3B081E55C2EE0075E638 /* SSJNewBaseTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD04338C1C1A8DA50051E7AB /* SSJNewBaseTableViewController.m */; };
 		7DBB3B091E55C2EE0075E638 /* UICountingLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD49BF31DB78A4A00318AF9 /* UICountingLabel.m */; };
 		7DBB3B0A1E55C2EE0075E638 /* SSJLoanChargeAddOrEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4A79721DD46D6100E905F4 /* SSJLoanChargeAddOrEditViewController.m */; };
@@ -1634,7 +1629,6 @@
 		7DBB3B451E55C2EE0075E638 /* SSJBudgetDetailHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F327A1CEAE6C10086B67E /* SSJBudgetDetailHeaderView.m */; };
 		7DBB3B461E55C2EE0075E638 /* SSJUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = BD04333F1C1A82730051E7AB /* SSJUtil.m */; };
 		7DBB3B471E55C2EE0075E638 /* SSJChatMessageItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 91F7FD281DFA8CD3005F4B6B /* SSJChatMessageItem.m */; };
-		7DBB3B481E55C2EE0075E638 /* SSJReportFormsScaleAxisView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD9D0C51CF6E2A6005AF735 /* SSJReportFormsScaleAxisView.m */; };
 		7DBB3B491E55C2EE0075E638 /* UIImage+SSJTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE4A7EB1D20DD8C00F05BF0 /* UIImage+SSJTheme.m */; };
 		7DBB3B4A1E55C2EE0075E638 /* SSJBudgetEditLabelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32801CEAE6C10086B67E /* SSJBudgetEditLabelCell.m */; };
 		7DBB3B4B1E55C2EE0075E638 /* SSJCalendarTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1E4C4B1E4C619600CA5843 /* SSJCalendarTableViewCell.m */; };
@@ -2137,7 +2131,6 @@
 		7DBB3F9F1E55C4E00075E638 /* SSJViewAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D22A30D1E4F16AC00190CEB /* SSJViewAddition.m */; };
 		7DBB3FA01E55C4E00075E638 /* SSJBooksColorAndIconSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CA40E5E1DD481FC0001E9E3 /* SSJBooksColorAndIconSelectView.m */; };
 		7DBB3FA11E55C4E00075E638 /* SSJForgotPSWResetService.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF3A1C4751EA000E6CC9 /* SSJForgotPSWResetService.m */; };
-		7DBB3FA21E55C4E00075E638 /* SSJReportFormsScaleAxisCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD9D0C31CF6E2A6005AF735 /* SSJReportFormsScaleAxisCell.m */; };
 		7DBB3FA31E55C4E00075E638 /* SSJNewBaseTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD04338C1C1A8DA50051E7AB /* SSJNewBaseTableViewController.m */; };
 		7DBB3FA41E55C4E00075E638 /* UICountingLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD49BF31DB78A4A00318AF9 /* UICountingLabel.m */; };
 		7DBB3FA51E55C4E00075E638 /* SSJLoanChargeAddOrEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4A79721DD46D6100E905F4 /* SSJLoanChargeAddOrEditViewController.m */; };
@@ -2201,7 +2194,6 @@
 		7DBB3FE01E55C4E00075E638 /* SSJBudgetDetailHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F327A1CEAE6C10086B67E /* SSJBudgetDetailHeaderView.m */; };
 		7DBB3FE11E55C4E00075E638 /* SSJUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = BD04333F1C1A82730051E7AB /* SSJUtil.m */; };
 		7DBB3FE21E55C4E00075E638 /* SSJChatMessageItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 91F7FD281DFA8CD3005F4B6B /* SSJChatMessageItem.m */; };
-		7DBB3FE31E55C4E00075E638 /* SSJReportFormsScaleAxisView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD9D0C51CF6E2A6005AF735 /* SSJReportFormsScaleAxisView.m */; };
 		7DBB3FE41E55C4E00075E638 /* UIImage+SSJTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE4A7EB1D20DD8C00F05BF0 /* UIImage+SSJTheme.m */; };
 		7DBB3FE51E55C4E00075E638 /* SSJBudgetEditLabelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32801CEAE6C10086B67E /* SSJBudgetEditLabelCell.m */; };
 		7DBB3FE61E55C4E00075E638 /* SSJCalendarTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1E4C4B1E4C619600CA5843 /* SSJCalendarTableViewCell.m */; };
@@ -2616,8 +2608,6 @@
 		7DD7D7401C4CDB9000ACE71A /* SSJUserDefaultDataCreater.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD7D73F1C4CDB9000ACE71A /* SSJUserDefaultDataCreater.m */; };
 		7DD902971CE202790076929F /* SCYSlidePagingHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD902941CE202790076929F /* SCYSlidePagingHeaderView.m */; };
 		7DD902981CE202790076929F /* SCYSlidePagingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD902961CE202790076929F /* SCYSlidePagingView.m */; };
-		7DD9D0C61CF6E2A6005AF735 /* SSJReportFormsScaleAxisCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD9D0C31CF6E2A6005AF735 /* SSJReportFormsScaleAxisCell.m */; };
-		7DD9D0C71CF6E2A6005AF735 /* SSJReportFormsScaleAxisView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD9D0C51CF6E2A6005AF735 /* SSJReportFormsScaleAxisView.m */; };
 		7DD9D0D11CF703CF005AF735 /* SSJReportFormsPeriodModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD9D0D01CF703CF005AF735 /* SSJReportFormsPeriodModel.m */; };
 		7DDA489A1C8821F20010EB01 /* SSJDatePeriod.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DDA48991C8821F20010EB01 /* SSJDatePeriod.m */; };
 		7DDB6D231DB9A57200D823AE /* SSJDomainManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DDB6D221DB9A57200D823AE /* SSJDomainManager.m */; };
@@ -2640,6 +2630,8 @@
 		7DE4A7DB1D20C0BA00F05BF0 /* SSJThemeSetting.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE4A7DA1D20C0BA00F05BF0 /* SSJThemeSetting.m */; };
 		7DE4A7E51D20DC7000F05BF0 /* NSString+SSJTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE4A7E41D20DC7000F05BF0 /* NSString+SSJTheme.m */; };
 		7DE4A7EC1D20DD8C00F05BF0 /* UIImage+SSJTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE4A7EB1D20DD8C00F05BF0 /* UIImage+SSJTheme.m */; };
+		7DE4E9DA1EB33C0800616958 /* SSJReportFormsScaleAxisCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE4E9D71EB33C0800616958 /* SSJReportFormsScaleAxisCell.m */; };
+		7DE4E9DB1EB33C0800616958 /* SSJReportFormsScaleAxisView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE4E9D91EB33C0800616958 /* SSJReportFormsScaleAxisView.m */; };
 		7DE681651E42FBE30023622E /* UIViewController+SSJMotionPassword.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE681641E42FBE30023622E /* UIViewController+SSJMotionPassword.m */; };
 		7DE69B611C8D26E7001D31C1 /* SSJImageSynchronizeTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE69B601C8D26E7001D31C1 /* SSJImageSynchronizeTask.m */; };
 		7DE69C2D1C8EA84A001D31C1 /* SSJDatabaseUpgrader.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE69C2C1C8EA84A001D31C1 /* SSJDatabaseUpgrader.m */; };
@@ -2873,7 +2865,6 @@
 		7DFB16F11EB0341E00292DD3 /* MJRefreshStateHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C155E851E68572700FDFD18 /* MJRefreshStateHeader.m */; };
 		7DFB16F21EB0341E00292DD3 /* SSJBooksColorAndIconSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CA40E5E1DD481FC0001E9E3 /* SSJBooksColorAndIconSelectView.m */; };
 		7DFB16F31EB0341E00292DD3 /* SSJForgotPSWResetService.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF3A1C4751EA000E6CC9 /* SSJForgotPSWResetService.m */; };
-		7DFB16F41EB0341E00292DD3 /* SSJReportFormsScaleAxisCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD9D0C31CF6E2A6005AF735 /* SSJReportFormsScaleAxisCell.m */; };
 		7DFB16F51EB0341E00292DD3 /* SSJNewBaseTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD04338C1C1A8DA50051E7AB /* SSJNewBaseTableViewController.m */; };
 		7DFB16F61EB0341E00292DD3 /* UICountingLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD49BF31DB78A4A00318AF9 /* UICountingLabel.m */; };
 		7DFB16F71EB0341E00292DD3 /* SSJLoanChargeAddOrEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4A79721DD46D6100E905F4 /* SSJLoanChargeAddOrEditViewController.m */; };
@@ -2939,7 +2930,6 @@
 		7DFB17331EB0341E00292DD3 /* SSJBudgetDetailHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F327A1CEAE6C10086B67E /* SSJBudgetDetailHeaderView.m */; };
 		7DFB17341EB0341E00292DD3 /* SSJUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = BD04333F1C1A82730051E7AB /* SSJUtil.m */; };
 		7DFB17351EB0341E00292DD3 /* SSJChatMessageItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 91F7FD281DFA8CD3005F4B6B /* SSJChatMessageItem.m */; };
-		7DFB17361EB0341E00292DD3 /* SSJReportFormsScaleAxisView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD9D0C51CF6E2A6005AF735 /* SSJReportFormsScaleAxisView.m */; };
 		7DFB17371EB0341E00292DD3 /* UIImage+SSJTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE4A7EB1D20DD8C00F05BF0 /* UIImage+SSJTheme.m */; };
 		7DFB17381EB0341E00292DD3 /* SSJBudgetEditLabelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32801CEAE6C10086B67E /* SSJBudgetEditLabelCell.m */; };
 		7DFB17391EB0341E00292DD3 /* SSJCalendarTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1E4C4B1E4C619600CA5843 /* SSJCalendarTableViewCell.m */; };
@@ -3591,7 +3581,6 @@
 		9C13F5751E8267D300AC5FA9 /* MJRefreshBackFooter.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C155E681E68572700FDFD18 /* MJRefreshBackFooter.m */; };
 		9C13F5761E8267D300AC5FA9 /* SSJBooksColorAndIconSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CA40E5E1DD481FC0001E9E3 /* SSJBooksColorAndIconSelectView.m */; };
 		9C13F5771E8267D300AC5FA9 /* SSJForgotPSWResetService.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF3A1C4751EA000E6CC9 /* SSJForgotPSWResetService.m */; };
-		9C13F5781E8267D300AC5FA9 /* SSJReportFormsScaleAxisCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD9D0C31CF6E2A6005AF735 /* SSJReportFormsScaleAxisCell.m */; };
 		9C13F5791E8267D300AC5FA9 /* SSJNewBaseTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD04338C1C1A8DA50051E7AB /* SSJNewBaseTableViewController.m */; };
 		9C13F57A1E8267D300AC5FA9 /* UICountingLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD49BF31DB78A4A00318AF9 /* UICountingLabel.m */; };
 		9C13F57B1E8267D300AC5FA9 /* SSJLoanChargeAddOrEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4A79721DD46D6100E905F4 /* SSJLoanChargeAddOrEditViewController.m */; };
@@ -3657,7 +3646,6 @@
 		9C13F5B71E8267D300AC5FA9 /* SSJBudgetDetailHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F327A1CEAE6C10086B67E /* SSJBudgetDetailHeaderView.m */; };
 		9C13F5B81E8267D300AC5FA9 /* SSJUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = BD04333F1C1A82730051E7AB /* SSJUtil.m */; };
 		9C13F5B91E8267D300AC5FA9 /* SSJChatMessageItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 91F7FD281DFA8CD3005F4B6B /* SSJChatMessageItem.m */; };
-		9C13F5BA1E8267D300AC5FA9 /* SSJReportFormsScaleAxisView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD9D0C51CF6E2A6005AF735 /* SSJReportFormsScaleAxisView.m */; };
 		9C13F5BB1E8267D300AC5FA9 /* UIImage+SSJTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE4A7EB1D20DD8C00F05BF0 /* UIImage+SSJTheme.m */; };
 		9C13F5BC1E8267D300AC5FA9 /* SSJBudgetEditLabelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32801CEAE6C10086B67E /* SSJBudgetEditLabelCell.m */; };
 		9C13F5BD1E8267D300AC5FA9 /* SSJCalendarTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1E4C4B1E4C619600CA5843 /* SSJCalendarTableViewCell.m */; };
@@ -4468,7 +4456,6 @@
 		9C4C20981E9E30C8000C5F15 /* MJRefreshStateHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C155E851E68572700FDFD18 /* MJRefreshStateHeader.m */; };
 		9C4C20991E9E30C8000C5F15 /* SSJBooksColorAndIconSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CA40E5E1DD481FC0001E9E3 /* SSJBooksColorAndIconSelectView.m */; };
 		9C4C209A1E9E30C8000C5F15 /* SSJForgotPSWResetService.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF3A1C4751EA000E6CC9 /* SSJForgotPSWResetService.m */; };
-		9C4C209B1E9E30C8000C5F15 /* SSJReportFormsScaleAxisCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD9D0C31CF6E2A6005AF735 /* SSJReportFormsScaleAxisCell.m */; };
 		9C4C209C1E9E30C8000C5F15 /* SSJNewBaseTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD04338C1C1A8DA50051E7AB /* SSJNewBaseTableViewController.m */; };
 		9C4C209D1E9E30C8000C5F15 /* UICountingLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD49BF31DB78A4A00318AF9 /* UICountingLabel.m */; };
 		9C4C209E1E9E30C8000C5F15 /* SSJLoanChargeAddOrEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4A79721DD46D6100E905F4 /* SSJLoanChargeAddOrEditViewController.m */; };
@@ -4534,7 +4521,6 @@
 		9C4C20DA1E9E30C8000C5F15 /* SSJBudgetDetailHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F327A1CEAE6C10086B67E /* SSJBudgetDetailHeaderView.m */; };
 		9C4C20DB1E9E30C8000C5F15 /* SSJUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = BD04333F1C1A82730051E7AB /* SSJUtil.m */; };
 		9C4C20DC1E9E30C8000C5F15 /* SSJChatMessageItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 91F7FD281DFA8CD3005F4B6B /* SSJChatMessageItem.m */; };
-		9C4C20DD1E9E30C8000C5F15 /* SSJReportFormsScaleAxisView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD9D0C51CF6E2A6005AF735 /* SSJReportFormsScaleAxisView.m */; };
 		9C4C20DE1E9E30C8000C5F15 /* UIImage+SSJTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE4A7EB1D20DD8C00F05BF0 /* UIImage+SSJTheme.m */; };
 		9C4C20DF1E9E30C8000C5F15 /* SSJBudgetEditLabelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32801CEAE6C10086B67E /* SSJBudgetEditLabelCell.m */; };
 		9C4C20E01E9E30C8000C5F15 /* SSJCalendarTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1E4C4B1E4C619600CA5843 /* SSJCalendarTableViewCell.m */; };
@@ -5196,7 +5182,6 @@
 		9C7D2D7E1E8DF8A80093001F /* MJRefreshStateHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C155E851E68572700FDFD18 /* MJRefreshStateHeader.m */; };
 		9C7D2D7F1E8DF8A80093001F /* SSJBooksColorAndIconSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CA40E5E1DD481FC0001E9E3 /* SSJBooksColorAndIconSelectView.m */; };
 		9C7D2D801E8DF8A80093001F /* SSJForgotPSWResetService.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF3A1C4751EA000E6CC9 /* SSJForgotPSWResetService.m */; };
-		9C7D2D811E8DF8A80093001F /* SSJReportFormsScaleAxisCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD9D0C31CF6E2A6005AF735 /* SSJReportFormsScaleAxisCell.m */; };
 		9C7D2D821E8DF8A80093001F /* SSJNewBaseTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD04338C1C1A8DA50051E7AB /* SSJNewBaseTableViewController.m */; };
 		9C7D2D831E8DF8A80093001F /* UICountingLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD49BF31DB78A4A00318AF9 /* UICountingLabel.m */; };
 		9C7D2D841E8DF8A80093001F /* SSJLoanChargeAddOrEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4A79721DD46D6100E905F4 /* SSJLoanChargeAddOrEditViewController.m */; };
@@ -5262,7 +5247,6 @@
 		9C7D2DC01E8DF8A80093001F /* SSJBudgetDetailHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F327A1CEAE6C10086B67E /* SSJBudgetDetailHeaderView.m */; };
 		9C7D2DC11E8DF8A80093001F /* SSJUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = BD04333F1C1A82730051E7AB /* SSJUtil.m */; };
 		9C7D2DC21E8DF8A80093001F /* SSJChatMessageItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 91F7FD281DFA8CD3005F4B6B /* SSJChatMessageItem.m */; };
-		9C7D2DC31E8DF8A80093001F /* SSJReportFormsScaleAxisView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD9D0C51CF6E2A6005AF735 /* SSJReportFormsScaleAxisView.m */; };
 		9C7D2DC41E8DF8A80093001F /* UIImage+SSJTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE4A7EB1D20DD8C00F05BF0 /* UIImage+SSJTheme.m */; };
 		9C7D2DC51E8DF8A80093001F /* SSJBudgetEditLabelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32801CEAE6C10086B67E /* SSJBudgetEditLabelCell.m */; };
 		9C7D2DC61E8DF8A80093001F /* SSJCalendarTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1E4C4B1E4C619600CA5843 /* SSJCalendarTableViewCell.m */; };
@@ -5812,7 +5796,6 @@
 		9C7D2FF51E8DF96B0093001F /* MJRefreshStateHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C155E851E68572700FDFD18 /* MJRefreshStateHeader.m */; };
 		9C7D2FF61E8DF96B0093001F /* SSJBooksColorAndIconSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CA40E5E1DD481FC0001E9E3 /* SSJBooksColorAndIconSelectView.m */; };
 		9C7D2FF71E8DF96B0093001F /* SSJForgotPSWResetService.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF3A1C4751EA000E6CC9 /* SSJForgotPSWResetService.m */; };
-		9C7D2FF81E8DF96B0093001F /* SSJReportFormsScaleAxisCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD9D0C31CF6E2A6005AF735 /* SSJReportFormsScaleAxisCell.m */; };
 		9C7D2FF91E8DF96B0093001F /* SSJNewBaseTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD04338C1C1A8DA50051E7AB /* SSJNewBaseTableViewController.m */; };
 		9C7D2FFA1E8DF96B0093001F /* UICountingLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD49BF31DB78A4A00318AF9 /* UICountingLabel.m */; };
 		9C7D2FFB1E8DF96B0093001F /* SSJLoanChargeAddOrEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4A79721DD46D6100E905F4 /* SSJLoanChargeAddOrEditViewController.m */; };
@@ -5878,7 +5861,6 @@
 		9C7D30371E8DF96B0093001F /* SSJBudgetDetailHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F327A1CEAE6C10086B67E /* SSJBudgetDetailHeaderView.m */; };
 		9C7D30381E8DF96B0093001F /* SSJUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = BD04333F1C1A82730051E7AB /* SSJUtil.m */; };
 		9C7D30391E8DF96B0093001F /* SSJChatMessageItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 91F7FD281DFA8CD3005F4B6B /* SSJChatMessageItem.m */; };
-		9C7D303A1E8DF96B0093001F /* SSJReportFormsScaleAxisView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD9D0C51CF6E2A6005AF735 /* SSJReportFormsScaleAxisView.m */; };
 		9C7D303B1E8DF96B0093001F /* UIImage+SSJTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE4A7EB1D20DD8C00F05BF0 /* UIImage+SSJTheme.m */; };
 		9C7D303C1E8DF96B0093001F /* SSJBudgetEditLabelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32801CEAE6C10086B67E /* SSJBudgetEditLabelCell.m */; };
 		9C7D303D1E8DF96B0093001F /* SSJCalendarTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1E4C4B1E4C619600CA5843 /* SSJCalendarTableViewCell.m */; };
@@ -6429,7 +6411,6 @@
 		9C80FD371E95E88E00B1BAAC /* MJRefreshStateHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C155E851E68572700FDFD18 /* MJRefreshStateHeader.m */; };
 		9C80FD381E95E88E00B1BAAC /* SSJBooksColorAndIconSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CA40E5E1DD481FC0001E9E3 /* SSJBooksColorAndIconSelectView.m */; };
 		9C80FD391E95E88E00B1BAAC /* SSJForgotPSWResetService.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF3A1C4751EA000E6CC9 /* SSJForgotPSWResetService.m */; };
-		9C80FD3A1E95E88E00B1BAAC /* SSJReportFormsScaleAxisCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD9D0C31CF6E2A6005AF735 /* SSJReportFormsScaleAxisCell.m */; };
 		9C80FD3B1E95E88E00B1BAAC /* SSJNewBaseTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD04338C1C1A8DA50051E7AB /* SSJNewBaseTableViewController.m */; };
 		9C80FD3C1E95E88E00B1BAAC /* UICountingLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD49BF31DB78A4A00318AF9 /* UICountingLabel.m */; };
 		9C80FD3D1E95E88E00B1BAAC /* SSJLoanChargeAddOrEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4A79721DD46D6100E905F4 /* SSJLoanChargeAddOrEditViewController.m */; };
@@ -6495,7 +6476,6 @@
 		9C80FD791E95E88E00B1BAAC /* SSJBudgetDetailHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F327A1CEAE6C10086B67E /* SSJBudgetDetailHeaderView.m */; };
 		9C80FD7A1E95E88E00B1BAAC /* SSJUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = BD04333F1C1A82730051E7AB /* SSJUtil.m */; };
 		9C80FD7B1E95E88E00B1BAAC /* SSJChatMessageItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 91F7FD281DFA8CD3005F4B6B /* SSJChatMessageItem.m */; };
-		9C80FD7C1E95E88E00B1BAAC /* SSJReportFormsScaleAxisView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD9D0C51CF6E2A6005AF735 /* SSJReportFormsScaleAxisView.m */; };
 		9C80FD7D1E95E88E00B1BAAC /* UIImage+SSJTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE4A7EB1D20DD8C00F05BF0 /* UIImage+SSJTheme.m */; };
 		9C80FD7E1E95E88E00B1BAAC /* SSJBudgetEditLabelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32801CEAE6C10086B67E /* SSJBudgetEditLabelCell.m */; };
 		9C80FD7F1E95E88E00B1BAAC /* SSJCalendarTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1E4C4B1E4C619600CA5843 /* SSJCalendarTableViewCell.m */; };
@@ -7119,7 +7099,6 @@
 		9C9CEEF71EA5F73A007657FE /* MJRefreshStateHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C155E851E68572700FDFD18 /* MJRefreshStateHeader.m */; };
 		9C9CEEF81EA5F73A007657FE /* SSJBooksColorAndIconSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CA40E5E1DD481FC0001E9E3 /* SSJBooksColorAndIconSelectView.m */; };
 		9C9CEEF91EA5F73A007657FE /* SSJForgotPSWResetService.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF3A1C4751EA000E6CC9 /* SSJForgotPSWResetService.m */; };
-		9C9CEEFA1EA5F73A007657FE /* SSJReportFormsScaleAxisCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD9D0C31CF6E2A6005AF735 /* SSJReportFormsScaleAxisCell.m */; };
 		9C9CEEFB1EA5F73A007657FE /* SSJNewBaseTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD04338C1C1A8DA50051E7AB /* SSJNewBaseTableViewController.m */; };
 		9C9CEEFC1EA5F73A007657FE /* UICountingLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD49BF31DB78A4A00318AF9 /* UICountingLabel.m */; };
 		9C9CEEFD1EA5F73A007657FE /* SSJLoanChargeAddOrEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4A79721DD46D6100E905F4 /* SSJLoanChargeAddOrEditViewController.m */; };
@@ -7185,7 +7164,6 @@
 		9C9CEF391EA5F73A007657FE /* SSJBudgetDetailHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F327A1CEAE6C10086B67E /* SSJBudgetDetailHeaderView.m */; };
 		9C9CEF3A1EA5F73A007657FE /* SSJUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = BD04333F1C1A82730051E7AB /* SSJUtil.m */; };
 		9C9CEF3B1EA5F73A007657FE /* SSJChatMessageItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 91F7FD281DFA8CD3005F4B6B /* SSJChatMessageItem.m */; };
-		9C9CEF3C1EA5F73A007657FE /* SSJReportFormsScaleAxisView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD9D0C51CF6E2A6005AF735 /* SSJReportFormsScaleAxisView.m */; };
 		9C9CEF3D1EA5F73A007657FE /* UIImage+SSJTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE4A7EB1D20DD8C00F05BF0 /* UIImage+SSJTheme.m */; };
 		9C9CEF3E1EA5F73A007657FE /* SSJBudgetEditLabelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32801CEAE6C10086B67E /* SSJBudgetEditLabelCell.m */; };
 		9C9CEF3F1EA5F73A007657FE /* SSJCalendarTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1E4C4B1E4C619600CA5843 /* SSJCalendarTableViewCell.m */; };
@@ -7851,7 +7829,6 @@
 		9CECFB7A1D6D41A700DB2C8B /* SSJHomeBarCalenderButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32531CEAE6C10086B67E /* SSJHomeBarCalenderButton.m */; };
 		9CECFB7B1D6D41A700DB2C8B /* SSJForgetPassowrdNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF361C4751EA000E6CC9 /* SSJForgetPassowrdNetworkService.m */; };
 		9CECFB7C1D6D41A700DB2C8B /* SSJForgotPSWResetService.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF3A1C4751EA000E6CC9 /* SSJForgotPSWResetService.m */; };
-		9CECFB7D1D6D41A700DB2C8B /* SSJReportFormsScaleAxisCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD9D0C31CF6E2A6005AF735 /* SSJReportFormsScaleAxisCell.m */; };
 		9CECFB7E1D6D41A700DB2C8B /* SSJNewBaseTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD04338C1C1A8DA50051E7AB /* SSJNewBaseTableViewController.m */; };
 		9CECFB801D6D41A700DB2C8B /* SSJMotionPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBE41CFD2DAA0061803B /* SSJMotionPasswordViewController.m */; };
 		9CECFB811D6D41A700DB2C8B /* SSJFundingDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9471561CEB224C00D69079 /* SSJFundingDetailCell.m */; };
@@ -7891,7 +7868,6 @@
 		9CECFBA81D6D41A700DB2C8B /* SSJBaseTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433811C1A8DA50051E7AB /* SSJBaseTableViewCell.m */; };
 		9CECFBA91D6D41A700DB2C8B /* SSJBudgetDetailHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F327A1CEAE6C10086B67E /* SSJBudgetDetailHeaderView.m */; };
 		9CECFBAA1D6D41A700DB2C8B /* SSJUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = BD04333F1C1A82730051E7AB /* SSJUtil.m */; };
-		9CECFBAB1D6D41A700DB2C8B /* SSJReportFormsScaleAxisView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD9D0C51CF6E2A6005AF735 /* SSJReportFormsScaleAxisView.m */; };
 		9CECFBAC1D6D41A700DB2C8B /* UIImage+SSJTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE4A7EB1D20DD8C00F05BF0 /* UIImage+SSJTheme.m */; };
 		9CECFBAD1D6D41A700DB2C8B /* SSJBudgetEditLabelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32801CEAE6C10086B67E /* SSJBudgetEditLabelCell.m */; };
 		9CECFBAE1D6D41A700DB2C8B /* SSJCalenderTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F329E1CEAE6C10086B67E /* SSJCalenderTableViewCell.m */; };
@@ -8731,10 +8707,6 @@
 		7DD902941CE202790076929F /* SCYSlidePagingHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCYSlidePagingHeaderView.m; sourceTree = "<group>"; };
 		7DD902951CE202790076929F /* SCYSlidePagingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCYSlidePagingView.h; sourceTree = "<group>"; };
 		7DD902961CE202790076929F /* SCYSlidePagingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCYSlidePagingView.m; sourceTree = "<group>"; };
-		7DD9D0C21CF6E2A6005AF735 /* SSJReportFormsScaleAxisCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormsScaleAxisCell.h; sourceTree = "<group>"; };
-		7DD9D0C31CF6E2A6005AF735 /* SSJReportFormsScaleAxisCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReportFormsScaleAxisCell.m; sourceTree = "<group>"; };
-		7DD9D0C41CF6E2A6005AF735 /* SSJReportFormsScaleAxisView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormsScaleAxisView.h; sourceTree = "<group>"; };
-		7DD9D0C51CF6E2A6005AF735 /* SSJReportFormsScaleAxisView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReportFormsScaleAxisView.m; sourceTree = "<group>"; };
 		7DD9D0CF1CF703CF005AF735 /* SSJReportFormsPeriodModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormsPeriodModel.h; sourceTree = "<group>"; };
 		7DD9D0D01CF703CF005AF735 /* SSJReportFormsPeriodModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReportFormsPeriodModel.m; sourceTree = "<group>"; };
 		7DDA48981C8821F20010EB01 /* SSJDatePeriod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJDatePeriod.h; sourceTree = "<group>"; };
@@ -8772,6 +8744,10 @@
 		7DE4A7E41D20DC7000F05BF0 /* NSString+SSJTheme.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+SSJTheme.m"; sourceTree = "<group>"; };
 		7DE4A7EA1D20DD8C00F05BF0 /* UIImage+SSJTheme.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+SSJTheme.h"; sourceTree = "<group>"; };
 		7DE4A7EB1D20DD8C00F05BF0 /* UIImage+SSJTheme.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+SSJTheme.m"; sourceTree = "<group>"; };
+		7DE4E9D61EB33C0800616958 /* SSJReportFormsScaleAxisCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormsScaleAxisCell.h; sourceTree = "<group>"; };
+		7DE4E9D71EB33C0800616958 /* SSJReportFormsScaleAxisCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReportFormsScaleAxisCell.m; sourceTree = "<group>"; };
+		7DE4E9D81EB33C0800616958 /* SSJReportFormsScaleAxisView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormsScaleAxisView.h; sourceTree = "<group>"; };
+		7DE4E9D91EB33C0800616958 /* SSJReportFormsScaleAxisView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReportFormsScaleAxisView.m; sourceTree = "<group>"; };
 		7DE681631E42FBE30023622E /* UIViewController+SSJMotionPassword.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+SSJMotionPassword.h"; sourceTree = "<group>"; };
 		7DE681641E42FBE30023622E /* UIViewController+SSJMotionPassword.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+SSJMotionPassword.m"; sourceTree = "<group>"; };
 		7DE69B5F1C8D26E7001D31C1 /* SSJImageSynchronizeTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJImageSynchronizeTask.h; sourceTree = "<group>"; };
@@ -10487,7 +10463,6 @@
 		7D6AAB501C30EC1F0007C0A3 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				7DD9D0C11CF6E2A6005AF735 /* SSJReportFormsScaleAxisView */,
 				7D6AAB511C30EC290007C0A3 /* SSJReportFormsSwitchYearControl.h */,
 				7D6AAB521C30EC290007C0A3 /* SSJReportFormsSwitchYearControl.m */,
 				7D6AAB681C313BA70007C0A3 /* SSJReportFormsIncomeAndPayCell.h */,
@@ -10548,6 +10523,7 @@
 		7D6AAB5F1C312C340007C0A3 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				7DE4E9D51EB33C0800616958 /* SSJReportFormsScaleAxisView */,
 				7D8952BA1EB2E59200FF6D04 /* SSJButton */,
 				7D6CC8E31E0A731C00FF6133 /* SSJReportFormsCurveGraphView */,
 				7DF07E0B1DD086BB00B0AF97 /* SSJSeparatorFormView */,
@@ -10910,17 +10886,6 @@
 			path = SCYSlidePagingView;
 			sourceTree = "<group>";
 		};
-		7DD9D0C11CF6E2A6005AF735 /* SSJReportFormsScaleAxisView */ = {
-			isa = PBXGroup;
-			children = (
-				7DD9D0C41CF6E2A6005AF735 /* SSJReportFormsScaleAxisView.h */,
-				7DD9D0C51CF6E2A6005AF735 /* SSJReportFormsScaleAxisView.m */,
-				7DD9D0C21CF6E2A6005AF735 /* SSJReportFormsScaleAxisCell.h */,
-				7DD9D0C31CF6E2A6005AF735 /* SSJReportFormsScaleAxisCell.m */,
-			);
-			path = SSJReportFormsScaleAxisView;
-			sourceTree = "<group>";
-		};
 		7DDA48971C8821D70010EB01 /* Foundation */ = {
 			isa = PBXGroup;
 			children = (
@@ -11032,6 +10997,17 @@
 				7D46328D1D21029F0040BABD /* UIImageView+SSJTheme.m */,
 			);
 			path = Category;
+			sourceTree = "<group>";
+		};
+		7DE4E9D51EB33C0800616958 /* SSJReportFormsScaleAxisView */ = {
+			isa = PBXGroup;
+			children = (
+				7DE4E9D81EB33C0800616958 /* SSJReportFormsScaleAxisView.h */,
+				7DE4E9D91EB33C0800616958 /* SSJReportFormsScaleAxisView.m */,
+				7DE4E9D61EB33C0800616958 /* SSJReportFormsScaleAxisCell.h */,
+				7DE4E9D71EB33C0800616958 /* SSJReportFormsScaleAxisCell.m */,
+			);
+			path = SSJReportFormsScaleAxisView;
 			sourceTree = "<group>";
 		};
 		7DE69C271C8E6E7E001D31C1 /* SSJDatabaseUpdater */ = {
@@ -14768,7 +14744,6 @@
 				9C61FD241EAE0CF300971F0F /* SSJHomeThemeModifyView.m in Sources */,
 				7D08A1211E4999D30085A8FB /* SSJBooksColorAndIconSelectView.m in Sources */,
 				7D08A1221E4999D30085A8FB /* SSJForgotPSWResetService.m in Sources */,
-				7D08A1231E4999D30085A8FB /* SSJReportFormsScaleAxisCell.m in Sources */,
 				9CEC60EC1E700D970087B361 /* SSJPushInfoItem.m in Sources */,
 				7D08A1241E4999D30085A8FB /* SSJNewBaseTableViewController.m in Sources */,
 				9C155EA01E68572700FDFD18 /* MJRefreshBackFooter.m in Sources */,
@@ -14841,7 +14816,6 @@
 				7D08A1631E4999D30085A8FB /* SSJBudgetDetailHeaderView.m in Sources */,
 				7D08A1641E4999D30085A8FB /* SSJUtil.m in Sources */,
 				7D08A1651E4999D30085A8FB /* SSJChatMessageItem.m in Sources */,
-				7D08A1661E4999D30085A8FB /* SSJReportFormsScaleAxisView.m in Sources */,
 				7D08A1671E4999D30085A8FB /* UIImage+SSJTheme.m in Sources */,
 				7D08A1681E4999D30085A8FB /* SSJBudgetEditLabelCell.m in Sources */,
 				7D08A1691E4999D30085A8FB /* SSJCalenderTableViewCell.m in Sources */,
@@ -15371,7 +15345,6 @@
 				9C61FD231EAE0CF300971F0F /* SSJHomeThemeModifyView.m in Sources */,
 				7DA13A781E35AED7000490A4 /* SSJBooksColorAndIconSelectView.m in Sources */,
 				7DA13A791E35AED7000490A4 /* SSJForgotPSWResetService.m in Sources */,
-				7DA13A7A1E35AED7000490A4 /* SSJReportFormsScaleAxisCell.m in Sources */,
 				9CEC60EB1E700D970087B361 /* SSJPushInfoItem.m in Sources */,
 				7DA13A7B1E35AED7000490A4 /* SSJNewBaseTableViewController.m in Sources */,
 				9C155E9F1E68572700FDFD18 /* MJRefreshBackFooter.m in Sources */,
@@ -15444,7 +15417,6 @@
 				7DA13ABA1E35AED7000490A4 /* SSJBudgetDetailHeaderView.m in Sources */,
 				7DA13ABB1E35AED7000490A4 /* SSJUtil.m in Sources */,
 				7DA13ABC1E35AED7000490A4 /* SSJChatMessageItem.m in Sources */,
-				7DA13ABD1E35AED7000490A4 /* SSJReportFormsScaleAxisView.m in Sources */,
 				7DA13ABE1E35AED7000490A4 /* UIImage+SSJTheme.m in Sources */,
 				7DA13ABF1E35AED7000490A4 /* SSJBudgetEditLabelCell.m in Sources */,
 				7DA13AC01E35AED7000490A4 /* SSJCalenderTableViewCell.m in Sources */,
@@ -15980,7 +15952,6 @@
 				9C155EA11E68572700FDFD18 /* MJRefreshBackFooter.m in Sources */,
 				7DBB3B051E55C2EE0075E638 /* SSJBooksColorAndIconSelectView.m in Sources */,
 				7DBB3B061E55C2EE0075E638 /* SSJForgotPSWResetService.m in Sources */,
-				7DBB3B071E55C2EE0075E638 /* SSJReportFormsScaleAxisCell.m in Sources */,
 				7DBB3B081E55C2EE0075E638 /* SSJNewBaseTableViewController.m in Sources */,
 				7DBB3B091E55C2EE0075E638 /* UICountingLabel.m in Sources */,
 				7DBB3B0A1E55C2EE0075E638 /* SSJLoanChargeAddOrEditViewController.m in Sources */,
@@ -16048,7 +16019,6 @@
 				7DBB3B451E55C2EE0075E638 /* SSJBudgetDetailHeaderView.m in Sources */,
 				7DBB3B461E55C2EE0075E638 /* SSJUtil.m in Sources */,
 				7DBB3B471E55C2EE0075E638 /* SSJChatMessageItem.m in Sources */,
-				7DBB3B481E55C2EE0075E638 /* SSJReportFormsScaleAxisView.m in Sources */,
 				7DBB3B491E55C2EE0075E638 /* UIImage+SSJTheme.m in Sources */,
 				7DBB3B4A1E55C2EE0075E638 /* SSJBudgetEditLabelCell.m in Sources */,
 				7DBB3B4B1E55C2EE0075E638 /* SSJCalendarTableViewCell.m in Sources */,
@@ -16581,7 +16551,6 @@
 				9C155E9B1E68572700FDFD18 /* MJRefreshBackFooter.m in Sources */,
 				7DBB3FA01E55C4E00075E638 /* SSJBooksColorAndIconSelectView.m in Sources */,
 				7DBB3FA11E55C4E00075E638 /* SSJForgotPSWResetService.m in Sources */,
-				7DBB3FA21E55C4E00075E638 /* SSJReportFormsScaleAxisCell.m in Sources */,
 				7DBB3FA31E55C4E00075E638 /* SSJNewBaseTableViewController.m in Sources */,
 				7DBB3FA41E55C4E00075E638 /* UICountingLabel.m in Sources */,
 				7DBB3FA51E55C4E00075E638 /* SSJLoanChargeAddOrEditViewController.m in Sources */,
@@ -16649,7 +16618,6 @@
 				7DBB3FE01E55C4E00075E638 /* SSJBudgetDetailHeaderView.m in Sources */,
 				7DBB3FE11E55C4E00075E638 /* SSJUtil.m in Sources */,
 				7DBB3FE21E55C4E00075E638 /* SSJChatMessageItem.m in Sources */,
-				7DBB3FE31E55C4E00075E638 /* SSJReportFormsScaleAxisView.m in Sources */,
 				7DBB3FE41E55C4E00075E638 /* UIImage+SSJTheme.m in Sources */,
 				7DBB3FE51E55C4E00075E638 /* SSJBudgetEditLabelCell.m in Sources */,
 				7DBB3FE61E55C4E00075E638 /* SSJCalendarTableViewCell.m in Sources */,
@@ -17173,7 +17141,6 @@
 				7DFB16F11EB0341E00292DD3 /* MJRefreshStateHeader.m in Sources */,
 				7DFB16F21EB0341E00292DD3 /* SSJBooksColorAndIconSelectView.m in Sources */,
 				7DFB16F31EB0341E00292DD3 /* SSJForgotPSWResetService.m in Sources */,
-				7DFB16F41EB0341E00292DD3 /* SSJReportFormsScaleAxisCell.m in Sources */,
 				7DFB16F51EB0341E00292DD3 /* SSJNewBaseTableViewController.m in Sources */,
 				7DFB16F61EB0341E00292DD3 /* UICountingLabel.m in Sources */,
 				7DFB16F71EB0341E00292DD3 /* SSJLoanChargeAddOrEditViewController.m in Sources */,
@@ -17241,7 +17208,6 @@
 				7DFB17331EB0341E00292DD3 /* SSJBudgetDetailHeaderView.m in Sources */,
 				7DFB17341EB0341E00292DD3 /* SSJUtil.m in Sources */,
 				7DFB17351EB0341E00292DD3 /* SSJChatMessageItem.m in Sources */,
-				7DFB17361EB0341E00292DD3 /* SSJReportFormsScaleAxisView.m in Sources */,
 				7DFB17371EB0341E00292DD3 /* UIImage+SSJTheme.m in Sources */,
 				7DFB17381EB0341E00292DD3 /* SSJBudgetEditLabelCell.m in Sources */,
 				7DFB17391EB0341E00292DD3 /* SSJCalendarTableViewCell.m in Sources */,
@@ -17775,7 +17741,6 @@
 				9C13F5751E8267D300AC5FA9 /* MJRefreshBackFooter.m in Sources */,
 				9C13F5761E8267D300AC5FA9 /* SSJBooksColorAndIconSelectView.m in Sources */,
 				9C13F5771E8267D300AC5FA9 /* SSJForgotPSWResetService.m in Sources */,
-				9C13F5781E8267D300AC5FA9 /* SSJReportFormsScaleAxisCell.m in Sources */,
 				9C13F5791E8267D300AC5FA9 /* SSJNewBaseTableViewController.m in Sources */,
 				9C13F57A1E8267D300AC5FA9 /* UICountingLabel.m in Sources */,
 				9C13F57B1E8267D300AC5FA9 /* SSJLoanChargeAddOrEditViewController.m in Sources */,
@@ -17841,7 +17806,6 @@
 				9C13F5B71E8267D300AC5FA9 /* SSJBudgetDetailHeaderView.m in Sources */,
 				9C13F5B81E8267D300AC5FA9 /* SSJUtil.m in Sources */,
 				9C13F5B91E8267D300AC5FA9 /* SSJChatMessageItem.m in Sources */,
-				9C13F5BA1E8267D300AC5FA9 /* SSJReportFormsScaleAxisView.m in Sources */,
 				9C13F5BB1E8267D300AC5FA9 /* UIImage+SSJTheme.m in Sources */,
 				9C13F5BC1E8267D300AC5FA9 /* SSJBudgetEditLabelCell.m in Sources */,
 				9C13F5BD1E8267D300AC5FA9 /* SSJCalendarTableViewCell.m in Sources */,
@@ -18367,7 +18331,6 @@
 				9C4C20981E9E30C8000C5F15 /* MJRefreshStateHeader.m in Sources */,
 				9C4C20991E9E30C8000C5F15 /* SSJBooksColorAndIconSelectView.m in Sources */,
 				9C4C209A1E9E30C8000C5F15 /* SSJForgotPSWResetService.m in Sources */,
-				9C4C209B1E9E30C8000C5F15 /* SSJReportFormsScaleAxisCell.m in Sources */,
 				9C4C209C1E9E30C8000C5F15 /* SSJNewBaseTableViewController.m in Sources */,
 				9C4C209D1E9E30C8000C5F15 /* UICountingLabel.m in Sources */,
 				9C4C209E1E9E30C8000C5F15 /* SSJLoanChargeAddOrEditViewController.m in Sources */,
@@ -18436,7 +18399,6 @@
 				9C4C20DA1E9E30C8000C5F15 /* SSJBudgetDetailHeaderView.m in Sources */,
 				9C4C20DB1E9E30C8000C5F15 /* SSJUtil.m in Sources */,
 				9C4C20DC1E9E30C8000C5F15 /* SSJChatMessageItem.m in Sources */,
-				9C4C20DD1E9E30C8000C5F15 /* SSJReportFormsScaleAxisView.m in Sources */,
 				9C4C20DE1E9E30C8000C5F15 /* UIImage+SSJTheme.m in Sources */,
 				9C4C20DF1E9E30C8000C5F15 /* SSJBudgetEditLabelCell.m in Sources */,
 				9C4C20E01E9E30C8000C5F15 /* SSJCalendarTableViewCell.m in Sources */,
@@ -18966,7 +18928,6 @@
 				9C7D2D7E1E8DF8A80093001F /* MJRefreshStateHeader.m in Sources */,
 				9C7D2D7F1E8DF8A80093001F /* SSJBooksColorAndIconSelectView.m in Sources */,
 				9C7D2D801E8DF8A80093001F /* SSJForgotPSWResetService.m in Sources */,
-				9C7D2D811E8DF8A80093001F /* SSJReportFormsScaleAxisCell.m in Sources */,
 				9C7D2D821E8DF8A80093001F /* SSJNewBaseTableViewController.m in Sources */,
 				7DFB16271EAF18F500292DD3 /* SSJCustomThemeSelectCollectionViewCell.m in Sources */,
 				9C7D2D831E8DF8A80093001F /* UICountingLabel.m in Sources */,
@@ -19035,7 +18996,6 @@
 				9C7D2DC01E8DF8A80093001F /* SSJBudgetDetailHeaderView.m in Sources */,
 				9C7D2DC11E8DF8A80093001F /* SSJUtil.m in Sources */,
 				9C7D2DC21E8DF8A80093001F /* SSJChatMessageItem.m in Sources */,
-				9C7D2DC31E8DF8A80093001F /* SSJReportFormsScaleAxisView.m in Sources */,
 				9C7D2DC41E8DF8A80093001F /* UIImage+SSJTheme.m in Sources */,
 				9C7D2DC51E8DF8A80093001F /* SSJBudgetEditLabelCell.m in Sources */,
 				9C7D2DC61E8DF8A80093001F /* SSJCalendarTableViewCell.m in Sources */,
@@ -19565,7 +19525,6 @@
 				9C7D2FF51E8DF96B0093001F /* MJRefreshStateHeader.m in Sources */,
 				9C7D2FF61E8DF96B0093001F /* SSJBooksColorAndIconSelectView.m in Sources */,
 				9C7D2FF71E8DF96B0093001F /* SSJForgotPSWResetService.m in Sources */,
-				9C7D2FF81E8DF96B0093001F /* SSJReportFormsScaleAxisCell.m in Sources */,
 				9C7D2FF91E8DF96B0093001F /* SSJNewBaseTableViewController.m in Sources */,
 				7DFB162E1EAF18FA00292DD3 /* SSJCustomThemeSelectCollectionViewCell.m in Sources */,
 				9C7D2FFA1E8DF96B0093001F /* UICountingLabel.m in Sources */,
@@ -19634,7 +19593,6 @@
 				9C7D30371E8DF96B0093001F /* SSJBudgetDetailHeaderView.m in Sources */,
 				9C7D30381E8DF96B0093001F /* SSJUtil.m in Sources */,
 				9C7D30391E8DF96B0093001F /* SSJChatMessageItem.m in Sources */,
-				9C7D303A1E8DF96B0093001F /* SSJReportFormsScaleAxisView.m in Sources */,
 				9C7D303B1E8DF96B0093001F /* UIImage+SSJTheme.m in Sources */,
 				9C7D303C1E8DF96B0093001F /* SSJBudgetEditLabelCell.m in Sources */,
 				9C7D303D1E8DF96B0093001F /* SSJCalendarTableViewCell.m in Sources */,
@@ -20163,7 +20121,6 @@
 				9C80FD371E95E88E00B1BAAC /* MJRefreshStateHeader.m in Sources */,
 				9C80FD381E95E88E00B1BAAC /* SSJBooksColorAndIconSelectView.m in Sources */,
 				9C80FD391E95E88E00B1BAAC /* SSJForgotPSWResetService.m in Sources */,
-				9C80FD3A1E95E88E00B1BAAC /* SSJReportFormsScaleAxisCell.m in Sources */,
 				9C80FD3B1E95E88E00B1BAAC /* SSJNewBaseTableViewController.m in Sources */,
 				9C80FD3C1E95E88E00B1BAAC /* UICountingLabel.m in Sources */,
 				9C80FD3D1E95E88E00B1BAAC /* SSJLoanChargeAddOrEditViewController.m in Sources */,
@@ -20232,7 +20189,6 @@
 				9C80FD791E95E88E00B1BAAC /* SSJBudgetDetailHeaderView.m in Sources */,
 				9C80FD7A1E95E88E00B1BAAC /* SSJUtil.m in Sources */,
 				9C80FD7B1E95E88E00B1BAAC /* SSJChatMessageItem.m in Sources */,
-				9C80FD7C1E95E88E00B1BAAC /* SSJReportFormsScaleAxisView.m in Sources */,
 				9C80FD7D1E95E88E00B1BAAC /* UIImage+SSJTheme.m in Sources */,
 				9C80FD7E1E95E88E00B1BAAC /* SSJBudgetEditLabelCell.m in Sources */,
 				9C80FD7F1E95E88E00B1BAAC /* SSJCalendarTableViewCell.m in Sources */,
@@ -20761,7 +20717,6 @@
 				9C9CEEF71EA5F73A007657FE /* MJRefreshStateHeader.m in Sources */,
 				9C9CEEF81EA5F73A007657FE /* SSJBooksColorAndIconSelectView.m in Sources */,
 				9C9CEEF91EA5F73A007657FE /* SSJForgotPSWResetService.m in Sources */,
-				9C9CEEFA1EA5F73A007657FE /* SSJReportFormsScaleAxisCell.m in Sources */,
 				9C9CEEFB1EA5F73A007657FE /* SSJNewBaseTableViewController.m in Sources */,
 				9C9CEEFC1EA5F73A007657FE /* UICountingLabel.m in Sources */,
 				9C9CEEFD1EA5F73A007657FE /* SSJLoanChargeAddOrEditViewController.m in Sources */,
@@ -20830,7 +20785,6 @@
 				9C9CEF391EA5F73A007657FE /* SSJBudgetDetailHeaderView.m in Sources */,
 				9C9CEF3A1EA5F73A007657FE /* SSJUtil.m in Sources */,
 				9C9CEF3B1EA5F73A007657FE /* SSJChatMessageItem.m in Sources */,
-				9C9CEF3C1EA5F73A007657FE /* SSJReportFormsScaleAxisView.m in Sources */,
 				9C9CEF3D1EA5F73A007657FE /* UIImage+SSJTheme.m in Sources */,
 				9C9CEF3E1EA5F73A007657FE /* SSJBudgetEditLabelCell.m in Sources */,
 				9C9CEF3F1EA5F73A007657FE /* SSJCalendarTableViewCell.m in Sources */,
@@ -21339,7 +21293,6 @@
 				9CECFB7B1D6D41A700DB2C8B /* SSJForgetPassowrdNetworkService.m in Sources */,
 				9CECFB7C1D6D41A700DB2C8B /* SSJForgotPSWResetService.m in Sources */,
 				7D6CC9211E0A799800FF6133 /* SSJReportFormsCurveViewItem.m in Sources */,
-				9CECFB7D1D6D41A700DB2C8B /* SSJReportFormsScaleAxisCell.m in Sources */,
 				7DB9F8551DFFED2E0084E998 /* SSJReportFormCurveListCellItem.m in Sources */,
 				7D22A31C1E4F16AC00190CEB /* SSJArrayAddition.m in Sources */,
 				9C77DBB81DE70B3100CD64A2 /* SSJCustomJsonSerializer.m in Sources */,
@@ -21424,7 +21377,6 @@
 				7D22A3621E4F16AC00190CEB /* SSJScrollViewAddition.m in Sources */,
 				9C9A0C051D6D94BF002AF046 /* SSJLoanListViewController.m in Sources */,
 				9CECFBAA1D6D41A700DB2C8B /* SSJUtil.m in Sources */,
-				9CECFBAB1D6D41A700DB2C8B /* SSJReportFormsScaleAxisView.m in Sources */,
 				9CECFBAC1D6D41A700DB2C8B /* UIImage+SSJTheme.m in Sources */,
 				9CECFBAD1D6D41A700DB2C8B /* SSJBudgetEditLabelCell.m in Sources */,
 				9CECFBAE1D6D41A700DB2C8B /* SSJCalenderTableViewCell.m in Sources */,
@@ -21837,6 +21789,7 @@
 				7D22A3201E4F16AC00190CEB /* SSJDataAddition.m in Sources */,
 				7D5F33751CEAE6C10086B67E /* SSJAddNewTypeColorSelectionView.m in Sources */,
 				9CD9BC1F1CFD2DAA0061803B /* SSJUserInfoNetworkService.m in Sources */,
+				7DE4E9DA1EB33C0800616958 /* SSJReportFormsScaleAxisCell.m in Sources */,
 				7D587E5B1CC0DFF40058847B /* SSJServerLaunchView.m in Sources */,
 				BD0432F61C1A77BB0051E7AB /* TPKeyboardAvoidingTableView.m in Sources */,
 				7D22A3121E4F16AC00190CEB /* NSString+MoneyDisplayFormat.m in Sources */,
@@ -21959,7 +21912,6 @@
 				9C155F081E68572700FDFD18 /* MJRefreshStateHeader.m in Sources */,
 				9CA40E5F1DD481FC0001E9E3 /* SSJBooksColorAndIconSelectView.m in Sources */,
 				BD70DF5C1C4751EA000E6CC9 /* SSJForgotPSWResetService.m in Sources */,
-				7DD9D0C61CF6E2A6005AF735 /* SSJReportFormsScaleAxisCell.m in Sources */,
 				BD04339A1C1A8DA50051E7AB /* SSJNewBaseTableViewController.m in Sources */,
 				7DD49BF41DB78A4A00318AF9 /* UICountingLabel.m in Sources */,
 				9C61FD2D1EAE13FE00971F0F /* SSJCustomThemeSelectCollectionViewCell.m in Sources */,
@@ -22028,7 +21980,6 @@
 				7D5F333F1CEAE6C10086B67E /* SSJBudgetDetailHeaderView.m in Sources */,
 				BD0433411C1A82730051E7AB /* SSJUtil.m in Sources */,
 				91F7FD291DFA8CD3005F4B6B /* SSJChatMessageItem.m in Sources */,
-				7DD9D0C71CF6E2A6005AF735 /* SSJReportFormsScaleAxisView.m in Sources */,
 				7DE4A7EC1D20DD8C00F05BF0 /* UIImage+SSJTheme.m in Sources */,
 				7D5F33421CEAE6C10086B67E /* SSJBudgetEditLabelCell.m in Sources */,
 				9C1E4C4C1E4C619600CA5843 /* SSJCalendarTableViewCell.m in Sources */,
@@ -22211,6 +22162,7 @@
 				7D87AE961D6319770024D33C /* SSJLoanHelper.m in Sources */,
 				9C0AB1691D670BAE0082B971 /* SSJCreditCardEditeCell.m in Sources */,
 				9CD9BC221CFD2DAA0061803B /* SSJBookKeepingRiminderCircleView.m in Sources */,
+				7DE4E9DB1EB33C0800616958 /* SSJReportFormsScaleAxisView.m in Sources */,
 				9CD9BC391CFD2DAA0061803B /* SSJPasswordModifyCell.m in Sources */,
 				7D6B12DA1D4CBC140036BF4E /* SSJListMenuCellItem.m in Sources */,
 				7D6CC9271E0B837300FF6133 /* SSJReportFormsBillTypeDetailViewController.m in Sources */,
