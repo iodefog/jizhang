@@ -83,7 +83,7 @@
     if (!_dateLabel) {
         _dateLabel = [[UILabel alloc]init];
         _dateLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        _dateLabel.font = [UIFont systemFontOfSize:15];
+        _dateLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
     }
     return _dateLabel;
 }
@@ -99,7 +99,7 @@
 - (UILabel *)moneyLabel{
     if (!_moneyLabel) {
         _moneyLabel = [[UILabel alloc]init];
-        _moneyLabel.font = [UIFont systemFontOfSize:18];
+        _moneyLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2);
     }
     return _moneyLabel;
 }
@@ -114,7 +114,7 @@
 - (UILabel *)subLab{
     if (!_subLab) {
         _subLab = [[UILabel alloc] init];
-        _subLab.font = [UIFont systemFontOfSize:15];
+        _subLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         _subLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     }
     return _subLab;
@@ -123,7 +123,7 @@
 - (SSJStrikeLineLabel *)subDetailLab{
     if (!_subDetailLab) {
         _subDetailLab = [[SSJStrikeLineLabel alloc] init];
-        _subDetailLab.font = [UIFont systemFontOfSize:15];
+        _subDetailLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         _subDetailLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     }
     return _subDetailLab;

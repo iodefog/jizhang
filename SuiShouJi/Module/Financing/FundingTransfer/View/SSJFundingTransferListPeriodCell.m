@@ -153,7 +153,7 @@
 - (UILabel *)transferTitleLab {
     if (!_transferTitleLab) {
         _transferTitleLab = [[UILabel alloc] init];
-        _transferTitleLab.font = [UIFont systemFontOfSize:16];
+        _transferTitleLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
     }
     return _transferTitleLab;
 }
@@ -168,7 +168,7 @@
 - (UILabel *)cycleTitleLab {
     if (!_cycleTitleLab) {
         _cycleTitleLab = [[UILabel alloc] init];
-        _cycleTitleLab.font = [UIFont systemFontOfSize:13];
+        _cycleTitleLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
     }
     return _cycleTitleLab;
 }
@@ -183,7 +183,7 @@
 - (UILabel *)memoLab {
     if (!_memoLab) {
         _memoLab = [[UILabel alloc] init];
-        _memoLab.font = [UIFont systemFontOfSize:13];
+        _memoLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
     }
     return _memoLab;
 }
@@ -191,7 +191,7 @@
 - (UILabel *)dateLab {
     if (!_dateLab) {
         _dateLab = [[UILabel alloc] init];
-        _dateLab.font = [UIFont systemFontOfSize:13];
+        _dateLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
     }
     return _dateLab;
 }
@@ -199,7 +199,7 @@
 - (UILabel *)moneyLab {
     if (!_moneyLab) {
         _moneyLab = [[UILabel alloc] init];
-        _moneyLab.font = [UIFont systemFontOfSize:16];
+        _moneyLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         _moneyLab.textAlignment = NSTextAlignmentRight;
     }
     return _moneyLab;

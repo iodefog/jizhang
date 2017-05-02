@@ -71,7 +71,7 @@
         } else {
             _expenceLabel.textColor = [UIColor whiteColor];
         }
-        _expenceLabel.font = [UIFont systemFontOfSize:11];
+        _expenceLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_6);
         _expenceLabel.textAlignment = NSTextAlignmentCenter;
         _expenceLabel.text = @"累计支出";
         [_expenceLabel sizeToFit];
@@ -87,7 +87,7 @@
         } else {
             _incomeLabel.textColor = [UIColor whiteColor];
         }
-        _incomeLabel.font = [UIFont systemFontOfSize:11];
+        _incomeLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_6);
         _incomeLabel.textAlignment = NSTextAlignmentCenter;
         _incomeLabel.text = @"累计收入";
         [_incomeLabel sizeToFit];
@@ -98,7 +98,7 @@
 -(UILabel *)totalExpenceLabel{
     if (!_totalExpenceLabel) {
         _totalExpenceLabel = [[UILabel alloc]init];
-        _totalExpenceLabel.font = [UIFont systemFontOfSize:24];
+        _totalExpenceLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_1);
         _totalExpenceLabel.textAlignment = NSTextAlignmentCenter;
         if (SSJ_CURRENT_THEME.financingDetailMainColor.length) {
             _totalExpenceLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailMainColor alpha:SSJ_CURRENT_THEME.financingDetailMainAlpha];
@@ -115,7 +115,7 @@
 -(UILabel *)totalIncomeLabel{
     if (!_totalIncomeLabel) {
         _totalIncomeLabel = [[UILabel alloc]init];
-        _totalIncomeLabel.font = [UIFont systemFontOfSize:24];
+        _totalIncomeLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_1);
         _totalIncomeLabel.textAlignment = NSTextAlignmentCenter;
         if (SSJ_CURRENT_THEME.financingDetailMainColor.length) {
             _totalIncomeLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailMainColor alpha:SSJ_CURRENT_THEME.financingDetailMainAlpha];
@@ -147,7 +147,7 @@
 
 - (void)setExpence:(double)expence {
     NSString *expenceStr = [[NSString stringWithFormat:@"%f",expence] ssj_moneyDecimalDisplayWithDigits:2];
-    CGSize expenceSize = [expenceStr sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:24]}];
+    CGSize expenceSize = [expenceStr sizeWithAttributes:@{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_1)}];
     if (expenceSize.width > self.width / 2 - 10) {
         self.totalExpenceLabel.width = self.width / 2 - 10;
         self.totalExpenceLabel.height = expenceSize.height;
@@ -160,7 +160,7 @@
 
 - (void)setIncome:(double)income {
     NSString *incomeStr = [[NSString stringWithFormat:@"%f",income] ssj_moneyDecimalDisplayWithDigits:2];
-    CGSize incomeSize = [incomeStr sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:24]}];
+    CGSize incomeSize = [incomeStr sizeWithAttributes:@{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_1)}];
     if (incomeSize.width > self.width / 2 - 10) {
         self.totalIncomeLabel.width = self.width / 2 - 10;
         self.totalIncomeLabel.height = incomeSize.height;
