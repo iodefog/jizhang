@@ -10,4 +10,6 @@
 
 @interface SSJReportFormsScaleAxisView (SSJTheme)
 
+- (void)updateAppearance;
+
 @end

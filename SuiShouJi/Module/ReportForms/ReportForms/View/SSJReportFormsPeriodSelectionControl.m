@@ -12,16 +12,17 @@
 
 @interface SSJReportFormsPeriodSelectionControl () <SSJReportFormsScaleAxisViewDelegate>
 
-//  切换年份、月份控件
+// 切换年份、月份控件
 @property (nonatomic, strong) SSJReportFormsScaleAxisView *dateAxisView;
 
-//  自定义时间
+// 自定义时间
 @property (nonatomic, strong) UIButton *customPeriodBtn;
 
-@property (nonatomic, strong) UIView *customPeriodBtnContainer;
+// 编辑自定义时间按钮
+@property (nonatomic, strong) UIButton *addCustomPeriodBtn;
 
-//  编辑、删除自定义时间按钮
-@property (nonatomic, strong) UIButton *addOrDeleteCustomPeriodBtn;
+// 删除自定义时间按钮
+@property (nonatomic, strong) UIButton *clearCustomPeriodBtn;
 
 @end
 
@@ -31,12 +32,12 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         self.backgroundColor = [UIColor clearColor];
-        [self addSubview:self.customPeriodBtnContainer];
         [self addSubview:self.dateAxisView];
-        [self addSubview:self.addOrDeleteCustomPeriodBtn];
+        [self addSubview:self.customPeriodBtn];
+        [self addSubview:self.addCustomPeriodBtn];
+        [self addSubview:self.clearCustomPeriodBtn];
         
         [self updateViewsHidden];
-        [self updateAddOrDeleteCustomPeriodBtnImage];
         [self updateAppearance];
         [self setNeedsUpdateConstraints];
     }
@@ -51,25 +52,27 @@
 }
 
 - (void)updateConstraints {
-    [self.customPeriodBtnContainer mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.edges.mas_equalTo(self);
-    }];
     [self.customPeriodBtn mas_updateConstraints:^(MASConstraintMaker *make) {
         CGSize textSize = [self.customPeriodBtn.currentTitle sizeWithAttributes:@{NSFontAttributeName:_customPeriodBtn.titleLabel.font}];
-        make.width.mas_equalTo(textSize.width + 56);
+        make.width.mas_equalTo(textSize.width);
         make.height.mas_equalTo(25);
         make.center.mas_equalTo(self);
     }];
     [self.dateAxisView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.left.top.mas_equalTo(0);
-        make.right.mas_equalTo(self.addOrDeleteCustomPeriodBtn.mas_left);
+        make.right.mas_equalTo(self.addCustomPeriodBtn.mas_left);
         make.height.mas_equalTo(self);
     }];
-    [self.addOrDeleteCustomPeriodBtn mas_updateConstraints:^(MASConstraintMaker *make) {
+    [self.addCustomPeriodBtn mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(0);
         make.right.mas_equalTo(self);
         make.width.mas_equalTo(55);
         make.height.mas_equalTo(self);
+    }];
+    [self.clearCustomPeriodBtn mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(0);
+        make.left.mas_equalTo(self.customPeriodBtn.mas_right);
+        make.size.mas_equalTo(CGSizeMake(35, 35));
     }];
     [super updateConstraints];
 }
@@ -98,7 +101,6 @@
 - (void)setCustomPeriod:(SSJDatePeriod *)customPeriod {
     _customPeriod = customPeriod;
     [self updateCustomPeriodBtnTitle];
-    [self updateAddOrDeleteCustomPeriodBtnImage];
     [self updateViewsHidden];
     [self setNeedsUpdateConstraints];
 }
@@ -108,19 +110,8 @@
 }
 
 - (void)updateAppearance {
-    self.dateAxisView.fillColor = SSJ_CONTROL_BACKGROUND_COLOR;
-    self.dateAxisView.scaleColor = SSJ_SUBTITLE_COLOR;
-    self.dateAxisView.selectedScaleColor = SSJ_THEME_COLOR;
-    self.dateAxisView.bottomLineColor = SSJ_BORDER_COLOR;
-    
-    [self.customPeriodBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [self.customPeriodBtn ssj_setBackgroundColor:SSJ_THEME_COLOR forState:UIControlStateNormal];
-    
-    self.customPeriodBtnContainer.backgroundColor = SSJ_CONTROL_BACKGROUND_COLOR;
-    [self.customPeriodBtnContainer ssj_setBorderColor:SSJ_BORDER_COLOR];
-    
-    self.addOrDeleteCustomPeriodBtn.backgroundColor = SSJ_CONTROL_BACKGROUND_COLOR;
-    [self.addOrDeleteCustomPeriodBtn ssj_setBorderColor:SSJ_BORDER_COLOR];
+    [self.dateAxisView updateConstraints];
+    [self.customPeriodBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] forState:UIControlStateNormal];
 }
 
 #pragma mark - SSJReportFormsScaleAxisViewDelegate
@@ -142,7 +133,7 @@
 }
 
 - (CGFloat)scaleAxisView:(SSJReportFormsScaleAxisView *)scaleAxisView heightForAxisAtIndex:(NSUInteger)index {
-    return 8;
+    return 12;
 }
 
 - (void)scaleAxisView:(SSJReportFormsScaleAxisView *)scaleAxisView didSelectedScaleAxisAtIndex:(NSUInteger)index {
@@ -153,14 +144,6 @@
 }
 
 #pragma mark - Event
-- (void)addOrDeleteCustomPeriodAction {
-    if (_customPeriod) {
-        [self clearCustomPeriod];
-    } else {
-        [self addCustomPeriod];
-    }
-}
-
 - (void)clearCustomPeriod {
     self.customPeriod = nil;
     if (_clearCustomPeriodHandler) {
@@ -178,34 +161,29 @@
 - (void)updateViewsHidden {
     if (_customPeriod) {
         self.dateAxisView.hidden = YES;
+        self.addCustomPeriodBtn.hidden = YES;
         self.customPeriodBtn.hidden = NO;
-        self.customPeriodBtnContainer.hidden = NO;
+        self.clearCustomPeriodBtn.hidden = NO;
     } else {
         self.dateAxisView.hidden = NO;
+        self.addCustomPeriodBtn.hidden = NO;
         self.customPeriodBtn.hidden = YES;
-        self.customPeriodBtnContainer.hidden = YES;
+        self.clearCustomPeriodBtn.hidden = YES;
     }
 }
 
 - (void)updateCustomPeriodBtnTitle {
-    NSString *startDateStr = [_customPeriod.startDate formattedDateWithFormat:@"yyyy.MM.dd"];
-    NSString *endDateStr = [_customPeriod.endDate formattedDateWithFormat:@"yyyy.MM.dd"];
-    NSString *title = [NSString stringWithFormat:@"%@ —— %@", startDateStr, endDateStr];
+    NSString *startDateStr = [_customPeriod.startDate formattedDateWithFormat:@"yyyy-MM-dd"];
+    NSString *endDateStr = [_customPeriod.endDate formattedDateWithFormat:@"yyyy-MM-dd"];
+    NSString *title = [NSString stringWithFormat:@"%@——%@", startDateStr, endDateStr];
     [_customPeriodBtn setTitle:title forState:UIControlStateNormal];
-}
-
-- (void)updateAddOrDeleteCustomPeriodBtnImage {
-    if (_customPeriod) {
-        [self.addOrDeleteCustomPeriodBtn setImage:[UIImage ssj_themeImageWithName:@"reportForms_clear_filter"] forState:UIControlStateNormal];
-    } else {
-        [self.addOrDeleteCustomPeriodBtn setImage:[UIImage ssj_themeImageWithName:@"reportForms_time_filter"] forState:UIControlStateNormal];
-    }
 }
 
 #pragma mark - Lazy
 - (SSJReportFormsScaleAxisView *)dateAxisView {
     if (!_dateAxisView) {
         _dateAxisView = [[SSJReportFormsScaleAxisView alloc] init];
+        _dateAxisView.fillColor = [UIColor clearColor];
         _dateAxisView.delegate = self;
     }
     return _dateAxisView;
@@ -214,33 +192,29 @@
 - (UIButton *)customPeriodBtn {
     if (!_customPeriodBtn) {
         _customPeriodBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        _customPeriodBtn.titleLabel.font = SSJ_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_6);
-        _customPeriodBtn.layer.cornerRadius = 12.5;
-        _customPeriodBtn.clipsToBounds = YES;
-        _customPeriodBtn.hidden = YES;
+        _customPeriodBtn.titleLabel.font = SSJ_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
         [_customPeriodBtn addTarget:self action:@selector(addCustomPeriod) forControlEvents:UIControlEventTouchUpInside];
     }
     return _customPeriodBtn;
 }
 
-- (UIView *)customPeriodBtnContainer {
-    if (!_customPeriodBtnContainer) {
-        _customPeriodBtnContainer = [[UIView alloc] init];
-        [_customPeriodBtnContainer addSubview:self.customPeriodBtn];
-        [_customPeriodBtnContainer ssj_setBorderStyle:SSJBorderStyleBottom];
+- (UIButton *)addCustomPeriodBtn {
+    if (!_addCustomPeriodBtn) {
+        _addCustomPeriodBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        _addCustomPeriodBtn.imageEdgeInsets = UIEdgeInsetsMake(0, 14, 0, 20);
+        [_addCustomPeriodBtn addTarget:self action:@selector(addCustomPeriod) forControlEvents:UIControlEventTouchUpInside];
+        [_addCustomPeriodBtn setImage:[UIImage ssj_themeImageWithName:@"reportForms_edit"] forState:UIControlStateNormal];
     }
-    return _customPeriodBtnContainer;
+    return _addCustomPeriodBtn;
 }
 
-- (UIButton *)addOrDeleteCustomPeriodBtn {
-    if (!_addOrDeleteCustomPeriodBtn) {
-        _addOrDeleteCustomPeriodBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        _addOrDeleteCustomPeriodBtn.imageEdgeInsets = UIEdgeInsetsMake(0, 14, 0, 20);
-        [_addOrDeleteCustomPeriodBtn addTarget:self action:@selector(addOrDeleteCustomPeriodAction) forControlEvents:UIControlEventTouchUpInside];
-        [_addOrDeleteCustomPeriodBtn ssj_setBorderStyle:SSJBorderStyleBottom];
+- (UIButton *)clearCustomPeriodBtn {
+    if (!_clearCustomPeriodBtn) {
+        _clearCustomPeriodBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_clearCustomPeriodBtn addTarget:self action:@selector(clearCustomPeriod) forControlEvents:UIControlEventTouchUpInside];
+        [_clearCustomPeriodBtn setImage:[UIImage ssj_themeImageWithName:@"reportForms_delete"] forState:UIControlStateNormal];
     }
-    return _addOrDeleteCustomPeriodBtn;
+    return _clearCustomPeriodBtn;
 }
-
 
 @end

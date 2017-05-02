@@ -639,6 +639,20 @@
 		7D2B24271C3E098F009A74A8 /* SSJFundInfoSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B24261C3E098F009A74A8 /* SSJFundInfoSyncTable.m */; };
 		7D2B242A1C3E09A0009A74A8 /* SSJUserBillSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B24291C3E09A0009A74A8 /* SSJUserBillSyncTable.m */; };
 		7D2BF36A1D59CCE7008A93FF /* SSJMagicExportSuccessAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2BF3691D59CCE7008A93FF /* SSJMagicExportSuccessAlertView.m */; };
+		7D2D26D11EB858BD005E3E2D /* SSJReportFormsPeriodSelectionControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2D26D01EB858BD005E3E2D /* SSJReportFormsPeriodSelectionControl.m */; };
+		7D2D26D41EB85A3E005E3E2D /* SSJReportFormsScaleAxisView+SSJTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2D26D31EB85A3E005E3E2D /* SSJReportFormsScaleAxisView+SSJTheme.m */; };
+		7D2D26D51EB85A3E005E3E2D /* SSJReportFormsScaleAxisView+SSJTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2D26D31EB85A3E005E3E2D /* SSJReportFormsScaleAxisView+SSJTheme.m */; };
+		7D2D26D61EB85A3E005E3E2D /* SSJReportFormsScaleAxisView+SSJTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2D26D31EB85A3E005E3E2D /* SSJReportFormsScaleAxisView+SSJTheme.m */; };
+		7D2D26D71EB85A3E005E3E2D /* SSJReportFormsScaleAxisView+SSJTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2D26D31EB85A3E005E3E2D /* SSJReportFormsScaleAxisView+SSJTheme.m */; };
+		7D2D26D81EB85A3E005E3E2D /* SSJReportFormsScaleAxisView+SSJTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2D26D31EB85A3E005E3E2D /* SSJReportFormsScaleAxisView+SSJTheme.m */; };
+		7D2D26D91EB85A3E005E3E2D /* SSJReportFormsScaleAxisView+SSJTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2D26D31EB85A3E005E3E2D /* SSJReportFormsScaleAxisView+SSJTheme.m */; };
+		7D2D26DA1EB85A3E005E3E2D /* SSJReportFormsScaleAxisView+SSJTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2D26D31EB85A3E005E3E2D /* SSJReportFormsScaleAxisView+SSJTheme.m */; };
+		7D2D26DB1EB85A3E005E3E2D /* SSJReportFormsScaleAxisView+SSJTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2D26D31EB85A3E005E3E2D /* SSJReportFormsScaleAxisView+SSJTheme.m */; };
+		7D2D26DC1EB85A3E005E3E2D /* SSJReportFormsScaleAxisView+SSJTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2D26D31EB85A3E005E3E2D /* SSJReportFormsScaleAxisView+SSJTheme.m */; };
+		7D2D26DD1EB85A3E005E3E2D /* SSJReportFormsScaleAxisView+SSJTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2D26D31EB85A3E005E3E2D /* SSJReportFormsScaleAxisView+SSJTheme.m */; };
+		7D2D26DE1EB85A3E005E3E2D /* SSJReportFormsScaleAxisView+SSJTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2D26D31EB85A3E005E3E2D /* SSJReportFormsScaleAxisView+SSJTheme.m */; };
+		7D2D26DF1EB85A3E005E3E2D /* SSJReportFormsScaleAxisView+SSJTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2D26D31EB85A3E005E3E2D /* SSJReportFormsScaleAxisView+SSJTheme.m */; };
+		7D2D26E01EB85A3E005E3E2D /* SSJReportFormsScaleAxisView+SSJTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2D26D31EB85A3E005E3E2D /* SSJReportFormsScaleAxisView+SSJTheme.m */; };
 		7D2E7FB51C520EA500A2601C /* SSJUserTableManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2E7FB41C520EA500A2601C /* SSJUserTableManager.m */; };
 		7D36AC311D409A9C006526B3 /* SSJBudgetEditAccountDaySelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D36AC301D409A9C006526B3 /* SSJBudgetEditAccountDaySelectionView.m */; };
 		7D36AC471D461704006526B3 /* SSJMemberSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D36AC461D461704006526B3 /* SSJMemberSyncTable.m */; };
@@ -8316,6 +8330,10 @@
 		7D2B24291C3E09A0009A74A8 /* SSJUserBillSyncTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJUserBillSyncTable.m; sourceTree = "<group>"; };
 		7D2BF3681D59CCE7008A93FF /* SSJMagicExportSuccessAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMagicExportSuccessAlertView.h; sourceTree = "<group>"; };
 		7D2BF3691D59CCE7008A93FF /* SSJMagicExportSuccessAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMagicExportSuccessAlertView.m; sourceTree = "<group>"; };
+		7D2D26CF1EB858BD005E3E2D /* SSJReportFormsPeriodSelectionControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormsPeriodSelectionControl.h; sourceTree = "<group>"; };
+		7D2D26D01EB858BD005E3E2D /* SSJReportFormsPeriodSelectionControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReportFormsPeriodSelectionControl.m; sourceTree = "<group>"; };
+		7D2D26D21EB85A3E005E3E2D /* SSJReportFormsScaleAxisView+SSJTheme.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SSJReportFormsScaleAxisView+SSJTheme.h"; sourceTree = "<group>"; };
+		7D2D26D31EB85A3E005E3E2D /* SSJReportFormsScaleAxisView+SSJTheme.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SSJReportFormsScaleAxisView+SSJTheme.m"; sourceTree = "<group>"; };
 		7D2E7FB31C520EA500A2601C /* SSJUserTableManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJUserTableManager.h; sourceTree = "<group>"; };
 		7D2E7FB41C520EA500A2601C /* SSJUserTableManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJUserTableManager.m; sourceTree = "<group>"; };
 		7D36AC2F1D409A9C006526B3 /* SSJBudgetEditAccountDaySelectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBudgetEditAccountDaySelectionView.h; sourceTree = "<group>"; };
@@ -10483,6 +10501,8 @@
 				7D70C1361E00E68400479E44 /* SSJReportFormCurveHeaderView.m */,
 				91FD904B1E0B8319001C64B7 /* SSJReportFormCanYinChartCell.h */,
 				91FD904C1E0B8319001C64B7 /* SSJReportFormCanYinChartCell.m */,
+				7D2D26CF1EB858BD005E3E2D /* SSJReportFormsPeriodSelectionControl.h */,
+				7D2D26D01EB858BD005E3E2D /* SSJReportFormsPeriodSelectionControl.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -11006,6 +11026,8 @@
 				7DE4E9D91EB33C0800616958 /* SSJReportFormsScaleAxisView.m */,
 				7DE4E9D61EB33C0800616958 /* SSJReportFormsScaleAxisCell.h */,
 				7DE4E9D71EB33C0800616958 /* SSJReportFormsScaleAxisCell.m */,
+				7D2D26D21EB85A3E005E3E2D /* SSJReportFormsScaleAxisView+SSJTheme.h */,
+				7D2D26D31EB85A3E005E3E2D /* SSJReportFormsScaleAxisView+SSJTheme.m */,
 			);
 			path = SSJReportFormsScaleAxisView;
 			sourceTree = "<group>";
@@ -14667,6 +14689,7 @@
 				7D08A0E71E4999D30085A8FB /* SSJCalenderDetaiImagelFooterView.m in Sources */,
 				7D08A0E81E4999D30085A8FB /* SSJFundInfoSyncTable.m in Sources */,
 				9C155EE81E68572700FDFD18 /* MJRefreshBackNormalFooter.m in Sources */,
+				7D2D26D91EB85A3E005E3E2D /* SSJReportFormsScaleAxisView+SSJTheme.m in Sources */,
 				9C155EB21E68572700FDFD18 /* MJRefreshFooter.m in Sources */,
 				7D08A0E91E4999D30085A8FB /* SSJAdWebViewController.m in Sources */,
 				7D08A0EA1E4999D30085A8FB /* SSJRecordMakingStore.m in Sources */,
@@ -15268,6 +15291,7 @@
 				7DA13A3E1E35AED7000490A4 /* SSJCalenderDetaiImagelFooterView.m in Sources */,
 				7DA13A3F1E35AED7000490A4 /* SSJFundInfoSyncTable.m in Sources */,
 				9C155EE71E68572700FDFD18 /* MJRefreshBackNormalFooter.m in Sources */,
+				7D2D26D81EB85A3E005E3E2D /* SSJReportFormsScaleAxisView+SSJTheme.m in Sources */,
 				9C155EB11E68572700FDFD18 /* MJRefreshFooter.m in Sources */,
 				7DA13A401E35AED7000490A4 /* SSJAdWebViewController.m in Sources */,
 				7DA13A411E35AED7000490A4 /* SSJRecordMakingStore.m in Sources */,
@@ -15869,6 +15893,7 @@
 				7DBB3AC41E55C2EE0075E638 /* NSString+SSJTheme.m in Sources */,
 				7DBB3AC51E55C2EE0075E638 /* SSJReportFormsCurveViewItem.m in Sources */,
 				9C155EE91E68572700FDFD18 /* MJRefreshBackNormalFooter.m in Sources */,
+				7D2D26DA1EB85A3E005E3E2D /* SSJReportFormsScaleAxisView+SSJTheme.m in Sources */,
 				9C155EB31E68572700FDFD18 /* MJRefreshFooter.m in Sources */,
 				7DBB3AC71E55C2EE0075E638 /* SSJCalenderDetaiImagelFooterView.m in Sources */,
 				7DBB3AC81E55C2EE0075E638 /* SSJFundInfoSyncTable.m in Sources */,
@@ -16414,6 +16439,7 @@
 				7DBB3F2A1E55C4E00075E638 /* SSJSyncFileModel.m in Sources */,
 				7DBB3F2B1E55C4E00075E638 /* SCYSlidePagingView.m in Sources */,
 				7DBB3F2C1E55C4E00075E638 /* SSJDatabaseQueue.m in Sources */,
+				7D2D26D51EB85A3E005E3E2D /* SSJReportFormsScaleAxisView+SSJTheme.m in Sources */,
 				7DBB3F2D1E55C4E00075E638 /* SSJBooksAdView.m in Sources */,
 				9C3A2D4B1E666BE400DFAE2C /* SSJFinancingGradientColorItem.m in Sources */,
 				7DBB3F2E1E55C4E00075E638 /* SSJSeparatorFormView.m in Sources */,
@@ -17474,6 +17500,7 @@
 				7DFB18391EB0341E00292DD3 /* SSJInstalmentDetailViewController.m in Sources */,
 				7DFB183A1EB0341E00292DD3 /* SSJBudgetWaveWaterView.m in Sources */,
 				7DFB183B1EB0341E00292DD3 /* SSJPercentCircleAdditionNode.m in Sources */,
+				7D2D26E01EB85A3E005E3E2D /* SSJReportFormsScaleAxisView+SSJTheme.m in Sources */,
 				7DFB183C1EB0341E00292DD3 /* SSJDateSelectedView.m in Sources */,
 				7DFB183D1EB0341E00292DD3 /* UIView+SSJViewAnimatioin.m in Sources */,
 				7DFB183E1EB0341E00292DD3 /* SSJReportFormCanYinChartCellItem.m in Sources */,
@@ -17642,6 +17669,7 @@
 				9C13F5161E8267D300AC5FA9 /* SSJPasswordModifyService.m in Sources */,
 				9C13F5171E8267D300AC5FA9 /* SSJFundingTransferStore.m in Sources */,
 				9C13F5181E8267D300AC5FA9 /* SSJRecordMakingBillTypeInputView.m in Sources */,
+				7D2D26DB1EB85A3E005E3E2D /* SSJReportFormsScaleAxisView+SSJTheme.m in Sources */,
 				9C13F5191E8267D300AC5FA9 /* SSJBooksTypeSyncTable.m in Sources */,
 				9C13F51A1E8267D300AC5FA9 /* SSJInstalmentEditeViewController.m in Sources */,
 				9C13F51B1E8267D300AC5FA9 /* SSJThemeDownLoaderManger.m in Sources */,
@@ -18665,6 +18693,7 @@
 				9C4C21E01E9E30C8000C5F15 /* SSJInstalmentDetailViewController.m in Sources */,
 				9C4C21E11E9E30C8000C5F15 /* SSJBudgetWaveWaterView.m in Sources */,
 				9C4C21E21E9E30C8000C5F15 /* SSJPercentCircleAdditionNode.m in Sources */,
+				7D2D26DE1EB85A3E005E3E2D /* SSJReportFormsScaleAxisView+SSJTheme.m in Sources */,
 				9C4C21E31E9E30C8000C5F15 /* SSJDateSelectedView.m in Sources */,
 				9C4C21E41E9E30C8000C5F15 /* UIView+SSJViewAnimatioin.m in Sources */,
 				9C4C21E51E9E30C8000C5F15 /* SSJReportFormCanYinChartCellItem.m in Sources */,
@@ -19158,6 +19187,7 @@
 				9C7D2E601E8DF8A80093001F /* UIViewController+SSJMotionPassword.m in Sources */,
 				9C7D2E611E8DF8A80093001F /* SSJJsPatchItem.m in Sources */,
 				9C7D2E621E8DF8A80093001F /* AppDelegate.m in Sources */,
+				7D2D26D41EB85A3E005E3E2D /* SSJReportFormsScaleAxisView+SSJTheme.m in Sources */,
 				9C7D2E631E8DF8A80093001F /* SSJThirdPartyLoginManger.m in Sources */,
 				9C7D2E641E8DF8A80093001F /* SSJAdItem.m in Sources */,
 				9C7D2E651E8DF8A80093001F /* SSJAccountsMergerTables.m in Sources */,
@@ -19755,6 +19785,7 @@
 				9C7D30D71E8DF96B0093001F /* UIViewController+SSJMotionPassword.m in Sources */,
 				9C7D30D81E8DF96B0093001F /* SSJJsPatchItem.m in Sources */,
 				9C7D30D91E8DF96B0093001F /* AppDelegate.m in Sources */,
+				7D2D26DC1EB85A3E005E3E2D /* SSJReportFormsScaleAxisView+SSJTheme.m in Sources */,
 				9C7D30DA1E8DF96B0093001F /* SSJThirdPartyLoginManger.m in Sources */,
 				9C7D30DB1E8DF96B0093001F /* SSJAdItem.m in Sources */,
 				9C7D30DC1E8DF96B0093001F /* SSJAccountsMergerTables.m in Sources */,
@@ -20455,6 +20486,7 @@
 				9C80FE7F1E95E88E00B1BAAC /* SSJInstalmentDetailViewController.m in Sources */,
 				9C80FE801E95E88E00B1BAAC /* SSJBudgetWaveWaterView.m in Sources */,
 				9C80FE811E95E88E00B1BAAC /* SSJPercentCircleAdditionNode.m in Sources */,
+				7D2D26DD1EB85A3E005E3E2D /* SSJReportFormsScaleAxisView+SSJTheme.m in Sources */,
 				9C80FE821E95E88E00B1BAAC /* SSJDateSelectedView.m in Sources */,
 				9C80FE831E95E88E00B1BAAC /* UIView+SSJViewAnimatioin.m in Sources */,
 				9C80FE841E95E88E00B1BAAC /* SSJReportFormCanYinChartCellItem.m in Sources */,
@@ -21051,6 +21083,7 @@
 				9C9CF03F1EA5F73A007657FE /* SSJInstalmentDetailViewController.m in Sources */,
 				9C9CF0401EA5F73A007657FE /* SSJBudgetWaveWaterView.m in Sources */,
 				9C9CF0411EA5F73A007657FE /* SSJPercentCircleAdditionNode.m in Sources */,
+				7D2D26DF1EB85A3E005E3E2D /* SSJReportFormsScaleAxisView+SSJTheme.m in Sources */,
 				9C9CF0421EA5F73A007657FE /* SSJDateSelectedView.m in Sources */,
 				9C9CF0431EA5F73A007657FE /* UIView+SSJViewAnimatioin.m in Sources */,
 				9C9CF0441EA5F73A007657FE /* SSJReportFormCanYinChartCellItem.m in Sources */,
@@ -21641,6 +21674,7 @@
 				9CECFC5D1D6D41A700DB2C8B /* main.m in Sources */,
 				9CECFC5E1D6D41A700DB2C8B /* UIImageView+SSJTheme.m in Sources */,
 				7D4A795F1DD2F01000E905F4 /* SSJLoanChangeChargeSelectionControl.m in Sources */,
+				7D2D26D71EB85A3E005E3E2D /* SSJReportFormsScaleAxisView+SSJTheme.m in Sources */,
 				7DF532891E13BB81009A6F6C /* SSJInstalmentEditeViewController.m in Sources */,
 				7D0AEC431E31AD3F008FADDB /* SSJAdWebViewController.m in Sources */,
 				9C155ECB1E68572700FDFD18 /* MJRefreshAutoNormalFooter.m in Sources */,
@@ -22067,6 +22101,7 @@
 				7D2B23FD1C3A1B63009A74A8 /* SSJBillingChargeHelper.m in Sources */,
 				9CA5F0C51DD047DB003E72E8 /* SSJSummaryBooksTableViewHeader.m in Sources */,
 				9C24CFBD1D76C9ED0095D150 /* SSJBooksTypeCollectionViewCell.m in Sources */,
+				7D2D26D11EB858BD005E3E2D /* SSJReportFormsPeriodSelectionControl.m in Sources */,
 				7DE6E8741C5641B6001C9138 /* SSJForgetPasswordSecondStepViewController.m in Sources */,
 				91F7FD381DFAB94A005F4B6B /* SSJAdviceItem.m in Sources */,
 				BD0432F71C1A77BB0051E7AB /* UIScrollView+TPKeyboardAvoidingAdditions.m in Sources */,
@@ -22282,6 +22317,7 @@
 				7DFD30591D75288D00A0D7A0 /* SSJCategoryEditableCollectionViewCellItem.m in Sources */,
 				91C2E81B1DF7D69E003ADABE /* SSJMineHomeViewController.m in Sources */,
 				9CD9BC1E1CFD2DAA0061803B /* SSJPortraitUploadNetworkService.m in Sources */,
+				7D2D26D61EB85A3E005E3E2D /* SSJReportFormsScaleAxisView+SSJTheme.m in Sources */,
 				91F7FD301DFA9EF9005F4B6B /* SSJProductAdviceNetWorkService.m in Sources */,
 				7D6CC8FB1E0A731C00FF6133 /* SSJReportFormsCurveGridView.m in Sources */,
 				9CD9BC2D1CFD2DAA0061803B /* SSJAboutusViewController.m in Sources */,

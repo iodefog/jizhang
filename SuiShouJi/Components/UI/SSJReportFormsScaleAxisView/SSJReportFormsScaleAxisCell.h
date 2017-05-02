@@ -22,6 +22,8 @@
 
 @property (nonatomic, strong) UIColor *scaleColor;
 
+@property (nonatomic, strong) UIFont *font;
+
 @property (nonatomic) CGFloat scaleHeight;
 
 @property (nonatomic) BOOL scaleMarkShowed;
