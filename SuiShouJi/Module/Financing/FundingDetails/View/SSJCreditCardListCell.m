@@ -49,7 +49,7 @@
     if (!_incomeLab) {
         _incomeLab = [[UILabel alloc]init];
         _incomeLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-        _incomeLab.font = [UIFont systemFontOfSize:13];
+        _incomeLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
     }
     return _incomeLab;
 }
@@ -58,7 +58,7 @@
     if (!_expenseLab) {
         _expenseLab = [[UILabel alloc]init];
         _expenseLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-        _expenseLab.font = [UIFont systemFontOfSize:13];
+        _expenseLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
     }
     return _expenseLab;
 }
@@ -67,7 +67,7 @@
     if (!_periodLab) {
         _periodLab = [[UILabel alloc]init];
         _periodLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-        _periodLab.font = [UIFont systemFontOfSize:13];
+        _periodLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
     }
     return _periodLab;
 }
@@ -76,7 +76,7 @@
     if (!_daysLab) {
         _daysLab = [[UILabel alloc]init];
         _daysLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-        _daysLab.font = [UIFont systemFontOfSize:13];
+        _daysLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
     }
     return _daysLab;
 }

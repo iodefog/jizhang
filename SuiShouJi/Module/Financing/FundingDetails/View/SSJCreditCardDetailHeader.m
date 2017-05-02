@@ -113,7 +113,7 @@
         } else {
             _balanceTitleLab.textColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:0.5];
         }
-        _balanceTitleLab.font = [UIFont systemFontOfSize:11];
+        _balanceTitleLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_6);
         [_balanceTitleLab sizeToFit];
     }
     return _balanceTitleLab;
@@ -127,7 +127,7 @@
         } else {
             _balanceLab.textColor = [UIColor ssj_colorWithHex:@"#ffffff"];
         }
-        _balanceLab.font = [UIFont systemFontOfSize:24];
+        _balanceLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_1);
     }
     return _balanceLab;
 }
@@ -140,7 +140,7 @@
         } else {
             _limitTitleLab.textColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:0.5];
         }
-        _limitTitleLab.font = [UIFont systemFontOfSize:11];
+        _limitTitleLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_6);
         _limitTitleLab.text = @"信用额度";
         [_limitTitleLab sizeToFit];
     }
@@ -156,7 +156,7 @@
         } else {
             _limitLab.textColor = [UIColor ssj_colorWithHex:@"#ffffff"];
         }
-        _limitLab.font = [UIFont systemFontOfSize:15];
+        _limitLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
     }
     return _limitLab;
 }
@@ -169,7 +169,7 @@
         } else {
             _repaymentDayTitleLab.textColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:0.5];
         }
-        _repaymentDayTitleLab.font = [UIFont systemFontOfSize:11];
+        _repaymentDayTitleLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_6);
         _repaymentDayTitleLab.text = @"还款日";
         [_repaymentDayTitleLab sizeToFit];
     }
@@ -185,7 +185,7 @@
         } else {
             _repaymentDayLab.textColor = [UIColor ssj_colorWithHex:@"#ffffff"];
         }
-        _repaymentDayLab.font = [UIFont systemFontOfSize:15];
+        _repaymentDayLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
     }
     return _repaymentDayLab;
 }
@@ -198,7 +198,7 @@
         } else {
             _billingDayTitleLab.textColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:0.5];
         }
-        _billingDayTitleLab.font = [UIFont systemFontOfSize:11];
+        _billingDayTitleLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_6);
         _billingDayTitleLab.text = @"账单日";
         [_billingDayTitleLab sizeToFit];
     }
@@ -215,7 +215,7 @@
         } else {
             _billingDayLab.textColor = [UIColor ssj_colorWithHex:@"#ffffff"];
         }
-        _billingDayLab.font = [UIFont systemFontOfSize:15];
+        _billingDayLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
     }
     return _billingDayLab;
 }
@@ -251,7 +251,7 @@
     if (!_incomeLab) {
         _incomeLab = [[UILabel alloc]init];
         _incomeLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-        _incomeLab.font = [UIFont systemFontOfSize:13];
+        _incomeLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
     }
     return _incomeLab;
 }
@@ -260,7 +260,7 @@
     if (!_expenceLab) {
         _expenceLab = [[UILabel alloc]init];
         _expenceLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-        _expenceLab.font = [UIFont systemFontOfSize:13];
+        _expenceLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
     }
     return _expenceLab;
 }

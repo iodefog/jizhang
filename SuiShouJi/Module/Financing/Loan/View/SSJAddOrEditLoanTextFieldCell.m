@@ -14,10 +14,10 @@
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         
         self.selectionStyle = UITableViewCellSelectionStyleNone;
-        self.textLabel.font = [UIFont systemFontOfSize:18];
+        self.textLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         
         _textField = [[UITextField alloc] init];
-        _textField.font = [UIFont systemFontOfSize:18];
+        _textField.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         _textField.textAlignment = NSTextAlignmentRight;
         [self.contentView addSubview:_textField];
         

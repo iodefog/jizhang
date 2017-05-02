@@ -293,15 +293,15 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
                                                                                    bottomTitle:surplusValue
                                                                                  topTitleColor:[UIColor whiteColor]
                                                                               bottomTitleColor:[UIColor whiteColor]
-                                                                                  topTitleFont:[UIFont systemFontOfSize:11]
-                                                                               bottomTitleFont:[UIFont systemFontOfSize:24] contentInsets:UIEdgeInsetsMake(0, 6, 0, 6)];
+                                                                                                topTitleFont:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_6)
+                                                                               bottomTitleFont:SSJ_PingFang_REGULAR_FONT_SIZE(24) contentInsets:UIEdgeInsetsMake(0, 6, 0, 6)];
     
     SSJFinancingDetailHeadeViewCellItem *sumItem = [SSJFinancingDetailHeadeViewCellItem itemWithTopTitle:sumTitle
                                                                                bottomTitle:[NSString stringWithFormat:@"%.2f", loanSum]
                                                                              topTitleColor:[UIColor whiteColor]
                                                                           bottomTitleColor:[UIColor whiteColor]
-                                                                              topTitleFont:[UIFont systemFontOfSize:11]
-                                                                           bottomTitleFont:[UIFont systemFontOfSize:15]
+                                                                              topTitleFont:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_6)
+                                                                           bottomTitleFont:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3)
                                                                              contentInsets:UIEdgeInsetsMake(0, 6, 0, 6)];
     
     SSJFinancingDetailHeadeViewCellItem *interestItem = nil;
@@ -310,16 +310,16 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
                                                           bottomTitle:[NSString stringWithFormat:@"%.2f", interest]
                                                         topTitleColor:[UIColor whiteColor]
                                                      bottomTitleColor:[UIColor whiteColor]
-                                                         topTitleFont:[UIFont systemFontOfSize:11]
-                                                      bottomTitleFont:[UIFont systemFontOfSize:15]
+                                                         topTitleFont:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_6)
+                                                      bottomTitleFont:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3)
                                                         contentInsets:UIEdgeInsetsMake(0, 6, 0, 6)];
     } else {
         interestItem = [SSJFinancingDetailHeadeViewCellItem itemWithTopTitle:paymentTitle
                                                           bottomTitle:[NSString stringWithFormat:@"%.2f", payment]
                                                         topTitleColor:[UIColor whiteColor]
                                                      bottomTitleColor:[UIColor whiteColor]
-                                                         topTitleFont:[UIFont systemFontOfSize:11]
-                                                      bottomTitleFont:[UIFont systemFontOfSize:15]
+                                                         topTitleFont:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_6)
+                                                      bottomTitleFont:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3)
                                                         contentInsets:UIEdgeInsetsMake(0, 6, 0, 6)];
     }
     
@@ -327,8 +327,8 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
                                                                                   bottomTitle:self.loanModel.lender
                                                                                 topTitleColor:[UIColor whiteColor]
                                                                              bottomTitleColor:[UIColor whiteColor]
-                                                                                 topTitleFont:[UIFont systemFontOfSize:11]
-                                                                              bottomTitleFont:[UIFont systemFontOfSize:15]
+                                                                                 topTitleFont:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_6)
+                                                                              bottomTitleFont:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3)
                                                                                 contentInsets:UIEdgeInsetsMake(0, 6, 0, 6)];
     
     _headerItems = @[@[surplusItem], @[sumItem, interestItem, lenderItem]];
@@ -635,7 +635,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     if (!_changeBtn) {
         _changeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _changeBtn.frame = CGRectMake(0, self.view.height - 54, self.view.width * 0.6, 54);
-        _changeBtn.titleLabel.font = [UIFont systemFontOfSize:19];
+        _changeBtn.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2);
         [_changeBtn setTitle:@"变更" forState:UIControlStateNormal];
         [_changeBtn addTarget:self action:@selector(changeBtnAction) forControlEvents:UIControlEventTouchUpInside];
         _changeBtn.hidden = YES;
@@ -649,7 +649,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     if (!_closeOutBtn) {
         _closeOutBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _closeOutBtn.frame = CGRectMake(self.view.width * 0.6, self.view.height - 54, self.view.width * 0.4, 54);
-        _closeOutBtn.titleLabel.font = [UIFont systemFontOfSize:19];
+        _closeOutBtn.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2);
         [_closeOutBtn setTitle:@"结清" forState:UIControlStateNormal];
         [_closeOutBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_closeOutBtn addTarget:self action:@selector(closeOutBtnAction) forControlEvents:UIControlEventTouchUpInside];
@@ -664,7 +664,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     if (!_deleteBtn) {
         _deleteBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _deleteBtn.frame = CGRectMake(0, self.view.height - 54, self.view.width, 54);
-        _deleteBtn.titleLabel.font = [UIFont systemFontOfSize:19];
+        _deleteBtn.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2);
         [_deleteBtn setTitle:@"删除" forState:UIControlStateNormal];
         [_deleteBtn addTarget:self action:@selector(deleteBtnAction) forControlEvents:UIControlEventTouchUpInside];
         _deleteBtn.hidden = YES;

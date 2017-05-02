@@ -37,7 +37,7 @@
     if (!_cellTitleLabel) {
         _cellTitleLabel = [[UILabel alloc]init];
         _cellTitleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        _cellTitleLabel.font = [UIFont systemFontOfSize:18];
+        _cellTitleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
     }
     return _cellTitleLabel;
 }
@@ -46,7 +46,7 @@
     if (!_cellDetailLabel) {
         _cellDetailLabel = [[UILabel alloc]init];
         _cellDetailLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-        _cellDetailLabel.font = [UIFont systemFontOfSize:18];
+        _cellDetailLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
     }
     return _cellDetailLabel;
 }

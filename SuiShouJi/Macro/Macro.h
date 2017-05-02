@@ -128,6 +128,8 @@ alpha:(a)]
 #define SSJ_FONT_SIZE_4 13
 #define SSJ_FONT_SIZE_5 12
 #define SSJ_FONT_SIZE_6 11
+#define SSJ_FONT_SIZE_7 14
+
 
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_9_0
 

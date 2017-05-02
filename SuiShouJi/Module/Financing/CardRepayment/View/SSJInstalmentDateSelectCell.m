@@ -15,14 +15,14 @@
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         
         self.selectionStyle = UITableViewCellSelectionStyleNone;
-        self.textLabel.font = [UIFont systemFontOfSize:18];
+        self.textLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2);
         
         _subtitleLabel = [[UILabel alloc] init];
-        _subtitleLabel.font = [UIFont systemFontOfSize:14];
+        _subtitleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(14);
         [self.contentView addSubview:_subtitleLabel];
         
         _detailLabel = [[UILabel alloc] init];
-        _detailLabel.font = [UIFont systemFontOfSize:18];
+        _detailLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2);
         _detailLabel.textAlignment = NSTextAlignmentRight;
         [self.contentView addSubview:_detailLabel];
         
