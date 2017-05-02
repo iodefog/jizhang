@@ -42,7 +42,7 @@ static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
-    [self.view addSubview:self.hintLabel];
+//    [self.view addSubview:self.hintLabel];
     [self.view addSubview:self.themeSelectView];
     // Do any additional setup after loading the view.
 }
@@ -51,7 +51,7 @@ static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
     [super viewWillAppear:animated];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
     [self checkNetwork];
-    UIBarButtonItem *rightButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"more_guanli"] style:UIBarButtonItemStylePlain target:self action:@selector(managerButtonClicked:)];
+    UIBarButtonItem *rightButton = [[UIBarButtonItem alloc]initWithTitle:@"管理" style:UIBarButtonItemStylePlain target:self action:@selector(managerButtonClicked:)];
     if ([SSJThemeSetting allThemeModels].count - 1) {
         self.navigationItem.rightBarButtonItem = rightButton;
     }
@@ -59,11 +59,11 @@ static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
 
 -(void)viewDidLayoutSubviews{
     [super viewDidLayoutSubviews];
-    self.hintLabel.width = self.view.width;
-    self.hintLabel.height = 32;
-    self.hintLabel.leftTop = CGPointMake(0, SSJ_NAVIBAR_BOTTOM + 10);
-    self.themeSelectView.size = CGSizeMake(self.view.width, self.view.height - self.hintLabel.bottom);
-    self.themeSelectView.leftTop = CGPointMake(0, self.hintLabel.bottom);
+//    self.hintLabel.width = self.view.width;
+//    self.hintLabel.height = 32;
+//    self.hintLabel.leftTop = CGPointMake(0, SSJ_NAVIBAR_BOTTOM + 10);
+    self.themeSelectView.size = CGSizeMake(self.view.width, self.view.height - 10);
+    self.themeSelectView.leftTop = CGPointMake(0, 10);
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
