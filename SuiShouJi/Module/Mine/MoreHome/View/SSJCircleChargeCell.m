@@ -40,7 +40,8 @@
     [super layoutSubviews];
     self.categoryImage.size = CGSizeMake(46, 46);
     self.categoryImage.left = self.contentView.left + 10;
-    self.categoryImage.top = 22;
+//    self.categoryImage.top = 22;
+    self.categoryImage.centerY = self.contentView.centerY;
     self.categoryLabel.left = self.categoryImage.right + 10;
     self.categoryLabel.bottom = self.categoryImage.centerY - 8;
     self.moneyLabel.left = self.categoryLabel.right + 10;
@@ -79,7 +80,7 @@
     if (!_categoryLabel) {
         _categoryLabel = [[UILabel alloc]init];
         _categoryLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        _categoryLabel.font = [UIFont systemFontOfSize:18];
+        _categoryLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
     }
     return _categoryLabel;
 }
@@ -88,7 +89,7 @@
     if (!_moneyLabel) {
         _moneyLabel = [[UILabel alloc]init];
         _moneyLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        _moneyLabel.font = [UIFont systemFontOfSize:18];
+        _moneyLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
 
     }
     return _moneyLabel;
@@ -98,7 +99,7 @@
     if (!_circleLabel) {
         _circleLabel = [[UILabel alloc]init];
         _circleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        _circleLabel.font = [UIFont systemFontOfSize:15];
+        _circleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
         
     }
     return _circleLabel;
@@ -117,7 +118,7 @@
     if (!_timeLabel) {
         _timeLabel = [[UILabel alloc]init];
         _timeLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-        _timeLabel.font = [UIFont systemFontOfSize:14];
+        _timeLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_5);
     }
     return _timeLabel;
 }

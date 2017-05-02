@@ -91,7 +91,7 @@ static NSString *const kCircleAnimationKey = @"circleAnimationKey";
         _titleLabel = [[UILabel alloc]init];
         _titleLabel.text = @"云同步";
         _titleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.moreHomeTitleColor];
-        _titleLabel.font = [UIFont systemFontOfSize:16];
+        _titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
         [_titleLabel sizeToFit];
     }
     return _titleLabel;

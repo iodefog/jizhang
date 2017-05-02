@@ -46,6 +46,7 @@
     if (!_titleLabel) {
         _titleLabel = [[UILabel alloc]init];
         _titleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+        _titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
     }
     return _titleLabel;
 }
@@ -55,7 +56,7 @@
         _detailLabel = [[UILabel alloc]init];
         _detailLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         _detailLabel.textAlignment = NSTextAlignmentRight;
-        _detailLabel.font = [UIFont systemFontOfSize:15];
+        _detailLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
     }
     return _detailLabel;
 }
@@ -76,7 +77,7 @@
     if (!_subTitleLabel) {
         _subTitleLabel = [[UILabel alloc]init];
         _subTitleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-        _subTitleLabel.font = [UIFont systemFontOfSize:13];
+        _subTitleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
     }
     return _subTitleLabel;
 }

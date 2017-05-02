@@ -76,7 +76,7 @@
     if (!_cellTitleLabel) {
         _cellTitleLabel = [[UILabel alloc]init];
         _cellTitleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        _cellTitleLabel.font = [UIFont systemFontOfSize:18];
+        _cellTitleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
     }
     return _cellTitleLabel;
 }
@@ -85,7 +85,7 @@
     if (!_cellDetailLabel) {
         _cellDetailLabel = [[UILabel alloc]init];
         _cellDetailLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-        _cellDetailLabel.font = [UIFont systemFontOfSize:18];
+        _cellDetailLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
     }
     return _cellDetailLabel;
 }
@@ -94,7 +94,7 @@
     if (!_cellSubTitleLabel) {
         _cellSubTitleLabel = [[UILabel alloc]init];
         _cellSubTitleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-        _cellSubTitleLabel.font = [UIFont systemFontOfSize:13];
+        _cellSubTitleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
     }
     return _cellSubTitleLabel;
 }
@@ -112,7 +112,7 @@
         _cellInput = [[UITextField alloc]init];
         _cellInput.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _cellInput.textAlignment = NSTextAlignmentRight;
-        _cellInput.font = [UIFont systemFontOfSize:18];
+        _cellInput.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         _cellInput.hidden = YES;
     }
     return _cellInput;

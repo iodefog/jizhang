@@ -19,7 +19,7 @@
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         _bookNameLab = [[UILabel alloc] init];
-        _bookNameLab.font = [UIFont systemFontOfSize:14];
+        _bookNameLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(14);
         _bookNameLab.textAlignment = NSTextAlignmentCenter;
         _bookNameLab.textColor = [UIColor ssj_colorWithHex:@"393939"];
         [self.contentView addSubview:_bookNameLab];

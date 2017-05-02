@@ -481,7 +481,6 @@
 		7D08A27E1E4999D30085A8FB /* SSJThemeSetting.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE4A7DA1D20C0BA00F05BF0 /* SSJThemeSetting.m */; };
 		7D08A27F1E4999D30085A8FB /* SSJFundingTypeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F330C1CEAE6C10086B67E /* SSJFundingTypeTableViewCell.m */; };
 		7D08A2801E4999D30085A8FB /* SSJNewOrEditCustomCategoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DF19ED71D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m */; };
-		7D08A2811E4999D30085A8FB /* SSJBookkeepingTreeDescView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB6D1CFD2DAA0061803B /* SSJBookkeepingTreeDescView.m */; };
 		7D08A2821E4999D30085A8FB /* SSJFundingTransferViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BC411CFD2E470061803B /* SSJFundingTransferViewController.m */; };
 		7D08A2831E4999D30085A8FB /* SSJScrollTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F325D1CEAE6C10086B67E /* SSJScrollTextView.m */; };
 		7D08A2841E4999D30085A8FB /* SSJModifyFundingTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF593F01D63FFBB00006594 /* SSJModifyFundingTableViewCell.m */; };
@@ -1344,7 +1343,6 @@
 		7DA13BD51E35AED7000490A4 /* SSJThemeSetting.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE4A7DA1D20C0BA00F05BF0 /* SSJThemeSetting.m */; };
 		7DA13BD61E35AED7000490A4 /* SSJFundingTypeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F330C1CEAE6C10086B67E /* SSJFundingTypeTableViewCell.m */; };
 		7DA13BD71E35AED7000490A4 /* SSJNewOrEditCustomCategoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DF19ED71D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m */; };
-		7DA13BD81E35AED7000490A4 /* SSJBookkeepingTreeDescView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB6D1CFD2DAA0061803B /* SSJBookkeepingTreeDescView.m */; };
 		7DA13BD91E35AED7000490A4 /* SSJFundingTransferViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BC411CFD2E470061803B /* SSJFundingTransferViewController.m */; };
 		7DA13BDA1E35AED7000490A4 /* SSJScrollTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F325D1CEAE6C10086B67E /* SSJScrollTextView.m */; };
 		7DA13BDB1E35AED7000490A4 /* SSJModifyFundingTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF593F01D63FFBB00006594 /* SSJModifyFundingTableViewCell.m */; };
@@ -1927,7 +1925,6 @@
 		7DBB3C651E55C2EE0075E638 /* SSJThemeSetting.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE4A7DA1D20C0BA00F05BF0 /* SSJThemeSetting.m */; };
 		7DBB3C661E55C2EE0075E638 /* SSJFundingTypeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F330C1CEAE6C10086B67E /* SSJFundingTypeTableViewCell.m */; };
 		7DBB3C671E55C2EE0075E638 /* SSJNewOrEditCustomCategoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DF19ED71D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m */; };
-		7DBB3C681E55C2EE0075E638 /* SSJBookkeepingTreeDescView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB6D1CFD2DAA0061803B /* SSJBookkeepingTreeDescView.m */; };
 		7DBB3C691E55C2EE0075E638 /* SSJFundingTransferViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BC411CFD2E470061803B /* SSJFundingTransferViewController.m */; };
 		7DBB3C6A1E55C2EE0075E638 /* SSJScrollTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F325D1CEAE6C10086B67E /* SSJScrollTextView.m */; };
 		7DBB3C6B1E55C2EE0075E638 /* SSJModifyFundingTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF593F01D63FFBB00006594 /* SSJModifyFundingTableViewCell.m */; };
@@ -2492,7 +2489,6 @@
 		7DBB41001E55C4E00075E638 /* SSJThemeSetting.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE4A7DA1D20C0BA00F05BF0 /* SSJThemeSetting.m */; };
 		7DBB41011E55C4E00075E638 /* SSJFundingTypeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F330C1CEAE6C10086B67E /* SSJFundingTypeTableViewCell.m */; };
 		7DBB41021E55C4E00075E638 /* SSJNewOrEditCustomCategoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DF19ED71D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m */; };
-		7DBB41031E55C4E00075E638 /* SSJBookkeepingTreeDescView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB6D1CFD2DAA0061803B /* SSJBookkeepingTreeDescView.m */; };
 		7DBB41041E55C4E00075E638 /* SSJFundingTransferViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BC411CFD2E470061803B /* SSJFundingTransferViewController.m */; };
 		7DBB41051E55C4E00075E638 /* SSJScrollTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F325D1CEAE6C10086B67E /* SSJScrollTextView.m */; };
 		7DBB41061E55C4E00075E638 /* SSJModifyFundingTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF593F01D63FFBB00006594 /* SSJModifyFundingTableViewCell.m */; };
@@ -3250,7 +3246,6 @@
 		7DFB18671EB0341E00292DD3 /* SSJThemeSetting.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE4A7DA1D20C0BA00F05BF0 /* SSJThemeSetting.m */; };
 		7DFB18681EB0341E00292DD3 /* SSJFundingTypeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F330C1CEAE6C10086B67E /* SSJFundingTypeTableViewCell.m */; };
 		7DFB18691EB0341E00292DD3 /* SSJNewOrEditCustomCategoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DF19ED71D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m */; };
-		7DFB186A1EB0341E00292DD3 /* SSJBookkeepingTreeDescView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB6D1CFD2DAA0061803B /* SSJBookkeepingTreeDescView.m */; };
 		7DFB186B1EB0341E00292DD3 /* SSJFundingTransferViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BC411CFD2E470061803B /* SSJFundingTransferViewController.m */; };
 		7DFB186C1EB0341E00292DD3 /* SSJScrollTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F325D1CEAE6C10086B67E /* SSJScrollTextView.m */; };
 		7DFB186D1EB0341E00292DD3 /* SSJModifyFundingTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF593F01D63FFBB00006594 /* SSJModifyFundingTableViewCell.m */; };
@@ -3959,7 +3954,6 @@
 		9C13F6E41E8267D300AC5FA9 /* SSJThemeSetting.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE4A7DA1D20C0BA00F05BF0 /* SSJThemeSetting.m */; };
 		9C13F6E51E8267D300AC5FA9 /* SSJFundingTypeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F330C1CEAE6C10086B67E /* SSJFundingTypeTableViewCell.m */; };
 		9C13F6E61E8267D300AC5FA9 /* SSJNewOrEditCustomCategoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DF19ED71D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m */; };
-		9C13F6E71E8267D300AC5FA9 /* SSJBookkeepingTreeDescView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB6D1CFD2DAA0061803B /* SSJBookkeepingTreeDescView.m */; };
 		9C13F6E81E8267D300AC5FA9 /* SSJFundingTransferViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BC411CFD2E470061803B /* SSJFundingTransferViewController.m */; };
 		9C13F6E91E8267D300AC5FA9 /* SSJScrollTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F325D1CEAE6C10086B67E /* SSJScrollTextView.m */; };
 		9C13F6EA1E8267D300AC5FA9 /* SSJModifyFundingTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF593F01D63FFBB00006594 /* SSJModifyFundingTableViewCell.m */; };
@@ -4841,7 +4835,6 @@
 		9C4C220E1E9E30C8000C5F15 /* SSJThemeSetting.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE4A7DA1D20C0BA00F05BF0 /* SSJThemeSetting.m */; };
 		9C4C220F1E9E30C8000C5F15 /* SSJFundingTypeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F330C1CEAE6C10086B67E /* SSJFundingTypeTableViewCell.m */; };
 		9C4C22101E9E30C8000C5F15 /* SSJNewOrEditCustomCategoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DF19ED71D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m */; };
-		9C4C22111E9E30C8000C5F15 /* SSJBookkeepingTreeDescView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB6D1CFD2DAA0061803B /* SSJBookkeepingTreeDescView.m */; };
 		9C4C22121E9E30C8000C5F15 /* SSJFundingTransferViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BC411CFD2E470061803B /* SSJFundingTransferViewController.m */; };
 		9C4C22131E9E30C8000C5F15 /* SSJScrollTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F325D1CEAE6C10086B67E /* SSJScrollTextView.m */; };
 		9C4C22141E9E30C8000C5F15 /* SSJModifyFundingTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF593F01D63FFBB00006594 /* SSJModifyFundingTableViewCell.m */; };
@@ -5566,7 +5559,6 @@
 		9C7D2EF31E8DF8A80093001F /* SSJThemeSetting.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE4A7DA1D20C0BA00F05BF0 /* SSJThemeSetting.m */; };
 		9C7D2EF41E8DF8A80093001F /* SSJFundingTypeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F330C1CEAE6C10086B67E /* SSJFundingTypeTableViewCell.m */; };
 		9C7D2EF51E8DF8A80093001F /* SSJNewOrEditCustomCategoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DF19ED71D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m */; };
-		9C7D2EF61E8DF8A80093001F /* SSJBookkeepingTreeDescView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB6D1CFD2DAA0061803B /* SSJBookkeepingTreeDescView.m */; };
 		9C7D2EF71E8DF8A80093001F /* SSJFundingTransferViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BC411CFD2E470061803B /* SSJFundingTransferViewController.m */; };
 		9C7D2EF81E8DF8A80093001F /* SSJScrollTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F325D1CEAE6C10086B67E /* SSJScrollTextView.m */; };
 		9C7D2EF91E8DF8A80093001F /* SSJModifyFundingTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF593F01D63FFBB00006594 /* SSJModifyFundingTableViewCell.m */; };
@@ -6180,7 +6172,6 @@
 		9C7D316A1E8DF96B0093001F /* SSJThemeSetting.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE4A7DA1D20C0BA00F05BF0 /* SSJThemeSetting.m */; };
 		9C7D316B1E8DF96B0093001F /* SSJFundingTypeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F330C1CEAE6C10086B67E /* SSJFundingTypeTableViewCell.m */; };
 		9C7D316C1E8DF96B0093001F /* SSJNewOrEditCustomCategoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DF19ED71D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m */; };
-		9C7D316D1E8DF96B0093001F /* SSJBookkeepingTreeDescView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB6D1CFD2DAA0061803B /* SSJBookkeepingTreeDescView.m */; };
 		9C7D316E1E8DF96B0093001F /* SSJFundingTransferViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BC411CFD2E470061803B /* SSJFundingTransferViewController.m */; };
 		9C7D316F1E8DF96B0093001F /* SSJScrollTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F325D1CEAE6C10086B67E /* SSJScrollTextView.m */; };
 		9C7D31701E8DF96B0093001F /* SSJModifyFundingTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF593F01D63FFBB00006594 /* SSJModifyFundingTableViewCell.m */; };
@@ -6796,7 +6787,6 @@
 		9C80FEAD1E95E88E00B1BAAC /* SSJThemeSetting.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE4A7DA1D20C0BA00F05BF0 /* SSJThemeSetting.m */; };
 		9C80FEAE1E95E88E00B1BAAC /* SSJFundingTypeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F330C1CEAE6C10086B67E /* SSJFundingTypeTableViewCell.m */; };
 		9C80FEAF1E95E88E00B1BAAC /* SSJNewOrEditCustomCategoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DF19ED71D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m */; };
-		9C80FEB01E95E88E00B1BAAC /* SSJBookkeepingTreeDescView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB6D1CFD2DAA0061803B /* SSJBookkeepingTreeDescView.m */; };
 		9C80FEB11E95E88E00B1BAAC /* SSJFundingTransferViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BC411CFD2E470061803B /* SSJFundingTransferViewController.m */; };
 		9C80FEB21E95E88E00B1BAAC /* SSJScrollTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F325D1CEAE6C10086B67E /* SSJScrollTextView.m */; };
 		9C80FEB31E95E88E00B1BAAC /* SSJModifyFundingTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF593F01D63FFBB00006594 /* SSJModifyFundingTableViewCell.m */; };
@@ -7484,7 +7474,6 @@
 		9C9CF06D1EA5F73A007657FE /* SSJThemeSetting.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE4A7DA1D20C0BA00F05BF0 /* SSJThemeSetting.m */; };
 		9C9CF06E1EA5F73A007657FE /* SSJFundingTypeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F330C1CEAE6C10086B67E /* SSJFundingTypeTableViewCell.m */; };
 		9C9CF06F1EA5F73A007657FE /* SSJNewOrEditCustomCategoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DF19ED71D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m */; };
-		9C9CF0701EA5F73A007657FE /* SSJBookkeepingTreeDescView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB6D1CFD2DAA0061803B /* SSJBookkeepingTreeDescView.m */; };
 		9C9CF0711EA5F73A007657FE /* SSJFundingTransferViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BC411CFD2E470061803B /* SSJFundingTransferViewController.m */; };
 		9C9CF0721EA5F73A007657FE /* SSJScrollTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F325D1CEAE6C10086B67E /* SSJScrollTextView.m */; };
 		9C9CF0731EA5F73A007657FE /* SSJModifyFundingTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF593F01D63FFBB00006594 /* SSJModifyFundingTableViewCell.m */; };
@@ -7624,7 +7613,6 @@
 		9CD9BC001CFD2DAA0061803B /* SSJBookkeepingTreeHelpCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB641CFD2DAA0061803B /* SSJBookkeepingTreeHelpCellItem.m */; };
 		9CD9BC011CFD2DAA0061803B /* SSJBookkeepingTreeCheckInService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB671CFD2DAA0061803B /* SSJBookkeepingTreeCheckInService.m */; };
 		9CD9BC021CFD2DAA0061803B /* SSJBookkeepingTreeStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB6A1CFD2DAA0061803B /* SSJBookkeepingTreeStore.m */; };
-		9CD9BC031CFD2DAA0061803B /* SSJBookkeepingTreeDescView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB6D1CFD2DAA0061803B /* SSJBookkeepingTreeDescView.m */; };
 		9CD9BC041CFD2DAA0061803B /* SSJBookkeepingTreeHelpCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB6F1CFD2DAA0061803B /* SSJBookkeepingTreeHelpCell.m */; };
 		9CD9BC051CFD2DAA0061803B /* SSJBookkeepingTreeRuleDescView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB711CFD2DAA0061803B /* SSJBookkeepingTreeRuleDescView.m */; };
 		9CD9BC061CFD2DAA0061803B /* SSJBookkeepingTreeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB731CFD2DAA0061803B /* SSJBookkeepingTreeView.m */; };
@@ -8063,7 +8051,6 @@
 		9CECFC771D6D41A700DB2C8B /* SSJNetworkReachabilityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D41A6951D1415F30043FD81 /* SSJNetworkReachabilityManager.m */; };
 		9CECFC781D6D41A700DB2C8B /* SSJThemeSetting.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE4A7DA1D20C0BA00F05BF0 /* SSJThemeSetting.m */; };
 		9CECFC791D6D41A700DB2C8B /* SSJFundingTypeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F330C1CEAE6C10086B67E /* SSJFundingTypeTableViewCell.m */; };
-		9CECFC7A1D6D41A700DB2C8B /* SSJBookkeepingTreeDescView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB6D1CFD2DAA0061803B /* SSJBookkeepingTreeDescView.m */; };
 		9CECFC7C1D6D41A700DB2C8B /* SSJFundingTransferViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BC411CFD2E470061803B /* SSJFundingTransferViewController.m */; };
 		9CECFC7D1D6D41A700DB2C8B /* SSJScrollTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F325D1CEAE6C10086B67E /* SSJScrollTextView.m */; };
 		9CECFC7E1D6D41A700DB2C8B /* SSJFundAccountTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4EF8811C43B10C003C4B20 /* SSJFundAccountTable.m */; };
@@ -9233,8 +9220,6 @@
 		9CD9BB671CFD2DAA0061803B /* SSJBookkeepingTreeCheckInService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBookkeepingTreeCheckInService.m; sourceTree = "<group>"; };
 		9CD9BB691CFD2DAA0061803B /* SSJBookkeepingTreeStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookkeepingTreeStore.h; sourceTree = "<group>"; };
 		9CD9BB6A1CFD2DAA0061803B /* SSJBookkeepingTreeStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBookkeepingTreeStore.m; sourceTree = "<group>"; };
-		9CD9BB6C1CFD2DAA0061803B /* SSJBookkeepingTreeDescView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookkeepingTreeDescView.h; sourceTree = "<group>"; };
-		9CD9BB6D1CFD2DAA0061803B /* SSJBookkeepingTreeDescView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBookkeepingTreeDescView.m; sourceTree = "<group>"; };
 		9CD9BB6E1CFD2DAA0061803B /* SSJBookkeepingTreeHelpCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookkeepingTreeHelpCell.h; sourceTree = "<group>"; };
 		9CD9BB6F1CFD2DAA0061803B /* SSJBookkeepingTreeHelpCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBookkeepingTreeHelpCell.m; sourceTree = "<group>"; };
 		9CD9BB701CFD2DAA0061803B /* SSJBookkeepingTreeRuleDescView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookkeepingTreeRuleDescView.h; sourceTree = "<group>"; };
@@ -11986,8 +11971,6 @@
 		9CD9BB6B1CFD2DAA0061803B /* View */ = {
 			isa = PBXGroup;
 			children = (
-				9CD9BB6C1CFD2DAA0061803B /* SSJBookkeepingTreeDescView.h */,
-				9CD9BB6D1CFD2DAA0061803B /* SSJBookkeepingTreeDescView.m */,
 				9CD9BB6E1CFD2DAA0061803B /* SSJBookkeepingTreeHelpCell.h */,
 				9CD9BB6F1CFD2DAA0061803B /* SSJBookkeepingTreeHelpCell.m */,
 				9CD9BB701CFD2DAA0061803B /* SSJBookkeepingTreeRuleDescView.h */,
@@ -15157,7 +15140,6 @@
 				7D08A27F1E4999D30085A8FB /* SSJFundingTypeTableViewCell.m in Sources */,
 				7D08A2801E4999D30085A8FB /* SSJNewOrEditCustomCategoryView.m in Sources */,
 				7D74E0091E51523B00F9C31C /* SSJTransferCycleSyncTable.m in Sources */,
-				7D08A2811E4999D30085A8FB /* SSJBookkeepingTreeDescView.m in Sources */,
 				7D08A2821E4999D30085A8FB /* SSJFundingTransferViewController.m in Sources */,
 				7D08A2831E4999D30085A8FB /* SSJScrollTextView.m in Sources */,
 				7D08A2841E4999D30085A8FB /* SSJModifyFundingTableViewCell.m in Sources */,
@@ -15759,7 +15741,6 @@
 				7DA13BD61E35AED7000490A4 /* SSJFundingTypeTableViewCell.m in Sources */,
 				7DA13BD71E35AED7000490A4 /* SSJNewOrEditCustomCategoryView.m in Sources */,
 				7D74E0081E51523B00F9C31C /* SSJTransferCycleSyncTable.m in Sources */,
-				7DA13BD81E35AED7000490A4 /* SSJBookkeepingTreeDescView.m in Sources */,
 				7DA13BD91E35AED7000490A4 /* SSJFundingTransferViewController.m in Sources */,
 				7DA13BDA1E35AED7000490A4 /* SSJScrollTextView.m in Sources */,
 				7DA13BDB1E35AED7000490A4 /* SSJModifyFundingTableViewCell.m in Sources */,
@@ -16360,7 +16341,6 @@
 				7DBB3C651E55C2EE0075E638 /* SSJThemeSetting.m in Sources */,
 				7DBB3C661E55C2EE0075E638 /* SSJFundingTypeTableViewCell.m in Sources */,
 				7DBB3C671E55C2EE0075E638 /* SSJNewOrEditCustomCategoryView.m in Sources */,
-				7DBB3C681E55C2EE0075E638 /* SSJBookkeepingTreeDescView.m in Sources */,
 				7DBB3C691E55C2EE0075E638 /* SSJFundingTransferViewController.m in Sources */,
 				7DBB3C6A1E55C2EE0075E638 /* SSJScrollTextView.m in Sources */,
 				7DBB3C6B1E55C2EE0075E638 /* SSJModifyFundingTableViewCell.m in Sources */,
@@ -16956,7 +16936,6 @@
 				7DBB41001E55C4E00075E638 /* SSJThemeSetting.m in Sources */,
 				7DBB41011E55C4E00075E638 /* SSJFundingTypeTableViewCell.m in Sources */,
 				7DBB41021E55C4E00075E638 /* SSJNewOrEditCustomCategoryView.m in Sources */,
-				7DBB41031E55C4E00075E638 /* SSJBookkeepingTreeDescView.m in Sources */,
 				7DBB41041E55C4E00075E638 /* SSJFundingTransferViewController.m in Sources */,
 				7DBB41051E55C4E00075E638 /* SSJScrollTextView.m in Sources */,
 				7DBB41061E55C4E00075E638 /* SSJModifyFundingTableViewCell.m in Sources */,
@@ -17549,7 +17528,6 @@
 				7DFB18671EB0341E00292DD3 /* SSJThemeSetting.m in Sources */,
 				7DFB18681EB0341E00292DD3 /* SSJFundingTypeTableViewCell.m in Sources */,
 				7DFB18691EB0341E00292DD3 /* SSJNewOrEditCustomCategoryView.m in Sources */,
-				7DFB186A1EB0341E00292DD3 /* SSJBookkeepingTreeDescView.m in Sources */,
 				7DFB186B1EB0341E00292DD3 /* SSJFundingTransferViewController.m in Sources */,
 				7DFB186C1EB0341E00292DD3 /* SSJScrollTextView.m in Sources */,
 				7DFB186D1EB0341E00292DD3 /* SSJModifyFundingTableViewCell.m in Sources */,
@@ -18147,7 +18125,6 @@
 				9C13F6E41E8267D300AC5FA9 /* SSJThemeSetting.m in Sources */,
 				9C13F6E51E8267D300AC5FA9 /* SSJFundingTypeTableViewCell.m in Sources */,
 				9C13F6E61E8267D300AC5FA9 /* SSJNewOrEditCustomCategoryView.m in Sources */,
-				9C13F6E71E8267D300AC5FA9 /* SSJBookkeepingTreeDescView.m in Sources */,
 				9C13F6E81E8267D300AC5FA9 /* SSJFundingTransferViewController.m in Sources */,
 				9C13F6E91E8267D300AC5FA9 /* SSJScrollTextView.m in Sources */,
 				9C13F6EA1E8267D300AC5FA9 /* SSJModifyFundingTableViewCell.m in Sources */,
@@ -18742,7 +18719,6 @@
 				9C4C220E1E9E30C8000C5F15 /* SSJThemeSetting.m in Sources */,
 				9C4C220F1E9E30C8000C5F15 /* SSJFundingTypeTableViewCell.m in Sources */,
 				9C4C22101E9E30C8000C5F15 /* SSJNewOrEditCustomCategoryView.m in Sources */,
-				9C4C22111E9E30C8000C5F15 /* SSJBookkeepingTreeDescView.m in Sources */,
 				9C4C22121E9E30C8000C5F15 /* SSJFundingTransferViewController.m in Sources */,
 				9C4C22131E9E30C8000C5F15 /* SSJScrollTextView.m in Sources */,
 				9C4C22141E9E30C8000C5F15 /* SSJModifyFundingTableViewCell.m in Sources */,
@@ -19338,7 +19314,6 @@
 				9C7D2EF31E8DF8A80093001F /* SSJThemeSetting.m in Sources */,
 				9C7D2EF41E8DF8A80093001F /* SSJFundingTypeTableViewCell.m in Sources */,
 				9C7D2EF51E8DF8A80093001F /* SSJNewOrEditCustomCategoryView.m in Sources */,
-				9C7D2EF61E8DF8A80093001F /* SSJBookkeepingTreeDescView.m in Sources */,
 				9C7D2EF71E8DF8A80093001F /* SSJFundingTransferViewController.m in Sources */,
 				9C7D2EF81E8DF8A80093001F /* SSJScrollTextView.m in Sources */,
 				9C7D2EF91E8DF8A80093001F /* SSJModifyFundingTableViewCell.m in Sources */,
@@ -19936,7 +19911,6 @@
 				9C7D316A1E8DF96B0093001F /* SSJThemeSetting.m in Sources */,
 				9C7D316B1E8DF96B0093001F /* SSJFundingTypeTableViewCell.m in Sources */,
 				9C7D316C1E8DF96B0093001F /* SSJNewOrEditCustomCategoryView.m in Sources */,
-				9C7D316D1E8DF96B0093001F /* SSJBookkeepingTreeDescView.m in Sources */,
 				9C7D316E1E8DF96B0093001F /* SSJFundingTransferViewController.m in Sources */,
 				9C7D316F1E8DF96B0093001F /* SSJScrollTextView.m in Sources */,
 				9C7D31701E8DF96B0093001F /* SSJModifyFundingTableViewCell.m in Sources */,
@@ -20535,7 +20509,6 @@
 				9C80FEAD1E95E88E00B1BAAC /* SSJThemeSetting.m in Sources */,
 				9C80FEAE1E95E88E00B1BAAC /* SSJFundingTypeTableViewCell.m in Sources */,
 				9C80FEAF1E95E88E00B1BAAC /* SSJNewOrEditCustomCategoryView.m in Sources */,
-				9C80FEB01E95E88E00B1BAAC /* SSJBookkeepingTreeDescView.m in Sources */,
 				9C80FEB11E95E88E00B1BAAC /* SSJFundingTransferViewController.m in Sources */,
 				9C80FEB21E95E88E00B1BAAC /* SSJScrollTextView.m in Sources */,
 				9C80FEB31E95E88E00B1BAAC /* SSJModifyFundingTableViewCell.m in Sources */,
@@ -21132,7 +21105,6 @@
 				9C9CF06D1EA5F73A007657FE /* SSJThemeSetting.m in Sources */,
 				9C9CF06E1EA5F73A007657FE /* SSJFundingTypeTableViewCell.m in Sources */,
 				9C9CF06F1EA5F73A007657FE /* SSJNewOrEditCustomCategoryView.m in Sources */,
-				9C9CF0701EA5F73A007657FE /* SSJBookkeepingTreeDescView.m in Sources */,
 				9C9CF0711EA5F73A007657FE /* SSJFundingTransferViewController.m in Sources */,
 				9C9CF0721EA5F73A007657FE /* SSJScrollTextView.m in Sources */,
 				9C9CF0731EA5F73A007657FE /* SSJModifyFundingTableViewCell.m in Sources */,
@@ -21726,7 +21698,6 @@
 				7D6CC9051E0A797D00FF6133 /* SSJReportFormsCurveBalloonView.m in Sources */,
 				7D481B841E4DB39600060E1A /* SSJFundingTransferListPeriodCell.m in Sources */,
 				9CEC60EA1E700D960087B361 /* SSJPushInfoItem.m in Sources */,
-				9CECFC7A1D6D41A700DB2C8B /* SSJBookkeepingTreeDescView.m in Sources */,
 				9CECFC7C1D6D41A700DB2C8B /* SSJFundingTransferViewController.m in Sources */,
 				9CECFC7D1D6D41A700DB2C8B /* SSJScrollTextView.m in Sources */,
 				9CECFC7E1D6D41A700DB2C8B /* SSJFundAccountTable.m in Sources */,
@@ -22331,7 +22302,6 @@
 				7DE4A7DB1D20C0BA00F05BF0 /* SSJThemeSetting.m in Sources */,
 				7D5F337D1CEAE6C10086B67E /* SSJFundingTypeTableViewCell.m in Sources */,
 				7DF19ED81D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m in Sources */,
-				9CD9BC031CFD2DAA0061803B /* SSJBookkeepingTreeDescView.m in Sources */,
 				9CD9BC431CFD2E470061803B /* SSJFundingTransferViewController.m in Sources */,
 				7D5F33341CEAE6C10086B67E /* SSJScrollTextView.m in Sources */,
 				9CF594021D63FFBB00006594 /* SSJModifyFundingTableViewCell.m in Sources */,

@@ -126,15 +126,19 @@ alpha:(a)]
 #define SSJ_FONT_SIZE_2 18
 #define SSJ_FONT_SIZE_3 16
 #define SSJ_FONT_SIZE_4 13
-#define SSJ_FONT_SIZE_5 11
+#define SSJ_FONT_SIZE_5 12
+#define SSJ_FONT_SIZE_6 11
 
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_9_0
 
 #define SSJ_PingFang_REGULAR_FONT_SIZE(x) [UIFont fontWithName:@"PingFangSC-Regular" size:(x)]
+#define SSJ_PingFang_MEDIUM_FONT_SIZE(x) [UIFont fontWithName:@"PingFangSC-Medium" size:(x)]
+#define SSJ_Helvetica_REGULAR_FONT_SIZE(x) [UIFont fontWithName:@"Helvetica" size:(x)]
 
 #else
 
 #define SSJ_PingFang_REGULAR_FONT_SIZE(x) [UIFont systemFontOfSize:(x)]
+#define SSJ_PingFang_MEDIUM_FONT_SIZE(x) [UIFont boldSystemFontOfSize:(x)]
 #define SSJ_Helvetica_REGULAR_FONT_SIZE(x) [UIFont fontWithName:@"Helvetica" size:(x)]
 #endif
 

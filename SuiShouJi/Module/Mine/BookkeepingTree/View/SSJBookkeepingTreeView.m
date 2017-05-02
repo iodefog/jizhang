@@ -70,7 +70,7 @@ static const NSTimeInterval kRaninDuration = 3;
         [self addSubview:self.dashLineView];
         
         _checkInDescLab = [[UILabel alloc] init];
-        _checkInDescLab.font = [UIFont systemFontOfSize:14];
+        _checkInDescLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         _checkInDescLab.textColor = [UIColor whiteColor];
         _checkInDescLab.textAlignment = NSTextAlignmentCenter;
         _checkInDescLab.numberOfLines = 0;
