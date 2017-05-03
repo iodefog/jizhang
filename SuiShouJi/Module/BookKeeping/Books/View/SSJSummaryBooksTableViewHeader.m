@@ -340,9 +340,9 @@
     self.backColorView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     
     [_chartView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
-    _chartView.topTitleAttribute = @{NSFontAttributeName:[UIFont systemFontOfSize:16],
+    _chartView.topTitleAttribute = @{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_1),
                                      NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor]};
-    _chartView.bottomTitleAttribute = @{NSFontAttributeName:[UIFont systemFontOfSize:12],
+    _chartView.bottomTitleAttribute = @{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_5),
                                         NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]};
     
     _dateAxisView.scaleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];

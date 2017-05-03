@@ -279,7 +279,6 @@
 		7D08A1AB1E4999D30085A8FB /* SSJBaselineTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE6E8671C55DB75001C9138 /* SSJBaselineTextField.m */; };
 		7D08A1AC1E4999D30085A8FB /* SSJCircleChargeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBC41CFD2DAA0061803B /* SSJCircleChargeCell.m */; };
 		7D08A1AD1E4999D30085A8FB /* SSJUserChargePeriodConfigSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D1D7F421C86BBD90001F72A /* SSJUserChargePeriodConfigSyncTable.m */; };
-		7D08A1AE1E4999D30085A8FB /* SSJSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D99D4641C357703006EB113 /* SSJSegmentedControl.m */; };
 		7D08A1AF1E4999D30085A8FB /* SSJCustomCollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32F21CEAE6C10086B67E /* SSJCustomCollectionViewFlowLayout.m */; };
 		7D08A1B01E4999D30085A8FB /* SSJBillingChargeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B23FC1C3A1B63009A74A8 /* SSJBillingChargeHelper.m */; };
 		7D08A1B11E4999D30085A8FB /* SSJSummaryBooksTableViewHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CA5F0C41DD047DB003E72E8 /* SSJSummaryBooksTableViewHeader.m */; };
@@ -878,7 +877,6 @@
 		7D8F7C381D2CAED200F7DF6A /* SSJThemeUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D8F7C371D2CAED200F7DF6A /* SSJThemeUtil.m */; };
 		7D99D45C1C3522D7006EB113 /* SSJDatabaseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D99D45B1C3522D7006EB113 /* SSJDatabaseQueue.m */; };
 		7D99D4621C355130006EB113 /* SSJReportFormsSurplusView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D99D4611C355130006EB113 /* SSJReportFormsSurplusView.m */; };
-		7D99D4651C357703006EB113 /* SSJSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D99D4641C357703006EB113 /* SSJSegmentedControl.m */; };
 		7D9E4A531D0FFBEF00EE254D /* SSJMagicExportBookTypeSelectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D9E4A521D0FFBEF00EE254D /* SSJMagicExportBookTypeSelectionCell.m */; };
 		7DA139ED1E35AED7000490A4 /* SSJAlertViewAction.m in Sources */ = {isa = PBXBuildFile; fileRef = BD33FD281C4B2E4C006A6942 /* SSJAlertViewAction.m */; };
 		7DA139EE1E35AED7000490A4 /* SSJForgetPasswordFirstStepViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE6E8701C56419F001C9138 /* SSJForgetPasswordFirstStepViewController.m */; };
@@ -1141,7 +1139,6 @@
 		7DA13B021E35AED7000490A4 /* SSJBaselineTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE6E8671C55DB75001C9138 /* SSJBaselineTextField.m */; };
 		7DA13B031E35AED7000490A4 /* SSJCircleChargeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBC41CFD2DAA0061803B /* SSJCircleChargeCell.m */; };
 		7DA13B041E35AED7000490A4 /* SSJUserChargePeriodConfigSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D1D7F421C86BBD90001F72A /* SSJUserChargePeriodConfigSyncTable.m */; };
-		7DA13B051E35AED7000490A4 /* SSJSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D99D4641C357703006EB113 /* SSJSegmentedControl.m */; };
 		7DA13B061E35AED7000490A4 /* SSJCustomCollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32F21CEAE6C10086B67E /* SSJCustomCollectionViewFlowLayout.m */; };
 		7DA13B071E35AED7000490A4 /* SSJBillingChargeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B23FC1C3A1B63009A74A8 /* SSJBillingChargeHelper.m */; };
 		7DA13B081E35AED7000490A4 /* SSJSummaryBooksTableViewHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CA5F0C41DD047DB003E72E8 /* SSJSummaryBooksTableViewHeader.m */; };
@@ -1413,6 +1410,7 @@
 		7DABCA661D0E5A32002886E8 /* SSJReportFormsCurveDescriptionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DABCA651D0E5A32002886E8 /* SSJReportFormsCurveDescriptionView.m */; };
 		7DB429011CAE3E5000B46F32 /* SSJDatabaseVersion2.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DB429001CAE3E5000B46F32 /* SSJDatabaseVersion2.m */; };
 		7DB6140C1D2F4BB6009A6F87 /* SCYWinCowryHomeBannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DB6140B1D2F4BB6009A6F87 /* SCYWinCowryHomeBannerView.m */; };
+		7DB7E44A1EB98821002383C5 /* SSJSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DB7E4491EB98821002383C5 /* SSJSegmentedControl.m */; };
 		7DB9F81A1DFFC8C90084E998 /* SSJReportFormsNoDataCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DB9F8191DFFC8C90084E998 /* SSJReportFormsNoDataCell.m */; };
 		7DB9F81D1DFFC8C90084E998 /* SSJReportFormsNoDataCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DB9F8191DFFC8C90084E998 /* SSJReportFormsNoDataCell.m */; };
 		7DB9F8281DFFC9230084E998 /* SSJReportFormsNoDataCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DB9F8271DFFC9230084E998 /* SSJReportFormsNoDataCellItem.m */; };
@@ -1715,7 +1713,6 @@
 		7DBB3B901E55C2EE0075E638 /* SSJBaselineTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE6E8671C55DB75001C9138 /* SSJBaselineTextField.m */; };
 		7DBB3B911E55C2EE0075E638 /* SSJCircleChargeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBC41CFD2DAA0061803B /* SSJCircleChargeCell.m */; };
 		7DBB3B921E55C2EE0075E638 /* SSJUserChargePeriodConfigSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D1D7F421C86BBD90001F72A /* SSJUserChargePeriodConfigSyncTable.m */; };
-		7DBB3B931E55C2EE0075E638 /* SSJSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D99D4641C357703006EB113 /* SSJSegmentedControl.m */; };
 		7DBB3B941E55C2EE0075E638 /* SSJFundingTransferListPeriodCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D22A2E51E4F10C300190CEB /* SSJFundingTransferListPeriodCellItem.m */; };
 		7DBB3B951E55C2EE0075E638 /* SSJCustomCollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32F21CEAE6C10086B67E /* SSJCustomCollectionViewFlowLayout.m */; };
 		7DBB3B961E55C2EE0075E638 /* SSJBillingChargeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B23FC1C3A1B63009A74A8 /* SSJBillingChargeHelper.m */; };
@@ -2279,7 +2276,6 @@
 		7DBB402B1E55C4E00075E638 /* SSJBaselineTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE6E8671C55DB75001C9138 /* SSJBaselineTextField.m */; };
 		7DBB402C1E55C4E00075E638 /* SSJCircleChargeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBC41CFD2DAA0061803B /* SSJCircleChargeCell.m */; };
 		7DBB402D1E55C4E00075E638 /* SSJUserChargePeriodConfigSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D1D7F421C86BBD90001F72A /* SSJUserChargePeriodConfigSyncTable.m */; };
-		7DBB402E1E55C4E00075E638 /* SSJSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D99D4641C357703006EB113 /* SSJSegmentedControl.m */; };
 		7DBB402F1E55C4E00075E638 /* SSJFundingTransferListPeriodCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D22A2E51E4F10C300190CEB /* SSJFundingTransferListPeriodCellItem.m */; };
 		7DBB40301E55C4E00075E638 /* SSJCustomCollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32F21CEAE6C10086B67E /* SSJCustomCollectionViewFlowLayout.m */; };
 		7DBB40311E55C4E00075E638 /* SSJBillingChargeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B23FC1C3A1B63009A74A8 /* SSJBillingChargeHelper.m */; };
@@ -3067,7 +3063,6 @@
 		7DFB17821EB0341E00292DD3 /* SSJBaselineTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE6E8671C55DB75001C9138 /* SSJBaselineTextField.m */; };
 		7DFB17831EB0341E00292DD3 /* SSJCircleChargeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBC41CFD2DAA0061803B /* SSJCircleChargeCell.m */; };
 		7DFB17841EB0341E00292DD3 /* SSJUserChargePeriodConfigSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D1D7F421C86BBD90001F72A /* SSJUserChargePeriodConfigSyncTable.m */; };
-		7DFB17851EB0341E00292DD3 /* SSJSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D99D4641C357703006EB113 /* SSJSegmentedControl.m */; };
 		7DFB17861EB0341E00292DD3 /* SSJFundingTransferListPeriodCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D22A2E51E4F10C300190CEB /* SSJFundingTransferListPeriodCellItem.m */; };
 		7DFB17871EB0341E00292DD3 /* SSJCustomCollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32F21CEAE6C10086B67E /* SSJCustomCollectionViewFlowLayout.m */; };
 		7DFB17881EB0341E00292DD3 /* SSJBillingChargeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B23FC1C3A1B63009A74A8 /* SSJBillingChargeHelper.m */; };
@@ -3782,7 +3777,6 @@
 		9C13F6061E8267D300AC5FA9 /* MJRefreshAutoFooter.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C155E661E68572700FDFD18 /* MJRefreshAutoFooter.m */; };
 		9C13F6071E8267D300AC5FA9 /* SSJCircleChargeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBC41CFD2DAA0061803B /* SSJCircleChargeCell.m */; };
 		9C13F6081E8267D300AC5FA9 /* SSJUserChargePeriodConfigSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D1D7F421C86BBD90001F72A /* SSJUserChargePeriodConfigSyncTable.m */; };
-		9C13F6091E8267D300AC5FA9 /* SSJSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D99D4641C357703006EB113 /* SSJSegmentedControl.m */; };
 		9C13F60A1E8267D300AC5FA9 /* MJRefreshAutoGifFooter.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C155E731E68572700FDFD18 /* MJRefreshAutoGifFooter.m */; };
 		9C13F60B1E8267D300AC5FA9 /* SSJFundingTransferListPeriodCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D22A2E51E4F10C300190CEB /* SSJFundingTransferListPeriodCellItem.m */; };
 		9C13F60C1E8267D300AC5FA9 /* SSJCustomCollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32F21CEAE6C10086B67E /* SSJCustomCollectionViewFlowLayout.m */; };
@@ -4656,7 +4650,6 @@
 		9C4C21291E9E30C8000C5F15 /* SSJBaselineTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE6E8671C55DB75001C9138 /* SSJBaselineTextField.m */; };
 		9C4C212A1E9E30C8000C5F15 /* SSJCircleChargeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBC41CFD2DAA0061803B /* SSJCircleChargeCell.m */; };
 		9C4C212B1E9E30C8000C5F15 /* SSJUserChargePeriodConfigSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D1D7F421C86BBD90001F72A /* SSJUserChargePeriodConfigSyncTable.m */; };
-		9C4C212C1E9E30C8000C5F15 /* SSJSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D99D4641C357703006EB113 /* SSJSegmentedControl.m */; };
 		9C4C212D1E9E30C8000C5F15 /* SSJFundingTransferListPeriodCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D22A2E51E4F10C300190CEB /* SSJFundingTransferListPeriodCellItem.m */; };
 		9C4C212E1E9E30C8000C5F15 /* SSJCustomCollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32F21CEAE6C10086B67E /* SSJCustomCollectionViewFlowLayout.m */; };
 		9C4C212F1E9E30C8000C5F15 /* SSJBillingChargeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B23FC1C3A1B63009A74A8 /* SSJBillingChargeHelper.m */; };
@@ -5381,7 +5374,6 @@
 		9C7D2E0F1E8DF8A80093001F /* SSJBaselineTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE6E8671C55DB75001C9138 /* SSJBaselineTextField.m */; };
 		9C7D2E101E8DF8A80093001F /* SSJCircleChargeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBC41CFD2DAA0061803B /* SSJCircleChargeCell.m */; };
 		9C7D2E111E8DF8A80093001F /* SSJUserChargePeriodConfigSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D1D7F421C86BBD90001F72A /* SSJUserChargePeriodConfigSyncTable.m */; };
-		9C7D2E121E8DF8A80093001F /* SSJSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D99D4641C357703006EB113 /* SSJSegmentedControl.m */; };
 		9C7D2E131E8DF8A80093001F /* SSJFundingTransferListPeriodCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D22A2E51E4F10C300190CEB /* SSJFundingTransferListPeriodCellItem.m */; };
 		9C7D2E141E8DF8A80093001F /* SSJCustomCollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32F21CEAE6C10086B67E /* SSJCustomCollectionViewFlowLayout.m */; };
 		9C7D2E151E8DF8A80093001F /* SSJBillingChargeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B23FC1C3A1B63009A74A8 /* SSJBillingChargeHelper.m */; };
@@ -5994,7 +5986,6 @@
 		9C7D30861E8DF96B0093001F /* SSJBaselineTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE6E8671C55DB75001C9138 /* SSJBaselineTextField.m */; };
 		9C7D30871E8DF96B0093001F /* SSJCircleChargeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBC41CFD2DAA0061803B /* SSJCircleChargeCell.m */; };
 		9C7D30881E8DF96B0093001F /* SSJUserChargePeriodConfigSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D1D7F421C86BBD90001F72A /* SSJUserChargePeriodConfigSyncTable.m */; };
-		9C7D30891E8DF96B0093001F /* SSJSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D99D4641C357703006EB113 /* SSJSegmentedControl.m */; };
 		9C7D308A1E8DF96B0093001F /* SSJFundingTransferListPeriodCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D22A2E51E4F10C300190CEB /* SSJFundingTransferListPeriodCellItem.m */; };
 		9C7D308B1E8DF96B0093001F /* SSJCustomCollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32F21CEAE6C10086B67E /* SSJCustomCollectionViewFlowLayout.m */; };
 		9C7D308C1E8DF96B0093001F /* SSJBillingChargeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B23FC1C3A1B63009A74A8 /* SSJBillingChargeHelper.m */; };
@@ -6608,7 +6599,6 @@
 		9C80FDC81E95E88E00B1BAAC /* SSJBaselineTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE6E8671C55DB75001C9138 /* SSJBaselineTextField.m */; };
 		9C80FDC91E95E88E00B1BAAC /* SSJCircleChargeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBC41CFD2DAA0061803B /* SSJCircleChargeCell.m */; };
 		9C80FDCA1E95E88E00B1BAAC /* SSJUserChargePeriodConfigSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D1D7F421C86BBD90001F72A /* SSJUserChargePeriodConfigSyncTable.m */; };
-		9C80FDCB1E95E88E00B1BAAC /* SSJSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D99D4641C357703006EB113 /* SSJSegmentedControl.m */; };
 		9C80FDCC1E95E88E00B1BAAC /* SSJFundingTransferListPeriodCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D22A2E51E4F10C300190CEB /* SSJFundingTransferListPeriodCellItem.m */; };
 		9C80FDCD1E95E88E00B1BAAC /* SSJCustomCollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32F21CEAE6C10086B67E /* SSJCustomCollectionViewFlowLayout.m */; };
 		9C80FDCE1E95E88E00B1BAAC /* SSJBillingChargeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B23FC1C3A1B63009A74A8 /* SSJBillingChargeHelper.m */; };
@@ -7295,7 +7285,6 @@
 		9C9CEF881EA5F73A007657FE /* SSJBaselineTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE6E8671C55DB75001C9138 /* SSJBaselineTextField.m */; };
 		9C9CEF891EA5F73A007657FE /* SSJCircleChargeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBC41CFD2DAA0061803B /* SSJCircleChargeCell.m */; };
 		9C9CEF8A1EA5F73A007657FE /* SSJUserChargePeriodConfigSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D1D7F421C86BBD90001F72A /* SSJUserChargePeriodConfigSyncTable.m */; };
-		9C9CEF8B1EA5F73A007657FE /* SSJSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D99D4641C357703006EB113 /* SSJSegmentedControl.m */; };
 		9C9CEF8C1EA5F73A007657FE /* SSJFundingTransferListPeriodCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D22A2E51E4F10C300190CEB /* SSJFundingTransferListPeriodCellItem.m */; };
 		9C9CEF8D1EA5F73A007657FE /* SSJCustomCollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32F21CEAE6C10086B67E /* SSJCustomCollectionViewFlowLayout.m */; };
 		9C9CEF8E1EA5F73A007657FE /* SSJBillingChargeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B23FC1C3A1B63009A74A8 /* SSJBillingChargeHelper.m */; };
@@ -7968,7 +7957,6 @@
 		9CECFBDE1D6D41A700DB2C8B /* SSJBaselineTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE6E8671C55DB75001C9138 /* SSJBaselineTextField.m */; };
 		9CECFBDF1D6D41A700DB2C8B /* SSJCircleChargeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBC41CFD2DAA0061803B /* SSJCircleChargeCell.m */; };
 		9CECFBE01D6D41A700DB2C8B /* SSJUserChargePeriodConfigSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D1D7F421C86BBD90001F72A /* SSJUserChargePeriodConfigSyncTable.m */; };
-		9CECFBE11D6D41A700DB2C8B /* SSJSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D99D4641C357703006EB113 /* SSJSegmentedControl.m */; };
 		9CECFBE31D6D41A700DB2C8B /* SSJCustomCollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32F21CEAE6C10086B67E /* SSJCustomCollectionViewFlowLayout.m */; };
 		9CECFBE41D6D41A700DB2C8B /* SSJBillingChargeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B23FC1C3A1B63009A74A8 /* SSJBillingChargeHelper.m */; };
 		9CECFBE51D6D41A700DB2C8B /* SSJForgetPasswordSecondStepViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE6E8731C5641B6001C9138 /* SSJForgetPasswordSecondStepViewController.m */; };
@@ -8658,8 +8646,6 @@
 		7D99D45B1C3522D7006EB113 /* SSJDatabaseQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDatabaseQueue.m; sourceTree = "<group>"; };
 		7D99D4601C355130006EB113 /* SSJReportFormsSurplusView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SSJReportFormsSurplusView.h; path = View/SSJReportFormsSurplusView.h; sourceTree = "<group>"; };
 		7D99D4611C355130006EB113 /* SSJReportFormsSurplusView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SSJReportFormsSurplusView.m; path = View/SSJReportFormsSurplusView.m; sourceTree = "<group>"; };
-		7D99D4631C357703006EB113 /* SSJSegmentedControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJSegmentedControl.h; sourceTree = "<group>"; };
-		7D99D4641C357703006EB113 /* SSJSegmentedControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJSegmentedControl.m; sourceTree = "<group>"; };
 		7D9E4A511D0FFBEF00EE254D /* SSJMagicExportBookTypeSelectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMagicExportBookTypeSelectionCell.h; sourceTree = "<group>"; };
 		7D9E4A521D0FFBEF00EE254D /* SSJMagicExportBookTypeSelectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMagicExportBookTypeSelectionCell.m; sourceTree = "<group>"; };
 		7DA13C2C1E35AED7000490A4 /* YouYuJiZhangBao.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YouYuJiZhangBao.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -8679,6 +8665,8 @@
 		7DB429001CAE3E5000B46F32 /* SSJDatabaseVersion2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDatabaseVersion2.m; sourceTree = "<group>"; };
 		7DB6140A1D2F4BB6009A6F87 /* SCYWinCowryHomeBannerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCYWinCowryHomeBannerView.h; sourceTree = "<group>"; };
 		7DB6140B1D2F4BB6009A6F87 /* SCYWinCowryHomeBannerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCYWinCowryHomeBannerView.m; sourceTree = "<group>"; };
+		7DB7E4481EB98821002383C5 /* SSJSegmentedControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJSegmentedControl.h; sourceTree = "<group>"; };
+		7DB7E4491EB98821002383C5 /* SSJSegmentedControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJSegmentedControl.m; sourceTree = "<group>"; };
 		7DB9F8181DFFC8C90084E998 /* SSJReportFormsNoDataCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormsNoDataCell.h; sourceTree = "<group>"; };
 		7DB9F8191DFFC8C90084E998 /* SSJReportFormsNoDataCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReportFormsNoDataCell.m; sourceTree = "<group>"; };
 		7DB9F8261DFFC9230084E998 /* SSJReportFormsNoDataCellItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormsNoDataCellItem.h; sourceTree = "<group>"; };
@@ -10521,8 +10509,6 @@
 				7D6AAB521C30EC290007C0A3 /* SSJReportFormsSwitchYearControl.m */,
 				7D6AAB681C313BA70007C0A3 /* SSJReportFormsIncomeAndPayCell.h */,
 				7D6AAB691C313BA70007C0A3 /* SSJReportFormsIncomeAndPayCell.m */,
-				7D99D4631C357703006EB113 /* SSJSegmentedControl.h */,
-				7D99D4641C357703006EB113 /* SSJSegmentedControl.m */,
 				7DABCA641D0E5A32002886E8 /* SSJReportFormsCurveDescriptionView.h */,
 				7DABCA651D0E5A32002886E8 /* SSJReportFormsCurveDescriptionView.m */,
 				7D6B12B51D4B6C190036BF4E /* SSJReportFormsSwitchControl.h */,
@@ -10581,6 +10567,7 @@
 		7D6AAB5F1C312C340007C0A3 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				7DB7E4471EB98821002383C5 /* SSJSegmentedControl */,
 				7DE4E9D51EB33C0800616958 /* SSJReportFormsScaleAxisView */,
 				7D8952BA1EB2E59200FF6D04 /* SSJButton */,
 				7D6CC8E31E0A731C00FF6133 /* SSJReportFormsCurveGraphView */,
@@ -10833,6 +10820,15 @@
 				7DA6EDD11D2B5CAE0097F06C /* SSJThemeModel.m */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		7DB7E4471EB98821002383C5 /* SSJSegmentedControl */ = {
+			isa = PBXGroup;
+			children = (
+				7DB7E4481EB98821002383C5 /* SSJSegmentedControl.h */,
+				7DB7E4491EB98821002383C5 /* SSJSegmentedControl.m */,
+			);
+			path = SSJSegmentedControl;
 			sourceTree = "<group>";
 		};
 		7DC318491E2882A300932644 /* FMDB */ = {
@@ -14951,7 +14947,6 @@
 				7D08A1AB1E4999D30085A8FB /* SSJBaselineTextField.m in Sources */,
 				7D08A1AC1E4999D30085A8FB /* SSJCircleChargeCell.m in Sources */,
 				7D08A1AD1E4999D30085A8FB /* SSJUserChargePeriodConfigSyncTable.m in Sources */,
-				7D08A1AE1E4999D30085A8FB /* SSJSegmentedControl.m in Sources */,
 				7D08A1AF1E4999D30085A8FB /* SSJCustomCollectionViewFlowLayout.m in Sources */,
 				7D08A1B01E4999D30085A8FB /* SSJBillingChargeHelper.m in Sources */,
 				7D08A1B11E4999D30085A8FB /* SSJSummaryBooksTableViewHeader.m in Sources */,
@@ -15556,7 +15551,6 @@
 				7DA13B021E35AED7000490A4 /* SSJBaselineTextField.m in Sources */,
 				7DA13B031E35AED7000490A4 /* SSJCircleChargeCell.m in Sources */,
 				7DA13B041E35AED7000490A4 /* SSJUserChargePeriodConfigSyncTable.m in Sources */,
-				7DA13B051E35AED7000490A4 /* SSJSegmentedControl.m in Sources */,
 				7DA13B061E35AED7000490A4 /* SSJCustomCollectionViewFlowLayout.m in Sources */,
 				7DA13B071E35AED7000490A4 /* SSJBillingChargeHelper.m in Sources */,
 				7DA13B081E35AED7000490A4 /* SSJSummaryBooksTableViewHeader.m in Sources */,
@@ -16169,7 +16163,6 @@
 				7DBB3B911E55C2EE0075E638 /* SSJCircleChargeCell.m in Sources */,
 				9CE4AD3F1E8376350051B6DB /* SSJMoreHomeAnnouncementButton.m in Sources */,
 				7DBB3B921E55C2EE0075E638 /* SSJUserChargePeriodConfigSyncTable.m in Sources */,
-				7DBB3B931E55C2EE0075E638 /* SSJSegmentedControl.m in Sources */,
 				9C155EC51E68572700FDFD18 /* MJRefreshAutoGifFooter.m in Sources */,
 				7DBB3B941E55C2EE0075E638 /* SSJFundingTransferListPeriodCellItem.m in Sources */,
 				7DBB3B951E55C2EE0075E638 /* SSJCustomCollectionViewFlowLayout.m in Sources */,
@@ -16775,7 +16768,6 @@
 				7DBB402C1E55C4E00075E638 /* SSJCircleChargeCell.m in Sources */,
 				7DF4F1241EB890C00039FB2C /* SSJReportFormsPeriodSelectionControl.m in Sources */,
 				7DBB402D1E55C4E00075E638 /* SSJUserChargePeriodConfigSyncTable.m in Sources */,
-				7DBB402E1E55C4E00075E638 /* SSJSegmentedControl.m in Sources */,
 				9C155EBF1E68572700FDFD18 /* MJRefreshAutoGifFooter.m in Sources */,
 				7DBB402F1E55C4E00075E638 /* SSJFundingTransferListPeriodCellItem.m in Sources */,
 				7DBB40301E55C4E00075E638 /* SSJCustomCollectionViewFlowLayout.m in Sources */,
@@ -17365,7 +17357,6 @@
 				7DFB17821EB0341E00292DD3 /* SSJBaselineTextField.m in Sources */,
 				7DFB17831EB0341E00292DD3 /* SSJCircleChargeCell.m in Sources */,
 				7DFB17841EB0341E00292DD3 /* SSJUserChargePeriodConfigSyncTable.m in Sources */,
-				7DFB17851EB0341E00292DD3 /* SSJSegmentedControl.m in Sources */,
 				7DFB17861EB0341E00292DD3 /* SSJFundingTransferListPeriodCellItem.m in Sources */,
 				7DFB17871EB0341E00292DD3 /* SSJCustomCollectionViewFlowLayout.m in Sources */,
 				7DFB17881EB0341E00292DD3 /* SSJBillingChargeHelper.m in Sources */,
@@ -17969,7 +17960,6 @@
 				9C13F6071E8267D300AC5FA9 /* SSJCircleChargeCell.m in Sources */,
 				9CE4AD421E8376370051B6DB /* SSJMoreHomeAnnouncementButton.m in Sources */,
 				9C13F6081E8267D300AC5FA9 /* SSJUserChargePeriodConfigSyncTable.m in Sources */,
-				9C13F6091E8267D300AC5FA9 /* SSJSegmentedControl.m in Sources */,
 				9C13F60A1E8267D300AC5FA9 /* MJRefreshAutoGifFooter.m in Sources */,
 				9C13F60B1E8267D300AC5FA9 /* SSJFundingTransferListPeriodCellItem.m in Sources */,
 				9C13F60C1E8267D300AC5FA9 /* SSJCustomCollectionViewFlowLayout.m in Sources */,
@@ -18564,7 +18554,6 @@
 				9C4C21291E9E30C8000C5F15 /* SSJBaselineTextField.m in Sources */,
 				9C4C212A1E9E30C8000C5F15 /* SSJCircleChargeCell.m in Sources */,
 				9C4C212B1E9E30C8000C5F15 /* SSJUserChargePeriodConfigSyncTable.m in Sources */,
-				9C4C212C1E9E30C8000C5F15 /* SSJSegmentedControl.m in Sources */,
 				9C4C212D1E9E30C8000C5F15 /* SSJFundingTransferListPeriodCellItem.m in Sources */,
 				9C4C212E1E9E30C8000C5F15 /* SSJCustomCollectionViewFlowLayout.m in Sources */,
 				9C4C212F1E9E30C8000C5F15 /* SSJBillingChargeHelper.m in Sources */,
@@ -19164,7 +19153,6 @@
 				9C7D2E0F1E8DF8A80093001F /* SSJBaselineTextField.m in Sources */,
 				9C7D2E101E8DF8A80093001F /* SSJCircleChargeCell.m in Sources */,
 				9C7D2E111E8DF8A80093001F /* SSJUserChargePeriodConfigSyncTable.m in Sources */,
-				9C7D2E121E8DF8A80093001F /* SSJSegmentedControl.m in Sources */,
 				9C7D2E131E8DF8A80093001F /* SSJFundingTransferListPeriodCellItem.m in Sources */,
 				9C7D2E141E8DF8A80093001F /* SSJCustomCollectionViewFlowLayout.m in Sources */,
 				9C7D2E151E8DF8A80093001F /* SSJBillingChargeHelper.m in Sources */,
@@ -19765,7 +19753,6 @@
 				9C7D30861E8DF96B0093001F /* SSJBaselineTextField.m in Sources */,
 				9C7D30871E8DF96B0093001F /* SSJCircleChargeCell.m in Sources */,
 				9C7D30881E8DF96B0093001F /* SSJUserChargePeriodConfigSyncTable.m in Sources */,
-				9C7D30891E8DF96B0093001F /* SSJSegmentedControl.m in Sources */,
 				9C7D308A1E8DF96B0093001F /* SSJFundingTransferListPeriodCellItem.m in Sources */,
 				9C7D308B1E8DF96B0093001F /* SSJCustomCollectionViewFlowLayout.m in Sources */,
 				9C7D308C1E8DF96B0093001F /* SSJBillingChargeHelper.m in Sources */,
@@ -20366,7 +20353,6 @@
 				9C80FDC81E95E88E00B1BAAC /* SSJBaselineTextField.m in Sources */,
 				9C80FDC91E95E88E00B1BAAC /* SSJCircleChargeCell.m in Sources */,
 				9C80FDCA1E95E88E00B1BAAC /* SSJUserChargePeriodConfigSyncTable.m in Sources */,
-				9C80FDCB1E95E88E00B1BAAC /* SSJSegmentedControl.m in Sources */,
 				9C80FDCC1E95E88E00B1BAAC /* SSJFundingTransferListPeriodCellItem.m in Sources */,
 				9C80FDCD1E95E88E00B1BAAC /* SSJCustomCollectionViewFlowLayout.m in Sources */,
 				9C80FDCE1E95E88E00B1BAAC /* SSJBillingChargeHelper.m in Sources */,
@@ -20966,7 +20952,6 @@
 				9C9CEF881EA5F73A007657FE /* SSJBaselineTextField.m in Sources */,
 				9C9CEF891EA5F73A007657FE /* SSJCircleChargeCell.m in Sources */,
 				9C9CEF8A1EA5F73A007657FE /* SSJUserChargePeriodConfigSyncTable.m in Sources */,
-				9C9CEF8B1EA5F73A007657FE /* SSJSegmentedControl.m in Sources */,
 				9C9CEF8C1EA5F73A007657FE /* SSJFundingTransferListPeriodCellItem.m in Sources */,
 				9C9CEF8D1EA5F73A007657FE /* SSJCustomCollectionViewFlowLayout.m in Sources */,
 				9C9CEF8E1EA5F73A007657FE /* SSJBillingChargeHelper.m in Sources */,
@@ -21564,7 +21549,6 @@
 				9CECFBDF1D6D41A700DB2C8B /* SSJCircleChargeCell.m in Sources */,
 				9CECFBE01D6D41A700DB2C8B /* SSJUserChargePeriodConfigSyncTable.m in Sources */,
 				7DF19EDB1D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m in Sources */,
-				9CECFBE11D6D41A700DB2C8B /* SSJSegmentedControl.m in Sources */,
 				9CECFBE31D6D41A700DB2C8B /* SSJCustomCollectionViewFlowLayout.m in Sources */,
 				9CECFBE41D6D41A700DB2C8B /* SSJBillingChargeHelper.m in Sources */,
 				9CECFBE51D6D41A700DB2C8B /* SSJForgetPasswordSecondStepViewController.m in Sources */,
@@ -21946,6 +21930,7 @@
 				9C53A3BA1D420A01003BA2F0 /* SSJNewMemberViewController.m in Sources */,
 				7D5F33771CEAE6C10086B67E /* SSJCategoryCollectionViewCell.m in Sources */,
 				7DE4A7E51D20DC7000F05BF0 /* NSString+SSJTheme.m in Sources */,
+				7DB7E44A1EB98821002383C5 /* SSJSegmentedControl.m in Sources */,
 				7D6CC8FE1E0A731C00FF6133 /* SSJReportFormsCurveViewItem.m in Sources */,
 				7D5F334D1CEAE6C10086B67E /* SSJCalenderDetaiImagelFooterView.m in Sources */,
 				7D2B24271C3E098F009A74A8 /* SSJFundInfoSyncTable.m in Sources */,
@@ -22169,7 +22154,6 @@
 				7DE6E8681C55DB75001C9138 /* SSJBaselineTextField.m in Sources */,
 				9CD9BC241CFD2DAA0061803B /* SSJCircleChargeCell.m in Sources */,
 				7D1D7F431C86BBD90001F72A /* SSJUserChargePeriodConfigSyncTable.m in Sources */,
-				7D99D4651C357703006EB113 /* SSJSegmentedControl.m in Sources */,
 				7D22A2E61E4F10C300190CEB /* SSJFundingTransferListPeriodCellItem.m in Sources */,
 				7D5F33711CEAE6C10086B67E /* SSJCustomCollectionViewFlowLayout.m in Sources */,
 				7D2B23FD1C3A1B63009A74A8 /* SSJBillingChargeHelper.m in Sources */,
