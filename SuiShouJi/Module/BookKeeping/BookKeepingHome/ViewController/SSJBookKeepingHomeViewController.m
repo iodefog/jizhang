@@ -59,7 +59,7 @@
 
 static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 
-@interface SSJBookKeepingHomeViewController () <UITabBarControllerDelegate, SSJMultiFunctionButtonDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
+@interface SSJBookKeepingHomeViewController () <SSJMultiFunctionButtonDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 
 @property (nonatomic,strong) NSMutableArray *items;
 @property (nonatomic,strong) UIButton *button;
@@ -122,6 +122,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.statisticsTitle = @"首页";
+        self.hidesNavigationBarWhenPushed = YES;
         self.extendedLayoutIncludesOpaqueBars = YES;
         self.automaticallyAdjustsScrollViewInsets = NO;
 //        [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleLightContent];
@@ -154,10 +155,6 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    
-    self.tabBarController.delegate = self;
-    
-    [self.navigationController setNavigationBarHidden:YES animated:YES];
         
     __weak typeof(self) weakSelf = self;
     [self.mm_drawerController setGestureCompletionBlock:^(MMDrawerController *drawerController, UIGestureRecognizer *gesture) {
@@ -215,10 +212,6 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
-    // 如果不是present一个控制器就显示导航栏
-    if (!self.navigationController.presentedViewController) {
-        [[self navigationController] setNavigationBarHidden:NO animated:YES];
-    }
 //    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
     self.selectIndex = nil;
     [self getCurrentDate];
@@ -226,11 +219,6 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
     [self.mutiFunctionButton dismiss];
     _dateViewHasDismiss = YES;
 }
-
-//- (void)viewDidDisappear:(BOOL)animated{
-//    [super viewDidDisappear:animated];
-//    [[self navigationController] setNavigationBarHidden:NO animated:NO];
-//}
 
 -(void)viewDidLayoutSubviews{
     [super viewDidLayoutSubviews];
@@ -494,28 +482,6 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return self.items.count;
 }
-
-
-#pragma mark - UITabBarControllerDelegate
-- (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController {
-    if ([viewController isKindOfClass:[UINavigationController class]]) {
-        UINavigationController *naviController = (UINavigationController *)viewController;
-        if (naviController.topViewController == self) {
-            [self.navigationController setNavigationBarHidden:YES animated:NO];
-        }
-    }
-    
-    return YES;
-}
-
-//- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
-//    if ([viewController isKindOfClass:[UINavigationController class]]) {
-//        UINavigationController *naviController = (UINavigationController *)viewController;
-//        if (naviController.topViewController == self) {
-//            [self.navigationController setNavigationBarHidden:YES animated:NO];
-//        }
-//    }
-//}
 
 #pragma mark - UIScrollViewDelegate
 -(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{

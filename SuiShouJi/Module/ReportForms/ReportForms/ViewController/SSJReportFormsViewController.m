@@ -7,6 +7,7 @@
 //
 
 #import "SSJReportFormsViewController.h"
+#import "SSJNavigationController.h"
 #import "SSJBillingChargeViewController.h"
 #import "SSJMagicExportCalendarViewController.h"
 #import "SSJReportFormsBillTypeDetailViewController.h"
@@ -87,6 +88,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
         self.automaticallyAdjustsScrollViewInsets = NO;
         self.extendedLayoutIncludesOpaqueBars = YES;
         self.showNavigationBarBaseLine = NO;
+        self.hidesNavigationBarWhenPushed = YES;
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadAllDatas) name:SSJBooksTypeDidChangeNotification object:nil];
     }
@@ -104,13 +106,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self.navigationController setNavigationBarHidden:YES animated:YES];
     [self reloadAllDatas];
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
 }
 
 #pragma mark - Overwrite

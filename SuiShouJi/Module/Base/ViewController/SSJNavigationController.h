@@ -8,6 +8,18 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol SSJNavigationControllerDelegate <UINavigationControllerDelegate>
+
+@end
+
 @interface SSJNavigationController : UINavigationController
+
+@property (nonatomic, weak) id<SSJNavigationControllerDelegate> customDelegate;
+
+@end
+
+@interface UIViewController (SSJNavigationController)
+
+@property (nonatomic, getter=ssj_hidesNavigationBarWhenPushed, setter=ssj_setHidesNavigationBarWhenPushed:) BOOL hidesNavigationBarWhenPushed;
 
 @end

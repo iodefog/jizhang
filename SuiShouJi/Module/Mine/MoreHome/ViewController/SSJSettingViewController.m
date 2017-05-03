@@ -78,8 +78,6 @@ static NSString *const kTitle9 = @"上传日志";
             self.titles = @[@[kTitle0, kTitle1, kTitle2 , kTitle3 , kTitle9] ,@[kTitle5,kTitle6]];
         }
     }
-    
-    [self.navigationController setNavigationBarHidden:NO];
 }
 
 #pragma mark - UITableViewDelegate
