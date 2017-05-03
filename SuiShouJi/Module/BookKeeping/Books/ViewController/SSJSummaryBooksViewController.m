@@ -22,8 +22,7 @@
 
 static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
 
-@interface SSJSummaryBooksViewController ()<UITableViewDataSource, UITableViewDelegate, UITabBarControllerDelegate, SSJReportFormsPercentCircleDataSource, SSJReportFormsScaleAxisViewDelegate, SSJReportFormsCurveGraphViewDataSource, SSJReportFormsCurveGraphViewDelegate>
-
+@interface SSJSummaryBooksViewController ()<UITableViewDataSource, UITableViewDelegate, UITabBarControllerDelegate, SSJReportFormsPercentCircleDataSource, SSJReportFormsCurveGraphViewDataSource, SSJReportFormsCurveGraphViewDelegate>
 
 @property(nonatomic, strong) SSJSummaryBooksTableViewHeader *header;
 
@@ -38,16 +37,7 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
 
 @property (nonatomic, strong) NSArray *curveItems;
 
-//  日期切换刻度控件的数据源
-@property (nonatomic, strong) NSArray *periods;
-
-@property(nonatomic, strong) NSArray *chargeDatas;
-
-//  当前时间周期
-@property (nonatomic, strong) SSJDatePeriod *currentPeriod;
-
-//  自定义周期
-@property (nonatomic, strong) SSJDatePeriod *customPeriod;
+@property (nonatomic, strong) NSArray *chargeDatas;
 
 @end
 
@@ -67,12 +57,6 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
     [self.view addSubview:self.tableView];
     self.tableView.tableHeaderView = self.header;
     [self.tableView registerClass:[SSJReportFormsIncomeAndPayCell class] forCellReuseIdentifier:kIncomeAndPayCellID];
-    // Do any additional setup after loading the view.
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -86,7 +70,6 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
     [self.mm_drawerController setCloseDrawerGestureModeMask:MMCloseDrawerGestureModeNone];
 }
 
-
 #pragma mark - Getter
 - (SSJSummaryBooksTableViewHeader *)header{
     if (!_header) {
@@ -94,18 +77,23 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
         _header.curveView.dataSource = self;
         _header.curveView.delegate = self;
         _header.chartView.dataSource = self;
-        _header.dateAxisView.delegate = self;
-        __weak typeof(self) weakSelf = self;
+        __weak typeof(self) wself = self;
+        _header.periodControl.periodChangeHandler = ^(SSJReportFormsPeriodSelectionControl *control) {
+            [wself reloadAllDatas];
+        };
+        _header.periodControl.addCustomPeriodHandler = ^(SSJReportFormsPeriodSelectionControl *control) {
+            [wself enterCalendarVC];
+        };
+        _header.periodControl.clearCustomPeriodHandler = ^(SSJReportFormsPeriodSelectionControl *control) {
+            [wself reloadAllDatas];
+        };
         _header.periodSelectBlock = ^(){
-            [weakSelf reloadCurveViewData];
+            [wself reloadCurveViewData];
         };
         _header.incomeOrExpentureSelectBlock = ^(){
-            [weakSelf reloadChartViewData];
-            [weakSelf updateIncomeAndPaymentLabels];
+            [wself reloadChartViewData];
+            [wself updateIncomeAndPaymentLabels];
         };
-        [_header.addOrDeleteCustomPeriodBtn addTarget:self action:@selector(customPeriodBtnAction) forControlEvents:UIControlEventTouchUpInside];
-        [_header.customPeriodBtn addTarget:self action:@selector(enterCalendarVC) forControlEvents:UIControlEventTouchUpInside];
-
     }
     return _header;
 }
@@ -148,46 +136,10 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
         billingChargeVC.ID = item.ID;
         billingChargeVC.booksId = @"all";
         billingChargeVC.color = [UIColor ssj_colorWithHex:item.colorValue];
-        billingChargeVC.period = _customPeriod ?: [_periods ssj_safeObjectAtIndex:_header.dateAxisView.selectedIndex];
+        billingChargeVC.period = self.header.periodControl.currentPeriod;
         billingChargeVC.isPayment = _header.incomOrExpenseSelectSegment.selectedSegmentIndex == 0;
         [self.navigationController pushViewController:billingChargeVC animated:YES];
     }
-}
-
-#pragma mark - SSJReportFormsScaleAxisViewDelegate
-- (NSUInteger)numberOfAxisInScaleAxisView:(SSJReportFormsScaleAxisView *)scaleAxisView {
-    return _periods.count;
-}
-
-- (NSString *)scaleAxisView:(SSJReportFormsScaleAxisView *)scaleAxisView titleForAxisAtIndex:(NSUInteger)index {
-    SSJDatePeriod *period = [_periods ssj_safeObjectAtIndex:index];
-    if (period.periodType == SSJDatePeriodTypeMonth) {
-        return [NSString stringWithFormat:@"%d月", (int)period.startDate.month];
-    } else if (period.periodType == SSJDatePeriodTypeYear) {
-        return [NSString stringWithFormat:@"%d年", (int)period.startDate.year];
-    } else if (period.periodType == SSJDatePeriodTypeCustom) {
-        return @"合计";
-    } else {
-        return nil;
-    }
-}
-
-- (CGFloat)scaleAxisView:(SSJReportFormsScaleAxisView *)scaleAxisView heightForAxisAtIndex:(NSUInteger)index {
-    SSJDatePeriod *period = [_periods ssj_safeObjectAtIndex:index];
-    if (period.periodType == SSJDatePeriodTypeMonth) {
-        return 12;
-    } else if (period.periodType == SSJDatePeriodTypeYear
-               || period.periodType == SSJDatePeriodTypeCustom) {
-        return 20;
-    } else {
-        return 0;
-    }
-}
-
-- (void)scaleAxisView:(SSJReportFormsScaleAxisView *)scaleAxisView didSelectedScaleAxisAtIndex:(NSUInteger)index {
-    SSJDatePeriod *period = [_periods ssj_safeObjectAtIndex:index];
-    self.currentPeriod = period;
-    [self reloadAllDatas];
 }
 
 #pragma mark - SSJReportFormsPercentCircleDataSource
@@ -343,8 +295,7 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
 
 //  重新加载数据
 - (void)reloadAllDatas {
-    
-    SSJDatePeriod *period = _customPeriod ?: _currentPeriod;
+    SSJDatePeriod *period = self.header.periodControl.currentPeriod;
     [SSJReportFormsUtil queryForDefaultTimeDimensionWithStartDate:period.startDate endDate:period.endDate booksId:@"all" billTypeId:nil success:^(SSJTimeDimension timeDimension) {
         
         if (timeDimension != SSJTimeDimensionUnknown) {
@@ -356,13 +307,13 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
         
     } failure:^(NSError *error) {
         [self.view ssj_hideLoadingIndicator];
-        [self showError:error];
+        [SSJAlertViewAdapter showError:error];
     }];
 }
 
 // 加载折线图的数据
 - (void)reloadCurveViewData {
-    SSJDatePeriod *period = _customPeriod ?: _currentPeriod;
+    SSJDatePeriod *period = self.header.periodControl.currentPeriod;
     [SSJReportFormsUtil queryForBillStatisticsWithTimeDimension:[_header dimension] booksId:@"all" billTypeId:nil startDate:period.startDate endDate:period.endDate success:^(NSDictionary *result) {
         
         [self.view ssj_hideLoadingIndicator];
@@ -383,20 +334,20 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
         
     } failure:^(NSError *error) {
         [self.view ssj_hideLoadingIndicator];
-        [self showError:error];
+        [SSJAlertViewAdapter showError:error];
     }];
 }
 
 - (void)reloadChartViewData {
     // 加载流水列表和饼状图的数据
-    SSJDatePeriod *period = _customPeriod ?: _currentPeriod;
+    SSJDatePeriod *period = self.header.periodControl.currentPeriod;
     if (period) {
         [SSJReportFormsUtil queryForIncomeOrPayType:!(int)_header.incomOrExpenseSelectSegment.selectedSegmentIndex booksId:@"all" startDate:period.startDate endDate:period.endDate success:^(NSArray<SSJReportFormsItem *> *result) {
             [self.view ssj_hideLoadingIndicator];
             [self organiseDatasWithResult:result];
         } failure:^(NSError *error) {
             [self.view ssj_hideLoadingIndicator];
-            [self showError:error];
+            [SSJAlertViewAdapter showError:error];
         }];
     }
 }
@@ -408,45 +359,21 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
         weakSelf.header.totalIncome = income;
         weakSelf.header.totalExpenture = expenture;
     } failure:^(NSError *error) {
-        [self showError:error];
+        [SSJAlertViewAdapter showError:error];
     }];
-
     
     [SSJReportFormsUtil queryForPeriodListWithIncomeOrPayType:SSJBillTypeSurplus booksId:@"all" success:^(NSArray<SSJDatePeriod *> *periods) {
-        
-//        if (periods.count == 0) {
-//            _dateAxisView.hidden = YES;
-//            _customPeriodBtn.hidden = YES;
-//            _addOrDeleteCustomPeriodBtn.hidden = YES;
-//            self.tableView.hidden = YES;
-//            
-//            [self.view ssj_hideLoadingIndicator];
-//            [self.view ssj_showWatermarkWithCustomView:self.noDataRemindView animated:YES target:nil action:nil];
-//            
-//            return;
-//        }
-        
-        _header.dateAxisView.hidden = _customPeriod;
-        _header.customPeriodBtn.hidden = !_customPeriod;
-        _header.addOrDeleteCustomPeriodBtn.hidden = NO;
         self.tableView.hidden = NO;
         [self.view ssj_hideWatermark:YES];
-        
-        _periods = periods;
-        [_header.dateAxisView reloadData];
-        
-        NSInteger selectedIndex = (_currentPeriod ? [_periods indexOfObject:_currentPeriod] : _periods.count - 1);
-        _header.dateAxisView.selectedIndex = selectedIndex;
-        _currentPeriod = [_periods ssj_safeObjectAtIndex:selectedIndex];
-        
-        _header.addOrDeleteCustomPeriodBtn.hidden = !_periods.count;
-        
+        self.header.periodControl.periods = periods;
+        if (!self.header.periodControl.selectedPeriod && periods.count >= 3) {
+            self.header.periodControl.selectedPeriod = periods[periods.count - 3];
+        }
         [self reloadAllDatas];
     } failure:^(NSError *error) {
         [self.view ssj_hideLoadingIndicator];
-        [self showError:error];
+        [SSJAlertViewAdapter showError:error];
     }];
-
 }
 
 - (void)organiseDatasWithResult:(NSArray *)result {
@@ -519,51 +446,20 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
     //        }
 }
 
-- (void)customPeriodBtnAction {
-    if (_customPeriod) {
-        _customPeriod = nil;
-        _header.customPeriod = nil;
-        [self reloadAllDatas];
-    } else {
-        [self enterCalendarVC];
-    }
-}
-
 - (void)enterCalendarVC {
+    __weak typeof(self) wself = self;
     SSJMagicExportCalendarViewController *calendarVC = [[SSJMagicExportCalendarViewController alloc] init];
     calendarVC.title = @"自定义时间";
     calendarVC.billType = SSJBillTypeSurplus;
     calendarVC.completion = ^(NSDate *selectedBeginDate, NSDate *selectedEndDate) {
-        _customPeriod = [SSJDatePeriod datePeriodWithStartDate:selectedBeginDate endDate:selectedEndDate];
-        _header.customPeriod = _customPeriod;
+        wself.header.periodControl.customPeriod = [SSJDatePeriod datePeriodWithStartDate:selectedBeginDate endDate:selectedEndDate];
     };
     [self.navigationController pushViewController:calendarVC animated:YES];
-}
-
-- (void)showError:(NSError *)error {
-    NSString *message = nil;
-#ifdef DEBUG
-    message = [error localizedDescription];
-#else
-    message = SSJ_ERROR_MESSAGE;
-#endif
-    [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:message action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
 }
 
 - (void)updateAppearanceAfterThemeChanged{
     [super updateAppearanceAfterThemeChanged];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.summaryBooksHeaderColor alpha:SSJ_CURRENT_THEME.summaryBooksHeaderAlpha] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
 }
-
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

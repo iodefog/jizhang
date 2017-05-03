@@ -9,13 +9,15 @@
 #import "SSJReportFormsBillTypeDetailViewController.h"
 #import "SSJMagicExportCalendarViewController.h"
 #import "SSJBillingChargeViewController.h"
-#import "SSJReportFormsScaleAxisView.h"
+
+#import "SSJReportFormsPeriodSelectionControl.h"
 #import "SCYSlidePagingHeaderView.h"
 #import "SSJReportFormsCurveGraphView.h"
 #import "SSJSeparatorFormView.h"
 #import "SSJReportFormsCurveDescriptionView.h"
 #import "SSJBudgetNodataRemindView.h"
 #import "SSJReportFormCanYinChartCell.h"
+
 #import "SSJReportFormCanYinChartCellItem.h"
 #import "SSJReportFormsCurveModel.h"
 #import "SSJDatePeriod.h"
@@ -31,16 +33,9 @@ static const CGFloat kSeparatorFormViewHeight = 88;
 
 static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinChartCellId";
 
-@interface SSJReportFormsBillTypeDetailViewController () <UITableViewDataSource, UITableViewDelegate, SSJReportFormsScaleAxisViewDelegate, SCYSlidePagingHeaderViewDelegate, SSJReportFormsCurveGraphViewDataSource, SSJReportFormsCurveGraphViewDelegate, SSJSeparatorFormViewDataSource>
+@interface SSJReportFormsBillTypeDetailViewController () <UITableViewDataSource, UITableViewDelegate, SCYSlidePagingHeaderViewDelegate, SSJReportFormsCurveGraphViewDataSource, SSJReportFormsCurveGraphViewDelegate, SSJSeparatorFormViewDataSource>
 
-//  自定义时间
-@property (nonatomic, strong) UIButton *customPeriodBtn;
-
-//  编辑、删除自定义时间按钮
-@property (nonatomic, strong) UIButton *addOrDeleteCustomPeriodBtn;
-
-//  切换年份、月份控件
-@property (nonatomic, strong) SSJReportFormsScaleAxisView *dateAxisView;
+@property (nonatomic, strong) SSJReportFormsPeriodSelectionControl *periodControl;
 
 @property (nonatomic, strong) SCYSlidePagingHeaderView *timeDemisionControl;
 
@@ -59,9 +54,6 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
 
 //  没有流水的提示视图
 @property (nonatomic, strong) SSJBudgetNodataRemindView *noDataRemindView;
-
-//  日期切换刻度控件的数据源
-@property (nonatomic, strong) NSArray<SSJDatePeriod *> *periods;
 
 @property (nonatomic, strong) NSArray<SSJReportFormsCurveModel *> *curveModels;
 
@@ -100,19 +92,11 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self.view addSubview:self.customPeriodBtn];
-    [self.view addSubview:self.dateAxisView];
-    [self.view addSubview:self.addOrDeleteCustomPeriodBtn];
     [self.view addSubview:self.tableView];
-    
+    [self.view addSubview:self.periodControl];
     self.tableView.tableHeaderView = self.headerView;
-    [self.headerView addSubview:self.timeDemisionControl];
-    [self.headerView addSubview:self.curveView];
-    [self.headerView addSubview:self.separatorFormView];
     [self.curveView addSubview:self.questionBtn];
-    
     [self updateAppearance];
-    [self updateCustomPeriodBtn];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -128,51 +112,24 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
         
         [self.view ssj_hideLoadingIndicator];
         
-        _periods = periods;
+        self.periodControl.periods = periods;
         
         [self updateSubveiwsHidden];
         
-        if (_periods.count == 0) {
+        if (periods.count == 0) {
             [self.view ssj_showWatermarkWithCustomView:self.noDataRemindView animated:YES target:nil action:nil];
         } else {
             [self.view ssj_hideWatermark:YES];
         }
         
-        if (_periods.count > 0) {
-            
-            [_dateAxisView reloadData];
-            
-            NSUInteger selectedIndex = _selectedPeriod ? [_periods indexOfObject:_selectedPeriod] : NSNotFound;
-            _dateAxisView.selectedIndex = (selectedIndex != NSNotFound) ? selectedIndex : _periods.count - 1;
-            _selectedPeriod = [_periods ssj_safeObjectAtIndex:_dateAxisView.selectedIndex];
-            
+        if (periods.count > 0) {
             [self reloadAllData];
         }
         
     } failure:^(NSError *error) {
         [self.view ssj_hideLoadingIndicator];
-        [self showError:error];
+        [SSJAlertViewAdapter showError:error];
     }];
-}
-
-- (void)viewWillLayoutSubviews {
-    [super viewWillLayoutSubviews];
-    
-//    _dateAxisView.frame = CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, 50);
-//    [_dateAxisView ssj_relayoutBorder];
-//    
-//    _addOrDeleteCustomPeriodBtn.frame = CGRectMake(self.view.width - 50, SSJ_NAVIBAR_BOTTOM, 50, 50);
-//    
-//    _separatorFormView.frame = CGRectMake(0, kSpaceHeight, self.view.width, kSeparatorFormViewHeight);
-//    
-//    _timeDemisionControl.frame = CGRectMake(0, _separatorFormView.bottom + kSpaceHeight, self.view.width, kTimePeriodSegmentControlHeight);
-//    
-//    _curveView.frame = CGRectMake(0, _timeDemisionControl.bottom, self.view.width, kCurveViewHeight);
-//    [_curveView ssj_relayoutBorder];
-//
-//    _tableView.frame = CGRectMake(0, self.dateAxisView.bottom, self.view.width, self.view.height - self.dateAxisView.bottom);
-//    
-//    _questionBtn.frame = CGRectMake(60, _curveView.height - 30, 30, 30);
 }
 
 #pragma mark - UITableViewDataSource
@@ -198,42 +155,6 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
     chargeListController.period = [SSJDatePeriod datePeriodWithStartDate:curveModel.startDate endDate:curveModel.endDate];
     chargeListController.color = [UIColor ssj_colorWithHex:_colorValue];
     [self.navigationController pushViewController:chargeListController animated:YES];
-}
-
-#pragma mark - SSJReportFormsScaleAxisViewDelegate
-- (NSUInteger)numberOfAxisInScaleAxisView:(SSJReportFormsScaleAxisView *)scaleAxisView {
-    return _periods.count;
-}
-
-- (NSString *)scaleAxisView:(SSJReportFormsScaleAxisView *)scaleAxisView titleForAxisAtIndex:(NSUInteger)index {
-    SSJDatePeriod *period = [_periods ssj_safeObjectAtIndex:index];
-    if (period.periodType == SSJDatePeriodTypeMonth) {
-        return [NSString stringWithFormat:@"%d月", (int)period.startDate.month];
-    } else if (period.periodType == SSJDatePeriodTypeYear) {
-        return [NSString stringWithFormat:@"%d年", (int)period.startDate.year];
-    } else if (period.periodType == SSJDatePeriodTypeCustom) {
-        return @"合计";
-    } else {
-        return nil;
-    }
-}
-
-- (CGFloat)scaleAxisView:(SSJReportFormsScaleAxisView *)scaleAxisView heightForAxisAtIndex:(NSUInteger)index {
-    SSJDatePeriod *period = [_periods ssj_safeObjectAtIndex:index];
-    if (period.periodType == SSJDatePeriodTypeMonth) {
-        return 12;
-    } else if (period.periodType == SSJDatePeriodTypeYear
-               || period.periodType == SSJDatePeriodTypeCustom) {
-        return 20;
-    } else {
-        return 0;
-    }
-}
-
-- (void)scaleAxisView:(SSJReportFormsScaleAxisView *)scaleAxisView didSelectedScaleAxisAtIndex:(NSUInteger)index {
-    _selectedPeriod = [_periods ssj_safeObjectAtIndex:index];
-    [self reloadAllData];
-//    [SSJAnaliyticsManager event:@"form_date_picked"];
 }
 
 #pragma mark - SCYSlidePagingHeaderViewDelegate
@@ -435,32 +356,11 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
     calendarVC.booksId = SSJGetCurrentBooksType();
     calendarVC.billTypeId = _billTypeID;
     calendarVC.completion = ^(NSDate *selectedBeginDate, NSDate *selectedEndDate) {
-        wself.customPeriod = [SSJDatePeriod datePeriodWithStartDate:selectedBeginDate endDate:selectedEndDate];
-        wself.dateAxisView.hidden = YES;
-        wself.customPeriodBtn.hidden = NO;
-        [wself updateCustomPeriodBtn];
-        [wself.addOrDeleteCustomPeriodBtn setImage:[UIImage ssj_themeImageWithName:@"reportForms_delete"] forState:UIControlStateNormal];
+        wself.periodControl.customPeriod = [SSJDatePeriod datePeriodWithStartDate:selectedBeginDate endDate:selectedEndDate];
     };
     [self.navigationController pushViewController:calendarVC animated:YES];
     
     [SSJAnaliyticsManager event:@"form_date_custom"];
-}
-
-- (void)customPeriodBtnAction {
-    if (_customPeriod) {
-        
-        _customPeriod = nil;
-        _dateAxisView.hidden = NO;
-        _customPeriodBtn.hidden = YES;
-        
-        [_addOrDeleteCustomPeriodBtn setImage:[UIImage ssj_themeImageWithName:@"reportForms_edit"] forState:UIControlStateNormal];
-        
-        [self reloadAllData];
-        
-        [SSJAnaliyticsManager event:@"form_date_custom_delete"];
-    } else {
-        [self enterCalendarVC];
-    }
 }
 
 - (void)questionBtnAction {
@@ -475,7 +375,7 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
 #pragma mark - Private
 - (void)reloadAllData {
     [self.view ssj_showLoadingIndicator];
-    SSJDatePeriod *period = _customPeriod ?: _selectedPeriod;
+    SSJDatePeriod *period = self.periodControl.currentPeriod;
     [SSJReportFormsUtil queryForDefaultTimeDimensionWithStartDate:period.startDate endDate:period.endDate booksId:nil billTypeId:_billTypeID success:^(SSJTimeDimension timeDimension) {
         
         if (timeDimension == SSJTimeDimensionUnknown) {
@@ -491,14 +391,14 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
         [self reloadDataWithDimension:timeDimension];
         
     } failure:^(NSError *error) {
-        [self showError:error];
+        [SSJAlertViewAdapter showError:error];
         [self.view ssj_hideLoadingIndicator];
     }];
 }
 
 - (void)reloadDataWithDimension:(SSJTimeDimension)dimension {
     
-    SSJDatePeriod *period = _customPeriod ?: _selectedPeriod;
+    SSJDatePeriod *period = self.periodControl.currentPeriod;
     
     [SSJReportFormsUtil queryForBillStatisticsWithTimeDimension:[self currentDemension] booksId:nil billTypeId:_billTypeID startDate:period.startDate endDate:period.endDate success:^(NSDictionary *result) {
         
@@ -527,7 +427,7 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
         
     } failure:^(NSError *error) {
         [self.view ssj_hideLoadingIndicator];
-        [self showError:error];
+        [SSJAlertViewAdapter showError:error];
     }];
 }
 
@@ -572,21 +472,8 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
 }
 
 - (void)updateAppearance {
-    self.dateAxisView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
-    self.dateAxisView.scaleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-    self.dateAxisView.selectedScaleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
-    [self.dateAxisView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
-    
-    [self.customPeriodBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] forState:UIControlStateNormal];
-    self.customPeriodBtn.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor].CGColor;
-    
+    [self.periodControl updateAppearance];
     self.tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
-    
-    if (_customPeriod) {
-        [self.addOrDeleteCustomPeriodBtn setImage:[UIImage ssj_themeImageWithName:@"reportForms_delete"] forState:UIControlStateNormal];
-    } else {
-        [self.addOrDeleteCustomPeriodBtn setImage:[UIImage ssj_themeImageWithName:@"reportForms_edit"] forState:UIControlStateNormal];
-    }
     
     [self.noDataRemindView updateAppearance];
     
@@ -612,24 +499,13 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
 }
 
 - (void)updateSubveiwsHidden {
-    if (_periods.count == 0) {
-        _dateAxisView.hidden = YES;
-        _customPeriodBtn.hidden = YES;
-        _addOrDeleteCustomPeriodBtn.hidden = YES;
+    if (self.periodControl.periods.count == 0) {
+        self.periodControl.hidden = YES;
         self.tableView.hidden = YES;
-        return;
-    }
-    
-    if (_customPeriod) {
-        _dateAxisView.hidden = YES;
-        _customPeriodBtn.hidden = NO;
     } else {
-        _dateAxisView.hidden = NO;
-        _customPeriodBtn.hidden = YES;
+        self.periodControl.hidden = NO;
+        self.tableView.hidden = NO;
     }
-    
-    _addOrDeleteCustomPeriodBtn.hidden = NO;
-    self.tableView.hidden = NO;
 }
 
 - (void)updateDimension:(SSJTimeDimension)dimension {
@@ -695,16 +571,6 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
     }
 }
 
-- (void)showError:(NSError *)error {
-    NSString *message = nil;
-#ifdef DEBUG
-    message = [error localizedDescription];
-#else
-    message = SSJ_ERROR_MESSAGE;
-#endif
-    [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:message action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
-}
-
 - (void)caculateValue {
     
     _amount = 0;
@@ -730,17 +596,6 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
     if (count > 0) {
         _average = _amount / count;
     }
-}
-
-- (void)updateCustomPeriodBtn {
-    NSString *startDateStr = [_customPeriod.startDate formattedDateWithFormat:@"yyyy-MM-dd"];
-    NSString *endDateStr = [_customPeriod.endDate formattedDateWithFormat:@"yyyy-MM-dd"];
-    NSString *title = [NSString stringWithFormat:@"%@－－%@", startDateStr, endDateStr];
-    [_customPeriodBtn setTitle:title forState:UIControlStateNormal];
-    CGSize textSize = [title sizeWithAttributes:@{NSFontAttributeName:_customPeriodBtn.titleLabel.font}];
-    _customPeriodBtn.size = CGSizeMake(textSize.width + 28, 30);
-    _customPeriodBtn.top = SSJ_NAVIBAR_BOTTOM + 10;
-    _customPeriodBtn.centerX = self.view.width * 0.5;
 }
 
 - (NSString *)timeWithModel:(SSJReportFormsCurveModel *)model {
@@ -770,35 +625,25 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
 }
 
 #pragma mark - LazyLoading
-- (UIButton *)customPeriodBtn {
-    if (!_customPeriodBtn) {
-        _customPeriodBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        _customPeriodBtn.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
-        _customPeriodBtn.layer.borderWidth = 1;
-        _customPeriodBtn.layer.cornerRadius = 15;
-        [_customPeriodBtn addTarget:self action:@selector(enterCalendarVC) forControlEvents:UIControlEventTouchUpInside];
+- (SSJReportFormsPeriodSelectionControl *)periodControl {
+    if (!_periodControl) {
+        __weak typeof(self) wself = self;
+        _periodControl = [[SSJReportFormsPeriodSelectionControl alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, 35)];
+        _periodControl.customPeriod = self.customPeriod;
+        _periodControl.selectedPeriod = self.selectedPeriod;
+        _periodControl.periodChangeHandler = ^(SSJReportFormsPeriodSelectionControl *control) {
+            [wself reloadAllData];
+            [SSJAnaliyticsManager event:@"form_date_picked"];
+        };
+        _periodControl.addCustomPeriodHandler = ^(SSJReportFormsPeriodSelectionControl *control) {
+            [wself enterCalendarVC];
+        };
+        _periodControl.clearCustomPeriodHandler = ^(SSJReportFormsPeriodSelectionControl *control) {
+            [wself reloadAllData];
+            [SSJAnaliyticsManager event:@"form_date_custom_delete"];
+        };
     }
-    return _customPeriodBtn;
-}
-
-- (UIButton *)addOrDeleteCustomPeriodBtn {
-    if (!_addOrDeleteCustomPeriodBtn) {
-        _addOrDeleteCustomPeriodBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        _addOrDeleteCustomPeriodBtn.frame = CGRectMake(self.view.width - 50, SSJ_NAVIBAR_BOTTOM, 50, 50);
-        [_addOrDeleteCustomPeriodBtn setImage:[UIImage ssj_themeImageWithName:@"reportForms_edit"] forState:UIControlStateNormal];
-        [_addOrDeleteCustomPeriodBtn addTarget:self action:@selector(customPeriodBtnAction) forControlEvents:UIControlEventTouchUpInside];
-    }
-    return _addOrDeleteCustomPeriodBtn;
-}
-
-- (SSJReportFormsScaleAxisView *)dateAxisView {
-    if (!_dateAxisView) {
-        _dateAxisView = [[SSJReportFormsScaleAxisView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, 50)];
-        _dateAxisView.delegate = self;
-        [_dateAxisView ssj_setBorderWidth:1];
-        [_dateAxisView ssj_setBorderStyle:SSJBorderStyleBottom];
-    }
-    return _dateAxisView;
+    return _periodControl;
 }
 
 - (SSJSeparatorFormView *)separatorFormView {
@@ -837,13 +682,16 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
     if (!_headerView) {
         _headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, kSpaceHeight * 3 + kTimePeriodSegmentControlHeight + kCurveViewHeight + kSeparatorFormViewHeight)];
         _headerView.backgroundColor = [UIColor clearColor];
+        [_headerView addSubview:self.timeDemisionControl];
+        [_headerView addSubview:self.curveView];
+        [_headerView addSubview:self.separatorFormView];
     }
     return _headerView;
 }
 
 - (UITableView *)tableView {
     if (!_tableView) {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.dateAxisView.bottom, self.view.width, self.view.height - self.dateAxisView.bottom) style:UITableViewStylePlain];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.periodControl.bottom, self.view.width, self.view.height - self.periodControl.bottom) style:UITableViewStylePlain];
         _tableView.backgroundColor = [UIColor clearColor];
         _tableView.rowHeight = 55;
         _tableView.sectionHeaderHeight = 0;
