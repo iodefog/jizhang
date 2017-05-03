@@ -366,6 +366,9 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
         self.tableView.hidden = NO;
         [self.view ssj_hideWatermark:YES];
         self.header.periodControl.periods = periods;
+        if (!self.header.periodControl.selectedPeriod && periods.count >= 3) {
+            self.header.periodControl.selectedPeriod = periods[periods.count - 3];
+        }
         [self reloadAllDatas];
     } failure:^(NSError *error) {
         [self.view ssj_hideLoadingIndicator];
