@@ -84,7 +84,7 @@
 //            index = 0;
 //        }
         SSJFinancingGradientColorItem *item = [colors objectAtIndex:index];
-        if (![db executeUpdate:@"update bk_fund_info set cstartcolor = ? , cendcolor = ?, cwritedate = ?, iversion = ?, operatortype = 1 where cfundid = ?",item.startColor,item.endColor,cwriteDate,@(SSJSyncVersion()),fundid]) {
+        if (![db executeUpdate:@"update bk_fund_info set ccolor = ?, cstartcolor = ? , cendcolor = ?, cwritedate = ?, iversion = ?, operatortype = 1 where cfundid = ?",item.startColor,item.startColor,item.endColor,cwriteDate,@(SSJSyncVersion()),fundid]) {
             return [db lastError];
         }
     }
