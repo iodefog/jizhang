@@ -2,13 +2,15 @@ lane :adhoc do |options|
   # 如果你用 pod install
   cocoapods
   # 不带adhoc参数，sigh会自动生成App Store证书(公司或个人帐户)
-  # sigh(adhoc: true)
+  sigh(adhoc: true)
   # 指定输出目录
   gym(
     configuration:options[:config],
     scheme:options[:scheme],
-    output_directory: options[:outpath],
+    output_directory: ‘./build’,
     export_method:'ad-hoc',
     clean:true
     )
+  sh "ipa distribute:pgyer -f ./build/SuiShouJi.ipa -a 1c85c26364b99fd4c0c9534504af1e71 -u 4d3a4ece05e37ffda29bb8f4d5b506f2"
+
 end
