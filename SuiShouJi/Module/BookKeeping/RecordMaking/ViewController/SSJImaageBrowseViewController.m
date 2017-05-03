@@ -138,7 +138,7 @@
     if (!_moneyLabel) {
         _moneyLabel = [[UILabel alloc]init];
         _moneyLabel.textColor = [UIColor whiteColor];
-        _moneyLabel.font = [UIFont systemFontOfSize:15];
+        _moneyLabel.font = SSJ_Helvetica_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         _moneyLabel.textAlignment = NSTextAlignmentLeft;
     }
     return _moneyLabel;
@@ -148,7 +148,7 @@
     if (!_memoLabel) {
         _memoLabel = [[UILabel alloc]init];
         _memoLabel.textColor = [UIColor whiteColor];
-        _memoLabel.font = [UIFont systemFontOfSize:15];
+        _memoLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         _memoLabel.textAlignment = NSTextAlignmentLeft;
     }
     return _memoLabel;
@@ -170,7 +170,7 @@
     if (!_dateLabel) {
         _dateLabel = [[UILabel alloc]init];
         _dateLabel.textColor = [UIColor whiteColor];
-        _dateLabel.font = [UIFont systemFontOfSize:15];
+        _dateLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         _dateLabel.textAlignment = NSTextAlignmentLeft;
     }
     return _dateLabel;

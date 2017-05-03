@@ -101,7 +101,7 @@
     if (!_statusLab) {
         _statusLab = [[UILabel alloc] init];
         _statusLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-        _statusLab.font = [UIFont systemFontOfSize:13];
+        _statusLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
         _statusLab.text  = @"数据加载中";
         [_statusLab sizeToFit];
         _statusLab.hidden = YES;

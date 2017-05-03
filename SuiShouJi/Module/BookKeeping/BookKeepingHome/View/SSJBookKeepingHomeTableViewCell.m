@@ -109,7 +109,7 @@
 -(UILabel*)incomeLabel{
     if (!_incomeLabel) {
         _incomeLabel = [[UILabel alloc]initWithFrame:CGRectZero];
-        _incomeLabel.font = [UIFont systemFontOfSize:15];
+        _incomeLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         _incomeLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         [_incomeLabel sizeToFit];
     }
@@ -119,7 +119,7 @@
 -(UILabel*)expenditureLabel{
     if (!_expenditureLabel) {
         _expenditureLabel = [[UILabel alloc]initWithFrame:CGRectZero];
-        _expenditureLabel.font = [UIFont systemFontOfSize:15];
+        _expenditureLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         _expenditureLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         [_expenditureLabel sizeToFit];
     }
@@ -164,7 +164,7 @@
         _incomeMemoLabel = [[UILabel alloc]init];
         _incomeMemoLabel.textAlignment = NSTextAlignmentRight;
         _incomeMemoLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-        _incomeMemoLabel.font = [UIFont systemFontOfSize:14];
+        _incomeMemoLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
     }
     return _incomeMemoLabel;
 }
@@ -174,7 +174,7 @@
         _expentureMemoLabel = [[UILabel alloc]init];
         _expentureMemoLabel.textAlignment = NSTextAlignmentLeft;
         _expentureMemoLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-        _expentureMemoLabel.font = [UIFont systemFontOfSize:14];
+        _expentureMemoLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
     }
     return _expentureMemoLabel;
 }
@@ -242,7 +242,7 @@
         _categoryImageButton.layer.borderWidth = 0;
         _categoryImageButton.userInteractionEnabled = NO;
         [_categoryImageButton setImage:nil forState:UIControlStateNormal];
-        _categoryImageButton.titleLabel.font = [UIFont systemFontOfSize:14];
+        _categoryImageButton.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
         [_categoryImageButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor] forState:UIControlStateNormal];
         _IncomeImage.hidden = YES;
         _expentureImage.hidden = YES;

@@ -110,7 +110,7 @@
     if (!_periodSelectSegment) {
         _periodSelectSegment = [[SSJSegmentedControl alloc] initWithItems:@[@"日", @"周",@"月"]];
         _periodSelectSegment.size = CGSizeMake(150, 30);
-        _periodSelectSegment.font = [UIFont systemFontOfSize:15];
+        _periodSelectSegment.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         _periodSelectSegment.tag = 100;
         [_periodSelectSegment addTarget:self action:@selector(segmentControlValueDidChange:) forControlEvents:UIControlEventValueChanged];
 
@@ -122,7 +122,7 @@
     if (!_incomOrExpenseSelectSegment) {
         _incomOrExpenseSelectSegment = [[SSJSegmentedControl alloc] initWithItems:@[@"支出",@"收入"]];
         _incomOrExpenseSelectSegment.size = CGSizeMake(225, 30);
-        _incomOrExpenseSelectSegment.font = [UIFont systemFontOfSize:15];
+        _incomOrExpenseSelectSegment.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         _incomOrExpenseSelectSegment.tag = 101;
         [_incomOrExpenseSelectSegment addTarget:self action:@selector(segmentControlValueDidChange:) forControlEvents:UIControlEventValueChanged];
 
@@ -133,7 +133,7 @@
 -(UILabel *)firstLineLab{
     if (!_firstLineLab) {
         _firstLineLab = [[UILabel alloc]init];
-        _firstLineLab.font = [UIFont systemFontOfSize:12];
+        _firstLineLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_5);
         _firstLineLab.text = @"总账本折线图趋势";
         [_firstLineLab sizeToFit];
     }
@@ -143,7 +143,7 @@
 -(UILabel *)secondLineLab{
     if (!_secondLineLab) {
         _secondLineLab = [[UILabel alloc]init];
-        _secondLineLab.font = [UIFont systemFontOfSize:12];
+        _secondLineLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_5);
         _secondLineLab.text = @"总账本饼图明细";
         [_secondLineLab sizeToFit];
     }
@@ -161,7 +161,7 @@
     if (!_customPeriodBtn) {
         _customPeriodBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _customPeriodBtn.frame = CGRectMake(0, self.dateAxisView.top + 10, 0, 30);
-        _customPeriodBtn.titleLabel.font = [UIFont systemFontOfSize:15];
+        _customPeriodBtn.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         _customPeriodBtn.layer.borderWidth = 1;
         _customPeriodBtn.layer.cornerRadius = 15;
         _customPeriodBtn.hidden = YES;
@@ -367,7 +367,7 @@
     
     [_curveView reloadData];
     _curveView.scaleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor];
-    _curveView.balloonTitleAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:13],
+    _curveView.balloonTitleAttributes = @{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4),
                                           NSForegroundColorAttributeName:[UIColor whiteColor],
                                           NSBackgroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.bookKeepingHomeMutiButtonSelectColor]};
 }

@@ -480,7 +480,7 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
     [_curveView reloadData];
     _curveView.valueColor = SSJ_MAIN_COLOR;
     _curveView.scaleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor];
-    _curveView.balloonTitleAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:13],
+    _curveView.balloonTitleAttributes = @{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4),
                                           NSForegroundColorAttributeName:[UIColor whiteColor],
                                           NSBackgroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.bookKeepingHomeMutiButtonSelectColor]};
     

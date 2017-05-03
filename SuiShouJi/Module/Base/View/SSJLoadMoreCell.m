@@ -29,7 +29,7 @@
     if (self) {
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         self.textLabel.backgroundColor = [UIColor clearColor];
-        self.textLabel.font = [UIFont systemFontOfSize:16];
+        self.textLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         
         _indicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
         [self.contentView addSubview:_indicatorView];

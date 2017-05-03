@@ -26,7 +26,7 @@
 }
 
 - (CGSize)sizeThatFits:(CGSize)size {
-    return [_text sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:_fontSize]}];
+    return [_text sizeWithAttributes:@{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(_fontSize)}];
 }
 
 - (void)setFontSize:(CGFloat)fontSize {

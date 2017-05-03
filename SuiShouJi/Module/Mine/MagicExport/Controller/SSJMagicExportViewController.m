@@ -357,7 +357,7 @@
     if (!_announcementLab) {
         _announcementLab = [[UILabel alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, 35)];
         _announcementLab.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
-        _announcementLab.font = [UIFont systemFontOfSize:14];
+        _announcementLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_7);
         _announcementLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         
         NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
@@ -381,7 +381,7 @@
         [_bookTypeView ssj_setBorderWidth:1];
         
         UILabel *titleLab = [[UILabel alloc] init];
-        titleLab.font = [UIFont systemFontOfSize:16];
+        titleLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         titleLab.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
         titleLab.text = @"导出账本类型";
         [titleLab sizeToFit];
@@ -398,7 +398,7 @@
     if (!_bookTypeBtn) {
         _bookTypeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _bookTypeBtn.frame = CGRectMake(self.view.width - 116, 0, 116, 50);
-        _bookTypeBtn.titleLabel.font = [UIFont systemFontOfSize:16];
+        _bookTypeBtn.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         [_bookTypeBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [_bookTypeBtn addTarget:self action:@selector(selectionBookTypeAction) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -437,7 +437,7 @@
     if (!_dateLabel) {
         _dateLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 36)];
         _dateLabel.backgroundColor = [UIColor clearColor];
-        _dateLabel.font = [UIFont systemFontOfSize:14];
+        _dateLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_7);
         _dateLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         
         NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
@@ -465,7 +465,7 @@
     if (!_emailLabel) {
         _emailLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.selectDateView.bottom, self.view.width, 36)];
         _emailLabel.backgroundColor = [UIColor clearColor];
-        _emailLabel.font = [UIFont systemFontOfSize:14];
+        _emailLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_7);
         _emailLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         
         NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
@@ -509,7 +509,7 @@
         _commitBtn.layer.cornerRadius = 3;
         _commitBtn.clipsToBounds = YES;
         _commitBtn.frame = CGRectMake(22, self.emailView.bottom + 26, self.view.width - 44, 44);
-        _commitBtn.titleLabel.font = [UIFont systemFontOfSize:20];
+        _commitBtn.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_1);
         [_commitBtn setTitle:@"提交" forState:UIControlStateNormal];
         [_commitBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_commitBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];
@@ -529,7 +529,7 @@
         
         UILabel *lab = [[UILabel alloc] initWithFrame:CGRectMake(0, imgView.bottom + 10, _noDataRemindView.width, 16)];
         lab.backgroundColor = [UIColor clearColor];
-        lab.font = [UIFont systemFontOfSize:15];
+        lab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         lab.text = @"您还未有记账数据哦";
         lab.textAlignment = NSTextAlignmentCenter;
         lab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];

@@ -84,7 +84,7 @@
         _titleLabel = [[UILabel alloc]init];
         _titleLabel.text = @"提醒时间";
         _titleLabel.textAlignment = NSTextAlignmentCenter;
-        _titleLabel.font = [UIFont systemFontOfSize:18];
+        _titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2);
         _titleLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
         [_topView ssj_setBorderColor:[UIColor ssj_colorWithHex:@"cccccc"]];
         [_topView ssj_setBorderStyle:SSJBorderStyleBottom];

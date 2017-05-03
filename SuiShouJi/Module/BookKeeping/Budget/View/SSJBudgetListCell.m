@@ -87,7 +87,7 @@
         _typeLab = [[UILabel alloc] init];
         _typeLab.backgroundColor = [UIColor clearColor];
         _typeLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        _typeLab.font = [UIFont systemFontOfSize:15];
+        _typeLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
     }
     return _typeLab;
 }
@@ -97,7 +97,7 @@
         _periodLab = [[UILabel alloc] init];
         _periodLab.backgroundColor = [UIColor clearColor];
         _periodLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        _periodLab.font = [UIFont systemFontOfSize:13];
+        _periodLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
     }
     return _periodLab;
 }
@@ -107,7 +107,7 @@
         _paymentLab = [[UILabel alloc] init];
         _paymentLab.backgroundColor = [UIColor clearColor];
         _paymentLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-        _paymentLab.font = [UIFont systemFontOfSize:13];
+        _paymentLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
     }
     return _paymentLab;
 }
@@ -117,7 +117,7 @@
         _budgetLab = [[UILabel alloc] init];
         _budgetLab.backgroundColor = [UIColor clearColor];
         _budgetLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-        _budgetLab.font = [UIFont systemFontOfSize:13];
+        _budgetLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
     }
     return _budgetLab;
 }
