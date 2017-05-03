@@ -628,7 +628,7 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
 - (SSJReportFormsPeriodSelectionControl *)periodControl {
     if (!_periodControl) {
         __weak typeof(self) wself = self;
-        _periodControl = [[SSJReportFormsPeriodSelectionControl alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, 35)];
+        _periodControl = [[SSJReportFormsPeriodSelectionControl alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, 40)];
         _periodControl.customPeriod = self.customPeriod;
         _periodControl.selectedPeriod = self.selectedPeriod;
         _periodControl.periodChangeHandler = ^(SSJReportFormsPeriodSelectionControl *control) {

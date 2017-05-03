@@ -614,7 +614,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
 - (SSJReportFormsPeriodSelectionControl *)periodControl {
     if (!_periodControl) {
         __weak typeof(self) wself = self;
-        _periodControl = [[SSJReportFormsPeriodSelectionControl alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, 35)];
+        _periodControl = [[SSJReportFormsPeriodSelectionControl alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, 40)];
         _periodControl.periodChangeHandler = ^(SSJReportFormsPeriodSelectionControl *control) {
             [wself reloadDatasInPeriod:control.selectedPeriod];
             [SSJAnaliyticsManager event:@"form_date_picked"];

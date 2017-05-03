@@ -72,7 +72,7 @@
     [self.clearCustomPeriodBtn mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(0);
         make.left.mas_equalTo(self.customPeriodBtn.mas_right);
-        make.size.mas_equalTo(CGSizeMake(35, 35));
+        make.width.height.mas_equalTo(self.mas_height);
     }];
     [super updateConstraints];
 }
