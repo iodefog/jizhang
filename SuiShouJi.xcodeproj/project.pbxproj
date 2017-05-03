@@ -8888,8 +8888,8 @@
 		8ED51442757E13C0CDA434AA /* Pods-YouYuJiZhangBen.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangBen.release.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangBen/Pods-YouYuJiZhangBen.release.xcconfig"; sourceTree = "<group>"; };
 		910DD68E1DF7B47E00A73F0C /* SSJMineHomeCollectionImageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMineHomeCollectionImageCell.h; sourceTree = "<group>"; };
 		910DD68F1DF7B47E00A73F0C /* SSJMineHomeCollectionImageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMineHomeCollectionImageCell.m; sourceTree = "<group>"; };
-		9152948F1EB0718100C63264 /* SSJThemBgImageClipViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJThemBgImageClipViewController.h; sourceTree = "<group>"; };
-		915294901EB0718100C63264 /* SSJThemBgImageClipViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJThemBgImageClipViewController.m; sourceTree = "<group>"; };
+		9152948F1EB0718100C63264 /* SSJThemBgImageClipViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SSJThemBgImageClipViewController.h; path = ../View/SSJThemBgImageClipViewController.h; sourceTree = "<group>"; };
+		915294901EB0718100C63264 /* SSJThemBgImageClipViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SSJThemBgImageClipViewController.m; path = ../View/SSJThemBgImageClipViewController.m; sourceTree = "<group>"; };
 		915A1AEB1E10F02200F73C7B /* SSJLoginPopView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJLoginPopView.h; sourceTree = "<group>"; };
 		915A1AEC1E10F02200F73C7B /* SSJLoginPopView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJLoginPopView.m; sourceTree = "<group>"; };
 		916012031DF7D86C00BF571C /* SSJHeaderBannerImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJHeaderBannerImageView.h; sourceTree = "<group>"; };
@@ -10200,8 +10200,6 @@
 				9C61FD1E1EAE0C2800971F0F /* SSJHomeThemeModifyView.m */,
 				9C61FD2B1EAE13FE00971F0F /* SSJCustomThemeSelectCollectionViewCell.h */,
 				9C61FD2C1EAE13FE00971F0F /* SSJCustomThemeSelectCollectionViewCell.m */,
-				9152948F1EB0718100C63264 /* SSJThemBgImageClipViewController.h */,
-				915294901EB0718100C63264 /* SSJThemBgImageClipViewController.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -10209,6 +10207,8 @@
 		7D5F325E1CEAE6C10086B67E /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
+				9152948F1EB0718100C63264 /* SSJThemBgImageClipViewController.h */,
+				915294901EB0718100C63264 /* SSJThemBgImageClipViewController.m */,
 				7D5F325F1CEAE6C10086B67E /* SSJBookKeepingHomeViewController.h */,
 				7D5F32601CEAE6C10086B67E /* SSJBookKeepingHomeViewController.m */,
 			);
