@@ -23,6 +23,7 @@
 #import "SSJSegmentedControl.h"
 #import "SSJReportFormCurveHeaderView.h"
 #import "SSJReportFormsPeriodSelectionControl.h"
+#import "SSJReportFormsNavigationBar.h"
 
 #import "SSJReportFormsUtil.h"
 #import "SSJUserTableManager.h"
@@ -42,8 +43,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
 
 @interface SSJReportFormsViewController () <UITableViewDataSource, UITableViewDelegate, UITabBarControllerDelegate, SCYSlidePagingHeaderViewDelegate>
 
-//  饼图、折线图切换控件
-@property (nonatomic, strong) SSJSegmentedControl *titleSegmentCtrl;
+@property (nonatomic, strong) SSJReportFormsNavigationBar *navigationBar;
 
 @property (nonatomic, strong) SSJReportFormsPeriodSelectionControl *periodControl;
 
@@ -57,8 +57,6 @@ static NSString *const kSegmentTitleIncome = @"收入";
 
 //  流水列表视图
 @property (nonatomic, strong) UITableView *tableView;
-
-@property (nonatomic, strong) UIBarButtonItem *booksItem;
 
 //  当前账本id
 @property (nonatomic, strong) NSString *currentBooksId;
@@ -88,6 +86,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
         _curveHeaderItem.timeDimension = SSJTimeDimensionMonth;
         self.automaticallyAdjustsScrollViewInsets = NO;
         self.extendedLayoutIncludesOpaqueBars = YES;
+        self.showNavigationBarBaseLine = NO;
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadAllDatas) name:SSJBooksTypeDidChangeNotification object:nil];
     }
@@ -96,17 +95,22 @@ static NSString *const kSegmentTitleIncome = @"收入";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.navigationItem.titleView = self.titleSegmentCtrl;
-    self.navigationItem.leftBarButtonItem = self.booksItem;
-    [self.view addSubview:self.periodControl];
+    [self.view addSubview:self.navigationBar];
     [self.view addSubview:self.tableView];
+    [self.view addSubview:self.periodControl];
     [self updateAppearance];
     [self updateSubveiwsHidden];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
     [self reloadAllDatas];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
 }
 
 #pragma mark - Overwrite
@@ -236,21 +240,20 @@ static NSString *const kSegmentTitleIncome = @"收入";
 
 #pragma mark - SCYSlidePagingHeaderViewDelegate
 - (void)slidePagingHeaderView:(SCYSlidePagingHeaderView *)headerView didSelectButtonAtIndex:(NSUInteger)index {
-    
     SSJDatePeriod *period = _periodControl.currentPeriod;
-    
-    if (_titleSegmentCtrl.selectedSegmentIndex == 0) {
-        
-        [self reloadDatasInPeriod:period];
-        
-    } else if (_titleSegmentCtrl.selectedSegmentIndex == 1) {
-        
-        [SSJReportFormsUtil queryForIncomeOrPayType:[self currentType] booksId:_currentBooksId startDate:period.startDate endDate:period.endDate success:^(NSArray<SSJReportFormsItem *> *list) {
-            [self reorganiseCurveTableDataWithOriginalData:list];
-        } failure:^(NSError *error) {
-            [self showError:error];
-            [self.view ssj_hideLoadingIndicator];
-        }];
+    switch (self.navigationBar.option) {
+        case SSJReportFormsNavigationBarChart:
+            [self reloadDatasInPeriod:period];
+            break;
+            
+        case SSJReportFormsNavigationBarCurve:
+            [SSJReportFormsUtil queryForIncomeOrPayType:[self currentType] booksId:_currentBooksId startDate:period.startDate endDate:period.endDate success:^(NSArray<SSJReportFormsItem *> *list) {
+                [self reorganiseCurveTableDataWithOriginalData:list];
+            } failure:^(NSError *error) {
+                [self showError:error];
+                [self.view ssj_hideLoadingIndicator];
+            }];
+            break;
     }
     
     if (_payAndIncomeSegmentControl.selectedIndex == 0) {
@@ -258,22 +261,6 @@ static NSString *const kSegmentTitleIncome = @"收入";
     } else if (_payAndIncomeSegmentControl.selectedIndex == 1) {
         [SSJAnaliyticsManager event:@"form_in"];
     }
-}
-
-#pragma mark - Event
-- (void)titleSegmentCtrlAction {
-    [self reloadDatasInPeriod:_periodControl.currentPeriod];
-}
-
-- (void)selectBookAction {
-    [SSJAnaliyticsManager event:@"forms_open_account_books"];
-    [self.mm_drawerController toggleDrawerSide:MMDrawerSideLeft animated:YES completion:^(BOOL finished) {
-//        if (!_dateViewHasDismiss) {
-//            [self.floatingDateView dismiss];
-//            [self.mutiFunctionButton dismiss];
-//            _dateViewHasDismiss = YES;
-//        }
-    }];
 }
 
 #pragma mark - Private
@@ -286,8 +273,8 @@ static NSString *const kSegmentTitleIncome = @"收入";
     SSJBooksTypeItem *currentBooksItem = [SSJBooksTypeStore queryCurrentBooksTypeForBooksId:_currentBooksId];
     
     UIImage *image = [[UIImage imageNamed:currentBooksItem.booksIcoin] ssj_compressWithinSize:CGSizeMake(22, 22)];
-    [self.booksItem setImage:image];
-    self.booksItem.tintColor = [UIColor ssj_colorWithHex:currentBooksItem.booksColor];
+    [self.navigationBar setBooksImage:image];
+    [self.navigationBar setBooksColor:[UIColor ssj_colorWithHex:currentBooksItem.booksColor]];
     
     [SSJReportFormsUtil queryForPeriodListWithIncomeOrPayType:SSJBillTypeSurplus booksId:_currentBooksId success:^(NSArray<SSJDatePeriod *> *periods) {
         
@@ -319,70 +306,78 @@ static NSString *const kSegmentTitleIncome = @"收入";
         return;
     }
     
-    if (_titleSegmentCtrl.selectedSegmentIndex == 0) {
-        
-        [self.datas removeAllObjects];
-        [self.tableView reloadData];
-        self.tableView.tableHeaderView = nil;
-        [self.tableView ssj_showLoadingIndicator];
-        
-        switch (_selectedOption) {
-            case SSJReportFormsMemberAndCategoryOptionCategory: {
-                [SSJReportFormsUtil queryForIncomeOrPayType:[self currentType] booksId:_currentBooksId startDate:period.startDate endDate:period.endDate success:^(NSArray<SSJReportFormsItem *> *result) {
-                    [self.tableView ssj_hideLoadingIndicator];
-                    [self reorganiseChartTableVieDatasWithOriginalData:result];
-                    [self.tableView reloadData];
-                } failure:^(NSError *error) {
-                    [self showError:error];
-                    [self.tableView ssj_hideLoadingIndicator];
-                }];
+    switch (self.navigationBar.option) {
+        case SSJReportFormsNavigationBarChart: {
+            [self.datas removeAllObjects];
+            [self.tableView reloadData];
+            self.tableView.tableHeaderView = nil;
+            [self.tableView ssj_showLoadingIndicator];
+            
+            switch (_selectedOption) {
+                case SSJReportFormsMemberAndCategoryOptionCategory: {
+                    [SSJReportFormsUtil queryForIncomeOrPayType:[self currentType] booksId:_currentBooksId startDate:period.startDate endDate:period.endDate success:^(NSArray<SSJReportFormsItem *> *result) {
+                        [self.tableView ssj_hideLoadingIndicator];
+                        [self reorganiseChartTableVieDatasWithOriginalData:result];
+                        [self.tableView reloadData];
+                    } failure:^(NSError *error) {
+                        [self showError:error];
+                        [self.tableView ssj_hideLoadingIndicator];
+                    }];
+                }
+                    break;
+                    
+                case SSJReportFormsMemberAndCategoryOptionMember: {
+                    [self.tableView ssj_showLoadingIndicator];
+                    [SSJReportFormsUtil queryForMemberChargeWithType:[self currentType] startDate:period.startDate endDate:period.endDate success:^(NSArray<SSJReportFormsItem *> *result) {
+                        [self.tableView ssj_hideLoadingIndicator];
+                        [self reorganiseChartTableVieDatasWithOriginalData:result];
+                        [self.tableView reloadData];
+                    } failure:^(NSError *error) {
+                        [self showError:error];
+                        [self.tableView ssj_hideLoadingIndicator];
+                    }];
+                }
+                    break;
             }
-                break;
-                
-            case SSJReportFormsMemberAndCategoryOptionMember: {
-                [self.tableView ssj_showLoadingIndicator];
-                [SSJReportFormsUtil queryForMemberChargeWithType:[self currentType] startDate:period.startDate endDate:period.endDate success:^(NSArray<SSJReportFormsItem *> *result) {
-                    [self.tableView ssj_hideLoadingIndicator];
-                    [self reorganiseChartTableVieDatasWithOriginalData:result];
-                    [self.tableView reloadData];
-                } failure:^(NSError *error) {
-                    [self showError:error];
-                    [self.tableView ssj_hideLoadingIndicator];
-                }];
-            }
-                break;
         }
-    } else if (_titleSegmentCtrl.selectedSegmentIndex == 1) {
-        
-        [self.datas removeAllObjects];
-        [self.tableView reloadData];
-        self.tableView.tableHeaderView = self.curveHeaderView;
-        
-        [self.curveHeaderView showLoadingOnSeparatorForm];
-        [self.curveHeaderView showLoadingOnCurve];
-        
-        [SSJReportFormsUtil queryForDefaultTimeDimensionWithStartDate:period.startDate endDate:period.endDate booksId:_currentBooksId billTypeId:nil success:^(SSJTimeDimension timeDimension) {
+            break;
             
-            if (timeDimension != SSJTimeDimensionUnknown) {
-                self.curveHeaderItem.timeDimension = timeDimension;
-            }
+        case SSJReportFormsNavigationBarCurve: {
+            [self.datas removeAllObjects];
+            [self.tableView reloadData];
+            self.tableView.tableHeaderView = self.curveHeaderView;
             
-            [SSJReportFormsUtil queryForBillStatisticsWithTimeDimension:self.curveHeaderItem.timeDimension booksId:_currentBooksId billTypeId:nil startDate:period.startDate endDate:period.endDate success:^(NSDictionary *result) {
+            [self.curveHeaderView showLoadingOnSeparatorForm];
+            [self.curveHeaderView showLoadingOnCurve];
+            
+            [SSJReportFormsUtil queryForDefaultTimeDimensionWithStartDate:period.startDate endDate:period.endDate booksId:_currentBooksId billTypeId:nil success:^(SSJTimeDimension timeDimension) {
                 
-                [self updateCurveHeaderItemWithCurveModels:result[SSJReportFormsCurveModelListKey] period:period];
+                if (timeDimension != SSJTimeDimensionUnknown) {
+                    self.curveHeaderItem.timeDimension = timeDimension;
+                }
                 
-                [SSJReportFormsUtil queryForIncomeOrPayType:[self currentType] booksId:_currentBooksId startDate:period.startDate endDate:period.endDate success:^(NSArray<SSJReportFormsItem *> *list) {
+                [SSJReportFormsUtil queryForBillStatisticsWithTimeDimension:self.curveHeaderItem.timeDimension booksId:_currentBooksId billTypeId:nil startDate:period.startDate endDate:period.endDate success:^(NSDictionary *result) {
                     
-                    [self.curveHeaderView hideLoadingOnSeparatorForm];
-                    [self.curveHeaderView hideLoadingOnCurve];
+                    [self updateCurveHeaderItemWithCurveModels:result[SSJReportFormsCurveModelListKey] period:period];
                     
-                    self.curveHeaderView.item = _curveHeaderItem;
-                    
-                    if (_curveHeaderItem.curveModels.count == 0) {
-                        self.tableView.tableHeaderView = nil;
-                    }
-                    
-                    [self reorganiseCurveTableDataWithOriginalData:list];
+                    [SSJReportFormsUtil queryForIncomeOrPayType:[self currentType] booksId:_currentBooksId startDate:period.startDate endDate:period.endDate success:^(NSArray<SSJReportFormsItem *> *list) {
+                        
+                        [self.curveHeaderView hideLoadingOnSeparatorForm];
+                        [self.curveHeaderView hideLoadingOnCurve];
+                        
+                        self.curveHeaderView.item = _curveHeaderItem;
+                        
+                        if (_curveHeaderItem.curveModels.count == 0) {
+                            self.tableView.tableHeaderView = nil;
+                        }
+                        
+                        [self reorganiseCurveTableDataWithOriginalData:list];
+                        
+                    } failure:^(NSError *error) {
+                        [self showError:error];
+                        [self.curveHeaderView hideLoadingOnSeparatorForm];
+                        [self.curveHeaderView hideLoadingOnCurve];
+                    }];
                     
                 } failure:^(NSError *error) {
                     [self showError:error];
@@ -395,12 +390,8 @@ static NSString *const kSegmentTitleIncome = @"收入";
                 [self.curveHeaderView hideLoadingOnSeparatorForm];
                 [self.curveHeaderView hideLoadingOnCurve];
             }];
-            
-        } failure:^(NSError *error) {
-            [self showError:error];
-            [self.curveHeaderView hideLoadingOnSeparatorForm];
-            [self.curveHeaderView hideLoadingOnCurve];
-        }];
+        }
+            break;
     }
 }
 
@@ -463,6 +454,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
         circleItem.imageName = item.imageName;
         circleItem.colorValue = item.colorValue;
         circleItem.additionalText = [NSString stringWithFormat:@"%.0f％", item.scale * 100];
+        circleItem.additionalFont = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_5);
         circleItem.imageBorderShowed = YES;
         if (item.isMember) {
             circleItem.customView = [self chartAdditionalViewWithMemberName:item.name colorValue:item.colorValue];
@@ -552,12 +544,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
 }
 
 - (void)updateAppearance {
-    
-    self.titleSegmentCtrl.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-    self.titleSegmentCtrl.selectedBorderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
-    [self.titleSegmentCtrl setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]} forState:UIControlStateNormal];
-    [self.titleSegmentCtrl setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]} forState:UIControlStateSelected];
-    
+    [self.navigationBar updateAppearance];
     self.payAndIncomeSegmentControl.titleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     self.payAndIncomeSegmentControl.selectedTitleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
     self.payAndIncomeSegmentControl.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
@@ -609,13 +596,19 @@ static NSString *const kSegmentTitleIncome = @"收入";
 }
 
 #pragma mark - LazyLoading
-- (SSJSegmentedControl *)titleSegmentCtrl {
-    if (!_titleSegmentCtrl) {
-        _titleSegmentCtrl = [[SSJSegmentedControl alloc] initWithItems:@[@"饼图",@"折线图"]];
-        _titleSegmentCtrl.size = CGSizeMake(170, 24);
-        [_titleSegmentCtrl addTarget:self action:@selector(titleSegmentCtrlAction) forControlEvents: UIControlEventValueChanged];
+- (SSJReportFormsNavigationBar *)navigationBar {
+    if (!_navigationBar) {
+        __weak typeof(self) wself = self;
+        _navigationBar = [[SSJReportFormsNavigationBar alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 64)];
+        _navigationBar.switchChartAndCurveHandler = ^(SSJReportFormsNavigationBar *bar) {
+            [wself reloadDatasInPeriod:wself.periodControl.currentPeriod];
+        };
+        _navigationBar.clickBooksHandler = ^(SSJReportFormsNavigationBar *bar) {
+            [SSJAnaliyticsManager event:@"forms_open_account_books"];
+            [wself.mm_drawerController toggleDrawerSide:MMDrawerSideLeft animated:YES completion:NULL];
+        };
     }
-    return _titleSegmentCtrl;
+    return _navigationBar;
 }
 
 - (SSJReportFormsPeriodSelectionControl *)periodControl {
@@ -718,13 +711,6 @@ static NSString *const kSegmentTitleIncome = @"收入";
         };
     }
     return _curveHeaderView;
-}
-
-- (UIBarButtonItem *)booksItem {
-    if (!_booksItem) {
-        _booksItem = [[UIBarButtonItem alloc] initWithImage:nil style:UIBarButtonItemStylePlain target:self action:@selector(selectBookAction)];
-    }
-    return _booksItem;
 }
 
 @end

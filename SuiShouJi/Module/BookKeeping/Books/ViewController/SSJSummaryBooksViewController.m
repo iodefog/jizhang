@@ -486,6 +486,7 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
         circleItem.imageName = item.imageName;
         circleItem.colorValue = item.colorValue;
         circleItem.additionalText = [NSString stringWithFormat:@"%.0f％", item.scale * 100];
+        circleItem.additionalFont = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_5);
         circleItem.imageBorderShowed = YES;
         [self.circleItems addObject:circleItem];
     }
