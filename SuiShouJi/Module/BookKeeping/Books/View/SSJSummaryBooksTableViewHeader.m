@@ -37,7 +37,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         [self addSubview:self.summaryHeader];
-        [self addSubview:self.dateAxisView];
+        [self addSubview:self.periodControl];
         [self addSubview:self.backColorView];
         [self addSubview:self.firstLineLab];
         [self addSubview:self.periodSelectSegment];
@@ -47,9 +47,6 @@
         [self addSubview:self.incomOrExpenseSelectSegment];
         [self addSubview:self.chartView];
         [self addSubview:self.chartNoResultView];
-        [self addSubview:self.customPeriodBtn];
-        [self addSubview:self.addOrDeleteCustomPeriodBtn];
-        self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         [self updateAppearance];
     }
     return self;
@@ -58,10 +55,10 @@
 - (void)layoutSubviews{
     [super layoutSubviews];
     self.summaryHeader.leftTop = CGPointMake(0, 0);
-    self.dateAxisView.leftTop = CGPointMake(0, self.summaryHeader.bottom);
-    self.backColorView.leftTop = CGPointMake(0, self.dateAxisView.bottom);
-    self.backColorView.size = CGSizeMake(self.width, self.height - self.dateAxisView.bottom);
-    self.firstLineLab.top = self.dateAxisView.bottom + 37;
+    self.periodControl.leftTop = CGPointMake(0, self.summaryHeader.bottom);
+    self.backColorView.leftTop = CGPointMake(0, self.periodControl.bottom);
+    self.backColorView.size = CGSizeMake(self.width, self.height - self.periodControl.bottom);
+    self.firstLineLab.top = self.periodControl.bottom + 37;
     self.firstLineLab.centerX = self.width / 2;
     self.periodSelectSegment.top = self.firstLineLab.bottom + 20;
     self.periodSelectSegment.centerX = self.width / 2;
@@ -75,7 +72,13 @@
     self.chartNoResultView.frame = self.chartView.frame;
     
     [self updateCurveUnitAxisXLength];
-    self.addOrDeleteCustomPeriodBtn.frame = CGRectMake(self.width - 50, self.dateAxisView.top, 50, 50);
+}
+
+- (SSJReportFormsPeriodSelectionControl *)periodControl {
+    if (!_periodControl) {
+        _periodControl = [[SSJReportFormsPeriodSelectionControl alloc] initWithFrame:CGRectMake(0, 0, self.width, 35)];
+    }
+    return _periodControl;
 }
 
 - (SSJPercentCircleView *)chartView{
@@ -98,14 +101,6 @@
     return _curveView;
 }
 
-- (SSJReportFormsScaleAxisView *)dateAxisView {
-    if (!_dateAxisView) {
-        _dateAxisView = [[SSJReportFormsScaleAxisView alloc] initWithFrame:CGRectMake(0, 0, self.width, 50)];
-        _dateAxisView.backgroundColor = [UIColor clearColor];
-    }
-    return _dateAxisView;
-}
-
 - (SSJSegmentedControl *)periodSelectSegment {
     if (!_periodSelectSegment) {
         _periodSelectSegment = [[SSJSegmentedControl alloc] initWithItems:@[@"日", @"周",@"月"]];
@@ -125,7 +120,6 @@
         _incomOrExpenseSelectSegment.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         _incomOrExpenseSelectSegment.tag = 101;
         [_incomOrExpenseSelectSegment addTarget:self action:@selector(segmentControlValueDidChange:) forControlEvents:UIControlEventValueChanged];
-
     }
     return _incomOrExpenseSelectSegment;
 }
@@ -155,27 +149,6 @@
         _summaryHeader = [[SSJSummaryBooksHeaderView alloc]initWithFrame:CGRectMake(0, 0, self.width, 109)];
     }
     return _summaryHeader;
-}
-
-- (UIButton *)customPeriodBtn {
-    if (!_customPeriodBtn) {
-        _customPeriodBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        _customPeriodBtn.frame = CGRectMake(0, self.dateAxisView.top + 10, 0, 30);
-        _customPeriodBtn.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
-        _customPeriodBtn.layer.borderWidth = 1;
-        _customPeriodBtn.layer.cornerRadius = 15;
-        _customPeriodBtn.hidden = YES;
-    }
-    return _customPeriodBtn;
-}
-
-- (UIButton *)addOrDeleteCustomPeriodBtn {
-    if (!_addOrDeleteCustomPeriodBtn) {
-        _addOrDeleteCustomPeriodBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_addOrDeleteCustomPeriodBtn setImage:[UIImage ssj_themeImageWithName:@"reportForms_edit"] forState:UIControlStateNormal];
-//        [_addOrDeleteCustomPeriodBtn addTarget:self action:@selector(customPeriodBtnAction) forControlEvents:UIControlEventTouchUpInside];
-    }
-    return _addOrDeleteCustomPeriodBtn;
 }
 
 - (SSJBudgetNodataRemindView *)curveNoResultView{
@@ -224,20 +197,6 @@
     _chartView.topTitle = amount;
 }
 
-- (void)setCustomPeriod:(SSJDatePeriod *)customPeriod{
-    _customPeriod = customPeriod;
-    if (_customPeriod) {
-        self.dateAxisView.hidden = YES;
-        self.customPeriodBtn.hidden = NO;
-        [self updateCustomPeriodBtn];
-        [self.addOrDeleteCustomPeriodBtn setImage:[UIImage ssj_themeImageWithName:@"reportForms_delete"] forState:UIControlStateNormal];
-    }else{
-        self.dateAxisView.hidden = NO;
-        self.customPeriodBtn.hidden = YES;
-        [self.addOrDeleteCustomPeriodBtn setImage:[UIImage ssj_themeImageWithName:@"reportForms_edit"] forState:UIControlStateNormal];
-    }
-}
-
 - (void)setChartViewHasDataOrNot:(BOOL)chartViewHasDataOrNot{
     _chartViewHasDataOrNot = chartViewHasDataOrNot;
     if (!_chartViewHasDataOrNot) {
@@ -262,17 +221,6 @@
         self.chartView.hidden = NO;
         self.chartNoResultView.hidden = YES;
     }
-}
-
-- (void)updateCustomPeriodBtn {
-    NSString *startDateStr = [_customPeriod.startDate formattedDateWithFormat:@"yyyy-MM-dd"];
-    NSString *endDateStr = [_customPeriod.endDate formattedDateWithFormat:@"yyyy-MM-dd"];
-    NSString *title = [NSString stringWithFormat:@"%@－－%@", startDateStr, endDateStr];
-    [self.customPeriodBtn setTitle:title forState:UIControlStateNormal];
-    CGSize textSize = [title sizeWithAttributes:@{NSFontAttributeName:self.customPeriodBtn.titleLabel.font}];
-    self.customPeriodBtn.top = self.dateAxisView.top + 10;
-    self.customPeriodBtn.width = textSize.width + 28;
-    self.customPeriodBtn.centerX = self.width * 0.5;
 }
 
 - (void)segmentControlValueDidChange:(SSJSegmentedControl *)sender{
@@ -337,6 +285,7 @@
 }
 
 - (void)updateAppearance {
+    self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     self.backColorView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     
     [_chartView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
@@ -345,8 +294,7 @@
     _chartView.bottomTitleAttribute = @{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_5),
                                         NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]};
     
-    _dateAxisView.scaleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-    _dateAxisView.selectedScaleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
+    [self.periodControl updateAppearance];
     
     _periodSelectSegment.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     _periodSelectSegment.selectedBorderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
@@ -359,11 +307,7 @@
     [_incomOrExpenseSelectSegment setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]} forState:UIControlStateSelected];
     
     _firstLineLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-    
     _secondLineLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-    
-    [_customPeriodBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] forState:UIControlStateNormal];
-    _customPeriodBtn.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor].CGColor;
     
     [_curveView reloadData];
     _curveView.scaleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor];
