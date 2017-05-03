@@ -815,6 +815,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
             } else {
                 [weakSelf.tfPassword becomeFirstResponder];
             }
+            
         };
         [weakSelf.view endEditing:YES];
         [weakSelf.navigationController pushViewController:forgetVC animated:YES];
