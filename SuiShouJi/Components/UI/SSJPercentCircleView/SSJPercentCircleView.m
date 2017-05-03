@@ -48,6 +48,7 @@
         self.backgroundColor = [UIColor clearColor];
         self.circleInsets = insets;
         self.circleThickness = thickness;
+        self.addtionTextFont = [UIFont systemFontOfSize:12];
         
         self.contentView = [[UIView alloc] initWithFrame:self.bounds];
         [self addSubview:self.contentView];
@@ -197,7 +198,7 @@
             additionViewItem.borderColorValue = item.colorValue;
             additionViewItem.gapBetweenImageAndText = 0;
             additionViewItem.text = item.additionalText;
-            additionViewItem.textSize = 15;
+            additionViewItem.font = item.additionalFont ?: self.addtionTextFont;
             additionViewItem.textColorValue = SSJ_CURRENT_THEME.secondaryColor;
             [additionNodeItems addObject:additionViewItem];
         }

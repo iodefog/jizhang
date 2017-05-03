@@ -454,6 +454,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
         circleItem.imageName = item.imageName;
         circleItem.colorValue = item.colorValue;
         circleItem.additionalText = [NSString stringWithFormat:@"%.0f％", item.scale * 100];
+        circleItem.additionalFont = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_5);
         circleItem.imageBorderShowed = YES;
         if (item.isMember) {
             circleItem.customView = [self chartAdditionalViewWithMemberName:item.name colorValue:item.colorValue];

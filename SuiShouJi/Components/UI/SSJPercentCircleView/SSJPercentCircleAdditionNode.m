@@ -156,7 +156,7 @@ static NSString *const kAnimationKey = @"kAnimationKey";
     CGFloat angle = item.angle;
     angle = angle - floor(angle / (M_PI * 2)) * M_PI * 2;
     
-    CGSize labelSize = [item.text sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:item.textSize]}];
+    CGSize labelSize = [item.text sizeWithAttributes:@{NSFontAttributeName:item.font}];
     CGFloat labelRadius = MAX(labelSize.width, labelSize.height) * 0.5;
     
     CGPoint labelCenter = CGPointZero;
@@ -281,7 +281,7 @@ static NSString *const kAnimationKey = @"kAnimationKey";
         _textLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         _textLabel.hidden = YES;
         _textLabel.backgroundColor = [UIColor clearColor];
-        _textLabel.font = [UIFont systemFontOfSize:self.item.textSize];
+        _textLabel.font = self.item.font;
         _textLabel.textColor = [UIColor ssj_colorWithHex:self.item.textColorValue];
         _textLabel.text = self.item.text;
         [_textLabel sizeToFit];
