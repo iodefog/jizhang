@@ -8888,8 +8888,8 @@
 		8ED51442757E13C0CDA434AA /* Pods-YouYuJiZhangBen.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangBen.release.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangBen/Pods-YouYuJiZhangBen.release.xcconfig"; sourceTree = "<group>"; };
 		910DD68E1DF7B47E00A73F0C /* SSJMineHomeCollectionImageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMineHomeCollectionImageCell.h; sourceTree = "<group>"; };
 		910DD68F1DF7B47E00A73F0C /* SSJMineHomeCollectionImageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMineHomeCollectionImageCell.m; sourceTree = "<group>"; };
-		9152948F1EB0718100C63264 /* SSJThemBgImageClipViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJThemBgImageClipViewController.h; sourceTree = "<group>"; };
-		915294901EB0718100C63264 /* SSJThemBgImageClipViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJThemBgImageClipViewController.m; sourceTree = "<group>"; };
+		9152948F1EB0718100C63264 /* SSJThemBgImageClipViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SSJThemBgImageClipViewController.h; path = ../View/SSJThemBgImageClipViewController.h; sourceTree = "<group>"; };
+		915294901EB0718100C63264 /* SSJThemBgImageClipViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SSJThemBgImageClipViewController.m; path = ../View/SSJThemBgImageClipViewController.m; sourceTree = "<group>"; };
 		915A1AEB1E10F02200F73C7B /* SSJLoginPopView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJLoginPopView.h; sourceTree = "<group>"; };
 		915A1AEC1E10F02200F73C7B /* SSJLoginPopView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJLoginPopView.m; sourceTree = "<group>"; };
 		916012031DF7D86C00BF571C /* SSJHeaderBannerImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJHeaderBannerImageView.h; sourceTree = "<group>"; };
@@ -10200,8 +10200,6 @@
 				9C61FD1E1EAE0C2800971F0F /* SSJHomeThemeModifyView.m */,
 				9C61FD2B1EAE13FE00971F0F /* SSJCustomThemeSelectCollectionViewCell.h */,
 				9C61FD2C1EAE13FE00971F0F /* SSJCustomThemeSelectCollectionViewCell.m */,
-				9152948F1EB0718100C63264 /* SSJThemBgImageClipViewController.h */,
-				915294901EB0718100C63264 /* SSJThemBgImageClipViewController.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -10209,6 +10207,8 @@
 		7D5F325E1CEAE6C10086B67E /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
+				9152948F1EB0718100C63264 /* SSJThemBgImageClipViewController.h */,
+				915294901EB0718100C63264 /* SSJThemBgImageClipViewController.m */,
 				7D5F325F1CEAE6C10086B67E /* SSJBookKeepingHomeViewController.h */,
 				7D5F32601CEAE6C10086B67E /* SSJBookKeepingHomeViewController.m */,
 			);
@@ -22596,8 +22596,8 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Wen Chen (262HTD8ZSJ)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Wen Chen (262HTD8ZSJ)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Wen Chen (ZW7DKJ39L3)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Wen Chen (ZW7DKJ39L3)";
 				DEVELOPMENT_TEAM = 262HTD8ZSJ;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -22833,7 +22833,7 @@
 				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/SuiShouJi/Resource/Entitlements/SuiShouJi.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer: Pingxi Fan (Z6G7KSGD6Q)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = Z8SZ588DYT;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -22917,8 +22917,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhangAppStore;
 				PRODUCT_NAME = SuiShouJi;
-				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE = "a5a9e396-ef95-46bc-9785-ffea374306e0";
+				PROVISIONING_PROFILE_SPECIFIER = JiZhangAppStoreDev;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -22981,8 +22981,8 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Wen Chen (262HTD8ZSJ)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Wen Chen (262HTD8ZSJ)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Wen Chen (ZW7DKJ39L3)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Wen Chen (ZW7DKJ39L3)";
 				DEVELOPMENT_TEAM = 262HTD8ZSJ;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -23379,8 +23379,8 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/SuiShouJi/Resource/Entitlements/SuiShouJi.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Pingxi Fan (Z8SZ588DYT)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				DEVELOPMENT_TEAM = Z8SZ588DYT;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -23463,8 +23463,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhangAppStore;
 				PRODUCT_NAME = SuiShouJi;
-				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE = "70b1cb51-be78-403c-a8ea-e404616eef1c";
+				PROVISIONING_PROFILE_SPECIFIER = JiZhangAppStoreAdHoc;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -25487,8 +25487,8 @@
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = SuiShouJi/Resource/Entitlements/YouYuJiZhangPro.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer: XiaoYong  Wu (6CF3K2UQ7J)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: XiaoYong  Wu (6CF3K2UQ7J)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Pingxi Fan (5QMLP5Z59C)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Pingxi Fan (5QMLP5Z59C)";
 				DEVELOPMENT_TEAM = 5QMLP5Z59C;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -25589,8 +25589,8 @@
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = SuiShouJi/Resource/Entitlements/YouYuJiZhangPro.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer: XiaoYong  Wu (6CF3K2UQ7J)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: XiaoYong  Wu (6CF3K2UQ7J)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Pingxi Fan (5QMLP5Z59C)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Pingxi Fan (5QMLP5Z59C)";
 				DEVELOPMENT_TEAM = 5QMLP5Z59C;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -27399,8 +27399,8 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/SuiShouJi/Resource/Entitlements/SuiShouJi.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Pingxi Fan (Z8SZ588DYT)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				DEVELOPMENT_TEAM = Z8SZ588DYT;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -27483,8 +27483,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhangAppStore;
 				PRODUCT_NAME = SuiShouJi;
-				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE = "70b1cb51-be78-403c-a8ea-e404616eef1c";
+				PROVISIONING_PROFILE_SPECIFIER = JiZhangAppStoreAdHoc;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

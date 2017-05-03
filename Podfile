@@ -82,3 +82,7 @@ end
 target '9188JiZhangPro'  do
     shared_pods
 end
+
+target '9188JiZhangBao'  do
+    shared_pods
+end

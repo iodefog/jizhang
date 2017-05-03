@@ -95,15 +95,14 @@ static CGFloat imageScale = 0.8; //裁剪框和屏幕大小比例
     self.oldImagesize = CGSizeMake(normalImage.size.width, normalImage.size.height);
     self.oldImage = normalImage;
     self.imageView.image = normalImage;
-    self.imageView.size = CGSizeMake(normalImage.size.width, normalImage.size.height);
+    self.imageView.size = CGSizeMake(normalImage.size.width*imageScale/SSJSCREENSCALE, normalImage.size.height*imageScale/SSJSCREENSCALE);
     self.scrollview.contentSize = self.imageView.size;
-    self.imageView.center = CGPointMake(self.scrollview.contentSize.width*0.5, self.scrollview.contentSize.height*0.5);
-    if (self.imageView.size.width < self.view.width) {
-        self.imageView.centerX = self.view.width*0.5;
-    }
-    if (self.imageView.size.height<self.view.height) {
-        self.imageView.centerY = self.view.height*0.5;
-    }
+//    self.imageView.center = CGPointMake(self.scrollview.contentSize.width*0.5, self.scrollview.contentSize.height*0.5);
+//    self.scrollview.contentOffset
+    CGPoint conOfSet = self.scrollview.contentOffset;
+    conOfSet.x = -SSJSCREENWITH * (1 - imageScale) * 0.5;
+    conOfSet.y = -SSJSCREENHEIGHT * (1 - imageScale) * 0.5;
+    self.scrollview.contentOffset = conOfSet;
 }
 
 #pragma mark - Event

@@ -48,7 +48,7 @@
     if (!_expenditureView) {
         _expenditureView = [[SSJScrollTextView alloc]init];
         _expenditureView.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        _expenditureView.textFont = 20;
+        _expenditureView.textFont = SSJ_FONT_SIZE_1;
         _expenditureView.totalAnimationDuration = 1.f;
     }
     return _expenditureView;
@@ -58,7 +58,7 @@
     if (!_incomeView) {
         _incomeView = [[SSJScrollTextView alloc]init];
         _incomeView.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        _incomeView.textFont = 20;
+        _incomeView.textFont = SSJ_FONT_SIZE_1;
         _incomeView.totalAnimationDuration = 1.f;
     }
     return _incomeView;
@@ -68,7 +68,7 @@
     if (!_expenditureTitleLabel) {
         _expenditureTitleLabel = [[UILabel alloc]init];
         _expenditureTitleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-        _expenditureTitleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        _expenditureTitleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_5);
     }
     return _expenditureTitleLabel;
 }
@@ -77,7 +77,7 @@
     if (!_incomeTitleLabel) {
         _incomeTitleLabel = [[UILabel alloc]init];
         _incomeTitleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-        _incomeTitleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        _incomeTitleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_5);
     }
     return _incomeTitleLabel;
 }
