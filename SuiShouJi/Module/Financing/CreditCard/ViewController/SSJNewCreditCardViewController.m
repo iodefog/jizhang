@@ -232,6 +232,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     if (!newReminderCell) {
         newReminderCell = [[SSJCreditCardEditeCell alloc] initWithStyle:UITableViewCellStyleDefault  reuseIdentifier:SSJCreditCardEditeCellIdentifier];
     }
+    newReminderCell.separatorInset = UIEdgeInsetsMake(0, 10, 0, 10);
     NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
     NSString *image = [self.images ssj_objectAtIndexPath:indexPath];
     // 信用卡名称
