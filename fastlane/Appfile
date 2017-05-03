@@ -1,0 +1,4 @@
+for_lane :appstore do |options|
+app_identifier "com.youyu.jizhangbao"
+apple_id "licaidi003@126.com"
+end

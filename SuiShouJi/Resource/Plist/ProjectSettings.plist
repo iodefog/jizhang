@@ -84,6 +84,18 @@
 	</dict>
 	<key>com.youyu.jizhang</key>
 	<dict>
+		<key>GeTuiAppSecret</key>
+		<string>r475vUBHQb5bNAdkBw6CV6</string>
+		<key>GeTuiTestAppSecret</key>
+		<string>D0Fd9ekqMy8A27DMVwoIc4</string>
+		<key>GeTuiAppKey</key>
+		<string>veBOaiEFxO7dMj36QfQ9P8</string>
+		<key>GeTuiTestAppKey</key>
+		<string>UldCizNDjk7d0VTAAlSo8</string>
+		<key>GeTuiAppID</key>
+		<string>7rHyx1dzw59JutCZym5jv7</string>
+		<key>GeTuTestiAppID</key>
+		<string>ilSGUkJ79Z5MCSXbGk76u</string>
 		<key>appleID</key>
 		<string>1126210029</string>
 		<key>source</key>
@@ -119,6 +131,18 @@
 	</dict>
 	<key>com.youyu.jizhangguanjia</key>
 	<dict>
+		<key>GeTuiAppSecret</key>
+		<string>r475vUBHQb5bNAdkBw6CV6</string>
+		<key>GeTuiTestAppSecret</key>
+		<string>D0Fd9ekqMy8A27DMVwoIc4</string>
+		<key>GeTuiAppKey</key>
+		<string>veBOaiEFxO7dMj36QfQ9P8</string>
+		<key>GeTuiTestAppKey</key>
+		<string>UldCizNDjk7d0VTAAlSo8</string>
+		<key>GeTuiAppID</key>
+		<string>7rHyx1dzw59JutCZym5jv7</string>
+		<key>GeTuTestiAppID</key>
+		<string>ilSGUkJ79Z5MCSXbGk76u</string>
 		<key>source</key>
 		<string>11503</string>
 		<key>WeiXinKey</key>
@@ -152,6 +176,18 @@
 	</dict>
 	<key>com.youyu.jizhangben</key>
 	<dict>
+		<key>GeTuiAppSecret</key>
+		<string>r475vUBHQb5bNAdkBw6CV6</string>
+		<key>GeTuiTestAppSecret</key>
+		<string>D0Fd9ekqMy8A27DMVwoIc4</string>
+		<key>GeTuiAppKey</key>
+		<string>veBOaiEFxO7dMj36QfQ9P8</string>
+		<key>GeTuiTestAppKey</key>
+		<string>UldCizNDjk7d0VTAAlSo8</string>
+		<key>GeTuiAppID</key>
+		<string>7rHyx1dzw59JutCZym5jv7</string>
+		<key>GeTuTestiAppID</key>
+		<string>ilSGUkJ79Z5MCSXbGk76u</string>
 		<key>source</key>
 		<string>11504</string>
 		<key>WeiXinKey</key>
@@ -185,6 +221,18 @@
 	</dict>
 	<key>com.youyu.jizhanglicai</key>
 	<dict>
+		<key>GeTuiAppSecret</key>
+		<string>r475vUBHQb5bNAdkBw6CV6</string>
+		<key>GeTuiTestAppSecret</key>
+		<string>D0Fd9ekqMy8A27DMVwoIc4</string>
+		<key>GeTuiAppKey</key>
+		<string>veBOaiEFxO7dMj36QfQ9P8</string>
+		<key>GeTuiTestAppKey</key>
+		<string>UldCizNDjk7d0VTAAlSo8</string>
+		<key>GeTuiAppID</key>
+		<string>7rHyx1dzw59JutCZym5jv7</string>
+		<key>GeTuTestiAppID</key>
+		<string>ilSGUkJ79Z5MCSXbGk76u</string>
 		<key>source</key>
 		<string>11505</string>
 		<key>WeiXinKey</key>
@@ -220,6 +268,12 @@
 	</dict>
 	<key>com.youyu.jizhangbao</key>
 	<dict>
+		<key>GeTuiAppSecret</key>
+		<string>QNtKqLZR8lAFQIi23BYxI8</string>
+		<key>GeTuiAppKey</key>
+		<string>pZQNRIoYEd604esRNu6hB5</string>
+		<key>GeTuiAppID</key>
+		<string>oK4QpfLsWm8uPFzZhClIr7</string>
 		<key>source</key>
 		<string>11506</string>
 		<key>WeiXinKey</key>
@@ -227,9 +281,9 @@
 		<key>WeiXinSecret</key>
 		<string></string>
 		<key>QQAppId</key>
-		<string></string>
+		<string>1105340301</string>
 		<key>QQAppKey</key>
-		<string></string>
+		<string>mW8hRwplNTlrUj3O</string>
 		<key>YWAppKey</key>
 		<string></string>
 		<key>WeiBoAppKey</key>
@@ -250,9 +304,23 @@
 		<string></string>
 		<key>AppStoreUrl</key>
 		<string>https://itunes.apple.com/cn/app/you-yu-ji-zhang-bao-ge-ren/id1198079862?l=zh&amp;ls=1&amp;mt=8</string>
+		<key>appleID</key>
+		<string>1198079862</string>
 	</dict>
 	<key>com.youyu.youyujizhangguanjia</key>
 	<dict>
+		<key>GeTuiAppSecret</key>
+		<string>r475vUBHQb5bNAdkBw6CV6</string>
+		<key>GeTuiTestAppSecret</key>
+		<string>D0Fd9ekqMy8A27DMVwoIc4</string>
+		<key>GeTuiAppKey</key>
+		<string>veBOaiEFxO7dMj36QfQ9P8</string>
+		<key>GeTuiTestAppKey</key>
+		<string>UldCizNDjk7d0VTAAlSo8</string>
+		<key>GeTuiAppID</key>
+		<string>7rHyx1dzw59JutCZym5jv7</string>
+		<key>GeTuTestiAppID</key>
+		<string>ilSGUkJ79Z5MCSXbGk76u</string>
 		<key>source</key>
 		<string>11507</string>
 		<key>WeiXinKey</key>
@@ -286,6 +354,18 @@
 	</dict>
 	<key>com.9188.jizhangben</key>
 	<dict>
+		<key>GeTuiAppSecret</key>
+		<string>r475vUBHQb5bNAdkBw6CV6</string>
+		<key>GeTuiTestAppSecret</key>
+		<string>D0Fd9ekqMy8A27DMVwoIc4</string>
+		<key>GeTuiAppKey</key>
+		<string>veBOaiEFxO7dMj36QfQ9P8</string>
+		<key>GeTuiTestAppKey</key>
+		<string>UldCizNDjk7d0VTAAlSo8</string>
+		<key>GeTuiAppID</key>
+		<string>7rHyx1dzw59JutCZym5jv7</string>
+		<key>GeTuTestiAppID</key>
+		<string>ilSGUkJ79Z5MCSXbGk76u</string>
 		<key>source</key>
 		<string>11508</string>
 		<key>WeiXinKey</key>
@@ -321,6 +401,12 @@
 	</dict>
 	<key>com.beikejizhang.app</key>
 	<dict>
+		<key>GeTuiAppSecret</key>
+		<string>pBys1PXMsYABfsQTKzr2s2</string>
+		<key>GeTuiAppKey</key>
+		<string>NyI7klZRvdAO1OEAFJtRb5</string>
+		<key>GeTuiAppID</key>
+		<string>9IwbxPJ7U78pGjZrGTggV7</string>
 		<key>source</key>
 		<string>11511</string>
 		<key>WeiXinKey</key>
@@ -354,6 +440,18 @@
 	</dict>
 	<key>com.youyu.notepro</key>
 	<dict>
+		<key>GeTuiAppSecret</key>
+		<string>r475vUBHQb5bNAdkBw6CV6</string>
+		<key>GeTuiTestAppSecret</key>
+		<string>D0Fd9ekqMy8A27DMVwoIc4</string>
+		<key>GeTuiAppKey</key>
+		<string>veBOaiEFxO7dMj36QfQ9P8</string>
+		<key>GeTuiTestAppKey</key>
+		<string>UldCizNDjk7d0VTAAlSo8</string>
+		<key>GeTuiAppID</key>
+		<string>7rHyx1dzw59JutCZym5jv7</string>
+		<key>GeTuTestiAppID</key>
+		<string>ilSGUkJ79Z5MCSXbGk76u</string>
 		<key>appleID</key>
 		<string>1221777670</string>
 		<key>source</key>
@@ -387,6 +485,12 @@
 	</dict>
 	<key>com.9188.notepro</key>
 	<dict>
+		<key>GeTuiAppSecret</key>
+		<string>aLIRi494dh9Fxla7XQNeW4</string>
+		<key>GeTuiAppKey</key>
+		<string>o7U2dDc9jSAvBSqtFrTqT2</string>
+		<key>GeTuiAppID</key>
+		<string>K4PvH3j3YL9obGYtjY0rA5</string>
 		<key>appleID</key>
 		<string>1221777670</string>
 		<key>source</key>
