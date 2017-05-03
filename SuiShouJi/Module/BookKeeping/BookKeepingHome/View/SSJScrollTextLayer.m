@@ -24,6 +24,7 @@
     if (self) {
         self.backgroundColor = [UIColor clearColor].CGColor;
         _currentNum = 0;
+        self.contentsScale = [UIScreen mainScreen].scale;
         self.animationDuration = 1.0;
         self.foregroundColor = [UIColor blackColor].CGColor;
         self.contentsScale = [UIScreen mainScreen].scale;

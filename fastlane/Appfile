@@ -1,4 +1,10 @@
+<<<<<<< HEAD
 for_lane :adhoc do |options|
 app_identifier "com.9188.jizhangAppStore"
 apple_id "yyfiniancial02@sina.com"
+=======
+for_lane :appstore do |options|
+app_identifier "com.youyu.jizhangbao"
+apple_id "licaidi003@126.com"
+>>>>>>> master
 end
