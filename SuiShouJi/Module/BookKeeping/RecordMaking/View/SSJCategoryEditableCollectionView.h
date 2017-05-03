@@ -23,6 +23,7 @@
 
 @property (nonatomic) CGSize itemSize;
 
+// default (0, 10, 94, 10)
 @property (nonatomic) UIEdgeInsets contentInset;
 
 @property (nonatomic, copy) void(^editStateChangeHandle)(SSJCategoryEditableCollectionView *view);

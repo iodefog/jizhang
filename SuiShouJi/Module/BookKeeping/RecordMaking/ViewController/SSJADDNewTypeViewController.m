@@ -21,6 +21,8 @@
 #import "SSJCategoryListHelper.h"
 #import "SSJBillModel.h"
 
+static const CGFloat kButtonHeight = 54;
+
 static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 
 @interface SSJADDNewTypeViewController () <UIScrollViewDelegate, SCYSlidePagingHeaderViewDelegate>
@@ -663,6 +665,8 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
     if (!_featuredCategoryCollectionView) {
         __weak typeof(self) wself = self;
         _featuredCategoryCollectionView = [[SSJCategoryEditableCollectionView alloc] initWithFrame:CGRectMake(0, 10, self.scrollView.width, self.scrollView.height - 10)];
+        _featuredCategoryCollectionView.contentInset = UIEdgeInsetsMake(10, 14, kButtonHeight, 14);
+        _featuredCategoryCollectionView.itemSize = CGSizeMake((_featuredCategoryCollectionView.width - 28) / 5, 75);
         _featuredCategoryCollectionView.editStateChangeHandle = ^(SSJCategoryEditableCollectionView *view) {
             [wself updateButtons];
         };
@@ -677,6 +681,8 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
     if (!_customCategoryCollectionView) {
         __weak typeof(self) wself = self;
         _customCategoryCollectionView = [[SSJCategoryEditableCollectionView alloc] initWithFrame:CGRectMake(self.scrollView.width, self.customCategorySwitchConrol.bottom + 10, self.scrollView.width, self.scrollView.height - self.customCategorySwitchConrol.bottom - 10)];
+        _customCategoryCollectionView.contentInset = UIEdgeInsetsMake(10, 14, kButtonHeight, 14);
+        _customCategoryCollectionView.itemSize = CGSizeMake((_featuredCategoryCollectionView.width - 28) / 5, 75);
         _customCategoryCollectionView.editStateChangeHandle = ^(SSJCategoryEditableCollectionView *view) {
             [wself updateButtons];
 //            [wself updateEditButtonEnable];
@@ -724,7 +730,7 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 - (UIButton *)sureButton {
     if (!_sureButton) {
         _sureButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        _sureButton.frame = CGRectMake(0, self.view.height - 50, self.view.width, 50);
+        _sureButton.frame = CGRectMake(0, self.view.height - 50, self.view.width, kButtonHeight);
         _sureButton.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_1);
         [_sureButton setTitle:@"确定" forState:UIControlStateNormal];
         [_sureButton ssj_setBorderStyle:SSJBorderStyleTop];
@@ -737,7 +743,7 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 - (UIButton *)editButton {
     if (!_editButton) {
         _editButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        _editButton.frame = CGRectMake(0, self.view.height - 54, self.view.width * 0.6, 54);
+        _editButton.frame = CGRectMake(0, self.view.height - kButtonHeight, self.view.width * 0.6, kButtonHeight);
         [_editButton ssj_setBorderStyle:SSJBorderStyleTop | SSJBorderStyleRight];
         _editButton.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_1);
         [_editButton addTarget:self action:@selector(editButtonAction) forControlEvents:UIControlEventTouchUpInside];
@@ -748,7 +754,7 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 - (UIButton *)featureDeleteButton {
     if (!_featureDeleteButton) {
         _featureDeleteButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        _featureDeleteButton.frame = CGRectMake(0, self.view.height - 54, self.view.width, 54);
+        _featureDeleteButton.frame = CGRectMake(0, self.view.height - kButtonHeight, self.view.width, kButtonHeight);
         _featureDeleteButton.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_1);
         [_featureDeleteButton setTitle:@"删除" forState:UIControlStateNormal];
         [_featureDeleteButton ssj_setBorderStyle:SSJBorderStyleTop];
@@ -760,7 +766,7 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 - (UIButton *)customDeleteButton {
     if (!_customDeleteButton) {
         _customDeleteButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        _customDeleteButton.frame = CGRectMake(self.view.width * 0.6, self.view.height - 54, self.view.width * 0.4, 54);
+        _customDeleteButton.frame = CGRectMake(self.view.width * 0.6, self.view.height - kButtonHeight, self.view.width * 0.4, kButtonHeight);
         _customDeleteButton.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_1);
         [_customDeleteButton ssj_setBorderStyle:SSJBorderStyleTop];
         [_customDeleteButton setTitle:@"删除" forState:UIControlStateNormal];

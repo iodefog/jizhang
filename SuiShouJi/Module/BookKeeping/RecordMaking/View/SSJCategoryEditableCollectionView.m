@@ -9,7 +9,7 @@
 #import "SSJCategoryEditableCollectionView.h"
 #import "SSJCategoryEditableCollectionViewCell.h"
 
-#define DEFAULT_ITEM_SIZE CGSizeMake((self.width - 20) * 0.2, 90)
+#define DEFAULT_ITEM_SIZE CGSizeMake((self.width - _contentInset.left - _contentInset.right) / 5, 75)
 
 static NSString *const kCellId = @"SSJCategoryEditableCollectionViewCellId";
 
@@ -392,9 +392,6 @@ static NSString *const kAdditionalUnselectedImage = @"record_making_unselected";
         _layout = [[UICollectionViewFlowLayout alloc] init];
         _layout.minimumInteritemSpacing = 0;
         _layout.minimumLineSpacing = 0;
-//        CGFloat width = (self.width - 20) * 0.2;
-//        _layout.itemSize = CGSizeMake(floor(width), 90);
-        _layout.sectionInset = UIEdgeInsetsMake(0, 0, 0, 0);
     }
     return _layout;
 }
