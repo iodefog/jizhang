@@ -77,6 +77,7 @@
 - (SSJReportFormsPeriodSelectionControl *)periodControl {
     if (!_periodControl) {
         _periodControl = [[SSJReportFormsPeriodSelectionControl alloc] initWithFrame:CGRectMake(0, 0, self.width, 35)];
+        _periodControl.layer.zPosition = 100;
     }
     return _periodControl;
 }
