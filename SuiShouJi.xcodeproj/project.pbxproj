@@ -10537,10 +10537,10 @@
 				7D70C1361E00E68400479E44 /* SSJReportFormCurveHeaderView.m */,
 				91FD904B1E0B8319001C64B7 /* SSJReportFormCanYinChartCell.h */,
 				91FD904C1E0B8319001C64B7 /* SSJReportFormCanYinChartCell.m */,
-				7D2D26CF1EB858BD005E3E2D /* SSJReportFormsPeriodSelectionControl.h */,
-				7D2D26D01EB858BD005E3E2D /* SSJReportFormsPeriodSelectionControl.m */,
 				7DF4F0FB1EB88A6B0039FB2C /* SSJReportFormsNavigationBar.h */,
 				7DF4F0FC1EB88A6B0039FB2C /* SSJReportFormsNavigationBar.m */,
+				7D2D26CF1EB858BD005E3E2D /* SSJReportFormsPeriodSelectionControl.h */,
+				7D2D26D01EB858BD005E3E2D /* SSJReportFormsPeriodSelectionControl.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -19398,7 +19398,6 @@
 				9C7D2EF31E8DF8A80093001F /* SSJThemeSetting.m in Sources */,
 				9C7D2EF41E8DF8A80093001F /* SSJFundingTypeTableViewCell.m in Sources */,
 				9C7D2EF51E8DF8A80093001F /* SSJNewOrEditCustomCategoryView.m in Sources */,
-				9C7D2EF61E8DF8A80093001F /* SSJBookkeepingTreeDescView.m in Sources */,
 				7DF4F0FD1EB88A6B0039FB2C /* SSJReportFormsNavigationBar.m in Sources */,
 				9C7D2EF71E8DF8A80093001F /* SSJFundingTransferViewController.m in Sources */,
 				9C7D2EF81E8DF8A80093001F /* SSJScrollTextView.m in Sources */,
@@ -20000,7 +19999,6 @@
 				9C7D316A1E8DF96B0093001F /* SSJThemeSetting.m in Sources */,
 				9C7D316B1E8DF96B0093001F /* SSJFundingTypeTableViewCell.m in Sources */,
 				9C7D316C1E8DF96B0093001F /* SSJNewOrEditCustomCategoryView.m in Sources */,
-				9C7D316D1E8DF96B0093001F /* SSJBookkeepingTreeDescView.m in Sources */,
 				7DF4F1051EB88A6B0039FB2C /* SSJReportFormsNavigationBar.m in Sources */,
 				9C7D316E1E8DF96B0093001F /* SSJFundingTransferViewController.m in Sources */,
 				9C7D316F1E8DF96B0093001F /* SSJScrollTextView.m in Sources */,

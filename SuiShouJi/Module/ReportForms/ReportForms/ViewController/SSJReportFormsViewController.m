@@ -58,8 +58,6 @@ static NSString *const kSegmentTitleIncome = @"收入";
 //  流水列表视图
 @property (nonatomic, strong) UITableView *tableView;
 
-@property (nonatomic, strong) UIBarButtonItem *booksItem;
-
 //  当前账本id
 @property (nonatomic, strong) NSString *currentBooksId;
 
@@ -106,7 +104,13 @@ static NSString *const kSegmentTitleIncome = @"收入";
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
     [self reloadAllDatas];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
 }
 
 #pragma mark - Overwrite
@@ -259,22 +263,6 @@ static NSString *const kSegmentTitleIncome = @"收入";
     }
 }
 
-#pragma mark - Event
-- (void)titleSegmentCtrlAction {
-    [self reloadDatasInPeriod:_periodControl.currentPeriod];
-}
-
-- (void)selectBookAction {
-    [SSJAnaliyticsManager event:@"forms_open_account_books"];
-    [self.mm_drawerController toggleDrawerSide:MMDrawerSideLeft animated:YES completion:^(BOOL finished) {
-//        if (!_dateViewHasDismiss) {
-//            [self.floatingDateView dismiss];
-//            [self.mutiFunctionButton dismiss];
-//            _dateViewHasDismiss = YES;
-//        }
-    }];
-}
-
 #pragma mark - Private
 //  重新加载数据
 - (void)reloadAllDatas {
@@ -285,8 +273,8 @@ static NSString *const kSegmentTitleIncome = @"收入";
     SSJBooksTypeItem *currentBooksItem = [SSJBooksTypeStore queryCurrentBooksTypeForBooksId:_currentBooksId];
     
     UIImage *image = [[UIImage imageNamed:currentBooksItem.booksIcoin] ssj_compressWithinSize:CGSizeMake(22, 22)];
-    [self.booksItem setImage:image];
-    self.booksItem.tintColor = [UIColor ssj_colorWithHex:currentBooksItem.booksColor];
+    [self.navigationBar setBooksImage:image];
+    [self.navigationBar setBooksColor:[UIColor ssj_colorWithHex:currentBooksItem.booksColor]];
     
     [SSJReportFormsUtil queryForPeriodListWithIncomeOrPayType:SSJBillTypeSurplus booksId:_currentBooksId success:^(NSArray<SSJDatePeriod *> *periods) {
         
@@ -609,12 +597,14 @@ static NSString *const kSegmentTitleIncome = @"收入";
 #pragma mark - LazyLoading
 - (SSJReportFormsNavigationBar *)navigationBar {
     if (!_navigationBar) {
+        __weak typeof(self) wself = self;
         _navigationBar = [[SSJReportFormsNavigationBar alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 64)];
         _navigationBar.switchChartAndCurveHandler = ^(SSJReportFormsNavigationBar *bar) {
-            
+            [wself reloadDatasInPeriod:wself.periodControl.currentPeriod];
         };
         _navigationBar.clickBooksHandler = ^(SSJReportFormsNavigationBar *bar) {
-            
+            [SSJAnaliyticsManager event:@"forms_open_account_books"];
+            [wself.mm_drawerController toggleDrawerSide:MMDrawerSideLeft animated:YES completion:NULL];
         };
     }
     return _navigationBar;
@@ -720,13 +710,6 @@ static NSString *const kSegmentTitleIncome = @"收入";
         };
     }
     return _curveHeaderView;
-}
-
-- (UIBarButtonItem *)booksItem {
-    if (!_booksItem) {
-        _booksItem = [[UIBarButtonItem alloc] initWithImage:nil style:UIBarButtonItemStylePlain target:self action:@selector(selectBookAction)];
-    }
-    return _booksItem;
 }
 
 @end

@@ -139,11 +139,9 @@
 }
 
 - (void)reloadDataAfterSync {
-    
 }
 
 - (void)reloadDataAfterInitDatabase {
-    
 }
 
 - (void)updateAppearanceAfterThemeChanged {
@@ -172,7 +170,6 @@
 
 #pragma mark - SSJBaseNetworkServiceDelegate
 - (void)serverDidStart:(SSJBaseNetworkService *)service {
-    
 }
 
 /* 将接口返回的code 值转换为前端现实用的文字
@@ -214,7 +211,6 @@
 }
 
 - (void)serverDidCancel:(SSJBaseNetworkService *)service {
-    
 }
 
 - (void)server:(SSJBaseNetworkService *)service didFailLoadWithError:(NSError *)error {

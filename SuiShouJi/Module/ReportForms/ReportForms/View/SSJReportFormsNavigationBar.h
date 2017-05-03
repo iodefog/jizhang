@@ -19,11 +19,13 @@ typedef NS_ENUM(NSInteger, SSJReportFormsNavigationBarOption) {
 
 @property (nonatomic) SSJReportFormsNavigationBarOption option;
 
-@property (nonatomic, strong) UIImage *leftImage;
-
 @property (nonatomic, copy) void (^clickBooksHandler)(SSJReportFormsNavigationBar *bar);
 
 @property (nonatomic, copy) void (^switchChartAndCurveHandler)(SSJReportFormsNavigationBar *bar);
+
+- (void)setBooksImage:(UIImage *)booksImage;
+
+- (void)setBooksColor:(UIColor *)booksColor;
 
 - (void)updateAppearance;
 

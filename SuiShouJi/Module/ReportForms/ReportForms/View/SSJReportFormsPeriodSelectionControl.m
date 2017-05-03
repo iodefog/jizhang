@@ -110,8 +110,7 @@
 }
 
 - (void)updateAppearance {
-//    self.layer.shadowColor = RGBACOLOR(0, 0, 0, 0.08).CGColor;
-    self.layer.shadowColor = [UIColor orangeColor].CGColor;
+    self.layer.shadowColor = RGBACOLOR(0, 0, 0, 0.08).CGColor;
     self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
     [self.dateAxisView updateAppearance];
     [self.customPeriodBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] forState:UIControlStateNormal];
