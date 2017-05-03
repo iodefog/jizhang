@@ -103,7 +103,7 @@ static NSString *const kHelpCellId = @"kHelpCellId";
         
         UILabel *titleLab = [[UILabel alloc] init];
         titleLab.textColor = [UIColor grayColor];
-        titleLab.font = [UIFont systemFontOfSize:14];
+        titleLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_7);
         titleLab.textAlignment = NSTextAlignmentCenter;
         titleLab.text = @"种子的茁壮成长之路";
         [titleLab sizeToFit];
@@ -124,14 +124,14 @@ static NSString *const kHelpCellId = @"kHelpCellId";
         UILabel *levelLab = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, _sectionView.width * 0.5, _sectionView.height)];
         levelLab.backgroundColor = [UIColor clearColor];
         levelLab.textColor = [UIColor grayColor];
-        levelLab.font = [UIFont systemFontOfSize:12];
+        levelLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_5);
         levelLab.textAlignment = NSTextAlignmentCenter;
         levelLab.text = @"树的等级";
         
         UILabel *daysLab = [[UILabel alloc] initWithFrame:CGRectMake(_sectionView.width * 0.5, 0, _sectionView.width * 0.5, _sectionView.height)];
         daysLab.backgroundColor = [UIColor clearColor];
         daysLab.textColor = [UIColor grayColor];
-        daysLab.font = [UIFont systemFontOfSize:12];
+        daysLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_5);
         daysLab.textAlignment = NSTextAlignmentCenter;
         daysLab.text = @"累计登录天数";
         

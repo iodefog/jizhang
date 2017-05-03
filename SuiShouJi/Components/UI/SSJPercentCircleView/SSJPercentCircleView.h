@@ -37,6 +37,8 @@
 
 @property (nonatomic, strong) NSDictionary *bottomTitleAttribute;
 
+@property (nonatomic, strong) UIFont *addtionTextFont;
+
 @property (nonatomic, weak) id <SSJReportFormsPercentCircleDataSource> dataSource;
 
 - (void)reloadData;

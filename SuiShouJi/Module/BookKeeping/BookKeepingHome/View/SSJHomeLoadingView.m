@@ -92,7 +92,7 @@
     if (!_statusLab) {
         _statusLab = [[UILabel alloc] init];
         _statusLab.text = @"正在加载数据,请稍候...";
-        _statusLab.font = [UIFont systemFontOfSize:16];
+        _statusLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         _statusLab.textColor  = [UIColor ssj_colorWithHex:@"#333333"];
         [_statusLab sizeToFit];
     }

@@ -7,7 +7,7 @@
 //
 
 #import "SSJReportFormsPeriodSelectionControl.h"
-#import "SSJReportFormsScaleAxisView.h"
+#import "SSJReportFormsScaleAxisView+SSJTheme.h"
 #import "SSJDatePeriod.h"
 
 @interface SSJReportFormsPeriodSelectionControl () <SSJReportFormsScaleAxisViewDelegate>
@@ -31,7 +31,6 @@
 #pragma mark - Public
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        self.backgroundColor = [UIColor clearColor];
         [self addSubview:self.dateAxisView];
         [self addSubview:self.customPeriodBtn];
         [self addSubview:self.addCustomPeriodBtn];
@@ -46,6 +45,7 @@
 
 - (void)layoutSubviews {
     [super layoutSubviews];
+    [self drawShadowIfNeeded];
     if (self.width > 0) {
         self.dateAxisView.subscriptPosition = self.width * 0.5 / self.dateAxisView.width;
     }
@@ -54,7 +54,7 @@
 - (void)updateConstraints {
     [self.customPeriodBtn mas_updateConstraints:^(MASConstraintMaker *make) {
         CGSize textSize = [self.customPeriodBtn.currentTitle sizeWithAttributes:@{NSFontAttributeName:_customPeriodBtn.titleLabel.font}];
-        make.width.mas_equalTo(textSize.width);
+        make.width.mas_equalTo(ceil(textSize.width));
         make.height.mas_equalTo(25);
         make.center.mas_equalTo(self);
     }];
@@ -110,8 +110,23 @@
 }
 
 - (void)updateAppearance {
-    [self.dateAxisView updateConstraints];
+    self.layer.shadowColor = RGBACOLOR(0, 0, 0, 0.08).CGColor;
+    self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
+    [self.dateAxisView updateAppearance];
     [self.customPeriodBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] forState:UIControlStateNormal];
+}
+
+- (void)drawShadowIfNeeded {
+    if (CGRectIsEmpty(self.bounds)
+        || self.layer.shadowPath) {
+        return;
+    }
+    
+    UIBezierPath *path = [UIBezierPath bezierPathWithRect:self.bounds];
+    self.layer.shadowPath = path.CGPath;
+    self.layer.shadowRadius = 10;
+    self.layer.shadowOffset = CGSizeZero;
+    self.layer.shadowOpacity = 1;
 }
 
 #pragma mark - SSJReportFormsScaleAxisViewDelegate
@@ -203,7 +218,7 @@
         _addCustomPeriodBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _addCustomPeriodBtn.imageEdgeInsets = UIEdgeInsetsMake(0, 14, 0, 20);
         [_addCustomPeriodBtn addTarget:self action:@selector(addCustomPeriod) forControlEvents:UIControlEventTouchUpInside];
-        [_addCustomPeriodBtn setImage:[UIImage ssj_themeImageWithName:@"reportForms_edit"] forState:UIControlStateNormal];
+        [_addCustomPeriodBtn setImage:[UIImage imageNamed:@"reportForms_edit"] forState:UIControlStateNormal];
     }
     return _addCustomPeriodBtn;
 }
@@ -212,7 +227,7 @@
     if (!_clearCustomPeriodBtn) {
         _clearCustomPeriodBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [_clearCustomPeriodBtn addTarget:self action:@selector(clearCustomPeriod) forControlEvents:UIControlEventTouchUpInside];
-        [_clearCustomPeriodBtn setImage:[UIImage ssj_themeImageWithName:@"reportForms_delete"] forState:UIControlStateNormal];
+        [_clearCustomPeriodBtn setImage:[UIImage imageNamed:@"reportForms_delete"] forState:UIControlStateNormal];
     }
     return _clearCustomPeriodBtn;
 }

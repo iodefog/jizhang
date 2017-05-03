@@ -91,7 +91,7 @@
 - (UILabel *)titleLab {
     if (!_titleLab) {
         _titleLab = [[UILabel alloc] init];
-        _titleLab.font = [UIFont systemFontOfSize:15];
+        _titleLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
     }
     return _titleLab;
 }
@@ -99,7 +99,7 @@
 - (UILabel *)billTypeLab {
     if (!_billTypeLab) {
         _billTypeLab = [[UILabel alloc] init];
-        _billTypeLab.font = [UIFont systemFontOfSize:15];
+        _billTypeLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
     }
     return _billTypeLab;
 }
@@ -107,7 +107,7 @@
 - (UILabel *)periodLab {
     if (!_periodLab) {
         _periodLab = [[UILabel alloc] init];
-        _periodLab.font = [UIFont systemFontOfSize:13];
+        _periodLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
     }
     return _periodLab;
 }
@@ -115,7 +115,7 @@
 - (UILabel *)expendLab {
     if (!_expendLab) {
         _expendLab = [[UILabel alloc] init];
-        _expendLab.font = [UIFont systemFontOfSize:13];
+        _expendLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
     }
     return _expendLab;
 }
@@ -123,7 +123,7 @@
 - (UILabel *)budgetLab {
     if (!_budgetLab) {
         _budgetLab = [[UILabel alloc] init];
-        _budgetLab.font = [UIFont systemFontOfSize:13];
+        _budgetLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
     }
     return _budgetLab;
 }

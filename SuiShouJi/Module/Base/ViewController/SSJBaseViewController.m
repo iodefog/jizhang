@@ -139,11 +139,9 @@
 }
 
 - (void)reloadDataAfterSync {
-    
 }
 
 - (void)reloadDataAfterInitDatabase {
-    
 }
 
 - (void)updateAppearanceAfterThemeChanged {
@@ -172,7 +170,6 @@
 
 #pragma mark - SSJBaseNetworkServiceDelegate
 - (void)serverDidStart:(SSJBaseNetworkService *)service {
-    
 }
 
 /* 将接口返回的code 值转换为前端现实用的文字
@@ -214,7 +211,6 @@
 }
 
 - (void)serverDidCancel:(SSJBaseNetworkService *)service {
-    
 }
 
 - (void)server:(SSJBaseNetworkService *)service didFailLoadWithError:(NSError *)error {
@@ -252,7 +248,7 @@
     SSJThemeModel *themeModel = _appliesTheme ? [SSJThemeSetting currentThemeModel] : [SSJThemeSetting defaultThemeModel];
     self.navigationController.navigationBar.tintColor = [UIColor ssj_colorWithHex:themeModel.naviBarTintColor];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:themeModel.naviBarBackgroundColor alpha:themeModel.backgroundAlpha] size:CGSizeZero] forBarMetrics:UIBarMetricsDefault];
-    self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:18],
+    self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2),
                                                                     NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:themeModel.naviBarTitleColor]};
     
     if (_showNavigationBarBaseLine) {

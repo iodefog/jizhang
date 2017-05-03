@@ -28,6 +28,9 @@
 //  附加文本
 @property (nonatomic, copy) NSString *additionalText;
 
+//  附加文本
+@property (nonatomic, copy) UIFont *additionalFont;
+
 //  之前所有圆环组件的比例值总和，用于SSJReportFormsPercentCircle内部计算角度使用
 //  不需要在函数percentCircle:itemForComponentAtIndex:中返回
 @property (nonatomic) double previousScale;

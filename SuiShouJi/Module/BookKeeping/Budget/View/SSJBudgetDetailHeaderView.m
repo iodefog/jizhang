@@ -318,7 +318,7 @@ static const CGFloat kBottomViewHeight = 398;
     if (!_budgetMoneyTitleLab) {
         _budgetMoneyTitleLab = [[UILabel alloc] init];
         _budgetMoneyTitleLab.backgroundColor = [UIColor clearColor];
-        _budgetMoneyTitleLab.font = [UIFont systemFontOfSize:13];
+        _budgetMoneyTitleLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
     }
     return _budgetMoneyTitleLab;
 }
@@ -327,7 +327,7 @@ static const CGFloat kBottomViewHeight = 398;
     if (!_budgetMoneyLab) {
         _budgetMoneyLab = [[UILabel alloc] init];
         _budgetMoneyLab.backgroundColor = [UIColor clearColor];
-        _budgetMoneyLab.font = [UIFont systemFontOfSize:22];
+        _budgetMoneyLab.font = SSJ_Helvetica_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_1);
         _budgetMoneyLab.adjustsFontSizeToFitWidth = YES;
     }
     return _budgetMoneyLab;
@@ -337,7 +337,7 @@ static const CGFloat kBottomViewHeight = 398;
     if (!_intervalTitleLab) {
         _intervalTitleLab = [[UILabel alloc] init];
         _intervalTitleLab.backgroundColor = [UIColor clearColor];
-        _intervalTitleLab.font = [UIFont systemFontOfSize:13];
+        _intervalTitleLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
         _intervalTitleLab.text = @"距结算日";
         [_intervalTitleLab sizeToFit];
     }
@@ -348,7 +348,7 @@ static const CGFloat kBottomViewHeight = 398;
     if (!_intervalLab) {
         _intervalLab = [[UILabel alloc] init];
         _intervalLab.backgroundColor = [UIColor clearColor];
-        _intervalLab.font = [UIFont systemFontOfSize:22];
+        _intervalLab.font = SSJ_Helvetica_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_1);
     }
     return _intervalLab;
 }
@@ -391,7 +391,7 @@ static const CGFloat kBottomViewHeight = 398;
     if (!_payMoneyLab) {
         _payMoneyLab = [[UILabel alloc] init];
         _payMoneyLab.backgroundColor = [UIColor clearColor];
-        _payMoneyLab.font = [UIFont systemFontOfSize:18];
+        _payMoneyLab.font = SSJ_Helvetica_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2);
         _payMoneyLab.adjustsFontSizeToFitWidth = YES;
     }
     return _payMoneyLab;
@@ -401,7 +401,7 @@ static const CGFloat kBottomViewHeight = 398;
     if (!_historyPaymentLab) {
         _historyPaymentLab = [[UILabel alloc] init];
         _historyPaymentLab.backgroundColor = [UIColor clearColor];
-        _historyPaymentLab.font = [UIFont systemFontOfSize:13];
+        _historyPaymentLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
         _historyPaymentLab.adjustsFontSizeToFitWidth = YES;
     }
     return _historyPaymentLab;
@@ -412,7 +412,7 @@ static const CGFloat kBottomViewHeight = 398;
         _estimateMoneyLab = [[UILabel alloc] init];
         _estimateMoneyLab.backgroundColor = [UIColor clearColor];
         _estimateMoneyLab.textAlignment = NSTextAlignmentRight;
-        _estimateMoneyLab.font = [UIFont systemFontOfSize:13];
+        _estimateMoneyLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
         _estimateMoneyLab.adjustsFontSizeToFitWidth = YES;
     }
     return _estimateMoneyLab;
@@ -422,7 +422,7 @@ static const CGFloat kBottomViewHeight = 398;
     if (!_payOrOverrunLab) {
         _payOrOverrunLab = [[UILabel alloc] init];
         _payOrOverrunLab.backgroundColor = [UIColor clearColor];
-        _payOrOverrunLab.font = [UIFont systemFontOfSize:13];
+        _payOrOverrunLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
     }
     return _payOrOverrunLab;
 }
@@ -431,7 +431,7 @@ static const CGFloat kBottomViewHeight = 398;
     if (!_billTypeLab) {
         _billTypeLab = [[UILabel alloc] init];
         _billTypeLab.backgroundColor = [UIColor clearColor];
-        _billTypeLab.font = [UIFont systemFontOfSize:18];
+        _billTypeLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2);
         _billTypeLab.adjustsFontSizeToFitWidth = YES;
     }
     return _billTypeLab;
@@ -439,7 +439,7 @@ static const CGFloat kBottomViewHeight = 398;
 
 - (SSJPercentCircleView *)circleView {
     if (!_circleView) {
-        _circleView = [[SSJPercentCircleView alloc] initWithFrame:CGRectMake(0, 70, self.width, 320) insets:UIEdgeInsetsMake(80, 80, 80, 80) thickness:30];
+        _circleView = [[SSJPercentCircleView alloc] initWithFrame:CGRectMake(0, 70, self.width, 320) insets:UIEdgeInsetsMake(80, 80, 80, 80) thickness:20];
         _circleView.backgroundColor = [UIColor clearColor];
         _circleView.dataSource = self;
     }

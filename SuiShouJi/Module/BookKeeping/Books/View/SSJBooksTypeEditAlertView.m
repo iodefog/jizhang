@@ -112,7 +112,7 @@ static const CGSize kButtonSize = {200, 40};
 - (UILabel *)titleLab {
     if (!_titleLab) {
         _titleLab = [[UILabel alloc] init];
-        _titleLab.font = [UIFont systemFontOfSize:16];
+        _titleLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         _titleLab.text = @"请选择";
         _titleLab.textAlignment = NSTextAlignmentCenter;
     }
@@ -124,7 +124,7 @@ static const CGSize kButtonSize = {200, 40};
         _editBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _editBtn.layer.borderWidth = 1;
         _editBtn.layer.cornerRadius = kButtonSize.height * 0.5;
-        _editBtn.titleLabel.font = [UIFont systemFontOfSize:18];
+        _editBtn.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2);
         _editBtn.spaceBetweenImageAndTitle = 10;
         [_editBtn setTitle:@"编辑账本" forState:UIControlStateNormal];
         [_editBtn setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
@@ -145,7 +145,7 @@ static const CGSize kButtonSize = {200, 40};
         _deleteBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _deleteBtn.layer.borderWidth = 1;
         _deleteBtn.layer.cornerRadius = kButtonSize.height * 0.5;
-        _deleteBtn.titleLabel.font = [UIFont systemFontOfSize:18];
+        _deleteBtn.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2);
         _deleteBtn.spaceBetweenImageAndTitle = 10;
         [_deleteBtn setTitle:@"删除账本" forState:UIControlStateNormal];
         [_deleteBtn setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
@@ -164,7 +164,7 @@ static const CGSize kButtonSize = {200, 40};
 - (UIButton *)cancelBtn {
     if (!_cancelBtn) {
         _cancelBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        _cancelBtn.titleLabel.font = [UIFont systemFontOfSize:16];
+        _cancelBtn.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         [_cancelBtn setTitle:@"取消" forState:UIControlStateNormal];
         @weakify(self);
         [[_cancelBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {

@@ -32,7 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, copy) NSString *text;
 
-@property (nonatomic) CGFloat textSize;
+@property (nonatomic, strong) UIFont *font;
 
 @property (nonatomic, copy) NSString *textColorValue;
 

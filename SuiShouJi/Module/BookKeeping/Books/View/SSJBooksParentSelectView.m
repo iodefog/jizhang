@@ -64,7 +64,7 @@ static NSString * SSJBooksParentSelectCellIdentifier = @"SSJBooksParentSelectCel
 - (UILabel *)titleLab{
     if (!_titleLab) {
         _titleLab = [[UILabel alloc]init];
-        _titleLab.font = [UIFont systemFontOfSize:18];
+        _titleLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2);
         _titleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _titleLab.text = @"请选择账本收支类型";
         [_titleLab sizeToFit];

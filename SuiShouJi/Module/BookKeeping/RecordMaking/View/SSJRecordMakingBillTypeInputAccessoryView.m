@@ -148,7 +148,7 @@
 - (UITextField *)memoView {
     if (!_memoView) {
         _memoView = [[UITextField alloc] initWithFrame:CGRectMake(40, 0, self.topView.width - 40, self.topView.height)];
-        _memoView.font = [UIFont systemFontOfSize:13];
+        _memoView.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
         _memoView.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _memoView.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"写点啥备注下" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         _memoView.returnKeyType = UIReturnKeyDone;
@@ -161,7 +161,7 @@
     if (!_accountBtn) {
         _accountBtn = [[SSJButton alloc] init];
         _accountBtn.frame = CGRectMake(0, 0, 70, 24);
-        _accountBtn.titleLabel.font = [UIFont systemFontOfSize:13];
+        _accountBtn.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
         _accountBtn.borderWidth = 1 / [UIScreen mainScreen].scale;
         [_accountBtn setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor] forState:SSJButtonStateNormal];
         [_accountBtn setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha] forState:SSJButtonStateNormal];
@@ -174,7 +174,7 @@
     if (!_dateBtn) {
         _dateBtn = [[SSJButton alloc] init];
         _dateBtn.frame = CGRectMake(0, 0, 70, 24);
-        _dateBtn.titleLabel.font = [UIFont systemFontOfSize:13];
+        _dateBtn.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
         _dateBtn.borderWidth = 1 / [UIScreen mainScreen].scale;
         [_dateBtn setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor] forState:SSJButtonStateNormal];
         [_dateBtn setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha] forState:SSJButtonStateNormal];
@@ -187,7 +187,7 @@
     if (!_memberBtn) {
         _memberBtn = [[SSJButton alloc] init];
         _memberBtn.frame = CGRectMake(0, 0, 70, 24);
-        _memberBtn.titleLabel.font = [UIFont systemFontOfSize:13];
+        _memberBtn.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
         _memberBtn.borderWidth = 1 / [UIScreen mainScreen].scale;
         [_memberBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] forState:SSJButtonStateNormal];
         [_memberBtn setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor] forState:SSJButtonStateNormal];
@@ -201,7 +201,7 @@
     if (!_photoBtn) {
         _photoBtn = [[SSJButton alloc] init];
         _photoBtn.frame = CGRectMake(0, 0, 70, 24);
-        _photoBtn.titleLabel.font = [UIFont systemFontOfSize:13];
+        _photoBtn.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
         _photoBtn.borderWidth = 1 / [UIScreen mainScreen].scale;
         [_photoBtn setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor] forState:SSJButtonStateNormal];
         [_photoBtn setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha] forState:SSJButtonStateNormal];
