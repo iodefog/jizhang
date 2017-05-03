@@ -120,7 +120,6 @@ static NSString *const kSegmentTitleIncome = @"收入";
 
 - (void)updateAppearanceAfterThemeChanged {
     [super updateAppearanceAfterThemeChanged];
-    
     [_tableView reloadData];
     [self updateAppearance];
 }

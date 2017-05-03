@@ -55,6 +55,7 @@
 #import "SSJBookKeepingHomeNoDataCell.h"
 #import "SSJCustomThemeManager.h"
 #import "SSJThemBgImageClipViewController.h"
+#import "SSJNavigationController.h"
 
 static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 
@@ -459,7 +460,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
                 weakSelf.newlyAddChargeArr = [NSMutableArray arrayWithArray:chargeIdArr];
                 _hasChangeBooksType = hasChangeBooksType;
             };
-            UINavigationController *recordNav = [[UINavigationController alloc]initWithRootViewController:recordMakingVc];
+            SSJNavigationController *recordNav = [[SSJNavigationController alloc]initWithRootViewController:recordMakingVc];
             [weakSelf presentViewController:recordNav animated:YES completion:NULL];
         };
         bookKeepingCell.imageClickBlock = ^(SSJBillingChargeCellItem *item){
@@ -530,7 +531,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
             weakSelf.newlyAddChargeArr = [NSMutableArray arrayWithArray:chargeIdArr];
             _hasChangeBooksType = hasChangeBooksType;
         };
-        UINavigationController *recordNav = [[UINavigationController alloc]initWithRootViewController:recordmakingVC];
+        SSJNavigationController *recordNav = [[SSJNavigationController alloc] initWithRootViewController:recordmakingVC];
         [self presentViewController:recordNav animated:YES completion:NULL];
     }
 }
@@ -704,7 +705,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
                 weakSelf.newlyAddChargeArr = [NSMutableArray arrayWithArray:chargeIdArr];
                 _hasChangeBooksType = hasChangeBooksType;
             };
-            UINavigationController *recordNav = [[UINavigationController alloc]initWithRootViewController:recordmakingVC];
+            SSJNavigationController *recordNav = [[SSJNavigationController alloc]initWithRootViewController:recordmakingVC];
             [weakSelf presentViewController:recordNav animated:YES completion:NULL];
         };
     }

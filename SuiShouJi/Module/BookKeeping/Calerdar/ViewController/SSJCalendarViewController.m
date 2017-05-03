@@ -7,13 +7,15 @@
 //
 
 #import "SSJCalendarViewController.h"
-#import "SSJCalendarView.h"
+#import "SSJNavigationController.h"
 #import "SSJRecordMakingViewController.h"
-#import "SSJCalendarTableViewCell.h"
-#import "SSJBillingChargeCell.h"
+#import "SSJCalenderDetailViewController.h"
+
+#import "SSJCalendarView.h"
 #import "SSJCalenderTableViewNoDataHeader.h"
 #import "SSJCalendarTabelViewHeaderView.h"
-#import "SSJCalenderDetailViewController.h"
+#import "SSJCalendarTableViewCell.h"
+#import "SSJBillingChargeCell.h"
 #import "SSJCalenderTableViewCell.h"
 
 #import "SSJDatabaseQueue.h"
@@ -22,8 +24,6 @@
 #import "FMDB.h"
 #import "SSJShareManager.h"
 #import <TencentOpenAPI/QQApiInterface.h>
-
-
 
 @interface SSJCalendarViewController ()
 
@@ -276,7 +276,7 @@
             recordMakingVC.selectedDay = weakSelf.selectedDay;
             recordMakingVC.selectedMonth = weakSelf.selectedMonth;
             recordMakingVC.selectedYear = weakSelf.selectedYear;
-            UINavigationController *recordNav = [[UINavigationController alloc]initWithRootViewController:recordMakingVC];
+            SSJNavigationController *recordNav = [[SSJNavigationController alloc]initWithRootViewController:recordMakingVC];
             [weakSelf presentViewController:recordNav animated:YES completion:NULL];
         };
     }
@@ -321,7 +321,7 @@
     recordMakingVC.selectedDay = self.selectedDay;
     recordMakingVC.selectedMonth = self.selectedMonth;
     recordMakingVC.selectedYear = self.selectedYear;
-    UINavigationController *recordNav = [[UINavigationController alloc]initWithRootViewController:recordMakingVC];
+    SSJNavigationController *recordNav = [[SSJNavigationController alloc]initWithRootViewController:recordMakingVC];
     [self presentViewController:recordNav animated:YES completion:NULL];
 }
 
