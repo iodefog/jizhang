@@ -9,7 +9,7 @@
 #import "SSJLoginViewController+SSJCategory.h"
 #import "UIViewController+SSJPageFlow.h"
 #import "SSJUserTableManager.h"
-
+#import "SSJNavigationController.h"
 
 @implementation SSJLoginViewController (SSJCategory)
 
@@ -34,7 +34,7 @@
     };
     
 //    [loginVC ssj_showBackButtonWithTarget:loginVC selector:@selector(backOffAction)];
-    UINavigationController *naviVC = [[UINavigationController alloc] initWithRootViewController:loginVC];
+    SSJNavigationController *naviVC = [[SSJNavigationController alloc] initWithRootViewController:loginVC];
     [currentVC presentViewController:naviVC animated:YES completion:NULL];
     
     return YES;

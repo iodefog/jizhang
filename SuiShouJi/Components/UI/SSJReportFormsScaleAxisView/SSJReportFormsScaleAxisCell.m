@@ -56,6 +56,10 @@
         @strongify(self);
         self.scaleValueLab.text = scaleValue;
     }];
+    [[RACObserve(_item, font) takeUntil:[self rac_prepareForReuseSignal]] subscribeNext:^(UIFont *font) {
+        @strongify(self);
+        self.scaleValueLab.font = font;
+    }];
     [[RACObserve(_item, scaleColor) takeUntil:[self rac_prepareForReuseSignal]] subscribeNext:^(UIColor *scaleColor) {
         @strongify(self);
         self.scaleValueLab.textColor = scaleColor;

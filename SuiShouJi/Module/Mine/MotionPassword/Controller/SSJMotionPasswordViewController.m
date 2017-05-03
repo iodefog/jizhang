@@ -7,6 +7,7 @@
 //
 
 #import "SSJMotionPasswordViewController.h"
+#import "SSJNavigationController.h"
 #import "SSJLoginViewController.h"
 #import "SCYMotionEncryptionView.h"
 #import "SSJUserTableManager.h"
@@ -84,7 +85,7 @@ static const int kVerifyFailureTimesLimit = 5;
                 }
                 [controller dismissViewControllerAnimated:YES completion:NULL];
             };
-            UINavigationController *naviVC = [[UINavigationController alloc] initWithRootViewController:motionVC];
+            SSJNavigationController *naviVC = [[SSJNavigationController alloc] initWithRootViewController:motionVC];
             [currentVC presentViewController:naviVC animated:animated completion:NULL];
             
             return;

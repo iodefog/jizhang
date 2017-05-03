@@ -164,7 +164,8 @@
         __weak typeof(self) wself = self;
         _imageSelectionView = [[SSJCategoryEditableCollectionView alloc] init];
         _imageSelectionView.editable = NO;
-        _imageSelectionView.itemSize = CGSizeMake((self.width - 20) * 0.2, 70);
+        _imageSelectionView.contentInset = UIEdgeInsetsMake(10, 14, 20, 14);
+        _imageSelectionView.itemSize = CGSizeMake(floor((self.width - 28) * 0.2), 50);
         _imageSelectionView.selectedItemsChangeHandle = ^(SSJCategoryEditableCollectionView *view) {
             SSJRecordMakingCategoryItem *selectedItem = [view.selectedItems firstObject];
             wself.selectedImage = selectedItem.categoryImage;

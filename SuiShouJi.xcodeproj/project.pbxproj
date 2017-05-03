@@ -1423,6 +1423,19 @@
 		7DB7E4541EB98B26002383C5 /* SSJSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DB7E4491EB98821002383C5 /* SSJSegmentedControl.m */; };
 		7DB7E4551EB98B27002383C5 /* SSJSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DB7E4491EB98821002383C5 /* SSJSegmentedControl.m */; };
 		7DB7E4561EB98B27002383C5 /* SSJSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DB7E4491EB98821002383C5 /* SSJSegmentedControl.m */; };
+		7DB7E45A1EB9E260002383C5 /* SSJNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DB7E4581EB9E125002383C5 /* SSJNavigationController.m */; };
+		7DB7E45B1EB9E260002383C5 /* SSJNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DB7E4581EB9E125002383C5 /* SSJNavigationController.m */; };
+		7DB7E45C1EB9E262002383C5 /* SSJNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DB7E4581EB9E125002383C5 /* SSJNavigationController.m */; };
+		7DB7E45D1EB9E262002383C5 /* SSJNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DB7E4581EB9E125002383C5 /* SSJNavigationController.m */; };
+		7DB7E45E1EB9E263002383C5 /* SSJNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DB7E4581EB9E125002383C5 /* SSJNavigationController.m */; };
+		7DB7E45F1EB9E263002383C5 /* SSJNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DB7E4581EB9E125002383C5 /* SSJNavigationController.m */; };
+		7DB7E4601EB9E264002383C5 /* SSJNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DB7E4581EB9E125002383C5 /* SSJNavigationController.m */; };
+		7DB7E4611EB9E264002383C5 /* SSJNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DB7E4581EB9E125002383C5 /* SSJNavigationController.m */; };
+		7DB7E4621EB9E265002383C5 /* SSJNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DB7E4581EB9E125002383C5 /* SSJNavigationController.m */; };
+		7DB7E4631EB9E266002383C5 /* SSJNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DB7E4581EB9E125002383C5 /* SSJNavigationController.m */; };
+		7DB7E4641EB9E267002383C5 /* SSJNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DB7E4581EB9E125002383C5 /* SSJNavigationController.m */; };
+		7DB7E4651EB9E267002383C5 /* SSJNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DB7E4581EB9E125002383C5 /* SSJNavigationController.m */; };
+		7DB7E4661EB9E268002383C5 /* SSJNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DB7E4581EB9E125002383C5 /* SSJNavigationController.m */; };
 		7DB9F81A1DFFC8C90084E998 /* SSJReportFormsNoDataCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DB9F8191DFFC8C90084E998 /* SSJReportFormsNoDataCell.m */; };
 		7DB9F81D1DFFC8C90084E998 /* SSJReportFormsNoDataCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DB9F8191DFFC8C90084E998 /* SSJReportFormsNoDataCell.m */; };
 		7DB9F8281DFFC9230084E998 /* SSJReportFormsNoDataCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DB9F8271DFFC9230084E998 /* SSJReportFormsNoDataCellItem.m */; };
@@ -1439,7 +1452,6 @@
 		7DBA55521D6BF53500C02D79 /* SSJLoanFundAccountSelectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DBA55511D6BF53500C02D79 /* SSJLoanFundAccountSelectionCell.m */; };
 		7DBA55561D6BF76300C02D79 /* SSJLoanFundAccountSelectionCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DBA55551D6BF76300C02D79 /* SSJLoanFundAccountSelectionCellItem.m */; };
 		7DBA555A1D6BFAF300C02D79 /* SSJLoanFundAccountSelectionViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DBA55591D6BFAF300C02D79 /* SSJLoanFundAccountSelectionViewItem.m */; };
-		7DBB38211E55BE2F0075E638 /* SuiShouJi-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7DBB381D1E55BE2F0075E638 /* SuiShouJi-Info.plist */; };
 		7DBB38221E55BE2F0075E638 /* YouYuJiZhangBao-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7DBB381E1E55BE2F0075E638 /* YouYuJiZhangBao-Info.plist */; };
 		7DBB38231E55BE2F0075E638 /* YouYuJiZhangBen-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7DBB381F1E55BE2F0075E638 /* YouYuJiZhangBen-Info.plist */; };
 		7DBB38241E55BE2F0075E638 /* YouYuJiZhangGuanJia-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7DBB38201E55BE2F0075E638 /* YouYuJiZhangGuanJia-Info.plist */; };
@@ -1983,7 +1995,6 @@
 		7DBB3C991E55C2EE0075E638 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D4A431D1CC86F51002F0264 /* AVFoundation.framework */; };
 		7DBB3C9A1E55C2EE0075E638 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD0E43F61C21365100F9179D /* Security.framework */; };
 		7DBB3C9B1E55C2EE0075E638 /* libPods-SuiShouJi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DCB8AA1DC23E6D40C33EB5B /* libPods-SuiShouJi.a */; };
-		7DBB3C9C1E55C2EE0075E638 /* libPods-SuiShouJi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DCB8AA1DC23E6D40C33EB5B /* libPods-SuiShouJi.a */; };
 		7DBB3C9E1E55C2EE0075E638 /* pushsound.wav in Resources */ = {isa = PBXBuildFile; fileRef = BD6C388E1C910A8F000E2E42 /* pushsound.wav */; };
 		7DBB3C9F1E55C2EE0075E638 /* YouYuJiZhangBen-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7DBB381F1E55BE2F0075E638 /* YouYuJiZhangBen-Info.plist */; };
 		7DBB3CA01E55C2EE0075E638 /* xiaomao.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9CAF731B1E03EAD90061ADB8 /* xiaomao.gif */; };
@@ -2546,7 +2557,6 @@
 		7DBB41341E55C4E00075E638 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D4A431D1CC86F51002F0264 /* AVFoundation.framework */; };
 		7DBB41351E55C4E00075E638 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD0E43F61C21365100F9179D /* Security.framework */; };
 		7DBB41361E55C4E00075E638 /* libPods-SuiShouJi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DCB8AA1DC23E6D40C33EB5B /* libPods-SuiShouJi.a */; };
-		7DBB41371E55C4E00075E638 /* libPods-SuiShouJi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DCB8AA1DC23E6D40C33EB5B /* libPods-SuiShouJi.a */; };
 		7DBB41391E55C4E00075E638 /* pushsound.wav in Resources */ = {isa = PBXBuildFile; fileRef = BD6C388E1C910A8F000E2E42 /* pushsound.wav */; };
 		7DBB413A1E55C4E00075E638 /* YouYuJiZhangBen-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7DBB381F1E55BE2F0075E638 /* YouYuJiZhangBen-Info.plist */; };
 		7DBB413B1E55C4E00075E638 /* xiaomao.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9CAF731B1E03EAD90061ADB8 /* xiaomao.gif */; };
@@ -3443,7 +3453,6 @@
 		7DFFD5BE1D670BB7000FDAA6 /* SSJLoanListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DFFD5BD1D670BB7000FDAA6 /* SSJLoanListCell.m */; };
 		7DFFD5C61D67201E000FDAA6 /* SSJAddOrEditLoanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DFFD5C51D67201E000FDAA6 /* SSJAddOrEditLoanViewController.m */; };
 		81159558A04406B56D1F36B3 /* libPods-SuiShouJiEnterprise.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FFD30CB9DFEC254EA2C4274 /* libPods-SuiShouJiEnterprise.a */; };
-		8428485CF9D80778A17CA157 /* libPods-SuiShouJiEnterprise.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FFD30CB9DFEC254EA2C4274 /* libPods-SuiShouJiEnterprise.a */; };
 		910DD6911DF7B47E00A73F0C /* SSJMineHomeCollectionImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 910DD68F1DF7B47E00A73F0C /* SSJMineHomeCollectionImageCell.m */; };
 		9119A8001E0CB7B500374B62 /* SSJReportFormCanYinChartCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 91FD904C1E0B8319001C64B7 /* SSJReportFormCanYinChartCell.m */; };
 		915294911EB0718100C63264 /* SSJThemBgImageClipViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 915294901EB0718100C63264 /* SSJThemBgImageClipViewController.m */; };
@@ -4942,8 +4951,6 @@
 		9C4C22451E9E30C8000C5F15 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D4A431D1CC86F51002F0264 /* AVFoundation.framework */; };
 		9C4C22461E9E30C8000C5F15 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD0E43F61C21365100F9179D /* Security.framework */; };
 		9C4C22471E9E30C8000C5F15 /* libPods-SuiShouJi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DCB8AA1DC23E6D40C33EB5B /* libPods-SuiShouJi.a */; };
-		9C4C22481E9E30C8000C5F15 /* libPods-SuiShouJi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DCB8AA1DC23E6D40C33EB5B /* libPods-SuiShouJi.a */; };
-		9C4C22491E9E30C8000C5F15 /* libPods-SuiShouJi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DCB8AA1DC23E6D40C33EB5B /* libPods-SuiShouJi.a */; };
 		9C4C224B1E9E30C8000C5F15 /* pushsound.wav in Resources */ = {isa = PBXBuildFile; fileRef = BD6C388E1C910A8F000E2E42 /* pushsound.wav */; };
 		9C4C224C1E9E30C8000C5F15 /* YouYuJiZhangBen-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7DBB381F1E55BE2F0075E638 /* YouYuJiZhangBen-Info.plist */; };
 		9C4C224D1E9E30C8000C5F15 /* MJRefresh.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9C155E861E68572700FDFD18 /* MJRefresh.bundle */; };
@@ -4951,7 +4958,6 @@
 		9C4C224F1E9E30C8000C5F15 /* youyujizhangpro-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9C7D31CA1E8E08980093001F /* youyujizhangpro-Info.plist */; };
 		9C4C22501E9E30C8000C5F15 /* xiaomao.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9CAF731B1E03EAD90061ADB8 /* xiaomao.gif */; };
 		9C4C22511E9E30C8000C5F15 /* SSJCalenderTableViewNoDataHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7D5F32A11CEAE6C10086B67E /* SSJCalenderTableViewNoDataHeader.xib */; };
-		9C4C22521E9E30C8000C5F15 /* 9188JiZhangBen-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9C3849751E641D1100BF4AF9 /* 9188JiZhangBen-Info.plist */; };
 		9C4C22531E9E30C8000C5F15 /* mydatabase.db in Resources */ = {isa = PBXBuildFile; fileRef = 7D6AAB731C322E0C0007C0A3 /* mydatabase.db */; };
 		9C4C22541E9E30C8000C5F15 /* 9188.cer in Resources */ = {isa = PBXBuildFile; fileRef = 9C23EA4C1DDAD4FE0003C5AB /* 9188.cer */; };
 		9C4C22551E9E30C8000C5F15 /* sr_refresh@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BD0432DB1C1A77BB0051E7AB /* sr_refresh@2x.png */; };
@@ -4985,18 +4991,6 @@
 		9C53A3BA1D420A01003BA2F0 /* SSJNewMemberViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C53A3B91D420A01003BA2F0 /* SSJNewMemberViewController.m */; };
 		9C53A3C01D45A9D8003BA2F0 /* SSJNewMemberHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C53A3BF1D45A9D8003BA2F0 /* SSJNewMemberHeaderView.m */; };
 		9C56E1301D1A87640057895D /* SSJRecordMakingStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C56E12F1D1A87640057895D /* SSJRecordMakingStore.m */; };
-		9C5E99A91EB9CDB000C5B346 /* customBackGround.zip in Resources */ = {isa = PBXBuildFile; fileRef = 9C03D87E1EB855D600D845DD /* customBackGround.zip */; };
-		9C5E99AA1EB9CDB000C5B346 /* customBackGround.zip in Resources */ = {isa = PBXBuildFile; fileRef = 9C03D87E1EB855D600D845DD /* customBackGround.zip */; };
-		9C5E99AB1EB9CDB100C5B346 /* customBackGround.zip in Resources */ = {isa = PBXBuildFile; fileRef = 9C03D87E1EB855D600D845DD /* customBackGround.zip */; };
-		9C5E99AC1EB9CDB200C5B346 /* customBackGround.zip in Resources */ = {isa = PBXBuildFile; fileRef = 9C03D87E1EB855D600D845DD /* customBackGround.zip */; };
-		9C5E99AD1EB9CDB200C5B346 /* customBackGround.zip in Resources */ = {isa = PBXBuildFile; fileRef = 9C03D87E1EB855D600D845DD /* customBackGround.zip */; };
-		9C5E99AE1EB9CDB300C5B346 /* customBackGround.zip in Resources */ = {isa = PBXBuildFile; fileRef = 9C03D87E1EB855D600D845DD /* customBackGround.zip */; };
-		9C5E99AF1EB9CDB300C5B346 /* customBackGround.zip in Resources */ = {isa = PBXBuildFile; fileRef = 9C03D87E1EB855D600D845DD /* customBackGround.zip */; };
-		9C5E99B01EB9CDB400C5B346 /* customBackGround.zip in Resources */ = {isa = PBXBuildFile; fileRef = 9C03D87E1EB855D600D845DD /* customBackGround.zip */; };
-		9C5E99B11EB9CDB600C5B346 /* customBackGround.zip in Resources */ = {isa = PBXBuildFile; fileRef = 9C03D87E1EB855D600D845DD /* customBackGround.zip */; };
-		9C5E99B21EB9CDB700C5B346 /* customBackGround.zip in Resources */ = {isa = PBXBuildFile; fileRef = 9C03D87E1EB855D600D845DD /* customBackGround.zip */; };
-		9C5E99B31EB9CDB700C5B346 /* customBackGround.zip in Resources */ = {isa = PBXBuildFile; fileRef = 9C03D87E1EB855D600D845DD /* customBackGround.zip */; };
-		9C5E99B41EB9CDB800C5B346 /* customBackGround.zip in Resources */ = {isa = PBXBuildFile; fileRef = 9C03D87E1EB855D600D845DD /* customBackGround.zip */; };
 		9C6167331E4D605A00D9209A /* SSJDatabaseVersion12.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6167321E4D605A00D9209A /* SSJDatabaseVersion12.m */; };
 		9C61AAA71D5B30DE005DC9BD /* SSJThemeDownLoadCompleteService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61AAA61D5B30DE005DC9BD /* SSJThemeDownLoadCompleteService.m */; };
 		9C61FD1F1EAE0C2800971F0F /* SSJHomeThemeModifyView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61FD1E1EAE0C2800971F0F /* SSJHomeThemeModifyView.m */; };
@@ -5039,12 +5033,10 @@
 		9C6CAFB41E7A2AFC00262FAF /* SSJBookKeepingHomeListItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6CAFA51E76824B00262FAF /* SSJBookKeepingHomeListItem.m */; };
 		9C6CAFB51E7A2AFC00262FAF /* SSJBookKeepingHomeListItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6CAFA51E76824B00262FAF /* SSJBookKeepingHomeListItem.m */; };
 		9C6CAFB81E7A2B2700262FAF /* SSJBookKeepingHomeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6CAFA21E76824300262FAF /* SSJBookKeepingHomeHelper.m */; };
-		9C6CAFBA1E7A2B2800262FAF /* SSJBookKeepingHomeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6CAFA21E76824300262FAF /* SSJBookKeepingHomeHelper.m */; };
 		9C6CAFBB1E7A2B2800262FAF /* SSJBookKeepingHomeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6CAFA21E76824300262FAF /* SSJBookKeepingHomeHelper.m */; };
 		9C6CAFBC1E7A2B2900262FAF /* SSJBookKeepingHomeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6CAFA21E76824300262FAF /* SSJBookKeepingHomeHelper.m */; };
 		9C6CAFBD1E7A2B2900262FAF /* SSJBookKeepingHomeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6CAFA21E76824300262FAF /* SSJBookKeepingHomeHelper.m */; };
 		9C6CAFC01E7A2BC800262FAF /* SSJAnnouncementDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE377231E6837D800218655 /* SSJAnnouncementDetailCell.m */; };
-		9C6CAFC21E7A2BCA00262FAF /* SSJAnnouncementDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE377231E6837D800218655 /* SSJAnnouncementDetailCell.m */; };
 		9C6CAFC31E7A2BCA00262FAF /* SSJAnnouncementDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE377231E6837D800218655 /* SSJAnnouncementDetailCell.m */; };
 		9C6CAFC41E7A2BCB00262FAF /* SSJAnnouncementDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE377231E6837D800218655 /* SSJAnnouncementDetailCell.m */; };
 		9C6CAFC51E7A2BCC00262FAF /* SSJAnnouncementDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE377231E6837D800218655 /* SSJAnnouncementDetailCell.m */; };
@@ -5053,14 +5045,7 @@
 		9C6CAFCD1E7A2BD400262FAF /* SSJMoreHomeAnnouncementButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE377251E6837D800218655 /* SSJMoreHomeAnnouncementButton.m */; };
 		9C6CAFCE1E7A2BD500262FAF /* SSJMoreHomeAnnouncementButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE377251E6837D800218655 /* SSJMoreHomeAnnouncementButton.m */; };
 		9C6CAFCF1E7A2BD500262FAF /* SSJMoreHomeAnnouncementButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE377251E6837D800218655 /* SSJMoreHomeAnnouncementButton.m */; };
-		9C6CAFD41E7A2BDB00262FAF /* SSJScrollalbleAnnounceView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE377271E6837D800218655 /* SSJScrollalbleAnnounceView.m */; };
-		9C6CAFD51E7A2BDC00262FAF /* SSJScrollalbleAnnounceView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE377271E6837D800218655 /* SSJScrollalbleAnnounceView.m */; };
-		9C6CAFD61E7A2BDC00262FAF /* SSJScrollalbleAnnounceView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE377271E6837D800218655 /* SSJScrollalbleAnnounceView.m */; };
-		9C6CAFD71E7A2BDC00262FAF /* SSJScrollalbleAnnounceView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE377271E6837D800218655 /* SSJScrollalbleAnnounceView.m */; };
 		9C6CAFDC1E7A2BF000262FAF /* SSJAnnoucementService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE377201E6837D800218655 /* SSJAnnoucementService.m */; };
-		9C6CAFDD1E7A2BF000262FAF /* SSJAnnoucementService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE377201E6837D800218655 /* SSJAnnoucementService.m */; };
-		9C6CAFDE1E7A2BF100262FAF /* SSJAnnoucementService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE377201E6837D800218655 /* SSJAnnoucementService.m */; };
-		9C6CAFDF1E7A2BF100262FAF /* SSJAnnoucementService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE377201E6837D800218655 /* SSJAnnoucementService.m */; };
 		9C6CAFE41E7A324A00262FAF /* SSJDatabaseVersion14.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6CAFE31E7A324A00262FAF /* SSJDatabaseVersion14.m */; };
 		9C6CAFE51E7A324A00262FAF /* SSJDatabaseVersion14.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6CAFE31E7A324A00262FAF /* SSJDatabaseVersion14.m */; };
 		9C6CAFE71E7A324A00262FAF /* SSJDatabaseVersion14.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6CAFE31E7A324A00262FAF /* SSJDatabaseVersion14.m */; };
@@ -5676,8 +5661,6 @@
 		9C7D2F291E8DF8A80093001F /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D4A431D1CC86F51002F0264 /* AVFoundation.framework */; };
 		9C7D2F2A1E8DF8A80093001F /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD0E43F61C21365100F9179D /* Security.framework */; };
 		9C7D2F2B1E8DF8A80093001F /* libPods-SuiShouJi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DCB8AA1DC23E6D40C33EB5B /* libPods-SuiShouJi.a */; };
-		9C7D2F2C1E8DF8A80093001F /* libPods-SuiShouJi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DCB8AA1DC23E6D40C33EB5B /* libPods-SuiShouJi.a */; };
-		9C7D2F2D1E8DF8A80093001F /* libPods-SuiShouJi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DCB8AA1DC23E6D40C33EB5B /* libPods-SuiShouJi.a */; };
 		9C7D2F2F1E8DF8A80093001F /* pushsound.wav in Resources */ = {isa = PBXBuildFile; fileRef = BD6C388E1C910A8F000E2E42 /* pushsound.wav */; };
 		9C7D2F301E8DF8A80093001F /* YouYuJiZhangBen-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7DBB381F1E55BE2F0075E638 /* YouYuJiZhangBen-Info.plist */; };
 		9C7D2F311E8DF8A80093001F /* MJRefresh.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9C155E861E68572700FDFD18 /* MJRefresh.bundle */; };
@@ -6288,8 +6271,6 @@
 		9C7D31A01E8DF96B0093001F /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D4A431D1CC86F51002F0264 /* AVFoundation.framework */; };
 		9C7D31A11E8DF96B0093001F /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD0E43F61C21365100F9179D /* Security.framework */; };
 		9C7D31A21E8DF96B0093001F /* libPods-SuiShouJi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DCB8AA1DC23E6D40C33EB5B /* libPods-SuiShouJi.a */; };
-		9C7D31A31E8DF96B0093001F /* libPods-SuiShouJi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DCB8AA1DC23E6D40C33EB5B /* libPods-SuiShouJi.a */; };
-		9C7D31A41E8DF96B0093001F /* libPods-SuiShouJi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DCB8AA1DC23E6D40C33EB5B /* libPods-SuiShouJi.a */; };
 		9C7D31A61E8DF96B0093001F /* pushsound.wav in Resources */ = {isa = PBXBuildFile; fileRef = BD6C388E1C910A8F000E2E42 /* pushsound.wav */; };
 		9C7D31A71E8DF96B0093001F /* YouYuJiZhangBen-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7DBB381F1E55BE2F0075E638 /* YouYuJiZhangBen-Info.plist */; };
 		9C7D31A81E8DF96B0093001F /* MJRefresh.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9C155E861E68572700FDFD18 /* MJRefresh.bundle */; };
@@ -6903,8 +6884,6 @@
 		9C80FEE41E95E88E00B1BAAC /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D4A431D1CC86F51002F0264 /* AVFoundation.framework */; };
 		9C80FEE51E95E88E00B1BAAC /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD0E43F61C21365100F9179D /* Security.framework */; };
 		9C80FEE61E95E88E00B1BAAC /* libPods-SuiShouJi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DCB8AA1DC23E6D40C33EB5B /* libPods-SuiShouJi.a */; };
-		9C80FEE71E95E88E00B1BAAC /* libPods-SuiShouJi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DCB8AA1DC23E6D40C33EB5B /* libPods-SuiShouJi.a */; };
-		9C80FEE81E95E88E00B1BAAC /* libPods-SuiShouJi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DCB8AA1DC23E6D40C33EB5B /* libPods-SuiShouJi.a */; };
 		9C80FEEA1E95E88E00B1BAAC /* pushsound.wav in Resources */ = {isa = PBXBuildFile; fileRef = BD6C388E1C910A8F000E2E42 /* pushsound.wav */; };
 		9C80FEEB1E95E88E00B1BAAC /* YouYuJiZhangBen-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7DBB381F1E55BE2F0075E638 /* YouYuJiZhangBen-Info.plist */; };
 		9C80FEEC1E95E88E00B1BAAC /* MJRefresh.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9C155E861E68572700FDFD18 /* MJRefresh.bundle */; };
@@ -6923,7 +6902,6 @@
 		9C80FEF91E95E88E00B1BAAC /* rain_sound.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D4A43091CC63755002F0264 /* rain_sound.wav */; };
 		9C80FEFA1E95E88E00B1BAAC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BD543C4B1C1A6DBC00910D61 /* Assets.xcassets */; };
 		9C80FEFB1E95E88E00B1BAAC /* sr_refresh.png in Resources */ = {isa = PBXBuildFile; fileRef = BD0432DA1C1A77BB0051E7AB /* sr_refresh.png */; };
-		9C80FEFC1E95E88E00B1BAAC /* YouYuJiZhang-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7DBB3A6F1E55C13F0075E638 /* YouYuJiZhang-Info.plist */; };
 		9C80FEFD1E95E88E00B1BAAC /* 9188jizhangpro-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9C7D31CB1E8E08980093001F /* 9188jizhangpro-Info.plist */; };
 		9C80FEFE1E95E88E00B1BAAC /* JiZhangGuanJia-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7DBB3F0A1E55C4530075E638 /* JiZhangGuanJia-Info.plist */; };
 		9C80FEFF1E95E88E00B1BAAC /* YouYuJiZhangGuanJia-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7DBB38201E55BE2F0075E638 /* YouYuJiZhangGuanJia-Info.plist */; };
@@ -7589,8 +7567,6 @@
 		9C9CF0A41EA5F73A007657FE /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D4A431D1CC86F51002F0264 /* AVFoundation.framework */; };
 		9C9CF0A51EA5F73A007657FE /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD0E43F61C21365100F9179D /* Security.framework */; };
 		9C9CF0A61EA5F73A007657FE /* libPods-SuiShouJi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DCB8AA1DC23E6D40C33EB5B /* libPods-SuiShouJi.a */; };
-		9C9CF0A71EA5F73A007657FE /* libPods-SuiShouJi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DCB8AA1DC23E6D40C33EB5B /* libPods-SuiShouJi.a */; };
-		9C9CF0A81EA5F73A007657FE /* libPods-SuiShouJi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DCB8AA1DC23E6D40C33EB5B /* libPods-SuiShouJi.a */; };
 		9C9CF0AA1EA5F73A007657FE /* pushsound.wav in Resources */ = {isa = PBXBuildFile; fileRef = BD6C388E1C910A8F000E2E42 /* pushsound.wav */; };
 		9C9CF0AB1EA5F73A007657FE /* YouYuJiZhangBen-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7DBB381F1E55BE2F0075E638 /* YouYuJiZhangBen-Info.plist */; };
 		9C9CF0AC1EA5F73A007657FE /* MJRefresh.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9C155E861E68572700FDFD18 /* MJRefresh.bundle */; };
@@ -7611,7 +7587,6 @@
 		9C9CF0BB1EA5F73A007657FE /* sr_refresh.png in Resources */ = {isa = PBXBuildFile; fileRef = BD0432DA1C1A77BB0051E7AB /* sr_refresh.png */; };
 		9C9CF0BC1EA5F73A007657FE /* YouYuJiZhang-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7DBB3A6F1E55C13F0075E638 /* YouYuJiZhang-Info.plist */; };
 		9C9CF0BD1EA5F73A007657FE /* 9188jizhangpro-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9C7D31CB1E8E08980093001F /* 9188jizhangpro-Info.plist */; };
-		9C9CF0BE1EA5F73A007657FE /* JiZhangGuanJia-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7DBB3F0A1E55C4530075E638 /* JiZhangGuanJia-Info.plist */; };
 		9C9CF0BF1EA5F73A007657FE /* YouYuJiZhangGuanJia-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7DBB38201E55BE2F0075E638 /* YouYuJiZhangGuanJia-Info.plist */; };
 		9C9CF0C01EA5F73A007657FE /* homeDefualtLoading.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9CFBAC311E07D4DE00C55814 /* homeDefualtLoading.gif */; };
 		9C9CF0C11EA5F73A007657FE /* homeLoading.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9CAF731D1E03EAE50061ADB8 /* homeLoading.gif */; };
@@ -7749,26 +7724,14 @@
 		9CE3772B1E6837D800218655 /* SSJAnnouncementDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE377231E6837D800218655 /* SSJAnnouncementDetailCell.m */; };
 		9CE3772C1E6837D800218655 /* SSJMoreHomeAnnouncementButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE377251E6837D800218655 /* SSJMoreHomeAnnouncementButton.m */; };
 		9CE3772D1E6837D800218655 /* SSJScrollalbleAnnounceView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE377271E6837D800218655 /* SSJScrollalbleAnnounceView.m */; };
-		9CE4AD211E8375E20051B6DB /* SSJAnnoucementItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE3771D1E6837D800218655 /* SSJAnnoucementItem.m */; };
-		9CE4AD221E8375E20051B6DB /* SSJAnnoucementItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE3771D1E6837D800218655 /* SSJAnnoucementItem.m */; };
-		9CE4AD231E8375E30051B6DB /* SSJAnnoucementItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE3771D1E6837D800218655 /* SSJAnnoucementItem.m */; };
-		9CE4AD241E8375E30051B6DB /* SSJAnnoucementItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE3771D1E6837D800218655 /* SSJAnnoucementItem.m */; };
 		9CE4AD271E8375E50051B6DB /* SSJAnnoucementItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE3771D1E6837D800218655 /* SSJAnnoucementItem.m */; };
 		9CE4AD281E8376220051B6DB /* SSJAnnoucementService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE377201E6837D800218655 /* SSJAnnoucementService.m */; };
-		9CE4AD291E8376220051B6DB /* SSJAnnoucementService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE377201E6837D800218655 /* SSJAnnoucementService.m */; };
 		9CE4AD2B1E8376240051B6DB /* SSJAnnoucementService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE377201E6837D800218655 /* SSJAnnoucementService.m */; };
 		9CE4AD2C1E8376240051B6DB /* SSJAnnoucementService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE377201E6837D800218655 /* SSJAnnoucementService.m */; };
 		9CE4AD2D1E8376250051B6DB /* SSJAnnoucementService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE377201E6837D800218655 /* SSJAnnoucementService.m */; };
 		9CE4AD301E8376260051B6DB /* SSJAnnoucementService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE377201E6837D800218655 /* SSJAnnoucementService.m */; };
 		9CE4AD331E83762B0051B6DB /* SSJAnnouncementDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE377231E6837D800218655 /* SSJAnnouncementDetailCell.m */; };
-		9CE4AD341E83762C0051B6DB /* SSJAnnouncementDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE377231E6837D800218655 /* SSJAnnouncementDetailCell.m */; };
-		9CE4AD351E83762C0051B6DB /* SSJAnnouncementDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE377231E6837D800218655 /* SSJAnnouncementDetailCell.m */; };
-		9CE4AD361E83762D0051B6DB /* SSJAnnouncementDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE377231E6837D800218655 /* SSJAnnouncementDetailCell.m */; };
 		9CE4AD391E83762F0051B6DB /* SSJAnnouncementDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE377231E6837D800218655 /* SSJAnnouncementDetailCell.m */; };
-		9CE4AD3C1E8376340051B6DB /* SSJMoreHomeAnnouncementButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE377251E6837D800218655 /* SSJMoreHomeAnnouncementButton.m */; };
-		9CE4AD3D1E8376340051B6DB /* SSJMoreHomeAnnouncementButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE377251E6837D800218655 /* SSJMoreHomeAnnouncementButton.m */; };
-		9CE4AD3E1E8376350051B6DB /* SSJMoreHomeAnnouncementButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE377251E6837D800218655 /* SSJMoreHomeAnnouncementButton.m */; };
-		9CE4AD3F1E8376350051B6DB /* SSJMoreHomeAnnouncementButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE377251E6837D800218655 /* SSJMoreHomeAnnouncementButton.m */; };
 		9CE4AD421E8376370051B6DB /* SSJMoreHomeAnnouncementButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE377251E6837D800218655 /* SSJMoreHomeAnnouncementButton.m */; };
 		9CE4AD431E83763B0051B6DB /* SSJScrollalbleAnnounceView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE377271E6837D800218655 /* SSJScrollalbleAnnounceView.m */; };
 		9CE4AD441E83763B0051B6DB /* SSJScrollalbleAnnounceView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE377271E6837D800218655 /* SSJScrollalbleAnnounceView.m */; };
@@ -7776,15 +7739,8 @@
 		9CE4AD471E83763D0051B6DB /* SSJScrollalbleAnnounceView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE377271E6837D800218655 /* SSJScrollalbleAnnounceView.m */; };
 		9CE4AD481E83763D0051B6DB /* SSJScrollalbleAnnounceView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE377271E6837D800218655 /* SSJScrollalbleAnnounceView.m */; };
 		9CE4AD4B1E83763F0051B6DB /* SSJScrollalbleAnnounceView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE377271E6837D800218655 /* SSJScrollalbleAnnounceView.m */; };
-		9CE4AD4E1E8376700051B6DB /* SSJBookKeepingHomeListItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6CAFA51E76824B00262FAF /* SSJBookKeepingHomeListItem.m */; };
-		9CE4AD4F1E8376710051B6DB /* SSJBookKeepingHomeListItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6CAFA51E76824B00262FAF /* SSJBookKeepingHomeListItem.m */; };
-		9CE4AD501E8376710051B6DB /* SSJBookKeepingHomeListItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6CAFA51E76824B00262FAF /* SSJBookKeepingHomeListItem.m */; };
-		9CE4AD511E8376720051B6DB /* SSJBookKeepingHomeListItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6CAFA51E76824B00262FAF /* SSJBookKeepingHomeListItem.m */; };
 		9CE4AD541E8376740051B6DB /* SSJBookKeepingHomeListItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6CAFA51E76824B00262FAF /* SSJBookKeepingHomeListItem.m */; };
 		9CE4AD571E83768E0051B6DB /* SSJBookKeepingHomeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6CAFA21E76824300262FAF /* SSJBookKeepingHomeHelper.m */; };
-		9CE4AD581E83768F0051B6DB /* SSJBookKeepingHomeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6CAFA21E76824300262FAF /* SSJBookKeepingHomeHelper.m */; };
-		9CE4AD591E83768F0051B6DB /* SSJBookKeepingHomeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6CAFA21E76824300262FAF /* SSJBookKeepingHomeHelper.m */; };
-		9CE4AD5B1E8376910051B6DB /* SSJBookKeepingHomeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6CAFA21E76824300262FAF /* SSJBookKeepingHomeHelper.m */; };
 		9CE4AD5E1E8376920051B6DB /* SSJBookKeepingHomeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6CAFA21E76824300262FAF /* SSJBookKeepingHomeHelper.m */; };
 		9CE7D7851D2F4EA40013E97B /* SSJBannerHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE7D7841D2F4EA40013E97B /* SSJBannerHeaderView.m */; };
 		9CE7D78F1D2F4ECA0013E97B /* SSJAdItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE7D78E1D2F4ECA0013E97B /* SSJAdItem.m */; };
@@ -8172,7 +8128,6 @@
 		9CFBAC441E07E6F700C55814 /* SSJCreditRepaymentSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CFBAC431E07E6F700C55814 /* SSJCreditRepaymentSyncTable.m */; };
 		9CFBAC471E07E6F700C55814 /* SSJCreditRepaymentSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CFBAC431E07E6F700C55814 /* SSJCreditRepaymentSyncTable.m */; };
 		A3F86B7BFBA3F62C302818B9 /* libPods-SuiShouJi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DCB8AA1DC23E6D40C33EB5B /* libPods-SuiShouJi.a */; };
-		B087CCAE080810E8AC52F3CE /* libPods-SuiShouJi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DCB8AA1DC23E6D40C33EB5B /* libPods-SuiShouJi.a */; };
 		B39301A128D168E2CA563B59 /* libPods-YouYuJiZhangGuanJia.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 54C394CC554BE2031E6172C1 /* libPods-YouYuJiZhangGuanJia.a */; };
 		BD0432EF1C1A77BB0051E7AB /* CDPointActivityIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0432D81C1A77BB0051E7AB /* CDPointActivityIndicator.m */; };
 		BD0432F01C1A77BB0051E7AB /* sr_refresh.png in Resources */ = {isa = PBXBuildFile; fileRef = BD0432DA1C1A77BB0051E7AB /* sr_refresh.png */; };
@@ -8229,11 +8184,8 @@
 		BDC01FF31C2D92E3008B1F75 /* CDAutoHideMessageHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = BDC01FF21C2D92E3008B1F75 /* CDAutoHideMessageHUD.m */; };
 		C0E2B2A04AC1D7D09F602D08 /* libPods-JiZhangGuanJia.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 28D54CCC52994B95633CA5E3 /* libPods-JiZhangGuanJia.a */; };
 		C1EE302265126295E171EB49 /* libPods-YouYuJiZhangLiCai.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F9099E967EA40B5B4F591EA5 /* libPods-YouYuJiZhangLiCai.a */; };
-		D462D30AAB2CA0236A17BF13 /* libPods-SuiShouJi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DCB8AA1DC23E6D40C33EB5B /* libPods-SuiShouJi.a */; };
 		E1CEB4191E8A8B165BBAC41C /* libPods-YouYuJiZhangBao.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D1A7ECDE4745F51DE93EF377 /* libPods-YouYuJiZhangBao.a */; };
-		E84F9798AF83397BBA7DDAD6 /* libPods-SuiShouJi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DCB8AA1DC23E6D40C33EB5B /* libPods-SuiShouJi.a */; };
 		FC8C76456DC126984B2A120A /* libPods-9188JiZhangPro.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C67906F6CFFC0A3639C9DEC3 /* libPods-9188JiZhangPro.a */; };
-		FF577138BF64F6B9A399141B /* libPods-YouYuJiZhang.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BE2668A2D3687E35A1F7D0D /* libPods-YouYuJiZhang.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -8691,6 +8643,8 @@
 		7DB6140B1D2F4BB6009A6F87 /* SCYWinCowryHomeBannerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCYWinCowryHomeBannerView.m; sourceTree = "<group>"; };
 		7DB7E4481EB98821002383C5 /* SSJSegmentedControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJSegmentedControl.h; sourceTree = "<group>"; };
 		7DB7E4491EB98821002383C5 /* SSJSegmentedControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJSegmentedControl.m; sourceTree = "<group>"; };
+		7DB7E4571EB9E125002383C5 /* SSJNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJNavigationController.h; sourceTree = "<group>"; };
+		7DB7E4581EB9E125002383C5 /* SSJNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJNavigationController.m; sourceTree = "<group>"; };
 		7DB9F8181DFFC8C90084E998 /* SSJReportFormsNoDataCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormsNoDataCell.h; sourceTree = "<group>"; };
 		7DB9F8191DFFC8C90084E998 /* SSJReportFormsNoDataCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReportFormsNoDataCell.m; sourceTree = "<group>"; };
 		7DB9F8261DFFC9230084E998 /* SSJReportFormsNoDataCellItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormsNoDataCellItem.h; sourceTree = "<group>"; };
@@ -9645,7 +9599,6 @@
 				7DBB3C991E55C2EE0075E638 /* AVFoundation.framework in Frameworks */,
 				7DBB3C9A1E55C2EE0075E638 /* Security.framework in Frameworks */,
 				7DBB3C9B1E55C2EE0075E638 /* libPods-SuiShouJi.a in Frameworks */,
-				7DBB3C9C1E55C2EE0075E638 /* libPods-SuiShouJi.a in Frameworks */,
 				C1EE302265126295E171EB49 /* libPods-YouYuJiZhangLiCai.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -9663,9 +9616,7 @@
 				7DBB41341E55C4E00075E638 /* AVFoundation.framework in Frameworks */,
 				7DBB41351E55C4E00075E638 /* Security.framework in Frameworks */,
 				7DBB41361E55C4E00075E638 /* libPods-SuiShouJi.a in Frameworks */,
-				7DBB41371E55C4E00075E638 /* libPods-SuiShouJi.a in Frameworks */,
 				81159558A04406B56D1F36B3 /* libPods-SuiShouJiEnterprise.a in Frameworks */,
-				8428485CF9D80778A17CA157 /* libPods-SuiShouJiEnterprise.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -9713,8 +9664,6 @@
 				9C4C22451E9E30C8000C5F15 /* AVFoundation.framework in Frameworks */,
 				9C4C22461E9E30C8000C5F15 /* Security.framework in Frameworks */,
 				9C4C22471E9E30C8000C5F15 /* libPods-SuiShouJi.a in Frameworks */,
-				9C4C22481E9E30C8000C5F15 /* libPods-SuiShouJi.a in Frameworks */,
-				9C4C22491E9E30C8000C5F15 /* libPods-SuiShouJi.a in Frameworks */,
 				2037DEF73FC931CFDC333C7D /* libPods-9188JiZhangBen.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -9732,8 +9681,6 @@
 				9C7D2F291E8DF8A80093001F /* AVFoundation.framework in Frameworks */,
 				9C7D2F2A1E8DF8A80093001F /* Security.framework in Frameworks */,
 				9C7D2F2B1E8DF8A80093001F /* libPods-SuiShouJi.a in Frameworks */,
-				9C7D2F2C1E8DF8A80093001F /* libPods-SuiShouJi.a in Frameworks */,
-				9C7D2F2D1E8DF8A80093001F /* libPods-SuiShouJi.a in Frameworks */,
 				43FB013EC6CC98DC90F5D913 /* libPods-YouYuJiZhangPro.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -9751,8 +9698,6 @@
 				9C7D31A01E8DF96B0093001F /* AVFoundation.framework in Frameworks */,
 				9C7D31A11E8DF96B0093001F /* Security.framework in Frameworks */,
 				9C7D31A21E8DF96B0093001F /* libPods-SuiShouJi.a in Frameworks */,
-				9C7D31A31E8DF96B0093001F /* libPods-SuiShouJi.a in Frameworks */,
-				9C7D31A41E8DF96B0093001F /* libPods-SuiShouJi.a in Frameworks */,
 				FC8C76456DC126984B2A120A /* libPods-9188JiZhangPro.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -9770,10 +9715,7 @@
 				9C80FEE41E95E88E00B1BAAC /* AVFoundation.framework in Frameworks */,
 				9C80FEE51E95E88E00B1BAAC /* Security.framework in Frameworks */,
 				9C80FEE61E95E88E00B1BAAC /* libPods-SuiShouJi.a in Frameworks */,
-				9C80FEE71E95E88E00B1BAAC /* libPods-SuiShouJi.a in Frameworks */,
-				9C80FEE81E95E88E00B1BAAC /* libPods-SuiShouJi.a in Frameworks */,
 				2969FD659CB0F29A997B0743 /* libPods-YouYuJiZhang.a in Frameworks */,
-				FF577138BF64F6B9A399141B /* libPods-YouYuJiZhang.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -9790,8 +9732,6 @@
 				9C9CF0A41EA5F73A007657FE /* AVFoundation.framework in Frameworks */,
 				9C9CF0A51EA5F73A007657FE /* Security.framework in Frameworks */,
 				9C9CF0A61EA5F73A007657FE /* libPods-SuiShouJi.a in Frameworks */,
-				9C9CF0A71EA5F73A007657FE /* libPods-SuiShouJi.a in Frameworks */,
-				9C9CF0A81EA5F73A007657FE /* libPods-SuiShouJi.a in Frameworks */,
 				C0E2B2A04AC1D7D09F602D08 /* libPods-JiZhangGuanJia.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -9825,9 +9765,6 @@
 				7D4A431E1CC86F51002F0264 /* AVFoundation.framework in Frameworks */,
 				BD0E43F71C21365100F9179D /* Security.framework in Frameworks */,
 				A3F86B7BFBA3F62C302818B9 /* libPods-SuiShouJi.a in Frameworks */,
-				E84F9798AF83397BBA7DDAD6 /* libPods-SuiShouJi.a in Frameworks */,
-				B087CCAE080810E8AC52F3CE /* libPods-SuiShouJi.a in Frameworks */,
-				D462D30AAB2CA0236A17BF13 /* libPods-SuiShouJi.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -12838,6 +12775,8 @@
 		BD0433861C1A8DA50051E7AB /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
+				7DB7E4571EB9E125002383C5 /* SSJNavigationController.h */,
+				7DB7E4581EB9E125002383C5 /* SSJNavigationController.m */,
 				BD0433891C1A8DA50051E7AB /* SSJBaseViewController.h */,
 				BD04338A1C1A8DA50051E7AB /* SSJBaseViewController.m */,
 				BD04338B1C1A8DA50051E7AB /* SSJNewBaseTableViewController.h */,
@@ -13527,7 +13466,7 @@
 		BD543C341C1A6DBC00910D61 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0810;
+				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = "___9188___";
 				TargetAttributes = {
 					7D08A0931E4999D30085A8FB = {
@@ -13537,7 +13476,7 @@
 						DevelopmentTeam = 262HTD8ZSJ;
 					};
 					7DBB3A711E55C2EE0075E638 = {
-						DevelopmentTeam = JFBU3W8R6E;
+						DevelopmentTeam = GZ7Q3299CT;
 					};
 					7DBB3F0C1E55C4E00075E638 = {
 						DevelopmentTeam = 747363KXQ6;
@@ -13600,9 +13539,6 @@
 					};
 					9C9CEE561EA5F73A007657FE = {
 						DevelopmentTeam = DHR24CJQ56;
-					};
-					9CECFB191D6D41A700DB2C8B = {
-						DevelopmentTeam = 534SCE47WT;
 					};
 					BD543C3B1C1A6DBC00910D61 = {
 						CreatedOnToolsVersion = 7.2;
@@ -13667,7 +13603,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9C5E99AD1EB9CDB200C5B346 /* customBackGround.zip in Resources */,
 				7D08A2BB1E4999D30085A8FB /* pushsound.wav in Resources */,
 				7D08A2BC1E4999D30085A8FB /* xiaomao.gif in Resources */,
 				7D08A2BD1E4999D30085A8FB /* SSJCalenderTableViewNoDataHeader.xib in Resources */,
@@ -13694,7 +13629,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9C5E99AC1EB9CDB200C5B346 /* customBackGround.zip in Resources */,
 				7DA13C121E35AED7000490A4 /* pushsound.wav in Resources */,
 				7DA13C131E35AED7000490A4 /* xiaomao.gif in Resources */,
 				7DA13C141E35AED7000490A4 /* SSJCalenderTableViewNoDataHeader.xib in Resources */,
@@ -13741,7 +13675,6 @@
 				7DBB3CAE1E55C2EE0075E638 /* homeDefualtLoading.gif in Resources */,
 				9C30AA9D1EAF6EB2008DD51D /* 1000.zip in Resources */,
 				7DBB3CAF1E55C2EE0075E638 /* homeLoading.gif in Resources */,
-				9C5E99AE1EB9CDB300C5B346 /* customBackGround.zip in Resources */,
 				7DBB3CB01E55C2EE0075E638 /* ProjectSettings.plist in Resources */,
 				7DBB3CB11E55C2EE0075E638 /* Localizable.strings in Resources */,
 				7DBB3CB21E55C2EE0075E638 /* YouYuJiZhangBao-Info.plist in Resources */,
@@ -13767,7 +13700,6 @@
 				7DBB41441E55C4E00075E638 /* SuiShouJi-Info.plist in Resources */,
 				7DBB41451E55C4E00075E638 /* rain_sound.wav in Resources */,
 				7DBB41461E55C4E00075E638 /* Assets.xcassets in Resources */,
-				9C5E99AA1EB9CDB000C5B346 /* customBackGround.zip in Resources */,
 				7DBB41471E55C4E00075E638 /* sr_refresh.png in Resources */,
 				7D8952DB1EB2F21700FF6D04 /* 1001.zip in Resources */,
 				7DBB41481E55C4E00075E638 /* YouYuJiZhang-Info.plist in Resources */,
@@ -13803,7 +13735,6 @@
 				7DFB18B21EB0341E00292DD3 /* YouYuJiZhangLiCai-Info.plist in Resources */,
 				7DFB19201EB1E3E400292DD3 /* 1000.zip in Resources */,
 				7DFB18B31EB0341E00292DD3 /* SuiShouJi-Info.plist in Resources */,
-				9C5E99B41EB9CDB800C5B346 /* customBackGround.zip in Resources */,
 				7DFB191F1EB1E3E100292DD3 /* 1001.zip in Resources */,
 				7DFB18B41EB0341E00292DD3 /* rain_sound.wav in Resources */,
 				7DFB18B51EB0341E00292DD3 /* Assets.xcassets in Resources */,
@@ -13840,7 +13771,6 @@
 				9C13F7291E8267D300AC5FA9 /* SuiShouJi-Info.plist in Resources */,
 				9C13F72A1E8267D300AC5FA9 /* rain_sound.wav in Resources */,
 				9C13F72B1E8267D300AC5FA9 /* Assets.xcassets in Resources */,
-				9C5E99AF1EB9CDB300C5B346 /* customBackGround.zip in Resources */,
 				9C13F72C1E8267D300AC5FA9 /* sr_refresh.png in Resources */,
 				9C13F72D1E8267D300AC5FA9 /* YouYuJiZhang-Info.plist in Resources */,
 				9C13F72E1E8267D300AC5FA9 /* JiZhangGuanJia-Info.plist in Resources */,
@@ -13867,7 +13797,6 @@
 				9C4C224F1E9E30C8000C5F15 /* youyujizhangpro-Info.plist in Resources */,
 				9C4C22501E9E30C8000C5F15 /* xiaomao.gif in Resources */,
 				9C4C22511E9E30C8000C5F15 /* SSJCalenderTableViewNoDataHeader.xib in Resources */,
-				9C4C22521E9E30C8000C5F15 /* 9188JiZhangBen-Info.plist in Resources */,
 				9C4C22531E9E30C8000C5F15 /* mydatabase.db in Resources */,
 				9C4C22541E9E30C8000C5F15 /* 9188.cer in Resources */,
 				9C4C22551E9E30C8000C5F15 /* sr_refresh@2x.png in Resources */,
@@ -13876,7 +13805,6 @@
 				9C4C22581E9E30C8000C5F15 /* YouYuJiZhangLiCai-Info.plist in Resources */,
 				9C30AAA11EAF6EB5008DD51D /* 1000.zip in Resources */,
 				9C4C22591E9E30C8000C5F15 /* SuiShouJi-Info.plist in Resources */,
-				9C5E99B21EB9CDB700C5B346 /* customBackGround.zip in Resources */,
 				9C30AA961EAF6EAB008DD51D /* 1001.zip in Resources */,
 				9C4C225A1E9E30C8000C5F15 /* rain_sound.wav in Resources */,
 				9C4C225B1E9E30C8000C5F15 /* Assets.xcassets in Resources */,
@@ -13919,7 +13847,6 @@
 				9C7D2F3F1E8DF8A80093001F /* sr_refresh.png in Resources */,
 				9C7D2F401E8DF8A80093001F /* YouYuJiZhang-Info.plist in Resources */,
 				9C7D2F411E8DF8A80093001F /* JiZhangGuanJia-Info.plist in Resources */,
-				9C5E99A91EB9CDB000C5B346 /* customBackGround.zip in Resources */,
 				9C7D2F421E8DF8A80093001F /* YouYuJiZhangGuanJia-Info.plist in Resources */,
 				9C30AA981EAF6EAF008DD51D /* 1000.zip in Resources */,
 				9C7D2F431E8DF8A80093001F /* homeDefualtLoading.gif in Resources */,
@@ -13956,7 +13883,6 @@
 				9C7D31B61E8DF96B0093001F /* sr_refresh.png in Resources */,
 				9C7D31B71E8DF96B0093001F /* YouYuJiZhang-Info.plist in Resources */,
 				9C7D31B81E8DF96B0093001F /* JiZhangGuanJia-Info.plist in Resources */,
-				9C5E99B01EB9CDB400C5B346 /* customBackGround.zip in Resources */,
 				9C7D31B91E8DF96B0093001F /* YouYuJiZhangGuanJia-Info.plist in Resources */,
 				9C30AA9F1EAF6EB3008DD51D /* 1000.zip in Resources */,
 				9C7D31BA1E8DF96B0093001F /* homeDefualtLoading.gif in Resources */,
@@ -13989,12 +13915,10 @@
 				9C80FEF71E95E88E00B1BAAC /* YouYuJiZhangLiCai-Info.plist in Resources */,
 				9C30AAA21EAF6EB5008DD51D /* 1000.zip in Resources */,
 				9C80FEF81E95E88E00B1BAAC /* SuiShouJi-Info.plist in Resources */,
-				9C5E99B11EB9CDB600C5B346 /* customBackGround.zip in Resources */,
 				9C30AA951EAF6EAA008DD51D /* 1001.zip in Resources */,
 				9C80FEF91E95E88E00B1BAAC /* rain_sound.wav in Resources */,
 				9C80FEFA1E95E88E00B1BAAC /* Assets.xcassets in Resources */,
 				9C80FEFB1E95E88E00B1BAAC /* sr_refresh.png in Resources */,
-				9C80FEFC1E95E88E00B1BAAC /* YouYuJiZhang-Info.plist in Resources */,
 				9C80FEFD1E95E88E00B1BAAC /* 9188jizhangpro-Info.plist in Resources */,
 				9C80FEFE1E95E88E00B1BAAC /* JiZhangGuanJia-Info.plist in Resources */,
 				9C80FEFF1E95E88E00B1BAAC /* YouYuJiZhangGuanJia-Info.plist in Resources */,
@@ -14028,14 +13952,12 @@
 				9C9CF0B71EA5F73A007657FE /* YouYuJiZhangLiCai-Info.plist in Resources */,
 				9C30AAA31EAF6EB6008DD51D /* 1000.zip in Resources */,
 				9C9CF0B81EA5F73A007657FE /* SuiShouJi-Info.plist in Resources */,
-				9C5E99B31EB9CDB700C5B346 /* customBackGround.zip in Resources */,
 				9C30AA971EAF6EAB008DD51D /* 1001.zip in Resources */,
 				9C9CF0B91EA5F73A007657FE /* rain_sound.wav in Resources */,
 				9C9CF0BA1EA5F73A007657FE /* Assets.xcassets in Resources */,
 				9C9CF0BB1EA5F73A007657FE /* sr_refresh.png in Resources */,
 				9C9CF0BC1EA5F73A007657FE /* YouYuJiZhang-Info.plist in Resources */,
 				9C9CF0BD1EA5F73A007657FE /* 9188jizhangpro-Info.plist in Resources */,
-				9C9CF0BE1EA5F73A007657FE /* JiZhangGuanJia-Info.plist in Resources */,
 				9C9CF0BF1EA5F73A007657FE /* YouYuJiZhangGuanJia-Info.plist in Resources */,
 				9C9CF0C01EA5F73A007657FE /* homeDefualtLoading.gif in Resources */,
 				9C9CF0C11EA5F73A007657FE /* homeLoading.gif in Resources */,
@@ -14065,7 +13987,6 @@
 				7DC4875E1DF6629700C27B69 /* Localizable.strings in Resources */,
 				9C30AA8E1EAF6EA6008DD51D /* 1001.zip in Resources */,
 				9CFBAC3C1E07D4E600C55814 /* homeDefualtLoading.gif in Resources */,
-				9C5E99AB1EB9CDB100C5B346 /* customBackGround.zip in Resources */,
 				9CFBAC401E07D4EC00C55814 /* xiaomao.gif in Resources */,
 				9CECFED81D6D41A700DB2C8B /* SSJFinancingHomePopView.xib in Resources */,
 				9C155F131E68572700FDFD18 /* MJRefresh.bundle in Resources */,
@@ -14091,7 +14012,6 @@
 				7D81DBB91E1369560072DB7E /* youyuwo.cer in Resources */,
 				7DBB3CBD1E55C3500075E638 /* YouYuJiZhangLiCai-Info.plist in Resources */,
 				9C30AA8B1EAF6E9F008DD51D /* 1000.zip in Resources */,
-				7DBB38211E55BE2F0075E638 /* SuiShouJi-Info.plist in Resources */,
 				9C03D87F1EB855D600D845DD /* customBackGround.zip in Resources */,
 				9C30AA8A1EAF6E9F008DD51D /* 1001.zip in Resources */,
 				7D4A430A1CC63755002F0264 /* rain_sound.wav in Resources */,
@@ -14790,7 +14710,6 @@
 				9CEC60FF1E70F7170087B361 /* SSJShareManager.m in Sources */,
 				7D08A0FD1E4999D30085A8FB /* SSJFinancingHomePopView.m in Sources */,
 				9C6CAFAC1E7A2AD500262FAF /* SSJAnnoucementItem.m in Sources */,
-				9CE4AD231E8375E30051B6DB /* SSJAnnoucementItem.m in Sources */,
 				7D08A0FE1E4999D30085A8FB /* SSJBookkeepingTreeView.m in Sources */,
 				7D08A0FF1E4999D30085A8FB /* SSJReportFormsCurveModel.m in Sources */,
 				7D08A1001E4999D30085A8FB /* SSJRecordMakingViewController.m in Sources */,
@@ -14834,7 +14753,6 @@
 				7D08A11D1E4999D30085A8FB /* SSJBillingChargeViewController.m in Sources */,
 				7D08A11E1E4999D30085A8FB /* SSJHomeBarCalenderButton.m in Sources */,
 				7D22A37A1E4F16AC00190CEB /* SSJViewAddition.m in Sources */,
-				9C6CAFDE1E7A2BF100262FAF /* SSJAnnoucementService.m in Sources */,
 				7D08A11F1E4999D30085A8FB /* SSJSearchResultHeader.m in Sources */,
 				7D08A1201E4999D30085A8FB /* SSJForgetPassowrdNetworkService.m in Sources */,
 				9C61FD241EAE0CF300971F0F /* SSJHomeThemeModifyView.m in Sources */,
@@ -14992,7 +14910,6 @@
 				7D08A1B11E4999D30085A8FB /* SSJSummaryBooksTableViewHeader.m in Sources */,
 				9C155E971E68572700FDFD18 /* MJRefreshAutoFooter.m in Sources */,
 				7D08A1B21E4999D30085A8FB /* SSJBooksTypeCollectionViewCell.m in Sources */,
-				9CE4AD3E1E8376350051B6DB /* SSJMoreHomeAnnouncementButton.m in Sources */,
 				7D08A1B31E4999D30085A8FB /* SSJForgetPasswordSecondStepViewController.m in Sources */,
 				7D08A1B41E4999D30085A8FB /* SSJAdviceItem.m in Sources */,
 				9C155EC41E68572700FDFD18 /* MJRefreshAutoGifFooter.m in Sources */,
@@ -15082,7 +14999,6 @@
 				7D481B871E4DB39600060E1A /* SSJFundingTransferListPeriodCell.m in Sources */,
 				7D08A2011E4999D30085A8FB /* SSJCalendarViewController.m in Sources */,
 				7D08A2021E4999D30085A8FB /* SSJThemeService.m in Sources */,
-				9CE4AD591E83768F0051B6DB /* SSJBookKeepingHomeHelper.m in Sources */,
 				7D08A2031E4999D30085A8FB /* SSJLocalNotificationStore.m in Sources */,
 				7D08A2041E4999D30085A8FB /* SSJMagicExportCalendarWeekView.m in Sources */,
 				7D08A2051E4999D30085A8FB /* SSJGuideContentView.m in Sources */,
@@ -15153,7 +15069,6 @@
 				915294961EB0718100C63264 /* SSJThemBgImageClipViewController.m in Sources */,
 				7D08A2391E4999D30085A8FB /* SSJCreditCardRepaymentViewController.m in Sources */,
 				7D08A23A1E4999D30085A8FB /* SSJLoginService.m in Sources */,
-				9CE4AD351E83762C0051B6DB /* SSJAnnouncementDetailCell.m in Sources */,
 				7D08A23B1E4999D30085A8FB /* SSJNewFundingTypeCell.m in Sources */,
 				7D08A23C1E4999D30085A8FB /* SSJBooksAdBanner.m in Sources */,
 				7D22A3501E4F16AC00190CEB /* SSJFontAddition.m in Sources */,
@@ -15168,6 +15083,7 @@
 				7D08A2431E4999D30085A8FB /* SSJQQLoginHelper.m in Sources */,
 				7D08A2441E4999D30085A8FB /* SSJSearchBar.m in Sources */,
 				7D08A2451E4999D30085A8FB /* TPKeyboardAvoidingScrollView.m in Sources */,
+				7DB7E45F1EB9E263002383C5 /* SSJNavigationController.m in Sources */,
 				7D08A2461E4999D30085A8FB /* SSJBillTypeSelectViewController.m in Sources */,
 				7D08A2471E4999D30085A8FB /* SSJBookKeepingHomeTableViewCell.m in Sources */,
 				7D08A2481E4999D30085A8FB /* SSJReportFormsCurveBalloonView.m in Sources */,
@@ -15185,7 +15101,6 @@
 				7D08A2531E4999D30085A8FB /* SSJPercentCircleAdditionNode.m in Sources */,
 				7D08A2541E4999D30085A8FB /* SSJDateSelectedView.m in Sources */,
 				7D08A2551E4999D30085A8FB /* UIView+SSJViewAnimatioin.m in Sources */,
-				9CE4AD501E8376710051B6DB /* SSJBookKeepingHomeListItem.m in Sources */,
 				7D08A2571E4999D30085A8FB /* SSJReportFormCanYinChartCellItem.m in Sources */,
 				7D08A2581E4999D30085A8FB /* main.m in Sources */,
 				7D08A2591E4999D30085A8FB /* UIImageView+SSJTheme.m in Sources */,
@@ -15249,7 +15164,6 @@
 				7D08A28F1E4999D30085A8FB /* SSJThemeCollectionHeaderView.m in Sources */,
 				7D08A2901E4999D30085A8FB /* SSJPagingNetworkService.m in Sources */,
 				7D08A2911E4999D30085A8FB /* SCYMotionEncryptionTriangleLayer.m in Sources */,
-				9C6CAFD61E7A2BDC00262FAF /* SSJScrollalbleAnnounceView.m in Sources */,
 				7D08A2921E4999D30085A8FB /* SSJSyncSettingViewController.m in Sources */,
 				7D08A2931E4999D30085A8FB /* SSJADDNewTypeViewController.m in Sources */,
 				7D08A2941E4999D30085A8FB /* SSJReportFormsCurveView.m in Sources */,
@@ -15395,7 +15309,6 @@
 				9CEC60FE1E70F7160087B361 /* SSJShareManager.m in Sources */,
 				7DA13A541E35AED7000490A4 /* SSJFinancingHomePopView.m in Sources */,
 				9C6CAFAA1E7A2AD400262FAF /* SSJAnnoucementItem.m in Sources */,
-				9CE4AD221E8375E20051B6DB /* SSJAnnoucementItem.m in Sources */,
 				7DA13A551E35AED7000490A4 /* SSJBookkeepingTreeView.m in Sources */,
 				7DA13A561E35AED7000490A4 /* SSJReportFormsCurveModel.m in Sources */,
 				7DA13A571E35AED7000490A4 /* SSJRecordMakingViewController.m in Sources */,
@@ -15439,7 +15352,6 @@
 				7DA13A741E35AED7000490A4 /* SSJBillingChargeViewController.m in Sources */,
 				7DA13A751E35AED7000490A4 /* SSJHomeBarCalenderButton.m in Sources */,
 				7D22A3791E4F16AC00190CEB /* SSJViewAddition.m in Sources */,
-				9C6CAFDD1E7A2BF000262FAF /* SSJAnnoucementService.m in Sources */,
 				7DA13A761E35AED7000490A4 /* SSJSearchResultHeader.m in Sources */,
 				7DA13A771E35AED7000490A4 /* SSJForgetPassowrdNetworkService.m in Sources */,
 				9C61FD231EAE0CF300971F0F /* SSJHomeThemeModifyView.m in Sources */,
@@ -15597,7 +15509,6 @@
 				7DA13B081E35AED7000490A4 /* SSJSummaryBooksTableViewHeader.m in Sources */,
 				9C155E961E68572700FDFD18 /* MJRefreshAutoFooter.m in Sources */,
 				7DA13B091E35AED7000490A4 /* SSJBooksTypeCollectionViewCell.m in Sources */,
-				9CE4AD3D1E8376340051B6DB /* SSJMoreHomeAnnouncementButton.m in Sources */,
 				7DA13B0A1E35AED7000490A4 /* SSJForgetPasswordSecondStepViewController.m in Sources */,
 				7DA13B0B1E35AED7000490A4 /* SSJAdviceItem.m in Sources */,
 				9C155EC31E68572700FDFD18 /* MJRefreshAutoGifFooter.m in Sources */,
@@ -15687,7 +15598,6 @@
 				7D481B861E4DB39600060E1A /* SSJFundingTransferListPeriodCell.m in Sources */,
 				7DA13B581E35AED7000490A4 /* SSJCalendarViewController.m in Sources */,
 				7DA13B591E35AED7000490A4 /* SSJThemeService.m in Sources */,
-				9CE4AD581E83768F0051B6DB /* SSJBookKeepingHomeHelper.m in Sources */,
 				7DA13B5A1E35AED7000490A4 /* SSJLocalNotificationStore.m in Sources */,
 				7DA13B5B1E35AED7000490A4 /* SSJMagicExportCalendarWeekView.m in Sources */,
 				7DA13B5C1E35AED7000490A4 /* SSJGuideContentView.m in Sources */,
@@ -15758,7 +15668,6 @@
 				915294951EB0718100C63264 /* SSJThemBgImageClipViewController.m in Sources */,
 				7DA13B901E35AED7000490A4 /* SSJCreditCardRepaymentViewController.m in Sources */,
 				7DA13B911E35AED7000490A4 /* SSJLoginService.m in Sources */,
-				9CE4AD341E83762C0051B6DB /* SSJAnnouncementDetailCell.m in Sources */,
 				7DA13B921E35AED7000490A4 /* SSJNewFundingTypeCell.m in Sources */,
 				7DA13B931E35AED7000490A4 /* SSJBooksAdBanner.m in Sources */,
 				7D22A34F1E4F16AC00190CEB /* SSJFontAddition.m in Sources */,
@@ -15773,6 +15682,7 @@
 				7DA13B9A1E35AED7000490A4 /* SSJQQLoginHelper.m in Sources */,
 				7DA13B9B1E35AED7000490A4 /* SSJSearchBar.m in Sources */,
 				7DA13B9C1E35AED7000490A4 /* TPKeyboardAvoidingScrollView.m in Sources */,
+				7DB7E45E1EB9E263002383C5 /* SSJNavigationController.m in Sources */,
 				7DA13B9D1E35AED7000490A4 /* SSJBillTypeSelectViewController.m in Sources */,
 				7DA13B9E1E35AED7000490A4 /* SSJBookKeepingHomeTableViewCell.m in Sources */,
 				7DA13B9F1E35AED7000490A4 /* SSJReportFormsCurveBalloonView.m in Sources */,
@@ -15790,7 +15700,6 @@
 				7DA13BAA1E35AED7000490A4 /* SSJPercentCircleAdditionNode.m in Sources */,
 				7DA13BAB1E35AED7000490A4 /* SSJDateSelectedView.m in Sources */,
 				7DA13BAC1E35AED7000490A4 /* UIView+SSJViewAnimatioin.m in Sources */,
-				9CE4AD4F1E8376710051B6DB /* SSJBookKeepingHomeListItem.m in Sources */,
 				7DA13BAE1E35AED7000490A4 /* SSJReportFormCanYinChartCellItem.m in Sources */,
 				7DA13BAF1E35AED7000490A4 /* main.m in Sources */,
 				7DA13BB01E35AED7000490A4 /* UIImageView+SSJTheme.m in Sources */,
@@ -15854,7 +15763,6 @@
 				7DA13BE61E35AED7000490A4 /* SSJThemeCollectionHeaderView.m in Sources */,
 				7DA13BE71E35AED7000490A4 /* SSJPagingNetworkService.m in Sources */,
 				7DA13BE81E35AED7000490A4 /* SCYMotionEncryptionTriangleLayer.m in Sources */,
-				9C6CAFD51E7A2BDC00262FAF /* SSJScrollalbleAnnounceView.m in Sources */,
 				7DA13BE91E35AED7000490A4 /* SSJSyncSettingViewController.m in Sources */,
 				7DA13BEA1E35AED7000490A4 /* SSJADDNewTypeViewController.m in Sources */,
 				7DA13BEB1E35AED7000490A4 /* SSJReportFormsCurveView.m in Sources */,
@@ -16000,7 +15908,6 @@
 				9CEC61001E70F7170087B361 /* SSJShareManager.m in Sources */,
 				7DBB3ADB1E55C2EE0075E638 /* SSJReportFormsUtil.m in Sources */,
 				9C6CAFAD1E7A2AD600262FAF /* SSJAnnoucementItem.m in Sources */,
-				9CE4AD241E8375E30051B6DB /* SSJAnnoucementItem.m in Sources */,
 				7DBB3ADC1E55C2EE0075E638 /* SSJFundingDetailListHeaderView.m in Sources */,
 				7DBB3ADD1E55C2EE0075E638 /* SSJChargeReminderItem.m in Sources */,
 				7DBB3ADE1E55C2EE0075E638 /* SSJLoanChargeDetailViewController.m in Sources */,
@@ -16044,7 +15951,6 @@
 				7DBB3AFC1E55C2EE0075E638 /* SSJLoanSyncTable.m in Sources */,
 				7DBB3AFD1E55C2EE0075E638 /* SSJBookKeepingHomeBooksButton.m in Sources */,
 				7DBB3AFE1E55C2EE0075E638 /* GTMBase64.m in Sources */,
-				9C6CAFDF1E7A2BF100262FAF /* SSJAnnoucementService.m in Sources */,
 				7DBB3AFF1E55C2EE0075E638 /* SSJEditBillTypeViewController.m in Sources */,
 				7DBB3B001E55C2EE0075E638 /* SSJBillingChargeViewController.m in Sources */,
 				9C61FD251EAE0CF400971F0F /* SSJHomeThemeModifyView.m in Sources */,
@@ -16203,7 +16109,6 @@
 				7DBB3B901E55C2EE0075E638 /* SSJBaselineTextField.m in Sources */,
 				9C155E981E68572700FDFD18 /* MJRefreshAutoFooter.m in Sources */,
 				7DBB3B911E55C2EE0075E638 /* SSJCircleChargeCell.m in Sources */,
-				9CE4AD3F1E8376350051B6DB /* SSJMoreHomeAnnouncementButton.m in Sources */,
 				7DBB3B921E55C2EE0075E638 /* SSJUserChargePeriodConfigSyncTable.m in Sources */,
 				9C155EC51E68572700FDFD18 /* MJRefreshAutoGifFooter.m in Sources */,
 				7DBB3B941E55C2EE0075E638 /* SSJFundingTransferListPeriodCellItem.m in Sources */,
@@ -16292,7 +16197,6 @@
 				7DBB3BE01E55C2EE0075E638 /* SSJAdItem.m in Sources */,
 				7DBB3BE11E55C2EE0075E638 /* SSJAccountsMergerTables.m in Sources */,
 				7DBB3BE21E55C2EE0075E638 /* SSJBooksHeaderView.m in Sources */,
-				9CE4AD5B1E8376910051B6DB /* SSJBookKeepingHomeHelper.m in Sources */,
 				7DBB3BE31E55C2EE0075E638 /* FMDatabase+FTS3.m in Sources */,
 				7DBB3BE41E55C2EE0075E638 /* SSJThemeManagerViewController.m in Sources */,
 				7DBB3BE51E55C2EE0075E638 /* SSJCalendarViewController.m in Sources */,
@@ -16363,7 +16267,6 @@
 				915294971EB0718100C63264 /* SSJThemBgImageClipViewController.m in Sources */,
 				7DBB3C1F1E55C2EE0075E638 /* SSJUserDefaultDataCreater.m in Sources */,
 				7DBB3C201E55C2EE0075E638 /* SSJBudgetModel.m in Sources */,
-				9CE4AD361E83762D0051B6DB /* SSJAnnouncementDetailCell.m in Sources */,
 				7DBB3C211E55C2EE0075E638 /* SSJCreditCardRepaymentViewController.m in Sources */,
 				7DBB3C221E55C2EE0075E638 /* SSJLoginService.m in Sources */,
 				7DBB3C231E55C2EE0075E638 /* SSJNewFundingTypeCell.m in Sources */,
@@ -16378,6 +16281,7 @@
 				7DBB3C2A1E55C2EE0075E638 /* SSJDatabaseVersion7.m in Sources */,
 				7DBB3C2B1E55C2EE0075E638 /* SSJBooksParentSelectView.m in Sources */,
 				7DBB3C2C1E55C2EE0075E638 /* SSJQQLoginHelper.m in Sources */,
+				7DB7E4601EB9E264002383C5 /* SSJNavigationController.m in Sources */,
 				7DBB3C2D1E55C2EE0075E638 /* SSJSearchBar.m in Sources */,
 				7DBB3C2E1E55C2EE0075E638 /* TPKeyboardAvoidingScrollView.m in Sources */,
 				7DBB3C2F1E55C2EE0075E638 /* SSJBillTypeSelectViewController.m in Sources */,
@@ -16395,7 +16299,6 @@
 				7DBB3C3B1E55C2EE0075E638 /* SSJBudgetWaveWaterView.m in Sources */,
 				7DBB3C3C1E55C2EE0075E638 /* SSJPercentCircleAdditionNode.m in Sources */,
 				7DBB3C3D1E55C2EE0075E638 /* SSJDateSelectedView.m in Sources */,
-				9CE4AD511E8376720051B6DB /* SSJBookKeepingHomeListItem.m in Sources */,
 				7DBB3C3E1E55C2EE0075E638 /* UIView+SSJViewAnimatioin.m in Sources */,
 				7DBB3C3F1E55C2EE0075E638 /* SSJReportFormCanYinChartCellItem.m in Sources */,
 				7DBB3C401E55C2EE0075E638 /* main.m in Sources */,
@@ -16459,7 +16362,6 @@
 				7DBB3C781E55C2EE0075E638 /* SCYMotionEncryptionTriangleLayer.m in Sources */,
 				7DBB3C791E55C2EE0075E638 /* SSJSyncSettingViewController.m in Sources */,
 				7DBB3C7A1E55C2EE0075E638 /* SSJADDNewTypeViewController.m in Sources */,
-				9C6CAFD71E7A2BDC00262FAF /* SSJScrollalbleAnnounceView.m in Sources */,
 				7DBB3C7B1E55C2EE0075E638 /* SSJReportFormsCurveView.m in Sources */,
 				7DBB3C7C1E55C2EE0075E638 /* SSJHomeDatePickerView.m in Sources */,
 				7DBB3C7D1E55C2EE0075E638 /* SSJBooksParentSelectCell.m in Sources */,
@@ -16978,6 +16880,7 @@
 				7DBB40C51E55C4E00075E638 /* SSJDatabaseVersion7.m in Sources */,
 				7DBB40C61E55C4E00075E638 /* SSJBooksParentSelectView.m in Sources */,
 				7DBB40C71E55C4E00075E638 /* SSJQQLoginHelper.m in Sources */,
+				7DB7E45B1EB9E260002383C5 /* SSJNavigationController.m in Sources */,
 				7DBB40C81E55C4E00075E638 /* SSJSearchBar.m in Sources */,
 				7DBB40C91E55C4E00075E638 /* TPKeyboardAvoidingScrollView.m in Sources */,
 				7DBB40CA1E55C4E00075E638 /* SSJBillTypeSelectViewController.m in Sources */,
@@ -17364,6 +17267,7 @@
 				7DFB175E1EB0341E00292DD3 /* NSBundle+MJRefresh.m in Sources */,
 				7DFB175F1EB0341E00292DD3 /* SSJBaseNetworkService.m in Sources */,
 				7DFB17601EB0341E00292DD3 /* SSJBudgetListSecondaryCell.m in Sources */,
+				7DB7E4661EB9E268002383C5 /* SSJNavigationController.m in Sources */,
 				7DFB17611EB0341E00292DD3 /* SSJLayerAddition.m in Sources */,
 				7DFB17621EB0341E00292DD3 /* SSJHomeTableView.m in Sources */,
 				7DFB17631EB0341E00292DD3 /* SSJDateAddition.m in Sources */,
@@ -18165,6 +18069,7 @@
 				9C13F6A31E8267D300AC5FA9 /* SSJBookKeepingHomeViewController.m in Sources */,
 				9C13F6A41E8267D300AC5FA9 /* SSJBudgetEditViewController.m in Sources */,
 				9C13F6A51E8267D300AC5FA9 /* SSJButtonAddition.m in Sources */,
+				7DB7E4611EB9E264002383C5 /* SSJNavigationController.m in Sources */,
 				9C2768211EA893E200F7C9FC /* SSJDatabaseVersion14.m in Sources */,
 				9C13F6A61E8267D300AC5FA9 /* SSJReportFormCurveHeaderView.m in Sources */,
 				9C13F6A71E8267D300AC5FA9 /* SSJDatabaseVersion7.m in Sources */,
@@ -18563,6 +18468,7 @@
 				9C4C21051E9E30C8000C5F15 /* NSBundle+MJRefresh.m in Sources */,
 				9C4C21061E9E30C8000C5F15 /* SSJBaseNetworkService.m in Sources */,
 				9C4C21071E9E30C8000C5F15 /* SSJBudgetListSecondaryCell.m in Sources */,
+				7DB7E4641EB9E267002383C5 /* SSJNavigationController.m in Sources */,
 				9C4C21081E9E30C8000C5F15 /* SSJLayerAddition.m in Sources */,
 				9C4C21091E9E30C8000C5F15 /* SSJHomeTableView.m in Sources */,
 				9C4C210A1E9E30C8000C5F15 /* SSJDateAddition.m in Sources */,
@@ -19343,6 +19249,7 @@
 				9C7D2E9C1E8DF8A80093001F /* MJRefreshBackStateFooter.m in Sources */,
 				9C7D2E9D1E8DF8A80093001F /* SSJFundingTransferDetailItem.m in Sources */,
 				9C7D2E9E1E8DF8A80093001F /* SSJShareManager.m in Sources */,
+				7DB7E45A1EB9E260002383C5 /* SSJNavigationController.m in Sources */,
 				9C7D2E9F1E8DF8A80093001F /* FMDatabaseAdditions.m in Sources */,
 				9C7D2EA01E8DF8A80093001F /* SSJMagicExportResultCheckMarkView.m in Sources */,
 				9C7D2EA11E8DF8A80093001F /* SSJChargeCircleTimeSelectView.m in Sources */,
@@ -19944,6 +19851,7 @@
 				9C7D31131E8DF96B0093001F /* MJRefreshBackStateFooter.m in Sources */,
 				9C7D31141E8DF96B0093001F /* SSJFundingTransferDetailItem.m in Sources */,
 				9C7D31151E8DF96B0093001F /* SSJShareManager.m in Sources */,
+				7DB7E4621EB9E265002383C5 /* SSJNavigationController.m in Sources */,
 				9C7D31161E8DF96B0093001F /* FMDatabaseAdditions.m in Sources */,
 				9C7D31171E8DF96B0093001F /* SSJMagicExportResultCheckMarkView.m in Sources */,
 				9C7D31181E8DF96B0093001F /* SSJChargeCircleTimeSelectView.m in Sources */,
@@ -20365,6 +20273,7 @@
 				9C80FDA41E95E88E00B1BAAC /* NSBundle+MJRefresh.m in Sources */,
 				9C80FDA51E95E88E00B1BAAC /* SSJBaseNetworkService.m in Sources */,
 				9C80FDA61E95E88E00B1BAAC /* SSJBudgetListSecondaryCell.m in Sources */,
+				7DB7E4631EB9E266002383C5 /* SSJNavigationController.m in Sources */,
 				9C80FDA71E95E88E00B1BAAC /* SSJLayerAddition.m in Sources */,
 				9C80FDA81E95E88E00B1BAAC /* SSJHomeTableView.m in Sources */,
 				9C80FDA91E95E88E00B1BAAC /* SSJDateAddition.m in Sources */,
@@ -20965,6 +20874,7 @@
 				9C9CEF641EA5F73A007657FE /* NSBundle+MJRefresh.m in Sources */,
 				9C9CEF651EA5F73A007657FE /* SSJBaseNetworkService.m in Sources */,
 				9C9CEF661EA5F73A007657FE /* SSJBudgetListSecondaryCell.m in Sources */,
+				7DB7E4651EB9E267002383C5 /* SSJNavigationController.m in Sources */,
 				9C9CEF671EA5F73A007657FE /* SSJLayerAddition.m in Sources */,
 				9C9CEF681EA5F73A007657FE /* SSJHomeTableView.m in Sources */,
 				9C9CEF691EA5F73A007657FE /* SSJDateAddition.m in Sources */,
@@ -21393,7 +21303,6 @@
 				9CECFB611D6D41A700DB2C8B /* SSJMagicExportCalendarView.m in Sources */,
 				9C3A2D881E66793F00DFAE2C /* SSJBookKeepingHomeHeaderView.m in Sources */,
 				9C6CAFAB1E7A2AD500262FAF /* SSJAnnoucementItem.m in Sources */,
-				9CE4AD211E8375E20051B6DB /* SSJAnnoucementItem.m in Sources */,
 				7DDB6D261DB9A57200D823AE /* SSJDomainManager.m in Sources */,
 				9CECFB621D6D41A700DB2C8B /* SSJDataSynchronizeTask.m in Sources */,
 				9CECFB631D6D41A700DB2C8B /* SSJFundingTransferDetailCell.m in Sources */,
@@ -21403,7 +21312,6 @@
 				9CECFB661D6D41A700DB2C8B /* SSJFundingDetailListHeaderView.m in Sources */,
 				9CECFB671D6D41A700DB2C8B /* SSJChargeReminderItem.m in Sources */,
 				9CECFB681D6D41A700DB2C8B /* SSJFinancingHomePopView.m in Sources */,
-				9CE4AD3C1E8376340051B6DB /* SSJMoreHomeAnnouncementButton.m in Sources */,
 				9CECFB691D6D41A700DB2C8B /* SSJBookkeepingTreeView.m in Sources */,
 				9CECFB6A1D6D41A700DB2C8B /* SSJReportFormsCurveModel.m in Sources */,
 				9CECFB6B1D6D41A700DB2C8B /* SSJRecordMakingViewController.m in Sources */,
@@ -21525,7 +21433,6 @@
 				9CECFBB01D6D41A700DB2C8B /* SSJBookKeepingButton.m in Sources */,
 				7DB7E44D1EB98B22002383C5 /* SSJSegmentedControl.m in Sources */,
 				9C155EE61E68572700FDFD18 /* MJRefreshBackNormalFooter.m in Sources */,
-				9C6CAFC21E7A2BCA00262FAF /* SSJAnnouncementDetailCell.m in Sources */,
 				7DC318761E2882A300932644 /* FMDatabase.m in Sources */,
 				9C9A0C301D6D9620002AF046 /* SSJLoanModel.m in Sources */,
 				9CECFBB11D6D41A700DB2C8B /* SSJUserInfoItem.m in Sources */,
@@ -21570,6 +21477,7 @@
 				9CECFBCE1D6D41A700DB2C8B /* SSJBudgetTypeModel.m in Sources */,
 				9C9A0C331D6D9630002AF046 /* SSJLoanListCellItem.m in Sources */,
 				9CECFBCF1D6D41A700DB2C8B /* SSJPercentCircleNode.m in Sources */,
+				7DB7E45D1EB9E262002383C5 /* SSJNavigationController.m in Sources */,
 				9CECFBD01D6D41A700DB2C8B /* SSJBaseSyncTable.m in Sources */,
 				9C17B5441DEED837000D6C99 /* SSJSummaryBooksTableViewHeader.m in Sources */,
 				9CECFBD11D6D41A700DB2C8B /* SSJPercentCircleNodeItem.m in Sources */,
@@ -21625,7 +21533,6 @@
 				7D6CC9011E0A797900FF6133 /* SSJReportFormsCurveGraphView.m in Sources */,
 				9CECFBF11D6D41A700DB2C8B /* UIViewController+SSJPageFlow.m in Sources */,
 				7DCA2A1E1E4C9CE600B60F4F /* SSJNewDotNetworkService.m in Sources */,
-				9C6CAFD41E7A2BDB00262FAF /* SSJScrollalbleAnnounceView.m in Sources */,
 				7DB9F81D1DFFC8C90084E998 /* SSJReportFormsNoDataCell.m in Sources */,
 				9CECFBF41D6D41A700DB2C8B /* SSJBaseViewController.m in Sources */,
 				9C6D66281D86BD270081A7CE /* SSJBannerItem.m in Sources */,
@@ -21719,7 +21626,6 @@
 				9CECFC2C1D6D41A700DB2C8B /* SSJFinancingHomeCell.m in Sources */,
 				9CECFC2D1D6D41A700DB2C8B /* SSJScrollTextLayer.m in Sources */,
 				9C26FDB21DD3058C0086F94F /* SSJBooksHeaderView.m in Sources */,
-				9CE4AD4E1E8376700051B6DB /* SSJBookKeepingHomeListItem.m in Sources */,
 				9CECFC2E1D6D41A700DB2C8B /* SSJFundingDailySumCell.m in Sources */,
 				7D3F4B4A1E55991E004B5962 /* SSJDatabaseVersion12.m in Sources */,
 				9CECFC2F1D6D41A700DB2C8B /* SSJThemeDetailViewController.m in Sources */,
@@ -21792,7 +21698,6 @@
 				9CECFC601D6D41A700DB2C8B /* SSJListMenuItem.m in Sources */,
 				9C1E4C1A1E4ACD5C00CA5843 /* SSJCalendarTabelViewHeaderView.m in Sources */,
 				9C3899A41DC9D99700715732 /* SSJCustomCategoryItem.m in Sources */,
-				9CE4AD291E8376220051B6DB /* SSJAnnoucementService.m in Sources */,
 				9CECFC611D6D41A700DB2C8B /* SSJCircleChargeStore.m in Sources */,
 				9CECFC621D6D41A700DB2C8B /* SSJDatabaseVersion2.m in Sources */,
 				7DCA2A2A1E4C9D0600B60F4F /* SSJHomeDatePickerView.m in Sources */,
@@ -21816,7 +21721,6 @@
 				7D00D80F1DFAA3D30007A8FB /* SSJReportFormsChartCellItem.m in Sources */,
 				7D22A32A1E4F16AC00190CEB /* SSJDateAddition.m in Sources */,
 				9CECFC6D1D6D41A700DB2C8B /* SSJMagicExportService.m in Sources */,
-				9C6CAFBA1E7A2B2800262FAF /* SSJBookKeepingHomeHelper.m in Sources */,
 				9CECFC6E1D6D41A700DB2C8B /* SSJPortraitUploadNetworkService.m in Sources */,
 				9CECFC6F1D6D41A700DB2C8B /* SSJAboutusViewController.m in Sources */,
 				9CECFC701D6D41A700DB2C8B /* SSJFundingDetailNoDataView.m in Sources */,
@@ -22167,6 +22071,7 @@
 				9C155F231E68572700FDFD18 /* NSBundle+MJRefresh.m in Sources */,
 				BD0433911C1A8DA50051E7AB /* SSJBaseNetworkService.m in Sources */,
 				7D567E4A1D9D1AD6006512C8 /* SSJBudgetListSecondaryCell.m in Sources */,
+				7DB7E45C1EB9E262002383C5 /* SSJNavigationController.m in Sources */,
 				7D22A3581E4F16AC00190CEB /* SSJLayerAddition.m in Sources */,
 				7D5F33321CEAE6C10086B67E /* SSJHomeTableView.m in Sources */,
 				7D22A3271E4F16AC00190CEB /* SSJDateAddition.m in Sources */,
@@ -22623,8 +22528,8 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Wen Chen (ZW7DKJ39L3)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Wen Chen (ZW7DKJ39L3)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Wen Chen (262HTD8ZSJ)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Wen Chen (262HTD8ZSJ)";
 				DEVELOPMENT_TEAM = 262HTD8ZSJ;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -22859,8 +22764,8 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/SuiShouJi/Resource/Entitlements/SuiShouJi.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer: Pingxi Fan (Z6G7KSGD6Q)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = Z8SZ588DYT;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: XiaoYong  Wu (6CF3K2UQ7J)";
+				DEVELOPMENT_TEAM = 534SCE47WT;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -22944,8 +22849,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhangAppStore;
 				PRODUCT_NAME = SuiShouJi;
-				PROVISIONING_PROFILE = "a5a9e396-ef95-46bc-9785-ffea374306e0";
-				PROVISIONING_PROFILE_SPECIFIER = JiZhangAppStoreDev;
+				PROVISIONING_PROFILE = "28748966-5ef8-4f28-88ad-59794e4c5d2f";
+				PROVISIONING_PROFILE_SPECIFIER = JiZhangAppStoreDeve;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -23008,8 +22913,8 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Wen Chen (ZW7DKJ39L3)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Wen Chen (ZW7DKJ39L3)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Wen Chen (262HTD8ZSJ)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Wen Chen (262HTD8ZSJ)";
 				DEVELOPMENT_TEAM = 262HTD8ZSJ;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -23092,7 +22997,7 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Yutang Zhou (AS9JQNECA2)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Yutang Zhou (AS9JQNECA2)";
-				DEVELOPMENT_TEAM = JFBU3W8R6E;
+				DEVELOPMENT_TEAM = GZ7Q3299CT;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -23208,8 +23113,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhanglicai;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "937a1078-01f6-40e9-8c7e-077e234fdad9";
-				PROVISIONING_PROFILE_SPECIFIER = YYJiZhangLiCaiDev;
+				PROVISIONING_PROFILE = "e6c69c88-f91c-4ee1-ab81-bb118f514fd6";
+				PROVISIONING_PROFILE_SPECIFIER = YouYuJiZhangLiCaiDev;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -23407,7 +23312,7 @@
 				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/SuiShouJi/Resource/Entitlements/SuiShouJi.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Pingxi Fan (Z8SZ588DYT)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				DEVELOPMENT_TEAM = Z8SZ588DYT;
+				DEVELOPMENT_TEAM = 534SCE47WT;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -23490,8 +23395,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhangAppStore;
 				PRODUCT_NAME = SuiShouJi;
-				PROVISIONING_PROFILE = "70b1cb51-be78-403c-a8ea-e404616eef1c";
-				PROVISIONING_PROFILE_SPECIFIER = JiZhangAppStoreAdHoc;
+				PROVISIONING_PROFILE = "00341802-6333-4c7f-a929-02b298071043";
+				PROVISIONING_PROFILE_SPECIFIER = JiZhangAppstoreAdHoc;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -23632,9 +23537,9 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Yutang Zhou (JFBU3W8R6E)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Yutang Zhou (JFBU3W8R6E)";
-				DEVELOPMENT_TEAM = JFBU3W8R6E;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Wu Can (GZ7Q3299CT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Wu Can (GZ7Q3299CT)";
+				DEVELOPMENT_TEAM = GZ7Q3299CT;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -23750,8 +23655,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhanglicai;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "289a39b6-fb52-4f8c-afac-e594ee345138";
-				PROVISIONING_PROFILE_SPECIFIER = YYJiZhangLiCaiAppStore;
+				PROVISIONING_PROFILE = "3624541f-ed23-46a4-970b-eca8ae759684";
+				PROVISIONING_PROFILE_SPECIFIER = YouYuJiZhangLiCaiDis;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -23801,7 +23706,7 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Yutang Zhou (AS9JQNECA2)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Yutang Zhou (AS9JQNECA2)";
-				DEVELOPMENT_TEAM = JFBU3W8R6E;
+				DEVELOPMENT_TEAM = GZ7Q3299CT;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -23917,8 +23822,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhanglicai;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "937a1078-01f6-40e9-8c7e-077e234fdad9";
-				PROVISIONING_PROFILE_SPECIFIER = YYJiZhangLiCaiDev;
+				PROVISIONING_PROFILE = "e6c69c88-f91c-4ee1-ab81-bb118f514fd6";
+				PROVISIONING_PROFILE_SPECIFIER = YouYuJiZhangLiCaiDev;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -23933,9 +23838,9 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Yutang Zhou (JFBU3W8R6E)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Yutang Zhou (JFBU3W8R6E)";
-				DEVELOPMENT_TEAM = JFBU3W8R6E;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Wu Can (GZ7Q3299CT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Wu Can (GZ7Q3299CT)";
+				DEVELOPMENT_TEAM = GZ7Q3299CT;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -24051,8 +23956,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhanglicai;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "289a39b6-fb52-4f8c-afac-e594ee345138";
-				PROVISIONING_PROFILE_SPECIFIER = YYJiZhangLiCaiAppStore;
+				PROVISIONING_PROFILE = "3624541f-ed23-46a4-970b-eca8ae759684";
+				PROVISIONING_PROFILE_SPECIFIER = YouYuJiZhangLiCaiDis;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -25514,8 +25419,8 @@
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = SuiShouJi/Resource/Entitlements/YouYuJiZhangPro.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Pingxi Fan (5QMLP5Z59C)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Pingxi Fan (5QMLP5Z59C)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: XiaoYong  Wu (6CF3K2UQ7J)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: XiaoYong  Wu (6CF3K2UQ7J)";
 				DEVELOPMENT_TEAM = 5QMLP5Z59C;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -25616,8 +25521,8 @@
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = SuiShouJi/Resource/Entitlements/YouYuJiZhangPro.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Pingxi Fan (5QMLP5Z59C)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Pingxi Fan (5QMLP5Z59C)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: XiaoYong  Wu (6CF3K2UQ7J)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: XiaoYong  Wu (6CF3K2UQ7J)";
 				DEVELOPMENT_TEAM = 5QMLP5Z59C;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -26023,8 +25928,8 @@
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/SuiShouJi/Resource/Entitlements/SuiShouJi.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Developer: Pingxi Fan (9P35U59W23)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Pingxi Fan (9P35U59W23)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Pingxi Fan (5QMLP5Z59C)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Pingxi Fan (5QMLP5Z59C)";
 				DEVELOPMENT_TEAM = 5QMLP5Z59C;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -26109,8 +26014,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.9188.notepro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "c40b27e5-3e52-4acb-8777-876313a86a3d";
-				PROVISIONING_PROFILE_SPECIFIER = 9188jizhangdev;
+				PROVISIONING_PROFILE = "5b15cef5-cd88-498c-8303-81ce799a37b3";
+				PROVISIONING_PROFILE_SPECIFIER = 9188jizhangdis;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -26126,7 +26031,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/SuiShouJi/Resource/Entitlements/SuiShouJi.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Pingxi Fan (5QMLP5Z59C)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: XiaoYong  Wu (6CF3K2UQ7J)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Pingxi Fan (5QMLP5Z59C)";
 				DEVELOPMENT_TEAM = 5QMLP5Z59C;
 				ENABLE_BITCODE = NO;
@@ -26227,7 +26132,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/SuiShouJi/Resource/Entitlements/SuiShouJi.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Pingxi Fan (5QMLP5Z59C)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: XiaoYong  Wu (6CF3K2UQ7J)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Pingxi Fan (5QMLP5Z59C)";
 				DEVELOPMENT_TEAM = 5QMLP5Z59C;
 				ENABLE_BITCODE = NO;
@@ -26618,8 +26523,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhang;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "718b05a9-554f-44db-8080-ded490bdf8e3";
-				PROVISIONING_PROFILE_SPECIFIER = youyujizhangAppStore;
+				PROVISIONING_PROFILE = "2965f271-13d3-48ef-8fca-5d53b07ed4a2";
+				PROVISIONING_PROFILE_SPECIFIER = youyujizhangAppStoreAdHoc;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -27143,7 +27048,6 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer: dai menglin (2Z4WFTCYDJ)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: dai menglin (2Z4WFTCYDJ)";
-				DEVELOPMENT_TEAM = 534SCE47WT;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -27176,8 +27080,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhangben;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "4ca865e1-de21-4b04-99e6-16618b258dfd";
-				PROVISIONING_PROFILE_SPECIFIER = "XC Ad Hoc: *";
+				PROVISIONING_PROFILE = "6006d513-3fc0-4850-8601-d473d8dcaafd";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -27429,7 +27332,7 @@
 				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/SuiShouJi/Resource/Entitlements/SuiShouJi.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Pingxi Fan (Z8SZ588DYT)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				DEVELOPMENT_TEAM = Z8SZ588DYT;
+				DEVELOPMENT_TEAM = 534SCE47WT;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -27512,8 +27415,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhangAppStore;
 				PRODUCT_NAME = SuiShouJi;
-				PROVISIONING_PROFILE = "70b1cb51-be78-403c-a8ea-e404616eef1c";
-				PROVISIONING_PROFILE_SPECIFIER = JiZhangAppStoreAdHoc;
+				PROVISIONING_PROFILE = "00341802-6333-4c7f-a929-02b298071043";
+				PROVISIONING_PROFILE_SPECIFIER = JiZhangAppstoreAdHoc;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
