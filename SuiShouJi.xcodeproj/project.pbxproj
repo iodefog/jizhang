@@ -4985,6 +4985,18 @@
 		9C53A3BA1D420A01003BA2F0 /* SSJNewMemberViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C53A3B91D420A01003BA2F0 /* SSJNewMemberViewController.m */; };
 		9C53A3C01D45A9D8003BA2F0 /* SSJNewMemberHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C53A3BF1D45A9D8003BA2F0 /* SSJNewMemberHeaderView.m */; };
 		9C56E1301D1A87640057895D /* SSJRecordMakingStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C56E12F1D1A87640057895D /* SSJRecordMakingStore.m */; };
+		9C5E99A91EB9CDB000C5B346 /* customBackGround.zip in Resources */ = {isa = PBXBuildFile; fileRef = 9C03D87E1EB855D600D845DD /* customBackGround.zip */; };
+		9C5E99AA1EB9CDB000C5B346 /* customBackGround.zip in Resources */ = {isa = PBXBuildFile; fileRef = 9C03D87E1EB855D600D845DD /* customBackGround.zip */; };
+		9C5E99AB1EB9CDB100C5B346 /* customBackGround.zip in Resources */ = {isa = PBXBuildFile; fileRef = 9C03D87E1EB855D600D845DD /* customBackGround.zip */; };
+		9C5E99AC1EB9CDB200C5B346 /* customBackGround.zip in Resources */ = {isa = PBXBuildFile; fileRef = 9C03D87E1EB855D600D845DD /* customBackGround.zip */; };
+		9C5E99AD1EB9CDB200C5B346 /* customBackGround.zip in Resources */ = {isa = PBXBuildFile; fileRef = 9C03D87E1EB855D600D845DD /* customBackGround.zip */; };
+		9C5E99AE1EB9CDB300C5B346 /* customBackGround.zip in Resources */ = {isa = PBXBuildFile; fileRef = 9C03D87E1EB855D600D845DD /* customBackGround.zip */; };
+		9C5E99AF1EB9CDB300C5B346 /* customBackGround.zip in Resources */ = {isa = PBXBuildFile; fileRef = 9C03D87E1EB855D600D845DD /* customBackGround.zip */; };
+		9C5E99B01EB9CDB400C5B346 /* customBackGround.zip in Resources */ = {isa = PBXBuildFile; fileRef = 9C03D87E1EB855D600D845DD /* customBackGround.zip */; };
+		9C5E99B11EB9CDB600C5B346 /* customBackGround.zip in Resources */ = {isa = PBXBuildFile; fileRef = 9C03D87E1EB855D600D845DD /* customBackGround.zip */; };
+		9C5E99B21EB9CDB700C5B346 /* customBackGround.zip in Resources */ = {isa = PBXBuildFile; fileRef = 9C03D87E1EB855D600D845DD /* customBackGround.zip */; };
+		9C5E99B31EB9CDB700C5B346 /* customBackGround.zip in Resources */ = {isa = PBXBuildFile; fileRef = 9C03D87E1EB855D600D845DD /* customBackGround.zip */; };
+		9C5E99B41EB9CDB800C5B346 /* customBackGround.zip in Resources */ = {isa = PBXBuildFile; fileRef = 9C03D87E1EB855D600D845DD /* customBackGround.zip */; };
 		9C6167331E4D605A00D9209A /* SSJDatabaseVersion12.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6167321E4D605A00D9209A /* SSJDatabaseVersion12.m */; };
 		9C61AAA71D5B30DE005DC9BD /* SSJThemeDownLoadCompleteService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61AAA61D5B30DE005DC9BD /* SSJThemeDownLoadCompleteService.m */; };
 		9C61FD1F1EAE0C2800971F0F /* SSJHomeThemeModifyView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61FD1E1EAE0C2800971F0F /* SSJHomeThemeModifyView.m */; };
@@ -13655,6 +13667,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9C5E99AD1EB9CDB200C5B346 /* customBackGround.zip in Resources */,
 				7D08A2BB1E4999D30085A8FB /* pushsound.wav in Resources */,
 				7D08A2BC1E4999D30085A8FB /* xiaomao.gif in Resources */,
 				7D08A2BD1E4999D30085A8FB /* SSJCalenderTableViewNoDataHeader.xib in Resources */,
@@ -13681,6 +13694,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9C5E99AC1EB9CDB200C5B346 /* customBackGround.zip in Resources */,
 				7DA13C121E35AED7000490A4 /* pushsound.wav in Resources */,
 				7DA13C131E35AED7000490A4 /* xiaomao.gif in Resources */,
 				7DA13C141E35AED7000490A4 /* SSJCalenderTableViewNoDataHeader.xib in Resources */,
@@ -13727,6 +13741,7 @@
 				7DBB3CAE1E55C2EE0075E638 /* homeDefualtLoading.gif in Resources */,
 				9C30AA9D1EAF6EB2008DD51D /* 1000.zip in Resources */,
 				7DBB3CAF1E55C2EE0075E638 /* homeLoading.gif in Resources */,
+				9C5E99AE1EB9CDB300C5B346 /* customBackGround.zip in Resources */,
 				7DBB3CB01E55C2EE0075E638 /* ProjectSettings.plist in Resources */,
 				7DBB3CB11E55C2EE0075E638 /* Localizable.strings in Resources */,
 				7DBB3CB21E55C2EE0075E638 /* YouYuJiZhangBao-Info.plist in Resources */,
@@ -13752,6 +13767,7 @@
 				7DBB41441E55C4E00075E638 /* SuiShouJi-Info.plist in Resources */,
 				7DBB41451E55C4E00075E638 /* rain_sound.wav in Resources */,
 				7DBB41461E55C4E00075E638 /* Assets.xcassets in Resources */,
+				9C5E99AA1EB9CDB000C5B346 /* customBackGround.zip in Resources */,
 				7DBB41471E55C4E00075E638 /* sr_refresh.png in Resources */,
 				7D8952DB1EB2F21700FF6D04 /* 1001.zip in Resources */,
 				7DBB41481E55C4E00075E638 /* YouYuJiZhang-Info.plist in Resources */,
@@ -13787,6 +13803,7 @@
 				7DFB18B21EB0341E00292DD3 /* YouYuJiZhangLiCai-Info.plist in Resources */,
 				7DFB19201EB1E3E400292DD3 /* 1000.zip in Resources */,
 				7DFB18B31EB0341E00292DD3 /* SuiShouJi-Info.plist in Resources */,
+				9C5E99B41EB9CDB800C5B346 /* customBackGround.zip in Resources */,
 				7DFB191F1EB1E3E100292DD3 /* 1001.zip in Resources */,
 				7DFB18B41EB0341E00292DD3 /* rain_sound.wav in Resources */,
 				7DFB18B51EB0341E00292DD3 /* Assets.xcassets in Resources */,
@@ -13823,6 +13840,7 @@
 				9C13F7291E8267D300AC5FA9 /* SuiShouJi-Info.plist in Resources */,
 				9C13F72A1E8267D300AC5FA9 /* rain_sound.wav in Resources */,
 				9C13F72B1E8267D300AC5FA9 /* Assets.xcassets in Resources */,
+				9C5E99AF1EB9CDB300C5B346 /* customBackGround.zip in Resources */,
 				9C13F72C1E8267D300AC5FA9 /* sr_refresh.png in Resources */,
 				9C13F72D1E8267D300AC5FA9 /* YouYuJiZhang-Info.plist in Resources */,
 				9C13F72E1E8267D300AC5FA9 /* JiZhangGuanJia-Info.plist in Resources */,
@@ -13858,6 +13876,7 @@
 				9C4C22581E9E30C8000C5F15 /* YouYuJiZhangLiCai-Info.plist in Resources */,
 				9C30AAA11EAF6EB5008DD51D /* 1000.zip in Resources */,
 				9C4C22591E9E30C8000C5F15 /* SuiShouJi-Info.plist in Resources */,
+				9C5E99B21EB9CDB700C5B346 /* customBackGround.zip in Resources */,
 				9C30AA961EAF6EAB008DD51D /* 1001.zip in Resources */,
 				9C4C225A1E9E30C8000C5F15 /* rain_sound.wav in Resources */,
 				9C4C225B1E9E30C8000C5F15 /* Assets.xcassets in Resources */,
@@ -13900,6 +13919,7 @@
 				9C7D2F3F1E8DF8A80093001F /* sr_refresh.png in Resources */,
 				9C7D2F401E8DF8A80093001F /* YouYuJiZhang-Info.plist in Resources */,
 				9C7D2F411E8DF8A80093001F /* JiZhangGuanJia-Info.plist in Resources */,
+				9C5E99A91EB9CDB000C5B346 /* customBackGround.zip in Resources */,
 				9C7D2F421E8DF8A80093001F /* YouYuJiZhangGuanJia-Info.plist in Resources */,
 				9C30AA981EAF6EAF008DD51D /* 1000.zip in Resources */,
 				9C7D2F431E8DF8A80093001F /* homeDefualtLoading.gif in Resources */,
@@ -13936,6 +13956,7 @@
 				9C7D31B61E8DF96B0093001F /* sr_refresh.png in Resources */,
 				9C7D31B71E8DF96B0093001F /* YouYuJiZhang-Info.plist in Resources */,
 				9C7D31B81E8DF96B0093001F /* JiZhangGuanJia-Info.plist in Resources */,
+				9C5E99B01EB9CDB400C5B346 /* customBackGround.zip in Resources */,
 				9C7D31B91E8DF96B0093001F /* YouYuJiZhangGuanJia-Info.plist in Resources */,
 				9C30AA9F1EAF6EB3008DD51D /* 1000.zip in Resources */,
 				9C7D31BA1E8DF96B0093001F /* homeDefualtLoading.gif in Resources */,
@@ -13968,6 +13989,7 @@
 				9C80FEF71E95E88E00B1BAAC /* YouYuJiZhangLiCai-Info.plist in Resources */,
 				9C30AAA21EAF6EB5008DD51D /* 1000.zip in Resources */,
 				9C80FEF81E95E88E00B1BAAC /* SuiShouJi-Info.plist in Resources */,
+				9C5E99B11EB9CDB600C5B346 /* customBackGround.zip in Resources */,
 				9C30AA951EAF6EAA008DD51D /* 1001.zip in Resources */,
 				9C80FEF91E95E88E00B1BAAC /* rain_sound.wav in Resources */,
 				9C80FEFA1E95E88E00B1BAAC /* Assets.xcassets in Resources */,
@@ -14006,6 +14028,7 @@
 				9C9CF0B71EA5F73A007657FE /* YouYuJiZhangLiCai-Info.plist in Resources */,
 				9C30AAA31EAF6EB6008DD51D /* 1000.zip in Resources */,
 				9C9CF0B81EA5F73A007657FE /* SuiShouJi-Info.plist in Resources */,
+				9C5E99B31EB9CDB700C5B346 /* customBackGround.zip in Resources */,
 				9C30AA971EAF6EAB008DD51D /* 1001.zip in Resources */,
 				9C9CF0B91EA5F73A007657FE /* rain_sound.wav in Resources */,
 				9C9CF0BA1EA5F73A007657FE /* Assets.xcassets in Resources */,
@@ -14042,6 +14065,7 @@
 				7DC4875E1DF6629700C27B69 /* Localizable.strings in Resources */,
 				9C30AA8E1EAF6EA6008DD51D /* 1001.zip in Resources */,
 				9CFBAC3C1E07D4E600C55814 /* homeDefualtLoading.gif in Resources */,
+				9C5E99AB1EB9CDB100C5B346 /* customBackGround.zip in Resources */,
 				9CFBAC401E07D4EC00C55814 /* xiaomao.gif in Resources */,
 				9CECFED81D6D41A700DB2C8B /* SSJFinancingHomePopView.xib in Resources */,
 				9C155F131E68572700FDFD18 /* MJRefresh.bundle in Resources */,
