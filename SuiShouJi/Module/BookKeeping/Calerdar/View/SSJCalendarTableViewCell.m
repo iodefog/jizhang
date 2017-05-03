@@ -95,7 +95,7 @@
     if (!_typeLab) {
         _typeLab = [[UILabel alloc] init];
         _typeLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        _typeLab.font = [UIFont systemFontOfSize:16];
+        _typeLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
     }
     return _typeLab;
 }
@@ -104,7 +104,7 @@
     if (!_memoLab) {
         _memoLab = [[UILabel alloc] init];
         _memoLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-        _memoLab.font = [UIFont systemFontOfSize:13];
+        _memoLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
     }
     return _memoLab;
 }
@@ -113,7 +113,7 @@
     if (!_moneyLab) {
         _moneyLab = [[UILabel alloc] init];
         _moneyLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        _moneyLab.font = [UIFont systemFontOfSize:16];
+        _moneyLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
     }
     return _moneyLab;
 }

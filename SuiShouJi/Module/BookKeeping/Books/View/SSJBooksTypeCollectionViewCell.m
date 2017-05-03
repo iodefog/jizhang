@@ -56,14 +56,14 @@ static const CGFloat kCornerRadius = 4.f;
     self.seperatorLineView.leftTop = CGPointMake(22, 0);
     if (self.titleLabel.text.length) {
         if (self.titleLabel.text.length >= 4) {
-            self.titleLabel.height = [[self.titleLabel.text substringWithRange:NSMakeRange(0, 1)] sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:18]}].height * 4;
+            self.titleLabel.height = [[self.titleLabel.text substringWithRange:NSMakeRange(0, 1)] sizeWithAttributes:@{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2)}].height * 4;
         }else{
-            self.titleLabel.height = [[self.titleLabel.text substringWithRange:NSMakeRange(0, 1)] sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:18]}].height * self.titleLabel.text.length;
+            self.titleLabel.height = [[self.titleLabel.text substringWithRange:NSMakeRange(0, 1)] sizeWithAttributes:@{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2)}].height * self.titleLabel.text.length;
         }
     }
     float maxWitdh = 0;
     for (int i = 0; i < self.titleLabel.text.length; i ++) {
-        float textWidth = [[self.titleLabel.text substringWithRange:NSMakeRange(i, 1)] sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:18]}].width;
+        float textWidth = [[self.titleLabel.text substringWithRange:NSMakeRange(i, 1)] sizeWithAttributes:@{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2)}].width;
         if (textWidth > maxWitdh) {
             maxWitdh = textWidth;
         }
@@ -92,7 +92,7 @@ static const CGFloat kCornerRadius = 4.f;
     if (!_titleLabel) {
         _titleLabel = [[UILabel alloc]init];
         _titleLabel.textColor = [UIColor whiteColor];
-        _titleLabel.font = [UIFont systemFontOfSize:16];
+        _titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         _titleLabel.textAlignment = NSTextAlignmentCenter;
         _titleLabel.numberOfLines = 0;
     }

@@ -188,7 +188,7 @@
     if (!_titleLabel) {
         _titleLabel = [[UILabel alloc]init];
         _titleLabel.textColor = [UIColor ssj_colorWithHex:@"#393939"];
-        _titleLabel.font = [UIFont systemFontOfSize:18];
+        _titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2);
         _titleLabel.text = @"编辑/添加账本";
         _titleLabel.textAlignment = NSTextAlignmentCenter;
         [_titleLabel ssj_setBorderStyle:SSJBorderStyleBottom];
@@ -202,11 +202,11 @@
     if (!_nameInput) {
         _nameInput = [[UITextField alloc]init];
         _nameInput.textColor = [UIColor ssj_colorWithHex:@"#393939"];
-        _nameInput.font = [UIFont systemFontOfSize:18];
+        _nameInput.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2);
         UILabel *leftLabel = [[UILabel alloc]init];
         leftLabel.textColor = [UIColor ssj_colorWithHex:@"#393939"];
         leftLabel.text = @"账本名称: ";
-        leftLabel.font = [UIFont systemFontOfSize:18];
+        leftLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2);
         [leftLabel sizeToFit];
         _nameInput.leftView = leftLabel;
         _nameInput.leftViewMode = UITextFieldViewModeAlways;

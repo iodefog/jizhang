@@ -133,8 +133,8 @@ static NSString *const kMemberTableViewCellIdentifier = @"kMemberTableViewCellId
         NSMutableAttributedString *atrributedTitle = [[NSMutableAttributedString alloc]initWithString:title];
         [atrributedTitle addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:[title rangeOfString:@"选择成员"]];
         [atrributedTitle addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] range:[title rangeOfString:@"(可多选 , 多选即均分费用)"]];
-        [atrributedTitle addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:18] range:[title rangeOfString:@"选择成员"]];
-        [atrributedTitle addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15] range:[title rangeOfString:@"(可多选 , 多选即均分费用)"]];
+        [atrributedTitle addAttribute:NSFontAttributeName value:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2) range:[title rangeOfString:@"选择成员"]];
+        [atrributedTitle addAttribute:NSFontAttributeName value:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3) range:[title rangeOfString:@"(可多选 , 多选即均分费用)"]];
         titleLab.attributedText = atrributedTitle;
         [titleLab sizeToFit];
         [_topView addSubview:titleLab];
@@ -144,7 +144,7 @@ static NSString *const kMemberTableViewCellIdentifier = @"kMemberTableViewCellId
         [comfirmButton setTitle:@"确定" forState:UIControlStateNormal];
         [comfirmButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] forState:UIControlStateNormal];
         [comfirmButton addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
-        comfirmButton.titleLabel.font = [UIFont systemFontOfSize:18];
+        comfirmButton.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2);
         [_topView addSubview:comfirmButton];
         comfirmButton.size = CGSizeMake(50, 20);
         comfirmButton.centerY = _topView.height / 2;
@@ -153,7 +153,7 @@ static NSString *const kMemberTableViewCellIdentifier = @"kMemberTableViewCellId
         [manageButton setImage:[[UIImage imageNamed:@"chengyuan_guanli"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
         manageButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
         [manageButton addTarget:self action:@selector(manageButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-        manageButton.titleLabel.font = [UIFont systemFontOfSize:18];
+        manageButton.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2);
         [_topView addSubview:manageButton];
         manageButton.size = CGSizeMake(40, 40);
         manageButton.centerY = _topView.height / 2;

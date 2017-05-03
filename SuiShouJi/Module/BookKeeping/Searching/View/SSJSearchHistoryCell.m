@@ -40,7 +40,7 @@
     if (!_titleLab) {
         _titleLab = [[UILabel alloc]init];
         _titleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        _titleLab.font = [UIFont systemFontOfSize:15];
+        _titleLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
     }
     return _titleLab;
 }

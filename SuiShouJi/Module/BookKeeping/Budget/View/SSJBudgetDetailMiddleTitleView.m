@@ -64,7 +64,7 @@
     if (!_titleLabel) {
         _titleLabel = [[UILabel alloc] init];
         _titleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-        _titleLabel.font = [UIFont systemFontOfSize:12];
+        _titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_5);
     }
     return _titleLabel;
 }
@@ -73,7 +73,7 @@
     if (!_periodLabel) {
         _periodLabel = [[UILabel alloc] init];
         _periodLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-        _periodLabel.font = [UIFont systemFontOfSize:12];
+        _periodLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_5);
     }
     return _periodLabel;
 }

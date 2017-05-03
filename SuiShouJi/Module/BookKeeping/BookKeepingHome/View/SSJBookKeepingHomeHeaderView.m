@@ -55,7 +55,7 @@
 -(UILabel*)incomeLabel{
     if (!_incomeLabel) {
         _incomeLabel = [[UILabel alloc]initWithFrame:CGRectZero];
-        _incomeLabel.font = [UIFont systemFontOfSize:15];
+        _incomeLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         _incomeLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     }
     return _incomeLabel;
@@ -64,7 +64,7 @@
 -(UILabel*)expenditureLabel{
     if (!_expenditureLabel) {
         _expenditureLabel = [[UILabel alloc]initWithFrame:CGRectZero];
-        _expenditureLabel.font = [UIFont systemFontOfSize:15];
+        _expenditureLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         _expenditureLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     }
     return _expenditureLabel;

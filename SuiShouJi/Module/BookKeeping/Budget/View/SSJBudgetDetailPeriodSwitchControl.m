@@ -68,7 +68,7 @@ static CGSize kButtonSize = {36, 30};
 }
 
 - (void)setTitleSize:(CGFloat)titleSize {
-    _titleLabel.font = [UIFont systemFontOfSize:titleSize];
+    _titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(titleSize);
     [self sizeToFit];
 }
 
@@ -108,7 +108,7 @@ static CGSize kButtonSize = {36, 30};
 - (UILabel *)titleLabel {
     if (!_titleLabel) {
         _titleLabel = [[UILabel alloc] init];
-        _titleLabel.font = [UIFont systemFontOfSize:21];
+        _titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_1);
     }
     return _titleLabel;
 }

@@ -324,7 +324,7 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
         [clearButton setTitle:@"清空所有历史搜索" forState:UIControlStateNormal];
         [clearButton setImage:[[UIImage imageNamed:@"search_clear"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
         clearButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-        clearButton.titleLabel.font = [UIFont systemFontOfSize:15];
+        clearButton.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         [clearButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] forState:UIControlStateNormal];
         [clearButton addTarget:self action:@selector(clearButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         clearButton.center = CGPointMake(_clearHistoryFooterView.width / 2, _clearHistoryFooterView.height / 2);

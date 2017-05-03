@@ -23,7 +23,7 @@
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier]) {
-        self.textLabel.font = [UIFont systemFontOfSize:15];
+        self.textLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         self.textLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         
         self.imageView.contentMode = UIViewContentModeCenter;
@@ -77,7 +77,7 @@
         _moneyLab = [[UILabel alloc] init];
         _moneyLab.backgroundColor = [UIColor clearColor];
         _moneyLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        _moneyLab.font = [UIFont systemFontOfSize:20];
+        _moneyLab.font = SSJ_Helvetica_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_1);
     }
     return _moneyLab;
 }

@@ -36,7 +36,7 @@
     if (!_headerLab) {
         _headerLab = [[UILabel alloc]init];
         _headerLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        _headerLab.font = [UIFont systemFontOfSize:15];
+        _headerLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
     }
     return _headerLab;
 }

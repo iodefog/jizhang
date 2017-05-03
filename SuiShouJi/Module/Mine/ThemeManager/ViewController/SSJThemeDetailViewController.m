@@ -196,7 +196,7 @@ static NSString *const kCellId = @"SSJThemeImageCollectionViewCell";
     if (!_themeTitleLabel) {
         _themeTitleLabel = [[UILabel alloc]init];
         _themeTitleLabel.textColor = [UIColor ssj_colorWithHex:@"#393939"];
-        _themeTitleLabel.font = [UIFont systemFontOfSize:18];
+        _themeTitleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2);
         _themeTitleLabel.text = self.item.themeTitle;
         [_themeTitleLabel sizeToFit];
     }
@@ -207,7 +207,7 @@ static NSString *const kCellId = @"SSJThemeImageCollectionViewCell";
     if (!_themeSizeLabel) {
         _themeSizeLabel = [[UILabel alloc]init];
         _themeSizeLabel.textColor = [UIColor ssj_colorWithHex:@"#929292"];
-        _themeSizeLabel.font = [UIFont systemFontOfSize:15];
+        _themeSizeLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         _themeSizeLabel.text = self.item.themeSize;
         [_themeSizeLabel sizeToFit];
     }
@@ -218,7 +218,7 @@ static NSString *const kCellId = @"SSJThemeImageCollectionViewCell";
     if (!_themePriceLabel) {
         _themePriceLabel = [[UILabel alloc]init];
         _themePriceLabel.textColor = [UIColor ssj_colorWithHex:@"#eb4a64"];
-        _themePriceLabel.font = [UIFont systemFontOfSize:15];
+        _themePriceLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         _themePriceLabel.text = @"免费";
         [_themePriceLabel sizeToFit];
     }
@@ -272,7 +272,7 @@ static NSString *const kCellId = @"SSJThemeImageCollectionViewCell";
     if (!_themeDescLabel) {
         _themeDescLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, self.view.width - 10, 56)];
         _themeDescLabel.textColor = [UIColor ssj_colorWithHex:@"#393939"];
-        _themeDescLabel.font = [UIFont systemFontOfSize:15];
+        _themeDescLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         _themeDescLabel.text = self.item.themeDesc;
         _themeDescLabel.numberOfLines = 0;
         [_themeDescLabel sizeToFit];

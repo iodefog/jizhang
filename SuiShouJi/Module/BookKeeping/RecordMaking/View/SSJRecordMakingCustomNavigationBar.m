@@ -270,7 +270,7 @@
 - (UIButton *)managerBtn {
     if (!_managerBtn) {
         _managerBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        _managerBtn.titleLabel.font = [UIFont systemFontOfSize:16];
+        _managerBtn.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         [_managerBtn addTarget:self action:@selector(managerBtnAction) forControlEvents:UIControlEventTouchUpInside];
     }
     return _managerBtn;
@@ -279,7 +279,7 @@
 - (UILabel *)titleLab {
     if (!_titleLab) {
         _titleLab = [[UILabel alloc] init];
-        _titleLab.font = [UIFont systemFontOfSize:13];
+        _titleLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
     }
     return _titleLab;
 }

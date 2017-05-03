@@ -186,7 +186,7 @@
 - (UILabel *)createLabelWithText:(NSString *)text fontSize:(CGFloat)size textColor:(UIColor *)color {
     UILabel *label = [[UILabel alloc] init];
     label.text = text;
-    label.font = [UIFont systemFontOfSize:size];
+    label.font = SSJ_PingFang_REGULAR_FONT_SIZE(size);
     label.textColor = color;
     label.adjustsFontSizeToFitWidth = YES;
     [label sizeToFit];
