@@ -128,7 +128,7 @@
     if ([_item.ID isEqualToString:SSJDefaultThemeID]) {
         self.themeImage.image = [UIImage imageNamed:@"defualtImage"];
     }else{
-        [self.themeImage sd_setImageWithURL:[NSURL URLWithString:item.previewUrlStr]];
+        [self.themeImage sd_setImageWithURL:[NSURL URLWithString:item.thumbUrlStr]];
     }
     self.themeTitleLabel.text = item.name;
     [self.themeTitleLabel sizeToFit];
