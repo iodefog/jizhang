@@ -250,7 +250,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
             [SSJReportFormsUtil queryForIncomeOrPayType:[self currentType] booksId:_currentBooksId startDate:period.startDate endDate:period.endDate success:^(NSArray<SSJReportFormsItem *> *list) {
                 [self reorganiseCurveTableDataWithOriginalData:list];
             } failure:^(NSError *error) {
-                [self showError:error];
+                [SSJAlertViewAdapter showError:error];
                 [self.view ssj_hideLoadingIndicator];
             }];
             break;
@@ -296,7 +296,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
         
     } failure:^(NSError *error) {
         [self.view ssj_hideLoadingIndicator];
-        [self showError:error];
+        [SSJAlertViewAdapter showError:error];
     }];
 }
 
@@ -320,7 +320,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
                         [self reorganiseChartTableVieDatasWithOriginalData:result];
                         [self.tableView reloadData];
                     } failure:^(NSError *error) {
-                        [self showError:error];
+                        [SSJAlertViewAdapter showError:error];
                         [self.tableView ssj_hideLoadingIndicator];
                     }];
                 }
@@ -333,7 +333,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
                         [self reorganiseChartTableVieDatasWithOriginalData:result];
                         [self.tableView reloadData];
                     } failure:^(NSError *error) {
-                        [self showError:error];
+                        [SSJAlertViewAdapter showError:error];
                         [self.tableView ssj_hideLoadingIndicator];
                     }];
                 }
@@ -374,19 +374,19 @@ static NSString *const kSegmentTitleIncome = @"收入";
                         [self reorganiseCurveTableDataWithOriginalData:list];
                         
                     } failure:^(NSError *error) {
-                        [self showError:error];
+                        [SSJAlertViewAdapter showError:error];
                         [self.curveHeaderView hideLoadingOnSeparatorForm];
                         [self.curveHeaderView hideLoadingOnCurve];
                     }];
                     
                 } failure:^(NSError *error) {
-                    [self showError:error];
+                    [SSJAlertViewAdapter showError:error];
                     [self.curveHeaderView hideLoadingOnSeparatorForm];
                     [self.curveHeaderView hideLoadingOnCurve];
                 }];
                 
             } failure:^(NSError *error) {
-                [self showError:error];
+                [SSJAlertViewAdapter showError:error];
                 [self.curveHeaderView hideLoadingOnSeparatorForm];
                 [self.curveHeaderView hideLoadingOnCurve];
             }];
@@ -531,16 +531,6 @@ static NSString *const kSegmentTitleIncome = @"收入";
     }
     
     [self.tableView reloadData];
-}
-
-- (void)showError:(NSError *)error {
-    NSString *message = nil;
-#ifdef DEBUG
-    message = [error localizedDescription];
-#else
-    message = SSJ_ERROR_MESSAGE;
-#endif
-    [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:message action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
 }
 
 - (void)updateAppearance {
@@ -688,7 +678,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
                 wself.curveHeaderView.item = wself.curveHeaderItem;
                 
             } failure:^(NSError *error) {
-                [wself showError:error];
+                [SSJAlertViewAdapter showError:error];
                 [wself.curveHeaderView hideLoadingOnCurve];
             }];
             

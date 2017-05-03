@@ -111,9 +111,14 @@
 
 - (void)updateAppearance {
     self.layer.shadowColor = RGBACOLOR(0, 0, 0, 0.08).CGColor;
-    self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
     [self.dateAxisView updateAppearance];
+    self.addCustomPeriodBtn.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
     [self.customPeriodBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] forState:UIControlStateNormal];
+    if ([SSJCurrentThemeID() isEqualToString:SSJDefaultThemeID]) {
+        self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
+    } else {
+        self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor alpha:SSJ_CURRENT_THEME.backgroundAlpha + 0.1];
+    }
 }
 
 - (void)drawShadowIfNeeded {
@@ -218,7 +223,7 @@
         _addCustomPeriodBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _addCustomPeriodBtn.imageEdgeInsets = UIEdgeInsetsMake(0, 14, 0, 20);
         [_addCustomPeriodBtn addTarget:self action:@selector(addCustomPeriod) forControlEvents:UIControlEventTouchUpInside];
-        [_addCustomPeriodBtn setImage:[UIImage imageNamed:@"reportForms_edit"] forState:UIControlStateNormal];
+        [_addCustomPeriodBtn setImage:[[UIImage imageNamed:@"reportForms_edit"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
     }
     return _addCustomPeriodBtn;
 }
