@@ -70,7 +70,7 @@
     SSJBaseItem *item = [self.items ssj_objectAtIndexPath:indexPath];
     if ([item isKindOfClass:[SSJBillingChargeCellItem class]] && indexPath.section == 1) {
         if (self.item.chargeMemo.length) {
-            return 142;
+            return 160;
         }else{
             return 120;
         }

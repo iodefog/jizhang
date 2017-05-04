@@ -8,8 +8,10 @@
 
 #import "SSJHomeThemeModifyView.h"
 #import "SSJCustomThemeSelectCollectionViewCell.h"
+#import "SSJButton.h"
 
 #import "SSJCustomThemeManager.h"
+
 
 static NSString *const kCellId = @"SSJCustomThemeSelectCollectionViewCell";
 
@@ -21,9 +23,9 @@ static NSString *const kCellId = @"SSJCustomThemeSelectCollectionViewCell";
 
 @property(nonatomic, strong) UILabel *fontLab;
 
-@property(nonatomic, strong) UIButton *blackButton;
+@property(nonatomic, strong) SSJButton *blackButton;
 
-@property(nonatomic, strong) UIButton *whiteButton;
+@property(nonatomic, strong) SSJButton *whiteButton;
 
 @end
 
@@ -54,6 +56,7 @@ static NSString *const kCellId = @"SSJCustomThemeSelectCollectionViewCell";
     self.collectionView.size = CGSizeMake(self.width, self.height - 41);
     self.collectionView.leftBottom = CGPointMake(0, self.height);
     self.fontLab.rightTop = CGPointMake(self.width / 2 - 20, 18);
+    self.whiteButton.size = self.blackButton.size = CGSizeMake(24, 24);
     self.whiteButton.left = self.width / 2 + 20;
     self.whiteButton.centerY = self.fontLab.centerY;
     self.blackButton.left = self.whiteButton.right + 40;
@@ -86,27 +89,29 @@ static NSString *const kCellId = @"SSJCustomThemeSelectCollectionViewCell";
     return _fontLab;
 }
 
-- (UIButton *)blackButton {
+- (SSJButton *)blackButton {
     if (!_blackButton) {
-        _blackButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        _blackButton = [[SSJButton alloc] init];
+        _blackButton.contentInset = UIEdgeInsetsMake(6, 6, 6, 6);
         _blackButton.size = CGSizeMake(12, 12);
-        _blackButton.layer.cornerRadius = 6.f;
-        _blackButton.layer.borderWidth  = 2.f;
-        _blackButton.layer.borderColor = [UIColor clearColor].CGColor;
-        _blackButton.backgroundColor = [UIColor blackColor];
+        _blackButton.cornerRadius = 6.f;
+        _blackButton.borderWidth  = 2.f;
+        [_blackButton setBorderColor:[UIColor clearColor] forState:SSJButtonStateNormal];
+        [_blackButton setBackgroundColor:[UIColor blackColor] forState:SSJButtonStateNormal];
         [_blackButton addTarget:self action:@selector(blackBlackButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _blackButton;
 }
 
-- (UIButton *)whiteButton {
+- (SSJButton *)whiteButton {
     if (!_whiteButton) {
-        _whiteButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        _whiteButton = [[SSJButton alloc] init];
+        _whiteButton.contentInset = UIEdgeInsetsMake(6, 6, 6, 6);
         _whiteButton.size = CGSizeMake(12, 12);
-        _whiteButton.layer.cornerRadius = 6.f;
-        _whiteButton.layer.borderWidth  = 2.f;
-        _whiteButton.layer.borderColor = [UIColor clearColor].CGColor;
-        _whiteButton.backgroundColor = [UIColor whiteColor];
+        _whiteButton.cornerRadius = 6.f;
+        _whiteButton.borderWidth  = 2.f;
+        [_whiteButton setBorderColor:[UIColor clearColor] forState:SSJButtonStateNormal];
+        [_whiteButton setBackgroundColor:[UIColor whiteColor] forState:SSJButtonStateNormal];
         [_whiteButton addTarget:self action:@selector(whiteButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _whiteButton;
@@ -124,19 +129,22 @@ static NSString *const kCellId = @"SSJCustomThemeSelectCollectionViewCell";
         self.seletctTheme = [self.images objectAtIndex:indexPath.item];
         if ([self.seletctTheme isEqualToString:@"background"]) {
             self.selectType = NO;
-            self.blackButton.layer.borderColor = [UIColor ssj_colorWithHex:@"#EB4762"].CGColor;
-            self.whiteButton.layer.borderColor = [UIColor clearColor].CGColor;
+            [self.blackButton setBorderColor:[UIColor ssj_colorWithHex:@"#EB4762"] forState:SSJButtonStateNormal];
+            [self.whiteButton setBorderColor:[UIColor clearColor] forState:SSJButtonStateNormal];
+
             [self.collectionView reloadData];
             [SSJCustomThemeManager changeThemeWithLocalImage:nil type:self.selectType];
         } else {
             if ([self.seletctTheme hasSuffix:@"dark"]) {
                 self.selectType = YES;
-                self.whiteButton.layer.borderColor = [UIColor ssj_colorWithHex:@"#EB4762"].CGColor;
-                self.blackButton.layer.borderColor = [UIColor clearColor].CGColor;
+                [self.whiteButton setBorderColor:[UIColor ssj_colorWithHex:@"#EB4762"] forState:SSJButtonStateNormal];
+                [self.blackButton setBorderColor:[UIColor clearColor] forState:SSJButtonStateNormal];
+
             } else {
                 self.selectType = NO;
-                self.blackButton.layer.borderColor = [UIColor ssj_colorWithHex:@"#EB4762"].CGColor;
-                self.whiteButton.layer.borderColor = [UIColor clearColor].CGColor;
+                [self.blackButton setBorderColor:[UIColor ssj_colorWithHex:@"#EB4762"] forState:SSJButtonStateNormal];
+                [self.whiteButton setBorderColor:[UIColor clearColor] forState:SSJButtonStateNormal];
+
             }
             [self.collectionView reloadData];
             [SSJCustomThemeManager changeThemeWithDefaultImageName:self.seletctTheme type:self.selectType];
@@ -268,11 +276,11 @@ static NSString *const kCellId = @"SSJCustomThemeSelectCollectionViewCell";
 
 - (void)updateFontType {
     if (!self.selectType) {
-        self.blackButton.layer.borderColor = [UIColor ssj_colorWithHex:@"#EB4762"].CGColor;
-        self.whiteButton.layer.borderColor = [UIColor clearColor].CGColor;
+        [self.blackButton setBorderColor:[UIColor ssj_colorWithHex:@"#EB4762"] forState:SSJButtonStateNormal];
+        [self.whiteButton setBorderColor:[UIColor clearColor] forState:SSJButtonStateNormal];
     } else {
-        self.whiteButton.layer.borderColor = [UIColor ssj_colorWithHex:@"#EB4762"].CGColor;
-        self.blackButton.layer.borderColor = [UIColor clearColor].CGColor;
+        [self.whiteButton setBorderColor:[UIColor ssj_colorWithHex:@"#EB4762"] forState:SSJButtonStateNormal];
+        [self.blackButton setBorderColor:[UIColor clearColor] forState:SSJButtonStateNormal];
     }
 }
 
