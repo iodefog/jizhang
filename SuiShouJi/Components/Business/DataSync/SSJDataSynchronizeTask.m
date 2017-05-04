@@ -377,7 +377,7 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
         userItem.mobileNo = userInfo[@"cmobileno"];
         userItem.nickName = userInfo[@"crealname"]; // 第三方登录时，服务器返回的crealname就是用户昵称
         userItem.signature = userInfo[@"usersignature"];
-        userItem.icon = userInfo[@"cicons"];
+        userItem.icon = userInfo[@"cicon"];
         [SSJUserTableManager saveUserItem:userItem];
     }
     
