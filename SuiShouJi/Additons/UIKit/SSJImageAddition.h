@@ -107,5 +107,12 @@
 
 + (UIImage *)verticalImageFromArray:(NSArray *)imagesArray;
 
+
+/**
+ 根据拍照图片的方向返回一张正确方向的图片
+
+ @return <#return value description#>
+ */
+- (UIImage *)fixOrientation;
 @end
 
