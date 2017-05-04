@@ -104,8 +104,9 @@ static CGFloat imageScale = 0.8; //裁剪框和屏幕大小比例
 //        
 //    }
     if (self.imageView.width > self.imageView.height) { //宽》 高
-        float clipH = [[NSString stringWithFormat:@"%.2f",SSJSCREENHEIGHT*imageScale ] floatValue];
-        if (self.imageView.height <= clipH) {
+        int clipH = SSJSCREENHEIGHT*imageScale;
+        int imgH = self.imageView.height;
+        if (imgH <= clipH) {
             
         } else {
             double scale = self.imageView.width / self.imageView.height;
@@ -113,8 +114,9 @@ static CGFloat imageScale = 0.8; //裁剪框和屏幕大小比例
         }
         
     } else { //高》宽
-        float clipW = [[NSString stringWithFormat:@"%.2f",SSJSCREENWITH*imageScale ] floatValue];
-        if (self.imageView.width <= clipW) {
+        int clipW = SSJSCREENWITH*imageScale;
+        int imgW = self.imageView.width;
+        if (imgW <= clipW) {
             
         } else {
             double scale = self.imageView.height / self.imageView.width;
