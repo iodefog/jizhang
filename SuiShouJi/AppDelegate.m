@@ -144,12 +144,7 @@ NSDate *SCYEnterBackgroundTime() {
         });
         
     }
-    
-    NSInteger appversion = [[SSJAppVersion() stringByReplacingOccurrencesOfString:@"." withString:@""] integerValue];
-    
-    if (SSJLaunchTimesForCurrentVersion() == 1 && appversion >= 240) {
-        [SSJCustomThemeManager initializeCustomTheme];
-    }
+        
     
     //每次启动打一次补丁
 //    [SSJJspatchAnalyze SSJJsPatchAnalyzePatch];

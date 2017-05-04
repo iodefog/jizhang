@@ -12,35 +12,40 @@
 #import "SSJThemeModel.h"
 
 @implementation SSJCustomThemeManager
+    
++ (void)load {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initializeCustomTheme) name:UIApplicationDidFinishLaunchingNotification object:nil];
+}
+
 
 + (void)initializeCustomTheme {
-    NSString *firstThemeDirectPath = [[NSString ssj_themeDirectory] stringByAppendingPathComponent:@"1000"];
-    NSString *secondThemeDirectPath = [[NSString ssj_themeDirectory] stringByAppendingPathComponent:@"1001"];
-    NSString *themeBackDirectPath = [[NSString ssj_themeDirectory] stringByAppendingPathComponent:@"customBackGround"];
-    if (![[NSFileManager defaultManager] fileExistsAtPath:firstThemeDirectPath] && ![[NSFileManager defaultManager] fileExistsAtPath:secondThemeDirectPath]) {
-        // 将两个主题解压和背景图
-        NSString *firstThemePath = [[NSBundle mainBundle] pathForResource:@"1001" ofType:@"zip"];
-        NSString *secondThemePath = [[NSBundle mainBundle] pathForResource:@"1000" ofType:@"zip"];
-        [SSZipArchive unzipFileAtPath:firstThemePath toDestination:[NSString ssj_themeDirectory] overwrite:NO password:nil error:nil];
-        [SSZipArchive unzipFileAtPath:secondThemePath toDestination:[NSString ssj_themeDirectory] overwrite:NO password:nil error:nil];
-
-        // 将两个默认主题写入主题配置文件中
-        NSData *firstThemeData = [NSData dataWithContentsOfFile:[firstThemeDirectPath stringByAppendingPathComponent:@"themeSettings.json"]];
-        NSData *secondThemeData = [NSData dataWithContentsOfFile:[secondThemeDirectPath stringByAppendingPathComponent:@"themeSettings.json"]];
-        NSDictionary *firstDic = [NSJSONSerialization JSONObjectWithData:firstThemeData options:NSJSONReadingMutableContainers error:nil];
-        NSDictionary *secondDic = [NSJSONSerialization JSONObjectWithData:secondThemeData options:NSJSONReadingMutableContainers error:nil];
-        SSJThemeModel *firstModel = [SSJThemeModel mj_objectWithKeyValues:firstDic];
-        SSJThemeModel *secondModel = [SSJThemeModel mj_objectWithKeyValues:secondDic];
-        [SSJThemeSetting addThemeModel:firstModel];
-        [SSJThemeSetting addThemeModel:secondModel];
-    }
-    if (![[NSFileManager defaultManager] fileExistsAtPath:[[NSString ssj_themeDirectory] stringByAppendingPathComponent:@"customBackGround"]]) {
-//        [[NSFileManager defaultManager] createDirectoryAtPath:[[NSString ssj_themeDirectory] stringByAppendingPathComponent:@"customBackGround"] withIntermediateDirectories:YES attributes:nil error:nil];
-        NSString *themeBackPath = [[NSBundle mainBundle] pathForResource:@"customBackGround" ofType:@"zip"];
-        NSError *error = nil;
-        [SSZipArchive unzipFileAtPath:themeBackPath toDestination:[NSString ssj_themeDirectory] overwrite:YES password:nil error:&error];
-    }
-    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSString *firstThemeDirectPath = [[NSString ssj_themeDirectory] stringByAppendingPathComponent:@"1000"];
+        NSString *secondThemeDirectPath = [[NSString ssj_themeDirectory] stringByAppendingPathComponent:@"1001"];
+        if (![[NSFileManager defaultManager] fileExistsAtPath:firstThemeDirectPath] && ![[NSFileManager defaultManager] fileExistsAtPath:secondThemeDirectPath]) {
+            // 将两个主题解压和背景图
+            NSString *firstThemePath = [[NSBundle mainBundle] pathForResource:@"1001" ofType:@"zip"];
+            NSString *secondThemePath = [[NSBundle mainBundle] pathForResource:@"1000" ofType:@"zip"];
+            [SSZipArchive unzipFileAtPath:firstThemePath toDestination:[NSString ssj_themeDirectory] overwrite:NO password:nil error:nil];
+            [SSZipArchive unzipFileAtPath:secondThemePath toDestination:[NSString ssj_themeDirectory] overwrite:NO password:nil error:nil];
+            
+            // 将两个默认主题写入主题配置文件中
+            NSData *firstThemeData = [NSData dataWithContentsOfFile:[firstThemeDirectPath stringByAppendingPathComponent:@"themeSettings.json"]];
+            NSData *secondThemeData = [NSData dataWithContentsOfFile:[secondThemeDirectPath stringByAppendingPathComponent:@"themeSettings.json"]];
+            NSDictionary *firstDic = [NSJSONSerialization JSONObjectWithData:firstThemeData options:NSJSONReadingMutableContainers error:nil];
+            NSDictionary *secondDic = [NSJSONSerialization JSONObjectWithData:secondThemeData options:NSJSONReadingMutableContainers error:nil];
+            SSJThemeModel *firstModel = [SSJThemeModel mj_objectWithKeyValues:firstDic];
+            SSJThemeModel *secondModel = [SSJThemeModel mj_objectWithKeyValues:secondDic];
+            [SSJThemeSetting addThemeModel:firstModel];
+            [SSJThemeSetting addThemeModel:secondModel];
+        }
+        if (![[NSFileManager defaultManager] fileExistsAtPath:[[NSString ssj_themeDirectory] stringByAppendingPathComponent:@"customBackGround"]]) {
+            //        [[NSFileManager defaultManager] createDirectoryAtPath:[[NSString ssj_themeDirectory] stringByAppendingPathComponent:@"customBackGround"] withIntermediateDirectories:YES attributes:nil error:nil];
+            NSString *themeBackPath = [[NSBundle mainBundle] pathForResource:@"customBackGround" ofType:@"zip"];
+            NSError *error = nil;
+            [SSZipArchive unzipFileAtPath:themeBackPath toDestination:[NSString ssj_themeDirectory] overwrite:YES password:nil error:&error];
+        }
+    });
 }
 
 + (void)changeThemeWithDefaultImageName:(NSString *)name type:(BOOL)type{
