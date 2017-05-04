@@ -73,7 +73,7 @@
     _arrow.left = _titleLab.right + 5;
     _arrow.position = CGPointMake(_arrow.position.x, _containerView.height * 0.5);
     
-    _segmentCtrl.size = CGSizeMake(250, 24);
+    _segmentCtrl.size = CGSizeMake(200, 24);
     _segmentCtrl.centerX = self.width * 0.5;
     _segmentCtrl.top = 40 + statusBarHeight;
 }
@@ -238,7 +238,7 @@
     
     _titleLab.textColor = SSJ_MARCATO_COLOR;
     
-    _arrow.strokeColor = SSJ_SECONDARY_COLOR.CGColor;
+    _arrow.fillColor = SSJ_MARCATO_COLOR.CGColor;
     
     _segmentCtrl.borderColor = SSJ_SECONDARY_COLOR;
     _segmentCtrl.selectedBorderColor = SSJ_MARCATO_COLOR;
@@ -304,14 +304,14 @@
     if (!_arrow) {
         UIBezierPath *path = [UIBezierPath bezierPath];
         [path moveToPoint:CGPointZero];
-        [path addLineToPoint:CGPointMake(6, 7)];
-        [path addLineToPoint:CGPointMake(12, 0)];
+        [path addLineToPoint:CGPointMake(5, 5)];
+        [path addLineToPoint:CGPointMake(10, 0)];
         
         _arrow = [CAShapeLayer layer];
-        _arrow.size = CGSizeMake(12, 7);
+        _arrow.size = CGSizeMake(10, 5);
         _arrow.path = path.CGPath;
         _arrow.lineWidth = 1;
-        _arrow.fillColor = [UIColor clearColor].CGColor;
+        _arrow.fillColor = SSJ_MARCATO_COLOR.CGColor;
     }
     return _arrow;
 }
