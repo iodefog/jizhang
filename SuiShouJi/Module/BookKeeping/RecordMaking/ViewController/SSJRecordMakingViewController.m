@@ -93,7 +93,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     BOOL _needToDismiss;
 }
 #pragma mark - Lifecycle
--(void)dealloc {
+- (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -180,7 +180,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
             [wself loadCategoryAndBooksList];
         };
         _customNaviBar.addNewBookHandle = ^(SSJRecordMakingCustomNavigationBar *naviBar) {
-            [self.view endEditing:YES];
+            [wself.view endEditing:YES];
             [wself.parentSelectView show];
         };
         _customNaviBar.selectBillTypeHandle = ^(SSJRecordMakingCustomNavigationBar *naviBar) {
