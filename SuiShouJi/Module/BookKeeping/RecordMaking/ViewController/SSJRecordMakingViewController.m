@@ -180,6 +180,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
             [wself loadCategoryAndBooksList];
         };
         _customNaviBar.addNewBookHandle = ^(SSJRecordMakingCustomNavigationBar *naviBar) {
+            [self.view endEditing:YES];
             [wself.parentSelectView show];
         };
         _customNaviBar.selectBillTypeHandle = ^(SSJRecordMakingCustomNavigationBar *naviBar) {
