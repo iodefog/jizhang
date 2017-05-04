@@ -260,7 +260,10 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         [CDAutoHideMessageHUD showMessage:@"请先输入验证码"];
         return;
     }
-    [self finishBtnAction];//验证密码是否合格
+    
+    if (![self vefifyPassword]) {//验证密码是否合格
+        return;
+    }
     
     [self.networkService checkAuthCodeWithMobileNo:self.phoneNoField.text authCode:self.authCodeField.text];
 }
@@ -314,20 +317,16 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     return imageView;
 }
 
-- (void)finishBtnAction {
+- (BOOL)vefifyPassword {
     if (!self.passwordField.text.length) {
         [CDAutoHideMessageHUD showMessage:@"请输入6~15位数字和字母组合的密码"];
-        return;
+        return NO;
     }
-    
-    NSString * regex = @"^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,15}$";
-    NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
-    BOOL isMatch = [pred evaluateWithObject:self.passwordField.text];
-    if (isMatch) {
-    } else {
+    if (!SSJVerifyPassword(self.passwordField.text)) {
         [CDAutoHideMessageHUD showMessage:@"只能输入6-15位字母、数字组合"];
-        return;
+        return NO;
     }
+    return YES;
 }
 
 - (void)showSecret:(UIButton *)button

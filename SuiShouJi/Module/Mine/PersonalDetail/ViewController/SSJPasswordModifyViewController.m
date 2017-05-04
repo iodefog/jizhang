@@ -139,9 +139,7 @@
 
 #pragma mark - Private
 - (void)comfirmButtonClicked:(id)sender{
-    NSString * regex = @"^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,15}$";
-    NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
-    if (![pred evaluateWithObject:self.modifiedPasswordInput.text]){
+    if (!SSJVerifyPassword(self.modifiedPasswordInput.text)){
         [CDAutoHideMessageHUD showMessage:@"您的新密码不是由6到15位数字和字母组成的哦，请重新设置一个吧～"];
         return;
     }else if (![self.comfirmNewPasswordInput.text isEqualToString:self.modifiedPasswordInput.text]){

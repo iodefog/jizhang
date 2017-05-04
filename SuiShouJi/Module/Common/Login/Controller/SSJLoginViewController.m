@@ -545,10 +545,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
  */
 - (void)gotoRegister
 {
-    NSString * regex = @"^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,15}$";  //注册
-    NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
-    BOOL isMatch = [pred evaluateWithObject:self.tfRegPasswordNum.text];
-    if (isMatch) {
+    if (SSJVerifyPassword(self.tfRegPasswordNum.text)) {
         [self.registCompleteService setPasswordWithMobileNo:self.tfRegPhoneNum.text authCode:self.codeNum password:self.tfRegPasswordNum.text];
     } else {
         [CDAutoHideMessageHUD showMessage:@"只能输入6-15位字母、数字组合"];
