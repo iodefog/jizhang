@@ -61,7 +61,12 @@ static NSString *const kAnnouncementCellIdentifier = @"kAnnouncementCellIdentifi
 
 #pragma mark - UITableViewDelegate
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 114;
+    return UITableViewAutomaticDimension;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+     return 114;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
@@ -106,9 +111,12 @@ static NSString *const kAnnouncementCellIdentifier = @"kAnnouncementCellIdentifi
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     SSJAnnouncementDetailCell *announcementCell  = [tableView dequeueReusableCellWithIdentifier:kAnnouncementCellIdentifier];
+     
     [announcementCell setCellItem:[self.items objectAtIndex:indexPath.row]];
+     
     return announcementCell;
 }
+
 
 #pragma mark - SSJBaseNetworkService
 -(void)serverDidFinished:(SSJBaseNetworkService *)service {
