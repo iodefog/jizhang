@@ -275,6 +275,11 @@ static NSString *const kCellId = @"SSJCustomThemeSelectCollectionViewCell";
         self.selectType = currentTheme.darkOrLight;
         [self updateFontType];
         [self.collectionView reloadData];
+    } else {
+        self.seletctTheme = nil;
+        [self.blackButton setBorderColor:[UIColor clearColor] forState:SSJButtonStateNormal];
+        [self.whiteButton setBorderColor:[UIColor clearColor] forState:SSJButtonStateNormal];
+        [self.collectionView reloadData];
     }
 }
 
