@@ -390,14 +390,14 @@
             transform = CGAffineTransformRotate(transform, M_PI_2);
             break;
         case UIImageOrientationRight:
-        caseUIImageOrientationRightMirrored:
+        case UIImageOrientationRightMirrored:
             transform = CGAffineTransformTranslate(transform, 0, self.size.height);
             transform = CGAffineTransformRotate(transform, -M_PI_2);break;
         case UIImageOrientationUp:
         case UIImageOrientationUpMirrored:
             break;
     }
-    switch (self.imageOrientation){
+    switch (self.imageOrientation) {
         case UIImageOrientationUpMirrored:
         case UIImageOrientationDownMirrored:
             transform = CGAffineTransformTranslate(transform,self.size.width,0);
