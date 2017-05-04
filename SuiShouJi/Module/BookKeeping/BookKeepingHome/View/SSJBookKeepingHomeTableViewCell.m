@@ -478,7 +478,7 @@
     self.expentureMemoLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     self.toplineView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor];
     self.bottomlineView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor];
-    self.   categoryImageButton.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.recordHomeCategoryBackgroundColor];
+    [self.categoryImageButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.recordHomeCategoryBackgroundColor] forState:UIControlStateNormal];
 }
 
 @end
