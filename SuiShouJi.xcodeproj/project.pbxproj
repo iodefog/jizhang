@@ -13514,7 +13514,7 @@
 						};
 					};
 					9C7D2CDC1E8DF8A80093001F = {
-						DevelopmentTeam = 5QMLP5Z59C;
+						DevelopmentTeam = 534SCE47WT;
 						SystemCapabilities = {
 							com.apple.Push = {
 								enabled = 1;
@@ -25421,7 +25421,7 @@
 				CODE_SIGN_ENTITLEMENTS = SuiShouJi/Resource/Entitlements/YouYuJiZhangPro.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer: XiaoYong  Wu (6CF3K2UQ7J)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: XiaoYong  Wu (6CF3K2UQ7J)";
-				DEVELOPMENT_TEAM = 5QMLP5Z59C;
+				DEVELOPMENT_TEAM = 534SCE47WT;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -25504,8 +25504,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.notepro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "d7ec3992-88fd-4e38-a492-4580d1b21dd4";
-				PROVISIONING_PROFILE_SPECIFIER = youyujizhangproAppStore;
+				PROVISIONING_PROFILE = "4ca865e1-de21-4b04-99e6-16618b258dfd";
+				PROVISIONING_PROFILE_SPECIFIER = "XC Ad Hoc: *";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
