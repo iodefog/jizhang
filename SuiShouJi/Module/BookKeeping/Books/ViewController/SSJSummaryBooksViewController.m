@@ -73,7 +73,10 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
 #pragma mark - Getter
 - (SSJSummaryBooksTableViewHeader *)header{
     if (!_header) {
-        _header = [[SSJSummaryBooksTableViewHeader alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 1138)];
+        _header = [[SSJSummaryBooksTableViewHeader alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 1162)];
+        [_header ssj_setBorderStyle:SSJBorderStyleBottom];
+        [_header ssj_setBorderWidth:1];
+        [_header ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
         _header.curveView.dataSource = self;
         _header.curveView.delegate = self;
         _header.chartView.dataSource = self;

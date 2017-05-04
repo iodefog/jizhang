@@ -84,10 +84,8 @@
 
 - (SSJPercentCircleView *)chartView{
     if (!_chartView) {
-        _chartView = [[SSJPercentCircleView alloc] initWithFrame:CGRectMake(0, 0, self.width, 320) insets:UIEdgeInsetsMake(80, 80, 80, 80) thickness:20];
+        _chartView = [[SSJPercentCircleView alloc] initWithFrame:CGRectMake(0, 0, self.width, 344) insets:UIEdgeInsetsMake(80, 80, 80, 80) thickness:20];
         _chartView.backgroundColor = [UIColor clearColor];
-        [_chartView ssj_setBorderStyle:SSJBorderStyleBottom];
-        [_chartView ssj_setBorderWidth:1];
     }
     return _chartView;
 }
@@ -289,7 +287,6 @@
     self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     self.backColorView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     
-    [_chartView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
     _chartView.topTitleAttribute = @{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_1),
                                      NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor]};
     _chartView.bottomTitleAttribute = @{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_5),
