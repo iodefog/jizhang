@@ -12698,7 +12698,8 @@
 				BD0433311C1A82110051E7AB /* SSJConstant.h */,
 				BD0433321C1A82110051E7AB /* SSJConstant.m */,
 			);
-			path = Constant;
+			name = Constant;
+			path = ../Constant;
 			sourceTree = "<group>";
 		};
 		BD04333B1C1A82730051E7AB /* Util */ = {
@@ -12832,6 +12833,7 @@
 		BD0E43EB1C2118E600F9179D /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				BD0433301C1A82110051E7AB /* Constant */,
 				9C30AA871EAF6E7C008DD51D /* customTheme */,
 				9C3A2D461E65A4C200DFAE2C /* Entitlements */,
 				9C9D588E1E0144BF00E04213 /* GifImage */,
@@ -12909,7 +12911,6 @@
 				BD04336F1C1A8DA50051E7AB /* Module */,
 				7D6AAB5D1C312C340007C0A3 /* Components */,
 				BD04333B1C1A82730051E7AB /* Util */,
-				BD0433301C1A82110051E7AB /* Constant */,
 				BD0E43EB1C2118E600F9179D /* Resource */,
 				BD0432CD1C1A77BB0051E7AB /* Vendor */,
 				BD0432CB1C1A772A0051E7AB /* Macro */,
