@@ -261,3 +261,11 @@ NSString *SSJTitleForCycleType(SSJCyclePeriodType type);
  */
 int64_t SSJMilliTimestamp();
 
+/**
+ 验证登录密码是否合法
+
+ @param pwd 登录密码
+ @return BOOL
+ */
+BOOL SSJVerifyPassword(NSString *pwd);
+

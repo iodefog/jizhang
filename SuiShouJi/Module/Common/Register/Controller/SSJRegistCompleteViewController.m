@@ -169,10 +169,7 @@
 
 #pragma mark - Event
 - (void)finishBtnAction {
-    NSString * regex = @"^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,15}$";
-    NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
-    BOOL isMatch = [pred evaluateWithObject:self.passwordField.text];
-    if (isMatch) {
+    if (SSJVerifyPassword(self.passwordField.text)) {
         [self.registCompleteService setPasswordWithMobileNo:self.mobileNo authCode:self.authCode password:self.passwordField.text];
     } else {
         [CDAutoHideMessageHUD showMessage:@"只能输入6-15位字母、数字组合"];

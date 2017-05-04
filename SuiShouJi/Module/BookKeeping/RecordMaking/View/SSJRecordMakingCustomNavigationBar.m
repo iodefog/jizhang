@@ -236,7 +236,7 @@
     [_managerBtn setTitleColor:SSJ_MARCATO_COLOR forState:UIControlStateNormal];
     [_managerBtn setTitleColor:[SSJ_MARCATO_COLOR colorWithAlphaComponent:0.5] forState:UIControlStateHighlighted];
     
-    _titleLab.textColor = SSJ_MAIN_COLOR;
+    _titleLab.textColor = SSJ_MARCATO_COLOR;
     
     _arrow.fillColor = SSJ_MARCATO_COLOR.CGColor;
     
