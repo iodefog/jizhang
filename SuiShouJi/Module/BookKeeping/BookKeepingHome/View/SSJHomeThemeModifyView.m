@@ -57,9 +57,9 @@ static NSString *const kCellId = @"SSJCustomThemeSelectCollectionViewCell";
     self.collectionView.leftBottom = CGPointMake(0, self.height);
     self.fontLab.rightTop = CGPointMake(self.width / 2 - 20, 18);
     self.whiteButton.size = self.blackButton.size = CGSizeMake(24, 24);
-    self.whiteButton.left = self.width / 2 + 20;
+    self.whiteButton.left = self.width / 2 + 14;
     self.whiteButton.centerY = self.fontLab.centerY;
-    self.blackButton.left = self.whiteButton.right + 40;
+    self.blackButton.left = self.whiteButton.right + 34;
     self.blackButton.centerY = self.fontLab.centerY;
 }
 
