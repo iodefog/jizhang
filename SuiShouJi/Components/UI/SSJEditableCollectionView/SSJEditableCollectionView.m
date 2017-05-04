@@ -201,8 +201,6 @@ static const CGFloat kMaxSpeed = 100;
         _moving = YES;
         _longPressGesture.enabled = NO;
     }
-    
-//    [self beginEditingIfNeededWithTouchPressIndex:touchIndexPath];
 }
 
 - (void)endEditingWhenTapped {
@@ -238,7 +236,13 @@ static const CGFloat kMaxSpeed = 100;
 }
 
 - (void)beginEditing {
-    [self beginEditingIfNeededWithTouchPressIndex:nil];
+    if (!_editing) {
+        _editing = YES;
+        
+        if (_editDelegate && [_editDelegate respondsToSelector:@selector(collectionView:didBeginEditingWhenPressAtIndexPath:)]) {
+            [_editDelegate collectionView:self didBeginEditingWhenPressAtIndexPath:nil];
+        }
+    }
 }
 
 - (void)endEditing {
@@ -333,16 +337,6 @@ static const CGFloat kMaxSpeed = 100;
 }
 
 #pragma mark - Private
-- (void)beginEditingIfNeededWithTouchPressIndex:(NSIndexPath *)indexPath {
-    if (!_editing) {
-        _editing = YES;
-        
-        if (_editDelegate && [_editDelegate respondsToSelector:@selector(collectionView:didBeginEditingWhenPressAtIndexPath:)]) {
-            [_editDelegate collectionView:self didBeginEditingWhenPressAtIndexPath:indexPath];
-        }
-    }
-}
-
 // 如果两个cell相交就交换它们
 - (BOOL)moveCellToIndexPathIfNeeded:(NSIndexPath *)toIndexPath {
     if (!_currentMovedIndexPath || !toIndexPath) {
