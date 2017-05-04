@@ -7,6 +7,7 @@
 //
 
 #import "SSJBookkeepingTreeRuleDescView.h"
+#import "SSJStartChecker.h"
 
 static const UIEdgeInsets kOuterInsets = {54, 14, 36, 14};
 static const UIEdgeInsets kInnerInsets = {34, 14, 34, 14};
@@ -85,7 +86,11 @@ static const UIEdgeInsets kInnerInsets = {34, 14, 34, 14};
 }
 
 - (NSString *)ruleContent {
-    return @"1、每天摇一摇签到，就能给树浇水，每天限浇水1次，坚持助种子成功升级吧。\n\n2、记账树的成长依据您累计登录客户端的天数而定，系统会自动为您累计，天数越多，树的等级越高。\n\n3、时间累计以您实际打开客户端的天数为准；如第1天和第3天登录了客户端，第2天中断，则合计登录天数为2天。\n\n4、若您已累计登录达600天以上,即可获得一棵皇冠树。\n\n5、温馨提示：仅需您当天登录客户端，即可自动累计天数升级。本活动限APP版本号为1.2.0以上用户方可参与。\n\n6、活动最终解释归9188记账所有，如有任何疑问请致电400-7676－108 （工作日：9:00-18:00）。";
+    NSString *serviceNum = @"400-7676-298";
+    if ([SSJStartChecker sharedInstance].serviceNum) {
+        serviceNum = [SSJStartChecker sharedInstance].serviceNum;
+    }
+    return [NSString stringWithFormat:@"1、每天摇一摇签到，就能给树浇水，每天限浇水1次，坚持助种子成功升级吧。\n\n2、记账树的成长依据您累计登录客户端的天数而定，系统会自动为您累计，天数越多，树的等级越高。\n\n3、时间累计以您实际打开客户端的天数为准；如第1天和第3天登录了客户端，第2天中断，则合计登录天数为2天。\n\n4、若您已累计登录达600天以上,即可获得一棵皇冠树。\n\n5、温馨提示：仅需您当天登录客户端，即可自动累计天数升级。本活动限APP版本号为1.2.0以上用户方可参与。\n\n6、活动最终解释归本司所有，如有任何疑问请致电%@ （工作日：9:00-18:00）。",serviceNum];
 }
 
 @end

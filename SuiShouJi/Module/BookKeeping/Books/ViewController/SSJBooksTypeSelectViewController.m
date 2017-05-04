@@ -266,6 +266,7 @@ static BOOL kNeedBannerDisplay = YES;
         _rightButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 40, 30)];
         [_rightButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTintColor] forState:UIControlStateNormal];
         [_rightButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTintColor] forState:UIControlStateSelected];
+        _rightButton.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         _rightButton.contentHorizontalAlignment = NSTextAlignmentRight;
         [_rightButton setTitle:@"管理" forState:UIControlStateNormal];
         [_rightButton setTitle:@"完成" forState:UIControlStateSelected];
