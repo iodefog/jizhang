@@ -264,7 +264,11 @@ static NSString *const kCellId = @"SSJCustomThemeSelectCollectionViewCell";
     if (currentTheme.customThemeBackImage.length) {
         if (![currentTheme.customThemeBackImage isEqualToString:@"background"]) {
             NSInteger themeIndex = [[currentTheme.customThemeBackImage stringByReplacingOccurrencesOfString:@"custom" withString:@""] integerValue];
-            self.seletctTheme = [self.images objectAtIndex:themeIndex];
+            if ([UIImage ssj_themeLocalBackGroundImageName:@"background"]) {
+                self.seletctTheme = [self.images objectAtIndex:themeIndex + 1];
+            } else {
+                self.seletctTheme = [self.images objectAtIndex:themeIndex];
+            }
         } else {
             self.seletctTheme = currentTheme.customThemeBackImage;
         }
