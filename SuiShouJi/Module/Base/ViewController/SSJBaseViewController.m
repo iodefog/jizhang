@@ -94,6 +94,7 @@
     }
     
     [self updateNavigationAppearance];
+    [self updateNavigationItemsFont];
     [[UIApplication sharedApplication] setStatusBarStyle:SSJ_CURRENT_THEME.statusBarStyle];
 }
 
@@ -256,6 +257,19 @@
         [self.navigationController.navigationBar setShadowImage:[UIImage ssj_imageWithColor:lineColor size:CGSizeMake(0, 0.5)]];
     } else {
         [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
+    }
+}
+
+- (void)updateNavigationItemsFont {
+    for (UIBarButtonItem *item in self.navigationItem.leftBarButtonItems) {
+        NSMutableDictionary *attributes = [[item titleTextAttributesForState:UIControlStateNormal] mutableCopy];
+        [attributes setObject:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3) forKey:NSFontAttributeName];
+        [item setTitleTextAttributes:attributes forState:UIControlStateNormal];
+    }
+    for (UIBarButtonItem *item in self.navigationItem.rightBarButtonItems) {
+        NSMutableDictionary *attributes = [[item titleTextAttributesForState:UIControlStateNormal] mutableCopy];
+        [attributes setObject:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3) forKey:NSFontAttributeName];
+        [item setTitleTextAttributes:attributes forState:UIControlStateNormal];
     }
 }
 

@@ -34,12 +34,12 @@
 -(void)layoutSubviews{
     [super layoutSubviews];
     self.balanceLabel.top = self.height / 2 + 4;
-    self.balanceLabel.left = 25;
+    self.balanceLabel.left = 18;
     self.balanceTitleLab.bottom = self.balanceLabel.top - 8;
     self.balanceTitleLab.left = self.balanceLabel.left;
     self.transferButton.size = CGSizeMake(60, 24);
     self.transferButton.centerY = self.balanceLabel.centerY;
-    self.transferButton.right = self.width - 34;
+    self.transferButton.right = self.width - 18;
     self.hiddenButton.centerY = self.balanceLabel.centerY;
     self.hiddenButton.left = self.balanceLabel.right + 10;
 }

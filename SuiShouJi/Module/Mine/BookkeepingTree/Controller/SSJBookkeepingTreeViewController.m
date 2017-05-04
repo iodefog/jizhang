@@ -51,6 +51,7 @@
         self.navigationItem.title = @"记账树";
         self.hidesBottomBarWhenPushed = YES;
         self.showNavigationBarBaseLine = NO;
+        self.appliesTheme = NO;
     }
     return self;
 }
