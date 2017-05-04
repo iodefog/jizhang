@@ -40,7 +40,7 @@ static NSString *const kAnnouncementCellIdentifier = @"kAnnouncementCellIdentifi
         [self startPullRefresh];
     }];
     self.tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(startLoadMore)];
-    // Do any additional setup after loading the view.
+     [self updateAppearance];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -57,6 +57,11 @@ static NSString *const kAnnouncementCellIdentifier = @"kAnnouncementCellIdentifi
 {
      [super viewDidDisappear:animated];
      [self.service cancel];
+}
+
+- (void)updateAppearanceAfterThemeChanged {
+     [super updateAppearanceAfterThemeChanged];
+     [self updateAppearance];
 }
 
 #pragma mark - UITableViewDelegate
@@ -166,19 +171,10 @@ static NSString *const kAnnouncementCellIdentifier = @"kAnnouncementCellIdentifi
     }
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (void)updateAppearance {
+     ((MJRefreshStateHeader *)self.tableView.mj_header).lastUpdatedTimeLabel.textColor = SSJ_SECONDARY_COLOR;
+     ((MJRefreshStateHeader *)self.tableView.mj_header).stateLabel.textColor = SSJ_SECONDARY_COLOR;
+     ((MJRefreshAutoStateFooter *)self.tableView.mj_footer).stateLabel.textColor = SSJ_SECONDARY_COLOR;
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end
