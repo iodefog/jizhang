@@ -91,14 +91,37 @@ static CGFloat imageScale = 0.8; //裁剪框和屏幕大小比例
 #pragma mark - Setter
 - (void)setNormalImage:(UIImage *)normalImage
 {
+    normalImage = [normalImage fixOrientation];
     _normalImage = normalImage;
     self.oldImagesize = CGSizeMake(normalImage.size.width, normalImage.size.height);
     self.oldImage = normalImage;
     self.imageView.image = normalImage;
+//    self.imageView.size = CGSizeMake(normalImage.size.width/SSJSCREENSCALE, normalImage.size.height/SSJSCREENSCALE);
+    
     self.imageView.size = CGSizeMake(normalImage.size.width*imageScale/SSJSCREENSCALE, normalImage.size.height*imageScale/SSJSCREENSCALE);
     self.scrollview.contentSize = self.imageView.size;
-//    self.imageView.center = CGPointMake(self.scrollview.contentSize.width*0.5, self.scrollview.contentSize.height*0.5);
-//    self.scrollview.contentOffset
+//    if (self.imageView.width < self.coverLayer.width && self.imageView.height < self.coverLayer.height) {
+//        
+//    }
+    if (self.imageView.width > self.imageView.height) { //宽》 高
+        float clipH = [[NSString stringWithFormat:@"%.2f",SSJSCREENHEIGHT*imageScale ] floatValue];
+        if (self.imageView.height <= clipH) {
+            
+        } else {
+            double scale = self.imageView.width / self.imageView.height;
+            self.imageView.size = CGSizeMake(SSJSCREENHEIGHT * imageScale * scale, SSJSCREENHEIGHT * imageScale);
+        }
+        
+    } else { //高》宽
+        float clipW = [[NSString stringWithFormat:@"%.2f",SSJSCREENWITH*imageScale ] floatValue];
+        if (self.imageView.width <= clipW) {
+            
+        } else {
+            double scale = self.imageView.height / self.imageView.width;
+            self.imageView.size = CGSizeMake(SSJSCREENWITH * imageScale * scale, SSJSCREENHEIGHT * imageScale);
+        }
+    }
+
     CGPoint conOfSet = self.scrollview.contentOffset;
     conOfSet.x = -SSJSCREENWITH * (1 - imageScale) * 0.5;
     conOfSet.y = -SSJSCREENHEIGHT * (1 - imageScale) * 0.5;
