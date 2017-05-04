@@ -104,7 +104,7 @@
     if (!_nicknameLabel) {
         _nicknameLabel = [[UILabel alloc]init];
         _nicknameLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.moreHomeTitleColor];
-        _nicknameLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
+        _nicknameLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
     }
     return _nicknameLabel;
 }
