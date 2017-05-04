@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		2037DEF73FC931CFDC333C7D /* libPods-9188JiZhangBen.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F84857880610A2DD87904A88 /* libPods-9188JiZhangBen.a */; };
 		2969FD659CB0F29A997B0743 /* libPods-YouYuJiZhang.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BE2668A2D3687E35A1F7D0D /* libPods-YouYuJiZhang.a */; };
+		43F46352E882052109152F93 /* libPods-9188JiZhangBao.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 933AEAFC67FE5E9F93EBD574 /* libPods-9188JiZhangBao.a */; };
 		43FB013EC6CC98DC90F5D913 /* libPods-YouYuJiZhangPro.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DC160CBD947F86ED6CD7DD86 /* libPods-YouYuJiZhangPro.a */; };
 		72BB5896AF4A38FC4F8B3B48 /* libPods-YouYuJiZhangBen.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD18AB4DEF381D69AB77158 /* libPods-YouYuJiZhangBen.a */; };
 		77DF96B1D75AEF70D1506706 /* libPods-BeiKeJiZhang.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D1CEF5E96BF59F42EAD3BC3 /* libPods-BeiKeJiZhang.a */; };
@@ -3521,7 +3522,7 @@
 		9C13F4EF1E8267D300AC5FA9 /* SSJBillingChargeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B23F51C3A14D8009A74A8 /* SSJBillingChargeCell.m */; };
 		9C13F4F01E8267D300AC5FA9 /* SSJLoginViewController+SSJCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D22E2931D89519B00474B11 /* SSJLoginViewController+SSJCategory.m */; };
 		9C13F4F11E8267D300AC5FA9 /* SSJBannerItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6D66241D86BD220081A7CE /* SSJBannerItem.m */; };
-		9C13F4F21E8267D300AC5FA9 /* (null) in Sources */ = {isa = PBXBuildFile; };
+		9C13F4F21E8267D300AC5FA9 /* BuildFile in Sources */ = {isa = PBXBuildFile; };
 		9C13F4F31E8267D300AC5FA9 /* SSJSyncFileModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DDBB01F1C9AAA57003433D0 /* SSJSyncFileModel.m */; };
 		9C13F4F41E8267D300AC5FA9 /* SCYSlidePagingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD902961CE202790076929F /* SCYSlidePagingView.m */; };
 		9C13F4F51E8267D300AC5FA9 /* SSJDatabaseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D99D45B1C3522D7006EB113 /* SSJDatabaseQueue.m */; };
@@ -5108,7 +5109,7 @@
 		9C7D2CFA1E8DF8A80093001F /* SSJBillingChargeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B23F51C3A14D8009A74A8 /* SSJBillingChargeCell.m */; };
 		9C7D2CFB1E8DF8A80093001F /* SSJLoginViewController+SSJCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D22E2931D89519B00474B11 /* SSJLoginViewController+SSJCategory.m */; };
 		9C7D2CFC1E8DF8A80093001F /* SSJBannerItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6D66241D86BD220081A7CE /* SSJBannerItem.m */; };
-		9C7D2CFD1E8DF8A80093001F /* (null) in Sources */ = {isa = PBXBuildFile; };
+		9C7D2CFD1E8DF8A80093001F /* BuildFile in Sources */ = {isa = PBXBuildFile; };
 		9C7D2CFE1E8DF8A80093001F /* SSJSyncFileModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DDBB01F1C9AAA57003433D0 /* SSJSyncFileModel.m */; };
 		9C7D2CFF1E8DF8A80093001F /* SCYSlidePagingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD902961CE202790076929F /* SCYSlidePagingView.m */; };
 		9C7D2D001E8DF8A80093001F /* SSJDatabaseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D99D45B1C3522D7006EB113 /* SSJDatabaseQueue.m */; };
@@ -5718,7 +5719,7 @@
 		9C7D2F711E8DF96B0093001F /* SSJBillingChargeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B23F51C3A14D8009A74A8 /* SSJBillingChargeCell.m */; };
 		9C7D2F721E8DF96B0093001F /* SSJLoginViewController+SSJCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D22E2931D89519B00474B11 /* SSJLoginViewController+SSJCategory.m */; };
 		9C7D2F731E8DF96B0093001F /* SSJBannerItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6D66241D86BD220081A7CE /* SSJBannerItem.m */; };
-		9C7D2F741E8DF96B0093001F /* (null) in Sources */ = {isa = PBXBuildFile; };
+		9C7D2F741E8DF96B0093001F /* BuildFile in Sources */ = {isa = PBXBuildFile; };
 		9C7D2F751E8DF96B0093001F /* SSJSyncFileModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DDBB01F1C9AAA57003433D0 /* SSJSyncFileModel.m */; };
 		9C7D2F761E8DF96B0093001F /* SCYSlidePagingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD902961CE202790076929F /* SCYSlidePagingView.m */; };
 		9C7D2F771E8DF96B0093001F /* SSJDatabaseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D99D45B1C3522D7006EB113 /* SSJDatabaseQueue.m */; };
@@ -8209,6 +8210,7 @@
 		004889EB34083108A8612BCE /* Pods-YouYuJiZhangBao.debug-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangBao.debug-test.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangBao/Pods-YouYuJiZhangBao.debug-test.xcconfig"; sourceTree = "<group>"; };
 		10B02F27B07D9E59BDE1CA2A /* Pods-YouYuJiZhang.release-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhang.release-test.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhang/Pods-YouYuJiZhang.release-test.xcconfig"; sourceTree = "<group>"; };
 		13DED3B91912A4CA23981548 /* Pods-YouYuJiZhangGuanJia.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangGuanJia.debug.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangGuanJia/Pods-YouYuJiZhangGuanJia.debug.xcconfig"; sourceTree = "<group>"; };
+		185FF0BEC97A544CD843C051 /* Pods-9188JiZhangBao.release-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-9188JiZhangBao.release-production.xcconfig"; path = "Pods/Target Support Files/Pods-9188JiZhangBao/Pods-9188JiZhangBao.release-production.xcconfig"; sourceTree = "<group>"; };
 		1BCD58B8B9CBEA7ED5E6BDD4 /* Pods-JiZhangGuanJia.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JiZhangGuanJia.debug.xcconfig"; path = "Pods/Target Support Files/Pods-JiZhangGuanJia/Pods-JiZhangGuanJia.debug.xcconfig"; sourceTree = "<group>"; };
 		1E51C22F9305214B776BE476 /* Pods-YouYuJiZhang.debug-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhang.debug-production.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhang/Pods-YouYuJiZhang.debug-production.xcconfig"; sourceTree = "<group>"; };
 		1E94BF472DA87D55A1CBED4F /* Pods-YouYuJiZhang.debug-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhang.debug-test.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhang/Pods-YouYuJiZhang.debug-test.xcconfig"; sourceTree = "<group>"; };
@@ -8234,6 +8236,7 @@
 		559995F82A41A31A1EDB66F7 /* Pods-YouYuJiZhangBao.release-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangBao.release-test.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangBao/Pods-YouYuJiZhangBao.release-test.xcconfig"; sourceTree = "<group>"; };
 		5899867574AEB0396C49AE15 /* Pods-SuiShouJi.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SuiShouJi.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SuiShouJi/Pods-SuiShouJi.debug.xcconfig"; sourceTree = "<group>"; };
 		59B9709CD0561A8AD4BDF638 /* Pods-SuiShouJi.debug-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SuiShouJi.debug-test.xcconfig"; path = "Pods/Target Support Files/Pods-SuiShouJi/Pods-SuiShouJi.debug-test.xcconfig"; sourceTree = "<group>"; };
+		5B172F7CEC8A001F30088C0A /* Pods-9188JiZhangBao.debug-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-9188JiZhangBao.debug-production.xcconfig"; path = "Pods/Target Support Files/Pods-9188JiZhangBao/Pods-9188JiZhangBao.debug-production.xcconfig"; sourceTree = "<group>"; };
 		5DE4695CC7C0CB804EB71885 /* Pods-JiZhangGuanJia.debug-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JiZhangGuanJia.debug-production.xcconfig"; path = "Pods/Target Support Files/Pods-JiZhangGuanJia/Pods-JiZhangGuanJia.debug-production.xcconfig"; sourceTree = "<group>"; };
 		5E12FC9D6B49C5CFC7E59C45 /* Pods-9188JiZhangPro.release-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-9188JiZhangPro.release-test.xcconfig"; path = "Pods/Target Support Files/Pods-9188JiZhangPro/Pods-9188JiZhangPro.release-test.xcconfig"; sourceTree = "<group>"; };
 		6534E1884B88B3410A9AFE6E /* Pods-SuiShouJiEnterprise.debug-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SuiShouJiEnterprise.debug-production.xcconfig"; path = "Pods/Target Support Files/Pods-SuiShouJiEnterprise/Pods-SuiShouJiEnterprise.debug-production.xcconfig"; sourceTree = "<group>"; };
@@ -8850,6 +8853,7 @@
 		7E2C437569BE5F61C549F4C5 /* Pods-9188JiZhangBen.release-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-9188JiZhangBen.release-test.xcconfig"; path = "Pods/Target Support Files/Pods-9188JiZhangBen/Pods-9188JiZhangBen.release-test.xcconfig"; sourceTree = "<group>"; };
 		8243DAE18B924886B7E827E5 /* Pods-youyujizhang.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-youyujizhang.debug.xcconfig"; path = "Pods/Target Support Files/Pods-youyujizhang/Pods-youyujizhang.debug.xcconfig"; sourceTree = "<group>"; };
 		87B6E587581D2C973B9CE0A0 /* Pods-BeiKeJiZhang.release-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BeiKeJiZhang.release-test.xcconfig"; path = "Pods/Target Support Files/Pods-BeiKeJiZhang/Pods-BeiKeJiZhang.release-test.xcconfig"; sourceTree = "<group>"; };
+		8C97B891FAD8876F448575A8 /* Pods-9188JiZhangBao.debug-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-9188JiZhangBao.debug-test.xcconfig"; path = "Pods/Target Support Files/Pods-9188JiZhangBao/Pods-9188JiZhangBao.debug-test.xcconfig"; sourceTree = "<group>"; };
 		8E88665EC4BCCDEADDBBF76D /* Pods-YouYuJiZhangBen.release-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangBen.release-production.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangBen/Pods-YouYuJiZhangBen.release-production.xcconfig"; sourceTree = "<group>"; };
 		8ED51442757E13C0CDA434AA /* Pods-YouYuJiZhangBen.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangBen.release.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangBen/Pods-YouYuJiZhangBen.release.xcconfig"; sourceTree = "<group>"; };
 		910DD68E1DF7B47E00A73F0C /* SSJMineHomeCollectionImageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMineHomeCollectionImageCell.h; sourceTree = "<group>"; };
@@ -8882,6 +8886,7 @@
 		91F7FD371DFAB94A005F4B6B /* SSJAdviceItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJAdviceItem.m; sourceTree = "<group>"; };
 		91FD904B1E0B8319001C64B7 /* SSJReportFormCanYinChartCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormCanYinChartCell.h; sourceTree = "<group>"; };
 		91FD904C1E0B8319001C64B7 /* SSJReportFormCanYinChartCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReportFormCanYinChartCell.m; sourceTree = "<group>"; };
+		933AEAFC67FE5E9F93EBD574 /* libPods-9188JiZhangBao.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-9188JiZhangBao.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9892BFAB47044275B53028C0 /* Pods-YouYuJiZhangBao.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangBao.debug.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangBao/Pods-YouYuJiZhangBao.debug.xcconfig"; sourceTree = "<group>"; };
 		9C03D87E1EB855D600D845DD /* customBackGround.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = customBackGround.zip; sourceTree = "<group>"; };
 		9C0AB1671D670BAE0082B971 /* SSJCreditCardEditeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCreditCardEditeCell.h; sourceTree = "<group>"; };
@@ -9545,6 +9550,7 @@
 		DF287708592603CEA9EF83AB /* Pods-BeiKeJiZhang.debug-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BeiKeJiZhang.debug-test.xcconfig"; path = "Pods/Target Support Files/Pods-BeiKeJiZhang/Pods-BeiKeJiZhang.debug-test.xcconfig"; sourceTree = "<group>"; };
 		E38835B4B811DB254C8C71D4 /* Pods-YouYuJiZhangLiCai.debug-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangLiCai.debug-production.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangLiCai/Pods-YouYuJiZhangLiCai.debug-production.xcconfig"; sourceTree = "<group>"; };
 		E46D461943E8EB50EC47585D /* Pods-YouYuJiZhangBen.debug-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangBen.debug-test.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangBen/Pods-YouYuJiZhangBen.debug-test.xcconfig"; sourceTree = "<group>"; };
+		E605D19557F8FEBA9D5548E2 /* Pods-9188JiZhangBao.release-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-9188JiZhangBao.release-test.xcconfig"; path = "Pods/Target Support Files/Pods-9188JiZhangBao/Pods-9188JiZhangBao.release-test.xcconfig"; sourceTree = "<group>"; };
 		E710211033A79D2C7E92D379 /* Pods-SuiShouJiEnterprise.release-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SuiShouJiEnterprise.release-test.xcconfig"; path = "Pods/Target Support Files/Pods-SuiShouJiEnterprise/Pods-SuiShouJiEnterprise.release-test.xcconfig"; sourceTree = "<group>"; };
 		F1BFD9B2FA7E263C7101F5E8 /* Pods-SuiShouJiEnterprise.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SuiShouJiEnterprise.release.xcconfig"; path = "Pods/Target Support Files/Pods-SuiShouJiEnterprise/Pods-SuiShouJiEnterprise.release.xcconfig"; sourceTree = "<group>"; };
 		F36B3F26385C626176D7A485 /* Pods-YouYuJiZhangLiCai.release-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangLiCai.release-production.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangLiCai/Pods-YouYuJiZhangLiCai.release-production.xcconfig"; sourceTree = "<group>"; };
@@ -9632,6 +9638,7 @@
 				7DFB189D1EB0341E00292DD3 /* libz.tbd in Frameworks */,
 				7DFB189E1EB0341E00292DD3 /* AVFoundation.framework in Frameworks */,
 				7DFB189F1EB0341E00292DD3 /* Security.framework in Frameworks */,
+				43F46352E882052109152F93 /* libPods-9188JiZhangBao.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -9810,6 +9817,7 @@
 				2D1CEF5E96BF59F42EAD3BC3 /* libPods-BeiKeJiZhang.a */,
 				C67906F6CFFC0A3639C9DEC3 /* libPods-9188JiZhangPro.a */,
 				DC160CBD947F86ED6CD7DD86 /* libPods-YouYuJiZhangPro.a */,
+				933AEAFC67FE5E9F93EBD574 /* libPods-9188JiZhangBao.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -13160,6 +13168,10 @@
 				1E51C22F9305214B776BE476 /* Pods-YouYuJiZhang.debug-production.xcconfig */,
 				10B02F27B07D9E59BDE1CA2A /* Pods-YouYuJiZhang.release-test.xcconfig */,
 				6914A4671174AA5C297802D2 /* Pods-YouYuJiZhang.release-production.xcconfig */,
+				8C97B891FAD8876F448575A8 /* Pods-9188JiZhangBao.debug-test.xcconfig */,
+				5B172F7CEC8A001F30088C0A /* Pods-9188JiZhangBao.debug-production.xcconfig */,
+				E605D19557F8FEBA9D5548E2 /* Pods-9188JiZhangBao.release-test.xcconfig */,
+				185FF0BEC97A544CD843C051 /* Pods-9188JiZhangBao.release-production.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -13251,9 +13263,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7DFB18C41EB0341E00292DD3 /* Build configuration list for PBXNativeTarget "9188JiZhangBao" */;
 			buildPhases = (
+				017F4D3749010CB380601B52 /* [CP] Check Pods Manifest.lock */,
 				7DFB16521EB0341E00292DD3 /* Sources */,
 				7DFB18971EB0341E00292DD3 /* Frameworks */,
 				7DFB18A41EB0341E00292DD3 /* Resources */,
+				332C81971C70F5FABFFDE8C5 /* [CP] Embed Pods Frameworks */,
+				F08DAF6A3C9B42CFF56E7E3F /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -13467,7 +13482,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0820;
-				ORGANIZATIONNAME = "___9188___";
+				ORGANIZATIONNAME = ___9188___;
 				TargetAttributes = {
 					7D08A0931E4999D30085A8FB = {
 						DevelopmentTeam = 7RVBV2MALK;
@@ -14048,6 +14063,21 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		017F4D3749010CB380601B52 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
 		19CA2764BC837F0A3ACF86A2 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -14091,6 +14121,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BeiKeJiZhang/Pods-BeiKeJiZhang-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		332C81971C70F5FABFFDE8C5 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-9188JiZhangBao/Pods-9188JiZhangBao-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		3434A1FA5629E89C6387C495 /* [CP] Check Pods Manifest.lock */ = {
@@ -14586,6 +14631,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-YouYuJiZhangBao/Pods-YouYuJiZhangBao-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F08DAF6A3C9B42CFF56E7E3F /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-9188JiZhangBao/Pods-9188JiZhangBao-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -17620,7 +17680,7 @@
 				9C13F4EF1E8267D300AC5FA9 /* SSJBillingChargeCell.m in Sources */,
 				9C13F4F01E8267D300AC5FA9 /* SSJLoginViewController+SSJCategory.m in Sources */,
 				9C13F4F11E8267D300AC5FA9 /* SSJBannerItem.m in Sources */,
-				9C13F4F21E8267D300AC5FA9 /* (null) in Sources */,
+				9C13F4F21E8267D300AC5FA9 /* BuildFile in Sources */,
 				9C13F4F31E8267D300AC5FA9 /* SSJSyncFileModel.m in Sources */,
 				9C13F4F41E8267D300AC5FA9 /* SCYSlidePagingView.m in Sources */,
 				9C13F4F51E8267D300AC5FA9 /* SSJDatabaseQueue.m in Sources */,
@@ -18823,7 +18883,7 @@
 				9C7D2CFA1E8DF8A80093001F /* SSJBillingChargeCell.m in Sources */,
 				9C7D2CFB1E8DF8A80093001F /* SSJLoginViewController+SSJCategory.m in Sources */,
 				9C7D2CFC1E8DF8A80093001F /* SSJBannerItem.m in Sources */,
-				9C7D2CFD1E8DF8A80093001F /* (null) in Sources */,
+				9C7D2CFD1E8DF8A80093001F /* BuildFile in Sources */,
 				9C7D2CFE1E8DF8A80093001F /* SSJSyncFileModel.m in Sources */,
 				9C7D2CFF1E8DF8A80093001F /* SCYSlidePagingView.m in Sources */,
 				9C7D2D001E8DF8A80093001F /* SSJDatabaseQueue.m in Sources */,
@@ -19425,7 +19485,7 @@
 				9C7D2F711E8DF96B0093001F /* SSJBillingChargeCell.m in Sources */,
 				9C7D2F721E8DF96B0093001F /* SSJLoginViewController+SSJCategory.m in Sources */,
 				9C7D2F731E8DF96B0093001F /* SSJBannerItem.m in Sources */,
-				9C7D2F741E8DF96B0093001F /* (null) in Sources */,
+				9C7D2F741E8DF96B0093001F /* BuildFile in Sources */,
 				9C7D2F751E8DF96B0093001F /* SSJSyncFileModel.m in Sources */,
 				9C7D2F761E8DF96B0093001F /* SCYSlidePagingView.m in Sources */,
 				9C7D2F771E8DF96B0093001F /* SSJDatabaseQueue.m in Sources */,
@@ -23312,7 +23372,7 @@
 				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/SuiShouJi/Resource/Entitlements/SuiShouJi.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Pingxi Fan (Z8SZ588DYT)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				DEVELOPMENT_TEAM = 534SCE47WT;
+				DEVELOPMENT_TEAM = Z8SZ588DYT;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -23395,8 +23455,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhangAppStore;
 				PRODUCT_NAME = SuiShouJi;
-				PROVISIONING_PROFILE = "00341802-6333-4c7f-a929-02b298071043";
-				PROVISIONING_PROFILE_SPECIFIER = JiZhangAppstoreAdHoc;
+				PROVISIONING_PROFILE = "1af64e08-bcbc-48b5-9b5d-794f426e8fa3";
+				PROVISIONING_PROFILE_SPECIFIER = JiZhangAppStoreAdHoc;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -24176,6 +24236,7 @@
 		};
 		7DFB18C51EB0341E00292DD3 /* Debug-test */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8C97B891FAD8876F448575A8 /* Pods-9188JiZhangBao.debug-test.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = 9188JiZhangBao;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -24277,6 +24338,7 @@
 		};
 		7DFB18C61EB0341E00292DD3 /* Debug-production */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5B172F7CEC8A001F30088C0A /* Pods-9188JiZhangBao.debug-production.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = 9188JiZhangBao;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -24379,6 +24441,7 @@
 		};
 		7DFB18C71EB0341E00292DD3 /* Release-test */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E605D19557F8FEBA9D5548E2 /* Pods-9188JiZhangBao.release-test.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = 9188JiZhangBao;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -24479,6 +24542,7 @@
 		};
 		7DFB18C81EB0341E00292DD3 /* Release-production */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 185FF0BEC97A544CD843C051 /* Pods-9188JiZhangBao.release-production.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = 9188JiZhangBao;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -27332,7 +27396,7 @@
 				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/SuiShouJi/Resource/Entitlements/SuiShouJi.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Pingxi Fan (Z8SZ588DYT)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				DEVELOPMENT_TEAM = 534SCE47WT;
+				DEVELOPMENT_TEAM = Z8SZ588DYT;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -27415,8 +27479,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhangAppStore;
 				PRODUCT_NAME = SuiShouJi;
-				PROVISIONING_PROFILE = "00341802-6333-4c7f-a929-02b298071043";
-				PROVISIONING_PROFILE_SPECIFIER = JiZhangAppstoreAdHoc;
+				PROVISIONING_PROFILE = "1af64e08-bcbc-48b5-9b5d-794f426e8fa3";
+				PROVISIONING_PROFILE_SPECIFIER = JiZhangAppStoreAdHoc;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

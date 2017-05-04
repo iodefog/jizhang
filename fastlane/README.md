@@ -29,6 +29,11 @@ xcode-select --install
 </table>
 
 # Available Actions
+### adhoc
+```
+fastlane adhoc
+```
+
 ### appstore
 ```
 fastlane appstore
