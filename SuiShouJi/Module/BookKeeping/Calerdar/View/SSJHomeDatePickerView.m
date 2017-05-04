@@ -54,7 +54,7 @@
 }
 
 - (CGSize)sizeThatFits:(CGSize)size{
-    return CGSizeMake([UIApplication sharedApplication].keyWindow.width, 250);
+    return CGSizeMake([UIApplication sharedApplication].keyWindow.width, 260);
 }
 
 - (void)layoutSubviews
@@ -64,7 +64,8 @@
     self.datePicker.frame = CGRectMake(0,self.topView.height,self.width,self.height - self.topView.height);
     self.titleLabel.centerX = self.centerX;
     self.titleLabel.centerY = self.closeButton.centerY;
-    self.horuAndMinuBgView.frame = CGRectMake(200,self.datePicker.centerY - 22, self.width - 200, 43);
+    self.horuAndMinuBgView.frame = CGRectMake(200,self.topView.height + self.datePicker.height * 0.5 - 22, self.width - 200, 43);
+    self.horuAndMinuBgView.centerY = self.datePicker.centerY;
     self.closeButton.leftTop = CGPointMake(15, 15);
     self.comfirmButton.rightTop = CGPointMake(self.width - 15, 15);
 }

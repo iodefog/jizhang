@@ -94,7 +94,7 @@
 
 - (UIImageView *)imageView {
     if (!_imageView) {
-        UIImage *image = [[UIImage imageNamed:@"budget_add"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        UIImage *image = [[UIImage imageNamed:@"founds_jia"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         _imageView = [[UIImageView alloc] initWithImage:image];
     }
     return _imageView;
