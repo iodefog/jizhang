@@ -83,7 +83,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
     
     if (_isEdit) {
         self.navigationItem.title = @"编辑预算";
-        UIBarButtonItem *deleteItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"budget_delete"] style:UIBarButtonItemStylePlain target:self action:@selector(deleteBudgetAction)];
+        UIBarButtonItem *deleteItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(deleteBudgetAction)];
         self.navigationItem.rightBarButtonItem = deleteItem;
     } else {
         self.navigationItem.title = @"添加预算";
