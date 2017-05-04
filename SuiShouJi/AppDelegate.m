@@ -17,6 +17,7 @@
 #import "SSJThirdPartyLoginManger.h"
 #import "SSJMotionPasswordViewController.h"
 
+#import "SSJNavigationController.h"
 #import "SSJBookKeepingHomeViewController.h"
 #import "SSJMineHomeViewController.h"
 #import "SSJFinancingHomeViewController.h"
@@ -294,26 +295,26 @@ NSDate *SCYEnterBackgroundTime() {
 // 设置根控制器
 - (void)setRootViewController {
     SSJBookKeepingHomeViewController *bookKeepingVC = [[SSJBookKeepingHomeViewController alloc] initWithNibName:nil bundle:nil];
-    UINavigationController *bookKeepingNavi = [[UINavigationController alloc] initWithRootViewController:bookKeepingVC];
+    SSJNavigationController *bookKeepingNavi = [[SSJNavigationController alloc] initWithRootViewController:bookKeepingVC];
     bookKeepingNavi.tabBarItem.title = @"记账";
     
     SSJReportFormsViewController *reportFormsVC = [[SSJReportFormsViewController alloc] initWithNibName:nil bundle:nil];
-    UINavigationController *reportFormsNavi = [[UINavigationController alloc] initWithRootViewController:reportFormsVC];
+    SSJNavigationController *reportFormsNavi = [[SSJNavigationController alloc] initWithRootViewController:reportFormsVC];
     reportFormsNavi.tabBarItem.title = @"报表";
     
     SSJFinancingHomeViewController *financingVC = [[SSJFinancingHomeViewController alloc] initWithNibName:nil bundle:nil];
-    UINavigationController *financingNavi = [[UINavigationController alloc] initWithRootViewController:financingVC];
+    SSJNavigationController *financingNavi = [[SSJNavigationController alloc] initWithRootViewController:financingVC];
     financingNavi.tabBarItem.title = @"资金";
     
     SSJMineHomeViewController *moreVC = [[SSJMineHomeViewController alloc] initWithNibName:nil bundle:nil];
-    UINavigationController *moreNavi = [[UINavigationController alloc] initWithRootViewController:moreVC];
+    SSJNavigationController *moreNavi = [[SSJNavigationController alloc] initWithRootViewController:moreVC];
     moreNavi.tabBarItem.title = @"更多";
     
     UITabBarController *tabBarVC = [[UITabBarController alloc] initWithNibName:nil bundle:nil];
     tabBarVC.viewControllers = @[bookKeepingNavi, reportFormsNavi, financingNavi, moreNavi];
     
     SSJBooksTypeSelectViewController *booksTypeVC = [[SSJBooksTypeSelectViewController alloc]init];
-    UINavigationController *booksNav = [[UINavigationController alloc] initWithRootViewController:booksTypeVC];
+    SSJNavigationController *booksNav = [[SSJNavigationController alloc] initWithRootViewController:booksTypeVC];
 
     MMDrawerController *drawerController = [[MMDrawerController alloc]
                              initWithCenterViewController:tabBarVC

@@ -67,19 +67,17 @@ static NSString *const kTitle9 = @"上传日志";
     [super viewWillAppear:animated];
     if ([SSJStartChecker sharedInstance].isInReview) {
         if ([WXApi isWXAppInstalled]) {
-            self.titles = @[@[kTitle0,kTitle1], @[kTitle2 , kTitle3 , kTitle9] ,@[kTitle6,kTitle7,kTitle8]];
+            self.titles = @[@[kTitle0,kTitle1, kTitle2 , kTitle3 , kTitle9] ,@[kTitle6,kTitle7,kTitle8]];
         }else{
-            self.titles = @[@[kTitle0,kTitle1], @[kTitle2 , kTitle3 , kTitle9], @[kTitle6]];
+            self.titles = @[@[kTitle0,kTitle1, kTitle2 , kTitle3 , kTitle9], @[kTitle6]];
         }
     } else {
         if ([WXApi isWXAppInstalled]) {
-            self.titles = @[@[kTitle0,kTitle1], @[kTitle2 , kTitle3 , kTitle9] ,@[kTitle5,kTitle6,kTitle7,kTitle8]];
+            self.titles = @[@[kTitle0,kTitle1, kTitle2 , kTitle3 , kTitle9] ,@[kTitle5,kTitle6,kTitle7,kTitle8]];
         }else{
-            self.titles = @[@[kTitle0,kTitle1], @[kTitle2 , kTitle3 , kTitle9] ,@[kTitle5,kTitle6]];
+            self.titles = @[@[kTitle0, kTitle1, kTitle2 , kTitle3 , kTitle9] ,@[kTitle5,kTitle6]];
         }
     }
-    
-    [self.navigationController setNavigationBarHidden:NO];
 }
 
 #pragma mark - UITableViewDelegate
@@ -87,6 +85,9 @@ static NSString *const kTitle9 = @"上传日志";
     NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
     if ([title isEqualToString:kTitle8]) {
         return 35;
+    }
+    if ([title isEqualToString:kTitle7]) {
+        return 33;
     }
     return 55;
 }
@@ -240,6 +241,12 @@ static NSString *const kTitle9 = @"上传日志";
         mineHomeCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
+    
+    if ([title isEqualToString:kTitle7]) {
+        mineHomeCell.separatorInset = UIEdgeInsetsMake(0, 0, 0, MAXFLOAT);
+    } else {
+        mineHomeCell.separatorInset = UIEdgeInsetsMake(0, 10, 0, 10);
+    }
     if ([title isEqualToString:kTitle8]) {
         mineHomeCell.customAccessoryType = UITableViewCellAccessoryNone;
         mineHomeCell.cellSubTitle = title;
@@ -251,6 +258,7 @@ static NSString *const kTitle9 = @"上传日志";
         } else if([mineHomeCell.cellTitle isEqualToString:kTitle7]) {
             mineHomeCell.cellDetail = @"youyujz";
         }
+
     }
     return mineHomeCell;
 }

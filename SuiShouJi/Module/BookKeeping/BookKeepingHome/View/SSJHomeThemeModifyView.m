@@ -229,7 +229,7 @@ static NSString *const kCellId = @"SSJCustomThemeSelectCollectionViewCell";
 //}
 
 - (void)blackBlackButtonClick:(id)sender{
-    self.selectType = YES;
+    self.selectType = NO;
     [self updateFontType];
     if ([self.seletctTheme isEqualToString:@"background"]) {
         [SSJCustomThemeManager changeThemeWithLocalImage:nil type:self.selectType];
@@ -239,7 +239,7 @@ static NSString *const kCellId = @"SSJCustomThemeSelectCollectionViewCell";
 }
 
 - (void)whiteButtonClick:(id)sender{
-    self.selectType = NO;
+    self.selectType = YES;
     [self updateFontType];
     if ([self.seletctTheme isEqualToString:@"background"]) {
         [SSJCustomThemeManager changeThemeWithLocalImage:nil type:self.selectType];
@@ -254,7 +254,12 @@ static NSString *const kCellId = @"SSJCustomThemeSelectCollectionViewCell";
         self.images = @[@"",@"background",@"theme_custom1_light",@"theme_custom2_light",@"theme_custom3_dark",@"theme_custom4_dark"];
     }
     if (currentTheme.customThemeBackImage.length) {
-        self.seletctTheme = currentTheme.customThemeBackImage;
+        if (![currentTheme.customThemeBackImage isEqualToString:@"background"]) {
+            NSInteger themeIndex = [[currentTheme.customThemeBackImage stringByReplacingOccurrencesOfString:@"custom" withString:@""] integerValue];
+            self.seletctTheme = [self.images objectAtIndex:themeIndex];
+        } else {
+            self.seletctTheme = currentTheme.customThemeBackImage;
+        }
         self.selectType = currentTheme.darkOrLight;
         [self updateFontType];
         [self.collectionView reloadData];

@@ -144,7 +144,8 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
     NSString *image = [self.images ssj_objectAtIndexPath:indexPath];
     newReminderCell.cellImageName = image;
-    
+    newReminderCell.separatorInset = UIEdgeInsetsMake(0, 10, 0, 10);
+
     if ([title isEqualToString:kTitle1]) {
         newReminderCell.type = SSJCreditCardCellTypeTextField;
         newReminderCell.cellTitle = title;

@@ -11,13 +11,14 @@
 #import "SSJRecordMakingBillTypeSelectionCellLabel.h"
 
 static const NSTimeInterval kDuration = 0.25;
-static const CGFloat kScale = 1.2;
+static const CGFloat kIconScale = 0.7;
 
 static NSString *const kBorderColorAnimationKey = @"kBorderColorAnimationKey";
-static NSString *const kTransformAnimationKey = @"kTransformAnimationKey";
 static NSString *const kTextColorAnimationKey = @"kTextColorAnimationKey";
 
 @interface SSJRecordMakingBillTypeSelectionCell () <CAAnimationDelegate>
+
+@property (nonatomic, strong) UIView *borderView;
 
 @property (nonatomic, strong) UIImageView *imageView;
 
@@ -33,37 +34,22 @@ static NSString *const kTextColorAnimationKey = @"kTextColorAnimationKey";
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        
         _normalTextColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+        [self.contentView addSubview:self.borderView];
+        [self.contentView addSubview:self.imageView];
+        [self.contentView addSubview:self.label];
+        [self.contentView addSubview:self.deleteBtn];
         
-        _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 52, 52)];
-        _imageView.layer.borderWidth = 1;
-        _imageView.layer.cornerRadius = _imageView.width * 0.5;
-        _imageView.layer.borderColor = [UIColor clearColor].CGColor;
-        _imageView.contentMode = UIViewContentModeCenter;
-        _imageView.transform = CGAffineTransformIdentity;
-        [self.contentView addSubview:_imageView];
-        
-        _label = [[SSJRecordMakingBillTypeSelectionCellLabel alloc] init];
-        _label.backgroundColor = [UIColor clearColor];
-        _label.fontSize = 16;
-        _label.textAlignment = NSTextAlignmentCenter;
-        [self.contentView addSubview:_label];
-        
-        _deleteBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_deleteBtn addTarget:self action:@selector(deleteButtonAction) forControlEvents:UIControlEventTouchUpInside];
-        [_deleteBtn setImage:[UIImage imageNamed:@"record_making_remove"] forState:UIControlStateNormal];
-        [self.contentView addSubview:_deleteBtn];
-        
-//        _deleteBtn.layer.borderColor = [UIColor orangeColor].CGColor;
-//        self.contentView.layer.borderColor = [UIColor orangeColor].CGColor;
-//        self.contentView.layer.borderWidth = _deleteBtn.layer.borderWidth = 1;
+#warning test
+//        self.layer.borderColor = [UIColor orangeColor].CGColor;
+//        self.layer.borderWidth = 1;
     }
     return self;
 }
 
 - (void)layoutSubviews {
-    _imageView.center = CGPointMake(self.contentView.width * 0.5, 36);
+    _imageView.size = CGSizeMake(_imageView.image.size.width * kIconScale, _imageView.image.size.height * kIconScale);
+    _borderView.center = _imageView.center = CGPointMake(self.contentView.width * 0.5, 36);
     _label.bottom = self.contentView.height;
     _label.centerX = self.contentView.width * 0.5;
     _deleteBtn.size = CGSizeMake(32, 32);
@@ -73,7 +59,6 @@ static NSString *const kTextColorAnimationKey = @"kTextColorAnimationKey";
 }
 
 - (void)setItem:(SSJRecordMakingBillTypeSelectionCellItem *)item {
-    [self setNeedsLayout];
     _item = item;
     if (_item.colorValue.length) {
         _imageView.image = [[UIImage imageNamed:_item.imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
@@ -84,46 +69,24 @@ static NSString *const kTextColorAnimationKey = @"kTextColorAnimationKey";
     _label.text = _item.title;
     [_label sizeToFit];
     [self updateState];
-}
-
-- (void)deleteButtonAction {
-    BOOL shouldDelete = YES;
-    if (_shouldDeleteAction) {
-        shouldDelete = _shouldDeleteAction(self);
-    }
-    
-    if (shouldDelete && _deleteAction) {
-        _deleteAction(self);
-    }
+    [self setNeedsLayout];
 }
 
 - (void)updateState {
     _deleteBtn.hidden = !_item.editable;
     
-    [self.contentView.layer removeAllAnimations];
-    self.contentView.transform = CGAffineTransformMakeRotation(0);
-    
-    [_imageView.layer removeAnimationForKey:kBorderColorAnimationKey];
-    [_imageView.layer removeAnimationForKey:kTransformAnimationKey];
+    [_borderView.layer removeAnimationForKey:kBorderColorAnimationKey];
     [_label.layer removeAnimationForKey:kTextColorAnimationKey];
     
     if (_item.editable) {
-        _imageView.transform = CGAffineTransformMakeScale(1, 1);
-        _imageView.layer.borderColor = [UIColor clearColor].CGColor;
+        _borderView.layer.borderColor = [UIColor clearColor].CGColor;
         _label.textColor = _item.selected ? [UIColor ssj_colorWithHex:_item.colorValue] : _normalTextColor;
-        
-//        self.contentView.transform = CGAffineTransformMakeRotation(-M_PI_4 * 0.06);
-//        [UIView animateWithDuration:0.12 delay:0 options:(UIViewAnimationOptionRepeat | UIViewAnimationOptionAutoreverse | UIViewAnimationOptionAllowUserInteraction) animations:^{
-//            self.contentView.transform = CGAffineTransformMakeRotation(+M_PI_4 * 0.06);
-//        } completion:NULL];
-        
     } else if (_item.selected) {
         [self animateSelectState:YES];
     } else if (_item.deselected) {
         [self animateSelectState:NO];
     } else {
-        _imageView.layer.borderColor = (_item.selected ? [UIColor ssj_colorWithHex:_item.colorValue].CGColor : [UIColor clearColor].CGColor);
-        _imageView.transform = _item.selected ? CGAffineTransformMakeScale(kScale, kScale) : CGAffineTransformIdentity;
+        _borderView.layer.borderColor = (_item.selected ? [UIColor ssj_colorWithHex:_item.colorValue].CGColor : [UIColor clearColor].CGColor);
         _label.textColor = _item.selected ? [UIColor ssj_colorWithHex:_item.colorValue] : _normalTextColor;
     }
 }
@@ -134,10 +97,8 @@ static NSString *const kTextColorAnimationKey = @"kTextColorAnimationKey";
     
     UIColor *selectedTextColor = [UIColor ssj_colorWithHex:_item.colorValue];
     
-    _imageView.layer.borderColor = selected ? normalBorderColor : selectedBorderColor;
-    _imageView.transform = _item.selected ? CGAffineTransformIdentity : CGAffineTransformMakeScale(kScale, kScale);
+    _borderView.layer.borderColor = selected ? normalBorderColor : selectedBorderColor;
     _label.textColor = _item.selected ? _normalTextColor : selectedTextColor;
-    
     
     CABasicAnimation *borderColorAnimation = [CABasicAnimation animationWithKeyPath:@"borderColor"];
     borderColorAnimation.duration = kDuration;
@@ -145,15 +106,7 @@ static NSString *const kTextColorAnimationKey = @"kTextColorAnimationKey";
     borderColorAnimation.removedOnCompletion = NO;
     borderColorAnimation.fillMode = kCAFillModeForwards;
     borderColorAnimation.toValue = (__bridge id _Nullable)(selected ? selectedBorderColor : normalBorderColor);
-    [_imageView.layer addAnimation:borderColorAnimation forKey:kBorderColorAnimationKey];
-    
-    CABasicAnimation *transformAnimation = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
-    transformAnimation.duration = kDuration;
-    transformAnimation.delegate = self;
-    transformAnimation.removedOnCompletion = NO;
-    transformAnimation.fillMode = kCAFillModeForwards;
-    transformAnimation.toValue = selected ? @(kScale) : @1;
-    [_imageView.layer addAnimation:transformAnimation forKey:kTransformAnimationKey];
+    [_borderView.layer addAnimation:borderColorAnimation forKey:kBorderColorAnimationKey];
     
     CABasicAnimation *textColorAnimation = [CABasicAnimation animationWithKeyPath:@"foregroundColor"];
     textColorAnimation.duration = kDuration;
@@ -165,19 +118,63 @@ static NSString *const kTextColorAnimationKey = @"kTextColorAnimationKey";
 }
 
 - (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag {
-    if (anim == [_imageView.layer animationForKey:kBorderColorAnimationKey]) {
+    if (anim == [_borderView.layer animationForKey:kBorderColorAnimationKey]) {
         CABasicAnimation *borderColorAnimation = (CABasicAnimation *)anim;
-        _imageView.layer.borderColor = (__bridge CGColorRef _Nullable)(borderColorAnimation.toValue);
-        [_imageView.layer removeAnimationForKey:kBorderColorAnimationKey];
-        
-    } else if (anim == [_imageView.layer animationForKey:kTransformAnimationKey]) {
-        _imageView.transform = _item.selected ? CGAffineTransformMakeScale(kScale, kScale) : CGAffineTransformIdentity;
-        [_imageView.layer removeAnimationForKey:kTransformAnimationKey];
-        
+        _borderView.layer.borderColor = (__bridge CGColorRef _Nullable)(borderColorAnimation.toValue);
+        [_borderView.layer removeAnimationForKey:kBorderColorAnimationKey];
     } else if (anim == [_label.layer animationForKey:kTextColorAnimationKey]) {
         _label.textColor = _item.selected ? [UIColor ssj_colorWithHex:_item.colorValue] : _normalTextColor;
         [_label.layer removeAnimationForKey:kTextColorAnimationKey];
     }
+}
+
+#pragma mark - Lazyloading
+- (UIView *)borderView {
+    if (!_borderView) {
+        _borderView = [[UIView alloc] init];
+        _borderView.size = CGSizeMake(40, 40);
+        _borderView.layer.borderWidth = 1;
+        _borderView.layer.cornerRadius = 20;
+        _borderView.layer.borderColor = [UIColor clearColor].CGColor;
+    }
+    return _borderView;
+}
+
+- (UIImageView *)imageView {
+    if (!_imageView) {
+        _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 52, 52)];
+    }
+    return _imageView;
+}
+
+- (SSJRecordMakingBillTypeSelectionCellLabel *)label {
+    if (!_label) {
+        _label = [[SSJRecordMakingBillTypeSelectionCellLabel alloc] init];
+        _label.backgroundColor = [UIColor clearColor];
+        _label.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
+        _label.textAlignment = NSTextAlignmentCenter;
+    }
+    return _label;
+}
+
+- (UIButton *)deleteBtn {
+    if (!_deleteBtn) {
+        _deleteBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_deleteBtn setImage:[UIImage imageNamed:@"record_making_remove"] forState:UIControlStateNormal];
+        @weakify(self);
+        [[_deleteBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
+            @strongify(self);
+            BOOL shouldDelete = YES;
+            if (self.shouldDeleteAction) {
+                shouldDelete = self.shouldDeleteAction(self);
+            }
+            
+            if (shouldDelete && self.deleteAction) {
+                self.deleteAction(self);
+            }
+        }];
+    }
+    return _deleteBtn;
 }
 
 @end

@@ -27,7 +27,7 @@
 
 @property (nonatomic, copy) void (^selectColorAction)(SSJBooksColorAndIconSelectView *view);
 
-@property (nonatomic, strong) SSJCategoryEditableCollectionView *imageSelectionView;\
+@property (nonatomic, strong) SSJCategoryEditableCollectionView *imageSelectionView;
 
 @property(nonatomic) NSInteger booksParent;
 

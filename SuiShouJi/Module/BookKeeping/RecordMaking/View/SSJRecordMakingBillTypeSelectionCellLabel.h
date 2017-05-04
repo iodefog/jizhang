@@ -10,7 +10,7 @@
 
 @interface SSJRecordMakingBillTypeSelectionCellLabel : UIView
 
-@property (nonatomic) CGFloat fontSize;
+@property (nonatomic, strong) UIFont *font;
 
 @property (nonatomic) NSTextAlignment textAlignment;
 

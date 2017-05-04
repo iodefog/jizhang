@@ -7,6 +7,7 @@
 //
 
 #import "SSJReportFormsViewController.h"
+#import "SSJNavigationController.h"
 #import "SSJBillingChargeViewController.h"
 #import "SSJMagicExportCalendarViewController.h"
 #import "SSJReportFormsBillTypeDetailViewController.h"
@@ -87,6 +88,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
         self.automaticallyAdjustsScrollViewInsets = NO;
         self.extendedLayoutIncludesOpaqueBars = YES;
         self.showNavigationBarBaseLine = NO;
+        self.hidesNavigationBarWhenPushed = YES;
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadAllDatas) name:SSJBooksTypeDidChangeNotification object:nil];
     }
@@ -104,13 +106,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self.navigationController setNavigationBarHidden:YES animated:YES];
     [self reloadAllDatas];
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
 }
 
 #pragma mark - Overwrite
@@ -120,7 +116,6 @@ static NSString *const kSegmentTitleIncome = @"收入";
 
 - (void)updateAppearanceAfterThemeChanged {
     [super updateAppearanceAfterThemeChanged];
-    
     [_tableView reloadData];
     [self updateAppearance];
 }
@@ -250,7 +245,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
             [SSJReportFormsUtil queryForIncomeOrPayType:[self currentType] booksId:_currentBooksId startDate:period.startDate endDate:period.endDate success:^(NSArray<SSJReportFormsItem *> *list) {
                 [self reorganiseCurveTableDataWithOriginalData:list];
             } failure:^(NSError *error) {
-                [self showError:error];
+                [SSJAlertViewAdapter showError:error];
                 [self.view ssj_hideLoadingIndicator];
             }];
             break;
@@ -296,7 +291,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
         
     } failure:^(NSError *error) {
         [self.view ssj_hideLoadingIndicator];
-        [self showError:error];
+        [SSJAlertViewAdapter showError:error];
     }];
 }
 
@@ -320,7 +315,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
                         [self reorganiseChartTableVieDatasWithOriginalData:result];
                         [self.tableView reloadData];
                     } failure:^(NSError *error) {
-                        [self showError:error];
+                        [SSJAlertViewAdapter showError:error];
                         [self.tableView ssj_hideLoadingIndicator];
                     }];
                 }
@@ -333,7 +328,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
                         [self reorganiseChartTableVieDatasWithOriginalData:result];
                         [self.tableView reloadData];
                     } failure:^(NSError *error) {
-                        [self showError:error];
+                        [SSJAlertViewAdapter showError:error];
                         [self.tableView ssj_hideLoadingIndicator];
                     }];
                 }
@@ -374,19 +369,19 @@ static NSString *const kSegmentTitleIncome = @"收入";
                         [self reorganiseCurveTableDataWithOriginalData:list];
                         
                     } failure:^(NSError *error) {
-                        [self showError:error];
+                        [SSJAlertViewAdapter showError:error];
                         [self.curveHeaderView hideLoadingOnSeparatorForm];
                         [self.curveHeaderView hideLoadingOnCurve];
                     }];
                     
                 } failure:^(NSError *error) {
-                    [self showError:error];
+                    [SSJAlertViewAdapter showError:error];
                     [self.curveHeaderView hideLoadingOnSeparatorForm];
                     [self.curveHeaderView hideLoadingOnCurve];
                 }];
                 
             } failure:^(NSError *error) {
-                [self showError:error];
+                [SSJAlertViewAdapter showError:error];
                 [self.curveHeaderView hideLoadingOnSeparatorForm];
                 [self.curveHeaderView hideLoadingOnCurve];
             }];
@@ -533,16 +528,6 @@ static NSString *const kSegmentTitleIncome = @"收入";
     [self.tableView reloadData];
 }
 
-- (void)showError:(NSError *)error {
-    NSString *message = nil;
-#ifdef DEBUG
-    message = [error localizedDescription];
-#else
-    message = SSJ_ERROR_MESSAGE;
-#endif
-    [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:message action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
-}
-
 - (void)updateAppearance {
     [self.navigationBar updateAppearance];
     self.payAndIncomeSegmentControl.titleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
@@ -614,7 +599,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
 - (SSJReportFormsPeriodSelectionControl *)periodControl {
     if (!_periodControl) {
         __weak typeof(self) wself = self;
-        _periodControl = [[SSJReportFormsPeriodSelectionControl alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, 35)];
+        _periodControl = [[SSJReportFormsPeriodSelectionControl alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, 40)];
         _periodControl.periodChangeHandler = ^(SSJReportFormsPeriodSelectionControl *control) {
             [wself reloadDatasInPeriod:control.selectedPeriod];
             [SSJAnaliyticsManager event:@"form_date_picked"];
@@ -688,7 +673,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
                 wself.curveHeaderView.item = wself.curveHeaderItem;
                 
             } failure:^(NSError *error) {
-                [wself showError:error];
+                [SSJAlertViewAdapter showError:error];
                 [wself.curveHeaderView hideLoadingOnCurve];
             }];
             

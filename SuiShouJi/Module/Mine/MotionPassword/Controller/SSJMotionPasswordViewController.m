@@ -7,6 +7,7 @@
 //
 
 #import "SSJMotionPasswordViewController.h"
+#import "SSJNavigationController.h"
 #import "SSJLoginViewController.h"
 #import "SCYMotionEncryptionView.h"
 #import "SSJUserTableManager.h"
@@ -84,7 +85,7 @@ static const int kVerifyFailureTimesLimit = 5;
                 }
                 [controller dismissViewControllerAnimated:YES completion:NULL];
             };
-            UINavigationController *naviVC = [[UINavigationController alloc] initWithRootViewController:motionVC];
+            SSJNavigationController *naviVC = [[SSJNavigationController alloc] initWithRootViewController:motionVC];
             [currentVC presentViewController:naviVC animated:animated completion:NULL];
             
             return;
@@ -99,6 +100,7 @@ static const int kVerifyFailureTimesLimit = 5;
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.hidesBottomBarWhenPushed = YES;
+        self.hidesNavigationBarWhenPushed = YES;
         self.verifyFailureTimes = kVerifyFailureTimesLimit;
     }
     return self;
@@ -161,11 +163,6 @@ static const int kVerifyFailureTimesLimit = 5;
     }
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    [self.navigationController setNavigationBarHidden:YES animated:YES];
-}
-
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     //  禁用手势返回
@@ -175,8 +172,6 @@ static const int kVerifyFailureTimesLimit = 5;
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    [self.navigationController setNavigationBarHidden:NO animated:YES];
-    
     [_context invalidate];
     _context = nil;
 }
@@ -268,7 +263,6 @@ static const int kVerifyFailureTimesLimit = 5;
                     _userItem.motionPWDState = @"1";
                     [SSJUserTableManager saveUserItem:_userItem];
                     
-                    [self.navigationController setNavigationBarHidden:NO animated:YES];
                     if (self.finishHandle) {
                         self.finishHandle(self);
                     } else {
@@ -295,8 +289,6 @@ static const int kVerifyFailureTimesLimit = 5;
         //  验证手势密码
         case SSJMotionPasswordViewControllerTypeVerification: {
             if ([self.password isEqualToString:[keypads componentsJoinedByString:@","]]) {
-                //  验证成功
-                [self.navigationController setNavigationBarHidden:NO animated:YES];
                 if (self.finishHandle) {
                     self.finishHandle(self);
                 } else {
@@ -365,7 +357,6 @@ static const int kVerifyFailureTimesLimit = 5;
             loginVC.finishHandle = self.finishHandle;
             loginVC.cancelHandle = self.finishHandle;
             loginVC.backController = self.backController;
-            [self.navigationController setNavigationBarHidden:NO animated:YES];
             [self.navigationController setViewControllers:@[loginVC] animated:YES];
         }
         
@@ -383,7 +374,6 @@ static const int kVerifyFailureTimesLimit = 5;
         loginVC.finishHandle = self.finishHandle;
         loginVC.cancelHandle = self.finishHandle;
         loginVC.backController = self.backController;
-        [self.navigationController setNavigationBarHidden:NO animated:YES];
         [self.navigationController setViewControllers:@[loginVC] animated:YES];
     }
     
@@ -403,7 +393,6 @@ static const int kVerifyFailureTimesLimit = 5;
         [_context evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics localizedReason:@"请按住Home键进行解锁" reply:^(BOOL success, NSError * _Nullable error) {
             if (success) {
                 SSJDispatchMainSync(^{
-                    [self.navigationController setNavigationBarHidden:NO];
                     if (self.finishHandle) {
                         self.finishHandle(self);
                     } else {
