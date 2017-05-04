@@ -155,11 +155,6 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     }
 }
 
--(void)viewDidAppear:(BOOL)animated{
-    [super viewDidAppear:animated];
-
-}
-
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     [_billTypeInputView.moneyInput resignFirstResponder];

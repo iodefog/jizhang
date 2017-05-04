@@ -186,12 +186,10 @@
     _titles = titles;
     
     NSMutableArray *items = [[NSMutableArray alloc] init];
-    
     for (NSString *title in _titles) {
-        [items addObject:[SSJListMenuItem itemWithImageName:nil title:title normalTitleColor:SSJ_MAIN_COLOR selectedTitleColor:nil normalImageColor:nil selectedImageColor:nil]];
+        [items addObject:[SSJListMenuItem itemWithImageName:nil title:title normalTitleColor:SSJ_MAIN_COLOR selectedTitleColor:SSJ_MARCATO_COLOR normalImageColor:nil selectedImageColor:nil]];
     }
-    
-    [items addObject:[SSJListMenuItem itemWithImageName:nil title:@"添加账本" normalTitleColor:SSJ_SECONDARY_COLOR selectedTitleColor:nil normalImageColor:nil selectedImageColor:nil]];
+    [items addObject:[SSJListMenuItem itemWithImageName:nil title:@"添加账本" normalTitleColor:SSJ_MAIN_COLOR selectedTitleColor:nil normalImageColor:nil selectedImageColor:nil]];
     
     self.booksMenu.items = items;
     self.booksMenu.maxDisplayRowCount = 6.5;
@@ -294,9 +292,9 @@
 
 - (SSJListMenu *)booksMenu {
     if (!_booksMenu) {
-        _booksMenu = [[SSJListMenu alloc] initWithFrame:CGRectMake(0, 0, 104, 0)];
+        _booksMenu = [[SSJListMenu alloc] initWithFrame:CGRectMake(0, 0, 154, 0)];
         _booksMenu.maxDisplayRowCount = 5.5;
-        _booksMenu.titleFontSize = 13;
+        _booksMenu.titleFont = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         [_booksMenu addTarget:self action:@selector(selectBookAction) forControlEvents:UIControlEventValueChanged];
     }
     return _booksMenu;
