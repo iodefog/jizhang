@@ -73,7 +73,7 @@
     _arrow.left = _titleLab.right + 5;
     _arrow.position = CGPointMake(_arrow.position.x, _containerView.height * 0.5);
     
-    _segmentCtrl.size = CGSizeMake(250, 24);
+    _segmentCtrl.size = CGSizeMake(200, 24);
     _segmentCtrl.centerX = self.width * 0.5;
     _segmentCtrl.top = 40 + statusBarHeight;
 }
@@ -186,12 +186,10 @@
     _titles = titles;
     
     NSMutableArray *items = [[NSMutableArray alloc] init];
-    
     for (NSString *title in _titles) {
-        [items addObject:[SSJListMenuItem itemWithImageName:nil title:title normalTitleColor:SSJ_MAIN_COLOR selectedTitleColor:nil normalImageColor:nil selectedImageColor:nil]];
+        [items addObject:[SSJListMenuItem itemWithImageName:nil title:title normalTitleColor:SSJ_MAIN_COLOR selectedTitleColor:SSJ_MARCATO_COLOR normalImageColor:nil selectedImageColor:nil]];
     }
-    
-    [items addObject:[SSJListMenuItem itemWithImageName:nil title:@"添加账本" normalTitleColor:SSJ_SECONDARY_COLOR selectedTitleColor:nil normalImageColor:nil selectedImageColor:nil]];
+    [items addObject:[SSJListMenuItem itemWithImageName:nil title:@"添加账本" normalTitleColor:SSJ_MAIN_COLOR selectedTitleColor:nil normalImageColor:nil selectedImageColor:nil]];
     
     self.booksMenu.items = items;
     self.booksMenu.maxDisplayRowCount = 6.5;
@@ -238,9 +236,9 @@
     [_managerBtn setTitleColor:SSJ_MARCATO_COLOR forState:UIControlStateNormal];
     [_managerBtn setTitleColor:[SSJ_MARCATO_COLOR colorWithAlphaComponent:0.5] forState:UIControlStateHighlighted];
     
-    _titleLab.textColor = SSJ_MARCATO_COLOR;
+    _titleLab.textColor = SSJ_MAIN_COLOR;
     
-    _arrow.strokeColor = SSJ_SECONDARY_COLOR.CGColor;
+    _arrow.fillColor = SSJ_MARCATO_COLOR.CGColor;
     
     _segmentCtrl.borderColor = SSJ_SECONDARY_COLOR;
     _segmentCtrl.selectedBorderColor = SSJ_MARCATO_COLOR;
@@ -294,9 +292,9 @@
 
 - (SSJListMenu *)booksMenu {
     if (!_booksMenu) {
-        _booksMenu = [[SSJListMenu alloc] initWithFrame:CGRectMake(0, 0, 104, 0)];
+        _booksMenu = [[SSJListMenu alloc] initWithFrame:CGRectMake(0, 0, 154, 0)];
         _booksMenu.maxDisplayRowCount = 5.5;
-        _booksMenu.titleFontSize = 13;
+        _booksMenu.titleFont = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         [_booksMenu addTarget:self action:@selector(selectBookAction) forControlEvents:UIControlEventValueChanged];
     }
     return _booksMenu;
@@ -306,14 +304,14 @@
     if (!_arrow) {
         UIBezierPath *path = [UIBezierPath bezierPath];
         [path moveToPoint:CGPointZero];
-        [path addLineToPoint:CGPointMake(6, 7)];
-        [path addLineToPoint:CGPointMake(12, 0)];
+        [path addLineToPoint:CGPointMake(5, 5)];
+        [path addLineToPoint:CGPointMake(10, 0)];
         
         _arrow = [CAShapeLayer layer];
-        _arrow.size = CGSizeMake(12, 7);
+        _arrow.size = CGSizeMake(10, 5);
         _arrow.path = path.CGPath;
         _arrow.lineWidth = 1;
-        _arrow.fillColor = [UIColor clearColor].CGColor;
+        _arrow.fillColor = SSJ_MARCATO_COLOR.CGColor;
     }
     return _arrow;
 }
