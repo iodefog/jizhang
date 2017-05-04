@@ -57,7 +57,6 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
         }
         return YES;
     };
-    
     cell.deleteAction = ^(SSJRecordMakingBillTypeSelectionCell *cell) {
         if ([wself deleteItem:cell.item]) {
             if (wself.deleteAction) {
