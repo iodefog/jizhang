@@ -74,14 +74,14 @@
     if ([_item.fundingParent isEqualToString:@"root"]) {
         if (_item.fundingMemo == nil) {
             _fundingTitle.text = self.item.fundingName;
-            _fundingTitle.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2);
+            _fundingTitle.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         }else{
             NSString *string = [NSString stringWithFormat:@"%@ (%@)",self.item.fundingName,self.item.fundingMemo];
             NSMutableAttributedString *attrString =
             [[NSMutableAttributedString alloc] initWithString:string];
-            [attrString addAttribute:NSFontAttributeName value:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2)
-                               range:[string rangeOfString:self.item.fundingName]];
             [attrString addAttribute:NSFontAttributeName value:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3)
+                               range:[string rangeOfString:self.item.fundingName]];
+            [attrString addAttribute:NSFontAttributeName value:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4)
                                range:[string rangeOfString:[NSString stringWithFormat:@"(%@)",self.item.fundingMemo]]];
             [attrString addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor]
                                range:[string rangeOfString:self.item.fundingName]];
