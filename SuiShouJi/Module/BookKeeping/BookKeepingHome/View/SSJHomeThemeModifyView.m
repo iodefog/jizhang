@@ -238,6 +238,10 @@ static NSString *const kCellId = @"SSJCustomThemeSelectCollectionViewCell";
 
 - (void)blackBlackButtonClick:(id)sender{
     self.selectType = NO;
+    if (!self.seletctTheme) {
+        self.seletctTheme = @"theme_custom3_dark";
+        [self.collectionView reloadData];
+    }
     [self updateFontType];
     if ([self.seletctTheme isEqualToString:@"background"]) {
         [SSJCustomThemeManager changeThemeWithLocalImage:nil type:self.selectType];
@@ -248,6 +252,10 @@ static NSString *const kCellId = @"SSJCustomThemeSelectCollectionViewCell";
 
 - (void)whiteButtonClick:(id)sender{
     self.selectType = YES;
+    if (!self.seletctTheme) {
+        self.seletctTheme = @"theme_custom1_light";
+        [self.collectionView reloadData];
+    }
     [self updateFontType];
     if ([self.seletctTheme isEqualToString:@"background"]) {
         [SSJCustomThemeManager changeThemeWithLocalImage:nil type:self.selectType];
