@@ -7,6 +7,7 @@
 //
 
 #import "SSJSearchingViewController.h"
+#import "SSJNavigationController.h"
 #import "SSJChargeSearchingStore.h"
 #import "SSJSearchBar.h"
 #import "SSJSearchHistoryItem.h"
@@ -56,6 +57,7 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
         self.extendedLayoutIncludesOpaqueBars = YES;
         self.automaticallyAdjustsScrollViewInsets = NO;
         self.hidesBottomBarWhenPushed = YES;
+        self.hidesNavigationBarWhenPushed = YES;
     }
     return self;
 }
@@ -74,7 +76,6 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [[UIApplication sharedApplication]setStatusBarHidden:YES];
-    [self.navigationController setNavigationBarHidden:YES animated:NO];
     if (self.model == SSJSearchResultModel) {
         [self searchForContent:self.searchBar.searchTextInput.text listOrder:self.resultOrderHeader.order];
     }else{
@@ -93,7 +94,6 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     [self.searchBar.searchTextInput resignFirstResponder];
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
     [[UIApplication sharedApplication]setStatusBarHidden:NO];
 }
 

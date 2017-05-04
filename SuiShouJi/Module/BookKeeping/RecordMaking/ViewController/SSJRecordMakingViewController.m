@@ -7,6 +7,7 @@
 //
 
 #import "SSJRecordMakingViewController.h"
+#import "SSJNavigationController.h"
 #import "SSJADDNewTypeViewController.h"
 #import "SSJSegmentedControl.h"
 #import "SSJSmallCalendarView.h"
@@ -100,6 +101,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.statisticsTitle = @"记一笔";
         self.hidesBottomBarWhenPushed = YES;
+        self.hidesNavigationBarWhenPushed = YES;
         [[YYKeyboardManager defaultManager] addObserver:self];
     }
     return self;
@@ -141,7 +143,6 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self.navigationController setNavigationBarHidden:YES animated:NO];
     [self loadCategoryAndBooksList];
     [self reloadMenberItems];
     if (![self showGuideViewIfNeeded]) {
@@ -161,7 +162,6 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    [self.navigationController setNavigationBarHidden:NO animated:YES];
     [_billTypeInputView.moneyInput resignFirstResponder];
     [_accessoryView.memoView resignFirstResponder];
 }
