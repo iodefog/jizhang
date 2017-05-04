@@ -71,7 +71,7 @@
         _cellDetail = [[UITextField alloc] init];
         _cellDetail.textAlignment = NSTextAlignmentRight;
         _cellDetail.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        _cellDetail.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
+        _cellDetail.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         _cellDetail.clearButtonMode = UITextFieldViewModeWhileEditing;
     }
     return _cellDetail;
