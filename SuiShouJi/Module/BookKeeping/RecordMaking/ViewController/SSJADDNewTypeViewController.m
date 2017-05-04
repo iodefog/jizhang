@@ -730,7 +730,7 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 - (UIButton *)sureButton {
     if (!_sureButton) {
         _sureButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        _sureButton.frame = CGRectMake(0, self.view.height - 50, self.view.width, kButtonHeight);
+        _sureButton.frame = CGRectMake(0, self.view.height - kButtonHeight, self.view.width, kButtonHeight);
         _sureButton.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_1);
         [_sureButton setTitle:@"确定" forState:UIControlStateNormal];
         [_sureButton ssj_setBorderStyle:SSJBorderStyleTop];
