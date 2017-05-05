@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		2037DEF73FC931CFDC333C7D /* libPods-9188JiZhangBen.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F84857880610A2DD87904A88 /* libPods-9188JiZhangBen.a */; };
 		2969FD659CB0F29A997B0743 /* libPods-YouYuJiZhang.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BE2668A2D3687E35A1F7D0D /* libPods-YouYuJiZhang.a */; };
-		3B66892728C8460D8718717B /* libPods-9188JiZhangBao.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1403F6B3547B961373F65A2A /* libPods-9188JiZhangBao.a */; };
 		43FB013EC6CC98DC90F5D913 /* libPods-YouYuJiZhangPro.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DC160CBD947F86ED6CD7DD86 /* libPods-YouYuJiZhangPro.a */; };
 		72BB5896AF4A38FC4F8B3B48 /* libPods-YouYuJiZhangBen.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD18AB4DEF381D69AB77158 /* libPods-YouYuJiZhangBen.a */; };
 		77DF96B1D75AEF70D1506706 /* libPods-BeiKeJiZhang.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D1CEF5E96BF59F42EAD3BC3 /* libPods-BeiKeJiZhang.a */; };
@@ -8222,13 +8221,11 @@
 		004889EB34083108A8612BCE /* Pods-YouYuJiZhangBao.debug-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangBao.debug-test.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangBao/Pods-YouYuJiZhangBao.debug-test.xcconfig"; sourceTree = "<group>"; };
 		10B02F27B07D9E59BDE1CA2A /* Pods-YouYuJiZhang.release-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhang.release-test.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhang/Pods-YouYuJiZhang.release-test.xcconfig"; sourceTree = "<group>"; };
 		13DED3B91912A4CA23981548 /* Pods-YouYuJiZhangGuanJia.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangGuanJia.debug.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangGuanJia/Pods-YouYuJiZhangGuanJia.debug.xcconfig"; sourceTree = "<group>"; };
-		1403F6B3547B961373F65A2A /* libPods-9188JiZhangBao.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-9188JiZhangBao.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1BCD58B8B9CBEA7ED5E6BDD4 /* Pods-JiZhangGuanJia.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JiZhangGuanJia.debug.xcconfig"; path = "Pods/Target Support Files/Pods-JiZhangGuanJia/Pods-JiZhangGuanJia.debug.xcconfig"; sourceTree = "<group>"; };
 		1E51C22F9305214B776BE476 /* Pods-YouYuJiZhang.debug-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhang.debug-production.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhang/Pods-YouYuJiZhang.debug-production.xcconfig"; sourceTree = "<group>"; };
 		1E94BF472DA87D55A1CBED4F /* Pods-YouYuJiZhang.debug-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhang.debug-test.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhang/Pods-YouYuJiZhang.debug-test.xcconfig"; sourceTree = "<group>"; };
 		20DA9AF0E6D356E778C6EB44 /* Pods-SuiShouJiEnterprise.release-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SuiShouJiEnterprise.release-production.xcconfig"; path = "Pods/Target Support Files/Pods-SuiShouJiEnterprise/Pods-SuiShouJiEnterprise.release-production.xcconfig"; sourceTree = "<group>"; };
 		21EA1E50547213D6FCC8FD05 /* Pods-SuiShouJi.release-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SuiShouJi.release-test.xcconfig"; path = "Pods/Target Support Files/Pods-SuiShouJi/Pods-SuiShouJi.release-test.xcconfig"; sourceTree = "<group>"; };
-		23735A96A5798898EEE0D21B /* Pods-9188JiZhangBao.release-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-9188JiZhangBao.release-test.xcconfig"; path = "Pods/Target Support Files/Pods-9188JiZhangBao/Pods-9188JiZhangBao.release-test.xcconfig"; sourceTree = "<group>"; };
 		2540479F536C7834E132C4B5 /* Pods-YouYuJiZhangPro.release-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangPro.release-production.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangPro/Pods-YouYuJiZhangPro.release-production.xcconfig"; sourceTree = "<group>"; };
 		28D54CCC52994B95633CA5E3 /* libPods-JiZhangGuanJia.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-JiZhangGuanJia.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D1CEF5E96BF59F42EAD3BC3 /* libPods-BeiKeJiZhang.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BeiKeJiZhang.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -8244,12 +8241,9 @@
 		4BE2668A2D3687E35A1F7D0D /* libPods-YouYuJiZhang.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-YouYuJiZhang.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4DCB8AA1DC23E6D40C33EB5B /* libPods-SuiShouJi.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SuiShouJi.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4EF45D0DA6D692497985E773 /* Pods-JiZhangGuanJia.release-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JiZhangGuanJia.release-test.xcconfig"; path = "Pods/Target Support Files/Pods-JiZhangGuanJia/Pods-JiZhangGuanJia.release-test.xcconfig"; sourceTree = "<group>"; };
-		51A25E07A619486269BADB04 /* Pods-9188JiZhangBao.release-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-9188JiZhangBao.release-production.xcconfig"; path = "Pods/Target Support Files/Pods-9188JiZhangBao/Pods-9188JiZhangBao.release-production.xcconfig"; sourceTree = "<group>"; };
 		53D02BD02F89C64D5FED1E49 /* Pods-YouYuJiZhangGuanJia.debug-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangGuanJia.debug-production.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangGuanJia/Pods-YouYuJiZhangGuanJia.debug-production.xcconfig"; sourceTree = "<group>"; };
 		54C394CC554BE2031E6172C1 /* libPods-YouYuJiZhangGuanJia.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-YouYuJiZhangGuanJia.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		54DDAB8063B5382AD4F92A4C /* Pods-9188JiZhangBao.debug-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-9188JiZhangBao.debug-production.xcconfig"; path = "Pods/Target Support Files/Pods-9188JiZhangBao/Pods-9188JiZhangBao.debug-production.xcconfig"; sourceTree = "<group>"; };
 		559995F82A41A31A1EDB66F7 /* Pods-YouYuJiZhangBao.release-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangBao.release-test.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangBao/Pods-YouYuJiZhangBao.release-test.xcconfig"; sourceTree = "<group>"; };
-		57CA88A53827E4DC0E13C2DD /* Pods-9188JiZhangBao.debug-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-9188JiZhangBao.debug-test.xcconfig"; path = "Pods/Target Support Files/Pods-9188JiZhangBao/Pods-9188JiZhangBao.debug-test.xcconfig"; sourceTree = "<group>"; };
 		5899867574AEB0396C49AE15 /* Pods-SuiShouJi.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SuiShouJi.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SuiShouJi/Pods-SuiShouJi.debug.xcconfig"; sourceTree = "<group>"; };
 		59B9709CD0561A8AD4BDF638 /* Pods-SuiShouJi.debug-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SuiShouJi.debug-test.xcconfig"; path = "Pods/Target Support Files/Pods-SuiShouJi/Pods-SuiShouJi.debug-test.xcconfig"; sourceTree = "<group>"; };
 		5DE4695CC7C0CB804EB71885 /* Pods-JiZhangGuanJia.debug-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JiZhangGuanJia.debug-production.xcconfig"; path = "Pods/Target Support Files/Pods-JiZhangGuanJia/Pods-JiZhangGuanJia.debug-production.xcconfig"; sourceTree = "<group>"; };
@@ -9650,7 +9644,6 @@
 				7DFB189D1EB0341E00292DD3 /* libz.tbd in Frameworks */,
 				7DFB189E1EB0341E00292DD3 /* AVFoundation.framework in Frameworks */,
 				7DFB189F1EB0341E00292DD3 /* Security.framework in Frameworks */,
-				3B66892728C8460D8718717B /* libPods-9188JiZhangBao.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -9829,7 +9822,6 @@
 				2D1CEF5E96BF59F42EAD3BC3 /* libPods-BeiKeJiZhang.a */,
 				C67906F6CFFC0A3639C9DEC3 /* libPods-9188JiZhangPro.a */,
 				DC160CBD947F86ED6CD7DD86 /* libPods-YouYuJiZhangPro.a */,
-				1403F6B3547B961373F65A2A /* libPods-9188JiZhangBao.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -13181,10 +13173,6 @@
 				1E51C22F9305214B776BE476 /* Pods-YouYuJiZhang.debug-production.xcconfig */,
 				10B02F27B07D9E59BDE1CA2A /* Pods-YouYuJiZhang.release-test.xcconfig */,
 				6914A4671174AA5C297802D2 /* Pods-YouYuJiZhang.release-production.xcconfig */,
-				57CA88A53827E4DC0E13C2DD /* Pods-9188JiZhangBao.debug-test.xcconfig */,
-				54DDAB8063B5382AD4F92A4C /* Pods-9188JiZhangBao.debug-production.xcconfig */,
-				23735A96A5798898EEE0D21B /* Pods-9188JiZhangBao.release-test.xcconfig */,
-				51A25E07A619486269BADB04 /* Pods-9188JiZhangBao.release-production.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -13276,12 +13264,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7DFB18C41EB0341E00292DD3 /* Build configuration list for PBXNativeTarget "9188JiZhangBao" */;
 			buildPhases = (
-				EA09A5515B2208658E4E595A /* [CP] Check Pods Manifest.lock */,
 				7DFB16521EB0341E00292DD3 /* Sources */,
 				7DFB18971EB0341E00292DD3 /* Frameworks */,
 				7DFB18A41EB0341E00292DD3 /* Resources */,
-				24225524EB71C72CB2809C30 /* [CP] Embed Pods Frameworks */,
-				AE50B8146533773D430CFC76 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -14136,21 +14121,6 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BeiKeJiZhang/Pods-BeiKeJiZhang-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		24225524EB71C72CB2809C30 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-9188JiZhangBao/Pods-9188JiZhangBao-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		3434A1FA5629E89C6387C495 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -14571,21 +14541,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		AE50B8146533773D430CFC76 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-9188JiZhangBao/Pods-9188JiZhangBao-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		D5BE237FD9961E3E5F59193C /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -14644,21 +14599,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-YouYuJiZhangBao/Pods-YouYuJiZhangBao-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		EA09A5515B2208658E4E595A /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		EB88810B3A1B30F8D98E4C9D /* [CP] Embed Pods Frameworks */ = {
@@ -22988,7 +22928,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhangben;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "a89448e9-1b94-493b-86c8-a3fbfca1b115";
+				PROVISIONING_PROFILE = "0843f3cd-0082-4cea-8fbc-f525a2108680";
 				PROVISIONING_PROFILE_SPECIFIER = YouYuJiZhangBenDev;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -23485,13 +23425,12 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhangAppStore;
 				PRODUCT_NAME = SuiShouJi;
-				PROVISIONING_PROFILE = "fbc6b536-df8b-4945-81e2-455e46bdf151";
-				PROVISIONING_PROFILE_SPECIFIER = JiZhangAppStoreDis;
+				PROVISIONING_PROFILE = "b07cc377-1cbb-4899-94c6-7e2a1899b3c5";
+				PROVISIONING_PROFILE_SPECIFIER = JiZhangAppStoreAdHoc;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
-			name = "Release-product
-
+			name = "Release-production";
 		};
 		7DA8F9A11E55CFBE006BE13B /* Release-production */ = {
 			isa = XCBuildConfiguration;
@@ -23501,9 +23440,8 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Yutang Zhou (4ST4RGT353)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Yutang Zhou (4ST4RGT353)";
-
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Yutang Zhou (R3852KFF45)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Yutang Zhou (R3852KFF45)";
 				DEVELOPMENT_TEAM = R3852KFF45;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -23537,8 +23475,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhangben;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "a89448e9-1b94-493b-86c8-a3fbfca1b115";
-				PROVISIONING_PROFILE_SPECIFIER = YouYuJiZhangBenDev;
+				PROVISIONING_PROFILE = "94470d36-8a95-4638-a692-726b5daac246";
+				PROVISIONING_PROFILE_SPECIFIER = YouYuJiZhangBenDis;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 			};
 			name = "Release-production";
@@ -24270,7 +24208,6 @@
 		};
 		7DFB18C51EB0341E00292DD3 /* Debug-test */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 57CA88A53827E4DC0E13C2DD /* Pods-9188JiZhangBao.debug-test.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = 9188JiZhangBao;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -24372,7 +24309,6 @@
 		};
 		7DFB18C61EB0341E00292DD3 /* Debug-production */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 54DDAB8063B5382AD4F92A4C /* Pods-9188JiZhangBao.debug-production.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = 9188JiZhangBao;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -24475,7 +24411,6 @@
 		};
 		7DFB18C71EB0341E00292DD3 /* Release-test */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 23735A96A5798898EEE0D21B /* Pods-9188JiZhangBao.release-test.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = 9188JiZhangBao;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -24576,7 +24511,6 @@
 		};
 		7DFB18C81EB0341E00292DD3 /* Release-production */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 51A25E07A619486269BADB04 /* Pods-9188JiZhangBao.release-production.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = 9188JiZhangBao;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -27179,7 +27113,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhangben;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "a89448e9-1b94-493b-86c8-a3fbfca1b115";
+				PROVISIONING_PROFILE = "0843f3cd-0082-4cea-8fbc-f525a2108680";
 				PROVISIONING_PROFILE_SPECIFIER = YouYuJiZhangBenDev;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -27194,8 +27128,8 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Yutang Zhou (4ST4RGT353)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Yutang Zhou (4ST4RGT353)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Yutang Zhou (R3852KFF45)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Yutang Zhou (R3852KFF45)";
 				DEVELOPMENT_TEAM = R3852KFF45;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -27229,8 +27163,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhangben;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "a89448e9-1b94-493b-86c8-a3fbfca1b115";
-				PROVISIONING_PROFILE_SPECIFIER = YouYuJiZhangBenDev;
+				PROVISIONING_PROFILE = "94470d36-8a95-4638-a692-726b5daac246";
+				PROVISIONING_PROFILE_SPECIFIER = YouYuJiZhangBenDis;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 			};
 			name = "Release-test";
@@ -27517,8 +27451,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhangAppStore;
 				PRODUCT_NAME = SuiShouJi;
-				PROVISIONING_PROFILE = "fbc6b536-df8b-4945-81e2-455e46bdf151";
-				PROVISIONING_PROFILE_SPECIFIER = JiZhangAppStoreDis;
+				PROVISIONING_PROFILE = "b07cc377-1cbb-4899-94c6-7e2a1899b3c5";
+				PROVISIONING_PROFILE_SPECIFIER = JiZhangAppStoreAdHoc;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
