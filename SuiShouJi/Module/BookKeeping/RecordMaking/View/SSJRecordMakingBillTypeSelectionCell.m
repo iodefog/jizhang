@@ -39,17 +39,15 @@ static NSString *const kTextColorAnimationKey = @"kTextColorAnimationKey";
         [self.contentView addSubview:self.imageView];
         [self.contentView addSubview:self.label];
         [self.contentView addSubview:self.deleteBtn];
-        
-#warning test
-//        self.layer.borderColor = [UIColor orangeColor].CGColor;
-//        self.layer.borderWidth = 1;
     }
     return self;
 }
 
 - (void)layoutSubviews {
     _imageView.size = CGSizeMake(_imageView.image.size.width * kIconScale, _imageView.image.size.height * kIconScale);
-    _borderView.center = _imageView.center = CGPointMake(self.contentView.width * 0.5, 36);
+    _imageView.top = 24;
+    _imageView.centerX = self.contentView.width * 0.5;
+    _borderView.center = CGPointMake(self.contentView.width * 0.5, _imageView.centerY);
     _label.bottom = self.contentView.height;
     _label.centerX = self.contentView.width * 0.5;
     _deleteBtn.size = CGSizeMake(32, 32);
