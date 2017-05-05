@@ -124,7 +124,7 @@
         _titleLabel = [[UILabel alloc]init];
         _titleLabel.text = @"重复";
         _titleLabel.textAlignment = NSTextAlignmentCenter;
-        _titleLabel.font = [UIFont systemFontOfSize:18];
+        _titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2);
         _titleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         [_topView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
         [_topView ssj_setBorderStyle:SSJBorderStyleBottom];
@@ -141,7 +141,7 @@
         [_comfirmButton setTitle:@"确定" forState:UIControlStateNormal];
         [_comfirmButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];
         [_comfirmButton addTarget:self action:@selector(comfirmButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
-        _comfirmButton.titleLabel.font = [UIFont systemFontOfSize:15];
+        _comfirmButton.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         [_topView addSubview:_comfirmButton];
     }
     return _topView;

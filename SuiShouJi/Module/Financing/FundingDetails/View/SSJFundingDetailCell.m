@@ -328,7 +328,7 @@
     if (!_moneyLab) {
         _moneyLab = [[UILabel alloc] init];
         _moneyLab.backgroundColor = [UIColor clearColor];
-        _moneyLab.font = [UIFont systemFontOfSize:16];
+        _moneyLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         _moneyLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     }
     return _moneyLab;
@@ -353,7 +353,7 @@
 -(UILabel *)typeLabel{
     if (!_typeLabel) {
         _typeLabel = [[UILabel alloc]init];
-        _typeLabel.font = [UIFont systemFontOfSize:15];
+        _typeLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         _typeLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     }
     return _typeLabel;
@@ -363,7 +363,7 @@
     if (!_memoLabel) {
         _memoLabel = [[UILabel alloc]init];
         _memoLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-        _memoLabel.font = [UIFont systemFontOfSize:13];
+        _memoLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
     }
     return _memoLabel;
 }
@@ -380,7 +380,7 @@
     [super updateCellAppearanceAfterThemeChanged];
     _moneyLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     _typeLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-    _memoLabel.font = [UIFont systemFontOfSize:13];
+    _memoLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
     _seperatorLine.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
 }
 

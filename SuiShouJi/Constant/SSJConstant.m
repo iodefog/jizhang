@@ -10,6 +10,8 @@
 
 const int64_t SSJDefaultSyncVersion = -1;
 
+const float SSJMaskAlpha = 0.3;
+
 NSString *const SSJErrorDomain = @"com.9188.jizhang";
 
 //NSString *const SSJAppStoreAddress = @"https://itunes.apple.com/us/app/li-cai-di/id1023600539?l=zh&ls=1&mt=8";
@@ -47,10 +49,6 @@ NSString *const SSJSyncImageSuccessNotification = @"SSJSyncImageSuccessNotificat
 NSString *const SSJSyncImageFailureNotification = @"SSJSyncImageFailureNotification";
 
 NSString *const SSJLoginOrRegisterNotification = @"SSJLoginOrRegisterNotification";
-
-NSString *const SSJShowSyncLoadingNotification = @"SSJShowSyncLoadingNotification";
-
-NSString *const SSJHideSyncLoadingNotification = @"SSJHideSyncLoadingNotification";
 
 NSString *const SSJInitDatabaseDidBeginNotification = @"SSJInitDatabaseDidBeginNotification";
 

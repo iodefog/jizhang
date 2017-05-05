@@ -19,13 +19,13 @@
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         
-        self.textLabel.font = [UIFont systemFontOfSize:18];
+        self.textLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         
         _additionalIcon = [[UIImageView alloc] init];
         [self.contentView addSubview:_additionalIcon];
         
         _subtitleLabel = [[UILabel alloc] init];
-        _subtitleLabel.font = [UIFont systemFontOfSize:18];
+        _subtitleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         [self.contentView addSubview:_subtitleLabel];
         
         _switchControl = [[UISwitch alloc] init];

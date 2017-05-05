@@ -51,11 +51,15 @@
 #import "SSJRegistGetVerViewController.h"
 #import "SSJBookKeepingHomeListItem.h"
 #import "SSJBookKeepingHomeHeaderView.h"
+#import "SSJHomeThemeModifyView.h"
 #import "SSJBookKeepingHomeNoDataCell.h"
+#import "SSJCustomThemeManager.h"
+#import "SSJThemBgImageClipViewController.h"
+#import "SSJNavigationController.h"
 
 static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 
-@interface SSJBookKeepingHomeViewController () <UITabBarControllerDelegate, SSJMultiFunctionButtonDelegate>
+@interface SSJBookKeepingHomeViewController () <SSJMultiFunctionButtonDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 
 @property (nonatomic,strong) NSMutableArray *items;
 @property (nonatomic,strong) UIButton *button;
@@ -97,6 +101,8 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 @property (nonatomic, strong) SSJBookKeepingHomePopView *keepingHomePopView;
 
 @property (nonatomic, strong) SSJHomeBillStickyNoteView *billStickyNoteView;
+
+@property(nonatomic, strong) SSJHomeThemeModifyView *themeModifyView;
 @end
 
 @implementation SSJBookKeepingHomeViewController{
@@ -116,6 +122,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.statisticsTitle = @"首页";
+        self.hidesNavigationBarWhenPushed = YES;
         self.extendedLayoutIncludesOpaqueBars = YES;
         self.automaticallyAdjustsScrollViewInsets = NO;
 //        [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleLightContent];
@@ -148,10 +155,6 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    
-    self.tabBarController.delegate = self;
-    
-    [self.navigationController setNavigationBarHidden:YES animated:YES];
         
     __weak typeof(self) weakSelf = self;
     [self.mm_drawerController setGestureCompletionBlock:^(MMDrawerController *drawerController, UIGestureRecognizer *gesture) {
@@ -168,6 +171,11 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 //    _hasLoad = YES;
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
     self.extendedLayoutIncludesOpaqueBars = YES;
+    
+    if (_needEditeThemeModel) {
+        [self.themeModifyView show];
+        _needEditeThemeModel = NO;
+    }
     [self getCurrentDate];
     
 //    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor],NSFontAttributeName:[UIFont systemFontOfSize:20]};
@@ -204,10 +212,6 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
-    // 如果不是present一个控制器就显示导航栏
-    if (!self.navigationController.presentedViewController) {
-        [[self navigationController] setNavigationBarHidden:NO animated:YES];
-    }
 //    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
     self.selectIndex = nil;
     [self getCurrentDate];
@@ -215,11 +219,6 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
     [self.mutiFunctionButton dismiss];
     _dateViewHasDismiss = YES;
 }
-
-//- (void)viewDidDisappear:(BOOL)animated{
-//    [super viewDidDisappear:animated];
-//    [[self navigationController] setNavigationBarHidden:NO animated:NO];
-//}
 
 -(void)viewDidLayoutSubviews{
     [super viewDidLayoutSubviews];
@@ -266,6 +265,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
     self.statusLabel.height = 21;
     self.statusLabel.top = self.homeButton.bottom;
     self.statusLabel.centerX = self.view.width / 2;
+    self.themeModifyView.leftBottom = CGPointMake(0, self.view.height);
 }
 
 - (BOOL)prefersStatusBarHidden {
@@ -281,7 +281,6 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
     } else {
         return 80;
     }
-
 }
 
 
@@ -449,7 +448,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
                 weakSelf.newlyAddChargeArr = [NSMutableArray arrayWithArray:chargeIdArr];
                 _hasChangeBooksType = hasChangeBooksType;
             };
-            UINavigationController *recordNav = [[UINavigationController alloc]initWithRootViewController:recordMakingVc];
+            SSJNavigationController *recordNav = [[SSJNavigationController alloc]initWithRootViewController:recordMakingVc];
             [weakSelf presentViewController:recordNav animated:YES completion:NULL];
         };
         bookKeepingCell.imageClickBlock = ^(SSJBillingChargeCellItem *item){
@@ -466,7 +465,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
             [SSJBudgetDatabaseHelper queryForCurrentBudgetListWithSuccess:^(NSArray<SSJBudgetModel *> * _Nonnull result) {
                 self.homeBar.budgetButton.model = [result firstObject];
             } failure:^(NSError * _Nullable error) {
-                NSLog(@"%@",error.localizedDescription);
+                SSJPRINT(@"%@",error.localizedDescription);
             }];
         };
         return bookKeepingCell;
@@ -484,28 +483,6 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
     return self.items.count;
 }
 
-
-#pragma mark - UITabBarControllerDelegate
-- (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController {
-    if ([viewController isKindOfClass:[UINavigationController class]]) {
-        UINavigationController *naviController = (UINavigationController *)viewController;
-        if (naviController.topViewController == self) {
-            [self.navigationController setNavigationBarHidden:YES animated:NO];
-        }
-    }
-    
-    return YES;
-}
-
-//- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
-//    if ([viewController isKindOfClass:[UINavigationController class]]) {
-//        UINavigationController *naviController = (UINavigationController *)viewController;
-//        if (naviController.topViewController == self) {
-//            [self.navigationController setNavigationBarHidden:YES animated:NO];
-//        }
-//    }
-//}
-
 #pragma mark - UIScrollViewDelegate
 -(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
     [self.homeButton stopLoading];
@@ -520,7 +497,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
             weakSelf.newlyAddChargeArr = [NSMutableArray arrayWithArray:chargeIdArr];
             _hasChangeBooksType = hasChangeBooksType;
         };
-        UINavigationController *recordNav = [[UINavigationController alloc]initWithRootViewController:recordmakingVC];
+        SSJNavigationController *recordNav = [[SSJNavigationController alloc] initWithRootViewController:recordmakingVC];
         [self presentViewController:recordNav animated:YES completion:NULL];
     }
 }
@@ -531,7 +508,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
             self.homeBar.budgetButton.model = [result firstObject];
             self.homeBar.budgetButton.button.enabled = YES;
         } failure:^(NSError * _Nullable error) {
-            NSLog(@"%@",error.localizedDescription);
+            SSJPRINT(@"%@",error.localizedDescription);
         }];
     }
     if (scrollView.contentOffset.y < - scrollView.contentInset.top) {
@@ -614,6 +591,22 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
     }
 }
 
+#pragma mark - UIImagePickerControllerDelegate
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    [picker dismissViewControllerAnimated:NO completion:^{}];
+    UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
+    if (!image) return;
+    //图片编辑
+    SSJThemBgImageClipViewController *imageClipVC = [[SSJThemBgImageClipViewController alloc] init];
+    imageClipVC.normalImage = image;
+    imageClipVC.clipImageBlock = ^(UIImage *newImage) {
+        [SSJCustomThemeManager changeThemeWithLocalImage:newImage type:0];
+        [self.themeModifyView show];
+    };
+    [self presentViewController:imageClipVC animated:YES completion:NULL];
+}
+
 #pragma mark - Getter
 //-(UIImageView *)backImage{
 //    if (!_backImage) {
@@ -626,7 +619,6 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 -(SSJHomeTableView *)tableView{
     if (!_tableView) {
         _tableView = [[SSJHomeTableView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height) style:UITableViewStyleGrouped];
-        _tableView.backgroundColor = [UIColor clearColor];
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.showsVerticalScrollIndicator = NO;
@@ -679,7 +671,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
                 weakSelf.newlyAddChargeArr = [NSMutableArray arrayWithArray:chargeIdArr];
                 _hasChangeBooksType = hasChangeBooksType;
             };
-            UINavigationController *recordNav = [[UINavigationController alloc]initWithRootViewController:recordmakingVC];
+            SSJNavigationController *recordNav = [[SSJNavigationController alloc]initWithRootViewController:recordmakingVC];
             [weakSelf presentViewController:recordNav animated:YES completion:NULL];
         };
     }
@@ -793,6 +785,32 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 //        };
     }
     return _billStickyNoteView;
+}
+
+- (SSJHomeThemeModifyView *)themeModifyView {
+    __weak __typeof(self)weakSelf = self;
+    if (!_themeModifyView) {
+        _themeModifyView = [[SSJHomeThemeModifyView alloc] init];
+        _themeModifyView.themeSelectBlock = ^(NSString *selectTheme, BOOL selectType){
+
+        };
+        _themeModifyView.themeSelectCustomImageBlock = ^(){
+            //访问相册
+            [weakSelf localPhoto];
+        };
+    }
+    return _themeModifyView;
+}
+
+//选择相册
+-(void)localPhoto{
+    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+    
+    picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    picker.delegate = self;
+    //设置选择后的图片可被编辑
+//    picker.allowsEditing = YES;
+    [self presentViewController:picker animated:YES completion:^{}];
 }
 
 

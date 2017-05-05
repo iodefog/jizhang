@@ -34,12 +34,12 @@
 -(void)layoutSubviews{
     [super layoutSubviews];
     self.balanceLabel.top = self.height / 2 + 4;
-    self.balanceLabel.left = 25;
+    self.balanceLabel.left = 18;
     self.balanceTitleLab.bottom = self.balanceLabel.top - 8;
     self.balanceTitleLab.left = self.balanceLabel.left;
     self.transferButton.size = CGSizeMake(60, 24);
     self.transferButton.centerY = self.balanceLabel.centerY;
-    self.transferButton.right = self.width - 34;
+    self.transferButton.right = self.width - 18;
     self.hiddenButton.centerY = self.balanceLabel.centerY;
     self.hiddenButton.left = self.balanceLabel.right + 10;
 }
@@ -48,7 +48,7 @@
     if (!_balanceLabel) {
         _balanceLabel = [[UILabel alloc] init];
         _balanceLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        _balanceLabel.font = [UIFont systemFontOfSize:22];
+        _balanceLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_1);
     }
     return _balanceLabel;
 }
@@ -62,7 +62,7 @@
         _transferButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
         [_transferButton setTitle:@"转账" forState:UIControlStateNormal];
         [_transferButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] forState:UIControlStateNormal];
-        _transferButton.titleLabel.font = [UIFont systemFontOfSize:13];
+        _transferButton.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
     }
     return _transferButton;
 }
@@ -70,7 +70,7 @@
 - (UILabel *)balanceTitleLab {
     if (!_balanceTitleLab) {
         _balanceTitleLab = [[UILabel alloc] init];
-        _balanceTitleLab.font = [UIFont systemFontOfSize:12];
+        _balanceTitleLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_5);
         _balanceTitleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         _balanceTitleLab.text = @"结余";
         [_balanceTitleLab sizeToFit];

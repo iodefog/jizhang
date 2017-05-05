@@ -58,7 +58,7 @@
     
     if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
         [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
-        self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:21],
+        self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_1),
                                                                         NSForegroundColorAttributeName:[UIColor whiteColor]};
         self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     }
@@ -117,11 +117,7 @@
         [CDAutoHideMessageHUD showMessage:@"请收入您的新密码"];
         return;
     }
-    
-    NSString * regex = @"^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,15}$";
-    NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
-    BOOL isMatch = [pred evaluateWithObject:self.passwordField.text];
-    if (isMatch) {
+    if (SSJVerifyPassword(self.passwordField.text)) {
         [self.networkService setPasswordWithMobileNo:self.mobileNo authCode:self.authCode password:self.passwordField.text];
     } else {
         [CDAutoHideMessageHUD showMessage:@"只能输入6-15位字母、数字组合"];
@@ -148,7 +144,7 @@
     if (!_passwordField) {
         _passwordField = [[SSJBaselineTextField alloc] initWithFrame:CGRectMake(25, 94, self.view.width - 50, 50) contentHeight:34];
         _passwordField.secureTextEntry = YES;
-        _passwordField.font = [UIFont systemFontOfSize:15];
+        _passwordField.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         _passwordField.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor];
         _passwordField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入新密码" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginSecondaryColor]}];
         _passwordField.delegate = self;

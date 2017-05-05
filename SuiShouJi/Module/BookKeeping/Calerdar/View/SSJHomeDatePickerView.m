@@ -54,7 +54,7 @@
 }
 
 - (CGSize)sizeThatFits:(CGSize)size{
-    return CGSizeMake([UIApplication sharedApplication].keyWindow.width, 250);
+    return CGSizeMake([UIApplication sharedApplication].keyWindow.width, 260);
 }
 
 - (void)layoutSubviews
@@ -64,7 +64,8 @@
     self.datePicker.frame = CGRectMake(0,self.topView.height,self.width,self.height - self.topView.height);
     self.titleLabel.centerX = self.centerX;
     self.titleLabel.centerY = self.closeButton.centerY;
-    self.horuAndMinuBgView.frame = CGRectMake(200,self.datePicker.centerY - 22, self.width - 200, 43);
+    self.horuAndMinuBgView.frame = CGRectMake(200,self.topView.height + self.datePicker.height * 0.5 - 22, self.width - 200, 43);
+    self.horuAndMinuBgView.centerY = self.datePicker.centerY;
     self.closeButton.leftTop = CGPointMake(15, 15);
     self.comfirmButton.rightTop = CGPointMake(self.width - 15, 15);
 }
@@ -147,7 +148,7 @@
         _titleLabel = [[UILabel alloc] init];
         _titleLabel.text = @"时间";
         _titleLabel.textAlignment = NSTextAlignmentCenter;
-        _titleLabel.font = [UIFont systemFontOfSize:18];
+        _titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2);
         [_titleLabel sizeToFit];
     }
     return _titleLabel;
@@ -697,14 +698,14 @@
 - (void)datePickerModeTime:(UIView *)view viewForRow:(NSInteger)row forComponent:(NSInteger)component
 {
     UILabel *label = (UILabel *)view;
-    label.font = systemFontSize(19);
+    label.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2);
     label.textColor = [UIColor ssj_colorWithHex:self.mainColor ? self.mainColor : SSJ_CURRENT_THEME.mainColor];
     label.text = [[self.dataArray ssj_safeObjectAtIndex:component] ssj_safeObjectAtIndex:row];
 }
 - (void)datePickerModeDate:(UIView *)view viewForRow:(NSInteger)row forComponent:(NSInteger)component
 {
     UILabel *label = (UILabel *)view;
-    label.font = systemFontSize(19);
+    label.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2);
     label.textColor = [UIColor ssj_colorWithHex:self.mainColor ? self.mainColor : SSJ_CURRENT_THEME.mainColor];
     if (component == 2) {
         label.text = [self.dayArray ssj_safeObjectAtIndex:row];
@@ -715,7 +716,7 @@
 - (void)datePickerModeDateAndTime:(UIView *)view viewForRow:(NSInteger)row forComponent:(NSInteger)component
 {
     UILabel *label = (UILabel *)view;
-    label.font = systemFontSize(19);
+    label.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2);
     label.textColor = [UIColor ssj_colorWithHex:self.mainColor ? self.mainColor : SSJ_CURRENT_THEME.mainColor];
     if (component == 0) {
         BOOL isToday = [self.monthDayWeekArray[row] isSameDay:[NSDate date]];
@@ -735,17 +736,17 @@
 {
     UILabel *label = (UILabel *)view;
     if (component == 0 ) {
-        label.font = systemFontSize(11);
+        label.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_6);
         label.textColor = [UIColor ssj_colorWithHex:self.mainColor ? self.mainColor : SSJ_CURRENT_THEME.mainColor];
     }else if (component == 1){
-        label.font = systemFontSize(19);
+        label.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2);
         label.textColor = [UIColor ssj_colorWithHex:self.mainColor ? self.mainColor : SSJ_CURRENT_THEME.mainColor];
     }else if (component == 2 || component == 4) {
-        label.font = systemFontSize(21);
+        label.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_1);
         label.textAlignment = NSTextAlignmentRight;
         label.textColor = [UIColor ssj_colorWithHex:self.mainColor ? self.mainColor : SSJ_CURRENT_THEME.mainColor];
     }else {
-        label.font = systemFontSize(11);
+        label.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_6);
         label.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
     }
     

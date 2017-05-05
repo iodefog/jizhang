@@ -21,6 +21,10 @@
 
 @implementation SSJDatabaseErrorHandler
 
++ (void)load {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(uploadFileData) name:UIApplicationDidFinishLaunchingNotification object:nil];
+}
+
 + (void)handleError:(NSError *)error {
     if (!error) return;
     dispatch_async([self sharedQueue], ^{
@@ -77,7 +81,7 @@
     if ([[dic objectForKey:@"uploaded"] intValue] == 0) {
         //数据库名称
         NSString *cFileName = [dic objectForKey:@"cfilename"];
-        NSString *sqlName = cFileName.length ? cFileName : [NSString stringWithFormat:@"db_error_%ld",(long)[[NSDate date] timeIntervalSince1970]];
+        NSString *sqlName = cFileName.length ? cFileName : [NSString stringWithFormat:@"db_error_%lld",SSJMilliTimestamp()];
         
         //存储数据库名称
         [dic setValue:sqlName forKey:@"cfilename"];
@@ -114,7 +118,7 @@
         if ([[dic objectForKey:@"uploaded"] intValue] == 0) {
 //            //数据库名称
             NSString *cFileName = [dic objectForKey:@"cfilename"];
-            NSString *sqlName = cFileName.length ? cFileName : [NSString stringWithFormat:@"db_error_%ld",(long)[[NSDate date] timeIntervalSince1970]];
+            NSString *sqlName = cFileName.length ? cFileName : [NSString stringWithFormat:@"db_error_%lld",SSJMilliTimestamp()];
             NSData *zipData = [self zipSqlWithName:sqlName];
             if (!zipData) return;
             [self uploadData:zipData completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {

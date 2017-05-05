@@ -508,3 +508,13 @@ NSString *SSJTitleForCycleType(SSJCyclePeriodType type) {
     }
 }
 
+int64_t SSJMilliTimestamp() {
+    return (int64_t)([NSDate date].timeIntervalSince1970 * 1000);
+}
+
+BOOL SSJVerifyPassword(NSString *pwd) {
+    NSString * regex = @"^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,15}$";
+    NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
+    return [pred evaluateWithObject:pwd];
+}
+

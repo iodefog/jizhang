@@ -21,6 +21,7 @@
         self.layerArr = [NSMutableArray arrayWithCapacity:0];
         self.textFont = 15;
         self.textColor = [UIColor blackColor];
+//        self.contentsScale = [UIScreen mainScreen].scale;
         self.totalAnimationDuration = 1.f;
         self.scrollAble = YES;
         self.clipsToBounds = NO;
@@ -29,7 +30,7 @@
 }
 
 -(CGSize)sizeThatFits:(CGSize)size{
-    return [self.string sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:self.textFont]}];
+    return [self.string sizeWithAttributes:@{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(self.textFont)}];
 }
 
 - (void)ajustFontWithSize:(CGSize)size {
@@ -46,11 +47,11 @@
         [[self.layerArr objectAtIndex:i] removeFromSuperlayer];
     }
     float totalStrWidth = 0;
-    float siglestringHeight = [@"0" sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:self.textFont]}].height;
+    float siglestringHeight = [@"0" sizeWithAttributes:@{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_1)}].height;
     for (int i = 0; i < _string.length; i ++) {
         NSPredicate *numberPre = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",@"^[0-9]+$"];
         NSString *tempStr = [_string substringWithRange:NSMakeRange(i, 1)];
-        float strWidth = [tempStr sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:self.textFont]}].width;
+        float strWidth = [tempStr sizeWithAttributes:@{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_1)}].width;
         if (![numberPre evaluateWithObject:tempStr] || !self.scrollAble) {
             CATextLayer *textLayer = [CATextLayer layer];
             textLayer.contentsScale = [UIScreen mainScreen].scale;
@@ -79,10 +80,20 @@
 
 -(void)setTextFont:(int)textFont{
     _textFont = textFont;
+    for (CALayer *layer in self.layer.sublayers) {
+        if ([layer isKindOfClass:[CATextLayer class]]) {
+            ((CATextLayer *)layer).fontSize = textFont;
+        }
+    }
 }
 
 -(void)setTextColor:(UIColor *)textColor{
     _textColor = textColor;
+    for (CALayer *layer in self.layer.sublayers) {
+        if ([layer isKindOfClass:[CATextLayer class]]) {
+            ((CATextLayer *)layer).foregroundColor = textColor.CGColor;
+        }
+    }
 }
 
 -(void)setTotalAnimationDuration:(float)totalAnimationDuration{

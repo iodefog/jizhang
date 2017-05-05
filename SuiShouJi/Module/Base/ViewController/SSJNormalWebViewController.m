@@ -111,7 +111,7 @@
         self.webView.scrollView.backgroundColor=[UIColor clearColor];
         _lblinkURL=[[UILabel alloc]initWithFrame:CGRectMake(20, 5, self.webView.scrollView.width-40, 20)];
         _lblinkURL.textColor=[UIColor whiteColor];
-        _lblinkURL.font=[UIFont systemFontOfSize:13];
+        _lblinkURL.font=SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
         _lblinkURL.textAlignment=NSTextAlignmentCenter;
         [self.webView insertSubview:_lblinkURL belowSubview:self.webView.scrollView];
     }
@@ -124,7 +124,7 @@
         _titleLabel = [[UILabel alloc] init];
         _titleLabel.textColor = [UIColor ssj_colorWithHex:@"333333"];
         _titleLabel.textAlignment = NSTextAlignmentCenter;
-        _titleLabel.font = systemFontSize(18);
+        _titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2);
     }
     return _titleLabel;
 }

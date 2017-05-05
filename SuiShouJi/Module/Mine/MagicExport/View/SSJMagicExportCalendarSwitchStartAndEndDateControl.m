@@ -29,13 +29,13 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         _topLabel = [[UILabel alloc] init];
-        _topLabel.font = [UIFont systemFontOfSize:18];
+        _topLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2);
         _topLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
         _topLabel.textAlignment = NSTextAlignmentCenter;
         [self addSubview:_topLabel];
         
         _bottomLabel = [[UILabel alloc] init];
-        _bottomLabel.font = [UIFont systemFontOfSize:18];
+        _bottomLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2);
         _bottomLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         _bottomLabel.textAlignment = NSTextAlignmentCenter;
         _bottomLabel.top = self.height;
@@ -69,7 +69,7 @@
     }
     
     [UIView animateWithDuration:0.25 animations:^{
-        _topLabel.font = [UIFont systemFontOfSize:14];
+        _topLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(14);
         [_topLabel sizeToFit];
         _topLabel.top = verticalGap;
         _bottomLabel.top = _topLabel.bottom + verticalGap;
@@ -78,7 +78,7 @@
 
 - (void)updateLayout {
     if (_bottomLabel.text.length) {
-        _topLabel.font = [UIFont systemFontOfSize:14];
+        _topLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(14);
         [_topLabel sizeToFit];
         
         [_bottomLabel sizeToFit];
@@ -88,7 +88,7 @@
         _bottomLabel.top = _topLabel.bottom + verticalGap;
         _topLabel.centerX = _bottomLabel.centerX = self.width * 0.5;
     } else {
-        _topLabel.font = [UIFont systemFontOfSize:18];
+        _topLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2);
         [_topLabel sizeToFit];
         _topLabel.center = CGPointMake(self.width * 0.5, self.height * 0.5);
     }

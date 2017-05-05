@@ -11,8 +11,9 @@
 #import "SSJRecordMakingBillTypeSelectionCellItem.h"
 #import "SSJEditableCollectionView.h"
 
-#define kCellWidth CGRectGetWidth(self.bounds) / 5
-#define kCellHeight 88
+static const UIEdgeInsets kSectionInset = {0, 14, 0, 14};
+#define kCellWidth (CGRectGetWidth(self.bounds) - kSectionInset.left - kSectionInset.right) / 5
+#define kCellHeight 75
 
 static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
 
@@ -56,7 +57,6 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
         }
         return YES;
     };
-    
     cell.deleteAction = ^(SSJRecordMakingBillTypeSelectionCell *cell) {
         if ([wself deleteItem:cell.item]) {
             if (wself.deleteAction) {
@@ -244,7 +244,8 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
     layout.minimumLineSpacing = 0;
     layout.minimumInteritemSpacing = 0;
-    layout.itemSize = CGSizeMake(kCellWidth, kCellHeight);
+//    layout.itemSize = CGSizeMake(kCellWidth, kCellHeight);
+    layout.sectionInset = kSectionInset;
     return layout;
 }
 

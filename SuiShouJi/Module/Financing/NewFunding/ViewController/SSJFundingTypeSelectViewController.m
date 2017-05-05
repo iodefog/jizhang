@@ -63,7 +63,7 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    SSJFundingItem *item = [_items objectAtIndex:indexPath.section];
+    SSJFundingItem *item = [_items objectAtIndex:indexPath.row];
     if ([item.fundingID isEqualToString:@"10"]) {
         
         SSJAddOrEditLoanViewController *addLoanController = [[SSJAddOrEditLoanViewController alloc] init];
@@ -117,11 +117,11 @@
 
 #pragma mark - UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 1;
+    return _items.count;
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return _items.count;
+    return 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -130,7 +130,7 @@
     if (!FundingTypeCell) {
         FundingTypeCell = [[SSJFundingTypeTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
     }
-    FundingTypeCell.item = [_items objectAtIndex:indexPath.section];
+    FundingTypeCell.item = [_items objectAtIndex:indexPath.row];
     FundingTypeCell.selectionStyle = UITableViewCellSelectionStyleNone;
     return FundingTypeCell;
 }

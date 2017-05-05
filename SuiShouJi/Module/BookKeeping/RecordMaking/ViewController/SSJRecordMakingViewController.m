@@ -7,6 +7,7 @@
 //
 
 #import "SSJRecordMakingViewController.h"
+#import "SSJNavigationController.h"
 #import "SSJADDNewTypeViewController.h"
 #import "SSJSegmentedControl.h"
 #import "SSJSmallCalendarView.h"
@@ -92,7 +93,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     BOOL _needToDismiss;
 }
 #pragma mark - Lifecycle
--(void)dealloc {
+- (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -100,6 +101,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.statisticsTitle = @"记一笔";
         self.hidesBottomBarWhenPushed = YES;
+        self.hidesNavigationBarWhenPushed = YES;
         [[YYKeyboardManager defaultManager] addObserver:self];
     }
     return self;
@@ -141,7 +143,6 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self.navigationController setNavigationBarHidden:YES animated:NO];
     [self loadCategoryAndBooksList];
     [self reloadMenberItems];
     if (![self showGuideViewIfNeeded]) {
@@ -154,14 +155,8 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     }
 }
 
--(void)viewDidAppear:(BOOL)animated{
-    [super viewDidAppear:animated];
-
-}
-
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    [self.navigationController setNavigationBarHidden:NO animated:YES];
     [_billTypeInputView.moneyInput resignFirstResponder];
     [_accessoryView.memoView resignFirstResponder];
 }
@@ -185,6 +180,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
             [wself loadCategoryAndBooksList];
         };
         _customNaviBar.addNewBookHandle = ^(SSJRecordMakingCustomNavigationBar *naviBar) {
+            [wself.view endEditing:YES];
             [wself.parentSelectView show];
         };
         _customNaviBar.selectBillTypeHandle = ^(SSJRecordMakingCustomNavigationBar *naviBar) {
@@ -225,7 +221,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
             weakSelf.selectedYear = view.date.year;
             weakSelf.item.billDate = [NSString stringWithFormat:@"%04ld-%02ld-%02ld",(long)view.date.year,(long)view.date.month,(long)view.date.day];
             weakSelf.item.billDetailDate = [NSString stringWithFormat:@"%02ld:%02ld",(long)view.date.hour,(long)view.date.minute];
-            [weakSelf.accessoryView.dateBtn setTitle:[NSString stringWithFormat:@"%ld月%ld日", weakSelf.selectedMonth, weakSelf.selectedDay] forState:UIControlStateNormal];
+            [weakSelf.accessoryView.dateBtn setTitle:[NSString stringWithFormat:@"%ld月%ld日", weakSelf.selectedMonth, weakSelf.selectedDay] forState:SSJButtonStateNormal];
             [weakSelf.dateSelectedView dismiss];
         };
         _dateSelectedView.dismissBlock = ^(SSJHomeDatePickerView *view) {
@@ -370,8 +366,8 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         [_accessoryView.dateBtn addTarget:self action:@selector(selectBillDateAction) forControlEvents:UIControlEventTouchUpInside];
         [_accessoryView.photoBtn addTarget:self action:@selector(selectPhotoAction) forControlEvents:UIControlEventTouchUpInside];
         [_accessoryView.memberBtn addTarget:self action:@selector(selectMemberAction) forControlEvents:UIControlEventTouchUpInside];
-        [_accessoryView.dateBtn setTitle:[NSString stringWithFormat:@"%ld月%ld日", _selectedMonth, _selectedDay] forState:UIControlStateNormal];
-        [_accessoryView.photoBtn setTitle:@"照片" forState:UIControlStateNormal];
+        [_accessoryView.dateBtn setTitle:[NSString stringWithFormat:@"%ld月%ld日", _selectedMonth, _selectedDay] forState:SSJButtonStateNormal];
+        [_accessoryView.photoBtn setTitle:@"照片" forState:SSJButtonStateNormal];
         _accessoryView.memoView.delegate = self;
         _accessoryView.memoView.text = _item.chargeMemo;
         _accessoryView.dateBtn.selected = YES;
@@ -414,15 +410,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
         textField.text = [text ssj_reserveDecimalDigits:2 intDigits:9];
         return NO;
-    } else if (_accessoryView.memoView == textField) {
-        NSString *text = textField.text ? : @"";
-        text = [text stringByReplacingCharactersInRange:range withString:string];
-        if (text.length > 50) {
-            [CDAutoHideMessageHUD showMessage:@"最多只能输入50个字"];
-            return NO;
-        }
     }
-    
     return YES;
 }
 
@@ -844,7 +832,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         [self presentViewController:picker animated:YES completion:^{}];
     }else
     {
-        NSLog(@"模拟其中无法打开照相机,请在真机中使用");
+        SSJPRINT(@"模拟其中无法打开照相机,请在真机中使用");
     }
 }
 
@@ -881,6 +869,11 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     if (self.item.fundOperatorType == 2) {
         [_billTypeInputView.moneyInput becomeFirstResponder];
         [CDAutoHideMessageHUD showMessage:@"请先添加资金账户"];
+        return;
+    }
+    
+    if (_accessoryView.memoView.text.length > 500) {
+        [CDAutoHideMessageHUD showMessage:@"备注最多只能输入500个字"];
         return;
     }
     
@@ -1042,14 +1035,14 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 -(void)updateMembers{
     if (self.item.membersItem.count == 1) {
         SSJChargeMemberItem *item = [self.item.membersItem ssj_safeObjectAtIndex:0];
-        [self.accessoryView.memberBtn setTitle:item.memberName forState:UIControlStateNormal];
+        [self.accessoryView.memberBtn setTitle:item.memberName forState:SSJButtonStateNormal];
     }else{
-        [self.accessoryView.memberBtn setTitle:[NSString stringWithFormat:@"%ld人",self.item.membersItem.count] forState:UIControlStateNormal];
+        [self.accessoryView.memberBtn setTitle:[NSString stringWithFormat:@"%ld人",self.item.membersItem.count] forState:SSJButtonStateNormal];
     }
 }
 
 - (void)updateFundingType {
-    [self.accessoryView.accountBtn setTitle:self.item.fundName forState:UIControlStateNormal];
+    [self.accessoryView.accountBtn setTitle:self.item.fundName forState:SSJButtonStateNormal];
     self.accessoryView.accountBtn.selected = YES;
     self.FundingTypeSelectView.selectFundID = self.item.fundId;
 }

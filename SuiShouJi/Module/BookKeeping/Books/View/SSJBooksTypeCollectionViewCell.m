@@ -8,6 +8,8 @@
 
 #import "SSJBooksTypeCollectionViewCell.h"
 
+static const CGFloat kCornerRadius = 4.f;
+
 @interface SSJBooksTypeCollectionViewCell()
 
 @property(nonatomic, strong) UILabel *titleLabel;
@@ -20,7 +22,9 @@
 
 @property(nonatomic, strong) CALayer *booksIcionImage;
 
-@property(nonatomic, strong) UIButton *selectedButton;
+@property (nonatomic, strong) UIView *mask;
+
+@property (nonatomic, strong) UIImageView *icon;
 
 @end
 
@@ -34,10 +38,10 @@
         [self.contentView addSubview:self.seperatorLineView];
         [self.contentView addSubview:self.lineImage];
         [self.contentView addSubview:self.selectImageView];
-        [self.contentView addSubview:self.selectedButton];
         [self.contentView.layer addSublayer:self.booksIcionImage];
+        [self.contentView addSubview:self.mask];
         self.clipsToBounds = NO;
-        self.layer.cornerRadius = 4.f;
+        self.layer.cornerRadius = kCornerRadius;
     }
     return self;
 }
@@ -52,14 +56,14 @@
     self.seperatorLineView.leftTop = CGPointMake(22, 0);
     if (self.titleLabel.text.length) {
         if (self.titleLabel.text.length >= 4) {
-            self.titleLabel.height = [[self.titleLabel.text substringWithRange:NSMakeRange(0, 1)] sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:18]}].height * 4;
+            self.titleLabel.height = [[self.titleLabel.text substringWithRange:NSMakeRange(0, 1)] sizeWithAttributes:@{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2)}].height * 4;
         }else{
-            self.titleLabel.height = [[self.titleLabel.text substringWithRange:NSMakeRange(0, 1)] sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:18]}].height * self.titleLabel.text.length;
+            self.titleLabel.height = [[self.titleLabel.text substringWithRange:NSMakeRange(0, 1)] sizeWithAttributes:@{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2)}].height * self.titleLabel.text.length;
         }
     }
     float maxWitdh = 0;
     for (int i = 0; i < self.titleLabel.text.length; i ++) {
-        float textWidth = [[self.titleLabel.text substringWithRange:NSMakeRange(i, 1)] sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:18]}].width;
+        float textWidth = [[self.titleLabel.text substringWithRange:NSMakeRange(i, 1)] sizeWithAttributes:@{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2)}].width;
         if (textWidth > maxWitdh) {
             maxWitdh = textWidth;
         }
@@ -75,11 +79,9 @@
     }else{
         self.booksIcionImage.position = CGPointMake(self.contentView.width - 21, self.contentView.height - 21);
     }
-    if (self.item.booksId.length) {
-        self.selectedButton.rightTop = CGPointMake(self.contentView.width , 0);
-    }else{
-        self.selectedButton.hidden = YES;
-    }
+    
+    self.mask.frame = self.contentView.bounds;
+    self.icon.center = CGPointMake(self.mask.width * 0.5, self.mask.height * 0.5);
 }
 
 - (void)observeValueForKeyPath:(nullable NSString *)keyPath ofObject:(nullable id)object change:(nullable NSDictionary<NSString*, id> *)change context:(nullable void *)context {
@@ -90,7 +92,7 @@
     if (!_titleLabel) {
         _titleLabel = [[UILabel alloc]init];
         _titleLabel.textColor = [UIColor whiteColor];
-        _titleLabel.font = [UIFont systemFontOfSize:18];
+        _titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         _titleLabel.textAlignment = NSTextAlignmentCenter;
         _titleLabel.numberOfLines = 0;
     }
@@ -131,21 +133,23 @@
     return _booksIcionImage;
 }
 
-- (UIButton *)selectedButton{
-    if (!_selectedButton) {
-        _selectedButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 18, 18)];
-        [_selectedButton addTarget:self action:@selector(selectButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
-        [_selectedButton setImage:[UIImage imageNamed:@"book_xuanzhong"] forState:UIControlStateNormal];
-        [_selectedButton setImage:[UIImage imageNamed:@"book_sel"] forState:UIControlStateSelected];
+- (UIView *)mask {
+    if (!_mask) {
+        _mask = [[UIView alloc] init];
+        _mask.backgroundColor = [UIColor blackColor];
+        _mask.alpha = 0.6;
+        _mask.layer.cornerRadius = kCornerRadius;
+        _mask.clipsToBounds = YES;
+        [_mask addSubview:self.icon];
     }
-    return _selectedButton;
+    return _mask;
 }
 
-- (void)selectButtonClicked:(id)sender{
-//    self.item.selectToEdite = !self.item.selectToEdite;
-    if (self.selectButtonClickedBlock) {
-        self.selectButtonClickedBlock(self.item);
+- (UIImageView *)icon {
+    if (!_icon) {
+        _icon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"book_edit_icon"]];
     }
+    return _icon;
 }
 
 -(void)setItem:(SSJBooksTypeItem *)item{
@@ -181,8 +185,7 @@
     }else{
         self.booksIcionImage.transform = CATransform3DIdentity;
     }
-    self.selectedButton.hidden = !_item.editeModel;
-    self.selectedButton.selected = _item.selectToEdite;
+    self.mask.hidden = !_item.editeModel;
     [self setNeedsLayout];
 }
 

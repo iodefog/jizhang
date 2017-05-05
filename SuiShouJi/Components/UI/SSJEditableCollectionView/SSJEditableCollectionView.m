@@ -21,7 +21,7 @@ static const CGFloat kMaxSpeed = 100;
 
 @property (nonatomic) BOOL editing;
 
-@property (nonatomic) BOOL movable;
+@property (nonatomic) BOOL moving;
 
 @property (nonatomic, strong) NSIndexPath *currentMovedIndexPath;
 
@@ -85,7 +85,7 @@ static const CGFloat kMaxSpeed = 100;
     if (gestureRecognizer == _tapGesture) {
         return _editing;
     } else if (gestureRecognizer == _panGesture) {
-        return _movable;
+        return _moving;
     }
     return YES;
 }
@@ -124,7 +124,7 @@ static const CGFloat kMaxSpeed = 100;
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     if (_editDataSource && [_editDataSource respondsToSelector:@selector(collectionView:cellForItemAtIndexPath:)]) {
         UICollectionViewCell *cell = [_editDataSource collectionView:collectionView cellForItemAtIndexPath:indexPath];
-        if (_movable && _currentMovedIndexPath) {
+        if (_moving && _currentMovedIndexPath) {
             cell.hidden = [_currentMovedIndexPath compare:indexPath] == NSOrderedSame;
         } else {
             cell.hidden = NO;
@@ -163,39 +163,44 @@ static const CGFloat kMaxSpeed = 100;
 
 #pragma mark - Event
 - (void)beginEditingWhenLongPressBegin {
-    if (_movable) {
+    if (_moving) {
         return;
     }
     
     CGPoint touchPoint = [_longPressGesture locationInView:self];
     NSIndexPath *touchIndexPath = [self indexPathForItemAtPoint:touchPoint];
+    UICollectionViewCell *touchedCell = [self cellForItemAtIndexPath:touchIndexPath];
     
-    BOOL couldBeginEdit = YES;
-    if (_editDelegate && [_editDelegate respondsToSelector:@selector(collectionView:shouldBeginEditingWhenPressAtIndexPath:)]) {
-        couldBeginEdit = [_editDelegate collectionView:self shouldBeginEditingWhenPressAtIndexPath:touchIndexPath];
+    if (!_editing) {
+        BOOL couldBeginEdit = YES;
+        if (_editDelegate && [_editDelegate respondsToSelector:@selector(collectionView:shouldBeginEditingWhenPressAtIndexPath:)]) {
+            couldBeginEdit = [_editDelegate collectionView:self shouldBeginEditingWhenPressAtIndexPath:touchIndexPath];
+        }
+        
+        if (couldBeginEdit) {
+            _editing = YES;
+            if (_editDelegate && [_editDelegate respondsToSelector:@selector(collectionView:didBeginEditingWhenPressAtIndexPath:)]) {
+                [_editDelegate collectionView:self didBeginEditingWhenPressAtIndexPath:touchIndexPath];
+            }
+        }
     }
     
-    if (!couldBeginEdit) {
-        return;
+    if (!_moving && touchedCell) {
+        _currentMovedIndexPath = touchIndexPath;
+        _originalMovedIndexPath = _currentMovedIndexPath;
+        
+        _touchPointInCell = [_longPressGesture locationInView:touchedCell];
+        
+        _movedCell.frame = touchedCell.frame;
+        [_movedCell setImage:[touchedCell.layer.presentationLayer ssj_takeScreenShotWithSize:_movedCell.size opaque:NO scale:0]];
+        _movedCell.hidden = NO;
+        [UIView animateWithDuration:0.25 animations:^{
+            _movedCell.transform = CGAffineTransformMakeScale(_movedCellScale, _movedCellScale);
+        }];
+        touchedCell.hidden = YES;
+        _moving = YES;
+        _longPressGesture.enabled = NO;
     }
-    
-    _currentMovedIndexPath = [self indexPathForItemAtPoint:touchPoint];
-    _originalMovedIndexPath = _currentMovedIndexPath;
-    
-    UICollectionViewCell *movedCell = [self cellForItemAtIndexPath:_currentMovedIndexPath];
-    _touchPointInCell = [_longPressGesture locationInView:movedCell];
-    
-    _movedCell.frame = movedCell.frame;
-    [_movedCell setImage:[movedCell.layer.presentationLayer ssj_takeScreenShotWithSize:_movedCell.size opaque:NO scale:0]];
-    _movedCell.hidden = NO;
-    [UIView animateWithDuration:0.25 animations:^{
-        _movedCell.transform = CGAffineTransformMakeScale(_movedCellScale, _movedCellScale);
-    }];
-    movedCell.hidden = YES;
-    _movable = YES;
-    _longPressGesture.enabled = NO;
-    
-    [self beginEditingIfNeededWithTouchPressIndex:touchIndexPath];
 }
 
 - (void)endEditingWhenTapped {
@@ -209,7 +214,7 @@ static const CGFloat kMaxSpeed = 100;
 }
 
 - (void)beginMoving {
-    if (_movable) {
+    if (_moving) {
         CGPoint touchPoint = [_panGesture locationInView:self];
         _movedCell.leftTop = CGPointMake(touchPoint.x - _touchPointInCell.x, touchPoint.y - _touchPointInCell.y);
         
@@ -231,7 +236,13 @@ static const CGFloat kMaxSpeed = 100;
 }
 
 - (void)beginEditing {
-    [self beginEditingIfNeededWithTouchPressIndex:nil];
+    if (!_editing) {
+        _editing = YES;
+        
+        if (_editDelegate && [_editDelegate respondsToSelector:@selector(collectionView:didBeginEditingWhenPressAtIndexPath:)]) {
+            [_editDelegate collectionView:self didBeginEditingWhenPressAtIndexPath:nil];
+        }
+    }
 }
 
 - (void)endEditing {
@@ -248,7 +259,7 @@ static const CGFloat kMaxSpeed = 100;
 
 // 将当前移动的cell保持在可视范围内
 - (void)keepCurrentMovedCellVisible {
-    if (!_movable || !_currentMovedIndexPath || !_movedCell) {
+    if (!_moving || !_currentMovedIndexPath || !_movedCell) {
         return;
     }
     
@@ -326,16 +337,6 @@ static const CGFloat kMaxSpeed = 100;
 }
 
 #pragma mark - Private
-- (void)beginEditingIfNeededWithTouchPressIndex:(NSIndexPath *)indexPath {
-    if (!_editing) {
-        _editing = YES;
-        
-        if (_editDelegate && [_editDelegate respondsToSelector:@selector(collectionView:didBeginEditingWhenPressAtIndexPath:)]) {
-            [_editDelegate collectionView:self didBeginEditingWhenPressAtIndexPath:indexPath];
-        }
-    }
-}
-
 // 如果两个cell相交就交换它们
 - (BOOL)moveCellToIndexPathIfNeeded:(NSIndexPath *)toIndexPath {
     if (!_currentMovedIndexPath || !toIndexPath) {
@@ -379,7 +380,7 @@ static const CGFloat kMaxSpeed = 100;
 }
 
 - (void)endMovingCell {
-    if (!_movable || !_currentMovedIndexPath || !_currentMovedIndexPath) {
+    if (!_moving || !_currentMovedIndexPath || !_currentMovedIndexPath) {
         return;
     }
     
@@ -391,7 +392,7 @@ static const CGFloat kMaxSpeed = 100;
         }
     }
     
-    _movable = NO;
+    _moving = NO;
     
     UICollectionViewLayoutAttributes *attributes = [self layoutAttributesForItemAtIndexPath:_currentMovedIndexPath];
     [UIView animateWithDuration:0.25 animations:^{

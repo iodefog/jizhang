@@ -62,7 +62,7 @@
     if (!_incomeTitleLab) {
         _incomeTitleLab = [[UILabel alloc]init];
         _incomeTitleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        _incomeTitleLab.font = [UIFont systemFontOfSize:12];
+        _incomeTitleLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_5);
         _incomeTitleLab.text = @"累计收入";
         [_incomeTitleLab sizeToFit];
     }
@@ -73,7 +73,7 @@
     if (!_incomeLab) {
         _incomeLab = [[UILabel alloc]init];
         _incomeLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        _incomeLab.font = [UIFont systemFontOfSize:20];
+        _incomeLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_1);
     }
     return _incomeLab;
 }
@@ -82,7 +82,7 @@
     if (!_expentureTitleLab) {
         _expentureTitleLab = [[UILabel alloc]init];
         _expentureTitleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        _expentureTitleLab.font = [UIFont systemFontOfSize:12];
+        _expentureTitleLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_5);
         _expentureTitleLab.text = @"累计支出";
         [_expentureTitleLab sizeToFit];
     }
@@ -93,7 +93,7 @@
     if (!_expentureLab) {
         _expentureLab = [[UILabel alloc]init];
         _expentureLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        _expentureLab.font = [UIFont systemFontOfSize:20];
+        _expentureLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_1);
     }
     return _expentureLab;
 }

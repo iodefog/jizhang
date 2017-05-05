@@ -69,7 +69,7 @@
 -(UILabel *)themeTitleLabel{
     if (!_themeTitleLabel) {
         _themeTitleLabel = [[UILabel alloc]init];
-        _themeTitleLabel.font = [UIFont systemFontOfSize:16];
+        _themeTitleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         _themeTitleLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
     }
     return _themeTitleLabel;
@@ -78,7 +78,7 @@
 -(UILabel *)themeSizeLabel{
     if (!_themeSizeLabel) {
         _themeSizeLabel = [[UILabel alloc]init];
-        _themeSizeLabel.font = [UIFont systemFontOfSize:13];
+        _themeSizeLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
         _themeSizeLabel.textColor = [UIColor ssj_colorWithHex:@"929292"];
     }
     return _themeSizeLabel;
@@ -128,7 +128,7 @@
     if ([_item.ID isEqualToString:SSJDefaultThemeID]) {
         self.themeImage.image = [UIImage imageNamed:@"defualtImage"];
     }else{
-        [self.themeImage sd_setImageWithURL:[NSURL URLWithString:item.previewUrlStr]];
+        [self.themeImage sd_setImageWithURL:[NSURL URLWithString:item.thumbUrlStr]];
     }
     self.themeTitleLabel.text = item.name;
     [self.themeTitleLabel sizeToFit];

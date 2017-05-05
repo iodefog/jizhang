@@ -17,7 +17,7 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         self.textAlignment = NSTextAlignmentLeft;
-        self.fontSize = 16;
+        self.font = [UIFont systemFontOfSize:16];
         self.textColor = [UIColor blueColor];
         self.backgroundColor = [UIColor whiteColor];
         self.layer.contentsScale = [UIScreen mainScreen].scale;
@@ -26,13 +26,18 @@
 }
 
 - (CGSize)sizeThatFits:(CGSize)size {
-    return [_text sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:_fontSize]}];
+    return [_text sizeWithAttributes:@{NSFontAttributeName:_font}];
 }
 
-- (void)setFontSize:(CGFloat)fontSize {
-    _fontSize = fontSize;
-    CATextLayer *layer = (CATextLayer *)self.layer;
-    layer.fontSize = fontSize;
+- (void)setFont:(UIFont *)font {
+    _font = font;
+    CFStringRef fontName = (__bridge CFStringRef)font.fontName;
+    self.textLayer.font = CGFontCreateWithFontName(fontName);
+    self.textLayer.fontSize = font.pointSize;
+}
+
+- (CATextLayer *)textLayer {
+    return (CATextLayer *)self.layer;
 }
 
 - (void)setTextAlignment:(NSTextAlignment)textAlignment {

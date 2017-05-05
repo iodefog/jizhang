@@ -22,7 +22,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.backgroundColor = [UIColor clearColor];
+        self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         
         [self addSubview:self.leftButton];
         [self addSubview:self.rightBarButton];
@@ -101,7 +101,7 @@
     if (!_statusLab) {
         _statusLab = [[UILabel alloc] init];
         _statusLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-        _statusLab.font = [UIFont systemFontOfSize:13];
+        _statusLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
         _statusLab.text  = @"数据加载中";
         [_statusLab sizeToFit];
         _statusLab.hidden = YES;
@@ -121,6 +121,8 @@
         
     }
     self.loadingView.animatedImage = [FLAnimatedImage animatedImageWithGIFData:gifData];
+    self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+
 }
 
 - (void)setIsAnimating:(BOOL)isAnimating {

@@ -17,6 +17,7 @@
 #import "SSJThirdPartyLoginManger.h"
 #import "SSJMotionPasswordViewController.h"
 
+#import "SSJNavigationController.h"
 #import "SSJBookKeepingHomeViewController.h"
 #import "SSJMineHomeViewController.h"
 #import "SSJFinancingHomeViewController.h"
@@ -40,18 +41,14 @@
 //#import "SSJJsPatchItem.h"
 #import "SSJBooksTypeSelectViewController.h"
 //#import "JPEngine.h"
-#import "SSJNetworkReachabilityManager.h"
 #import "SSJUmengManager.h"
 #import "SSJLocalNotificationHelper.h"
 #import "SSJLocalNotificationStore.h"
 #import "SSJThemeUpdate.h"
 #import "SSJDomainManager.h"
 #import "SSJLoanHelper.h"
-#import "SSJIdfaUploadService.h"
-#import <AdSupport/ASIdentifierManager.h>
-#import "SimulateIDFA.h"
-#import "SSJDatabaseErrorHandler.h"
 #import "SSJAnaliyticsManager.h"
+#import "SSJCustomThemeManager.h"
 
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_10_0
 #import <UserNotifications/UserNotifications.h>
@@ -80,7 +77,6 @@ NSDate *SCYEnterBackgroundTime() {
 
 @property(nonatomic, strong) SSJGradientMaskView *maskView;
 
-@property(nonatomic, strong) SSJIdfaUploadService *uploadService;
 @end
 
 @implementation AppDelegate
@@ -102,8 +98,6 @@ NSDate *SCYEnterBackgroundTime() {
     [SSJGeTuiManager SSJGeTuiManagerWithDelegate:self];
     
     [MQManager setScheduledAgentWithAgentId:@"" agentGroupId:SSJMQDefualtGroupId scheduleRule:MQScheduleRulesRedirectGroup];
-    
-    [self uploadIdfa];
     
     [self initializeDatabaseWithFinishHandler:^{
         //  启动时强制同步一次
@@ -131,7 +125,6 @@ NSDate *SCYEnterBackgroundTime() {
                 [self pushToControllerWithNotification:notifcation];
             });
         }
-        
     }];
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
@@ -141,7 +134,6 @@ NSDate *SCYEnterBackgroundTime() {
     [self setRootViewController];
     
     [SSJThemeSetting updateTabbarAppearance];
-    [SSJNetworkReachabilityManager startMonitoring];
     
     //如果第一次打开记录当前时间
     if (SSJLaunchTimesForCurrentVersion() == 1) {
@@ -152,6 +144,7 @@ NSDate *SCYEnterBackgroundTime() {
         });
         
     }
+        
     
     //每次启动打一次补丁
 //    [SSJJspatchAnalyze SSJJsPatchAnalyzePatch];
@@ -189,11 +182,6 @@ NSDate *SCYEnterBackgroundTime() {
     
     //保存app启动时间，判断是否为新用户
     [SSJBookKeepingHomeEvaluatePopView evaluatePopViewConfiguration];
-    //上传数据库错误
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [SSJDatabaseErrorHandler uploadFileData];
-    });
-    [SSJDatabaseErrorHandler uploadFileData];
     
     return YES;
 }
@@ -245,13 +233,6 @@ NSDate *SCYEnterBackgroundTime() {
         _maskView = [[SSJGradientMaskView alloc]initWithFrame:CGRectMake(0, 0, SSJSCREENWITH, SSJSCREENHEIGHT)];
     }
     return _maskView;
-}
-
-- (SSJIdfaUploadService *)uploadService{
-    if (!_uploadService) {
-        _uploadService = [[SSJIdfaUploadService alloc]initWithDelegate:NULL];
-    }
-    return _uploadService;
 }
 
 #pragma mark - Private
@@ -309,26 +290,26 @@ NSDate *SCYEnterBackgroundTime() {
 // 设置根控制器
 - (void)setRootViewController {
     SSJBookKeepingHomeViewController *bookKeepingVC = [[SSJBookKeepingHomeViewController alloc] initWithNibName:nil bundle:nil];
-    UINavigationController *bookKeepingNavi = [[UINavigationController alloc] initWithRootViewController:bookKeepingVC];
+    SSJNavigationController *bookKeepingNavi = [[SSJNavigationController alloc] initWithRootViewController:bookKeepingVC];
     bookKeepingNavi.tabBarItem.title = @"记账";
     
     SSJReportFormsViewController *reportFormsVC = [[SSJReportFormsViewController alloc] initWithNibName:nil bundle:nil];
-    UINavigationController *reportFormsNavi = [[UINavigationController alloc] initWithRootViewController:reportFormsVC];
+    SSJNavigationController *reportFormsNavi = [[SSJNavigationController alloc] initWithRootViewController:reportFormsVC];
     reportFormsNavi.tabBarItem.title = @"报表";
     
     SSJFinancingHomeViewController *financingVC = [[SSJFinancingHomeViewController alloc] initWithNibName:nil bundle:nil];
-    UINavigationController *financingNavi = [[UINavigationController alloc] initWithRootViewController:financingVC];
+    SSJNavigationController *financingNavi = [[SSJNavigationController alloc] initWithRootViewController:financingVC];
     financingNavi.tabBarItem.title = @"资金";
     
     SSJMineHomeViewController *moreVC = [[SSJMineHomeViewController alloc] initWithNibName:nil bundle:nil];
-    UINavigationController *moreNavi = [[UINavigationController alloc] initWithRootViewController:moreVC];
+    SSJNavigationController *moreNavi = [[SSJNavigationController alloc] initWithRootViewController:moreVC];
     moreNavi.tabBarItem.title = @"更多";
     
     UITabBarController *tabBarVC = [[UITabBarController alloc] initWithNibName:nil bundle:nil];
     tabBarVC.viewControllers = @[bookKeepingNavi, reportFormsNavi, financingNavi, moreNavi];
     
     SSJBooksTypeSelectViewController *booksTypeVC = [[SSJBooksTypeSelectViewController alloc]init];
-    UINavigationController *booksNav = [[UINavigationController alloc] initWithRootViewController:booksTypeVC];
+    SSJNavigationController *booksNav = [[SSJNavigationController alloc] initWithRootViewController:booksTypeVC];
 
     MMDrawerController *drawerController = [[MMDrawerController alloc]
                              initWithCenterViewController:tabBarVC
@@ -352,24 +333,6 @@ NSDate *SCYEnterBackgroundTime() {
     }];
     
     [UIApplication sharedApplication].keyWindow.rootViewController = drawerController;
-}
-
-// 上传idfa
-- (void)uploadIdfa{
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        NSString *idfa;
-        if ([ASIdentifierManager sharedManager].advertisingTrackingEnabled) {
-            idfa = [NSString stringWithFormat:@"%@",[ASIdentifierManager sharedManager].advertisingIdentifier];
-        } else{
-            idfa = [SimulateIDFA createSimulateIDFA];
-        }
-        NSString *lastUploadIdfa = [[NSUserDefaults standardUserDefaults] objectForKey:SSJLastSavedIdfaKey];
-        if (![lastUploadIdfa isEqualToString:idfa] || !lastUploadIdfa) {
-            [self.uploadService uploadIdfaWithIdfaStr:idfa Success:^(NSString *idfaStr) {
-                [[NSUserDefaults standardUserDefaults] setObject:idfaStr forKey:SSJLastSavedIdfaKey];
-            }];
-        }
-    });
 }
     
 #pragma mark - qq快登

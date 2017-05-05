@@ -27,6 +27,8 @@ static BOOL kNeedBannerDisplay = YES;
 #import "SSJBooksParentSelectView.h"
 #import "SSJBooksAdView.h"
 #import "SSJBannerNetworkService.h"
+#import "SSJBooksTypeEditAlertView.h"
+#import "SSJBooksTypeDeletionAuthCodeAlertView.h"
 
 @interface SSJBooksTypeSelectViewController ()<SSJEditableCollectionViewDelegate,SSJEditableCollectionViewDataSource>
 
@@ -34,11 +36,7 @@ static BOOL kNeedBannerDisplay = YES;
 
 @property(nonatomic, strong) NSMutableArray *items;
 
-@property(nonatomic, strong) UIButton *deleteButton;
-
-@property(nonatomic, strong) UIButton *editeButton;
-
-@property(nonatomic, strong) NSMutableArray *selectedBooks;
+@property(nonatomic, strong) SSJBooksTypeItem *editBooksItem;
 
 @property(nonatomic, strong) UIButton *rightButton;
 
@@ -50,12 +48,16 @@ static BOOL kNeedBannerDisplay = YES;
 
 @property(nonatomic, strong) SSJBannerNetworkService *adService;
 
+@property (nonatomic, strong) SSJBooksTypeEditAlertView *editAlertView;
+
+@property (nonatomic, strong) SSJBooksTypeDeletionAuthCodeAlertView *authCodeAlertView;
+
 @end
 
-@implementation SSJBooksTypeSelectViewController{
-    NSString *_selectBooksId;
-    NSIndexPath *_editingIndex;
-    BOOL _editeModel;
+@implementation SSJBooksTypeSelectViewController
+
+-(void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -69,15 +71,11 @@ static BOOL kNeedBannerDisplay = YES;
     [super viewDidLoad];
     [self.view addSubview:self.header];
     [self.view addSubview:self.collectionView];
-    [self.view addSubview:self.editeButton];
-    [self.view addSubview:self.deleteButton];
     [self.view addSubview:self.adView];
-    self.selectedBooks = [NSMutableArray arrayWithCapacity:0];
     [self.collectionView registerClass:[SSJBooksTypeCollectionViewCell class] forCellWithReuseIdentifier:SSJBooksTypeCellIdentifier];
     [self.collectionView setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithCustomView:self.rightButton];
     self.navigationItem.rightBarButtonItem = rightItem;
-    _editeModel = NO;
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -97,25 +95,12 @@ static BOOL kNeedBannerDisplay = YES;
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     [self.header stopLoading];
-    [self.selectedBooks removeAllObjects];
-    _editeModel = NO;
     self.rightButton.selected = NO;
-    self.editeButton.hidden = YES;
-    self.deleteButton.hidden = YES;
-    self.editeButton.enabled = NO;
     [self.collectionView endEditing];
-}
-
--(void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 -(void)viewDidLayoutSubviews{
     [super viewDidLayoutSubviews];
-    self.editeButton.size = CGSizeMake(self.view.width * 0.58, 55);
-    self.editeButton.leftBottom = CGPointMake(0, self.view.height);
-    self.deleteButton.size = CGSizeMake(self.view.width * 0.42, 55);
-    self.deleteButton.leftBottom = CGPointMake(self.editeButton.right, self.view.height);
     self.header.width = self.view.width;
     self.adView.leftBottom = CGPointMake(0, self.view.height);
     self.adView.width = self.view.width;
@@ -125,38 +110,21 @@ static BOOL kNeedBannerDisplay = YES;
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     SSJBooksTypeItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
-    if (_editeModel) {
-        if (![item.booksName isEqualToString:@"添加账本"]) {
-            if ([self.selectedBooks containsObject:item]) {
-                [self.selectedBooks removeObject:item];
-                item.selectToEdite = NO;
-            }else{
-                [self.selectedBooks addObject:item];
-                item.selectToEdite = YES;
-            }
-            if (self.selectedBooks.count > 1  || !self.selectedBooks.count) {
-                self.editeButton.enabled = NO;
-            }else{
-                self.editeButton.enabled = YES;
-            }
-        }else{
-            SSJBooksEditeOrNewViewController *booksEditeVc = [[SSJBooksEditeOrNewViewController alloc]init];
-            [self.navigationController pushViewController:booksEditeVc animated:YES];
-        }
-    }else{
-        if (![item.booksName isEqualToString:@"添加账本"]) {
+    if (item.editeModel) {
+        self.editBooksItem = item;
+        [self.editAlertView show];
+    } else {
+        if ([item.booksName isEqualToString:@"添加账本"]) {
+            [self.parentSelectView show];
+        } else {
             [SSJAnaliyticsManager event:@"change_account_book" extra:item.booksName
              ];
             SSJSelectBooksType(item.booksId);
             [self.collectionView reloadData];
             [self.mm_drawerController closeDrawerAnimated:YES completion:NULL];
-        } else {
-            [self.parentSelectView show];
-
         }
     }
 }
-
 
 #pragma mark - UICollectionViewDataSource
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
@@ -168,34 +136,12 @@ static BOOL kNeedBannerDisplay = YES;
 {
     NSString *booksid = SSJGetCurrentBooksType();
     SSJBooksTypeItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
-//    __weak typeof(self) weakSelf = self;
     SSJBooksTypeCollectionViewCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:SSJBooksTypeCellIdentifier forIndexPath:indexPath];
-    cell.editeModel = _editeModel;
-    if ([self.selectedBooks containsObject:item]) {
-        cell.selectToEdite = YES;
-    }else{
-        cell.selectToEdite = NO;
-    }
     if ([item.booksId isEqualToString:booksid]) {
         cell.isSelected = YES;
     }else{
         cell.isSelected = NO;
     }
-    __weak typeof(self) weakSelf = self;
-    cell.selectButtonClickedBlock = ^(SSJBooksTypeItem *item){
-        if ([weakSelf.selectedBooks containsObject:item]) {
-            [weakSelf.selectedBooks removeObject:item];
-            item.selectToEdite = NO;
-        }else{
-            [weakSelf.selectedBooks addObject:item];
-            item.selectToEdite = YES;
-        }
-        if (self.selectedBooks.count > 1  || !self.selectedBooks.count) {
-            self.editeButton.enabled = NO;
-        }else{
-            self.editeButton.enabled = YES;
-        }
-    };
     cell.item = item;
     return cell;
 }
@@ -235,13 +181,12 @@ static BOOL kNeedBannerDisplay = YES;
 }
 
 - (void)collectionView:(SSJEditableCollectionView *)collectionView didBeginEditingWhenPressAtIndexPath:(NSIndexPath *)indexPath{
-    _editeModel = YES;
     self.rightButton.selected = YES;
-    self.editeButton.hidden = NO;
-    self.deleteButton.hidden = NO;
     self.adView.hidden = YES;
     for (SSJBooksTypeItem *item in self.items) {
-        item.editeModel = self.rightButton.isSelected;
+        if (![item.booksName isEqualToString:@"添加账本"]) {
+            item.editeModel = YES;
+        }
     }
 }
 
@@ -249,7 +194,7 @@ static BOOL kNeedBannerDisplay = YES;
     [SSJBooksTypeStore saveBooksOrderWithItems:self.items sucess:^{
         [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
     } failure:^(NSError *error) {
-        NSLog(@"%@",[error localizedDescription]);
+        SSJPRINT(@"%@",[error localizedDescription]);
     }];
 }
 
@@ -281,59 +226,18 @@ static BOOL kNeedBannerDisplay = YES;
 
 #pragma mark - Event
 - (void)rightButtonClicked:(id)sender{
-    _editeModel = !_editeModel;
     self.rightButton.selected = !self.rightButton.isSelected;
-    self.editeButton.hidden = !self.rightButton.isSelected;
-    self.deleteButton.hidden = !self.rightButton.isSelected;
     if (self.rightButton.isSelected) {
         self.adView.hidden = YES;
         [SSJAnaliyticsManager event:@"accountbook_manage"];
     }else{
         self.adView.hidden = NO;
         [self.collectionView endEditing];
-        [self.selectedBooks removeAllObjects];
     }
     for (SSJBooksTypeItem *item in self.items) {
-        item.editeModel = self.rightButton.isSelected;
-        item.selectToEdite = NO;
-    }
-}
-
-- (void)editeButtonClicked:(id)sender{
-    [SSJAnaliyticsManager event:@"accountbook_edit"];
-
-    SSJBooksEditeOrNewViewController *booksEditeVc = [[SSJBooksEditeOrNewViewController alloc]init];
-    booksEditeVc.item = [self.selectedBooks firstObject];
-    [self.navigationController pushViewController:booksEditeVc animated:YES];
-}
-
-- (void)deleteButtonClicked:(id)sender{
-    if (self.selectedBooks.count) {
-        __weak typeof(self) weakSelf = self;
-        SSJBooksTypeItem *defualtItem = [[SSJBooksTypeItem alloc]init];
-        defualtItem.booksId = SSJUSERID();
-        if ([self.selectedBooks containsObject:defualtItem]) {
-            [CDAutoHideMessageHUD showMessage:@"日常账本不能删除哦"];
-            return;
+        if (![item.booksName isEqualToString:@"添加账本"]) {
+            item.editeModel = self.rightButton.isSelected;
         }
-        SSJAlertViewAction *comfirmAction = [SSJAlertViewAction actionWithTitle:@"删除" handler:^(SSJAlertViewAction * _Nonnull action) {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"删除该账本后，是否将涉及相关资金账户的流水一并删除？" preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *reserve = [UIAlertAction actionWithTitle:@"保留资金流水" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                [weakSelf deleteBooksWithType:0];
-            }];
-            UIAlertAction *destructive = [UIAlertAction actionWithTitle:@"一并删除" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
-                [weakSelf deleteBooksWithType:1];
-            }];
-            UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-            }];
-            [alert addAction:reserve];
-            [alert addAction:destructive];
-            [alert addAction:cancel];
-            [weakSelf presentViewController:alert animated:YES completion:NULL];
-        }];
-        SSJAlertViewAction *cancelAction = [SSJAlertViewAction actionWithTitle:@"取消" handler:NULL];
-        [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@"你确定要删除该账本吗?" action:cancelAction , comfirmAction, nil];
-
     }
 }
 
@@ -347,7 +251,7 @@ static BOOL kNeedBannerDisplay = YES;
         }else{
             flowLayout.minimumInteritemSpacing = 15;
         }
-        _collectionView=[[SSJEditableCollectionView alloc] initWithFrame:CGRectMake(0, self.header.bottom, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM - 169) collectionViewLayout:flowLayout];
+        _collectionView=[[SSJEditableCollectionView alloc] initWithFrame:CGRectMake(0, self.header.bottom, self.view.width, self.view.height - self.header.bottom) collectionViewLayout:flowLayout];
         _collectionView.movedCellScale = 1.08;
         _collectionView.editDelegate=self;
         _collectionView.editDataSource=self;
@@ -357,54 +261,12 @@ static BOOL kNeedBannerDisplay = YES;
     return _collectionView;
 }
 
--(UIButton *)editeButton{
-    if (!_editeButton) {
-        _editeButton = [[UIButton alloc]init];
-        NSMutableAttributedString *attributedTitle = [[NSMutableAttributedString alloc]initWithString:@"编辑 (单选)"];
-        [attributedTitle addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:20] range:NSMakeRange(0, 2)];
-        [attributedTitle addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15] range:NSMakeRange(3, 4)];
-        [attributedTitle addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:NSMakeRange(0, attributedTitle.length)];
-        NSMutableAttributedString *attributedDisableTitle = [[NSMutableAttributedString alloc]initWithString:@"编辑 (单选)"];
-        [attributedDisableTitle addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:20] range:NSMakeRange(0, 2)];
-        [attributedDisableTitle addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15] range:NSMakeRange(3, 4)];
-        [attributedDisableTitle addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] range:NSMakeRange(0, attributedTitle.length)];
-        [_editeButton setAttributedTitle:attributedTitle forState:UIControlStateNormal];
-        [_editeButton setAttributedTitle:attributedDisableTitle forState:UIControlStateDisabled];
-        _editeButton.enabled = NO;
-        if (SSJ_CURRENT_THEME.throughScreenButtonBackGroudColor.length) {
-            _editeButton.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.throughScreenButtonBackGroudColor alpha:SSJ_CURRENT_THEME.throughScreenButtonAlpha];
-        } else {
-            _editeButton.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor alpha:0.8];
-        }
-        [_editeButton addTarget:self action:@selector(editeButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
-        _editeButton.hidden = YES;
-
-    }
-    return _editeButton;
-}
-
--(UIButton *)deleteButton{
-    if (!_deleteButton) {
-        _deleteButton = [[UIButton alloc]init];
-        [_deleteButton setTitle:@"删除" forState:UIControlStateNormal];
-        [_deleteButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] forState:UIControlStateNormal];
-        _deleteButton.titleLabel.font = [UIFont systemFontOfSize:20];
-        if (SSJ_CURRENT_THEME.throughScreenButtonBackGroudColor.length) {
-            _deleteButton.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.throughScreenButtonBackGroudColor alpha:SSJ_CURRENT_THEME.throughScreenButtonAlpha];
-        } else {
-            _deleteButton.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor alpha:0.8];
-        }
-        [_deleteButton addTarget:self action:@selector(deleteButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
-        _deleteButton.hidden = YES;
-    }
-    return _deleteButton;
-}
-
 -(UIButton *)rightButton{
     if (!_rightButton) {
         _rightButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 40, 30)];
         [_rightButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTintColor] forState:UIControlStateNormal];
         [_rightButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTintColor] forState:UIControlStateSelected];
+        _rightButton.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         _rightButton.contentHorizontalAlignment = NSTextAlignmentRight;
         [_rightButton setTitle:@"管理" forState:UIControlStateNormal];
         [_rightButton setTitle:@"完成" forState:UIControlStateSelected];
@@ -426,32 +288,6 @@ static BOOL kNeedBannerDisplay = YES;
     }
     return _header;
 }
-
-//-(SSJBooksTypeEditeView *)booksEditeView{
-//    if (!_booksEditeView) {
-//        _booksEditeView = [[SSJBooksTypeEditeView alloc]init];
-//        __weak typeof(self) weakSelf = self;
-//        _booksEditeView.comfirmButtonClickedBlock = ^(SSJBooksTypeItem *item){
-//            item.cwriteDate = [[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-//            item.userId = SSJUSERID();
-//            [SSJBooksTypeStore saveBooksTypeItem:item];
-//            [weakSelf getDateFromDB];
-//            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
-//        };
-//        __block NSString *booksid = SSJGetCurrentBooksType();
-//        _booksEditeView.deleteButtonClickedBlock = ^(SSJBooksTypeItem *item){
-//            if ([item.booksId isEqualToString:booksid]) {
-//                SSJSelectBooksType(SSJUSERID());
-//            }
-//            [weakSelf getDateFromDB];
-//            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
-//        };
-//        _booksEditeView.editeViewDismissBlock = ^(){
-//            _editingIndex = nil;
-//        };
-//    }
-//    return _booksEditeView;
-//}
 
 - (SSJBooksParentSelectView *)parentSelectView{
     if (!_parentSelectView) {
@@ -486,6 +322,35 @@ static BOOL kNeedBannerDisplay = YES;
     return _adView;
 }
 
+- (SSJBooksTypeEditAlertView *)editAlertView {
+    if (!_editAlertView) {
+        __weak typeof(self) wself = self;
+        _editAlertView = [[SSJBooksTypeEditAlertView alloc] init];
+        _editAlertView.editHandler = ^{
+            [wself enterBooksTypeEditController];
+        };
+        _editAlertView.deleteHandler = ^{
+            if ([wself.editBooksItem.booksId isEqualToString:SSJUSERID()]) {
+                [CDAutoHideMessageHUD showMessage:@"日常账本无法删除"];
+            } else {
+                [wself.authCodeAlertView show];
+            }
+        };
+    }
+    return _editAlertView;
+}
+
+- (SSJBooksTypeDeletionAuthCodeAlertView *)authCodeAlertView {
+    if (!_authCodeAlertView) {
+        __weak typeof(self) wself = self;
+        _authCodeAlertView = [[SSJBooksTypeDeletionAuthCodeAlertView alloc] init];
+        _authCodeAlertView.finishVerification = ^{
+            [wself deleteBooksWithType:1];
+        };
+    }
+    return _authCodeAlertView;
+}
+
 - (SSJBannerNetworkService *)adService{
     if (!_adService) {
         _adService = [[SSJBannerNetworkService alloc]initWithDelegate:self];
@@ -501,40 +366,41 @@ static BOOL kNeedBannerDisplay = YES;
         weakSelf.header.income = income;
         weakSelf.header.expenture = expenture;
     } failure:^(NSError *error) {
-        
+        [SSJAlertViewAdapter showError:error];
     }];
     
     [SSJBooksTypeStore queryForBooksListWithSuccess:^(NSMutableArray<SSJBooksTypeItem *> *result) {
         weakSelf.items = [NSMutableArray arrayWithArray:result];
         [weakSelf.collectionView reloadData];
     } failure:^(NSError *error) {
-        
+        [SSJAlertViewAdapter showError:error];
     }];
 }
 
 - (void)deleteBooksWithType:(BOOL)type{
-    for (SSJBooksTypeItem *booksItem in self.selectedBooks) {
-            if ([booksItem.booksId isEqualToString:SSJGetCurrentBooksType()]) {
-                SSJSelectBooksType(SSJUSERID());
-        };
-    }
+    if ([self.editBooksItem.booksId isEqualToString:SSJGetCurrentBooksType()]) {
+        SSJSelectBooksType(SSJUSERID());
+    };
     __weak typeof(self) weakSelf = self;
-    [SSJBooksTypeStore deleteBooksTypeWithbooksItems:self.selectedBooks deleteType:type Success:^{
+    [SSJBooksTypeStore deleteBooksTypeWithbooksItems:@[self.editBooksItem] deleteType:type Success:^{
         weakSelf.rightButton.selected = NO;
-        weakSelf.deleteButton.hidden = YES;
-        weakSelf.editeButton.hidden = YES;
         [weakSelf.collectionView endEditing];
         for (SSJBooksTypeItem *item in self.items) {
             item.editeModel = NO;
         }
         self.adView.hidden = NO;
-        _editeModel = NO;
         [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
-        [self.selectedBooks removeAllObjects];
         [weakSelf getDateFromDB];
     } failure:^(NSError *error) {
-        
+        [SSJAlertViewAdapter showError:error];
     }];
+}
+
+- (void)enterBooksTypeEditController {
+    [SSJAnaliyticsManager event:@"accountbook_edit"];
+    SSJBooksEditeOrNewViewController *booksEditeVc = [[SSJBooksEditeOrNewViewController alloc]init];
+    booksEditeVc.item = self.editBooksItem;
+    [self.navigationController pushViewController:booksEditeVc animated:YES];
 }
 
 -(void)updateAppearanceAfterThemeChanged{
@@ -543,35 +409,15 @@ static BOOL kNeedBannerDisplay = YES;
     [self.rightButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTintColor] forState:UIControlStateNormal];
     [self.rightButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTintColor] forState:UIControlStateSelected];
     NSMutableAttributedString *attributedTitle = [[NSMutableAttributedString alloc]initWithString:@"编辑 (单选)"];
-    [attributedTitle addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:20] range:NSMakeRange(0, 2)];
-    [attributedTitle addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15] range:NSMakeRange(3, 4)];
+    [attributedTitle addAttribute:NSFontAttributeName value:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_1) range:NSMakeRange(0, 2)];
+    [attributedTitle addAttribute:NSFontAttributeName value:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3) range:NSMakeRange(3, 4)];
     [attributedTitle addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:NSMakeRange(0, attributedTitle.length)];
     NSMutableAttributedString *attributedDisableTitle = [[NSMutableAttributedString alloc]initWithString:@"编辑 (单选)"];
-    [attributedDisableTitle addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:20] range:NSMakeRange(0, 2)];
-    [attributedDisableTitle addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15] range:NSMakeRange(3, 4)];
+    [attributedDisableTitle addAttribute:NSFontAttributeName value:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2) range:NSMakeRange(0, 2)];
+    [attributedDisableTitle addAttribute:NSFontAttributeName value:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3) range:NSMakeRange(3, 4)];
     [attributedDisableTitle addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] range:NSMakeRange(0, attributedTitle.length)];
-    [self.editeButton setAttributedTitle:attributedTitle forState:UIControlStateNormal];
-    [self.editeButton setAttributedTitle:attributedDisableTitle forState:UIControlStateDisabled];
-    self.editeButton.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
-    self.deleteButton.backgroundColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:0.2];
-    [self.deleteButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] forState:UIControlStateNormal];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.summaryBooksHeaderColor alpha:SSJ_CURRENT_THEME.summaryBooksHeaderAlpha] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
     [self.header updateAfterThemeChange];
 }
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

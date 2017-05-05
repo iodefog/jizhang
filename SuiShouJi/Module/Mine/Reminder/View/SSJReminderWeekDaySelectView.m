@@ -48,7 +48,7 @@
     if (!_dateLabel) {
         _dateLabel = [[UILabel alloc]init];
         _dateLabel.textColor = [UIColor whiteColor];
-        _dateLabel.font = [UIFont systemFontOfSize:13];
+        _dateLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
     }
     return _dateLabel;
 }

@@ -42,7 +42,7 @@
     if (!_memberIcon) {
         _memberIcon = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 26, 26)];
         _memberIcon.layer.cornerRadius = _memberIcon.width / 2;
-        _memberIcon.font = [UIFont systemFontOfSize:15];
+        _memberIcon.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         _memberIcon.layer.borderWidth = 1 / [UIScreen mainScreen].scale;
         _memberIcon.textAlignment = NSTextAlignmentCenter;
     }
@@ -53,7 +53,7 @@
     if (!_memberNameLab) {
         _memberNameLab = [[UILabel alloc]init];
         _memberNameLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        _memberNameLab.font = [UIFont systemFontOfSize:15];
+        _memberNameLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
     }
     return _memberNameLab;
 }
@@ -62,7 +62,7 @@
     if (!_moneyLab) {
         _moneyLab = [[UILabel alloc]init];
         _moneyLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-        _moneyLab.font = [UIFont systemFontOfSize:15];
+        _moneyLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
     }
     return _moneyLab;
 }

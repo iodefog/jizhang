@@ -34,8 +34,8 @@ static NSString *const kTitle0 = @"手势密码";
 static NSString *const kTitle1 = @"自动同步设置";
 static NSString *const kTitle2 = @"数据重新拉取";
 static NSString *const kTitle3 = @"数据格式化";
-static NSString *const kTitle6 = @"关于我们";
 static NSString *const kTitle5 = @"检查更新";
+static NSString *const kTitle6 = @"关于我们";
 static NSString *const kTitle7 = @"微信公众号";
 static NSString *const kTitle8 = @"点击上方微信号复制，接着去微信查找即可";
 static NSString *const kTitle9 = @"上传日志";
@@ -67,19 +67,17 @@ static NSString *const kTitle9 = @"上传日志";
     [super viewWillAppear:animated];
     if ([SSJStartChecker sharedInstance].isInReview) {
         if ([WXApi isWXAppInstalled]) {
-            self.titles = @[@[kTitle0], @[kTitle1], @[kTitle2 , kTitle3 , kTitle9], @[kTitle6] ,@[kTitle7,kTitle8]];
+            self.titles = @[@[kTitle0,kTitle1, kTitle2 , kTitle3 , kTitle9] ,@[kTitle6,kTitle7,kTitle8]];
         }else{
-            self.titles = @[@[kTitle0], @[kTitle1], @[kTitle2 , kTitle3 , kTitle9], @[kTitle6]];
+            self.titles = @[@[kTitle0,kTitle1, kTitle2 , kTitle3 , kTitle9], @[kTitle6]];
         }
     } else {
         if ([WXApi isWXAppInstalled]) {
-            self.titles = @[@[kTitle0], @[kTitle1], @[kTitle2 , kTitle3 , kTitle9] , @[kTitle5], @[kTitle6],@[kTitle7,kTitle8]];
+            self.titles = @[@[kTitle0,kTitle1, kTitle2 , kTitle3 , kTitle9] ,@[kTitle5,kTitle6,kTitle7,kTitle8]];
         }else{
-            self.titles = @[@[kTitle0], @[kTitle1], @[kTitle2 , kTitle3 , kTitle9] , @[kTitle5], @[kTitle6]];
+            self.titles = @[@[kTitle0, kTitle1, kTitle2 , kTitle3 , kTitle9] ,@[kTitle5,kTitle6]];
         }
     }
-    
-    [self.navigationController setNavigationBarHidden:NO];
 }
 
 #pragma mark - UITableViewDelegate
@@ -87,6 +85,9 @@ static NSString *const kTitle9 = @"上传日志";
     NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
     if ([title isEqualToString:kTitle8]) {
         return 35;
+    }
+    if ([title isEqualToString:kTitle7]) {
+        return 33;
     }
     return 55;
 }
@@ -240,6 +241,12 @@ static NSString *const kTitle9 = @"上传日志";
         mineHomeCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
+    
+    if ([title isEqualToString:kTitle7]) {
+        mineHomeCell.separatorInset = UIEdgeInsetsMake(0, 0, 0, MAXFLOAT);
+    } else {
+        mineHomeCell.separatorInset = UIEdgeInsetsMake(0, 10, 0, 10);
+    }
     if ([title isEqualToString:kTitle8]) {
         mineHomeCell.customAccessoryType = UITableViewCellAccessoryNone;
         mineHomeCell.cellSubTitle = title;
@@ -251,6 +258,7 @@ static NSString *const kTitle9 = @"上传日志";
         } else if([mineHomeCell.cellTitle isEqualToString:kTitle7]) {
             mineHomeCell.cellDetail = @"youyujz";
         }
+
     }
     return mineHomeCell;
 }
@@ -272,7 +280,7 @@ static NSString *const kTitle9 = @"上传日志";
     
     NSError *tError = nil;
     NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] multipartFormRequestWithMethod:@"POST" URLString:SSJURLWithAPI(@"/admin/applog.go") parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-        NSString *fileName = [NSString stringWithFormat:@"ios_error_db_%ld.zip", (long)[NSDate date].timeIntervalSince1970];
+        NSString *fileName = [NSString stringWithFormat:@"ios_error_db_%lld.zip", SSJMilliTimestamp()];
         [formData appendPartWithFileData:data name:@"zip" fileName:fileName mimeType:@"application/zip"];
     } error:&tError];
     

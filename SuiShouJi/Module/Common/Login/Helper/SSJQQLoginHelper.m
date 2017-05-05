@@ -31,7 +31,7 @@
     }
     else
     {
-        NSLog(@"登录不成功 没有获取accesstoken");
+        SSJPRINT(@"登录不成功 没有获取accesstoken");
     }
 }
 
@@ -55,7 +55,7 @@
 //获取用户信息
 -(void)getUserInfoResponse:(APIResponse *)response
 {
-    NSLog(@"respons:%@",response.jsonResponse);
+    SSJPRINT(@"respons:%@",response.jsonResponse);
     SSJThirdPartLoginItem *item = [[SSJThirdPartLoginItem alloc]init];
     item.portraitURL = [response.jsonResponse objectForKey:@"figureurl_qq_2"] ? : @"";
     item.nickName = [response.jsonResponse objectForKey:@"nickname"] ? : @"";

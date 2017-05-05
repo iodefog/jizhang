@@ -75,8 +75,8 @@ static CGFloat kBottomTitleSize = 22;
         
         [[UIImage imageNamed:imageName] drawInRect:self.bounds];
         
-        CGSize topSize = [topStr sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:kTopTitleSize]}];
-        CGSize bottomSize = [bottomStr sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:kBottomTitleSize]}];
+        CGSize topSize = [topStr sizeWithAttributes:@{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(kTopTitleSize)}];
+        CGSize bottomSize = [bottomStr sizeWithAttributes:@{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(kBottomTitleSize)}];
         bottomSize.width = MIN(bottomSize.width, self.width - _outerBorderWidth * 2);
         
         CGFloat top = (self.height - topSize.height - bottomSize.height - kTitleGap) * 0.5;
@@ -85,10 +85,10 @@ static CGFloat kBottomTitleSize = 22;
         
         NSMutableParagraphStyle *paragraph = [[NSMutableParagraphStyle alloc] init];
         paragraph.lineBreakMode = NSLineBreakByTruncatingTail;
-        [topStr drawInRect:topRect withAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:kTopTitleSize],
+        [topStr drawInRect:topRect withAttributes:@{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(kTopTitleSize),
                                                     NSForegroundColorAttributeName:[UIColor whiteColor],
                                                     NSParagraphStyleAttributeName:paragraph}];
-        [bottomStr drawInRect:bottomRect withAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:kBottomTitleSize],
+        [bottomStr drawInRect:bottomRect withAttributes:@{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(kBottomTitleSize),
                                                           NSForegroundColorAttributeName:[UIColor whiteColor],
                                                           NSParagraphStyleAttributeName:paragraph}];
     }

@@ -14,6 +14,7 @@
 #import "SSJDataSynchronizer.h"
 #import "SSJFinancingStore.h"
 #import "SSJFinancingHomeHelper.h"
+#import "SSJBooksTypeDeletionAuthCodeAlertView.h"
 
 #import "FMDB.h"
 
@@ -31,6 +32,8 @@
 @property(nonatomic, strong) NSArray *images;
 
 @property(nonatomic, strong) UIView *footerView;
+
+@property (nonatomic, strong) SSJBooksTypeDeletionAuthCodeAlertView *authCodeAlertView;
 
 @end
 
@@ -171,7 +174,7 @@
     } else if ([title isEqualToString:@"账户余额"]) {
         _amountTextField = NewFundingCell.cellDetail;
         NewFundingCell.cellDetail.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入账户余额" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
-        NewFundingCell.cellDetail.text = [[NSString stringWithFormat:@"%f",self.item.fundingAmount] ssj_moneyDecimalDisplayWithDigits:2];
+        NewFundingCell.cellDetail.text = self.item.fundingAmount > 0 ? [[NSString stringWithFormat:@"%f",self.item.fundingAmount]ssj_moneyDecimalDisplayWithDigits:2] :@"";
         NewFundingCell.cellDetail.tag = 101;
         NewFundingCell.cellDetail.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
         _amountTextField.delegate = self;
@@ -248,28 +251,10 @@
 - (void)rightButtonClicked:(id)sender {
     __weak typeof(self) weakSelf = self;
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"确定要删除该资金账户吗?" preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:NULL];
-    UIAlertAction *comfirm = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
-        if (weakSelf.item.chargeCount) {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"删除该资金后，是否将展示在首页和报表的流水及相关借贷数据一并删除" preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *reserve = [UIAlertAction actionWithTitle:@"仅删除资金" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                [weakSelf deleteFundingItem:weakSelf.item type:0];
-            }];
-            UIAlertAction *destructive = [UIAlertAction actionWithTitle:@"一并删除" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
-                [weakSelf deleteFundingItem:weakSelf.item type:1];
-            }];
-            UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-            }];
-            [alert addAction:reserve];
-            [alert addAction:destructive];
-            [alert addAction:cancel];
-            [weakSelf presentViewController:alert animated:YES completion:NULL];
-        }else{
-            [weakSelf deleteFundingItem:weakSelf.item type:0];
-        }
-    }];
-    [alert addAction:cancel];
-    [alert addAction:comfirm];
+    [alert addAction:[UIAlertAction actionWithTitle:@"删除" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [weakSelf.authCodeAlertView show];
+    }]];
+    [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDestructive handler:NULL]];
     [self presentViewController:alert animated:YES completion:NULL];
 }
 
@@ -327,6 +312,17 @@
     return _footerView;
 }
 
+- (SSJBooksTypeDeletionAuthCodeAlertView *)authCodeAlertView {
+    if (!_authCodeAlertView) {
+        __weak typeof(self) wself = self;
+        _authCodeAlertView = [[SSJBooksTypeDeletionAuthCodeAlertView alloc] init];
+        _authCodeAlertView.finishVerification = ^{
+            [wself deleteFundingItem:wself.item type:1];
+        };
+    }
+    return _authCodeAlertView;
+}
+
 #pragma mark - Private
 - (void)deleteFundingItem:(SSJBaseItem *)item type:(BOOL)type{
     __weak typeof(self) weakSelf = self;
@@ -334,7 +330,7 @@
         [weakSelf.navigationController popToRootViewControllerAnimated:YES];
         [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
     } failure:^(NSError *error) {
-        NSLog(@"%@",[error localizedDescription]);
+        SSJPRINT(@"%@",[error localizedDescription]);
     }];
 }
 
@@ -351,7 +347,7 @@
     }
     FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
     if (![db open]) {
-        NSLog(@"Could not open db");
+        SSJPRINT(@"Could not open db");
     }
     if ([_nameTextField.text isEqualToString:@""]) {
         [CDAutoHideMessageHUD showMessage:@"请输入资金账户名称"];

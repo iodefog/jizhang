@@ -150,6 +150,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil{
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+        self.title = SSJAppName();
         self.appliesTheme = NO;
         self.backgroundView.hidden = YES;
         self.extendedLayoutIncludesOpaqueBars = YES;
@@ -242,6 +243,9 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     [super viewWillAppear:animated];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    NSMutableDictionary *titleAttributes = [self.navigationController.navigationBar.titleTextAttributes mutableCopy];
+    [titleAttributes setObject:[UIColor whiteColor] forKey:NSForegroundColorAttributeName];
+    self.navigationController.navigationBar.titleTextAttributes = titleAttributes;
 //    if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
 //        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
 //        self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
@@ -403,6 +407,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
                     && SSJSaveAccessToken(resultInfo[@"accessToken"] ?: @"")
                     && SSJSaveUserLogined(YES)) {
                     
+                    [self syncData];
                     [[NSNotificationCenter defaultCenter] postNotificationName:SSJLoginOrRegisterNotification object:self];
                     
                     [self.tfRegPasswordNum resignFirstResponder];
@@ -540,10 +545,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
  */
 - (void)gotoRegister
 {
-    NSString * regex = @"^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,15}$";  //注册
-    NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
-    BOOL isMatch = [pred evaluateWithObject:self.tfRegPasswordNum.text];
-    if (isMatch) {
+    if (SSJVerifyPassword(self.tfRegPasswordNum.text)) {
         [self.registCompleteService setPasswordWithMobileNo:self.tfRegPhoneNum.text authCode:self.codeNum password:self.tfRegPasswordNum.text];
     } else {
         [CDAutoHideMessageHUD showMessage:@"只能输入6-15位字母、数字组合"];
@@ -652,6 +654,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 -(void)comfirmTologin{
     //  只要登录就设置用户为已注册，因为9188账户、第三方登录没有注册就可以登录
     self.loginService.item.registerState = @"1";
+//    if (!self.loginService.item) return;
     if (![SSJUserTableManager saveUserItem:self.loginService.item]
         || !SSJSaveAppId(self.loginService.appid)
         || !SSJSaveAccessToken(self.loginService.accesstoken)
@@ -686,14 +689,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     [SSJLocalNotificationHelper cancelLocalNotificationWithKey:SSJReminderNotificationKey];
     
     //  登陆成功后强制同步一次
-    [[NSNotificationCenter defaultCenter] postNotificationName:SSJShowSyncLoadingNotification object:self];
-    [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:^(SSJDataSynchronizeType type){
-        [[NSNotificationCenter defaultCenter] postNotificationName:SSJHideSyncLoadingNotification object:self];
-        [CDAutoHideMessageHUD showMessage:@"同步成功"];
-    } failure:^(SSJDataSynchronizeType type, NSError *error) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:SSJHideSyncLoadingNotification object:self];
-        [CDAutoHideMessageHUD showMessage:@"同步失败"];
-    }];
+    [self syncData];
     [self.loadingView show];
     
     //  如果有finishHandle，就通过finishHandle来控制页面流程，否则走默认流程
@@ -724,6 +720,14 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     } else {
         [self ssj_backOffAction];
     }
+}
+
+- (void)syncData {
+    [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:^(SSJDataSynchronizeType type){
+        [CDAutoHideMessageHUD showMessage:@"同步成功"];
+    } failure:^(SSJDataSynchronizeType type, NSError *error) {
+        [CDAutoHideMessageHUD showMessage:@"同步失败"];
+    }];
 }
 /**
  *  画三角形
@@ -787,7 +791,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     
     //修改标题的内容，字号，颜色。使用的key值是“attributedTitle”
     NSMutableAttributedString *attMessate = [oldStr attributeStrWithTargetStr:@"忘记密码" range:NSMakeRange(0, 0) color:[UIColor ssj_colorWithHex:@"ea4a64"]];
-    [attMessate addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:14] range:NSMakeRange(0, attMessate.length - 1)];
+    [attMessate addAttribute:NSFontAttributeName value:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_7) range:NSMakeRange(0, attMessate.length - 1)];
     
     //修改按钮的颜色，同上可以使用同样的方法修改内容，样式
     UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"忘记密码" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
@@ -808,6 +812,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
             } else {
                 [weakSelf.tfPassword becomeFirstResponder];
             }
+            
         };
         [weakSelf.view endEditing:YES];
         [weakSelf.navigationController pushViewController:forgetVC animated:YES];
@@ -1023,9 +1028,9 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         _tfPhoneNum.textColor = [UIColor ssj_colorWithHex:@"333333"];
         _tfPhoneNum.clearButtonMode = UITextFieldViewModeWhileEditing;
         _tfPhoneNum.placeholder = @"请输入手机号";
-        _tfPhoneNum.font = [UIFont systemFontOfSize:16];
+        _tfPhoneNum.font = SSJ_Helvetica_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         [_tfPhoneNum setValue:[UIColor ssj_colorWithHex:@"999999"] forKeyPath:@"_placeholderLabel.textColor"];
-        [_tfPhoneNum setValue:[UIFont systemFontOfSize:13] forKeyPath:@"_placeholderLabel.font"];
+        [_tfPhoneNum setValue:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4) forKeyPath:@"_placeholderLabel.font"];
         
         [_tfPhoneNum ssj_setBorderColor:[UIColor ssj_colorWithHex:@"cccccc"]];
         [_tfPhoneNum ssj_setBorderStyle:SSJBorderStyleBottom];
@@ -1048,9 +1053,9 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         _tfRegPhoneNum.textColor = [UIColor ssj_colorWithHex:@"333333"];
         _tfRegPhoneNum.clearButtonMode = UITextFieldViewModeWhileEditing;
         _tfRegPhoneNum.placeholder = @"请输入手机号";
-        _tfRegPhoneNum.font = [UIFont systemFontOfSize:16];
+        _tfRegPhoneNum.font = SSJ_Helvetica_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         [_tfRegPhoneNum setValue:[UIColor ssj_colorWithHex:@"999999"] forKeyPath:@"_placeholderLabel.textColor"];
-        [_tfRegPhoneNum setValue:[UIFont systemFontOfSize:13] forKeyPath:@"_placeholderLabel.font"];
+        [_tfRegPhoneNum setValue:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4) forKeyPath:@"_placeholderLabel.font"];
         [_tfRegPhoneNum ssj_setBorderStyle:SSJBorderStyleBottom];
         [_tfRegPhoneNum ssj_setBorderWidth:1];
         [_tfRegPhoneNum ssj_setBorderColor:[UIColor ssj_colorWithHex:@"cccccc"]];
@@ -1077,9 +1082,9 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         _tfPassword.textColor = [UIColor ssj_colorWithHex:@"333333"];
         _tfPassword.clearButtonMode = UITextFieldViewModeWhileEditing;
         _tfPassword.placeholder = @"请输入账户密码";
-        _tfPassword.font = [UIFont systemFontOfSize:16];
+        _tfPassword.font = SSJ_Helvetica_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         [_tfPassword setValue:[UIColor ssj_colorWithHex:@"999999"] forKeyPath:@"_placeholderLabel.textColor"];
-        [_tfPassword setValue:[UIFont systemFontOfSize:13] forKeyPath:@"_placeholderLabel.font"];
+        [_tfPassword setValue:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4) forKeyPath:@"_placeholderLabel.font"];
         
         _tfPassword.keyboardType = UIKeyboardTypeASCIICapable;
         _tfPassword.delegate = self;
@@ -1106,9 +1111,9 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         _tfRegPasswordNum.textColor = [UIColor ssj_colorWithHex:@"333333"];
         _tfRegPasswordNum.clearButtonMode = UITextFieldViewModeWhileEditing;
         _tfRegPasswordNum.placeholder = @"请输入6~15位数字和字母组合的密码";
-        _tfRegPasswordNum.font = [UIFont systemFontOfSize:16];
+        _tfRegPasswordNum.font = SSJ_Helvetica_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         [_tfRegPasswordNum setValue:[UIColor ssj_colorWithHex:@"999999"] forKeyPath:@"_placeholderLabel.textColor"];
-        [_tfRegPasswordNum setValue:[UIFont systemFontOfSize:13] forKeyPath:@"_placeholderLabel.font"];
+        [_tfRegPasswordNum setValue:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4) forKeyPath:@"_placeholderLabel.font"];
         
         _tfRegPasswordNum.keyboardType = UIKeyboardTypeASCIICapable;
         _tfRegPasswordNum.delegate = self;
@@ -1131,9 +1136,9 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         _tfRegYanZhenNum.textColor = [UIColor ssj_colorWithHex:@"333333"];
         _tfRegYanZhenNum.clearButtonMode = UITextFieldViewModeWhileEditing;
         _tfRegYanZhenNum.placeholder = @"请输入验证码";
-        _tfRegYanZhenNum.font = [UIFont systemFontOfSize:16];
+        _tfRegYanZhenNum.font = SSJ_Helvetica_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         [_tfRegYanZhenNum setValue:[UIColor ssj_colorWithHex:@"999999"] forKeyPath:@"_placeholderLabel.textColor"];
-        [_tfRegYanZhenNum setValue:[UIFont systemFontOfSize:13] forKeyPath:@"_placeholderLabel.font"];
+        [_tfRegYanZhenNum setValue:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4) forKeyPath:@"_placeholderLabel.font"];
         [_tfRegYanZhenNum ssj_setBorderColor:[UIColor ssj_colorWithHex:@"cccccc"]];
         [_tfRegYanZhenNum ssj_setBorderStyle:SSJBorderStyleBottom | SSJBorderStyleTop];
         [_tfRegYanZhenNum ssj_setBorderWidth:1];
@@ -1151,7 +1156,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 - (UIButton*)loginButton{
     if (!_loginButton) {
         _loginButton = [[UIButton alloc]init];
-        _loginButton.titleLabel.font = [UIFont systemFontOfSize:19];
+        _loginButton.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_1);
         _loginButton.enabled = NO;
         [_loginButton setTitle:@"登录" forState:UIControlStateNormal];
         [_loginButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -1169,7 +1174,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     if (!_loginTitleButton) {
         _loginTitleButton = [[UIButton alloc]init];
         _loginTitleButton.selected = YES;
-        _loginTitleButton.titleLabel.font = [UIFont systemFontOfSize:14];
+        _loginTitleButton.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_7);
         [_loginTitleButton setTitle:@"登录" forState:UIControlStateNormal];
         [_loginTitleButton setTitleColor:[UIColor ssj_colorWithHex:@"eb4a64" alpha:0.6] forState:UIControlStateNormal];
         [_loginTitleButton setTitleColor:[UIColor ssj_colorWithHex:@"eb4a64"] forState:UIControlStateSelected];
@@ -1183,7 +1188,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 - (UIButton*)registerButton{
     if (!_registerButton) {
         _registerButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        _registerButton.titleLabel.font = [UIFont systemFontOfSize:19];
+        _registerButton.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_1);
         [_registerButton setTitle:@"注册" forState:UIControlStateNormal];
         [_registerButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_registerButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"f9cbd0"] forState:UIControlStateDisabled];
@@ -1216,7 +1221,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 - (UIButton*)registerTitleButton{
     if (!_registerTitleButton) {
         _registerTitleButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        _registerTitleButton.titleLabel.font = [UIFont systemFontOfSize:14];
+        _registerTitleButton.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_7);
         [_registerTitleButton setTitle:@"注册" forState:UIControlStateNormal];
         [_registerTitleButton setTitleColor:[UIColor ssj_colorWithHex:@"eb4a64" alpha:0.6] forState:UIControlStateNormal];
         [_registerTitleButton setTitleColor:[UIColor ssj_colorWithHex:@"eb4a64"] forState:UIControlStateSelected];
@@ -1229,7 +1234,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 -(UIButton*)forgetButton{
     if (!_forgetButton) {
         _forgetButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        _forgetButton.titleLabel.font = [UIFont systemFontOfSize:13];
+        _forgetButton.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
         [_forgetButton setTitle:@"忘记密码?" forState:UIControlStateNormal];
         [_forgetButton setTitleColor:[UIColor ssj_colorWithHex:@"666666"] forState:UIControlStateNormal];
         [_forgetButton addTarget:self action:@selector(forgetButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
@@ -1287,7 +1292,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         _thirdPartyLoginLabel.text = @"使用第三方登录";
         [_thirdPartyLoginLabel sizeToFit];
         _thirdPartyLoginLabel.textColor = [UIColor ssj_colorWithHex:@"666666"];
-        _thirdPartyLoginLabel.font = [UIFont systemFontOfSize:13];
+        _thirdPartyLoginLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
         _thirdPartyLoginLabel.textAlignment = NSTextAlignmentCenter;
         [_thirdPartyLoginLabel sizeToFit];
     }
@@ -1336,7 +1341,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     if (!_getAuthCodeBtn) {
         _getAuthCodeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _getAuthCodeBtn.size = CGSizeMake(95, 30);
-        _getAuthCodeBtn.titleLabel.font = [UIFont systemFontOfSize:13];
+        _getAuthCodeBtn.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
         [_getAuthCodeBtn setTitle:@"获取验证码" forState:UIControlStateNormal];
         [_getAuthCodeBtn setTitleColor:[UIColor ssj_colorWithHex:@"#ea4a64"] forState:UIControlStateNormal];
         [_getAuthCodeBtn setTitleColor:[UIColor ssj_colorWithHex:@"#f9cbd0"] forState:UIControlStateDisabled];
@@ -1368,7 +1373,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 - (UIButton *)protocolButton {
     if (!_protocolButton) {
         _protocolButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        _protocolButton.titleLabel.font = [UIFont systemFontOfSize:12];
+        _protocolButton.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_5);
         NSString *oldStr = @"我已阅读并同意用户协定";
         [_protocolButton setAttributedTitle:[oldStr attributeStrWithTargetStr:@"用户协定" range:NSMakeRange(0, 0) color:[UIColor ssj_colorWithHex:@"ea4a64"]] forState:UIControlStateNormal];
         [_protocolButton setTitleColor:[UIColor ssj_colorWithHex:@"666666"] forState:UIControlStateNormal];

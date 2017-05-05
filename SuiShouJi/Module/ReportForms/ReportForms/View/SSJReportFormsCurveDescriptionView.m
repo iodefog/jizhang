@@ -45,7 +45,7 @@ const CGFloat kSuperMargin = 5;
         
         _label = [[UILabel alloc] init];
         _label.numberOfLines = 0;
-        _label.font = [UIFont systemFontOfSize:10];
+        _label.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_6);
         [self addSubview:_label];
     }
     return self;

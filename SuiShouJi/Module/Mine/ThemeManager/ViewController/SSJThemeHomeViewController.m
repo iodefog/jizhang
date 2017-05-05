@@ -14,6 +14,7 @@
 #import "SSJThemeService.h"
 #import "MMDrawerController.h"
 #import "SSJThemeManagerViewController.h"
+#import "SSJBookKeepingHomeViewController.h"
 
 @interface SSJThemeHomeViewController ()<UICollectionViewDelegate,UICollectionViewDataSource>
 @property(nonatomic, strong) UILabel *hintLabel;
@@ -41,7 +42,7 @@ static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
-    [self.view addSubview:self.hintLabel];
+//    [self.view addSubview:self.hintLabel];
     [self.view addSubview:self.themeSelectView];
     // Do any additional setup after loading the view.
 }
@@ -50,7 +51,7 @@ static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
     [super viewWillAppear:animated];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
     [self checkNetwork];
-    UIBarButtonItem *rightButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"more_guanli"] style:UIBarButtonItemStylePlain target:self action:@selector(managerButtonClicked:)];
+    UIBarButtonItem *rightButton = [[UIBarButtonItem alloc]initWithTitle:@"管理" style:UIBarButtonItemStylePlain target:self action:@selector(managerButtonClicked:)];
     if ([SSJThemeSetting allThemeModels].count - 1) {
         self.navigationItem.rightBarButtonItem = rightButton;
     }
@@ -58,11 +59,11 @@ static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
 
 -(void)viewDidLayoutSubviews{
     [super viewDidLayoutSubviews];
-    self.hintLabel.width = self.view.width;
-    self.hintLabel.height = 32;
-    self.hintLabel.leftTop = CGPointMake(0, SSJ_NAVIBAR_BOTTOM + 10);
-    self.themeSelectView.size = CGSizeMake(self.view.width, self.view.height - self.hintLabel.bottom);
-    self.themeSelectView.leftTop = CGPointMake(0, self.hintLabel.bottom);
+//    self.hintLabel.width = self.view.width;
+//    self.hintLabel.height = 32;
+//    self.hintLabel.leftTop = CGPointMake(0, SSJ_NAVIBAR_BOTTOM + 10);
+    self.themeSelectView.size = CGSizeMake(self.view.width, self.view.height - 10);
+    self.themeSelectView.leftTop = CGPointMake(0, 10);
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -112,9 +113,19 @@ static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     SSJThemeItem *item = [self.items ssj_safeObjectAtIndex:indexPath.item];
-    SSJThemeDetailViewController *themeDetailVc = [[SSJThemeDetailViewController alloc]init];
-    themeDetailVc.item = item;
-    [self.navigationController pushViewController:themeDetailVc animated:YES];
+    if ([item.themeId isEqualToString:@"-1"]) {
+        UITabBarController *tabVC = (UITabBarController *)((MMDrawerController *)[UIApplication sharedApplication].keyWindow.rootViewController).centerViewController;
+        UINavigationController *firstNav = [tabVC.viewControllers objectAtIndex:0];
+        SSJBookKeepingHomeViewController *homeVc = [firstNav.viewControllers objectAtIndex:0];
+        homeVc.needEditeThemeModel = YES;
+        tabVC.selectedIndex = 0;
+        [self.navigationController popViewControllerAnimated:YES];
+    } else {
+        SSJThemeDetailViewController *themeDetailVc = [[SSJThemeDetailViewController alloc]init];
+        themeDetailVc.item = item;
+        [self.navigationController pushViewController:themeDetailVc animated:YES];
+
+    }
 }
 
 #pragma mark - SSJBaseNetworkServiceDelegate
@@ -139,7 +150,7 @@ static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
         _hintLabel.backgroundColor = [UIColor whiteColor];
         _hintLabel.text = @"  温馨提示，换肤请在WiFi环境下进行，否则会较消耗流量哦。";
         _hintLabel.textColor = [UIColor ssj_colorWithHex:@"929292"];
-        _hintLabel.font = [UIFont systemFontOfSize:14];
+        _hintLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_7);
     }
     return _hintLabel;
 }
@@ -195,8 +206,12 @@ static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
         item.themeDesc = model.desc;
         float imageRatio = 220.f / 358;
         float imageHeight = (SSJSCREENWITH - 45) / 3 / imageRatio;
-        item.cellHeight = imageHeight + 25 + [item.themeTitle sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:16]}].height + 26;
+        item.cellHeight = imageHeight + 25 + [item.themeTitle sizeWithAttributes:@{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3)}].height + 26;
         [tempArr addObject:item];
+        SSJThemeItem *itemCustom = [[SSJThemeItem alloc]init];
+        itemCustom.themeId = @"-1";
+        itemCustom.themeTitle = @"自定义背景";
+        [tempArr insertObject:itemCustom atIndex:0];
     }
     [self getThemeStatusForThemes:tempArr];
 }
@@ -243,7 +258,7 @@ static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
         //计算每个cell的高度
         float imageRatio = 220.f / 358;
         float imageHeight = (SSJSCREENWITH - 45) / 3 / imageRatio;
-        theme.cellHeight = imageHeight + 25 + [theme.themeTitle sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:16]}].height + 26;
+        theme.cellHeight = imageHeight + 25 + [theme.themeTitle sizeWithAttributes:@{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3)}].height + 26;
     }
     self.items = themes;
     [self.themeSelectView reloadData];

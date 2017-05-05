@@ -45,7 +45,7 @@ typedef void(^SSJRecordMakingCustomNavigationBarAction)(SSJRecordMakingCustomNav
 @property (nonatomic, copy) SSJRecordMakingCustomNavigationBarAction selectBookHandle;
 
 /**
- 点击添加账本出发的回调
+ 点击添加账本触发的回调
  */
 @property (nonatomic, copy) SSJRecordMakingCustomNavigationBarAction addNewBookHandle;
 

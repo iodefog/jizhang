@@ -88,15 +88,15 @@
         passwordModifyCell.passwordInput.delegate = self;
     }
     if (indexPath.row == 0) {
-        passwordModifyCell.passwordInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"原密码" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+        passwordModifyCell.passwordInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"原密码" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor],NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3)}];
         self.oldPasswordInput = passwordModifyCell.passwordInput;
     }
     if (indexPath.row == 1) {
-        passwordModifyCell.passwordInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"新密码" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+        passwordModifyCell.passwordInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"新密码" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor],NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3)}];
         self.modifiedPasswordInput = passwordModifyCell.passwordInput;
     }
     if (indexPath.row == 2) {
-        passwordModifyCell.passwordInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"确认新密码" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+        passwordModifyCell.passwordInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"确认新密码" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor],NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3)}];
         self.comfirmNewPasswordInput = passwordModifyCell.passwordInput;
     }
     return passwordModifyCell;
@@ -139,9 +139,7 @@
 
 #pragma mark - Private
 - (void)comfirmButtonClicked:(id)sender{
-    NSString * regex = @"^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,15}$";
-    NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
-    if (![pred evaluateWithObject:self.modifiedPasswordInput.text]){
+    if (!SSJVerifyPassword(self.modifiedPasswordInput.text)){
         [CDAutoHideMessageHUD showMessage:@"您的新密码不是由6到15位数字和字母组成的哦，请重新设置一个吧～"];
         return;
     }else if (![self.comfirmNewPasswordInput.text isEqualToString:self.modifiedPasswordInput.text]){

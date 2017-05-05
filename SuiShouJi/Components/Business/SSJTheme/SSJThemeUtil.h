@@ -10,6 +10,15 @@
 
 #define SSJ_CURRENT_THEME [SSJThemeSetting currentThemeModel]
 
+// 主要颜色
+#define SSJ_MAIN_COLOR [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor]
+
+// 强调颜色
+#define SSJ_MARCATO_COLOR [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]
+
+// 次要颜色
+#define SSJ_SECONDARY_COLOR [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]
+
 //  切换主题通知
 extern NSString *const SSJThemeDidChangeNotification;
 

@@ -14,7 +14,7 @@
 #define kBottomViewHeight 45
 
 @interface SSJMineHomeTableViewHeader()
-@property (nonatomic, strong) SSJMineHeaderView *headPotraitImage;
+@property (nonatomic, strong) UIImageView *headPotraitImage;
 @property (nonatomic, strong) UILabel *nicknameLabel;
 @property(nonatomic, strong) UILabel *checkInLevelLabel;
 @property(nonatomic, strong) UIButton *checkInButton;
@@ -88,10 +88,14 @@
     self.syncButton.shouldSyncBlock = shouldSyncBlock;
 }
 
--(SSJMineHeaderView *)headPotraitImage{
+-(UIImageView *)headPotraitImage{
     if (!_headPotraitImage) {
-        _headPotraitImage = [[SSJMineHeaderView alloc]init];
-        _headPotraitImage.layer.cornerRadius = 32;
+        _headPotraitImage = [[UIImageView alloc]init];
+        CGRect rect = CGRectMake(0, 0, 64, 64);
+        CAShapeLayer *imagLayer = [CAShapeLayer layer];
+        UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:rect cornerRadius:rect.size.width * 0.5];
+        imagLayer.path = path.CGPath;
+        _headPotraitImage.layer.mask = imagLayer;
     }
     return _headPotraitImage;
 }
@@ -100,7 +104,7 @@
     if (!_nicknameLabel) {
         _nicknameLabel = [[UILabel alloc]init];
         _nicknameLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.moreHomeTitleColor];
-        _nicknameLabel.font = [UIFont systemFontOfSize:18];
+        _nicknameLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
     }
     return _nicknameLabel;
 }
@@ -109,7 +113,7 @@
     if (!_geXingSignLabel) {
         _geXingSignLabel = [[UILabel alloc] init];
         _geXingSignLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.moreHomeSubtitleColor];
-        _geXingSignLabel.font = [UIFont systemFontOfSize:13];
+        _geXingSignLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
     }
     return _geXingSignLabel;
 }
@@ -119,7 +123,7 @@
 -(UILabel *)checkInLevelLabel{
     if (!_checkInLevelLabel) {
         _checkInLevelLabel = [[UILabel alloc]init];
-        _checkInLevelLabel.font = [UIFont systemFontOfSize:13];
+        _checkInLevelLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
         _checkInLevelLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.moreHomeSubtitleColor];
     }
     return _checkInLevelLabel;
@@ -132,12 +136,10 @@
         [_checkInButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.moreHomeTitleColor] forState:UIControlStateNormal];
         [_checkInButton setImage:[[UIImage imageNamed:@"more_qiandao"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
         _checkInButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.moreHomeTitleColor];
-        _checkInButton.titleLabel.font = [UIFont systemFontOfSize:16];
+        _checkInButton.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
         [_checkInButton ssj_setBorderStyle:SSJBorderStyleTop];
         [_checkInButton ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
-           [_checkInButton ssj_setBorderWidth:1.f / [UIScreen mainScreen].scale];
-
-        
+        [_checkInButton ssj_setBorderWidth:1.f / [UIScreen mainScreen].scale];
         [_checkInButton addTarget:self action:@selector(checkInButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _checkInButton;
@@ -206,10 +208,11 @@
             //三方登录
             self.nicknameLabel.text = item.nickName;
         }
-        [self.headPotraitImage.headerImage sd_setImageWithURL:[NSURL URLWithString:iconStr] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
+        [self.headPotraitImage sd_setImageWithURL:[NSURL URLWithString:iconStr] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
+
         [self.nicknameLabel sizeToFit];
     } else {
-        self.headPotraitImage.headerImage.image = [UIImage imageNamed:@"defualt_portrait"];
+        self.headPotraitImage.image = [UIImage imageNamed:@"defualt_portrait"];
         self.nicknameLabel.text = @"待君登录";
         [self.nicknameLabel sizeToFit];
     }

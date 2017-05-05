@@ -58,7 +58,7 @@ alpha:(a)]
 #define degreesToRadians(x)(M_PI*x/180.0)
 
 //  系统字体大小
-#define systemFontSize(x) [UIFont systemFontOfSize:(x)]
+//#define systemFontSize(x) [UIFont systemFontOfSize:(x)]
 
 //  根据屏幕宽度比例计算宽度
 #define SSJ_SCALE_WIDTH(x) CGRectGetWidth([UIScreen mainScreen].bounds) / 320 * (x)
@@ -93,6 +93,9 @@ alpha:(a)]
 //  屏幕屏幕宽度
 #define SSJSCREENWITH CGRectGetWidth([UIScreen mainScreen].bounds)
 
+//  屏幕分辨率
+#define SSJSCREENSCALE [UIScreen mainScreen].scale
+
 //  状态栏高度
 #define SSJ_STATUSBAR_HEIGHT CGRectGetHeight([UIApplication sharedApplication].statusBarFrame)
 
@@ -104,15 +107,31 @@ alpha:(a)]
 
 #define SSJ_KEYWINDOW [UIApplication sharedApplication].keyWindow
 
-#pragma mark - Theme
 
-// 主要颜色
-#define SSJ_MAIN_COLOR [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor]
+#pragma mark -
+#pragma mark - Font
 
-// 强调颜色
-#define SSJ_MARCATO_COLOR [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]
+#define SSJ_FONT_SIZE_1 20
+#define SSJ_FONT_SIZE_2 18
+#define SSJ_FONT_SIZE_3 16
+#define SSJ_FONT_SIZE_4 13
+#define SSJ_FONT_SIZE_5 12
+#define SSJ_FONT_SIZE_6 11
+#define SSJ_FONT_SIZE_7 14
+#define SSJ_FONT_SIZE_8 15
 
-// 次要颜色
-#define SSJ_SECONDARY_COLOR [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]
+
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_9_0
+
+#define SSJ_PingFang_REGULAR_FONT_SIZE(x) [UIFont fontWithName:@"PingFangSC-Regular" size:(x)]
+#define SSJ_PingFang_MEDIUM_FONT_SIZE(x) [UIFont fontWithName:@"PingFangSC-Medium" size:(x)]
+#define SSJ_Helvetica_REGULAR_FONT_SIZE(x) [UIFont fontWithName:@"Helvetica" size:(x)]
+
+#else
+
+#define SSJ_PingFang_REGULAR_FONT_SIZE(x) [UIFont systemFontOfSize:(x)]
+#define SSJ_PingFang_MEDIUM_FONT_SIZE(x) [UIFont boldSystemFontOfSize:(x)]
+#define SSJ_Helvetica_REGULAR_FONT_SIZE(x) [UIFont fontWithName:@"Helvetica" size:(x)]
+#endif
 
 #endif

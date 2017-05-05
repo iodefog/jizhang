@@ -13,7 +13,6 @@
 #import "SSJBookkeepingTreeHelpViewController.h"
 #import "UIView+SSJViewAnimatioin.h"
 #import "SSJBookkeepingTreeView.h"
-#import "AFNetworkReachabilityManager.h"
 #import "SSJBookkeepingTreeHelper.h"
 #import "CDPointActivityIndicator.h"
 #import <CoreMotion/CoreMotion.h>
@@ -51,6 +50,8 @@
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.navigationItem.title = @"记账树";
         self.hidesBottomBarWhenPushed = YES;
+        self.showNavigationBarBaseLine = NO;
+        self.appliesTheme = NO;
     }
     return self;
 }
@@ -387,7 +388,7 @@
     if (_isViewSetuped) {
         [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
         [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeZero] forBarMetrics:UIBarMetricsDefault];
-        self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:21],
+        self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2),
                                                                         NSForegroundColorAttributeName:[UIColor whiteColor]};
     } else {
         [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
@@ -418,7 +419,7 @@
     if (!_checkInStateLab) {
         _checkInStateLab = [[UILabel alloc] initWithFrame:CGRectMake(0, self.navigationController.navigationBar.bottom, self.view.width, 40)];
         _checkInStateLab.backgroundColor = [UIColor clearColor];
-        _checkInStateLab.font = [UIFont systemFontOfSize:16];
+        _checkInStateLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         _checkInStateLab.textColor = [UIColor ssj_colorWithHex:@"468f1b"];
         _checkInStateLab.textAlignment = NSTextAlignmentCenter;
     }

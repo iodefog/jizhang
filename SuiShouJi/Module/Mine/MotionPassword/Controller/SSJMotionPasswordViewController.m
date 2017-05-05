@@ -7,6 +7,7 @@
 //
 
 #import "SSJMotionPasswordViewController.h"
+#import "SSJNavigationController.h"
 #import "SSJLoginViewController.h"
 #import "SCYMotionEncryptionView.h"
 #import "SSJUserTableManager.h"
@@ -84,7 +85,7 @@ static const int kVerifyFailureTimesLimit = 5;
                 }
                 [controller dismissViewControllerAnimated:YES completion:NULL];
             };
-            UINavigationController *naviVC = [[UINavigationController alloc] initWithRootViewController:motionVC];
+            SSJNavigationController *naviVC = [[SSJNavigationController alloc] initWithRootViewController:motionVC];
             [currentVC presentViewController:naviVC animated:animated completion:NULL];
             
             return;
@@ -99,6 +100,7 @@ static const int kVerifyFailureTimesLimit = 5;
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.hidesBottomBarWhenPushed = YES;
+        self.hidesNavigationBarWhenPushed = YES;
         self.verifyFailureTimes = kVerifyFailureTimesLimit;
     }
     return self;
@@ -161,11 +163,6 @@ static const int kVerifyFailureTimesLimit = 5;
     }
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    [self.navigationController setNavigationBarHidden:YES animated:YES];
-}
-
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     //  禁用手势返回
@@ -175,8 +172,6 @@ static const int kVerifyFailureTimesLimit = 5;
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    [self.navigationController setNavigationBarHidden:NO animated:YES];
-    
     [_context invalidate];
     _context = nil;
 }
@@ -268,7 +263,6 @@ static const int kVerifyFailureTimesLimit = 5;
                     _userItem.motionPWDState = @"1";
                     [SSJUserTableManager saveUserItem:_userItem];
                     
-                    [self.navigationController setNavigationBarHidden:NO animated:YES];
                     if (self.finishHandle) {
                         self.finishHandle(self);
                     } else {
@@ -295,8 +289,6 @@ static const int kVerifyFailureTimesLimit = 5;
         //  验证手势密码
         case SSJMotionPasswordViewControllerTypeVerification: {
             if ([self.password isEqualToString:[keypads componentsJoinedByString:@","]]) {
-                //  验证成功
-                [self.navigationController setNavigationBarHidden:NO animated:YES];
                 if (self.finishHandle) {
                     self.finishHandle(self);
                 } else {
@@ -365,7 +357,6 @@ static const int kVerifyFailureTimesLimit = 5;
             loginVC.finishHandle = self.finishHandle;
             loginVC.cancelHandle = self.finishHandle;
             loginVC.backController = self.backController;
-            [self.navigationController setNavigationBarHidden:NO animated:YES];
             [self.navigationController setViewControllers:@[loginVC] animated:YES];
         }
         
@@ -383,7 +374,6 @@ static const int kVerifyFailureTimesLimit = 5;
         loginVC.finishHandle = self.finishHandle;
         loginVC.cancelHandle = self.finishHandle;
         loginVC.backController = self.backController;
-        [self.navigationController setNavigationBarHidden:NO animated:YES];
         [self.navigationController setViewControllers:@[loginVC] animated:YES];
     }
     
@@ -403,7 +393,6 @@ static const int kVerifyFailureTimesLimit = 5;
         [_context evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics localizedReason:@"请按住Home键进行解锁" reply:^(BOOL success, NSError * _Nullable error) {
             if (success) {
                 SSJDispatchMainSync(^{
-                    [self.navigationController setNavigationBarHidden:NO];
                     if (self.finishHandle) {
                         self.finishHandle(self);
                     } else {
@@ -473,7 +462,7 @@ static const int kVerifyFailureTimesLimit = 5;
         _remindLab = [[UILabel alloc] initWithFrame:CGRectMake(0, self.view.height * 0.338, self.view.width, 20)];
         _remindLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.motionPasswordNormalColor];
         _remindLab.textAlignment = NSTextAlignmentCenter;
-        _remindLab.font = [UIFont systemFontOfSize:18];
+        _remindLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2);
     }
     return _remindLab;
 }
@@ -481,7 +470,7 @@ static const int kVerifyFailureTimesLimit = 5;
 - (UIButton *)verifyLoginPwdBtn {
     if (!_verifyLoginPwdBtn) {
         _verifyLoginPwdBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        _verifyLoginPwdBtn.titleLabel.font = [UIFont systemFontOfSize:14];
+        _verifyLoginPwdBtn.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_7);
         [_verifyLoginPwdBtn setTitle:@"忘记手势？可验证登录密码" forState:UIControlStateNormal];
         if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
             [_verifyLoginPwdBtn setTitleColor:[[UIColor ssj_colorWithHex:@"#eb4a64"] colorWithAlphaComponent:0.6] forState:UIControlStateNormal];
@@ -499,7 +488,7 @@ static const int kVerifyFailureTimesLimit = 5;
 - (UIButton *)forgetPwdBtn {
     if (!_forgetPwdBtn) {
         _forgetPwdBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        _forgetPwdBtn.titleLabel.font = [UIFont systemFontOfSize:14];
+        _forgetPwdBtn.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_7);
         [_forgetPwdBtn setTitle:@"忘记手势密码" forState:UIControlStateNormal];
         if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
             [_forgetPwdBtn setTitleColor:[[UIColor ssj_colorWithHex:@"#eb4a64"] colorWithAlphaComponent:0.6] forState:UIControlStateNormal];
@@ -517,7 +506,7 @@ static const int kVerifyFailureTimesLimit = 5;
 - (UIButton *)changeAccountBtn {
     if (!_changeAccountBtn) {
         _changeAccountBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        _changeAccountBtn.titleLabel.font = [UIFont systemFontOfSize:14];
+        _changeAccountBtn.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_7);
         [_changeAccountBtn setTitle:@"使用其它账号登录" forState:UIControlStateNormal];
         if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
             [_changeAccountBtn setTitleColor:[[UIColor ssj_colorWithHex:@"#eb4a64"] colorWithAlphaComponent:0.6] forState:UIControlStateNormal];

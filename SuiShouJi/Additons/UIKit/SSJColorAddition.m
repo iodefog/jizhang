@@ -11,9 +11,16 @@
 @implementation UIColor (SSJCategory)
 
 + (UIColor *)ssj_colorWithHex:(NSString *)hexColor {
+    
+    if ([hexColor   isEqualToString:@"#FFFFFFcc"]) {
+        
+    }
+
     NSString *cString = [[hexColor stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] uppercaseString];
     if ([cString hasPrefix:@"0X"]) cString = [cString substringFromIndex:2];
     if ([cString hasPrefix:@"#"]) cString = [cString substringFromIndex:1];
+    
+
     
     // 区分颜色中是否带有alpha,如果后面是8位,则认为她当中有透明度
     if (cString.length == 8) {
@@ -32,7 +39,12 @@
         // strip 0X if it appears
         if ([cString hasPrefix:@"0X"]) cString = [cString substringFromIndex:2];
         if ([cString hasPrefix:@"#"]) cString = [cString substringFromIndex:1];
-        if ([cString length] != 6) return [UIColor blackColor];
+        
+        if ([cString length] == 8) {
+            return [UIColor ssj_colorWithAlphaHex:hexColor];
+        } else if ([cString length] != 6){
+            return [UIColor blackColor];
+        }
         
         // Separate into r, g, b substrings
         

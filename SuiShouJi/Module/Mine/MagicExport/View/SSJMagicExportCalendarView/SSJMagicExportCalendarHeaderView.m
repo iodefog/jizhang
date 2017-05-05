@@ -17,7 +17,7 @@
 - (instancetype)initWithReuseIdentifier:(nullable NSString *)reuseIdentifier {
     if (self = [super initWithReuseIdentifier:reuseIdentifier]) {
         
-        self.textLabel.font = [UIFont systemFontOfSize:18];
+        self.textLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2);
         self.textLabel.textAlignment = NSTextAlignmentCenter;
         
         self.backgroundView = [[UIView alloc] init];

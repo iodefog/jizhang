@@ -199,4 +199,16 @@
 // 通屏按钮的透明度
 @property (nonatomic) CGFloat throughScreenButtonAlpha;
 
+//-----和自定义主题有关的-----
+
+// 自定义主题的背景图
+@property (nonatomic, copy) NSString *customThemeBackImage;
+
+
+//// 是否是自定义背景图
+//@property (nonatomic) BOOL isCustomImage;
+
+// 是暗色还是亮色
+@property (nonatomic) BOOL darkOrLight;
+
 @end

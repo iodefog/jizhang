@@ -24,6 +24,7 @@
         [self addSubview:self.incomeTitleLabel];
         [self addSubview:self.expenditureView];
         [self addSubview:self.expenditureTitleLabel];
+        self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     }
     return self;
 }
@@ -47,7 +48,7 @@
     if (!_expenditureView) {
         _expenditureView = [[SSJScrollTextView alloc]init];
         _expenditureView.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        _expenditureView.textFont = 20;
+        _expenditureView.textFont = SSJ_FONT_SIZE_1;
         _expenditureView.totalAnimationDuration = 1.f;
     }
     return _expenditureView;
@@ -57,7 +58,7 @@
     if (!_incomeView) {
         _incomeView = [[SSJScrollTextView alloc]init];
         _incomeView.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        _incomeView.textFont = 20;
+        _incomeView.textFont = SSJ_FONT_SIZE_1;
         _incomeView.totalAnimationDuration = 1.f;
     }
     return _incomeView;
@@ -67,7 +68,7 @@
     if (!_expenditureTitleLabel) {
         _expenditureTitleLabel = [[UILabel alloc]init];
         _expenditureTitleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-        _expenditureTitleLabel.font = [UIFont systemFontOfSize:13];
+        _expenditureTitleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_5);
     }
     return _expenditureTitleLabel;
 }
@@ -76,7 +77,7 @@
     if (!_incomeTitleLabel) {
         _incomeTitleLabel = [[UILabel alloc]init];
         _incomeTitleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-        _incomeTitleLabel.font = [UIFont systemFontOfSize:13];
+        _incomeTitleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_5);
     }
     return _incomeTitleLabel;
 }
@@ -99,7 +100,7 @@
 
 -(void)setIncome:(NSString *)income{
     _income = income;
-    CGSize incomeSize = [_income sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:20]}];
+    CGSize incomeSize = [_income sizeWithAttributes:@{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_1)}];
     if (incomeSize.width > self.width / 2 - self.buttonWidth / 3) {
         [self.incomeView ajustFontWithSize:CGSizeMake(self.width / 2 - self.buttonWidth / 3 - 10, incomeSize.height)];
         self.incomeView.string = _income;
@@ -112,7 +113,7 @@
 
 -(void)setExpenditure:(NSString *)expenditure{
     _expenditure = expenditure;
-    CGSize expenditureSize = [_expenditure sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:20]}];
+    CGSize expenditureSize = [_expenditure sizeWithAttributes:@{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_1)}];
     if (expenditureSize.width > self.width / 2 - self.buttonWidth / 3) {
         [self.expenditureView ajustFontWithSize:CGSizeMake(self.width / 2 - self.buttonWidth / 3 - 10, expenditureSize.height)];
         self.expenditureView.string = _expenditure;
@@ -130,9 +131,10 @@
 - (void)updateAfterThemeChange{
     self.expenditureView.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     self.incomeView.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-    self.expenditureTitleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-    self.incomeTitleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    self.expenditureTitleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    self.incomeTitleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     self.seperatorLine.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor];
+    self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
 }
 
 @end

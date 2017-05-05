@@ -254,4 +254,18 @@ void SSJDispatchMainAsync(void (^block)(void));
 
 NSString *SSJTitleForCycleType(SSJCyclePeriodType type);
 
+/**
+ 毫秒级的整数时间戳
+
+ @return int64_t
+ */
+int64_t SSJMilliTimestamp();
+
+/**
+ 验证登录密码是否合法
+
+ @param pwd 登录密码
+ @return BOOL
+ */
+BOOL SSJVerifyPassword(NSString *pwd);
 

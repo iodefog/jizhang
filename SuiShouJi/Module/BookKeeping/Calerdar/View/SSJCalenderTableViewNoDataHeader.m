@@ -20,6 +20,7 @@
 }
 
 -(void)awakeFromNib{
+    [super awakeFromNib];
     [self.recordMakingButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];
     self.recordMakingButton.layer.cornerRadius = 20;
     self.recordMakingButton.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor].CGColor;

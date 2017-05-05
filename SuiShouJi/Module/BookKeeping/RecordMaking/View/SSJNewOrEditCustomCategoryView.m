@@ -139,7 +139,7 @@
 - (UITextField *)textField {
     if (!_textField) {
         _textField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, self.width, 63)];
-        _textField.font = [UIFont systemFontOfSize:15];
+        _textField.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         _textField.delegate = self;
         [_textField ssj_setBorderWidth:1];
         [_textField ssj_setBorderStyle:(SSJBorderStyleTop | SSJBorderStyleBottom)];
@@ -164,7 +164,8 @@
         __weak typeof(self) wself = self;
         _imageSelectionView = [[SSJCategoryEditableCollectionView alloc] init];
         _imageSelectionView.editable = NO;
-        _imageSelectionView.itemSize = CGSizeMake((self.width - 20) * 0.2, 70);
+        _imageSelectionView.contentInset = UIEdgeInsetsMake(10, 14, 20, 14);
+        _imageSelectionView.itemSize = CGSizeMake(floor((self.width - 28) * 0.2), 50);
         _imageSelectionView.selectedItemsChangeHandle = ^(SSJCategoryEditableCollectionView *view) {
             SSJRecordMakingCategoryItem *selectedItem = [view.selectedItems firstObject];
             wself.selectedImage = selectedItem.categoryImage;

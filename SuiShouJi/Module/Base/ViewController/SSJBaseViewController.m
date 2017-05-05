@@ -23,8 +23,6 @@
 
 @property (nonatomic, strong) UIImageView *backgroundView;
 
-@property (nonatomic, strong) UIBarButtonItem *syncLoadingItem;
-
 @property (nonatomic) BOOL isDatabaseInitFinished;
 
 @end
@@ -44,8 +42,6 @@
         self.extendedLayoutIncludesOpaqueBars = YES;
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadDataIfNeeded) name:SSJSyncDataSuccessNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showSyncLoadingIndicator) name:SSJShowSyncLoadingNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideSyncLoadingIndicator) name:SSJHideSyncLoadingNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didFinishInitDatabase) name:SSJInitDatabaseDidFinishNotification object:nil];
     }
     return self;
@@ -63,9 +59,15 @@
                 _backgroundView = [[UIImageView alloc] initWithImage:[[UIImage ssj_compatibleThemeImageNamed:@"background"] blurredImageWithRadius:2.f iterations:20 tintColor:[UIColor clearColor]]];
             } else {
                 _backgroundView = [[UIImageView alloc] initWithImage:[UIImage ssj_compatibleThemeImageNamed:@"background"]];
+                if (SSJ_CURRENT_THEME.customThemeBackImage.length) {
+                    _backgroundView.image = [UIImage ssj_themeLocalBackGroundImageName:SSJ_CURRENT_THEME.customThemeBackImage];
+                }
             }
         } else {
             _backgroundView = [[UIImageView alloc] initWithImage:[UIImage ssj_compatibleThemeImageNamed:@"background"]];
+            if (SSJ_CURRENT_THEME.customThemeBackImage.length) {
+                _backgroundView.image = [UIImage ssj_themeLocalBackGroundImageName:SSJ_CURRENT_THEME.customThemeBackImage];
+            }
         }
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateAppearanceAfterThemeChanged) name:SSJThemeDidChangeNotification object:nil];
@@ -92,6 +94,7 @@
     }
     
     [self updateNavigationAppearance];
+    [self updateNavigationItemsFont];
     [[UIApplication sharedApplication] setStatusBarStyle:SSJ_CURRENT_THEME.statusBarStyle];
 }
 
@@ -137,15 +140,16 @@
 }
 
 - (void)reloadDataAfterSync {
-    
 }
 
 - (void)reloadDataAfterInitDatabase {
-    
 }
 
 - (void)updateAppearanceAfterThemeChanged {
     [_backgroundView ssj_setCompatibleThemeImageWithName:@"background"];
+    if (SSJ_CURRENT_THEME.customThemeBackImage.length ) {
+        _backgroundView.image = [UIImage ssj_themeLocalBackGroundImageName:SSJ_CURRENT_THEME.customThemeBackImage];
+    }
     [self updateNavigationAppearance];
     [[UIApplication sharedApplication] setStatusBarStyle:SSJ_CURRENT_THEME.statusBarStyle];
 }
@@ -167,7 +171,6 @@
 
 #pragma mark - SSJBaseNetworkServiceDelegate
 - (void)serverDidStart:(SSJBaseNetworkService *)service {
-    
 }
 
 /* 将接口返回的code 值转换为前端现实用的文字
@@ -209,7 +212,6 @@
 }
 
 - (void)serverDidCancel:(SSJBaseNetworkService *)service {
-    
 }
 
 - (void)server:(SSJBaseNetworkService *)service didFailLoadWithError:(NSError *)error {
@@ -223,50 +225,6 @@
 }
 
 #pragma mark - Private
-- (UIBarButtonItem *)syncLoadingItem {
-    if (!_syncLoadingItem) {
-        UIView *syncLoadingView = [[UIView alloc] init];
-        
-        UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-        [indicator startAnimating];
-        
-        UILabel *label = [[UILabel alloc] init];
-        label.text = @"同步中...";
-        label.font = [UIFont systemFontOfSize:14];
-        [label sizeToFit];
-        
-        [syncLoadingView addSubview:indicator];
-        [syncLoadingView addSubview:label];
-        
-        CGFloat gap = 5;
-        CGFloat width = label.width + indicator.width + gap;
-        CGFloat height = MAX(label.height, indicator.height);
-        syncLoadingView.size = CGSizeMake(width, height);
-        
-        label.left = indicator.right + gap;
-        indicator.centerY = label.centerY = syncLoadingView.height * 0.5;
-        
-        _syncLoadingItem = [[UIBarButtonItem alloc] initWithCustomView:syncLoadingView];
-    }
-    return _syncLoadingItem;
-}
-
-- (void)showSyncLoadingIndicator {
-    NSMutableArray *leftItems = [self.navigationItem.leftBarButtonItems mutableCopy];
-    if (!leftItems) {
-        leftItems = [@[] mutableCopy];
-    }
-    
-    [leftItems addObject:self.syncLoadingItem];
-    [self.navigationItem setLeftBarButtonItems:leftItems animated:YES];
-}
-
-- (void)hideSyncLoadingIndicator {
-    NSMutableArray *leftItems = [self.navigationItem.leftBarButtonItems mutableCopy];
-    [leftItems removeObject:self.syncLoadingItem];
-    [self.navigationItem setLeftBarButtonItems:leftItems animated:YES];
-}
-
 - (NSString *)statisticsTitle {
     if (_statisticsTitle.length) {
         return _statisticsTitle;
@@ -291,7 +249,7 @@
     SSJThemeModel *themeModel = _appliesTheme ? [SSJThemeSetting currentThemeModel] : [SSJThemeSetting defaultThemeModel];
     self.navigationController.navigationBar.tintColor = [UIColor ssj_colorWithHex:themeModel.naviBarTintColor];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:themeModel.naviBarBackgroundColor alpha:themeModel.backgroundAlpha] size:CGSizeZero] forBarMetrics:UIBarMetricsDefault];
-    self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:18],
+    self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2),
                                                                     NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:themeModel.naviBarTitleColor]};
     
     if (_showNavigationBarBaseLine) {
@@ -299,6 +257,19 @@
         [self.navigationController.navigationBar setShadowImage:[UIImage ssj_imageWithColor:lineColor size:CGSizeMake(0, 0.5)]];
     } else {
         [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
+    }
+}
+
+- (void)updateNavigationItemsFont {
+    for (UIBarButtonItem *item in self.navigationItem.leftBarButtonItems) {
+        NSMutableDictionary *attributes = [[item titleTextAttributesForState:UIControlStateNormal] mutableCopy];
+        [attributes setObject:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3) forKey:NSFontAttributeName];
+        [item setTitleTextAttributes:attributes forState:UIControlStateNormal];
+    }
+    for (UIBarButtonItem *item in self.navigationItem.rightBarButtonItems) {
+        NSMutableDictionary *attributes = [[item titleTextAttributesForState:UIControlStateNormal] mutableCopy];
+        [attributes setObject:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3) forKey:NSFontAttributeName];
+        [item setTitleTextAttributes:attributes forState:UIControlStateNormal];
     }
 }
 

@@ -20,8 +20,8 @@
     if (self = [super initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:reuseIdentifier]) {
         
         self.selectionStyle = UITableViewCellSelectionStyleNone;
-        self.textLabel.font = [UIFont systemFontOfSize:16];
-        self.detailTextLabel.font = [UIFont systemFontOfSize:13];
+        self.textLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        self.detailTextLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
         
         self.switchCtrl = [[UISwitch alloc] init];
         [self.contentView addSubview:self.switchCtrl];

@@ -41,7 +41,7 @@
 /**
  标题大小，默认16号字
  */
-@property (nonatomic) CGFloat titleFontSize;
+@property (nonatomic, strong) UIFont *titleFont;
 
 /**
  每行高度，默认44

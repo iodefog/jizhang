@@ -20,6 +20,7 @@
 #import "SSJReminderEditeViewController.h"
 #import "SSJFinancingHomeHelper.h"
 #import "SSJDataSynchronizer.h"
+#import "SSJBooksTypeDeletionAuthCodeAlertView.h"
 
 #define NUM @"+-.0123456789"
 
@@ -27,7 +28,7 @@ static NSString *const kTitle1 = @"账户名称";
 static NSString *const kTitle2 = @"账户类型";
 static NSString *const kTitle3 = @"信用额度";
 static NSString *const kTitle4 = @"余额/欠款";
-static NSString *const kTitle5 = @"备注";
+static NSString *const kTitle5 = @"备注说明";
 static NSString *const kTitle6 = @"以账单日结算";
 static NSString *const kTitle7 = @"账单日";
 static NSString *const kTitle8 = @"还款日";
@@ -62,6 +63,8 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 
 @property(nonatomic, strong) UIView *colorSelectView;
 
+@property (nonatomic, strong) SSJBooksTypeDeletionAuthCodeAlertView *authCodeAlertView;
+
 @end
 
 @implementation SSJNewCreditCardViewController{
@@ -85,7 +88,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.titles = @[@[kTitle1,kTitle2],@[kTitle3,kTitle4,kTitle5],@[kTitle6,kTitle7,kTitle8],@[kTitle9,kTitle10]];
-    self.images = @[@[@"loan_person",@"card_zhanghu"],@[@"loan_yield",@"loan_money",@"loan_memo"],@[@"loan_expires",@"",@""],@[@"loan_clock",@"card_yanse"]];
+    self.images = @[@[@"loan_person",@"card_zhanghu"],@[@"loan_yield",@"loan_money",@"loan_memo"],@[@"loan_expires",@"loan_zhangdanri",@"loan_huankuanri"],@[@"loan_clock",@"card_yanse"]];
 
     if (!self.cardId.length) {
         self.title = @"添加资金账户";
@@ -232,6 +235,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     if (!newReminderCell) {
         newReminderCell = [[SSJCreditCardEditeCell alloc] initWithStyle:UITableViewCellStyleDefault  reuseIdentifier:SSJCreditCardEditeCellIdentifier];
     }
+    newReminderCell.separatorInset = UIEdgeInsetsMake(0, 10, 0, 10);
     NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
     NSString *image = [self.images ssj_objectAtIndexPath:indexPath];
     // 信用卡名称
@@ -293,7 +297,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     if ([title isEqualToString:kTitle5]) {
         newReminderCell.type = SSJCreditCardCellTypeTextField;
         newReminderCell.cellTitle = title;
-        newReminderCell.textInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"备注说明（选填）" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+        newReminderCell.textInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"选填" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         _memoInput = newReminderCell.textInput;
         newReminderCell.textInput.text = self.item.cardMemo;
         newReminderCell.textInput.delegate = self;
@@ -321,7 +325,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         NSMutableAttributedString *attributeddetail = [[NSMutableAttributedString alloc]initWithString:detail];
         [attributeddetail addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:NSMakeRange(0, detail.length)];
         [attributeddetail addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] range:[detail rangeOfString:[NSString stringWithFormat:@"%ld",self.item.cardBillingDay]]];
-        [attributeddetail addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:18] range:NSMakeRange(0, detail.length)];
+        [attributeddetail addAttribute:NSFontAttributeName value:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3) range:NSMakeRange(0, detail.length)];
         newReminderCell.cellAtrributedDetail = attributeddetail;
         newReminderCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
@@ -334,7 +338,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         NSMutableAttributedString *attributeddetail = [[NSMutableAttributedString alloc]initWithString:detail];
         [attributeddetail addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:NSMakeRange(0, detail.length)];
         [attributeddetail addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] range:[detail rangeOfString:[NSString stringWithFormat:@"%ld",self.item.cardRepaymentDay]]];
-        [attributeddetail addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:18] range:NSMakeRange(0, detail.length)];
+        [attributeddetail addAttribute:NSFontAttributeName value:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3) range:NSMakeRange(0, detail.length)];
         newReminderCell.cellAtrributedDetail = attributeddetail;
         newReminderCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
@@ -443,28 +447,10 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 - (void)rightButtonClicked:(id)sender{
     __weak typeof(self) weakSelf = self;
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"确定要删除该资金账户吗?" preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:NULL];
-    UIAlertAction *comfirm = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
-        if (weakSelf.item.chargeCount) {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"删除该资金后，是否将展示在首页和报表的流水及相关借贷数据一并删除" preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *reserve = [UIAlertAction actionWithTitle:@"仅删除资金" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                [weakSelf deleteFundingItem:weakSelf.item type:0];
-            }];
-            UIAlertAction *destructive = [UIAlertAction actionWithTitle:@"一并删除" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
-                [weakSelf deleteFundingItem:weakSelf.item type:1];
-            }];
-            UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-            }];
-            [alert addAction:reserve];
-            [alert addAction:destructive];
-            [alert addAction:cancel];
-            [weakSelf presentViewController:alert animated:YES completion:NULL];
-        }else{
-            [weakSelf deleteFundingItem:weakSelf.item type:0];
-        }
-    }];
-    [alert addAction:cancel];
-    [alert addAction:comfirm];
+    [alert addAction:[UIAlertAction actionWithTitle:@"删除" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [weakSelf.authCodeAlertView show];
+    }]];
+    [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDestructive handler:NULL]];
     [self presentViewController:alert animated:YES completion:NULL];
 }
 
@@ -685,6 +671,17 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     return _billDateSettleMentButton;
 }
 
+- (SSJBooksTypeDeletionAuthCodeAlertView *)authCodeAlertView {
+    if (!_authCodeAlertView) {
+        __weak typeof(self) wself = self;
+        _authCodeAlertView = [[SSJBooksTypeDeletionAuthCodeAlertView alloc] init];
+        _authCodeAlertView.finishVerification = ^{
+            [wself deleteFundingItem:wself.item type:1];
+        };
+    }
+    return _authCodeAlertView;
+}
+
 #pragma mark - Private
 - (void)deleteFundingItem:(SSJBaseItem *)item type:(BOOL)type{
     __weak typeof(self) weakSelf = self;
@@ -692,7 +689,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         [weakSelf.navigationController popToRootViewControllerAnimated:YES];
         [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
     } failure:^(NSError *error) {
-        NSLog(@"%@",[error localizedDescription]);
+        SSJPRINT(@"%@",[error localizedDescription]);
     }];
 }
 

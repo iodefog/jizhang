@@ -19,9 +19,9 @@
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
-        self.backgroundColor = [UIColor clearColor];
         [self.contentView addSubview:self.noDataView];
         self.selectionStyle = UITableViewCellSelectionStyleNone;
+        self.backgroundColor = [UIColor clearColor];
     }
     return self;
 }
@@ -40,8 +40,8 @@
 
 - (void)updateCellAppearanceAfterThemeChanged{
     [super updateCellAppearanceAfterThemeChanged];
-    self.backgroundColor = [UIColor clearColor];
     [self.noDataView updateAfterThemeChanged];
+    self.backgroundColor = [UIColor clearColor];
 }
 
 

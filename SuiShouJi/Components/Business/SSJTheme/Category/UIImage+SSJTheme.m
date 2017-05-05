@@ -85,4 +85,35 @@
     return [self ssj_themeImageWithName:imageName];
 }
 
++ (instancetype)ssj_themeLocalBackGroundImageName:(NSString *)name {
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+        CGSize screenSize = [UIScreen mainScreen].bounds.size;
+        if (CGSizeEqualToSize(screenSize, CGSizeMake(320.0, 568.0))) {
+            name = [NSString stringWithFormat:@"%@-568",name];
+        } else if (CGSizeEqualToSize(screenSize, CGSizeMake(375.0, 667.0))) {
+            name = [NSString stringWithFormat:@"%@-667",name];
+        }
+    }
+    if ([UIScreen mainScreen].scale == 2 || [UIScreen mainScreen].scale == 3) {
+        name = [NSString stringWithFormat:@"%@@%dx.png", name, (int)[UIScreen mainScreen].scale];
+    }
+    
+    NSString *imagePath = [[NSString ssj_themeDirectory] stringByAppendingPathComponent:@"customBackGround"];
+    
+    imagePath = [imagePath stringByAppendingPathComponent:name];
+    
+    UIImage *image = [[self memoCache] objectForKey:imagePath];
+    
+    image = [UIImage imageWithContentsOfFile:imagePath];
+    
+    if (image) {
+        [[self memoCache] setObject:image forKey:imagePath];
+    } else {
+        SSJPRINT(@"imge在指定路径下不存在 %@", imagePath);
+        image = [UIImage imageNamed:name];
+    }
+    
+    return image;
+}
 @end

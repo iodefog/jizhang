@@ -13,7 +13,9 @@
 #import "SSJLoanListSectionHeaderAmountView.h"
 #import "SSJLoanListCell.h"
 #import "SSJBudgetNodataRemindView.h"
+#import "SSJBooksTypeDeletionAuthCodeAlertView.h"
 #import "SSJLoanHelper.h"
+#import "SSJFinancingHomeHelper.h"
 
 static NSString *const kLoanListCellId = @"kLoanListCellId";
 
@@ -28,6 +30,10 @@ static NSString *const kLoanListCellId = @"kLoanListCellId";
 @property (nonatomic, strong) SSJBudgetNodataRemindView *noDataRemindView;
 
 @property (nonatomic, strong) SSJLoanListSectionHeaderAmountView *amountView;
+
+@property (nonatomic, strong) UIButton *addBtn;
+
+@property (nonatomic, strong) SSJBooksTypeDeletionAuthCodeAlertView *authCodeAlertView;
 
 @end
 
@@ -46,12 +52,12 @@ static NSString *const kLoanListCellId = @"kLoanListCellId";
     
     self.title = _item.fundingName;
     
-    UIBarButtonItem *addItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"tianjia"] style:UIBarButtonItemStylePlain target:self action:@selector(rightItemAction)];
-    self.navigationItem.rightBarButtonItem = addItem;
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(deleteAction)];
     
     [self.view addSubview:self.headerSegmentView];
 //    [self.view addSubview:self.amountView];
     [self.view addSubview:self.tableView];
+    [self.view addSubview:self.addBtn];
     
     [self updateAppearance];
 }
@@ -142,7 +148,16 @@ static NSString *const kLoanListCellId = @"kLoanListCellId";
 }
 
 #pragma mark - Event
-- (void)rightItemAction {
+- (void)deleteAction {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"确定要删除该资金账户吗?" preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:@"删除" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self.authCodeAlertView show];
+    }]];
+    [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDestructive handler:NULL]];
+    [self presentViewController:alert animated:YES completion:NULL];
+}
+
+- (void)addAction {
     SSJAddOrEditLoanViewController *addLoanVC = [[SSJAddOrEditLoanViewController alloc] init];
     if ([_item.fundingParent isEqualToString:@"10"]) {
         addLoanVC.type = SSJLoanTypeLend;
@@ -165,6 +180,9 @@ static NSString *const kLoanListCellId = @"kLoanListCellId";
     _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
     
     [_amountView updateAppearance];
+    _addBtn.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
+    [_addBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] forState:UIControlStateNormal];
+    [_addBtn ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
 }
 
 //// 如果没有未结清数据就加载全部数据
@@ -243,7 +261,7 @@ static NSString *const kLoanListCellId = @"kLoanListCellId";
 
 - (UITableView *)tableView {
     if (!_tableView) {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.headerSegmentView.bottom, self.view.width, self.view.height - self.headerSegmentView.bottom) style:UITableViewStylePlain];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.headerSegmentView.bottom, self.view.width, self.view.height - self.headerSegmentView.bottom - self.addBtn.height) style:UITableViewStylePlain];
         _tableView.dataSource = self;
         _tableView.delegate = self;
         _tableView.backgroundView = nil;
@@ -277,6 +295,33 @@ static NSString *const kLoanListCellId = @"kLoanListCellId";
         }
     }
     return _amountView;
+}
+
+- (UIButton *)addBtn {
+    if (!_addBtn) {
+        _addBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        _addBtn.frame = CGRectMake(0, self.view.height - 50, self.view.width, 50);
+        _addBtn.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        [_addBtn setTitle:@"添加" forState:UIControlStateNormal];
+        [_addBtn addTarget:self action:@selector(addAction) forControlEvents:UIControlEventTouchUpInside];
+        [_addBtn ssj_setBorderStyle:SSJBorderStyleTop];
+    }
+    return _addBtn;
+}
+
+- (SSJBooksTypeDeletionAuthCodeAlertView *)authCodeAlertView {
+    if (!_authCodeAlertView) {
+        __weak typeof(self) wself = self;
+        _authCodeAlertView = [[SSJBooksTypeDeletionAuthCodeAlertView alloc] init];
+        _authCodeAlertView.finishVerification = ^{
+            [SSJFinancingHomeHelper deleteFundingWithFundingItem:wself.item deleteType:1 Success:^{
+                [wself.navigationController popToRootViewControllerAnimated:YES];
+            } failure:^(NSError *error) {
+                [SSJAlertViewAdapter showError:error];
+            }];
+        };
+    }
+    return _authCodeAlertView;
 }
 
 @end

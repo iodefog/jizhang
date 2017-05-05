@@ -31,7 +31,7 @@
     if ([self.button.titleLabel.text isEqualToString:@"添加预算"]) {
         return CGSizeMake(200, 44);
     }
-    return CGSizeMake([self.button.titleLabel.text sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:14]}].width + 20, 44);
+    return CGSizeMake([self.button.titleLabel.text sizeWithAttributes:@{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4)}].width + 20, 44);
 }
 
 -(void)layoutSubviews{
@@ -55,7 +55,7 @@
         _button.layer.cornerRadius = 13.f;
         _button.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor].CGColor;
         _button.layer.borderWidth = 1.f;
-        _button.titleLabel.font = [UIFont systemFontOfSize:14];
+        _button.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
         [_button addTarget:self action:@selector(budgetButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _button;
@@ -119,7 +119,7 @@
 
 - (void)updateAfterThemeChange{
     [self.button setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] forState:UIControlStateNormal];
-    [self.button setBackgroundColor:[UIColor ssj_colorWithHex:@"#ffffff" alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
+    [self.button setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha]];
     self.button.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor].CGColor;
     self.seperatorLine.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor];
 }

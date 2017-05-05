@@ -119,8 +119,9 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
     }
     if ([self.item isKindOfClass:[SSJCreditCardItem class]] && self.cardItem.settleAtRepaymentDay) {
         [SSJFundingDetailHelper queryDataWithCreditCardItem:self.cardItem success:^(NSMutableArray *data,SSJCreditCardItem *cardItem) {
-            weakSelf.listItems = [NSMutableArray arrayWithArray:data];
-            [weakSelf.tableView reloadData];
+//            weakSelf.listItems = [NSMutableArray arrayWithArray:data];
+//            [weakSelf.tableView reloadData];
+            [self array:weakSelf.listItems isEqualToAnotherArray:data];
             [weakSelf.view ssj_hideLoadingIndicator];
             if (data.count == 0) {
                 weakSelf.noDataHeader.hidden = NO;
@@ -140,8 +141,9 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
         if ([self.item isKindOfClass:[SSJCreditCardItem class]]) {
             SSJCreditCardItem *cardItem = (SSJCreditCardItem *)self.item;
             [SSJFundingDetailHelper queryDataWithFundTypeID:cardItem.cardId success:^(NSMutableArray *data,SSJFinancingHomeitem *fundingItem) {
-                weakSelf.listItems = [NSMutableArray arrayWithArray:data];
-                [weakSelf.tableView reloadData];
+//                weakSelf.listItems = [NSMutableArray arrayWithArray:data];
+//                [weakSelf.tableView reloadData];
+                [self array:weakSelf.listItems isEqualToAnotherArray:data];
                 [weakSelf.view ssj_hideLoadingIndicator];
                 if (data.count == 0) {
                     weakSelf.noDataHeader.hidden = NO;
@@ -161,9 +163,10 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
             }];
         }else{
             SSJFinancingHomeitem *financingItem = (SSJFinancingHomeitem *)self.item;
-            [SSJFundingDetailHelper queryDataWithFundTypeID:financingItem.fundingID success:^(NSMutableArray *data,SSJFinancingHomeitem *fundingItem) {
-                weakSelf.listItems = [NSMutableArray arrayWithArray:data];
-                [weakSelf.tableView reloadData];
+            [SSJFundingDetailHelper queryDataWithFundTypeID:financingItem.fundingID success:^(NSMutableArray <SSJFundingDetailListItem *>*data,SSJFinancingHomeitem *fundingItem) {
+//                weakSelf.listItems = [NSMutableArray arrayWithArray:data];
+//                [weakSelf.tableView reloadData];
+                [self array:weakSelf.listItems isEqualToAnotherArray:data];
                 [weakSelf.view ssj_hideLoadingIndicator];
                 if (data.count == 0) {
                     weakSelf.noDataHeader.hidden = NO;
@@ -396,12 +399,10 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
         [_repaymentButton setTitle:@"还款" forState:UIControlStateNormal];
         if (SSJ_CURRENT_THEME.throughScreenButtonBackGroudColor.length) {
             [_repaymentButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.throughScreenButtonBackGroudColor alpha:SSJ_CURRENT_THEME.throughScreenButtonAlpha] forState:UIControlStateNormal];
-            
         } else {
             [_repaymentButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor alpha:0.8] forState:UIControlStateNormal];
-            
         }
-        _repaymentButton.titleLabel.font = [UIFont systemFontOfSize:19];
+        _repaymentButton.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2);
         [_repaymentButton ssj_setBorderWidth:1];
         [_repaymentButton ssj_setBorderStyle:SSJBorderStyleTop];
         
@@ -421,7 +422,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
         [attributedStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] range:[originalStr rangeOfString:@"(仅支持账单分期)"]];
         [attributedStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:[originalStr rangeOfString:@"分期还款"]];
 
-        [attributedStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:13] range:[originalStr rangeOfString:@"(仅支持账单分期)"]];
+        [attributedStr addAttribute:NSFontAttributeName value:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4) range:[originalStr rangeOfString:@"(仅支持账单分期)"]];
         [_repaymentPopView setAttributtedText:attributedStr forIndex:1];
         _repaymentPopView.selectionHandle = ^(NSString * title){
             if ([title isEqualToString:@"还款"]) {
@@ -490,8 +491,9 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
         if ([self.item isKindOfClass:[SSJCreditCardItem class]]) {
             SSJCreditCardItem *cardItem = (SSJCreditCardItem *)self.item;
             [SSJFundingDetailHelper queryDataWithFundTypeID:cardItem.cardId success:^(NSMutableArray *data,SSJFinancingHomeitem *fundingItem) {
-                weakSelf.listItems = [NSMutableArray arrayWithArray:data];
-                [weakSelf.tableView reloadData];
+//                weakSelf.listItems = [NSMutableArray arrayWithArray:data];
+//                [weakSelf.tableView reloadData];
+                [self array:weakSelf.listItems isEqualToAnotherArray:data];
                 [weakSelf.view ssj_hideLoadingIndicator];
                 if (data.count == 0) {
                     weakSelf.noDataHeader.hidden = NO;
@@ -517,8 +519,9 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
         }else{
             SSJFinancingHomeitem *financingItem = (SSJFinancingHomeitem *)self.item;
             [SSJFundingDetailHelper queryDataWithFundTypeID:financingItem.fundingID success:^(NSMutableArray *data,SSJFinancingHomeitem *fundingItem) {
-                weakSelf.listItems = [NSMutableArray arrayWithArray:data];
-                [weakSelf.tableView reloadData];
+//                weakSelf.listItems = [NSMutableArray arrayWithArray:data];
+//                [weakSelf.tableView reloadData];
+                [self array:weakSelf.listItems isEqualToAnotherArray:data];
                 [weakSelf.view ssj_hideLoadingIndicator];
                 if (data.count == 0) {
                     weakSelf.noDataHeader.hidden = NO;
@@ -650,19 +653,35 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
 
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+//anotherArr 新
+- (void)array:(NSMutableArray <SSJFundingDetailListItem *> *)array  isEqualToAnotherArray:(NSMutableArray <SSJFundingDetailListItem *> *)anotherArr {
+    if (array.count == anotherArr.count) {
+        for (int i = 0; i < anotherArr.count; i++) {
+            if ([[array ssj_safeObjectAtIndex:i] isEqual:[anotherArr ssj_safeObjectAtIndex:i]]) {
+                self.listItems = anotherArr;
+            } else {
+                //保存最新model,展开状态
+                ((SSJFundingDetailListItem *)[anotherArr ssj_safeObjectAtIndex:i]).isExpand = ((SSJFundingDetailListItem *)[array ssj_safeObjectAtIndex:i]).isExpand;
+                self.listItems = anotherArr;
+                //刷新表格
+            }
+        }
+    } else if(anotherArr.count < array.count){ // 删除
+        //保存最新model,展开状态
+        for (SSJFundingDetailListItem *tempItem in anotherArr) {
+            for (SSJFundingDetailListItem *oldItem in array) {
+                if ([oldItem.date isEqualToString:tempItem.date]) {//通过时间判断是哪个
+                    tempItem.isExpand = oldItem.isExpand;
+                    break;
+                }
+            }
+        }
+        self.listItems = anotherArr;
+    } else if (anotherArr.count > array.count) { //开始加载数据
+        self.listItems = anotherArr;
+    }
+    [self.tableView reloadData];
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

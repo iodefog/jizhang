@@ -7,7 +7,6 @@
 //
 
 #import "SSJDatabaseQueue.h"
-#import "SSJDatabaseErrorHandler.h"
 
 static const void * kSSJDatabaseQueueSpecificKey = &kSSJDatabaseQueueSpecificKey;
 
@@ -18,6 +17,10 @@ static const void * kSSJDatabaseQueueSpecificKey = &kSSJDatabaseQueueSpecificKey
 @end
 
 @implementation SSJDatabaseQueue
+
++ (Class)databaseClass {
+    return [SSJDatabase class];
+}
 
 + (instancetype)sharedInstance {
     static SSJDatabaseQueue *queue = nil;
@@ -38,61 +41,25 @@ static const void * kSSJDatabaseQueueSpecificKey = &kSSJDatabaseQueueSpecificKey
     return self;
 }
 
-- (void)inDatabase:(void (^)(FMDatabase *))block {
+- (void)inDatabase:(void (^)(SSJDatabase *))block {
     [super inDatabase:^(FMDatabase *db) {
-        if (block) {
-            block(db);
-        }
-        
-        NSError *error = [db lastError];
-        if (error.code != 0) {
-            [SSJDatabaseErrorHandler handleError:error];
-            SSJDispatchMainAsync(^{
-                [SSJAlertViewAdapter showError:error];
-            });
-        }
+        block((SSJDatabase *)db);
     }];
 }
 
-- (void)inTransaction:(void (^)(FMDatabase *, BOOL *))block {
+- (void)inTransaction:(void (^)(SSJDatabase *, BOOL *))block {
     [super inTransaction:^(FMDatabase *db, BOOL *rollback) {
-        BOOL shouldRollback;
-        if (block) {
-            block(db, &shouldRollback);
-        }
-        
-        NSError *error = [db lastError];
-        if (error.code != 0) {
-            [SSJDatabaseErrorHandler handleError:error];
-            SSJDispatchMainAsync(^{
-                [SSJAlertViewAdapter showError:error];
-            });
-        }
-        
-        *rollback = shouldRollback;
+        block((SSJDatabase *)db, rollback);
     }];
 }
 
-- (void)inDeferredTransaction:(void (^)(FMDatabase *db, BOOL *rollback))block {
+- (void)inDeferredTransaction:(void (^)(SSJDatabase *db, BOOL *rollback))block {
     [super inDeferredTransaction:^(FMDatabase *db, BOOL *rollback) {
-        BOOL shouldRollback;
-        if (block) {
-            block(db, &shouldRollback);
-        }
-        
-        NSError *error = [db lastError];
-        if (error.code != 0) {
-            [SSJDatabaseErrorHandler handleError:error];
-            SSJDispatchMainAsync(^{
-                [SSJAlertViewAdapter showError:error];
-            });
-        }
-        
-        *rollback = shouldRollback;
+        block((SSJDatabase *)db, rollback);
     }];
 }
 
-- (void)asyncInDatabase:(void (^)(FMDatabase *db))block {
+- (void)asyncInDatabase:(void (^)(SSJDatabase *db))block {
     SSJDatabaseQueue *currentDatabaseQueue = (__bridge id)dispatch_get_specific(kSSJDatabaseQueueSpecificKey);
     if (currentDatabaseQueue == self) {
         [self inDatabase:block];
@@ -103,7 +70,7 @@ static const void * kSSJDatabaseQueueSpecificKey = &kSSJDatabaseQueueSpecificKey
     }
 }
 
-- (void)asyncInTransaction:(void (^)(FMDatabase *db, BOOL *rollback))block {
+- (void)asyncInTransaction:(void (^)(SSJDatabase *db, BOOL *rollback))block {
     SSJDatabaseQueue *currentDatabaseQueue = (__bridge id)dispatch_get_specific(kSSJDatabaseQueueSpecificKey);
     if (currentDatabaseQueue == self) {
         [self inTransaction:block];
@@ -114,7 +81,7 @@ static const void * kSSJDatabaseQueueSpecificKey = &kSSJDatabaseQueueSpecificKey
     }
 }
 
-- (void)asyncInDeferredTransaction:(void (^)(FMDatabase *db, BOOL *rollback))block {
+- (void)asyncInDeferredTransaction:(void (^)(SSJDatabase *db, BOOL *rollback))block {
     SSJDatabaseQueue *currentDatabaseQueue = (__bridge id)dispatch_get_specific(kSSJDatabaseQueueSpecificKey);
     if (currentDatabaseQueue == self) {
         [self inDeferredTransaction:block];

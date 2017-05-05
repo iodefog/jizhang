@@ -26,7 +26,7 @@ static NSString *const kAnnouncementCellIdentifier = @"kAnnouncementCellIdentifi
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-        self.title = @"消息";
+        self.title = @"有鱼头条";
         self.hidesBottomBarWhenPushed = YES;
     }
     return self;
@@ -40,7 +40,7 @@ static NSString *const kAnnouncementCellIdentifier = @"kAnnouncementCellIdentifi
         [self startPullRefresh];
     }];
     self.tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(startLoadMore)];
-    // Do any additional setup after loading the view.
+     [self updateAppearance];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -53,10 +53,25 @@ static NSString *const kAnnouncementCellIdentifier = @"kAnnouncementCellIdentifi
      }
 }
 
+- (void)viewDidDisappear:(BOOL)animated
+{
+     [super viewDidDisappear:animated];
+     [self.service cancel];
+}
+
+- (void)updateAppearanceAfterThemeChanged {
+     [super updateAppearanceAfterThemeChanged];
+     [self updateAppearance];
+}
 
 #pragma mark - UITableViewDelegate
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 80;
+    return UITableViewAutomaticDimension;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+     return 114;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
@@ -101,9 +116,12 @@ static NSString *const kAnnouncementCellIdentifier = @"kAnnouncementCellIdentifi
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     SSJAnnouncementDetailCell *announcementCell  = [tableView dequeueReusableCellWithIdentifier:kAnnouncementCellIdentifier];
+     
     [announcementCell setCellItem:[self.items objectAtIndex:indexPath.row]];
+     
     return announcementCell;
 }
+
 
 #pragma mark - SSJBaseNetworkService
 -(void)serverDidFinished:(SSJBaseNetworkService *)service {
@@ -153,19 +171,10 @@ static NSString *const kAnnouncementCellIdentifier = @"kAnnouncementCellIdentifi
     }
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (void)updateAppearance {
+     ((MJRefreshStateHeader *)self.tableView.mj_header).lastUpdatedTimeLabel.textColor = SSJ_SECONDARY_COLOR;
+     ((MJRefreshStateHeader *)self.tableView.mj_header).stateLabel.textColor = SSJ_SECONDARY_COLOR;
+     ((MJRefreshAutoStateFooter *)self.tableView.mj_footer).stateLabel.textColor = SSJ_SECONDARY_COLOR;
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

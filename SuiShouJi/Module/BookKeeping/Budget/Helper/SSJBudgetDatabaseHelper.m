@@ -341,6 +341,7 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
                 circleItem.colorValue = [resultSet stringForColumn:@"ccolor"];
                 circleItem.imageName = [resultSet stringForColumn:@"ccoin"];
                 circleItem.additionalText = [NSString stringWithFormat:@"%.0f％", scale * 100];
+                circleItem.additionalFont = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_5);
                 circleItem.imageBorderShowed = YES;
                 [circleItemArr addObject:circleItem];
             }
