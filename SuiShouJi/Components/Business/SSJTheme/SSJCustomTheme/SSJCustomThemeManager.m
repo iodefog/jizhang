@@ -130,14 +130,14 @@
         }
     }
     
-    //    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-    //        CGSize screenSize = [UIScreen mainScreen].bounds.size;
-    //        if (CGSizeEqualToSize(screenSize, CGSizeMake(768.0, 1024.0))) {
-    //            imageName = [NSString stringWithFormat:@"%@-1024",name];
-    //        } else if (CGSizeEqualToSize(screenSize, CGSizeMake(1536.0, 2048.0))) {
-    //            imageName = [NSString stringWithFormat:@"%@-2048",name];
-    //        }
-    //    }
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        CGSize screenSize = [UIScreen mainScreen].bounds.size;
+        if (CGSizeEqualToSize(screenSize, CGSizeMake(768.0, 1024.0))) {
+            backGroudImageName = [NSString stringWithFormat:@"%@-1024",@"background"];
+        } else if (CGSizeEqualToSize(screenSize, CGSizeMake(1536.0, 2048.0))) {
+            backGroudImageName = [NSString stringWithFormat:@"%@-2048",@"background"];
+        }
+    }
     if (image) {
         NSString *backImageFolder = [[NSString ssj_themeDirectory] stringByAppendingPathComponent:@"customBackGround"];
         if (![[NSFileManager defaultManager] fileExistsAtPath:backImageFolder]) {

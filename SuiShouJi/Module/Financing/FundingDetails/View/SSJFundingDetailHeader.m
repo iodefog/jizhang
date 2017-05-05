@@ -58,7 +58,7 @@
 -(UIView *)seperatorView{
     if (!_seperatorView) {
         _seperatorView = [[UIView alloc]init];
-        _seperatorView.backgroundColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.2];
+        _seperatorView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
     }
     return _seperatorView;
 }
@@ -200,6 +200,7 @@
             self.backLayer.backgroundColor = [UIColor ssj_colorWithHex:self.item.startColor].CGColor;
         }
     }
+    self.seperatorView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
 }
 /*
 // Only override drawRect: if you perform custom drawing.

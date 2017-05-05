@@ -94,9 +94,20 @@
         } else if (CGSizeEqualToSize(screenSize, CGSizeMake(375.0, 667.0))) {
             name = [NSString stringWithFormat:@"%@-667",name];
         }
+        
+        if ([UIScreen mainScreen].scale == 2 || [UIScreen mainScreen].scale == 3) {
+            name = [NSString stringWithFormat:@"%@@%dx.png", name, (int)[UIScreen mainScreen].scale];
+        }
     }
-    if ([UIScreen mainScreen].scale == 2 || [UIScreen mainScreen].scale == 3) {
-        name = [NSString stringWithFormat:@"%@@%dx.png", name, (int)[UIScreen mainScreen].scale];
+
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        CGSize screenSize = [UIScreen mainScreen].bounds.size;
+        if (CGSizeEqualToSize(screenSize, CGSizeMake(768.0, 1024.0))) {
+            name = [NSString stringWithFormat:@"%@-1024.png",name];
+        } else if (CGSizeEqualToSize(screenSize, CGSizeMake(1536.0, 2048.0))) {
+            name = [NSString stringWithFormat:@"%@-2048.png",name];
+        }
     }
     
     NSString *imagePath = [[NSString ssj_themeDirectory] stringByAppendingPathComponent:@"customBackGround"];
