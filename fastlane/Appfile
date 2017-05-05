@@ -1,4 +1,4 @@
 for_lane :appstore do |options|
-app_identifier "com.youyu.jizhangben"
-apple_id "marsfan999@163.com"
+app_identifier "com.youyu.youyujizhangguanjia"
+apple_id "licaidi002@126.com"
 end
