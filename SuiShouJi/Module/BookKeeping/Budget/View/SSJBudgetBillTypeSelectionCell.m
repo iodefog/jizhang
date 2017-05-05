@@ -22,7 +22,7 @@
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
-        self.textLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2);
+        self.textLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
         self.textLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         
         _checkMark = [[UIImageView alloc] init];
@@ -34,12 +34,12 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
     
-    [self.imageView sizeToFit];
+    self.imageView.size = CGSizeMake(20, 20);
     [self.textLabel sizeToFit];
     [self.checkMark sizeToFit];
     
     self.imageView.left = 15;
-    if (self.imageView.width) {
+    if (self.imageView.image) {
         self.textLabel.left = self.imageView.right + 15;
     } else {
         self.textLabel.left = 15;
