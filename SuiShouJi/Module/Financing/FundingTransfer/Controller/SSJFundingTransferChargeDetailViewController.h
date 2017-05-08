@@ -16,12 +16,12 @@ NS_ASSUME_NONNULL_BEGIN
 @interface SSJFundingTransferChargeDetailViewController : SSJBaseViewController
 
 /**
- 从转账记录列表页面进入时必穿
+ 从转账记录列表页面进入时必传
  */
 @property(nonatomic, strong, nullable) SSJFundingTransferDetailItem *item;
 
 /**
- 从资金详情页的流水列表中进入时必穿
+ 从资金详情页的流水列表中进入时必传
  */
 @property(nonatomic, strong, nullable) SSJBillingChargeCellItem *chargeItem;
 
