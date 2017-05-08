@@ -255,7 +255,7 @@ static BOOL kNeedBannerDisplay = YES;
         _collectionView.movedCellScale = 1.08;
         _collectionView.editDelegate=self;
         _collectionView.editDataSource=self;
-        _collectionView.exchangeCellRegion = UIEdgeInsetsMake(5, 0, 5, 0);
+        _collectionView.exchangeCellRegion = UIEdgeInsetsMake(30, 25, 30, 25);
         _collectionView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     }
     return _collectionView;
