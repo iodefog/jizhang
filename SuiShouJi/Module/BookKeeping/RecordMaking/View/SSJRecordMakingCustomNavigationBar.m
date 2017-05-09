@@ -268,7 +268,7 @@
 - (UIButton *)managerBtn {
     if (!_managerBtn) {
         _managerBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        _managerBtn.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        _managerBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         [_managerBtn addTarget:self action:@selector(managerBtnAction) forControlEvents:UIControlEventTouchUpInside];
     }
     return _managerBtn;
@@ -277,7 +277,7 @@
 - (UILabel *)titleLab {
     if (!_titleLab) {
         _titleLab = [[UILabel alloc] init];
-        _titleLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        _titleLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
     }
     return _titleLab;
 }
@@ -294,7 +294,7 @@
     if (!_booksMenu) {
         _booksMenu = [[SSJListMenu alloc] initWithFrame:CGRectMake(0, 0, 154, 0)];
         _booksMenu.maxDisplayRowCount = 5.5;
-        _booksMenu.titleFont = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        _booksMenu.titleFont = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         [_booksMenu addTarget:self action:@selector(selectBookAction) forControlEvents:UIControlEventValueChanged];
     }
     return _booksMenu;

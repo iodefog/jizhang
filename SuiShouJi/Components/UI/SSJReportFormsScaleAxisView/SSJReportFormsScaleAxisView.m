@@ -182,7 +182,7 @@ static NSString *const kCellId = @"SSJReportFormsScaleAxisCell";
         item.scaleHeight = [_delegate scaleAxisView:self heightForAxisAtIndex:idx];
         item.scaleColor = self.selectedIndex == idx ? self.selectedScaleColor : self.scaleColor;
         item.scaleMarkShowed = self.scaleMarkShowed;
-        item.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
+        item.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
         [tmpItems addObject:item];
     }
     _items = [tmpItems copy];

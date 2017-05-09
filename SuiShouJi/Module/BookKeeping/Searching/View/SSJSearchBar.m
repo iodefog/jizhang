@@ -59,7 +59,7 @@
         _searchTextInput.layer.borderWidth = 1.f / [UIScreen mainScreen].scale;
         _searchTextInput.layer.cornerRadius = 15.f;
         _searchTextInput.searchBarStyle = UISearchBarStyleMinimal;
-        [_searchTextInput searchTextFieldView].font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        [_searchTextInput searchTextFieldView].font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         [_searchTextInput searchTextFieldView].textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         [_searchTextInput searchTextFieldView].attributedPlaceholder = [[NSAttributedString alloc]initWithString:@"可搜索收支类别,备注" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
     }
@@ -70,7 +70,7 @@
     if (!_searchButton) {
         _searchButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 50, 30)];
         [_searchButton setTitle:@"搜索" forState:UIControlStateNormal];
-        _searchButton.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        _searchButton.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         [_searchButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTitleColor] forState:UIControlStateNormal];
         [_searchButton addTarget:self action:@selector(searchButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -103,7 +103,7 @@
     [self.searchButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarBackgroundColor] forState:UIControlStateNormal];
     self.searchTextInput.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarBackgroundColor];
-    [self.searchTextInput searchTextFieldView].font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+    [self.searchTextInput searchTextFieldView].font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
     [self.searchTextInput searchTextFieldView].textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     [self.searchTextInput searchTextFieldView].attributedPlaceholder = [[NSAttributedString alloc]initWithString:@"搜索" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
     self.backButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTintColor];

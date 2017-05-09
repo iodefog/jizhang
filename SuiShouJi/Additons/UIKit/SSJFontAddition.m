@@ -25,4 +25,24 @@ CGFloat SSJCompatibleFontSize(CGFloat fontSize) {
     return [UIFont boldSystemFontOfSize:SSJCompatibleFontSize(fontSize)];
 }
 
++ (UIFont *)ssj_pingFangRegularFontOfSize:(CGFloat)fontSize {
+    if (SSJSystemVersion() >= 9) {
+        return [UIFont fontWithName:@"PingFangSC-Regular" size:(fontSize)];
+    } else {
+        return [UIFont systemFontOfSize:(fontSize)];
+    }
+}
+
++ (UIFont *)ssj_pingFangMediumFontOfSize:(CGFloat)fontSize {
+    if (SSJSystemVersion() >= 9) {
+        return [UIFont fontWithName:@"PingFangSC-Medium" size:(fontSize)];
+    } else {
+        return [UIFont systemFontOfSize:(fontSize)];
+    }
+}
+
++ (UIFont *)ssj_helveticaRegularFontOfSize:(CGFloat)fontSize {
+    return [UIFont fontWithName:@"Helvetica" size:(fontSize)];
+}
+
 @end

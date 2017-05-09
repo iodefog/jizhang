@@ -62,7 +62,7 @@
 - (UILabel *)amountTitleLab {
     if (!_amountTitleLab) {
         _amountTitleLab = [[UILabel alloc] init];
-        _amountTitleLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_7);
+        _amountTitleLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_7];
     }
     return _amountTitleLab;
 }
@@ -70,7 +70,7 @@
 - (UILabel *)amountValueLab {
     if (!_amountValueLab) {
         _amountValueLab = [[UILabel alloc] init];
-        _amountValueLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_7);
+        _amountValueLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_7];
     }
     return _amountValueLab;
 }

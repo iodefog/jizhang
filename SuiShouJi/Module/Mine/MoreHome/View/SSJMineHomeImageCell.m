@@ -64,7 +64,7 @@
         _detailLabel = [[UILabel alloc]init];
         _detailLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         _detailLabel.textAlignment = NSTextAlignmentRight;
-        _detailLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        _detailLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
     }
     return _detailLabel;
 }
@@ -74,7 +74,7 @@
         _subTitleLabel = [[UILabel alloc]init];
         _subTitleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         _subTitleLabel.textAlignment = NSTextAlignmentRight;
-        _subTitleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
+        _subTitleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
     }
     return _subTitleLabel;
 }

@@ -35,7 +35,7 @@
         _cellTitleLabel = [[UILabel alloc]init];
         _cellTitleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _cellTitleLabel.textAlignment = NSTextAlignmentLeft;
-        _cellTitleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        _cellTitleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
     }
     return _cellTitleLabel;
 }
@@ -45,7 +45,7 @@
         _memoLabel = [[UILabel alloc]init];
         _memoLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         _memoLabel.textAlignment = NSTextAlignmentRight;
-        _memoLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2);
+        _memoLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
         _memoLabel.numberOfLines = 2;
     }
     return _memoLabel;

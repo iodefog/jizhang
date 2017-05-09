@@ -301,7 +301,7 @@ static NSString *const kLoanListCellId = @"kLoanListCellId";
     if (!_addBtn) {
         _addBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _addBtn.frame = CGRectMake(0, self.view.height - 50, self.view.width, 50);
-        _addBtn.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        _addBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         [_addBtn setTitle:@"添加" forState:UIControlStateNormal];
         [_addBtn addTarget:self action:@selector(addAction) forControlEvents:UIControlEventTouchUpInside];
         [_addBtn ssj_setBorderStyle:SSJBorderStyleTop];

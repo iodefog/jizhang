@@ -55,7 +55,7 @@
 - (UILabel *)titleLab{
     if (!_titleLab) {
         _titleLab = [[UILabel alloc]init];
-        _titleLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        _titleLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         _titleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     }
     return _titleLab;
@@ -64,7 +64,7 @@
 - (UILabel *)detailLab{
     if (!_detailLab) {
         _detailLab = [[UILabel alloc]init];
-        _detailLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        _detailLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         _detailLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     }
     return _detailLab;

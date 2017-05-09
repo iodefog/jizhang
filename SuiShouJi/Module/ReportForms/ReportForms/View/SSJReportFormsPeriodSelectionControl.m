@@ -212,7 +212,7 @@
 - (UIButton *)customPeriodBtn {
     if (!_customPeriodBtn) {
         _customPeriodBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        _customPeriodBtn.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
+        _customPeriodBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
         [_customPeriodBtn addTarget:self action:@selector(addCustomPeriod) forControlEvents:UIControlEventTouchUpInside];
     }
     return _customPeriodBtn;

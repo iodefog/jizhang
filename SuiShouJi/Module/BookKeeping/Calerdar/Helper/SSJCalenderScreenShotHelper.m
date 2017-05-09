@@ -52,40 +52,40 @@
         
         // 写上日期
         NSString *dateStr = [date formattedDateWithFormat:@"MM/dd"];
-        CGSize dateSize = [dateStr sizeWithAttributes:@{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_1)}];
+        CGSize dateSize = [dateStr sizeWithAttributes:@{NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_1]}];
         
-        [dateStr drawInRect:CGRectMake(firstImageCenterX - 10 - dateSize.width, firstImageCenterY - dateSize.height / 2, dateSize.width, dateSize.width) withAttributes:@{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_1),NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"#222222"]}];
+        [dateStr drawInRect:CGRectMake(firstImageCenterX - 10 - dateSize.width, firstImageCenterY - dateSize.height / 2, dateSize.width, dateSize.width) withAttributes:@{NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_1],NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"#222222"]}];
 
         
         // 写上星期
         NSString *weekDayStr = [NSString stringWithFormat:@"%@",[self stringFromWeekday:date.weekday]];
-        CGSize weekDaySize = [weekDayStr sizeWithAttributes:@{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_1)}];
-        [weekDayStr drawInRect:CGRectMake(firstImageCenterX + 10, firstImageCenterY - weekDaySize.height / 2, weekDaySize.width, weekDaySize.width) withAttributes:@{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_1),NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"#222222"]}];
+        CGSize weekDaySize = [weekDayStr sizeWithAttributes:@{NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_1]}];
+        [weekDayStr drawInRect:CGRectMake(firstImageCenterX + 10, firstImageCenterY - weekDaySize.height / 2, weekDaySize.width, weekDaySize.width) withAttributes:@{NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_1],NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"#222222"]}];
 
         // 写上年份
         NSString *yearStr = [NSString stringWithFormat:@"%04ld",(long)date.year];
-        CGSize yearSize = [yearStr sizeWithAttributes:@{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4)}];
-        [yearStr drawInRect:CGRectMake(firstImageCenterX - dateSize.width / 2 - 10 - yearSize.width / 2, firstImageCenterY + dateSize.height / 2 + 5, yearSize.width, yearSize.height) withAttributes:@{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4),NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"#222222"]}];
+        CGSize yearSize = [yearStr sizeWithAttributes:@{NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4]}];
+        [yearStr drawInRect:CGRectMake(firstImageCenterX - dateSize.width / 2 - 10 - yearSize.width / 2, firstImageCenterY + dateSize.height / 2 + 5, yearSize.width, yearSize.height) withAttributes:@{NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4],NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"#222222"]}];
         
         // 写上总收入
         NSString *incomeTitleStr = @"总收入:";
-        CGSize incomeTitleSize = [incomeTitleStr sizeWithAttributes:@{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4)}];
-        [incomeTitleStr drawInRect:CGRectMake(10, headerImageHeight + 25 - incomeTitleSize.height / 2, incomeTitleSize.width, incomeTitleSize.height) withAttributes:@{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4),NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+        CGSize incomeTitleSize = [incomeTitleStr sizeWithAttributes:@{NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4]}];
+        [incomeTitleStr drawInRect:CGRectMake(10, headerImageHeight + 25 - incomeTitleSize.height / 2, incomeTitleSize.width, incomeTitleSize.height) withAttributes:@{NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4],NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
 
         // 写上收入金额
         NSString *incomeStr = [[NSString stringWithFormat:@"%f",income] ssj_moneyDecimalDisplayWithDigits:2];
-        CGSize incomeSize = [incomeStr sizeWithAttributes:@{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4)}];
-        [incomeStr drawInRect:CGRectMake(10 + incomeTitleSize.width + 5, headerImageHeight + 25 - incomeSize.height / 2, incomeSize.width, incomeSize.height) withAttributes:@{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4),NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurveIncomeColor]}];
+        CGSize incomeSize = [incomeStr sizeWithAttributes:@{NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4]}];
+        [incomeStr drawInRect:CGRectMake(10 + incomeTitleSize.width + 5, headerImageHeight + 25 - incomeSize.height / 2, incomeSize.width, incomeSize.height) withAttributes:@{NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4],NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurveIncomeColor]}];
         
         // 写上支出金额
         NSString *expenceStr = [[NSString stringWithFormat:@"%f",expence] ssj_moneyDecimalDisplayWithDigits:2];
-        CGSize expenceSize = [expenceStr sizeWithAttributes:@{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4)}];
-        [expenceStr drawInRect:CGRectMake(width - expenceSize.width - 10, headerImageHeight + 25 - expenceSize.height / 2, expenceSize.width, expenceSize.height) withAttributes:@{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4),NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurvePaymentColor]}];
+        CGSize expenceSize = [expenceStr sizeWithAttributes:@{NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4]}];
+        [expenceStr drawInRect:CGRectMake(width - expenceSize.width - 10, headerImageHeight + 25 - expenceSize.height / 2, expenceSize.width, expenceSize.height) withAttributes:@{NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4],NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurvePaymentColor]}];
         
         // 写上总支出
         NSString *expenceTitleStr = @"总支出:";
-        CGSize expenceTitleSize = [expenceTitleStr sizeWithAttributes:@{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4)}];
-        [expenceTitleStr drawInRect:CGRectMake(width - expenceSize.width - 15 - expenceTitleSize.width, headerImageHeight + 25 - expenceTitleSize.height / 2, expenceTitleSize.width, expenceTitleSize.height) withAttributes:@{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4),NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+        CGSize expenceTitleSize = [expenceTitleStr sizeWithAttributes:@{NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4]}];
+        [expenceTitleStr drawInRect:CGRectMake(width - expenceSize.width - 15 - expenceTitleSize.width, headerImageHeight + 25 - expenceTitleSize.height / 2, expenceTitleSize.width, expenceTitleSize.height) withAttributes:@{NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4],NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         
         
         // 把cell的截图画上去
@@ -102,8 +102,8 @@
         
         // 把二维码下面的字写上去
         NSString *qrStr = @"长按识别图中二维码,下载有鱼记账";
-        CGSize qrStrSize = [qrStr sizeWithAttributes:@{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4)}];
-        [qrStr drawInRect:CGRectMake((width - qrStrSize.width) / 2, wholeHeight - 65 + qrImage.size.height / 2, qrStrSize.width, qrStrSize.height) withAttributes:@{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4),NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+        CGSize qrStrSize = [qrStr sizeWithAttributes:@{NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4]}];
+        [qrStr drawInRect:CGRectMake((width - qrStrSize.width) / 2, wholeHeight - 65 + qrImage.size.height / 2, qrStrSize.width, qrStrSize.height) withAttributes:@{NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4],NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
 
         shareImage = UIGraphicsGetImageFromCurrentImageContext();
         

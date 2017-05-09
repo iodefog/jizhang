@@ -37,7 +37,7 @@
     if (!_incomeLabel) {
         _incomeLabel = [[UILabel alloc]init];
         _incomeLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        _incomeLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_5);
+        _incomeLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_5];
     }
     return _incomeLabel;
 }
@@ -46,7 +46,7 @@
     if (!_expentureLabel) {
         _expentureLabel = [[UILabel alloc]init];
         _expentureLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        _expentureLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_5);
+        _expentureLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_5];
     }
     return _expentureLabel;
 }

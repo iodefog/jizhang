@@ -402,7 +402,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
         } else {
             [_repaymentButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor alpha:0.8] forState:UIControlStateNormal];
         }
-        _repaymentButton.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2);
+        _repaymentButton.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
         [_repaymentButton ssj_setBorderWidth:1];
         [_repaymentButton ssj_setBorderStyle:SSJBorderStyleTop];
         
@@ -422,7 +422,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
         [attributedStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] range:[originalStr rangeOfString:@"(仅支持账单分期)"]];
         [attributedStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:[originalStr rangeOfString:@"分期还款"]];
 
-        [attributedStr addAttribute:NSFontAttributeName value:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4) range:[originalStr rangeOfString:@"(仅支持账单分期)"]];
+        [attributedStr addAttribute:NSFontAttributeName value:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4] range:[originalStr rangeOfString:@"(仅支持账单分期)"]];
         [_repaymentPopView setAttributtedText:attributedStr forIndex:1];
         _repaymentPopView.selectionHandle = ^(NSString * title){
             if ([title isEqualToString:@"还款"]) {

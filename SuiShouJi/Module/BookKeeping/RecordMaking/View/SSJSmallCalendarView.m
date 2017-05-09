@@ -43,7 +43,7 @@
         _dateLabel = [[UILabel alloc]init];
         _dateLabel.textColor = [UIColor ssj_colorWithHex:@"eb4a64"];
         _dateLabel.textAlignment = NSTextAlignmentCenter;
-        _dateLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_5);
+        _dateLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_5];
     }
     return _dateLabel;
 }
