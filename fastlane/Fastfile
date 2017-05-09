@@ -7,7 +7,7 @@ lane :adhoc do |options|
   gym(
     configuration:options[:config],
     scheme:options[:scheme],
-    output_directory: ‘./build’,
+    output_directory: options[:outpath],
     export_method:'ad-hoc',
     clean:true
     )
