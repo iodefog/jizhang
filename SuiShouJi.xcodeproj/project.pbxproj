@@ -13527,7 +13527,7 @@
 						};
 					};
 					9C7D2CDC1E8DF8A80093001F = {
-						DevelopmentTeam = 534SCE47WT;
+						DevelopmentTeam = 5QMLP5Z59C;
 						SystemCapabilities = {
 							com.apple.Push = {
 								enabled = 1;
@@ -22791,7 +22791,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/SuiShouJi/Resource/Entitlements/SuiShouJi.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Pingxi Fan (Z8SZ588DYT)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Pingxi Fan (Z6G7KSGD6Q)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Pingxi Fan (Z6G7KSGD6Q)";
 				DEVELOPMENT_TEAM = Z8SZ588DYT;
 				ENABLE_BITCODE = NO;
@@ -27264,7 +27264,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/SuiShouJi/Resource/Entitlements/SuiShouJi.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Pingxi Fan (Z8SZ588DYT)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Pingxi Fan (Z6G7KSGD6Q)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Pingxi Fan (Z6G7KSGD6Q)";
 				DEVELOPMENT_TEAM = Z8SZ588DYT;
 				ENABLE_BITCODE = NO;

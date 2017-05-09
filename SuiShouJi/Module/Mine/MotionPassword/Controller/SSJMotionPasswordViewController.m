@@ -346,39 +346,43 @@ static const int kVerifyFailureTimesLimit = 5;
         _userItem.motionPWD = @"";
         [SSJUserTableManager saveUserItem:_userItem];
         
-        UIViewController *previousVC = [self ssj_previousViewController];
-        if ([previousVC isKindOfClass:[SSJLoginViewController class]]) {
-            SSJLoginViewController *loginVC = (SSJLoginViewController *)previousVC;
-            loginVC.mobileNo = _userItem.mobileNo;
-            [self.navigationController popViewControllerAnimated:YES];
-        } else {
-            SSJLoginViewController *loginVC = [[SSJLoginViewController alloc] init];
-            loginVC.mobileNo = _userItem.mobileNo;
-            loginVC.finishHandle = self.finishHandle;
-            loginVC.cancelHandle = self.finishHandle;
-            loginVC.backController = self.backController;
-            [self.navigationController setViewControllers:@[loginVC] animated:YES];
-        }
-        
         SSJClearLoginInfo();
-        [SSJUserTableManager reloadUserIdWithError:nil];
+        [SSJUserTableManager reloadUserIdWithSuccess:^{
+            UIViewController *previousVC = [self ssj_previousViewController];
+            if ([previousVC isKindOfClass:[SSJLoginViewController class]]) {
+                SSJLoginViewController *loginVC = (SSJLoginViewController *)previousVC;
+                loginVC.mobileNo = _userItem.mobileNo;
+                [self.navigationController popViewControllerAnimated:YES];
+            } else {
+                SSJLoginViewController *loginVC = [[SSJLoginViewController alloc] init];
+                loginVC.mobileNo = _userItem.mobileNo;
+                loginVC.finishHandle = self.finishHandle;
+                loginVC.cancelHandle = self.finishHandle;
+                loginVC.backController = self.backController;
+                [self.navigationController setViewControllers:@[loginVC] animated:YES];
+            }
+        } failure:^(NSError * _Nonnull error) {
+            [SSJAlertViewAdapter showError:error];
+        }];
     }
 }
 
 //  切换账号
 - (void)changeAccountAction {
-    if ([[self ssj_previousViewController] isKindOfClass:[SSJLoginViewController class]]) {
-        [self.navigationController popViewControllerAnimated:YES];
-    } else {
-        SSJLoginViewController *loginVC = [[SSJLoginViewController alloc] init];
-        loginVC.finishHandle = self.finishHandle;
-        loginVC.cancelHandle = self.finishHandle;
-        loginVC.backController = self.backController;
-        [self.navigationController setViewControllers:@[loginVC] animated:YES];
-    }
-    
     SSJClearLoginInfo();
-    [SSJUserTableManager reloadUserIdWithError:nil];
+    [SSJUserTableManager reloadUserIdWithSuccess:^{
+        if ([[self ssj_previousViewController] isKindOfClass:[SSJLoginViewController class]]) {
+            [self.navigationController popViewControllerAnimated:YES];
+        } else {
+            SSJLoginViewController *loginVC = [[SSJLoginViewController alloc] init];
+            loginVC.finishHandle = self.finishHandle;
+            loginVC.cancelHandle = self.finishHandle;
+            loginVC.backController = self.backController;
+            [self.navigationController setViewControllers:@[loginVC] animated:YES];
+        }
+    } failure:^(NSError * _Nonnull error) {
+        [SSJAlertViewAdapter showError:error];
+    }];
 }
 
 //  验证touchID

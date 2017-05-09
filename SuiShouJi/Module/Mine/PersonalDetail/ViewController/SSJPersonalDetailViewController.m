@@ -261,11 +261,14 @@ extern BOOL kHomeNeedLoginPop;
         } failure:NULL];
         
         SSJClearLoginInfo();
-        [SSJUserTableManager reloadUserIdWithError:nil];
-        [SSJUserDefaultDataCreater asyncCreateAllDefaultDataWithSuccess:NULL failure:NULL];
-        [weakSelf.tableView reloadData];
-        [SSJAnaliyticsManager loginOut];
-        [weakSelf.navigationController popViewControllerAnimated:YES];
+        [SSJUserTableManager reloadUserIdWithSuccess:^{
+            [weakSelf.tableView reloadData];
+            [SSJAnaliyticsManager loginOut];
+            [weakSelf.navigationController popViewControllerAnimated:YES];
+            [SSJUserDefaultDataCreater asyncCreateAllDefaultDataWithSuccess:NULL failure:NULL];
+        } failure:^(NSError * _Nonnull error) {
+            [SSJAlertViewAdapter showError:error];
+        }];
     }], nil];
 }
 
