@@ -31,7 +31,7 @@ static const CGFloat kVerticalGap = 10;
         _titleLab = [[UILabel alloc] init];
         _titleLab.numberOfLines = 0;
         
-        _titleLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2);
+        _titleLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
         _titleLab.textAlignment = NSTextAlignmentCenter;
         _titleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         [self addSubview:_titleLab];

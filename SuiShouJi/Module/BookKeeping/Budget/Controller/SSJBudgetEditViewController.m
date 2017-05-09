@@ -543,7 +543,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         [self updateRemindMoneyWithCell:budgetScaleCell];
         
         UILabel *percentLab = [[UILabel alloc] init];
-        percentLab.font = SSJ_Helvetica_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2);
+        percentLab.font = [UIFont ssj_helveticaRegularFontOfSize:SSJ_FONT_SIZE_2];
         percentLab.text = @"％";
         percentLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         [percentLab sizeToFit];
@@ -815,7 +815,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         _saveBtn.frame = CGRectMake(22, 22, self.view.width - 44, 44);
         _saveBtn.layer.cornerRadius = 3;
         _saveBtn.clipsToBounds = YES;
-        _saveBtn.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_1);
+        _saveBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_1];
         [self.saveBtn setTitle:@"保存" forState:UIControlStateNormal];
         [_saveBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_saveBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];

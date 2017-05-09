@@ -51,7 +51,7 @@
 - (UILabel *)nameLab {
     if (!_nameLab) {
         _nameLab = [[UILabel alloc] init];
-        _nameLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        _nameLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         _nameLab.textColor = [UIColor whiteColor];
     }
     return _nameLab;
@@ -60,7 +60,7 @@
 - (UILabel *)balanceLab {
     if (!_balanceLab) {
         _balanceLab = [[UILabel alloc] init];
-        _balanceLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        _balanceLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         _balanceLab.textColor = [UIColor whiteColor];
     }
     return _balanceLab;

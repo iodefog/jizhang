@@ -57,7 +57,7 @@
 - (UILabel *)phoneNoLabel {
     if (!_phoneNoLabel) {
         _phoneNoLabel = [[UILabel alloc] init];
-        _phoneNoLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_7);
+        _phoneNoLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_7];
         _phoneNoLabel.textColor = self.orderType == SSJRegistOrderTypeInputPhoneNo ? SSJ_HIGHLIGHTED_COLOR : SSJ_NORMAL_COLOR;
         _phoneNoLabel.text = @"1 输入手机号码";
         [_phoneNoLabel sizeToFit];
@@ -68,7 +68,7 @@
 - (UILabel *)authCodeLabel {
     if (!_authCodeLabel) {
         _authCodeLabel = [[UILabel alloc] init];
-        _authCodeLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_7);
+        _authCodeLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_7];
         _authCodeLabel.textColor = self.orderType == SSJRegistOrderTypeInputAuthCode ? SSJ_HIGHLIGHTED_COLOR : SSJ_NORMAL_COLOR;
         _authCodeLabel.text = @"2 输入验证码";
         [_authCodeLabel sizeToFit];
@@ -79,7 +79,7 @@
 - (UILabel *)passwordLabel {
     if (!_passwordLabel) {
         _passwordLabel = [[UILabel alloc] init];
-        _passwordLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_7);
+        _passwordLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_7];
         _passwordLabel.textColor = self.orderType == SSJRegistOrderTypeSetPassword ? SSJ_HIGHLIGHTED_COLOR : SSJ_NORMAL_COLOR;
         _passwordLabel.text = @"3 设置密码";
         [_passwordLabel sizeToFit];
@@ -104,7 +104,7 @@
 }
 
 - (void)setGreaterLabel:(UILabel *)label {
-    label.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_7);
+    label.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_7];
     label.textColor = SSJ_NORMAL_COLOR;
     label.text = @">";
     label.textAlignment = NSTextAlignmentCenter;

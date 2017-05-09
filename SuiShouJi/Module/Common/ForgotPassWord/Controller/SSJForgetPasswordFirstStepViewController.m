@@ -392,9 +392,9 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         _phoneNoField.textColor = [UIColor ssj_colorWithHex:@"333333"];
         _phoneNoField.clearButtonMode = UITextFieldViewModeWhileEditing;
         _phoneNoField.placeholder = @"请输入手机号";
-        _phoneNoField.font = SSJ_Helvetica_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        _phoneNoField.font = [UIFont ssj_helveticaRegularFontOfSize:SSJ_FONT_SIZE_3];
         [_phoneNoField setValue:[UIColor ssj_colorWithHex:@"999999"] forKeyPath:@"_placeholderLabel.textColor"];
-        [_phoneNoField setValue:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4) forKeyPath:@"_placeholderLabel.font"];
+        [_phoneNoField setValue:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4] forKeyPath:@"_placeholderLabel.font"];
         [_phoneNoField ssj_setBorderStyle:SSJBorderStyleBottom];
         [_phoneNoField ssj_setBorderWidth:1];
         [_phoneNoField ssj_setBorderColor:[UIColor ssj_colorWithHex:@"cccccc"]];
@@ -416,12 +416,12 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         _authCodeField.clearButtonMode = UITextFieldViewModeWhileEditing;
         _authCodeField.placeholder = @"请输入验证码";
         [_authCodeField setValue:[UIColor ssj_colorWithHex:@"999999"] forKeyPath:@"_placeholderLabel.textColor"];
-        _authCodeField.font = SSJ_Helvetica_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
-        [_authCodeField setValue:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4) forKeyPath:@"_placeholderLabel.font"];
+        _authCodeField.font = [UIFont ssj_helveticaRegularFontOfSize:SSJ_FONT_SIZE_3];
+        [_authCodeField setValue:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4] forKeyPath:@"_placeholderLabel.font"];
         [_authCodeField ssj_setBorderColor:[UIColor ssj_colorWithHex:@"cccccc"]];
         [_authCodeField ssj_setBorderStyle:SSJBorderStyleBottom | SSJBorderStyleTop];
         [_authCodeField ssj_setBorderWidth:1];
-        _authCodeField.font = SSJ_Helvetica_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        _authCodeField.font = [UIFont ssj_helveticaRegularFontOfSize:SSJ_FONT_SIZE_3];
         _authCodeField.keyboardType = UIKeyboardTypeNumberPad;
         _authCodeField.delegate = self;
         _authCodeField.leftView = leftView;
@@ -447,9 +447,9 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         _passwordField.textColor = [UIColor ssj_colorWithHex:@"333333"];
         _passwordField.clearButtonMode = UITextFieldViewModeWhileEditing;
         _passwordField.placeholder = @"请输入账户密码";
-        _passwordField.font = SSJ_Helvetica_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        _passwordField.font = [UIFont ssj_helveticaRegularFontOfSize:SSJ_FONT_SIZE_3];
         [_passwordField setValue:[UIColor ssj_colorWithHex:@"999999"] forKeyPath:@"_placeholderLabel.textColor"];
-        [_passwordField setValue:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4) forKeyPath:@"_placeholderLabel.font"];
+        [_passwordField setValue:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4] forKeyPath:@"_placeholderLabel.font"];
         
         _passwordField.keyboardType = UIKeyboardTypeASCIICapable;
         _passwordField.delegate = self;
@@ -468,7 +468,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     if (!_getAuthCodeBtn) {
         _getAuthCodeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _getAuthCodeBtn.size = CGSizeMake(80, 30);
-        _getAuthCodeBtn.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
+        _getAuthCodeBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
         [_getAuthCodeBtn setTitle:@"获取验证码" forState:UIControlStateNormal];
         
         [_getAuthCodeBtn setTitleColor:[UIColor ssj_colorWithHex:@"ea4a64"] forState:UIControlStateNormal];
@@ -544,7 +544,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     if (!_forgetPassWordLabel) {
         _forgetPassWordLabel = [[UILabel alloc]init];
         _forgetPassWordLabel.text = @"忘记密码";
-        _forgetPassWordLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_7);
+        _forgetPassWordLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_7];
         [_forgetPassWordLabel sizeToFit];
         _forgetPassWordLabel.textColor = [UIColor ssj_colorWithHex:@"eb4a64"];
     }
@@ -563,7 +563,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 - (UIButton *)setPasswordButton {
     if (!_setPasswordButton) {
         _setPasswordButton = [[UIButton alloc] init];
-        _setPasswordButton.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_1);
+        _setPasswordButton.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_1];
         [_setPasswordButton setTitle:@"确定" forState:UIControlStateNormal];
         [_setPasswordButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_setPasswordButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"f9cbd0"] forState:UIControlStateDisabled];

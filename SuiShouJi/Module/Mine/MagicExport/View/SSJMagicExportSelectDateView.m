@@ -107,7 +107,7 @@
         _titleLab = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 164, 0)];
         _titleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _titleLab.numberOfLines = 0;
-        _titleLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(14);
+        _titleLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_7];
     }
     return _titleLab;
 }
@@ -115,7 +115,7 @@
 - (UILabel *)beginDateTitleLab {
     if (!_beginDateTitleLab) {
         _beginDateTitleLab = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 164, 0)];
-        _beginDateTitleLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_5);
+        _beginDateTitleLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_5];
         _beginDateTitleLab.text = @"起始";
         _beginDateTitleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         [_beginDateTitleLab sizeToFit];
@@ -126,7 +126,7 @@
 - (UILabel *)endDateTitleLab {
     if (!_endDateTitleLab) {
         _endDateTitleLab = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 164, 0)];
-        _endDateTitleLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_5);
+        _endDateTitleLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_5];
         _endDateTitleLab.text = @"结束";
         _endDateTitleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         [_endDateTitleLab sizeToFit];
@@ -137,7 +137,7 @@
 - (UILabel *)beginDateLab {
     if (!_beginDateLab) {
         _beginDateLab = [[UILabel alloc] init];
-        _beginDateLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2);
+        _beginDateLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
         _beginDateLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _beginDateLab.text = @"--年--月--日";
     }
@@ -147,7 +147,7 @@
 - (UILabel *)endDateLab {
     if (!_endDateLab) {
         _endDateLab = [[UILabel alloc] init];
-        _endDateLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2);
+        _endDateLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
         _endDateLab.text = @"--年--月--日";
         _endDateLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     }

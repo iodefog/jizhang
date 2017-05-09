@@ -61,7 +61,7 @@
 -(UILabel *)remindLabel{
     if (!_remindLabel) {
         _remindLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 250, MAXFLOAT)];
-        _remindLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        _remindLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         _remindLabel.textColor = [UIColor whiteColor];
         _remindLabel.numberOfLines = 0;
         _remindLabel.textAlignment = NSTextAlignmentLeft;

@@ -48,7 +48,7 @@
     if (!_cellTextLab) {
         _cellTextLab = [[UITextField alloc]init];
         _cellTextLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        _cellTextLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        _cellTextLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         _cellTextLab.textAlignment = NSTextAlignmentLeft;
     }
     return _cellTextLab;
@@ -58,7 +58,7 @@
     if (!_typeLabel) {
         _typeLabel = [[UILabel alloc]init];
         _typeLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        _typeLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        _typeLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
     }
     return _typeLabel;
 }

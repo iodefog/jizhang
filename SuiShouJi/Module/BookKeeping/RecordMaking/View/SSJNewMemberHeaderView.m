@@ -42,9 +42,9 @@
 -(UITextField *)nameInput{
     if (!_nameInput) {
         _nameInput = [[UITextField alloc]initWithFrame:CGRectMake(0, 0, 200, 30)];
-        _nameInput.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2);
+        _nameInput.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
         _nameInput.textAlignment = NSTextAlignmentLeft;
-        _nameInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入成员名称" attributes:@{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2),NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+        _nameInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入成员名称" attributes:@{NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2],NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         _nameInput.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     }
     return _nameInput;
@@ -55,7 +55,7 @@
         _nameLab = [[UILabel alloc]init];
         _nameLab.textColor = [UIColor whiteColor];
         _nameLab.textAlignment = NSTextAlignmentCenter;
-        _nameLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_8);
+        _nameLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_8];
     }
     return _nameLab;
 }

@@ -73,7 +73,7 @@
     if (!_remindLab) {
         _remindLab = [[UILabel alloc] init];
         _remindLab.backgroundColor = [UIColor clearColor];
-        _remindLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
+        _remindLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
         _remindLab.textAlignment = NSTextAlignmentCenter;
         _remindLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _remindLab.text = @"提交成功，请至您的邮箱查看";

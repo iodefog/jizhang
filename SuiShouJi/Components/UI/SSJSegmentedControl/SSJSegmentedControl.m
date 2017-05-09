@@ -22,7 +22,7 @@
     }
     
     if (self = [super initWithFrame:CGRectZero]) {
-        self.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
+        self.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
         self.tintColor = [UIColor ssj_colorWithHex:@"#cccccc"];
         self.buttons = [NSMutableArray arrayWithCapacity:items.count];
         

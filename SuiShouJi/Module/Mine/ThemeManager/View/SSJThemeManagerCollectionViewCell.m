@@ -69,7 +69,7 @@
 -(UILabel *)themeTitleLabel{
     if (!_themeTitleLabel) {
         _themeTitleLabel = [[UILabel alloc]init];
-        _themeTitleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        _themeTitleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         _themeTitleLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
     }
     return _themeTitleLabel;
@@ -78,7 +78,7 @@
 -(UILabel *)themeSizeLabel{
     if (!_themeSizeLabel) {
         _themeSizeLabel = [[UILabel alloc]init];
-        _themeSizeLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
+        _themeSizeLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
         _themeSizeLabel.textColor = [UIColor ssj_colorWithHex:@"929292"];
     }
     return _themeSizeLabel;

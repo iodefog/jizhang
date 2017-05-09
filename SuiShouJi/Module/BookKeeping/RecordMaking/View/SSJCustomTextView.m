@@ -20,7 +20,7 @@
     if(self) {
         self.backgroundColor= [UIColor clearColor];
         self.placeholderColor= [UIColor ssj_colorWithHex:@"cccccc"];
-        self.font= SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        self.font= [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange) name:UITextViewTextDidChangeNotification object:self]; //通知:监听文字的改变
     }
     return self;
@@ -65,7 +65,7 @@
     if (!_placeholderLabel) {
         _placeholderLabel = [[UILabel alloc]init];
         _placeholderLabel.backgroundColor= [UIColor clearColor];
-        _placeholderLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        _placeholderLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         _placeholderLabel.numberOfLines=0;
         [self addSubview:_placeholderLabel];
     }

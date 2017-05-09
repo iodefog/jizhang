@@ -68,7 +68,7 @@
     if (!_expenditureTitleLabel) {
         _expenditureTitleLabel = [[UILabel alloc]init];
         _expenditureTitleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-        _expenditureTitleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_5);
+        _expenditureTitleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_5];
     }
     return _expenditureTitleLabel;
 }
@@ -77,7 +77,7 @@
     if (!_incomeTitleLabel) {
         _incomeTitleLabel = [[UILabel alloc]init];
         _incomeTitleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-        _incomeTitleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_5);
+        _incomeTitleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_5];
     }
     return _incomeTitleLabel;
 }
@@ -100,7 +100,7 @@
 
 -(void)setIncome:(NSString *)income{
     _income = income;
-    CGSize incomeSize = [_income sizeWithAttributes:@{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_1)}];
+    CGSize incomeSize = [_income sizeWithAttributes:@{NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_1]}];
     if (incomeSize.width > self.width / 2 - self.buttonWidth / 3) {
         [self.incomeView ajustFontWithSize:CGSizeMake(self.width / 2 - self.buttonWidth / 3 - 10, incomeSize.height)];
         self.incomeView.string = _income;
@@ -113,7 +113,7 @@
 
 -(void)setExpenditure:(NSString *)expenditure{
     _expenditure = expenditure;
-    CGSize expenditureSize = [_expenditure sizeWithAttributes:@{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_1)}];
+    CGSize expenditureSize = [_expenditure sizeWithAttributes:@{NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_1]}];
     if (expenditureSize.width > self.width / 2 - self.buttonWidth / 3) {
         [self.expenditureView ajustFontWithSize:CGSizeMake(self.width / 2 - self.buttonWidth / 3 - 10, expenditureSize.height)];
         self.expenditureView.string = _expenditure;
