@@ -449,7 +449,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
         circleItem.imageName = item.imageName;
         circleItem.colorValue = item.colorValue;
         circleItem.additionalText = [NSString stringWithFormat:@"%.0f％", item.scale * 100];
-        circleItem.additionalFont = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_5);
+        circleItem.additionalFont = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_5];
         circleItem.imageBorderShowed = YES;
         if (item.isMember) {
             circleItem.customView = [self chartAdditionalViewWithMemberName:item.name colorValue:item.colorValue];
@@ -561,7 +561,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
     lab.text = name.length >= 1 ? [name substringToIndex:1] : @"";
     lab.textColor = [UIColor ssj_colorWithHex:colorValue];
     lab.textAlignment = NSTextAlignmentCenter;
-    lab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+    lab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
     
     return lab;
 }

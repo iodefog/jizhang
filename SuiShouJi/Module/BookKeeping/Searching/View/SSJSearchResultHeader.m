@@ -49,7 +49,7 @@
     if (!_dateLabel) {
         _dateLabel = [[UILabel alloc]init];
         _dateLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-        _dateLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_5);
+        _dateLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_5];
     }
     return _dateLabel;
 }
@@ -57,7 +57,7 @@
 -(UILabel *)moneyLabel{
     if (!_moneyLabel) {
         _moneyLabel = [[UILabel alloc]init];
-        _moneyLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_5);
+        _moneyLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_5];
     }
     return _moneyLabel;
 }

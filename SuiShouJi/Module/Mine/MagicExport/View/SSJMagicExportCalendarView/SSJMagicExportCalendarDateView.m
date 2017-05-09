@@ -117,7 +117,7 @@
         _dateLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 35, 35)];
         _dateLabel.layer.cornerRadius = _dateLabel.width * 0.5;
         _dateLabel.backgroundColor = [UIColor clearColor];
-        _dateLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
+        _dateLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
         _dateLabel.textAlignment = NSTextAlignmentCenter;
     }
     return _dateLabel;
@@ -127,7 +127,7 @@
     if (!_descLabel) {
         _descLabel = [[UILabel alloc] init];
         _descLabel.backgroundColor = [UIColor clearColor];
-        _descLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
+        _descLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
         _descLabel.textAlignment = NSTextAlignmentCenter;
     }
     return _descLabel;

@@ -139,7 +139,7 @@
 - (UITextField *)textField {
     if (!_textField) {
         _textField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, self.width, 63)];
-        _textField.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        _textField.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         _textField.delegate = self;
         [_textField ssj_setBorderWidth:1];
         [_textField ssj_setBorderStyle:(SSJBorderStyleTop | SSJBorderStyleBottom)];

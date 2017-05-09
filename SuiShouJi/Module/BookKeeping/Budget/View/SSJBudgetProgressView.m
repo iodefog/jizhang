@@ -30,12 +30,12 @@
         [self addSubview:_progressView];
         
         _surplusLab = [[UILabel alloc] init];
-        _surplusLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
+        _surplusLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
         _surplusLab.textColor = [UIColor ssj_colorWithHex:@"#FFFFFF"];
         [self addSubview:_surplusLab];
         
         _surplusValueLab = [[UICountingLabel alloc] init];
-        _surplusValueLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
+        _surplusValueLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
         _surplusValueLab.textColor = [UIColor ssj_colorWithHex:@"#FFFFFF"];
         _surplusValueLab.format = @"%.2f";
         _surplusValueLab.method = UILabelCountingMethodEaseOut;

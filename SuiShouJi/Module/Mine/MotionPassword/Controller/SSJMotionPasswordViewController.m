@@ -346,39 +346,43 @@ static const int kVerifyFailureTimesLimit = 5;
         _userItem.motionPWD = @"";
         [SSJUserTableManager saveUserItem:_userItem];
         
-        UIViewController *previousVC = [self ssj_previousViewController];
-        if ([previousVC isKindOfClass:[SSJLoginViewController class]]) {
-            SSJLoginViewController *loginVC = (SSJLoginViewController *)previousVC;
-            loginVC.mobileNo = _userItem.mobileNo;
-            [self.navigationController popViewControllerAnimated:YES];
-        } else {
-            SSJLoginViewController *loginVC = [[SSJLoginViewController alloc] init];
-            loginVC.mobileNo = _userItem.mobileNo;
-            loginVC.finishHandle = self.finishHandle;
-            loginVC.cancelHandle = self.finishHandle;
-            loginVC.backController = self.backController;
-            [self.navigationController setViewControllers:@[loginVC] animated:YES];
-        }
-        
         SSJClearLoginInfo();
-        [SSJUserTableManager reloadUserIdWithError:nil];
+        [SSJUserTableManager reloadUserIdWithSuccess:^{
+            UIViewController *previousVC = [self ssj_previousViewController];
+            if ([previousVC isKindOfClass:[SSJLoginViewController class]]) {
+                SSJLoginViewController *loginVC = (SSJLoginViewController *)previousVC;
+                loginVC.mobileNo = _userItem.mobileNo;
+                [self.navigationController popViewControllerAnimated:YES];
+            } else {
+                SSJLoginViewController *loginVC = [[SSJLoginViewController alloc] init];
+                loginVC.mobileNo = _userItem.mobileNo;
+                loginVC.finishHandle = self.finishHandle;
+                loginVC.cancelHandle = self.finishHandle;
+                loginVC.backController = self.backController;
+                [self.navigationController setViewControllers:@[loginVC] animated:YES];
+            }
+        } failure:^(NSError * _Nonnull error) {
+            [SSJAlertViewAdapter showError:error];
+        }];
     }
 }
 
 //  切换账号
 - (void)changeAccountAction {
-    if ([[self ssj_previousViewController] isKindOfClass:[SSJLoginViewController class]]) {
-        [self.navigationController popViewControllerAnimated:YES];
-    } else {
-        SSJLoginViewController *loginVC = [[SSJLoginViewController alloc] init];
-        loginVC.finishHandle = self.finishHandle;
-        loginVC.cancelHandle = self.finishHandle;
-        loginVC.backController = self.backController;
-        [self.navigationController setViewControllers:@[loginVC] animated:YES];
-    }
-    
     SSJClearLoginInfo();
-    [SSJUserTableManager reloadUserIdWithError:nil];
+    [SSJUserTableManager reloadUserIdWithSuccess:^{
+        if ([[self ssj_previousViewController] isKindOfClass:[SSJLoginViewController class]]) {
+            [self.navigationController popViewControllerAnimated:YES];
+        } else {
+            SSJLoginViewController *loginVC = [[SSJLoginViewController alloc] init];
+            loginVC.finishHandle = self.finishHandle;
+            loginVC.cancelHandle = self.finishHandle;
+            loginVC.backController = self.backController;
+            [self.navigationController setViewControllers:@[loginVC] animated:YES];
+        }
+    } failure:^(NSError * _Nonnull error) {
+        [SSJAlertViewAdapter showError:error];
+    }];
 }
 
 //  验证touchID
@@ -462,7 +466,7 @@ static const int kVerifyFailureTimesLimit = 5;
         _remindLab = [[UILabel alloc] initWithFrame:CGRectMake(0, self.view.height * 0.338, self.view.width, 20)];
         _remindLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.motionPasswordNormalColor];
         _remindLab.textAlignment = NSTextAlignmentCenter;
-        _remindLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2);
+        _remindLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
     }
     return _remindLab;
 }
@@ -470,7 +474,7 @@ static const int kVerifyFailureTimesLimit = 5;
 - (UIButton *)verifyLoginPwdBtn {
     if (!_verifyLoginPwdBtn) {
         _verifyLoginPwdBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        _verifyLoginPwdBtn.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_7);
+        _verifyLoginPwdBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_7];
         [_verifyLoginPwdBtn setTitle:@"忘记手势？可验证登录密码" forState:UIControlStateNormal];
         if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
             [_verifyLoginPwdBtn setTitleColor:[[UIColor ssj_colorWithHex:@"#eb4a64"] colorWithAlphaComponent:0.6] forState:UIControlStateNormal];
@@ -488,7 +492,7 @@ static const int kVerifyFailureTimesLimit = 5;
 - (UIButton *)forgetPwdBtn {
     if (!_forgetPwdBtn) {
         _forgetPwdBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        _forgetPwdBtn.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_7);
+        _forgetPwdBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_7];
         [_forgetPwdBtn setTitle:@"忘记手势密码" forState:UIControlStateNormal];
         if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
             [_forgetPwdBtn setTitleColor:[[UIColor ssj_colorWithHex:@"#eb4a64"] colorWithAlphaComponent:0.6] forState:UIControlStateNormal];
@@ -506,7 +510,7 @@ static const int kVerifyFailureTimesLimit = 5;
 - (UIButton *)changeAccountBtn {
     if (!_changeAccountBtn) {
         _changeAccountBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        _changeAccountBtn.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_7);
+        _changeAccountBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_7];
         [_changeAccountBtn setTitle:@"使用其它账号登录" forState:UIControlStateNormal];
         if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
             [_changeAccountBtn setTitleColor:[[UIColor ssj_colorWithHex:@"#eb4a64"] colorWithAlphaComponent:0.6] forState:UIControlStateNormal];

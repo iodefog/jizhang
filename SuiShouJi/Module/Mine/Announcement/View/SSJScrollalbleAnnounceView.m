@@ -56,7 +56,7 @@
     self.headLab.left = 10;
     self.headLab.centerY = self.height / 2;
     SSJAnnoucementItem *currentItem = [self.items objectAtIndex:self.currentIndex];
-    CGSize textLayerSize = [currentItem.announcementTitle sizeWithAttributes:@{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4)}];
+    CGSize textLayerSize = [currentItem.announcementTitle sizeWithAttributes:@{NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4]}];
     self.announceTextLayer.size = CGSizeMake(self.width - self.headLab.right - 20 ,textLayerSize.height);
 //    self.announceTextLayer.position = CGPointMake(self.headLab.right + 20 + self.announceTextLayer.width, self.height / 2);
     self.announceTextLayer.left = self.headLab.right + 20;
@@ -79,7 +79,7 @@
 - (UILabel *)headLab{
     if (!_headLab) {
         _headLab = [[UILabel alloc] init];
-        _headLab.font = SSJ_PingFang_MEDIUM_FONT_SIZE(SSJ_FONT_SIZE_4);
+        _headLab.font = [UIFont ssj_pingFangMediumFontOfSize:SSJ_FONT_SIZE_4];
         _headLab.text = @"有鱼头条";
         _headLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         [_headLab sizeToFit];
@@ -112,24 +112,24 @@
     if ([_items firstObject].announcementType == SSJAnnouceMentTypeNew) {
         announcementStr = [NSString stringWithFormat:@"【new】%@",announcementStr];
         attributeStr = [[NSMutableAttributedString alloc] initWithString:announcementStr];
-        [attributeStr addAttribute:NSFontAttributeName value:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4) range:NSMakeRange(0, attributeStr.length)];
+        [attributeStr addAttribute:NSFontAttributeName value:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4] range:NSMakeRange(0, attributeStr.length)];
         [attributeStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] range:[announcementStr rangeOfString:@"【new】"]];
         [attributeStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:[announcementStr rangeOfString:[items firstObject].announcementTitle]];
 
     } else if([_items firstObject].announcementType == SSJAnnouceMentTypeHot) {
         announcementStr = [NSString stringWithFormat:@"【hot】%@",announcementStr];
         attributeStr = [[NSMutableAttributedString alloc] initWithString:announcementStr];
-        [attributeStr addAttribute:NSFontAttributeName value:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4) range:NSMakeRange(0, attributeStr.length)];
+        [attributeStr addAttribute:NSFontAttributeName value:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4] range:NSMakeRange(0, attributeStr.length)];
         [attributeStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] range:[announcementStr rangeOfString:@"【hot】"]];
         [attributeStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:[announcementStr rangeOfString:[items firstObject].announcementTitle]];
     } else {
         announcementStr = [NSString stringWithFormat:@"%@",announcementStr];
         attributeStr = [[NSMutableAttributedString alloc] initWithString:announcementStr];
-        [attributeStr addAttribute:NSFontAttributeName value:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4) range:NSMakeRange(0, attributeStr.length)];
+        [attributeStr addAttribute:NSFontAttributeName value:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4] range:NSMakeRange(0, attributeStr.length)];
         [attributeStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:[announcementStr rangeOfString:[items firstObject].announcementTitle]];
     }
     self.announceTextLayer.string = attributeStr;
-    CGSize textLayerSize = [announcementStr sizeWithAttributes:@{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4)}];
+    CGSize textLayerSize = [announcementStr sizeWithAttributes:@{NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4]}];
     self.announceTextLayer.size = CGSizeMake(self.width - self.headLab.right - 20 ,textLayerSize.height);
     [self setNeedsLayout];
     [self.timer fire];
@@ -146,20 +146,20 @@
     if (currentItem.announcementType == SSJAnnouceMentTypeNew) {
         announcementStr = [NSString stringWithFormat:@"【new】%@",announcementStr];
         attributeStr = [[NSMutableAttributedString alloc] initWithString:announcementStr];
-        [attributeStr addAttribute:NSFontAttributeName value:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4) range:NSMakeRange(0, attributeStr.length)];
+        [attributeStr addAttribute:NSFontAttributeName value:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4] range:NSMakeRange(0, attributeStr.length)];
         [attributeStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] range:[announcementStr rangeOfString:@"【new】"]];
         [attributeStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:[announcementStr rangeOfString:currentItem.announcementTitle]];
         
     } else if([_items firstObject].announcementType == SSJAnnouceMentTypeHot) {
         announcementStr = [NSString stringWithFormat:@"【hot】%@",announcementStr];
         attributeStr = [[NSMutableAttributedString alloc] initWithString:announcementStr];
-        [attributeStr addAttribute:NSFontAttributeName value:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4) range:NSMakeRange(0, attributeStr.length)];
+        [attributeStr addAttribute:NSFontAttributeName value:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4] range:NSMakeRange(0, attributeStr.length)];
         [attributeStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] range:[announcementStr rangeOfString:@"【hot】"]];
         [attributeStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:[announcementStr rangeOfString:currentItem.announcementTitle]];
     } else {
         announcementStr = [NSString stringWithFormat:@"%@",announcementStr];
         attributeStr = [[NSMutableAttributedString alloc] initWithString:announcementStr];
-        [attributeStr addAttribute:NSFontAttributeName value:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4) range:NSMakeRange(0, attributeStr.length)];
+        [attributeStr addAttribute:NSFontAttributeName value:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4] range:NSMakeRange(0, attributeStr.length)];
         [attributeStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:[announcementStr rangeOfString:currentItem.announcementTitle]];
     }
     self.announceTextLayer.string = attributeStr;
@@ -175,18 +175,18 @@
         if (currentItem.announcementType == SSJAnnouceMentTypeNew) {
             announcementStr = [NSString stringWithFormat:@"【new】%@",announcementStr];
             attributeStr = [[NSMutableAttributedString alloc] initWithString:announcementStr];
-            [attributeStr addAttribute:NSFontAttributeName value:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4) range:NSMakeRange(0, attributeStr.length)];
+            [attributeStr addAttribute:NSFontAttributeName value:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4] range:NSMakeRange(0, attributeStr.length)];
             [attributeStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] range:[announcementStr rangeOfString:@"【new】"]];
             [attributeStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:[announcementStr rangeOfString:currentItem.announcementTitle]];
             
         } else if([_items firstObject].announcementType == SSJAnnouceMentTypeNew) {
             announcementStr = [NSString stringWithFormat:@"【hot】%@",announcementStr];
-            [attributeStr addAttribute:NSFontAttributeName value:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4) range:NSMakeRange(0, attributeStr.length)];
+            [attributeStr addAttribute:NSFontAttributeName value:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4] range:NSMakeRange(0, attributeStr.length)];
             [attributeStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] range:[announcementStr rangeOfString:@"【hot】"]];
             [attributeStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:[announcementStr rangeOfString:currentItem.announcementTitle]];
         } else {
             announcementStr = [NSString stringWithFormat:@"%@",announcementStr];
-            [attributeStr addAttribute:NSFontAttributeName value:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4) range:NSMakeRange(0, attributeStr.length)];
+            [attributeStr addAttribute:NSFontAttributeName value:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4] range:NSMakeRange(0, attributeStr.length)];
             [attributeStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:[announcementStr rangeOfString:currentItem.announcementTitle]];
         }
         self.announceTextLayer.string = attributeStr;

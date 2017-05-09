@@ -53,7 +53,7 @@
         _descLab.numberOfLines = 0;
         _descLab.text = @"关注公众号，了解有鱼记账最新资讯动态，学习记账理财知识，轻松理出“鱼”钱~";
         _descLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        _descLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        _descLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
     }
     return _descLab;
 }
@@ -63,7 +63,7 @@
         _iconDesLab = [[UILabel alloc]init];
         _iconDesLab.text = @"有鱼记账本";
         _iconDesLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-        _iconDesLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
+        _iconDesLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
         [_iconDesLab sizeToFit];                                                                                                                                                                                                                                               
     }
     return _iconDesLab;

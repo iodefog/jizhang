@@ -68,7 +68,7 @@
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
     if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
         [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
-        self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2),
+        self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2],
                                                                         NSForegroundColorAttributeName:[UIColor whiteColor]};
         self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     }
@@ -187,7 +187,7 @@
 - (SSJBaselineTextField *)tfPhoneNum {
     if (!_tfPhoneNum) {
         _tfPhoneNum = [[SSJBaselineTextField alloc] initWithFrame:CGRectMake(25, 83, self.view.width - 50, 50) contentHeight:34];
-        _tfPhoneNum.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        _tfPhoneNum.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         _tfPhoneNum.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor];
         _tfPhoneNum.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入您的手机号" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginSecondaryColor]}];
         _tfPhoneNum.delegate = self;
@@ -230,7 +230,7 @@
 - (UIButton *)protocolButton {
     if (!_protocolButton) {
         _protocolButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        _protocolButton.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
+        _protocolButton.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
         [_protocolButton setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
         [_protocolButton setTitle:@"我已阅读并同意用户协定" forState:UIControlStateNormal];
         [_protocolButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginSecondaryColor] forState:UIControlStateNormal];

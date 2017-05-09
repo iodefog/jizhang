@@ -19,4 +19,10 @@ CGFloat SSJCompatibleFontSize(CGFloat fontSize);
 //  根据屏幕宽度比例返回响应的粗体
 + (UIFont *)ssj_compatibleBoldSystemFontOfSize:(CGFloat)fontSize;
 
++ (UIFont *)ssj_pingFangRegularFontOfSize:(CGFloat)fontSize;
+
++ (UIFont *)ssj_pingFangMediumFontOfSize:(CGFloat)fontSize;
+
++ (UIFont *)ssj_helveticaRegularFontOfSize:(CGFloat)fontSize;
+
 @end

@@ -134,7 +134,7 @@
     if (!_categoryName) {
         _categoryName = [[UILabel alloc]init];
         [_categoryName sizeToFit];
-        _categoryName.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_7);
+        _categoryName.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_7];
         _categoryName.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _categoryName.textAlignment = NSTextAlignmentCenter;
     }

@@ -40,7 +40,7 @@
 - (UILabel *)label{
     if (_label==nil) {
         _label=[[UILabel alloc]initWithFrame:CGRectMake(10, 0, self.width-20, 30)];
-        _label.font=SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
+        _label.font=[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
         _label.textAlignment=NSTextAlignmentCenter;
         _label.text=@"点击加载更多";
         _label.textColor=[UIColor ssj_colorWithHex:@"#e0e0e0"];

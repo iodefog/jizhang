@@ -23,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @param error 错误对象，如果不为nil，则查询过程发生错误
  */
-+ (void)reloadUserIdWithError:(NSError **)error;
++ (void)reloadUserIdWithSuccess:(void (^)())success failure:(void (^)(NSError *error))failure;
 
 /**
  *  从用户表中查询未注册的用户编号，如果没有则返回nil

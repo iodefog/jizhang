@@ -32,7 +32,7 @@
         
         for (int i = 0; i < titles.count; i ++) {
             UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-            btn.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+            btn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
             [btn setTitle:titles[i] forState:UIControlStateNormal];
             [btn addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
             [self addSubview:btn];

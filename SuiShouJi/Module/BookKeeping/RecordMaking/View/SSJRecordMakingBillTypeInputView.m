@@ -67,7 +67,7 @@
 - (UILabel *)billTypeNameLab {
     if (!_billTypeNameLab) {
         _billTypeNameLab = [[UILabel alloc] init];
-        _billTypeNameLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_1);
+        _billTypeNameLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_1];
         _billTypeNameLab.textColor = [UIColor whiteColor];
     }
     return _billTypeNameLab;
@@ -80,7 +80,7 @@
         _moneyInput.inputView = [SSJCustomKeyboard sharedInstance];
 //        _moneyInput.keyboardType = UIKeyboardTypeURL;
         _moneyInput.textColor = [UIColor whiteColor];
-        _moneyInput.font = SSJ_PingFang_REGULAR_FONT_SIZE(30);
+        _moneyInput.font = [UIFont ssj_pingFangRegularFontOfSize:30];
         _moneyInput.textAlignment = NSTextAlignmentRight;
         _moneyInput.placeholder = @"0.00";
         _moneyInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"0.00" attributes:@{NSForegroundColorAttributeName:[UIColor colorWithRed:1 green:1 blue:1 alpha:0.5]}];

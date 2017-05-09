@@ -149,7 +149,7 @@ static NSString *const kTextColorAnimationKey = @"kTextColorAnimationKey";
     if (!_label) {
         _label = [[SSJRecordMakingBillTypeSelectionCellLabel alloc] init];
         _label.backgroundColor = [UIColor clearColor];
-        _label.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
+        _label.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
         _label.textAlignment = NSTextAlignmentCenter;
     }
     return _label;
