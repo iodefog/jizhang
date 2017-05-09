@@ -211,7 +211,9 @@ static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
         SSJThemeItem *itemCustom = [[SSJThemeItem alloc]init];
         itemCustom.themeId = @"-1";
         itemCustom.themeTitle = @"自定义背景";
-        [tempArr insertObject:itemCustom atIndex:0];
+        if (![tempArr containsObject:itemCustom]) {
+            [tempArr insertObject:itemCustom atIndex:0];
+        }
     }
     [self getThemeStatusForThemes:tempArr];
 }
@@ -223,6 +225,7 @@ static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
     }else{
         [self getThemeFromLocal];
     };
+    
 }
 
 -(void)getThemeStatusForThemes:(NSArray *)themes{

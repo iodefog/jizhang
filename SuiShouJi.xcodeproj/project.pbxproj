@@ -12,6 +12,7 @@
 		43FB013EC6CC98DC90F5D913 /* libPods-YouYuJiZhangPro.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DC160CBD947F86ED6CD7DD86 /* libPods-YouYuJiZhangPro.a */; };
 		72BB5896AF4A38FC4F8B3B48 /* libPods-YouYuJiZhangBen.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD18AB4DEF381D69AB77158 /* libPods-YouYuJiZhangBen.a */; };
 		77DF96B1D75AEF70D1506706 /* libPods-BeiKeJiZhang.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D1CEF5E96BF59F42EAD3BC3 /* libPods-BeiKeJiZhang.a */; };
+		7A0F545325C98140D90A42EE /* libPods-9188JiZhangBao.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C5771E8CE795420339FE5806 /* libPods-9188JiZhangBao.a */; };
 		7D00D8051DFA9CC00007A8FB /* SSJReportFormsChartCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D00D8041DFA9CC00007A8FB /* SSJReportFormsChartCell.m */; };
 		7D00D8081DFA9CC00007A8FB /* SSJReportFormsChartCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D00D8041DFA9CC00007A8FB /* SSJReportFormsChartCell.m */; };
 		7D00D80C1DFAA3D30007A8FB /* SSJReportFormsChartCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D00D80B1DFAA3D30007A8FB /* SSJReportFormsChartCellItem.m */; };
@@ -8994,6 +8995,11 @@
 		9C2ABB8C1CF7E969002FC79E /* SSJGradientMaskView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJGradientMaskView.m; sourceTree = "<group>"; };
 		9C2B19211D3E185200B987EE /* SSJAdWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJAdWebViewController.h; sourceTree = "<group>"; };
 		9C2B19221D3E185200B987EE /* SSJAdWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJAdWebViewController.m; sourceTree = "<group>"; };
+		9C2D0E151EC0226A003E9111 /* YouYuJiZhangLiCai.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = YouYuJiZhangLiCai.entitlements; sourceTree = "<group>"; };
+		9C2D0E161EC0226A003E9111 /* YouYuJiZhangBen.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = YouYuJiZhangBen.entitlements; sourceTree = "<group>"; };
+		9C2D0E171EC0226A003E9111 /* YouYuJiZhangGuanJia.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = YouYuJiZhangGuanJia.entitlements; sourceTree = "<group>"; };
+		9C2D0E181EC0226A003E9111 /* YouYuJiZhangBao.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = YouYuJiZhangBao.entitlements; sourceTree = "<group>"; };
+		9C2D0E191EC0226A003E9111 /* 9188JiZhangPro.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = 9188JiZhangPro.entitlements; sourceTree = "<group>"; };
 		9C2E02721CAE419600C5F764 /* SSJWeiXinLoginHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJWeiXinLoginHelper.h; sourceTree = "<group>"; };
 		9C2E02731CAE419600C5F764 /* SSJWeiXinLoginHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJWeiXinLoginHelper.m; sourceTree = "<group>"; };
 		9C2FC0441D3E3A9700A4C0C9 /* SSJMemberSelectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMemberSelectView.h; sourceTree = "<group>"; };
@@ -9541,7 +9547,9 @@
 		BDA2EF151C8EB89E007DD45F /* TencentOpenAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TencentOpenAPI.framework; sourceTree = "<group>"; };
 		BDC01FF11C2D92E3008B1F75 /* CDAutoHideMessageHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDAutoHideMessageHUD.h; sourceTree = "<group>"; };
 		BDC01FF21C2D92E3008B1F75 /* CDAutoHideMessageHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDAutoHideMessageHUD.m; sourceTree = "<group>"; };
+		BDED39AF20CC5F34BACE95E9 /* Pods-9188JiZhangBao.release-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-9188JiZhangBao.release-test.xcconfig"; path = "Pods/Target Support Files/Pods-9188JiZhangBao/Pods-9188JiZhangBao.release-test.xcconfig"; sourceTree = "<group>"; };
 		C456BDB9A1174F4A4B005EB9 /* Pods-YouYuJiZhangBao.debug-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangBao.debug-production.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangBao/Pods-YouYuJiZhangBao.debug-production.xcconfig"; sourceTree = "<group>"; };
+		C5771E8CE795420339FE5806 /* libPods-9188JiZhangBao.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-9188JiZhangBao.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C67906F6CFFC0A3639C9DEC3 /* libPods-9188JiZhangPro.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-9188JiZhangPro.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C940E901F298A3A24076E517 /* Pods-YouYuJiZhang.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhang.debug.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhang/Pods-YouYuJiZhang.debug.xcconfig"; sourceTree = "<group>"; };
 		CAA8E44768CD8C6BF10DACE5 /* Pods-YouYuJiZhangBen.release-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangBen.release-test.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangBen/Pods-YouYuJiZhangBen.release-test.xcconfig"; sourceTree = "<group>"; };
@@ -9554,15 +9562,18 @@
 		DB9B0038A884FAF5FA1CEB4F /* Pods-JiZhangGuanJia.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JiZhangGuanJia.release.xcconfig"; path = "Pods/Target Support Files/Pods-JiZhangGuanJia/Pods-JiZhangGuanJia.release.xcconfig"; sourceTree = "<group>"; };
 		DC160CBD947F86ED6CD7DD86 /* libPods-YouYuJiZhangPro.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-YouYuJiZhangPro.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD224C6E2E36CBA3226029D3 /* Pods-BeiKeJiZhang.release-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BeiKeJiZhang.release-production.xcconfig"; path = "Pods/Target Support Files/Pods-BeiKeJiZhang/Pods-BeiKeJiZhang.release-production.xcconfig"; sourceTree = "<group>"; };
+		DDDAF21ED0ACE6B74EBCB8A6 /* Pods-9188JiZhangBao.debug-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-9188JiZhangBao.debug-production.xcconfig"; path = "Pods/Target Support Files/Pods-9188JiZhangBao/Pods-9188JiZhangBao.debug-production.xcconfig"; sourceTree = "<group>"; };
 		DF287708592603CEA9EF83AB /* Pods-BeiKeJiZhang.debug-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BeiKeJiZhang.debug-test.xcconfig"; path = "Pods/Target Support Files/Pods-BeiKeJiZhang/Pods-BeiKeJiZhang.debug-test.xcconfig"; sourceTree = "<group>"; };
 		E38835B4B811DB254C8C71D4 /* Pods-YouYuJiZhangLiCai.debug-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangLiCai.debug-production.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangLiCai/Pods-YouYuJiZhangLiCai.debug-production.xcconfig"; sourceTree = "<group>"; };
 		E46D461943E8EB50EC47585D /* Pods-YouYuJiZhangBen.debug-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangBen.debug-test.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangBen/Pods-YouYuJiZhangBen.debug-test.xcconfig"; sourceTree = "<group>"; };
 		E710211033A79D2C7E92D379 /* Pods-SuiShouJiEnterprise.release-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SuiShouJiEnterprise.release-test.xcconfig"; path = "Pods/Target Support Files/Pods-SuiShouJiEnterprise/Pods-SuiShouJiEnterprise.release-test.xcconfig"; sourceTree = "<group>"; };
+		E77827293B9974EF1F14709F /* Pods-9188JiZhangBao.debug-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-9188JiZhangBao.debug-test.xcconfig"; path = "Pods/Target Support Files/Pods-9188JiZhangBao/Pods-9188JiZhangBao.debug-test.xcconfig"; sourceTree = "<group>"; };
 		F1BFD9B2FA7E263C7101F5E8 /* Pods-SuiShouJiEnterprise.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SuiShouJiEnterprise.release.xcconfig"; path = "Pods/Target Support Files/Pods-SuiShouJiEnterprise/Pods-SuiShouJiEnterprise.release.xcconfig"; sourceTree = "<group>"; };
 		F36B3F26385C626176D7A485 /* Pods-YouYuJiZhangLiCai.release-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangLiCai.release-production.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangLiCai/Pods-YouYuJiZhangLiCai.release-production.xcconfig"; sourceTree = "<group>"; };
 		F84857880610A2DD87904A88 /* libPods-9188JiZhangBen.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-9188JiZhangBen.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F8D4E0B8A39DD37EA1FCC6CB /* Pods-YouYuJiZhangLiCai.debug-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangLiCai.debug-test.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangLiCai/Pods-YouYuJiZhangLiCai.debug-test.xcconfig"; sourceTree = "<group>"; };
 		F9099E967EA40B5B4F591EA5 /* libPods-YouYuJiZhangLiCai.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-YouYuJiZhangLiCai.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		FC699DBB59A6780396A68CE0 /* Pods-9188JiZhangBao.release-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-9188JiZhangBao.release-production.xcconfig"; path = "Pods/Target Support Files/Pods-9188JiZhangBao/Pods-9188JiZhangBao.release-production.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -9644,6 +9655,7 @@
 				7DFB189D1EB0341E00292DD3 /* libz.tbd in Frameworks */,
 				7DFB189E1EB0341E00292DD3 /* AVFoundation.framework in Frameworks */,
 				7DFB189F1EB0341E00292DD3 /* Security.framework in Frameworks */,
+				7A0F545325C98140D90A42EE /* libPods-9188JiZhangBao.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -9822,6 +9834,7 @@
 				2D1CEF5E96BF59F42EAD3BC3 /* libPods-BeiKeJiZhang.a */,
 				C67906F6CFFC0A3639C9DEC3 /* libPods-9188JiZhangPro.a */,
 				DC160CBD947F86ED6CD7DD86 /* libPods-YouYuJiZhangPro.a */,
+				C5771E8CE795420339FE5806 /* libPods-9188JiZhangBao.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -11440,6 +11453,11 @@
 		9C3A2D461E65A4C200DFAE2C /* Entitlements */ = {
 			isa = PBXGroup;
 			children = (
+				9C2D0E151EC0226A003E9111 /* YouYuJiZhangLiCai.entitlements */,
+				9C2D0E161EC0226A003E9111 /* YouYuJiZhangBen.entitlements */,
+				9C2D0E171EC0226A003E9111 /* YouYuJiZhangGuanJia.entitlements */,
+				9C2D0E181EC0226A003E9111 /* YouYuJiZhangBao.entitlements */,
+				9C2D0E191EC0226A003E9111 /* 9188JiZhangPro.entitlements */,
 				9C4C22721E9F1B54000C5F15 /* 9188jizhangben.entitlements */,
 				9C7D31CF1E8E0A210093001F /* YouYuJiZhangPro.entitlements */,
 				9C111F9F1E85117600D87EA8 /* YouYuJiZhang.entitlements */,
@@ -13173,6 +13191,10 @@
 				1E51C22F9305214B776BE476 /* Pods-YouYuJiZhang.debug-production.xcconfig */,
 				10B02F27B07D9E59BDE1CA2A /* Pods-YouYuJiZhang.release-test.xcconfig */,
 				6914A4671174AA5C297802D2 /* Pods-YouYuJiZhang.release-production.xcconfig */,
+				E77827293B9974EF1F14709F /* Pods-9188JiZhangBao.debug-test.xcconfig */,
+				DDDAF21ED0ACE6B74EBCB8A6 /* Pods-9188JiZhangBao.debug-production.xcconfig */,
+				BDED39AF20CC5F34BACE95E9 /* Pods-9188JiZhangBao.release-test.xcconfig */,
+				FC699DBB59A6780396A68CE0 /* Pods-9188JiZhangBao.release-production.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -13264,9 +13286,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7DFB18C41EB0341E00292DD3 /* Build configuration list for PBXNativeTarget "9188JiZhangBao" */;
 			buildPhases = (
+				01CE643A88DE19F944EEF034 /* [CP] Check Pods Manifest.lock */,
 				7DFB16521EB0341E00292DD3 /* Sources */,
 				7DFB18971EB0341E00292DD3 /* Frameworks */,
 				7DFB18A41EB0341E00292DD3 /* Resources */,
+				EC85233C65887050F130D286 /* [CP] Embed Pods Frameworks */,
+				3119ACCD098C19AC7F6A84B1 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -13490,6 +13515,14 @@
 					};
 					7DBB3A711E55C2EE0075E638 = {
 						DevelopmentTeam = JFBU3W8R6E;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 					7DBB3F0C1E55C4E00075E638 = {
 						DevelopmentTeam = 747363KXQ6;
@@ -14076,6 +14109,21 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		01CE643A88DE19F944EEF034 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
 		19CA2764BC837F0A3ACF86A2 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -14119,6 +14167,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BeiKeJiZhang/Pods-BeiKeJiZhang-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		3119ACCD098C19AC7F6A84B1 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-9188JiZhangBao/Pods-9188JiZhangBao-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		3434A1FA5629E89C6387C495 /* [CP] Check Pods Manifest.lock */ = {
@@ -14614,6 +14677,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-YouYuJiZhangBao/Pods-YouYuJiZhangBao-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		EC85233C65887050F130D286 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-9188JiZhangBao/Pods-9188JiZhangBao-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -22791,7 +22869,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/SuiShouJi/Resource/Entitlements/SuiShouJi.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Pingxi Fan (Z8SZ588DYT)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Pingxi Fan (Z6G7KSGD6Q)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Pingxi Fan (Z6G7KSGD6Q)";
 				DEVELOPMENT_TEAM = Z8SZ588DYT;
 				ENABLE_BITCODE = NO;
@@ -23052,31 +23130,13 @@
 					"$(inherited)",
 					"-ObjC",
 					"-l\"AFNetworking\"",
-					"-l\"APOpenSdk\"",
 					"-l\"DateTools\"",
 					"-l\"FLAnimatedImage\"",
-					"-l\"JSPatch\"",
-					"-l\"LWApiSDK\"",
 					"-l\"MJExtension\"",
 					"-l\"MMDrawerController\"",
 					"-l\"Masonry\"",
 					"-l\"Meiqia\"",
 					"-l\"SDWebImage\"",
-					"-l\"SocialAlipayShare\"",
-					"-l\"SocialFacebook\"",
-					"-l\"SocialInstagram\"",
-					"-l\"SocialLaiWang\"",
-					"-l\"SocialLine\"",
-					"-l\"SocialQQ\"",
-					"-l\"SocialSinaSSO\"",
-					"-l\"SocialTumblr\"",
-					"-l\"SocialTwitter\"",
-					"-l\"SocialWechat\"",
-					"-l\"SocialWhatsapp\"",
-					"-l\"UMSocial_Sdk_5.2.1\"",
-					"-l\"UMSocial_Sdk_Comment_5.2.1\"",
-					"-l\"WeChatSDK\"",
-					"-l\"WeiboSDK\"",
 					"-l\"YYKeyboardManager\"",
 					"-l\"YYText\"",
 					"-l\"ZYCornerRadius\"",
@@ -23105,14 +23165,6 @@
 					"-framework",
 					"\"CoreText\"",
 					"-framework",
-					"\"FBSDKCoreKit\"",
-					"-framework",
-					"\"FBSDKLoginKit\"",
-					"-framework",
-					"\"FBSDKShareKit\"",
-					"-framework",
-					"\"Fabric\"",
-					"-framework",
 					"\"Foundation\"",
 					"-framework",
 					"\"ImageIO\"",
@@ -23131,10 +23183,6 @@
 					"-framework",
 					"\"TencentOpenAPI\"",
 					"-framework",
-					"\"TwitterCore\"",
-					"-framework",
-					"\"TwitterKit\"",
-					"-framework",
 					"\"UIKit\"",
 					"-framework",
 					"\"UMMobClick\"",
@@ -23147,7 +23195,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = YYJiZhangLiCaiDev;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = "Debug-production";
 		};
@@ -23596,31 +23644,13 @@
 					"$(inherited)",
 					"-ObjC",
 					"-l\"AFNetworking\"",
-					"-l\"APOpenSdk\"",
 					"-l\"DateTools\"",
 					"-l\"FLAnimatedImage\"",
-					"-l\"JSPatch\"",
-					"-l\"LWApiSDK\"",
 					"-l\"MJExtension\"",
 					"-l\"MMDrawerController\"",
 					"-l\"Masonry\"",
 					"-l\"Meiqia\"",
 					"-l\"SDWebImage\"",
-					"-l\"SocialAlipayShare\"",
-					"-l\"SocialFacebook\"",
-					"-l\"SocialInstagram\"",
-					"-l\"SocialLaiWang\"",
-					"-l\"SocialLine\"",
-					"-l\"SocialQQ\"",
-					"-l\"SocialSinaSSO\"",
-					"-l\"SocialTumblr\"",
-					"-l\"SocialTwitter\"",
-					"-l\"SocialWechat\"",
-					"-l\"SocialWhatsapp\"",
-					"-l\"UMSocial_Sdk_5.2.1\"",
-					"-l\"UMSocial_Sdk_Comment_5.2.1\"",
-					"-l\"WeChatSDK\"",
-					"-l\"WeiboSDK\"",
 					"-l\"YYKeyboardManager\"",
 					"-l\"YYText\"",
 					"-l\"ZYCornerRadius\"",
@@ -23649,14 +23679,6 @@
 					"-framework",
 					"\"CoreText\"",
 					"-framework",
-					"\"FBSDKCoreKit\"",
-					"-framework",
-					"\"FBSDKLoginKit\"",
-					"-framework",
-					"\"FBSDKShareKit\"",
-					"-framework",
-					"\"Fabric\"",
-					"-framework",
 					"\"Foundation\"",
 					"-framework",
 					"\"ImageIO\"",
@@ -23675,10 +23697,6 @@
 					"-framework",
 					"\"TencentOpenAPI\"",
 					"-framework",
-					"\"TwitterCore\"",
-					"-framework",
-					"\"TwitterKit\"",
-					"-framework",
 					"\"UIKit\"",
 					"-framework",
 					"\"UMMobClick\"",
@@ -23690,7 +23708,7 @@
 				PROVISIONING_PROFILE = "289a39b6-fb52-4f8c-afac-e594ee345138";
 				PROVISIONING_PROFILE_SPECIFIER = YYJiZhangLiCaiAppStore;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = "Release-production";
 		};
@@ -23763,31 +23781,13 @@
 					"$(inherited)",
 					"-ObjC",
 					"-l\"AFNetworking\"",
-					"-l\"APOpenSdk\"",
 					"-l\"DateTools\"",
 					"-l\"FLAnimatedImage\"",
-					"-l\"JSPatch\"",
-					"-l\"LWApiSDK\"",
 					"-l\"MJExtension\"",
 					"-l\"MMDrawerController\"",
 					"-l\"Masonry\"",
 					"-l\"Meiqia\"",
 					"-l\"SDWebImage\"",
-					"-l\"SocialAlipayShare\"",
-					"-l\"SocialFacebook\"",
-					"-l\"SocialInstagram\"",
-					"-l\"SocialLaiWang\"",
-					"-l\"SocialLine\"",
-					"-l\"SocialQQ\"",
-					"-l\"SocialSinaSSO\"",
-					"-l\"SocialTumblr\"",
-					"-l\"SocialTwitter\"",
-					"-l\"SocialWechat\"",
-					"-l\"SocialWhatsapp\"",
-					"-l\"UMSocial_Sdk_5.2.1\"",
-					"-l\"UMSocial_Sdk_Comment_5.2.1\"",
-					"-l\"WeChatSDK\"",
-					"-l\"WeiboSDK\"",
 					"-l\"YYKeyboardManager\"",
 					"-l\"YYText\"",
 					"-l\"ZYCornerRadius\"",
@@ -23816,14 +23816,6 @@
 					"-framework",
 					"\"CoreText\"",
 					"-framework",
-					"\"FBSDKCoreKit\"",
-					"-framework",
-					"\"FBSDKLoginKit\"",
-					"-framework",
-					"\"FBSDKShareKit\"",
-					"-framework",
-					"\"Fabric\"",
-					"-framework",
 					"\"Foundation\"",
 					"-framework",
 					"\"ImageIO\"",
@@ -23842,10 +23834,6 @@
 					"-framework",
 					"\"TencentOpenAPI\"",
 					"-framework",
-					"\"TwitterCore\"",
-					"-framework",
-					"\"TwitterKit\"",
-					"-framework",
 					"\"UIKit\"",
 					"-framework",
 					"\"UMMobClick\"",
@@ -23858,7 +23846,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = YYJiZhangLiCaiDev;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = "Debug-test";
 		};
@@ -23897,31 +23885,13 @@
 					"$(inherited)",
 					"-ObjC",
 					"-l\"AFNetworking\"",
-					"-l\"APOpenSdk\"",
 					"-l\"DateTools\"",
 					"-l\"FLAnimatedImage\"",
-					"-l\"JSPatch\"",
-					"-l\"LWApiSDK\"",
 					"-l\"MJExtension\"",
 					"-l\"MMDrawerController\"",
 					"-l\"Masonry\"",
 					"-l\"Meiqia\"",
 					"-l\"SDWebImage\"",
-					"-l\"SocialAlipayShare\"",
-					"-l\"SocialFacebook\"",
-					"-l\"SocialInstagram\"",
-					"-l\"SocialLaiWang\"",
-					"-l\"SocialLine\"",
-					"-l\"SocialQQ\"",
-					"-l\"SocialSinaSSO\"",
-					"-l\"SocialTumblr\"",
-					"-l\"SocialTwitter\"",
-					"-l\"SocialWechat\"",
-					"-l\"SocialWhatsapp\"",
-					"-l\"UMSocial_Sdk_5.2.1\"",
-					"-l\"UMSocial_Sdk_Comment_5.2.1\"",
-					"-l\"WeChatSDK\"",
-					"-l\"WeiboSDK\"",
 					"-l\"YYKeyboardManager\"",
 					"-l\"YYText\"",
 					"-l\"ZYCornerRadius\"",
@@ -23950,14 +23920,6 @@
 					"-framework",
 					"\"CoreText\"",
 					"-framework",
-					"\"FBSDKCoreKit\"",
-					"-framework",
-					"\"FBSDKLoginKit\"",
-					"-framework",
-					"\"FBSDKShareKit\"",
-					"-framework",
-					"\"Fabric\"",
-					"-framework",
 					"\"Foundation\"",
 					"-framework",
 					"\"ImageIO\"",
@@ -23976,10 +23938,6 @@
 					"-framework",
 					"\"TencentOpenAPI\"",
 					"-framework",
-					"\"TwitterCore\"",
-					"-framework",
-					"\"TwitterKit\"",
-					"-framework",
 					"\"UIKit\"",
 					"-framework",
 					"\"UMMobClick\"",
@@ -23991,7 +23949,7 @@
 				PROVISIONING_PROFILE = "289a39b6-fb52-4f8c-afac-e594ee345138";
 				PROVISIONING_PROFILE_SPECIFIER = YYJiZhangLiCaiAppStore;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = "Release-test";
 		};
@@ -24208,6 +24166,7 @@
 		};
 		7DFB18C51EB0341E00292DD3 /* Debug-test */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E77827293B9974EF1F14709F /* Pods-9188JiZhangBao.debug-test.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = 9188JiZhangBao;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -24309,6 +24268,7 @@
 		};
 		7DFB18C61EB0341E00292DD3 /* Debug-production */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = DDDAF21ED0ACE6B74EBCB8A6 /* Pods-9188JiZhangBao.debug-production.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = 9188JiZhangBao;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -24411,6 +24371,7 @@
 		};
 		7DFB18C71EB0341E00292DD3 /* Release-test */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = BDED39AF20CC5F34BACE95E9 /* Pods-9188JiZhangBao.release-test.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = 9188JiZhangBao;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -24511,6 +24472,7 @@
 		};
 		7DFB18C81EB0341E00292DD3 /* Release-production */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = FC699DBB59A6780396A68CE0 /* Pods-9188JiZhangBao.release-production.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = 9188JiZhangBao;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -27264,7 +27226,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/SuiShouJi/Resource/Entitlements/SuiShouJi.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Pingxi Fan (Z8SZ588DYT)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Pingxi Fan (Z6G7KSGD6Q)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Pingxi Fan (Z6G7KSGD6Q)";
 				DEVELOPMENT_TEAM = Z8SZ588DYT;
 				ENABLE_BITCODE = NO;
@@ -27349,7 +27311,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhangAppStore;
 				PRODUCT_NAME = SuiShouJi;
-				PROVISIONING_PROFILE = "ff9d21ea-8a37-4dd1-a79f-33707d0253d8";
+				PROVISIONING_PROFILE = "8ffa3657-901d-45d2-a88b-2cf57db8bedf";
 				PROVISIONING_PROFILE_SPECIFIER = JiZhangAppStoreDev;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
