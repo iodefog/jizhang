@@ -42,7 +42,7 @@
         _cellLabel = [[UILabel alloc]init];
         _cellLabel.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
         _cellLabel.textAlignment = NSTextAlignmentLeft;
-        _cellLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        _cellLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         _cellLabel.text = @"照片";
         [_cellLabel sizeToFit];
     }

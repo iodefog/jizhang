@@ -54,7 +54,7 @@
 - (UILabel *)booksTitleLab{
     if (!_booksTitleLab) {
         _booksTitleLab = [[UILabel alloc]init];
-        _booksTitleLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2);
+        _booksTitleLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
         _booksTitleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     }
     return _booksTitleLab;

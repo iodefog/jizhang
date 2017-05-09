@@ -574,7 +574,7 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 - (void)updateEditButtonTitleColor {
     NSString *titleColor = _customCategoryCollectionView.selectedItems.count == 1 ? SSJ_CURRENT_THEME.mainColor : SSJ_CURRENT_THEME.secondaryColor;
     NSMutableAttributedString *title = [[NSMutableAttributedString alloc] initWithString:@"编辑（单选）" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:titleColor]}];
-    [title setAttributes:@{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3),
+    [title setAttributes:@{NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3],
                            NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:titleColor]} range:NSMakeRange(2, 4)];
     [_editButton setAttributedTitle:title forState:UIControlStateNormal];
 }
@@ -731,7 +731,7 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
     if (!_sureButton) {
         _sureButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _sureButton.frame = CGRectMake(0, self.view.height - kButtonHeight, self.view.width, kButtonHeight);
-        _sureButton.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_1);
+        _sureButton.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_1];
         [_sureButton setTitle:@"确定" forState:UIControlStateNormal];
         [_sureButton ssj_setBorderStyle:SSJBorderStyleTop];
         [_sureButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] forState:UIControlStateNormal];
@@ -745,7 +745,7 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
         _editButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _editButton.frame = CGRectMake(0, self.view.height - kButtonHeight, self.view.width * 0.6, kButtonHeight);
         [_editButton ssj_setBorderStyle:SSJBorderStyleTop | SSJBorderStyleRight];
-        _editButton.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_1);
+        _editButton.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_1];
         [_editButton addTarget:self action:@selector(editButtonAction) forControlEvents:UIControlEventTouchUpInside];
     }
     return _editButton;
@@ -755,7 +755,7 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
     if (!_featureDeleteButton) {
         _featureDeleteButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _featureDeleteButton.frame = CGRectMake(0, self.view.height - kButtonHeight, self.view.width, kButtonHeight);
-        _featureDeleteButton.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_1);
+        _featureDeleteButton.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_1];
         [_featureDeleteButton setTitle:@"删除" forState:UIControlStateNormal];
         [_featureDeleteButton ssj_setBorderStyle:SSJBorderStyleTop];
         [_featureDeleteButton addTarget:self action:@selector(featureDeleteButtonAction) forControlEvents:UIControlEventTouchUpInside];
@@ -767,7 +767,7 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
     if (!_customDeleteButton) {
         _customDeleteButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _customDeleteButton.frame = CGRectMake(self.view.width * 0.6, self.view.height - kButtonHeight, self.view.width * 0.4, kButtonHeight);
-        _customDeleteButton.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_1);
+        _customDeleteButton.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_1];
         [_customDeleteButton ssj_setBorderStyle:SSJBorderStyleTop];
         [_customDeleteButton setTitle:@"删除" forState:UIControlStateNormal];
         [_customDeleteButton addTarget:self action:@selector(customDeleteButtonAction) forControlEvents:UIControlEventTouchUpInside];

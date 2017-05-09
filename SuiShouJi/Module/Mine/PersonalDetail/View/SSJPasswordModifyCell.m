@@ -26,7 +26,7 @@
     if (!_passwordInput) {
         _passwordInput = [[UITextField alloc]init];
         _passwordInput.secureTextEntry = YES;
-        _passwordInput.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        _passwordInput.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         _passwordInput.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         [_passwordInput ssj_setBorderStyle:SSJBorderStyleBottom];
         [_passwordInput ssj_setBorderWidth:1.f / [UIScreen mainScreen].scale];

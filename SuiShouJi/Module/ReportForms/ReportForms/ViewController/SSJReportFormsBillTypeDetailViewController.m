@@ -316,8 +316,8 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
                                                   bottomTitle:bottomTitle
                                                 topTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor]
                                              bottomTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]
-                                                 topTitleFont:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2)
-                                              bottomTitleFont:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_5)
+                                                 topTitleFont:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2]
+                                              bottomTitleFont:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_5]
                                                 contentInsets:UIEdgeInsetsZero];
         
     } else if (index.row == 1) {
@@ -327,8 +327,8 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
                                                   bottomTitle:@"最大值"
                                                 topTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor]
                                              bottomTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]
-                                                 topTitleFont:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2)
-                                              bottomTitleFont:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_5)
+                                                 topTitleFont:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2]
+                                              bottomTitleFont:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_5]
                                                 contentInsets:UIEdgeInsetsZero];
         
     } else if (index.row == 2) {
@@ -338,8 +338,8 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
                                                   bottomTitle:@"合值"
                                                 topTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]
                                              bottomTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]
-                                                 topTitleFont:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2)
-                                              bottomTitleFont:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_5)
+                                                 topTitleFont:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2]
+                                              bottomTitleFont:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_5]
                                                 contentInsets:UIEdgeInsetsZero];
         
     } else {
@@ -480,7 +480,7 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
     [_curveView reloadData];
     _curveView.valueColor = SSJ_MAIN_COLOR;
     _curveView.scaleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor];
-    _curveView.balloonTitleAttributes = @{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4),
+    _curveView.balloonTitleAttributes = @{NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4],
                                           NSForegroundColorAttributeName:[UIColor whiteColor],
                                           NSBackgroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.bookKeepingHomeMutiButtonSelectColor]};
     

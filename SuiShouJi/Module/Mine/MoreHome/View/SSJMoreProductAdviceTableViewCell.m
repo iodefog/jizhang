@@ -114,7 +114,7 @@
         [showTextButton setTitle:self.message.content forState:UIControlStateNormal];
     }
     
-    CGSize size = [self sizeOfString:showTextButton.titleLabel.text font:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3) width:SSJSCREENWITH - 2*(_iconView.width + 30)];
+    CGSize size = [self sizeOfString:showTextButton.titleLabel.text font:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3] width:SSJSCREENWITH - 2*(_iconView.width + 30)];
     // 设置按钮的高度就是titleLabel的高度
     CGFloat buttonH = size.height + 20;
     CGFloat buttonW = size.width + 20;
@@ -144,7 +144,7 @@
     if (!_timeLabel) {
         _timeLabel = [[UILabel alloc] init];
         _timeLabel.textAlignment = NSTextAlignmentCenter;
-        _timeLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_5);
+        _timeLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_5];
         _timeLabel.textColor = [UIColor ssj_colorWithHex:@"999999"];
     }
     return _timeLabel;
@@ -160,7 +160,7 @@
         _textButton.titleEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10);
         [_textButton clipsToBounds];
         [_textButton setTitleColor:[UIColor ssj_colorWithHex:@"333333"] forState:UIControlStateNormal];
-        _textButton.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        _textButton.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         [_textButton.titleLabel setPreferredMaxLayoutWidth:SSJSCREENWITH - 2*(_iconView.width + 25)];
     }
     return _textButton;
@@ -176,7 +176,7 @@
         _otherTextButton.titleEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10);
         [_otherTextButton clipsToBounds];
         [_otherTextButton setTitleColor:[UIColor ssj_colorWithHex:@"333333"] forState:UIControlStateNormal];
-        _otherTextButton.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        _otherTextButton.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         [_otherIconView clipsToBounds];
         [_otherTextButton.titleLabel setPreferredMaxLayoutWidth:SSJSCREENWITH - 2*(_iconView.width + 25)];
     }

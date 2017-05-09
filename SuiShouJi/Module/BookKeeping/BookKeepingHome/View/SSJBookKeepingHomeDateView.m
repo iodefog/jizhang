@@ -89,7 +89,7 @@
     if (!_dateLab) {
         _dateLab = [[UILabel alloc]init];
         _dateLab.textColor = [UIColor ssj_colorWithHex:@"#FFFFFF"];
-        _dateLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
+        _dateLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
     }
     return _dateLab;
 }

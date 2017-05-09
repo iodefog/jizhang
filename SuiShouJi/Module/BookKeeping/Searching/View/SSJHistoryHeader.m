@@ -36,7 +36,7 @@
 - (UILabel *)historyLab{
     if (!_historyLab) {
         _historyLab = [[UILabel alloc]init];
-        _historyLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
+        _historyLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
         _historyLab.text = @"搜索历史";
         _historyLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         [_historyLab sizeToFit];

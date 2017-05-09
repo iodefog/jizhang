@@ -24,11 +24,11 @@
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         
         _daysLab = [[UILabel alloc] init];
-        _daysLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        _daysLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         _daysLab.textAlignment = NSTextAlignmentCenter;
         [self.contentView addSubview:_daysLab];
         
-        self.textLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        self.textLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         self.textLabel.textAlignment = NSTextAlignmentCenter;
         
         self.imageView.layer.borderColor = SSJ_DEFAULT_SEPARATOR_COLOR.CGColor;

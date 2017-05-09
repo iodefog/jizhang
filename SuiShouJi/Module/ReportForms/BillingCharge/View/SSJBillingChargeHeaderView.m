@@ -18,7 +18,7 @@
 
 - (instancetype)initWithReuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithReuseIdentifier:reuseIdentifier]) {
-        self.textLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        self.textLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         [self.contentView addSubview:self.sumLabel];
         self.backgroundView = [[UIView alloc] init];
     }
@@ -37,7 +37,7 @@
 - (UILabel *)sumLabel {
     if (!_sumLabel) {
         _sumLabel = [[UILabel alloc] init];
-        _sumLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
+        _sumLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
         _sumLabel.textAlignment = NSTextAlignmentRight;
     }
     return _sumLabel;

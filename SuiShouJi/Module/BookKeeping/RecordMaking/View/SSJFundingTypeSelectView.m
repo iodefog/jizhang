@@ -145,7 +145,7 @@
         _titleLabel = [[UILabel alloc]init];
         _titleLabel.text = @"选择资金账户";
         _titleLabel.textAlignment = NSTextAlignmentCenter;
-        _titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2);
+        _titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
         _titleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         [_titleView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
         [_titleView ssj_setBorderStyle:SSJBorderStyleBottom];

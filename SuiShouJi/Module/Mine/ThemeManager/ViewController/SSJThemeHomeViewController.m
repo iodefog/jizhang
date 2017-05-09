@@ -150,7 +150,7 @@ static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
         _hintLabel.backgroundColor = [UIColor whiteColor];
         _hintLabel.text = @"  温馨提示，换肤请在WiFi环境下进行，否则会较消耗流量哦。";
         _hintLabel.textColor = [UIColor ssj_colorWithHex:@"929292"];
-        _hintLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_7);
+        _hintLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_7];
     }
     return _hintLabel;
 }
@@ -206,7 +206,7 @@ static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
         item.themeDesc = model.desc;
         float imageRatio = 220.f / 358;
         float imageHeight = (SSJSCREENWITH - 45) / 3 / imageRatio;
-        item.cellHeight = imageHeight + 25 + [item.themeTitle sizeWithAttributes:@{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3)}].height + 26;
+        item.cellHeight = imageHeight + 25 + [item.themeTitle sizeWithAttributes:@{NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3]}].height + 26;
         [tempArr addObject:item];
         SSJThemeItem *itemCustom = [[SSJThemeItem alloc]init];
         itemCustom.themeId = @"-1";
@@ -258,7 +258,7 @@ static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
         //计算每个cell的高度
         float imageRatio = 220.f / 358;
         float imageHeight = (SSJSCREENWITH - 45) / 3 / imageRatio;
-        theme.cellHeight = imageHeight + 25 + [theme.themeTitle sizeWithAttributes:@{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3)}].height + 26;
+        theme.cellHeight = imageHeight + 25 + [theme.themeTitle sizeWithAttributes:@{NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3]}].height + 26;
     }
     self.items = themes;
     [self.themeSelectView reloadData];

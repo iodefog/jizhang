@@ -66,14 +66,14 @@
 {
     UILabel *titleLabel = [[UILabel alloc] init];
     titleLabel.text = @"产品建议";
-    titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2);
+    titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
     titleLabel.textColor = [UIColor ssj_colorWithHex:@"333333"];
     [titleLabel sizeToFit];
     self.navigationItem.titleView = titleLabel;
-      [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor],NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2)}];
+      [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor],NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2]}];
     UIButton *navRightButton = [[UIButton alloc] init];
     [navRightButton setTitle:@"在线客服" forState:UIControlStateNormal];
-    navRightButton.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+    navRightButton.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
     [navRightButton setTitleColor:[UIColor ssj_colorWithHex:@"eb4a64"] forState:UIControlStateNormal];
     [navRightButton addTarget:self action:@selector(navRightButtonClicked) forControlEvents:UIControlEventTouchUpInside];
     [navRightButton sizeToFit];

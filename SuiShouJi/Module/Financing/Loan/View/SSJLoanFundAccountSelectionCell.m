@@ -23,7 +23,7 @@
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
-        self.textLabel.font =  SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        self.textLabel.font =  [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         self.textLabel.backgroundColor = [UIColor clearColor];
         [self.contentView addSubview:self.checkMark];
         [self updateAppearance];
