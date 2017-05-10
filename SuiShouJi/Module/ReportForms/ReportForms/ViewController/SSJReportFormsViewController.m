@@ -261,16 +261,8 @@ static NSString *const kSegmentTitleIncome = @"收入";
 #pragma mark - Private
 //  重新加载数据
 - (void)reloadAllDatas {
-    
     [self.view ssj_showLoadingIndicator];
-    
-    _currentBooksId = SSJGetCurrentBooksType();
-    SSJBooksTypeItem *currentBooksItem = [SSJBooksTypeStore queryCurrentBooksTypeForBooksId:_currentBooksId];
-    
-    UIImage *image = [[UIImage imageNamed:currentBooksItem.booksIcoin] ssj_compressWithinSize:CGSizeMake(22, 22)];
-    [self.navigationBar setBooksImage:image];
-    [self.navigationBar setBooksColor:[UIColor ssj_colorWithHex:currentBooksItem.booksColor]];
-    
+    [self loadBooksItem];
     [SSJReportFormsUtil queryForPeriodListWithIncomeOrPayType:SSJBillTypeSurplus booksId:_currentBooksId success:^(NSArray<SSJDatePeriod *> *periods) {
         
         _periodControl.periods = periods;
@@ -291,6 +283,18 @@ static NSString *const kSegmentTitleIncome = @"收入";
         
     } failure:^(NSError *error) {
         [self.view ssj_hideLoadingIndicator];
+        [SSJAlertViewAdapter showError:error];
+    }];
+}
+
+- (void)loadBooksItem {
+    [SSJUserTableManager currentBooksId:^(NSString * _Nonnull booksId) {
+        _currentBooksId = booksId;
+        SSJBooksTypeItem *currentBooksItem = [SSJBooksTypeStore queryCurrentBooksTypeForBooksId:_currentBooksId];
+        UIImage *image = [[UIImage imageNamed:currentBooksItem.booksIcoin] ssj_compressWithinSize:CGSizeMake(22, 22)];
+        [self.navigationBar setBooksImage:image];
+        [self.navigationBar setBooksColor:[UIColor ssj_colorWithHex:currentBooksItem.booksColor]];
+    } failure:^(NSError * _Nonnull error) {
         [SSJAlertViewAdapter showError:error];
     }];
 }

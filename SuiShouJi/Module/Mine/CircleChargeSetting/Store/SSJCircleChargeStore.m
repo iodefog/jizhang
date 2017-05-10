@@ -13,9 +13,9 @@
 @implementation SSJCircleChargeStore
 + (void)queryForChargeListWithSuccess:(void(^)(NSArray<SSJBillingChargeCellItem *> *result))success
                               failure:(void (^)(NSError *error))failure {
-    __block NSString *booksId = SSJGetCurrentBooksType();
     [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
         NSString *userid = SSJUSERID();
+        NSString *booksId = [db stringForQuery:@"select currentBooksId from bk_user where cuserid = ?", userid];
         NSMutableArray *chargeList = [NSMutableArray array];
         FMResultSet *chargeResult = [db executeQuery:@"select a.* , b.CCOIN , b.CNAME , b.CCOLOR , b.ITYPE as INCOMEOREXPENSE , b.ID , c.cbooksname , d.cacctname , d.cicoin from BK_CHARGE_PERIOD_CONFIG as a, BK_BILL_TYPE as b , bk_books_type as c , bk_fund_info as d where a.CUSERID = ? and a.OPERATORTYPE != 2 and a.IBILLID = b.ID and c.cbooksid = ? and a.cbooksid = c.cbooksid and c.cuserid = a.cuserid and a.ifunsid = d.cfundid order by A.ITYPE ASC , A.IMONEY DESC",userid,booksId];
         if (!chargeResult) {
@@ -72,9 +72,9 @@
 + (void)queryDefualtItemWithIncomeOrExpence:(BOOL)incomeOrExpence
                                     Success:(void(^)(SSJBillingChargeCellItem *item))success
                               failure:(void (^)(NSError *error))failure {
-    __block NSString *booksId = SSJGetCurrentBooksType();
     [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
         NSString *userid = SSJUSERID();
+        NSString *booksId = [db stringForQuery:@"select currentBooksId from bk_user where cuserid = ?", userid];
         SSJBillingChargeCellItem *item = [[SSJBillingChargeCellItem alloc]init];
         item.billDate = [[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"];
         item.billId = [db stringForQuery:@"select a.id from bk_bill_type as a , bk_user_bill as b where b.istate = 1 and b.cuserid = ? and a.id = b.cbillid and a.itype = ? and b.cbooksid = ? order by b.iorder limit 1",userid,@(incomeOrExpence),booksId];
@@ -123,15 +123,15 @@
 + (void)saveCircleChargeItem:(SSJBillingChargeCellItem *)item
                      success:(void(^)())success
                      failure:(void (^)(NSError *error))failure {
-    NSString *booksid = SSJGetCurrentBooksType();
-    if (!item.booksId.length) {
-        item.booksId = booksid;
-    }
-    if (!item.configId.length) {
-        item.configId = SSJUUID();
-    }
     [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback){
         NSString *userid = SSJUSERID();
+        if (!item.booksId.length) {
+            item.booksId = [db stringForQuery:@"select currentBooksId from bk_user where cuserid = ?", userid];
+            item.booksId = item.booksId ?: userid;
+        }
+        if (!item.configId.length) {
+            item.configId = SSJUUID();
+        }
         NSString *cwriteDate = [[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         NSMutableArray *membersIdArr = [NSMutableArray arrayWithCapacity:0];
         for (SSJChargeMemberItem *memberItem in item.membersItem) {
@@ -160,7 +160,7 @@
         }
         //插入周期记账表
         if (![db intForQuery:@"select count(1) from bk_charge_period_config where iconfigid = ?",item.configId]) {
-            if (![db executeUpdate:@"insert into bk_charge_period_config (iconfigid, cuserid, ibillid, ifunsid, itype, imoney, cimgurl, cmemo, cbilldate, istate, iversion, cwritedate, operatortype, cbooksid, cmemberids, cbilldateend) values (?,?,?,?,?,?,?,?,?,1,?,?,0,?,?,?)",item.configId,userid,item.billId,item.fundId,@(item.chargeCircleType),@([item.money doubleValue]),item.chargeImage,item.chargeMemo,item.billDate,@(SSJSyncVersion()),cwriteDate,booksid,membersStr,item.chargeCircleEndDate]) {
+            if (![db executeUpdate:@"insert into bk_charge_period_config (iconfigid, cuserid, ibillid, ifunsid, itype, imoney, cimgurl, cmemo, cbilldate, istate, iversion, cwritedate, operatortype, cbooksid, cmemberids, cbilldateend) values (?,?,?,?,?,?,?,?,?,1,?,?,0,?,?,?)",item.configId,userid,item.billId,item.fundId,@(item.chargeCircleType),@([item.money doubleValue]),item.chargeImage,item.chargeMemo,item.billDate,@(SSJSyncVersion()),cwriteDate,item.booksId,membersStr,item.chargeCircleEndDate]) {
                 if (failure) {
                     SSJDispatch_main_async_safe(^{
                         failure([db lastError]);
@@ -182,7 +182,7 @@
                 }else{
                     NSString *chargeId = SSJUUID();
                     //修改流水表
-                    if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, ibillid, ifunsid, cid, ichargetype, imoney, cimgurl, thumburl, cmemo, cbilldate, iversion, cwritedate, operatortype, cbooksid) values (?,?,?,?,?,?,?,?,?,?,?,?,?,0,?)",chargeId,userid,item.billId,item.fundId,item.configId,@(SSJChargeIdTypeCircleConfig),@([item.money doubleValue]),item.chargeImage,item.chargeThumbImage,item.chargeMemo,item.billDate,@(SSJSyncVersion()),cwriteDate,booksid]) {
+                    if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, ibillid, ifunsid, cid, ichargetype, imoney, cimgurl, thumburl, cmemo, cbilldate, iversion, cwritedate, operatortype, cbooksid) values (?,?,?,?,?,?,?,?,?,?,?,?,?,0,?)",chargeId,userid,item.billId,item.fundId,item.configId,@(SSJChargeIdTypeCircleConfig),@([item.money doubleValue]),item.chargeImage,item.chargeThumbImage,item.chargeMemo,item.billDate,@(SSJSyncVersion()),cwriteDate,item.booksId]) {
                         if (failure) {
                             SSJDispatch_main_async_safe(^{
                                 failure([db lastError]);
@@ -247,7 +247,7 @@
             }else{
                 NSString *chargeId = SSJUUID();
                 //修改流水表
-                if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, ibillid, ifunsid, cid, ichargetype, imoney, cimgurl, thumburl, cmemo, cbilldate, iversion, cwritedate, operatortype, cbooksid) values (?,?,?,?,?,?,?,?,?,?,?,?,?,0,?)",chargeId,userid,item.billId,item.fundId,item.configId,@(SSJChargeIdTypeCircleConfig),@([item.money doubleValue]),item.chargeImage,item.chargeThumbImage,item.chargeMemo,item.billDate,@(SSJSyncVersion()),cwriteDate,booksid]) {
+                if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, ibillid, ifunsid, cid, ichargetype, imoney, cimgurl, thumburl, cmemo, cbilldate, iversion, cwritedate, operatortype, cbooksid) values (?,?,?,?,?,?,?,?,?,?,?,?,?,0,?)",chargeId,userid,item.billId,item.fundId,item.configId,@(SSJChargeIdTypeCircleConfig),@([item.money doubleValue]),item.chargeImage,item.chargeThumbImage,item.chargeMemo,item.billDate,@(SSJSyncVersion()),cwriteDate,item.booksId]) {
                     if (failure) {
                         SSJDispatch_main_async_safe(^{
                             failure([db lastError]);

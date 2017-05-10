@@ -102,17 +102,17 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
     NSDictionary *sectionInfo = [self.datas ssj_safeObjectAtIndex:(NSUInteger)indexPath.section];
     NSArray *datas = sectionInfo[SSJBillingChargeRecordKey];
     SSJBillingChargeCellItem *selectedItem = [datas ssj_safeObjectAtIndex:indexPath.row];
-    SSJCalenderDetailViewController *calenderDetailVC = [[SSJCalenderDetailViewController alloc] initWithTableViewStyle:UITableViewStyleGrouped];
-    if (!self.booksId.length) {
-        self.booksId = [SSJUserTableManager queryUserItemForID:SSJUSERID()].currentBooksId;
+    
+    if (self.booksId.length) {
+        [self enterCalenderDetailWithSelectedItem:selectedItem];
+    } else {
+        [SSJUserTableManager queryUserItemWithID:SSJUSERID() success:^(SSJUserItem * _Nonnull userItem) {
+            self.booksId = userItem.currentBooksId;
+            [self enterCalenderDetailWithSelectedItem:selectedItem];
+        } failure:^(NSError * _Nonnull error) {
+            [SSJAlertViewAdapter showError:error];
+        }];
     }
-    if (self.period) {
-        calenderDetailVC.period = self.period;
-    }
-    calenderDetailVC.booksId = self.booksId;
-    calenderDetailVC.Id = self.ID;
-    calenderDetailVC.item = selectedItem;
-    [self.navigationController pushViewController:calenderDetailVC animated:YES];
 }
 
 //- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
@@ -164,6 +164,17 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
 
 - (void)reloadDataAfterSync {
     [self reloadData];
+}
+
+- (void)enterCalenderDetailWithSelectedItem:(SSJBillingChargeCellItem *)selectedItem {
+    SSJCalenderDetailViewController *calenderDetailVC = [[SSJCalenderDetailViewController alloc] initWithTableViewStyle:UITableViewStyleGrouped];
+    if (self.period) {
+        calenderDetailVC.period = self.period;
+    }
+    calenderDetailVC.booksId = self.booksId;
+    calenderDetailVC.Id = self.ID;
+    calenderDetailVC.item = selectedItem;
+    [self.navigationController pushViewController:calenderDetailVC animated:YES];
 }
 
 #pragma mark - Getter

@@ -219,20 +219,6 @@
 
 }
 
-- (void)setSignStr
-{
-    SSJUserItem *userItem = [SSJUserTableManager queryUserItemForID:SSJUSERID()];
-    if (userItem.signature.length < 1 || userItem.signature == nil) {
-        _geXingSignLabel.text = @"";
-        self.nicknameLabel.centerY = self.headPotraitImage.centerY;
-    }else{
-        _geXingSignLabel.text = userItem.signature;
-        self.nicknameLabel.top = self.headPotraitImage.top + 15;
-    }
-    self.dengjiImage.centerY = self.nicknameLabel.centerY;
-
-}
-
 -(void)setCheckInLevel:(SSJBookkeepingTreeLevel)checkInLevel{
     _checkInLevel = checkInLevel;
     UIImage *levelImage;

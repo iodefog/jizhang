@@ -10,4 +10,8 @@
 
 @interface SSJUserTable : NSObject
 
++ (NSDictionary *)syncDataWithUserId:(NSString *)userId;
+
++ (BOOL)mergeData:(NSDictionary *)info;
+
 @end

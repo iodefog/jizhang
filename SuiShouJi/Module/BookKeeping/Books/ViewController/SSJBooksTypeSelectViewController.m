@@ -29,6 +29,7 @@ static BOOL kNeedBannerDisplay = YES;
 #import "SSJBannerNetworkService.h"
 #import "SSJBooksTypeEditAlertView.h"
 #import "SSJBooksTypeDeletionAuthCodeAlertView.h"
+#import "SSJUserTableManager.h"
 
 @interface SSJBooksTypeSelectViewController ()<SSJEditableCollectionViewDelegate,SSJEditableCollectionViewDataSource>
 
@@ -51,6 +52,8 @@ static BOOL kNeedBannerDisplay = YES;
 @property (nonatomic, strong) SSJBooksTypeEditAlertView *editAlertView;
 
 @property (nonatomic, strong) SSJBooksTypeDeletionAuthCodeAlertView *authCodeAlertView;
+
+@property (nonatomic, strong) NSString *currentBooksId;
 
 @end
 
@@ -120,6 +123,7 @@ static BOOL kNeedBannerDisplay = YES;
             [SSJAnaliyticsManager event:@"change_account_book" extra:item.booksName
              ];
             SSJSelectBooksType(item.booksId);
+            self.currentBooksId = item.booksId;
             [self.collectionView reloadData];
             [self.mm_drawerController closeDrawerAnimated:YES completion:NULL];
         }
@@ -134,7 +138,7 @@ static BOOL kNeedBannerDisplay = YES;
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString *booksid = SSJGetCurrentBooksType();
+    NSString *booksid = self.currentBooksId;
     SSJBooksTypeItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
     SSJBooksTypeCollectionViewCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:SSJBooksTypeCellIdentifier forIndexPath:indexPath];
     if ([item.booksId isEqualToString:booksid]) {
@@ -369,16 +373,21 @@ static BOOL kNeedBannerDisplay = YES;
         [SSJAlertViewAdapter showError:error];
     }];
     
-    [SSJBooksTypeStore queryForBooksListWithSuccess:^(NSMutableArray<SSJBooksTypeItem *> *result) {
-        weakSelf.items = [NSMutableArray arrayWithArray:result];
-        [weakSelf.collectionView reloadData];
-    } failure:^(NSError *error) {
+    [SSJUserTableManager currentBooksId:^(NSString * _Nonnull booksId) {
+        weakSelf.currentBooksId = booksId;
+        [SSJBooksTypeStore queryForBooksListWithSuccess:^(NSMutableArray<SSJBooksTypeItem *> *result) {
+            weakSelf.items = [NSMutableArray arrayWithArray:result];
+            [weakSelf.collectionView reloadData];
+        } failure:^(NSError *error) {
+            [SSJAlertViewAdapter showError:error];
+        }];
+    } failure:^(NSError * _Nonnull error) {
         [SSJAlertViewAdapter showError:error];
     }];
 }
 
 - (void)deleteBooksWithType:(BOOL)type{
-    if ([self.editBooksItem.booksId isEqualToString:SSJGetCurrentBooksType()]) {
+    if ([self.editBooksItem.booksId isEqualToString:self.currentBooksId]) {
         SSJSelectBooksType(SSJUSERID());
     };
     __weak typeof(self) weakSelf = self;

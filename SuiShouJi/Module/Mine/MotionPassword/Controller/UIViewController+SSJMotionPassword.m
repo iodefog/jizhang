@@ -21,27 +21,33 @@
     
     NSString *userId = SSJUSERID();
     
-    SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"motionPWD", @"remindSettingMotionPWD"] forUserId:userId];
-    
-    if (![userItem.remindSettingMotionPWD boolValue] && !userItem.motionPWD.length) {
-        __weak typeof(self) weakSelf = self;
-        [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"为保障您的隐私，建议您设置下手势密码哦！" action:[SSJAlertViewAction actionWithTitle:@"取消" handler:^(SSJAlertViewAction * _Nonnull action) {
-            
-            userItem.remindSettingMotionPWD = @"1";
-            [SSJUserTableManager saveUserItem:userItem];
-            
-        }], [SSJAlertViewAction actionWithTitle:@"立即设置" handler:^(SSJAlertViewAction * _Nonnull action) {
-            
-            userItem.remindSettingMotionPWD = @"1";
-            [SSJUserTableManager saveUserItem:userItem];
-            
-            SSJMotionPasswordViewController *motionVC = [[SSJMotionPasswordViewController alloc] init];
-            motionVC.finishHandle = weakSelf.finishHandle;
-            motionVC.backController = weakSelf.backController;
-            motionVC.type = SSJMotionPasswordViewControllerTypeSetting;
-            [weakSelf.navigationController pushViewController:motionVC animated:YES];
-        }], nil];
-    }
+    [SSJUserTableManager queryProperty:@[@"motionPWD", @"remindSettingMotionPWD"] forUserId:userId success:^(SSJUserItem * _Nonnull userItem) {
+        if (![userItem.remindSettingMotionPWD boolValue] && !userItem.motionPWD.length) {
+            __weak typeof(self) weakSelf = self;
+            [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"为保障您的隐私，建议您设置下手势密码哦！" action:[SSJAlertViewAction actionWithTitle:@"取消" handler:^(SSJAlertViewAction * _Nonnull action) {
+                
+                userItem.remindSettingMotionPWD = @"1";
+                [SSJUserTableManager saveUserItem:userItem success:NULL failure:^(NSError * _Nonnull error) {
+                    [SSJAlertViewAdapter showError:error];
+                }];
+                
+            }], [SSJAlertViewAction actionWithTitle:@"立即设置" handler:^(SSJAlertViewAction * _Nonnull action) {
+                
+                userItem.remindSettingMotionPWD = @"1";
+                [SSJUserTableManager saveUserItem:userItem success:NULL failure:^(NSError * _Nonnull error) {
+                    [SSJAlertViewAdapter showError:error];
+                }];
+                
+                SSJMotionPasswordViewController *motionVC = [[SSJMotionPasswordViewController alloc] init];
+                motionVC.finishHandle = weakSelf.finishHandle;
+                motionVC.backController = weakSelf.backController;
+                motionVC.type = SSJMotionPasswordViewControllerTypeSetting;
+                [weakSelf.navigationController pushViewController:motionVC animated:YES];
+            }], nil];
+        }
+    } failure:^(NSError * _Nonnull error) {
+        [SSJAlertViewAdapter showError:error];
+    }];
 }
 
 @end

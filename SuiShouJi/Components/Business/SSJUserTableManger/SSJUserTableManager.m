@@ -23,7 +23,7 @@
         return;
     }
     
-    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSString *tUserId = [self unregisteredUserIdInDatabase:db error:&tError];
         if (tError) {
             if (failure) {
@@ -83,9 +83,9 @@
     return userId;
 }
 
-+ (SSJUserItem *)queryUserItemForID:(NSString *)userID {
++ (void)queryUserItemWithID:(NSString *)userID success:(void(^)(SSJUserItem *userItem))success failure:(void(^)(NSError *error))failure {
     NSArray *properties = [[SSJUserItem propertyMapping] allKeys];
-    return [self queryProperty:properties forUserId:userID];
+    [self queryProperty:properties forUserId:userID success:success failure:failure];
 }
 
 + (void)queryProperty:(NSArray *)propertyNames forUserId:(NSString *)userId success:(void(^)(SSJUserItem *userModel))success failure:(void(^)(NSError *error))failure {
@@ -157,15 +157,17 @@
     }];
 }
 
-+ (BOOL)saveUserItem:(SSJUserItem *)userItem {
++ (void)saveUserItem:(SSJUserItem *)userItem success:(void(^)())success failure:(void(^)(NSError *error))failure {
     NSString *userId = userItem.userId;
     if (!userId || !userId.length) {
         SSJPRINT(@"SSJ Warning:userid不能为空!!!");
-        return NO;
+        if (failure) {
+            failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"userid不能为空"}]);
+        }
+        return;
     }
     
-    __block BOOL success = YES;
-    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSString *statment = nil;
         NSMutableDictionary *userInfo = [[self fieldMapWithUserItem:userItem] mutableCopy];
         if (![db boolForQuery:@"select count(*) from BK_USER where CUSERID = ?", userId]) {
@@ -177,10 +179,38 @@
             statment = [self updateSQLStatementWithUserInfo:userInfo];
         }
         
-        success = [db executeUpdate:statment withParameterDictionary:userInfo];
+        if ([db executeUpdate:statment withParameterDictionary:userInfo]) {
+            if (success) {
+                SSJDispatchMainAsync(^{
+                    success();
+                });
+            }
+        } else {
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure([db lastError]);
+                });
+            }
+        }
     }];
-    
-    return success;
+}
+
++ (void)currentBooksId:(void(^)(NSString *booksId))success failure:(void(^)(NSError *error))failure {
+    [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID() success:^(SSJUserItem * _Nonnull userModel) {
+        NSString *booksId = userModel.currentBooksId.length ? userModel.currentBooksId : userModel.userId;
+        if (success) {
+            success(booksId);
+        }
+    } failure:failure];
+}
+
++ (void)updateCurrentBooksId:(NSString *)booksId success:(void(^)())success failure:(void(^)(NSError *error))failure {
+    SSJUserItem *item = [[SSJUserItem alloc] init];
+    item.userId = SSJUSERID();
+    item.currentBooksId = booksId;
+    [SSJUserTableManager saveUserItem:item success:^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:SSJBooksTypeDidChangeNotification object:nil];
+    } failure:failure];
 }
 
 + (NSDictionary *)fieldMapWithUserItem:(SSJUserItem *)userItem {

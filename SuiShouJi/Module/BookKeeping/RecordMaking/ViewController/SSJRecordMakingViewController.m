@@ -38,6 +38,8 @@
 #import "SSJBooksTypeStore.h"
 #import "SSJCreditCardItem.h"
 #import "SSJHomeDatePickerView.h"
+#import "SSJUserTableManager.h"
+
 #define INPUT_DEFAULT_COLOR [UIColor ssj_colorWithHex:@"#dddddd"]
 
 static const NSTimeInterval kAnimationDuration = 0.25;
@@ -84,6 +86,8 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 
 @property (nonatomic, strong) NSArray *booksIds;
 
+@property (nonatomic, strong) NSString *defaultBooksId;// 当前用户默认的账本id
+
 @property (nonatomic) long currentYear;
 @property (nonatomic) long currentMonth;
 @property (nonatomic) long currentDay;
@@ -116,11 +120,6 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         self.item = [[SSJBillingChargeCellItem alloc] init];
     }
     
-    // 如果没有账本id就传当前账本（从首页进入没有传账本id）
-    if (!self.item.booksId) {
-        self.item.booksId = SSJGetCurrentBooksType();
-    }
-    
     [self initData];
     
     self.view.backgroundColor = [UIColor whiteColor];
@@ -143,7 +142,20 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self loadCategoryAndBooksList];
+    // 如果没有账本id就传当前账本（从首页进入没有传账本id）
+    
+    [self.view ssj_showLoadingIndicator];
+    [[[[self loadCurrentBooksIdSignal] then:^RACSignal *{
+        return [self loadBooksListSignal];
+    }] then:^RACSignal *{
+        return [self loadBillTypeSignal];
+    }] subscribeError:^(NSError *error) {
+        [self.view ssj_hideLoadingIndicator];
+        [SSJAlertViewAdapter showError:error];
+    } completed:^{
+        [self.view ssj_hideLoadingIndicator];
+    }];
+    
     [self reloadMenberItems];
     if (![self showGuideViewIfNeeded]) {
         [self.FundingTypeSelectView dismiss];
@@ -177,7 +189,9 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
             [SSJAnaliyticsManager event:@"addRecord_changeBooks"];//记一笔-切换账本
             wself.item.booksId = [wself.booksIds ssj_safeObjectAtIndex:naviBar.selectedTitleIndex];
             [wself.currentInput becomeFirstResponder];
-            [wself loadCategoryAndBooksList];
+            [[wself loadBillTypeSignal] subscribeError:^(NSError *error) {
+                [SSJAlertViewAdapter showError:error];
+            } completed:NULL];
         };
         _customNaviBar.addNewBookHandle = ^(SSJRecordMakingCustomNavigationBar *naviBar) {
             [wself.view endEditing:YES];
@@ -651,48 +665,29 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 /**
  加载收支类别和账本数据
  */
-- (void)loadCategoryAndBooksList {
-    if (_customNaviBar.selectedBillType != SSJBillTypePay
-         && _customNaviBar.selectedBillType != SSJBillTypeIncome) {
-        return;
-    }
-    
-    __weak typeof(self) weakSelf = self;
-    [self.view ssj_showLoadingIndicator];
-    [SSJCategoryListHelper queryForCategoryListWithIncomeOrExpenture:_customNaviBar.selectedBillType booksId:self.item.booksId Success:^(NSMutableArray *categoryList) {
-        
+- (RACSignal *)loadCurrentBooksIdSignal {
+    @weakify(self);
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        @strongify(self);
+        [SSJUserTableManager currentBooksId:^(NSString * _Nonnull booksId) {
+            self.defaultBooksId = booksId;
+            if (!self.item.booksId) {
+                self.item.booksId = booksId;
+            }
+            [subscriber sendNext:nil];
+            [subscriber sendCompleted];
+        } failure:^(NSError * _Nonnull error) {
+            [subscriber sendError:error];
+        }];
+        return nil;
+    }];
+}
+
+- (RACSignal *)loadBooksListSignal {
+    @weakify(self);
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        @strongify(self);
         [SSJBooksTypeStore queryForBooksListWithSuccess:^(NSMutableArray<SSJBooksTypeItem *> *bookList) {
-            
-            [self.view ssj_hideLoadingIndicator];
-            
-            __block SSJRecordMakingBillTypeSelectionCellItem *selectedItem = nil;
-            dispatch_apply([categoryList count], dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(size_t index) {
-                SSJRecordMakingBillTypeSelectionCellItem *item = [categoryList ssj_safeObjectAtIndex:index];
-                if (weakSelf.item.billId && [item.ID isEqualToString:weakSelf.item.billId]) {
-                    item.selected = YES;
-                    selectedItem = item;
-                }
-            });
-            
-            if (!selectedItem) {
-                selectedItem = [categoryList firstObject];
-                selectedItem.selected = YES;
-                weakSelf.item.billId = selectedItem.ID;
-            }
-            
-            if (_customNaviBar.selectedBillType == SSJBillTypePay) {
-                weakSelf.paymentTypeView.items = categoryList;
-            } else if (_customNaviBar.selectedBillType == SSJBillTypeIncome) {
-                weakSelf.incomeTypeView.items = categoryList;
-            }
-            
-            if (selectedItem) {
-                [UIView animateWithDuration:kAnimationDuration animations:^{
-                    weakSelf.billTypeInputView.fillColor = [UIColor ssj_colorWithHex:selectedItem.colorValue];
-                }];
-                weakSelf.billTypeInputView.billTypeName = selectedItem.title;
-            }
-            
             NSInteger selectedIndex = -1;
             NSMutableArray *bookTitles = [[NSMutableArray alloc] initWithCapacity:bookList.count];
             NSMutableArray *bookIds = [[NSMutableArray alloc] initWithCapacity:bookList.count];
@@ -702,36 +697,66 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
                 if (item.booksId) {
                     [bookTitles addObject:item.booksName];
                     [bookIds addObject:item.booksId];
-                    
                     if ([item.booksId isEqualToString:self.item.booksId]) {
                         selectedIndex = i;
                     }
                 }
             }
             
-            _booksIds = [bookIds copy];
-            _customNaviBar.titles = bookTitles;
-            _customNaviBar.selectedTitleIndex = selectedIndex;
+            self.booksIds = [bookIds copy];
+            self.customNaviBar.titles = bookTitles;
+            self.customNaviBar.selectedTitleIndex = selectedIndex;
             
+            [subscriber sendNext:nil];
+            [subscriber sendCompleted];
         } failure:^(NSError *error) {
-            [self.view ssj_hideLoadingIndicator];
-            [self showError:error];
+            [subscriber sendError:error];
         }];
-        
-    } failure:^(NSError *error) {
-        [self.view ssj_hideLoadingIndicator];
-        [self showError:error];
+        return nil;
     }];
 }
 
-- (void)showError:(NSError *)error {
-    NSString *message = nil;
-#ifdef DEBUG
-    message = [error localizedDescription];
-#else
-    message = SSJ_ERROR_MESSAGE;
-#endif
-    [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:message action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
+- (RACSignal *)loadBillTypeSignal {
+    @weakify(self);
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        @strongify(self);
+        [SSJCategoryListHelper queryForCategoryListWithIncomeOrExpenture:self.customNaviBar.selectedBillType booksId:self.item.booksId Success:^(NSMutableArray *categoryList) {
+            
+            __block SSJRecordMakingBillTypeSelectionCellItem *selectedItem = nil;
+            dispatch_apply([categoryList count], dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(size_t index) {
+                SSJRecordMakingBillTypeSelectionCellItem *item = [categoryList ssj_safeObjectAtIndex:index];
+                if (self.item.billId && [item.ID isEqualToString:self.item.billId]) {
+                    item.selected = YES;
+                    selectedItem = item;
+                }
+            });
+            
+            if (!selectedItem) {
+                selectedItem = [categoryList firstObject];
+                selectedItem.selected = YES;
+                self.item.billId = selectedItem.ID;
+            }
+            
+            if (self.customNaviBar.selectedBillType == SSJBillTypePay) {
+                self.paymentTypeView.items = categoryList;
+            } else if (self.customNaviBar.selectedBillType == SSJBillTypeIncome) {
+                self.incomeTypeView.items = categoryList;
+            }
+            
+            if (selectedItem) {
+                [UIView animateWithDuration:kAnimationDuration animations:^{
+                    self.billTypeInputView.fillColor = [UIColor ssj_colorWithHex:selectedItem.colorValue];
+                }];
+                self.billTypeInputView.billTypeName = selectedItem.title;
+            }
+            
+            [subscriber sendNext:nil];
+            [subscriber sendCompleted];
+        } failure:^(NSError *error) {
+            [subscriber sendError:error];
+        }];
+        return nil;
+    }];
 }
 
 // 获取选中的资金账户
@@ -894,7 +919,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     
     [SSJRecordMakingStore saveChargeWithChargeItem:self.item Success:^(SSJBillingChargeCellItem *editeItem){
         BOOL hasChangeBooksType = NO;
-        if (![editeItem.booksId isEqualToString:SSJGetCurrentBooksType()]) {
+        if (![editeItem.booksId isEqualToString:self.defaultBooksId]) {
             SSJSelectBooksType(editeItem.booksId);
             hasChangeBooksType = YES;
         }
@@ -1003,7 +1028,9 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 - (void)updateBillTypeSelectionViewAndInputView {
     if (_customNaviBar.selectedBillType == SSJBillTypePay) {
         if (_paymentTypeView.items.count == 0) {
-            [self loadCategoryAndBooksList];
+            [[self loadBillTypeSignal] subscribeError:^(NSError *error) {
+                [SSJAlertViewAdapter showError:error];
+            } completed:NULL];
         } else {
             for (SSJRecordMakingBillTypeSelectionCellItem *item in _paymentTypeView.items) {
                 if (item.selected) {
@@ -1017,7 +1044,9 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         }
     } else if (_customNaviBar.selectedBillType == SSJBillTypeIncome) {
         if (_incomeTypeView.items.count == 0) {
-            [self loadCategoryAndBooksList];
+            [[self loadBillTypeSignal] subscribeError:^(NSError *error) {
+                [SSJAlertViewAdapter showError:error];
+            } completed:NULL];
         } else {
             for (SSJRecordMakingBillTypeSelectionCellItem *item in _incomeTypeView.items) {
                 if (item.selected) {

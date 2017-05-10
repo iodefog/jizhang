@@ -71,12 +71,10 @@ static const int kVerifyFailureTimesLimit = 5;
         return;
     }
     
-    SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"motionPWD", @"motionPWDState"] forUserId:SSJUSERID()];
-    
-    // 手势密码开启
-    if ([userItem.motionPWDState boolValue]) {
-        //  验证手势密码页面
-        if (userItem.motionPWD.length) {
+    [SSJUserTableManager queryProperty:@[@"motionPWD", @"motionPWDState"] forUserId:SSJUSERID() success:^(SSJUserItem * _Nonnull userItem) {
+        // 手势密码开启
+        if ([userItem.motionPWDState boolValue] && userItem.motionPWD.length) {
+            //  验证手势密码页面
             SSJMotionPasswordViewController *motionVC = [[SSJMotionPasswordViewController alloc] init];
             motionVC.type = SSJMotionPasswordViewControllerTypeVerification;
             motionVC.finishHandle = ^(UIViewController *controller) {
@@ -89,12 +87,17 @@ static const int kVerifyFailureTimesLimit = 5;
             [currentVC presentViewController:naviVC animated:animated completion:NULL];
             
             return;
+        } else {
+            if (finish) {
+                finish(NO);
+            }
         }
-    }
-    
-    if (finish) {
-        finish(NO);
-    }
+    } failure:^(NSError * _Nonnull error) {
+        [SSJAlertViewAdapter showError:error];
+        if (finish) {
+            finish(NO);
+        }
+    }];
 }
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -118,48 +121,59 @@ static const int kVerifyFailureTimesLimit = 5;
     
     switch (self.type) {
         case SSJMotionPasswordViewControllerTypeSetting: {
-            _userItem = [SSJUserTableManager queryProperty:@[@"userId", @"loginPWD", @"motionPWD", @"motionTrackState"] forUserId:SSJUSERID()];
-            
-            self.motionView.showStroke = [_userItem.motionTrackState boolValue];
-            if ([_userItem.motionTrackState boolValue]) {
-                [self.view addSubview:self.miniMotionView];
-            }
-            
-            if (_userItem.motionPWD.length) {
-                self.needToVerifyOriginalPwd = YES;
-                self.miniMotionView.hidden = YES;
-                self.remindLab.text = @"请输入原手势密码";
-                [self.view addSubview:self.verifyLoginPwdBtn];
-            } else {
-                self.remindLab.text = @"绘制解锁图案";
-            }
-            
-        }   break;
+            [SSJUserTableManager queryProperty:@[@"userId", @"loginPWD", @"motionPWD", @"motionTrackState"] forUserId:SSJUSERID() success:^(SSJUserItem * _Nonnull userModel) {
+                _userItem = userModel;
+                self.motionView.showStroke = [_userItem.motionTrackState boolValue];
+                if ([_userItem.motionTrackState boolValue]) {
+                    [self.view addSubview:self.miniMotionView];
+                }
+                
+                if (_userItem.motionPWD.length) {
+                    self.needToVerifyOriginalPwd = YES;
+                    self.miniMotionView.hidden = YES;
+                    self.remindLab.text = @"请输入原手势密码";
+                    [self.view addSubview:self.verifyLoginPwdBtn];
+                } else {
+                    self.remindLab.text = @"绘制解锁图案";
+                }
+            } failure:^(NSError * _Nonnull error) {
+                [SSJAlertViewAdapter showError:error];
+            }];
+        }
+            break;
             
         case SSJMotionPasswordViewControllerTypeVerification: {
             //  查询手势密码
-            _userItem = [SSJUserTableManager queryProperty:@[@"userId", @"motionPWD", @"icon", @"mobileNo", @"fingerPrintState", @"motionTrackState"] forUserId:SSJUSERID()];
-            self.password = _userItem.motionPWD;
-            self.motionView.showStroke = [_userItem.motionTrackState boolValue];
-            
-            [self.view addSubview:self.portraitView];
-            [self.view addSubview:self.forgetPwdBtn];
-            [self.view addSubview:self.changeAccountBtn];
-            self.remindLab.text = @"请输入手势密码";
-            
-            if ([_userItem.fingerPrintState boolValue]) {
-                [self verifyTouchIDIfNeeded];
-            }
-            
-        }   break;
+            [SSJUserTableManager queryProperty:@[@"userId", @"motionPWD", @"icon", @"mobileNo", @"fingerPrintState", @"motionTrackState"] forUserId:SSJUSERID() success:^(SSJUserItem * _Nonnull userModel) {
+                _userItem = userModel;
+                self.password = _userItem.motionPWD;
+                self.motionView.showStroke = [_userItem.motionTrackState boolValue];
+                
+                [self.view addSubview:self.portraitView];
+                [self.view addSubview:self.forgetPwdBtn];
+                [self.view addSubview:self.changeAccountBtn];
+                self.remindLab.text = @"请输入手势密码";
+                
+                if ([_userItem.fingerPrintState boolValue]) {
+                    [self verifyTouchIDIfNeeded];
+                }
+            } failure:^(NSError * _Nonnull error) {
+                [SSJAlertViewAdapter showError:error];
+            }];
+        }
+            break;
             
         case SSJMotionPasswordViewControllerTypeTurnoff: {
-            _userItem = [SSJUserTableManager queryProperty:@[@"userId", @"loginPWD", @"motionPWD", @"motionTrackState"] forUserId:SSJUSERID()];
-            self.remindLab.text = @"请输入原手势密码";
-            self.motionView.showStroke = [_userItem.motionTrackState boolValue];
-            [self.view addSubview:self.verifyLoginPwdBtn];
-            
-        }   break;
+            [SSJUserTableManager queryProperty:@[@"userId", @"loginPWD", @"motionPWD", @"motionTrackState"] forUserId:SSJUSERID() success:^(SSJUserItem * _Nonnull userModel) {
+                _userItem = userModel;
+                self.remindLab.text = @"请输入原手势密码";
+                self.motionView.showStroke = [_userItem.motionTrackState boolValue];
+                [self.view addSubview:self.verifyLoginPwdBtn];
+            } failure:^(NSError * _Nonnull error) {
+                [SSJAlertViewAdapter showError:error];
+            }];
+        }
+            break;
     }
 }
 
@@ -261,13 +275,15 @@ static const int kVerifyFailureTimesLimit = 5;
                     //  设置成功，保存手势密码
                     _userItem.motionPWD = self.password;
                     _userItem.motionPWDState = @"1";
-                    [SSJUserTableManager saveUserItem:_userItem];
-                    
-                    if (self.finishHandle) {
-                        self.finishHandle(self);
-                    } else {
-                        [self ssj_backOffAction];
-                    }
+                    [SSJUserTableManager saveUserItem:_userItem success:^{
+                        if (self.finishHandle) {
+                            self.finishHandle(self);
+                        } else {
+                            [self ssj_backOffAction];
+                        }
+                    } failure:^(NSError * _Nonnull error) {
+                        [SSJAlertViewAdapter showError:error];
+                    }];
                     return SCYMotionEncryptionCircleLayerStatusCorrect;
                 } else {
                     //  设置失败，重新绘制
@@ -316,8 +332,11 @@ static const int kVerifyFailureTimesLimit = 5;
             if ([_userItem.motionPWD isEqualToString:[keypads componentsJoinedByString:@","]]) {
                 //  验证成功
                 _userItem.motionPWDState = @"0";
-                [SSJUserTableManager saveUserItem:_userItem];
-                [self goBackAction];
+                [SSJUserTableManager saveUserItem:_userItem success:^{
+                    [self goBackAction];
+                } failure:^(NSError * _Nonnull error) {
+                    [SSJAlertViewAdapter showError:error];
+                }];
                 return SCYMotionEncryptionCircleLayerStatusCorrect;
             } else {
                 //  验证失败
@@ -344,25 +363,42 @@ static const int kVerifyFailureTimesLimit = 5;
     } else {
         // 注销登录状态、清空用户的手势密码，并跳转至登录页面
         _userItem.motionPWD = @"";
-        [SSJUserTableManager saveUserItem:_userItem];
-        
-        SSJClearLoginInfo();
-        [SSJUserTableManager reloadUserIdWithSuccess:^{
+        @weakify(self);
+        [[[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+            @strongify(self);
+            [SSJUserTableManager saveUserItem:self.userItem success:^{
+                [subscriber sendCompleted];
+            } failure:^(NSError * _Nonnull error) {
+                [subscriber sendError:error];
+            }];
+            return nil;
+        }] then:^RACSignal *{
+            return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+                SSJClearLoginInfo();
+                [SSJUserTableManager reloadUserIdWithSuccess:^{
+                    [subscriber sendCompleted];
+                } failure:^(NSError * _Nonnull error) {
+                    [subscriber sendError:error];
+                }];
+                return nil;
+            }];
+        }] subscribeError:^(NSError *error) {
+            [SSJAlertViewAdapter showError:error];
+        } completed:^{
+            @strongify(self);
             UIViewController *previousVC = [self ssj_previousViewController];
             if ([previousVC isKindOfClass:[SSJLoginViewController class]]) {
                 SSJLoginViewController *loginVC = (SSJLoginViewController *)previousVC;
-                loginVC.mobileNo = _userItem.mobileNo;
+                loginVC.mobileNo = self.userItem.mobileNo;
                 [self.navigationController popViewControllerAnimated:YES];
             } else {
                 SSJLoginViewController *loginVC = [[SSJLoginViewController alloc] init];
-                loginVC.mobileNo = _userItem.mobileNo;
+                loginVC.mobileNo = self.userItem.mobileNo;
                 loginVC.finishHandle = self.finishHandle;
                 loginVC.cancelHandle = self.finishHandle;
                 loginVC.backController = self.backController;
                 [self.navigationController setViewControllers:@[loginVC] animated:YES];
             }
-        } failure:^(NSError * _Nonnull error) {
-            [SSJAlertViewAdapter showError:error];
         }];
     }
 }
@@ -422,9 +458,12 @@ static const int kVerifyFailureTimesLimit = 5;
             [_passwordAlertView dismiss:NULL];
         } else if (_type == SSJMotionPasswordViewControllerTypeTurnoff) {
             _userItem.motionPWDState = @"0";
-            [SSJUserTableManager saveUserItem:_userItem];
-            [_passwordAlertView dismiss:^(BOOL finished) {
-                [self goBackAction];
+            [SSJUserTableManager saveUserItem:_userItem success:^{
+                [_passwordAlertView dismiss:^(BOOL finished) {
+                    [self goBackAction];
+                }];
+            } failure:^(NSError * _Nonnull error) {
+                [SSJAlertViewAdapter showError:error];
             }];
         }
     } else {

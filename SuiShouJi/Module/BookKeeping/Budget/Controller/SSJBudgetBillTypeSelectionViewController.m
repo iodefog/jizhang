@@ -13,6 +13,7 @@
 #import "SSJBudgetDatabaseHelper.h"
 #import "SSJBudgetModel.h"
 #import "SSJDatePeriod.h"
+#import "SSJUserTableManager.h"
 
 static NSString *const kBudgetBillTypeSelectionCellId = @"kBudgetBillTypeSelectionCellId";
 
@@ -144,30 +145,33 @@ static NSString *const kBudgetBillTypeSelectionCellId = @"kBudgetBillTypeSelecti
     }
     
     if (self.enterFromBudgetList) {
-        
-        SSJDatePeriod *period = [SSJDatePeriod datePeriodWithPeriodType:SSJDatePeriodTypeMonth date:[NSDate date]];
-        SSJBudgetModel *budgetModel = [[SSJBudgetModel alloc] init];
-        budgetModel.ID = SSJUUID();
-        budgetModel.userId = SSJUSERID();
-        budgetModel.booksId = SSJGetCurrentBooksType();
-        budgetModel.billIds = self.selectedTypeList;
-        budgetModel.type = 1;
-        budgetModel.budgetMoney = 3000;
-        budgetModel.remindMoney = 300;
-        budgetModel.beginDate = [period.startDate formattedDateWithFormat:@"yyyy-MM-dd"];
-        budgetModel.endDate = [period.endDate formattedDateWithFormat:@"yyyy-MM-dd"];
-        budgetModel.isAutoContinued = YES;
-        budgetModel.isRemind = YES;
-        budgetModel.isAlreadyReminded = NO;
-        budgetModel.isLastDay = YES;
-        
-        SSJBudgetEditViewController *newBudgetController = [[SSJBudgetEditViewController alloc] init];
-        newBudgetController.model = budgetModel;
-        
-        NSMutableArray *viewControllers = [self.navigationController.viewControllers mutableCopy];
-        [viewControllers removeObject:self];
-        [viewControllers addObject:newBudgetController];
-        [self.navigationController setViewControllers:viewControllers animated:YES];
+        [SSJUserTableManager currentBooksId:^(NSString * _Nonnull booksId) {
+            SSJDatePeriod *period = [SSJDatePeriod datePeriodWithPeriodType:SSJDatePeriodTypeMonth date:[NSDate date]];
+            SSJBudgetModel *budgetModel = [[SSJBudgetModel alloc] init];
+            budgetModel.ID = SSJUUID();
+            budgetModel.userId = SSJUSERID();
+            budgetModel.booksId = booksId;
+            budgetModel.billIds = self.selectedTypeList;
+            budgetModel.type = 1;
+            budgetModel.budgetMoney = 3000;
+            budgetModel.remindMoney = 300;
+            budgetModel.beginDate = [period.startDate formattedDateWithFormat:@"yyyy-MM-dd"];
+            budgetModel.endDate = [period.endDate formattedDateWithFormat:@"yyyy-MM-dd"];
+            budgetModel.isAutoContinued = YES;
+            budgetModel.isRemind = YES;
+            budgetModel.isAlreadyReminded = NO;
+            budgetModel.isLastDay = YES;
+            
+            SSJBudgetEditViewController *newBudgetController = [[SSJBudgetEditViewController alloc] init];
+            newBudgetController.model = budgetModel;
+            
+            NSMutableArray *viewControllers = [self.navigationController.viewControllers mutableCopy];
+            [viewControllers removeObject:self];
+            [viewControllers addObject:newBudgetController];
+            [self.navigationController setViewControllers:viewControllers animated:YES];
+        } failure:^(NSError * _Nonnull error) {
+            [SSJAlertViewAdapter showError:error];
+        }];
         
         return;
     }

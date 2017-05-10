@@ -94,19 +94,16 @@ BOOL SSJSaveSyncSetting(SSJSyncSettingType setting) {
     return [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
-NSString *SSJGetCurrentBooksType(){
-    SSJUserItem *item = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID()];
-    if (!item.currentBooksId.length) {
-        return SSJUSERID();
-    }
-    return item.currentBooksId;
-}
-
 BOOL SSJSelectBooksType(NSString *booksId){
     SSJUserItem *item = [[SSJUserItem alloc]init];
     item.userId = SSJUSERID();
     item.currentBooksId = booksId;
-    BOOL success = [SSJUserTableManager saveUserItem:item];
+    [SSJUserTableManager saveUserItem:item success:^{
+        
+    } failure:^(NSError * _Nonnull error) {
+        
+    }];
+    BOOL success;
     if (success) {
         [[NSNotificationCenter defaultCenter]postNotificationName:SSJBooksTypeDidChangeNotification object:nil];
     }

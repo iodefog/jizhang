@@ -34,14 +34,12 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
                                       failure:(void (^)(NSError * _Nullable error))failure {
     
     NSString *currentDate = [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"];
-    SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID()];
-    if (!userItem.currentBooksId.length) {
-        userItem.currentBooksId = SSJUSERID();
-    }
-    
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        
-        FMResultSet *resultSet = [db executeQuery:@"select a.cbillid, b.cname, b.ccolor from bk_user_bill as a, bk_bill_type as b where a.cuserid = ? and a.cbillid = b.id and b.itype = 1 and b.istate <> 2", userItem.userId];
+        NSString *booksId = [db stringForQuery:@"select ccurrentBooksId from bk_user where cuserid = ?", SSJUSERID()];
+        if (!booksId) {
+            booksId = SSJUSERID();
+        }
+        FMResultSet *resultSet = [db executeQuery:@"select a.cbillid, b.cname, b.ccolor from bk_user_bill as a, bk_bill_type as b where a.cuserid = ? and a.cbillid = b.id and b.itype = 1 and b.istate <> 2", SSJUSERID()];
         if (!resultSet) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{
@@ -60,7 +58,7 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
         }
         [resultSet close];
         
-        FMResultSet *budgetResult = [db executeQuery:@"select ibid, itype, cbilltype, imoney, iremindmoney, csdate, cedate, istate, iremind, ihasremind, cbooksid, islastday from bk_user_budget where cuserid = ? and operatortype <> 2 and csdate <= ? and cedate >= ? and cbooksid = ? order by imoney desc", userItem.userId, currentDate, currentDate, userItem.currentBooksId];
+        FMResultSet *budgetResult = [db executeQuery:@"select ibid, itype, cbilltype, imoney, iremindmoney, csdate, cedate, istate, iremind, ihasremind, cbooksid, islastday from bk_user_budget where cuserid = ? and operatortype <> 2 and csdate <= ? and cedate >= ? and cbooksid = ? order by imoney desc", SSJUSERID(), currentDate, currentDate, booksId];
         
         if (!budgetResult) {
             if (failure) {
@@ -167,13 +165,12 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
 + (void)queryForCurrentBudgetListWithSuccess:(void(^)(NSArray<SSJBudgetModel *> *result))success failure:(void (^)(NSError *error))failure {
     
     NSString *currentDate = [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"];
-    SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID()];
-    if (!userItem.currentBooksId.length) {
-        userItem.currentBooksId = SSJUSERID();
-    }
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        
-        FMResultSet *budgetResult = [db executeQuery:@"select ibid, itype, cbilltype, imoney, iremindmoney, csdate, cedate, istate, iremind, ihasremind, cbooksid, islastday from bk_user_budget where cuserid = ? and operatortype <> 2 and csdate <= ? and cedate >= ? and cbooksid = ? order by imoney desc", SSJUSERID(), currentDate, currentDate, userItem.currentBooksId];
+        NSString *booksId = [db stringForQuery:@"select ccurrentBooksId from bk_user where cuserid = ?", SSJUSERID()];
+        if (!booksId) {
+            booksId = SSJUSERID();
+        }
+        FMResultSet *budgetResult = [db executeQuery:@"select ibid, itype, cbilltype, imoney, iremindmoney, csdate, cedate, istate, iremind, ihasremind, cbooksid, islastday from bk_user_budget where cuserid = ? and operatortype <> 2 and csdate <= ? and cedate >= ? and cbooksid = ? order by imoney desc", SSJUSERID(), currentDate, currentDate, booksId];
         
         if (!budgetResult) {
             if (failure) {
@@ -406,10 +403,11 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
 + (void)queryForBudgetIdListWithType:(SSJBudgetPeriodType)type billIds:(NSArray *)billIds success:(void(^)(NSDictionary *result))success failure:(void (^)(NSError *error))failure {
     
     NSString *userid = SSJUSERID();
-    NSString *booksId = SSJGetCurrentBooksType();
-    
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        
+        NSString *booksId = [db stringForQuery:@"select currentBooksId from bk_user where cuserid = ?", userid];
+        if (!booksId) {
+            booksId = userid;
+        }
         NSString *billIdStr = [self billTypeStringWithBillTypeArr:billIds];
         NSString *today = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"];
         
@@ -795,16 +793,14 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
                                                          success:(void(^)(NSArray <SSJBudgetBillTypeSelectionCellItem *>*list))success
                                                          failure:(void(^)(NSError *error))failure {
     NSString *userID = SSJUSERID();
-    
-    if (!booksId) {
-        SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID()];
-        booksId = userItem.currentBooksId ?: SSJUSERID();
-    }
-    
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        
+        NSString *tBooksId = booksId;
+        if (!tBooksId) {
+            tBooksId = [db stringForQuery:@"select ccurrentBooksId from bk_user where cuserid = ?", SSJUSERID()];
+            tBooksId = tBooksId ?: SSJUSERID();
+        }
         // 查询所有默认支出类别
-        FMResultSet *resultSet = [db executeQuery:@"select bt.cname, bt.ccolor, bt.ccoin, ub.cwritedate, bt.id from BK_BILL_TYPE bt, BK_USER_BILL ub where ub.istate = 1 and bt.itype = 1 and bt.id = ub.cbillid and ub.cuserid = ? and ub.cbooksid = ? and (bt.cparent <> 'root' or bt.cparent is null) order by ub.iorder, ub.cwritedate, bt.id", userID, booksId];
+        FMResultSet *resultSet = [db executeQuery:@"select bt.cname, bt.ccolor, bt.ccoin, ub.cwritedate, bt.id from BK_BILL_TYPE bt, BK_USER_BILL ub where ub.istate = 1 and bt.itype = 1 and bt.id = ub.cbillid and ub.cuserid = ? and ub.cbooksid = ? and (bt.cparent <> 'root' or bt.cparent is null) order by ub.iorder, ub.cwritedate, bt.id", userID, tBooksId];
         
         if (!resultSet) {
             if (failure) {

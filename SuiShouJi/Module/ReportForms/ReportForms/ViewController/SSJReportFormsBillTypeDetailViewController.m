@@ -22,6 +22,7 @@
 #import "SSJReportFormsCurveModel.h"
 #import "SSJDatePeriod.h"
 #import "SSJReportFormsUtil.h"
+#import "SSJUserTableManager.h"
 
 static const CGFloat kSpaceHeight = 10;
 
@@ -349,18 +350,22 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
 
 #pragma mark - Event
 - (void)enterCalendarVC {
-    [SSJAnaliyticsManager event:@"form_item_date_custom"];
-    __weak typeof(self) wself = self;
-    SSJMagicExportCalendarViewController *calendarVC = [[SSJMagicExportCalendarViewController alloc] init];
-    calendarVC.title = @"自定义时间";
-    calendarVC.booksId = SSJGetCurrentBooksType();
-    calendarVC.billTypeId = _billTypeID;
-    calendarVC.completion = ^(NSDate *selectedBeginDate, NSDate *selectedEndDate) {
-        wself.periodControl.customPeriod = [SSJDatePeriod datePeriodWithStartDate:selectedBeginDate endDate:selectedEndDate];
-    };
-    [self.navigationController pushViewController:calendarVC animated:YES];
-    
     [SSJAnaliyticsManager event:@"form_date_custom"];
+    [SSJAnaliyticsManager event:@"form_item_date_custom"];
+    
+    __weak typeof(self) wself = self;
+    [SSJUserTableManager currentBooksId:^(NSString * _Nonnull booksId) {
+        SSJMagicExportCalendarViewController *calendarVC = [[SSJMagicExportCalendarViewController alloc] init];
+        calendarVC.title = @"自定义时间";
+        calendarVC.booksId = booksId;
+        calendarVC.billTypeId = wself.billTypeID;
+        calendarVC.completion = ^(NSDate *selectedBeginDate, NSDate *selectedEndDate) {
+            wself.periodControl.customPeriod = [SSJDatePeriod datePeriodWithStartDate:selectedBeginDate endDate:selectedEndDate];
+        };
+        [wself.navigationController pushViewController:calendarVC animated:YES];
+    } failure:^(NSError * _Nonnull error) {
+        [SSJAlertViewAdapter showError:error];
+    }];
 }
 
 - (void)questionBtnAction {
