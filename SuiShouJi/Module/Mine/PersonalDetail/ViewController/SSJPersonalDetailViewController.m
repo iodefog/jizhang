@@ -66,7 +66,7 @@ extern BOOL kHomeNeedLoginPop;
         [weakSelf getCheckInLevel];
         [weakSelf.tableView reloadData];
     } failure:^(NSError *error) {
-        
+        [SSJAlertViewAdapter showError:error];
     }];
 }
 
@@ -347,24 +347,12 @@ extern BOOL kHomeNeedLoginPop;
 }
 
 - (void)getCheckInLevel{
-    SSJBookkeepingTreeCheckInModel *checkInModel = [SSJBookkeepingTreeStore queryCheckInInfoWithUserId:SSJUSERID() error:nil];
-    self.checkInLevel = [SSJBookkeepingTreeHelper treeLevelNameForLevel:[SSJBookkeepingTreeHelper treeLevelForDays:checkInModel.checkInTimes]];
-    [self.tableView reloadData];
+    [SSJBookkeepingTreeStore queryCheckInInfoWithUserId:SSJUSERID() success:^(SSJBookkeepingTreeCheckInModel * _Nonnull checkInModel) {
+        self.checkInLevel = [SSJBookkeepingTreeHelper treeLevelNameForLevel:[SSJBookkeepingTreeHelper treeLevelForDays:checkInModel.checkInTimes]];
+        [self.tableView reloadData];
+    } failure:^(NSError * _Nonnull error) {
+        [SSJAlertViewAdapter showError:error];
+    }];
 }
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

@@ -14,11 +14,11 @@
 + (NSDictionary *)syncDataWithUserId:(NSString *)userId {
     NSMutableDictionary *info = [NSMutableDictionary dictionary];
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(SSJDatabase *db) {
-        FMResultSet *rs = [db executeQuery:@"select nickName, signature, writeDate from bk_user where cuserid = ?", userId];
+        FMResultSet *rs = [db executeQuery:@"select cnickid, usersignature, cwritedate from bk_user where cuserid = ?", userId];
         while ([rs next]) {
-            [info setObject:[rs stringForColumn:@"nickName"] ?: @"" forKey:@"crealname"];
-            [info setObject:[rs stringForColumn:@"signature"] ?: @"" forKey:@"usersignature"];
-            [info setObject:[rs stringForColumn:@"writeDate"] ?: @"" forKey:@"cwritedate"];
+            [info setObject:[rs stringForColumn:@"cnickid"] ?: @"" forKey:@"crealname"];
+            [info setObject:[rs stringForColumn:@"usersignature"] ?: @"" forKey:@"usersignature"];
+            [info setObject:[rs stringForColumn:@"cwritedate"] ?: @"" forKey:@"cwritedate"];
         }
         [rs close];
         

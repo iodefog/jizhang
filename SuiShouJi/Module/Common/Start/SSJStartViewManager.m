@@ -123,19 +123,22 @@ static const NSTimeInterval kTransitionDuration = 0.3;
     if ([_checkInService.returnCode isEqualToString:@"1"]) {
         
         _checkInModel = _checkInService.checkInModel;
-        [SSJBookkeepingTreeStore saveCheckInModel:_checkInModel error:nil];
+        [SSJBookkeepingTreeStore saveCheckInModel:_checkInModel success:NULL failure:NULL];
         [self loadTreeViewIfNeeded];
         
     } else if ([_checkInService.returnCode isEqualToString:@"2"]) {
         
         // 如果本地保存的最近一次签到时间和服务端返回的不一致，说明本地没有保存最新的签到记录
-        _checkInModel = [SSJBookkeepingTreeStore queryCheckInInfoWithUserId:SSJUSERID() error:nil];
-        if (![_checkInModel.lastCheckInDate isEqualToString:_checkInService.checkInModel.lastCheckInDate]) {
-            _checkInModel = _checkInService.checkInModel;
-            [SSJBookkeepingTreeStore saveCheckInModel:_checkInService.checkInModel error:nil];
-            [self loadTreeViewIfNeeded];
-        }
-        
+        [SSJBookkeepingTreeStore queryCheckInInfoWithUserId:SSJUSERID() success:^(SSJBookkeepingTreeCheckInModel * _Nonnull model) {
+            _checkInModel = model;
+            if (![_checkInModel.lastCheckInDate isEqualToString:_checkInService.checkInModel.lastCheckInDate]) {
+                _checkInModel = _checkInService.checkInModel;
+                [SSJBookkeepingTreeStore saveCheckInModel:_checkInModel success:NULL failure:NULL];
+                [self loadTreeViewIfNeeded];
+            }
+        } failure:^(NSError * _Nonnull error) {
+            [SSJAlertViewAdapter showError:error];
+        }];
     }
 }
 

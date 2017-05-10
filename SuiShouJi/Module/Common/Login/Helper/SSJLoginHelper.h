@@ -21,5 +21,6 @@
 + (void)updateCustomUserBillNeededForUserId:(NSString *)userId billTypeItems:(NSArray *)items inDatabase:(FMDatabase *)db error:(NSError **)error;
 
 // 在登录的时候更新表中的数据
-+ (void)updateTableWhenLoginWithServices:(SSJLoginService *)service;
++ (void)updateTableWhenLoginWithServices:(SSJLoginService *)service completion:(void(^)())completion;
+
 @end
