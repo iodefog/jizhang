@@ -456,8 +456,9 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
                     [SSJAlertViewAdapter showError:error];
                 }];
             }
+        } else {
+            [self showErrorMessage:(self.registCompleteService.desc.length ? self.registCompleteService.desc : SSJ_ERROR_MESSAGE)];
         }
-        [self showErrorMessage:(self.registCompleteService.desc.length ? self.registCompleteService.desc : SSJ_ERROR_MESSAGE)];
     }
 }
 

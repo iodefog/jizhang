@@ -122,10 +122,13 @@ static BOOL kNeedBannerDisplay = YES;
         } else {
             [SSJAnaliyticsManager event:@"change_account_book" extra:item.booksName
              ];
-            SSJSelectBooksType(item.booksId);
-            self.currentBooksId = item.booksId;
-            [self.collectionView reloadData];
-            [self.mm_drawerController closeDrawerAnimated:YES completion:NULL];
+            [SSJUserTableManager updateCurrentBooksId:item.booksId success:^{
+                self.currentBooksId = item.booksId;
+                [self.collectionView reloadData];
+                [self.mm_drawerController closeDrawerAnimated:YES completion:NULL];
+            } failure:^(NSError * _Nonnull error) {
+                [SSJAlertViewAdapter showError:error];
+            }];
         }
     }
 }
@@ -388,21 +391,36 @@ static BOOL kNeedBannerDisplay = YES;
 
 - (void)deleteBooksWithType:(BOOL)type{
     if ([self.editBooksItem.booksId isEqualToString:self.currentBooksId]) {
-        SSJSelectBooksType(SSJUSERID());
+        [[[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+            [SSJUserTableManager updateCurrentBooksId:SSJUSERID() success:^{
+                [subscriber sendCompleted];
+            } failure:^(NSError * _Nonnull error) {
+                [subscriber sendError:error];
+            }];
+            return nil;
+        }] then:^RACSignal *{
+            return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+                [SSJBooksTypeStore deleteBooksTypeWithbooksItems:@[self.editBooksItem] deleteType:type Success:^{
+                    [subscriber sendCompleted];
+                } failure:^(NSError *error) {
+                    [subscriber sendError:error];
+                }];
+                return nil;
+            }];
+        }] subscribeError:^(NSError *error) {
+            [SSJAlertViewAdapter showError:error];
+        } completed:^{
+            self.rightButton.selected = NO;
+            [self.collectionView endEditing];
+            for (SSJBooksTypeItem *item in self.items) {
+                item.editeModel = NO;
+            }
+            self.adView.hidden = NO;
+            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+            [self getDateFromDB];
+        }];
     };
-    __weak typeof(self) weakSelf = self;
-    [SSJBooksTypeStore deleteBooksTypeWithbooksItems:@[self.editBooksItem] deleteType:type Success:^{
-        weakSelf.rightButton.selected = NO;
-        [weakSelf.collectionView endEditing];
-        for (SSJBooksTypeItem *item in self.items) {
-            item.editeModel = NO;
-        }
-        self.adView.hidden = NO;
-        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
-        [weakSelf getDateFromDB];
-    } failure:^(NSError *error) {
-        [SSJAlertViewAdapter showError:error];
-    }];
+    
 }
 
 - (void)enterBooksTypeEditController {

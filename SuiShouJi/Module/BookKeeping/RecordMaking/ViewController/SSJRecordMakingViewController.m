@@ -917,18 +917,41 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         }
     }
     
-    [SSJRecordMakingStore saveChargeWithChargeItem:self.item Success:^(SSJBillingChargeCellItem *editeItem){
-        BOOL hasChangeBooksType = NO;
-        if (![editeItem.booksId isEqualToString:self.defaultBooksId]) {
-            SSJSelectBooksType(editeItem.booksId);
-            hasChangeBooksType = YES;
+    @weakify(self);
+    [[[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [SSJRecordMakingStore saveChargeWithChargeItem:self.item Success:^(SSJBillingChargeCellItem *editeItem){
+            [subscriber sendNext:editeItem];
+            [subscriber sendCompleted];
+        } failure:^{
+            [subscriber sendError:nil];
+        }];
+        return nil;
+    }] flattenMap:^RACStream *(SSJBillingChargeCellItem *editeItem) {
+        @strongify(self);
+        return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+            BOOL hasChangeBooksType = ![editeItem.booksId isEqualToString:self.defaultBooksId];
+            if (hasChangeBooksType) {
+                [SSJUserTableManager updateCurrentBooksId:editeItem.booksId success:^{
+                    [subscriber sendNext:editeItem];
+                    [subscriber sendCompleted];
+                } failure:^(NSError * _Nonnull error) {
+                    [subscriber sendError:error];
+                }];
+            } else {
+                [subscriber sendNext:editeItem];
+                [subscriber sendCompleted];
+            }
+            return nil;
+        }];
+    }] subscribeNext:^(SSJBillingChargeCellItem *editeItem) {
+        @strongify(self);
+        BOOL hasChangeBooksType = ![editeItem.booksId isEqualToString:self.defaultBooksId];
+        if (self.addNewChargeBlock) {
+            self.addNewChargeBlock(@[editeItem],hasChangeBooksType);
         }
-        if (weakSelf.addNewChargeBlock) {
-            weakSelf.addNewChargeBlock(@[editeItem],hasChangeBooksType);
-        }
-        [weakSelf goBackAction];
-    } failure:^{
-        
+        [self goBackAction];
+    } error:^(NSError *error) {
+        [SSJAlertViewAdapter showError:error];
     }];
 }
 
