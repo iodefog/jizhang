@@ -9,6 +9,7 @@
 #import "SSJBaseNetworkService.h"
 
 static NSString *const kThemeVersionKey = @"kThemeVersionKey";
+static NSString *const kUserItemReturnKey = @"kUserItemReturnKey";
 
 @class SSJThemeAndAdviceDotItem;
 
