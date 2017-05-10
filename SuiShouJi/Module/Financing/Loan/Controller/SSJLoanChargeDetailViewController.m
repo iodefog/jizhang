@@ -77,16 +77,29 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
 #pragma mark - Private
 - (void)loadData {
     [self.view ssj_showLoadingIndicator];
-    [SSJLoanHelper queryLoanCompoundChangeModelWithChargeId:self.chargeId success:^(SSJLoanCompoundChargeModel * _Nonnull model) {
+    [[[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [SSJLoanHelper queryLoanCompoundChangeModelWithChargeId:self.chargeId success:^(SSJLoanCompoundChargeModel * _Nonnull model) {
+            self.compoundModel = model;
+            [subscriber sendCompleted];
+        } failure:^(NSError * _Nonnull error) {
+            [subscriber sendError:error];
+        }];
+        return nil;
+    }] then:^RACSignal *{
+        return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+            [self organiseCellItems:^{
+                [subscriber sendCompleted];
+            }];
+            return nil;
+        }];
+    }] subscribeError:^(NSError *error) {
         [self.view ssj_hideLoadingIndicator];
-        self.compoundModel = model;
-        [self showDeleteItemIfNeeded];
+        [SSJAlertViewAdapter showError:error];
+    } completed:^{
+        [self.view ssj_hideLoadingIndicator];
         [self updateTitle];
-        [self organiseCellItems];
         [self.tableView reloadData];
-    } failure:^(NSError * _Nonnull error) {
-        [self.view ssj_hideLoadingIndicator];
-        [self showError:error];
+        [self showDeleteItemIfNeeded];
     }];
 }
 
@@ -160,27 +173,27 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     }
 }
 
-- (void)organiseCellItems {
+- (void)organiseCellItems:(void(^)())completion {
     switch (_compoundModel.chargeModel.chargeType) {
         case SSJLoanCompoundChargeTypeCreate:
-            [self organiseChargeTypeCreateItems];
+            [self organiseChargeTypeCreateItems:completion];
             break;
             
         case SSJLoanCompoundChargeTypeBalanceIncrease:
         case SSJLoanCompoundChargeTypeBalanceDecrease:
-            [self organiseChargeTypeBalanceChangeItems];
+            [self organiseChargeTypeBalanceChangeItems:completion];
             break;
             
         case SSJLoanCompoundChargeTypeRepayment:
-            [self organiseChargeTypeRepaymentItems];
+            [self organiseChargeTypeRepaymentItems:completion];
             break;
             
         case SSJLoanCompoundChargeTypeAdd:
-            [self organiseChargeTypeAddItems];
+            [self organiseChargeTypeAddItems:completion];
             break;
             
         case SSJLoanCompoundChargeTypeCloseOut:
-            [self organiseChargeTypeCloseOutItems];
+            [self organiseChargeTypeCloseOutItems:completion];
             break;
             
         case SSJLoanCompoundChargeTypeInterest:
@@ -188,333 +201,344 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     }
 }
 
-- (void)organiseChargeTypeCreateItems {
-    
-    NSString *moneyTitle = nil;
-    NSString *dateTitle = nil;
-    NSString *accountTitle = nil;
-    NSString *lenderTitle = nil;
-    
-    switch (self.compoundModel.chargeModel.type) {
-        case SSJLoanTypeLend:
-            moneyTitle = @"借出金额";
-            dateTitle = @"借出日期";
-            accountTitle = @"转入账户";
-            lenderTitle = @"被谁借款";
-            break;
-            
-        case SSJLoanTypeBorrow:
-            moneyTitle = @"欠款金额";
-            dateTitle = @"欠款日期";
-            accountTitle = @"转出账户";
-            lenderTitle = @"欠谁钱款";
-            break;
-    }
-    
-    NSMutableArray *section_1 = [[NSMutableArray alloc] init];
-    NSMutableArray *section_2 = [[NSMutableArray alloc] init];
-    
-    NSString *money = [NSString stringWithFormat:@"%.2f", self.compoundModel.chargeModel.money];
-    [section_1 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_money"
-                                                        title:moneyTitle
-                                                     subtitle:money
-                                                  bottomTitle:nil]];
-    
-    NSString *accountName = [SSJLoanHelper queryForFundNameWithID:self.compoundModel.targetChargeModel.fundId];
-    [section_1 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_account"
-                                                        title:accountTitle
-                                                     subtitle:accountName
-                                                  bottomTitle:nil]];
-    
-    if (self.compoundModel.chargeModel.memo.length) {
-        [section_2 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_memo"
-                                                            title:@"备注"
-                                                         subtitle:self.compoundModel.chargeModel.memo
+- (void)organiseChargeTypeCreateItems:(void(^)())completion {
+    [SSJLoanHelper queryForFundNameWithID:self.compoundModel.targetChargeModel.fundId completion:^(NSString * _Nonnull name) {
+        NSString *moneyTitle = nil;
+        NSString *dateTitle = nil;
+        NSString *accountTitle = nil;
+        NSString *lenderTitle = nil;
+        
+        switch (self.compoundModel.chargeModel.type) {
+            case SSJLoanTypeLend:
+                moneyTitle = @"借出金额";
+                dateTitle = @"借出日期";
+                accountTitle = @"转入账户";
+                lenderTitle = @"被谁借款";
+                break;
+                
+            case SSJLoanTypeBorrow:
+                moneyTitle = @"欠款金额";
+                dateTitle = @"欠款日期";
+                accountTitle = @"转出账户";
+                lenderTitle = @"欠谁钱款";
+                break;
+        }
+        
+        NSMutableArray *section_1 = [[NSMutableArray alloc] init];
+        NSMutableArray *section_2 = [[NSMutableArray alloc] init];
+        
+        NSString *money = [NSString stringWithFormat:@"%.2f", self.compoundModel.chargeModel.money];
+        [section_1 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_money"
+                                                            title:moneyTitle
+                                                         subtitle:money
                                                       bottomTitle:nil]];
-    }
-    
-    NSString *dateStr = [self.compoundModel.chargeModel.billDate formattedDateWithFormat:@"yyyy.MM.dd"];
-    [section_2 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_calendar"
-                                                        title:dateTitle
-                                                     subtitle:dateStr
-                                                  bottomTitle:nil]];
-    
-    [section_2 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_person"
-                                                        title:lenderTitle
-                                                     subtitle:self.compoundModel.lender
-                                                  bottomTitle:nil]];
-    
-    [_cellItems removeAllObjects];
-    [_cellItems addObject:section_1];
-    [_cellItems addObject:section_2];
+        
+        NSString *accountName = name;
+        [section_1 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_account"
+                                                            title:accountTitle
+                                                         subtitle:accountName
+                                                      bottomTitle:nil]];
+        
+        if (self.compoundModel.chargeModel.memo.length) {
+            [section_2 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_memo"
+                                                                title:@"备注"
+                                                             subtitle:self.compoundModel.chargeModel.memo
+                                                          bottomTitle:nil]];
+        }
+        
+        NSString *dateStr = [self.compoundModel.chargeModel.billDate formattedDateWithFormat:@"yyyy.MM.dd"];
+        [section_2 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_calendar"
+                                                            title:dateTitle
+                                                         subtitle:dateStr
+                                                      bottomTitle:nil]];
+        
+        [section_2 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_person"
+                                                            title:lenderTitle
+                                                         subtitle:self.compoundModel.lender
+                                                      bottomTitle:nil]];
+        
+        [_cellItems removeAllObjects];
+        [_cellItems addObject:section_1];
+        [_cellItems addObject:section_2];
+        
+        if (completion) {
+            completion();
+        }
+    }];
 }
 
-- (void)organiseChargeTypeBalanceChangeItems {
-    
-    NSString *moneyTitle = nil;
-    NSString *accountTitle = @"账户";
-    NSString *memoTitle = @"备注";
-    NSString *dateTitle = @"更改日期";
-    NSString *lenderTitle = nil;
-    
-    switch (self.compoundModel.chargeModel.type) {
-        case SSJLoanTypeLend:
-            moneyTitle = @"剩余借出款余额变更";
-            lenderTitle = @"被谁借款";
-            break;
-            
-        case SSJLoanTypeBorrow:
-            moneyTitle = @"剩余欠款余额变更";
-            lenderTitle = @"欠谁钱款";
-            break;
-    }
-    
-    NSMutableArray *section_1 = [[NSMutableArray alloc] init];
-    NSMutableArray *section_2 = [[NSMutableArray alloc] init];
-    
-    NSString *money = [NSString stringWithFormat:@"%.2f", self.compoundModel.chargeModel.money];
-    [section_1 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_money"
-                                                        title:moneyTitle
-                                                     subtitle:money
-                                                  bottomTitle:nil]];
-    
-    NSString *accountName = [SSJLoanHelper queryForFundNameWithID:_compoundModel.targetChargeModel.fundId];
-    [section_1 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_account"
-                                                        title:accountTitle
-                                                     subtitle:accountName
-                                                  bottomTitle:nil]];
-    
-    if (self.compoundModel.chargeModel.memo.length) {
-        [section_2 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_memo"
-                                                            title:memoTitle
-                                                         subtitle:self.compoundModel.chargeModel.memo
+- (void)organiseChargeTypeBalanceChangeItems:(void(^)())completion {
+    [SSJLoanHelper queryForFundNameWithID:_compoundModel.targetChargeModel.fundId completion:^(NSString * _Nonnull name) {
+        NSString *moneyTitle = nil;
+        NSString *accountTitle = @"账户";
+        NSString *memoTitle = @"备注";
+        NSString *dateTitle = @"更改日期";
+        NSString *lenderTitle = nil;
+        
+        switch (self.compoundModel.chargeModel.type) {
+            case SSJLoanTypeLend:
+                moneyTitle = @"剩余借出款余额变更";
+                lenderTitle = @"被谁借款";
+                break;
+                
+            case SSJLoanTypeBorrow:
+                moneyTitle = @"剩余欠款余额变更";
+                lenderTitle = @"欠谁钱款";
+                break;
+        }
+        
+        NSMutableArray *section_1 = [[NSMutableArray alloc] init];
+        NSMutableArray *section_2 = [[NSMutableArray alloc] init];
+        
+        NSString *money = [NSString stringWithFormat:@"%.2f", self.compoundModel.chargeModel.money];
+        [section_1 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_money"
+                                                            title:moneyTitle
+                                                         subtitle:money
                                                       bottomTitle:nil]];
-    }
-    
-    NSString *dateStr = [self.compoundModel.chargeModel.billDate formattedDateWithFormat:@"yyyy.MM.dd"];
-    [section_2 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_calendar"
-                                                        title:dateTitle
-                                                     subtitle:dateStr
-                                                  bottomTitle:nil]];
-    
-    [section_2 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_person"
-                                                        title:lenderTitle
-                                                     subtitle:self.compoundModel.lender
-                                                  bottomTitle:nil]];
-    
-    [_cellItems removeAllObjects];
-    [_cellItems addObject:section_1];
-    [_cellItems addObject:section_2];
+        
+        NSString *accountName = name;
+        [section_1 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_account"
+                                                            title:accountTitle
+                                                         subtitle:accountName
+                                                      bottomTitle:nil]];
+        
+        if (self.compoundModel.chargeModel.memo.length) {
+            [section_2 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_memo"
+                                                                title:memoTitle
+                                                             subtitle:self.compoundModel.chargeModel.memo
+                                                          bottomTitle:nil]];
+        }
+        
+        NSString *dateStr = [self.compoundModel.chargeModel.billDate formattedDateWithFormat:@"yyyy.MM.dd"];
+        [section_2 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_calendar"
+                                                            title:dateTitle
+                                                         subtitle:dateStr
+                                                      bottomTitle:nil]];
+        
+        [section_2 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_person"
+                                                            title:lenderTitle
+                                                         subtitle:self.compoundModel.lender
+                                                      bottomTitle:nil]];
+        
+        [_cellItems removeAllObjects];
+        [_cellItems addObject:section_1];
+        [_cellItems addObject:section_2];
+        
+        if (completion) {
+            completion();
+        }
+    }];
 }
 
-- (void)organiseChargeTypeRepaymentItems {
-    
-    NSString *moneyTitle = nil;
-    NSString *interestTitle = nil;
-    NSString *accountTitle = nil;
-    NSString *memoTitle = @"备注";
-    NSString *dateTitle = nil;
-    NSString *lenderTitle = nil;
-    
-    switch (self.compoundModel.chargeModel.type) {
-        case SSJLoanTypeLend:
-            moneyTitle = @"收款金额";
-            interestTitle = @"利息收入";
-            accountTitle = @"转入账户";
-            dateTitle = @"收款日期";
-            lenderTitle = @"被谁借款";
-            break;
-            
-        case SSJLoanTypeBorrow:
-            moneyTitle = @"还款金额";
-            interestTitle = @"利息支出";
-            accountTitle = @"转出账户";
-            dateTitle = @"还款日期";
-            lenderTitle = @"欠谁钱款";
-            break;
-    }
-    
-    NSMutableArray *section_1 = [[NSMutableArray alloc] init];
-    NSMutableArray *section_2 = [[NSMutableArray alloc] init];
-    
-    NSString *money = [NSString stringWithFormat:@"%.2f", self.compoundModel.targetChargeModel.money];
-    [section_1 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_money"
-                                                        title:moneyTitle
-                                                     subtitle:money
-                                                  bottomTitle:nil]];
-    
-    if (_compoundModel.interestChargeModel.money) {
-        NSString *interest = [NSString stringWithFormat:@"%.2f", self.compoundModel.interestChargeModel.money];
-        [section_1 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_yield"
-                                                            title:interestTitle
-                                                         subtitle:interest
+- (void)organiseChargeTypeRepaymentItems:(void(^)())completion {
+    [SSJLoanHelper queryForFundNameWithID:_compoundModel.targetChargeModel.fundId completion:^(NSString * _Nonnull name) {
+        NSString *moneyTitle = nil;
+        NSString *interestTitle = nil;
+        NSString *accountTitle = nil;
+        NSString *memoTitle = @"备注";
+        NSString *dateTitle = nil;
+        NSString *lenderTitle = nil;
+        
+        switch (self.compoundModel.chargeModel.type) {
+            case SSJLoanTypeLend:
+                moneyTitle = @"收款金额";
+                interestTitle = @"利息收入";
+                accountTitle = @"转入账户";
+                dateTitle = @"收款日期";
+                lenderTitle = @"被谁借款";
+                break;
+                
+            case SSJLoanTypeBorrow:
+                moneyTitle = @"还款金额";
+                interestTitle = @"利息支出";
+                accountTitle = @"转出账户";
+                dateTitle = @"还款日期";
+                lenderTitle = @"欠谁钱款";
+                break;
+        }
+        
+        NSMutableArray *section_1 = [[NSMutableArray alloc] init];
+        NSMutableArray *section_2 = [[NSMutableArray alloc] init];
+        
+        NSString *money = [NSString stringWithFormat:@"%.2f", self.compoundModel.targetChargeModel.money];
+        [section_1 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_money"
+                                                            title:moneyTitle
+                                                         subtitle:money
                                                       bottomTitle:nil]];
-    }
-    
-    NSString *accountName = [SSJLoanHelper queryForFundNameWithID:_compoundModel.targetChargeModel.fundId];
-    [section_1 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_account"
-                                                        title:accountTitle
-                                                     subtitle:accountName
-                                                  bottomTitle:nil]];
-    
-    if (self.compoundModel.chargeModel.memo.length) {
-        [section_2 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_memo"
-                                                            title:memoTitle
-                                                         subtitle:self.compoundModel.chargeModel.memo
+        
+        if (_compoundModel.interestChargeModel.money) {
+            NSString *interest = [NSString stringWithFormat:@"%.2f", self.compoundModel.interestChargeModel.money];
+            [section_1 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_yield"
+                                                                title:interestTitle
+                                                             subtitle:interest
+                                                          bottomTitle:nil]];
+        }
+        
+        NSString *accountName = name;
+        [section_1 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_account"
+                                                            title:accountTitle
+                                                         subtitle:accountName
                                                       bottomTitle:nil]];
-    }
-    
-    NSString *dateStr = [self.compoundModel.chargeModel.billDate formattedDateWithFormat:@"yyyy.MM.dd"];
-    [section_2 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_calendar"
-                                                        title:dateTitle
-                                                     subtitle:dateStr
-                                                  bottomTitle:nil]];
-    
-    [section_2 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_person"
-                                                        title:lenderTitle
-                                                     subtitle:_compoundModel.lender
-                                                  bottomTitle:nil]];
-    
-    [_cellItems removeAllObjects];
-    [_cellItems addObject:section_1];
-    [_cellItems addObject:section_2];
+        
+        if (self.compoundModel.chargeModel.memo.length) {
+            [section_2 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_memo"
+                                                                title:memoTitle
+                                                             subtitle:self.compoundModel.chargeModel.memo
+                                                          bottomTitle:nil]];
+        }
+        
+        NSString *dateStr = [self.compoundModel.chargeModel.billDate formattedDateWithFormat:@"yyyy.MM.dd"];
+        [section_2 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_calendar"
+                                                            title:dateTitle
+                                                         subtitle:dateStr
+                                                      bottomTitle:nil]];
+        
+        [section_2 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_person"
+                                                            title:lenderTitle
+                                                         subtitle:_compoundModel.lender
+                                                      bottomTitle:nil]];
+        
+        [_cellItems removeAllObjects];
+        [_cellItems addObject:section_1];
+        [_cellItems addObject:section_2];
+        
+        if (completion) {
+            completion();
+        }
+    }];
 }
 
-- (void)organiseChargeTypeAddItems {
-    
-    NSString *moneyTitle = nil;
-    NSString *accountTitle = nil;
-    NSString *memoTitle = @"备注";
-    NSString *dateTitle = @"日期";
-    NSString *lenderTitle = nil;
-    
-    switch (self.compoundModel.chargeModel.type) {
-        case SSJLoanTypeLend:
-            moneyTitle = @"追加借出金额";
-            accountTitle = @"转出账户";
-            lenderTitle = @"被谁借款";
-            break;
-            
-        case SSJLoanTypeBorrow:
-            moneyTitle = @"追加欠款金额";
-            accountTitle = @"转入账户";
-            lenderTitle = @"欠谁钱款";
-            break;
-    }
-    
-    NSMutableArray *section_1 = [[NSMutableArray alloc] init];
-    NSMutableArray *section_2 = [[NSMutableArray alloc] init];
-    
-    NSString *money = [NSString stringWithFormat:@"%.2f", self.compoundModel.chargeModel.money];
-    [section_1 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_money"
-                                                        title:moneyTitle
-                                                     subtitle:money
-                                                  bottomTitle:nil]];
-    
-    NSString *accountName = [SSJLoanHelper queryForFundNameWithID:_compoundModel.targetChargeModel.fundId];
-    [section_1 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_account"
-                                                        title:accountTitle
-                                                     subtitle:accountName
-                                                  bottomTitle:nil]];
-    
-    if (self.compoundModel.chargeModel.memo.length) {
-        [section_2 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_memo"
-                                                            title:memoTitle
-                                                         subtitle:self.compoundModel.chargeModel.memo
+- (void)organiseChargeTypeAddItems:(void(^)())completion {
+    [SSJLoanHelper queryForFundNameWithID:_compoundModel.targetChargeModel.fundId completion:^(NSString * _Nonnull name) {
+        NSString *moneyTitle = nil;
+        NSString *accountTitle = nil;
+        NSString *memoTitle = @"备注";
+        NSString *dateTitle = @"日期";
+        NSString *lenderTitle = nil;
+        
+        switch (self.compoundModel.chargeModel.type) {
+            case SSJLoanTypeLend:
+                moneyTitle = @"追加借出金额";
+                accountTitle = @"转出账户";
+                lenderTitle = @"被谁借款";
+                break;
+                
+            case SSJLoanTypeBorrow:
+                moneyTitle = @"追加欠款金额";
+                accountTitle = @"转入账户";
+                lenderTitle = @"欠谁钱款";
+                break;
+        }
+        
+        NSMutableArray *section_1 = [[NSMutableArray alloc] init];
+        NSMutableArray *section_2 = [[NSMutableArray alloc] init];
+        
+        NSString *money = [NSString stringWithFormat:@"%.2f", self.compoundModel.chargeModel.money];
+        [section_1 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_money"
+                                                            title:moneyTitle
+                                                         subtitle:money
                                                       bottomTitle:nil]];
-    }
-    
-    NSString *dateStr = [self.compoundModel.chargeModel.billDate formattedDateWithFormat:@"yyyy.MM.dd"];
-    [section_2 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_calendar"
-                                                        title:dateTitle
-                                                     subtitle:dateStr
-                                                  bottomTitle:nil]];
-    
-    [section_2 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_person"
-                                                        title:lenderTitle
-                                                     subtitle:_compoundModel.lender
-                                                  bottomTitle:nil]];
-    
-    [_cellItems removeAllObjects];
-    [_cellItems addObject:section_1];
-    [_cellItems addObject:section_2];
+        
+        NSString *accountName = name;
+        [section_1 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_account"
+                                                            title:accountTitle
+                                                         subtitle:accountName
+                                                      bottomTitle:nil]];
+        
+        if (self.compoundModel.chargeModel.memo.length) {
+            [section_2 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_memo"
+                                                                title:memoTitle
+                                                             subtitle:self.compoundModel.chargeModel.memo
+                                                          bottomTitle:nil]];
+        }
+        
+        NSString *dateStr = [self.compoundModel.chargeModel.billDate formattedDateWithFormat:@"yyyy.MM.dd"];
+        [section_2 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_calendar"
+                                                            title:dateTitle
+                                                         subtitle:dateStr
+                                                      bottomTitle:nil]];
+        
+        [section_2 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_person"
+                                                            title:lenderTitle
+                                                         subtitle:_compoundModel.lender
+                                                      bottomTitle:nil]];
+        
+        [_cellItems removeAllObjects];
+        [_cellItems addObject:section_1];
+        [_cellItems addObject:section_2];
+        
+        if (completion) {
+            completion();
+        }
+    }];
 }
 
-- (void)organiseChargeTypeCloseOutItems {
-    
-    NSString *moneyTitle = nil;
-    NSString *interestTitle = nil;
-    NSString *accountTitle = nil;
-    NSString *dateTitle = @"结清日";
-    NSString *lenderTitle = nil;
-    
-    switch (self.compoundModel.chargeModel.type) {
-        case SSJLoanTypeLend:
-            moneyTitle = @"借出款金额";
-            interestTitle = @"利息收入";
-            accountTitle = @"结清转入账户";
-            lenderTitle = @"被谁借款";
-            break;
-            
-        case SSJLoanTypeBorrow:
-            moneyTitle = @"欠款金额";
-            interestTitle = @"利息支出";
-            accountTitle = @"结清转出账户";
-            lenderTitle = @"欠谁钱款";
-            break;
-    }
-    
-    NSMutableArray *section_1 = [[NSMutableArray alloc] init];
-    NSMutableArray *section_2 = [[NSMutableArray alloc] init];
-    
-    NSString *money = [NSString stringWithFormat:@"%.2f", self.compoundModel.targetChargeModel.money];
-    [section_1 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_money"
-                                                        title:moneyTitle
-                                                     subtitle:money
-                                                  bottomTitle:nil]];
-    
-    if (_compoundModel.interestChargeModel.money) {
-        NSString *interest = [NSString stringWithFormat:@"%.2f", self.compoundModel.interestChargeModel.money];
-        [section_1 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_yield"
-                                                            title:interestTitle
-                                                         subtitle:interest
+- (void)organiseChargeTypeCloseOutItems:(void(^)())completion {
+    [SSJLoanHelper queryForFundNameWithID:self.compoundModel.targetChargeModel.fundId completion:^(NSString * _Nonnull name) {
+        NSString *moneyTitle = nil;
+        NSString *interestTitle = nil;
+        NSString *accountTitle = nil;
+        NSString *dateTitle = @"结清日";
+        NSString *lenderTitle = nil;
+        
+        switch (self.compoundModel.chargeModel.type) {
+            case SSJLoanTypeLend:
+                moneyTitle = @"借出款金额";
+                interestTitle = @"利息收入";
+                accountTitle = @"结清转入账户";
+                lenderTitle = @"被谁借款";
+                break;
+                
+            case SSJLoanTypeBorrow:
+                moneyTitle = @"欠款金额";
+                interestTitle = @"利息支出";
+                accountTitle = @"结清转出账户";
+                lenderTitle = @"欠谁钱款";
+                break;
+        }
+        
+        NSMutableArray *section_1 = [[NSMutableArray alloc] init];
+        NSMutableArray *section_2 = [[NSMutableArray alloc] init];
+        
+        NSString *money = [NSString stringWithFormat:@"%.2f", self.compoundModel.targetChargeModel.money];
+        [section_1 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_money"
+                                                            title:moneyTitle
+                                                         subtitle:money
                                                       bottomTitle:nil]];
-    }
-    
-    NSString *accountName = [SSJLoanHelper queryForFundNameWithID:self.compoundModel.targetChargeModel.fundId];
-    [section_1 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_account"
-                                                        title:accountTitle
-                                                     subtitle:accountName
-                                                  bottomTitle:nil]];
-    
-    NSString *dateStr = [self.compoundModel.chargeModel.billDate formattedDateWithFormat:@"yyyy.MM.dd"];
-    [section_2 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_calendar"
-                                                        title:dateTitle
-                                                     subtitle:dateStr
-                                                  bottomTitle:nil]];
-    
-    [section_2 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_person"
-                                                        title:lenderTitle
-                                                     subtitle:self.compoundModel.lender
-                                                  bottomTitle:nil]];
-    
-    [_cellItems removeAllObjects];
-    [_cellItems addObject:section_1];
-    [_cellItems addObject:section_2];
-}
-
-- (void)showError:(NSError *)error {
-    NSString *message = nil;
-    if (error.code == 1) {
-        message = @"该流水暂不能删除哦，可先编辑收款或追加借出金额再操作。";
-    } else {
-#ifdef DEBUG
-        message = [error localizedDescription];
-#else
-        message = SSJ_ERROR_MESSAGE;
-#endif
-    }
-    [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:message action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
+        
+        if (_compoundModel.interestChargeModel.money) {
+            NSString *interest = [NSString stringWithFormat:@"%.2f", self.compoundModel.interestChargeModel.money];
+            [section_1 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_yield"
+                                                                title:interestTitle
+                                                             subtitle:interest
+                                                          bottomTitle:nil]];
+        }
+        
+        NSString *accountName = name;
+        [section_1 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_account"
+                                                            title:accountTitle
+                                                         subtitle:accountName
+                                                      bottomTitle:nil]];
+        
+        NSString *dateStr = [self.compoundModel.chargeModel.billDate formattedDateWithFormat:@"yyyy.MM.dd"];
+        [section_2 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_calendar"
+                                                            title:dateTitle
+                                                         subtitle:dateStr
+                                                      bottomTitle:nil]];
+        
+        [section_2 addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_person"
+                                                            title:lenderTitle
+                                                         subtitle:self.compoundModel.lender
+                                                      bottomTitle:nil]];
+        
+        [_cellItems removeAllObjects];
+        [_cellItems addObject:section_1];
+        [_cellItems addObject:section_2];
+        
+        if (completion) {
+            completion();
+        }
+    }];
 }
 
 #pragma mark - Event
@@ -529,7 +553,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
             [self goBackAction];
         } failure:^(NSError * _Nonnull error) {
             self.deleteItem.enabled = YES;
-            [self showError:error];
+            [SSJAlertViewAdapter showError:error];
         }];
         
     }], nil];

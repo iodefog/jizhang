@@ -334,40 +334,61 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     _headerItems = @[@[surplusItem], @[sumItem, interestItem, lenderItem]];
 }
 
-- (void)reorganiseSection1Items {
-    
+- (void)reorganiseSection1Items:(void(^)())completion {
+
     [self.section1Items removeAllObjects];
     
     if (_loanModel.closeOut) {
         
-        NSString *accountName = [SSJLoanHelper queryForFundNameWithID:_loanModel.targetFundID];
-        NSString *endAccountName = [SSJLoanHelper queryForFundNameWithID:_loanModel.endTargetFundID];
-        NSString *borrowDateStr = [_loanModel.borrowDate formattedDateWithFormat:@"yyyy.MM.dd"];
-        NSString *closeOutDateStr = [_loanModel.endDate formattedDateWithFormat:@"yyyy.MM.dd"];
+        __block NSString *accountName = nil;
+        __block NSString *endAccountName = nil;
         
-        NSString *loanDayTitle = nil;
-        NSString *loanAccountTitle = nil;
-        
-        switch (_loanModel.type) {
-            case SSJLoanTypeLend:
-                loanDayTitle = @"借款日";
-                loanAccountTitle = @"借出账户";
-                break;
-                
-            case SSJLoanTypeBorrow:
-                loanDayTitle = @"欠款日";
-                loanAccountTitle = @"借入账户";
-                break;
-        }
-        
-        [self.section1Items addObjectsFromArray:@[[SSJLoanDetailCellItem itemWithImage:@"loan_expires" title:@"结清日" subtitle:closeOutDateStr bottomTitle:nil],
-                                                  [SSJLoanDetailCellItem itemWithImage:@"loan_calendar" title:loanDayTitle subtitle:borrowDateStr bottomTitle:nil],
-                                                  [SSJLoanDetailCellItem itemWithImage:@"loan_closeOut" title:@"结清账户" subtitle:endAccountName bottomTitle:nil],
-                                                  [SSJLoanDetailCellItem itemWithImage:@"loan_account" title:loanAccountTitle subtitle:accountName bottomTitle:nil]]];
-        
-        if (_loanModel.memo.length) {
-            [self.section1Items addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_memo" title:@"备注" subtitle:_loanModel.memo bottomTitle:nil]];
-        }
+        [[[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+            [SSJLoanHelper queryForFundNameWithID:_loanModel.targetFundID completion:^(NSString * _Nonnull name) {
+                accountName = name;
+                [subscriber sendCompleted];
+            }];
+            return nil;
+        }] then:^RACSignal *{
+            return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+                [SSJLoanHelper queryForFundNameWithID:_loanModel.endTargetFundID completion:^(NSString * _Nonnull name) {
+                    endAccountName = name;
+                    [subscriber sendCompleted];
+                }];
+                return nil;
+            }];
+        }] subscribeCompleted:^{
+            NSString *borrowDateStr = [_loanModel.borrowDate formattedDateWithFormat:@"yyyy.MM.dd"];
+            NSString *closeOutDateStr = [_loanModel.endDate formattedDateWithFormat:@"yyyy.MM.dd"];
+            
+            NSString *loanDayTitle = nil;
+            NSString *loanAccountTitle = nil;
+            
+            switch (_loanModel.type) {
+                case SSJLoanTypeLend:
+                    loanDayTitle = @"借款日";
+                    loanAccountTitle = @"借出账户";
+                    break;
+                    
+                case SSJLoanTypeBorrow:
+                    loanDayTitle = @"欠款日";
+                    loanAccountTitle = @"借入账户";
+                    break;
+            }
+            
+            [self.section1Items addObjectsFromArray:@[[SSJLoanDetailCellItem itemWithImage:@"loan_expires" title:@"结清日" subtitle:closeOutDateStr bottomTitle:nil],
+                                                      [SSJLoanDetailCellItem itemWithImage:@"loan_calendar" title:loanDayTitle subtitle:borrowDateStr bottomTitle:nil],
+                                                      [SSJLoanDetailCellItem itemWithImage:@"loan_closeOut" title:@"结清账户" subtitle:endAccountName bottomTitle:nil],
+                                                      [SSJLoanDetailCellItem itemWithImage:@"loan_account" title:loanAccountTitle subtitle:accountName bottomTitle:nil]]];
+            
+            if (_loanModel.memo.length) {
+                [self.section1Items addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_memo" title:@"备注" subtitle:_loanModel.memo bottomTitle:nil]];
+            }
+            
+            if (completion) {
+                completion();
+            }
+        }];
         
     } else {
         
@@ -414,6 +435,10 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
         if (_loanModel.memo.length) {
             [self.section1Items addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_memo" title:@"备注" subtitle:_loanModel.memo bottomTitle:nil]];
         }
+        
+        if (completion) {
+            completion();
+        }
     }
 }
 
@@ -453,70 +478,69 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
 
 - (void)loadData {
     [self.view ssj_showLoadingIndicator];
-    [SSJLoanHelper queryForLoanModelWithLoanID:_loanID success:^(SSJLoanModel * _Nonnull model) {
-        
-        [SSJLoanHelper queryLoanChargeModeListWithLoanModel:model success:^(NSArray<SSJLoanCompoundChargeModel *> * _Nonnull list) {
-            
-            [self.view ssj_hideLoadingIndicator];
-            
+    [[[[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [SSJLoanHelper queryForLoanModelWithLoanID:_loanID success:^(SSJLoanModel * _Nonnull model) {
             self.loanModel = model;
-            self.chargeModels = list;
-            
-            [self updateTitle];
-            [self updateSubViewHidden];
-            
-            [self reorganiseSection1Items];
-            [self reorganiseSection2Items];
-            
-            [self organiseHeaderItems];
-            
-            [self.tableView reloadData];
-            [self.headerView reloadData];
-            
-            SSJFinancingGradientColorItem *item = [[SSJFinancingGradientColorItem alloc] init];
-            item.startColor = model.startColor;
-            item.endColor = model.endColor;
-            self.headerView.colorItem = item;
-            self.tableView.tableHeaderView = self.headerView;
-            
-            self.changeSectionHeaderView.title = [NSString stringWithFormat:@"变更记录：%d条", (int)self.section2Items.count];
-            
-            switch (self.loanModel.type) {
-                case SSJLoanTypeLend:
-                    if (self.loanModel.closeOut) {
-                        [SSJAnaliyticsManager event:@"loan_end_detail"];
-                    } else {
-                        [SSJAnaliyticsManager event:@"loan_detail"];
-                    }
-                    break;
-                    
-                case SSJLoanTypeBorrow:
-                    if (self.loanModel.closeOut) {
-                        [SSJAnaliyticsManager event:@"owed_end_detail"];
-                    } else {
-                        [SSJAnaliyticsManager event:@"owed_detail"];
-                    }
-                    break;
-            }
+            [subscriber sendCompleted];
         } failure:^(NSError * _Nonnull error) {
-            [self.view ssj_hideLoadingIndicator];
-            [self showError:error];
+            [subscriber sendError:error];
         }];
-        
-    } failure:^(NSError * _Nonnull error) {
+        return nil;
+    }] then:^RACSignal *{
+        return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+            [SSJLoanHelper queryLoanChargeModeListWithLoanModel:self.loanModel success:^(NSArray<SSJLoanCompoundChargeModel *> * _Nonnull list) {
+                self.chargeModels = list;
+                [subscriber sendCompleted];
+            } failure:^(NSError * _Nonnull error) {
+                [subscriber sendError:error];
+            }];
+            return nil;
+        }];
+    }] then:^RACSignal *{
+        return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+            [self reorganiseSection1Items:^{
+                [self reorganiseSection2Items];
+                [self organiseHeaderItems];
+                [subscriber sendCompleted];
+            }];
+            return nil;
+        }];
+    }] subscribeError:^(NSError *error) {
         [self.view ssj_hideLoadingIndicator];
-        [self showError:error];
+        [SSJAlertViewAdapter showError:error];
+    } completed:^{
+        [self.view ssj_hideLoadingIndicator];
+        [self updateTitle];
+        [self updateSubViewHidden];
+        
+        [self.tableView reloadData];
+        [self.headerView reloadData];
+        
+        SSJFinancingGradientColorItem *item = [[SSJFinancingGradientColorItem alloc] init];
+        item.startColor = self.loanModel.startColor;
+        item.endColor = self.loanModel.endColor;
+        self.headerView.colorItem = item;
+        self.tableView.tableHeaderView = self.headerView;
+        self.changeSectionHeaderView.title = [NSString stringWithFormat:@"变更记录：%d条", (int)self.section2Items.count];
+        
+        switch (self.loanModel.type) {
+            case SSJLoanTypeLend:
+                if (self.loanModel.closeOut) {
+                    [SSJAnaliyticsManager event:@"loan_end_detail"];
+                } else {
+                    [SSJAnaliyticsManager event:@"loan_detail"];
+                }
+                break;
+                
+            case SSJLoanTypeBorrow:
+                if (self.loanModel.closeOut) {
+                    [SSJAnaliyticsManager event:@"owed_end_detail"];
+                } else {
+                    [SSJAnaliyticsManager event:@"owed_detail"];
+                }
+                break;
+        }
     }];
-}
-
-- (void)showError:(NSError *)error {
-    NSString *message = nil;
-#ifdef DEBUG
-    message = [error localizedDescription];
-#else
-    message = SSJ_ERROR_MESSAGE;
-#endif
-    [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:message action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
 }
 
 - (void)deleteLoanModel {

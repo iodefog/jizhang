@@ -727,7 +727,7 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
 }
 
 + (void)queryBookNameForBookId:(NSString *)ID success:(void(^)(NSString *bookName))success failure:(void(^)(NSError *error))failure {
-    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSString *bookName = [db stringForQuery:@"select cbooksname from bk_books_type where cbooksid = ? and cuserid = ?", ID, SSJUSERID()];
         if (success) {
             SSJDispatchMainAsync(^{
