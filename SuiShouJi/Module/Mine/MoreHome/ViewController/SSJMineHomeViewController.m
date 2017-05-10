@@ -132,6 +132,7 @@ static BOOL kNeedBannerDisplay = YES;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userInfoComplishedNotice) name:kUserItemReturnKey object:nil];
     [self.view addSubview:self.announcementView];
     [self.view addSubview:self.header];
     [self.view addSubview:self.collectionView];
@@ -358,6 +359,7 @@ static BOOL kNeedBannerDisplay = YES;
 
 #pragma mark - SSJBaseNetworkService
 -(void)serverDidFinished:(SSJBaseNetworkService *)service{
+    if ([service isKindOfClass:[SSJNewDotNetworkService class]]) return;
     if ([service isKindOfClass:[SSJBannerNetworkService class]]) {
         //banner
         if (self.bannerService.item.bannerItems.count) {
@@ -370,18 +372,6 @@ static BOOL kNeedBannerDisplay = YES;
             }
         }
         [self loadDataArray];
-    }
-    
-    if ([service isKindOfClass:[SSJNewDotNetworkService class]]) {
-        //更改模型数据
-        for (SSJListAdItem *item in self.localAdItems) {
-            if ([item.adTitle isEqualToString:kTitle2]) {//主题皮肤
-                item.isShowDot = self.dotService.dotItem.hasThemeUpdate;
-            }
-            if ([item.adTitle isEqualToString:kTitle5]) {//建议与咨询
-                item.isShowDot = self.dotService.dotItem.hasAdviceUpdate;
-            }
-        }
     }
     
     if ([service isKindOfClass:[SSJAnnoucementService class]]) {
@@ -408,6 +398,21 @@ static BOOL kNeedBannerDisplay = YES;
     self.adItemsArray = self.localAdItems;
     [self.collectionView reloadData];
     [self getLocalAnnoucement];
+}
+
+#pragma mark -- NoticeCenter
+- (void)userInfoComplishedNotice
+{
+    //更改模型数据
+    for (SSJListAdItem *item in self.localAdItems) {
+        if ([item.adTitle isEqualToString:kTitle2]) {//主题皮肤
+            item.isShowDot = self.dotService.dotItem.hasThemeUpdate;
+        }
+        if ([item.adTitle isEqualToString:kTitle5]) {//建议与咨询
+            item.isShowDot = self.dotService.dotItem.hasAdviceUpdate;
+        }
+    }
+    [self.collectionView reloadData];
 }
 
 - (void)loadDataArray
