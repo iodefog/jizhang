@@ -40,6 +40,12 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
     
     UICollectionViewFlowLayout *flowLayout = (UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout;
     flowLayout.itemSize = CGSizeMake(kCellWidth, kCellHeight);
+    
+    CGFloat top = 24;
+    CGFloat left, right;
+    left = right = (kCellWidth - 22) * 0.5;
+    CGFloat bottom = kCellHeight - top - 22;
+    self.collectionView.exchangeCellRegion = UIEdgeInsetsMake(top, left, bottom, right);
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -244,7 +250,6 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
     layout.minimumLineSpacing = 0;
     layout.minimumInteritemSpacing = 0;
-//    layout.itemSize = CGSizeMake(kCellWidth, kCellHeight);
     layout.sectionInset = kSectionInset;
     return layout;
 }

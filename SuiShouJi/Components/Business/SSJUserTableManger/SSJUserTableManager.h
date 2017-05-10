@@ -23,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @param error 错误对象，如果不为nil，则查询过程发生错误
  */
-+ (void)reloadUserIdWithError:(NSError **)error;
++ (void)reloadUserIdWithSuccess:(nullable void (^)())success failure:(nullable void (^)(NSError *error))failure;
 
 /**
  *  从用户表中查询未注册的用户编号，如果没有则返回nil
@@ -38,7 +38,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @return (SSJUserItem *) 用户信息模型
  */
-+ (SSJUserItem *)queryUserItemForID:(NSString *)userID;
++ (void)queryUserItemWithID:(NSString *)userID success:(void(^)(SSJUserItem *userItem))success failure:(nullable void(^)(NSError *error))failure;
 
 /**
  *  查询指定的用户信息
@@ -46,14 +46,31 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param propertyName 查询的属性
  *  @return (SSJUserItem *) 用户信息模型
  */
-+ (SSJUserItem *)queryProperty:(NSArray<NSString *> *)propertyNames forUserId:(NSString *)userId;
++ (void)queryProperty:(NSArray *)propertyNames forUserId:(NSString *)userId success:(void(^)(SSJUserItem *userModel))success failure:(nullable void(^)(NSError *error))failure;
 
 /**
  *  保存用户信息
  *
  *  @return (BOOL) 是否保存成功
  */
-+ (BOOL)saveUserItem:(SSJUserItem *)userItem;
++ (void)saveUserItem:(SSJUserItem *)userItem success:(nullable void(^)())success failure:(nullable void(^)(NSError *error))failure;
+
+/**
+ 获取当前用户的账本id
+
+ @param success <#success description#>
+ @param failure <#failure description#>
+ */
++ (void)currentBooksId:(void(^)(NSString *booksId))success failure:(nullable void(^)(NSError *error))failure;
+
+/**
+ 更新当前用户的账本id
+
+ @param booksId <#booksId description#>
+ @param success <#success description#>
+ @param failure <#failure description#>
+ */
++ (void)updateCurrentBooksId:(NSString *)booksId success:(nullable void(^)())success failure:(nullable void(^)(NSError *error))failure;
 
 @end
 

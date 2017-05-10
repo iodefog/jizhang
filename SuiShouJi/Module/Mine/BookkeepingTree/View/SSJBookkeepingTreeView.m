@@ -70,20 +70,23 @@ static const NSTimeInterval kRaninDuration = 3;
         [self addSubview:self.dashLineView];
         
         _checkInDescLab = [[UILabel alloc] init];
-        _checkInDescLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        _checkInDescLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         _checkInDescLab.textColor = [UIColor whiteColor];
         _checkInDescLab.textAlignment = NSTextAlignmentCenter;
         _checkInDescLab.numberOfLines = 0;
         [self addSubview:self.checkInDescLab];
         
         if (SSJIsUserLogined()) {
-            SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"nickName", @"mobileNo"] forUserId:SSJUSERID()];
-            _userName = userItem.nickName;
-            if (!_userName.length) {
-                if (userItem.mobileNo.length >= 7) {
-                    _userName = [userItem.mobileNo stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
+            [SSJUserTableManager queryProperty:@[@"nickName", @"mobileNo"] forUserId:SSJUSERID() success:^(SSJUserItem * _Nonnull userModel) {
+                _userName = userModel.nickName;
+                if (!_userName.length) {
+                    if (userModel.mobileNo.length >= 7) {
+                        _userName = [userModel.mobileNo stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
+                    }
                 }
-            }
+            } failure:^(NSError * _Nonnull error) {
+                [SSJAlertViewAdapter showError:error];
+            }];
         }
         
         _muteButton = [UIButton buttonWithType:UIButtonTypeCustom];

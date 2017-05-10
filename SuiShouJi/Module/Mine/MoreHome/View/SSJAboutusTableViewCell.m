@@ -38,7 +38,7 @@
 -(UILabel *)cellTitleLabel{
     if (!_cellTitleLabel) {
         _cellTitleLabel = [[UILabel alloc]initWithFrame:CGRectZero];
-        _cellTitleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        _cellTitleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         _cellTitleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     }
     return _cellTitleLabel;
@@ -47,7 +47,7 @@
 -(UILabel *)cellDetailLabel{
     if (!_cellDetailLabel) {
         _cellDetailLabel = [[UILabel alloc]initWithFrame:CGRectZero];
-        _cellDetailLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        _cellDetailLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         _cellDetailLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     }
     return _cellDetailLabel;
@@ -56,7 +56,7 @@
 -(UILabel *)cellSubtitleLabel{
     if (!_cellSubtitleLabel) {
         _cellSubtitleLabel = [[UILabel alloc]initWithFrame:CGRectZero];
-        _cellSubtitleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_5);
+        _cellSubtitleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_5];
         _cellSubtitleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     }
     return _cellSubtitleLabel;

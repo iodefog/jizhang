@@ -43,21 +43,21 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         
         _lab1 = [[UILabel alloc] init];
         _lab1.text = @"点击";
-        _lab1.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2);
+        _lab1.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
         _lab1.textColor = [UIColor ssj_colorWithHex:@"#393939"];
         [_lab1 sizeToFit];
         [self addSubview:_lab1];
         
         _lab2 = [[UILabel alloc] init];
         _lab2.text = @"键，爱类别将被移动";
-        _lab2.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2);
+        _lab2.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
         _lab2.textColor = [UIColor ssj_colorWithHex:@"#393939"];
         [_lab2 sizeToFit];
         [self addSubview:_lab2];
         
         _lab3 = [[UILabel alloc] init];
         _lab3.text = @"到添加类别页的底部哦！";
-        _lab3.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2);
+        _lab3.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
         _lab3.textColor = [UIColor ssj_colorWithHex:@"#393939"];
         [_lab3 sizeToFit];
         [self addSubview:_lab3];
@@ -66,7 +66,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         [self addSubview:_arrow];
         
         _sureBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        _sureBtn.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_1);
+        _sureBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_1];
         [_sureBtn setTitle:@"知道了" forState:UIControlStateNormal];
         [_sureBtn setTitleColor:[UIColor ssj_colorWithHex:@"#eb4a64"] forState:UIControlStateNormal];
         [_sureBtn addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];

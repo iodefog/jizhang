@@ -64,12 +64,12 @@ NSString *const SSJBudgetDetailBillInfoColorKey = @"SSJBudgetDetailBillInfoColor
     item.payment = [NSString stringWithFormat:@"已花：%.2f", model.payMoney];
     
     NSMutableAttributedString *paymentStr = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"已花：%.2f", model.payMoney]];
-    [paymentStr setAttributes:@{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_1),
+    [paymentStr setAttributes:@{NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_1],
                                 NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor]} range:NSMakeRange(3, paymentStr.length - 3)];
     item.historyPayment = paymentStr;
     
     NSMutableAttributedString *budgetStr = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"预算：%.2f", model.budgetMoney]];
-    [budgetStr setAttributes:@{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_1),
+    [budgetStr setAttributes:@{NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_1],
                                NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor]} range:NSMakeRange(3, budgetStr.length - 3)];
     item.historyBudget = budgetStr;
     

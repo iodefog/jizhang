@@ -22,15 +22,15 @@
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         
         self.selectionStyle = UITableViewCellSelectionStyleNone;
-        self.textLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        self.textLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         
         _rightLabel = [[UILabel alloc] init];
-        _rightLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        _rightLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         _rightLabel.textAlignment = NSTextAlignmentRight;
         [self.contentView addSubview:_rightLabel];
         
         _bottomLabel = [[UILabel alloc] init];
-        _bottomLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
+        _bottomLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
         [self.contentView addSubview:_bottomLabel];
         
         [self updateAppearance];

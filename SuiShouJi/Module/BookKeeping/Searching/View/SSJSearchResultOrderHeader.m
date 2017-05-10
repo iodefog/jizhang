@@ -22,6 +22,8 @@
 
 @property(nonatomic, strong) UILabel *doubleLineExpentureLabel;
 
+@property(nonatomic, strong) UIView *bottomView;
+
 @end
 
 @implementation SSJSearchResultOrderHeader
@@ -30,8 +32,13 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.searchResultHeaderBackgroundColor];
+        if ([SSJCurrentThemeID() isEqualToString:SSJDefaultThemeID]) {
+            self.backgroundColor = [UIColor whiteColor];
+        } else {
+            self.backgroundColor = [UIColor clearColor];
+        }
         [self addSubview:self.slidePageView];
+        [self addSubview:self.bottomView];
         [self addSubview:self.resultCountLabel];
         [self addSubview:self.singleLineLabel];
         [self addSubview:self.doubleLineIncomeLabel];
@@ -49,13 +56,15 @@
     [super layoutSubviews];
     self.slidePageView.leftTop = CGPointMake(0, 0);
     self.slidePageView.size = CGSizeMake(self.width, 44);
+    self.bottomView.leftTop = CGPointMake(0, self.slidePageView.bottom);
+    self.bottomView.size = CGSizeMake(self.width, self.height - self.slidePageView.height);
     if (self.sumItem.resultExpenture && self.sumItem.resultIncome) {
         self.resultCountLabel.bottom = self.slidePageView.bottom + (self.height - self.slidePageView.bottom) / 2 - 9;
         self.resultCountLabel.left = 10;
         self.doubleLineIncomeLabel.top = self.doubleLineExpentureLabel.top = self.slidePageView.bottom + (self.height - self.slidePageView.bottom) / 2 + 9;
         self.doubleLineIncomeLabel.left = 10;
         self.doubleLineExpentureLabel.right = self.width - 10;
-    }else{
+    } else {
         self.resultCountLabel.centerY = self.slidePageView.bottom + (self.height - self.slidePageView.bottom) / 2;
         self.resultCountLabel.left = 10;
         self.singleLineLabel.centerY = self.resultCountLabel.centerY;
@@ -83,7 +92,7 @@
 - (UILabel *)resultCountLabel{
     if (!_resultCountLabel) {
         _resultCountLabel = [[UILabel alloc]init];
-        _resultCountLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_5);
+        _resultCountLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_5];
         _resultCountLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     }
     return _resultCountLabel;
@@ -92,7 +101,7 @@
 - (UILabel *)singleLineLabel{
     if (!_singleLineLabel) {
         _singleLineLabel = [[UILabel alloc]init];
-        _singleLineLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_5);
+        _singleLineLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_5];
         _singleLineLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     }
     return _singleLineLabel;
@@ -101,7 +110,7 @@
 - (UILabel *)doubleLineIncomeLabel{
     if (!_doubleLineIncomeLabel) {
         _doubleLineIncomeLabel = [[UILabel alloc]init];
-        _doubleLineIncomeLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_5);
+        _doubleLineIncomeLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_5];
         _doubleLineIncomeLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     }
     return _doubleLineIncomeLabel;
@@ -110,10 +119,18 @@
 - (UILabel *)doubleLineExpentureLabel{
     if (!_doubleLineExpentureLabel) {
         _doubleLineExpentureLabel = [[UILabel alloc]init];
-        _doubleLineExpentureLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_5);
+        _doubleLineExpentureLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_5];
         _doubleLineExpentureLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     }
     return _doubleLineExpentureLabel;
+}
+
+- (UIView *)bottomView {
+    if (!_bottomView) {
+        _bottomView = [[UIView alloc] init];
+        _bottomView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor alpha:0.1];
+    }
+    return _bottomView;
 }
 
 - (void)setSumItem:(SSJSearchResultSummaryItem *)sumItem{
@@ -239,7 +256,12 @@
 }
 
 - (void)updateCellAppearanceAfterThemeChanged {
-    self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.searchResultHeaderBackgroundColor];
+    if ([SSJCurrentThemeID() isEqualToString:SSJDefaultThemeID]) {
+        self.backgroundColor = [UIColor whiteColor];
+    } else {
+        self.backgroundColor = [UIColor clearColor];
+    }
+    self.bottomView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor alpha:0.1];
     self.slidePageView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     self.slidePageView.titleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     self.resultCountLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];

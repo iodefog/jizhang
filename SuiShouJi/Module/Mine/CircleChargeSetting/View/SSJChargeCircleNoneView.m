@@ -65,7 +65,7 @@
 -(UILabel *)nodataLabel{
     if (!_nodataLabel) {
         _nodataLabel = [[UILabel alloc]init];
-        _nodataLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        _nodataLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         _nodataLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         _nodataLabel.text = @"您暂时未设置任何周期记账哦~";
         [_nodataLabel sizeToFit];

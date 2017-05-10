@@ -41,10 +41,10 @@
     [expendText addAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]} range:NSMakeRange(0, 3)];
     [expendText addAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor]} range:NSMakeRange(3, expendText.length - 3)];
     if (item.isMajor) {
-        [expendText addAttributes:@{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4)} range:NSMakeRange(0, 3)];
-        [expendText addAttributes:@{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_1)} range:NSMakeRange(3, expendText.length - 3)];
+        [expendText addAttributes:@{NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4]} range:NSMakeRange(0, 3)];
+        [expendText addAttributes:@{NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_1]} range:NSMakeRange(3, expendText.length - 3)];
     } else {
-        [expendText addAttributes:@{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4)} range:NSMakeRange(0, expendText.length)];
+        [expendText addAttributes:@{NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4]} range:NSMakeRange(0, expendText.length)];
     }
     item.expend = expendText;
     
@@ -52,10 +52,10 @@
     [budgetText addAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]} range:NSMakeRange(0, 3)];
     [budgetText addAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor]} range:NSMakeRange(3, budgetText.length - 3)];
     if (item.isMajor) {
-        [budgetText addAttributes:@{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4)} range:NSMakeRange(0, 3)];
-        [budgetText addAttributes:@{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_1)} range:NSMakeRange(3, budgetText.length - 3)];
+        [budgetText addAttributes:@{NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4]} range:NSMakeRange(0, 3)];
+        [budgetText addAttributes:@{NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_1]} range:NSMakeRange(3, budgetText.length - 3)];
     } else {
-        [budgetText addAttributes:@{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4)} range:NSMakeRange(0, budgetText.length)];
+        [budgetText addAttributes:@{NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4]} range:NSMakeRange(0, budgetText.length)];
     }
     item.budget = budgetText;
     

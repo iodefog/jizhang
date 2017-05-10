@@ -21,18 +21,10 @@
 #import "SSJMagicExportBookTypeSelectionCell.h"
 #import "SSJMagicExportSuccessAlertView.h"
 
-@interface SSJMagicExportViewController () <UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate>
+@interface SSJMagicExportViewController () <UITextFieldDelegate>
 
 
 @property (nonatomic, strong) TPKeyboardAvoidingScrollView *scrollView;
-
-@property (nonatomic, strong) UIView *bookTypeView;
-
-@property (nonatomic, strong) UIButton *bookTypeBtn;
-
-@property (nonatomic, strong) UITableView *bookTypeSelectionView;
-
-@property (nonatomic, strong) CAShapeLayer *triangle;
 
 //
 @property (nonatomic, strong) UILabel *dateLabel;
@@ -64,10 +56,6 @@
 // 导出结束时间
 @property (nonatomic, strong) NSDate *endDate;
 
-@property (nonatomic, strong) NSArray *bookTypes;
-
-@property (nonatomic, strong) SSJBooksTypeItem *selectedBookItem;
-
 @property (nonatomic, strong) SSJMagicExportService *service;
 
 @property (nonatomic, strong) UIView *noDataRemindView;
@@ -86,7 +74,6 @@
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.navigationItem.title = @"数据导出";
         self.hidesBottomBarWhenPushed = YES;
-        _userItem = [SSJUserTableManager queryUserItemForID:SSJUSERID()];
     }
     return self;
 }
@@ -98,14 +85,13 @@
     
     // 现隐藏视图，等数据加载出来在显示
     self.announcementLab.hidden = YES;
-    self.bookTypeView.hidden = YES;
     self.scrollView.hidden = YES;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self.navigationController.navigationBar setShadowImage:nil];
-    [self loadExportPeriod];
+    [self loadAllData];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -113,34 +99,9 @@
     [self.service cancel];
 }
 
-#pragma mark - UITableViewDataSource
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return _bookTypes.count;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *cellId = @"cellId";
-    SSJMagicExportBookTypeSelectionCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
-    if (!cell) {
-        cell = [[SSJMagicExportBookTypeSelectionCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
-    }
-    SSJBooksTypeItem *bookItem = [_bookTypes ssj_safeObjectAtIndex:indexPath.row];
-    cell.bookName = bookItem.booksName;
-    return cell;
-}
-
-#pragma mark - UITableViewDelegate
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    _selectedBookItem = [_bookTypes ssj_safeObjectAtIndex:indexPath.row];
-    [_bookTypeBtn setTitle:_selectedBookItem.booksName forState:UIControlStateNormal];
-    [self loadExportPeriod];
-    [self hideBookTypeSelectionView];
-}
-
 #pragma mark - UITextFieldDelegate
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
-    [self hideBookTypeSelectionView];
+    
 }
 
 #pragma mark - SSJBaseNetworkServiceDelegate
@@ -149,7 +110,9 @@
     if (service == _service && [_service.returnCode isEqualToString:@"1"]) {
         
         _userItem.email = _service.email;
-        [SSJUserTableManager saveUserItem:_userItem];
+        [SSJUserTableManager saveUserItem:_userItem success:NULL failure:^(NSError * _Nonnull error) {
+            [SSJAlertViewAdapter showError:error];
+        }];
         
         __weak typeof(self) wself = self;
         [SSJMagicExportSuccessAlertView show:^{
@@ -159,84 +122,69 @@
 }
 
 #pragma mark - Private
-- (void)loadData {
+- (void)loadAllData {
     [self.view ssj_showLoadingIndicator];
     
-    [SSJBooksTypeStore queryForBooksListWithSuccess:^(NSMutableArray<SSJBooksTypeItem *> *result) {
-        
+    @weakify(self);
+    [[[self loadUserItemSignal] then:^RACSignal *{
+        @strongify(self);
+        return [self loadExportPeriodSingal];
+    }] subscribeError:^(NSError *error) {
+        @strongify(self);
         [self.view ssj_hideLoadingIndicator];
-        
-        _bookTypes = result;
-        if (!_selectedBookItem) {
-            SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID()];
-            if (!userItem.currentBooksId.length) {
-                userItem.currentBooksId = SSJUSERID();
-            }
-            for (SSJBooksTypeItem *bookItem in _bookTypes) {
-                if ([bookItem.booksId isEqualToString:userItem.currentBooksId]) {
-                    _selectedBookItem = bookItem;
-                    break;
-                }
-            }
-        }
-        
-        self.bookTypeView.hidden = NO;
-        self.announcementLab.hidden = NO;
-        
-        [self.bookTypeSelectionView reloadData];
-        [self.bookTypeBtn setTitle:_selectedBookItem.booksName forState:UIControlStateNormal];
-        
-        [self loadExportPeriod];
-        
-    } failure:^(NSError *error) {
+        [SSJAlertViewAdapter showError:error];
+    } completed:^{
+        @strongify(self);
         [self.view ssj_hideLoadingIndicator];
-        [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
     }];
 }
 
-- (void)loadExportPeriod {
-    [self.view ssj_showLoadingIndicator];
-    [SSJMagicExportStore queryBillPeriodWithBookId:_selectedBookItem.booksId success:^(NSDictionary<NSString *,NSDate *> *result) {
-        
-        [self.view ssj_hideLoadingIndicator];
-        
-        _firstRecordDate = result[SSJMagicExportStoreBeginDateKey];
-        _lastRecordDate = result[SSJMagicExportStoreEndDateKey];
-        
-        if (!_beginDate) {
-            _beginDate = _firstRecordDate;
-        }
-        if (!_endDate) {
-            _endDate = _lastRecordDate;
-        }
-        
-        if (_firstRecordDate && _lastRecordDate) {
-            self.announcementLab.hidden = NO;
-            self.scrollView.hidden = NO;
-            [self updateBeginAndEndButton];
-            [self.view ssj_hideWatermark:YES];
+- (RACSignal *)loadUserItemSignal {
+    @weakify(self);
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        @strongify(self);
+        [SSJUserTableManager queryUserItemWithID:SSJUSERID() success:^(SSJUserItem * _Nonnull userItem) {
+            self.userItem = userItem;
+            [subscriber sendNext:nil];
+            [subscriber sendCompleted];
+        } failure:^(NSError * _Nonnull error) {
+            [subscriber sendError:error];
+        }];
+        return nil;
+    }];
+}
+
+- (RACSignal *)loadExportPeriodSingal {
+    @weakify(self);
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        @strongify(self);
+        [SSJMagicExportStore queryBillPeriodWithBookId:nil success:^(NSDictionary<NSString *,NSDate *> *result) {
+            self.firstRecordDate = result[SSJMagicExportStoreBeginDateKey];
+            self.lastRecordDate = result[SSJMagicExportStoreEndDateKey];
             
-//            if (self.noDataRemindView.superview) {
-//                [UIView transitionWithView:self.view duration:0.25 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-//                    [self.noDataRemindView removeFromSuperview];
-//                } completion:NULL];
-//            }
-        } else {
-            self.announcementLab.hidden = YES;
-            self.scrollView.hidden = YES;
-            [self.view ssj_hideLoadingIndicator];
-            [self.view ssj_showWatermarkWithCustomView:self.noDataRemindView animated:YES target:nil action:nil];
+            if (!self.beginDate) {
+                self.beginDate = self.firstRecordDate;
+            }
+            if (!self.endDate) {
+                self.endDate = self.lastRecordDate;
+            }
             
-//            if (!self.noDataRemindView.superview) {
-//                [UIView transitionWithView:self.view duration:0.25 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-//                    [self.view addSubview:self.noDataRemindView];
-//                } completion:NULL];
-//            }
-        }
-        
-    } failure:^(NSError *error) {
-        [self.view ssj_hideLoadingIndicator];
-        [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
+            if (self.firstRecordDate && self.lastRecordDate) {
+                self.announcementLab.hidden = NO;
+                self.scrollView.hidden = NO;
+                [self updateBeginAndEndButton];
+                [self.view ssj_hideWatermark:YES];
+            } else {
+                self.announcementLab.hidden = YES;
+                self.scrollView.hidden = YES;
+                [self.view ssj_showWatermarkWithCustomView:self.noDataRemindView animated:YES target:nil action:nil];
+            }
+            [subscriber sendNext:nil];
+            [subscriber sendCompleted];
+        } failure:^(NSError *error) {
+            [subscriber sendError:error];
+        }];
+        return nil;
     }];
 }
 
@@ -246,7 +194,6 @@
     }
     
     [self.view addSubview:self.announcementLab];
-//    [self.view addSubview:self.bookTypeView];
     [self.view addSubview:_scrollView];
     
     [_scrollView addSubview:self.dateLabel];
@@ -282,7 +229,6 @@
 - (void)selectDateActionWithBeginDate:(NSDate *)beginDate endDate:(NSDate *)endDate {
     SSJMagicExportCalendarViewController *calendarVC = [[SSJMagicExportCalendarViewController alloc] init];
     calendarVC.billType = SSJBillTypeUnknown;
-    calendarVC.booksId = _selectedBookItem.booksId;
     calendarVC.beginDate = beginDate;
     calendarVC.endDate = endDate;
     __weak typeof(self) weakSelf = self;
@@ -322,42 +268,12 @@
     [self.navigationController pushViewController:announcementVC animated:YES];
 }
 
-- (void)selectionBookTypeAction {
-    [self.view endEditing:YES];
-    if (self.bookTypeSelectionView.superview) {
-        [self hideBookTypeSelectionView];
-    } else {
-        [self showBookTypeSelectionView];
-    }
-}
-
-- (void)showBookTypeSelectionView {
-    [self.view addSubview:self.bookTypeSelectionView];
-    self.bookTypeSelectionView.height = 0;
-    [UIView animateWithDuration:0.25 animations:^{
-        self.bookTypeSelectionView.top = 70;
-        self.bookTypeSelectionView.height = 130;
-        self.triangle.transform = CATransform3DMakeRotation(M_PI, 0, 0, 1);
-    }];
-}
-
-- (void)hideBookTypeSelectionView {
-    [UIView animateWithDuration:0.25 animations:^{
-        self.bookTypeSelectionView.top = 70;
-        self.bookTypeSelectionView.height = 0;
-        self.triangle.transform = CATransform3DIdentity;
-    } completion:^(BOOL finished) {
-        [self.bookTypeSelectionView removeFromSuperview];
-    }];
-//    [self.bookTypeSelectionView removeFromSuperview];
-}
-
 #pragma mark - Getter
 - (UILabel *)announcementLab {
     if (!_announcementLab) {
         _announcementLab = [[UILabel alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, 35)];
         _announcementLab.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
-        _announcementLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_7);
+        _announcementLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_7];
         _announcementLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         
         NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
@@ -372,72 +288,11 @@
     return _announcementLab;
 }
 
-- (UIView *)bookTypeView {
-    if (!_bookTypeView) {
-        _bookTypeView = [[UIView alloc] initWithFrame:CGRectMake(0, self.announcementLab.bottom, self.view.width, 50)];
-        _bookTypeView.backgroundColor = [UIColor whiteColor];
-        [_bookTypeView ssj_setBorderColor:[UIColor ssj_colorWithHex:@"b7b7b7"]];
-        [_bookTypeView ssj_setBorderStyle:SSJBorderStyleTop];
-        [_bookTypeView ssj_setBorderWidth:1];
-        
-        UILabel *titleLab = [[UILabel alloc] init];
-        titleLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
-        titleLab.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
-        titleLab.text = @"导出账本类型";
-        [titleLab sizeToFit];
-        titleLab.left = 10;
-        titleLab.centerY = _bookTypeView.height * 0.5;
-        [_bookTypeView addSubview:titleLab];
-        [_bookTypeView addSubview:self.bookTypeBtn];
-        [_bookTypeView.layer addSublayer:self.triangle];
-    }
-    return _bookTypeView;
-}
-
-- (UIButton *)bookTypeBtn {
-    if (!_bookTypeBtn) {
-        _bookTypeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        _bookTypeBtn.frame = CGRectMake(self.view.width - 116, 0, 116, 50);
-        _bookTypeBtn.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
-        [_bookTypeBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        [_bookTypeBtn addTarget:self action:@selector(selectionBookTypeAction) forControlEvents:UIControlEventTouchUpInside];
-    }
-    return _bookTypeBtn;
-}
-
-- (UITableView *)bookTypeSelectionView {
-    if (!_bookTypeSelectionView) {
-        _bookTypeSelectionView = [[UITableView alloc] initWithFrame:CGRectMake(self.view.width - 94, 70, 84, 130)];
-        _bookTypeSelectionView.backgroundColor = [UIColor ssj_colorWithHex:@"cccccc"];
-        _bookTypeSelectionView.dataSource = self;
-        _bookTypeSelectionView.delegate = self;
-        _bookTypeSelectionView.rowHeight = 30;
-        _bookTypeSelectionView.separatorInset = UIEdgeInsetsZero;
-        _bookTypeSelectionView.separatorColor = [UIColor ssj_colorWithHex:@"b7b7b7"];
-    }
-    return _bookTypeSelectionView;
-}
-
-- (CAShapeLayer *)triangle {
-    if (!_triangle) {
-        _triangle = [CAShapeLayer layer];
-        _triangle.frame = CGRectMake(self.view.width - 17, 30, 7, 5);
-        _triangle.fillColor = [UIColor blackColor].CGColor;
-        UIBezierPath *path = [UIBezierPath bezierPath];
-        [path moveToPoint:CGPointMake(0, 0)];
-        [path addLineToPoint:CGPointMake(_triangle.width, 0)];
-        [path addLineToPoint:CGPointMake(_triangle.width * 0.5, _triangle.height)];
-        [path closePath];
-        _triangle.path = path.CGPath;
-    }
-    return _triangle;
-}
-
 - (UILabel *)dateLabel {
     if (!_dateLabel) {
         _dateLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 36)];
         _dateLabel.backgroundColor = [UIColor clearColor];
-        _dateLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_7);
+        _dateLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_7];
         _dateLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         
         NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
@@ -465,7 +320,7 @@
     if (!_emailLabel) {
         _emailLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.selectDateView.bottom, self.view.width, 36)];
         _emailLabel.backgroundColor = [UIColor clearColor];
-        _emailLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_7);
+        _emailLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_7];
         _emailLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         
         NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
@@ -509,7 +364,7 @@
         _commitBtn.layer.cornerRadius = 3;
         _commitBtn.clipsToBounds = YES;
         _commitBtn.frame = CGRectMake(22, self.emailView.bottom + 26, self.view.width - 44, 44);
-        _commitBtn.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_1);
+        _commitBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_1];
         [_commitBtn setTitle:@"提交" forState:UIControlStateNormal];
         [_commitBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_commitBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];
@@ -529,7 +384,7 @@
         
         UILabel *lab = [[UILabel alloc] initWithFrame:CGRectMake(0, imgView.bottom + 10, _noDataRemindView.width, 16)];
         lab.backgroundColor = [UIColor clearColor];
-        lab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        lab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         lab.text = @"您还未有记账数据哦";
         lab.textAlignment = NSTextAlignmentCenter;
         lab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];

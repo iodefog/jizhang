@@ -21,7 +21,7 @@
 #import "SSJUserCreditSyncTable.h"
 #import "SSJCreditRepaymentSyncTable.h"
 #import "SSJTransferCycleSyncTable.h"
-
+#import "SSJUserTable.h"
 
 #import "SSJSyncTable.h"
 
@@ -29,7 +29,6 @@
 #import "AFNetworking.h"
 #import "SSJFinancingGradientColorItem.h"
 
-#import "SSJUserTableManager.h"
 #import "SSJRegularManager.h"
 
 #import "SSJLoginViewController+SSJCategory.h"
@@ -262,14 +261,7 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
     }];
     
     if (self.userId.length) {
-        SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"nickName", @"signature",@"writeDate"] forUserId:self.userId];
-        [jsonObject setObject:@[@{@"cuserid":self.userId,
-                                  @"crealname":userItem.nickName ?: @"",
-                                  @"usersignature":userItem.signature ?: @"",
-                                  @"cimei":SSJUniqueID(),
-                                  @"isource":SSJDefaultSource(),
-                                  @"operatortype":@1,
-                                  @"cwritedate":userItem.writeDate ?: @""}] forKey:@"bk_user"];
+        [jsonObject setObject:@[[SSJUserTable syncDataWithUserId:self.userId]] forKey:@"bk_user"];
     }
     
     if (*error) {
@@ -371,14 +363,7 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
         if (![userId isEqualToString:self.userId]) {
             continue;
         }
-        
-        SSJUserItem *userItem = [[SSJUserItem alloc] init];
-        userItem.userId = userId;
-        userItem.mobileNo = userInfo[@"cmobileno"];
-        userItem.nickName = userInfo[@"crealname"]; // 第三方登录时，服务器返回的crealname就是用户昵称
-        userItem.signature = userInfo[@"usersignature"];
-        userItem.icon = userInfo[@"cicon"];
-        [SSJUserTableManager saveUserItem:userItem];
+        [SSJUserTable mergeData:userInfo];
     }
     
     // 合并顺序：1.收支类型 2.资金账户 3.定期记账 4.记账流水 5.预算

@@ -264,7 +264,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
         _collectionView.movedCellScale = 1.08;
         _collectionView.editDelegate=self;
         _collectionView.editDataSource=self;
-        _collectionView.exchangeCellRegion = UIEdgeInsetsMake(5, 0, 5, 0);
+        _collectionView.exchangeCellRegion = UIEdgeInsetsMake(20, 0, 20, 0);
         _collectionView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     }
     return _collectionView;
@@ -393,20 +393,5 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 //    self.navigationItem.rightBarButtonItem.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     [self.collectionView reloadData];
 }
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

@@ -186,7 +186,7 @@
 - (UILabel *)titleLabel{
     if (!_titleLabel) {
         _titleLabel = [[UILabel alloc]initWithFrame:CGRectZero];
-        _titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        _titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         _titleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     }
     return _titleLabel;
@@ -196,7 +196,7 @@
     if (!_detailLabel) {
         _detailLabel = [[UILabel alloc]initWithFrame:CGRectZero];
 //        _detailLabel.adjustsFontSizeToFitWidth = YES;
-        _detailLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        _detailLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
     }
     return _detailLabel;
 }
@@ -204,7 +204,7 @@
 - (UILabel *)subTitleLabel{
     if (!_subTitleLabel) {
         _subTitleLabel = [[UILabel alloc]initWithFrame:CGRectZero];
-        _subTitleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        _subTitleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         _subTitleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     }
     return _subTitleLabel;
@@ -222,7 +222,7 @@
         _textInput = [[UITextField alloc]init];
         _textInput.textAlignment = NSTextAlignmentRight;
         _textInput.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        _textInput.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        _textInput.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
     }
     return _textInput;
 }

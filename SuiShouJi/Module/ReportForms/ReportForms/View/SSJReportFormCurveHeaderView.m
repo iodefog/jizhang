@@ -345,7 +345,7 @@ static const CGFloat kSeparatorFormViewHeight = 88;
     
     [_curveView reloadData];
     _curveView.scaleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor];
-    _curveView.balloonTitleAttributes = @{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4),
+    _curveView.balloonTitleAttributes = @{NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4],
                                     NSForegroundColorAttributeName:[UIColor whiteColor],
                                     NSBackgroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.bookKeepingHomeMutiButtonSelectColor]};
     _curveView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
@@ -406,16 +406,16 @@ static const CGFloat kSeparatorFormViewHeight = 88;
                                                      bottomTitle:@"期间收入"
                                                    topTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurveIncomeColor]
                                                 bottomTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]
-                                                    topTitleFont:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2)
-                                                 bottomTitleFont:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_5)
+                                                    topTitleFont:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2]
+                                                 bottomTitleFont:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_5]
                                                    contentInsets:UIEdgeInsetsZero];
     
     _paymentItem = [SSJSeparatorFormViewCellItem itemWithTopTitle:_item.generalPayment
                                                       bottomTitle:@"期间支出"
                                                     topTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurvePaymentColor]
                                                  bottomTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]
-                                                     topTitleFont:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2)
-                                                  bottomTitleFont:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_5)
+                                                     topTitleFont:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2]
+                                                  bottomTitleFont:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_5]
                                                     contentInsets:UIEdgeInsetsZero];
     
     double surplus = [_item.generalIncome doubleValue] - [_item.generalPayment doubleValue];
@@ -423,8 +423,8 @@ static const CGFloat kSeparatorFormViewHeight = 88;
                                                         bottomTitle:@"期间结余"
                                                       topTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor]
                                                    bottomTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]
-                                                       topTitleFont:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2)
-                                                    bottomTitleFont:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_5)
+                                                       topTitleFont:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2]
+                                                    bottomTitleFont:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_5]
                                                       contentInsets:UIEdgeInsetsZero];
     [_separatorFormView reloadData];
 }

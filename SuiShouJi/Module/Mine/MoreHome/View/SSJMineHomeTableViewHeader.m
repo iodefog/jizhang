@@ -104,7 +104,7 @@
     if (!_nicknameLabel) {
         _nicknameLabel = [[UILabel alloc]init];
         _nicknameLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.moreHomeTitleColor];
-        _nicknameLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        _nicknameLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
     }
     return _nicknameLabel;
 }
@@ -113,7 +113,7 @@
     if (!_geXingSignLabel) {
         _geXingSignLabel = [[UILabel alloc] init];
         _geXingSignLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.moreHomeSubtitleColor];
-        _geXingSignLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
+        _geXingSignLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
     }
     return _geXingSignLabel;
 }
@@ -123,7 +123,7 @@
 -(UILabel *)checkInLevelLabel{
     if (!_checkInLevelLabel) {
         _checkInLevelLabel = [[UILabel alloc]init];
-        _checkInLevelLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
+        _checkInLevelLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
         _checkInLevelLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.moreHomeSubtitleColor];
     }
     return _checkInLevelLabel;
@@ -136,7 +136,7 @@
         [_checkInButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.moreHomeTitleColor] forState:UIControlStateNormal];
         [_checkInButton setImage:[[UIImage imageNamed:@"more_qiandao"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
         _checkInButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.moreHomeTitleColor];
-        _checkInButton.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
+        _checkInButton.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
         [_checkInButton ssj_setBorderStyle:SSJBorderStyleTop];
         [_checkInButton ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
         [_checkInButton ssj_setBorderWidth:1.f / [UIScreen mainScreen].scale];
@@ -216,20 +216,6 @@
         self.nicknameLabel.text = @"待君登录";
         [self.nicknameLabel sizeToFit];
     }
-
-}
-
-- (void)setSignStr
-{
-    SSJUserItem *userItem = [SSJUserTableManager queryUserItemForID:SSJUSERID()];
-    if (userItem.signature.length < 1 || userItem.signature == nil) {
-        _geXingSignLabel.text = @"";
-        self.nicknameLabel.centerY = self.headPotraitImage.centerY;
-    }else{
-        _geXingSignLabel.text = userItem.signature;
-        self.nicknameLabel.top = self.headPotraitImage.top + 15;
-    }
-    self.dengjiImage.centerY = self.nicknameLabel.centerY;
 
 }
 

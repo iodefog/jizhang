@@ -21,7 +21,7 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         _titleLab = [[UILabel alloc] init];
-        _titleLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_7);
+        _titleLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_7];
         [self addSubview:_titleLab];
         
         _arrow = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"loan_arrow"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];

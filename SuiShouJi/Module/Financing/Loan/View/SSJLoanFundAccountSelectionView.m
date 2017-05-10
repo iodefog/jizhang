@@ -157,7 +157,7 @@ static NSString *const kCellId = @"SSJLoanFundAccountSelectionCell";
         _titleLabel = [[UILabel alloc] init];
         _titleLabel.text = @"选择资金账户";
         _titleLabel.textAlignment = NSTextAlignmentCenter;
-        _titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2);
+        _titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
     }
     return _titleLabel;
 }

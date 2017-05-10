@@ -46,7 +46,7 @@
     if (!_noDataLabel) {
         _noDataLabel = [[UILabel alloc]init];
         _noDataLabel.text = @"暂无流水记录哦~";
-        _noDataLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        _noDataLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         _noDataLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         _noDataLabel.textAlignment = NSTextAlignmentCenter;
         [_noDataLabel sizeToFit];

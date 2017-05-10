@@ -46,7 +46,7 @@
         _noDataLabel.textAlignment = NSTextAlignmentCenter;
         _noDataLabel.text = @"您暂未设置任何周期记账哦~";
         _noDataLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
-        _noDataLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        _noDataLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         [_noDataLabel sizeToFit];
     }
     return _noDataLabel;

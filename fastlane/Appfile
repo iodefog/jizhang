@@ -4,6 +4,6 @@ apple_id "yyfiniancial02@sina.com"
 end
 
 for_lane :appstore do |options|
-app_identifier "com.youyu.jizhangbao"
-apple_id "licaidi003@126.com"
+app_identifier "com.youyu.youyujizhangguanjia"
+apple_id "licaidi002@126.com"
 end

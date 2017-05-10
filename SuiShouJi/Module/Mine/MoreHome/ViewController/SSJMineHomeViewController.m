@@ -149,9 +149,7 @@ static BOOL kNeedBannerDisplay = YES;
         [self.annoucementService requestAnnoucementsWithPage:1];
     }
     
-    SSJUserItem *item = [SSJUserTableManager queryUserItemForID:SSJUSERID()];\
-    self.header.item = item;
-    [self.header setSignStr];//设置签名
+    [self updateSign];
     
     SSJBookkeepingTreeCheckInModel *checkInModel = [SSJBookkeepingTreeStore queryCheckInInfoWithUserId:SSJUSERID() error:nil];
     self.header.checkInLevel = [SSJBookkeepingTreeHelper treeLevelForDays:checkInModel.checkInTimes];
@@ -162,6 +160,16 @@ static BOOL kNeedBannerDisplay = YES;
     
     //    [self getCircleChargeState];
     self.navigationItem.rightBarButtonItem.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTintColor];
+}
+
+// 更新用户签名
+- (void)updateSign {
+    [SSJUserTableManager queryUserItemWithID:SSJUSERID() success:^(SSJUserItem * _Nonnull userItem) {
+        self.header.item = userItem;
+        [self.header setSignStr];//设置签名
+    } failure:^(NSError * _Nonnull error) {
+        [SSJAlertViewAdapter showError:error];
+    }];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -577,9 +585,7 @@ static BOOL kNeedBannerDisplay = YES;
 
 #pragma mark - Event
 -(void)reloadDataAfterSync {
-    SSJUserItem *item = [SSJUserTableManager queryUserItemForID:SSJUSERID()];
-    self.header.item = item;
-    [self.header setSignStr];//设置签名
+    [self updateSign];
 }
 
 #pragma mark - Private

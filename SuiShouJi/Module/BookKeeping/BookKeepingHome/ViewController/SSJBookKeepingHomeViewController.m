@@ -56,6 +56,7 @@
 #import "SSJCustomThemeManager.h"
 #import "SSJThemBgImageClipViewController.h"
 #import "SSJNavigationController.h"
+#import "SSJUserTableManager.h"
 
 static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 
@@ -196,10 +197,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
     if (self.isDatabaseInitFinished) {
         [self getDataFromDataBase];
         [self reloadBudgetData];
-        NSString *booksid = SSJGetCurrentBooksType();
-        SSJBooksTypeItem *currentBooksItem = [SSJBooksTypeStore queryCurrentBooksTypeForBooksId:booksid];
-        self.homeBar.leftButton.item = currentBooksItem;
-        self.homeBar.leftButton.tintColor = [UIColor ssj_colorWithHex:currentBooksItem.booksColor];
+        [self updateBooksItem];
     }
 }
 
@@ -910,8 +908,6 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
                 self.tableView.hasData = YES;
                 if (weakSelf.newlyAddChargeArr.count && !_hasChangeBooksType) {
                     
-                    SSJBillingChargeCellItem *currentItem = [weakSelf.newlyAddChargeArr firstObject];
-                    
                     NSInteger maxSection = [weakSelf.tableView numberOfSections] - 1;
                     NSInteger rowCount = [weakSelf.tableView numberOfRowsInSection:maxSection];
                     NSIndexPath *currentMaxIndex = [NSIndexPath indexPathForRow:rowCount - 1 inSection:maxSection];
@@ -1011,63 +1007,54 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
     }
     [self stopLoading];
     [self reloadBudgetData];
-    NSString *booksid = SSJGetCurrentBooksType();
-    SSJBooksTypeItem *currentBooksItem = [SSJBooksTypeStore queryCurrentBooksTypeForBooksId:booksid];
-    self.homeBar.leftButton.item = currentBooksItem;
+    [self updateBooksItem];
 }
 
 - (void)reloadDataAfterInitDatabase {
     [self getDataFromDataBase];
-    
     [self reloadBudgetData];
-    
-    NSString *booksid = SSJGetCurrentBooksType();
-    SSJBooksTypeItem *currentBooksItem = [SSJBooksTypeStore queryCurrentBooksTypeForBooksId:booksid];
-    self.homeBar.leftButton.item = currentBooksItem;
+    [self updateBooksItem];
 }
 
 - (void)reloadAfterBooksTypeChange{
-    
     _hasChangeBooksType = YES;
-    
     [self getDataFromDataBase];
-    
     [self reloadBudgetData];
-    
-    NSString *booksid = SSJGetCurrentBooksType();
-    SSJBooksTypeItem *currentBooksItem = [SSJBooksTypeStore queryCurrentBooksTypeForBooksId:booksid];
-    self.homeBar.leftButton.item = currentBooksItem;
+    [self updateBooksItem];
 }
 
 - (void)reloadBudgetData {
-    [SSJBudgetDatabaseHelper queryForCurrentBudgetListWithSuccess:^(NSArray<SSJBudgetModel *> * _Nonnull result) {
-        self.homeBar.budgetButton.model = [result firstObject];
-        for (int i = 0; i < result.count; i++) {
-            SSJBudgetModel *model = [result objectAtIndex:i];
-            NSArray *remindedBookTypes = _budgetRemindInfo[SSJUSERID()];
-            NSString *booksType = SSJGetCurrentBooksType();
-            
-            if (model.isRemind
-                && !model.isAlreadyReminded
-                && ![remindedBookTypes containsObject:booksType]
-                && (model.remindMoney >= model.budgetMoney - model.payMoney)
-                && (![[UIApplication sharedApplication].keyWindow.subviews containsObject:self.evaluatePopView])
-                && (![[UIApplication sharedApplication].keyWindow.subviews containsObject:self.keepingHomePopView])) {
-                self.remindView.model = model;
-                [self.remindView show];
-                self.isBudgetOverrunsPopViewShow = YES;
-                NSMutableArray *tmpRemindBookTypes = [remindedBookTypes mutableCopy];
-                if (!tmpRemindBookTypes) {
-                    tmpRemindBookTypes = [NSMutableArray array];
-                }
-                [tmpRemindBookTypes addObject:booksType];
-                [_budgetRemindInfo setObject:tmpRemindBookTypes forKey:SSJUSERID()];
+    [SSJUserTableManager currentBooksId:^(NSString * _Nonnull booksId) {
+        [SSJBudgetDatabaseHelper queryForCurrentBudgetListWithSuccess:^(NSArray<SSJBudgetModel *> * _Nonnull result) {
+            self.homeBar.budgetButton.model = [result firstObject];
+            for (int i = 0; i < result.count; i++) {
+                SSJBudgetModel *model = [result objectAtIndex:i];
+                NSArray *remindedBookTypes = _budgetRemindInfo[SSJUSERID()];
                 
-                break;
+                if (model.isRemind
+                    && !model.isAlreadyReminded
+                    && ![remindedBookTypes containsObject:booksId]
+                    && (model.remindMoney >= model.budgetMoney - model.payMoney)
+                    && (![[UIApplication sharedApplication].keyWindow.subviews containsObject:self.evaluatePopView])
+                    && (![[UIApplication sharedApplication].keyWindow.subviews containsObject:self.keepingHomePopView])) {
+                    self.remindView.model = model;
+                    [self.remindView show];
+                    self.isBudgetOverrunsPopViewShow = YES;
+                    NSMutableArray *tmpRemindBookTypes = [remindedBookTypes mutableCopy];
+                    if (!tmpRemindBookTypes) {
+                        tmpRemindBookTypes = [NSMutableArray array];
+                    }
+                    [tmpRemindBookTypes addObject:booksId];
+                    [_budgetRemindInfo setObject:tmpRemindBookTypes forKey:SSJUSERID()];
+                    
+                    break;
+                }
             }
-        }
-    } failure:^(NSError * _Nullable error) {
-        SSJPRINT(@"%@",error.localizedDescription);
+        } failure:^(NSError * _Nullable error) {
+            SSJPRINT(@"%@",error.localizedDescription);
+        }];
+    } failure:^(NSError * _Nonnull error) {
+        [SSJAlertViewAdapter showError:error];
     }];
 }
 
@@ -1110,5 +1097,14 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
     }
 }
 
+- (void)updateBooksItem {
+    [SSJUserTableManager currentBooksId:^(NSString * _Nonnull booksId) {
+        SSJBooksTypeItem *currentBooksItem = [SSJBooksTypeStore queryCurrentBooksTypeForBooksId:booksId];
+        self.homeBar.leftButton.item = currentBooksItem;
+        self.homeBar.leftButton.tintColor = [UIColor ssj_colorWithHex:currentBooksItem.booksColor];
+    } failure:^(NSError * _Nonnull error) {
+        [SSJAlertViewAdapter showError:error];
+    }];
+}
 
 @end

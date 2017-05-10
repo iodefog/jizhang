@@ -38,19 +38,19 @@
         [self.contentView addSubview:_icon];
         
         _titleLab = [[UILabel alloc] init];
-        _titleLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_7);
+        _titleLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_7];
         [self.contentView addSubview:_titleLab];
         
         _memoLab = [[UILabel alloc] init];
-        _memoLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
+        _memoLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
         [self.contentView addSubview:_memoLab];
         
         _moneyLab = [[UILabel alloc] init];
-        _moneyLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        _moneyLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         [self.contentView addSubview:_moneyLab];
         
         _dateLab = [[UILabel alloc] init];
-        _dateLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
+        _dateLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
         [self.contentView addSubview:_dateLab];
         
         [self updateAppearance];

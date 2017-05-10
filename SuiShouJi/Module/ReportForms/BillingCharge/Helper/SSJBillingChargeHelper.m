@@ -24,15 +24,16 @@ NSString *const SSJBillingChargeRecordKey = @"SSJBillingChargeRecordKey";
                         success:(void (^)(NSArray <NSDictionary *>*data))success
                         failure:(void (^)(NSError *error))failure {
     
-    if (!booksId) {
-        SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID()];
-        booksId = userItem.currentBooksId ?: SSJUSERID();
-    }
-    
     NSString *beginDate = [period.startDate formattedDateWithFormat:@"yyyy-MM-dd"];
     NSString *endDate = [period.endDate formattedDateWithFormat:@"yyyy-MM-dd"];
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        
+        NSString *tBooksId = booksId;
+        if (!tBooksId) {
+            tBooksId = [db stringForQuery:@"select ccurrentBooksId from bk_user where cuserid = ?", SSJUSERID()];
+            tBooksId = tBooksId ?: SSJUSERID();
+        }
         
         NSMutableString *sql = [@"select a.ICHARGEID, a.IMONEY, a.CBILLDATE, a.CWRITEDATE, a.IFUNSID, a.IBILLID, a.cmemo, a.cimgurl, a.thumburl, a.cid , a.ichargetype, a.cbooksid, b.CNAME, b.CCOIN, b.CCOLOR, b.ITYPE from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.IBILLID = :billId and a.CBILLDATE >= :beginDate and a.CBILLDATE <= :endDate and a.CBILLDATE <= datetime('now', 'localtime') and a.CUSERID = :userId and a.OPERATORTYPE <> 2" mutableCopy];
         
@@ -41,9 +42,9 @@ NSString *const SSJBillingChargeRecordKey = @"SSJBillingChargeRecordKey";
                                          @"endDate":endDate,
                                          @"userId":SSJUSERID()} mutableCopy];
         
-        if (![booksId isEqualToString:@"all"]) {
+        if (![tBooksId isEqualToString:@"all"]) {
             [sql appendString:@" and a.CBOOKSID = :booksId"];
-            [params setObject:booksId forKey:@"booksId"];
+            [params setObject:tBooksId forKey:@"booksId"];
         }
         [sql appendString:@" order by a.CBILLDATE desc"];
         
@@ -127,17 +128,17 @@ NSString *const SSJBillingChargeRecordKey = @"SSJBillingChargeRecordKey";
                               success:(void (^)(NSArray <NSDictionary *>*data))success
                               failure:(void (^)(NSError *error))failure {
     
-    if (!booksId) {
-        SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID()];
-        booksId = userItem.currentBooksId ?: SSJUSERID();
-    }
-    
     NSString *beginDate = [period.startDate formattedDateWithFormat:@"yyyy-MM-dd"];
     NSString *endDate = [period.endDate formattedDateWithFormat:@"yyyy-MM-dd"];
     
     NSString *userID = SSJUSERID();
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        NSString *tBooksId = booksId;
+        if (!tBooksId) {
+            tBooksId = [db stringForQuery:@"select ccurrentBooksId from bk_user where cuserid = ?", SSJUSERID()];
+            tBooksId = tBooksId ?: SSJUSERID();
+        }
         
         NSMutableString *sql = [@"select a.ICHARGEID, c.IMONEY, a.CBILLDATE , a.CWRITEDATE , a.IFUNSID, a.IBILLID, a.cmemo, a.cimgurl, a.thumburl, a.cid, a.ichargetype, a.cbooksid, b.CNAME, b.CCOIN, b.CCOLOR, b.ITYPE from BK_USER_CHARGE as a, BK_BILL_TYPE as b, bk_member_charge as c where a.IBILLID = b.ID and a.ichargeid = c.ichargeid and b.istate <> 2 and b.itype = :type and c.cmemberid = :memberId and a.CBILLDATE >= :beginDate and a.CBILLDATE <= :endDate and a.CBILLDATE <= datetime('now', 'localtime') and a.CUSERID = :userId and a.OPERATORTYPE <> 2" mutableCopy];
         
@@ -147,9 +148,9 @@ NSString *const SSJBillingChargeRecordKey = @"SSJBillingChargeRecordKey";
                                          @"endDate":endDate,
                                          @"userId":userID} mutableCopy];
         
-        if (![booksId isEqualToString:@"all"]) {
+        if (![tBooksId isEqualToString:@"all"]) {
             [sql appendString:@" and a.CBOOKSID = :booksId"];
-            [params setObject:booksId forKey:@"booksId"];
+            [params setObject:tBooksId forKey:@"booksId"];
         }
         
         [sql appendString:@" order by a.CBILLDATE desc"];

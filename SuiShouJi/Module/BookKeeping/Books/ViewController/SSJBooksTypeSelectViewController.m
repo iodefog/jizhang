@@ -29,6 +29,7 @@ static BOOL kNeedBannerDisplay = YES;
 #import "SSJBannerNetworkService.h"
 #import "SSJBooksTypeEditAlertView.h"
 #import "SSJBooksTypeDeletionAuthCodeAlertView.h"
+#import "SSJUserTableManager.h"
 
 @interface SSJBooksTypeSelectViewController ()<SSJEditableCollectionViewDelegate,SSJEditableCollectionViewDataSource>
 
@@ -51,6 +52,8 @@ static BOOL kNeedBannerDisplay = YES;
 @property (nonatomic, strong) SSJBooksTypeEditAlertView *editAlertView;
 
 @property (nonatomic, strong) SSJBooksTypeDeletionAuthCodeAlertView *authCodeAlertView;
+
+@property (nonatomic, strong) NSString *currentBooksId;
 
 @end
 
@@ -119,9 +122,13 @@ static BOOL kNeedBannerDisplay = YES;
         } else {
             [SSJAnaliyticsManager event:@"change_account_book" extra:item.booksName
              ];
-            SSJSelectBooksType(item.booksId);
-            [self.collectionView reloadData];
-            [self.mm_drawerController closeDrawerAnimated:YES completion:NULL];
+            [SSJUserTableManager updateCurrentBooksId:item.booksId success:^{
+                self.currentBooksId = item.booksId;
+                [self.collectionView reloadData];
+                [self.mm_drawerController closeDrawerAnimated:YES completion:NULL];
+            } failure:^(NSError * _Nonnull error) {
+                [SSJAlertViewAdapter showError:error];
+            }];
         }
     }
 }
@@ -134,7 +141,7 @@ static BOOL kNeedBannerDisplay = YES;
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString *booksid = SSJGetCurrentBooksType();
+    NSString *booksid = self.currentBooksId;
     SSJBooksTypeItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
     SSJBooksTypeCollectionViewCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:SSJBooksTypeCellIdentifier forIndexPath:indexPath];
     if ([item.booksId isEqualToString:booksid]) {
@@ -255,7 +262,7 @@ static BOOL kNeedBannerDisplay = YES;
         _collectionView.movedCellScale = 1.08;
         _collectionView.editDelegate=self;
         _collectionView.editDataSource=self;
-        _collectionView.exchangeCellRegion = UIEdgeInsetsMake(5, 0, 5, 0);
+        _collectionView.exchangeCellRegion = UIEdgeInsetsMake(30, 25, 30, 25);
         _collectionView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     }
     return _collectionView;
@@ -266,7 +273,7 @@ static BOOL kNeedBannerDisplay = YES;
         _rightButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 40, 30)];
         [_rightButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTintColor] forState:UIControlStateNormal];
         [_rightButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTintColor] forState:UIControlStateSelected];
-        _rightButton.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        _rightButton.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         _rightButton.contentHorizontalAlignment = NSTextAlignmentRight;
         [_rightButton setTitle:@"管理" forState:UIControlStateNormal];
         [_rightButton setTitle:@"完成" forState:UIControlStateSelected];
@@ -369,31 +376,51 @@ static BOOL kNeedBannerDisplay = YES;
         [SSJAlertViewAdapter showError:error];
     }];
     
-    [SSJBooksTypeStore queryForBooksListWithSuccess:^(NSMutableArray<SSJBooksTypeItem *> *result) {
-        weakSelf.items = [NSMutableArray arrayWithArray:result];
-        [weakSelf.collectionView reloadData];
-    } failure:^(NSError *error) {
+    [SSJUserTableManager currentBooksId:^(NSString * _Nonnull booksId) {
+        weakSelf.currentBooksId = booksId;
+        [SSJBooksTypeStore queryForBooksListWithSuccess:^(NSMutableArray<SSJBooksTypeItem *> *result) {
+            weakSelf.items = [NSMutableArray arrayWithArray:result];
+            [weakSelf.collectionView reloadData];
+        } failure:^(NSError *error) {
+            [SSJAlertViewAdapter showError:error];
+        }];
+    } failure:^(NSError * _Nonnull error) {
         [SSJAlertViewAdapter showError:error];
     }];
 }
 
 - (void)deleteBooksWithType:(BOOL)type{
-    if ([self.editBooksItem.booksId isEqualToString:SSJGetCurrentBooksType()]) {
-        SSJSelectBooksType(SSJUSERID());
+    if ([self.editBooksItem.booksId isEqualToString:self.currentBooksId]) {
+        [[[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+            [SSJUserTableManager updateCurrentBooksId:SSJUSERID() success:^{
+                [subscriber sendCompleted];
+            } failure:^(NSError * _Nonnull error) {
+                [subscriber sendError:error];
+            }];
+            return nil;
+        }] then:^RACSignal *{
+            return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+                [SSJBooksTypeStore deleteBooksTypeWithbooksItems:@[self.editBooksItem] deleteType:type Success:^{
+                    [subscriber sendCompleted];
+                } failure:^(NSError *error) {
+                    [subscriber sendError:error];
+                }];
+                return nil;
+            }];
+        }] subscribeError:^(NSError *error) {
+            [SSJAlertViewAdapter showError:error];
+        } completed:^{
+            self.rightButton.selected = NO;
+            [self.collectionView endEditing];
+            for (SSJBooksTypeItem *item in self.items) {
+                item.editeModel = NO;
+            }
+            self.adView.hidden = NO;
+            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+            [self getDateFromDB];
+        }];
     };
-    __weak typeof(self) weakSelf = self;
-    [SSJBooksTypeStore deleteBooksTypeWithbooksItems:@[self.editBooksItem] deleteType:type Success:^{
-        weakSelf.rightButton.selected = NO;
-        [weakSelf.collectionView endEditing];
-        for (SSJBooksTypeItem *item in self.items) {
-            item.editeModel = NO;
-        }
-        self.adView.hidden = NO;
-        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
-        [weakSelf getDateFromDB];
-    } failure:^(NSError *error) {
-        [SSJAlertViewAdapter showError:error];
-    }];
+    
 }
 
 - (void)enterBooksTypeEditController {
@@ -409,12 +436,12 @@ static BOOL kNeedBannerDisplay = YES;
     [self.rightButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTintColor] forState:UIControlStateNormal];
     [self.rightButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTintColor] forState:UIControlStateSelected];
     NSMutableAttributedString *attributedTitle = [[NSMutableAttributedString alloc]initWithString:@"编辑 (单选)"];
-    [attributedTitle addAttribute:NSFontAttributeName value:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_1) range:NSMakeRange(0, 2)];
-    [attributedTitle addAttribute:NSFontAttributeName value:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3) range:NSMakeRange(3, 4)];
+    [attributedTitle addAttribute:NSFontAttributeName value:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_1] range:NSMakeRange(0, 2)];
+    [attributedTitle addAttribute:NSFontAttributeName value:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3] range:NSMakeRange(3, 4)];
     [attributedTitle addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:NSMakeRange(0, attributedTitle.length)];
     NSMutableAttributedString *attributedDisableTitle = [[NSMutableAttributedString alloc]initWithString:@"编辑 (单选)"];
-    [attributedDisableTitle addAttribute:NSFontAttributeName value:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2) range:NSMakeRange(0, 2)];
-    [attributedDisableTitle addAttribute:NSFontAttributeName value:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3) range:NSMakeRange(3, 4)];
+    [attributedDisableTitle addAttribute:NSFontAttributeName value:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2] range:NSMakeRange(0, 2)];
+    [attributedDisableTitle addAttribute:NSFontAttributeName value:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3] range:NSMakeRange(3, 4)];
     [attributedDisableTitle addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] range:NSMakeRange(0, attributedTitle.length)];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.summaryBooksHeaderColor alpha:SSJ_CURRENT_THEME.summaryBooksHeaderAlpha] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
     [self.header updateAfterThemeChange];

@@ -22,6 +22,7 @@
 #import "SSJReportFormsCurveModel.h"
 #import "SSJDatePeriod.h"
 #import "SSJReportFormsUtil.h"
+#import "SSJUserTableManager.h"
 
 static const CGFloat kSpaceHeight = 10;
 
@@ -316,8 +317,8 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
                                                   bottomTitle:bottomTitle
                                                 topTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor]
                                              bottomTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]
-                                                 topTitleFont:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2)
-                                              bottomTitleFont:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_5)
+                                                 topTitleFont:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2]
+                                              bottomTitleFont:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_5]
                                                 contentInsets:UIEdgeInsetsZero];
         
     } else if (index.row == 1) {
@@ -327,8 +328,8 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
                                                   bottomTitle:@"最大值"
                                                 topTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor]
                                              bottomTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]
-                                                 topTitleFont:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2)
-                                              bottomTitleFont:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_5)
+                                                 topTitleFont:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2]
+                                              bottomTitleFont:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_5]
                                                 contentInsets:UIEdgeInsetsZero];
         
     } else if (index.row == 2) {
@@ -338,8 +339,8 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
                                                   bottomTitle:@"合值"
                                                 topTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]
                                              bottomTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]
-                                                 topTitleFont:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2)
-                                              bottomTitleFont:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_5)
+                                                 topTitleFont:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2]
+                                              bottomTitleFont:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_5]
                                                 contentInsets:UIEdgeInsetsZero];
         
     } else {
@@ -349,18 +350,22 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
 
 #pragma mark - Event
 - (void)enterCalendarVC {
-    [SSJAnaliyticsManager event:@"form_item_date_custom"];
-    __weak typeof(self) wself = self;
-    SSJMagicExportCalendarViewController *calendarVC = [[SSJMagicExportCalendarViewController alloc] init];
-    calendarVC.title = @"自定义时间";
-    calendarVC.booksId = SSJGetCurrentBooksType();
-    calendarVC.billTypeId = _billTypeID;
-    calendarVC.completion = ^(NSDate *selectedBeginDate, NSDate *selectedEndDate) {
-        wself.periodControl.customPeriod = [SSJDatePeriod datePeriodWithStartDate:selectedBeginDate endDate:selectedEndDate];
-    };
-    [self.navigationController pushViewController:calendarVC animated:YES];
-    
     [SSJAnaliyticsManager event:@"form_date_custom"];
+    [SSJAnaliyticsManager event:@"form_item_date_custom"];
+    
+    __weak typeof(self) wself = self;
+    [SSJUserTableManager currentBooksId:^(NSString * _Nonnull booksId) {
+        SSJMagicExportCalendarViewController *calendarVC = [[SSJMagicExportCalendarViewController alloc] init];
+        calendarVC.title = @"自定义时间";
+        calendarVC.booksId = booksId;
+        calendarVC.billTypeId = wself.billTypeID;
+        calendarVC.completion = ^(NSDate *selectedBeginDate, NSDate *selectedEndDate) {
+            wself.periodControl.customPeriod = [SSJDatePeriod datePeriodWithStartDate:selectedBeginDate endDate:selectedEndDate];
+        };
+        [wself.navigationController pushViewController:calendarVC animated:YES];
+    } failure:^(NSError * _Nonnull error) {
+        [SSJAlertViewAdapter showError:error];
+    }];
 }
 
 - (void)questionBtnAction {
@@ -480,7 +485,7 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
     [_curveView reloadData];
     _curveView.valueColor = SSJ_MAIN_COLOR;
     _curveView.scaleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor];
-    _curveView.balloonTitleAttributes = @{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4),
+    _curveView.balloonTitleAttributes = @{NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4],
                                           NSForegroundColorAttributeName:[UIColor whiteColor],
                                           NSBackgroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.bookKeepingHomeMutiButtonSelectColor]};
     

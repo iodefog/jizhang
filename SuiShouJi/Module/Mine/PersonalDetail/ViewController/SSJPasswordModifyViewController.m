@@ -88,15 +88,15 @@
         passwordModifyCell.passwordInput.delegate = self;
     }
     if (indexPath.row == 0) {
-        passwordModifyCell.passwordInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"原密码" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor],NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3)}];
+        passwordModifyCell.passwordInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"原密码" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor],NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3]}];
         self.oldPasswordInput = passwordModifyCell.passwordInput;
     }
     if (indexPath.row == 1) {
-        passwordModifyCell.passwordInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"新密码" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor],NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3)}];
+        passwordModifyCell.passwordInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"新密码" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor],NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3]}];
         self.modifiedPasswordInput = passwordModifyCell.passwordInput;
     }
     if (indexPath.row == 2) {
-        passwordModifyCell.passwordInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"确认新密码" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor],NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3)}];
+        passwordModifyCell.passwordInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"确认新密码" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor],NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3]}];
         self.comfirmNewPasswordInput = passwordModifyCell.passwordInput;
     }
     return passwordModifyCell;
@@ -156,30 +156,18 @@
         [CDAutoHideMessageHUD showMessage:@"修改密码成功"];
         [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
         SSJClearLoginInfo();
-        [SSJUserTableManager reloadUserIdWithError:nil];
-        [SSJUserDefaultDataCreater asyncCreateAllDefaultDataWithSuccess:NULL failure:NULL];
-        SSJLoginViewController *loginVc = [[SSJLoginViewController alloc]init];
-        loginVc.backController = [self.navigationController.viewControllers firstObject];
-        [self.navigationController pushViewController:loginVc animated:YES];
-    }else{
+        [SSJUserTableManager reloadUserIdWithSuccess:^{
+            SSJLoginViewController *loginVc = [[SSJLoginViewController alloc]init];
+            loginVc.backController = [self.navigationController.viewControllers firstObject];
+            [self.navigationController pushViewController:loginVc animated:YES];
+            [SSJUserDefaultDataCreater asyncCreateAllDefaultDataWithSuccess:NULL failure:NULL];
+        } failure:^(NSError * _Nonnull error) {
+            [SSJAlertViewAdapter showError:error];
+        }];
+    } else {
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:service.desc delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
         [alert show];
     }
 }
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

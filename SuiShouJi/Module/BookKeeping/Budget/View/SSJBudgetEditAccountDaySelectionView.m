@@ -39,7 +39,7 @@
         [self addSubview:_sureBtn];
         
         _titleLab = [[UILabel alloc] init];
-        _titleLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        _titleLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         _titleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _titleLab.text = @"结算日";
         [_titleLab sizeToFit];

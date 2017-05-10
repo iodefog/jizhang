@@ -94,7 +94,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self queryData];
+    [self loadData];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -385,27 +385,14 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
 }
 
 #pragma mark - Private
-- (void)queryData {
-    [SSJBudgetDatabaseHelper queryForCurrentBudgetListWithSuccess:^(NSArray<SSJBudgetModel *> * _Nonnull result) {
-        _budgetList = result;
-        [self queryBillTypeList];
-    } failure:^(NSError * _Nullable error) {
-        [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
-    }];
-}
-
-- (void)queryBillTypeList {
-    [self.view ssj_showLoadingIndicator];
-    [SSJBudgetDatabaseHelper queryBillTypeMapWithSuccess:^(NSDictionary * _Nonnull billTypeMap) {
-        
-        [self.view ssj_hideLoadingIndicator];
-        
-        self.budgetTypeMap = billTypeMap;
-        
-        if (!self.model) {
-            [self initBudgetModel];
-        }
-        
+- (void)loadData {
+    [[[[self loadBudgetListSignal] then:^RACSignal *{
+        return [self loadBillTypeSingal];
+    }] then:^RACSignal *{
+        return [self budgetModelSignal];
+    }] subscribeError:^(NSError *error) {
+        [SSJAlertViewAdapter showError:error];
+    } completed:^{
         self.remindPercent = self.model.remindMoney / self.model.budgetMoney;
         
         [self updateCellTitles];
@@ -422,31 +409,65 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         self.accountDaySelectionView.periodType = self.model.type;
         self.accountDaySelectionView.endDate = [NSDate dateWithString:self.model.endDate formatString:@"yyyy-MM-dd"];
         self.accountDaySelectionView.endOfMonth = self.model.isLastDay;
-        
-    } failure:^(NSError * _Nonnull error) {
-        [self.view ssj_hideLoadingIndicator];
-        SSJAlertViewAction *action = [SSJAlertViewAction actionWithTitle:@"确认" handler:NULL];
-        [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:SSJ_ERROR_MESSAGE action:action, nil];
     }];
 }
 
-- (void)initBudgetModel {
-    SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID()];
-    SSJDatePeriod *period = [SSJDatePeriod datePeriodWithPeriodType:SSJDatePeriodTypeMonth date:[NSDate date]];
-    self.model = [[SSJBudgetModel alloc] init];
-    self.model.ID = SSJUUID();
-    self.model.userId = SSJUSERID();
-    self.model.booksId = userItem.currentBooksId.length ? userItem.currentBooksId : SSJUSERID();
-    self.model.billIds = @[@"all"];
-    self.model.type = 1;
-    self.model.budgetMoney = 3000;
-    self.model.remindMoney = 300;
-    self.model.beginDate = [period.startDate formattedDateWithFormat:@"yyyy-MM-dd"];
-    self.model.endDate = [period.endDate formattedDateWithFormat:@"yyyy-MM-dd"];
-    self.model.isAutoContinued = YES;
-    self.model.isRemind = YES;
-    self.model.isAlreadyReminded = NO;
-    self.model.isLastDay = YES;
+- (RACSignal *)loadBudgetListSignal {
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [SSJBudgetDatabaseHelper queryForCurrentBudgetListWithSuccess:^(NSArray<SSJBudgetModel *> * _Nonnull result) {
+            _budgetList = result;
+            [subscriber sendNext:nil];
+            [subscriber sendCompleted];
+        } failure:^(NSError * _Nullable error) {
+            [subscriber sendError:error];
+        }];
+        return nil;
+    }];
+}
+
+- (RACSignal *)loadBillTypeSingal {
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [SSJBudgetDatabaseHelper queryBillTypeMapWithSuccess:^(NSDictionary * _Nonnull billTypeMap) {
+            self.budgetTypeMap = billTypeMap;
+            [subscriber sendNext:nil];
+            [subscriber sendCompleted];
+        } failure:^(NSError * _Nonnull error) {
+            [subscriber sendError:error];
+        }];
+        return nil;
+    }];
+}
+
+- (RACSignal *)budgetModelSignal {
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        if (self.model) {
+            [subscriber sendNext:nil];
+            [subscriber sendCompleted];
+        } else {
+            [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID() success:^(SSJUserItem * _Nonnull userItem) {
+                SSJDatePeriod *period = [SSJDatePeriod datePeriodWithPeriodType:SSJDatePeriodTypeMonth date:[NSDate date]];
+                self.model = [[SSJBudgetModel alloc] init];
+                self.model.ID = SSJUUID();
+                self.model.userId = SSJUSERID();
+                self.model.booksId = userItem.currentBooksId.length ? userItem.currentBooksId : SSJUSERID();
+                self.model.billIds = @[@"all"];
+                self.model.type = 1;
+                self.model.budgetMoney = 3000;
+                self.model.remindMoney = 300;
+                self.model.beginDate = [period.startDate formattedDateWithFormat:@"yyyy-MM-dd"];
+                self.model.endDate = [period.endDate formattedDateWithFormat:@"yyyy-MM-dd"];
+                self.model.isAutoContinued = YES;
+                self.model.isRemind = YES;
+                self.model.isAlreadyReminded = NO;
+                self.model.isLastDay = YES;
+                [subscriber sendNext:nil];
+                [subscriber sendCompleted];
+            } failure:^(NSError * _Nonnull error) {
+                [subscriber sendError:error];
+            }];
+        }
+        return nil;
+    }];
 }
 
 - (NSString *)reuseCellIdForIndexPath:(NSIndexPath *)indexPath {
@@ -543,7 +564,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         [self updateRemindMoneyWithCell:budgetScaleCell];
         
         UILabel *percentLab = [[UILabel alloc] init];
-        percentLab.font = SSJ_Helvetica_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2);
+        percentLab.font = [UIFont ssj_helveticaRegularFontOfSize:SSJ_FONT_SIZE_2];
         percentLab.text = @"％";
         percentLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         [percentLab sizeToFit];
@@ -815,7 +836,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         _saveBtn.frame = CGRectMake(22, 22, self.view.width - 44, 44);
         _saveBtn.layer.cornerRadius = 3;
         _saveBtn.clipsToBounds = YES;
-        _saveBtn.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_1);
+        _saveBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_1];
         [self.saveBtn setTitle:@"保存" forState:UIControlStateNormal];
         [_saveBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_saveBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];

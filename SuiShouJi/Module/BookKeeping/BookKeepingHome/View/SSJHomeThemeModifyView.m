@@ -83,7 +83,7 @@ static NSString *const kCellId = @"SSJCustomThemeSelectCollectionViewCell";
         _fontLab = [[UILabel alloc] init];
         _fontLab.textColor = [UIColor whiteColor];
         _fontLab.text = @"字体颜色";
-        _fontLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
+        _fontLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
         [_fontLab sizeToFit];
     }
     return _fontLab;

@@ -66,14 +66,14 @@
 {
     UILabel *titleLabel = [[UILabel alloc] init];
     titleLabel.text = @"产品建议";
-    titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2);
+    titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
     titleLabel.textColor = [UIColor ssj_colorWithHex:@"333333"];
     [titleLabel sizeToFit];
     self.navigationItem.titleView = titleLabel;
-      [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor],NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2)}];
+      [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor],NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2]}];
     UIButton *navRightButton = [[UIButton alloc] init];
     [navRightButton setTitle:@"在线客服" forState:UIControlStateNormal];
-    navRightButton.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+    navRightButton.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
     [navRightButton setTitleColor:[UIColor ssj_colorWithHex:@"eb4a64"] forState:UIControlStateNormal];
     [navRightButton addTarget:self action:@selector(navRightButtonClicked) forControlEvents:UIControlEventTouchUpInside];
     [navRightButton sizeToFit];
@@ -85,22 +85,23 @@
 #pragma mark -Action
 - (void)navRightButtonClicked
 {
-    SSJUserItem *userItem = [SSJUserTableManager queryUserItemForID:SSJUSERID()];
-    NSDictionary* clientCustomizedAttrs = @{@"userid": userItem.userId ?: @"",
-                                            @"openid": userItem.openId ?: @"",
-                                            @"nickname": userItem.nickName ?: @"",
-                                            @"tel": userItem.mobileNo ?: @"",
-                                            @"登录方式": userItem.loginType ?: @"",
-                                            @"注册状态": userItem.registerState ?: @"",
-                                            @"应用名称": SSJAppName(),
-                                            @"应用版本号": SSJAppVersion(),
-                                            @"手机型号" : SSJPhoneModel()
-                                            };
-    [MQManager setClientInfo:clientCustomizedAttrs completion:^(BOOL success , NSError *error) {
-        
+    [SSJUserTableManager queryUserItemWithID:SSJUSERID() success:^(SSJUserItem * _Nonnull userItem) {
+        NSDictionary* clientCustomizedAttrs = @{@"userid": userItem.userId ?: @"",
+                                                @"openid": userItem.openId ?: @"",
+                                                @"nickname": userItem.nickName ?: @"",
+                                                @"tel": userItem.mobileNo ?: @"",
+                                                @"登录方式": userItem.loginType ?: @"",
+                                                @"注册状态": userItem.registerState ?: @"",
+                                                @"应用名称": SSJAppName(),
+                                                @"应用版本号": SSJAppVersion(),
+                                                @"手机型号" : SSJPhoneModel()
+                                                };
+        [MQManager setClientInfo:clientCustomizedAttrs completion:NULL];
+        MQChatViewManager *chatViewManager = [[MQChatViewManager alloc] init];
+        [chatViewManager pushMQChatViewControllerInViewController:self];
+    } failure:^(NSError * _Nonnull error) {
+        [SSJAlertViewAdapter showError:error];
     }];
-    MQChatViewManager *chatViewManager = [[MQChatViewManager alloc] init];
-    [chatViewManager pushMQChatViewControllerInViewController:self];
 }
 
 #pragma mark - SSJBaseNetworkService
@@ -177,7 +178,7 @@
             userItem.userId = SSJUSERID();
             userItem.adviceTime = item.creplyDate;
             //存储
-            [SSJUserTableManager saveUserItem:userItem];
+            [SSJUserTableManager saveUserItem:userItem success:NULL failure:NULL];
             isStop = YES;
         }
         if ([lastItem.date isSameDay:item.date]) {

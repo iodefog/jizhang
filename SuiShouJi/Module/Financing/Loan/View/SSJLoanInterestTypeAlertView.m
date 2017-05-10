@@ -120,7 +120,7 @@ static NSString *const kSelectedBorderColorValue = @"#eb4a64";
 - (UILabel *)titleLab {
     if (!_titleLab) {
         _titleLab = [[UILabel alloc] init];
-        _titleLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        _titleLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         _titleLab.textColor = [UIColor ssj_colorWithHex:@"#393939"];
     }
     return _titleLab;
@@ -129,7 +129,7 @@ static NSString *const kSelectedBorderColorValue = @"#eb4a64";
 - (UIButton *)originalPrincipalButton {
     if (!_originalPrincipalButton) {
         _originalPrincipalButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        _originalPrincipalButton.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        _originalPrincipalButton.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         _originalPrincipalButton.titleLabel.adjustsFontSizeToFitWidth = YES;
         _originalPrincipalButton.titleLabel.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
         [_originalPrincipalButton setTitleColor:[UIColor ssj_colorWithHex:@"#343434"] forState:UIControlStateNormal];
@@ -144,7 +144,7 @@ static NSString *const kSelectedBorderColorValue = @"#eb4a64";
 - (UIButton *)changePrincipalButton {
     if (!_changePrincipalButton) {
         _changePrincipalButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        _changePrincipalButton.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        _changePrincipalButton.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         _changePrincipalButton.titleLabel.adjustsFontSizeToFitWidth = YES;
         _changePrincipalButton.titleLabel.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
         [_changePrincipalButton setTitleColor:[UIColor ssj_colorWithHex:@"#343434"] forState:UIControlStateNormal];
@@ -160,7 +160,7 @@ static NSString *const kSelectedBorderColorValue = @"#eb4a64";
     if (!_sureButton) {
         _sureButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _sureButton.clipsToBounds = YES;
-        _sureButton.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2);
+        _sureButton.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
         [_sureButton setTitle:@"确定" forState:UIControlStateNormal];
         [_sureButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_sureButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:kSelectedBorderColorValue] forState:UIControlStateNormal];

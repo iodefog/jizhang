@@ -68,7 +68,7 @@
     if (!_dateLabel) {
         _dateLabel = [[UILabel alloc] init];
         _dateLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        _dateLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        _dateLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
     }
     
     return _dateLabel;
@@ -78,7 +78,7 @@
     if (!_incomeLabel) {
         _incomeLabel = [[UILabel alloc] init];
         _incomeLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-        _incomeLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
+        _incomeLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
     }
     
     return _incomeLabel;
@@ -88,7 +88,7 @@
     if (!_expenceLabel) {
         _expenceLabel = [[UILabel alloc] init];
         _expenceLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-        _expenceLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
+        _expenceLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
     }
     
     return _expenceLabel;
@@ -97,7 +97,7 @@
 - (UILabel *)balanceLabel {
     if (!_balanceLabel) {
         _balanceLabel = [[UILabel alloc] init];
-        _balanceLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        _balanceLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         if (self.balance > 0) {
             _balanceLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurveIncomeColor];
         } else {

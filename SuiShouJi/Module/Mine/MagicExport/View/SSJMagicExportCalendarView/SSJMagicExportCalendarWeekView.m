@@ -25,7 +25,7 @@
         for (NSString *week in weekArr) {
             UILabel *lab = [[UILabel alloc] init];
             lab.backgroundColor = [UIColor clearColor];
-            lab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
+            lab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
             lab.text = week;
             lab.textAlignment = NSTextAlignmentCenter;
             lab.textColor = ([week isEqualToString:@"日"] || [week isEqualToString:@"六"]) ? [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] : [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];

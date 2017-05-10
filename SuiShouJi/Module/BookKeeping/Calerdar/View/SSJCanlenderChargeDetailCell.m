@@ -65,7 +65,7 @@
     if (!_dateLab) {
         _dateLab = [[UILabel alloc]init];
         _dateLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-        _dateLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        _dateLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         _dateLab.text = @"时间";
         [_dateLab sizeToFit];
     }
@@ -76,7 +76,7 @@
     if (!_fundLab) {
         _fundLab = [[UILabel alloc]init];
         _fundLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-        _fundLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        _fundLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         _fundLab.text = @"资金类型";
         [_fundLab sizeToFit];
     }
@@ -87,7 +87,7 @@
     if (!_booksLab) {
         _booksLab = [[UILabel alloc]init];
         _booksLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-        _booksLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        _booksLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         _booksLab.text = @"账本类型";
         [_booksLab sizeToFit];
     }
@@ -98,7 +98,7 @@
     if (!_memoLab) {
         _memoLab = [[UILabel alloc]init];
         _memoLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-        _memoLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        _memoLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         _memoLab.text = @"备注";
         [_memoLab sizeToFit];
     }
@@ -109,7 +109,7 @@
     if (!_dateDetailLab) {
         _dateDetailLab = [[UILabel alloc]init];
         _dateDetailLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-        _dateDetailLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        _dateDetailLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
     }
     return _dateDetailLab;
 }
@@ -118,7 +118,7 @@
     if (!_fundDetailLab) {
         _fundDetailLab = [[UILabel alloc]init];
         _fundDetailLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-        _fundDetailLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        _fundDetailLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
     }
     return _fundDetailLab;
 }
@@ -127,7 +127,7 @@
     if (!_booksDetailLab) {
         _booksDetailLab = [[UILabel alloc]init];
         _booksDetailLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-        _booksDetailLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        _booksDetailLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
     }
     return _booksDetailLab;
 }
@@ -136,7 +136,7 @@
     if (!_memoDetailLab) {
         _memoDetailLab = [[UILabel alloc]init];
         _memoDetailLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-        _memoDetailLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        _memoDetailLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
     }
     return _memoDetailLab;
 }
@@ -149,7 +149,7 @@
     [self.fundDetailLab sizeToFit];
     self.booksDetailLab.text = _item.booksName;
     [self.booksDetailLab sizeToFit];
-    CGSize memoSize = [_item.chargeMemo sizeWithAttributes:@{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3)}];
+    CGSize memoSize = [_item.chargeMemo sizeWithAttributes:@{NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3]}];
 
     if (memoSize.width > self.width - _memoLab.width - 30) {
         self.memoDetailLab.text = _item.chargeMemo;

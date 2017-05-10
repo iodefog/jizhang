@@ -119,7 +119,7 @@ static const CGFloat kRadius = 12.f;
     if (!_fundingNameLabel) {
         _fundingNameLabel = [[UILabel alloc]init];
         _fundingNameLabel.textColor = [UIColor whiteColor];
-        _fundingNameLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        _fundingNameLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
     }
     return _fundingNameLabel;
 }
@@ -128,7 +128,7 @@ static const CGFloat kRadius = 12.f;
     if (!_fundingBalanceLabel) {
         _fundingBalanceLabel = [[UILabel alloc]init];
         _fundingBalanceLabel.textColor = [UIColor whiteColor];
-        _fundingBalanceLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2);
+        _fundingBalanceLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
         _fundingBalanceLabel.textAlignment = NSTextAlignmentRight;
     }
     return _fundingBalanceLabel;
@@ -138,7 +138,7 @@ static const CGFloat kRadius = 12.f;
     if (!_fundingMemoLabel) {
         _fundingMemoLabel = [[UILabel alloc]init];
         _fundingMemoLabel.textColor = [UIColor whiteColor];
-        _fundingMemoLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
+        _fundingMemoLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
     }
     return _fundingMemoLabel;
 }
@@ -147,7 +147,7 @@ static const CGFloat kRadius = 12.f;
     if (!_cardMemoLabel) {
         _cardMemoLabel = [[UILabel alloc]init];
         _cardMemoLabel.textColor = [UIColor whiteColor];
-        _cardMemoLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
+        _cardMemoLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
     }
     return _cardMemoLabel;
 }
@@ -156,7 +156,7 @@ static const CGFloat kRadius = 12.f;
     if (!_cardLimitLabel) {
         _cardLimitLabel = [[UILabel alloc]init];
         _cardLimitLabel.textColor = [UIColor whiteColor];
-        _cardLimitLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
+        _cardLimitLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
     }
     return _cardLimitLabel;
 }
@@ -165,7 +165,7 @@ static const CGFloat kRadius = 12.f;
     if (!_cardBillingDayLabel) {
         _cardBillingDayLabel = [[UILabel alloc]init];
         _cardBillingDayLabel.textColor = [UIColor whiteColor];
-        _cardBillingDayLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
+        _cardBillingDayLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
     }
     return _cardBillingDayLabel;
 }

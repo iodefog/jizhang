@@ -67,7 +67,7 @@
     
     if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
         [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
-        self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2),
+        self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2],
                                                                         NSForegroundColorAttributeName:[UIColor whiteColor]};
         self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     }
@@ -118,41 +118,46 @@
             userItem.openId = @"";
             
             //  只有保存用户登录信息成功后才算登录成功
-            if ([SSJUserTableManager saveUserItem:userItem]
-                && SSJSaveAppId(resultInfo[@"appId"] ?: @"")
-                && SSJSaveAccessToken(resultInfo[@"accessToken"] ?: @"")
-                && SSJSaveUserLogined(YES)) {
-                
-                [[NSNotificationCenter defaultCenter] postNotificationName:SSJLoginOrRegisterNotification object:self];
-                
-                [self.passwordField resignFirstResponder];
-                [self showSuccessMessage];
-                
-                [CDAutoHideMessageHUD showMessage:@"注册成功"];
-                
-                //  如果用户手势密码开启，进入手势密码页面
-                SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"motionPWD", @"motionPWDState"] forUserId:SSJUSERID()];
-                if ([userItem.motionPWDState boolValue]) {
+            [SSJUserTableManager saveUserItem:userItem success:^{
+                if (SSJSaveAppId(resultInfo[@"appId"] ?: @"")
+                    && SSJSaveAccessToken(resultInfo[@"accessToken"] ?: @"")
+                    && SSJSaveUserLogined(YES)) {
                     
-                    SSJMotionPasswordViewController *motionVC = [[SSJMotionPasswordViewController alloc] init];
-                    motionVC.finishHandle = self.finishHandle;
-                    motionVC.backController = self.backController;
-                    if (userItem.motionPWD.length) {
-                        motionVC.type = SSJMotionPasswordViewControllerTypeVerification;
-                    } else {
-                        motionVC.type = SSJMotionPasswordViewControllerTypeSetting;
-                    }
-                    [self.navigationController pushViewController:motionVC animated:YES];
-        
+                    [[NSNotificationCenter defaultCenter] postNotificationName:SSJLoginOrRegisterNotification object:self];
+                    
+                    [self.passwordField resignFirstResponder];
+                    [self showSuccessMessage];
+                    
+                    [CDAutoHideMessageHUD showMessage:@"注册成功"];
+                    
+                    //  如果用户手势密码开启，进入手势密码页面
+                    [SSJUserTableManager queryProperty:@[@"motionPWD", @"motionPWDState"] forUserId:SSJUSERID() success:^(SSJUserItem * _Nonnull userItem) {
+                        if ([userItem.motionPWDState boolValue]) {
+                            SSJMotionPasswordViewController *motionVC = [[SSJMotionPasswordViewController alloc] init];
+                            motionVC.finishHandle = self.finishHandle;
+                            motionVC.backController = self.backController;
+                            if (userItem.motionPWD.length) {
+                                motionVC.type = SSJMotionPasswordViewControllerTypeVerification;
+                            } else {
+                                motionVC.type = SSJMotionPasswordViewControllerTypeSetting;
+                            }
+                            [self.navigationController pushViewController:motionVC animated:YES];
+                            
+                            return;
+                        }
+                        
+                        if (self.finishHandle) {
+                            self.finishHandle(self);
+                        }
+                    } failure:^(NSError * _Nonnull error) {
+                        [SSJAlertViewAdapter showError:error];
+                    }];
+                    
                     return;
                 }
-                
-                if (self.finishHandle) {
-                    self.finishHandle(self);
-                }
-                
-                return;
-            }
+            } failure:^(NSError * _Nonnull error) {
+                [SSJAlertViewAdapter showError:error];
+            }];
         }
     }
     
@@ -215,7 +220,7 @@
         _passwordField = [[SSJBaselineTextField alloc] initWithFrame:CGRectMake(25, 83, self.view.width - 50, 50) contentHeight:34];
         _passwordField.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor];
         _passwordField.secureTextEntry = YES;
-        _passwordField.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        _passwordField.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         _passwordField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入6-15位字母、数字组合" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginSecondaryColor]}];
         _passwordField.delegate = self;
         _passwordField.clearButtonMode = UITextFieldViewModeWhileEditing;

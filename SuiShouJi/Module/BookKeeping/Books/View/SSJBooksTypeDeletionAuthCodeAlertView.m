@@ -139,7 +139,7 @@ static const CGFloat kGap = 15;
         _field.keyboardType = UIKeyboardTypeNumberPad;
         [_field addTarget:self action:@selector(textDidChange:) forControlEvents:UIControlEventAllEditingEvents];
         _field.delegate = self;
-        _field.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_1);
+        _field.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_1];
     }
     return _field;
 }
@@ -150,8 +150,6 @@ static const CGFloat kGap = 15;
 #pragma mark - SSJBooksTypeDeletionAuthCodeAlertView
 
 static const int kAuthCodeDigits = 4;
-
-static const CGFloat kAnimationDuration = 0.25;
 
 @interface SSJBooksTypeDeletionAuthCodeAlertView () <YYKeyboardObserver>
 
@@ -372,7 +370,7 @@ static const CGFloat kAnimationDuration = 0.25;
 - (UILabel *)titleLab {
     if (!_titleLab) {
         _titleLab = [[UILabel alloc] init];
-        _titleLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_4);
+        _titleLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
         _titleLab.numberOfLines = 0;
         NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
         style.lineSpacing = 5;
@@ -385,7 +383,7 @@ static const CGFloat kAnimationDuration = 0.25;
 - (UILabel *)authCodeLab {
     if (!_authCodeLab) {
         _authCodeLab = [[UILabel alloc] init];
-        _authCodeLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_1);
+        _authCodeLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_1];
     }
     return _authCodeLab;
 }
@@ -400,7 +398,7 @@ static const CGFloat kAnimationDuration = 0.25;
 - (UIButton *)cancelBtn {
     if (!_cancelBtn) {
         _cancelBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        _cancelBtn.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2);
+        _cancelBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
         [_cancelBtn setTitle:@"取消" forState:UIControlStateNormal];
         [_cancelBtn addTarget:self action:@selector(cancelAction) forControlEvents:UIControlEventTouchUpInside];
         [_cancelBtn ssj_setBorderStyle:(SSJBorderStyleTop | SSJBorderStyleLeft)];
@@ -411,7 +409,7 @@ static const CGFloat kAnimationDuration = 0.25;
 - (UIButton *)sureBtn {
     if (!_sureBtn) {
         _sureBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        _sureBtn.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2);
+        _sureBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
         [_sureBtn setTitle:@"删除" forState:UIControlStateNormal];
         [_sureBtn addTarget:self action:@selector(sureAction) forControlEvents:UIControlEventTouchUpInside];
         [_sureBtn ssj_setBorderStyle:(SSJBorderStyleTop)];

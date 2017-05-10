@@ -261,16 +261,8 @@ static NSString *const kSegmentTitleIncome = @"收入";
 #pragma mark - Private
 //  重新加载数据
 - (void)reloadAllDatas {
-    
     [self.view ssj_showLoadingIndicator];
-    
-    _currentBooksId = SSJGetCurrentBooksType();
-    SSJBooksTypeItem *currentBooksItem = [SSJBooksTypeStore queryCurrentBooksTypeForBooksId:_currentBooksId];
-    
-    UIImage *image = [[UIImage imageNamed:currentBooksItem.booksIcoin] ssj_compressWithinSize:CGSizeMake(22, 22)];
-    [self.navigationBar setBooksImage:image];
-    [self.navigationBar setBooksColor:[UIColor ssj_colorWithHex:currentBooksItem.booksColor]];
-    
+    [self loadBooksItem];
     [SSJReportFormsUtil queryForPeriodListWithIncomeOrPayType:SSJBillTypeSurplus booksId:_currentBooksId success:^(NSArray<SSJDatePeriod *> *periods) {
         
         _periodControl.periods = periods;
@@ -291,6 +283,18 @@ static NSString *const kSegmentTitleIncome = @"收入";
         
     } failure:^(NSError *error) {
         [self.view ssj_hideLoadingIndicator];
+        [SSJAlertViewAdapter showError:error];
+    }];
+}
+
+- (void)loadBooksItem {
+    [SSJUserTableManager currentBooksId:^(NSString * _Nonnull booksId) {
+        _currentBooksId = booksId;
+        SSJBooksTypeItem *currentBooksItem = [SSJBooksTypeStore queryCurrentBooksTypeForBooksId:_currentBooksId];
+        UIImage *image = [[UIImage imageNamed:currentBooksItem.booksIcoin] ssj_compressWithinSize:CGSizeMake(22, 22)];
+        [self.navigationBar setBooksImage:image];
+        [self.navigationBar setBooksColor:[UIColor ssj_colorWithHex:currentBooksItem.booksColor]];
+    } failure:^(NSError * _Nonnull error) {
         [SSJAlertViewAdapter showError:error];
     }];
 }
@@ -449,7 +453,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
         circleItem.imageName = item.imageName;
         circleItem.colorValue = item.colorValue;
         circleItem.additionalText = [NSString stringWithFormat:@"%.0f％", item.scale * 100];
-        circleItem.additionalFont = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_5);
+        circleItem.additionalFont = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_5];
         circleItem.imageBorderShowed = YES;
         if (item.isMember) {
             circleItem.customView = [self chartAdditionalViewWithMemberName:item.name colorValue:item.colorValue];
@@ -561,7 +565,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
     lab.text = name.length >= 1 ? [name substringToIndex:1] : @"";
     lab.textColor = [UIColor ssj_colorWithHex:colorValue];
     lab.textAlignment = NSTextAlignmentCenter;
-    lab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+    lab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
     
     return lab;
 }

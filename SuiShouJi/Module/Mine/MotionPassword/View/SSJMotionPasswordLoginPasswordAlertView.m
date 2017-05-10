@@ -84,7 +84,7 @@ static NSString *const kPinkColor = @"eb4a64";
     if (!_titleLab) {
         _titleLab = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.width, kHeaderHeight)];
         _titleLab.backgroundColor = [UIColor clearColor];
-        _titleLab.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_3);
+        _titleLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         _titleLab.textAlignment = NSTextAlignmentCenter;
         _titleLab.text = @"请输入登录密码";
     }
@@ -118,7 +118,7 @@ static NSString *const kPinkColor = @"eb4a64";
     if (!_sureButton) {
         _sureButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _sureButton.frame = CGRectMake(0, kHeaderHeight + kBodyHeight, self.width, kFooterHeight);
-        _sureButton.titleLabel.font = SSJ_PingFang_REGULAR_FONT_SIZE(SSJ_FONT_SIZE_2);
+        _sureButton.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
         [_sureButton setTitle:@"确定" forState:UIControlStateNormal];
         [_sureButton setTitleColor:[UIColor ssj_colorWithHex:kPinkColor] forState:UIControlStateNormal];
     }
