@@ -1,9 +1,0 @@
-for_lane :adhoc do |options|
-app_identifier "com.9188.jizhangAppStore"
-apple_id "yyfiniancial02@sina.com"
-end
-
-for_lane :appstore do |options|
-app_identifier "com.youyu.youyujizhangguanjia"
-apple_id "licaidi002@126.com"
-end

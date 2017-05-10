@@ -370,7 +370,9 @@ NSDate *SCYEnterBackgroundTime() {
             if (remindItem.remindType == SSJReminderTypeCreditCard) {
                 SSJCreditCardItem *cardItem = [[SSJCreditCardItem alloc]init];
                 if (!remindItem.fundId.length) {
-                    remindItem.fundId = [self getCreditCardIdForRemindId:remindItem.remindId];
+                    [self getCreditCardIdForRemindId:remindItem.remindId Success:^(NSString *cardId) {
+                        remindItem.fundId = cardId;
+                    } failure:NULL];
                 }
                 cardItem.cardId = remindItem.fundId;
                 SSJFundingDetailsViewController *creditCardVc = [[SSJFundingDetailsViewController alloc]init];
@@ -378,7 +380,9 @@ NSDate *SCYEnterBackgroundTime() {
                 [currentVc.navigationController pushViewController:creditCardVc animated:YES];
             }else if(remindItem.remindType == SSJReminderTypeBorrowing){
                 if (!remindItem.fundId.length) {
-                    remindItem.fundId = [self getLoanIdForRemindId:remindItem.remindId];
+                    [self getLoanIdForRemindId:remindItem.remindId Success:^(NSString *cardId) {
+                        remindItem.fundId = cardId;
+                    } failure:NULL];
                 }
                 [SSJLoanHelper queryForFundColorWithLoanId:remindItem.fundId completion:^(NSString * _Nonnull color) {
                     SSJLoanDetailViewController *loanVc = [[SSJLoanDetailViewController alloc]init];
@@ -392,20 +396,22 @@ NSDate *SCYEnterBackgroundTime() {
 }
 
 #pragma mark - 获取当前推送的账户id
-- (NSString *)getCreditCardIdForRemindId:(NSString *)remindID{
-    __block NSString *cardId;
-    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
-        cardId = [db stringForQuery:@"select cfundid from bk_user_credit where cremindid = ? and cuserid = ?",remindID,SSJUSERID()];
+- (void)getCreditCardIdForRemindId:(NSString *)remindID Success:(void (^)(NSString *cardId))success failure:(void (^)())failure{
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        NSString *cardId = [db stringForQuery:@"select cfundid from bk_user_credit where cremindid = ? and cuserid = ?",remindID,SSJUSERID()];
+        if (success) {
+            success(cardId);
+        }
     }];
-    return cardId;
 }
 
-- (NSString *)getLoanIdForRemindId:(NSString *)remindID{
-    __block NSString *loanId;
-    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
-        loanId = [db stringForQuery:@"select loanid from bk_loan where cremindid = ? and cuserid = ?",remindID,SSJUSERID()];
+- (void)getLoanIdForRemindId:(NSString *)remindID Success:(void (^)(NSString *cardId))success failure:(void (^)())failure{
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        NSString * loanId = [db stringForQuery:@"select loanid from bk_loan where cremindid = ? and cuserid = ?",remindID,SSJUSERID()];
+        if (success) {
+            success(loanId);
+        }
     }];
-    return loanId;
 }
 
 #pragma mark - 远程通知有关的
