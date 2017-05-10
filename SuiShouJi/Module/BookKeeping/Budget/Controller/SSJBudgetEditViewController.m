@@ -386,19 +386,17 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
 
 #pragma mark - Private
 - (void)loadData {
-    [[[[self loadBudgetListSignal] then:^RACSignal *{
+    [[[[[self loadBudgetListSignal] then:^RACSignal *{
         return [self loadBillTypeSingal];
     }] then:^RACSignal *{
         return [self budgetModelSignal];
+    }] then:^RACSignal *{
+        return [self loadBookNameSignal];
     }] subscribeError:^(NSError *error) {
         [SSJAlertViewAdapter showError:error];
     } completed:^{
         self.remindPercent = self.model.remindMoney / self.model.budgetMoney;
-        
         [self updateCellTitles];
-        
-        _bookName = [SSJBudgetDatabaseHelper queryBookNameForBookId:self.model.booksId];
-        
         [self.tableView reloadData];
         if (self.tableView.tableFooterView != self.footerView) {
             self.tableView.tableFooterView = self.footerView;
@@ -466,6 +464,18 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
                 [subscriber sendError:error];
             }];
         }
+        return nil;
+    }];
+}
+
+- (RACSignal *)loadBookNameSignal {
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [SSJBudgetDatabaseHelper queryBookNameForBookId:self.model.booksId success:^(NSString * _Nonnull bookName) {
+            _bookName = bookName;
+            [subscriber sendCompleted];
+        } failure:^(NSError * _Nonnull error) {
+            [subscriber sendError:error];
+        }];
         return nil;
     }];
 }
@@ -638,12 +648,8 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
 
 - (void)updateCellTitles {
     if (self.model.isRemind) {
-//        self.cellTitles = @[@[kBudgetTypeTitle], @[kBooksTypeTitle], @[kAutoContinueTitle], @[kBudgetMoneyTitle], @[kBudgetRemindTitle, kBudgetRemindScaleTitle], @[kBudgetPeriodTitle, kAccountDayTitle]];
-        
         self.cellTitles = @[@[kBudgetTypeTitle, kBooksTypeTitle, kBudgetMoneyTitle], @[kAutoContinueTitle], @[kBudgetRemindTitle, kBudgetRemindScaleTitle], @[kBudgetPeriodTitle, kAccountDayTitle]];
     } else {
-//        self.cellTitles = @[@[kBudgetTypeTitle], @[kBooksTypeTitle], @[kAutoContinueTitle], @[kBudgetMoneyTitle], @[kBudgetRemindTitle], @[kBudgetPeriodTitle, kAccountDayTitle]];
-        
         self.cellTitles = @[@[kBudgetTypeTitle, kBooksTypeTitle, kBudgetMoneyTitle], @[kAutoContinueTitle], @[kBudgetRemindTitle], @[kBudgetPeriodTitle, kAccountDayTitle]];
     }
 }

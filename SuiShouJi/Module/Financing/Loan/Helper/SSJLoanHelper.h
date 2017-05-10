@@ -106,7 +106,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @param ID 资金账户ID
  */
-+ (NSString *)queryForFundNameWithID:(NSString *)ID;
++ (void)queryForFundNameWithID:(NSString *)ID completion:(void(^)(NSString *name))completion;
 
 /**
  查询资金账户颜色值

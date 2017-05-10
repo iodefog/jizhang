@@ -608,13 +608,15 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
     }];
 }
 
-+ (NSString *)queryForFundNameWithID:(NSString *)ID {
-    __block NSString *fundName = nil;
-    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
-        fundName = [db stringForQuery:@"select cacctname from bk_fund_info where cfundid = ?", ID];
++ (void)queryForFundNameWithID:(NSString *)ID completion:(void(^)(NSString *name))completion {
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        NSString *fundName = [db stringForQuery:@"select cacctname from bk_fund_info where cfundid = ?", ID];
+        if (completion) {
+            SSJDispatchMainAsync(^{
+                completion(fundName);
+            });
+        }
     }];
-    
-    return fundName;
 }
 
 + (NSString *)queryForFundColorWithID:(NSString *)ID {

@@ -14,11 +14,11 @@
 + (NSDictionary *)syncDataWithUserId:(NSString *)userId {
     NSMutableDictionary *info = [NSMutableDictionary dictionary];
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(SSJDatabase *db) {
-        FMResultSet *rs = [db executeQuery:@"select nickName, signature, writeDate from bk_user where cuserid = ?", userId];
+        FMResultSet *rs = [db executeQuery:@"select cnickid, usersignature, cwritedate from bk_user where cuserid = ?", userId];
         while ([rs next]) {
-            [info setObject:[rs stringForColumn:@"nickName"] ?: @"" forKey:@"crealname"];
-            [info setObject:[rs stringForColumn:@"signature"] ?: @"" forKey:@"usersignature"];
-            [info setObject:[rs stringForColumn:@"writeDate"] ?: @"" forKey:@"cwritedate"];
+            [info setObject:[rs stringForColumn:@"cnickid"] ?: @"" forKey:@"crealname"];
+            [info setObject:[rs stringForColumn:@"usersignature"] ?: @"" forKey:@"usersignature"];
+            [info setObject:[rs stringForColumn:@"cwritedate"] ?: @"" forKey:@"cwritedate"];
         }
         [rs close];
         
@@ -33,7 +33,7 @@
 + (BOOL)mergeData:(NSDictionary *)info {
     __block BOOL successfull = NO;
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(SSJDatabase *db) {
-        successfull = [db executeUpdate:@"replace into bk_user (cuserid, cmobileno, cnickid, usersignature, cicons) values (:cuserid, :cmobileno, :crealname, :usersignature, :cicon)" withParameterDictionary:info];
+        successfull = [db executeUpdate:@"update bk_user set cmobileno = ?, cnickid = ?, usersignature = ?, cicons = ?", info[@"cuserid"], info[@"cmobileno"], info[@"crealname"], info[@"usersignature"], info[@"cicon"]];
     }];
     return successfull;
 }

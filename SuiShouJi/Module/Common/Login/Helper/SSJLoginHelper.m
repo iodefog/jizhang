@@ -80,8 +80,8 @@
 
 }
 
-+ (void)updateTableWhenLoginWithServices:(SSJLoginService *)service{
-    [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
++ (void)updateTableWhenLoginWithServices:(SSJLoginService *)service completion:(void(^)())completion {
+    [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
         //  merge登陆接口返回的收支类型、资金账户、账本
         [SSJBooksTypeSyncTable mergeRecords:service.booksTypeArray forUserId:SSJUSERID() inDatabase:db error:nil];
         //  更新父类型为空的账本
@@ -111,8 +111,10 @@
             [SSJUserDefaultDataCreater createDefaultMembersForUserId:SSJUSERID() inDatabase:db];
         }
         
+        if (completion) {
+            completion();
+        }
     }];
-
 }
 
 + (BOOL)mergeWhenLoginWithRecords:(NSArray *)records forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
