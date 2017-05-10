@@ -8,6 +8,7 @@ lane :adhoc do |options|
     configuration:options[:config],
     scheme:options[:scheme],
     output_directory: options[:outpath],
+    output_name: options[:ipaname],
     export_method:'ad-hoc',
     clean:true
     )
