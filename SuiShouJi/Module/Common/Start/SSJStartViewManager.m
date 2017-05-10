@@ -55,7 +55,6 @@ static const NSTimeInterval kTransitionDuration = 0.3;
 @implementation SSJStartViewManager
 
 - (void)dealloc {
-    
 }
 
 - (void)showWithCompletion:(void(^)(SSJStartViewManager *))completion {
@@ -70,16 +69,13 @@ static const NSTimeInterval kTransitionDuration = 0.3;
     
     [self requestStartAPI];
     
-    __block BOOL hasUserTreeTable;
     // 如果没有本地签到表（升级新版本，数据库还没升级完成的情况下），不能请求签到接口
-    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
-        hasUserTreeTable = [db tableExists:@"bk_user_tree"];
-    }];
-    
     // 如果没有userid，就不调用签到接口，签到接口需要userid（第一次启动初始化数据库未完成前，userid为空）
-    if (hasUserTreeTable && SSJUSERID().length) {
-        [self requestCheckIn];
-    }
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        if ([db tableExists:@"bk_user_tree"] && SSJUSERID().length) {
+            [self requestCheckIn];
+        }
+    }];
 }
 
 // 请求启动接口，检测是否有更新、苹果是否正在审核、加载下发启动页
