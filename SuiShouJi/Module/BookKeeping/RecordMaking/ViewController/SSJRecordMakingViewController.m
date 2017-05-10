@@ -917,9 +917,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         }
     }
     
-    @weakify(self);
     [[[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        @strongify(self);
         [SSJRecordMakingStore saveChargeWithChargeItem:self.item Success:^(SSJBillingChargeCellItem *editeItem){
             [subscriber sendNext:editeItem];
             [subscriber sendCompleted];
@@ -928,7 +926,6 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         }];
         return nil;
     }] flattenMap:^RACStream *(SSJBillingChargeCellItem *editeItem) {
-        @strongify(self);
         return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
             BOOL hasChangeBooksType = ![editeItem.booksId isEqualToString:self.defaultBooksId];
             if (hasChangeBooksType) {
@@ -945,7 +942,6 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
             return nil;
         }];
     }] subscribeNext:^(SSJBillingChargeCellItem *editeItem) {
-        @strongify(self);
         BOOL hasChangeBooksType = ![editeItem.booksId isEqualToString:self.defaultBooksId];
         if (self.addNewChargeBlock) {
             self.addNewChargeBlock(@[editeItem],hasChangeBooksType);
