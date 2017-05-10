@@ -7,11 +7,10 @@ lane :adhoc do |options|
   gym(
     configuration:options[:config],
     scheme:options[:scheme],
-    output_directory: ‘./build’,
+    output_directory: options[:outpath],
     export_method:'ad-hoc',
     clean:true
     )
-  pgyer(api_key: "1c85c26364b99fd4c0c9534504af1e71", user_key: "4d3a4ece05e37ffda29bb8f4d5b506f2")
 end
 
 lane :appstore do |options|
