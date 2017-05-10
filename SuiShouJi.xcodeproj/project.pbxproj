@@ -9001,8 +9001,8 @@
 		9C24CFB91D76C9ED0095D150 /* SSJBooksTypeSelectViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBooksTypeSelectViewController.h; sourceTree = "<group>"; };
 		9C24CFD41D76CC250095D150 /* SSJBooksEditeOrNewViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBooksEditeOrNewViewController.h; sourceTree = "<group>"; };
 		9C24CFD51D76CC250095D150 /* SSJBooksEditeOrNewViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBooksEditeOrNewViewController.m; sourceTree = "<group>"; };
-		9C24E6E81EC2EE7D0022D60A /* Fastfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Fastfile; sourceTree = "<group>"; };
-		9C24E6E91EC2EE7D0022D60A /* Appfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Appfile; sourceTree = "<group>"; };
+		9C24E6EC1EC30A7D0022D60A /* Appfile */ = {isa = PBXFileReference; lastKnownFileType = text; name = Appfile; path = fastlane/Appfile; sourceTree = SOURCE_ROOT; };
+		9C24E6ED1EC30A7D0022D60A /* Fastfile */ = {isa = PBXFileReference; lastKnownFileType = text; name = Fastfile; path = fastlane/Fastfile; sourceTree = SOURCE_ROOT; };
 		9C2692391D9CB58D00B3B5DF /* SSJSearchHistoryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJSearchHistoryCell.h; sourceTree = "<group>"; };
 		9C26923A1D9CB58D00B3B5DF /* SSJSearchHistoryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJSearchHistoryCell.m; sourceTree = "<group>"; };
 		9C26FDAD1DD2F9E80086F94F /* SSJBooksHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBooksHeaderView.h; sourceTree = "<group>"; };
@@ -11401,9 +11401,9 @@
 		9C24E6E71EC2EE500022D60A /* buildconfig */ = {
 			isa = PBXGroup;
 			children = (
+				9C24E6EC1EC30A7D0022D60A /* Appfile */,
+				9C24E6ED1EC30A7D0022D60A /* Fastfile */,
 				9C111F9D1E84FDB900D87EA8 /* buildConfig.txt */,
-				9C24E6E81EC2EE7D0022D60A /* Fastfile */,
-				9C24E6E91EC2EE7D0022D60A /* Appfile */,
 			);
 			name = buildconfig;
 			path = ..;
