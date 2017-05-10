@@ -404,7 +404,7 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
     
     NSString *userid = SSJUSERID();
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        NSString *booksId = [db stringForQuery:@"select currentBooksId from bk_user where cuserid = ?", userid];
+        NSString *booksId = [db stringForQuery:@"select ccurrentBooksId from bk_user where cuserid = ?", userid];
         if (!booksId) {
             booksId = userid;
         }

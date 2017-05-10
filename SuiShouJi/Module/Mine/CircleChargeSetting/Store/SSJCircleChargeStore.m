@@ -15,7 +15,10 @@
                               failure:(void (^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
         NSString *userid = SSJUSERID();
-        NSString *booksId = [db stringForQuery:@"select currentBooksId from bk_user where cuserid = ?", userid];
+        NSString *booksId = [db stringForQuery:@"select ccurrentBooksId from bk_user where cuserid = ?", userid];
+        if (!booksId) {
+            booksId = userid;
+        }
         NSMutableArray *chargeList = [NSMutableArray array];
         FMResultSet *chargeResult = [db executeQuery:@"select a.* , b.CCOIN , b.CNAME , b.CCOLOR , b.ITYPE as INCOMEOREXPENSE , b.ID , c.cbooksname , d.cacctname , d.cicoin from BK_CHARGE_PERIOD_CONFIG as a, BK_BILL_TYPE as b , bk_books_type as c , bk_fund_info as d where a.CUSERID = ? and a.OPERATORTYPE != 2 and a.IBILLID = b.ID and c.cbooksid = ? and a.cbooksid = c.cbooksid and c.cuserid = a.cuserid and a.ifunsid = d.cfundid order by A.ITYPE ASC , A.IMONEY DESC",userid,booksId];
         if (!chargeResult) {
@@ -74,7 +77,10 @@
                               failure:(void (^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
         NSString *userid = SSJUSERID();
-        NSString *booksId = [db stringForQuery:@"select currentBooksId from bk_user where cuserid = ?", userid];
+        NSString *booksId = [db stringForQuery:@"select ccurrentBooksId from bk_user where cuserid = ?", userid];
+        if (!booksId) {
+            booksId = userid;
+        }
         SSJBillingChargeCellItem *item = [[SSJBillingChargeCellItem alloc]init];
         item.billDate = [[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"];
         item.billId = [db stringForQuery:@"select a.id from bk_bill_type as a , bk_user_bill as b where b.istate = 1 and b.cuserid = ? and a.id = b.cbillid and a.itype = ? and b.cbooksid = ? order by b.iorder limit 1",userid,@(incomeOrExpence),booksId];
@@ -126,7 +132,7 @@
     [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback){
         NSString *userid = SSJUSERID();
         if (!item.booksId.length) {
-            item.booksId = [db stringForQuery:@"select currentBooksId from bk_user where cuserid = ?", userid];
+            item.booksId = [db stringForQuery:@"select ccurrentBooksId from bk_user where cuserid = ?", userid];
             item.booksId = item.booksId ?: userid;
         }
         if (!item.configId.length) {

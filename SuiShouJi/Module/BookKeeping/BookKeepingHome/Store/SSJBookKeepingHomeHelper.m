@@ -26,7 +26,10 @@ NSString *const SSJMonthSumDicKey = @"SSJMonthSumDicKey";
 {
     [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
         NSString *userid = SSJUSERID();
-        NSString *booksid = [db stringForQuery:@"select currentBooksId from bk_user where cuserid = ?", userid];
+        NSString *booksid = [db stringForQuery:@"select ccurrentBooksId from bk_user where cuserid = ?", userid];
+        if (!booksid) {
+            booksid = userid;
+        }
         NSMutableArray *originalChargeArr = [NSMutableArray array];
         NSMutableArray *newAddChargeArr = [NSMutableArray array];
         NSMutableArray *newSectionArr = [NSMutableArray array];
@@ -133,7 +136,7 @@ NSString *const SSJMonthSumDicKey = @"SSJMonthSumDicKey";
                                        failure:(void (^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
         NSString *userid = SSJUSERID();
-        NSString *booksid = [db stringForQuery:@"select currentBooksId from bk_user where cuserid = ?", userid];
+        NSString *booksid = [db stringForQuery:@"select ccurrentBooksId from bk_user where cuserid = ?", userid];
         NSMutableDictionary *SumDic = [NSMutableDictionary dictionary];
         FMResultSet *resultSet = [db executeQuery:[NSString stringWithFormat:@"SELECT SUM(INCOMEAMOUNT) , SUM(EXPENCEAMOUNT) FROM BK_DAILYSUM_CHARGE WHERE CBILLDATE LIKE '%04ld-%02ld-__' AND CUSERID = '%@' AND CBILLDATE <= '%@' AND CBOOKSID = '%@'", year,month,userid,[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"],booksid]];
         if (!resultSet) {
