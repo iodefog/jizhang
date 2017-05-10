@@ -3,7 +3,7 @@ lane :adhoc do |options|
   cocoapods
   # 不带adhoc参数，sigh会自动生成App Store证书(公司或个人帐户)
   sigh(
-    adhoc: true
+    adhoc: true,
     output_path:'/Users/a9188/Documents/provisionfile'
   )
   # 指定输出目录
@@ -28,7 +28,8 @@ lane :appstore do |options|
   gym(
     configuration:options[:config],
     scheme:options[:scheme],
-    output_directory: ‘./build’,
+    output_directory: options[:outpath],
+    output_name: options[:ipaname],
     export_method:'app-store',
     clean:true
   )
