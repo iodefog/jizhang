@@ -377,19 +377,19 @@ NSDate *SCYEnterBackgroundTime() {
                 creditCardVc.item = cardItem;
                 [currentVc.navigationController pushViewController:creditCardVc animated:YES];
             }else if(remindItem.remindType == SSJReminderTypeBorrowing){
-                SSJLoanDetailViewController *loanVc = [[SSJLoanDetailViewController alloc]init];
                 if (!remindItem.fundId.length) {
                     remindItem.fundId = [self getLoanIdForRemindId:remindItem.remindId];
                 }
-                loanVc.loanID = remindItem.fundId;
-                loanVc.fundColor = [SSJLoanHelper queryForFundColorWithLoanId:remindItem.fundId];
-                [currentVc.navigationController pushViewController:loanVc animated:YES];
+                [SSJLoanHelper queryForFundColorWithLoanId:remindItem.fundId completion:^(NSString * _Nonnull color) {
+                    SSJLoanDetailViewController *loanVc = [[SSJLoanDetailViewController alloc]init];
+                    loanVc.loanID = remindItem.fundId;
+                    loanVc.fundColor = color;
+                    [currentVc.navigationController pushViewController:loanVc animated:YES];
+                }];
             }
         }
     }
-
 }
-
 
 #pragma mark - 获取当前推送的账户id
 - (NSString *)getCreditCardIdForRemindId:(NSString *)remindID{
