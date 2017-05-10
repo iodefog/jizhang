@@ -726,12 +726,15 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
     }
 }
 
-+ (NSString *)queryBookNameForBookId:(NSString *)ID {
-    __block NSString *bookName = nil;
++ (void)queryBookNameForBookId:(NSString *)ID success:(void(^)(NSString *bookName))success failure:(void(^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
-        bookName = [db stringForQuery:@"select cbooksname from bk_books_type where cbooksid = ? and cuserid = ?", ID, SSJUSERID()];
+        NSString *bookName = [db stringForQuery:@"select cbooksname from bk_books_type where cbooksid = ? and cuserid = ?", ID, SSJUSERID()];
+        if (success) {
+            SSJDispatchMainAsync(^{
+                success(bookName);
+            });
+        }
     }];
-    return bookName;
 }
 
 + (SSJBudgetModel *)budgetModelWithResultSet:(FMResultSet *)set inDatabase:(FMDatabase *)db {
