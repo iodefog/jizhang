@@ -620,7 +620,7 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
 }
 
 + (void)queryForFundColorWithID:(NSString *)ID completion:(void(^)(NSString *color))completion {
-    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSString *color = [db stringForQuery:@"select ccolor from bk_fund_info where cfundid = ?", ID];
         if (completion) {
             SSJDispatchMainAsync(^{
@@ -631,7 +631,7 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
 }
 
 + (void)queryForFundColorWithLoanId:(NSString *)loanId completion:(void(^)(NSString *color))completion {
-    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSString *colorValue = [db stringForQuery:@"select ccolor from bk_fund_info where cfundid = (select cthefundid from bk_loan where loanid = ?)", loanId];
         if (completion) {
             SSJDispatchMainAsync(^{
