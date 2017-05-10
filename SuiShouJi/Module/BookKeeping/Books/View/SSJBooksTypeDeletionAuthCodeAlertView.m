@@ -151,8 +151,6 @@ static const CGFloat kGap = 15;
 
 static const int kAuthCodeDigits = 4;
 
-static const CGFloat kAnimationDuration = 0.25;
-
 @interface SSJBooksTypeDeletionAuthCodeAlertView () <YYKeyboardObserver>
 
 @property (nonatomic, strong) UILabel *titleLab;

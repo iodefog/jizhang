@@ -210,6 +210,9 @@
     item.currentBooksId = booksId;
     [SSJUserTableManager saveUserItem:item success:^{
         [[NSNotificationCenter defaultCenter] postNotificationName:SSJBooksTypeDidChangeNotification object:nil];
+        if (success) {
+            success();
+        }
     } failure:failure];
 }
 

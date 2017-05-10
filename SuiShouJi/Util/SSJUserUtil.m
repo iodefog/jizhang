@@ -93,19 +93,3 @@ BOOL SSJSaveSyncSetting(SSJSyncSettingType setting) {
     [[NSUserDefaults standardUserDefaults] setInteger:setting forKey:kSSJSyncSettingTypeKey];
     return [[NSUserDefaults standardUserDefaults] synchronize];
 }
-
-BOOL SSJSelectBooksType(NSString *booksId){
-    SSJUserItem *item = [[SSJUserItem alloc]init];
-    item.userId = SSJUSERID();
-    item.currentBooksId = booksId;
-    [SSJUserTableManager saveUserItem:item success:^{
-        
-    } failure:^(NSError * _Nonnull error) {
-        
-    }];
-    BOOL success;
-    if (success) {
-        [[NSNotificationCenter defaultCenter]postNotificationName:SSJBooksTypeDidChangeNotification object:nil];
-    }
-    return success;
-}

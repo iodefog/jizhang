@@ -167,7 +167,7 @@
         [db executeUpdate:@"update bk_search_history set csearchdate = ? where csearchcontent = ? and cuserid = ?",writeDate,item.searchHistory,userId];
         return nil;
     }
-    if ([db executeUpdate:@"insert into bk_search_history (cuserid,csearchcontent,chistoryid,csearchdate) values (?,?,?,?)",userId,item.searchHistory,item.historyID,writeDate]) {
+    if (![db executeUpdate:@"insert into bk_search_history (cuserid,csearchcontent,chistoryid,csearchdate) values (?,?,?,?)",userId,item.searchHistory,item.historyID,writeDate]) {
         return [db lastError];
     };
     return nil;

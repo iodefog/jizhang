@@ -908,8 +908,6 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
                 self.tableView.hasData = YES;
                 if (weakSelf.newlyAddChargeArr.count && !_hasChangeBooksType) {
                     
-                    SSJBillingChargeCellItem *currentItem = [weakSelf.newlyAddChargeArr firstObject];
-                    
                     NSInteger maxSection = [weakSelf.tableView numberOfSections] - 1;
                     NSInteger rowCount = [weakSelf.tableView numberOfRowsInSection:maxSection];
                     NSIndexPath *currentMaxIndex = [NSIndexPath indexPathForRow:rowCount - 1 inSection:maxSection];

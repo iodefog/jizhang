@@ -115,14 +115,5 @@ BOOL SSJSaveSyncSetting(SSJSyncSettingType setting);
 // */
 //BOOL SSJSetUserForgetMotionPassword(BOOL forgeted);
 
-/**
- *  选择当前的账本
- *
- *  @param booksId 账本的id
- *
- *  @return (BOOL) 是否保存成功
- */
-BOOL SSJSelectBooksType(NSString *booksId);
-
 //BOOL
 

@@ -38,7 +38,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @return (SSJUserItem *) 用户信息模型
  */
-+ (void)queryUserItemWithID:(NSString *)userID success:(void(^)(SSJUserItem *userItem))success failure:(void(^)(NSError *error))failure;
++ (void)queryUserItemWithID:(NSString *)userID success:(void(^)(SSJUserItem *userItem))success failure:(nullable void(^)(NSError *error))failure;
 
 /**
  *  查询指定的用户信息
@@ -46,7 +46,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param propertyName 查询的属性
  *  @return (SSJUserItem *) 用户信息模型
  */
-+ (void)queryProperty:(NSArray *)propertyNames forUserId:(NSString *)userId success:(void(^)(SSJUserItem *userModel))success failure:(void(^)(NSError *error))failure;
++ (void)queryProperty:(NSArray *)propertyNames forUserId:(NSString *)userId success:(void(^)(SSJUserItem *userModel))success failure:(nullable void(^)(NSError *error))failure;
 
 /**
  *  保存用户信息
@@ -61,7 +61,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param success <#success description#>
  @param failure <#failure description#>
  */
-+ (void)currentBooksId:(void(^)(NSString *booksId))success failure:(void(^)(NSError *error))failure;
++ (void)currentBooksId:(void(^)(NSString *booksId))success failure:(nullable void(^)(NSError *error))failure;
 
 /**
  更新当前用户的账本id
