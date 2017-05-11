@@ -18,6 +18,7 @@
 #endif
     
     NSString *urlStr = [[NSURL URLWithString:api relativeToURL:[NSURL URLWithString:[SSJDomainManager formalDomain]]] absoluteString];
+
     [self request:urlStr params:nil];
 }
 
