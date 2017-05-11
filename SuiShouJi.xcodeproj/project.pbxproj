@@ -8899,7 +8899,7 @@
 		9C03D87E1EB855D600D845DD /* customBackGround.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = customBackGround.zip; sourceTree = "<group>"; };
 		9C0AB1671D670BAE0082B971 /* SSJCreditCardEditeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCreditCardEditeCell.h; sourceTree = "<group>"; };
 		9C0AB1681D670BAE0082B971 /* SSJCreditCardEditeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCreditCardEditeCell.m; sourceTree = "<group>"; };
-		9C111F9D1E84FDB900D87EA8 /* buildConfig.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = buildConfig.txt; sourceTree = "<group>"; };
+		9C111F9D1E84FDB900D87EA8 /* buildConfig.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = buildConfig.txt; path = ../../buildConfig.txt; sourceTree = "<group>"; };
 		9C111F9F1E85117600D87EA8 /* YouYuJiZhang.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = YouYuJiZhang.entitlements; sourceTree = "<group>"; };
 		9C13F73E1E8267D300AC5FA9 /* BeiKeJiZhang.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BeiKeJiZhang.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C13F7411E82688400AC5FA9 /* BeiKeJiZhang-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "BeiKeJiZhang-Info.plist"; sourceTree = "<group>"; };
@@ -8987,6 +8987,8 @@
 		9C24CFB91D76C9ED0095D150 /* SSJBooksTypeSelectViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBooksTypeSelectViewController.h; sourceTree = "<group>"; };
 		9C24CFD41D76CC250095D150 /* SSJBooksEditeOrNewViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBooksEditeOrNewViewController.h; sourceTree = "<group>"; };
 		9C24CFD51D76CC250095D150 /* SSJBooksEditeOrNewViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBooksEditeOrNewViewController.m; sourceTree = "<group>"; };
+		9C24E6EF1EC428C10022D60A /* Appfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Appfile; path = fastlane/Appfile; sourceTree = SOURCE_ROOT; };
+		9C24E6F01EC428C10022D60A /* Fastfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Fastfile; path = fastlane/Fastfile; sourceTree = SOURCE_ROOT; };
 		9C2692391D9CB58D00B3B5DF /* SSJSearchHistoryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJSearchHistoryCell.h; sourceTree = "<group>"; };
 		9C26923A1D9CB58D00B3B5DF /* SSJSearchHistoryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJSearchHistoryCell.m; sourceTree = "<group>"; };
 		9C26FDAD1DD2F9E80086F94F /* SSJBooksHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBooksHeaderView.h; sourceTree = "<group>"; };
@@ -11392,6 +11394,16 @@
 			path = ViewController;
 			sourceTree = "<group>";
 		};
+		9C24E6EE1EC428980022D60A /* buildconfig */ = {
+			isa = PBXGroup;
+			children = (
+				9C24E6EF1EC428C10022D60A /* Appfile */,
+				9C24E6F01EC428C10022D60A /* Fastfile */,
+				9C111F9D1E84FDB900D87EA8 /* buildConfig.txt */,
+			);
+			name = buildconfig;
+			sourceTree = "<group>";
+		};
 		9C29319D1CEF1B1F00484F6E /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -12855,6 +12867,7 @@
 		BD0E43EB1C2118E600F9179D /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				9C24E6EE1EC428980022D60A /* buildconfig */,
 				BD0433301C1A82110051E7AB /* Constant */,
 				9C30AA871EAF6E7C008DD51D /* customTheme */,
 				9C3A2D461E65A4C200DFAE2C /* Entitlements */,
@@ -12894,7 +12907,6 @@
 		BD543C331C1A6DBC00910D61 = {
 			isa = PBXGroup;
 			children = (
-				9C111F9D1E84FDB900D87EA8 /* buildConfig.txt */,
 				BD543C3E1C1A6DBC00910D61 /* SuiShouJi */,
 				BD543C581C1A6DBC00910D61 /* SuiShouJiTests */,
 				BD543C631C1A6DBC00910D61 /* SuiShouJiUITests */,
