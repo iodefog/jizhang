@@ -1,28 +1,33 @@
-lane :adhoc do |options|
-  # 如果你用 pod install
-  cocoapods
-  # 不带adhoc参数，sigh会自动生成App Store证书(公司或个人帐户)
-  sigh(adhoc: true)
-  # 指定输出目录
+  lane :adhoc do |options|
+    # 如果你用 pod install
+    cocoapods
+    # 不带adhoc参数，sigh会自动生成App Store证书(公司或个人帐户)
+    sigh(
+    adhoc: true,
+    output_path:'/Users/a9188/Documents/provisionfile'
+  )
   gym(
     configuration:options[:config],
     scheme:options[:scheme],
-    output_directory: options[:scheme],
+    output_directory: options[:outpath],
+    output_name: options[:ipaname],
     export_method:'ad-hoc',
     clean:true
-    )
-end
+  )
+  end
 
-lane :appstore do |options|
+  lane :appstore do |options|
   # 如果你用 pod install
   cocoapods
   # 不带adhoc参数，sigh会自动生成App Store证书(公司或个人帐户)
-  sigh
-  # 指定输出目录
+  sigh(
+    output_path:'/Users/a9188/Documents/provisionfile'
+  )
   gym(
     configuration:options[:config],
     scheme:options[:scheme],
-    output_directory: options[:scheme],
+    output_directory: options[:outpath],
+    output_name: options[:ipaname],
     export_method:'app-store',
     clean:true
   )
@@ -31,6 +36,4 @@ lane :appstore do |options|
     skip_screenshots:true,
     skip_metadata: true
   )
-end
-
-
+  end
