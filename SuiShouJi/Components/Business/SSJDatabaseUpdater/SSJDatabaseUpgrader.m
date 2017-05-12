@@ -8,6 +8,7 @@
 
 #import "SSJDatabaseUpgrader.h"
 #import "SSJDatabaseQueue.h"
+#import "SSJDatabaseErrorHandler.h"
 #import "SSJDatabaseVersionProtocol.h"
 #import "SSJDatabaseVersion1.h"
 #import "SSJDatabaseVersion2.h"
@@ -34,11 +35,16 @@ static const int kDatabaseVersion = 15;
     __block NSError *error = nil;
     __block int currentVersion = 0;
     
-    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(SSJDatabase *db) {
+        db.shouldHandleError = NO;
         if (![db executeUpdate:@"create table if not exists bk_db_version (version integer not null default 0)"]) {
+            NSString *desc = [NSString stringWithFormat:@"code:%d  description:%@  sql:%@", (int)error.code, error.localizedDescription, db.sql];
+            NSError *tError = [NSError errorWithDomain:error.domain code:error.code userInfo:@{NSLocalizedDescriptionKey:desc}];
+            [SSJDatabaseErrorHandler handleError:tError];
             error = [db lastError];
             return;
         }
+        
         // 查询当前数据库的版本
         currentVersion = [db intForQuery:@"select max(version) from bk_db_version"];
         
@@ -50,11 +56,17 @@ static const int kDatabaseVersion = 15;
                 
                 error = [dbVersionClass startUpgradeInDatabase:db];
                 if (error) {
+                    NSString *desc = [NSString stringWithFormat:@"数据库升级失败  version:%@  code:%d  description:%@  sql:%@", [dbVersionClass dbVersion], (int)error.code, error.localizedDescription, db.sql];
+                    NSError *tError = [NSError errorWithDomain:error.domain code:error.code userInfo:@{NSLocalizedDescriptionKey:desc}];
+                    [SSJDatabaseErrorHandler handleError:tError];
                     [db rollback];
                     break;
                 }
                 
                 if (![db executeUpdate:@"insert into bk_db_version (version) values (?)", @(ver)]) {
+                    NSString *desc = [NSString stringWithFormat:@"code:%d  description:%@  sql:%@", (int)error.code, error.localizedDescription, db.sql];
+                    NSError *tError = [NSError errorWithDomain:error.domain code:error.code userInfo:@{NSLocalizedDescriptionKey:desc}];
+                    [SSJDatabaseErrorHandler handleError:tError];
                     [db rollback];
                     break;
                 }

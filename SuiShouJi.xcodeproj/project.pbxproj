@@ -11076,9 +11076,9 @@
 		7DE69C271C8E6E7E001D31C1 /* SSJDatabaseUpdater */ = {
 			isa = PBXGroup;
 			children = (
+				7D768A841C97E78600CB75B0 /* SSJDatabaseVersionProtocol.h */,
 				7DE69C2B1C8EA84A001D31C1 /* SSJDatabaseUpgrader.h */,
 				7DE69C2C1C8EA84A001D31C1 /* SSJDatabaseUpgrader.m */,
-				7D768A841C97E78600CB75B0 /* SSJDatabaseVersionProtocol.h */,
 				7D768A811C97E76400CB75B0 /* SSJDatabaseVersion1.h */,
 				7D768A821C97E76400CB75B0 /* SSJDatabaseVersion1.m */,
 				7DB428FF1CAE3E5000B46F32 /* SSJDatabaseVersion2.h */,

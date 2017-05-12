@@ -12,6 +12,8 @@
 
 @protocol SSJDatabaseVersionProtocol <NSObject>
 
++ (NSString *)dbVersion;
+
 + (NSError *)startUpgradeInDatabase:(FMDatabase *)db;
 
 @end
