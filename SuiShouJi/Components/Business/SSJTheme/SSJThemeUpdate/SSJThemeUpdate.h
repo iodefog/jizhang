@@ -10,6 +10,4 @@
 
 @interface SSJThemeUpdate : NSObject
 
-+ (void)updateLocalThemesIfneeded;
-
 @end
