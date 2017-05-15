@@ -13572,7 +13572,7 @@
 						};
 					};
 					9C7D2CDC1E8DF8A80093001F = {
-						DevelopmentTeam = 534SCE47WT;
+						DevelopmentTeam = 5QMLP5Z59C;
 						SystemCapabilities = {
 							com.apple.Push = {
 								enabled = 1;
