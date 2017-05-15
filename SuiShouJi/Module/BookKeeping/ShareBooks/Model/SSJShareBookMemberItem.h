@@ -16,6 +16,12 @@
 // 账本id
 @property(nonatomic, copy) NSString *booksId;
 
+// 用户头像
+@property(nonatomic, copy) NSString *icon;
+
+// 用户昵称
+@property(nonatomic, copy) NSString *nickName;
+
 // 加入时间
 @property(nonatomic, copy) NSString *joinDate;
 

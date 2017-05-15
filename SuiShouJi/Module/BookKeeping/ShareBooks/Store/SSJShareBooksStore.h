@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "SSJShareBookItem.h"
 
 @interface SSJShareBooksStore : NSObject
 

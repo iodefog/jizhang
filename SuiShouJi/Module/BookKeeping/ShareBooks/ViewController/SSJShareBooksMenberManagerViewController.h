@@ -7,7 +7,10 @@
 //
 
 #import "SSJBaseViewController.h"
+#import "SSJShareBookItem.h"
 
 @interface SSJShareBooksMenberManagerViewController : SSJBaseViewController
+
+@property(nonatomic, strong) SSJShareBookItem *item;
 
 @end
