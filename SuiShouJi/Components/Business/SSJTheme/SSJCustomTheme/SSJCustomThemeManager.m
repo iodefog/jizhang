@@ -22,12 +22,16 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSString *firstThemeDirectPath = [[NSString ssj_themeDirectory] stringByAppendingPathComponent:@"1000"];
         NSString *secondThemeDirectPath = [[NSString ssj_themeDirectory] stringByAppendingPathComponent:@"1001"];
+        
+        [[NSFileManager defaultManager] removeItemAtPath:firstThemeDirectPath error:nil];
+        [[NSFileManager defaultManager] removeItemAtPath:secondThemeDirectPath error:nil];
+        
         if (![[NSFileManager defaultManager] fileExistsAtPath:firstThemeDirectPath] && ![[NSFileManager defaultManager] fileExistsAtPath:secondThemeDirectPath]) {
             // 将两个主题解压和背景图
             NSString *firstThemePath = [[NSBundle mainBundle] pathForResource:@"1001" ofType:@"zip"];
             NSString *secondThemePath = [[NSBundle mainBundle] pathForResource:@"1000" ofType:@"zip"];
-            [SSZipArchive unzipFileAtPath:firstThemePath toDestination:[NSString ssj_themeDirectory] overwrite:NO password:nil error:nil];
-            [SSZipArchive unzipFileAtPath:secondThemePath toDestination:[NSString ssj_themeDirectory] overwrite:NO password:nil error:nil];
+            [SSZipArchive unzipFileAtPath:firstThemePath toDestination:[NSString ssj_themeDirectory] overwrite:YES password:nil error:nil];
+            [SSZipArchive unzipFileAtPath:secondThemePath toDestination:[NSString ssj_themeDirectory] overwrite:YES password:nil error:nil];
             
             // 将两个默认主题写入主题配置文件中
             NSData *firstThemeData = [NSData dataWithContentsOfFile:[firstThemeDirectPath stringByAppendingPathComponent:@"themeSettings.json"]];

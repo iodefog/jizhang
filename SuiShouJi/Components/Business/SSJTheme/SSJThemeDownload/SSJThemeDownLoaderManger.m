@@ -124,7 +124,7 @@ static id _instance;
             [tProgress removeObserver:self forKeyPath:@"fractionCompleted"];
             
             NSError *tError = nil;
-            [SSZipArchive unzipFileAtPath:filePath.path toDestination:[NSString ssj_themeDirectory] overwrite:NO password:nil error:&tError];
+            [SSZipArchive unzipFileAtPath:filePath.path toDestination:[NSString ssj_themeDirectory] overwrite:YES password:nil error:&tError];
             
             // 不管解压是否成功，把压缩包删除，否则可能会导致以后下载相同压缩包不能覆盖的奇葩问题
             [[NSFileManager defaultManager] removeItemAtURL:filePath error:&error];
