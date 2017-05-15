@@ -165,7 +165,7 @@ static NSString *const kMemberTableViewCellIdentifier = @"kMemberTableViewCellId
 
 - (void)deleteMemberWithMemberId:(NSString *)Id{
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        [db executeUpdate:@"update bk_member set istate = 0, iversion = ?, cwritedate = ? where cmemberid = ?",Id,@(SSJSyncVersion()),[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"]];
+        [db executeUpdate:@"update bk_member set istate = 0, iversion = ?, cwritedate = ? where cmemberid = ?",@(SSJSyncVersion()),[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],Id];
 //        [db executeUpdate:@"update bk_member_charge set operatortype = 2 where cmemberid = ?",Id];
     }];
 }
