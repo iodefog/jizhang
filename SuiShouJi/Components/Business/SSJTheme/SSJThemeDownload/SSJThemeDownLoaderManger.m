@@ -100,6 +100,8 @@ static id _instance;
         } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
             [_blockerMapping removeObjectForKey:item.themeId];
             
+            [self.downLoadingArr removeObject:item.themeId];
+            
             if (((NSHTTPURLResponse *)response).statusCode == 304) {
                 if (success) {
                     SSJDispatch_main_async_safe(^{
@@ -110,7 +112,6 @@ static id _instance;
             }
             
             if (error) {
-                [self.downLoadingArr removeObject:item.themeId];
                 SSJPRINT(@"%@",[error localizedDescription]);
                 if (failure) {
                     SSJDispatch_main_async_safe(^{
@@ -120,7 +121,6 @@ static id _instance;
                 return;
             }
             
-            [self.downLoadingArr removeObject:item.themeId];
             [tProgress removeObserver:self forKeyPath:@"fractionCompleted"];
             
             NSError *tError = nil;

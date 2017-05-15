@@ -31,6 +31,8 @@ typedef void(^SSJNetworkReachabilityManagerBlock)(SSJNetworkReachabilityStatus s
 
 + (SSJNetworkReachabilityObserver *)observeReachabilityStatusChange:(SSJNetworkReachabilityManagerBlock)block;
 
++ (void)observeReachabilityStatusChangeOnce:(SSJNetworkReachabilityManagerBlock)block;
+
 + (void)addObserverForReachabilityStatusChange:(SSJNetworkReachabilityObserver *)observer;
 
 + (void)removeObserverForReachabilityStatusChange:(SSJNetworkReachabilityObserver *)observer;
