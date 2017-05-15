@@ -11,6 +11,10 @@
 
 @implementation SSJDatabaseVersion9
 
++ (NSString *)dbVersion {
+    return @"1.8.0";
+}
+
 + (NSError *)startUpgradeInDatabase:(FMDatabase *)db {
     NSError *error = [self createSearchHistoryTableWithDatabase:db];
     if (error) {
