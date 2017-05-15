@@ -57,6 +57,7 @@
 #import "SSJThemBgImageClipViewController.h"
 #import "SSJNavigationController.h"
 #import "SSJUserTableManager.h"
+#import "SSJShareBooksHelper.h"
 
 static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 
@@ -156,6 +157,8 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    
+    [SSJShareBooksHelper generateTheRandomCodeWithType:SSJRandomCodeTypeAll length:6];
         
     __weak typeof(self) weakSelf = self;
     [self.mm_drawerController setGestureCompletionBlock:^(MMDrawerController *drawerController, UIGestureRecognizer *gesture) {
