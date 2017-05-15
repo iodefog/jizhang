@@ -125,6 +125,7 @@
     model.searchResultHeaderBackgroundColor = @"#ffebeb";
     model.summaryBooksHeaderColor = @"#ffd2d2";
     model.summaryBooksHeaderAlpha = 1;
+    model.authCodeGroundColor = @"#cccccc";
     return model;
 }
 

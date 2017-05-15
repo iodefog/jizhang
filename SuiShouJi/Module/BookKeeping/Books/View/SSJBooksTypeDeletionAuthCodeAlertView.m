@@ -345,7 +345,7 @@ static const CGFloat kAnimationDuration = 0.25;
     self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
     self.titleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     self.authCodeLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-    self.authCodeLab.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor];
+    self.authCodeLab.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.authCodeGroundColor];
     [self.sureBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] forState:UIControlStateNormal];
     [self.sureBtn setTitleColor:[[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] colorWithAlphaComponent:0.5] forState:UIControlStateDisabled];
     [self.sureBtn ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor]];
