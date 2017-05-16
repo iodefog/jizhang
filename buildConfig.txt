@@ -3,6 +3,6 @@
     "buildScheme": "YouYuJiZhang",
     "infoplist": "YouYuJiZhang-Info.plist",
     "uploadToPgy": false,
-    "uploadToAppStore": false,
-    "testflight": true
+    "uploadToAppStore": true,
+    "testflight":false
 }

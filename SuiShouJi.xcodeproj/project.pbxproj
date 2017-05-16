@@ -13572,7 +13572,7 @@
 						};
 					};
 					9C7D2CDC1E8DF8A80093001F = {
-						DevelopmentTeam = 5QMLP5Z59C;
+						DevelopmentTeam = 534SCE47WT;
 						SystemCapabilities = {
 							com.apple.Push = {
 								enabled = 1;
@@ -26529,8 +26529,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhang;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "2965f271-13d3-48ef-8fca-5d53b07ed4a2";
-				PROVISIONING_PROFILE_SPECIFIER = youyujizhangAppStoreAdHoc;
+				PROVISIONING_PROFILE = "718b05a9-554f-44db-8080-ded490bdf8e3";
+				PROVISIONING_PROFILE_SPECIFIER = youyujizhangAppStore;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -26630,8 +26630,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhang;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "2965f271-13d3-48ef-8fca-5d53b07ed4a2";
-				PROVISIONING_PROFILE_SPECIFIER = youyujizhangAppStoreAdHoc;
+				PROVISIONING_PROFILE = "718b05a9-554f-44db-8080-ded490bdf8e3";
+				PROVISIONING_PROFILE_SPECIFIER = youyujizhangAppStore;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
