@@ -33,7 +33,7 @@
 + (BOOL)mergeData:(NSDictionary *)info {
     __block BOOL successfull = NO;
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(SSJDatabase *db) {
-        successfull = [db executeUpdate:@"update bk_user set cmobileno = ?, cnickid = ?, usersignature = ?, cicons = ?", info[@"cuserid"], info[@"cmobileno"], info[@"crealname"], info[@"usersignature"], info[@"cicon"]];
+        successfull = [db executeUpdate:@"update bk_user set cmobileno = ?, cnickid = ?, usersignature = ?, cicons = ? where cuserid = ?", info[@"cmobileno"], info[@"crealname"], info[@"usersignature"], info[@"cicon"], info[@"cuserid"]];
     }];
     return successfull;
 }
