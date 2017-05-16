@@ -7,3 +7,9 @@ for_lane :appstore do |options|
 app_identifier "com.youyu.jizhanglicai"
 apple_id "marsfan666@163.com"
 end
+
+for_lane :testflight do |options|
+app_identifier "com.youyu.jizhang"
+apple_id "marsfan888@163.com"
+end
+

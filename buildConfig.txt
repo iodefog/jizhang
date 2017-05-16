@@ -3,5 +3,6 @@
     "buildScheme": "YouYuJiZhangLiCai",
     "infoplist": "YouYuJiZhangLiCai-Info.plist",
     "uploadToPgy": false,
-    "uploadToAppStore": true
+    "uploadToAppStore": true,
+    "testflight": true
 }

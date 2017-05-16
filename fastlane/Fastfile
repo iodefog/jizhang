@@ -16,7 +16,7 @@
   )
   end
 
-  lane :appstore do |options|
+  lane :release do |options|
   # 如果你用 pod install
   cocoapods
   # 不带adhoc参数，sigh会自动生成App Store证书(公司或个人帐户)
@@ -36,4 +36,22 @@
     skip_screenshots:true,
     skip_metadata: true
   )
+  end
+
+  lane :testflight do |options|
+    # 如果你用 pod install
+    cocoapods
+    # 不带adhoc参数，sigh会自动生成App Store证书(公司或个人帐户)
+  sigh(
+    output_path:'/Users/a9188/Documents/provisionfile'
+  )
+  gym(
+    configuration:options[:config],
+    scheme:options[:scheme],
+    output_directory: options[:outpath],
+    output_name: options[:ipaname],
+    export_method:'app-store',
+    clean:true
+  )
+  testflight
   end
