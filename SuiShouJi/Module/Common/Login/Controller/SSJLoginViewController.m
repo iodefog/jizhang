@@ -736,7 +736,12 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
                 if ([userItem.motionPWDState boolValue]) {
                     __weak typeof(self) weakSelf = self;
                     SSJMotionPasswordViewController *motionVC = [[SSJMotionPasswordViewController alloc] init];
-                    motionVC.finishHandle = self.finishHandle;
+                    motionVC.finishHandle = ^(UIViewController *controller) {
+                        UITabBarController *tabbarVc = self.navigationController.tabBarController;
+                        UIViewController *homeController = [((UINavigationController *)[tabbarVc.viewControllers firstObject]).viewControllers firstObject];
+                        controller.backController = homeController;
+                        [controller ssj_backOffAction];
+                    };
                     motionVC.backController = self.backController;
                     if (userItem.motionPWD.length) {
                         motionVC.type = SSJMotionPasswordViewControllerTypeVerification;
