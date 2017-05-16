@@ -1,5 +1,5 @@
 //
-//  SSJCalenderDetailPhotoCell.h
+//  SSJCalenderDetailInfoCell.h
 //  SuiShouJi
 //
 //  Created by old lang on 17/5/16.
@@ -12,13 +12,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class SSJBillingChargeCellItem;
 
-@interface SSJCalenderDetailPhotoCell : SSJBaseTableViewCell
+@interface SSJCalenderDetailInfoCell : SSJBaseTableViewCell
 
 @end
 
-@interface SSJCalenderDetailPhotoCellItem : SSJBaseItem
+@interface SSJCalenderDetailInfoCellItem : SSJBaseItem
 
-@property (nonatomic, copy) NSURL *photoPath;
+@property (nonatomic, copy) NSString *leftText;
+
+@property (nonatomic, copy) NSString *rightText;
 
 @end
 

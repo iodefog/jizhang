@@ -225,7 +225,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
-@implementation UIImage (SSJCorner)
+@implementation UIImage (SSJClip)
 
 /**
  圆角图片
@@ -238,6 +238,16 @@
     [self drawInRect:rect];
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
+    return image;
+}
+
+- (UIImage *)ssj_imageWithClipInsets:(UIEdgeInsets)insets {
+    CGSize ctxSize = CGSizeMake(self.size.width - insets.left - insets.right, self.size.height - insets.top - insets.bottom);
+    UIGraphicsBeginImageContextWithOptions(ctxSize, NO, 0);
+    [self drawInRect:CGRectMake(-insets.left, -insets.top, self.size.width, self.size.height)];
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
     return image;
 }
 
@@ -268,6 +278,23 @@
         }
     }
     return [UIImage imageNamed:launchImageName];
+}
+
+@end
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+@implementation UIImage (SSJLoad)
+
++ (void)ssj_loadUrl:(NSURL *)url compeltion:(void(^)(NSError *error, UIImage *image))compeltion {
+    [SDWebImageManager.sharedManager loadImageWithURL:url options:0 progress:nil completed:^(UIImage *image, NSData *data, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+        SSJDispatchMainAsync(^{
+            if (compeltion) {
+                compeltion(error, image);
+            }
+        });
+    }];
 }
 
 @end

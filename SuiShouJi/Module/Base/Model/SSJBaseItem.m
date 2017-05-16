@@ -40,4 +40,8 @@
     SSJPRINT(@"<<< 警告：设置未定义的属性：%@ >>>",key);
 }
 
+- (NSString *)debugDescription {
+    return [self ssj_debugDescription];
+}
+
 @end

@@ -241,4 +241,36 @@ NSString *const SSJBillingChargeRecordKey = @"SSJBillingChargeRecordKey";
     }
 }
 
++ (void)queryTheRestChargeCountWithBillId:(NSString *)billId
+                                 memberId:(NSString *)memberId
+                                  booksId:(NSString *)booksId
+                                   period:(SSJDatePeriod *)period
+                                  success:(void(^)(int count))success
+                                  failure:(void(^)(NSError *error))failure {
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
+        NSMutableString *chargeCountSql = [NSMutableString stringWithFormat:@"select count(1) from bk_user_charge as uc, bk_member_charge as mc where uc.cuserid = '%@' and uc.operatortype <> 2 and mc.operatortype <> 2 and uc.ichargeid = mc.ichargeid", SSJUSERID()];
+        if (billId) {
+            [chargeCountSql appendFormat:@" and uc.ibillid = '%@'", billId];
+        }
+        if (memberId) {
+            [chargeCountSql appendFormat:@" and uc.cmemberid = '%@'", memberId];
+        }
+        if (booksId && ![booksId isEqualToString:@"all"]) {
+            [chargeCountSql appendFormat:@" and uc.cbooksid = '%@'", booksId];
+        }
+        if (period) {
+            NSString *startDate = [period.startDate formattedDateWithFormat:@"yyyy-MM-dd"];
+            NSString *endDate = [period.endDate formattedDateWithFormat:@"yyyy-MM-dd"];
+            [chargeCountSql appendFormat:@" and uc.cbilldate >= '%@' and uc.cbilldate <= '%@'", startDate, endDate];
+        }
+        
+        int count = [db intForQuery:chargeCountSql];
+        if (success) {
+            SSJDispatchMainAsync(^{
+                success(count);
+            });
+        }
+    }];
+}
+
 @end

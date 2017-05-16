@@ -9,6 +9,8 @@
 #import "SSJBaseTableViewCell.h"
 #import "SSJBillingChargeCellItem.h"
 
+SSJ_DEPRECATED
+
 @interface SSJCanlenderChargeDetailCell : SSJBaseTableViewCell
 @property(nonatomic, strong) SSJBillingChargeCellItem *item;
 @end

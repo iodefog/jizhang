@@ -9,6 +9,8 @@
 #import "SSJBaseItem.h"
 #import "SSJLoanChargeModel.h"
 
+@class SSJChargeMemberItem;
+
 @interface SSJBillingChargeCellItem : SSJBaseItem
 
 // 图片名称
@@ -92,7 +94,7 @@
 @property(nonatomic, strong) NSString *transferSource;
 
 // 成员id
-@property(nonatomic, strong) NSMutableArray *membersItem;
+@property(nonatomic, strong) NSMutableArray<SSJChargeMemberItem *> *membersItem;
 
 // 新增的成员
 @property(nonatomic, strong) NSArray *newlyAddMembers;

@@ -53,4 +53,21 @@ extern NSString *const SSJBillingChargeRecordKey;
                               success:(void (^)(NSArray <NSDictionary *>*data))success
                               failure:(void (^)(NSError *error))failure;
 
+/**
+ *  查询剩余流水数量
+ *
+ *  @param billId           类别id
+ *  @param memberId         成员id
+ *  @param booksId          账本id，如果传nil就当做当前账本，查询所有账本数据传all
+ *  @param period           查询的时间段，如果超过当前时间，则截止到今天
+ *  @param success          查询成功的回调
+ *  @param failure          查询失败的回调
+ */
++ (void)queryTheRestChargeCountWithBillId:(NSString *)billId
+                                 memberId:(NSString *)memberId
+                                  booksId:(NSString *)booksId
+                                   period:(SSJDatePeriod *)period
+                                  success:(void(^)(int count))success
+                                  failure:(void(^)(NSError *error))failure;
+
 @end

@@ -15,8 +15,6 @@
 #import "SSJCalenderTableViewNoDataHeader.h"
 #import "SSJCalendarTabelViewHeaderView.h"
 #import "SSJCalendarTableViewCell.h"
-#import "SSJBillingChargeCell.h"
-#import "SSJCalenderTableViewCell.h"
 
 #import "SSJDatabaseQueue.h"
 #import "SSJCalenderHelper.h"
@@ -150,15 +148,13 @@
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
     if (self.needAnimation) {
         __weak typeof(self) weakSelf = self;
-        SSJCalenderTableViewCell * currentCell = (SSJCalenderTableViewCell *)cell;
-        currentCell.transform = CGAffineTransformMakeTranslation(0, self.view.height - 400);
+        cell.transform = CGAffineTransformMakeTranslation(0, self.view.height - 400);
         [UIView animateWithDuration:0.3 delay:0.1 * indexPath.row options:UIViewAnimationOptionTransitionCurlUp animations:^{
-            currentCell.transform = CGAffineTransformIdentity;
+            cell.transform = CGAffineTransformIdentity;
         } completion:^(BOOL finished) {
             weakSelf.needAnimation = NO;
         }];
     }
-
 }
 
 #pragma mark - UITableViewDataSource
