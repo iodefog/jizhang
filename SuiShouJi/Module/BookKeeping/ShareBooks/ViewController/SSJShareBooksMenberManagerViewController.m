@@ -7,10 +7,15 @@
 //
 
 #import "SSJShareBooksMenberManagerViewController.h"
+#import "SSJShareBooksStore.h"
 
 @interface SSJShareBooksMenberManagerViewController ()
 
 @property(nonatomic, strong) UICollectionView *collectionView;
+
+@property(nonatomic, strong) UIButton *deleteButton;
+
+@property(nonatomic, strong) NSArray <SSJShareBookMemberItem *> *items;
 
 @end
 
@@ -23,6 +28,15 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    __weak typeof(self) weakSelf = self;
+    [SSJShareBooksStore queryTheMemberListForTheShareBooks:self.item Success:^(NSArray<SSJShareBookMemberItem *> *result) {
+        weakSelf.items = result;
+        [weakSelf.collectionView reloadData];
+    } failure:NULL];
+}
+
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
     
 }
 

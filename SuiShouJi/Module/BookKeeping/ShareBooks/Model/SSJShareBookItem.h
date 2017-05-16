@@ -28,4 +28,5 @@
 // 账本夫类型
 @property(nonatomic) NSInteger parentType;
 
+
 @end

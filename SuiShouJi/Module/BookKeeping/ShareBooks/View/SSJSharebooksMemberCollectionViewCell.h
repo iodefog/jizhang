@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SSJShareBookMemberItem.h"
 
 @interface SSJSharebooksMemberCollectionViewCell : UICollectionViewCell
+
+@property(nonatomic, strong) SSJShareBookMemberItem *memberItem;
 
 @end
