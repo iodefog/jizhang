@@ -8,8 +8,19 @@
 
 #import "SSJShareBooksMenberManagerViewController.h"
 #import "SSJShareBooksStore.h"
+#import "SSJSharebooksMemberCollectionViewCell.h"
 
-@interface SSJShareBooksMenberManagerViewController ()
+#define ITEM_SPACE 25
+#define ITEM_SIZE_HEIGHT 90
+
+#define ITEM_SIZE_WIDTH (self.view.width - 28 * 3 - 30) / 4
+
+#define BOTTOM_MARGIN 18.f
+
+#define TOP_MARGIN 14.f
+
+
+@interface SSJShareBooksMenberManagerViewController ()<UICollectionViewDelegate,UICollectionViewDataSource>
 
 @property(nonatomic, strong) UICollectionView *collectionView;
 
@@ -17,12 +28,25 @@
 
 @property(nonatomic, strong) NSArray <SSJShareBookMemberItem *> *items;
 
+@property(nonatomic, strong) UICollectionViewFlowLayout *flowLayout;
+
 @end
 
 @implementation SSJShareBooksMenberManagerViewController
 
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+        self.statisticsTitle = @"账本成员";
+    }
+    return self;
+}
+
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self.view addSubview:self.collectionView];
+    [self.view addSubview:self.deleteButton];
+
     // Do any additional setup after loading the view.
 }
 
@@ -32,12 +56,115 @@
     [SSJShareBooksStore queryTheMemberListForTheShareBooks:self.item Success:^(NSArray<SSJShareBookMemberItem *> *result) {
         weakSelf.items = result;
         [weakSelf.collectionView reloadData];
+        [weakSelf.view updateConstraintsIfNeeded];
     } failure:NULL];
 }
 
-- (void)viewDidLayoutSubviews {
-    [super viewDidLayoutSubviews];
+- (void)updateViewConstraints {
+    [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.top.mas_equalTo(self.view);
+    }];
     
+    [self.deleteButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.bottom.mas_equalTo(self.view);
+        make.width.mas_equalTo(self.view);
+        make.height.mas_equalTo(50);
+    }];
+    
+    [self updateHeightForCollectionView];
+    
+    [super updateViewConstraints];
+
+}
+
+#pragma mark - UICollectionViewDataSource
+-(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
+    return self.items.count;
+}
+
+-(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
+    SSJShareBookMemberItem *item = [self.items objectAtIndex:indexPath.item];
+    SSJSharebooksMemberCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"" forIndexPath:indexPath];
+    cell.memberItem = item;
+    return cell;
+}
+
+#pragma mark - UICollectionViewDelegate
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
+    
+}
+
+
+#pragma mark - Getter
+- (UICollectionView *)collectionView{
+    if (_collectionView==nil) {
+        _collectionView =[[UICollectionView alloc]initWithFrame:CGRectZero collectionViewLayout:self.flowLayout];
+        _collectionView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+        _collectionView.dataSource=self;
+        _collectionView.delegate=self;
+        [_collectionView registerClass:[SSJSharebooksMemberCollectionViewCell class] forCellWithReuseIdentifier:@""];
+        _collectionView.backgroundColor = [UIColor clearColor];
+    }
+    return _collectionView;
+}
+
+- (UICollectionViewFlowLayout *)flowLayout {
+    UICollectionViewFlowLayout *flowLayout=[[UICollectionViewFlowLayout alloc]init];
+    [flowLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
+    flowLayout.minimumInteritemSpacing = 28;
+    flowLayout.minimumLineSpacing = ITEM_SPACE;
+    flowLayout.itemSize = CGSizeMake(ITEM_SIZE_WIDTH, ITEM_SIZE_HEIGHT);
+    flowLayout.sectionInset = UIEdgeInsetsMake(TOP_MARGIN, 15, BOTTOM_MARGIN, 15);
+    return flowLayout;
+}
+
+- (UIButton *)deleteButton {
+    if (!_deleteButton) {
+        _deleteButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_deleteButton setTitle:@"退出并删除此账本" forState:UIControlStateNormal];
+        if (SSJ_CURRENT_THEME.throughScreenButtonBackGroudColor.length) {
+            [_deleteButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.throughScreenButtonBackGroudColor alpha:SSJ_CURRENT_THEME.throughScreenButtonAlpha] forState:UIControlStateNormal];
+        } else {
+            [_deleteButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor alpha:0.8] forState:UIControlStateNormal];
+        }
+        _deleteButton.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
+        [_deleteButton ssj_setBorderWidth:1];
+        [_deleteButton ssj_setBorderStyle:SSJBorderStyleTop];
+        [_deleteButton ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
+        [_deleteButton addTarget:self action:@selector(deleteButtonClicked:) forControlEvents:UIControlEventTouchUpInside];    }
+    return _deleteButton;
+}
+
+#pragma mark - Event
+- (void)deleteButtonClicked:(id)sender {
+    
+}
+
+#pragma mark - Private
+- (void)updateHeightForCollectionView {
+    if (!self.items || !self.items.count) {
+        return;
+    }
+    
+    NSInteger rowCount = self.items.count % 4 + 1;
+    
+    float height = BOTTOM_MARGIN + TOP_MARGIN + rowCount * ITEM_SIZE_HEIGHT + (rowCount - 1) * ITEM_SPACE;
+    
+    [self.collectionView mas_updateConstraints:^(MASConstraintMaker *make) {
+        self.collectionView.height = height;
+    }];
+}
+
+- (void)updateAppearanceAfterThemeChanged {
+    [super updateAppearanceAfterThemeChanged];
+    self.collectionView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+    if (SSJ_CURRENT_THEME.throughScreenButtonBackGroudColor.length) {
+        [self.deleteButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.throughScreenButtonBackGroudColor alpha:SSJ_CURRENT_THEME.throughScreenButtonAlpha] forState:UIControlStateNormal];
+    } else {
+        [self.deleteButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor alpha:0.8] forState:UIControlStateNormal];
+    }
+    [self.deleteButton ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
+    [self.deleteButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] forState:UIControlStateNormal];
 }
 
 - (void)didReceiveMemoryWarning {

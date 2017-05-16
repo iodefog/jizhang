@@ -70,7 +70,7 @@
 - (void)updateConstraints {
     [self.iconImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.height.mas_equalTo(self.contentView.mas_width);
-        make.left.top.mas_equalTo(0);
+        make.right.top.mas_equalTo(0);
     }];
     
     [self.nickNameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -94,8 +94,12 @@
             imageUrl = SSJImageURLWithAPI(imageUrl);
         }
         [self.iconImageView sd_setImageWithURL:[NSURL URLWithString:imageUrl] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
+        self.addImageView.hidden = YES;
+        self.backgroundColor = [UIColor clearColor];
     } else {
-        
+        self.nickNameLabel.text = @"";
+        self.addImageView.hidden = NO;
+        self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
     }
 }
 
