@@ -9021,6 +9021,7 @@
 		9C3849751E641D1100BF4AF9 /* 9188JiZhangBen-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "9188JiZhangBen-Info.plist"; sourceTree = "<group>"; };
 		9C38999F1DC9D99700715732 /* SSJCustomCategoryItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCustomCategoryItem.h; sourceTree = "<group>"; };
 		9C3899A01DC9D99700715732 /* SSJCustomCategoryItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCustomCategoryItem.m; sourceTree = "<group>"; };
+		9C3970321ECB2C2600AB267A /* JiZhangGuanJia.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = JiZhangGuanJia.entitlements; sourceTree = "<group>"; };
 		9C3A2D3A1E658E8B00DFAE2C /* SSJDatabaseVersion13.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJDatabaseVersion13.h; sourceTree = "<group>"; };
 		9C3A2D3B1E658E8B00DFAE2C /* SSJDatabaseVersion13.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDatabaseVersion13.m; sourceTree = "<group>"; };
 		9C3A2D471E65A4C200DFAE2C /* SuiShouJi.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = SuiShouJi.entitlements; sourceTree = "<group>"; };
@@ -11465,6 +11466,7 @@
 		9C3A2D461E65A4C200DFAE2C /* Entitlements */ = {
 			isa = PBXGroup;
 			children = (
+				9C3970321ECB2C2600AB267A /* JiZhangGuanJia.entitlements */,
 				9C2D0E151EC0226A003E9111 /* YouYuJiZhangLiCai.entitlements */,
 				9C2D0E161EC0226A003E9111 /* YouYuJiZhangBen.entitlements */,
 				9C2D0E171EC0226A003E9111 /* YouYuJiZhangGuanJia.entitlements */,
@@ -13597,6 +13599,11 @@
 					};
 					9C9CEE561EA5F73A007657FE = {
 						DevelopmentTeam = DHR24CJQ56;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 					9CECFB191D6D41A700DB2C8B = {
 						DevelopmentTeam = R3852KFF45;
@@ -26645,7 +26652,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
-				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/SuiShouJi/Resource/Entitlements/SuiShouJi.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/SuiShouJi/Resource/Entitlements/JiZhangGuanJia.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer: Wen Chen (QTBTG29H4P)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Wen Chen (QTBTG29H4P)";
 				DEVELOPMENT_TEAM = DHR24CJQ56;
@@ -26747,7 +26754,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
-				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/SuiShouJi/Resource/Entitlements/SuiShouJi.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/SuiShouJi/Resource/Entitlements/JiZhangGuanJia.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer: Wen Chen (QTBTG29H4P)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Wen Chen (QTBTG29H4P)";
 				DEVELOPMENT_TEAM = DHR24CJQ56;
@@ -26850,7 +26857,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
-				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/SuiShouJi/Resource/Entitlements/SuiShouJi.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/SuiShouJi/Resource/Entitlements/JiZhangGuanJia.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Wen Chen (DHR24CJQ56)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Wen Chen (DHR24CJQ56)";
 				DEVELOPMENT_TEAM = DHR24CJQ56;
@@ -26951,7 +26958,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
-				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/SuiShouJi/Resource/Entitlements/SuiShouJi.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/SuiShouJi/Resource/Entitlements/JiZhangGuanJia.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Wen Chen (DHR24CJQ56)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Wen Chen (DHR24CJQ56)";
 				DEVELOPMENT_TEAM = DHR24CJQ56;
