@@ -3,7 +3,7 @@ app_identifier "com.9188.jizhangAppStore"
 apple_id "yyfiniancial02@sina.com"
 end
 
-for_lane :appstore do |options|
+for_lane :release do |options|
 app_identifier "com.youyu.jizhangguanjia"
 apple_id "licaidi001@126.com"
 end
