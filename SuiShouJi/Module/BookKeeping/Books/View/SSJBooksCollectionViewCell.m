@@ -1,0 +1,158 @@
+//
+//  SSJBooksCollectionViewCell.m
+//  SuiShouJi
+//
+//  Created by yi cai on 2017/5/16.
+//  Copyright © 2017年 ___9188___. All rights reserved.
+//
+
+#import "SSJBooksCollectionViewCell.h"
+#import "SSJBooksTypeItem.h"
+
+static const CGFloat kBooksCornerRadius = 10.f;
+
+@interface SSJBooksCollectionViewCell()
+
+@property (nonatomic, strong) CAGradientLayer *gradientLayer;
+
+@property (nonatomic, strong) CAShapeLayer *backLayer;
+
+@property (nonatomic, strong) UILabel *nameLab;
+
+@property (nonatomic, strong) UILabel *menberNumLab;
+
+@property (nonatomic, strong) UIImageView *markImageView;
+
+@end
+
+@implementation SSJBooksCollectionViewCell
+
+
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        [self.contentView.layer addSublayer:self.gradientLayer];
+        [self.contentView.layer addSublayer:self.backLayer];
+        [self.contentView addSubview:self.nameLab];
+        [self.contentView addSubview:self.menberNumLab];
+        [self.contentView addSubview:self.markImageView];
+        [self setNeedsUpdateConstraints];
+    }
+    return self;
+}
+
+- (void)setNeedsUpdateConstraints {
+    [super setNeedsUpdateConstraints];
+    [self.nameLab mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.mas_equalTo(-11);
+        make.centerY.mas_equalTo(self);
+        make.width.mas_equalTo(20);
+    }];
+    
+    [self.menberNumLab mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(12);
+        make.bottomMargin.mas_equalTo(-10);
+    }];
+    
+    [self.markImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(17);
+        make.top.mas_equalTo(self);
+    }];
+}
+
+#pragma mark - Setter
+- (void)setBooksTypeItem:(SSJBooksTypeItem *)booksTypeItem {
+    
+    _booksTypeItem = booksTypeItem;
+    self.nameLab.text = booksTypeItem.booksName;
+    //当前选中账本的标记
+    if ([booksTypeItem.booksId isEqualToString:self.curretSelectedBookId]) {
+        self.markImageView.hidden = YES;
+    }else{
+        self.markImageView.hidden = NO;
+    }
+    
+    [CATransaction begin];
+    [CATransaction setDisableActions:YES];
+    self.gradientLayer.colors = @[(__bridge id)[UIColor brownColor].CGColor,(__bridge id)[UIColor lightGrayColor].CGColor];
+
+    if ([booksTypeItem.booksName isEqualToString:@"添加账本"]) {
+        self.gradientLayer.hidden = YES;
+        self.backLayer.hidden = NO;
+        self.nameLab.textColor = [UIColor ssj_colorWithHex:@"666666"];
+    } else {
+        self.gradientLayer.hidden = NO;
+        self.backLayer.hidden = YES;
+        self.nameLab.textColor = [UIColor whiteColor];
+    }
+    [CATransaction commit];
+}
+
+#pragma mark - Private
+- (CGSize)sizeForItem {
+    float collectionViewWith = SSJSCREENWITH * 0.8;
+    float itemWidth;
+    if (SSJSCREENWITH == 320) {
+        itemWidth = (collectionViewWith - 24 - 30) / 3;
+    }else{
+        itemWidth = (collectionViewWith - 24 - 45) / 3;
+    }
+    return CGSizeMake(itemWidth, itemWidth * 1.3);
+}
+
+#pragma mark - Lazy
+- (CAGradientLayer *)gradientLayer {
+    if (!_gradientLayer) {
+        CGRect itemRect = CGRectMake(0, 0, [self sizeForItem].width, [self sizeForItem].height);
+        _gradientLayer = [CAGradientLayer layer];
+        _gradientLayer.frame = itemRect;
+        CAShapeLayer *sharpLayer = [CAShapeLayer layer];
+        sharpLayer.path = [UIBezierPath bezierPathWithRoundedRect:itemRect cornerRadius:kBooksCornerRadius].CGPath;
+        _gradientLayer.mask = sharpLayer;
+    }
+    return _gradientLayer;
+}
+
+- (CAShapeLayer *)backLayer {
+    if (!_backLayer) {
+        CGRect itemRect = CGRectMake(0, 0, [self sizeForItem].width, [self sizeForItem].height);
+        _backLayer = [CAShapeLayer layer];
+        _backLayer.path = [UIBezierPath bezierPathWithRoundedRect:itemRect cornerRadius:kBooksCornerRadius].CGPath;
+        _backLayer.strokeColor = [UIColor ssj_colorWithHex:@"666666"].CGColor;
+        _backLayer.borderWidth = 1;
+        _backLayer.fillColor = [UIColor clearColor].CGColor;
+    }
+    return _backLayer;
+}
+
+- (UILabel *)nameLab {
+    if (!_nameLab) {
+        _nameLab = [[UILabel alloc] init];
+        _nameLab.backgroundColor = [UIColor clearColor];
+        _nameLab.numberOfLines = 0;
+        _nameLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
+        _nameLab.textColor = [UIColor whiteColor];
+    }
+    return _nameLab;
+}
+
+- (UILabel *)menberNumLab {
+    if (!_menberNumLab) {
+        _menberNumLab = [[UILabel alloc] init];
+        _menberNumLab.backgroundColor = [UIColor clearColor];
+        _menberNumLab.text = @"2人";
+        _menberNumLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
+        _menberNumLab.textColor = [UIColor whiteColor];
+    }
+    return _menberNumLab;
+}
+
+- (UIImageView *)markImageView {
+    if (!_markImageView) {
+        _markImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"zhangben_mark"]];
+    }
+    return _markImageView;
+}
+
+@end
