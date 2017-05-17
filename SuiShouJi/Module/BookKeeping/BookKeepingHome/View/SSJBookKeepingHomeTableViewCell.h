@@ -11,24 +11,27 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface SSJBookKeepingHomeTableViewCell : SSJBaseTableViewCell
+@class SSJBookKeepingHomeTableViewCell;
 
 typedef void(^beginEditeBtnClickBlock)(SSJBookKeepingHomeTableViewCell *cell);
+
+typedef void(^editeBtnClickBlock)(SSJBookKeepingHomeTableViewCell *cell);
+
+typedef void(^deleteButtonClickBlock)();
+
+typedef void(^imageClickBlock)(SSJBillingChargeCellItem *item);
+
+
+
+@interface SSJBookKeepingHomeTableViewCell : SSJBaseTableViewCell
 
 @property (nonatomic,strong) SSJBillingChargeCellItem *item;
 
 @property (nonatomic, copy) beginEditeBtnClickBlock beginEditeBtnClickBlock;
 
-typedef void(^editeBtnClickBlock)(SSJBookKeepingHomeTableViewCell *cell);
-
 @property (nonatomic, copy) editeBtnClickBlock editeBtnClickBlock;
 
-
-typedef void(^deleteButtonClickBlock)();
-
 @property (nonatomic, copy) deleteButtonClickBlock deleteButtonClickBlock;
-
-typedef void(^imageClickBlock)(SSJBillingChargeCellItem *item);
 
 @property (nonatomic, copy) imageClickBlock imageClickBlock;
 
