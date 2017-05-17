@@ -43,28 +43,17 @@
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadDataIfNeeded) name:SSJSyncDataSuccessNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didFinishInitDatabase) name:SSJInitDatabaseDidFinishNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateAppearanceAfterThemeChanged) name:SSJThemeDidChangeNotification object:nil];
     }
     return self;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     self.view.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
-    
-    if (_appliesTheme) {
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateAppearanceAfterThemeChanged) name:SSJThemeDidChangeNotification object:nil];
-
-        _backgroundView = [[UIImageView alloc] initWithFrame:self.view.bounds];
-        [self.view addSubview:_backgroundView];
-        [self updateBackgroundView];
-    }
-    
-    if (self.navigationController && [[self.navigationController viewControllers] count] > 1) {
-        if (!self.navigationItem.leftBarButtonItem) {
-            [self ssj_showBackButtonWithTarget:self selector:@selector(goBackAction)];
-        }
-    }
+    [self.view addSubview:self.backgroundView];
+    [self updateBackgroundViewIfNeeded];
+    [self showBackItemIfNeeded];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -130,7 +119,7 @@
 }
 
 - (void)updateAppearanceAfterThemeChanged {
-    [self updateBackgroundView];
+    [self updateBackgroundViewIfNeeded];
     [self updateNavigationAppearance];
     [[UIApplication sharedApplication] setStatusBarStyle:SSJ_CURRENT_THEME.statusBarStyle];
 }
@@ -254,7 +243,11 @@
     }
 }
 
-- (void)updateBackgroundView {
+- (void)updateBackgroundViewIfNeeded {
+    if (!self.appliesTheme) {
+        return;
+    }
+    
     UIImage *backgroundImage = nil;
     if (SSJ_CURRENT_THEME.customThemeBackImage.length) {
         backgroundImage = [UIImage ssj_themeLocalBackGroundImageName:SSJ_CURRENT_THEME.customThemeBackImage];
@@ -269,6 +262,21 @@
         }
     }
     self.backgroundView.image = backgroundImage;
+}
+
+- (void)showBackItemIfNeeded {
+    if (self.navigationController && [[self.navigationController viewControllers] count] > 1) {
+        if (!self.navigationItem.leftBarButtonItem) {
+            [self ssj_showBackButtonWithTarget:self selector:@selector(goBackAction)];
+        }
+    }
+}
+
+- (UIImageView *)backgroundView {
+    if (!_backgroundView) {
+        _backgroundView = [[UIImageView alloc] initWithFrame:self.view.bounds];
+    }
+    return _backgroundView;
 }
 
 @end
