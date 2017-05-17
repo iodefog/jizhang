@@ -34,6 +34,10 @@
 
 @property(nonatomic, strong) NSMutableArray *hintViews;
 
+@property(nonatomic, strong) NSString *code;
+
+@property(nonatomic, strong) NSString *expiredate;
+
 @end
 
 @implementation SSJSharebooksInviteViewController
@@ -42,6 +46,7 @@
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.title = @"暗号添加成员";
         self.appliesTheme = NO;
+        self.hidesBottomBarWhenPushed = YES;
     }
     return self;
 }
@@ -65,20 +70,104 @@
 }
 
 - (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
     self.backView.centerX = self.view.width / 2;
-    self.backView.top = 30;
+    self.backView.top = SSJ_NAVIBAR_BOTTOM + 30;
     self.backView.size = CGSizeMake(self.view.width - 35, 255);
-    self.codeTitleLab.centerX = self.backView.centerX;
+    self.codeTitleLab.centerX = self.backView.width / 2;
     self.codeTitleLab.top = 30;
     self.codeLeftImage.right = self.codeTitleLab.left - 10;
     self.codeRightImage.left = self.codeTitleLab.right + 10;
     self.codeLeftImage.centerY = self.codeRightImage.centerY = self.codeTitleLab.centerY;
-    self.codeInput.top = self.codeTitleLab.bottom + 38;
-    self.codeInput.centerX = self.backView.centerX;
+    self.codeInput.top = self.codeTitleLab.bottom + 34;
+    self.codeInput.centerX = self.backView.width / 2;
     self.codeInput.size = CGSizeMake(self.backView.width - 44, 57);
+    self.customCodeLab.left = self.codeInput.left;
+    self.expireDateLab.right = self.codeInput.right;
+    self.customCodeLab.top = self.expireDateLab.top = self.codeInput.bottom + 15;
 }
 
 #pragma mark - Getter
+- (UIView *)backView {
+    if (!_backView) {
+        _backView = [[UIView alloc] init];
+        _backView.backgroundColor = [UIColor whiteColor];
+        _backView.layer.cornerRadius = 16.f;
+    }
+    return _backView;
+}
+
+- (UILabel *)codeTitleLab {
+    if (!_codeTitleLab) {
+        _codeTitleLab = [[UILabel alloc] init];
+        _codeTitleLab.textColor = [UIColor ssj_colorWithHex:@"#333333"];
+        _codeTitleLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
+        _codeTitleLab.text = @"暗号";
+        [_codeTitleLab sizeToFit];
+    }
+    return _codeTitleLab;
+}
+
+- (UIImageView *)codeLeftImage {
+    if (!_codeLeftImage) {
+        _codeLeftImage = [[UIImageView alloc] init];
+        _codeLeftImage.image = [UIImage imageNamed:@"sharebk_bracketleft"];
+        [_codeLeftImage sizeToFit];
+    }
+    return _codeLeftImage;
+}
+
+- (UIImageView *)codeRightImage {
+    if (!_codeRightImage) {
+        _codeRightImage = [[UIImageView alloc] init];
+        _codeRightImage.image = [UIImage imageNamed:@"sharebk_bracketright"];
+        [_codeRightImage sizeToFit];
+    }
+    return _codeRightImage;
+}
+
+- (UITextField *)codeInput {
+    if (!_codeInput) {
+        _codeInput = [[UITextField alloc] init];
+        _codeInput.textColor = [UIColor ssj_colorWithHex:@"#333333"];
+        _codeInput.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
+        [_codeInput ssj_setBorderColor:[UIColor ssj_colorWithHex:@"#DDDDDD"]];
+        [_codeInput ssj_setBorderStyle:SSJBorderStyleBottom];
+        [_codeInput ssj_setBorderWidth:1.f / [UIScreen mainScreen].scale];
+        _codeInput.rightView = self.resendButton;
+    }
+    return _codeInput;
+}
+
+- (UIButton *)resendButton {
+    if (!_resendButton) {
+        _resendButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        _resendButton.size = CGSizeMake(72, 24);
+        _resendButton.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_5];
+        [_resendButton setTitleColor:[UIColor ssj_colorWithHex:@"#CCCCCC"] forState:UIControlStateNormal | UIControlStateSelected];
+        [_resendButton setTitle:@"重新生成" forState:UIControlStateNormal];
+        [_resendButton setTitle:@"随机生成" forState:UIControlStateSelected];
+    }
+    return _resendButton;
+}
+
+- (UILabel *)expireDateLab {
+    if (!_expireDateLab) {
+        _expireDateLab = [[UILabel alloc] init];
+        _expireDateLab.textColor = [UIColor ssj_colorWithHex:@"#999999"];
+        _expireDateLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
+    }
+    return _expireDateLab;
+}
+
+- (UILabel *)customCodeLab {
+    if (!_customCodeLab) {
+        _customCodeLab = [[UILabel alloc] init];
+        _customCodeLab.textColor = [UIColor ssj_colorWithHex:@"#999999"];
+        _customCodeLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
+    }
+    return _customCodeLab;
+}
 
 #pragma mark - Private
 - (void)initHintView {
@@ -100,6 +189,7 @@
         [self.hintViews addObject:hintView];
     }
 }
+
 
 
 - (void)didReceiveMemoryWarning {
