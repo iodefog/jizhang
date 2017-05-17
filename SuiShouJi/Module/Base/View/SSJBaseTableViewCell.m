@@ -55,8 +55,8 @@
     }
 }
 
-- (void)setCellItem:(__kindof SSJBaseItem *)cellItem {
-    if (![cellItem isKindOfClass:[SSJBaseItem class]]) {
+- (void)setCellItem:(__kindof SSJBaseCellItem *)cellItem {
+    if (![cellItem isKindOfClass:[SSJBaseCellItem class]]) {
         return;
     }
     

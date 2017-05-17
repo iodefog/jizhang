@@ -34,7 +34,7 @@
 - (void)updateCellAppearanceAfterThemeChanged {
 }
 
-- (void)setCellItem:(SSJBaseItem *)cellItem {
+- (void)setCellItem:(SSJBaseCellItem *)cellItem {
     SSJReportFormsNoDataCellItem *item = (SSJReportFormsNoDataCellItem *)cellItem;
     _noDataRemindView.title = item.remindDesc;
 }

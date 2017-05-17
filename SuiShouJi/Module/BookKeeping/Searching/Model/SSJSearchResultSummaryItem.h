@@ -6,9 +6,9 @@
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
 
-#import "SSJBaseItem.h"
+#import "SSJBaseCellItem.h"
 
-@interface SSJSearchResultSummaryItem : SSJBaseItem
+@interface SSJSearchResultSummaryItem : SSJBaseCellItem
 
 @property(nonatomic) NSInteger resultCount;
 

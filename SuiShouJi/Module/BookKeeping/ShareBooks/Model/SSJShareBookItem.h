@@ -6,9 +6,9 @@
 //  Copyright © 2017年 ___9188___. All rights reserved.
 //
 
-#import "SSJBaseItem.h"
+#import "SSJBaseCellItem.h"
 
-@interface SSJShareBookItem : SSJBaseItem
+@interface SSJShareBookItem : SSJBaseCellItem
 
 // 账本id
 @property(nonatomic, copy) NSString *booksId;

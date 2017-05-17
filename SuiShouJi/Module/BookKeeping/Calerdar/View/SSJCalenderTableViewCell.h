@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-@interface SSJCalenderTableViewCellItem : SSJBaseItem
+@interface SSJCalenderTableViewCellItem : SSJBaseCellItem
 
 @property (nonatomic, copy) UIImage *billImage;
 

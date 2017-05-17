@@ -6,9 +6,9 @@
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
 
-#import "SSJBaseItem.h"
+#import "SSJBaseCellItem.h"
 
-@interface SSJRepaymentModel : SSJBaseItem <NSCopying>
+@interface SSJRepaymentModel : SSJBaseCellItem <NSCopying>
 
 // 还款id
 @property(nonatomic, strong) NSString *repaymentId;

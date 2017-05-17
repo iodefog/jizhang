@@ -70,7 +70,7 @@
 		7D08A0CA1E4999D30085A8FB /* SSJThemeDownLoadCompleteService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61AAA61D5B30DE005DC9BD /* SSJThemeDownLoadCompleteService.m */; };
 		7D08A0CB1E4999D30085A8FB /* SSJHomeReminderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32571CEAE6C10086B67E /* SSJHomeReminderView.m */; };
 		7D08A0CD1E4999D30085A8FB /* SSJBookKeepingHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32481CEAE6C10086B67E /* SSJBookKeepingHeader.m */; };
-		7D08A0CE1E4999D30085A8FB /* SSJBaseItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433731C1A8DA50051E7AB /* SSJBaseItem.m */; };
+		7D08A0CE1E4999D30085A8FB /* SSJBaseCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433731C1A8DA50051E7AB /* SSJBaseCellItem.m */; };
 		7D08A0CF1E4999D30085A8FB /* SSJChargeSearchingStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C91AE161D93A4BB00B585AA /* SSJChargeSearchingStore.m */; };
 		7D08A0D01E4999D30085A8FB /* SSJMagicExportStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB951CFD2DAA0061803B /* SSJMagicExportStore.m */; };
 		7D08A0D11E4999D30085A8FB /* SSJPasswordModifyService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBF11CFD2DAA0061803B /* SSJPasswordModifyService.m */; };
@@ -964,7 +964,7 @@
 		7DA13A211E35AED7000490A4 /* SSJThemeDownLoadCompleteService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61AAA61D5B30DE005DC9BD /* SSJThemeDownLoadCompleteService.m */; };
 		7DA13A221E35AED7000490A4 /* SSJHomeReminderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32571CEAE6C10086B67E /* SSJHomeReminderView.m */; };
 		7DA13A241E35AED7000490A4 /* SSJBookKeepingHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32481CEAE6C10086B67E /* SSJBookKeepingHeader.m */; };
-		7DA13A251E35AED7000490A4 /* SSJBaseItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433731C1A8DA50051E7AB /* SSJBaseItem.m */; };
+		7DA13A251E35AED7000490A4 /* SSJBaseCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433731C1A8DA50051E7AB /* SSJBaseCellItem.m */; };
 		7DA13A261E35AED7000490A4 /* SSJChargeSearchingStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C91AE161D93A4BB00B585AA /* SSJChargeSearchingStore.m */; };
 		7DA13A271E35AED7000490A4 /* SSJMagicExportStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB951CFD2DAA0061803B /* SSJMagicExportStore.m */; };
 		7DA13A281E35AED7000490A4 /* SSJPasswordModifyService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBF11CFD2DAA0061803B /* SSJPasswordModifyService.m */; };
@@ -1554,7 +1554,7 @@
 		7DBB3AA81E55C2EE0075E638 /* SSJThemeDownLoadCompleteService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61AAA61D5B30DE005DC9BD /* SSJThemeDownLoadCompleteService.m */; };
 		7DBB3AA91E55C2EE0075E638 /* SSJHomeReminderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32571CEAE6C10086B67E /* SSJHomeReminderView.m */; };
 		7DBB3AAB1E55C2EE0075E638 /* SSJBookKeepingHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32481CEAE6C10086B67E /* SSJBookKeepingHeader.m */; };
-		7DBB3AAC1E55C2EE0075E638 /* SSJBaseItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433731C1A8DA50051E7AB /* SSJBaseItem.m */; };
+		7DBB3AAC1E55C2EE0075E638 /* SSJBaseCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433731C1A8DA50051E7AB /* SSJBaseCellItem.m */; };
 		7DBB3AAD1E55C2EE0075E638 /* SSJChargeSearchingStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C91AE161D93A4BB00B585AA /* SSJChargeSearchingStore.m */; };
 		7DBB3AAE1E55C2EE0075E638 /* SSJMagicExportStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB951CFD2DAA0061803B /* SSJMagicExportStore.m */; };
 		7DBB3AAF1E55C2EE0075E638 /* SSJImageAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D22A3031E4F16AC00190CEB /* SSJImageAddition.m */; };
@@ -2113,7 +2113,7 @@
 		7DBB3F431E55C4E00075E638 /* SSJThemeDownLoadCompleteService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61AAA61D5B30DE005DC9BD /* SSJThemeDownLoadCompleteService.m */; };
 		7DBB3F441E55C4E00075E638 /* SSJHomeReminderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32571CEAE6C10086B67E /* SSJHomeReminderView.m */; };
 		7DBB3F461E55C4E00075E638 /* SSJBookKeepingHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32481CEAE6C10086B67E /* SSJBookKeepingHeader.m */; };
-		7DBB3F471E55C4E00075E638 /* SSJBaseItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433731C1A8DA50051E7AB /* SSJBaseItem.m */; };
+		7DBB3F471E55C4E00075E638 /* SSJBaseCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433731C1A8DA50051E7AB /* SSJBaseCellItem.m */; };
 		7DBB3F481E55C4E00075E638 /* SSJChargeSearchingStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C91AE161D93A4BB00B585AA /* SSJChargeSearchingStore.m */; };
 		7DBB3F491E55C4E00075E638 /* SSJMagicExportStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB951CFD2DAA0061803B /* SSJMagicExportStore.m */; };
 		7DBB3F4A1E55C4E00075E638 /* SSJImageAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D22A3031E4F16AC00190CEB /* SSJImageAddition.m */; };
@@ -2905,7 +2905,7 @@
 		7DFB168C1EB0341E00292DD3 /* SSJThemeDownLoadCompleteService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61AAA61D5B30DE005DC9BD /* SSJThemeDownLoadCompleteService.m */; };
 		7DFB168D1EB0341E00292DD3 /* SSJHomeReminderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32571CEAE6C10086B67E /* SSJHomeReminderView.m */; };
 		7DFB168E1EB0341E00292DD3 /* SSJBookKeepingHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32481CEAE6C10086B67E /* SSJBookKeepingHeader.m */; };
-		7DFB168F1EB0341E00292DD3 /* SSJBaseItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433731C1A8DA50051E7AB /* SSJBaseItem.m */; };
+		7DFB168F1EB0341E00292DD3 /* SSJBaseCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433731C1A8DA50051E7AB /* SSJBaseCellItem.m */; };
 		7DFB16901EB0341E00292DD3 /* SSJChargeSearchingStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C91AE161D93A4BB00B585AA /* SSJChargeSearchingStore.m */; };
 		7DFB16911EB0341E00292DD3 /* SSJMagicExportStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB951CFD2DAA0061803B /* SSJMagicExportStore.m */; };
 		7DFB16921EB0341E00292DD3 /* SSJAnnoucementItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE3771D1E6837D800218655 /* SSJAnnoucementItem.m */; };
@@ -3640,7 +3640,7 @@
 		9C13F50F1E8267D300AC5FA9 /* SSJThemeDownLoadCompleteService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61AAA61D5B30DE005DC9BD /* SSJThemeDownLoadCompleteService.m */; };
 		9C13F5101E8267D300AC5FA9 /* SSJHomeReminderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32571CEAE6C10086B67E /* SSJHomeReminderView.m */; };
 		9C13F5111E8267D300AC5FA9 /* SSJBookKeepingHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32481CEAE6C10086B67E /* SSJBookKeepingHeader.m */; };
-		9C13F5121E8267D300AC5FA9 /* SSJBaseItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433731C1A8DA50051E7AB /* SSJBaseItem.m */; };
+		9C13F5121E8267D300AC5FA9 /* SSJBaseCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433731C1A8DA50051E7AB /* SSJBaseCellItem.m */; };
 		9C13F5131E8267D300AC5FA9 /* SSJChargeSearchingStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C91AE161D93A4BB00B585AA /* SSJChargeSearchingStore.m */; };
 		9C13F5141E8267D300AC5FA9 /* SSJMagicExportStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB951CFD2DAA0061803B /* SSJMagicExportStore.m */; };
 		9C13F5151E8267D300AC5FA9 /* SSJImageAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D22A3031E4F16AC00190CEB /* SSJImageAddition.m */; };
@@ -4615,7 +4615,7 @@
 		9C4C20331E9E30C8000C5F15 /* SSJThemeDownLoadCompleteService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61AAA61D5B30DE005DC9BD /* SSJThemeDownLoadCompleteService.m */; };
 		9C4C20341E9E30C8000C5F15 /* SSJHomeReminderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32571CEAE6C10086B67E /* SSJHomeReminderView.m */; };
 		9C4C20351E9E30C8000C5F15 /* SSJBookKeepingHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32481CEAE6C10086B67E /* SSJBookKeepingHeader.m */; };
-		9C4C20361E9E30C8000C5F15 /* SSJBaseItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433731C1A8DA50051E7AB /* SSJBaseItem.m */; };
+		9C4C20361E9E30C8000C5F15 /* SSJBaseCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433731C1A8DA50051E7AB /* SSJBaseCellItem.m */; };
 		9C4C20371E9E30C8000C5F15 /* SSJChargeSearchingStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C91AE161D93A4BB00B585AA /* SSJChargeSearchingStore.m */; };
 		9C4C20381E9E30C8000C5F15 /* SSJMagicExportStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB951CFD2DAA0061803B /* SSJMagicExportStore.m */; };
 		9C4C20391E9E30C8000C5F15 /* SSJAnnoucementItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE3771D1E6837D800218655 /* SSJAnnoucementItem.m */; };
@@ -5324,7 +5324,7 @@
 		9C7D2D191E8DF8A80093001F /* SSJThemeDownLoadCompleteService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61AAA61D5B30DE005DC9BD /* SSJThemeDownLoadCompleteService.m */; };
 		9C7D2D1A1E8DF8A80093001F /* SSJHomeReminderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32571CEAE6C10086B67E /* SSJHomeReminderView.m */; };
 		9C7D2D1B1E8DF8A80093001F /* SSJBookKeepingHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32481CEAE6C10086B67E /* SSJBookKeepingHeader.m */; };
-		9C7D2D1C1E8DF8A80093001F /* SSJBaseItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433731C1A8DA50051E7AB /* SSJBaseItem.m */; };
+		9C7D2D1C1E8DF8A80093001F /* SSJBaseCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433731C1A8DA50051E7AB /* SSJBaseCellItem.m */; };
 		9C7D2D1D1E8DF8A80093001F /* SSJChargeSearchingStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C91AE161D93A4BB00B585AA /* SSJChargeSearchingStore.m */; };
 		9C7D2D1E1E8DF8A80093001F /* SSJMagicExportStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB951CFD2DAA0061803B /* SSJMagicExportStore.m */; };
 		9C7D2D1F1E8DF8A80093001F /* SSJAnnoucementItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE3771D1E6837D800218655 /* SSJAnnoucementItem.m */; };
@@ -5931,7 +5931,7 @@
 		9C7D2F901E8DF96B0093001F /* SSJThemeDownLoadCompleteService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61AAA61D5B30DE005DC9BD /* SSJThemeDownLoadCompleteService.m */; };
 		9C7D2F911E8DF96B0093001F /* SSJHomeReminderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32571CEAE6C10086B67E /* SSJHomeReminderView.m */; };
 		9C7D2F921E8DF96B0093001F /* SSJBookKeepingHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32481CEAE6C10086B67E /* SSJBookKeepingHeader.m */; };
-		9C7D2F931E8DF96B0093001F /* SSJBaseItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433731C1A8DA50051E7AB /* SSJBaseItem.m */; };
+		9C7D2F931E8DF96B0093001F /* SSJBaseCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433731C1A8DA50051E7AB /* SSJBaseCellItem.m */; };
 		9C7D2F941E8DF96B0093001F /* SSJChargeSearchingStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C91AE161D93A4BB00B585AA /* SSJChargeSearchingStore.m */; };
 		9C7D2F951E8DF96B0093001F /* SSJMagicExportStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB951CFD2DAA0061803B /* SSJMagicExportStore.m */; };
 		9C7D2F961E8DF96B0093001F /* SSJAnnoucementItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE3771D1E6837D800218655 /* SSJAnnoucementItem.m */; };
@@ -6539,7 +6539,7 @@
 		9C80FCD21E95E88E00B1BAAC /* SSJThemeDownLoadCompleteService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61AAA61D5B30DE005DC9BD /* SSJThemeDownLoadCompleteService.m */; };
 		9C80FCD31E95E88E00B1BAAC /* SSJHomeReminderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32571CEAE6C10086B67E /* SSJHomeReminderView.m */; };
 		9C80FCD41E95E88E00B1BAAC /* SSJBookKeepingHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32481CEAE6C10086B67E /* SSJBookKeepingHeader.m */; };
-		9C80FCD51E95E88E00B1BAAC /* SSJBaseItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433731C1A8DA50051E7AB /* SSJBaseItem.m */; };
+		9C80FCD51E95E88E00B1BAAC /* SSJBaseCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433731C1A8DA50051E7AB /* SSJBaseCellItem.m */; };
 		9C80FCD61E95E88E00B1BAAC /* SSJChargeSearchingStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C91AE161D93A4BB00B585AA /* SSJChargeSearchingStore.m */; };
 		9C80FCD71E95E88E00B1BAAC /* SSJMagicExportStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB951CFD2DAA0061803B /* SSJMagicExportStore.m */; };
 		9C80FCD81E95E88E00B1BAAC /* SSJAnnoucementItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE3771D1E6837D800218655 /* SSJAnnoucementItem.m */; };
@@ -7219,7 +7219,7 @@
 		9C9CEE921EA5F73A007657FE /* SSJThemeDownLoadCompleteService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61AAA61D5B30DE005DC9BD /* SSJThemeDownLoadCompleteService.m */; };
 		9C9CEE931EA5F73A007657FE /* SSJHomeReminderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32571CEAE6C10086B67E /* SSJHomeReminderView.m */; };
 		9C9CEE941EA5F73A007657FE /* SSJBookKeepingHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32481CEAE6C10086B67E /* SSJBookKeepingHeader.m */; };
-		9C9CEE951EA5F73A007657FE /* SSJBaseItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433731C1A8DA50051E7AB /* SSJBaseItem.m */; };
+		9C9CEE951EA5F73A007657FE /* SSJBaseCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433731C1A8DA50051E7AB /* SSJBaseCellItem.m */; };
 		9C9CEE961EA5F73A007657FE /* SSJChargeSearchingStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C91AE161D93A4BB00B585AA /* SSJChargeSearchingStore.m */; };
 		9C9CEE971EA5F73A007657FE /* SSJMagicExportStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB951CFD2DAA0061803B /* SSJMagicExportStore.m */; };
 		9C9CEE981EA5F73A007657FE /* SSJAnnoucementItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE3771D1E6837D800218655 /* SSJAnnoucementItem.m */; };
@@ -7970,7 +7970,7 @@
 		9CECFB431D6D41A700DB2C8B /* SSJThemeDownLoadCompleteService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61AAA61D5B30DE005DC9BD /* SSJThemeDownLoadCompleteService.m */; };
 		9CECFB441D6D41A700DB2C8B /* SSJHomeReminderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32571CEAE6C10086B67E /* SSJHomeReminderView.m */; };
 		9CECFB461D6D41A700DB2C8B /* SSJBookKeepingHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32481CEAE6C10086B67E /* SSJBookKeepingHeader.m */; };
-		9CECFB471D6D41A700DB2C8B /* SSJBaseItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433731C1A8DA50051E7AB /* SSJBaseItem.m */; };
+		9CECFB471D6D41A700DB2C8B /* SSJBaseCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433731C1A8DA50051E7AB /* SSJBaseCellItem.m */; };
 		9CECFB481D6D41A700DB2C8B /* SSJMagicExportStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB951CFD2DAA0061803B /* SSJMagicExportStore.m */; };
 		9CECFB491D6D41A700DB2C8B /* SSJPasswordModifyService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBF11CFD2DAA0061803B /* SSJPasswordModifyService.m */; };
 		9CECFB4A1D6D41A700DB2C8B /* SSJFundingTransferStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BC451CFD72140061803B /* SSJFundingTransferStore.m */; };
@@ -8311,7 +8311,7 @@
 		BD0433331C1A82110051E7AB /* SSJConstant.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433321C1A82110051E7AB /* SSJConstant.m */; };
 		BD0433401C1A82730051E7AB /* SSJDebugUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = BD04333D1C1A82730051E7AB /* SSJDebugUtil.m */; };
 		BD0433411C1A82730051E7AB /* SSJUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = BD04333F1C1A82730051E7AB /* SSJUtil.m */; };
-		BD04338F1C1A8DA50051E7AB /* SSJBaseItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433731C1A8DA50051E7AB /* SSJBaseItem.m */; };
+		BD04338F1C1A8DA50051E7AB /* SSJBaseCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433731C1A8DA50051E7AB /* SSJBaseCellItem.m */; };
 		BD0433901C1A8DA50051E7AB /* SSJLoadMoreItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433751C1A8DA50051E7AB /* SSJLoadMoreItem.m */; };
 		BD0433911C1A8DA50051E7AB /* SSJBaseNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433781C1A8DA50051E7AB /* SSJBaseNetworkService.m */; };
 		BD0433921C1A8DA50051E7AB /* SSJGlobalServiceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BD04337A1C1A8DA50051E7AB /* SSJGlobalServiceManager.m */; };
@@ -9651,8 +9651,8 @@
 		BD04333D1C1A82730051E7AB /* SSJDebugUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDebugUtil.m; sourceTree = "<group>"; };
 		BD04333E1C1A82730051E7AB /* SSJUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJUtil.h; sourceTree = "<group>"; };
 		BD04333F1C1A82730051E7AB /* SSJUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJUtil.m; sourceTree = "<group>"; };
-		BD0433721C1A8DA50051E7AB /* SSJBaseItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBaseItem.h; sourceTree = "<group>"; };
-		BD0433731C1A8DA50051E7AB /* SSJBaseItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBaseItem.m; sourceTree = "<group>"; };
+		BD0433721C1A8DA50051E7AB /* SSJBaseCellItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBaseCellItem.h; sourceTree = "<group>"; };
+		BD0433731C1A8DA50051E7AB /* SSJBaseCellItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBaseCellItem.m; sourceTree = "<group>"; };
 		BD0433741C1A8DA50051E7AB /* SSJLoadMoreItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJLoadMoreItem.h; sourceTree = "<group>"; };
 		BD0433751C1A8DA50051E7AB /* SSJLoadMoreItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJLoadMoreItem.m; sourceTree = "<group>"; };
 		BD0433771C1A8DA50051E7AB /* SSJBaseNetworkService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBaseNetworkService.h; sourceTree = "<group>"; };
@@ -13044,8 +13044,8 @@
 		BD0433711C1A8DA50051E7AB /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				BD0433721C1A8DA50051E7AB /* SSJBaseItem.h */,
-				BD0433731C1A8DA50051E7AB /* SSJBaseItem.m */,
+				BD0433721C1A8DA50051E7AB /* SSJBaseCellItem.h */,
+				BD0433731C1A8DA50051E7AB /* SSJBaseCellItem.m */,
 				BD0433741C1A8DA50051E7AB /* SSJLoadMoreItem.h */,
 				BD0433751C1A8DA50051E7AB /* SSJLoadMoreItem.m */,
 			);
@@ -15045,7 +15045,7 @@
 				7D08A0CA1E4999D30085A8FB /* SSJThemeDownLoadCompleteService.m in Sources */,
 				7D08A0CB1E4999D30085A8FB /* SSJHomeReminderView.m in Sources */,
 				7D08A0CD1E4999D30085A8FB /* SSJBookKeepingHeader.m in Sources */,
-				7D08A0CE1E4999D30085A8FB /* SSJBaseItem.m in Sources */,
+				7D08A0CE1E4999D30085A8FB /* SSJBaseCellItem.m in Sources */,
 				7D08A0CF1E4999D30085A8FB /* SSJChargeSearchingStore.m in Sources */,
 				7D08A0D01E4999D30085A8FB /* SSJMagicExportStore.m in Sources */,
 				7D08A0D11E4999D30085A8FB /* SSJPasswordModifyService.m in Sources */,
@@ -15656,7 +15656,7 @@
 				7DA13A211E35AED7000490A4 /* SSJThemeDownLoadCompleteService.m in Sources */,
 				7DA13A221E35AED7000490A4 /* SSJHomeReminderView.m in Sources */,
 				7DA13A241E35AED7000490A4 /* SSJBookKeepingHeader.m in Sources */,
-				7DA13A251E35AED7000490A4 /* SSJBaseItem.m in Sources */,
+				7DA13A251E35AED7000490A4 /* SSJBaseCellItem.m in Sources */,
 				7DA13A261E35AED7000490A4 /* SSJChargeSearchingStore.m in Sources */,
 				7DA13A271E35AED7000490A4 /* SSJMagicExportStore.m in Sources */,
 				7DA13A281E35AED7000490A4 /* SSJPasswordModifyService.m in Sources */,
@@ -16268,7 +16268,7 @@
 				7DBB3AA81E55C2EE0075E638 /* SSJThemeDownLoadCompleteService.m in Sources */,
 				7DBB3AA91E55C2EE0075E638 /* SSJHomeReminderView.m in Sources */,
 				7DBB3AAB1E55C2EE0075E638 /* SSJBookKeepingHeader.m in Sources */,
-				7DBB3AAC1E55C2EE0075E638 /* SSJBaseItem.m in Sources */,
+				7DBB3AAC1E55C2EE0075E638 /* SSJBaseCellItem.m in Sources */,
 				7DBB3AAD1E55C2EE0075E638 /* SSJChargeSearchingStore.m in Sources */,
 				7DBB3AAE1E55C2EE0075E638 /* SSJMagicExportStore.m in Sources */,
 				7DBB3AAF1E55C2EE0075E638 /* SSJImageAddition.m in Sources */,
@@ -16880,7 +16880,7 @@
 				7DBB3F431E55C4E00075E638 /* SSJThemeDownLoadCompleteService.m in Sources */,
 				7DBB3F441E55C4E00075E638 /* SSJHomeReminderView.m in Sources */,
 				7DBB3F461E55C4E00075E638 /* SSJBookKeepingHeader.m in Sources */,
-				7DBB3F471E55C4E00075E638 /* SSJBaseItem.m in Sources */,
+				7DBB3F471E55C4E00075E638 /* SSJBaseCellItem.m in Sources */,
 				7DBB3F481E55C4E00075E638 /* SSJChargeSearchingStore.m in Sources */,
 				7DBB3F491E55C4E00075E638 /* SSJMagicExportStore.m in Sources */,
 				7DBB3F4A1E55C4E00075E638 /* SSJImageAddition.m in Sources */,
@@ -17493,7 +17493,7 @@
 				91633C1B1ECBE97F00A7A60F /* SSJBooksCollectionViewCell.m in Sources */,
 				7DFB168D1EB0341E00292DD3 /* SSJHomeReminderView.m in Sources */,
 				7DFB168E1EB0341E00292DD3 /* SSJBookKeepingHeader.m in Sources */,
-				7DFB168F1EB0341E00292DD3 /* SSJBaseItem.m in Sources */,
+				7DFB168F1EB0341E00292DD3 /* SSJBaseCellItem.m in Sources */,
 				7DFB16901EB0341E00292DD3 /* SSJChargeSearchingStore.m in Sources */,
 				7DFB16911EB0341E00292DD3 /* SSJMagicExportStore.m in Sources */,
 				7DFB16921EB0341E00292DD3 /* SSJAnnoucementItem.m in Sources */,
@@ -18107,7 +18107,7 @@
 				9C13F50F1E8267D300AC5FA9 /* SSJThemeDownLoadCompleteService.m in Sources */,
 				9C13F5101E8267D300AC5FA9 /* SSJHomeReminderView.m in Sources */,
 				9C13F5111E8267D300AC5FA9 /* SSJBookKeepingHeader.m in Sources */,
-				9C13F5121E8267D300AC5FA9 /* SSJBaseItem.m in Sources */,
+				9C13F5121E8267D300AC5FA9 /* SSJBaseCellItem.m in Sources */,
 				9C13F5131E8267D300AC5FA9 /* SSJChargeSearchingStore.m in Sources */,
 				9C13F5141E8267D300AC5FA9 /* SSJMagicExportStore.m in Sources */,
 				9C13F5151E8267D300AC5FA9 /* SSJImageAddition.m in Sources */,
@@ -18716,7 +18716,7 @@
 				9C4C20341E9E30C8000C5F15 /* SSJHomeReminderView.m in Sources */,
 				9C4C20351E9E30C8000C5F15 /* SSJBookKeepingHeader.m in Sources */,
 				91633C191ECBE97F00A7A60F /* SSJBooksCollectionViewCell.m in Sources */,
-				9C4C20361E9E30C8000C5F15 /* SSJBaseItem.m in Sources */,
+				9C4C20361E9E30C8000C5F15 /* SSJBaseCellItem.m in Sources */,
 				9C4C20371E9E30C8000C5F15 /* SSJChargeSearchingStore.m in Sources */,
 				9C4C20381E9E30C8000C5F15 /* SSJMagicExportStore.m in Sources */,
 				9C4C20391E9E30C8000C5F15 /* SSJAnnoucementItem.m in Sources */,
@@ -19331,7 +19331,7 @@
 				9C7D2D191E8DF8A80093001F /* SSJThemeDownLoadCompleteService.m in Sources */,
 				9C7D2D1A1E8DF8A80093001F /* SSJHomeReminderView.m in Sources */,
 				9C7D2D1B1E8DF8A80093001F /* SSJBookKeepingHeader.m in Sources */,
-				9C7D2D1C1E8DF8A80093001F /* SSJBaseItem.m in Sources */,
+				9C7D2D1C1E8DF8A80093001F /* SSJBaseCellItem.m in Sources */,
 				9C7D2D1D1E8DF8A80093001F /* SSJChargeSearchingStore.m in Sources */,
 				9C7D2D1E1E8DF8A80093001F /* SSJMagicExportStore.m in Sources */,
 				9C7D2D1F1E8DF8A80093001F /* SSJAnnoucementItem.m in Sources */,
@@ -19945,7 +19945,7 @@
 				9C7D2F901E8DF96B0093001F /* SSJThemeDownLoadCompleteService.m in Sources */,
 				9C7D2F911E8DF96B0093001F /* SSJHomeReminderView.m in Sources */,
 				9C7D2F921E8DF96B0093001F /* SSJBookKeepingHeader.m in Sources */,
-				9C7D2F931E8DF96B0093001F /* SSJBaseItem.m in Sources */,
+				9C7D2F931E8DF96B0093001F /* SSJBaseCellItem.m in Sources */,
 				9C7D2F941E8DF96B0093001F /* SSJChargeSearchingStore.m in Sources */,
 				9C7D2F951E8DF96B0093001F /* SSJMagicExportStore.m in Sources */,
 				9C7D2F961E8DF96B0093001F /* SSJAnnoucementItem.m in Sources */,
@@ -20557,7 +20557,7 @@
 				9C80FCD31E95E88E00B1BAAC /* SSJHomeReminderView.m in Sources */,
 				9C80FCD41E95E88E00B1BAAC /* SSJBookKeepingHeader.m in Sources */,
 				91633C181ECBE97F00A7A60F /* SSJBooksCollectionViewCell.m in Sources */,
-				9C80FCD51E95E88E00B1BAAC /* SSJBaseItem.m in Sources */,
+				9C80FCD51E95E88E00B1BAAC /* SSJBaseCellItem.m in Sources */,
 				9C80FCD61E95E88E00B1BAAC /* SSJChargeSearchingStore.m in Sources */,
 				9C80FCD71E95E88E00B1BAAC /* SSJMagicExportStore.m in Sources */,
 				9C80FCD81E95E88E00B1BAAC /* SSJAnnoucementItem.m in Sources */,
@@ -21170,7 +21170,7 @@
 				9C9CEE931EA5F73A007657FE /* SSJHomeReminderView.m in Sources */,
 				9C9CEE941EA5F73A007657FE /* SSJBookKeepingHeader.m in Sources */,
 				91633C1A1ECBE97F00A7A60F /* SSJBooksCollectionViewCell.m in Sources */,
-				9C9CEE951EA5F73A007657FE /* SSJBaseItem.m in Sources */,
+				9C9CEE951EA5F73A007657FE /* SSJBaseCellItem.m in Sources */,
 				9C9CEE961EA5F73A007657FE /* SSJChargeSearchingStore.m in Sources */,
 				9C9CEE971EA5F73A007657FE /* SSJMagicExportStore.m in Sources */,
 				9C9CEE981EA5F73A007657FE /* SSJAnnoucementItem.m in Sources */,
@@ -21784,7 +21784,7 @@
 				7D24ED921D9E6F8E003C4248 /* SSJBudgetDetailHeaderViewItem.m in Sources */,
 				9CECFB441D6D41A700DB2C8B /* SSJHomeReminderView.m in Sources */,
 				9CECFB461D6D41A700DB2C8B /* SSJBookKeepingHeader.m in Sources */,
-				9CECFB471D6D41A700DB2C8B /* SSJBaseItem.m in Sources */,
+				9CECFB471D6D41A700DB2C8B /* SSJBaseCellItem.m in Sources */,
 				9C9A0C1E1D6D958B002AF046 /* SSJUserCreditSyncTable.m in Sources */,
 				9CECFB481D6D41A700DB2C8B /* SSJMagicExportStore.m in Sources */,
 				9CECFB491D6D41A700DB2C8B /* SSJPasswordModifyService.m in Sources */,
@@ -22391,7 +22391,7 @@
 				9C61AAA71D5B30DE005DC9BD /* SSJThemeDownLoadCompleteService.m in Sources */,
 				7D5F33311CEAE6C10086B67E /* SSJHomeReminderView.m in Sources */,
 				7D5F33291CEAE6C10086B67E /* SSJBookKeepingHeader.m in Sources */,
-				BD04338F1C1A8DA50051E7AB /* SSJBaseItem.m in Sources */,
+				BD04338F1C1A8DA50051E7AB /* SSJBaseCellItem.m in Sources */,
 				9C91AE171D93A4BB00B585AA /* SSJChargeSearchingStore.m in Sources */,
 				9CD9BC101CFD2DAA0061803B /* SSJMagicExportStore.m in Sources */,
 				9CE377291E6837D800218655 /* SSJAnnoucementItem.m in Sources */,

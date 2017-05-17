@@ -138,7 +138,7 @@
     return _payOffImage;
 }
 
-- (void)setItem:(SSJBaseItem *)item{
+- (void)setItem:(SSJBaseCellItem *)item{
     _item = item;
     if ([_item isKindOfClass:[SSJFundingDetailListItem class]]) {
         _payOffImage.hidden = YES;

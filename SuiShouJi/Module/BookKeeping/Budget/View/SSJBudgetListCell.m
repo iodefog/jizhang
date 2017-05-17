@@ -68,7 +68,7 @@
     self.budgetLab.rightBottom = CGPointMake(self.contentView.width - 10, self.contentView.height - 15);
 }
 
-- (void)setCellItem:(SSJBaseItem *)cellItem {
+- (void)setCellItem:(SSJBaseCellItem *)cellItem {
     if (![cellItem isKindOfClass:[SSJBudgetListCellItem class]]) {
         return;
     }

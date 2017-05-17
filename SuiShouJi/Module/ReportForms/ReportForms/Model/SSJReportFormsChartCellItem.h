@@ -6,11 +6,11 @@
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
 
-#import "SSJBaseItem.h"
+#import "SSJBaseCellItem.h"
 
 @class SSJPercentCircleViewItem;
 
-@interface SSJReportFormsChartCellItem : SSJBaseItem
+@interface SSJReportFormsChartCellItem : SSJBaseCellItem
 
 @property (nonatomic, copy) NSArray <SSJPercentCircleViewItem *>* chartItems;
 

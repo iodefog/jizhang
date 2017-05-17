@@ -53,7 +53,7 @@
     self.verticalLine.frame = CGRectMake(self.contentView.width * 0.5, 0, 1 / [UIScreen mainScreen].scale, self.contentView.height);
 }
 
-- (void)setCellItem:(SSJBaseItem *)cellItem {
+- (void)setCellItem:(SSJBaseCellItem *)cellItem {
     SSJBookkeepingTreeHelpCellItem *item = (SSJBookkeepingTreeHelpCellItem *)cellItem;
     if (![item isKindOfClass:[SSJBookkeepingTreeHelpCellItem class]]) {
         return;

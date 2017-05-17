@@ -8,11 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "SSJFinancingHomeitem.h"
-#import "SSJBaseItem.h"
+#import "SSJBaseCellItem.h"
 
 @interface SSJFinancingHomeCell : UICollectionViewCell
 
-@property (nonatomic,strong) SSJBaseItem *item;
+@property (nonatomic,strong) SSJBaseCellItem *item;
 
 
 @property (nonatomic,strong) UILabel *fundingBalanceLabel;

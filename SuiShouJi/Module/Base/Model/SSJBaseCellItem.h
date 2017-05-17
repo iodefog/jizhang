@@ -1,5 +1,5 @@
 //
-//  SSJBaseItem.h
+//  SSJBaseCellItem.h
 //  MoneyMore
 //
 //  Created by old lang on 15-3-23.
@@ -8,16 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface SSJBaseItem : NSObject <NSCopying>
-
-//  工厂初始化方法，初始化同时会调用parseElement:解析数据
-+ (instancetype)itemWithElement:(id)element;
-
-//  标准初始化方法，初始化同时会调用parseElement:解析数据
-- (instancetype)initWithElement:(id)element;
-
-//  解析数据，element可以为空
-- (void)parseElement:(id)element;
+@interface SSJBaseCellItem : NSObject <NSCopying>
 
 /**
  返回对应cell的行高

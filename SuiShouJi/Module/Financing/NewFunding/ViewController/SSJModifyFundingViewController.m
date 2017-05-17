@@ -247,7 +247,7 @@
 }
 
 #pragma mark - Private
-- (void)deleteFundingItem:(SSJBaseItem *)item type:(BOOL)type{
+- (void)deleteFundingItem:(SSJBaseCellItem *)item type:(BOOL)type{
     __weak typeof(self) weakSelf = self;
     [SSJFinancingHomeHelper deleteFundingWithFundingItem:item deleteType:type Success:^{
         [weakSelf.navigationController popToRootViewControllerAnimated:YES];

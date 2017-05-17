@@ -76,7 +76,7 @@ static NSString *const kSSJCalenderDetailPhotoCellId = @"kSSJCalenderDetailPhoto
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    SSJBaseItem *item = [self.items ssj_objectAtIndexPath:indexPath];
+    SSJBaseCellItem *item = [self.items ssj_objectAtIndexPath:indexPath];
     SSJCalenderTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[self cellReuseIdForItemClass:[item class]] forIndexPath:indexPath];
     cell.cellItem = item;
     return cell;
@@ -84,7 +84,7 @@ static NSString *const kSSJCalenderDetailPhotoCellId = @"kSSJCalenderDetailPhoto
 
 #pragma mark - UITableViewDelegate
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    SSJBaseItem *item = [self.items ssj_objectAtIndexPath:indexPath];
+    SSJBaseCellItem *item = [self.items ssj_objectAtIndexPath:indexPath];
     if ([item isKindOfClass:[SSJCalenderTableViewCellItem class]]
         || [item isKindOfClass:[SSJCalenderDetailInfoCellItem class]]) {
         return 54;
