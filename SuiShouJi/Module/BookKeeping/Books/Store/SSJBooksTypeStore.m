@@ -304,10 +304,9 @@
 
 #pragma mark - 共享账本
 + (void)queryForShareBooksListWithSuccess:(void(^)(NSMutableArray<SSJShareBookItem *> *result))success failure:(void(^)(NSError *error))failure {
-    NSString *userId = SSJUSERID();
     NSMutableArray *shareBooksList = [NSMutableArray array];
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
-       FMResultSet *result = [db executeQuery:@"select * from bk_share_books where cuserid = ? and operatortype <> 2 obderby iorder asc , cwritedate asc", userId];
+       FMResultSet *result = [db executeQuery:@"select * from bk_share_books where operatortype <> 2 order by iorder asc, cwritedate asc"];
         if (!result) {
             SSJDispatch_main_async_safe(^{
                 failure([db lastError]);
