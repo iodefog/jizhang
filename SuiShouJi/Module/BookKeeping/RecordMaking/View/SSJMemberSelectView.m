@@ -51,7 +51,6 @@ static NSString *const kMemberTableViewCellIdentifier = @"kMemberTableViewCellId
     self.topView.leftTop = CGPointMake(0, 0);
     self.tableView.size = CGSizeMake(self.width, self.height - 85);
     self.tableView.leftTop = CGPointMake(0, self.topView.bottom);
-    [self.tableView ssj_relayoutBorder];
 }
 
 #pragma mark - UITableViewDelegate

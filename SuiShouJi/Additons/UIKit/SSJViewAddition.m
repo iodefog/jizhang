@@ -151,71 +151,58 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
-static const void *kBorderLayerKey  = &kBorderLayerKey;
-
 @implementation UIView (SSJBorder)
 
 - (void)ssj_setCornerStyle:(UIRectCorner)cornerStyle {
-    [[self ssj_borderLayer] setCornerStyle:cornerStyle];
+    [[self.layer ssj_borderLayer] setCornerStyle:cornerStyle];
 }
 
 - (UIRectCorner)ssj_cornerStyle {
-    return [[self ssj_borderLayer] cornerStyle];
+    return [[self.layer ssj_borderLayer] cornerStyle];
 }
 
 - (void)ssj_setCornerRadius:(CGFloat)cornerRadius {
-    [self ssj_borderLayer].customCornerRadius = cornerRadius;
+    [self.layer ssj_borderLayer].customCornerRadius = cornerRadius;
 }
 
 - (CGFloat)ssj_cornerRadius {
-    return [self ssj_borderLayer].customCornerRadius;
+    return [self.layer ssj_borderLayer].customCornerRadius;
 }
 
 - (void)ssj_setBorderStyle:(SSJBorderStyle)customBorderStyle {
-    [[self ssj_borderLayer] setCustomBorderStyle:customBorderStyle];
+    [[self.layer ssj_borderLayer] setCustomBorderStyle:customBorderStyle];
 }
 
 - (SSJBorderStyle)ssj_borderStyle {
-    return [[self ssj_borderLayer] customBorderStyle];
+    return [[self.layer ssj_borderLayer] customBorderStyle];
 }
 
 - (void)ssj_setBorderColor:(UIColor *)color {
-    [[self ssj_borderLayer] setCustomBorderColor:color];
+    [[self.layer ssj_borderLayer] setCustomBorderColor:color];
 }
 
 - (UIColor *)ssj_borderColor {
-    return [[self ssj_borderLayer] customBorderColor];
+    return [[self.layer ssj_borderLayer] customBorderColor];
 }
 
 - (void)ssj_setBorderWidth:(CGFloat)with {
-    [[self ssj_borderLayer] setCustomBorderWidth:with];
+    [[self.layer ssj_borderLayer] setCustomBorderWidth:with];
 }
 
 - (CGFloat)ssj_borderWidth {
-    return [[self ssj_borderLayer] customBorderWidth];
+    return [[self.layer ssj_borderLayer] customBorderWidth];
 }
 
 - (void)ssj_setBorderInsets:(UIEdgeInsets)insets {
-    [[self ssj_borderLayer] setBorderInsets:insets];
+    [[self.layer ssj_borderLayer] setBorderInsets:insets];
 }
 
 - (UIEdgeInsets)ssj_borderInsets {
-    return [[self ssj_borderLayer] borderInsets];
+    return [[self.layer ssj_borderLayer] borderInsets];
 }
 
 - (void)ssj_relayoutBorder {
-    [self ssj_borderLayer].frame = self.layer.bounds;
-}
-
-- (SSJBorderLayer *)ssj_borderLayer {
-    SSJBorderLayer *layer = objc_getAssociatedObject(self, kBorderLayerKey);
-    if (!layer) {
-        layer = [SSJBorderLayer layer];
-        layer.frame = self.layer.bounds;
-        [self.layer addSublayer:layer];
-        objc_setAssociatedObject(self, kBorderLayerKey, layer, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    }
-    return layer;
+    [self.layer ssj_borderLayer].frame = self.layer.bounds;
 }
 
 @end

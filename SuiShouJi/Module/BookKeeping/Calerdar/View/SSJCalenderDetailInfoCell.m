@@ -34,6 +34,7 @@
 
 - (void)updateConstraints {
     [self.leftLab mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo([self.leftLab.text sizeWithAttributes:@{NSFontAttributeName:self.leftLab.font}]);
         make.left.mas_equalTo(15);
         make.centerY.mas_equalTo(self.contentView);
     }];
@@ -54,7 +55,7 @@
     SSJCalenderDetailInfoCellItem *item = cellItem;
     self.leftLab.text = item.leftText;
     self.rightLab.text = item.rightText;
-    [self setNeedsLayout];
+    [self setNeedsUpdateConstraints];
 }
 
 - (void)updateCellAppearanceAfterThemeChanged {

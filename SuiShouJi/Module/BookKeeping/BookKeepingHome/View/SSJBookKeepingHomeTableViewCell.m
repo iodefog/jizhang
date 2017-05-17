@@ -7,9 +7,8 @@
 //
 
 #import "SSJBookKeepingHomeTableViewCell.h"
-#import "SSJDatabaseQueue.h"
 #import "SSJDataSynchronizer.h"
-#import "FMDB.h"
+#import "SSJCalenderHelper.h"
 
 @interface SSJBookKeepingHomeTableViewCell()
 @property (nonatomic,strong) UIButton *editeButton;
@@ -371,36 +370,14 @@
 }
 
 -(void)deleteButtonClick{
-    [self deleteCharge];
-    if (self.deleteButtonClickBlock) {
-        self.deleteButtonClickBlock();
-    }
-}
-
--(void)deleteCharge{
-    __weak typeof(self) weakSelf = self;
-    [[SSJDatabaseQueue sharedInstance]asyncInTransaction:^(FMDatabase *db , BOOL *rollback){
-        NSString *userId = SSJUSERID();
-        NSString *booksId = [db stringForQuery:@"select ccurrentbooksid from bk_user where cuserid = ?",userId];
-        if (!booksId.length) {
-            booksId = userId;
+    [SSJCalenderHelper deleteChargeWithItem:self.item success:^{
+        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+        if (self.deleteButtonClickBlock) {
+            self.deleteButtonClickBlock();
         }
-        [db executeUpdate:@"UPDATE BK_USER_CHARGE SET OPERATORTYPE = 2 , CWRITEDATE = ? , IVERSION = ? WHERE ICHARGEID = ?",[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),weakSelf.item.ID];
-        if ([db intForQuery:@"SELECT ITYPE FROM BK_BILL_TYPE WHERE ID = ?",weakSelf.item.billId]) {
-            if (![db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET EXPENCEAMOUNT = EXPENCEAMOUNT - ? , SUMAMOUNT = SUMAMOUNT + ? , CWRITEDATE = ? WHERE CBILLDATE = ? and cbooksid = ?",[NSNumber numberWithDouble:[weakSelf.item.money doubleValue]],[NSNumber numberWithDouble:[weakSelf.item.money doubleValue]],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],weakSelf.item.billDate,booksId])
-            {
-                *rollback = YES;
-            };
-        }else{
-            if (![db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET INCOMEAMOUNT = INCOMEAMOUNT - ? , SUMAMOUnT = SUMAMOUNT - ? , CWRITEDATE = ? WHERE CBILLDATE = ? and cbooksid = ?",[NSNumber numberWithDouble:[weakSelf.item.money doubleValue]],[NSNumber numberWithDouble:[weakSelf.item.money doubleValue]],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],weakSelf.item.billDate,booksId])
-            {
-                *rollback = YES;
-            };
-        }
-        [db executeUpdate:@"DELETE FROM BK_DAILYSUM_CHARGE WHERE SUMAMOUNT = 0 AND INCOMEAMOUNT = 0 AND EXPENCEAMOUNT = 0"];
+    } failure:^(NSError * _Nonnull error) {
+        [SSJAlertViewAdapter showError:error];
     }];
-    
-    [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
 }
 
 -(void)imageClick:(UITapGestureRecognizer *)sender{

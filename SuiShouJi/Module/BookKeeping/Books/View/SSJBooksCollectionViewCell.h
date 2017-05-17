@@ -10,8 +10,14 @@
 
 NS_ASSUME_NONNULL_BEGIN
 @interface SSJBooksCollectionViewCell : UICollectionViewCell
+
 @property(nonatomic, strong) __kindof SSJBaseCellItem *booksTypeItem;
+
 /**当前选中的账本ID*/
 @property (nonatomic, copy) NSString *curretSelectedBookId;
+
+/**编辑按钮点击*/
+@property (nonatomic, copy) void(^editBookAction)();
+
 NS_ASSUME_NONNULL_END
 @end

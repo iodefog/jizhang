@@ -34,8 +34,6 @@ static BOOL kNeedBannerDisplay = YES;
 
 @interface SSJBooksTypeSelectViewController ()<SSJEditableCollectionViewDelegate,SSJEditableCollectionViewDataSource>
 
-@property(nonatomic, strong) SSJEditableCollectionView *collectionView;
-
 @property (nonatomic, strong) NSArray *headerTitleArray;
 
 /**个人账本列表*/
@@ -46,7 +44,7 @@ static BOOL kNeedBannerDisplay = YES;
 
 @property(nonatomic, strong) SSJBooksTypeItem *editBooksItem;
 
-@property(nonatomic, strong) UIButton *rightButton;
+@property(nonatomic, strong) SSJEditableCollectionView *collectionView;
 
 @property(nonatomic, strong) SSJBooksHeaderView *header;
 
@@ -54,13 +52,15 @@ static BOOL kNeedBannerDisplay = YES;
 
 @property(nonatomic, strong) SSJBooksAdView *adView;
 
-@property(nonatomic, strong) SSJBannerNetworkService *adService;
-
 @property (nonatomic, strong) SSJBooksTypeEditAlertView *editAlertView;
 
 @property (nonatomic, strong) SSJBooksTypeDeletionAuthCodeAlertView *authCodeAlertView;
 
+@property(nonatomic, strong) SSJBannerNetworkService *adService;
+
 @property (nonatomic, strong) NSString *currentBooksId;
+
+@property(nonatomic, strong) UIButton *rightButton;
 
 @end
 
@@ -132,11 +132,6 @@ static BOOL kNeedBannerDisplay = YES;
         bookName = shareItem.booksName;
         bookId = shareItem.booksId;
     }
-    
-//    if (item.editeModel) {
-//        self.editBooksItem = item;
-//        [self.editAlertView show];
-//    } else {
         if ([bookName isEqualToString:@"添加账本"]) {
             [self.parentSelectView show];
         } else {
@@ -163,7 +158,6 @@ static BOOL kNeedBannerDisplay = YES;
 }
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-//    return ((NSMutableArray *)[self.booksDataItems ssj_safeObjectAtIndex:section]).count;
     if (section == 0) {
         return self.privateBooksDataitems.count;
     } else if (section == 1) {
@@ -183,6 +177,12 @@ static BOOL kNeedBannerDisplay = YES;
         SSJShareBookItem *shareItem = [self.shareBooksDataItems ssj_safeObjectAtIndex:indexPath.row];
         cell.booksTypeItem = shareItem;
     }
+    @weakify(self);
+    cell.editBookAction = ^{
+        @strongify(self);
+        [self.editAlertView show];
+    };
+    
     return cell;
 }
 
@@ -236,13 +236,8 @@ static BOOL kNeedBannerDisplay = YES;
 }
 
 - (void)collectionView:(SSJEditableCollectionView *)collectionView didBeginEditingWhenPressAtIndexPath:(NSIndexPath *)indexPath{
-    self.rightButton.selected = YES;
-    self.adView.hidden = YES;
-    for (SSJBooksTypeItem *item in self.privateBooksDataitems) {
-        if (![item.booksName isEqualToString:@"添加账本"]) {
-            item.editeModel = YES;
-        }
-    }
+    self.rightButton.selected = NO;
+    [self rightButtonClicked:self.rightButton];
 }
 
 - (void)collectionViewDidEndEditing:(SSJEditableCollectionView *)collectionView{
@@ -301,6 +296,13 @@ static BOOL kNeedBannerDisplay = YES;
             item.editeModel = self.rightButton.isSelected;
         }
     }
+    
+    for (SSJShareBookItem *shareItem in self.shareBooksDataItems) {
+        if (![shareItem.booksName isEqualToString:@"添加账本"]) {
+            shareItem.editing = self.rightButton.isSelected;
+        }
+    }
+    [self.collectionView reloadData];
 }
 
 #pragma mark - Getter
@@ -333,7 +335,7 @@ static BOOL kNeedBannerDisplay = YES;
         _rightButton.contentHorizontalAlignment = NSTextAlignmentRight;
         [_rightButton setTitle:@"管理" forState:UIControlStateNormal];
         [_rightButton setTitle:@"完成" forState:UIControlStateSelected];
-        [_rightButton addTarget:self action:@selector(rightButtonClicked:) forControlEvents:UIControlEventTouchUpInside];    
+        [_rightButton addTarget:self action:@selector(rightButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         _rightButton.selected = NO;
     }
     return _rightButton;
