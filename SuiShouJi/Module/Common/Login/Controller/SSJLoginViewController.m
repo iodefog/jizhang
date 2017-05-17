@@ -38,6 +38,8 @@
 #import "SSJRegistNetworkService.h"
 #import "SSJNormalWebViewController.h"
 #import "NSString+MoneyDisplayFormat.h"
+#import "MMDrawerController.h"
+#import "SSJBookKeepingHomeViewController.h"
 
 static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 @interface SSJLoginViewController () <UITextFieldDelegate,UIScrollViewDelegate>
@@ -419,8 +421,11 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
                     if ([userItem.motionPWDState boolValue]) {
                         SSJMotionPasswordViewController *motionVC = [[SSJMotionPasswordViewController alloc] init];
                         motionVC.finishHandle = ^(UIViewController *controller) {
-                            UITabBarController *tabbarVc = self.navigationController.tabBarController;
-                            UIViewController *homeController = [((UINavigationController *)[tabbarVc.viewControllers firstObject]).viewControllers firstObject];
+                            UITabBarController *tabVC = (UITabBarController *)((MMDrawerController *)[UIApplication sharedApplication].keyWindow.rootViewController).centerViewController;
+                            UINavigationController *navi = [tabVC.viewControllers firstObject];
+                            SSJBookKeepingHomeViewController *homeController = [navi.viewControllers firstObject];
+                            homeController.allowRefresh = YES;
+                            homeController.hasLoad = NO;
                             controller.backController = homeController;
                             [controller ssj_backOffAction];
                         };
@@ -707,10 +712,19 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         __weak typeof(self) weakSelf = self;
         SSJMotionPasswordViewController *motionVC = [[SSJMotionPasswordViewController alloc] init];
         motionVC.finishHandle = ^(UIViewController *controller) {
-            UITabBarController *tabbarVc = self.navigationController.tabBarController;
-            UIViewController *homeController = [((UINavigationController *)[tabbarVc.viewControllers firstObject]).viewControllers firstObject];
+//            UITabBarController *tabbarVc = self.navigationController.tabBarController;
+//            UIViewController *homeController = [((UINavigationController *)[tabbarVc.viewControllers firstObject]).viewControllers firstObject];
+//            controller.backController = homeController;
+            
+            UITabBarController *tabVC = (UITabBarController *)((MMDrawerController *)[UIApplication sharedApplication].keyWindow.rootViewController).centerViewController;
+            UINavigationController *navi = [tabVC.viewControllers firstObject];
+            SSJBookKeepingHomeViewController *homeController = [navi.viewControllers firstObject];
+            homeController.allowRefresh = YES;
+            homeController.hasLoad = NO;
+
             controller.backController = homeController;
             [controller ssj_backOffAction];
+
         };
         motionVC.backController = self.backController;
         if (userItem.motionPWD.length) {
