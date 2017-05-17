@@ -24,6 +24,12 @@ static const CGFloat kBooksCornerRadius = 10.f;
 
 @property (nonatomic, strong) UIImageView *markImageView;
 
+//@property (nonatomic, strong) UIView *mask;
+//
+//@property (nonatomic, strong) UIImageView *maskImageView;
+/**<#注释#>*/
+@property (nonatomic, strong) UIButton *maskButton;
+
 @end
 
 @implementation SSJBooksCollectionViewCell
@@ -38,6 +44,7 @@ static const CGFloat kBooksCornerRadius = 10.f;
         [self.contentView addSubview:self.nameLab];
         [self.contentView addSubview:self.menberNumLab];
         [self.contentView addSubview:self.markImageView];
+        [self.contentView addSubview:self.maskButton];
         [self setNeedsUpdateConstraints];
 //        self.contentView.backgroundColor = [UIColor whiteColor];
     }
@@ -48,7 +55,7 @@ static const CGFloat kBooksCornerRadius = 10.f;
     [super setNeedsUpdateConstraints];
     [self.nameLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.mas_equalTo(-11);
-        make.centerY.mas_equalTo(self);
+        make.centerY.mas_equalTo(self.contentView);
         make.width.mas_equalTo(20);
     }];
     
@@ -59,8 +66,13 @@ static const CGFloat kBooksCornerRadius = 10.f;
     
     [self.markImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(17);
-        make.top.mas_equalTo(self);
+        make.top.mas_equalTo(self.contentView);
     }];
+    
+    [self.maskButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.top.bottom.right.mas_equalTo(self.contentView);
+    }];
+
 }
 
 #pragma mark - Setter
@@ -89,6 +101,8 @@ static const CGFloat kBooksCornerRadius = 10.f;
             self.backLayer.hidden = YES;
             self.nameLab.textColor = [UIColor whiteColor];
         }
+        
+        self.maskButton.hidden = !privateBookItem.editeModel;
         [CATransaction commit];
     } else if ([booksTypeItem isKindOfClass:[SSJShareBookItem class]]) {//共享账本
         SSJShareBookItem *shareBookItem = (SSJShareBookItem *)booksTypeItem;
@@ -113,9 +127,11 @@ static const CGFloat kBooksCornerRadius = 10.f;
             self.backLayer.hidden = YES;
             self.nameLab.textColor = [UIColor whiteColor];
         }
+        self.maskButton.hidden = !shareBookItem.isEditing;
         [CATransaction commit];
     }
 }
+
 
 #pragma mark - Private
 - (CGSize)sizeForItem {
@@ -179,8 +195,28 @@ static const CGFloat kBooksCornerRadius = 10.f;
 - (UIImageView *)markImageView {
     if (!_markImageView) {
         _markImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"zhangben_mark"]];
+        _markImageView.userInteractionEnabled = YES;
     }
     return _markImageView;
+}
+
+- (UIButton *)maskButton {
+    if (!_maskButton) {
+        _maskButton = [[UIButton alloc] init];
+        _maskButton.backgroundColor = [UIColor ssj_colorWithHex:@"000000" alpha:0.5];
+        [_maskButton setImage:[UIImage imageNamed:@"book_edit_icon"] forState:UIControlStateNormal];
+        _maskButton.layer.cornerRadius = kBooksCornerRadius;
+        _maskButton.clipsToBounds = YES;
+        [_maskButton addTarget:self action:@selector(editButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _maskButton;
+}
+
+#pragma mark - Action
+- (void)editButtonClicked:(UIButton *)button {
+    if (self.editBookAction) {
+        self.editBookAction();
+    }
 }
 
 @end

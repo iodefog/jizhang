@@ -31,5 +31,6 @@
 // 账本父类型
 @property(nonatomic) NSInteger parentType;
 
-
+/**是否编辑中*/
+@property (nonatomic, assign, getter = isEditing) BOOL editing;
 @end
