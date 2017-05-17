@@ -22,10 +22,13 @@
 // 账本名称
 @property(nonatomic, copy) NSString *booksName;
 
+// 账本顺序
+@property(nonatomic, assign) NSInteger booksOrder;
+
 // 账本颜色
 @property(nonatomic, copy) NSString *booksColor;
 
-// 账本夫类型
+// 账本父类型
 @property(nonatomic) NSInteger parentType;
 
 

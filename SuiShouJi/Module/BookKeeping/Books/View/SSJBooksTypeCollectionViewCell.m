@@ -8,7 +8,7 @@
 
 #import "SSJBooksTypeCollectionViewCell.h"
 
-static const CGFloat kCornerRadius = 4.f;
+static const CGFloat kCornerRadius = 10.f;
 
 @interface SSJBooksTypeCollectionViewCell()
 

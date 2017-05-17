@@ -12,6 +12,8 @@
 #import "SSJReportFormsCurveModel.h"
 
 @implementation SSJBooksTypeStore
+
+#pragma mark - 个人账本
 + (void)queryForBooksListWithSuccess:(void(^)(NSMutableArray<SSJBooksTypeItem *> *result))success
                                   failure:(void (^)(NSError *error))failure{
     [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
@@ -44,8 +46,7 @@
         }
         SSJBooksTypeItem *item = [[SSJBooksTypeItem alloc]init];
         item.booksName = @"添加账本";
-        item.booksColor = @"#cccccc";
-        item.booksIcoin = @"book_tianjia";
+        item.booksColor = @"#FFFFFF";
         [booksList addObject:item];
         if (success) {
             SSJDispatch_main_async_safe(^{
@@ -299,6 +300,41 @@
             });
         }
     }];
+}
+
+#pragma mark - 共享账本
++ (void)queryForShareBooksListWithSuccess:(void(^)(NSMutableArray<SSJShareBookItem *> *result))success failure:(void(^)(NSError *error))failure {
+    NSString *userId = SSJUSERID();
+    NSMutableArray *shareBooksList = [NSMutableArray array];
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
+       FMResultSet *result = [db executeQuery:@"select * from bk_share_books where cuserid = ? and operatortype <> 2 obderby iorder asc , cwritedate asc", userId];
+        if (!result) {
+            SSJDispatch_main_async_safe(^{
+                failure([db lastError]);
+            });
+            return ;
+        }
+        while ([result next]) {
+            SSJShareBookItem *shareBookItem = [[SSJShareBookItem alloc] init];
+            shareBookItem.booksId = [result stringForColumn:@"cbooksid"];
+            shareBookItem.booksName = [result stringForColumn:@"cbooksname"];
+            shareBookItem.booksColor = [result stringForColumn:@"cbookscolor"];
+            shareBookItem.parentType = [result intForColumn:@"iparenttype"];
+            shareBookItem.booksOrder = [result intForColumn:@"iorder"];
+            [shareBooksList addObject:shareBookItem];
+        }
+        //最后一个添加账本
+        SSJShareBookItem *lastItem = [[SSJShareBookItem alloc]init];
+        lastItem.booksName = @"添加账本";
+        lastItem.booksColor = @"#FFFFFF";
+        [shareBooksList addObject:lastItem];
+        if (success) {
+            SSJDispatch_main_async_safe(^{
+                success(shareBooksList);
+            });
+        }
+    }];
+    
 }
 
 @end

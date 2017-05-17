@@ -7,13 +7,13 @@
 //
 
 static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
-
+static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIdentifier";
 static BOOL kNeedBannerDisplay = YES;
 
 #import "SSJBooksTypeSelectViewController.h"
 #import "SSJBooksTypeStore.h"
 #import "SSJBooksTypeItem.h"
-#import "SSJBooksTypeCollectionViewCell.h"
+#import "SSJBooksCollectionViewCell.h"
 #import "UIViewController+MMDrawerController.h"
 #import "SSJAdWebViewController.h"
 #import "SSJAdWebViewController.h"
@@ -30,12 +30,15 @@ static BOOL kNeedBannerDisplay = YES;
 #import "SSJBooksTypeEditAlertView.h"
 #import "SSJBooksTypeDeletionAuthCodeAlertView.h"
 #import "SSJUserTableManager.h"
+#import "SSJBooksHeadeCollectionrReusableView.h"
 
 @interface SSJBooksTypeSelectViewController ()<SSJEditableCollectionViewDelegate,SSJEditableCollectionViewDataSource>
 
 @property(nonatomic, strong) SSJEditableCollectionView *collectionView;
 
 @property(nonatomic, strong) NSMutableArray *items;
+
+@property (nonatomic, strong) NSArray *headerTitleArray;
 
 @property(nonatomic, strong) SSJBooksTypeItem *editBooksItem;
 
@@ -75,7 +78,9 @@ static BOOL kNeedBannerDisplay = YES;
     [self.view addSubview:self.header];
     [self.view addSubview:self.collectionView];
     [self.view addSubview:self.adView];
-    [self.collectionView registerClass:[SSJBooksTypeCollectionViewCell class] forCellWithReuseIdentifier:SSJBooksTypeCellIdentifier];
+    [self.collectionView registerClass:[SSJBooksCollectionViewCell class] forCellWithReuseIdentifier:SSJBooksTypeCellIdentifier];
+    [self.collectionView registerClass:[SSJBooksHeadeCollectionrReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:SSJBooksTypeCellHeaderIdentifier];
+    
     [self.collectionView setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithCustomView:self.rightButton];
     self.navigationItem.rightBarButtonItem = rightItem;
@@ -133,7 +138,12 @@ static BOOL kNeedBannerDisplay = YES;
     }
 }
 
+
 #pragma mark - UICollectionViewDataSource
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
+{
+    return 2;
+}
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
     return self.items.count;
@@ -141,16 +151,21 @@ static BOOL kNeedBannerDisplay = YES;
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString *booksid = self.currentBooksId;
     SSJBooksTypeItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
-    SSJBooksTypeCollectionViewCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:SSJBooksTypeCellIdentifier forIndexPath:indexPath];
-    if ([item.booksId isEqualToString:booksid]) {
-        cell.isSelected = YES;
-    }else{
-        cell.isSelected = NO;
-    }
-    cell.item = item;
+    SSJBooksCollectionViewCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:SSJBooksTypeCellIdentifier forIndexPath:indexPath];
+    
+    cell.booksTypeItem = item;
     return cell;
+}
+
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
+    //如果是头视图
+    if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
+        SSJBooksHeadeCollectionrReusableView *resuableView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:SSJBooksTypeCellHeaderIdentifier forIndexPath:indexPath];
+        resuableView.titleStr = [self.headerTitleArray ssj_safeObjectAtIndex:indexPath.section];
+        return resuableView;
+    }
+    return nil;
 }
 
 #pragma mark - UICollectionViewDelegateFlowLayout
@@ -164,6 +179,11 @@ static BOOL kNeedBannerDisplay = YES;
         itemWidth = (collectionViewWith - 24 - 45) / 3;
     }
     return CGSizeMake(itemWidth, itemWidth * 1.3);
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section
+{
+    return (CGSize){SSJSCREENWITH,65};
 }
 
 -(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
@@ -264,6 +284,7 @@ static BOOL kNeedBannerDisplay = YES;
         _collectionView.editDataSource=self;
         _collectionView.exchangeCellRegion = UIEdgeInsetsMake(30, 25, 30, 25);
         _collectionView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+        _collectionView.contentInset = UIEdgeInsetsMake(0, 0, 10, 0);
     }
     return _collectionView;
 }
@@ -285,7 +306,7 @@ static BOOL kNeedBannerDisplay = YES;
 
 - (SSJBooksHeaderView *)header{
     if (!_header) {
-        _header = [[SSJBooksHeaderView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 178)];
+        _header = [[SSJBooksHeaderView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 164)];
         __weak typeof(self) weakSelf = self;
         _header.buttonClickBlock = ^(){
             [SSJAnaliyticsManager event:@"account_all_booksType"];
@@ -364,6 +385,14 @@ static BOOL kNeedBannerDisplay = YES;
         _adService.httpMethod = SSJBaseNetworkServiceHttpMethodGET;
     }
     return _adService;
+}
+
+- (NSArray *)headerTitleArray
+{
+    if (!_headerTitleArray) {
+        _headerTitleArray = @[@"个人账本",@"共享账本"];
+    }
+    return _headerTitleArray;
 }
 
 #pragma mark - Private
