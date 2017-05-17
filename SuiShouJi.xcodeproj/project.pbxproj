@@ -4524,7 +4524,6 @@
 		9C3970381ECC3CEA00AB267A /* SSJSharebooksInviteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C39700F1ECADB0C00AB267A /* SSJSharebooksInviteViewController.m */; };
 		9C3970391ECC3CEA00AB267A /* SSJSharebooksInviteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C39700F1ECADB0C00AB267A /* SSJSharebooksInviteViewController.m */; };
 		9C39703A1ECC3CEB00AB267A /* SSJSharebooksInviteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C39700F1ECADB0C00AB267A /* SSJSharebooksInviteViewController.m */; };
-		9C39703C1ECC3CED00AB267A /* SSJSharebooksInviteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C39700F1ECADB0C00AB267A /* SSJSharebooksInviteViewController.m */; };
 		9C39703D1ECC3CED00AB267A /* SSJSharebooksInviteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C39700F1ECADB0C00AB267A /* SSJSharebooksInviteViewController.m */; };
 		9C39703E1ECC3CEE00AB267A /* SSJSharebooksInviteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C39700F1ECADB0C00AB267A /* SSJSharebooksInviteViewController.m */; };
 		9C39703F1ECC3CEF00AB267A /* SSJSharebooksInviteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C39700F1ECADB0C00AB267A /* SSJSharebooksInviteViewController.m */; };
@@ -18965,7 +18964,6 @@
 				9C4C20F71E9E30C8000C5F15 /* SSJWaveWaterViewItem.m in Sources */,
 				9C4C20F81E9E30C8000C5F15 /* SSJReportFormsCurveDot.m in Sources */,
 				9C4C20F91E9E30C8000C5F15 /* SSJThemeHomeCollectionViewCell.m in Sources */,
-				9C39703C1ECC3CED00AB267A /* SSJSharebooksInviteViewController.m in Sources */,
 				9C4C20FA1E9E30C8000C5F15 /* SSJSynchronizeTask.m in Sources */,
 				9C4C20FB1E9E30C8000C5F15 /* SSJRecordMakingBillTypeSelectionCell.m in Sources */,
 				9C4C20FC1E9E30C8000C5F15 /* SSJGeTuiManager.m in Sources */,

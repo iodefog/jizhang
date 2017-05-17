@@ -133,8 +133,10 @@
         _codeInput.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
         [_codeInput ssj_setBorderColor:[UIColor ssj_colorWithHex:@"#DDDDDD"]];
         [_codeInput ssj_setBorderStyle:SSJBorderStyleBottom];
-        [_codeInput ssj_setBorderWidth:1.f / [UIScreen mainScreen].scale];
+        [_codeInput ssj_setBorderWidth:1.f];
+        _codeInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入六位暗号" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"#CCCCCC"]}];
         _codeInput.rightView = self.resendButton;
+        _codeInput.rightViewMode = UITextFieldViewModeAlways;
     }
     return _codeInput;
 }
@@ -144,9 +146,11 @@
         _resendButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _resendButton.size = CGSizeMake(72, 24);
         _resendButton.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_5];
-        [_resendButton setTitleColor:[UIColor ssj_colorWithHex:@"#CCCCCC"] forState:UIControlStateNormal | UIControlStateSelected];
-        [_resendButton setTitle:@"重新生成" forState:UIControlStateNormal];
-        [_resendButton setTitle:@"随机生成" forState:UIControlStateSelected];
+        _resendButton.layer.cornerRadius = 12.f;
+        _resendButton.layer.borderWidth = 1.f / [UIScreen mainScreen].scale;
+        _resendButton.layer.borderColor = [UIColor ssj_colorWithHex:@"#CCCCCC"].CGColor;
+        [_resendButton setTitleColor:[UIColor ssj_colorWithHex:@"#CCCCCC"] forState:UIControlStateNormal];
+        [_resendButton setTitle:@"随机生成" forState:UIControlStateNormal];
     }
     return _resendButton;
 }
