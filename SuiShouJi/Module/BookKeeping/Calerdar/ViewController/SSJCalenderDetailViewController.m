@@ -16,6 +16,7 @@
 #import "SSJCalenderTableViewCell.h"
 #import "SSJCalenderDetailInfoCell.h"
 #import "SSJCalenderDetailPhotoCell.h"
+#import "SSJChargeImageBrowseView.h"
 
 #import "SSJBooksTypeItem.h"
 #import "SSJChargeMemBerItem.h"
@@ -106,6 +107,18 @@ static NSString *const kSSJCalenderDetailPhotoCellId = @"kSSJCalenderDetailPhoto
         return 54;
     } else {
         return 0.1;
+    }
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    SSJBaseCellItem *item = [self.items ssj_objectAtIndexPath:indexPath];
+    if ([item isKindOfClass:[SSJCalenderDetailPhotoCellItem class]]) {
+        SSJCalenderDetailPhotoCellItem *photoItem = (SSJCalenderDetailPhotoCellItem *)item;
+        [UIImage ssj_loadUrl:photoItem.photoPath compeltion:^(NSError *error, UIImage *image) {
+            if (image) {
+                [SSJChargeImageBrowseView showWithImage:image];
+            }
+        }];
     }
 }
 

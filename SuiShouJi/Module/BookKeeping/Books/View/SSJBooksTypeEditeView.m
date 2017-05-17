@@ -101,17 +101,13 @@
     [super layoutSubviews];
     self.titleLabel.size = CGSizeMake(self.width, 50);
     self.titleLabel.leftTop = CGPointMake(0, 0);
-    [self.titleLabel ssj_relayoutBorder];
     self.nameInput.size = CGSizeMake(self.width - 28, 54);
     self.nameInput.top = self.titleLabel.bottom;
     self.nameInput.centerX = self.width / 2;
-    [self.nameInput ssj_relayoutBorder];
     self.cancelButton.size = CGSizeMake(self.width / 2, 50);
     self.cancelButton.leftBottom = CGPointMake(0, self.height);
-    [self.cancelButton ssj_relayoutBorder];
     self.comfirmButton.size = CGSizeMake(self.width / 2, 50);
     self.comfirmButton.rightBottom = CGPointMake(self.width, self.height);
-    [self.comfirmButton ssj_relayoutBorder];
     self.colorSelectView.size = CGSizeMake(self.width, self.comfirmButton.top - self.nameInput.bottom);
     self.colorSelectView.leftTop = CGPointMake(0, self.nameInput.bottom);
     self.deleteButton.rightTop = CGPointMake(self.width - 10 , 0);

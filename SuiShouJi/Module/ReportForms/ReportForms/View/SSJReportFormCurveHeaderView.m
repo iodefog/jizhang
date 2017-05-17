@@ -76,7 +76,6 @@ static const CGFloat kSeparatorFormViewHeight = 88;
     _curveView.frame = CGRectMake(0, _timePeriodSegmentControl.bottom, self.width, kCurveViewHeight);
     _curveView.curveInsets = UIEdgeInsetsMake(50, 0, 50, 0);
     [self updateCurveUnitAxisXLength];
-    [_curveView ssj_relayoutBorder];
     [_curveView ssj_relayoutLoadingIndicator];
     
     _questionBtn.frame = CGRectMake(60, _curveView.height - 28, 28, 28);

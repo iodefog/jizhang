@@ -200,8 +200,6 @@ static const int kAuthCodeDigits = 4;
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    [self.cancelBtn ssj_relayoutBorder];
-    [self.sureBtn ssj_relayoutBorder];
     [self updateAuthCodeText];
 }
 

@@ -128,7 +128,6 @@ static const CGFloat kBottomViewHeight = 398;
         
         CGFloat middleHeight = _item.isMajor ? kHistoryMajorMiddleViewHeight : kHistorySecondaryMiddleViewHeight;
         self.middleView.frame = CGRectMake(0, kTopGap, self.width, middleHeight);
-        [self.middleView ssj_relayoutBorder];
         
         self.estimateMoneyLab.top = self.historyPaymentLab.top = tmpView.bottom + 15;
         self.estimateMoneyLab.width = MIN(self.estimateMoneyLab.width, (self.width - 80) * 0.5);
@@ -139,11 +138,9 @@ static const CGFloat kBottomViewHeight = 398;
     } else {
         
         self.topView.frame = CGRectMake(0, kTopGap, self.width, kTopViewHeight);
-        [self.topView ssj_relayoutBorder];
         
         CGFloat middleHeight = _item.isMajor ? kCurrentMajorMiddleViewHeight : kCurrentSecondaryMiddleViewHeight;
         self.middleView.frame = CGRectMake(0, self.topView.bottom, self.width, middleHeight);
-        [self.middleView ssj_relayoutBorder];
         
         CGFloat top1 = (self.topView.height - self.budgetMoneyTitleLab.height - self.budgetMoneyLab.height - gap) * 0.5;
         
@@ -167,7 +164,6 @@ static const CGFloat kBottomViewHeight = 398;
     }
     
     self.bottomView.frame = CGRectMake(0, self.middleView.bottom, self.width, kBottomViewHeight);
-    [self.bottomView ssj_relayoutBorder];
     [self.bottomView ssj_relayoutWatermark];
     
     self.billTypeLab.top = 26;

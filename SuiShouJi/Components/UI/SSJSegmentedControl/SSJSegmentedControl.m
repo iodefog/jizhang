@@ -70,7 +70,6 @@
     for (int i = 0; i < self.buttons.count; i ++) {
         UIButton *button = self.buttons[i];
         button.frame = CGRectMake(width * i, 0, width, height);
-        [button ssj_relayoutBorder];
     }
 }
 

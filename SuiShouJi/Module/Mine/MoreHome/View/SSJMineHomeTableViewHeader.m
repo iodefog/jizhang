@@ -76,10 +76,8 @@
     self.dengjiImage.centerY = self.nicknameLabel.centerY;
     self.syncButton.size = CGSizeMake(self.width / 2 , kBottomViewHeight);
     self.syncButton.leftBottom = CGPointMake(0, self.height);
-    [self.syncButton ssj_relayoutBorder];
     self.checkInButton.size = CGSizeMake(self.width / 2 , kBottomViewHeight);
     self.checkInButton.rightBottom = CGPointMake(self.width, self.height);
-    [self.checkInButton ssj_relayoutBorder];
     self.verticalSepertorLine.centerX = self.width / 2;
     self.verticalSepertorLine.centerY = self.height - 23;
 }

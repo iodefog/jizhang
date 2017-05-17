@@ -979,8 +979,6 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     
     self.protocolButton.left = CGRectGetMaxX(self.agreeButton.frame) + 3;
     self.protocolButton.centerY = self.agreeButton.centerY;
-    [self.tfPhoneNum ssj_relayoutBorder];
-    [self.tfRegYanZhenNum ssj_relayoutBorder];
 }
 
 
