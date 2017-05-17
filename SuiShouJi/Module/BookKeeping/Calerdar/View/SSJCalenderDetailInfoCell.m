@@ -50,6 +50,7 @@
         return;
     }
     
+    [super setCellItem:cellItem];
     SSJCalenderDetailInfoCellItem *item = cellItem;
     self.leftLab.text = item.leftText;
     self.rightLab.text = item.rightText;

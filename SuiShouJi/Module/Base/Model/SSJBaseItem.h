@@ -24,4 +24,14 @@
  */
 @property (nonatomic) CGFloat rowHeight;
 
+/**
+ 分割线的内凹值
+ */
+@property (nonatomic) UIEdgeInsets separatorInsets;
+
+/**
+ cell的点击效果
+ */
+@property (nonatomic) UITableViewCellSelectionStyle selectionStyle;
+
 @end

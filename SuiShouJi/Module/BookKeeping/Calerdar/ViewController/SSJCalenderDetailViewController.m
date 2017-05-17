@@ -196,21 +196,25 @@ static NSString *const kSSJCalenderDetailPhotoCellId = @"kSSJCalenderDetailPhoto
     SSJCalenderDetailInfoCellItem *memberItem = [[SSJCalenderDetailInfoCellItem alloc] init];
     memberItem.leftText = @"成员";
     memberItem.rightText = [[self.item.membersItem valueForKeyPath:@"memberName"] componentsJoinedByString:@"，"];
+    memberItem.separatorInsets = UIEdgeInsetsMake(0, 15, 0, 0);
     [section_2 addObject:memberItem];
     
     SSJCalenderDetailInfoCellItem *dateItem = [[SSJCalenderDetailInfoCellItem alloc] init];
     dateItem.leftText = @"时间";
     dateItem.rightText = [NSString stringWithFormat:@"%@ %@", self.item.billDate, self.item.billDetailDate];
+    dateItem.separatorInsets = UIEdgeInsetsMake(0, 15, 0, 0);
     [section_2 addObject:dateItem];
     
     SSJCalenderDetailInfoCellItem *fundItem = [[SSJCalenderDetailInfoCellItem alloc] init];
     fundItem.leftText = @"资金";
     fundItem.rightText = self.item.fundName;
+    fundItem.separatorInsets = UIEdgeInsetsMake(0, 15, 0, 0);
     [section_2 addObject:fundItem];
     
     SSJCalenderDetailInfoCellItem *bookItem = [[SSJCalenderDetailInfoCellItem alloc] init];
     bookItem.leftText = @"账本";
     bookItem.rightText = self.item.booksName;
+    bookItem.separatorInsets = UIEdgeInsetsMake(0, 15, 0, 0);
     [section_2 addObject:bookItem];
 }
 
