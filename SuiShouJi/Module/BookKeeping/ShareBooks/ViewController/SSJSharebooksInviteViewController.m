@@ -75,6 +75,7 @@
     self.codeLeftImage.centerY = self.codeRightImage.centerY = self.codeTitleLab.centerY;
     self.codeInput.top = self.codeTitleLab.bottom + 38;
     self.codeInput.centerX = self.backView.centerX;
+    self.codeInput.size = CGSizeMake(self.backView.width - 44, 57);
 }
 
 #pragma mark - Getter
