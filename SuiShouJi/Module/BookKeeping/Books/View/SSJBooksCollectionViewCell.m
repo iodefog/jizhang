@@ -64,7 +64,7 @@ static const CGFloat kBooksCornerRadius = 10.f;
 }
 
 #pragma mark - Setter
-- (void)setBooksTypeItem:(__kindof SSJBaseItem *)booksTypeItem {
+- (void)setBooksTypeItem:(__kindof SSJBaseCellItem *)booksTypeItem {
     _booksTypeItem = booksTypeItem;
     if ([booksTypeItem isKindOfClass:[SSJBooksTypeItem class]]) {//个人账本
         SSJBooksTypeItem *privateBookItem = (SSJBooksTypeItem *)booksTypeItem;

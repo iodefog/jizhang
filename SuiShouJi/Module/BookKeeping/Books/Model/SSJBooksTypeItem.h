@@ -8,7 +8,7 @@
 
 #import "SSJBaseCellItem.h"
 
-@interface SSJBooksTypeItem : SSJBaseItem
+@interface SSJBooksTypeItem : SSJBaseCellItem
 
 //账本id
 @property(nonatomic, strong) NSString *booksId;
