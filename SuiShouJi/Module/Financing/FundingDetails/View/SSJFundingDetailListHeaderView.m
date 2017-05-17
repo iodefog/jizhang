@@ -65,7 +65,6 @@
         self.subDetailLab.right = self.expandImage.right;
         self.subDetailLab.centerY = self.subLab.centerY;
         self.subLab.width = self.subDetailLab.left - self.subLab.left - 10;
-        [self ssj_relayoutBorder];
     } else {
         self.btn.frame = self.bounds;
         self.dateLabel.left = 15;
@@ -75,7 +74,6 @@
         self.expandImage.centerY = self.height / 2;
         self.moneyLabel.right = self.expandImage.left - 10;
         self.moneyLabel.centerY = self.height / 2;
-        [self ssj_relayoutBorder];
     }
 }
 

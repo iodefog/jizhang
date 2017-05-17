@@ -32,7 +32,6 @@
     [super layoutSubviews];
     self.dateLabel.left = 10;
     self.dateLabel.centerY = self.height / 2;
-    [self ssj_relayoutBorder];
 }
 
 -(UILabel *)dateLabel{

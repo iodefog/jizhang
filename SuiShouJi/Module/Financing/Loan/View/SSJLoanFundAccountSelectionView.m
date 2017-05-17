@@ -43,8 +43,6 @@ static NSString *const kCellId = @"SSJLoanFundAccountSelectionCell";
     _closeButton.frame = CGRectMake(0, 0, 44, 44);
     _tableView.top = 44;
     _tableView.height = self.height - 44;
-    
-    [_titleLabel ssj_relayoutBorder];
 }
 
 #pragma mark - UITableViewDataSource
