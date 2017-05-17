@@ -38,6 +38,7 @@
 #import "SSJRegistNetworkService.h"
 #import "SSJNormalWebViewController.h"
 #import "NSString+MoneyDisplayFormat.h"
+#import "MMDrawerController.h"
 
 static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 @interface SSJLoginViewController () <UITextFieldDelegate,UIScrollViewDelegate>
@@ -437,8 +438,15 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
                     @strongify(self);
                     if ([userItem.motionPWDState boolValue]) {
                         SSJMotionPasswordViewController *motionVC = [[SSJMotionPasswordViewController alloc] init];
-                        motionVC.finishHandle = self.finishHandle;
-                        motionVC.backController = self.backController;
+                        motionVC.finishHandle = ^(UIViewController *controller) {
+                            
+                            UITabBarController *tabVC = (UITabBarController *)((MMDrawerController *)[UIApplication sharedApplication].keyWindow.rootViewController).centerViewController;
+                            UINavigationController *navi = [tabVC.viewControllers firstObject];
+                            UIViewController *homeController = [navi.viewControllers firstObject];
+                            controller.backController = homeController;
+                            [controller ssj_backOffAction];
+                            
+                        };
                         if (userItem.motionPWD.length) {
                             motionVC.type = SSJMotionPasswordViewControllerTypeVerification;
                         } else {
@@ -737,8 +745,10 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
                     __weak typeof(self) weakSelf = self;
                     SSJMotionPasswordViewController *motionVC = [[SSJMotionPasswordViewController alloc] init];
                     motionVC.finishHandle = ^(UIViewController *controller) {
-                        UITabBarController *tabbarVc = self.navigationController.tabBarController;
-                        UIViewController *homeController = [((UINavigationController *)[tabbarVc.viewControllers firstObject]).viewControllers firstObject];
+                        UITabBarController *tabVC = (UITabBarController *)((MMDrawerController *)[UIApplication sharedApplication].keyWindow.rootViewController).centerViewController;
+                        UINavigationController *navi = [tabVC.viewControllers firstObject];
+                        UIViewController *homeController = [navi.viewControllers firstObject];
+
                         controller.backController = homeController;
                         [controller ssj_backOffAction];
                     };
