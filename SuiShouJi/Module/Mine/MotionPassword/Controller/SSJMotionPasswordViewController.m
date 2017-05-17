@@ -397,7 +397,8 @@ static const int kVerifyFailureTimesLimit = 5;
                 loginVC.finishHandle = self.finishHandle;
                 loginVC.cancelHandle = self.finishHandle;
                 loginVC.backController = self.backController;
-                [self.navigationController setViewControllers:@[loginVC] animated:YES];
+                //[self.navigationController setViewControllers:@[loginVC] animated:YES];
+                [self.navigationController pushViewController:loginVC animated:YES];
             }
         }];
     }

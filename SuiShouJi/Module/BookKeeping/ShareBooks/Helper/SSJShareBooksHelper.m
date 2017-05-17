@@ -32,7 +32,7 @@
         wholeStr = [wholeStr stringByAppendingString:[self numbers]];
     }
     
-    for (int i = 0; i < 100000; i ++) {
+    for (int i = 0; i < length; i ++) {
         int ramdom = arc4random()%wholeStr.length;
         NSString *currentStr = [wholeStr substringWithRange:NSMakeRange(ramdom  , 1)];
         randomCode = [randomCode stringByAppendingString:currentStr];

@@ -53,5 +53,7 @@
     export_method:'app-store',
     clean:true
   )
-  testflight
+  testflight(
+    skip_waiting_for_build_processing:true
+  )
   end

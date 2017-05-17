@@ -11,6 +11,10 @@
 #import "SSZipArchive.h"
 #import "SSJThemeModel.h"
 
+
+// 当前皮肤最新版本号
+static const int kCustomThemeVersion = 1;
+
 @implementation SSJCustomThemeManager
     
 + (void)load {
@@ -23,13 +27,19 @@
         NSString *firstThemeDirectPath = [[NSString ssj_themeDirectory] stringByAppendingPathComponent:@"1000"];
         NSString *secondThemeDirectPath = [[NSString ssj_themeDirectory] stringByAppendingPathComponent:@"1001"];
         
-        [[NSFileManager defaultManager] removeItemAtPath:firstThemeDirectPath error:nil];
-        [[NSFileManager defaultManager] removeItemAtPath:secondThemeDirectPath error:nil];
+        NSString *currentThemeId = SSJCurrentThemeID();
+        NSString *currentBackGround = SSJ_CURRENT_THEME.customThemeBackImage;
+        
+        if ([[SSJThemeSetting ThemeModelForModelId:@"1000"].version integerValue] < kCustomThemeVersion || [[SSJThemeSetting ThemeModelForModelId:@"1001"].version integerValue] < kCustomThemeVersion) {
+            [[NSFileManager defaultManager] removeItemAtPath:firstThemeDirectPath error:nil];
+            [[NSFileManager defaultManager] removeItemAtPath:secondThemeDirectPath error:nil];
+        }
         
         if (![[NSFileManager defaultManager] fileExistsAtPath:firstThemeDirectPath] && ![[NSFileManager defaultManager] fileExistsAtPath:secondThemeDirectPath]) {
             // 将两个主题解压和背景图
             NSString *firstThemePath = [[NSBundle mainBundle] pathForResource:@"1001" ofType:@"zip"];
             NSString *secondThemePath = [[NSBundle mainBundle] pathForResource:@"1000" ofType:@"zip"];
+            
             [SSZipArchive unzipFileAtPath:firstThemePath toDestination:[NSString ssj_themeDirectory] overwrite:YES password:nil error:nil];
             [SSZipArchive unzipFileAtPath:secondThemePath toDestination:[NSString ssj_themeDirectory] overwrite:YES password:nil error:nil];
             
@@ -40,6 +50,11 @@
             NSDictionary *secondDic = [NSJSONSerialization JSONObjectWithData:secondThemeData options:NSJSONReadingMutableContainers error:nil];
             SSJThemeModel *firstModel = [SSJThemeModel mj_objectWithKeyValues:firstDic];
             SSJThemeModel *secondModel = [SSJThemeModel mj_objectWithKeyValues:secondDic];
+            if ([currentThemeId isEqualToString:@"1001"]) {
+                firstModel.customThemeBackImage = currentBackGround;
+            } else {
+                secondModel.customThemeBackImage = currentBackGround;
+            }
             [SSJThemeSetting addThemeModel:firstModel];
             [SSJThemeSetting addThemeModel:secondModel];
         }
