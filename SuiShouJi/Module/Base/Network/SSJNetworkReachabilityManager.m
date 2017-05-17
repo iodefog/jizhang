@@ -32,6 +32,8 @@
 
 @property (nonatomic, strong) NSMutableArray<SSJNetworkReachabilityObserver *> *observers;
 
+@property (nonatomic, strong) NSMutableArray<SSJNetworkReachabilityObserver *> *onceObservers;
+
 @end
 
 @implementation SSJNetworkReachabilityManager
@@ -72,6 +74,14 @@
     return observer;
 }
 
++ (void)observeReachabilityStatusChangeOnce:(SSJNetworkReachabilityManagerBlock)block {
+    SSJNetworkReachabilityObserver *observer = [[SSJNetworkReachabilityObserver alloc] init];
+    observer.block = block;
+    if (![[self sharedManager].onceObservers containsObject:observer]) {
+        [[self sharedManager].onceObservers addObject:observer];
+    }
+}
+
 + (void)addObserverForReachabilityStatusChange:(SSJNetworkReachabilityObserver *)observer {
     if (![[self sharedManager].observers containsObject:observer]) {
         [[self sharedManager].observers addObject:observer];
@@ -85,12 +95,18 @@
 - (instancetype)init {
     if (self = [super init]) {
         self.observers = [NSMutableArray array];
+        self.onceObservers = [NSMutableArray array];
         self.reachability = [AFNetworkReachabilityManager managerForDomain:@"www.baidu.com"];
         __weak typeof(self) wself = self;
         [self.reachability setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
             for (SSJNetworkReachabilityObserver *observer in wself.observers) {
                 observer.block([wself mapStatus:status]);
             }
+            
+            for (SSJNetworkReachabilityObserver *observer in wself.onceObservers) {
+                observer.block([wself mapStatus:status]);
+            }
+            [wself.onceObservers removeAllObjects];
         }];
     }
     return self;

@@ -14,6 +14,22 @@
 
 @implementation SSJThemeUpdate
 
++ (void)load {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(observeNetworkStatus) name:UIApplicationDidFinishLaunchingNotification object:nil];
+}
+
++ (void)observeNetworkStatus {
+    [SSJNetworkReachabilityManager observeReachabilityStatusChangeOnce:^(SSJNetworkReachabilityStatus status) {
+        if (status == SSJNetworkReachabilityStatusReachableViaWWAN
+            || status == SSJNetworkReachabilityStatusReachableViaWiFi) {
+            
+            if (SSJLaunchTimesForCurrentVersion() == 1) {
+               [self updateLocalThemesIfneeded];
+            }
+        }
+    }];
+}
+
 + (void)updateLocalThemesIfneeded{
     // 判断是否是wifi环境,如果是直接下载
     if ([SSJNetworkReachabilityManager networkReachabilityStatus] == SSJNetworkReachabilityStatusReachableViaWiFi) {

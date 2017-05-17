@@ -44,7 +44,6 @@
 #import "SSJUmengManager.h"
 #import "SSJLocalNotificationHelper.h"
 #import "SSJLocalNotificationStore.h"
-#import "SSJThemeUpdate.h"
 #import "SSJDomainManager.h"
 #import "SSJLoanHelper.h"
 #import "SSJAnaliyticsManager.h"
@@ -139,10 +138,6 @@ NSDate *SCYEnterBackgroundTime() {
     if (SSJLaunchTimesForCurrentVersion() == 1) {
         [[NSUserDefaults standardUserDefaults]setObject:[NSDate date]forKey:SSJLastPopTimeKey];
 //        [SSJJspatchAnalyze removePatch];
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [SSJThemeUpdate updateLocalThemesIfneeded];
-        });
-        
     }
         
     

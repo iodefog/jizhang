@@ -1,7 +1,8 @@
 {
-   "buildConfig": "Release-production",
-   "buildScheme": "SuiShouJi",
-   "infoplist": "SuiShouJi-info.plist",
-   "uploadToPgy": true,
-   "uploadToAppStore": false
+    "buildConfig": "Release-production",
+    "buildScheme": "YouYuJiZhangLiCai",
+    "infoplist": "YouYuJiZhangLiCai-Info.plist",
+    "uploadToPgy": false,
+    "uploadToAppStore": true,
+    "testflight":false
 }

@@ -56,7 +56,7 @@
     }
     
     // 将没有渐变色的数据改成渐变色
-    FMResultSet *result = [db executeQuery:@"select cfundid ,iorder from bk_fund_info where (length(cstartcolor) = 0 or cstartcolor is null) and cparent <> 'root'"];
+    FMResultSet *result = [db executeQuery:@"select cfundid ,iorder from bk_fund_info where (length(cstartcolor) = 0 or cstartcolor is null) and cparent <> 'root' and operatortype <> 2"];
     
     NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:0];
     

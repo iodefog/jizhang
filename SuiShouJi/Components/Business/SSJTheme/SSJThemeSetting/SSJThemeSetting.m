@@ -22,9 +22,6 @@
     NSDictionary *modelInfo = [NSKeyedUnarchiver unarchiveObjectWithFile:[self settingFilePath]];
     NSMutableDictionary *newModelInfo = [NSMutableDictionary dictionaryWithCapacity:modelInfo.count + 1];
     [newModelInfo addEntriesFromDictionary:modelInfo];
-    if ([newModelInfo objectForKey:model.ID]) {
-        [newModelInfo removeObjectForKey:model.ID];
-    }
     [newModelInfo setObject:model forKey:model.ID];
     
     return [NSKeyedArchiver archiveRootObject:newModelInfo toFile:[self settingFilePath]];
@@ -125,6 +122,7 @@
     model.searchResultHeaderBackgroundColor = @"#ffebeb";
     model.summaryBooksHeaderColor = @"#ffd2d2";
     model.summaryBooksHeaderAlpha = 1;
+    model.authCodeGroundColor = @"#cccccc";
     return model;
 }
 
