@@ -100,27 +100,25 @@ static CGFloat imageScale = 0.8; //裁剪框和屏幕大小比例
     
     self.imageView.size = CGSizeMake(normalImage.size.width*imageScale/SSJSCREENSCALE, normalImage.size.height*imageScale/SSJSCREENSCALE);
     self.scrollview.contentSize = self.imageView.size;
-//    if (self.imageView.width < self.coverLayer.width && self.imageView.height < self.coverLayer.height) {
-//        
-//    }
-    if (self.imageView.width > self.imageView.height) { //宽》 高
-        int clipH = SSJSCREENHEIGHT*imageScale;
-        int imgH = self.imageView.height;
+
+    int clipH = SSJSCREENHEIGHT*imageScale;
+    int imgH = self.imageView.height;
+    int imgW = self.imageView.width;
+    int clipW = SSJSCREENWITH*imageScale;
+    if (imgW > imgH) { //宽》 高
         if (imgH <= clipH) {
             
-        } else {
-            double scale = self.imageView.width / self.imageView.height;
-            self.imageView.size = CGSizeMake(SSJSCREENHEIGHT * imageScale * scale, SSJSCREENHEIGHT * imageScale);
+        } else {//imgH > clipH 缩小
+            double scale = imgH / clipH;
+            self.imageView.size = CGSizeMake(imgW / scale, clipH);
         }
         
     } else { //高》宽
-        int clipW = SSJSCREENWITH*imageScale;
-        int imgW = self.imageView.width;
         if (imgW <= clipW) {
             
-        } else {
-            double scale = self.imageView.height / self.imageView.width;
-            self.imageView.size = CGSizeMake(SSJSCREENWITH * imageScale * scale, SSJSCREENHEIGHT * imageScale);
+        } else {//imgW > clipW缩小
+            double scale = imgW / clipW;
+            self.imageView.size = CGSizeMake(clipW, imgH / scale);
         }
     }
 
