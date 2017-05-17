@@ -204,11 +204,13 @@
 // 自定义主题的背景图
 @property (nonatomic, copy) NSString *customThemeBackImage;
 
-
 //// 是否是自定义背景图
 //@property (nonatomic) BOOL isCustomImage;
 
 // 是暗色还是亮色
 @property (nonatomic) BOOL darkOrLight;
+
+// 验证码底色
+@property (nonatomic, copy) NSString *authCodeGroundColor;
 
 @end

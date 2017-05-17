@@ -100,6 +100,8 @@ static id _instance;
         } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
             [_blockerMapping removeObjectForKey:item.themeId];
             
+            [self.downLoadingArr removeObject:item.themeId];
+            
             if (((NSHTTPURLResponse *)response).statusCode == 304) {
                 if (success) {
                     SSJDispatch_main_async_safe(^{
@@ -110,7 +112,6 @@ static id _instance;
             }
             
             if (error) {
-                [self.downLoadingArr removeObject:item.themeId];
                 SSJPRINT(@"%@",[error localizedDescription]);
                 if (failure) {
                     SSJDispatch_main_async_safe(^{
@@ -120,11 +121,10 @@ static id _instance;
                 return;
             }
             
-            [self.downLoadingArr removeObject:item.themeId];
             [tProgress removeObserver:self forKeyPath:@"fractionCompleted"];
             
             NSError *tError = nil;
-            [SSZipArchive unzipFileAtPath:filePath.path toDestination:[NSString ssj_themeDirectory] overwrite:NO password:nil error:&tError];
+            [SSZipArchive unzipFileAtPath:filePath.path toDestination:[NSString ssj_themeDirectory] overwrite:YES password:nil error:&tError];
             
             // 不管解压是否成功，把压缩包删除，否则可能会导致以后下载相同压缩包不能覆盖的奇葩问题
             [[NSFileManager defaultManager] removeItemAtURL:filePath error:&error];

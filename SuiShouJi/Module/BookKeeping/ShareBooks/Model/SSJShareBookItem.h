@@ -31,4 +31,5 @@
 // 账本父类型
 @property(nonatomic) NSInteger parentType;
 
+
 @end

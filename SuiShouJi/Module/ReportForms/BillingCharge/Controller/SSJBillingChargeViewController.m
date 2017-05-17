@@ -168,12 +168,26 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
 
 - (void)enterCalenderDetailWithSelectedItem:(SSJBillingChargeCellItem *)selectedItem {
     SSJCalenderDetailViewController *calenderDetailVC = [[SSJCalenderDetailViewController alloc] initWithTableViewStyle:UITableViewStyleGrouped];
-    if (self.period) {
-        calenderDetailVC.period = self.period;
-    }
-    calenderDetailVC.booksId = self.booksId;
-    calenderDetailVC.Id = self.ID;
     calenderDetailVC.item = selectedItem;
+    __weak typeof(self) wself = self;
+    calenderDetailVC.deleteHandler = ^ {
+        NSString *billId = nil;
+        NSString *memberId = nil;
+        if (wself.isMemberCharge) {
+            memberId = wself.ID;
+        } else {
+            billId = wself.ID;
+        }
+        [SSJBillingChargeHelper queryTheRestChargeCountWithBillId:billId memberId:memberId booksId:wself.booksId period:wself.period success:^(int count) {
+            if (count == 0) {
+                [wself.navigationController popToRootViewControllerAnimated:YES];
+            } else {
+                [wself.navigationController popViewControllerAnimated:YES];
+            }
+        } failure:^(NSError *error) {
+            [SSJAlertViewAdapter showError:error];
+        }];
+    };
     [self.navigationController pushViewController:calenderDetailVC animated:YES];
 }
 

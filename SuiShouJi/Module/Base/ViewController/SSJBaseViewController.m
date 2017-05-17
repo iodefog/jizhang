@@ -56,7 +56,7 @@
         if (SSJ_CURRENT_THEME.needBlurOrNot) {
             if ([self isKindOfClass:[SSJReportFormsViewController class]]
                 || [self isKindOfClass:[SSJRecordMakingViewController class]]) {
-                _backgroundView = [[UIImageView alloc] initWithImage:[[UIImage ssj_compatibleThemeImageNamed:@"background"] blurredImageWithRadius:2.f iterations:20 tintColor:[UIColor clearColor]]];
+                _backgroundView = [[UIImageView alloc] initWithImage:[[UIImage ssj_compatibleThemeImageNamed:@"background"] ssj_blurredImageWithRadius:2.f iterations:20 tintColor:[UIColor clearColor]]];
             } else {
                 _backgroundView = [[UIImageView alloc] initWithImage:[UIImage ssj_compatibleThemeImageNamed:@"background"]];
                 if (SSJ_CURRENT_THEME.customThemeBackImage.length) {

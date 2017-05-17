@@ -22,7 +22,8 @@
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        _defaultView = [[UIImageView alloc] initWithImage:[UIImage ssj_compatibleImageNamed:@"default"]];
+        //_defaultView = [[UIImageView alloc] initWithImage:[UIImage ssj_compatibleImageNamed:@"default"]];
+        _defaultView = [[UIImageView alloc] initWithImage:[UIImage ssj_launchImage]];
         _defaultView.frame = self.bounds;
         [self addSubview:_defaultView];
     }

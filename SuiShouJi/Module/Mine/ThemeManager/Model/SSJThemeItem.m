@@ -24,4 +24,14 @@
              };
 }
 
+- (BOOL)isEqual:(id)other
+{
+    SSJThemeItem *item = (SSJThemeItem *)other;
+    if ([self.themeId isEqualToString:item.themeId]) {
+        return YES;
+    }
+    return NO;
+}
+
+
 @end

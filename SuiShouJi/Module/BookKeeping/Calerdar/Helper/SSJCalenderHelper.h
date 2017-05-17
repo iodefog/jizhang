@@ -8,6 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
+@class SSJBillingChargeCellItem;
+
 @interface SSJCalenderHelper : NSObject
 
 /**
@@ -33,4 +37,29 @@
 + (void)queryBalanceForDate:(NSString*)date
                     success:(void (^)(double income , double expence))success
                     failure:(void (^)(NSError *error))failure;
+
+/**
+ *  查询流水详情
+ *
+ *  @param chargeId 流水id
+ *  @param success 查询成功的回调
+ *  @param failure 查询失败的回调
+ */
++ (void)queryChargeDetailWithId:(NSString *)chargeId
+                        success:(void (^)(SSJBillingChargeCellItem *chargeItem))success
+                        failure:(nullable void(^)(NSError *error))failure;
+
+/**
+ *
+ *
+ *  @param chargeId 流水id
+ *  @param success 查询成功的回调
+ *  @param failure 查询失败的回调
+ */
++ (void)deleteChargeWithItem:(SSJBillingChargeCellItem *)item
+                     success:(nullable void(^)())success
+                     failure:(nullable void(^)(NSError *error))failure;
+
 @end
+
+NS_ASSUME_NONNULL_END
