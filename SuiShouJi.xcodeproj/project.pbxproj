@@ -10117,8 +10117,8 @@
 		7D5F32411CEAE6C10086B67E /* Store */ = {
 			isa = PBXGroup;
 			children = (
-				9C6CAFA21E76824300262FAF /* SSJBookKeepingHomeHelper.m */,
 				9C6CAFA31E76824300262FAF /* SSJBookKeepingHomeHelper.h */,
+				9C6CAFA21E76824300262FAF /* SSJBookKeepingHomeHelper.m */,
 			);
 			path = Store;
 			sourceTree = "<group>";
