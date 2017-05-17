@@ -15,6 +15,7 @@
     if (!mapping) {
         mapping = @{@"memberId":@"cmemberid",
                     @"booksId":@"cbooksid",
+                    @"icon":@"cicon",
                     @"joinDate":@"cjoindate",
                     @"state":@"istate"};
     }
