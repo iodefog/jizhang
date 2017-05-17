@@ -8,6 +8,7 @@
 
 #import "SSJBooksCollectionViewCell.h"
 #import "SSJBooksTypeItem.h"
+#import "SSJShareBookItem.h"
 
 static const CGFloat kBooksCornerRadius = 10.f;
 
@@ -38,6 +39,7 @@ static const CGFloat kBooksCornerRadius = 10.f;
         [self.contentView addSubview:self.menberNumLab];
         [self.contentView addSubview:self.markImageView];
         [self setNeedsUpdateConstraints];
+//        self.contentView.backgroundColor = [UIColor whiteColor];
     }
     return self;
 }
@@ -62,31 +64,57 @@ static const CGFloat kBooksCornerRadius = 10.f;
 }
 
 #pragma mark - Setter
-- (void)setBooksTypeItem:(SSJBooksTypeItem *)booksTypeItem {
-    
+- (void)setBooksTypeItem:(__kindof SSJBaseItem *)booksTypeItem {
     _booksTypeItem = booksTypeItem;
-    self.nameLab.text = booksTypeItem.booksName;
-    //当前选中账本的标记
-    if ([booksTypeItem.booksId isEqualToString:self.curretSelectedBookId]) {
-        self.markImageView.hidden = YES;
-    }else{
-        self.markImageView.hidden = NO;
+    if ([booksTypeItem isKindOfClass:[SSJBooksTypeItem class]]) {//个人账本
+        SSJBooksTypeItem *privateBookItem = (SSJBooksTypeItem *)booksTypeItem;
+        self.nameLab.text = privateBookItem.booksName;
+        //当前选中账本的标记
+        if ([privateBookItem.booksId isEqualToString:self.curretSelectedBookId]) {
+            self.markImageView.hidden = NO;
+        }else{
+            self.markImageView.hidden = YES;
+        }
+        
+        [CATransaction begin];
+        [CATransaction setDisableActions:YES];
+        self.gradientLayer.colors = @[(__bridge id)[UIColor brownColor].CGColor,(__bridge id)[UIColor lightGrayColor].CGColor];
+        
+        if ([privateBookItem.booksName isEqualToString:@"添加账本"]) {
+            self.gradientLayer.hidden = YES;
+            self.backLayer.hidden = NO;
+            self.nameLab.textColor = [UIColor ssj_colorWithHex:@"666666"];
+        } else {
+            self.gradientLayer.hidden = NO;
+            self.backLayer.hidden = YES;
+            self.nameLab.textColor = [UIColor whiteColor];
+        }
+        [CATransaction commit];
+    } else if ([booksTypeItem isKindOfClass:[SSJShareBookItem class]]) {//共享账本
+        SSJShareBookItem *shareBookItem = (SSJShareBookItem *)booksTypeItem;
+        self.nameLab.text = shareBookItem.booksName;
+        //当前选中账本的标记
+        if ([shareBookItem.booksId isEqualToString:self.curretSelectedBookId]) {
+            self.markImageView.hidden = NO;
+        }else{
+            self.markImageView.hidden = YES;
+        }
+        
+        [CATransaction begin];
+        [CATransaction setDisableActions:YES];
+        self.gradientLayer.colors = @[(__bridge id)[UIColor yellowColor].CGColor,(__bridge id)[UIColor purpleColor].CGColor];
+        
+        if ([shareBookItem.booksName isEqualToString:@"添加账本"]) {
+            self.gradientLayer.hidden = YES;
+            self.backLayer.hidden = NO;
+            self.nameLab.textColor = [UIColor ssj_colorWithHex:@"666666"];
+        } else {
+            self.gradientLayer.hidden = NO;
+            self.backLayer.hidden = YES;
+            self.nameLab.textColor = [UIColor whiteColor];
+        }
+        [CATransaction commit];
     }
-    
-    [CATransaction begin];
-    [CATransaction setDisableActions:YES];
-    self.gradientLayer.colors = @[(__bridge id)[UIColor brownColor].CGColor,(__bridge id)[UIColor lightGrayColor].CGColor];
-
-    if ([booksTypeItem.booksName isEqualToString:@"添加账本"]) {
-        self.gradientLayer.hidden = YES;
-        self.backLayer.hidden = NO;
-        self.nameLab.textColor = [UIColor ssj_colorWithHex:@"666666"];
-    } else {
-        self.gradientLayer.hidden = NO;
-        self.backLayer.hidden = YES;
-        self.nameLab.textColor = [UIColor whiteColor];
-    }
-    [CATransaction commit];
 }
 
 #pragma mark - Private
@@ -121,7 +149,7 @@ static const CGFloat kBooksCornerRadius = 10.f;
         _backLayer.path = [UIBezierPath bezierPathWithRoundedRect:itemRect cornerRadius:kBooksCornerRadius].CGPath;
         _backLayer.strokeColor = [UIColor ssj_colorWithHex:@"666666"].CGColor;
         _backLayer.borderWidth = 1;
-        _backLayer.fillColor = [UIColor clearColor].CGColor;
+        _backLayer.fillColor = [UIColor whiteColor].CGColor;
     }
     return _backLayer;
 }

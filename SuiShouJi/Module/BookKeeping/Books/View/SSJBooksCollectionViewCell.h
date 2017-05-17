@@ -10,7 +10,7 @@
 @class SSJBooksTypeItem;
 NS_ASSUME_NONNULL_BEGIN
 @interface SSJBooksCollectionViewCell : UICollectionViewCell
-@property(nonatomic, strong) SSJBooksTypeItem *booksTypeItem;
+@property(nonatomic, strong) __kindof SSJBaseItem *booksTypeItem;
 /**当前选中的账本ID*/
 @property (nonatomic, copy) NSString *curretSelectedBookId;
 NS_ASSUME_NONNULL_END

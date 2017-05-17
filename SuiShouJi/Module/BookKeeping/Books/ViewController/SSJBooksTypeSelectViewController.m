@@ -36,9 +36,13 @@ static BOOL kNeedBannerDisplay = YES;
 
 @property(nonatomic, strong) SSJEditableCollectionView *collectionView;
 
-@property(nonatomic, strong) NSMutableArray *items;
-
 @property (nonatomic, strong) NSArray *headerTitleArray;
+
+/**个人账本列表*/
+@property(nonatomic, strong) NSMutableArray <SSJBooksTypeItem *>*privateBooksDataitems;
+
+/**共享账本列表*/
+@property (nonatomic, strong) NSMutableArray <SSJShareBookItem *>*shareBooksDataItems;
 
 @property(nonatomic, strong) SSJBooksTypeItem *editBooksItem;
 
@@ -117,25 +121,38 @@ static BOOL kNeedBannerDisplay = YES;
 #pragma mark - UICollectionViewDelegate
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    SSJBooksTypeItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
-    if (item.editeModel) {
-        self.editBooksItem = item;
-        [self.editAlertView show];
-    } else {
-        if ([item.booksName isEqualToString:@"添加账本"]) {
+    NSString *bookName;
+    NSString *bookId;
+    if (indexPath.section == 0) {
+       SSJBooksTypeItem *privateItem = (SSJBooksTypeItem *)[self.privateBooksDataitems ssj_safeObjectAtIndex:indexPath.row];
+        bookName = privateItem.booksName;
+        bookId = privateItem.booksId;
+    } else if(indexPath.section == 1) {
+        SSJShareBookItem *shareItem = (SSJShareBookItem *)[self.shareBooksDataItems ssj_safeObjectAtIndex:indexPath.row];
+        bookName = shareItem.booksName;
+        bookId = shareItem.booksId;
+    }
+    
+//    if (item.editeModel) {
+//        self.editBooksItem = item;
+//        [self.editAlertView show];
+//    } else {
+        if ([bookName isEqualToString:@"添加账本"]) {
             [self.parentSelectView show];
         } else {
-            [SSJAnaliyticsManager event:@"change_account_book" extra:item.booksName
+            [SSJAnaliyticsManager event:@"change_account_book" extra:bookName
              ];
-            [SSJUserTableManager updateCurrentBooksId:item.booksId success:^{
-                self.currentBooksId = item.booksId;
+            @weakify(self);
+            [SSJUserTableManager updateCurrentBooksId:bookId success:^{
+                @strongify(self);
+                self.currentBooksId = bookId;
                 [self.collectionView reloadData];
                 [self.mm_drawerController closeDrawerAnimated:YES completion:NULL];
             } failure:^(NSError * _Nonnull error) {
                 [SSJAlertViewAdapter showError:error];
             }];
         }
-    }
+//    }
 }
 
 
@@ -146,15 +163,26 @@ static BOOL kNeedBannerDisplay = YES;
 }
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return self.items.count;
+//    return ((NSMutableArray *)[self.booksDataItems ssj_safeObjectAtIndex:section]).count;
+    if (section == 0) {
+        return self.privateBooksDataitems.count;
+    } else if (section == 1) {
+        return self.shareBooksDataItems.count;
+    }
+    return 0;
 }
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    SSJBooksTypeItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
     SSJBooksCollectionViewCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:SSJBooksTypeCellIdentifier forIndexPath:indexPath];
-    
-    cell.booksTypeItem = item;
+    cell.curretSelectedBookId = self.currentBooksId;
+    if (indexPath.section == 0) {
+        SSJBooksTypeItem *privateItem = [self.privateBooksDataitems ssj_safeObjectAtIndex:indexPath.row];
+        cell.booksTypeItem = privateItem;
+    } else if (indexPath.section == 1) {
+        SSJShareBookItem *shareItem = [self.shareBooksDataItems ssj_safeObjectAtIndex:indexPath.row];
+        cell.booksTypeItem = shareItem;
+    }
     return cell;
 }
 
@@ -194,14 +222,14 @@ static BOOL kNeedBannerDisplay = YES;
 #pragma mark - SSJEditableCollectionViewDelegate
 - (BOOL)collectionView:(SSJEditableCollectionView *)collectionView shouldBeginEditingWhenPressAtIndexPath:(NSIndexPath *)indexPath{
     [SSJAnaliyticsManager event:@"fund_sort"];
-    if (indexPath.row == self.items.count - 1) {
+    if (indexPath.row == self.privateBooksDataitems.count - 1) {
         return NO;
     }
     return YES;
 }
 
 - (BOOL)collectionView:(SSJEditableCollectionView *)collectionView shouldMoveCellAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath{
-    if (toIndexPath.row == self.items.count - 1) {
+    if (toIndexPath.row == self.privateBooksDataitems.count - 1) {
         return NO;
     }
     return YES;
@@ -210,7 +238,7 @@ static BOOL kNeedBannerDisplay = YES;
 - (void)collectionView:(SSJEditableCollectionView *)collectionView didBeginEditingWhenPressAtIndexPath:(NSIndexPath *)indexPath{
     self.rightButton.selected = YES;
     self.adView.hidden = YES;
-    for (SSJBooksTypeItem *item in self.items) {
+    for (SSJBooksTypeItem *item in self.privateBooksDataitems) {
         if (![item.booksName isEqualToString:@"添加账本"]) {
             item.editeModel = YES;
         }
@@ -218,7 +246,7 @@ static BOOL kNeedBannerDisplay = YES;
 }
 
 - (void)collectionViewDidEndEditing:(SSJEditableCollectionView *)collectionView{
-    [SSJBooksTypeStore saveBooksOrderWithItems:self.items sucess:^{
+    [SSJBooksTypeStore saveBooksOrderWithItems:self.privateBooksDataitems sucess:^{
         [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
     } failure:^(NSError *error) {
         SSJPRINT(@"%@",[error localizedDescription]);
@@ -231,9 +259,16 @@ static BOOL kNeedBannerDisplay = YES;
 //}
 
 - (void)collectionView:(SSJEditableCollectionView *)collectionView didEndMovingCellFromIndexPath:(NSIndexPath *)fromIndexPath toTargetIndexPath:(NSIndexPath *)toIndexPath{
-    SSJBooksTypeItem *currentItem = [self.items ssj_safeObjectAtIndex:fromIndexPath.row];
-    [self.items removeObjectAtIndex:fromIndexPath.row];
-    [self.items insertObject:currentItem atIndex:toIndexPath.row];
+    if (fromIndexPath.section == 0) {
+        SSJBooksTypeItem *currentItem = [self.privateBooksDataitems ssj_safeObjectAtIndex:fromIndexPath.row];
+        [self.privateBooksDataitems removeObjectAtIndex:fromIndexPath.row];
+        [self.privateBooksDataitems insertObject:currentItem atIndex:toIndexPath.row];
+    } else if (fromIndexPath.section == 1) {
+        SSJShareBookItem *shareCurrentItem = [self.shareBooksDataItems ssj_safeObjectAtIndex:fromIndexPath.row];
+        [self.shareBooksDataItems removeObjectAtIndex:fromIndexPath.row];
+        [self.shareBooksDataItems insertObject:shareCurrentItem atIndex:toIndexPath.row];
+    }
+    
 }
 
 #pragma mark - SSJBaseNetworkServiceDelegate
@@ -261,7 +296,7 @@ static BOOL kNeedBannerDisplay = YES;
         self.adView.hidden = NO;
         [self.collectionView endEditing];
     }
-    for (SSJBooksTypeItem *item in self.items) {
+    for (SSJBooksTypeItem *item in self.privateBooksDataitems) {
         if (![item.booksName isEqualToString:@"添加账本"]) {
             item.editeModel = self.rightButton.isSelected;
         }
@@ -387,12 +422,25 @@ static BOOL kNeedBannerDisplay = YES;
     return _adService;
 }
 
-- (NSArray *)headerTitleArray
-{
+- (NSArray *)headerTitleArray {
     if (!_headerTitleArray) {
         _headerTitleArray = @[@"个人账本",@"共享账本"];
     }
     return _headerTitleArray;
+}
+
+- (NSMutableArray<SSJBooksTypeItem *> *)privateBooksDataitems {
+    if (!_privateBooksDataitems) {
+        _privateBooksDataitems = [NSMutableArray array];
+    }
+    return _privateBooksDataitems;
+}
+
+- (NSMutableArray<SSJShareBookItem *> *)shareBooksDataItems {
+    if (!_shareBooksDataItems) {
+        _shareBooksDataItems = [NSMutableArray array];
+    }
+    return _shareBooksDataItems;
 }
 
 #pragma mark - Private
@@ -407,12 +455,24 @@ static BOOL kNeedBannerDisplay = YES;
     
     [SSJUserTableManager currentBooksId:^(NSString * _Nonnull booksId) {
         weakSelf.currentBooksId = booksId;
+        //查询个人账本
         [SSJBooksTypeStore queryForBooksListWithSuccess:^(NSMutableArray<SSJBooksTypeItem *> *result) {
-            weakSelf.items = [NSMutableArray arrayWithArray:result];
+            weakSelf.privateBooksDataitems = result;
+//            [weakSelf.collectionView reloadSections:[NSIndexSet indexSetWithIndex:0]];
             [weakSelf.collectionView reloadData];
         } failure:^(NSError *error) {
             [SSJAlertViewAdapter showError:error];
         }];
+        
+        //查询共享账本
+        [SSJBooksTypeStore queryForShareBooksListWithSuccess:^(NSMutableArray<SSJShareBookItem *> *result) {
+            weakSelf.shareBooksDataItems = result;
+//            [weakSelf.collectionView reloadSections:[NSIndexSet indexSetWithIndex:1]];
+            [weakSelf.collectionView reloadData];
+        } failure:^(NSError *error) {
+            [SSJAlertViewAdapter showError:error];
+        }];
+        
     } failure:^(NSError * _Nonnull error) {
         [SSJAlertViewAdapter showError:error];
     }];
@@ -441,7 +501,7 @@ static BOOL kNeedBannerDisplay = YES;
         } completed:^{
             self.rightButton.selected = NO;
             [self.collectionView endEditing];
-            for (SSJBooksTypeItem *item in self.items) {
+            for (SSJBooksTypeItem *item in self.privateBooksDataitems) {
                 item.editeModel = NO;
             }
             self.adView.hidden = NO;
