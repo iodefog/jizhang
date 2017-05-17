@@ -108,9 +108,9 @@ static CGFloat imageScale = 0.8; //裁剪框和屏幕大小比例
         int imgH = self.imageView.height;
         if (imgH <= clipH) {
             
-        } else {
+        } else {//imgh>cliph
             double scale = self.imageView.width / self.imageView.height;
-            self.imageView.size = CGSizeMake(SSJSCREENHEIGHT * imageScale * scale, SSJSCREENHEIGHT * imageScale);
+            self.imageView.size = CGSizeMake(clipH * scale, clipH);
         }
         
     } else { //高》宽
@@ -118,9 +118,9 @@ static CGFloat imageScale = 0.8; //裁剪框和屏幕大小比例
         int imgW = self.imageView.width;
         if (imgW <= clipW) {
             
-        } else {
+        } else {//imgw>clipW
             double scale = self.imageView.height / self.imageView.width;
-            self.imageView.size = CGSizeMake(SSJSCREENWITH * imageScale * scale, SSJSCREENHEIGHT * imageScale);
+            self.imageView.size = CGSizeMake(clipW, clipW * scale);
         }
     }
 

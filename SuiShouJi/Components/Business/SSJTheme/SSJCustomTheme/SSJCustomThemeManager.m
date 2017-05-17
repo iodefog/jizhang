@@ -39,6 +39,7 @@ static const int kCustomThemeVersion = 1;
             // 将两个主题解压和背景图
             NSString *firstThemePath = [[NSBundle mainBundle] pathForResource:@"1001" ofType:@"zip"];
             NSString *secondThemePath = [[NSBundle mainBundle] pathForResource:@"1000" ofType:@"zip"];
+            
             [SSZipArchive unzipFileAtPath:firstThemePath toDestination:[NSString ssj_themeDirectory] overwrite:YES password:nil error:nil];
             [SSZipArchive unzipFileAtPath:secondThemePath toDestination:[NSString ssj_themeDirectory] overwrite:YES password:nil error:nil];
             
