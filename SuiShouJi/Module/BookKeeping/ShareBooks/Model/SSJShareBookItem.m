@@ -18,7 +18,8 @@
                     @"adminId":@"cadmin",
                     @"booksName":@"cbooksname",
                     @"booksColor":@"cbookscolor",
-                    @"parentType":@"iparenttype"};
+                    @"parentType":@"iparenttype",
+                    @"booksOrder":@"iorder"};
     }
     return mapping;
 }

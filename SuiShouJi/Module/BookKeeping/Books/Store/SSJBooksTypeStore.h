@@ -10,12 +10,13 @@
 #import "SSJBooksTypeItem.h"
 #import "SSJReportFormsItem.h"
 #import "SSJDatePeriod.h"
-
+#import "SSJShareBookItem.h"
 
 @interface SSJBooksTypeStore : NSObject
 
+#pragma mark - 个人账本
 /**
- *  查询账本列表
+ *  查询账本列表(个人账本)
  *
  *  @param success 查询成功的回调
  *  @param failure 查询失败的回调
@@ -71,4 +72,13 @@
 + (void)getTotalIncomeAndExpenceWithSuccess:(void(^)(double income,double expenture))success
                                     failure:(void (^)(NSError *error))failure;
 
+
+#pragma mark - 共享账本
+/**
+ *  查询账本列表(共享账本)
+ *
+ *  @param success 查询成功的回调
+ *  @param failure 查询失败的回调
+ */
++ (void)queryForShareBooksListWithSuccess:(void(^)(NSMutableArray<SSJShareBookItem *> *result))success failure:(void(^)(NSError *error))failure;
 @end

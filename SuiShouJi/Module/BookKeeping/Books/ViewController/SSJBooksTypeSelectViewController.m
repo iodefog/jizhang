@@ -151,7 +151,6 @@ static BOOL kNeedBannerDisplay = YES;
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString *booksid = self.currentBooksId;
     SSJBooksTypeItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
     SSJBooksCollectionViewCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:SSJBooksTypeCellIdentifier forIndexPath:indexPath];
     
