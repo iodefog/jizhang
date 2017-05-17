@@ -55,6 +55,16 @@
     }
 }
 
+- (void)setCellItem:(__kindof SSJBaseCellItem *)cellItem {
+    if (![cellItem isKindOfClass:[SSJBaseCellItem class]]) {
+        return;
+    }
+    
+    _cellItem = cellItem;
+    self.separatorInset = _cellItem.separatorInsets;
+    self.selectionStyle = _cellItem.selectionStyle;
+}
+
 - (void)setCustomAccessoryType:(UITableViewCellAccessoryType)customAccessoryType {
     if (_customAccessoryType != customAccessoryType) {
         _customAccessoryType = customAccessoryType;

@@ -10,7 +10,7 @@
 
 @interface SSJFundingDetailListHeaderView : UIView
 
-@property(nonatomic, strong) SSJBaseItem *item;
+@property(nonatomic, strong) SSJBaseCellItem *item;
 
 //点击按钮的回调
 typedef void (^SectionHeaderClickedBlock)();

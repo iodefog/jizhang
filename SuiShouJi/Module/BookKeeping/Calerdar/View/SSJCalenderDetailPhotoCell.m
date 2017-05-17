@@ -37,7 +37,7 @@
     [super updateConstraints];
 }
 
-- (void)setCellItem:(__kindof SSJBaseItem *)cellItem {
+- (void)setCellItem:(__kindof SSJBaseCellItem *)cellItem {
     if (![cellItem isKindOfClass:[SSJCalenderDetailPhotoCellItem class]]) {
         return;
     }

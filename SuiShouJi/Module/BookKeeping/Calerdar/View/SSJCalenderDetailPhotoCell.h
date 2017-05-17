@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-@interface SSJCalenderDetailPhotoCellItem : SSJBaseItem
+@interface SSJCalenderDetailPhotoCellItem : SSJBaseCellItem
 
 @property (nonatomic, copy) NSURL *photoPath;
 

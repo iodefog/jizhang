@@ -107,7 +107,7 @@
     _progressView.frame = CGRectMake(10, 40, self.contentView.width - 15, 30);
 }
 
-- (void)setCellItem:(SSJBaseItem *)cellItem {
+- (void)setCellItem:(SSJBaseCellItem *)cellItem {
     if (![cellItem isKindOfClass:[SSJReportFormCurveListCellItem class]]) {
         return;
     }

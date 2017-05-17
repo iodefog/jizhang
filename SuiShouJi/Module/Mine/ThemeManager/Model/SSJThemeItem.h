@@ -6,9 +6,9 @@
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
 
-#import "SSJBaseItem.h"
+#import "SSJBaseCellItem.h"
 
-@interface SSJThemeItem : SSJBaseItem
+@interface SSJThemeItem : SSJBaseCellItem
 
 typedef NS_ENUM(NSInteger, themeStatus) {
     themeStatusNotDownloaded,        // 未下载

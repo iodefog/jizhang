@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface SSJReminderItem : SSJBaseItem<NSCopying>
+@interface SSJReminderItem : SSJBaseCellItem<NSCopying>
 
 typedef NS_ENUM(NSInteger, SSJReminderType) {
     SSJReminderTypeNormal,       //自定义提醒

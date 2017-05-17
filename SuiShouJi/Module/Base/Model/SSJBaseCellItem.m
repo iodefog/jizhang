@@ -1,26 +1,14 @@
 //
-//  SSJBaseItem.m
+//  SSJBaseCellItem.m
 //  MoneyMore
 //
 //  Created by old lang on 15-3-23.
 //  Copyright (c) 2015年 ___9188___. All rights reserved.
 //
 
-#import "SSJBaseItem.h"
+#import "SSJBaseCellItem.h"
 
-@implementation SSJBaseItem
-
-+ (instancetype)itemWithElement:(id)element {
-    SSJBaseItem *item = [[SSJBaseItem alloc] initWithElement:element];
-    return item;
-}
-
-- (instancetype)initWithElement:(id)element {
-    if (self = [self init]) {
-        [self parseElement:element];
-    }
-    return self;
-}
+@implementation SSJBaseCellItem
 
 - (instancetype)init {
     if (self = [super init]) {
@@ -30,10 +18,11 @@
 }
 
 - (id)copyWithZone:(NSZone *)zone {
-    return nil;
-}
-
-- (void)parseElement:(id)element {
+    SSJBaseCellItem *item = [[SSJBaseCellItem alloc] init];
+    item.rowHeight = self.rowHeight;
+    item.separatorInsets = self.separatorInsets;
+    item.selectionStyle = self.selectionStyle;
+    return item;
 }
 
 - (void)setValue:(id)value forUndefinedKey:(NSString *)key {

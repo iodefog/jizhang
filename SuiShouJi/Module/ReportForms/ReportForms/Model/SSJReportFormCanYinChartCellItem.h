@@ -6,7 +6,7 @@
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
 
-#import "SSJBaseItem.h"
+#import "SSJBaseCellItem.h"
 
 /**
  左侧分割线段样式
@@ -21,7 +21,7 @@ typedef NS_OPTIONS(NSUInteger, SSJReportFormCanYinChartCellSegmentStyle) {
     SSJReportFormCanYinChartCellSegmentStyleBottom = 1 << 1
 };
 
-@interface SSJReportFormCanYinChartCellItem : SSJBaseItem
+@interface SSJReportFormCanYinChartCellItem : SSJBaseCellItem
 
 @property (nonatomic) SSJReportFormCanYinChartCellSegmentStyle segmentStyle;
 

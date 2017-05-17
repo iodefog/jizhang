@@ -54,7 +54,7 @@
     self.moneyLab.centerY = self.contentView.height * 0.5;
 }
 
-- (void)setCellItem:(__kindof SSJBaseItem *)cellItem {
+- (void)setCellItem:(__kindof SSJBaseCellItem *)cellItem {
     
     if (![cellItem isKindOfClass:[SSJCalenderTableViewCellItem class]]) {
         return;

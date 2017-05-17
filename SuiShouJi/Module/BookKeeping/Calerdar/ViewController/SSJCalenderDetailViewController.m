@@ -76,7 +76,7 @@ static NSString *const kSSJCalenderDetailPhotoCellId = @"kSSJCalenderDetailPhoto
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    SSJBaseItem *item = [self.items ssj_objectAtIndexPath:indexPath];
+    SSJBaseCellItem *item = [self.items ssj_objectAtIndexPath:indexPath];
     SSJCalenderTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[self cellReuseIdForItemClass:[item class]] forIndexPath:indexPath];
     cell.cellItem = item;
     return cell;
@@ -84,7 +84,7 @@ static NSString *const kSSJCalenderDetailPhotoCellId = @"kSSJCalenderDetailPhoto
 
 #pragma mark - UITableViewDelegate
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    SSJBaseItem *item = [self.items ssj_objectAtIndexPath:indexPath];
+    SSJBaseCellItem *item = [self.items ssj_objectAtIndexPath:indexPath];
     if ([item isKindOfClass:[SSJCalenderTableViewCellItem class]]
         || [item isKindOfClass:[SSJCalenderDetailInfoCellItem class]]) {
         return 54;
@@ -113,8 +113,8 @@ static NSString *const kSSJCalenderDetailPhotoCellId = @"kSSJCalenderDetailPhoto
 - (UIButton *)editBtn {
     if (!_editBtn) {
         _editBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_editBtn ssj_setBorderStyle:SSJBorderStyleTop];
         _editBtn.frame = CGRectMake(0, self.view.height - 54, self.view.width, 54);
+        [_editBtn ssj_setBorderStyle:SSJBorderStyleTop];
         _editBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
         [_editBtn setTitle:NSLocalizedString(@"修改", nil) forState:UIControlStateNormal];
         [[_editBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
@@ -196,21 +196,25 @@ static NSString *const kSSJCalenderDetailPhotoCellId = @"kSSJCalenderDetailPhoto
     SSJCalenderDetailInfoCellItem *memberItem = [[SSJCalenderDetailInfoCellItem alloc] init];
     memberItem.leftText = @"成员";
     memberItem.rightText = [[self.item.membersItem valueForKeyPath:@"memberName"] componentsJoinedByString:@"，"];
+    memberItem.separatorInsets = UIEdgeInsetsMake(0, 15, 0, 0);
     [section_2 addObject:memberItem];
     
     SSJCalenderDetailInfoCellItem *dateItem = [[SSJCalenderDetailInfoCellItem alloc] init];
     dateItem.leftText = @"时间";
     dateItem.rightText = [NSString stringWithFormat:@"%@ %@", self.item.billDate, self.item.billDetailDate];
+    dateItem.separatorInsets = UIEdgeInsetsMake(0, 15, 0, 0);
     [section_2 addObject:dateItem];
     
     SSJCalenderDetailInfoCellItem *fundItem = [[SSJCalenderDetailInfoCellItem alloc] init];
     fundItem.leftText = @"资金";
     fundItem.rightText = self.item.fundName;
+    fundItem.separatorInsets = UIEdgeInsetsMake(0, 15, 0, 0);
     [section_2 addObject:fundItem];
     
     SSJCalenderDetailInfoCellItem *bookItem = [[SSJCalenderDetailInfoCellItem alloc] init];
     bookItem.leftText = @"账本";
     bookItem.rightText = self.item.booksName;
+    bookItem.separatorInsets = UIEdgeInsetsMake(0, 15, 0, 0);
     [section_2 addObject:bookItem];
 }
 

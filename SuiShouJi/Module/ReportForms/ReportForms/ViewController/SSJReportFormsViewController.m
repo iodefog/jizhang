@@ -126,7 +126,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    SSJBaseItem *item = [self.datas ssj_safeObjectAtIndex:indexPath.row];
+    SSJBaseCellItem *item = [self.datas ssj_safeObjectAtIndex:indexPath.row];
     
     if ([item isKindOfClass:[SSJReportFormsChartCellItem class]]) {
         SSJReportFormsChartCell *chartCell = [tableView dequeueReusableCellWithIdentifier:kChartViewCellID forIndexPath:indexPath];
@@ -176,7 +176,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
     [SSJAnaliyticsManager event:@"forms_bar_chart"];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    SSJBaseItem *item = [self.datas ssj_safeObjectAtIndex:indexPath.row];
+    SSJBaseCellItem *item = [self.datas ssj_safeObjectAtIndex:indexPath.row];
     
     if ([item isKindOfClass:[SSJReportFormsItem class]]) {
         SSJReportFormsItem *tmpItem = (SSJReportFormsItem *)item;
@@ -218,7 +218,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    SSJBaseItem *item = [self.datas ssj_safeObjectAtIndex:indexPath.row];
+    SSJBaseCellItem *item = [self.datas ssj_safeObjectAtIndex:indexPath.row];
     return item.rowHeight;
 }
 

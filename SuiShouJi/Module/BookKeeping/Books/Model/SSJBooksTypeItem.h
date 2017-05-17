@@ -6,7 +6,7 @@
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
 
-#import "SSJBaseItem.h"
+#import "SSJBaseCellItem.h"
 
 @interface SSJBooksTypeItem : NSObject
 

@@ -99,7 +99,7 @@
     [self updateAppearance];
 }
 
-- (void)setCellItem:(SSJBaseItem *)cellItem {
+- (void)setCellItem:(SSJBaseCellItem *)cellItem {
     SSJLoanListCellItem *item = (SSJLoanListCellItem *)cellItem;
     _icon.image = [UIImage imageNamed:item.icon];
     _titleLab.text = item.loanTitle;

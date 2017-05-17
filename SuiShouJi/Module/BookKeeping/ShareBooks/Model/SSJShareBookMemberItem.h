@@ -6,9 +6,9 @@
 //  Copyright © 2017年 ___9188___. All rights reserved.
 //
 
-#import "SSJBaseItem.h"
+#import "SSJBaseCellItem.h"
 
-@interface SSJShareBookMemberItem : SSJBaseItem
+@interface SSJShareBookMemberItem : SSJBaseCellItem
 
 // 成员id(userid)
 @property(nonatomic, copy) NSString *memberId;

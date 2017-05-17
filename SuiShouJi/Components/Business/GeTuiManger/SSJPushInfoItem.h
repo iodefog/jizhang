@@ -6,9 +6,9 @@
 //  Copyright © 2017年 ___9188___. All rights reserved.
 //
 
-#import "SSJBaseItem.h"
+#import "SSJBaseCellItem.h"
 
-@interface SSJPushInfoItem : SSJBaseItem
+@interface SSJPushInfoItem : SSJBaseCellItem
 
 @property(nonatomic, strong) NSString *pushId;
 

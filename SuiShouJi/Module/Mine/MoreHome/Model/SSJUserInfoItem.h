@@ -6,9 +6,9 @@
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
 
-#import "SSJBaseItem.h"
+#import "SSJBaseCellItem.h"
 
-@interface SSJUserInfoItem : SSJBaseItem
+@interface SSJUserInfoItem : SSJBaseCellItem
 @property (nonatomic,strong) NSString *cuserid;
 @property (nonatomic,strong) NSString *cmobileno;
 @property (nonatomic,strong) NSString *cicon;

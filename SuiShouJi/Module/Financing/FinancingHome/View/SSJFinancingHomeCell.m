@@ -188,7 +188,7 @@ static const CGFloat kRadius = 12.f;
     return _fundingImage;
 }
 
--(void)setItem:(SSJBaseItem *)item {
+-(void)setItem:(SSJBaseCellItem *)item {
     _item = item;
     if ([_item isKindOfClass:[SSJFinancingHomeitem class]]) {
         SSJFinancingHomeitem *item = (SSJFinancingHomeitem *)_item;

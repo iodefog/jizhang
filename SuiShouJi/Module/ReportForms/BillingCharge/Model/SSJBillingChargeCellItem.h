@@ -6,12 +6,12 @@
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
 
-#import "SSJBaseItem.h"
+#import "SSJBaseCellItem.h"
 #import "SSJLoanChargeModel.h"
 
 @class SSJChargeMemberItem;
 
-@interface SSJBillingChargeCellItem : SSJBaseItem
+@interface SSJBillingChargeCellItem : SSJBaseCellItem
 
 // 图片名称
 @property (nonatomic, copy) NSString *imageName;

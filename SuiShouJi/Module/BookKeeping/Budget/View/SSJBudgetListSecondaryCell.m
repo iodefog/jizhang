@@ -67,7 +67,7 @@
     [self updateAppearance];
 }
 
-- (void)setCellItem:(SSJBaseItem *)cellItem {
+- (void)setCellItem:(SSJBaseCellItem *)cellItem {
     [self setNeedsLayout];
     
     SSJBudgetListCellItem *item = (SSJBudgetListCellItem *)cellItem;

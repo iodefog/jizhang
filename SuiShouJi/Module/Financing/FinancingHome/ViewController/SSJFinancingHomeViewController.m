@@ -103,7 +103,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 #pragma mark - UICollectionViewDelegate
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    SSJBaseItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
+    SSJBaseCellItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
     
     if ([item isKindOfClass:[SSJFinancingHomeitem class]]) {
         SSJFinancingHomeitem *financingItem = (SSJFinancingHomeitem *)item;
@@ -147,7 +147,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     
-    SSJBaseItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
+    SSJBaseCellItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
     __weak typeof(self) weakSelf = self;
     SSJFinancingHomeCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:SSJFinancingNormalCellIdentifier forIndexPath:indexPath];
     cell.item = item;
@@ -242,7 +242,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
     [self.items removeObjectAtIndex:fromIndexPath.row];
     [self.items insertObject:currentItem atIndex:toIndexPath.row];
     for (int i = 0; i < self.items.count; i ++) {
-        SSJBaseItem *tempItem = [self.items ssj_safeObjectAtIndex:i];
+        SSJBaseCellItem *tempItem = [self.items ssj_safeObjectAtIndex:i];
         if ([tempItem isKindOfClass:[SSJFinancingHomeitem class]]) {
             SSJFinancingHomeitem *fundingItem = (SSJFinancingHomeitem *)tempItem;
             fundingItem.fundingOrder = i + 1;
@@ -304,7 +304,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
     SSJFundingTypeSelectViewController *fundingTypeSelectVC = [[SSJFundingTypeSelectViewController alloc]init];
     fundingTypeSelectVC.needLoanOrNot = YES;
     __weak typeof(self) weakSelf = self;
-    fundingTypeSelectVC.addNewFundingBlock = ^(SSJBaseItem *item){
+    fundingTypeSelectVC.addNewFundingBlock = ^(SSJBaseCellItem *item){
         if ([item isKindOfClass:[SSJFundingItem class]]) {
             weakSelf.newlyAddFundId = ((SSJFundingItem *)item).fundingID;
         }else if ([item isKindOfClass:[SSJCreditCardItem class]]){
@@ -357,7 +357,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
     }];
 }
 
-- (void)deleteFundingItem:(SSJBaseItem *)item type:(BOOL)type{
+- (void)deleteFundingItem:(SSJBaseCellItem *)item type:(BOOL)type{
     __weak typeof(self) weakSelf = self;
     [SSJFinancingHomeHelper deleteFundingWithFundingItem:item deleteType:type Success:^{
         [weakSelf getDataFromDataBase];

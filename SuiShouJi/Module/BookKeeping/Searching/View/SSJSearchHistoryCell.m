@@ -54,7 +54,7 @@
     return _deleteButton;
 }
 
-- (void)setCellItem:(SSJBaseItem *)cellItem{
+- (void)setCellItem:(SSJBaseCellItem *)cellItem{
     [super setCellItem:cellItem];
     if (![cellItem isKindOfClass:[SSJSearchHistoryItem class]]) {
         return;

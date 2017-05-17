@@ -54,7 +54,7 @@
     self.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
 }
 
-- (void)setCellItem:(SSJBaseItem *)cellItem {
+- (void)setCellItem:(SSJBaseCellItem *)cellItem {
     [self.cellItem removeObserver:self forKeyPath:@"selected"];
     [super setCellItem:cellItem];
     [self.cellItem addObserver:self forKeyPath:@"selected" options:NSKeyValueObservingOptionNew context:NULL];

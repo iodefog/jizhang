@@ -7,9 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "SSJBaseItem.h"
+#import "SSJBaseCellItem.h"
 
-@interface SSJFundingDetailListItem : SSJBaseItem
+@interface SSJFundingDetailListItem : SSJBaseCellItem
 
 //年和月
 @property(nonatomic, strong) NSString *date;

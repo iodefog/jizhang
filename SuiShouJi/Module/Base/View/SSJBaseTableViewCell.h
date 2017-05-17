@@ -7,11 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "SSJBaseItem.h"
+#import "SSJBaseCellItem.h"
 
 @interface SSJBaseTableViewCell : UITableViewCell
 
-@property (nonatomic, strong) __kindof SSJBaseItem *cellItem;
+@property (nonatomic, strong) __kindof SSJBaseCellItem *cellItem;
 
 @property (nonatomic) UITableViewCellAccessoryType customAccessoryType;
 

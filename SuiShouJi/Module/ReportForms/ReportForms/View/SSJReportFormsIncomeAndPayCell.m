@@ -67,7 +67,7 @@ static const CGFloat imageDiam = 26;
     self.textLabel.textColor = _percentLabel.textColor = _moneyLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
 }
 
-- (void)setCellItem:(SSJBaseItem *)cellItem {
+- (void)setCellItem:(SSJBaseCellItem *)cellItem {
     if (cellItem) {
         SSJReportFormsItem *item = (SSJReportFormsItem *)cellItem;
         

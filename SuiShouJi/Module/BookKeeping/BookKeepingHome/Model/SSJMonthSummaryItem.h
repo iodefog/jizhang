@@ -6,9 +6,9 @@
 //  Copyright © 2017年 ___9188___. All rights reserved.
 //
 
-#import "SSJBaseItem.h"
+#import "SSJBaseCellItem.h"
 
-@interface SSJMonthSummaryItem : SSJBaseItem
+@interface SSJMonthSummaryItem : SSJBaseCellItem
 
 @property(nonatomic, strong) NSString *patchVersion;
 

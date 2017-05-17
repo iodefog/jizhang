@@ -6,9 +6,9 @@
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
 
-#import "SSJBaseItem.h"
+#import "SSJBaseCellItem.h"
 
-@interface SSJChatMessageItem : SSJBaseItem
+@interface SSJChatMessageItem : SSJBaseCellItem
 /**
  cell高度
  */

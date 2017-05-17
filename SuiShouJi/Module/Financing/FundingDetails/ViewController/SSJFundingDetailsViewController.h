@@ -7,8 +7,8 @@
 //
 
 #import "SSJNewBaseTableViewController.h"
-#import "SSJBaseItem.h"
+#import "SSJBaseCellItem.h"
 
 @interface SSJFundingDetailsViewController : SSJNewBaseTableViewController
-@property (nonatomic,strong) SSJBaseItem *item;
+@property (nonatomic,strong) SSJBaseCellItem *item;
 @end

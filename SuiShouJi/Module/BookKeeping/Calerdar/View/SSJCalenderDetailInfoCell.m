@@ -45,11 +45,12 @@
     [super updateConstraints];
 }
 
-- (void)setCellItem:(__kindof SSJBaseItem *)cellItem {
+- (void)setCellItem:(__kindof SSJBaseCellItem *)cellItem {
     if (![cellItem isKindOfClass:[SSJCalenderDetailInfoCellItem class]]) {
         return;
     }
     
+    [super setCellItem:cellItem];
     SSJCalenderDetailInfoCellItem *item = cellItem;
     self.leftLab.text = item.leftText;
     self.rightLab.text = item.rightText;

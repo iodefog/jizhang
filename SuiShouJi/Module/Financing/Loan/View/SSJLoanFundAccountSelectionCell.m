@@ -40,7 +40,7 @@
     self.checkMark.right = self.width - 10;
 }
 
-- (void)setCellItem:(SSJBaseItem *)cellItem {
+- (void)setCellItem:(SSJBaseCellItem *)cellItem {
     [self.cellItem removeObserver:self forKeyPath:@"showCheckMark"];
     
     [super setCellItem:cellItem];
