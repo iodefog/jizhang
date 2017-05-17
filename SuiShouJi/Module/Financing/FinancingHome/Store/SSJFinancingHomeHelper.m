@@ -97,7 +97,7 @@
     [[SSJDatabaseQueue sharedInstance]asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
         for (int i = 0; i < items.count; i++) {
             NSString *sql;
-            SSJBaseItem *item = [items ssj_safeObjectAtIndex:i];
+            SSJBaseCellItem *item = [items ssj_safeObjectAtIndex:i];
             if ([item isKindOfClass:[SSJFinancingHomeitem class]]) {
                 SSJFinancingHomeitem *fundingItem = (SSJFinancingHomeitem *)item;
                 fundingItem.fundingOrder = i + 1;
@@ -113,7 +113,7 @@
     }];
 }
 
-+ (void)deleteFundingWithFundingItem:(SSJBaseItem *)item
++ (void)deleteFundingWithFundingItem:(SSJBaseCellItem *)item
                           deleteType:(BOOL)type
                              Success:(void(^)())success
                              failure:(void (^)(NSError *error))failure {

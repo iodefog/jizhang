@@ -68,8 +68,8 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
 @end
 
 @implementation SSJFundingTransferViewController{
-    SSJBaseItem *_transferInItem;
-    SSJBaseItem *_transferOutItem;
+    SSJBaseCellItem *_transferInItem;
+    SSJBaseCellItem *_transferOutItem;
     UITextField *_moneyInput;
     UITextField *_memoInput;
 }
@@ -341,7 +341,7 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
             }else{
                 SSJFundingTypeSelectViewController *NewFundingVC = [[SSJFundingTypeSelectViewController alloc]init];
                 NewFundingVC.needLoanOrNot = NO;
-                NewFundingVC.addNewFundingBlock = ^(SSJBaseItem *item){
+                NewFundingVC.addNewFundingBlock = ^(SSJBaseCellItem *item){
                     if ([item isKindOfClass:[SSJFundingItem class]]) {
                         SSJFundingItem *fundItem = (SSJFundingItem *)item;
                         _transferInItem = fundItem;
@@ -373,7 +373,7 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
             }else{
                 SSJFundingTypeSelectViewController *NewFundingVC = [[SSJFundingTypeSelectViewController alloc]init];
                 NewFundingVC.needLoanOrNot = NO;
-                NewFundingVC.addNewFundingBlock = ^(SSJBaseItem *item){
+                NewFundingVC.addNewFundingBlock = ^(SSJBaseCellItem *item){
                     if ([item isKindOfClass:[SSJFundingItem class]]) {
                         SSJFundingItem *fundItem = (SSJFundingItem *)item;
                         _transferOutItem = fundItem;

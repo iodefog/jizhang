@@ -130,6 +130,7 @@
         
         SSJBillingChargeCellItem *item = [[SSJBillingChargeCellItem alloc] init];
         while ([chargeResult next]) {
+            item.ID = chargeId;
             item.billId = [chargeResult stringForColumn:@"IBILLID"];
             item.imageName = [chargeResult stringForColumn:@"CCOIN"];
             item.typeName = [chargeResult stringForColumn:@"CNAME"];

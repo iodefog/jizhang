@@ -6,9 +6,9 @@
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
 
-#import "SSJBaseItem.h"
+#import "SSJBaseCellItem.h"
 
-@interface SSJBannerItem : SSJBaseItem
+@interface SSJBannerItem : SSJBaseCellItem
 
 // 图片url
 @property(nonatomic, strong) NSString *bannerImageUrl;

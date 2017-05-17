@@ -6,10 +6,10 @@
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
 
-#import "SSJBaseItem.h"
+#import "SSJBaseCellItem.h"
 #import "SSJBillingChargeCellItem.h"
 
-@interface SSJBookKeepingHomeListItem : SSJBaseItem
+@interface SSJBookKeepingHomeListItem : SSJBaseCellItem
 
 @property(nonatomic) double balance;
 

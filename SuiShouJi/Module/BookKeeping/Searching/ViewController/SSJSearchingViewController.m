@@ -207,7 +207,7 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
         [cell setCellItem:billItem];
         return cell;
     }else{
-        SSJBaseItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
+        SSJBaseCellItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
         SSJSearchHistoryCell *cell = [tableView dequeueReusableCellWithIdentifier:kSearchHistoryCellId forIndexPath:indexPath];
         __weak typeof(self) weakSelf = self;
         cell.deleteAction = ^(SSJSearchHistoryItem *item){

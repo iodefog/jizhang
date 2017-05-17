@@ -46,7 +46,7 @@
     [self updateAppearance];
 }
 
-- (void)setCellItem:(SSJBaseItem *)cellItem {
+- (void)setCellItem:(SSJBaseCellItem *)cellItem {
     SSJReportFormsChartCellItem *item = (SSJReportFormsChartCellItem *)cellItem;
     if (![item isKindOfClass:[SSJReportFormsChartCellItem class]]) {
         return;

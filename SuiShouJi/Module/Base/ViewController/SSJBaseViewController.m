@@ -53,27 +53,11 @@
     self.view.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
     
     if (_appliesTheme) {
-        if (SSJ_CURRENT_THEME.needBlurOrNot) {
-            if ([self isKindOfClass:[SSJReportFormsViewController class]]
-                || [self isKindOfClass:[SSJRecordMakingViewController class]]) {
-                _backgroundView = [[UIImageView alloc] initWithImage:[[UIImage ssj_compatibleThemeImageNamed:@"background"] ssj_blurredImageWithRadius:2.f iterations:20 tintColor:[UIColor clearColor]]];
-            } else {
-                _backgroundView = [[UIImageView alloc] initWithImage:[UIImage ssj_compatibleThemeImageNamed:@"background"]];
-                if (SSJ_CURRENT_THEME.customThemeBackImage.length) {
-                    _backgroundView.image = [UIImage ssj_themeLocalBackGroundImageName:SSJ_CURRENT_THEME.customThemeBackImage];
-                }
-            }
-        } else {
-            _backgroundView = [[UIImageView alloc] initWithImage:[UIImage ssj_compatibleThemeImageNamed:@"background"]];
-            if (SSJ_CURRENT_THEME.customThemeBackImage.length) {
-                _backgroundView.image = [UIImage ssj_themeLocalBackGroundImageName:SSJ_CURRENT_THEME.customThemeBackImage];
-            }
-        }
-        
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateAppearanceAfterThemeChanged) name:SSJThemeDidChangeNotification object:nil];
 
-        _backgroundView.frame = self.view.bounds;
+        _backgroundView = [[UIImageView alloc] initWithFrame:self.view.bounds];
         [self.view addSubview:_backgroundView];
+        [self updateBackgroundView];
     }
     
     if (self.navigationController && [[self.navigationController viewControllers] count] > 1) {
@@ -146,10 +130,7 @@
 }
 
 - (void)updateAppearanceAfterThemeChanged {
-    [_backgroundView ssj_setCompatibleThemeImageWithName:@"background"];
-    if (SSJ_CURRENT_THEME.customThemeBackImage.length ) {
-        _backgroundView.image = [UIImage ssj_themeLocalBackGroundImageName:SSJ_CURRENT_THEME.customThemeBackImage];
-    }
+    [self updateBackgroundView];
     [self updateNavigationAppearance];
     [[UIApplication sharedApplication] setStatusBarStyle:SSJ_CURRENT_THEME.statusBarStyle];
 }
@@ -271,6 +252,23 @@
         [attributes setObject:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3] forKey:NSFontAttributeName];
         [item setTitleTextAttributes:attributes forState:UIControlStateNormal];
     }
+}
+
+- (void)updateBackgroundView {
+    UIImage *backgroundImage = nil;
+    if (SSJ_CURRENT_THEME.customThemeBackImage.length) {
+        backgroundImage = [UIImage ssj_themeLocalBackGroundImageName:SSJ_CURRENT_THEME.customThemeBackImage];
+    } else {
+        backgroundImage = [UIImage ssj_compatibleThemeImageNamed:@"background"];
+    }
+    
+    if (SSJ_CURRENT_THEME.needBlurOrNot) {
+        if ([self isKindOfClass:[SSJReportFormsViewController class]]
+            || [self isKindOfClass:[SSJRecordMakingViewController class]]) {
+            backgroundImage = [backgroundImage ssj_blurredImageWithRadius:2.f iterations:20 tintColor:[UIColor clearColor]];
+        }
+    }
+    self.backgroundView.image = backgroundImage;
 }
 
 @end

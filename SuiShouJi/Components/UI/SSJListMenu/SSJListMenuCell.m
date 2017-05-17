@@ -88,7 +88,7 @@
     self.imageView.centerY = self.textLabel.centerY = CGRectGetMidY(contentFrame);
 }
 
-- (void)setCellItem:(SSJBaseItem *)cellItem {
+- (void)setCellItem:(SSJBaseCellItem *)cellItem {
     if (![cellItem isKindOfClass:[SSJListMenuCellItem class]]) {
         return;
     }

@@ -56,7 +56,7 @@
     _rightLabel.frame = CGRectMake(self.textLabel.right + 15, 0, self.contentView.width - self.textLabel.right - 30, self.contentView.height);
 }
 
-- (void)setCellItem:(SSJBaseItem *)cellItem {
+- (void)setCellItem:(SSJBaseCellItem *)cellItem {
     [super setCellItem:cellItem];
     
     SSJLoanDetailCellItem *item = (SSJLoanDetailCellItem *)cellItem;

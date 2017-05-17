@@ -6,9 +6,9 @@
 //  Copyright © 2017年 ___9188___. All rights reserved.
 //
 
-#import "SSJBaseItem.h"
+#import "SSJBaseCellItem.h"
 
-@interface SSJThemeAndAdviceDotItem : SSJBaseItem
+@interface SSJThemeAndAdviceDotItem : SSJBaseCellItem
 /**
  最新回复时间String格式
  */

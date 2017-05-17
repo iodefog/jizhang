@@ -84,7 +84,7 @@
     return _cellImageView;
 }
 
-- (void)setCellItem:(SSJBaseItem *)cellItem{
+- (void)setCellItem:(SSJBaseCellItem *)cellItem{
     [super setCellItem:cellItem];
     if (![cellItem isKindOfClass:[SSJReminderItem class]]) {
         return;

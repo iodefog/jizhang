@@ -6,11 +6,11 @@
 //  Copyright © 2017年 ___9188___. All rights reserved.
 //
 
-#import "SSJBaseItem.h"
+#import "SSJBaseCellItem.h"
 
 @class SSJFundingTransferDetailItem;
 
-@interface SSJFundingTransferListPeriodCellItem : SSJBaseItem
+@interface SSJFundingTransferListPeriodCellItem : SSJBaseCellItem
 
 @property (nonatomic, strong) NSString *transferId;
 

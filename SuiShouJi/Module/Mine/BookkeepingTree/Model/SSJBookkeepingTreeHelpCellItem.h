@@ -6,10 +6,10 @@
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
 
-#import "SSJBaseItem.h"
+#import "SSJBaseCellItem.h"
 #import "SSJBookkeepingTreeHelper.h"
 
-@interface SSJBookkeepingTreeHelpCellItem : SSJBaseItem
+@interface SSJBookkeepingTreeHelpCellItem : SSJBaseCellItem
 
 @property (nonatomic, copy, readonly) NSString *imageName;
 

@@ -6,10 +6,10 @@
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
 
-#import "SSJBaseItem.h"
+#import "SSJBaseCellItem.h"
 #import "SSJBillingChargeCellItem.h"
 
-@interface SSJSearchResultItem : SSJBaseItem
+@interface SSJSearchResultItem : SSJBaseCellItem
 
 typedef NS_ENUM(NSInteger, SSJChargeListOrder) {
     SSJChargeListOrderMoneyAscending,   //按金额升序

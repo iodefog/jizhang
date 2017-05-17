@@ -6,11 +6,11 @@
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
 
-#import "SSJBaseItem.h"
+#import "SSJBaseCellItem.h"
 
 @class SSJLoanModel;
 
-@interface SSJLoanListCellItem : SSJBaseItem
+@interface SSJLoanListCellItem : SSJBaseCellItem
 
 @property (nonatomic, copy) NSString *icon;
 

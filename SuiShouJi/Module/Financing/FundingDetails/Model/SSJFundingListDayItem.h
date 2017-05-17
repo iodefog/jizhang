@@ -7,9 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "SSJBaseItem.h"
+#import "SSJBaseCellItem.h"
 
-@interface SSJFundingListDayItem : SSJBaseItem
+@interface SSJFundingListDayItem : SSJBaseCellItem
 
 //当天的日期
 @property(nonatomic, strong) NSString *date;

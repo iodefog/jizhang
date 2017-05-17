@@ -6,12 +6,12 @@
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
 
-#import "SSJBaseItem.h"
+#import "SSJBaseCellItem.h"
 #import "SSJLoanChargeModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface SSJLoanDetailCellItem : SSJBaseItem
+@interface SSJLoanDetailCellItem : SSJBaseCellItem
 
 @property (nonatomic, copy) NSString *image;
 

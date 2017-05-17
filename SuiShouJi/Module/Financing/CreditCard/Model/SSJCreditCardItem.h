@@ -6,9 +6,9 @@
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
 
-#import "SSJBaseItem.h"
+#import "SSJBaseCellItem.h"
 
-@interface SSJCreditCardItem : SSJBaseItem
+@interface SSJCreditCardItem : SSJBaseCellItem
 
 // 信用卡id
 @property(nonatomic, strong) NSString *cardId;
