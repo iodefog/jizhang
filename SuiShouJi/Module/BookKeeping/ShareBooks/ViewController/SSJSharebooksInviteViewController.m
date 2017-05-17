@@ -51,12 +51,12 @@
     self.backgroundView.image = [UIImage ssj_compatibleImageNamed:@"sharebk_backgroud"];
     self.titles = @[@"发送暗号给好友",@"对方打开有鱼记账App V2.5 以上版本",@"好友添加共享账本时，输入暗号",@"大功告成～"];
     [self.view addSubview:self.backView];
-    [self.backView addSubview:self.codeInput];
-    [self.backView addSubview:self.customCodeLab];
-    [self.backView addSubview:self.expireDateLab];
     [self.backView addSubview:self.codeTitleLab];
     [self.backView addSubview:self.codeLeftImage];
     [self.backView addSubview:self.codeRightImage];
+    [self.backView addSubview:self.codeInput];
+    [self.backView addSubview:self.customCodeLab];
+    [self.backView addSubview:self.expireDateLab];
     [self.view addSubview:self.sendButton];
     for (SSJSHareBooksHintView *hintView in self.hintViews) {
         [self.view addSubview:hintView];
@@ -70,7 +70,11 @@
     self.backView.size = CGSizeMake(self.view.width - 35, 255);
     self.codeTitleLab.centerX = self.backView.centerX;
     self.codeTitleLab.top = 30;
-    
+    self.codeLeftImage.right = self.codeTitleLab.left - 10;
+    self.codeRightImage.left = self.codeTitleLab.right + 10;
+    self.codeLeftImage.centerY = self.codeRightImage.centerY = self.codeTitleLab.centerY;
+    self.codeInput.top = self.codeTitleLab.bottom + 38;
+    self.codeInput.centerX = self.backView.centerX;
 }
 
 #pragma mark - Getter
