@@ -113,8 +113,8 @@ static NSString *const kSSJCalenderDetailPhotoCellId = @"kSSJCalenderDetailPhoto
 - (UIButton *)editBtn {
     if (!_editBtn) {
         _editBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_editBtn ssj_setBorderStyle:SSJBorderStyleTop];
         _editBtn.frame = CGRectMake(0, self.view.height - 54, self.view.width, 54);
+        [_editBtn ssj_setBorderStyle:SSJBorderStyleTop];
         _editBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
         [_editBtn setTitle:NSLocalizedString(@"修改", nil) forState:UIControlStateNormal];
         [[_editBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
