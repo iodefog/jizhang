@@ -8,7 +8,7 @@
 
 #import "SSJBaseViewController.h"
 #import "SSJBooksTypeItem.h"
-
+SSJ_DEPRECATED
 @interface SSJBooksEditeOrNewViewController : SSJBaseViewController
 
 @property(nonatomic, strong) SSJBooksTypeItem *item;

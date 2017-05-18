@@ -146,7 +146,7 @@ static NSString * SSJBooksParentSelectCellIdentifier = @"SSJBooksParentSelectCel
         default:
             break;
     }
-    cell.isSelected = YES;
+//    cell.isSelected = YES;
     if (self.parentSelectBlock) {
         self.parentSelectBlock(indexPath.item);
     }
@@ -161,9 +161,9 @@ static NSString * SSJBooksParentSelectCellIdentifier = @"SSJBooksParentSelectCel
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     SSJBooksParentSelectCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:SSJBooksParentSelectCellIdentifier forIndexPath:indexPath];
-    cell.image = [self.images ssj_safeObjectAtIndex:indexPath.item];
-    cell.title = [self.titles ssj_safeObjectAtIndex:indexPath.item];
-    cell.isSelected = NO;
+//    cell.image = [self.images ssj_safeObjectAtIndex:indexPath.item];
+//    cell.title = [self.titles ssj_safeObjectAtIndex:indexPath.item];
+//    cell.isSelected = NO;
     return cell;
 }
 
