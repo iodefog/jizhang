@@ -189,12 +189,6 @@ static BOOL kNeedBannerDisplay = YES;
 //    self.bottomBgView.bottom = self.view.bottom - SSJ_TABBAR_HEIGHT;
 }
 
--(void)viewWillDisappear:(BOOL)animated{
-    [super viewWillDisappear:animated];
-    [UIApplication sharedApplication].statusBarHidden = NO;
-}
-
-
 #pragma mark - UICollectionViewDataSource
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {

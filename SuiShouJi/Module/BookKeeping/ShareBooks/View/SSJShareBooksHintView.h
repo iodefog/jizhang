@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface SSJSHareBooksHintView : UIView
+@interface SSJShareBooksHintView: UIView
 
 @property(nonatomic) BOOL isLastRow;
 
