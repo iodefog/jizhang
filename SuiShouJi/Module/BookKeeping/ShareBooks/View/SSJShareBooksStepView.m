@@ -27,12 +27,20 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        [self addSubview:self.firstCircle];
-        [self addSubview:self.secondCircle];
         [self addSubview:self.thirdCircle];
+        [self addSubview:self.secondCircle];
+        [self addSubview:self.firstCircle];
         [self addSubview:self.checkImageView];
     }
     return self;
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    self.thirdCircle.layer.cornerRadius = self.thirdCircle.height / 2;
+    self.secondCircle.layer.cornerRadius = self.secondCircle.height / 2;
+    self.firstCircle.layer.cornerRadius = self.firstCircle.height / 2;
+
 }
 
 - (UIView *)firstCircle {
@@ -89,6 +97,10 @@
     }];
     
     [super updateConstraints];
+}
+
+- (void)setIsLastone:(BOOL)isLastone {
+    self.checkImageView.hidden = !isLastone;
 }
 
 /*

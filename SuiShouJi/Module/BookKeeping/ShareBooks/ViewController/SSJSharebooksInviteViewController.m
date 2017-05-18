@@ -73,9 +73,9 @@
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
+    self.backView.size = CGSizeMake(self.view.width - 35, 255);
     self.backView.centerX = self.view.width / 2;
     self.backView.top = SSJ_NAVIBAR_BOTTOM + 30;
-    self.backView.size = CGSizeMake(self.view.width - 35, 255);
     self.backView.layer.shadowPath = (__bridge CGPathRef _Nullable)([UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, self.backView.width + 4, self.backView.height + 4) cornerRadius:16.f]);
     self.backView.layer.shadowColor = [UIColor ssj_colorWithHex:@"#000000"].CGColor;
     self.backView.layer.shadowOpacity = 0.15;
@@ -84,19 +84,23 @@
     self.codeLeftImage.right = self.codeTitleLab.left - 10;
     self.codeRightImage.left = self.codeTitleLab.right + 10;
     self.codeLeftImage.centerY = self.codeRightImage.centerY = self.codeTitleLab.centerY;
+    self.codeInput.size = CGSizeMake(self.backView.width - 44, 57);
     self.codeInput.top = self.codeTitleLab.bottom + 34;
     self.codeInput.centerX = self.backView.width / 2;
-    self.codeInput.size = CGSizeMake(self.backView.width - 44, 57);
     self.customCodeLab.left = self.codeInput.left;
     self.expireDateLab.right = self.codeInput.right;
     self.customCodeLab.top = self.expireDateLab.top = self.codeInput.bottom + 15;
     self.sendButton.centerX = self.view.width / 2;
     self.sendButton.centerY = self.backView.bottom;
-//    for (SSJShareBooksHintView *hintView in self.hintViews) {
-//        NSInteger index = [self.hintViews indexOfObject:hintView];
-//        hintView.size = CGSizeMake(self.view.width, 20);
-//        hintView.top = self.sendButton.bottom + 48 + index * 20;
-//    }
+    for (SSJShareBooksHintView *hintView in self.hintViews) {
+        NSInteger index = [self.hintViews indexOfObject:hintView];
+        hintView.size = CGSizeMake(self.view.width, 38);
+        hintView.top = self.sendButton.bottom + 48 + index * 38;
+    }
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle {
+    return UIStatusBarStyleDefault;
 }
 
 #pragma mark - Getter
@@ -208,7 +212,7 @@
 #pragma mark - Event
 - (void)resendButtonClicked:(UIButton *)sender {
     if ([sender.titleLabel.text isEqualToString:@"随机生成"]) {
-        
+        self.codeInput.text = [SSJShareBooksHelper generateTheRandomCodeWithType:SSJRandomCodeTypeUpperLetter | SSJRandomCodeTypeNumbers length:6];
     }
 }
 

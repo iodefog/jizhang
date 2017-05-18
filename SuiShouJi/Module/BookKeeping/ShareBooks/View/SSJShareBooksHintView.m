@@ -35,6 +35,8 @@
     return self;
 }
 
+
+
 - (UILabel *)titleLab {
     if (!_titleLab) {
         _titleLab = [[UILabel alloc] init];
@@ -69,7 +71,7 @@
 
 - (void)updateConstraints {
     [self.titleLab mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(self.dotView).offset(15);
+        make.left.mas_equalTo(self.dotView.mas_right).offset(15);
         make.centerY.mas_equalTo(self);
     }];
     
@@ -82,25 +84,28 @@
     
     [self.topLine mas_updateConstraints:^(MASConstraintMaker *make) {
         make.height.mas_equalTo(10);
-        make.width.mas_equalTo(10);
-        make.centerX.bottom.mas_equalTo(self.dotView);
+        make.width.mas_equalTo(1);
+        make.centerX.mas_equalTo(self.dotView);
+        make.bottom.mas_equalTo(self.dotView.mas_top);
     }];
     
     [self.bottomLine mas_updateConstraints:^(MASConstraintMaker *make) {
         make.height.mas_equalTo(10);
-        make.width.mas_equalTo(10);
-        make.centerX.top.mas_equalTo(self.dotView);
+        make.width.mas_equalTo(1);
+        make.centerX.mas_equalTo(self.dotView);
+        make.top.mas_equalTo(self.dotView.mas_bottom);
     }];
     
     [super updateConstraints];
 }
 
 - (void)setIsLastRow:(BOOL)isLastRow {
-    self.bottomLine.hidden = !isLastRow;
+    self.bottomLine.hidden = isLastRow;
+    self.dotView.isLastone = isLastRow;
 }
 
 - (void)setIsFirstRow:(BOOL)isFirstRow {
-    self.topLine.hidden = !isFirstRow;
+    self.topLine.hidden = isFirstRow;
 }
 
 - (void)setTitle:(NSString *)title {
