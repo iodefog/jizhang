@@ -67,7 +67,9 @@
     
     [self.timer invalidate];
     
-    self.timer = nil;
+    if (self.timer) {
+        self.timer = nil;
+    }
     
     _currentSecond = 0;
 }
