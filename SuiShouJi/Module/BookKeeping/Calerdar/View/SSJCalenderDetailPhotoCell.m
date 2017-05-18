@@ -22,6 +22,7 @@
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+        self.selectionStyle = UITableViewCellSelectionStyleNone;
         self.photo = [[UIImageView alloc] init];
         [self.contentView addSubview:self.photo];
         [self setNeedsUpdateConstraints];
