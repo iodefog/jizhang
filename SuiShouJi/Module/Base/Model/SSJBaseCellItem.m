@@ -10,6 +10,7 @@
 
 @implementation SSJBaseCellItem
 
+// 用MJExtension转成字典忽略这几个属性
 + (NSArray *)mj_ignoredPropertyNames {
     return @[@"rowHeight",
              @"separatorInsets",

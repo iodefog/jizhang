@@ -13,7 +13,7 @@
 
 @interface SSJBillingChargeCellItem : SSJBaseCellItem
 
-// 图片名称
+// 收支类别图片名称
 @property (nonatomic, copy) NSString *imageName;
 
 // 收支类型名称

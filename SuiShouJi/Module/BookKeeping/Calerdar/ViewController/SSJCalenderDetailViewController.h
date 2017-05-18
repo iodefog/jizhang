@@ -12,7 +12,7 @@
 
 @interface SSJCalenderDetailViewController :SSJNewBaseTableViewController
 
-@property (nonatomic,strong) SSJBillingChargeCellItem *item;
+@property (nonatomic, strong) SSJBillingChargeCellItem *item;
 
 @property (nonatomic, copy) void (^deleteHandler)();
 
