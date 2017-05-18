@@ -45,7 +45,10 @@
   sigh(
     output_path:'/Users/a9188/Documents/provisionfile'
   )
-  increment_build_number
+  increment_build_number(
+      build_number: options[:build]
+      xcodeproj: PROJECT_FILE_PATH,
+   )
   gym(
     configuration:options[:config],
     scheme:options[:scheme],
