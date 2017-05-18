@@ -10,9 +10,15 @@
 
 @implementation SSJBaseCellItem
 
++ (NSArray *)mj_ignoredPropertyNames {
+    return @[@"rowHeight",
+             @"separatorInsets",
+             @"selectionStyle"];
+}
+
 - (instancetype)init {
     if (self = [super init]) {
-        _rowHeight = 54;
+        self.rowHeight = 54;
     }
     return self;
 }
