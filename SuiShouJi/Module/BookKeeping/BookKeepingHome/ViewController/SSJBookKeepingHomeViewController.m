@@ -320,39 +320,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
         SSJBookKeepingHomeTableViewCell * currentCell = (SSJBookKeepingHomeTableViewCell *)cell;
         SSJBillingChargeCellItem *item = currentCell.item;
         if ([self.newlyAddChargeArr containsObject:item]) {
-            if (item.operatorType == 0) {
-                currentCell.categoryImageButton.transform = CGAffineTransformMakeTranslation(0,  - currentCell.height / 2);
-                currentCell.expenditureLabel.alpha = 0;
-                currentCell.expentureMemoLabel.alpha = 0;
-                currentCell.incomeLabel.alpha = 0;
-                currentCell.incomeMemoLabel.alpha = 0;
-                if (item.incomeOrExpence) {
-                    currentCell.expenditureLabel.transform = CGAffineTransformMakeScale(0, 0);
-                    currentCell.expentureMemoLabel.transform = CGAffineTransformMakeScale(0, 0);
-                    currentCell.expentureImage.layer.transform = CATransform3DMakeRotation(degreesToRadians(90) , 1, -1, 0);
-                }else{
-                    currentCell.incomeLabel.transform = CGAffineTransformMakeScale(0, 0);
-                    currentCell.incomeMemoLabel.transform = CGAffineTransformMakeScale(0, 0);
-                    currentCell.IncomeImage.layer.transform = CATransform3DMakeRotation(degreesToRadians(90) , -1, -1, 0);
-                }
-                [UIView animateWithDuration:0.7 animations:^{
-                    currentCell.expenditureLabel.alpha = 1;
-                    currentCell.expentureMemoLabel.alpha = 1;
-                    currentCell.incomeLabel.alpha = 1;
-                    currentCell.incomeMemoLabel.alpha = 1;
-                    currentCell.categoryImageButton.transform = CGAffineTransformIdentity;
-                    currentCell.expenditureLabel.transform = CGAffineTransformIdentity;
-                    currentCell.incomeLabel.transform = CGAffineTransformIdentity;
-                    currentCell.expentureMemoLabel.transform = CGAffineTransformIdentity;
-                    currentCell.incomeMemoLabel.transform = CGAffineTransformIdentity;
-                    currentCell.expentureImage.layer.transform = CATransform3DIdentity;
-                    currentCell.IncomeImage.layer.transform = CATransform3DIdentity;
-                } completion:^(BOOL finished) {
-                    [currentCell shake];
-                }];
-            }else{
-                [currentCell shake];
-            }
+            [currentCell performAddOrEditAnimation];
             [self.newlyAddChargeArr removeObject:item];
         }else{
             if (!self.hasLoad && self.items.count) {
@@ -361,7 +329,6 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
                 [currentCell animatedShowCellWithDistance:self.view.height + indexPath.row * 130 delay:0.2 * (item.totalCount + indexPath.row) completion:^{
                     weakSelf.hasLoad = YES;
                 }];
-                
             }
         }
     }
@@ -420,7 +387,6 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
         if (!bookKeepingCell) {
             bookKeepingCell = [[SSJBookKeepingHomeTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
         }
-        bookKeepingCell.isEdite = ([indexPath compare:self.selectIndex] == NSOrderedSame);
         if (indexPath.row == [self.tableView numberOfRowsInSection:indexPath.section] - 1 && indexPath.section == self.items.count - 1) {
             bookKeepingCell.isLastRowOrNot = NO;
         }else{
@@ -429,7 +395,13 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
         SSJBookKeepingHomeListItem *listItem = [self.items objectAtIndex:indexPath.section];
         bookKeepingCell.item = [listItem.chargeItems ssj_safeObjectAtIndex:indexPath.row];
         __weak typeof(self) weakSelf = self;
-        bookKeepingCell.beginEditeBtnClickBlock = ^(SSJBookKeepingHomeTableViewCell *cell){
+        bookKeepingCell.imageClickBlock = ^(SSJBillingChargeCellItem *item){
+            SSJImaageBrowseViewController *imageBrowserVC = [[SSJImaageBrowseViewController alloc]init];
+            imageBrowserVC.type = SSJImageBrowseVcTypeBrowse;
+            imageBrowserVC.item = item;
+            [weakSelf.navigationController pushViewController:imageBrowserVC animated:YES];
+        };
+        /*bookKeepingCell.beginEditeBtnClickBlock = ^(SSJBookKeepingHomeTableViewCell *cell){
             if (weakSelf.selectIndex == nil) {
                 weakSelf.selectIndex = [tableView indexPathForCell:cell];
                 [weakSelf.tableView reloadData];
@@ -452,12 +424,6 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
             SSJNavigationController *recordNav = [[SSJNavigationController alloc]initWithRootViewController:recordMakingVc];
             [weakSelf presentViewController:recordNav animated:YES completion:NULL];
         };
-        bookKeepingCell.imageClickBlock = ^(SSJBillingChargeCellItem *item){
-            SSJImaageBrowseViewController *imageBrowserVC = [[SSJImaageBrowseViewController alloc]init];
-            imageBrowserVC.type = SSJImageBrowseVcTypeBrowse;
-            imageBrowserVC.item = item;
-            [weakSelf.navigationController pushViewController:imageBrowserVC animated:YES];
-        };
         bookKeepingCell.deleteButtonClickBlock = ^{
             [SSJAnaliyticsManager event:@"main_record_edit"];
             weakSelf.selectIndex = nil;
@@ -468,15 +434,15 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
             } failure:^(NSError * _Nullable error) {
                 SSJPRINT(@"%@",error.localizedDescription);
             }];
-        };
+        };*/
         return bookKeepingCell;
     } else {
-            static NSString *cellId = @"SSJBookKeepingNoDataCell";
-            SSJBookKeepingHomeNoDataCell *noDataCell = [tableView dequeueReusableCellWithIdentifier:cellId];
-            if (!noDataCell) {
-                noDataCell = [[SSJBookKeepingHomeNoDataCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
-            }
-            return noDataCell;
+        static NSString *cellId = @"SSJBookKeepingNoDataCell";
+        SSJBookKeepingHomeNoDataCell *noDataCell = [tableView dequeueReusableCellWithIdentifier:cellId];
+        if (!noDataCell) {
+            noDataCell = [[SSJBookKeepingHomeNoDataCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+        }
+        return noDataCell;
     }
 }
 
