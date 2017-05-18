@@ -143,6 +143,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
     [self.view addSubview:self.bookKeepingHeader];
     [self.view addSubview:self.homeButton];
     [self.view addSubview:self.statusLabel];
+    [self.tableView addSubview:self.noDataHeader];
 //    [self.view addSubview:self.billStickyNoteView];//mzl新年账单
     self.tableView.frame = self.view.frame;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -236,7 +237,11 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
     self.tableView.contentInset = UIEdgeInsetsMake(46, 0, tabBarHeight, 0);
 
     self.tableView.top = self.bookKeepingHeader.bottom;
-
+    
+    self.noDataHeader.top = -60;
+    
+    self.noDataHeader.size = CGSizeMake(self.view.width, self.tableView.height - 60);
+    
     self.clearView.frame = self.view.frame;
     self.statusLabel.height = 21;
     self.statusLabel.top = self.homeButton.bottom;
@@ -561,7 +566,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 
 -(SSJBookKeepingHomeNoDataHeader *)noDataHeader{
     if (!_noDataHeader) {
-        _noDataHeader = [[SSJBookKeepingHomeNoDataHeader alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 244)];
+        _noDataHeader = [[SSJBookKeepingHomeNoDataHeader alloc]init];
     }
     return _noDataHeader;
 }
@@ -790,6 +795,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
             weakSelf.newlyAddSectionArr = [[NSMutableArray alloc]initWithArray:[result objectForKey:SSJNewAddChargeSectionArrKey]];
             
             if (weakSelf.items.count) {
+                self.noDataHeader.hidden = YES;
                 self.tableView.hasData = YES;
                 if (weakSelf.newlyAddChargeArr.count && !_hasChangeBooksType) {
                     
@@ -835,6 +841,9 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
                 } else {
                     [weakSelf.tableView reloadData];
                 }
+            } else {
+                self.tableView.hasData = NO;
+                self.noDataHeader.hidden = NO;
             }
             
             [weakSelf.tableView ssj_hideLoadingIndicator];
