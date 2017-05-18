@@ -8,7 +8,8 @@
 //
 
 #import "SSJSharebooksInviteViewController.h"
-#import "SSJSHareBooksHintView.h"
+#import "SSJShareBooksHintView.h"
+#import "SSJShareBooksHelper.h"
 
 @interface SSJSharebooksInviteViewController ()
 
@@ -63,7 +64,8 @@
     [self.backView addSubview:self.customCodeLab];
     [self.backView addSubview:self.expireDateLab];
     [self.view addSubview:self.sendButton];
-    for (SSJSHareBooksHintView *hintView in self.hintViews) {
+    [self initHintView];
+    for (SSJShareBooksHintView *hintView in self.hintViews) {
         [self.view addSubview:hintView];
     }
     // Do any additional setup after loading the view.
@@ -90,6 +92,11 @@
     self.customCodeLab.top = self.expireDateLab.top = self.codeInput.bottom + 15;
     self.sendButton.centerX = self.view.width / 2;
     self.sendButton.centerY = self.backView.bottom;
+//    for (SSJShareBooksHintView *hintView in self.hintViews) {
+//        NSInteger index = [self.hintViews indexOfObject:hintView];
+//        hintView.size = CGSizeMake(self.view.width, 20);
+//        hintView.top = self.sendButton.bottom + 48 + index * 20;
+//    }
 }
 
 #pragma mark - Getter
@@ -157,6 +164,7 @@
         _resendButton.layer.borderColor = [UIColor ssj_colorWithHex:@"#CCCCCC"].CGColor;
         [_resendButton setTitleColor:[UIColor ssj_colorWithHex:@"#CCCCCC"] forState:UIControlStateNormal];
         [_resendButton setTitle:@"随机生成" forState:UIControlStateNormal];
+        [_resendButton addTarget:self action:@selector(resendButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _resendButton;
 }
@@ -175,6 +183,8 @@
         _customCodeLab = [[UILabel alloc] init];
         _customCodeLab.textColor = [UIColor ssj_colorWithHex:@"#999999"];
         _customCodeLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
+        _customCodeLab.text = @"暗号可自定义哦";
+        [_customCodeLab sizeToFit];
     }
     return _customCodeLab;
 }
@@ -195,12 +205,20 @@
     return _sendButton;
 }
 
+#pragma mark - Event
+- (void)resendButtonClicked:(UIButton *)sender {
+    if ([sender.titleLabel.text isEqualToString:@"随机生成"]) {
+        
+    }
+}
+
+
 #pragma mark - Private
 - (void)initHintView {
+    self.hintViews = [NSMutableArray arrayWithCapacity:0];
     for (NSString *title in self.titles) {
-        self.hintViews = [NSMutableArray arrayWithCapacity:0];
         NSInteger index = [self.titles indexOfObject:title];
-        SSJSHareBooksHintView *hintView = [[SSJSHareBooksHintView alloc] init];
+        SSJShareBooksHintView *hintView = [[SSJShareBooksHintView alloc] init];
         hintView.title = title;
         if (index == 0) {
             hintView.isFirstRow = YES;

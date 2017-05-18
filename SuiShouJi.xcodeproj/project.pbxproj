@@ -4503,19 +4503,19 @@
 		9C39701D1ECAF4B000AB267A /* SSJShareBooksStepView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3970121ECAF2F400AB267A /* SSJShareBooksStepView.m */; };
 		9C39701E1ECAF4B000AB267A /* SSJShareBooksStepView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3970121ECAF2F400AB267A /* SSJShareBooksStepView.m */; };
 		9C39701F1ECAF4B100AB267A /* SSJShareBooksStepView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3970121ECAF2F400AB267A /* SSJShareBooksStepView.m */; };
-		9C3970221ECB022900AB267A /* SSJSHareBooksHintView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3970211ECB022900AB267A /* SSJSHareBooksHintView.m */; };
-		9C3970231ECB022D00AB267A /* SSJSHareBooksHintView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3970211ECB022900AB267A /* SSJSHareBooksHintView.m */; };
-		9C3970241ECB022D00AB267A /* SSJSHareBooksHintView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3970211ECB022900AB267A /* SSJSHareBooksHintView.m */; };
-		9C3970251ECB022E00AB267A /* SSJSHareBooksHintView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3970211ECB022900AB267A /* SSJSHareBooksHintView.m */; };
-		9C3970261ECB023000AB267A /* SSJSHareBooksHintView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3970211ECB022900AB267A /* SSJSHareBooksHintView.m */; };
-		9C3970271ECB023000AB267A /* SSJSHareBooksHintView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3970211ECB022900AB267A /* SSJSHareBooksHintView.m */; };
-		9C3970281ECB023000AB267A /* SSJSHareBooksHintView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3970211ECB022900AB267A /* SSJSHareBooksHintView.m */; };
-		9C3970291ECB023100AB267A /* SSJSHareBooksHintView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3970211ECB022900AB267A /* SSJSHareBooksHintView.m */; };
-		9C39702A1ECB023100AB267A /* SSJSHareBooksHintView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3970211ECB022900AB267A /* SSJSHareBooksHintView.m */; };
-		9C39702C1ECB023300AB267A /* SSJSHareBooksHintView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3970211ECB022900AB267A /* SSJSHareBooksHintView.m */; };
-		9C39702D1ECB023400AB267A /* SSJSHareBooksHintView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3970211ECB022900AB267A /* SSJSHareBooksHintView.m */; };
-		9C39702E1ECB023400AB267A /* SSJSHareBooksHintView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3970211ECB022900AB267A /* SSJSHareBooksHintView.m */; };
-		9C39702F1ECB023500AB267A /* SSJSHareBooksHintView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3970211ECB022900AB267A /* SSJSHareBooksHintView.m */; };
+		9C3970221ECB022900AB267A /* SSJShareBooksHintView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3970211ECB022900AB267A /* SSJShareBooksHintView.m */; };
+		9C3970231ECB022D00AB267A /* SSJShareBooksHintView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3970211ECB022900AB267A /* SSJShareBooksHintView.m */; };
+		9C3970241ECB022D00AB267A /* SSJShareBooksHintView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3970211ECB022900AB267A /* SSJShareBooksHintView.m */; };
+		9C3970251ECB022E00AB267A /* SSJShareBooksHintView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3970211ECB022900AB267A /* SSJShareBooksHintView.m */; };
+		9C3970261ECB023000AB267A /* SSJShareBooksHintView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3970211ECB022900AB267A /* SSJShareBooksHintView.m */; };
+		9C3970271ECB023000AB267A /* SSJShareBooksHintView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3970211ECB022900AB267A /* SSJShareBooksHintView.m */; };
+		9C3970281ECB023000AB267A /* SSJShareBooksHintView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3970211ECB022900AB267A /* SSJShareBooksHintView.m */; };
+		9C3970291ECB023100AB267A /* SSJShareBooksHintView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3970211ECB022900AB267A /* SSJShareBooksHintView.m */; };
+		9C39702A1ECB023100AB267A /* SSJShareBooksHintView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3970211ECB022900AB267A /* SSJShareBooksHintView.m */; };
+		9C39702C1ECB023300AB267A /* SSJShareBooksHintView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3970211ECB022900AB267A /* SSJShareBooksHintView.m */; };
+		9C39702D1ECB023400AB267A /* SSJShareBooksHintView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3970211ECB022900AB267A /* SSJShareBooksHintView.m */; };
+		9C39702E1ECB023400AB267A /* SSJShareBooksHintView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3970211ECB022900AB267A /* SSJShareBooksHintView.m */; };
+		9C39702F1ECB023500AB267A /* SSJShareBooksHintView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3970211ECB022900AB267A /* SSJShareBooksHintView.m */; };
 		9C3970331ECC3CE700AB267A /* SSJSharebooksInviteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C39700F1ECADB0C00AB267A /* SSJSharebooksInviteViewController.m */; };
 		9C3970341ECC3CE700AB267A /* SSJSharebooksInviteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C39700F1ECADB0C00AB267A /* SSJSharebooksInviteViewController.m */; };
 		9C3970351ECC3CE800AB267A /* SSJSharebooksInviteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C39700F1ECADB0C00AB267A /* SSJSharebooksInviteViewController.m */; };
@@ -9228,8 +9228,8 @@
 		9C39700F1ECADB0C00AB267A /* SSJSharebooksInviteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJSharebooksInviteViewController.m; sourceTree = "<group>"; };
 		9C3970111ECAF2F400AB267A /* SSJShareBooksStepView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJShareBooksStepView.h; sourceTree = "<group>"; };
 		9C3970121ECAF2F400AB267A /* SSJShareBooksStepView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJShareBooksStepView.m; sourceTree = "<group>"; };
-		9C3970201ECB022900AB267A /* SSJSHareBooksHintView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJSHareBooksHintView.h; sourceTree = "<group>"; };
-		9C3970211ECB022900AB267A /* SSJSHareBooksHintView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJSHareBooksHintView.m; sourceTree = "<group>"; };
+		9C3970201ECB022900AB267A /* SSJShareBooksHintView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJShareBooksHintView.h; sourceTree = "<group>"; };
+		9C3970211ECB022900AB267A /* SSJShareBooksHintView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJShareBooksHintView.m; sourceTree = "<group>"; };
 		9C3970321ECB2C2600AB267A /* JiZhangGuanJia.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = JiZhangGuanJia.entitlements; sourceTree = "<group>"; };
 		9C3A2D3A1E658E8B00DFAE2C /* SSJDatabaseVersion13.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJDatabaseVersion13.h; sourceTree = "<group>"; };
 		9C3A2D3B1E658E8B00DFAE2C /* SSJDatabaseVersion13.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDatabaseVersion13.m; sourceTree = "<group>"; };
@@ -11739,8 +11739,8 @@
 				9C3970001EC99F7000AB267A /* SSJSharebooksMemberCollectionViewCell.m */,
 				9C3970111ECAF2F400AB267A /* SSJShareBooksStepView.h */,
 				9C3970121ECAF2F400AB267A /* SSJShareBooksStepView.m */,
-				9C3970201ECB022900AB267A /* SSJSHareBooksHintView.h */,
-				9C3970211ECB022900AB267A /* SSJSHareBooksHintView.m */,
+				9C3970201ECB022900AB267A /* SSJShareBooksHintView.h */,
+				9C3970211ECB022900AB267A /* SSJShareBooksHintView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -15480,7 +15480,7 @@
 				7D22A36C1E4F16AC00190CEB /* SSJSearchBarAddition.m in Sources */,
 				7DF4F10E1EB8909F0039FB2C /* SSJReportFormsScaleAxisView.m in Sources */,
 				7D22A3731E4F16AC00190CEB /* SSJTableView.m in Sources */,
-				9C3970271ECB023000AB267A /* SSJSHareBooksHintView.m in Sources */,
+				9C3970271ECB023000AB267A /* SSJShareBooksHintView.m in Sources */,
 				7DCA2A271E4C9CFB00B60F4F /* SSJCalenderScreenShotHelper.m in Sources */,
 				7D08A2301E4999D30085A8FB /* SSJMagicExportResultCheckMarkView.m in Sources */,
 				7D08A2311E4999D30085A8FB /* SSJChargeCircleTimeSelectView.m in Sources */,
@@ -16093,7 +16093,7 @@
 				7D22A36B1E4F16AC00190CEB /* SSJSearchBarAddition.m in Sources */,
 				7DF4F10D1EB8909E0039FB2C /* SSJReportFormsScaleAxisView.m in Sources */,
 				7D22A3721E4F16AC00190CEB /* SSJTableView.m in Sources */,
-				9C3970261ECB023000AB267A /* SSJSHareBooksHintView.m in Sources */,
+				9C3970261ECB023000AB267A /* SSJShareBooksHintView.m in Sources */,
 				7DCA2A261E4C9CFB00B60F4F /* SSJCalenderScreenShotHelper.m in Sources */,
 				7DA13B871E35AED7000490A4 /* SSJMagicExportResultCheckMarkView.m in Sources */,
 				7DA13B881E35AED7000490A4 /* SSJChargeCircleTimeSelectView.m in Sources */,
@@ -16706,7 +16706,7 @@
 				7DBB3C131E55C2EE0075E638 /* SSJBooksEditeOrNewViewController.m in Sources */,
 				7DF4F10F1EB890A00039FB2C /* SSJReportFormsScaleAxisView.m in Sources */,
 				7DBB3C141E55C2EE0075E638 /* SSJReportFormsCurveCell.m in Sources */,
-				9C3970281ECB023000AB267A /* SSJSHareBooksHintView.m in Sources */,
+				9C3970281ECB023000AB267A /* SSJShareBooksHintView.m in Sources */,
 				7DBB3C151E55C2EE0075E638 /* SSJRecordMakingCategoryItem.m in Sources */,
 				7DBB3C161E55C2EE0075E638 /* SSJFundingTransferDetailItem.m in Sources */,
 				7DBB3C171E55C2EE0075E638 /* FMDatabaseAdditions.m in Sources */,
@@ -17319,7 +17319,7 @@
 				7DBB40AD1E55C4E00075E638 /* SSJRegularManager.m in Sources */,
 				7DBB40AE1E55C4E00075E638 /* SSJBooksEditeOrNewViewController.m in Sources */,
 				7DBB40AF1E55C4E00075E638 /* SSJReportFormsCurveCell.m in Sources */,
-				9C3970241ECB022D00AB267A /* SSJSHareBooksHintView.m in Sources */,
+				9C3970241ECB022D00AB267A /* SSJShareBooksHintView.m in Sources */,
 				7DBB40B01E55C4E00075E638 /* SSJRecordMakingCategoryItem.m in Sources */,
 				7DBB40B11E55C4E00075E638 /* SSJFundingTransferDetailItem.m in Sources */,
 				7DBB40B21E55C4E00075E638 /* FMDatabaseAdditions.m in Sources */,
@@ -17979,7 +17979,7 @@
 				7DFB183B1EB0341E00292DD3 /* SSJPercentCircleAdditionNode.m in Sources */,
 				7D2D26E01EB85A3E005E3E2D /* SSJReportFormsScaleAxisView+SSJTheme.m in Sources */,
 				7DFB183C1EB0341E00292DD3 /* SSJDateSelectedView.m in Sources */,
-				9C39702F1ECB023500AB267A /* SSJSHareBooksHintView.m in Sources */,
+				9C39702F1ECB023500AB267A /* SSJShareBooksHintView.m in Sources */,
 				7DFB183D1EB0341E00292DD3 /* UIView+SSJViewAnimatioin.m in Sources */,
 				7DFB183E1EB0341E00292DD3 /* SSJReportFormCanYinChartCellItem.m in Sources */,
 				7DFB183F1EB0341E00292DD3 /* main.m in Sources */,
@@ -18684,7 +18684,7 @@
 				9C13F70C1E8267D300AC5FA9 /* SSJCreditCardListDetailItem.m in Sources */,
 				9C13F70D1E8267D300AC5FA9 /* SSJLoadMoreItem.m in Sources */,
 				9C13F70E1E8267D300AC5FA9 /* SRRefreshView.m in Sources */,
-				9C3970291ECB023100AB267A /* SSJSHareBooksHintView.m in Sources */,
+				9C3970291ECB023100AB267A /* SSJShareBooksHintView.m in Sources */,
 				9C13F70F1E8267D300AC5FA9 /* SSJPageControl.m in Sources */,
 				9C13F7101E8267D300AC5FA9 /* SSJNickNameModifyView.m in Sources */,
 			);
@@ -19207,7 +19207,7 @@
 				9C4C21E21E9E30C8000C5F15 /* SSJPercentCircleAdditionNode.m in Sources */,
 				7D2D26DE1EB85A3E005E3E2D /* SSJReportFormsScaleAxisView+SSJTheme.m in Sources */,
 				9C4C21E31E9E30C8000C5F15 /* SSJDateSelectedView.m in Sources */,
-				9C39702D1ECB023400AB267A /* SSJSHareBooksHintView.m in Sources */,
+				9C39702D1ECB023400AB267A /* SSJShareBooksHintView.m in Sources */,
 				9C4C21E41E9E30C8000C5F15 /* UIView+SSJViewAnimatioin.m in Sources */,
 				9C4C21E51E9E30C8000C5F15 /* SSJReportFormCanYinChartCellItem.m in Sources */,
 				9C4C21E61E9E30C8000C5F15 /* main.m in Sources */,
@@ -19911,7 +19911,7 @@
 				9C7D2F1C1E8DF8A80093001F /* SSJCustomKeyBoardButton.m in Sources */,
 				9C7D2F1D1E8DF8A80093001F /* SSJCreditCardListDetailItem.m in Sources */,
 				9C7D2F1E1E8DF8A80093001F /* SSJLoadMoreItem.m in Sources */,
-				9C3970231ECB022D00AB267A /* SSJSHareBooksHintView.m in Sources */,
+				9C3970231ECB022D00AB267A /* SSJShareBooksHintView.m in Sources */,
 				9C7D2F1F1E8DF8A80093001F /* SRRefreshView.m in Sources */,
 				91633C1E1ECBE9D500A7A60F /* SSJBooksHeadeCollectionrReusableView.m in Sources */,
 				9C7D2F201E8DF8A80093001F /* SSJPageControl.m in Sources */,
@@ -20527,7 +20527,7 @@
 				9C7D31931E8DF96B0093001F /* SSJCustomKeyBoardButton.m in Sources */,
 				9C7D31941E8DF96B0093001F /* SSJCreditCardListDetailItem.m in Sources */,
 				9C7D31951E8DF96B0093001F /* SSJLoadMoreItem.m in Sources */,
-				9C39702A1ECB023100AB267A /* SSJSHareBooksHintView.m in Sources */,
+				9C39702A1ECB023100AB267A /* SSJShareBooksHintView.m in Sources */,
 				9C7D31961E8DF96B0093001F /* SRRefreshView.m in Sources */,
 				91633C261ECBE9D500A7A60F /* SSJBooksHeadeCollectionrReusableView.m in Sources */,
 				9C7D31971E8DF96B0093001F /* SSJPageControl.m in Sources */,
@@ -21054,7 +21054,7 @@
 				9C80FE811E95E88E00B1BAAC /* SSJPercentCircleAdditionNode.m in Sources */,
 				7D2D26DD1EB85A3E005E3E2D /* SSJReportFormsScaleAxisView+SSJTheme.m in Sources */,
 				9C80FE821E95E88E00B1BAAC /* SSJDateSelectedView.m in Sources */,
-				9C39702C1ECB023300AB267A /* SSJSHareBooksHintView.m in Sources */,
+				9C39702C1ECB023300AB267A /* SSJShareBooksHintView.m in Sources */,
 				9C80FE831E95E88E00B1BAAC /* UIView+SSJViewAnimatioin.m in Sources */,
 				9C80FE841E95E88E00B1BAAC /* SSJReportFormCanYinChartCellItem.m in Sources */,
 				9C80FE851E95E88E00B1BAAC /* main.m in Sources */,
@@ -21669,7 +21669,7 @@
 				9C9CF0411EA5F73A007657FE /* SSJPercentCircleAdditionNode.m in Sources */,
 				7D2D26DF1EB85A3E005E3E2D /* SSJReportFormsScaleAxisView+SSJTheme.m in Sources */,
 				9C9CF0421EA5F73A007657FE /* SSJDateSelectedView.m in Sources */,
-				9C39702E1ECB023400AB267A /* SSJSHareBooksHintView.m in Sources */,
+				9C39702E1ECB023400AB267A /* SSJShareBooksHintView.m in Sources */,
 				9C9CF0431EA5F73A007657FE /* UIView+SSJViewAnimatioin.m in Sources */,
 				9C9CF0441EA5F73A007657FE /* SSJReportFormCanYinChartCellItem.m in Sources */,
 				9C9CF0451EA5F73A007657FE /* main.m in Sources */,
@@ -21892,7 +21892,7 @@
 				9CECFB6A1D6D41A700DB2C8B /* SSJReportFormsCurveModel.m in Sources */,
 				9CECFB6B1D6D41A700DB2C8B /* SSJRecordMakingViewController.m in Sources */,
 				9CECFB6C1D6D41A700DB2C8B /* SCYMotionEncryptionUitlities.m in Sources */,
-				9C3970251ECB022E00AB267A /* SSJSHareBooksHintView.m in Sources */,
+				9C3970251ECB022E00AB267A /* SSJShareBooksHintView.m in Sources */,
 				7D738A911DAB267F000CD629 /* SSJDatabaseVersion9.m in Sources */,
 				9CECFB6D1D6D41A700DB2C8B /* SSJStartChecker.m in Sources */,
 				9CECFB6E1D6D41A700DB2C8B /* SSJFundingTransferEdite.m in Sources */,
@@ -22982,7 +22982,7 @@
 				9C9471891CEB224C00D69079 /* SSJFundingDetailsViewController.m in Sources */,
 				7D5F33791CEAE6C10086B67E /* SSJCustomKeyBoardButton.m in Sources */,
 				9C5377231D75202E002B230A /* SSJCreditCardListDetailItem.m in Sources */,
-				9C3970221ECB022900AB267A /* SSJSHareBooksHintView.m in Sources */,
+				9C3970221ECB022900AB267A /* SSJShareBooksHintView.m in Sources */,
 				BD0433901C1A8DA50051E7AB /* SSJLoadMoreItem.m in Sources */,
 				91633C201ECBE9D500A7A60F /* SSJBooksHeadeCollectionrReusableView.m in Sources */,
 				BD0432F21C1A77BB0051E7AB /* SRRefreshView.m in Sources */,
