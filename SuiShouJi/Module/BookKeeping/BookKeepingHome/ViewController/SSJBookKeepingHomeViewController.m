@@ -284,10 +284,9 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
     if ([listItem.date isEqualToString:@"-1"]) {
         return 244;
     } else {
-        return 80;
+        return 66;
     }
 }
-
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
     SSJBookKeepingHomeListItem *listItem = [self.items ssj_safeObjectAtIndex:section];
@@ -301,7 +300,6 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
     return 0.1;
 }
-
 
 -(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
     return [UIView new];
@@ -599,8 +597,6 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
     }
     return _bookKeepingHeader;
 }
-
-
 
 -(SSJBookKeepingButton *)homeButton{
     if (!_homeButton) {
