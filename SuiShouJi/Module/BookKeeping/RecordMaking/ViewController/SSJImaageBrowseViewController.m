@@ -50,7 +50,6 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    [[UIApplication sharedApplication] setStatusBarHidden:YES];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
     UIBarButtonItem *leftItem = [[UIBarButtonItem alloc]initWithCustomView:self.leftButtonView];
     self.navigationItem.leftBarButtonItem = leftItem;
@@ -72,12 +71,10 @@
     self.moneyLabel.leftTop = CGPointMake(10, self.bottomBackGroundView.top + 10);
     self.memoLabel.leftTop = CGPointMake(10, self.moneyLabel.bottom + 10);
     self.dateLabel.rightTop = CGPointMake(self.view.width - 10, self.bottomBackGroundView.top + 10);
-
 }
 
--(void)viewWillDisappear:(BOOL)animated{
-    [super viewWillDisappear:animated];
-    [[UIApplication sharedApplication] setStatusBarHidden:NO];
+- (BOOL)prefersStatusBarHidden {
+    return YES;
 }
 
 #pragma mark - Getter
