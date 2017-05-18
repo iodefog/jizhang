@@ -59,6 +59,9 @@
 #import "SSJUserTableManager.h"
 #import "SSJShareBooksHelper.h"
 
+#warning test
+#import "SSJSharebooksInviteViewController.h"
+
 static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 
 @interface SSJBookKeepingHomeViewController () <SSJMultiFunctionButtonDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
@@ -682,17 +685,20 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
         _homeBar = [[SSJBookKeepingHomeBar alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 64)];
         __weak typeof(self) weakSelf = self;
         _homeBar.budgetButton.budgetButtonClickBlock = ^(SSJBudgetModel *model){
-            if (model == nil) {
-                SSJBudgetEditViewController *budgetEditVC = [[SSJBudgetEditViewController alloc]init];
-                SSJBudgetListViewController *budgetListVC = [[SSJBudgetListViewController alloc] init];
-                NSMutableArray *viewControllers = [weakSelf.navigationController.viewControllers mutableCopy];
-                [viewControllers addObject:budgetListVC];
-                [viewControllers addObject:budgetEditVC];
-                [weakSelf.navigationController setViewControllers:viewControllers animated:YES];
-            }else{
-                SSJBudgetListViewController *budgetListVC = [[SSJBudgetListViewController alloc]init];
-                [weakSelf.navigationController pushViewController:budgetListVC animated:YES];
-            }
+//            if (model == nil) {
+//                SSJBudgetEditViewController *budgetEditVC = [[SSJBudgetEditViewController alloc]init];
+//                SSJBudgetListViewController *budgetListVC = [[SSJBudgetListViewController alloc] init];
+//                NSMutableArray *viewControllers = [weakSelf.navigationController.viewControllers mutableCopy];
+//                [viewControllers addObject:budgetListVC];
+//                [viewControllers addObject:budgetEditVC];
+//                [weakSelf.navigationController setViewControllers:viewControllers animated:YES];
+//            }else{
+//                SSJBudgetListViewController *budgetListVC = [[SSJBudgetListViewController alloc]init];
+//                [weakSelf.navigationController pushViewController:budgetListVC animated:YES];
+//            }
+#warning test
+            SSJSharebooksInviteViewController *inviteVc = [[SSJSharebooksInviteViewController alloc] init];
+            [weakSelf.navigationController pushViewController:inviteVc animated:YES];
         };
         _homeBar.rightBarButton.currentDay = _currentDay;
         [_homeBar.rightBarButton.btn addTarget:self action:@selector(rightBarButtonClicked) forControlEvents:UIControlEventTouchUpInside];
