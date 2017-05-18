@@ -81,6 +81,7 @@ static const CGFloat kBooksCornerRadius = 10.f;
     if ([booksTypeItem isKindOfClass:[SSJBooksTypeItem class]]) {//个人账本
         SSJBooksTypeItem *privateBookItem = (SSJBooksTypeItem *)booksTypeItem;
         self.nameLab.text = privateBookItem.booksName;
+        self.menberNumLab.hidden = YES;
         //当前选中账本的标记
         if ([privateBookItem.booksId isEqualToString:self.curretSelectedBookId]) {
             self.markImageView.hidden = NO;
@@ -107,6 +108,7 @@ static const CGFloat kBooksCornerRadius = 10.f;
     } else if ([booksTypeItem isKindOfClass:[SSJShareBookItem class]]) {//共享账本
         SSJShareBookItem *shareBookItem = (SSJShareBookItem *)booksTypeItem;
         self.nameLab.text = shareBookItem.booksName;
+        self.menberNumLab.hidden = NO;
         //当前选中账本的标记
         if ([shareBookItem.booksId isEqualToString:self.curretSelectedBookId]) {
             self.markImageView.hidden = NO;

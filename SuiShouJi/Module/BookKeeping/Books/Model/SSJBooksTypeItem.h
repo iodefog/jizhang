@@ -36,6 +36,9 @@
 
 @property(nonatomic) BOOL editeModel;
 
+/**是否是个人账本*/
+//@property (nonatomic, assign, getter=isPrivateBook) BOOL privateBook;
+
 + (NSDictionary *)propertyMapping;
 
 @end

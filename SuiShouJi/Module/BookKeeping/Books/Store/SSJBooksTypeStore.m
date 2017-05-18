@@ -320,6 +320,7 @@
             shareBookItem.booksColor = [result stringForColumn:@"cbookscolor"];
             shareBookItem.parentType = [result intForColumn:@"iparenttype"];
             shareBookItem.booksOrder = [result intForColumn:@"iorder"];
+//            shareBookItem.shareBook = YES;
             [shareBooksList addObject:shareBookItem];
         }
         //最后一个添加账本
