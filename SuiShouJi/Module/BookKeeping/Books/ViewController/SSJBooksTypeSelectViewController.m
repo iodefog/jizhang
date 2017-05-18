@@ -20,11 +20,12 @@ static BOOL kNeedBannerDisplay = YES;
 #import "SSJBooksTypeEditeView.h"
 #import "SSJBooksHeaderView.h"
 #import "SSJDataSynchronizer.h"
-#import "SSJBooksEditeOrNewViewController.h"
+
+#import "SSJNewOrEditeBooksViewController.h"
 #import "SSJEditableCollectionView.h"
 #import "SSJSummaryBooksViewController.h"
 #import "SSJDatabaseQueue.h"
-#import "SSJBooksParentSelectView.h"
+//#import "SSJBooksParentSelectView.h"
 #import "SSJBooksAdView.h"
 #import "SSJBannerNetworkService.h"
 #import "SSJBooksTypeEditAlertView.h"
@@ -48,7 +49,7 @@ static BOOL kNeedBannerDisplay = YES;
 
 @property(nonatomic, strong) SSJBooksHeaderView *header;
 
-@property(nonatomic, strong) SSJBooksParentSelectView *parentSelectView;
+//@property(nonatomic, strong) SSJBooksParentSelectView *parentSelectView;
 
 @property(nonatomic, strong) SSJBooksAdView *adView;
 
@@ -123,17 +124,23 @@ static BOOL kNeedBannerDisplay = YES;
 {
     NSString *bookName;
     NSString *bookId;
-    if (indexPath.section == 0) {
+    if (indexPath.section == 0) {//个人
        SSJBooksTypeItem *privateItem = (SSJBooksTypeItem *)[self.privateBooksDataitems ssj_safeObjectAtIndex:indexPath.row];
         bookName = privateItem.booksName;
         bookId = privateItem.booksId;
-    } else if(indexPath.section == 1) {
+        if ([bookName isEqualToString:@"添加账本"]) {
+            [self newAndEditeBooksWiteItem:privateItem];
+        }
+        
+    } else if(indexPath.section == 1) {//共享
         SSJShareBookItem *shareItem = (SSJShareBookItem *)[self.shareBooksDataItems ssj_safeObjectAtIndex:indexPath.row];
         bookName = shareItem.booksName;
         bookId = shareItem.booksId;
+        if ([bookName isEqualToString:@"添加账本"]) {
+            [self newAndEditeBooksWiteItem:shareItem];
+        }
     }
         if ([bookName isEqualToString:@"添加账本"]) {
-            [self.parentSelectView show];
         } else {
             [SSJAnaliyticsManager event:@"change_account_book" extra:bookName
              ];
@@ -148,6 +155,12 @@ static BOOL kNeedBannerDisplay = YES;
             }];
         }
 //    }
+}
+
+- (void)newAndEditeBooksWiteItem:(__kindof SSJBaseCellItem *)item {
+    SSJNewOrEditeBooksViewController *booksEditeVc = [[SSJNewOrEditeBooksViewController alloc]init];
+    booksEditeVc.bookItem = item;
+    [self.navigationController pushViewController:booksEditeVc animated:YES];
 }
 
 
@@ -354,22 +367,6 @@ static BOOL kNeedBannerDisplay = YES;
     return _header;
 }
 
-- (SSJBooksParentSelectView *)parentSelectView{
-    if (!_parentSelectView) {
-        _parentSelectView = [[SSJBooksParentSelectView alloc]initWithFrame:self.view.frame];
-        __weak typeof(self) weakSelf = self;
-        _parentSelectView.parentSelectBlock = ^(NSInteger selectParent){
-            SSJBooksEditeOrNewViewController *booksEditeVc = [[SSJBooksEditeOrNewViewController alloc]init];
-            SSJBooksTypeItem *item = [[SSJBooksTypeItem alloc]init];
-            item.booksParent = selectParent;
-            booksEditeVc.item = item;
-            [weakSelf.parentSelectView dismiss];
-            [weakSelf.navigationController pushViewController:booksEditeVc animated:YES];
-        };
-    }
-    return _parentSelectView;
-}
-
 - (SSJBooksAdView *)adView{
     if (!_adView) {
         _adView = [[SSJBooksAdView alloc]init];
@@ -516,8 +513,8 @@ static BOOL kNeedBannerDisplay = YES;
 
 - (void)enterBooksTypeEditController {
     [SSJAnaliyticsManager event:@"accountbook_edit"];
-    SSJBooksEditeOrNewViewController *booksEditeVc = [[SSJBooksEditeOrNewViewController alloc]init];
-    booksEditeVc.item = self.editBooksItem;
+    SSJNewOrEditeBooksViewController *booksEditeVc = [[SSJNewOrEditeBooksViewController alloc]init];
+    booksEditeVc.bookItem = self.editBooksItem;
     [self.navigationController pushViewController:booksEditeVc animated:YES];
 }
 
