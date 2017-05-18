@@ -74,6 +74,9 @@
     self.backView.centerX = self.view.width / 2;
     self.backView.top = SSJ_NAVIBAR_BOTTOM + 30;
     self.backView.size = CGSizeMake(self.view.width - 35, 255);
+    self.backView.layer.shadowPath = (__bridge CGPathRef _Nullable)([UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, self.backView.width + 4, self.backView.height + 4) cornerRadius:16.f]);
+    self.backView.layer.shadowColor = [UIColor ssj_colorWithHex:@"#000000"].CGColor;
+    self.backView.layer.shadowOpacity = 0.15;
     self.codeTitleLab.centerX = self.backView.width / 2;
     self.codeTitleLab.top = 30;
     self.codeLeftImage.right = self.codeTitleLab.left - 10;
@@ -85,6 +88,8 @@
     self.customCodeLab.left = self.codeInput.left;
     self.expireDateLab.right = self.codeInput.right;
     self.customCodeLab.top = self.expireDateLab.top = self.codeInput.bottom + 15;
+    self.sendButton.centerX = self.view.width / 2;
+    self.sendButton.centerY = self.backView.bottom;
 }
 
 #pragma mark - Getter
@@ -137,6 +142,7 @@
         _codeInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入六位暗号" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"#CCCCCC"]}];
         _codeInput.rightView = self.resendButton;
         _codeInput.rightViewMode = UITextFieldViewModeAlways;
+        _codeInput.tintColor = [UIColor ssj_colorWithHex:@"#333333"];
     }
     return _codeInput;
 }
@@ -171,6 +177,22 @@
         _customCodeLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
     }
     return _customCodeLab;
+}
+
+- (UIButton *)sendButton {
+    if (!_sendButton) {
+        _sendButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        _sendButton.size = CGSizeMake(224, 46);
+        _sendButton.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
+        _sendButton.layer.cornerRadius = 23.f;
+        [_sendButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [_sendButton setTitle:@"发送暗号" forState:UIControlStateNormal];
+        _sendButton.backgroundColor = [UIColor ssj_colorWithHex:@"#EB4A64"];
+        _sendButton.layer.shadowPath = (__bridge CGPathRef _Nullable)([UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, 226, 48) cornerRadius:23.f]);
+        _sendButton.layer.shadowColor = [UIColor ssj_colorWithHex:@"#EB4A64"].CGColor;
+        _sendButton.layer.shadowOpacity = 0.39;
+    }
+    return _sendButton;
 }
 
 #pragma mark - Private
