@@ -7,37 +7,34 @@
 //
 
 #import "SSJBookKeepingHomeViewController.h"
-#import "SSJBookKeepingHeader.h"
-#import "SSJBookKeepingHomeTableViewCell.h"
+#import "SSJCalenderDetailViewController.h"
 #import "SSJRecordMakingViewController.h"
 #import "SSJCalendarViewController.h"
-#import "SSJHomeBarCalenderButton.h"
-#import "SSJBookKeepingHomePopView.h"
 #import "SSJLoginViewController.h"
 #import "SSJRegistGetVerViewController.h"
 #import "SSJBudgetListViewController.h"
 #import "SSJBudgetEditViewController.h"
 #import "SSJBooksTypeSelectViewController.h"
-#import "SSJBudgetDatabaseHelper.h"
 #import "SSJImaageBrowseViewController.h"
-#import "SSJBudgetModel.h"
-#import "SSJBillingChargeCellItem.h"
+#import "UIViewController+MMDrawerController.h"
+#import "SSJSearchingViewController.h"
+#import "SSJRegistGetVerViewController.h"
+#import "SSJThemBgImageClipViewController.h"
+#import "SSJNavigationController.h"
+#import "UIViewController+SSJMotionPassword.h"
+#import "SSJLoginViewController+SSJCategory.h"
+
+#import "SSJBookKeepingHomeTableViewCell.h"
+#import "SSJBookKeepingHomeNoDataCell.h"
+#import "SSJHomeBarCalenderButton.h"
+#import "SSJBookKeepingHomePopView.h"
+#import "SSJBookKeepingHeader.h"
 #import "SSJHomeBudgetButton.h"
 #import "SSJBookKeepingButton.h"
-#import "SSJBudgetModel.h"
-#import "SSJDatabaseQueue.h"
-#import "SSJDataSynchronizer.h"
-#import "SSJBooksTypeStore.h"
-#import "SSJBooksTypeItem.h"
-#import "FMDB.h"
 #import "SSJHomeReminderView.h"
-#import "SSJBookKeepingHomeHelper.h"
-#import "UIViewController+MMDrawerController.h"
 #import "SSJStartUpgradeAlertView.h"
 #import "SSJBookKeepingHomeNoDataHeader.h"
-#import "UIViewController+SSJMotionPassword.h"
 #import "SSJBookKeepingHomeBooksButton.h"
-#import "SSJSearchingViewController.h"
 #import "SSJBookKeepingHomeDateView.h"
 #import "SSJMultiFunctionButtonView.h"
 #import "SSJBookKeepingHomeBar.h"
@@ -45,19 +42,23 @@
 #import "SSJLoginPopView.h"
 #import "SSJBookKeepingHomePopView.h"
 #import "SSJHomeBillStickyNoteView.h"
-#import "SSJAlertViewAdapter.h"
-#import "SSJAlertViewAction.h"
-#import "SSJLoginViewController+SSJCategory.h"
-#import "SSJRegistGetVerViewController.h"
-#import "SSJBookKeepingHomeListItem.h"
 #import "SSJBookKeepingHomeHeaderView.h"
 #import "SSJHomeThemeModifyView.h"
-#import "SSJBookKeepingHomeNoDataCell.h"
-#import "SSJCustomThemeManager.h"
-#import "SSJThemBgImageClipViewController.h"
-#import "SSJNavigationController.h"
-#import "SSJUserTableManager.h"
+#import "SSJAlertViewAdapter.h"
+#import "SSJAlertViewAction.h"
+
+#import "SSJBudgetModel.h"
+#import "SSJBooksTypeItem.h"
+#import "SSJBillingChargeCellItem.h"
+#import "SSJBookKeepingHomeListItem.h"
+#import "SSJBooksTypeStore.h"
 #import "SSJShareBooksHelper.h"
+#import "SSJBookKeepingHomeHelper.h"
+#import "SSJBudgetDatabaseHelper.h"
+#import "SSJDatabaseQueue.h"
+#import "SSJDataSynchronizer.h"
+#import "SSJUserTableManager.h"
+#import "SSJCustomThemeManager.h"
 
 #warning test
 #import "SSJSharebooksInviteViewController.h"
@@ -391,9 +392,9 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
             bookKeepingCell = [[SSJBookKeepingHomeTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
         }
         if (indexPath.row == [self.tableView numberOfRowsInSection:indexPath.section] - 1 && indexPath.section == self.items.count - 1) {
-            bookKeepingCell.isLastRowOrNot = NO;
+            bookKeepingCell.isLastRow = YES;
         }else{
-            bookKeepingCell.isLastRowOrNot = YES;
+            bookKeepingCell.isLastRow = NO;
         }
         SSJBookKeepingHomeListItem *listItem = [self.items objectAtIndex:indexPath.section];
         bookKeepingCell.item = [listItem.chargeItems ssj_safeObjectAtIndex:indexPath.row];
@@ -404,40 +405,11 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
             imageBrowserVC.item = item;
             [weakSelf.navigationController pushViewController:imageBrowserVC animated:YES];
         };
-        /*bookKeepingCell.beginEditeBtnClickBlock = ^(SSJBookKeepingHomeTableViewCell *cell){
-            if (weakSelf.selectIndex == nil) {
-                weakSelf.selectIndex = [tableView indexPathForCell:cell];
-                [weakSelf.tableView reloadData];
-            }else{
-                weakSelf.selectIndex = nil;
-                [weakSelf.tableView reloadData];
-            }
-            //        cell.isEdite = YES;
+        bookKeepingCell.enterChargeDetailBlock = ^(SSJBookKeepingHomeTableViewCell *cell) {
+            SSJCalenderDetailViewController *detailVc = [[SSJCalenderDetailViewController alloc] init];
+            detailVc.item = cell.item;
+            [weakSelf.navigationController pushViewController:detailVc animated:YES];
         };
-        bookKeepingCell.editeBtnClickBlock = ^(SSJBookKeepingHomeTableViewCell *cell)
-        {
-            [SSJAnaliyticsManager event:@"main_record_delete"];
-            
-            SSJRecordMakingViewController *recordMakingVc = [[SSJRecordMakingViewController alloc]init];
-            recordMakingVc.item = cell.item;
-            recordMakingVc.addNewChargeBlock = ^(NSArray *chargeIdArr ,BOOL hasChangeBooksType){
-                weakSelf.newlyAddChargeArr = [NSMutableArray arrayWithArray:chargeIdArr];
-                _hasChangeBooksType = hasChangeBooksType;
-            };
-            SSJNavigationController *recordNav = [[SSJNavigationController alloc]initWithRootViewController:recordMakingVc];
-            [weakSelf presentViewController:recordNav animated:YES completion:NULL];
-        };
-        bookKeepingCell.deleteButtonClickBlock = ^{
-            [SSJAnaliyticsManager event:@"main_record_edit"];
-            weakSelf.selectIndex = nil;
-            [weakSelf getDataFromDataBase];
-//            [weakSelf.tableView reloadData];
-            [SSJBudgetDatabaseHelper queryForCurrentBudgetListWithSuccess:^(NSArray<SSJBudgetModel *> * _Nonnull result) {
-                self.homeBar.budgetButton.model = [result firstObject];
-            } failure:^(NSError * _Nullable error) {
-                SSJPRINT(@"%@",error.localizedDescription);
-            }];
-        };*/
         return bookKeepingCell;
     } else {
         static NSString *cellId = @"SSJBookKeepingNoDataCell";

@@ -44,6 +44,7 @@ static NSString *const kSSJCalenderDetailPhotoCellId = @"kSSJCalenderDetailPhoto
         self.statisticsTitle = @"流水详情";
         self.title = @"详情";
         self.items = [NSMutableArray array];
+        self.hidesBottomBarWhenPushed = YES;
     }
     return self;
 }
