@@ -25427,7 +25427,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D65178675E1A2115270E7CCB /* Pods-YouYuJiZhangPro.debug-test.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuIconPro;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -25529,7 +25529,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 69D2F0A471A04C17E16C7FEB /* Pods-YouYuJiZhangPro.debug-production.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuIconPro;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -25632,7 +25632,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = CBF9E3113464BE93EBD90F4A /* Pods-YouYuJiZhangPro.release-test.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuIconPro;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -25733,7 +25733,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2540479F536C7834E132C4B5 /* Pods-YouYuJiZhangPro.release-production.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuIconPro;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
