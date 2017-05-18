@@ -33,4 +33,7 @@
 
 /**是否编辑中*/
 @property (nonatomic, assign, getter = isEditing) BOOL editing;
+
+/**是否是共享账本*/
+//@property (nonatomic, assign, getter = isShareBook) BOOL shareBook;
 @end
