@@ -45,6 +45,7 @@
   sigh(
     output_path:'/Users/a9188/Documents/provisionfile'
   )
+  increment_build_number
   gym(
     configuration:options[:config],
     scheme:options[:scheme],
