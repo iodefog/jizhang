@@ -57,19 +57,6 @@ static CGFloat imageScale = 0.8; //裁剪框和屏幕大小比例
     self.view.frame = self.view.bounds;
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    [[UIApplication sharedApplication] setStatusBarHidden:YES];
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    [[UIApplication sharedApplication] setStatusBarHidden:NO];
-    
-}
-
 - (BOOL)prefersStatusBarHidden {
     return YES;
 }

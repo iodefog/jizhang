@@ -865,6 +865,7 @@
 		7D7EF1461ECC350D00E5D51D /* SSJChargeImageBrowseView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D7EF13B1ECC350D00E5D51D /* SSJChargeImageBrowseView.m */; };
 		7D7EF1471ECC350D00E5D51D /* SSJChargeImageBrowseView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D7EF13B1ECC350D00E5D51D /* SSJChargeImageBrowseView.m */; };
 		7D7EF1481ECC350D00E5D51D /* SSJChargeImageBrowseView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D7EF13B1ECC350D00E5D51D /* SSJChargeImageBrowseView.m */; };
+		7D7EF14C1ECDA05200E5D51D /* 9188JiZhangBao-info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7D7EF14B1ECDA05200E5D51D /* 9188JiZhangBao-info.plist */; };
 		7D81DBB91E1369560072DB7E /* youyuwo.cer in Resources */ = {isa = PBXBuildFile; fileRef = 7D81DBB81E1369560072DB7E /* youyuwo.cer */; };
 		7D8248CB1EC5849C0048BC4B /* SSJDatabaseVersion15.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D8248CA1EC5849C0048BC4B /* SSJDatabaseVersion15.m */; };
 		7D8248CC1EC5849C0048BC4B /* SSJDatabaseVersion15.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D8248CA1EC5849C0048BC4B /* SSJDatabaseVersion15.m */; };
@@ -8784,6 +8785,7 @@
 		7D7EF1231ECAFFF100E5D51D /* SSJImageViewAddition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJImageViewAddition.m; sourceTree = "<group>"; };
 		7D7EF13A1ECC350D00E5D51D /* SSJChargeImageBrowseView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJChargeImageBrowseView.h; sourceTree = "<group>"; };
 		7D7EF13B1ECC350D00E5D51D /* SSJChargeImageBrowseView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJChargeImageBrowseView.m; sourceTree = "<group>"; };
+		7D7EF14B1ECDA05200E5D51D /* 9188JiZhangBao-info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "9188JiZhangBao-info.plist"; sourceTree = "<group>"; };
 		7D81DBB81E1369560072DB7E /* youyuwo.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = youyuwo.cer; sourceTree = "<group>"; };
 		7D8248C91EC5849C0048BC4B /* SSJDatabaseVersion15.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJDatabaseVersion15.h; sourceTree = "<group>"; };
 		7D8248CA1EC5849C0048BC4B /* SSJDatabaseVersion15.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDatabaseVersion15.m; sourceTree = "<group>"; };
@@ -10286,6 +10288,7 @@
 		7D4EF8921C4B5625003C4B20 /* Plist */ = {
 			isa = PBXGroup;
 			children = (
+				7D7EF14B1ECDA05200E5D51D /* 9188JiZhangBao-info.plist */,
 				9C7D31CA1E8E08980093001F /* youyujizhangpro-Info.plist */,
 				9C7D31CB1E8E08980093001F /* 9188jizhangpro-Info.plist */,
 				9C13F7411E82688400AC5FA9 /* BeiKeJiZhang-Info.plist */,
@@ -14373,6 +14376,7 @@
 				BD6C388F1C910A8F000E2E42 /* pushsound.wav in Resources */,
 				7DBB38231E55BE2F0075E638 /* YouYuJiZhangBen-Info.plist in Resources */,
 				9C155F111E68572700FDFD18 /* MJRefresh.bundle in Resources */,
+				7D7EF14C1ECDA05200E5D51D /* 9188JiZhangBao-info.plist in Resources */,
 				7DBB415A1E55C5150075E638 /* SuiShouJiEnterprise-Info.plist in Resources */,
 				9C7D31CC1E8E08980093001F /* youyujizhangpro-Info.plist in Resources */,
 				9CAF731C1E03EAD90061ADB8 /* xiaomao.gif in Resources */,
