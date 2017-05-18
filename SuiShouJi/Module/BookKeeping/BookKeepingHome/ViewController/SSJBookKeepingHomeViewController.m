@@ -131,7 +131,6 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
         self.hidesNavigationBarWhenPushed = YES;
         self.extendedLayoutIncludesOpaqueBars = YES;
         self.automaticallyAdjustsScrollViewInsets = NO;
-//        [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleLightContent];
     }
     return self;
 }
@@ -146,8 +145,6 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
     [self.view addSubview:self.statusLabel];
 //    [self.view addSubview:self.billStickyNoteView];//mzl新年账单
     self.tableView.frame = self.view.frame;
-    //    self.newlyAddChargeArr = [[NSMutableArray alloc]init];
-    //    self.tableView.backgroundColor = [UIColor whiteColor];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.view.backgroundColor = [UIColor whiteColor];
     [self.tableView registerClass:[SSJBookKeepingHomeHeaderView class] forHeaderFooterViewReuseIdentifier:kHeaderId];
@@ -186,19 +183,6 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
     }
     [self getCurrentDate];
     
-//    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor],NSFontAttributeName:[UIFont systemFontOfSize:20]};
-//    [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
-//    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
-//    UIBarButtonItem *leftButton = [[UIBarButtonItem alloc]initWithCustomView:self.leftButton];
-//    self.navigationItem.leftBarButtonItem = leftButton;
-//    UIBarButtonItem *rightSpace = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace  target:nil action:nil];
-//    rightSpace.width = -15;
-////    UIBarButtonItem *leftSpace = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace  target:nil action:nil];
-////    leftSpace.width = -10;
-////    self.navigationItem.leftBarButtonItem = leftBarButtonItem;
-//    self.navigationItem.titleView = self.budgetButton;
-//    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithCustomView:self.rightBarButton];
-//    self.navigationItem.rightBarButtonItems = @[rightSpace, rightItem];
     
     //  数据库初始化完成后再查询数据
     if (self.isDatabaseInitFinished) {
@@ -236,7 +220,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 //    self.billStickyNoteView.centerX = self.view.centerX;
 //    self.billStickyNoteView.width = self.view.width;
 //    self.billStickyNoteView.top = self.homeButton.bottom;
-    BOOL haveShowTheNoteView = YES;//是否显示过新年账单默认显示过了//[[[NSUserDefaults standardUserDefaults] objectForKey:SSJShowBillNoteKey] boolValue];
+//    BOOL haveShowTheNoteView = YES;//是否显示过新年账单默认显示过了//[[[NSUserDefaults standardUserDefaults] objectForKey:SSJShowBillNoteKey] boolValue];
 //    if (!haveShowTheNoteView) {
 //        //没显示过
 //        self.billStickyNoteView.height = 105;
@@ -245,27 +229,15 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 //        self.billStickyNoteView.height = 0;
 //        self.billStickyNoteView.hidden = YES;
 //    }
-    if (!SSJ_CURRENT_THEME.tabBarBackgroundImage.length) {
-        if (!haveShowTheNoteView) {
-            self.tableView.top = self.billStickyNoteView.bottom;
-            self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.billStickyNoteView.bottom - SSJ_TABBAR_HEIGHT);
-        } else {
-            self.tableView.top = self.bookKeepingHeader.bottom;
-            self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.bookKeepingHeader.bottom - SSJ_TABBAR_HEIGHT);
-            self.tableView.contentInset = UIEdgeInsetsMake(46, 0, 0, 0);
-        }
-    }else{
-        if (!haveShowTheNoteView) {
-            self.tableView.top = self.billStickyNoteView.bottom;
-            self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.billStickyNoteView.bottom);
-            self.tableView.contentInset = UIEdgeInsetsMake(0, 0, SSJ_TABBAR_HEIGHT, 0);
-        } else {
-            self.tableView.top = self.bookKeepingHeader.bottom;
-            self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.bookKeepingHeader.bottom);
-            self.tableView.contentInset = UIEdgeInsetsMake(46, 0, SSJ_TABBAR_HEIGHT, 0);
-//            self.tableView.contentOffset = CGPointMake(0, 46);
-        }
-    }
+    
+    float tabBarHeight = SSJ_CURRENT_THEME.tabBarBackgroundImage.length ? SSJ_TABBAR_HEIGHT : 0;
+    
+    self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.bookKeepingHeader.bottom - tabBarHeight);
+    
+    self.tableView.contentInset = UIEdgeInsetsMake(46, 0, tabBarHeight, 0);
+
+    self.tableView.top = self.bookKeepingHeader.bottom;
+
     self.clearView.frame = self.view.frame;
     self.statusLabel.height = 21;
     self.statusLabel.top = self.homeButton.bottom;
@@ -280,21 +252,11 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 
 #pragma mark - UITableViewDelegate
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    SSJBookKeepingHomeListItem *listItem = [self.items ssj_safeObjectAtIndex:indexPath.section];
-    if ([listItem.date isEqualToString:@"-1"]) {
-        return 244;
-    } else {
-        return 66;
-    }
+    return 66;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    SSJBookKeepingHomeListItem *listItem = [self.items ssj_safeObjectAtIndex:section];
-    if ([listItem.date isEqualToString:@"-1"]) {
-        return 0.1;
-    } else {
-        return 80;
-    }
+    return 80;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
@@ -307,13 +269,9 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     SSJBookKeepingHomeListItem *item = [self.items ssj_safeObjectAtIndex:section];
-    if (![item.date isEqualToString:@"-1"]) {
-        SSJBookKeepingHomeListItem *item = [self.items ssj_safeObjectAtIndex:section];
-        SSJBookKeepingHomeHeaderView *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kHeaderId];
-        headerView.item = item;
-        return headerView;
-    }
-    return nil;
+    SSJBookKeepingHomeHeaderView *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kHeaderId];
+    headerView.item = item;
+    return headerView;
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -374,11 +332,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 #pragma mark - UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     SSJBookKeepingHomeListItem *listItem = [self.items ssj_safeObjectAtIndex:section];
-    if ([listItem.date isEqualToString:@"-1"]) {
-        return 1;
-    } else {
-        return listItem.chargeItems.count;
-    }
+    return listItem.chargeItems.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -571,16 +525,6 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
     return _tableView;
 }
 
-//-(SSJHomeBarCalenderButton*)rightBarButton{
-//    if (!_rightBarButton) {
-//        _rightBarButton = [[SSJHomeBarCalenderButton alloc]initWithFrame:CGRectMake(0, 0, 50, 30)];
-////        buttonView.layer.borderColor = [UIColor redColor].CGColor;
-////        buttonView.layer.borderWidth = 1;
-//        _rightBarButton.currentDay = _currentDay;
-//        [_rightBarButton.btn addTarget:self action:@selector(rightBarButtonClicked) forControlEvents:UIControlEventTouchUpInside];
-//    }
-//    return _rightBarButton;
-//}
 
 -(SSJHomeReminderView *)remindView{
     if (!_remindView) {
@@ -842,7 +786,6 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
         }];
         _startTime = CFAbsoluteTimeGetCurrent();
         [SSJBookKeepingHomeHelper queryForChargeListExceptNewCharge:self.newlyAddChargeArr Success:^(NSDictionary *result) {
-            BOOL needToDelete = [((SSJBookKeepingHomeListItem *)[weakSelf.items objectAtIndex:0]).date isEqualToString:@"-1"];
             weakSelf.items = [[NSMutableArray alloc]initWithArray:[result objectForKey:SSJOrginalChargeArrKey]];
             weakSelf.newlyAddChargeArr = [[NSMutableArray alloc]initWithArray:[result objectForKey:SSJNewAddChargeArrKey]];
             weakSelf.newlyAddSectionArr = [[NSMutableArray alloc]initWithArray:[result objectForKey:SSJNewAddChargeSectionArrKey]];
@@ -851,13 +794,10 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
                 self.tableView.hasData = YES;
                 if (weakSelf.newlyAddChargeArr.count && !_hasChangeBooksType) {
                     
-                    NSInteger maxSection = [weakSelf.tableView numberOfSections] - 1;
+                    NSInteger maxSection = [weakSelf.tableView numberOfSections];
                     NSInteger rowCount = [weakSelf.tableView numberOfRowsInSection:maxSection];
                     NSIndexPath *currentMaxIndex = [NSIndexPath indexPathForRow:rowCount - 1 inSection:maxSection];
-                    
-                    //                    [weakSelf.tableView beginUpdates];
-                    
-                    
+                                        
                     
                     BOOL needToReload = NO;
                     
@@ -865,10 +805,6 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
                         
                         if (item.operatorType == 0) {
                             [weakSelf.tableView beginUpdates];
-                            if (needToDelete) {
-                                [weakSelf.tableView deleteSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
-                                needToDelete = NO;
-                            }
                             if ([weakSelf.newlyAddSectionArr containsObject:@(item.chargeIndex.section)]) {
                                 [self.tableView insertSections:[NSIndexSet indexSetWithIndex:item.chargeIndex.section] withRowAnimation:UITableViewRowAnimationTop];
                             } else {
@@ -900,12 +836,6 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
                 } else {
                     [weakSelf.tableView reloadData];
                 }
-            } else {
-                self.tableView.hasData = NO;
-                SSJBookKeepingHomeListItem *listItem = [[SSJBookKeepingHomeListItem alloc] init];
-                listItem.date = @"-1";
-                [weakSelf.items addObject:listItem];
-                [weakSelf.tableView reloadData];
             }
             
             [weakSelf.tableView ssj_hideLoadingIndicator];
