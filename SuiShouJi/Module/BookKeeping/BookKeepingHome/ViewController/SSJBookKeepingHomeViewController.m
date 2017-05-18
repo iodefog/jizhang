@@ -201,7 +201,6 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
-//    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
     self.selectIndex = nil;
     [self getCurrentDate];
     [self.floatingDateView dismiss];
