@@ -110,7 +110,7 @@
 #pragma mark - Event
 - (void)rightButtonClicked:(UIButton *)btn {
     if (self.saveBooksBlock) {
-        self.saveBooksBlock(self.lastSelectedIndex);
+        self.saveBooksBlock(self.lastSelectedIndex,[self.titleArray ssj_safeObjectAtIndex:self.lastSelectedIndex]);
     }
     [self.navigationController popViewControllerAnimated:YES];
 }
