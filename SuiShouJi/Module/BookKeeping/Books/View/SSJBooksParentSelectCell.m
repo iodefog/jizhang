@@ -20,6 +20,10 @@
 
 @implementation SSJBooksParentSelectCell
 
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (instancetype)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -31,6 +35,7 @@
         [self.contentView addSubview:self.booksTitleLab];
         [self.contentView addSubview:self.booksIconImageView];
         [self.contentView addSubview:self.arrowImageView];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateAppearance) name:SSJThemeDidChangeNotification object:nil];
     }
     return self;
 }
@@ -91,6 +96,13 @@
         self.booksIconImageView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         self.arrowImageView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     }
+}
+
+- (void)updateAppearance {
+    self.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor].CGColor;
+    self.booksIconImageView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    self.booksTitleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    self.arrowImageView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
 }
 
 
