@@ -25,7 +25,7 @@ static BOOL kNeedBannerDisplay = YES;
 #import "SSJEditableCollectionView.h"
 #import "SSJSummaryBooksViewController.h"
 #import "SSJDatabaseQueue.h"
-//#import "SSJBooksParentSelectView.h"
+#import "SSJSelectCreateShareBookType.h"
 #import "SSJBooksAdView.h"
 #import "SSJBannerNetworkService.h"
 #import "SSJBooksTypeEditAlertView.h"
@@ -62,6 +62,8 @@ static BOOL kNeedBannerDisplay = YES;
 @property (nonatomic, strong) NSString *currentBooksId;
 
 @property(nonatomic, strong) UIButton *rightButton;
+
+@property (nonatomic, strong) SSJSelectCreateShareBookType *createShareBookTypeView;
 
 @end
 
@@ -137,7 +139,7 @@ static BOOL kNeedBannerDisplay = YES;
         bookName = shareItem.booksName;
         bookId = shareItem.booksId;
         if ([bookName isEqualToString:@"添加账本"]) {
-            [self newAndEditeBooksWiteItem:shareItem];
+            [self.createShareBookTypeView show];
         }
     }
         if ([bookName isEqualToString:@"添加账本"]) {
@@ -440,6 +442,22 @@ static BOOL kNeedBannerDisplay = YES;
         _shareBooksDataItems = [NSMutableArray array];
     }
     return _shareBooksDataItems;
+}
+
+- (SSJSelectCreateShareBookType *)createShareBookTypeView {
+    if (!_createShareBookTypeView) {
+        _createShareBookTypeView = [[SSJSelectCreateShareBookType alloc] init];
+        __weak __typeof(self)weakSelf = self;
+        _createShareBookTypeView.selectCreateShareBookBlock = ^(NSInteger selectParent) {
+            if (selectParent == 0) {
+                //新建共享
+                [weakSelf newAndEditeBooksWiteItem:[[SSJShareBookItem alloc] init]];
+            } else if (selectParent == 1) {
+                //暗号加入
+            }
+        };
+    }
+    return _createShareBookTypeView;
 }
 
 #pragma mark - Private

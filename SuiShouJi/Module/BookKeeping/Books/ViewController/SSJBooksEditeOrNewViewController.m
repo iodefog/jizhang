@@ -71,7 +71,7 @@
         };
         _booksEditeView.selectColorAction = ^(SSJBooksColorAndIconSelectView *view){
             [SSJAnaliyticsManager event:@"accountbook_color_pick"];
-            weakSelf.item.booksColor = view.selectedColor;
+//            weakSelf.item.booksColor = view.selectedColor;
         };
         if (self.item.booksName.length) {
             _booksEditeView.textField.text = self.item.booksName;
@@ -79,9 +79,9 @@
         if (self.item.booksIcoin.length) {
             _booksEditeView.selectedImage = self.item.booksIcoin;
         }
-        if (self.item.booksColor.length) {
-            _booksEditeView.selectedColor = [self.item.booksColor lowercaseString];
-        }
+//        if (self.item.booksColor.length) {
+//            _booksEditeView.selectedColor = [self.item.booksColor lowercaseString];
+//        }
         _booksEditeView.displayColorRowCount = 3;
     }
     return _booksEditeView;

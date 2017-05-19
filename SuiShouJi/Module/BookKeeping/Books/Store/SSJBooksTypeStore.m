@@ -10,6 +10,7 @@
 #import "SSJDatabaseQueue.h"
 #import "SSJDailySumChargeTable.h"
 #import "SSJReportFormsCurveModel.h"
+#import "SSJFinancingGradientColorItem.h"
 
 @implementation SSJBooksTypeStore
 
@@ -33,7 +34,19 @@
             SSJBooksTypeItem *item = [[SSJBooksTypeItem alloc]init];
             item.booksId = [booksResult stringForColumn:@"cbooksid"];
             item.booksName = [booksResult stringForColumn:@"cbooksname"];
-            item.booksColor = [booksResult stringForColumn:@"cbookscolor"];
+            
+            //处理渐变色
+            SSJFinancingGradientColorItem *colorItem = [[SSJFinancingGradientColorItem alloc] init];
+            NSArray *colorArray = [[booksResult stringForColumn:@"cbookscolor"] componentsSeparatedByString:@","];
+            if (colorArray.count > 1) {
+                colorItem.startColor = [colorArray ssj_safeObjectAtIndex:0];
+                colorItem.endColor = [colorArray ssj_safeObjectAtIndex:1];
+            } else if (colorArray.count == 1) {
+                colorItem.startColor = [colorArray ssj_safeObjectAtIndex:0];
+                colorItem.endColor = [colorArray ssj_safeObjectAtIndex:0];
+            }
+            item.booksColor = colorItem;
+            
             item.userId = [booksResult stringForColumn:@"cuserid"];
             item.booksIcoin = [booksResult stringForColumn:@"cicoin"];
             item.booksOrder = [booksResult intForColumn:@"iorder"];
@@ -46,7 +59,9 @@
         }
         SSJBooksTypeItem *item = [[SSJBooksTypeItem alloc]init];
         item.booksName = @"添加账本";
-        item.booksColor = @"#FFFFFF";
+        SSJFinancingGradientColorItem *colorItem = [[SSJFinancingGradientColorItem alloc] init];
+        colorItem.startColor = colorItem.endColor = @"#FFFFFF";
+        item.booksColor = colorItem;
         [booksList addObject:item];
         if (success) {
             SSJDispatch_main_async_safe(^{
@@ -179,7 +194,18 @@
         while ([resultSet next]) {
             item.booksId = [resultSet stringForColumn:@"cbooksid"];
             item.booksName = [resultSet stringForColumn:@"cbooksname"];
-            item.booksColor = [resultSet stringForColumn:@"cbookscolor"];
+//            item.booksColor = [resultSet stringForColumn:@"cbookscolor"];
+            //处理渐变色
+            SSJFinancingGradientColorItem *colorItem = [[SSJFinancingGradientColorItem alloc] init];
+            NSArray *colorArray = [[resultSet stringForColumn:@"cbookscolor"] componentsSeparatedByString:@","];
+            if (colorArray.count > 1) {
+                colorItem.startColor = [colorArray ssj_safeObjectAtIndex:0];
+                colorItem.endColor = [colorArray ssj_safeObjectAtIndex:1];
+            } else if (colorArray.count == 1) {
+                colorItem.startColor = [colorArray ssj_safeObjectAtIndex:0];
+                colorItem.endColor = [colorArray ssj_safeObjectAtIndex:0];
+            }
+            item.booksColor = colorItem;
             item.booksIcoin = [resultSet stringForColumn:@"cicoin"];
         }
     }];

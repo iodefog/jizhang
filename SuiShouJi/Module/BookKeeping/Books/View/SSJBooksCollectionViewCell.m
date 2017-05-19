@@ -93,7 +93,7 @@ static const CGFloat kBooksCornerRadius = 10.f;
         [CATransaction setDisableActions:YES];
         self.gradientLayer.colors = @[(__bridge id)[UIColor brownColor].CGColor,(__bridge id)[UIColor lightGrayColor].CGColor];
         
-        if ([privateBookItem.booksName isEqualToString:@"添加账本"]) {
+        if (!privateBookItem.booksId.length && [privateBookItem.booksName isEqualToString:@"添加账本"]) {
             self.gradientLayer.hidden = YES;
             self.backLayer.hidden = NO;
             self.nameLab.textColor = [UIColor ssj_colorWithHex:@"666666"];
@@ -120,7 +120,7 @@ static const CGFloat kBooksCornerRadius = 10.f;
         [CATransaction setDisableActions:YES];
         self.gradientLayer.colors = @[(__bridge id)[UIColor yellowColor].CGColor,(__bridge id)[UIColor purpleColor].CGColor];
         
-        if ([shareBookItem.booksName isEqualToString:@"添加账本"]) {
+        if (!shareBookItem.booksId.length && [shareBookItem.booksName isEqualToString:@"添加账本"]) {
             self.gradientLayer.hidden = YES;
             self.backLayer.hidden = NO;
             self.nameLab.textColor = [UIColor ssj_colorWithHex:@"666666"];

@@ -18,6 +18,7 @@
 #import "SSJShareBookItem.h"
 
 #import "SSJBooksTypeStore.h"
+#import "SSJDataSynchronizer.h"
 
 static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIdentifier";
 
@@ -28,9 +29,6 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
 @property (nonatomic, strong) NSArray <NSString *> *titleArray;
 
 @property (nonatomic, strong) UITextField *bookNameTextField;
-
-/**记账场景*/
-@property (nonatomic, strong) NSDictionary *bookTypeDic;
 
 /**记账颜色*/
 @property (nonatomic, strong) SSJFinancingGradientColorItem *gradientColorItem;
@@ -69,7 +67,7 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
         } else {
             self.title = NSLocalizedString(@"新建共享账本", nil);
         }
-        self.tipStr = NSLocalizedString(@"Tip：共享记账，", nil);
+        self.tipStr = NSLocalizedString(@"Tip：共同记账，账本可共享给ta", nil);
     }
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"完成", nil) style:UIBarButtonItemStylePlain target:self action:@selector(rightButtonClicked:)];
@@ -169,27 +167,41 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
 
 #pragma mark - Event
 - (void)rightButtonClicked:(id)sender{
-//    self.item.booksName = self.booksEditeView.textField.text;
-//    if (!self.bookItem.booksName.length) {
-//        [CDAutoHideMessageHUD showMessage:@"请输入账本名称"];
-//        return;
-//    }
-//    if (self.bookItem.booksName.length > 5) {
-//        [CDAutoHideMessageHUD showMessage:@"账本名称不能超过5个字"];
-//        return;
-//    }
-//    //    __weak typeof(self) weakSelf = self;
-//    [SSJBooksTypeStore saveBooksTypeItem:self.bookItem sucess:^{
-//        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
-//        [[NSNotificationCenter defaultCenter]postNotificationName:SSJBooksTypeDidChangeNotification object:nil];
-//        [self.navigationController popViewControllerAnimated:YES];
-//        if (_saveBooksBlock) {
-//            _saveBooksBlock(self.item.booksId);
-//        }
-//    } failure:^(NSError *error) {
-//        [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
-//    }];
-}
+    NSString *booksName = self.bookNameTextField.text;
+    if (!booksName.length) {
+        [CDAutoHideMessageHUD showMessage:@"请输入账本名称"];
+        return;
+    }
+    if (booksName.length > 5) {
+        [CDAutoHideMessageHUD showMessage:@"账本名称不能超过5个字"];
+        return;
+    }
+    
+    __weak typeof(self) weakSelf = self;
+    
+    if ([self.bookItem isKindOfClass:[SSJBooksTypeItem class]]) {//个人账本
+        ((SSJBooksTypeItem *)self.bookItem).booksName = booksName;
+        ((SSJBooksTypeItem *)self.bookItem).booksParent = self.currentBookType;
+        ((SSJBooksTypeItem *)self.bookItem).booksColor =  self.gradientColorItem;
+        [SSJBooksTypeStore saveBooksTypeItem:(SSJBooksTypeItem *)self.bookItem sucess:^{
+            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+            [[NSNotificationCenter defaultCenter] postNotificationName:SSJBooksTypeDidChangeNotification object:nil];
+            
+            if (_saveBooksBlock) {
+                _saveBooksBlock(((SSJBooksTypeItem *)self.bookItem).booksId);
+            }
+            [weakSelf.navigationController popViewControllerAnimated:YES];
+        } failure:^(NSError *error) {
+            [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
+        }];
+
+
+    } else if([self.bookItem isKindOfClass:[SSJShareBookItem class]]) { //共享账本
+
+    }
+    
+    
+   }
 
 #pragma mark - Lazy
 - (TPKeyboardAvoidingTableView *)tableView {

@@ -7,6 +7,7 @@
 //
 
 #import "SSJBaseCellItem.h"
+#import "SSJFinancingGradientColorItem.h"
 
 @interface SSJBooksTypeItem : SSJBaseCellItem
 
@@ -17,7 +18,7 @@
 @property(nonatomic, strong) NSString *booksName;
 
 //账本颜色
-@property(nonatomic, strong) NSString *booksColor;
+@property (nonatomic, strong) SSJFinancingGradientColorItem *booksColor;
 
 //账本图标
 @property(nonatomic, strong) NSString *booksIcoin;

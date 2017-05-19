@@ -21,7 +21,7 @@
 #import "SSJNewMemberViewController.h"
 #import "SSJFundingTypeSelectViewController.h"
 #import "UIViewController+MMDrawerController.h"
-#import "SSJBooksEditeOrNewViewController.h"
+#import "SSJNewOrEditeBooksViewController.h"
 #import "SSJCustomKeyboard.h"
 #import "SSJCalendarView.h"
 //#import "SSJDateSelectedView.h"
@@ -400,8 +400,9 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
             SSJBooksTypeItem *item = [[SSJBooksTypeItem alloc]init];
             item.booksParent = selectParent;
             
-            SSJBooksEditeOrNewViewController *booksEditeVc = [[SSJBooksEditeOrNewViewController alloc] init];
-            booksEditeVc.item = item;
+            SSJNewOrEditeBooksViewController *booksEditeVc = [[SSJNewOrEditeBooksViewController alloc] init];
+#warning========
+            booksEditeVc.bookItem = item;
             booksEditeVc.saveBooksBlock = ^(NSString *booksId) {
                 weakSelf.item.booksId = booksId;
             };
