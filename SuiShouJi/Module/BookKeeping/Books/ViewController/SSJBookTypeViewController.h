@@ -12,5 +12,5 @@
 /**上一次选择的账本类型indexPath.row*/
 @property (nonatomic, assign) NSInteger lastSelectedIndex;
 
-@property (nonatomic, copy) void(^saveBooksBlock)(NSInteger bookTypeIndex);
+@property (nonatomic, copy) void(^saveBooksBlock)(NSInteger bookTypeIndex,NSString *bookName);
 @end

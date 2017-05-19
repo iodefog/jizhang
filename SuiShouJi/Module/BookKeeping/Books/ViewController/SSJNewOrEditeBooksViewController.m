@@ -36,6 +36,12 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
 
 /**当前选择的账本类型indexPath.row*/
 @property (nonatomic, assign) NSInteger currentBookType;
+
+/**记账场景*/
+@property (nonatomic, copy) NSString *bookParentStr;
+
+/**tip*/
+@property (nonatomic, copy) NSString *tipStr;
 @end
 
 @implementation SSJNewOrEditeBooksViewController
@@ -55,12 +61,14 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
         } else {
             self.title = NSLocalizedString(@"新建个人账本", nil);
         }
+        self.tipStr = NSLocalizedString(@"Tip：个人记账，账本仅自己可见", nil);
     } else if([self.bookItem isKindOfClass:[SSJShareBookItem class]]) { //共享账本
         if (((SSJShareBookItem *)self.bookItem).booksId.length) {
             self.title = NSLocalizedString(@"编辑共享账本", nil);
         } else {
             self.title = NSLocalizedString(@"新建共享账本", nil);
         }
+        self.tipStr = NSLocalizedString(@"Tip：共享记账，", nil);
     }
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"完成", nil) style:UIBarButtonItemStylePlain target:self action:@selector(rightButtonClicked:)];
@@ -70,11 +78,18 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
     [self.view addSubview:self.tableView];
     [self.tableView ssj_clearExtendSeparator];
     [self.tableView registerClass:[SSJCreditCardEditeCell class] forCellReuseIdentifier:SSJNewOrEditeBooksCellIdentifier];
+    
+    UILabel *tipLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 0, self.view.width - 20, 44)];
+    tipLabel.font = [UIFont ssj_pingFangMediumFontOfSize:SSJ_FONT_SIZE_4];
+    tipLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    tipLabel.text = self.tipStr;
+    self.tableView.tableFooterView = tipLabel;
 }
 
 - (void)initalizedDataArray {
     self.titleArray = @[@"记账场景",@"账本名称",@"账本颜色"];
     self.currentBookType = 0;
+    self.bookParentStr = @"日常";
 }
 
 - (void)viewWillLayoutSubviews {
@@ -99,12 +114,16 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
         }
         bookTypeVC.lastSelectedIndex = self.currentBookType;
         __weak __typeof(self)weakSelf = self;
-        bookTypeVC.saveBooksBlock = ^(NSInteger bookTypeIndex) {
+        bookTypeVC.saveBooksBlock = ^(NSInteger bookTypeIndex,NSString *bookName) {
             weakSelf.currentBookType = bookTypeIndex;
+            weakSelf.bookParentStr = bookName;
+            //更新选中账本场景
+            [weakSelf.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
         };
         [self.navigationController pushViewController:bookTypeVC animated:YES];
     } else if (indexPath.row == 2) {
         //账本颜色
+        
     }
 }
 
@@ -115,7 +134,7 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
     cell.cellTitle = [self.titleArray ssj_safeObjectAtIndex:indexPath.row];
     if (indexPath.row == 0) {
         cell.type = SSJCreditCardCellTypeDetail;
-        cell.cellDetail = @"日常账本";
+        cell.cellDetail =  self.bookParentStr;
         cell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
     } else if (indexPath.row == 1) {
         cell.type = SSJCreditCardCellTypeTextField;
