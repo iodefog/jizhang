@@ -8,12 +8,13 @@
 
 #import <Foundation/Foundation.h>
 #import "SSJUserItem.h"
+#import "SSJDatePeriod.h"
 
 @interface SSJShareBooksMemberStore : NSObject
 
 + (void)queryMemberItemWithMemberId:(NSString *)memberId
                             booksId:(NSString *)booksId
                             Success:(void(^)(SSJUserItem * memberItem))success
-                            failure:(void (^)(NSError *error))failure;
+                            failure:(void(^)(NSError *error))failure;
 
 @end

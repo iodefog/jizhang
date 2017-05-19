@@ -11,13 +11,17 @@
 #import "SSJSharebooksMemberDetailViewController.h"
 #import "SSJReportFormsPeriodSelectionControl.h"
 #import "SSJMagicExportCalendarViewController.h"
+#import "SSJBillingChargeViewController.h"
 
 #import "SCYSlidePagingHeaderView.h"
-#import "SSJReportFormsChartCell.h"
+#import "SSJReportFormsIncomeAndPayCell.h"
 
 #import "SSJUserTableManager.h"
 #import "SSJDatePeriod.h"
 #import "SSJShareBooksMemberStore.h"
+#import "SSJReportFormsItem.h"
+
+static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
 
 static NSString *const kSegmentTitlePay = @"支出";
 static NSString *const kSegmentTitleIncome = @"收入";
@@ -37,7 +41,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
 @property(nonatomic, strong) UITableView *tableView;
 
 //  tableview数据源
-@property (nonatomic, strong) NSMutableArray *datas;
+@property (nonatomic, strong) NSMutableArray *cellItems;
 
 
 @end
@@ -51,61 +55,36 @@ static NSString *const kSegmentTitleIncome = @"收入";
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [SSJShareBooksMemberStore queryMemberItemWithMemberId:@"" booksId:@"" Success:^(SSJUserItem *memberItem) {
-        
+    [SSJShareBooksMemberStore queryMemberItemWithMemberId:self.memberId booksId:self.booksId Success:^(SSJUserItem *memberItem) {
+        [self updateUserInfoWithUserItem:memberItem];
     } failure:^(NSError *error) {
-        
+        [SSJAlertViewAdapter showError:error];
     }];
 }
 
 #pragma mark - UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.datas.count;
+    return self.cellItems.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    SSJBaseCellItem *item = [self.datas ssj_safeObjectAtIndex:indexPath.row];
-    SSJReportFormsChartCell *chartCell = [tableView dequeueReusableCellWithIdentifier:@"" forIndexPath:indexPath];
-    chartCell.cellItem = item;
-//    chartCell.option = _selectedOption;
-//    __weak typeof(self) wself = self;
-//    chartCell.selectOptionHandle = ^(SSJReportFormsChartCell *cell) {
-//        wself.selectedOption = cell.option;
-//        [wself reloadDatasInPeriod:wself.periodControl.selectedPeriod];
-//        
-//        switch (wself.selectedOption) {
-//            case SSJReportFormsMemberAndCategoryOptionCategory:
-//                [SSJAnaliyticsManager event:@"form_category"];
-//                break;
-//                
-//            case SSJReportFormsMemberAndCategoryOptionMember:
-//                [SSJAnaliyticsManager event:@"form_member"];
-//                break;
-//        }
-//    };
-    
-    return chartCell;
+    SSJBaseCellItem *item = [self.cellItems ssj_safeObjectAtIndex:indexPath.row];
+
+    SSJReportFormsIncomeAndPayCell *incomeAndPayCell = [tableView dequeueReusableCellWithIdentifier:kIncomeAndPayCellID forIndexPath:indexPath];
+    incomeAndPayCell.cellItem = item;
+    return incomeAndPayCell;
 }
 
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-//    [SSJAnaliyticsManager event:@"forms_bar_chart"];
-//    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-//    
-//    SSJBaseCellItem *item = [self.datas ssj_safeObjectAtIndex:indexPath.row];
-//    
-//    SSJReportFormsItem *tmpItem = (SSJReportFormsItem *)item;
-//    SSJBillingChargeViewController *billingChargeVC = [[SSJBillingChargeViewController alloc] init];
-//    billingChargeVC.ID = tmpItem.ID;
-//    billingChargeVC.color = [UIColor ssj_colorWithHex:tmpItem.colorValue];
-//    billingChargeVC.period = _periodControl.currentPeriod;
-//    billingChargeVC.isMemberCharge = tmpItem.isMember;
-//    billingChargeVC.isPayment = _payAndIncomeSegmentControl.selectedIndex == 0;
-//    if (tmpItem.isMember) {
-//        billingChargeVC.title = tmpItem.name;
-//    }
-//    [self.navigationController pushViewController:billingChargeVC animated:YES];
-//
+    SSJBaseCellItem *item = [self.cellItems ssj_safeObjectAtIndex:indexPath.row];
+    SSJReportFormsItem *tmpItem = (SSJReportFormsItem *)item;
+    SSJBillingChargeViewController *billingChargeVC = [[SSJBillingChargeViewController alloc] init];
+    billingChargeVC.ID = tmpItem.ID;
+    billingChargeVC.color = [UIColor ssj_colorWithHex:tmpItem.colorValue];
+    billingChargeVC.period = _periodControl.currentPeriod;
+    billingChargeVC.isPayment = _payAndIncomeSegmentControl.selectedIndex == 0;
+    [self.navigationController pushViewController:billingChargeVC animated:YES];
 }
 
 - (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
@@ -120,8 +99,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    SSJBaseCellItem *item = [self.datas ssj_safeObjectAtIndex:indexPath.row];
-    return item.rowHeight;
+    return 55;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
@@ -138,6 +116,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
 #pragma mark - SCYSlidePagingHeaderViewDelegate
 - (void)slidePagingHeaderView:(SCYSlidePagingHeaderView *)headerView didSelectButtonAtIndex:(NSUInteger)index {
     SSJDatePeriod *period = _periodControl.currentPeriod;
+//    [self reloadDatasInPeriod:period];
 //    switch (self.navigationBar.option) {
 //        case SSJReportFormsNavigationBarChart:
 //            [self reloadDatasInPeriod:period];
@@ -221,6 +200,100 @@ static NSString *const kSegmentTitleIncome = @"收入";
         [SSJAlertViewAdapter showError:error];
     }];
 }
+
+#pragma mark - Private
+- (void)updateUserInfoWithUserItem:(SSJUserItem *)item {
+    self.nickNameLab.text = item.nickName;
+    if (![item.icon hasPrefix:@"http"]) {
+        item.icon = SSJImageURLWithAPI(item.icon);
+    }
+    [self.iconImageView sd_setImageWithURL:[NSURL URLWithString:item.icon] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
+}
+
+- (SSJBillType)currentType {
+    if (self.payAndIncomeSegmentControl.selectedIndex == 0) {
+        return SSJBillTypePay;
+    } else if (self.payAndIncomeSegmentControl.selectedIndex == 1) {
+        return SSJBillTypeIncome;
+    } else {
+        return SSJBillTypeUnknown;
+    }
+}
+
+- (void)updateSubveiwsHidden {
+    if (self.periodControl.periods.count) {
+        self.periodControl.hidden = NO;
+        self.tableView.hidden = NO;
+    } else {
+        self.periodControl.hidden = YES;
+        self.tableView.hidden = YES;
+    }
+}
+
+//  重新加载数据
+- (void)reloadAllDatas {
+    [self.view ssj_showLoadingIndicator];
+    [self loadBooksItem];
+    [SSJReportFormsUtil queryForPeriodListWithIncomeOrPayType:SSJBillTypeSurplus booksId:_currentBooksId success:^(NSArray<SSJDatePeriod *> *periods) {
+        
+        _periodControl.periods = periods;
+        if (!_periodControl.selectedPeriod && periods.count >= 3) {
+            _periodControl.selectedPeriod = periods[periods.count - 3];
+        }
+        
+        [self updateSubveiwsHidden];
+        
+        if (periods.count == 0) {
+            [self.view ssj_showWatermarkWithCustomView:self.noDataRemindView animated:YES target:nil action:nil];
+        } else {
+            [self.view ssj_hideWatermark:YES];
+        }
+        
+        [self reloadDatasInPeriod:_periodControl.currentPeriod];
+        [self.view ssj_hideLoadingIndicator];
+        
+    } failure:^(NSError *error) {
+        [self.view ssj_hideLoadingIndicator];
+        [SSJAlertViewAdapter showError:error];
+    }];
+}
+
+// 查询某个周期内的流水统计
+- (void)reloadDatasInPeriod:(SSJDatePeriod *)period {
+    if (!period) {
+        return;
+    }
+    [self.tableView ssj_showLoadingIndicator];
+    [SSJReportFormsUtil queryForIncomeOrPayType:[self currentType] booksId:_currentBooksId startDate:period.startDate endDate:period.endDate success:^(NSArray<SSJReportFormsItem *> *result) {
+        [self.tableView ssj_hideLoadingIndicator];
+        [self reorganiseChartTableVieDatasWithOriginalData:result];
+        [self.tableView reloadData];
+    } failure:^(NSError *error) {
+        [SSJAlertViewAdapter showError:error];
+        [self.tableView ssj_hideLoadingIndicator];
+    }];
+}
+
+- (void)reorganiseChartTableVieDatasWithOriginalData:(NSArray<SSJReportFormsItem *> *)result {
+    
+    [self.cellItems removeAllObjects];
+    
+    //  将datas按照收支类型所占比例从大到小进行排序
+    NSArray *oragnizeResult = [result sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+        SSJReportFormsItem *item1 = obj1;
+        SSJReportFormsItem *item2 = obj2;
+        if (item1.scale > item2.scale) {
+            return NSOrderedAscending;
+        } else if (item1.scale < item2.scale) {
+            return NSOrderedDescending;
+        } else {
+            return NSOrderedSame;
+        }
+    }];
+    
+    [self.cellItems addObjectsFromArray:oragnizeResult];
+}
+
 
 
 - (void)didReceiveMemoryWarning {
