@@ -249,6 +249,8 @@
 - (void)resendButtonClicked:(UIButton *)sender {
     if ([sender.titleLabel.text isEqualToString:@"随机生成"]) {
         self.codeInput.text = [SSJShareBooksHelper generateTheRandomCodeWithType:SSJRandomCodeTypeUpperLetter | SSJRandomCodeTypeNumbers length:6];
+    } else {
+        self.codeInput.userInteractionEnabled = YES;
     }
 }
 
