@@ -443,7 +443,6 @@ static NSString *const kSegmentTitleSurplus = @"结余";
 }
 
 - (void)reorganiseChartTableVieDatasWithOriginalData:(NSArray<SSJReportFormsItem *> *)result {
-    
     [self.datas removeAllObjects];
     
     if (result.count == 0) {
@@ -535,6 +534,19 @@ static NSString *const kSegmentTitleSurplus = @"结余";
                 }
             }
             SSJReportFormsSurplusCellItem *surplusItem = [[SSJReportFormsSurplusCellItem alloc] init];
+            if (self.periodControl.customPeriod) {
+                surplusItem.title = @"期间结余";
+            } else {
+                if (self.periodControl.selectedPeriod.periodType == SSJDatePeriodTypeMonth) {
+                    surplusItem.title = [self.periodControl.selectedPeriod.startDate formattedDateWithFormat:@"yyyy年MM月结余"];
+                } else if (self.periodControl.selectedPeriod.periodType == SSJDatePeriodTypeYear) {
+                    surplusItem.title = [self.periodControl.selectedPeriod.startDate formattedDateWithFormat:@"yyyy年结余"];
+                } else if (self.periodControl.selectedPeriod.periodType == SSJDatePeriodTypeCustom) {
+                    surplusItem.title = @"总结余";
+                } else {
+                    [SSJAlertViewAdapter showError:[NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat:@"组织数据发生错误，无效的时间周期类型：%d", (int)self.periodControl.selectedPeriod.periodType]}]];
+                }
+            }
             surplusItem.payment = payment;
             surplusItem.income = income;
             [self.datas addObject:surplusItem];

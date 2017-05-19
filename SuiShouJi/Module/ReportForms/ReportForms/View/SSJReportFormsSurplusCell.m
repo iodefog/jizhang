@@ -134,6 +134,7 @@
     }
     [super setCellItem:cellItem];
     SSJReportFormsSurplusCellItem *item = cellItem;
+    self.surplusView.topLab.text = item.title;
     self.surplusView.bottomLab.text = [NSString stringWithFormat:@"%.2f", item.income - item.payment];
     self.incomeView.bottomLab.text = [NSString stringWithFormat:@"%.2f", item.income];
     self.paymentView.bottomLab.text = [NSString stringWithFormat:@"%.2f", item.payment];
@@ -159,7 +160,6 @@
 - (SSJReportFormsSurplusCellContainerView *)surplusView {
     if (!_surplusView) {
         _surplusView = [[SSJReportFormsSurplusCellContainerView alloc] init];
-        _surplusView.topLab.text = @"总结余";
         _surplusView.topLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_6];
         _surplusView.bottomLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_1];
         [_surplusView ssj_setBorderStyle:SSJBorderStyleBottom];

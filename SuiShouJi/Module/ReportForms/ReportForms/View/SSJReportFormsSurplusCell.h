@@ -14,6 +14,8 @@
 
 @interface SSJReportFormsSurplusCellItem : SSJBaseCellItem
 
+@property (nonatomic, copy) NSString *title;
+
 @property (nonatomic) double income;
 
 @property (nonatomic) double payment;
