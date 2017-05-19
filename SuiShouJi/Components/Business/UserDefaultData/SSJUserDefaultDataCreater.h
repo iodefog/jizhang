@@ -13,24 +13,6 @@
 @interface SSJUserDefaultDataCreater : NSObject
 
 /**
- *  同步创建当前用户默认的同步表记录
- *
- *  @param success  成功的回调
- *  @param failure  失败的回调
- *  @return (void)
- */
-+ (void)createDefaultSyncRecordWithError:(NSError **)error;
-
-/**
- *  异步创建当前用户默认的同步表记录
- *
- *  @param success  成功的回调
- *  @param failure  失败的回调
- *  @return (void)
- */
-+ (void)asyncCreateDefaultSyncRecordWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure;
-
-/**
  *  创建指定用户默认的资金账户
  *
  *  @param userId 用户id

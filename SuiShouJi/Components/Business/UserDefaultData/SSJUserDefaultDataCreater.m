@@ -11,30 +11,6 @@
 
 @implementation SSJUserDefaultDataCreater
 
-+ (void)createDefaultSyncRecordWithError:(NSError **)error {
-    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
-        NSError *tError = [self createDefaultSyncRecordInDatabase:db];
-        if (error) {
-            *error = tError;
-        }
-    }];
-}
-
-+ (void)asyncCreateDefaultSyncRecordWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure {
-    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        NSError *error = [self createDefaultSyncRecordInDatabase:db];
-        if (error) {
-            if (failure) {
-                failure(error);
-            }
-        } else {
-            if (success) {
-                success();
-            }
-        }
-    }];
-}
-
 + (void)createDefaultFundAccountsWithError:(NSError **)error {
     //  创建默认的资金账户
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
@@ -154,15 +130,7 @@
 + (void)asyncCreateAllDefaultDataWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure {
     NSString *userId = SSJUSERID();
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        NSError *error = [self createDefaultSyncRecordInDatabase:db];
-        if (error) {
-            if (failure) {
-                failure(error);
-            }
-            return;
-        }
-        
-        error = [self createDefaultFundAccountsIfNeededForUserId:userId inDatabase:db];
+        NSError *error = [self createDefaultFundAccountsIfNeededForUserId:userId inDatabase:db];
         if (error) {
             if (failure) {
                 failure(error);
@@ -198,27 +166,6 @@
             success();
         }
     }];
-}
-
-//  如果同步表中没有当前用户数据，就创建默认同步表数据
-+ (NSError *)createDefaultSyncRecordInDatabase:(FMDatabase *)db {
-    if (!SSJUSERID().length) {
-        return [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"current user id is invalid"}];
-    }
-    if (![db intForQuery:@"select count(*) from BK_SYNC where CUSERID = ?",SSJUSERID()]) {
-        if ([db executeUpdate:@"insert into BK_SYNC (VERSION, TYPE, CUSERID) values(?, 0, ?)", @(SSJDefaultSyncVersion), SSJUSERID(), SSJUSERID()]) {
-            SSJUpdateSyncVersion(SSJDefaultSyncVersion + 1);
-            return nil;
-        } else {
-            return [db lastError];
-        }
-    }
-//    if ([db executeUpdate:@"insert into BK_SYNC (VERSION, TYPE, CUSERID) select ?, 0, ? where not exists (select count(*) from BK_SYNC where CUSERID = ?)", @(SSJDefaultSyncVersion), SSJUSERID(), SSJUSERID()]) {
-//        SSJUpdateSyncVersion(SSJDefaultSyncVersion + 1);
-//        return nil;
-//    }
-    
-    return nil;
 }
 
 //  如果当前用户没有创建过默认的资金账户，则创建默认资金账户
