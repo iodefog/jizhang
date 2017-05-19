@@ -159,9 +159,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    
-//    [SSJShareBooksHelper generateTheRandomCodeWithType:SSJRandomCodeTypeAll length:6];
-        
+
     __weak typeof(self) weakSelf = self;
     [self.mm_drawerController setGestureCompletionBlock:^(MMDrawerController *drawerController, UIGestureRecognizer *gesture) {
         __strong typeof(weakSelf) sself = weakSelf;
@@ -174,7 +172,6 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
             sself->_dateViewHasDismiss = YES;
         }
     }];
-//    _hasLoad = YES;
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
     self.extendedLayoutIncludesOpaqueBars = YES;
     
@@ -430,11 +427,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
         CGPoint currentPostion = [self.view convertPoint:CGPointMake(self.view.width / 2, self.view.height / 2) toView:self.tableView];
         NSInteger currentSection = [self.tableView indexPathForRowAtPoint:currentPostion].section;
         if (currentSection <= self.items.count && self.items.count) {
-            SSJBookKeepingHomeListItem *listItem = [self.items objectAtIndex:currentSection];
-//            bookKeepingCell.item = [listItem.chargeItems ssj_safeObjectAtIndex:indexPath.row];
-            if ([listItem.date isEqualToString:@"-1"]) {
-                return;
-            }
+            SSJBookKeepingHomeListItem *listItem = [self.items ssj_safeObjectAtIndex:currentSection];
             self.floatingDateView.currentDate = listItem.date;
             _isRefreshing = NO;
             if (self.items.count == 0) {
