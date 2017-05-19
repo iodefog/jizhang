@@ -72,31 +72,66 @@
 }
 
 - (void)viewDidLayoutSubviews {
-    [super viewDidLayoutSubviews];
-    self.backView.size = CGSizeMake(self.view.width - 35, 255);
-    self.backView.centerX = self.view.width / 2;
-    self.backView.top = SSJ_NAVIBAR_BOTTOM + 30;
-    self.backView.layer.shadowPath = (__bridge CGPathRef _Nullable)([UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, self.backView.width + 4, self.backView.height + 4) cornerRadius:16.f]);
-    self.backView.layer.shadowColor = [UIColor ssj_colorWithHex:@"#000000"].CGColor;
-    self.backView.layer.shadowOpacity = 0.15;
-    self.codeTitleLab.centerX = self.backView.width / 2;
-    self.codeTitleLab.top = 30;
-    self.codeLeftImage.right = self.codeTitleLab.left - 10;
-    self.codeRightImage.left = self.codeTitleLab.right + 10;
-    self.codeLeftImage.centerY = self.codeRightImage.centerY = self.codeTitleLab.centerY;
-    self.codeInput.size = CGSizeMake(self.backView.width - 44, 57);
-    self.codeInput.top = self.codeTitleLab.bottom + 34;
-    self.codeInput.centerX = self.backView.width / 2;
-    self.customCodeLab.left = self.codeInput.left;
-    self.expireDateLab.right = self.codeInput.right;
-    self.customCodeLab.top = self.expireDateLab.top = self.codeInput.bottom + 15;
-    self.sendButton.centerX = self.view.width / 2;
-    self.sendButton.centerY = self.backView.bottom;
+    
+}
+
+- (void)updateViewConstraints {
+
+    [self.backView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.height.mas_equalTo(255);
+        make.width.mas_equalTo(self.view.mas_width).offset(-35);
+        make.top.mas_equalTo(SSJ_NAVIBAR_BOTTOM + 30);
+        make.centerX.mas_equalTo(self.view);
+    }];
+    
+    [self.codeTitleLab mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.centerX.mas_equalTo(self.backView);
+        make.top.mas_equalTo(30);
+    }];
+    
+    [self.codeLeftImage mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.right.mas_equalTo(self.codeTitleLab.mas_left).offset(-10);
+        make.centerY.mas_equalTo(self.codeTitleLab.mas_centerY);
+    }];
+    
+    [self.codeRightImage mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(self.codeTitleLab.mas_right).offset(10);
+        make.centerY.mas_equalTo(self.codeTitleLab.mas_centerY);
+    }];
+    
+    [self.codeInput mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.width.mas_equalTo(self.backView.mas_width).offset(-44);
+        make.height.mas_equalTo(57);
+        make.centerX.mas_equalTo(self.backView.mas_centerX);
+        make.top.mas_equalTo(self.codeTitleLab.mas_bottom).offset(34);
+    }];
+    
+    [self.customCodeLab mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(self.codeInput.mas_bottom).offset(15);
+        make.left.mas_equalTo(self.codeInput);
+    }];
+    
+    [self.expireDateLab mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(self.codeInput.mas_bottom).offset(15);
+        make.right.mas_equalTo(self.codeInput);
+    }];
+    
+    [self.sendButton mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(224, 46));
+        make.centerX.mas_equalTo(self.view.mas_centerX);
+        make.centerY.mas_equalTo(self.backView.mas_bottom);
+    }];
+    
     for (SSJShareBooksHintView *hintView in self.hintViews) {
         NSInteger index = [self.hintViews indexOfObject:hintView];
-        hintView.size = CGSizeMake(self.view.width, 38);
-        hintView.top = self.sendButton.bottom + 48 + index * 38;
+        [hintView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.width.mas_equalTo(self.view);
+            make.height.mas_equalTo(38);
+            make.top.mas_equalTo(self.sendButton.mas_bottom).offset(48 + index * 38);
+            make.left.mas_equalTo(self.view);
+        }];
     }
+    [super updateViewConstraints];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
@@ -109,6 +144,9 @@
         _backView = [[UIView alloc] init];
         _backView.backgroundColor = [UIColor whiteColor];
         _backView.layer.cornerRadius = 16.f;
+        _backView.layer.shadowOffset = CGSizeMake(0, 2);
+        _backView.layer.shadowColor = [UIColor ssj_colorWithHex:@"#000000"].CGColor;
+        _backView.layer.shadowOpacity = 0.15;
     }
     return _backView;
 }
@@ -119,7 +157,6 @@
         _codeTitleLab.textColor = [UIColor ssj_colorWithHex:@"#333333"];
         _codeTitleLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         _codeTitleLab.text = @"暗号";
-        [_codeTitleLab sizeToFit];
     }
     return _codeTitleLab;
 }
@@ -196,13 +233,12 @@
 - (UIButton *)sendButton {
     if (!_sendButton) {
         _sendButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        _sendButton.size = CGSizeMake(224, 46);
         _sendButton.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
         _sendButton.layer.cornerRadius = 23.f;
         [_sendButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_sendButton setTitle:@"发送暗号" forState:UIControlStateNormal];
         _sendButton.backgroundColor = [UIColor ssj_colorWithHex:@"#EB4A64"];
-        _sendButton.layer.shadowPath = (__bridge CGPathRef _Nullable)([UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, 226, 48) cornerRadius:23.f]);
+        _sendButton.layer.shadowOffset = CGSizeMake(0, 4);
         _sendButton.layer.shadowColor = [UIColor ssj_colorWithHex:@"#EB4A64"].CGColor;
         _sendButton.layer.shadowOpacity = 0.39;
     }
