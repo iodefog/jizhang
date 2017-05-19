@@ -8,8 +8,6 @@
 
 #import <Foundation/Foundation.h>
 #import "SSJBooksTypeItem.h"
-#import "SSJReportFormsItem.h"
-#import "SSJDatePeriod.h"
 #import "SSJShareBookItem.h"
 
 @interface SSJBooksTypeStore : NSObject
