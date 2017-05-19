@@ -12,6 +12,7 @@
 #import "SSJBookTypeViewController.h"
 
 #import "SSJCreditCardEditeCell.h"
+#import "SSJBookColorSelectedViewController.h"
 
 #import "SSJBooksTypeItem.h"
 #import "SSJShareBookItem.h"
@@ -90,6 +91,11 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
     self.titleArray = @[@"记账场景",@"账本名称",@"账本颜色"];
     self.currentBookType = 0;
     self.bookParentStr = @"日常";
+    
+    SSJFinancingGradientColorItem *item = [[SSJFinancingGradientColorItem alloc] init];
+    item.startColor = @"#FC6EAC";
+    item.endColor = @"#FB92BD";
+    self.gradientColorItem = item;
 }
 
 - (void)viewWillLayoutSubviews {
@@ -106,6 +112,7 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
 
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    __weak __typeof(self)weakSelf = self;
     if (indexPath.row == 0) {
         //记账场景
         SSJBookTypeViewController *bookTypeVC = [[SSJBookTypeViewController alloc] init];
@@ -113,7 +120,7 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
             self.currentBookType = 0;
         }
         bookTypeVC.lastSelectedIndex = self.currentBookType;
-        __weak __typeof(self)weakSelf = self;
+        
         bookTypeVC.saveBooksBlock = ^(NSInteger bookTypeIndex,NSString *bookName) {
             weakSelf.currentBookType = bookTypeIndex;
             weakSelf.bookParentStr = bookName;
@@ -123,7 +130,14 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
         [self.navigationController pushViewController:bookTypeVC animated:YES];
     } else if (indexPath.row == 2) {
         //账本颜色
-        
+        SSJBookColorSelectedViewController *bookColorVC = [[SSJBookColorSelectedViewController alloc] init];
+        bookColorVC.colorSelectedBlock = ^(SSJFinancingGradientColorItem *selectColor) {
+            //更新选择账本颜色
+            weakSelf.gradientColorItem = selectColor;
+            [weakSelf.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:2 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+        };
+        bookColorVC.bookColorItem = self.gradientColorItem;
+        [self.navigationController pushViewController:bookColorVC animated:YES];
     }
 }
 
@@ -143,10 +157,7 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
         self.bookNameTextField = cell.textInput;
     } else if (indexPath.row == 2) {
         cell.type = SSJCreditCardCellColorSelect;
-        SSJFinancingGradientColorItem *item = [[SSJFinancingGradientColorItem alloc] init];
-        item.startColor = @"#FC6EAC";
-        item.endColor = @"#FB92BD";
-        cell.colorItem = item;
+        cell.colorItem = self.gradientColorItem;
         cell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     return cell;
