@@ -43,7 +43,7 @@ static BOOL kNeedBannerDisplay = YES;
 /**共享账本列表*/
 @property (nonatomic, strong) NSMutableArray <SSJShareBookItem *>*shareBooksDataItems;
 
-@property(nonatomic, strong) SSJBooksTypeItem *editBooksItem;
+@property(nonatomic, strong) __kindof SSJBaseCellItem *editBooksItem;
 
 @property(nonatomic, strong) SSJEditableCollectionView *collectionView;
 
@@ -193,8 +193,10 @@ static BOOL kNeedBannerDisplay = YES;
         cell.booksTypeItem = shareItem;
     }
     @weakify(self);
-    cell.editBookAction = ^{
+
+    cell.editBookAction = ^(__kindof SSJBaseCellItem * _Nonnull booksTypeItem) {
         @strongify(self);
+        self.editBooksItem = booksTypeItem;
         [self.editAlertView show];
     };
     
@@ -256,11 +258,21 @@ static BOOL kNeedBannerDisplay = YES;
 }
 
 - (void)collectionViewDidEndEditing:(SSJEditableCollectionView *)collectionView{
-    [SSJBooksTypeStore saveBooksOrderWithItems:self.privateBooksDataitems sucess:^{
-        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
-    } failure:^(NSError *error) {
-        SSJPRINT(@"%@",[error localizedDescription]);
+    [RACObserve(self, privateBooksDataitems) subscribeNext:^(id x) {
+        [SSJBooksTypeStore saveBooksOrderWithItems:self.privateBooksDataitems sucess:^{
+            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+        } failure:^(NSError *error) {
+            SSJPRINT(@"%@",[error localizedDescription]);
+        }];
     }];
+    
+//    [RACObserve(self, shareBooksDataItems) subscribeNext:^(id x) {
+        [SSJBooksTypeStore saveShareBooksOrderWithItems:self.shareBooksDataItems sucess:^{
+            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+        } failure:^(NSError *error) {
+            SSJPRINT(@"%@",[error localizedDescription]);
+        }];
+//    }];
 }
 
 //- (BOOL)shouldCollectionViewEndEditingWhenUserTapped:(SSJEditableCollectionView *)collectionView{
@@ -302,6 +314,7 @@ static BOOL kNeedBannerDisplay = YES;
     if (self.rightButton.isSelected) {
         self.adView.hidden = YES;
         [SSJAnaliyticsManager event:@"accountbook_manage"];
+        [self.collectionView beginEditing];
     }else{
         self.adView.hidden = NO;
         [self.collectionView endEditing];
@@ -394,7 +407,8 @@ static BOOL kNeedBannerDisplay = YES;
             [wself enterBooksTypeEditController];
         };
         _editAlertView.deleteHandler = ^{
-            if ([wself.editBooksItem.booksId isEqualToString:SSJUSERID()]) {
+            SSJBooksTypeItem *persionalBook = wself.editBooksItem;
+            if ([persionalBook.booksId isEqualToString:SSJUSERID()]) {
                 [CDAutoHideMessageHUD showMessage:@"日常账本无法删除"];
             } else {
                 [wself.authCodeAlertView show];
@@ -496,7 +510,13 @@ static BOOL kNeedBannerDisplay = YES;
 }
 
 - (void)deleteBooksWithType:(BOOL)type{
-    if ([self.editBooksItem.booksId isEqualToString:self.currentBooksId]) {
+    NSString *bookId;
+    if ([self.editBooksItem isKindOfClass:[SSJBooksTypeItem class]]) {
+        bookId = ((SSJBooksTypeItem *)self.editBooksItem).booksId;
+    } else if ([self.editBooksItem isKindOfClass:[SSJShareBookItem class]]) {
+        bookId = ((SSJShareBookItem *)self.editBooksItem).booksId;
+    }
+    if ([bookId isEqualToString:self.currentBooksId]) {
         [[[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
             [SSJUserTableManager updateCurrentBooksId:SSJUSERID() success:^{
                 [subscriber sendCompleted];

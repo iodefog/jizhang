@@ -79,4 +79,24 @@
  *  @param failure 查询失败的回调
  */
 + (void)queryForShareBooksListWithSuccess:(void(^)(NSMutableArray<SSJShareBookItem *> *result))success failure:(void(^)(NSError *error))failure;
+
+/**
+ *  保存账本(共享账本)
+ *
+ *  @return (BOOL) 是否保存成功
+ */
++ (void)saveShareBooksTypeItem:(SSJShareBookItem *)item
+                   sucess:(void(^)())success
+                  failure:(void (^)(NSError *error))failure;
+
+/**
+ 保存账本顺序(共享账本)
+ 
+ @param items   账本item的数组
+ @param success 保存成功的回调
+ @param failure 保存失败的回调
+ */
++ (void)saveShareBooksOrderWithItems:(NSArray<SSJShareBookItem *> *)items
+                         sucess:(void(^)())success
+                        failure:(void (^)(NSError *error))failure;
 @end

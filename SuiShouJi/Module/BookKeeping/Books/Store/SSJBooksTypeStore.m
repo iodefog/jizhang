@@ -104,10 +104,10 @@
         if (![db boolForQuery:@"select count(*) from BK_BOOKS_TYPE where CBOOKSID = ?", booksid]) {
             [typeInfo setObject:@(booksOrder) forKey:@"iorder"];
             [typeInfo setObject:@(0) forKey:@"operatortype"];
-            sql = [self inertSQLStatementWithTypeInfo:typeInfo];
+            sql = [self inertSQLStatementWithTypeInfo:typeInfo tableName:@"BK_BOOKS_TYPE"];
         } else {
             [typeInfo setObject:@(1) forKey:@"operatortype"];
-            sql = [self updateSQLStatementWithTypeInfo:typeInfo];
+            sql = [self updateSQLStatementWithTypeInfo:typeInfo tableName:@"BK_BOOKS_TYPE"];
         }
         if (![db executeUpdate:sql withParameterDictionary:typeInfo]) {
             if (failure) {
@@ -168,23 +168,34 @@
 }
 
 
-+ (NSString *)inertSQLStatementWithTypeInfo:(NSDictionary *)typeInfo {
++ (NSString *)inertSQLStatementWithTypeInfo:(NSDictionary *)typeInfo tableName:(NSString *)tableName {
     NSMutableArray *keys = [[typeInfo allKeys] mutableCopy];
+    //处理渐变
+    if ([keys containsObject:@"cbookscolor"]) {
+       id bookColorDic = [typeInfo objectForKey:@"cbookscolor"];
+        if ([bookColorDic isKindOfClass:[NSDictionary class]]) {
+          NSString *startColor = [(NSDictionary *)bookColorDic objectForKey:@"startColor"];
+          NSString *endColor = [(NSDictionary *)bookColorDic objectForKey:@"endColor"];
+            NSString *colorStr = [NSString stringWithFormat:@"%@,%@",startColor,endColor];
+            [typeInfo setValue:colorStr forKey:@"cbookscolor"];
+        }
+    }
+    
     NSMutableArray *values = [NSMutableArray arrayWithCapacity:[keys count]];
     for (NSString *key in keys) {
         [values addObject:[NSString stringWithFormat:@":%@", key]];
     }
     
-    return [NSString stringWithFormat:@"insert into BK_BOOKS_TYPE (%@) values (%@)", [keys componentsJoinedByString:@","], [values componentsJoinedByString:@","]];
+    return [NSString stringWithFormat:@"insert into %@ (%@) values (%@)",tableName, [keys componentsJoinedByString:@","], [values componentsJoinedByString:@","]];
 }
 
-+ (NSString *)updateSQLStatementWithTypeInfo:(NSDictionary *)typeInfo {
++ (NSString *)updateSQLStatementWithTypeInfo:(NSDictionary *)typeInfo tableName:(NSString *)tableName {
     NSMutableArray *keyValues = [NSMutableArray arrayWithCapacity:[typeInfo count]];
     for (NSString *key in [typeInfo allKeys]) {
         [keyValues addObject:[NSString stringWithFormat:@"%@ =:%@", key, key]];
     }
     
-    return [NSString stringWithFormat:@"update BK_BOOKS_TYPE set %@ where cbooksid = :cbooksid", [keyValues componentsJoinedByString:@", "]];
+    return [NSString stringWithFormat:@"update %@ set %@ where cbooksid = :cbooksid",tableName, [keyValues componentsJoinedByString:@", "]];
 }
 
 +(SSJBooksTypeItem *)queryCurrentBooksTypeForBooksId:(NSString *)booksid{
@@ -343,16 +354,30 @@
             SSJShareBookItem *shareBookItem = [[SSJShareBookItem alloc] init];
             shareBookItem.booksId = [result stringForColumn:@"cbooksid"];
             shareBookItem.booksName = [result stringForColumn:@"cbooksname"];
-            shareBookItem.booksColor = [result stringForColumn:@"cbookscolor"];
+//            shareBookItem.booksColor = [result stringForColumn:@"cbookscolor"];
             shareBookItem.parentType = [result intForColumn:@"iparenttype"];
             shareBookItem.booksOrder = [result intForColumn:@"iorder"];
-//            shareBookItem.shareBook = YES;
+            
+            //处理渐变色
+            SSJFinancingGradientColorItem *colorItem = [[SSJFinancingGradientColorItem alloc] init];
+            NSArray *colorArray = [[result stringForColumn:@"cbookscolor"] componentsSeparatedByString:@","];
+            if (colorArray.count > 1) {
+                colorItem.startColor = [colorArray ssj_safeObjectAtIndex:0];
+                colorItem.endColor = [colorArray ssj_safeObjectAtIndex:1];
+            } else if (colorArray.count == 1) {
+                colorItem.startColor = [colorArray ssj_safeObjectAtIndex:0];
+                colorItem.endColor = [colorArray ssj_safeObjectAtIndex:0];
+            }
+            shareBookItem.booksColor = colorItem;
+            
             [shareBooksList addObject:shareBookItem];
         }
         //最后一个添加账本
         SSJShareBookItem *lastItem = [[SSJShareBookItem alloc]init];
         lastItem.booksName = @"添加账本";
-        lastItem.booksColor = @"#FFFFFF";
+        SSJFinancingGradientColorItem *colorItem = [[SSJFinancingGradientColorItem alloc] init];
+        colorItem.startColor = colorItem.endColor = @"#FFFFFF";
+        lastItem.booksColor = colorItem;
         [shareBooksList addObject:lastItem];
         if (success) {
             SSJDispatch_main_async_safe(^{
@@ -360,7 +385,118 @@
             });
         }
     }];
-    
 }
 
+
+/**
+ *  保存账本类型
+ *
+ *  @return (BOOL) 是否保存成功
+ */
++ (void)saveShareBooksTypeItem:(SSJShareBookItem *)item
+                        sucess:(void(^)())success
+                       failure:(void (^)(NSError *error))failure {
+    NSString * booksid = item.booksId;
+    if (!booksid.length) {
+        item.booksId = SSJUUID();
+    }
+    if (!item.creatorId.length) {
+        item.creatorId = SSJUSERID();
+    }
+    if (!item.adminId.length) {
+        item.adminId = SSJUSERID();
+    }
+    
+    NSString *cwriteDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+    NSMutableDictionary *shareBookInfo = [NSMutableDictionary dictionaryWithDictionary:[self fieldMapWithShareBookItem:item]];
+    [shareBookInfo removeObjectForKey:@"editing"];
+    [shareBookInfo setObject:cwriteDate forKey:@"CADDDATE"];
+    if (![[shareBookInfo allKeys] containsObject:@"iversion"]) {
+        [shareBookInfo setObject:@(SSJSyncVersion()) forKey:@"iversion"];
+    }
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
+        NSString *sqlStr;
+        NSString *userId = SSJUSERID();
+        if ([db intForQuery:@"select count(1) from bk_share_books where cbooksname = ?  and ccreator = ? and cadmin = ?and cbooksid <> ?",item.booksName,item.creatorId,item.adminId,item.booksId]) {
+            SSJDispatch_main_async_safe(^{
+                [CDAutoHideMessageHUD showMessage:@"已有相同账本名称了，换一个吧"];
+            });
+            return;
+        }
+        
+        item.booksOrder = [db intForQuery:@"select max(iorder) from bk_share_books where ccreator = ?",item.creatorId] + 1;
+        
+        if ([item.booksId isEqualToString:userId]) {
+            item.booksOrder = 0;
+        }
+        if (![db boolForQuery:@"select count(*) from bk_share_books where CBOOKSID = ?", booksid]) {
+            [shareBookInfo setObject:@(item.booksOrder) forKey:@"iorder"];
+            [shareBookInfo setObject:@(0) forKey:@"operatortype"];
+            sqlStr = [self inertSQLStatementWithTypeInfo:shareBookInfo tableName:@"bk_share_books"];
+        } else {
+            [shareBookInfo setObject:@(1) forKey:@"operatortype"];
+            sqlStr = [self updateSQLStatementWithTypeInfo:shareBookInfo tableName:@"bk_share_books"];
+        }
+        
+        if (![db executeUpdate:sqlStr withParameterDictionary:shareBookInfo]) {
+            if (failure) {
+                SSJDispatch_main_async_safe(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        }
+        
+        if (![db boolForQuery:@"select count(*) from bk_share_books where CBOOKSID = ?", booksid]) {
+//            if (![self generateBooksTypeForBooksItem:item indatabase:db forUserId:userId]) {
+//                if (failure) {
+//                    SSJDispatch_main_async_safe(^{
+//                        failure([db lastError]);
+//                    });
+//                }
+//                return;
+//            }
+        }
+        if (success) {
+            SSJDispatch_main_async_safe(^{
+                success();
+            });
+        }
+    }];
+}
+
++ (void)saveShareBooksOrderWithItems:(NSArray<SSJShareBookItem *> *)items sucess:(void (^)())success failure:(void (^)(NSError *))failure {
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
+        for (SSJShareBookItem *item in items) {
+            NSInteger order = [items indexOfObject:item] + 1;
+            NSString *creatorId = item.creatorId;
+            if (!creatorId) {
+                creatorId = SSJUSERID();
+            }
+            if (!item.booksId) return ;
+            NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+            NSString *sqlStr = [NSString stringWithFormat:@"update bk_share_books set iorder = %@, iversion = %@, cadddate = '%@' where cbooksid = '%@' and ccreator = '%@'",@(order),@(SSJSyncVersion()),writeDate,item.booksId,creatorId];
+            if (![db executeUpdate:sqlStr]) {
+                if (failure) {
+                    SSJDispatch_main_async_safe(^{
+                        failure([db lastError]);
+                    });
+                }
+                return ;
+            }
+        }
+        if (success) {
+            SSJDispatch_main_async_safe(^{
+                success();
+            });
+        }
+    }];
+}
+
++ (NSDictionary *)fieldMapWithShareBookItem:(SSJShareBookItem *)item {
+    [SSJShareBookItem mj_setupReplacedKeyFromPropertyName:^NSDictionary *{
+        return [SSJShareBookItem propertyMapping];
+    }];
+    return item.mj_keyValues;
+}
 @end

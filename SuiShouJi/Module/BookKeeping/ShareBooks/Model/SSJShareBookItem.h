@@ -7,7 +7,7 @@
 //
 
 #import "SSJBaseCellItem.h"
-
+#import "SSJFinancingGradientColorItem.h"
 @interface SSJShareBookItem : SSJBaseCellItem
 
 // 账本id
@@ -26,7 +26,7 @@
 @property(nonatomic, assign) NSInteger booksOrder;
 
 // 账本颜色
-@property(nonatomic, copy) NSString *booksColor;
+@property(nonatomic, copy) SSJFinancingGradientColorItem *booksColor;
 
 // 账本父类型
 @property(nonatomic) NSInteger parentType;
@@ -36,4 +36,5 @@
 
 /**是否是共享账本*/
 //@property (nonatomic, assign, getter = isShareBook) BOOL shareBook;
++ (NSDictionary *)propertyMapping;
 @end
