@@ -69,9 +69,6 @@
         
         SSJUserItem *newuserItem = [originalUserItem copy];
         newuserItem.userId = newUserId;
-        newuserItem.defaultMemberState = @"0";
-        newuserItem.defaultFundAcctState = @"0";
-        newuserItem.defaultBooksTypeState = @"0";
         newuserItem.currentBooksId = newuserItem.userId;
         
         // 老用户id没过注册过，说明没有登录，为登陆情况下数据格式化不请求接口
