@@ -89,11 +89,7 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
     self.titleArray = @[@"记账场景",@"账本名称",@"账本颜色"];
     self.currentBookType = 0;
     self.bookParentStr = @"日常";
-    
-    SSJFinancingGradientColorItem *item = [[SSJFinancingGradientColorItem alloc] init];
-    item.startColor = @"#FC6EAC";
-    item.endColor = @"#FB92BD";
-    self.gradientColorItem = item;
+    self.gradientColorItem = [[SSJFinancingGradientColorItem defualtColors] firstObject];
 }
 
 - (void)viewWillLayoutSubviews {
@@ -129,6 +125,10 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
     } else if (indexPath.row == 2) {
         //账本颜色
         SSJBookColorSelectedViewController *bookColorVC = [[SSJBookColorSelectedViewController alloc] init];
+        //账本名称
+        if (self.bookNameTextField.text.length) {
+            bookColorVC.bookName = self.bookNameTextField.text;
+        }
         bookColorVC.colorSelectedBlock = ^(SSJFinancingGradientColorItem *selectColor) {
             //更新选择账本颜色
             weakSelf.gradientColorItem = selectColor;
@@ -199,9 +199,7 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
     } else if([self.bookItem isKindOfClass:[SSJShareBookItem class]]) { //共享账本
 
     }
-    
-    
-   }
+}
 
 #pragma mark - Lazy
 - (TPKeyboardAvoidingTableView *)tableView {
