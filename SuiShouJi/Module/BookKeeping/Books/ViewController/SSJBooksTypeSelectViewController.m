@@ -239,14 +239,23 @@ static BOOL kNeedBannerDisplay = YES;
 #pragma mark - SSJEditableCollectionViewDelegate
 - (BOOL)collectionView:(SSJEditableCollectionView *)collectionView shouldBeginEditingWhenPressAtIndexPath:(NSIndexPath *)indexPath{
     [SSJAnaliyticsManager event:@"fund_sort"];
-    if (indexPath.row == self.privateBooksDataitems.count - 1) {
+    if ((indexPath.row == self.privateBooksDataitems.count - 1 && indexPath.section == 0) || (indexPath.section == 1 && indexPath.row == self.shareBooksDataItems.count - 1)) {
         return NO;
     }
+    
     return YES;
 }
 
 - (BOOL)collectionView:(SSJEditableCollectionView *)collectionView shouldMoveCellAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath{
-    if (toIndexPath.row == self.privateBooksDataitems.count - 1) {
+    if ((toIndexPath.row == self.privateBooksDataitems.count - 1 && toIndexPath.section == 0) || (toIndexPath.section == 1 && toIndexPath.row == self.shareBooksDataItems.count - 1)) {
+        return NO;
+    }
+    
+    if ((fromIndexPath.row == self.privateBooksDataitems.count - 1 && fromIndexPath.section == 0) || (fromIndexPath.section == 1 && fromIndexPath.row == self.shareBooksDataItems.count - 1)) {
+        return NO;
+    }
+    
+    if (fromIndexPath.section != toIndexPath.section) {
         return NO;
     }
     return YES;
