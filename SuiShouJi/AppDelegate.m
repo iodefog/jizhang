@@ -250,8 +250,6 @@ NSDate *SCYEnterBackgroundTime() {
             
             //  载入用户id
             [SSJUserTableManager reloadUserIdWithSuccess:^{
-                //  创建默认的同步表记录
-                [SSJUserDefaultDataCreater createDefaultSyncRecordWithError:nil];
                 //  创建默认的资金账户
                 [SSJUserDefaultDataCreater createDefaultFundAccountsWithError:nil];
             } failure:^(NSError * _Nonnull error) {
