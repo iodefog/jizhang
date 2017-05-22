@@ -307,21 +307,110 @@ static NSString *const kSegmentTitleSurplus = @"结余";
     }];
 }
 
+- (void)loadBooksItem {
+    [SSJUserTableManager currentBooksId:^(NSString * _Nonnull booksId) {
+        _currentBooksId = booksId;
+        SSJBooksTypeItem *currentBooksItem = [SSJBooksTypeStore queryCurrentBooksTypeForBooksId:_currentBooksId];
+        UIImage *image = [[UIImage imageNamed:currentBooksItem.booksIcoin] ssj_compressWithinSize:CGSizeMake(22, 22)];
+        [self.navigationBar setBooksImage:image];
+        [self.navigationBar setBooksColor:[UIColor ssj_colorWithHex:currentBooksItem.booksColor]];
+    } failure:^(NSError * _Nonnull error) {
+        [SSJAlertViewAdapter showError:error];
+    }];
+}
 
 // 查询某个周期内的流水统计
 - (void)reloadDatasInPeriod:(SSJDatePeriod *)period {
     if (!period) {
         return;
     }
-    [self.tableView ssj_showLoadingIndicator];
-    [SSJReportFormsUtil queryForIncomeOrPayType:[self currentType] booksId:_currentBooksId startDate:period.startDate endDate:period.endDate success:^(NSArray<SSJReportFormsItem *> *result) {
-        [self.tableView ssj_hideLoadingIndicator];
-        [self reorganiseChartTableVieDatasWithOriginalData:result];
-        [self.tableView reloadData];
-    } failure:^(NSError *error) {
-        [SSJAlertViewAdapter showError:error];
-        [self.tableView ssj_hideLoadingIndicator];
-    }];
+    switch (self.navigationBar.option) {
+        case SSJReportFormsNavigationBarChart: {
+            [self.datas removeAllObjects];
+            [self.tableView reloadData];
+            self.tableView.tableHeaderView = nil;
+            [self.tableView ssj_showLoadingIndicator];
+            
+            switch (_selectedOption) {
+                case SSJReportFormsMemberAndCategoryOptionCategory: {
+                    [SSJReportFormsUtil queryForIncomeOrPayType:[self currentType] booksId:_currentBooksId startDate:period.startDate endDate:period.endDate success:^(NSArray<SSJReportFormsItem *> *result) {
+                        [self.tableView ssj_hideLoadingIndicator];
+                        [self reorganiseChartTableVieDatasWithOriginalData:result];
+                        [self.tableView reloadData];
+                    } failure:^(NSError *error) {
+                        [SSJAlertViewAdapter showError:error];
+                        [self.tableView ssj_hideLoadingIndicator];
+                    }];
+                }
+                    break;
+                    
+                case SSJReportFormsMemberAndCategoryOptionMember: {
+                    [self.tableView ssj_showLoadingIndicator];
+                    [SSJReportFormsUtil queryForMemberChargeWithType:[self currentType] startDate:period.startDate endDate:period.endDate success:^(NSArray<SSJReportFormsItem *> *result) {
+                        [self.tableView ssj_hideLoadingIndicator];
+                        [self reorganiseChartTableVieDatasWithOriginalData:result];
+                        [self.tableView reloadData];
+                    } failure:^(NSError *error) {
+                        [SSJAlertViewAdapter showError:error];
+                        [self.tableView ssj_hideLoadingIndicator];
+                    }];
+                }
+                    break;
+            }
+        }
+            break;
+            
+        case SSJReportFormsNavigationBarCurve: {
+            [self.datas removeAllObjects];
+            [self.tableView reloadData];
+            self.tableView.tableHeaderView = self.curveHeaderView;
+            
+            [self.curveHeaderView showLoadingOnSeparatorForm];
+            [self.curveHeaderView showLoadingOnCurve];
+            
+            [SSJReportFormsUtil queryForDefaultTimeDimensionWithStartDate:period.startDate endDate:period.endDate booksId:_currentBooksId billTypeId:nil success:^(SSJTimeDimension timeDimension) {
+                
+                if (timeDimension != SSJTimeDimensionUnknown) {
+                    self.curveHeaderItem.timeDimension = timeDimension;
+                }
+                
+                [SSJReportFormsUtil queryForBillStatisticsWithTimeDimension:self.curveHeaderItem.timeDimension booksId:_currentBooksId billTypeId:nil startDate:period.startDate endDate:period.endDate success:^(NSDictionary *result) {
+                    
+                    [self updateCurveHeaderItemWithCurveModels:result[SSJReportFormsCurveModelListKey] period:period];
+                    
+                    [SSJReportFormsUtil queryForIncomeOrPayType:[self currentType] booksId:_currentBooksId startDate:period.startDate endDate:period.endDate success:^(NSArray<SSJReportFormsItem *> *list) {
+                        
+                        [self.curveHeaderView hideLoadingOnSeparatorForm];
+                        [self.curveHeaderView hideLoadingOnCurve];
+                        
+                        self.curveHeaderView.item = _curveHeaderItem;
+                        
+                        if (_curveHeaderItem.curveModels.count == 0) {
+                            self.tableView.tableHeaderView = nil;
+                        }
+                        
+                        [self reorganiseCurveTableDataWithOriginalData:list];
+                        
+                    } failure:^(NSError *error) {
+                        [SSJAlertViewAdapter showError:error];
+                        [self.curveHeaderView hideLoadingOnSeparatorForm];
+                        [self.curveHeaderView hideLoadingOnCurve];
+                    }];
+                    
+                } failure:^(NSError *error) {
+                    [SSJAlertViewAdapter showError:error];
+                    [self.curveHeaderView hideLoadingOnSeparatorForm];
+                    [self.curveHeaderView hideLoadingOnCurve];
+                }];
+                
+            } failure:^(NSError *error) {
+                [SSJAlertViewAdapter showError:error];
+                [self.curveHeaderView hideLoadingOnSeparatorForm];
+                [self.curveHeaderView hideLoadingOnCurve];
+            }];
+        }
+            break;
+    }
 }
 
 - (void)updateSubveiwsHidden {
