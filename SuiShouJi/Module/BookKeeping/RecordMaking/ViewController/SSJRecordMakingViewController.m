@@ -78,8 +78,6 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 
 @property (nonatomic) NSInteger lastSelectedIndex;
 
-@property (nonatomic, strong) NSArray<SSJBooksTypeItem *> *bookItems;
-
 @property (nonatomic, strong) NSString *defaultBooksId;// 当前用户默认的账本id
 
 @property (nonatomic) long currentYear;
@@ -187,7 +185,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         _customNaviBar = [[SSJRecordMakingCustomNavigationBar alloc] init];
         _customNaviBar.selectBookHandle = ^(SSJRecordMakingCustomNavigationBar *naviBar) {
             [SSJAnaliyticsManager event:@"addRecord_changeBooks"];//记一笔-切换账本
-            SSJBooksTypeItem *bookItem = [wself.bookItems ssj_safeObjectAtIndex:naviBar.selectedTitleIndex];
+            SSJBooksTypeItem *bookItem = [naviBar.bookItems ssj_safeObjectAtIndex:naviBar.selectedTitleIndex];
             wself.item.booksId = bookItem.booksId;
             [wself.currentInput becomeFirstResponder];
             [[wself loadBillTypeSignal] subscribeError:^(NSError *error) {
@@ -650,41 +648,64 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 }
 
 - (RACSignal *)loadBooksListIfNeededSignal {
-    @weakify(self);
     return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        @strongify(self);
-        [SSJBooksTypeStore queryForBooksListWithSuccess:^(NSMutableArray<SSJBooksTypeItem *> *bookList) {
-            self.bookItems = [bookList copy];
-            [self updateNaviBarTitles];
+        RACSignal *sg_1 = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+            [SSJBooksTypeStore queryForBooksListWithSuccess:^(NSMutableArray<SSJBooksTypeItem *> *bookList) {
+                [subscriber sendNext:bookList];
+                [subscriber sendCompleted];
+            } failure:^(NSError *error) {
+                [subscriber sendError:error];
+            }];
+            return nil;
+        }];
+        
+        RACSignal *sg_2 = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+            [SSJBooksTypeStore queryForShareBooksListWithSuccess:^(NSMutableArray<SSJShareBookItem *> *result) {
+                [subscriber sendNext:result];
+                [subscriber sendCompleted];
+            } failure:^(NSError *error) {
+                [SSJAlertViewAdapter showError:error];
+            }];
+            return nil;
+        }];
+        
+        NSMutableArray *tmpItems = [NSMutableArray array];
+        [[RACSignal merge:@[sg_1, sg_2]] subscribeNext:^(NSArray *booksItems) {
+            [tmpItems addObjectsFromArray:booksItems];
+        } completed:^{
+            [self updateNaviBarTitlesWithItems:tmpItems];
             [subscriber sendNext:nil];
             [subscriber sendCompleted];
-        } failure:^(NSError *error) {
-            [subscriber sendError:error];
         }];
+        
         return nil;
     }];
 }
 
-- (void)updateNaviBarTitles {
+- (void)updateNaviBarTitlesWithItems:(NSArray *)items {
     NSInteger selectedIndex = -1;
-    NSMutableArray *bookTitles = [[NSMutableArray alloc] initWithCapacity:self.bookItems.count];
-    NSMutableArray *bookIds = [[NSMutableArray alloc] initWithCapacity:self.bookItems.count];
+    NSMutableArray *bookItems = [[NSMutableArray alloc] initWithCapacity:items.count];
     
-    for (int i = 0; i < self.bookItems.count; i ++) {
-        SSJBooksTypeItem *item = self.bookItems[i];
+    for (int i = 0; i < items.count; i ++) {
+        SSJBooksTypeItem *item = items[i];
         if (item.booksId) {
-            [bookTitles addObject:item.booksName];
-            [bookIds addObject:item.booksId];
+            NSString *iconName = nil;
+            if ([item isKindOfClass:[SSJBooksTypeItem class]]) {
+                iconName = @"record_making_private_book";
+            } else if ([item isKindOfClass:[SSJShareBookItem class]]) {
+                iconName = @"record_making_shared_book";
+            }
+            [bookItems addObject:[SSJRecordMakingCustomNavigationBarBookItem itemWithTitle:item.booksName iconName:iconName booksId:item.booksId]];
             if ([item.booksId isEqualToString:self.item.booksId]) {
                 selectedIndex = i;
             }
         }
     }
     
-    self.customNaviBar.titles = bookTitles;
+    self.customNaviBar.bookItems = bookItems;
     self.customNaviBar.selectedTitleIndex = selectedIndex;
     if ((self.item.idType == SSJChargeIdTypeShareBooks && self.edited)
-        || bookTitles.count <= 1) {
+        || bookItems.count <= 1) {
         self.customNaviBar.canSelectTitle = NO;
     } else {
         self.customNaviBar.canSelectTitle = YES;

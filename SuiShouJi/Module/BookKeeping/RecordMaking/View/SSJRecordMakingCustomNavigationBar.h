@@ -9,20 +9,21 @@
 #import <UIKit/UIKit.h>
 
 @class SSJRecordMakingCustomNavigationBar;
+@class SSJRecordMakingCustomNavigationBarBookItem;
 
 typedef void(^SSJRecordMakingCustomNavigationBarAction)(SSJRecordMakingCustomNavigationBar *);
 
 @interface SSJRecordMakingCustomNavigationBar : UIView
 
 /**
- 下拉菜单的标题
- */
-@property (nonatomic, strong) NSArray <NSString *>*titles;
-
-/**
  能否选择标题，如果为NO，点击标题不会显示下拉框并且隐藏标题边的角标
  */
 @property (nonatomic) BOOL canSelectTitle;
+
+/**
+ 下拉菜单的标题
+ */
+@property (nonatomic, strong) NSArray <SSJRecordMakingCustomNavigationBarBookItem *>*bookItems;
 
 /**
  选中的标题下标，默认－1（即什么都不选）
@@ -68,5 +69,17 @@ typedef void(^SSJRecordMakingCustomNavigationBarAction)(SSJRecordMakingCustomNav
  根据当前主题刷新界面
  */
 - (void)updateAppearance;
+
+@end
+
+@interface SSJRecordMakingCustomNavigationBarBookItem : NSObject
+
+@property (nonatomic, copy) NSString *title;
+
+@property (nonatomic, copy) NSString *iconName;
+
+@property (nonatomic, copy) NSString *booksId;
+
++ (instancetype)itemWithTitle:(NSString *)title iconName:(NSString *)iconName booksId:(NSString *)booksId;
 
 @end
