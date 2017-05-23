@@ -21,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface YYAnalytics : NSObject
 
-//初始化友盟统计模块
+//初始化统计模块
 + (void)startWithConfig:(YYAnalyticsConfig *)config;
 
 //用户登录成功后，调用此方法设置userid和username

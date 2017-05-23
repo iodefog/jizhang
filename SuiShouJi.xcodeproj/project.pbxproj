@@ -7652,6 +7652,8 @@
 		9CC9F4791DD4176C001E1606 /* SSJBooksParentSelectCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CC9F4781DD4176C001E1606 /* SSJBooksParentSelectCell.m */; };
 		9CC9F47D1DD42681001E1606 /* SSJBooksParentSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CC9F47C1DD42681001E1606 /* SSJBooksParentSelectView.m */; };
 		9CCF521F1DFE57B00078B950 /* SSJInstalmentDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CCF521E1DFE57B00078B950 /* SSJInstalmentDetailViewController.m */; };
+		9CD088B41ED3E95D0050B4EB /* YYAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C9A42FA1E51BE4F00C1D7ED /* YYAnalytics.framework */; };
+		9CD088B51ED3E95D0050B4EB /* YYAnalytics.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9C9A42FA1E51BE4F00C1D7ED /* YYAnalytics.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		9CD26C7E1E1217B000276401 /* SSJStrikeLineLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD26C7D1E1217AF00276401 /* SSJStrikeLineLabel.m */; };
 		9CD26C811E1217B100276401 /* SSJStrikeLineLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD26C7D1E1217AF00276401 /* SSJStrikeLineLabel.m */; };
 		9CD5168C1D9D00960040480B /* SSJHistoryHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD5168B1D9D00960040480B /* SSJHistoryHeader.m */; };
@@ -8217,6 +8219,20 @@
 			remoteInfo = SuiShouJi;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		9CD088B61ED3E95E0050B4EB /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				9CD088B51ED3E95D0050B4EB /* YYAnalytics.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		004889EB34083108A8612BCE /* Pods-YouYuJiZhangBao.debug-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangBao.debug-test.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangBao/Pods-YouYuJiZhangBao.debug-test.xcconfig"; sourceTree = "<group>"; };
@@ -9786,6 +9802,7 @@
 				9C9A42FD1E51C09700C1D7ED /* CoreLocation.framework in Frameworks */,
 				9C9A42FB1E51BE4F00C1D7ED /* YYAnalytics.framework in Frameworks */,
 				9C3276F41CE4616900109C4C /* SystemConfiguration.framework in Frameworks */,
+				9CD088B41ED3E95D0050B4EB /* YYAnalytics.framework in Frameworks */,
 				9C3276F21CE4615C00109C4C /* CoreTelephony.framework in Frameworks */,
 				9C3276F01CE4615200109C4C /* AudioToolbox.framework in Frameworks */,
 				9C3276EE1CE4614700109C4C /* libz.tbd in Frameworks */,
@@ -13466,6 +13483,7 @@
 				BD543C3A1C1A6DBC00910D61 /* Resources */,
 				7F384EDE547D146520592FD0 /* [CP] Embed Pods Frameworks */,
 				DDCD4E7CD2023DDEE0A45788 /* [CP] Copy Pods Resources */,
+				9CD088B61ED3E95E0050B4EB /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
