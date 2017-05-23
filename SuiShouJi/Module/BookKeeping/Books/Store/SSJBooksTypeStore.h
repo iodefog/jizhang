@@ -10,6 +10,7 @@
 #import "SSJBooksTypeItem.h"
 #import "SSJShareBookItem.h"
 
+
 @interface SSJBooksTypeStore : NSObject
 
 #pragma mark - 个人账本
@@ -99,4 +100,10 @@
 + (void)saveShareBooksOrderWithItems:(NSArray<SSJShareBookItem *> *)items
                          sucess:(void(^)())success
                         failure:(void (^)(NSError *error))failure;
+
+#warning 测试
++ (void)saveShareBooksMemberWithBookId:(NSString *)bookId
+                       success:(void(^)())success
+                       failure:(void(^)(NSError *error))failure;
+
 @end

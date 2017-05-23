@@ -34,6 +34,9 @@
 /**是否编辑中*/
 @property (nonatomic, assign, getter = isEditing) BOOL editing;
 
+/**成员人数*/
+@property (nonatomic, assign) NSInteger memberCount;
+
 /**是否是共享账本*/
 //@property (nonatomic, assign, getter = isShareBook) BOOL shareBook;
 + (NSDictionary *)propertyMapping;

@@ -109,6 +109,7 @@ static const CGFloat kBooksCornerRadius = 10.f;
         SSJShareBookItem *shareBookItem = (SSJShareBookItem *)booksTypeItem;
         self.nameLab.text = shareBookItem.booksName;
         self.menberNumLab.hidden = NO;
+        self.menberNumLab.text = [NSString stringWithFormat:@"%ld人",shareBookItem.memberCount];
         //当前选中账本的标记
         if ([shareBookItem.booksId isEqualToString:self.curretSelectedBookId]) {
             self.markImageView.hidden = NO;
@@ -187,7 +188,6 @@ static const CGFloat kBooksCornerRadius = 10.f;
     if (!_menberNumLab) {
         _menberNumLab = [[UILabel alloc] init];
         _menberNumLab.backgroundColor = [UIColor clearColor];
-        _menberNumLab.text = @"2人";
         _menberNumLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
         _menberNumLab.textColor = [UIColor whiteColor];
     }
