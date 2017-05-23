@@ -163,7 +163,7 @@ static const CGFloat kMaxSpeed = 100;
 
 #pragma mark - Event
 - (void)beginEditingWhenLongPressBegin {
-    if (_moving) {
+    if (_moving || !_longPressGesture.enabled) {
         return;
     }
     
@@ -205,7 +205,6 @@ static const CGFloat kMaxSpeed = 100;
         _movedCell.frame = touchedCell.frame;
         [_movedCell setImage:[touchedCell.layer.presentationLayer ssj_takeScreenShotWithSize:_movedCell.size opaque:NO scale:0]];
         _movedCell.hidden = NO;
-        [_movedCell.layer removeAllAnimations];
         [UIView animateWithDuration:0.25 animations:^{
             _movedCell.transform = CGAffineTransformMakeScale(_movedCellScale, _movedCellScale);
         }];
