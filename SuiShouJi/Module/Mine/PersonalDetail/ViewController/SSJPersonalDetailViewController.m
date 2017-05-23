@@ -268,7 +268,7 @@ extern BOOL kHomeNeedLoginPop;
             [weakSelf.tableView reloadData];
             [SSJAnaliyticsManager loginOut];
             [weakSelf.navigationController popViewControllerAnimated:YES];
-            [SSJUserDefaultDataCreater asyncCreateAllDefaultDataWithSuccess:NULL failure:NULL];
+            [SSJUserDefaultDataCreater asyncCreateAllDefaultDataWithUserId:SSJUSERID() success:NULL failure:NULL];
         } failure:^(NSError * _Nonnull error) {
             [SSJAlertViewAdapter showError:error];
         }];

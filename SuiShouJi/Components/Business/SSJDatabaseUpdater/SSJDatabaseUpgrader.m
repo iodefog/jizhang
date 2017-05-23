@@ -38,10 +38,10 @@ static const int kDatabaseVersion = 15;
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(SSJDatabase *db) {
         db.shouldHandleError = NO;
         if (![db executeUpdate:@"create table if not exists bk_db_version (version integer not null default 0)"]) {
+            error = [db lastError];
             NSString *desc = [NSString stringWithFormat:@"code:%d  description:%@  sql:%@", (int)error.code, error.localizedDescription, db.sql];
             NSError *tError = [NSError errorWithDomain:error.domain code:error.code userInfo:@{NSLocalizedDescriptionKey:desc}];
             [SSJDatabaseErrorHandler handleError:tError];
-            error = [db lastError];
             return;
         }
         

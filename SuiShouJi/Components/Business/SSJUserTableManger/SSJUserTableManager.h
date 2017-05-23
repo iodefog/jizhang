@@ -23,6 +23,17 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @param error 错误对象，如果不为nil，则查询过程发生错误
  */
++ (void)reloadUserIdWithError:(NSError **)error;
+
+/**
+ *  重载当前的用户编号，重载过程分为以下3步:
+ *  1:如果存储的当前用户编号(即函数SSJUSERID()的返回值)有效（不为nil，并且长度大于0），则直接返回；
+ *  2:如果存储的当前用户编号(即函数SSJUSERID()的返回值)无效，则从用户表中查询没有注册的用户编号，并设置其为当前的用户编号；
+ *  3:如果用户表中没有未注册的用户编号，则新建一个用户编号存储到表中，并设置其为当前用户编号；
+ *
+ *  @param success 成功回调
+ *  @param failure 失败回调
+ */
 + (void)reloadUserIdWithSuccess:(nullable void (^)())success
                         failure:(nullable void (^)(NSError *error))failure;
 

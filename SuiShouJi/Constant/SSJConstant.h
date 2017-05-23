@@ -48,7 +48,7 @@ typedef NS_ENUM(NSInteger, SSJBillType) {
     SSJBillTypeSurplus = 2    // 结余(收入＋支出)
 };
 
-//  收支类型
+//  流水类型
 typedef NS_ENUM(NSInteger, SSJChargeIdType) {
     SSJChargeIdTypeNormal = 0,        // 普通记账
     SSJChargeIdTypeCircleConfig = 1,  // 周期记账
@@ -101,6 +101,23 @@ typedef NS_ENUM(NSInteger, SSJCyclePeriodType) {
     SSJCyclePeriodTypePerMonth = 4,
     SSJCyclePeriodTypeLastDayPerMonth = 5,
     SSJCyclePeriodTypePerYear = 6
+};
+
+/**
+ 账本类型
+
+ - SSJDefaultBooksTypeDaily: 日常
+ - SSJDefaultBooksTypeBusiness: 生意
+ - SSJDefaultBooksTypeMarriage: 结婚
+ - SSJDefaultBooksTypeDecoration: 装修
+ - SSJDefaultBooksTypeTravel: 旅行
+ */
+typedef NS_ENUM(NSInteger, SSJBooksType) {
+    SSJBooksTypeDaily = 0,
+    SSJBooksTypeBusiness = 1,
+    SSJBooksTypeMarriage = 2,
+    SSJBooksTypeDecoration = 3,
+    SSJBooksTypeTravel = 4
 };
 
 ///------------------------------------------
