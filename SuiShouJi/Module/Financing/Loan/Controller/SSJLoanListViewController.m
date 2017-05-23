@@ -321,6 +321,10 @@ static NSString *const kLoanListCellId = @"kLoanListCellId";
                 [SSJAlertViewAdapter showError:error];
             }];
         };
+        NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+        style.lineSpacing = 5;
+        style.alignment = NSTextAlignmentCenter;
+        _authCodeAlertView.message = [[NSAttributedString alloc] initWithString:@"删除后将难以恢复\n仍然删除，请输入下列验证码" attributes:@{NSParagraphStyleAttributeName:style}];
     }
     return _authCodeAlertView;
 }

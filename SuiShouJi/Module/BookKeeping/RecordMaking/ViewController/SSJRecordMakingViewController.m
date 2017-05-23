@@ -91,6 +91,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 @property (nonatomic) long currentYear;
 @property (nonatomic) long currentMonth;
 @property (nonatomic) long currentDay;
+
 @end
 
 @implementation SSJRecordMakingViewController{

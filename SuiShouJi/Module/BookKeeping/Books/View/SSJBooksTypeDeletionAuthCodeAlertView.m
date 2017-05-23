@@ -364,16 +364,17 @@ static const int kAuthCodeDigits = 4;
     }
 }
 
+- (void)setMessage:(NSAttributedString *)message {
+    _titleLab.attributedText = message;
+    [self setNeedsUpdateConstraints];
+}
+
 #pragma mark - Lazyloading
 - (UILabel *)titleLab {
     if (!_titleLab) {
         _titleLab = [[UILabel alloc] init];
         _titleLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
         _titleLab.numberOfLines = 0;
-        NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
-        style.lineSpacing = 5;
-        style.alignment = NSTextAlignmentCenter;
-        _titleLab.attributedText = [[NSAttributedString alloc] initWithString:@"删除后将难以恢复\n仍然删除，请输入下列验证码" attributes:@{NSParagraphStyleAttributeName:style}];
     }
     return _titleLab;
 }
