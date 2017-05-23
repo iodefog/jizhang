@@ -30,6 +30,7 @@
 
 @property(nonatomic, strong) UICollectionViewFlowLayout *flowLayout;
 
+
 @end
 
 @implementation SSJShareBooksMenberManagerViewController
@@ -46,7 +47,6 @@
     [super viewDidLoad];
     [self.view addSubview:self.collectionView];
     [self.view addSubview:self.deleteButton];
-
     // Do any additional setup after loading the view.
 }
 
@@ -166,6 +166,7 @@
     [self.deleteButton ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
     [self.deleteButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] forState:UIControlStateNormal];
 }
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
