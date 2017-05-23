@@ -60,12 +60,7 @@
             [booksList addObject:item];
             order ++;
         }
-        SSJBooksTypeItem *item = [[SSJBooksTypeItem alloc]init];
-        item.booksName = @"添加账本";
-        SSJFinancingGradientColorItem *colorItem = [[SSJFinancingGradientColorItem alloc] init];
-        colorItem.startColor = colorItem.endColor = @"#FFFFFF";
-        item.booksColor = colorItem;
-        [booksList addObject:item];
+        
         if (success) {
             SSJDispatch_main_async_safe(^{
                 success(booksList);
@@ -363,7 +358,7 @@
             shareBookItem.booksId = [result stringForColumn:@"cbooksid"];
             shareBookItem.booksName = [result stringForColumn:@"cbooksname"];
 //            shareBookItem.booksColor = [result stringForColumn:@"cbookscolor"];
-            shareBookItem.parentType = [result intForColumn:@"iparenttype"];
+            shareBookItem.booksParent = [result intForColumn:@"iparenttype"];
             shareBookItem.booksOrder = [result intForColumn:@"iorder"];
             shareBookItem.memberCount = [result intForColumn:@"memberCount"];
             //处理渐变色
@@ -380,13 +375,7 @@
             
             [shareBooksList addObject:shareBookItem];
         }
-        //最后一个添加账本
-        SSJShareBookItem *lastItem = [[SSJShareBookItem alloc]init];
-        lastItem.booksName = @"添加账本";
-        SSJFinancingGradientColorItem *colorItem = [[SSJFinancingGradientColorItem alloc] init];
-        colorItem.startColor = colorItem.endColor = @"#FFFFFF";
-        lastItem.booksColor = colorItem;
-        [shareBooksList addObject:lastItem];
+        
         if (success) {
             SSJDispatch_main_async_safe(^{
                 success(shareBooksList);

@@ -9452,6 +9452,7 @@
 		91F7FD2F1DFA9EF9005F4B6B /* SSJProductAdviceNetWorkService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJProductAdviceNetWorkService.m; sourceTree = "<group>"; };
 		91F7FD361DFAB94A005F4B6B /* SSJAdviceItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJAdviceItem.h; sourceTree = "<group>"; };
 		91F7FD371DFAB94A005F4B6B /* SSJAdviceItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJAdviceItem.m; sourceTree = "<group>"; };
+		91F961001ED43BA2001BC0C5 /* SSJBooksItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBooksItem.h; sourceTree = "<group>"; };
 		91FD904B1E0B8319001C64B7 /* SSJReportFormCanYinChartCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormCanYinChartCell.h; sourceTree = "<group>"; };
 		91FD904C1E0B8319001C64B7 /* SSJReportFormCanYinChartCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReportFormCanYinChartCell.m; sourceTree = "<group>"; };
 		9892BFAB47044275B53028C0 /* Pods-YouYuJiZhangBao.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangBao.debug.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangBao/Pods-YouYuJiZhangBao.debug.xcconfig"; sourceTree = "<group>"; };
@@ -11960,6 +11961,7 @@
 			children = (
 				9C24CFAE1D76C9ED0095D150 /* SSJBooksTypeItem.h */,
 				9C24CFAF1D76C9ED0095D150 /* SSJBooksTypeItem.m */,
+				91F961001ED43BA2001BC0C5 /* SSJBooksItem.h */,
 			);
 			path = Model;
 			sourceTree = "<group>";

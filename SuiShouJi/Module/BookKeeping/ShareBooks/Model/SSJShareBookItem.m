@@ -9,6 +9,12 @@
 #import "SSJShareBookItem.h"
 
 @implementation SSJShareBookItem
+@synthesize booksId;
+@synthesize booksName;
+@synthesize booksColor;
+@synthesize booksOrder;
+@synthesize booksParent;
+@synthesize cwriteDate;
 
 + (NSDictionary *)propertyMapping {
     static NSDictionary *mapping = nil;
@@ -18,15 +24,12 @@
                     @"adminId":@"cadmin",
                     @"booksName":@"cbooksname",
                     @"booksColor":@"cbookscolor",
-                    @"parentType":@"iparenttype",
+                    @"booksParent":@"iparenttype",
                     @"booksOrder":@"iorder"};
     }
     return mapping;
 }
 
-- (void)setBooksColor:(SSJFinancingGradientColorItem *)booksColor {
-    _booksColor = booksColor;
-}
 
 
 @end

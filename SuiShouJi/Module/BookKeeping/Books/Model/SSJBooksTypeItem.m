@@ -9,6 +9,13 @@
 #import "SSJBooksTypeItem.h"
 
 @implementation SSJBooksTypeItem
+@synthesize booksId;
+@synthesize booksName;
+@synthesize booksColor;
+@synthesize booksOrder;
+@synthesize booksParent;
+@synthesize cwriteDate;
+
 + (NSDictionary *)propertyMapping {
     static NSDictionary *mapping = nil;
     if (!mapping) {

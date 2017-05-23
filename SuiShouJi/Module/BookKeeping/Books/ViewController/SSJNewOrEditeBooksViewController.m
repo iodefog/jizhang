@@ -105,7 +105,7 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
     } else if([self.bookItem isKindOfClass:[SSJShareBookItem class]]) { //共享账本
         if (((SSJShareBookItem *)self.bookItem).booksId.length) {
             //编辑共享账本
-            self.currentBookType = ((SSJShareBookItem *)self.bookItem).parentType;
+            self.currentBookType = ((SSJShareBookItem *)self.bookItem).booksParent;
 //            self.gradientColorItem = ((SSJShareBookItem *)self.bookItem).booksColor;
             self.bookParentStr = [self bookParentStrWithKey:[NSString stringWithFormat:@"%ld",self.currentBookType]];
             self.bookName = ((SSJShareBookItem *)self.bookItem).booksName;
@@ -230,7 +230,7 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
 
     } else if([self.bookItem isKindOfClass:[SSJShareBookItem class]]) { //共享账本
         ((SSJShareBookItem *)self.bookItem).booksName = booksName;
-        ((SSJShareBookItem *)self.bookItem).parentType = self.currentBookType;
+        ((SSJShareBookItem *)self.bookItem).booksParent = self.currentBookType;
         ((SSJShareBookItem *)self.bookItem).booksColor =  self.gradientColorItem;
         
         [SSJBooksTypeStore saveShareBooksTypeItem:(SSJShareBookItem *)self.bookItem sucess:^{
