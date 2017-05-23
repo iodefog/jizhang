@@ -226,7 +226,7 @@
         return;
     }
     
-    if (selectedTitleIndex >= _bookItems.count) {
+    if (selectedTitleIndex >= (NSInteger)_bookItems.count) {
         SSJPRINT(@"下标超过标题数组范围");
         return;
     }

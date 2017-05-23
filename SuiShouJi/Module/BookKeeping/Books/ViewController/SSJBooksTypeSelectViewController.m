@@ -512,8 +512,15 @@ static BOOL kNeedBannerDisplay = YES;
         weakSelf.currentBooksId = booksId;
         //查询个人账本
         [SSJBooksTypeStore queryForBooksListWithSuccess:^(NSMutableArray<SSJBooksTypeItem *> *result) {
+            //添加账本
+            SSJBooksTypeItem *item = [[SSJBooksTypeItem alloc]init];
+            item.booksName = @"添加账本";
+            SSJFinancingGradientColorItem *colorItem = [[SSJFinancingGradientColorItem alloc] init];
+            colorItem.startColor = colorItem.endColor = @"#FFFFFF";
+            item.booksColor = colorItem;
+            [result addObject:item];
+            
             weakSelf.privateBooksDataitems = result;
-//            [weakSelf.collectionView reloadSections:[NSIndexSet indexSetWithIndex:0]];
             [weakSelf.collectionView reloadData];
         } failure:^(NSError *error) {
             [SSJAlertViewAdapter showError:error];
@@ -521,8 +528,15 @@ static BOOL kNeedBannerDisplay = YES;
         
         //查询共享账本
         [SSJBooksTypeStore queryForShareBooksListWithSuccess:^(NSMutableArray<SSJShareBookItem *> *result) {
+            //最后一个添加账本
+            SSJShareBookItem *lastItem = [[SSJShareBookItem alloc]init];
+            lastItem.booksName = @"添加账本";
+            SSJFinancingGradientColorItem *colorItem = [[SSJFinancingGradientColorItem alloc] init];
+            colorItem.startColor = colorItem.endColor = @"#FFFFFF";
+            lastItem.booksColor = colorItem;
+            [result addObject:lastItem];
             weakSelf.shareBooksDataItems = result;
-//            [weakSelf.collectionView reloadSections:[NSIndexSet indexSetWithIndex:1]];
+            
             [weakSelf.collectionView reloadData];
         } failure:^(NSError *error) {
             [SSJAlertViewAdapter showError:error];

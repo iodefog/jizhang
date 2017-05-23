@@ -23,7 +23,7 @@ typedef void(^SSJRecordMakingCustomNavigationBarAction)(SSJRecordMakingCustomNav
 /**
  下拉菜单的标题
  */
-@property (nonatomic, strong) NSArray <SSJRecordMakingCustomNavigationBarBookItem *>*bookItems;
+@property (nonatomic, strong) NSArray<SSJRecordMakingCustomNavigationBarBookItem *> *bookItems;
 
 /**
  选中的标题下标，默认－1（即什么都不选）
