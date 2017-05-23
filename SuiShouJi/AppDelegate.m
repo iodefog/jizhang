@@ -219,6 +219,7 @@ NSDate *SCYEnterBackgroundTime() {
 #pragma mark - Private
 // 初始化用户数据
 - (void)initUserDataWithFinishHandler:(void (^)(BOOL successfull))finishHandler {
+    [[NSNotificationCenter defaultCenter] postNotificationName:SSJInitDatabaseDidBeginNotification object:self];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         // 迁移数据库文件
         NSString *dbDocumentPath = SSJSQLitePath();
@@ -266,6 +267,7 @@ NSDate *SCYEnterBackgroundTime() {
         }];
         
         SSJDispatchMainAsync(^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:SSJInitDatabaseDidFinishNotification object:self];
             finishHandler(YES);
         });
     });
