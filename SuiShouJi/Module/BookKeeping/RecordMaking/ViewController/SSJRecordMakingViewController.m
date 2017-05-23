@@ -145,7 +145,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     
     [self.view ssj_showLoadingIndicator];
     [[[[self loadCurrentBooksIdSignal] then:^RACSignal *{
-        return [self loadBooksListIfNeededSignal];
+        return [self loadBooksListSignal];
     }] then:^RACSignal *{
         return [self loadBillTypeSignal];
     }] subscribeError:^(NSError *error) {
@@ -647,7 +647,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     }];
 }
 
-- (RACSignal *)loadBooksListIfNeededSignal {
+- (RACSignal *)loadBooksListSignal {
     return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         RACSignal *sg_1 = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
             [SSJBooksTypeStore queryForBooksListWithSuccess:^(NSMutableArray<SSJBooksTypeItem *> *bookList) {
@@ -680,36 +680,6 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         
         return nil;
     }];
-}
-
-- (void)updateNaviBarTitlesWithItems:(NSArray *)items {
-    NSInteger selectedIndex = -1;
-    NSMutableArray *bookItems = [[NSMutableArray alloc] initWithCapacity:items.count];
-    
-    for (int i = 0; i < items.count; i ++) {
-        SSJBooksTypeItem *item = items[i];
-        if (item.booksId) {
-            NSString *iconName = nil;
-            if ([item isKindOfClass:[SSJBooksTypeItem class]]) {
-                iconName = @"record_making_private_book";
-            } else if ([item isKindOfClass:[SSJShareBookItem class]]) {
-                iconName = @"record_making_shared_book";
-            }
-            [bookItems addObject:[SSJRecordMakingCustomNavigationBarBookItem itemWithTitle:item.booksName iconName:iconName booksId:item.booksId]];
-            if ([item.booksId isEqualToString:self.item.booksId]) {
-                selectedIndex = i;
-            }
-        }
-    }
-    
-    self.customNaviBar.bookItems = bookItems;
-    self.customNaviBar.selectedTitleIndex = selectedIndex;
-    if ((self.item.idType == SSJChargeIdTypeShareBooks && self.edited)
-        || bookItems.count <= 1) {
-        self.customNaviBar.canSelectTitle = NO;
-    } else {
-        self.customNaviBar.canSelectTitle = YES;
-    }
 }
 
 - (RACSignal *)loadBillTypeSignal {
@@ -1133,6 +1103,34 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
             self.billTypeInputView.fillColor = INPUT_DEFAULT_COLOR;
         }];
         self.item.billId = nil;
+    }
+}
+
+- (void)updateNaviBarTitlesWithItems:(NSArray *)items {
+    NSInteger selectedIndex = -1;
+    NSMutableArray *bookItems = [[NSMutableArray alloc] initWithCapacity:items.count];
+    
+    for (int i = 0; i < items.count; i ++) {
+        SSJBooksTypeItem *item = items[i];
+        NSString *iconName = nil;
+        if ([item isKindOfClass:[SSJBooksTypeItem class]]) {
+            iconName = @"record_making_private_book";
+        } else if ([item isKindOfClass:[SSJShareBookItem class]]) {
+            iconName = @"record_making_shared_book";
+        }
+        [bookItems addObject:[SSJRecordMakingCustomNavigationBarBookItem itemWithTitle:item.booksName iconName:iconName booksId:item.booksId]];
+        if ([item.booksId isEqualToString:self.item.booksId]) {
+            selectedIndex = i;
+        }
+    }
+    
+    self.customNaviBar.bookItems = bookItems;
+    self.customNaviBar.selectedTitleIndex = selectedIndex;
+    if ((self.item.idType == SSJChargeIdTypeShareBooks && self.edited)
+        || bookItems.count <= 1) {
+        self.customNaviBar.canSelectTitle = NO;
+    } else {
+        self.customNaviBar.canSelectTitle = YES;
     }
 }
 
