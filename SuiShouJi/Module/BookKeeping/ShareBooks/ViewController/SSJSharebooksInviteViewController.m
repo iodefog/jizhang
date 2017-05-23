@@ -292,13 +292,13 @@
 
 - (void)sendButtonClicked:(id)sender {
     if (self.codeInput.text.length != 6) {
-        [CDAutoHideMessageHUD showMessage:@""];
+        [CDAutoHideMessageHUD showMessage:@"暗号长度必须为6位哦"];
         return;
     }
     NSString *regex = @"[0-9]*";
     NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",regex];
     if ([pred evaluateWithObject:self.codeInput.text]) {
-        [CDAutoHideMessageHUD showMessage:@""];
+        [CDAutoHideMessageHUD showMessage:@"暗号不能是纯数字哦"];
         return;
     }
     
