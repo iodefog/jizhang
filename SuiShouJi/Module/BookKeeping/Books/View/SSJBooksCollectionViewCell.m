@@ -91,9 +91,9 @@ static const CGFloat kBooksCornerRadius = 10.f;
         
         [CATransaction begin];
         [CATransaction setDisableActions:YES];
-        self.gradientLayer.colors = @[(__bridge id)[UIColor brownColor].CGColor,(__bridge id)[UIColor lightGrayColor].CGColor];
+        self.gradientLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:privateBookItem.booksColor.startColor].CGColor,(__bridge id)[UIColor ssj_colorWithHex:privateBookItem.booksColor.endColor].CGColor];
         
-        if ([privateBookItem.booksName isEqualToString:@"添加账本"]) {
+        if (!privateBookItem.booksId.length && [privateBookItem.booksName isEqualToString:@"添加账本"]) {
             self.gradientLayer.hidden = YES;
             self.backLayer.hidden = NO;
             self.nameLab.textColor = [UIColor ssj_colorWithHex:@"666666"];
@@ -109,6 +109,7 @@ static const CGFloat kBooksCornerRadius = 10.f;
         SSJShareBookItem *shareBookItem = (SSJShareBookItem *)booksTypeItem;
         self.nameLab.text = shareBookItem.booksName;
         self.menberNumLab.hidden = NO;
+        self.menberNumLab.text = [NSString stringWithFormat:@"%ld人",shareBookItem.memberCount];
         //当前选中账本的标记
         if ([shareBookItem.booksId isEqualToString:self.curretSelectedBookId]) {
             self.markImageView.hidden = NO;
@@ -118,9 +119,9 @@ static const CGFloat kBooksCornerRadius = 10.f;
         
         [CATransaction begin];
         [CATransaction setDisableActions:YES];
-        self.gradientLayer.colors = @[(__bridge id)[UIColor yellowColor].CGColor,(__bridge id)[UIColor purpleColor].CGColor];
+        self.gradientLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:shareBookItem.booksColor.startColor].CGColor,(__bridge id)[UIColor ssj_colorWithHex:shareBookItem.booksColor.endColor].CGColor];
         
-        if ([shareBookItem.booksName isEqualToString:@"添加账本"]) {
+        if (!shareBookItem.booksId.length && [shareBookItem.booksName isEqualToString:@"添加账本"]) {
             self.gradientLayer.hidden = YES;
             self.backLayer.hidden = NO;
             self.nameLab.textColor = [UIColor ssj_colorWithHex:@"666666"];
@@ -187,7 +188,6 @@ static const CGFloat kBooksCornerRadius = 10.f;
     if (!_menberNumLab) {
         _menberNumLab = [[UILabel alloc] init];
         _menberNumLab.backgroundColor = [UIColor clearColor];
-        _menberNumLab.text = @"2人";
         _menberNumLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
         _menberNumLab.textColor = [UIColor whiteColor];
     }
@@ -217,7 +217,7 @@ static const CGFloat kBooksCornerRadius = 10.f;
 #pragma mark - Action
 - (void)editButtonClicked:(UIButton *)button {
     if (self.editBookAction) {
-        self.editBookAction();
+        self.editBookAction(self.booksTypeItem);
     }
 }
 

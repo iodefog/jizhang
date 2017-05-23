@@ -243,6 +243,7 @@
 }
 
 - (void)setColorItem:(SSJFinancingGradientColorItem *)colorItem {
+    if (!colorItem.startColor) return;
     _gradientLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:colorItem.startColor].CGColor,(__bridge id)[UIColor ssj_colorWithHex:colorItem.endColor].CGColor];
 }
 

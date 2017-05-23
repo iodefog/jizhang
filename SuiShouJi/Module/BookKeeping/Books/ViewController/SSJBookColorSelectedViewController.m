@@ -59,6 +59,11 @@ static NSString *SSJBookColorSelectedCollectionViewCellId = @"SSJBookColorSelect
     [self.view addSubview:headView];
 }
 
+- (void)setBookName:(NSString *)bookName {
+    _bookName = bookName;
+    self.bookNameLabel.text = bookName;
+}
+
 #pragma mark - UICollectionViewDataSource
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
     return self.colorArray.count;
@@ -66,6 +71,13 @@ static NSString *SSJBookColorSelectedCollectionViewCellId = @"SSJBookColorSelect
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     SSJBookColorSelectedCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:SSJBookColorSelectedCollectionViewCellId forIndexPath:indexPath];
+    if ([self.bookColorItem isEqual:self.colorArray[indexPath.row]]) {
+        cell.colorSelected = YES;
+        self.selectedIndex = indexPath.row;
+        self.lastSelectedCell = cell;
+    } else {
+        cell.colorSelected = NO;
+    }
     cell.itemColor = self.colorArray[indexPath.row];
     return cell;
 }
@@ -73,6 +85,7 @@ static NSString *SSJBookColorSelectedCollectionViewCellId = @"SSJBookColorSelect
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     self.selectedIndex = indexPath.row;
     SSJFinancingGradientColorItem *item = [self.colorArray ssj_safeObjectAtIndex:indexPath.row];
+    if (!item) return;
     SSJBookColorSelectedCollectionViewCell *currentCell = (SSJBookColorSelectedCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
     self.lastSelectedCell.colorSelected = NO;
     currentCell.colorSelected = YES;
