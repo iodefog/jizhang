@@ -24,6 +24,7 @@ static BOOL kNeedBannerDisplay = YES;
 #import "SSJNewOrEditeBooksViewController.h"
 #import "SSJEditableCollectionView.h"
 #import "SSJSummaryBooksViewController.h"
+#import "SSJInviteCodeJoinViewController.h"
 #import "SSJDatabaseQueue.h"
 #import "SSJSelectCreateShareBookType.h"
 //#import "SSJBooksAdView.h"
@@ -489,6 +490,8 @@ static BOOL kNeedBannerDisplay = YES;
                 [weakSelf newAndEditeBooksWiteItem:[[SSJShareBookItem alloc] init]];
             } else if (selectParent == 1) {
                 //暗号加入
+                SSJInviteCodeJoinViewController *inviteVc = [[SSJInviteCodeJoinViewController alloc] init];
+                [weakSelf.navigationController pushViewController:inviteVc animated:YES];
             }
         };
     }
