@@ -160,7 +160,7 @@
             SSJLoginViewController *loginVc = [[SSJLoginViewController alloc]init];
             loginVc.backController = [self.navigationController.viewControllers firstObject];
             [self.navigationController pushViewController:loginVc animated:YES];
-            [SSJUserDefaultDataCreater asyncCreateAllDefaultDataWithSuccess:NULL failure:NULL];
+            [SSJUserDefaultDataCreater asyncCreateAllDefaultDataWithUserId:SSJUSERID() success:NULL failure:NULL];
         } failure:^(NSError * _Nonnull error) {
             [SSJAlertViewAdapter showError:error];
         }];

@@ -98,25 +98,11 @@ NSDate *SCYEnterBackgroundTime() {
     
     [MQManager setScheduledAgentWithAgentId:@"" agentGroupId:SSJMQDefualtGroupId scheduleRule:MQScheduleRulesRedirectGroup];
     
-    [self initializeDatabaseWithFinishHandler:^{
-        //  启动时强制同步一次
+    [self initUserDataWithFinishHandler:^(BOOL successfull){
+        [[SSJDataSynchronizer shareInstance] startTimingSync];
         if (SSJIsUserLogined()) {
             [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
         }
-        
-        //  开启定时同步
-        [[SSJDataSynchronizer shareInstance] startTimingSync];
-        
-        // 1.7.0之前有每日提醒，此版本后提醒改变了，所以要取消之前所有提醒
-        [[UIApplication sharedApplication] cancelAllLocalNotifications];
-        [SSJRegularManager registerRegularTaskNotification];
-        [SSJLocalNotificationStore queryForreminderListForUserId:SSJUSERID() WithSuccess:^(NSArray<SSJReminderItem *> *result) {
-            for (SSJReminderItem *item in result) {
-                [SSJLocalNotificationHelper registerLocalNotificationWithremindItem:item];
-            }
-        } failure:^(NSError *error) {
-            SSJPRINT(@"警告：同步后注册本地通知失败 error:%@", [error localizedDescription]);
-        }];
         
         UILocalNotification *notifcation = launchOptions[UIApplicationLaunchOptionsLocalNotificationKey];
         if (notifcation) {
@@ -231,55 +217,61 @@ NSDate *SCYEnterBackgroundTime() {
 }
 
 #pragma mark - Private
-//  初始化数据库
-- (void)initializeDatabaseWithFinishHandler:(void (^)(void))finishHandler {
-    [[NSNotificationCenter defaultCenter] postNotificationName:SSJInitDatabaseDidBeginNotification object:nil];
+// 初始化用户数据
+- (void)initUserDataWithFinishHandler:(void (^)(BOOL successfull))finishHandler {
+    [[NSNotificationCenter defaultCenter] postNotificationName:SSJInitDatabaseDidBeginNotification object:self];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        // 迁移数据库文件
         NSString *dbDocumentPath = SSJSQLitePath();
         SSJPRINT(@"%@", dbDocumentPath);
         
-        NSError *error = nil;
-        
         if (![[NSFileManager defaultManager] fileExistsAtPath:dbDocumentPath]) {
-            //  迁移数据库到document中
+            NSError *error = nil;
             NSString *dbBundlePath = [[NSBundle mainBundle] pathForResource:@"mydatabase" ofType:@"db"];
-            
-            if (![[NSFileManager defaultManager] copyItemAtPath:dbBundlePath toPath:dbDocumentPath error:&error]) {
-                SSJPRINT(@"move database error:%@",[error localizedDescription]);
+            [[NSFileManager defaultManager] copyItemAtPath:dbBundlePath toPath:dbDocumentPath error:&error];
+            if (error) {
+                SSJDispatchMainAsync(^{
+                    finishHandler(NO);
+                });
+                return;
             }
             
-            //  载入用户id
-            [SSJUserTableManager reloadUserIdWithSuccess:^{
-                //  创建默认的资金账户
-                [SSJUserDefaultDataCreater createDefaultFundAccountsWithError:nil];
-            } failure:^(NSError * _Nonnull error) {
-                
-            }];
-
-        } else {
-            //  升级数据库
-            [SSJDatabaseUpgrader upgradeDatabase];
+            [SSJUserTableManager reloadUserIdWithError:&error];
+            if (error) {
+                SSJDispatchMainAsync(^{
+                    finishHandler(NO);
+                });
+                return;
+            }
         }
-
-        //  创建默认的收支类型
-        [SSJUserDefaultDataCreater createDefaultBillTypesIfNeededWithError:nil];
         
-        //  创建默认的账本
-        [SSJUserDefaultDataCreater createDefaultBooksTypeWithError:nil];
+        NSError *error = [SSJDatabaseUpgrader upgradeDatabase];
+        if (error) {
+            SSJDispatchMainAsync(^{
+                finishHandler(NO);
+            });
+            return;
+        }
         
-        //  创建默认的成员
-        [SSJUserDefaultDataCreater createDefaultMembersWithError:nil];
+        [SSJUserDefaultDataCreater createAllDefaultDataWithUserId:SSJUSERID() error:nil];
         
-        SSJDispatchMainSync(^{
-            [[NSNotificationCenter defaultCenter] postNotificationName:SSJInitDatabaseDidFinishNotification object:nil];
+        // 1.7.0之前有每日提醒，此版本后提醒改变了，所以要取消之前所有提醒
+        [[UIApplication sharedApplication] cancelAllLocalNotifications];
+        [SSJRegularManager registerRegularTaskNotification];
+        [SSJLocalNotificationStore queryForreminderListForUserId:SSJUSERID() WithSuccess:^(NSArray<SSJReminderItem *> *result) {
+            for (SSJReminderItem *item in result) {
+                [SSJLocalNotificationHelper registerLocalNotificationWithremindItem:item];
+            }
+        } failure:^(NSError *error) {
+            SSJPRINT(@"警告：同步后注册本地通知失败 error:%@", [error localizedDescription]);
+        }];
+        
+        SSJDispatchMainAsync(^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:SSJInitDatabaseDidFinishNotification object:self];
+            finishHandler(YES);
         });
-        
-        if (finishHandler) {
-            finishHandler();
-        }
     });
 }
-
 
 // 设置根控制器
 - (void)setRootViewController {

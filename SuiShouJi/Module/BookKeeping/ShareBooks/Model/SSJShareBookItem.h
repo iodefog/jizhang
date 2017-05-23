@@ -19,6 +19,9 @@
 // 管理员id(userid)
 @property(nonatomic, copy) NSString *adminId;
 
+// 管理员名称
+@property(nonatomic, copy) NSString *adminName;
+
 // 账本名称
 @property(nonatomic, copy) NSString *booksName;
 

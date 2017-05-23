@@ -7,8 +7,12 @@
 //
 
 #import "SSJShareBooksMenberManagerViewController.h"
-#import "SSJShareBooksStore.h"
+
 #import "SSJSharebooksMemberCollectionViewCell.h"
+#import "SSJBooksTypeDeletionAuthCodeAlertView.h"
+
+#import "SSJShareBooksStore.h"
+
 
 #define ITEM_SPACE 25
 #define ITEM_SIZE_HEIGHT 90
@@ -30,6 +34,9 @@
 
 @property(nonatomic, strong) UICollectionViewFlowLayout *flowLayout;
 
+@property(nonatomic, strong) SSJBooksTypeDeletionAuthCodeAlertView *deleteComfirmAlert;
+
+
 @end
 
 @implementation SSJShareBooksMenberManagerViewController
@@ -46,7 +53,6 @@
     [super viewDidLoad];
     [self.view addSubview:self.collectionView];
     [self.view addSubview:self.deleteButton];
-
     // Do any additional setup after loading the view.
 }
 
@@ -135,6 +141,16 @@
     return _deleteButton;
 }
 
+- (SSJBooksTypeDeletionAuthCodeAlertView *)deleteComfirmAlert {
+    if (!_deleteComfirmAlert) {
+        _deleteComfirmAlert = [[SSJBooksTypeDeletionAuthCodeAlertView alloc] init];
+        NSMutableAttributedString *atrrStr = [[NSMutableAttributedString alloc] initWithString:@"数据无法恢复,删除并退出此共享账本,请输入下列验证码"];
+        [atrrStr addAttribute:NSFontAttributeName value:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4] range:NSMakeRange(0, atrrStr.length)];
+        [atrrStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:NSMakeRange(0, atrrStr.length)];
+    }
+    return _deleteComfirmAlert;
+}
+
 #pragma mark - Event
 - (void)deleteButtonClicked:(id)sender {
     
@@ -166,6 +182,7 @@
     [self.deleteButton ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
     [self.deleteButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] forState:UIControlStateNormal];
 }
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

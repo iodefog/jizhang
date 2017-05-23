@@ -8,8 +8,13 @@
 //
 
 #import "SSJSharebooksInviteViewController.h"
+
 #import "SSJShareBooksHintView.h"
+
 #import "SSJShareBooksHelper.h"
+#import "SSJSharebooksCodeNetworkService.h"
+#import "SSJShareManager.h"
+
 
 @interface SSJSharebooksInviteViewController ()
 
@@ -38,6 +43,10 @@
 @property(nonatomic, strong) NSString *code;
 
 @property(nonatomic, strong) NSString *expiredate;
+
+@property(nonatomic, strong) SSJSharebooksCodeNetworkService *getCodeService;
+
+@property(nonatomic, strong) SSJSharebooksCodeNetworkService *saveCodeService;
 
 @end
 
@@ -68,12 +77,11 @@
     for (SSJShareBooksHintView *hintView in self.hintViews) {
         [self.view addSubview:hintView];
     }
+    
+    [self.getCodeService requestCodeWithbooksId:@""];
     // Do any additional setup after loading the view.
 }
 
-- (void)viewDidLayoutSubviews {
-    
-}
 
 - (void)updateViewConstraints {
 
@@ -191,6 +199,21 @@
         _codeInput.rightView = self.resendButton;
         _codeInput.rightViewMode = UITextFieldViewModeAlways;
         _codeInput.tintColor = [UIColor ssj_colorWithHex:@"#333333"];
+        @weakify(self);
+        [_codeInput.rac_textSignal subscribeNext:^(id x) {
+            @strongify(self);
+            if (self.codeInput.text.length == 0) {
+                self.sendButton.backgroundColor = [UIColor ssj_colorWithHex:@"#CCCCCC"];
+                self.sendButton.layer.shadowColor = [UIColor blackColor].CGColor;
+                self.sendButton.layer.shadowOpacity = 0.15;
+
+            } else {
+                self.sendButton.backgroundColor = [UIColor ssj_colorWithHex:@"#EB4A64"];
+                self.sendButton.layer.shadowColor = [UIColor ssj_colorWithHex:@"#EB4A64"].CGColor;
+                self.sendButton.layer.shadowOpacity = 0.39;
+
+            }
+        }];
     }
     return _codeInput;
 }
@@ -239,10 +262,23 @@
         [_sendButton setTitle:@"发送暗号" forState:UIControlStateNormal];
         _sendButton.backgroundColor = [UIColor ssj_colorWithHex:@"#EB4A64"];
         _sendButton.layer.shadowOffset = CGSizeMake(0, 4);
-        _sendButton.layer.shadowColor = [UIColor ssj_colorWithHex:@"#EB4A64"].CGColor;
-        _sendButton.layer.shadowOpacity = 0.39;
+        [_sendButton addTarget:self action:@selector(sendButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _sendButton;
+}
+
+- (SSJSharebooksCodeNetworkService *)getCodeService {
+    if (!_getCodeService) {
+        _getCodeService = [[SSJSharebooksCodeNetworkService alloc] initWithDelegate:self];
+    }
+    return _getCodeService;
+}
+
+- (SSJSharebooksCodeNetworkService *)saveCodeService {
+    if (!_saveCodeService) {
+        _saveCodeService = [[SSJSharebooksCodeNetworkService alloc] initWithDelegate:self];
+    }
+    return _saveCodeService;
 }
 
 #pragma mark - Event
@@ -252,6 +288,21 @@
     } else {
         self.codeInput.userInteractionEnabled = YES;
     }
+}
+
+- (void)sendButtonClicked:(id)sender {
+    if (self.codeInput.text.length != 6) {
+        [CDAutoHideMessageHUD showMessage:@"暗号长度必须为6位哦"];
+        return;
+    }
+    NSString *regex = @"[0-9]*";
+    NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",regex];
+    if ([pred evaluateWithObject:self.codeInput.text]) {
+        [CDAutoHideMessageHUD showMessage:@"暗号不能是纯数字哦"];
+        return;
+    }
+    
+    [self.saveCodeService saveCodeWithbooksId:self.item.booksId code:self.codeInput.text];
 }
 
 
@@ -273,6 +324,31 @@
             hintView.isLastRow = NO;
         }
         [self.hintViews addObject:hintView];
+    }
+}
+
+- (void)shareTheCode {
+    [SSJShareManager shareWithType:SSJShareTypeUrl image:nil UrlStr:@"" title:@"" content:@"" PlatformType:UMSocialPlatformType_WechatSession | UMSocialPlatformType_QQ inController:self ShareSuccess:NULL];
+}
+
+#pragma mark - SSJBaseNetworkServiceDelegate
+- (void)serverDidFinished:(SSJBaseNetworkService *)service {
+    if (service == self.getCodeService) {
+        if ([service.returnCode isEqualToString:@"1"]) {
+            self.codeInput.userInteractionEnabled = NO;
+            self.codeInput.text = self.getCodeService.secretKey;
+            [self.resendButton setTitle:@"重新生成" forState:UIControlStateNormal];
+        } else {
+            [CDAutoHideMessageHUD showMessage:service.description];
+        }
+    }
+    
+    if (service == self.saveCodeService) {
+        if ([service.returnCode isEqualToString:@"1"]) {
+            [self shareTheCode];
+        } else {
+            [CDAutoHideMessageHUD showMessage:service.description];
+        }
     }
 }
 

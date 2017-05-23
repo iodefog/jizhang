@@ -129,7 +129,7 @@
     
     RACSignal *sg_4 = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         [SSJLocalNotificationHelper cancelLocalNotificationWithUserId:originalUserItem.userId];
-        [SSJUserDefaultDataCreater asyncCreateAllDefaultDataWithSuccess:^{
+        [SSJUserDefaultDataCreater asyncCreateAllDefaultDataWithUserId:SSJUSERID() success:^{
             [subscriber sendCompleted];
         } failure:^(NSError *error) {
             [subscriber sendError:error];

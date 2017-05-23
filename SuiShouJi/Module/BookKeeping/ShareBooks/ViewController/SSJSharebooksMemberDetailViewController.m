@@ -61,6 +61,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
     self.iconImageView.layer.cornerRadius = self.iconImageView.height / 2;
+    
 }
 
 - (void)updateViewConstraints {

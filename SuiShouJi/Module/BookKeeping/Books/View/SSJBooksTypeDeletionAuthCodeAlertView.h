@@ -14,6 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, copy) void (^finishVerification)();
 
+@property (nonatomic, copy) NSAttributedString *message;
+
 - (void)show;
 
 - (void)dismiss;

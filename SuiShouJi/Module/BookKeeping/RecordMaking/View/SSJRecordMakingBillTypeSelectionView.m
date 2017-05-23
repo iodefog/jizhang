@@ -115,6 +115,10 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
     }
 }
 
+- (BOOL)collectionView:(SSJEditableCollectionView *)collectionView shouldBeginMovingCellAtIndexPath:(NSIndexPath *)indexPath {
+    return indexPath.item != _internalItems.count - 1;
+}
+
 - (void)collectionView:(SSJEditableCollectionView *)collectionView willMoveCellAtIndexPath:(NSIndexPath *)indexPath {
     SSJRecordMakingBillTypeSelectionCellItem *item = _internalItems[indexPath.item];
     item.editable = YES;

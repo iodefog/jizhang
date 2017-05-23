@@ -442,6 +442,10 @@ static BOOL kNeedBannerDisplay = YES;
         _authCodeAlertView.finishVerification = ^{
             [wself deleteBooksWithType:1];
         };
+        NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+        style.lineSpacing = 5;
+        style.alignment = NSTextAlignmentCenter;
+        _authCodeAlertView.message = [[NSAttributedString alloc] initWithString:@"删除后将难以恢复\n仍然删除，请输入下列验证码" attributes:@{NSParagraphStyleAttributeName:style}];
     }
     return _authCodeAlertView;
 }

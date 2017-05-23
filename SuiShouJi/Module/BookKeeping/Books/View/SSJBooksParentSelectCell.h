@@ -10,6 +10,7 @@
 
 @interface SSJBooksParentSelectCell : UITableViewCell
 
+
 @property(nonatomic, strong) UIImageView *arrowImageView;
 
 - (void)setImage:(NSString *)imageName title:(NSString *)title;
