@@ -10,4 +10,8 @@
 
 @interface SSJSharebooksMemberDetailViewController : SSJBaseViewController
 
+@property(nonatomic, strong) NSString *memberId;
+
+@property(nonatomic, strong) NSString *booksId;
+
 @end

@@ -324,7 +324,6 @@ static NSString *const kSegmentTitleSurplus = @"结余";
     if (!period) {
         return;
     }
-    
     switch (self.navigationBar.option) {
         case SSJReportFormsNavigationBarChart: {
             [self.datas removeAllObjects];

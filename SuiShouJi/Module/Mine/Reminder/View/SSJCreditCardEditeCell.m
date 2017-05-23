@@ -130,6 +130,7 @@
             self.textInput.hidden = YES;
             self.subTitleLabel.hidden = YES;
             self.gradientLayer.hidden = YES;
+            self.detailLabel.hidden = NO;
         }
             break;
             
@@ -146,6 +147,7 @@
             self.textInput.hidden = YES;
             self.subTitleLabel.hidden = NO;
             self.gradientLayer.hidden = YES;
+            self.detailLabel.hidden = NO;
         }
             break;
             
