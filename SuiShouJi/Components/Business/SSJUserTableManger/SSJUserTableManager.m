@@ -11,6 +11,12 @@
 
 @implementation SSJUserTableManager
 
++ (void)reloadUserIdWithError:(NSError **)error {
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+        [self reloadUserIdInDatabase:db error:error];
+    }];
+}
+
 + (void)reloadUserIdWithSuccess:(void (^)())success failure:(void (^)(NSError *error))failure {
     __block NSError *tError = nil;
     
@@ -24,43 +30,44 @@
     }
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        NSString *tUserId = [self unregisteredUserIdInDatabase:db error:&tError];
-        if (tError) {
+        NSError *error = nil;
+        [self reloadUserIdInDatabase:db error:&error];
+        if (error) {
             if (failure) {
                 SSJDispatchMainAsync(^{
-                    failure(tError);
+                    failure(error);
                 });
             }
-            return;
-        }
-        
-        if (tUserId.length) {
-            SSJSetUserId(tUserId);
+        } else {
             if (success) {
                 SSJDispatchMainAsync(^{
                     success();
                 });
             }
-            return;
-        }
-        
-        tUserId = SSJUUID();
-        if (![db executeUpdate:@"insert into BK_USER (CUSERID, CREGISTERSTATE, CCURRENTBOOKSID, CWRITEDATE) values (?, 0, ?, ?)", tUserId, tUserId, [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"]]) {
-            if (failure) {
-                SSJDispatchMainAsync(^{
-                    failure([db lastError]);
-                });
-            }
-            return;
-        }
-        
-        SSJSetUserId(tUserId);
-        if (success) {
-            SSJDispatchMainAsync(^{
-                success();
-            });
         }
     }];
+}
+
++ (void)reloadUserIdInDatabase:(FMDatabase *)db error:(NSError **)error {
+    NSString *userId = [self unregisteredUserIdInDatabase:db error:error];
+    if (*error) {
+        return;
+    }
+    
+    if (userId.length) {
+        SSJSetUserId(userId);
+        return;
+    }
+    
+    userId = SSJUUID();
+    if (![db executeUpdate:@"insert into BK_USER (CUSERID, CREGISTERSTATE, CCURRENTBOOKSID, CWRITEDATE) values (?, 0, ?, ?)", userId, userId, [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"]]) {
+        if (error) {
+            *error = [db lastError];
+        }
+        return;
+    }
+    
+    SSJSetUserId(userId);
 }
 
 + (NSString *)unregisteredUserIdInDatabase:(FMDatabase *)db error:(NSError **)error {

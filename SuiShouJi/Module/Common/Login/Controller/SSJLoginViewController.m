@@ -679,7 +679,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     self.loginService.item.registerState = @"1";
     
     // 保存用户信息
-    [[[[[[[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+    [[[[[[[[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         [SSJUserTableManager saveUserItem:self.loginService.item success:^{
             [subscriber sendCompleted];
         } failure:^(NSError * _Nonnull error) {
@@ -704,6 +704,16 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
             [SSJLoginHelper updateTableWhenLoginWithServices:self.loginService completion:^{
                 [subscriber sendCompleted];
+            }];
+            return nil;
+        }];
+    }] then:^RACSignal *{
+        // 检测用户的默认数据，哪些没有就创建哪些
+        return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+            [SSJUserDefaultDataCreater asyncCreateAllDefaultDataWithUserId:SSJUSERID() success:^{
+                [subscriber sendCompleted];
+            } failure:^(NSError *error) {
+                [subscriber sendError:error];
             }];
             return nil;
         }];

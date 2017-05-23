@@ -186,6 +186,17 @@ static const CGFloat kMaxSpeed = 100;
     }
     
     if (!_moving && touchedCell) {
+        _longPressGesture.enabled = NO;
+        
+        BOOL shouldBeginMoving = YES;
+        if (_editDelegate && [_editDelegate respondsToSelector:@selector(collectionView:shouldBeginMovingCellAtIndexPath:)]) {
+            shouldBeginMoving = [_editDelegate collectionView:self shouldBeginMovingCellAtIndexPath:touchIndexPath];
+        }
+        
+        if (!shouldBeginMoving) {
+            return;
+        }
+        
         _currentMovedIndexPath = touchIndexPath;
         _originalMovedIndexPath = _currentMovedIndexPath;
         
@@ -194,12 +205,12 @@ static const CGFloat kMaxSpeed = 100;
         _movedCell.frame = touchedCell.frame;
         [_movedCell setImage:[touchedCell.layer.presentationLayer ssj_takeScreenShotWithSize:_movedCell.size opaque:NO scale:0]];
         _movedCell.hidden = NO;
+        [_movedCell.layer removeAllAnimations];
         [UIView animateWithDuration:0.25 animations:^{
             _movedCell.transform = CGAffineTransformMakeScale(_movedCellScale, _movedCellScale);
         }];
         touchedCell.hidden = YES;
         _moving = YES;
-        _longPressGesture.enabled = NO;
     }
 }
 
@@ -380,11 +391,10 @@ static const CGFloat kMaxSpeed = 100;
 }
 
 - (void)endMovingCell {
-    if (!_moving || !_currentMovedIndexPath || !_currentMovedIndexPath) {
+    _longPressGesture.enabled = YES;
+    if (!_moving || !_originalMovedIndexPath || !_currentMovedIndexPath) {
         return;
     }
-    
-    _longPressGesture.enabled = YES;
     
     if ([_originalMovedIndexPath compare:_currentMovedIndexPath] != NSOrderedSame) {
         if (_editDelegate && [_editDelegate respondsToSelector:@selector(collectionView:didEndMovingCellFromIndexPath:toTargetIndexPath:)]) {

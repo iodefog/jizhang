@@ -90,29 +90,15 @@
         [SSJFundInfoSyncTable mergeRecords:service.fundInfoArray forUserId:SSJUSERID() inDatabase:db error:nil];
         [self updateCustomUserBillNeededForUserId:SSJUSERID() billTypeItems:service.customCategoryArray inDatabase:db error:nil];
         
-        //  检测缺少哪个收支类型就创建
-        [SSJUserDefaultDataCreater createDefaultBillTypesIfNeededForUserId:SSJUSERID() inDatabase:db];
-        
         //  更新排序字段为空的收支类型
         [self updateBillTypeOrderIfNeededForUserId:SSJUSERID() inDatabase:db error:nil];
         
         [self updateFundColorForUserId:SSJUSERID() inDatabase:db error:nil];
         
-        //  如果登录没有返回任何资金账户，说明服务器没有保存任何资金记录，就给用户创建默认的
-        [SSJUserDefaultDataCreater createDefaultFundAccountsIfNeededForUserId:SSJUSERID() inDatabase:db];
-        
-        //  如果登录没有返回任何账本类型，说明服务器没有保存任何账本类型，就给用户创建默认的
-        if (service.booksTypeArray.count == 0) {
-            [SSJUserDefaultDataCreater createDefaultBooksTypeForUserId:SSJUSERID() inDatabase:db];
-        }
-        
-        //  如果登录没有返回任何成员类型，说明服务器没有保存任何成员类型，就给用户创建默认的
-        if (service.membersArray.count == 0) {
-            [SSJUserDefaultDataCreater createDefaultMembersForUserId:SSJUSERID() inDatabase:db];
-        }
-        
         if (completion) {
-            completion();
+            SSJDispatchMainAsync(^{
+                completion();
+            });
         }
     }];
 }
