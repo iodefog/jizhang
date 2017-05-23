@@ -837,6 +837,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
             } else {
                 self.tableView.hasData = NO;
                 self.noDataHeader.hidden = NO;
+                [self.tableView reloadData];
             }
             
             [weakSelf.tableView ssj_hideLoadingIndicator];
