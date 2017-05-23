@@ -7985,6 +7985,30 @@
 		9CD088AA1ED2CADC0050B4EB /* YYAnalytics.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9C9A42FA1E51BE4F00C1D7ED /* YYAnalytics.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		9CD088AC1ED2CF6D0050B4EB /* YYAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C9A42FA1E51BE4F00C1D7ED /* YYAnalytics.framework */; };
 		9CD088AD1ED2D6670050B4EB /* SSJSharebooksInviteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C39700F1ECADB0C00AB267A /* SSJSharebooksInviteViewController.m */; };
+		9CD088B71ED409F50050B4EB /* YYAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C9A42FA1E51BE4F00C1D7ED /* YYAnalytics.framework */; };
+		9CD088B81ED409F50050B4EB /* YYAnalytics.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9C9A42FA1E51BE4F00C1D7ED /* YYAnalytics.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		9CD088BA1ED40AED0050B4EB /* YYAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C9A42FA1E51BE4F00C1D7ED /* YYAnalytics.framework */; };
+		9CD088BB1ED40AED0050B4EB /* YYAnalytics.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9C9A42FA1E51BE4F00C1D7ED /* YYAnalytics.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		9CD088BD1ED40AF20050B4EB /* YYAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C9A42FA1E51BE4F00C1D7ED /* YYAnalytics.framework */; };
+		9CD088BE1ED40AF20050B4EB /* YYAnalytics.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9C9A42FA1E51BE4F00C1D7ED /* YYAnalytics.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		9CD088C01ED40AFB0050B4EB /* YYAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C9A42FA1E51BE4F00C1D7ED /* YYAnalytics.framework */; };
+		9CD088C11ED40AFB0050B4EB /* YYAnalytics.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9C9A42FA1E51BE4F00C1D7ED /* YYAnalytics.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		9CD088C31ED40B020050B4EB /* YYAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C9A42FA1E51BE4F00C1D7ED /* YYAnalytics.framework */; };
+		9CD088C41ED40B020050B4EB /* YYAnalytics.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9C9A42FA1E51BE4F00C1D7ED /* YYAnalytics.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		9CD088C61ED40B080050B4EB /* YYAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C9A42FA1E51BE4F00C1D7ED /* YYAnalytics.framework */; };
+		9CD088C71ED40B080050B4EB /* YYAnalytics.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9C9A42FA1E51BE4F00C1D7ED /* YYAnalytics.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		9CD088C91ED40B0E0050B4EB /* YYAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C9A42FA1E51BE4F00C1D7ED /* YYAnalytics.framework */; };
+		9CD088CA1ED40B0E0050B4EB /* YYAnalytics.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9C9A42FA1E51BE4F00C1D7ED /* YYAnalytics.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		9CD088CC1ED40B130050B4EB /* YYAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C9A42FA1E51BE4F00C1D7ED /* YYAnalytics.framework */; };
+		9CD088CD1ED40B130050B4EB /* YYAnalytics.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9C9A42FA1E51BE4F00C1D7ED /* YYAnalytics.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		9CD088CF1ED40B180050B4EB /* YYAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C9A42FA1E51BE4F00C1D7ED /* YYAnalytics.framework */; };
+		9CD088D01ED40B180050B4EB /* YYAnalytics.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9C9A42FA1E51BE4F00C1D7ED /* YYAnalytics.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		9CD088D21ED40B240050B4EB /* YYAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C9A42FA1E51BE4F00C1D7ED /* YYAnalytics.framework */; };
+		9CD088D31ED40B240050B4EB /* YYAnalytics.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9C9A42FA1E51BE4F00C1D7ED /* YYAnalytics.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		9CD088D51ED40B2A0050B4EB /* YYAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C9A42FA1E51BE4F00C1D7ED /* YYAnalytics.framework */; };
+		9CD088D61ED40B2A0050B4EB /* YYAnalytics.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9C9A42FA1E51BE4F00C1D7ED /* YYAnalytics.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		9CD088D81ED40B310050B4EB /* YYAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C9A42FA1E51BE4F00C1D7ED /* YYAnalytics.framework */; };
+		9CD088D91ED40B310050B4EB /* YYAnalytics.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9C9A42FA1E51BE4F00C1D7ED /* YYAnalytics.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		9CD26C7E1E1217B000276401 /* SSJStrikeLineLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD26C7D1E1217AF00276401 /* SSJStrikeLineLabel.m */; };
 		9CD26C811E1217B100276401 /* SSJStrikeLineLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD26C7D1E1217AF00276401 /* SSJStrikeLineLabel.m */; };
 		9CD5168C1D9D00960040480B /* SSJHistoryHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD5168B1D9D00960040480B /* SSJHistoryHeader.m */; };
@@ -8553,6 +8577,138 @@
 			dstSubfolderSpec = 10;
 			files = (
 				9CD088AA1ED2CADC0050B4EB /* YYAnalytics.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9CD088B91ED409F50050B4EB /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				9CD088B81ED409F50050B4EB /* YYAnalytics.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9CD088BC1ED40AED0050B4EB /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				9CD088BB1ED40AED0050B4EB /* YYAnalytics.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9CD088BF1ED40AF20050B4EB /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				9CD088BE1ED40AF20050B4EB /* YYAnalytics.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9CD088C21ED40AFB0050B4EB /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				9CD088C11ED40AFB0050B4EB /* YYAnalytics.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9CD088C51ED40B020050B4EB /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				9CD088C41ED40B020050B4EB /* YYAnalytics.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9CD088C81ED40B080050B4EB /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				9CD088C71ED40B080050B4EB /* YYAnalytics.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9CD088CB1ED40B0F0050B4EB /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				9CD088CA1ED40B0E0050B4EB /* YYAnalytics.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9CD088CE1ED40B140050B4EB /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				9CD088CD1ED40B130050B4EB /* YYAnalytics.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9CD088D11ED40B180050B4EB /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				9CD088D01ED40B180050B4EB /* YYAnalytics.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9CD088D41ED40B240050B4EB /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				9CD088D31ED40B240050B4EB /* YYAnalytics.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9CD088D71ED40B2B0050B4EB /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				9CD088D61ED40B2A0050B4EB /* YYAnalytics.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9CD088DA1ED40B310050B4EB /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				9CD088D91ED40B310050B4EB /* YYAnalytics.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -9980,6 +10136,7 @@
 				7D3F4B531E559A62004B5962 /* CoreLocation.framework in Frameworks */,
 				7D08A2AA1E4999D30085A8FB /* SystemConfiguration.framework in Frameworks */,
 				7D08A2AB1E4999D30085A8FB /* CoreTelephony.framework in Frameworks */,
+				9CD088C61ED40B080050B4EB /* YYAnalytics.framework in Frameworks */,
 				7D08A2AD1E4999D30085A8FB /* AudioToolbox.framework in Frameworks */,
 				7D08A2B11E4999D30085A8FB /* libz.tbd in Frameworks */,
 				7D08A2B21E4999D30085A8FB /* AVFoundation.framework in Frameworks */,
@@ -9996,6 +10153,7 @@
 				7D3F4B521E559A5D004B5962 /* CoreLocation.framework in Frameworks */,
 				7DA13C011E35AED7000490A4 /* SystemConfiguration.framework in Frameworks */,
 				7DA13C021E35AED7000490A4 /* CoreTelephony.framework in Frameworks */,
+				9CD088C31ED40B020050B4EB /* YYAnalytics.framework in Frameworks */,
 				7DA13C041E35AED7000490A4 /* AudioToolbox.framework in Frameworks */,
 				7DA13C081E35AED7000490A4 /* libz.tbd in Frameworks */,
 				7DA13C091E35AED7000490A4 /* AVFoundation.framework in Frameworks */,
@@ -10017,6 +10175,7 @@
 				7DBB3C981E55C2EE0075E638 /* libz.tbd in Frameworks */,
 				7DBB3C991E55C2EE0075E638 /* AVFoundation.framework in Frameworks */,
 				7DBB3C9A1E55C2EE0075E638 /* Security.framework in Frameworks */,
+				9CD088C91ED40B0E0050B4EB /* YYAnalytics.framework in Frameworks */,
 				7DBB3C9B1E55C2EE0075E638 /* libPods-SuiShouJi.a in Frameworks */,
 				C1EE302265126295E171EB49 /* libPods-YouYuJiZhangLiCai.a in Frameworks */,
 			);
@@ -10034,6 +10193,7 @@
 				7DBB41331E55C4E00075E638 /* libz.tbd in Frameworks */,
 				7DBB41341E55C4E00075E638 /* AVFoundation.framework in Frameworks */,
 				7DBB41351E55C4E00075E638 /* Security.framework in Frameworks */,
+				9CD088BD1ED40AF20050B4EB /* YYAnalytics.framework in Frameworks */,
 				7DBB41361E55C4E00075E638 /* libPods-SuiShouJi.a in Frameworks */,
 				81159558A04406B56D1F36B3 /* libPods-SuiShouJiEnterprise.a in Frameworks */,
 			);
@@ -10046,6 +10206,7 @@
 				7DFB18981EB0341E00292DD3 /* CoreLocation.framework in Frameworks */,
 				7DFB18991EB0341E00292DD3 /* YYAnalytics.framework in Frameworks */,
 				7DFB189A1EB0341E00292DD3 /* SystemConfiguration.framework in Frameworks */,
+				9CD088D81ED40B310050B4EB /* YYAnalytics.framework in Frameworks */,
 				7DFB189B1EB0341E00292DD3 /* CoreTelephony.framework in Frameworks */,
 				7DFB189C1EB0341E00292DD3 /* AudioToolbox.framework in Frameworks */,
 				7DFB189D1EB0341E00292DD3 /* libz.tbd in Frameworks */,
@@ -10062,6 +10223,7 @@
 				9C13F7121E8267D300AC5FA9 /* CoreLocation.framework in Frameworks */,
 				9C13F7131E8267D300AC5FA9 /* YYAnalytics.framework in Frameworks */,
 				9C13F7141E8267D300AC5FA9 /* SystemConfiguration.framework in Frameworks */,
+				9CD088CC1ED40B130050B4EB /* YYAnalytics.framework in Frameworks */,
 				9C13F7151E8267D300AC5FA9 /* CoreTelephony.framework in Frameworks */,
 				9C13F7161E8267D300AC5FA9 /* AudioToolbox.framework in Frameworks */,
 				9C13F7171E8267D300AC5FA9 /* libz.tbd in Frameworks */,
@@ -10083,6 +10245,7 @@
 				9C4C22441E9E30C8000C5F15 /* libz.tbd in Frameworks */,
 				9C4C22451E9E30C8000C5F15 /* AVFoundation.framework in Frameworks */,
 				9C4C22461E9E30C8000C5F15 /* Security.framework in Frameworks */,
+				9CD088D21ED40B240050B4EB /* YYAnalytics.framework in Frameworks */,
 				9C4C22471E9E30C8000C5F15 /* libPods-SuiShouJi.a in Frameworks */,
 				2037DEF73FC931CFDC333C7D /* libPods-9188JiZhangBen.a in Frameworks */,
 			);
@@ -10100,6 +10263,7 @@
 				9C7D2F281E8DF8A80093001F /* libz.tbd in Frameworks */,
 				9C7D2F291E8DF8A80093001F /* AVFoundation.framework in Frameworks */,
 				9C7D2F2A1E8DF8A80093001F /* Security.framework in Frameworks */,
+				9CD088BA1ED40AED0050B4EB /* YYAnalytics.framework in Frameworks */,
 				9C7D2F2B1E8DF8A80093001F /* libPods-SuiShouJi.a in Frameworks */,
 				43FB013EC6CC98DC90F5D913 /* libPods-YouYuJiZhangPro.a in Frameworks */,
 			);
@@ -10117,6 +10281,7 @@
 				9C7D319F1E8DF96B0093001F /* libz.tbd in Frameworks */,
 				9C7D31A01E8DF96B0093001F /* AVFoundation.framework in Frameworks */,
 				9C7D31A11E8DF96B0093001F /* Security.framework in Frameworks */,
+				9CD088CF1ED40B180050B4EB /* YYAnalytics.framework in Frameworks */,
 				9C7D31A21E8DF96B0093001F /* libPods-SuiShouJi.a in Frameworks */,
 				FC8C76456DC126984B2A120A /* libPods-9188JiZhangPro.a in Frameworks */,
 			);
@@ -10151,6 +10316,7 @@
 				9C9CF0A31EA5F73A007657FE /* libz.tbd in Frameworks */,
 				9C9CF0A41EA5F73A007657FE /* AVFoundation.framework in Frameworks */,
 				9C9CF0A51EA5F73A007657FE /* Security.framework in Frameworks */,
+				9CD088D51ED40B2A0050B4EB /* YYAnalytics.framework in Frameworks */,
 				9C9CF0A61EA5F73A007657FE /* libPods-SuiShouJi.a in Frameworks */,
 				C0E2B2A04AC1D7D09F602D08 /* libPods-JiZhangGuanJia.a in Frameworks */,
 			);
@@ -10163,6 +10329,7 @@
 				7D3F4B501E559A52004B5962 /* CoreLocation.framework in Frameworks */,
 				9CECFC9A1D6D41A700DB2C8B /* SystemConfiguration.framework in Frameworks */,
 				9CECFC9B1D6D41A700DB2C8B /* CoreTelephony.framework in Frameworks */,
+				9CD088C01ED40AFB0050B4EB /* YYAnalytics.framework in Frameworks */,
 				9CECFC9D1D6D41A700DB2C8B /* AudioToolbox.framework in Frameworks */,
 				9CECFCA11D6D41A700DB2C8B /* libz.tbd in Frameworks */,
 				9CECFCA21D6D41A700DB2C8B /* AVFoundation.framework in Frameworks */,
@@ -10179,6 +10346,7 @@
 				9C9A42FD1E51C09700C1D7ED /* CoreLocation.framework in Frameworks */,
 				9C9A42FB1E51BE4F00C1D7ED /* YYAnalytics.framework in Frameworks */,
 				9C3276F41CE4616900109C4C /* SystemConfiguration.framework in Frameworks */,
+				9CD088B71ED409F50050B4EB /* YYAnalytics.framework in Frameworks */,
 				9C3276F21CE4615C00109C4C /* CoreTelephony.framework in Frameworks */,
 				9C3276F01CE4615200109C4C /* AudioToolbox.framework in Frameworks */,
 				9C3276EE1CE4614700109C4C /* libz.tbd in Frameworks */,
@@ -13718,6 +13886,7 @@
 				7D08A2BA1E4999D30085A8FB /* Resources */,
 				E8A2C184C8D7381A27CCD96E /* [CP] Embed Pods Frameworks */,
 				48AA12A1E7C2938463D4C3AE /* [CP] Copy Pods Resources */,
+				9CD088C81ED40B080050B4EB /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -13738,6 +13907,7 @@
 				7DA13C111E35AED7000490A4 /* Resources */,
 				EB88810B3A1B30F8D98E4C9D /* [CP] Embed Pods Frameworks */,
 				E963EDFE5DCDB7C8E7A385DF /* [CP] Copy Pods Resources */,
+				9CD088C51ED40B020050B4EB /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -13758,6 +13928,7 @@
 				7DBB3C9D1E55C2EE0075E638 /* Resources */,
 				7DBB3CB51E55C2EE0075E638 /* [CP] Embed Pods Frameworks */,
 				7DBB3CB61E55C2EE0075E638 /* [CP] Copy Pods Resources */,
+				9CD088CB1ED40B0F0050B4EB /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -13778,6 +13949,7 @@
 				7DBB41381E55C4E00075E638 /* Resources */,
 				7DBB41521E55C4E00075E638 /* [CP] Embed Pods Frameworks */,
 				7DBB41531E55C4E00075E638 /* [CP] Copy Pods Resources */,
+				9CD088BF1ED40AF20050B4EB /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -13798,6 +13970,7 @@
 				7DFB18A41EB0341E00292DD3 /* Resources */,
 				EC85233C65887050F130D286 /* [CP] Embed Pods Frameworks */,
 				3119ACCD098C19AC7F6A84B1 /* [CP] Copy Pods Resources */,
+				9CD088DA1ED40B310050B4EB /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -13818,6 +13991,7 @@
 				9C13F71D1E8267D300AC5FA9 /* Resources */,
 				9EEA079F752C2669B9209682 /* [CP] Embed Pods Frameworks */,
 				216B94347647C1DD9449A3E5 /* [CP] Copy Pods Resources */,
+				9CD088CE1ED40B140050B4EB /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -13838,6 +14012,7 @@
 				9C4C224A1E9E30C8000C5F15 /* Resources */,
 				9C4C22681E9E30C8000C5F15 /* [CP] Embed Pods Frameworks */,
 				9C4C22691E9E30C8000C5F15 /* [CP] Copy Pods Resources */,
+				9CD088D41ED40B240050B4EB /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -13858,6 +14033,7 @@
 				9C7D2F2E1E8DF8A80093001F /* Resources */,
 				9C7D2F4A1E8DF8A80093001F /* [CP] Embed Pods Frameworks */,
 				9C7D2F4B1E8DF8A80093001F /* [CP] Copy Pods Resources */,
+				9CD088BC1ED40AED0050B4EB /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -13878,6 +14054,7 @@
 				9C7D31A51E8DF96B0093001F /* Resources */,
 				9C7D31C11E8DF96B0093001F /* [CP] Embed Pods Frameworks */,
 				9C7D31C21E8DF96B0093001F /* [CP] Copy Pods Resources */,
+				9CD088D11ED40B180050B4EB /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -13919,6 +14096,7 @@
 				9C9CF0A91EA5F73A007657FE /* Resources */,
 				9C9CF0C71EA5F73A007657FE /* [CP] Embed Pods Frameworks */,
 				9C9CF0C81EA5F73A007657FE /* [CP] Copy Pods Resources */,
+				9CD088D71ED40B2B0050B4EB /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -13939,6 +14117,7 @@
 				9CECFCAE1D6D41A700DB2C8B /* Resources */,
 				1D232FE2381AE3048A659CF0 /* [CP] Embed Pods Frameworks */,
 				A0C1C82E62623DF40C356336 /* [CP] Copy Pods Resources */,
+				9CD088C21ED40AFB0050B4EB /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -13959,6 +14138,7 @@
 				BD543C3A1C1A6DBC00910D61 /* Resources */,
 				7F384EDE547D146520592FD0 /* [CP] Embed Pods Frameworks */,
 				DDCD4E7CD2023DDEE0A45788 /* [CP] Copy Pods Resources */,
+				9CD088B91ED409F50050B4EB /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
