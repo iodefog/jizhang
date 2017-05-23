@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface SSJListMenuCellItem : NSObject
+@interface SSJListMenuCellItem : SSJBaseCellItem
 
 @property (nonatomic) CGSize imageSize;
 

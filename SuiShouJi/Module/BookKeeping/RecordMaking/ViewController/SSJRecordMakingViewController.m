@@ -184,7 +184,6 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     if (!_customNaviBar) {
         __weak typeof(self) wself = self;
         _customNaviBar = [[SSJRecordMakingCustomNavigationBar alloc] init];
-        _customNaviBar.titles = @[@"test1", @"test2"];
         _customNaviBar.selectBookHandle = ^(SSJRecordMakingCustomNavigationBar *naviBar) {
             [SSJAnaliyticsManager event:@"addRecord_changeBooks"];//记一笔-切换账本
             wself.item.booksId = [wself.booksIds ssj_safeObjectAtIndex:naviBar.selectedTitleIndex];
