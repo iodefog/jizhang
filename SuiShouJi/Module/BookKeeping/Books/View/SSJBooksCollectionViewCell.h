@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString *curretSelectedBookId;
 
 /**编辑按钮点击*/
-@property (nonatomic, copy) void(^editBookAction)();
+@property (nonatomic, copy) void(^editBookAction)(__kindof SSJBaseCellItem *booksTypeItem);
 
 NS_ASSUME_NONNULL_END
 @end

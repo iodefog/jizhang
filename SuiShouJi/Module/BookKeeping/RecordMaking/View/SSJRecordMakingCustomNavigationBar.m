@@ -10,6 +10,18 @@
 #import "SSJSegmentedControl.h"
 #import "SSJListMenu.h"
 
+@implementation SSJRecordMakingCustomNavigationBarBookItem
+
++ (instancetype)itemWithTitle:(NSString *)title iconName:(NSString *)iconName booksId:(NSString *)booksId {
+    SSJRecordMakingCustomNavigationBarBookItem *item = [[SSJRecordMakingCustomNavigationBarBookItem alloc] init];
+    item.title = title;
+    item.iconName = iconName;
+    item.booksId = booksId;
+    return item;
+}
+
+@end
+
 @interface SSJRecordMakingCustomNavigationBar ()
 
 @property (nonatomic, strong) UIButton *backOffBtn;
@@ -155,8 +167,8 @@
         _titleLab.text = @"请选择账本";
         return;
     }
-    
-    _titleLab.text = [_titles ssj_safeObjectAtIndex:_selectedTitleIndex];
+    SSJRecordMakingCustomNavigationBarBookItem *item = [_bookItems ssj_safeObjectAtIndex:_selectedTitleIndex];
+    _titleLab.text = item.title;
 }
 
 - (void)updateRightButtonTitle {
@@ -184,18 +196,17 @@
 }
 
 #pragma mark - Public
-- (void)setTitles:(NSArray *)titles {
-    if (!titles && [_titles isEqualToArray:titles]) {
+- (void)setBookItems:(NSArray<SSJRecordMakingCustomNavigationBarBookItem *> *)bookItems {
+    if (!bookItems && [_bookItems isEqualToArray:bookItems]) {
         return;
     }
     
-    _titles = titles;
+    _bookItems = bookItems;
     
     NSMutableArray *items = [[NSMutableArray alloc] init];
-    for (NSString *title in _titles) {
-        [items addObject:[SSJListMenuItem itemWithImageName:nil title:title normalTitleColor:SSJ_MAIN_COLOR selectedTitleColor:SSJ_MARCATO_COLOR normalImageColor:nil selectedImageColor:nil]];
+    for (SSJRecordMakingCustomNavigationBarBookItem *item in _bookItems) {
+        [items addObject:[SSJListMenuItem itemWithImageName:item.iconName title:item.title normalTitleColor:SSJ_MAIN_COLOR selectedTitleColor:SSJ_MARCATO_COLOR normalImageColor:SSJ_SECONDARY_COLOR selectedImageColor:SSJ_MARCATO_COLOR]];
     }
-//    [items addObject:[SSJListMenuItem itemWithImageName:nil title:@"添加账本" normalTitleColor:SSJ_MAIN_COLOR selectedTitleColor:nil normalImageColor:nil selectedImageColor:nil]];
     
     self.booksMenu.items = items;
     self.booksMenu.maxDisplayRowCount = 6.5;
@@ -215,7 +226,7 @@
         return;
     }
     
-    if (selectedTitleIndex >= _titles.count) {
+    if (selectedTitleIndex >= _bookItems.count) {
         SSJPRINT(@"下标超过标题数组范围");
         return;
     }
@@ -307,6 +318,7 @@
     if (!_booksMenu) {
         _booksMenu = [[SSJListMenu alloc] initWithFrame:CGRectMake(0, 0, 154, 0)];
         _booksMenu.maxDisplayRowCount = 5.5;
+        _booksMenu.gapBetweenImageAndTitle = 16;
         _booksMenu.titleFont = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         [_booksMenu addTarget:self action:@selector(selectBookAction) forControlEvents:UIControlEventValueChanged];
     }

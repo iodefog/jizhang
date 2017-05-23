@@ -837,6 +837,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
             } else {
                 self.tableView.hasData = NO;
                 self.noDataHeader.hidden = NO;
+                [self.tableView reloadData];
             }
             
             [weakSelf.tableView ssj_hideLoadingIndicator];
@@ -975,7 +976,8 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
     [SSJUserTableManager currentBooksId:^(NSString * _Nonnull booksId) {
         SSJBooksTypeItem *currentBooksItem = [SSJBooksTypeStore queryCurrentBooksTypeForBooksId:booksId];
         self.homeBar.leftButton.item = currentBooksItem;
-        self.homeBar.leftButton.tintColor = [UIColor ssj_colorWithHex:currentBooksItem.booksColor];
+#warning tintColor
+//        self.homeBar.leftButton.tintColor = [UIColor ssj_colorWithHex:currentBooksItem.booksColor];
     } failure:^(NSError * _Nonnull error) {
         [SSJAlertViewAdapter showError:error];
     }];

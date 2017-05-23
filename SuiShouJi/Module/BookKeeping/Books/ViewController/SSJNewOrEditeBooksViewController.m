@@ -18,6 +18,7 @@
 #import "SSJShareBookItem.h"
 
 #import "SSJBooksTypeStore.h"
+#import "SSJDataSynchronizer.h"
 
 static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIdentifier";
 
@@ -28,9 +29,6 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
 @property (nonatomic, strong) NSArray <NSString *> *titleArray;
 
 @property (nonatomic, strong) UITextField *bookNameTextField;
-
-/**记账场景*/
-@property (nonatomic, strong) NSDictionary *bookTypeDic;
 
 /**记账颜色*/
 @property (nonatomic, strong) SSJFinancingGradientColorItem *gradientColorItem;
@@ -43,6 +41,9 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
 
 /**tip*/
 @property (nonatomic, copy) NSString *tipStr;
+
+/**bookName*/
+@property (nonatomic, copy) NSString *bookName;
 @end
 
 @implementation SSJNewOrEditeBooksViewController
@@ -69,7 +70,7 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
         } else {
             self.title = NSLocalizedString(@"新建共享账本", nil);
         }
-        self.tipStr = NSLocalizedString(@"Tip：共享记账，", nil);
+        self.tipStr = NSLocalizedString(@"Tip：共同记账，账本可共享给ta", nil);
     }
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"完成", nil) style:UIBarButtonItemStylePlain target:self action:@selector(rightButtonClicked:)];
@@ -89,13 +90,37 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
 
 - (void)initalizedDataArray {
     self.titleArray = @[@"记账场景",@"账本名称",@"账本颜色"];
+    if ([self.bookItem isKindOfClass:[SSJBooksTypeItem class]]) {//个人账本
+        if (((SSJBooksTypeItem *)self.bookItem).booksId.length) {
+            //编辑个人账本
+//            [self editeBookData];
+            self.currentBookType = ((SSJBooksTypeItem *)self.bookItem).booksParent;
+//            self.gradientColorItem = ((SSJBooksTypeItem *)self.bookItem).booksColor;
+           self.bookParentStr = [self bookParentStrWithKey:[NSString stringWithFormat:@"%ld",self.currentBookType]];
+            self.bookName = ((SSJBooksTypeItem *)self.bookItem).booksName;
+        } else {
+            //新建个人账本
+            [self newBookData];
+        }
+    } else if([self.bookItem isKindOfClass:[SSJShareBookItem class]]) { //共享账本
+        if (((SSJShareBookItem *)self.bookItem).booksId.length) {
+            //编辑共享账本
+            self.currentBookType = ((SSJShareBookItem *)self.bookItem).parentType;
+//            self.gradientColorItem = ((SSJShareBookItem *)self.bookItem).booksColor;
+            self.bookParentStr = [self bookParentStrWithKey:[NSString stringWithFormat:@"%ld",self.currentBookType]];
+            self.bookName = ((SSJShareBookItem *)self.bookItem).booksName;
+        } else {
+            //新建共享账本
+            [self newBookData];
+        }
+    }
+}
+
+- (void)newBookData {
     self.currentBookType = 0;
-    self.bookParentStr = @"日常";
-    
-    SSJFinancingGradientColorItem *item = [[SSJFinancingGradientColorItem alloc] init];
-    item.startColor = @"#FC6EAC";
-    item.endColor = @"#FB92BD";
-    self.gradientColorItem = item;
+    self.bookParentStr = [self bookParentStrWithKey:[NSString stringWithFormat:@"%ld",self.currentBookType]];
+    self.gradientColorItem = [[SSJFinancingGradientColorItem defualtColors] firstObject];
+    self.bookName = @"";
 }
 
 - (void)viewWillLayoutSubviews {
@@ -131,6 +156,10 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
     } else if (indexPath.row == 2) {
         //账本颜色
         SSJBookColorSelectedViewController *bookColorVC = [[SSJBookColorSelectedViewController alloc] init];
+        //账本名称
+        if (self.bookNameTextField.text.length) {
+            bookColorVC.bookName = self.bookNameTextField.text;
+        }
         bookColorVC.colorSelectedBlock = ^(SSJFinancingGradientColorItem *selectColor) {
             //更新选择账本颜色
             weakSelf.gradientColorItem = selectColor;
@@ -148,12 +177,13 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
     cell.cellTitle = [self.titleArray ssj_safeObjectAtIndex:indexPath.row];
     if (indexPath.row == 0) {
         cell.type = SSJCreditCardCellTypeDetail;
-        cell.cellDetail =  self.bookParentStr;
+        cell.cellDetail = self.bookParentStr;
         cell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
     } else if (indexPath.row == 1) {
         cell.type = SSJCreditCardCellTypeTextField;
         cell.textInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入5字以内名称" attributes:@{NSForegroundColorAttributeName : [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         cell.customAccessoryType = UITableViewCellAccessoryNone;
+        cell.textInput.text = self.bookName;
         self.bookNameTextField = cell.textInput;
     } else if (indexPath.row == 2) {
         cell.type = SSJCreditCardCellColorSelect;
@@ -169,26 +199,52 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
 
 #pragma mark - Event
 - (void)rightButtonClicked:(id)sender{
-//    self.item.booksName = self.booksEditeView.textField.text;
-//    if (!self.bookItem.booksName.length) {
-//        [CDAutoHideMessageHUD showMessage:@"请输入账本名称"];
-//        return;
-//    }
-//    if (self.bookItem.booksName.length > 5) {
-//        [CDAutoHideMessageHUD showMessage:@"账本名称不能超过5个字"];
-//        return;
-//    }
-//    //    __weak typeof(self) weakSelf = self;
-//    [SSJBooksTypeStore saveBooksTypeItem:self.bookItem sucess:^{
-//        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
-//        [[NSNotificationCenter defaultCenter]postNotificationName:SSJBooksTypeDidChangeNotification object:nil];
-//        [self.navigationController popViewControllerAnimated:YES];
-//        if (_saveBooksBlock) {
-//            _saveBooksBlock(self.item.booksId);
-//        }
-//    } failure:^(NSError *error) {
-//        [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
-//    }];
+    NSString *booksName = self.bookNameTextField.text;
+    if (!booksName.length) {
+        [CDAutoHideMessageHUD showMessage:@"请输入账本名称"];
+        return;
+    }
+    if (booksName.length > 5) {
+        [CDAutoHideMessageHUD showMessage:@"账本名称不能超过5个字"];
+        return;
+    }
+    
+    __weak typeof(self) weakSelf = self;
+    
+    if ([self.bookItem isKindOfClass:[SSJBooksTypeItem class]]) {//个人账本
+        ((SSJBooksTypeItem *)self.bookItem).booksName = booksName;
+        ((SSJBooksTypeItem *)self.bookItem).booksParent = self.currentBookType;
+        ((SSJBooksTypeItem *)self.bookItem).booksColor =  self.gradientColorItem;
+        [SSJBooksTypeStore saveBooksTypeItem:(SSJBooksTypeItem *)self.bookItem sucess:^{
+            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+            [[NSNotificationCenter defaultCenter] postNotificationName:SSJBooksTypeDidChangeNotification object:nil];
+            
+            if (_saveBooksBlock) {
+                _saveBooksBlock(((SSJBooksTypeItem *)self.bookItem).booksId);
+            }
+            [weakSelf.navigationController popViewControllerAnimated:YES];
+        } failure:^(NSError *error) {
+            [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
+        }];
+
+
+    } else if([self.bookItem isKindOfClass:[SSJShareBookItem class]]) { //共享账本
+        ((SSJShareBookItem *)self.bookItem).booksName = booksName;
+        ((SSJShareBookItem *)self.bookItem).parentType = self.currentBookType;
+        ((SSJShareBookItem *)self.bookItem).booksColor =  self.gradientColorItem;
+        
+        [SSJBooksTypeStore saveShareBooksTypeItem:(SSJShareBookItem *)self.bookItem sucess:^{
+            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+            [[NSNotificationCenter defaultCenter] postNotificationName:SSJBooksTypeDidChangeNotification object:nil];
+            if (_saveBooksBlock) {
+                _saveBooksBlock(((SSJShareBookItem *)self.bookItem).booksId);
+            }
+            [weakSelf.navigationController popViewControllerAnimated:YES];
+            
+        } failure:^(NSError *error) {
+            [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
+        }];
+    }
 }
 
 #pragma mark - Lazy
@@ -201,6 +257,22 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
         _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
     }
     return _tableView;
+}
+
+- (NSString *)bookParentStrWithKey:(NSString *)key {
+    NSDictionary *dic = @{
+                          @"0":@"日常",
+                          @"1":@"育儿",
+                          @"2":@"生意",
+                          @"3":@"旅行",
+                          @"4":@"装修",
+                          @"5":@"结婚",
+                          };
+    if ([[dic allKeys] containsObject:key]) {
+        return [dic objectForKey:key];
+    } else {
+        return @"日常";
+    }
 }
 
 @end
