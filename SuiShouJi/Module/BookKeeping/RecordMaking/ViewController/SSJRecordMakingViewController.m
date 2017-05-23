@@ -9,36 +9,32 @@
 #import "SSJRecordMakingViewController.h"
 #import "SSJNavigationController.h"
 #import "SSJADDNewTypeViewController.h"
-#import "SSJSegmentedControl.h"
-#import "SSJSmallCalendarView.h"
-#import "SSJDatabaseQueue.h"
-#import "SSJDataSynchronizer.h"
-#import "SSJChargeCircleSelectView.h"
-#import "SSJCategoryListHelper.h"
 #import "SSJImaageBrowseViewController.h"
-#import "SSJMemberSelectView.h"
 #import "SSJMemberManagerViewController.h"
 #import "SSJNewMemberViewController.h"
 #import "SSJFundingTypeSelectViewController.h"
-#import "UIViewController+MMDrawerController.h"
 #import "SSJBooksEditeOrNewViewController.h"
+
 #import "SSJCustomKeyboard.h"
-#import "SSJCalendarView.h"
-//#import "SSJDateSelectedView.h"
+#import "SSJMemberSelectView.h"
+#import "SSJHomeDatePickerView.h"
 #import "SSJFundingTypeSelectView.h"
 #import "SSJRecordMakingBillTypeInputView.h"
 #import "SSJRecordMakingBillTypeSelectionView.h"
 #import "SSJRecordMakingBillTypeInputAccessoryView.h"
 #import "SSJRecordMakingCustomNavigationBar.h"
-#import "SSJBooksParentSelectView.h"
-#import "SSJRecordMakingBillTypeSelectionCellItem.h"
-#import "SSJChargeMemBerItem.h"
-#import "YYKeyboardManager.h"
-#import "SSJRecordMakingStore.h"
-#import "SSJBooksTypeStore.h"
+
 #import "SSJCreditCardItem.h"
-#import "SSJHomeDatePickerView.h"
+#import "SSJChargeMemBerItem.h"
+#import "SSJRecordMakingBillTypeSelectionCellItem.h"
+#import "YYKeyboardManager.h"
 #import "SSJUserTableManager.h"
+#import "SSJBooksTypeStore.h"
+#import "SSJRecordMakingStore.h"
+#import "SSJDatabaseQueue.h"
+#import "SSJDataSynchronizer.h"
+#import "SSJCategoryListHelper.h"
+
 
 #define INPUT_DEFAULT_COLOR [UIColor ssj_colorWithHex:@"#dddddd"]
 
@@ -74,8 +70,6 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 
 @property (nonatomic, strong) SSJRecordMakingBillTypeInputAccessoryView *accessoryView;
 
-@property (nonatomic, strong) SSJBooksParentSelectView *parentSelectView;
-
 @property (nonatomic, strong) UIImageView *guideView;
 
 @property (nonatomic, strong) UITextField *currentInput;
@@ -84,13 +78,16 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 
 @property (nonatomic) NSInteger lastSelectedIndex;
 
-@property (nonatomic, strong) NSArray *booksIds;
+@property (nonatomic, strong) NSArray<SSJBooksTypeItem *> *bookItems;
 
 @property (nonatomic, strong) NSString *defaultBooksId;// 当前用户默认的账本id
 
 @property (nonatomic) long currentYear;
 @property (nonatomic) long currentMonth;
 @property (nonatomic) long currentDay;
+
+// 是否编辑流水
+@property (nonatomic) BOOL edited;
 
 @end
 
@@ -116,12 +113,15 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     [super viewDidLoad];
 
     _needToDismiss = YES;
+    _edited = (self.item != nil);
     
     if (!self.item) {
         self.item = [[SSJBillingChargeCellItem alloc] init];
     }
     
-    [self initData];
+    [self initDate];
+    [self loadFundData];
+    [self getmembersForTheCharge];
     
     self.view.backgroundColor = [UIColor whiteColor];
     
@@ -147,7 +147,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     
     [self.view ssj_showLoadingIndicator];
     [[[[self loadCurrentBooksIdSignal] then:^RACSignal *{
-        return [self loadBooksListSignal];
+        return [self loadBooksListIfNeededSignal];
     }] then:^RACSignal *{
         return [self loadBillTypeSignal];
     }] subscribeError:^(NSError *error) {
@@ -187,15 +187,12 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         _customNaviBar = [[SSJRecordMakingCustomNavigationBar alloc] init];
         _customNaviBar.selectBookHandle = ^(SSJRecordMakingCustomNavigationBar *naviBar) {
             [SSJAnaliyticsManager event:@"addRecord_changeBooks"];//记一笔-切换账本
-            wself.item.booksId = [wself.booksIds ssj_safeObjectAtIndex:naviBar.selectedTitleIndex];
+            SSJBooksTypeItem *bookItem = [wself.bookItems ssj_safeObjectAtIndex:naviBar.selectedTitleIndex];
+            wself.item.booksId = bookItem.booksId;
             [wself.currentInput becomeFirstResponder];
             [[wself loadBillTypeSignal] subscribeError:^(NSError *error) {
                 [SSJAlertViewAdapter showError:error];
             } completed:NULL];
-        };
-        _customNaviBar.addNewBookHandle = ^(SSJRecordMakingCustomNavigationBar *naviBar) {
-            [wself.view endEditing:YES];
-            [wself.parentSelectView show];
         };
         _customNaviBar.selectBillTypeHandle = ^(SSJRecordMakingCustomNavigationBar *naviBar) {
             [wself segmentPressed];
@@ -390,27 +387,6 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     return _accessoryView;
 }
 
-- (SSJBooksParentSelectView *)parentSelectView{
-    if (!_parentSelectView) {
-        _parentSelectView = [[SSJBooksParentSelectView alloc] initWithFrame:self.view.frame];
-        __weak typeof(self) weakSelf = self;
-        _parentSelectView.parentSelectBlock = ^(NSInteger selectParent) {
-            [weakSelf.parentSelectView dismiss];
-            
-            SSJBooksTypeItem *item = [[SSJBooksTypeItem alloc]init];
-            item.booksParent = selectParent;
-            
-            SSJBooksEditeOrNewViewController *booksEditeVc = [[SSJBooksEditeOrNewViewController alloc] init];
-            booksEditeVc.item = item;
-            booksEditeVc.saveBooksBlock = ^(NSString *booksId) {
-                weakSelf.item.booksId = booksId;
-            };
-            [weakSelf.navigationController pushViewController:booksEditeVc animated:YES];
-        };
-    }
-    return _parentSelectView;
-}
-
 #pragma mark - UITextFieldDelegate
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
     [super textFieldDidBeginEditing:textField];
@@ -580,14 +556,6 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     [_accessoryView.memoView resignFirstResponder];
 }
 
-//- (void)selectPeriodAction {
-//    [SSJAnaliyticsManager event:@"addRecord_cycle"];
-//    self.ChargeCircleSelectView.selectCircleType = _selectChargeCircleType;
-//    [self.ChargeCircleSelectView show];
-//    [_billTypeInputView.moneyInput resignFirstResponder];
-//    [_accessoryView.memoView resignFirstResponder];
-//}
-
 - (void)endEditingAction {
     _paymentTypeView.editing = NO;
     _incomeTypeView.editing = NO;
@@ -629,7 +597,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 }
 
 #pragma mark - private
-- (void)initData {
+- (void)initDate {
     NSDate *now = [NSDate date];
     _currentYear= now.year;
     _currentDay = now.day;
@@ -658,8 +626,6 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         }
     }
     self.item.billDate = [NSString stringWithFormat:@"%04ld-%02ld-%02ld",self.selectedYear,self.selectedMonth,self.selectedDay];
-    [self loadFundData];
-    [self getmembersForTheCharge];
 }
 
 /**
@@ -683,30 +649,13 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     }];
 }
 
-- (RACSignal *)loadBooksListSignal {
+- (RACSignal *)loadBooksListIfNeededSignal {
     @weakify(self);
     return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         @strongify(self);
         [SSJBooksTypeStore queryForBooksListWithSuccess:^(NSMutableArray<SSJBooksTypeItem *> *bookList) {
-            NSInteger selectedIndex = -1;
-            NSMutableArray *bookTitles = [[NSMutableArray alloc] initWithCapacity:bookList.count];
-            NSMutableArray *bookIds = [[NSMutableArray alloc] initWithCapacity:bookList.count];
-            
-            for (int i = 0; i < bookList.count; i ++) {
-                SSJBooksTypeItem *item = bookList[i];
-                if (item.booksId) {
-                    [bookTitles addObject:item.booksName];
-                    [bookIds addObject:item.booksId];
-                    if ([item.booksId isEqualToString:self.item.booksId]) {
-                        selectedIndex = i;
-                    }
-                }
-            }
-            
-            self.booksIds = [bookIds copy];
-            self.customNaviBar.titles = bookTitles;
-            self.customNaviBar.selectedTitleIndex = selectedIndex;
-            
+            self.bookItems = [bookList copy];
+            [self updateNaviBarTitles];
             [subscriber sendNext:nil];
             [subscriber sendCompleted];
         } failure:^(NSError *error) {
@@ -714,6 +663,32 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         }];
         return nil;
     }];
+}
+
+- (void)updateNaviBarTitles {
+    NSInteger selectedIndex = -1;
+    NSMutableArray *bookTitles = [[NSMutableArray alloc] initWithCapacity:self.bookItems.count];
+    NSMutableArray *bookIds = [[NSMutableArray alloc] initWithCapacity:self.bookItems.count];
+    
+    for (int i = 0; i < self.bookItems.count; i ++) {
+        SSJBooksTypeItem *item = self.bookItems[i];
+        if (item.booksId) {
+            [bookTitles addObject:item.booksName];
+            [bookIds addObject:item.booksId];
+            if ([item.booksId isEqualToString:self.item.booksId]) {
+                selectedIndex = i;
+            }
+        }
+    }
+    
+    self.customNaviBar.titles = bookTitles;
+    self.customNaviBar.selectedTitleIndex = selectedIndex;
+    if ((self.item.idType == SSJChargeIdTypeShareBooks && self.edited)
+        || bookTitles.count <= 1) {
+        self.customNaviBar.canSelectTitle = NO;
+    } else {
+        self.customNaviBar.canSelectTitle = YES;
+    }
 }
 
 - (RACSignal *)loadBillTypeSignal {

@@ -20,6 +20,11 @@ typedef void(^SSJRecordMakingCustomNavigationBarAction)(SSJRecordMakingCustomNav
 @property (nonatomic, strong) NSArray <NSString *>*titles;
 
 /**
+ 能否选择标题，如果为NO，点击标题不会显示下拉框并且隐藏标题边的角标
+ */
+@property (nonatomic) BOOL canSelectTitle;
+
+/**
  选中的标题下标，默认－1（即什么都不选）
  */
 @property (nonatomic) NSInteger selectedTitleIndex;
@@ -43,11 +48,6 @@ typedef void(^SSJRecordMakingCustomNavigationBarAction)(SSJRecordMakingCustomNav
  点击下拉菜单中的选项触发的回调
  */
 @property (nonatomic, copy) SSJRecordMakingCustomNavigationBarAction selectBookHandle;
-
-/**
- 点击添加账本触发的回调
- */
-@property (nonatomic, copy) SSJRecordMakingCustomNavigationBarAction addNewBookHandle;
 
 /**
  选中收入、支出切换控件触发的回调

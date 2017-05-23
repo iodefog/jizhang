@@ -9782,8 +9782,8 @@
 		9CC97D6C1DA9F8260055B3BD /* SSJBookKeepingHomeDateView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBookKeepingHomeDateView.m; sourceTree = "<group>"; };
 		9CC9F4771DD4176C001E1606 /* SSJBooksParentSelectCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBooksParentSelectCell.h; sourceTree = "<group>"; };
 		9CC9F4781DD4176C001E1606 /* SSJBooksParentSelectCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBooksParentSelectCell.m; sourceTree = "<group>"; };
-		9CC9F47B1DD42681001E1606 /* SSJBooksParentSelectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBooksParentSelectView.h; sourceTree = "<group>"; };
-		9CC9F47C1DD42681001E1606 /* SSJBooksParentSelectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBooksParentSelectView.m; sourceTree = "<group>"; };
+		9CC9F47B1DD42681001E1606 /* SSJBooksParentSelectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SSJBooksParentSelectView.h; path = View/SSJBooksParentSelectView.h; sourceTree = "<group>"; };
+		9CC9F47C1DD42681001E1606 /* SSJBooksParentSelectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SSJBooksParentSelectView.m; path = View/SSJBooksParentSelectView.m; sourceTree = "<group>"; };
 		9CCF521E1DFE57B00078B950 /* SSJInstalmentDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJInstalmentDetailViewController.m; sourceTree = "<group>"; };
 		9CD088751ECE8E310050B4EB /* SSJSharebooksMemberDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJSharebooksMemberDetailViewController.h; sourceTree = "<group>"; };
 		9CD088761ECE8E310050B4EB /* SSJSharebooksMemberDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJSharebooksMemberDetailViewController.m; sourceTree = "<group>"; };
@@ -11476,6 +11476,15 @@
 			path = UICountingLabel;
 			sourceTree = "<group>";
 		};
+		7DD75FF21ED417210063D62D /* Deprecated */ = {
+			isa = PBXGroup;
+			children = (
+				9CC9F47B1DD42681001E1606 /* SSJBooksParentSelectView.h */,
+				9CC9F47C1DD42681001E1606 /* SSJBooksParentSelectView.m */,
+			);
+			name = Deprecated;
+			sourceTree = "<group>";
+		};
 		7DD7D73D1C4CDB4100ACE71A /* UserDefaultData */ = {
 			isa = PBXGroup;
 			children = (
@@ -11907,6 +11916,7 @@
 		9C24CFAC1D76C9ED0095D150 /* Books */ = {
 			isa = PBXGroup;
 			children = (
+				7DD75FF21ED417210063D62D /* Deprecated */,
 				9C24CFAD1D76C9ED0095D150 /* Model */,
 				9C24CFB01D76C9ED0095D150 /* Store */,
 				9C24CFB31D76C9ED0095D150 /* View */,
@@ -11950,8 +11960,6 @@
 				9C26FDAE1DD2F9E80086F94F /* SSJBooksHeaderView.m */,
 				9CC9F4771DD4176C001E1606 /* SSJBooksParentSelectCell.h */,
 				9CC9F4781DD4176C001E1606 /* SSJBooksParentSelectCell.m */,
-				9CC9F47B1DD42681001E1606 /* SSJBooksParentSelectView.h */,
-				9CC9F47C1DD42681001E1606 /* SSJBooksParentSelectView.m */,
 				9CA40E5D1DD481FC0001E9E3 /* SSJBooksColorAndIconSelectView.h */,
 				9CA40E5E1DD481FC0001E9E3 /* SSJBooksColorAndIconSelectView.m */,
 				9C77DB751DE686C100CD64A2 /* SSJBooksAdView.h */,
