@@ -296,7 +296,7 @@
         return;
     }
     NSString *regex = @"[0-9]*";
-    NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",regex];
+    NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",regex];
     if ([pred evaluateWithObject:self.codeInput.text]) {
         [CDAutoHideMessageHUD showMessage:@""];
         return;
