@@ -41,3 +41,48 @@
 }
 
 @end
+
+@implementation NSArray (SSJAutoLayout)
+
+- (void)ssj_distributeViewsAlongAxis:(SSJAxisType)axisType withFixedItemLength:(CGFloat)fixedItemLength {
+    MAS_VIEW *superView = [self ssj_commonSuperviewOfViews];
+    switch (axisType) {
+        case SSJAxisTypeHorizontal:
+            for (int i = 0; i < self.count; i ++) {
+                MAS_VIEW *v = self[i];
+                [v mas_remakeConstraints:^(MASConstraintMaker *make) {
+                    CGFloat multiplier = (i + 1) / (CGFloat)(self.count + 1);
+                    CGFloat offset = fixedItemLength * (i - (CGFloat)self.count) / ((CGFloat)self.count + 1);
+                    make.left.mas_equalTo(superView.mas_right).multipliedBy(multiplier).offset(offset);
+                    make.width.mas_equalTo(fixedItemLength);
+                }];
+            }
+            break;
+            
+        case SSJAxisTypeVertical:
+            
+            break;
+    }
+}
+
+- (MAS_VIEW *)ssj_commonSuperviewOfViews
+{
+    MAS_VIEW *commonSuperview = nil;
+    MAS_VIEW *previousView = nil;
+    for (id object in self) {
+        if ([object isKindOfClass:[MAS_VIEW class]]) {
+            MAS_VIEW *view = (MAS_VIEW *)object;
+            if (previousView) {
+                commonSuperview = [view mas_closestCommonSuperview:commonSuperview];
+            } else {
+                commonSuperview = view;
+            }
+            previousView = view;
+        }
+    }
+    NSAssert(commonSuperview, @"Can't constrain views that do not share a common superview. Make sure that all the views in this array have been added into the same view hierarchy.");
+    return commonSuperview;
+}
+
+@end
+
