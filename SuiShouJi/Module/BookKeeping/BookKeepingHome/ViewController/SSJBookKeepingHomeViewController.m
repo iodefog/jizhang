@@ -59,6 +59,7 @@
 #import "SSJDataSynchronizer.h"
 #import "SSJUserTableManager.h"
 #import "SSJCustomThemeManager.h"
+#import "SSJBooksTypeStore.h"
 
 #warning test
 #import "SSJSharebooksInviteViewController.h"
@@ -185,7 +186,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
     //  数据库初始化完成后再查询数据
     if (self.isDatabaseInitFinished) {
         [self getDataFromDataBase];
-        [self reloadBudgetData];
+        [self updateTabbar];
         [self updateBooksItem];
     }
 }
@@ -204,6 +205,8 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
     [self.floatingDateView dismiss];
     [self.mutiFunctionButton dismiss];
     _dateViewHasDismiss = YES;
+    
+    
 }
 
 -(void)viewDidLayoutSubviews{
@@ -881,56 +884,92 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
         [self getDataFromDataBase];
     }
     [self stopLoading];
-    [self reloadBudgetData];
+    [self updateTabbar];
     [self updateBooksItem];
 }
 
 - (void)reloadDataAfterInitDatabase {
     [self getDataFromDataBase];
-    [self reloadBudgetData];
+    [self updateTabbar];
     [self updateBooksItem];
 }
 
 - (void)reloadAfterBooksTypeChange{
     _hasChangeBooksType = YES;
     [self getDataFromDataBase];
-    [self reloadBudgetData];
+    [self updateTabbar];
     [self updateBooksItem];
 }
 
-- (void)reloadBudgetData {
-    [SSJUserTableManager currentBooksId:^(NSString * _Nonnull booksId) {
-        [SSJBudgetDatabaseHelper queryForCurrentBudgetListWithSuccess:^(NSArray<SSJBudgetModel *> * _Nonnull result) {
-            self.homeBar.budgetButton.model = [result firstObject];
-            for (int i = 0; i < result.count; i++) {
-                SSJBudgetModel *model = [result objectAtIndex:i];
-                NSArray *remindedBookTypes = _budgetRemindInfo[SSJUSERID()];
-                
-                if (model.isRemind
-                    && !model.isAlreadyReminded
-                    && ![remindedBookTypes containsObject:booksId]
-                    && (model.remindMoney >= model.budgetMoney - model.payMoney)
-                    && (![[UIApplication sharedApplication].keyWindow.subviews containsObject:self.evaluatePopView])
-                    && (![[UIApplication sharedApplication].keyWindow.subviews containsObject:self.keepingHomePopView])) {
-                    self.remindView.model = model;
-                    [self.remindView show];
-                    self.isBudgetOverrunsPopViewShow = YES;
-                    NSMutableArray *tmpRemindBookTypes = [remindedBookTypes mutableCopy];
-                    if (!tmpRemindBookTypes) {
-                        tmpRemindBookTypes = [NSMutableArray array];
-                    }
-                    [tmpRemindBookTypes addObject:booksId];
-                    [_budgetRemindInfo setObject:tmpRemindBookTypes forKey:SSJUSERID()];
-                    
-                    break;
-                }
-            }
-        } failure:^(NSError * _Nullable error) {
-            SSJPRINT(@"%@",error.localizedDescription);
+- (void)updateTabbar {
+    [[[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [SSJBooksTypeStore queryCurrentBooksItemWithSuccess:^(id booksItem) {
+            [subscriber sendNext:booksItem];
+            [subscriber sendCompleted];
+        } failure:^(NSError *error){
+            [subscriber sendError:error];
         }];
-    } failure:^(NSError * _Nonnull error) {
+        return nil;
+    }] flattenMap:^RACStream *(id booksItem) {
+        return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+            if ([booksItem isKindOfClass:[SSJBooksTypeItem class]]) {
+                [SSJBudgetDatabaseHelper queryForCurrentBudgetListWithSuccess:^(NSArray<SSJBudgetModel *> * _Nonnull result) {
+                    [subscriber sendNext:result];
+                    [subscriber sendCompleted];
+                } failure:^(NSError * _Nonnull error) {
+                    [subscriber sendError:error];
+                }];
+            } else if ([booksItem isKindOfClass:[SSJShareBookItem class]]){
+                [subscriber sendNext:booksItem];
+                [subscriber sendCompleted];
+            }
+            return nil;
+        }];
+    }] subscribeNext:^(id result) {
+        if ([result isKindOfClass:[NSArray class]]) {
+            [self updateBudgetWithModels:result];
+        } else {
+            self.homeBar.budgetButton.model = result;
+        }
+
+    } error:^(NSError *error) {
         [SSJAlertViewAdapter showError:error];
     }];
+
+    
+}
+
+- (void)updateBudgetWithModels:(NSArray *)models {
+    [SSJUserTableManager currentBooksId:^(NSString * _Nonnull booksId) {
+        self.homeBar.budgetButton.model = [models firstObject];
+        for (int i = 0; i < models.count; i++) {
+            SSJBudgetModel *model = [models objectAtIndex:i];
+            NSArray *remindedBookTypes = _budgetRemindInfo[SSJUSERID()];
+            
+            if (model.isRemind
+                && !model.isAlreadyReminded
+                && ![remindedBookTypes containsObject:booksId]
+                && (model.remindMoney >= model.budgetMoney - model.payMoney)
+                && (![[UIApplication sharedApplication].keyWindow.subviews containsObject:self.evaluatePopView])
+                && (![[UIApplication sharedApplication].keyWindow.subviews containsObject:self.keepingHomePopView])) {
+                self.remindView.model = model;
+                [self.remindView show];
+                self.isBudgetOverrunsPopViewShow = YES;
+                NSMutableArray *tmpRemindBookTypes = [remindedBookTypes mutableCopy];
+                if (!tmpRemindBookTypes) {
+                    tmpRemindBookTypes = [NSMutableArray array];
+                }
+                [tmpRemindBookTypes addObject:booksId];
+                [_budgetRemindInfo setObject:tmpRemindBookTypes forKey:SSJUSERID()];
+                
+                break;
+            }
+        }
+        
+    } failure:^(NSError * _Nonnull error) {
+        
+    }];
+
 }
 
 -(void)reloadWithAnimation{

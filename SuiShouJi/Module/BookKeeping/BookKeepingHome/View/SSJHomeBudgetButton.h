@@ -11,7 +11,8 @@
 
 @interface SSJHomeBudgetButton : UIView
 
-@property (nonatomic,strong) SSJBudgetModel *model;
+
+@property (nonatomic,strong) id model;
 
 @property (nonatomic,strong) UIButton *button;
 
