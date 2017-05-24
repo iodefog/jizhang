@@ -1583,6 +1583,18 @@
 		7DBA55521D6BF53500C02D79 /* SSJLoanFundAccountSelectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DBA55511D6BF53500C02D79 /* SSJLoanFundAccountSelectionCell.m */; };
 		7DBA55561D6BF76300C02D79 /* SSJLoanFundAccountSelectionCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DBA55551D6BF76300C02D79 /* SSJLoanFundAccountSelectionCellItem.m */; };
 		7DBA555A1D6BFAF300C02D79 /* SSJLoanFundAccountSelectionViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DBA55591D6BFAF300C02D79 /* SSJLoanFundAccountSelectionViewItem.m */; };
+		7DBB03251ED52B26001EAD4F /* SSJInviteCodeJoinViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C51FECC1ED43F13005E3CFC /* SSJInviteCodeJoinViewController.m */; };
+		7DBB03261ED52B26001EAD4F /* SSJInviteCodeJoinViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C51FECC1ED43F13005E3CFC /* SSJInviteCodeJoinViewController.m */; };
+		7DBB03271ED52B27001EAD4F /* SSJInviteCodeJoinViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C51FECC1ED43F13005E3CFC /* SSJInviteCodeJoinViewController.m */; };
+		7DBB03281ED52B27001EAD4F /* SSJInviteCodeJoinViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C51FECC1ED43F13005E3CFC /* SSJInviteCodeJoinViewController.m */; };
+		7DBB03291ED52B28001EAD4F /* SSJInviteCodeJoinViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C51FECC1ED43F13005E3CFC /* SSJInviteCodeJoinViewController.m */; };
+		7DBB032A1ED52B28001EAD4F /* SSJInviteCodeJoinViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C51FECC1ED43F13005E3CFC /* SSJInviteCodeJoinViewController.m */; };
+		7DBB032B1ED52B28001EAD4F /* SSJInviteCodeJoinViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C51FECC1ED43F13005E3CFC /* SSJInviteCodeJoinViewController.m */; };
+		7DBB032C1ED52B2A001EAD4F /* SSJInviteCodeJoinViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C51FECC1ED43F13005E3CFC /* SSJInviteCodeJoinViewController.m */; };
+		7DBB032D1ED52B2A001EAD4F /* SSJInviteCodeJoinViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C51FECC1ED43F13005E3CFC /* SSJInviteCodeJoinViewController.m */; };
+		7DBB032E1ED52B2B001EAD4F /* SSJInviteCodeJoinViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C51FECC1ED43F13005E3CFC /* SSJInviteCodeJoinViewController.m */; };
+		7DBB032F1ED52B2B001EAD4F /* SSJInviteCodeJoinViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C51FECC1ED43F13005E3CFC /* SSJInviteCodeJoinViewController.m */; };
+		7DBB03301ED52B2C001EAD4F /* SSJInviteCodeJoinViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C51FECC1ED43F13005E3CFC /* SSJInviteCodeJoinViewController.m */; };
 		7DBB38221E55BE2F0075E638 /* YouYuJiZhangBao-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7DBB381E1E55BE2F0075E638 /* YouYuJiZhangBao-Info.plist */; };
 		7DBB38231E55BE2F0075E638 /* YouYuJiZhangBen-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7DBB381F1E55BE2F0075E638 /* YouYuJiZhangBen-Info.plist */; };
 		7DBB38241E55BE2F0075E638 /* YouYuJiZhangGuanJia-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7DBB38201E55BE2F0075E638 /* YouYuJiZhangGuanJia-Info.plist */; };
@@ -15699,6 +15711,7 @@
 				7D08A16C1E4999D30085A8FB /* SSJAddOrEditLoanViewController.m in Sources */,
 				7D08A16D1E4999D30085A8FB /* SSJUserInfoItem.m in Sources */,
 				7D08A16E1E4999D30085A8FB /* SSJChargeCircleNoneView.m in Sources */,
+				7DBB03291ED52B28001EAD4F /* SSJInviteCodeJoinViewController.m in Sources */,
 				7D08A16F1E4999D30085A8FB /* SSJMemberManagerViewController.m in Sources */,
 				7D08A1701E4999D30085A8FB /* SSJNewFundingViewController.m in Sources */,
 				7D08A1711E4999D30085A8FB /* SSJLoanListViewController.m in Sources */,
@@ -16325,6 +16338,7 @@
 				7DA13AC31E35AED7000490A4 /* SSJAddOrEditLoanViewController.m in Sources */,
 				7DA13AC41E35AED7000490A4 /* SSJUserInfoItem.m in Sources */,
 				7DA13AC51E35AED7000490A4 /* SSJChargeCircleNoneView.m in Sources */,
+				7DBB03281ED52B27001EAD4F /* SSJInviteCodeJoinViewController.m in Sources */,
 				7DA13AC61E35AED7000490A4 /* SSJMemberManagerViewController.m in Sources */,
 				7DA13AC71E35AED7000490A4 /* SSJNewFundingViewController.m in Sources */,
 				7DA13AC81E35AED7000490A4 /* SSJLoanListViewController.m in Sources */,
@@ -16951,6 +16965,7 @@
 				7DBB3B4D1E55C2EE0075E638 /* SSJMemberChargeSyncTable.m in Sources */,
 				7DBB3B4E1E55C2EE0075E638 /* SSJBookKeepingButton.m in Sources */,
 				7DBB3B4F1E55C2EE0075E638 /* SSJAddOrEditLoanViewController.m in Sources */,
+				7DBB032A1ED52B28001EAD4F /* SSJInviteCodeJoinViewController.m in Sources */,
 				7DBB3B501E55C2EE0075E638 /* SSJUserInfoItem.m in Sources */,
 				7DBB3B511E55C2EE0075E638 /* SSJChargeCircleNoneView.m in Sources */,
 				7DBB3B521E55C2EE0075E638 /* SSJMemberManagerViewController.m in Sources */,
@@ -17577,6 +17592,7 @@
 				7DBB3FE71E55C4E00075E638 /* SSJCalenderTableViewCell.m in Sources */,
 				7DBB3FE81E55C4E00075E638 /* SSJMemberChargeSyncTable.m in Sources */,
 				7DBB3FE91E55C4E00075E638 /* SSJBookKeepingButton.m in Sources */,
+				7DBB03261ED52B26001EAD4F /* SSJInviteCodeJoinViewController.m in Sources */,
 				7DBB3FEA1E55C4E00075E638 /* SSJAddOrEditLoanViewController.m in Sources */,
 				7DBB3FEB1E55C4E00075E638 /* SSJUserInfoItem.m in Sources */,
 				7DBB3FEC1E55C4E00075E638 /* SSJChargeCircleNoneView.m in Sources */,
@@ -18269,6 +18285,7 @@
 				7DFB17771EB0341E00292DD3 /* SSJPersonalDetailViewController.m in Sources */,
 				7DFB17781EB0341E00292DD3 /* SSJCalenderScreenShotHelper.m in Sources */,
 				7DFB17791EB0341E00292DD3 /* SSJLoginPopView.m in Sources */,
+				7DBB03301ED52B2C001EAD4F /* SSJInviteCodeJoinViewController.m in Sources */,
 				7DFB177A1EB0341E00292DD3 /* SSJGlobalServiceManager.m in Sources */,
 				7DFB177B1EB0341E00292DD3 /* SCYWinCowryHomeBannerView.m in Sources */,
 				7DFB177C1EB0341E00292DD3 /* SSJBookkeepingTreeHelpCellItem.m in Sources */,
@@ -18921,6 +18938,7 @@
 				9C13F6121E8267D300AC5FA9 /* UIScrollView+TPKeyboardAvoidingAdditions.m in Sources */,
 				9C13F6141E8267D300AC5FA9 /* UIScrollView+MJRefresh.m in Sources */,
 				9C13F6151E8267D300AC5FA9 /* SSJUserBillSyncTable.m in Sources */,
+				7DBB032B1ED52B28001EAD4F /* SSJInviteCodeJoinViewController.m in Sources */,
 				9C13F6161E8267D300AC5FA9 /* SSJBudgetEditAccountDaySelectionView.m in Sources */,
 				9C13F6171E8267D300AC5FA9 /* SSJCircleChargeSettingViewController.m in Sources */,
 				9C13F6181E8267D300AC5FA9 /* SSJLoanInterestTypeAlertView.m in Sources */,
@@ -19524,6 +19542,7 @@
 				9C4C211F1E9E30C8000C5F15 /* SSJCalenderScreenShotHelper.m in Sources */,
 				9C4C21201E9E30C8000C5F15 /* SSJLoginPopView.m in Sources */,
 				9CD088821ECE8E440050B4EB /* SSJSharebooksMemberDetailViewController.m in Sources */,
+				7DBB032E1ED52B2B001EAD4F /* SSJInviteCodeJoinViewController.m in Sources */,
 				9C4C21211E9E30C8000C5F15 /* SSJGlobalServiceManager.m in Sources */,
 				9C4C21221E9E30C8000C5F15 /* SCYWinCowryHomeBannerView.m in Sources */,
 				9C4C21231E9E30C8000C5F15 /* SSJBookkeepingTreeHelpCellItem.m in Sources */,
@@ -20076,6 +20095,7 @@
 				9C7D2DC01E8DF8A80093001F /* SSJBudgetDetailHeaderView.m in Sources */,
 				9C7D2DC11E8DF8A80093001F /* SSJUtil.m in Sources */,
 				9C7D2DC21E8DF8A80093001F /* SSJChatMessageItem.m in Sources */,
+				7DBB03251ED52B26001EAD4F /* SSJInviteCodeJoinViewController.m in Sources */,
 				9C7D2DC41E8DF8A80093001F /* UIImage+SSJTheme.m in Sources */,
 				9C7D2DC51E8DF8A80093001F /* SSJBudgetEditLabelCell.m in Sources */,
 				9C7D2DC61E8DF8A80093001F /* SSJCalendarTableViewCell.m in Sources */,
@@ -20705,6 +20725,7 @@
 				9C7D30371E8DF96B0093001F /* SSJBudgetDetailHeaderView.m in Sources */,
 				9C7D30381E8DF96B0093001F /* SSJUtil.m in Sources */,
 				9C7D30391E8DF96B0093001F /* SSJChatMessageItem.m in Sources */,
+				7DBB032C1ED52B2A001EAD4F /* SSJInviteCodeJoinViewController.m in Sources */,
 				9C7D303B1E8DF96B0093001F /* UIImage+SSJTheme.m in Sources */,
 				9C7D303C1E8DF96B0093001F /* SSJBudgetEditLabelCell.m in Sources */,
 				9C7D303D1E8DF96B0093001F /* SSJCalendarTableViewCell.m in Sources */,
@@ -21410,6 +21431,7 @@
 				9C80FDBD1E95E88E00B1BAAC /* SSJPersonalDetailViewController.m in Sources */,
 				9C80FDBE1E95E88E00B1BAAC /* SSJCalenderScreenShotHelper.m in Sources */,
 				9C80FDBF1E95E88E00B1BAAC /* SSJLoginPopView.m in Sources */,
+				7DBB032D1ED52B2A001EAD4F /* SSJInviteCodeJoinViewController.m in Sources */,
 				9C80FDC01E95E88E00B1BAAC /* SSJGlobalServiceManager.m in Sources */,
 				9C80FDC11E95E88E00B1BAAC /* SCYWinCowryHomeBannerView.m in Sources */,
 				9C80FDC21E95E88E00B1BAAC /* SSJBookkeepingTreeHelpCellItem.m in Sources */,
@@ -22038,6 +22060,7 @@
 				9C9CEF7D1EA5F73A007657FE /* SSJPersonalDetailViewController.m in Sources */,
 				9C9CEF7E1EA5F73A007657FE /* SSJCalenderScreenShotHelper.m in Sources */,
 				9C9CEF7F1EA5F73A007657FE /* SSJLoginPopView.m in Sources */,
+				7DBB032F1ED52B2B001EAD4F /* SSJInviteCodeJoinViewController.m in Sources */,
 				9C9CEF801EA5F73A007657FE /* SSJGlobalServiceManager.m in Sources */,
 				9C9CEF811EA5F73A007657FE /* SCYWinCowryHomeBannerView.m in Sources */,
 				9C9CEF821EA5F73A007657FE /* SSJBookkeepingTreeHelpCellItem.m in Sources */,
@@ -22900,6 +22923,7 @@
 				9C9323F91D9DFA9500EBD216 /* SSJSearchResultHeader.m in Sources */,
 				9CECFC721D6D41A700DB2C8B /* SCYMotionEncryptionStrokeLayer.m in Sources */,
 				9CECFC751D6D41A700DB2C8B /* SSJDatabaseVersion3.m in Sources */,
+				7DBB03271ED52B27001EAD4F /* SSJInviteCodeJoinViewController.m in Sources */,
 				9CECFC761D6D41A700DB2C8B /* SSJWaveWaterPath.m in Sources */,
 				91F7FD331DFA9EF9005F4B6B /* SSJProductAdviceNetWorkService.m in Sources */,
 				9CECFC771D6D41A700DB2C8B /* SSJNetworkReachabilityManager.m in Sources */,
