@@ -78,8 +78,6 @@ typedef void(^SSJRecordMakingCustomNavigationBarAction)(SSJRecordMakingCustomNav
 
 @property (nonatomic, copy) NSString *iconName;
 
-@property (nonatomic, copy) NSString *booksId;
-
-+ (instancetype)itemWithTitle:(NSString *)title iconName:(NSString *)iconName booksId:(NSString *)booksId;
++ (instancetype)itemWithTitle:(NSString *)title iconName:(NSString *)iconName;
 
 @end

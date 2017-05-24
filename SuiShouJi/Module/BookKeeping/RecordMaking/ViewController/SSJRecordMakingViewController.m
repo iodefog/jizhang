@@ -80,6 +80,8 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 
 @property (nonatomic, strong) NSString *defaultBooksId;// 当前用户默认的账本id
 
+@property (nonatomic, strong) NSMutableArray<NSObject<SSJBooksItemProtocol> *> *booksItems;
+
 @property (nonatomic) long currentYear;
 @property (nonatomic) long currentMonth;
 @property (nonatomic) long currentDay;
@@ -102,6 +104,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         self.statisticsTitle = @"记一笔";
         self.hidesBottomBarWhenPushed = YES;
         self.hidesNavigationBarWhenPushed = YES;
+        self.booksItems = [NSMutableArray array];
         [[YYKeyboardManager defaultManager] addObserver:self];
     }
     return self;
@@ -178,6 +181,11 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     _paymentTypeView.height = _incomeTypeView.height = _scrollView.height = self.view.height - self.billTypeInputView.bottom;
 }
 
+- (void)updateAppearanceAfterThemeChanged {
+    [super updateAppearanceAfterThemeChanged];
+    [self updateAppearance];
+}
+
 #pragma mark - Getter
 - (SSJRecordMakingCustomNavigationBar *)customNaviBar {
     if (!_customNaviBar) {
@@ -185,12 +193,20 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         _customNaviBar = [[SSJRecordMakingCustomNavigationBar alloc] init];
         _customNaviBar.selectBookHandle = ^(SSJRecordMakingCustomNavigationBar *naviBar) {
             [SSJAnaliyticsManager event:@"addRecord_changeBooks"];//记一笔-切换账本
-            SSJBooksTypeItem *bookItem = [naviBar.bookItems ssj_safeObjectAtIndex:naviBar.selectedTitleIndex];
+            NSObject<SSJBooksItemProtocol> *bookItem = [wself.booksItems ssj_safeObjectAtIndex:naviBar.selectedTitleIndex];
             wself.item.booksId = bookItem.booksId;
+            if ([bookItem isKindOfClass:[SSJBooksTypeItem class]]) {
+                wself.item.configId = nil;
+                wself.item.idType = SSJChargeIdTypeNormal;
+            } else if ([bookItem isKindOfClass:[SSJShareBookItem class]]) {
+                wself.item.configId = bookItem.booksId;
+                wself.item.idType = SSJChargeIdTypeShareBooks;
+            }
             [wself.currentInput becomeFirstResponder];
             [[wself loadBillTypeSignal] subscribeError:^(NSError *error) {
                 [SSJAlertViewAdapter showError:error];
             } completed:NULL];
+            wself.accessoryView.memberBtn.hidden = (wself.item.idType == SSJChargeIdTypeShareBooks);
         };
         _customNaviBar.selectBillTypeHandle = ^(SSJRecordMakingCustomNavigationBar *naviBar) {
             [wself segmentPressed];
@@ -208,7 +224,6 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 - (SSJHomeDatePickerView *)dateSelectedView {
     if (!_dateSelectedView) {
         _dateSelectedView = [[SSJHomeDatePickerView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 288)];
-        _dateSelectedView.horuAndMinuBgViewBgColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainFillColor alpha:1];
         _dateSelectedView.datePickerMode = SSJDatePickerModeYearDateAndTime;
         _dateSelectedView.warningDate = [NSDate date];
         _dateSelectedView.maxDate = [NSDate date];
@@ -369,8 +384,6 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 - (SSJRecordMakingBillTypeInputAccessoryView *)accessoryView {
     if (!_accessoryView) {
         _accessoryView = [[SSJRecordMakingBillTypeInputAccessoryView alloc] initWithFrame:CGRectMake(0, self.view.height, self.view.width, 86)];
-        _accessoryView.buttonTitleNormalColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-        _accessoryView.buttonTitleSelectedColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         [_accessoryView.accountBtn addTarget:self action:@selector(selectFundAccountAction) forControlEvents:UIControlEventTouchUpInside];
         [_accessoryView.dateBtn addTarget:self action:@selector(selectBillDateAction) forControlEvents:UIControlEventTouchUpInside];
         [_accessoryView.photoBtn addTarget:self action:@selector(selectPhotoAction) forControlEvents:UIControlEventTouchUpInside];
@@ -669,11 +682,43 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
             return nil;
         }];
         
-        NSMutableArray *tmpItems = [NSMutableArray array];
+        [self.booksItems removeAllObjects];
         [[RACSignal merge:@[sg_1, sg_2]] subscribeNext:^(NSArray *booksItems) {
-            [tmpItems addObjectsFromArray:booksItems];
+            [self.booksItems addObjectsFromArray:booksItems];
         } completed:^{
-            [self updateNaviBarTitlesWithItems:tmpItems];
+            NSInteger selectedIndex = -1;
+            NSMutableArray *bookItems = [[NSMutableArray alloc] initWithCapacity:self.booksItems.count];
+            
+            for (int i = 0; i < self.booksItems.count; i ++) {
+                NSObject<SSJBooksItemProtocol> *item = self.booksItems[i];
+                NSString *iconName = nil;
+                if ([item isKindOfClass:[SSJBooksTypeItem class]]) {
+                    iconName = @"record_making_private_book";
+                } else if ([item isKindOfClass:[SSJShareBookItem class]]) {
+                    iconName = @"record_making_shared_book";
+                }
+                [bookItems addObject:[SSJRecordMakingCustomNavigationBarBookItem itemWithTitle:item.booksName iconName:iconName]];
+                if ([item.booksId isEqualToString:self.item.booksId]) {
+                    selectedIndex = i;
+                    if ([item isKindOfClass:[SSJBooksTypeItem class]]) {
+                        self.item.configId = nil;
+                        self.item.idType = SSJChargeIdTypeNormal;
+                    } else if ([item isKindOfClass:[SSJShareBookItem class]]) {
+                        self.item.configId = self.item.booksId;
+                        self.item.idType = SSJChargeIdTypeShareBooks;
+                    }
+                }
+            }
+            
+            self.accessoryView.memberBtn.hidden = (self.item.idType == SSJChargeIdTypeShareBooks);
+            self.customNaviBar.bookItems = bookItems;
+            self.customNaviBar.selectedTitleIndex = selectedIndex;
+            if ((self.item.idType == SSJChargeIdTypeShareBooks && self.edited)
+                || bookItems.count <= 1) {
+                self.customNaviBar.canSelectTitle = NO;
+            } else {
+                self.customNaviBar.canSelectTitle = YES;
+            }
             [subscriber sendNext:nil];
             [subscriber sendCompleted];
         }];
@@ -1106,32 +1151,10 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     }
 }
 
-- (void)updateNaviBarTitlesWithItems:(NSArray<NSObject<SSJBooksItemProtocol> *> *)items {
-    NSInteger selectedIndex = -1;
-    NSMutableArray *bookItems = [[NSMutableArray alloc] initWithCapacity:items.count];
-    
-    for (int i = 0; i < items.count; i ++) {
-        NSObject<SSJBooksItemProtocol> *item = items[i];
-        NSString *iconName = nil;
-        if ([item isKindOfClass:[SSJBooksTypeItem class]]) {
-            iconName = @"record_making_private_book";
-        } else if ([item isKindOfClass:[SSJShareBookItem class]]) {
-            iconName = @"record_making_shared_book";
-        }
-        [bookItems addObject:[SSJRecordMakingCustomNavigationBarBookItem itemWithTitle:item.booksName iconName:iconName booksId:item.booksId]];
-        if ([item.booksId isEqualToString:self.item.booksId]) {
-            selectedIndex = i;
-        }
-    }
-    
-    self.customNaviBar.bookItems = bookItems;
-    self.customNaviBar.selectedTitleIndex = selectedIndex;
-    if ((self.item.idType == SSJChargeIdTypeShareBooks && self.edited)
-        || bookItems.count <= 1) {
-        self.customNaviBar.canSelectTitle = NO;
-    } else {
-        self.customNaviBar.canSelectTitle = YES;
-    }
+- (void)updateAppearance {
+    [self.customNaviBar updateAppearance];
+    [self.accessoryView updateAppearance];
+    self.dateSelectedView.horuAndMinuBgViewBgColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainFillColor alpha:1];
 }
 
 //-(void)closeButtonClicked:(id)sender{
