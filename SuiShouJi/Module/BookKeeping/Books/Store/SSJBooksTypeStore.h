@@ -13,6 +13,9 @@
 
 @interface SSJBooksTypeStore : NSObject
 
++ (void)queryCurrentBooksItemWithSuccess:(void(^)(id booksItem))success
+                             failure:(void (^)(NSError *error))failure;
+
 #pragma mark - 个人账本
 /**
  *  查询账本列表(个人账本)

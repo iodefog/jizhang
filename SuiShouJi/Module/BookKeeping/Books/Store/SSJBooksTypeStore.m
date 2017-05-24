@@ -17,6 +17,70 @@
 
 @implementation SSJBooksTypeStore
 
++ (void)queryCurrentBooksItemWithSuccess:(void(^)(id booksItem))success
+                                 failure:(void (^)(NSError *error))failure {
+    [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
+        NSString *userId = SSJUSERID();
+        NSString *booksid = [db stringForQuery:@"select ccurrentbooksid from bk_user where cuserid = ?",userId];
+        FMResultSet *rs;
+        id currentBooksItem;
+        if ([db boolForQuery:@"select count(1) from bk_books_type where cbooksid = ?",booksid]) {
+            rs = [db executeQuery:@"select * from bk_books_type where cbooksid = ?",booksid];
+            if (!rs) {
+                if (failure) {
+                    SSJDispatch_main_async_safe(^{
+                        failure([db lastError]);
+                    });
+                }
+                return;
+            }
+            SSJBooksTypeItem *booksItem = [[SSJBooksTypeItem alloc] init];
+            booksItem.booksId = [rs stringForColumn:@"cbooksid"];
+            booksItem.booksName = [rs stringForColumn:@"cbooksname"];
+            booksItem.booksOrder = [rs intForColumn:@"iorder"];
+            booksItem.booksParent = [rs intForColumn:@"iparenttype"];
+            currentBooksItem = booksItem;
+        } else {
+            rs = [db executeQuery:@"select sb.*, count(bm.cmemberid) as memberCount from bk_share_books sb, bk_share_books_member bm where sb.cbooksid = ? and sb.cbooksid = bm.cbooksid and bm.istate = 1",booksid];
+            if (!rs) {
+                if (failure) {
+                    SSJDispatch_main_async_safe(^{
+                        failure([db lastError]);
+                    });
+                }
+                return;
+            }
+            while ([rs next]) {
+                SSJShareBookItem *shareBookItem = [[SSJShareBookItem alloc] init];
+                shareBookItem.booksId = [rs stringForColumn:@"cbooksid"];
+                shareBookItem.booksName = [rs stringForColumn:@"cbooksname"];
+                shareBookItem.booksParent = [rs intForColumn:@"iparenttype"];
+                shareBookItem.booksOrder = [rs intForColumn:@"iorder"];
+                shareBookItem.memberCount = [rs intForColumn:@"memberCount"];
+                //处理渐变色
+                SSJFinancingGradientColorItem *colorItem = [[SSJFinancingGradientColorItem alloc] init];
+                NSArray *colorArray = [[rs stringForColumn:@"cbookscolor"] componentsSeparatedByString:@","];
+                if (colorArray.count > 1) {
+                    colorItem.startColor = [colorArray ssj_safeObjectAtIndex:0];
+                    colorItem.endColor = [colorArray ssj_safeObjectAtIndex:1];
+                } else if (colorArray.count == 1) {
+                    colorItem.startColor = [colorArray ssj_safeObjectAtIndex:0];
+                    colorItem.endColor = [colorArray ssj_safeObjectAtIndex:0];
+                }
+                shareBookItem.booksColor = colorItem;
+                currentBooksItem = shareBookItem;
+            }
+        }
+        [rs close];
+        if (success) {
+            SSJDispatch_main_async_safe(^{
+                success(currentBooksItem);
+            });
+        }
+    }];
+}
+
+
 #pragma mark - 个人账本
 + (void)queryForBooksListWithSuccess:(void(^)(NSMutableArray<SSJBooksTypeItem *> *result))success
                                   failure:(void (^)(NSError *error))failure{
@@ -352,7 +416,7 @@
 + (void)queryForShareBooksListWithSuccess:(void(^)(NSMutableArray<SSJShareBookItem *> *result))success failure:(void(^)(NSError *error))failure {
     NSMutableArray *shareBooksList = [NSMutableArray array];
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
-       FMResultSet *result = [db executeQuery:@"select t.*,(select count(*) from bk_share_books_member t1 where t1.cbooksid = t.cbooksid and t1.istate = 1) as memberCount from bk_share_books t where t.cbooksid in (select s.cbooksid from bk_share_books_member s where s.cmemberid = ? and s.istate = 1) and t.operatortype <> 2 order by t.iorder asc, t.cwritedate asc",SSJUSERID()];
+       FMResultSet *result = [db executeQuery:@"select t.*,(select count(1) from bk_share_books_member t1 where t1.cbooksid = t.cbooksid and t1.istate = 1) as memberCount from bk_share_books t where t.cbooksid in (select s.cbooksid from bk_share_books_member s where s.cmemberid = ? and s.istate = 1) and t.operatortype <> 2 order by t.iorder asc, t.cwritedate asc",SSJUSERID()];
         if (!result) {
             SSJDispatch_main_async_safe(^{
                 failure([db lastError]);

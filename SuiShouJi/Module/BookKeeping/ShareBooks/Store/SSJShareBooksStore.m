@@ -17,7 +17,7 @@
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
         NSString *userId = SSJUSERID();
         NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:0];
-        FMResultSet *resultSet = [db executeQuery:@"select bm.* , sk.cmark from bk_share_books_member bm, bk_share_books sk where bm.cbooksid = ? and bm.istate = 1 and sk.cuserid = ? and sk.cbooksid = bm.cbooksid and sk.cfreindid = bm.cmemberid order by bm.cjoindate desc",booksItem.booksId,userId];
+        FMResultSet *resultSet = [db executeQuery:@"select bm.* , sk.cmark , sk.cadmin from bk_share_books_member bm, bk_share_books sk where bm.cbooksid = ? and bm.istate = 1 and sk.cuserid = ? and sk.cbooksid = bm.cbooksid and sk.cfreindid = bm.cmemberid order by bm.cjoindate desc",booksItem.booksId,userId];
         if (!resultSet) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{
@@ -37,6 +37,7 @@
             memberItem.nickName = [resultSet stringForColumn:@"cmark"];
             [tempArr addObject:memberItem];
         }
+        
         
         if ([booksItem.adminId isEqualToString:userId]) {
             SSJShareBookMemberItem *memberItem = [[SSJShareBookMemberItem alloc] init];
