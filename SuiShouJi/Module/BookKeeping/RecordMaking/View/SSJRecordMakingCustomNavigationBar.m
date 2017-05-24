@@ -12,11 +12,10 @@
 
 @implementation SSJRecordMakingCustomNavigationBarBookItem
 
-+ (instancetype)itemWithTitle:(NSString *)title iconName:(NSString *)iconName booksId:(NSString *)booksId {
++ (instancetype)itemWithTitle:(NSString *)title iconName:(NSString *)iconName {
     SSJRecordMakingCustomNavigationBarBookItem *item = [[SSJRecordMakingCustomNavigationBarBookItem alloc] init];
     item.title = title;
     item.iconName = iconName;
-    item.booksId = booksId;
     return item;
 }
 
