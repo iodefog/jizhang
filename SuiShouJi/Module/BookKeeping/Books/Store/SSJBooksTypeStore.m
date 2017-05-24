@@ -99,11 +99,11 @@
         if ([item.booksId isEqualToString:userId]) {
             booksOrder = 1;
         }
-        if (![db boolForQuery:@"select count(*) from BK_BOOKS_TYPE where CBOOKSID = ?", booksid]) {
+        if (![db boolForQuery:@"select count(*) from BK_BOOKS_TYPE where CBOOKSID = ?", booksid]) {//添加
             [typeInfo setObject:@(booksOrder) forKey:@"iorder"];
             [typeInfo setObject:@(0) forKey:@"operatortype"];
             sql = [self inertSQLStatementWithTypeInfo:typeInfo tableName:@"BK_BOOKS_TYPE"];
-        } else {
+        } else { //修改
             [typeInfo setObject:@(1) forKey:@"operatortype"];
             sql = [self updateSQLStatementWithTypeInfo:typeInfo tableName:@"BK_BOOKS_TYPE"];
         }
@@ -115,7 +115,7 @@
             }
             return;
         }
-        if (![db boolForQuery:@"select count(*) from BK_BOOKS_TYPE where CBOOKSID = ?", booksid]) {
+        if (![db boolForQuery:@"select count(*) from BK_BOOKS_TYPE where CBOOKSID = ?", booksid]) {//判断添加账本还是修改账本
             if (![self generateBooksTypeForBooksItem:item indatabase:db forUserId:userId]) {
                 if (failure) {
                     SSJDispatch_main_async_safe(^{
@@ -280,16 +280,15 @@
     }];
 }
 
-+ (BOOL)generateBooksTypeForBooksItem:(__kindof SSJBaseCellItem *)item
++ (BOOL)generateBooksTypeForBooksItem:(id<SSJBooksItemProtocol>)item
                            indatabase:(FMDatabase *)db
-                               forUserId:(NSString *)userId{
-    if ([item isKindOfClass:[SSJBooksTypeItem class]]) { //个人账本
-        SSJBooksTypeItem *privateBookItem = (SSJBooksTypeItem *)item;
-        
+                               forUserId:(NSString *)userId {
+//        SSJBooksTypeItem *privateBookItem = (SSJBooksTypeItem *)item;
+    
         // 补充每个账本独有的记账类型
         NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.sss"];
-        if (![db intForQuery:@"select count(1) from bk_user_bill where cbooksid = ?",privateBookItem.booksId]) {
-            if (![db executeUpdate:@"insert into bk_user_bill select ?, id, istate, ?, ?, 1, defaultorder,? from bk_bill_type where ibookstype = ? and icustom = 0",userId,writeDate,@(SSJSyncVersion()),privateBookItem.booksId,@(privateBookItem.booksParent)]) {
+        if (![db intForQuery:@"select count(1) from bk_user_bill where cbooksid = ?",item.booksId]) {
+            if (![db executeUpdate:@"insert into bk_user_bill select ?, id, istate, ?, ?, 1, defaultorder,? from bk_bill_type where ibookstype = ? and icustom = 0",userId,writeDate,@(SSJSyncVersion()),item.booksId,@(item.booksParent)]) {
                 return NO;
             }
         }
@@ -315,16 +314,13 @@
             NSString *iparenttype = [dict objectForKey:@"kParentTypeKey"];
             NSArray *parentArr = [iparenttype componentsSeparatedByString:@","];
             for (NSString *parenttype in parentArr) {
-                if ([parenttype integerValue] == privateBookItem.booksParent) {
-                    if (![db executeUpdate:@"insert into bk_user_bill values (?,?,1,?,?,1,?,?)",userId,cbillid,writeDate,@(SSJSyncVersion()),defualtOrder,privateBookItem.booksId]) {
+                if ([parenttype integerValue] == item.booksParent) {
+                    if (![db executeUpdate:@"insert into bk_user_bill values (?,?,1,?,?,1,?,?)",userId,cbillid,writeDate,@(SSJSyncVersion()),defualtOrder,item.booksId]) {
                         return NO;
                     }
                 }
             }
         }
-    } else if ([item isKindOfClass:[SSJShareBookItem class]]) {//共享账本
-        
-    }
     return YES;
 }
 
@@ -395,7 +391,7 @@
                        failure:(void (^)(NSError *error))failure {
     NSString * booksid = item.booksId;
     if (!item.booksId.length) {
-       booksid = item.booksId = SSJUUID();
+       item.booksId = SSJUUID();
     }
     if (!item.creatorId.length) {
         item.creatorId = SSJUSERID();
@@ -427,11 +423,11 @@
         if ([item.booksId isEqualToString:userId]) {
             item.booksOrder = 0;
         }
-        if (![db boolForQuery:@"select count(*) from bk_share_books where CBOOKSID = ?", booksid]) {
+        if (![db boolForQuery:@"select count(*) from bk_share_books where CBOOKSID = ?", booksid]) {//添加
             [shareBookInfo setObject:@(item.booksOrder) forKey:@"iorder"];
             [shareBookInfo setObject:@(0) forKey:@"operatortype"];
             sqlStr = [self inertSQLStatementWithTypeInfo:shareBookInfo tableName:@"bk_share_books"];
-        } else {
+        } else {//修改
             [shareBookInfo setObject:@(1) forKey:@"operatortype"];
             sqlStr = [self updateSQLStatementWithTypeInfo:shareBookInfo tableName:@"bk_share_books"];
         }
@@ -445,23 +441,21 @@
             return;
         }
         
-        
         //账本类别
-//        if (![db boolForQuery:@"select count(*) from bk_share_books where CBOOKSID = ?", booksid]) {
-//            if (![self generateBooksTypeForBooksItem:item indatabase:db forUserId:userId]) {
-//                if (failure) {
-//                    SSJDispatch_main_async_safe(^{
-//                        failure([db lastError]);
-//                    });
-//                }
-//                return;
-//            }
-//        }
+        if (![db boolForQuery:@"select count(*) from bk_share_books where CBOOKSID = ?", booksid]) {
+            if (![self generateBooksTypeForBooksItem:item indatabase:db forUserId:SSJUSERID()]) {
+                if (failure) {
+                    SSJDispatch_main_async_safe(^{
+                        failure([db lastError]);
+                    });
+                }
+                return;
+            }
+        }
         
         //成员信息
-        
         if (success) {
-            [self saveShareBooksMemberWithBookId:booksid success:nil failure:nil];
+            [self saveShareBooksMemberWithBookId:item.booksId success:nil failure:nil];
             SSJDispatch_main_async_safe(^{
                 success();
             });
@@ -544,6 +538,7 @@
     }];
     return item.mj_keyValues;
 }
+
 
 
 
