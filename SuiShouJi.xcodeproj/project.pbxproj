@@ -5333,6 +5333,7 @@
 		9C4EBC951D7D1C4B00BE4982 /* SSJThirdPartLoginItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C4EBC941D7D1C4B00BE4982 /* SSJThirdPartLoginItem.m */; };
 		9C4EBCA01D7D1D0D00BE4982 /* SSJThirdPartLoginItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C4EBC941D7D1C4B00BE4982 /* SSJThirdPartLoginItem.m */; };
 		9C4EBCA21D7D1D0E00BE4982 /* SSJThirdPartLoginItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C4EBC941D7D1C4B00BE4982 /* SSJThirdPartLoginItem.m */; };
+		9C51FECD1ED43F13005E3CFC /* SSJInviteCodeJoinViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C51FECC1ED43F13005E3CFC /* SSJInviteCodeJoinViewController.m */; };
 		9C5377231D75202E002B230A /* SSJCreditCardListDetailItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C5377221D75202E002B230A /* SSJCreditCardListDetailItem.m */; };
 		9C5377261D752037002B230A /* SSJCreditCardListDetailItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C5377221D75202E002B230A /* SSJCreditCardListDetailItem.m */; };
 		9C53772D1D752BF4002B230A /* SSJCreditCardDetailHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C53772C1D752BF3002B230A /* SSJCreditCardDetailHeader.m */; };
@@ -9625,6 +9626,8 @@
 		9C4C22721E9F1B54000C5F15 /* 9188jizhangben.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = 9188jizhangben.entitlements; sourceTree = "<group>"; };
 		9C4EBC931D7D1C4B00BE4982 /* SSJThirdPartLoginItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJThirdPartLoginItem.h; sourceTree = "<group>"; };
 		9C4EBC941D7D1C4B00BE4982 /* SSJThirdPartLoginItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJThirdPartLoginItem.m; sourceTree = "<group>"; };
+		9C51FECB1ED43F13005E3CFC /* SSJInviteCodeJoinViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJInviteCodeJoinViewController.h; sourceTree = "<group>"; };
+		9C51FECC1ED43F13005E3CFC /* SSJInviteCodeJoinViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJInviteCodeJoinViewController.m; sourceTree = "<group>"; };
 		9C5377211D75202E002B230A /* SSJCreditCardListDetailItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCreditCardListDetailItem.h; sourceTree = "<group>"; };
 		9C5377221D75202E002B230A /* SSJCreditCardListDetailItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCreditCardListDetailItem.m; sourceTree = "<group>"; };
 		9C53772B1D752BF3002B230A /* SSJCreditCardDetailHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCreditCardDetailHeader.h; sourceTree = "<group>"; };
@@ -12174,6 +12177,8 @@
 				9C39700F1ECADB0C00AB267A /* SSJSharebooksInviteViewController.m */,
 				9CD088751ECE8E310050B4EB /* SSJSharebooksMemberDetailViewController.h */,
 				9CD088761ECE8E310050B4EB /* SSJSharebooksMemberDetailViewController.m */,
+				9C51FECB1ED43F13005E3CFC /* SSJInviteCodeJoinViewController.h */,
+				9C51FECC1ED43F13005E3CFC /* SSJInviteCodeJoinViewController.m */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -23284,6 +23289,7 @@
 				BD0433921C1A8DA50051E7AB /* SSJGlobalServiceManager.m in Sources */,
 				7DB6140C1D2F4BB6009A6F87 /* SCYWinCowryHomeBannerView.m in Sources */,
 				9CD9BC001CFD2DAA0061803B /* SSJBookkeepingTreeHelpCellItem.m in Sources */,
+				9C51FECD1ED43F13005E3CFC /* SSJInviteCodeJoinViewController.m in Sources */,
 				7DFB16361EAF2EB900292DD3 /* SSJDatabase.m in Sources */,
 				9C9471861CEB224C00D69079 /* SSJFundingDetailHeader.m in Sources */,
 				7D5F33531CEAE6C10086B67E /* SSJCalenderDetailViewController.m in Sources */,
