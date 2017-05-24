@@ -189,6 +189,16 @@
 
 + (NSString *)updateSQLStatementWithTypeInfo:(NSDictionary *)typeInfo tableName:(NSString *)tableName {
     NSMutableArray *keyValues = [NSMutableArray arrayWithCapacity:[typeInfo count]];
+    //处理渐变颜色
+    if ([[typeInfo allKeys] containsObject:@"cbookscolor"]) {
+        id bookColorDic = [typeInfo objectForKey:@"cbookscolor"];
+        if ([bookColorDic isKindOfClass:[NSDictionary class]]) {
+            if ([[bookColorDic allKeys] containsObject:@"endColor"] && [[bookColorDic allKeys] containsObject:@"startColor"] ) {
+                [typeInfo setValue:[NSString stringWithFormat:@"%@,%@",bookColorDic[@"startColor"],bookColorDic[@"endColor"]] forKey:@"cbookscolor"];
+            }
+        }
+    }
+    
     for (NSString *key in [typeInfo allKeys]) {
         [keyValues addObject:[NSString stringWithFormat:@"%@ =:%@", key, key]];
     }
@@ -342,7 +352,7 @@
 + (void)queryForShareBooksListWithSuccess:(void(^)(NSMutableArray<SSJShareBookItem *> *result))success failure:(void(^)(NSError *error))failure {
     NSMutableArray *shareBooksList = [NSMutableArray array];
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
-       FMResultSet *result = [db executeQuery:@"select t.*,(select count(*) from bk_share_books_member t1 where t1.cbooksid = t.cbooksid and t1.istate = 1) as memberCount from bk_share_books t where t.cbooksid in (select s.cbooksid from bk_share_books_member s where s.cmemberid = ? and s.istate = 1) and t.operatortype <> 2 order by t.iorder asc, t.cwritedate asc",SSJUSERID()];//select * from bk_share_books where operatortype <> 2 order by iorder asc, cwritedate asc
+       FMResultSet *result = [db executeQuery:@"select t.*,(select count(*) from bk_share_books_member t1 where t1.cbooksid = t.cbooksid and t1.istate = 1) as memberCount from bk_share_books t where t.cbooksid in (select s.cbooksid from bk_share_books_member s where s.cmemberid = ? and s.istate = 1) and t.operatortype <> 2 order by t.iorder asc, t.cwritedate asc",SSJUSERID()];
         if (!result) {
             SSJDispatch_main_async_safe(^{
                 failure([db lastError]);
@@ -410,19 +420,14 @@
     }
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
         NSString *sqlStr;
-        NSString *userId = SSJUSERID();
         if ([db intForQuery:@"select count(1) from bk_share_books where cbooksname = ?  and ccreator = ? and cadmin = ?and cbooksid <> ?",item.booksName,item.creatorId,item.adminId,item.booksId]) {
             SSJDispatch_main_async_safe(^{
                 [CDAutoHideMessageHUD showMessage:@"已有相同账本名称了，换一个吧"];
             });
             return;
         }
+        item.booksOrder = [db intForQuery:@"select max(iorder) from bk_share_books"] + 1;
         
-        item.booksOrder = [db intForQuery:@"select max(iorder) from bk_share_books where ccreator = ?",item.creatorId] + 1;
-        
-        if ([item.booksId isEqualToString:userId]) {
-            item.booksOrder = 0;
-        }
         if (![db boolForQuery:@"select count(*) from bk_share_books where CBOOKSID = ?", booksid]) {//添加
             [shareBookInfo setObject:@(item.booksOrder) forKey:@"iorder"];
             [shareBookInfo setObject:@(0) forKey:@"operatortype"];
@@ -455,7 +460,10 @@
         
         //成员信息
         if (success) {
-            [self saveShareBooksMemberWithBookId:item.booksId success:nil failure:nil];
+            //如果是新建时候
+            if (![db boolForQuery:@"select count(*) from bk_share_books where CBOOKSID = ?", booksid]) {
+                [self saveShareBooksMemberWithBookId:item.booksId success:nil failure:nil];
+            }
             SSJDispatch_main_async_safe(^{
                 success();
             });
@@ -517,6 +525,9 @@
         } else {
             memberItem.icon = @"defualt_portrait";
         }
+        
+        //新建
+        //编辑
         if (![db executeUpdate:@"insert into BK_SHARE_BOOKS_MEMBER values (?,?,?,?,?)",memberItem.memberId,memberItem.booksId,memberItem.joinDate,@(memberItem.state),memberItem.icon]) {
             SSJDispatch_main_async_safe(^{
                 failure([db lastError]);

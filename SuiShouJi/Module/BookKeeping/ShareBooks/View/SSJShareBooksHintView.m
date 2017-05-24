@@ -110,7 +110,7 @@
 
 - (void)setTitle:(NSString *)title {
     self.titleLab.text = title;
-    [self updateConstraints];
+    [self setNeedsUpdateConstraints];
 }
 
 /*

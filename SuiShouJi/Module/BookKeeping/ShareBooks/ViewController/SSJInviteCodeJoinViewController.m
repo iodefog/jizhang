@@ -45,13 +45,9 @@
     [self.mm_drawerController setOpenDrawerGestureModeMask:MMOpenDrawerGestureModeNone];
     [self.mm_drawerController setCloseDrawerGestureModeMask:MMCloseDrawerGestureModeNone];
     
-    [self updateViewConstraints];
+    [self.view setNeedsUpdateConstraints];
 
     // Do any additional setup after loading the view.
-}
-
-- (void)viewDidLayoutSubviews {
-    [super viewDidLayoutSubviews];
 }
 
 - (void)updateViewConstraints {
