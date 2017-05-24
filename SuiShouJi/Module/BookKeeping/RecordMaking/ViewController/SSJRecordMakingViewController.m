@@ -1106,12 +1106,12 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     }
 }
 
-- (void)updateNaviBarTitlesWithItems:(NSArray *)items {
+- (void)updateNaviBarTitlesWithItems:(NSArray<NSObject<SSJBooksItemProtocol> *> *)items {
     NSInteger selectedIndex = -1;
     NSMutableArray *bookItems = [[NSMutableArray alloc] initWithCapacity:items.count];
     
     for (int i = 0; i < items.count; i ++) {
-        SSJBooksTypeItem *item = items[i];
+        NSObject<SSJBooksItemProtocol> *item = items[i];
         NSString *iconName = nil;
         if ([item isKindOfClass:[SSJBooksTypeItem class]]) {
             iconName = @"record_making_private_book";
