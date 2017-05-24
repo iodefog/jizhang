@@ -45,7 +45,7 @@
     [self.mm_drawerController setOpenDrawerGestureModeMask:MMOpenDrawerGestureModeNone];
     [self.mm_drawerController setCloseDrawerGestureModeMask:MMCloseDrawerGestureModeNone];
     
-//    [self updateViewConstraints];
+    [self updateViewConstraints];
 
     // Do any additional setup after loading the view.
 }
@@ -57,7 +57,7 @@
 - (void)updateViewConstraints {
     
     [self.backView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.height.mas_equalTo(255);
+        make.height.mas_equalTo(200);
         make.width.mas_equalTo(self.view.mas_width).offset(-35);
         make.top.mas_equalTo(SSJ_NAVIBAR_BOTTOM + 30);
         make.centerX.mas_equalTo(self.view);
@@ -67,11 +67,12 @@
         make.width.mas_equalTo(self.backView.mas_width).offset(-44);
         make.height.mas_equalTo(57);
         make.centerX.mas_equalTo(self.backView.mas_centerX);
+        make.top.mas_equalTo(self.backView).offset(36);
     }];
     
     [self.customCodeLab mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self.codeInput.mas_bottom).offset(20);
-        make.center.mas_equalTo(self.codeInput);
+        make.centerX.mas_equalTo(self.codeInput);
     }];
     
     [self.sendButton mas_updateConstraints:^(MASConstraintMaker *make) {
@@ -102,6 +103,7 @@
         _codeInput = [[UITextField alloc] init];
         _codeInput.textColor = [UIColor ssj_colorWithHex:@"#333333"];
         _codeInput.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
+        _codeInput.textAlignment = NSTextAlignmentCenter;
         [_codeInput ssj_setBorderColor:[UIColor ssj_colorWithHex:@"#DDDDDD"]];
         [_codeInput ssj_setBorderStyle:SSJBorderStyleBottom];
         [_codeInput ssj_setBorderWidth:1.f];
@@ -151,6 +153,13 @@
     }
     return _sendButton;
 }
+
+#pragma mark - Event
+- (void)sendButtonClicked:(id)sender {
+
+    
+}
+
 
 
 - (void)didReceiveMemoryWarning {
