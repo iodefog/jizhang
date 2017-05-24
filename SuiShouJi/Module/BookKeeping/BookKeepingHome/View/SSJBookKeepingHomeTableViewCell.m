@@ -110,7 +110,12 @@ static const CGFloat kCategoryImageButtonRadius = 16;
     _item = item;
     
     self.topLabel.text = [NSString stringWithFormat:@"%@%.2f",_item.typeName,[_item.money doubleValue]];
-    self.bottomLabel.text = _item.chargeMemo;
+    if (_item.idType == SSJChargeIdTypeShareBooks) {
+        
+    } else {
+        self.bottomLabel.text = _item.chargeMemo;
+    }
+    
     self.topLabel.textAlignment = self.bottomLabel.textAlignment = self.item.incomeOrExpence ? NSTextAlignmentLeft : NSTextAlignmentRight;
     
     UIImage *image = [[UIImage imageWithCGImage:[UIImage imageNamed:_item.imageName].CGImage scale:1.5*SSJ_SCREEN_SCALE orientation:UIImageOrientationUp] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
