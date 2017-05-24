@@ -148,7 +148,7 @@
 //            item.billId = [result stringForColumn:@"IBILLID"];
 //            item.chargeImage = [result stringForColumn:@"CIMGURL"];
 //            item.chargeMemo = [result stringForColumn:@"CMEMO"];
-//            item.configId = [result stringForColumn:@"ICONFIGID"];
+//            item.sundryId = [result stringForColumn:@"ICONFIGID"];
 //            item.chargeCircleType = [result intForColumn:@"ITYPE"];
 //            item.isOnOrNot = [result intForColumn:@"ISTATE"];
 //            [tempArray addObject:item];

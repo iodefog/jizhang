@@ -67,9 +67,6 @@
 //记账图片(缩略图)
 @property (nonatomic,strong) NSString *chargeThumbImage;
 
-//循环记账配置ID
-@property (nonatomic,strong) NSString *configId;
-
 //账本id
 @property(nonatomic, strong) NSString *booksId;
 
@@ -101,9 +98,6 @@
 
 //删除的成员
 @property(nonatomic, strong) NSArray *deletedMembers;
-
-//流水对应的借贷id
-@property(nonatomic, strong) NSString *loanId;
 
 //借贷产生的流水类型
 @property(nonatomic) SSJLoanCompoundChargeType loanChargeType;

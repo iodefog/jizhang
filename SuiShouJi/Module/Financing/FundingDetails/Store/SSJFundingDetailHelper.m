@@ -58,12 +58,6 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
             item.idType = [resultSet intForColumn:@"ichargetype"];
             item.fundParent = [resultSet stringForColumn:@"CPARENT"];
             double money = [item.money doubleValue];
-            if (item.idType == SSJChargeIdTypeCircleConfig) {
-                item.configId = [resultSet stringForColumn:@"sundryid"];
-            }
-            if (item.idType == SSJChargeIdTypeLoan) {
-                item.loanId = [resultSet stringForColumn:@"sundryid"];
-            }
             item.sundryId = [resultSet stringForColumn:@"sundryid"];
             if (item.incomeOrExpence) {
                 item.money = [NSString stringWithFormat:@"-%.2f",money];
@@ -72,7 +66,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                 item.money = [NSString stringWithFormat:@"+%.2f",money];
                 fundingItem.fundingIncome = fundingItem.fundingIncome + money;
             }
-            if (item.loanId.length) {
+            if (item.idType == SSJChargeIdTypeLoan && item.sundryId.length) {
                 // 先判断他是借入还是借出
                 if (item.loanType == SSJLoanTypeBorrow) {
                     //借入
@@ -243,54 +237,53 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                 item.money = [NSString stringWithFormat:@"+%.2f",money];
                 newcardItem.cardIncome = newcardItem.cardIncome + money;
             }
-            if (item.idType == SSJChargeIdTypeCircleConfig) {
-                item.configId = [resultSet stringForColumn:@"sundryid"];
-            }
-            if (item.idType == SSJChargeIdTypeLoan) {
-                item.loanId = [resultSet stringForColumn:@"sundryid"];
-            }
-            if (item.loanId.length) {
+            
+            if (item.idType == SSJChargeIdTypeLoan && item.sundryId.length) {
                 // 先判断他是借入还是借出
-                if (item.loanType) {
-                    //借入
-                    if ([item.typeName isEqualToString:@"转入"]) {
-                        // 对于借入来说转入是创建
-                        item.loanChargeType = SSJLoanCompoundChargeTypeCreate;
-                    }else if ([item.typeName isEqualToString:@"转出"]){
-                        // 转出是结清
-                        item.loanChargeType = SSJLoanCompoundChargeTypeCloseOut;
-                    }else if ([item.typeName isEqualToString:@"借贷利息收入"] || [item.typeName isEqualToString:@"借贷利息支出"]){
-                        item.loanChargeType = SSJLoanCompoundChargeTypeInterest;
-                    }else if ([item.typeName isEqualToString:@"借贷变更收入"]){
-                        // 变更收入是追加
-                        item.loanChargeType = SSJLoanCompoundChargeTypeAdd;
-                    }else if ([item.typeName isEqualToString:@"借贷变更支出"]){
-                        // 变更支出是收款
-                        item.loanChargeType = SSJLoanCompoundChargeTypeRepayment;
-                    }else if ([item.typeName isEqualToString:@"借贷余额转入"] || [item.typeName isEqualToString:@"借贷余额转出"]){
-                        // 余额转入转出是余额变更
-                        item.loanChargeType = SSJLoanCompoundChargeTypeBalanceIncrease;
-                    }
-                }else{
-                    //借出
-                    if ([item.typeName isEqualToString:@"转入"]) {
-                        // 对于借入来说转入是结清
-                        item.loanChargeType = SSJLoanCompoundChargeTypeCloseOut;
-                    }else if ([item.typeName isEqualToString:@"转出"]){
-                        // 转出是创建
-                        item.loanChargeType = SSJLoanCompoundChargeTypeCreate;
-                    }else if ([item.typeName isEqualToString:@"借贷利息收入"] || [item.typeName isEqualToString:@"借贷利息支出"]){
-                        item.loanChargeType = SSJLoanCompoundChargeTypeInterest;
-                    }else if ([item.typeName isEqualToString:@"借贷变更收入"]){
-                        // 变更收入是收款
-                        item.loanChargeType = SSJLoanCompoundChargeTypeRepayment;
-                    }else if ([item.typeName isEqualToString:@"借贷变更支出"]){
-                        // 变更支出是追加
-                        item.loanChargeType = SSJLoanCompoundChargeTypeAdd;
-                    }else if ([item.typeName isEqualToString:@"借贷余额转入"] || [item.typeName isEqualToString:@"借贷余额转出"]){
-                        // 余额转入转出是余额变更
-                        item.loanChargeType = SSJLoanCompoundChargeTypeBalanceIncrease;
-                    }
+                switch (item.loanType) {
+                    case SSJLoanTypeLend:
+                        //借出
+                        if ([item.typeName isEqualToString:@"转入"]) {
+                            // 对于借入来说转入是结清
+                            item.loanChargeType = SSJLoanCompoundChargeTypeCloseOut;
+                        }else if ([item.typeName isEqualToString:@"转出"]){
+                            // 转出是创建
+                            item.loanChargeType = SSJLoanCompoundChargeTypeCreate;
+                        }else if ([item.typeName isEqualToString:@"借贷利息收入"] || [item.typeName isEqualToString:@"借贷利息支出"]){
+                            item.loanChargeType = SSJLoanCompoundChargeTypeInterest;
+                        }else if ([item.typeName isEqualToString:@"借贷变更收入"]){
+                            // 变更收入是收款
+                            item.loanChargeType = SSJLoanCompoundChargeTypeRepayment;
+                        }else if ([item.typeName isEqualToString:@"借贷变更支出"]){
+                            // 变更支出是追加
+                            item.loanChargeType = SSJLoanCompoundChargeTypeAdd;
+                        }else if ([item.typeName isEqualToString:@"借贷余额转入"] || [item.typeName isEqualToString:@"借贷余额转出"]){
+                            // 余额转入转出是余额变更
+                            item.loanChargeType = SSJLoanCompoundChargeTypeBalanceIncrease;
+                        }
+                        break;
+                        
+                    case SSJLoanTypeBorrow:
+                        //借入
+                        if ([item.typeName isEqualToString:@"转入"]) {
+                            // 对于借入来说转入是创建
+                            item.loanChargeType = SSJLoanCompoundChargeTypeCreate;
+                        }else if ([item.typeName isEqualToString:@"转出"]){
+                            // 转出是结清
+                            item.loanChargeType = SSJLoanCompoundChargeTypeCloseOut;
+                        }else if ([item.typeName isEqualToString:@"借贷利息收入"] || [item.typeName isEqualToString:@"借贷利息支出"]){
+                            item.loanChargeType = SSJLoanCompoundChargeTypeInterest;
+                        }else if ([item.typeName isEqualToString:@"借贷变更收入"]){
+                            // 变更收入是追加
+                            item.loanChargeType = SSJLoanCompoundChargeTypeAdd;
+                        }else if ([item.typeName isEqualToString:@"借贷变更支出"]){
+                            // 变更支出是收款
+                            item.loanChargeType = SSJLoanCompoundChargeTypeRepayment;
+                        }else if ([item.typeName isEqualToString:@"借贷余额转入"] || [item.typeName isEqualToString:@"借贷余额转出"]){
+                            // 余额转入转出是余额变更
+                            item.loanChargeType = SSJLoanCompoundChargeTypeBalanceIncrease;
+                        }
+                        break;
                 }
             }else{
                 if ([item.typeName isEqualToString:@"转入"]) {

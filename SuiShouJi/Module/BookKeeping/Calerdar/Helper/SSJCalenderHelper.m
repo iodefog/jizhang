@@ -56,7 +56,7 @@
             item.idType = [resultSet intForColumn:@"ichargetype"];
             item.billDetailDate = [resultSet stringForColumn:@"cdetaildate"];
             if (item.idType == SSJChargeIdTypeCircleConfig) {
-                item.configId = [resultSet stringForColumn:@"cid"];
+                item.sundryId = [resultSet stringForColumn:@"cid"];
             }
             NSString *billDate = [resultSet stringForColumn:@"CBILLDATE"];
             item.booksId = [resultSet stringForColumn:@"cbooksid"];
