@@ -57,6 +57,7 @@
                 shareBookItem.booksParent = [rs intForColumn:@"iparenttype"];
                 shareBookItem.booksOrder = [rs intForColumn:@"iorder"];
                 shareBookItem.memberCount = [rs intForColumn:@"memberCount"];
+                shareBookItem.adminId = [rs stringForColumn:@"cadmin"];
                 //处理渐变色
                 SSJFinancingGradientColorItem *colorItem = [[SSJFinancingGradientColorItem alloc] init];
                 NSArray *colorArray = [[rs stringForColumn:@"cbookscolor"] componentsSeparatedByString:@","];

@@ -7,12 +7,14 @@
 //
 
 #import "SSJShareBooksMenberManagerViewController.h"
+#import "SSJSharebooksInviteViewController.h"
 
 #import "SSJSharebooksMemberCollectionViewCell.h"
 #import "SSJBooksTypeDeletionAuthCodeAlertView.h"
 
 #import "SSJShareBooksStore.h"
 
+static NSString * SSJSharebooksMemberCellIdentifier = @"SSJSharebooksMemberCellIdentifier";
 
 #define ITEM_SPACE 25
 #define ITEM_SIZE_HEIGHT 90
@@ -43,7 +45,8 @@
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-        self.statisticsTitle = @"账本成员";
+        self.title = @"账本成员";
+        self.hidesBottomBarWhenPushed = YES;
     }
     return self;
 }
@@ -54,6 +57,11 @@
     [self.view addSubview:self.collectionView];
     [self.view addSubview:self.deleteButton];
     // Do any additional setup after loading the view.
+}
+
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -68,7 +76,9 @@
 
 - (void)updateViewConstraints {
     [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.top.mas_equalTo(self.view);
+        make.right.mas_equalTo(self.view);
+        make.top.mas_equalTo(SSJ_NAVIBAR_BOTTOM);
+        make.width.mas_equalTo(self.view);
     }];
     
     [self.deleteButton mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -90,14 +100,21 @@
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     SSJShareBookMemberItem *item = [self.items objectAtIndex:indexPath.item];
-    SSJSharebooksMemberCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"" forIndexPath:indexPath];
+    SSJSharebooksMemberCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:SSJSharebooksMemberCellIdentifier forIndexPath:indexPath];
     cell.memberItem = item;
     return cell;
 }
 
 #pragma mark - UICollectionViewDelegate
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
-    
+    SSJShareBookMemberItem *item = [self.items objectAtIndex:indexPath.item];
+    if ([item.memberId isEqualToString:@"-1"]) {
+        SSJSharebooksInviteViewController *inviteVc = [[SSJSharebooksInviteViewController alloc] init];
+        inviteVc.item = self.item;
+        [self.navigationController pushViewController:inviteVc animated:YES];
+    } else {
+        
+    }
 }
 
 
@@ -108,8 +125,7 @@
         _collectionView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         _collectionView.dataSource=self;
         _collectionView.delegate=self;
-        [_collectionView registerClass:[SSJSharebooksMemberCollectionViewCell class] forCellWithReuseIdentifier:@""];
-        _collectionView.backgroundColor = [UIColor clearColor];
+        [_collectionView registerClass:[SSJSharebooksMemberCollectionViewCell class] forCellWithReuseIdentifier:SSJSharebooksMemberCellIdentifier];
     }
     return _collectionView;
 }
@@ -128,6 +144,7 @@
     if (!_deleteButton) {
         _deleteButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_deleteButton setTitle:@"退出并删除此账本" forState:UIControlStateNormal];
+        [_deleteButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] forState:UIControlStateNormal];
         if (SSJ_CURRENT_THEME.throughScreenButtonBackGroudColor.length) {
             [_deleteButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.throughScreenButtonBackGroudColor alpha:SSJ_CURRENT_THEME.throughScreenButtonAlpha] forState:UIControlStateNormal];
         } else {
@@ -137,7 +154,8 @@
         [_deleteButton ssj_setBorderWidth:1];
         [_deleteButton ssj_setBorderStyle:SSJBorderStyleTop];
         [_deleteButton ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
-        [_deleteButton addTarget:self action:@selector(deleteButtonClicked:) forControlEvents:UIControlEventTouchUpInside];    }
+        [_deleteButton addTarget:self action:@selector(deleteButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    }
     return _deleteButton;
 }
 
@@ -147,6 +165,9 @@
         NSMutableAttributedString *atrrStr = [[NSMutableAttributedString alloc] initWithString:@"数据无法恢复,删除并退出此共享账本,请输入下列验证码"];
         [atrrStr addAttribute:NSFontAttributeName value:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4] range:NSMakeRange(0, atrrStr.length)];
         [atrrStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:NSMakeRange(0, atrrStr.length)];
+        NSMutableParagraphStyle *paragraph = [[NSMutableParagraphStyle alloc] init];
+        paragraph.alignment = NSTextAlignmentCenter;
+        [atrrStr addAttribute:NSParagraphStyleAttributeName value:paragraph range:NSMakeRange(0, atrrStr.length)];
         _deleteComfirmAlert.message = atrrStr;
         _deleteComfirmAlert.finishVerification = ^{
             
@@ -166,12 +187,12 @@
         return;
     }
     
-    NSInteger rowCount = self.items.count % 4 + 1;
+    NSInteger rowCount = self.items.count / 4 + 1;
     
     float height = BOTTOM_MARGIN + TOP_MARGIN + rowCount * ITEM_SIZE_HEIGHT + (rowCount - 1) * ITEM_SPACE;
     
     [self.collectionView mas_updateConstraints:^(MASConstraintMaker *make) {
-        self.collectionView.height = height;
+        make.height.mas_equalTo(height);
     }];
 }
 
