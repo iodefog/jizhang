@@ -109,4 +109,16 @@
                        success:(void(^)())success
                        failure:(void(^)(NSError *error))failure;
 
+
+
+/**
+ 保存用户昵称
+
+ @param bookId <#bookId description#>
+ @param success <#success description#>
+ @param failure <#failure description#>
+ */
++ (void)saveShareBookMemberNickWithBookId:(NSString *)bookId
+                                  success:(void(^)())success
+                                  failure:(void(^)(NSError *error))failure;
 @end
