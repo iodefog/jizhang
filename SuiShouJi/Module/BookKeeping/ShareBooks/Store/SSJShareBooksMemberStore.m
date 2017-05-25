@@ -16,7 +16,7 @@
                             Success:(void(^)(SSJUserItem * memberItem))success
                             failure:(void(^)(NSError *error))failure 
  {
-    if (memberId.length) {
+    if (!memberId.length) {
         SSJPRINT(@"memberid不正确");
     }
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
@@ -62,6 +62,8 @@
             }   break;
                 
             case SSJBillTypeSurplus: {
+//                NSString *sql = [NSString stringWithFormat:@"select distinct strftime('Y-m', a.cbilldate) from bk_user_charge as a, bk_bill_type as b where a.cuserid = '%@' and a.ibillid = b.id and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and a.cid = '%@' and ichargetype = %ld and b.istate <> 2 order by a.cbilldate", SSJUSERID(), booksId, SSJChargeIdTypeShareBooks];
+//                result = [db executeQuery:sql];
                 result = [db executeQuery:@"select distinct strftime('%Y-%m', a.cbilldate) from bk_user_charge as a, bk_bill_type as b where a.cuserid = ? and a.ibillid = b.id and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and a.cid = ? and ichargetype = ? and b.istate <> 2 order by a.cbilldate", SSJUSERID(), booksId, SSJChargeIdTypeShareBooks];
                 
             }   break;

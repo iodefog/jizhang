@@ -8,6 +8,7 @@
 
 #import "SSJShareBooksMenberManagerViewController.h"
 #import "SSJSharebooksInviteViewController.h"
+#import "SSJSharebooksMemberDetailViewController.h"
 
 #import "SSJSharebooksMemberCollectionViewCell.h"
 #import "SSJBooksTypeDeletionAuthCodeAlertView.h"
@@ -113,7 +114,11 @@ static NSString * SSJSharebooksMemberCellIdentifier = @"SSJSharebooksMemberCellI
         inviteVc.item = self.item;
         [self.navigationController pushViewController:inviteVc animated:YES];
     } else {
-        
+        SSJSharebooksMemberDetailViewController *memberDetailVc = [[SSJSharebooksMemberDetailViewController alloc] init];
+        memberDetailVc.memberId = item.memberId;
+        memberDetailVc.booksId = item.booksId;
+        [self.navigationController pushViewController:memberDetailVc animated:YES];
+
     }
 }
 

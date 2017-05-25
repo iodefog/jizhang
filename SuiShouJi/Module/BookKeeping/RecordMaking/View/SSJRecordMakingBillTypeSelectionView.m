@@ -84,14 +84,17 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
     }
     
     SSJRecordMakingBillTypeSelectionCellItem *selectedItem = [_internalItems ssj_safeObjectAtIndex:indexPath.item];
-    if (selectedItem.selected) {
+    if (selectedItem.state == SSJRecordMakingBillTypeSelectionCellStateSelected) {
         return;
     }
+    
     for (SSJRecordMakingBillTypeSelectionCellItem *item in _internalItems) {
-        item.deselected = item.selected;
-        item.selected = [item.ID isEqualToString:selectedItem.ID];
+        if ([item.ID isEqualToString:selectedItem.ID]) {
+            item.state = SSJRecordMakingBillTypeSelectionCellStateSelected;
+        } else {
+            item.state = SSJRecordMakingBillTypeSelectionCellStateNormal;
+        }
     }
-    [_collectionView reloadData];
     [self scrollToSelectedItem];
     
     if (_selectAction) {
@@ -106,9 +109,10 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
 
 - (void)collectionView:(SSJEditableCollectionView *)collectionView didBeginEditingWhenPressAtIndexPath:(NSIndexPath *)indexPath {
     for (SSJRecordMakingBillTypeSelectionCellItem *item in _internalItems) {
-        item.editable = item != [_internalItems lastObject];
+        if (item != [_internalItems lastObject]) {
+            item.state = SSJRecordMakingBillTypeSelectionCellStateEditing;
+        }
     }
-    [_collectionView reloadData];
     _editing = YES;
     if (_beginEditingAction) {
         _beginEditingAction(self);
@@ -121,8 +125,7 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
 
 - (void)collectionView:(SSJEditableCollectionView *)collectionView willMoveCellAtIndexPath:(NSIndexPath *)indexPath {
     SSJRecordMakingBillTypeSelectionCellItem *item = _internalItems[indexPath.item];
-    item.editable = YES;
-    [_collectionView reloadItemsAtIndexPaths:@[indexPath]];
+    item.state = SSJRecordMakingBillTypeSelectionCellStateEditing;
 }
 
 - (BOOL)collectionView:(SSJEditableCollectionView *)collectionView shouldMoveCellAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
@@ -149,10 +152,8 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
 
 - (void)collectionViewDidEndEditing:(SSJEditableCollectionView *)collectionView {
     for (SSJRecordMakingBillTypeSelectionCellItem *item in _internalItems) {
-        item.editable = NO;
+        item.state = SSJRecordMakingBillTypeSelectionCellStateNormal;
     }
-    
-    [_collectionView reloadData];
     
     if (_endEditingAction) {
         _endEditingAction(self);
@@ -189,6 +190,17 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
     return tempItems;
 }
 
+- (SSJRecordMakingBillTypeSelectionCellItem *)selectedItem {
+    __block SSJRecordMakingBillTypeSelectionCellItem *tmpItem = nil;
+    [self.items enumerateObjectsWithOptions:NSEnumerationConcurrent usingBlock:^(SSJRecordMakingBillTypeSelectionCellItem * _Nonnull item, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (item.state == SSJRecordMakingBillTypeSelectionCellStateSelected) {
+            tmpItem = item;
+            *stop = YES;
+        }
+    }];
+    return tmpItem;
+}
+
 - (void)setContentInsets:(UIEdgeInsets)contentInsets {
     _collectionView.contentInset = contentInsets;
 }
@@ -214,9 +226,9 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
         [_internalItems removeObjectAtIndex:index];
         [_collectionView deleteItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:index inSection:0]]];
         
-        if (item.selected && _internalItems.count > 1) {
+        if (item.state == SSJRecordMakingBillTypeSelectionCellStateSelected && _internalItems.count > 1) {
             SSJRecordMakingBillTypeSelectionCellItem *item = [_internalItems firstObject];
-            item.selected = YES;
+            item.state = SSJRecordMakingBillTypeSelectionCellStateSelected;
         }
         return YES;
     }
@@ -227,7 +239,7 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
 - (void)scrollToSelectedItem {
     for (int idx = 0; idx < _internalItems.count; idx ++) {
         SSJRecordMakingBillTypeSelectionCellItem *item = _internalItems[idx];
-        if (item.selected) {
+        if (item.state == SSJRecordMakingBillTypeSelectionCellStateSelected) {
             [_collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:idx inSection:0] atScrollPosition:UICollectionViewScrollPositionTop animated:YES];
         }
     }

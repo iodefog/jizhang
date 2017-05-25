@@ -1,21 +1,21 @@
 //
-//  SSJDatabaseService.m
+//  SSJDatabaseSequence.m
 //  SuiShouJi
 //
 //  Created by old lang on 17/4/19.
 //  Copyright © 2017年 MZL. All rights reserved.
 //
 
-#import "SSJDatabaseService.h"
+#import "SSJDatabaseSequence.h"
 
 NSString *SSJDatabaseServiceFullName(NSString *name) {
-    return [NSString stringWithFormat:@"SSJDatabaseService-%@", name];
+    return [NSString stringWithFormat:@"SSJDatabaseSequence-%@", name];
 };
 
 #pragma mark - 
-#pragma mark - SSJDatabaseServiceTask
+#pragma mark - SSJDatabaseSequenceTask
 
-@interface SSJDatabaseServiceTask ()
+@interface SSJDatabaseSequenceTask ()
 
 @property (nonatomic, copy) id handler;
 
@@ -25,7 +25,7 @@ NSString *SSJDatabaseServiceFullName(NSString *name) {
 
 @property (nonatomic) SSJDatabaseServiceTaskType type;
 
-@property SSJDatabaseServiceTaskState state;
+@property SSJDatabaseSequenceTaskState state;
 
 @property (nonatomic, strong) NSBlockOperation *operation;
 
@@ -35,24 +35,24 @@ NSString *SSJDatabaseServiceFullName(NSString *name) {
 
 @end
 
-@implementation SSJDatabaseServiceTask
+@implementation SSJDatabaseSequenceTask
 
 - (void)dealloc {
     
 }
 
 + (instancetype)taskWithHandler:(id(^)(SSJDatabase *db))handler success:(void(^)(id result))success failure:(void(^)(NSError *))failure {
-    SSJDatabaseServiceTask *task = [[SSJDatabaseServiceTask alloc] initWithType:SSJDatabaseServiceTaskTypeNormal handler:handler success:success failure:failure];
+    SSJDatabaseSequenceTask *task = [[SSJDatabaseSequenceTask alloc] initWithType:SSJDatabaseServiceTaskTypeNormal handler:handler success:success failure:failure];
     return task;
 }
 
 + (instancetype)transactionTaskWithHandler:(id(^)(SSJDatabase *db, BOOL *rollback))handler success:(void(^)(id result))success failure:(void(^)(NSError *))failure {
-    SSJDatabaseServiceTask *task = [[SSJDatabaseServiceTask alloc] initWithType:SSJDatabaseServiceTaskTypeTranscation handler:handler success:success failure:failure];
+    SSJDatabaseSequenceTask *task = [[SSJDatabaseSequenceTask alloc] initWithType:SSJDatabaseServiceTaskTypeTranscation handler:handler success:success failure:failure];
     return task;
 }
 
 + (instancetype)deferredTransactionTaskWithHandler:(id(^)(SSJDatabase *db, BOOL *rollback))handler success:(void(^)(id result))success failure:(void(^)(NSError *))failure {
-    SSJDatabaseServiceTask *task = [[SSJDatabaseServiceTask alloc] initWithType:SSJDatabaseServiceTaskTypeDeferredTransaction handler:handler success:success failure:failure];
+    SSJDatabaseSequenceTask *task = [[SSJDatabaseSequenceTask alloc] initWithType:SSJDatabaseServiceTaskTypeDeferredTransaction handler:handler success:success failure:failure];
     return task;
 }
 
@@ -148,15 +148,15 @@ NSString *SSJDatabaseServiceFullName(NSString *name) {
 
 - (void)updateState {
     if (self.operation.isCancelled) {
-        self.state = SSJDatabaseServiceTaskStateCanceled;
+        self.state = SSJDatabaseSequenceTaskStateCanceled;
     } else if (self.operation.isFinished) {
-        self.state = SSJDatabaseServiceTaskStateFinished;
+        self.state = SSJDatabaseSequenceTaskStateFinished;
     } else if (self.operation.isExecuting) {
-        self.state = SSJDatabaseServiceTaskStateExecuting;
+        self.state = SSJDatabaseSequenceTaskStateExecuting;
     } else if (self.operation.isReady) {
-        self.state = SSJDatabaseServiceTaskStatePending;
+        self.state = SSJDatabaseSequenceTaskStatePending;
     } else {
-        self.state = SSJDatabaseServiceTaskStateUnknown;
+        self.state = SSJDatabaseSequenceTaskStateUnknown;
     }
 }
 
@@ -167,33 +167,33 @@ NSString *SSJDatabaseServiceFullName(NSString *name) {
 @end
 
 #pragma mark -
-#pragma mark - SSJDatabaseService
+#pragma mark - SSJDatabaseSequence
 
-static NSString *const kSSJDatabaseServiceLockName = @"com.ShuiShouJi.SSJDatabaseService.lock";
+static NSString *const kSSJDatabaseServiceLockName = @"com.ShuiShouJi.SSJDatabaseSequence.lock";
 
-@interface SSJDatabaseService ()
+@interface SSJDatabaseSequence ()
 
 @property (nonatomic, copy, nullable) NSString *name;
 
 @property (nonatomic, strong) NSOperationQueue *queue;
 
-@property (nonatomic, strong) NSMutableArray<SSJDatabaseServiceTask *> *innerTasks;
+@property (nonatomic, strong) NSMutableArray<SSJDatabaseSequenceTask *> *innerTasks;
 
 @property (nonatomic, strong) NSLock *lock;
 
 @end
 
-@implementation SSJDatabaseService
+@implementation SSJDatabaseSequence
 
 - (void)dealloc {
     
 }
 
-+ (instancetype)service {
-    return [self serviceWithName:nil];
++ (instancetype)sequence {
+    return [self sequenceWithName:nil];
 }
 
-+ (instancetype)serviceWithName:(NSString *)name {
++ (instancetype)sequenceWithName:(NSString *)name {
     return [[self alloc] initWithName:name];
 }
 
@@ -214,8 +214,8 @@ static NSString *const kSSJDatabaseServiceLockName = @"com.ShuiShouJi.SSJDatabas
     return [self.innerTasks copy];
 }
 
-- (void)addTask:(SSJDatabaseServiceTask *)task {
-    if (!task || ![task isKindOfClass:[SSJDatabaseServiceTask class]]) {
+- (void)addTask:(SSJDatabaseSequenceTask *)task {
+    if (!task || ![task isKindOfClass:[SSJDatabaseSequenceTask class]]) {
         return;
     }
     [self.queue addOperation:task.operation];
@@ -227,8 +227,8 @@ static NSString *const kSSJDatabaseServiceLockName = @"com.ShuiShouJi.SSJDatabas
     @weakify(self);
     [RACObserve(task, state) subscribeNext:^(id x) {
         @strongify(self);
-        if ([x integerValue] == SSJDatabaseServiceTaskStateFinished
-            || [x integerValue] == SSJDatabaseServiceTaskStateCanceled) {
+        if ([x integerValue] == SSJDatabaseSequenceTaskStateFinished
+            || [x integerValue] == SSJDatabaseSequenceTaskStateCanceled) {
             [self.lock lock];
             [self.innerTasks removeObject:task];
             [self.lock unlock];
@@ -236,22 +236,22 @@ static NSString *const kSSJDatabaseServiceLockName = @"com.ShuiShouJi.SSJDatabas
     }];
 }
 
-- (SSJDatabaseServiceTask *)addTaskWithHandler:(id(^)(SSJDatabase *db))handler success:(void(^)(id result))success failure:(void(^)(NSError *))failure {
-    SSJDatabaseServiceTask *task = [SSJDatabaseServiceTask taskWithHandler:handler success:success failure:failure];
+- (SSJDatabaseSequenceTask *)addTaskWithHandler:(id(^)(SSJDatabase *db))handler success:(void(^)(id result))success failure:(void(^)(NSError *))failure {
+    SSJDatabaseSequenceTask *task = [SSJDatabaseSequenceTask taskWithHandler:handler success:success failure:failure];
     task.identifier = SSJUUID();
     [self addTask:task];
     return task;
 }
 
-- (SSJDatabaseServiceTask *)addTransactionTaskWithHandler:(id(^)(SSJDatabase *db, BOOL *rollback))handler success:(void(^)(id result))success failure:(void(^)(NSError *))failure {
-    SSJDatabaseServiceTask *task = [SSJDatabaseServiceTask transactionTaskWithHandler:handler success:success failure:failure];
+- (SSJDatabaseSequenceTask *)addTransactionTaskWithHandler:(id(^)(SSJDatabase *db, BOOL *rollback))handler success:(void(^)(id result))success failure:(void(^)(NSError *))failure {
+    SSJDatabaseSequenceTask *task = [SSJDatabaseSequenceTask transactionTaskWithHandler:handler success:success failure:failure];
     task.identifier = SSJUUID();
     [self addTask:task];
     return task;
 }
 
-- (SSJDatabaseServiceTask *)addDeferredTransactionTaskWithHandler:(id(^)(SSJDatabase *db, BOOL *rollback))handler success:(void(^)(id result))success failure:(void(^)(NSError *))failure {
-    SSJDatabaseServiceTask *task = [SSJDatabaseServiceTask deferredTransactionTaskWithHandler:handler success:success failure:failure];
+- (SSJDatabaseSequenceTask *)addDeferredTransactionTaskWithHandler:(id(^)(SSJDatabase *db, BOOL *rollback))handler success:(void(^)(id result))success failure:(void(^)(NSError *))failure {
+    SSJDatabaseSequenceTask *task = [SSJDatabaseSequenceTask deferredTransactionTaskWithHandler:handler success:success failure:failure];
     task.identifier = SSJUUID();
     [self addTask:task];
     return task;
