@@ -117,4 +117,7 @@
 //杂项id(周期记账,借贷,还款id)根据上面的type来判断
 @property(nonatomic, strong) NSString *sundryId;
 
+// 共享账本中,别人记的账的用户名称
+@property(nonatomic, strong) NSString *otherUserName;
+
 @end

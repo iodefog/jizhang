@@ -623,7 +623,7 @@
         NSString *nickNameStr;
         if ([result next]) {
             NSString *nickStr = [result stringForColumn:@"cnickid"];
-            NSString *phoneStr = [result stringForColumn:@"cmomileno"];
+            NSString *phoneStr = [result stringForColumn:@"cmoileno"];
             if (nickStr.length) {
                 nickNameStr = nickStr;
             }else if (phoneStr.length) {
