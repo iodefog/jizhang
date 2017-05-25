@@ -13,6 +13,7 @@
 
 #import "SSJShareBooksStore.h"
 
+static NSString * SSJSharebooksMemberCellIdentifier = @"SSJSharebooksMemberCellIdentifier";
 
 #define ITEM_SPACE 25
 #define ITEM_SIZE_HEIGHT 90
@@ -56,6 +57,11 @@
     // Do any additional setup after loading the view.
 }
 
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     __weak typeof(self) weakSelf = self;
@@ -68,7 +74,9 @@
 
 - (void)updateViewConstraints {
     [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.top.mas_equalTo(self.view);
+        make.right.mas_equalTo(self.view);
+        make.top.mas_equalTo(SSJ_NAVIBAR_BOTTOM);
+        make.width.mas_equalTo(self.view);
     }];
     
     [self.deleteButton mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -90,7 +98,7 @@
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     SSJShareBookMemberItem *item = [self.items objectAtIndex:indexPath.item];
-    SSJSharebooksMemberCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"" forIndexPath:indexPath];
+    SSJSharebooksMemberCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:SSJSharebooksMemberCellIdentifier forIndexPath:indexPath];
     cell.memberItem = item;
     return cell;
 }
@@ -108,8 +116,7 @@
         _collectionView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         _collectionView.dataSource=self;
         _collectionView.delegate=self;
-        [_collectionView registerClass:[SSJSharebooksMemberCollectionViewCell class] forCellWithReuseIdentifier:@""];
-        _collectionView.backgroundColor = [UIColor clearColor];
+        [_collectionView registerClass:[SSJSharebooksMemberCollectionViewCell class] forCellWithReuseIdentifier:SSJSharebooksMemberCellIdentifier];
     }
     return _collectionView;
 }
@@ -166,12 +173,12 @@
         return;
     }
     
-    NSInteger rowCount = self.items.count % 4 + 1;
+    NSInteger rowCount = self.items.count / 4 + 1;
     
     float height = BOTTOM_MARGIN + TOP_MARGIN + rowCount * ITEM_SIZE_HEIGHT + (rowCount - 1) * ITEM_SPACE;
     
     [self.collectionView mas_updateConstraints:^(MASConstraintMaker *make) {
-        self.collectionView.height = height;
+        make.height.mas_equalTo(height);
     }];
 }
 

@@ -26,8 +26,9 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        [self.contentView addSubview:self.iconImageView];
-        [self.contentView addSubview:self.nickNameLabel];
+        [self addSubview:self.iconImageView];
+        [self addSubview:self.nickNameLabel];
+        [self addSubview:self.addImageView];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCellAppearanceAfterThemeChanged) name:SSJThemeDidChangeNotification object:nil];
     }
     return self;
@@ -35,6 +36,11 @@
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    self.iconImageView.layer.cornerRadius = self.iconImageView.height / 2;
 }
 
 - (UIImageView *)iconImageView {
@@ -70,7 +76,7 @@
 - (void)updateConstraints {
     [self.iconImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.height.mas_equalTo(self.contentView.mas_width);
-        make.right.top.mas_equalTo(0);
+        make.left.top.mas_equalTo(0);
     }];
     
     [self.nickNameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -99,8 +105,9 @@
     } else {
         self.nickNameLabel.text = @"";
         self.addImageView.hidden = NO;
-        self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
+        self.iconImageView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     }
+    [self setNeedsUpdateConstraints];
 }
 
 - (void)updateCellAppearanceAfterThemeChanged {
