@@ -38,7 +38,7 @@
         if (!self.item) {
             self.item = [[SSJBooksTypeItem alloc]init];
         }
-        self.item.booksColor = @"#fc7a60";
+//        self.item.booksColor = @"#fc7a60";
         self.item.booksIcoin = @"bk_moren";
     }
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"checkmark"] style:UIBarButtonItemStylePlain target:self action:@selector(rightButtonClicked:)];

@@ -121,7 +121,7 @@ static NSString * SSJBooksParentSelectCellIdentifier = @"SSJBooksParentSelectCel
 #pragma mark - UICollectionViewDelegate
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    SSJBooksParentSelectCell * cell = (SSJBooksParentSelectCell *)[collectionView cellForItemAtIndexPath:indexPath];
+//    SSJBooksParentSelectCell * cell = (SSJBooksParentSelectCell *)[collectionView cellForItemAtIndexPath:indexPath];
     switch (indexPath.item) {
         case 0:
             [SSJAnaliyticsManager event:@"book_type_richang"];
@@ -160,11 +160,12 @@ static NSString * SSJBooksParentSelectCellIdentifier = @"SSJBooksParentSelectCel
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    SSJBooksParentSelectCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:SSJBooksParentSelectCellIdentifier forIndexPath:indexPath];
+//    SSJBooksParentSelectCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:SSJBooksParentSelectCellIdentifier forIndexPath:indexPath];
 //    cell.image = [self.images ssj_safeObjectAtIndex:indexPath.item];
 //    cell.title = [self.titles ssj_safeObjectAtIndex:indexPath.item];
 //    cell.isSelected = NO;
-    return cell;
+//    return cell;
+    return [UICollectionViewCell new];
 }
 
 #pragma mark - UICollectionViewDelegateFlowLayout

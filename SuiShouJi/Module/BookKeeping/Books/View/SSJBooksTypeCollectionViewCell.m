@@ -176,7 +176,7 @@ static const CGFloat kCornerRadius = 10.f;
 }
 
 - (void)updateAppearance{
-    self.backgroundColor = [UIColor ssj_colorWithHex:_item.booksColor];
+//    self.backgroundColor = [UIColor ssj_colorWithHex:_item.booksColor];
     self.titleLabel.text = _item.booksName;
     [self.titleLabel sizeToFit];
     self.booksIcionImage.contents = (id)[[UIImage imageNamed:_item.booksIcoin] ssj_imageWithColor:[UIColor ssj_colorWithHex:@"#000000" alpha:0.15]].CGImage;
