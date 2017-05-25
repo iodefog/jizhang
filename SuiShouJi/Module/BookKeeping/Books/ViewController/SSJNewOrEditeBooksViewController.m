@@ -53,6 +53,7 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
     [self setUpNav];
     [self setUpTableView];
     [self initalizedDataArray];
+    [self updateAppearanceAfterThemeChanged];//颜色
 }
 
 #pragma mark - UI
@@ -217,7 +218,6 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
         ((SSJBooksTypeItem *)self.bookItem).booksColor =  self.gradientColorItem;
         [SSJBooksTypeStore saveBooksTypeItem:(SSJBooksTypeItem *)self.bookItem sucess:^{
             [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
-            [[NSNotificationCenter defaultCenter] postNotificationName:SSJBooksTypeDidChangeNotification object:nil];
             
             if (_saveBooksBlock) {
                 _saveBooksBlock(((SSJBooksTypeItem *)self.bookItem).booksId);
@@ -254,7 +254,6 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.backgroundColor = [UIColor clearColor];
-        _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
     }
     return _tableView;
 }
@@ -273,6 +272,10 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
     } else {
         return @"日常";
     }
+}
+
+- (void)updateAppearanceAfterThemeChanged {
+    _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
 }
 
 @end
