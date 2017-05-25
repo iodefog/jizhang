@@ -8,7 +8,6 @@
 
 static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
 static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIdentifier";
-static BOOL kNeedBannerDisplay = YES;
 
 #import "SSJBooksTypeSelectViewController.h"
 #import "SSJBooksTypeStore.h"
@@ -17,7 +16,6 @@ static BOOL kNeedBannerDisplay = YES;
 #import "UIViewController+MMDrawerController.h"
 #import "SSJAdWebViewController.h"
 #import "SSJAdWebViewController.h"
-#import "SSJBooksTypeEditeView.h"
 #import "SSJBooksHeaderView.h"
 #import "SSJDataSynchronizer.h"
 
@@ -27,7 +25,6 @@ static BOOL kNeedBannerDisplay = YES;
 #import "SSJInviteCodeJoinViewController.h"
 #import "SSJDatabaseQueue.h"
 #import "SSJSelectCreateShareBookType.h"
-//#import "SSJBooksAdView.h"
 #import "SSJBannerNetworkService.h"
 #import "SSJBooksTypeEditAlertView.h"
 #import "SSJBooksTypeDeletionAuthCodeAlertView.h"
@@ -65,6 +62,9 @@ static BOOL kNeedBannerDisplay = YES;
 @property(nonatomic, strong) UIButton *rightButton;
 
 @property (nonatomic, strong) SSJSelectCreateShareBookType *createShareBookTypeView;
+
+/**是否显示新建账本成功动画*/
+@property (nonatomic, assign,getter=isShowCreateBookAnimation) BOOL showCreateBookAnimation;
 
 @end
 
@@ -121,6 +121,34 @@ static BOOL kNeedBannerDisplay = YES;
 //    self.adView.leftBottom = CGPointMake(0, self.view.height);
 //    self.adView.width = self.view.width;
 }
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    if (self.isShowCreateBookAnimation) {
+        //刷新动画
+        //取出在数组中的位置
+        for (SSJBooksTypeItem *item in self.privateBooksDataitems) {
+            if ([item.booksId isEqualToString:self.currentBooksId]) {
+                NSInteger index = [self.privateBooksDataitems indexOfObject:item];
+                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
+                SSJBooksCollectionViewCell *cell1 = (SSJBooksCollectionViewCell *)[self.collectionView cellForItemAtIndexPath:indexPath];
+                [cell1 animationAfterCreateBook];
+                return ;
+            }
+        }
+        
+        for (SSJShareBookItem *sItem in self.shareBooksDataItems) {
+            if ([sItem.booksId isEqualToString:self.currentBooksId]) {
+                NSInteger index = [self.shareBooksDataItems indexOfObject:sItem];
+                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:1];
+                SSJBooksCollectionViewCell *cell1 = (SSJBooksCollectionViewCell *)[self.collectionView cellForItemAtIndexPath:indexPath];
+                [cell1 animationAfterCreateBook];
+            }
+        }
+        self.showCreateBookAnimation = NO;
+    }
+}
+
 
 #pragma mark - UICollectionViewDelegate
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
@@ -201,7 +229,7 @@ static BOOL kNeedBannerDisplay = YES;
         self.editBooksItem = booksTypeItem;
         [self.editAlertView show];
     };
-    
+
     return cell;
 }
 
@@ -244,7 +272,6 @@ static BOOL kNeedBannerDisplay = YES;
     if ((indexPath.row == self.privateBooksDataitems.count - 1 && indexPath.section == 0) || (indexPath.section == 1 && indexPath.row == self.shareBooksDataItems.count - 1)) {
         return NO;
     }
-    
     return YES;
 }
 
@@ -290,6 +317,7 @@ static BOOL kNeedBannerDisplay = YES;
 //    [self collectionViewEndEditing];
 //    return YES;
 //}
+
 
 - (void)collectionView:(SSJEditableCollectionView *)collectionView didEndMovingCellFromIndexPath:(NSIndexPath *)fromIndexPath toTargetIndexPath:(NSIndexPath *)toIndexPath{
     if (fromIndexPath.section == 0) {
@@ -619,6 +647,10 @@ static BOOL kNeedBannerDisplay = YES;
         @strongify(self);
         self.currentBooksId = bookId;
         [self.collectionView reloadData];
+        self.showCreateBookAnimation = YES;
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:SSJBooksTypeDidChangeNotification object:nil];
+        
     } failure:^(NSError * _Nonnull error) {
         [SSJAlertViewAdapter showError:error];
     }];
@@ -636,14 +668,6 @@ static BOOL kNeedBannerDisplay = YES;
     self.collectionView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     [self.rightButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTintColor] forState:UIControlStateNormal];
     [self.rightButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTintColor] forState:UIControlStateSelected];
-    NSMutableAttributedString *attributedTitle = [[NSMutableAttributedString alloc]initWithString:@"编辑 (单选)"];
-    [attributedTitle addAttribute:NSFontAttributeName value:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_1] range:NSMakeRange(0, 2)];
-    [attributedTitle addAttribute:NSFontAttributeName value:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3] range:NSMakeRange(3, 4)];
-    [attributedTitle addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:NSMakeRange(0, attributedTitle.length)];
-    NSMutableAttributedString *attributedDisableTitle = [[NSMutableAttributedString alloc]initWithString:@"编辑 (单选)"];
-    [attributedDisableTitle addAttribute:NSFontAttributeName value:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2] range:NSMakeRange(0, 2)];
-    [attributedDisableTitle addAttribute:NSFontAttributeName value:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3] range:NSMakeRange(3, 4)];
-    [attributedDisableTitle addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] range:NSMakeRange(0, attributedTitle.length)];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.summaryBooksHeaderColor alpha:SSJ_CURRENT_THEME.summaryBooksHeaderAlpha] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
     [self.header updateAfterThemeChange];
 }

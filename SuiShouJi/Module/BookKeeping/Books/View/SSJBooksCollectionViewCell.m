@@ -24,11 +24,13 @@ static const CGFloat kBooksCornerRadius = 10.f;
 
 @property (nonatomic, strong) UIImageView *markImageView;
 
-//@property (nonatomic, strong) UIView *mask;
-//
-//@property (nonatomic, strong) UIImageView *maskImageView;
+@property (nonatomic, strong) UIView *progressView;
 /**<#注释#>*/
 @property (nonatomic, strong) UIButton *maskButton;
+
+@property (nonatomic, strong) UIView *maskTopView;
+
+@property (nonatomic, strong) UIView *maskBottomView;
 
 @end
 
@@ -46,7 +48,9 @@ static const CGFloat kBooksCornerRadius = 10.f;
         [self.contentView addSubview:self.markImageView];
         [self.contentView addSubview:self.maskButton];
         [self setNeedsUpdateConstraints];
-//        self.contentView.backgroundColor = [UIColor whiteColor];
+        self.contentView.layer.cornerRadius = kBooksCornerRadius;
+        self.contentView.layer.masksToBounds = YES;
+        [self.contentView clipsToBounds];
     }
     return self;
 }
@@ -148,6 +152,39 @@ static const CGFloat kBooksCornerRadius = 10.f;
     return CGSizeMake(itemWidth, itemWidth * 1.3);
 }
 
+#pragma mark - Action
+- (void)editButtonClicked:(UIButton *)button {
+    if (self.editBookAction) {
+        self.editBookAction(self.booksTypeItem);
+    }
+}
+
+- (void)animationAfterCreateBook {
+    [self.contentView addSubview:self.maskTopView];
+    [self.contentView addSubview:self.maskBottomView];
+    [self.contentView addSubview:self.progressView];
+    __weak __typeof(self)weakSelf = self;
+    self.progressView.width = 0;
+    [UIView animateWithDuration:0.3 animations:^{
+        weakSelf.progressView.width = [self sizeForItem].width;
+    } completion:^(BOOL finished) {
+        [weakSelf.progressView removeFromSuperview];
+        weakSelf.progressView = nil;
+        weakSelf.maskBottomView.bottom = [self sizeForItem].height;
+        weakSelf.maskBottomView.transform = CGAffineTransformIdentity;
+        [UIView animateWithDuration:0.3 animations:^{
+            weakSelf.maskTopView.height = 0;
+            weakSelf.maskBottomView.height = 0;
+            weakSelf.maskBottomView.bottom = [self sizeForItem].height;
+        } completion:^(BOOL finished) {
+            [weakSelf.maskTopView removeFromSuperview];
+            weakSelf.maskTopView = nil;
+            [weakSelf.maskBottomView removeFromSuperview];
+            weakSelf.maskBottomView = nil;
+        }];
+    }];
+ }
+
 #pragma mark - Lazy
 - (CAGradientLayer *)gradientLayer {
     if (!_gradientLayer) {
@@ -214,11 +251,37 @@ static const CGFloat kBooksCornerRadius = 10.f;
     return _maskButton;
 }
 
-#pragma mark - Action
-- (void)editButtonClicked:(UIButton *)button {
-    if (self.editBookAction) {
-        self.editBookAction(self.booksTypeItem);
+
+- (UIView *)maskTopView {
+    if (!_maskTopView) {
+        _maskTopView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [self sizeForItem].width , [self sizeForItem].height * 0.5)];
+        _maskTopView.backgroundColor = [UIColor ssj_colorWithHex:@"000000" alpha:0.5];
+        CAShapeLayer *sharpLayer = [CAShapeLayer layer];
+        sharpLayer.path = [UIBezierPath bezierPathWithRoundedRect:_maskTopView.bounds byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight cornerRadii:CGSizeMake(kBooksCornerRadius, kBooksCornerRadius)].CGPath;
+        _maskTopView.layer.mask = sharpLayer;
+        
     }
+    return _maskTopView;
+}
+
+- (UIView *)maskBottomView {
+    if (!_maskBottomView) {
+        _maskBottomView = [[UIView alloc] initWithFrame:CGRectMake(0, [self sizeForItem].height * 0.5, [self sizeForItem].width , [self sizeForItem].height * 0.5)];
+        _maskBottomView.backgroundColor = [UIColor ssj_colorWithHex:@"000000" alpha:0.5];
+        CAShapeLayer *sharpLayer = [CAShapeLayer layer];
+        _maskBottomView.bottom = [self sizeForItem].height;
+        sharpLayer.path = [UIBezierPath bezierPathWithRoundedRect:_maskBottomView.bounds byRoundingCorners:UIRectCornerBottomLeft | UIRectCornerBottomRight cornerRadii:CGSizeMake(kBooksCornerRadius, kBooksCornerRadius)].CGPath;
+        _maskBottomView.layer.mask = sharpLayer;
+    }
+    return _maskBottomView;
+}
+
+- (UIView *)progressView {
+    if (!_progressView) {
+        _progressView = [[UIProgressView alloc] initWithFrame:CGRectMake(0, ([self sizeForItem].height - 3) * 0.5, [self sizeForItem].width, 3)];
+        _progressView.backgroundColor = [UIColor whiteColor];
+    }
+    return _progressView;
 }
 
 @end

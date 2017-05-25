@@ -17,7 +17,7 @@
         self.textLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         [self themeUpdate];
         self.selectionStyle = UITableViewCellSelectionStyleNone;
-//        self.arrowImageView.hidden = YES;
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(themeUpdate) name:SSJThemeDidChangeNotification object:nil];
     }
     return self;
 }

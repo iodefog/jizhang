@@ -263,7 +263,7 @@
     }
     [self dismiss];
     self.item.booksName = [self.nameInput.text ssj_emojiFilter];
-    self.item.booksColor = _selectColor;
+//    self.item.booksColor = _selectColor;
     if (self.comfirmButtonClickedBlock) {
         self.comfirmButtonClickedBlock(self.item);
     }
@@ -282,7 +282,7 @@
     _item = item;
     if (![_item.booksName isEqualToString:@"添加账本"]) {
         self.nameInput.text = _item.booksName;
-        _selectColor = _item.booksColor;
+//        _selectColor = _item.booksColor;
     }else{
         self.nameInput.text = @"";
         _selectColor = @"#7FB04F";

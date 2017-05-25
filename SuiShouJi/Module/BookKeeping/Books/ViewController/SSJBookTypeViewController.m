@@ -34,6 +34,7 @@
     
     [self setUpTableView];
     [self setUpDataArray];
+    [self updateAppearanceAfterThemeChanged];
 }
 
 - (void)setLastSelectedIndex:(NSInteger)lastSelectedIndex
@@ -123,8 +124,11 @@
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.backgroundColor = [UIColor clearColor];
-        _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
     }
     return _tableView;
+}
+
+- (void)updateAppearanceAfterThemeChanged {
+    _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
 }
 @end

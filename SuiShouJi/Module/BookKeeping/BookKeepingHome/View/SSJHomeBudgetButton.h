@@ -16,7 +16,7 @@
 
 @property (nonatomic,strong) UIButton *button;
 
-typedef void(^budgetButtonClickBlock)(SSJBudgetModel *model);
+typedef void(^budgetButtonClickBlock)(id model);
 
 @property (nonatomic, copy) budgetButtonClickBlock budgetButtonClickBlock;
 

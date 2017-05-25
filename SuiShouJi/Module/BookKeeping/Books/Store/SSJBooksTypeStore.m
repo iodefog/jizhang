@@ -57,6 +57,7 @@
                 shareBookItem.booksParent = [rs intForColumn:@"iparenttype"];
                 shareBookItem.booksOrder = [rs intForColumn:@"iorder"];
                 shareBookItem.memberCount = [rs intForColumn:@"memberCount"];
+                shareBookItem.adminId = [rs stringForColumn:@"cadmin"];
                 //处理渐变色
                 SSJFinancingGradientColorItem *colorItem = [[SSJFinancingGradientColorItem alloc] init];
                 NSArray *colorArray = [[rs stringForColumn:@"cbookscolor"] componentsSeparatedByString:@","];
@@ -522,12 +523,14 @@
             }
         }
         
+        //如果是新建时候不错成员头像和昵称
+        if (![db boolForQuery:@"select count(*) from bk_share_books where CBOOKSID = ?", booksid]) {
+            [self saveShareBooksMemberWithBookId:item.booksId success:nil failure:nil];
+            [self saveShareBookMemberNickWithBookId:item.booksId success:nil failure:nil];
+        }
+        
         //成员信息
         if (success) {
-            //如果是新建时候
-            if (![db boolForQuery:@"select count(*) from bk_share_books where CBOOKSID = ?", booksid]) {
-                [self saveShareBooksMemberWithBookId:item.booksId success:nil failure:nil];
-            }
             SSJDispatch_main_async_safe(^{
                 success();
             });
@@ -606,6 +609,44 @@
     }];
 }
 
++ (void)saveShareBookMemberNickWithBookId:(NSString *)bookId
+                                  success:(void(^)())success
+                                  failure:(void(^)(NSError *error))failure{
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
+       FMResultSet *result = [db executeQuery:@"select * from bk_user where cuserid = ?",SSJUSERID()];
+        if (!result) {
+            SSJDispatch_main_async_safe(^{
+                failure([db lastError]);
+            });
+            return ;
+        }
+        NSString *nickNameStr;
+        if ([result next]) {
+            NSString *nickStr = [result stringForColumn:@"cnickid"];
+            NSString *phoneStr = [result stringForColumn:@"cmomileno"];
+            if (nickStr.length) {
+                nickNameStr = nickStr;
+            }else if (phoneStr.length) {
+                nickNameStr = nickStr;
+            } else {
+                nickNameStr = @"";
+            }
+        }
+        
+        if (![db executeUpdate:@"insert into BK_SHARE_BOOKS_FRIENDS_MARK values (?,?,?,?,?,?,0)",SSJUSERID(),bookId,SSJUSERID(),nickNameStr,@(SSJSyncVersion()),[[NSDate date] ssj_dateStringWithFormat:@"yyyy-mm-dd"]]) {
+            SSJDispatch_main_async_safe(^{
+                failure([db lastError]);
+            });
+            return ;
+        }
+        
+        SSJDispatch_main_sync_safe(^{
+            if (success) {
+                success();
+            }
+        });
+    }];
+}
 
 + (NSDictionary *)fieldMapWithShareBookItem:(SSJShareBookItem *)item {
     [SSJShareBookItem mj_setupReplacedKeyFromPropertyName:^NSDictionary *{

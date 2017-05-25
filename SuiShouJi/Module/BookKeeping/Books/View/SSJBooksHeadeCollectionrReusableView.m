@@ -48,9 +48,7 @@
 }
 
 - (void)updateAppearance {
-    self.titleLab.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     self.titleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-    
 }
 
 @end
