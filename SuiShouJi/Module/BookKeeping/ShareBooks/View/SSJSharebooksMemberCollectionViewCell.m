@@ -80,9 +80,9 @@
     }];
     
     [self.nickNameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.iconImageView.mas_top).offset(10);
+        make.top.mas_equalTo(self.iconImageView.mas_bottom).offset(10);
         make.centerX.mas_equalTo(self.contentView.mas_centerX);
-        make.width.mas_equalTo(self.contentView.mas_width);
+        make.width.lessThanOrEqualTo(self.contentView.mas_width);
     }];
     
     [self.addImageView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -93,6 +93,7 @@
 }
 
 - (void)setMemberItem:(SSJShareBookMemberItem *)memberItem {
+    _memberItem = memberItem;
     if (![memberItem.memberId isEqualToString:@"-1"]) {
         self.nickNameLabel.text = self.memberItem.nickName;
         NSString *imageUrl = self.memberItem.icon;

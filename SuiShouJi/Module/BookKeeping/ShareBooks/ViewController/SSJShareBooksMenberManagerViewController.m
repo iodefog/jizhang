@@ -7,6 +7,7 @@
 //
 
 #import "SSJShareBooksMenberManagerViewController.h"
+#import "SSJSharebooksInviteViewController.h"
 
 #import "SSJSharebooksMemberCollectionViewCell.h"
 #import "SSJBooksTypeDeletionAuthCodeAlertView.h"
@@ -44,7 +45,8 @@ static NSString * SSJSharebooksMemberCellIdentifier = @"SSJSharebooksMemberCellI
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-        self.statisticsTitle = @"账本成员";
+        self.title = @"账本成员";
+        self.hidesBottomBarWhenPushed = YES;
     }
     return self;
 }
@@ -105,7 +107,14 @@ static NSString * SSJSharebooksMemberCellIdentifier = @"SSJSharebooksMemberCellI
 
 #pragma mark - UICollectionViewDelegate
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
-    
+    SSJShareBookMemberItem *item = [self.items objectAtIndex:indexPath.item];
+    if ([item.memberId isEqualToString:@"-1"]) {
+        SSJSharebooksInviteViewController *inviteVc = [[SSJSharebooksInviteViewController alloc] init];
+        inviteVc.item = self.item;
+        [self.navigationController pushViewController:inviteVc animated:YES];
+    } else {
+        
+    }
 }
 
 
@@ -135,6 +144,7 @@ static NSString * SSJSharebooksMemberCellIdentifier = @"SSJSharebooksMemberCellI
     if (!_deleteButton) {
         _deleteButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_deleteButton setTitle:@"退出并删除此账本" forState:UIControlStateNormal];
+        [_deleteButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] forState:UIControlStateNormal];
         if (SSJ_CURRENT_THEME.throughScreenButtonBackGroudColor.length) {
             [_deleteButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.throughScreenButtonBackGroudColor alpha:SSJ_CURRENT_THEME.throughScreenButtonAlpha] forState:UIControlStateNormal];
         } else {
@@ -144,7 +154,8 @@ static NSString * SSJSharebooksMemberCellIdentifier = @"SSJSharebooksMemberCellI
         [_deleteButton ssj_setBorderWidth:1];
         [_deleteButton ssj_setBorderStyle:SSJBorderStyleTop];
         [_deleteButton ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
-        [_deleteButton addTarget:self action:@selector(deleteButtonClicked:) forControlEvents:UIControlEventTouchUpInside];    }
+        [_deleteButton addTarget:self action:@selector(deleteButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    }
     return _deleteButton;
 }
 
@@ -154,6 +165,9 @@ static NSString * SSJSharebooksMemberCellIdentifier = @"SSJSharebooksMemberCellI
         NSMutableAttributedString *atrrStr = [[NSMutableAttributedString alloc] initWithString:@"数据无法恢复,删除并退出此共享账本,请输入下列验证码"];
         [atrrStr addAttribute:NSFontAttributeName value:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4] range:NSMakeRange(0, atrrStr.length)];
         [atrrStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:NSMakeRange(0, atrrStr.length)];
+        NSMutableParagraphStyle *paragraph = [[NSMutableParagraphStyle alloc] init];
+        paragraph.alignment = NSTextAlignmentCenter;
+        [atrrStr addAttribute:NSParagraphStyleAttributeName value:paragraph range:NSMakeRange(0, atrrStr.length)];
         _deleteComfirmAlert.message = atrrStr;
         _deleteComfirmAlert.finishVerification = ^{
             
