@@ -19,5 +19,10 @@ NS_ASSUME_NONNULL_BEGIN
 /**编辑按钮点击*/
 @property (nonatomic, copy) void(^editBookAction)(__kindof SSJBaseCellItem *booksTypeItem);
 
+/**
+ 新建账本后动画
+ */
+- (void)animationAfterCreateBook;
+
 NS_ASSUME_NONNULL_END
 @end

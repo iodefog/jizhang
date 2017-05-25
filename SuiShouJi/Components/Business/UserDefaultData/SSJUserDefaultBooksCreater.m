@@ -35,7 +35,7 @@
                @"cuserid":userId,
                @"iparenttype":@(SSJBooksTypeDaily),
                @"cbooksname":@"日常账本",
-               @"cbookscolor":@"#7fb04f",
+               @"cbookscolor":@"#FC73AE,#FB91BC",
                @"cicoin":@"bk_moren",
                @"iorder":@1,
                @"iversion":syncVersion,
