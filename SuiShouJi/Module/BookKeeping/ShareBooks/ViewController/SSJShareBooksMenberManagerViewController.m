@@ -70,8 +70,8 @@ static NSString * SSJSharebooksMemberCellIdentifier = @"SSJSharebooksMemberCellI
     __weak typeof(self) weakSelf = self;
     [SSJShareBooksStore queryTheMemberListForTheShareBooks:self.item Success:^(NSArray<SSJShareBookMemberItem *> *result) {
         weakSelf.items = result;
-        [weakSelf.collectionView reloadData];
         [weakSelf.view updateConstraintsIfNeeded];
+        [weakSelf.collectionView reloadData];
     } failure:NULL];
 }
 
@@ -118,7 +118,6 @@ static NSString * SSJSharebooksMemberCellIdentifier = @"SSJSharebooksMemberCellI
         memberDetailVc.memberId = item.memberId;
         memberDetailVc.booksId = item.booksId;
         [self.navigationController pushViewController:memberDetailVc animated:YES];
-
     }
 }
 

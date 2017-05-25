@@ -51,17 +51,17 @@ static NSString *const kSegmentTitleIncome = @"收入";
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.view addSubview:self.userInfoHeader];
-    [self.view addSubview:self.iconImageView];
-    [self.view addSubview:self.nickNameLab];
+    [self.userInfoHeader addSubview:self.iconImageView];
+    [self.userInfoHeader addSubview:self.nickNameLab];
     [self.view addSubview:self.periodControl];
     [self.view addSubview:self.tableView];
+    [self.view setNeedsUpdateConstraints];
     // Do any additional setup after loading the view.
 }
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
     self.iconImageView.layer.cornerRadius = self.iconImageView.height / 2;
-    
 }
 
 - (void)updateViewConstraints {
@@ -69,7 +69,8 @@ static NSString *const kSegmentTitleIncome = @"收入";
     [self.userInfoHeader mas_updateConstraints:^(MASConstraintMaker *make) {
         make.width.mas_equalTo(self.view);
         make.height.mas_equalTo(140);
-        make.left.top.mas_equalTo(self.view);
+        make.left.mas_equalTo(self.view);
+        make.top.mas_equalTo(SSJ_NAVIBAR_BOTTOM);
     }];
     
     [self.iconImageView mas_updateConstraints:^(MASConstraintMaker *make) {
@@ -215,6 +216,30 @@ static NSString *const kSegmentTitleIncome = @"收入";
 //        [_tableView registerClass:[SSJReportFormsNoDataCell class] forCellReuseIdentifier:kNoDataRemindCellID];
     }
     return _tableView;
+}
+
+- (UIView *)userInfoHeader {
+    if (!_userInfoHeader) {
+        _userInfoHeader = [[UIView alloc] init];
+        _userInfoHeader.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+    }
+    return _userInfoHeader;
+}
+
+- (UIImageView *)iconImageView {
+    if (!_iconImageView) {
+        _iconImageView = [[UIImageView alloc] init];
+    }
+    return _iconImageView;
+}
+
+- (UILabel *)nickNameLab {
+    if (!_nickNameLab) {
+        _nickNameLab = [[UILabel alloc] init];
+        _nickNameLab.textColor = [UIColor ssj_colorWithHex:@"#333333"];
+        _nickNameLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
+    }
+    return _nickNameLab;
 }
 
 
