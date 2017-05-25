@@ -31,9 +31,5 @@
     return mapping;
 }
 
-//- (void)setBooksColor:(SSJFinancingGradientColorItem *)booksColor
-//{
-//    _booksColor = booksColor;
-//}
 
 @end

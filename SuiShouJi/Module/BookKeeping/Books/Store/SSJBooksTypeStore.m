@@ -463,7 +463,7 @@
  */
 + (void)saveShareBooksTypeItem:(SSJShareBookItem *)item
                         sucess:(void(^)())success
-                       failure:(void (^)(NSError *error))failure {
+                       failure:(void (^)(NSError *error))failure {// isNewBook:(BOOL)isNewBook
     NSString * booksid = item.booksId;
     if (!item.booksId.length) {
        item.booksId = SSJUUID();
@@ -475,7 +475,7 @@
         item.adminId = SSJUSERID();
     }
     
-    NSString *cwriteDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+    NSString *cwriteDate = item.cwriteDate;
     NSMutableDictionary *shareBookInfo = [NSMutableDictionary dictionaryWithDictionary:[self fieldMapWithShareBookItem:item]];
     [shareBookInfo removeObjectForKey:@"editing"];
     [shareBookInfo removeObjectForKey:@"memberCount"];
@@ -538,6 +538,65 @@
     }];
 }
 
+/**
+ 删除账本
+ @param item share_charge	bk_user_charge	平账流水
+ share_member	bk_share_books_member	共享成员
+ @param success <#success description#>
+ @param failure <#failure description#>
+ */
++ (void)deleteShareBooksWithShareCharge:(NSArray<NSDictionary *> *)shareCharge
+                            shareMember:(NSArray<NSDictionary *> *)shareMember
+                          sucess:(void(^)())success
+                         failure:(void (^)(NSError *error))failure {
+    [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
+        NSString *userId = SSJUSERID();
+
+        //更新bk_user_charge表
+        for (NSDictionary *chargeDic in shareCharge) {
+            NSString *keyStr = [[chargeDic allKeys] componentsJoinedByString:@"=?, "];
+            NSString *valueStr = [[chargeDic allValues] componentsJoinedByString:@", "];
+            if (![db executeUpdate:@"update bk_user_charge set %@ values(%@)",keyStr,valueStr]) {
+                if (failure) {
+                    SSJDispatchMainAsync(^{
+                        failure([db lastError]);
+                    });
+                }
+                return ;
+            };
+        }
+        //更新bk_share_books_member表
+        for (NSDictionary *memberDic in shareMember) {
+            NSString *memberKey = [[memberDic allKeys] componentsJoinedByString:@"=? "];
+            NSString *memberValue = [[memberDic allValues] componentsJoinedByString:@", "];
+            if (![db executeUpdate:@"update bk_share_books_member set %@ values(%@)",memberKey,memberValue]) {
+                if (failure) {
+                    SSJDispatchMainAsync(^{
+                        failure([db lastError]);
+                    });
+                }
+                return;
+            }
+        }
+            //更新日常统计表
+            if (![SSJDailySumChargeTable updateDailySumChargeForUserId:userId inDatabase:db]) {
+                if (failure) {
+                    *rollback = YES;
+                    SSJDispatchMainAsync(^{
+                        failure([db lastError]);
+                    });
+                }
+                return;
+            }
+
+        if (success) {
+            SSJDispatch_main_async_safe(^{
+                success();
+            });
+        }
+    }];
+}
+
 + (void)saveShareBooksOrderWithItems:(NSArray<SSJShareBookItem *> *)items sucess:(void (^)())success failure:(void (^)(NSError *))failure {
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
         for (SSJShareBookItem *item in items) {
@@ -574,7 +633,7 @@
         SSJShareBookMemberItem *memberItem = [[SSJShareBookMemberItem alloc] init];
         memberItem.memberId = SSJUSERID();
         memberItem.booksId = bookId;
-        memberItem.joinDate = [[NSDate date] formattedDateWithFormat:@"yyyy-mm-dd"];
+        memberItem.joinDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         memberItem.state = 1;
         
         if (SSJIsUserLogined()) {//登录
@@ -613,17 +672,9 @@
                                   success:(void(^)())success
                                   failure:(void(^)(NSError *error))failure{
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
-       FMResultSet *result = [db executeQuery:@"select * from bk_user where cuserid = ?",SSJUSERID()];
-        if (!result) {
-            SSJDispatch_main_async_safe(^{
-                failure([db lastError]);
-            });
-            return ;
-        }
         NSString *nickNameStr;
-        if ([result next]) {
-            NSString *nickStr = [result stringForColumn:@"cnickid"];
-            NSString *phoneStr = [result stringForColumn:@"cmomileno"];
+            NSString *nickStr = [db stringForQuery:@"select cnickid from bk_user where cuserid = ?",SSJUSERID()];
+            NSString *phoneStr = [db stringForQuery:@"select cmomileno from bk_user where cuserid = ?",SSJUSERID()];
             if (nickStr.length) {
                 nickNameStr = nickStr;
             }else if (phoneStr.length) {
@@ -631,9 +682,8 @@
             } else {
                 nickNameStr = @"";
             }
-        }
         
-        if (![db executeUpdate:@"insert into BK_SHARE_BOOKS_FRIENDS_MARK values (?,?,?,?,?,?,0)",SSJUSERID(),bookId,SSJUSERID(),nickNameStr,@(SSJSyncVersion()),[[NSDate date] ssj_dateStringWithFormat:@"yyyy-mm-dd"]]) {
+        if (![db executeUpdate:@"insert into BK_SHARE_BOOKS_FRIENDS_MARK values (?,?,?,?,?,?,0)",SSJUSERID(),bookId,SSJUSERID(),nickNameStr,@(SSJSyncVersion()),[[NSDate date] ssj_dateStringWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"]]) {
             SSJDispatch_main_async_safe(^{
                 failure([db lastError]);
             });

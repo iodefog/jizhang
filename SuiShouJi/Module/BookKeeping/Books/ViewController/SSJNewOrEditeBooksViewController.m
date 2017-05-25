@@ -20,6 +20,8 @@
 #import "SSJBooksTypeStore.h"
 #import "SSJDataSynchronizer.h"
 
+#import "SSJCreateOrDeleteBooksService.h"
+
 static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIdentifier";
 
 @interface SSJNewOrEditeBooksViewController ()<UITableViewDelegate,UITableViewDataSource>
@@ -44,6 +46,8 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
 
 /**bookName*/
 @property (nonatomic, copy) NSString *bookName;
+
+@property (nonatomic, strong) SSJCreateOrDeleteBooksService *createBookService;
 @end
 
 @implementation SSJNewOrEditeBooksViewController
@@ -198,24 +202,43 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
     return self.titleArray.count;
 }
 
+
+#pragma mark - SSJBaseNetworkServiceDelegate
+- (void)serverDidFinished:(SSJBaseNetworkService *)service
+{
+    if ([service.returnCode isEqualToString:@"1"]) {
+        __weak __typeof(self)weakSelf = self;
+        [SSJBooksTypeStore saveShareBooksTypeItem:(SSJShareBookItem *)self.bookItem sucess:^{
+            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+            
+            if (_saveBooksBlock) {
+                _saveBooksBlock(((SSJShareBookItem *)self.bookItem).booksId);
+            }
+            [weakSelf.navigationController popViewControllerAnimated:YES];
+            
+        } failure:^(NSError *error) {
+            [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
+        }];
+    }
+}
+
 #pragma mark - Event
 - (void)rightButtonClicked:(id)sender{
-    NSString *booksName = self.bookNameTextField.text;
-    if (!booksName.length) {
+    self.bookName = self.bookNameTextField.text;
+    if (!self.bookName.length) {
         [CDAutoHideMessageHUD showMessage:@"请输入账本名称"];
         return;
     }
-    if (booksName.length > 5) {
+    if (self.bookName.length > 5) {
         [CDAutoHideMessageHUD showMessage:@"账本名称不能超过5个字"];
         return;
     }
     
     __weak typeof(self) weakSelf = self;
-    
+    self.bookItem.booksName = self.bookName;
+    self.bookItem.booksParent = self.currentBookType;
+    self.bookItem.booksColor = self.gradientColorItem;
     if ([self.bookItem isKindOfClass:[SSJBooksTypeItem class]]) {//个人账本
-        ((SSJBooksTypeItem *)self.bookItem).booksName = booksName;
-        ((SSJBooksTypeItem *)self.bookItem).booksParent = self.currentBookType;
-        ((SSJBooksTypeItem *)self.bookItem).booksColor =  self.gradientColorItem;
         [SSJBooksTypeStore saveBooksTypeItem:(SSJBooksTypeItem *)self.bookItem sucess:^{
             [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
             
@@ -226,24 +249,9 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
         } failure:^(NSError *error) {
             [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
         }];
-
-
-    } else if([self.bookItem isKindOfClass:[SSJShareBookItem class]]) { //共享账本
-        ((SSJShareBookItem *)self.bookItem).booksName = booksName;
-        ((SSJShareBookItem *)self.bookItem).booksParent = self.currentBookType;
-        ((SSJShareBookItem *)self.bookItem).booksColor =  self.gradientColorItem;
         
-        [SSJBooksTypeStore saveShareBooksTypeItem:(SSJShareBookItem *)self.bookItem sucess:^{
-            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
-            [[NSNotificationCenter defaultCenter] postNotificationName:SSJBooksTypeDidChangeNotification object:nil];
-            if (_saveBooksBlock) {
-                _saveBooksBlock(((SSJShareBookItem *)self.bookItem).booksId);
-            }
-            [weakSelf.navigationController popViewControllerAnimated:YES];
-            
-        } failure:^(NSError *error) {
-            [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
-        }];
+    } else if([self.bookItem isKindOfClass:[SSJShareBookItem class]]) { //共享账本
+        [self.createBookService createShareBookWithBookItem:(SSJShareBookItem<SSJBooksItemProtocol> *)self.bookItem];
     }
 }
 
@@ -274,6 +282,15 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
     }
 }
 
+- (SSJCreateOrDeleteBooksService *)createBookService {
+    if (!_createBookService) {
+        _createBookService = [[SSJCreateOrDeleteBooksService alloc] initWithDelegate:self];
+    }
+    return _createBookService;
+}
+
+
+#pragma mark - Notice
 - (void)updateAppearanceAfterThemeChanged {
     _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
 }

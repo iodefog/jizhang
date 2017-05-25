@@ -11,7 +11,7 @@
 @implementation SSJBooksTypeItem
 @synthesize booksId;
 @synthesize booksName;
-@synthesize booksColor = _booksColor;
+@synthesize booksColor;
 @synthesize booksOrder;
 @synthesize booksParent;
 @synthesize cwriteDate;

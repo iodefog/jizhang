@@ -13,7 +13,6 @@
 #import "SSJMemberManagerViewController.h"
 #import "SSJNewMemberViewController.h"
 #import "SSJFundingTypeSelectViewController.h"
-#import "SSJBooksEditeOrNewViewController.h"
 
 #import "SSJCustomKeyboard.h"
 #import "SSJMemberSelectView.h"

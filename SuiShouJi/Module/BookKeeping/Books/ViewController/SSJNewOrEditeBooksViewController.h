@@ -7,10 +7,10 @@
 //
 
 #import "SSJBaseViewController.h"
-
+#import "SSJBooksItem.h"
 @interface SSJNewOrEditeBooksViewController : SSJBaseViewController
 
-@property (nonatomic, strong) __kindof SSJBaseCellItem *bookItem;
+@property (nonatomic, strong) __kindof SSJBaseCellItem<SSJBooksItemProtocol> *bookItem;
 
 @property (nonatomic, copy) void (^saveBooksBlock)(NSString *booksId);
 @end

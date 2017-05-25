@@ -30,6 +30,7 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
 #import "SSJBooksTypeDeletionAuthCodeAlertView.h"
 #import "SSJUserTableManager.h"
 #import "SSJBooksHeadeCollectionrReusableView.h"
+#import "SSJCreateOrDeleteBooksService.h"
 
 @interface SSJBooksTypeSelectViewController ()<SSJEditableCollectionViewDelegate,SSJEditableCollectionViewDataSource>
 
@@ -66,6 +67,7 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
 /**是否显示新建账本成功动画*/
 @property (nonatomic, assign,getter=isShowCreateBookAnimation) BOOL showCreateBookAnimation;
 
+@property (nonatomic, strong) SSJCreateOrDeleteBooksService *deleteBookService;
 @end
 
 @implementation SSJBooksTypeSelectViewController
@@ -127,6 +129,7 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
     if (self.isShowCreateBookAnimation) {
         //刷新动画
         //取出在数组中的位置
+        self.showCreateBookAnimation = NO;
         for (SSJBooksTypeItem *item in self.privateBooksDataitems) {
             if ([item.booksId isEqualToString:self.currentBooksId]) {
                 NSInteger index = [self.privateBooksDataitems indexOfObject:item];
@@ -145,7 +148,6 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
                 [cell1 animationAfterCreateBook];
             }
         }
-        self.showCreateBookAnimation = NO;
     }
 }
 
@@ -296,21 +298,17 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
 }
 
 - (void)collectionViewDidEndEditing:(SSJEditableCollectionView *)collectionView{
-    [RACObserve(self, privateBooksDataitems) subscribeNext:^(id x) {
         [SSJBooksTypeStore saveBooksOrderWithItems:self.privateBooksDataitems sucess:^{
             [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
         } failure:^(NSError *error) {
             SSJPRINT(@"%@",[error localizedDescription]);
         }];
-    }];
     
-//    [RACObserve(self, shareBooksDataItems) subscribeNext:^(id x) {
         [SSJBooksTypeStore saveShareBooksOrderWithItems:self.shareBooksDataItems sucess:^{
             [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
         } failure:^(NSError *error) {
             SSJPRINT(@"%@",[error localizedDescription]);
         }];
-//    }];
 }
 
 //- (BOOL)shouldCollectionViewEndEditingWhenUserTapped:(SSJEditableCollectionView *)collectionView{
@@ -487,6 +485,13 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
 //    return _adService;
 //}
 
+- (SSJCreateOrDeleteBooksService *)deleteBookService {
+    if (!_deleteBookService) {
+        _deleteBookService = [[SSJCreateOrDeleteBooksService alloc] initWithDelegate:self];
+    }
+    return _deleteBookService;
+}
+
 - (NSArray *)headerTitleArray {
     if (!_headerTitleArray) {
         _headerTitleArray = @[@"个人账本",@"共享账本"];
@@ -582,6 +587,7 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
     } else if ([self.editBooksItem isKindOfClass:[SSJShareBookItem class]]) {
         bookId = ((SSJShareBookItem *)self.editBooksItem).booksId;
     }
+
     if ([bookId isEqualToString:self.currentBooksId]) {
         [[[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
             [SSJUserTableManager updateCurrentBooksId:SSJUSERID() success:^{
@@ -592,11 +598,16 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
             return nil;
         }] then:^RACSignal *{
             return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-                [SSJBooksTypeStore deleteBooksTypeWithbooksItems:@[self.editBooksItem] deleteType:type Success:^{
-                    [subscriber sendCompleted];
-                } failure:^(NSError *error) {
-                    [subscriber sendError:error];
-                }];
+                if ([self.editBooksItem isKindOfClass:[SSJBooksTypeItem class]]) {
+                    [SSJBooksTypeStore deleteBooksTypeWithbooksItems:@[self.editBooksItem] deleteType:type Success:^{
+                        [subscriber sendCompleted];
+                    } failure:^(NSError *error) {
+                        [subscriber sendError:error];
+                    }];
+                } else if ([self.editBooksItem isKindOfClass:[SSJShareBookItem class]]) {
+//                    self.deleteBookService deleteShareBookWithBookId:bookId memberId:self.editBooksItem. memberState:(SSJMemberState)
+                }
+                
                 return nil;
             }];
         }] subscribeError:^(NSError *error) {
@@ -648,7 +659,7 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
         self.currentBooksId = bookId;
         [self.collectionView reloadData];
         self.showCreateBookAnimation = YES;
-        
+        //更新当前账本
         [[NSNotificationCenter defaultCenter] postNotificationName:SSJBooksTypeDidChangeNotification object:nil];
         
     } failure:^(NSError * _Nonnull error) {

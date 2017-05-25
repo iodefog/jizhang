@@ -93,6 +93,18 @@
                    sucess:(void(^)())success
                   failure:(void (^)(NSError *error))failure;
 
+
+/**
+ 删除账本
+ @param item <#item description#>
+ @param success <#success description#>
+ @param failure <#failure description#>
+ */
++ (void)deleteShareBooksWithShareCharge:(NSArray<NSDictionary *> *)shareCharge
+                            shareMember:(NSArray<NSDictionary *> *)shareMember
+                                 sucess:(void(^)())success
+                                failure:(void (^)(NSError *error))failure;
+
 /**
  保存账本顺序(共享账本)
  
@@ -104,7 +116,7 @@
                          sucess:(void(^)())success
                         failure:(void (^)(NSError *error))failure;
 
-#warning 测试
+
 + (void)saveShareBooksMemberWithBookId:(NSString *)bookId
                        success:(void(^)())success
                        failure:(void(^)(NSError *error))failure;
@@ -121,4 +133,6 @@
 + (void)saveShareBookMemberNickWithBookId:(NSString *)bookId
                                   success:(void(^)())success
                                   failure:(void(^)(NSError *error))failure;
+
+
 @end
