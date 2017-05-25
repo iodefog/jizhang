@@ -125,7 +125,6 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
                         endDate:(NSDate *)endDate
                         success:(void(^)(NSArray<SSJReportFormsItem *> *result))success
                         failure:(void (^)(NSError *error))failure {
-    
     switch (type) {
         case SSJBillTypeIncome:
         case SSJBillTypePay:
@@ -142,7 +141,7 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
     }
 }
 
-//  查询收支数据
+// 查询收支数据
 + (void)queryForIncomeOrPayChargeWithType:(SSJBillType)type
                                   booksId:(NSString *)booksId
                                 startDate:(NSDate *)startDate
@@ -174,7 +173,7 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
     NSString *beginDateStr = [startDate formattedDateWithFormat:@"yyyy-MM-dd"];
     NSString *endDateStr = [endDate formattedDateWithFormat:@"yyyy-MM-dd"];
 
-    //  查询不同收支类型的总额
+    // 查询不同收支类型的总额
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSString *tBooksId = booksId;
         if (!tBooksId) {
@@ -182,11 +181,10 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
             tBooksId = tBooksId ?: SSJUSERID();
         }
         
-        NSMutableString *sql_1 = [@"select sum(a.IMONEY) from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.cbilldate >= :beginDateStr and a.cbilldate <= :endDateStr and a.cbilldate <= datetime('now', 'localtime') and a.cuserid = :userId and a.operatortype <> 2 and b.istate <> 2 and b.itype = :type" mutableCopy];
+        NSMutableString *sql_1 = [@"select sum(a.IMONEY) from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.cbilldate >= :beginDateStr and a.cbilldate <= :endDateStr and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and b.istate <> 2 and b.itype = :type" mutableCopy];
         
         NSMutableDictionary *params_1 = [@{@"beginDateStr":beginDateStr,
                                          @"endDateStr":endDateStr,
-                                         @"userId":SSJUSERID(),
                                          @"type":incomeOrPayType} mutableCopy];
         
         if (![tBooksId isEqualToString:@"all"]) {
@@ -208,7 +206,6 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
         while ([amountResultSet next]) {
             amount = [amountResultSet doubleForColumnIndex:0];
         }
-        
         [amountResultSet close];
         
         if (amount == 0) {
@@ -219,11 +216,10 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
             return;
         }
         
-        //  查询不同收支类型相应的金额、名称、图标、颜色
-        NSMutableString *sql_2 = [@"select sum(a.imoney), b.id, b.cname, b.ccoin, b.ccolor from bk_user_charge as a, bk_bill_type as b where a.cuserid = :userId and a.ibillid = b.id and a.cbilldate >= :beginDateStr and a.cbilldate <= :endDateStr and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and b.itype = :type and b.istate <> 2" mutableCopy];
+        // 查询不同收支类型相应的金额、名称、图标、颜色
+        NSMutableString *sql_2 = [@"select sum(a.imoney), b.id, b.cname, b.ccoin, b.ccolor from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cbilldate >= :beginDateStr and a.cbilldate <= :endDateStr and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and b.itype = :type and b.istate <> 2" mutableCopy];
         
-        NSMutableDictionary *params_2 = [@{@"userId":SSJUSERID(),
-                                           @"beginDateStr":beginDateStr,
+        NSMutableDictionary *params_2 = [@{@"beginDateStr":beginDateStr,
                                            @"endDateStr":endDateStr,
                                            @"type":incomeOrPayType} mutableCopy];
         

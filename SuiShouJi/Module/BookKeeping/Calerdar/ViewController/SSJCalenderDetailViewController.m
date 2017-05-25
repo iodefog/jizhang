@@ -51,7 +51,6 @@ static NSString *const kSSJCalenderDetailPhotoCellId = @"kSSJCalenderDetailPhoto
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.tableView.height = self.view.height - SSJ_NAVIBAR_BOTTOM - self.editBtn.height;
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(rightBarButtonClicked:)];
     [self.view addSubview:self.editBtn];
     [self registerCellClass];
@@ -135,6 +134,7 @@ static NSString *const kSSJCalenderDetailPhotoCellId = @"kSSJCalenderDetailPhoto
 - (UIButton *)editBtn {
     if (!_editBtn) {
         _editBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        _editBtn.hidden = YES;
         _editBtn.frame = CGRectMake(0, self.view.height - 54, self.view.width, 54);
         [_editBtn ssj_setBorderStyle:SSJBorderStyleTop];
         _editBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
@@ -176,8 +176,28 @@ static NSString *const kSSJCalenderDetailPhotoCellId = @"kSSJCalenderDetailPhoto
         self.item = chargeItem;
         [self organiseData];
         [self.tableView reloadData];
+        [self updateTableViewInsetsAndEditBtnHidden];
     } failure:^(NSError * _Nonnull error) {
         [self.view ssj_hideLoadingIndicator];
+        [SSJAlertViewAdapter showError:error];
+    }];
+}
+
+/**
+ *  数据库中删除流水
+ */
+- (void)deleteCharge {
+    self.navigationItem.rightBarButtonItem.enabled = NO;
+    [SSJCalenderHelper deleteChargeWithItem:self.item success:^{
+        self.navigationItem.rightBarButtonItem.enabled = YES;
+        if (self.deleteHandler) {
+            self.deleteHandler();
+        } else {
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+    } failure:^(NSError * _Nonnull error) {
+        self.navigationItem.rightBarButtonItem.enabled = YES;
         [SSJAlertViewAdapter showError:error];
     }];
 }
@@ -217,7 +237,11 @@ static NSString *const kSSJCalenderDetailPhotoCellId = @"kSSJCalenderDetailPhoto
     
     SSJCalenderDetailInfoCellItem *memberItem = [[SSJCalenderDetailInfoCellItem alloc] init];
     memberItem.leftText = @"成员";
-    memberItem.rightText = [[self.item.membersItem valueForKeyPath:@"memberName"] componentsJoinedByString:@"，"];
+    if (self.item.idType == SSJChargeIdTypeShareBooks) {
+        memberItem.rightText = self.item.memberNickname;
+    } else {
+        memberItem.rightText = [[self.item.membersItem valueForKeyPath:@"memberName"] componentsJoinedByString:@"，"];
+    }
     memberItem.separatorInsets = UIEdgeInsetsMake(0, 15, 0, 0);
     [section_2 addObject:memberItem];
     
@@ -227,11 +251,13 @@ static NSString *const kSSJCalenderDetailPhotoCellId = @"kSSJCalenderDetailPhoto
     dateItem.separatorInsets = UIEdgeInsetsMake(0, 15, 0, 0);
     [section_2 addObject:dateItem];
     
-    SSJCalenderDetailInfoCellItem *fundItem = [[SSJCalenderDetailInfoCellItem alloc] init];
-    fundItem.leftText = @"资金";
-    fundItem.rightText = self.item.fundName;
-    fundItem.separatorInsets = UIEdgeInsetsMake(0, 15, 0, 0);
-    [section_2 addObject:fundItem];
+    if (self.item.fundName) {
+        SSJCalenderDetailInfoCellItem *fundItem = [[SSJCalenderDetailInfoCellItem alloc] init];
+        fundItem.leftText = @"资金";
+        fundItem.rightText = self.item.fundName;
+        fundItem.separatorInsets = UIEdgeInsetsMake(0, 15, 0, 0);
+        [section_2 addObject:fundItem];
+    }
     
     SSJCalenderDetailInfoCellItem *bookItem = [[SSJCalenderDetailInfoCellItem alloc] init];
     bookItem.leftText = @"账本";
@@ -255,23 +281,19 @@ static NSString *const kSSJCalenderDetailPhotoCellId = @"kSSJCalenderDetailPhoto
     [self.editBtn ssj_setBackgroundColor:SSJ_SECONDARY_FILL_COLOR forState:UIControlStateNormal];
 }
 
-/**
- *  数据库中删除流水
- */
-- (void)deleteCharge {
-    self.navigationItem.rightBarButtonItem.enabled = NO;
-    [SSJCalenderHelper deleteChargeWithItem:self.item success:^{
-        self.navigationItem.rightBarButtonItem.enabled = YES;
-        if (self.deleteHandler) {
-            self.deleteHandler();
-        } else {
-            [self.navigationController popViewControllerAnimated:YES];
-        }
-        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
-    } failure:^(NSError * _Nonnull error) {
-        self.navigationItem.rightBarButtonItem.enabled = YES;
-        [SSJAlertViewAdapter showError:error];
-    }];
+- (void)updateTableViewInsetsAndEditBtnHidden {
+    if (self.item.idType == SSJChargeIdTypeShareBooks
+        && ![self.item.userId isEqualToString:SSJUSERID()]) {
+        UIEdgeInsets insets = self.tableView.contentInset;
+        insets.bottom = 0;
+        self.tableView.contentInset = insets;
+        self.editBtn.hidden = YES;
+    } else {
+        UIEdgeInsets insets = self.tableView.contentInset;
+        insets.bottom = self.editBtn.height;
+        self.tableView.contentInset = insets;
+        self.editBtn.hidden = NO;
+    }
 }
 
 @end

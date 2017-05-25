@@ -81,11 +81,10 @@ static const CGFloat kCategoryImageButtonRadius = 16;
             make.size.mas_equalTo(CGSizeMake(30, 30));
         }];
     }
-    
-    if (self.bottomLabel.text.length) {
+  
+    if (self.bottomLabel.text.length || self.bottomLabel.attributedText.length) {
         [self.topLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(self.labelContainer);
-            make.left.and.right.mas_equalTo(self.labelContainer);
+            make.top.and.left.and.right.mas_equalTo(self.labelContainer);
         }];
         [self.bottomLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.top.mas_equalTo(self.topLabel.mas_bottom).offset(2);
@@ -93,8 +92,7 @@ static const CGFloat kCategoryImageButtonRadius = 16;
         }];
     } else {
         [self.topLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(self.labelContainer);
-            make.left.and.right.and.bottom.mas_equalTo(self.labelContainer);
+            make.edges.mas_equalTo(self.labelContainer);
         }];
     }
     
@@ -111,8 +109,16 @@ static const CGFloat kCategoryImageButtonRadius = 16;
     
     self.topLabel.text = [NSString stringWithFormat:@"%@%.2f",_item.typeName,[_item.money doubleValue]];
     if (_item.idType == SSJChargeIdTypeShareBooks) {
-        
+        NSMutableAttributedString *text = [[NSMutableAttributedString alloc] init];
+        if (_item.memberNickname.length) {
+            [text appendAttributedString:[[NSAttributedString alloc] initWithString:_item.memberNickname attributes:@{NSForegroundColorAttributeName:SSJ_MAIN_COLOR}]];
+        }
+        if (_item.chargeMemo.length) {
+            [text appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"｜%@", _item.memberNickname] attributes:@{NSForegroundColorAttributeName:SSJ_SECONDARY_COLOR}]];
+        }
+        self.bottomLabel.attributedText = text;
     } else {
+        self.bottomLabel.attributedText = nil;
         self.bottomLabel.text = _item.chargeMemo;
     }
     
