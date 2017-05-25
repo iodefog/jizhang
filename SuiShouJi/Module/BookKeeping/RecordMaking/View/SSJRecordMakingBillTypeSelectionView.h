@@ -14,6 +14,8 @@
 
 @property (nonatomic, strong) NSArray<SSJRecordMakingBillTypeSelectionCellItem *> *items;
 
+@property (nonatomic, strong, readonly) SSJRecordMakingBillTypeSelectionCellItem *selectedItem;
+
 @property (nonatomic, copy) BOOL (^shouldDeleteAction)(SSJRecordMakingBillTypeSelectionView *, SSJRecordMakingBillTypeSelectionCellItem *);
 
 @property (nonatomic, copy) void (^deleteAction)(SSJRecordMakingBillTypeSelectionView *, SSJRecordMakingBillTypeSelectionCellItem *);

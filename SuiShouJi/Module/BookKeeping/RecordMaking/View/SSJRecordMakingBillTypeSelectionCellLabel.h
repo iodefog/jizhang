@@ -10,6 +10,8 @@
 
 @interface SSJRecordMakingBillTypeSelectionCellLabel : UIView
 
+@property (nonatomic, strong, readonly) CATextLayer *textLayer;
+
 @property (nonatomic, strong) UIFont *font;
 
 @property (nonatomic) NSTextAlignment textAlignment;

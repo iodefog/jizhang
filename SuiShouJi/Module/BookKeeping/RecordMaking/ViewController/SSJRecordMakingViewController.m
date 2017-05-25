@@ -466,7 +466,9 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
             
             _paymentTypeView.editing = NO;
             _incomeTypeView.editing = NO;
-            [self updateBillTypeSelectionViewAndInputView];
+            [[self loadBillTypeSignal] subscribeError:^(NSError *error) {
+                [SSJAlertViewAdapter showError:error];
+            } completed:NULL];
             [self updateNavigationRightItem];
         }
     }
@@ -508,7 +510,9 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     
     _paymentTypeView.editing = NO;
     _incomeTypeView.editing = NO;
-    [self updateBillTypeSelectionViewAndInputView];
+    [[self loadBillTypeSignal] subscribeError:^(NSError *error) {
+        [SSJAlertViewAdapter showError:error];
+    } completed:NULL];
     [self updateNavigationRightItem];
 }
 
@@ -731,35 +735,37 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     @weakify(self);
     return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         @strongify(self);
-        [SSJCategoryListHelper queryForCategoryListWithIncomeOrExpenture:self.customNaviBar.selectedBillType booksId:self.item.booksId Success:^(NSMutableArray *categoryList) {
+        [SSJCategoryListHelper queryForCategoryListWithIncomeOrExpenture:self.customNaviBar.selectedBillType booksId:self.item.booksId Success:^(NSMutableArray<SSJRecordMakingBillTypeSelectionCellItem *> *categoryList) {
+            
+            SSJRecordMakingBillTypeSelectionView *billTypeView = self.paymentTypeView;
+            if (self.customNaviBar.selectedBillType == SSJBillTypePay) {
+                billTypeView = self.paymentTypeView;
+            } else if (self.customNaviBar.selectedBillType == SSJBillTypeIncome) {
+                billTypeView = self.incomeTypeView;
+            }
             
             __block SSJRecordMakingBillTypeSelectionCellItem *selectedItem = nil;
-            dispatch_apply([categoryList count], dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(size_t index) {
-                SSJRecordMakingBillTypeSelectionCellItem *item = [categoryList ssj_safeObjectAtIndex:index];
-                if (self.item.billId && [item.ID isEqualToString:self.item.billId]) {
-                    item.selected = YES;
-                    selectedItem = item;
+            SSJRecordMakingBillTypeSelectionCellItem *lastSelectedItem = billTypeView.selectedItem;
+            [categoryList enumerateObjectsWithOptions:NSEnumerationConcurrent usingBlock:^(SSJRecordMakingBillTypeSelectionCellItem *obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                if (lastSelectedItem.ID && [obj.ID isEqualToString:lastSelectedItem.ID]) {
+                    obj.state = SSJRecordMakingBillTypeSelectionCellStateSelected;
+                    selectedItem = obj;
+                    *stop = YES;
                 }
-            });
+            }];
             
             if (!selectedItem) {
                 selectedItem = [categoryList firstObject];
-                selectedItem.selected = YES;
-                self.item.billId = selectedItem.ID;
+                selectedItem.state = SSJRecordMakingBillTypeSelectionCellStateSelected;
             }
             
-            if (self.customNaviBar.selectedBillType == SSJBillTypePay) {
-                self.paymentTypeView.items = categoryList;
-            } else if (self.customNaviBar.selectedBillType == SSJBillTypeIncome) {
-                self.incomeTypeView.items = categoryList;
-            }
+            self.item.billId = selectedItem.ID;
+            billTypeView.items = categoryList;
             
-            if (selectedItem) {
-                [UIView animateWithDuration:kAnimationDuration animations:^{
-                    self.billTypeInputView.fillColor = [UIColor ssj_colorWithHex:selectedItem.colorValue];
-                }];
-                self.billTypeInputView.billTypeName = selectedItem.title;
-            }
+            [UIView animateWithDuration:kAnimationDuration animations:^{
+                self.billTypeInputView.fillColor = selectedItem ? [UIColor ssj_colorWithHex:selectedItem.colorValue] : INPUT_DEFAULT_COLOR;
+            }];
+            self.billTypeInputView.billTypeName = selectedItem.title;
             
             [subscriber sendNext:nil];
             [subscriber sendCompleted];
@@ -1056,42 +1062,6 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     };
 }
 
-- (void)updateBillTypeSelectionViewAndInputView {
-    if (_customNaviBar.selectedBillType == SSJBillTypePay) {
-        if (_paymentTypeView.items.count == 0) {
-            [[self loadBillTypeSignal] subscribeError:^(NSError *error) {
-                [SSJAlertViewAdapter showError:error];
-            } completed:NULL];
-        } else {
-            for (SSJRecordMakingBillTypeSelectionCellItem *item in _paymentTypeView.items) {
-                if (item.selected) {
-                    [UIView animateWithDuration:kAnimationDuration animations:^{
-                        _billTypeInputView.fillColor = [UIColor ssj_colorWithHex:item.colorValue];
-                    }];
-                    _billTypeInputView.billTypeName = item.title;
-                    break;
-                }
-            }
-        }
-    } else if (_customNaviBar.selectedBillType == SSJBillTypeIncome) {
-        if (_incomeTypeView.items.count == 0) {
-            [[self loadBillTypeSignal] subscribeError:^(NSError *error) {
-                [SSJAlertViewAdapter showError:error];
-            } completed:NULL];
-        } else {
-            for (SSJRecordMakingBillTypeSelectionCellItem *item in _incomeTypeView.items) {
-                if (item.selected) {
-                    [UIView animateWithDuration:kAnimationDuration animations:^{
-                        _billTypeInputView.fillColor = [UIColor ssj_colorWithHex:item.colorValue];
-                    }];
-                    _billTypeInputView.billTypeName = item.title;
-                    break;
-                }
-            }
-        }
-    }
-}
-
 -(void)updateMembers{
     if (self.item.membersItem.count == 1) {
         SSJChargeMemberItem *item = [self.item.membersItem ssj_safeObjectAtIndex:0];
@@ -1133,7 +1103,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
                                         }];
     
     for (SSJRecordMakingBillTypeSelectionCellItem *item in items) {
-        if (item.selected) {
+        if (item.state == SSJRecordMakingBillTypeSelectionCellStateSelected) {
             [UIView animateWithDuration:kAnimationDuration animations:^{
                 self.billTypeInputView.billTypeName = item.title;
                 self.billTypeInputView.fillColor = [UIColor ssj_colorWithHex:item.colorValue];
