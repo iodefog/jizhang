@@ -545,5 +545,46 @@
 		<key>appleID</key>
 		<string>1230291938</string>
 	</dict>
+	<key>com.yy.jz</key>
+	<dict>
+		<key>GeTuiAppSecret</key>
+		<string>Fx5ww60VDh9OC5V496qvG1</string>
+		<key>GeTuiAppKey</key>
+		<string>o94ErdbmnQ7XaEOXAUgVA5</string>
+		<key>GeTuiAppID</key>
+		<string>5wARtCEMJP7DXpQYrNpFX6</string>
+		<key>source</key>
+		<string>11514</string>
+		<key>WeiXinKey</key>
+		<string></string>
+		<key>WeiXinSecret</key>
+		<string></string>
+		<key>QQAppId</key>
+		<string>1105340301</string>
+		<key>QQAppKey</key>
+		<string>mW8hRwplNTlrUj3O</string>
+		<key>YWAppKey</key>
+		<string></string>
+		<key>WeiBoAppKey</key>
+		<string></string>
+		<key>WeiBoSecret</key>
+		<string></string>
+		<key>UMAppKey</key>
+		<string>5926844cf29d98556900034d</string>
+		<key>ShareTitle</key>
+		<string></string>
+		<key>ShareUrl</key>
+		<string></string>
+		<key>ShareContent</key>
+		<string></string>
+		<key>ShareIcon</key>
+		<string></string>
+		<key>WeiboBanner</key>
+		<string></string>
+		<key>AppStoreUrl</key>
+		<string>https://itunes.apple.com/cn/app/%E8%AE%B0%E8%B4%A6222/id1238642818?l=zh&amp;ls=1&amp;mt=8</string>
+		<key>appleID</key>
+		<string>1238642818</string>
+	</dict>
 </dict>
 </plist>
