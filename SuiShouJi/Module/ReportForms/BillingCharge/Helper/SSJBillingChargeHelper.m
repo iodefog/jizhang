@@ -79,7 +79,7 @@ NSString *const SSJBillingChargeRecordKey = @"SSJBillingChargeRecordKey";
             item.chargeThumbImage = [resultSet stringForColumn:@"thumburl"];
             item.idType = [resultSet intForColumn:@"ichargetype"];
             if (item.idType == SSJChargeIdTypeCircleConfig) {
-                item.configId = [resultSet stringForColumn:@"cid"];
+                item.sundryId = [resultSet stringForColumn:@"cid"];
             }
             item.booksId = [resultSet stringForColumn:@"cbooksid"];;
             
@@ -186,7 +186,7 @@ NSString *const SSJBillingChargeRecordKey = @"SSJBillingChargeRecordKey";
             item.chargeThumbImage = [resultSet stringForColumn:@"thumburl"];
             item.idType = [resultSet intForColumn:@"ichargetype"];
             if (item.idType) {
-                item.configId = [resultSet stringForColumn:@"cid"];
+                item.sundryId = [resultSet stringForColumn:@"cid"];
             }
             item.booksId = [resultSet stringForColumn:@"cbooksid"];
             

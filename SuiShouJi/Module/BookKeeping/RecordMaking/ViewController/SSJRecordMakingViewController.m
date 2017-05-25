@@ -196,10 +196,10 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
             NSObject<SSJBooksItemProtocol> *bookItem = [wself.booksItems ssj_safeObjectAtIndex:naviBar.selectedTitleIndex];
             wself.item.booksId = bookItem.booksId;
             if ([bookItem isKindOfClass:[SSJBooksTypeItem class]]) {
-                wself.item.configId = nil;
+                wself.item.sundryId = nil;
                 wself.item.idType = SSJChargeIdTypeNormal;
             } else if ([bookItem isKindOfClass:[SSJShareBookItem class]]) {
-                wself.item.configId = bookItem.booksId;
+                wself.item.sundryId = bookItem.booksId;
                 wself.item.idType = SSJChargeIdTypeShareBooks;
             }
             [wself.currentInput becomeFirstResponder];
@@ -701,10 +701,10 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
                 if ([item.booksId isEqualToString:self.item.booksId]) {
                     selectedIndex = i;
                     if ([item isKindOfClass:[SSJBooksTypeItem class]]) {
-                        self.item.configId = nil;
+                        self.item.sundryId = nil;
                         self.item.idType = SSJChargeIdTypeNormal;
                     } else if ([item isKindOfClass:[SSJShareBookItem class]]) {
-                        self.item.configId = self.item.booksId;
+                        self.item.sundryId = self.item.booksId;
                         self.item.idType = SSJChargeIdTypeShareBooks;
                     }
                 }

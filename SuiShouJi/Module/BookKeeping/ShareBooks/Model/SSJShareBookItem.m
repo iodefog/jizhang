@@ -11,7 +11,8 @@
 @implementation SSJShareBookItem
 @synthesize booksId;
 @synthesize booksName;
-@synthesize booksColor = _booksColor;
+//@synthesize booksColor = _booksColor;
+@synthesize booksColor;
 @synthesize booksOrder;
 @synthesize booksParent;
 @synthesize cwriteDate;
@@ -30,9 +31,9 @@
     return mapping;
 }
 
-- (void)setBooksColor:(SSJFinancingGradientColorItem *)booksColor
-{
-    _booksColor = booksColor;
-}
+//- (void)setBooksColor:(SSJFinancingGradientColorItem *)booksColor
+//{
+//    _booksColor = booksColor;
+//}
 
 @end

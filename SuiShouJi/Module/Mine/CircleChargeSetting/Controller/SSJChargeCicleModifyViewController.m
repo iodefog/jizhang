@@ -610,8 +610,8 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
     __weak typeof(self) weakSelf = self;
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSString *writeDate = [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-        if ([db intForQuery:@"select count(1) from bk_charge_period_config where iconfigid = ?",weakSelf.item.configId]) {
-            [db executeUpdate:@"update bk_charge_period_config set operatortype = 2 ,cwritedate = ? ,iversion = ? where iconfigid = ?",writeDate,@(SSJSyncVersion()),weakSelf.item.configId];
+        if ([db intForQuery:@"select count(1) from bk_charge_period_config where iconfigid = ?",weakSelf.item.sundryId]) {
+            [db executeUpdate:@"update bk_charge_period_config set operatortype = 2 ,cwritedate = ? ,iversion = ? where iconfigid = ?",writeDate,@(SSJSyncVersion()),weakSelf.item.sundryId];
         }
         SSJDispatch_main_async_safe(^{
             [weakSelf.navigationController popViewControllerAnimated:YES];

@@ -41,7 +41,7 @@
             item.billId = [chargeResult stringForColumn:@"IBILLID"];
             item.chargeImage = [chargeResult stringForColumn:@"CIMGURL"];
             item.chargeMemo = [chargeResult stringForColumn:@"CMEMO"];
-            item.configId = [chargeResult stringForColumn:@"ICONFIGID"];
+            item.sundryId = [chargeResult stringForColumn:@"ICONFIGID"];
             item.billDate = [chargeResult stringForColumn:@"CBILLDATE"];
             item.booksName = [chargeResult stringForColumn:@"CBOOKSNAME"];
             item.isOnOrNot = [chargeResult boolForColumn:@"ISTATE"];
@@ -116,7 +116,7 @@
     item.billId = [set stringForColumn:@"IBILLID"];
     item.chargeImage = [set stringForColumn:@"CIMGURL"];
     item.chargeMemo = [set stringForColumn:@"CMEMO"];
-    item.configId = [set stringForColumn:@"ICONFIGID"];
+    item.sundryId = [set stringForColumn:@"ICONFIGID"];
     item.billDate = [set stringForColumn:@"CBILLDATE"];
     item.booksName = [set stringForColumn:@"CBOOKSNAME"];
     item.isOnOrNot = [set boolForColumn:@"ISTATE"];
@@ -135,8 +135,8 @@
             item.booksId = [db stringForQuery:@"select ccurrentBooksId from bk_user where cuserid = ?", userid];
             item.booksId = item.booksId ?: userid;
         }
-        if (!item.configId.length) {
-            item.configId = SSJUUID();
+        if (!item.sundryId.length) {
+            item.sundryId = SSJUUID();
         }
         NSString *cwriteDate = [[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         NSMutableArray *membersIdArr = [NSMutableArray arrayWithCapacity:0];
@@ -150,11 +150,11 @@
             item.chargeThumbImage = [NSString stringWithFormat:@"%@.jpg",item.chargeThumbImage];
         }
         NSString *membersStr = [membersIdArr componentsJoinedByString:@","];
-        NSString *originImageName = [db stringForQuery:@"select cimgurl from bk_charge_period_config where iconfigid = ?",item.configId];
+        NSString *originImageName = [db stringForQuery:@"select cimgurl from bk_charge_period_config where iconfigid = ?",item.sundryId];
         //如果有图片,插入图片表
         if (![item.chargeImage isEqualToString:originImageName]) {
             if (item.chargeImage.length) {
-                if (![db executeUpdate:@"insert into bk_img_sync (rid,cimgname,cwritedate,operatortype,isynctype,isyncstate) values (?,?,?,0,0,0)",item.configId,item.chargeImage,cwriteDate]) {
+                if (![db executeUpdate:@"insert into bk_img_sync (rid,cimgname,cwritedate,operatortype,isynctype,isyncstate) values (?,?,?,0,0,0)",item.sundryId,item.chargeImage,cwriteDate]) {
                     if (failure) {
                         SSJDispatch_main_async_safe(^{
                             failure([db lastError]);
@@ -165,8 +165,8 @@
             }
         }
         //插入周期记账表
-        if (![db intForQuery:@"select count(1) from bk_charge_period_config where iconfigid = ?",item.configId]) {
-            if (![db executeUpdate:@"insert into bk_charge_period_config (iconfigid, cuserid, ibillid, ifunsid, itype, imoney, cimgurl, cmemo, cbilldate, istate, iversion, cwritedate, operatortype, cbooksid, cmemberids, cbilldateend) values (?,?,?,?,?,?,?,?,?,1,?,?,0,?,?,?)",item.configId,userid,item.billId,item.fundId,@(item.chargeCircleType),@([item.money doubleValue]),item.chargeImage,item.chargeMemo,item.billDate,@(SSJSyncVersion()),cwriteDate,item.booksId,membersStr,item.chargeCircleEndDate]) {
+        if (![db intForQuery:@"select count(1) from bk_charge_period_config where iconfigid = ?",item.sundryId]) {
+            if (![db executeUpdate:@"insert into bk_charge_period_config (iconfigid, cuserid, ibillid, ifunsid, itype, imoney, cimgurl, cmemo, cbilldate, istate, iversion, cwritedate, operatortype, cbooksid, cmemberids, cbilldateend) values (?,?,?,?,?,?,?,?,?,1,?,?,0,?,?,?)",item.sundryId,userid,item.billId,item.fundId,@(item.chargeCircleType),@([item.money doubleValue]),item.chargeImage,item.chargeMemo,item.billDate,@(SSJSyncVersion()),cwriteDate,item.booksId,membersStr,item.chargeCircleEndDate]) {
                 if (failure) {
                     SSJDispatch_main_async_safe(^{
                         failure([db lastError]);
@@ -188,7 +188,7 @@
                 }else{
                     NSString *chargeId = SSJUUID();
                     //修改流水表
-                    if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, ibillid, ifunsid, cid, ichargetype, imoney, cimgurl, thumburl, cmemo, cbilldate, iversion, cwritedate, operatortype, cbooksid) values (?,?,?,?,?,?,?,?,?,?,?,?,?,0,?)",chargeId,userid,item.billId,item.fundId,item.configId,@(SSJChargeIdTypeCircleConfig),@([item.money doubleValue]),item.chargeImage,item.chargeThumbImage,item.chargeMemo,item.billDate,@(SSJSyncVersion()),cwriteDate,item.booksId]) {
+                    if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, ibillid, ifunsid, cid, ichargetype, imoney, cimgurl, thumburl, cmemo, cbilldate, iversion, cwritedate, operatortype, cbooksid) values (?,?,?,?,?,?,?,?,?,?,?,?,?,0,?)",chargeId,userid,item.billId,item.fundId,item.sundryId,@(SSJChargeIdTypeCircleConfig),@([item.money doubleValue]),item.chargeImage,item.chargeThumbImage,item.chargeMemo,item.billDate,@(SSJSyncVersion()),cwriteDate,item.booksId]) {
                         if (failure) {
                             SSJDispatch_main_async_safe(^{
                                 failure([db lastError]);
@@ -253,7 +253,7 @@
             }else{
                 NSString *chargeId = SSJUUID();
                 //修改流水表
-                if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, ibillid, ifunsid, cid, ichargetype, imoney, cimgurl, thumburl, cmemo, cbilldate, iversion, cwritedate, operatortype, cbooksid) values (?,?,?,?,?,?,?,?,?,?,?,?,?,0,?)",chargeId,userid,item.billId,item.fundId,item.configId,@(SSJChargeIdTypeCircleConfig),@([item.money doubleValue]),item.chargeImage,item.chargeThumbImage,item.chargeMemo,item.billDate,@(SSJSyncVersion()),cwriteDate,item.booksId]) {
+                if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, ibillid, ifunsid, cid, ichargetype, imoney, cimgurl, thumburl, cmemo, cbilldate, iversion, cwritedate, operatortype, cbooksid) values (?,?,?,?,?,?,?,?,?,?,?,?,?,0,?)",chargeId,userid,item.billId,item.fundId,item.sundryId,@(SSJChargeIdTypeCircleConfig),@([item.money doubleValue]),item.chargeImage,item.chargeThumbImage,item.chargeMemo,item.billDate,@(SSJSyncVersion()),cwriteDate,item.booksId]) {
                     if (failure) {
                         SSJDispatch_main_async_safe(^{
                             failure([db lastError]);
@@ -275,7 +275,7 @@
             }
         }else{
             //修改周期记账
-            if (![db executeUpdate:@"update bk_charge_period_config set ibillid = ? ,ifunsid = ? ,itype = ? ,imoney = ?,cimgurl = ?,cmemo = ?,cbilldate = ?,iversion = ?,cwritedate = ?,operatortype = 1 , cmemberids = ?, cbilldateend = ? where cuserid = ? and cbooksid = ? and iconfigid = ?",item.billId,item.fundId,@(item.chargeCircleType),item.money,item.chargeImage,item.chargeMemo,item.billDate,@(SSJSyncVersion()),cwriteDate,membersStr,item.chargeCircleEndDate,userid,item.booksId,item.configId]) {
+            if (![db executeUpdate:@"update bk_charge_period_config set ibillid = ? ,ifunsid = ? ,itype = ? ,imoney = ?,cimgurl = ?,cmemo = ?,cbilldate = ?,iversion = ?,cwritedate = ?,operatortype = 1 , cmemberids = ?, cbilldateend = ? where cuserid = ? and cbooksid = ? and iconfigid = ?",item.billId,item.fundId,@(item.chargeCircleType),item.money,item.chargeImage,item.chargeMemo,item.billDate,@(SSJSyncVersion()),cwriteDate,membersStr,item.chargeCircleEndDate,userid,item.booksId,item.sundryId]) {
                 if (failure) {
                     SSJDispatch_main_async_safe(^{
                         failure([db lastError]);

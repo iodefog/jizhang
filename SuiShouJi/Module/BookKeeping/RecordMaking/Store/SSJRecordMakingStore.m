@@ -162,7 +162,7 @@
                 originItem.chargeThumbImage = [originResult stringForColumn:@"THUMBURL"];
                 originItem.chargeMemo = [originResult stringForColumn:@"CMEMO"];
                 if ([originResult intForColumn:@"ichargetype"] == SSJChargeIdTypeCircleConfig) {
-                    originItem.configId = [originResult stringForColumn:@"cid"];
+                    originItem.sundryId = [originResult stringForColumn:@"cid"];
                 }
                 originItem.billDate = [originResult stringForColumn:@"CBILLDATE"];
                 originItem.incomeOrExpence = [originResult intForColumn:@"ITYPE"];
