@@ -44,7 +44,7 @@
 
 // 创建共享账本成员表
 + (NSError *)createShareBooksMemberTableWithDatabase:(FMDatabase *)db {
-    if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS BK_SHARE_BOOKS_MEMBER (CMEMBERID TEXT, CBOOKSID TEXT, CJOINDATE TEXT, ISTATE INTEGER, PRIMARY KEY(CMEMBERID, CBOOKSID))"]) {
+    if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS BK_SHARE_BOOKS_MEMBER (CMEMBERID TEXT, CBOOKSID TEXT, CJOINDATE TEXT, ISTATE INTEGER, CCOLOR TEXT, PRIMARY KEY(CMEMBERID, CBOOKSID))"]) {
         return [db lastError];
     }
     return nil;
