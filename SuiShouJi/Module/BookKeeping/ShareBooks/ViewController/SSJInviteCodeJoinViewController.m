@@ -114,11 +114,12 @@
                 self.sendButton.backgroundColor = [UIColor ssj_colorWithHex:@"#CCCCCC"];
                 self.sendButton.layer.shadowColor = [UIColor blackColor].CGColor;
                 self.sendButton.layer.shadowOpacity = 0.15;
-                
+                self.sendButton.userInteractionEnabled = NO;
             } else {
                 self.sendButton.backgroundColor = [UIColor ssj_colorWithHex:@"#EB4A64"];
                 self.sendButton.layer.shadowColor = [UIColor ssj_colorWithHex:@"#EB4A64"].CGColor;
                 self.sendButton.layer.shadowOpacity = 0.39;
+                self.sendButton.userInteractionEnabled = YES;
             }
         }];
     }
@@ -152,7 +153,6 @@
 
 #pragma mark - Event
 - (void)sendButtonClicked:(id)sender {
-
     
 }
 

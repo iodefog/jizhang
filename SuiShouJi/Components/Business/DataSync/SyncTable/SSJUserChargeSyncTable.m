@@ -99,7 +99,7 @@
 + (BOOL)mergeRecords:(NSArray *)records forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
     for (NSDictionary *recordInfo in records) {
         
-        FMResultSet *resultSet = [db executeQuery:@"select operatortype from bk_user_charge where ichargeid = ? and cuserid = ? and cbooksid = ?", recordInfo[@"ichargeid"]];
+        FMResultSet *resultSet = [db executeQuery:@"select operatortype from bk_user_charge where ichargeid = ?", recordInfo[@"ichargeid"]];
         
         if (!resultSet) {
             if (error) {
