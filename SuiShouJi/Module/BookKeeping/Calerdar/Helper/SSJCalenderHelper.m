@@ -117,9 +117,8 @@
     }
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db){
-        
-        FMResultSet *chargeResult = [db executeQuery:@"select a.* , b.* , c.cacctname , d.cbooksname from bk_user_charge a , bk_bill_type b , bk_fund_info c , bk_books_type d where a.ichargeid = ? and a.cuserid = ?  and a.ibillid = b.id and a.ifunsid = c.cfundid and a.cbooksid = d.cbooksid", chargeId, SSJUSERID()];
-        if (!chargeResult) {
+        FMResultSet *rs = [db executeQuery:@"select a.* , b.* from bk_user_charge a , bk_bill_type b where a.ichargeid = ? and a.ibillid = b.id", chargeId];
+        if (!rs) {
             if (failure) {
                 SSJDispatchMainAsync(^{
                     failure([db lastError]);
@@ -129,54 +128,80 @@
         }
         
         SSJBillingChargeCellItem *item = [[SSJBillingChargeCellItem alloc] init];
-        while ([chargeResult next]) {
+        while ([rs next]) {
             item.ID = chargeId;
-            item.billId = [chargeResult stringForColumn:@"IBILLID"];
-            item.imageName = [chargeResult stringForColumn:@"CCOIN"];
-            item.typeName = [chargeResult stringForColumn:@"CNAME"];
-            item.money = [chargeResult stringForColumn:@"IMONEY"];
-            item.chargeImage = [chargeResult stringForColumn:@"CIMGURL"];
-            item.chargeMemo = [chargeResult stringForColumn:@"CMEMO"];
-            item.billDate = [chargeResult stringForColumn:@"CBILLDATE"];
-            item.fundId = [chargeResult stringForColumn:@"IFUNSID"];
-            item.fundName = [chargeResult stringForColumn:@"cacctname"];
-            item.colorValue = [chargeResult stringForColumn:@"CCOLOR"];
-            item.incomeOrExpence = [chargeResult boolForColumn:@"ITYPE"];
-            item.billDetailDate = [chargeResult stringForColumn:@"cdetaildate"];
-            item.booksId = [chargeResult stringForColumn:@"cbooksid"];
+            item.userId = [rs stringForColumn:@"cuserid"];
+            item.billId = [rs stringForColumn:@"IBILLID"];
+            item.imageName = [rs stringForColumn:@"CCOIN"];
+            item.typeName = [rs stringForColumn:@"CNAME"];
+            item.money = [rs stringForColumn:@"IMONEY"];
+            item.chargeImage = [rs stringForColumn:@"CIMGURL"];
+            item.chargeMemo = [rs stringForColumn:@"CMEMO"];
+            item.billDate = [rs stringForColumn:@"CBILLDATE"];
+            item.fundId = [rs stringForColumn:@"IFUNSID"];
+            item.colorValue = [rs stringForColumn:@"CCOLOR"];
+            item.incomeOrExpence = [rs boolForColumn:@"ITYPE"];
+            item.billDetailDate = [rs stringForColumn:@"cdetaildate"];
+            item.booksId = [rs stringForColumn:@"cbooksid"];
             item.booksId = item.booksId.length ? item.booksId : SSJUSERID();
-            item.booksName = [chargeResult stringForColumn:@"cbooksname"];
+            item.idType = [rs intForColumn:@"ichargetype"];
         }
-        [chargeResult close];
+        [rs close];
         
-        FMResultSet *memberResult = [db executeQuery:@"select a.* , b.* from bk_member_charge as a , bk_member as b where a.ichargeid = ? and a.cmemberid = b.cmemberid and b.cuserid = ?", chargeId, SSJUSERID()];
-        if (!chargeResult) {
-            if (failure) {
-                SSJDispatchMainAsync(^{
-                    failure([db lastError]);
-                });
+        if (item.idType == SSJChargeIdTypeShareBooks) { // 共享账本
+            if (item.userId == SSJUSERID()) {// 如果是自己的流水就还需要查询资金账户
+                rs = [db executeQuery:@"select fi.cacctname, sb.cbooksname, sm.cmark from bk_user_charge as uc, bk_fund_info as fi, bk_share_books as sb, bk_share_books_friends_mark as sm where uc.ifunsid = fi.cfundid and uc.cbooksid = sb.cbooksid and sb.cbooksid = sm.cbooksid and uc.cuserid = sm.cfriendid and sm.cuserid = ? and uc.ichargeid = ?", SSJUSERID(), item.ID];
+                while ([rs next]) {
+                    item.fundName = [rs stringForColumn:@"cacctname"];
+                    item.booksName = [rs stringForColumn:@"cbooksname"];
+                    item.memberNickname = [rs stringForColumn:@"cmark"];
+                }
+                [rs close];
+            } else {
+                rs = [db executeQuery:@"select sb.cbooksname, sm.cmark from bk_user_charge as uc, bk_share_books as sb, bk_share_books_friends_mark as sm where uc.cbooksid = sb.cbooksid and sb.cbooksid = sm.cbooksid and uc.cuserid = sm.cfriendid and sm.cuserid = ? and uc.ichargeid = ?", SSJUSERID(), item.ID];
+                while ([rs next]) {
+                    item.booksName = [rs stringForColumn:@"cbooksname"];
+                    item.memberNickname = [rs stringForColumn:@"cmark"];
+                }
+                [rs close];
             }
-            return;
+        } else { // 个人账本
+            rs = [db executeQuery:@"select fi.cacctname, bt.cbooksname from bk_user_charge as uc, bk_fund_info as fi, bk_books_type as bt where uc.ifunsid = fi.cfundid and uc.cbooksid = bt.cbooksid and uc.ichargeid = ?", item.ID];
+            while ([rs next]) {
+                item.fundName = [rs stringForColumn:@"cacctname"];
+                item.booksName = [rs stringForColumn:@"cbooksname"];
+            }
+            [rs close];
+            
+            rs = [db executeQuery:@"select a.* , b.* from bk_member_charge as a , bk_member as b where a.ichargeid = ? and a.cmemberid = b.cmemberid and b.cuserid = ?", chargeId, SSJUSERID()];
+            if (!rs) {
+                if (failure) {
+                    SSJDispatchMainAsync(^{
+                        failure([db lastError]);
+                    });
+                }
+                return;
+            }
+            
+            NSMutableArray *memberItems = [NSMutableArray arrayWithCapacity:0];
+            while ([rs next]) {
+                SSJChargeMemberItem *memberItem = [[SSJChargeMemberItem alloc]init];
+                memberItem.memberId = [rs stringForColumn:@"cmemberId"];
+                memberItem.memberName = [rs stringForColumn:@"cname"];
+                memberItem.memberColor = [rs stringForColumn:@"ccolor"];
+                [memberItems addObject:memberItem];
+            }
+            [rs close];
+            
+            if (!memberItems.count) {
+                SSJChargeMemberItem *item = [[SSJChargeMemberItem alloc]init];
+                item.memberId = [NSString stringWithFormat:@"%@-0",SSJUSERID()];
+                item.memberName = @"我";
+                item.memberColor = @"#fc7a60";
+                [memberItems addObject:item];
+            }
+            item.membersItem = memberItems;
         }
-        
-        NSMutableArray *memberItems = [NSMutableArray arrayWithCapacity:0];
-        while ([memberResult next]) {
-            SSJChargeMemberItem *memberItem = [[SSJChargeMemberItem alloc]init];
-            memberItem.memberId = [memberResult stringForColumn:@"cmemberId"];
-            memberItem.memberName = [memberResult stringForColumn:@"cname"];
-            memberItem.memberColor = [memberResult stringForColumn:@"ccolor"];
-            [memberItems addObject:memberItem];
-        }
-        [memberResult close];
-        
-        if (!memberItems.count) {
-            SSJChargeMemberItem *item = [[SSJChargeMemberItem alloc]init];
-            item.memberId = [NSString stringWithFormat:@"%@-0",SSJUSERID()];
-            item.memberName = @"我";
-            item.memberColor = @"#fc7a60";
-            [memberItems addObject:item];
-        }
-        item.membersItem = memberItems;
         
         if (success) {
             SSJDispatch_main_async_safe(^(){

@@ -744,9 +744,9 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
             }
             
             __block SSJRecordMakingBillTypeSelectionCellItem *selectedItem = nil;
-            SSJRecordMakingBillTypeSelectionCellItem *lastSelectedItem = billTypeView.selectedItem;
+            NSString *selectedId = billTypeView.selectedItem.ID ?: self.item.billId;
             [categoryList enumerateObjectsWithOptions:NSEnumerationConcurrent usingBlock:^(SSJRecordMakingBillTypeSelectionCellItem *obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                if (lastSelectedItem.ID && [obj.ID isEqualToString:lastSelectedItem.ID]) {
+                if (selectedId && [obj.ID isEqualToString:selectedId]) {
                     obj.state = SSJRecordMakingBillTypeSelectionCellStateSelected;
                     selectedItem = obj;
                     *stop = YES;

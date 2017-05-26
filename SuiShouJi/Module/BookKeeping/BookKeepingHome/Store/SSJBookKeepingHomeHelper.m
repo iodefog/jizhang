@@ -41,7 +41,7 @@ NSString *const SSJMonthSumDicKey = @"SSJMonthSumDicKey";
         
         int section = 0;
         int row = 0;
-        FMResultSet *chargeResult = [db executeQuery:@"select uc.* , uc.operatortype as chargeoperatortype, bt.cname, bt.ccoin, bt.ccolor, bt.itype, bf.cmark from bk_user_charge uc , bk_bill_type bt left join bk_share_books_friends_mark bf on bf.cuserid = uc.cuserid and bf.cbooksid = uc.cbooksid where uc.ibillid = bt.id and uc.cbilldate <= ? and uc.cuserid = ? and uc.cbooksid = ? and uc.operatortype <> 2 and bt.istate <> 2 order by uc.cbilldate desc , uc.clientadddate desc , uc.cwritedate desc",[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"],userid,booksid];
+        FMResultSet *chargeResult = [db executeQuery:@"select uc.* , uc.operatortype as chargeoperatortype, bt.cname, bt.ccoin, bt.ccolor, bt.itype, bf.cmark from bk_user_charge uc left join bk_share_books_friends_mark bf on bf.cfriendid = uc.cuserid and bf.cbooksid = uc.cbooksid and bf.cuserid = ? , bk_bill_type bt where uc.ibillid = bt.id and uc.cbilldate <= ? and uc.cuserid = ? and uc.cbooksid = ? and uc.operatortype <> 2 and bt.istate <> 2 order by uc.cbilldate desc , uc.clientadddate desc , uc.cwritedate desc", SSJUSERID(), [[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"],userid,booksid];
         if (!chargeResult) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{
@@ -58,6 +58,7 @@ NSString *const SSJMonthSumDicKey = @"SSJMonthSumDicKey";
             item.colorValue = [chargeResult stringForColumn:@"CCOLOR"];
             item.incomeOrExpence = [chargeResult boolForColumn:@"ITYPE"];
             item.ID = [chargeResult stringForColumn:@"ICHARGEID"];
+            item.userId = [chargeResult stringForColumn:@"cuserid"];
             item.fundId = [chargeResult stringForColumn:@"IFUNSID"];
             item.editeDate = [chargeResult stringForColumn:@"CWRITEDATE"];
             item.billId = [chargeResult stringForColumn:@"IBILLID"];
@@ -68,7 +69,9 @@ NSString *const SSJMonthSumDicKey = @"SSJMonthSumDicKey";
             item.billDate = [chargeResult stringForColumn:@"CBILLDATE"];
             item.clientAddDate = [chargeResult stringForColumn:@"clientadddate"];
             item.billDetailDate = [chargeResult stringForColumn:@"cdetaildate"];
-            item.otherUserName = [chargeResult stringForColumn:@"cmark"];
+            item.memberNickname = [chargeResult stringForColumn:@"cmark"];
+            item.idType = [chargeResult intForColumn:@"ichargetype"];
+            
             if (![item.billDate isEqualToString:lastDate]) {
                 SSJBookKeepingHomeListItem *listItem = [[SSJBookKeepingHomeListItem alloc]init];
                 listItem.chargeItems = [NSMutableArray arrayWithCapacity:0];
