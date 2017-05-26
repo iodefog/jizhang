@@ -52,35 +52,33 @@ static NSString * SSJSharebooksMemberCellIdentifier = @"SSJSharebooksMemberCellI
     return self;
 }
 
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.view addSubview:self.collectionView];
     [self.view addSubview:self.deleteButton];
+    [self.view updateConstraintsIfNeeded];
+//    [self.view setNeedsUpdateConstraints];
     // Do any additional setup after loading the view.
 }
 
-- (void)viewDidLayoutSubviews {
-    [super viewDidLayoutSubviews];
-    
-}
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     __weak typeof(self) weakSelf = self;
     [SSJShareBooksStore queryTheMemberListForTheShareBooks:self.item Success:^(NSArray<SSJShareBookMemberItem *> *result) {
         weakSelf.items = result;
-        [weakSelf.view updateConstraintsIfNeeded];
+        [weakSelf.view setNeedsUpdateConstraints];
+//        [weakSelf.view updateConstraintsIfNeeded];
         [weakSelf.collectionView reloadData];
     } failure:NULL];
 }
 
 - (void)updateViewConstraints {
-    [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.mas_equalTo(self.view);
-        make.top.mas_equalTo(SSJ_NAVIBAR_BOTTOM);
-        make.width.mas_equalTo(self.view);
-    }];
+//    [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.right.mas_equalTo(self.view);
+//        make.top.mas_equalTo(SSJ_NAVIBAR_BOTTOM);
+//        make.width.mas_equalTo(self.view);
+//    }];
     
     [self.deleteButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.bottom.mas_equalTo(self.view);
@@ -195,7 +193,10 @@ static NSString * SSJSharebooksMemberCellIdentifier = @"SSJSharebooksMemberCellI
     
     float height = BOTTOM_MARGIN + TOP_MARGIN + rowCount * ITEM_SIZE_HEIGHT + (rowCount - 1) * ITEM_SPACE;
     
-    [self.collectionView mas_updateConstraints:^(MASConstraintMaker *make) {
+    [self.collectionView mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.right.mas_equalTo(self.view);
+        make.top.mas_equalTo(SSJ_NAVIBAR_BOTTOM);
+        make.width.mas_equalTo(self.view);
         make.height.mas_equalTo(height);
     }];
 }
