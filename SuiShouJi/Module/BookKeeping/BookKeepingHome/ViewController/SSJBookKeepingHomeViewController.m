@@ -644,12 +644,12 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 - (SSJListMenu *)guidePopView {
     if (!_guidePopView) {
         _guidePopView = [[SSJListMenu alloc] initWithFrame:CGRectMake(0, 0, 154, 50)];
-        _guidePopView.applyTheme = NO;
+//        _guidePopView.applyTheme = NO;
         _guidePopView.maxDisplayRowCount = 1;
         _guidePopView.gapBetweenImageAndTitle = 0;
         _guidePopView.titleFont = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
         _guidePopView.backgroundColor = [UIColor clearColor];
-        _guidePopView.fillColor = [UIColor ssj_colorWithHex:@"000000" alpha:0.5];
+        _guidePopView.fillColor = [UIColor ssj_colorWithHex:@"666666"];
         [_guidePopView addTarget:self action:@selector(guidePopViewClicked) forControlEvents:UIControlEventValueChanged];
     }
     return _guidePopView;

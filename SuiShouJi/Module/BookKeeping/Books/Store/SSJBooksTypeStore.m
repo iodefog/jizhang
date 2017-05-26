@@ -14,6 +14,7 @@
 #import "SSJUserTableManager.h"
 #import "SSJShareBookMemberItem.h"
 #import "SSJUserItem.h"
+#import "SSJUserChargeSyncTable.h"
 
 @implementation SSJBooksTypeStore
 
@@ -553,18 +554,27 @@
         NSString *userId = SSJUSERID();
         
         //更新bk_user_charge表
-        for (NSDictionary *chargeDic in shareCharge) {
-            NSString *keyStr = [[chargeDic allKeys] componentsJoinedByString:@"=?, "];
-            NSString *valueStr = [[chargeDic allValues] componentsJoinedByString:@", "];
-            if (![db executeUpdate:@"update bk_user_charge set %@ values(%@)",keyStr,valueStr]) {
-                if (failure) {
-                    SSJDispatchMainAsync(^{
-                        failure([db lastError]);
-                    });
-                }
-                return ;
-            };
+        if (![SSJUserChargeSyncTable mergeRecords:shareCharge forUserId:SSJUSERID() inDatabase:db error:nil]) {
+            if ([db lastError]) {
+                SSJDispatchMainAsync(^{
+                    failure([db lastError]);
+                });
+            }
+            return ;
         }
+//        for (NSDictionary *chargeDic in shareCharge) {
+//            NSString *keyStr = [[chargeDic allKeys] componentsJoinedByString:@"=?, "];
+//            NSString *valueStr = [[chargeDic allValues] componentsJoinedByString:@", "];
+//            if (![db executeUpdate:@"update bk_user_charge set %@ values(%@)",keyStr,valueStr]) {
+//                if (failure) {
+//                    SSJDispatchMainAsync(^{
+//                        failure([db lastError]);
+//                    });
+//                }
+//                return ;
+//            };
+//        }
+        
         //更新bk_share_books_member表
         for (NSDictionary *memberDic in shareMember) {
             NSString *memberKey = [[memberDic allKeys] componentsJoinedByString:@"=? "];
@@ -578,6 +588,7 @@
                 return;
             }
         }
+        
             //更新日常统计表
             if (![SSJDailySumChargeTable updateDailySumChargeForUserId:userId inDatabase:db]) {
                 if (failure) {

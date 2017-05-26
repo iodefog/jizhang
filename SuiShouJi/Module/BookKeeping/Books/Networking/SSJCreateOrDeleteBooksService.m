@@ -25,14 +25,14 @@
                                @"cbookColor":[NSString stringWithFormat:@"%@,%@",bookItem.booksColor.startColor,bookItem.booksColor.endColor],@"iparentType":@(bookItem.booksParent),
                                @"cwriteDate":bookItem.cwriteDate,
                                @"operatorType":@"0"};
-    [self request:SSJURLWithAPI(@"/sharebook/add_shareBook.go") params:paramDic];
+    [self request:(@"http://192.168.1.168:18080/sharebook/add_shareBook.go") params:paramDic];
 }
 
 - (void)deleteShareBookWithBookId:(NSString *)bookId memberId:(NSString *)memberId memberState:(SSJMemberState)memberState {
     NSDictionary *paramDic = @{@"cmemberId":memberId,
                                @"cbooksId":bookId,
                                @"istate":@(memberState)};
-    [self request:SSJURLWithAPI(@"/sharedMember/removeMember.go") params:paramDic];
+    [self request:(@"http://192.168.1.168:18080/sharedMember/removeMember.go") params:paramDic];
 }
 
 - (void)requestDidFinish:(NSDictionary *)rootElement {
