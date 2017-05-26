@@ -154,7 +154,6 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
     SSJBillingChargeViewController *chargeListController = [[SSJBillingChargeViewController alloc] init];
     chargeListController.ID = _billTypeID;
     chargeListController.period = [SSJDatePeriod datePeriodWithStartDate:curveModel.startDate endDate:curveModel.endDate];
-    chargeListController.color = [UIColor ssj_colorWithHex:_colorValue];
     [self.navigationController pushViewController:chargeListController animated:YES];
 }
 

@@ -138,7 +138,6 @@ static NSString *const kSegmentTitleIncome = @"收入";
     SSJReportFormsItem *tmpItem = (SSJReportFormsItem *)item;
     SSJBillingChargeViewController *billingChargeVC = [[SSJBillingChargeViewController alloc] init];
     billingChargeVC.ID = tmpItem.ID;
-    billingChargeVC.color = [UIColor ssj_colorWithHex:tmpItem.colorValue];
     billingChargeVC.period = _periodControl.currentPeriod;
     billingChargeVC.isPayment = _payAndIncomeSegmentControl.selectedIndex == 0;
     [self.navigationController pushViewController:billingChargeVC animated:YES];

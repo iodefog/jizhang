@@ -109,7 +109,6 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
         
         SSJBillingChargeViewController *billingChargeVC = [[SSJBillingChargeViewController alloc] init];
         billingChargeVC.ID = item.ID;
-        billingChargeVC.color = [UIColor ssj_colorWithHex:item.colorValue];
         billingChargeVC.period = [SSJDatePeriod datePeriodWithStartDate:beginDate endDate:endDate];
         billingChargeVC.isMemberCharge = NO;
         [self.navigationController pushViewController:billingChargeVC animated:YES];
