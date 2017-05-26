@@ -204,7 +204,13 @@
     
     NSMutableArray *items = [[NSMutableArray alloc] init];
     for (SSJRecordMakingCustomNavigationBarBookItem *item in _bookItems) {
-        [items addObject:[SSJListMenuItem itemWithImageName:item.iconName title:item.title normalTitleColor:SSJ_MAIN_COLOR selectedTitleColor:SSJ_MARCATO_COLOR normalImageColor:SSJ_SECONDARY_COLOR selectedImageColor:SSJ_MARCATO_COLOR]];
+        [items addObject:[SSJListMenuItem itemWithImageName:item.iconName
+                                                      title:item.title
+                                           normalTitleColor:SSJ_MAIN_COLOR
+                                         selectedTitleColor:SSJ_MARCATO_COLOR
+                                           normalImageColor:SSJ_SECONDARY_COLOR
+                                         selectedImageColor:SSJ_MARCATO_COLOR
+                                            backgroundColor:SSJ_MAIN_BACKGROUND_COLOR]];
     }
     
     self.booksMenu.items = items;
@@ -273,9 +279,7 @@
         item.normalTitleColor = (i == self.booksMenu.items.count - 1) ? SSJ_SECONDARY_COLOR : SSJ_MAIN_COLOR;
     }
     
-    self.booksMenu.fillColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
-    self.booksMenu.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
-    self.booksMenu.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
+    [self.booksMenu updateAppearance];
 }
 
 #pragma mark - Getter

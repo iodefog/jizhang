@@ -53,10 +53,7 @@
 
 - (void)updateAppearance {
     self.imageView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
-    
-    self.listMenu.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
-    self.listMenu.fillColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
-    self.listMenu.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
+    [self.listMenu updateAppearance];
     for (SSJListMenuItem *item in self.listMenu.items) {
         item.normalTitleColor = SSJ_MAIN_COLOR;
         item.normalImageColor = SSJ_SECONDARY_COLOR;
@@ -108,13 +105,15 @@
                                               normalTitleColor:SSJ_MAIN_COLOR
                                             selectedTitleColor:nil
                                               normalImageColor:SSJ_SECONDARY_COLOR
-                                            selectedImageColor:nil],
+                                            selectedImageColor:nil
+                                               backgroundColor:SSJ_MAIN_BACKGROUND_COLOR],
                             [SSJListMenuItem itemWithImageName:@"reportForms_member"
                                                          title:@"分类预算"
                                               normalTitleColor:SSJ_MAIN_COLOR
                                             selectedTitleColor:nil
                                               normalImageColor:SSJ_SECONDARY_COLOR
-                                            selectedImageColor:nil]];
+                                            selectedImageColor:nil
+                                               backgroundColor:SSJ_MAIN_BACKGROUND_COLOR]];
         _listMenu.width = 124;
         [_listMenu addTarget:self action:@selector(listMenuSelectAction) forControlEvents:UIControlEventValueChanged];
     }

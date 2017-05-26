@@ -273,7 +273,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
             break;
             
         case SSJBillTypeUnknown:
-            [SSJAlertViewAdapter showError:[NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"组织数据发生错误，无效参数：SSJBillTypeUnknown"}]];
+            [SSJAlertViewAdapter showError:[NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"无效参数：SSJBillTypeUnknown"}]];
             break;
     }
 }
@@ -347,7 +347,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
                     
                 case SSJReportFormsMemberAndCategoryOptionMember: {
                     [self.tableView ssj_showLoadingIndicator];
-                    [SSJReportFormsUtil queryForMemberChargeWithType:[self currentType] startDate:period.startDate endDate:period.endDate success:^(NSArray<SSJReportFormsItem *> *result) {
+                    [SSJReportFormsUtil queryForMemberChargeWithType:[self currentType] booksId:nil startDate:period.startDate endDate:period.endDate success:^(NSArray<SSJReportFormsItem *> *result) {
                         [self.tableView ssj_hideLoadingIndicator];
                         [self reorganiseChartTableVieDatasWithOriginalData:result];
                         [self.tableView reloadData];

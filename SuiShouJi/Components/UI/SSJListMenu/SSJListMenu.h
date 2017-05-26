@@ -88,3 +88,9 @@
 - (void)dismiss;
 
 @end
+
+@interface SSJListMenu (SSJTheme)
+
+- (void)updateAppearance;
+
+@end
