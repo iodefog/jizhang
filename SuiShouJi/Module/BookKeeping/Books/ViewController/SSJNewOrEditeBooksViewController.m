@@ -208,6 +208,7 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
 {
     if ([service.returnCode isEqualToString:@"1"]) {
         __weak __typeof(self)weakSelf = self;
+        weakSelf.bookItem.booksId = self.createBookService.shareBookId;
         [SSJBooksTypeStore saveShareBooksTypeItem:(SSJShareBookItem *)self.bookItem sucess:^{
             [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
             

@@ -17,16 +17,6 @@
 //    iparentType	String	是	账本父类型
 //    cwriteDate	String	是	客户端操作时间
 //    operatorType	String	是	操作类型
-    if (!bookItem.booksId.length) {
-        bookItem.booksId = SSJUUID();
-    }
-    if (!bookItem.creatorId.length) {
-        bookItem.creatorId = SSJUSERID();
-    }
-    if (!bookItem.adminId.length) {
-        bookItem.adminId = SSJUSERID();
-    }
-    
     NSString *cwriteDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
     bookItem.cwriteDate = cwriteDate;
     
@@ -46,10 +36,18 @@
 }
 
 - (void)requestDidFinish:(NSDictionary *)rootElement {
-    if ([[rootElement allKeys] containsObject:@"share_charge"]) {
+    NSArray *keyArray = [rootElement allKeys];
+    if ([keyArray containsObject:@"result"]) {
+        NSDictionary *result = rootElement[@"result"];
+        if ([[result allKeys] containsObject:@"cbookId"]) {
+            self.shareBookId = rootElement[@"result"][@"cbookId"];
+        }
+    }
+    
+    if ([keyArray containsObject:@"share_charge"]) {
         self.shareChargeArray = [rootElement objectForKey:@"share_charge"];
     }
-    if ([[rootElement allKeys] containsObject:@"share_member"]) {
+    if ([keyArray containsObject:@"share_member"]) {
         self.shareMemberArray = [rootElement objectForKey:@"share_member"];
     }
 }

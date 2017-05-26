@@ -41,7 +41,7 @@
             booksItem.booksParent = [rs intForColumn:@"iparenttype"];
             currentBooksItem = booksItem;
         } else {
-            rs = [db executeQuery:@"select sb.*, count(bm.cmemberid) as memberCount from bk_share_books sb, bk_share_books_member bm where sb.cbooksid = ? and sb.cbooksid = bm.cbooksid and bm.istate = 1",booksid];
+            rs = [db executeQuery:@"select sb.*, count(bm.cmemberid) as memberCount from bk_share_books sb, bk_share_books_member bm where sb.cbooksid = ? and sb.cbooksid = bm.cbooksid and bm.istate = 0",booksid];
             if (!rs) {
                 if (failure) {
                     SSJDispatch_main_async_safe(^{
@@ -462,12 +462,12 @@
  *  @return (BOOL) 是否保存成功
  */
 + (void)saveShareBooksTypeItem:(SSJShareBookItem *)item
+//               WithShareCharge:(NSArray<NSDictionary *> *)shareCharge
+                   shareMember:(NSArray<NSDictionary *> *)shareMember
                         sucess:(void(^)())success
                        failure:(void (^)(NSError *error))failure {// isNewBook:(BOOL)isNewBook
     NSString * booksid = item.booksId;
-    if (!item.booksId.length) {
-       item.booksId = SSJUUID();
-    }
+    if (!item.booksId.length) return;
     if (!item.creatorId.length) {
         item.creatorId = SSJUSERID();
     }
@@ -511,7 +511,7 @@
             return;
         }
         
-        //账本类别
+        //账本类别(新建)
         if (![db boolForQuery:@"select count(*) from bk_share_books where CBOOKSID = ?", booksid]) {
             if (![self generateBooksTypeForBooksItem:item indatabase:db forUserId:SSJUSERID()]) {
                 if (failure) {
@@ -523,7 +523,7 @@
             }
         }
         
-        //如果是新建时候不错成员头像和昵称
+        //如果是新建时候生成成员头像和昵称
         if (![db boolForQuery:@"select count(*) from bk_share_books where CBOOKSID = ?", booksid]) {
             [self saveShareBooksMemberWithBookId:item.booksId success:nil failure:nil];
             [self saveShareBookMemberNickWithBookId:item.booksId success:nil failure:nil];
@@ -551,7 +551,7 @@
                          failure:(void (^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
         NSString *userId = SSJUSERID();
-
+        
         //更新bk_user_charge表
         for (NSDictionary *chargeDic in shareCharge) {
             NSString *keyStr = [[chargeDic allKeys] componentsJoinedByString:@"=?, "];
@@ -627,6 +627,7 @@
 
 
 + (void)saveShareBooksMemberWithBookId:(NSString *)bookId
+       shareMember:(NSArray<NSDictionary *> *)shareMember
                        success:(void(^)())success
                        failure:(void(^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
@@ -634,7 +635,7 @@
         memberItem.memberId = SSJUSERID();
         memberItem.booksId = bookId;
         memberItem.joinDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-        memberItem.state = 1;
+        memberItem.state = 0;
         
         if (SSJIsUserLogined()) {//登录
             //查询当前用户信息
@@ -653,13 +654,31 @@
         }
         
         //新建
-        //编辑
-        if (![db executeUpdate:@"insert into BK_SHARE_BOOKS_MEMBER values (?,?,?,?,?)",memberItem.memberId,memberItem.booksId,memberItem.joinDate,@(memberItem.state),memberItem.icon]) {
-            SSJDispatch_main_async_safe(^{
-                failure([db lastError]);
-            });
-            return ;
+        
+        //更新bk_share_books_member表
+        for (NSDictionary *memberDic in shareMember) {
+            //处理头像
+            [memberDic setValue:memberItem.icon forKey:@"cicon"];
+            NSString *memberKey = [[memberDic allKeys] componentsJoinedByString:@"=? "];
+            NSString *memberValue = [[memberDic allValues] componentsJoinedByString:@", "];
+            if (![db executeUpdate:@"insert into bk_share_books_member (%@) values(%@)",memberKey,memberValue]) {
+                if (failure) {
+                    SSJDispatchMainAsync(^{
+                        failure([db lastError]);
+                    });
+                }
+                return;
+            }
         }
+
+        //处理bk_share_books_member表（没有返回的情况）
+//        if (![db executeUpdate:@"insert into BK_SHARE_BOOKS_MEMBER values (?,?,?,?,?)",memberItem.memberId,memberItem.booksId,memberItem.joinDate,@(memberItem.state),memberItem.icon]) {
+//            SSJDispatch_main_async_safe(^{
+//                failure([db lastError]);
+//            });
+//            return ;
+//        }
+        
         SSJDispatch_main_sync_safe(^{
             if (success) {
                 success();

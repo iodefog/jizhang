@@ -17,6 +17,9 @@ typedef enum : NSUInteger {
 
 @interface SSJCreateOrDeleteBooksService : SSJBaseNetworkService
 
+/**bookId*/
+@property (nonatomic, copy) NSString *shareBookId;
+
 /**<#注释#>*/
 @property (nonatomic, strong) NSArray *shareChargeArray;
 
