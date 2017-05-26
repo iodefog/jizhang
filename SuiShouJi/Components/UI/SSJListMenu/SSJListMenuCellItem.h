@@ -28,4 +28,6 @@
 
 @property (nonatomic) UIEdgeInsets contentInset;
 
+@property (nonatomic, strong) UIColor *backgroundColor;
+
 @end

@@ -281,6 +281,7 @@ static const CGFloat kCornerRadius = 2;
         cellItem.gapBetweenImageAndTitle = _gapBetweenImageAndTitle;
         cellItem.contentAlignment = _contentAlignment;
         cellItem.contentInset = _contentInsets;
+        cellItem.backgroundColor = item.backgroundColor;
         
         if (idx == _selectedIndex) {
             cellItem.titleColor = item.selectedTitleColor ?: item.normalTitleColor;
@@ -408,3 +409,16 @@ static const CGFloat kCornerRadius = 2;
 }
 
 @end
+
+
+@implementation SSJListMenu (SSJTheme)
+
+- (void)updateAppearance {
+    self.fillColor = SSJ_SECONDARY_FILL_COLOR;
+    self.borderColor = SSJ_CELL_SEPARATOR_COLOR;
+    self.separatorColor = SSJ_CELL_SEPARATOR_COLOR;
+    [self.cellItems makeObjectsPerformSelector:@selector(setBackgroundColor:) withObject:SSJ_MAIN_BACKGROUND_COLOR];
+}
+
+@end
+

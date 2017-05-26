@@ -24,10 +24,7 @@
 }
 
 - (NSString *)debugDescription {
-    return [NSString stringWithFormat:@"<%@>:%@", self, @{@"payment":@(_payment),
-                                                          @"income":@(_income),
-                                                          @"startDate":_startDate ?: [NSNull null],
-                                                          @"endDate":_endDate ?: [NSNull null]}];
+    return [self ssj_debugDescription];
 }
 
 

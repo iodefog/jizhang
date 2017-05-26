@@ -15,7 +15,8 @@
                  normalTitleColor:(UIColor *)normalTitleColor
                selectedTitleColor:(UIColor *)selectedTitleColor
                  normalImageColor:(UIColor *)normalImageColor
-               selectedImageColor:(UIColor *)selectedImageColor {
+               selectedImageColor:(UIColor *)selectedImageColor
+                  backgroundColor:(UIColor *)backgroundColor {
     
     SSJListMenuItem *item = [[SSJListMenuItem alloc] init];
     item.imageName = imageName;
@@ -24,6 +25,7 @@
     item.selectedTitleColor = selectedTitleColor;
     item.normalImageColor = normalImageColor;
     item.selectedImageColor = selectedImageColor;
+    item.backgroundColor = backgroundColor;
     return item;
 }
 

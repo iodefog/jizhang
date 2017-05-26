@@ -583,35 +583,42 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
     }
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        NSMutableString *sqlStr = [NSMutableString stringWithFormat:@"select max(a.cbilldate) as maxBillDate, min(a.cbilldate) as minBillDate from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = '%@' and a.operatortype <> 2 and b.istate <> 2 and a.cbilldate <= datetime('now', 'localtime')", SSJUSERID()];
-        
         NSString *tBooksId = booksId;
         if (!tBooksId) {
             tBooksId = [db stringForQuery:@"select ccurrentBooksId from bk_user where cuserid = ?", SSJUSERID()];
             tBooksId = tBooksId ?: SSJUSERID();
         }
         
-        if (![tBooksId isEqualToString:@"all"]) {
-            [sqlStr appendFormat:@" and a.cbooksid = '%@'", tBooksId];
+        NSMutableDictionary *params = [@{} mutableCopy];
+        NSMutableString *sqlStr = [NSMutableString stringWithFormat:@"select max(a.cbilldate) as maxBillDate, min(a.cbilldate) as minBillDate from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.operatortype <> 2 and b.istate <> 2 and a.cbilldate <= datetime('now', 'localtime')"];
+        
+        if ([tBooksId isEqualToString:@"all"]) {
+            [params setObject:SSJUSERID() forKey:@"userId"];
+            [sqlStr appendString:@" and a.cuserid = :userId"];
+        } else {
+            [params setObject:tBooksId forKey:@"booksId"];
+            [sqlStr appendString:@" and a.cbooksid = :booksId"];
         }
         
         if (billTypeId) {
-            [sqlStr appendFormat:@" and a.ibillid = '%@'", billTypeId];
+            [params setObject:billTypeId forKey:@"billId"];
+            [sqlStr appendString:@" and a.ibillid = :billId"];
         }
         
         if (startDate) {
             NSString *startDateStr = [startDate formattedDateWithFormat:@"yyyy-MM-dd"];
-            [sqlStr appendFormat:@" and a.cbilldate >= '%@'", startDateStr];
+            [params setObject:startDateStr forKey:@"startDate"];
+            [sqlStr appendString:@" and a.cbilldate >= :startDate"];
         }
         
         if (endDate) {
             NSString *endDateStr = [endDate formattedDateWithFormat:@"yyyy-MM-dd"];
-            [sqlStr appendFormat:@" and a.cbilldate <= '%@'", endDateStr];
+            [params setObject:endDateStr forKey:@"endDate"];
+            [sqlStr appendString:@" and a.cbilldate <= :endDate"];
         }
         
-        FMResultSet *resultSet = [db executeQuery:sqlStr];
+        FMResultSet *resultSet = [db executeQuery:sqlStr withParameterDictionary:params];
         if (!resultSet) {
-            SSJPRINT(@">>>SSJ\n class:%@\n method:%@\n message:%@\n error:%@",NSStringFromClass([self class]), NSStringFromSelector(_cmd), [db lastErrorMessage], [db lastError]);
             if (failure) {
                 SSJDispatchMainAsync(^{
                     failure([db lastError]);
@@ -683,14 +690,13 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
             break;
             
         case SSJTimeDimensionUnknown:
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"dimension参数无效"}]);
+                });
+            }
+            return;
             break;
-    }
-    
-    if (periodType == SSJDatePeriodTypeUnknown) {
-        if (failure) {
-            failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"dimension参数无效"}]);
-        }
-        return;
     }
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
@@ -790,19 +796,6 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
             if (!lastModel || [lastModel.startDate compare:period.startDate] != NSOrderedSame) {
                 [list addObject:[SSJReportFormsCurveModel modelWithPayment:payment income:income startDate:period.startDate endDate:period.endDate]];
             }
-        } else {
-//            // 如果数据库中没有纪录，并且起始、截止时间都传入了，补充之间的收支统计
-//            if (startDate && endDate) {
-//                SSJDatePeriod *startPeriod = [SSJDatePeriod datePeriodWithPeriodType:periodType date:startDate];
-//                SSJDatePeriod *endPeriod = [SSJDatePeriod datePeriodWithPeriodType:periodType date:endDate];
-//                NSMutableArray *periods = [[endPeriod periodsFromPeriod:startPeriod] mutableCopy];
-//                [periods addObject:startPeriod];
-//                for (int i = 0; i < periods.count; i ++) {
-//                    SSJDatePeriod *addPeriod = periods[i];
-//                    weekOrder++;
-//                    [list addObject:[self modelWithPayment:0 income:0 weekOrder:weekOrder period:addPeriod]];
-//                }
-//            }
         }
         
         // 确保第一条模型的开始时间不早于传入的开始时间

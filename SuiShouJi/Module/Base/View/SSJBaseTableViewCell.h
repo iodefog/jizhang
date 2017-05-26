@@ -15,6 +15,9 @@
 
 @property (nonatomic) UITableViewCellAccessoryType customAccessoryType;
 
+// default YES
+@property (nonatomic) BOOL appliesTheme;
+
 + (CGFloat)tableView:(UITableView*)tableView rowHeightForObject:(id)object;
 
 /**

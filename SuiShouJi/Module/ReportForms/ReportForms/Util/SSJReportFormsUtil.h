@@ -88,10 +88,11 @@ extern NSString *const SSJReportFormsCurveModelEndDateKey;
 /**
  *  查询某个时间段内有效的收入／支出流水统计
  *
- *  @param type         查询的类型，0:月 1:周
- *  @param startDate    开始时间
- *  @param endDate      结束时间
+ *  @param dimension
  *  @param booksId      账本id，如果传nil则当做当前账本，传all就是全部帐本
+ *  @param billTypeId   收支类别id，如果传nil就查询所有类别
+ *  @param startDate    开始时间，传nil就没有开始日期限制
+ *  @param endDate      结束时间，传nil就以当前时间作为结束日期限制
  *  @param success      查询成功的回调
  *  @param failure      查询失败的回调
  */
