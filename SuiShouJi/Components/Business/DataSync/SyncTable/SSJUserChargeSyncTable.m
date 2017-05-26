@@ -98,10 +98,8 @@
 
 + (BOOL)mergeRecords:(NSArray *)records forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
     for (NSDictionary *recordInfo in records) {
-        BOOL exist = [db boolForQuery:@"select count(*) from bk_user_charge where ichargeid = ? and cuserid = ? and cbooksid = ?", recordInfo[@"ichargeid"], recordInfo[@"cuserid"], recordInfo[@"cbooksid"] ? : recordInfo[@"cuserid"]];
         
-        FMResultSet *resultSet = [db executeQuery:@"select operatortype from bk_user_charge where ichargeid = ? and cuserid = ? and cbooksid = ?", recordInfo[@"ichargeid"], recordInfo[@"cuserid"], recordInfo[@"cbooksid"] ? : recordInfo[@"cuserid"]];
-        
+        FMResultSet *resultSet = [db executeQuery:@"select operatortype from bk_user_charge where ichargeid = ? and cuserid = ? and cbooksid = ?", recordInfo[@"ichargeid"]];
         
         if (!resultSet) {
             if (error) {
@@ -110,14 +108,89 @@
             return NO;
         }
         
+        
+        if (![self shouldMergeRecord:recordInfo forUserId:userId inDatabase:db error:error]) {
+            if (error && *error) {
+                return NO;
+            }
+            continue;
+        }
+        
+        // 0添加  1修改  2删除
         int opertoryValue = [recordInfo[@"operatortype"] intValue];
+
+        NSMutableDictionary *mergeRecord = [NSMutableDictionary dictionary];
+        
+        BOOL isExisted = NO;
         
         int localOperatorType = 0;
         
+        NSString *statement = nil;
+        
         while ([resultSet next]) {
+            isExisted = YES;
             localOperatorType = [resultSet intForColumn:@"operatortype"];
         }
+        
+        if (isExisted) {
+            if (localOperatorType == 2) {
+                continue;
+            }
+            
+            NSMutableString *condition = [NSMutableString stringWithFormat:@"ichargeid = '%@'",recordInfo[@"ichargeid"]];
+            
+            if (opertoryValue == 0 || opertoryValue == 1) {
+                [condition appendFormat:@" and cwritedate < '%@'", recordInfo[@"cwritedate"]];
+            }
+            
+            int chargeType = [recordInfo[@"ichargetype"] intValue];
+            
+            NSMutableArray *keyValues = [NSMutableArray arrayWithCapacity:recordInfo.count];
+            [recordInfo enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+                if ([[self columns] containsObject:key]) {
+                    [keyValues addObject:[NSString stringWithFormat:@"%@ = :%@", key, key]];
+                    [mergeRecord setObject:obj forKey:key];
+                }
+            }];
+            NSString *keyValuesStr = [keyValues componentsJoinedByString:@", "];
 
+            
+            if (chargeType == SSJChargeIdTypeShareBooks && [recordInfo[@"cuserid"] isEqualToString:userId]) {
+                BOOL exitChargeShareBooks = [db boolForQuery:@"select istate from bk_share_books_member where cbooksid = ? and cmemberid = ?",recordInfo[@"cbooksid"],userId];
+                if (!exitChargeShareBooks) {
+                    statement = [NSString stringWithFormat:@"update bk_user_charge set %@ where ichargeid = %@",keyValuesStr, recordInfo[@"ichargeid"]];
+                } else {
+                    statement = [NSString stringWithFormat:@"update bk_user_charge set %@ where %@",keyValuesStr,  condition];
+                }
+            } else {
+                statement = [NSString stringWithFormat:@"update bk_user_charge set %@ where %@",keyValuesStr, condition];
+            }
+        } else {
+            NSMutableArray *columns = [NSMutableArray arrayWithCapacity:[recordInfo count]];
+            NSMutableArray *values = [NSMutableArray arrayWithCapacity:[recordInfo count]];
+            [recordInfo enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+                if ([[self columns] containsObject:key]) {
+                    [columns addObject:key];
+                    [values addObject:[NSString stringWithFormat:@":%@", key]];
+                    [mergeRecord setObject:obj forKey:key];
+                }
+            }];
+            
+            NSString *columnsStr = [columns componentsJoinedByString:@", "];
+            NSString *valuesStr = [values componentsJoinedByString:@", "];
+            
+            statement = [NSString stringWithFormat:@"insert into %@ (%@) values (%@)", [self tableName], columnsStr, valuesStr];
+        }
+        
+        BOOL success = [db executeUpdate:statement withParameterDictionary:mergeRecord];
+        if (!success) {
+            if (error) {
+                *error = [db lastError];
+            }
+            return NO;
+        }
+
+        
     }
     return YES;
 }
