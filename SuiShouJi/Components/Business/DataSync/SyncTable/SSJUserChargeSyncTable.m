@@ -59,18 +59,6 @@
         return NO;
     }
     
-    //  如果此流水不依赖于特殊收支类型（istate等于2），还要从user_bill表中查询是否有此类型(因为user_bill中没有特殊收支类型)
-    if ([db intForQuery:@"select istate from bk_bill_type where id = ?", billId] != 2) {
-        if (![db boolForQuery:@"select count(*) from bk_user_bill where cuserid = ? and cbillid = ?", userId, billId]) {
-            return NO;
-        }
-    }
-    
-    //  查询fund_info中是否有对应的资金账户
-    if (![db boolForQuery:@"select count(*) from bk_fund_info where cuserid = ? and cfundid = ?", userId, fundId]) {
-        return NO;
-    }
-    
     //  如果返回了定期配置id，就查询定期配置表中是否有这个id
     if (configId.length && idtype == SSJChargeIdTypeCircleConfig) {
         //  定期配置表中没有对应id的记录
@@ -105,6 +93,32 @@
         }
     }
     
+    return YES;
+}
+
++ (BOOL)mergeRecords:(NSArray *)records forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
+    for (NSDictionary *recordInfo in records) {
+        BOOL exist = [db boolForQuery:@"select count(*) from bk_user_charge where ichargeid = ? and cuserid = ? and cbooksid = ?", recordInfo[@"ichargeid"], recordInfo[@"cuserid"], recordInfo[@"cbooksid"] ? : recordInfo[@"cuserid"]];
+        
+        FMResultSet *resultSet = [db executeQuery:@"select operatortype from bk_user_charge where ichargeid = ? and cuserid = ? and cbooksid = ?", recordInfo[@"ichargeid"], recordInfo[@"cuserid"], recordInfo[@"cbooksid"] ? : recordInfo[@"cuserid"]];
+        
+        
+        if (!resultSet) {
+            if (error) {
+                *error = [db lastError];
+            }
+            return NO;
+        }
+        
+        int opertoryValue = [recordInfo[@"operatortype"] intValue];
+        
+        int localOperatorType = 0;
+        
+        while ([resultSet next]) {
+            localOperatorType = [resultSet intForColumn:@"operatortype"];
+        }
+
+    }
     return YES;
 }
 
