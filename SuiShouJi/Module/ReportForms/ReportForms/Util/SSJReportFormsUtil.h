@@ -88,7 +88,7 @@ extern NSString *const SSJReportFormsCurveModelEndDateKey;
 /**
  *  查询某个时间段内有效的收入／支出流水统计
  *
- *  @param dimension
+ *  @param dimension    查询数据的时间维度单位
  *  @param booksId      账本id，如果传nil则当做当前账本，传all就是全部帐本
  *  @param billTypeId   收支类别id，如果传nil就查询所有类别
  *  @param startDate    开始时间，传nil就没有开始日期限制
