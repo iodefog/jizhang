@@ -48,6 +48,14 @@ static NSString *const kSegmentTitleIncome = @"收入";
 
 @implementation SSJSharebooksMemberDetailViewController
 
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+        self.title = @"账本成员";
+        self.cellItems = [NSMutableArray arrayWithCapacity:0];
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.view addSubview:self.userInfoHeader];
@@ -95,7 +103,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
         make.width.mas_equalTo(self.view);
         make.height.mas_equalTo(self.view).offset(self.periodControl.bottom);
         make.left.mas_equalTo(self.view);
-        make.top.mas_equalTo(self.periodControl);
+        make.top.mas_equalTo(self.periodControl.mas_bottom);
     }];
     
     [super updateViewConstraints];
@@ -191,6 +199,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
         _payAndIncomeSegmentControl = [[SCYSlidePagingHeaderView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 40)];
         _payAndIncomeSegmentControl.customDelegate = self;
         _payAndIncomeSegmentControl.buttonClickAnimated = YES;
+        _payAndIncomeSegmentControl.selectedTitleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
         [_payAndIncomeSegmentControl setTabSize:CGSizeMake(_payAndIncomeSegmentControl.width * 0.5, 3)];
         _payAndIncomeSegmentControl.titles = @[kSegmentTitlePay, kSegmentTitleIncome];
         [_payAndIncomeSegmentControl ssj_setBorderWidth:1];
