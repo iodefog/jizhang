@@ -20,6 +20,7 @@ extern NSString *const SSJReportFormsCurveModelEndDateKey;
 
 /**
  *  查询所有有效的收入／支出／结余流水纪录的年份、月份列表；
+ *  注意：如果指定所有账本，只会查询当前用户的数据，因为可能会包含共享账本，所以要排除其他人的数据；如果指定某个账本，则会查询该账本上的所有数据
  *
  *  @param type      查询的类型
  *  @param booksId   账本id，如果传nil就当做当前账本，查询所有账本数据传all
@@ -33,9 +34,10 @@ extern NSString *const SSJReportFormsCurveModelEndDateKey;
 
 /**
  *  查询某个时间段内有效的收入／支出／结余流水纪录
+ *  注意：如果指定所有账本，只会查询当前用户的数据，因为可能会包含共享账本，所以要排除其他人的数据；如果指定某个账本，则会查询该账本上的所有数据
  *
  *  @param type         收入／支出／结余
- *  @param booksId      账本id，如果传nil就当做当前账本，查询所有账本数据传all
+ *  @param booksId      账本id，如果传nil就查询当前账本，查询所有账本数据传all
  *  @param billTypeId   收支类别id，如果传nil就查询所有类别
  *  @param startDate    开始时间
  *  @param endDate      结束时间x
@@ -48,6 +50,23 @@ extern NSString *const SSJReportFormsCurveModelEndDateKey;
                         endDate:(NSDate *)endDate
                         success:(void(^)(NSArray<SSJReportFormsItem *> *result))success
                         failure:(void (^)(NSError *error))failure;
+
+/**
+ *  查询某个时间段内有效的收入／支出成员流水统计
+ *
+ *  @param type         查询的类型
+ *  @param booksId      账本id，如果传nil就查询当前账本，查询所有账本数据传all
+ *  @param startDate    开始时间
+ *  @param endDate      结束时间
+ *  @param success      查询成功的回调
+ *  @param failure      查询失败的回调
+ */
++ (void)queryForMemberChargeWithType:(SSJBillType)type
+                             booksId:(NSString *)booksId
+                           startDate:(NSDate *)startDate
+                             endDate:(NSDate *)endDate
+                             success:(void (^)(NSArray <SSJReportFormsItem *> *result))success
+                             failure:(void (^)(NSError *error))failure;
 
 /**
  查询默认的时间维度
@@ -69,10 +88,11 @@ extern NSString *const SSJReportFormsCurveModelEndDateKey;
 /**
  *  查询某个时间段内有效的收入／支出流水统计
  *
- *  @param type         查询的类型，0:月 1:周
- *  @param startDate    开始时间
- *  @param endDate      结束时间
+ *  @param dimension
  *  @param booksId      账本id，如果传nil则当做当前账本，传all就是全部帐本
+ *  @param billTypeId   收支类别id，如果传nil就查询所有类别
+ *  @param startDate    开始时间，传nil就没有开始日期限制
+ *  @param endDate      结束时间，传nil就以当前时间作为结束日期限制
  *  @param success      查询成功的回调
  *  @param failure      查询失败的回调
  */
@@ -83,21 +103,6 @@ extern NSString *const SSJReportFormsCurveModelEndDateKey;
                                         endDate:(NSDate *)endDate
                                         success:(void(^)(NSDictionary *result))success
                                         failure:(void (^)(NSError *error))failure;
-
-/**
- *  查询某个时间段内有效的收入／支出成员流水统计
- *
- *  @param type         查询的类型
- *  @param startDate    开始时间
- *  @param endDate      结束时间
- *  @param success      查询成功的回调
- *  @param failure      查询失败的回调
- */
-+ (void)queryForMemberChargeWithType:(SSJBillType)type
-                           startDate:(NSDate *)startDate
-                             endDate:(NSDate *)endDate
-                             success:(void (^)(NSArray <SSJReportFormsItem *> *result))success
-                             failure:(void (^)(NSError *error))failure;
 
 /**
  查询指定的类别是否是支出

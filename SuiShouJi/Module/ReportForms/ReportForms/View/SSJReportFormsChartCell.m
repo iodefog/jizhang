@@ -79,9 +79,7 @@
     _chartView.bottomTitleAttribute = @{NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_5],
                                         NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]};
     
-    self.listMenu.fillColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
-    self.listMenu.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
-    self.listMenu.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
+    [self.listMenu updateAppearance];
     for (SSJListMenuItem *item in self.listMenu.items) {
         item.normalTitleColor = SSJ_MAIN_COLOR;
         item.selectedTitleColor = SSJ_MARCATO_COLOR;
@@ -155,13 +153,15 @@
                                               normalTitleColor:SSJ_MAIN_COLOR
                                             selectedTitleColor:SSJ_MARCATO_COLOR
                                               normalImageColor:SSJ_SECONDARY_COLOR
-                                            selectedImageColor:SSJ_MARCATO_COLOR],
+                                            selectedImageColor:SSJ_MARCATO_COLOR
+                                               backgroundColor:SSJ_MAIN_BACKGROUND_COLOR],
                             [SSJListMenuItem itemWithImageName:@"reportForms_member"
                                                          title:@"成员"
                                               normalTitleColor:SSJ_MAIN_COLOR
                                             selectedTitleColor:SSJ_MARCATO_COLOR
                                               normalImageColor:SSJ_SECONDARY_COLOR
-                                            selectedImageColor:SSJ_MARCATO_COLOR]];
+                                            selectedImageColor:SSJ_MARCATO_COLOR
+                                               backgroundColor:SSJ_MAIN_BACKGROUND_COLOR]];
         _listMenu.width = 104;
         [_listMenu addTarget:self action:@selector(listMenuSelectAction) forControlEvents:UIControlEventValueChanged];
     }
