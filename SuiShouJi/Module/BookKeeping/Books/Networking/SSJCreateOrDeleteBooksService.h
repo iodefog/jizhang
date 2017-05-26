@@ -16,6 +16,13 @@ typedef enum : NSUInteger {
 } SSJMemberState;
 
 @interface SSJCreateOrDeleteBooksService : SSJBaseNetworkService
+
+/**<#注释#>*/
+@property (nonatomic, strong) NSArray *shareChargeArray;
+
+/**<#注释#>*/
+@property (nonatomic, strong) NSArray *shareMemberArray;
+
 - (void)createShareBookWithBookItem:(SSJShareBookItem *)bookItem;
 
 - (void)deleteShareBookWithBookId:(NSString *)bookId memberId:(NSString *)memberId memberState:(SSJMemberState)memberState;

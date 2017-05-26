@@ -201,7 +201,7 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
 #pragma mark - UICollectionViewDataSource
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
-    return 2;
+    return SSJIsUserLogined() ? 2 : 1;
 }
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
@@ -338,19 +338,25 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
 }
 
 #pragma mark - SSJBaseNetworkServiceDelegate
-//- (void)serverDidFinished:(SSJBaseNetworkService *)service{
-//    if (kNeedBannerDisplay) {
-//        SSJBooksAdBanner *booksAdItem = self.adService.item.booksAdItem;
-//        if (booksAdItem.hidden) {
-//            self.adView.hidden = NO;
-//            [self.adView.adImageView sd_setImageWithURL:[NSURL URLWithString:booksAdItem.adImage] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-//                if (image) {
-//                    self.adView.height = self.view.width * image.size.height / image.size.width;
-//                }
-//            }];
-//        }
-//    }
-//}
+- (void)serverDidFinished:(SSJBaseNetworkService *)service{
+    if (service == self.deleteBookService) {
+        if ([service.returnCode isEqualToString:@"1"]) {
+            __weak __typeof(self)weakSelf = self;
+            [SSJBooksTypeStore deleteShareBooksWithShareCharge:self.deleteBookService.shareChargeArray shareMember:self.deleteBookService.shareMemberArray sucess:^{
+                weakSelf.rightButton.selected = NO;
+                [weakSelf.collectionView endEditing];
+                for (SSJBooksTypeItem *item in weakSelf.privateBooksDataitems) {
+                    item.editeModel = NO;
+                }
+                [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+                [weakSelf getDateFromDB];
+            } failure:^(NSError *error) {
+                [SSJAlertViewAdapter showError:error];
+            }];
+        }
+    }
+}
+
 
 #pragma mark - Event
 - (void)rightButtonClicked:(id)sender{
@@ -559,21 +565,24 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
             [SSJAlertViewAdapter showError:error];
         }];
         
-        //查询共享账本
-        [SSJBooksTypeStore queryForShareBooksListWithSuccess:^(NSMutableArray<SSJShareBookItem *> *result) {
-            //最后一个添加账本
-            SSJShareBookItem *lastItem = [[SSJShareBookItem alloc]init];
-            lastItem.booksName = @"添加账本";
-            SSJFinancingGradientColorItem *colorItem = [[SSJFinancingGradientColorItem alloc] init];
-            colorItem.startColor = colorItem.endColor = @"#FFFFFF";
-            lastItem.booksColor = colorItem;
-            [result addObject:lastItem];
-            weakSelf.shareBooksDataItems = result;
-            
-            [weakSelf.collectionView reloadData];
-        } failure:^(NSError *error) {
-            [SSJAlertViewAdapter showError:error];
-        }];
+        //如果登录
+        if (SSJIsUserLogined()) {
+            //查询共享账本
+            [SSJBooksTypeStore queryForShareBooksListWithSuccess:^(NSMutableArray<SSJShareBookItem *> *result) {
+                //最后一个添加账本
+                SSJShareBookItem *lastItem = [[SSJShareBookItem alloc]init];
+                lastItem.booksName = @"添加账本";
+                SSJFinancingGradientColorItem *colorItem = [[SSJFinancingGradientColorItem alloc] init];
+                colorItem.startColor = colorItem.endColor = @"#FFFFFF";
+                lastItem.booksColor = colorItem;
+                [result addObject:lastItem];
+                weakSelf.shareBooksDataItems = result;
+                
+                [weakSelf.collectionView reloadData];
+            } failure:^(NSError *error) {
+                [SSJAlertViewAdapter showError:error];
+            }];
+        }
         
     } failure:^(NSError * _Nonnull error) {
         [SSJAlertViewAdapter showError:error];
@@ -598,14 +607,14 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
             return nil;
         }] then:^RACSignal *{
             return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-                if ([self.editBooksItem isKindOfClass:[SSJBooksTypeItem class]]) {
+                if ([self.editBooksItem isKindOfClass:[SSJBooksTypeItem class]]) {//个人账本
                     [SSJBooksTypeStore deleteBooksTypeWithbooksItems:@[self.editBooksItem] deleteType:type Success:^{
                         [subscriber sendCompleted];
                     } failure:^(NSError *error) {
                         [subscriber sendError:error];
                     }];
-                } else if ([self.editBooksItem isKindOfClass:[SSJShareBookItem class]]) {
-//                    self.deleteBookService deleteShareBookWithBookId:bookId memberId:self.editBooksItem. memberState:(SSJMemberState)
+                } else if ([self.editBooksItem isKindOfClass:[SSJShareBookItem class]]) {//共享账本
+                    [self.deleteBookService deleteShareBookWithBookId:bookId memberId:SSJUSERID() memberState:SSJMemberStateQuit];
                 }
                 
                 return nil;

@@ -45,6 +45,13 @@
     [self request:SSJURLWithAPI(@"/sharedMember/removeMember.go") params:paramDic];
 }
 
-
+- (void)requestDidFinish:(NSDictionary *)rootElement {
+    if ([[rootElement allKeys] containsObject:@"share_charge"]) {
+        self.shareChargeArray = [rootElement objectForKey:@"share_charge"];
+    }
+    if ([[rootElement allKeys] containsObject:@"share_member"]) {
+        self.shareMemberArray = [rootElement objectForKey:@"share_member"];
+    }
+}
 
 @end

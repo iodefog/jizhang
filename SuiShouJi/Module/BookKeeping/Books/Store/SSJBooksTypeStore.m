@@ -539,7 +539,7 @@
 }
 
 /**
- 删除账本
+ 删除账本(共享账本)
  @param item share_charge	bk_user_charge	平账流水
  share_member	bk_share_books_member	共享成员
  @param success <#success description#>
