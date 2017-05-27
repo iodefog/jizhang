@@ -26,10 +26,17 @@
                     @"booksName":@"cbooksname",
                     @"booksColor":@"cbookscolor",
                     @"booksParent":@"iparenttype",
-                    @"booksOrder":@"iorder"};
+                    @"booksOrder":@"iorder",
+                    @"cwriteDate":@"cadddate"};
     }
     return mapping;
 }
 
 
++ (NSDictionary *)mj_replacedKeyFromPropertyName {
+    return [self propertyMapping];
+}
+//+ (NSDictionary *)mj_objectClassInArray {
+//    return @{@"booksColor":@"SSJFinancingGradientColorItem"};
+//}
 @end

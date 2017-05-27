@@ -10,6 +10,13 @@
 #import "SSJShareBookItem.h"
 #import "SSJFinancingGradientColorItem.h"
 @implementation SSJCreateOrDeleteBooksService
+
+- (instancetype)initWithDelegate:(id<SSJBaseNetworkServiceDelegate>)delegate {
+    if (self = [super initWithDelegate:delegate]) {
+        self.requestSerialization = SSJHTTPRequestSerialization;
+    }
+    return self;
+}
 - (void)createShareBookWithBookItem:(SSJShareBookItem *)bookItem {
 //    cuserId	String	是	用户id
 //    cbookName	String	是	账本名称

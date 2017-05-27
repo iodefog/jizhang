@@ -10,7 +10,10 @@
 #import "SSJBooksTypeItem.h"
 #import "SSJShareBookItem.h"
 
-
+typedef enum : NSUInteger {
+    ShareBookOperateCreate,
+    ShareBookOperateEdite
+} ShareBookOperate;
 @interface SSJBooksTypeStore : NSObject
 
 + (void)queryCurrentBooksItemWithSuccess:(void(^)(id booksItem))success
@@ -92,8 +95,10 @@
 + (void)saveShareBooksTypeItem:(SSJShareBookItem *)item
                WithshareMember:(NSArray<NSDictionary *> *)shareMember
              shareFriendsMarks:(NSArray<NSDictionary *> *)shareFriendsMarks
+              ShareBookOperate:(ShareBookOperate)shareBookOperate
                         sucess:(void(^)())success
                        failure:(void (^)(NSError *error))failure;
+
 
 
 /**
@@ -133,6 +138,7 @@
  @param failure <#failure description#>
  */
 + (void)saveShareBookMemberNickWithBookId:(NSString *)bookId
+                        shareFriendsMarks:(NSArray <NSDictionary *>*)shareFriendsMarks
                                   success:(void(^)())success
                                   failure:(void(^)(NSError *error))failure;
 
