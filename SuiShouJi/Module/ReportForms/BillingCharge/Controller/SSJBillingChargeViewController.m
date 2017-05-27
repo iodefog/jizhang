@@ -136,9 +136,9 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
 
 #pragma mark - Private
 - (void)reloadData {
-    if (_isMemberCharge) {
+    if (self.billId) {
         [self.view ssj_showLoadingIndicator];
-        [SSJBillingChargeHelper queryMemberChargeWithMemberID:_ID booksId:_booksId inPeriod:_period isPayment:_isPayment success:^(NSArray<NSDictionary *> *data) {
+        [SSJBillingChargeHelper queryDataWithBillTypeID:self.billId booksId:_booksId inPeriod:_period success:^(NSArray<NSDictionary *> *data) {
             [self.view ssj_hideLoadingIndicator];
             self.datas = data;
             [self.tableView reloadData];
@@ -147,18 +147,21 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
             NSString *message = [error localizedDescription].length ? [error localizedDescription] : SSJ_ERROR_MESSAGE;
             [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:message action:[SSJAlertViewAction actionWithTitle:@"确认" handler:NULL], nil];
         }];
+    } else if (self.memberId) {
+        [self.view ssj_showLoadingIndicator];
+        [SSJBillingChargeHelper queryMemberChargeWithMemberID:self.memberId booksId:_booksId inPeriod:_period isPayment:_isPayment success:^(NSArray<NSDictionary *> *data) {
+            [self.view ssj_hideLoadingIndicator];
+            self.datas = data;
+            [self.tableView reloadData];
+        } failure:^(NSError *error) {
+            [self.view ssj_hideLoadingIndicator];
+            NSString *message = [error localizedDescription].length ? [error localizedDescription] : SSJ_ERROR_MESSAGE;
+            [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:message action:[SSJAlertViewAction actionWithTitle:@"确认" handler:NULL], nil];
+        }];
+    } else if (self.billName) {
         
     } else {
-        [self.view ssj_showLoadingIndicator];
-        [SSJBillingChargeHelper queryDataWithBillTypeID:_ID booksId:_booksId inPeriod:_period success:^(NSArray<NSDictionary *> *data) {
-            [self.view ssj_hideLoadingIndicator];
-            self.datas = data;
-            [self.tableView reloadData];
-        } failure:^(NSError *error) {
-            [self.view ssj_hideLoadingIndicator];
-            NSString *message = [error localizedDescription].length ? [error localizedDescription] : SSJ_ERROR_MESSAGE;
-            [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:message action:[SSJAlertViewAction actionWithTitle:@"确认" handler:NULL], nil];
-        }];
+        [SSJAlertViewAdapter showError:[NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"billId、memberId、billName三个参数必须传一个"}]];
     }
 }
 
@@ -171,14 +174,7 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
     calenderDetailVC.item = selectedItem;
     __weak typeof(self) wself = self;
     calenderDetailVC.deleteHandler = ^ {
-        NSString *billId = nil;
-        NSString *memberId = nil;
-        if (wself.isMemberCharge) {
-            memberId = wself.ID;
-        } else {
-            billId = wself.ID;
-        }
-        [SSJBillingChargeHelper queryTheRestChargeCountWithBillId:billId memberId:memberId booksId:wself.booksId period:wself.period success:^(int count) {
+        [SSJBillingChargeHelper queryTheRestChargeCountWithBillId:wself.billId memberId:wself.memberId booksId:wself.booksId period:wself.period success:^(int count) {
             if (count == 0) {
                 [wself.navigationController popToRootViewControllerAnimated:YES];
             } else {

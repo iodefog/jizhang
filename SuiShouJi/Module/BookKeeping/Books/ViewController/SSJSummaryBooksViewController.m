@@ -136,7 +136,7 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
     if (self.chargeDatas.count > indexPath.row) {
         SSJReportFormsItem *item = self.chargeDatas[indexPath.row];
         SSJBillingChargeViewController *billingChargeVC = [[SSJBillingChargeViewController alloc] init];
-        billingChargeVC.ID = item.ID;
+        billingChargeVC.billId = item.ID;
         billingChargeVC.booksId = @"all";
         billingChargeVC.period = self.header.periodControl.currentPeriod;
         billingChargeVC.isPayment = _header.incomOrExpenseSelectSegment.selectedSegmentIndex == 0;
