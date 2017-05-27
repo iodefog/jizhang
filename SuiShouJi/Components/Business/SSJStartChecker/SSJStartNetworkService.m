@@ -27,6 +27,7 @@
 - (instancetype)initWithDelegate:(id<SSJBaseNetworkServiceDelegate>)delegate {
     if (self = [super initWithDelegate:delegate]) {
         _isInReview = YES;
+        self.requestSerialization = SSJHTTPRequestSerialization;
     }
     return self;
 }

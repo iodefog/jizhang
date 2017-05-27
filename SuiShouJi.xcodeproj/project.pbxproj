@@ -13540,10 +13540,10 @@
 		BD0433761C1A8DA50051E7AB /* Network */ = {
 			isa = PBXGroup;
 			children = (
-				BD04339C1C1A99170051E7AB /* SSJPagingNetworkService.h */,
-				BD04339D1C1A99170051E7AB /* SSJPagingNetworkService.m */,
 				BD0433771C1A8DA50051E7AB /* SSJBaseNetworkService.h */,
 				BD0433781C1A8DA50051E7AB /* SSJBaseNetworkService.m */,
+				BD04339C1C1A99170051E7AB /* SSJPagingNetworkService.h */,
+				BD04339D1C1A99170051E7AB /* SSJPagingNetworkService.m */,
 				BD0433791C1A8DA50051E7AB /* SSJGlobalServiceManager.h */,
 				BD04337A1C1A8DA50051E7AB /* SSJGlobalServiceManager.m */,
 				7D41A6941D1415F30043FD81 /* SSJNetworkReachabilityManager.h */,
