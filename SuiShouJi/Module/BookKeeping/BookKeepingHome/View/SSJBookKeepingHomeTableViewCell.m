@@ -234,6 +234,7 @@ static const CGFloat kCategoryImageButtonRadius = 16;
     anim.fillMode = kCAFillModeForwards;
     
     [self.categoryImageButton.layer addAnimation:anim forKey:@"shake"];
+    
 }
 
 #pragma mark - Lazyloading
