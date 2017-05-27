@@ -108,9 +108,8 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
         NSDate *endDate = [NSDate dateWithString:_budgetModel.endDate formatString:@"yyyy-MM-dd"];
         
         SSJBillingChargeViewController *billingChargeVC = [[SSJBillingChargeViewController alloc] init];
-        billingChargeVC.ID = item.ID;
+        billingChargeVC.billId = item.ID;
         billingChargeVC.period = [SSJDatePeriod datePeriodWithStartDate:beginDate endDate:endDate];
-        billingChargeVC.isMemberCharge = NO;
         [self.navigationController pushViewController:billingChargeVC animated:YES];
     }
 }

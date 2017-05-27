@@ -47,6 +47,7 @@
 #import "SSJHomeThemeModifyView.h"
 #import "SSJAlertViewAdapter.h"
 #import "SSJAlertViewAction.h"
+#import "SSJListMenu.h"
 
 #import "SSJBudgetModel.h"
 #import "SSJBooksTypeItem.h"
@@ -85,6 +86,8 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
  弹出好评弹框
  */
 @property (nonatomic, strong) SSJBookKeepingHomeEvaluatePopView *evaluatePopView;
+/**指引弹框*/
+@property (nonatomic, strong) SSJListMenu *guidePopView;
 @property(nonatomic, strong) UILabel *statusLabel;
 @property(nonatomic, strong) NSIndexPath *selectIndex;
 @property(nonatomic, strong) NSString *currentIncome;
@@ -157,6 +160,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
     [self.mm_drawerController setCloseDrawerGestureModeMask:MMCloseDrawerGestureModeAll];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(continueLoading) name:SSJHomeContinueLoadingNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(syncDidFail) name:SSJSyncDataFailureNotification object:nil];
+    [self showGuildView];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -637,6 +641,19 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
     return _keepingHomePopView;
 }
 
+- (SSJListMenu *)guidePopView {
+    if (!_guidePopView) {
+        _guidePopView = [[SSJListMenu alloc] initWithFrame:CGRectMake(0, 0, 154, 50)];
+        _guidePopView.maxDisplayRowCount = 1;
+        _guidePopView.gapBetweenImageAndTitle = 0;
+        _guidePopView.titleFont = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
+        _guidePopView.backgroundColor = [UIColor clearColor];
+        _guidePopView.fillColor = [UIColor ssj_colorWithHex:@"666666"];
+        [_guidePopView addTarget:self action:@selector(guidePopViewClicked) forControlEvents:UIControlEventValueChanged];
+    }
+    return _guidePopView;
+}
+
 - (SSJHomeBillStickyNoteView *)billStickyNoteView
 {
     __weak typeof(self) weakSelf = self;
@@ -734,6 +751,10 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 
 - (void)syncDidFail {
     [self stopLoading];
+}
+
+- (void)guidePopViewClicked {
+    //[self.guidePopView dismiss];
 }
 
 #pragma mark - Private
@@ -1011,6 +1032,29 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
     if (self.isBudgetOverrunsPopViewShow == NO) {
         if ([self.evaluatePopView showEvaluatePopView] == YES) return;
     }
+}
+
+
+/**
+ 显示引导页（第一次启动app并且没有登录的时候）
+ */
+- (void)showGuildView {
+//    if (SSJLaunchTimesForCurrentVersion() <= 1 && !SSJIsUserLogined()) {
+//    SSJListMenuItem *listItem = [[SSJListMenuItem alloc] init];
+//    listItem.title = @"点击这里即可记一笔账";
+//    listItem.backgroundColor = [UIColor clearColor];
+//    listItem.normalTitleColor = [UIColor whiteColor];
+//        self.guidePopView.items = [NSMutableArray arrayWithObject:listItem];
+//    __weak __typeof(self)weakSelf = self;
+//        [self.guidePopView showInView:self.view atPoint:CGPointMake(SSJSCREENWITH * 0.5, self.homeButton.bottom) dismissHandle:^(SSJListMenu *listMenu) {
+//            weakSelf.guidePopView = nil;
+//            listItem.title = @"你的账本全在这里";
+//            weakSelf.guidePopView.items = [NSMutableArray arrayWithObject:listItem];
+//            [weakSelf.guidePopView showInView:self.view atPoint:CGPointMake(20, 64) dismissHandle:^(SSJListMenu *listMenu) {
+//                
+//            }];
+//        }];
+//    }
 }
 
 - (void)updateBooksItem {

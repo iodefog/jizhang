@@ -60,6 +60,11 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
     [self updateAppearanceAfterThemeChanged];//颜色
 }
 
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    [self.createBookService cancel];
+}
+
 #pragma mark - UI
 - (void)setUpNav {
     if ([self.bookItem isKindOfClass:[SSJBooksTypeItem class]]) {//个人账本
@@ -208,14 +213,23 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
 {
     if ([service.returnCode isEqualToString:@"1"]) {
         __weak __typeof(self)weakSelf = self;
-        [SSJBooksTypeStore saveShareBooksTypeItem:(SSJShareBookItem *)self.bookItem sucess:^{
-            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
-            
+        SSJShareBookItem *shareItem = [SSJShareBookItem mj_objectWithKeyValues:self.createBookService.shareBookDic];
+        SSJFinancingGradientColorItem *gradientColor = [[SSJFinancingGradientColorItem alloc] init];
+       NSArray *gradientArr = [self.createBookService.shareBookDic [@"cbookscolor"] componentsSeparatedByString:@","];
+        if (gradientArr.count >1) {
+            gradientColor.startColor = [gradientArr ssj_safeObjectAtIndex:0];
+            gradientColor.endColor = [gradientArr ssj_safeObjectAtIndex:1];
+        } else if (gradientArr.count == 1) {
+            gradientColor.startColor = gradientColor.endColor = [gradientArr ssj_safeObjectAtIndex:0];
+        }
+        
+        shareItem.booksColor = gradientColor;
+        weakSelf.bookItem = shareItem;
+        [SSJBooksTypeStore saveShareBooksTypeItem:shareItem WithshareMember:self.createBookService.shareMemberArray shareFriendsMarks:self.createBookService.shareFriendsMarkArray ShareBookOperate:ShareBookOperateCreate sucess:^{
             if (_saveBooksBlock) {
                 _saveBooksBlock(((SSJShareBookItem *)self.bookItem).booksId);
             }
             [weakSelf.navigationController popViewControllerAnimated:YES];
-            
         } failure:^(NSError *error) {
             [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
         }];

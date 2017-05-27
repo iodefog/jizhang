@@ -627,16 +627,18 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 }
 
 - (void)regNextButtonClicked {//验证验证码
-    if (!self.tfRegYanZhenNum.text.length) {
+    NSString *phoneNum = self.tfRegPhoneNum.text;
+    NSString *codeNum = self.tfRegYanZhenNum.text;
+    if (!codeNum.length) {
         [CDAutoHideMessageHUD showMessage:@"请先输入验证码"];
         return;
     }
     
-    if (!self.tfRegPhoneNum.text.length) {
+    if (!phoneNum.length) {
         [CDAutoHideMessageHUD showMessage:@"请先输入手机号码"];
         return;
     }
-    [self.registerNextService checkAuthCodeWithMobileNo:self.tfRegPhoneNum.text authCode:self.tfRegYanZhenNum.text];
+    [self.registerNextService checkAuthCodeWithMobileNo:phoneNum authCode:codeNum];
 }
 
 //  同意、不同意协议

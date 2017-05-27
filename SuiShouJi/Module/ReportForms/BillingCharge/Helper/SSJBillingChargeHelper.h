@@ -10,6 +10,8 @@
 
 @class SSJDatePeriod;
 
+NS_ASSUME_NONNULL_BEGIN
+
 //  对应日期的key
 extern NSString *const SSJBillingChargeDateKey;
 
@@ -22,19 +24,40 @@ extern NSString *const SSJBillingChargeRecordKey;
 @interface SSJBillingChargeHelper : NSObject
 
 /**
- *  查询特定时间内的指定类别流水数据；
+ *  查询某个个人账本的指定类别名字的流水数据；
  *
  *  @param ID           收支类别id
- *  @param booksId      账本id，如果传nil就当做当前账本，查询所有账本数据传all
+ *  @param booksId      账本id，如果传nil就当做当前账本
  *  @param period       查询的时间段，如果超过当前时间，则截止到今天
- *  @param success      查询成功的回调；参数data中是字典类型，有两个key：SSJBillingChargeDateKey对应日期字符串，SSJBillingChargeRecordKey对应数组，数组中元素是SSJBillingChargeCellItem类型实例
+ *  @param success      查询成功的回调；参数data中是数组类型，元素对应一个section；
+                        元素字典结构：@{SSJBillingChargeDateKey:流水日起字符串，
+                        SSJBillingChargeSumKey:流水统计金额,
+                        SSJBillingChargeRecordKey:@[SSJBillingChargeCellItem实例...]}
  *  @param failure      查询失败的回调
  */
 + (void)queryDataWithBillTypeID:(NSString *)ID
-                        booksId:(NSString *)booksId
+                        booksId:(nullable NSString *)booksId
                        inPeriod:(SSJDatePeriod *)period
                         success:(void (^)(NSArray <NSDictionary *>*data))success
-                        failure:(void (^)(NSError *error))failure;
+                        failure:(nullable void (^)(NSError *error))failure;
+
+/**
+ 查询某个共享账本的指定类别名字的流水数据；
+
+ @param name 类别名字
+ @param booksId 共享账本id
+ @param period 查询的时间段，如果超过当前时间，则截止到今天
+ @param success 查询成功的回调；参数data中是数组类型，元素对应一个section；
+                元素字典结构：@{SSJBillingChargeDateKey:流水日起字符串， 
+                             SSJBillingChargeSumKey:流水统计金额,
+                             SSJBillingChargeRecordKey:@[SSJBillingChargeCellItem实例...]}
+ @param failure 查询失败的回调
+ */
++ (void)queryDataWithBillTypeName:(NSString *)name
+                          booksId:(NSString *)booksId
+                         inPeriod:(SSJDatePeriod *)period
+                          success:(void (^)(NSArray <NSDictionary *>*data))success
+                          failure:(void (^)(NSError *error))failure;
 
 /**
  *  查询某个时间内的成员流水数据；
@@ -43,15 +66,18 @@ extern NSString *const SSJBillingChargeRecordKey;
  *  @param booksId      账本id，如果传nil就当做当前账本，查询所有账本数据传all
  *  @param period       查询的时间段，如果超过当前时间，则截止到今天
  *  @param isPayment    是否查询支出流水
- *  @param success      查询成功的回调；参数data中是字典类型，有两个key：SSJBillingChargeDateKey对应日期字符串，SSJBillingChargeRecordKey对应数组，数组中元素是SSJBillingChargeCellItem类型实例
+ *  @param success      查询成功的回调；参数data中是数组类型，元素对应一个section；
+                        元素字典结构：@{SSJBillingChargeDateKey:流水日起字符串，
+                        SSJBillingChargeSumKey:流水统计金额,
+                        SSJBillingChargeRecordKey:@[SSJBillingChargeCellItem实例...]}
  *  @param failure      查询失败的回调
  */
 + (void)queryMemberChargeWithMemberID:(NSString *)ID
-                              booksId:(NSString *)booksId
+                              booksId:(nullable NSString *)booksId
                              inPeriod:(SSJDatePeriod *)period
                             isPayment:(BOOL)isPayment
                               success:(void (^)(NSArray <NSDictionary *>*data))success
-                              failure:(void (^)(NSError *error))failure;
+                              failure:(nullable void (^)(NSError *error))failure;
 
 /**
  *  查询剩余流水数量
@@ -65,9 +91,12 @@ extern NSString *const SSJBillingChargeRecordKey;
  */
 + (void)queryTheRestChargeCountWithBillId:(NSString *)billId
                                  memberId:(NSString *)memberId
-                                  booksId:(NSString *)booksId
+                                  booksId:(nullable NSString *)booksId
                                    period:(SSJDatePeriod *)period
                                   success:(void(^)(int count))success
-                                  failure:(void(^)(NSError *error))failure;
+                                  failure:(nullable void(^)(NSError *error))failure;
 
 @end
+
+NS_ASSUME_NONNULL_END
+

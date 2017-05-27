@@ -27,5 +27,6 @@
 /**成员人数*/
 @property (nonatomic, assign) NSInteger memberCount;
 
+
 + (NSDictionary *)propertyMapping;
 @end
