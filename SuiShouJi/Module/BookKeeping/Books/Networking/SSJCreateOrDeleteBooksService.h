@@ -21,10 +21,13 @@ typedef enum : NSUInteger {
 @property (nonatomic, copy) NSDictionary *shareBookDic;
 
 /**<#注释#>*/
-@property (nonatomic, strong) NSArray *shareChargeArray;
+@property (nonatomic, copy) NSArray *shareChargeArray;
 
 /**<#注释#>*/
-@property (nonatomic, strong) NSArray *shareMemberArray;
+@property (nonatomic, copy) NSArray *shareMemberArray;
+
+/**<#注释#>*/
+@property (nonatomic, copy) NSArray *shareFriendsMarkArray;
 
 - (void)createShareBookWithBookItem:(SSJShareBookItem *)bookItem;
 

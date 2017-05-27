@@ -201,7 +201,7 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
 #pragma mark - UICollectionViewDataSource
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
-    return SSJIsUserLogined() ? 2 : 1;
+    return 2;//SSJIsUserLogined() ? 2 : 1;
 }
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
@@ -566,7 +566,7 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
         }];
         
         //如果登录
-        if (SSJIsUserLogined()) {
+//        if (SSJIsUserLogined()) {
             //查询共享账本
             [SSJBooksTypeStore queryForShareBooksListWithSuccess:^(NSMutableArray<SSJShareBookItem *> *result) {
                 //最后一个添加账本
@@ -582,7 +582,7 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
             } failure:^(NSError *error) {
                 [SSJAlertViewAdapter showError:error];
             }];
-        }
+//        }
         
     } failure:^(NSError * _Nonnull error) {
         [SSJAlertViewAdapter showError:error];

@@ -90,8 +90,10 @@
  *  @return (BOOL) 是否保存成功
  */
 + (void)saveShareBooksTypeItem:(SSJShareBookItem *)item
-                   sucess:(void(^)())success
-                  failure:(void (^)(NSError *error))failure;
+               WithshareMember:(NSArray<NSDictionary *> *)shareMember
+             shareFriendsMarks:(NSArray<NSDictionary *> *)shareFriendsMarks
+                        sucess:(void(^)())success
+                       failure:(void (^)(NSError *error))failure;
 
 
 /**
