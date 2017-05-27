@@ -51,7 +51,7 @@ typedef NS_OPTIONS(NSInteger, SSJResponseSerialization) {
 @property (nonatomic, assign) SSJBaseNetworkServiceHttpMethod httpMethod;
 
 /**
- 请求数据序列化方式，默认SSJJSONRequestSerialization
+ 请求数据序列化方式，默认SSJHTTPRequestSerialization
  */
 @property (nonatomic, assign) SSJRequestSerialization requestSerialization;
 

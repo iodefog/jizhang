@@ -78,7 +78,7 @@ static inline AFHTTPResponseSerializer *SSJResponseSerializer(SSJResponseSeriali
         _pinningMode = AFSSLPinningModeCertificate;
         _allowInvalidCertificates = YES;
         _validatesDomainName = YES;
-        _requestSerialization = SSJJSONRequestSerialization;
+        _requestSerialization = SSJHTTPRequestSerialization;
         _responseSerialization = SSJJSONResponseSerialization;
         
         self.formatter = [[NSDateFormatter alloc] init];
