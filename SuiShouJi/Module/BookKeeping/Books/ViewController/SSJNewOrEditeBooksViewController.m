@@ -60,6 +60,11 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
     [self updateAppearanceAfterThemeChanged];//颜色
 }
 
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    [self.createBookService cancel];
+}
+
 #pragma mark - UI
 - (void)setUpNav {
     if ([self.bookItem isKindOfClass:[SSJBooksTypeItem class]]) {//个人账本
@@ -208,7 +213,10 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
 {
     if ([service.returnCode isEqualToString:@"1"]) {
         __weak __typeof(self)weakSelf = self;
-        weakSelf.bookItem.booksId = self.createBookService.shareBookId;
+        SSJShareBookItem *shareItem = [[SSJShareBookItem alloc] init];
+        [shareItem setValuesForKeysWithDictionary:self.createBookService.shareBookDic];
+        
+        weakSelf.bookItem = shareItem;
         [SSJBooksTypeStore saveShareBooksTypeItem:(SSJShareBookItem *)self.bookItem sucess:^{
             [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
             

@@ -463,10 +463,10 @@
  *  @return (BOOL) 是否保存成功
  */
 + (void)saveShareBooksTypeItem:(SSJShareBookItem *)item
-//               WithShareCharge:(NSArray<NSDictionary *> *)shareCharge
-                   shareMember:(NSArray<NSDictionary *> *)shareMember
+               WithshareMember:(NSArray<NSDictionary *> *)shareMember
+                   shareFriendsMarks:(NSArray<NSDictionary *> *)shareFriendsMarks
                         sucess:(void(^)())success
-                       failure:(void (^)(NSError *error))failure {// isNewBook:(BOOL)isNewBook
+                       failure:(void (^)(NSError *error))failure {
     NSString * booksid = item.booksId;
     if (!item.booksId.length) return;
     if (!item.creatorId.length) {
@@ -526,7 +526,8 @@
         
         //如果是新建时候生成成员头像和昵称
         if (![db boolForQuery:@"select count(*) from bk_share_books where CBOOKSID = ?", booksid]) {
-            [self saveShareBooksMemberWithBookId:item.booksId success:nil failure:nil];
+//            [self saveShareBooksMemberWithBookId:item.booksId success:nil failure:nil];
+            [self saveShareBooksMemberWithBookId:item.booksId shareMember:shareMember success:nil failure:nil];
             [self saveShareBookMemberNickWithBookId:item.booksId success:nil failure:nil];
         }
         
@@ -699,25 +700,38 @@
 }
 
 + (void)saveShareBookMemberNickWithBookId:(NSString *)bookId
+                        shareFriendsMarks:(NSArray <NSDictionary *>*)shareFriendsMarks
                                   success:(void(^)())success
                                   failure:(void(^)(NSError *error))failure{
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
-        NSString *nickNameStr;
-            NSString *nickStr = [db stringForQuery:@"select cnickid from bk_user where cuserid = ?",SSJUSERID()];
-            NSString *phoneStr = [db stringForQuery:@"select cmomileno from bk_user where cuserid = ?",SSJUSERID()];
-            if (nickStr.length) {
-                nickNameStr = nickStr;
-            }else if (phoneStr.length) {
-                nickNameStr = nickStr;
-            } else {
-                nickNameStr = @"";
-            }
         
-        if (![db executeUpdate:@"insert into BK_SHARE_BOOKS_FRIENDS_MARK values (?,?,?,?,?,?,0)",SSJUSERID(),bookId,SSJUSERID(),nickNameStr,@(SSJSyncVersion()),[[NSDate date] ssj_dateStringWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"]]) {
-            SSJDispatch_main_async_safe(^{
-                failure([db lastError]);
-            });
-            return ;
+//        NSString *nickNameStr;
+//            NSString *nickStr = [db stringForQuery:@"select cnickid from bk_user where cuserid = ?",SSJUSERID()];
+//            NSString *phoneStr = [db stringForQuery:@"select cmomileno from bk_user where cuserid = ?",SSJUSERID()];
+//            if (nickStr.length) {
+//                nickNameStr = nickStr;
+//            }else if (phoneStr.length) {
+//                nickNameStr = nickStr;
+//            } else {
+//                nickNameStr = @"";
+//            }
+//        
+//        if (![db executeUpdate:@"insert into BK_SHARE_BOOKS_FRIENDS_MARK values (?,?,?,?,?,?,0)",SSJUSERID(),bookId,SSJUSERID(),nickNameStr,@(SSJSyncVersion()),[[NSDate date] ssj_dateStringWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"]]) {
+//            SSJDispatch_main_async_safe(^{
+//                failure([db lastError]);
+//            });
+//            return ;
+//        }
+        for (NSDictionary *dic in shareFriendsMarks) {
+            NSString *keyStr = [[dic allKeys] componentsJoinedByString:@"=? ,"];
+            NSString *valueStr = [[dic allValues] componentsJoinedByString:@", "];
+            
+            if (![db executeUpdate:@"insert into BK_SHARE_BOOKS_FRIENDS_MARK (%@) values (%@)",keyStr,valueStr]) {
+                SSJDispatch_main_async_safe(^{
+                    failure([db lastError]);
+                });
+                return ;
+            }
         }
         
         SSJDispatch_main_sync_safe(^{

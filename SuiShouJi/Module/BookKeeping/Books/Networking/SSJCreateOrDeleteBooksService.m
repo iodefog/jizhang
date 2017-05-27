@@ -25,6 +25,7 @@
                                @"cbookColor":[NSString stringWithFormat:@"%@,%@",bookItem.booksColor.startColor,bookItem.booksColor.endColor],@"iparentType":@(bookItem.booksParent),
                                @"cwriteDate":bookItem.cwriteDate,
                                @"operatorType":@"0"};
+    self.httpMethod = SSJBaseNetworkServiceHttpMethodPOST;
     [self request:(@"http://192.168.1.168:18080/sharebook/add_shareBook.go") params:paramDic];
 }
 
@@ -32,6 +33,7 @@
     NSDictionary *paramDic = @{@"cmemberId":memberId,
                                @"cbooksId":bookId,
                                @"istate":@(memberState)};
+    self.httpMethod = SSJBaseNetworkServiceHttpMethodPOST;
     [self request:(@"http://192.168.1.168:18080/sharedMember/removeMember.go") params:paramDic];
 }
 
@@ -40,15 +42,15 @@
     if ([keyArray containsObject:@"result"]) {
         NSDictionary *result = rootElement[@"result"];
         if ([[result allKeys] containsObject:@"cbookId"]) {
-            self.shareBookId = rootElement[@"result"][@"cbookId"];
+            self.shareBookDic = result[@"shareBook"];
         }
-    }
-    
-    if ([keyArray containsObject:@"share_charge"]) {
-        self.shareChargeArray = [rootElement objectForKey:@"share_charge"];
-    }
-    if ([keyArray containsObject:@"share_member"]) {
-        self.shareMemberArray = [rootElement objectForKey:@"share_member"];
+        
+        if ([[result allKeys] containsObject:@"share_charge"]) {
+            self.shareChargeArray = [result objectForKey:@"share_charge"];
+        }
+        if ([[result allKeys] containsObject:@"share_member"]) {
+            self.shareMemberArray = [result objectForKey:@"share_member"];
+        }
     }
 }
 

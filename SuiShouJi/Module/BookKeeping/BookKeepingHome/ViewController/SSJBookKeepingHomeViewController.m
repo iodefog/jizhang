@@ -644,7 +644,6 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 - (SSJListMenu *)guidePopView {
     if (!_guidePopView) {
         _guidePopView = [[SSJListMenu alloc] initWithFrame:CGRectMake(0, 0, 154, 50)];
-//        _guidePopView.applyTheme = NO;
         _guidePopView.maxDisplayRowCount = 1;
         _guidePopView.gapBetweenImageAndTitle = 0;
         _guidePopView.titleFont = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
@@ -755,7 +754,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 }
 
 - (void)guidePopViewClicked {
-    [self.guidePopView dismiss];
+    //[self.guidePopView dismiss];
 }
 
 #pragma mark - Private
@@ -1041,13 +1040,20 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
  */
 - (void)showGuildView {
 //    if (SSJLaunchTimesForCurrentVersion() <= 1 && !SSJIsUserLogined()) {
-    SSJListMenuItem *listItem = [[SSJListMenuItem alloc] init];
-    listItem.title = @"aauli;hgsaj;ofjsiafj";
-    listItem.normalTitleColor = [UIColor whiteColor];
-        self.guidePopView.items = [NSMutableArray arrayWithObject:listItem];
-        [self.guidePopView showInView:self.view atPoint:CGPointMake(SSJSCREENWITH * 0.5, self.homeButton.bottom) dismissHandle:^(SSJListMenu *listMenu) {
-            
-        }];
+//    SSJListMenuItem *listItem = [[SSJListMenuItem alloc] init];
+//    listItem.title = @"点击这里即可记一笔账";
+//    listItem.backgroundColor = [UIColor clearColor];
+//    listItem.normalTitleColor = [UIColor whiteColor];
+//        self.guidePopView.items = [NSMutableArray arrayWithObject:listItem];
+//    __weak __typeof(self)weakSelf = self;
+//        [self.guidePopView showInView:self.view atPoint:CGPointMake(SSJSCREENWITH * 0.5, self.homeButton.bottom) dismissHandle:^(SSJListMenu *listMenu) {
+//            weakSelf.guidePopView = nil;
+//            listItem.title = @"你的账本全在这里";
+//            weakSelf.guidePopView.items = [NSMutableArray arrayWithObject:listItem];
+//            [weakSelf.guidePopView showInView:self.view atPoint:CGPointMake(20, 64) dismissHandle:^(SSJListMenu *listMenu) {
+//                
+//            }];
+//        }];
 //    }
 }
 
