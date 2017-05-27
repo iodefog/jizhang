@@ -27,6 +27,7 @@
             configuration.requestCachePolicy = NSURLRequestReloadIgnoringLocalCacheData;
             
             manager = [[SSJGlobalServiceManager alloc] initWithBaseURL:[NSURL URLWithString:[SSJDomainManager domain]] sessionConfiguration:configuration];
+            manager.requestSerializer = [AFJSONRequestSerializer serializer];
         }
     });
     return manager;
@@ -37,6 +38,7 @@
     configuration.requestCachePolicy = NSURLRequestReloadIgnoringLocalCacheData;
     
     SSJGlobalServiceManager *manager = [[SSJGlobalServiceManager alloc] initWithBaseURL:[NSURL URLWithString:[SSJDomainManager domain]] sessionConfiguration:configuration];
+    manager.requestSerializer = [AFJSONRequestSerializer serializer];
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     manager.SSLPinningMode = AFSSLPinningModeCertificate;
     manager.allowInvalidCertificates = YES;
