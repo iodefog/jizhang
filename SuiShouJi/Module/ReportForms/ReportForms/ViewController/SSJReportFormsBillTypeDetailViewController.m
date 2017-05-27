@@ -152,7 +152,7 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
     SSJReportFormsCurveModel *curveModel = [_filterCurveModels ssj_safeObjectAtIndex:indexPath.row];
     
     SSJBillingChargeViewController *chargeListController = [[SSJBillingChargeViewController alloc] init];
-    chargeListController.ID = _billTypeID;
+    chargeListController.billId = _billTypeID;
     chargeListController.period = [SSJDatePeriod datePeriodWithStartDate:curveModel.startDate endDate:curveModel.endDate];
     [self.navigationController pushViewController:chargeListController animated:YES];
 }

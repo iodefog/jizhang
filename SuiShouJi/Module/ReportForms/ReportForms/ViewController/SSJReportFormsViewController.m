@@ -189,12 +189,13 @@ static NSString *const kSegmentTitleSurplus = @"结余";
     if ([item isKindOfClass:[SSJReportFormsItem class]]) {
         SSJReportFormsItem *tmpItem = (SSJReportFormsItem *)item;
         SSJBillingChargeViewController *billingChargeVC = [[SSJBillingChargeViewController alloc] init];
-        billingChargeVC.ID = tmpItem.ID;
         billingChargeVC.period = _periodControl.currentPeriod;
-        billingChargeVC.isMemberCharge = tmpItem.isMember;
         billingChargeVC.isPayment = [self currentType] == SSJBillTypePay;
         if (tmpItem.isMember) {
             billingChargeVC.title = tmpItem.name;
+            billingChargeVC.memberId = tmpItem.ID;
+        } else {
+            billingChargeVC.billId = tmpItem.ID;
         }
         [self.navigationController pushViewController:billingChargeVC animated:YES];
         
