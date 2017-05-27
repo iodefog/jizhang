@@ -78,7 +78,7 @@
         [self.view addSubview:hintView];
     }
     
-    [self.getCodeService requestCodeWithbooksId:@""];
+    [self.getCodeService requestCodeWithbooksId:self.item.booksId];
     // Do any additional setup after loading the view.
 }
 

@@ -9,6 +9,7 @@
 
 #import "SSJInviteCodeJoinViewController.h"
 #import "UIViewController+MMDrawerController.h"
+#import "SSJCodeEnterBooksService.h"
 
 @interface SSJInviteCodeJoinViewController ()
 
@@ -19,6 +20,8 @@
 @property(nonatomic, strong) UILabel *customCodeLab;
 
 @property(nonatomic, strong) UIButton *sendButton;
+
+@property(nonatomic, strong) SSJCodeEnterBooksService *service;
 
 
 @end
@@ -151,9 +154,16 @@
     return _sendButton;
 }
 
+- (SSJCodeEnterBooksService *)service {
+    if (!_service) {
+        _service = [[SSJCodeEnterBooksService alloc] initWithDelegate:self];
+    }
+    return _service;
+}
+
 #pragma mark - Event
 - (void)sendButtonClicked:(id)sender {
-    
+    [self.service enterBooksWithCode:self.codeInput.text];
 }
 
 
