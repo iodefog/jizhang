@@ -11,14 +11,18 @@
 @implementation SSJSharebooksCodeNetworkService
 
 - (void)requestCodeWithbooksId:(NSString *)booksId{
-    [self request:SSJURLWithAPI(@"/sharebook/query_secretKey.go") params:@{@"cuserId":SSJUSERID(),
-                                                                           @"cbooksId":booksId}];
+#warning test
+    self.httpMethod = SSJBaseNetworkServiceHttpMethodGET;
+    [self request:@"http://192.168.1.168:18080/sharebook/query_secretKey.go" params:@{@"cuserId":SSJUSERID(),
+                                                                                      @"cbooksId":booksId ? : @""}];
 }
 
 - (void)saveCodeWithbooksId:(NSString *)booksId code:(NSString *)code {
-    [self request:SSJURLWithAPI(@"/sharebook/save_secretKey.go") params:@{@"cuserId":SSJUSERID(),
-                                                                          @"cbooksId":booksId,
-                                                                          @"secretKey":code}];
+#warning test
+    self.httpMethod = SSJBaseNetworkServiceHttpMethodGET;
+    [self request:SSJURLWithAPI(@"http://192.168.1.168:18080/sharebook/save_secretKey.go") params:@{@"cuserId":SSJUSERID(),
+                                                                                                    @"cbooksId":booksId,
+                                                                                                    @"secretKey":code ? : @""}];
 }
 
 - (void)requestDidFinish:(NSDictionary *)rootElement {

@@ -1,0 +1,32 @@
+//
+//  SSJCodeEnterBooksService.m
+//  SuiShouJi
+//
+//  Created by ricky on 2017/5/26.
+//  Copyright © 2017年 ___9188___. All rights reserved.
+//
+
+#import "SSJCodeEnterBooksService.h"
+
+@implementation SSJCodeEnterBooksService
+
+- (void)enterBooksWithCode:(NSString *)code{
+#warning test
+    self.httpMethod = SSJBaseNetworkServiceHttpMethodGET;
+    [self request:@"http://192.168.1.168:18080/sharebook/join_book.go" params:@{@"cuserId":SSJUSERID(),
+                                                                                @"secretKey":code ? : @""}];
+
+}
+
+- (void)requestDidFinish:(NSDictionary *)rootElement {
+    if ([self.returnCode isEqualToString:@"1"]) {
+        NSDictionary *resultInfo = [rootElement objectForKey:@"results"];
+        if (resultInfo) {
+            self.shareBooksTableInfo = resultInfo[@"share_book"];
+            self.shareMemberTableInfo =  resultInfo[@"share_member"];
+            self.userChargeTableInfo = resultInfo[@"share_charge"];
+        }
+    }
+}
+
+@end

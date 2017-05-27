@@ -10,6 +10,7 @@
 #import "SSJShareBookItem.h"
 #import "SSJFinancingGradientColorItem.h"
 @implementation SSJCreateOrDeleteBooksService
+
 - (void)createShareBookWithBookItem:(SSJShareBookItem *)bookItem {
 //    cuserId	String	是	用户id
 //    cbookName	String	是	账本名称
@@ -35,7 +36,9 @@
                                @"cbookColor":[NSString stringWithFormat:@"%@,%@",bookItem.booksColor.startColor,bookItem.booksColor.endColor],@"iparentType":@(bookItem.booksParent),
                                @"cwriteDate":bookItem.cwriteDate,
                                @"operatorType":@"0"};
-    [self request:SSJURLWithAPI(@"/sharebook/add_shareBook.go") params:paramDic];
+    
+    
+    [self request:@"http://192.168.1.168:18080/sharebook/add_shareBook.go" params:paramDic];
 }
 
 - (void)deleteShareBookWithBookId:(NSString *)bookId memberId:(NSString *)memberId memberState:(SSJMemberState)memberState {
@@ -44,7 +47,6 @@
                                @"istate":@(memberState)};
     [self request:SSJURLWithAPI(@"/sharedMember/removeMember.go") params:paramDic];
 }
-
 
 
 @end
