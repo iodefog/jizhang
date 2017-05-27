@@ -500,7 +500,6 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
         FMResultSet *resultSet = [db executeQuery:sql withParameterDictionary:params];
         
         if (!resultSet) {
-            SSJPRINT(@">>>SSJ\n class:%@\n method:%@\n message:%@\n error:%@",NSStringFromClass([self class]), NSStringFromSelector(_cmd), [db lastErrorMessage], [db lastError]);
             SSJDispatch_main_async_safe(^{
                 failure([db lastError]);
             });
@@ -706,29 +705,37 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
             tBooksId = tBooksId ?: SSJUSERID();
         }
         
-        NSMutableString *sqlStr = [NSMutableString stringWithFormat:@"select a.imoney, a.cbilldate, b.itype from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = '%@' and a.operatortype <> 2 and b.istate <> 2 and a.cbilldate <= datetime('now', 'localtime')", SSJUSERID()];
+        NSMutableDictionary *params = [@{} mutableCopy];
+        NSMutableString *sqlStr = [@"select a.imoney, a.cbilldate, b.itype from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.operatortype <> 2 and b.istate <> 2 and a.cbilldate <= datetime('now', 'localtime')" mutableCopy];
         
-        if (![tBooksId isEqualToString:@"all"]) {
-            [sqlStr appendFormat:@" and a.cbooksid = '%@'", tBooksId];
+        if ([tBooksId isEqualToString:@"all"]) {
+            params[@"userId"] = SSJUSERID();
+            [sqlStr appendString:@" and a.cuserid = :userId"];
+        } else {
+            params[@"booksId"] = tBooksId;
+            [sqlStr appendString:@" and a.cbooksid = :booksId"];
         }
         
         if (billTypeId) {
-            [sqlStr appendFormat:@" and a.ibillid = '%@'", billTypeId];
+            params[@"billId"] = billTypeId;
+            [sqlStr appendString:@" and a.ibillid = :billId"];
         }
         
         if (startDate) {
             NSString *startDateStr = [startDate formattedDateWithFormat:@"yyyy-MM-dd"];
-            [sqlStr appendFormat:@" and a.cbilldate >= '%@'", startDateStr];
+            params[@"startDate"] = startDateStr;
+            [sqlStr appendString:@" and a.cbilldate >= :startDate"];
         }
         
         if (endDate) {
             NSString *endDateStr = [endDate formattedDateWithFormat:@"yyyy-MM-dd"];
-            [sqlStr appendFormat:@" and a.cbilldate <= '%@'", endDateStr];
+            params[@"endDate"] = endDateStr;
+            [sqlStr appendString:@" and a.cbilldate <= :endDate"];
         }
         
         [sqlStr appendString:@" order by a.cbilldate"];
         
-        FMResultSet *resultSet = [db executeQuery:sqlStr];
+        FMResultSet *resultSet = [db executeQuery:sqlStr withParameterDictionary:params];
         if (!resultSet) {
             SSJPRINT(@">>>SSJ\n class:%@\n method:%@\n message:%@\n error:%@",NSStringFromClass([self class]), NSStringFromSelector(_cmd), [db lastErrorMessage], [db lastError]);
             if (failure) {
@@ -769,7 +776,6 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
                     income += money;
                 }
             } else {
-                
                 [list addObject:[SSJReportFormsCurveModel modelWithPayment:payment income:income startDate:period.startDate endDate:period.endDate]];
                 
                 SSJDatePeriod *currentPeriod = [SSJDatePeriod datePeriodWithPeriodType:periodType date:billDate];

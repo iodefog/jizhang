@@ -24,9 +24,6 @@ NS_ASSUME_NONNULL_BEGIN
 // 查询周期内的流水
 @property (nonatomic, strong) SSJDatePeriod *period;
 
-// 收支类型的颜色
-@property (nonatomic, strong) UIColor *color;
-
 // 是否是成员流水（不是成员流水就是类别流水）
 @property (nonatomic) BOOL isMemberCharge;
 

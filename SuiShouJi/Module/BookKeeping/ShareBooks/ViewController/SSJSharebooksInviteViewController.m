@@ -78,7 +78,7 @@
         [self.view addSubview:hintView];
     }
     
-    [self.getCodeService requestCodeWithbooksId:@""];
+    [self.getCodeService requestCodeWithbooksId:self.item.booksId];
     // Do any additional setup after loading the view.
 }
 
@@ -211,7 +211,6 @@
                 self.sendButton.backgroundColor = [UIColor ssj_colorWithHex:@"#EB4A64"];
                 self.sendButton.layer.shadowColor = [UIColor ssj_colorWithHex:@"#EB4A64"].CGColor;
                 self.sendButton.layer.shadowOpacity = 0.39;
-
             }
         }];
     }

@@ -138,7 +138,6 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
         SSJBillingChargeViewController *billingChargeVC = [[SSJBillingChargeViewController alloc] init];
         billingChargeVC.ID = item.ID;
         billingChargeVC.booksId = @"all";
-        billingChargeVC.color = [UIColor ssj_colorWithHex:item.colorValue];
         billingChargeVC.period = self.header.periodControl.currentPeriod;
         billingChargeVC.isPayment = _header.incomOrExpenseSelectSegment.selectedSegmentIndex == 0;
         [self.navigationController pushViewController:billingChargeVC animated:YES];

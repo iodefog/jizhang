@@ -190,7 +190,6 @@ static NSString *const kSegmentTitleSurplus = @"结余";
         SSJReportFormsItem *tmpItem = (SSJReportFormsItem *)item;
         SSJBillingChargeViewController *billingChargeVC = [[SSJBillingChargeViewController alloc] init];
         billingChargeVC.ID = tmpItem.ID;
-        billingChargeVC.color = [UIColor ssj_colorWithHex:tmpItem.colorValue];
         billingChargeVC.period = _periodControl.currentPeriod;
         billingChargeVC.isMemberCharge = tmpItem.isMember;
         billingChargeVC.isPayment = [self currentType] == SSJBillTypePay;
