@@ -196,7 +196,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                         failure:(void (^)(NSError *error))failure{
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSString *userid = SSJUSERID();
-        NSString *sql = [NSString stringWithFormat:@"select a.* , a.cwritedate as chargedate, a.cid as sundryid, c.lender, c.itype as loantype, b.*  from BK_USER_CHARGE a, BK_BILL_TYPE b left join bk_loan c on a.cid = c.loanid where a.IBILLID = b.ID and a.IFUNSID = '%@' and a.operatortype <> 2 and (a.cbilldate <= '%@' or (length(a.cid) > 0 and a.ichargetype = %ld)) order by a.cbilldate desc ,  a.cwritedate desc", cardItem.cardId , [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"],SSJChargeIdTypeLoan];
+        NSString *sql = [NSString stringWithFormat:@"select a.* , a.cwritedate as chargedate, a.cid as sundryid, c.lender, c.itype as loantype, b.*  from BK_USER_CHARGE a, BK_BILL_TYPE b left join bk_loan c on a.cid = c.loanid left join bk_share_books_member d on d.cbooksid = a.cbooksid where a.IBILLID = b.ID and a.IFUNSID = '%@' and a.operatortype <> 2 and (a.cbilldate <= '%@' or (length(a.cid) > 0 and a.ichargetype = %ld)) and d.istate = 0 order by a.cbilldate desc ,  a.cwritedate desc", cardItem.cardId , [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"],SSJChargeIdTypeLoan];
         FMResultSet *resultSet = [db executeQuery:sql];
         SSJCreditCardItem *newcardItem = [[SSJCreditCardItem alloc]init];
         if (!resultSet) {
@@ -292,7 +292,6 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                     item.transferSource = [db stringForQuery:@"select b.cacctname from bk_user_charge as a, bk_fund_info as b where substr(a.cwritedate,1,19) = ? and a.cuserid = ? and a.ifunsid = b.cfundid and b.cfundid <> ? and a.ibillid = '3' limit 1",[item.editeDate substringWithRange:NSMakeRange(0, 19)],userid,item.fundId];
                 }
             }
-
             NSDate *billDate = [NSDate dateWithString:item.billDate formatString:@"yyyy-MM-dd"];
             NSString *currentPeriod;
             NSString *currentMonth;

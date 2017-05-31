@@ -7,12 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2037DEF73FC931CFDC333C7D /* libPods-9188JiZhangBen.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F84857880610A2DD87904A88 /* libPods-9188JiZhangBen.a */; };
-		2969FD659CB0F29A997B0743 /* libPods-YouYuJiZhang.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BE2668A2D3687E35A1F7D0D /* libPods-YouYuJiZhang.a */; };
-		43FB013EC6CC98DC90F5D913 /* libPods-YouYuJiZhangPro.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DC160CBD947F86ED6CD7DD86 /* libPods-YouYuJiZhangPro.a */; };
-		72BB5896AF4A38FC4F8B3B48 /* libPods-YouYuJiZhangBen.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD18AB4DEF381D69AB77158 /* libPods-YouYuJiZhangBen.a */; };
-		77DF96B1D75AEF70D1506706 /* libPods-BeiKeJiZhang.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D1CEF5E96BF59F42EAD3BC3 /* libPods-BeiKeJiZhang.a */; };
-		7A0F545325C98140D90A42EE /* libPods-9188JiZhangBao.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C5771E8CE795420339FE5806 /* libPods-9188JiZhangBao.a */; };
+		18E10A0E5057FCCA71A417FC /* libPods-9188JiZhangBao.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BEAA1B2FC6756F3854AACA28 /* libPods-9188JiZhangBao.a */; };
+		27072D566B5F9C1A74410870 /* libPods-9188JiZhangPro.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1330B042666B67AFA97A31B4 /* libPods-9188JiZhangPro.a */; };
+		708563F2FF7122D3D729779C /* libPods-9188JiZhangBen.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B515737030339BE6A5806D /* libPods-9188JiZhangBen.a */; };
 		7D00D8051DFA9CC00007A8FB /* SSJReportFormsChartCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D00D8041DFA9CC00007A8FB /* SSJReportFormsChartCell.m */; };
 		7D00D8081DFA9CC00007A8FB /* SSJReportFormsChartCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D00D8041DFA9CC00007A8FB /* SSJReportFormsChartCell.m */; };
 		7D00D80C1DFAA3D30007A8FB /* SSJReportFormsChartCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D00D80B1DFAA3D30007A8FB /* SSJReportFormsChartCellItem.m */; };
@@ -2113,7 +2110,7 @@
 		7DBB3C981E55C2EE0075E638 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C3276ED1CE4614700109C4C /* libz.tbd */; };
 		7DBB3C991E55C2EE0075E638 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D4A431D1CC86F51002F0264 /* AVFoundation.framework */; };
 		7DBB3C9A1E55C2EE0075E638 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD0E43F61C21365100F9179D /* Security.framework */; };
-		7DBB3C9B1E55C2EE0075E638 /* libPods-SuiShouJi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DCB8AA1DC23E6D40C33EB5B /* libPods-SuiShouJi.a */; };
+		7DBB3C9B1E55C2EE0075E638 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		7DBB3C9E1E55C2EE0075E638 /* pushsound.wav in Resources */ = {isa = PBXBuildFile; fileRef = BD6C388E1C910A8F000E2E42 /* pushsound.wav */; };
 		7DBB3C9F1E55C2EE0075E638 /* YouYuJiZhangBen-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7DBB381F1E55BE2F0075E638 /* YouYuJiZhangBen-Info.plist */; };
 		7DBB3CA01E55C2EE0075E638 /* xiaomao.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9CAF731B1E03EAD90061ADB8 /* xiaomao.gif */; };
@@ -2668,7 +2665,7 @@
 		7DBB41331E55C4E00075E638 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C3276ED1CE4614700109C4C /* libz.tbd */; };
 		7DBB41341E55C4E00075E638 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D4A431D1CC86F51002F0264 /* AVFoundation.framework */; };
 		7DBB41351E55C4E00075E638 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD0E43F61C21365100F9179D /* Security.framework */; };
-		7DBB41361E55C4E00075E638 /* libPods-SuiShouJi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DCB8AA1DC23E6D40C33EB5B /* libPods-SuiShouJi.a */; };
+		7DBB41361E55C4E00075E638 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		7DBB41391E55C4E00075E638 /* pushsound.wav in Resources */ = {isa = PBXBuildFile; fileRef = BD6C388E1C910A8F000E2E42 /* pushsound.wav */; };
 		7DBB413A1E55C4E00075E638 /* YouYuJiZhangBen-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7DBB381F1E55BE2F0075E638 /* YouYuJiZhangBen-Info.plist */; };
 		7DBB413B1E55C4E00075E638 /* xiaomao.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9CAF731B1E03EAD90061ADB8 /* xiaomao.gif */; };
@@ -3583,7 +3580,8 @@
 		7DFFD5B31D6706B7000FDAA6 /* SSJLoanListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DFFD5B21D6706B7000FDAA6 /* SSJLoanListViewController.m */; };
 		7DFFD5BE1D670BB7000FDAA6 /* SSJLoanListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DFFD5BD1D670BB7000FDAA6 /* SSJLoanListCell.m */; };
 		7DFFD5C61D67201E000FDAA6 /* SSJAddOrEditLoanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DFFD5C51D67201E000FDAA6 /* SSJAddOrEditLoanViewController.m */; };
-		81159558A04406B56D1F36B3 /* libPods-SuiShouJiEnterprise.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FFD30CB9DFEC254EA2C4274 /* libPods-SuiShouJiEnterprise.a */; };
+		8AFD7C4264E444F472747C5E /* libPods-BeiKeJiZhang.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F3039050029C23C766A9C4C /* libPods-BeiKeJiZhang.a */; };
+		8EAE523834178C9493CC82B1 /* libPods-YouYuJiZhangLiCai.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 79537D91EF8CAC5D9782BE95 /* libPods-YouYuJiZhangLiCai.a */; };
 		910DD6911DF7B47E00A73F0C /* SSJMineHomeCollectionImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 910DD68F1DF7B47E00A73F0C /* SSJMineHomeCollectionImageCell.m */; };
 		9119A8001E0CB7B500374B62 /* SSJReportFormCanYinChartCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 91FD904C1E0B8319001C64B7 /* SSJReportFormCanYinChartCell.m */; };
 		913E2BD91ECE89FE008242CD /* SSJBookColorSelectedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 913E2BD81ECE89FE008242CD /* SSJBookColorSelectedViewController.m */; };
@@ -3740,6 +3738,7 @@
 		91F7FD331DFA9EF9005F4B6B /* SSJProductAdviceNetWorkService.m in Sources */ = {isa = PBXBuildFile; fileRef = 91F7FD2F1DFA9EF9005F4B6B /* SSJProductAdviceNetWorkService.m */; };
 		91F7FD381DFAB94A005F4B6B /* SSJAdviceItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 91F7FD371DFAB94A005F4B6B /* SSJAdviceItem.m */; };
 		91FD904D1E0B8319001C64B7 /* SSJReportFormCanYinChartCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 91FD904C1E0B8319001C64B7 /* SSJReportFormCanYinChartCell.m */; };
+		9BC870CBC702B3D5107DA532 /* libPods-SuiShouJi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 16E44CAC96297AFD0B023EB1 /* libPods-SuiShouJi.a */; };
 		9C03D87F1EB855D600D845DD /* customBackGround.zip in Resources */ = {isa = PBXBuildFile; fileRef = 9C03D87E1EB855D600D845DD /* customBackGround.zip */; };
 		9C0AB1691D670BAE0082B971 /* SSJCreditCardEditeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0AB1681D670BAE0082B971 /* SSJCreditCardEditeCell.m */; };
 		9C13F4D71E8267D300AC5FA9 /* SSJAlertViewAction.m in Sources */ = {isa = PBXBuildFile; fileRef = BD33FD281C4B2E4C006A6942 /* SSJAlertViewAction.m */; };
@@ -3769,7 +3768,7 @@
 		9C13F4EF1E8267D300AC5FA9 /* SSJBillingChargeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B23F51C3A14D8009A74A8 /* SSJBillingChargeCell.m */; };
 		9C13F4F01E8267D300AC5FA9 /* SSJLoginViewController+SSJCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D22E2931D89519B00474B11 /* SSJLoginViewController+SSJCategory.m */; };
 		9C13F4F11E8267D300AC5FA9 /* SSJBannerItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6D66241D86BD220081A7CE /* SSJBannerItem.m */; };
-		9C13F4F21E8267D300AC5FA9 /* (null) in Sources */ = {isa = PBXBuildFile; };
+		9C13F4F21E8267D300AC5FA9 /* BuildFile in Sources */ = {isa = PBXBuildFile; };
 		9C13F4F31E8267D300AC5FA9 /* SSJSyncFileModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DDBB01F1C9AAA57003433D0 /* SSJSyncFileModel.m */; };
 		9C13F4F41E8267D300AC5FA9 /* SCYSlidePagingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD902961CE202790076929F /* SCYSlidePagingView.m */; };
 		9C13F4F51E8267D300AC5FA9 /* SSJDatabaseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D99D45B1C3522D7006EB113 /* SSJDatabaseQueue.m */; };
@@ -5297,7 +5296,7 @@
 		9C4C22441E9E30C8000C5F15 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C3276ED1CE4614700109C4C /* libz.tbd */; };
 		9C4C22451E9E30C8000C5F15 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D4A431D1CC86F51002F0264 /* AVFoundation.framework */; };
 		9C4C22461E9E30C8000C5F15 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD0E43F61C21365100F9179D /* Security.framework */; };
-		9C4C22471E9E30C8000C5F15 /* libPods-SuiShouJi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DCB8AA1DC23E6D40C33EB5B /* libPods-SuiShouJi.a */; };
+		9C4C22471E9E30C8000C5F15 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		9C4C224B1E9E30C8000C5F15 /* pushsound.wav in Resources */ = {isa = PBXBuildFile; fileRef = BD6C388E1C910A8F000E2E42 /* pushsound.wav */; };
 		9C4C224C1E9E30C8000C5F15 /* YouYuJiZhangBen-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7DBB381F1E55BE2F0075E638 /* YouYuJiZhangBen-Info.plist */; };
 		9C4C224D1E9E30C8000C5F15 /* MJRefresh.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9C155E861E68572700FDFD18 /* MJRefresh.bundle */; };
@@ -5508,7 +5507,7 @@
 		9C7D2CFA1E8DF8A80093001F /* SSJBillingChargeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B23F51C3A14D8009A74A8 /* SSJBillingChargeCell.m */; };
 		9C7D2CFB1E8DF8A80093001F /* SSJLoginViewController+SSJCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D22E2931D89519B00474B11 /* SSJLoginViewController+SSJCategory.m */; };
 		9C7D2CFC1E8DF8A80093001F /* SSJBannerItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6D66241D86BD220081A7CE /* SSJBannerItem.m */; };
-		9C7D2CFD1E8DF8A80093001F /* (null) in Sources */ = {isa = PBXBuildFile; };
+		9C7D2CFD1E8DF8A80093001F /* BuildFile in Sources */ = {isa = PBXBuildFile; };
 		9C7D2CFE1E8DF8A80093001F /* SSJSyncFileModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DDBB01F1C9AAA57003433D0 /* SSJSyncFileModel.m */; };
 		9C7D2CFF1E8DF8A80093001F /* SCYSlidePagingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD902961CE202790076929F /* SCYSlidePagingView.m */; };
 		9C7D2D001E8DF8A80093001F /* SSJDatabaseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D99D45B1C3522D7006EB113 /* SSJDatabaseQueue.m */; };
@@ -6053,7 +6052,7 @@
 		9C7D2F281E8DF8A80093001F /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C3276ED1CE4614700109C4C /* libz.tbd */; };
 		9C7D2F291E8DF8A80093001F /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D4A431D1CC86F51002F0264 /* AVFoundation.framework */; };
 		9C7D2F2A1E8DF8A80093001F /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD0E43F61C21365100F9179D /* Security.framework */; };
-		9C7D2F2B1E8DF8A80093001F /* libPods-SuiShouJi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DCB8AA1DC23E6D40C33EB5B /* libPods-SuiShouJi.a */; };
+		9C7D2F2B1E8DF8A80093001F /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		9C7D2F2F1E8DF8A80093001F /* pushsound.wav in Resources */ = {isa = PBXBuildFile; fileRef = BD6C388E1C910A8F000E2E42 /* pushsound.wav */; };
 		9C7D2F301E8DF8A80093001F /* YouYuJiZhangBen-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7DBB381F1E55BE2F0075E638 /* YouYuJiZhangBen-Info.plist */; };
 		9C7D2F311E8DF8A80093001F /* MJRefresh.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9C155E861E68572700FDFD18 /* MJRefresh.bundle */; };
@@ -6111,7 +6110,7 @@
 		9C7D2F711E8DF96B0093001F /* SSJBillingChargeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B23F51C3A14D8009A74A8 /* SSJBillingChargeCell.m */; };
 		9C7D2F721E8DF96B0093001F /* SSJLoginViewController+SSJCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D22E2931D89519B00474B11 /* SSJLoginViewController+SSJCategory.m */; };
 		9C7D2F731E8DF96B0093001F /* SSJBannerItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6D66241D86BD220081A7CE /* SSJBannerItem.m */; };
-		9C7D2F741E8DF96B0093001F /* (null) in Sources */ = {isa = PBXBuildFile; };
+		9C7D2F741E8DF96B0093001F /* BuildFile in Sources */ = {isa = PBXBuildFile; };
 		9C7D2F751E8DF96B0093001F /* SSJSyncFileModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DDBB01F1C9AAA57003433D0 /* SSJSyncFileModel.m */; };
 		9C7D2F761E8DF96B0093001F /* SCYSlidePagingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD902961CE202790076929F /* SCYSlidePagingView.m */; };
 		9C7D2F771E8DF96B0093001F /* SSJDatabaseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D99D45B1C3522D7006EB113 /* SSJDatabaseQueue.m */; };
@@ -6656,7 +6655,7 @@
 		9C7D319F1E8DF96B0093001F /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C3276ED1CE4614700109C4C /* libz.tbd */; };
 		9C7D31A01E8DF96B0093001F /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D4A431D1CC86F51002F0264 /* AVFoundation.framework */; };
 		9C7D31A11E8DF96B0093001F /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD0E43F61C21365100F9179D /* Security.framework */; };
-		9C7D31A21E8DF96B0093001F /* libPods-SuiShouJi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DCB8AA1DC23E6D40C33EB5B /* libPods-SuiShouJi.a */; };
+		9C7D31A21E8DF96B0093001F /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		9C7D31A61E8DF96B0093001F /* pushsound.wav in Resources */ = {isa = PBXBuildFile; fileRef = BD6C388E1C910A8F000E2E42 /* pushsound.wav */; };
 		9C7D31A71E8DF96B0093001F /* YouYuJiZhangBen-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7DBB381F1E55BE2F0075E638 /* YouYuJiZhangBen-Info.plist */; };
 		9C7D31A81E8DF96B0093001F /* MJRefresh.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9C155E861E68572700FDFD18 /* MJRefresh.bundle */; };
@@ -7262,7 +7261,7 @@
 		9C80FEE31E95E88E00B1BAAC /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C3276ED1CE4614700109C4C /* libz.tbd */; };
 		9C80FEE41E95E88E00B1BAAC /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D4A431D1CC86F51002F0264 /* AVFoundation.framework */; };
 		9C80FEE51E95E88E00B1BAAC /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD0E43F61C21365100F9179D /* Security.framework */; };
-		9C80FEE61E95E88E00B1BAAC /* libPods-SuiShouJi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DCB8AA1DC23E6D40C33EB5B /* libPods-SuiShouJi.a */; };
+		9C80FEE61E95E88E00B1BAAC /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		9C80FEEA1E95E88E00B1BAAC /* pushsound.wav in Resources */ = {isa = PBXBuildFile; fileRef = BD6C388E1C910A8F000E2E42 /* pushsound.wav */; };
 		9C80FEEB1E95E88E00B1BAAC /* YouYuJiZhangBen-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7DBB381F1E55BE2F0075E638 /* YouYuJiZhangBen-Info.plist */; };
 		9C80FEEC1E95E88E00B1BAAC /* MJRefresh.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9C155E861E68572700FDFD18 /* MJRefresh.bundle */; };
@@ -7963,7 +7962,7 @@
 		9C9CF0A31EA5F73A007657FE /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C3276ED1CE4614700109C4C /* libz.tbd */; };
 		9C9CF0A41EA5F73A007657FE /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D4A431D1CC86F51002F0264 /* AVFoundation.framework */; };
 		9C9CF0A51EA5F73A007657FE /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD0E43F61C21365100F9179D /* Security.framework */; };
-		9C9CF0A61EA5F73A007657FE /* libPods-SuiShouJi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DCB8AA1DC23E6D40C33EB5B /* libPods-SuiShouJi.a */; };
+		9C9CF0A61EA5F73A007657FE /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		9C9CF0AA1EA5F73A007657FE /* pushsound.wav in Resources */ = {isa = PBXBuildFile; fileRef = BD6C388E1C910A8F000E2E42 /* pushsound.wav */; };
 		9C9CF0AB1EA5F73A007657FE /* YouYuJiZhangBen-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7DBB381F1E55BE2F0075E638 /* YouYuJiZhangBen-Info.plist */; };
 		9C9CF0AC1EA5F73A007657FE /* MJRefresh.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9C155E861E68572700FDFD18 /* MJRefresh.bundle */; };
@@ -8559,8 +8558,8 @@
 		9CFBAC401E07D4EC00C55814 /* xiaomao.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9CAF731B1E03EAD90061ADB8 /* xiaomao.gif */; };
 		9CFBAC441E07E6F700C55814 /* SSJCreditRepaymentSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CFBAC431E07E6F700C55814 /* SSJCreditRepaymentSyncTable.m */; };
 		9CFBAC471E07E6F700C55814 /* SSJCreditRepaymentSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CFBAC431E07E6F700C55814 /* SSJCreditRepaymentSyncTable.m */; };
-		A3F86B7BFBA3F62C302818B9 /* libPods-SuiShouJi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DCB8AA1DC23E6D40C33EB5B /* libPods-SuiShouJi.a */; };
-		B39301A128D168E2CA563B59 /* libPods-YouYuJiZhangGuanJia.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 54C394CC554BE2031E6172C1 /* libPods-YouYuJiZhangGuanJia.a */; };
+		A66BF6DF56DABBAE0AAB8A37 /* libPods-YouYuJiZhangGuanJia.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0050705599BE6C22A11B5061 /* libPods-YouYuJiZhangGuanJia.a */; };
+		B47F9F2EABB4944D2931F43F /* libPods-YouYuJiZhangBao.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CD88827B08968A79CD647BC5 /* libPods-YouYuJiZhangBao.a */; };
 		BD0432EF1C1A77BB0051E7AB /* CDPointActivityIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0432D81C1A77BB0051E7AB /* CDPointActivityIndicator.m */; };
 		BD0432F01C1A77BB0051E7AB /* sr_refresh.png in Resources */ = {isa = PBXBuildFile; fileRef = BD0432DA1C1A77BB0051E7AB /* sr_refresh.png */; };
 		BD0432F11C1A77BB0051E7AB /* sr_refresh@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BD0432DB1C1A77BB0051E7AB /* sr_refresh@2x.png */; };
@@ -8613,10 +8612,11 @@
 		BD70DF671C4751EA000E6CC9 /* SSJRegistNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF571C4751EA000E6CC9 /* SSJRegistNetworkService.m */; };
 		BD70DF6B1C4B26B3000E6CC9 /* UIViewController+SSJPageFlow.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF6A1C4B26B3000E6CC9 /* UIViewController+SSJPageFlow.m */; };
 		BDC01FF31C2D92E3008B1F75 /* CDAutoHideMessageHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = BDC01FF21C2D92E3008B1F75 /* CDAutoHideMessageHUD.m */; };
-		C0E2B2A04AC1D7D09F602D08 /* libPods-JiZhangGuanJia.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 28D54CCC52994B95633CA5E3 /* libPods-JiZhangGuanJia.a */; };
-		C1EE302265126295E171EB49 /* libPods-YouYuJiZhangLiCai.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F9099E967EA40B5B4F591EA5 /* libPods-YouYuJiZhangLiCai.a */; };
-		E1CEB4191E8A8B165BBAC41C /* libPods-YouYuJiZhangBao.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D1A7ECDE4745F51DE93EF377 /* libPods-YouYuJiZhangBao.a */; };
-		FC8C76456DC126984B2A120A /* libPods-9188JiZhangPro.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C67906F6CFFC0A3639C9DEC3 /* libPods-9188JiZhangPro.a */; };
+		DE40AFEE86913D4496BD2849 /* libPods-YouYuJiZhangPro.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EF5B82B4857D59207E9CA7D7 /* libPods-YouYuJiZhangPro.a */; };
+		EB3CDE318B1DD156CA0EC0A5 /* libPods-JiZhangGuanJia.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 571F4D066EC4C6EC375F15AE /* libPods-JiZhangGuanJia.a */; };
+		EBE20BB4A93813569A3B2312 /* libPods-YouYuJiZhangBen.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E333715C60C0345F8D6FCA9 /* libPods-YouYuJiZhangBen.a */; };
+		F570B572427C5B0F5505EDC0 /* libPods-YouYuJiZhang.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9109F50D921E453C23106ABD /* libPods-YouYuJiZhang.a */; };
+		FADECC831AD5BC45973441B1 /* libPods-SuiShouJiEnterprise.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6511C90ACDB7D92C18046A91 /* libPods-SuiShouJiEnterprise.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -8772,16 +8772,18 @@
 
 /* Begin PBXFileReference section */
 		004889EB34083108A8612BCE /* Pods-YouYuJiZhangBao.debug-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangBao.debug-test.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangBao/Pods-YouYuJiZhangBao.debug-test.xcconfig"; sourceTree = "<group>"; };
+		0050705599BE6C22A11B5061 /* libPods-YouYuJiZhangGuanJia.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-YouYuJiZhangGuanJia.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		10B02F27B07D9E59BDE1CA2A /* Pods-YouYuJiZhang.release-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhang.release-test.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhang/Pods-YouYuJiZhang.release-test.xcconfig"; sourceTree = "<group>"; };
+		1330B042666B67AFA97A31B4 /* libPods-9188JiZhangPro.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-9188JiZhangPro.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		13DED3B91912A4CA23981548 /* Pods-YouYuJiZhangGuanJia.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangGuanJia.debug.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangGuanJia/Pods-YouYuJiZhangGuanJia.debug.xcconfig"; sourceTree = "<group>"; };
+		16E44CAC96297AFD0B023EB1 /* libPods-SuiShouJi.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SuiShouJi.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1BCD58B8B9CBEA7ED5E6BDD4 /* Pods-JiZhangGuanJia.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JiZhangGuanJia.debug.xcconfig"; path = "Pods/Target Support Files/Pods-JiZhangGuanJia/Pods-JiZhangGuanJia.debug.xcconfig"; sourceTree = "<group>"; };
+		1E333715C60C0345F8D6FCA9 /* libPods-YouYuJiZhangBen.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-YouYuJiZhangBen.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1E51C22F9305214B776BE476 /* Pods-YouYuJiZhang.debug-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhang.debug-production.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhang/Pods-YouYuJiZhang.debug-production.xcconfig"; sourceTree = "<group>"; };
 		1E94BF472DA87D55A1CBED4F /* Pods-YouYuJiZhang.debug-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhang.debug-test.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhang/Pods-YouYuJiZhang.debug-test.xcconfig"; sourceTree = "<group>"; };
 		20DA9AF0E6D356E778C6EB44 /* Pods-SuiShouJiEnterprise.release-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SuiShouJiEnterprise.release-production.xcconfig"; path = "Pods/Target Support Files/Pods-SuiShouJiEnterprise/Pods-SuiShouJiEnterprise.release-production.xcconfig"; sourceTree = "<group>"; };
 		21EA1E50547213D6FCC8FD05 /* Pods-SuiShouJi.release-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SuiShouJi.release-test.xcconfig"; path = "Pods/Target Support Files/Pods-SuiShouJi/Pods-SuiShouJi.release-test.xcconfig"; sourceTree = "<group>"; };
 		2540479F536C7834E132C4B5 /* Pods-YouYuJiZhangPro.release-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangPro.release-production.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangPro/Pods-YouYuJiZhangPro.release-production.xcconfig"; sourceTree = "<group>"; };
-		28D54CCC52994B95633CA5E3 /* libPods-JiZhangGuanJia.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-JiZhangGuanJia.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		2D1CEF5E96BF59F42EAD3BC3 /* libPods-BeiKeJiZhang.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BeiKeJiZhang.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2DEF1E8E40DA1003C5D69150 /* Pods-YouYuJiZhangLiCai.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangLiCai.release.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangLiCai/Pods-YouYuJiZhangLiCai.release.xcconfig"; sourceTree = "<group>"; };
 		3107DC1ABD197F0C5FAC4C5F /* Pods-YouYuJiZhangBao.release-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangBao.release-production.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangBao/Pods-YouYuJiZhangBao.release-production.xcconfig"; sourceTree = "<group>"; };
 		348DA5EFAB1C2E711E07E558 /* libPods-youyujizhang.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-youyujizhang.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -8791,16 +8793,17 @@
 		3D28921C2AB227ED349FA128 /* Pods-YouYuJiZhangLiCai.release-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangLiCai.release-test.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangLiCai/Pods-YouYuJiZhangLiCai.release-test.xcconfig"; sourceTree = "<group>"; };
 		408D479324B9408204BAA12F /* Pods-YouYuJiZhangGuanJia.release-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangGuanJia.release-test.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangGuanJia/Pods-YouYuJiZhangGuanJia.release-test.xcconfig"; sourceTree = "<group>"; };
 		409F6679D47EFA5753A58706 /* Pods-youyujizhang.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-youyujizhang.release.xcconfig"; path = "Pods/Target Support Files/Pods-youyujizhang/Pods-youyujizhang.release.xcconfig"; sourceTree = "<group>"; };
-		4BE2668A2D3687E35A1F7D0D /* libPods-YouYuJiZhang.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-YouYuJiZhang.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		4DCB8AA1DC23E6D40C33EB5B /* libPods-SuiShouJi.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SuiShouJi.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		49B515737030339BE6A5806D /* libPods-9188JiZhangBen.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-9188JiZhangBen.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4EF45D0DA6D692497985E773 /* Pods-JiZhangGuanJia.release-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JiZhangGuanJia.release-test.xcconfig"; path = "Pods/Target Support Files/Pods-JiZhangGuanJia/Pods-JiZhangGuanJia.release-test.xcconfig"; sourceTree = "<group>"; };
 		53D02BD02F89C64D5FED1E49 /* Pods-YouYuJiZhangGuanJia.debug-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangGuanJia.debug-production.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangGuanJia/Pods-YouYuJiZhangGuanJia.debug-production.xcconfig"; sourceTree = "<group>"; };
-		54C394CC554BE2031E6172C1 /* libPods-YouYuJiZhangGuanJia.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-YouYuJiZhangGuanJia.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		559995F82A41A31A1EDB66F7 /* Pods-YouYuJiZhangBao.release-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangBao.release-test.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangBao/Pods-YouYuJiZhangBao.release-test.xcconfig"; sourceTree = "<group>"; };
+		571F4D066EC4C6EC375F15AE /* libPods-JiZhangGuanJia.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-JiZhangGuanJia.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5899867574AEB0396C49AE15 /* Pods-SuiShouJi.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SuiShouJi.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SuiShouJi/Pods-SuiShouJi.debug.xcconfig"; sourceTree = "<group>"; };
 		59B9709CD0561A8AD4BDF638 /* Pods-SuiShouJi.debug-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SuiShouJi.debug-test.xcconfig"; path = "Pods/Target Support Files/Pods-SuiShouJi/Pods-SuiShouJi.debug-test.xcconfig"; sourceTree = "<group>"; };
 		5DE4695CC7C0CB804EB71885 /* Pods-JiZhangGuanJia.debug-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JiZhangGuanJia.debug-production.xcconfig"; path = "Pods/Target Support Files/Pods-JiZhangGuanJia/Pods-JiZhangGuanJia.debug-production.xcconfig"; sourceTree = "<group>"; };
 		5E12FC9D6B49C5CFC7E59C45 /* Pods-9188JiZhangPro.release-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-9188JiZhangPro.release-test.xcconfig"; path = "Pods/Target Support Files/Pods-9188JiZhangPro/Pods-9188JiZhangPro.release-test.xcconfig"; sourceTree = "<group>"; };
+		5F3039050029C23C766A9C4C /* libPods-BeiKeJiZhang.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BeiKeJiZhang.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6511C90ACDB7D92C18046A91 /* libPods-SuiShouJiEnterprise.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SuiShouJiEnterprise.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6534E1884B88B3410A9AFE6E /* Pods-SuiShouJiEnterprise.debug-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SuiShouJiEnterprise.debug-production.xcconfig"; path = "Pods/Target Support Files/Pods-SuiShouJiEnterprise/Pods-SuiShouJiEnterprise.debug-production.xcconfig"; sourceTree = "<group>"; };
 		6914A4671174AA5C297802D2 /* Pods-YouYuJiZhang.release-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhang.release-production.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhang/Pods-YouYuJiZhang.release-production.xcconfig"; sourceTree = "<group>"; };
 		69D2F0A471A04C17E16C7FEB /* Pods-YouYuJiZhangPro.debug-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangPro.debug-production.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangPro/Pods-YouYuJiZhangPro.debug-production.xcconfig"; sourceTree = "<group>"; };
@@ -8810,6 +8813,7 @@
 		71971C49348189D6064D4695 /* Pods-YouYuJiZhangBen.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangBen.debug.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangBen/Pods-YouYuJiZhangBen.debug.xcconfig"; sourceTree = "<group>"; };
 		73027455F8F75CEC77E66AC1 /* Pods-9188JiZhangBen.release-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-9188JiZhangBen.release-production.xcconfig"; path = "Pods/Target Support Files/Pods-9188JiZhangBen/Pods-9188JiZhangBen.release-production.xcconfig"; sourceTree = "<group>"; };
 		7501B672488D73E1788CDDF1 /* Pods-9188JiZhangPro.debug-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-9188JiZhangPro.debug-test.xcconfig"; path = "Pods/Target Support Files/Pods-9188JiZhangPro/Pods-9188JiZhangPro.debug-test.xcconfig"; sourceTree = "<group>"; };
+		79537D91EF8CAC5D9782BE95 /* libPods-YouYuJiZhangLiCai.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-YouYuJiZhangLiCai.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A54FBECED91876ACA5E330D /* Pods-BeiKeJiZhang.debug-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BeiKeJiZhang.debug-production.xcconfig"; path = "Pods/Target Support Files/Pods-BeiKeJiZhang/Pods-BeiKeJiZhang.debug-production.xcconfig"; sourceTree = "<group>"; };
 		7BDCA1EC0DEE649B1ED1D06F /* Pods-YouYuJiZhangGuanJia.release-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangGuanJia.release-production.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangGuanJia/Pods-YouYuJiZhangGuanJia.release-production.xcconfig"; sourceTree = "<group>"; };
 		7D00D8031DFA9CC00007A8FB /* SSJReportFormsChartCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormsChartCell.h; sourceTree = "<group>"; };
@@ -9437,6 +9441,7 @@
 		87B6E587581D2C973B9CE0A0 /* Pods-BeiKeJiZhang.release-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BeiKeJiZhang.release-test.xcconfig"; path = "Pods/Target Support Files/Pods-BeiKeJiZhang/Pods-BeiKeJiZhang.release-test.xcconfig"; sourceTree = "<group>"; };
 		8E88665EC4BCCDEADDBBF76D /* Pods-YouYuJiZhangBen.release-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangBen.release-production.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangBen/Pods-YouYuJiZhangBen.release-production.xcconfig"; sourceTree = "<group>"; };
 		8ED51442757E13C0CDA434AA /* Pods-YouYuJiZhangBen.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangBen.release.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangBen/Pods-YouYuJiZhangBen.release.xcconfig"; sourceTree = "<group>"; };
+		9109F50D921E453C23106ABD /* libPods-YouYuJiZhang.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-YouYuJiZhang.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		910DD68E1DF7B47E00A73F0C /* SSJMineHomeCollectionImageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMineHomeCollectionImageCell.h; sourceTree = "<group>"; };
 		910DD68F1DF7B47E00A73F0C /* SSJMineHomeCollectionImageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMineHomeCollectionImageCell.m; sourceTree = "<group>"; };
 		913E2BD71ECE89FE008242CD /* SSJBookColorSelectedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookColorSelectedViewController.h; sourceTree = "<group>"; };
@@ -10054,7 +10059,6 @@
 		9CFBAC311E07D4DE00C55814 /* homeDefualtLoading.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = homeDefualtLoading.gif; sourceTree = "<group>"; };
 		9CFBAC421E07E6F700C55814 /* SSJCreditRepaymentSyncTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCreditRepaymentSyncTable.h; sourceTree = "<group>"; };
 		9CFBAC431E07E6F700C55814 /* SSJCreditRepaymentSyncTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCreditRepaymentSyncTable.m; sourceTree = "<group>"; };
-		9FFD30CB9DFEC254EA2C4274 /* libPods-SuiShouJiEnterprise.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SuiShouJiEnterprise.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A2AF6367657D967EE92CE822 /* Pods-JiZhangGuanJia.release-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JiZhangGuanJia.release-production.xcconfig"; path = "Pods/Target Support Files/Pods-JiZhangGuanJia/Pods-JiZhangGuanJia.release-production.xcconfig"; sourceTree = "<group>"; };
 		A667F7088E87A8C8B73EC269 /* Pods-YouYuJiZhangGuanJia.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangGuanJia.release.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangGuanJia/Pods-YouYuJiZhangGuanJia.release.xcconfig"; sourceTree = "<group>"; };
 		A684F38344A33CFE5F75ADF5 /* Pods-SuiShouJiEnterprise.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SuiShouJiEnterprise.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SuiShouJiEnterprise/Pods-SuiShouJiEnterprise.debug.xcconfig"; sourceTree = "<group>"; };
@@ -10170,19 +10174,16 @@
 		BDC01FF11C2D92E3008B1F75 /* CDAutoHideMessageHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDAutoHideMessageHUD.h; sourceTree = "<group>"; };
 		BDC01FF21C2D92E3008B1F75 /* CDAutoHideMessageHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDAutoHideMessageHUD.m; sourceTree = "<group>"; };
 		BDED39AF20CC5F34BACE95E9 /* Pods-9188JiZhangBao.release-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-9188JiZhangBao.release-test.xcconfig"; path = "Pods/Target Support Files/Pods-9188JiZhangBao/Pods-9188JiZhangBao.release-test.xcconfig"; sourceTree = "<group>"; };
+		BEAA1B2FC6756F3854AACA28 /* libPods-9188JiZhangBao.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-9188JiZhangBao.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C456BDB9A1174F4A4B005EB9 /* Pods-YouYuJiZhangBao.debug-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangBao.debug-production.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangBao/Pods-YouYuJiZhangBao.debug-production.xcconfig"; sourceTree = "<group>"; };
-		C5771E8CE795420339FE5806 /* libPods-9188JiZhangBao.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-9188JiZhangBao.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		C67906F6CFFC0A3639C9DEC3 /* libPods-9188JiZhangPro.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-9188JiZhangPro.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C940E901F298A3A24076E517 /* Pods-YouYuJiZhang.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhang.debug.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhang/Pods-YouYuJiZhang.debug.xcconfig"; sourceTree = "<group>"; };
 		CAA8E44768CD8C6BF10DACE5 /* Pods-YouYuJiZhangBen.release-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangBen.release-test.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangBen/Pods-YouYuJiZhangBen.release-test.xcconfig"; sourceTree = "<group>"; };
 		CBF9E3113464BE93EBD90F4A /* Pods-YouYuJiZhangPro.release-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangPro.release-test.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangPro/Pods-YouYuJiZhangPro.release-test.xcconfig"; sourceTree = "<group>"; };
+		CD88827B08968A79CD647BC5 /* libPods-YouYuJiZhangBao.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-YouYuJiZhangBao.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CFF6621CBAC638A24B0361A7 /* Pods-YouYuJiZhangLiCai.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangLiCai.debug.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangLiCai/Pods-YouYuJiZhangLiCai.debug.xcconfig"; sourceTree = "<group>"; };
-		D1A7ECDE4745F51DE93EF377 /* libPods-YouYuJiZhangBao.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-YouYuJiZhangBao.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D65178675E1A2115270E7CCB /* Pods-YouYuJiZhangPro.debug-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangPro.debug-test.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangPro/Pods-YouYuJiZhangPro.debug-test.xcconfig"; sourceTree = "<group>"; };
 		D7A5205CDCA302CF951A8581 /* Pods-SuiShouJiEnterprise.debug-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SuiShouJiEnterprise.debug-test.xcconfig"; path = "Pods/Target Support Files/Pods-SuiShouJiEnterprise/Pods-SuiShouJiEnterprise.debug-test.xcconfig"; sourceTree = "<group>"; };
-		DAD18AB4DEF381D69AB77158 /* libPods-YouYuJiZhangBen.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-YouYuJiZhangBen.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB9B0038A884FAF5FA1CEB4F /* Pods-JiZhangGuanJia.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JiZhangGuanJia.release.xcconfig"; path = "Pods/Target Support Files/Pods-JiZhangGuanJia/Pods-JiZhangGuanJia.release.xcconfig"; sourceTree = "<group>"; };
-		DC160CBD947F86ED6CD7DD86 /* libPods-YouYuJiZhangPro.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-YouYuJiZhangPro.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD224C6E2E36CBA3226029D3 /* Pods-BeiKeJiZhang.release-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BeiKeJiZhang.release-production.xcconfig"; path = "Pods/Target Support Files/Pods-BeiKeJiZhang/Pods-BeiKeJiZhang.release-production.xcconfig"; sourceTree = "<group>"; };
 		DDDAF21ED0ACE6B74EBCB8A6 /* Pods-9188JiZhangBao.debug-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-9188JiZhangBao.debug-production.xcconfig"; path = "Pods/Target Support Files/Pods-9188JiZhangBao/Pods-9188JiZhangBao.debug-production.xcconfig"; sourceTree = "<group>"; };
 		DF287708592603CEA9EF83AB /* Pods-BeiKeJiZhang.debug-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BeiKeJiZhang.debug-test.xcconfig"; path = "Pods/Target Support Files/Pods-BeiKeJiZhang/Pods-BeiKeJiZhang.debug-test.xcconfig"; sourceTree = "<group>"; };
@@ -10190,11 +10191,10 @@
 		E46D461943E8EB50EC47585D /* Pods-YouYuJiZhangBen.debug-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangBen.debug-test.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangBen/Pods-YouYuJiZhangBen.debug-test.xcconfig"; sourceTree = "<group>"; };
 		E710211033A79D2C7E92D379 /* Pods-SuiShouJiEnterprise.release-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SuiShouJiEnterprise.release-test.xcconfig"; path = "Pods/Target Support Files/Pods-SuiShouJiEnterprise/Pods-SuiShouJiEnterprise.release-test.xcconfig"; sourceTree = "<group>"; };
 		E77827293B9974EF1F14709F /* Pods-9188JiZhangBao.debug-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-9188JiZhangBao.debug-test.xcconfig"; path = "Pods/Target Support Files/Pods-9188JiZhangBao/Pods-9188JiZhangBao.debug-test.xcconfig"; sourceTree = "<group>"; };
+		EF5B82B4857D59207E9CA7D7 /* libPods-YouYuJiZhangPro.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-YouYuJiZhangPro.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1BFD9B2FA7E263C7101F5E8 /* Pods-SuiShouJiEnterprise.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SuiShouJiEnterprise.release.xcconfig"; path = "Pods/Target Support Files/Pods-SuiShouJiEnterprise/Pods-SuiShouJiEnterprise.release.xcconfig"; sourceTree = "<group>"; };
 		F36B3F26385C626176D7A485 /* Pods-YouYuJiZhangLiCai.release-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangLiCai.release-production.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangLiCai/Pods-YouYuJiZhangLiCai.release-production.xcconfig"; sourceTree = "<group>"; };
-		F84857880610A2DD87904A88 /* libPods-9188JiZhangBen.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-9188JiZhangBen.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F8D4E0B8A39DD37EA1FCC6CB /* Pods-YouYuJiZhangLiCai.debug-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangLiCai.debug-test.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangLiCai/Pods-YouYuJiZhangLiCai.debug-test.xcconfig"; sourceTree = "<group>"; };
-		F9099E967EA40B5B4F591EA5 /* libPods-YouYuJiZhangLiCai.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-YouYuJiZhangLiCai.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC699DBB59A6780396A68CE0 /* Pods-9188JiZhangBao.release-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-9188JiZhangBao.release-production.xcconfig"; path = "Pods/Target Support Files/Pods-9188JiZhangBao/Pods-9188JiZhangBao.release-production.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -10211,7 +10211,7 @@
 				7D08A2B11E4999D30085A8FB /* libz.tbd in Frameworks */,
 				7D08A2B21E4999D30085A8FB /* AVFoundation.framework in Frameworks */,
 				7D08A2B71E4999D30085A8FB /* Security.framework in Frameworks */,
-				B39301A128D168E2CA563B59 /* libPods-YouYuJiZhangGuanJia.a in Frameworks */,
+				A66BF6DF56DABBAE0AAB8A37 /* libPods-YouYuJiZhangGuanJia.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -10227,7 +10227,7 @@
 				7DA13C081E35AED7000490A4 /* libz.tbd in Frameworks */,
 				7DA13C091E35AED7000490A4 /* AVFoundation.framework in Frameworks */,
 				7DA13C0E1E35AED7000490A4 /* Security.framework in Frameworks */,
-				E1CEB4191E8A8B165BBAC41C /* libPods-YouYuJiZhangBao.a in Frameworks */,
+				B47F9F2EABB4944D2931F43F /* libPods-YouYuJiZhangBao.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -10243,8 +10243,7 @@
 				7DBB3C981E55C2EE0075E638 /* libz.tbd in Frameworks */,
 				7DBB3C991E55C2EE0075E638 /* AVFoundation.framework in Frameworks */,
 				7DBB3C9A1E55C2EE0075E638 /* Security.framework in Frameworks */,
-				7DBB3C9B1E55C2EE0075E638 /* libPods-SuiShouJi.a in Frameworks */,
-				C1EE302265126295E171EB49 /* libPods-YouYuJiZhangLiCai.a in Frameworks */,
+				8EAE523834178C9493CC82B1 /* libPods-YouYuJiZhangLiCai.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -10260,8 +10259,7 @@
 				7DBB41331E55C4E00075E638 /* libz.tbd in Frameworks */,
 				7DBB41341E55C4E00075E638 /* AVFoundation.framework in Frameworks */,
 				7DBB41351E55C4E00075E638 /* Security.framework in Frameworks */,
-				7DBB41361E55C4E00075E638 /* libPods-SuiShouJi.a in Frameworks */,
-				81159558A04406B56D1F36B3 /* libPods-SuiShouJiEnterprise.a in Frameworks */,
+				FADECC831AD5BC45973441B1 /* libPods-SuiShouJiEnterprise.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -10277,7 +10275,7 @@
 				7DFB189D1EB0341E00292DD3 /* libz.tbd in Frameworks */,
 				7DFB189E1EB0341E00292DD3 /* AVFoundation.framework in Frameworks */,
 				7DFB189F1EB0341E00292DD3 /* Security.framework in Frameworks */,
-				7A0F545325C98140D90A42EE /* libPods-9188JiZhangBao.a in Frameworks */,
+				18E10A0E5057FCCA71A417FC /* libPods-9188JiZhangBao.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -10293,7 +10291,7 @@
 				9C13F7171E8267D300AC5FA9 /* libz.tbd in Frameworks */,
 				9C13F7181E8267D300AC5FA9 /* AVFoundation.framework in Frameworks */,
 				9C13F7191E8267D300AC5FA9 /* Security.framework in Frameworks */,
-				77DF96B1D75AEF70D1506706 /* libPods-BeiKeJiZhang.a in Frameworks */,
+				8AFD7C4264E444F472747C5E /* libPods-BeiKeJiZhang.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -10309,8 +10307,7 @@
 				9C4C22441E9E30C8000C5F15 /* libz.tbd in Frameworks */,
 				9C4C22451E9E30C8000C5F15 /* AVFoundation.framework in Frameworks */,
 				9C4C22461E9E30C8000C5F15 /* Security.framework in Frameworks */,
-				9C4C22471E9E30C8000C5F15 /* libPods-SuiShouJi.a in Frameworks */,
-				2037DEF73FC931CFDC333C7D /* libPods-9188JiZhangBen.a in Frameworks */,
+				708563F2FF7122D3D729779C /* libPods-9188JiZhangBen.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -10326,8 +10323,7 @@
 				9C7D2F281E8DF8A80093001F /* libz.tbd in Frameworks */,
 				9C7D2F291E8DF8A80093001F /* AVFoundation.framework in Frameworks */,
 				9C7D2F2A1E8DF8A80093001F /* Security.framework in Frameworks */,
-				9C7D2F2B1E8DF8A80093001F /* libPods-SuiShouJi.a in Frameworks */,
-				43FB013EC6CC98DC90F5D913 /* libPods-YouYuJiZhangPro.a in Frameworks */,
+				DE40AFEE86913D4496BD2849 /* libPods-YouYuJiZhangPro.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -10343,8 +10339,7 @@
 				9C7D319F1E8DF96B0093001F /* libz.tbd in Frameworks */,
 				9C7D31A01E8DF96B0093001F /* AVFoundation.framework in Frameworks */,
 				9C7D31A11E8DF96B0093001F /* Security.framework in Frameworks */,
-				9C7D31A21E8DF96B0093001F /* libPods-SuiShouJi.a in Frameworks */,
-				FC8C76456DC126984B2A120A /* libPods-9188JiZhangPro.a in Frameworks */,
+				27072D566B5F9C1A74410870 /* libPods-9188JiZhangPro.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -10360,8 +10355,7 @@
 				9C80FEE31E95E88E00B1BAAC /* libz.tbd in Frameworks */,
 				9C80FEE41E95E88E00B1BAAC /* AVFoundation.framework in Frameworks */,
 				9C80FEE51E95E88E00B1BAAC /* Security.framework in Frameworks */,
-				9C80FEE61E95E88E00B1BAAC /* libPods-SuiShouJi.a in Frameworks */,
-				2969FD659CB0F29A997B0743 /* libPods-YouYuJiZhang.a in Frameworks */,
+				F570B572427C5B0F5505EDC0 /* libPods-YouYuJiZhang.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -10377,8 +10371,7 @@
 				9C9CF0A31EA5F73A007657FE /* libz.tbd in Frameworks */,
 				9C9CF0A41EA5F73A007657FE /* AVFoundation.framework in Frameworks */,
 				9C9CF0A51EA5F73A007657FE /* Security.framework in Frameworks */,
-				9C9CF0A61EA5F73A007657FE /* libPods-SuiShouJi.a in Frameworks */,
-				C0E2B2A04AC1D7D09F602D08 /* libPods-JiZhangGuanJia.a in Frameworks */,
+				EB3CDE318B1DD156CA0EC0A5 /* libPods-JiZhangGuanJia.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -10394,7 +10387,7 @@
 				9CECFCA11D6D41A700DB2C8B /* libz.tbd in Frameworks */,
 				9CECFCA21D6D41A700DB2C8B /* AVFoundation.framework in Frameworks */,
 				9CECFCA71D6D41A700DB2C8B /* Security.framework in Frameworks */,
-				72BB5896AF4A38FC4F8B3B48 /* libPods-YouYuJiZhangBen.a in Frameworks */,
+				EBE20BB4A93813569A3B2312 /* libPods-YouYuJiZhangBen.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -10410,7 +10403,7 @@
 				9C3276EE1CE4614700109C4C /* libz.tbd in Frameworks */,
 				7D4A431E1CC86F51002F0264 /* AVFoundation.framework in Frameworks */,
 				BD0E43F71C21365100F9179D /* Security.framework in Frameworks */,
-				A3F86B7BFBA3F62C302818B9 /* libPods-SuiShouJi.a in Frameworks */,
+				9BC870CBC702B3D5107DA532 /* libPods-SuiShouJi.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -10443,20 +10436,20 @@
 				BDA2EF151C8EB89E007DD45F /* TencentOpenAPI.framework */,
 				7DAD4B171C4FAF42004B7FF0 /* ImageIO.framework */,
 				BD0E43F61C21365100F9179D /* Security.framework */,
-				28D54CCC52994B95633CA5E3 /* libPods-JiZhangGuanJia.a */,
-				4DCB8AA1DC23E6D40C33EB5B /* libPods-SuiShouJi.a */,
-				DAD18AB4DEF381D69AB77158 /* libPods-YouYuJiZhangBen.a */,
-				F9099E967EA40B5B4F591EA5 /* libPods-YouYuJiZhangLiCai.a */,
 				348DA5EFAB1C2E711E07E558 /* libPods-youyujizhang.a */,
-				D1A7ECDE4745F51DE93EF377 /* libPods-YouYuJiZhangBao.a */,
-				54C394CC554BE2031E6172C1 /* libPods-YouYuJiZhangGuanJia.a */,
-				9FFD30CB9DFEC254EA2C4274 /* libPods-SuiShouJiEnterprise.a */,
-				4BE2668A2D3687E35A1F7D0D /* libPods-YouYuJiZhang.a */,
-				F84857880610A2DD87904A88 /* libPods-9188JiZhangBen.a */,
-				2D1CEF5E96BF59F42EAD3BC3 /* libPods-BeiKeJiZhang.a */,
-				C67906F6CFFC0A3639C9DEC3 /* libPods-9188JiZhangPro.a */,
-				DC160CBD947F86ED6CD7DD86 /* libPods-YouYuJiZhangPro.a */,
-				C5771E8CE795420339FE5806 /* libPods-9188JiZhangBao.a */,
+				BEAA1B2FC6756F3854AACA28 /* libPods-9188JiZhangBao.a */,
+				49B515737030339BE6A5806D /* libPods-9188JiZhangBen.a */,
+				1330B042666B67AFA97A31B4 /* libPods-9188JiZhangPro.a */,
+				5F3039050029C23C766A9C4C /* libPods-BeiKeJiZhang.a */,
+				571F4D066EC4C6EC375F15AE /* libPods-JiZhangGuanJia.a */,
+				16E44CAC96297AFD0B023EB1 /* libPods-SuiShouJi.a */,
+				6511C90ACDB7D92C18046A91 /* libPods-SuiShouJiEnterprise.a */,
+				9109F50D921E453C23106ABD /* libPods-YouYuJiZhang.a */,
+				CD88827B08968A79CD647BC5 /* libPods-YouYuJiZhangBao.a */,
+				1E333715C60C0345F8D6FCA9 /* libPods-YouYuJiZhangBen.a */,
+				0050705599BE6C22A11B5061 /* libPods-YouYuJiZhangGuanJia.a */,
+				79537D91EF8CAC5D9782BE95 /* libPods-YouYuJiZhangLiCai.a */,
+				EF5B82B4857D59207E9CA7D7 /* libPods-YouYuJiZhangPro.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -14282,7 +14275,7 @@
 			attributes = {
 				CLASSPREFIX = SSJ;
 				LastUpgradeCheck = 0820;
-				ORGANIZATIONNAME = "___9188___";
+				ORGANIZATIONNAME = ___9188___;
 				TargetAttributes = {
 					7D08A0931E4999D30085A8FB = {
 						DevelopmentTeam = 7RVBV2MALK;
@@ -18669,7 +18662,7 @@
 				9C13F4EF1E8267D300AC5FA9 /* SSJBillingChargeCell.m in Sources */,
 				9C13F4F01E8267D300AC5FA9 /* SSJLoginViewController+SSJCategory.m in Sources */,
 				9C13F4F11E8267D300AC5FA9 /* SSJBannerItem.m in Sources */,
-				9C13F4F21E8267D300AC5FA9 /* (null) in Sources */,
+				9C13F4F21E8267D300AC5FA9 /* BuildFile in Sources */,
 				9C13F4F31E8267D300AC5FA9 /* SSJSyncFileModel.m in Sources */,
 				9C13F4F41E8267D300AC5FA9 /* SCYSlidePagingView.m in Sources */,
 				9C13F4F51E8267D300AC5FA9 /* SSJDatabaseQueue.m in Sources */,
@@ -19940,7 +19933,7 @@
 				9C7D2CFB1E8DF8A80093001F /* SSJLoginViewController+SSJCategory.m in Sources */,
 				7D8248CB1EC5849C0048BC4B /* SSJDatabaseVersion15.m in Sources */,
 				9C7D2CFC1E8DF8A80093001F /* SSJBannerItem.m in Sources */,
-				9C7D2CFD1E8DF8A80093001F /* (null) in Sources */,
+				9C7D2CFD1E8DF8A80093001F /* BuildFile in Sources */,
 				9C7D2CFE1E8DF8A80093001F /* SSJSyncFileModel.m in Sources */,
 				9C7D2CFF1E8DF8A80093001F /* SCYSlidePagingView.m in Sources */,
 				9C7D2D001E8DF8A80093001F /* SSJDatabaseQueue.m in Sources */,
@@ -20574,7 +20567,7 @@
 				9C7D2F721E8DF96B0093001F /* SSJLoginViewController+SSJCategory.m in Sources */,
 				7D8248D31EC5849C0048BC4B /* SSJDatabaseVersion15.m in Sources */,
 				9C7D2F731E8DF96B0093001F /* SSJBannerItem.m in Sources */,
-				9C7D2F741E8DF96B0093001F /* (null) in Sources */,
+				9C7D2F741E8DF96B0093001F /* BuildFile in Sources */,
 				9C7D2F751E8DF96B0093001F /* SSJSyncFileModel.m in Sources */,
 				9C7D2F761E8DF96B0093001F /* SCYSlidePagingView.m in Sources */,
 				9C7D2F771E8DF96B0093001F /* SSJDatabaseQueue.m in Sources */,

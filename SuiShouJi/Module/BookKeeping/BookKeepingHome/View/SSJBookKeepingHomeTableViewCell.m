@@ -1,4 +1,4 @@
-//
+    //
 //  SSJBookKeepingHomeTableViewCell.m
 //  SuiShouJi
 //
@@ -188,9 +188,10 @@ static const CGFloat kCategoryImageButtonRadius = 16;
         [UIView animateWithDuration:0.7 animations:^{
             self.topLabel.alpha = 1;
             self.bottomLabel.alpha = 1;
-            self.categoryImageButton.transform = CGAffineTransformIdentity;
-            self.chargeImage.layer.transform = CATransform3DIdentity;
+//            self.categoryImageButton.transform = CGAffineTransformIdentity;
+//            self.chargeImage.layer.transform = CATransform3DIdentity;
         } completion:^(BOOL finished) {
+//            [self updateConstraints];
             [self shake];
         }];
     } else {
@@ -234,6 +235,7 @@ static const CGFloat kCategoryImageButtonRadius = 16;
     anim.fillMode = kCAFillModeForwards;
     
     [self.categoryImageButton.layer addAnimation:anim forKey:@"shake"];
+    
 }
 
 #pragma mark - Lazyloading

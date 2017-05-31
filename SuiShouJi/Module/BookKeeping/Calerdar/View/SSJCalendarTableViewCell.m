@@ -7,7 +7,7 @@
 //
 
 #import "SSJCalendarTableViewCell.h"
-#import <Masonry.h>
+#import "Masonry.h"
 
 @interface SSJCalendarTableViewCell()
 
