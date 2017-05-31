@@ -41,7 +41,8 @@
                                @"cbooksId":bookId,
                                @"istate":@(memberState)};
     self.httpMethod = SSJBaseNetworkServiceHttpMethodPOST;
-    [self request:(@"http://192.168.1.168:18080/sharedMember/removeMember.go") params:paramDic];
+//    /sharebook/removeMember.go
+    [self request:(@"http://192.168.1.168:18080/sharebook/remove_member") params:paramDic];
 }
 
 - (void)requestDidFinish:(NSDictionary *)rootElement {

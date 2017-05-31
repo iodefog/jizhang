@@ -224,6 +224,7 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
         }
         
         shareItem.booksColor = gradientColor;
+        shareItem.booksName = weakSelf.bookName;
         weakSelf.bookItem = shareItem;
         [SSJBooksTypeStore saveShareBooksTypeItem:shareItem WithshareMember:self.createBookService.shareMemberArray shareFriendsMarks:self.createBookService.shareFriendsMarkArray ShareBookOperate:ShareBookOperateCreate sucess:^{
             if (_saveBooksBlock) {
