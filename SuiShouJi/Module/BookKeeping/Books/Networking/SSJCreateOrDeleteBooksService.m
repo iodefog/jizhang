@@ -33,7 +33,7 @@
                                @"cwriteDate":bookItem.cwriteDate,
                                @"operatorType":@"0"};
     self.httpMethod = SSJBaseNetworkServiceHttpMethodPOST;
-    [self request:(@"http://192.168.1.168:18080/sharebook/add_shareBook.go") params:paramDic];
+    [self request:(@"http://jz.gs.9188.com:18080/sharebook/add_shareBook.go") params:paramDic];
 }
 
 - (void)deleteShareBookWithBookId:(NSString *)bookId memberId:(NSString *)memberId memberState:(SSJMemberState)memberState {
@@ -42,7 +42,7 @@
                                @"istate":@(memberState)};
     self.httpMethod = SSJBaseNetworkServiceHttpMethodPOST;
 //    /sharebook/removeMember.go
-    [self request:(@"http://192.168.1.168:18080/sharebook/remove_member") params:paramDic];
+    [self request:(@"http://jz.gs.9188.com:18080/sharebook/remove_member") params:paramDic];
 }
 
 - (void)requestDidFinish:(NSDictionary *)rootElement {

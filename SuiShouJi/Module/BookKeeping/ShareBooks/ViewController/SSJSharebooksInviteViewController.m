@@ -71,6 +71,7 @@
     [self.backView addSubview:self.codeLeftImage];
     [self.backView addSubview:self.codeRightImage];
     [self.backView addSubview:self.codeInput];
+    [self.backView addSubview:self.resendButton];
     [self.backView addSubview:self.customCodeLab];
     [self.backView addSubview:self.expireDateLab];
     [self.view addSubview:self.sendButton];
@@ -118,6 +119,12 @@
     [self.customCodeLab mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self.codeInput.mas_bottom).offset(15);
         make.left.mas_equalTo(self.codeInput);
+    }];
+    
+    [self.resendButton mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.right.mas_equalTo(self.codeInput.mas_right);
+        make.size.mas_equalTo(CGSizeMake(72, 24));
+        make.centerY.mas_equalTo(self.codeInput.mas_centerY);
     }];
     
     [self.expireDateLab mas_updateConstraints:^(MASConstraintMaker *make) {
@@ -197,7 +204,7 @@
         [_codeInput ssj_setBorderStyle:SSJBorderStyleBottom];
         [_codeInput ssj_setBorderWidth:1.f];
         _codeInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入六位暗号" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"#CCCCCC"]}];
-        _codeInput.rightView = self.resendButton;
+//        _codeInput.rightView = self.resendButton;
         _codeInput.rightViewMode = UITextFieldViewModeAlways;
         _codeInput.tintColor = [UIColor ssj_colorWithHex:@"#333333"];
         @weakify(self);
@@ -221,7 +228,6 @@
 - (UIButton *)resendButton {
     if (!_resendButton) {
         _resendButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        _resendButton.size = CGSizeMake(72, 24);
         _resendButton.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_5];
         _resendButton.layer.cornerRadius = 12.f;
         _resendButton.layer.borderWidth = 1.f / [UIScreen mainScreen].scale;
@@ -286,7 +292,8 @@
     if ([sender.titleLabel.text isEqualToString:@"随机生成"]) {
         self.codeInput.text = [SSJShareBooksHelper generateTheRandomCodeWithType:SSJRandomCodeTypeUpperLetter | SSJRandomCodeTypeNumbers length:6];
     } else {
-        self.codeInput.userInteractionEnabled = YES;
+        self.codeInput.text = @"";
+        self.codeInput.enabled = YES;
     }
 }
 
@@ -330,6 +337,8 @@
 - (void)shareTheCode {
     __weak typeof(self) weakSelf = self;
     
+    [self.codeInput resignFirstResponder];
+    
     [SSJUserTableManager queryUserItemWithID:self.item.adminId success:^(SSJUserItem * _Nonnull userItem) {
         NSMutableString *url = nil;
         
@@ -368,8 +377,8 @@
 - (void)serverDidFinished:(SSJBaseNetworkService *)service {
     if (service == self.getCodeService) {
         if ([service.returnCode isEqualToString:@"1"]) {
-            self.codeInput.userInteractionEnabled = NO;
-            self.sendButton.userInteractionEnabled = NO;
+//            self.codeInput.enabled = NO;
+//            self.sendButton.enabled = NO;
             self.codeInput.text = self.getCodeService.secretKey;
             [self.resendButton setTitle:@"重新生成" forState:UIControlStateNormal];
         } else {
