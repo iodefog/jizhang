@@ -329,17 +329,11 @@
 	<key>com.9188.jizhangben</key>
 	<dict>
 		<key>GeTuiAppSecret</key>
-		<string>r475vUBHQb5bNAdkBw6CV6</string>
-		<key>GeTuiTestAppSecret</key>
-		<string>D0Fd9ekqMy8A27DMVwoIc4</string>
+		<string>Qy2lpd32U27JwDiGDmpOKA</string>
 		<key>GeTuiAppKey</key>
-		<string>veBOaiEFxO7dMj36QfQ9P8</string>
-		<key>GeTuiTestAppKey</key>
-		<string>UldCizNDjk7d0VTAAlSo8</string>
+		<string>uMcte79f3Z8i0tpGXwrM28</string>
 		<key>GeTuiAppID</key>
-		<string>7rHyx1dzw59JutCZym5jv7</string>
-		<key>GeTuTestiAppID</key>
-		<string>ilSGUkJ79Z5MCSXbGk76u</string>
+		<string>YaFakqeo9c7EpHwOzjeXR6</string>
 		<key>source</key>
 		<string>11508</string>
 		<key>WeiXinKey</key>
