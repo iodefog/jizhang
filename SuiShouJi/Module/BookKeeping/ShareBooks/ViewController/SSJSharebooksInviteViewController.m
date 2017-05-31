@@ -14,6 +14,7 @@
 #import "SSJShareBooksHelper.h"
 #import "SSJSharebooksCodeNetworkService.h"
 #import "SSJShareManager.h"
+#import "SSJUserTableManager.h"
 
 
 @interface SSJSharebooksInviteViewController ()
@@ -327,7 +328,40 @@
 }
 
 - (void)shareTheCode {
-    [SSJShareManager shareWithType:SSJShareTypeUrl image:nil UrlStr:@"" title:@"" content:@"" PlatformType:UMSocialPlatformType_WechatSession | UMSocialPlatformType_QQ inController:self ShareSuccess:NULL];
+    __weak typeof(self) weakSelf = self;
+    
+    [SSJUserTableManager queryUserItemWithID:self.item.adminId success:^(SSJUserItem * _Nonnull userItem) {
+        NSMutableString *url = nil;
+        
+#warning test
+        NSString *baseUrl = @"http://10.0.11.53:3000/5/invite/index.html?";
+        
+        
+        [url appendString:baseUrl];
+        
+        [url appendFormat:@"name=%@",userItem.nickName];
+        
+        [url appendFormat:@"code=%@",weakSelf.codeInput.text];
+        
+        [url appendFormat:@"books=%@",weakSelf.item.booksName];
+        
+        NSString *iconUrl = userItem.icon;
+        
+        if (![iconUrl hasPrefix:@"http"]) {
+            iconUrl = SSJImageURLWithAPI(iconUrl);
+        }
+        
+        [url appendFormat:@"pic=%@",iconUrl];
+
+        NSString *content = [NSString stringWithFormat:@"%@邀你加入【%@】，希望和你开启共享记账之旅，快来！",userItem.nickName,weakSelf.item.booksName];
+        
+        [SSJShareManager shareWithType:SSJShareTypeUrl image:nil UrlStr:url title:SSJAppName() content:content PlatformType:UMSocialPlatformType_WechatSession | UMSocialPlatformType_QQ inController:self ShareSuccess:NULL];
+        
+    } failure:^(NSError * _Nonnull error) {
+        
+    }];
+    
+
 }
 
 #pragma mark - SSJBaseNetworkServiceDelegate
