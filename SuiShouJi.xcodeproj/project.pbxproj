@@ -24196,7 +24196,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = YYJiZhangGuanJiaDev;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = "Debug-test";
 		};
@@ -24236,7 +24236,7 @@
 				PROVISIONING_PROFILE = "bd31d90f-fb53-4024-8716-bffa3b8240bb";
 				PROVISIONING_PROFILE_SPECIFIER = YYJiZhangGuanJiaAppStore;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = "Release-test";
 		};
@@ -24706,7 +24706,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = YYJiZhangGuanJiaDev;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = "Debug-production";
 		};
@@ -25221,7 +25221,7 @@
 				PROVISIONING_PROFILE = "a201d9cd-d3e8-45d2-a7e6-c2a795451f92";
 				PROVISIONING_PROFILE_SPECIFIER = YYJiZhangGuanJiaAppStore;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = "Release-production";
 		};
