@@ -1,6 +1,0 @@
-framework module Pods_YouYuJiZhangPro {
-  umbrella header "Pods-YouYuJiZhangPro-umbrella.h"
-
-  export *
-  module * { export * }
-}

@@ -1,7 +1,6 @@
 platform :ios, '8.0'
 
 inhibit_all_warnings!
-use_frameworks!
 
 def shared_pods
     pod 'AFNetworking', '~> 2.5.4'
