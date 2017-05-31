@@ -543,7 +543,7 @@
         
         //如果是新建时候生成成员信息和昵称
         if (shareBookOperate == ShareBookOperateCreate) {
-            if (![self saveShareBooksMemberWithBookId:item.booksId shareMember:shareMember inDatabase:db]) {
+            if (![self saveShareBooksMemberWithBookId:item shareMember:shareMember inDatabase:db]) {
                 *rollback = YES;
                 return;
             }
@@ -591,28 +591,33 @@
         NSArray *memberArr = @[@"cmemberid",
                                @"cbooksid",
                                @"cjoindate",
-                               @"istate",
-                               @"cicon",
-                               @"ccolor"];
-        NSString *memberKey = [memberArr componentsJoinedByString:@", "];
-        [shareMember enumerateObjectsUsingBlock:^(NSDictionary * _Nonnull memberDic, NSUInteger idx, BOOL * _Nonnull stop) {
-            NSMutableArray *memberValueArr = [NSMutableArray array];
+                               @"istate"];
+
+        [shareMember enumerateObjectsUsingBlock:^(NSDictionary * _Nonnull dic, NSUInteger idx, BOOL * _Nonnull stop) {
+            NSMutableDictionary *mergeRecord = [NSMutableDictionary dictionary];
             for (NSString *key in memberArr) {
-                [memberValueArr addObject:[NSString stringWithFormat:@"'%@'",[memberDic objectForKey:key]]];
+                [mergeRecord setObject:[dic objectForKey:key]?:@"" forKey:key];
             }
-            NSString *memberValue = [memberValueArr componentsJoinedByString:@", "];
-            NSString *sqlStr = [NSString stringWithFormat:@"update bk_share_books_member set %@ values(%@)",memberKey,memberValue];
-            if (![db executeUpdate:sqlStr]) {
+            
+            NSMutableArray *keyValues = [NSMutableArray array];
+            [mergeRecord enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+                [keyValues addObject:[NSString stringWithFormat:@"%@ = :%@", key, key]];
+                [mergeRecord setObject:obj forKey:key];
+            }];
+            
+            NSString *keyValuesStr = [keyValues componentsJoinedByString:@", "];
+            NSString *sqlStr = [NSString stringWithFormat:@"update bk_share_books_member set %@ where cmemberid = '%@' and cbooksid = '%@'",keyValuesStr,[mergeRecord objectForKey:@"cmemberid"],[mergeRecord objectForKey:@"cbooksid"]];
+            
+            if (![db executeUpdate:sqlStr withParameterDictionary:mergeRecord]) {
                 *rollback = YES;
                 if (failure) {
-                    SSJDispatchMainAsync(^{
+                    SSJDispatch_main_async_safe(^{
                         failure([db lastError]);
                     });
                 }
-                return;
             }
         }];
-        
+
             //更新日常统计表
             if (![SSJDailySumChargeTable updateDailySumChargeForUserId:userId inDatabase:db]) {
                 if (failure) {
@@ -640,9 +645,15 @@
             if (!creatorId) {
                 creatorId = SSJUSERID();
             }
-            if (!item.booksId) return ;
+            NSString *bookId;
+            if ([item isKindOfClass:[SSJShareBookItem class]]) {
+                bookId = ((SSJShareBookItem *)item).booksId;
+            } else if ([item isKindOfClass:[SSJBooksTypeItem class]]) {
+                bookId = ((SSJBooksTypeItem *)item).booksId;
+            }
+            if (!bookId.length && ![item.booksName isEqualToString:@"添加账本"]) return ;
             NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-            NSString *sqlStr = [NSString stringWithFormat:@"update bk_share_books set iorder = %@, iversion = %@, cadddate = '%@' where cbooksid = '%@' and ccreator = '%@'",@(order),@(SSJSyncVersion()),writeDate,item.booksId,creatorId];
+            NSString *sqlStr = [NSString stringWithFormat:@"update bk_share_books set iorder = %@, iversion = %@, cadddate = '%@' where cbooksid = '%@'",@(order),@(SSJSyncVersion()),writeDate,bookId];
             if (![db executeUpdate:sqlStr]) {
                 if (failure) {
                     SSJDispatch_main_async_safe(^{
@@ -690,14 +701,14 @@
                                @"cicon",
                                @"ccolor"];
         //更新bk_share_books_member表
-        for (NSDictionary *dic in shareMember) {
+        [shareMember enumerateObjectsUsingBlock:^(NSDictionary * _Nonnull dic, NSUInteger idx, BOOL * _Nonnull stop) {
             NSMutableDictionary *memberDic = [dic mutableCopy];
             [memberDic setObject:iconStr?:@"defualt_portrait" forKey:@"cicon"];
             NSString *memberKey = [memberArr componentsJoinedByString:@", "];
             
             NSMutableArray *memberValueArr = [NSMutableArray array];
             for (NSString *key in memberArr) {
-                    [memberValueArr addObject:[NSString stringWithFormat:@"'%@'",[memberDic objectForKey:key]]];
+                [memberValueArr addObject:[NSString stringWithFormat:@"'%@'",[memberDic objectForKey:key]]];
             }
             
             NSString *memberValue = [memberValueArr componentsJoinedByString:@", "];
@@ -710,7 +721,7 @@
                 }
                 return;
             }
-        }
+        }];
         
         SSJDispatch_main_sync_safe(^{
             if (success) {
@@ -730,7 +741,7 @@
  @param failure <#failure description#>
  @return <#return value description#>
  */
-+ (BOOL)saveShareBooksMemberWithBookId:(NSString *)bookId
++ (BOOL)saveShareBooksMemberWithBookId:(SSJShareBookItem *)item
                            shareMember:(NSArray<NSDictionary *> *)shareMember
                             inDatabase:(FMDatabase *)db {
     __block NSString *iconStr;
@@ -756,11 +767,16 @@
                            @"istate",
                            @"cicon",
                            @"ccolor"];
+    NSString *memberKey = [memberArr componentsJoinedByString:@", "];
+    //颜色
+    NSString *colorStr = [NSString stringWithFormat:@"%@,%@",item.booksColor.startColor,item.booksColor.endColor];
+    
     //更新bk_share_books_member表
     for (NSDictionary *dic in shareMember) {
         NSMutableDictionary *memberDic = [dic mutableCopy];
         [memberDic setObject:iconStr?:@"defualt_portrait" forKey:@"cicon"];
-        NSString *memberKey = [memberArr componentsJoinedByString:@", "];
+        //颜色
+        [memberDic setObject:colorStr forKey:@"ccolor"];
         
         NSMutableArray *memberValueArr = [NSMutableArray array];
         for (NSString *key in memberArr) {

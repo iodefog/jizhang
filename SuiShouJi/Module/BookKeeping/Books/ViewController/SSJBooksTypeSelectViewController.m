@@ -161,7 +161,7 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
         SSJBooksTypeItem *privateItem = (SSJBooksTypeItem *)[self.privateBooksDataitems ssj_safeObjectAtIndex:indexPath.row];
         bookName = privateItem.booksName;
         bookId = privateItem.booksId;
-        if ([bookName isEqualToString:@"添加账本"]) {
+        if (!privateItem.booksId.length && [bookName isEqualToString:@"添加账本"]) {
             [self newAndEditeBooksWiteItem:privateItem];
             return;
         }
@@ -298,17 +298,7 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
 }
 
 - (void)collectionViewDidEndEditing:(SSJEditableCollectionView *)collectionView{
-        [SSJBooksTypeStore saveBooksOrderWithItems:self.privateBooksDataitems sucess:^{
-            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
-        } failure:^(NSError *error) {
-            SSJPRINT(@"%@",[error localizedDescription]);
-        }];
-    
-        [SSJBooksTypeStore saveShareBooksOrderWithItems:self.shareBooksDataItems sucess:^{
-            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
-        } failure:^(NSError *error) {
-            SSJPRINT(@"%@",[error localizedDescription]);
-        }];
+
 }
 
 //- (BOOL)shouldCollectionViewEndEditingWhenUserTapped:(SSJEditableCollectionView *)collectionView{
@@ -322,12 +312,21 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
         SSJBooksTypeItem *currentItem = [self.privateBooksDataitems ssj_safeObjectAtIndex:fromIndexPath.row];
         [self.privateBooksDataitems removeObjectAtIndex:fromIndexPath.row];
         [self.privateBooksDataitems insertObject:currentItem atIndex:toIndexPath.row];
+        [SSJBooksTypeStore saveBooksOrderWithItems:self.privateBooksDataitems sucess:^{
+            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+        } failure:^(NSError *error) {
+            SSJPRINT(@"%@",[error localizedDescription]);
+        }];
     } else if (fromIndexPath.section == 1) {
         SSJShareBookItem *shareCurrentItem = [self.shareBooksDataItems ssj_safeObjectAtIndex:fromIndexPath.row];
         [self.shareBooksDataItems removeObjectAtIndex:fromIndexPath.row];
         [self.shareBooksDataItems insertObject:shareCurrentItem atIndex:toIndexPath.row];
+        [SSJBooksTypeStore saveShareBooksOrderWithItems:self.shareBooksDataItems sucess:^{
+            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+        } failure:^(NSError *error) {
+            SSJPRINT(@"%@",[error localizedDescription]);
+        }];
     }
-    
 }
 
 - (BOOL)collectionView:(SSJEditableCollectionView *)collectionView shouldBeginMovingCellAtIndexPath:(NSIndexPath *)indexPath {
@@ -676,6 +675,8 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
         self.showCreateBookAnimation = YES;
         //更新当前账本
 //        [[NSNotificationCenter defaultCenter] postNotificationName:SSJBooksTypeDidChangeNotification object:nil];
+        //同步
+        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:nil failure:nil];
         
     } failure:^(NSError * _Nonnull error) {
         [SSJAlertViewAdapter showError:error];
