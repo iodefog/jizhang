@@ -579,18 +579,7 @@
             }
             return ;
         }
-//        for (NSDictionary *chargeDic in shareCharge) {
-//            NSString *keyStr = [[chargeDic allKeys] componentsJoinedByString:@"=?, "];
-//            NSString *valueStr = [[chargeDic allValues] componentsJoinedByString:@", "];
-//            if (![db executeUpdate:@"update bk_user_charge set %@ values(%@)",keyStr,valueStr]) {
-//                if (failure) {
-//                    SSJDispatchMainAsync(^{
-//                        failure([db lastError]);
-//                    });
-//                }
-//                return ;
-//            };
-//        }
+        
         NSArray *memberArr = @[@"cmemberid",
                                @"cbooksid",
                                @"cjoindate",
