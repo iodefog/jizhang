@@ -369,10 +369,11 @@
     if (service == self.getCodeService) {
         if ([service.returnCode isEqualToString:@"1"]) {
             self.codeInput.userInteractionEnabled = NO;
+            self.sendButton.userInteractionEnabled = NO;
             self.codeInput.text = self.getCodeService.secretKey;
             [self.resendButton setTitle:@"重新生成" forState:UIControlStateNormal];
         } else {
-            [CDAutoHideMessageHUD showMessage:service.description];
+            [CDAutoHideMessageHUD showMessage:service.desc];
         }
     }
     
@@ -380,7 +381,7 @@
         if ([service.returnCode isEqualToString:@"1"]) {
             [self shareTheCode];
         } else {
-            [CDAutoHideMessageHUD showMessage:service.description];
+            [CDAutoHideMessageHUD showMessage:service.desc];
         }
     }
 }
