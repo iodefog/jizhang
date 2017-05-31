@@ -102,7 +102,7 @@ typedef enum : NSUInteger {
 
 
 /**
- 删除账本
+ 删除账本 （共享账本）
  @param item <#item description#>
  @param success <#success description#>
  @param failure <#failure description#>
@@ -124,14 +124,24 @@ typedef enum : NSUInteger {
                         failure:(void (^)(NSError *error))failure;
 
 
+
+/**
+ 保存账本成员表（共享账本）
+
+ @param bookId <#bookId description#>
+ @param shareMember <#shareMember description#>
+ @param success <#success description#>
+ @param failure <#failure description#>
+ */
 + (void)saveShareBooksMemberWithBookId:(NSString *)bookId
-                       success:(void(^)())success
-                       failure:(void(^)(NSError *error))failure;
+                           shareMember:(NSArray<NSDictionary *> *)shareMember
+                               success:(void(^)())success
+                               failure:(void(^)(NSError *error))failure;
 
 
 
 /**
- 保存用户昵称
+ 保存用户昵称（共享账本）
 
  @param bookId <#bookId description#>
  @param success <#success description#>

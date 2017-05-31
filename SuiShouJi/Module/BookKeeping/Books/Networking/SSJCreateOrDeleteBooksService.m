@@ -27,7 +27,7 @@
     NSString *cwriteDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
     bookItem.cwriteDate = cwriteDate;
     NSDictionary *paramDic = @{@"cuserId":SSJUSERID(),
-                               @"cbookName":[NSString stringWithFormat:@"%@ ",bookItem.booksName],
+                               @"cbookName":[NSString stringWithFormat:@"%@",bookItem.booksName],
                                @"cbookColor":[NSString stringWithFormat:@"%@,%@",bookItem.booksColor.startColor,bookItem.booksColor.endColor],
                                @"iparentType":@(bookItem.booksParent),
                                @"cwriteDate":bookItem.cwriteDate,
@@ -41,7 +41,8 @@
                                @"cbooksId":bookId,
                                @"istate":@(memberState)};
     self.httpMethod = SSJBaseNetworkServiceHttpMethodPOST;
-    [self request:(@"http://192.168.1.168:18080/sharedMember/removeMember.go") params:paramDic];
+//    /sharebook/removeMember.go
+    [self request:(@"http://192.168.1.168:18080/sharebook/remove_member") params:paramDic];
 }
 
 - (void)requestDidFinish:(NSDictionary *)rootElement {
