@@ -15,12 +15,12 @@
                UrlStr:(NSString *)str
                 title:(NSString *)title
               content:(NSString *)content
-         PlatformType:(UMSocialPlatformType)platformType
+         PlatformType:(NSArray *)platforms
          inController:(UIViewController *)controller
            ShareSuccess:(void(^)(UMSocialShareResponse *response))success
 {
     __weak typeof(self) weakSelf = self;
-//    [UMSocialUIManager setPreDefinePlatforms:@[@(UMSocialPlatformType_Sina),@(UMSocialPlatformType_QQ),@(UMSocialPlatformType_WechatSession),@(UMSocialPlatformType_WechatTimeLine)]];
+    [UMSocialUIManager setPreDefinePlatforms:platforms];
     [UMSocialUIManager showShareMenuViewInWindowWithPlatformSelectionBlock:^(UMSocialPlatformType platformType, NSDictionary *userInfo) {
         switch (type) {
             case SSJShareTypeUrl: {

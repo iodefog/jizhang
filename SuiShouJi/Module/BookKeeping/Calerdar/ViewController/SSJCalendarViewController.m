@@ -407,7 +407,7 @@
 - (void)shareTheBillWithImage:(UIImage *)image {
     if (!image) return;
     
-    [SSJShareManager shareWithType:SSJShareTypeImageOnly image:image UrlStr:nil title:@"" content:@"" PlatformType:UMSocialPlatformType_Sina | UMSocialPlatformType_WechatSession | UMSocialPlatformType_WechatTimeLine | UMSocialPlatformType_QQ inController:self ShareSuccess:^(UMSocialShareResponse *response) {
+    [SSJShareManager shareWithType:SSJShareTypeImageOnly image:image UrlStr:nil title:@"" content:@"" PlatformType:@[@(UMSocialPlatformType_Sina),@(UMSocialPlatformType_WechatSession),@(UMSocialPlatformType_WechatTimeLine),@(UMSocialPlatformType_QQ)] inController:self ShareSuccess:^(UMSocialShareResponse *response) {
         if (response.platformType == UMSocialPlatformType_WechatSession) {
             [SSJAnaliyticsManager event:@"calendar_share_weixin"];
         } else if (response.platformType == UMSocialPlatformType_WechatTimeLine) {
