@@ -12,7 +12,6 @@
 
 - (void)enterBooksWithCode:(NSString *)code{
 #warning test
-    self.httpMethod = SSJBaseNetworkServiceHttpMethodGET;
     [self request:@"http://192.168.1.168:18080/sharebook/join_book.go" params:@{@"cuserId":SSJUSERID(),
                                                                                 @"secretKey":code ? : @""}];
 
