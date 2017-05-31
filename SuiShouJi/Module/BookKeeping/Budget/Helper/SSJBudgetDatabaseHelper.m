@@ -79,7 +79,7 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
         while ([budgetResult next]) {
             SSJBudgetModel *budget = [self budgetModelWithResultSet:budgetResult inDatabase:db];
             SSJBudgetListCellItem *cellItem = [SSJBudgetListCellItem cellItemWithBudgetModel:budget billTypeMapping:mapping];
-            BOOL isAllBillType = [[budget.billIds firstObject] isEqualToString:@"all"];
+            BOOL isAllBillType = [[budget.billIds firstObject] isEqualToString:SSJAllBillTypeId];
             switch (budget.type) {
                 case SSJBudgetPeriodTypeWeek:
                     if (isAllBillType) {
@@ -187,7 +187,7 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
         
         while ([budgetResult next]) {
             SSJBudgetModel *budget = [self budgetModelWithResultSet:budgetResult inDatabase:db];
-            BOOL isAllBillType = [[budget.billIds firstObject] isEqualToString:@"all"];
+            BOOL isAllBillType = [[budget.billIds firstObject] isEqualToString:SSJAllBillTypeId];
             
             switch (budget.type) {
                 case SSJBudgetPeriodTypeWeek:
@@ -301,7 +301,7 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
         //  查询预算范围内不同收支类型相应的金额、名称、图标、颜色
         NSMutableString *query = [NSMutableString stringWithFormat:@"select sum(a.imoney), b.ccoin, b.ccolor, b.cname, b.id from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = '%@' and a.operatortype <> 2 and a.cbilldate >= '%@'and a.cbilldate <= '%@' and a.cbilldate <= datetime('now', 'localtime') and a.cbooksid = '%@' and b.itype = 1 and b.istate <> 2", userid, budgetModel.beginDate, budgetModel.endDate, budgetModel.booksId];
         
-        if (![budgetModel.billIds isEqualToArray:@[@"all"]]) {
+        if (![budgetModel.billIds isEqualToArray:@[SSJAllBillTypeId]]) {
             NSMutableArray *billIds = [NSMutableArray arrayWithCapacity:budgetModel.billIds.count];
             for (NSString *billId in budgetModel.billIds) {
                 [billIds addObject:[NSString stringWithFormat:@"'%@'", billId]];
@@ -539,7 +539,7 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
             return;
         }
         
-        if ([billIds isEqualToString:@"all"]) {
+        if ([billIds isEqualToString:SSJAllBillTypeId]) {
             
             // 检测所有相同类型（周、月、年）、账本、周期分预算总额是否大于当前设置的总预算金额
             double amount = [db doubleForQuery:@"select sum(imoney) from bk_user_budget where cuserid = ? and operatortype <> 2 and ibid <> ? and itype = ? and cbooksid = ? and csdate = ? and cedate = ? and cbilltype <> 'all'", userId, model.ID, @(model.type), model.booksId, model.beginDate, model.endDate];
@@ -755,7 +755,7 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
     // 当前账本所有有效支出流水的总金额
     NSMutableString *sqlStr = [[NSString stringWithFormat:@"select sum(a.imoney) from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = '%@' and a.operatortype <> 2 and a.cbilldate >= '%@' and a.cbilldate <= '%@' and a.cbilldate <= datetime('now', 'localtime') and a.cbooksid = '%@' and b.istate <> 2 and b.itype = 1", SSJUSERID(), budgetModel.beginDate, budgetModel.endDate, budgetModel.booksId] mutableCopy];
     
-    if (![[budgetModel.billIds firstObject] isEqualToString:@"all"]) {
+    if (![[budgetModel.billIds firstObject] isEqualToString:SSJAllBillTypeId]) {
         NSMutableArray *tmpBillIds = [NSMutableArray arrayWithCapacity:budgetModel.billIds.count];
         for (NSString *billId in budgetModel.billIds) {
             [tmpBillIds addObject:[NSString stringWithFormat:@"'%@'", billId]];
@@ -823,17 +823,17 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
             item.billTypeName = [resultSet stringForColumn:@"cname"];
             item.billTypeColor = [resultSet stringForColumn:@"ccolor"];
             item.canSelect = YES;
-            item.selected = [typeList containsObject:item.billID] || [[typeList firstObject] isEqualToString:@"all"];
+            item.selected = [typeList containsObject:item.billID] || [[typeList firstObject] isEqualToString:SSJAllBillTypeId];
             [list addObject:item];
         }
         [resultSet close];
         
         if (list.count > 0) {
             SSJBudgetBillTypeSelectionCellItem *selectAllItem = [[SSJBudgetBillTypeSelectionCellItem alloc] init];
-            selectAllItem.billID = @"all";
+            selectAllItem.billID = SSJAllBillTypeId;
             selectAllItem.billTypeName = @"全选";
             selectAllItem.canSelect = YES;
-            selectAllItem.selected = [[typeList firstObject] isEqualToString:@"all"];
+            selectAllItem.selected = [[typeList firstObject] isEqualToString:SSJAllBillTypeId];
             [list insertObject:selectAllItem atIndex:0];
         }
         

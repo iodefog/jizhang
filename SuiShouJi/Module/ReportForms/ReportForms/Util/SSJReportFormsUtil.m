@@ -35,7 +35,7 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
             case SSJBillTypeIncome:
             case SSJBillTypePay: {
                 NSString *incomeOrPayType = type == SSJBillTypeIncome ? @"0" : @"1";
-                if ([tBooksId isEqualToString:@"all"]) {
+                if ([tBooksId isEqualToString:SSJAllBooksIds]) {
                     // 查询所有账本数据时，要加上userid条件，因为可能包含共享账本，把其他人的数据排除
                     result = [db executeQuery:@"select distinct strftime('%Y-%m', a.cbilldate) from bk_user_charge as a, bk_bill_type as b where a.cuserid = ? and a.ibillid = b.id and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and b.itype = ? and b.istate <> 2 order by a.cbilldate", SSJUSERID(), incomeOrPayType];
                 } else {
@@ -46,7 +46,7 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
             }   break;
                 
             case SSJBillTypeSurplus: {
-                if ([tBooksId isEqualToString:@"all"]) {
+                if ([tBooksId isEqualToString:SSJAllBooksIds]) {
                     result = [db executeQuery:@"select distinct strftime('%Y-%m', a.cbilldate) from bk_user_charge as a, bk_bill_type as b where a.cuserid = ? and a.ibillid = b.id and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and b.istate <> 2 order by a.cbilldate", SSJUSERID()];
                 } else {
                     result = [db executeQuery:@"select distinct strftime('%Y-%m', a.cbilldate) from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and a.cbooksid = ? and b.istate <> 2 order by a.cbilldate", tBooksId];
@@ -223,7 +223,7 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
                                            @"endDateStr":endDateStr,
                                            @"type":@(type)} mutableCopy];
         
-        if ([tBooksId isEqualToString:@"all"]) {
+        if ([tBooksId isEqualToString:SSJAllBooksIds]) {
             [sql_2 appendString:@" and a.cuserid = :userId"];
             [params_2 setObject:SSJUSERID() forKey:@"userId"];
         } else {
@@ -323,7 +323,7 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
         }
         
         NSMutableArray *result = [@[] mutableCopy];
-        if ([booksId isEqualToString:@"all"]) {
+        if ([booksId isEqualToString:SSJAllBooksIds]) {
             // ----------------------------------------------------------------
             // 查询所有账本数据分两步：
             // 1.查询共享账本中当前登录用户的数据
@@ -488,7 +488,7 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
         NSMutableDictionary *params = [@{@"beginDateStr":beginDateStr,
                                          @"endDateStr":endDateStr} mutableCopy];
         
-        if ([tBooksId isEqualToString:@"all"]) {
+        if ([tBooksId isEqualToString:SSJAllBooksIds]) {
             [sql appendString:@" and a.cuserid = :userId"];
             [params setObject:SSJUSERID() forKey:@"userId"];
         } else {
@@ -542,7 +542,7 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
                                        @"endDateStr":endDate,
                                        @"type":@(type)} mutableCopy];
     
-    if ([booksId isEqualToString:@"all"]) {
+    if ([booksId isEqualToString:SSJAllBooksIds]) {
         [sql_1 appendString:@" and a.cuserid = :userId"];
         [params_1 setObject:SSJUSERID() forKey:@"userId"];
     } else {
@@ -591,7 +591,7 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
         NSMutableDictionary *params = [@{} mutableCopy];
         NSMutableString *sqlStr = [NSMutableString stringWithFormat:@"select max(a.cbilldate) as maxBillDate, min(a.cbilldate) as minBillDate from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.operatortype <> 2 and b.istate <> 2 and a.cbilldate <= datetime('now', 'localtime')"];
         
-        if ([tBooksId isEqualToString:@"all"]) {
+        if ([tBooksId isEqualToString:SSJAllBooksIds]) {
             [params setObject:SSJUSERID() forKey:@"userId"];
             [sqlStr appendString:@" and a.cuserid = :userId"];
         } else {
@@ -708,7 +708,7 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
         NSMutableDictionary *params = [@{} mutableCopy];
         NSMutableString *sqlStr = [@"select a.imoney, a.cbilldate, b.itype from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.operatortype <> 2 and b.istate <> 2 and a.cbilldate <= datetime('now', 'localtime')" mutableCopy];
         
-        if ([tBooksId isEqualToString:@"all"]) {
+        if ([tBooksId isEqualToString:SSJAllBooksIds]) {
             params[@"userId"] = SSJUSERID();
             [sqlStr appendString:@" and a.cuserid = :userId"];
         } else {

@@ -84,3 +84,7 @@ NSString *const SSJOverrunRedColorValue = @"#ff654c";
 
 NSString *const SSJSurplusGreenColorValue = @"#0ac082";
 
+NSString *const SSJAllBooksIds = @"all_books_ids";
+
+NSString *const SSJAllBillTypeId = @"all";
+

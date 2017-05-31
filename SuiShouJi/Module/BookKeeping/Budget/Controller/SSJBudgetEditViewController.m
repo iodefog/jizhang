@@ -448,7 +448,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
                 self.model.ID = SSJUUID();
                 self.model.userId = SSJUSERID();
                 self.model.booksId = userItem.currentBooksId.length ? userItem.currentBooksId : SSJUSERID();
-                self.model.billIds = @[@"all"];
+                self.model.billIds = @[SSJAllBillTypeId];
                 self.model.type = 1;
                 self.model.budgetMoney = 3000;
                 self.model.remindMoney = 300;
@@ -676,7 +676,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
 }
 
 - (NSString *)budgetTypeNames {
-    if ([[self.model.billIds firstObject] isEqualToString:@"all"]) {
+    if ([[self.model.billIds firstObject] isEqualToString:SSJAllBillTypeId]) {
         return @"所有支出类别";
     }
     
@@ -761,7 +761,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
                 break;
         }
         
-        if (![self.model.billIds isEqualToArray:@[@"all"]]) {
+        if (![self.model.billIds isEqualToArray:@[SSJAllBillTypeId]]) {
             [SSJAnaliyticsManager event:@"budget_add_part"];
         }
         

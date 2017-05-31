@@ -128,7 +128,7 @@
             NSString *budgetId = budgetInfo[@"budgetId"];
             
             if (type == 0) {
-                if ([billTypes isEqualToArray:@[@"all"]]) {
+                if ([billTypes isEqualToArray:@[SSJAllBillTypeId]]) {
                     weekBudgetId = budgetId;
                     weekBudgetTypeCount = NSUIntegerMax;
                 } else {
@@ -136,7 +136,7 @@
                     weekBudgetTypeCount = billTypes.count;
                 }
             } else if (type == 1) {
-                if ([billTypes isEqualToArray:@[@"all"]]) {
+                if ([billTypes isEqualToArray:@[SSJAllBillTypeId]]) {
                     monthBudgetId = budgetId;
                     monthBudgetTypeCount = NSUIntegerMax;
                 } else {
@@ -144,7 +144,7 @@
                     monthBudgetTypeCount = billTypes.count;
                 }
             } else if (type == 2) {
-                if ([billTypes isEqualToArray:@[@"all"]]) {
+                if ([billTypes isEqualToArray:@[SSJAllBillTypeId]]) {
                     yearBudgetId = budgetId;
                     yearBudgetTypeCount = NSUIntegerMax;
                 } else {

@@ -158,7 +158,7 @@
     @weakify(self);
     return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         @strongify(self);
-        [SSJMagicExportStore queryBillPeriodWithBookId:nil success:^(NSDictionary<NSString *,NSDate *> *result) {
+        [SSJMagicExportStore queryBillPeriodWithBookId:SSJAllBooksIds success:^(NSDictionary<NSString *,NSDate *> *result) {
             self.firstRecordDate = result[SSJMagicExportStoreBeginDateKey];
             self.lastRecordDate = result[SSJMagicExportStoreEndDateKey];
             
@@ -228,9 +228,11 @@
 #pragma mark - Event
 - (void)selectDateActionWithBeginDate:(NSDate *)beginDate endDate:(NSDate *)endDate {
     SSJMagicExportCalendarViewController *calendarVC = [[SSJMagicExportCalendarViewController alloc] init];
-    calendarVC.billType = SSJBillTypeUnknown;
-    calendarVC.beginDate = beginDate;
-    calendarVC.endDate = endDate;
+    calendarVC.billType = SSJBillTypeSurplus;
+    calendarVC.selectedBeginDate = beginDate;
+    calendarVC.selectedEndDate = endDate;
+    calendarVC.booksId = SSJAllBooksIds;
+    calendarVC.containsOtherMember = YES;
     __weak typeof(self) weakSelf = self;
     calendarVC.completion = ^(NSDate *selectedBeginDate, NSDate *selectedEndDate) {
         weakSelf.beginDate = selectedBeginDate;

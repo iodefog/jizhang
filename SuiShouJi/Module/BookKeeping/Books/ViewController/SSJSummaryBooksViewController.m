@@ -137,7 +137,7 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
         SSJReportFormsItem *item = self.chargeDatas[indexPath.row];
         SSJBillingChargeViewController *billingChargeVC = [[SSJBillingChargeViewController alloc] init];
         billingChargeVC.billId = item.ID;
-        billingChargeVC.booksId = @"all";
+        billingChargeVC.booksId = SSJAllBooksIds;
         billingChargeVC.period = self.header.periodControl.currentPeriod;
         billingChargeVC.isPayment = _header.incomOrExpenseSelectSegment.selectedSegmentIndex == 0;
         [self.navigationController pushViewController:billingChargeVC animated:YES];
@@ -298,7 +298,7 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
 //  重新加载数据
 - (void)reloadAllDatas {
     SSJDatePeriod *period = self.header.periodControl.currentPeriod;
-    [SSJReportFormsUtil queryForDefaultTimeDimensionWithStartDate:period.startDate endDate:period.endDate booksId:@"all" billTypeId:nil success:^(SSJTimeDimension timeDimension) {
+    [SSJReportFormsUtil queryForDefaultTimeDimensionWithStartDate:period.startDate endDate:period.endDate booksId:SSJAllBooksIds billTypeId:nil success:^(SSJTimeDimension timeDimension) {
         
         if (timeDimension != SSJTimeDimensionUnknown) {
             _header.dimension = timeDimension;
@@ -316,7 +316,7 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
 // 加载折线图的数据
 - (void)reloadCurveViewData {
     SSJDatePeriod *period = self.header.periodControl.currentPeriod;
-    [SSJReportFormsUtil queryForBillStatisticsWithTimeDimension:[_header dimension] booksId:@"all" billTypeId:nil startDate:period.startDate endDate:period.endDate success:^(NSDictionary *result) {
+    [SSJReportFormsUtil queryForBillStatisticsWithTimeDimension:[_header dimension] booksId:SSJAllBooksIds billTypeId:nil startDate:period.startDate endDate:period.endDate success:^(NSDictionary *result) {
         
         [self.view ssj_hideLoadingIndicator];
         _curveItems = result[SSJReportFormsCurveModelListKey];
@@ -344,7 +344,7 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
     // 加载流水列表和饼状图的数据
     SSJDatePeriod *period = self.header.periodControl.currentPeriod;
     if (period) {
-        [SSJReportFormsUtil queryForIncomeOrPayType:!(int)_header.incomOrExpenseSelectSegment.selectedSegmentIndex booksId:@"all" startDate:period.startDate endDate:period.endDate success:^(NSArray<SSJReportFormsItem *> *result) {
+        [SSJReportFormsUtil queryForIncomeOrPayType:!(int)_header.incomOrExpenseSelectSegment.selectedSegmentIndex booksId:SSJAllBooksIds startDate:period.startDate endDate:period.endDate success:^(NSArray<SSJReportFormsItem *> *result) {
             [self.view ssj_hideLoadingIndicator];
             [self organiseDatasWithResult:result];
         } failure:^(NSError *error) {
@@ -364,7 +364,7 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
         [SSJAlertViewAdapter showError:error];
     }];
     
-    [SSJReportFormsUtil queryForPeriodListWithIncomeOrPayType:SSJBillTypeSurplus booksId:@"all" success:^(NSArray<SSJDatePeriod *> *periods) {
+    [SSJReportFormsUtil queryForPeriodListWithIncomeOrPayType:SSJBillTypeSurplus booksId:SSJAllBooksIds success:^(NSArray<SSJDatePeriod *> *periods) {
         self.tableView.hidden = NO;
         [self.view ssj_hideWatermark:YES];
         self.header.periodControl.periods = periods;
@@ -454,6 +454,7 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
     SSJMagicExportCalendarViewController *calendarVC = [[SSJMagicExportCalendarViewController alloc] init];
     calendarVC.title = @"自定义时间";
     calendarVC.billType = SSJBillTypeSurplus;
+    calendarVC.booksId = SSJAllBooksIds;
     calendarVC.completion = ^(NSDate *selectedBeginDate, NSDate *selectedEndDate) {
         wself.header.periodControl.customPeriod = [SSJDatePeriod datePeriodWithStartDate:selectedBeginDate endDate:selectedEndDate];
     };

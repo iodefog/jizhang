@@ -180,6 +180,12 @@ extern NSString *const SSJOverrunRedColorValue;
 //预算剩余绿色
 extern NSString *const SSJSurplusGreenColorValue;
 
+// 所有账本id
+extern NSString *const SSJAllBooksIds;
+
+// 所有收支类别id
+extern NSString *const SSJAllBillTypeId;
+
 /** -------------------- KEY -------------------- */
 #pragma mark - KEY
 //保存上次弹窗的时间
