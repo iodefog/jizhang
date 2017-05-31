@@ -24,7 +24,7 @@ def shared_pods
     pod 'SSZipArchive'
     pod 'GTSDK'
     pod 'Masonry'
-    pod 'ReactiveCocoa', '~> 3.0.0'
+    pod 'ReactiveCocoa', '~> 2.1.2'
     pod 'UMengUShare/UI'
     # 集成新浪微博
     pod 'UMengUShare/Social/Sina'
