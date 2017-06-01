@@ -179,7 +179,7 @@
             @strongify(self);
             NSError *error = nil;
 
-            if ([SSJShareBooksSyncTable mergeRecords:self.service.shareBooksTableInfo forUserId:SSJUSERID() inDatabase:db error:&error]) {
+            if ([SSJShareBooksSyncTable mergeRecords:@[self.service.shareBooksTableInfo] forUserId:SSJUSERID() inDatabase:db error:&error]) {
                 return;
             }
             
