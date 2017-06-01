@@ -177,19 +177,21 @@ static const CGFloat kCategoryImageButtonRadius = 16;
 
 - (void)performAddOrEditAnimation {
     if (self.item.operatorType == 0) {
+        [self shake];
+
         self.categoryImageButton.transform = CGAffineTransformMakeTranslation(0,  - self.height / 2);
         self.topLabel.alpha = 0;
         self.bottomLabel.alpha = 0;
         
-        self.topLabel.transform = CGAffineTransformMakeScale(0, 0);
-        self.bottomLabel.transform = CGAffineTransformMakeScale(0, 0);
+//        self.topLabel.transform = CGAffineTransformMakeScale(0, 0);
+//        self.bottomLabel.transform = CGAffineTransformMakeScale(0, 0);
         self.chargeImage.layer.transform = CATransform3DMakeRotation(degreesToRadians(90) , -1, -1, 0);
         
         [UIView animateWithDuration:0.7 animations:^{
             self.topLabel.alpha = 1;
             self.bottomLabel.alpha = 1;
-//            self.categoryImageButton.transform = CGAffineTransformIdentity;
-//            self.chargeImage.layer.transform = CATransform3DIdentity;
+            self.categoryImageButton.transform = CGAffineTransformIdentity;
+            self.chargeImage.layer.transform = CATransform3DIdentity;
         } completion:^(BOOL finished) {
 //            [self updateConstraints];
             [self shake];
