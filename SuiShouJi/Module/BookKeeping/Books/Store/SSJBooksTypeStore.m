@@ -500,15 +500,15 @@
     }
     
     [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(SSJDatabase *db, BOOL *rollback) {
-        NSString *sqlStr;
-        if ([db intForQuery:@"select count(1) from bk_share_books where cbooksname = ?  and ccreator = ? and cadmin = ?and cbooksid <> ?",item.booksName,item.creatorId,item.adminId,item.booksId]) {
+        
+        if ([db intForQuery:@"select count(1) from bk_share_books t where t.cbooksid in (select s.cbooksid from bk_share_books_member s where s.cmemberid = ? and s.istate = 0) and t.operatortype <> 2 and cbooksname = ? and cbooksid <> ?",SSJUSERID(),item.booksName,item.booksId]) {
             SSJDispatch_main_async_safe(^{
                 [CDAutoHideMessageHUD showMessage:@"已有相同账本名称了，换一个吧"];
             });
             return;
         }
         item.booksOrder = [db intForQuery:@"select max(iorder) from bk_share_books"] + 1;
-        
+        NSString *sqlStr;
         if (shareBookOperate == ShareBookOperateCreate) {//添加
             [shareBookInfo setObject:@(item.booksOrder) forKey:@"iorder"];
             [shareBookInfo setObject:[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"] forKey:@"cadddate"];
