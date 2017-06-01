@@ -110,11 +110,14 @@ static const CGFloat kCategoryImageButtonRadius = 16;
     self.topLabel.text = [NSString stringWithFormat:@"%@%.2f",_item.typeName,[_item.money doubleValue]];
     if (_item.idType == SSJChargeIdTypeShareBooks) {
         NSMutableAttributedString *text = [[NSMutableAttributedString alloc] init];
-        if (_item.memberNickname.length) {
+        if ([_item.userId isEqualToString:SSJUSERID()]) {
+            [text appendAttributedString:[[NSAttributedString alloc] initWithString:@"我" attributes:@{NSForegroundColorAttributeName:SSJ_MAIN_COLOR}]];
+        } else if (_item.memberNickname.length) {
             [text appendAttributedString:[[NSAttributedString alloc] initWithString:_item.memberNickname attributes:@{NSForegroundColorAttributeName:SSJ_MAIN_COLOR}]];
         }
+        
         if (_item.chargeMemo.length) {
-            [text appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"｜%@", _item.memberNickname] attributes:@{NSForegroundColorAttributeName:SSJ_SECONDARY_COLOR}]];
+            [text appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"｜%@", _item.chargeMemo] attributes:@{NSForegroundColorAttributeName:SSJ_SECONDARY_COLOR}]];
         }
         self.bottomLabel.attributedText = text;
     } else {
