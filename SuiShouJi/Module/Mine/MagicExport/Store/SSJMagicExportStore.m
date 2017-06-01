@@ -119,11 +119,15 @@ NSString *const SSJMagicExportStoreEndDateKey = @"SSJMagicExportStoreEndDateKey"
             // 1.个人账本非借贷流水：需要限制用户id为当前用户、流水时间不能超过当前时间
             // 2.个人账本借贷流水：需要限制用户id为当前用户，因为借贷可以生成未来时间流水，所以不需要限制流水时间
             // 3.共享账本流水：当前用户加入的共享账本的所有成员流水，并限制流水时间不能超过当前时间
-            params = [@{@"userId":SSJUSERID(),
-                        @"shareChargeType":@(SSJChargeIdTypeShareBooks),
-                        @"loanChargeType":@(SSJChargeIdTypeLoan),
+            params = [@{@"shareChargeType_1":@(SSJChargeIdTypeShareBooks),
+                        @"loanChargeType_1":@(SSJChargeIdTypeLoan),
+                        @"userId_1":SSJUSERID(),
+                        @"shareChargeType_2":@(SSJChargeIdTypeShareBooks),
+                        @"loanChargeType_2":@(SSJChargeIdTypeLoan),
+                        @"userId_2":SSJUSERID(),
+                        @"userId_3":SSJUSERID(),
                         @"memberState":@(SSJShareBooksMemberStateNormal)} mutableCopy];
-            sql = [@"select distinct(uc.cbilldate) from bk_user_charge as uc, bk_bill_type as bt where (uc.ichargetype <> :shareChargeType and uc.ichargetype <> :loanChargeType and uc.cuserid = :userId and uc.cbilldate <= datetime('now', 'localtime')) or (uc.ichargetype = :loanChargeType and uc.cuserid = :userId) or (uc.ichargetype = :shareChargeType and uc.cbooksid in (select cbooksid from bk_share_books_member where cmemberid = :userId and istate = :memberState) and uc.cbilldate <= datetime('now', 'localtime')) and uc.operatortype <> 2" mutableCopy];
+            sql = [@"select distinct(uc.cbilldate) from bk_user_charge as uc, bk_bill_type as bt where (uc.ichargetype <> :shareChargeType_1 and uc.ichargetype <> :loanChargeType_1 and uc.cuserid = :userId_1 and uc.cbilldate <= datetime('now', 'localtime')) or (uc.ichargetype = :loanChargeType_2 and uc.cuserid = :userId_2) or (uc.ichargetype = :shareChargeType_2 and uc.cbooksid in (select cbooksid from bk_share_books_member where cmemberid = :userId_3 and istate = :memberState) and uc.cbilldate <= datetime('now', 'localtime')) and uc.operatortype <> 2" mutableCopy];
         } else {
             params = [@{} mutableCopy];
             sql = [@"select distinct(uc.cbilldate) from bk_user_charge as uc, bk_bill_type as bt where uc.ibillid = bt.id and bt.istate <> 2 and uc.operatortype <> 2 and uc.cbilldate <= datetime('now', 'localtime')" mutableCopy];
@@ -140,8 +144,10 @@ NSString *const SSJMagicExportStoreEndDateKey = @"SSJMagicExportStoreEndDateKey"
             params[@"billId"] = billId;
             [sql appendString:@" and uc.ibillid = :billId"];
         } else {
-            params[@"billType"] = @(billType);
-            [sql appendString:@" and bt.itype = :billType"];
+            if (billType == SSJBillTypeIncome || billType == SSJBillTypePay) {
+                params[@"billType"] = @(billType);
+                [sql appendString:@" and bt.itype = :billType"];
+            }
         }
         
         [sql appendString:@" order by uc.cbilldate"];
