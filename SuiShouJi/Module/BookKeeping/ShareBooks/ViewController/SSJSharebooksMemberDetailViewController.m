@@ -273,7 +273,11 @@ static NSString *const kSegmentTitleIncome = @"收入";
 
 #pragma mark - Private
 - (void)updateUserInfoWithUserItem:(SSJUserItem *)item {
-    self.nickNameLab.text = item.nickName;
+    if ([item.userId isEqualToString:SSJUSERID()]) {
+        self.nickNameLab.text = @"我";
+    } else {
+        self.nickNameLab.text = item.nickName;
+    }
     if (![item.icon hasPrefix:@"http"]) {
         item.icon = SSJImageURLWithAPI(item.icon);
     }

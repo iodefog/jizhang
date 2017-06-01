@@ -95,7 +95,11 @@
 - (void)setMemberItem:(SSJShareBookMemberItem *)memberItem {
     _memberItem = memberItem;
     if (![memberItem.memberId isEqualToString:@"-1"]) {
-        self.nickNameLabel.text = self.memberItem.nickName;
+        if ([memberItem.memberId isEqualToString:SSJUSERID()]) {
+            self.nickNameLabel.text = @"我";
+        } else {
+            self.nickNameLabel.text = self.memberItem.nickName;
+        }
         NSString *imageUrl = self.memberItem.icon;
         if (![imageUrl hasPrefix:@"http"]) {
             imageUrl = SSJImageURLWithAPI(imageUrl);
