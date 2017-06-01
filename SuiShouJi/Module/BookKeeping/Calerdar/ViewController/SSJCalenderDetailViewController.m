@@ -238,7 +238,7 @@ static NSString *const kSSJCalenderDetailPhotoCellId = @"kSSJCalenderDetailPhoto
     SSJCalenderDetailInfoCellItem *memberItem = [[SSJCalenderDetailInfoCellItem alloc] init];
     memberItem.leftText = @"成员";
     if (self.item.idType == SSJChargeIdTypeShareBooks) {
-        memberItem.rightText = self.item.memberNickname;
+        memberItem.rightText = [self.item.userId isEqualToString:SSJUSERID()] ? @"我" : self.item.memberNickname;
     } else {
         memberItem.rightText = [[self.item.membersItem valueForKeyPath:@"memberName"] componentsJoinedByString:@"，"];
     }
