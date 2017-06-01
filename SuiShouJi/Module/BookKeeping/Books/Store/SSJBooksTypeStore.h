@@ -86,7 +86,8 @@ typedef enum : NSUInteger {
  *  @param success 查询成功的回调
  *  @param failure 查询失败的回调
  */
-+ (void)queryForShareBooksListWithSuccess:(void(^)(NSMutableArray<SSJShareBookItem *> *result))success failure:(void(^)(NSError *error))failure;
++ (void)queryForShareBooksListWithSuccess:(void(^)(NSMutableArray<SSJShareBookItem *> *result))success
+                                  failure:(void(^)(NSError *error))failure;
 
 /**
  *  保存账本(共享账本)

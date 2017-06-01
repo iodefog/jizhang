@@ -7,15 +7,7 @@
 //
 
 #import "SSJBaseNetworkService.h"
-
 @class SSJShareBookItem;
-
-//0正常   1退出　２移除
-typedef enum : NSUInteger {
-    SSJMemberStateNormal,
-    SSJMemberStateQuit,
-    SSJMemberStateRemove,
-} SSJMemberState;
 
 @interface SSJCreateOrDeleteBooksService : SSJBaseNetworkService
 
@@ -33,6 +25,5 @@ typedef enum : NSUInteger {
 
 - (void)createShareBookWithBookItem:(SSJShareBookItem *)bookItem;
 
-- (void)deleteShareBookWithBookId:(NSString *)bookId memberId:(NSString *)memberId memberState:(SSJMemberState)memberState;
-
+- (void)deleteShareBookWithBookId:(NSString *)bookId memberId:(NSString *)memberId memberState:(SSJShareBooksMemberState)memberState;
 @end

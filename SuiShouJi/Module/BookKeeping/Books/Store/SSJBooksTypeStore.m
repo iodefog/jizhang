@@ -85,7 +85,7 @@
 
 #pragma mark - 个人账本
 + (void)queryForBooksListWithSuccess:(void(^)(NSMutableArray<SSJBooksTypeItem *> *result))success
-                                  failure:(void (^)(NSError *error))failure{
+                             failure:(void (^)(NSError *error))failure{
     [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
         NSString *userid = SSJUSERID();
         NSMutableArray *booksList = [NSMutableArray array];
@@ -201,7 +201,7 @@
 
 + (void)saveBooksOrderWithItems:(NSArray *)items
                          sucess:(void(^)())success
-                             failure:(void (^)(NSError *error))failure{
+                        failure:(void (^)(NSError *error))failure{
     [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
         for (SSJBooksTypeItem *item in items) {
             NSInteger order = [items indexOfObject:item] + 1;
@@ -236,10 +236,10 @@
     NSMutableArray *keys = [[typeInfo allKeys] mutableCopy];
     //处理渐变
     if ([keys containsObject:@"cbookscolor"]) {
-       id bookColorDic = [typeInfo objectForKey:@"cbookscolor"];
+        id bookColorDic = [typeInfo objectForKey:@"cbookscolor"];
         if ([bookColorDic isKindOfClass:[NSDictionary class]]) {
-          NSString *startColor = [(NSDictionary *)bookColorDic objectForKey:@"startColor"];
-          NSString *endColor = [(NSDictionary *)bookColorDic objectForKey:@"endColor"];
+            NSString *startColor = [(NSDictionary *)bookColorDic objectForKey:@"startColor"];
+            NSString *endColor = [(NSDictionary *)bookColorDic objectForKey:@"endColor"];
             NSString *colorStr = [NSString stringWithFormat:@"%@,%@",startColor,endColor];
             [typeInfo setValue:colorStr forKey:@"cbookscolor"];
         }
@@ -279,7 +279,7 @@
         while ([resultSet next]) {
             item.booksId = [resultSet stringForColumn:@"cbooksid"];
             item.booksName = [resultSet stringForColumn:@"cbooksname"];
-//            item.booksColor = [resultSet stringForColumn:@"cbookscolor"];
+            //            item.booksColor = [resultSet stringForColumn:@"cbookscolor"];
             //处理渐变色
             SSJFinancingGradientColorItem *colorItem = [[SSJFinancingGradientColorItem alloc] init];
             NSArray *colorArray = [[resultSet stringForColumn:@"cbookscolor"] componentsSeparatedByString:@","];
@@ -299,8 +299,8 @@
 
 + (void)deleteBooksTypeWithbooksItems:(NSArray *)items
                            deleteType:(BOOL)type
-                           Success:(void(^)())success
-                           failure:(void (^)(NSError *error))failure {
+                              Success:(void(^)())success
+                              failure:(void (^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
         NSString *userId = SSJUSERID();
         if (!type) {
@@ -358,45 +358,45 @@
 
 + (BOOL)generateBooksTypeForBooksItem:(id<SSJBooksItemProtocol>)item
                            indatabase:(FMDatabase *)db
-                               forUserId:(NSString *)userId {
-//        SSJBooksTypeItem *privateBookItem = (SSJBooksTypeItem *)item;
+                            forUserId:(NSString *)userId {
+    //        SSJBooksTypeItem *privateBookItem = (SSJBooksTypeItem *)item;
     
-        // 补充每个账本独有的记账类型
-        NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.sss"];
-        if (![db intForQuery:@"select count(1) from bk_user_bill where cbooksid = ?",item.booksId]) {
-            if (![db executeUpdate:@"insert into bk_user_bill select ?, id, istate, ?, ?, 1, defaultorder,? from bk_bill_type where ibookstype = ? and icustom = 0",userId,writeDate,@(SSJSyncVersion()),item.booksId,@(item.booksParent)]) {
-                return NO;
-            }
+    // 补充每个账本独有的记账类型
+    NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.sss"];
+    if (![db intForQuery:@"select count(1) from bk_user_bill where cbooksid = ?",item.booksId]) {
+        if (![db executeUpdate:@"insert into bk_user_bill select ?, id, istate, ?, ?, 1, defaultorder,? from bk_bill_type where ibookstype = ? and icustom = 0",userId,writeDate,@(SSJSyncVersion()),item.booksId,@(item.booksParent)]) {
+            return NO;
         }
-        
-        // 补充账本公用的记账类型
-        FMResultSet *result = [db executeQuery:@"select id ,defaultorder ,ibookstype from bk_bill_type where length(ibookstype) > 1"];
-        
-        NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:0];
-        
-        while ([result next]) {
-            NSString *cbillid = [result stringForColumn:@"id"];
-            NSString *defualtOrder = [result stringForColumn:@"defaultorder"];
-            NSString *iparenttype = [result stringForColumn:@"ibookstype"];
-            NSDictionary *dic = @{@"kBillIdKey":cbillid,
-                                  @"kDefualtOrderKey":defualtOrder,
-                                  @"kParentTypeKey":iparenttype};
-            [tempArr addObject:dic];
-        };
-        
-        for (NSDictionary *dict in tempArr) {
-            NSString *cbillid = [dict objectForKey:@"kBillIdKey"];
-            NSString *defualtOrder = [dict objectForKey:@"kDefualtOrderKey"];
-            NSString *iparenttype = [dict objectForKey:@"kParentTypeKey"];
-            NSArray *parentArr = [iparenttype componentsSeparatedByString:@","];
-            for (NSString *parenttype in parentArr) {
-                if ([parenttype integerValue] == item.booksParent) {
-                    if (![db executeUpdate:@"insert into bk_user_bill values (?,?,1,?,?,1,?,?)",userId,cbillid,writeDate,@(SSJSyncVersion()),defualtOrder,item.booksId]) {
-                        return NO;
-                    }
+    }
+    
+    // 补充账本公用的记账类型
+    FMResultSet *result = [db executeQuery:@"select id ,defaultorder ,ibookstype from bk_bill_type where length(ibookstype) > 1"];
+    
+    NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:0];
+    
+    while ([result next]) {
+        NSString *cbillid = [result stringForColumn:@"id"];
+        NSString *defualtOrder = [result stringForColumn:@"defaultorder"];
+        NSString *iparenttype = [result stringForColumn:@"ibookstype"];
+        NSDictionary *dic = @{@"kBillIdKey":cbillid,
+                              @"kDefualtOrderKey":defualtOrder,
+                              @"kParentTypeKey":iparenttype};
+        [tempArr addObject:dic];
+    };
+    
+    for (NSDictionary *dict in tempArr) {
+        NSString *cbillid = [dict objectForKey:@"kBillIdKey"];
+        NSString *defualtOrder = [dict objectForKey:@"kDefualtOrderKey"];
+        NSString *iparenttype = [dict objectForKey:@"kParentTypeKey"];
+        NSArray *parentArr = [iparenttype componentsSeparatedByString:@","];
+        for (NSString *parenttype in parentArr) {
+            if ([parenttype integerValue] == item.booksParent) {
+                if (![db executeUpdate:@"insert into bk_user_bill values (?,?,1,?,?,1,?,?)",userId,cbillid,writeDate,@(SSJSyncVersion()),defualtOrder,item.booksId]) {
+                    return NO;
                 }
             }
         }
+    }
     return YES;
 }
 
@@ -418,7 +418,7 @@
 + (void)queryForShareBooksListWithSuccess:(void(^)(NSMutableArray<SSJShareBookItem *> *result))success failure:(void(^)(NSError *error))failure {
     NSMutableArray *shareBooksList = [NSMutableArray array];
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
-       FMResultSet *result = [db executeQuery:@"select t.*,(select count(*) from bk_share_books_member t1 where t1.cbooksid = t.cbooksid and t1.istate = 0) as memberCount from bk_share_books t where t.cbooksid in (select s.cbooksid from bk_share_books_member s where s.cmemberid = ? and s.istate = 0) and t.operatortype <> 2 order by t.iorder asc, t.cwritedate asc",SSJUSERID()];
+        FMResultSet *result = [db executeQuery:@"select t.*,(select count(*) from bk_share_books_member t1 where t1.cbooksid = t.cbooksid and t1.istate = 0) as memberCount from bk_share_books t where t.cbooksid in (select s.cbooksid from bk_share_books_member s where s.cmemberid = ? and s.istate = 0) and t.operatortype <> 2 order by t.iorder asc, t.cwritedate asc",SSJUSERID()];
         if (!result) {
             SSJDispatch_main_async_safe(^{
                 failure([db lastError]);
@@ -429,7 +429,7 @@
             SSJShareBookItem *shareBookItem = [[SSJShareBookItem alloc] init];
             shareBookItem.booksId = [result stringForColumn:@"cbooksid"];
             shareBookItem.booksName = [result stringForColumn:@"cbooksname"];
-//            shareBookItem.booksColor = [result stringForColumn:@"cbookscolor"];
+            //            shareBookItem.booksColor = [result stringForColumn:@"cbookscolor"];
             shareBookItem.booksParent = [result intForColumn:@"iparenttype"];
             shareBookItem.booksOrder = [result intForColumn:@"iorder"];
             shareBookItem.memberCount = [result intForColumn:@"memberCount"];
@@ -502,12 +502,12 @@
     [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(SSJDatabase *db, BOOL *rollback) {
         
         //共享账本账本名称不做限制
-//        if ([db intForQuery:@"select count(1) from bk_share_books t where t.cbooksid in (select s.cbooksid from bk_share_books_member s where s.cmemberid = ? and s.istate = 0) and t.operatortype <> 2 and cbooksname = ? and cbooksid <> ?",SSJUSERID(),item.booksName,item.booksId]) {
-//            SSJDispatch_main_async_safe(^{
-//                [CDAutoHideMessageHUD showMessage:@"已有相同账本名称了，换一个吧"];
-//            });
-//            return;
-//        }
+        //        if ([db intForQuery:@"select count(1) from bk_share_books t where t.cbooksid in (select s.cbooksid from bk_share_books_member s where s.cmemberid = ? and s.istate = 0) and t.operatortype <> 2 and cbooksname = ? and cbooksid <> ?",SSJUSERID(),item.booksName,item.booksId]) {
+        //            SSJDispatch_main_async_safe(^{
+        //                [CDAutoHideMessageHUD showMessage:@"已有相同账本名称了，换一个吧"];
+        //            });
+        //            return;
+        //        }
         item.booksOrder = [db intForQuery:@"select max(iorder) from bk_share_books"] + 1;
         NSString *sqlStr;
         if (shareBookOperate == ShareBookOperateCreate) {//添加
@@ -548,11 +548,21 @@
         if (shareBookOperate == ShareBookOperateCreate) {
             if (![self saveShareBooksMemberWithBookId:item shareMember:shareMember inDatabase:db]) {
                 *rollback = YES;
+                if ([db lastError]) {
+                    SSJDispatchMainAsync(^{
+                        failure([db lastError]);
+                    });
+                }
                 return;
             }
             
             if (![self saveShareBookMemberNickWithBookId:item.booksId shareFriendsMarks:shareFriendsMarks inDatabase:db]) {
                 *rollback = YES;
+                if ([db lastError]) {
+                    SSJDispatchMainAsync(^{
+                        failure([db lastError]);
+                    });
+                }
                 return;
             }
         }
@@ -565,6 +575,7 @@
     }];
 }
 
+
 /**
  删除账本(共享账本)
  @param item share_charge	bk_user_charge	平账流水
@@ -575,8 +586,8 @@
 + (void)deleteShareBooksWithShareCharge:(NSArray<NSDictionary *> *)shareCharge
                             shareMember:(NSArray<NSDictionary *> *)shareMember
                                  bookId:(NSString *)bookId
-                          sucess:(void(^)())success
-                         failure:(void (^)(NSError *error))failure {
+                                 sucess:(void(^)())success
+                                failure:(void (^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
         NSString *userId = SSJUSERID();
         //将bk_share_book表的operate = 2
@@ -606,7 +617,7 @@
                                @"cbooksid",
                                @"cjoindate",
                                @"istate"];
-
+        
         [shareMember enumerateObjectsUsingBlock:^(NSDictionary * _Nonnull dic, NSUInteger idx, BOOL * _Nonnull stop) {
             NSMutableDictionary *mergeRecord = [NSMutableDictionary dictionary];
             for (NSString *key in memberArr) {
@@ -631,18 +642,29 @@
                 }
             }
         }];
-
-            //更新日常统计表
-            if (![SSJDailySumChargeTable updateDailySumChargeForUserId:userId inDatabase:db]) {
-                if (failure) {
-                    *rollback = YES;
-                    SSJDispatchMainAsync(^{
-                        failure([db lastError]);
-                    });
-                }
-                return;
+        
+        //退出账本 移除账本 移除本地账本的备注
+        if (![self deleteMemberMarkWithBookId:bookId inDatabase:db]) {
+            if (failure) {
+                *rollback = YES;
+                SSJDispatchMainAsync(^{
+                    failure([db lastError]);
+                });
             }
-
+            return;
+        }
+        
+        //更新日常统计表
+        if (![SSJDailySumChargeTable updateDailySumChargeForUserId:userId inDatabase:db]) {
+            if (failure) {
+                *rollback = YES;
+                SSJDispatchMainAsync(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        }
+        
         if (success) {
             SSJDispatch_main_async_safe(^{
                 success();
@@ -687,11 +709,11 @@
 
 
 + (void)saveShareBooksMemberWithBookId:(NSString *)bookId
-       shareMember:(NSArray<NSDictionary *> *)shareMember
-                       success:(void(^)())success
-                       failure:(void(^)(NSError *error))failure {
+                           shareMember:(NSArray<NSDictionary *> *)shareMember
+                               success:(void(^)())success
+                               failure:(void(^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
-       __block NSString *iconStr;
+        __block NSString *iconStr;
         if (SSJIsUserLogined()) {//登录
             //查询当前用户信息
             [SSJUserTableManager queryUserItemWithID:SSJUSERID() success:^(SSJUserItem * _Nonnull item) {
@@ -699,7 +721,7 @@
                     item.icon = @"defualt_portrait";
                 }
                 iconStr = item.icon;
-
+                
             } failure:^(NSError * _Nonnull error) {
                 [SSJAlertViewAdapter showError:error];
             }];
@@ -707,7 +729,7 @@
         } else {
             iconStr = @"defualt_portrait";
         }
-
+        
         NSArray *memberArr = @[@"cmemberid",
                                @"cbooksid",
                                @"cjoindate",
@@ -748,7 +770,7 @@
 
 /**
  保存用户信息
-
+ 
  @param bookId <#bookId description#>
  @param shareFriendsMarks <#shareFriendsMarks description#>
  @param success <#success description#>
@@ -803,7 +825,23 @@
             return NO;
         }
     }
+    
+    return YES;
+}
 
+
+/**
+ 删除账本后删除对应账本的备注
+ 
+ @param bookId <#bookId description#>
+ @param db <#db description#>
+ @return <#return value description#>
+ */
++ (BOOL)deleteMemberMarkWithBookId:(NSString *)bookId
+                        inDatabase:(FMDatabase *)db {
+    if (![db executeUpdate:@"delete from BK_SHARE_BOOKS_FRIENDS_MARK where cbooksid = ?",bookId]) {
+        return NO;
+    }
     return YES;
 }
 
@@ -834,7 +872,7 @@
                 });
                 return ;
             }
-
+            
         }];
         
         SSJDispatch_main_sync_safe(^{
@@ -847,26 +885,26 @@
 
 + (BOOL)saveShareBookMemberNickWithBookId:(NSString *)bookId
                         shareFriendsMarks:(NSArray <NSDictionary *>*)shareFriendsMarks inDatabase:(SSJDatabase *)db {
-        NSArray *keyStrArr = @[@"cuserid",
-                               @"cbooksid",
-                               @"cfriendid",
-                               @"cmark",
-                               @"iversion",
-                               @"cwritedate",
-                               @"operatortype"];
-        NSString *keyStr = [keyStrArr componentsJoinedByString:@", "];
-        for (NSDictionary *dic in shareFriendsMarks) {
-            NSMutableArray *friendValueArr = [NSMutableArray array];
-            for (NSString *key in keyStrArr) {
-                [friendValueArr addObject:[NSString stringWithFormat:@"'%@'",[dic objectForKey:key]]];
-            }
-            
-            NSString *valueStr = [friendValueArr componentsJoinedByString:@", "];
-            NSString *sqlStr = [NSString stringWithFormat:@"insert into BK_SHARE_BOOKS_FRIENDS_MARK (%@) values (%@)",keyStr,valueStr];
-            if (![db executeUpdate:sqlStr]) {
-                return NO;
-            }
+    NSArray *keyStrArr = @[@"cuserid",
+                           @"cbooksid",
+                           @"cfriendid",
+                           @"cmark",
+                           @"iversion",
+                           @"cwritedate",
+                           @"operatortype"];
+    NSString *keyStr = [keyStrArr componentsJoinedByString:@", "];
+    for (NSDictionary *dic in shareFriendsMarks) {
+        NSMutableArray *friendValueArr = [NSMutableArray array];
+        for (NSString *key in keyStrArr) {
+            [friendValueArr addObject:[NSString stringWithFormat:@"'%@'",[dic objectForKey:key]]];
         }
+        
+        NSString *valueStr = [friendValueArr componentsJoinedByString:@", "];
+        NSString *sqlStr = [NSString stringWithFormat:@"insert into BK_SHARE_BOOKS_FRIENDS_MARK (%@) values (%@)",keyStr,valueStr];
+        if (![db executeUpdate:sqlStr]) {
+            return NO;
+        }
+    }
     return YES;
 }
 

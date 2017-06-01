@@ -613,7 +613,7 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
                         [subscriber sendError:error];
                     }];
                 } else if ([self.editBooksItem isKindOfClass:[SSJShareBookItem class]]) {//共享账本
-                    [self.deleteBookService deleteShareBookWithBookId:bookId memberId:SSJUSERID() memberState:SSJMemberStateQuit];
+                    [self.deleteBookService deleteShareBookWithBookId:bookId memberId:SSJUSERID() memberState:SSJShareBooksMemberStateQuitted];
                 }
                 
                 return nil;
@@ -647,7 +647,7 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
             }];
         } else if ([self.editBooksItem isKindOfClass:[SSJShareBookItem class]]) {//共享账本
             @strongify(self);
-            [self.deleteBookService deleteShareBookWithBookId:bookId memberId:SSJUSERID() memberState:SSJMemberStateQuit];
+            [self.deleteBookService deleteShareBookWithBookId:bookId memberId:SSJUSERID() memberState:SSJShareBooksMemberStateQuitted];
         }
         
         [self.collectionView endEditing];
