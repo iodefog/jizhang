@@ -28,6 +28,7 @@
                                @"operatorType":@"0"};
     self.httpMethod = SSJBaseNetworkServiceHttpMethodPOST;
     self.showLodingIndicator = YES;
+    #warning test
     [self request:(@"http://192.168.1.168:18080/sharebook/add_shareBook.go") params:paramDic];
 }
 
@@ -37,6 +38,7 @@
                                @"istate":@(memberState)};
     self.httpMethod = SSJBaseNetworkServiceHttpMethodPOST;
     self.showLodingIndicator = YES;
+    #warning test
     [self request:(@"http://192.168.1.168:18080/sharebook/remove_member") params:paramDic];
 }
 
