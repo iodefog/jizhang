@@ -63,7 +63,7 @@ extern NSString *const SSJBillingChargeRecordKey;
  *  查询某个时间内的成员流水数据；
  *
  *  @param ID           成员id
- *  @param booksId      账本id，如果传nil就当做当前账本，查询所有账本数据传all
+ *  @param booksId      账本id，如果传nil就当做当前账本，查询所有账本数据传SSJAllBooksIds
  *  @param period       查询的时间段，如果超过当前时间，则截止到今天
  *  @param isPayment    是否查询支出流水
  *  @param success      查询成功的回调；参数data中是数组类型，元素对应一个section；
@@ -84,7 +84,7 @@ extern NSString *const SSJBillingChargeRecordKey;
  *
  *  @param billId           类别id
  *  @param memberId         成员id
- *  @param booksId          账本id，如果传nil就当做当前账本，查询所有账本数据传all
+ *  @param booksId          账本id，如果传nil就当做当前账本，查询所有账本数据传SSJAllBooksIds
  *  @param period           查询的时间段，如果超过当前时间，则截止到今天
  *  @param success          查询成功的回调
  *  @param failure          查询失败的回调
