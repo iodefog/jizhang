@@ -204,7 +204,6 @@
         [_codeInput ssj_setBorderStyle:SSJBorderStyleBottom];
         [_codeInput ssj_setBorderWidth:1.f];
         _codeInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入六位暗号" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"#CCCCCC"]}];
-//        _codeInput.rightView = self.resendButton;
         _codeInput.rightViewMode = UITextFieldViewModeAlways;
         _codeInput.tintColor = [UIColor ssj_colorWithHex:@"#333333"];
         @weakify(self);
@@ -340,7 +339,7 @@
     [self.codeInput resignFirstResponder];
     
     [SSJUserTableManager queryUserItemWithID:self.item.adminId success:^(SSJUserItem * _Nonnull userItem) {
-        NSMutableString *url = nil;
+        NSMutableString *url = [NSMutableString string];
         
 #warning test
         NSString *baseUrl = @"http://10.0.11.53:3000/5/invite/index.html?";
@@ -348,11 +347,14 @@
         
         [url appendString:baseUrl];
         
-        [url appendFormat:@"name=%@",userItem.nickName];
+        NSString *nickName = userItem.nickName ? : userItem.mobileNo;
         
-        [url appendFormat:@"code=%@",weakSelf.codeInput.text];
         
-        [url appendFormat:@"books=%@",weakSelf.item.booksName];
+        [url appendFormat:@"name=%@&",nickName];
+        
+        [url appendFormat:@"code=%@&",weakSelf.codeInput.text];
+        
+        [url appendFormat:@"books=%@&",weakSelf.item.booksName];
         
         NSString *iconUrl = userItem.icon;
         
@@ -360,11 +362,15 @@
             iconUrl = SSJImageURLWithAPI(iconUrl);
         }
         
+        if (iconUrl.length | !iconUrl) {
+            iconUrl = @"";
+        }
+        
         [url appendFormat:@"pic=%@",iconUrl];
 
         NSString *content = [NSString stringWithFormat:@"%@邀你加入【%@】，希望和你开启共享记账之旅，快来！",userItem.nickName,weakSelf.item.booksName];
         
-        [SSJShareManager shareWithType:SSJShareTypeUrl image:nil UrlStr:url title:SSJAppName() content:content PlatformType:@[@(UMSocialPlatformType_WechatTimeLine),@(UMSocialPlatformType_QQ)] inController:self ShareSuccess:NULL];
+        [SSJShareManager shareWithType:SSJShareTypeUrl image:nil UrlStr:[NSString stringWithFormat:@"%@",[url mj_url]] title:SSJAppName() content:content PlatformType:@[@(UMSocialPlatformType_WechatSession),@(UMSocialPlatformType_QQ)] inController:self ShareSuccess:NULL];
         
     } failure:^(NSError * _Nonnull error) {
         
@@ -377,12 +383,12 @@
 - (void)serverDidFinished:(SSJBaseNetworkService *)service {
     if (service == self.getCodeService) {
         if ([service.returnCode isEqualToString:@"1"]) {
-//            self.codeInput.enabled = NO;
-//            self.sendButton.enabled = NO;
+            self.codeInput.enabled = NO;
             self.codeInput.text = self.getCodeService.secretKey;
             [self.resendButton setTitle:@"重新生成" forState:UIControlStateNormal];
-        } else {
-            [CDAutoHideMessageHUD showMessage:service.desc];
+            self.sendButton.backgroundColor = [UIColor ssj_colorWithHex:@"#EB4A64"];
+            self.sendButton.layer.shadowColor = [UIColor ssj_colorWithHex:@"#EB4A64"].CGColor;
+            self.sendButton.layer.shadowOpacity = 0.39;
         }
     }
     

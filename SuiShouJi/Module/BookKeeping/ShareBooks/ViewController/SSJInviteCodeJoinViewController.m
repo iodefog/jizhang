@@ -9,7 +9,12 @@
 
 #import "SSJInviteCodeJoinViewController.h"
 #import "UIViewController+MMDrawerController.h"
+
 #import "SSJCodeEnterBooksService.h"
+#import "SSJShareBooksSyncTable.h"
+#import "SSJShareBooksMemberSyncTable.h"
+#import "SSJUserChargeSyncTable.h"
+#import "SSJDatabaseQueue.h"
 
 @interface SSJInviteCodeJoinViewController ()
 
@@ -146,7 +151,7 @@
         _sendButton.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
         _sendButton.layer.cornerRadius = 23.f;
         [_sendButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [_sendButton setTitle:@"发送暗号" forState:UIControlStateNormal];
+        [_sendButton setTitle:@"芝麻开门" forState:UIControlStateNormal];
         _sendButton.backgroundColor = [UIColor ssj_colorWithHex:@"#EB4A64"];
         _sendButton.layer.shadowOffset = CGSizeMake(0, 4);
         [_sendButton addTarget:self action:@selector(sendButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
@@ -166,6 +171,28 @@
     [self.service enterBooksWithCode:self.codeInput.text];
 }
 
+#pragma mark - SSJBaseNetworkServiceDelegate
+- (void)serverDidFinished:(SSJBaseNetworkService *)service {
+    if ([service.returnCode isEqualToString:@"1"]) {
+        @weakify(self);
+        [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
+            @strongify(self);
+            NSError *error = nil;
+
+            if ([SSJShareBooksSyncTable mergeRecords:self.service.shareBooksTableInfo forUserId:SSJUSERID() inDatabase:db error:&error]) {
+                return;
+            }
+            
+            if ([SSJShareBooksMemberSyncTable mergeRecords:self.service.shareMemberTableInfo forUserId:SSJUSERID() inDatabase:db error:&error]) {
+                return;
+            }
+            
+            if ([SSJUserChargeSyncTable mergeRecords:self.service.userChargeTableInfo forUserId:SSJUSERID() inDatabase:db error:&error]) {
+                return;
+            }
+        }];
+    }
+}
 
 
 - (void)didReceiveMemoryWarning {
