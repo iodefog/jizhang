@@ -14,7 +14,7 @@
 + (instancetype)cellItemWithBudgetModel:(SSJBudgetModel *)model billTypeMapping:(NSDictionary *)mapping {
     SSJBudgetListCellItem *item = [[SSJBudgetListCellItem alloc] init];
     item.budgetID = model.ID;
-    item.isMajor = [model.billIds isEqualToArray:@[@"all"]];
+    item.isMajor = [model.billIds isEqualToArray:@[SSJAllBillTypeId]];
     
     NSMutableArray *billTypeNames = [NSMutableArray arrayWithCapacity:model.billIds.count];
     for (NSString *billId in model.billIds) {

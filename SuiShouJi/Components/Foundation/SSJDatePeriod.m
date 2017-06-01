@@ -106,13 +106,13 @@ static const unsigned int kAllCalendarUnitFlags = NSCalendarUnitYear | NSCalenda
     return [self compareWithPeriod:period];
 }
 
-+ (NSArray *)periodsBetweenDate:(NSDate *)date andAnotherDate:(NSDate *)anotherDate periodType:(SSJDatePeriodType)type {
++ (NSArray<SSJDatePeriod *> *)periodsBetweenDate:(NSDate *)date andAnotherDate:(NSDate *)anotherDate periodType:(SSJDatePeriodType)type {
     SSJDatePeriod *period = [SSJDatePeriod datePeriodWithPeriodType:type date:date];
     SSJDatePeriod *anotherPeriod = [SSJDatePeriod datePeriodWithPeriodType:type date:anotherDate];
     return [period periodsFromPeriod:anotherPeriod];
 }
 
-- (NSArray *)periodsFromPeriod:(SSJDatePeriod *)period {
+- (NSArray<SSJDatePeriod *> *)periodsFromPeriod:(SSJDatePeriod *)period {
     if (!period || self.periodType != period.periodType) {
         return nil;
     }
@@ -157,7 +157,7 @@ static const unsigned int kAllCalendarUnitFlags = NSCalendarUnitYear | NSCalenda
     return periods;
 }
 
-- (NSArray *)periodsFromDate:(NSDate *)date {
+- (NSArray<SSJDatePeriod *> *)periodsFromDate:(NSDate *)date {
     SSJDatePeriod *period = [SSJDatePeriod datePeriodWithPeriodType:self.periodType date:date];
     return [self periodsFromPeriod:period];
 }

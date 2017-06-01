@@ -7,7 +7,14 @@
 //
 
 #import "SSJMagicExportCalendarDateView.h"
-#import "SSJMagicExportCalendarDateViewItem.h"
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
+#pragma mark - SSJMagicExportCalendarDateView
+#pragma mark -
+
+#define kCircleCenterY self.height * 0.37
+static const CGFloat kCircleDiam = 35;
 
 @interface SSJMagicExportCalendarDateView ()
 
@@ -32,7 +39,7 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         
-        _observedKeyPaths = [NSArray arrayWithObjects:@"hidden", @"selected", @"showMarker", @"date", @"desc", @"dateColor", @"selectedDateColor", @"highlightColor", nil];
+        _observedKeyPaths = [NSArray arrayWithObjects:@"hidden", @"showMarker", @"date", @"desc", @"dateColor", @"descColor", @"markerColor", @"fillColor", nil];
         
         [self addSubview:self.dateLabel];
         [self addSubview:self.descLabel];
@@ -46,10 +53,23 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
     
-    self.dateLabel.top = 5;
-    self.dateLabel.centerX = self.width * 0.5;
-    self.descLabel.frame = CGRectMake(0, self.dateLabel.bottom, self.width, self.height - self.dateLabel.bottom);
-    self.marker.center = CGPointMake(self.width * 0.5, self.dateLabel.bottom - self.marker.height * 0.8);
+    [self.dateLabel sizeToFit];
+    self.dateLabel.center = CGPointMake(self.width * 0.5, kCircleCenterY);
+    self.marker.centerX = self.width * 0.5;
+    self.marker.top = self.dateLabel.bottom;
+    CGFloat descTop = kCircleCenterY + kCircleDiam * 0.5;
+    self.descLabel.frame = CGRectMake(0, descTop, self.width, self.height - descTop);
+}
+
+- (void)drawRect:(CGRect)rect {
+    if (_item.fillColor) {
+        CGFloat left = (self.width - kCircleDiam) * 0.5;
+        CGFloat top = kCircleCenterY - kCircleDiam * 0.5;
+        CGRect roundedRect = CGRectMake(left, top, kCircleDiam, kCircleDiam);
+        UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:roundedRect byRoundingCorners:UIRectCornerAllCorners cornerRadii:CGSizeMake(kCircleDiam * 0.5, kCircleDiam * 0.5)];
+        [_item.fillColor setFill];
+        [path fill];
+    }
 }
 
 - (void)setItem:(SSJMagicExportCalendarDateViewItem *)item {
@@ -80,41 +100,31 @@
     self.hidden = _item.hidden;
     
     self.dateLabel.text = [NSString stringWithFormat:@"%d", (int)_item.date.day];
-    self.dateLabel.textColor = _item.selected ? _item.selectedDateColor : _item.dateColor;
-    self.dateLabel.clipsToBounds = _item.selected;
-    self.dateLabel.backgroundColor = _item.selected ? _item.highlightColor : [UIColor clearColor];
+    self.dateLabel.textColor = _item.dateColor;
     
-    self.descLabel.text = _item.selected ? _item.desc : nil;
-    self.descLabel.textColor = _item.highlightColor;
+    self.descLabel.text = _item.desc;
+    self.descLabel.textColor = _item.descColor;
     
     self.marker.hidden = !_item.showMarker;
-    self.marker.tintColor = _item.selected ? [UIColor whiteColor] : _item.highlightColor;
+    self.marker.tintColor = _item.markerColor;
+    
+    [self setNeedsLayout];
+    [self setNeedsDisplay];
 }
 
 #pragma mark - UIResponder
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     [super touchesEnded:touches withEvent:event];
     
-    BOOL shouldSelect = YES;
-    if (_shouldSelectBlock) {
-        shouldSelect = _shouldSelectBlock(self);
-    }
-    
-    if (shouldSelect) {
-        _item.selected = YES;
-        
-        [self updateAppearance];
-        
-        if (_didSelectBlock) {
-            _didSelectBlock(self);
-        }
+    if (!_item.hidden && _clickBlock) {
+        _clickBlock(self);
     }
 }
 
 #pragma mark - Getter
 - (UILabel *)dateLabel {
     if (!_dateLabel) {
-        _dateLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 35, 35)];
+        _dateLabel = [[UILabel alloc] init];
         _dateLabel.layer.cornerRadius = _dateLabel.width * 0.5;
         _dateLabel.backgroundColor = [UIColor clearColor];
         _dateLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
@@ -140,6 +150,20 @@
         [_marker sizeToFit];
     }
     return _marker;
+}
+
+@end
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
+#pragma mark - SSJMagicExportCalendarDateViewItem
+#pragma mark -
+
+@implementation SSJMagicExportCalendarDateViewItem
+
+- (NSString *)debugDescription {
+    return [self ssj_debugDescription];
 }
 
 @end

@@ -120,6 +120,19 @@ typedef NS_ENUM(NSInteger, SSJBooksType) {
     SSJBooksTypeTravel = 4
 };
 
+/**
+ 共享账本成员状态
+ 
+ - SSJShareBooksMemberStateNormal: 正常
+ - SSJShareBooksMemberStateQuitted: 主动退出
+ - SSJShareBooksMemberStateKickedOut: 被踢出
+ */
+typedef NS_ENUM(NSInteger, SSJShareBooksMemberState) {
+    SSJShareBooksMemberStateNormal = 0,
+    SSJShareBooksMemberStateQuitted = 1,
+    SSJShareBooksMemberStateKickedOut = 2
+};
+
 ///------------------------------------------
 /// @name 基本数据常量
 ///------------------------------------------
@@ -179,6 +192,12 @@ extern NSString *const SSJOverrunRedColorValue;
 
 //预算剩余绿色
 extern NSString *const SSJSurplusGreenColorValue;
+
+// 所有账本id
+extern NSString *const SSJAllBooksIds;
+
+// 所有收支类别id
+extern NSString *const SSJAllBillTypeId;
 
 /** -------------------- KEY -------------------- */
 #pragma mark - KEY
