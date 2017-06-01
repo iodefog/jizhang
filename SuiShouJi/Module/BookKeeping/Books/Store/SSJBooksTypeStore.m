@@ -42,7 +42,7 @@
             booksItem.booksParent = [rs intForColumn:@"iparenttype"];
             currentBooksItem = booksItem;
         } else {
-            rs = [db executeQuery:@"select sb.*, count(bm.cmemberid) as memberCount from bk_share_books sb, bk_share_books_member bm where sb.cbooksid = ? and sb.cbooksid = bm.cbooksid and bm.istate = ?", booksid, @(SSJShareBooksMemberStateNormal)];
+            rs = [db executeQuery:@"select sb.*, count(bm.cmemberid) as memberCount from bk_share_books sb, bk_share_books_member bm where sb.cbooksid = ? and sb.cbooksid = bm.cbooksid and bm.istate = 0",booksid];
             if (!rs) {
                 if (failure) {
                     SSJDispatch_main_async_safe(^{
@@ -418,7 +418,7 @@
 + (void)queryForShareBooksListWithSuccess:(void(^)(NSMutableArray<SSJShareBookItem *> *result))success failure:(void(^)(NSError *error))failure {
     NSMutableArray *shareBooksList = [NSMutableArray array];
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
-       FMResultSet *result = [db executeQuery:@"select t.*,(select count(*) from bk_share_books_member t1 where t1.cbooksid = t.cbooksid and t1.istate = ?) as memberCount from bk_share_books t where t.cbooksid in (select s.cbooksid from bk_share_books_member s where s.cmemberid = ? and s.istate = 0) and t.operatortype <> 2 order by t.iorder asc, t.cwritedate asc", @(SSJShareBooksMemberStateNormal), SSJUSERID()];
+       FMResultSet *result = [db executeQuery:@"select t.*,(select count(*) from bk_share_books_member t1 where t1.cbooksid = t.cbooksid and t1.istate = 0) as memberCount from bk_share_books t where t.cbooksid in (select s.cbooksid from bk_share_books_member s where s.cmemberid = ? and s.istate = 0) and t.operatortype <> 2 order by t.iorder asc, t.cwritedate asc",SSJUSERID()];
         if (!result) {
             SSJDispatch_main_async_safe(^{
                 failure([db lastError]);
@@ -501,12 +501,13 @@
     
     [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(SSJDatabase *db, BOOL *rollback) {
         
-        if ([db intForQuery:@"select count(1) from bk_share_books t where t.cbooksid in (select s.cbooksid from bk_share_books_member s where s.cmemberid = ? and s.istate = ?) and t.operatortype <> 2 and cbooksname = ? and cbooksid <> ?", SSJUSERID(), @(SSJShareBooksMemberStateNormal), item.booksName, item.booksId]) {
-            SSJDispatch_main_async_safe(^{
-                [CDAutoHideMessageHUD showMessage:@"已有相同账本名称了，换一个吧"];
-            });
-            return;
-        }
+        //共享账本账本名称不做限制
+//        if ([db intForQuery:@"select count(1) from bk_share_books t where t.cbooksid in (select s.cbooksid from bk_share_books_member s where s.cmemberid = ? and s.istate = 0) and t.operatortype <> 2 and cbooksname = ? and cbooksid <> ?",SSJUSERID(),item.booksName,item.booksId]) {
+//            SSJDispatch_main_async_safe(^{
+//                [CDAutoHideMessageHUD showMessage:@"已有相同账本名称了，换一个吧"];
+//            });
+//            return;
+//        }
         item.booksOrder = [db intForQuery:@"select max(iorder) from bk_share_books"] + 1;
         NSString *sqlStr;
         if (shareBookOperate == ShareBookOperateCreate) {//添加
@@ -573,10 +574,21 @@
  */
 + (void)deleteShareBooksWithShareCharge:(NSArray<NSDictionary *> *)shareCharge
                             shareMember:(NSArray<NSDictionary *> *)shareMember
+                                 bookId:(NSString *)bookId
                           sucess:(void(^)())success
                          failure:(void (^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
         NSString *userId = SSJUSERID();
+        //将bk_share_book表的operate = 2
+        if (![db executeUpdate:@"update bk_share_books set cwritedate = ?,operatortype = 2 where cbooksid = ?",[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],bookId]) {
+            *rollback = YES;
+            if ([db lastError]) {
+                SSJDispatchMainAsync(^{
+                    failure([db lastError]);
+                });
+            }
+            return ;
+        }
         
         //更新bk_user_charge表
         if (![SSJUserChargeSyncTable mergeRecords:shareCharge forUserId:SSJUSERID() inDatabase:db error:nil]) {
