@@ -293,6 +293,10 @@
     } else {
         self.codeInput.text = @"";
         self.codeInput.enabled = YES;
+        [self.resendButton setTitle:@"随机生成" forState:UIControlStateNormal];
+        self.sendButton.backgroundColor = [UIColor ssj_colorWithHex:@"#CCCCCC"];
+        self.sendButton.layer.shadowColor = [UIColor blackColor].CGColor;
+        self.sendButton.layer.shadowOpacity = 0.15;
     }
 }
 
@@ -385,6 +389,8 @@
         if ([service.returnCode isEqualToString:@"1"]) {
             self.codeInput.enabled = NO;
             self.codeInput.text = self.getCodeService.secretKey;
+            NSDate *expireDate = [NSDate dateWithString:self.getCodeService.overTime formatString:@"yyyy-MM-dd HH:mm:ss"];
+            self.expireDateLab.text = [NSString stringWithFormat:@"暗号于%@前有效",[expireDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm"]];
             [self.resendButton setTitle:@"重新生成" forState:UIControlStateNormal];
             self.sendButton.backgroundColor = [UIColor ssj_colorWithHex:@"#EB4A64"];
             self.sendButton.layer.shadowColor = [UIColor ssj_colorWithHex:@"#EB4A64"].CGColor;
