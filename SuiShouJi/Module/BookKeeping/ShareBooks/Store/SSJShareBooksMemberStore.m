@@ -34,6 +34,7 @@
         while ([rs next]) {
             memberItem.nickName = [rs stringForColumn:@"cmark"];
             memberItem.icon = [rs stringForColumn:@"cicon"];
+            memberItem.userId = memberId;
         }
         
         if (success) {

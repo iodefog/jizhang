@@ -12,7 +12,7 @@
 
 - (void)enterBooksWithCode:(NSString *)code;
 
-@property(nonatomic, strong) NSArray *shareBooksTableInfo;
+@property(nonatomic, strong) NSMutableDictionary *shareBooksTableInfo;
 
 @property(nonatomic, strong) NSArray *shareMemberTableInfo;
 

@@ -21,7 +21,7 @@
     if ([self.returnCode isEqualToString:@"1"]) {
         NSDictionary *resultInfo = [rootElement objectForKey:@"results"];
         if (resultInfo) {
-            self.shareBooksTableInfo = resultInfo[@"share_book"];
+            self.shareBooksTableInfo = [NSMutableDictionary dictionaryWithDictionary:resultInfo[@"share_book"]];
             self.shareMemberTableInfo =  resultInfo[@"share_member"];
             self.userChargeTableInfo = resultInfo[@"share_charge"];
         }
