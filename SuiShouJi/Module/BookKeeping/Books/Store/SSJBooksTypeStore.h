@@ -14,6 +14,7 @@ typedef enum : NSUInteger {
     ShareBookOperateCreate,
     ShareBookOperateEdite
 } ShareBookOperate;
+
 @interface SSJBooksTypeStore : NSObject
 
 + (void)queryCurrentBooksItemWithSuccess:(void(^)(id booksItem))success
@@ -109,6 +110,7 @@ typedef enum : NSUInteger {
  */
 + (void)deleteShareBooksWithShareCharge:(NSArray<NSDictionary *> *)shareCharge
                             shareMember:(NSArray<NSDictionary *> *)shareMember
+                                 bookId:(NSString *)bookId
                                  sucess:(void(^)())success
                                 failure:(void (^)(NSError *error))failure;
 
