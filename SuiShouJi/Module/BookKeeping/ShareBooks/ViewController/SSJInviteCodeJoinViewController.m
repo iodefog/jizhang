@@ -178,6 +178,13 @@
         [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
             @strongify(self);
             NSError *error = nil;
+            
+            NSInteger maxOrder = [db intForQuery:@"select max(iorder) from bk_share_books where cuserid = ?",SSJUSERID()] + 1;
+            
+            if (self.service.shareBooksTableInfo) {
+                [self.service.shareBooksTableInfo setObject:@(maxOrder) forKey:@"iorder"];
+            }
+            
 
             if ([SSJShareBooksSyncTable mergeRecords:@[self.service.shareBooksTableInfo] forUserId:SSJUSERID() inDatabase:db error:&error]) {
                 return;
