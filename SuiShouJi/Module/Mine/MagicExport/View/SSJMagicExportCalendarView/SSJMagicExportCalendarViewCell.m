@@ -8,7 +8,6 @@
 
 #import "SSJMagicExportCalendarViewCell.h"
 #import "SSJMagicExportCalendarDateView.h"
-#import "SSJMagicExportCalendarDateViewItem.h"
 
 @interface SSJMagicExportCalendarViewCell ()
 
@@ -27,17 +26,9 @@
             SSJMagicExportCalendarDateView *dateView = [[SSJMagicExportCalendarDateView alloc] init];
             __weak typeof(self) weakSelf = self;
             
-            dateView.shouldSelectBlock = ^BOOL(SSJMagicExportCalendarDateView *dateView) {
-                BOOL shouldSelect = YES;
-                if (weakSelf.shouldSelectBlock) {
-                    shouldSelect = weakSelf.shouldSelectBlock(weakSelf, dateView);
-                }
-                return shouldSelect;
-            };
-            
-            dateView.didSelectBlock = ^(SSJMagicExportCalendarDateView *dateView) {
-                if (weakSelf.didSelectBlock) {
-                    weakSelf.didSelectBlock(weakSelf, dateView);
+            dateView.clickBlock = ^(SSJMagicExportCalendarDateView *dateView) {
+                if (weakSelf.clickBlock) {
+                    weakSelf.clickBlock(weakSelf, dateView);
                 }
             };
             
