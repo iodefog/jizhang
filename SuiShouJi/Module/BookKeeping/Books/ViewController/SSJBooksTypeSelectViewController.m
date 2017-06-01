@@ -171,12 +171,12 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
         SSJShareBookItem *shareItem = (SSJShareBookItem *)[self.shareBooksDataItems ssj_safeObjectAtIndex:indexPath.row];
         bookName = shareItem.booksName;
         bookId = shareItem.booksId;
-        if ([bookName isEqualToString:@"添加账本"]) {
+        if (!bookId.length && [bookName isEqualToString:@"添加账本"]) {
             [self.createShareBookTypeView show];
             return;
         }
     }
-    if (![bookName isEqualToString:@"添加账本"]) {
+    if (bookId.length) {
 
         [SSJAnaliyticsManager event:@"change_account_book" extra:bookName
          ];
@@ -341,7 +341,7 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
     if (service == self.deleteBookService) {
         if ([service.returnCode isEqualToString:@"1"]) {
             __weak __typeof(self)weakSelf = self;
-            [SSJBooksTypeStore deleteShareBooksWithShareCharge:self.deleteBookService.shareChargeArray shareMember:self.deleteBookService.shareMemberArray sucess:^{
+            [SSJBooksTypeStore deleteShareBooksWithShareCharge:self.deleteBookService.shareChargeArray shareMember:self.deleteBookService.shareMemberArray bookId:((SSJShareBookItem *)self.editBooksItem).booksId  sucess:^{
                 weakSelf.rightButton.selected = NO;
                 [weakSelf.collectionView endEditing];
                 for (SSJBooksTypeItem *item in weakSelf.privateBooksDataitems) {
@@ -369,13 +369,13 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
         [self.collectionView endEditing];
     }
     for (SSJBooksTypeItem *item in self.privateBooksDataitems) {
-        if (![item.booksName isEqualToString:@"添加账本"]) {
+        if (item.booksId.length) {
             item.editeModel = self.rightButton.isSelected;
         }
     }
     
     for (SSJShareBookItem *shareItem in self.shareBooksDataItems) {
-        if (![shareItem.booksName isEqualToString:@"添加账本"]) {
+        if (shareItem.booksId.length) {
             shareItem.editing = self.rightButton.isSelected;
         }
     }
