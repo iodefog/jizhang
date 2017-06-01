@@ -99,6 +99,16 @@
 + (BOOL)mergeRecords:(NSArray *)records forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
     for (NSDictionary *recordInfo in records) {
         
+        NSMutableArray *quitBooksArr = [NSMutableArray arrayWithCapacity:0];
+        
+        FMResultSet *quitBooksResult = [db executeQuery:@"select cbooksid from bk_share_books_member where cmemberid = ? and istate != 0", userId];
+        
+        while ([quitBooksResult next]) {
+            NSString *quitBookId = [quitBooksResult stringForColumn:@"cbooksid"];
+            [quitBooksArr addObject:quitBookId];
+        }
+
+        
         FMResultSet *resultSet = [db executeQuery:@"select operatortype from bk_user_charge where ichargeid = ?", recordInfo[@"ichargeid"]];
         
         if (!resultSet) {
@@ -156,8 +166,7 @@
 
             
             if (chargeType == SSJChargeIdTypeShareBooks && [recordInfo[@"cuserid"] isEqualToString:userId]) {
-                BOOL exitChargeShareBooks = [db boolForQuery:@"select istate from bk_share_books_member where cbooksid = ? and cmemberid = ?",recordInfo[@"cbooksid"],userId];
-                if (!exitChargeShareBooks) {
+                if ([quitBooksArr containsObject:recordInfo[@"cbooksid"]]) {
                     statement = [NSString stringWithFormat:@"update bk_user_charge set %@ where ichargeid = %@",keyValuesStr, recordInfo[@"ichargeid"]];
                 } else {
                     statement = [NSString stringWithFormat:@"update bk_user_charge set %@ where %@",keyValuesStr,  condition];

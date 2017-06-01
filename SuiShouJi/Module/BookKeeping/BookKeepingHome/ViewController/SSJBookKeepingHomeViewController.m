@@ -438,7 +438,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
             SSJBookKeepingHomeListItem *listItem = [self.items ssj_safeObjectAtIndex:currentSection];
             self.floatingDateView.currentDate = listItem.date;
             _isRefreshing = NO;
-            if (self.items.count == 0) {
+            if (self.items.count == 0 || [self.homeBar.budgetButton.model isKindOfClass:[SSJShareBookItem class]]) {
                 self.homeBar.budgetButton.button.enabled = YES;
                 return;
             }else{

@@ -140,8 +140,10 @@ NSString *const SSJMagicExportStoreEndDateKey = @"SSJMagicExportStoreEndDateKey"
             params[@"billId"] = billId;
             [sql appendString:@" and uc.ibillid = :billId"];
         } else {
-            params[@"billType"] = @(billType);
-            [sql appendString:@" and bt.itype = :billType"];
+            if (billType == SSJBillTypePay || billType == SSJBillTypeIncome) {
+                params[@"billType"] = @(billType);
+                [sql appendString:@" and bt.itype = :billType"];
+            }
         }
         
         [sql appendString:@" order by uc.cbilldate"];
