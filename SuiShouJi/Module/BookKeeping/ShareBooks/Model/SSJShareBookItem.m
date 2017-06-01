@@ -27,7 +27,7 @@
                     @"booksColor":@"cbookscolor",
                     @"booksParent":@"iparenttype",
                     @"booksOrder":@"iorder",
-                    @"cwriteDate":@"cadddate"};
+                    @"cwriteDate":@"cwritedate"};
     }
     return mapping;
 }

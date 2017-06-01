@@ -511,10 +511,12 @@
         
         if (shareBookOperate == ShareBookOperateCreate) {//添加
             [shareBookInfo setObject:@(item.booksOrder) forKey:@"iorder"];
+            [shareBookInfo setObject:[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"] forKey:@"cadddate"];
             [shareBookInfo setObject:@(0) forKey:@"operatortype"];
             sqlStr = [self inertSQLStatementWithTypeInfo:shareBookInfo tableName:@"bk_share_books"];
         } else if(shareBookOperate == ShareBookOperateEdite){//修改
             [shareBookInfo setObject:@(1) forKey:@"operatortype"];
+            [shareBookInfo setObject:[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"] forKey:@"cwritedate"];
             sqlStr = [self updateSQLStatementWithTypeInfo:shareBookInfo tableName:@"bk_share_books"];
         }
         
