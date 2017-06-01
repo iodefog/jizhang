@@ -31,7 +31,7 @@
     [self request:(@"http://192.168.1.168:18080/sharebook/add_shareBook.go") params:paramDic];
 }
 
-- (void)deleteShareBookWithBookId:(NSString *)bookId memberId:(NSString *)memberId memberState:(SSJMemberState)memberState {
+- (void)deleteShareBookWithBookId:(NSString *)bookId memberId:(NSString *)memberId memberState:(SSJShareBooksMemberState)memberState {
     NSDictionary *paramDic = @{@"cmemberId":memberId,
                                @"cbooksId":bookId,
                                @"istate":@(memberState)};
