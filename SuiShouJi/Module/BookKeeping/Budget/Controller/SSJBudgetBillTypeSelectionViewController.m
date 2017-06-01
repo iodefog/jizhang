@@ -80,7 +80,7 @@ static NSString *const kBudgetBillTypeSelectionCellId = @"kBudgetBillTypeSelecti
         
         selectedItem.selected = !selectedItem.selected;
         
-        if ([selectedItem.billID isEqualToString:@"all"]) {
+        if ([selectedItem.billID isEqualToString:SSJAllBillTypeId]) {
             for (SSJBudgetBillTypeSelectionCellItem *item in self.items) {
                 if (item.canSelect) {
                     item.selected = selectedItem.selected;
@@ -90,7 +90,7 @@ static NSString *const kBudgetBillTypeSelectionCellId = @"kBudgetBillTypeSelecti
             if (selectedItem.selected) {
                 BOOL isSelectedAll = YES;
                 for (SSJBudgetBillTypeSelectionCellItem *item in self.items) {
-                    if ([item.billID isEqualToString:@"all"] || !item.canSelect) {
+                    if ([item.billID isEqualToString:SSJAllBillTypeId] || !item.canSelect) {
                         continue;
                     }
                     
@@ -181,7 +181,7 @@ static NSString *const kBudgetBillTypeSelectionCellId = @"kBudgetBillTypeSelecti
         [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"更改类别后，该预算的历史预算数据将清除重置哦" action:[SSJAlertViewAction actionWithTitle:@"取消" handler:^(SSJAlertViewAction * _Nonnull action) {
             
             self.selectedTypeList = self.originalBillIds;
-            BOOL allSelect = [self.selectedTypeList isEqualToArray:@[@"all"]];
+            BOOL allSelect = [self.selectedTypeList isEqualToArray:@[SSJAllBillTypeId]];
             for (SSJBudgetBillTypeSelectionCellItem *item in self.items) {
                 if (allSelect) {
                     item.selected = YES;
@@ -217,8 +217,8 @@ static NSString *const kBudgetBillTypeSelectionCellId = @"kBudgetBillTypeSelecti
     NSMutableArray *billIds = [NSMutableArray array];
     for (SSJBudgetBillTypeSelectionCellItem *item in self.items) {
         if (item.selected) {
-            if ([item.billID isEqualToString:@"all"]) {
-                [billIds addObject:@"all"];
+            if ([item.billID isEqualToString:SSJAllBillTypeId]) {
+                [billIds addObject:SSJAllBillTypeId];
                 break;
             }
             

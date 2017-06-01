@@ -41,7 +41,7 @@ NSString *const SSJBillingChargeRecordKey = @"SSJBillingChargeRecordKey";
                                          @"endDate":endDate,
                                          @"userId":SSJUSERID()} mutableCopy];
         
-        if (![tBooksId isEqualToString:@"all"]) {
+        if (![tBooksId isEqualToString:SSJAllBooksIds]) {
             [sql appendString:@" and a.CBOOKSID = :booksId"];
             [params setObject:tBooksId forKey:@"booksId"];
         }
@@ -133,7 +133,7 @@ NSString *const SSJBillingChargeRecordKey = @"SSJBillingChargeRecordKey";
                                              @"endDate":endDate,
                                              @"userId":userID} mutableCopy];
             
-            if (![tBooksId isEqualToString:@"all"]) {
+            if (![tBooksId isEqualToString:SSJAllBooksIds]) {
                 [sql appendString:@" and a.CBOOKSID = :booksId"];
                 [params setObject:tBooksId forKey:@"booksId"];
             }
@@ -244,7 +244,7 @@ NSString *const SSJBillingChargeRecordKey = @"SSJBillingChargeRecordKey";
         if (memberId) {
             [chargeCountSql appendFormat:@" and uc.cmemberid = '%@'", memberId];
         }
-        if (booksId && ![booksId isEqualToString:@"all"]) {
+        if (booksId && ![booksId isEqualToString:SSJAllBooksIds]) {
             [chargeCountSql appendFormat:@" and uc.cbooksid = '%@'", booksId];
         }
         if (period) {
