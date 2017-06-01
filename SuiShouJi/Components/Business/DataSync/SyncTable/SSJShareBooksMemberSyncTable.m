@@ -40,7 +40,7 @@
                 return NO;
             }
         } else {
-            if (![db executeUpdate:@"inset into bk_share_books_member (cjoindate,istate,cicon,cbooksid,cmemberid) values (?,?,?,?,?)", recordInfo[@"cjoindate"], recordInfo[@"istate"], recordInfo[@"cicon"], recordInfo[@"cbooksid"], recordInfo[@"cmemberid"]]) {
+            if (![db executeUpdate:@"insert into bk_share_books_member (cjoindate,istate,cicon,cbooksid,cmemberid) values (?,?,?,?,?)", recordInfo[@"cjoindate"], recordInfo[@"istate"], recordInfo[@"cicon"], recordInfo[@"cbooksid"], recordInfo[@"cmemberid"]]) {
                 if (error) {
                     *error = [db lastError];
                 }
@@ -55,6 +55,25 @@
 + (NSArray *)queryRecordsNeedToSyncWithUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
     NSMutableArray *syncRecords = [NSMutableArray array];
     return syncRecords;
+}
+
++ (BOOL)updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:(int64_t)newVersion forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
+    
+    int64_t version = [SSJSyncTable lastSuccessSyncVersionForUserId:userId inDatabase:db];
+    if (version == SSJ_INVALID_SYNC_VERSION) {
+        if (error) {
+            *error = [db lastError];
+        }
+        SSJPRINT(@">>>SSJ warning: invalid sync version");
+        return NO;
+    }
+    
+    if (newVersion == SSJ_INVALID_SYNC_VERSION) {
+        SSJPRINT(@">>>SSJ warning: invalid sync version");
+        return NO;
+    }
+    
+    return [db executeUpdate:@"update bk_member_charge set iversion = ? where iversion = ? and cmemberid = ?", @(newVersion), @(version + 2), userId];
 }
 
 @end
