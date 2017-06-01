@@ -12,13 +12,13 @@
 
 - (void)requestCodeWithbooksId:(NSString *)booksId{
 #warning test
-    [self request:@"http://192.168.1.168:18080/sharebook/query_secretKey.go" params:@{@"cuserId":SSJUSERID(),
+    [self request:@"http://jz.gs.9188.com:18080/sharebook/query_secretKey.go" params:@{@"cuserId":SSJUSERID(),
                                                                                       @"cbooksId":booksId ? : @""}];
 }
 
 - (void)saveCodeWithbooksId:(NSString *)booksId code:(NSString *)code {
 #warning test
-    [self request:SSJURLWithAPI(@"http://192.168.1.168:18080/sharebook/save_secretKey.go") params:@{@"cuserId":SSJUSERID(),
+    [self request:SSJURLWithAPI(@"http://jz.gs.9188.com:18080/sharebook/save_secretKey.go") params:@{@"cuserId":SSJUSERID(),
                                                                                                     @"cbooksId":booksId,
                                                                                                     @"secretKey":code ? : @""}];
 }

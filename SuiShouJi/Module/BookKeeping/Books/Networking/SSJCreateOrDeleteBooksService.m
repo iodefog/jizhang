@@ -11,12 +11,6 @@
 #import "SSJFinancingGradientColorItem.h"
 @implementation SSJCreateOrDeleteBooksService
 
-- (instancetype)initWithDelegate:(id<SSJBaseNetworkServiceDelegate>)delegate {
-    if (self = [super initWithDelegate:delegate]) {
-        self.requestSerialization = SSJHTTPRequestSerialization;
-    }
-    return self;
-}
 - (void)createShareBookWithBookItem:(SSJShareBookItem *)bookItem {
 //    cuserId	String	是	用户id
 //    cbookName	String	是	账本名称
@@ -33,6 +27,7 @@
                                @"cwriteDate":bookItem.cwriteDate,
                                @"operatorType":@"0"};
     self.httpMethod = SSJBaseNetworkServiceHttpMethodPOST;
+    self.showLodingIndicator = YES;
     [self request:(@"http://192.168.1.168:18080/sharebook/add_shareBook.go") params:paramDic];
 }
 
@@ -41,7 +36,7 @@
                                @"cbooksId":bookId,
                                @"istate":@(memberState)};
     self.httpMethod = SSJBaseNetworkServiceHttpMethodPOST;
-//    /sharebook/removeMember.go
+    self.showLodingIndicator = YES;
     [self request:(@"http://192.168.1.168:18080/sharebook/remove_member") params:paramDic];
 }
 
@@ -59,6 +54,8 @@
         }
         if ([[result allKeys] containsObject:@"shareMembers"]) {
             self.shareMemberArray = [result objectForKey:@"shareMembers"];
+        } else if ([[result allKeys] containsObject:@"share_member"]) {
+            self.shareMemberArray = [result objectForKey:@"share_member"];
         }
         if ([[result allKeys] containsObject:@"shareFriendsMarks"]) {
             self.shareFriendsMarkArray = [result objectForKey:@"shareFriendsMarks"];

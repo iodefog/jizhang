@@ -255,7 +255,7 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
     self.bookItem.booksColor = self.gradientColorItem;
     if ([self.bookItem isKindOfClass:[SSJBooksTypeItem class]]) {//个人账本
         [SSJBooksTypeStore saveBooksTypeItem:(SSJBooksTypeItem *)self.bookItem sucess:^{
-            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+//            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
             
             if (_saveBooksBlock) {
                 _saveBooksBlock(((SSJBooksTypeItem *)self.bookItem).booksId);
@@ -266,7 +266,18 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
         }];
         
     } else if([self.bookItem isKindOfClass:[SSJShareBookItem class]]) { //共享账本
-        [self.createBookService createShareBookWithBookItem:(SSJShareBookItem<SSJBooksItemProtocol> *)self.bookItem];
+        //编辑
+        if (self.bookItem.booksId.length) {
+            [SSJBooksTypeStore saveShareBooksTypeItem:self.bookItem WithshareMember:nil shareFriendsMarks:nil ShareBookOperate:ShareBookOperateEdite sucess:^{
+                [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+                [weakSelf.navigationController popViewControllerAnimated:YES];
+            } failure:^(NSError *error) {
+                [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
+            }];
+        } else {
+            //新建
+            [self.createBookService createShareBookWithBookItem:(SSJShareBookItem<SSJBooksItemProtocol> *)self.bookItem];
+        }
     }
 }
 
