@@ -235,11 +235,11 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 //        self.billStickyNoteView.hidden = YES;
 //    }
     
-    float tabBarHeight = SSJ_CURRENT_THEME.tabBarBackgroundImage.length ? SSJ_TABBAR_HEIGHT : 0;
+    float tabBarHeight = SSJ_CURRENT_THEME.tabBarBackgroundImage.length ? 0 : SSJ_TABBAR_HEIGHT;
     
     self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.bookKeepingHeader.bottom - tabBarHeight);
     
-    self.tableView.contentInset = UIEdgeInsetsMake(46, 0, tabBarHeight, 0);
+    self.tableView.contentInset = UIEdgeInsetsMake(46, 0, 0, 0);
 
     self.tableView.top = self.bookKeepingHeader.bottom;
     
