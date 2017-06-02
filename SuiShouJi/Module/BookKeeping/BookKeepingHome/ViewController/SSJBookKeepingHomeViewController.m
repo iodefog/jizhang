@@ -63,8 +63,6 @@
 #import "SSJCustomThemeManager.h"
 #import "SSJBooksTypeStore.h"
 
-#warning test
-#import "SSJSharebooksInviteViewController.h"
 
 static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 
@@ -935,6 +933,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
         return nil;
     }] flattenMap:^RACStream *(id booksItem) {
         return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+
             if ([booksItem isKindOfClass:[SSJBooksTypeItem class]]) {
                 [SSJBudgetDatabaseHelper queryForCurrentBudgetListWithSuccess:^(NSArray<SSJBudgetModel *> * _Nonnull result) {
                     [subscriber sendNext:result];
@@ -1059,10 +1058,9 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 
 - (void)updateBooksItem {
     [SSJUserTableManager currentBooksId:^(NSString * _Nonnull booksId) {
-        SSJBooksTypeItem *currentBooksItem = [SSJBooksTypeStore queryCurrentBooksTypeForBooksId:booksId];
-        self.homeBar.leftButton.item = currentBooksItem;
-#warning tintColor
-//        self.homeBar.leftButton.tintColor = [UIColor ssj_colorWithHex:currentBooksItem.booksColor];
+        [SSJBooksTypeStore queryCurrentBooksTypeForBooksId:booksId Success:^(SSJBooksTypeItem *result) {
+            self.homeBar.leftButton.item = result;
+        } failure:NULL];
     } failure:^(NSError * _Nonnull error) {
         [SSJAlertViewAdapter showError:error];
     }];

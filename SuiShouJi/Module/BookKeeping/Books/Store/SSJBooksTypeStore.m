@@ -272,10 +272,21 @@
     return [NSString stringWithFormat:@"update %@ set %@ where cbooksid = :cbooksid",tableName, [keyValues componentsJoinedByString:@", "]];
 }
 
-+(SSJBooksTypeItem *)queryCurrentBooksTypeForBooksId:(NSString *)booksid{
++ (void)queryCurrentBooksTypeForBooksId:(NSString *)booksid
+                                             Success:(void(^)(SSJBooksTypeItem * result))success
+                                             failure:(void (^)(NSError *error))failure{
     __block SSJBooksTypeItem *item = [[SSJBooksTypeItem alloc]init];
-    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         FMResultSet *resultSet = [db executeQuery:@"select * from bk_books_type where cbooksid = ?",booksid];
+        if (!resultSet) {
+            if (failure) {
+                SSJDispatch_main_async_safe(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        }
+        
         while ([resultSet next]) {
             item.booksId = [resultSet stringForColumn:@"cbooksid"];
             item.booksName = [resultSet stringForColumn:@"cbooksname"];
@@ -293,8 +304,13 @@
             item.booksColor = colorItem;
             item.booksIcoin = [resultSet stringForColumn:@"cicoin"];
         }
+        if (success) {
+            SSJDispatch_main_async_safe(^{
+                success(item);
+            });
+        }
+
     }];
-    return item;
 }
 
 + (void)deleteBooksTypeWithbooksItems:(NSArray *)items

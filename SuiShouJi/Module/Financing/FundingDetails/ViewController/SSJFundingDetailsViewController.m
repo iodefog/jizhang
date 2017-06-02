@@ -38,6 +38,7 @@
 #import "SSJInstalmentDetailViewController.h"
 #import "SSJBalenceChangeDetailViewController.h"
 #import "SSJNewFundingViewController.h"
+#import "SSJDeleteBooksDetailViewController.h"
 
 #import "FMDB.h"
 
@@ -317,6 +318,12 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
                     SSJFundingTransferChargeDetailViewController *transferVc = [[SSJFundingTransferChargeDetailViewController alloc] init];
                     transferVc.chargeItem = (SSJBillingChargeCellItem*)item;
                     [self.navigationController pushViewController:transferVc animated:YES];
+                } else if (billId == 13 || billId == 14) {
+                    SSJDeleteBooksDetailViewController *deleteBooksVc = [[SSJDeleteBooksDetailViewController alloc] init];
+                    deleteBooksVc.booksId = ((SSJBillingChargeCellItem*)item).booksId;
+                    deleteBooksVc.fundId = ((SSJBillingChargeCellItem*)item).fundId;
+                    deleteBooksVc.booksName = ((SSJBillingChargeCellItem*)item).chargeMemo;
+                    [self.navigationController pushViewController:deleteBooksVc animated:YES];
                 } else {
                     if (billId != 1 && billId != 2) {
                         SSJCalenderDetailViewController *calenderDetailVC = [[SSJCalenderDetailViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];

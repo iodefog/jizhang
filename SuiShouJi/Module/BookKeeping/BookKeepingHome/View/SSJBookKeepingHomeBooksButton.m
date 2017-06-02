@@ -50,9 +50,8 @@
 
 - (void)setItem:(SSJBooksTypeItem *)item{
     _item = item;
-    self.booksImage.image = [[UIImage imageNamed:_item.booksIcoin] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-#warning 图标颜色待定
-    //self.booksImage.tintColor = [UIColor ssj_colorWithHex:_item.booksColor];
+    self.booksImage.image = [[UIImage imageNamed:[SSJBooksTypeItem parentIconForParenType:item.booksParent]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    self.booksImage.tintColor = [UIColor ssj_colorWithHex:[_item getSingleColor]];
     [self setNeedsLayout];
 }
 

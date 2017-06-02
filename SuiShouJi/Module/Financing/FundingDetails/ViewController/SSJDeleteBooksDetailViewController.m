@@ -73,6 +73,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.title = self.booksName;
     self.navigationItem.rightBarButtonItem = self.rightButton;
     self.tableView.sectionHeaderHeight = 40;
     [self.tableView registerClass:[SSJFundingDetailCell class] forCellReuseIdentifier:kFundingDetailCellID];
@@ -85,7 +86,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self.view ssj_showLoadingIndicator];
-    //    [self getTotalIcomeAndExpence];
+    [self getDataFromDb];
 }
 
 #pragma mark - UITableViewDataSource
@@ -169,10 +170,6 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
             return 30;
         }
     }
-    SSJBaseCellItem *item = [self.listItems ssj_safeObjectAtIndex:indexPath.section];
-    if ([item isKindOfClass:[SSJCreditCardListDetailItem class]]) {
-        return 65;
-    }
     return 35;
 }
 
@@ -239,9 +236,24 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
 #pragma mark - Private
 -(void)reloadDataAfterSync{
     [self.view ssj_showLoadingIndicator];
-    //    [self getTotalIcomeAndExpence];
+    [self getDataFromDb];
 }
 
+
+- (void)getDataFromDb {
+    @weakify(self);
+    [SSJFundingDetailHelper queryDataWithBooksId:self.booksId FundTypeID:self.fundId success:^(NSMutableArray *data) {
+        @strongify(self);
+        [self array:self.listItems isEqualToAnotherArray:data];
+        self.listItems = [NSMutableArray arrayWithArray:data];
+        [self.tableView reloadData];
+        [self.view ssj_hideLoadingIndicator];
+
+    } failure:^(NSError *error) {
+        [self.view ssj_hideLoadingIndicator];
+    }];
+
+}
 
 
 //anotherArr 新
