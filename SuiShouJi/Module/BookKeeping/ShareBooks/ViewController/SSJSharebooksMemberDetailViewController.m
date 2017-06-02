@@ -15,6 +15,7 @@
 
 #import "SCYSlidePagingHeaderView.h"
 #import "SSJReportFormsIncomeAndPayCell.h"
+#import "SSJNickNameModifyView.h"
 
 #import "SSJUserTableManager.h"
 #import "SSJDatePeriod.h"
@@ -22,6 +23,7 @@
 #import "SSJReportFormsItem.h"
 #import "SSJCreateOrDeleteBooksService.h"
 #import "SSJBooksTypeStore.h"
+#import "SSJDatabaseQueue.h"
 
 static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
 
@@ -41,6 +43,9 @@ static NSString *const kSegmentTitleIncome = @"收入";
 @property (nonatomic, strong) SCYSlidePagingHeaderView *payAndIncomeSegmentControl;
 
 @property(nonatomic, strong) UITableView *tableView;
+
+
+@property(nonatomic, strong) SSJNickNameModifyView *nickNameModifyView;
 
 //  tableview数据源
 @property (nonatomic, strong) NSMutableArray *cellItems;
@@ -269,8 +274,33 @@ static NSString *const kSegmentTitleIncome = @"收入";
         _nickNameLab = [[UILabel alloc] init];
         _nickNameLab.textColor = [UIColor ssj_colorWithHex:@"#333333"];
         _nickNameLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
+        _nickNameLab.userInteractionEnabled = YES;
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] init];
+        @weakify(self);
+        [[tap rac_gestureSignal] subscribeNext:^(id x) {
+            @strongify(self);
+            if ([self.memberId isEqualToString:SSJUSERID()]) {
+                [self.nickNameModifyView show];
+            }
+        }];
+        [_nickNameLab addGestureRecognizer:tap];
     }
     return _nickNameLab;
+}
+
+- (SSJNickNameModifyView *)nickNameModifyView {
+    if (!_nickNameModifyView) {
+        _nickNameModifyView = [[SSJNickNameModifyView alloc] initWithFrame:CGRectZero maxTextLength:10 title:@"昵称"];
+        @weakify(self);
+        _nickNameModifyView.comfirmButtonClickedBlock = ^(NSString *textInputed) {
+            @strongify(self);
+            [SSJShareBooksMemberStore saveNickNameWithNickName:textInputed memberId:self.memberId booksid:self.booksId success:^(NSString *name) {
+                self.nickNameLab.text = name;
+                [CDAutoHideMessageHUD showMessage:@"修改成功"];
+            } failure:NULL];
+        };
+    }
+    return _nickNameModifyView;
 }
 
 - (SSJCreateOrDeleteBooksService *)deleteService {

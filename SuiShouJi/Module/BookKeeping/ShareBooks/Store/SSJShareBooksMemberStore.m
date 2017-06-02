@@ -347,8 +347,22 @@
     }];
 }
 
-
-
-
++ (void)saveNickNameWithNickName:(NSString *)name
+                        memberId:(NSString *)memberId
+                        booksid:(NSString *)booksid
+                  success:(void (^)(NSString * name))success
+                  failure:(void (^)(NSError *error))failure {
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
+        if (![db executeQuery:@"update bk_user set cmark = ? where cfriendid = ? and cuserid = ? and cbooksid = ?", name, memberId, SSJUSERID(), booksid]) {
+            SSJDispatch_main_async_safe(^{
+                failure([db lastError]);
+            });
+            return;
+        }
+        SSJDispatch_main_async_safe(^{
+            success(name);
+        });
+    }];
+}
 
 @end
