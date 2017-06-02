@@ -14,6 +14,8 @@
 #import "SSJBooksTypeDeletionAuthCodeAlertView.h"
 
 #import "SSJShareBooksStore.h"
+#import "SSJCreateOrDeleteBooksService.h"
+#import "SSJBooksTypeStore.h"
 
 static NSString * SSJSharebooksMemberCellIdentifier = @"SSJSharebooksMemberCellIdentifier";
 
@@ -39,6 +41,7 @@ static NSString * SSJSharebooksMemberCellIdentifier = @"SSJSharebooksMemberCellI
 
 @property(nonatomic, strong) SSJBooksTypeDeletionAuthCodeAlertView *deleteComfirmAlert;
 
+@property(nonatomic, strong) SSJCreateOrDeleteBooksService *deleteService;
 
 @end
 
@@ -91,6 +94,16 @@ static NSString * SSJSharebooksMemberCellIdentifier = @"SSJSharebooksMemberCellI
     [super updateViewConstraints];
 
 }
+
+#pragma mark - SSJBaseNetworkServiceDelegate
+- (void)serverDidFinished:(SSJBaseNetworkService *)service {
+    if ([service.returnCode isEqualToString:@"1"]) {
+        [SSJBooksTypeStore deleteShareBooksWithShareCharge:self.deleteService.shareChargeArray shareMember:self.deleteService.shareMemberArray bookId:self.item.booksId sucess:^{
+            [CDAutoHideMessageHUD showMessage:@"退出成功"];
+        } failure:NULL];
+    }
+}
+
 
 #pragma mark - UICollectionViewDataSource
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
@@ -171,11 +184,20 @@ static NSString * SSJSharebooksMemberCellIdentifier = @"SSJSharebooksMemberCellI
         paragraph.alignment = NSTextAlignmentCenter;
         [atrrStr addAttribute:NSParagraphStyleAttributeName value:paragraph range:NSMakeRange(0, atrrStr.length)];
         _deleteComfirmAlert.message = atrrStr;
+        @weakify(self);
         _deleteComfirmAlert.finishVerification = ^{
-            
+            @strongify(self);
+            [self.deleteService deleteShareBookWithBookId:self.item.booksId memberId:SSJUSERID() memberState:SSJShareBooksMemberStateKickedOut];
         };
     }
     return _deleteComfirmAlert;
+}
+
+- (SSJCreateOrDeleteBooksService *)deleteService {
+    if (!_deleteService) {
+        _deleteService = [[SSJCreateOrDeleteBooksService alloc] initWithDelegate:self];
+    }
+    return _deleteService;
 }
 
 #pragma mark - Event

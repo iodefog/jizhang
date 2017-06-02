@@ -74,7 +74,7 @@
         self.imageView.size = CGSizeMake(imageDiam, imageDiam);
         self.imageView.leftTop = CGPointMake(15, (self.contentView.height - imageDiam) * 0.5);
         self.imageView.layer.cornerRadius = imageDiam * 0.5;
-        if (!self.item.sundryId.length) {
+        if (!self.item.sundryId.length || self.item.idType == SSJChargeIdTypeShareBooks) {
             self.imageView.contentScaleFactor = [UIScreen mainScreen].scale * self.imageView.image.size.width / (imageDiam * 0.75);
         }
         self.typeLabel.left = self.imageView.right + 10;
@@ -85,7 +85,7 @@
         self.imageView.size = CGSizeMake(imageDiam, imageDiam);
         self.imageView.left = 15;
         self.imageView.layer.cornerRadius = imageDiam * 0.5;
-        if (!self.item.sundryId.length) {
+        if (!self.item.sundryId.length || self.item.idType == SSJChargeIdTypeShareBooks) {
             self.imageView.contentScaleFactor = [UIScreen mainScreen].scale * self.imageView.image.size.width / (imageDiam * 0.75);
         }
         self.haveImage.size = CGSizeMake(12, 12);

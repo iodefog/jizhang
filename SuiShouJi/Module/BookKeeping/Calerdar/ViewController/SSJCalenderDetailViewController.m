@@ -267,12 +267,7 @@ static NSString *const kSSJCalenderDetailPhotoCellId = @"kSSJCalenderDetailPhoto
 }
 
 -(void)rightBarButtonClicked:(id)sender{
-    __weak typeof(self) weakSelf = self;
-    SSJAlertViewAction *cancelAction = [SSJAlertViewAction actionWithTitle:@"取消" handler:NULL];
-    SSJAlertViewAction *sureAction = [SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction *action){
-        [weakSelf deleteCharge];
-    }];
-    [SSJAlertViewAdapter showAlertViewWithTitle:@"提示" message:@"你确定要删除这条流水吗" action: cancelAction , sureAction, nil];
+    [self deleteCharge];
 }
 
 - (void)updateAppearance {

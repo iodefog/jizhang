@@ -20,6 +20,8 @@
 #import "SSJDatePeriod.h"
 #import "SSJShareBooksMemberStore.h"
 #import "SSJReportFormsItem.h"
+#import "SSJCreateOrDeleteBooksService.h"
+#import "SSJBooksTypeStore.h"
 
 static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
 
@@ -43,6 +45,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
 //  tableview数据源
 @property (nonatomic, strong) NSMutableArray *cellItems;
 
+@property(nonatomic, strong) SSJCreateOrDeleteBooksService *deleteService;
 
 @end
 
@@ -63,6 +66,10 @@ static NSString *const kSegmentTitleIncome = @"收入";
     [self.userInfoHeader addSubview:self.nickNameLab];
     [self.view addSubview:self.periodControl];
     [self.view addSubview:self.tableView];
+    if ([self.memberId isEqualToString:SSJUSERID()]) {
+        UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithTitle:@"删除" style:UIBarButtonItemStylePlain target:self action:@selector(deleteButtonClicked:)];
+        self.navigationItem.rightBarButtonItem = rightItem;
+    }
     [self.view setNeedsUpdateConstraints];
     // Do any additional setup after loading the view.
 }
@@ -179,6 +186,15 @@ static NSString *const kSegmentTitleIncome = @"收入";
     [self reloadDatasInPeriod:period];
 }
 
+#pragma mark - SSJBaseNetworkServiceDelegate
+- (void)serverDidFinished:(SSJBaseNetworkService *)service {
+    if ([service.returnCode isEqualToString:@"1"]) {
+        [SSJBooksTypeStore deleteShareBooksWithShareCharge:self.deleteService.shareChargeArray shareMember:self.deleteService.shareMemberArray bookId:self.booksId sucess:^{
+            [CDAutoHideMessageHUD showMessage:@"删除成功"];
+        } failure:NULL];
+    }
+}
+
 #pragma mark - LazyLoading
 - (SSJReportFormsPeriodSelectionControl *)periodControl {
     if (!_periodControl) {
@@ -254,6 +270,13 @@ static NSString *const kSegmentTitleIncome = @"收入";
     return _nickNameLab;
 }
 
+- (SSJCreateOrDeleteBooksService *)deleteService {
+    if (!_deleteService) {
+        _deleteService = [[SSJCreateOrDeleteBooksService alloc] initWithDelegate:self];
+    }
+    return _deleteService;
+}
+
 
 #pragma mark - Event
 - (void)enterCalendarVC {
@@ -269,6 +292,10 @@ static NSString *const kSegmentTitleIncome = @"收入";
     } failure:^(NSError * _Nonnull error) {
         [SSJAlertViewAdapter showError:error];
     }];
+}
+
+- (void)deleteButtonClicked:(id)sender {
+    [self.deleteService deleteShareBookWithBookId:self.booksId memberId:self.memberId memberState:SSJShareBooksMemberStateKickedOut];
 }
 
 #pragma mark - Private
