@@ -194,6 +194,7 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
         cell.textInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入5字以内名称" attributes:@{NSForegroundColorAttributeName : [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         cell.customAccessoryType = UITableViewCellAccessoryNone;
         cell.textInput.text = self.bookName;
+        cell.textInput.clearButtonMode = UITextFieldViewModeAlways;
         self.bookNameTextField = cell.textInput;
     } else if (indexPath.row == 2) {
         cell.type = SSJCreditCardCellColorSelect;

@@ -342,6 +342,10 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
         if ([service.returnCode isEqualToString:@"1"]) {
             __weak __typeof(self)weakSelf = self;
             [SSJBooksTypeStore deleteShareBooksWithShareCharge:self.deleteBookService.shareChargeArray shareMember:self.deleteBookService.shareMemberArray bookId:((SSJShareBookItem *)self.editBooksItem).booksId  sucess:^{
+                //更新当前选中账本
+                if ([((SSJShareBookItem *)self.editBooksItem).booksId isEqualToString:self.currentBooksId]) {
+                    [self updateCurrentBookAfterCreateBooksWithBookId:SSJUSERID()];
+                }
                 weakSelf.rightButton.selected = NO;
                 [weakSelf.collectionView endEditing];
                 for (SSJBooksTypeItem *item in weakSelf.privateBooksDataitems) {
@@ -596,7 +600,7 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
         bookId = ((SSJShareBookItem *)self.editBooksItem).booksId;
     }
 
-    if ([bookId isEqualToString:self.currentBooksId]) {
+    if ([bookId isEqualToString:self.currentBooksId] && [self.editBooksItem isKindOfClass:[SSJBooksTypeItem class]]) {//个人账本
         [[[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
             [SSJUserTableManager updateCurrentBooksId:SSJUSERID() success:^{
                 [subscriber sendCompleted];
@@ -629,7 +633,7 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
             [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
             [self getDateFromDB];
         }];
-    } else {
+    } else{
         @weakify(self);
         if ([self.editBooksItem isKindOfClass:[SSJBooksTypeItem class]]) {//个人账本
             [SSJBooksTypeStore deleteBooksTypeWithbooksItems:@[self.editBooksItem] deleteType:type Success:^{
