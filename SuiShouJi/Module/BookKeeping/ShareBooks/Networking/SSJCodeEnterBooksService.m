@@ -24,6 +24,7 @@
             self.shareBooksTableInfo = [NSMutableDictionary dictionaryWithDictionary:resultInfo[@"share_book"]];
             self.shareMemberTableInfo =  resultInfo[@"share_member"];
             self.userChargeTableInfo = resultInfo[@"share_charge"];
+            self.shareFriendMarkTableInfo = resultInfo[@"share_friends_mark"];
         }
     }
 }

@@ -189,8 +189,11 @@ static NSString *const kSegmentTitleIncome = @"收入";
 #pragma mark - SSJBaseNetworkServiceDelegate
 - (void)serverDidFinished:(SSJBaseNetworkService *)service {
     if ([service.returnCode isEqualToString:@"1"]) {
+        @weakify(self);
         [SSJBooksTypeStore deleteShareBooksWithShareCharge:self.deleteService.shareChargeArray shareMember:self.deleteService.shareMemberArray bookId:self.booksId sucess:^{
+            @strongify(self);
             [CDAutoHideMessageHUD showMessage:@"删除成功"];
+            [self.navigationController popToRootViewControllerAnimated:YES];
         } failure:NULL];
     }
 }

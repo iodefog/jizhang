@@ -222,13 +222,13 @@ static const int kAuthCodeDigits = 4;
     [self.sureBtn mas_updateConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(0);
         make.bottom.mas_equalTo(self);
-        make.size.mas_equalTo(CGSizeMake(140, 50));
+        make.height.mas_equalTo(50);
     }];
     [self.cancelBtn mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(self.cancelBtn.mas_right);
+        make.left.mas_equalTo(self.sureBtn.mas_right);
         make.bottom.mas_equalTo(self);
         make.right.mas_equalTo(self);
-        make.size.mas_equalTo(CGSizeMake(140, 50));
+        make.width.and.height.mas_equalTo(self.sureBtn);
     }];
     
     [self.backView mas_updateConstraints:^(MASConstraintMaker *make) {
