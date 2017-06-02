@@ -32,4 +32,10 @@
                         success:(void(^)(NSArray<SSJReportFormsItem *> *result))success
                         failure:(void (^)(NSError *error))failure;
 
++ (void)saveNickNameWithNickName:(NSString *)name
+                        memberId:(NSString *)memberId
+                         booksid:(NSString *)booksid
+                         success:(void (^)(NSString * name))success
+                         failure:(void (^)(NSError *error))failure ;
+
 @end

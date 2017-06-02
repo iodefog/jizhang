@@ -12,6 +12,10 @@
 
 - (BOOL)isEqual:(id)other
 {
+    if (self == other) {
+        return YES;
+    }
+    
     SSJFinancingGradientColorItem *item = (SSJFinancingGradientColorItem *)other;
     if ([self.startColor isEqualToString:item.startColor] && [self.endColor isEqualToString:item.endColor]) {
         return YES;
