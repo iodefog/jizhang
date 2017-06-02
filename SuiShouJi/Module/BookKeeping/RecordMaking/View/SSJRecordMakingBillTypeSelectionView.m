@@ -23,6 +23,8 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
 
 @property (nonatomic, strong) NSMutableArray *internalItems;
 
+@property (nonatomic, strong) SSJRecordMakingBillTypeSelectionCellItem *lastSelectedItem;
+
 @end
 
 @implementation SSJRecordMakingBillTypeSelectionView
@@ -65,6 +67,9 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
     };
     cell.deleteAction = ^(SSJRecordMakingBillTypeSelectionCell *cell) {
         if ([wself deleteItem:cell.item]) {
+            if (cell.item == self.lastSelectedItem && [self.internalItems count] > 1) {
+                self.lastSelectedItem = [self.internalItems firstObject];
+            }
             if (wself.deleteAction) {
                 wself.deleteAction(wself, cell.item);
             }
@@ -110,6 +115,9 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
 - (void)collectionView:(SSJEditableCollectionView *)collectionView didBeginEditingWhenPressAtIndexPath:(NSIndexPath *)indexPath {
     for (SSJRecordMakingBillTypeSelectionCellItem *item in _internalItems) {
         if (item != [_internalItems lastObject]) {
+            if (item.state == SSJRecordMakingBillTypeSelectionCellStateSelected) {
+                self.lastSelectedItem = item;
+            }
             item.state = SSJRecordMakingBillTypeSelectionCellStateEditing;
         }
     }
@@ -152,7 +160,7 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
 
 - (void)collectionViewDidEndEditing:(SSJEditableCollectionView *)collectionView {
     for (SSJRecordMakingBillTypeSelectionCellItem *item in _internalItems) {
-        item.state = SSJRecordMakingBillTypeSelectionCellStateNormal;
+        item.state = (item == self.lastSelectedItem) ? SSJRecordMakingBillTypeSelectionCellStateSelected : SSJRecordMakingBillTypeSelectionCellStateNormal;
     }
     
     if (_endEditingAction) {
