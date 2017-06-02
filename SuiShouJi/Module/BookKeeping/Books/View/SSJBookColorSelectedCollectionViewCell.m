@@ -65,6 +65,8 @@
         _gradientLayer.frame = itemRect;
         self.sharpLayer.path = [UIBezierPath bezierPathWithRoundedRect:_gradientLayer.bounds cornerRadius:6].CGPath;
         _gradientLayer.mask = self.sharpLayer;
+        _gradientLayer.startPoint = CGPointMake(0, 0.5);
+        _gradientLayer.endPoint = CGPointMake(1, 0.5);
     }
     return _gradientLayer;
 }
