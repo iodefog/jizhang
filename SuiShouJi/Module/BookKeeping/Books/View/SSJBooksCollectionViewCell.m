@@ -95,7 +95,7 @@ static const CGFloat kBooksCornerRadius = 10.f;
         
         [CATransaction begin];
         [CATransaction setDisableActions:YES];
-        self.gradientLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:privateBookItem.booksColor.startColor].CGColor,(__bridge id)[UIColor ssj_colorWithHex:privateBookItem.booksColor.endColor].CGColor];
+        self.gradientLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:privateBookItem.booksColor.endColor].CGColor,(__bridge id)[UIColor ssj_colorWithHex:privateBookItem.booksColor.startColor].CGColor];
         
         if (!privateBookItem.booksId.length && [privateBookItem.booksName isEqualToString:@"添加账本"]) {
             self.gradientLayer.hidden = YES;
@@ -123,7 +123,7 @@ static const CGFloat kBooksCornerRadius = 10.f;
         
         [CATransaction begin];
         [CATransaction setDisableActions:YES];
-        self.gradientLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:shareBookItem.booksColor.startColor].CGColor,(__bridge id)[UIColor ssj_colorWithHex:shareBookItem.booksColor.endColor].CGColor];
+        self.gradientLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:shareBookItem.booksColor.endColor].CGColor,(__bridge id)[UIColor ssj_colorWithHex:shareBookItem.booksColor.startColor].CGColor];
         
         if (!shareBookItem.booksId.length && [shareBookItem.booksName isEqualToString:@"添加账本"]) {
             self.gradientLayer.hidden = YES;
