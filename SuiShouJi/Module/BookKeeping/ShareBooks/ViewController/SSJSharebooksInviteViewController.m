@@ -142,11 +142,12 @@
         NSInteger index = [self.hintViews indexOfObject:hintView];
         [hintView mas_updateConstraints:^(MASConstraintMaker *make) {
             make.width.mas_equalTo(self.view);
-            make.height.mas_equalTo(38);
-            make.top.mas_equalTo(self.sendButton.mas_bottom).offset(48 + index * 38);
+            make.height.mas_equalTo(28);
+            make.top.mas_equalTo(self.sendButton.mas_bottom).offset(48 + index * 28);
             make.left.mas_equalTo(self.view);
         }];
     }
+    
     [super updateViewConstraints];
 }
 
@@ -290,6 +291,9 @@
 - (void)resendButtonClicked:(UIButton *)sender {
     if ([sender.titleLabel.text isEqualToString:@"随机生成"]) {
         self.codeInput.text = [SSJShareBooksHelper generateTheRandomCodeWithType:SSJRandomCodeTypeUpperLetter | SSJRandomCodeTypeNumbers length:6];
+        self.sendButton.backgroundColor = [UIColor ssj_colorWithHex:@"#EB4A64"];
+        self.sendButton.layer.shadowColor = [UIColor ssj_colorWithHex:@"#EB4A64"].CGColor;
+        self.sendButton.layer.shadowOpacity = 0.39;
     } else {
         self.codeInput.text = @"";
         self.codeInput.enabled = YES;
@@ -372,15 +376,13 @@
         
         [url appendFormat:@"pic=%@",iconUrl];
 
-        NSString *content = [NSString stringWithFormat:@"%@邀你加入【%@】，希望和你开启共享记账之旅，快来！",userItem.nickName,weakSelf.item.booksName];
+        NSString *content = [NSString stringWithFormat:@"%@邀你加入【%@】，希望和你开启共享记账之旅，快来！",nickName,weakSelf.item.booksName];
         
         [SSJShareManager shareWithType:SSJShareTypeUrl image:nil UrlStr:[NSString stringWithFormat:@"%@",[url mj_url]] title:SSJAppName() content:content PlatformType:@[@(UMSocialPlatformType_WechatSession),@(UMSocialPlatformType_QQ)] inController:self ShareSuccess:NULL];
         
     } failure:^(NSError * _Nonnull error) {
         
     }];
-    
-
 }
 
 #pragma mark - SSJBaseNetworkServiceDelegate

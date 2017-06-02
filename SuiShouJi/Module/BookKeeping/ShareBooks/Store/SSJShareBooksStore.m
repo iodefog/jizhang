@@ -17,7 +17,7 @@
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
         NSString *userId = SSJUSERID();
         NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:0];
-        FMResultSet *resultSet = [db executeQuery:@"select bm.* , bf.cmark from bk_share_books_friends_mark bf left join bk_share_books_member bm on bf.cfriendid = bm.cmemberid where bm.istate = ? and bm.cbooksid = ? order by bm.cjoindate desc", @(SSJShareBooksMemberStateNormal), booksItem.booksId];
+        FMResultSet *resultSet = [db executeQuery:@"select bm.* , bf.cmark from  bk_share_books_member bm left join bk_share_books_friends_mark bf on bf.cfriendid = bm.cmemberid and bf.cbooksid = bm.cbooksid where bm.istate = ? and bm.cbooksid = ? order by bm.cjoindate asc", @(SSJShareBooksMemberStateNormal), booksItem.booksId];
         if (!resultSet) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{
