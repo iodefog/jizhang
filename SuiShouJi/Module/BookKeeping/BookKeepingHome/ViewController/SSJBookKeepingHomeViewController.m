@@ -15,7 +15,6 @@
 #import "SSJBudgetListViewController.h"
 #import "SSJBudgetEditViewController.h"
 #import "SSJBooksTypeSelectViewController.h"
-#import "SSJImaageBrowseViewController.h"
 #import "UIViewController+MMDrawerController.h"
 #import "SSJSearchingViewController.h"
 #import "SSJRegistGetVerViewController.h"
@@ -48,6 +47,7 @@
 #import "SSJAlertViewAdapter.h"
 #import "SSJAlertViewAction.h"
 #import "SSJListMenu.h"
+#import "SSJChargeImageBrowseView.h"
 
 #import "SSJBudgetModel.h"
 #import "SSJBooksTypeItem.h"
@@ -361,10 +361,17 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
         bookKeepingCell.item = [listItem.chargeItems ssj_safeObjectAtIndex:indexPath.row];
         __weak typeof(self) weakSelf = self;
         bookKeepingCell.imageClickBlock = ^(SSJBillingChargeCellItem *item){
-            SSJImaageBrowseViewController *imageBrowserVC = [[SSJImaageBrowseViewController alloc]init];
-            imageBrowserVC.type = SSJImageBrowseVcTypeBrowse;
-            imageBrowserVC.item = item;
-            [weakSelf.navigationController pushViewController:imageBrowserVC animated:YES];
+            NSURL *imgUrl = nil;
+            if ([[NSFileManager defaultManager] fileExistsAtPath:SSJImagePath(item.chargeImage)]) {
+                imgUrl = [NSURL fileURLWithPath:SSJImagePath(item.chargeImage)];
+            } else {
+                imgUrl = [NSURL URLWithString:SSJGetChargeImageUrl(item.chargeImage)];
+            }
+            [UIImage ssj_loadUrl:imgUrl compeltion:^(NSError *error, UIImage *image) {
+                if (image) {
+                    [SSJChargeImageBrowseView showWithImage:image];
+                }
+            }];
         };
         bookKeepingCell.enterChargeDetailBlock = ^(SSJBookKeepingHomeTableViewCell *cell) {
             SSJCalenderDetailViewController *detailVc = [[SSJCalenderDetailViewController alloc] init];
