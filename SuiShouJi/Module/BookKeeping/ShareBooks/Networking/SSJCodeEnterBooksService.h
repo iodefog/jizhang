@@ -18,5 +18,7 @@
 
 @property(nonatomic, strong) NSArray *userChargeTableInfo;
 
+@property(nonatomic, strong) NSArray *shareFriendMarkTableInfo;
+
 
 @end

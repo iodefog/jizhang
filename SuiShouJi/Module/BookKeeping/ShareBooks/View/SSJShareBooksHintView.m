@@ -41,7 +41,7 @@
     if (!_titleLab) {
         _titleLab = [[UILabel alloc] init];
         _titleLab.textColor = [UIColor ssj_colorWithHex:@"#999999"];
-        _titleLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
+        _titleLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_5];
     }
     return _titleLab;
 }
@@ -76,21 +76,21 @@
     }];
     
     [self.dotView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.height.mas_equalTo(20);
-        make.width.mas_equalTo(20);
+        make.height.mas_equalTo(12);
+        make.width.mas_equalTo(12);
         make.centerY.mas_equalTo(self.mas_centerY);
         make.left.mas_equalTo(50);
     }];
     
     [self.topLine mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.height.mas_equalTo(10);
+        make.height.mas_equalTo(8);
         make.width.mas_equalTo(1);
         make.centerX.mas_equalTo(self.dotView);
         make.bottom.mas_equalTo(self.dotView.mas_top);
     }];
     
     [self.bottomLine mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.height.mas_equalTo(10);
+        make.height.mas_equalTo(8);
         make.width.mas_equalTo(1);
         make.centerX.mas_equalTo(self.dotView);
         make.top.mas_equalTo(self.dotView.mas_bottom);

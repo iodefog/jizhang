@@ -299,7 +299,7 @@
 
 + (void)deleteBooksTypeWithbooksItems:(NSArray *)items
                            deleteType:(BOOL)type
-                              Success:(void(^)())success
+                              Success:(void(^)(BOOL bookstypeHasChange))success
                               failure:(void (^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
         NSString *userId = SSJUSERID();
@@ -348,9 +348,29 @@
                 
             }
         }
+        
+        NSString *currentBooksId = [db stringForQuery:@"select ccurrentbooksid from bk_user where cuserid = ?",userId];
+        
+        BOOL booksTypeHasChange = NO;
+        
+        for (SSJBooksTypeItem *item in items) {
+            if ([item.booksId isEqualToString:currentBooksId]) {
+                if (![db executeUpdate:@"update bk_user set ccurrentbooksid = ? where cuserid = ?",userId,userId]) {
+                    booksTypeHasChange = YES;
+                    if (failure) {
+                        *rollback = YES;
+                        SSJDispatchMainAsync(^{
+                            failure([db lastError]);
+                        });
+                    }
+                    return;
+                }
+            }
+        }
+        
         if (success) {
             SSJDispatch_main_async_safe(^{
-                success();
+                success(booksTypeHasChange);
             });
         }
     }];
@@ -586,7 +606,7 @@
 + (void)deleteShareBooksWithShareCharge:(NSArray<NSDictionary *> *)shareCharge
                             shareMember:(NSArray<NSDictionary *> *)shareMember
                                  bookId:(NSString *)bookId
-                                 sucess:(void(^)())success
+                                 sucess:(void(^)(BOOL bookstypeHasChange))success
                                 failure:(void (^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
         NSString *userId = SSJUSERID();
@@ -664,10 +684,26 @@
             }
             return;
         }
+        BOOL booksTypeHasChange = NO;
+        
+        NSString *currentBooksId = [db stringForQuery:@"select ccurrentbooksid from bk_user where cuserid = ?",userId];
+        
+        if ([bookId isEqualToString:currentBooksId]) {
+            booksTypeHasChange = YES;
+            if (![db executeUpdate:@"update bk_user set ccurrentbooksid = ? where cuserid = ?",userId,userId]) {
+                if (failure) {
+                    *rollback = YES;
+                    SSJDispatchMainAsync(^{
+                        failure([db lastError]);
+                    });
+                }
+                return;
+            }
+        }
         
         if (success) {
             SSJDispatch_main_async_safe(^{
-                success();
+                success(booksTypeHasChange);
             });
         }
     }];

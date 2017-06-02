@@ -98,8 +98,11 @@ static NSString * SSJSharebooksMemberCellIdentifier = @"SSJSharebooksMemberCellI
 #pragma mark - SSJBaseNetworkServiceDelegate
 - (void)serverDidFinished:(SSJBaseNetworkService *)service {
     if ([service.returnCode isEqualToString:@"1"]) {
-        [SSJBooksTypeStore deleteShareBooksWithShareCharge:self.deleteService.shareChargeArray shareMember:self.deleteService.shareMemberArray bookId:self.item.booksId sucess:^{
+        @weakify(self);
+        [SSJBooksTypeStore deleteShareBooksWithShareCharge:self.deleteService.shareChargeArray shareMember:self.deleteService.shareMemberArray bookId:self.item.booksId sucess:^(BOOL bookstypeHasChange){
+            @strongify(self);
             [CDAutoHideMessageHUD showMessage:@"退出成功"];
+            [self.navigationController popToRootViewControllerAnimated:YES];
         } failure:NULL];
     }
 }

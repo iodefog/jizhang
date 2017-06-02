@@ -14,6 +14,8 @@
 #import "SSJShareBooksSyncTable.h"
 #import "SSJShareBooksMemberSyncTable.h"
 #import "SSJUserChargeSyncTable.h"
+#import "SSJShareBooksFriendMarkSyncTable.h"
+
 #import "SSJDatabaseQueue.h"
 
 @interface SSJInviteCodeJoinViewController ()
@@ -179,24 +181,43 @@
             @strongify(self);
             NSError *error = nil;
             
-            NSInteger maxOrder = [db intForQuery:@"select max(iorder) from bk_share_books where cuserid = ?",SSJUSERID()] + 1;
+            NSInteger maxOrder = [db intForQuery:@"select max(iorder) from bk_share_books where cbooksid in (select cbooksid  from bk_share_books_member where cmemberid = ? and istate = ?)",SSJUSERID(),SSJShareBooksMemberStateNormal] + 1;
+            
+            NSString *booksId = self.service.shareBooksTableInfo[@"cbooksid"];
             
             if (self.service.shareBooksTableInfo) {
                 [self.service.shareBooksTableInfo setObject:@(maxOrder) forKey:@"iorder"];
             }
             
 
-            if ([SSJShareBooksSyncTable mergeRecords:@[self.service.shareBooksTableInfo] forUserId:SSJUSERID() inDatabase:db error:&error]) {
+            if (![SSJShareBooksSyncTable mergeRecords:@[self.service.shareBooksTableInfo] forUserId:SSJUSERID() inDatabase:db error:&error]) {
                 return;
             }
             
-            if ([SSJShareBooksMemberSyncTable mergeRecords:self.service.shareMemberTableInfo forUserId:SSJUSERID() inDatabase:db error:&error]) {
+            if (![SSJShareBooksMemberSyncTable mergeRecords:self.service.shareMemberTableInfo forUserId:SSJUSERID() inDatabase:db error:&error]) {
                 return;
             }
             
-            if ([SSJUserChargeSyncTable mergeRecords:self.service.userChargeTableInfo forUserId:SSJUSERID() inDatabase:db error:&error]) {
+            if (![SSJUserChargeSyncTable mergeRecords:self.service.userChargeTableInfo forUserId:SSJUSERID() inDatabase:db error:&error]) {
                 return;
             }
+            
+            if (![SSJShareBooksFriendMarkSyncTable mergeRecords:self.service.shareFriendMarkTableInfo forUserId:SSJUSERID() inDatabase:db error:&error]) {
+                return;
+            }
+            
+            if (![db executeUpdate:@"delete from bk_user_charge where cbooksid = ? and ibillid = ?",booksId,@"13"]) {
+                return;
+            }
+            
+            if (![db executeUpdate:@"update bk_user set ccurrentbookstype = ? where cuserid = ?",booksId,SSJUSERID()]) {
+                return;
+            }
+        
+            SSJDispatchMainSync(^{
+                [[NSNotificationCenter defaultCenter] postNotificationName:SSJBooksTypeDidChangeNotification object:nil];
+                [self.navigationController popToRootViewControllerAnimated:YES];
+            });
         }];
     }
 }
