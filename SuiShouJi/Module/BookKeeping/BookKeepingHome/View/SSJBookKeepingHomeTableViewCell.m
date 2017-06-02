@@ -94,6 +94,11 @@ static const CGFloat kCategoryImageButtonRadius = 16;
         [self.topLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.edges.mas_equalTo(self.labelContainer);
         }];
+        
+        NSArray *installedConstraints = [MASViewConstraint installedConstraintsForView:self.bottomLabel];
+        for (MASConstraint *constraint in installedConstraints) {
+            [constraint uninstall];
+        }
     }
     
     [super updateConstraints];
