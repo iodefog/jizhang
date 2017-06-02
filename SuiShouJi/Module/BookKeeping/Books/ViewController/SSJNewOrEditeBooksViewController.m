@@ -251,7 +251,7 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
     
     __weak typeof(self) weakSelf = self;
     self.bookItem.booksName = self.bookName;
-    self.bookItem.booksParent = self.currentBookType;
+    self.bookItem.booksParent = [self bookParentWithCurrentBookType:self.currentBookType];
     self.bookItem.booksColor = self.gradientColorItem;
     if ([self.bookItem isKindOfClass:[SSJBooksTypeItem class]]) {//个人账本
         [SSJBooksTypeStore saveBooksTypeItem:(SSJBooksTypeItem *)self.bookItem sucess:^{
@@ -292,14 +292,21 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
     return _tableView;
 }
 
+- (SSJCreateOrDeleteBooksService *)createBookService {
+    if (!_createBookService) {
+        _createBookService = [[SSJCreateOrDeleteBooksService alloc] initWithDelegate:self];
+    }
+    return _createBookService;
+}
+
 - (NSString *)bookParentStrWithKey:(NSString *)key {
     NSDictionary *dic = @{
                           @"0":@"日常",
-                          @"1":@"育儿",
-                          @"2":@"生意",
-                          @"3":@"旅行",
-                          @"4":@"装修",
-                          @"5":@"结婚",
+                          //@"1":@"育儿",
+                          @"1":@"生意",
+                          @"2":@"旅行",
+                          @"3":@"装修",
+                          @"4":@"结婚",
                           };
     if ([[dic allKeys] containsObject:key]) {
         return [dic objectForKey:key];
@@ -308,13 +315,17 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
     }
 }
 
-- (SSJCreateOrDeleteBooksService *)createBookService {
-    if (!_createBookService) {
-        _createBookService = [[SSJCreateOrDeleteBooksService alloc] initWithDelegate:self];
+/**
+ 获取父账本类型
+ */
+- (NSInteger)bookParentWithCurrentBookType:(NSInteger)currentBookType {
+    if (currentBookType == 2) {
+        return 4;
+    } else if(currentBookType == 4){
+        return 2;
     }
-    return _createBookService;
+    return currentBookType;
 }
-
 
 #pragma mark - Notice
 - (void)updateAppearanceAfterThemeChanged {
