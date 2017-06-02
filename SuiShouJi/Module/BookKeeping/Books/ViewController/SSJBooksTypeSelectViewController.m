@@ -602,24 +602,20 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
 
     if ([bookId isEqualToString:self.currentBooksId] && [self.editBooksItem isKindOfClass:[SSJBooksTypeItem class]]) {//个人账本
         [[[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-            [SSJUserTableManager updateCurrentBooksId:SSJUSERID() success:^{
+            [SSJBooksTypeStore deleteBooksTypeWithbooksItems:@[self.editBooksItem] deleteType:type Success:^{
                 [subscriber sendCompleted];
-            } failure:^(NSError * _Nonnull error) {
+            } failure:^(NSError *error) {
                 [subscriber sendError:error];
             }];
             return nil;
+            
         }] then:^RACSignal *{
             return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-                if ([self.editBooksItem isKindOfClass:[SSJBooksTypeItem class]]) {//个人账本
-                    [SSJBooksTypeStore deleteBooksTypeWithbooksItems:@[self.editBooksItem] deleteType:type Success:^{
-                        [subscriber sendCompleted];
-                    } failure:^(NSError *error) {
-                        [subscriber sendError:error];
-                    }];
-                } else if ([self.editBooksItem isKindOfClass:[SSJShareBookItem class]]) {//共享账本
-                    [self.deleteBookService deleteShareBookWithBookId:bookId memberId:SSJUSERID() memberState:SSJShareBooksMemberStateQuitted];
-                }
-                
+                [SSJUserTableManager updateCurrentBooksId:SSJUSERID() success:^{
+                    [subscriber sendCompleted];
+                } failure:^(NSError * _Nonnull error) {
+                    [subscriber sendError:error];
+                }];
                 return nil;
             }];
         }] subscribeError:^(NSError *error) {
