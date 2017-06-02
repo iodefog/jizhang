@@ -22,6 +22,14 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
                                       booksId:(NSString *)booksId
                                       success:(void (^)(NSArray<SSJDatePeriod *> *))success
                                       failure:(void (^)(NSError *))failure {
+    if (type == SSJBillTypeUnknown) {
+        if (failure) {
+            SSJDispatchMainAsync(^{
+                failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"参数type无效"}]);
+            });
+        }
+        return;
+    }
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSString *tBooksId = booksId;
@@ -30,39 +38,31 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
             tBooksId = tBooksId ?: SSJUSERID();
         }
         // 查询有数据的月份
-        FMResultSet *result = nil;
-        switch (type) {
-            case SSJBillTypeIncome:
-            case SSJBillTypePay: {
-                NSString *incomeOrPayType = type == SSJBillTypeIncome ? @"0" : @"1";
-                if ([tBooksId isEqualToString:SSJAllBooksIds]) {
-                    // 查询所有账本数据时，要加上userid条件，因为可能包含共享账本，把其他人的数据排除
-                    result = [db executeQuery:@"select distinct strftime('%Y-%m', a.cbilldate) from bk_user_charge as a, bk_bill_type as b where a.cuserid = ? and a.ibillid = b.id and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and b.itype = ? and b.istate <> 2 order by a.cbilldate", SSJUSERID(), incomeOrPayType];
-                } else {
-                    // 查询某个账本数据时，不需要userid条件
-                    result = [db executeQuery:@"select distinct strftime('%Y-%m', a.cbilldate) from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and a.cbooksid = ? and b.itype = ? and b.istate <> 2 order by a.cbilldate", tBooksId, incomeOrPayType];
-                }
-                
-            }   break;
-                
-            case SSJBillTypeSurplus: {
-                if ([tBooksId isEqualToString:SSJAllBooksIds]) {
-                    result = [db executeQuery:@"select distinct strftime('%Y-%m', a.cbilldate) from bk_user_charge as a, bk_bill_type as b where a.cuserid = ? and a.ibillid = b.id and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and b.istate <> 2 order by a.cbilldate", SSJUSERID()];
-                } else {
-                    result = [db executeQuery:@"select distinct strftime('%Y-%m', a.cbilldate) from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and a.cbooksid = ? and b.istate <> 2 order by a.cbilldate", tBooksId];
-                }
-                
-            }   break;
-                
-            case SSJBillTypeUnknown:
-                if (failure) {
-                    SSJDispatch_main_async_safe(^{
-                        failure(nil);
-                    });
-                }
-                break;
+        NSMutableDictionary *params = [@{} mutableCopy];
+        NSMutableString *sql = [@"select distinct strftime('%Y-%m', uc.cbilldate) from bk_user_charge as uc, bk_bill_type as bt where uc.ibillid = bt.id and uc.cbilldate <= datetime('now', 'localtime') and uc.operatortype <> 2 and bt.istate <> 2" mutableCopy];
+        
+        if ([tBooksId isEqualToString:SSJAllBooksIds]) {
+            // 因为所有账本中可能包括共享账本，要加两个限制流水的条件
+            // 1.共享账本流水：当前用户加入的共享账本流水并且是当前用户的流水
+            // 2.非共享账本流水：只要是当前用户的流水
+            params[@"userId"] = SSJUSERID();
+            params[@"shareBooksType"] = @(SSJChargeIdTypeShareBooks);
+            params[@"memberState"] = @(SSJShareBooksMemberStateNormal);
+            [sql appendString:@" and ((uc.ichargetype = :shareBooksType and uc.cuserid = :userId and uc.cbooksid in (select cbooksid from bk_share_books_member where cmemberid = :userId and istate = :memberState) or (uc.ichargetype <> :shareBooksType and uc.cuserid = :userId)))"];
+        } else {
+            // 如果是特定的账本，不限制特定用户的流水
+            params[@"booksId"] = tBooksId;
+            [sql appendString:@" and uc.cbooksid = :booksId"];
         }
         
+        if (type != SSJBillTypeSurplus) {
+            params[@"billType"] = @(type);
+            [sql appendString:@" and and bt.itype = :billType"];
+        }
+        
+        [sql appendString:@" order by uc.cbilldate"];
+        
+        FMResultSet *result = [db executeQuery:sql withParameterDictionary:params];
         if (!result) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{
@@ -73,7 +73,6 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
         }
         
         NSMutableArray *list = [NSMutableArray array];
-        
         while ([result next]) {
             
             NSString *dateStr = [result stringForColumnIndex:0];
@@ -99,7 +98,6 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
                 [list addObject:currentPeriod];
             }
         }
-        
         [result close];
         
         if (list.count) {
@@ -217,18 +215,23 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
         }
         
         // 查询不同收支类型相应的金额、名称、图标、颜色
-        NSMutableString *sql_2 = [@"select sum(a.imoney), b.id, b.cname, b.ccoin, b.ccolor from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cbilldate >= :beginDateStr and a.cbilldate <= :endDateStr and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and b.itype = :type and b.istate <> 2" mutableCopy];
-        
         NSMutableDictionary *params_2 = [@{@"beginDateStr":beginDateStr,
                                            @"endDateStr":endDateStr,
                                            @"type":@(type)} mutableCopy];
         
+        NSMutableString *sql_2 = [@"select sum(a.imoney), b.id, b.cname, b.ccoin, b.ccolor from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cbilldate >= :beginDateStr and a.cbilldate <= :endDateStr and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and b.itype = :type and b.istate <> 2" mutableCopy];
+        
         if ([tBooksId isEqualToString:SSJAllBooksIds]) {
-            [sql_2 appendString:@" and a.cuserid = :userId"];
-            [params_2 setObject:SSJUSERID() forKey:@"userId"];
+            // 因为所有账本中可能包括共享账本，要加两个限制流水的条件
+            // 1.共享账本流水：当前用户加入的共享账本流水并且是当前用户的流水
+            // 2.非共享账本流水：只要是当前用户的流水
+            params_2[@"userId"] = SSJUSERID();
+            params_2[@"shareBooksType"] = @(SSJChargeIdTypeShareBooks);
+            params_2[@"memberState"] = @(SSJShareBooksMemberStateNormal);
+            [sql_2 appendString:@" and ((a.ichargetype = :shareBooksType and a.cuserid = :userId and a.cbooksid in (select cbooksid from bk_share_books_member where cmemberid = :userId and istate = :memberState) or (a.ichargetype <> :shareBooksType and a.cuserid = :userId)))"];
         } else {
-            [sql_2 appendString:@" and a.cbooksid = :booksId"];
             [params_2 setObject:tBooksId forKey:@"booksId"];
+            [sql_2 appendString:@" and a.cbooksid = :booksId"];
         }
         
         // 只有共享账本是根据类别名称分组，所有账本、个人账本都是根据类别id分组
@@ -273,7 +276,6 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
                                         endDate:(NSDate *)endDate
                                         success:(void (^)(NSArray <SSJReportFormsItem *> *result))success
                                         failure:(void (^)(NSError *error))failure {
-    
     if (type == SSJBillTypeSurplus || type == SSJBillTypeUnknown) {
         if (failure) {
             SSJDispatchMainAsync(^{
@@ -323,21 +325,18 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
         }
         
         NSMutableArray *result = [@[] mutableCopy];
-        if ([booksId isEqualToString:SSJAllBooksIds]) {
+        BOOL isShareBook = [db boolForQuery:@"select count(*) from bk_share_books where cbooksid = ?", tBooksId];
+        if (isShareBook) {
             // ----------------------------------------------------------------
-            // 查询所有账本数据分两步：
-            // 1.查询共享账本中当前登录用户的数据
-            // 2.查询当前登录用户的个人账本数据
+            // 查询单个账本数据（共享账本）
             // ----------------------------------------------------------------
-            
-            // --------------------------- 第1步 ---------------------------
             NSDictionary *params = @{@"userId":userID,
                                      @"type":@(type),
+                                     @"booksId":tBooksId,
                                      @"startDate":beginDateStr,
-                                     @"endDate":endDateStr,
-                                     @"chargeType":@(SSJChargeIdTypeShareBooks)};
+                                     @"endDate":endDateStr};
             
-            FMResultSet *rs = [db executeQuery:@"select sum(uc.imoney) as amount, sm.cmemberid, sm.ccolor, sf.cmark from bk_user_charge as uc, bk_share_books_member as sm, bk_share_books_friends_mark as sf, bk_bill_type as bt where uc.cuserid = sm.cmemberid and sm.cbooksid = uc.cbooksid and sf.cuserid = :userId and sf.cbooksid = uc.cbooksid and sf.cfriendid = uc.cuserid and bt.id = uc.ibillid and bt.itype = :type and bt.istate <> 2 and uc.operatortype <> 2 and uc.cbilldate >= :startDate and uc.cbilldate <= :endDate and uc.cbilldate <= datetime('now', 'localtime') and uc.ichargetype = :chargeType and uc.cuserid = :userId group by sm.cmemberid" withParameterDictionary:params];
+            FMResultSet *rs = [db executeQuery:@"select sum(uc.imoney) as amount, sm.cmemberid, sm.ccolor, sf.cmark from bk_user_charge as uc, bk_share_books_member as sm, bk_share_books_friends_mark as sf, bk_bill_type as bt where uc.cuserid = sm.cmemberid and sm.cbooksid = uc.cbooksid and sf.cuserid = :userId and sf.cbooksid = uc.cbooksid and sf.cfriendid = uc.cuserid and bt.id = uc.ibillid and bt.itype = :type and bt.istate <> 2 and uc.cbooksid = :booksId and uc.operatortype <> 2 and uc.cbilldate >= :startDate and uc.cbilldate <= :endDate and uc.cbilldate <= datetime('now', 'localtime') group by sm.cmemberid" withParameterDictionary:params];
             if (!rs) {
                 SSJDispatch_main_async_safe(^{
                     failure([db lastError]);
@@ -356,14 +355,17 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
                 [result addObject:item];
             }
             [rs close];
+        } else {
+            // ----------------------------------------------------------------
+            // 查询单个账本数据（个人账本）
+            // ----------------------------------------------------------------
+            NSDictionary *params = @{@"userId":userID,
+                                     @"booksId":tBooksId,
+                                     @"type":@(type),
+                                     @"startDate":beginDateStr,
+                                     @"endDate":endDateStr};
             
-            // --------------------------- 第2步 ---------------------------
-            params = @{@"userId":userID,
-                       @"type":@(type),
-                       @"startDate":beginDateStr,
-                       @"endDate":endDateStr};
-            
-            rs = [db executeQuery:@"select sum(mc.imoney), mc.cmemberid from bk_member_charge as mc, bk_user_charge as uc, bk_bill_type as bt where mc.ichargeid = uc.ichargeid and uc.ibillid = bt.id and uc.cuserid = :userId and uc.operatortype <> 2 and bt.itype = :type and bt.istate <> 2 and uc.cbilldate >= :startDate and uc.cbilldate <= :endDate and uc.cbilldate <= datetime('now', 'localtime') group by mc.cmemberid" withParameterDictionary:params];
+            FMResultSet *rs = [db executeQuery:@"select sum(mc.imoney), mc.cmemberid from bk_member_charge as mc, bk_user_charge as uc, bk_bill_type as bt where mc.ichargeid = uc.ichargeid and uc.ibillid = bt.id and uc.cuserid = :userId and uc.operatortype <> 2 and uc.cbooksid = :booksId and bt.itype = :type and bt.istate <> 2 and uc.cbilldate >= :startDate and uc.cbilldate <= :endDate and uc.cbilldate <= datetime('now', 'localtime') group by mc.cmemberid" withParameterDictionary:params];
             if (!rs) {
                 SSJDispatch_main_async_safe(^{
                     failure([db lastError]);
@@ -388,75 +390,6 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
                     item.colorValue = [rs stringForColumnIndex:1];
                 }
                 [rs close];
-            }
-            
-        } else {
-            BOOL isShareBook = [db boolForQuery:@"select count(*) from bk_share_books where cbooksid = ?", tBooksId];
-            if (isShareBook) {
-                // ----------------------------------------------------------------
-                // 查询单个账本数据（共享账本）
-                // ----------------------------------------------------------------
-                NSDictionary *params = @{@"userId":userID,
-                                         @"type":@(type),
-                                         @"booksId":tBooksId,
-                                         @"startDate":beginDateStr,
-                                         @"endDate":endDateStr};
-                
-                FMResultSet *rs = [db executeQuery:@"select sum(uc.imoney) as amount, sm.cmemberid, sm.ccolor, sf.cmark from bk_user_charge as uc, bk_share_books_member as sm, bk_share_books_friends_mark as sf, bk_bill_type as bt where uc.cuserid = sm.cmemberid and sm.cbooksid = uc.cbooksid and sf.cuserid = :userId and sf.cbooksid = uc.cbooksid and sf.cfriendid = uc.cuserid and bt.id = uc.ibillid and bt.itype = :type and bt.istate <> 2 and uc.cbooksid = :booksId and uc.operatortype <> 2 and uc.cbilldate >= :startDate and uc.cbilldate <= :endDate and uc.cbilldate <= datetime('now', 'localtime') group by sm.cmemberid" withParameterDictionary:params];
-                if (!rs) {
-                    SSJDispatch_main_async_safe(^{
-                        failure([db lastError]);
-                    });
-                    return;
-                }
-                
-                while ([rs next]) {
-                    SSJReportFormsItem *item = [[SSJReportFormsItem alloc] init];
-                    item.ID = [rs stringForColumn:@"cmemberid"];
-                    item.money = [rs doubleForColumn:@"amount"];
-                    item.name = [rs stringForColumn:@"cmark"];
-                    item.colorValue = [rs stringForColumn:@"ccolor"];
-                    item.scale = item.money / amount;
-                    item.isMember = YES;
-                    [result addObject:item];
-                }
-                [rs close];
-            } else {
-                // ----------------------------------------------------------------
-                // 查询单个账本数据（个人账本）
-                // ----------------------------------------------------------------
-                NSDictionary *params = @{@"userId":userID,
-                                         @"booksId":tBooksId,
-                                         @"type":@(type),
-                                         @"startDate":beginDateStr,
-                                         @"endDate":endDateStr};
-                
-                FMResultSet *rs = [db executeQuery:@"select sum(mc.imoney), mc.cmemberid from bk_member_charge as mc, bk_user_charge as uc, bk_bill_type as bt where mc.ichargeid = uc.ichargeid and uc.ibillid = bt.id and uc.cuserid = :userId and uc.operatortype <> 2 and uc.cbooksid = :booksId and bt.itype = :type and bt.istate <> 2 and uc.cbilldate >= :startDate and uc.cbilldate <= :endDate and uc.cbilldate <= datetime('now', 'localtime') group by mc.cmemberid" withParameterDictionary:params];
-                if (!rs) {
-                    SSJDispatch_main_async_safe(^{
-                        failure([db lastError]);
-                    });
-                    return;
-                }
-                
-                while ([rs next]) {
-                    SSJReportFormsItem *item = [[SSJReportFormsItem alloc] init];
-                    item.ID = [rs stringForColumn:@"cmemberid"];
-                    item.money = [rs doubleForColumn:@"sum(mc.imoney)"];
-                    item.scale = item.money / amount;
-                    item.isMember = YES;
-                    [result addObject:item];
-                }
-                [rs close];
-                
-                for (SSJReportFormsItem *item in result) {
-                    rs = [db executeQuery:@"select cname, ccolor from bk_member where cmemberid = ? and cuserid = ?", item.ID, userID];
-                    while ([rs next]) {
-                        item.name = [rs stringForColumnIndex:0];
-                        item.colorValue = [rs stringForColumnIndex:1];
-                    }
-                    [rs close];
-                }
             }
         }
         
@@ -483,17 +416,22 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
         NSString *beginDateStr = [startDate formattedDateWithFormat:@"yyyy-MM-dd"];
         NSString *endDateStr = [endDate formattedDateWithFormat:@"yyyy-MM-dd"];
         
-        NSMutableString *sql = [@"select sum(a.imoney), b.itype from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cbilldate >= :beginDateStr and a.cbilldate <= :endDateStr and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and b.istate <> 2" mutableCopy];
-        
         NSMutableDictionary *params = [@{@"beginDateStr":beginDateStr,
                                          @"endDateStr":endDateStr} mutableCopy];
         
+        NSMutableString *sql = [@"select sum(a.imoney), b.itype from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cbilldate >= :beginDateStr and a.cbilldate <= :endDateStr and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and b.istate <> 2" mutableCopy];
+        
         if ([tBooksId isEqualToString:SSJAllBooksIds]) {
-            [sql appendString:@" and a.cuserid = :userId"];
-            [params setObject:SSJUSERID() forKey:@"userId"];
+            // 因为所有账本中可能包括共享账本，要加两个限制流水的条件
+            // 1.共享账本流水：当前用户加入的共享账本流水并且是当前用户的流水
+            // 2.非共享账本流水：只要是当前用户的流水
+            params[@"userId"] = SSJUSERID();
+            params[@"shareBooksType"] = @(SSJChargeIdTypeShareBooks);
+            params[@"memberState"] = @(SSJShareBooksMemberStateNormal);
+            [sql appendString:@" and ((a.ichargetype = :shareBooksType and a.cuserid = :userId and a.cbooksid in (select cbooksid from bk_share_books_member where cmemberid = :userId and istate = :memberState) or (a.ichargetype <> :shareBooksType and a.cuserid = :userId)))"];
         } else {
+            params[@"booksId"] = tBooksId;
             [sql appendString:@" and a.cbooksid = :booksId"];
-            [params setObject:tBooksId forKey:@"booksId"];
         }
         [sql appendString:@" group by b.itype order by b.itype desc"];
         
@@ -543,11 +481,16 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
                                        @"type":@(type)} mutableCopy];
     
     if ([booksId isEqualToString:SSJAllBooksIds]) {
-        [sql_1 appendString:@" and a.cuserid = :userId"];
-        [params_1 setObject:SSJUSERID() forKey:@"userId"];
+        // 因为所有账本中可能包括共享账本，要加两个限制流水的条件
+        // 1.共享账本流水：当前用户加入的共享账本流水并且是当前用户的流水
+        // 2.非共享账本流水：只要是当前用户的流水
+        params_1[@"userId"] = SSJUSERID();
+        params_1[@"shareBooksType"] = @(SSJChargeIdTypeShareBooks);
+        params_1[@"memberState"] = @(SSJShareBooksMemberStateNormal);
+        [sql_1 appendString:@" and ((a.ichargetype = :shareBooksType and a.cuserid = :userId and a.cbooksid in (select cbooksid from bk_share_books_member where cmemberid = :userId and istate = :memberState) or (a.ichargetype <> :shareBooksType and a.cuserid = :userId)))"];
     } else {
+        params_1[@"booksId"] = booksId;
         [sql_1 appendString:@" and a.cbooksid = :booksId"];
-        [params_1 setObject:booksId forKey:@"booksId"];
     }
     
     FMResultSet *rs = [db executeQuery:sql_1 withParameterDictionary:params_1];
@@ -589,34 +532,39 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
         }
         
         NSMutableDictionary *params = [@{} mutableCopy];
-        NSMutableString *sqlStr = [NSMutableString stringWithFormat:@"select max(a.cbilldate) as maxBillDate, min(a.cbilldate) as minBillDate from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.operatortype <> 2 and b.istate <> 2 and a.cbilldate <= datetime('now', 'localtime')"];
+        NSMutableString *sql = [NSMutableString stringWithFormat:@"select max(uc.cbilldate) as maxBillDate, min(uc.cbilldate) as minBillDate from bk_user_charge as uc, bk_bill_type as bt where uc.ibillid = bt.id and uc.operatortype <> 2 and bt.istate <> 2 and uc.cbilldate <= datetime('now', 'localtime')"];
         
         if ([tBooksId isEqualToString:SSJAllBooksIds]) {
-            [params setObject:SSJUSERID() forKey:@"userId"];
-            [sqlStr appendString:@" and a.cuserid = :userId"];
+            // 因为所有账本中可能包括共享账本，要加两个限制流水的条件
+            // 1.共享账本流水：当前用户加入的共享账本流水并且是当前用户的流水
+            // 2.非共享账本流水：只要是当前用户的流水
+            params[@"userId"] = SSJUSERID();
+            params[@"shareBooksType"] = @(SSJChargeIdTypeShareBooks);
+            params[@"memberState"] = @(SSJShareBooksMemberStateNormal);
+            [sql appendString:@" and ((uc.ichargetype = :shareBooksType and uc.cuserid = :userId and uc.cbooksid in (select cbooksid from bk_share_books_member where cmemberid = :userId and istate = :memberState) or (uc.ichargetype <> :shareBooksType and uc.cuserid = :userId)))"];
         } else {
             [params setObject:tBooksId forKey:@"booksId"];
-            [sqlStr appendString:@" and a.cbooksid = :booksId"];
+            [sql appendString:@" and uc.cbooksid = :booksId"];
         }
         
         if (billTypeId) {
             [params setObject:billTypeId forKey:@"billId"];
-            [sqlStr appendString:@" and a.ibillid = :billId"];
+            [sql appendString:@" and uc.ibillid = :billId"];
         }
         
         if (startDate) {
             NSString *startDateStr = [startDate formattedDateWithFormat:@"yyyy-MM-dd"];
             [params setObject:startDateStr forKey:@"startDate"];
-            [sqlStr appendString:@" and a.cbilldate >= :startDate"];
+            [sql appendString:@" and uc.cbilldate >= :startDate"];
         }
         
         if (endDate) {
             NSString *endDateStr = [endDate formattedDateWithFormat:@"yyyy-MM-dd"];
             [params setObject:endDateStr forKey:@"endDate"];
-            [sqlStr appendString:@" and a.cbilldate <= :endDate"];
+            [sql appendString:@" and uc.cbilldate <= :endDate"];
         }
         
-        FMResultSet *resultSet = [db executeQuery:sqlStr withParameterDictionary:params];
+        FMResultSet *resultSet = [db executeQuery:sql withParameterDictionary:params];
         if (!resultSet) {
             if (failure) {
                 SSJDispatchMainAsync(^{
@@ -706,36 +654,41 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
         }
         
         NSMutableDictionary *params = [@{} mutableCopy];
-        NSMutableString *sqlStr = [@"select a.imoney, a.cbilldate, b.itype from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.operatortype <> 2 and b.istate <> 2 and a.cbilldate <= datetime('now', 'localtime')" mutableCopy];
+        NSMutableString *sql = [@"select a.imoney, a.cbilldate, b.itype from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.operatortype <> 2 and b.istate <> 2 and a.cbilldate <= datetime('now', 'localtime')" mutableCopy];
         
         if ([tBooksId isEqualToString:SSJAllBooksIds]) {
+            // 因为所有账本中可能包括共享账本，要加两个限制流水的条件
+            // 1.共享账本流水：当前用户加入的共享账本流水并且是当前用户的流水
+            // 2.非共享账本流水：只要是当前用户的流水
             params[@"userId"] = SSJUSERID();
-            [sqlStr appendString:@" and a.cuserid = :userId"];
+            params[@"shareBooksType"] = @(SSJChargeIdTypeShareBooks);
+            params[@"memberState"] = @(SSJShareBooksMemberStateNormal);
+            [sql appendString:@" and ((a.ichargetype = :shareBooksType and a.cuserid = :userId and a.cbooksid in (select cbooksid from bk_share_books_member where cmemberid = :userId and istate = :memberState) or (a.ichargetype <> :shareBooksType and a.cuserid = :userId)))"];
         } else {
             params[@"booksId"] = tBooksId;
-            [sqlStr appendString:@" and a.cbooksid = :booksId"];
+            [sql appendString:@" and a.cbooksid = :booksId"];
         }
         
         if (billTypeId) {
             params[@"billId"] = billTypeId;
-            [sqlStr appendString:@" and a.ibillid = :billId"];
+            [sql appendString:@" and a.ibillid = :billId"];
         }
         
         if (startDate) {
             NSString *startDateStr = [startDate formattedDateWithFormat:@"yyyy-MM-dd"];
             params[@"startDate"] = startDateStr;
-            [sqlStr appendString:@" and a.cbilldate >= :startDate"];
+            [sql appendString:@" and a.cbilldate >= :startDate"];
         }
         
         if (endDate) {
             NSString *endDateStr = [endDate formattedDateWithFormat:@"yyyy-MM-dd"];
             params[@"endDate"] = endDateStr;
-            [sqlStr appendString:@" and a.cbilldate <= :endDate"];
+            [sql appendString:@" and a.cbilldate <= :endDate"];
         }
         
-        [sqlStr appendString:@" order by a.cbilldate"];
+        [sql appendString:@" order by a.cbilldate"];
         
-        FMResultSet *resultSet = [db executeQuery:sqlStr withParameterDictionary:params];
+        FMResultSet *resultSet = [db executeQuery:sql withParameterDictionary:params];
         if (!resultSet) {
             SSJPRINT(@">>>SSJ\n class:%@\n method:%@\n message:%@\n error:%@",NSStringFromClass([self class]), NSStringFromSelector(_cmd), [db lastErrorMessage], [db lastError]);
             if (failure) {
