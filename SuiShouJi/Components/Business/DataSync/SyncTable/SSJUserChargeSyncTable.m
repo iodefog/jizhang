@@ -101,7 +101,7 @@
         
         NSMutableArray *quitBooksArr = [NSMutableArray arrayWithCapacity:0];
         
-        FMResultSet *quitBooksResult = [db executeQuery:@"select cbooksid from bk_share_books_member where cmemberid = ? and istate != 0", userId];
+        FMResultSet *quitBooksResult = [db executeQuery:@"select cbooksid from bk_share_books_member where cmemberid = ? and istate != ?", userId, SSJShareBooksMemberStateNormal];
         
         while ([quitBooksResult next]) {
             NSString *quitBookId = [quitBooksResult stringForColumn:@"cbooksid"];
@@ -165,8 +165,8 @@
             NSString *keyValuesStr = [keyValues componentsJoinedByString:@", "];
 
             
-            if (chargeType == SSJChargeIdTypeShareBooks && [recordInfo[@"cuserid"] isEqualToString:userId]) {
-                if ([quitBooksArr containsObject:recordInfo[@"cbooksid"]]) {
+            if (chargeType == SSJChargeIdTypeShareBooks) {
+                if ([quitBooksArr containsObject:recordInfo[@"cbooksid"]] || ![recordInfo[@"cuserid"] isEqualToString:userId]) {
                     statement = [NSString stringWithFormat:@"update bk_user_charge set %@ where ichargeid = %@",keyValuesStr, recordInfo[@"ichargeid"]];
                 } else {
                     statement = [NSString stringWithFormat:@"update bk_user_charge set %@ where %@",keyValuesStr,  condition];
