@@ -99,7 +99,7 @@ static NSString * SSJSharebooksMemberCellIdentifier = @"SSJSharebooksMemberCellI
 - (void)serverDidFinished:(SSJBaseNetworkService *)service {
     if ([service.returnCode isEqualToString:@"1"]) {
         @weakify(self);
-        [SSJBooksTypeStore deleteShareBooksWithShareCharge:self.deleteService.shareChargeArray shareMember:self.deleteService.shareMemberArray bookId:self.item.booksId sucess:^{
+        [SSJBooksTypeStore deleteShareBooksWithShareCharge:self.deleteService.shareChargeArray shareMember:self.deleteService.shareMemberArray bookId:self.item.booksId sucess:^(BOOL bookstypeHasChange){
             @strongify(self);
             [CDAutoHideMessageHUD showMessage:@"退出成功"];
             [self.navigationController popToRootViewControllerAnimated:YES];

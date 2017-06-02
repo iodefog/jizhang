@@ -72,7 +72,7 @@ typedef enum : NSUInteger {
  */
 + (void)deleteBooksTypeWithbooksItems:(NSArray *)items
                            deleteType:(BOOL)type
-                              Success:(void(^)())success
+                              Success:(void(^)(BOOL bookstypeHasChange))success
                               failure:(void (^)(NSError *error))failure;
 
 + (void)getTotalIncomeAndExpenceWithSuccess:(void(^)(double income,double expenture))success
@@ -112,7 +112,7 @@ typedef enum : NSUInteger {
 + (void)deleteShareBooksWithShareCharge:(NSArray<NSDictionary *> *)shareCharge
                             shareMember:(NSArray<NSDictionary *> *)shareMember
                                  bookId:(NSString *)bookId
-                                 sucess:(void(^)())success
+                                 sucess:(void(^)(BOOL bookstypeHasChange))success
                                 failure:(void (^)(NSError *error))failure;
 
 /**
