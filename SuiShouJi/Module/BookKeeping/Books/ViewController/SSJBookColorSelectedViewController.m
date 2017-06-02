@@ -91,7 +91,7 @@ static NSString *SSJBookColorSelectedCollectionViewCellId = @"SSJBookColorSelect
     currentCell.colorSelected = YES;
     self.lastSelectedCell = currentCell;
     [UIView animateWithDuration:0.25 animations:^{
-        self.gradientLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:item.startColor].CGColor,(__bridge id)[UIColor ssj_colorWithHex:item.endColor].CGColor];
+        self.gradientLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:item.endColor].CGColor,(__bridge id)[UIColor ssj_colorWithHex:item.startColor].CGColor];
     }];
 }
 
@@ -153,7 +153,7 @@ static NSString *SSJBookColorSelectedCollectionViewCellId = @"SSJBookColorSelect
         CAShapeLayer *sharpLayer = [CAShapeLayer layer];
         sharpLayer.path = [UIBezierPath bezierPathWithRoundedRect:_gradientLayer.bounds cornerRadius:10].CGPath;
         _gradientLayer.mask = sharpLayer;
-        _gradientLayer.colors = _gradientLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:self.bookColorItem.startColor].CGColor,(__bridge id)[UIColor ssj_colorWithHex:self.bookColorItem.endColor].CGColor];
+        _gradientLayer.colors = _gradientLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:self.bookColorItem.endColor].CGColor,(__bridge id)[UIColor ssj_colorWithHex:self.bookColorItem.startColor].CGColor];
     }
     return _gradientLayer;
 }
