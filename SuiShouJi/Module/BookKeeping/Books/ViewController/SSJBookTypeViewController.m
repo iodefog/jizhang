@@ -69,8 +69,8 @@
 
 #pragma mark - dataArray
 - (void)setUpDataArray {
-    self.titleArray = @[@"日常",@"育儿",@"生意",@"旅行",@"装修",@"结婚"];
-    self.imageArray = @[@"bk_moren",@"bk_yinger",@"bk_shengyi",@"bk_lvxing",@"bk_zhuangxiu",@"bk_jiehun"];
+    self.titleArray = @[@"日常",@"生意",@"旅行",@"装修",@"结婚"];//,@"育儿"
+    self.imageArray = @[@"bk_moren",@"bk_shengyi",@"bk_lvxing",@"bk_zhuangxiu",@"bk_jiehun"];//,@"bk_yinger"
 }
 
 
