@@ -118,17 +118,19 @@ static NSString *const kTextColorAnimationKey = @"kTextColorAnimationKey";
         borderColorAnimation.toValue = (__bridge id _Nullable)(borderColor);
         [_borderView.layer addAnimation:borderColorAnimation forKey:kBorderColorAnimationKey];
         
-        CABasicAnimation *textColorAnimation = [CABasicAnimation animationWithKeyPath:@"foregroundColor"];
-        textColorAnimation.duration = kDuration;
-        textColorAnimation.removedOnCompletion = NO;
-        textColorAnimation.fillMode = kCAFillModeForwards;
-        textColorAnimation.fromValue = (__bridge id _Nullable)(_label.layer.presentationLayer.borderColor);
-        textColorAnimation.toValue = (__bridge id _Nullable)(textColor);
-        [_label.layer addAnimation:textColorAnimation forKey:kTextColorAnimationKey];
+        // CTMB 动画莫名其妙的不起作用
+//        CABasicAnimation *textColorAnimation = [CABasicAnimation animationWithKeyPath:@"foregroundColor"];
+//        textColorAnimation.duration = kDuration;
+//        textColorAnimation.removedOnCompletion = NO;
+//        textColorAnimation.fillMode = kCAFillModeForwards;
+//        textColorAnimation.fromValue = (__bridge id _Nullable)(_label.layer.presentationLayer.borderColor);
+//        textColorAnimation.toValue = (__bridge id _Nullable)(textColor);
+//        [_label.layer addAnimation:textColorAnimation forKey:kTextColorAnimationKey];
     } else {
         _borderView.layer.borderColor = borderColor;
-        _label.textLayer.foregroundColor = textColor;
     }
+    
+    _label.textLayer.foregroundColor = textColor;
 }
 
 #pragma mark - Lazyloading

@@ -14,8 +14,6 @@
 
 @property (nonatomic, strong) NSArray<SSJRecordMakingBillTypeSelectionCellItem *> *items;
 
-@property (nonatomic, strong, readonly) SSJRecordMakingBillTypeSelectionCellItem *selectedItem;
-
 @property (nonatomic, copy) BOOL (^shouldDeleteAction)(SSJRecordMakingBillTypeSelectionView *, SSJRecordMakingBillTypeSelectionCellItem *);
 
 @property (nonatomic, copy) void (^deleteAction)(SSJRecordMakingBillTypeSelectionView *, SSJRecordMakingBillTypeSelectionCellItem *);
@@ -37,5 +35,7 @@
 - (BOOL)deleteItem:(SSJRecordMakingBillTypeSelectionCellItem *)item;
 
 - (void)scrollToSelectedItem;
+
+- (SSJRecordMakingBillTypeSelectionCellItem *)selectedItem;
 
 @end
