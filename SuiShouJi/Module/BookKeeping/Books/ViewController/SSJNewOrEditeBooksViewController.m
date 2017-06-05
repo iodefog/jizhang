@@ -94,12 +94,22 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
     UILabel *tipLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 0, self.view.width - 20, 44)];
     tipLabel.font = [UIFont ssj_pingFangMediumFontOfSize:SSJ_FONT_SIZE_4];
     tipLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    
     tipLabel.text = self.tipStr;
+    tipLabel.backgroundColor = [UIColor clearColor];
     self.tableView.tableFooterView = tipLabel;
+    
+    //分割线补齐
+    if ([self.tableView respondsToSelector:@selector(setSeparatorInset:)]) {
+        [self.tableView setSeparatorInset:UIEdgeInsetsZero];
+    }
+    if ([self.tableView respondsToSelector:@selector(setLayoutMargins:)]) {
+        [self.tableView setLayoutMargins:UIEdgeInsetsZero];
+    }
 }
 
 - (void)initalizedDataArray {
-    self.titleArray = @[@"记账场景",@"账本名称",@"账本颜色"];
+    self.titleArray = @[@"账本名称",@"记账场景",@"账本颜色"];
     if ([self.bookItem isKindOfClass:[SSJBooksTypeItem class]]) {//个人账本
         if (((SSJBooksTypeItem *)self.bookItem).booksId.length) {
             //编辑个人账本
@@ -145,10 +155,15 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
     [self.mm_drawerController setCloseDrawerGestureModeMask:MMCloseDrawerGestureModeNone];
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [self.bookNameTextField becomeFirstResponder];
+}
+
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     __weak __typeof(self)weakSelf = self;
-    if (indexPath.row == 0) {
+    if (indexPath.row == 1) {
         //记账场景
         SSJBookTypeViewController *bookTypeVC = [[SSJBookTypeViewController alloc] init];
         if (!self.currentBookType) {
@@ -180,22 +195,52 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
     }
 }
 
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if ([cell respondsToSelector:@selector(setSeparatorInset:)])
+    {
+        [cell setSeparatorInset:UIEdgeInsetsZero];
+    }
+    if ([cell respondsToSelector:@selector(setPreservesSuperviewLayoutMargins:)])
+    {
+        [cell setPreservesSuperviewLayoutMargins:NO];
+    }
+    if ([cell respondsToSelector:@selector(setLayoutMargins:)])
+    {
+        [cell setLayoutMargins:UIEdgeInsetsZero];
+    }
+}
+
+//- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
+//    UILabel *tipLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 0, self.view.width - 20, 44)];
+//    tipLabel.font = [UIFont ssj_pingFangMediumFontOfSize:SSJ_FONT_SIZE_4];
+//    tipLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+//    
+//    tipLabel.text = self.tipStr;
+//    tipLabel.backgroundColor = [UIColor clearColor];
+//    return tipLabel;
+//}
+//
+//- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+//    return 44;
+//}
+
 #pragma mark - UITableViewDataSource
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     SSJCreditCardEditeCell *cell = [tableView dequeueReusableCellWithIdentifier:SSJNewOrEditeBooksCellIdentifier];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.cellTitle = [self.titleArray ssj_safeObjectAtIndex:indexPath.row];
     if (indexPath.row == 0) {
-        cell.type = SSJCreditCardCellTypeDetail;
-        cell.cellDetail = self.bookParentStr;
-        cell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    } else if (indexPath.row == 1) {
         cell.type = SSJCreditCardCellTypeTextField;
         cell.textInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入5字以内名称" attributes:@{NSForegroundColorAttributeName : [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         cell.customAccessoryType = UITableViewCellAccessoryNone;
         cell.textInput.text = self.bookName;
         cell.textInput.clearButtonMode = UITextFieldViewModeAlways;
         self.bookNameTextField = cell.textInput;
+    } else if (indexPath.row == 1) {
+        cell.type = SSJCreditCardCellTypeDetail;
+        cell.cellDetail = self.bookParentStr;
+        cell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
     } else if (indexPath.row == 2) {
         cell.type = SSJCreditCardCellColorSelect;
         cell.colorItem = self.gradientColorItem;
@@ -289,6 +334,7 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.backgroundColor = [UIColor clearColor];
+        _tableView.rowHeight = 55;
     }
     return _tableView;
 }
