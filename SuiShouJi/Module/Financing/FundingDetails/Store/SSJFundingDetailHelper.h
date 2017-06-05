@@ -39,6 +39,11 @@ extern NSString *const SSJFundingDetailSumKey;
                             success:(void (^)(NSMutableArray <SSJFundingDetailListItem *> *data,SSJCreditCardItem *cardItem))success
                             failure:(void (^)(NSError *error))failure;
 
++ (void)queryDataWithBooksId:(NSString * )booksId
+                  FundTypeID:(NSString *)ID
+                     success:(void (^)(NSMutableArray <SSJFundingDetailListItem *> *data))success
+                     failure:(void (^)(NSError *error))failure;
+
 + (BOOL)queryCloseOutStateWithLoanId:(NSString *)loanId;
 
 @end

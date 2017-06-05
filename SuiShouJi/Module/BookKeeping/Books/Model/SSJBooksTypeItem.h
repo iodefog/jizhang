@@ -21,6 +21,13 @@
 /**<#注释#>*/
 @property (nonatomic, copy) NSString *booksIcoin;
 
+- (NSString *)getSingleColor;
+
+
++ (NSString *)parentIconForParenType:(NSInteger)type;
+
+
 + (NSDictionary *)propertyMapping;
+
 
 @end

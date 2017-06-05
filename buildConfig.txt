@@ -1,5 +1,5 @@
 {
-    "buildConfig": "Release-production",
+    "buildConfig": "Release-test",
     "buildScheme": "SuiShouJi",
     "infoplist": "SuiShouJi-Info.plist",
     "uploadToPgy": true,

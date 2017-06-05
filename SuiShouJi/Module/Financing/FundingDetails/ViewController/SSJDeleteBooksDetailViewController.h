@@ -10,4 +10,10 @@
 
 @interface SSJDeleteBooksDetailViewController : SSJNewBaseTableViewController
 
+@property(nonatomic, strong) NSString *booksId;
+
+@property(nonatomic, strong) NSString *fundId;
+
+@property(nonatomic, strong) NSString *booksName;
+
 @end

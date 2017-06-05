@@ -13,11 +13,6 @@
 #import "SSJFinancingGradientColorItem.h"
 
 @interface SSJBookTypeViewController ()<UITableViewDelegate,UITableViewDataSource>
-/**imageArray*/
-@property (nonatomic, strong) NSArray *imageArray;
-
-/**titleArray*/
-@property (nonatomic, strong) NSArray *titleArray;
 
 @property (nonatomic, strong) TPKeyboardAvoidingTableView *tableView;
 
@@ -33,7 +28,6 @@
     [self setUpNav];
     
     [self setUpTableView];
-    [self setUpDataArray];
     [self updateAppearanceAfterThemeChanged];
 }
 
@@ -72,12 +66,6 @@
     if ([_tableView respondsToSelector:@selector(setLayoutMargins:)]) {
         [_tableView setLayoutMargins:UIEdgeInsetsZero];
     }
-}
-
-#pragma mark - dataArray
-- (void)setUpDataArray {
-    self.titleArray = @[@"日常",@"生意",@"旅行",@"装修",@"结婚"];//,@"育儿"
-    self.imageArray = @[@"bk_moren",@"bk_shengyi",@"bk_lvxing",@"bk_zhuangxiu",@"bk_jiehun"];//,@"bk_yinger"
 }
 
 
@@ -123,18 +111,18 @@
     } else {
         cell.arrowImageView.hidden = YES;
     }
-    [cell setImage:[self.imageArray ssj_safeObjectAtIndex:indexPath.row] title:[self.titleArray ssj_safeObjectAtIndex:indexPath.row]];
+    [cell setImage:[[self images] ssj_safeObjectAtIndex:indexPath.row] title:[[self titles] ssj_safeObjectAtIndex:indexPath.row]];
     return cell;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.titleArray.count;
+    return [self titles].count;
 }
 
 #pragma mark - Event
 - (void)rightButtonClicked:(UIButton *)btn {
     if (self.saveBooksBlock) {
-        self.saveBooksBlock(self.lastSelectedIndex,[self.titleArray ssj_safeObjectAtIndex:self.lastSelectedIndex]);
+        self.saveBooksBlock(self.lastSelectedIndex,[[self titles] ssj_safeObjectAtIndex:self.lastSelectedIndex]);
     }
     [self.navigationController popViewControllerAnimated:YES];
 }
@@ -154,4 +142,14 @@
 - (void)updateAppearanceAfterThemeChanged {
     _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
 }
+
+#pragma mark - Private
+- (NSArray *)titles {
+    return @[@"日常",@"生意",@"旅行",@"装修",@"结婚"];//,@"育儿"
+}
+
+- (NSArray *)images {
+    return @[@"bk_moren",@"bk_shengyi",@"bk_lvxing",@"bk_zhuangxiu",@"bk_jiehun"];//,@"bk_yinger"
+}
+
 @end

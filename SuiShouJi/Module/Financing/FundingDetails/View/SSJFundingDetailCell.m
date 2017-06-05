@@ -68,7 +68,7 @@
         self.imageView.contentMode = UIViewContentModeScaleAspectFit;
     }
     
-    if (_item.chargeMemo.length == 0 && _item.chargeImage.length == 0){
+    if ((_item.chargeMemo.length == 0 && _item.chargeImage.length == 0) || ([_item.billId isEqualToString:@"13"] || [_item.billId isEqualToString:@"14"])){
         self.memoLabel.hidden = YES;
         self.imageView.left = 15;
         self.imageView.size = CGSizeMake(imageDiam, imageDiam);
@@ -138,6 +138,7 @@
 - (void)setItem:(SSJBillingChargeCellItem *)item {
     _item = item;
     // 如果是信用卡还款有关的
+    NSInteger billid = [item.billId integerValue];
     if (item.idType == SSJChargeIdTypeRepayment) {
         self.imageView.tintColor = [UIColor ssj_colorWithHex:_item.colorValue];
         self.imageView.image = [[UIImage imageNamed:item.imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
@@ -289,7 +290,6 @@
             self.imageView.tintColor = [UIColor ssj_colorWithHex:_item.colorValue];
             self.imageView.image = [[UIImage imageNamed:item.imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             self.imageView.layer.borderColor = [UIColor ssj_colorWithHex:item.colorValue].CGColor;
-            NSInteger billid = [item.billId integerValue];
             if (billid == 1 || billid == 2) {
                 self.typeLabel.text = [NSString stringWithFormat:@"余额变更(%@)",item.typeName];
             }else if (billid == 3) {
@@ -297,7 +297,7 @@
             }else if (billid == 4) {
                 self.typeLabel.text = [NSString stringWithFormat:@"转出至%@",item.transferSource];
             } else if (billid == 13 || billid == 14) {
-                self.typeLabel.text = [NSString stringWithFormat:@"转出至%@",item.transferSource];
+                self.typeLabel.text = [NSString stringWithFormat:@"%@",item.chargeMemo];
             } else {
                 self.typeLabel.text = item.typeName;
             }
@@ -305,7 +305,7 @@
         }
 
     }
-    if (item.chargeMemo.length != 0) {
+    if (item.chargeMemo.length != 0 && billid != 13 && billid != 14) {
         self.memoImage.hidden = NO;
         self.memoLabel.hidden = NO;
         self.memoLabel.text = _item.chargeMemo;

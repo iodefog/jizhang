@@ -1058,6 +1058,13 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         [SSJCategoryListHelper updateCategoryOrderWithItems:selectionView.items success:NULL failure:^(NSError *error) {
             [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
         }];
+        
+        SSJRecordMakingBillTypeSelectionCellItem *selectedItem = [selectionView selectedItem];
+        [UIView animateWithDuration:kAnimationDuration animations:^{
+            self.billTypeInputView.billTypeName = selectedItem ? selectedItem.title : nil;
+            self.billTypeInputView.fillColor = selectedItem ? [UIColor ssj_colorWithHex:selectedItem.colorValue] : INPUT_DEFAULT_COLOR;
+        }];
+        self.item.billId = selectedItem ? selectedItem.ID : nil;
     };
 }
 
@@ -1100,24 +1107,6 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
                                                                                 message:[error localizedDescription]
                                                                                  action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
                                         }];
-    
-    for (SSJRecordMakingBillTypeSelectionCellItem *item in items) {
-        if (item.state == SSJRecordMakingBillTypeSelectionCellStateSelected) {
-            [UIView animateWithDuration:kAnimationDuration animations:^{
-                self.billTypeInputView.billTypeName = item.title;
-                self.billTypeInputView.fillColor = [UIColor ssj_colorWithHex:item.colorValue];
-            }];
-            self.item.billId = item.ID;
-        }
-    }
-    
-    if (items.count == 0) {
-        [UIView animateWithDuration:kAnimationDuration animations:^{
-            self.billTypeInputView.billTypeName = nil;
-            self.billTypeInputView.fillColor = INPUT_DEFAULT_COLOR;
-        }];
-        self.item.billId = nil;
-    }
 }
 
 - (void)updateAppearance {

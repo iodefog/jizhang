@@ -310,11 +310,10 @@ static NSString *const kSegmentTitleSurplus = @"结余";
 - (void)loadBooksItem {
     [SSJUserTableManager currentBooksId:^(NSString * _Nonnull booksId) {
         _currentBooksId = booksId;
-        SSJBooksTypeItem *currentBooksItem = [SSJBooksTypeStore queryCurrentBooksTypeForBooksId:_currentBooksId];
-        UIImage *image = [[UIImage imageNamed:currentBooksItem.booksIcoin] ssj_compressWithinSize:CGSizeMake(22, 22)];
-        [self.navigationBar setBooksImage:image];
-#warning 颜色待定
-//        [self.navigationBar setBooksColor:[UIColor ssj_colorWithHex:currentBooksItem.booksColor]];
+        [SSJBooksTypeStore queryCurrentBooksTypeForBooksId:_currentBooksId Success:^(SSJBooksTypeItem *result) {
+            UIImage *image = [[UIImage imageNamed:result.booksIcoin] ssj_compressWithinSize:CGSizeMake(22, 22)];
+            [self.navigationBar setBooksImage:image];
+        } failure:NULL];
     } failure:^(NSError * _Nonnull error) {
         [SSJAlertViewAdapter showError:error];
     }];
