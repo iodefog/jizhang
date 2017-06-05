@@ -63,6 +63,7 @@
     if ([_item.billId integerValue] >= 1000 || _item.billId.length > 4) {
         self.imageView.layer.borderWidth = 2 / [UIScreen mainScreen].scale;
         self.imageView.contentMode = UIViewContentModeCenter;
+        self.imageView.contentScaleFactor = [UIScreen mainScreen].scale * self.imageView.image.size.width / (imageDiam * 0.75);
     } else {
         self.imageView.layer.borderWidth = 0;
         self.imageView.contentMode = UIViewContentModeScaleAspectFit;
@@ -74,9 +75,6 @@
         self.imageView.size = CGSizeMake(imageDiam, imageDiam);
         self.imageView.leftTop = CGPointMake(15, (self.contentView.height - imageDiam) * 0.5);
         self.imageView.layer.cornerRadius = imageDiam * 0.5;
-        if (!self.item.sundryId.length || self.item.idType == SSJChargeIdTypeShareBooks) {
-            self.imageView.contentScaleFactor = [UIScreen mainScreen].scale * self.imageView.image.size.width / (imageDiam * 0.75);
-        }
         self.typeLabel.left = self.imageView.right + 10;
         self.typeLabel.centerY = self.height * 0.5;
         self.seperatorLine.hidden = YES;
@@ -85,9 +83,6 @@
         self.imageView.size = CGSizeMake(imageDiam, imageDiam);
         self.imageView.left = 15;
         self.imageView.layer.cornerRadius = imageDiam * 0.5;
-        if (!self.item.sundryId.length || self.item.idType == SSJChargeIdTypeShareBooks) {
-            self.imageView.contentScaleFactor = [UIScreen mainScreen].scale * self.imageView.image.size.width / (imageDiam * 0.75);
-        }
         self.haveImage.size = CGSizeMake(12, 12);
         
         self.seperatorLine.size = CGSizeMake(2 / [UIScreen mainScreen].scale, 9);
