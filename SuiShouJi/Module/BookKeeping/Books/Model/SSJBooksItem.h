@@ -28,5 +28,9 @@
 
 @property(nonatomic, strong) NSString *cwriteDate;
 
+- (NSString *)getSingleColor;
+
++ (NSString *)parentIconForParenType:(NSInteger)type;
+
 @end
 

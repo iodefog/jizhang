@@ -13,6 +13,6 @@
 
 @property(nonatomic, strong) UIButton *button;
 
-@property(nonatomic, strong) SSJBooksTypeItem *item;
+@property(nonatomic, strong) id item;
 
 @end
