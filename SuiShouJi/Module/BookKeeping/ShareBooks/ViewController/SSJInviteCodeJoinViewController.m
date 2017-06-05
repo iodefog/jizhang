@@ -219,6 +219,8 @@
                 [self.navigationController popToRootViewControllerAnimated:YES];
             });
         }];
+    } else {
+        [CDAutoHideMessageHUD showMessage:service.desc];
     }
 }
 
