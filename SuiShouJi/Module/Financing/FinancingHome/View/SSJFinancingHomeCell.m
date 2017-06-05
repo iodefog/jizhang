@@ -243,21 +243,21 @@ static const CGFloat kRadius = 12.f;
             NSInteger daysFromRepayment = [repaymentDate daysFrom:[NSDate date]];
             NSInteger mostRecentDay = MIN(daysFromBill, daysFromRepayment);
             if (billDate.day == [NSDate date].day) {
-                self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距还款日:%ld天",daysFromRepayment + 1];
+                self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距还款日:%ld天",(long)daysFromRepayment + 1];
             }else if(repaymentDate.day == [NSDate date].day){
-                self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距账单日:%ld天",daysFromBill + 1];
+                self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距账单日:%ld天",(long)daysFromBill + 1];
             }else{
                 if (mostRecentDay == daysFromBill) {
                     if (daysFromBill > 0 ) {
-                        self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距账单日%ld天",mostRecentDay + 1];
+                        self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距账单日%ld天",(long)mostRecentDay + 1];
                     }else{
-                        self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距还款日%ld天",daysFromRepayment + 1];
+                        self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距还款日%ld天",(long)daysFromRepayment + 1];
                     }
                 }else if (mostRecentDay == daysFromRepayment){
                     if (daysFromRepayment < 0 ) {
-                        self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距账单日日%ld天",daysFromBill + 1];
+                        self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距账单日日%ld天",(long)daysFromBill + 1];
                     }else{
-                        self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距还款日%ld天",mostRecentDay + 1];
+                        self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距还款日%ld天",(long)mostRecentDay + 1];
                     }
                 }
             }

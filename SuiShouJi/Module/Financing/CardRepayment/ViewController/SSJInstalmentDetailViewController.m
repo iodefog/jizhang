@@ -117,18 +117,18 @@ static NSString *const SSJInstalmentDetailMutiLabCellIdentifier = @"SSJInstalmen
         repaymentModifyCell.accessoryType = UITableViewCellAccessoryNone;
         if ([title isEqualToString:kTitle1]) {
             if ([self.chargeItem.billId isEqualToString:@"11"]) {
-                repaymentModifyCell.cellTitle = [NSString stringWithFormat:@"%ld月份账单本金",self.repaymentModel.repaymentMonth.month];
+                repaymentModifyCell.cellTitle = [NSString stringWithFormat:@"%ld月份账单本金",(long)self.repaymentModel.repaymentMonth.month];
                 repaymentModifyCell.cellDetail = [[NSString stringWithFormat:@"%f",[self.repaymentModel.repaymentMoney doubleValue] / self.repaymentModel.instalmentCout] ssj_moneyDecimalDisplayWithDigits:2];
                 repaymentModifyCell.cellImageName = @"ft_cash";
             } else {
-                repaymentModifyCell.cellTitle = [NSString stringWithFormat:@"%ld月份账单手续费",self.repaymentModel.repaymentMonth.month];
+                repaymentModifyCell.cellTitle = [NSString stringWithFormat:@"%ld月份账单手续费",(long)self.repaymentModel.repaymentMonth.month];
                 repaymentModifyCell.cellDetail = [[NSString stringWithFormat:@"%f",[self.repaymentModel.repaymentMoney doubleValue] * [self.repaymentModel.poundageRate doubleValue]] ssj_moneyDecimalDisplayWithDigits:2];
                 repaymentModifyCell.cellImageName = @"bt_shouxufei";
             }
         } else if ([title isEqualToString:kTitle3]) {
-            repaymentModifyCell.cellDetail = [NSString stringWithFormat:@"%ld期",self.repaymentModel.instalmentCout];
+            repaymentModifyCell.cellDetail = [NSString stringWithFormat:@"%ld期",(long)self.repaymentModel.instalmentCout];
         } else if ([title isEqualToString:kTitle4]) {
-            repaymentModifyCell.cellDetail = [NSString stringWithFormat:@"%ld期",self.repaymentModel.currentInstalmentCout];
+            repaymentModifyCell.cellDetail = [NSString stringWithFormat:@"%ld期",(long)self.repaymentModel.currentInstalmentCout];
         } else if ([title isEqualToString:kTitle5]) {
             repaymentModifyCell.cellDetail = [NSString stringWithFormat:@"%@",self.chargeItem.billDate];
         } else if ([title isEqualToString:kTitle6]) {

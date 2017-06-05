@@ -75,9 +75,7 @@ static inline AFHTTPResponseSerializer *SSJResponseSerializer(SSJResponseSeriali
         _delegate = delegate;
         _httpMethod = SSJBaseNetworkServiceHttpMethodPOST;
         _timeoutInterval = 60;
-        _pinningMode = AFSSLPinningModeCertificate;
-        _allowInvalidCertificates = YES;
-        _validatesDomainName = YES;
+        _httpsOpened = YES;
         _requestSerialization = SSJHTTPRequestSerialization;
         _responseSerialization = SSJJSONResponseSerialization;
         
@@ -160,9 +158,7 @@ static inline AFHTTPResponseSerializer *SSJResponseSerializer(SSJResponseSeriali
 /* 配置manager */
 - (SSJGlobalServiceManager *)p_customManager {
     SSJGlobalServiceManager *manager = [SSJGlobalServiceManager sharedManager];
-    manager.SSLPinningMode = _pinningMode;
-    manager.allowInvalidCertificates = _allowInvalidCertificates;
-    manager.validatesDomainName = _validatesDomainName;
+    manager.httpsOpened = _httpsOpened;
     manager.requestSerializer = SSJRequestSerializer(_requestSerialization);
     manager.responseSerializer = SSJResponseSerializer(_responseSerialization);
     manager.requestSerializer.timeoutInterval = _timeoutInterval;

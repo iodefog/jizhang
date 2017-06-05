@@ -266,7 +266,7 @@ static NSString *const kTitle6 = @"分期申请日";
                 }else{
                     self.repaymentModel.instalmentCout = [textField.text integerValue];
                 }
-                textField.text = [NSString stringWithFormat:@"%ld",self.repaymentModel.instalmentCout];
+                textField.text = [NSString stringWithFormat:@"%ld",(long)self.repaymentModel.instalmentCout];
             }else{
                 self.repaymentModel.instalmentCout = 0;
                 textField.text = @"";
@@ -299,7 +299,7 @@ static NSString *const kTitle6 = @"分期申请日";
         [CDAutoHideMessageHUD showMessage:@"分期期数最大为36期哦"];
     }
     [self updatePoundageLab];
-    self.instalmentCountView.text = [NSString stringWithFormat:@"%ld",self.repaymentModel.instalmentCout];
+    self.instalmentCountView.text = [NSString stringWithFormat:@"%ld",(long)self.repaymentModel.instalmentCout];
 }
 
 - (void)minusButtonClicked:(id)sender{
@@ -309,7 +309,7 @@ static NSString *const kTitle6 = @"分期申请日";
         [CDAutoHideMessageHUD showMessage:@"分期期数最小为1期哦"];
     }
     [self updatePoundageLab];
-    self.instalmentCountView.text = [NSString stringWithFormat:@"%ld",self.repaymentModel.instalmentCout];
+    self.instalmentCountView.text = [NSString stringWithFormat:@"%ld",(long)self.repaymentModel.instalmentCout];
 }
 
 - (void)saveButtonClicked:(id)sender{
@@ -441,7 +441,7 @@ static NSString *const kTitle6 = @"分期申请日";
     if (!_instalmentCountView) {
         _instalmentCountView = [[UITextField alloc]initWithFrame:CGRectMake(0, 0, 110, 25)];
         _instalmentCountView.textAlignment = NSTextAlignmentCenter;
-        _instalmentCountView.text = [NSString stringWithFormat:@"%ld",self.repaymentModel.instalmentCout];
+        _instalmentCountView.text = [NSString stringWithFormat:@"%ld",(long)self.repaymentModel.instalmentCout];
         _instalmentCountView.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         UIButton *plusButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 25, 25)];
         [plusButton addTarget:self action:@selector(plusButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
@@ -510,7 +510,7 @@ static NSString *const kTitle6 = @"分期申请日";
     [firstAtrributeStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] range:NSMakeRange(firstStr.length - poundageStr.length, poundageStr.length)];
     _poundageLab.attributedText = firstAtrributeStr;
     [_poundageLab sizeToFit];
-    NSString *secondStr = [NSString stringWithFormat:@"每月%ld号信用卡将自动生成%@元的分期流水",self.repaymentModel.applyDate.day,sumMoneyStr];
+    NSString *secondStr = [NSString stringWithFormat:@"每月%ld号信用卡将自动生成%@元的分期流水",(long)self.repaymentModel.applyDate.day,sumMoneyStr];
     NSMutableAttributedString *secondAtrributeStr = [[NSMutableAttributedString alloc]initWithString:secondStr];
     [secondAtrributeStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] range:[secondStr rangeOfString:sumMoneyStr]];
     _instalDateLab.attributedText = secondAtrributeStr;

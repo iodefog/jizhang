@@ -9,11 +9,11 @@
 #import "SSJDomainManager.h"
 #import "AFHTTPSessionManager.h"
 
-static NSString *const SSJDefaultFormalDomain = @"http://jz.youyuwo.com";
+static NSString *const SSJDefaultFormalDomain = @"https://jz.youyuwo.com";
 
 static NSString *const SSJTestDomain = @"http://account.gs.9188.com/";
 
-static NSString *const SSJTestImageDomain = @"http://account_img.gs.9188.com/ ";
+static NSString *const SSJTestImageDomain = @"http://account_img.gs.9188.com/";
 
 // 请求失败后重试的最大次数
 const int kMaxRequestFailureTimes = 2;

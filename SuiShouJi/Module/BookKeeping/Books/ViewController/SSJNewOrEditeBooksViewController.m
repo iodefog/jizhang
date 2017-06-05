@@ -116,7 +116,7 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
 //            [self editeBookData];
             self.currentBookType = [self bookParentWithCurrentBookType:((SSJBooksTypeItem *)self.bookItem).booksParent] ;
             self.gradientColorItem = ((SSJBooksTypeItem *)self.bookItem).booksColor;
-           self.bookParentStr = [self bookParentStrWithKey:[NSString stringWithFormat:@"%ld",self.currentBookType]];
+           self.bookParentStr = [self bookParentStrWithKey:[NSString stringWithFormat:@"%ld",(long)self.currentBookType]];
             self.bookName = ((SSJBooksTypeItem *)self.bookItem).booksName;
         } else {
             //新建个人账本
@@ -128,7 +128,7 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
             //编辑共享账本
             self.currentBookType = ((SSJShareBookItem *)self.bookItem).booksParent;
             self.gradientColorItem = ((SSJShareBookItem *)self.bookItem).booksColor;
-            self.bookParentStr = [self bookParentStrWithKey:[NSString stringWithFormat:@"%ld",self.currentBookType]];
+            self.bookParentStr = [self bookParentStrWithKey:[NSString stringWithFormat:@"%ld",(long)self.currentBookType]];
             self.bookName = ((SSJShareBookItem *)self.bookItem).booksName;
         } else {
             //新建共享账本
@@ -140,7 +140,7 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
 
 - (void)newBookData {
     self.currentBookType = 0;
-    self.bookParentStr = [self bookParentStrWithKey:[NSString stringWithFormat:@"%ld",self.currentBookType]];
+    self.bookParentStr = [self bookParentStrWithKey:[NSString stringWithFormat:@"%ld",(long)self.currentBookType]];
     self.gradientColorItem = [[SSJFinancingGradientColorItem defualtColors] firstObject];
     self.bookName = @"";
 }

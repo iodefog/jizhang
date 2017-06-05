@@ -297,13 +297,13 @@
     if (_item.cardRepaymentDay == 0) {
         self.repaymentDayLab.text = @"未设置";
     }else{
-        self.repaymentDayLab.text = [NSString stringWithFormat:@"每月%ld日",_item.cardRepaymentDay];
+        self.repaymentDayLab.text = [NSString stringWithFormat:@"每月%ld日",(long)_item.cardRepaymentDay];
     }
     [self.repaymentDayLab sizeToFit];
     if (_item.cardBillingDay == 0) {
         self.billingDayLab.text = @"未设置";
     }else{
-        self.billingDayLab.text = [NSString stringWithFormat:@"每月%ld日",_item.cardBillingDay];
+        self.billingDayLab.text = [NSString stringWithFormat:@"每月%ld日",(long)_item.cardBillingDay];
     }
     if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
         self.backLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:item.startColor].CGColor,(__bridge id)[UIColor ssj_colorWithHex:item.endColor].CGColor];

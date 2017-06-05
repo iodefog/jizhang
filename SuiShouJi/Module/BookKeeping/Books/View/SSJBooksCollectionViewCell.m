@@ -113,7 +113,7 @@ static const CGFloat kBooksCornerRadius = 10.f;
         SSJShareBookItem *shareBookItem = (SSJShareBookItem *)booksTypeItem;
         self.nameLab.text = shareBookItem.booksName;
         self.menberNumLab.hidden = NO;
-        self.menberNumLab.text = [NSString stringWithFormat:@"%ld人",shareBookItem.memberCount];
+        self.menberNumLab.text = [NSString stringWithFormat:@"%ld人",(long)shareBookItem.memberCount];
         //当前选中账本的标记
         if ([shareBookItem.booksId isEqualToString:self.curretSelectedBookId]) {
             self.markImageView.hidden = NO;

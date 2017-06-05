@@ -13,22 +13,9 @@
 @interface SSJGlobalServiceManager : AFHTTPSessionManager
 
 /**
- *  证书验证模式；默认为AFSSLPinningModeCertificate
- *  AFSSLPinningModeNone：不验证客户端证书
- *  AFSSLPinningModePublicKey：验证客户端的证书公钥和服务端的证书公钥是否一致
- *  AFSSLPinningModeCertificate：验证客户端的证书和服务端的证书是否一致
+ *  是否开启https
  */
-@property (nonatomic, assign) AFSSLPinningMode SSLPinningMode;
-
-/**
- *  是否允许无效或过期的证书
- */
-@property (nonatomic, assign) BOOL allowInvalidCertificates;
-
-/**
- *  是否开启域名验证
- */
-@property (nonatomic, assign) BOOL validatesDomainName;
+@property (nonatomic, assign) BOOL httpsOpened;
 
 /**
  *  返回单列对象，此单列管理一个 url session

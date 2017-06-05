@@ -105,23 +105,23 @@
     NSInteger minmumDays = MIN(daysToBillingDate, daysToRepaymentDate);
     if (daysToBillingDate > 0 || daysToRepaymentDate > 0) {
         if (!daysToBillingDate) {
-            self.daysLab.text = [NSString stringWithFormat:@"距还款日:%ld天",daysToRepaymentDate + 1];
+            self.daysLab.text = [NSString stringWithFormat:@"距还款日:%d天",(int)daysToRepaymentDate + 1];
         }else if(!daysToRepaymentDate){
-            self.daysLab.text = [NSString stringWithFormat:@"距账单日:%ld天",daysToBillingDate + 1];
+            self.daysLab.text = [NSString stringWithFormat:@"距账单日:%d天",(int)daysToBillingDate + 1];
         }else{
             if (minmumDays + 1 < 0) {
                 if (daysToBillingDate + 1 > 0) {
-                    self.daysLab.text = [NSString stringWithFormat:@"距账单日:%ld天",daysToBillingDate + 1];
+                    self.daysLab.text = [NSString stringWithFormat:@"距账单日:%d天",(int)daysToBillingDate + 1];
                 }else if(daysToRepaymentDate > 0){
-                    self.daysLab.text = [NSString stringWithFormat:@"距还款日:%ld天",daysToRepaymentDate + 1];
+                    self.daysLab.text = [NSString stringWithFormat:@"距还款日:%d天",(int)daysToRepaymentDate + 1];
                 }else{
                     self.daysLab.text = @"";
                 }
             }else{
                 if (daysToBillingDate + 1 > 0) {
-                    self.daysLab.text = [NSString stringWithFormat:@"距账单日:%ld天",daysToBillingDate + 1];
+                    self.daysLab.text = [NSString stringWithFormat:@"距账单日:%d天",(int)daysToBillingDate + 1];
                 }else{
-                    self.daysLab.text = [NSString stringWithFormat:@"距还款日:%ld天",daysToRepaymentDate + 1];
+                    self.daysLab.text = [NSString stringWithFormat:@"距还款日:%d天",(int)daysToRepaymentDate + 1];
                 }
             }
         }

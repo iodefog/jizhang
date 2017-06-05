@@ -342,7 +342,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
         if (self.item.membersItem.count == 1) {
             circleModifyCell.cellDetail = ((SSJChargeMemberItem *)[self.item.membersItem ssj_safeObjectAtIndex:0]).memberName;
         }else{
-            circleModifyCell.cellDetail = [NSString stringWithFormat:@"%ld人",self.item.membersItem.count];
+            circleModifyCell.cellDetail = [NSString stringWithFormat:@"%ld人",(unsigned long)self.item.membersItem.count];
         }
     }else if ([title isEqualToString:kTitle12]) {
         circleModifyCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
