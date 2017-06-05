@@ -18,6 +18,7 @@
 }
 
 - (void)saveCodeWithbooksId:(NSString *)booksId code:(NSString *)code {
+    self.showLodingIndicator = YES;
 #warning test
     [self request:SSJURLWithAPI(@"http://jz.gs.9188.com:18080/sharebook/save_secretKey.go") params:@{@"cuserId":SSJUSERID(),
                                                                                                     @"cbooksId":booksId,

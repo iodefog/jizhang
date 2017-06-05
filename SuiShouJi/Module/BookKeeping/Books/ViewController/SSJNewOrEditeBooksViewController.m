@@ -114,7 +114,7 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
         if (((SSJBooksTypeItem *)self.bookItem).booksId.length) {
             //编辑个人账本
 //            [self editeBookData];
-            self.currentBookType = ((SSJBooksTypeItem *)self.bookItem).booksParent;
+            self.currentBookType = [self bookParentWithCurrentBookType:((SSJBooksTypeItem *)self.bookItem).booksParent] ;
             self.gradientColorItem = ((SSJBooksTypeItem *)self.bookItem).booksColor;
            self.bookParentStr = [self bookParentStrWithKey:[NSString stringWithFormat:@"%ld",self.currentBookType]];
             self.bookName = ((SSJBooksTypeItem *)self.bookItem).booksName;

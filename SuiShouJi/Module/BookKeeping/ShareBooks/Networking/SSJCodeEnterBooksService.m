@@ -11,6 +11,7 @@
 @implementation SSJCodeEnterBooksService
 
 - (void)enterBooksWithCode:(NSString *)code{
+    self.showLodingIndicator = YES;
 #warning test
     [self request:@"http://192.168.1.168:18080/sharebook/join_book.go" params:@{@"cuserId":SSJUSERID(),
                                                                                 @"secretKey":code ? : @""}];
