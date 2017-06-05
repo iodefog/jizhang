@@ -49,7 +49,7 @@
     if (_customAccessoryType == UITableViewCellAccessoryDisclosureIndicator) {
         CGFloat accessoryWidth = 33;
         self.contentView.frame = CGRectMake(0, 0, self.width - accessoryWidth, self.height);
-        _indicatorView.center = CGPointMake(self.contentView.right + accessoryWidth * 0.5, self.height * 0.5);
+        _indicatorView.center = CGPointMake(self.contentView.right + accessoryWidth * 0.5 - 5, self.height * 0.5);
     } else {
 //        self.contentView.frame = self.bounds;
     }
