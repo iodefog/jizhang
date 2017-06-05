@@ -33,7 +33,6 @@ static const CGFloat kCategoryImageButtonRadius = 16;
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         self.isAnimating = NO;
-        self.backgroundColor = [UIColor clearColor];
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         
         [self.contentView addSubview:self.verticalLine];
@@ -217,6 +216,7 @@ static const CGFloat kCategoryImageButtonRadius = 16;
 }
 
 - (void)updateAppearance {
+    self.backgroundColor = [UIColor clearColor];
     self.topLabel.textColor = SSJ_MAIN_COLOR;
     self.bottomLabel.textColor = SSJ_SECONDARY_COLOR;
     self.verticalLine.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor];
