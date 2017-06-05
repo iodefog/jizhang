@@ -290,7 +290,7 @@
         while ([resultSet next]) {
             item.booksId = [resultSet stringForColumn:@"cbooksid"];
             item.booksName = [resultSet stringForColumn:@"cbooksname"];
-            //            item.booksColor = [resultSet stringForColumn:@"cbookscolor"];
+            item.booksParent = [resultSet intForColumn:@"iparenttype"];
             //处理渐变色
             SSJFinancingGradientColorItem *colorItem = [[SSJFinancingGradientColorItem alloc] init];
             NSArray *colorArray = [[resultSet stringForColumn:@"cbookscolor"] componentsSeparatedByString:@","];
