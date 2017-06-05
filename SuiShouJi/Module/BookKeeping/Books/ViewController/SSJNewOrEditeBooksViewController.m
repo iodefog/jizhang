@@ -164,7 +164,7 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     __weak __typeof(self)weakSelf = self;
-    if (indexPath.row == 1) {
+    if (indexPath.row == 1  && !self.bookItem.booksId.length) {
         //记账场景
         SSJBookTypeViewController *bookTypeVC = [[SSJBookTypeViewController alloc] init];
         if (!self.currentBookType) {
@@ -241,7 +241,12 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
     } else if (indexPath.row == 1) {
         cell.type = SSJCreditCardCellTypeDetail;
         cell.cellDetail = self.bookParentStr;
-        cell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        if (!self.bookItem.booksId.length) {
+            cell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        } else {
+            cell.customAccessoryType = UITableViewCellAccessoryNone;
+        }
+        
     } else if (indexPath.row == 2) {
         cell.type = SSJCreditCardCellColorSelect;
         cell.colorItem = self.gradientColorItem;

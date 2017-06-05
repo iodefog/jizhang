@@ -18,8 +18,6 @@
 
 @property (nonatomic,strong) UIImageView *cellDetailImage;
 
-@property(nonatomic, strong) UILabel *detailLabel;
-
 @property(nonatomic, strong) CAGradientLayer *gradientLayer;
 
 @end
@@ -286,6 +284,7 @@
 - (void)setCellDetail:(NSString *)cellDetail{
     _cellDetail = cellDetail;
     self.detailLabel.text = _cellDetail;
+    self.detailLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     [self.detailLabel sizeToFit];
 }
 

@@ -32,6 +32,7 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
 #import "SSJBooksHeadeCollectionrReusableView.h"
 #import "SSJCreateOrDeleteBooksService.h"
 #import "SSJLoginViewController.h"
+#import "UIViewController+SSJPageFlow.h"
 
 @interface SSJBooksTypeSelectViewController ()<SSJEditableCollectionViewDelegate,SSJEditableCollectionViewDataSource>
 
@@ -179,6 +180,9 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
                 //去登录
                 SSJLoginViewController *loginVC = [[SSJLoginViewController alloc] init];
                 loginVC.backController = self;
+                loginVC.finishHandle = ^(UIViewController *controller) {
+                    [self.navigationController popToRootViewControllerAnimated:YES];
+                };
                 [self.navigationController pushViewController:loginVC animated:YES];
             }
             return;
