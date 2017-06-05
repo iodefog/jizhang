@@ -33,14 +33,14 @@
 - (void)updateConstraints {
     [self.containerView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.center.mas_equalTo(self);
-        make.width.mas_equalTo(self).offset(-20);
+        make.width.mas_equalTo(self).offset(-20).priorityLow();
     }];
     [self.topLab mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.top.and.left.and.width.mas_equalTo(self.containerView);
+        make.top.and.left.and.right.mas_equalTo(self.containerView);
     }];
     [self.bottomLab mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self.topLab.mas_bottom).offset(2);
-        make.left.and.width.and.bottom.mas_equalTo(self.containerView);
+        make.left.and.right.and.bottom.mas_equalTo(self.containerView);
     }];
     [super updateConstraints];
 }
