@@ -39,6 +39,7 @@
 #import "SSJNormalWebViewController.h"
 #import "NSString+MoneyDisplayFormat.h"
 #import "MMDrawerController.h"
+#import "UIViewController+MMDrawerController.h"
 
 static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 @interface SSJLoginViewController () <UITextFieldDelegate,UIScrollViewDelegate>
@@ -245,6 +246,10 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 //        self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:21],
 //                                                                        NSForegroundColorAttributeName:[UIColor whiteColor]};
 //    }
+    
+    [self.mm_drawerController setMaximumLeftDrawerWidth:SSJSCREENWITH];
+    [self.mm_drawerController setOpenDrawerGestureModeMask:MMOpenDrawerGestureModeNone];
+    [self.mm_drawerController setCloseDrawerGestureModeMask:MMCloseDrawerGestureModeNone];
 }
 
 -(void)viewWillLayoutSubviews{

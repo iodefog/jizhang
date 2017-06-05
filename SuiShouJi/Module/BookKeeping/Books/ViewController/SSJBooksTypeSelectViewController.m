@@ -31,6 +31,7 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
 #import "SSJUserTableManager.h"
 #import "SSJBooksHeadeCollectionrReusableView.h"
 #import "SSJCreateOrDeleteBooksService.h"
+#import "SSJLoginViewController.h"
 
 @interface SSJBooksTypeSelectViewController ()<SSJEditableCollectionViewDelegate,SSJEditableCollectionViewDataSource>
 
@@ -172,7 +173,13 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
         bookName = shareItem.booksName;
         bookId = shareItem.booksId;
         if (!bookId.length && [bookName isEqualToString:@"添加账本"]) {
-            [self.createShareBookTypeView show];
+            if (SSJIsUserLogined()) {
+                [self.createShareBookTypeView show];
+            } else {
+                //去登录
+                SSJLoginViewController *loginVC = [[SSJLoginViewController alloc] init];
+                [self.navigationController pushViewController:loginVC animated:YES];
+            }
             return;
         }
     }
@@ -201,7 +208,7 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
 #pragma mark - UICollectionViewDataSource
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
-    return SSJIsUserLogined() ? 2 : 1;
+    return 2;
 }
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
@@ -585,6 +592,16 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
             } failure:^(NSError *error) {
                 [SSJAlertViewAdapter showError:error];
             }];
+        } else {
+            NSMutableArray *addArray = [NSMutableArray array];
+            //添加账本
+            SSJShareBookItem *lastItem = [[SSJShareBookItem alloc]init];
+            lastItem.booksName = @"添加账本";
+            SSJFinancingGradientColorItem *colorItem = [[SSJFinancingGradientColorItem alloc] init];
+            colorItem.startColor = colorItem.endColor = @"#FFFFFF";
+            lastItem.booksColor = colorItem;
+            [addArray addObject:lastItem];
+            weakSelf.shareBooksDataItems = addArray;
         }
         
     } failure:^(NSError * _Nonnull error) {
