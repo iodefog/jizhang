@@ -807,11 +807,11 @@ const int kMemoMaxLength = 15;
         tmpRemindItem.borrowtarget = self.loanModel.lender;
         switch (self.loanModel.type) {
             case SSJLoanTypeLend:
-                tmpRemindItem.borrowtOrLend = @"1";
+                tmpRemindItem.borrowtOrLend = 1;
                 break;
                 
             case SSJLoanTypeBorrow:
-                tmpRemindItem.borrowtOrLend = @"0";
+                tmpRemindItem.borrowtOrLend = 0;
                 break;
         }
     }

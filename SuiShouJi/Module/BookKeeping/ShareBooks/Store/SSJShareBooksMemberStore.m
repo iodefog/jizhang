@@ -208,7 +208,7 @@
                                            @"type":incomeOrPayType} mutableCopy];
         
         if (![tBooksId isEqualToString:SSJAllBooksIds]) {
-            [sql_1 appendString:[NSString stringWithFormat:@" and a.cbooksid = :booksId and ichargetype = %ld",SSJChargeIdTypeShareBooks]];
+            [sql_1 appendString:[NSString stringWithFormat:@" and a.cbooksid = :booksId and ichargetype = %ld",(long)SSJChargeIdTypeShareBooks]];
             [params_1 setObject:tBooksId forKey:@"booksId"];
         }
         
@@ -246,7 +246,7 @@
                                            @"type":incomeOrPayType} mutableCopy];
         
         if (![tBooksId isEqualToString:SSJAllBooksIds]) {
-            [sql_2 appendString:[NSString stringWithFormat:@" and a.cbooksid = :booksId and ichargetype = %ld",SSJChargeIdTypeShareBooks]];
+            [sql_2 appendString:[NSString stringWithFormat:@" and a.cbooksid = :booksId and ichargetype = %ld",(long)SSJChargeIdTypeShareBooks]];
             [params_2 setObject:tBooksId forKey:@"booksId"];
         }
         

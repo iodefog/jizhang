@@ -74,7 +74,6 @@ static NSString *const kSyncTypeKey = @"kSyncTypeKey";
     }];
     
     if (imageInfoArr.count == 0) {
-        SSJPRINT(@"<<< ------- 没有要同步的图片 ------- >>>");
         if (success) {
             success();
         }

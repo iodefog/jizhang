@@ -1073,7 +1073,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         SSJChargeMemberItem *item = [self.item.membersItem ssj_safeObjectAtIndex:0];
         [self.accessoryView.memberBtn setTitle:item.memberName forState:SSJButtonStateNormal];
     }else{
-        [self.accessoryView.memberBtn setTitle:[NSString stringWithFormat:@"%ld人",self.item.membersItem.count] forState:SSJButtonStateNormal];
+        [self.accessoryView.memberBtn setTitle:[NSString stringWithFormat:@"%ld人",(unsigned long)self.item.membersItem.count] forState:SSJButtonStateNormal];
     }
 }
 

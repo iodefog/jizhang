@@ -570,7 +570,7 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
     [self.view endEditing:YES];
     if (!_alertShowed && [self shouldShowAlert]) {
         NSDate *date = [NSDate dateWithString:_item.beginDate formatString:@"yyyy-MM-dd"];
-        NSString *message = [NSString stringWithFormat:@"每月不一定都有%ld号哦，没有的月份将自动跳过不生成该转账记录哦！", date.day];
+        NSString *message = [NSString stringWithFormat:@"每月不一定都有%ld号哦，没有的月份将自动跳过不生成该转账记录哦！", (long)date.day];
         
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:@"知道了" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {

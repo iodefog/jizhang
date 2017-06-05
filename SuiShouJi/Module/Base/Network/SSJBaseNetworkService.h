@@ -122,22 +122,9 @@ typedef NS_OPTIONS(NSInteger, SSJResponseSerialization) {
 @property (nonatomic, strong, readonly) NSDate *serverDate;
 
 /**
- *  证书验证模式；默认为AFSSLPinningModePublicKey
- *  AFSSLPinningModeNone：不验证客户端证书
- *  AFSSLPinningModePublicKey：验证客户端的证书公钥和服务端的证书公钥是否一致
- *  AFSSLPinningModeCertificate：验证客户端的证书和服务端的证书是否一致
+ *  是否开启https
  */
-@property (nonatomic, assign) AFSSLPinningMode pinningMode;
-
-/**
- *  是否允许无效或过期的证书，默认为YES
- */
-@property (nonatomic, assign) BOOL allowInvalidCertificates;
-
-/**
- *  是否开启域名验证，默认为YES
- */
-@property (nonatomic, assign) BOOL validatesDomainName;
+@property (nonatomic, assign) BOOL httpsOpened;
 
 /**
  *  初始化方法
