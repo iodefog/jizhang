@@ -53,7 +53,7 @@
 
 - (void)updateConstraints {
     [self.contentView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.edges.mas_equalTo(self).insets(self.contentInset);
+        make.edges.mas_equalTo(self).insets(self.contentInset).priorityLow();
     }];
     [super updateConstraints];
 }
