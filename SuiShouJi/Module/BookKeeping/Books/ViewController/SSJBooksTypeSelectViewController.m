@@ -178,6 +178,7 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
             } else {
                 //去登录
                 SSJLoginViewController *loginVC = [[SSJLoginViewController alloc] init];
+                loginVC.backController = self;
                 [self.navigationController pushViewController:loginVC animated:YES];
             }
             return;
