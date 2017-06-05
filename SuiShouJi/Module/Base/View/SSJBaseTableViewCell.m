@@ -28,7 +28,7 @@
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         self.appliesTheme = YES;
         self.contentView.backgroundColor = [UIColor clearColor];
-        [self updateAppearance];
+        [self updateCellAppearanceAfterThemeChanged];
         if ([self respondsToSelector:@selector(setPreservesSuperviewLayoutMargins:)]) {
             [self setPreservesSuperviewLayoutMargins:NO];
         }
@@ -84,12 +84,8 @@
 }
 
 - (void)updateCellAppearanceAfterThemeChanged {
-    [self updateAppearance];
-}
-
-- (void)updateAppearance {
     self.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
-    self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+    self.backgroundColor = SSJ_MAIN_BACKGROUND_COLOR;
     _indicatorView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellIndicatorColor];
 }
 
