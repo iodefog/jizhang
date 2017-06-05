@@ -470,7 +470,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 
 -(SSJHomeDatePickerView *)chargeCircleTimeView{
     if (!_chargeCircleTimeView) {
-        _chargeCircleTimeView = [[SSJHomeDatePickerView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 244)];
+        _chargeCircleTimeView = [[SSJHomeDatePickerView alloc]initWithFrame:CGRectMake(0, 0, SSJSCREENWITH, 244)];
         _chargeCircleTimeView.horuAndMinuBgViewBgColor = [UIColor clearColor];;
         _chargeCircleTimeView.datePickerMode = SSJDatePickerModeDate;
         __weak typeof(self)weakSelf = self;
