@@ -39,6 +39,10 @@
 
 
 - (NSString *)getSingleColor {
+    if ([self.booksColor.startColor isEqualToString:self.booksColor.endColor]) {
+        return self.booksColor.startColor;
+    }
+    
     NSInteger index = [[SSJFinancingGradientColorItem defualtColors] indexOfObject:self.booksColor];
     
     NSString *singleColor;

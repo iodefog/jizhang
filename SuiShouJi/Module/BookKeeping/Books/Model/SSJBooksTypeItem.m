@@ -55,6 +55,11 @@
 }
 
 - (NSString *)getSingleColor {
+    
+    if ([self.booksColor.startColor isEqualToString:self.booksColor.endColor]) {
+        return self.booksColor.startColor;
+    }
+    
     NSInteger index = [[SSJFinancingGradientColorItem defualtColors] indexOfObject:self.booksColor];
     
     NSString *singleColor;
@@ -130,7 +135,7 @@
             break;
             
         case 2:
-            icon = @"bk_lvxing";
+            icon = @"bk_jiehun";
             break;
             
         case 3:
@@ -138,7 +143,7 @@
             break;
             
         case 4:
-            icon = @"bk_jiehun";
+            icon = @"bk_lvxing";
             break;
             
         default:
