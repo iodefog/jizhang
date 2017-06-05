@@ -250,11 +250,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
     self.statusLabel.top = self.homeButton.bottom;
     self.statusLabel.centerX = self.view.width / 2;
     self.themeModifyView.leftBottom = CGPointMake(0, self.view.height);
-}
-
-- (BOOL)prefersStatusBarHidden {
-    return YES;
-}
+} 
 
 
 #pragma mark - UITableViewDelegate
