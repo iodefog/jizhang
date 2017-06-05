@@ -41,14 +41,20 @@
 
 - (void)layoutSubviews{
     [super layoutSubviews];
+    //分割线
+    for (UIView *subview in self.contentView.superview.subviews) {
+        if ([NSStringFromClass(subview.class) hasSuffix:@"SeparatorView"]) {
+            subview.hidden = NO;
+        }
+    }
     switch (self.type) {
         case SSJCreditCardCellTypeTextField:{
-            self.cellImage.left = 10;
+            self.cellImage.left = 15;
             self.cellImage.centerY = self.contentView.height / 2;
             self.accessoryView.centerY = self.cellImage.centerY;
-            self.titleLabel.left = self.cellImage.right + 10;
+            self.titleLabel.left = self.cellImage.image ? self.cellImage.right + 10 : 15;
             self.titleLabel.centerY = self.contentView.height / 2;
-            self.textInput.size = CGSizeMake(self.contentView.width - self.titleLabel.right - 20, self.contentView.height);
+            self.textInput.size = CGSizeMake(self.contentView.width - self.titleLabel.right - 15, self.contentView.height);
             self.textInput.left = self.titleLabel.right + 10;
             self.textInput.centerY = self.contentView.height / 2;
             self.textInput.hidden = NO;
@@ -61,14 +67,14 @@
             break;
             
         case SSJCreditCardCellTypeDetail:{
-            self.cellImage.left = 10;
+            self.cellImage.left = 15;
             self.cellImage.centerY = self.contentView.height / 2;
             self.accessoryView.centerY = self.cellImage.centerY;
-            self.titleLabel.left = self.cellImage.right + 10;
+            self.titleLabel.left = self.cellImage.image ? self.cellImage.right + 10 : 15;
             self.titleLabel.centerY = self.contentView.height / 2;
             if (self.contentView.width == self.width) {
-                if (self.detailLabel.width > self.contentView.width - 10 - self.titleLabel.right) {
-                    self.detailLabel.width = self.contentView.width - 10 - self.titleLabel.right;
+                if (self.detailLabel.width > self.contentView.width - 15 - self.titleLabel.right) {
+                    self.detailLabel.width = self.contentView.width - 15 - self.titleLabel.right;
                     self.detailLabel.adjustsFontSizeToFitWidth = YES;
                 }
             }else{
@@ -78,7 +84,7 @@
                 }
             }
             if (self.contentView.width == self.width) {
-                self.detailLabel.right = self.contentView.width - 10;
+                self.detailLabel.right = self.contentView.width - 15;
             }else{
                 self.detailLabel.right = self.contentView.width;
             }
@@ -86,7 +92,7 @@
             if (!self.cellAtrributedDetail.length) {
                 self.detailLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
             }
-            self.cellDetailImage.right = self.detailLabel.left - 10;
+            self.cellDetailImage.right = self.detailLabel.left - 15;
             self.cellDetailImage.centerY = self.contentView.height /  2;
             self.titleLabel.hidden = NO;
             self.cellDetailImage.hidden = NO;
@@ -98,14 +104,14 @@
             break;
             
         case SSJCreditCardCellTypeassertedDetail:{
-            self.cellImage.left = 10;
+            self.cellImage.left = 15;
             self.cellImage.centerY = self.contentView.height / 2;
             self.accessoryView.centerY = self.cellImage.centerY;
-            self.titleLabel.left = self.cellImage.right + 10;
+            self.titleLabel.left = self.cellImage.image ? self.cellImage.right + 10 : 15;
             self.titleLabel.centerY = self.contentView.height / 2;
             if (self.contentView.width == self.width) {
-                if (self.detailLabel.width > self.contentView.width - 10 - self.titleLabel.right) {
-                    self.detailLabel.width = self.contentView.width - 10 - self.titleLabel.right;
+                if (self.detailLabel.width > self.contentView.width - 15 - self.titleLabel.right) {
+                    self.detailLabel.width = self.contentView.width - 15 - self.titleLabel.right;
                     self.detailLabel.adjustsFontSizeToFitWidth = YES;
                 }
             }else{
@@ -115,7 +121,7 @@
                 }
             }
             if (self.contentView.width == self.width) {
-                self.detailLabel.right = self.contentView.width - 10;
+                self.detailLabel.right = self.contentView.width - 15;
             }else{
                 self.detailLabel.right = self.contentView.width;
             }
@@ -135,10 +141,10 @@
             break;
             
         case SSJCreditCardCellTypeSubTitle:{
-            self.cellImage.left = 10;
+            self.cellImage.left = 15;
             self.cellImage.top = 10;
             self.accessoryView.centerY = self.cellImage.centerY;
-            self.titleLabel.left = self.cellImage.right + 10;
+            self.titleLabel.left = self.cellImage.image ? self.cellImage.right + 10 : 15;
             self.titleLabel.centerY = self.cellImage.centerY;
             self.subTitleLabel.top = self.titleLabel.bottom + 10;
             self.subTitleLabel.left = self.titleLabel.left;
@@ -152,14 +158,14 @@
             break;
             
         case SSJCreditCardCellColorSelect:{
-            self.cellImage.left = 10;
+            self.cellImage.left = 15;
             self.cellImage.centerY = self.contentView.height / 2;
             self.accessoryView.centerY = self.cellImage.centerY;
-            self.titleLabel.left = self.cellImage.right + 10;
+            self.titleLabel.left = self.cellImage.image ? self.cellImage.right + 10 : 15;
             self.titleLabel.centerY = self.contentView.height / 2;
             self.gradientLayer.position = CGPointMake(0, self.height / 2);
             if (self.contentView.width == self.width) {
-                self.gradientLayer.right = self.contentView.width - 10;
+                self.gradientLayer.right = self.contentView.width - 15;
             }else{
                 self.gradientLayer.right = self.contentView.width;
             }

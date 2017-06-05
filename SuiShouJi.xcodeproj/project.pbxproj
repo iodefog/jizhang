@@ -9774,7 +9774,7 @@
 		9C9471601CEB224C00D69079 /* SSJFundingDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFundingDetailsViewController.h; sourceTree = "<group>"; };
 		9C9471611CEB224C00D69079 /* SSJFundingDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFundingDetailsViewController.m; sourceTree = "<group>"; };
 		9C94719A1CEB473E00D69079 /* SSJCalendarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCalendarViewController.h; sourceTree = "<group>"; };
-		9C94719B1CEB473E00D69079 /* SSJCalendarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCalendarViewController.m; sourceTree = "<group>"; };
+		9C94719B1CEB473E00D69079 /* SSJCalendarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCalendarViewController.m; sourceTree = "<group>"; wrapsLines = 0; };
 		9C9A0C851D73CDB6002AF046 /* SSJCreditCardItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCreditCardItem.h; sourceTree = "<group>"; };
 		9C9A0C861D73CDB6002AF046 /* SSJCreditCardItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCreditCardItem.m; sourceTree = "<group>"; };
 		9C9A0C881D73CDB7002AF046 /* SSJCreditCardStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCreditCardStore.h; sourceTree = "<group>"; };

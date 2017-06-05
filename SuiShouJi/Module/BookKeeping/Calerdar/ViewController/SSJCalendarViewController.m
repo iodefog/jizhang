@@ -289,7 +289,8 @@
         } else {
             _shareButton.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor alpha:0.8];
         }
-        [_shareButton setImage:[UIImage imageNamed:@"calender_fenxiang"] forState:UIControlStateNormal];
+        [_shareButton setImage:[[UIImage imageNamed:@"calender_fenxiang"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+        _shareButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
         [_shareButton setSpaceBetweenImageAndTitle:10];
         _shareButton.hidden = YES;
         [_shareButton addTarget:self action:@selector(shareButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
@@ -427,6 +428,8 @@
     } else {
         _shareButton.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor alpha:0.8];
     }
+    _shareButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
+    [_shareButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] forState:UIControlStateNormal];
 }
 
 /*

@@ -42,7 +42,7 @@
         
         CGFloat verticalGap = (self.contentView.height - self.textLabel.height - self.detailTextLabel.height) * 0.33;
         
-        self.imageView.left = 10;
+        self.imageView.left = 15;
         self.imageView.top = verticalGap;
         
         self.textLabel.left = self.imageView.right + 10;
@@ -51,17 +51,17 @@
         self.detailTextLabel.left = self.imageView.right + 10;
         self.detailTextLabel.top = self.textLabel.bottom + verticalGap;
         
-        self.switchCtrl.right = self.contentView.width - 10;
+        self.switchCtrl.right = self.contentView.width - 15;
         self.switchCtrl.centerY = self.textLabel.centerY;
         
     } else {
-        self.imageView.left = 10;
+        self.imageView.left = 15;
         self.imageView.centerY = self.contentView.height * 0.5;
         
         self.textLabel.left = self.detailTextLabel.left = self.imageView.right + 10;
         self.textLabel.centerY = self.contentView.height * 0.5;
         
-        self.switchCtrl.right = self.contentView.width - 10;
+        self.switchCtrl.right = self.contentView.width - 15;
         self.switchCtrl.centerY = self.contentView.height * 0.5;
     }
 }

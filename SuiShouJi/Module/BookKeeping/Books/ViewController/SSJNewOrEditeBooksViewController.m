@@ -91,7 +91,7 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
     [self.tableView ssj_clearExtendSeparator];
     [self.tableView registerClass:[SSJCreditCardEditeCell class] forCellReuseIdentifier:SSJNewOrEditeBooksCellIdentifier];
     
-    UILabel *tipLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 0, self.view.width - 20, 44)];
+    UILabel *tipLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, 0, self.view.width - 20, 44)];
     tipLabel.font = [UIFont ssj_pingFangMediumFontOfSize:SSJ_FONT_SIZE_4];
     tipLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     
@@ -121,6 +121,7 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
         } else {
             //新建个人账本
             [self newBookData];
+            [self.bookNameTextField becomeFirstResponder];
         }
     } else if([self.bookItem isKindOfClass:[SSJShareBookItem class]]) { //共享账本
         if (((SSJShareBookItem *)self.bookItem).booksId.length) {
@@ -132,6 +133,7 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
         } else {
             //新建共享账本
             [self newBookData];
+            [self.bookNameTextField becomeFirstResponder];
         }
     }
 }
@@ -157,7 +159,6 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    [self.bookNameTextField becomeFirstResponder];
 }
 
 #pragma mark - UITableViewDelegate
@@ -175,7 +176,7 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
             weakSelf.currentBookType = bookTypeIndex;
             weakSelf.bookParentStr = bookName;
             //更新选中账本场景
-            [weakSelf.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+            [weakSelf.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
         };
         [self.navigationController pushViewController:bookTypeVC animated:YES];
     } else if (indexPath.row == 2) {
