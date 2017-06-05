@@ -65,6 +65,13 @@
 //    self.lastSelectedIndex = lastIndexPath.row;
 //    self.shouldSelected = YES;
 //    [self tableView:self.tableView didSelectRowAtIndexPath:lastIndexPath];
+    if ([_tableView respondsToSelector:@selector(setSeparatorInset:)]) {
+        [_tableView setSeparatorInset:UIEdgeInsetsZero];
+    }
+    
+    if ([_tableView respondsToSelector:@selector(setLayoutMargins:)]) {
+        [_tableView setLayoutMargins:UIEdgeInsetsZero];
+    }
 }
 
 #pragma mark - dataArray
@@ -83,6 +90,22 @@
         self.lastSelectedIndex = indexPath.row;
         self.lastSelectedCell = currentCell;
         //更新选择的账本类型就是lastSelectedIndex
+    }
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if ([cell respondsToSelector:@selector(setSeparatorInset:)])
+    {
+        [cell setSeparatorInset:UIEdgeInsetsZero];
+    }
+    if ([cell respondsToSelector:@selector(setPreservesSuperviewLayoutMargins:)])
+    {
+        [cell setPreservesSuperviewLayoutMargins:NO];
+    }
+    if ([cell respondsToSelector:@selector(setLayoutMargins:)])
+    {
+        [cell setLayoutMargins:UIEdgeInsetsZero];
     }
 }
 
