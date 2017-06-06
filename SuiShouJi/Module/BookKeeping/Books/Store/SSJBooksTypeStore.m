@@ -454,7 +454,7 @@
 + (void)queryForShareBooksListWithSuccess:(void(^)(NSMutableArray<SSJShareBookItem *> *result))success failure:(void(^)(NSError *error))failure {
     NSMutableArray *shareBooksList = [NSMutableArray array];
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
-        FMResultSet *result = [db executeQuery:@"select t.*,(select count(*) from bk_share_books_member t1 where t1.cbooksid = t.cbooksid and t1.istate = 0) as memberCount from bk_share_books t where t.cbooksid in (select s.cbooksid from bk_share_books_member s where s.cmemberid = ? and s.istate = 0) and t.operatortype <> 2 order by t.iorder asc, t.cwritedate asc",SSJUSERID()];
+        FMResultSet *result = [db executeQuery:@"select t.*,(select count(*) from bk_share_books_member t1 where t1.cbooksid = t.cbooksid and t1.istate = 0) as memberCount from bk_share_books t where t.cbooksid in (select s.cbooksid from bk_share_books_member s where s.cmemberid = ? and s.istate = 0) order by t.iorder asc, t.cwritedate asc",SSJUSERID()];
         if (!result) {
             SSJDispatch_main_async_safe(^{
                 failure([db lastError]);
@@ -626,17 +626,6 @@
                                 failure:(void (^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
         NSString *userId = SSJUSERID();
-        //将bk_share_book表的operate = 2
-        if (![db executeUpdate:@"update bk_share_books set cwritedate = ?,operatortype = 2 where cbooksid = ?",[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],bookId]) {
-            *rollback = YES;
-            if ([db lastError]) {
-                SSJDispatchMainAsync(^{
-                    failure([db lastError]);
-                });
-            }
-            return ;
-        }
-        
         //更新bk_user_charge表
         if (![SSJUserChargeSyncTable mergeRecords:shareCharge forUserId:SSJUSERID() inDatabase:db error:nil]) {
             *rollback = YES;
@@ -962,8 +951,4 @@
     }];
     return item.mj_keyValues;
 }
-
-
-
-
 @end
