@@ -70,6 +70,7 @@
 
 - (void)play {
     if (self.lottieView) {
+        self.lottieView.animationProgress = 0;
         [self.lottieView play];
     }
 }

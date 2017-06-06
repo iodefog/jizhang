@@ -93,7 +93,7 @@
         self.contentViews = [[NSMutableArray alloc] initWithCapacity:4];
     }
     
-    NSArray *images = @[@"lottie_1",@"lottie_3"];
+    NSArray *images = @[@"lottie_1",@"lottie_2",@"lottie_3"];
     for (int i = 0; i < images.count; i ++) {
         NSString *imageName = [images ssj_safeObjectAtIndex:i];
         SSJGuideContentView *imageView = [[SSJGuideContentView alloc] initWithFrame:CGRectZero withType:SSJGuideContentViewTypeLottie imageName:imageName];
