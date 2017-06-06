@@ -69,13 +69,20 @@ NSString *const SSJBillingChargeRecordKey = @"SSJBillingChargeRecordKey";
                           failure:(void (^)(NSError *error))failure {
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
+        NSString *tBooksId = booksId;
+        if (!tBooksId) {
+            tBooksId = [db stringForQuery:@"select ccurrentBooksId from bk_user where cuserid = ?", SSJUSERID()];
+            tBooksId = tBooksId ?: SSJUSERID();
+        }
+        
         NSString *beginDate = [period.startDate formattedDateWithFormat:@"yyyy-MM-dd"];
         NSString *endDate = [period.endDate formattedDateWithFormat:@"yyyy-MM-dd"];
         
         NSDictionary *params = @{@"name":name,
                                  @"beginDate":beginDate,
-                                 @"endDate":endDate};
-        FMResultSet *rs = [db executeQuery:@"select uc.ichargeid, uc.imoney, uc.cbilldate, uc.cwritedate, uc.ifunsid, uc.ibillid, uc.cmemo, uc.cimgurl, uc.thumburl, uc.cid, uc.ichargetype, uc.cbooksid, bt.cname, bt.ccoin, bt.ccolor, bt.itype from bk_user_charge as uc, bk_bill_type as bt where uc.ibillid = bt.id and bt.cname = :name and uc.cbilldate >= :beginDate and uc.cbilldate <= :endDate and uc.cbilldate <= datetime('now', 'localtime') and uc.operatortype <> 2 order by uc.cbilldate desc" withParameterDictionary:params];
+                                 @"endDate":endDate,
+                                 @"booksId":tBooksId};
+        FMResultSet *rs = [db executeQuery:@"select uc.ichargeid, uc.imoney, uc.cbilldate, uc.cwritedate, uc.ifunsid, uc.ibillid, uc.cmemo, uc.cimgurl, uc.thumburl, uc.cid, uc.ichargetype, uc.cbooksid, bt.cname, bt.ccoin, bt.ccolor, bt.itype from bk_user_charge as uc, bk_bill_type as bt where uc.ibillid = bt.id and bt.cname = :name and uc.cbilldate >= :beginDate and uc.cbilldate <= :endDate and uc.cbilldate <= datetime('now', 'localtime') and uc.operatortype <> 2 and uc.cbooksid = :booksId order by uc.cbilldate desc" withParameterDictionary:params];
         if (!rs) {
             if (failure) {
                 SSJDispatchMainAsync(^{
