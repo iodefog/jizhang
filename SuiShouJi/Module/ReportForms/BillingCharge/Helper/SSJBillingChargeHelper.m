@@ -113,7 +113,7 @@ NSString *const SSJBillingChargeRecordKey = @"SSJBillingChargeRecordKey";
             tBooksId = tBooksId ?: SSJUSERID();
         }
         
-        BOOL isShareBook = [db boolForQuery:@"select count(*) from bk_share_books_member where cmemberid = ? and cbooksid = ?", ID, booksId];
+        BOOL isShareBook = [db boolForQuery:@"select count(*) from bk_share_books_member where cmemberid = ? and cbooksid = ?", ID, tBooksId];
         FMResultSet *rs = nil;
         
         if (isShareBook) {
