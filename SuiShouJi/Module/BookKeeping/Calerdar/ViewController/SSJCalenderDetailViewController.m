@@ -78,7 +78,7 @@ static NSString *const kSSJCalenderDetailPhotoCellId = @"kSSJCalenderDetailPhoto
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     SSJBaseCellItem *item = [self.items ssj_objectAtIndexPath:indexPath];
-    SSJCalenderTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[self cellReuseIdForItemClass:[item class]] forIndexPath:indexPath];
+    SSJBaseTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[self cellReuseIdForItemClass:[item class]] forIndexPath:indexPath];
     cell.cellItem = item;
     return cell;
 }
