@@ -110,7 +110,8 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
     [self.mm_drawerController setMaximumLeftDrawerWidth:SSJSCREENWITH * 0.8];
     [self.mm_drawerController setOpenDrawerGestureModeMask:MMOpenDrawerGestureModeAll];
     [self.mm_drawerController setCloseDrawerGestureModeMask:MMCloseDrawerGestureModeAll];
-}
+    
+    }
 
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
@@ -128,34 +129,33 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-}
-
-#pragma mark - UICollectionViewDelegate
-
-- (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
-{
     if (self.isShowCreateBookAnimation) {
         //刷新动画
-        NSString *itemBookId;
-        if (indexPath.section == 0) {
-            SSJBooksTypeItem *item = [self.privateBooksDataitems ssj_safeObjectAtIndex:indexPath.row];
-            itemBookId = item.booksId;
-        } else {
-            SSJShareBookItem *sItem = [self.shareBooksDataItems ssj_safeObjectAtIndex:indexPath.row];
-            itemBookId = sItem.booksId;
+        //取出在数组中的位置
+        self.showCreateBookAnimation = NO;
+        for (SSJBooksTypeItem *item in self.privateBooksDataitems) {
+            if ([item.booksId isEqualToString:self.currentBooksId]) {
+                NSInteger index = [self.privateBooksDataitems indexOfObject:item];
+                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
+                SSJBooksCollectionViewCell *cell1 = (SSJBooksCollectionViewCell *)[self.collectionView cellForItemAtIndexPath:indexPath];
+                [cell1 animationAfterCreateBook];
+                return ;
+            }
         }
         
-        if ([itemBookId isEqualToString:self.currentBooksId]) {
-            self.showCreateBookAnimation = NO;
-            SSJBooksCollectionViewCell *cell1 = (SSJBooksCollectionViewCell *)cell;
-            [UIView animateWithDuration:0.1 animations:^{
+        for (SSJShareBookItem *sItem in self.shareBooksDataItems) {
+            if ([sItem.booksId isEqualToString:self.currentBooksId]) {
+                NSInteger index = [self.shareBooksDataItems indexOfObject:sItem];
+                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:1];
+                SSJBooksCollectionViewCell *cell1 = (SSJBooksCollectionViewCell *)[self.collectionView cellForItemAtIndexPath:indexPath];
                 [cell1 animationAfterCreateBook];
-            }];
-            return ;
+            }
         }
     }
 }
 
+
+#pragma mark - UICollectionViewDelegate
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     NSString *bookName;
