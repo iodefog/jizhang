@@ -62,7 +62,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
 @property (nonatomic, strong) UITableView *tableView;
 
 //  当前账本id
-@property (nonatomic, strong) NSString *currentBooksId;
+@property (nonatomic, strong) NSObject<SSJBooksItemProtocol> *currentBooksItem;
 
 //  tableview数据源
 @property (nonatomic, strong) NSMutableArray *datas;
@@ -195,7 +195,11 @@ static NSString *const kSegmentTitleSurplus = @"结余";
             billingChargeVC.title = tmpItem.name;
             billingChargeVC.memberId = tmpItem.ID;
         } else {
-            billingChargeVC.billId = tmpItem.ID;
+            if ([self.currentBooksItem isKindOfClass:[SSJBooksTypeItem class]]) {
+                billingChargeVC.billId = tmpItem.ID;
+            } else if ([self.currentBooksItem isKindOfClass:[SSJShareBookItem class]]) {
+                billingChargeVC.billName = tmpItem.name;
+            }
         }
         [self.navigationController pushViewController:billingChargeVC animated:YES];
         
@@ -250,7 +254,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
             break;
             
         case SSJReportFormsNavigationBarCurve:
-            [SSJReportFormsUtil queryForIncomeOrPayType:[self currentType] booksId:_currentBooksId startDate:period.startDate endDate:period.endDate success:^(NSArray<SSJReportFormsItem *> *list) {
+            [SSJReportFormsUtil queryForIncomeOrPayType:[self currentType] booksId:self.currentBooksItem.booksId startDate:period.startDate endDate:period.endDate success:^(NSArray<SSJReportFormsItem *> *list) {
                 [self reorganiseCurveTableDataWithOriginalData:list];
             } failure:^(NSError *error) {
                 [SSJAlertViewAdapter showError:error];
@@ -282,39 +286,35 @@ static NSString *const kSegmentTitleSurplus = @"结余";
 //  重新加载数据
 - (void)reloadAllDatas {
     [self.view ssj_showLoadingIndicator];
-    [self loadBooksItem];
-    [SSJReportFormsUtil queryForPeriodListWithIncomeOrPayType:SSJBillTypeSurplus booksId:_currentBooksId success:^(NSArray<SSJDatePeriod *> *periods) {
+    [SSJBooksTypeStore queryCurrentBooksItemWithSuccess:^(NSObject<SSJBooksItemProtocol> *booksItem) {
+        self.currentBooksItem = booksItem;
+        [self.navigationBar setBooksImage:[UIImage imageNamed:booksItem.parentIcon]];
+        [self.navigationBar setBooksColor:[UIColor ssj_colorWithHex:booksItem.getSingleColor]];
         
-        _periodControl.periods = periods;
-        if (!_periodControl.selectedPeriod && periods.count >= 3) {
-            _periodControl.selectedPeriod = periods[periods.count - 3];
-        }
-        
-        [self updateSubveiwsHidden];
-        
-        if (periods.count == 0) {
-            [self.view ssj_showWatermarkWithCustomView:self.noDataRemindView animated:YES target:nil action:nil];
-        } else {
-            [self.view ssj_hideWatermark:YES];
-        }
-        
-        [self reloadDatasInPeriod:_periodControl.currentPeriod];
-        [self.view ssj_hideLoadingIndicator];
-        
+        [SSJReportFormsUtil queryForPeriodListWithIncomeOrPayType:SSJBillTypeSurplus booksId:self.currentBooksItem.booksId success:^(NSArray<SSJDatePeriod *> *periods) {
+            
+            _periodControl.periods = periods;
+            if (!_periodControl.selectedPeriod && periods.count >= 3) {
+                _periodControl.selectedPeriod = periods[periods.count - 3];
+            }
+            
+            [self updateSubveiwsHidden];
+            
+            if (periods.count == 0) {
+                [self.view ssj_showWatermarkWithCustomView:self.noDataRemindView animated:YES target:nil action:nil];
+            } else {
+                [self.view ssj_hideWatermark:YES];
+            }
+            
+            [self reloadDatasInPeriod:_periodControl.currentPeriod];
+            [self.view ssj_hideLoadingIndicator];
+            
+        } failure:^(NSError *error) {
+            [self.view ssj_hideLoadingIndicator];
+            [SSJAlertViewAdapter showError:error];
+        }];
     } failure:^(NSError *error) {
         [self.view ssj_hideLoadingIndicator];
-        [SSJAlertViewAdapter showError:error];
-    }];
-}
-
-- (void)loadBooksItem {
-    [SSJUserTableManager currentBooksId:^(NSString * _Nonnull booksId) {
-        _currentBooksId = booksId;
-        [SSJBooksTypeStore queryCurrentBooksTypeForBooksId:_currentBooksId Success:^(id<SSJBooksItemProtocol> result) {
-            [self.navigationBar setBooksImage:[UIImage imageNamed:result.parentIcon]];
-            [self.navigationBar setBooksColor:[UIColor ssj_colorWithHex:result.getSingleColor]];
-        } failure:NULL];
-    } failure:^(NSError * _Nonnull error) {
         [SSJAlertViewAdapter showError:error];
     }];
 }
@@ -333,7 +333,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
             
             switch (_selectedOption) {
                 case SSJReportFormsMemberAndCategoryOptionCategory: {
-                    [SSJReportFormsUtil queryForIncomeOrPayType:[self currentType] booksId:_currentBooksId startDate:period.startDate endDate:period.endDate success:^(NSArray<SSJReportFormsItem *> *result) {
+                    [SSJReportFormsUtil queryForIncomeOrPayType:[self currentType] booksId:self.currentBooksItem.booksId startDate:period.startDate endDate:period.endDate success:^(NSArray<SSJReportFormsItem *> *result) {
                         [self.tableView ssj_hideLoadingIndicator];
                         [self reorganiseChartTableVieDatasWithOriginalData:result];
                         [self.tableView reloadData];
@@ -368,17 +368,17 @@ static NSString *const kSegmentTitleSurplus = @"结余";
             [self.curveHeaderView showLoadingOnSeparatorForm];
             [self.curveHeaderView showLoadingOnCurve];
             
-            [SSJReportFormsUtil queryForDefaultTimeDimensionWithStartDate:period.startDate endDate:period.endDate booksId:_currentBooksId billTypeId:nil success:^(SSJTimeDimension timeDimension) {
+            [SSJReportFormsUtil queryForDefaultTimeDimensionWithStartDate:period.startDate endDate:period.endDate booksId:self.currentBooksItem.booksId billTypeId:nil success:^(SSJTimeDimension timeDimension) {
                 
                 if (timeDimension != SSJTimeDimensionUnknown) {
                     self.curveHeaderItem.timeDimension = timeDimension;
                 }
                 
-                [SSJReportFormsUtil queryForBillStatisticsWithTimeDimension:self.curveHeaderItem.timeDimension booksId:_currentBooksId billTypeId:nil startDate:period.startDate endDate:period.endDate success:^(NSDictionary *result) {
+                [SSJReportFormsUtil queryForBillStatisticsWithTimeDimension:self.curveHeaderItem.timeDimension booksId:self.currentBooksItem.booksId billTypeId:nil startDate:period.startDate endDate:period.endDate success:^(NSDictionary *result) {
                     
                     [self updateCurveHeaderItemWithCurveModels:result[SSJReportFormsCurveModelListKey] period:period];
                     
-                    [SSJReportFormsUtil queryForIncomeOrPayType:[self currentType] booksId:_currentBooksId startDate:period.startDate endDate:period.endDate success:^(NSArray<SSJReportFormsItem *> *list) {
+                    [SSJReportFormsUtil queryForIncomeOrPayType:[self currentType] booksId:self.currentBooksItem.booksId startDate:period.startDate endDate:period.endDate success:^(NSArray<SSJReportFormsItem *> *list) {
                         
                         [self.curveHeaderView hideLoadingOnSeparatorForm];
                         [self.curveHeaderView hideLoadingOnCurve];
@@ -647,7 +647,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
     SSJMagicExportCalendarViewController *calendarVC = [[SSJMagicExportCalendarViewController alloc] init];
     calendarVC.title = @"自定义时间";
     calendarVC.billType = [self currentType];
-    calendarVC.booksId = _currentBooksId;
+    calendarVC.booksId = self.currentBooksItem.booksId;
     calendarVC.completion = ^(NSDate *selectedBeginDate, NSDate *selectedEndDate) {
         wself.periodControl.customPeriod = [SSJDatePeriod datePeriodWithStartDate:selectedBeginDate endDate:selectedEndDate];
     };
@@ -742,7 +742,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
             SSJDatePeriod *period = wself.periodControl.currentPeriod;
             
             [wself.curveHeaderView showLoadingOnCurve];
-            [SSJReportFormsUtil queryForBillStatisticsWithTimeDimension:view.item.timeDimension booksId:wself.currentBooksId billTypeId:nil startDate:period.startDate endDate:period.endDate success:^(NSDictionary *result) {
+            [SSJReportFormsUtil queryForBillStatisticsWithTimeDimension:view.item.timeDimension booksId:wself.currentBooksItem.booksId billTypeId:nil startDate:period.startDate endDate:period.endDate success:^(NSDictionary *result) {
                 
                 [wself.curveHeaderView hideLoadingOnCurve];
                 

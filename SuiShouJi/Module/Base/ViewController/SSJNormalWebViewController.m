@@ -76,7 +76,7 @@
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
-    [self.webView setFrame:self.view.bounds];
+    self.webView.frame = CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM);
 }
 
 - (void)viewWillAppear:(BOOL)animated{
