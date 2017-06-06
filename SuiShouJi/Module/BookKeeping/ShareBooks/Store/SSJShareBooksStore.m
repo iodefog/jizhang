@@ -33,11 +33,10 @@
             memberItem.booksId = [resultSet stringForColumn:@"cbooksid"];
             memberItem.icon = [resultSet stringForColumn:@"cicon"];
             memberItem.joinDate = [resultSet stringForColumn:@"cjoindate"];
-            memberItem.state = [resultSet stringForColumn:@"istate"];
+            memberItem.state = [resultSet boolForColumn:@"istate"];
             memberItem.nickName = [resultSet stringForColumn:@"cmark"];
             [tempArr addObject:memberItem];
         }
-        
         
         if ([booksItem.adminId isEqualToString:userId]) {
             SSJShareBookMemberItem *memberItem = [[SSJShareBookMemberItem alloc] init];

@@ -57,7 +57,11 @@
 }
 
 - (void)setBooksImage:(UIImage *)booksImage {
-    [self.leftBtn setImage:[booksImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    UIImage *resizedImage = [booksImage ssj_scaleImageWithSize:CGSizeMake(21, 21)];
+    UIImage *tmplateImage = [resizedImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    [self.leftBtn setImage:tmplateImage forState:UIControlStateNormal];
+    
+//    [self.leftBtn setImage:[booksImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
 }
 
 - (void)setBooksColor:(UIColor *)booksColor {

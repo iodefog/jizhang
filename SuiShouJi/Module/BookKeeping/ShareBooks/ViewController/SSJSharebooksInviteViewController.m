@@ -364,6 +364,9 @@
         
         [url appendFormat:@"books=%@&",weakSelf.item.booksName];
         
+        [url appendFormat:@"endtime=%@&",weakSelf.saveCodeService.overTime];
+
+        
         NSString *iconUrl = userItem.icon;
         
         if (![iconUrl hasPrefix:@"http"]) {

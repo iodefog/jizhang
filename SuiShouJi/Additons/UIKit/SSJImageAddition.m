@@ -102,9 +102,9 @@
     return self;
 }
 
-- (UIImage *)ssj_scaleImageWithSize:(CGSize)Size{
-    UIGraphicsBeginImageContext(Size);
-    [self drawInRect:CGRectMake(0, 0, Size.width, Size.height)];
+- (UIImage *)ssj_scaleImageWithSize:(CGSize)size{
+    UIGraphicsBeginImageContextWithOptions(size, NO, 0);
+    [self drawInRect:CGRectMake(0, 0, size.width, size.height)];
     UIImage* scaledImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     return scaledImage;

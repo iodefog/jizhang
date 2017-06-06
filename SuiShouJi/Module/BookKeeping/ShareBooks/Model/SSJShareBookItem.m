@@ -106,36 +106,28 @@
     return singleColor;
 }
 
-+ (NSString *)parentIconForParenType:(NSInteger)type {
-    NSString *icon;
-    
-    switch (type) {
-        case 0:
-        icon = @"bk_moren";
+- (NSString *)parentIcon {
+    switch (self.booksParent) {
+        case SSJBooksTypeDaily:
+        return @"bk_moren";
         break;
         
-        case 1:
-        icon = @"bk_shengyi";
+        case SSJBooksTypeBusiness:
+        return @"bk_shengyi";
         break;
         
-        case 2:
-        icon = @"bk_jiehun";
+        case SSJBooksTypeMarriage:
+        return @"bk_jiehun";
         break;
         
-        case 3:
-        icon = @"bk_zhuangxiu";
+        case SSJBooksTypeDecoration:
+        return @"bk_zhuangxiu";
         break;
         
-        case 4:
-        icon = @"bk_lvxing";
-        break;
-        
-        default:
-        icon = @"bk_moren";
+        case SSJBooksTypeTravel:
+        return @"bk_lvxing";
         break;
     }
-    
-    return icon;
 }
 
 

@@ -214,7 +214,8 @@ static NSString * SSJSharebooksMemberCellIdentifier = @"SSJSharebooksMemberCellI
         return;
     }
     
-    NSInteger rowCount = self.items.count / 4 + 1;
+    
+    NSInteger rowCount = ceil((double)self.items.count / 4.f);
     
     float height = BOTTOM_MARGIN + TOP_MARGIN + rowCount * ITEM_SIZE_HEIGHT + (rowCount - 1) * ITEM_SPACE;
     
