@@ -5375,6 +5375,8 @@
 		9C56E1301D1A87640057895D /* SSJRecordMakingStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C56E12F1D1A87640057895D /* SSJRecordMakingStore.m */; };
 		9C6167331E4D605A00D9209A /* SSJDatabaseVersion12.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6167321E4D605A00D9209A /* SSJDatabaseVersion12.m */; };
 		9C61AAA71D5B30DE005DC9BD /* SSJThemeDownLoadCompleteService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61AAA61D5B30DE005DC9BD /* SSJThemeDownLoadCompleteService.m */; };
+		9C61E2FE1EE654BC001BA5F2 /* lottie_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 9C61E2FD1EE654BC001BA5F2 /* lottie_3.json */; };
+		9C61E3021EE65737001BA5F2 /* lottie_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 9C61E3011EE65737001BA5F2 /* lottie_1.json */; };
 		9C61FD1F1EAE0C2800971F0F /* SSJHomeThemeModifyView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61FD1E1EAE0C2800971F0F /* SSJHomeThemeModifyView.m */; };
 		9C61FD201EAE0CF100971F0F /* SSJHomeThemeModifyView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61FD1E1EAE0C2800971F0F /* SSJHomeThemeModifyView.m */; };
 		9C61FD211EAE0CF200971F0F /* SSJHomeThemeModifyView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61FD1E1EAE0C2800971F0F /* SSJHomeThemeModifyView.m */; };
@@ -9665,6 +9667,8 @@
 		9C6167321E4D605A00D9209A /* SSJDatabaseVersion12.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDatabaseVersion12.m; sourceTree = "<group>"; };
 		9C61AAA51D5B30DE005DC9BD /* SSJThemeDownLoadCompleteService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJThemeDownLoadCompleteService.h; sourceTree = "<group>"; };
 		9C61AAA61D5B30DE005DC9BD /* SSJThemeDownLoadCompleteService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJThemeDownLoadCompleteService.m; sourceTree = "<group>"; };
+		9C61E2FD1EE654BC001BA5F2 /* lottie_3.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = lottie_3.json; sourceTree = "<group>"; };
+		9C61E3011EE65737001BA5F2 /* lottie_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = lottie_1.json; sourceTree = "<group>"; };
 		9C61FD1D1EAE0C2800971F0F /* SSJHomeThemeModifyView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJHomeThemeModifyView.h; sourceTree = "<group>"; };
 		9C61FD1E1EAE0C2800971F0F /* SSJHomeThemeModifyView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJHomeThemeModifyView.m; sourceTree = "<group>"; };
 		9C61FD2B1EAE13FE00971F0F /* SSJCustomThemeSelectCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCustomThemeSelectCollectionViewCell.h; sourceTree = "<group>"; };
@@ -12274,6 +12278,15 @@
 			path = Store;
 			sourceTree = "<group>";
 		};
+		9C61E2FC1EE654BC001BA5F2 /* LottieJson */ = {
+			isa = PBXGroup;
+			children = (
+				9C61E3011EE65737001BA5F2 /* lottie_1.json */,
+				9C61E2FD1EE654BC001BA5F2 /* lottie_3.json */,
+			);
+			path = LottieJson;
+			sourceTree = "<group>";
+		};
 		9C66F1111D20C1620094125D /* ThemeManager */ = {
 			isa = PBXGroup;
 			children = (
@@ -13587,6 +13600,7 @@
 		BD0E43EB1C2118E600F9179D /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				9C61E2FC1EE654BC001BA5F2 /* LottieJson */,
 				9C24E6EE1EC428980022D60A /* buildconfig */,
 				9C30AA871EAF6E7C008DD51D /* customTheme */,
 				9C3A2D461E65A4C200DFAE2C /* Entitlements */,
@@ -14817,6 +14831,7 @@
 				9C7D31CC1E8E08980093001F /* youyujizhangpro-Info.plist in Resources */,
 				9CAF731C1E03EAD90061ADB8 /* xiaomao.gif in Resources */,
 				7D5F33511CEAE6C10086B67E /* SSJCalenderTableViewNoDataHeader.xib in Resources */,
+				9C61E2FE1EE654BC001BA5F2 /* lottie_3.json in Resources */,
 				9C3849761E641D1100BF4AF9 /* 9188JiZhangBen-Info.plist in Resources */,
 				7D6AAB751C3233190007C0A3 /* mydatabase.db in Resources */,
 				9C23EA4D1DDAD4FE0003C5AB /* 9188.cer in Resources */,
@@ -14834,6 +14849,7 @@
 				9C7D31CD1E8E08980093001F /* 9188jizhangpro-Info.plist in Resources */,
 				7DBB3F0B1E55C4530075E638 /* JiZhangGuanJia-Info.plist in Resources */,
 				7DBB38241E55BE2F0075E638 /* YouYuJiZhangGuanJia-Info.plist in Resources */,
+				9C61E3021EE65737001BA5F2 /* lottie_1.json in Resources */,
 				9CFBAC321E07D4DE00C55814 /* homeDefualtLoading.gif in Resources */,
 				9CAF731E1E03EAE50061ADB8 /* homeLoading.gif in Resources */,
 				7D4EF8941C4B5625003C4B20 /* ProjectSettings.plist in Resources */,
