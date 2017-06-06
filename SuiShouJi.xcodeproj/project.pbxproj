@@ -5375,8 +5375,45 @@
 		9C56E1301D1A87640057895D /* SSJRecordMakingStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C56E12F1D1A87640057895D /* SSJRecordMakingStore.m */; };
 		9C6167331E4D605A00D9209A /* SSJDatabaseVersion12.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6167321E4D605A00D9209A /* SSJDatabaseVersion12.m */; };
 		9C61AAA71D5B30DE005DC9BD /* SSJThemeDownLoadCompleteService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61AAA61D5B30DE005DC9BD /* SSJThemeDownLoadCompleteService.m */; };
-		9C61E2FE1EE654BC001BA5F2 /* lottie_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 9C61E2FD1EE654BC001BA5F2 /* lottie_3.json */; };
 		9C61E3021EE65737001BA5F2 /* lottie_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 9C61E3011EE65737001BA5F2 /* lottie_1.json */; };
+		9C61E3111EE6AA04001BA5F2 /* lottie_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 9C61E3011EE65737001BA5F2 /* lottie_1.json */; };
+		9C61E3121EE6AA05001BA5F2 /* lottie_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 9C61E3011EE65737001BA5F2 /* lottie_1.json */; };
+		9C61E3131EE6AA06001BA5F2 /* lottie_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 9C61E3011EE65737001BA5F2 /* lottie_1.json */; };
+		9C61E3141EE6AA06001BA5F2 /* lottie_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 9C61E3011EE65737001BA5F2 /* lottie_1.json */; };
+		9C61E3151EE6AA07001BA5F2 /* lottie_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 9C61E3011EE65737001BA5F2 /* lottie_1.json */; };
+		9C61E3161EE6AA07001BA5F2 /* lottie_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 9C61E3011EE65737001BA5F2 /* lottie_1.json */; };
+		9C61E3171EE6AA08001BA5F2 /* lottie_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 9C61E3011EE65737001BA5F2 /* lottie_1.json */; };
+		9C61E3181EE6AA08001BA5F2 /* lottie_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 9C61E3011EE65737001BA5F2 /* lottie_1.json */; };
+		9C61E31B1EE6AA0A001BA5F2 /* lottie_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 9C61E3011EE65737001BA5F2 /* lottie_1.json */; };
+		9C61E31C1EE6AA0B001BA5F2 /* lottie_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 9C61E3011EE65737001BA5F2 /* lottie_1.json */; };
+		9C61E31D1EE6AA0B001BA5F2 /* lottie_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 9C61E3011EE65737001BA5F2 /* lottie_1.json */; };
+		9C61E31E1EE6AA0C001BA5F2 /* lottie_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 9C61E3011EE65737001BA5F2 /* lottie_1.json */; };
+		9C61E32F1EE6B224001BA5F2 /* lottie_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 9C61E32E1EE6B224001BA5F2 /* lottie_3.json */; };
+		9C61E3301EE6B224001BA5F2 /* lottie_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 9C61E32E1EE6B224001BA5F2 /* lottie_3.json */; };
+		9C61E3311EE6B224001BA5F2 /* lottie_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 9C61E32E1EE6B224001BA5F2 /* lottie_3.json */; };
+		9C61E3321EE6B224001BA5F2 /* lottie_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 9C61E32E1EE6B224001BA5F2 /* lottie_3.json */; };
+		9C61E3331EE6B224001BA5F2 /* lottie_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 9C61E32E1EE6B224001BA5F2 /* lottie_3.json */; };
+		9C61E3341EE6B224001BA5F2 /* lottie_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 9C61E32E1EE6B224001BA5F2 /* lottie_3.json */; };
+		9C61E3351EE6B224001BA5F2 /* lottie_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 9C61E32E1EE6B224001BA5F2 /* lottie_3.json */; };
+		9C61E3361EE6B224001BA5F2 /* lottie_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 9C61E32E1EE6B224001BA5F2 /* lottie_3.json */; };
+		9C61E3371EE6B224001BA5F2 /* lottie_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 9C61E32E1EE6B224001BA5F2 /* lottie_3.json */; };
+		9C61E3381EE6B224001BA5F2 /* lottie_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 9C61E32E1EE6B224001BA5F2 /* lottie_3.json */; };
+		9C61E3391EE6B224001BA5F2 /* lottie_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 9C61E32E1EE6B224001BA5F2 /* lottie_3.json */; };
+		9C61E33A1EE6B224001BA5F2 /* lottie_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 9C61E32E1EE6B224001BA5F2 /* lottie_3.json */; };
+		9C61E33B1EE6B224001BA5F2 /* lottie_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 9C61E32E1EE6B224001BA5F2 /* lottie_3.json */; };
+		9C61E33D1EE6B9BE001BA5F2 /* lottie_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 9C61E33C1EE6B9BE001BA5F2 /* lottie_2.json */; };
+		9C61E33E1EE6B9BE001BA5F2 /* lottie_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 9C61E33C1EE6B9BE001BA5F2 /* lottie_2.json */; };
+		9C61E33F1EE6B9BE001BA5F2 /* lottie_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 9C61E33C1EE6B9BE001BA5F2 /* lottie_2.json */; };
+		9C61E3401EE6B9BE001BA5F2 /* lottie_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 9C61E33C1EE6B9BE001BA5F2 /* lottie_2.json */; };
+		9C61E3411EE6B9BE001BA5F2 /* lottie_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 9C61E33C1EE6B9BE001BA5F2 /* lottie_2.json */; };
+		9C61E3421EE6B9BE001BA5F2 /* lottie_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 9C61E33C1EE6B9BE001BA5F2 /* lottie_2.json */; };
+		9C61E3431EE6B9BE001BA5F2 /* lottie_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 9C61E33C1EE6B9BE001BA5F2 /* lottie_2.json */; };
+		9C61E3441EE6B9BE001BA5F2 /* lottie_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 9C61E33C1EE6B9BE001BA5F2 /* lottie_2.json */; };
+		9C61E3451EE6B9BE001BA5F2 /* lottie_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 9C61E33C1EE6B9BE001BA5F2 /* lottie_2.json */; };
+		9C61E3461EE6B9BE001BA5F2 /* lottie_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 9C61E33C1EE6B9BE001BA5F2 /* lottie_2.json */; };
+		9C61E3471EE6B9BE001BA5F2 /* lottie_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 9C61E33C1EE6B9BE001BA5F2 /* lottie_2.json */; };
+		9C61E3481EE6B9BE001BA5F2 /* lottie_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 9C61E33C1EE6B9BE001BA5F2 /* lottie_2.json */; };
+		9C61E3491EE6B9BE001BA5F2 /* lottie_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 9C61E33C1EE6B9BE001BA5F2 /* lottie_2.json */; };
 		9C61FD1F1EAE0C2800971F0F /* SSJHomeThemeModifyView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61FD1E1EAE0C2800971F0F /* SSJHomeThemeModifyView.m */; };
 		9C61FD201EAE0CF100971F0F /* SSJHomeThemeModifyView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61FD1E1EAE0C2800971F0F /* SSJHomeThemeModifyView.m */; };
 		9C61FD211EAE0CF200971F0F /* SSJHomeThemeModifyView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61FD1E1EAE0C2800971F0F /* SSJHomeThemeModifyView.m */; };
@@ -9667,8 +9704,9 @@
 		9C6167321E4D605A00D9209A /* SSJDatabaseVersion12.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDatabaseVersion12.m; sourceTree = "<group>"; };
 		9C61AAA51D5B30DE005DC9BD /* SSJThemeDownLoadCompleteService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJThemeDownLoadCompleteService.h; sourceTree = "<group>"; };
 		9C61AAA61D5B30DE005DC9BD /* SSJThemeDownLoadCompleteService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJThemeDownLoadCompleteService.m; sourceTree = "<group>"; };
-		9C61E2FD1EE654BC001BA5F2 /* lottie_3.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = lottie_3.json; sourceTree = "<group>"; };
 		9C61E3011EE65737001BA5F2 /* lottie_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = lottie_1.json; sourceTree = "<group>"; };
+		9C61E32E1EE6B224001BA5F2 /* lottie_3.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = lottie_3.json; sourceTree = "<group>"; };
+		9C61E33C1EE6B9BE001BA5F2 /* lottie_2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = lottie_2.json; sourceTree = "<group>"; };
 		9C61FD1D1EAE0C2800971F0F /* SSJHomeThemeModifyView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJHomeThemeModifyView.h; sourceTree = "<group>"; };
 		9C61FD1E1EAE0C2800971F0F /* SSJHomeThemeModifyView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJHomeThemeModifyView.m; sourceTree = "<group>"; };
 		9C61FD2B1EAE13FE00971F0F /* SSJCustomThemeSelectCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCustomThemeSelectCollectionViewCell.h; sourceTree = "<group>"; };
@@ -12281,8 +12319,9 @@
 		9C61E2FC1EE654BC001BA5F2 /* LottieJson */ = {
 			isa = PBXGroup;
 			children = (
+				9C61E32E1EE6B224001BA5F2 /* lottie_3.json */,
+				9C61E33C1EE6B9BE001BA5F2 /* lottie_2.json */,
 				9C61E3011EE65737001BA5F2 /* lottie_1.json */,
-				9C61E2FD1EE654BC001BA5F2 /* lottie_3.json */,
 			);
 			path = LottieJson;
 			sourceTree = "<group>";
@@ -14418,6 +14457,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7DB7E46B1EBB26C1002383C5 /* customBackGround.zip in Resources */,
+				9C61E3341EE6B224001BA5F2 /* lottie_3.json in Resources */,
 				7D08A2BB1E4999D30085A8FB /* pushsound.wav in Resources */,
 				7D08A2BC1E4999D30085A8FB /* xiaomao.gif in Resources */,
 				7D08A2BD1E4999D30085A8FB /* SSJCalenderTableViewNoDataHeader.xib in Resources */,
@@ -14430,11 +14470,13 @@
 				7D08A2C41E4999D30085A8FB /* youyuwo.cer in Resources */,
 				9C30AA901EAF6EA6008DD51D /* 1001.zip in Resources */,
 				7D08A2C51E4999D30085A8FB /* rain_sound.wav in Resources */,
+				9C61E3151EE6AA07001BA5F2 /* lottie_1.json in Resources */,
 				7D08A2C61E4999D30085A8FB /* Assets.xcassets in Resources */,
 				7D08A2C81E4999D30085A8FB /* sr_refresh.png in Resources */,
 				7D08A2C91E4999D30085A8FB /* homeDefualtLoading.gif in Resources */,
 				7D08A2CA1E4999D30085A8FB /* homeLoading.gif in Resources */,
 				7D08A2CB1E4999D30085A8FB /* ProjectSettings.plist in Resources */,
+				9C61E3421EE6B9BE001BA5F2 /* lottie_2.json in Resources */,
 				7D08A2CD1E4999D30085A8FB /* Localizable.strings in Resources */,
 				7D08A2CE1E4999D30085A8FB /* SSJFinancingHomePopView.xib in Resources */,
 			);
@@ -14445,6 +14487,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7DB7E46A1EBB26C0002383C5 /* customBackGround.zip in Resources */,
+				9C61E3331EE6B224001BA5F2 /* lottie_3.json in Resources */,
 				7DA13C121E35AED7000490A4 /* pushsound.wav in Resources */,
 				7DA13C131E35AED7000490A4 /* xiaomao.gif in Resources */,
 				7DA13C141E35AED7000490A4 /* SSJCalenderTableViewNoDataHeader.xib in Resources */,
@@ -14457,11 +14500,13 @@
 				7DA13C1B1E35AED7000490A4 /* youyuwo.cer in Resources */,
 				9C30AA8F1EAF6EA6008DD51D /* 1001.zip in Resources */,
 				7DA13C1C1E35AED7000490A4 /* rain_sound.wav in Resources */,
+				9C61E3141EE6AA06001BA5F2 /* lottie_1.json in Resources */,
 				7DA13C1D1E35AED7000490A4 /* Assets.xcassets in Resources */,
 				7DA13C1F1E35AED7000490A4 /* sr_refresh.png in Resources */,
 				7DA13C201E35AED7000490A4 /* homeDefualtLoading.gif in Resources */,
 				7DA13C211E35AED7000490A4 /* homeLoading.gif in Resources */,
 				7DA13C221E35AED7000490A4 /* ProjectSettings.plist in Resources */,
+				9C61E3411EE6B9BE001BA5F2 /* lottie_2.json in Resources */,
 				7DA13C241E35AED7000490A4 /* Localizable.strings in Resources */,
 				7DA13C251E35AED7000490A4 /* SSJFinancingHomePopView.xib in Resources */,
 			);
@@ -14479,17 +14524,20 @@
 				7DBB3CA41E55C2EE0075E638 /* 9188.cer in Resources */,
 				7DBB3CA51E55C2EE0075E638 /* sr_refresh@2x.png in Resources */,
 				7DBB3CA61E55C2EE0075E638 /* SSJBookKeepingHomePopView.xib in Resources */,
+				9C61E3161EE6AA07001BA5F2 /* lottie_1.json in Resources */,
 				7DBB3CA71E55C2EE0075E638 /* youyuwo.cer in Resources */,
 				7DBB3CA81E55C2EE0075E638 /* SuiShouJi-Info.plist in Resources */,
 				7DBB3CA91E55C2EE0075E638 /* rain_sound.wav in Resources */,
 				7DBB3CAA1E55C2EE0075E638 /* Assets.xcassets in Resources */,
 				7DBB3CAB1E55C2EE0075E638 /* sr_refresh.png in Resources */,
 				9C155F161E68572700FDFD18 /* MJRefresh.bundle in Resources */,
+				9C61E3431EE6B9BE001BA5F2 /* lottie_2.json in Resources */,
 				9C30AA911EAF6EA7008DD51D /* 1001.zip in Resources */,
 				7DBB3CAC1E55C2EE0075E638 /* YouYuJiZhang-Info.plist in Resources */,
 				7DBB3CAD1E55C2EE0075E638 /* YouYuJiZhangGuanJia-Info.plist in Resources */,
 				7DBB3CAE1E55C2EE0075E638 /* homeDefualtLoading.gif in Resources */,
 				9C30AA9D1EAF6EB2008DD51D /* 1000.zip in Resources */,
+				9C61E3351EE6B224001BA5F2 /* lottie_3.json in Resources */,
 				7DBB3CAF1E55C2EE0075E638 /* homeLoading.gif in Resources */,
 				7DB7E46C1EBB26C2002383C5 /* customBackGround.zip in Resources */,
 				7DBB3CB01E55C2EE0075E638 /* ProjectSettings.plist in Resources */,
@@ -14508,6 +14556,7 @@
 				7DBB413B1E55C4E00075E638 /* xiaomao.gif in Resources */,
 				7DBB413C1E55C4E00075E638 /* SSJCalenderTableViewNoDataHeader.xib in Resources */,
 				7DBB413D1E55C4E00075E638 /* mydatabase.db in Resources */,
+				9C61E33E1EE6B9BE001BA5F2 /* lottie_2.json in Resources */,
 				7DBB413F1E55C4E00075E638 /* 9188.cer in Resources */,
 				7DBB41401E55C4E00075E638 /* sr_refresh@2x.png in Resources */,
 				7DBB41411E55C4E00075E638 /* SSJBookKeepingHomePopView.xib in Resources */,
@@ -14519,8 +14568,10 @@
 				7DBB41461E55C4E00075E638 /* Assets.xcassets in Resources */,
 				7DB7E4681EBB26BE002383C5 /* customBackGround.zip in Resources */,
 				7DBB41471E55C4E00075E638 /* sr_refresh.png in Resources */,
+				9C61E3121EE6AA05001BA5F2 /* lottie_1.json in Resources */,
 				7D8952DB1EB2F21700FF6D04 /* 1001.zip in Resources */,
 				7DBB41481E55C4E00075E638 /* YouYuJiZhang-Info.plist in Resources */,
+				9C61E3301EE6B224001BA5F2 /* lottie_3.json in Resources */,
 				7DBB41491E55C4E00075E638 /* JiZhangGuanJia-Info.plist in Resources */,
 				7DBB414A1E55C4E00075E638 /* YouYuJiZhangGuanJia-Info.plist in Resources */,
 				7DBB414B1E55C4E00075E638 /* homeDefualtLoading.gif in Resources */,
@@ -14552,16 +14603,19 @@
 				7DFB18B11EB0341E00292DD3 /* youyuwo.cer in Resources */,
 				7DFB18B21EB0341E00292DD3 /* YouYuJiZhangLiCai-Info.plist in Resources */,
 				7DFB19201EB1E3E400292DD3 /* 1000.zip in Resources */,
+				9C61E3491EE6B9BE001BA5F2 /* lottie_2.json in Resources */,
 				7DFB18B31EB0341E00292DD3 /* SuiShouJi-Info.plist in Resources */,
 				7DB7E4721EBB26CB002383C5 /* customBackGround.zip in Resources */,
 				7DFB191F1EB1E3E100292DD3 /* 1001.zip in Resources */,
 				7DFB18B41EB0341E00292DD3 /* rain_sound.wav in Resources */,
+				9C61E33B1EE6B224001BA5F2 /* lottie_3.json in Resources */,
 				7DFB18B51EB0341E00292DD3 /* Assets.xcassets in Resources */,
 				7DFB18B61EB0341E00292DD3 /* sr_refresh.png in Resources */,
 				7DFB18B71EB0341E00292DD3 /* YouYuJiZhang-Info.plist in Resources */,
 				7DFB18B81EB0341E00292DD3 /* 9188jizhangpro-Info.plist in Resources */,
 				7DFB18B91EB0341E00292DD3 /* JiZhangGuanJia-Info.plist in Resources */,
 				7DFB18BA1EB0341E00292DD3 /* YouYuJiZhangGuanJia-Info.plist in Resources */,
+				9C61E31E1EE6AA0C001BA5F2 /* lottie_1.json in Resources */,
 				7DFB18BB1EB0341E00292DD3 /* homeDefualtLoading.gif in Resources */,
 				7DFB18BC1EB0341E00292DD3 /* homeLoading.gif in Resources */,
 				7DFB18BD1EB0341E00292DD3 /* ProjectSettings.plist in Resources */,
@@ -14581,6 +14635,7 @@
 				9C13F7201E8267D300AC5FA9 /* xiaomao.gif in Resources */,
 				9C13F7211E8267D300AC5FA9 /* SSJCalenderTableViewNoDataHeader.xib in Resources */,
 				9C13F7221E8267D300AC5FA9 /* mydatabase.db in Resources */,
+				9C61E3441EE6B9BE001BA5F2 /* lottie_2.json in Resources */,
 				9C13F7241E8267D300AC5FA9 /* 9188.cer in Resources */,
 				9C13F7251E8267D300AC5FA9 /* sr_refresh@2x.png in Resources */,
 				9C13F7261E8267D300AC5FA9 /* SSJBookKeepingHomePopView.xib in Resources */,
@@ -14592,8 +14647,10 @@
 				9C13F72B1E8267D300AC5FA9 /* Assets.xcassets in Resources */,
 				7DB7E46D1EBB26C2002383C5 /* customBackGround.zip in Resources */,
 				9C13F72C1E8267D300AC5FA9 /* sr_refresh.png in Resources */,
+				9C61E3171EE6AA08001BA5F2 /* lottie_1.json in Resources */,
 				9C13F72D1E8267D300AC5FA9 /* YouYuJiZhang-Info.plist in Resources */,
 				9C13F72E1E8267D300AC5FA9 /* JiZhangGuanJia-Info.plist in Resources */,
+				9C61E3361EE6B224001BA5F2 /* lottie_3.json in Resources */,
 				9C13F72F1E8267D300AC5FA9 /* YouYuJiZhangGuanJia-Info.plist in Resources */,
 				9C13F7301E8267D300AC5FA9 /* homeDefualtLoading.gif in Resources */,
 				9C13F7311E8267D300AC5FA9 /* homeLoading.gif in Resources */,
@@ -14610,6 +14667,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9C61E3391EE6B224001BA5F2 /* lottie_3.json in Resources */,
 				9C4C224B1E9E30C8000C5F15 /* pushsound.wav in Resources */,
 				9C4C224C1E9E30C8000C5F15 /* YouYuJiZhangBen-Info.plist in Resources */,
 				9C4C224D1E9E30C8000C5F15 /* MJRefresh.bundle in Resources */,
@@ -14622,8 +14680,10 @@
 				9C4C22551E9E30C8000C5F15 /* sr_refresh@2x.png in Resources */,
 				9C4C22561E9E30C8000C5F15 /* SSJBookKeepingHomePopView.xib in Resources */,
 				9C4C22571E9E30C8000C5F15 /* youyuwo.cer in Resources */,
+				9C61E3471EE6B9BE001BA5F2 /* lottie_2.json in Resources */,
 				9C4C22581E9E30C8000C5F15 /* YouYuJiZhangLiCai-Info.plist in Resources */,
 				9C30AAA11EAF6EB5008DD51D /* 1000.zip in Resources */,
+				9C61E31C1EE6AA0B001BA5F2 /* lottie_1.json in Resources */,
 				9C4C22591E9E30C8000C5F15 /* SuiShouJi-Info.plist in Resources */,
 				9C30AA961EAF6EAB008DD51D /* 1001.zip in Resources */,
 				9C4C225A1E9E30C8000C5F15 /* rain_sound.wav in Resources */,
@@ -14656,8 +14716,10 @@
 				9C7D2F341E8DF8A80093001F /* SSJCalenderTableViewNoDataHeader.xib in Resources */,
 				9C7D2F351E8DF8A80093001F /* 9188JiZhangBen-Info.plist in Resources */,
 				9C7D2F361E8DF8A80093001F /* mydatabase.db in Resources */,
+				9C61E32F1EE6B224001BA5F2 /* lottie_3.json in Resources */,
 				9C7D2F371E8DF8A80093001F /* 9188.cer in Resources */,
 				9C7D2F381E8DF8A80093001F /* sr_refresh@2x.png in Resources */,
+				9C61E33D1EE6B9BE001BA5F2 /* lottie_2.json in Resources */,
 				9C7D2F391E8DF8A80093001F /* SSJBookKeepingHomePopView.xib in Resources */,
 				9C7D2F3A1E8DF8A80093001F /* youyuwo.cer in Resources */,
 				9C7D2F3B1E8DF8A80093001F /* YouYuJiZhangLiCai-Info.plist in Resources */,
@@ -14669,6 +14731,7 @@
 				9C7D2F401E8DF8A80093001F /* YouYuJiZhang-Info.plist in Resources */,
 				9C7D2F411E8DF8A80093001F /* JiZhangGuanJia-Info.plist in Resources */,
 				7DB7E4671EBB26BE002383C5 /* customBackGround.zip in Resources */,
+				9C61E3111EE6AA04001BA5F2 /* lottie_1.json in Resources */,
 				9C7D2F421E8DF8A80093001F /* YouYuJiZhangGuanJia-Info.plist in Resources */,
 				9C30AA981EAF6EAF008DD51D /* 1000.zip in Resources */,
 				9C7D2F431E8DF8A80093001F /* homeDefualtLoading.gif in Resources */,
@@ -14693,8 +14756,10 @@
 				9C7D31AB1E8DF96B0093001F /* SSJCalenderTableViewNoDataHeader.xib in Resources */,
 				9C7D31AC1E8DF96B0093001F /* 9188JiZhangBen-Info.plist in Resources */,
 				9C7D31AD1E8DF96B0093001F /* mydatabase.db in Resources */,
+				9C61E3371EE6B224001BA5F2 /* lottie_3.json in Resources */,
 				9C7D31AE1E8DF96B0093001F /* 9188.cer in Resources */,
 				9C7D31AF1E8DF96B0093001F /* sr_refresh@2x.png in Resources */,
+				9C61E3451EE6B9BE001BA5F2 /* lottie_2.json in Resources */,
 				9C7D31B01E8DF96B0093001F /* SSJBookKeepingHomePopView.xib in Resources */,
 				9C7D31B11E8DF96B0093001F /* youyuwo.cer in Resources */,
 				9C7D31B21E8DF96B0093001F /* YouYuJiZhangLiCai-Info.plist in Resources */,
@@ -14706,6 +14771,7 @@
 				9C7D31B71E8DF96B0093001F /* YouYuJiZhang-Info.plist in Resources */,
 				9C7D31B81E8DF96B0093001F /* JiZhangGuanJia-Info.plist in Resources */,
 				7DB7E46E1EBB26C8002383C5 /* customBackGround.zip in Resources */,
+				9C61E3181EE6AA08001BA5F2 /* lottie_1.json in Resources */,
 				9C7D31B91E8DF96B0093001F /* YouYuJiZhangGuanJia-Info.plist in Resources */,
 				9C30AA9F1EAF6EB3008DD51D /* 1000.zip in Resources */,
 				9C7D31BA1E8DF96B0093001F /* homeDefualtLoading.gif in Resources */,
@@ -14722,6 +14788,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9C61E3381EE6B224001BA5F2 /* lottie_3.json in Resources */,
 				9C80FEEA1E95E88E00B1BAAC /* pushsound.wav in Resources */,
 				9C80FEEB1E95E88E00B1BAAC /* YouYuJiZhangBen-Info.plist in Resources */,
 				9C80FEEC1E95E88E00B1BAAC /* MJRefresh.bundle in Resources */,
@@ -14734,8 +14801,10 @@
 				9C80FEF31E95E88E00B1BAAC /* 9188.cer in Resources */,
 				9C80FEF41E95E88E00B1BAAC /* sr_refresh@2x.png in Resources */,
 				9C80FEF51E95E88E00B1BAAC /* SSJBookKeepingHomePopView.xib in Resources */,
+				9C61E3461EE6B9BE001BA5F2 /* lottie_2.json in Resources */,
 				9C80FEF61E95E88E00B1BAAC /* youyuwo.cer in Resources */,
 				9C80FEF71E95E88E00B1BAAC /* YouYuJiZhangLiCai-Info.plist in Resources */,
+				9C61E31B1EE6AA0A001BA5F2 /* lottie_1.json in Resources */,
 				9C30AAA21EAF6EB5008DD51D /* 1000.zip in Resources */,
 				9C80FEF81E95E88E00B1BAAC /* SuiShouJi-Info.plist in Resources */,
 				9C30AA951EAF6EAA008DD51D /* 1001.zip in Resources */,
@@ -14760,6 +14829,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9C61E33A1EE6B224001BA5F2 /* lottie_3.json in Resources */,
 				9C9CF0AA1EA5F73A007657FE /* pushsound.wav in Resources */,
 				9C9CF0AB1EA5F73A007657FE /* YouYuJiZhangBen-Info.plist in Resources */,
 				9C9CF0AC1EA5F73A007657FE /* MJRefresh.bundle in Resources */,
@@ -14772,8 +14842,10 @@
 				9C9CF0B31EA5F73A007657FE /* 9188.cer in Resources */,
 				9C9CF0B41EA5F73A007657FE /* sr_refresh@2x.png in Resources */,
 				9C9CF0B51EA5F73A007657FE /* SSJBookKeepingHomePopView.xib in Resources */,
+				9C61E3481EE6B9BE001BA5F2 /* lottie_2.json in Resources */,
 				9C9CF0B61EA5F73A007657FE /* youyuwo.cer in Resources */,
 				9C9CF0B71EA5F73A007657FE /* YouYuJiZhangLiCai-Info.plist in Resources */,
+				9C61E31D1EE6AA0B001BA5F2 /* lottie_1.json in Resources */,
 				9C30AAA31EAF6EB6008DD51D /* 1000.zip in Resources */,
 				9C9CF0B81EA5F73A007657FE /* SuiShouJi-Info.plist in Resources */,
 				9C30AA971EAF6EAB008DD51D /* 1001.zip in Resources */,
@@ -14806,7 +14878,9 @@
 				9CECFDA21D6D41A700DB2C8B /* SSJBookKeepingHomePopView.xib in Resources */,
 				9CC0AED01DEEE12F0085AC65 /* 9188.cer in Resources */,
 				9CECFDDB1D6D41A700DB2C8B /* rain_sound.wav in Resources */,
+				9C61E3401EE6B9BE001BA5F2 /* lottie_2.json in Resources */,
 				9CECFE031D6D41A700DB2C8B /* Assets.xcassets in Resources */,
+				9C61E3131EE6AA06001BA5F2 /* lottie_1.json in Resources */,
 				9CECFE461D6D41A700DB2C8B /* sr_refresh.png in Resources */,
 				9CECFEB51D6D41A700DB2C8B /* ProjectSettings.plist in Resources */,
 				7DC4875E1DF6629700C27B69 /* Localizable.strings in Resources */,
@@ -14816,6 +14890,7 @@
 				9CFBAC401E07D4EC00C55814 /* xiaomao.gif in Resources */,
 				9CECFED81D6D41A700DB2C8B /* SSJFinancingHomePopView.xib in Resources */,
 				9C155F131E68572700FDFD18 /* MJRefresh.bundle in Resources */,
+				9C61E3321EE6B224001BA5F2 /* lottie_3.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -14831,7 +14906,6 @@
 				9C7D31CC1E8E08980093001F /* youyujizhangpro-Info.plist in Resources */,
 				9CAF731C1E03EAD90061ADB8 /* xiaomao.gif in Resources */,
 				7D5F33511CEAE6C10086B67E /* SSJCalenderTableViewNoDataHeader.xib in Resources */,
-				9C61E2FE1EE654BC001BA5F2 /* lottie_3.json in Resources */,
 				9C3849761E641D1100BF4AF9 /* 9188JiZhangBen-Info.plist in Resources */,
 				7D6AAB751C3233190007C0A3 /* mydatabase.db in Resources */,
 				9C23EA4D1DDAD4FE0003C5AB /* 9188.cer in Resources */,
@@ -14839,10 +14913,12 @@
 				7D5F332C1CEAE6C10086B67E /* SSJBookKeepingHomePopView.xib in Resources */,
 				7D81DBB91E1369560072DB7E /* youyuwo.cer in Resources */,
 				7DBB3CBD1E55C3500075E638 /* YouYuJiZhangLiCai-Info.plist in Resources */,
+				9C61E33F1EE6B9BE001BA5F2 /* lottie_2.json in Resources */,
 				9C30AA8B1EAF6E9F008DD51D /* 1000.zip in Resources */,
 				9C03D87F1EB855D600D845DD /* customBackGround.zip in Resources */,
 				9C30AA8A1EAF6E9F008DD51D /* 1001.zip in Resources */,
 				7D4A430A1CC63755002F0264 /* rain_sound.wav in Resources */,
+				9C61E3311EE6B224001BA5F2 /* lottie_3.json in Resources */,
 				BD543C4C1C1A6DBC00910D61 /* Assets.xcassets in Resources */,
 				BD0432F01C1A77BB0051E7AB /* sr_refresh.png in Resources */,
 				7DBB3A701E55C13F0075E638 /* YouYuJiZhang-Info.plist in Resources */,

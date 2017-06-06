@@ -24,7 +24,8 @@
              @"iparenttype",
              @"iversion",
              @"cwritedate",
-             @"operatortype"];
+             @"operatortype",
+             @"iorder"];
 }
 
 + (NSArray *)primaryKeys {
@@ -60,6 +61,7 @@
         NSString *iversion = [result stringForColumn:@"iversion"];
         NSString *cwritedate = [result stringForColumn:@"cwritedate"];
         NSInteger operatortype = [result intForColumn:@"operatortype"];
+        NSInteger iorder = [result intForColumn:@"iorder"];
         [syncRecords addObject:@{@"cbooksid":ID,
                                  @"ccreator":ccreator,
                                  @"cadmin":cadmin,
@@ -68,7 +70,8 @@
                                  @"cbookscolor":cbookscolor,
                                  @"iversion":iversion,
                                  @"cwritedate":cwritedate,
-                                 @"operatortype":@(operatortype)}];
+                                 @"operatortype":@(operatortype),
+                                 @"iorder":@(iorder)}];
     }
     return syncRecords;
 }
