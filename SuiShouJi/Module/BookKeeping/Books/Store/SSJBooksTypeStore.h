@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "SSJBooksTypeItem.h"
 #import "SSJShareBookItem.h"
+#import "SSJDatabaseQueue.h"
 
 typedef enum : NSUInteger {
     ShareBookOperateCreate,
@@ -79,6 +80,10 @@ typedef enum : NSUInteger {
 
 + (void)getTotalIncomeAndExpenceWithSuccess:(void(^)(double income,double expenture))success
                                     failure:(void (^)(NSError *error))failure;
+
++ (BOOL)generateBooksTypeForBooksItem:(id<SSJBooksItemProtocol>)item
+                           indatabase:(FMDatabase *)db
+                            forUserId:(NSString *)userId ;
 
 
 #pragma mark - 共享账本

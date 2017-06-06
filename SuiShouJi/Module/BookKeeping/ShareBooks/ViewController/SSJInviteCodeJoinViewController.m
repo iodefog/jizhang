@@ -15,6 +15,7 @@
 #import "SSJShareBooksMemberSyncTable.h"
 #import "SSJUserChargeSyncTable.h"
 #import "SSJShareBooksFriendMarkSyncTable.h"
+#import "SSJBooksTypeStore.h"
 
 #import "SSJDatabaseQueue.h"
 
@@ -210,7 +211,11 @@
                 return;
             }
             
-            if (![db executeUpdate:@"update bk_user set ccurrentbookstype = ? where cuserid = ?",booksId,SSJUSERID()]) {
+            if (![db executeUpdate:@"update bk_user set ccurrentbooksid = ? where cuserid = ?",booksId,SSJUSERID()]) {
+                return;
+            }
+            
+            if (![SSJBooksTypeStore generateBooksTypeForBooksItem:[SSJShareBookItem mj_objectWithKeyValues:self.service.shareBooksTableInfo] indatabase:db forUserId:SSJUSERID()]) {
                 return;
             }
         
