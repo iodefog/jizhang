@@ -126,7 +126,7 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
     } else if([self.bookItem isKindOfClass:[SSJShareBookItem class]]) { //共享账本
         if (((SSJShareBookItem *)self.bookItem).booksId.length) {
             //编辑共享账本
-            self.currentBookType = ((SSJShareBookItem *)self.bookItem).booksParent;
+            self.currentBookType = [self bookParentWithCurrentBookType:((SSJShareBookItem *)self.bookItem).booksParent];//;
             self.gradientColorItem = ((SSJShareBookItem *)self.bookItem).booksColor;
             self.bookParentStr = [self bookParentStrWithKey:[NSString stringWithFormat:@"%ld",(long)self.currentBookType]];
             self.bookName = ((SSJShareBookItem *)self.bookItem).booksName;
