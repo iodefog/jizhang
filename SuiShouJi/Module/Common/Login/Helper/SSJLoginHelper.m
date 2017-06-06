@@ -134,7 +134,7 @@
         
         // 如果后端数据没有升级的话要对后端数据进行处理
         if (!hasUpdated) {
-            NSString *sql1 = [NSString stringWithFormat:@"insert into bk_user_bill select ub.cuserid, ub.cbillid, ub.istate, '%@', '%@', 1, ub.iorder, bk.cbooksid from bk_user_bill ub , bk_books_type bk where ub.operatortype <> 2 and bk.cbooksid not like bk.cuserid || '%%' and ub.cbooksid = bk.cuserid and length(ub.cbillid) < 10  and bk.cuserid = '%@' and ub.cuserid = '%@'",writeDate,@(SSJSyncVersion()),userId,userId];
+            NSString *sql1 = [NSString stringWithFormat:@"replace into bk_user_bill select ub.cuserid, ub.cbillid, ub.istate, '%@', '%@', 1, ub.iorder, bk.cbooksid from bk_user_bill ub , bk_books_type bk where ub.operatortype <> 2 and bk.cbooksid not like bk.cuserid || '%%' and ub.cbooksid = bk.cuserid and length(ub.cbillid) < 10  and bk.cuserid = '%@' and ub.cuserid = '%@'",writeDate,@(SSJSyncVersion()),userId,userId];
             // 然后将日常账本的记账类型拷进自定义账本
             if (![db executeUpdate:sql1]) {
                 if (error) {
@@ -144,7 +144,7 @@
             }
             
             // 将四个非日常账本的默认账本插入所有默认类型
-            NSString *sql2 = [NSString stringWithFormat:@"insert into bk_user_bill select a.cuserid ,b.id , 1, '%@', '%@', 0, b.defaultorder, a.cbooksid from bk_books_type a, bk_bill_type b where a.iparenttype = b.ibookstype and a.cbooksid <> a.cuserid and length(b.ibookstype) = 1 and a.cbooksid like a.cuserid || '%%' and cuserid = '%@'",writeDate,@(SSJSyncVersion()),userId];
+            NSString *sql2 = [NSString stringWithFormat:@"replace into bk_user_bill select a.cuserid ,b.id , 1, '%@', '%@', 0, b.defaultorder, a.cbooksid from bk_books_type a, bk_bill_type b where a.iparenttype = b.ibookstype and a.cbooksid <> a.cuserid and length(b.ibookstype) = 1 and a.cbooksid like a.cuserid || '%%' and cuserid = '%@'",writeDate,@(SSJSyncVersion()),userId];
             if (![db executeUpdate:sql2]) {
                 if (error) {
                     *error = [db lastError];
@@ -173,7 +173,7 @@
                 NSArray *parentArr = [iparenttype componentsSeparatedByString:@","];
                 for (NSString *parenttype in parentArr) {
                     if ([parenttype integerValue]) {
-                        if (![db executeUpdate:@"insert into bk_user_bill select cuserid ,? , 1, ?, ?, 1, ?, cbooksid from bk_books_type where iparenttype = ? and operatortype <> 2 and cuserid = ?",cbillid,writeDate,@(SSJSyncVersion()),defualtOrder,parenttype,userId]) {
+                        if (![db executeUpdate:@"replace into bk_user_bill select cuserid ,? , 1, ?, ?, 1, ?, cbooksid from bk_books_type where iparenttype = ? and operatortype <> 2 and cuserid = ?",cbillid,writeDate,@(SSJSyncVersion()),defualtOrder,parenttype,userId]) {
                             if (error) {
                                 *error = [db lastError];
                             }

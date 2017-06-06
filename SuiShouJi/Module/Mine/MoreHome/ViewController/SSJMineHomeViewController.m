@@ -380,6 +380,7 @@ static BOOL kNeedBannerDisplay = YES;
             self.rightButton.hasNewAnnoucements = self.annoucementService.hasNewAnnouceMent;
             self.announcements = [NSArray arrayWithArray:self.annoucementService.annoucements];
             self.announcementView.height = 34;
+            self.announcementView.hidden = NO;
             [self.view setNeedsLayout];
         }
     }
@@ -555,6 +556,7 @@ static BOOL kNeedBannerDisplay = YES;
 - (SSJScrollalbleAnnounceView *)announcementView {
     if (!_announcementView) {
         _announcementView = [[SSJScrollalbleAnnounceView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, 0)];
+        _announcementView.hidden = YES;
         __weak typeof(self) weakSelf = self;
         _announcementView.announceClickedBlock = ^(SSJAnnoucementItem *item) {
             if (item) {
@@ -718,9 +720,9 @@ static BOOL kNeedBannerDisplay = YES;
     NSArray *annoucements = [SSJAnnoucementItem mj_objectArrayWithKeyValuesArray:jsonArr];
 
     if (annoucements.count > 0) {
+        self.announcementView.hidden = NO;
         self.announcementView.items = annoucements;
         self.announcementView.height = 34;
-        self.announcementView.hidden = NO;
         [self.view setNeedsLayout];
     }
 }
