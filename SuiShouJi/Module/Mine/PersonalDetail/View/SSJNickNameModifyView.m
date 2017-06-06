@@ -97,29 +97,6 @@
     } timeInterval:0.25 fininshed:NULL];
 }
 
-
-//-(void)layoutSubviews{
-//    [super layoutSubviews];
-//    self.titleView.size = CGSizeMake(self.width, 42);
-//    self.titleView.leftTop = CGPointMake(0, 0);
-//    self.titleView.centerX = self.width / 2;
-//    self.titleLabel.center = CGPointMake(self.titleView.width / 2, self.titleView.height / 2);
-//    self.textInput.size = CGSizeMake(self.width - 20, 49);
-//    self.textInput.top = self.titleView.bottom + 10;
-//    self.textInput.centerX = self.width / 2;
-//    self.textLengthLabel.right = self.textInput.right;
-//    self.textLengthLabel.top = self.textInput.bottom - 9;
-//    self.bottomView.size = CGSizeMake(self.width, 53);
-//    self.bottomView.rightBottom = CGPointMake(0, self.height);
-//    self.bottomView.centerX = self.width / 2;
-//    self.comfirmButton.size = CGSizeMake(55, 27);
-//    self.comfirmButton.right = self.textInput.right;
-//    self.comfirmButton.centerY = self.bottomView.height / 2;
-//    self.cancelButton.size = CGSizeMake(55, 27);
-//    self.cancelButton.right = self.comfirmButton.left - 20;
-//    self.cancelButton.centerY = self.bottomView.height / 2;
-//}
-
 - (void)updateConstraints {
     [self.titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
         make.width.mas_equalTo(self);
@@ -141,14 +118,14 @@
     
     [self.comfirmButton mas_updateConstraints:^(MASConstraintMaker *make) {
         make.bottom.mas_equalTo(self.mas_bottom);
-        make.left.mas_equalTo(self.mas_left);
+        make.right.mas_equalTo(self.mas_right);
         make.width.mas_equalTo(self.mas_width).multipliedBy(0.5);
         make.height.mas_equalTo(53);
     }];
     
     [self.cancelButton mas_updateConstraints:^(MASConstraintMaker *make) {
         make.bottom.mas_equalTo(self.mas_bottom);
-        make.right.mas_equalTo(self.mas_right);
+        make.left.mas_equalTo(self.mas_left);
         make.width.mas_equalTo(self.mas_width).multipliedBy(0.5);
         make.height.mas_equalTo(53);
     }];
@@ -215,6 +192,8 @@
         _textInput = [[UITextView alloc]init];
         _textInput.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _textInput.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
+        [_textInput ssj_setBorderStyle:SSJBorderStyleBottom];
+        [_textInput ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor]];
         _textInput.delegate = self;
         _textInput.autocorrectionType = UITextAutocorrectionTypeNo;
     }
@@ -236,7 +215,7 @@
     if (!_comfirmButton) {
         _comfirmButton = [[UIButton alloc]init];
         [_comfirmButton setTitle:@"确定" forState:UIControlStateNormal];
-        [_cancelButton setTitleColor:[UIColor ssj_colorWithHex:@"cccccc"] forState:UIControlStateNormal];
+        [_comfirmButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] forState:UIControlStateNormal];
         [_comfirmButton addTarget:self action:@selector(comfirmButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _comfirmButton;
@@ -246,7 +225,10 @@
     if (!_cancelButton) {
         _cancelButton = [[UIButton alloc]init];
         [_cancelButton setTitle:@"取消" forState:UIControlStateNormal];
-        [_cancelButton setTitleColor:[UIColor ssj_colorWithHex:@"cccccc"] forState:UIControlStateNormal];
+        [_cancelButton ssj_setBorderStyle:SSJBorderStyleRight];
+        [_cancelButton ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor]];
+        
+        [_cancelButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] forState:UIControlStateNormal];
         [_cancelButton addTarget:self action:@selector(cancelButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _cancelButton;

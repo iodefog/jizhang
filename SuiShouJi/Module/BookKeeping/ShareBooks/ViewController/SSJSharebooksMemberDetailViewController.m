@@ -275,7 +275,8 @@ static NSString *const kSegmentTitleIncome = @"收入";
         @weakify(self);
         [[tap rac_gestureSignal] subscribeNext:^(id x) {
             @strongify(self);
-            if ([self.memberId isEqualToString:SSJUSERID()]) {
+            if (![self.memberId isEqualToString:SSJUSERID()]) {
+                self.nickNameModifyView.originalText = self.nickNameLab.text;
                 [self.nickNameModifyView show];
             }
         }];
