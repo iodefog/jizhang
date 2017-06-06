@@ -18,7 +18,13 @@ typedef enum : NSUInteger {
 
 @interface SSJBooksTypeStore : NSObject
 
-+ (void)queryCurrentBooksItemWithSuccess:(void(^)(id booksItem))success
+/**
+ *  查询当前的账本
+ *
+ *  @param success 查询成功的回调
+ *  @param failure 查询失败的回调
+ */
++ (void)queryCurrentBooksItemWithSuccess:(void(^)(id<SSJBooksItemProtocol> booksItem))success
                              failure:(void (^)(NSError *error))failure;
 
 #pragma mark - 个人账本
@@ -39,18 +45,6 @@ typedef enum : NSUInteger {
 + (void)saveBooksTypeItem:(SSJBooksTypeItem *)item
                    sucess:(void(^)())success
                   failure:(void (^)(NSError *error))failure;
-
-/**
- *  查询当前的账本
- *
- *  @param booksid 账本id
- *
- *  @return @return (SSJBooksTypeItem *) 账本信息模型
- */
-+ (void)queryCurrentBooksTypeForBooksId:(NSString *)booksid
-                                Success:(void(^)(id<SSJBooksItemProtocol> result))success
-                                failure:(void (^)(NSError *error))failure;
-
 
 /**
  保存账本顺序

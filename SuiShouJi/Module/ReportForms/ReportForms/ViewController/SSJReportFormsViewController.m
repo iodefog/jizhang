@@ -308,13 +308,11 @@ static NSString *const kSegmentTitleSurplus = @"结余";
 }
 
 - (void)loadBooksItem {
-    [SSJUserTableManager currentBooksId:^(NSString * _Nonnull booksId) {
-        _currentBooksId = booksId;
-        [SSJBooksTypeStore queryCurrentBooksTypeForBooksId:_currentBooksId Success:^(id<SSJBooksItemProtocol> result) {
-            [self.navigationBar setBooksImage:[UIImage imageNamed:result.parentIcon]];
-            [self.navigationBar setBooksColor:[UIColor ssj_colorWithHex:result.getSingleColor]];
-        } failure:NULL];
-    } failure:^(NSError * _Nonnull error) {
+    [SSJBooksTypeStore queryCurrentBooksItemWithSuccess:^(id<SSJBooksItemProtocol> booksItem) {
+        _currentBooksId = booksItem.booksId;
+        [self.navigationBar setBooksImage:[UIImage imageNamed:booksItem.parentIcon]];
+        [self.navigationBar setBooksColor:[UIColor ssj_colorWithHex:booksItem.getSingleColor]];
+    } failure:^(NSError *error) {
         [SSJAlertViewAdapter showError:error];
     }];
 }
