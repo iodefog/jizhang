@@ -12,25 +12,25 @@
 @protocol SSJBooksItemProtocol
 
 //账本id
-@property(nonatomic, strong) NSString *booksId;
+@property (nonatomic, strong) NSString *booksId;
 
 //账本名称
-@property(nonatomic, strong) NSString *booksName;
+@property (nonatomic, strong) NSString *booksName;
 
 //账本颜色
 @property (nonatomic, strong) SSJFinancingGradientColorItem *booksColor;
 
 //账本顺序
-@property(nonatomic) NSInteger booksOrder;
+@property (nonatomic) NSInteger booksOrder;
 
 //账本父类
-@property(nonatomic) NSInteger booksParent;
+@property (nonatomic) SSJBooksType booksParent;
 
-@property(nonatomic, strong) NSString *cwriteDate;
+@property (nonatomic, strong) NSString *cwriteDate;
 
 - (NSString *)getSingleColor;
 
-+ (NSString *)parentIconForParenType:(NSInteger)type;
+- (NSString *)parentIcon;
 
 @end
 

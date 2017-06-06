@@ -76,7 +76,7 @@
  *
  *  @return (UIImage *) 缩放后的图片
  */
-- (UIImage *)ssj_scaleImageWithSize:(CGSize)Size;
+- (UIImage *)ssj_scaleImageWithSize:(CGSize)size;
 
 @end
 

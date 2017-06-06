@@ -117,7 +117,6 @@
             item.booksColor = colorItem;
             
             item.userId = [booksResult stringForColumn:@"cuserid"];
-            item.booksIcoin = [booksResult stringForColumn:@"cicoin"];
             item.booksOrder = [booksResult intForColumn:@"iorder"];
             item.booksParent = [booksResult intForColumn:@"iparenttype"];
             if (item.booksOrder == 0) {
@@ -273,8 +272,8 @@
 }
 
 + (void)queryCurrentBooksTypeForBooksId:(NSString *)booksid
-                                             Success:(void(^)(SSJBooksTypeItem * result))success
-                                             failure:(void (^)(NSError *error))failure{
+                                Success:(void(^)(id<SSJBooksItemProtocol> result))success
+                                failure:(void (^)(NSError *error))failure{
     __block SSJBooksTypeItem *item = [[SSJBooksTypeItem alloc]init];
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         FMResultSet *resultSet = [db executeQuery:@"select * from bk_books_type where cbooksid = ?",booksid];
@@ -302,7 +301,6 @@
                 colorItem.endColor = [colorArray ssj_safeObjectAtIndex:0];
             }
             item.booksColor = colorItem;
-            item.booksIcoin = [resultSet stringForColumn:@"cicoin"];
         }
         if (success) {
             SSJDispatch_main_async_safe(^{
@@ -311,6 +309,33 @@
         }
 
     }];
+}
+
++ (NSString *)parentIconForParenType:(SSJBooksType)type {
+    NSString *icon = nil;;
+    switch (type) {
+        case SSJBooksTypeDaily:
+            icon = @"bk_moren";
+            break;
+            
+        case SSJBooksTypeBusiness:
+            icon = @"bk_shengyi";
+            break;
+            
+        case SSJBooksTypeMarriage:
+            icon = @"bk_jiehun";
+            break;
+            
+        case SSJBooksTypeDecoration:
+            icon = @"bk_zhuangxiu";
+            break;
+            
+        case SSJBooksTypeTravel:
+            icon = @"bk_lvxing";
+            break;
+    }
+    
+    return icon;
 }
 
 + (void)deleteBooksTypeWithbooksItems:(NSArray *)items
