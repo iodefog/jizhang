@@ -1061,7 +1061,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 
 - (void)updateBooksItem {
     [SSJUserTableManager currentBooksId:^(NSString * _Nonnull booksId) {
-        [SSJBooksTypeStore queryCurrentBooksTypeForBooksId:booksId Success:^(SSJBooksTypeItem *result) {
+        [SSJBooksTypeStore queryCurrentBooksItemWithSuccess:^(id result) {
             self.homeBar.leftButton.item = result;
         } failure:NULL];
     } failure:^(NSError * _Nonnull error) {
