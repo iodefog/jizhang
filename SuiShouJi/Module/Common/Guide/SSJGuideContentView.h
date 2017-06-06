@@ -12,9 +12,16 @@
 
 typedef void(^SSJGuideBeginButtonClick)(SSJGuideContentView *contentView);
 
+typedef NS_ENUM(NSInteger, SSJGuideContentViewType) {
+    SSJGuideContentViewTypeNormal = 0,
+    SSJGuideContentViewTypeLottie = 1
+};
+
+
 @interface SSJGuideContentView : UIView
 
-// 图片名称
-@property (nonatomic, copy) NSString *imageName;
+- (instancetype)initWithFrame:(CGRect)frame withType:(SSJGuideContentViewType)type imageName:(NSString *)imageName;
+
+- (void)play;
 
 @end

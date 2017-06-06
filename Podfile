@@ -32,7 +32,7 @@ def shared_pods
     pod 'UMengUShare/Social/WeChat'
     
     # 集成QQ
-    pod 'UMengUShare/Social/QQ'
+    pod 'UMengUShare/Social/QQ', '~> 6.3.0'
 
 end
 

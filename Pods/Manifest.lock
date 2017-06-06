@@ -80,25 +80,16 @@ PODS:
     - SDWebImage/Core
   - SSZipArchive (1.8.1)
   - UMengAnalytics (4.2.4)
-  - UMengUShare/Core (6.4.4):
+  - UMengUShare/Core (6.3.0):
     - UMengUShare/Network
-  - UMengUShare/Network (6.4.4)
-  - UMengUShare/Social/QQ (6.4.4):
+  - UMengUShare/Network (6.3.0)
+  - UMengUShare/Social/QQ (6.3.0):
     - UMengUShare/Core
-    - UMengUShare/Social/ReducedQQ
-  - UMengUShare/Social/ReducedQQ (6.4.4):
+  - UMengUShare/Social/Sina (6.3.0):
     - UMengUShare/Core
-  - UMengUShare/Social/ReducedSina (6.4.4):
+  - UMengUShare/Social/WeChat (6.3.0):
     - UMengUShare/Core
-  - UMengUShare/Social/ReducedWeChat (6.4.4):
-    - UMengUShare/Core
-  - UMengUShare/Social/Sina (6.4.4):
-    - UMengUShare/Core
-    - UMengUShare/Social/ReducedSina
-  - UMengUShare/Social/WeChat (6.4.4):
-    - UMengUShare/Core
-    - UMengUShare/Social/ReducedWeChat
-  - UMengUShare/UI (6.4.4):
+  - UMengUShare/UI (6.3.0):
     - UMengUShare/Core
   - YYKeyboardManager (1.0.1)
   - YYText (1.0.7)
@@ -118,7 +109,7 @@ DEPENDENCIES:
   - SDWebImage/WebP
   - SSZipArchive
   - UMengAnalytics
-  - UMengUShare/Social/QQ
+  - UMengUShare/Social/QQ (~> 6.3.0)
   - UMengUShare/Social/Sina
   - UMengUShare/Social/WeChat
   - UMengUShare/UI
@@ -141,11 +132,11 @@ SPEC CHECKSUMS:
   SDWebImage: 76a6348bdc74eb5a55dd08a091ef298e56b55e41
   SSZipArchive: 04547dfa448be5ed7ecbaf7eaf8a6e9eb9b42997
   UMengAnalytics: ef8d45f94c0e5771dc364cf6a5731d9d3b101da2
-  UMengUShare: cd54ae52958426b79aa9193a7b02058d6a6d9aa0
+  UMengUShare: b208ac3bcf1f63d11a100b359990e9d77a0f2085
   YYKeyboardManager: ff53d2e80d1808567a7f004028bd200d9469a89f
   YYText: 5c461d709e24d55a182d1441c41dc639a18a4849
   ZYCornerRadius: 526dfd5b860008e57abf7be4a887f4630c3018f0
 
-PODFILE CHECKSUM: 91ae0319cdb125125f24749a603fd45cdc9bf02d
+PODFILE CHECKSUM: 3d8f2dc8bf4aa74446200c7e0e52b712ecb69685
 
 COCOAPODS: 1.2.1
