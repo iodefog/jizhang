@@ -39,6 +39,7 @@
 
 
 - (NSString *)getSingleColor {
+    
     if ([self.booksColor.startColor isEqualToString:self.booksColor.endColor]) {
         return self.booksColor.startColor;
     }
@@ -49,57 +50,57 @@
     
     switch (index) {
         case 0:
-            singleColor = @"#fc72ae";
-            break;
-            
+        singleColor = @"#fc72ae";
+        break;
+        
         case 1:
-            singleColor = @"#f96a6a";
-            break;
-            
+        singleColor = @"#f96a6a";
+        break;
+        
         case 2:
-            singleColor = @"#8094f9";
-            break;
-            
+        singleColor = @"#8094f9";
+        break;
+        
         case 3:
-            singleColor = @"#81b9f0";
-            break;
-            
+        singleColor = @"#81b9f0";
+        break;
+        
         case 4:
-            singleColor = @"#39d4da";
-            break;
-            
+        singleColor = @"#39d4da";
+        break;
+        
         case 5:
-            singleColor = @"#56d696";
-            break;
-            
+        singleColor = @"#56d696";
+        break;
+        
         case 6:
-            singleColor = @"#f8b556";
-            break;
-            
+        singleColor = @"#f8b556";
+        break;
+        
         case 7:
-            singleColor = @"#fc835a";
-            break;
-            
+        singleColor = @"#fc835a";
+        break;
+        
         case 8:
-            singleColor = @"#c6b244";
-            break;
-            
+        singleColor = @"#c6b244";
+        break;
+        
         case 9:
-            singleColor = @"#8d79ff";
-            break;
-            
+        singleColor = @"#8d79ff";
+        break;
+        
         case 10:
-            singleColor = @"#c565e5";
-            break;
-            
+        singleColor = @"#c565e5";
+        break;
+        
         case 11:
-            singleColor = @"#51a4ff";
-            break;
-            
+        singleColor = @"#51a4ff";
+        break;
+        
         default:
-            singleColor = @"#fc72ae";
-            break;
-            
+        singleColor = @"#fc72ae";
+        break;
+        
     }
     
     return singleColor;
@@ -110,32 +111,33 @@
     
     switch (type) {
         case 0:
-            icon = @"bk_moren";
-            break;
-            
+        icon = @"bk_moren";
+        break;
+        
         case 1:
-            icon = @"bk_shengyi";
-            break;
-            
+        icon = @"bk_shengyi";
+        break;
+        
         case 2:
-            icon = @"bk_lvxing";
-            break;
-            
+        icon = @"bk_jiehun";
+        break;
+        
         case 3:
-            icon = @"bk_zhuangxiu";
-            break;
-            
+        icon = @"bk_zhuangxiu";
+        break;
+        
         case 4:
-            icon = @"bk_jiehun";
-            break;
-            
+        icon = @"bk_lvxing";
+        break;
+        
         default:
-            icon = @"bk_moren";
-            break;
+        icon = @"bk_moren";
+        break;
     }
     
     return icon;
 }
+
 
 //+ (NSDictionary *)mj_objectClassInArray {
 //    return @{@"booksColor":@"SSJFinancingGradientColorItem"};
