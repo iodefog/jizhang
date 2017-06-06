@@ -173,7 +173,7 @@
                 NSArray *parentArr = [iparenttype componentsSeparatedByString:@","];
                 for (NSString *parenttype in parentArr) {
                     if ([parenttype integerValue]) {
-                        if (![db executeUpdate:@"insert into bk_user_bill select cuserid ,? , 1, ?, ?, 1, ?, cbooksid from bk_books_type where iparenttype = ? and operatortype <> 2 and cuserid = ?",cbillid,writeDate,@(SSJSyncVersion()),defualtOrder,parenttype,userId]) {
+                        if (![db executeUpdate:@"replace into bk_user_bill select cuserid ,? , 1, ?, ?, 1, ?, cbooksid from bk_books_type where iparenttype = ? and operatortype <> 2 and cuserid = ?",cbillid,writeDate,@(SSJSyncVersion()),defualtOrder,parenttype,userId]) {
                             if (error) {
                                 *error = [db lastError];
                             }
