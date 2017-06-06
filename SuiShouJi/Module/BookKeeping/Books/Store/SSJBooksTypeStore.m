@@ -856,15 +856,11 @@
                            @"cicon",
                            @"ccolor"];
     NSString *memberKey = [memberArr componentsJoinedByString:@", "];
-    //颜色
-    NSString *colorStr = [NSString stringWithFormat:@"%@,%@",item.booksColor.startColor,item.booksColor.endColor];
     
     //更新bk_share_books_member表
     for (NSDictionary *dic in shareMember) {
         NSMutableDictionary *memberDic = [dic mutableCopy];
         [memberDic setObject:iconStr?:@"defualt_portrait" forKey:@"cicon"];
-        //颜色
-        [memberDic setObject:colorStr forKey:@"ccolor"];
         
         NSMutableArray *memberValueArr = [NSMutableArray array];
         for (NSString *key in memberArr) {

@@ -90,14 +90,14 @@ static const CGFloat kCategoryImageButtonRadius = 16;
             make.left.and.right.and.bottom.mas_equalTo(self.labelContainer);
         }];
     } else {
-        [self.topLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.edges.mas_equalTo(self.labelContainer);
-        }];
-        
         NSArray *installedConstraints = [MASViewConstraint installedConstraintsForView:self.bottomLabel];
         for (MASConstraint *constraint in installedConstraints) {
             [constraint uninstall];
         }
+        
+        [self.topLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.edges.mas_equalTo(self.labelContainer);
+        }];
     }
     
     [super updateConstraints];
