@@ -119,7 +119,7 @@
 
 - (void)textViewDidChange:(UITextView *)textView
 {
-    self.textLengthLabel.text = [NSString stringWithFormat:@"剩余%lu个字",self.maxLength - textView.text.length];
+    self.textLengthLabel.text = [NSString stringWithFormat:@"剩余%d个字",self.maxLength - (int)textView.text.length];
     [self.textLengthLabel sizeToFit];
     if (textView.text.length >= self.maxLength) {
         textView.text = [textView.text substringToIndex:self.maxLength];
@@ -225,7 +225,7 @@
         return;
     }
     self.textInput.text = originalText;
-    self.textLengthLabel.text = [NSString stringWithFormat:@"剩余%lu个字",self.maxLength - _originalText.length];
+    self.textLengthLabel.text = [NSString stringWithFormat:@"剩余%d个字",self.maxLength - (int)_originalText.length];
     [self.textLengthLabel sizeToFit];
 }
 

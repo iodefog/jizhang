@@ -53,11 +53,11 @@
     _item = item;
     if ([_item isKindOfClass:[SSJBooksTypeItem class]]) {
         SSJBooksTypeItem *booksItem = (SSJBooksTypeItem *)_item;
-        self.booksImage.image = [[UIImage imageNamed:[SSJBooksTypeItem parentIconForParenType:booksItem.booksParent]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        self.booksImage.image = [[UIImage imageNamed:booksItem.parentIcon] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         self.booksImage.tintColor = [UIColor ssj_colorWithHex:[booksItem getSingleColor]];
     } else if ([_item isKindOfClass:[SSJShareBookItem class]]) {
         SSJShareBookItem *shareBooksItem = (SSJShareBookItem *)_item;
-        self.booksImage.image = [[UIImage imageNamed:[SSJBooksTypeItem parentIconForParenType:shareBooksItem.booksParent]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        self.booksImage.image = [[UIImage imageNamed:shareBooksItem.parentIcon] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         self.booksImage.tintColor = [UIColor ssj_colorWithHex:[shareBooksItem getSingleColor]];
     }
     [self setNeedsLayout];

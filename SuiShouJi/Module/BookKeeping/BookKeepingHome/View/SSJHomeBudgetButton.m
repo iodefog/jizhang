@@ -98,7 +98,7 @@
 
     } else if ([model isKindOfClass:[SSJShareBookItem class]]){
         SSJShareBookItem *currentModel = (SSJShareBookItem *)model;
-        [self.button setTitle:[NSString stringWithFormat:@"%ld 人",currentModel.memberCount] forState:UIControlStateNormal];
+        [self.button setTitle:[NSString stringWithFormat:@"%ld 人", (long)currentModel.memberCount] forState:UIControlStateNormal];
     }
     [self sizeToFit];
     [self setNeedsLayout];

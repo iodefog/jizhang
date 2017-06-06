@@ -47,7 +47,7 @@ typedef enum : NSUInteger {
  *  @return @return (SSJBooksTypeItem *) 账本信息模型
  */
 + (void)queryCurrentBooksTypeForBooksId:(NSString *)booksid
-                                Success:(void(^)(SSJBooksTypeItem * result))success
+                                Success:(void(^)(id<SSJBooksItemProtocol> result))success
                                 failure:(void (^)(NSError *error))failure;
 
 

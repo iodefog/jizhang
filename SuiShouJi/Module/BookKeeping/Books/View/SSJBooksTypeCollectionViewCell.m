@@ -179,7 +179,7 @@ static const CGFloat kCornerRadius = 10.f;
 //    self.backgroundColor = [UIColor ssj_colorWithHex:_item.booksColor];
     self.titleLabel.text = _item.booksName;
     [self.titleLabel sizeToFit];
-    self.booksIcionImage.contents = (id)[[UIImage imageNamed:_item.booksIcoin] ssj_imageWithColor:[UIColor ssj_colorWithHex:@"#000000" alpha:0.15]].CGImage;
+    self.booksIcionImage.contents = (id)[[UIImage imageNamed:_item.parentIcon] ssj_imageWithColor:[UIColor ssj_colorWithHex:@"#000000" alpha:0.15]].CGImage;
     if (self.item.booksId.length) {
         self.booksIcionImage.transform = CATransform3DMakeRotation(-M_PI_4, 0, 0, 1);
     }else{

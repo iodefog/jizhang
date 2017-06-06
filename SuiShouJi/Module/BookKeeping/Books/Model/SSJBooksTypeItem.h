@@ -18,8 +18,6 @@
 
 /**<#注释#>*/
 @property (nonatomic, copy) NSString *operatorType;
-/**<#注释#>*/
-@property (nonatomic, copy) NSString *booksIcoin;
 
 + (NSDictionary *)propertyMapping;
 
