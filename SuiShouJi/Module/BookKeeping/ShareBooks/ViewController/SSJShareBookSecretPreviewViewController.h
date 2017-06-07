@@ -10,4 +10,5 @@
 
 @interface SSJShareBookSecretPreviewViewController : SSJNormalWebViewController
 
+@property (nonatomic, copy) NSString *shareContent;
 @end

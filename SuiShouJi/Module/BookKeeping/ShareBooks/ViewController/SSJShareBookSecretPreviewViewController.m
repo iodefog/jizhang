@@ -7,6 +7,7 @@
 //
 
 #import "SSJShareBookSecretPreviewViewController.h"
+#import "SSJShareManager.h"
 
 @interface SSJShareBookSecretPreviewViewController ()
 
@@ -17,21 +18,22 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    self.title = @"邀请函";
     [self.view addSubview:self.shareButton];
 }
 
-- (void)updateViewConstraints {
-    [self.shareButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottomMargin.left.right.mas_equalTo(self);
-        make.height.mas_equalTo(50);
-    }];
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    self.shareButton.left = 0;
+    self.shareButton.width = SSJSCREENWITH;
+    self.shareButton.top = self.view.height - 60;
+    self.shareButton.height = 60;
 }
+
+
 #pragma mark - Event
 - (void)shareCodeToOther {
-//    NSString *content = [NSString stringWithFormat:@"%@邀你加入【%@】，希望和你开启共享记账之旅，快来！",nickName,weakSelf.item.booksName];
-//    
-//    [SSJShareManager shareWithType:SSJShareTypeUrl image:nil UrlStr:[NSString stringWithFormat:@"%@",[url mj_url]] title:SSJAppName() content:content PlatformType:@[@(UMSocialPlatformType_WechatSession),@(UMSocialPlatformType_QQ)] inController:self ShareSuccess:NULL];
+    [SSJShareManager shareWithType:SSJShareTypeUrl image:nil UrlStr:self.webView.request.URL.absoluteString title:SSJAppName() content:self.shareContent PlatformType:@[@(UMSocialPlatformType_WechatSession),@(UMSocialPlatformType_QQ)] inController:self ShareSuccess:nil];
 
 }
 
@@ -39,9 +41,10 @@
 - (UIButton *)shareButton {
     if (!_shareButton) {
         _shareButton = [[UIButton alloc] init];
-        _shareButton.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor];
-        [_shareButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginButtonTitleColor] forState:UIControlStateNormal];
+        _shareButton.backgroundColor = [UIColor ssj_colorWithHex:@"#eb4a64"];
+        [_shareButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_shareButton setTitle:@"发送" forState:UIControlStateNormal];
+        _shareButton.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:18];
         [_shareButton addTarget:self action:@selector(shareCodeToOther) forControlEvents:UIControlEventTouchUpInside];
     }
     return _shareButton;
