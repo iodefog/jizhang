@@ -103,6 +103,8 @@
     [self updateCustomPeriodBtnTitle];
     [self updateViewsHidden];
     [self setNeedsUpdateConstraints];
+    // CTMLGB! ios8如果不加下面这行代码就不会出发updateConstraints
+    [self setNeedsLayout];
 }
 
 - (SSJDatePeriod *)currentPeriod {

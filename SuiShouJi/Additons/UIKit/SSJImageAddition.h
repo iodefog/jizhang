@@ -116,7 +116,22 @@
  */
 - (UIImage *)ssj_circleImage;
 
+/**
+ 将图片insets之外的区域裁剪掉
+ 
+ @param insets 剪掉区域
+ @return 裁剪后的图片
+ */
 - (UIImage *)ssj_imageWithClipInsets:(UIEdgeInsets)insets;
+
+/**
+ 将图片insets之外的区域裁剪掉，并压缩成指定大小
+
+ @param insets 剪掉区域
+ @param size 裁剪后压缩成指定的大小
+ @return 处理后的图片
+ */
+- (UIImage *)ssj_imageWithClipInsets:(UIEdgeInsets)insets toSize:(CGSize)size;
 
 @end
 
@@ -125,6 +140,11 @@
 
 @interface UIImage (SSJAssets)
 
+/**
+ 从assets中读取启动图片
+
+ @return UIImage *
+ */
 + (UIImage *)ssj_launchImage;
 
 @end
@@ -134,6 +154,12 @@
 
 @interface UIImage (SSJLoad)
 
+/**
+ 加载网络图片或者沙盒图片
+
+ @param url 图片路径
+ @param compeltion 加载完成的回调
+ */
 + (void)ssj_loadUrl:(NSURL *)url compeltion:(void(^)(NSError *error, UIImage *image))compeltion;
 
 @end

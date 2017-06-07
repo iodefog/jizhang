@@ -8,6 +8,7 @@
 //
 
 #import "SSJSharebooksInviteViewController.h"
+#import "SSJShareBookSecretPreviewViewController.h"
 
 #import "SSJShareBooksHintView.h"
 
@@ -301,7 +302,6 @@
         [CDAutoHideMessageHUD showMessage:@"暗号不能是纯数字哦"];
         return;
     }
-    
 
     [self.saveCodeService saveCodeWithbooksId:self.item.booksId code:self.codeInput.text];
 }
@@ -333,9 +333,8 @@
 
 - (void)shareTheCode {
     __weak typeof(self) weakSelf = self;
-    
     [self.codeInput resignFirstResponder];
-    
+
     [SSJUserTableManager queryUserItemWithID:self.item.adminId success:^(SSJUserItem * _Nonnull userItem) {
         NSMutableString *url = [NSMutableString string];
         
@@ -368,10 +367,12 @@
         }
         
         [url appendFormat:@"pic=%@",iconUrl];
-
-        NSString *content = [NSString stringWithFormat:@"%@邀你加入【%@】，希望和你开启共享记账之旅，快来！",nickName,weakSelf.item.booksName];
         
-        [SSJShareManager shareWithType:SSJShareTypeUrl image:nil UrlStr:[NSString stringWithFormat:@"%@",[url mj_url]] title:SSJAppName() content:content PlatformType:@[@(UMSocialPlatformType_WechatSession),@(UMSocialPlatformType_QQ)] inController:self ShareSuccess:NULL];
+        SSJShareBookSecretPreviewViewController *previewVC = [SSJShareBookSecretPreviewViewController webViewVCWithURL:[url mj_url]];
+        previewVC.shareContent = [NSString stringWithFormat:@"%@邀你加入【%@】，希望和你开启共享记账之旅，快来！",nickName,weakSelf.item.booksName];
+//        [previewVC loadHTMLString:url];
+        [self.navigationController pushViewController:previewVC animated:YES];
+//        [SSJShareManager shareWithType:SSJShareTypeUrl image:nil UrlStr:[NSString stringWithFormat:@"%@",[url mj_url]] title:SSJAppName() content:content PlatformType:@[@(UMSocialPlatformType_WechatSession),@(UMSocialPlatformType_QQ)] inController:self ShareSuccess:NULL];
         
     } failure:^(NSError * _Nonnull error) {
         

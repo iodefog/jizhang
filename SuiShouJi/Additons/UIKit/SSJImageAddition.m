@@ -243,8 +243,17 @@
 
 - (UIImage *)ssj_imageWithClipInsets:(UIEdgeInsets)insets {
     CGSize ctxSize = CGSizeMake(self.size.width - insets.left - insets.right, self.size.height - insets.top - insets.bottom);
-    UIGraphicsBeginImageContextWithOptions(ctxSize, NO, 0);
-    [self drawInRect:CGRectMake(-insets.left, -insets.top, self.size.width, self.size.height)];
+    return [self ssj_imageWithClipInsets:insets toSize:ctxSize];
+}
+
+- (UIImage *)ssj_imageWithClipInsets:(UIEdgeInsets)insets toSize:(CGSize)toSize {
+    CGRect originalFrame = CGRectMake(0, 0, self.size.width, self.size.height);
+    CGRect clipedFrame = UIEdgeInsetsInsetRect(originalFrame, insets);
+    CGFloat widthScale = toSize.width / CGRectGetWidth(clipedFrame);
+    CGFloat heightScale = toSize.height / CGRectGetHeight(clipedFrame);
+    
+    UIGraphicsBeginImageContextWithOptions(toSize, NO, 0);
+    [self drawInRect:CGRectMake(-insets.left * widthScale, -insets.top * heightScale, self.size.width * widthScale, self.size.height * heightScale)];
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     
