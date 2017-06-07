@@ -272,7 +272,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
 - (UILabel *)nickNameLab {
     if (!_nickNameLab) {
         _nickNameLab = [[UILabel alloc] init];
-        _nickNameLab.textColor = [UIColor ssj_colorWithHex:@"#333333"];
+        _nickNameLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _nickNameLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
         _nickNameLab.userInteractionEnabled = YES;
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] init];
