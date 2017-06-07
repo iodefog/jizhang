@@ -423,6 +423,20 @@ static NSString *const kSegmentTitleSurplus = @"结余";
     }
 }
 
+- (void)updatePayIncomeSurplusControlTitles {
+    switch (self.navigationBar.option) {
+        case SSJReportFormsNavigationBarChart:
+            _payIncomeSurplusControl.titles = @[kSegmentTitlePay, kSegmentTitleIncome, kSegmentTitleSurplus];
+            [_payIncomeSurplusControl setTabSize:CGSizeMake(_payIncomeSurplusControl.width * 0.33, 3)];
+            break;
+            
+        case SSJReportFormsNavigationBarCurve:
+            _payIncomeSurplusControl.titles = @[kSegmentTitlePay, kSegmentTitleIncome];
+            [_payIncomeSurplusControl setTabSize:CGSizeMake(_payIncomeSurplusControl.width * 0.5, 3)];
+            break;
+    }
+}
+
 - (void)updateCurveHeaderItemWithCurveModels:(NSArray<SSJReportFormsCurveModel *> *)curveModels period:(SSJDatePeriod *)period {
     double income = 0;
     double payment = 0;
@@ -662,6 +676,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
         __weak typeof(self) wself = self;
         _navigationBar = [[SSJReportFormsNavigationBar alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 64)];
         _navigationBar.switchChartAndCurveHandler = ^(SSJReportFormsNavigationBar *bar) {
+            [wself updatePayIncomeSurplusControlTitles];
             [wself reloadDatasInPeriod:wself.periodControl.currentPeriod];
         };
         _navigationBar.clickBooksHandler = ^(SSJReportFormsNavigationBar *bar) {
@@ -696,11 +711,9 @@ static NSString *const kSegmentTitleSurplus = @"结余";
         _payIncomeSurplusControl = [[SCYSlidePagingHeaderView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 40)];
         _payIncomeSurplusControl.customDelegate = self;
         _payIncomeSurplusControl.buttonClickAnimated = YES;
-        [_payIncomeSurplusControl setTabSize:CGSizeMake(_payIncomeSurplusControl.width * 0.5, 3)];
-        _payIncomeSurplusControl.titles = @[kSegmentTitlePay, kSegmentTitleIncome, kSegmentTitleSurplus];
         [_payIncomeSurplusControl ssj_setBorderWidth:1];
         [_payIncomeSurplusControl ssj_setBorderStyle:SSJBorderStyleBottom];
-        
+        [self updatePayIncomeSurplusControlTitles];
     }
     return _payIncomeSurplusControl;
 }

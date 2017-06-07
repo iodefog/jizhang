@@ -113,8 +113,14 @@
 }
 
 - (void)setTitles:(NSArray *)titles {
+    if (!titles || titles.count == 0) {
+        SSJPRINT(@"titles至少有1个元素");
+        return;
+    }
+    
     if (![_titles isEqualToArray:titles]) {
         _titles = titles;
+        [self setSelectedIndex:0 animated:NO];
         [self reload];
         [self setNeedsLayout];
     }
