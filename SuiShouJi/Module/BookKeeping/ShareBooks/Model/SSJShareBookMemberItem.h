@@ -16,6 +16,10 @@
 // 账本id
 @property(nonatomic, copy) NSString *booksId;
 
+// 账本管理员id
+@property(nonatomic, copy) NSString *adminid;
+
+
 // 用户头像
 @property(nonatomic, copy) NSString *icon;
 
