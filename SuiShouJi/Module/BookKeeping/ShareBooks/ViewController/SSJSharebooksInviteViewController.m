@@ -8,6 +8,7 @@
 //
 
 #import "SSJSharebooksInviteViewController.h"
+#import "SSJShareBookSecretPreviewViewController.h"
 
 #import "SSJShareBooksHintView.h"
 
@@ -346,9 +347,8 @@
 
 - (void)shareTheCode {
     __weak typeof(self) weakSelf = self;
-    
     [self.codeInput resignFirstResponder];
-    
+
     [SSJUserTableManager queryUserItemWithID:self.item.adminId success:^(SSJUserItem * _Nonnull userItem) {
         NSMutableString *url = [NSMutableString string];
         
@@ -381,6 +381,9 @@
         }
         
         [url appendFormat:@"pic=%@",iconUrl];
+        
+        SSJShareBookSecretPreviewViewController *previewVC = [[SSJShareBookSecretPreviewViewController alloc] init];
+        [previewVC loadHTMLString:url];
 
         NSString *content = [NSString stringWithFormat:@"%@邀你加入【%@】，希望和你开启共享记账之旅，快来！",nickName,weakSelf.item.booksName];
         
