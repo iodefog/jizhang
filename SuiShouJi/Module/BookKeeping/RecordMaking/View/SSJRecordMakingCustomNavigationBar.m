@@ -321,7 +321,9 @@
     if (!_booksMenu) {
         _booksMenu = [[SSJListMenu alloc] initWithFrame:CGRectMake(0, 0, 154, 0)];
         _booksMenu.maxDisplayRowCount = 5.5;
-        _booksMenu.gapBetweenImageAndTitle = 16;
+        _booksMenu.gapBetweenImageAndTitle = 10;
+        _booksMenu.contentInsets = UIEdgeInsetsMake(0, 13, 0, 13);
+        _booksMenu.contentAlignment = UIControlContentHorizontalAlignmentLeft;
         _booksMenu.titleFont = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         [_booksMenu addTarget:self action:@selector(selectBookAction) forControlEvents:UIControlEventValueChanged];
     }

@@ -79,6 +79,8 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 
 @property (nonatomic, strong) NSString *defaultBooksId;// 当前用户默认的账本id
 
+@property (nonatomic, strong) NSString *addedBillId;// 新增的类别id
+
 @property (nonatomic, strong) NSMutableArray<NSObject<SSJBooksItemProtocol> *> *booksItems;
 
 @property (nonatomic) long currentYear;
@@ -736,15 +738,19 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         @strongify(self);
         [SSJCategoryListHelper queryForCategoryListWithIncomeOrExpenture:self.customNaviBar.selectedBillType booksId:self.item.booksId Success:^(NSMutableArray<SSJRecordMakingBillTypeSelectionCellItem *> *categoryList) {
             
-            SSJRecordMakingBillTypeSelectionView *billTypeView = self.paymentTypeView;
+            SSJRecordMakingBillTypeSelectionView *billTypeView = nil;
             if (self.customNaviBar.selectedBillType == SSJBillTypePay) {
                 billTypeView = self.paymentTypeView;
             } else if (self.customNaviBar.selectedBillType == SSJBillTypeIncome) {
                 billTypeView = self.incomeTypeView;
+            } else {
+                [SSJAlertViewAdapter showError:[NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat:@"未定义的控件行为，selectedBillType：%d", (int)self.customNaviBar.selectedBillType]}]];
+                return;
             }
             
             __block SSJRecordMakingBillTypeSelectionCellItem *selectedItem = nil;
-            NSString *selectedId = billTypeView.selectedItem.ID ?: self.item.billId;
+            NSString *selectedId = self.addedBillId ?: (billTypeView.selectedItem.ID ?: self.item.billId);
+            self.addedBillId = nil;
             [categoryList enumerateObjectsWithOptions:NSEnumerationConcurrent usingBlock:^(SSJRecordMakingBillTypeSelectionCellItem *obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 if (selectedId && [obj.ID isEqualToString:selectedId]) {
                     obj.state = SSJRecordMakingBillTypeSelectionCellStateSelected;
@@ -1006,10 +1012,8 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
                 [selectionView deleteItem:item];
                 [wself deleteItem:item ofItems:selectionView.items];
             }], nil];
-            
             return NO;
         }
-        
         return YES;
     };
     
@@ -1027,7 +1031,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         addNewTypeVc.booksId = wself.item.booksId;
         addNewTypeVc.incomeOrExpence = wself.customNaviBar.selectedBillType;
         addNewTypeVc.addNewCategoryAction = ^(NSString *categoryId, BOOL incomeOrExpence){
-            wself.item.billId = categoryId;
+            wself.addedBillId = categoryId;
             wself.customNaviBar.selectedBillType = incomeOrExpence;
             
             if (wself.customNaviBar.selectedBillType == SSJBillTypePay) {

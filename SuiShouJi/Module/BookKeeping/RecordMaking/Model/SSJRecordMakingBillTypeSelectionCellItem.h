@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 typedef NS_ENUM(NSInteger, SSJRecordMakingBillTypeSelectionCellState) {
-    SSJRecordMakingBillTypeSelectionCellStateNormal,
+    SSJRecordMakingBillTypeSelectionCellStateNormal = 0,
     SSJRecordMakingBillTypeSelectionCellStateSelected,
     SSJRecordMakingBillTypeSelectionCellStateEditing
 };

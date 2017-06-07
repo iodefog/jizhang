@@ -16,7 +16,7 @@ static const CGFloat kIconScale = 0.7;
 static NSString *const kBorderColorAnimationKey = @"kBorderColorAnimationKey";
 static NSString *const kTextColorAnimationKey = @"kTextColorAnimationKey";
 
-@interface SSJRecordMakingBillTypeSelectionCell () /*<CAAnimationDelegate>*/
+@interface SSJRecordMakingBillTypeSelectionCell () <CAAnimationDelegate>
 
 @property (nonatomic, strong) UIView *borderView;
 
@@ -86,8 +86,6 @@ static NSString *const kTextColorAnimationKey = @"kTextColorAnimationKey";
     if (_item.colorValue.length) {
         self.imageView.tintColor = [UIColor ssj_colorWithHex:self.item.colorValue];
     }
-    [self updateBorderAndTextColor:NO];
-    
     self.deleteBtn.hidden = self.item.state != SSJRecordMakingBillTypeSelectionCellStateEditing;
     [self updateBorderAndTextColor:NO];
 }
@@ -111,26 +109,43 @@ static NSString *const kTextColorAnimationKey = @"kTextColorAnimationKey";
     
     if (animated) {
         CABasicAnimation *borderColorAnimation = [CABasicAnimation animationWithKeyPath:@"borderColor"];
+        borderColorAnimation.delegate = self;
         borderColorAnimation.duration = kDuration;
         borderColorAnimation.removedOnCompletion = NO;
         borderColorAnimation.fillMode = kCAFillModeForwards;
-        borderColorAnimation.fromValue = (__bridge id _Nullable)(_borderView.layer.presentationLayer.borderColor);
+//        borderColorAnimation.fromValue = (__bridge id _Nullable)(_borderView.layer.presentationLayer.borderColor);
         borderColorAnimation.toValue = (__bridge id _Nullable)(borderColor);
         [_borderView.layer addAnimation:borderColorAnimation forKey:kBorderColorAnimationKey];
         
+        
         // CTMB 动画莫名其妙的不起作用
-//        CABasicAnimation *textColorAnimation = [CABasicAnimation animationWithKeyPath:@"foregroundColor"];
-//        textColorAnimation.duration = kDuration;
-//        textColorAnimation.removedOnCompletion = NO;
-//        textColorAnimation.fillMode = kCAFillModeForwards;
+        CABasicAnimation *textColorAnimation = [CABasicAnimation animationWithKeyPath:@"foregroundColor"];
+        textColorAnimation.delegate = self;
+        textColorAnimation.duration = kDuration;
+        textColorAnimation.removedOnCompletion = NO;
+        textColorAnimation.fillMode = kCAFillModeForwards;
 //        textColorAnimation.fromValue = (__bridge id _Nullable)(_label.layer.presentationLayer.borderColor);
-//        textColorAnimation.toValue = (__bridge id _Nullable)(textColor);
-//        [_label.layer addAnimation:textColorAnimation forKey:kTextColorAnimationKey];
+        textColorAnimation.toValue = (__bridge id _Nullable)(textColor);
+        [_label.textLayer addAnimation:textColorAnimation forKey:kTextColorAnimationKey];
     } else {
         _borderView.layer.borderColor = borderColor;
+        _label.textLayer.foregroundColor = textColor;
     }
     
-    _label.textLayer.foregroundColor = textColor;
+//    _borderView.layer.borderColor = borderColor;
+//    _label.textLayer.foregroundColor = textColor;
+}
+
+- (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag {
+    CABasicAnimation *basicAnimation = (CABasicAnimation *)anim;
+    if (anim == [_borderView.layer animationForKey:kBorderColorAnimationKey]) {
+        [_borderView.layer removeAnimationForKey:kBorderColorAnimationKey];
+        _borderView.layer.borderColor = (__bridge CGColorRef _Nullable)(basicAnimation.toValue);
+        
+    } else if (anim == [_label.layer animationForKey:kTextColorAnimationKey]) {
+        _label.textLayer.foregroundColor = (__bridge CGColorRef _Nullable)(basicAnimation.toValue);
+        [_label.layer removeAnimationForKey:kTextColorAnimationKey];
+    }
 }
 
 #pragma mark - Lazyloading
