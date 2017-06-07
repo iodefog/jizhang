@@ -362,7 +362,7 @@
             iconUrl = SSJImageURLWithAPI(iconUrl);
         }
         
-        if (iconUrl.length | !iconUrl) {
+        if (!iconUrl.length | !iconUrl) {
             iconUrl = @"";
         }
         
