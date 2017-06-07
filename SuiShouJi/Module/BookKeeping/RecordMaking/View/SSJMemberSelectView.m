@@ -114,9 +114,9 @@ static NSString *const kMemberTableViewCellIdentifier = @"kMemberTableViewCellId
         _tableView.separatorInset = UIEdgeInsetsZero;
         [_tableView ssj_clearExtendSeparator];
 
-        [_tableView ssj_setBorderWidth:2];
-        [_tableView ssj_setBorderStyle:SSJBorderStyleTop];
-        [_tableView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellIndicatorColor]];
+//        [_tableView ssj_setBorderWidth:2];
+//        [_tableView ssj_setBorderStyle:SSJBorderStyleTop];
+//        [_tableView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellIndicatorColor]];
     }
     return _tableView;
 }
@@ -157,6 +157,10 @@ static NSString *const kMemberTableViewCellIdentifier = @"kMemberTableViewCellId
         manageButton.size = CGSizeMake(40, 40);
         manageButton.centerY = _topView.height / 2;
         manageButton.left = 10;
+        
+        [_topView ssj_setBorderWidth:1];
+        [_topView ssj_setBorderStyle:SSJBorderStyleBottom];
+        [_topView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellIndicatorColor]];
     }
     return _topView;
 }
