@@ -464,12 +464,15 @@
                         sucess:(void(^)())success
                        failure:(void (^)(NSError *error))failure {
     if (!item.booksId.length) return;
+    
     if (!item.creatorId.length) {
         item.creatorId = SSJUSERID();
     }
+    
     if (!item.adminId.length) {
         item.adminId = SSJUSERID();
     }
+    
     NSMutableDictionary *shareBookInfo = [NSMutableDictionary dictionaryWithDictionary:[self fieldMapWithShareBookItem:item]];
     [shareBookInfo removeObjectForKey:@"editing"];
     [shareBookInfo removeObjectForKey:@"memberCount"];
@@ -688,8 +691,7 @@
                 bookId = ((SSJBooksTypeItem *)item).booksId;
             }
             if (!bookId.length && ![item.booksName isEqualToString:@"添加账本"]) return ;
-            NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-            NSString *sqlStr = [NSString stringWithFormat:@"update bk_share_books set iorder = %@, iversion = %@, cadddate = '%@' where cbooksid = '%@'",@(order),@(SSJSyncVersion()),writeDate,bookId];
+            NSString *sqlStr = [NSString stringWithFormat:@"update bk_share_books set iorder = %@ where cbooksid = '%@'",@(order),bookId];
             if (![db executeUpdate:sqlStr]) {
                 if (failure) {
                     SSJDispatch_main_async_safe(^{

@@ -16,6 +16,7 @@
 #import "SCYSlidePagingHeaderView.h"
 #import "SSJReportFormsIncomeAndPayCell.h"
 #import "SSJNickNameModifyView.h"
+#import "SSJBudgetNodataRemindView.h"
 
 #import "SSJUserTableManager.h"
 #import "SSJDatePeriod.h"
@@ -44,6 +45,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
 
 @property(nonatomic, strong) UITableView *tableView;
 
+@property(nonatomic, strong) SSJBudgetNodataRemindView *noDataRemindView;
 
 @property(nonatomic, strong) SSJNickNameModifyView *nickNameModifyView;
 
@@ -71,7 +73,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
     [self.userInfoHeader addSubview:self.nickNameLab];
     [self.view addSubview:self.periodControl];
     [self.view addSubview:self.tableView];
-    if ([self.memberId isEqualToString:SSJUSERID()]) {
+    if (![self.memberId isEqualToString:SSJUSERID()]) {
         UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithTitle:@"删除" style:UIBarButtonItemStylePlain target:self action:@selector(deleteButtonClicked:)];
         self.navigationItem.rightBarButtonItem = rightItem;
     }
@@ -220,6 +222,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
 - (SCYSlidePagingHeaderView *)payAndIncomeSegmentControl {
     if (!_payAndIncomeSegmentControl) {
         _payAndIncomeSegmentControl = [[SCYSlidePagingHeaderView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 40)];
+        _payAndIncomeSegmentControl.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         _payAndIncomeSegmentControl.customDelegate = self;
         _payAndIncomeSegmentControl.buttonClickAnimated = YES;
         _payAndIncomeSegmentControl.selectedTitleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
@@ -261,6 +264,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
 - (UIImageView *)iconImageView {
     if (!_iconImageView) {
         _iconImageView = [[UIImageView alloc] init];
+        _iconImageView.layer.masksToBounds = YES;
     }
     return _iconImageView;
 }
@@ -307,6 +311,14 @@ static NSString *const kSegmentTitleIncome = @"收入";
     return _deleteService;
 }
 
+- (SSJBudgetNodataRemindView *)noDataRemindView {
+    if (!_noDataRemindView) {
+        _noDataRemindView = [[SSJBudgetNodataRemindView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 260)];
+        _noDataRemindView.image = @"budget_no_data";
+        _noDataRemindView.title = @"暂无流水~";
+    }
+    return _noDataRemindView;
+}
 
 #pragma mark - Event
 - (void)enterCalendarVC {

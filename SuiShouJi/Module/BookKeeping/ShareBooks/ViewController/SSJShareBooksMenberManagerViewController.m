@@ -180,11 +180,12 @@ static NSString * SSJSharebooksMemberCellIdentifier = @"SSJSharebooksMemberCellI
 - (SSJBooksTypeDeletionAuthCodeAlertView *)deleteComfirmAlert {
     if (!_deleteComfirmAlert) {
         _deleteComfirmAlert = [[SSJBooksTypeDeletionAuthCodeAlertView alloc] init];
-        NSMutableAttributedString *atrrStr = [[NSMutableAttributedString alloc] initWithString:@"数据无法恢复,删除并退出此共享账本,请输入下列验证码"];
+        NSMutableAttributedString *atrrStr = [[NSMutableAttributedString alloc] initWithString:@"数据无法恢复,\n删除并退出此共享账本,请输入下列验证码"];
         [atrrStr addAttribute:NSFontAttributeName value:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4] range:NSMakeRange(0, atrrStr.length)];
         [atrrStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:NSMakeRange(0, atrrStr.length)];
         NSMutableParagraphStyle *paragraph = [[NSMutableParagraphStyle alloc] init];
         paragraph.alignment = NSTextAlignmentCenter;
+        paragraph.lineSpacing = 10;
         [atrrStr addAttribute:NSParagraphStyleAttributeName value:paragraph range:NSMakeRange(0, atrrStr.length)];
         _deleteComfirmAlert.message = atrrStr;
         @weakify(self);
