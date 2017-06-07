@@ -47,7 +47,7 @@
     if (!_iconImageView) {
         _iconImageView = [[UIImageView alloc] init];
         _iconImageView.layer.cornerRadius = self.width / 2;
-        _iconImageView.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha].CGColor;
+        _iconImageView.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor].CGColor;
         _iconImageView.layer.borderWidth = 1 / [UIScreen mainScreen].scale;
     }
     return _iconImageView;
@@ -67,7 +67,7 @@
     if (!_addImageView) {
         _addImageView = [[UIImageView alloc] init];
         _addImageView.image = [[UIImage imageNamed:@"sharebk_add"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        _addImageView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+        _addImageView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         [_addImageView sizeToFit];
     }
     return _addImageView;
@@ -110,15 +110,16 @@
     } else {
         self.nickNameLabel.text = @"";
         self.addImageView.hidden = NO;
-        self.iconImageView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+        self.iconImageView.image = nil;
+        self.iconImageView.backgroundColor = [UIColor clearColor];
     }
     [self setNeedsUpdateConstraints];
 }
 
 - (void)updateCellAppearanceAfterThemeChanged {
     _nickNameLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-    _iconImageView.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha].CGColor;
-    _addImageView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    _iconImageView.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor].CGColor;
+    _addImageView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
 }
 
 @end

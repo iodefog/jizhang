@@ -66,7 +66,7 @@
     self.imageView.layer.borderColor = item.billColor.CGColor;
     self.textLabel.text = item.billName;
     [self.textLabel sizeToFit];
-    float money = [item.money floatValue];
+    double money = [item.money doubleValue];
     self.moneyLab.text = [NSString stringWithFormat:@"%.2f", money];
     [self.moneyLab sizeToFit];
     [self setNeedsLayout];
