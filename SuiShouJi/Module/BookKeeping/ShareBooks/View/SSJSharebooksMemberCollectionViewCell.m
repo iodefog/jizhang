@@ -17,6 +17,8 @@
 
 @property(nonatomic, strong) UIImageView *addImageView;
 
+@property(nonatomic, strong) UIImageView *adminImage;
+
 @end
 
 
@@ -29,6 +31,7 @@
         [self addSubview:self.iconImageView];
         [self addSubview:self.nickNameLabel];
         [self addSubview:self.addImageView];
+        [self addSubview:self.adminImage];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCellAppearanceAfterThemeChanged) name:SSJThemeDidChangeNotification object:nil];
     }
     return self;
@@ -49,6 +52,7 @@
         _iconImageView.layer.cornerRadius = self.width / 2;
         _iconImageView.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor].CGColor;
         _iconImageView.layer.borderWidth = 1 / [UIScreen mainScreen].scale;
+        _iconImageView.layer.masksToBounds = YES;
     }
     return _iconImageView;
 }
@@ -73,6 +77,15 @@
     return _addImageView;
 }
 
+- (UIImageView *)adminImage {
+    if (!_adminImage) {
+        _adminImage = [[UIImageView alloc] init];
+        _adminImage.image = [UIImage imageNamed:@"adminImage"];
+        [_adminImage sizeToFit];
+    }
+    return _adminImage;
+}
+
 - (void)updateConstraints {
     [self.iconImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.height.mas_equalTo(self.contentView.mas_width);
@@ -87,6 +100,11 @@
     
     [self.addImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.center.mas_equalTo(self.iconImageView);
+    }];
+    
+    [self.adminImage mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.mas_equalTo(self.iconImageView.mas_centerX);
+        make.bottom.mas_equalTo(self.iconImageView.mas_top).offset(2);
     }];
     
     [super updateConstraints];
@@ -107,6 +125,7 @@
         [self.iconImageView sd_setImageWithURL:[NSURL URLWithString:imageUrl] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
         self.addImageView.hidden = YES;
         self.backgroundColor = [UIColor clearColor];
+        self.adminImage.hidden = ![_memberItem.memberId isEqualToString:_memberItem.adminid];
     } else {
         self.nickNameLabel.text = @"";
         self.addImageView.hidden = NO;

@@ -470,6 +470,7 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
         item.centerText = [[NSString stringWithFormat:@"%f", (money / _amount) * 100] ssj_moneyDecimalDisplayWithDigits:1];
         item.rightText = [[NSString stringWithFormat:@"%f", money] ssj_moneyDecimalDisplayWithDigits:2];
         item.circleColor = _colorValue;
+        item.separatorInsets = UIEdgeInsetsMake(0, 30, 0, 0);
         
         [_cellItems addObject:item];
     }
@@ -702,7 +703,6 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
         _tableView.sectionFooterHeight = 0;
         _tableView.dataSource = self;
         _tableView.delegate = self;
-        _tableView.separatorInset = UIEdgeInsetsMake(0, 30, 0, 0);
         _tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, _tableView.width, 36)];
         _tableView.tableFooterView.backgroundColor = [UIColor clearColor];
         [_tableView registerClass:[SSJReportFormCanYinChartCell class] forCellReuseIdentifier:kSSJReportFormCanYinChartCellId];
