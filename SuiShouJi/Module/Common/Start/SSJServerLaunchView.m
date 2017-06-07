@@ -44,7 +44,6 @@
 #endif
     SDWebImageManager *manager = [[SDWebImageManager alloc] init];
 //    manager.imageDownloader.downloadTimeout = timeout;
-    
     NSURL *url = [NSURL URLWithString:SSJImageURLWithAPI(imgUrl)];
     [manager.imageDownloader downloadImageWithURL:url options:(SDWebImageContinueInBackground | SDWebImageAllowInvalidSSLCertificates) progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, BOOL finished) {
         if (!image || error) {
