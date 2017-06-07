@@ -14,4 +14,6 @@
 
 @property(nonatomic, strong) NSString *booksId;
 
+@property(nonatomic, strong) NSString *adminId;
+
 @end

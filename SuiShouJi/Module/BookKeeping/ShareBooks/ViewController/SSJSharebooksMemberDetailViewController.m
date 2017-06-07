@@ -73,7 +73,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
     [self.userInfoHeader addSubview:self.nickNameLab];
     [self.view addSubview:self.periodControl];
     [self.view addSubview:self.tableView];
-    if (![self.memberId isEqualToString:SSJUSERID()]) {
+    if (![self.memberId isEqualToString:SSJUSERID()] && ![self.memberId isEqualToString:self.adminId]) {
         UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithTitle:@"删除" style:UIBarButtonItemStylePlain target:self action:@selector(deleteButtonClicked:)];
         self.navigationItem.rightBarButtonItem = rightItem;
     }
