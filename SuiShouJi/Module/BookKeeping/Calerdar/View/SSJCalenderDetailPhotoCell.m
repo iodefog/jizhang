@@ -50,10 +50,10 @@
         }
         if (image.size.width > image.size.height) {
             CGFloat x = (image.size.width - image.size.height) * 0.5;
-            self.photo.image = [image ssj_imageWithClipInsets:UIEdgeInsetsMake(0, x, 0, x)];
+            self.photo.image = [image ssj_imageWithClipInsets:UIEdgeInsetsMake(0, x, 0, x) toSize:CGSizeMake(150, 150)];
         } else {
             CGFloat x = (image.size.height - image.size.width) * 0.5;
-            self.photo.image = [image ssj_imageWithClipInsets:UIEdgeInsetsMake(x, 0, x, 0)];
+            self.photo.image = [image ssj_imageWithClipInsets:UIEdgeInsetsMake(x, 0, x, 0) toSize:CGSizeMake(150, 150)];
         }
     }];
 }

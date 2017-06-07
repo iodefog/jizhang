@@ -116,7 +116,22 @@
  */
 - (UIImage *)ssj_circleImage;
 
+/**
+ 将图片insets之外的区域裁剪掉
+ 
+ @param insets 剪掉区域
+ @return 裁剪后的图片
+ */
 - (UIImage *)ssj_imageWithClipInsets:(UIEdgeInsets)insets;
+
+/**
+ 将图片insets之外的区域裁剪掉，并压缩成指定大小
+
+ @param insets 剪掉区域
+ @param size 裁剪后压缩成指定的大小
+ @return 处理后的图片
+ */
+- (UIImage *)ssj_imageWithClipInsets:(UIEdgeInsets)insets toSize:(CGSize)size;
 
 @end
 

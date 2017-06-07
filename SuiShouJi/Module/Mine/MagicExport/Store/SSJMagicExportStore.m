@@ -84,15 +84,6 @@ NSString *const SSJMagicExportStoreEndDateKey = @"SSJMagicExportStoreEndDateKey"
                            success:(void (^)(NSArray<NSDate *> *result))success
                            failure:(void (^)(NSError *error))failure {
     
-    if (billType != SSJBillTypeUnknown && billId) {
-        if (failure) {
-            SSJDispatchMainAsync(^{
-                failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"billType和billTypeId不能同时都传值"}]);
-            });
-        }
-        return;
-    }
-    
     if (billType == SSJBillTypeUnknown && !billId) {
         if (failure) {
             SSJDispatchMainAsync(^{
