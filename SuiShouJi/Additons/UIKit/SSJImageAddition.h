@@ -140,6 +140,11 @@
 
 @interface UIImage (SSJAssets)
 
+/**
+ 从assets中读取启动图片
+
+ @return UIImage *
+ */
 + (UIImage *)ssj_launchImage;
 
 @end
@@ -149,6 +154,12 @@
 
 @interface UIImage (SSJLoad)
 
+/**
+ 加载网络图片或者沙盒图片
+
+ @param url 图片路径
+ @param compeltion 加载完成的回调
+ */
 + (void)ssj_loadUrl:(NSURL *)url compeltion:(void(^)(NSError *error, UIImage *image))compeltion;
 
 @end
