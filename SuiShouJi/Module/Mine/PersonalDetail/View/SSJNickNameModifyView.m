@@ -41,7 +41,7 @@
     if (self) {
         self.title = title;
         self.maxLength = maxTextLength;
-        self.backgroundColor = [UIColor whiteColor];
+        self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         [self addSubview:self.titleLabel];
         [self addSubview:self.textInput];
         [self addSubview:self.textLengthLabel];
@@ -195,6 +195,7 @@
         [_textInput ssj_setBorderStyle:SSJBorderStyleBottom];
         [_textInput ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor]];
         _textInput.delegate = self;
+        _textInput.backgroundColor = [UIColor clearColor];
         _textInput.autocorrectionType = UITextAutocorrectionTypeNo;
     }
     return _textInput;

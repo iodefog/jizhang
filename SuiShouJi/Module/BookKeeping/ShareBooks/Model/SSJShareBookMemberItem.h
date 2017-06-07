@@ -17,7 +17,7 @@
 @property(nonatomic, copy) NSString *booksId;
 
 // 账本管理员id
-@property(nonatomic, copy) NSString *adminid;
+@property(nonatomic, copy) NSString *adminId;
 
 
 // 用户头像

@@ -464,12 +464,15 @@
                         sucess:(void(^)())success
                        failure:(void (^)(NSError *error))failure {
     if (!item.booksId.length) return;
+    
     if (!item.creatorId.length) {
         item.creatorId = SSJUSERID();
     }
+    
     if (!item.adminId.length) {
         item.adminId = SSJUSERID();
     }
+    
     NSMutableDictionary *shareBookInfo = [NSMutableDictionary dictionaryWithDictionary:[self fieldMapWithShareBookItem:item]];
     [shareBookInfo removeObjectForKey:@"editing"];
     [shareBookInfo removeObjectForKey:@"memberCount"];
@@ -688,8 +691,7 @@
                 bookId = ((SSJBooksTypeItem *)item).booksId;
             }
             if (!bookId.length && ![item.booksName isEqualToString:@"添加账本"]) return ;
-            NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-            NSString *sqlStr = [NSString stringWithFormat:@"update bk_share_books set iorder = %@, iversion = %@, cadddate = '%@' where cbooksid = '%@'",@(order),@(SSJSyncVersion()),writeDate,bookId];
+            NSString *sqlStr = [NSString stringWithFormat:@"update bk_share_books set iorder = %@ where cbooksid = '%@'",@(order),bookId];
             if (![db executeUpdate:sqlStr]) {
                 if (failure) {
                     SSJDispatch_main_async_safe(^{
@@ -780,24 +782,6 @@
 + (BOOL)saveShareBooksMemberWithBookId:(SSJShareBookItem *)item
                            shareMember:(NSArray<NSDictionary *> *)shareMember
                             inDatabase:(FMDatabase *)db {
-    __block NSString *iconStr;
-    if (SSJIsUserLogined()) {//登录
-        //查询当前用户信息
-        [SSJUserTableManager queryUserItemWithID:SSJUSERID() success:^(SSJUserItem * _Nonnull item) {
-            if (!item.icon) {
-                iconStr = @"defualt_portrait";
-            } else {
-                iconStr = item.icon;
-            }
-            
-        } failure:^(NSError * _Nonnull error) {
-            iconStr = @"defualt_portrait";
-            [SSJAlertViewAdapter showError:error];
-        }];
-        
-    } else {
-        iconStr = @"defualt_portrait";
-    }
     
     NSArray *memberArr = @[@"cmemberid",
                            @"cbooksid",
@@ -810,7 +794,6 @@
     //更新bk_share_books_member表
     for (NSDictionary *dic in shareMember) {
         NSMutableDictionary *memberDic = [dic mutableCopy];
-        [memberDic setObject:iconStr?:@"defualt_portrait" forKey:@"cicon"];
         
         NSMutableArray *memberValueArr = [NSMutableArray array];
         for (NSString *key in memberArr) {

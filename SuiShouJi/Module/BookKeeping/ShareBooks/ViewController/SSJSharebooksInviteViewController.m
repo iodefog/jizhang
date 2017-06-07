@@ -30,8 +30,6 @@
 
 @property(nonatomic, strong) UIButton *sendButton;
 
-@property(nonatomic, strong) UILabel *customCodeLab;
-
 @property(nonatomic, strong) UILabel *expireDateLab;
 
 @property(nonatomic, strong) UILabel *codeTitleLab;
@@ -65,7 +63,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.backgroundView.image = [UIImage ssj_compatibleImageNamed:@"sharebk_backgroud"];
+//    self.backgroundView.image = [UIImage ssj_compatibleImageNamed:@"sharebk_backgroud"];
     self.titles = @[@"发送暗号给好友",@"对方打开有鱼记账App V2.5 以上版本",@"好友添加共享账本时，输入暗号",@"大功告成～"];
     [self.view addSubview:self.backView];
     [self.backView addSubview:self.codeTitleLab];
@@ -73,7 +71,6 @@
     [self.backView addSubview:self.codeRightImage];
     [self.backView addSubview:self.codeInput];
     [self.backView addSubview:self.resendButton];
-    [self.backView addSubview:self.customCodeLab];
     [self.backView addSubview:self.expireDateLab];
     [self.view addSubview:self.sendButton];
     [self initHintView];
@@ -89,15 +86,15 @@
 - (void)updateViewConstraints {
 
     [self.backView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.height.mas_equalTo(255);
-        make.width.mas_equalTo(self.view.mas_width).offset(-35);
-        make.top.mas_equalTo(SSJ_NAVIBAR_BOTTOM + 30);
+        make.height.mas_equalTo(385 - SSJ_NAVIBAR_BOTTOM);
+        make.width.mas_equalTo(self.view.mas_width);
+        make.top.mas_equalTo(SSJ_NAVIBAR_BOTTOM);
         make.centerX.mas_equalTo(self.view);
     }];
     
     [self.codeTitleLab mas_updateConstraints:^(MASConstraintMaker *make) {
         make.centerX.mas_equalTo(self.backView);
-        make.top.mas_equalTo(30);
+        make.top.mas_equalTo(60);
     }];
     
     [self.codeLeftImage mas_updateConstraints:^(MASConstraintMaker *make) {
@@ -117,10 +114,6 @@
         make.top.mas_equalTo(self.codeTitleLab.mas_bottom).offset(34);
     }];
     
-    [self.customCodeLab mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.codeInput.mas_bottom).offset(15);
-        make.left.mas_equalTo(self.codeInput);
-    }];
     
     [self.resendButton mas_updateConstraints:^(MASConstraintMaker *make) {
         make.right.mas_equalTo(self.codeInput.mas_right);
@@ -136,7 +129,7 @@
     [self.sendButton mas_updateConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(224, 46));
         make.centerX.mas_equalTo(self.view.mas_centerX);
-        make.centerY.mas_equalTo(self.backView.mas_bottom);
+        make.centerY.mas_equalTo(self.expireDateLab.mas_bottom).offset(50);
     }];
     
     for (SSJShareBooksHintView *hintView in self.hintViews) {
@@ -144,7 +137,7 @@
         [hintView mas_updateConstraints:^(MASConstraintMaker *make) {
             make.width.mas_equalTo(self.view);
             make.height.mas_equalTo(28);
-            make.top.mas_equalTo(self.sendButton.mas_bottom).offset(48 + index * 28);
+            make.top.mas_equalTo(self.sendButton.mas_bottom).offset(64 + index * 28);
             make.left.mas_equalTo(self.view);
         }];
     }
@@ -161,10 +154,10 @@
     if (!_backView) {
         _backView = [[UIView alloc] init];
         _backView.backgroundColor = [UIColor whiteColor];
-        _backView.layer.cornerRadius = 16.f;
-        _backView.layer.shadowOffset = CGSizeMake(0, 2);
-        _backView.layer.shadowColor = [UIColor ssj_colorWithHex:@"#000000"].CGColor;
-        _backView.layer.shadowOpacity = 0.15;
+//        _backView.layer.cornerRadius = 16.f;
+//        _backView.layer.shadowOffset = CGSizeMake(0, 2);
+//        _backView.layer.shadowColor = [UIColor ssj_colorWithHex:@"#000000"].CGColor;
+//        _backView.layer.shadowOpacity = 0.15;
     }
     return _backView;
 }
@@ -205,7 +198,7 @@
         [_codeInput ssj_setBorderColor:[UIColor ssj_colorWithHex:@"#DDDDDD"]];
         [_codeInput ssj_setBorderStyle:SSJBorderStyleBottom];
         [_codeInput ssj_setBorderWidth:1.f];
-        _codeInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入六位暗号" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"#CCCCCC"]}];
+        _codeInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入4-10位暗号" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"#CCCCCC"]}];
         _codeInput.rightViewMode = UITextFieldViewModeAlways;
         _codeInput.tintColor = [UIColor ssj_colorWithHex:@"#333333"];
         @weakify(self);
@@ -249,24 +242,13 @@
     return _expireDateLab;
 }
 
-- (UILabel *)customCodeLab {
-    if (!_customCodeLab) {
-        _customCodeLab = [[UILabel alloc] init];
-        _customCodeLab.textColor = [UIColor ssj_colorWithHex:@"#999999"];
-        _customCodeLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
-        _customCodeLab.text = @"暗号可自定义哦";
-        [_customCodeLab sizeToFit];
-    }
-    return _customCodeLab;
-}
-
 - (UIButton *)sendButton {
     if (!_sendButton) {
         _sendButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _sendButton.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
         _sendButton.layer.cornerRadius = 23.f;
         [_sendButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [_sendButton setTitle:@"发送暗号" forState:UIControlStateNormal];
+        [_sendButton setTitle:@"确认使用此暗号" forState:UIControlStateNormal];
         _sendButton.backgroundColor = [UIColor ssj_colorWithHex:@"#EB4A64"];
         _sendButton.layer.shadowOffset = CGSizeMake(0, 4);
         [_sendButton addTarget:self action:@selector(sendButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
@@ -298,6 +280,7 @@
     } else {
         self.codeInput.text = @"";
         self.codeInput.enabled = YES;
+        self.expireDateLab.text = @"暗号12小时内有效";
         [self.resendButton setTitle:@"随机生成" forState:UIControlStateNormal];
         self.sendButton.backgroundColor = [UIColor ssj_colorWithHex:@"#CCCCCC"];
         self.sendButton.layer.shadowColor = [UIColor blackColor].CGColor;
@@ -306,16 +289,20 @@
 }
 
 - (void)sendButtonClicked:(id)sender {
-    if (self.codeInput.text.length != 6) {
-        [CDAutoHideMessageHUD showMessage:@"暗号长度必须为6位哦"];
+    if (self.codeInput.text.length < 4 || self.codeInput.text.length > 10) {
+        [CDAutoHideMessageHUD showMessage:@"暗号长度必须在4到10位之间哦"];
         return;
     }
+    
     NSString *regex = @"[0-9]*";
+    
     NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",regex];
+    
     if ([pred evaluateWithObject:self.codeInput.text]) {
         [CDAutoHideMessageHUD showMessage:@"暗号不能是纯数字哦"];
         return;
     }
+
     [self.saveCodeService saveCodeWithbooksId:self.item.booksId code:self.codeInput.text];
 }
 
@@ -375,7 +362,7 @@
             iconUrl = SSJImageURLWithAPI(iconUrl);
         }
         
-        if (iconUrl.length | !iconUrl) {
+        if (!iconUrl.length | !iconUrl) {
             iconUrl = @"";
         }
         

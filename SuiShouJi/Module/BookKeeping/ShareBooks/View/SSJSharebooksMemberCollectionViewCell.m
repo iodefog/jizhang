@@ -125,12 +125,13 @@
         [self.iconImageView sd_setImageWithURL:[NSURL URLWithString:imageUrl] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
         self.addImageView.hidden = YES;
         self.backgroundColor = [UIColor clearColor];
-        self.adminImage.hidden = ![_memberItem.memberId isEqualToString:_memberItem.adminid];
+        self.adminImage.hidden = ![_memberItem.memberId isEqualToString:_memberItem.adminId];
     } else {
         self.nickNameLabel.text = @"";
         self.addImageView.hidden = NO;
         self.iconImageView.image = nil;
         self.iconImageView.backgroundColor = [UIColor clearColor];
+        self.adminImage.hidden = YES;
     }
     [self setNeedsUpdateConstraints];
 }

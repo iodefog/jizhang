@@ -225,6 +225,7 @@
         
             SSJDispatchMainSync(^{
                 [[NSNotificationCenter defaultCenter] postNotificationName:SSJBooksTypeDidChangeNotification object:nil];
+                [CDAutoHideMessageHUD showMessage:@"加入成功"];
                 [self.navigationController popToRootViewControllerAnimated:YES];
             });
         }];
