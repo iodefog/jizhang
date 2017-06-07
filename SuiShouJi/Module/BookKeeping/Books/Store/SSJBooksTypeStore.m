@@ -780,24 +780,6 @@
 + (BOOL)saveShareBooksMemberWithBookId:(SSJShareBookItem *)item
                            shareMember:(NSArray<NSDictionary *> *)shareMember
                             inDatabase:(FMDatabase *)db {
-    __block NSString *iconStr;
-    if (SSJIsUserLogined()) {//登录
-        //查询当前用户信息
-        [SSJUserTableManager queryUserItemWithID:SSJUSERID() success:^(SSJUserItem * _Nonnull item) {
-            if (!item.icon) {
-                iconStr = @"defualt_portrait";
-            } else {
-                iconStr = item.icon;
-            }
-            
-        } failure:^(NSError * _Nonnull error) {
-            iconStr = @"defualt_portrait";
-            [SSJAlertViewAdapter showError:error];
-        }];
-        
-    } else {
-        iconStr = @"defualt_portrait";
-    }
     
     NSArray *memberArr = @[@"cmemberid",
                            @"cbooksid",
@@ -810,7 +792,6 @@
     //更新bk_share_books_member表
     for (NSDictionary *dic in shareMember) {
         NSMutableDictionary *memberDic = [dic mutableCopy];
-        [memberDic setObject:iconStr?:@"defualt_portrait" forKey:@"cicon"];
         
         NSMutableArray *memberValueArr = [NSMutableArray array];
         for (NSString *key in memberArr) {
