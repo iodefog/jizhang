@@ -16,9 +16,11 @@
                             Success:(void(^)(SSJUserItem * memberItem))success
                             failure:(void(^)(NSError *error))failure 
  {
+     
     if (!memberId.length) {
         SSJPRINT(@"memberid不正确");
     }
+     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
         FMResultSet *rs = [db executeQuery:@"select bm.cicon, bf.cmark from bk_share_books_member bm,bk_share_books_friends_mark bf where bm.cmemberid = ? and bm.cmemberid = bf.cfriendid and bm.cbooksid = ? and bm.cbooksid = bf.cbooksid",memberId,booksId];
         if (!rs) {
@@ -29,6 +31,7 @@
             }
             return;
         }
+        
         SSJUserItem *memberItem = [[SSJUserItem alloc] init];
         
         while ([rs next]) {
@@ -36,6 +39,8 @@
             memberItem.icon = [rs stringForColumn:@"cicon"];
             memberItem.userId = memberId;
         }
+        
+        [rs close];
         
         if (success) {
             SSJDispatch_main_async_safe(^{
@@ -352,13 +357,17 @@
                         booksid:(NSString *)booksid
                   success:(void (^)(NSString * name))success
                   failure:(void (^)(NSError *error))failure {
+    
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
-        if (![db executeQuery:@"update bk_user set cmark = ?, cwritedate = ?, iversion = ? where cfriendid = ? and cuserid = ? and cbooksid = ?", name, [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], @(SSJSyncVersion()), memberId, SSJUSERID(), booksid]) {
+        if (![db executeUpdate:@"update bk_share_books_friends_mark set cmark = ?, cwritedate = ?, iversion = ? ,operatortype = 2 where cfriendid = ? and cuserid = ? and cbooksid = ?", name, [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], @(SSJSyncVersion()), memberId, SSJUSERID(), booksid]) {
             SSJDispatch_main_async_safe(^{
                 failure([db lastError]);
             });
             return;
         }
+        
+        
+        
         SSJDispatch_main_async_safe(^{
             success(name);
         });

@@ -167,6 +167,7 @@
         if (![db boolForQuery:@"select count(*) from BK_BOOKS_TYPE where CBOOKSID = ?", booksid]) {//添加
             [typeInfo setObject:@(booksOrder) forKey:@"iorder"];
             [typeInfo setObject:@(0) forKey:@"operatortype"];
+            [typeInfo setObject:[item parentIcon] forKey:@"cicoin"];
             sql = [self inertSQLStatementWithTypeInfo:typeInfo tableName:@"BK_BOOKS_TYPE"];
         } else { //修改
             [typeInfo setObject:@(1) forKey:@"operatortype"];
@@ -784,11 +785,13 @@
         //查询当前用户信息
         [SSJUserTableManager queryUserItemWithID:SSJUSERID() success:^(SSJUserItem * _Nonnull item) {
             if (!item.icon) {
-                item.icon = @"defualt_portrait";
+                iconStr = @"defualt_portrait";
+            } else {
+                iconStr = item.icon;
             }
-            iconStr = item.icon;
             
         } failure:^(NSError * _Nonnull error) {
+            iconStr = @"defualt_portrait";
             [SSJAlertViewAdapter showError:error];
         }];
         

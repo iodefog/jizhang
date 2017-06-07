@@ -174,6 +174,10 @@
     [self.service enterBooksWithCode:self.codeInput.text];
 }
 
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    [self.view endEditing:YES];
+}
+
 #pragma mark - SSJBaseNetworkServiceDelegate
 - (void)serverDidFinished:(SSJBaseNetworkService *)service {
     if ([service.returnCode isEqualToString:@"1"]) {

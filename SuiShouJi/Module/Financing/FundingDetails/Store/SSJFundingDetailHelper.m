@@ -27,7 +27,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
         SSJFinancingHomeitem *fundingItem = [[SSJFinancingHomeitem alloc]init];
         NSString *userid = SSJUSERID();
         NSMutableArray *tempDateArr = [NSMutableArray arrayWithCapacity:0];
-        NSString *sql = [NSString stringWithFormat:@"select substr(a.cbilldate,0,7) as cmonth , a.* , a.cwritedate as chargedate , a.cid as sundryid, b.*, c.lender, c.itype as loantype from BK_USER_CHARGE a, BK_BILL_TYPE b left join bk_loan c on a.cid = c.loanid where a.IBILLID = b.ID and a.IFUNSID = '%@' and a.operatortype <> 2 and (a.cbilldate <= '%@' or (length(a.cid) > 0 and a.ichargetype = %ld)) order by cmonth desc ,a.cbilldate desc ,a.cwritedate desc", ID , [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"],(long)SSJChargeIdTypeLoan];
+        NSString *sql = [NSString stringWithFormat:@"select substr(a.cbilldate,0,7) as cmonth , a.* , a.cwritedate as chargedate , a.cid as sundryid, b.*, c.lender, c.itype as loantype from BK_USER_CHARGE a, BK_BILL_TYPE b left join bk_loan c on a.cid = c.loanid left join bk_share_books_member d on d.cbooksid = a.cbooksid and d.cmemberid = a.cuserid where a.IBILLID = b.ID and a.IFUNSID = '%@' and a.operatortype <> 2 and (a.cbilldate <= '%@' or (length(a.cid) > 0 and a.ichargetype = %ld)) and d.istate = 0 order by cmonth desc ,a.cbilldate desc ,a.cwritedate desc", ID , [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"],(long)SSJChargeIdTypeLoan];
         FMResultSet *resultSet = [db executeQuery:sql];
         if (!resultSet) {
             if (failure) {
@@ -196,7 +196,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                         failure:(void (^)(NSError *error))failure{
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSString *userid = SSJUSERID();
-        NSString *sql = [NSString stringWithFormat:@"select a.* , a.cwritedate as chargedate, a.cid as sundryid, c.lender, c.itype as loantype, b.*  from BK_USER_CHARGE a, BK_BILL_TYPE b left join bk_loan c on a.cid = c.loanid left join bk_share_books_member d on d.cbooksid = a.cbooksid where a.IBILLID = b.ID and a.IFUNSID = '%@' and a.operatortype <> 2 and (a.cbilldate <= '%@' or (length(a.cid) > 0 and a.ichargetype = %ld)) and d.istate = 0 order by a.cbilldate desc ,  a.cwritedate desc", cardItem.cardId , [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"],(long)SSJChargeIdTypeLoan];
+        NSString *sql = [NSString stringWithFormat:@"select a.* , a.cwritedate as chargedate, a.cid as sundryid, c.lender, c.itype as loantype, b.*  from BK_USER_CHARGE a, BK_BILL_TYPE b left join bk_loan c on a.cid = c.loanid left join bk_share_books_member d on d.cbooksid = a.cbooksid and d.cmemberid = a.cuserid where a.IBILLID = b.ID and a.IFUNSID = '%@' and a.operatortype <> 2 and (a.cbilldate <= '%@' or (length(a.cid) > 0 and a.ichargetype = %ld)) and d.istate = 0 order by a.cbilldate desc ,  a.cwritedate desc", cardItem.cardId , [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"],(long)SSJChargeIdTypeLoan];
         FMResultSet *resultSet = [db executeQuery:sql];
         SSJCreditCardItem *newcardItem = [[SSJCreditCardItem alloc]init];
         if (!resultSet) {
@@ -385,7 +385,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
             NSDate *currentMonth = [NSDate dateWithString:listItem.month formatString:@"yyyy-MM"];
             NSDate *firstDate = [[NSDate dateWithYear:currentMonth.year month:currentMonth.month day:cardItem.cardBillingDay] dateBySubtractingMonths:1];
             NSDate *seconDate = [[NSDate dateWithYear:currentMonth.year month:currentMonth.month day:cardItem.cardBillingDay] dateByAddingDays:1];
-            listItem.repaymentForOtherMonthMoney = [db doubleForQuery:@"select sum(repaymentmoney) from bk_credit_repayment where cuserid = ? and crepaymentmonth <> ? and ccardid = ? and operatortype <> 2 and iinstalmentcount = 0 and capplydate >= ? and   capplydate <= ?",userid,listItem.month,cardItem.cardId,[firstDate formattedDateWithFormat:@"yyyy-MM-dd"],[seconDate formattedDateWithFormat:@"yyyy-MM-dd"]];
+            listItem.repaymentForOtherMonthMoney = [db doubleForQuery:@"select sum(repaymentmoney) from bk_credit_repayment where cuserid = ? and crepaymentmonth <> ? and ccardid = ? and operatortype <> 2 and iinstalmentcount = 0 and capplydate >= ? and capplydate <= ?",userid,listItem.month,cardItem.cardId,[firstDate formattedDateWithFormat:@"yyyy-MM-dd"],[seconDate formattedDateWithFormat:@"yyyy-MM-dd"]];
         }
         double instalMoney = [db doubleForQuery:@"select sum(repaymentmoney) from bk_credit_repayment where cuserid = ? and ccardid = ? and operatortype <> 2 and iinstalmentcount > 0",userid,cardItem.cardId];
         if (instalMoney > 0) {

@@ -319,6 +319,9 @@
     [self.saveCodeService saveCodeWithbooksId:self.item.booksId code:self.codeInput.text];
 }
 
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    [self.view endEditing:YES];
+}
 
 #pragma mark - Private
 - (void)initHintView {

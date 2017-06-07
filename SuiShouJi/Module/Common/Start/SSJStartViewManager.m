@@ -160,7 +160,7 @@ static const NSTimeInterval kTransitionDuration = 0.3;
 
 // 当前版本第一次启动显示引导页
 - (void)showGuideViewIfNeeded {
-//    if (SSJLaunchTimesForCurrentVersion() == 1) {
+    if (SSJLaunchTimesForCurrentVersion() == 1) {
         if (!_guideView) {
             __weak typeof(self) wself = self;
             _guideView = [[SSJGuideView alloc] initWithFrame:[UIScreen mainScreen].bounds];
@@ -174,21 +174,21 @@ static const NSTimeInterval kTransitionDuration = 0.3;
         }
         [UIView transitionFromView:_launchView toView:_guideView duration:kTransitionDuration options:UIViewAnimationOptionTransitionCrossDissolve completion:NULL];
         _launchView = nil;
-//    } else {
-//        
-//        [UIView animateWithDuration:0.5f animations:^(void){
-//            _launchView.transform = CGAffineTransformMakeScale(2.0f, 2.0f);
-//            _launchView.alpha = 0;
-//        } completion:^(BOOL finished){
-//            [_launchView removeFromSuperview];
-//            _launchView = nil;
-//        }];
-//        
-//        if (_completion) {
-//            _completion(self);
-//            _completion = nil;
-//        }
-//    }
+    } else {
+        
+        [UIView animateWithDuration:0.5f animations:^(void){
+            _launchView.transform = CGAffineTransformMakeScale(2.0f, 2.0f);
+            _launchView.alpha = 0;
+        } completion:^(BOOL finished){
+            [_launchView removeFromSuperview];
+            _launchView = nil;
+        }];
+        
+        if (_completion) {
+            _completion(self);
+            _completion = nil;
+        }
+    }
 }
 
 @end
