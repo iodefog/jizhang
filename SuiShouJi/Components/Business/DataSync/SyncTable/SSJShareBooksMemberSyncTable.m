@@ -20,7 +20,8 @@
              @"cbooksid",
              @"cjoindate",
              @"istate",
-             @"cicon"];
+             @"cicon",
+             @"ccolor"];
 }
 
 + (NSArray *)primaryKeys {

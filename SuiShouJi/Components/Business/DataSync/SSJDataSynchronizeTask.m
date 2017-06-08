@@ -507,13 +507,6 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
     
     // 删除已经退出的账本中的share_books,share_books_friends_mark
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
-        FMResultSet *result = [db executeQuery:@"select * from bk_share_books_member where cmemberid = ? and istate != ?",self.userId,@(SSJShareBooksMemberStateNormal)];
-        
-        while ([result next]) {
-            NSString *cbooksid = [result stringForColumn:@"cbooksid"];
-            NSInteger state = [result intForColumn:@"istate"];
-            NSLog(@"%@ state is %ld",cbooksid,state);
-        }
         
         [db executeUpdate:@"delete from bk_share_books where cbooksid in (select cbooksid from bk_share_books_member where cmemberid = ? and istate != ?)",self.userId,@(SSJShareBooksMemberStateNormal)];
         

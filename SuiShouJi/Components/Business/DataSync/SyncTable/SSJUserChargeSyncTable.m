@@ -101,7 +101,7 @@
         
         NSMutableArray *quitBooksArr = [NSMutableArray arrayWithCapacity:0];
         
-        FMResultSet *quitBooksResult = [db executeQuery:@"select cbooksid from bk_share_books_member where cmemberid = ? and istate != ?", userId, SSJShareBooksMemberStateNormal];
+        FMResultSet *quitBooksResult = [db executeQuery:@"select cbooksid from bk_share_books_member where cmemberid = ? and istate != ?", userId, @(SSJShareBooksMemberStateNormal)];
         
         while ([quitBooksResult next]) {
             NSString *quitBookId = [quitBooksResult stringForColumn:@"cbooksid"];
