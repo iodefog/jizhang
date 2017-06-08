@@ -51,7 +51,6 @@ static NSString *const kSSJCalenderDetailPhotoCellId = @"kSSJCalenderDetailPhoto
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(rightBarButtonClicked:)];
     [self.view addSubview:self.editBtn];
     [self registerCellClass];
     [self updateAppearance];
@@ -178,7 +177,20 @@ static NSString *const kSSJCalenderDetailPhotoCellId = @"kSSJCalenderDetailPhoto
         self.item = chargeItem;
         [self organiseData];
         [self.tableView reloadData];
-        [self updateTableViewInsetsAndEditBtnHidden];
+        if (self.item.idType == SSJChargeIdTypeShareBooks
+            && ![self.item.userId isEqualToString:SSJUSERID()]) {
+            UIEdgeInsets insets = self.tableView.contentInset;
+            insets.bottom = 0;
+            self.tableView.contentInset = insets;
+            self.editBtn.hidden = YES;
+            self.navigationItem.rightBarButtonItem = nil;
+        } else {
+            UIEdgeInsets insets = self.tableView.contentInset;
+            insets.bottom = self.editBtn.height;
+            self.tableView.contentInset = insets;
+            self.editBtn.hidden = NO;
+            self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(rightBarButtonClicked:)];
+        }
     } failure:^(NSError * _Nonnull error) {
         [self.view ssj_hideLoadingIndicator];
         [SSJAlertViewAdapter showError:error];
@@ -276,21 +288,6 @@ static NSString *const kSSJCalenderDetailPhotoCellId = @"kSSJCalenderDetailPhoto
     [self.editBtn ssj_setBorderColor:SSJ_CELL_SEPARATOR_COLOR];
     [self.editBtn setTitleColor:SSJ_MARCATO_COLOR forState:UIControlStateNormal];
     [self.editBtn ssj_setBackgroundColor:SSJ_SECONDARY_FILL_COLOR forState:UIControlStateNormal];
-}
-
-- (void)updateTableViewInsetsAndEditBtnHidden {
-    if (self.item.idType == SSJChargeIdTypeShareBooks
-        && ![self.item.userId isEqualToString:SSJUSERID()]) {
-        UIEdgeInsets insets = self.tableView.contentInset;
-        insets.bottom = 0;
-        self.tableView.contentInset = insets;
-        self.editBtn.hidden = YES;
-    } else {
-        UIEdgeInsets insets = self.tableView.contentInset;
-        insets.bottom = self.editBtn.height;
-        self.tableView.contentInset = insets;
-        self.editBtn.hidden = NO;
-    }
 }
 
 @end
