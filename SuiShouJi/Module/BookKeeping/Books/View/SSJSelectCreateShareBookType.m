@@ -167,4 +167,8 @@ static NSString * SSJSelectCreateShareBookTypeCellIdentifier = @"SSJSelectCreate
 //    self.collectionView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         self.collectionView.backgroundColor = [UIColor clearColor];
 }
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 @end

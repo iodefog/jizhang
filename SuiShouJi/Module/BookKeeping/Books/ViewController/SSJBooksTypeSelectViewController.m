@@ -33,6 +33,7 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
 #import "SSJCreateOrDeleteBooksService.h"
 #import "SSJLoginViewController.h"
 #import "UIViewController+SSJPageFlow.h"
+#import "SSJInviteCodeJoinSuccessView.h"
 
 @interface SSJBooksTypeSelectViewController ()<SSJEditableCollectionViewDelegate,SSJEditableCollectionViewDataSource>
 
@@ -70,6 +71,9 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
 @property (nonatomic, assign,getter=isShowCreateBookAnimation) BOOL showCreateBookAnimation;
 
 @property (nonatomic, strong) SSJCreateOrDeleteBooksService *deleteBookService;
+
+/**成功暗号加入后弹框*/
+@property (nonatomic, strong) SSJInviteCodeJoinSuccessView *inviteCodeJoinSuccessView;
 @end
 
 @implementation SSJBooksTypeSelectViewController
@@ -556,11 +560,26 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
             } else if (selectParent == 1) {
                 //暗号加入
                 SSJInviteCodeJoinViewController *inviteVc = [[SSJInviteCodeJoinViewController alloc] init];
+                inviteVc.inviteCodeJoinBooksBlock = ^(NSString *bookName) {
+                    weakSelf.showCreateBookAnimation = YES;
+                    weakSelf.inviteCodeJoinSuccessView.bookName = bookName;
+                    //弹出加入账本成功弹窗
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        [weakSelf.inviteCodeJoinSuccessView show];
+                    });
+                };
                 [weakSelf.navigationController pushViewController:inviteVc animated:YES];
             }
         };
     }
     return _createShareBookTypeView;
+}
+
+- (SSJInviteCodeJoinSuccessView *)inviteCodeJoinSuccessView {
+    if (!_inviteCodeJoinSuccessView) {
+        _inviteCodeJoinSuccessView = [[SSJInviteCodeJoinSuccessView alloc] initWithFrame:CGRectMake(0, 0, 280, 328)];
+    }
+    return _inviteCodeJoinSuccessView;
 }
 
 #pragma mark - Private
