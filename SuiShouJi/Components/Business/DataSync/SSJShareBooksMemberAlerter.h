@@ -10,4 +10,8 @@
 
 @interface SSJShareBooksMemberAlerter : NSObject
 
++ (instancetype)alerter;
+
+- (void)recordWithMemberId:(NSString *)memberId booksId:(NSString *)booksId;
+
 @end
