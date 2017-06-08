@@ -172,74 +172,73 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
                 if (failure) {
                     failure(tError);
                 }
-                
-                return;
-            }
-            
-            //  返回的是zip压缩包
-            if ([contentType isEqualToString:@"APPLICATION/OCTET-STREAM"]) {
-                
-                //  将数据解压
-                NSError *tError = nil;
-//                NSString *path = [[NSBundle mainBundle]pathForResource:@"sync_data" ofType:@"json" ];
-//                NSData *jsonData = [[NSData alloc] initWithContentsOfFile:path];
-                
-                NSData *jsonData = [self unzipData:responseObject error:&tError];
-                
-                if (tError) {
-                    SSJPRINT(@">>> SSJ warning:an error occured when unzip response data\n error:%@", tError);
-                    if (failure) {
-                        failure(tError);
-                    }
-                    return;
-                }
-                
-                //  解析json数据
-                NSDictionary *tableInfo = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&tError];
-                if (tError) {
-                    SSJPRINT(@">>> SSJ warning:an error occured when parse json data\n error:%@", tError);
-                    if (failure) {
-                        failure(tError);
-                    }
-                    return;
-                }
-                
-                //    SSJPRINT(@">>> sync response data:%@", tableInfo);
-                
-                NSInteger errorCode = [tableInfo[@"code"] integerValue];
-                if (errorCode != 1) {
-                    tError = [NSError errorWithDomain:SSJErrorDomain code:errorCode userInfo:@{NSLocalizedDescriptionKey:tableInfo[@"desc"]}];
-                    SSJPRINT(@">>> SSJ warning:server response an error:%@", tError);
-                    if (failure) {
-                        failure(tError);
-                    }
-                    return;
-                }
-                
-                //  合并数据
-                if (![self mergeData:tableInfo error:&tError]) {
-                    tError = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:[tError localizedDescription]}];
-                    SSJPRINT(@">>> SSJ warning:server response an error:%@", tError);
-                    if (failure) {
-                        failure(tError);
-                    }
-                    return;
-                }
-                
-                [self extraProcessAfterMerge];
-                
-                if (success) {
-                    SSJPRINT(@"<<< --------- SSJ Sync Data Success! --------- >>>");
-                    success();
-                }
                 return;
             }
             
             //  返回未知数据
-            SSJPRINT(@">>> SSJ warning:sync response unknown content type:%@", contentType);
-            tError = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeDataSyncFailed userInfo:@{NSLocalizedDescriptionKey:@"sync response unknown content type"}];
-            if (failure) {
-                failure(tError);
+            if (![contentType isEqualToString:@"APPLICATION/OCTET-STREAM"]) {
+                SSJPRINT(@">>> SSJ warning:sync response unknown content type:%@", contentType);
+                tError = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeDataSyncFailed userInfo:@{NSLocalizedDescriptionKey:@"sync response unknown content type"}];
+                if (failure) {
+                    failure(tError);
+                }
+                return;
+            }
+            
+            
+            //  返回的是zip压缩包
+            //  将数据解压
+            NSError *tError = nil;
+            //                NSString *path = [[NSBundle mainBundle]pathForResource:@"sync_data" ofType:@"json" ];
+            //                NSData *jsonData = [[NSData alloc] initWithContentsOfFile:path];
+            
+            NSData *jsonData = [self unzipData:responseObject error:&tError];
+            
+            if (tError) {
+                SSJPRINT(@">>> SSJ warning:an error occured when unzip response data\n error:%@", tError);
+                if (failure) {
+                    failure(tError);
+                }
+                return;
+            }
+            
+            //  解析json数据
+            NSDictionary *tableInfo = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&tError];
+            if (tError) {
+                SSJPRINT(@">>> SSJ warning:an error occured when parse json data\n error:%@", tError);
+                if (failure) {
+                    failure(tError);
+                }
+                return;
+            }
+            
+            //    SSJPRINT(@">>> sync response data:%@", tableInfo);
+            
+            NSInteger errorCode = [tableInfo[@"code"] integerValue];
+            if (errorCode != 1) {
+                tError = [NSError errorWithDomain:SSJErrorDomain code:errorCode userInfo:@{NSLocalizedDescriptionKey:tableInfo[@"desc"]}];
+                SSJPRINT(@">>> SSJ warning:server response an error:%@", tError);
+                if (failure) {
+                    failure(tError);
+                }
+                return;
+            }
+            
+            //  合并数据
+            if (![self mergeData:tableInfo error:&tError]) {
+                tError = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:[tError localizedDescription]}];
+                SSJPRINT(@">>> SSJ warning:server response an error:%@", tError);
+                if (failure) {
+                    failure(tError);
+                }
+                return;
+            }
+            
+            [self extraProcessAfterMerge];
+            
+            if (success) {
+                SSJPRINT(@"<<< --------- SSJ Sync Data Success! --------- >>>");
+                success();
             }
         });
     }];
