@@ -53,6 +53,7 @@ static const UIEdgeInsets kButtonInset = {7, 5, 7, 5};
         [RACObserve(self.memberBtn, hidden) subscribeNext:^(id x) {
             @strongify(self);
             [self setNeedsUpdateConstraints];
+            [self setNeedsLayout];
         }];
     }
     return self;
