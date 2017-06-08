@@ -25,8 +25,8 @@
         
         self.layer.cornerRadius = 20;
         self.layer.borderWidth = 1;
-        self.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha].CGColor;
         self.layer.masksToBounds = YES;
+        self.backgroundColor = [UIColor clearColor];
 //        CAShapeLayer *shapeLayer = [CAShapeLayer layer];
 //        shapeLayer.path = [UIBezierPath bezierPathWithRoundedRect:self.bounds cornerRadius:20].CGPath;
 //        shapeLayer.borderWidth = 1;
@@ -37,9 +37,9 @@
 //        [self ssj_setBorderWidth:1];
 //        [self ssj_setBorderStyle:SSJBorderStyleAll];
 //        [self ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
-
-        
-        
+        [self appearance];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appearance) name:SSJThemeDidChangeNotification object:nil];
+        [self sizeToFit];
     }
     return self;
 }
@@ -63,7 +63,6 @@
     if (!_nameLab) {
         _nameLab = [[UILabel alloc] init];
         _nameLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
-        _nameLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     }
     return _nameLab;
 }
@@ -73,5 +72,10 @@
         _imageView = [[UIImageView alloc] init];
     }
     return _imageView;
+}
+
+- (void)appearance {
+    self.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha].CGColor;
+    self.nameLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
 }
 @end
