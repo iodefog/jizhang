@@ -504,6 +504,22 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
             [db executeUpdate:@"update bk_fund_info set cstartcolor = ? , cendcolor = ?, cwritedate = ?, iversion = ?, operatortype = 1 where cfundid = ?",item.startColor,item.endColor,cwriteDate,@(SSJSyncVersion()),fundid];
         }
     }];
+    
+    
+    // 删除已经退出的账本中的share_books,share_books_friends_mark
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+        FMResultSet *result = [db executeQuery:@"select * from bk_share_books_member where cmemberid = ? and istate != ?",SSJUSERID(),SSJShareBooksMemberStateNormal];
+        
+        while ([result next]) {
+            NSString *cbooksid = [result stringForColumn:@"cbooksid"];
+            NSInteger state = [result intForColumn:@"istate"];
+            NSLog(@"%@ state is %ld",cbooksid,state);
+        }
+        
+        [db executeUpdate:@"delete from bk_share_books where cbooksid in (select cbooksid from bk_share_books_member where cmemberid = ? and istate != ?)",SSJUSERID(),SSJShareBooksMemberStateNormal];
+        
+        [db executeUpdate:@"delete from bk_share_books_friends_mark where cbooksid in (select cbooksid from bk_share_books_member where cmemberid = ? and istate != ?)",SSJUSERID(),SSJShareBooksMemberStateNormal];
+    }];
 }
 
 //  将data进行zip压缩
