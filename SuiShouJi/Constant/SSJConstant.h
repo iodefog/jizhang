@@ -133,6 +133,19 @@ typedef NS_ENUM(NSInteger, SSJShareBooksMemberState) {
     SSJShareBooksMemberStateKickedOut = 2
 };
 
+
+
+/**
+ 账本类型
+
+ - SSJBooksCategoryPersional: 个人账本
+ - SSJBooksCategoryPublic: 共享账本
+ */
+typedef NS_ENUM(NSInteger, SSJBooksCategory) {
+    SSJBooksCategoryPersional = 0,
+    SSJBooksCategoryPublic = 1
+};
+
 ///------------------------------------------
 /// @name 基本数据常量
 ///------------------------------------------
