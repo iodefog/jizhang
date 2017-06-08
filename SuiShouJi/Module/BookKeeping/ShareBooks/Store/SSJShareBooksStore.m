@@ -8,6 +8,8 @@
 
 #import "SSJShareBooksStore.h"
 #import "SSJDatabaseQueue.h"
+#import "SSJUserChargeSyncTable.h"
+#import "SSJShareBooksMemberSyncTable.h"
 
 @implementation SSJShareBooksStore
 
@@ -48,6 +50,38 @@
         if (success) {
             SSJDispatch_main_async_safe(^{
                 success(tempArr);
+            });
+        }
+    }];
+}
+
++ (void)kickOutMembersWithWithShareCharge:(NSArray *)shareChargeArray
+                              shareMember:(NSArray *)shareMemberArray
+                                  Success:(void(^)())success
+                                  failure:(void (^)(NSError *error))failure{
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
+        NSError *tError;
+        if (![SSJUserChargeSyncTable mergeRecords:shareChargeArray forUserId:SSJUSERID() inDatabase:db error:&tError]) {
+            if (failure) {
+                SSJDispatch_main_async_safe(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        };
+        
+        if (![SSJShareBooksMemberSyncTable mergeRecords:shareMemberArray forUserId:SSJUSERID() inDatabase:db error:&tError]) {
+            if (failure) {
+                SSJDispatch_main_async_safe(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        };
+        
+        if (success) {
+            SSJDispatch_main_async_safe(^{
+                success();
             });
         }
     }];
