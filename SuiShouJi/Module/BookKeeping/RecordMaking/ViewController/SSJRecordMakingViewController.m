@@ -23,6 +23,7 @@
 #import "SSJRecordMakingBillTypeInputAccessoryView.h"
 #import "SSJRecordMakingCustomNavigationBar.h"
 
+#import "SSJFinancingHomeitem.h"
 #import "SSJCreditCardItem.h"
 #import "SSJChargeMemBerItem.h"
 #import "SSJRecordMakingBillTypeSelectionCellItem.h"
@@ -277,7 +278,14 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
                         weakSelf.item.fundName = fundItem.fundingName;
                         weakSelf.item.fundOperatorType = 0;
                         [weakSelf updateFundingType];
-                    }else if ([item isKindOfClass:[SSJCreditCardItem class]]){
+                    } else if ([item isKindOfClass:[SSJFinancingHomeitem class]]){
+                        SSJFinancingHomeitem *fundItem = (SSJFinancingHomeitem *)item;
+                        [weakSelf.FundingTypeSelectView reloadDate];
+                        weakSelf.item.fundId = fundItem.fundingID;
+                        weakSelf.item.fundName = fundItem.fundingName;
+                        weakSelf.item.fundOperatorType = 0;
+                        [weakSelf updateFundingType];
+                    } else if ([item isKindOfClass:[SSJCreditCardItem class]]){
                         SSJCreditCardItem *cardItem = (SSJCreditCardItem *)item;
                         [weakSelf.FundingTypeSelectView reloadDate];
                         weakSelf.item.fundId = cardItem.cardId;
@@ -285,7 +293,6 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
                         weakSelf.item.fundOperatorType = 0;
                         [weakSelf updateFundingType];
                     }
-
                 };
                 [weakSelf.navigationController pushViewController:NewFundingVC animated:YES];
             }

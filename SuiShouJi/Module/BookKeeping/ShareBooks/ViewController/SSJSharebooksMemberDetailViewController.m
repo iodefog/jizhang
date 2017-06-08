@@ -25,6 +25,7 @@
 #import "SSJCreateOrDeleteBooksService.h"
 #import "SSJBooksTypeStore.h"
 #import "SSJDatabaseQueue.h"
+#import "SSJShareBooksStore.h"
 
 static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
 
@@ -73,7 +74,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
     [self.userInfoHeader addSubview:self.nickNameLab];
     [self.view addSubview:self.periodControl];
     [self.view addSubview:self.tableView];
-    if (![self.memberId isEqualToString:SSJUSERID()] && ![self.memberId isEqualToString:self.adminId]) {
+    if (![self.memberId isEqualToString:SSJUSERID()] && [self.adminId isEqualToString:SSJUSERID()]) {
         UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithTitle:@"删除" style:UIBarButtonItemStylePlain target:self action:@selector(deleteButtonClicked:)];
         self.navigationItem.rightBarButtonItem = rightItem;
     }
@@ -193,10 +194,10 @@ static NSString *const kSegmentTitleIncome = @"收入";
 - (void)serverDidFinished:(SSJBaseNetworkService *)service {
     if ([service.returnCode isEqualToString:@"1"]) {
         @weakify(self);
-        [SSJBooksTypeStore deleteShareBooksWithShareCharge:self.deleteService.shareChargeArray shareMember:self.deleteService.shareMemberArray bookId:self.booksId sucess:^(BOOL bookstypeHasChange){
+        [SSJShareBooksStore kickOutMembersWithWithShareCharge:self.deleteService.shareChargeArray shareMember:self.deleteService.shareMemberArray Success:^{
             @strongify(self);
             [CDAutoHideMessageHUD showMessage:@"删除成功"];
-            [self.navigationController popToRootViewControllerAnimated:YES];
+            [self.navigationController popViewControllerAnimated:YES];
         } failure:NULL];
     }
 }

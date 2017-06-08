@@ -641,6 +641,16 @@
             return;
         }
         
+        if (![self deleteSharebooksWithBooksid:bookId inDatabase:db]) {
+            if (failure) {
+                *rollback = YES;
+                SSJDispatchMainAsync(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        }
+        
         //更新日常统计表
         if (![SSJDailySumChargeTable updateDailySumChargeForUserId:userId inDatabase:db]) {
             if (failure) {
@@ -826,6 +836,16 @@
     return YES;
 }
 
+
++ (BOOL)deleteSharebooksWithBooksid:(NSString *)bookId
+                        inDatabase:(FMDatabase *)db {
+    if (![db executeUpdate:@"delete from bk_share_books where cbooksid = ?",bookId]) {
+        return NO;
+    }
+    
+    return YES;
+}
+
 + (void)saveShareBookMemberNickWithBookId:(NSString *)bookId
                         shareFriendsMarks:(NSArray <NSDictionary *>*)shareFriendsMarks
                                   success:(void(^)())success
@@ -895,4 +915,5 @@
     }];
     return item.mj_keyValues;
 }
+
 @end
