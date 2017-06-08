@@ -131,6 +131,7 @@ static NSString * SSJSharebooksMemberCellIdentifier = @"SSJSharebooksMemberCellI
         SSJSharebooksMemberDetailViewController *memberDetailVc = [[SSJSharebooksMemberDetailViewController alloc] init];
         memberDetailVc.memberId = item.memberId;
         memberDetailVc.booksId = item.booksId;
+        memberDetailVc.adminId = item.adminId;
         [self.navigationController pushViewController:memberDetailVc animated:YES];
     }
 }

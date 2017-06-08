@@ -167,7 +167,7 @@
             
             if (chargeType == SSJChargeIdTypeShareBooks) {
                 if ([quitBooksArr containsObject:recordInfo[@"cbooksid"]] || ![recordInfo[@"cuserid"] isEqualToString:userId]) {
-                    statement = [NSString stringWithFormat:@"update bk_user_charge set %@ where ichargeid = %@",keyValuesStr, recordInfo[@"ichargeid"]];
+                    statement = [NSString stringWithFormat:@"update bk_user_charge set %@ where ichargeid = '%@'",keyValuesStr, recordInfo[@"ichargeid"]];
                 } else {
                     statement = [NSString stringWithFormat:@"update bk_user_charge set %@ where %@",keyValuesStr,  condition];
                 }
