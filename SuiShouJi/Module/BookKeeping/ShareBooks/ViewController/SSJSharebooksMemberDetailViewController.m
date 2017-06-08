@@ -17,6 +17,7 @@
 #import "SSJReportFormsIncomeAndPayCell.h"
 #import "SSJNickNameModifyView.h"
 #import "SSJBudgetNodataRemindView.h"
+#import "SSJBooksTypeDeletionAuthCodeAlertView.h"
 
 #import "SSJUserTableManager.h"
 #import "SSJDatePeriod.h"
@@ -25,6 +26,7 @@
 #import "SSJCreateOrDeleteBooksService.h"
 #import "SSJBooksTypeStore.h"
 #import "SSJDatabaseQueue.h"
+#import "SSJShareBooksStore.h"
 
 static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
 
@@ -54,6 +56,8 @@ static NSString *const kSegmentTitleIncome = @"收入";
 
 @property(nonatomic, strong) SSJCreateOrDeleteBooksService *deleteService;
 
+@property(nonatomic, strong) SSJBooksTypeDeletionAuthCodeAlertView *deleteComfirmAlert;
+
 @end
 
 @implementation SSJSharebooksMemberDetailViewController
@@ -73,7 +77,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
     [self.userInfoHeader addSubview:self.nickNameLab];
     [self.view addSubview:self.periodControl];
     [self.view addSubview:self.tableView];
-    if (![self.memberId isEqualToString:SSJUSERID()] && ![self.memberId isEqualToString:self.adminId]) {
+    if (![self.memberId isEqualToString:SSJUSERID()] && [self.adminId isEqualToString:SSJUSERID()]) {
         UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithTitle:@"删除" style:UIBarButtonItemStylePlain target:self action:@selector(deleteButtonClicked:)];
         self.navigationItem.rightBarButtonItem = rightItem;
     }
@@ -193,10 +197,10 @@ static NSString *const kSegmentTitleIncome = @"收入";
 - (void)serverDidFinished:(SSJBaseNetworkService *)service {
     if ([service.returnCode isEqualToString:@"1"]) {
         @weakify(self);
-        [SSJBooksTypeStore deleteShareBooksWithShareCharge:self.deleteService.shareChargeArray shareMember:self.deleteService.shareMemberArray bookId:self.booksId sucess:^(BOOL bookstypeHasChange){
+        [SSJShareBooksStore kickOutMembersWithWithShareCharge:self.deleteService.shareChargeArray shareMember:self.deleteService.shareMemberArray Success:^{
             @strongify(self);
             [CDAutoHideMessageHUD showMessage:@"删除成功"];
-            [self.navigationController popToRootViewControllerAnimated:YES];
+            [self.navigationController popViewControllerAnimated:YES];
         } failure:NULL];
     }
 }
@@ -320,6 +324,27 @@ static NSString *const kSegmentTitleIncome = @"收入";
     return _noDataRemindView;
 }
 
+- (SSJBooksTypeDeletionAuthCodeAlertView *)deleteComfirmAlert {
+    if (!_deleteComfirmAlert) {
+        _deleteComfirmAlert = [[SSJBooksTypeDeletionAuthCodeAlertView alloc] init];
+        NSMutableAttributedString *atrrStr = [[NSMutableAttributedString alloc] initWithString:@"确认退出此共享账本,\n请输入下列验证码"];
+        [atrrStr addAttribute:NSFontAttributeName value:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4] range:NSMakeRange(0, atrrStr.length)];
+        [atrrStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:NSMakeRange(0, atrrStr.length)];
+        NSMutableParagraphStyle *paragraph = [[NSMutableParagraphStyle alloc] init];
+        paragraph.alignment = NSTextAlignmentCenter;
+        paragraph.lineSpacing = 10;
+        [atrrStr addAttribute:NSParagraphStyleAttributeName value:paragraph range:NSMakeRange(0, atrrStr.length)];
+        _deleteComfirmAlert.message = atrrStr;
+        @weakify(self);
+        _deleteComfirmAlert.finishVerification = ^{
+            @strongify(self);
+            [self.deleteService deleteShareBookWithBookId:self.booksId memberId:self.memberId memberState:SSJShareBooksMemberStateKickedOut];
+        };
+    }
+    return _deleteComfirmAlert;
+}
+
+
 #pragma mark - Event
 - (void)enterCalendarVC {
     __weak typeof(self) wself = self;
@@ -337,7 +362,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
 }
 
 - (void)deleteButtonClicked:(id)sender {
-    [self.deleteService deleteShareBookWithBookId:self.booksId memberId:self.memberId memberState:SSJShareBooksMemberStateKickedOut];
+    [self.deleteComfirmAlert show];
 }
 
 #pragma mark - Private

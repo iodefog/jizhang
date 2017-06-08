@@ -162,7 +162,7 @@ static NSString * SSJSharebooksMemberCellIdentifier = @"SSJSharebooksMemberCellI
 - (UIButton *)deleteButton {
     if (!_deleteButton) {
         _deleteButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_deleteButton setTitle:@"退出并删除此账本" forState:UIControlStateNormal];
+        [_deleteButton setTitle:@"退出账本" forState:UIControlStateNormal];
         [_deleteButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] forState:UIControlStateNormal];
         if (SSJ_CURRENT_THEME.throughScreenButtonBackGroudColor.length) {
             [_deleteButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.throughScreenButtonBackGroudColor alpha:SSJ_CURRENT_THEME.throughScreenButtonAlpha] forState:UIControlStateNormal];
@@ -181,7 +181,7 @@ static NSString * SSJSharebooksMemberCellIdentifier = @"SSJSharebooksMemberCellI
 - (SSJBooksTypeDeletionAuthCodeAlertView *)deleteComfirmAlert {
     if (!_deleteComfirmAlert) {
         _deleteComfirmAlert = [[SSJBooksTypeDeletionAuthCodeAlertView alloc] init];
-        NSMutableAttributedString *atrrStr = [[NSMutableAttributedString alloc] initWithString:@"数据无法恢复,\n删除并退出此共享账本,请输入下列验证码"];
+        NSMutableAttributedString *atrrStr = [[NSMutableAttributedString alloc] initWithString:@"确认退出此共享账本,\n请输入下列验证码"];
         [atrrStr addAttribute:NSFontAttributeName value:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4] range:NSMakeRange(0, atrrStr.length)];
         [atrrStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:NSMakeRange(0, atrrStr.length)];
         NSMutableParagraphStyle *paragraph = [[NSMutableParagraphStyle alloc] init];
@@ -192,7 +192,7 @@ static NSString * SSJSharebooksMemberCellIdentifier = @"SSJSharebooksMemberCellI
         @weakify(self);
         _deleteComfirmAlert.finishVerification = ^{
             @strongify(self);
-            [self.deleteService deleteShareBookWithBookId:self.item.booksId memberId:SSJUSERID() memberState:SSJShareBooksMemberStateKickedOut];
+            [self.deleteService deleteShareBookWithBookId:self.item.booksId memberId:SSJUSERID() memberState:SSJShareBooksMemberStateQuitted];
         };
     }
     return _deleteComfirmAlert;

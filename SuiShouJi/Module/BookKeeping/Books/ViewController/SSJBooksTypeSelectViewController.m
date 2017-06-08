@@ -242,7 +242,19 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
     cell.editBookAction = ^(__kindof SSJBaseCellItem * _Nonnull booksTypeItem) {
         @strongify(self);
         self.editBooksItem = booksTypeItem;
-        [self.editAlertView show];
+        if ([booksTypeItem isKindOfClass:[SSJBooksTypeItem class]]) {
+            [self.editAlertView showWithBookCategory: SSJBooksCategoryPersional];
+            NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+            style.lineSpacing = 5;
+            style.alignment = NSTextAlignmentCenter;
+            self.authCodeAlertView.message = [[NSAttributedString alloc] initWithString:@"删除后将难以恢复\n仍然删除，请输入下列验证码" attributes:@{NSParagraphStyleAttributeName:style}];
+        } else if ([booksTypeItem isKindOfClass:[SSJShareBookItem class]]) {
+            [self.editAlertView showWithBookCategory: SSJBooksCategoryPublic];
+            NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+            style.lineSpacing = 5;
+            style.alignment = NSTextAlignmentCenter;
+            self.authCodeAlertView.message = [[NSAttributedString alloc] initWithString:@"确认退出此共享账本，\n请输入下列验证码" attributes:@{NSParagraphStyleAttributeName:style}];
+        }
     };
 
     return cell;
@@ -491,11 +503,9 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
         _authCodeAlertView.finishVerification = ^{
             [wself deleteBooksWithType:1];
         };
-        NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
-        style.lineSpacing = 5;
-        style.alignment = NSTextAlignmentCenter;
-        _authCodeAlertView.message = [[NSAttributedString alloc] initWithString:@"删除后将难以恢复\n仍然删除，请输入下列验证码" attributes:@{NSParagraphStyleAttributeName:style}];
+        
     }
+
     return _authCodeAlertView;
 }
 

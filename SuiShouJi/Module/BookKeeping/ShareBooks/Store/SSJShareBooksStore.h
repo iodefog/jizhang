@@ -17,4 +17,9 @@
                                    Success:(void(^)(NSArray <SSJShareBookMemberItem *>* result))success
                                    failure:(void (^)(NSError *error))failure;
 
++ (void)kickOutMembersWithWithShareCharge:(NSArray *)shareChargeArray
+                              shareMember:(NSArray *)shareMemberArray
+                                  Success:(void(^)())success
+                                  failure:(void (^)(NSError *error))failure;
+
 @end

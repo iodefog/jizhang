@@ -41,7 +41,7 @@
     if (self) {
         self.title = title;
         self.maxLength = maxTextLength;
-        self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+        self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainFillColor];
         [self addSubview:self.titleLabel];
         [self addSubview:self.textInput];
         [self addSubview:self.textLengthLabel];
