@@ -186,7 +186,7 @@
             @strongify(self);
             NSError *error = nil;
             
-            NSInteger maxOrder = [db intForQuery:@"select max(iorder) from bk_share_books where cbooksid in (select cbooksid  from bk_share_books_member where cmemberid = ? and istate = ?)",SSJUSERID(),SSJShareBooksMemberStateNormal] + 1;
+            NSInteger maxOrder = [db intForQuery:@"select max(iorder) from bk_share_books where cbooksid in (select cbooksid  from bk_share_books_member where cmemberid = ? and istate = ?)",SSJUSERID(),@(SSJShareBooksMemberStateNormal)] + 1;
             
             NSString *booksId = self.service.shareBooksTableInfo[@"cbooksid"];
             
