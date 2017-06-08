@@ -29,6 +29,8 @@
 
 @property(nonatomic, strong) UIButton *sendButton;
 
+@property(nonatomic, strong) UILabel *customCodeLab;
+
 @property(nonatomic, strong) UILabel *expireDateLab;
 
 @property(nonatomic, strong) UILabel *codeTitleLab;
@@ -62,7 +64,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-//    self.backgroundView.image = [UIImage ssj_compatibleImageNamed:@"sharebk_backgroud"];
+    self.backgroundView.image = [UIImage ssj_compatibleImageNamed:@"sharebk_backgroud"];
     self.titles = @[@"发送暗号给好友",@"对方打开有鱼记账App V2.5 以上版本",@"好友添加共享账本时，输入暗号",@"大功告成～"];
     [self.view addSubview:self.backView];
     [self.backView addSubview:self.codeTitleLab];
@@ -70,6 +72,7 @@
     [self.backView addSubview:self.codeRightImage];
     [self.backView addSubview:self.codeInput];
     [self.backView addSubview:self.resendButton];
+    [self.backView addSubview:self.customCodeLab];
     [self.backView addSubview:self.expireDateLab];
     [self.view addSubview:self.sendButton];
     [self initHintView];
@@ -85,15 +88,15 @@
 - (void)updateViewConstraints {
 
     [self.backView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.height.mas_equalTo(385 - SSJ_NAVIBAR_BOTTOM);
-        make.width.mas_equalTo(self.view.mas_width);
-        make.top.mas_equalTo(SSJ_NAVIBAR_BOTTOM);
+        make.height.mas_equalTo(255);
+        make.width.mas_equalTo(self.view.mas_width).offset(-35);
+        make.top.mas_equalTo(SSJ_NAVIBAR_BOTTOM + 30);
         make.centerX.mas_equalTo(self.view);
     }];
     
     [self.codeTitleLab mas_updateConstraints:^(MASConstraintMaker *make) {
         make.centerX.mas_equalTo(self.backView);
-        make.top.mas_equalTo(60);
+        make.top.mas_equalTo(30);
     }];
     
     [self.codeLeftImage mas_updateConstraints:^(MASConstraintMaker *make) {
@@ -113,6 +116,10 @@
         make.top.mas_equalTo(self.codeTitleLab.mas_bottom).offset(34);
     }];
     
+    [self.customCodeLab mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(self.codeInput.mas_bottom).offset(15);
+        make.left.mas_equalTo(self.codeInput);
+    }];
     
     [self.resendButton mas_updateConstraints:^(MASConstraintMaker *make) {
         make.right.mas_equalTo(self.codeInput.mas_right);
@@ -128,19 +135,18 @@
     [self.sendButton mas_updateConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(224, 46));
         make.centerX.mas_equalTo(self.view.mas_centerX);
-        make.centerY.mas_equalTo(self.expireDateLab.mas_bottom).offset(50);
+        make.centerY.mas_equalTo(self.backView.mas_bottom);
     }];
     
     for (SSJShareBooksHintView *hintView in self.hintViews) {
         NSInteger index = [self.hintViews indexOfObject:hintView];
         [hintView mas_updateConstraints:^(MASConstraintMaker *make) {
             make.width.mas_equalTo(self.view);
-            make.height.mas_equalTo(28);
-            make.top.mas_equalTo(self.sendButton.mas_bottom).offset(64 + index * 28);
+            make.height.mas_equalTo(38);
+            make.top.mas_equalTo(self.sendButton.mas_bottom).offset(48 + index * 38);
             make.left.mas_equalTo(self.view);
         }];
     }
-    
     [super updateViewConstraints];
 }
 
@@ -153,10 +159,10 @@
     if (!_backView) {
         _backView = [[UIView alloc] init];
         _backView.backgroundColor = [UIColor whiteColor];
-//        _backView.layer.cornerRadius = 16.f;
-//        _backView.layer.shadowOffset = CGSizeMake(0, 2);
-//        _backView.layer.shadowColor = [UIColor ssj_colorWithHex:@"#000000"].CGColor;
-//        _backView.layer.shadowOpacity = 0.15;
+        _backView.layer.cornerRadius = 16.f;
+        _backView.layer.shadowOffset = CGSizeMake(0, 2);
+        _backView.layer.shadowColor = [UIColor ssj_colorWithHex:@"#000000"].CGColor;
+        _backView.layer.shadowOpacity = 0.15;
     }
     return _backView;
 }
@@ -301,7 +307,7 @@
         [CDAutoHideMessageHUD showMessage:@"暗号不能是纯数字哦"];
         return;
     }
-
+    
     [self.saveCodeService saveCodeWithbooksId:self.item.booksId code:self.codeInput.text];
 }
 
@@ -332,10 +338,14 @@
 
 - (void)shareTheCode {
     __weak typeof(self) weakSelf = self;
+    
     [self.codeInput resignFirstResponder];
-
+    
+    @weakify(self);
+    
     [SSJUserTableManager queryUserItemWithID:self.item.adminId success:^(SSJUserItem * _Nonnull userItem) {
         NSMutableString *url = [NSMutableString string];
+        @strongify(self);
         
 #warning test
         NSString *baseUrl = @"http://10.0.11.53:3000/5/invite/index.html?";
@@ -348,11 +358,11 @@
         
         [url appendFormat:@"name=%@&",nickName];
         
-        [url appendFormat:@"code=%@&",weakSelf.codeInput.text];
+        [url appendFormat:@"code=%@&",self.codeInput.text];
         
-        [url appendFormat:@"books=%@&",weakSelf.item.booksName];
+        [url appendFormat:@"books=%@&",self.item.booksName];
         
-        [url appendFormat:@"endtime=%@&",weakSelf.saveCodeService.overTime];
+        [url appendFormat:@"endtime=%@&",self.saveCodeService.overTime];
 
         
         NSString *iconUrl = userItem.icon;
@@ -366,13 +376,16 @@
         }
         
         [url appendFormat:@"pic=%@",iconUrl];
-        NSString *shareContent = [NSString stringWithFormat:@"%@邀你加入【%@】，希望和你开启共享记账之旅，快来！",nickName,weakSelf.item.booksName];
         
-        [SSJShareManager shareWithType:SSJShareTypeUrl image:nil UrlStr:[NSString stringWithFormat:@"%@",[url mj_url]] title:SSJAppName() content:shareContent PlatformType:@[@(UMSocialPlatformType_WechatSession),@(UMSocialPlatformType_QQ)] inController:self ShareSuccess:NULL];
+        NSString *content = [NSString stringWithFormat:@"%@邀你加入【%@】，希望和你开启共享记账之旅，快来！",nickName,weakSelf.item.booksName];
+        
+        [SSJShareManager shareWithType:SSJShareTypeUrl image:nil UrlStr:[NSString stringWithFormat:@"%@",[url mj_url]] title:SSJAppName() content:content PlatformType:@[@(UMSocialPlatformType_WechatSession),@(UMSocialPlatformType_QQ)] inController:self ShareSuccess:NULL];
         
     } failure:^(NSError * _Nonnull error) {
         
     }];
+    
+
 }
 
 #pragma mark - SSJBaseNetworkServiceDelegate

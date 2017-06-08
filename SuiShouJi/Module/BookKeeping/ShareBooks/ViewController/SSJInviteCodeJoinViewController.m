@@ -114,7 +114,7 @@
         [_codeInput ssj_setBorderColor:[UIColor ssj_colorWithHex:@"#DDDDDD"]];
         [_codeInput ssj_setBorderStyle:SSJBorderStyleBottom];
         [_codeInput ssj_setBorderWidth:1.f];
-        _codeInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入六位暗号" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"#CCCCCC"]}];
+        _codeInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入暗号" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"#CCCCCC"]}];
         _codeInput.rightViewMode = UITextFieldViewModeAlways;
         _codeInput.clearButtonMode = UITextFieldViewModeWhileEditing;
         _codeInput.tintColor = [UIColor ssj_colorWithHex:@"#333333"];

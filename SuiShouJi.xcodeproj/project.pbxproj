@@ -533,19 +533,19 @@
 		7D098C792A14820300C86957 /* SSJDatabaseErrorHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D098C782A14820300C86957 /* SSJDatabaseErrorHandler.m */; };
 		7D098C7C2A14820300C86957 /* SSJDatabaseErrorHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D098C782A14820300C86957 /* SSJDatabaseErrorHandler.m */; };
 		7D0AEC431E31AD3F008FADDB /* SSJAdWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C2B19221D3E185200B987EE /* SSJAdWebViewController.m */; };
-		7D0EF61E1EE8F59C003E53D7 /* SSJShareBooksMemberAlerter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0EF61D1EE8F59C003E53D7 /* SSJShareBooksMemberAlerter.m */; };
-		7D0EF61F1EE8F59C003E53D7 /* SSJShareBooksMemberAlerter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0EF61D1EE8F59C003E53D7 /* SSJShareBooksMemberAlerter.m */; };
-		7D0EF6201EE8F59C003E53D7 /* SSJShareBooksMemberAlerter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0EF61D1EE8F59C003E53D7 /* SSJShareBooksMemberAlerter.m */; };
-		7D0EF6211EE8F59C003E53D7 /* SSJShareBooksMemberAlerter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0EF61D1EE8F59C003E53D7 /* SSJShareBooksMemberAlerter.m */; };
-		7D0EF6221EE8F59C003E53D7 /* SSJShareBooksMemberAlerter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0EF61D1EE8F59C003E53D7 /* SSJShareBooksMemberAlerter.m */; };
-		7D0EF6231EE8F59C003E53D7 /* SSJShareBooksMemberAlerter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0EF61D1EE8F59C003E53D7 /* SSJShareBooksMemberAlerter.m */; };
-		7D0EF6241EE8F59C003E53D7 /* SSJShareBooksMemberAlerter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0EF61D1EE8F59C003E53D7 /* SSJShareBooksMemberAlerter.m */; };
-		7D0EF6251EE8F59C003E53D7 /* SSJShareBooksMemberAlerter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0EF61D1EE8F59C003E53D7 /* SSJShareBooksMemberAlerter.m */; };
-		7D0EF6261EE8F59C003E53D7 /* SSJShareBooksMemberAlerter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0EF61D1EE8F59C003E53D7 /* SSJShareBooksMemberAlerter.m */; };
-		7D0EF6271EE8F59C003E53D7 /* SSJShareBooksMemberAlerter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0EF61D1EE8F59C003E53D7 /* SSJShareBooksMemberAlerter.m */; };
-		7D0EF6281EE8F59C003E53D7 /* SSJShareBooksMemberAlerter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0EF61D1EE8F59C003E53D7 /* SSJShareBooksMemberAlerter.m */; };
-		7D0EF6291EE8F59C003E53D7 /* SSJShareBooksMemberAlerter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0EF61D1EE8F59C003E53D7 /* SSJShareBooksMemberAlerter.m */; };
-		7D0EF62A1EE8F59C003E53D7 /* SSJShareBooksMemberAlerter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0EF61D1EE8F59C003E53D7 /* SSJShareBooksMemberAlerter.m */; };
+		7D0EF61E1EE8F59C003E53D7 /* SSJShareBooksMemberKickedOutAlerter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0EF61D1EE8F59C003E53D7 /* SSJShareBooksMemberKickedOutAlerter.m */; };
+		7D0EF61F1EE8F59C003E53D7 /* SSJShareBooksMemberKickedOutAlerter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0EF61D1EE8F59C003E53D7 /* SSJShareBooksMemberKickedOutAlerter.m */; };
+		7D0EF6201EE8F59C003E53D7 /* SSJShareBooksMemberKickedOutAlerter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0EF61D1EE8F59C003E53D7 /* SSJShareBooksMemberKickedOutAlerter.m */; };
+		7D0EF6211EE8F59C003E53D7 /* SSJShareBooksMemberKickedOutAlerter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0EF61D1EE8F59C003E53D7 /* SSJShareBooksMemberKickedOutAlerter.m */; };
+		7D0EF6221EE8F59C003E53D7 /* SSJShareBooksMemberKickedOutAlerter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0EF61D1EE8F59C003E53D7 /* SSJShareBooksMemberKickedOutAlerter.m */; };
+		7D0EF6231EE8F59C003E53D7 /* SSJShareBooksMemberKickedOutAlerter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0EF61D1EE8F59C003E53D7 /* SSJShareBooksMemberKickedOutAlerter.m */; };
+		7D0EF6241EE8F59C003E53D7 /* SSJShareBooksMemberKickedOutAlerter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0EF61D1EE8F59C003E53D7 /* SSJShareBooksMemberKickedOutAlerter.m */; };
+		7D0EF6251EE8F59C003E53D7 /* SSJShareBooksMemberKickedOutAlerter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0EF61D1EE8F59C003E53D7 /* SSJShareBooksMemberKickedOutAlerter.m */; };
+		7D0EF6261EE8F59C003E53D7 /* SSJShareBooksMemberKickedOutAlerter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0EF61D1EE8F59C003E53D7 /* SSJShareBooksMemberKickedOutAlerter.m */; };
+		7D0EF6271EE8F59C003E53D7 /* SSJShareBooksMemberKickedOutAlerter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0EF61D1EE8F59C003E53D7 /* SSJShareBooksMemberKickedOutAlerter.m */; };
+		7D0EF6281EE8F59C003E53D7 /* SSJShareBooksMemberKickedOutAlerter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0EF61D1EE8F59C003E53D7 /* SSJShareBooksMemberKickedOutAlerter.m */; };
+		7D0EF6291EE8F59C003E53D7 /* SSJShareBooksMemberKickedOutAlerter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0EF61D1EE8F59C003E53D7 /* SSJShareBooksMemberKickedOutAlerter.m */; };
+		7D0EF62A1EE8F59C003E53D7 /* SSJShareBooksMemberKickedOutAlerter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0EF61D1EE8F59C003E53D7 /* SSJShareBooksMemberKickedOutAlerter.m */; };
 		7D1D7F431C86BBD90001F72A /* SSJUserChargePeriodConfigSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D1D7F421C86BBD90001F72A /* SSJUserChargePeriodConfigSyncTable.m */; };
 		7D1D7F461C86DB520001F72A /* SSJUserBudgetSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D1D7F451C86DB520001F72A /* SSJUserBudgetSyncTable.m */; };
 		7D1D7F4A1C87EC660001F72A /* SSJRegularManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D1D7F491C87EC660001F72A /* SSJRegularManager.m */; };
@@ -8859,8 +8859,8 @@
 		7D08A2D51E4999D40085A8FB /* YouYuJiZhangGuanJia.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YouYuJiZhangGuanJia.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D098C772A14820300C86957 /* SSJDatabaseErrorHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJDatabaseErrorHandler.h; sourceTree = "<group>"; };
 		7D098C782A14820300C86957 /* SSJDatabaseErrorHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDatabaseErrorHandler.m; sourceTree = "<group>"; };
-		7D0EF61C1EE8F59C003E53D7 /* SSJShareBooksMemberAlerter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJShareBooksMemberAlerter.h; sourceTree = "<group>"; };
-		7D0EF61D1EE8F59C003E53D7 /* SSJShareBooksMemberAlerter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJShareBooksMemberAlerter.m; sourceTree = "<group>"; };
+		7D0EF61C1EE8F59C003E53D7 /* SSJShareBooksMemberKickedOutAlerter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJShareBooksMemberKickedOutAlerter.h; sourceTree = "<group>"; };
+		7D0EF61D1EE8F59C003E53D7 /* SSJShareBooksMemberKickedOutAlerter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJShareBooksMemberKickedOutAlerter.m; sourceTree = "<group>"; };
 		7D1D7F411C86BBD90001F72A /* SSJUserChargePeriodConfigSyncTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJUserChargePeriodConfigSyncTable.h; sourceTree = "<group>"; };
 		7D1D7F421C86BBD90001F72A /* SSJUserChargePeriodConfigSyncTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJUserChargePeriodConfigSyncTable.m; sourceTree = "<group>"; };
 		7D1D7F441C86DB520001F72A /* SSJUserBudgetSyncTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJUserBudgetSyncTable.h; sourceTree = "<group>"; };
@@ -11650,8 +11650,8 @@
 			children = (
 				7DDBB01E1C9AAA57003433D0 /* SSJSyncFileModel.h */,
 				7DDBB01F1C9AAA57003433D0 /* SSJSyncFileModel.m */,
-				7D0EF61C1EE8F59C003E53D7 /* SSJShareBooksMemberAlerter.h */,
-				7D0EF61D1EE8F59C003E53D7 /* SSJShareBooksMemberAlerter.m */,
+				7D0EF61C1EE8F59C003E53D7 /* SSJShareBooksMemberKickedOutAlerter.h */,
+				7D0EF61D1EE8F59C003E53D7 /* SSJShareBooksMemberKickedOutAlerter.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -16183,7 +16183,7 @@
 				7D08A2A31E4999D30085A8FB /* SSJCreditCardListDetailItem.m in Sources */,
 				7D08A2A41E4999D30085A8FB /* SSJLoadMoreItem.m in Sources */,
 				7D08A2A51E4999D30085A8FB /* SRRefreshView.m in Sources */,
-				7D0EF6231EE8F59C003E53D7 /* SSJShareBooksMemberAlerter.m in Sources */,
+				7D0EF6231EE8F59C003E53D7 /* SSJShareBooksMemberKickedOutAlerter.m in Sources */,
 				7D08A2A61E4999D30085A8FB /* SSJPageControl.m in Sources */,
 				7D08A2A71E4999D30085A8FB /* SSJNickNameModifyView.m in Sources */,
 			);
@@ -16814,7 +16814,7 @@
 				7DA13BFA1E35AED7000490A4 /* SSJCreditCardListDetailItem.m in Sources */,
 				7DA13BFB1E35AED7000490A4 /* SSJLoadMoreItem.m in Sources */,
 				7DA13BFC1E35AED7000490A4 /* SRRefreshView.m in Sources */,
-				7D0EF6221EE8F59C003E53D7 /* SSJShareBooksMemberAlerter.m in Sources */,
+				7D0EF6221EE8F59C003E53D7 /* SSJShareBooksMemberKickedOutAlerter.m in Sources */,
 				7DA13BFD1E35AED7000490A4 /* SSJPageControl.m in Sources */,
 				7DA13BFE1E35AED7000490A4 /* SSJNickNameModifyView.m in Sources */,
 			);
@@ -17445,7 +17445,7 @@
 				7DBB3C8D1E55C2EE0075E638 /* SSJCreditCardListDetailItem.m in Sources */,
 				7DBB3C8E1E55C2EE0075E638 /* SSJLoadMoreItem.m in Sources */,
 				7DBB3C8F1E55C2EE0075E638 /* SRRefreshView.m in Sources */,
-				7D0EF6241EE8F59C003E53D7 /* SSJShareBooksMemberAlerter.m in Sources */,
+				7D0EF6241EE8F59C003E53D7 /* SSJShareBooksMemberKickedOutAlerter.m in Sources */,
 				7DBB3C901E55C2EE0075E638 /* SSJPageControl.m in Sources */,
 				7DBB3C911E55C2EE0075E638 /* SSJNickNameModifyView.m in Sources */,
 			);
@@ -18076,7 +18076,7 @@
 				7DBB41281E55C4E00075E638 /* SSJCreditCardListDetailItem.m in Sources */,
 				7DBB41291E55C4E00075E638 /* SSJLoadMoreItem.m in Sources */,
 				7DBB412A1E55C4E00075E638 /* SRRefreshView.m in Sources */,
-				7D0EF61F1EE8F59C003E53D7 /* SSJShareBooksMemberAlerter.m in Sources */,
+				7D0EF61F1EE8F59C003E53D7 /* SSJShareBooksMemberKickedOutAlerter.m in Sources */,
 				7DBB412B1E55C4E00075E638 /* SSJPageControl.m in Sources */,
 				7DBB412C1E55C4E00075E638 /* SSJNickNameModifyView.m in Sources */,
 			);
@@ -18394,7 +18394,7 @@
 				7DFB17691EB0341E00292DD3 /* SSJThemePlugin.m in Sources */,
 				7DFB176A1EB0341E00292DD3 /* SSJFinancingHomeitem.m in Sources */,
 				7DFB176B1EB0341E00292DD3 /* SSJThirdPartLoginItem.m in Sources */,
-				7D0EF62A1EE8F59C003E53D7 /* SSJShareBooksMemberAlerter.m in Sources */,
+				7D0EF62A1EE8F59C003E53D7 /* SSJShareBooksMemberKickedOutAlerter.m in Sources */,
 				7DFB176C1EB0341E00292DD3 /* SSJBudgetTypeModel.m in Sources */,
 				7DFB176D1EB0341E00292DD3 /* SSJPercentCircleNode.m in Sources */,
 				7DFB176E1EB0341E00292DD3 /* SSJBaseSyncTable.m in Sources */,
@@ -19071,7 +19071,7 @@
 				9C13F6161E8267D300AC5FA9 /* SSJBudgetEditAccountDaySelectionView.m in Sources */,
 				9C13F6171E8267D300AC5FA9 /* SSJCircleChargeSettingViewController.m in Sources */,
 				9C13F6181E8267D300AC5FA9 /* SSJLoanInterestTypeAlertView.m in Sources */,
-				7D0EF6251EE8F59C003E53D7 /* SSJShareBooksMemberAlerter.m in Sources */,
+				7D0EF6251EE8F59C003E53D7 /* SSJShareBooksMemberKickedOutAlerter.m in Sources */,
 				7DFB162D1EAF18F900292DD3 /* SSJCustomThemeSelectCollectionViewCell.m in Sources */,
 				9C13F6191E8267D300AC5FA9 /* SSJMagicExportViewController.m in Sources */,
 				9C13F61A1E8267D300AC5FA9 /* FMResultSet.m in Sources */,
@@ -19659,7 +19659,7 @@
 				9C4C21111E9E30C8000C5F15 /* SSJFinancingHomeitem.m in Sources */,
 				9C4C21121E9E30C8000C5F15 /* SSJThirdPartLoginItem.m in Sources */,
 				9C4C21131E9E30C8000C5F15 /* SSJBudgetTypeModel.m in Sources */,
-				7D0EF6281EE8F59C003E53D7 /* SSJShareBooksMemberAlerter.m in Sources */,
+				7D0EF6281EE8F59C003E53D7 /* SSJShareBooksMemberKickedOutAlerter.m in Sources */,
 				9C4C21141E9E30C8000C5F15 /* SSJPercentCircleNode.m in Sources */,
 				9C4C21151E9E30C8000C5F15 /* SSJBaseSyncTable.m in Sources */,
 				9C4C21161E9E30C8000C5F15 /* SSJInstalmentDateSelectCell.m in Sources */,
@@ -20482,7 +20482,7 @@
 				9C7D2EAA1E8DF8A80093001F /* SSJAnaliyticsManager.m in Sources */,
 				9C7D2EAB1E8DF8A80093001F /* SSJCreditCardRepaymentViewController.m in Sources */,
 				9C7D2EAC1E8DF8A80093001F /* SSJLoginService.m in Sources */,
-				7D0EF61E1EE8F59C003E53D7 /* SSJShareBooksMemberAlerter.m in Sources */,
+				7D0EF61E1EE8F59C003E53D7 /* SSJShareBooksMemberKickedOutAlerter.m in Sources */,
 				9C7D2EAD1E8DF8A80093001F /* MJRefreshAutoNormalFooter.m in Sources */,
 				9C7D2EAE1E8DF8A80093001F /* SSJNewFundingTypeCell.m in Sources */,
 				9C7D2EAF1E8DF8A80093001F /* SSJBooksAdBanner.m in Sources */,
@@ -21116,7 +21116,7 @@
 				9C7D31211E8DF96B0093001F /* SSJAnaliyticsManager.m in Sources */,
 				9C7D31221E8DF96B0093001F /* SSJCreditCardRepaymentViewController.m in Sources */,
 				9C7D31231E8DF96B0093001F /* SSJLoginService.m in Sources */,
-				7D0EF6261EE8F59C003E53D7 /* SSJShareBooksMemberAlerter.m in Sources */,
+				7D0EF6261EE8F59C003E53D7 /* SSJShareBooksMemberKickedOutAlerter.m in Sources */,
 				9C7D31241E8DF96B0093001F /* MJRefreshAutoNormalFooter.m in Sources */,
 				9C7D31251E8DF96B0093001F /* SSJNewFundingTypeCell.m in Sources */,
 				9C7D31261E8DF96B0093001F /* SSJBooksAdBanner.m in Sources */,
@@ -21560,7 +21560,7 @@
 				9C80FDAF1E95E88E00B1BAAC /* SSJThemePlugin.m in Sources */,
 				9C80FDB01E95E88E00B1BAAC /* SSJFinancingHomeitem.m in Sources */,
 				9C80FDB11E95E88E00B1BAAC /* SSJThirdPartLoginItem.m in Sources */,
-				7D0EF6271EE8F59C003E53D7 /* SSJShareBooksMemberAlerter.m in Sources */,
+				7D0EF6271EE8F59C003E53D7 /* SSJShareBooksMemberKickedOutAlerter.m in Sources */,
 				9C80FDB21E95E88E00B1BAAC /* SSJBudgetTypeModel.m in Sources */,
 				9C80FDB31E95E88E00B1BAAC /* SSJPercentCircleNode.m in Sources */,
 				9C80FDB41E95E88E00B1BAAC /* SSJBaseSyncTable.m in Sources */,
@@ -22193,7 +22193,7 @@
 				9C9CEF6F1EA5F73A007657FE /* SSJThemePlugin.m in Sources */,
 				9C9CEF701EA5F73A007657FE /* SSJFinancingHomeitem.m in Sources */,
 				9C9CEF711EA5F73A007657FE /* SSJThirdPartLoginItem.m in Sources */,
-				7D0EF6291EE8F59C003E53D7 /* SSJShareBooksMemberAlerter.m in Sources */,
+				7D0EF6291EE8F59C003E53D7 /* SSJShareBooksMemberKickedOutAlerter.m in Sources */,
 				9C9CEF721EA5F73A007657FE /* SSJBudgetTypeModel.m in Sources */,
 				9C9CEF731EA5F73A007657FE /* SSJPercentCircleNode.m in Sources */,
 				9C9CEF741EA5F73A007657FE /* SSJBaseSyncTable.m in Sources */,
@@ -22547,7 +22547,7 @@
 				9C3970161ECAF4AB00AB267A /* SSJShareBooksStepView.m in Sources */,
 				9CECFB291D6D41A700DB2C8B /* SSJFundingDetailHelper.m in Sources */,
 				9C155F1C1E68572700FDFD18 /* MJRefreshConst.m in Sources */,
-				7D0EF6211EE8F59C003E53D7 /* SSJShareBooksMemberAlerter.m in Sources */,
+				7D0EF6211EE8F59C003E53D7 /* SSJShareBooksMemberKickedOutAlerter.m in Sources */,
 				9CECFB2A1D6D41A700DB2C8B /* SSJBillingChargeCell.m in Sources */,
 				9CECFB2B1D6D41A700DB2C8B /* SSJLoginViewController+SSJCategory.m in Sources */,
 				9CECFB2C1D6D41A700DB2C8B /* SSJSyncFileModel.m in Sources */,
@@ -23454,7 +23454,7 @@
 				7DEF545D1C75F81B00A90153 /* SSJPercentCircleNode.m in Sources */,
 				7D581EB51C5106CE00E202A2 /* SSJBaseSyncTable.m in Sources */,
 				9C18C02E1DF9323C00BC0971 /* SSJInstalmentDateSelectCell.m in Sources */,
-				7D0EF6201EE8F59C003E53D7 /* SSJShareBooksMemberAlerter.m in Sources */,
+				7D0EF6201EE8F59C003E53D7 /* SSJShareBooksMemberKickedOutAlerter.m in Sources */,
 				7DBA55271D6AE05B00C02D79 /* SSJLoanListCellItem.m in Sources */,
 				9C1E4C171E4ACD5C00CA5843 /* SSJCalendarTabelViewHeaderView.m in Sources */,
 				7DEF54601C75F82A00A90153 /* SSJPercentCircleNodeItem.m in Sources */,
