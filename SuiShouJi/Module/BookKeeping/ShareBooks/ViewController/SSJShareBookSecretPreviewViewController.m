@@ -41,11 +41,14 @@
 - (UIButton *)shareButton {
     if (!_shareButton) {
         _shareButton = [[UIButton alloc] init];
-        _shareButton.backgroundColor = [UIColor ssj_colorWithHex:@"#eb4a64"];
+//        _shareButton.backgroundColor = [UIColor ssj_colorWithHex:@"#eb4a64"];
+        [_shareButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"#eb4a64"] forState:UIControlStateNormal];
+        [_shareButton ssj_setBackgroundColor:[UIColor lightGrayColor] forState:UIControlStateDisabled];
         [_shareButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_shareButton setTitle:@"发送" forState:UIControlStateNormal];
         _shareButton.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:18];
         [_shareButton addTarget:self action:@selector(shareCodeToOther) forControlEvents:UIControlEventTouchUpInside];
+        _shareButton.enabled = NO;
     }
     return _shareButton;
 }
