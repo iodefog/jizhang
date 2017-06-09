@@ -124,7 +124,6 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     
     [self initDate];
     [self loadFundData];
-    [self getmembersForTheCharge];
     
     self.view.backgroundColor = [UIColor whiteColor];
     
@@ -160,7 +159,11 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         [self.view ssj_hideLoadingIndicator];
     }];
     
-    [self reloadMenberItems];
+    self.memberSelectView.chargeId = self.item.ID;
+    [self.memberSelectView reloadData:^{
+        [self updateMemberButtonTitle];
+    }];
+    
     if (![self showGuideViewIfNeeded]) {
         [self.FundingTypeSelectView dismiss];
         //        [self.dateSelectedView dismiss];
@@ -358,7 +361,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         };
         _memberSelectView.selectedMemberDidChangeBlock = ^(NSArray *selectedMemberItems){
             weakSelf.item.membersItem = [selectedMemberItems mutableCopy];
-            [weakSelf updateMembers];
+            [weakSelf updateMemberButtonTitle];
         };
         _memberSelectView.manageBlock = ^(NSMutableArray *items){
             __strong typeof(weakSelf) strongSelf = weakSelf;
@@ -374,13 +377,8 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
             SSJNewMemberViewController *newMemberVc = [[SSJNewMemberViewController alloc]init];
             newMemberVc.addNewMemberAction = ^(SSJChargeMemberItem *item){
                 __strong typeof(weakSelf) strongSelf = weakSelf;
-                if (item.memberId.length) {
-                    [weakSelf.item.membersItem addObject:item];
-                }
-                [weakSelf updateMembers];
-                weakSelf.memberSelectView.selectedMemberItems = [weakSelf.item.membersItem mutableCopy];
-                weakSelf.memberSelectView.chargeId = weakSelf.item.ID;
                 [weakSelf.memberSelectView show];
+                [weakSelf.memberSelectView addSelectedMemberItem:item];
                 strongSelf -> _needToDismiss = NO;
             };
             [weakSelf.navigationController pushViewController:newMemberVc animated:YES];
@@ -572,8 +570,6 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 
 - (void)selectMemberAction{
     [SSJAnaliyticsManager event:@"addRecord_member"];
-    self.memberSelectView.selectedMemberItems = [self.item.membersItem mutableCopy];
-    self.memberSelectView.chargeId = self.item.ID;
     [self.memberSelectView show];
     [_billTypeInputView.moneyInput resignFirstResponder];
     [_accessoryView.memoView resignFirstResponder];
@@ -823,58 +819,6 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     }];
 }
 
-- (void)reloadMenberItems {
-    __weak typeof(self) weakSelf = self;
-    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        for (SSJChargeMemberItem *memberItem in weakSelf.item.membersItem) {
-            FMResultSet *result = [db executeQuery:@"select * from bk_member where cmemberid = ?",memberItem.memberId];
-            while ([result next]) {
-                memberItem.memberId = [result stringForColumn:@"cmemberid"];
-                memberItem.memberName = [result stringForColumn:@"cname"];
-                memberItem.memberColor = [result stringForColumn:@"ccolor"];
-            }
-        }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [weakSelf updateMembers];
-        });
-    }];
-}
-
--(void)getmembersForTheCharge{
-    __weak typeof(self) weakSelf = self;
-    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        if (weakSelf.item.ID.length) {
-            if ([db intForQuery:@"select count(1) from bk_member_charge where ichargeid = ? and operatortype <> 2",weakSelf.item.ID]) {
-                FMResultSet *result = [db executeQuery:@"select * from bk_member_charge as a , bk_member as b  where a.ichargeid = ? and a.operatortype <> 2 and b.cuserid = ? and a.cmemberid = b.cmemberid",weakSelf.item.ID,SSJUSERID()];
-                NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:0];
-                while ([result next]) {
-                    SSJChargeMemberItem *memberItem = [[SSJChargeMemberItem alloc]init];
-                    memberItem.memberId = [result stringForColumn:@"cmemberid"];
-                    memberItem.memberName = [result stringForColumn:@"cname"];
-                    memberItem.memberColor = [result stringForColumn:@"ccolor"];
-                    [tempArr addObject:memberItem];
-                }
-                weakSelf.item.membersItem= tempArr;
-            }else{
-                SSJChargeMemberItem *memberItem = [[SSJChargeMemberItem alloc]init];
-                memberItem.memberId = [NSString stringWithFormat:@"%@-0",SSJUSERID()];
-                memberItem.memberName = [db stringForQuery:@"select cname from bk_member where cmemberid = ?",memberItem.memberId];
-                memberItem.memberColor = [db stringForQuery:@"select ccolor from bk_member where cmemberid = ?",memberItem.memberId];
-                weakSelf.item.membersItem = [NSMutableArray arrayWithObjects:memberItem, nil];
-            }
-        }else{
-            SSJChargeMemberItem *memberItem = [[SSJChargeMemberItem alloc]init];
-            memberItem.memberId = [NSString stringWithFormat:@"%@-0",SSJUSERID()];
-            memberItem.memberName = [db stringForQuery:@"select cname from bk_member where cmemberid = ?",memberItem.memberId];
-            memberItem.memberColor = [db stringForQuery:@"select ccolor from bk_member where cmemberid = ?",memberItem.memberId];
-            weakSelf.item.membersItem = [NSMutableArray arrayWithObjects:memberItem, nil];
-        }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [weakSelf updateMembers];
-        });
-    }];
-}
-
 -(void)takePhoto{
     UIImagePickerControllerSourceType sourceType = UIImagePickerControllerSourceTypeCamera;
     if ([UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypeCamera])
@@ -900,40 +844,53 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     [self presentViewController:picker animated:YES completion:^{}];
 }
 
--(void)makeArecord{
-    __weak typeof(self) weakSelf = self;
+- (BOOL)verifyItem {
     if (!_item.billId.length) {
         [_billTypeInputView.moneyInput becomeFirstResponder];
         [CDAutoHideMessageHUD showMessage:@"请添加并选择一个类别"];
-        return;
+        return NO;
     }
     
-    if ([_billTypeInputView.moneyInput.text doubleValue] == 0) {
+    if ([self.item.money doubleValue] == 0) {
         [_billTypeInputView.moneyInput becomeFirstResponder];
         [CDAutoHideMessageHUD showMessage:@"金额不能为0"];
-        return;
+        return NO;
     }
     
-    if ([_billTypeInputView.moneyInput.text doubleValue] < 0) {
+    if ([self.item.money doubleValue] < 0) {
         [_billTypeInputView.moneyInput becomeFirstResponder];
         [CDAutoHideMessageHUD showMessage:@"金额不能小于0"];
-        return;
+        return NO;
     }
     
     if (self.item.fundOperatorType == 2) {
         [_billTypeInputView.moneyInput becomeFirstResponder];
         [CDAutoHideMessageHUD showMessage:@"请先添加资金账户"];
-        return;
+        return NO;
     }
     
-    if (_accessoryView.memoView.text.length > 500) {
+    if (self.item.chargeMemo.length > 500) {
         [CDAutoHideMessageHUD showMessage:@"备注最多只能输入500个字"];
-        return;
+        return NO;
     }
     
+    if (self.item.membersItem.count == 0) {
+        [CDAutoHideMessageHUD showMessage:@"请至少选择一个成员"];
+        return NO;
+    }
+    
+    return YES;
+}
+
+- (void)makeArecord {
     self.item.incomeOrExpence = _customNaviBar.selectedBillType;
     self.item.money = _billTypeInputView.moneyInput.text;
     self.item.chargeMemo = _accessoryView.memoView.text;
+    self.item.membersItem = self.memberSelectView.selectedMemberItems;
+    
+    if (![self verifyItem]) {
+        return;
+    }
     
     if (self.item.chargeMemo && self.item.ID.length) {
         [SSJAnaliyticsManager event:@"addRecord_memo"];
@@ -942,7 +899,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     if (_selectedImage != nil) {
         NSString *imageName = SSJUUID();
         if (SSJSaveImage(_selectedImage, imageName) && SSJSaveThumbImage(_selectedImage, imageName)) {
-            weakSelf.item.chargeImage = imageName;
+            self.item.chargeImage = imageName;
         }
     }
     
@@ -1079,12 +1036,13 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     };
 }
 
--(void)updateMembers{
-    if (self.item.membersItem.count == 1) {
-        SSJChargeMemberItem *item = [self.item.membersItem ssj_safeObjectAtIndex:0];
+- (void)updateMemberButtonTitle {
+    if (self.memberSelectView.selectedMemberItems.count == 1) {
+        SSJChargeMemberItem *item = [self.memberSelectView.selectedMemberItems firstObject];
         [self.accessoryView.memberBtn setTitle:item.memberName forState:SSJButtonStateNormal];
     }else{
-        [self.accessoryView.memberBtn setTitle:[NSString stringWithFormat:@"%ld人",(unsigned long)self.item.membersItem.count] forState:SSJButtonStateNormal];
+        NSString *title = [NSString stringWithFormat:@"%d人",(int)self.memberSelectView.selectedMemberItems.count];
+        [self.accessoryView.memberBtn setTitle:title forState:SSJButtonStateNormal];
     }
 }
 

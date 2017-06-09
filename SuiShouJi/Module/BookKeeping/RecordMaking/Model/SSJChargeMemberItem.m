@@ -21,14 +21,7 @@
     }
     
     SSJChargeMemberItem *memberItem = (SSJChargeMemberItem *)object;
-    
-    if ([self.memberId isEqualToString:memberItem.memberId]) {
-        return YES;
-    }else{
-        return NO;
-    }
-    
-    return NO;
+    return [self.memberId isEqualToString:memberItem.memberId];
 }
 
 @end

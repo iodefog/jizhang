@@ -204,7 +204,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
         [self.chargeTypeSelectView show];
     }
     if ([title isEqualToString:kTitle6]) {
-        self.memberSelectView.selectedMemberItems = self.item.membersItem;
+//        self.memberSelectView.selectedMemberItems = self.item.membersItem;
         [self.memberSelectView show];
     }
     if ([title isEqualToString:kTitle7]) {
