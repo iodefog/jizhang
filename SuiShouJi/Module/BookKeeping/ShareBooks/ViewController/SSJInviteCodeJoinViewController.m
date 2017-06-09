@@ -92,6 +92,10 @@
     [super updateViewConstraints];
 }
 
+- (UIStatusBarStyle)preferredStatusBarStyle {
+    return UIStatusBarStyleDefault;
+}
+
 #pragma mark - Getter
 - (UIView *)backView {
     if (!_backView) {
