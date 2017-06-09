@@ -212,6 +212,9 @@ extern NSString *const SSJAllBooksIds;
 // 所有收支类别id
 extern NSString *const SSJAllBillTypeId;
 
+// 所有成员id
+extern NSString *const SSJAllMembersId;
+
 /** -------------------- KEY -------------------- */
 #pragma mark - KEY
 //保存上次弹窗的时间

@@ -88,3 +88,5 @@ NSString *const SSJAllBooksIds = @"all_books_ids";
 
 NSString *const SSJAllBillTypeId = @"all";
 
+NSString *const SSJAllMembersId = @"all_members_id";
+

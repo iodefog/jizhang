@@ -19,7 +19,6 @@
     for (NSDictionary *recordInfo in records) {
         BOOL exist = [db boolForQuery:@"select count(*) from bk_share_books_member where cmemberid = ? and cbooksid = ?", recordInfo[@"cmemberid"], recordInfo[@"cbooksid"]];
 
-        
         if (exist) {
             if (![db executeUpdate:@"update bk_share_books_member set cjoindate = ? ,istate = ? ,cicon = ?, ccolor = ?, cleavedate = ? where cbooksid = ? and cmemberid = ?", recordInfo[@"cjoindate"], recordInfo[@"istate"], recordInfo[@"cicon"], recordInfo[@"ccolor"], recordInfo[@"cleavedate"], recordInfo[@"cbooksid"], recordInfo[@"cmemberid"]]) {
                 if (error) {
