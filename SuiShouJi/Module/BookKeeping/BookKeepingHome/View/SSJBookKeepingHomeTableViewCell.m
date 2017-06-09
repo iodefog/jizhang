@@ -140,7 +140,7 @@ static const CGFloat kCategoryImageButtonRadius = 16;
         if ([[NSFileManager defaultManager] fileExistsAtPath:SSJImagePath(self.item.chargeImage)]) {
             [self.chargeImage sd_setImageWithURL:[NSURL fileURLWithPath:SSJImagePath(_item.chargeImage)]];
         } else {
-            [self.chargeImage sd_setImageWithURL:[NSURL fileURLWithPath:SSJGetChargeImageUrl(_item.chargeThumbImage)]];
+            [self.chargeImage sd_setImageWithURL:[NSURL URLWithString:SSJGetChargeImageUrl(_item.chargeThumbImage)]];
         }
         self.chargeImage.userInteractionEnabled = YES;
     } else {

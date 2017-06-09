@@ -68,6 +68,10 @@ NSString *SSJUSERID() {
     return [[NSUserDefaults standardUserDefaults] stringForKey:kSSJUserIdKey];
 }
 
+NSString *SSJDefaultMemberId() {
+    return [NSString stringWithFormat:@"%@-0", SSJUSERID()];
+}
+
 static NSString *const kSSJSycnVersion = @"kSSJSycnVersion";
 
 int64_t SSJSyncVersion() {

@@ -12,8 +12,8 @@ NSString *SSJDatabaseServiceFullName(NSString *name) {
     return [NSString stringWithFormat:@"SSJDatabaseSequence-%@", name];
 };
 
-#pragma mark - 
 #pragma mark - SSJDatabaseSequenceTask
+#pragma mark -
 
 @interface SSJDatabaseSequenceTask ()
 
@@ -38,7 +38,9 @@ NSString *SSJDatabaseServiceFullName(NSString *name) {
 @implementation SSJDatabaseSequenceTask
 
 - (void)dealloc {
-    
+    self.handler = nil;
+    self.success = nil;
+    self.failure = nil;
 }
 
 + (instancetype)taskWithHandler:(id(^)(SSJDatabase *db))handler success:(void(^)(id result))success failure:(void(^)(NSError *))failure {
@@ -70,11 +72,14 @@ NSString *SSJDatabaseServiceFullName(NSString *name) {
             if (self.operation.isCancelled) {
                 return;
             }
-            if ([self.result isKindOfClass:[NSError class]]) {
-                self.failure(self.error);
-            } else {
-                self.success(self.result);
-            }
+            
+            SSJDispatchMainAsync(^{
+                if ([self.result isKindOfClass:[NSError class]]) {
+                    self.failure(self.error);
+                } else {
+                    self.success(self.result);
+                }
+            });
         };
     }
     return self;
@@ -153,10 +158,8 @@ NSString *SSJDatabaseServiceFullName(NSString *name) {
         self.state = SSJDatabaseSequenceTaskStateFinished;
     } else if (self.operation.isExecuting) {
         self.state = SSJDatabaseSequenceTaskStateExecuting;
-    } else if (self.operation.isReady) {
-        self.state = SSJDatabaseSequenceTaskStatePending;
     } else {
-        self.state = SSJDatabaseSequenceTaskStateUnknown;
+        self.state = SSJDatabaseSequenceTaskStatePending;
     }
 }
 
@@ -166,8 +169,125 @@ NSString *SSJDatabaseServiceFullName(NSString *name) {
 
 @end
 
+#pragma mark - SSJDatabaseSequenceCompoundTask
 #pragma mark -
+
+@interface SSJDatabaseSequenceCompoundTask ()
+
+@property SSJDatabaseSequenceTaskState state;
+
+@property (nonatomic, copy) NSArray<SSJDatabaseSequenceTask *> *tasks;
+
+@property (nonatomic, copy) void(^success)();
+
+@property (nonatomic, copy) void(^failure)(NSError *);
+
+@end
+
+@implementation SSJDatabaseSequenceCompoundTask
+
+@synthesize state;
+
+- (void)dealloc {
+    self.success = nil;
+    self.failure = nil;
+}
+
++ (instancetype)taskWithTasks:(NSArray<SSJDatabaseSequenceTask *> *)tasks
+                      success:(void(^)())success
+                      failure:(void(^)(NSError *error))failure {
+    return [[SSJDatabaseSequenceCompoundTask alloc] initWithTasks:tasks success:success failure:failure];
+}
+
+- (instancetype)initWithTasks:(NSArray<SSJDatabaseSequenceTask *> *)tasks
+                      success:(void(^)(_Nullable id result))success
+                      failure:(void(^)(NSError *error))failure {
+    if (self = [super init]) {
+        self.tasks = tasks;
+        self.success = success;
+        self.failure = failure;
+        [self observeTasksState];
+    }
+    return self;
+}
+
+- (void)observeTasksState {
+    NSMutableArray *signals = [NSMutableArray arrayWithCapacity:self.tasks.count];
+    for (SSJDatabaseSequenceTask *task in self.tasks) {
+        [signals addObject:RACObserve(task, state)];
+    }
+    [[RACSignal merge:signals] subscribeNext:^(NSNumber *stateValue) {
+        [self updateState];
+    }];
+}
+
+- (void)cancel {
+    for (SSJDatabaseSequenceTask *task in self.tasks) {
+        [task cancel];
+    }
+}
+
+- (void)updateState {
+    NSError *error = nil;
+    int pendingTaskCount = 0;
+    int executingTaskCount = 0;
+    int canceledTaskCount = 0;
+    
+    for (SSJDatabaseSequenceTask *task in self.tasks) {
+        if (!error) {
+            error = task.error;
+        }
+        switch (task.state) {
+            case SSJDatabaseSequenceTaskStatePending:
+                pendingTaskCount ++;
+                break;
+                
+            case SSJDatabaseSequenceTaskStateExecuting:
+                executingTaskCount ++;
+                break;
+                
+            case SSJDatabaseSequenceTaskStateFinished:
+                break;
+                
+            case SSJDatabaseSequenceTaskStateCanceled:
+                canceledTaskCount ++;
+                break;
+        }
+    }
+    
+    if (canceledTaskCount > 0) {
+        self.state = SSJDatabaseSequenceTaskStateCanceled;
+        [self cancel];
+    } else if (executingTaskCount > 0) {
+        self.state = SSJDatabaseSequenceTaskStateExecuting;
+    } else if (pendingTaskCount > 0) {
+        self.state = SSJDatabaseSequenceTaskStatePending;
+    } else {
+        self.state = SSJDatabaseSequenceTaskStateFinished;
+        SSJDispatchMainAsync(^{
+            if (error) {
+                if (self.failure) {
+                    self.failure(error);
+                    self.failure = nil;
+                }
+            } else {
+                if (self.success) {
+                    self.success();
+                    self.success = nil;
+                }
+            }
+        });
+    }
+}
+
+- (NSString *)debugDescription {
+    return [self ssj_debugDescription];
+}
+
+@end
+
 #pragma mark - SSJDatabaseSequence
+#pragma mark -
 
 static NSString *const kSSJDatabaseServiceLockName = @"com.ShuiShouJi.SSJDatabaseSequence.lock";
 
@@ -186,7 +306,6 @@ static NSString *const kSSJDatabaseServiceLockName = @"com.ShuiShouJi.SSJDatabas
 @implementation SSJDatabaseSequence
 
 - (void)dealloc {
-    
 }
 
 + (instancetype)sequence {
@@ -215,9 +334,12 @@ static NSString *const kSSJDatabaseServiceLockName = @"com.ShuiShouJi.SSJDatabas
 }
 
 - (void)addTask:(SSJDatabaseSequenceTask *)task {
-    if (!task || ![task isKindOfClass:[SSJDatabaseSequenceTask class]]) {
+    if (!task
+        || ![task isKindOfClass:[SSJDatabaseSequenceTask class]]
+        || task.state != SSJDatabaseSequenceTaskStatePending) {
         return;
     }
+    
     [self.queue addOperation:task.operation];
     
     [self.lock lock];
@@ -234,6 +356,16 @@ static NSString *const kSSJDatabaseServiceLockName = @"com.ShuiShouJi.SSJDatabas
             [self.lock unlock];
         }
     }];
+}
+
+- (void)addCompoundTask:(SSJDatabaseSequenceCompoundTask *)compoundTask {
+    if (![compoundTask isKindOfClass:[SSJDatabaseSequenceCompoundTask class]]) {
+        return;
+    }
+    
+    for (SSJDatabaseSequenceTask *task in compoundTask.tasks) {
+        [self addTask:task];
+    }
 }
 
 - (SSJDatabaseSequenceTask *)addTaskWithHandler:(id(^)(SSJDatabase *db))handler success:(void(^)(id result))success failure:(void(^)(NSError *))failure {
@@ -262,6 +394,10 @@ static NSString *const kSSJDatabaseServiceLockName = @"com.ShuiShouJi.SSJDatabas
     [self.lock lock];
     [self.innerTasks removeAllObjects];
     [self.lock unlock];
+}
+
+- (NSString *)debugDescription {
+    return [self ssj_debugDescription];
 }
 
 @end
