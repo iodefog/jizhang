@@ -81,6 +81,13 @@ BOOL SSJSetUserId(NSString *userId);
 NSString *SSJUSERID();
 
 /**
+ 默认成员id
+
+ @return
+ */
+NSString *SSJDefaultMemberId();
+
+/**
  *  获取当前同步记录版本号
  *
  *  @return (int64_t) 当前同步记录版本号
