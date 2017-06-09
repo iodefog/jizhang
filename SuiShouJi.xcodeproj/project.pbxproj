@@ -12132,8 +12132,8 @@
 		9C29319D1CEF1B1F00484F6E /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				9C6CAFA51E76824B00262FAF /* SSJBookKeepingHomeListItem.m */,
 				9C6CAFA61E76824B00262FAF /* SSJBookKeepingHomeListItem.h */,
+				9C6CAFA51E76824B00262FAF /* SSJBookKeepingHomeListItem.m */,
 				9CB743C11E6544E9009746EE /* SSJMonthSummaryItem.h */,
 				9CB743C21E6544E9009746EE /* SSJMonthSummaryItem.m */,
 				7D07B6931CF2AC4900B9C390 /* SSJJsPatchItem.h */,
