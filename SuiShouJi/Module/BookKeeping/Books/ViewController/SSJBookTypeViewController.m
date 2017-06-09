@@ -124,6 +124,30 @@
     if (self.saveBooksBlock) {
         self.saveBooksBlock(self.lastSelectedIndex,[[self titles] ssj_safeObjectAtIndex:self.lastSelectedIndex]);
     }
+        switch (self.lastSelectedIndex) {
+            case 0:
+                [SSJAnaliyticsManager event:@"book_type_richang"];
+                break;
+    
+            case 1:
+                [SSJAnaliyticsManager event:@"book_type_shengyi"];
+                break;
+    
+            case 2:
+                [SSJAnaliyticsManager event:@"book_type_jiehun"];
+                break;
+    
+            case 3:
+                [SSJAnaliyticsManager event:@"book_type_zhuangxiu"];
+                break;
+    
+            case 4:
+                [SSJAnaliyticsManager event:@"book_type_lvxing"];
+                break;
+                
+            default:
+                break;
+        }
     [self.navigationController popViewControllerAnimated:YES];
 }
 

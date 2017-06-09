@@ -25,11 +25,12 @@ static NSString * SSJSelectCreateShareBookTypeCellIdentifier = @"SSJSelectCreate
     if (self) {
         self.layer.cornerRadius = 15;
         self.layer.masksToBounds = YES;
-        self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
         [self addSubview:self.titleLab];
         [self addSubview:self.subTitleLab];
         [self addSubview:self.collectionView];
         [self.collectionView registerClass:[SSJSelectCreateShareBookTypeCollectionViewCell class] forCellWithReuseIdentifier:SSJSelectCreateShareBookTypeCellIdentifier];
+        [self appearance];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appearance) name:SSJThemeDidChangeNotification object:nil];
         [self sizeToFit];
     }
     return self;
@@ -87,30 +88,6 @@ static NSString * SSJSelectCreateShareBookTypeCellIdentifier = @"SSJSelectCreate
 #pragma mark - UICollectionViewDelegate
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-//    switch (indexPath.item) {
-//        case 0:
-//            [SSJAnaliyticsManager event:@"book_type_richang"];
-//            break;
-//            
-//        case 1:
-//            [SSJAnaliyticsManager event:@"book_type_shengyi"];
-//            break;
-//            
-//        case 2:
-//            [SSJAnaliyticsManager event:@"book_type_jiehun"];
-//            break;
-//            
-//        case 3:
-//            [SSJAnaliyticsManager event:@"book_type_zhuangxiu"];
-//            break;
-//            
-//        case 4:
-//            [SSJAnaliyticsManager event:@"book_type_lvxing"];
-//            break;
-//            
-//        default:
-//            break;
-//    }
     [self dismiss];
     if (self.selectCreateShareBookBlock) {
         self.selectCreateShareBookBlock(indexPath.item);
@@ -151,7 +128,6 @@ static NSString * SSJSelectCreateShareBookTypeCellIdentifier = @"SSJSelectCreate
         _collectionView=[[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:flowLayout];
         _collectionView.delegate=self;
         _collectionView.dataSource=self;
-        _collectionView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     }
     return _collectionView;
 }
@@ -160,7 +136,6 @@ static NSString * SSJSelectCreateShareBookTypeCellIdentifier = @"SSJSelectCreate
     if (!_titleLab) {
         _titleLab = [[UILabel alloc]init];
         _titleLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
-        _titleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _titleLab.text = @"共享账本";
         [_titleLab sizeToFit];
     }
@@ -171,7 +146,6 @@ static NSString * SSJSelectCreateShareBookTypeCellIdentifier = @"SSJSelectCreate
     if (!_subTitleLab) {
         _subTitleLab = [[UILabel alloc]init];
         _subTitleLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
-        _subTitleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         _subTitleLab.text = @"共同记账，账本共享";
         [_subTitleLab sizeToFit];
     }
@@ -186,5 +160,15 @@ static NSString * SSJSelectCreateShareBookTypeCellIdentifier = @"SSJSelectCreate
     return @[@"bk_new_sharebook_normal",@"bk_new_sharebook_anhao"];
 }
 
+- (void)appearance {
+    self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
+    self.subTitleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    self.titleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+//    self.collectionView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+        self.collectionView.backgroundColor = [UIColor clearColor];
+}
 
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 @end

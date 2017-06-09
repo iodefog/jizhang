@@ -222,10 +222,13 @@
             if (![SSJBooksTypeStore generateBooksTypeForBooksItem:[SSJShareBookItem mj_objectWithKeyValues:self.service.shareBooksTableInfo] indatabase:db forUserId:SSJUSERID()]) {
                 return;
             }
-        
+            NSString *bookName = [db stringForQuery:@"select cbooksname from bk_share_books where cbooksid = ?",booksId];
+
             SSJDispatchMainSync(^{
                 [[NSNotificationCenter defaultCenter] postNotificationName:SSJBooksTypeDidChangeNotification object:nil];
-                [CDAutoHideMessageHUD showMessage:@"加入成功"];
+                if (self.inviteCodeJoinBooksBlock) {
+                    self.inviteCodeJoinBooksBlock(bookName);
+                }
                 [self.navigationController popToRootViewControllerAnimated:YES];
             });
         }];
