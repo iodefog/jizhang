@@ -48,6 +48,9 @@
         [self addSubview:self.comfirmButton];
         [self addSubview:self.cancelButton];
         [[YYKeyboardManager defaultManager] addObserver:self];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCellAppearanceAfterThemeChanged) name:SSJThemeDidChangeNotification object:nil];
+
         [self sizeToFit];
         [self setNeedsUpdateConstraints];
     }
@@ -55,6 +58,7 @@
 }
 
 -(void)dealloc{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [[YYKeyboardManager defaultManager] removeObserver:self];
 }
 
@@ -255,6 +259,15 @@
     self.textInput.text = originalText;
     self.textLengthLabel.text = [NSString stringWithFormat:@"剩余%d个字",self.maxLength - (int)_originalText.length];
     [self.textLengthLabel sizeToFit];
+}
+
+- (void)updateCellAppearanceAfterThemeChanged {
+    [_titleLabel ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
+    [_textInput ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor]];
+    _textInput.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    _textLengthLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    [_comfirmButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] forState:UIControlStateNormal];
+    [_cancelButton ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor]];
 }
 
 /*

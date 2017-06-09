@@ -66,6 +66,8 @@
     [super viewDidLoad];
     self.backgroundView.image = [UIImage ssj_compatibleImageNamed:@"sharebk_backgroud"];
     self.titles = @[@"发送暗号给好友",@"对方打开有鱼记账App V2.5 以上版本",@"好友添加共享账本时，输入暗号",@"大功告成～"];
+    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"sharebk_hint"] style:UIBarButtonItemStyleDone target:self action:@selector(rightButtonClicked:)];
+    self.navigationItem.rightBarButtonItem = rightItem;
     [self.view addSubview:self.backView];
     [self.backView addSubview:self.codeTitleLab];
     [self.backView addSubview:self.codeLeftImage];
@@ -142,7 +144,7 @@
         NSInteger index = [self.hintViews indexOfObject:hintView];
         [hintView mas_updateConstraints:^(MASConstraintMaker *make) {
             make.width.mas_equalTo(self.view);
-            make.height.mas_equalTo(38);
+            make.height.mas_equalTo(16);
             make.top.mas_equalTo(self.sendButton.mas_bottom).offset(48 + index * 38);
             make.left.mas_equalTo(self.view);
         }];
@@ -315,6 +317,10 @@
     [self.view endEditing:YES];
 }
 
+- (void)rightButtonClicked:(id)sender {
+    
+}
+
 #pragma mark - Private
 - (void)initHintView {
     self.hintViews = [NSMutableArray arrayWithCapacity:0];
@@ -347,8 +353,7 @@
         NSMutableString *url = [NSMutableString string];
         @strongify(self);
         
-#warning test
-        NSString *baseUrl = @"http://10.0.11.53:3000/5/invite/index.html?";
+        NSString *baseUrl = @"http://jz.9188.com/5/invite/index.html?";
         
         
         [url appendString:baseUrl];
