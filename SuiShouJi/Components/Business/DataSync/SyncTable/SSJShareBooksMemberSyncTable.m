@@ -28,7 +28,7 @@
                 return NO;
             }
         } else {
-            if (![db executeUpdate:@"insert into bk_share_books_member (cjoindate, istate, cicon, ccolor, cleavedate, cbooksid, cmemberid) values (?, ?, ?, ?, ?)", recordInfo[@"cjoindate"], recordInfo[@"istate"], recordInfo[@"cicon"], recordInfo[@"ccolor"], recordInfo[@"cleavedate"], recordInfo[@"cbooksid"], recordInfo[@"cmemberid"]]) {
+            if (![db executeUpdate:@"insert into bk_share_books_member (cjoindate, istate, cicon, ccolor, cleavedate, cbooksid, cmemberid) values (?, ?, ?, ?, ?, ?, ?)", recordInfo[@"cjoindate"], recordInfo[@"istate"], recordInfo[@"cicon"], recordInfo[@"ccolor"], recordInfo[@"cleavedate"], recordInfo[@"cbooksid"], recordInfo[@"cmemberid"]]) {
                 if (error) {
                     *error = [db lastError];
                 }
