@@ -27,7 +27,7 @@
         if ([db executeUpdate:@"delete from bk_member_charge where ichargeid in (select ichargeid from bk_user_charge where cuserid = ?)", userId]
             && [db executeUpdate:@"delete from bk_member where cuserid = ?", userId]
             && [db executeUpdate:@"delete from bk_user_budget where cuserid = ?", userId]
-            && [db executeUpdate:@"delete from bk_user_charge where cuserid = ?", userId]
+            && [db executeUpdate:@"delete from bk_user_charge where cuserid = ? or cbooksid in (select cbooksid from bk_share_books_member where cmemberid = ?)", userId, userId]
             && [db executeUpdate:@"delete from bk_charge_period_config where cuserid = ?", userId]
             && [db executeUpdate:@"delete from bk_fund_info where cuserid = ?", userId]
             && [db executeUpdate:@"delete from bk_bill_type where id in (select cbillid from bk_user_bill where cuserid = ?) and icustom = 1", userId]
