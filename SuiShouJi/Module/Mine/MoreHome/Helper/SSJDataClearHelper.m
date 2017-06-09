@@ -23,7 +23,7 @@
                           failure:(void (^)(NSError *error))failure{
     
     NSString *userId = SSJUSERID();
-    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+    [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(SSJDatabase *db, BOOL *rollback) {
         if ([db executeUpdate:@"delete from bk_member_charge where ichargeid in (select ichargeid from bk_user_charge where cuserid = ?)", userId]
             && [db executeUpdate:@"delete from bk_member where cuserid = ?", userId]
             && [db executeUpdate:@"delete from bk_user_budget where cuserid = ?", userId]
@@ -39,7 +39,10 @@
             && [db executeUpdate:@"delete from bk_loan where cuserid = ?", userId]
             && [db executeUpdate:@"delete from bk_user_credit where cuserid = ?", userId]
             && [db executeUpdate:@"delete from bk_transfer_cycle where cuserid = ?", userId]
-            && [db executeUpdate:@"delete from bk_user_remind where cuserid = ?", userId]) {
+            && [db executeUpdate:@"delete from bk_user_remind where cuserid = ?", userId]
+            && [db executeUpdate:@"delete from bk_share_books where cbooksid in (select cbooksid from bk_share_books_friends_mark where cuserid = ?)", userId]
+            && [db executeUpdate:@"delete from bk_share_books_member where cmemberid || cbooksid in (select cfriendid || cbooksid from bk_share_books_friends_mark where cuserid = ?)", userId]
+            && [db executeUpdate:@"delete from bk_share_books_friends_mark where cuserid = ?", userId]) {
               
             [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:^(SSJDataSynchronizeType type) {
                 if (success) {
@@ -51,6 +54,7 @@
                 }
             }];
         } else {
+            *rollback = YES;
             if (failure) {
                 failure([db lastError]);
             }
