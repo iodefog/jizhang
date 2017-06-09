@@ -10,9 +10,12 @@
 #import "SSJDatabaseQueue.h"
 
 @class SSJDatabaseSequenceTask;
+@class SSJDatabaseSequenceCompoundTask;
 
 NS_ASSUME_NONNULL_BEGIN
 
+#pragma mark - SSJDatabaseSequenceTask
+#pragma mark -
 @interface SSJDatabaseSequence : NSObject
 
 /**
@@ -46,6 +49,13 @@ NS_ASSUME_NONNULL_BEGIN
  @param task SSJDatabaseSequenceTask实例
  */
 - (void)addTask:(SSJDatabaseSequenceTask *)task;
+
+/**
+ <#Description#>
+
+ @param compoundTask <#compoundTask description#>
+ */
+- (void)addCompoundTask:(SSJDatabaseSequenceCompoundTask *)compoundTask;
 
 /**
  创建数据库任务并添加到队列中，返回任务对象，任务之间都是顺序执行，不会并发
@@ -88,7 +98,40 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
+#pragma mark - SSJDatabaseSequenceTaskProtocol
+#pragma mark -
+/**
+ 数据库任务的状态
+ 
+ - SSJDatabaseSequenceTaskStateInitial: 初始状态
+ - SSJDatabaseSequenceTaskStatePending: 等待
+ - SSJDatabaseSequenceTaskStateExecuting: 正在进行中
+ - SSJDatabaseSequenceTaskStateFinished: 已经完成
+ - SSJDatabaseSequenceTaskStateCanceled: 已经取消
+ */
+typedef NS_ENUM(NSInteger, SSJDatabaseSequenceTaskState) {
+    SSJDatabaseSequenceTaskStatePending = 0,
+    SSJDatabaseSequenceTaskStateExecuting,
+    SSJDatabaseSequenceTaskStateFinished,
+    SSJDatabaseSequenceTaskStateCanceled
+};
 
+@protocol SSJDatabaseSequenceTaskProtocol <NSObject>
+
+/**
+ 任务的执行状态
+ */
+@property (readonly) SSJDatabaseSequenceTaskState state;
+
+/**
+ <#Description#>
+ */
+- (void)cancel;
+
+@end
+
+#pragma mark - SSJDatabaseSequenceTask
+#pragma mark -
 /**
  任务类型
 
@@ -102,24 +145,7 @@ typedef NS_ENUM(NSInteger, SSJDatabaseServiceTaskType) {
     SSJDatabaseServiceTaskTypeDeferredTransaction
 };
 
-/**
- 数据库任务的状态
-
- - SSJDatabaseSequenceTaskStateUnknown: 未知
- - SSJDatabaseSequenceTaskStatePending: 等待
- - SSJDatabaseSequenceTaskStateExecuting: 正在进行中
- - SSJDatabaseSequenceTaskStateFinished: 已经完成
- - SSJDatabaseSequenceTaskStateCanceled: 已经取消
- */
-typedef NS_ENUM(NSInteger, SSJDatabaseSequenceTaskState) {
-    SSJDatabaseSequenceTaskStateUnknown = -1,
-    SSJDatabaseSequenceTaskStatePending = 0,
-    SSJDatabaseSequenceTaskStateExecuting,
-    SSJDatabaseSequenceTaskStateFinished,
-    SSJDatabaseSequenceTaskStateCanceled
-};
-
-@interface SSJDatabaseSequenceTask : NSObject
+@interface SSJDatabaseSequenceTask : NSObject <SSJDatabaseSequenceTaskProtocol>
 
 /**
  用于识别任务的标识，调试用
@@ -130,11 +156,6 @@ typedef NS_ENUM(NSInteger, SSJDatabaseSequenceTaskState) {
  任务的类型
  */
 @property (nonatomic, readonly) SSJDatabaseServiceTaskType type;
-
-/**
- 任务的执行状态
- */
-@property (readonly) SSJDatabaseSequenceTaskState state;
 
 /**
  执行任务成功后的结果
@@ -156,7 +177,7 @@ typedef NS_ENUM(NSInteger, SSJDatabaseSequenceTaskState) {
  */
 + (instancetype)taskWithHandler:(id(^)(SSJDatabase *db))handler
                         success:(void(^)(_Nullable id result))success
-                        failure:(void(^)(NSError *error))failure;
+                        failure:(nullable void(^)(NSError *error))failure;
 
 /**
  创建执行事务操作的任务
@@ -168,7 +189,7 @@ typedef NS_ENUM(NSInteger, SSJDatabaseSequenceTaskState) {
  */
 + (instancetype)transactionTaskWithHandler:(id(^)(SSJDatabase *db, BOOL *rollback))handler
                                    success:(void(^)(_Nullable id result))success
-                                   failure:(void(^)(NSError *error))failure;
+                                   failure:(nullable void(^)(NSError *error))failure;
 
 /**
  创建执行延迟事务操作的任务
@@ -180,9 +201,20 @@ typedef NS_ENUM(NSInteger, SSJDatabaseSequenceTaskState) {
  */
 + (instancetype)deferredTransactionTaskWithHandler:(id(^)(SSJDatabase *db, BOOL *rollback))handler
                                            success:(void(^)(_Nullable id result))success
-                                           failure:(void(^)(NSError *error))failure;
+                                           failure:(nullable void(^)(NSError *error))failure;
 
-- (void)cancel;
+@end
+
+#pragma mark - SSJDatabaseSequenceCompoundTask
+#pragma mark -
+
+@interface SSJDatabaseSequenceCompoundTask : NSObject <SSJDatabaseSequenceTaskProtocol>
+
+@property (nonatomic, copy, readonly) NSArray<SSJDatabaseSequenceTask *> *tasks;
+
++ (instancetype)taskWithTasks:(NSArray<SSJDatabaseSequenceTask *> *)tasks
+                      success:(void(^)())success
+                      failure:(nullable void(^)(NSError *error))failure;
 
 @end
 
