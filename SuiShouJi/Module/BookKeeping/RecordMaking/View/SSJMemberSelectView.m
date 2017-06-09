@@ -65,7 +65,37 @@
 }
 
 + (id)queryMemberItemsForPeriodChargeConfigId:(NSString *)configId inDatabase:(SSJDatabase *)db {
-    return nil;
+    NSString *memberIdsStr = [db stringForQuery:@"select cmemberids from bk_charge_period_config where iconfigid = ?", configId];
+    NSArray *memberIds = [memberIdsStr componentsSeparatedByString:@","];
+    if (memberIds.count == 0) {
+        return nil;
+    }
+    
+    NSMutableArray *bindParams = [NSMutableArray arrayWithCapacity:memberIds.count];
+    NSMutableDictionary *params = [@{@"userId":SSJUSERID()} mutableCopy];
+    [memberIds enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSString *key = [NSString stringWithFormat:@"memberId_%d", (int)idx];
+        [bindParams addObject:[NSString stringWithFormat:@":%@", key]];
+        params[key] = obj;
+    }];
+    
+    NSString *sql = [NSString stringWithFormat:@"select cmemberid, cname, ccolor from bk_member where cmemberid in (%@) and cuserid = :userId", [bindParams componentsJoinedByString:@", "]];
+    FMResultSet *rs = [db executeQuery:sql withParameterDictionary:params];
+    if (!rs) {
+        return [db lastError];
+    }
+    
+    NSMutableArray *memberItems = [NSMutableArray array];
+    while ([rs next]) {
+        SSJChargeMemberItem *memberItem = [[SSJChargeMemberItem alloc] init];
+        memberItem.memberId = [rs stringForColumn:@"cmemberid"];
+        memberItem.memberName = [rs stringForColumn:@"cname"];
+        memberItem.memberColor = [rs stringForColumn:@"ccolor"];
+        [memberItems addObject:memberItem];
+    }
+    [rs close];
+    
+    return memberItems;
 }
 
 + (id)queryDefaultMemberItemInDatabase:(SSJDatabase *)db {
