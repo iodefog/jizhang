@@ -362,7 +362,13 @@ static NSString *const kSegmentTitleIncome = @"收入";
 }
 
 - (void)deleteButtonClicked:(id)sender {
-    [self.deleteComfirmAlert show];
+//    [self.deleteComfirmAlert show];
+    __weak __typeof(self)weakSelf = self;
+    [SSJAlertViewAdapter showAlertViewWithTitle:nil message:[NSString stringWithFormat:@"确定要删除共享账本成员%@？",self.nickNameLab.text] action:[SSJAlertViewAction actionWithTitle:@"取消" handler:^(SSJAlertViewAction *action) {
+    }], [SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction *action) {
+        [weakSelf.deleteService deleteShareBookWithBookId:weakSelf.booksId memberId:weakSelf.memberId memberState:SSJShareBooksMemberStateKickedOut];
+    }], nil];
+
 }
 
 #pragma mark - Private
