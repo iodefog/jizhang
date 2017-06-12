@@ -747,7 +747,8 @@
                                @"cjoindate",
                                @"istate",
                                @"cicon",
-                               @"ccolor"];
+                               @"ccolor",
+                               @"cleavedate"];
         //更新bk_share_books_member表
         [shareMember enumerateObjectsUsingBlock:^(NSDictionary * _Nonnull dic, NSUInteger idx, BOOL * _Nonnull stop) {
             NSMutableDictionary *memberDic = [dic mutableCopy];

@@ -8,6 +8,7 @@
 //
 
 #import "SSJSharebooksInviteViewController.h"
+#import "SSJNormalWebViewController.h"
 
 #import "SSJShareBooksHintView.h"
 
@@ -81,7 +82,8 @@
     }
     
     [self.getCodeService requestCodeWithbooksId:self.item.booksId];
-    // Do any additional setup after loading the view.
+
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"share_book_anhao_join_help"] style:UIBarButtonItemStylePlain target:self action:@selector(helpAction)];
 }
 
 
@@ -313,6 +315,13 @@
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     [self.view endEditing:YES];
+}
+
+- (void)helpAction {
+#warning 帮助地址
+    SSJNormalWebViewController *helpVC = [SSJNormalWebViewController webViewVCWithURL:[NSURL URLWithString:@""]];
+    helpVC.title = @"帮助";
+    [self.navigationController pushViewController:helpVC animated:YES];
 }
 
 #pragma mark - Private
