@@ -51,6 +51,9 @@ static NSString *const kSSJCalenderDetailPhotoCellId = @"kSSJCalenderDetailPhoto
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    UIEdgeInsets insets = self.tableView.contentInset;
+    insets.bottom = self.editBtn.height;
+    self.tableView.contentInset = insets;
     [self.view addSubview:self.editBtn];
     [self registerCellClass];
     [self updateAppearance];
@@ -133,11 +136,11 @@ static NSString *const kSSJCalenderDetailPhotoCellId = @"kSSJCalenderDetailPhoto
 - (UIButton *)editBtn {
     if (!_editBtn) {
         _editBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        _editBtn.hidden = YES;
         _editBtn.frame = CGRectMake(0, self.view.height - 54, self.view.width, 54);
         [_editBtn ssj_setBorderStyle:SSJBorderStyleTop];
         _editBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
         [_editBtn setTitle:NSLocalizedString(@"修改", nil) forState:UIControlStateNormal];
+        [_editBtn setTitle:NSLocalizedString(@"无法修改他人的流水", nil) forState:UIControlStateDisabled];
         @weakify(self);
         [[_editBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
             @strongify(self);
@@ -179,16 +182,10 @@ static NSString *const kSSJCalenderDetailPhotoCellId = @"kSSJCalenderDetailPhoto
         [self.tableView reloadData];
         if (self.item.idType == SSJChargeIdTypeShareBooks
             && ![self.item.userId isEqualToString:SSJUSERID()]) {
-            UIEdgeInsets insets = self.tableView.contentInset;
-            insets.bottom = 0;
-            self.tableView.contentInset = insets;
-            self.editBtn.hidden = YES;
+            self.editBtn.enabled = NO;
             self.navigationItem.rightBarButtonItem = nil;
         } else {
-            UIEdgeInsets insets = self.tableView.contentInset;
-            insets.bottom = self.editBtn.height;
-            self.tableView.contentInset = insets;
-            self.editBtn.hidden = NO;
+            self.editBtn.enabled = YES;
             self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(rightBarButtonClicked:)];
         }
     } failure:^(NSError * _Nonnull error) {
@@ -288,6 +285,7 @@ static NSString *const kSSJCalenderDetailPhotoCellId = @"kSSJCalenderDetailPhoto
     [self.editBtn ssj_setBorderColor:SSJ_CELL_SEPARATOR_COLOR];
     [self.editBtn setTitleColor:SSJ_MARCATO_COLOR forState:UIControlStateNormal];
     [self.editBtn ssj_setBackgroundColor:SSJ_SECONDARY_FILL_COLOR forState:UIControlStateNormal];
+    [self.editBtn ssj_setBackgroundColor:SSJ_MAIN_BACKGROUND_COLOR forState:UIControlStateDisabled];
 }
 
 @end
