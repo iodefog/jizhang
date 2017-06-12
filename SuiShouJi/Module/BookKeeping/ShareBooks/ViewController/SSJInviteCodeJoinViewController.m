@@ -112,6 +112,9 @@
 - (UITextField *)codeInput {
     if (!_codeInput) {
         _codeInput = [[UITextField alloc] init];
+        if (self.inviteCode.length) {
+            _codeInput.text = self.inviteCode;
+        }
         _codeInput.textColor = [UIColor ssj_colorWithHex:@"#333333"];
         _codeInput.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
         _codeInput.textAlignment = NSTextAlignmentCenter;

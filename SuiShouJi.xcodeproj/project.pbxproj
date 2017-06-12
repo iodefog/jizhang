@@ -5440,6 +5440,7 @@
 		9C61E3471EE6B9BE001BA5F2 /* lottie_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 9C61E33C1EE6B9BE001BA5F2 /* lottie_2.json */; };
 		9C61E3481EE6B9BE001BA5F2 /* lottie_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 9C61E33C1EE6B9BE001BA5F2 /* lottie_2.json */; };
 		9C61E3491EE6B9BE001BA5F2 /* lottie_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 9C61E33C1EE6B9BE001BA5F2 /* lottie_2.json */; };
+		9C61E35F1EEE704D001BA5F2 /* SSJShareBooksUrlHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61E35E1EEE704D001BA5F2 /* SSJShareBooksUrlHandle.m */; };
 		9C61FD1F1EAE0C2800971F0F /* SSJHomeThemeModifyView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61FD1E1EAE0C2800971F0F /* SSJHomeThemeModifyView.m */; };
 		9C61FD201EAE0CF100971F0F /* SSJHomeThemeModifyView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61FD1E1EAE0C2800971F0F /* SSJHomeThemeModifyView.m */; };
 		9C61FD211EAE0CF200971F0F /* SSJHomeThemeModifyView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61FD1E1EAE0C2800971F0F /* SSJHomeThemeModifyView.m */; };
@@ -9750,6 +9751,8 @@
 		9C61E3011EE65737001BA5F2 /* lottie_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = lottie_1.json; sourceTree = "<group>"; };
 		9C61E32E1EE6B224001BA5F2 /* lottie_3.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = lottie_3.json; sourceTree = "<group>"; };
 		9C61E33C1EE6B9BE001BA5F2 /* lottie_2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = lottie_2.json; sourceTree = "<group>"; };
+		9C61E35D1EEE704D001BA5F2 /* SSJShareBooksUrlHandle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJShareBooksUrlHandle.h; sourceTree = "<group>"; };
+		9C61E35E1EEE704D001BA5F2 /* SSJShareBooksUrlHandle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJShareBooksUrlHandle.m; sourceTree = "<group>"; };
 		9C61FD1D1EAE0C2800971F0F /* SSJHomeThemeModifyView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJHomeThemeModifyView.h; sourceTree = "<group>"; };
 		9C61FD1E1EAE0C2800971F0F /* SSJHomeThemeModifyView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJHomeThemeModifyView.m; sourceTree = "<group>"; };
 		9C61FD2B1EAE13FE00971F0F /* SSJCustomThemeSelectCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCustomThemeSelectCollectionViewCell.h; sourceTree = "<group>"; };
@@ -12220,6 +12223,8 @@
 			children = (
 				9C396FB21EC5A42900AB267A /* SSJShareBooksHelper.h */,
 				9C396FB31EC5A42900AB267A /* SSJShareBooksHelper.m */,
+				9C61E35D1EEE704D001BA5F2 /* SSJShareBooksUrlHandle.h */,
+				9C61E35E1EEE704D001BA5F2 /* SSJShareBooksUrlHandle.m */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -23739,6 +23744,7 @@
 				BD543C411C1A6DBC00910D61 /* main.m in Sources */,
 				7D46328E1D21029F0040BABD /* UIImageView+SSJTheme.m in Sources */,
 				7DBA55461D6B000D00C02D79 /* SSJAddOrEditLoanMultiLabelCell.m in Sources */,
+				9C61E35F1EEE704D001BA5F2 /* SSJShareBooksUrlHandle.m in Sources */,
 				BD70DF651C4751EA000E6CC9 /* SSJRegistCompleteViewController.m in Sources */,
 				7D87AEBC1D66E05B0024D33C /* SSJUserCreditSyncTable.m in Sources */,
 				916012051DF7D86C00BF571C /* SSJHeaderBannerImageView.m in Sources */,

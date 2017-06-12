@@ -9,7 +9,9 @@
 #import "SSJBaseViewController.h"
 
 @interface SSJInviteCodeJoinViewController : SSJBaseViewController
-/**<#注释#>*/
+
 @property (nonatomic, copy) void (^inviteCodeJoinBooksBlock)(NSString *bookName);
+
+@property(nonatomic, strong) NSString *inviteCode;
 
 @end

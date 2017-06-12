@@ -35,6 +35,7 @@
 #import "SSJStartViewManager.h"
 #import "SSJStartViewManager.h"
 #import <UShareUI/UMSocialUIManager.h>
+#import "SSJShareBooksUrlHandle.h"
 
 //#import "SSJPatchUpdateService.h"
 //#import "SSJJspatchAnalyze.h"
@@ -334,13 +335,13 @@ NSDate *SCYEnterBackgroundTime() {
 
 - (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<NSString*, id> *)options {
     return [TencentOAuth HandleOpenURL:url] ||
-    [WXApi handleOpenURL:url delegate:[SSJThirdPartyLoginManger shareInstance].weixinLogin];
+    [WXApi handleOpenURL:url delegate:[SSJThirdPartyLoginManger shareInstance].weixinLogin] || [SSJShareBooksUrlHandle handleOpenURL:url];
 }
 
 
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url{
     return [TencentOAuth HandleOpenURL:url] ||
-    [WXApi handleOpenURL:url delegate:[SSJThirdPartyLoginManger shareInstance].weixinLogin];
+    [WXApi handleOpenURL:url delegate:[SSJThirdPartyLoginManger shareInstance].weixinLogin] || [SSJShareBooksUrlHandle handleOpenURL:url];
 }
 
 #pragma mark - 根据推送的内容跳转不同的页面
