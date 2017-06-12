@@ -11,9 +11,9 @@
 
 @interface SSJShareBooksMemberKickedOutAlerterModel : NSObject
 
-@property (nonatomic, copy) NSString *memberId;
+@property (nonatomic, copy) NSString *adminName;
 
-@property (nonatomic, copy) NSString *booksId;
+@property (nonatomic, copy) NSString *booksName;
 
 @property (nonatomic, strong) NSDate *date;
 
@@ -21,22 +21,22 @@
 
 @implementation SSJShareBooksMemberKickedOutAlerterModel
 
-+ (instancetype)modelWithMemberId:(NSString *)memberId booksId:(NSString *)booksId date:(NSDate *)date {
++ (instancetype)modelWithAdminName:(NSString *)adminName booksName:(NSString *)booksName date:(NSDate *)date {
     SSJShareBooksMemberKickedOutAlerterModel *model = [[SSJShareBooksMemberKickedOutAlerterModel alloc] init];
-    model.memberId = memberId;
-    model.booksId = booksId;
+    model.adminName = adminName;
+    model.booksName = booksName;
     model.date = date;
     return model;
 }
 
-- (BOOL)isEqual:(id)object {
-    if (![object isKindOfClass:[self class]]) {
-        return NO;
-    }
-    
-    SSJShareBooksMemberKickedOutAlerterModel *anotherModel = object;
-    return [anotherModel.memberId isEqualToString:self.memberId] && [anotherModel.booksId isEqualToString:self.booksId];
-}
+//- (BOOL)isEqual:(id)object {
+//    if (![object isKindOfClass:[self class]]) {
+//        return NO;
+//    }
+//    
+//    SSJShareBooksMemberKickedOutAlerterModel *anotherModel = object;
+//    return [anotherModel.memberId isEqualToString:self.memberId] && [anotherModel.booksId isEqualToString:self.booksId];
+//}
 
 @end
 
@@ -64,53 +64,55 @@
     return self;
 }
 
-- (void)recordWithMemberId:(NSString *)memberId booksId:(NSString *)booksId date:(NSDate *)date {
+- (void)recordWithMemberId:(NSString *)memberId booksId:(NSString *)booksId date:(NSDate *)date inDatabase:(SSJDatabase *)db error:(NSError **)error {
+    FMResultSet *rs = [db executeQuery:@"select sb.cbooksname, sm.cmark from bk_share_books as sb, bk_share_books_friends_mark as sm where sb.cbooksid = sm.cbooksid and sb.cadmin = sm.cfriendid and sm.cuserid = ? and sm.cbooksid = ?", memberId, booksId];
+    if (!rs) {
+        if (error) {
+            *error = [db lastError];
+        }
+        return;
+    }
+    
+    NSString *adminName = nil;
+    NSString *booksName = nil;
+    while ([rs next]) {
+        adminName = [rs stringForColumn:@"cmark"];
+        booksName = [rs stringForColumn:@"cbooksname"];
+    }
+    [rs close];
+    
     NSMutableArray *records = self.membersInfo[memberId];
     if (!records) {
         records = [NSMutableArray array];
+        self.membersInfo[memberId] = records;
     }
     
-    SSJShareBooksMemberKickedOutAlerterModel *model = [SSJShareBooksMemberKickedOutAlerterModel modelWithMemberId:memberId booksId:booksId date:date];
-    [records removeObject:model];
+    SSJShareBooksMemberKickedOutAlerterModel *model = [SSJShareBooksMemberKickedOutAlerterModel modelWithAdminName:adminName booksName:booksName date:date];
+//    [records removeObject:model];
     [records addObject:model];
 }
 
 - (void)showAlertIfNeededWithMemberId:(NSString *)memberId {
-    NSArray *records = self.membersInfo[memberId];
-    NSArray *sortedRecords = [records sortedArrayUsingComparator:^NSComparisonResult(SSJShareBooksMemberKickedOutAlerterModel *obj1, SSJShareBooksMemberKickedOutAlerterModel *obj2) {
+    NSMutableArray *records = self.membersInfo[memberId];
+    [records sortUsingComparator:^NSComparisonResult(SSJShareBooksMemberKickedOutAlerterModel *obj1, SSJShareBooksMemberKickedOutAlerterModel *obj2) {
         return [obj1.date compare:obj2.date];
     }];
     
-    [self showAlertWithModels:sortedRecords index:0];
+    [self showAlertWithModels:records];
 }
 
-- (void)showAlertWithModels:(NSArray<SSJShareBooksMemberKickedOutAlerterModel *> *)models index:(int)index {
-    if (models.count <= index) {
+- (void)showAlertWithModels:(NSMutableArray<SSJShareBooksMemberKickedOutAlerterModel *> *)models {
+    if (models.count <= 0) {
         return;
     }
     
-    SSJShareBooksMemberKickedOutAlerterModel *model = models[index];
-    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
-        FMResultSet *rs = [db executeQuery:@"select sb.cbooksname, sm.cmark from bk_share_books as sb, bk_share_books_friends_mark as sm where sb.cbooksid = sm.cbooksid and sb.cadmin = sm.cfriendid and sm.cuserid = ? and sm.cbooksid = ?", model.memberId, model.booksId];
-        if (!rs) {
-            [SSJAlertViewAdapter showError:[db lastError]];
-            return;
-        }
-        
-        NSString *booksName = nil;
-        NSString *adminName = nil;
-        while ([rs next]) {
-            booksName = [rs stringForColumn:@"cbooksname"];
-            adminName = [rs stringForColumn:@"cmark"];
-        }
-        [rs close];
-        
-        SSJDispatchMainAsync(^{
-            [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:[NSString stringWithFormat:@"您已被%@移出共享账本［%@］", adminName, booksName] action:[SSJAlertViewAction actionWithTitle:@"知道了" handler:^(SSJAlertViewAction *action){
-                [self showAlertWithModels:models index:(index + 1)];
-            }], nil];
-        });
-    }];
+    SSJShareBooksMemberKickedOutAlerterModel *model = [models firstObject];
+    [models ssj_removeFirstObject];
+    SSJDispatchMainAsync(^{
+        [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:[NSString stringWithFormat:@"您已被%@移出共享账本［%@］", model.adminName, model.booksName] action:[SSJAlertViewAction actionWithTitle:@"知道了" handler:^(SSJAlertViewAction *action){
+            [self showAlertWithModels:models];
+        }], nil];
+    });
 }
 
 @end

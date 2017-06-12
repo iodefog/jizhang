@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+@class SSJDatabase;
+
 NS_ASSUME_NONNULL_BEGIN
 
 /**
@@ -29,7 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param booksId 账本id
  @param date 被踢出时间
  */
-- (void)recordWithMemberId:(NSString *)memberId booksId:(NSString *)booksId date:(NSDate *)date;
+- (void)recordWithMemberId:(NSString *)memberId booksId:(NSString *)booksId date:(NSDate *)date inDatabase:(SSJDatabase *)db error:(NSError **)error;
 
 /**
  弹出某个成员被移出哪个共享账本的弹窗
