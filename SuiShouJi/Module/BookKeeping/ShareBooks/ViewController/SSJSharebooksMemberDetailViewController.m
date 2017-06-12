@@ -80,6 +80,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
     [self.userInfoHeader addSubview:self.modifyButton];
     [self.view addSubview:self.periodControl];
     [self.view addSubview:self.tableView];
+    [self.view addSubview:self.noDataRemindView];
     if (![self.memberId isEqualToString:SSJUSERID()] && [self.adminId isEqualToString:SSJUSERID()]) {
         UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithTitle:@"删除" style:UIBarButtonItemStylePlain target:self action:@selector(deleteButtonClicked:)];
         self.navigationItem.rightBarButtonItem = rightItem;
@@ -131,6 +132,13 @@ static NSString *const kSegmentTitleIncome = @"收入";
         make.height.mas_equalTo(self.view).offset(self.periodControl.bottom);
         make.left.mas_equalTo(self.view);
         make.top.mas_equalTo(self.periodControl.mas_bottom);
+    }];
+    
+    [self.noDataRemindView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.width.mas_equalTo(self.view);
+        make.height.mas_equalTo(self.view).offset(- 140 - SSJ_NAVIBAR_BOTTOM);
+        make.left.mas_equalTo(self.view);
+        make.top.mas_equalTo(self.view).offset(140 + SSJ_NAVIBAR_BOTTOM);
     }];
     
     [super updateViewConstraints];
@@ -240,10 +248,9 @@ static NSString *const kSegmentTitleIncome = @"收入";
         _payAndIncomeSegmentControl.customDelegate = self;
         _payAndIncomeSegmentControl.buttonClickAnimated = YES;
         _payAndIncomeSegmentControl.selectedTitleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
+        [_payAndIncomeSegmentControl setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor]];
         [_payAndIncomeSegmentControl setTabSize:CGSizeMake(_payAndIncomeSegmentControl.width * 0.5, 3)];
         _payAndIncomeSegmentControl.titles = @[kSegmentTitlePay, kSegmentTitleIncome];
-        [_payAndIncomeSegmentControl ssj_setBorderWidth:1];
-        [_payAndIncomeSegmentControl ssj_setBorderStyle:SSJBorderStyleBottom];
     }
     return _payAndIncomeSegmentControl;
 }
@@ -327,7 +334,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
 
 - (SSJBudgetNodataRemindView *)noDataRemindView {
     if (!_noDataRemindView) {
-        _noDataRemindView = [[SSJBudgetNodataRemindView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 260)];
+        _noDataRemindView = [[SSJBudgetNodataRemindView alloc] init];
         _noDataRemindView.image = @"budget_no_data";
         _noDataRemindView.title = @"暂无流水~";
     }
@@ -451,6 +458,8 @@ static NSString *const kSegmentTitleIncome = @"收入";
         
         [self reloadDatasInPeriod:_periodControl.currentPeriod];
         [self.view ssj_hideLoadingIndicator];
+        
+        [self.view updateConstraintsIfNeeded];
         
     } failure:^(NSError *error) {
         [self.view ssj_hideLoadingIndicator];
