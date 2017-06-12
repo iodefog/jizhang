@@ -149,7 +149,13 @@
                 booksID = userId;
             }
         }
-        int parentType = [db intForQuery:@"select iparenttype from bk_books_type where cbooksid = ?",booksID];
+        int parentType = 0;
+        
+        if ([db intForQuery:@"select count(1) from bk_books_type where cbooksid = ?",booksID]) {
+            parentType = [db intForQuery:@"select iparenttype from bk_books_type where cbooksid = ?",booksID];
+        } else {
+            parentType = [db intForQuery:@"select iparenttype from bk_share_books where cbooksid = ?",booksID];
+        }
         NSString *sql;
         if (parentType == 0) {
             sql = [NSString stringWithFormat:@"SELECT * FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE A.ITYPE = '%d' AND A.ICUSTOM = '%d' AND B.ISTATE = 0 AND B.CUSERID = '%@' AND A.ID = B.CBILLID AND B.OPERATORTYPE <> 2 AND B.CBOOKSID = '%@' ORDER BY B.IORDER",incomeOrExpenture, custom, userId,booksID];

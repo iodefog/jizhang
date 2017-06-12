@@ -8,8 +8,10 @@
 //
 
 #import "SSJSharebooksInviteViewController.h"
+#import "SSJShareBooksHintViewController.h"
 
 #import "SSJShareBooksHintView.h"
+
 
 #import "SSJShareBooksHelper.h"
 #import "SSJSharebooksCodeNetworkService.h"
@@ -66,7 +68,7 @@
     [super viewDidLoad];
     self.backgroundView.image = [UIImage ssj_compatibleImageNamed:@"sharebk_backgroud"];
     self.titles = @[@"发送暗号给好友",@"对方打开有鱼记账App V2.5 以上版本",@"好友添加共享账本时，输入暗号",@"大功告成～"];
-    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"sharebk_hint"] style:UIBarButtonItemStyleDone target:self action:@selector(rightButtonClicked:)];
+    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"sharebk_hint"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(rightButtonClicked:)];
     self.navigationItem.rightBarButtonItem = rightItem;
     [self.view addSubview:self.backView];
     [self.backView addSubview:self.codeTitleLab];
@@ -319,7 +321,8 @@
 }
 
 - (void)rightButtonClicked:(id)sender {
-    
+    SSJShareBooksHintViewController *hintVc = [[SSJShareBooksHintViewController alloc] init];
+    [self.navigationController pushViewController:hintVc animated:YES];
 }
 
 #pragma mark - Private
