@@ -8,8 +8,10 @@
 //
 
 #import "SSJSharebooksInviteViewController.h"
+#import "SSJShareBooksHintViewController.h"
 
 #import "SSJShareBooksHintView.h"
+
 
 #import "SSJShareBooksHelper.h"
 #import "SSJSharebooksCodeNetworkService.h"
@@ -319,7 +321,8 @@
 }
 
 - (void)rightButtonClicked:(id)sender {
-    
+    SSJShareBooksHintViewController *hintVc = [[SSJShareBooksHintViewController alloc] init];
+    [self.navigationController pushViewController:hintVc animated:YES];
 }
 
 #pragma mark - Private
