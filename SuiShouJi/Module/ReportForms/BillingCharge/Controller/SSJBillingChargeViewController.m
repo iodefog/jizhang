@@ -148,7 +148,7 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
         }];
     } else if (self.billId) {
         [self.view ssj_showLoadingIndicator];
-        [SSJBillingChargeHelper queryChargeListWithMemberId:self.memberId booksId:self.booksId billId:self.billId billType:self.billType period:self.period success:^(NSArray<NSDictionary *> * _Nonnull result) {
+        [SSJBillingChargeHelper queryChargeListWithMemberId:self.memberId booksId:self.booksId billId:self.billId period:self.period success:^(NSArray<NSDictionary *> * _Nonnull result) {
             [self.view ssj_hideLoadingIndicator];
             self.datas = result;
             [self.tableView reloadData];
@@ -156,7 +156,7 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
             [self.view ssj_hideLoadingIndicator];
             [SSJAlertViewAdapter showError:error];
         }];
-    } else if (self.billName) {
+    } else {
         [self.view ssj_showLoadingIndicator];
         [SSJBillingChargeHelper queryChargeListWithMemberId:self.memberId booksId:self.booksId billName:self.billName billType:self.billType period:self.period success:^(NSArray<NSDictionary *> * _Nonnull result) {
             [self.view ssj_hideLoadingIndicator];
@@ -166,8 +166,6 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
             [self.view ssj_hideLoadingIndicator];
             [SSJAlertViewAdapter showError:error];
         }];
-    } else {
-        [SSJAlertViewAdapter showError:[NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"billId、billName两个参数必须传一个"}]];
     }
 }
 

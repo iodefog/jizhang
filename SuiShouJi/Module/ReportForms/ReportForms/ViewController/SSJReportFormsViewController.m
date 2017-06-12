@@ -184,21 +184,30 @@ static NSString *const kSegmentTitleSurplus = @"结余";
     [SSJAnaliyticsManager event:@"forms_bar_chart"];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
+    if (![self.currentBooksItem isKindOfClass:[SSJBooksTypeItem class]]
+        && ![self.currentBooksItem isKindOfClass:[SSJShareBookItem class]]) {
+        [SSJAlertViewAdapter showError:[NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"未定义当前账本模型类对应的行为"}]];
+        return;
+    }
+    
+    BOOL isShareBook = [self.currentBooksItem isKindOfClass:[SSJShareBookItem class]];
+    
     SSJBaseCellItem *item = [self.datas ssj_safeObjectAtIndex:indexPath.row];
     
     if ([item isKindOfClass:[SSJReportFormsItem class]]) {
         SSJReportFormsItem *tmpItem = (SSJReportFormsItem *)item;
         SSJBillingChargeViewController *billingChargeVC = [[SSJBillingChargeViewController alloc] init];
         billingChargeVC.period = _periodControl.currentPeriod;
-        billingChargeVC.isPayment = [self currentType] == SSJBillTypePay;
+        billingChargeVC.billType = [self currentType];
         if (tmpItem.isMember) {
             billingChargeVC.title = tmpItem.name;
             billingChargeVC.memberId = tmpItem.ID;
         } else {
-            if ([self.currentBooksItem isKindOfClass:[SSJBooksTypeItem class]]) {
-                billingChargeVC.billId = tmpItem.ID;
-            } else if ([self.currentBooksItem isKindOfClass:[SSJShareBookItem class]]) {
+            if (isShareBook) {
                 billingChargeVC.billName = tmpItem.name;
+                billingChargeVC.memberId = SSJAllMembersId;
+            } else {
+                billingChargeVC.billId = tmpItem.ID;
             }
         }
         [self.navigationController pushViewController:billingChargeVC animated:YES];
@@ -207,11 +216,16 @@ static NSString *const kSegmentTitleSurplus = @"结余";
             [SSJAnaliyticsManager event:@"form_member_detail"];
         }
     } else if ([item isKindOfClass:[SSJReportFormCurveListCellItem class]]) {
-        
         SSJReportFormCurveListCellItem *curveListItem = (SSJReportFormCurveListCellItem *)item;
         SSJReportFormsBillTypeDetailViewController *billTypeDetailController = [[SSJReportFormsBillTypeDetailViewController alloc] init];
-        billTypeDetailController.billTypeID = curveListItem.billTypeId;
+        if (isShareBook) {
+            billTypeDetailController.billName = curveListItem.leftTitle1;
+        } else {
+            billTypeDetailController.billTypeID = curveListItem.billTypeId;
+        }
+        billTypeDetailController.billType = [self currentType];
         billTypeDetailController.title = curveListItem.leftTitle1;
+        billTypeDetailController.colorValue = curveListItem.progressColorValue;
         billTypeDetailController.customPeriod = _periodControl.customPeriod;
         billTypeDetailController.selectedPeriod = _periodControl.selectedPeriod;
         [self.navigationController pushViewController:billTypeDetailController animated:YES];
@@ -368,13 +382,13 @@ static NSString *const kSegmentTitleSurplus = @"结余";
             [self.curveHeaderView showLoadingOnSeparatorForm];
             [self.curveHeaderView showLoadingOnCurve];
             
-            [SSJReportFormsUtil queryForDefaultTimeDimensionWithStartDate:period.startDate endDate:period.endDate booksId:self.currentBooksItem.booksId billTypeId:nil success:^(SSJTimeDimension timeDimension) {
+            [SSJReportFormsUtil queryForDefaultTimeDimensionWithStartDate:period.startDate endDate:period.endDate booksId:self.currentBooksItem.booksId billId:nil success:^(SSJTimeDimension timeDimension) {
                 
                 if (timeDimension != SSJTimeDimensionUnknown) {
                     self.curveHeaderItem.timeDimension = timeDimension;
                 }
                 
-                [SSJReportFormsUtil queryForBillStatisticsWithTimeDimension:self.curveHeaderItem.timeDimension booksId:self.currentBooksItem.booksId billTypeId:nil startDate:period.startDate endDate:period.endDate success:^(NSDictionary *result) {
+                [SSJReportFormsUtil queryForBillStatisticsWithTimeDimension:self.curveHeaderItem.timeDimension booksId:self.currentBooksItem.booksId billId:nil startDate:period.startDate endDate:period.endDate success:^(NSDictionary *result) {
                     
                     [self updateCurveHeaderItemWithCurveModels:result[SSJReportFormsCurveModelListKey] period:period];
                     
@@ -466,7 +480,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
         return;
     }
     
-    //  将比例小于0.01的item过滤掉
+    // 将比例小于0.01的item过滤掉
     NSMutableArray *filterItems = [NSMutableArray array];
     double scaleAmount = 0;
     for (SSJReportFormsItem *item in result) {
@@ -476,7 +490,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
         }
     }
     
-    //  将 SSJReportFormsItem 转换成 SSJReportFormsPercentCircleItem 存入数组
+    //----------------------------------- 组织饼图数据 -----------------------------------//
     NSMutableArray *chartItems = [[NSMutableArray alloc] init];
     for (SSJReportFormsItem *item in filterItems) {
         //  收入、支出
@@ -518,7 +532,10 @@ static NSString *const kSegmentTitleSurplus = @"结余";
         chartCellItem.amount = [[NSString stringWithFormat:@"%f", amount] ssj_moneyDecimalDisplayWithDigits:2];
         [self.datas addObject:chartCellItem];
     }
+    //----------------------------------------------------------------------------------------//
     
+    
+    //--------------------------------------- 组织列表数据 --------------------------------------//
     switch ([self currentType]) {
         case SSJBillTypePay:
         case SSJBillTypeIncome: {
@@ -571,6 +588,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
         }
             break;
     }
+    //----------------------------------------------------------------------------------------//
 }
 
 // 组织折线图下方的列表数据
@@ -660,7 +678,15 @@ static NSString *const kSegmentTitleSurplus = @"结余";
     __weak typeof(self) wself = self;
     SSJMagicExportCalendarViewController *calendarVC = [[SSJMagicExportCalendarViewController alloc] init];
     calendarVC.title = @"自定义时间";
-    calendarVC.billType = [self currentType];
+    switch (self.navigationBar.option) {
+        case SSJReportFormsNavigationBarChart:
+            calendarVC.billType = [self currentType];
+            break;
+            
+        case SSJReportFormsNavigationBarCurve:
+            calendarVC.billType = SSJBillTypeSurplus;
+            break;
+    }
     calendarVC.booksId = self.currentBooksItem.booksId;
     calendarVC.completion = ^(NSDate *selectedBeginDate, NSDate *selectedEndDate) {
         wself.periodControl.customPeriod = [SSJDatePeriod datePeriodWithStartDate:selectedBeginDate endDate:selectedEndDate];
@@ -755,7 +781,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
             SSJDatePeriod *period = wself.periodControl.currentPeriod;
             
             [wself.curveHeaderView showLoadingOnCurve];
-            [SSJReportFormsUtil queryForBillStatisticsWithTimeDimension:view.item.timeDimension booksId:wself.currentBooksItem.booksId billTypeId:nil startDate:period.startDate endDate:period.endDate success:^(NSDictionary *result) {
+            [SSJReportFormsUtil queryForBillStatisticsWithTimeDimension:view.item.timeDimension booksId:wself.currentBooksItem.booksId billId:nil startDate:period.startDate endDate:period.endDate success:^(NSDictionary *result) {
                 
                 [wself.curveHeaderView hideLoadingOnCurve];
                 

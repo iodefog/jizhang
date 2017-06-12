@@ -40,6 +40,7 @@ extern SSJMagicExportStoreDateKey *const SSJMagicExportStoreEndDateKey;
  @param failure 失败回调
  */
 + (void)queryAllBillDateWithBillId:(nullable NSString *)billId
+                          billName:(nullable NSString *)billName
                           billType:(SSJBillType)billType
                            booksId:(nullable NSString *)booksId
                containOtherMembers:(BOOL)containOtherMembers

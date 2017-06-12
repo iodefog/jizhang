@@ -64,10 +64,6 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
 
 @property (nonatomic) SSJTimeDimension dimesion;
 
-@property (nonatomic) BOOL isPayment;
-
-@property (nonatomic, strong) NSString *colorValue;
-
 @property (nonatomic) double maxValue;
 
 @property (nonatomic) double amount;
@@ -93,6 +89,11 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    if (self.billType != SSJBillTypePay && self.billType != SSJBillTypeIncome) {
+        [SSJAlertViewAdapter showError:[NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat:@"未定义的收支类型，billType:%d", (int)self.billType]}]];
+        return;
+    }
+    
     [self.view addSubview:self.tableView];
     [self.view addSubview:self.periodControl];
     self.tableView.tableHeaderView = self.headerView;
@@ -102,9 +103,6 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
-    _isPayment = [SSJReportFormsUtil isPaymentWithBillTypeId:_billTypeID];
-    _colorValue = [SSJReportFormsUtil billTypeColorWithBillTypeId:_billTypeID];
     
     [self updateSubveiwsHidden];
     [self.view ssj_showLoadingIndicator];
@@ -152,7 +150,10 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
     SSJReportFormsCurveModel *curveModel = [_filterCurveModels ssj_safeObjectAtIndex:indexPath.row];
     
     SSJBillingChargeViewController *chargeListController = [[SSJBillingChargeViewController alloc] init];
-    chargeListController.billId = _billTypeID;
+    chargeListController.billId = self.billTypeID;
+    chargeListController.billName = self.billName;
+    chargeListController.billType = self.billType;
+    chargeListController.memberId = SSJAllMembersId;
     chargeListController.period = [SSJDatePeriod datePeriodWithStartDate:curveModel.startDate endDate:curveModel.endDate];
     [self.navigationController pushViewController:chargeListController animated:YES];
 }
@@ -174,10 +175,12 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
 - (CGFloat)curveGraphView:(SSJReportFormsCurveGraphView *)graphView valueForCurveAtIndex:(NSUInteger)curveIndex axisXIndex:(NSUInteger)axisXIndex {
     
     SSJReportFormsCurveModel *model = [_curveModels ssj_safeObjectAtIndex:axisXIndex];
-    if (_isPayment) {
+    if (self.billType == SSJBillTypePay) {
         return model.payment;
-    } else {
+    } else if (self.billType == SSJBillTypeIncome) {
         return model.income;
+    } else {
+        return 0;
     }
 }
 
@@ -249,10 +252,12 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
 
 - (BOOL)curveGraphView:(SSJReportFormsCurveGraphView *)graphView shouldShowValuePointForCurveAtIndex:(NSUInteger)curveIndex axisXIndex:(NSUInteger)axisXIndex {
     SSJReportFormsCurveModel *model = [_curveModels ssj_safeObjectAtIndex:axisXIndex];
-    if (_isPayment) {
+    if (self.billType == SSJBillTypePay) {
         return model.payment > 0;
-    } else {
+    } else if (self.billType == SSJBillTypeIncome) {
         return model.income > 0;
+    } else {
+        return NO;
     }
 }
 
@@ -296,15 +301,15 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
         NSString *bottomTitle = nil;
         switch ([self currentDemension]) {
             case SSJTimeDimensionDay:
-                bottomTitle = _isPayment ? @"日均支出" : @"日均收入";
+                bottomTitle = self.billType == SSJBillTypePay ? @"日均支出" : @"日均收入";
                 break;
                 
             case SSJTimeDimensionWeek:
-                bottomTitle = _isPayment ? @"周均支出" : @"周均收入";
+                bottomTitle = self.billType == SSJBillTypePay ? @"周均支出" : @"周均收入";
                 break;
                 
             case SSJTimeDimensionMonth:
-                bottomTitle = _isPayment ? @"月均支出" : @"月均收入";
+                bottomTitle = self.billType == SSJBillTypePay ? @"月均支出" : @"月均收入";
                 break;
                 
             case SSJTimeDimensionUnknown:
@@ -357,6 +362,8 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
         SSJMagicExportCalendarViewController *calendarVC = [[SSJMagicExportCalendarViewController alloc] init];
         calendarVC.title = @"自定义时间";
         calendarVC.booksId = booksId;
+        calendarVC.billType = self.billType;
+        calendarVC.billName = self.billName;
         calendarVC.billTypeId = wself.billTypeID;
         calendarVC.completion = ^(NSDate *selectedBeginDate, NSDate *selectedEndDate) {
             wself.periodControl.customPeriod = [SSJDatePeriod datePeriodWithStartDate:selectedBeginDate endDate:selectedEndDate];
@@ -380,59 +387,106 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
 - (void)reloadAllData {
     [self.view ssj_showLoadingIndicator];
     SSJDatePeriod *period = self.periodControl.currentPeriod;
-    [SSJReportFormsUtil queryForDefaultTimeDimensionWithStartDate:period.startDate endDate:period.endDate booksId:nil billTypeId:_billTypeID success:^(SSJTimeDimension timeDimension) {
-        
-        if (timeDimension == SSJTimeDimensionUnknown) {
-            _tableView.hidden = YES;
+    if (self.billTypeID) {
+        [SSJReportFormsUtil queryForDefaultTimeDimensionWithStartDate:period.startDate endDate:period.endDate booksId:nil billId:_billTypeID success:^(SSJTimeDimension timeDimension) {
+            if (timeDimension == SSJTimeDimensionUnknown) {
+                _tableView.hidden = YES;
+                [self.view ssj_hideLoadingIndicator];
+                [self.view ssj_showWatermarkWithCustomView:self.noDataRemindView animated:YES target:nil action:nil];
+                return;
+            }
+            
+            _tableView.hidden = NO;
+            [self.view ssj_hideWatermark:YES];
+            [self updateDimension:timeDimension];
+            [self reloadDataWithDimension:timeDimension];
+        } failure:^(NSError *error) {
+            [SSJAlertViewAdapter showError:error];
             [self.view ssj_hideLoadingIndicator];
-            [self.view ssj_showWatermarkWithCustomView:self.noDataRemindView animated:YES target:nil action:nil];
-            return;
-        }
-        
-        _tableView.hidden = NO;
-        [self.view ssj_hideWatermark:YES];
-        [self updateDimension:timeDimension];
-        [self reloadDataWithDimension:timeDimension];
-        
-    } failure:^(NSError *error) {
-        [SSJAlertViewAdapter showError:error];
-        [self.view ssj_hideLoadingIndicator];
-    }];
+        }];
+    } else {
+        [SSJReportFormsUtil queryForDefaultTimeDimensionWithStartDate:period.startDate endDate:period.endDate booksId:nil billName:self.billName billType:self.billType success:^(SSJTimeDimension timeDimension) {
+            if (timeDimension == SSJTimeDimensionUnknown) {
+                _tableView.hidden = YES;
+                [self.view ssj_hideLoadingIndicator];
+                [self.view ssj_showWatermarkWithCustomView:self.noDataRemindView animated:YES target:nil action:nil];
+                return;
+            }
+            
+            _tableView.hidden = NO;
+            [self.view ssj_hideWatermark:YES];
+            [self updateDimension:timeDimension];
+            [self reloadDataWithDimension:timeDimension];
+        } failure:^(NSError *error) {
+            [SSJAlertViewAdapter showError:error];
+            [self.view ssj_hideLoadingIndicator];
+        }];
+    }
 }
 
 - (void)reloadDataWithDimension:(SSJTimeDimension)dimension {
     
     SSJDatePeriod *period = self.periodControl.currentPeriod;
     
-    [SSJReportFormsUtil queryForBillStatisticsWithTimeDimension:[self currentDemension] booksId:nil billTypeId:_billTypeID startDate:period.startDate endDate:period.endDate success:^(NSDictionary *result) {
-        
-        [self.view ssj_hideLoadingIndicator];
-        
-        _curveModels = result[SSJReportFormsCurveModelListKey];
-        
-        [self caculateValue];
-        [_separatorFormView reloadData];
-        
-        [_curveView reloadData];
-        [_curveView scrollToAxisXAtIndex:(_curveModels.count - 1) animated:NO];
-        [self updateCurveUnitAxisXLength];
-        
-        [self reorganiseCellItems];
-        [_tableView reloadData];
-        
-        [self updateQuestionBtnHidden];
-        
-        [_descView dismiss];
-        
-        if (_curveModels.count) {
-            SSJReportFormsCurveModel *firstModel = [_curveModels firstObject];
-            self.descView.period = [SSJDatePeriod datePeriodWithStartDate:firstModel.startDate endDate:firstModel.endDate];
-        }
-        
-    } failure:^(NSError *error) {
-        [self.view ssj_hideLoadingIndicator];
-        [SSJAlertViewAdapter showError:error];
-    }];
+    if (self.billTypeID) {
+        [SSJReportFormsUtil queryForBillStatisticsWithTimeDimension:[self currentDemension] booksId:nil billId:self.billTypeID startDate:period.startDate endDate:period.endDate success:^(NSDictionary *result) {
+            
+            [self.view ssj_hideLoadingIndicator];
+            
+            _curveModels = result[SSJReportFormsCurveModelListKey];
+            
+            [self caculateValue];
+            [_separatorFormView reloadData];
+            
+            [_curveView reloadData];
+            [_curveView scrollToAxisXAtIndex:(_curveModels.count - 1) animated:NO];
+            [self updateCurveUnitAxisXLength];
+            
+            [self reorganiseCellItems];
+            [_tableView reloadData];
+            
+            [self updateQuestionBtnHidden];
+            
+            [_descView dismiss];
+            
+            if (_curveModels.count) {
+                SSJReportFormsCurveModel *firstModel = [_curveModels firstObject];
+                self.descView.period = [SSJDatePeriod datePeriodWithStartDate:firstModel.startDate endDate:firstModel.endDate];
+            }
+            
+        } failure:^(NSError *error) {
+            [self.view ssj_hideLoadingIndicator];
+            [SSJAlertViewAdapter showError:error];
+        }];
+    } else {
+        [SSJReportFormsUtil queryForBillStatisticsWithTimeDimension:[self currentDemension] booksId:nil billName:self.billName billType:self.billType startDate:period.startDate endDate:period.endDate success:^(NSDictionary *result) {
+            [self.view ssj_hideLoadingIndicator];
+            
+            _curveModels = result[SSJReportFormsCurveModelListKey];
+            
+            [self caculateValue];
+            [_separatorFormView reloadData];
+            
+            [_curveView reloadData];
+            [_curveView scrollToAxisXAtIndex:(_curveModels.count - 1) animated:NO];
+            [self updateCurveUnitAxisXLength];
+            
+            [self reorganiseCellItems];
+            [_tableView reloadData];
+            
+            [self updateQuestionBtnHidden];
+            
+            [_descView dismiss];
+            
+            if (_curveModels.count) {
+                SSJReportFormsCurveModel *firstModel = [_curveModels firstObject];
+                self.descView.period = [SSJDatePeriod datePeriodWithStartDate:firstModel.startDate endDate:firstModel.endDate];
+            }
+        } failure:^(NSError *error) {
+            [self.view ssj_hideLoadingIndicator];
+            [SSJAlertViewAdapter showError:error];
+        }];
+    }
 }
 
 - (void)reorganiseCellItems {
@@ -443,7 +497,7 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
         
         int index = [obj doubleValue];
         SSJReportFormsCurveModel *model = [_curveModels ssj_safeObjectAtIndex:index];
-        double money = _isPayment ? model.payment : model.income;
+        double money = self.billType == SSJBillTypePay ? model.payment : model.income;
         
         if (money) {
             [_filterCurveModels addObject:model];
@@ -454,7 +508,7 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
     
     for (int i = 0; i < _filterCurveModels.count; i ++) {
         SSJReportFormsCurveModel *model = [_filterCurveModels ssj_safeObjectAtIndex:i];
-        double money = _isPayment ? model.payment : model.income;
+        double money = self.billType == SSJBillTypePay ? model.payment : model.income;
         
         SSJReportFormCanYinChartCellItem *item = [[SSJReportFormCanYinChartCellItem alloc] init];
         if (_filterCurveModels.count == 1) {
@@ -577,7 +631,6 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
 }
 
 - (void)caculateValue {
-    
     _amount = 0;
     _maxValue = 0;
     _average = 0;
@@ -585,7 +638,7 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
     int count = 0;
     
     for (SSJReportFormsCurveModel *model in _curveModels) {
-        double money = _isPayment ? model.payment : model.income;
+        double money = self.billType == SSJBillTypePay ? model.payment : model.income;
         if (money > 0) {
             count ++;
             _amount += money;

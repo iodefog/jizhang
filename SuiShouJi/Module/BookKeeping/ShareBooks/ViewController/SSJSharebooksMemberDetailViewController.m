@@ -155,9 +155,10 @@ static NSString *const kSegmentTitleIncome = @"收入";
     SSJBaseCellItem *item = [self.cellItems ssj_safeObjectAtIndex:indexPath.row];
     SSJReportFormsItem *tmpItem = (SSJReportFormsItem *)item;
     SSJBillingChargeViewController *billingChargeVC = [[SSJBillingChargeViewController alloc] init];
-    billingChargeVC.billName = tmpItem.name;
+    billingChargeVC.billId = tmpItem.ID;
+    billingChargeVC.booksId = self.booksId;
+    billingChargeVC.memberId = self.memberId;
     billingChargeVC.period = _periodControl.currentPeriod;
-    billingChargeVC.isPayment = _payAndIncomeSegmentControl.selectedIndex == 0;
     [self.navigationController pushViewController:billingChargeVC animated:YES];
 }
 

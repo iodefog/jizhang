@@ -41,7 +41,6 @@ extern NSString *const SSJBillingChargeRecordKey;
 + (void)queryChargeListWithMemberId:(nullable NSString *)memberId
                             booksId:(nullable NSString *)booksId
                              billId:(nullable NSString *)billId
-                           billType:(SSJBillType)billType
                              period:(nullable SSJDatePeriod *)period
                             success:(void (^)(NSArray<NSDictionary *> *result))success
                             failure:(nullable void (^)(NSError *error))failure;

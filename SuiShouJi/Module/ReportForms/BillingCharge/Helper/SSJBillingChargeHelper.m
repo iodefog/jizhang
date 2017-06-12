@@ -21,7 +21,6 @@ NSString *const SSJBillingChargeRecordKey = @"SSJBillingChargeRecordKey";
 + (void)queryChargeListWithMemberId:(nullable NSString *)memberId
                             booksId:(nullable NSString *)booksId
                              billId:(nullable NSString *)billId
-                           billType:(SSJBillType)billType
                              period:(nullable SSJDatePeriod *)period
                             success:(void (^)(NSArray <NSDictionary *>*result))success
                             failure:(nullable void (^)(NSError *error))failure {
@@ -54,10 +53,18 @@ NSString *const SSJBillingChargeRecordKey = @"SSJBillingChargeRecordKey";
                 [sql appendString:@" and uc.ibillid = :billId"];
             }
             
-            if (billType == SSJBillTypePay || billType == SSJBillTypeIncome) {
-                params[@"billType"] = @(billType);
-                [sql appendString:@" and bt.type = :billType"];
+            if (period) {
+                params[@"beginDate"] = [period.startDate formattedDateWithFormat:@"yyyy-MM-dd"];
+                params[@"endDate"] = [period.endDate formattedDateWithFormat:@"yyyy-MM-dd"];
+                [sql appendString:@" and uc.cbilldate >= :beginDate and uc.cbilldate <= :endDate"];
             }
+            
+            [sql appendString:@" order by uc.cbilldate desc"];
+            rs = [db executeQuery:sql withParameterDictionary:params];
+        } else if (billId) {
+            NSMutableDictionary *params = [@{@"booksId":tBooksId,
+                                             @"billId":billId} mutableCopy];
+            NSMutableString *sql = [@"select uc.ichargeid, uc.imoney, uc.cbilldate, uc.cwritedate, uc.ifunsid, uc.ibillid, uc.cmemo, uc.cimgurl, uc.thumburl, uc.cid, uc.ichargetype, uc.cbooksid, bt.cname, bt.ccoin, bt.ccolor, bt.itype from bk_user_charge as uc, bk_bill_type as bt where uc.ibillid = bt.id and bt.istate <> 2 and uc.cbilldate <= datetime('now', 'localtime') and uc.operatortype <> 2 and uc.cbooksid = :booksId and uc.ibillid = :billId" mutableCopy];
             
             if (period) {
                 params[@"beginDate"] = [period.startDate formattedDateWithFormat:@"yyyy-MM-dd"];
@@ -74,16 +81,6 @@ NSString *const SSJBillingChargeRecordKey = @"SSJBillingChargeRecordKey";
             if (![tMemberId isEqualToString:SSJAllMembersId]) {
                 params[@"memberId"] = tMemberId;
                 [sql appendString:@" and mc.cmemberid = :memberId"];
-            }
-            
-            if (billId) {
-                params[@"billId"] = billId;
-                [sql appendString:@" and uc.ibillid = :billId"];
-            }
-            
-            if (billType == SSJBillTypePay || billType == SSJBillTypeIncome) {
-                params[@"billType"] = @(billType);
-                [sql appendString:@" and bt.type = :billType"];
             }
             
             if (period) {
@@ -147,7 +144,25 @@ NSString *const SSJBillingChargeRecordKey = @"SSJBillingChargeRecordKey";
             
             if (billType == SSJBillTypePay || billType == SSJBillTypeIncome) {
                 params[@"billType"] = @(billType);
-                [sql appendString:@" and bt.type = :billType"];
+                [sql appendString:@" and bt.itype = :billType"];
+            }
+            
+            if (period) {
+                params[@"beginDate"] = [period.startDate formattedDateWithFormat:@"yyyy-MM-dd"];
+                params[@"endDate"] = [period.endDate formattedDateWithFormat:@"yyyy-MM-dd"];
+                [sql appendString:@" and uc.cbilldate >= :beginDate and uc.cbilldate <= :endDate"];
+            }
+            
+            [sql appendString:@" order by uc.cbilldate desc"];
+            rs = [db executeQuery:sql withParameterDictionary:params];
+        } else if (billName) {
+            NSMutableDictionary *params = [@{@"booksId":tBooksId,
+                                             @"billName":billName} mutableCopy];
+            NSMutableString *sql = [@"select uc.ichargeid, uc.imoney, uc.cbilldate, uc.cwritedate, uc.ifunsid, uc.ibillid, uc.cmemo, uc.cimgurl, uc.thumburl, uc.cid, uc.ichargetype, uc.cbooksid, bt.cname, bt.ccoin, bt.ccolor, bt.itype from bk_user_charge as uc, bk_bill_type as bt where uc.ibillid = bt.id and bt.istate <> 2 and uc.cbilldate <= datetime('now', 'localtime') and uc.operatortype <> 2 and uc.cbooksid = :booksId" mutableCopy];
+            
+            if (billType == SSJBillTypePay || billType == SSJBillTypeIncome) {
+                params[@"billType"] = @(billType);
+                [sql appendString:@" and bt.itype = :billType"];
             }
             
             if (period) {
@@ -167,14 +182,9 @@ NSString *const SSJBillingChargeRecordKey = @"SSJBillingChargeRecordKey";
                 [sql appendString:@" and mc.cmemberid = :memberId"];
             }
             
-            if (billName) {
-                params[@"billName"] = billName;
-                [sql appendString:@" and bt.cname = :billName"];
-            }
-            
             if (billType == SSJBillTypePay || billType == SSJBillTypeIncome) {
                 params[@"billType"] = @(billType);
-                [sql appendString:@" and bt.type = :billType"];
+                [sql appendString:@" and bt.itype = :billType"];
             }
             
             if (period) {

@@ -78,16 +78,16 @@ NSString *const SSJMagicExportStoreEndDateKey = @"SSJMagicExportStoreEndDateKey"
 }
 
 + (void)queryAllBillDateWithBillId:(NSString *)billId
+                          billName:(NSString *)billName
                           billType:(SSJBillType)billType
                            booksId:(NSString *)booksId
                containOtherMembers:(BOOL)containOtherMembers
                            success:(void (^)(NSArray<NSDate *> *result))success
                            failure:(void (^)(NSError *error))failure {
-    
-    if (billType == SSJBillTypeUnknown && !billId) {
+    if (!billId && billType == SSJBillTypeUnknown) {
         if (failure) {
             SSJDispatchMainAsync(^{
-                failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"billType、billTypeId两个参数中必须传一个"}]);
+                failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"billType参数无效"}]);
             });
         }
         return;
@@ -130,11 +130,16 @@ NSString *const SSJMagicExportStoreEndDateKey = @"SSJMagicExportStoreEndDateKey"
         if (billId) {
             params[@"billId"] = billId;
             [sql appendString:@" and uc.ibillid = :billId"];
-        } else {
-            if (billType == SSJBillTypePay || billType == SSJBillTypeIncome) {
-                params[@"billType"] = @(billType);
-                [sql appendString:@" and bt.itype = :billType"];
-            }
+        }
+        
+        if (billName) {
+            params[@"billName"] = billName;
+            [sql appendString:@" and bt.cname = :billName"];
+        }
+        
+        if (billType == SSJBillTypePay || billType == SSJBillTypeIncome) {
+            params[@"billType"] = @(billType);
+            [sql appendString:@" and bt.itype = :billType"];
         }
         
         [sql appendString:@" order by uc.cbilldate"];
