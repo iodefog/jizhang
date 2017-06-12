@@ -37,7 +37,6 @@ static NSString *const kCellId = @"SSJThemeManagerCollectionViewCell";
 - (void)viewDidLoad {
     [super viewDidLoad];
     editeModel = NO;
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
     [self.view addSubview:self.themeSelectView];
     UIBarButtonItem *rightButton = [[UIBarButtonItem alloc]initWithCustomView:self.rightButton];
     self.navigationItem.rightBarButtonItem = rightButton;
@@ -47,6 +46,10 @@ static NSString *const kCellId = @"SSJThemeManagerCollectionViewCell";
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self getAllThemes];
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle {
+    return UIStatusBarStyleDefault;
 }
 
 #pragma mark - UICollectionViewDataSource
