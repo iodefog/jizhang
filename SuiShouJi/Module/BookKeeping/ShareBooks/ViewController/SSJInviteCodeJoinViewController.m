@@ -201,6 +201,10 @@
                 [self.service.shareBooksTableInfo setObject:@(maxOrder) forKey:@"iorder"];
             }
             
+            if (![db executeUpdate:@"delete from bk_share_books_member where cbooksid = ?",booksId]) {
+                return;
+            }
+            
 
             if (![SSJShareBooksSyncTable mergeRecords:@[self.service.shareBooksTableInfo] forUserId:SSJUSERID() inDatabase:db error:&error]) {
                 return;
