@@ -519,10 +519,9 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
         NSString *currentBooksid = [db stringForQuery:@"select ccurrentbooksid from bk_user where cuserid = ?",self.userId];
         
         if ([db boolForQuery:@"select count(1) from bk_share_books where cbooksid = ?",currentBooksid]) {
-            if ([db intForQuery:@"select istate from bk_share_books_member where cbooksid = ?",currentBooksid] != SSJShareBooksMemberStateNormal) {
+            if ([db intForQuery:@"select istate from bk_share_books_member where cbooksid = ? and cmemberid = ?",currentBooksid,self.userId] != SSJShareBooksMemberStateNormal) {
                 [db executeUpdate:@"update bk_user set ccurrentbooksid = ?",self.userId];
             }
-
         }
         
     }];

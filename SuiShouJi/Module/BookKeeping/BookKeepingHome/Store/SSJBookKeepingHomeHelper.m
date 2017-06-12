@@ -41,7 +41,7 @@ NSString *const SSJMonthSumDicKey = @"SSJMonthSumDicKey";
         
         int section = 0;
         int row = 0;
-        FMResultSet *chargeResult = [db executeQuery:@"select uc.* , uc.operatortype as chargeoperatortype, bt.cname, bt.ccoin, bt.ccolor, bt.itype, bf.cmark from bk_user_charge uc left join bk_share_books_friends_mark bf on bf.cfriendid = uc.cuserid and bf.cbooksid = uc.cbooksid and bf.cuserid = ? , bk_bill_type bt where uc.ibillid = bt.id and uc.cbilldate <= ? and uc.cbooksid = ? and uc.operatortype <> 2 and bt.istate <> 2 order by uc.cbilldate desc , uc.clientadddate desc , uc.cwritedate desc", SSJUSERID(), [[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"],booksid];
+        FMResultSet *chargeResult = [db executeQuery:@"select uc.* , uc.operatortype as chargeoperatortype, bt.cname, bt.ccoin, bt.ccolor, bt.itype, bf.cmark from bk_user_charge uc left join bk_share_books_friends_mark bf on bf.cfriendid = uc.cuserid and bf.cbooksid = uc.cbooksid and bf.cuserid = ? left join bk_share_books_member bm on bm.cbooksid = uc.cbooksid and bm.cmemberid = uc.cuserid, bk_bill_type bt where uc.ibillid = bt.id and uc.cbilldate <= ? and uc.cbooksid = ? and uc.operatortype <> 2 and (bm.istate = ? or bm.istate is null) order by uc.cbilldate desc , uc.clientadddate desc , uc.cwritedate desc", SSJUSERID(), [[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"],booksid, @(SSJShareBooksMemberStateNormal)];
         if (!chargeResult) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{
@@ -71,6 +71,7 @@ NSString *const SSJMonthSumDicKey = @"SSJMonthSumDicKey";
             item.billDetailDate = [chargeResult stringForColumn:@"cdetaildate"];
             item.memberNickname = [chargeResult stringForColumn:@"cmark"];
             item.idType = [chargeResult intForColumn:@"ichargetype"];
+            item.booksId = [chargeResult stringForColumn:@"cbooksid"];
             
             if (![item.billDate isEqualToString:lastDate]) {
                 SSJBookKeepingHomeListItem *listItem = [[SSJBookKeepingHomeListItem alloc]init];
