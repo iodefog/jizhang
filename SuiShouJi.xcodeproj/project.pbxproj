@@ -5440,6 +5440,7 @@
 		9C61E3471EE6B9BE001BA5F2 /* lottie_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 9C61E33C1EE6B9BE001BA5F2 /* lottie_2.json */; };
 		9C61E3481EE6B9BE001BA5F2 /* lottie_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 9C61E33C1EE6B9BE001BA5F2 /* lottie_2.json */; };
 		9C61E3491EE6B9BE001BA5F2 /* lottie_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 9C61E33C1EE6B9BE001BA5F2 /* lottie_2.json */; };
+		9C61E35F1EEE704D001BA5F2 /* SSJShareBooksUrlHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61E35E1EEE704D001BA5F2 /* SSJShareBooksUrlHandle.m */; };
 		9C61FD1F1EAE0C2800971F0F /* SSJHomeThemeModifyView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61FD1E1EAE0C2800971F0F /* SSJHomeThemeModifyView.m */; };
 		9C61FD201EAE0CF100971F0F /* SSJHomeThemeModifyView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61FD1E1EAE0C2800971F0F /* SSJHomeThemeModifyView.m */; };
 		9C61FD211EAE0CF200971F0F /* SSJHomeThemeModifyView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61FD1E1EAE0C2800971F0F /* SSJHomeThemeModifyView.m */; };
@@ -8657,6 +8658,19 @@
 		BD70DF671C4751EA000E6CC9 /* SSJRegistNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF571C4751EA000E6CC9 /* SSJRegistNetworkService.m */; };
 		BD70DF6B1C4B26B3000E6CC9 /* UIViewController+SSJPageFlow.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF6A1C4B26B3000E6CC9 /* UIViewController+SSJPageFlow.m */; };
 		BDC01FF31C2D92E3008B1F75 /* CDAutoHideMessageHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = BDC01FF21C2D92E3008B1F75 /* CDAutoHideMessageHUD.m */; };
+		BDF927631EEA8ADD00F0C80F /* SSJShareBooksHintViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF927621EEA8ADD00F0C80F /* SSJShareBooksHintViewController.m */; };
+		BDF927641EEA8AE200F0C80F /* SSJShareBooksHintViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF927621EEA8ADD00F0C80F /* SSJShareBooksHintViewController.m */; };
+		BDF927651EEA8AE200F0C80F /* SSJShareBooksHintViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF927621EEA8ADD00F0C80F /* SSJShareBooksHintViewController.m */; };
+		BDF927661EEA8AE400F0C80F /* SSJShareBooksHintViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF927621EEA8ADD00F0C80F /* SSJShareBooksHintViewController.m */; };
+		BDF927671EEA8AE400F0C80F /* SSJShareBooksHintViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF927621EEA8ADD00F0C80F /* SSJShareBooksHintViewController.m */; };
+		BDF927681EEA8AE500F0C80F /* SSJShareBooksHintViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF927621EEA8ADD00F0C80F /* SSJShareBooksHintViewController.m */; };
+		BDF927691EEA8AE600F0C80F /* SSJShareBooksHintViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF927621EEA8ADD00F0C80F /* SSJShareBooksHintViewController.m */; };
+		BDF9276A1EEA8AE700F0C80F /* SSJShareBooksHintViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF927621EEA8ADD00F0C80F /* SSJShareBooksHintViewController.m */; };
+		BDF9276B1EEA8AE800F0C80F /* SSJShareBooksHintViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF927621EEA8ADD00F0C80F /* SSJShareBooksHintViewController.m */; };
+		BDF9276C1EEA8AE900F0C80F /* SSJShareBooksHintViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF927621EEA8ADD00F0C80F /* SSJShareBooksHintViewController.m */; };
+		BDF9276E1EEA8AEB00F0C80F /* SSJShareBooksHintViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF927621EEA8ADD00F0C80F /* SSJShareBooksHintViewController.m */; };
+		BDF927701EEA8AED00F0C80F /* SSJShareBooksHintViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF927621EEA8ADD00F0C80F /* SSJShareBooksHintViewController.m */; };
+		BDF927711EEA8AEE00F0C80F /* SSJShareBooksHintViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF927621EEA8ADD00F0C80F /* SSJShareBooksHintViewController.m */; };
 		DE40AFEE86913D4496BD2849 /* libPods-YouYuJiZhangPro.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EF5B82B4857D59207E9CA7D7 /* libPods-YouYuJiZhangPro.a */; };
 		EB3CDE318B1DD156CA0EC0A5 /* libPods-JiZhangGuanJia.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 571F4D066EC4C6EC375F15AE /* libPods-JiZhangGuanJia.a */; };
 		EBE20BB4A93813569A3B2312 /* libPods-YouYuJiZhangBen.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E333715C60C0345F8D6FCA9 /* libPods-YouYuJiZhangBen.a */; };
@@ -9737,6 +9751,8 @@
 		9C61E3011EE65737001BA5F2 /* lottie_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = lottie_1.json; sourceTree = "<group>"; };
 		9C61E32E1EE6B224001BA5F2 /* lottie_3.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = lottie_3.json; sourceTree = "<group>"; };
 		9C61E33C1EE6B9BE001BA5F2 /* lottie_2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = lottie_2.json; sourceTree = "<group>"; };
+		9C61E35D1EEE704D001BA5F2 /* SSJShareBooksUrlHandle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJShareBooksUrlHandle.h; sourceTree = "<group>"; };
+		9C61E35E1EEE704D001BA5F2 /* SSJShareBooksUrlHandle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJShareBooksUrlHandle.m; sourceTree = "<group>"; };
 		9C61FD1D1EAE0C2800971F0F /* SSJHomeThemeModifyView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJHomeThemeModifyView.h; sourceTree = "<group>"; };
 		9C61FD1E1EAE0C2800971F0F /* SSJHomeThemeModifyView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJHomeThemeModifyView.m; sourceTree = "<group>"; };
 		9C61FD2B1EAE13FE00971F0F /* SSJCustomThemeSelectCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCustomThemeSelectCollectionViewCell.h; sourceTree = "<group>"; };
@@ -10224,6 +10240,8 @@
 		BDC01FF11C2D92E3008B1F75 /* CDAutoHideMessageHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDAutoHideMessageHUD.h; sourceTree = "<group>"; };
 		BDC01FF21C2D92E3008B1F75 /* CDAutoHideMessageHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDAutoHideMessageHUD.m; sourceTree = "<group>"; };
 		BDED39AF20CC5F34BACE95E9 /* Pods-9188JiZhangBao.release-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-9188JiZhangBao.release-test.xcconfig"; path = "Pods/Target Support Files/Pods-9188JiZhangBao/Pods-9188JiZhangBao.release-test.xcconfig"; sourceTree = "<group>"; };
+		BDF927611EEA8ADD00F0C80F /* SSJShareBooksHintViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJShareBooksHintViewController.h; sourceTree = "<group>"; };
+		BDF927621EEA8ADD00F0C80F /* SSJShareBooksHintViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJShareBooksHintViewController.m; sourceTree = "<group>"; };
 		BEAA1B2FC6756F3854AACA28 /* libPods-9188JiZhangBao.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-9188JiZhangBao.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C456BDB9A1174F4A4B005EB9 /* Pods-YouYuJiZhangBao.debug-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangBao.debug-production.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangBao/Pods-YouYuJiZhangBao.debug-production.xcconfig"; sourceTree = "<group>"; };
 		C940E901F298A3A24076E517 /* Pods-YouYuJiZhang.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhang.debug.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhang/Pods-YouYuJiZhang.debug.xcconfig"; sourceTree = "<group>"; };
@@ -12205,6 +12223,8 @@
 			children = (
 				9C396FB21EC5A42900AB267A /* SSJShareBooksHelper.h */,
 				9C396FB31EC5A42900AB267A /* SSJShareBooksHelper.m */,
+				9C61E35D1EEE704D001BA5F2 /* SSJShareBooksUrlHandle.h */,
+				9C61E35E1EEE704D001BA5F2 /* SSJShareBooksUrlHandle.m */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -12266,6 +12286,8 @@
 				9CD088761ECE8E310050B4EB /* SSJSharebooksMemberDetailViewController.m */,
 				9C51FECB1ED43F13005E3CFC /* SSJInviteCodeJoinViewController.h */,
 				9C51FECC1ED43F13005E3CFC /* SSJInviteCodeJoinViewController.m */,
+				BDF927611EEA8ADD00F0C80F /* SSJShareBooksHintViewController.h */,
+				BDF927621EEA8ADD00F0C80F /* SSJShareBooksHintViewController.m */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -15754,6 +15776,7 @@
 				9C61FD241EAE0CF300971F0F /* SSJHomeThemeModifyView.m in Sources */,
 				7D08A1211E4999D30085A8FB /* SSJBooksColorAndIconSelectView.m in Sources */,
 				7D08A1221E4999D30085A8FB /* SSJForgotPSWResetService.m in Sources */,
+				BDF927681EEA8AE500F0C80F /* SSJShareBooksHintViewController.m in Sources */,
 				9CEC60EC1E700D970087B361 /* SSJPushInfoItem.m in Sources */,
 				7D08A1241E4999D30085A8FB /* SSJNewBaseTableViewController.m in Sources */,
 				9C155EA01E68572700FDFD18 /* MJRefreshBackFooter.m in Sources */,
@@ -16386,6 +16409,7 @@
 				9C61FD231EAE0CF300971F0F /* SSJHomeThemeModifyView.m in Sources */,
 				7DA13A781E35AED7000490A4 /* SSJBooksColorAndIconSelectView.m in Sources */,
 				7DA13A791E35AED7000490A4 /* SSJForgotPSWResetService.m in Sources */,
+				BDF927671EEA8AE400F0C80F /* SSJShareBooksHintViewController.m in Sources */,
 				9CEC60EB1E700D970087B361 /* SSJPushInfoItem.m in Sources */,
 				7DA13A7B1E35AED7000490A4 /* SSJNewBaseTableViewController.m in Sources */,
 				9C155E9F1E68572700FDFD18 /* MJRefreshBackFooter.m in Sources */,
@@ -17018,6 +17042,7 @@
 				9C61FD251EAE0CF400971F0F /* SSJHomeThemeModifyView.m in Sources */,
 				7DBB3B011E55C2EE0075E638 /* SSJHomeBarCalenderButton.m in Sources */,
 				7DBB3B021E55C2EE0075E638 /* SSJSearchResultHeader.m in Sources */,
+				BDF927691EEA8AE600F0C80F /* SSJShareBooksHintViewController.m in Sources */,
 				7DBB3B031E55C2EE0075E638 /* SSJForgetPassowrdNetworkService.m in Sources */,
 				9CEC60ED1E700D970087B361 /* SSJPushInfoItem.m in Sources */,
 				7DBB3B041E55C2EE0075E638 /* SSJViewAddition.m in Sources */,
@@ -17650,6 +17675,7 @@
 				7DBB3F9B1E55C4E00075E638 /* SSJBillingChargeViewController.m in Sources */,
 				9C61FD211EAE0CF200971F0F /* SSJHomeThemeModifyView.m in Sources */,
 				7DBB3F9C1E55C4E00075E638 /* SSJHomeBarCalenderButton.m in Sources */,
+				BDF927651EEA8AE200F0C80F /* SSJShareBooksHintViewController.m in Sources */,
 				7DBB3F9D1E55C4E00075E638 /* SSJSearchResultHeader.m in Sources */,
 				7DBB3F9E1E55C4E00075E638 /* SSJForgetPassowrdNetworkService.m in Sources */,
 				9CEC60E81E700D950087B361 /* SSJPushInfoItem.m in Sources */,
@@ -18324,6 +18350,7 @@
 				7DFB17181EB0341E00292DD3 /* SSJBudgetDetailMiddleTitleView.m in Sources */,
 				7DFB17191EB0341E00292DD3 /* SSJLoanDetailViewController.m in Sources */,
 				7DFB171A1EB0341E00292DD3 /* SSJBalenceChangeDetailViewController.m in Sources */,
+				BDF927711EEA8AEE00F0C80F /* SSJShareBooksHintViewController.m in Sources */,
 				7DFB171C1EB0341E00292DD3 /* SSJBillTypeSyncTable.m in Sources */,
 				7DFB171D1EB0341E00292DD3 /* SSJLocalNotificationHelper.m in Sources */,
 				7DFB171E1EB0341E00292DD3 /* SSJRegistGetVerViewController.m in Sources */,
@@ -19189,6 +19216,7 @@
 				9C13F66F1E8267D300AC5FA9 /* SSJWeiXinLoginHelper.m in Sources */,
 				9C13F6701E8267D300AC5FA9 /* SSJMagicExportCalendarViewController.m in Sources */,
 				9C13F6711E8267D300AC5FA9 /* SSJScrollViewAddition.m in Sources */,
+				BDF9276A1EEA8AE700F0C80F /* SSJShareBooksHintViewController.m in Sources */,
 				9C13F6731E8267D300AC5FA9 /* SSJMineHeaderView.m in Sources */,
 				9C13F6741E8267D300AC5FA9 /* SSJSearchResultOrderHeader.m in Sources */,
 				9C13F6751E8267D300AC5FA9 /* SSJFundingTypeSelectViewController.m in Sources */,
@@ -19591,6 +19619,7 @@
 				9C4C20BD1E9E30C8000C5F15 /* SCYSlidePagingHeaderView+SSJTheme.m in Sources */,
 				9C4C20BE1E9E30C8000C5F15 /* FMTokenizers.m in Sources */,
 				9C4C20BF1E9E30C8000C5F15 /* SSJBudgetDetailMiddleTitleView.m in Sources */,
+				BDF9276E1EEA8AEB00F0C80F /* SSJShareBooksHintViewController.m in Sources */,
 				9C4C20C01E9E30C8000C5F15 /* SSJLoanDetailViewController.m in Sources */,
 				9C4C20C11E9E30C8000C5F15 /* SSJBalenceChangeDetailViewController.m in Sources */,
 				9C4C20C31E9E30C8000C5F15 /* SSJBillTypeSyncTable.m in Sources */,
@@ -20450,6 +20479,7 @@
 				7DB877131ECEFD1400CD4A9E /* SSJUserDefaultFundCreater.m in Sources */,
 				9C7D2E761E8DF8A80093001F /* SSJReportFormsBillTypeDetailViewController.m in Sources */,
 				9C7D2E771E8DF8A80093001F /* SSJHomeBillStickyNoteView.m in Sources */,
+				BDF927641EEA8AE200F0C80F /* SSJShareBooksHintViewController.m in Sources */,
 				7DF4F10A1EB8909D0039FB2C /* SSJReportFormsScaleAxisView.m in Sources */,
 				9C7D2E781E8DF8A80093001F /* SSJWeiXinLoginHelper.m in Sources */,
 				9C7D2E791E8DF8A80093001F /* SSJMagicExportCalendarViewController.m in Sources */,
@@ -21085,6 +21115,7 @@
 				7DB8771B1ECEFD1400CD4A9E /* SSJUserDefaultFundCreater.m in Sources */,
 				9C7D30ED1E8DF96B0093001F /* SSJReportFormsBillTypeDetailViewController.m in Sources */,
 				9C7D30EE1E8DF96B0093001F /* SSJHomeBillStickyNoteView.m in Sources */,
+				BDF9276B1EEA8AE800F0C80F /* SSJShareBooksHintViewController.m in Sources */,
 				7DF4F1111EB890A10039FB2C /* SSJReportFormsScaleAxisView.m in Sources */,
 				9C7D30EF1E8DF96B0093001F /* SSJWeiXinLoginHelper.m in Sources */,
 				9C7D30F01E8DF96B0093001F /* SSJMagicExportCalendarViewController.m in Sources */,
@@ -21495,6 +21526,7 @@
 				9C80FD5E1E95E88E00B1BAAC /* SSJBudgetDetailMiddleTitleView.m in Sources */,
 				9C80FD5F1E95E88E00B1BAAC /* SSJLoanDetailViewController.m in Sources */,
 				9C80FD601E95E88E00B1BAAC /* SSJBalenceChangeDetailViewController.m in Sources */,
+				BDF9276C1EEA8AE900F0C80F /* SSJShareBooksHintViewController.m in Sources */,
 				9C80FD621E95E88E00B1BAAC /* SSJBillTypeSyncTable.m in Sources */,
 				9C80FD631E95E88E00B1BAAC /* SSJLocalNotificationHelper.m in Sources */,
 				9C80FD641E95E88E00B1BAAC /* SSJRegistGetVerViewController.m in Sources */,
@@ -22129,6 +22161,7 @@
 				9C9CEF1E1EA5F73A007657FE /* SSJBudgetDetailMiddleTitleView.m in Sources */,
 				9C9CEF1F1EA5F73A007657FE /* SSJLoanDetailViewController.m in Sources */,
 				9C9CEF201EA5F73A007657FE /* SSJBalenceChangeDetailViewController.m in Sources */,
+				BDF927701EEA8AED00F0C80F /* SSJShareBooksHintViewController.m in Sources */,
 				9C9CEF221EA5F73A007657FE /* SSJBillTypeSyncTable.m in Sources */,
 				9C9CEF231EA5F73A007657FE /* SSJLocalNotificationHelper.m in Sources */,
 				9C9CEF241EA5F73A007657FE /* SSJRegistGetVerViewController.m in Sources */,
@@ -23019,6 +23052,7 @@
 				7DFB19151EB1C1A700292DD3 /* SSJIdfaUploadService.m in Sources */,
 				9CECFC3A1D6D41A700DB2C8B /* SSJCanlenderChargeDetailCell.m in Sources */,
 				9CECFC3B1D6D41A700DB2C8B /* SSJDatabaseVersion5.m in Sources */,
+				BDF927661EEA8AE400F0C80F /* SSJShareBooksHintViewController.m in Sources */,
 				913E2BEB1ECE91D8008242CD /* SSJBookColorSelectedCollectionViewCell.m in Sources */,
 				9CECFC3C1D6D41A700DB2C8B /* SSJRegularManager.m in Sources */,
 				9CECFC3D1D6D41A700DB2C8B /* SSJRecordMakingCategoryItem.m in Sources */,
@@ -23392,6 +23426,7 @@
 				9C9D58861E01167F00E04213 /* SSJBalenceChangeDetailViewController.m in Sources */,
 				7D5848801CE5BB4A0027DAFA /* SSJBillTypeSyncTable.m in Sources */,
 				9CF5942F1D65AE6200006594 /* SSJLocalNotificationHelper.m in Sources */,
+				BDF927631EEA8ADD00F0C80F /* SSJShareBooksHintViewController.m in Sources */,
 				BD70DF661C4751EA000E6CC9 /* SSJRegistGetVerViewController.m in Sources */,
 				7D2BF36A1D59CCE7008A93FF /* SSJMagicExportSuccessAlertView.m in Sources */,
 				7D5F337C1CEAE6C10086B67E /* SSJFundingTypeSelectView.m in Sources */,
@@ -23709,6 +23744,7 @@
 				BD543C411C1A6DBC00910D61 /* main.m in Sources */,
 				7D46328E1D21029F0040BABD /* UIImageView+SSJTheme.m in Sources */,
 				7DBA55461D6B000D00C02D79 /* SSJAddOrEditLoanMultiLabelCell.m in Sources */,
+				9C61E35F1EEE704D001BA5F2 /* SSJShareBooksUrlHandle.m in Sources */,
 				BD70DF651C4751EA000E6CC9 /* SSJRegistCompleteViewController.m in Sources */,
 				7D87AEBC1D66E05B0024D33C /* SSJUserCreditSyncTable.m in Sources */,
 				916012051DF7D86C00BF571C /* SSJHeaderBannerImageView.m in Sources */,

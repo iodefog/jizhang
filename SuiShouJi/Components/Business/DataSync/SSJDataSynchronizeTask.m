@@ -423,6 +423,24 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
         }
     }];
     
+    // 如果当前的账本已经被踢,那切换回默认账本
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+        
+        NSString *currentBooksid = [db stringForQuery:@"select ccurrentbooksid from bk_user where cuserid = ?",self.userId];
+        
+        if ([db boolForQuery:@"select count(1) from bk_share_books where cbooksid = ?",currentBooksid]) {
+            
+            NSInteger currentBooksStatus = [db intForQuery:@"select istate from bk_share_books_member where cbooksid = ? and cmemberid = ?",currentBooksid,self.userId];
+            if (currentBooksStatus != SSJShareBooksMemberStateNormal) {
+                [db executeUpdate:@"update bk_user set ccurrentbooksid = ?",self.userId];
+                SSJDispatchMainSync(^{
+                    [[NSNotificationCenter defaultCenter] postNotificationName:SSJBooksTypeDidChangeNotification object:NULL];
+                });
+            }
+        }
+        
+    }];
+    
     // 合并数据完成后补充周期记账、周期转账、预算；即使补充失败，也不影响同步，在其他时机可以再次补充
     [SSJRegularManager supplementCycleRecordsForUserId:self.userId];
     
@@ -512,7 +530,11 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
         
         [db executeUpdate:@"delete from bk_share_books_friends_mark where cbooksid in (select cbooksid from bk_share_books_member where cmemberid = ? and istate != ?)",self.userId,@(SSJShareBooksMemberStateNormal)];
     }];
+    
+
+
 }
+
 
 //  将data进行zip压缩
 - (NSData *)zipData:(NSData *)data error:(NSError **)error {
