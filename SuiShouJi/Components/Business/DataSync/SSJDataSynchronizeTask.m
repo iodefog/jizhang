@@ -512,6 +512,21 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
         
         [db executeUpdate:@"delete from bk_share_books_friends_mark where cbooksid in (select cbooksid from bk_share_books_member where cmemberid = ? and istate != ?)",self.userId,@(SSJShareBooksMemberStateNormal)];
     }];
+    
+    // 如果当前的账本已经被踢,那切换回默认账本
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+        
+        NSString *currentBooksid = [db stringForQuery:@"select ccurrentbooksid from bk_user where cuserid = ?",self.userId];
+        
+        if ([db boolForQuery:@"select count(1) from bk_share_books where cbooksid = ?",currentBooksid]) {
+            if ([db intForQuery:@"select istate from bk_share_books_member where cbooksid = ?",currentBooksid] != SSJShareBooksMemberStateNormal) {
+                [db executeUpdate:@"update bk_user set ccurrentbooksid = ?",self.userId];
+            }
+
+        }
+        
+    }];
+
 }
 
 //  将data进行zip压缩
