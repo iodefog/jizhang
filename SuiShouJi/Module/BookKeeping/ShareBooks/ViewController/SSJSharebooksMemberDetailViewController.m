@@ -51,6 +51,8 @@ static NSString *const kSegmentTitleIncome = @"收入";
 
 @property(nonatomic, strong) SSJNickNameModifyView *nickNameModifyView;
 
+@property(nonatomic, strong) UIButton *modifyButton;
+
 //  tableview数据源
 @property (nonatomic, strong) NSMutableArray *cellItems;
 
@@ -342,6 +344,14 @@ static NSString *const kSegmentTitleIncome = @"收入";
         };
     }
     return _deleteComfirmAlert;
+}
+
+- (UIButton *)modifyButton {
+    if (!_modifyButton) {
+        _modifyButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        
+    }
+    return _modifyButton;
 }
 
 

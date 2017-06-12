@@ -519,14 +519,20 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
         NSString *currentBooksid = [db stringForQuery:@"select ccurrentbooksid from bk_user where cuserid = ?",self.userId];
         
         if ([db boolForQuery:@"select count(1) from bk_share_books where cbooksid = ?",currentBooksid]) {
-            if ([db intForQuery:@"select istate from bk_share_books_member where cbooksid = ? and cmemberid = ?",currentBooksid,self.userId] != SSJShareBooksMemberStateNormal) {
+            
+            NSInteger currentBooksStatus = [db intForQuery:@"select istate from bk_share_books_member where cbooksid = ? and cmemberid = ?",currentBooksid,self.userId];
+            if (currentBooksStatus != SSJShareBooksMemberStateNormal) {
                 [db executeUpdate:@"update bk_user set ccurrentbooksid = ?",self.userId];
+                SSJDispatchMainSync(^{
+                    [[NSNotificationCenter defaultCenter] postNotificationName:SSJBooksTypeDidChangeNotification object:NULL];
+                });
             }
         }
         
     }];
 
 }
+
 
 //  将data进行zip压缩
 - (NSData *)zipData:(NSData *)data error:(NSError **)error {
