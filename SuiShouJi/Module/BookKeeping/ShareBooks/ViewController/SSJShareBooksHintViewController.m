@@ -29,6 +29,7 @@
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.appliesTheme = NO;
+        self.statisticsTitle = @"暗号提示";
     }
     return self;
 }

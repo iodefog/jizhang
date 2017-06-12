@@ -247,6 +247,7 @@
     if (!_expireDateLab) {
         _expireDateLab = [[UILabel alloc] init];
         _expireDateLab.textColor = [UIColor ssj_colorWithHex:@"#999999"];
+        _expireDateLab.text = @"暗号12小时内有效";
         _expireDateLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
     }
     return _expireDateLab;
@@ -409,6 +410,7 @@
             self.sendButton.backgroundColor = [UIColor ssj_colorWithHex:@"#EB4A64"];
             self.sendButton.layer.shadowColor = [UIColor ssj_colorWithHex:@"#EB4A64"].CGColor;
             self.sendButton.layer.shadowOpacity = 0.39;
+            [self.sendButton setTitle:@"分享暗号" forState:UIControlStateNormal];
         }
     }
     
