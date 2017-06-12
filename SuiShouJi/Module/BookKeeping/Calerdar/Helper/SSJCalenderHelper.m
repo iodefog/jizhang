@@ -168,7 +168,7 @@
             
             // 如果账本名称为nil，就是退出了共享账本，需要从相同账本、资金账户下的平账流水中查询账本名称
             if (!item.booksName) {
-                item.booksName = [db stringForQuery:@"select t1.cmemo from bk_user_charge as t1, bk_user_charge as t2 where t1.cbooksid = t2.cbooksid and t1.ifunsid = t2.ifunsid and t1.ichargeid != t2.ichargeid and t2.ibillid in ('13', '14') and t1.ichargeid = ?", chargeId];
+                item.booksName = [db stringForQuery:@"select t1.cmemo from bk_user_charge as t1, bk_user_charge as t2 where t1.cbooksid = t2.cbooksid and t1.ifunsid = t2.ifunsid and t1.ichargeid != t2.ichargeid and t1.ibillid in ('13', '14') and t2.ichargeid = ?", chargeId];
             }
         } else { // 个人账本
             rs = [db executeQuery:@"select fi.cacctname, bt.cbooksname from bk_user_charge as uc, bk_fund_info as fi, bk_books_type as bt where uc.ifunsid = fi.cfundid and uc.cbooksid = bt.cbooksid and uc.ichargeid = ?", item.ID];
