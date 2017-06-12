@@ -77,6 +77,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
     [self.view addSubview:self.userInfoHeader];
     [self.userInfoHeader addSubview:self.iconImageView];
     [self.userInfoHeader addSubview:self.nickNameLab];
+    [self.userInfoHeader addSubview:self.modifyButton];
     [self.view addSubview:self.periodControl];
     [self.view addSubview:self.tableView];
     if (![self.memberId isEqualToString:SSJUSERID()] && [self.adminId isEqualToString:SSJUSERID()]) {
@@ -111,6 +112,12 @@ static NSString *const kSegmentTitleIncome = @"收入";
         make.centerX.mas_equalTo(self.userInfoHeader.mas_centerX);
         make.top.mas_equalTo(self.iconImageView.mas_bottom).offset(14);
     }];
+    
+    [self.modifyButton mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.centerY.mas_equalTo(self.nickNameLab.mas_centerY);
+        make.left.mas_equalTo(self.nickNameLab.mas_right).offset(20);
+    }];
+
     
     [self.periodControl mas_updateConstraints:^(MASConstraintMaker *make) {
         make.width.mas_equalTo(self.view);
@@ -349,7 +356,10 @@ static NSString *const kSegmentTitleIncome = @"收入";
 - (UIButton *)modifyButton {
     if (!_modifyButton) {
         _modifyButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        
+        _modifyButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+        [_modifyButton setImage:[[UIImage imageNamed:@"sharebk_pen"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+        [_modifyButton sizeToFit];
+        [_modifyButton addTarget:self action:@selector(modifyButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _modifyButton;
 }
@@ -380,6 +390,13 @@ static NSString *const kSegmentTitleIncome = @"收入";
     }], nil];
 
 }
+
+- (void)modifyButtonClicked:(id)sender {
+    self.nickNameModifyView.originalText = self.nickNameLab.text;
+    [self.nickNameModifyView show];
+}
+
+
 
 #pragma mark - Private
 - (void)updateUserInfoWithUserItem:(SSJUserItem *)item {
@@ -475,8 +492,6 @@ static NSString *const kSegmentTitleIncome = @"收入";
     
     [self.cellItems addObjectsFromArray:oragnizeResult];
 }
-
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

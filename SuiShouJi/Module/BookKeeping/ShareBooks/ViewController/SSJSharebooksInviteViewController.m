@@ -144,8 +144,8 @@
         NSInteger index = [self.hintViews indexOfObject:hintView];
         [hintView mas_updateConstraints:^(MASConstraintMaker *make) {
             make.width.mas_equalTo(self.view);
-            make.height.mas_equalTo(16);
-            make.top.mas_equalTo(self.sendButton.mas_bottom).offset(48 + index * 38);
+            make.height.mas_equalTo(28);
+            make.top.mas_equalTo(self.sendButton.mas_bottom).offset(48 + index * 28);
             make.left.mas_equalTo(self.view);
         }];
     }
@@ -205,6 +205,7 @@
         [_codeInput ssj_setBorderColor:[UIColor ssj_colorWithHex:@"#DDDDDD"]];
         [_codeInput ssj_setBorderStyle:SSJBorderStyleBottom];
         [_codeInput ssj_setBorderWidth:1.f];
+        _codeInput.clearButtonMode = UITextFieldViewModeWhileEditing;
         _codeInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入4-10位暗号" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"#CCCCCC"]}];
         _codeInput.rightViewMode = UITextFieldViewModeAlways;
         _codeInput.tintColor = [UIColor ssj_colorWithHex:@"#333333"];
