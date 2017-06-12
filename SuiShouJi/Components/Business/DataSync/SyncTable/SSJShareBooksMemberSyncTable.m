@@ -7,6 +7,7 @@
 //
 
 #import "SSJShareBooksMemberSyncTable.h"
+#import "SSJShareBooksMemberKickedOutAlerter.h"
 #import "SSJSyncTable.h"
 
 @implementation SSJShareBooksMemberSyncTable
@@ -15,19 +16,52 @@
     return @"bk_share_books_member";
 }
 
-+ (BOOL)mergeRecords:(NSArray *)records forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
++ (BOOL)mergeRecords:(NSArray *)records forUserId:(NSString *)userId inDatabase:(SSJDatabase *)db error:(NSError **)error {
     for (NSDictionary *recordInfo in records) {
-        BOOL exist = [db boolForQuery:@"select count(*) from bk_share_books_member where cmemberid = ? and cbooksid = ?", recordInfo[@"cmemberid"], recordInfo[@"cbooksid"]];
+        FMResultSet *rs = [db executeQuery:@"select istate from bk_share_books_member where cmemberid = ? and cbooksid = ?", recordInfo[@"cmemberid"], recordInfo[@"cbooksid"]];
+        if (!rs) {
+            if (error) {
+                *error = [db lastError];
+            }
+            return NO;
+        }
+        
+        BOOL existed = NO;
+        SSJShareBooksMemberState localState = SSJShareBooksMemberStateNormal;
+        while ([rs next]) {
+            existed = YES;
+            localState = [rs intForColumn:@"istate"];
+        }
+        [rs close];
+        
+        NSString *joinDateStr = recordInfo[@"cjoindate"];
+        NSString *state = recordInfo[@"istate"];
+        NSString *icon = recordInfo[@"cicon"];
+        NSString *color = recordInfo[@"ccolor"];
+        NSString *memberId = recordInfo[@"cmemberid"];
+        NSString *booksId = recordInfo[@"cbooksid"];
+        NSString *leaveDateStr = recordInfo[@"cleavedate"];
 
-        if (exist) {
-            if (![db executeUpdate:@"update bk_share_books_member set cjoindate = ? ,istate = ? ,cicon = ?, ccolor = ?, cleavedate = ? where cbooksid = ? and cmemberid = ?", recordInfo[@"cjoindate"], recordInfo[@"istate"], recordInfo[@"cicon"], recordInfo[@"ccolor"], recordInfo[@"cleavedate"], recordInfo[@"cbooksid"], recordInfo[@"cmemberid"]]) {
+        if (existed) {
+            // 如果本地记录的状态是为退出，后段返回的状态是被踢出，就记录下相应记录的信息，数据同步成功后根据记录的信息弹出提示框
+            SSJShareBooksMemberState mergedState = [recordInfo[@"istate"] integerValue];
+            if (localState == SSJShareBooksMemberStateNormal
+                && mergedState == SSJShareBooksMemberStateKickedOut) {
+                NSDate *leaveDate = [NSDate dateWithString:leaveDateStr formatString:@"yyyy-MM-dd HH:mm:ss"];
+                [[SSJShareBooksMemberKickedOutAlerter alerter] recordWithMemberId:memberId booksId:booksId date:leaveDate inDatabase:db error:error];
+                if (*error) {
+                    return NO;
+                }
+            }
+            
+            if (![db executeUpdate:@"update bk_share_books_member set cjoindate = ? ,istate = ? ,cicon = ?, ccolor = ?, cleavedate = ? where cbooksid = ? and cmemberid = ?", joinDateStr, state, icon, color, leaveDateStr, booksId, memberId]) {
                 if (error) {
                     *error = [db lastError];
                 }
                 return NO;
             }
         } else {
-            if (![db executeUpdate:@"insert into bk_share_books_member (cjoindate, istate, cicon, ccolor, cleavedate, cbooksid, cmemberid) values (?, ?, ?, ?, ?, ?, ?)", recordInfo[@"cjoindate"], recordInfo[@"istate"], recordInfo[@"cicon"], recordInfo[@"ccolor"], recordInfo[@"cleavedate"], recordInfo[@"cbooksid"], recordInfo[@"cmemberid"]]) {
+            if (![db executeUpdate:@"insert into bk_share_books_member (cjoindate, istate, cicon, ccolor, cleavedate, cbooksid, cmemberid) values (?, ?, ?, ?, ?, ?, ?)", joinDateStr, state, icon, color, leaveDateStr, booksId, memberId]) {
                 if (error) {
                     *error = [db lastError];
                 }
