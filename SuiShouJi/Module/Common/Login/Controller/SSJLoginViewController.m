@@ -532,7 +532,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 -(void)registerButtonClicked:(UIButton *)sender{//注册
     if (sender.tag == 200) {//注册标题
         self.loginTitleButton.selected = NO;
-        //清空数据
+        //清空数据，停止请求数据
         [self clearLoginData];
         self.centerScrollViewOne.hidden = YES;
         self.centerScrollViewTwo.hidden = NO;
@@ -660,7 +660,8 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 {
     self.tfPhoneNum.text = nil;
     self.tfPassword.text = nil;
-    self.registerButton.enabled = NO;
+    self.loginButton.enabled = NO;
+    [self.loginService cancel];
 }
 
 - (void)clearRegisterData
@@ -669,6 +670,8 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     self.tfRegPhoneNum.text = nil;
     self.tfRegYanZhenNum.text = nil;
     self.tfRegPasswordNum.text = nil;
+    self.registerButton.enabled = NO;
+    [self.registerService cancel];
 //    [self.countdownTimer invalidate];//停止倒计时
 //    self.countdownTimer = nil;
 }
