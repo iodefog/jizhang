@@ -69,7 +69,7 @@
         self.imageView.contentMode = UIViewContentModeScaleAspectFit;
     }
     
-    if ((_item.chargeMemo.length == 0 && _item.chargeImage.length == 0) || ([_item.billId isEqualToString:@"13"] || [_item.billId isEqualToString:@"14"])){
+    if (_item.chargeMemo.length == 0 && _item.chargeImage.length == 0){
         self.memoLabel.hidden = YES;
         self.imageView.left = 15;
         self.imageView.size = CGSizeMake(imageDiam, imageDiam);
@@ -300,14 +300,15 @@
         }
 
     }
-    if (item.chargeMemo.length != 0 && billid != 13 && billid != 14) {
+    if (item.chargeMemo.length != 0) {
         self.memoImage.hidden = NO;
         self.memoLabel.hidden = NO;
-        self.memoLabel.text = _item.chargeMemo;
+        if (billid == 13 || billid == 14) {
+            self.memoLabel.text = @"共享账本流水";
+        } else {
+            self.memoLabel.text = _item.chargeMemo;
+        }
         [self.memoLabel sizeToFit];
-    }else{
-        self.memoImage.hidden = YES;
-        self.memoLabel.hidden = NO;
     }
     if (item.chargeImage.length != 0) {
         self.haveImage.hidden = NO;
