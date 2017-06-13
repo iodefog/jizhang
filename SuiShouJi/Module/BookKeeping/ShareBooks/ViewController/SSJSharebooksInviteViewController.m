@@ -410,7 +410,7 @@
             self.sendButton.backgroundColor = [UIColor ssj_colorWithHex:@"#EB4A64"];
             self.sendButton.layer.shadowColor = [UIColor ssj_colorWithHex:@"#EB4A64"].CGColor;
             self.sendButton.layer.shadowOpacity = 0.39;
-            [self.sendButton setTitle:@"分享暗号" forState:UIControlStateNormal];
+            [self.sendButton setTitle:@"发送暗号" forState:UIControlStateNormal];
         }
     }
     
