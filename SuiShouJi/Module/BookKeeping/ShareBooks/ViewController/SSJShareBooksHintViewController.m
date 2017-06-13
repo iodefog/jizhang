@@ -144,7 +144,7 @@
 - (UIView *)firstRedView {
     if (!_firstRedView) {
         _firstRedView = [[UIView alloc] init];
-        _firstRedView.backgroundColor = [UIColor ssj_colorWithHex:@"eb4a64"];
+        _firstRedView.backgroundColor = [UIColor ssj_colorWithHex:@"#eb4a64"];
     }
     return _firstRedView;
 }
@@ -152,7 +152,7 @@
 - (UIView *)secondRedView {
     if (!_secondRedView) {
         _secondRedView = [[UIView alloc] init];
-        _secondRedView.backgroundColor = [UIColor ssj_colorWithHex:@"eb4a64"];
+        _secondRedView.backgroundColor = [UIColor ssj_colorWithHex:@"#eb4a64"];
     }
     return _secondRedView;
 }

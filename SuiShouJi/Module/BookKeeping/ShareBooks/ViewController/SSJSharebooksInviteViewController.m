@@ -11,6 +11,7 @@
 #import "SSJShareBooksHintViewController.h"
 
 #import "SSJShareBooksHintView.h"
+#import "SSJCodeInputView.h"
 
 
 #import "SSJShareBooksHelper.h"
@@ -25,7 +26,7 @@
 
 @property(nonatomic, strong) UIView *backView;
 
-@property(nonatomic, strong) UITextField *codeInput;
+@property(nonatomic, strong) SSJCodeInputView *codeInput;
 
 @property(nonatomic, strong) UIButton *resendButton;
 
@@ -114,9 +115,9 @@
     }];
     
     [self.codeInput mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.width.mas_equalTo(self.backView.mas_width).offset(-44);
+        make.width.mas_equalTo(self.view.mas_width).offset(-79);
         make.height.mas_equalTo(57);
-        make.centerX.mas_equalTo(self.backView.mas_centerX);
+        make.centerX.mas_equalTo(self.view.mas_centerX);
         make.top.mas_equalTo(self.codeTitleLab.mas_bottom).offset(34);
     }];
     
@@ -199,9 +200,9 @@
     return _codeRightImage;
 }
 
-- (UITextField *)codeInput {
+- (SSJCodeInputView *)codeInput {
     if (!_codeInput) {
-        _codeInput = [[UITextField alloc] init];
+        _codeInput = [[SSJCodeInputView alloc] initWithFrame:CGRectZero clearButtonInsects:UIEdgeInsetsMake(0, 0, 0, 72)];
         _codeInput.textColor = [UIColor ssj_colorWithHex:@"#333333"];
         _codeInput.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
         [_codeInput ssj_setBorderColor:[UIColor ssj_colorWithHex:@"#DDDDDD"]];
