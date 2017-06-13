@@ -32,4 +32,5 @@
 @property(nonatomic, strong) NSString *overTime;
 
 @property(nonatomic, strong) NSString *secretKey;
+
 @end

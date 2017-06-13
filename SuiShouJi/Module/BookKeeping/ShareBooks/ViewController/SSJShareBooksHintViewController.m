@@ -29,7 +29,7 @@
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.appliesTheme = NO;
-        self.statisticsTitle = @"暗号提示";
+        self.title = @"暗号注意事项";
     }
     return self;
 }
@@ -42,9 +42,6 @@
     [self.view addSubview:self.secondContentLab];
     [self.view addSubview:self.firstRedView];
     [self.view addSubview:self.secondRedView];
-    self.navigationItem.hidesBackButton = YES;
-    self.navigationItem.leftBarButtonItem = nil;
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"关闭" style:UIBarButtonItemStyleDone target:self action:@selector(closeButtonClicked:)];
     
     [self.view updateConstraintsIfNeeded];
     // Do any additional setup after loading the view.
@@ -59,19 +56,19 @@
     }];
     
     [self.firstContentLab mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.firstTitleLab.mas_bottom).offset(23);
+        make.top.mas_equalTo(self.firstTitleLab.mas_bottom).offset(32);
         make.left.mas_equalTo(self.firstTitleLab);
         make.width.mas_equalTo(self.view.mas_width).offset(-30);
     }];
     
     [self.secondTitleLab mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.firstContentLab.mas_bottom).offset(23);
+        make.top.mas_equalTo(self.firstContentLab.mas_bottom).offset(32);
         make.left.mas_equalTo(self.firstContentLab);
         make.width.mas_equalTo(self.view.mas_width).offset(-30);
     }];
     
     [self.secondContentLab mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.secondTitleLab.mas_bottom).offset(23);
+        make.top.mas_equalTo(self.secondTitleLab.mas_bottom).offset(32);
         make.left.mas_equalTo(self.secondTitleLab);
         make.width.mas_equalTo(self.view.mas_width).offset(-30);
     }];
@@ -111,9 +108,14 @@
     if (!_firstContentLab) {
         _firstContentLab = [[UILabel alloc] init];
         _firstContentLab.numberOfLines = 0;
-        _firstContentLab.font = [UIFont ssj_pingFangMediumFontOfSize:SSJ_FONT_SIZE_3];
+        _firstContentLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         _firstContentLab.textColor = [UIColor ssj_colorWithHex:@"#333333"];
-        _firstContentLab.text = @"    你可通过暗号邀请成员加入共享账本，暗号有效期为12小时。若重新生成暗号并确认使用，则之前的暗号作废。";
+        NSMutableAttributedString *attributeStr = [[NSMutableAttributedString alloc] initWithString:@"    你可通过暗号邀请成员加入共享账本，暗号有效期为12小时。若重新生成暗号并确认使用，则之前的暗号作废。"];
+        NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+        style.alignment = NSTextAlignmentJustified;
+        [attributeStr addAttribute:NSParagraphStyleAttributeName value:style range:NSMakeRange(0, attributeStr.length)];
+        [attributeStr addAttribute:NSFontAttributeName value:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3] range:NSMakeRange(0, attributeStr.length)];
+        _firstContentLab.attributedText = attributeStr;
     }
     return _firstContentLab;
 }
@@ -124,6 +126,7 @@
         _secondTitleLab.numberOfLines = 0;
         _secondTitleLab.font = [UIFont ssj_pingFangMediumFontOfSize:SSJ_FONT_SIZE_3];
         _secondTitleLab.textColor = [UIColor ssj_colorWithHex:@"#333333"];
+        
         _secondTitleLab.text = @"    注意";
     }
     return _secondTitleLab;
@@ -133,9 +136,14 @@
     if (!_secondContentLab) {
         _secondContentLab = [[UILabel alloc] init];
         _secondContentLab.numberOfLines = 0;
-        _secondContentLab.font = [UIFont ssj_pingFangMediumFontOfSize:SSJ_FONT_SIZE_3];
+        _secondContentLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         _secondContentLab.textColor = [UIColor ssj_colorWithHex:@"#333333"];
-        _secondContentLab.text = @"    12小时有效期内，输入此暗号的人，将进入到此共享账本中。so～，你懂的，为避免不认识的人进入你的共享账本，暗号请尽量复杂化，目前暗号支持中文、英文以及各种符号组合。过了12小时有效期后，此暗号作废，任何人无法再凭此暗号加入。你的共享账本你做主，你可以随时删除任意成员。";
+        NSMutableAttributedString *attributeStr = [[NSMutableAttributedString alloc] initWithString:@"    12小时有效期内，输入此暗号的人，将进入到此共享账本中。\n\n    so～，你懂的，为避免不认识的人进入你的共享账本，暗号请尽量复杂化，目前暗号支持中文、英文以及各种符号组合。过了12小时有效期后，此暗号作废，任何人无法再凭此暗号加入。\n\n    你的共享账本你做主，你可以随时删除任意成员。"];
+        NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+        style.alignment = NSTextAlignmentJustified;
+        [attributeStr addAttribute:NSParagraphStyleAttributeName value:style range:NSMakeRange(0, attributeStr.length)];
+        [attributeStr addAttribute:NSFontAttributeName value:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3] range:NSMakeRange(0, attributeStr.length)];
+        _secondContentLab.attributedText = attributeStr;
     }
     return _secondContentLab;
 }
@@ -157,10 +165,6 @@
     return _secondRedView;
 }
 
-#pragma mark - Event
-- (void)closeButtonClicked:(id)sender {
-    [self ssj_backOffAction];
-}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

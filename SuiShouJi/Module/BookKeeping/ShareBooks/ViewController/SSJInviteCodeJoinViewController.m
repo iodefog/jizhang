@@ -226,6 +226,7 @@
                 return;
             }
             
+            
             if (![db executeUpdate:@"update bk_user set ccurrentbooksid = ? where cuserid = ?",booksId,SSJUSERID()]) {
                 return;
             }
