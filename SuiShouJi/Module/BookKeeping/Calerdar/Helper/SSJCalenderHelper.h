@@ -60,6 +60,18 @@ NS_ASSUME_NONNULL_BEGIN
                      success:(nullable void(^)())success
                      failure:(nullable void(^)(NSError *error))failure;
 
+/**
+ 查询共享账本的
+
+ @param booksId <#booksId description#>
+ @param success <#success description#>
+ @param failure <#failure description#>
+ */
++ (void)queryShareBookStateWithBooksId:(NSString *)booksId
+                              memberId:(NSString *)memberId
+                               success:(void(^)(SSJShareBooksMemberState state))success
+                               failure:(nullable void(^)(NSError *error))failure;
+
 @end
 
 NS_ASSUME_NONNULL_END

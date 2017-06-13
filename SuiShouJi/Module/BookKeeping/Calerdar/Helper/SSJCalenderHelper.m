@@ -149,23 +149,13 @@
         [rs close];
         
         if (item.idType == SSJChargeIdTypeShareBooks) { // 共享账本
-            if ([item.userId isEqualToString:SSJUSERID()]) {// 如果是自己的流水就还需要查询资金账户
-                rs = [db executeQuery:@"select fi.cacctname, sb.cbooksname, sm.cmark from bk_user_charge as uc, bk_fund_info as fi, bk_share_books as sb, bk_share_books_friends_mark as sm where uc.ifunsid = fi.cfundid and uc.cbooksid = sb.cbooksid and sb.cbooksid = sm.cbooksid and uc.cuserid = sm.cfriendid and sm.cuserid = ? and uc.ichargeid = ?", SSJUSERID(), item.ID];
-                while ([rs next]) {
-                    item.fundName = [rs stringForColumn:@"cacctname"];
-                    item.booksName = [rs stringForColumn:@"cbooksname"];
-                    item.memberNickname = [rs stringForColumn:@"cmark"];
-                }
-                [rs close];
-            } else {
-                rs = [db executeQuery:@"select sb.cbooksname, sm.cmark from bk_user_charge as uc, bk_share_books as sb, bk_share_books_friends_mark as sm where uc.cbooksid = sb.cbooksid and sb.cbooksid = sm.cbooksid and uc.cuserid = sm.cfriendid and sm.cuserid = ? and uc.ichargeid = ?", SSJUSERID(), item.ID];
-                while ([rs next]) {
-                    item.booksName = [rs stringForColumn:@"cbooksname"];
-                    item.memberNickname = [rs stringForColumn:@"cmark"];
-                }
-                [rs close];
+            item.memberNickname = [db stringForQuery:@"select cmark from bk_share_books_friends_mark where cuserid = ? and cbooksid = ? and cfriendid = ?", SSJUSERID(), item.booksId, item.userId];
+            
+            if ([item.userId isEqualToString:SSJUSERID()]) {
+                item.fundName = [db stringForQuery:@"select cacctname from bk_fund_info where cfundid = ?", item.fundId];
             }
             
+            item.booksName = [db stringForQuery:@"select cbooksname from bk_share_books where cbooksid = ?", item.booksId];
             // 如果账本名称为nil，就是退出了共享账本，需要从相同账本、资金账户下的平账流水中查询账本名称
             if (!item.booksName) {
                 item.booksName = [db stringForQuery:@"select t1.cmemo from bk_user_charge as t1, bk_user_charge as t2 where t1.cbooksid = t2.cbooksid and t1.ifunsid = t2.ifunsid and t1.ichargeid != t2.ichargeid and t1.ibillid in ('13', '14') and t2.ichargeid = ?", chargeId];
@@ -272,6 +262,46 @@
         if (success) {
             SSJDispatchMainAsync(^{
                 success();
+            });
+        }
+    }];
+}
+
++ (void)queryShareBookStateWithBooksId:(NSString *)booksId
+                              memberId:(NSString *)memberId
+                               success:(void(^)(SSJShareBooksMemberState state))success
+                               failure:(nullable void(^)(NSError *error))failure {
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
+        FMResultSet *rs = [db executeQuery:@"select istate from bk_share_books_member where cmemberid = ? and cbooksid = ?", memberId, booksId];
+        if (!rs) {
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        }
+        
+        SSJShareBooksMemberState state = SSJShareBooksMemberStateNormal;
+        BOOL existed = NO;
+        while ([rs next]) {
+            existed = YES;
+            state = [rs intForColumn:@"istate"];
+        }
+        [rs close];
+        
+        if (!existed) {
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"不存在查询的记录"}]);
+                });
+            }
+            return;
+        }
+        
+        if (success) {
+            SSJDispatchMainAsync(^{
+                success(state);
             });
         }
     }];
