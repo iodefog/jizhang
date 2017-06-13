@@ -11,7 +11,7 @@
 
 @interface SSJCodeInputView()
 
-@property(nonatomic) UIEdgeInsets clearButtonInsects;
+@property(nonatomic) CGPoint clearButtonInsects;
 
 @property(nonatomic) UIEdgeInsets editeInsects;
 
@@ -20,7 +20,7 @@
 @implementation SSJCodeInputView
 
 - (instancetype)initWithFrame:(CGRect)frame
-           clearButtonInsects:(UIEdgeInsets)clearInsects
+           clearButtonInsects:(CGPoint)clearInsects
                   editeInsect:(UIEdgeInsets)editeInsect
 {
     self = [super initWithFrame:frame];
@@ -37,15 +37,13 @@
     CGRect rect = [super clearButtonRectForBounds:bounds];
     
     
-    return UIEdgeInsetsInsetRect(rect, self.clearButtonInsects);
+    return CGRectMake(rect.origin.x + self.clearButtonInsects.x, rect.origin.y + self.clearButtonInsects.y, rect.size.width, rect.size.height);
 }
 
 - (CGRect)editingRectForBounds:(CGRect)bounds {
     CGRect rect = [super textRectForBounds:bounds];
     
-    
     return UIEdgeInsetsInsetRect(rect, self.editeInsects);
-
 }
 
 
