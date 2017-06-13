@@ -55,15 +55,13 @@
 + (BOOL)mergeRecords:(NSArray *)records forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
     for (NSDictionary *recordInfo in records) {
         NSString *ID = recordInfo[@"id"];
-        if ([db boolForQuery:@"select count(*) from bk_bill_type where id = ?", ID]) {
-            continue;
-        }
-        
         NSString *cname = recordInfo[@"cname"];
         NSString *itype = recordInfo[@"itype"];
         NSString *ccoin = recordInfo[@"ccoin"];
         NSString *ccolor = recordInfo[@"ccolor"];
-        if (![db executeUpdate:@"insert into bk_bill_type (id, cname, itype, ccoin, ccolor, icustom, istate) values (?, ?, ?, ?, ?, 1, 1)", ID, cname, itype, ccoin, ccolor]) {
+        NSString *custom = recordInfo[@"icustom"];
+        NSString *state = recordInfo[@"istate"];
+        if (![db executeUpdate:@"replace into bk_bill_type (id, cname, itype, ccoin, ccolor, icustom, istate) values (?, ?, ?, ?, ?, ?, ?)", ID, cname, itype, ccoin, ccolor, custom, state]) {
             if (error) {
                 *error = [db lastError];
             }
