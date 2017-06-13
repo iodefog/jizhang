@@ -451,8 +451,9 @@ static NSString *const kSegmentTitleIncome = @"收入";
         [self updateSubveiwsHidden];
         
         if (periods.count == 0) {
-//            [self.view ssj_showWatermarkWithCustomView:self.noDataRemindView animated:YES target:nil action:nil];
+            self.noDataRemindView.hidden = NO;
         } else {
+            self.noDataRemindView.hidden = YES;
             [self.view ssj_hideWatermark:YES];
         }
         
