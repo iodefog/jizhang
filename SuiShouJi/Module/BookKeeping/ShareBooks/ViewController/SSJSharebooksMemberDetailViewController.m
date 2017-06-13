@@ -77,7 +77,9 @@ static NSString *const kSegmentTitleIncome = @"收入";
     [self.view addSubview:self.userInfoHeader];
     [self.userInfoHeader addSubview:self.iconImageView];
     [self.userInfoHeader addSubview:self.nickNameLab];
-    [self.userInfoHeader addSubview:self.modifyButton];
+    if (![self.memberId isEqualToString:SSJUSERID()]) {
+        [self.userInfoHeader addSubview:self.modifyButton];
+    }
     [self.view addSubview:self.periodControl];
     [self.view addSubview:self.tableView];
     [self.view addSubview:self.noDataRemindView];
