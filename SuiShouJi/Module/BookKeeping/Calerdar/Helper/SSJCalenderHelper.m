@@ -277,4 +277,44 @@
     }];
 }
 
++ (void)queryShareBookStateWithBooksId:(NSString *)booksId
+                              memberId:(NSString *)memberId
+                               success:(void(^)(SSJShareBooksMemberState state))success
+                               failure:(nullable void(^)(NSError *error))failure {
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
+        FMResultSet *rs = [db executeQuery:@"select istate from bk_share_books_member where cmemberid = ? and cbooksid = ?", memberId, booksId];
+        if (!rs) {
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        }
+        
+        SSJShareBooksMemberState state = SSJShareBooksMemberStateNormal;
+        BOOL existed = NO;
+        while ([rs next]) {
+            existed = YES;
+            state = [rs intForColumn:@"istate"];
+        }
+        [rs close];
+        
+        if (!existed) {
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"不存在查询的记录"}]);
+                });
+            }
+            return;
+        }
+        
+        if (success) {
+            SSJDispatchMainAsync(^{
+                success(state);
+            });
+        }
+    }];
+}
+
 @end

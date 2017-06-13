@@ -140,7 +140,6 @@ static NSString *const kSSJCalenderDetailPhotoCellId = @"kSSJCalenderDetailPhoto
         [_editBtn ssj_setBorderStyle:SSJBorderStyleTop];
         _editBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
         [_editBtn setTitle:NSLocalizedString(@"修改", nil) forState:UIControlStateNormal];
-        [_editBtn setTitle:NSLocalizedString(@"无法修改他人的流水", nil) forState:UIControlStateDisabled];
         @weakify(self);
         [[_editBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
             @strongify(self);
@@ -171,26 +170,65 @@ static NSString *const kSSJCalenderDetailPhotoCellId = @"kSSJCalenderDetailPhoto
     [self.tableView registerClass:[SSJCalenderDetailPhotoCell class] forCellReuseIdentifier:kSSJCalenderDetailPhotoCellId];
 }
 
+- (RACSignal *)loadChargeDetailSignal {
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [SSJCalenderHelper queryChargeDetailWithId:self.item.ID success:^(SSJBillingChargeCellItem * _Nonnull chargeItem) {
+            [self.view ssj_hideLoadingIndicator];
+            self.item = chargeItem;
+            [self organiseData];
+            [self.tableView reloadData];
+            [subscriber sendCompleted];
+        } failure:^(NSError * _Nonnull error) {
+            [subscriber sendError:error];
+        }];
+        return nil;
+    }];;
+}
+
+- (RACSignal *)loadShareBookStateSignal {
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        if (self.item.idType == SSJChargeIdTypeShareBooks
+            && [self.item.userId isEqualToString:SSJUSERID()]) {
+            [self.editBtn setTitle:NSLocalizedString(@"无法修改已退出账本的流水", nil) forState:UIControlStateDisabled];
+            [SSJCalenderHelper queryShareBookStateWithBooksId:self.item.booksId memberId:self.item.userId success:^(SSJShareBooksMemberState state) {
+                [subscriber sendNext:@(state == SSJShareBooksMemberStateNormal)];
+                [subscriber sendCompleted];
+            } failure:^(NSError * _Nonnull error) {
+                [subscriber sendError:error];
+            }];
+        } else if (self.item.idType == SSJChargeIdTypeShareBooks
+                   && ![self.item.userId isEqualToString:SSJUSERID()]) {
+            [self.editBtn setTitle:NSLocalizedString(@"无法修改他人的流水", nil) forState:UIControlStateDisabled];
+            [subscriber sendNext:@(NO)];
+            [subscriber sendCompleted];
+        } else {
+            [subscriber sendNext:@(YES)];
+            [subscriber sendCompleted];
+        }
+        return nil;
+    }];
+}
+
 - (void)loadData {
     if (self.items.count == 0) {
         [self.view ssj_showLoadingIndicator];
     }
-    [SSJCalenderHelper queryChargeDetailWithId:self.item.ID success:^(SSJBillingChargeCellItem * _Nonnull chargeItem) {
-        [self.view ssj_hideLoadingIndicator];
-        self.item = chargeItem;
-        [self organiseData];
-        [self.tableView reloadData];
-        if (self.item.idType == SSJChargeIdTypeShareBooks
-            && ![self.item.userId isEqualToString:SSJUSERID()]) {
-            self.editBtn.enabled = NO;
-            self.navigationItem.rightBarButtonItem = nil;
-        } else {
+    
+    [[[self loadChargeDetailSignal] then:^RACSignal *{
+        return [self loadShareBookStateSignal];
+    }] subscribeNext:^(NSNumber *canEditValue) {
+        if ([canEditValue boolValue]) {
             self.editBtn.enabled = YES;
             self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(rightBarButtonClicked:)];
+        } else {
+            self.editBtn.enabled = NO;
+            self.navigationItem.rightBarButtonItem = nil;
         }
-    } failure:^(NSError * _Nonnull error) {
+    } error:^(NSError *error) {
         [self.view ssj_hideLoadingIndicator];
         [SSJAlertViewAdapter showError:error];
+    } completed:^{
+        [self.view ssj_hideLoadingIndicator];
     }];
 }
 
