@@ -111,6 +111,15 @@ static NSString *const kSegmentTitleSurplus = @"结余";
     [self reloadAllDatas];
 }
 
+- (void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+    self.navigationBar.frame = CGRectMake(0, 0, self.view.width, 64);
+    self.periodControl.frame = CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, 40);
+    self.payIncomeSurplusControl.frame = CGRectMake(0, 0, self.view.width, 40);
+    self.tableView.frame = CGRectMake(0, self.periodControl.bottom, self.view.width, self.view.height - self.periodControl.bottom - SSJ_TABBAR_HEIGHT);
+    self.noDataRemindView.frame = CGRectMake(0, 0, self.view.width, 260);
+}
+
 #pragma mark - Overwrite
 - (void)reloadDataAfterSync {
     [self reloadAllDatas];
@@ -700,7 +709,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
 - (SSJReportFormsNavigationBar *)navigationBar {
     if (!_navigationBar) {
         __weak typeof(self) wself = self;
-        _navigationBar = [[SSJReportFormsNavigationBar alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 64)];
+        _navigationBar = [[SSJReportFormsNavigationBar alloc] init];
         _navigationBar.switchChartAndCurveHandler = ^(SSJReportFormsNavigationBar *bar) {
             [wself updatePayIncomeSurplusControlTitles];
             [wself reloadDatasInPeriod:wself.periodControl.currentPeriod];
@@ -716,7 +725,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
 - (SSJReportFormsPeriodSelectionControl *)periodControl {
     if (!_periodControl) {
         __weak typeof(self) wself = self;
-        _periodControl = [[SSJReportFormsPeriodSelectionControl alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, 40)];
+        _periodControl = [[SSJReportFormsPeriodSelectionControl alloc] init];
         _periodControl.periodChangeHandler = ^(SSJReportFormsPeriodSelectionControl *control) {
             [wself reloadDatasInPeriod:control.selectedPeriod];
             [SSJAnaliyticsManager event:@"form_date_picked"];
@@ -734,7 +743,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
 
 - (SCYSlidePagingHeaderView *)payIncomeSurplusControl {
     if (!_payIncomeSurplusControl) {
-        _payIncomeSurplusControl = [[SCYSlidePagingHeaderView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 40)];
+        _payIncomeSurplusControl = [[SCYSlidePagingHeaderView alloc] init];
         _payIncomeSurplusControl.customDelegate = self;
         _payIncomeSurplusControl.buttonClickAnimated = YES;
         [_payIncomeSurplusControl ssj_setBorderWidth:1];
@@ -746,7 +755,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
 
 - (UITableView *)tableView {
     if (!_tableView) {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.periodControl.bottom, self.view.width, self.view.height - self.periodControl.bottom - SSJ_TABBAR_HEIGHT) style:UITableViewStylePlain];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
         _tableView.backgroundColor = [UIColor clearColor];
         _tableView.rowHeight = 55;
         _tableView.sectionHeaderHeight = 0;
@@ -766,7 +775,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
 
 - (SSJBudgetNodataRemindView *)noDataRemindView {
     if (!_noDataRemindView) {
-        _noDataRemindView = [[SSJBudgetNodataRemindView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 260)];
+        _noDataRemindView = [[SSJBudgetNodataRemindView alloc] init];
         _noDataRemindView.image = @"budget_no_data";
         _noDataRemindView.title = @"报表空空如也";
     }
