@@ -46,7 +46,8 @@
             // 如果本地记录的状态是为退出，后段返回的状态是被踢出，就记录下相应记录的信息，数据同步成功后根据记录的信息弹出提示框
             SSJShareBooksMemberState mergedState = [recordInfo[@"istate"] integerValue];
             if (localState == SSJShareBooksMemberStateNormal
-                && mergedState == SSJShareBooksMemberStateKickedOut) {
+                && mergedState == SSJShareBooksMemberStateKickedOut
+                && [memberId isEqualToString:userId]) {
                 NSDate *leaveDate = [NSDate dateWithString:leaveDateStr formatString:@"yyyy-MM-dd HH:mm:ss"];
                 [[SSJShareBooksMemberKickedOutAlerter alerter] recordWithMemberId:memberId booksId:booksId date:leaveDate inDatabase:db error:error];
                 if (*error) {

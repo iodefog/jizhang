@@ -11,8 +11,6 @@
 
 @interface SSJShareBooksMemberKickedOutAlerterModel : NSObject
 
-@property (nonatomic, copy) NSString *adminName;
-
 @property (nonatomic, copy) NSString *booksName;
 
 @property (nonatomic, strong) NSDate *date;
@@ -21,9 +19,8 @@
 
 @implementation SSJShareBooksMemberKickedOutAlerterModel
 
-+ (instancetype)modelWithAdminName:(NSString *)adminName booksName:(NSString *)booksName date:(NSDate *)date {
++ (instancetype)modelWithBooksName:(NSString *)booksName date:(NSDate *)date {
     SSJShareBooksMemberKickedOutAlerterModel *model = [[SSJShareBooksMemberKickedOutAlerterModel alloc] init];
-    model.adminName = adminName;
     model.booksName = booksName;
     model.date = date;
     return model;
@@ -65,7 +62,7 @@
 }
 
 - (void)recordWithMemberId:(NSString *)memberId booksId:(NSString *)booksId date:(NSDate *)date inDatabase:(SSJDatabase *)db error:(NSError **)error {
-    FMResultSet *rs = [db executeQuery:@"select sb.cbooksname, sm.cmark from bk_share_books as sb, bk_share_books_friends_mark as sm where sb.cbooksid = sm.cbooksid and sb.cadmin = sm.cfriendid and sm.cuserid = ? and sm.cbooksid = ?", memberId, booksId];
+    FMResultSet *rs = [db executeQuery:@"select sb.cbooksname from bk_share_books as sb, bk_share_books_friends_mark as sm where sb.cbooksid = sm.cbooksid and sb.cadmin = sm.cfriendid and sm.cuserid = ? and sm.cbooksid = ?", memberId, booksId];
     if (!rs) {
         if (error) {
             *error = [db lastError];
@@ -73,10 +70,8 @@
         return;
     }
     
-    NSString *adminName = nil;
     NSString *booksName = nil;
     while ([rs next]) {
-        adminName = [rs stringForColumn:@"cmark"];
         booksName = [rs stringForColumn:@"cbooksname"];
     }
     [rs close];
@@ -87,7 +82,7 @@
         self.membersInfo[memberId] = records;
     }
     
-    SSJShareBooksMemberKickedOutAlerterModel *model = [SSJShareBooksMemberKickedOutAlerterModel modelWithAdminName:adminName booksName:booksName date:date];
+    SSJShareBooksMemberKickedOutAlerterModel *model = [SSJShareBooksMemberKickedOutAlerterModel modelWithBooksName:booksName date:date];
 //    [records removeObject:model];
     [records addObject:model];
 }
@@ -109,7 +104,7 @@
     SSJShareBooksMemberKickedOutAlerterModel *model = [models firstObject];
     [models ssj_removeFirstObject];
     SSJDispatchMainAsync(^{
-        [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:[NSString stringWithFormat:@"您已被%@移出共享账本［%@］", model.adminName, model.booksName] action:[SSJAlertViewAction actionWithTitle:@"知道了" handler:^(SSJAlertViewAction *action){
+        [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:[NSString stringWithFormat:@"您已被管理员移出共享账本［%@］", model.booksName] action:[SSJAlertViewAction actionWithTitle:@"知道了" handler:^(SSJAlertViewAction *action){
             [self showAlertWithModels:models];
         }], nil];
     });
