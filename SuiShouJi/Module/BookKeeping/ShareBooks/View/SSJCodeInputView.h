@@ -10,6 +10,8 @@
 
 @interface SSJCodeInputView : UITextField
 
-- (instancetype)initWithFrame:(CGRect)frame clearButtonInsects:(UIEdgeInsets)insects;
+- (instancetype)initWithFrame:(CGRect)frame
+           clearButtonInsects:(UIEdgeInsets)clearInsects
+                  editeInsect:(UIEdgeInsets)editeInsect;
 
 @end
