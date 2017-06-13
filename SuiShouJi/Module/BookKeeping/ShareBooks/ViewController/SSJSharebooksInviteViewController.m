@@ -417,6 +417,11 @@
     
     if (service == self.saveCodeService) {
         if ([service.returnCode isEqualToString:@"1"]) {
+            self.codeInput.enabled = NO;
+            NSDate *expireDate = [NSDate dateWithString:self.saveCodeService.overTime formatString:@"yyyy-MM-dd HH:mm:ss"];
+            self.expireDateLab.text = [NSString stringWithFormat:@"暗号于%@前有效",[expireDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm"]];
+            [self.resendButton setTitle:@"重新生成" forState:UIControlStateNormal];
+            [self.sendButton setTitle:@"发送暗号" forState:UIControlStateNormal];
             [self shareTheCode];
         } else {
             [CDAutoHideMessageHUD showMessage:service.desc];

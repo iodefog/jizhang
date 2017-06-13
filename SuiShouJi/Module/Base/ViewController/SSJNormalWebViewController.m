@@ -95,6 +95,10 @@
     [self invalidateTimer];
 }
 
+- (UIStatusBarStyle)preferredStatusBarStyle {
+    return UIStatusBarStyleDefault;
+}
+
 - (UIWebView *)webView{
     if (_webView==nil) {
         _webView = [[UIWebView alloc] init];
