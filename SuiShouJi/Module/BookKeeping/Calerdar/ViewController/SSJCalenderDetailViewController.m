@@ -182,7 +182,7 @@ static NSString *const kSSJCalenderDetailPhotoCellId = @"kSSJCalenderDetailPhoto
             [subscriber sendError:error];
         }];
         return nil;
-    }];;
+    }];
 }
 
 - (RACSignal *)loadShareBookStateSignal {
