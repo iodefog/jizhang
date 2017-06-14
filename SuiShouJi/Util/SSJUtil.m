@@ -530,7 +530,12 @@ SSJBooksCategory SSJGetBooksCategory() {
     return [[NSUserDefaults standardUserDefaults] integerForKey:SSJBookCategoryKey];
 }
 
-void SSJSaveBooksCategory(SSJBooksCategory category) {
+BOOL SSJSaveBooksCategory(SSJBooksCategory category) {
     [[NSUserDefaults standardUserDefaults] setInteger:category forKey:SSJBookCategoryKey];
+    return [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+void clearCurrentBooksCategory() {
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:SSJBookCategoryKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }

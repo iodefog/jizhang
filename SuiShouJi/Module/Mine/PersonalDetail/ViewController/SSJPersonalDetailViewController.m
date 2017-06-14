@@ -264,6 +264,8 @@ extern BOOL kHomeNeedLoginPop;
         } failure:NULL];
         
         SSJClearLoginInfo();
+        //清除当前账本类型
+        clearCurrentBooksCategory();
         [SSJUserTableManager reloadUserIdWithSuccess:^{
             [weakSelf.tableView reloadData];
             [SSJAnaliyticsManager loginOut];

@@ -280,7 +280,9 @@ void SSJSwizzleSelector(Class class, SEL originalSelector, SEL swizzledSelector)
 
 SSJBooksCategory SSJGetBooksCategory();
 
-void SSJSaveBooksCategory(SSJBooksCategory category);
+BOOL SSJSaveBooksCategory(SSJBooksCategory category);
+
+void clearCurrentBooksCategory();
 
 
 
