@@ -13,7 +13,7 @@
 
 
 // 当前皮肤最新版本号
-static const int kCustomThemeVersion = 1;
+static const int kCustomThemeVersion = 2;
 
 @implementation SSJCustomThemeManager
     
@@ -50,7 +50,7 @@ static const int kCustomThemeVersion = 1;
             NSDictionary *secondDic = [NSJSONSerialization JSONObjectWithData:secondThemeData options:NSJSONReadingMutableContainers error:nil];
             SSJThemeModel *firstModel = [SSJThemeModel mj_objectWithKeyValues:firstDic];
             SSJThemeModel *secondModel = [SSJThemeModel mj_objectWithKeyValues:secondDic];
-            if ([currentThemeId isEqualToString:@"1001"]) {
+            if ([currentThemeId isEqualToString:@"1000"]) {
                 firstModel.customThemeBackImage = currentBackGround;
             } else {
                 secondModel.customThemeBackImage = currentBackGround;
