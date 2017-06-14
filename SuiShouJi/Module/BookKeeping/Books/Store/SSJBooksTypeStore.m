@@ -310,17 +310,7 @@
                     }
                     return;
                 }
-                //更新日常统计表
-                if (![SSJDailySumChargeTable updateDailySumChargeForUserId:userId inDatabase:db]) {
-                    if (failure) {
-                        *rollback = YES;
-                        SSJDispatchMainAsync(^{
-                            failure([db lastError]);
-                        });
-                    }
-                    return;
-                }
-                
+
             }
         }
         
@@ -655,16 +645,7 @@
             return;
         }
         
-        //更新日常统计表
-        if (![SSJDailySumChargeTable updateDailySumChargeForUserId:userId inDatabase:db]) {
-            if (failure) {
-                *rollback = YES;
-                SSJDispatchMainAsync(^{
-                    failure([db lastError]);
-                });
-            }
-            return;
-        }
+
         BOOL booksTypeHasChange = NO;
         
         NSString *currentBooksId = [db stringForQuery:@"select ccurrentbooksid from bk_user where cuserid = ?",userId];

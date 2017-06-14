@@ -281,16 +281,6 @@
                         return;
                     };
                     
-                    //更新日常统计表
-                    if (![SSJDailySumChargeTable updateDailySumChargeForUserId:userId inDatabase:db]) {
-                        if (failure) {
-                            *rollback = YES;
-                            SSJDispatchMainAsync(^{
-                                failure([db lastError]);
-                            });
-                        }
-                        return;
-                    }
                 }
             }
         }else{
