@@ -124,10 +124,13 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
     NSDictionary *sectionInfo = [self.datas ssj_safeObjectAtIndex:(NSUInteger)indexPath.section];
     NSArray *datas = sectionInfo[SSJBillingChargeRecordKey];
     SSJBillingChargeCellItem *selectedItem = [datas ssj_safeObjectAtIndex:indexPath.row];
-    if (selectedItem.chargeMemo.length || selectedItem.chargeImage.length) {
+    if (selectedItem.chargeMemo.length
+        || selectedItem.chargeImage.length
+        || selectedItem.memberNickname.length) {
         return 65;
+    } else {
+        return 50;
     }
-    return 50;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {

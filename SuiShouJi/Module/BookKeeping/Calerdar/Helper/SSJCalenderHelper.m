@@ -29,7 +29,7 @@
         if (!booksid.length) {
             booksid = userid;
         }
-        FMResultSet *resultSet = [db executeQuery:@"select a.*, b.CNAME, b.CCOIN, b.CCOLOR, b.ITYPE from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.CBILLDATE like ? and a.CUSERID = ? and a.OPERATORTYPE <> 2 and b.istate <> 2 and a.cbooksid = ? order by a.CBILLDATE desc, a.cdetaildate desc, a.cwritedate desc", dateStr,userid,booksid];
+        FMResultSet *resultSet = [db executeQuery:@"select a.*, b.CNAME, b.CCOIN, b.CCOLOR, b.ITYPE from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.CBILLDATE like ? and a.OPERATORTYPE <> 2 and b.istate <> 2 and a.cbooksid = ? order by a.CBILLDATE desc, a.cdetaildate desc, a.cwritedate desc", dateStr,booksid];
         if (!resultSet) {
             SSJPRINT(@"class:%@\n method:%@\n message:%@\n error:%@",NSStringFromClass([self class]), NSStringFromSelector(_cmd), [db lastErrorMessage], [db lastError]);
             SSJDispatch_main_async_safe(^{
@@ -84,20 +84,11 @@
         double expence = 0;
         NSString *userId = SSJUSERID();
         NSString *booksid = [db stringForQuery:@"select ccurrentbooksid from bk_user where cuserid = ?",userId];
-        if (!booksid.length) {
-            booksid = userId;
-        }
-        FMResultSet *result = [db executeQuery:@"SELECT * FROM BK_DAILYSUM_CHARGE WHERE CBILLDATE = ? AND CUSERID = ? and cbooksid = ?",date,userId,booksid];
-        if (!result) {
-            SSJDispatch_main_async_safe(^{
-                failure([db lastError]);
-            });
-            return;
-        }
-        while ([result next]) {
-            income = [result doubleForColumn:@"INCOMEAMOUNT"];
-            expence = [result doubleForColumn:@"EXPENCEAMOUNT"];
-        }
+        
+        income = [db doubleForQuery:@"select sum(imoney) from bk_user_charge uc, bk_bill_type bt where uc.cbilldate = ? and uc.cbooksid = ? and uc.ibillid = bt.id and bt.itype = ?",date,booksid,@(SSJBillTypeIncome)];
+        
+        expence = [db doubleForQuery:@"select sum(imoney) from bk_user_charge uc, bk_bill_type bt where uc.cbilldate = ? and uc.cbooksid = ? and uc.ibillid = bt.id and bt.itype = ?",date,booksid,@(SSJBillTypePay)];
+
         SSJDispatch_main_async_safe(^{
             success(income,expence);
         });
@@ -226,39 +217,7 @@
             }
             return;
         }
-        
-        if ([db intForQuery:@"SELECT ITYPE FROM BK_BILL_TYPE WHERE ID = ?",item.billId]) {
-            if (![db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET EXPENCEAMOUNT = EXPENCEAMOUNT - ? , SUMAMOUNT = SUMAMOUNT + ? , CWRITEDATE = ? WHERE CBILLDATE = ? and cbooksid = ?",[NSNumber numberWithDouble:[item.money doubleValue]],[NSNumber numberWithDouble:[item.money doubleValue]],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],item.billDate,booksId]) {
-                *rollback = YES;
-                if (failure) {
-                    SSJDispatchMainAsync(^{
-                        failure([db lastError]);
-                    });
-                }
-                return;
-            };
-        } else {
-            if (![db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET INCOMEAMOUNT = INCOMEAMOUNT - ? , SUMAMOUnT = SUMAMOUNT - ? , CWRITEDATE = ? WHERE CBILLDATE = ? and cbooksid = ?",[NSNumber numberWithDouble:[item.money doubleValue]],[NSNumber numberWithDouble:[item.money doubleValue]],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],item.billDate,booksId]) {
-                *rollback = YES;
-                if (failure) {
-                    SSJDispatchMainAsync(^{
-                        failure([db lastError]);
-                    });
-                }
-                return;
-            };
-        }
-        
-        if (![db executeUpdate:@"DELETE FROM BK_DAILYSUM_CHARGE WHERE SUMAMOUNT = 0 AND INCOMEAMOUNT = 0 AND EXPENCEAMOUNT = 0"]) {
-            *rollback = YES;
-            if (failure) {
-                SSJDispatchMainAsync(^{
-                    failure([db lastError]);
-                });
-            }
-            return;
-        }
-        
+                
         if (success) {
             SSJDispatchMainAsync(^{
                 success();

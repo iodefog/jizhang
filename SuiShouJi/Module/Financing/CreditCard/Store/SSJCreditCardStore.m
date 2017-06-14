@@ -280,7 +280,7 @@
         };
     }
     //删除流水表
-    if (![db executeUpdate:@"update bk_user_charge set operatortype = 2 , cwritedate = ? , iversion = ? where cuserid = ? and ifunsid = ?",writeDate,@(SSJSyncVersion()),userId,item.cardId]) {
+    if (![db executeUpdate:@"update bk_user_charge set operatortype = 2 , cwritedate = ? , iversion = ? where cuserid = ? and ifunsid = ? and ichargetype <> ?",writeDate,@(SSJSyncVersion()),userId,item.cardId,@(SSJChargeIdTypeShareBooks)]) {
         if (error) {
             *error = [db lastError];
         }

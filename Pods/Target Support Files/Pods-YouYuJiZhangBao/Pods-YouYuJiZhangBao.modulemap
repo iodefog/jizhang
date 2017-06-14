@@ -1,6 +1,0 @@
-framework module Pods_YouYuJiZhangBao {
-  umbrella header "Pods-YouYuJiZhangBao-umbrella.h"
-
-  export *
-  module * { export * }
-}
