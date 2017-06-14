@@ -33,7 +33,6 @@
             && [db executeUpdate:@"delete from bk_bill_type where id in (select cbillid from bk_user_bill where cuserid = ?) and icustom = 1", userId]
             && [db executeUpdate:@"delete from bk_user_bill where cuserid = ?", userId]
             && [db executeUpdate:@"delete from bk_books_type where cuserid = ?", userId]
-            && [db executeUpdate:@"delete from bk_dailysum_charge where cuserid = ?", userId]
             && [db executeUpdate:@"delete from bk_sync where cuserid = ?", userId]
             && [db executeUpdate:@"delete from bk_credit_repayment where cuserid = ?", userId]
             && [db executeUpdate:@"delete from bk_loan where cuserid = ?", userId]

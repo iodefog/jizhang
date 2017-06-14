@@ -470,7 +470,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 }
 
 -(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
-    if (self.items.count == 0  || ![self.homeBar.budgetButton.model isKindOfClass:[SSJBudgetModel class]]) {
+    if (self.items.count == 0  || [self.homeBar.budgetButton.model isKindOfClass:[SSJShareBookItem class]]) {
         return;
     }else{
         [self reloadCurrentMonthData];

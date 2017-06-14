@@ -141,21 +141,16 @@ NSString *const SSJMonthSumDicKey = @"SSJMonthSumDicKey";
         NSString *userid = SSJUSERID();
         NSString *booksid = [db stringForQuery:@"select ccurrentBooksId from bk_user where cuserid = ?", userid];
         NSMutableDictionary *SumDic = [NSMutableDictionary dictionary];
-        FMResultSet *resultSet = [db executeQuery:[NSString stringWithFormat:@"SELECT SUM(INCOMEAMOUNT) , SUM(EXPENCEAMOUNT) FROM BK_DAILYSUM_CHARGE WHERE CBILLDATE LIKE '%04ld-%02ld-__' AND CUSERID = '%@' AND CBILLDATE <= '%@' AND CBOOKSID = '%@'", year,month,userid,[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"],booksid]];
-        if (!resultSet) {
-            if (failure) {
-                SSJDispatch_main_async_safe(^{
-                    failure([db lastError]);
-                });
-            }
-            return;
-        }
-        while ([resultSet next]) {
-            double incomeSum = [resultSet doubleForColumn:@"SUM(INCOMEAMOUNT)"];
-            double expentureSum = [resultSet doubleForColumn:@"SUM(EXPENCEAMOUNT)"];
-            [SumDic setObject:@(incomeSum) forKey:SSJIncomeSumlKey];
-            [SumDic setObject:@(expentureSum) forKey:SSJExpentureSumKey];
-        }
+        
+        double incomeSum = [db doubleForQuery:[NSString stringWithFormat:@"select sum(imoney) from bk_user_charge uc, bk_bill_type bt where uc.cbooksid = '%@' and uc.cbilldate like '%04ld-%02ld-__' AND uc.cbilldate <= '%@' and uc.ibillid = bt.id and bt.itype = %ld", booksid, year, month,[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"],SSJBillTypeIncome]];
+        
+        double expentureSum = [db doubleForQuery:[NSString stringWithFormat:@"select sum(imoney) from bk_user_charge uc, bk_bill_type bt where uc.cbooksid = '%@' and uc.cbilldate like '%04ld-%02ld-__' AND uc.cbilldate <= '%@' and uc.ibillid = bt.id and bt.itype = %ld", booksid, year, month,[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"],SSJBillTypePay]];
+        
+        [SumDic setObject:@(incomeSum) forKey:SSJIncomeSumlKey];
+        
+        [SumDic setObject:@(expentureSum) forKey:SSJExpentureSumKey];
+
+        
         if (success) {
             SSJDispatch_main_async_safe(^{
                 success(SumDic);

@@ -94,11 +94,12 @@
                 [self.button setTitle:[NSString stringWithFormat:@"超支 %.2f",currentModel.payMoney - currentModel.budgetMoney] forState:UIControlStateNormal];
             }
         }
-
-
     } else if ([model isKindOfClass:[SSJShareBookItem class]]){
         SSJShareBookItem *currentModel = (SSJShareBookItem *)model;
         [self.button setTitle:[NSString stringWithFormat:@"%ld 人", (long)currentModel.memberCount] forState:UIControlStateNormal];
+        self.button.backgroundColor = [UIColor clearColor];
+        self.button.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor].CGColor;
+        [self.button setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor] forState:UIControlStateNormal];
     }
     [self sizeToFit];
     [self setNeedsLayout];

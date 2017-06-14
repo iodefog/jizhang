@@ -19,7 +19,6 @@
              @"imoney",
              @"ibillid",
              @"ifunsid",
-             @"cadddate",
              @"ioldmoney",
              @"ibalance",
              @"cbilldate",
