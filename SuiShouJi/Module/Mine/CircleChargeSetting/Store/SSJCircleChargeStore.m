@@ -207,48 +207,6 @@
                             *rollback = YES;
                         }
                     }
-                    //修改每日汇总表
-                    if (!item.incomeOrExpence) {
-                        if ([db intForQuery:@"select count(1) from bk_dailysum_charge where cbilldate = ? and cbooksid = ?",item.billDate,item.booksId]) {
-                            if (![db executeUpdate:@"update bk_dailysum_charge set expenceamount = expenceamount + ? , sumamount = sumamount - ? where cbooksid = ? and cbilldate = ? and cuserid = ?",@([item.money doubleValue]),@([item.money doubleValue]),item.booksId,item.billDate,userid]) {
-                                if (failure) {
-                                    SSJDispatch_main_async_safe(^{
-                                        failure([db lastError]);
-                                    });
-                                }
-                                *rollback = YES;
-                            }
-                        }else{
-                            if (![db executeUpdate:@"insert into bk_dailysum_charge (cbilldate , expenceamount , incomeamount  , sumamount , cwritedate , cuserid ,cbooksid) values(?,?,0,?,?,?,?)",item.billDate,@([item.money doubleValue]),@(-[item.money doubleValue]),cwriteDate,userid,item.booksId]) {
-                                if (failure) {
-                                    SSJDispatch_main_async_safe(^{
-                                        failure([db lastError]);
-                                    });
-                                }
-                                *rollback = YES;
-                            }
-                        }
-                    }else{
-                        if ([db intForQuery:@"select count(1) from bk_dailysum_charge where cbilldate = ? and cbooksid = ?",item.billDate,item.booksId]) {
-                            if (![db executeUpdate:@"update bk_dailysum_charge set incomeamount = incomeamount + ? , sumamount = sumamount + ? where cbooksid = ? and cbilldate = ? and cuserid = ?",@([item.money doubleValue]),@([item.money doubleValue]),item.booksId,item.billDate,userid]) {
-                                if (failure) {
-                                    SSJDispatch_main_async_safe(^{
-                                        failure([db lastError]);
-                                    });
-                                }
-                                *rollback = YES;
-                            }
-                        }else{
-                            if (![db executeUpdate:@"insert into bk_dailysum_charge (cbilldate , expenceamount , incomeamount, sumamount , cwritedate , cuserid ,cbooksid) values(?,0,?,?,?,?,?)",item.billDate,@([item.money doubleValue]),@(-[item.money doubleValue]),cwriteDate,userid,item.booksId]) {
-                                if (failure) {
-                                    SSJDispatch_main_async_safe(^{
-                                        failure([db lastError]);
-                                    });
-                                }
-                                *rollback = YES;
-                            }
-                        }
-                    }
                 }
             }else{
                 NSString *chargeId = SSJUUID();

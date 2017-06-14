@@ -398,12 +398,13 @@ static NSString *const kSegmentTitleIncome = @"收入";
     }], [SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction *action) {
         [weakSelf.deleteService deleteShareBookWithBookId:weakSelf.booksId memberId:weakSelf.memberId memberState:SSJShareBooksMemberStateKickedOut];
     }], nil];
-
+    [SSJAnaliyticsManager event:@"sb_delete_share_books_member"];
 }
 
 - (void)modifyButtonClicked:(id)sender {
     self.nickNameModifyView.originalText = self.nickNameLab.text;
     [self.nickNameModifyView show];
+    [SSJAnaliyticsManager event:@"sb_rename_share_books_member_nickname"];
 }
 
 

@@ -96,6 +96,21 @@
 }
  
 + (BOOL)mergeRecords:(NSArray *)records forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
+    
+    NSMutableArray *quitBooksArr = [NSMutableArray arrayWithCapacity:0];
+    
+    FMResultSet *quitBooksResult = [db executeQuery:@"select cbooksid from bk_share_books_member where cmemberid = ? and istate != ?", userId, @(SSJShareBooksMemberStateNormal)];
+    
+    
+    if (!quitBooksResult) {
+        return NO;
+    }
+    
+    while ([quitBooksResult next]) {
+        NSString *quitBookId = [quitBooksResult stringForColumn:@"cbooksid"];
+        [quitBooksArr addObject:quitBookId];
+    }
+
     for (NSDictionary *record in records) {
         if (![record isKindOfClass:[NSDictionary class]]) {
             if (error) {

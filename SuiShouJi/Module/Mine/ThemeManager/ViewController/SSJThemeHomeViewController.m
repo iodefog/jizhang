@@ -119,6 +119,7 @@ static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
         SSJBookKeepingHomeViewController *homeVc = [firstNav.viewControllers objectAtIndex:0];
         homeVc.needEditeThemeModel = YES;
         tabVC.selectedIndex = 0;
+        [SSJAnaliyticsManager event:@"more_define_bg"];
         [self.navigationController popViewControllerAnimated:YES];
     } else {
         SSJThemeDetailViewController *themeDetailVc = [[SSJThemeDetailViewController alloc]init];

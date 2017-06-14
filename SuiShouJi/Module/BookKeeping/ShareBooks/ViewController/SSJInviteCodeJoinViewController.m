@@ -179,6 +179,7 @@
 #pragma mark - Event
 - (void)sendButtonClicked:(id)sender {
     [self.service enterBooksWithCode:self.codeInput.text];
+    [SSJAnaliyticsManager event:@"sb_anhao_zhimakaimen"];
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
@@ -243,9 +244,11 @@
                 }
                 [self.navigationController popToRootViewControllerAnimated:YES];
             });
+            [SSJAnaliyticsManager event:@"sb_anhao_input_success"];
         }];
     } else {
         [CDAutoHideMessageHUD showMessage:service.desc];
+        [SSJAnaliyticsManager event:@"sb_anhao_input_error"];
     }
 }
 
