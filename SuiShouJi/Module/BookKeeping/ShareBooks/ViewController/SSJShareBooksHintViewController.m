@@ -56,19 +56,19 @@
     }];
     
     [self.firstContentLab mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.firstTitleLab.mas_bottom).offset(32);
+        make.top.mas_equalTo(self.firstTitleLab.mas_bottom).offset(23);
         make.left.mas_equalTo(self.firstTitleLab);
         make.width.mas_equalTo(self.view.mas_width).offset(-30);
     }];
     
     [self.secondTitleLab mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.firstContentLab.mas_bottom).offset(32);
+        make.top.mas_equalTo(self.firstContentLab.mas_bottom).offset(23);
         make.left.mas_equalTo(self.firstContentLab);
         make.width.mas_equalTo(self.view.mas_width).offset(-30);
     }];
     
     [self.secondContentLab mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.secondTitleLab.mas_bottom).offset(32);
+        make.top.mas_equalTo(self.secondTitleLab.mas_bottom).offset(23);
         make.left.mas_equalTo(self.secondTitleLab);
         make.width.mas_equalTo(self.view.mas_width).offset(-30);
     }];
@@ -121,6 +121,7 @@
         NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
         CGFloat emptylen = _firstContentLab.font.pointSize * 2;
         style.firstLineHeadIndent = emptylen;
+        style.lineSpacing = 23;
         style.alignment = NSTextAlignmentJustified;
         [attributeStr addAttribute:NSParagraphStyleAttributeName value:style range:NSMakeRange(0, attributeStr.length)];
         [attributeStr addAttribute:NSFontAttributeName value:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3] range:NSMakeRange(0, attributeStr.length)];
@@ -156,6 +157,7 @@
         NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
         CGFloat emptylen = _secondContentLab.font.pointSize * 2;
         style.firstLineHeadIndent = emptylen;
+        style.lineSpacing = 23;
         style.alignment = NSTextAlignmentJustified;
         [attributeStr addAttribute:NSParagraphStyleAttributeName value:style range:NSMakeRange(0, attributeStr.length)];
         [attributeStr addAttribute:NSFontAttributeName value:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3] range:NSMakeRange(0, attributeStr.length)];
