@@ -278,3 +278,9 @@ BOOL SSJVerifyPassword(NSString *pwd);
  */
 void SSJSwizzleSelector(Class class, SEL originalSelector, SEL swizzledSelector);
 
+SSJBooksCategory SSJGetBooksCategory();
+
+void SSJSaveBooksCategory(SSJBooksCategory category);
+
+
+

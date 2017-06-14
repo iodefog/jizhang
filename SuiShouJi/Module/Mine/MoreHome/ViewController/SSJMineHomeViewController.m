@@ -279,9 +279,14 @@ static BOOL kNeedBannerDisplay = YES;
     
     //  周期记账
     if ([item.adTitle isEqualToString:kTitle3]) {
-        SSJCircleChargeSettingViewController *circleChargeSettingVC = [[SSJCircleChargeSettingViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
-        [self.navigationController pushViewController:circleChargeSettingVC animated:YES];
-        return;
+        if (SSJGetBooksCategory() == SSJBooksCategoryPersional) {
+            SSJCircleChargeSettingViewController *circleChargeSettingVC = [[SSJCircleChargeSettingViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
+            [self.navigationController pushViewController:circleChargeSettingVC animated:YES];
+            return;
+        } else if (SSJGetBooksCategory() == SSJBooksCategoryPublic) {
+            [CDAutoHideMessageHUD showMessage:@"共享账本不能周期记账哦~"];
+        }
+        
     }
 
     //建议与咨询

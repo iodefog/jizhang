@@ -203,9 +203,11 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
             if ([bookItem isKindOfClass:[SSJBooksTypeItem class]]) {
                 wself.item.sundryId = nil;
                 wself.item.idType = SSJChargeIdTypeNormal;
+                SSJSaveBooksCategory(SSJBooksCategoryPersional);
             } else if ([bookItem isKindOfClass:[SSJShareBookItem class]]) {
                 wself.item.sundryId = bookItem.booksId;
                 wself.item.idType = SSJChargeIdTypeShareBooks;
+                SSJSaveBooksCategory(SSJBooksCategoryPublic);
             }
             [wself.currentInput becomeFirstResponder];
             [[wself loadBillTypeSignal] subscribeError:^(NSError *error) {

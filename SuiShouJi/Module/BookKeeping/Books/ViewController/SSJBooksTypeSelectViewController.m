@@ -172,7 +172,7 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
             [self newAndEditeBooksWiteItem:privateItem];
             return;
         }
-        
+        SSJSaveBooksCategory(SSJBooksCategoryPersional);
         
     } else if(indexPath.section == 1) {//共享
         SSJShareBookItem *shareItem = (SSJShareBookItem *)[self.shareBooksDataItems ssj_safeObjectAtIndex:indexPath.row];
@@ -192,6 +192,7 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
             }
             return;
         }
+        SSJSaveBooksCategory(SSJBooksCategoryPublic);
     }
     if (bookId.length) {
 
