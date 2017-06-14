@@ -369,6 +369,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
         };
         bookKeepingCell.enterChargeDetailBlock = ^(SSJBookKeepingHomeTableViewCell *cell) {
             SSJCalenderDetailViewController *detailVc = [[SSJCalenderDetailViewController alloc] init];
+            [SSJAnaliyticsManager event:@"home_liushui_detail"];
             detailVc.item = cell.item;
             [weakSelf.navigationController pushViewController:detailVc animated:YES];
         };
@@ -470,7 +471,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 }
 
 -(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
-    if (self.items.count == 0  || ![self.homeBar.budgetButton.model isKindOfClass:[SSJBudgetModel class]]) {
+    if (self.items.count == 0  || [self.homeBar.budgetButton.model isKindOfClass:[SSJShareBookItem class]]) {
         return;
     }else{
         [self reloadCurrentMonthData];
@@ -615,6 +616,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
                 [weakSelf.navigationController pushViewController:budgetListVC animated:YES];
             } else if ([model isKindOfClass:[SSJShareBookItem class]]) {
                 SSJShareBooksMenberManagerViewController *memberVc = [[SSJShareBooksMenberManagerViewController alloc] init];
+                [SSJAnaliyticsManager event:@"sb_home_member_count"];
                 memberVc.item = model;
                 [weakSelf.navigationController pushViewController:memberVc animated:YES];
             }
@@ -702,6 +704,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
         _themeModifyView.themeSelectCustomImageBlock = ^(){
             //访问相册
             [weakSelf localPhoto];
+            [SSJAnaliyticsManager event:@"more_define_bg_upload_image"];
         };
     }
     return _themeModifyView;

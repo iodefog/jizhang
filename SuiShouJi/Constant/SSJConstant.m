@@ -36,6 +36,8 @@ NSString *const SSJLastLoggedUserItemKey = @"SSJLastLoggedUserItemKey";
 
 NSString *const SSJReminderNotificationKey = @"SSJReminderNotificationKey";
 
+NSString *const SSJBookCategoryKey = @"SSJBookCategoryKey";
+
 NSString *const SSJAnnouncementHaveReadKey = @"SSJAnnouncementHaveReadKey";
 
 NSString *const SSJSyncDataSuccessNotification = @"SSJSyncDataSuccessNotification";
@@ -87,4 +89,6 @@ NSString *const SSJSurplusGreenColorValue = @"#0ac082";
 NSString *const SSJAllBooksIds = @"all_books_ids";
 
 NSString *const SSJAllBillTypeId = @"all";
+
+NSString *const SSJAllMembersId = @"all_members_id";
 

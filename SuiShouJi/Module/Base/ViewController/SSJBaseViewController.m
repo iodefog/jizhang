@@ -88,6 +88,11 @@
     [SSJAnaliyticsManager endLogPageView:[self statisticsTitle]];
 }
 
+- (void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+    self.backgroundView.frame = self.view.bounds;
+}
+
 - (UIStatusBarStyle)preferredStatusBarStyle {
     return SSJ_CURRENT_THEME.statusBarStyle;
 }
@@ -274,7 +279,7 @@
 
 - (UIImageView *)backgroundView {
     if (!_backgroundView) {
-        _backgroundView = [[UIImageView alloc] initWithFrame:self.view.bounds];
+        _backgroundView = [[UIImageView alloc] init];
     }
     return _backgroundView;
 }

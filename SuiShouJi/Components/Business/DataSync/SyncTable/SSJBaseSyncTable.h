@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "FMDB.h"
+#import "SSJDatabaseQueue.h"
 
 @interface SSJBaseSyncTable : NSObject
 

@@ -173,14 +173,7 @@
             [typeInfo setObject:@(1) forKey:@"operatortype"];
             sql = [self updateSQLStatementWithTypeInfo:typeInfo tableName:@"BK_BOOKS_TYPE"];
         }
-        if (![db executeUpdate:sql withParameterDictionary:typeInfo]) {
-            if (failure) {
-                SSJDispatch_main_async_safe(^{
-                    failure([db lastError]);
-                });
-            }
-            return;
-        }
+        
         if (![db boolForQuery:@"select count(*) from BK_BOOKS_TYPE where CBOOKSID = ?", booksid]) {//判断添加账本还是修改账本
             if (![self generateBooksTypeForBooksItem:item indatabase:db forUserId:userId]) {
                 if (failure) {
@@ -191,6 +184,16 @@
                 return;
             }
         }
+        
+        if (![db executeUpdate:sql withParameterDictionary:typeInfo]) {
+            if (failure) {
+                SSJDispatch_main_async_safe(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        }
+        
         if (success) {
             SSJDispatch_main_async_safe(^{
                 success();
@@ -359,9 +362,13 @@
     // 补充每个账本独有的记账类型
     NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.sss"];
     if (![db intForQuery:@"select count(1) from bk_user_bill where cbooksid = ?",item.booksId]) {
-        if (![db executeUpdate:@"replace into bk_user_bill select ?, id, istate, ?, ?, 1, defaultorder,? from bk_bill_type where ibookstype = ? and icustom = 0",userId,writeDate,@(SSJSyncVersion()),item.booksId,@(item.booksParent)]) {
+        if (![db executeUpdate:@"delete from bk_user_bill where cbooksid = ?",item.booksId]) {
             return NO;
         }
+    }
+    
+    if (![db executeUpdate:@"replace into bk_user_bill select ?, id, istate, ?, ?, 1, defaultorder,? from bk_bill_type where ibookstype = ? and icustom = 0",userId,writeDate,@(SSJSyncVersion()),item.booksId,@(item.booksParent)]) {
+        return NO;
     }
     
     // 补充账本公用的记账类型
@@ -747,7 +754,8 @@
                                @"cjoindate",
                                @"istate",
                                @"cicon",
-                               @"ccolor"];
+                               @"ccolor",
+                               @"cleavedate"];
         //更新bk_share_books_member表
         [shareMember enumerateObjectsUsingBlock:^(NSDictionary * _Nonnull dic, NSUInteger idx, BOOL * _Nonnull stop) {
             NSMutableDictionary *memberDic = [dic mutableCopy];

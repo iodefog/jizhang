@@ -112,6 +112,9 @@
 - (UITextField *)codeInput {
     if (!_codeInput) {
         _codeInput = [[UITextField alloc] init];
+        if (self.inviteCode.length) {
+            _codeInput.text = self.inviteCode;
+        }
         _codeInput.textColor = [UIColor ssj_colorWithHex:@"#333333"];
         _codeInput.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
         _codeInput.textAlignment = NSTextAlignmentCenter;
@@ -176,6 +179,7 @@
 #pragma mark - Event
 - (void)sendButtonClicked:(id)sender {
     [self.service enterBooksWithCode:self.codeInput.text];
+    [SSJAnaliyticsManager event:@"sb_anhao_zhimakaimen"];
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
@@ -196,6 +200,10 @@
             
             if (self.service.shareBooksTableInfo) {
                 [self.service.shareBooksTableInfo setObject:@(maxOrder) forKey:@"iorder"];
+            }
+            
+            if (![db executeUpdate:@"delete from bk_share_books_member where cbooksid = ?",booksId]) {
+                return;
             }
             
 
@@ -219,6 +227,7 @@
                 return;
             }
             
+            
             if (![db executeUpdate:@"update bk_user set ccurrentbooksid = ? where cuserid = ?",booksId,SSJUSERID()]) {
                 return;
             }
@@ -235,9 +244,11 @@
                 }
                 [self.navigationController popToRootViewControllerAnimated:YES];
             });
+            [SSJAnaliyticsManager event:@"sb_anhao_input_success"];
         }];
     } else {
         [CDAutoHideMessageHUD showMessage:service.desc];
+        [SSJAnaliyticsManager event:@"sb_anhao_input_error"];
     }
 }
 

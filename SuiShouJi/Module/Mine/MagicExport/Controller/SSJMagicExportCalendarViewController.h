@@ -12,23 +12,35 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface SSJMagicExportCalendarViewController : SSJBaseViewController
 
+//---------------------------------------------------------------------------------------------------------
+// 注意：
+// 如果传了billTypeId，就不需要传billName和billType；
+// 反之传了billName就必须传billType（因为有可能收入和支出都有同名的类别），billName不需要再传
+//---------------------------------------------------------------------------------------------------------
 /**
  收支类别id,不传则查询所有类别，如果有值则忽略billType
  */
-@property (nonatomic, copy) NSString *billTypeId;
+@property (nonatomic, copy, nullable) NSString *billTypeId;
 
 /**
- 日历显示哪种收支类型的流水日期，默认SSJBillTypeSurplus
+ 收支类别名称
+ */
+@property (nonatomic, copy, nullable) NSString *billName;
+
+/**
+ 日历显示哪种收支类型的流水日期，默认SSJBillTypeSurplus；如果
  */
 @property (nonatomic) SSJBillType billType;
+// --------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------
 
 /**
- 账本类型id,不传则查询当前账本数据，传all则查询所有账本数据
+ 账本类型id,不传则查询当前账本数据，传SSJAllBooksIds则查询所有账本数据
  */
 @property (nonatomic, copy) NSString *booksId;
 
 /**
- 是否包含其他成员流水；当booksId为“all”时有效
+ 是否包含其他成员流水；当booksId为SSJAllBooksIds时有效
  */
 @property (nonatomic) BOOL containsOtherMember;
 

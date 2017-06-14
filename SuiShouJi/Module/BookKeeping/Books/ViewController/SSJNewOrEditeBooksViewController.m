@@ -48,6 +48,9 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
 @property (nonatomic, copy) NSString *bookName;
 
 @property (nonatomic, strong) SSJCreateOrDeleteBooksService *createBookService;
+
+/**编辑还是添加*/
+@property (nonatomic, assign) BOOL editOrNew;
 @end
 
 @implementation SSJNewOrEditeBooksViewController
@@ -70,15 +73,21 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
     if ([self.bookItem isKindOfClass:[SSJBooksTypeItem class]]) {//个人账本
         if (((SSJBooksTypeItem *)self.bookItem).booksId.length) {
             self.title = NSLocalizedString(@"编辑个人账本", nil);
+            [SSJAnaliyticsManager event:@"accountbook_edit"];
+            self.editOrNew = NO;
         } else {
             self.title = NSLocalizedString(@"新建个人账本", nil);
+            self.editOrNew = YES;
         }
         self.tipStr = NSLocalizedString(@"Tip：个人记账，账本仅自己可见", nil);
     } else if([self.bookItem isKindOfClass:[SSJShareBookItem class]]) { //共享账本
         if (((SSJShareBookItem *)self.bookItem).booksId.length) {
             self.title = NSLocalizedString(@"编辑共享账本", nil);
+            self.editOrNew = NO;
+            [SSJAnaliyticsManager event:@"sb_edit_share_books"];
         } else {
             self.title = NSLocalizedString(@"新建共享账本", nil);
+            self.editOrNew = YES;
         }
         self.tipStr = NSLocalizedString(@"Tip：共同记账，账本可共享给ta", nil);
     }
@@ -164,14 +173,14 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     __weak __typeof(self)weakSelf = self;
-    if (indexPath.row == 1  && !self.bookItem.booksId.length) {
+    if (indexPath.row == 1 && self.editOrNew == YES) {
         //记账场景
         SSJBookTypeViewController *bookTypeVC = [[SSJBookTypeViewController alloc] init];
         if (!self.currentBookType) {
             self.currentBookType = 0;
         }
         bookTypeVC.lastSelectedIndex = self.currentBookType;
-        
+        bookTypeVC.isShareBook = [self.bookItem isKindOfClass:[SSJShareBookItem class]];
         bookTypeVC.saveBooksBlock = ^(NSInteger bookTypeIndex,NSString *bookName) {
             weakSelf.currentBookType = bookTypeIndex;
             weakSelf.bookParentStr = bookName;
@@ -182,6 +191,7 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
     } else if (indexPath.row == 2) {
         //账本颜色
         SSJBookColorSelectedViewController *bookColorVC = [[SSJBookColorSelectedViewController alloc] init];
+        [SSJAnaliyticsManager event:@"sb_create_share_book_bookcolor"];
         //账本名称
         if (self.bookNameTextField.text.length) {
             bookColorVC.bookName = self.bookNameTextField.text;
@@ -282,6 +292,7 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
             if (_saveBooksBlock) {
                 _saveBooksBlock(((SSJShareBookItem *)self.bookItem).booksId);
             }
+            SSJSaveBooksCategory(SSJBooksCategoryPublic);
             [weakSelf.navigationController popViewControllerAnimated:YES];
         } failure:^(NSError *error) {
             [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
@@ -307,11 +318,10 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
     self.bookItem.booksColor = self.gradientColorItem;
     if ([self.bookItem isKindOfClass:[SSJBooksTypeItem class]]) {//个人账本
         [SSJBooksTypeStore saveBooksTypeItem:(SSJBooksTypeItem *)self.bookItem sucess:^{
-//            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
-            
             if (_saveBooksBlock) {
                 _saveBooksBlock(((SSJBooksTypeItem *)self.bookItem).booksId);
             }
+            SSJSaveBooksCategory(SSJBooksCategoryPersional);
             [weakSelf.navigationController popViewControllerAnimated:YES];
         } failure:^(NSError *error) {
             [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];

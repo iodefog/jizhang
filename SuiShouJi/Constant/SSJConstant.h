@@ -212,6 +212,9 @@ extern NSString *const SSJAllBooksIds;
 // 所有收支类别id
 extern NSString *const SSJAllBillTypeId;
 
+// 所有成员id
+extern NSString *const SSJAllMembersId;
+
 /** -------------------- KEY -------------------- */
 #pragma mark - KEY
 //保存上次弹窗的时间
@@ -243,6 +246,9 @@ extern NSString *const SSJReminderNotificationKey;
 
 //  已经读过的公告的key
 extern NSString *const SSJAnnouncementHaveReadKey;
+
+//保存当前账本类型：共享or个人
+extern NSString *const SSJBookCategoryKey;
 
 /** --------------- Notification --------------- */
 #pragma mark - Notification

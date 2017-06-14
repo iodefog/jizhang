@@ -8,8 +8,11 @@
 //
 
 #import "SSJSharebooksInviteViewController.h"
+#import "SSJShareBooksHintViewController.h"
 
 #import "SSJShareBooksHintView.h"
+#import "SSJCodeInputView.h"
+
 
 #import "SSJShareBooksHelper.h"
 #import "SSJSharebooksCodeNetworkService.h"
@@ -23,7 +26,7 @@
 
 @property(nonatomic, strong) UIView *backView;
 
-@property(nonatomic, strong) UITextField *codeInput;
+@property(nonatomic, strong) SSJCodeInputView *codeInput;
 
 @property(nonatomic, strong) UIButton *resendButton;
 
@@ -66,7 +69,7 @@
     [super viewDidLoad];
     self.backgroundView.image = [UIImage ssj_compatibleImageNamed:@"sharebk_backgroud"];
     self.titles = @[@"发送暗号给好友",@"对方打开有鱼记账App V2.5 以上版本",@"好友添加共享账本时，输入暗号",@"大功告成～"];
-    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"sharebk_hint"] style:UIBarButtonItemStyleDone target:self action:@selector(rightButtonClicked:)];
+    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"sharebk_hint"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(rightButtonClicked:)];
     self.navigationItem.rightBarButtonItem = rightItem;
     [self.view addSubview:self.backView];
     [self.backView addSubview:self.codeTitleLab];
@@ -112,9 +115,9 @@
     }];
     
     [self.codeInput mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.width.mas_equalTo(self.backView.mas_width).offset(-44);
+        make.width.mas_equalTo(self.view.mas_width).offset(-79);
         make.height.mas_equalTo(57);
-        make.centerX.mas_equalTo(self.backView.mas_centerX);
+        make.centerX.mas_equalTo(self.view.mas_centerX);
         make.top.mas_equalTo(self.codeTitleLab.mas_bottom).offset(34);
     }];
     
@@ -144,8 +147,8 @@
         NSInteger index = [self.hintViews indexOfObject:hintView];
         [hintView mas_updateConstraints:^(MASConstraintMaker *make) {
             make.width.mas_equalTo(self.view);
-            make.height.mas_equalTo(16);
-            make.top.mas_equalTo(self.sendButton.mas_bottom).offset(48 + index * 38);
+            make.height.mas_equalTo(28);
+            make.top.mas_equalTo(self.sendButton.mas_bottom).offset(48 + index * 28);
             make.left.mas_equalTo(self.view);
         }];
     }
@@ -197,14 +200,15 @@
     return _codeRightImage;
 }
 
-- (UITextField *)codeInput {
+- (SSJCodeInputView *)codeInput {
     if (!_codeInput) {
-        _codeInput = [[UITextField alloc] init];
+        _codeInput = [[SSJCodeInputView alloc] initWithFrame:CGRectZero clearButtonInsects:CGPointMake(-72, 0) editeInsect:UIEdgeInsetsMake(0, 0, 0, 72)];
         _codeInput.textColor = [UIColor ssj_colorWithHex:@"#333333"];
         _codeInput.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
         [_codeInput ssj_setBorderColor:[UIColor ssj_colorWithHex:@"#DDDDDD"]];
         [_codeInput ssj_setBorderStyle:SSJBorderStyleBottom];
         [_codeInput ssj_setBorderWidth:1.f];
+        _codeInput.clearButtonMode = UITextFieldViewModeWhileEditing;
         _codeInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入4-10位暗号" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"#CCCCCC"]}];
         _codeInput.rightViewMode = UITextFieldViewModeAlways;
         _codeInput.tintColor = [UIColor ssj_colorWithHex:@"#333333"];
@@ -244,6 +248,7 @@
     if (!_expireDateLab) {
         _expireDateLab = [[UILabel alloc] init];
         _expireDateLab.textColor = [UIColor ssj_colorWithHex:@"#999999"];
+        _expireDateLab.text = @"暗号12小时内有效";
         _expireDateLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
     }
     return _expireDateLab;
@@ -284,10 +289,12 @@
         self.sendButton.backgroundColor = [UIColor ssj_colorWithHex:@"#EB4A64"];
         self.sendButton.layer.shadowColor = [UIColor ssj_colorWithHex:@"#EB4A64"].CGColor;
         self.sendButton.layer.shadowOpacity = 0.39;
+        [SSJAnaliyticsManager event:@"sb_anhao_suiji"];
     } else {
         self.codeInput.text = @"";
         self.codeInput.enabled = YES;
         self.expireDateLab.text = @"暗号12小时内有效";
+        [SSJAnaliyticsManager event:@"sb_anhao_redefine"];
         [self.resendButton setTitle:@"随机生成" forState:UIControlStateNormal];
         self.sendButton.backgroundColor = [UIColor ssj_colorWithHex:@"#CCCCCC"];
         self.sendButton.layer.shadowColor = [UIColor blackColor].CGColor;
@@ -300,7 +307,7 @@
         [CDAutoHideMessageHUD showMessage:@"暗号长度必须在4到10位之间哦"];
         return;
     }
-    
+    [SSJAnaliyticsManager event:@"sb_anhao_sure_to_use"];
     NSString *regex = @"[0-9]*";
     
     NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",regex];
@@ -318,7 +325,8 @@
 }
 
 - (void)rightButtonClicked:(id)sender {
-    
+    SSJShareBooksHintViewController *hintVc = [[SSJShareBooksHintViewController alloc] init];
+    [self.navigationController pushViewController:hintVc animated:YES];
 }
 
 #pragma mark - Private
@@ -384,7 +392,7 @@
         
         NSString *content = [NSString stringWithFormat:@"%@邀你加入【%@】，希望和你开启共享记账之旅，快来！",nickName,weakSelf.item.booksName];
         
-        [SSJShareManager shareWithType:SSJShareTypeUrl image:nil UrlStr:[NSString stringWithFormat:@"%@",[url mj_url]] title:SSJAppName() content:content PlatformType:@[@(UMSocialPlatformType_WechatSession),@(UMSocialPlatformType_QQ)] inController:self ShareSuccess:NULL];
+        [SSJShareManager shareWithType:SSJShareTypeUrl image:nil UrlStr:[NSString stringWithFormat:@"%@ ",[url mj_url]] title:SSJAppName() content:content PlatformType:@[@(UMSocialPlatformType_WechatSession),@(UMSocialPlatformType_QQ)] inController:self ShareSuccess:NULL];
         
     } failure:^(NSError * _Nonnull error) {
         
@@ -405,11 +413,17 @@
             self.sendButton.backgroundColor = [UIColor ssj_colorWithHex:@"#EB4A64"];
             self.sendButton.layer.shadowColor = [UIColor ssj_colorWithHex:@"#EB4A64"].CGColor;
             self.sendButton.layer.shadowOpacity = 0.39;
+            [self.sendButton setTitle:@"发送暗号" forState:UIControlStateNormal];
         }
     }
     
     if (service == self.saveCodeService) {
         if ([service.returnCode isEqualToString:@"1"]) {
+            self.codeInput.enabled = NO;
+            NSDate *expireDate = [NSDate dateWithString:self.saveCodeService.overTime formatString:@"yyyy-MM-dd HH:mm:ss"];
+            self.expireDateLab.text = [NSString stringWithFormat:@"暗号于%@前有效",[expireDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm"]];
+            [self.resendButton setTitle:@"重新生成" forState:UIControlStateNormal];
+            [self.sendButton setTitle:@"发送暗号" forState:UIControlStateNormal];
             [self shareTheCode];
         } else {
             [CDAutoHideMessageHUD showMessage:service.desc];

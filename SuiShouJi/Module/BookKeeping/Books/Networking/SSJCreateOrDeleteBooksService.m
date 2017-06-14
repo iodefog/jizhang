@@ -27,8 +27,7 @@
                                @"cwriteDate":bookItem.cwriteDate,
                                @"operatorType":@"0"};
     self.showLodingIndicator = YES;
-    #warning test
-    [self request:(@"http://jz.gs.9188.com:18080/sharebook/add_shareBook.go") params:paramDic];
+    [self request:SSJURLWithAPI(@"/chargebook/sharebook/add_shareBook.go") params:paramDic];
 }
 
 - (void)deleteShareBookWithBookId:(NSString *)bookId memberId:(NSString *)memberId memberState:(SSJShareBooksMemberState)memberState {
@@ -36,8 +35,7 @@
                                @"cbooksId":bookId,
                                @"istate":@(memberState)};
     self.showLodingIndicator = YES;
-    #warning test
-    [self request:(@"http://jz.gs.9188.com:18080/sharebook/remove_member") params:paramDic];
+    [self request:SSJURLWithAPI(@"/chargebook/sharebook/remove_member.go") params:paramDic];
 }
 
 - (void)requestDidFinish:(NSDictionary *)rootElement {

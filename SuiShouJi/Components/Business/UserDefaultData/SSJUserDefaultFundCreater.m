@@ -42,7 +42,7 @@
                @"cicoin":@"ft_cash",
                @"iorder":@1,
                @"cstartcolor":@"#fc6eac",
-               @"cendcolor":@"fb92bd"},
+               @"cendcolor":@"#fb92bd"},
              
              @{@"cfundid":[NSString stringWithFormat:@"%@-2",userId],
                @"cacctname":@"储蓄卡",
@@ -55,7 +55,7 @@
                @"cicoin":@"ft_chuxuka",
                @"iorder":@2,
                @"cstartcolor":@"#f96566",
-               @"cendcolor":@"ff8989"},
+               @"cendcolor":@"#ff8989"},
              
              @{@"cfundid":[NSString stringWithFormat:@"%@-3",userId],
                @"cacctname":@"信用卡",
@@ -68,7 +68,7 @@
                @"cicoin":@"ft_creditcard",
                @"iorder":@3,
                @"cstartcolor":@"#7c91f8",
-               @"cendcolor":@"9fb0fc"},
+               @"cendcolor":@"#9fb0fc"},
              
              @{@"cfundid":[NSString stringWithFormat:@"%@-4",userId],
                @"cacctname":@"支付宝",
@@ -81,7 +81,7 @@
                @"cicoin":@"ft_zhifubao",
                @"iorder":@4,
                @"cstartcolor":@"#7fb4f1",
-               @"cendcolor":@"8ddcf0"},
+               @"cendcolor":@"#8ddcf0"},
              
              @{@"cfundid":[NSString stringWithFormat:@"%@-7",userId],
                @"cacctname":@"微信钱包",
@@ -94,7 +94,7 @@
                @"cicoin":@"ft_weixin",
                @"iorder":@5,
                @"cstartcolor":@"#39d4da",
-               @"cendcolor":@"7fe8e0"},
+               @"cendcolor":@"#7fe8e0"},
              
              @{@"cfundid":[NSString stringWithFormat:@"%@-5",userId],
                @"cacctname":@"借出款",
@@ -107,7 +107,7 @@
                @"cicoin":@"ft_jiechukuan",
                @"iorder":@6,
                @"cstartcolor":@"#55d696",
-               @"cendcolor":@"9be2a1"},
+               @"cendcolor":@"#9be2a1"},
              
              @{@"cfundid":[NSString stringWithFormat:@"%@-6",userId],
                @"cacctname":@"欠款",
@@ -120,7 +120,7 @@
                @"cicoin":@"ft_qiankuan",
                @"iorder":@7,
                @"cstartcolor":@"#f9b656",
-               @"cendcolor":@"f7cf70"}
+               @"cendcolor":@"#f7cf70"}
              ];
 }
 

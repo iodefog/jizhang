@@ -169,10 +169,11 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
         bookName = privateItem.booksName;
         bookId = privateItem.booksId;
         if (!privateItem.booksId.length && [bookName isEqualToString:@"添加账本"]) {
+            [SSJAnaliyticsManager event:@"add_account_book"];
             [self newAndEditeBooksWiteItem:privateItem];
             return;
         }
-        
+        SSJSaveBooksCategory(SSJBooksCategoryPersional);
         
     } else if(indexPath.section == 1) {//共享
         SSJShareBookItem *shareItem = (SSJShareBookItem *)[self.shareBooksDataItems ssj_safeObjectAtIndex:indexPath.row];
@@ -180,6 +181,7 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
         bookId = shareItem.booksId;
         if (!bookId.length && [bookName isEqualToString:@"添加账本"]) {
             if (SSJIsUserLogined()) {
+                [SSJAnaliyticsManager event:@"sb_add_share_book"];
                 [self.createShareBookTypeView show];
             } else {
                 //去登录
@@ -192,6 +194,7 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
             }
             return;
         }
+        SSJSaveBooksCategory(SSJBooksCategoryPublic);
     }
     if (bookId.length) {
 
@@ -251,7 +254,7 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
             NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
             style.lineSpacing = 5;
             style.alignment = NSTextAlignmentCenter;
-            self.authCodeAlertView.message = [[NSAttributedString alloc] initWithString:@"删除后将难以恢复\n仍然删除，请输入下列验证码" attributes:@{NSParagraphStyleAttributeName:style}];
+            self.authCodeAlertView.message = [[NSAttributedString alloc] initWithString:@"删除后，此账本数据将难以恢复\n仍然删除，请输入下列验证码" attributes:@{NSParagraphStyleAttributeName:style}];
         } else if ([booksTypeItem isKindOfClass:[SSJShareBookItem class]]) {
             [self.editAlertView showWithBookCategory: SSJBooksCategoryPublic];
             NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
@@ -557,10 +560,15 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
             if (selectParent == 0) {
                 //新建共享
                 [weakSelf newAndEditeBooksWiteItem:[[SSJShareBookItem alloc] init]];
+                [SSJAnaliyticsManager event:@"sb_create_share_book"];
+                
             } else if (selectParent == 1) {
                 //暗号加入
                 SSJInviteCodeJoinViewController *inviteVc = [[SSJInviteCodeJoinViewController alloc] init];
+                [SSJAnaliyticsManager event:@"sb_anhao_join_share_book"];
                 inviteVc.inviteCodeJoinBooksBlock = ^(NSString *bookName) {
+                    //保存账本类型
+                    SSJSaveBooksCategory(SSJBooksCategoryPublic);
                     weakSelf.showCreateBookAnimation = YES;
                     weakSelf.inviteCodeJoinSuccessView.bookName = bookName;
                     //弹出加入账本成功弹窗

@@ -51,6 +51,8 @@ static NSString *const kSegmentTitleIncome = @"收入";
 
 @property(nonatomic, strong) SSJNickNameModifyView *nickNameModifyView;
 
+@property(nonatomic, strong) UIButton *modifyButton;
+
 //  tableview数据源
 @property (nonatomic, strong) NSMutableArray *cellItems;
 
@@ -75,8 +77,12 @@ static NSString *const kSegmentTitleIncome = @"收入";
     [self.view addSubview:self.userInfoHeader];
     [self.userInfoHeader addSubview:self.iconImageView];
     [self.userInfoHeader addSubview:self.nickNameLab];
+    if (![self.memberId isEqualToString:SSJUSERID()]) {
+        [self.userInfoHeader addSubview:self.modifyButton];
+    }
     [self.view addSubview:self.periodControl];
     [self.view addSubview:self.tableView];
+    [self.view addSubview:self.noDataRemindView];
     if (![self.memberId isEqualToString:SSJUSERID()] && [self.adminId isEqualToString:SSJUSERID()]) {
         UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithTitle:@"删除" style:UIBarButtonItemStylePlain target:self action:@selector(deleteButtonClicked:)];
         self.navigationItem.rightBarButtonItem = rightItem;
@@ -110,6 +116,12 @@ static NSString *const kSegmentTitleIncome = @"收入";
         make.top.mas_equalTo(self.iconImageView.mas_bottom).offset(14);
     }];
     
+    [self.modifyButton mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.centerY.mas_equalTo(self.nickNameLab.mas_centerY);
+        make.left.mas_equalTo(self.nickNameLab.mas_right).offset(20);
+    }];
+
+    
     [self.periodControl mas_updateConstraints:^(MASConstraintMaker *make) {
         make.width.mas_equalTo(self.view);
         make.height.mas_equalTo(35);
@@ -122,6 +134,13 @@ static NSString *const kSegmentTitleIncome = @"收入";
         make.height.mas_equalTo(self.view).offset(self.periodControl.bottom);
         make.left.mas_equalTo(self.view);
         make.top.mas_equalTo(self.periodControl.mas_bottom);
+    }];
+    
+    [self.noDataRemindView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.width.mas_equalTo(self.view);
+        make.height.mas_equalTo(self.view).offset(- 140 - SSJ_NAVIBAR_BOTTOM);
+        make.left.mas_equalTo(self.view);
+        make.top.mas_equalTo(self.view).offset(140 + SSJ_NAVIBAR_BOTTOM);
     }];
     
     [super updateViewConstraints];
@@ -155,9 +174,10 @@ static NSString *const kSegmentTitleIncome = @"收入";
     SSJBaseCellItem *item = [self.cellItems ssj_safeObjectAtIndex:indexPath.row];
     SSJReportFormsItem *tmpItem = (SSJReportFormsItem *)item;
     SSJBillingChargeViewController *billingChargeVC = [[SSJBillingChargeViewController alloc] init];
-    billingChargeVC.billName = tmpItem.name;
+    billingChargeVC.billId = tmpItem.ID;
+    billingChargeVC.booksId = self.booksId;
+    billingChargeVC.memberId = self.memberId;
     billingChargeVC.period = _periodControl.currentPeriod;
-    billingChargeVC.isPayment = _payAndIncomeSegmentControl.selectedIndex == 0;
     [self.navigationController pushViewController:billingChargeVC animated:YES];
 }
 
@@ -230,10 +250,9 @@ static NSString *const kSegmentTitleIncome = @"收入";
         _payAndIncomeSegmentControl.customDelegate = self;
         _payAndIncomeSegmentControl.buttonClickAnimated = YES;
         _payAndIncomeSegmentControl.selectedTitleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
+        [_payAndIncomeSegmentControl setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor]];
         [_payAndIncomeSegmentControl setTabSize:CGSizeMake(_payAndIncomeSegmentControl.width * 0.5, 3)];
         _payAndIncomeSegmentControl.titles = @[kSegmentTitlePay, kSegmentTitleIncome];
-        [_payAndIncomeSegmentControl ssj_setBorderWidth:1];
-        [_payAndIncomeSegmentControl ssj_setBorderStyle:SSJBorderStyleBottom];
     }
     return _payAndIncomeSegmentControl;
 }
@@ -317,7 +336,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
 
 - (SSJBudgetNodataRemindView *)noDataRemindView {
     if (!_noDataRemindView) {
-        _noDataRemindView = [[SSJBudgetNodataRemindView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 260)];
+        _noDataRemindView = [[SSJBudgetNodataRemindView alloc] init];
         _noDataRemindView.image = @"budget_no_data";
         _noDataRemindView.title = @"暂无流水~";
     }
@@ -344,6 +363,17 @@ static NSString *const kSegmentTitleIncome = @"收入";
     return _deleteComfirmAlert;
 }
 
+- (UIButton *)modifyButton {
+    if (!_modifyButton) {
+        _modifyButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        _modifyButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+        [_modifyButton setImage:[[UIImage imageNamed:@"sharebk_pen"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+        [_modifyButton sizeToFit];
+        [_modifyButton addTarget:self action:@selector(modifyButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _modifyButton;
+}
+
 
 #pragma mark - Event
 - (void)enterCalendarVC {
@@ -368,8 +398,16 @@ static NSString *const kSegmentTitleIncome = @"收入";
     }], [SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction *action) {
         [weakSelf.deleteService deleteShareBookWithBookId:weakSelf.booksId memberId:weakSelf.memberId memberState:SSJShareBooksMemberStateKickedOut];
     }], nil];
-
+    [SSJAnaliyticsManager event:@"sb_delete_share_books_member"];
 }
+
+- (void)modifyButtonClicked:(id)sender {
+    self.nickNameModifyView.originalText = self.nickNameLab.text;
+    [self.nickNameModifyView show];
+    [SSJAnaliyticsManager event:@"sb_rename_share_books_member_nickname"];
+}
+
+
 
 #pragma mark - Private
 - (void)updateUserInfoWithUserItem:(SSJUserItem *)item {
@@ -416,13 +454,16 @@ static NSString *const kSegmentTitleIncome = @"收入";
         [self updateSubveiwsHidden];
         
         if (periods.count == 0) {
-//            [self.view ssj_showWatermarkWithCustomView:self.noDataRemindView animated:YES target:nil action:nil];
+            self.noDataRemindView.hidden = NO;
         } else {
+            self.noDataRemindView.hidden = YES;
             [self.view ssj_hideWatermark:YES];
         }
         
         [self reloadDatasInPeriod:_periodControl.currentPeriod];
         [self.view ssj_hideLoadingIndicator];
+        
+        [self.view updateConstraintsIfNeeded];
         
     } failure:^(NSError *error) {
         [self.view ssj_hideLoadingIndicator];
@@ -465,8 +506,6 @@ static NSString *const kSegmentTitleIncome = @"收入";
     
     [self.cellItems addObjectsFromArray:oragnizeResult];
 }
-
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

@@ -48,7 +48,7 @@ extern NSString *const SSJReportFormsCurveModelEndDateKey;
                         booksId:(NSString *)booksId
                       startDate:(NSDate *)startDate
                         endDate:(NSDate *)endDate
-                        success:(void(^)(NSArray<SSJReportFormsItem *> *result))success
+                        success:(void (^)(NSArray<SSJReportFormsItem *> *result))success
                         failure:(void (^)(NSError *error))failure;
 
 /**
@@ -70,7 +70,26 @@ extern NSString *const SSJReportFormsCurveModelEndDateKey;
                              failure:(void (^)(NSError *error))failure;
 
 /**
- 查询默认的时间维度
+ 根据收支类别名称查询默认的时间维度
+
+ @param startDate 开始日期，传nil就没有开始日期限制
+ @param endDate 结束日期，传nil就以当前时间作为结束日期限制
+ @param booksId 账本id，传nil认为当前账本，SSJAllBooksIds所有账本
+ @param billName 账本名称
+ @param billType 收支类型
+ @param success 成功回调，如果参数timeDimension是SSJTimeDimensionUnknown，说明期限内没有流水
+ @param failure 失败回调
+ */
++ (void)queryForDefaultTimeDimensionWithStartDate:(NSDate *)startDate
+                                          endDate:(NSDate *)endDate
+                                          booksId:(NSString *)booksId
+                                         billName:(NSString *)billName
+                                         billType:(SSJBillType)billType
+                                          success:(void(^)(SSJTimeDimension timeDimension))success
+                                          failure:(void (^)(NSError *error))failure;
+
+/**
+ 根据收支类别id查询默认的时间维度
 
  @param startDate 开始日期，传nil就没有开始日期限制
  @param endDate 结束日期，传nil就以当前时间作为结束日期限制
@@ -82,37 +101,52 @@ extern NSString *const SSJReportFormsCurveModelEndDateKey;
 + (void)queryForDefaultTimeDimensionWithStartDate:(NSDate *)startDate
                                           endDate:(NSDate *)endDate
                                           booksId:(NSString *)booksId
-                                       billTypeId:(NSString *)billTypeId
-                                          success:(void(^)(SSJTimeDimension timeDimension))success
+                                           billId:(NSString *)billId
+                                          success:(void (^)(SSJTimeDimension timeDimension))success
                                           failure:(void (^)(NSError *error))failure;
 
 /**
- *  查询某个时间段内有效的收入／支出流水统计
- *
- *  @param dimension    查询数据的时间维度单位
- *  @param booksId      账本id，如果传nil则当做当前账本，传SSJAllBooksIds就是全部帐本
- *  @param billTypeId   收支类别id，如果传nil就查询所有类别
- *  @param startDate    开始时间，传nil就没有开始日期限制
- *  @param endDate      结束时间，传nil就以当前时间作为结束日期限制
- *  @param success      查询成功的回调
- *  @param failure      查询失败的回调
+ 根据收支类别名称查询某个时间段内有效的收入／支出流水统计
+
+ @param dimension 查询数据的时间维度单位
+ @param booksId 账本id，如果传nil则当做当前账本，传SSJAllBooksIds就是全部帐本
+ @param billName 收支类别名称
+ @param billType 收支类型
+ @param startDate 开始时间，传nil就没有开始日期限制
+ @param endDate 结束时间，传nil就以当前时间作为结束日期限制
+ @param success 查询成功的回调；result结构：@{SSJReportFormsCurveModelListKey:@[SSJReportFormsCurveModel实例, ...],
+                                          SSJReportFormsCurveModelBeginDateKey:NSDate起始时间,
+                                          SSJReportFormsCurveModelEndDateKey:NSDate结束时间}
+ @param failure 查询失败的回调
  */
 + (void)queryForBillStatisticsWithTimeDimension:(SSJTimeDimension)dimension
                                         booksId:(NSString *)booksId
-                                     billTypeId:(NSString *)billTypeId
+                                       billName:(NSString *)billName
+                                       billType:(SSJBillType)billType
                                       startDate:(NSDate *)startDate
                                         endDate:(NSDate *)endDate
                                         success:(void(^)(NSDictionary *result))success
                                         failure:(void (^)(NSError *error))failure;
 
 /**
- 查询指定的类别是否是支出
-
- @param billTypeId 类别id
- @return
+ *  根据收支类别id查询某个时间段内有效的收入／支出流水统计
+ *
+ *  @param dimension    查询数据的时间维度单位
+ *  @param booksId      账本id，如果传nil则当做当前账本，传SSJAllBooksIds就是全部帐本
+ *  @param billId   收支类别id，如果传nil就查询所有类别
+ *  @param startDate    开始时间，传nil就没有开始日期限制
+ *  @param endDate      结束时间，传nil就以当前时间作为结束日期限制
+ *  @param success      查询成功的回调；result结构：@{SSJReportFormsCurveModelListKey:@[SSJReportFormsCurveModel实例, ...],
+                                                  SSJReportFormsCurveModelBeginDateKey:NSDate起始时间,
+                                                  SSJReportFormsCurveModelEndDateKey:NSDate结束时间}
+ *  @param failure      查询失败的回调
  */
-+ (BOOL)isPaymentWithBillTypeId:(NSString *)billTypeId;
-
-+ (NSString *)billTypeColorWithBillTypeId:(NSString *)billTypeId;
++ (void)queryForBillStatisticsWithTimeDimension:(SSJTimeDimension)dimension
+                                        booksId:(NSString *)booksId
+                                         billId:(NSString *)billId
+                                      startDate:(NSDate *)startDate
+                                        endDate:(NSDate *)endDate
+                                        success:(void(^)(NSDictionary *result))success
+                                        failure:(void (^)(NSError *error))failure;
 
 @end

@@ -124,10 +124,13 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
     NSDictionary *sectionInfo = [self.datas ssj_safeObjectAtIndex:(NSUInteger)indexPath.section];
     NSArray *datas = sectionInfo[SSJBillingChargeRecordKey];
     SSJBillingChargeCellItem *selectedItem = [datas ssj_safeObjectAtIndex:indexPath.row];
-    if (selectedItem.chargeMemo.length || selectedItem.chargeImage.length) {
+    if (selectedItem.chargeMemo.length
+        || selectedItem.chargeImage.length
+        || selectedItem.memberNickname.length) {
         return 65;
+    } else {
+        return 50;
     }
-    return 50;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
@@ -136,38 +139,36 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
 
 #pragma mark - Private
 - (void)reloadData {
-    if (self.billId) {
+    if ([self.booksId isEqualToString:SSJAllBooksIds]) {
         [self.view ssj_showLoadingIndicator];
-        [SSJBillingChargeHelper queryDataWithBillTypeID:self.billId booksId:self.booksId inPeriod:self.period success:^(NSArray<NSDictionary *> *data) {
+        [SSJBillingChargeHelper queryAllBooksChargeListBillId:self.billId period:self.period success:^(NSArray<NSDictionary *> * _Nonnull result) {
             [self.view ssj_hideLoadingIndicator];
-            self.datas = data;
+            self.datas = result;
             [self.tableView reloadData];
-        } failure:^(NSError *error) {
+        } failure:^(NSError * _Nonnull error) {
             [self.view ssj_hideLoadingIndicator];
             [SSJAlertViewAdapter showError:error];
         }];
-    } else if (self.memberId) {
+    } else if (self.billId) {
         [self.view ssj_showLoadingIndicator];
-        [SSJBillingChargeHelper queryMemberChargeWithMemberID:self.memberId booksId:self.booksId inPeriod:self.period isPayment:_isPayment success:^(NSArray<NSDictionary *> *data) {
+        [SSJBillingChargeHelper queryChargeListWithMemberId:self.memberId booksId:self.booksId billId:self.billId period:self.period success:^(NSArray<NSDictionary *> * _Nonnull result) {
             [self.view ssj_hideLoadingIndicator];
-            self.datas = data;
-            [self.tableView reloadData];
-        } failure:^(NSError *error) {
-            [self.view ssj_hideLoadingIndicator];
-            [SSJAlertViewAdapter showError:error];
-        }];
-    } else if (self.billName) {
-        [self.view ssj_showLoadingIndicator];
-        [SSJBillingChargeHelper queryDataWithBillTypeName:self.billName booksId:self.booksId inPeriod:self.period success:^(NSArray<NSDictionary *> * _Nonnull data) {
-            [self.view ssj_hideLoadingIndicator];
-            self.datas = data;
+            self.datas = result;
             [self.tableView reloadData];
         } failure:^(NSError * _Nonnull error) {
             [self.view ssj_hideLoadingIndicator];
             [SSJAlertViewAdapter showError:error];
         }];
     } else {
-        [SSJAlertViewAdapter showError:[NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"billId、memberId、billName三个参数必须传一个"}]];
+        [self.view ssj_showLoadingIndicator];
+        [SSJBillingChargeHelper queryChargeListWithMemberId:self.memberId booksId:self.booksId billName:self.billName billType:self.billType period:self.period success:^(NSArray<NSDictionary *> * _Nonnull result) {
+            [self.view ssj_hideLoadingIndicator];
+            self.datas = result;
+            [self.tableView reloadData];
+        } failure:^(NSError * _Nonnull error) {
+            [self.view ssj_hideLoadingIndicator];
+            [SSJAlertViewAdapter showError:error];
+        }];
     }
 }
 
