@@ -102,6 +102,7 @@ static NSString * SSJSharebooksMemberCellIdentifier = @"SSJSharebooksMemberCellI
         [SSJBooksTypeStore deleteShareBooksWithShareCharge:self.deleteService.shareChargeArray shareMember:self.deleteService.shareMemberArray bookId:self.item.booksId sucess:^(BOOL bookstypeHasChange){
             @strongify(self);
             [CDAutoHideMessageHUD showMessage:@"退出成功"];
+            [SSJAnaliyticsManager event:@"sb_delete_share_books"];
             [self.navigationController popToRootViewControllerAnimated:YES];
         } failure:NULL];
     }
@@ -125,6 +126,7 @@ static NSString * SSJSharebooksMemberCellIdentifier = @"SSJSharebooksMemberCellI
     SSJShareBookMemberItem *item = [self.items objectAtIndex:indexPath.item];
     if ([item.memberId isEqualToString:@"-1"]) {
         SSJSharebooksInviteViewController *inviteVc = [[SSJSharebooksInviteViewController alloc] init];
+        [SSJAnaliyticsManager event:@"sb_add_share_books_member"];
         inviteVc.item = self.item;
         [self.navigationController pushViewController:inviteVc animated:YES];
     } else {
@@ -208,6 +210,7 @@ static NSString * SSJSharebooksMemberCellIdentifier = @"SSJSharebooksMemberCellI
 #pragma mark - Event
 - (void)deleteButtonClicked:(id)sender {
     [self.deleteComfirmAlert show];
+    [SSJAnaliyticsManager event:@"sb_quit_share_books"];
 }
 
 #pragma mark - Private

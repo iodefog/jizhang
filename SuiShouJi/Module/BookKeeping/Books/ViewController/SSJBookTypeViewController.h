@@ -13,4 +13,7 @@
 @property (nonatomic, assign) NSInteger lastSelectedIndex;
 
 @property (nonatomic, copy) void(^saveBooksBlock)(NSInteger bookTypeIndex,NSString *bookName);
+
+/**是否是共享账本进入,目的：友盟统计*/
+@property (nonatomic, assign ) BOOL isShareBook;
 @end

@@ -169,6 +169,7 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
         bookName = privateItem.booksName;
         bookId = privateItem.booksId;
         if (!privateItem.booksId.length && [bookName isEqualToString:@"添加账本"]) {
+            [SSJAnaliyticsManager event:@"add_account_book"];
             [self newAndEditeBooksWiteItem:privateItem];
             return;
         }
@@ -180,6 +181,7 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
         bookId = shareItem.booksId;
         if (!bookId.length && [bookName isEqualToString:@"添加账本"]) {
             if (SSJIsUserLogined()) {
+                [SSJAnaliyticsManager event:@"sb_add_share_book"];
                 [self.createShareBookTypeView show];
             } else {
                 //去登录
@@ -558,10 +560,15 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
             if (selectParent == 0) {
                 //新建共享
                 [weakSelf newAndEditeBooksWiteItem:[[SSJShareBookItem alloc] init]];
+                [SSJAnaliyticsManager event:@"sb_create_share_book"];
+                
             } else if (selectParent == 1) {
                 //暗号加入
                 SSJInviteCodeJoinViewController *inviteVc = [[SSJInviteCodeJoinViewController alloc] init];
+                [SSJAnaliyticsManager event:@"sb_anhao_join_share_book"];
                 inviteVc.inviteCodeJoinBooksBlock = ^(NSString *bookName) {
+                    //保存账本类型
+                    SSJSaveBooksCategory(SSJBooksCategoryPublic);
                     weakSelf.showCreateBookAnimation = YES;
                     weakSelf.inviteCodeJoinSuccessView.bookName = bookName;
                     //弹出加入账本成功弹窗

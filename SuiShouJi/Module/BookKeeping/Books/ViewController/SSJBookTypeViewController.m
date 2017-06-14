@@ -126,23 +126,23 @@
     }
         switch (self.lastSelectedIndex) {
             case 0:
-                [SSJAnaliyticsManager event:@"book_type_richang"];
+                [SSJAnaliyticsManager event:self.isShareBook ? @"sb_book_category_richang" : @"book_type_richang"];
                 break;
     
             case 1:
-                [SSJAnaliyticsManager event:@"book_type_shengyi"];
+                [SSJAnaliyticsManager event:self.isShareBook ? @"sb_book_category_shengyi" : @"book_type_shengyi"];
                 break;
     
             case 2:
-                [SSJAnaliyticsManager event:@"book_type_jiehun"];
+                [SSJAnaliyticsManager event:self.isShareBook ? @" sb_book_category_jiehun" : @"book_type_jiehun"];
                 break;
     
             case 3:
-                [SSJAnaliyticsManager event:@"book_type_zhuangxiu"];
+                [SSJAnaliyticsManager event:self.isShareBook ? @" sb_book_category_zhuangxiu" : @"book_type_zhuangxiu"];
                 break;
     
             case 4:
-                [SSJAnaliyticsManager event:@"book_type_lvxing"];
+                [SSJAnaliyticsManager event:self.isShareBook ? @"sb_book_category_lvxing" : @"book_type_lvxing"];
                 break;
                 
             default:

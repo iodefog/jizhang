@@ -289,10 +289,12 @@
         self.sendButton.backgroundColor = [UIColor ssj_colorWithHex:@"#EB4A64"];
         self.sendButton.layer.shadowColor = [UIColor ssj_colorWithHex:@"#EB4A64"].CGColor;
         self.sendButton.layer.shadowOpacity = 0.39;
+        [SSJAnaliyticsManager event:@"sb_anhao_suiji"];
     } else {
         self.codeInput.text = @"";
         self.codeInput.enabled = YES;
         self.expireDateLab.text = @"暗号12小时内有效";
+        [SSJAnaliyticsManager event:@"sb_anhao_redefine"];
         [self.resendButton setTitle:@"随机生成" forState:UIControlStateNormal];
         self.sendButton.backgroundColor = [UIColor ssj_colorWithHex:@"#CCCCCC"];
         self.sendButton.layer.shadowColor = [UIColor blackColor].CGColor;
@@ -305,7 +307,7 @@
         [CDAutoHideMessageHUD showMessage:@"暗号长度必须在4到10位之间哦"];
         return;
     }
-    
+    [SSJAnaliyticsManager event:@"sb_anhao_sure_to_use"];
     NSString *regex = @"[0-9]*";
     
     NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",regex];
@@ -390,7 +392,7 @@
         
         NSString *content = [NSString stringWithFormat:@"%@邀你加入【%@】，希望和你开启共享记账之旅，快来！",nickName,weakSelf.item.booksName];
         
-        [SSJShareManager shareWithType:SSJShareTypeUrl image:nil UrlStr:[NSString stringWithFormat:@"%@",[url mj_url]] title:SSJAppName() content:content PlatformType:@[@(UMSocialPlatformType_WechatSession),@(UMSocialPlatformType_QQ)] inController:self ShareSuccess:NULL];
+        [SSJShareManager shareWithType:SSJShareTypeUrl image:nil UrlStr:[NSString stringWithFormat:@"%@ ",[url mj_url]] title:SSJAppName() content:content PlatformType:@[@(UMSocialPlatformType_WechatSession),@(UMSocialPlatformType_QQ)] inController:self ShareSuccess:NULL];
         
     } failure:^(NSError * _Nonnull error) {
         
