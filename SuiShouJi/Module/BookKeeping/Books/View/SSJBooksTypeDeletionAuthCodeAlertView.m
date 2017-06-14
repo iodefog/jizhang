@@ -369,6 +369,14 @@ static const int kAuthCodeDigits = 4;
     [self setNeedsUpdateConstraints];
 }
 
+- (void)setSureButtonTitle:(NSString *)sureButtonTitle {
+    [self.sureBtn setTitle:sureButtonTitle forState:UIControlStateNormal];
+}
+
+- (void)setCancelButtonTitle:(NSString *)cancelButtonTitle {
+    [self.cancelBtn setTitle:cancelButtonTitle forState:UIControlStateNormal];
+}
+
 #pragma mark - Lazyloading
 - (UILabel *)titleLab {
     if (!_titleLab) {
