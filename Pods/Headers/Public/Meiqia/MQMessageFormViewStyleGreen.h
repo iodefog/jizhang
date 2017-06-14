@@ -1,1 +1,0 @@
-../../../Meiqia/Meiqia-SDK-files/MQMessageForm/Config/Styles/PreDefined/MQMessageFormViewStyleGreen.h

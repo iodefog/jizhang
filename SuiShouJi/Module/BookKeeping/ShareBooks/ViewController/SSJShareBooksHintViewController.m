@@ -79,17 +79,18 @@
         make.top.mas_equalTo(self.secondTitleLab.mas_bottom).offset(23);
         make.left.mas_equalTo(self.secondTitleLab);
         make.width.mas_equalTo(self.scrollView.mas_width).offset(-30);
+        make.bottom.mas_equalTo(self.scrollView.mas_bottom).offset(-30);
     }];
     
     [self.firstRedView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(6, 16));
-        make.left.mas_equalTo(self.view).offset(18);
+        make.left.mas_equalTo(self.scrollView).offset(18);
         make.top.mas_equalTo(self.firstTitleLab).offset(4);
     }];
     
     [self.secondRedView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(6, 16));
-        make.left.mas_equalTo(self.view).offset(18);
+        make.left.mas_equalTo(self.scrollView).offset(18);
         make.top.mas_equalTo(self.secondTitleLab).offset(4);
     }];
     
@@ -194,6 +195,7 @@
 - (UIScrollView *)scrollView {
     if (!_scrollView) {
         _scrollView = [[UIScrollView alloc] init];
+        _scrollView.contentSize = CGSizeMake(self.view.width, 460);
     }
     return _scrollView;
 }

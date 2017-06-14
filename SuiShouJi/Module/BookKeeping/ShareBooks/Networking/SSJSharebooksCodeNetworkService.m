@@ -12,15 +12,13 @@
 
 - (void)requestCodeWithbooksId:(NSString *)booksId{
     self.showLodingIndicator = YES;
-#warning test
-    [self request:@"http://jz.gs.9188.com:18080/sharebook/query_secretKey.go" params:@{@"cuserId":SSJUSERID(),
+    [self request:SSJURLWithAPI(@"/chargebook/sharebook/query_secretKey.go") params:@{@"cuserId":SSJUSERID(),
                                                                                       @"cbooksId":booksId ? : @""}];
 }
 
 - (void)saveCodeWithbooksId:(NSString *)booksId code:(NSString *)code {
     self.showLodingIndicator = YES;
-#warning test
-    [self request:SSJURLWithAPI(@"http://jz.gs.9188.com:18080/sharebook/save_secretKey.go") params:@{@"cuserId":SSJUSERID(),
+    [self request:SSJURLWithAPI(@"/chargebook/sharebook/save_secretKey.go") params:@{@"cuserId":SSJUSERID(),
                                                                                                     @"cbooksId":booksId,
                                                                                                     @"secretKey":code ? : @""}];
 }
