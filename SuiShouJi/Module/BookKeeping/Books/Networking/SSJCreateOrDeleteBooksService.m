@@ -35,7 +35,7 @@
                                @"cbooksId":bookId,
                                @"istate":@(memberState)};
     self.showLodingIndicator = YES;
-    [self request:SSJURLWithAPI(@"/chargebook/sharebook/remove_member") params:paramDic];
+    [self request:SSJURLWithAPI(@"/chargebook/sharebook/remove_member.go") params:paramDic];
 }
 
 - (void)requestDidFinish:(NSDictionary *)rootElement {
