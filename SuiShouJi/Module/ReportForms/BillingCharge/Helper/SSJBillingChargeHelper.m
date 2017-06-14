@@ -37,11 +37,12 @@ NSString *const SSJBillingChargeRecordKey = @"SSJBillingChargeRecordKey";
             tBooksId = tBooksId ?: SSJUSERID();
         }
         
-        FMResultSet *rs = nil;
+        NSArray *result = nil;
         BOOL isShareBook = [db boolForQuery:@"select count(*) from bk_share_books where cbooksid = ?", tBooksId];
         if (isShareBook) {
-            NSMutableDictionary *params = [@{@"booksId":tBooksId} mutableCopy];
-            NSMutableString *sql = [@"select uc.ichargeid, uc.imoney, uc.cbilldate, uc.cwritedate, uc.ifunsid, uc.ibillid, uc.cmemo, uc.cimgurl, uc.thumburl, uc.cid, uc.ichargetype, uc.cbooksid, bt.cname, bt.ccoin, bt.ccolor, bt.itype from bk_user_charge as uc, bk_bill_type as bt where uc.ibillid = bt.id and uc.operatortype <> 2 and uc.cbilldate <= datetime('now', 'localtime') and bt.istate <> 2 and uc.cbooksid = :booksId" mutableCopy];
+            NSMutableDictionary *params = [@{@"booksId":tBooksId,
+                                             @"userId":SSJUSERID()} mutableCopy];
+            NSMutableString *sql = [@"select uc.cuserid, uc.ichargeid, uc.imoney, uc.cbilldate, uc.cwritedate, uc.ifunsid, uc.ibillid, uc.cmemo, uc.cimgurl, uc.thumburl, uc.cid, uc.ichargetype, uc.cbooksid, bt.cname, bt.ccoin, bt.ccolor, bt.itype, sm.cmark from bk_user_charge as uc, bk_bill_type as bt, bk_share_books_friends_mark as sm where uc.ibillid = bt.id and uc.operatortype <> 2 and uc.cbilldate <= datetime('now', 'localtime') and bt.istate <> 2 and uc.cbooksid = :booksId and uc.cbooksid = sm.cbooksid and uc.cuserid = sm.cfriendid and sm.cuserid = :userId" mutableCopy];
             
             if (![tMemberId isEqualToString:SSJAllMembersId]) {
                 params[@"memberId"] = tMemberId;
@@ -60,11 +61,18 @@ NSString *const SSJBillingChargeRecordKey = @"SSJBillingChargeRecordKey";
             }
             
             [sql appendString:@" order by uc.cbilldate desc"];
-            rs = [db executeQuery:sql withParameterDictionary:params];
+            FMResultSet *rs = [db executeQuery:sql withParameterDictionary:params];
+            if (!rs) {
+                SSJDispatch_main_async_safe(^{
+                    failure([db lastError]);
+                });
+                return;
+            }
+            result = [self organiseDataWithResult:rs containsMemberMark:YES];
         } else if (billId) {
             NSMutableDictionary *params = [@{@"booksId":tBooksId,
                                              @"billId":billId} mutableCopy];
-            NSMutableString *sql = [@"select uc.ichargeid, uc.imoney, uc.cbilldate, uc.cwritedate, uc.ifunsid, uc.ibillid, uc.cmemo, uc.cimgurl, uc.thumburl, uc.cid, uc.ichargetype, uc.cbooksid, bt.cname, bt.ccoin, bt.ccolor, bt.itype from bk_user_charge as uc, bk_bill_type as bt where uc.ibillid = bt.id and bt.istate <> 2 and uc.cbilldate <= datetime('now', 'localtime') and uc.operatortype <> 2 and uc.cbooksid = :booksId and uc.ibillid = :billId" mutableCopy];
+            NSMutableString *sql = [@"select uc.cuserid, uc.ichargeid, uc.imoney, uc.cbilldate, uc.cwritedate, uc.ifunsid, uc.ibillid, uc.cmemo, uc.cimgurl, uc.thumburl, uc.cid, uc.ichargetype, uc.cbooksid, bt.cname, bt.ccoin, bt.ccolor, bt.itype from bk_user_charge as uc, bk_bill_type as bt where uc.ibillid = bt.id and bt.istate <> 2 and uc.cbilldate <= datetime('now', 'localtime') and uc.operatortype <> 2 and uc.cbooksid = :booksId and uc.ibillid = :billId" mutableCopy];
             
             if (period) {
                 params[@"beginDate"] = [period.startDate formattedDateWithFormat:@"yyyy-MM-dd"];
@@ -73,10 +81,17 @@ NSString *const SSJBillingChargeRecordKey = @"SSJBillingChargeRecordKey";
             }
             
             [sql appendString:@" order by uc.cbilldate desc"];
-            rs = [db executeQuery:sql withParameterDictionary:params];
+            FMResultSet *rs = [db executeQuery:sql withParameterDictionary:params];
+            if (!rs) {
+                SSJDispatch_main_async_safe(^{
+                    failure([db lastError]);
+                });
+                return;
+            }
+            result = [self organiseDataWithResult:rs containsMemberMark:NO];
         } else {
             NSMutableDictionary *params = [@{@"booksId":tBooksId} mutableCopy];
-            NSMutableString *sql = [@"select uc.ichargeid, mc.imoney, uc.cbilldate, uc.cwritedate, uc.ifunsid, uc.ibillid, uc.cmemo, uc.cimgurl, uc.thumburl, uc.cid, uc.ichargetype, uc.cbooksid, bt.cname, bt.ccoin, bt.ccolor, bt.itype from bk_user_charge as uc, bk_bill_type as bt, bk_member_charge as mc where uc.ibillid = bt.id and uc.ichargeid = mc.ichargeid and bt.istate <> 2 and uc.cbilldate <= datetime('now', 'localtime') and uc.operatortype <> 2 and uc.cbooksid = :booksId" mutableCopy];
+            NSMutableString *sql = [@"select uc.cuserid, uc.ichargeid, mc.imoney, uc.cbilldate, uc.cwritedate, uc.ifunsid, uc.ibillid, uc.cmemo, uc.cimgurl, uc.thumburl, uc.cid, uc.ichargetype, uc.cbooksid, bt.cname, bt.ccoin, bt.ccolor, bt.itype from bk_user_charge as uc, bk_bill_type as bt, bk_member_charge as mc where uc.ibillid = bt.id and uc.ichargeid = mc.ichargeid and bt.istate <> 2 and uc.cbilldate <= datetime('now', 'localtime') and uc.operatortype <> 2 and uc.cbooksid = :booksId" mutableCopy];
             
             if (![tMemberId isEqualToString:SSJAllMembersId]) {
                 params[@"memberId"] = tMemberId;
@@ -90,17 +105,16 @@ NSString *const SSJBillingChargeRecordKey = @"SSJBillingChargeRecordKey";
             }
             
             [sql appendString:@" order by uc.cbilldate desc"];
-            rs = [db executeQuery:sql withParameterDictionary:params];
+            FMResultSet *rs = [db executeQuery:sql withParameterDictionary:params];
+            if (!rs) {
+                SSJDispatch_main_async_safe(^{
+                    failure([db lastError]);
+                });
+                return;
+            }
+            result = [self organiseDataWithResult:rs containsMemberMark:NO];
         }
         
-        if (!rs) {
-            SSJDispatch_main_async_safe(^{
-                failure([db lastError]);
-            });
-            return;
-        }
-        
-        NSArray *result = [self organiseDataWithResult:rs];
         SSJDispatch_main_async_safe(^{
             success(result);
         });
@@ -126,11 +140,12 @@ NSString *const SSJBillingChargeRecordKey = @"SSJBillingChargeRecordKey";
             tBooksId = tBooksId ?: SSJUSERID();
         }
         
-        FMResultSet *rs = nil;
+        NSArray *result = nil;
         BOOL isShareBook = [db boolForQuery:@"select count(*) from bk_share_books where cbooksid = ?", tBooksId];
         if (isShareBook) {
-            NSMutableDictionary *params = [@{@"booksId":tBooksId} mutableCopy];
-            NSMutableString *sql = [@"select uc.ichargeid, uc.imoney, uc.cbilldate, uc.cwritedate, uc.ifunsid, uc.ibillid, uc.cmemo, uc.cimgurl, uc.thumburl, uc.cid, uc.ichargetype, uc.cbooksid, bt.cname, bt.ccoin, bt.ccolor, bt.itype from bk_user_charge as uc, bk_bill_type as bt where uc.ibillid = bt.id and uc.operatortype <> 2 and uc.cbilldate <= datetime('now', 'localtime') and bt.istate <> 2 and uc.cbooksid = :booksId" mutableCopy];
+            NSMutableDictionary *params = [@{@"booksId":tBooksId,
+                                             @"userId":SSJUSERID()} mutableCopy];
+            NSMutableString *sql = [@"select uc.cuserid, uc.ichargeid, uc.imoney, uc.cbilldate, uc.cwritedate, uc.ifunsid, uc.ibillid, uc.cmemo, uc.cimgurl, uc.thumburl, uc.cid, uc.ichargetype, uc.cbooksid, bt.cname, bt.ccoin, bt.ccolor, bt.itype, sm.cmark from bk_user_charge as uc, bk_bill_type as bt, bk_share_books_friends_mark as sm where uc.ibillid = bt.id and uc.operatortype <> 2 and uc.cbilldate <= datetime('now', 'localtime') and bt.istate <> 2 and uc.cbooksid = :booksId and uc.cbooksid = sm.cbooksid and uc.cuserid = sm.cfriendid and sm.cuserid = :userId" mutableCopy];
             
             if (![tMemberId isEqualToString:SSJAllMembersId]) {
                 params[@"memberId"] = tMemberId;
@@ -154,11 +169,19 @@ NSString *const SSJBillingChargeRecordKey = @"SSJBillingChargeRecordKey";
             }
             
             [sql appendString:@" order by uc.cbilldate desc"];
-            rs = [db executeQuery:sql withParameterDictionary:params];
+            FMResultSet *rs = [db executeQuery:sql withParameterDictionary:params];
+            if (!rs) {
+                SSJDispatch_main_async_safe(^{
+                    failure([db lastError]);
+                });
+                return;
+            }
+            
+            result = [self organiseDataWithResult:rs containsMemberMark:YES];
         } else if (billName) {
             NSMutableDictionary *params = [@{@"booksId":tBooksId,
                                              @"billName":billName} mutableCopy];
-            NSMutableString *sql = [@"select uc.ichargeid, uc.imoney, uc.cbilldate, uc.cwritedate, uc.ifunsid, uc.ibillid, uc.cmemo, uc.cimgurl, uc.thumburl, uc.cid, uc.ichargetype, uc.cbooksid, bt.cname, bt.ccoin, bt.ccolor, bt.itype from bk_user_charge as uc, bk_bill_type as bt where uc.ibillid = bt.id and bt.istate <> 2 and uc.cbilldate <= datetime('now', 'localtime') and uc.operatortype <> 2 and uc.cbooksid = :booksId" mutableCopy];
+            NSMutableString *sql = [@"select uc.cuserid, uc.ichargeid, uc.imoney, uc.cbilldate, uc.cwritedate, uc.ifunsid, uc.ibillid, uc.cmemo, uc.cimgurl, uc.thumburl, uc.cid, uc.ichargetype, uc.cbooksid, bt.cname, bt.ccoin, bt.ccolor, bt.itype from bk_user_charge as uc, bk_bill_type as bt where uc.ibillid = bt.id and bt.istate <> 2 and uc.cbilldate <= datetime('now', 'localtime') and uc.operatortype <> 2 and uc.cbooksid = :booksId" mutableCopy];
             
             if (billType == SSJBillTypePay || billType == SSJBillTypeIncome) {
                 params[@"billType"] = @(billType);
@@ -172,10 +195,17 @@ NSString *const SSJBillingChargeRecordKey = @"SSJBillingChargeRecordKey";
             }
             
             [sql appendString:@" order by uc.cbilldate desc"];
-            rs = [db executeQuery:sql withParameterDictionary:params];
+            FMResultSet *rs = [db executeQuery:sql withParameterDictionary:params];if (!rs) {
+                SSJDispatch_main_async_safe(^{
+                    failure([db lastError]);
+                });
+                return;
+            }
+            
+            result = [self organiseDataWithResult:rs containsMemberMark:NO];
         } else {
             NSMutableDictionary *params = [@{@"booksId":tBooksId} mutableCopy];
-            NSMutableString *sql = [@"select uc.ichargeid, mc.imoney, uc.cbilldate, uc.cwritedate, uc.ifunsid, uc.ibillid, uc.cmemo, uc.cimgurl, uc.thumburl, uc.cid, uc.ichargetype, uc.cbooksid, bt.cname, bt.ccoin, bt.ccolor, bt.itype from bk_user_charge as uc, bk_bill_type as bt, bk_member_charge as mc where uc.ibillid = bt.id and uc.ichargeid = mc.ichargeid and bt.istate <> 2 and uc.cbilldate <= datetime('now', 'localtime') and uc.operatortype <> 2 and uc.cbooksid = :booksId" mutableCopy];
+            NSMutableString *sql = [@"select uc.cuserid, uc.ichargeid, mc.imoney, uc.cbilldate, uc.cwritedate, uc.ifunsid, uc.ibillid, uc.cmemo, uc.cimgurl, uc.thumburl, uc.cid, uc.ichargetype, uc.cbooksid, bt.cname, bt.ccoin, bt.ccolor, bt.itype from bk_user_charge as uc, bk_bill_type as bt, bk_member_charge as mc where uc.ibillid = bt.id and uc.ichargeid = mc.ichargeid and bt.istate <> 2 and uc.cbilldate <= datetime('now', 'localtime') and uc.operatortype <> 2 and uc.cbooksid = :booksId" mutableCopy];
             
             if (![tMemberId isEqualToString:SSJAllMembersId]) {
                 params[@"memberId"] = tMemberId;
@@ -194,17 +224,17 @@ NSString *const SSJBillingChargeRecordKey = @"SSJBillingChargeRecordKey";
             }
             
             [sql appendString:@" order by uc.cbilldate desc"];
-            rs = [db executeQuery:sql withParameterDictionary:params];
+            FMResultSet *rs = [db executeQuery:sql withParameterDictionary:params];
+            if (!rs) {
+                SSJDispatch_main_async_safe(^{
+                    failure([db lastError]);
+                });
+                return;
+            }
+            
+            result = [self organiseDataWithResult:rs containsMemberMark:NO];
         }
         
-        if (!rs) {
-            SSJDispatch_main_async_safe(^{
-                failure([db lastError]);
-            });
-            return;
-        }
-        
-        NSArray *result = [self organiseDataWithResult:rs];
         SSJDispatch_main_async_safe(^{
             success(result);
         });
@@ -219,7 +249,7 @@ NSString *const SSJBillingChargeRecordKey = @"SSJBillingChargeRecordKey";
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
         NSMutableDictionary *params = [@{@"billId":billId,
                                          @"userId":SSJUSERID()} mutableCopy];
-        NSMutableString *sql = [@"select uc.ichargeid, uc.imoney, uc.cbilldate, uc.cwritedate, uc.ifunsid, uc.ibillid, uc.cmemo, uc.cimgurl, uc.thumburl, uc.cid, uc.ichargetype, uc.cbooksid, bt.cname, bt.ccoin, bt.ccolor, bt.itype from bk_user_charge as uc, bk_bill_type as bt where uc.ibillid = bt.id and uc.operatortype <> 2 and uc.cbilldate <= datetime('now', 'localtime') and bt.istate <> 2 and uc.ibillid = :billId and uc.cuserid = :userId" mutableCopy];
+        NSMutableString *sql = [@"select uc.cuserid, uc.ichargeid, uc.imoney, uc.cbilldate, uc.cwritedate, uc.ifunsid, uc.ibillid, uc.cmemo, uc.cimgurl, uc.thumburl, uc.cid, uc.ichargetype, uc.cbooksid, bt.cname, bt.ccoin, bt.ccolor, bt.itype from bk_user_charge as uc, bk_bill_type as bt where uc.ibillid = bt.id and uc.operatortype <> 2 and uc.cbilldate <= datetime('now', 'localtime') and bt.istate <> 2 and uc.ibillid = :billId and uc.cuserid = :userId" mutableCopy];
         
         if (period) {
             params[@"beginDate"] = [period.startDate formattedDateWithFormat:@"yyyy-MM-dd"];
@@ -236,20 +266,21 @@ NSString *const SSJBillingChargeRecordKey = @"SSJBillingChargeRecordKey";
             return;
         }
         
-        NSArray *result = [self organiseDataWithResult:rs];
+        NSArray *result = [self organiseDataWithResult:rs containsMemberMark:NO];
         SSJDispatch_main_async_safe(^{
             success(result);
         });
     }];
 }
 
-+ (NSArray *)organiseDataWithResult:(FMResultSet *)rs {
++ (NSArray *)organiseDataWithResult:(FMResultSet *)rs containsMemberMark:(BOOL)containsMemberMark {
     NSMutableArray *items = [NSMutableArray array];
     NSMutableDictionary *subDic = nil;
     NSString *tempDate = nil;
     
     while ([rs next]) {
         SSJBillingChargeCellItem *item = [[SSJBillingChargeCellItem alloc] init];
+        item.userId = [rs stringForColumn:@"cuserid"];
         item.imageName = [rs stringForColumn:@"CCOIN"];
         item.typeName = [rs stringForColumn:@"CNAME"];
         item.money = [rs stringForColumn:@"IMONEY"];
@@ -266,6 +297,9 @@ NSString *const SSJBillingChargeRecordKey = @"SSJBillingChargeRecordKey";
         item.idType = [rs intForColumn:@"ichargetype"];
         item.sundryId = [rs stringForColumn:@"cid"];
         item.booksId = [rs stringForColumn:@"cbooksid"];
+        if (containsMemberMark) {
+            item.memberNickname = [item.userId isEqualToString:SSJUSERID()] ? @"我" : [rs stringForColumn:@"cmark"];
+        }
         
         if ([tempDate isEqualToString:item.billDate]) {
             NSMutableArray *items = subDic[SSJBillingChargeRecordKey];
