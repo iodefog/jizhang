@@ -247,6 +247,9 @@ extern NSString *const SSJReminderNotificationKey;
 //  已经读过的公告的key
 extern NSString *const SSJAnnouncementHaveReadKey;
 
+//保存当前账本类型：共享or个人
+extern NSString *const SSJBookCategoryKey;
+
 /** --------------- Notification --------------- */
 #pragma mark - Notification
 //  数据同步成功通知

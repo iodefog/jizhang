@@ -1,1 +1,0 @@
-../../../Meiqia/Meiqia-SDK-files/MQChatViewController/Controllers/PreChatForm/MQPreChatSubmitViewController.h

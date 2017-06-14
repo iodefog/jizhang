@@ -1,1 +1,0 @@
-../../../Meiqia/Meiqia-SDK-files/MQChatViewController/Vendors/HPTextView/MEIQIA_HPTextViewInternal.h

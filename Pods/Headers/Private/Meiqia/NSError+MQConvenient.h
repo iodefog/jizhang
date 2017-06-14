@@ -1,1 +1,0 @@
-../../../Meiqia/Meiqia-SDK-files/MQChatViewController/Categories/NSError+MQConvenient.h

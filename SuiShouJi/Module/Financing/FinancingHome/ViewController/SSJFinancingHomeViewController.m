@@ -287,13 +287,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 -(void)hiddenButtonClicked{
     self.headerView.hiddenButton.selected = !self.headerView.hiddenButton.selected;
     if (self.headerView.hiddenButton.selected) {
-        __weak typeof(self) weakSelf = self;
-        [SSJFinancingHomeHelper queryForFundingSumMoney:^(double result) {
-            weakSelf.headerView.balanceAmount = [NSString stringWithFormat:@"%.2f",result];
-            [weakSelf.view setNeedsLayout];
-        } failure:^(NSError *error) {
-            
-        }];
+        [self getSumMoney];
     }else{
         self.headerView.balanceAmount = @"******";
         [self .view setNeedsLayout];
@@ -320,16 +314,6 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
     if (!self.items.count) {
         [self.collectionView ssj_showLoadingIndicator];
     }
-    [SSJFinancingHomeHelper queryForFundingSumMoney:^(double result) {
-        if (weakSelf.headerView.hiddenButton.selected) {
-            weakSelf.headerView.balanceAmount = [NSString stringWithFormat:@"%.2f",result];
-            [weakSelf.view setNeedsLayout];
-        }else{
-            self.headerView.balanceAmount = @"******";
-        }
-    } failure:^(NSError *error) {
-        
-    }];
     [SSJFinancingHomeHelper queryForFundingListWithSuccess:^(NSArray<SSJFinancingHomeitem *> *result) {
         weakSelf.items = [[NSMutableArray alloc]initWithArray:result];
         for (int i = 0; i < weakSelf.items.count; i ++) {
@@ -352,6 +336,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
         }
         [weakSelf.collectionView ssj_hideLoadingIndicator];
         
+        [self getSumMoney];
     } failure:^(NSError *error) {
         [weakSelf.collectionView ssj_hideLoadingIndicator];
     }];
@@ -392,6 +377,29 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
     self.headerView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
 //    self.navigationItem.rightBarButtonItem.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     [self.collectionView reloadData];
+}
+
+- (void)getSumMoney {
+    __block double sumMoney = 0;
+    [self.items enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        
+        if ([obj isKindOfClass:[SSJFinancingHomeitem class]]) {
+            SSJFinancingHomeitem *fundingItem = (SSJFinancingHomeitem *)obj;
+            sumMoney += fundingItem.fundingAmount;
+        }else if([obj isKindOfClass:[SSJCreditCardItem class]]){
+            SSJCreditCardItem *creditItem = (SSJCreditCardItem *)obj;
+            sumMoney += creditItem.cardBalance;
+        }
+        
+    }];
+    
+    if (self.headerView.hiddenButton.selected) {
+        self.headerView.balanceAmount = [NSString stringWithFormat:@"%.2f",sumMoney];
+        [self.view setNeedsLayout];
+    }else{
+        self.headerView.balanceAmount = @"******";
+    }
+
 }
 
 @end
