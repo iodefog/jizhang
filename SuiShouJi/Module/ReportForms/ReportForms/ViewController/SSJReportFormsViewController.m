@@ -115,9 +115,9 @@ static NSString *const kSegmentTitleSurplus = @"结余";
     [super viewWillLayoutSubviews];
     self.navigationBar.frame = CGRectMake(0, 0, self.view.width, 64);
     self.periodControl.frame = CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, 40);
-    self.payIncomeSurplusControl.frame = CGRectMake(0, 0, self.view.width, 40);
+//    self.payIncomeSurplusControl.frame = CGRectMake(0, 0, self.view.width, 40);
     self.tableView.frame = CGRectMake(0, self.periodControl.bottom, self.view.width, self.view.height - self.periodControl.bottom - SSJ_TABBAR_HEIGHT);
-    self.noDataRemindView.frame = CGRectMake(0, 0, self.view.width, 260);
+    self.noDataRemindView.frame = CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM - SSJ_STATUSBAR_HEIGHT);
 }
 
 #pragma mark - Overwrite
@@ -259,6 +259,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     if (section == 0) {
+        return 40;
         return self.payIncomeSurplusControl.height;
     }
     return 0;
