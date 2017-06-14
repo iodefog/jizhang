@@ -8,7 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
+
 @class FMDatabase;
+
+SSJ_DEPRECATED
 
 @interface SSJDailySumChargeTable : NSObject
 

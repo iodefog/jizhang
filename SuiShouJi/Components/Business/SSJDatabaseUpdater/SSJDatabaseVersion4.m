@@ -32,11 +32,6 @@
         return error;
     }
     
-    error = [self updateDailySumChargeTableWithDatabase:db];
-    if (error) {
-        return error;
-    }
-    
     error = [self updateChargePeriodConfigTableWithDatabase:db];
     if (error) {
         return error;
@@ -98,35 +93,6 @@
     if (![db executeUpdate:@"update bk_user_budget set cbooksid = cuserid"]) {
         return [db lastError];
     }
-    return nil;
-}
-
-+ (NSError *)updateDailySumChargeTableWithDatabase:(FMDatabase *)db {
-    // 创建临时表
-    if (![db executeUpdate:@"create temporary table TMP_DAILYSUM_CHARGE (CBILLDATE TEXT, EXPENCEAMOUNT REAL, INCOMEAMOUNT REAL, SUMAMOUNT REAL, CWRITEDATE TEXT, CUSERID TEXT, CBOOKSID TEXT, PRIMARY KEY(CBILLDATE, CUSERID, CBOOKSID))"]) {
-        return [db lastError];
-    }
-    
-    // 将原来表中的纪录插入到临时表中
-    if (![db executeUpdate:@"insert into TMP_DAILYSUM_CHARGE select CBILLDATE, EXPENCEAMOUNT, INCOMEAMOUNT, SUMAMOUNT, CWRITEDATE, CUSERID, CUSERID from BK_DAILYSUM_CHARGE"]) {
-        return [db lastError];
-    }
-    
-    // 删除原来的表
-    if (![db executeUpdate:@"drop table BK_DAILYSUM_CHARGE"]) {
-        return [db lastError];
-    }
-    
-    // 新建表
-    if (![db executeUpdate:@"create table BK_DAILYSUM_CHARGE (CBILLDATE TEXT, EXPENCEAMOUNT REAL, INCOMEAMOUNT REAL, SUMAMOUNT REAL, CWRITEDATE TEXT, CUSERID TEXT, CBOOKSID TEXT, PRIMARY KEY(CBILLDATE, CUSERID, CBOOKSID))"]) {
-        return [db lastError];
-    }
-    
-    //
-    if (![db executeUpdate:@"insert into BK_DAILYSUM_CHARGE select * from TMP_DAILYSUM_CHARGE"]) {
-        return [db lastError];
-    }
-    
     return nil;
 }
 
