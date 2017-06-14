@@ -203,11 +203,9 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
             if ([bookItem isKindOfClass:[SSJBooksTypeItem class]]) {
                 wself.item.sundryId = nil;
                 wself.item.idType = SSJChargeIdTypeNormal;
-                SSJSaveBooksCategory(SSJBooksCategoryPersional);
             } else if ([bookItem isKindOfClass:[SSJShareBookItem class]]) {
                 wself.item.sundryId = bookItem.booksId;
                 wself.item.idType = SSJChargeIdTypeShareBooks;
-                SSJSaveBooksCategory(SSJBooksCategoryPublic);
             }
             [wself.currentInput becomeFirstResponder];
             [[wself loadBillTypeSignal] subscribeError:^(NSError *error) {
@@ -917,6 +915,13 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
             BOOL hasChangeBooksType = ![editeItem.booksId isEqualToString:self.defaultBooksId];
             if (hasChangeBooksType) {
+                NSObject<SSJBooksItemProtocol> *bookItem = [self.booksItems ssj_safeObjectAtIndex:self.customNaviBar.selectedTitleIndex];
+                ;
+                if ([bookItem isKindOfClass:[SSJBooksTypeItem class]]) {
+                    SSJSaveBooksCategory(SSJBooksCategoryPersional);
+                } else if ([bookItem isKindOfClass:[SSJShareBookItem class]]) {
+                    SSJSaveBooksCategory(SSJBooksCategoryPublic);
+                }
                 [SSJUserTableManager updateCurrentBooksId:editeItem.booksId success:^{
                     [subscriber sendNext:editeItem];
                     [subscriber sendCompleted];
