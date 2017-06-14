@@ -831,6 +831,7 @@
 		7D768A7D1C96C93A00CB75B0 /* SSJSynchronizeTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D768A7C1C96C93A00CB75B0 /* SSJSynchronizeTask.m */; };
 		7D768A801C96CA4400CB75B0 /* SSJSynchronizeTaskQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D768A7F1C96CA4400CB75B0 /* SSJSynchronizeTaskQueue.m */; };
 		7D768A831C97E76400CB75B0 /* SSJDatabaseVersion1.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D768A821C97E76400CB75B0 /* SSJDatabaseVersion1.m */; };
+		7D7ABD5A1EF123A800094382 /* youyuwo.cer in Resources */ = {isa = PBXBuildFile; fileRef = 7D81DBB81E1369560072DB7E /* youyuwo.cer */; };
 		7D7EF10F1ECAD40300E5D51D /* SSJCalenderDetailInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D7EF10E1ECAD40300E5D51D /* SSJCalenderDetailInfoCell.m */; };
 		7D7EF1101ECAD40300E5D51D /* SSJCalenderDetailInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D7EF10E1ECAD40300E5D51D /* SSJCalenderDetailInfoCell.m */; };
 		7D7EF1111ECAD40300E5D51D /* SSJCalenderDetailInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D7EF10E1ECAD40300E5D51D /* SSJCalenderDetailInfoCell.m */; };
@@ -14955,6 +14956,7 @@
 				9CECFE031D6D41A700DB2C8B /* Assets.xcassets in Resources */,
 				9C61E3131EE6AA06001BA5F2 /* lottie_1.json in Resources */,
 				9CECFE461D6D41A700DB2C8B /* sr_refresh.png in Resources */,
+				7D7ABD5A1EF123A800094382 /* youyuwo.cer in Resources */,
 				9CECFEB51D6D41A700DB2C8B /* ProjectSettings.plist in Resources */,
 				7DC4875E1DF6629700C27B69 /* Localizable.strings in Resources */,
 				9C30AA8E1EAF6EA6008DD51D /* 1001.zip in Resources */,
