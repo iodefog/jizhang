@@ -706,8 +706,11 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
             if (SSJSaveAppId(self.loginService.appid)
                 && SSJSaveAccessToken(self.loginService.accesstoken)
                 && SSJSetUserId(self.loginService.item.userId)
-                && SSJSaveUserLogined(YES)) {
+                && SSJSaveUserLogined(YES)
+                //保存账本类型个人or共享
+                && SSJSaveBooksCategory([self queryCurrentCategoryForUserId:self.loginService.item.userId])) {
                 [subscriber sendCompleted];
+                
             } else {
                 [subscriber sendError:[NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"存储用户登录信息失败"}]];
             }
@@ -799,6 +802,16 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     }] subscribeError:^(NSError *error) {
         [SSJAlertViewAdapter showError:error];
     }];
+}
+
+// 登录成功后保存当前账本类型：共享or个人
+- (SSJBooksCategory )queryCurrentCategoryForUserId:(NSString *)userId {
+    __block BOOL isShareBook;
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
+        NSString *currentBookId = [db stringForQuery:@"select ccurrentbooksid from bk_user where cuserid = ?",userId];
+        isShareBook = [db boolForQuery:@"select count(*) from bk_book_type where cbookid = ? ",currentBookId];
+    }];
+    return !isShareBook;
 }
 
 - (void)syncData {

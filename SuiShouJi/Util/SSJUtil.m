@@ -523,3 +523,19 @@ void SSJSwizzleSelector(Class class, SEL originalSelector, SEL swizzledSelector)
     Method swizzledMethod = class_getInstanceMethod(class, swizzledSelector);
     method_exchangeImplementations(originalMethod, swizzledMethod);
 }
+
+
+#pragma mark - 账本类型个人账本or共享账本
+SSJBooksCategory SSJGetBooksCategory() {
+    return [[NSUserDefaults standardUserDefaults] integerForKey:SSJBookCategoryKey];
+}
+
+BOOL SSJSaveBooksCategory(SSJBooksCategory category) {
+    [[NSUserDefaults standardUserDefaults] setInteger:category forKey:SSJBookCategoryKey];
+    return [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+void clearCurrentBooksCategory() {
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:SSJBookCategoryKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
