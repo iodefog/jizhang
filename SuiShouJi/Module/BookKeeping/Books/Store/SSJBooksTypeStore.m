@@ -173,14 +173,7 @@
             [typeInfo setObject:@(1) forKey:@"operatortype"];
             sql = [self updateSQLStatementWithTypeInfo:typeInfo tableName:@"BK_BOOKS_TYPE"];
         }
-        if (![db executeUpdate:sql withParameterDictionary:typeInfo]) {
-            if (failure) {
-                SSJDispatch_main_async_safe(^{
-                    failure([db lastError]);
-                });
-            }
-            return;
-        }
+        
         if (![db boolForQuery:@"select count(*) from BK_BOOKS_TYPE where CBOOKSID = ?", booksid]) {//判断添加账本还是修改账本
             if (![self generateBooksTypeForBooksItem:item indatabase:db forUserId:userId]) {
                 if (failure) {
@@ -191,6 +184,16 @@
                 return;
             }
         }
+        
+        if (![db executeUpdate:sql withParameterDictionary:typeInfo]) {
+            if (failure) {
+                SSJDispatch_main_async_safe(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        }
+        
         if (success) {
             SSJDispatch_main_async_safe(^{
                 success();

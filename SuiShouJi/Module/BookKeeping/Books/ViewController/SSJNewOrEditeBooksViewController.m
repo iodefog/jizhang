@@ -48,6 +48,9 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
 @property (nonatomic, copy) NSString *bookName;
 
 @property (nonatomic, strong) SSJCreateOrDeleteBooksService *createBookService;
+
+/**编辑还是添加*/
+@property (nonatomic, assign) BOOL editOrNew;
 @end
 
 @implementation SSJNewOrEditeBooksViewController
@@ -71,16 +74,20 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
         if (((SSJBooksTypeItem *)self.bookItem).booksId.length) {
             self.title = NSLocalizedString(@"编辑个人账本", nil);
             [SSJAnaliyticsManager event:@"accountbook_edit"];
+            self.editOrNew = NO;
         } else {
             self.title = NSLocalizedString(@"新建个人账本", nil);
+            self.editOrNew = YES;
         }
         self.tipStr = NSLocalizedString(@"Tip：个人记账，账本仅自己可见", nil);
     } else if([self.bookItem isKindOfClass:[SSJShareBookItem class]]) { //共享账本
         if (((SSJShareBookItem *)self.bookItem).booksId.length) {
             self.title = NSLocalizedString(@"编辑共享账本", nil);
+            self.editOrNew = NO;
             [SSJAnaliyticsManager event:@"sb_edit_share_books"];
         } else {
             self.title = NSLocalizedString(@"新建共享账本", nil);
+            self.editOrNew = YES;
         }
         self.tipStr = NSLocalizedString(@"Tip：共同记账，账本可共享给ta", nil);
     }
@@ -166,7 +173,7 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     __weak __typeof(self)weakSelf = self;
-    if (indexPath.row == 1  && !self.bookItem.booksId.length) {
+    if (indexPath.row == 1 && self.editOrNew == YES) {
         //记账场景
         SSJBookTypeViewController *bookTypeVC = [[SSJBookTypeViewController alloc] init];
         if (!self.currentBookType) {
