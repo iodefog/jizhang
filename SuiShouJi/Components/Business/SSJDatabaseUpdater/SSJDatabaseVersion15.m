@@ -31,6 +31,12 @@
         return error;
     }
     
+    error = [self updateBillTypeTableWithDatabase:db];
+    if (error) {
+        return error;
+    }
+    
+    
     return nil;
 }
 
