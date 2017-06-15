@@ -7,8 +7,86 @@
 //
 
 #import "SSJReportFormsCurveView.h"
-#import "SSJReportFormsCurveViewItem.h"
 #import "SSJReportFormsCurveDot.h"
+
+#pragma mark - SSJReportFormsCurveViewItem
+#pragma mark -
+
+typedef NS_ENUM(NSInteger, SSJCurveValueLabelLayoutStyle) {
+    SSJCurveValueLabelLayoutStyleTop,
+    SSJCurveValueLabelLayoutStyleBottom
+};
+
+@interface SSJReportFormsCurveViewItem ()
+
+@property (nonatomic) SSJCurveValueLabelLayoutStyle labelLayoutStyle;
+
+@end
+
+@implementation SSJReportFormsCurveViewItem
+
+- (instancetype)init {
+    if (self = [super init]) {
+        _labelLayoutStyle = SSJCurveValueLabelLayoutStyleBottom;
+    }
+    return self;
+}
+
+- (BOOL)isCurveInfoEqualToItem:(SSJReportFormsCurveViewItem *)item {
+    return (CGColorEqualToColor(_curveColor.CGColor, item.curveColor.CGColor)
+            && CGPointEqualToPoint(_startPoint, item.startPoint)
+            && CGPointEqualToPoint(_endPoint, item.endPoint)
+            && CGSizeEqualToSize(_shadowOffset, item.shadowOffset)
+            && _showCurve == item.showCurve
+            && _showShadow == item.showShadow
+            && _shadowWidth == item.shadowWidth
+            && _shadowAlpha == item.shadowAlpha
+            && _curveWidth == item.curveWidth);
+}
+
+- (void)testOverlapPreItem:(SSJReportFormsCurveViewItem *)preItem space:(CGFloat)space {
+    CGSize textSize = [self.value sizeWithAttributes:@{NSFontAttributeName:self.valueFont}];
+    CGRect textFrame = CGRectMake(space + self.endPoint.x, self.endPoint.y, textSize.width, textSize.height);
+    
+    CGSize preTextSize = [preItem.value sizeWithAttributes:@{NSFontAttributeName:preItem.valueFont}];
+    CGRect preTextFrame = CGRectMake(preItem.endPoint.x, preItem.endPoint.y, preTextSize.width, preTextSize.height);
+    
+    if (CGRectIntersectsRect(textFrame, preTextFrame)) {
+        switch (preItem.labelLayoutStyle) {
+            case SSJCurveValueLabelLayoutStyleTop:
+                self.labelLayoutStyle = SSJCurveValueLabelLayoutStyleBottom;
+                break;
+                
+            case SSJCurveValueLabelLayoutStyleBottom:
+                self.labelLayoutStyle = SSJCurveValueLabelLayoutStyleTop;
+                break;
+        }
+    }
+}
+
+- (NSString *)debugDescription {
+    return [NSString stringWithFormat:@"%@:%@", self, @{@"showCurve":@(_showCurve),
+                                                        @"startPoint":NSStringFromCGPoint(_startPoint),
+                                                        @"endPoint":NSStringFromCGPoint(_endPoint),
+                                                        @"curveWidth":@(_curveWidth),
+                                                        @"curveColor":_curveColor ?: [NSNull null],
+                                                        @"showShadow":@(_showShadow),
+                                                        @"shadowWidth":@(_shadowWidth),
+                                                        @"shadowOffset":NSStringFromCGSize(_shadowOffset),
+                                                        @"shadowAlpha":@(_shadowAlpha),
+                                                        @"showValue":@(_showValue),
+                                                        @"value":_value ?: [NSNull null],
+                                                        @"valueColor":_valueColor ?: [NSNull null],
+                                                        @"valueFont":_valueFont ?: [NSNull null],
+                                                        @"showDot":@(_showDot),
+                                                        @"dotColor":_dotColor ?: [NSNull null],
+                                                        @"dotAlpha":@(_dotAlpha)}];
+}
+
+@end
+
+#pragma mark - _SSJReportFormsCurveShapeView
+#pragma mark -
 
 @interface _SSJReportFormsCurveShapeView : UIView
 
@@ -27,6 +105,9 @@
 }
 
 @end
+
+#pragma mark - SSJReportFormsCurveView
+#pragma mark -
 
 @interface SSJReportFormsCurveView ()
 
@@ -111,7 +192,15 @@
     _dot.center = _item.endPoint;
     
     [_valueLab sizeToFit];
-    _valueLab.leftTop = CGPointMake(_item.endPoint.x + _dot.outerRadius, _item.endPoint.y);
+    switch (_item.labelLayoutStyle) {
+        case SSJCurveValueLabelLayoutStyleTop:
+            _valueLab.leftBottom = CGPointMake(_item.endPoint.x + _dot.outerRadius, _item.endPoint.y);
+            break;
+            
+        case SSJCurveValueLabelLayoutStyleBottom:
+            _valueLab.leftTop = CGPointMake(_item.endPoint.x + _dot.outerRadius, _item.endPoint.y);
+            break;
+    }
     
     _curveView.frame = self.bounds;
     _maskCurveView.frame = self.bounds;
