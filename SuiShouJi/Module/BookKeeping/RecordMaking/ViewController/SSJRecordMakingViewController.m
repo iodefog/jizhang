@@ -410,6 +410,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     _currentInput = textField;
     _paymentTypeView.editing = NO;
     _incomeTypeView.editing = NO;
+    _billTypeInputView.moneyInput.clearsOnInsertion = YES;
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
