@@ -156,26 +156,7 @@ static NSString *const kCellId = @"SSJCustomThemeSelectCollectionViewCell";
         }
         
         //友盟统计
-        switch (indexPath.item) {
-            case 1:
-                [SSJAnaliyticsManager event:@"more_define_bg_upload_image_one"];
-                break;
-            case 2:
-                [SSJAnaliyticsManager event:@"more_define_bg_upload_image_two"];
-                break;
-            case 3:
-                [SSJAnaliyticsManager event:@"more_define_bg_upload_image_three"];
-                break;
-            case 4:
-                [SSJAnaliyticsManager event:@"more_define_bg_upload_image_four"];
-                break;
-            case 5:
-                [SSJAnaliyticsManager event:@"more_define_bg_upload_image_five"];
-                break;
-                
-            default:
-                break;
-        }
+        [SSJAnaliyticsManager event:@"more_define_bg_sel_default_pic"];
     }
 }
 

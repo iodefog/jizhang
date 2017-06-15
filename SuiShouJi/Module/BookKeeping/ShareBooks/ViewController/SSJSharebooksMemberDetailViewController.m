@@ -156,6 +156,11 @@ static NSString *const kSegmentTitleIncome = @"收入";
     [self reloadAllDatas];
 }
 
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [self.deleteService cancel];
+}
+
 #pragma mark - UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.cellItems.count;

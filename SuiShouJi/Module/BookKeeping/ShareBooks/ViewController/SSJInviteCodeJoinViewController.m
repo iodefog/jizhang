@@ -96,6 +96,11 @@
     return UIStatusBarStyleDefault;
 }
 
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [self.service cancel];
+}
+
 #pragma mark - Getter
 - (UIView *)backView {
     if (!_backView) {
