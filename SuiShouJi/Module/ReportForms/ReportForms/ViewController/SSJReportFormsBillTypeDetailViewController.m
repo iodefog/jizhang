@@ -172,7 +172,7 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
     return 1;
 }
 
-- (CGFloat)curveGraphView:(SSJReportFormsCurveGraphView *)graphView valueForCurveAtIndex:(NSUInteger)curveIndex axisXIndex:(NSUInteger)axisXIndex {
+- (double)curveGraphView:(SSJReportFormsCurveGraphView *)graphView valueForCurveAtIndex:(NSUInteger)curveIndex axisXIndex:(NSUInteger)axisXIndex {
     
     SSJReportFormsCurveModel *model = [_curveModels ssj_safeObjectAtIndex:axisXIndex];
     if (self.billType == SSJBillTypePay) {

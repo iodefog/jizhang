@@ -8,7 +8,24 @@
 
 #import "SSJReportFormsCurveCell.h"
 #import "SSJReportFormsCurveView.h"
-#import "SSJReportFormsCurveCellItem.h"
+
+#pragma mark - SSJReportFormsCurveCellItem
+#pragma mark -
+@implementation SSJReportFormsCurveCellItem
+
+- (NSString *)debugDescription {
+    return [NSString stringWithFormat:@"%@:%@", self, @{@"title":_title ?: [NSNull null],
+                                                        @"titleFont":_titleFont ?: [NSNull null],
+                                                        @"titleColor":_titleColor ?: [NSNull null],
+                                                        @"scaleColor":_scaleColor ?: [NSNull null],
+                                                        @"scaleTop":@(_scaleTop),
+                                                        @"curveItems":[_curveItems debugDescription]}];
+}
+
+@end
+
+#pragma mark - SSJReportFormsCurveCell
+#pragma mark -
 
 @interface SSJReportFormsCurveCell ()
 

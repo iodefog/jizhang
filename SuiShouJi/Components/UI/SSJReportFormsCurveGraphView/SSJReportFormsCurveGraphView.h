@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 @required
 - (NSUInteger)numberOfAxisXInCurveGraphView:(SSJReportFormsCurveGraphView *)graphView;
 
-- (CGFloat)curveGraphView:(SSJReportFormsCurveGraphView *)graphView valueForCurveAtIndex:(NSUInteger)curveIndex axisXIndex:(NSUInteger)axisXIndex;
+- (double)curveGraphView:(SSJReportFormsCurveGraphView *)graphView valueForCurveAtIndex:(NSUInteger)curveIndex axisXIndex:(NSUInteger)axisXIndex;
 
 @optional
 - (NSUInteger)numberOfCurveInCurveGraphView:(SSJReportFormsCurveGraphView *)graphView;
@@ -62,7 +62,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Y轴刻度上的最大值
  */
-@property (nonatomic, readonly) CGFloat maxValue;
+@property (nonatomic, readonly) double maxValue;
 
 /**
  X轴的刻度数量
