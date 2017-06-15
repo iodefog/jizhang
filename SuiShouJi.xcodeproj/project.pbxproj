@@ -8197,6 +8197,18 @@
 		9CD9BC5E1CFEB12E0061803B /* SSJFundingTransferEditeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BC5D1CFEB12E0061803B /* SSJFundingTransferEditeViewController.m */; };
 		9CD9BC641CFEBCA40061803B /* SSJFundingTransferEdite.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BC631CFEBCA40061803B /* SSJFundingTransferEdite.m */; };
 		9CD9BC681CFFD3600061803B /* SSJChargeCircleModifyCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BC671CFFD3600061803B /* SSJChargeCircleModifyCell.m */; };
+		9CDB49611EF2A03F0097E09D /* SSJShareBooksUrlHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61E35E1EEE704D001BA5F2 /* SSJShareBooksUrlHandle.m */; };
+		9CDB49621EF2A0400097E09D /* SSJShareBooksUrlHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61E35E1EEE704D001BA5F2 /* SSJShareBooksUrlHandle.m */; };
+		9CDB49631EF2A0410097E09D /* SSJShareBooksUrlHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61E35E1EEE704D001BA5F2 /* SSJShareBooksUrlHandle.m */; };
+		9CDB49641EF2A0420097E09D /* SSJShareBooksUrlHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61E35E1EEE704D001BA5F2 /* SSJShareBooksUrlHandle.m */; };
+		9CDB49651EF2A0420097E09D /* SSJShareBooksUrlHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61E35E1EEE704D001BA5F2 /* SSJShareBooksUrlHandle.m */; };
+		9CDB49661EF2A0440097E09D /* SSJShareBooksUrlHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61E35E1EEE704D001BA5F2 /* SSJShareBooksUrlHandle.m */; };
+		9CDB49671EF2A0450097E09D /* SSJShareBooksUrlHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61E35E1EEE704D001BA5F2 /* SSJShareBooksUrlHandle.m */; };
+		9CDB49681EF2A0450097E09D /* SSJShareBooksUrlHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61E35E1EEE704D001BA5F2 /* SSJShareBooksUrlHandle.m */; };
+		9CDB496A1EF2A0470097E09D /* SSJShareBooksUrlHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61E35E1EEE704D001BA5F2 /* SSJShareBooksUrlHandle.m */; };
+		9CDB496B1EF2A0480097E09D /* SSJShareBooksUrlHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61E35E1EEE704D001BA5F2 /* SSJShareBooksUrlHandle.m */; };
+		9CDB496C1EF2A0480097E09D /* SSJShareBooksUrlHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61E35E1EEE704D001BA5F2 /* SSJShareBooksUrlHandle.m */; };
+		9CDB496D1EF2A0490097E09D /* SSJShareBooksUrlHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61E35E1EEE704D001BA5F2 /* SSJShareBooksUrlHandle.m */; };
 		9CDF19741E7F739400E55E4A /* SSJBooksTypeSelectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CDF19731E7F739400E55E4A /* SSJBooksTypeSelectViewController.m */; };
 		9CDF19751E7F7A1700E55E4A /* SSJBooksTypeSelectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CDF19731E7F739400E55E4A /* SSJBooksTypeSelectViewController.m */; };
 		9CDF19771E7F7A1800E55E4A /* SSJBooksTypeSelectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CDF19731E7F739400E55E4A /* SSJBooksTypeSelectViewController.m */; };
@@ -16129,6 +16141,7 @@
 				7D08A2481E4999D30085A8FB /* SSJReportFormsCurveBalloonView.m in Sources */,
 				7D08A2491E4999D30085A8FB /* SSJNewCreditCardViewController.m in Sources */,
 				7D08A24A1E4999D30085A8FB /* SSJRecordMakingBillTypeSelectionView.m in Sources */,
+				9CDB49651EF2A0420097E09D /* SSJShareBooksUrlHandle.m in Sources */,
 				7D08A24B1E4999D30085A8FB /* SSJReportFormCanYinChartCell.m in Sources */,
 				7D08A24C1E4999D30085A8FB /* SSJReportFormsCurveDescriptionView.m in Sources */,
 				7D08A24D1E4999D30085A8FB /* SSJFundingTransferListViewController.m in Sources */,
@@ -16762,6 +16775,7 @@
 				7DA13B9F1E35AED7000490A4 /* SSJReportFormsCurveBalloonView.m in Sources */,
 				7DA13BA01E35AED7000490A4 /* SSJNewCreditCardViewController.m in Sources */,
 				7DA13BA11E35AED7000490A4 /* SSJRecordMakingBillTypeSelectionView.m in Sources */,
+				9CDB49641EF2A0420097E09D /* SSJShareBooksUrlHandle.m in Sources */,
 				7DA13BA21E35AED7000490A4 /* SSJReportFormCanYinChartCell.m in Sources */,
 				7DA13BA31E35AED7000490A4 /* SSJReportFormsCurveDescriptionView.m in Sources */,
 				7DA13BA41E35AED7000490A4 /* SSJFundingTransferListViewController.m in Sources */,
@@ -17395,6 +17409,7 @@
 				7DBB3C2F1E55C2EE0075E638 /* SSJBillTypeSelectViewController.m in Sources */,
 				7DBB3C301E55C2EE0075E638 /* SSJBookKeepingHomeTableViewCell.m in Sources */,
 				7DBB3C311E55C2EE0075E638 /* SSJReportFormsCurveBalloonView.m in Sources */,
+				9CDB49661EF2A0440097E09D /* SSJShareBooksUrlHandle.m in Sources */,
 				7DBB3C321E55C2EE0075E638 /* SSJNewCreditCardViewController.m in Sources */,
 				7DBB3C331E55C2EE0075E638 /* SSJRecordMakingBillTypeSelectionView.m in Sources */,
 				7DBB3C341E55C2EE0075E638 /* SSJReportFormCanYinChartCell.m in Sources */,
@@ -18028,6 +18043,7 @@
 				7DBB40CA1E55C4E00075E638 /* SSJBillTypeSelectViewController.m in Sources */,
 				7DBB40CB1E55C4E00075E638 /* SSJBookKeepingHomeTableViewCell.m in Sources */,
 				7DBB40CC1E55C4E00075E638 /* SSJReportFormsCurveBalloonView.m in Sources */,
+				9CDB49621EF2A0400097E09D /* SSJShareBooksUrlHandle.m in Sources */,
 				7DBB40CD1E55C4E00075E638 /* SSJNewCreditCardViewController.m in Sources */,
 				7DBB40CE1E55C4E00075E638 /* SSJRecordMakingBillTypeSelectionView.m in Sources */,
 				7DBB40CF1E55C4E00075E638 /* SSJReportFormCanYinChartCell.m in Sources */,
@@ -18678,6 +18694,7 @@
 				7DFB183C1EB0341E00292DD3 /* SSJDateSelectedView.m in Sources */,
 				9C39702F1ECB023500AB267A /* SSJShareBooksHintView.m in Sources */,
 				7DFB183D1EB0341E00292DD3 /* UIView+SSJViewAnimatioin.m in Sources */,
+				9CDB496D1EF2A0490097E09D /* SSJShareBooksUrlHandle.m in Sources */,
 				7DFB183E1EB0341E00292DD3 /* SSJReportFormCanYinChartCellItem.m in Sources */,
 				7DFB183F1EB0341E00292DD3 /* main.m in Sources */,
 				7DFB18401EB0341E00292DD3 /* UIImageView+SSJTheme.m in Sources */,
@@ -19013,6 +19030,7 @@
 				9C13F5A71E8267D300AC5FA9 /* SSJUserItem.m in Sources */,
 				9C13F5A81E8267D300AC5FA9 /* SSJMemoMakingView.m in Sources */,
 				9C13F5A91E8267D300AC5FA9 /* SSJMineHomeTableViewHeader.m in Sources */,
+				9CDB49671EF2A0450097E09D /* SSJShareBooksUrlHandle.m in Sources */,
 				9C13F5AA1E8267D300AC5FA9 /* SSJCircleChargeTypeSelectView.m in Sources */,
 				9C13F5AB1E8267D300AC5FA9 /* SSJBooksTypeStore.m in Sources */,
 				9C13F5AC1E8267D300AC5FA9 /* SSJAccountsMerger.m in Sources */,
@@ -19947,6 +19965,7 @@
 				9C39702D1ECB023400AB267A /* SSJShareBooksHintView.m in Sources */,
 				9C4C21E41E9E30C8000C5F15 /* UIView+SSJViewAnimatioin.m in Sources */,
 				9C4C21E51E9E30C8000C5F15 /* SSJReportFormCanYinChartCellItem.m in Sources */,
+				9CDB496B1EF2A0480097E09D /* SSJShareBooksUrlHandle.m in Sources */,
 				9C4C21E61E9E30C8000C5F15 /* main.m in Sources */,
 				9C4C21E71E9E30C8000C5F15 /* UIImageView+SSJTheme.m in Sources */,
 				9C4C21E81E9E30C8000C5F15 /* SSJAddOrEditLoanMultiLabelCell.m in Sources */,
@@ -20178,6 +20197,7 @@
 				9C7D2D591E8DF8A80093001F /* SSJCreditCardDetailHeader.m in Sources */,
 				9C7D2D5A1E8DF8A80093001F /* SSJStartChecker.m in Sources */,
 				9C7D2D5B1E8DF8A80093001F /* SSJStringAddition.m in Sources */,
+				9CDB49611EF2A03F0097E09D /* SSJShareBooksUrlHandle.m in Sources */,
 				9C7D2D5C1E8DF8A80093001F /* SSJPushInfoItem.m in Sources */,
 				9C7D2D5D1E8DF8A80093001F /* SSJLoanChargeModel.m in Sources */,
 				9C7D2D5E1E8DF8A80093001F /* SSJReportFormsChartCellItem.m in Sources */,
@@ -20814,6 +20834,7 @@
 				9C7D2FD01E8DF96B0093001F /* SSJCreditCardDetailHeader.m in Sources */,
 				9C7D2FD11E8DF96B0093001F /* SSJStartChecker.m in Sources */,
 				9C7D2FD21E8DF96B0093001F /* SSJStringAddition.m in Sources */,
+				9CDB49681EF2A0450097E09D /* SSJShareBooksUrlHandle.m in Sources */,
 				9C7D2FD31E8DF96B0093001F /* SSJPushInfoItem.m in Sources */,
 				9C7D2FD41E8DF96B0093001F /* SSJLoanChargeModel.m in Sources */,
 				9C7D2FD51E8DF96B0093001F /* SSJReportFormsChartCellItem.m in Sources */,
@@ -21854,6 +21875,7 @@
 				9C80FE821E95E88E00B1BAAC /* SSJDateSelectedView.m in Sources */,
 				9C39702C1ECB023300AB267A /* SSJShareBooksHintView.m in Sources */,
 				9C80FE831E95E88E00B1BAAC /* UIView+SSJViewAnimatioin.m in Sources */,
+				9CDB496A1EF2A0470097E09D /* SSJShareBooksUrlHandle.m in Sources */,
 				9C80FE841E95E88E00B1BAAC /* SSJReportFormCanYinChartCellItem.m in Sources */,
 				9C80FE851E95E88E00B1BAAC /* main.m in Sources */,
 				9C80FE861E95E88E00B1BAAC /* UIImageView+SSJTheme.m in Sources */,
@@ -22489,6 +22511,7 @@
 				9C9CF0421EA5F73A007657FE /* SSJDateSelectedView.m in Sources */,
 				9C39702E1ECB023400AB267A /* SSJShareBooksHintView.m in Sources */,
 				9C9CF0431EA5F73A007657FE /* UIView+SSJViewAnimatioin.m in Sources */,
+				9CDB496C1EF2A0480097E09D /* SSJShareBooksUrlHandle.m in Sources */,
 				9C9CF0441EA5F73A007657FE /* SSJReportFormCanYinChartCellItem.m in Sources */,
 				9C9CF0451EA5F73A007657FE /* main.m in Sources */,
 				9C9CF0461EA5F73A007657FE /* UIImageView+SSJTheme.m in Sources */,
@@ -22960,6 +22983,7 @@
 				9CECFBFE1D6D41A700DB2C8B /* SSJBudgetEditSwitchCtrlCell.m in Sources */,
 				9CECFBFF1D6D41A700DB2C8B /* SSJPercentCircleAdditionGroupNode.m in Sources */,
 				9C1E4C4F1E4C619600CA5843 /* SSJCalendarTableViewCell.m in Sources */,
+				9CDB49631EF2A0410097E09D /* SSJShareBooksUrlHandle.m in Sources */,
 				9CECFC001D6D41A700DB2C8B /* SSJDataClearHelper.m in Sources */,
 				9CECFC021D6D41A700DB2C8B /* SSJNewCategoryCollectionView.m in Sources */,
 				9CECFC031D6D41A700DB2C8B /* SSJMemberSelectView.m in Sources */,
