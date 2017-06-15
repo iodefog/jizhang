@@ -11203,6 +11203,7 @@
 		7D6AAB5E1C312C340007C0A3 /* Business */ = {
 			isa = PBXGroup;
 			children = (
+				9CB122471EF2727F0074BAA4 /* SSJLottieManeger */,
 				7DFB19001EB1C02B00292DD3 /* IDFA */,
 				9C155F5C1E69128800FDFD18 /* SSJShareManger */,
 				9CB743C51E65450B009746EE /* GeTuiManger */,
@@ -12738,6 +12739,13 @@
 				9CAF731D1E03EAE50061ADB8 /* homeLoading.gif */,
 			);
 			path = GifImage;
+			sourceTree = "<group>";
+		};
+		9CB122471EF2727F0074BAA4 /* SSJLottieManeger */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = SSJLottieManeger;
 			sourceTree = "<group>";
 		};
 		9CB743BB1E6544CB009746EE /* SSJAnaliytisManager */ = {
