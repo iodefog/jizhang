@@ -87,6 +87,9 @@
         self.button.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor].CGColor;
         if (_model == nil) {
             [self.button setTitle:@"添加预算" forState:UIControlStateNormal];
+            self.button.backgroundColor = [UIColor clearColor];
+            self.button.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor].CGColor;
+            [self.button setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] forState:UIControlStateNormal];
         }else{
             if (currentModel.budgetMoney >= currentModel.payMoney) {
                 [self.button setTitle:[NSString stringWithFormat:@"剩余 %.2f",currentModel.budgetMoney - currentModel.payMoney] forState:UIControlStateNormal];
@@ -99,7 +102,7 @@
         [self.button setTitle:[NSString stringWithFormat:@"%ld 人", (long)currentModel.memberCount] forState:UIControlStateNormal];
         self.button.backgroundColor = [UIColor clearColor];
         self.button.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor].CGColor;
-        [self.button setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor] forState:UIControlStateNormal];
+        [self.button setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] forState:UIControlStateNormal];
     }
     [self sizeToFit];
     [self setNeedsLayout];
