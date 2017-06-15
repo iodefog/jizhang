@@ -73,7 +73,7 @@
     
     
     //设置网页地址
-    shareObject.webpageUrl = [str stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    shareObject.webpageUrl = [NSString stringWithFormat:@"%@",[str mj_url]];
     
     //分享消息对象设置分享内容对象
     messageObject.shareObject = shareObject;

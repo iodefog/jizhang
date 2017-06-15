@@ -31,6 +31,12 @@
         return error;
     }
     
+    error = [self updateBillTypeTableWithDatabase:db];
+    if (error) {
+        return error;
+    }
+    
+    
     return nil;
 }
 
@@ -44,7 +50,7 @@
 
 // 创建共享账本成员表
 + (NSError *)createShareBooksMemberTableWithDatabase:(FMDatabase *)db {
-    if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS BK_SHARE_BOOKS_MEMBER (CMEMBERID TEXT, CBOOKSID TEXT, CJOINDATE TEXT, ISTATE INTEGER, CCOLOR TEXT, CLEAVEDATE TEXT, PRIMARY KEY(CMEMBERID, CBOOKSID))"]) {
+    if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS BK_SHARE_BOOKS_MEMBER (CMEMBERID TEXT, CBOOKSID TEXT, CJOINDATE TEXT, ISTATE INTEGER, CCOLOR TEXT, CLEAVEDATE TEXT,CICON TEXT, PRIMARY KEY(CMEMBERID, CBOOKSID))"]) {
         return [db lastError];
     }
     return nil;
@@ -57,5 +63,20 @@
     }
     return nil;
 }
+
+// 加入共享账本平账支出平账收入
++ (NSError *)updateBillTypeTableWithDatabase:(FMDatabase *)db {
+
+    if (![db executeUpdate:@"INSERT INTO BK_BILL_TYPE (ID,CNAME,ITYPE,CCOIN,CCOLOR,ISTATE,ICUSTOM) VALUES ('13','平帐收入(共享账本)  ',0,'bt_sharebookpzsr','#9382ad',2,0)"]) {
+        return [db lastError];
+    }
+    
+    if (![db executeUpdate:@"INSERT INTO BK_BILL_TYPE (ID,CNAME,ITYPE,CCOIN,CCOLOR,ISTATE,ICUSTOM) VALUES ('14','平帐支出(共享账本)',1,'bt_sharebookpzzc','#5889c5',2,0)"]) {
+        return [db lastError];
+    }
+
+    return nil;
+}
+
 
 @end

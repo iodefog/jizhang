@@ -310,7 +310,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
             __weak typeof(self) weakSelf = self;
             NSData *lastUserData = [[NSUserDefaults standardUserDefaults] objectForKey:SSJLastLoggedUserItemKey];
             SSJUserItem *lastUserItem = [NSKeyedUnarchiver unarchiveObjectWithData:lastUserData];
-            if ((![self.loginService.item.mobileNo isEqualToString:lastUserItem.mobileNo] && lastUserItem.mobileNo.length) || (![self.loginService.item.openId isEqualToString:lastUserItem.openId] && lastUserItem.openId.length) || ![self.loginService.item.loginType isEqualToString:lastUserItem.loginType]) {
+            if (!(([self.loginService.item.mobileNo isEqualToString:lastUserItem.mobileNo] && lastUserItem.mobileNo.length) || ([self.loginService.item.openId isEqualToString:lastUserItem.openId] && lastUserItem.openId.length)) || ![self.loginService.item.loginType isEqualToString:lastUserItem.loginType]) {
                 NSString *userName;
                 int loginType = [lastUserItem.loginType intValue];
                 if (loginType == 0) {

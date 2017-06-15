@@ -280,7 +280,7 @@
         };
     }
     //删除流水表
-    if (![db executeUpdate:@"update bk_user_charge set operatortype = 2 , cwritedate = ? , iversion = ? where cuserid = ? and ifunsid = ? and ichargetype <> ?",writeDate,@(SSJSyncVersion()),userId,item.cardId,@(SSJChargeIdTypeShareBooks)]) {
+    if (![db executeUpdate:@"update bk_user_charge set operatortype = 2 , cwritedate = ? , iversion = ? where cuserid = ? and ifunsid = ? and (ichargetype <> ? or cbooksid in (select cbooksid from bk_share_books_member where cmemberid = ? and istate = ?))",writeDate,@(SSJSyncVersion()),userId,item.cardId,@(SSJChargeIdTypeShareBooks),userId,@(SSJShareBooksMemberStateNormal)]) {
         if (error) {
             *error = [db lastError];
         }

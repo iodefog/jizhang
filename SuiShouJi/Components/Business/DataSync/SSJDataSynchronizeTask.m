@@ -25,6 +25,7 @@
 #import "SSJShareBooksMemberSyncTable.h"
 #import "SSJShareBooksSyncTable.h"
 #import "SSJShareBooksFriendMarkSyncTable.h"
+#import "SSJBooksTypeStore.h"
 
 #import "SSJSyncTable.h"
 
@@ -531,7 +532,46 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
         [db executeUpdate:@"delete from bk_share_books_friends_mark where cbooksid in (select cbooksid from bk_share_books_member where cmemberid = ? and istate != ?)",self.userId,@(SSJShareBooksMemberStateNormal)];
     }];
     
-
+    
+    // 将一个收支类别的账本补充一套收支类别
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+        NSMutableArray *booksResult = [NSMutableArray arrayWithCapacity:0];
+        
+        FMResultSet *shareBooksResult = [db executeQuery:@"select sb.iparenttype ,ub.cbooksid ,ub.cuserid , count(ub.cbillid) from bk_share_books sb, bk_share_books_member sbm left join bk_user_bill ub on sbm.cbooksid = ub.cbooksid and ub.cuserid = sbm.cmemberid where length(ub.cbillid) < 10 and ub.cuserid = ? and sb.cbooksid = ub.cbooksid group by ub.cbooksid, ub.cuserid having count(ub.cbillid) = 0",self.userId];
+        
+        while ([shareBooksResult next]) {
+            NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithCapacity:0];
+            NSString *booksId = [shareBooksResult stringForColumn:@"cbooksid"];
+            NSInteger parentType = [shareBooksResult intForColumn:@"iparenttype"];
+            [dic setObject:booksId forKey:@"cbooksid"];
+            [dic setObject:@(parentType) forKey:@"iparenttype"];
+            [booksResult addObject:dic];
+        }
+        
+        [shareBooksResult close];
+        
+        FMResultSet *normalBooksResult = [db executeQuery:@"select bt.iparenttype, ub.cbooksid, ub.cuserid, count(ub.cbillid) from bk_books_type bt left join bk_user_bill ub on bt.cbooksid = ub.cbooksid and ub.cuserid = bt.cuserid where length(ub.cbillid) < 10 and ub.cuserid = ? group by ub.cbooksid, ub.cuserid having count(ub.cbillid) = 0",self.userId];
+        
+        while ([normalBooksResult next]) {
+            NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithCapacity:0];
+            NSString *booksId = [normalBooksResult stringForColumn:@"cbooksid"];
+            NSInteger parentType = [normalBooksResult intForColumn:@"iparenttype"];
+            [dic setObject:booksId forKey:@"cbooksid"];
+            [dic setObject:@(parentType) forKey:@"iparenttype"];
+            [booksResult addObject:dic];
+        }
+        
+        [shareBooksResult close];
+        
+        for (NSDictionary *dic in booksResult) {
+            NSString *booksId = [dic objectForKey:@"cbooksid"];
+            NSInteger parentType = [[dic objectForKey:@"iparenttype"] integerValue];
+            SSJBooksTypeItem *item = [[SSJBooksTypeItem alloc] init];
+            item.booksId = booksId;
+            item.booksParent = parentType;
+            [SSJBooksTypeStore generateBooksTypeForBooksItem:item indatabase:db forUserId:self.userId];
+        }
+    }];
 
 }
 
