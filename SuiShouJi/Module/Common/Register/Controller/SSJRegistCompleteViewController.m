@@ -130,6 +130,8 @@
                     
                     [CDAutoHideMessageHUD showMessage:@"注册成功"];
                     
+                    [[NSUserDefaults standardUserDefaults] setObject:userItem forKey:SSJLastLoggedUserItemKey];
+                    
                     //  如果用户手势密码开启，进入手势密码页面
                     [SSJUserTableManager queryProperty:@[@"motionPWD", @"motionPWDState"] forUserId:SSJUSERID() success:^(SSJUserItem * _Nonnull userItem) {
                         if ([userItem.motionPWDState boolValue]) {
