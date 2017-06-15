@@ -4,5 +4,5 @@
     "infoplist": "YouYuJiZhang-Info.plist",
     "uploadToPgy": false,
     "uploadToAppStore": false,
-    "testflight":ture
+    "testflight":true
 }
