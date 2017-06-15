@@ -29,7 +29,15 @@
         if (!booksid.length) {
             booksid = userid;
         }
-        FMResultSet *resultSet = [db executeQuery:@"select a.*, b.CNAME, b.CCOIN, b.CCOLOR, b.ITYPE from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.CBILLDATE like ? and a.OPERATORTYPE <> 2 and b.istate <> 2 and a.cbooksid = ? order by a.CBILLDATE desc, a.cdetaildate desc, a.cwritedate desc", dateStr,booksid];
+        
+        FMResultSet *resultSet = nil;
+        BOOL isShareBook = [db boolForQuery:@"select count(*) from bk_share_books where cbooksid = ?", booksid];
+        if (isShareBook) {
+            resultSet = [db executeQuery:@"select a.*, b.CNAME, b.CCOIN, b.CCOLOR, b.ITYPE, c.CMARK from BK_USER_CHARGE as a, BK_BILL_TYPE as b, BK_SHARE_BOOKS_FRIENDS_MARK as c where a.IBILLID = b.ID and a.CBILLDATE like ? and a.OPERATORTYPE <> 2 and b.ISTATE <> 2 and a.CBOOKSID = ? and a.CBOOKSID = c.CBOOKSID and c.CFRIENDID = a.CUSERID and c.CUSERID = ? order by a.CBILLDATE desc, a.cdetaildate desc, a.cwritedate desc", dateStr,booksid, userid];
+        } else {
+            resultSet = [db executeQuery:@"select a.*, b.CNAME, b.CCOIN, b.CCOLOR, b.ITYPE from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.CBILLDATE like ? and a.OPERATORTYPE <> 2 and b.istate <> 2 and a.cbooksid = ? order by a.CBILLDATE desc, a.cdetaildate desc, a.cwritedate desc", dateStr,booksid];
+        }
+        
         if (!resultSet) {
             SSJPRINT(@"class:%@\n method:%@\n message:%@\n error:%@",NSStringFromClass([self class]), NSStringFromSelector(_cmd), [db lastErrorMessage], [db lastError]);
             SSJDispatch_main_async_safe(^{
@@ -40,6 +48,7 @@
         NSMutableDictionary *result = [[NSMutableDictionary alloc]init];
         while ([resultSet next]) {
             SSJBillingChargeCellItem *item = [[SSJBillingChargeCellItem alloc] init];
+            item.userId = [resultSet stringForColumn:@"CUSERID"];
             item.imageName = [resultSet stringForColumn:@"CCOIN"];
             item.typeName = [resultSet stringForColumn:@"CNAME"];
             item.money = [resultSet stringForColumn:@"IMONEY"];
@@ -60,6 +69,10 @@
             }
             NSString *billDate = [resultSet stringForColumn:@"CBILLDATE"];
             item.booksId = [resultSet stringForColumn:@"cbooksid"];
+            if (isShareBook) {
+                item.memberNickname = [item.userId isEqualToString:userid] ? @"我" : [resultSet stringForColumn:@"CMARK"];
+            }
+            
             if ([result objectForKey:billDate] == nil) {
                 NSMutableArray *items = [[NSMutableArray alloc]init];
                 [items addObject:item];
