@@ -378,7 +378,7 @@
                 _currentExpenture = expence;
                 [weakSelf reloadWithAnimation];
             } failure:^(NSError *error) {
-                
+                [SSJAlertViewAdapter showError:error];
             }];
         }
         weakSelf.calendarView.data = data;
@@ -386,6 +386,7 @@
         [weakSelf.view setNeedsLayout];
     } failure:^(NSError *error) {
         [weakSelf.view ssj_hideLoadingIndicator];
+        [SSJAlertViewAdapter showError:error];
     }];
 }
 
