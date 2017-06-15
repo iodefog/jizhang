@@ -286,13 +286,7 @@
         }
         return NO;
     }
-    //更新日常统计表
-    if (![SSJDailySumChargeTable updateDailySumChargeForUserId:userId inDatabase:db]) {
-        if (error) {
-            *error = [db lastError];
-        }
-        return NO;
-    }
+
     return YES;
 }
 

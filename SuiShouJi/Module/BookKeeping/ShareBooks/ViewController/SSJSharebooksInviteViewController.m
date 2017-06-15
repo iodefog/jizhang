@@ -162,6 +162,12 @@
     return UIStatusBarStyleDefault;
 }
 
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [self.getCodeService cancel];
+    [self.saveCodeService cancel];
+}
+
 #pragma mark - Getter
 - (UIView *)backView {
     if (!_backView) {
@@ -402,7 +408,7 @@
         
         NSString *content = [NSString stringWithFormat:@"%@邀你加入【%@】，希望和你开启共享记账之旅，快来！",nickName,weakSelf.item.booksName];
         
-        [SSJShareManager shareWithType:SSJShareTypeUrl image:nil UrlStr:[NSString stringWithFormat:@"%@ ",[url mj_url]] title:SSJAppName() content:content PlatformType:@[@(UMSocialPlatformType_WechatSession),@(UMSocialPlatformType_QQ)] inController:self ShareSuccess:NULL];
+        [SSJShareManager shareWithType:SSJShareTypeUrl image:nil UrlStr:[NSString stringWithFormat:@"%@ ",url] title:SSJAppName() content:content PlatformType:@[@(UMSocialPlatformType_WechatSession),@(UMSocialPlatformType_QQ)] inController:self ShareSuccess:NULL];
         
     } failure:^(NSError * _Nonnull error) {
         

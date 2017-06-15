@@ -35,12 +35,25 @@
                 }
                 return;
             }
-            SSJBooksTypeItem *booksItem = [[SSJBooksTypeItem alloc] init];
-            booksItem.booksId = [rs stringForColumn:@"cbooksid"];
-            booksItem.booksName = [rs stringForColumn:@"cbooksname"];
-            booksItem.booksOrder = [rs intForColumn:@"iorder"];
-            booksItem.booksParent = [rs intForColumn:@"iparenttype"];
-            currentBooksItem = booksItem;
+            while ([rs next]) {
+                SSJBooksTypeItem *booksItem = [[SSJBooksTypeItem alloc] init];
+                booksItem.booksId = [rs stringForColumn:@"cbooksid"];
+                booksItem.booksName = [rs stringForColumn:@"cbooksname"];
+                booksItem.booksOrder = [rs intForColumn:@"iorder"];
+                booksItem.booksParent = [rs intForColumn:@"iparenttype"];
+                SSJFinancingGradientColorItem *colorItem = [[SSJFinancingGradientColorItem alloc] init];
+                NSArray *colorArray = [[rs stringForColumn:@"cbookscolor"] componentsSeparatedByString:@","];
+                if (colorArray.count > 1) {
+                    colorItem.startColor = [colorArray ssj_safeObjectAtIndex:0];
+                    colorItem.endColor = [colorArray ssj_safeObjectAtIndex:1];
+                } else if (colorArray.count == 1) {
+                    colorItem.startColor = [colorArray ssj_safeObjectAtIndex:0];
+                    colorItem.endColor = [colorArray ssj_safeObjectAtIndex:0];
+                }
+                booksItem.booksColor = colorItem;
+                currentBooksItem = booksItem;
+
+            }
         } else {
             rs = [db executeQuery:@"select sb.*, count(bm.cmemberid) as memberCount from bk_share_books sb, bk_share_books_member bm where sb.cbooksid = ? and sb.cbooksid = bm.cbooksid and bm.istate = 0",booksid];
             if (!rs) {
@@ -313,17 +326,7 @@
                     }
                     return;
                 }
-                //更新日常统计表
-                if (![SSJDailySumChargeTable updateDailySumChargeForUserId:userId inDatabase:db]) {
-                    if (failure) {
-                        *rollback = YES;
-                        SSJDispatchMainAsync(^{
-                            failure([db lastError]);
-                        });
-                    }
-                    return;
-                }
-                
+
             }
         }
         
@@ -658,16 +661,7 @@
             return;
         }
         
-        //更新日常统计表
-        if (![SSJDailySumChargeTable updateDailySumChargeForUserId:userId inDatabase:db]) {
-            if (failure) {
-                *rollback = YES;
-                SSJDispatchMainAsync(^{
-                    failure([db lastError]);
-                });
-            }
-            return;
-        }
+
         BOOL booksTypeHasChange = NO;
         
         NSString *currentBooksId = [db stringForQuery:@"select ccurrentbooksid from bk_user where cuserid = ?",userId];
