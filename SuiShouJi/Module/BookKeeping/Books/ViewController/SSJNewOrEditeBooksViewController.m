@@ -49,7 +49,7 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
 
 @property (nonatomic, strong) SSJCreateOrDeleteBooksService *createBookService;
 
-/**编辑还是添加*/
+/**编辑还是添新建为yes*/
 @property (nonatomic, assign) BOOL editOrNew;
 @end
 
@@ -251,7 +251,7 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
     } else if (indexPath.row == 1) {
         cell.type = SSJCreditCardCellTypeDetail;
         cell.cellDetail = self.bookParentStr;
-        if (!self.bookItem.booksId.length) {
+        if (self.editOrNew == YES) {
             cell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         } else {
             cell.customAccessoryType = UITableViewCellAccessoryNone;
