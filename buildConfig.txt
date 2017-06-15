@@ -1,7 +1,7 @@
 {
     "buildConfig": "Release-production",
-    "buildScheme": "SuiShouJi",
-    "infoplist": "SuiShouJi-Info.plist",
+    "buildScheme": "YouYuJiZhang",
+    "infoplist": "YouYuJiZhang-Info.plist",
     "uploadToPgy": false,
     "uploadToAppStore": false,
     "testflight":ture
