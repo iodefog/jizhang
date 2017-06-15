@@ -52,6 +52,9 @@
 
 @property(nonatomic, strong) SSJSharebooksCodeNetworkService *saveCodeService;
 
+/**随机生成的暗号：用于友盟统计*/
+@property (nonatomic, copy) NSString *randomCode;
+
 @end
 
 @implementation SSJSharebooksInviteViewController
@@ -264,6 +267,12 @@
         _sendButton.backgroundColor = [UIColor ssj_colorWithHex:@"#EB4A64"];
         _sendButton.layer.shadowOffset = CGSizeMake(0, 4);
         [_sendButton addTarget:self action:@selector(sendButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+        //友盟统计
+        if ([self.randomCode isEqualToString:self.codeInput.text]) {//随机
+            [SSJAnaliyticsManager event:@"sb_anhao_random"];
+        } else {//自定义
+            [SSJAnaliyticsManager event:@"sb_anhao_define"];
+        }
     }
     return _sendButton;
 }
@@ -286,6 +295,7 @@
 - (void)resendButtonClicked:(UIButton *)sender {
     if ([sender.titleLabel.text isEqualToString:@"随机生成"]) {
         self.codeInput.text = [SSJShareBooksHelper generateTheRandomCodeWithType:SSJRandomCodeTypeUpperLetter | SSJRandomCodeTypeNumbers length:6];
+        self.randomCode = self.codeInput.text;
         self.sendButton.backgroundColor = [UIColor ssj_colorWithHex:@"#EB4A64"];
         self.sendButton.layer.shadowColor = [UIColor ssj_colorWithHex:@"#EB4A64"].CGColor;
         self.sendButton.layer.shadowOpacity = 0.39;
