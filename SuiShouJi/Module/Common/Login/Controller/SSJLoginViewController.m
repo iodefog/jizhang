@@ -310,7 +310,10 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
             __weak typeof(self) weakSelf = self;
             NSData *lastUserData = [[NSUserDefaults standardUserDefaults] objectForKey:SSJLastLoggedUserItemKey];
             SSJUserItem *lastUserItem = [NSKeyedUnarchiver unarchiveObjectWithData:lastUserData];
-            if (!(([self.loginService.item.mobileNo isEqualToString:lastUserItem.mobileNo] && lastUserItem.mobileNo.length) || ([self.loginService.item.openId isEqualToString:lastUserItem.openId] && lastUserItem.openId.length)) || ![self.loginService.item.loginType isEqualToString:lastUserItem.loginType]) {
+            
+//            [self.loginService.item.loginType isEqualToString:lastUserItem.loginType]
+            BOOL isSameUser = ([self.loginService.item.mobileNo isEqualToString:lastUserItem.mobileNo] && lastUserItem.mobileNo.length) || ([self.loginService.item.openId isEqualToString:lastUserItem.openId] && lastUserItem.openId.length);
+            if (!isSameUser) {
                 NSString *userName;
                 int loginType = [lastUserItem.loginType intValue];
                 if (loginType == 0) {
@@ -330,12 +333,11 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
                 [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:message action:[SSJAlertViewAction actionWithTitle:@"取消" handler:NULL], [SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction * _Nonnull action) {
                     [weakSelf comfirmTologin];
                 }], nil];
-            }else{
-                [self comfirmTologin];
+                return;
             }
-        }else{
-            [self comfirmTologin];
         }
+        
+        [self comfirmTologin];
         return;
     }
     
@@ -384,7 +386,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         return;
     }
     
-    if (service == self.registCompleteService) {
+    if (service == self.registCompleteService) {//完成注册
         if ([self.registCompleteService.returnCode isEqualToString:@"1"]) {
             NSDictionary *resultInfo = [service.rootElement objectForKey:@"results"];
             if (resultInfo) {
@@ -395,6 +397,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
                 userItem.userId = SSJUSERID();
                 userItem.mobileNo = self.registCompleteService.mobileNo;
                 userItem.registerState = @"1";
+                userItem.loginType = @"0";
                 
                 //  只有保存用户登录信息成功后才算登录成功
                 RACSignal *sg_1 = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
