@@ -377,7 +377,7 @@
         NSMutableString *url = [NSMutableString string];
         @strongify(self);
         
-        NSString *baseUrl = @"http://jz.9188.com/5/invite/index.html?";
+        NSString *baseUrl = @"http://jz.youyuwo.com/5/invite/index.html?";
         
         
         [url appendString:baseUrl];

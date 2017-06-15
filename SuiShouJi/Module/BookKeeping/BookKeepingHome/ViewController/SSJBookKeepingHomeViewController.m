@@ -408,13 +408,9 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
-    if (scrollView.contentOffset.y <= - scrollView.contentInset.top && [self.homeBar.budgetButton.model isKindOfClass:[SSJBudgetModel class]]) {
-        [SSJBudgetDatabaseHelper queryForCurrentBudgetListWithSuccess:^(NSArray<SSJBudgetModel *> * _Nonnull result) {
-            self.homeBar.budgetButton.model = [result firstObject];
-            self.homeBar.budgetButton.button.enabled = YES;
-        } failure:^(NSError * _Nullable error) {
-            SSJPRINT(@"%@",error.localizedDescription);
-        }];
+    if (scrollView.contentOffset.y <= - scrollView.contentInset.top) {
+        [self updateTabbar];
+
     }
     if (scrollView.contentOffset.y < - scrollView.contentInset.top) {
         if (!_dateViewHasDismiss) {
@@ -463,6 +459,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
     if (scrollView.contentOffset.y <= - scrollView.contentInset.top) {
         if (!_dateViewHasDismiss) {
+            [self updateTabbar];
             [self.floatingDateView dismiss];
             [self.mutiFunctionButton dismiss];
             _dateViewHasDismiss = YES;
