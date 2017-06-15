@@ -410,7 +410,6 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
     if (scrollView.contentOffset.y <= - scrollView.contentInset.top) {
         [self updateTabbar];
-
     }
     if (scrollView.contentOffset.y < - scrollView.contentInset.top) {
         if (!_dateViewHasDismiss) {
@@ -446,7 +445,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
                 SSJBookKeepingHomeListItem *listItem = [self.items objectAtIndex:currentSection];
                 NSInteger currentMonth = [[listItem.date substringWithRange:NSMakeRange(5, 2)] integerValue];
                 NSInteger currentYear = [[listItem.date substringWithRange:NSMakeRange(0, 4)] integerValue];
-                if ((currentMonth != self.currentMonth || currentYear != self.currentYear) && [self.homeBar.budgetButton.model isKindOfClass:[SSJBudgetModel class]]) {
+                if ((currentMonth != self.currentMonth || currentYear != self.currentYear) && ![self.homeBar.budgetButton.model isKindOfClass:[SSJShareBookItem class]]) {
                     self.currentYear = currentYear;
                     self.currentMonth = currentMonth;
                     [self reloadCurrentMonthData];
