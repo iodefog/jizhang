@@ -137,8 +137,8 @@ static const CGFloat kCategoryImageButtonRadius = 16;
     _categoryImageButton.layer.borderColor = [UIColor ssj_colorWithHex:_item.colorValue].CGColor;
     
     if (self.item.chargeImage.length) {
-        if ([[NSFileManager defaultManager] fileExistsAtPath:SSJImagePath(self.item.chargeImage)]) {
-            [self.chargeImage sd_setImageWithURL:[NSURL fileURLWithPath:SSJImagePath(_item.chargeImage)]];
+        if ([[NSFileManager defaultManager] fileExistsAtPath:SSJImagePath(self.item.chargeThumbImage)]) {
+            [self.chargeImage sd_setImageWithURL:[NSURL fileURLWithPath:SSJImagePath(_item.chargeThumbImage)]];
         } else {
             [self.chargeImage sd_setImageWithURL:[NSURL URLWithString:SSJGetChargeImageUrl(_item.chargeThumbImage)]];
         }
