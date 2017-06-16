@@ -24,6 +24,10 @@ static NSString * SSJBooksParentSelectCellIdentifier = @"SSJBooksParentSelectCel
 
 @implementation SSJBooksParentSelectView
 
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (instancetype)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -36,6 +40,7 @@ static NSString * SSJBooksParentSelectCellIdentifier = @"SSJBooksParentSelectCel
         [self addSubview:self.collectionView];
         [self.collectionView registerClass:[SSJBooksParentSelectCell class] forCellWithReuseIdentifier:SSJBooksParentSelectCellIdentifier];
         [self sizeToFit];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateAppearance) name:SSJThemeDidChangeNotification object:nil];
     }
     return self;
 }
@@ -185,6 +190,14 @@ static NSString * SSJBooksParentSelectCellIdentifier = @"SSJBooksParentSelectCel
 
 - (NSArray *)images{
     return @[@"bk_moren",@"bk_shengyi",@"bk_jiehun",@"bk_zhuangxiu",@"bk_lvxing"];
+}
+
+#pragma mark - Private
+- (void)updateAppearance {
+    self.collectionView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+    self.titleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    self.waveView.image = [[UIImage ssj_themeImageWithName:@"bk_wave"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 0, 32, 0) resizingMode:UIImageResizingModeStretch];
+    self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
 }
 
 

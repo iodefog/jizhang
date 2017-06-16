@@ -780,9 +780,9 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 }
 
 - (void)getDataFromDataBase{
-    [self.tableView ssj_showLoadingIndicator];
     __weak typeof(self) weakSelf = self;
     if (self.allowRefresh) {
+        [self.tableView ssj_showLoadingIndicator];
         [SSJBookKeepingHomeHelper queryForIncomeAndExpentureSumWithMonth:_currentMonth Year:_currentYear Success:^(NSDictionary *result) {
             if (weakSelf.hasLoad) {
                 weakSelf.bookKeepingHeader.incomeView.scrollAble = NO;
