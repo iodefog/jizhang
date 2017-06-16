@@ -404,8 +404,8 @@ BOOL SSJSaveImage(UIImage *image , NSString *imageName){
     float imageHeight = image.size.height;
     float imageWidth = image.size.width;
     float maxLegth = MAX(imageHeight , imageWidth);
-    if (maxLegth > 2500) {
-        float scale = 2500 / maxLegth;
+    if (maxLegth > 1000) {
+        float scale = 1000 / maxLegth;
         imageHeight = imageHeight * scale;
         imageWidth = imageWidth * scale;
     }
