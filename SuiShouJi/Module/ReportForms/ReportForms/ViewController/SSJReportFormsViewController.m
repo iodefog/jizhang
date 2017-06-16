@@ -521,16 +521,33 @@ static NSString *const kSegmentTitleSurplus = @"结余";
         SSJReportFormsChartCellItem *chartCellItem = [[SSJReportFormsChartCellItem alloc] init];
         chartCellItem.chartItems = chartItems;
         switch ([self currentType]) {
-            case SSJBillTypePay:
+            case SSJBillTypePay: {
                 chartCellItem.title = @"总支出";
+                double amount = [[result valueForKeyPath:@"@sum.money"] doubleValue];
+                chartCellItem.amount = [[NSString stringWithFormat:@"%f", amount] ssj_moneyDecimalDisplayWithDigits:2];
+            }
                 break;
                 
-            case SSJBillTypeIncome:
+            case SSJBillTypeIncome: {
                 chartCellItem.title = @"总收入";
+                double amount = [[result valueForKeyPath:@"@sum.money"] doubleValue];
+                chartCellItem.amount = [[NSString stringWithFormat:@"%f", amount] ssj_moneyDecimalDisplayWithDigits:2];
+            }
                 break;
                 
-            case SSJBillTypeSurplus:
+            case SSJBillTypeSurplus: {
                 chartCellItem.title = @"结余";
+                double payment = 0;
+                double income = 0;
+                for (SSJReportFormsItem *item in result) {
+                    if (item.type == SSJReportFormsTypePayment) {
+                        payment += item.money;
+                    } else {
+                        income += item.money;
+                    }
+                }
+                chartCellItem.amount = [[NSString stringWithFormat:@"%f", (income - payment)] ssj_moneyDecimalDisplayWithDigits:2];
+            }
                 break;
                 
             case SSJBillTypeUnknown:
@@ -538,8 +555,6 @@ static NSString *const kSegmentTitleSurplus = @"结余";
                 break;
         }
         
-        double amount = [[result valueForKeyPath:@"@sum.money"] doubleValue];
-        chartCellItem.amount = [[NSString stringWithFormat:@"%f", amount] ssj_moneyDecimalDisplayWithDigits:2];
         [self.datas addObject:chartCellItem];
     }
     //----------------------------------------------------------------------------------------//

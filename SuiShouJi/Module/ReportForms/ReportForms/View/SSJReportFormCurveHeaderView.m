@@ -122,7 +122,7 @@ static const CGFloat kSeparatorFormViewHeight = 88;
     return 2;
 }
 
-- (CGFloat)curveGraphView:(SSJReportFormsCurveGraphView *)graphView valueForCurveAtIndex:(NSUInteger)curveIndex axisXIndex:(NSUInteger)axisXIndex {
+- (double)curveGraphView:(SSJReportFormsCurveGraphView *)graphView valueForCurveAtIndex:(NSUInteger)curveIndex axisXIndex:(NSUInteger)axisXIndex {
     
     SSJReportFormsCurveModel *model = [self.item.curveModels ssj_safeObjectAtIndex:axisXIndex];
     if (curveIndex == 0) {  // 支出

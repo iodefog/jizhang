@@ -121,7 +121,7 @@
                 }
             }
             [originResult close];
-            double originMoney = [originItem.money doubleValue];
+
             //更新流水表
             if (![db executeUpdate:@"update bk_user_charge set imoney = ? , ibillid = ? , ifunsid = ? , cwritedate = ? , operatortype = 1 , cbilldate = ? , iversion = ? , cmemo = ?  ,cimgurl = ? , thumburl = ?, cbooksid = ?, cdetaildate = ?, ichargetype = ?, cid = ? where ichargeid = ? and cuserid = ?", moneyStr, item.billId, item.fundId, [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], item.billDate, @(SSJSyncVersion()), item.chargeMemo, item.chargeImage, item.chargeThumbImage, item.booksId,item.billDetailDate, @(item.idType), item.sundryId, item.ID,userId]) {
                 *rollback = YES;

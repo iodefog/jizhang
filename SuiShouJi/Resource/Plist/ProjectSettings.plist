@@ -85,17 +85,11 @@
 	<key>com.youyu.jizhang</key>
 	<dict>
 		<key>GeTuiAppSecret</key>
-		<string>r475vUBHQb5bNAdkBw6CV6</string>
-		<key>GeTuiTestAppSecret</key>
-		<string>D0Fd9ekqMy8A27DMVwoIc4</string>
+		<string>qPVXAmYKIO7Jz78Jm6yQUA</string>
 		<key>GeTuiAppKey</key>
-		<string>veBOaiEFxO7dMj36QfQ9P8</string>
-		<key>GeTuiTestAppKey</key>
-		<string>UldCizNDjk7d0VTAAlSo8</string>
+		<string>VoRgMwet0q5V6H8ML7HkQ7</string>
 		<key>GeTuiAppID</key>
-		<string>7rHyx1dzw59JutCZym5jv7</string>
-		<key>GeTuTestiAppID</key>
-		<string>ilSGUkJ79Z5MCSXbGk76u</string>
+		<string>26n0wSZzlv5jmrEXRoLZs4</string>
 		<key>appleID</key>
 		<string>1126210029</string>
 		<key>source</key>
@@ -335,17 +329,11 @@
 	<key>com.9188.jizhangben</key>
 	<dict>
 		<key>GeTuiAppSecret</key>
-		<string>r475vUBHQb5bNAdkBw6CV6</string>
-		<key>GeTuiTestAppSecret</key>
-		<string>D0Fd9ekqMy8A27DMVwoIc4</string>
+		<string>Qy2lpd32U27JwDiGDmpOKA</string>
 		<key>GeTuiAppKey</key>
-		<string>veBOaiEFxO7dMj36QfQ9P8</string>
-		<key>GeTuiTestAppKey</key>
-		<string>UldCizNDjk7d0VTAAlSo8</string>
+		<string>uMcte79f3Z8i0tpGXwrM28</string>
 		<key>GeTuiAppID</key>
-		<string>7rHyx1dzw59JutCZym5jv7</string>
-		<key>GeTuTestiAppID</key>
-		<string>ilSGUkJ79Z5MCSXbGk76u</string>
+		<string>YaFakqeo9c7EpHwOzjeXR6</string>
 		<key>source</key>
 		<string>11508</string>
 		<key>WeiXinKey</key>
@@ -550,6 +538,47 @@
 		<string>https://itunes.apple.com/cn/app/9188记账宝/id1230291938?l=zh&amp;ls=1&amp;mt=8</string>
 		<key>appleID</key>
 		<string>1230291938</string>
+	</dict>
+	<key>com.yy.jz</key>
+	<dict>
+		<key>GeTuiAppSecret</key>
+		<string>zOpAVmrQTv7jZXSoN5XKe4</string>
+		<key>GeTuiAppKey</key>
+		<string>e0G6gtHb8q5yx3kiWyFGF3</string>
+		<key>GeTuiAppID</key>
+		<string>iFfiXmzGEE9DjJsF4kadu</string>
+		<key>source</key>
+		<string>11514</string>
+		<key>WeiXinKey</key>
+		<string></string>
+		<key>WeiXinSecret</key>
+		<string></string>
+		<key>QQAppId</key>
+		<string>1105340301</string>
+		<key>QQAppKey</key>
+		<string>mW8hRwplNTlrUj3O</string>
+		<key>YWAppKey</key>
+		<string></string>
+		<key>WeiBoAppKey</key>
+		<string></string>
+		<key>WeiBoSecret</key>
+		<string></string>
+		<key>UMAppKey</key>
+		<string>5926844cf29d98556900034d</string>
+		<key>ShareTitle</key>
+		<string></string>
+		<key>ShareUrl</key>
+		<string></string>
+		<key>ShareContent</key>
+		<string></string>
+		<key>ShareIcon</key>
+		<string></string>
+		<key>WeiboBanner</key>
+		<string></string>
+		<key>AppStoreUrl</key>
+		<string>https://itunes.apple.com/cn/app/%E8%AE%B0%E8%B4%A6222/id1238642818?l=zh&amp;ls=1&amp;mt=8</string>
+		<key>appleID</key>
+		<string>1238642818</string>
 	</dict>
 </dict>
 </plist>
