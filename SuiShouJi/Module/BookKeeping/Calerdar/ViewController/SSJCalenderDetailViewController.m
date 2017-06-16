@@ -31,9 +31,11 @@ static NSString *const kSSJCalenderDetailPhotoCellId = @"kSSJCalenderDetailPhoto
 
 @interface SSJCalenderDetailViewController ()
 
+@property (nonatomic, strong) NSMutableArray *items;
+
 @property (nonatomic, strong) UIButton *editBtn;
 
-@property (nonatomic, strong) NSMutableArray *items;
+@property (nonatomic, strong) UILabel *tipLab;
 
 @end
 
@@ -51,11 +53,16 @@ static NSString *const kSSJCalenderDetailPhotoCellId = @"kSSJCalenderDetailPhoto
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     UIEdgeInsets insets = self.tableView.contentInset;
     insets.bottom = self.editBtn.height;
     self.tableView.contentInset = insets;
-    [self.view addSubview:self.editBtn];
+    self.tableView.tableFooterView = self.tipLab;
     [self registerCellClass];
+    
+    [self.view addSubview:self.editBtn];
+    self.editBtn.hidden = YES;
+    
     [self updateAppearance];
 }
 
@@ -105,8 +112,6 @@ static NSString *const kSSJCalenderDetailPhotoCellId = @"kSSJCalenderDetailPhoto
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
     if (section == 0) {
         return 12;
-    } else if (section == 1) {
-        return 54;
     } else {
         return 0.1;
     }
@@ -151,6 +156,15 @@ static NSString *const kSSJCalenderDetailPhotoCellId = @"kSSJCalenderDetailPhoto
     return _editBtn;
 }
 
+- (UILabel *)tipLab {
+    if (!_tipLab) {
+        _tipLab = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 30)];
+        _tipLab.backgroundColor = [UIColor clearColor];
+        _tipLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
+    }
+    return _tipLab;
+}
+
 #pragma mark - Private
 - (NSString *)cellReuseIdForItemClass:(Class)itemClass {
     if (itemClass == [SSJCalenderTableViewCellItem class]) {
@@ -189,8 +203,12 @@ static NSString *const kSSJCalenderDetailPhotoCellId = @"kSSJCalenderDetailPhoto
     return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         if (self.item.idType == SSJChargeIdTypeShareBooks
             && [self.item.userId isEqualToString:SSJUSERID()]) {
-            [self.editBtn setTitle:NSLocalizedString(@"无法修改已退出账本的流水", nil) forState:UIControlStateDisabled];
             [SSJCalenderHelper queryShareBookStateWithBooksId:self.item.booksId memberId:self.item.userId success:^(SSJShareBooksMemberState state) {
+                if (state != SSJShareBooksMemberStateNormal) {
+                    [self updateTipWithText:@"Tip：已退出账本，无法修改流水"];
+                } else {
+                    self.editBtn.hidden = NO;
+                }
                 [subscriber sendNext:@(state == SSJShareBooksMemberStateNormal)];
                 [subscriber sendCompleted];
             } failure:^(NSError * _Nonnull error) {
@@ -198,15 +216,23 @@ static NSString *const kSSJCalenderDetailPhotoCellId = @"kSSJCalenderDetailPhoto
             }];
         } else if (self.item.idType == SSJChargeIdTypeShareBooks
                    && ![self.item.userId isEqualToString:SSJUSERID()]) {
-            [self.editBtn setTitle:NSLocalizedString(@"无法修改他人的流水", nil) forState:UIControlStateDisabled];
+            [self updateTipWithText:@"Tip：无法修改他人的流水"];
             [subscriber sendNext:@(NO)];
             [subscriber sendCompleted];
         } else {
+            self.editBtn.hidden = NO;
             [subscriber sendNext:@(YES)];
             [subscriber sendCompleted];
         }
         return nil;
     }];
+}
+
+- (void)updateTipWithText:(NSString *)text {
+    NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+    style.firstLineHeadIndent = 10;
+    NSAttributedString *tip = [[NSAttributedString alloc] initWithString:NSLocalizedString(text, nil) attributes:@{NSParagraphStyleAttributeName:style}];
+    self.tipLab.attributedText = tip;
 }
 
 - (void)loadData {
@@ -218,10 +244,10 @@ static NSString *const kSSJCalenderDetailPhotoCellId = @"kSSJCalenderDetailPhoto
         return [self loadShareBookStateSignal];
     }] subscribeNext:^(NSNumber *canEditValue) {
         if ([canEditValue boolValue]) {
-            self.editBtn.enabled = YES;
+            self.editBtn.hidden = NO;
             self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(rightBarButtonClicked:)];
         } else {
-            self.editBtn.enabled = NO;
+            self.editBtn.hidden = YES;
             self.navigationItem.rightBarButtonItem = nil;
         }
     } error:^(NSError *error) {
@@ -323,7 +349,7 @@ static NSString *const kSSJCalenderDetailPhotoCellId = @"kSSJCalenderDetailPhoto
     [self.editBtn ssj_setBorderColor:SSJ_CELL_SEPARATOR_COLOR];
     [self.editBtn setTitleColor:SSJ_MARCATO_COLOR forState:UIControlStateNormal];
     [self.editBtn ssj_setBackgroundColor:SSJ_SECONDARY_FILL_COLOR forState:UIControlStateNormal];
-    [self.editBtn ssj_setBackgroundColor:SSJ_MAIN_BACKGROUND_COLOR forState:UIControlStateDisabled];
+    self.tipLab.textColor = SSJ_SECONDARY_COLOR;
 }
 
 @end

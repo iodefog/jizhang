@@ -43,8 +43,10 @@
         return;
     }
     
+    [self.photo ssj_showLoadingIndicator];
     SSJCalenderDetailPhotoCellItem *item = cellItem;
     [UIImage ssj_loadUrl:item.photoPath compeltion:^(NSError *error, UIImage *image) {
+        [self.photo ssj_hideLoadingIndicator];
         if (!image) {
             return;
         }
