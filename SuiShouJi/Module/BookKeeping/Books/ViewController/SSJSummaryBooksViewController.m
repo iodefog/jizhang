@@ -164,7 +164,7 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
     return 2;
 }
 
-- (CGFloat)curveGraphView:(SSJReportFormsCurveGraphView *)graphView valueForCurveAtIndex:(NSUInteger)curveIndex axisXIndex:(NSUInteger)axisXIndex {
+- (double)curveGraphView:(SSJReportFormsCurveGraphView *)graphView valueForCurveAtIndex:(NSUInteger)curveIndex axisXIndex:(NSUInteger)axisXIndex {
     
     SSJReportFormsCurveModel *model = [_curveItems ssj_safeObjectAtIndex:axisXIndex];
     if (curveIndex == 0) {  // 支出
