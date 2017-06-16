@@ -16,12 +16,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString *appChannel; //市场渠道名
 @property (nonatomic, copy, nullable) NSString *userId; //若用户未登录可空
 @property (nonatomic, copy, nullable) NSString *userName; //若用户未登录可空
-@property (nonatomic, assign) BOOL isDebug; 
 @end
 
 @interface YYAnalytics : NSObject
 
-//初始化统计模块
+//初始化友盟统计模块
 + (void)startWithConfig:(YYAnalyticsConfig *)config;
 
 //用户登录成功后，调用此方法设置userid和username
