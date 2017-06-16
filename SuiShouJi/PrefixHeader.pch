@@ -51,4 +51,6 @@
 #import <ReactiveCocoa/RACEXTScope.h>
 #import <ReactiveCocoa/RACReturnSignal.h>
 
+#import <YYWebImage/YYWebImage.h>
+
 #endif
