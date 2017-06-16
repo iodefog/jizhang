@@ -909,6 +909,8 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
     [self stopLoading];
     [self updateTabbar];
     [self updateBooksItem];
+    
+    
 }
 
 - (void)reloadDataAfterInitDatabase {
