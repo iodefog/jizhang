@@ -628,3 +628,89 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
 }
 
 @end
+
+#import "SSJDataClearHelper.h"
+
+@implementation SSJDataSynchronizeTask (Simulation)
+
++ (void)simulateUserSync:(NSString *)userId {
+    [[[[[self updateUserId:userId] then:^RACSignal *{
+        return [self pullUserData];
+    }] then:^RACSignal *{
+        return [self mergeUserData];
+    }] then:^RACSignal *{
+        return [self clearSyncVersion];
+    }] subscribeError:^(NSError *error) {
+        [SSJAlertViewAdapter showError:error];
+    } completed:^{
+        [CDAutoHideMessageHUD showMessage:@"模拟用户登录成功"];
+    }];
+}
+
++ (RACSignal *)updateUserId:(NSString *)userId {
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
+            BOOL successful = [db executeUpdate:@"insert into bk_user (cuserid, cregisterstate) values (?, 1)", userId];
+            successful = successful && SSJSetUserId(userId) && SSJSaveUserLogined(YES);
+            SSJDispatchMainAsync(^{
+                if (successful) {
+                    [subscriber sendNext:nil];
+                    [subscriber sendCompleted];
+                } else {
+                    [subscriber sendError:[db lastError]];
+                }
+            });
+        }];
+        return nil;
+    }];
+}
+
++ (RACSignal *)pullUserData {
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [SSJDataClearHelper clearLocalDataWithSuccess:^{
+            [subscriber sendNext:nil];
+            [subscriber sendCompleted];
+        } failure:^(NSError *error) {
+            [subscriber sendError:error];
+        }];
+        return nil;
+    }];
+}
+
++ (RACSignal *)clearSyncVersion {
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
+            if ([db executeUpdate:@"delete from bk_sync where cuserid = ?", SSJUSERID()]) {
+                [subscriber sendNext:nil];
+                [subscriber sendCompleted];
+            } else {
+                [subscriber sendError:[db lastError]];
+            }
+        }];
+        return nil;
+    }];
+}
+
++ (RACSignal *)mergeUserData {
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        NSError *error = nil;
+        NSString *path = [[NSBundle mainBundle] pathForResource:@"sync_data" ofType:@"json"];
+        NSData *jsonData = [NSData dataWithContentsOfFile:path];
+        NSDictionary *data = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&error];
+        
+        SSJDataSynchronizeTask *task = [SSJDataSynchronizeTask task];
+        task.userId = SSJUSERID();
+        //  合并数据
+        if ([task mergeData:data error:&error]) {
+            [task extraProcessAfterMerge];
+            [subscriber sendNext:nil];
+            [subscriber sendCompleted];
+        } else {
+            [subscriber sendError:error];
+        }
+        
+        return nil;
+    }];
+}
+
+@end
