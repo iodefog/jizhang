@@ -255,12 +255,14 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
             style.lineSpacing = 5;
             style.alignment = NSTextAlignmentCenter;
             self.authCodeAlertView.message = [[NSAttributedString alloc] initWithString:@"删除后，此账本数据将难以恢复\n仍然删除，请输入下列验证码" attributes:@{NSParagraphStyleAttributeName:style}];
+            self.authCodeAlertView.sureButtonTitle = @"删除";
         } else if ([booksTypeItem isKindOfClass:[SSJShareBookItem class]]) {
             [self.editAlertView showWithBookCategory: SSJBooksCategoryPublic];
             NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
             style.lineSpacing = 5;
             style.alignment = NSTextAlignmentCenter;
             self.authCodeAlertView.message = [[NSAttributedString alloc] initWithString:@"确认退出此共享账本，\n请输入下列验证码" attributes:@{NSParagraphStyleAttributeName:style}];
+            self.authCodeAlertView.sureButtonTitle = @"退出";
         }
     };
 
