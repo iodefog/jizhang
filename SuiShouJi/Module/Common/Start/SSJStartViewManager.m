@@ -172,23 +172,26 @@ static const NSTimeInterval kTransitionDuration = 0.3;
                 }
             };
         }
+        
         [UIView transitionFromView:_launchView toView:_guideView duration:kTransitionDuration options:UIViewAnimationOptionTransitionCrossDissolve completion:NULL];
+        
         _launchView = nil;
+        
     } else {
         
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [_launchView removeFromSuperview];
-            _launchView = nil;
-        });
-        
-//        [UIView animateWithDuration:3.f animations:^(void){
-//            _launchView.transform = CGAffineTransformMakeScale(2.0f, 2.0f);
-//            _launchView.alpha = 0;
-//        } completion:^(BOOL finished){
+//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
 //            [_launchView removeFromSuperview];
 //            _launchView = nil;
-//        }];
-//        
+//        });
+        
+        [UIView animateWithDuration:0.5f animations:^(void){
+            _launchView.transform = CGAffineTransformMakeScale(2.0f, 2.0f);
+            _launchView.alpha = 0;
+        } completion:^(BOOL finished){
+            [_launchView removeFromSuperview];
+            _launchView = nil;
+        }];
+//
         if (_completion) {
             _completion(self);
             _completion = nil;
