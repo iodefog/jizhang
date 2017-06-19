@@ -78,7 +78,19 @@ static CGFloat imageScale = 0.8; //裁剪框和屏幕大小比例
 #pragma mark - Setter
 - (void)setNormalImage:(UIImage *)normalImage
 {
-    normalImage = [normalImage fixOrientation];
+    float imageHeight = normalImage.size.height;
+    float imageWidth = normalImage.size.width;
+    float maxLegth = MAX(imageHeight , imageWidth);
+    float tempscale = 1;
+    if (maxLegth > 2000) {
+        tempscale = 2000 / maxLegth;
+        imageHeight = imageHeight * tempscale;
+        imageWidth = imageWidth * tempscale;
+    }
+    UIImage *resizeImage = [self clipWithImageRect:CGRectMake(0, 0, imageWidth, imageHeight) clipImage:normalImage];
+//    [normalImage ssj_scaleImageWithSize:CGSizeMake(imageWidth, imageHeight)];
+    
+    normalImage = [resizeImage fixOrientation];
     _normalImage = normalImage;
     self.oldImagesize = CGSizeMake(normalImage.size.width, normalImage.size.height);
     self.oldImage = normalImage;
@@ -158,16 +170,9 @@ static CGFloat imageScale = 0.8; //裁剪框和屏幕大小比例
 //获得某个范围内的屏幕图像
 - (UIImage *)imageFromView: (UIView *)theView atFrame:(CGRect)rect
 {
-//    UIGraphicsBeginImageContext(r.size);
-//    CGContextRef context = UIGraphicsGetCurrentContext();
-//    CGContextSaveGState(context);
-//    UIRectClip(r);
-//    [theView.layer renderInContext:context];
-//    UIImage *theImage = UIGraphicsGetImageFromCurrentImageContext();
-//    
-//    UIGraphicsEndImageContext();
-    UIImage * imgeee = [UIImage imageWithCGImage:CGImageCreateWithImageInRect(self.oldImage.CGImage, rect)];
-    return  imgeee;
+    UIImage * image = [UIImage imageWithCGImage:CGImageCreateWithImageInRect(self.oldImage.CGImage, CGRectMake(0, 0, rect.size.width, rect.size.height))];
+    NSData *imageData = UIImageJPEGRepresentation(image, 0.4);
+    return  [UIImage imageWithData:imageData];
 }
 
 //返回裁剪区域图片,返回裁剪区域大小图片
@@ -175,7 +180,6 @@ static CGFloat imageScale = 0.8; //裁剪框和屏幕大小比例
 - (UIImage *)clipWithImageRect:(CGRect)clipRect clipImage:(UIImage *)clipImage;
 
 {
-    
     UIGraphicsBeginImageContext(clipRect.size);
     
     [clipImage drawInRect:CGRectMake(0,0,clipRect.size.width,clipRect.size.height)];
@@ -185,7 +189,6 @@ static CGFloat imageScale = 0.8; //裁剪框和屏幕大小比例
     UIGraphicsEndImageContext();
     
     return  newImage;
-    
 }
 
 #pragma mark - Lazy
