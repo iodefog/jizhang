@@ -81,6 +81,8 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
 
 @property (nonatomic, strong) SSJSynchronizeBlock *imageFailureBlocks;
 
+@property (nonatomic, strong) NSMutableDictionary<NSString *, NSNumber *> *userInfo;
+
 @end
 
 @implementation SSJDataSynchronizer
@@ -98,6 +100,8 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
 
 - (instancetype)init {
     if (self = [super init]) {
+        self.userInfo = [NSMutableDictionary dictionary];
+        
         self.dataSuccessBlocks = [[SSJSynchronizeBlock alloc] init];
         self.dataFailureBlocks = [[SSJSynchronizeBlock alloc] init];
         
@@ -215,11 +219,22 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
     //  数据同步失败
     if (self.dataSyncQueue == queue) {
         SSJDispatchMainAsync(^{
-            // -5555是用户格式化后原userid被注销了，需要用户重新登陆获取新的userid
+            BOOL shouldPerformFailuer = YES;
             if (error.code == -5555) {
+                // -5555是用户格式化后原userid被注销了，需要用户重新登陆获取新的userid
                 [SSJAlertViewAdapter showAlertViewWithTitle:nil message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction * _Nonnull action) {
                     [SSJLoginViewController reloginIfNeeded];
                 }], nil];
+            } else if (error.code == -2000) {
+                // 例如同步一条流水失败，可能是流水依赖的资金账户或者收支类别没有同步给服务端，这种情况就会导致－2000
+                BOOL hasResync = [self.userInfo[task.userId] boolValue];
+                if (!hasResync) {
+                    shouldPerformFailuer = NO;
+                    self.userInfo[task.userId] = @(YES);
+                    void (^success)() = [self.dataSuccessBlocks block];
+                    void (^failure)() = [self.dataFailureBlocks block];
+                    [self startSyncWithSuccess:success failure:failure];
+                }
             } else {
 #ifdef DEBUG
                 [SSJAlertViewAdapter showAlertViewWithTitle:@"数据同步失败" message:error.localizedDescription action:[SSJAlertViewAction actionWithTitle:@"确认" handler:NULL], nil];
@@ -227,14 +242,16 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
 #endif
             }
             
-            void (^failure)() = [self.dataFailureBlocks block];
-            if (failure) {
-                failure(SSJDataSynchronizeTypeData, error);
+            if (shouldPerformFailuer) {
+                void (^failure)() = [self.dataFailureBlocks block];
+                if (failure) {
+                    failure(SSJDataSynchronizeTypeData, error);
+                }
+                [[NSNotificationCenter defaultCenter] postNotificationName:SSJSyncDataFailureNotification object:self];
             }
+            
             [self.dataFailureBlocks removeBlock];
             [self.dataSuccessBlocks removeBlock];
-            
-            [[NSNotificationCenter defaultCenter] postNotificationName:SSJSyncDataFailureNotification object:self];
         });
         return;
     }

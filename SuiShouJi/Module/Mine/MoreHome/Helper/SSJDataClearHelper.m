@@ -42,10 +42,12 @@
             && [db executeUpdate:@"delete from bk_share_books where cbooksid in (select cbooksid from bk_share_books_friends_mark where cuserid = ?)", userId]
             && [db executeUpdate:@"delete from bk_share_books_member where cmemberid || cbooksid in (select cfriendid || cbooksid from bk_share_books_friends_mark where cuserid = ?)", userId]
             && [db executeUpdate:@"delete from bk_share_books_friends_mark where cuserid = ?", userId]) {
-              
+            
             [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:^(SSJDataSynchronizeType type) {
-                if (success) {
-                    success();
+                if (type == SSJDataSynchronizeTypeData) {
+                    if (success) {
+                        success();
+                    }
                 }
             } failure:^(SSJDataSynchronizeType type, NSError *error) {
                 if (failure) {
@@ -54,9 +56,11 @@
             }];
         } else {
             *rollback = YES;
-            if (failure) {
-                failure([db lastError]);
-            }
+            SSJDispatchMainAsync(^{
+                if (failure) {
+                    failure([db lastError]);
+                }
+            });
         }
     }];
 }

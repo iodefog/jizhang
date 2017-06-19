@@ -101,8 +101,12 @@ NSDate *SCYEnterBackgroundTime() {
     [MQManager setScheduledAgentWithAgentId:@"" agentGroupId:SSJMQDefualtGroupId scheduleRule:MQScheduleRulesRedirectGroup];
     
     [self initUserDataWithFinishHandler:^(BOOL successfull){
-        //如果要模拟用户登录，就开启此开关，并在simulateUserSync方法传入用户的id
+#ifdef DEBUG
+        // 如果要模拟用户登录，就开启此开关，并在simulateUserSync方法传入用户的id
         BOOL simulateUserSync = NO;
+#else
+        BOOL simulateUserSync = NO;
+#endif
         if (simulateUserSync) {
             [SSJDataSynchronizeTask simulateUserSync:@"8ed837fa-2912-4ea3-af19-7762ba7ec563"];
         } else {
