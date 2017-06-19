@@ -22,7 +22,9 @@ static const int kVerifyFailureTimesLimit = 5;
 
 @interface SSJMotionPasswordViewController () <SCYMotionEncryptionViewDelegate>
 
-@property (nonatomic, strong) UIView *portraitView;
+@property (nonatomic, strong) UIView *portraitContainer;
+
+@property (nonatomic, strong) UIImageView *portraitView;
 
 @property (nonatomic, strong) UILabel *remindLab;
 
@@ -115,66 +117,9 @@ static const int kVerifyFailureTimesLimit = 5;
     if ([SSJCurrentThemeID() isEqualToString:SSJDefaultThemeID]) {
         self.backgroundView.image = [UIImage ssj_compatibleImageNamed:@"motion_background"];
     }
-    
     [self.view addSubview:self.remindLab];
     [self.view addSubview:self.motionView];
-    
-    switch (self.type) {
-        case SSJMotionPasswordViewControllerTypeSetting: {
-            [SSJUserTableManager queryProperty:@[@"userId", @"loginPWD", @"motionPWD", @"motionTrackState"] forUserId:SSJUSERID() success:^(SSJUserItem * _Nonnull userModel) {
-                _userItem = userModel;
-                self.motionView.showStroke = [_userItem.motionTrackState boolValue];
-                if ([_userItem.motionTrackState boolValue]) {
-                    [self.view addSubview:self.miniMotionView];
-                }
-                
-                if (_userItem.motionPWD.length) {
-                    self.needToVerifyOriginalPwd = YES;
-                    self.miniMotionView.hidden = YES;
-                    self.remindLab.text = @"请输入原手势密码";
-                    [self.view addSubview:self.verifyLoginPwdBtn];
-                } else {
-                    self.remindLab.text = @"绘制解锁图案";
-                }
-            } failure:^(NSError * _Nonnull error) {
-                [SSJAlertViewAdapter showError:error];
-            }];
-        }
-            break;
-            
-        case SSJMotionPasswordViewControllerTypeVerification: {
-            //  查询手势密码
-            [SSJUserTableManager queryProperty:@[@"userId", @"motionPWD", @"icon", @"mobileNo", @"fingerPrintState", @"motionTrackState"] forUserId:SSJUSERID() success:^(SSJUserItem * _Nonnull userModel) {
-                _userItem = userModel;
-                self.password = _userItem.motionPWD;
-                self.motionView.showStroke = [_userItem.motionTrackState boolValue];
-                
-                [self.view addSubview:self.portraitView];
-                [self.view addSubview:self.forgetPwdBtn];
-                [self.view addSubview:self.changeAccountBtn];
-                self.remindLab.text = @"请输入手势密码";
-                
-                if ([_userItem.fingerPrintState boolValue]) {
-                    [self verifyTouchIDIfNeeded];
-                }
-            } failure:^(NSError * _Nonnull error) {
-                [SSJAlertViewAdapter showError:error];
-            }];
-        }
-            break;
-            
-        case SSJMotionPasswordViewControllerTypeTurnoff: {
-            [SSJUserTableManager queryProperty:@[@"userId", @"loginPWD", @"motionPWD", @"motionTrackState"] forUserId:SSJUSERID() success:^(SSJUserItem * _Nonnull userModel) {
-                _userItem = userModel;
-                self.remindLab.text = @"请输入原手势密码";
-                self.motionView.showStroke = [_userItem.motionTrackState boolValue];
-                [self.view addSubview:self.verifyLoginPwdBtn];
-            } failure:^(NSError * _Nonnull error) {
-                [SSJAlertViewAdapter showError:error];
-            }];
-        }
-            break;
-    }
+    [self loadUserModel];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -204,16 +149,18 @@ static const int kVerifyFailureTimesLimit = 5;
         }   break;
             
         case SSJMotionPasswordViewControllerTypeVerification: {
-            CGFloat verticalGap = (self.motionView.top - self.portraitView.height - self.remindLab.height) * 0.333;
-            self.portraitView.top = verticalGap;
-            self.portraitView.centerX = self.view.width * 0.5;
-            self.remindLab.top = self.portraitView.bottom + verticalGap;
+            CGFloat verticalGap = (self.motionView.top - self.portraitContainer.height - self.remindLab.height) * 0.333;
+            self.portraitContainer.top = verticalGap;
+            self.portraitContainer.centerX = self.view.width * 0.5;
+            self.remindLab.top = self.portraitContainer.bottom + verticalGap;
         }   break;
             
         case SSJMotionPasswordViewControllerTypeTurnoff: {
             self.remindLab.top = self.motionView.top * 0.62;
         }   break;
     }
+    
+    self.portraitView.frame = CGRectInset(self.portraitContainer.bounds, 3, 3);
 }
 
 #pragma mark - SCYMotionEncryptionViewDelegate
@@ -474,29 +421,96 @@ static const int kVerifyFailureTimesLimit = 5;
     }
 }
 
+- (void)loadUserIcon {
+    NSString *iconUrlStr = [_userItem.icon hasPrefix:@"http"] ? _userItem.icon : SSJImageURLWithAPI(_userItem.icon);
+    [self.portraitView sd_setImageWithURL:[NSURL URLWithString:iconUrlStr] placeholderImage:[UIImage imageNamed:@"defualt_portrait"] options:(SDWebImageAvoidAutoSetImage | SDWebImageAllowInvalidSSLCertificates) completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+        if (image && cacheType == SDImageCacheTypeNone) {
+            [UIView animateWithDuration:0.25 animations:^{
+                self.portraitView.image = image;
+            }];
+        } else {
+            self.portraitView.image = image;
+        }
+    }];
+}
+- (void)loadUserModel {
+    switch (self.type) {
+        case SSJMotionPasswordViewControllerTypeSetting: {
+            [SSJUserTableManager queryProperty:@[@"userId", @"loginPWD", @"motionPWD", @"motionTrackState"] forUserId:SSJUSERID() success:^(SSJUserItem * _Nonnull userModel) {
+                _userItem = userModel;
+                [self loadUserIcon];
+                self.motionView.showStroke = [_userItem.motionTrackState boolValue];
+                if ([_userItem.motionTrackState boolValue]) {
+                    [self.view addSubview:self.miniMotionView];
+                }
+                
+                if (_userItem.motionPWD.length) {
+                    self.needToVerifyOriginalPwd = YES;
+                    self.miniMotionView.hidden = YES;
+                    self.remindLab.text = @"请输入原手势密码";
+                    [self.view addSubview:self.verifyLoginPwdBtn];
+                } else {
+                    self.remindLab.text = @"绘制解锁图案";
+                }
+            } failure:^(NSError * _Nonnull error) {
+                [SSJAlertViewAdapter showError:error];
+            }];
+        }
+            break;
+            
+        case SSJMotionPasswordViewControllerTypeVerification: {
+            //  查询手势密码
+            [SSJUserTableManager queryProperty:@[@"userId", @"motionPWD", @"icon", @"mobileNo", @"fingerPrintState", @"motionTrackState"] forUserId:SSJUSERID() success:^(SSJUserItem * _Nonnull userModel) {
+                _userItem = userModel;
+                [self loadUserIcon];
+                self.password = _userItem.motionPWD;
+                self.motionView.showStroke = [_userItem.motionTrackState boolValue];
+                
+                [self.view addSubview:self.portraitContainer];
+                [self.view addSubview:self.forgetPwdBtn];
+                [self.view addSubview:self.changeAccountBtn];
+                self.remindLab.text = @"请输入手势密码";
+                
+                if ([_userItem.fingerPrintState boolValue]) {
+                    [self verifyTouchIDIfNeeded];
+                }
+            } failure:^(NSError * _Nonnull error) {
+                [SSJAlertViewAdapter showError:error];
+            }];
+        }
+            break;
+            
+        case SSJMotionPasswordViewControllerTypeTurnoff: {
+            [SSJUserTableManager queryProperty:@[@"userId", @"loginPWD", @"motionPWD", @"motionTrackState"] forUserId:SSJUSERID() success:^(SSJUserItem * _Nonnull userModel) {
+                _userItem = userModel;
+                [self loadUserIcon];
+                self.remindLab.text = @"请输入原手势密码";
+                self.motionView.showStroke = [_userItem.motionTrackState boolValue];
+                [self.view addSubview:self.verifyLoginPwdBtn];
+            } failure:^(NSError * _Nonnull error) {
+                [SSJAlertViewAdapter showError:error];
+            }];
+        }
+            break;
+    }
+}
+
 #pragma mark - Getter
-- (UIView *)portraitView {
+- (UIView *)portraitContainer {
+    if (!_portraitContainer) {
+        _portraitContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 68, 68)];
+        _portraitContainer.clipsToBounds = YES;
+        _portraitContainer.layer.cornerRadius = 34;
+        _portraitContainer.layer.borderWidth = 1;
+        _portraitContainer.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.motionPasswordNormalColor].CGColor;
+        [_portraitContainer addSubview:self.portraitView];
+    }
+    return _portraitContainer;
+}
+
+- (UIImageView *)portraitView {
     if (!_portraitView) {
-        _portraitView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 68, 68)];
-        _portraitView.clipsToBounds = YES;
-        _portraitView.layer.cornerRadius = 34;
-        _portraitView.layer.borderWidth = 1;
-        _portraitView.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.motionPasswordNormalColor].CGColor;
-        
-        CGRect imageFrame = CGRectInset(_portraitView.bounds, 3, 3);
-        UIImageView *imageView = [[UIImageView alloc] initWithCornerRadiusAdvance:CGRectGetWidth(imageFrame) * 0.5 rectCornerType:UIRectCornerAllCorners];
-        imageView.frame = imageFrame;
-        NSString *iconUrlStr = [_userItem.icon hasPrefix:@"http"] ? _userItem.icon : SSJImageURLWithAPI(_userItem.icon);
-        [imageView sd_setImageWithURL:[NSURL URLWithString:iconUrlStr] placeholderImage:[UIImage imageNamed:@"defualt_portrait"] options:(SDWebImageAvoidAutoSetImage | SDWebImageAllowInvalidSSLCertificates) completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-            if (image && cacheType == SDImageCacheTypeNone) {
-                [UIView animateWithDuration:0.25 animations:^{
-                    imageView.image = image;
-                }];
-            } else {
-                imageView.image = image;
-            }
-        }];
-        [_portraitView addSubview:imageView];
+        _portraitView = [[UIImageView alloc] init];
     }
     return _portraitView;
 }
