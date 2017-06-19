@@ -656,7 +656,6 @@
 		7D2D26DF1EB85A3E005E3E2D /* SSJReportFormsScaleAxisView+SSJTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2D26D31EB85A3E005E3E2D /* SSJReportFormsScaleAxisView+SSJTheme.m */; };
 		7D2D26E01EB85A3E005E3E2D /* SSJReportFormsScaleAxisView+SSJTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2D26D31EB85A3E005E3E2D /* SSJReportFormsScaleAxisView+SSJTheme.m */; };
 		7D2E7FB51C520EA500A2601C /* SSJUserTableManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2E7FB41C520EA500A2601C /* SSJUserTableManager.m */; };
-		7D301FC01EF77933009DC17A /* sync_data.json in Resources */ = {isa = PBXBuildFile; fileRef = 7D301FBF1EF77933009DC17A /* sync_data.json */; };
 		7D36AC311D409A9C006526B3 /* SSJBudgetEditAccountDaySelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D36AC301D409A9C006526B3 /* SSJBudgetEditAccountDaySelectionView.m */; };
 		7D36AC471D461704006526B3 /* SSJMemberSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D36AC461D461704006526B3 /* SSJMemberSyncTable.m */; };
 		7D36AC521D461D80006526B3 /* SSJMemberChargeSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D36AC511D461D80006526B3 /* SSJMemberChargeSyncTable.m */; };
@@ -9691,7 +9690,6 @@
 		7D2D26D31EB85A3E005E3E2D /* SSJReportFormsScaleAxisView+SSJTheme.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SSJReportFormsScaleAxisView+SSJTheme.m"; sourceTree = "<group>"; };
 		7D2E7FB31C520EA500A2601C /* SSJUserTableManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJUserTableManager.h; sourceTree = "<group>"; };
 		7D2E7FB41C520EA500A2601C /* SSJUserTableManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJUserTableManager.m; sourceTree = "<group>"; };
-		7D301FBF1EF77933009DC17A /* sync_data.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = sync_data.json; sourceTree = "<group>"; };
 		7D36AC2F1D409A9C006526B3 /* SSJBudgetEditAccountDaySelectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBudgetEditAccountDaySelectionView.h; sourceTree = "<group>"; };
 		7D36AC301D409A9C006526B3 /* SSJBudgetEditAccountDaySelectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBudgetEditAccountDaySelectionView.m; sourceTree = "<group>"; };
 		7D36AC451D461704006526B3 /* SSJMemberSyncTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMemberSyncTable.h; sourceTree = "<group>"; };
@@ -11406,7 +11404,6 @@
 		7D2B24011C3AA3AD009A74A8 /* DataSync */ = {
 			isa = PBXGroup;
 			children = (
-				7D301FBF1EF77933009DC17A /* sync_data.json */,
 				7DDB9DFF1DB4A33D007AF877 /* Deprecated */,
 				7DDBB01D1C9AAA22003433D0 /* Model */,
 				7D2B241E1C3E093E009A74A8 /* SyncTable */,
@@ -15823,7 +15820,6 @@
 				9CDB4C431EF3AC070097E09D /* MaYiJiZhang-Info.plist in Resources */,
 				9CAF731C1E03EAD90061ADB8 /* xiaomao.gif in Resources */,
 				7D5F33511CEAE6C10086B67E /* SSJCalenderTableViewNoDataHeader.xib in Resources */,
-				7D301FC01EF77933009DC17A /* sync_data.json in Resources */,
 				9C3849761E641D1100BF4AF9 /* 9188JiZhangBen-Info.plist in Resources */,
 				7D6AAB751C3233190007C0A3 /* mydatabase.db in Resources */,
 				9C23EA4D1DDAD4FE0003C5AB /* 9188.cer in Resources */,
