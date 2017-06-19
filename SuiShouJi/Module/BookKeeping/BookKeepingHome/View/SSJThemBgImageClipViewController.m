@@ -88,7 +88,7 @@ static CGFloat imageScale = 0.8; //裁剪框和屏幕大小比例
         imageWidth = imageWidth * tempscale;
     }
     UIImage *resizeImage = [self clipWithImageRect:CGRectMake(0, 0, imageWidth, imageHeight) clipImage:normalImage];
-    [normalImage ssj_scaleImageWithSize:CGSizeMake(imageWidth, imageHeight)];
+//    [normalImage ssj_scaleImageWithSize:CGSizeMake(imageWidth, imageHeight)];
     
     normalImage = [resizeImage fixOrientation];
     _normalImage = normalImage;
