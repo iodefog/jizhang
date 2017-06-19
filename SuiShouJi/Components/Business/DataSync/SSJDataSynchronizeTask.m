@@ -161,7 +161,7 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
             //            SSJPRINT(@">>> SSJ sync response headers:%@", tResponse.allHeaderFields);
             NSString *contentType = tResponse.allHeaderFields[@"Content-Type"];
             
-            //  返回的是json数据格式
+            // 返回的是json数据格式
             if ([contentType isEqualToString:@"text/json;charset=UTF-8"]) {
                 NSDictionary *responseInfo = [NSJSONSerialization JSONObjectWithData:responseObject options:0 error:&tError];
                 NSInteger code = [responseInfo[@"code"] integerValue];
@@ -190,9 +190,6 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
             //  返回的是zip压缩包
             //  将数据解压
             NSError *tError = nil;
-            //                NSString *path = [[NSBundle mainBundle]pathForResource:@"sync_data" ofType:@"json" ];
-            //                NSData *jsonData = [[NSData alloc] initWithContentsOfFile:path];
-            
             NSData *jsonData = [self unzipData:responseObject error:&tError];
             
             if (tError) {
@@ -641,25 +638,31 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
     }] then:^RACSignal *{
         return [self clearSyncVersion];
     }] subscribeError:^(NSError *error) {
-        [SSJAlertViewAdapter showError:error];
+        SSJDispatchMainAsync(^{
+            [SSJAlertViewAdapter showError:error];
+        });
     } completed:^{
-        [CDAutoHideMessageHUD showMessage:@"模拟用户登录成功"];
+        SSJDispatchMainAsync(^{
+            [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@"模拟用户数据成功" action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
+        });
     }];
 }
 
 + (RACSignal *)updateUserId:(NSString *)userId {
     return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
-            BOOL successful = [db executeUpdate:@"insert into bk_user (cuserid, cregisterstate) values (?, 1)", userId];
-            successful = successful && SSJSetUserId(userId) && SSJSaveUserLogined(YES);
-            SSJDispatchMainAsync(^{
-                if (successful) {
-                    [subscriber sendNext:nil];
-                    [subscriber sendCompleted];
-                } else {
-                    [subscriber sendError:[db lastError]];
-                }
-            });
+            BOOL successful = YES;
+            if (![db boolForQuery:@"select count(*) from bk_user where cuserid = ?", userId]) {
+                successful = [db executeUpdate:@"insert into bk_user (cuserid, cregisterstate) values (?, 1)", userId];
+                successful = successful && SSJSetUserId(userId) && SSJSaveUserLogined(YES);
+            }
+            
+            if (successful) {
+                [subscriber sendNext:nil];
+                [subscriber sendCompleted];
+            } else {
+                [subscriber sendError:[db lastError]];
+            }
         }];
         return nil;
     }];
