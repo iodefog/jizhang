@@ -24,19 +24,30 @@
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        //_defaultView = [[UIImageView alloc] initWithImage:[UIImage ssj_compatibleImageNamed:@"default"]];
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-            CGSize screenSize = [UIScreen mainScreen].bounds.size;
-            UIImage *image;
-            if (CGSizeEqualToSize(screenSize, CGSizeMake(320.0, 480.0))) {
-                image = [YYImage imageNamed:@"ani@960.webp"];
-            } else {
-                image = [YYImage imageNamed:@"ani.webp"];
-            }
-            _defaultView = [[YYAnimatedImageView alloc] initWithImage:image];
-            _defaultView.frame = self.bounds;
-            [self addSubview:_defaultView];
-        }
+        _defaultView = [[UIImageView alloc] initWithImage:[UIImage ssj_compatibleImageNamed:@"default"]];
+//        if ([SSJDefaultSource() isEqualToString:@"11501"] || [SSJDefaultSource() isEqualToString:@"11502"]) {
+//            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone && SSJLaunchTimesForCurrentVersion() == 1) {
+//                CGSize screenSize = [UIScreen mainScreen].bounds.size;
+//                UIImage *image;
+//                if (CGSizeEqualToSize(screenSize, CGSizeMake(320.0, 480.0))) {
+//                    image = [YYImage imageNamed:@"ani@960.webp"];
+//                } else {
+//                    image = [YYImage imageNamed:@"ani.webp"];
+//                }
+//                _defaultView = [[YYAnimatedImageView alloc] initWithImage:image];
+//                _defaultView.frame = self.bounds;
+//            } else {
+//                if ([SSJDefaultSource() isEqualToString:@"11501"]) {
+//                    _defaultView = [[UIImageView alloc] initWithImage:[UIImage ssj_compatibleImageNamed:@"9188default"]];
+//                } else {
+//                    _defaultView = [[UIImageView alloc] initWithImage:[UIImage ssj_compatibleImageNamed:@"youyudefult"]];
+//                }
+//            }
+//        } else {
+//            _defaultView = [[UIImageView alloc] initWithImage:[UIImage ssj_compatibleImageNamed:@"default"]];
+//        }
+
+        [self addSubview:_defaultView];
     }
     return self;
 }
