@@ -25,7 +25,8 @@
 
 -(void)layoutSubviews{
     [super layoutSubviews];
-    self.nodataImage.center = CGPointMake(self.width / 2, self.height / 2);
+    self.nodataImage.top = 46;
+    self.nodataImage.centerX = self.width / 2;
 }
 
 -(UIImageView *)nodataImage{

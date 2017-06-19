@@ -76,7 +76,7 @@
 -(void)setModel:(id)model{
     
     _model = model;
-    
+    self.button.enabled = YES;
     if (model == nil) {
         [self.button setTitle:@"添加预算" forState:UIControlStateNormal];
         self.button.backgroundColor = [UIColor clearColor];
@@ -113,6 +113,7 @@
 
 -(void)setCurrentBalance:(double)currentBalance{
     _currentBalance = currentBalance;
+    self.button.enabled = NO;
     if (self.currentMonth == 0) {
         [self.button setTitle:[NSString stringWithFormat:@"结余 %.2f",_currentBalance] forState:UIControlStateNormal];
     }else{
