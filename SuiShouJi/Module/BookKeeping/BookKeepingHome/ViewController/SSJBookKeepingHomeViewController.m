@@ -436,10 +436,8 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
             self.floatingDateView.currentDate = listItem.date;
             _isRefreshing = NO;
             if (self.items.count == 0 || [self.homeBar.budgetButton.model isKindOfClass:[SSJShareBookItem class]]) {
-                self.homeBar.budgetButton.button.enabled = YES;
                 return;
             }else{
-                self.homeBar.budgetButton.button.enabled = NO;
                 CGPoint currentPostion = CGPointMake(self.view.frame.size.width / 2, scrollView.contentOffset.y + 46);
                 NSInteger currentSection = [self.tableView indexPathForRowAtPoint:currentPostion].section;
                 SSJBookKeepingHomeListItem *listItem = [self.items objectAtIndex:currentSection];
@@ -653,42 +651,42 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
     return _guidePopView;
 }
 
-- (SSJHomeBillStickyNoteView *)billStickyNoteView
-{
-    __weak typeof(self) weakSelf = self;
-    if (!_billStickyNoteView) {
-        _billStickyNoteView = [[SSJHomeBillStickyNoteView alloc] init];
-        _billStickyNoteView.closeBillNoteBlock = ^{
-            [weakSelf.view layoutIfNeeded];
-            [weakSelf.tableView setContentOffset:CGPointMake(0, -46)];
-        };
-        
-//        _billStickyNoteView.openBillNoteBlock = ^{
-//            //如果没有登录
-//            if (!SSJIsUserLogined()) {
-//                [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:@"请登录后再查看2016账单吧！" action:[SSJAlertViewAction actionWithTitle:@"关闭" handler:^(SSJAlertViewAction *action) {
-//                }],[SSJAlertViewAction actionWithTitle:@"立即登录" handler:^(SSJAlertViewAction *action) {
-//                    SSJLoginViewController *loginVC = [[SSJLoginViewController alloc] init];
-//                    [weakSelf.navigationController pushViewController:loginVC animated:YES];
-//                }],nil];
-//            }else{
-//                //跳转2016账单
-//                SSJBillNoteWebViewController *billVC = [[SSJBillNoteWebViewController alloc] init];
-//                billVC.backButtonClickBlock = ^(){
-//                    [weakSelf.tableView setContentOffset:CGPointMake(0, -46)];
-//                };
-//                billVC.hidesBottomBarWhenPushed = YES;
-////                [weakSelf.navigationController pushViewController:billVC animated:YES];
-//                [weakSelf presentViewController:billVC animated:YES completion:nil];
-//                [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:SSJShowBillNoteKey];
-//                [[NSUserDefaults standardUserDefaults] synchronize];
-////                [weakSelf.billStickyNoteView removeFromSuperview];
-//                [weakSelf.view layoutIfNeeded];
-//            }
+//- (SSJHomeBillStickyNoteView *)billStickyNoteView
+//{
+//    __weak typeof(self) weakSelf = self;
+//    if (!_billStickyNoteView) {
+//        _billStickyNoteView = [[SSJHomeBillStickyNoteView alloc] init];
+//        _billStickyNoteView.closeBillNoteBlock = ^{
+//            [weakSelf.view layoutIfNeeded];
+//            [weakSelf.tableView setContentOffset:CGPointMake(0, -46)];
 //        };
-    }
-    return _billStickyNoteView;
-}
+//        
+////        _billStickyNoteView.openBillNoteBlock = ^{
+////            //如果没有登录
+////            if (!SSJIsUserLogined()) {
+////                [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:@"请登录后再查看2016账单吧！" action:[SSJAlertViewAction actionWithTitle:@"关闭" handler:^(SSJAlertViewAction *action) {
+////                }],[SSJAlertViewAction actionWithTitle:@"立即登录" handler:^(SSJAlertViewAction *action) {
+////                    SSJLoginViewController *loginVC = [[SSJLoginViewController alloc] init];
+////                    [weakSelf.navigationController pushViewController:loginVC animated:YES];
+////                }],nil];
+////            }else{
+////                //跳转2016账单
+////                SSJBillNoteWebViewController *billVC = [[SSJBillNoteWebViewController alloc] init];
+////                billVC.backButtonClickBlock = ^(){
+////                    [weakSelf.tableView setContentOffset:CGPointMake(0, -46)];
+////                };
+////                billVC.hidesBottomBarWhenPushed = YES;
+//////                [weakSelf.navigationController pushViewController:billVC animated:YES];
+////                [weakSelf presentViewController:billVC animated:YES completion:nil];
+////                [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:SSJShowBillNoteKey];
+////                [[NSUserDefaults standardUserDefaults] synchronize];
+//////                [weakSelf.billStickyNoteView removeFromSuperview];
+////                [weakSelf.view layoutIfNeeded];
+////            }
+////        };
+//    }
+//    return _billStickyNoteView;
+//}
 
 - (SSJHomeThemeModifyView *)themeModifyView {
     __weak __typeof(self)weakSelf = self;
