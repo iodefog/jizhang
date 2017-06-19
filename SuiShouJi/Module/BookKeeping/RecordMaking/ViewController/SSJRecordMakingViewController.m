@@ -399,7 +399,8 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         _accessoryView.memoView.delegate = self;
         _accessoryView.memoView.text = _item.chargeMemo;
         _accessoryView.dateBtn.selected = YES;
-        _accessoryView.photoBtn.selected = _item.chargeImage.length;
+        _accessoryView.memberBtn.selected = YES;
+        _accessoryView.photoBtn.selected = _item.chargeImage.length > 0;
     }
     return _accessoryView;
 }

@@ -25657,7 +25657,7 @@
 			baseConfigurationReference = 6534E1884B88B3410A9AFE6E /* Pods-SuiShouJiEnterprise.debug-production.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = 9188jizhang;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = 9188LaunchImage;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LongTailLaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Can Wu (7Z729NG4UD)";
@@ -25763,7 +25763,7 @@
 			baseConfigurationReference = 39E3B4D62A92E52E9A7D3272 /* Pods-SuiShouJi.debug-production.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = 9188jizhangpro;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = 9188LaunchImage;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LongTailLaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/SuiShouJi/Resource/Entitlements/SuiShouJi.entitlements";
@@ -26163,7 +26163,7 @@
 			baseConfigurationReference = 20DA9AF0E6D356E778C6EB44 /* Pods-SuiShouJiEnterprise.release-production.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = 9188jizhang;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = 9188LaunchImage;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LongTailLaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co. Ltd.";
@@ -26268,7 +26268,7 @@
 			baseConfigurationReference = 6B2E92DAE4FF9F6B4E6CFC2B /* Pods-SuiShouJi.release-production.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = 9188jizhangpro;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = 9188LaunchImage;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LongTailLaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/SuiShouJi/Resource/Entitlements/SuiShouJi.entitlements";
@@ -26829,7 +26829,7 @@
 			baseConfigurationReference = D7A5205CDCA302CF951A8581 /* Pods-SuiShouJiEnterprise.debug-test.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = 9188jizhang;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = 9188LaunchImage;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LongTailLaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Can Wu (7Z729NG4UD)";
@@ -26935,7 +26935,7 @@
 			baseConfigurationReference = E710211033A79D2C7E92D379 /* Pods-SuiShouJiEnterprise.release-test.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = 9188jizhang;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = 9188LaunchImage;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LongTailLaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co. Ltd.";
@@ -29093,7 +29093,7 @@
 			baseConfigurationReference = 1E94BF472DA87D55A1CBED4F /* Pods-YouYuJiZhang.debug-test.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = YouYuLaunchImage;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LongTailLaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/SuiShouJi/Resource/Entitlements/YouYuJiZhang.entitlements";
@@ -29195,7 +29195,7 @@
 			baseConfigurationReference = 1E51C22F9305214B776BE476 /* Pods-YouYuJiZhang.debug-production.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = YouYuLaunchImage;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LongTailLaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/SuiShouJi/Resource/Entitlements/YouYuJiZhang.entitlements";
@@ -29298,7 +29298,7 @@
 			baseConfigurationReference = 10B02F27B07D9E59BDE1CA2A /* Pods-YouYuJiZhang.release-test.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = YouYuLaunchImage;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LongTailLaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/SuiShouJi/Resource/Entitlements/YouYuJiZhang.entitlements";
@@ -29399,7 +29399,7 @@
 			baseConfigurationReference = 6914A4671174AA5C297802D2 /* Pods-YouYuJiZhang.release-production.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = YouYuLaunchImage;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LongTailLaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/SuiShouJi/Resource/Entitlements/YouYuJiZhang.entitlements";
@@ -30446,7 +30446,7 @@
 			baseConfigurationReference = 59B9709CD0561A8AD4BDF638 /* Pods-SuiShouJi.debug-test.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = 9188jizhangpro;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = 9188LaunchImage;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LongTailLaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/SuiShouJi/Resource/Entitlements/SuiShouJi.entitlements";
@@ -30535,7 +30535,7 @@
 			baseConfigurationReference = 21EA1E50547213D6FCC8FD05 /* Pods-SuiShouJi.release-test.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = 9188jizhangpro;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = 9188LaunchImage;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LongTailLaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/SuiShouJi/Resource/Entitlements/SuiShouJi.entitlements";
