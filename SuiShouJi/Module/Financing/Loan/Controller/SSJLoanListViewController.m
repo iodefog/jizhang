@@ -114,12 +114,13 @@ static NSString *const kLoanListCellId = @"kLoanListCellId";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
     SSJLoanModel *model = [_list ssj_safeObjectAtIndex:indexPath.section];
-    SSJLoanDetailViewController *loanDetailVC = [[SSJLoanDetailViewController alloc] init];
-    loanDetailVC.loanID = model.ID;
-    loanDetailVC.fundColor = [SSJLoanHelper queryForFundColorWithID:model.fundID];
-    [self.navigationController pushViewController:loanDetailVC animated:YES];
+    [SSJLoanHelper queryForFundColorWithID:model.fundID completion:^(NSString * _Nonnull color) {
+        SSJLoanDetailViewController *loanDetailVC = [[SSJLoanDetailViewController alloc] init];
+        loanDetailVC.loanID = model.ID;
+        loanDetailVC.fundColor = color;
+        [self.navigationController pushViewController:loanDetailVC animated:YES];
+    }];
 }
 
 #pragma mark - SCYSlidePagingHeaderViewDelegate
@@ -320,6 +321,10 @@ static NSString *const kLoanListCellId = @"kLoanListCellId";
                 [SSJAlertViewAdapter showError:error];
             }];
         };
+        NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+        style.lineSpacing = 5;
+        style.alignment = NSTextAlignmentCenter;
+        _authCodeAlertView.message = [[NSAttributedString alloc] initWithString:@"删除后将难以恢复\n仍然删除，请输入下列验证码" attributes:@{NSParagraphStyleAttributeName:style}];
     }
     return _authCodeAlertView;
 }

@@ -135,7 +135,7 @@
 
 - (void)setSumItem:(SSJSearchResultSummaryItem *)sumItem{
     _sumItem = sumItem;
-    self.resultCountLabel.text = [NSString stringWithFormat:@"搜索到%ld条相关流水记录",sumItem.resultCount];
+    self.resultCountLabel.text = [NSString stringWithFormat:@"搜索到%ld条相关流水记录",(long)sumItem.resultCount];
     [self.resultCountLabel sizeToFit];
     if (!sumItem.resultIncome) {
         self.singleLineLabel.hidden = NO;

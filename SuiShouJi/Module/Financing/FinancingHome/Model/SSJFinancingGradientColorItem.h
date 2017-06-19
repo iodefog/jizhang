@@ -6,9 +6,9 @@
 //  Copyright © 2017年 ___9188___. All rights reserved.
 //
 
-#import "SSJBaseItem.h"
+#import "SSJBaseCellItem.h"
 
-@interface SSJFinancingGradientColorItem : SSJBaseItem
+@interface SSJFinancingGradientColorItem : SSJBaseCellItem
 
 @property(nonatomic, strong) NSString *startColor;
 

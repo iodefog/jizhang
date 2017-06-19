@@ -103,12 +103,12 @@ static const CGFloat kRadius = 12.f;
         _backLayer.frame = self.bounds;
         _backLayer.startPoint = CGPointMake(0, 0.5);
         _backLayer.endPoint = CGPointMake(1, 0.5);
-        _backLayer.shadowRadius = kRadius;
+//        _backLayer.shadowRadius = kRadius;
         CAShapeLayer *maskLayer = [CAShapeLayer layer];
         maskLayer.path = [self drawPathInRect:CGRectMake(5, 10, self.width - 10, self.height - 10)].CGPath;
-        maskLayer.shadowPath = [self drawPathInRect:CGRectMake(0, 6, self.width, self.height - 6)].CGPath;
-        maskLayer.shadowOpacity = 0.2;
-        maskLayer.shadowOffset = CGSizeMake(0, 0);
+//        maskLayer.shadowPath = [self drawPathInRect:CGRectMake(0, 6, self.width, self.height - 6)].CGPath;
+//        maskLayer.shadowOpacity = 0.2;
+//        maskLayer.shadowOffset = CGSizeMake(0, 0);
         _backLayer.mask = maskLayer;
     }
     return _backLayer;
@@ -188,7 +188,7 @@ static const CGFloat kRadius = 12.f;
     return _fundingImage;
 }
 
--(void)setItem:(SSJBaseItem *)item {
+-(void)setItem:(SSJBaseCellItem *)item {
     _item = item;
     if ([_item isKindOfClass:[SSJFinancingHomeitem class]]) {
         SSJFinancingHomeitem *item = (SSJFinancingHomeitem *)_item;
@@ -196,7 +196,7 @@ static const CGFloat kRadius = 12.f;
         [CATransaction begin];
         [CATransaction setDisableActions:YES];
         self.backLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:item.startColor].CGColor,(__bridge id)[UIColor ssj_colorWithHex:item.endColor].CGColor];
-        self.backLayer.shadowColor = [UIColor ssj_colorWithHex:item.startColor].CGColor;
+//        self.backLayer.shadowColor = [UIColor ssj_colorWithHex:item.startColor].CGColor;
         [CATransaction commit];
         
         self.fundingNameLabel.text = item.fundingName;
@@ -218,7 +218,7 @@ static const CGFloat kRadius = 12.f;
         [CATransaction begin];
         [CATransaction setDisableActions:YES];
         self.backLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:item.startColor].CGColor,(__bridge id)[UIColor ssj_colorWithHex:item.endColor].CGColor];
-        self.backLayer.shadowColor = [UIColor ssj_colorWithHex:item.startColor].CGColor;
+//        self.backLayer.shadowColor = [UIColor ssj_colorWithHex:item.startColor].CGColor;
         [CATransaction commit];
         self.fundingBalanceLabel.hidden = NO;
         self.fundingBalanceLabel.text = [NSString stringWithFormat:@"%.2f",item.cardBalance];
@@ -243,21 +243,21 @@ static const CGFloat kRadius = 12.f;
             NSInteger daysFromRepayment = [repaymentDate daysFrom:[NSDate date]];
             NSInteger mostRecentDay = MIN(daysFromBill, daysFromRepayment);
             if (billDate.day == [NSDate date].day) {
-                self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距还款日:%ld天",daysFromRepayment + 1];
+                self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距还款日:%ld天",(long)daysFromRepayment + 1];
             }else if(repaymentDate.day == [NSDate date].day){
-                self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距账单日:%ld天",daysFromBill + 1];
+                self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距账单日:%ld天",(long)daysFromBill + 1];
             }else{
                 if (mostRecentDay == daysFromBill) {
                     if (daysFromBill > 0 ) {
-                        self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距账单日%ld天",mostRecentDay + 1];
+                        self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距账单日%ld天",(long)mostRecentDay + 1];
                     }else{
-                        self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距还款日%ld天",daysFromRepayment + 1];
+                        self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距还款日%ld天",(long)daysFromRepayment + 1];
                     }
                 }else if (mostRecentDay == daysFromRepayment){
                     if (daysFromRepayment < 0 ) {
-                        self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距账单日日%ld天",daysFromBill + 1];
+                        self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距账单日日%ld天",(long)daysFromBill + 1];
                     }else{
-                        self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距还款日%ld天",mostRecentDay + 1];
+                        self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距还款日%ld天",(long)mostRecentDay + 1];
                     }
                 }
             }

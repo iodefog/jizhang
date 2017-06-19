@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "SSJBooksTypeItem.h"
 
+SSJ_DEPRECATED
+
 @interface SSJBooksTypeCollectionViewCell : UICollectionViewCell
 
 @property(nonatomic, strong) SSJBooksTypeItem *item;

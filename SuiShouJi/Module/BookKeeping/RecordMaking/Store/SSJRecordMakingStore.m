@@ -32,7 +32,6 @@
             item.ID = SSJUUID();
         }
         
-        
         if (item.chargeImage.length && !item.chargeThumbImage.length) {
             NSString *imageName = [item.chargeImage copy];
             if (![item.chargeImage hasSuffix:@".jpg"]) {
@@ -56,7 +55,7 @@
             editeItem = item;
             editeItem.operatorType = 0;
             //新建流水
-            if (![db executeUpdate:@"insert into bk_user_charge (ichargeid , cuserid , imoney , ibillid , ifunsid  , cwritedate , iversion , operatortype , cbilldate , cmemo , cbooksid, cimgurl, thumburl, clientadddate, cdetaildate) values(?,?,?,?,?,?,?,0,?,?,?,?,?,?,?)",item.ID,userId,moneyStr,item.billId,item.fundId,editeTime,@(SSJSyncVersion()),item.billDate,item.chargeMemo,item.booksId,item.chargeImage,item.chargeThumbImage,editeTime,item.billDetailDate]) {
+            if (![db executeUpdate:@"insert into bk_user_charge (ichargeid , cuserid , imoney , ibillid , ifunsid  , cwritedate , iversion , operatortype , cbilldate , cmemo , cbooksid, cimgurl, thumburl, clientadddate, cdetaildate, ichargetype, cid) values(?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?, ?, ?, ?, ?, ?)",item.ID,userId,moneyStr,item.billId,item.fundId,editeTime,@(SSJSyncVersion()),item.billDate,item.chargeMemo,item.booksId,item.chargeImage,item.chargeThumbImage,editeTime,item.billDetailDate, @(item.idType), item.sundryId]) {
                 *rollback = YES;
                 if (failure) {
                     SSJDispatch_main_async_safe(^{
@@ -74,56 +73,6 @@
                         });
                     }
                     return;
-                }
-            }
-            //修改每日汇总表
-            if ([db intForQuery:@"select count(1) from bk_dailysum_charge where cbilldate = ? and cuserid = ? and cbooksid = ?",item.billDate,userId,item.booksId]) {
-                if (item.incomeOrExpence) {
-                    //如果是支出
-                    if (![db executeUpdate:@"update bk_dailysum_charge set expenceamount = expenceamount + ? , sumamount = sumamount - ? , cwritedate = ? where cuserid = ? and cbooksid = ? and cbilldate = ?",@(money),@(money),editeTime,userId,item.booksId,item.billDate]) {
-                        *rollback = YES;
-                        if (failure) {
-                            SSJDispatch_main_async_safe(^{
-                                failure([db lastError]);
-                            });
-                        }
-                        return;
-                    }
-                }else{
-                    //如果是收入
-                    if (![db executeUpdate:@"update bk_dailysum_charge set incomeamount = incomeamount + ? , sumamount = sumamount + ? , cwritedate = ? where cuserid = ? and cbooksid = ? and cbilldate = ?",@(money),@(money),editeTime,userId,item.booksId,item.billDate]) {
-                        *rollback = YES;
-                        if (failure) {
-                            SSJDispatch_main_async_safe(^{
-                                failure([db lastError]);
-                            });
-                        }
-                        return;
-                    }
-                }
-            }else{
-                if (item.incomeOrExpence) {
-                    //如果是支出
-                    if (![db executeUpdate:@"insert into bk_dailysum_charge (expenceamount,incomeamount, sumamount,cuserid,cbooksid,cbilldate,cwritedate) values (?,0,?,?,?,?,?)",@(money),@(-money),userId,item.booksId,item.billDate,editeTime]) {
-                        *rollback = YES;
-                        if (failure) {
-                            SSJDispatch_main_async_safe(^{
-                                failure([db lastError]);
-                            });
-                        }
-                        return;
-                    }
-                }else{
-                    //如果是收入
-                    if (![db executeUpdate:@"insert into bk_dailysum_charge (expenceamount,incomeamount,sumamount,cuserid,cbooksid,cbilldate,cwritedate) values (0,?,?,?,?,?,?)",@(money),@(money),userId,item.booksId,item.billDate,editeTime]) {
-                        *rollback = YES;
-                        if (failure) {
-                            SSJDispatch_main_async_safe(^{
-                                failure([db lastError]);
-                            });
-                        }
-                        return;
-                    }
                 }
             }
             //修改成员流水表
@@ -149,7 +98,7 @@
             }
         }else{
             editeItem = item;
-            editeItem.operatorType = 0;
+            editeItem.operatorType = 1;
             //修改流水
             FMResultSet *originResult = [db executeQuery:@"select a.cbilldate , a.imoney , a.ichargeid , a.ibillid , a.cwritedate , a.ifunsid , a.cuserid , a.cmemo ,  a.cimgurl , a.thumburl , a.cid, a.ichargetype , a.operatortype , a.cbooksid , b.itype from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.ichargeid = ? and a.cuserid = ?",item.ID,userId];
             SSJBillingChargeCellItem *originItem = [[SSJBillingChargeCellItem alloc]init];
@@ -162,7 +111,7 @@
                 originItem.chargeThumbImage = [originResult stringForColumn:@"THUMBURL"];
                 originItem.chargeMemo = [originResult stringForColumn:@"CMEMO"];
                 if ([originResult intForColumn:@"ichargetype"] == SSJChargeIdTypeCircleConfig) {
-                    originItem.configId = [originResult stringForColumn:@"cid"];
+                    originItem.sundryId = [originResult stringForColumn:@"cid"];
                 }
                 originItem.billDate = [originResult stringForColumn:@"CBILLDATE"];
                 originItem.incomeOrExpence = [originResult intForColumn:@"ITYPE"];
@@ -172,9 +121,9 @@
                 }
             }
             [originResult close];
-            double originMoney = [originItem.money doubleValue];
+
             //更新流水表
-            if (![db executeUpdate:@"update bk_user_charge set imoney = ? , ibillid = ? , ifunsid = ? , cwritedate = ? , operatortype = 1 , cbilldate = ? , iversion = ? , cmemo = ?  ,cimgurl = ? , thumburl = ?, cbooksid = ?, cdetaildate = ? where ichargeid = ? and cuserid = ?",moneyStr,item.billId,item.fundId,[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],item.billDate,@(SSJSyncVersion()),item.chargeMemo,item.chargeImage, item.chargeThumbImage, item.booksId,item.billDetailDate,item.ID,userId]) {
+            if (![db executeUpdate:@"update bk_user_charge set imoney = ? , ibillid = ? , ifunsid = ? , cwritedate = ? , operatortype = 1 , cbilldate = ? , iversion = ? , cmemo = ?  ,cimgurl = ? , thumburl = ?, cbooksid = ?, cdetaildate = ?, ichargetype = ?, cid = ? where ichargeid = ? and cuserid = ?", moneyStr, item.billId, item.fundId, [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], item.billDate, @(SSJSyncVersion()), item.chargeMemo, item.chargeImage, item.chargeThumbImage, item.booksId,item.billDetailDate, @(item.idType), item.sundryId, item.ID,userId]) {
                 *rollback = YES;
                 if (failure) {
                     SSJDispatch_main_async_safe(^{
@@ -203,80 +152,6 @@
                 [[NSFileManager defaultManager] removeItemAtPath:SSJImagePath(originItem.chargeImage) error:nil];
                 [[NSFileManager defaultManager] removeItemAtPath:SSJImagePath(originItem.chargeThumbImage) error:nil];
                 [db executeUpdate:@"delete from BK_IMG_SYNC where CIMGNAME = ?",originItem.chargeImage];
-            }
-            if (money != [originItem.money doubleValue] || item.incomeOrExpence != originItem.incomeOrExpence || ![item.billDate isEqualToString:originItem.billDate] || ![item.booksId isEqualToString:originItem.booksId]) {
-                if (originItem.incomeOrExpence) {
-                    //修改每日汇总表
-                    if (![db executeUpdate:@"update bk_dailysum_charge set expenceamount = expenceamount - ? , sumamount = sumamount + ?, cwritedate = ?  where cuserid = ? and cbooksid = ? and cbilldate = ?",@(originMoney),@(originMoney),editeTime,userId,originItem.booksId,originItem.billDate]) {
-                        if (failure) {
-                            SSJDispatch_main_async_safe(^{
-                                failure([db lastError]);
-                            });
-                        }
-                        return;
-                    }
-                }else{
-                    //修改每日汇总表
-                    if (![db executeUpdate:@"update bk_dailysum_charge set incomeamount = incomeamount - ? , sumamount = sumamount - ? where cuserid = ? and cbooksid = ? and cbilldate = ?",@(originMoney),@(originMoney),userId,originItem.booksId,originItem.billDate]) {
-                        if (failure) {
-                            SSJDispatch_main_async_safe(^{
-                                failure([db lastError]);
-                            });
-                        }
-                        return;
-                    }
-                }
-                if (item.incomeOrExpence) {
-                    if ([db intForQuery:@"select count(1) from bk_dailysum_charge where cuserid = ? and cbooksid = ? and cbilldate = ?",userId,item.booksId,item.billDate]) {
-                        if (![db executeUpdate:@"update bk_dailysum_charge set expenceamount = expenceamount + ? , sumamount = sumamount - ?, cwritedate = ?  where cuserid = ? and cbooksid = ? and cbilldate = ?",@(money),@(money),editeTime,userId,item.booksId,item.billDate]) {
-                            if (failure) {
-                                SSJDispatch_main_async_safe(^{
-                                    failure([db lastError]);
-                                });
-                            }
-                            return;
-                        }
-                    }else{
-                        if (![db executeUpdate:@"insert into bk_dailysum_charge (expenceamount,incomeamount,sumamount,cwritedate,cuserid,cbooksid,cbilldate) values (?,0,?,?,?,?,?)",@(money),@(-money),editeTime,userId,item.booksId,item.billDate]) {
-                            if (failure) {
-                                SSJDispatch_main_async_safe(^{
-                                    failure([db lastError]);
-                                });
-                            }
-                            return;
-                        }
-                    }
-
-                }else{
-                    if ([db intForQuery:@"select count(1) from bk_dailysum_charge where cuserid = ? and cbooksid = ? and cbilldate = ?",userId,item.booksId,item.billDate]) {
-                        if (![db executeUpdate:@"update bk_dailysum_charge set incomeamount = incomeamount + ? , sumamount = sumamount + ? where cuserid = ? and cbooksid = ? and cbilldate = ?",@(money),@(money),userId,item.booksId,item.billDate]) {
-                            if (failure) {
-                                SSJDispatch_main_async_safe(^{
-                                    failure([db lastError]);
-                                });
-                            }
-                            return;
-                        }
-                    }else{
-                        if (![db executeUpdate:@"insert into bk_dailysum_charge (incomeamount,expenceamount,sumamount,cwritedate,cuserid,cbooksid,cbilldate) values (?,0,?,?,?,?,?)",@(money),@(money),editeTime,userId,item.booksId,item.billDate]) {
-                            if (failure) {
-                                SSJDispatch_main_async_safe(^{
-                                    failure([db lastError]);
-                                });
-                            }
-                            return;
-                        }
-                    }
-                }
-                if (![db executeUpdate:@"delete from bk_dailysum_charge where incomeamount = 0 and expenceamount = 0 and sumamount = 0"]) {
-                    *rollback = YES;
-                    if (failure) {
-                        SSJDispatch_main_async_safe(^{
-                            failure([db lastError]);
-                        });
-                    }
-                    return;
-                }
             }
             //修改成员流水表
             if (![db executeUpdate:@"delete from bk_member_charge where ichargeid = ?",item.ID]) {

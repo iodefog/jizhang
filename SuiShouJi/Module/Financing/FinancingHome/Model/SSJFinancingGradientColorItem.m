@@ -12,6 +12,10 @@
 
 - (BOOL)isEqual:(id)other
 {
+    if (self == other) {
+        return YES;
+    }
+    
     SSJFinancingGradientColorItem *item = (SSJFinancingGradientColorItem *)other;
     if ([self.startColor isEqualToString:item.startColor] && [self.endColor isEqualToString:item.endColor]) {
         return YES;
@@ -21,8 +25,8 @@
 }
 
 + (NSArray *)defualtColors {
-    NSArray *startColors = @[@"#fc6eac",@"#f96566",@"#7c91f8",@"#7fb4f1",@"#39d4da",@"#55d696",@"#f9b656",@"#fc8258"];
-    NSArray *endColors = @[@"#fb92bd",@"#ff8989",@"#9fb0fc",@"#8ddcf0",@"#7fe8e0",@"#9be2a1",@"#f7cf70",@"#feb473"];
+    NSArray *startColors = @[@"#fc6eac",@"#f96566",@"#7c91f8",@"#7fb4f1",@"#39d4da",@"#55d696",@"#f9b656",@"#fc8258",@"#bfaa37",@"#8d79ff",@"#c260e3",@"#4ea2ff"];
+    NSArray *endColors = @[@"#fb92bd",@"#ff8989",@"#9fb0fc",@"#8ddcf0",@"#7fe8e0",@"#9be2a1",@"#f7cf70",@"#feb473",@"#e8d785",@"#afabff",@"#e8a8fe",@"#84befd"];
     
     NSMutableArray *colorArray = [NSMutableArray arrayWithCapacity:0];
     

@@ -12,44 +12,62 @@
 @implementation SSJUserTableManager
 
 + (void)reloadUserIdWithError:(NSError **)error {
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+        [self reloadUserIdInDatabase:db error:error];
+    }];
+}
+
++ (void)reloadUserIdWithSuccess:(void (^)())success failure:(void (^)(NSError *error))failure {
     __block NSError *tError = nil;
     
     if (SSJUSERID().length) {
-        tError = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"current userid is invalid"}];
+        tError = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"当前的userid无效"}];
         SSJPRINT(@">>> SSJ warning:current userid is invalid");
-        if (error) {
-            *error = tError;
+        if (failure) {
+            failure(tError);
         }
         return;
     }
     
-    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
-
-        NSString *tUserId = [self unregisteredUserIdInDatabase:db error:&tError];
-        
-        if (tError) {
-            if (error) {
-                *error = tError;
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        NSError *error = nil;
+        [self reloadUserIdInDatabase:db error:&error];
+        if (error) {
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure(error);
+                });
             }
-            return;
-        }
-        
-        if (tUserId.length) {
-            SSJSetUserId(tUserId);
-            return;
-        }
-        
-        tUserId = SSJUUID();
-        if (![db executeUpdate:@"insert into BK_USER (CUSERID, CREGISTERSTATE, CDEFAULTFUNDACCTSTATE, CDEFAULTBOOKSTYPESTATE, CCURRENTBOOKSID, CWRITEDATE) values (?, 0, 0, 0, ?, ?)", tUserId, tUserId, [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"]]) {
-            tError = [db lastError];
-            if (error) {
-                *error = tError;
+        } else {
+            if (success) {
+                SSJDispatchMainAsync(^{
+                    success();
+                });
             }
-            return;
         }
-        
-        SSJSetUserId(tUserId);
     }];
+}
+
++ (void)reloadUserIdInDatabase:(FMDatabase *)db error:(NSError **)error {
+    NSString *userId = [self unregisteredUserIdInDatabase:db error:error];
+    if (*error) {
+        return;
+    }
+    
+    if (userId.length) {
+        SSJSetUserId(userId);
+        return;
+    }
+    
+    userId = SSJUUID();
+    if (![db executeUpdate:@"insert into BK_USER (CUSERID, CREGISTERSTATE, CCURRENTBOOKSID, CWRITEDATE) values (?, 0, ?, ?)", userId, userId, [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"]]) {
+        if (error) {
+            *error = [db lastError];
+        }
+        return;
+    }
+    
+    SSJSetUserId(userId);
 }
 
 + (NSString *)unregisteredUserIdInDatabase:(FMDatabase *)db error:(NSError **)error {
@@ -72,17 +90,19 @@
     return userId;
 }
 
-+ (SSJUserItem *)queryUserItemForID:(NSString *)userID {
++ (void)queryUserItemWithID:(NSString *)userID success:(void(^)(SSJUserItem *userItem))success failure:(void(^)(NSError *error))failure {
     NSArray *properties = [[SSJUserItem propertyMapping] allKeys];
-    return [self queryProperty:properties forUserId:userID];
+    [self queryProperty:properties forUserId:userID success:success failure:failure];
 }
 
-+ (SSJUserItem *)queryProperty:(NSArray *)propertyNames forUserId:(NSString *)userId {
-    SSJUserItem *item = [[SSJUserItem alloc] init];
++ (void)queryProperty:(NSArray *)propertyNames forUserId:(NSString *)userId success:(void(^)(SSJUserItem *userModel))success failure:(void(^)(NSError *error))failure {
     
     if (!userId || !userId.length) {
-        SSJPRINT(@">>> SSJ Warning:userid不能为空");
-        return item;
+        NSError *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"userid不能为空"}];
+        if (failure) {
+            failure(error);
+        }
+        return;
     }
     
     //  将属性名转换成字段名
@@ -98,19 +118,22 @@
     }
     
     if (fieldArr.count == 0) {
-        SSJPRINT(@">>> SSJ Warning:propertyNames中的属性名无效");
-        return item;
+        NSError *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"propertyNames中的属性名无效"}];
+        if (failure) {
+            failure(error);
+        }
+        return;
     }
     
-    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSString *queryStr = [NSString stringWithFormat:@"select %@ from bk_user where cuserid = ?", [fieldArr componentsJoinedByString:@", "]];
         FMResultSet *resultSet = [db executeQuery:queryStr, userId];
         if (!resultSet) {
             return;
         }
-        
         [resultSet next];
         
+        SSJUserItem *item = [[SSJUserItem alloc] init];
         for (int i = 0; i < fieldArr.count; i ++) {
             NSString *fieldName = [fieldArr ssj_safeObjectAtIndex:i];
             NSString *propertyName = [filterPropertyArr ssj_safeObjectAtIndex:i];
@@ -130,24 +153,28 @@
                 
             }
         }
-        
+        item.userId = userId;
         [resultSet close];
+        
+        if (success) {
+            SSJDispatchMainAsync(^{
+                success(item);
+            });
+        }
     }];
-    
-    item.userId = userId;
-    
-    return item;
 }
 
-+ (BOOL)saveUserItem:(SSJUserItem *)userItem {
++ (void)saveUserItem:(SSJUserItem *)userItem success:(void(^)())success failure:(void(^)(NSError *error))failure {
     NSString *userId = userItem.userId;
     if (!userId || !userId.length) {
         SSJPRINT(@"SSJ Warning:userid不能为空!!!");
-        return NO;
+        if (failure) {
+            failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"userid不能为空"}]);
+        }
+        return;
     }
     
-    __block BOOL success = YES;
-    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSString *statment = nil;
         NSMutableDictionary *userInfo = [[self fieldMapWithUserItem:userItem] mutableCopy];
         if (![db boolForQuery:@"select count(*) from BK_USER where CUSERID = ?", userId]) {
@@ -159,10 +186,41 @@
             statment = [self updateSQLStatementWithUserInfo:userInfo];
         }
         
-        success = [db executeUpdate:statment withParameterDictionary:userInfo];
+        if ([db executeUpdate:statment withParameterDictionary:userInfo]) {
+            if (success) {
+                SSJDispatchMainAsync(^{
+                    success();
+                });
+            }
+        } else {
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure([db lastError]);
+                });
+            }
+        }
     }];
-    
-    return success;
+}
+
++ (void)currentBooksId:(void(^)(NSString *booksId))success failure:(void(^)(NSError *error))failure {
+    [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID() success:^(SSJUserItem * _Nonnull userModel) {
+        NSString *booksId = userModel.currentBooksId.length ? userModel.currentBooksId : userModel.userId;
+        if (success) {
+            success(booksId);
+        }
+    } failure:failure];
+}
+
++ (void)updateCurrentBooksId:(NSString *)booksId success:(void(^)())success failure:(void(^)(NSError *error))failure {
+    SSJUserItem *item = [[SSJUserItem alloc] init];
+    item.userId = SSJUSERID();
+    item.currentBooksId = booksId;
+    [SSJUserTableManager saveUserItem:item success:^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:SSJBooksTypeDidChangeNotification object:nil];
+        if (success) {
+            success();
+        }
+    } failure:failure];
 }
 
 + (NSDictionary *)fieldMapWithUserItem:(SSJUserItem *)userItem {

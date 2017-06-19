@@ -26,19 +26,19 @@
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
-        self.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
-        self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+        self.appliesTheme = YES;
         self.contentView.backgroundColor = [UIColor clearColor];
-        
+        [self updateCellAppearanceAfterThemeChanged];
         if ([self respondsToSelector:@selector(setPreservesSuperviewLayoutMargins:)]) {
             [self setPreservesSuperviewLayoutMargins:NO];
         }
-        
         if ([self respondsToSelector:@selector(setLayoutMargins:)]) {
             [self setLayoutMargins:UIEdgeInsetsZero];
         }
         
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCellAppearanceAfterThemeChanged) name:SSJThemeDidChangeNotification object:nil];
+        if (self.appliesTheme) {
+            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCellAppearanceAfterThemeChanged) name:SSJThemeDidChangeNotification object:nil];
+        }
     }
     return self;
 }
@@ -49,10 +49,20 @@
     if (_customAccessoryType == UITableViewCellAccessoryDisclosureIndicator) {
         CGFloat accessoryWidth = 33;
         self.contentView.frame = CGRectMake(0, 0, self.width - accessoryWidth, self.height);
-        _indicatorView.center = CGPointMake(self.contentView.right + accessoryWidth * 0.5, self.height * 0.5);
+        _indicatorView.center = CGPointMake(self.contentView.right + accessoryWidth * 0.5 - 5, self.height * 0.5);
     } else {
 //        self.contentView.frame = self.bounds;
     }
+}
+
+- (void)setCellItem:(__kindof SSJBaseCellItem *)cellItem {
+    if (![cellItem isKindOfClass:[SSJBaseCellItem class]]) {
+        return;
+    }
+    
+    _cellItem = cellItem;
+    self.separatorInset = _cellItem.separatorInsets;
+    self.selectionStyle = _cellItem.selectionStyle;
 }
 
 - (void)setCustomAccessoryType:(UITableViewCellAccessoryType)customAccessoryType {
@@ -75,7 +85,7 @@
 
 - (void)updateCellAppearanceAfterThemeChanged {
     self.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
-    self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+    self.backgroundColor = SSJ_MAIN_BACKGROUND_COLOR;
     _indicatorView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellIndicatorColor];
 }
 

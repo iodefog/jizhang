@@ -33,6 +33,8 @@ typedef NS_ENUM(NSInteger, SSJCreditCardCellType) {
 
 @property(nonatomic, strong) NSString *cellDetail;
 
+@property(nonatomic, strong) UILabel *detailLabel;
+
 @property(nonatomic, strong) NSAttributedString *cellAtrributedDetail;
 
 @property(nonatomic, strong) NSString *cellColor;

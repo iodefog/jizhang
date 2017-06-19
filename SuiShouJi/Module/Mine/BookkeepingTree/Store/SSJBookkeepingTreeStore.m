@@ -12,14 +12,19 @@
 
 @implementation SSJBookkeepingTreeStore
 
-+ (SSJBookkeepingTreeCheckInModel *)queryCheckInInfoWithUserId:(NSString *)userId error:(NSError **)error{
-    __block SSJBookkeepingTreeCheckInModel *model = nil;
-    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
++ (void)queryCheckInInfoWithUserId:(NSString *)userId success:(void(^)(SSJBookkeepingTreeCheckInModel *model))success failure:(void(^)(NSError *error))failure {
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         FMResultSet *result = [db executeQuery:@"select isignin, isignindate, hasshaked, treeimgurl, treegifurl from bk_user_tree where cuserid = ?", userId];
-        if (!result && error) {
-            *error = [db lastError];
+        if (!result) {
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
         }
         
+        SSJBookkeepingTreeCheckInModel *model = nil;
         while ([result next]) {
             SSJBookkeepingTreeCheckInModel *tmodel = [[SSJBookkeepingTreeCheckInModel alloc] init];
             tmodel.checkInTimes = [result intForColumn:@"isignin"];
@@ -31,30 +36,38 @@
             model = tmodel;
         }
         [result close];
+        
+        if (success) {
+            SSJDispatchMainAsync(^{
+                success(model);
+            });
+        }
     }];
-    
-    if (error && *error) {
-        return nil;
-    }
-    
-    return model;
 }
 
-+ (BOOL)saveCheckInModel:(SSJBookkeepingTreeCheckInModel *)model error:(NSError **)error {
-    __block BOOL success = YES;
-    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
++ (void)saveCheckInModel:(SSJBookkeepingTreeCheckInModel *)model success:(void(^)())success failure:(void(^)(NSError *error))failure {
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        BOOL successfull = YES;
         BOOL hasRecord = [db boolForQuery:@"select count(*) from bk_user_tree where cuserid = ?", model.userId];
         if (hasRecord) {
-            success = [db executeUpdate:@"update bk_user_tree set isignin = ?, isignindate = ?, hasshaked = ?, treeimgurl = ?, treegifurl = ? where cuserid = ?", @(model.checkInTimes), model.lastCheckInDate, @(model.hasShaked), model.treeImgUrl, model.treeGifUrl, model.userId];
+            successfull = [db executeUpdate:@"update bk_user_tree set isignin = ?, isignindate = ?, hasshaked = ?, treeimgurl = ?, treegifurl = ? where cuserid = ?", @(model.checkInTimes), model.lastCheckInDate, @(model.hasShaked), model.treeImgUrl, model.treeGifUrl, model.userId];
         } else {
-            success = [db executeUpdate:@"insert into bk_user_tree (isignin, isignindate, hasshaked, treeimgurl, treegifurl, cuserid) values (?, ?, ?, ?, ? ,?)", @(model.checkInTimes), model.lastCheckInDate, @(model.hasShaked), model.treeImgUrl, model.treeGifUrl, model.userId];
+            successfull = [db executeUpdate:@"insert into bk_user_tree (isignin, isignindate, hasshaked, treeimgurl, treegifurl, cuserid) values (?, ?, ?, ?, ? ,?)", @(model.checkInTimes), model.lastCheckInDate, @(model.hasShaked), model.treeImgUrl, model.treeGifUrl, model.userId];
         }
-        if (!success && error) {
-            *error = [db lastError];
+        if (successfull) {
+            if (success) {
+                SSJDispatchMainAsync(^{
+                    success();
+                });
+            }
+        } else {
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure([db lastError]);
+                });
+            }
         }
     }];
-    
-    return success;
 }
 
 @end

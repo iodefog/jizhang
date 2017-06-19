@@ -69,6 +69,14 @@ static const NSUInteger kMaxLoadUpdateItmes = 0; //  加载更新信息失败的
     return self.networkService.startImage;
 }
 
+- (NSString *)lottieUrl{
+    return self.networkService.lottieUrl;
+}
+
+- (NSString *)animUrl{
+    return self.networkService.animImage;
+}
+
 - (NSString *)serviceNum{
     return self.networkService.serviceNumber;
 }

@@ -608,30 +608,37 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
     }];
 }
 
-+ (NSString *)queryForFundNameWithID:(NSString *)ID {
-    __block NSString *fundName = nil;
-    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
-        fundName = [db stringForQuery:@"select cacctname from bk_fund_info where cfundid = ?", ID];
++ (void)queryForFundNameWithID:(NSString *)ID completion:(void(^)(NSString *name))completion {
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        NSString *fundName = [db stringForQuery:@"select cacctname from bk_fund_info where cfundid = ?", ID];
+        if (completion) {
+            SSJDispatchMainAsync(^{
+                completion(fundName);
+            });
+        }
     }];
-    
-    return fundName;
 }
 
-+ (NSString *)queryForFundColorWithID:(NSString *)ID {
-    __block NSString *fundName = nil;
-    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
-        fundName = [db stringForQuery:@"select ccolor from bk_fund_info where cfundid = ?", ID];
++ (void)queryForFundColorWithID:(NSString *)ID completion:(void(^)(NSString *color))completion {
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        NSString *color = [db stringForQuery:@"select ccolor from bk_fund_info where cfundid = ?", ID];
+        if (completion) {
+            SSJDispatchMainAsync(^{
+                completion(color);
+            });
+        }
     }];
-    
-    return fundName;
 }
 
-+ (NSString *)queryForFundColorWithLoanId:(NSString *)loanId {
-    __block NSString *colorValue = nil;
-    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
-        colorValue = [db stringForQuery:@"select ccolor from bk_fund_info where cfundid = (select cthefundid from bk_loan where loanid = ?)", loanId];
++ (void)queryForFundColorWithLoanId:(NSString *)loanId completion:(void(^)(NSString *color))completion {
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        NSString *colorValue = [db stringForQuery:@"select ccolor from bk_fund_info where cfundid = (select cthefundid from bk_loan where loanid = ?)", loanId];
+        if (completion) {
+            SSJDispatchMainAsync(^{
+                completion(colorValue);
+            });
+        }
     }];
-    return colorValue;
 }
 
 + (double)caculateInterestForEveryDayWithLoanModel:(SSJLoanModel *)model chargeModels:(NSArray <SSJLoanCompoundChargeModel *>*)models {

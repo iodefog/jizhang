@@ -1,5 +1,5 @@
 //
-//  SSJBooksParentButton.m
+//  SSJBooksParentSelectCell.m
 //  SuiShouJi
 //
 //  Created by ricky on 16/11/10.
@@ -8,110 +8,43 @@
 
 #import "SSJBooksParentSelectCell.h"
 
-@interface SSJBooksParentSelectCell()
-
-@property(nonatomic, strong) UIImageView *booksIconImageView;
-
-@property(nonatomic, strong) UILabel *booksTitleLab;
-
-@property(nonatomic, strong) UIImageView *arrowImageView;
-
-@end
-
 @implementation SSJBooksParentSelectCell
-
-- (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
-- (instancetype)initWithFrame:(CGRect)frame
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
-    self = [super initWithFrame:frame];
-    if (self) {
+    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         self.contentView.backgroundColor = [UIColor clearColor];
-        self.layer.cornerRadius = self.height / 2;
-        self.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor].CGColor;
-        self.layer.borderWidth = 1.f;
-        [self.contentView addSubview:self.booksTitleLab];
-        [self.contentView addSubview:self.booksIconImageView];
         [self.contentView addSubview:self.arrowImageView];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateAppearance) name:SSJThemeDidChangeNotification object:nil];
+        self.textLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
+        [self themeUpdate];
+        self.selectionStyle = UITableViewCellSelectionStyleNone;
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(themeUpdate) name:SSJThemeDidChangeNotification object:nil];
     }
     return self;
 }
 
+
 - (void)layoutSubviews{
     [super layoutSubviews];
-    self.booksTitleLab.centerX = self.width / 2;
-    self.booksTitleLab.centerY = self.booksIconImageView.centerY = self.arrowImageView.centerY = self.height / 2;
-    self.booksIconImageView.right = self.booksTitleLab.left - 15;
     self.arrowImageView.right = self.width - 20;
+    self.arrowImageView.centerY = self.height * 0.5;
 }
-
-- (UIImageView *)booksIconImageView{
-    if (!_booksIconImageView) {
-        _booksIconImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 15, 15)];
-        _booksIconImageView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-    }
-    return _booksIconImageView;
-}
-
-- (UILabel *)booksTitleLab{
-    if (!_booksTitleLab) {
-        _booksTitleLab = [[UILabel alloc]init];
-        _booksTitleLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
-        _booksTitleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-    }
-    return _booksTitleLab;
-}
-
 - (UIImageView *)arrowImageView{
     if (!_arrowImageView) {
-        _arrowImageView = [[UIImageView alloc]init];
-        _arrowImageView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-        _arrowImageView.image = [[UIImage imageNamed:@"budget_right"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        [_arrowImageView sizeToFit];
+        _arrowImageView = [[UIImageView alloc]initWithImage:[[UIImage imageNamed:@"bk_selectedParentBook_mark"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
     }
     return _arrowImageView;
 }
 
-- (void)setTitle:(NSString *)title{
-    self.booksTitleLab.text = title;
-    [self.booksTitleLab sizeToFit];
+- (void)setImage:(NSString *)imageName title:(NSString *)title {
+    self.imageView.image = [[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    self.textLabel.text = title;
 }
 
-- (void)setImage:(NSString *)image{
-    self.booksIconImageView.image = [[UIImage imageNamed:image] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+- (void)themeUpdate {
+    self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+    self.imageView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    self.textLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    self.arrowImageView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
 }
-
-- (void)setIsSelected:(BOOL)isSelected{
-    if (isSelected) {
-        self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
-        self.booksTitleLab.textColor = [UIColor whiteColor];
-        self.booksIconImageView.tintColor = [UIColor whiteColor];
-        self.arrowImageView.tintColor = [UIColor whiteColor];
-    }else{
-        self.backgroundColor = [UIColor clearColor];
-        self.booksTitleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-        self.booksIconImageView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-        self.arrowImageView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-    }
-}
-
-- (void)updateAppearance {
-    self.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor].CGColor;
-    self.booksIconImageView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-    self.booksTitleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-    self.arrowImageView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-}
-
-
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
-}
-*/
 
 @end

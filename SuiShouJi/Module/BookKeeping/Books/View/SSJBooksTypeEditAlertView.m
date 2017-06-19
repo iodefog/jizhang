@@ -80,7 +80,12 @@ static const CGSize kButtonSize = {200, 40};
     [super updateConstraints];
 }
 
-- (void)show {
+- (void)showWithBookCategory:(SSJBooksCategory)category {
+    if (category == SSJBooksCategoryPublic) {
+        [self.deleteBtn setTitle:@"退出账本" forState:UIControlStateNormal];
+    } else if (category == SSJBooksCategoryPersional) {
+        [self.deleteBtn setTitle:@"删除账本" forState:UIControlStateNormal];
+    }
     self.alpha = 0;
     self.center = CGPointMake(SSJ_KEYWINDOW.width * 0.5, SSJ_KEYWINDOW.height * 0.5);
     [SSJ_KEYWINDOW ssj_showViewWithBackView:self backColor:[UIColor blackColor] alpha:0.3 target:self touchAction:@selector(dismiss) animation:^{

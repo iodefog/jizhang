@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface SSJListMenuCellItem : NSObject
+@interface SSJListMenuCellItem : SSJBaseCellItem
 
 @property (nonatomic) CGSize imageSize;
 
@@ -27,5 +27,7 @@
 @property (nonatomic) UIControlContentHorizontalAlignment contentAlignment;
 
 @property (nonatomic) UIEdgeInsets contentInset;
+
+@property (nonatomic, strong) UIColor *backgroundColor;
 
 @end

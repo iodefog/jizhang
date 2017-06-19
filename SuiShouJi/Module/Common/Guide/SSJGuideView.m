@@ -8,13 +8,12 @@
 
 #import "SSJGuideView.h"
 #import "SSJGuideContentView.h"
-#import "SSJGuideLastContentView.h"
 #import "SSJPageControl.h"
 #import "SSJBorderButton.h"
 
 @interface SSJGuideView () <UIScrollViewDelegate>
 
-@property (nonatomic, strong) NSMutableArray *contentViews;
+@property (nonatomic, strong) NSMutableArray <SSJGuideContentView *> *contentViews;
 
 @property (nonatomic, strong) UIScrollView *scrollView;
 
@@ -73,15 +72,20 @@
     NSUInteger idx = scrollView.contentOffset.x / scrollView.width;
     self.pageControl.currentPage = idx;
     if (idx == self.contentViews.count - 1) {
-        [UIView transitionFromView:self.pageControl toView:self.beginButton duration:0.2 options:UIViewAnimationOptionTransitionCrossDissolve completion:NULL];
+        [UIView transitionFromView:self.pageControl toView:self.beginButton duration:0.2 options:UIViewAnimationOptionTransitionCrossDissolve completion:^(BOOL finished) {
+            [[self.contentViews objectAtIndex:idx] play];
+        }];
     } else {
-        [UIView transitionFromView:self.beginButton toView:self.pageControl duration:0.2 options:UIViewAnimationOptionTransitionCrossDissolve completion:NULL];
+        [UIView transitionFromView:self.beginButton toView:self.pageControl duration:0.2 options:UIViewAnimationOptionTransitionCrossDissolve completion:^(BOOL finished) {
+            [[self.contentViews objectAtIndex:idx] play];
+        }];
     }
 }
 
 - (void)pageControlAction {
     CGFloat offsetX = _pageControl.currentPage * _scrollView.width;
     [self.scrollView setContentOffset:CGPointMake(offsetX, 0) animated:YES];
+    [[self.contentViews objectAtIndex:_pageControl.currentPage] play];
 }
 
 - (void)createContentViews {
@@ -89,10 +93,10 @@
         self.contentViews = [[NSMutableArray alloc] initWithCapacity:4];
     }
     
-    NSArray *images = @[@"guide_1",@"guide_2",@"guide_3"];
+    NSArray *images = @[@"lottie_1",@"lottie_2",@"lottie_3"];
     for (int i = 0; i < images.count; i ++) {
-        UIImage *image = [UIImage ssj_compatibleImageNamed:images[i]];
-        UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
+        NSString *imageName = [images ssj_safeObjectAtIndex:i];
+        SSJGuideContentView *imageView = [[SSJGuideContentView alloc] initWithFrame:CGRectZero withType:SSJGuideContentViewTypeLottie imageName:imageName];
         [self.scrollView addSubview:imageView];
         [self.contentViews addObject:imageView];
     }

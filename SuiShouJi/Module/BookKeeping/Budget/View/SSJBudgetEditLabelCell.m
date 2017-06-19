@@ -32,14 +32,14 @@
     [super layoutSubviews];
     
     [self.imageView sizeToFit];
-    self.imageView.left = 10;
+    self.imageView.left = 15;
     self.imageView.centerY = self.contentView.height * 0.5;
     
     self.textLabel.left = self.imageView.right + 10;
     self.textLabel.centerY = self.contentView.height * 0.5;
     
     if (self.customAccessoryType == UITableViewCellAccessoryNone) {
-        self.detailTextLabel.frame = CGRectMake(self.textLabel.right + 20, 0, self.contentView.width - self.textLabel.right - 30, self.contentView.height);
+        self.detailTextLabel.frame = CGRectMake(self.textLabel.right + 20, 0, self.contentView.width - self.textLabel.right - 35, self.contentView.height);
     } else {
         self.detailTextLabel.frame = CGRectMake(self.textLabel.right + 20, 0, self.contentView.width - self.textLabel.right - 20, self.contentView.height);
     }

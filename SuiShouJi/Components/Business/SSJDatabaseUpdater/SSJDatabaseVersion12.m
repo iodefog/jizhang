@@ -8,6 +8,9 @@
 
 @implementation SSJDatabaseVersion12
 
++ (NSString *)dbVersion {
+    return @"2.1.0";
+}
 
 + (NSError *)startUpgradeInDatabase:(FMDatabase *)db {
 

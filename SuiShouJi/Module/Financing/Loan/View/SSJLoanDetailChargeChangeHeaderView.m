@@ -46,8 +46,6 @@
     
     _arrow.right = self.width - 20;
     _arrow.centerY = self.height * 0.5;
-    
-    [self ssj_relayoutBorder];
 }
 
 - (void)setExpanded:(BOOL)expanded {

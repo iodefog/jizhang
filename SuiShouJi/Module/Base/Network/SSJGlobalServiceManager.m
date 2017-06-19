@@ -38,9 +38,7 @@
     
     SSJGlobalServiceManager *manager = [[SSJGlobalServiceManager alloc] initWithBaseURL:[NSURL URLWithString:[SSJDomainManager domain]] sessionConfiguration:configuration];
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    manager.SSLPinningMode = AFSSLPinningModeCertificate;
-    manager.allowInvalidCertificates = YES;
-    manager.validatesDomainName = YES;
+    manager.httpsOpened = YES;
     
     return manager;
 }
@@ -75,52 +73,35 @@
            sessionConfiguration:(NSURLSessionConfiguration *)configuration {
     if (self = [super initWithBaseURL:url sessionConfiguration:configuration]) {
         _services = [[NSMutableArray alloc] init];
-        self.securityPolicy = [self securityPolicyWithPinningMode:AFSSLPinningModeCertificate];
+        self.securityPolicy = [self securityPolicy];
     }
     return self;
 }
 
-- (AFSecurityPolicy *)securityPolicyWithPinningMode:(AFSSLPinningMode)pinningMode {
+- (AFSecurityPolicy *)securityPolicy {
     
     // AFSSLPinningModeCertificate 使用证书验证模式
-    AFSecurityPolicy *securityPolicy = [AFSecurityPolicy policyWithPinningMode:pinningMode];
+    AFSecurityPolicy *securityPolicy = [AFSecurityPolicy policyWithPinningMode:(_httpsOpened ? AFSSLPinningModeCertificate : AFSSLPinningModeNone)];
     
     // allowInvalidCertificates 是否允许无效证书（也就是自建的证书），默认为NO
     // 如果是需要验证自建证书，需要设置为YES
-    securityPolicy.allowInvalidCertificates = _allowInvalidCertificates;
+    securityPolicy.allowInvalidCertificates = NO;
     
     //validatesDomainName 是否需要验证域名，默认为YES；
     //假如证书的域名与你请求的域名不一致，需把该项设置为NO；如设成NO的话，即服务器使用其他可信任机构颁发的证书，也可以建立连接，这个非常危险，建议打开。
     //置为NO，主要用于这种情况：客户端请求的是子域名，而证书上的是另外一个域名。因为SSL证书上的域名是独立的，假如证书上注册的域名是www.google.com，那么mail.google.com是无法验证通过的；当然，有钱可以注册通配符的域名*.google.com，但这个还是比较贵的。
     //如置为NO，建议自己添加对应域名的校验逻辑。
-    securityPolicy.validatesDomainName = self.validatesDomainName;
+    securityPolicy.validatesDomainName = YES;
     securityPolicy.validatesCertificateChain = NO; // 不用验证整个服务器的证书串，因为目前服务器包含客户端没有的证书
     
     return securityPolicy;
 }
 
-- (void)setSSLPinningMode:(AFSSLPinningMode)SSLPinningMode {
-    if (_SSLPinningMode != SSLPinningMode) {
-        _SSLPinningMode = SSLPinningMode;
-        self.securityPolicy = [self securityPolicyWithPinningMode:_SSLPinningMode];
-        
-//        if (SSLPinningMode == AFSSLPinningModePublicKey ||
-//            SSLPinningMode == AFSSLPinningModeCertificate) {
-//            if ([[NSFileManager defaultManager] fileExistsAtPath:SSJSSLCertificatePath()]) {
-//                [self p_reloadPinnedCertificates];
-//            }
-//        }
+- (void)setHttpsOpened:(BOOL)httpsOpened {
+    if (_httpsOpened != httpsOpened) {
+        _httpsOpened = httpsOpened;
+        self.securityPolicy = [self securityPolicy];
     }
-}
-
-- (void)setAllowInvalidCertificates:(BOOL)allowInvalidCertificates {
-    _allowInvalidCertificates = allowInvalidCertificates;
-    self.securityPolicy.allowInvalidCertificates = allowInvalidCertificates;
-}
-
-- (void)setValidatesDomainName:(BOOL)validatesDomainName {
-    _validatesDomainName = validatesDomainName;
-    self.securityPolicy.validatesDomainName = validatesDomainName;
 }
 
 //  如果当前有请求，就显示状态栏上的加载图标；反之不显示

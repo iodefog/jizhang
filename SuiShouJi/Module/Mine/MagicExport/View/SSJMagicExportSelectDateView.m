@@ -64,10 +64,8 @@
     
     CGFloat baseLineViewWidth = (self.width - self.arrowView.width - 40) * 0.5;
     self.beginDateBaseLineView.frame = CGRectMake(10, 108, baseLineViewWidth, 45);
-    [self.beginDateBaseLineView ssj_relayoutBorder];
     
     self.endDateBaseLineView.frame = CGRectMake(self.arrowView.right + 10, 108, baseLineViewWidth, 45);
-    [self.endDateBaseLineView ssj_relayoutBorder];
 }
 
 - (CGSize)sizeThatFits:(CGSize)size {

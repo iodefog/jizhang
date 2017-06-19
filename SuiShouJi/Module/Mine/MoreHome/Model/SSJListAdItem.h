@@ -6,9 +6,9 @@
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
 
-#import "SSJBaseItem.h"
+#import "SSJBaseCellItem.h"
 
-@interface SSJListAdItem : SSJBaseItem
+@interface SSJListAdItem : SSJBaseCellItem
 
 // 广告标题
 @property(nonatomic, copy) NSString *adTitle;

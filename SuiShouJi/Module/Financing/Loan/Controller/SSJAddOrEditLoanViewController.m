@@ -475,29 +475,34 @@ const int kMemoMaxLength = 15;
                         break;
                 }
                 
-                SSJLoanListViewController *loanListController = [[SSJLoanListViewController alloc] init];
-                loanListController.item = item;
-                
-                SSJLoanDetailViewController *detailController = [[SSJLoanDetailViewController alloc] init];
-                detailController.loanID = self.loanModel.ID;
-                detailController.fundColor = [SSJLoanHelper queryForFundColorWithID:self.loanModel.fundID];
-                
-                UIViewController *homeController = [self.navigationController.viewControllers firstObject];
-                
-                [self.navigationController setViewControllers:@[homeController, loanListController, detailController] animated:YES];
+                [SSJLoanHelper queryForFundColorWithID:self.loanModel.fundID completion:^(NSString * _Nonnull color) {
+                    
+                    UIViewController *homeController = [self.navigationController.viewControllers firstObject];
+                    
+                    SSJLoanListViewController *loanListController = [[SSJLoanListViewController alloc] init];
+                    loanListController.item = item;
+                    
+                    SSJLoanDetailViewController *detailController = [[SSJLoanDetailViewController alloc] init];
+                    detailController.loanID = self.loanModel.ID;
+                    detailController.fundColor = color;
+                    
+                    [self.navigationController setViewControllers:@[homeController, loanListController, detailController] animated:YES];
+                }];
             } else {
                 if (self.edited) {
                     [self.navigationController popViewControllerAnimated:YES];
                 } else {
                     // 新建借贷完成后跳转到借贷详情页
-                    SSJLoanDetailViewController *detailController = [[SSJLoanDetailViewController alloc] init];
-                    detailController.loanID = self.loanModel.ID;
-                    detailController.fundColor = [SSJLoanHelper queryForFundColorWithID:self.loanModel.fundID];
-                    
-                    NSMutableArray *controllers = [self.navigationController.viewControllers mutableCopy];
-                    [controllers removeObject:self];
-                    [controllers addObject:detailController];
-                    [self.navigationController setViewControllers:controllers animated:YES];
+                    [SSJLoanHelper queryForFundColorWithID:self.loanModel.fundID completion:^(NSString * _Nonnull color) {
+                        SSJLoanDetailViewController *detailController = [[SSJLoanDetailViewController alloc] init];
+                        detailController.loanID = self.loanModel.ID;
+                        detailController.fundColor = color;
+                        
+                        NSMutableArray *controllers = [self.navigationController.viewControllers mutableCopy];
+                        [controllers removeObject:self];
+                        [controllers addObject:detailController];
+                        [self.navigationController setViewControllers:controllers animated:YES];
+                    }];
                 }
             }
             
@@ -802,11 +807,11 @@ const int kMemoMaxLength = 15;
         tmpRemindItem.borrowtarget = self.loanModel.lender;
         switch (self.loanModel.type) {
             case SSJLoanTypeLend:
-                tmpRemindItem.borrowtOrLend = @"1";
+                tmpRemindItem.borrowtOrLend = 1;
                 break;
                 
             case SSJLoanTypeBorrow:
-                tmpRemindItem.borrowtOrLend = @"0";
+                tmpRemindItem.borrowtOrLend = 0;
                 break;
         }
     }
@@ -1096,7 +1101,7 @@ const int kMemoMaxLength = 15;
             } else if (index == view.items.count - 1) {
                 SSJFundingTypeSelectViewController *NewFundingVC = [[SSJFundingTypeSelectViewController alloc]init];
                 NewFundingVC.needLoanOrNot = NO;
-                NewFundingVC.addNewFundingBlock = ^(SSJBaseItem *item){
+                NewFundingVC.addNewFundingBlock = ^(SSJBaseCellItem *item){
                     if ([item isKindOfClass:[SSJFundingItem class]]) {
                         SSJFundingItem *fundItem = (SSJFundingItem *)item;
                         weakSelf.loanModel.targetFundID = fundItem.fundingID;

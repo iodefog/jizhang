@@ -9,7 +9,48 @@
 #import "SSJImageAddition.h"
 #import <Accelerate/Accelerate.h>
 
-@implementation UIImage (SSJCategory)
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+@implementation UIImage (SSJColor)
+
+//改变图片颜色
+- (UIImage *)ssj_imageWithColor:(UIColor *)color
+{
+    UIGraphicsBeginImageContextWithOptions(self.size, NO, self.scale);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextTranslateCTM(context, 0, self.size.height);
+    CGContextScaleCTM(context, 1.0, -1.0);
+    CGContextSetBlendMode(context, kCGBlendModeNormal);
+    CGRect rect = CGRectMake(0, 0, self.size.width, self.size.height);
+    CGContextClipToMask(context, rect, self.CGImage);
+    [color setFill];
+    CGContextFillRect(context, rect);
+    UIImage*newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return newImage;
+}
+
++ (UIImage *)ssj_imageWithColor:(UIColor *)color size:(CGSize)size {
+    size.width = MAX(size.width, 1);
+    size.height = MAX(size.height, 1);
+    
+    CGRect rect = CGRectMake(0, 0, size.width, size.height);
+    UIGraphicsBeginImageContext(rect.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetFillColorWithColor(context, [color CGColor]);
+    CGContextFillRect(context, rect);
+    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return img;
+}
+
+@end
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+@implementation UIImage (SSJAdaptation)
 
 + (UIImage *)ssj_compatibleImageNamed:(NSString *)name
 {
@@ -44,19 +85,12 @@
     return image;
 }
 
-+ (UIImage *)ssj_imageWithColor:(UIColor *)color size:(CGSize)size {
-    size.width = MAX(size.width, 1);
-    size.height = MAX(size.height, 1);
-    
-    CGRect rect = CGRectMake(0, 0, size.width, size.height);
-    UIGraphicsBeginImageContext(rect.size);
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextSetFillColorWithColor(context, [color CGColor]);
-    CGContextFillRect(context, rect);
-    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return img;
-}
+@end
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+@implementation UIImage (SSJResize)
 
 - (UIImage *)ssj_compressWithinSize:(CGSize)size {
     if (self.size.width > size.width || self.size.height > size.height) {
@@ -67,6 +101,21 @@
     }
     return self;
 }
+
+- (UIImage *)ssj_scaleImageWithSize:(CGSize)size{
+    UIGraphicsBeginImageContextWithOptions(size, NO, 0);
+    [self drawInRect:CGRectMake(0, 0, size.width, size.height)];
+    UIImage* scaledImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return scaledImage;
+}
+
+@end
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+@implementation UIImage (SSJProcessing)
 
 - (UIImage *)ssj_blurredImageWithRadius:(CGFloat)radius iterations:(NSUInteger)iterations tintColor:(UIColor *)tintColor
 {
@@ -133,98 +182,6 @@
     return image;
 }
 
-//-(void)ssj_convertToWebpImageWithquality:(CGFloat)quality alpha:(CGFloat)alpha completionBlock:(void (^)(NSData *result))completionBlock failureBlock:(void (^)(NSError *error))failureBlock{
-//    [UIImage imageToWebP:self quality:quality alpha:alpha preset:WEBP_PRESET_PICTURE completionBlock:completionBlock failureBlock:failureBlock];
-//}
-
-- (UIImage *)ssj_scaleImageWithSize:(CGSize)Size{
-    UIGraphicsBeginImageContext(Size);
-    [self drawInRect:CGRectMake(0, 0, Size.width, Size.height)];
-    UIImage* scaledImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return scaledImage;
-}
-
-//改变图片颜色
-- (UIImage *)ssj_imageWithColor:(UIColor *)color
-{
-    UIGraphicsBeginImageContextWithOptions(self.size, NO, self.scale);
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextTranslateCTM(context, 0, self.size.height);
-    CGContextScaleCTM(context, 1.0, -1.0);
-    CGContextSetBlendMode(context, kCGBlendModeNormal);
-    CGRect rect = CGRectMake(0, 0, self.size.width, self.size.height);
-    CGContextClipToMask(context, rect, self.CGImage);
-    [color setFill];
-    CGContextFillRect(context, rect);
-    UIImage*newImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return newImage;
-}
-
-- (UIImage *)blurredImageWithRadius:(CGFloat)radius iterations:(NSUInteger)iterations tintColor:(UIColor *)tintColor{
-    //image must be nonzero size
-    if (floorf(self.size.width) * floorf(self.size.height) <= 0.0f) return self;
-    
-    //boxsize must be an odd integer
-    uint32_t boxSize = (uint32_t)(radius * self.scale);
-    if (boxSize % 2 == 0) boxSize ++;
-    
-    //create image buffers
-    CGImageRef imageRef = self.CGImage;
-    vImage_Buffer buffer1, buffer2;
-    buffer1.width = buffer2.width = CGImageGetWidth(imageRef);
-    buffer1.height = buffer2.height = CGImageGetHeight(imageRef);
-    buffer1.rowBytes = buffer2.rowBytes = CGImageGetBytesPerRow(imageRef);
-    size_t bytes = buffer1.rowBytes * buffer1.height;
-    buffer1.data = malloc(bytes);
-    buffer2.data = malloc(bytes);
-    
-    //create temp buffer
-    void *tempBuffer = malloc((size_t)vImageBoxConvolve_ARGB8888(&buffer1, &buffer2, NULL, 0, 0, boxSize, boxSize,
-                                                                 NULL, kvImageEdgeExtend + kvImageGetTempBufferSize));
-    
-    //copy image data
-    CFDataRef dataSource = CGDataProviderCopyData(CGImageGetDataProvider(imageRef));
-    memcpy(buffer1.data, CFDataGetBytePtr(dataSource), bytes);
-    CFRelease(dataSource);
-    
-    for (NSUInteger i = 0; i < iterations; i++)
-    {
-        //perform blur
-        vImageBoxConvolve_ARGB8888(&buffer1, &buffer2, tempBuffer, 0, 0, boxSize, boxSize, NULL, kvImageEdgeExtend);
-        
-        //swap buffers
-        void *temp = buffer1.data;
-        buffer1.data = buffer2.data;
-        buffer2.data = temp;
-    }
-    
-    //free buffers
-    free(buffer2.data);
-    free(tempBuffer);
-    
-    //create image context from buffer
-    CGContextRef ctx = CGBitmapContextCreate(buffer1.data, buffer1.width, buffer1.height,
-                                             8, buffer1.rowBytes, CGImageGetColorSpace(imageRef),
-                                             CGImageGetBitmapInfo(imageRef));
-    
-    //apply tint
-    if (tintColor && CGColorGetAlpha(tintColor.CGColor) > 0.0f){
-        CGContextSetFillColorWithColor(ctx, [tintColor colorWithAlphaComponent:0.25].CGColor);
-        CGContextSetBlendMode(ctx, kCGBlendModePlusLighter);
-        CGContextFillRect(ctx, CGRectMake(0, 0, buffer1.width, buffer1.height));
-    }
-    
-    //create image from context
-    imageRef = CGBitmapContextCreateImage(ctx);
-    UIImage *image = [UIImage imageWithCGImage:imageRef scale:self.scale orientation:self.imageOrientation];
-    CGImageRelease(imageRef);
-    CGContextRelease(ctx);
-    free(buffer1.data);
-    return image;
-}
-
 - (UIColor*)ssj_getPixelColorAtLocation:(CGPoint)point {
     if (!CGRectContainsPoint(CGRectMake(0.0f, 0.0f, self.size.width, self.size.height), point)) {
         return nil;
@@ -263,64 +220,12 @@
     return [UIColor colorWithRed:red green:green blue:blue alpha:alpha];
 }
 
-- (CGContextRef) createARGBBitmapContextFromImage:(CGImageRef) inImage {
-    
-    CGContextRef    context = NULL;
-    CGColorSpaceRef colorSpace;
-    void *          bitmapData;
-    long            bitmapByteCount;
-    long            bitmapBytesPerRow;
-    
-    // Get image width, height. We'll use the entire image.
-    size_t pixelsWide = CGImageGetWidth(inImage);
-    size_t pixelsHigh = CGImageGetHeight(inImage);
-    
-    // Declare the number of bytes per row. Each pixel in the bitmap in this
-    // example is represented by 4 bytes; 8 bits each of red, green, blue, and
-    // alpha.
-    bitmapBytesPerRow = (pixelsWide * 4);
-    bitmapByteCount = (bitmapBytesPerRow * pixelsHigh);
-    
-    // Use the generic RGB color space.
-    colorSpace = CGColorSpaceCreateDeviceRGB();
-    
-    if (colorSpace == NULL)
-    {
-        fprintf(stderr, "Error allocating color spacen");
-        return NULL;
-    }
-    
-    // Allocate memory for image data. This is the destination in memory
-    // where any drawing to the bitmap context will be rendered.
-    bitmapData = malloc( bitmapByteCount );
-    if (bitmapData == NULL)
-    {
-        fprintf (stderr, "Memory not allocated!");
-        CGColorSpaceRelease( colorSpace );
-        return NULL;
-    }
-    
-    // Create the bitmap context. We want pre-multiplied ARGB, 8-bits
-    // per component. Regardless of what the source image format is
-    // (CMYK, Grayscale, and so on) it will be converted over to the format
-    // specified here by CGBitmapContextCreate.
-    context = CGBitmapContextCreate (bitmapData,
-                                     pixelsWide,
-                                     pixelsHigh,
-                                     8,      // bits per component
-                                     bitmapBytesPerRow,
-                                     colorSpace,
-                                     kCGImageAlphaPremultipliedFirst);
-    if (context == NULL)
-    {
-        free (bitmapData);
-        fprintf (stderr, "Context not created!");
-    }
-    // Make sure and release colorspace before returning
-    CGColorSpaceRelease( colorSpace );
-    
-    return context;
-}
+@end
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+@implementation UIImage (SSJClip)
 
 /**
  圆角图片
@@ -336,8 +241,75 @@
     return image;
 }
 
+- (UIImage *)ssj_imageWithClipInsets:(UIEdgeInsets)insets {
+    CGSize ctxSize = CGSizeMake(self.size.width - insets.left - insets.right, self.size.height - insets.top - insets.bottom);
+    return [self ssj_imageWithClipInsets:insets toSize:ctxSize];
+}
+
+- (UIImage *)ssj_imageWithClipInsets:(UIEdgeInsets)insets toSize:(CGSize)toSize {
+    CGRect originalFrame = CGRectMake(0, 0, self.size.width, self.size.height);
+    CGRect clipedFrame = UIEdgeInsetsInsetRect(originalFrame, insets);
+    CGFloat widthScale = toSize.width / CGRectGetWidth(clipedFrame);
+    CGFloat heightScale = toSize.height / CGRectGetHeight(clipedFrame);
+    
+    UIGraphicsBeginImageContextWithOptions(toSize, NO, 0);
+    [self drawInRect:CGRectMake(-insets.left * widthScale, -insets.top * heightScale, self.size.width * widthScale, self.size.height * heightScale)];
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return image;
+}
 
 @end
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+@implementation UIImage (SSJAssets)
+
++ (UIImage *)ssj_launchImage {
+    NSString *viewOrientation = @"Portrait";
+    if (UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation])) {
+        viewOrientation = @"Landscape";
+    }
+    NSString *launchImageName = nil;
+    NSArray* imagesDict = [[[NSBundle mainBundle] infoDictionary] valueForKey:@"UILaunchImages"];
+    
+    UIWindow *currentWindow = [[UIApplication sharedApplication].windows firstObject];
+    CGSize viewSize = currentWindow.bounds.size;
+    for (NSDictionary* dict in imagesDict)
+    {
+        CGSize imageSize = CGSizeFromString(dict[@"UILaunchImageSize"]);
+        
+        if (CGSizeEqualToSize(imageSize, viewSize) && [viewOrientation isEqualToString:dict[@"UILaunchImageOrientation"]])
+        {
+            launchImageName = dict[@"UILaunchImageName"];
+        }
+    }
+    return [UIImage imageNamed:launchImageName];
+}
+
+@end
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+@implementation UIImage (SSJLoad)
+
++ (void)ssj_loadUrl:(NSURL *)url compeltion:(void(^)(NSError *error, UIImage *image))compeltion {
+    [SDWebImageManager.sharedManager loadImageWithURL:url options:0 progress:nil completed:^(UIImage *image, NSData *data, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+        SSJDispatchMainAsync(^{
+            if (compeltion) {
+                compeltion(error, image);
+            }
+        });
+    }];
+}
+
+@end
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
 
 @implementation UIImage (SSJImageCompound)
 

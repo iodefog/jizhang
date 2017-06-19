@@ -75,7 +75,6 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    [[UIApplication sharedApplication]setStatusBarHidden:YES];
     if (self.model == SSJSearchResultModel) {
         [self searchForContent:self.searchBar.searchTextInput.text listOrder:self.resultOrderHeader.order];
     }else{
@@ -94,13 +93,16 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     [self.searchBar.searchTextInput resignFirstResponder];
-    [[UIApplication sharedApplication]setStatusBarHidden:NO];
 }
 
 - (void)viewDidLayoutSubviews{
     [super viewDidLayoutSubviews];
     self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.searchBar.bottom - 10);
     self.tableView.top = self.searchBar.bottom + 10;
+}
+
+- (BOOL)prefersStatusBarHidden {
+    return YES;
 }
 
 #pragma mark - UISearchBarDelegate
@@ -207,7 +209,7 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
         [cell setCellItem:billItem];
         return cell;
     }else{
-        SSJBaseItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
+        SSJBaseCellItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
         SSJSearchHistoryCell *cell = [tableView dequeueReusableCellWithIdentifier:kSearchHistoryCellId forIndexPath:indexPath];
         __weak typeof(self) weakSelf = self;
         cell.deleteAction = ^(SSJSearchHistoryItem *item){

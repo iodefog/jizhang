@@ -11,6 +11,10 @@
 
 @implementation SSJDatabaseVersion8
 
++ (NSString *)dbVersion {
+    return @"1.7.0";
+}
+
 + (NSError *)startUpgradeInDatabase:(FMDatabase *)db {
     NSError *error = [self updateFundInfoTableAndFunsAcctTableWithDatabase:db];
     if (error) {

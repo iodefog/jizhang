@@ -34,14 +34,12 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
                                       failure:(void (^)(NSError * _Nullable error))failure {
     
     NSString *currentDate = [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"];
-    SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID()];
-    if (!userItem.currentBooksId.length) {
-        userItem.currentBooksId = SSJUSERID();
-    }
-    
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        
-        FMResultSet *resultSet = [db executeQuery:@"select a.cbillid, b.cname, b.ccolor from bk_user_bill as a, bk_bill_type as b where a.cuserid = ? and a.cbillid = b.id and b.itype = 1 and b.istate <> 2", userItem.userId];
+        NSString *booksId = [db stringForQuery:@"select ccurrentBooksId from bk_user where cuserid = ?", SSJUSERID()];
+        if (!booksId) {
+            booksId = SSJUSERID();
+        }
+        FMResultSet *resultSet = [db executeQuery:@"select a.cbillid, b.cname, b.ccolor from bk_user_bill as a, bk_bill_type as b where a.cuserid = ? and a.cbillid = b.id and b.itype = 1 and b.istate <> 2", SSJUSERID()];
         if (!resultSet) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{
@@ -60,7 +58,7 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
         }
         [resultSet close];
         
-        FMResultSet *budgetResult = [db executeQuery:@"select ibid, itype, cbilltype, imoney, iremindmoney, csdate, cedate, istate, iremind, ihasremind, cbooksid, islastday from bk_user_budget where cuserid = ? and operatortype <> 2 and csdate <= ? and cedate >= ? and cbooksid = ? order by imoney desc", userItem.userId, currentDate, currentDate, userItem.currentBooksId];
+        FMResultSet *budgetResult = [db executeQuery:@"select ibid, itype, cbilltype, imoney, iremindmoney, csdate, cedate, istate, iremind, ihasremind, cbooksid, islastday from bk_user_budget where cuserid = ? and operatortype <> 2 and csdate <= ? and cedate >= ? and cbooksid = ? order by imoney desc", SSJUSERID(), currentDate, currentDate, booksId];
         
         if (!budgetResult) {
             if (failure) {
@@ -81,7 +79,7 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
         while ([budgetResult next]) {
             SSJBudgetModel *budget = [self budgetModelWithResultSet:budgetResult inDatabase:db];
             SSJBudgetListCellItem *cellItem = [SSJBudgetListCellItem cellItemWithBudgetModel:budget billTypeMapping:mapping];
-            BOOL isAllBillType = [[budget.billIds firstObject] isEqualToString:@"all"];
+            BOOL isAllBillType = [[budget.billIds firstObject] isEqualToString:SSJAllBillTypeId];
             switch (budget.type) {
                 case SSJBudgetPeriodTypeWeek:
                     if (isAllBillType) {
@@ -167,13 +165,12 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
 + (void)queryForCurrentBudgetListWithSuccess:(void(^)(NSArray<SSJBudgetModel *> *result))success failure:(void (^)(NSError *error))failure {
     
     NSString *currentDate = [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"];
-    SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID()];
-    if (!userItem.currentBooksId.length) {
-        userItem.currentBooksId = SSJUSERID();
-    }
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        
-        FMResultSet *budgetResult = [db executeQuery:@"select ibid, itype, cbilltype, imoney, iremindmoney, csdate, cedate, istate, iremind, ihasremind, cbooksid, islastday from bk_user_budget where cuserid = ? and operatortype <> 2 and csdate <= ? and cedate >= ? and cbooksid = ? order by imoney desc", SSJUSERID(), currentDate, currentDate, userItem.currentBooksId];
+        NSString *booksId = [db stringForQuery:@"select ccurrentBooksId from bk_user where cuserid = ?", SSJUSERID()];
+        if (!booksId) {
+            booksId = SSJUSERID();
+        }
+        FMResultSet *budgetResult = [db executeQuery:@"select ibid, itype, cbilltype, imoney, iremindmoney, csdate, cedate, istate, iremind, ihasremind, cbooksid, islastday from bk_user_budget where cuserid = ? and operatortype <> 2 and csdate <= ? and cedate >= ? and cbooksid = ? order by imoney desc", SSJUSERID(), currentDate, currentDate, booksId];
         
         if (!budgetResult) {
             if (failure) {
@@ -190,7 +187,7 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
         
         while ([budgetResult next]) {
             SSJBudgetModel *budget = [self budgetModelWithResultSet:budgetResult inDatabase:db];
-            BOOL isAllBillType = [[budget.billIds firstObject] isEqualToString:@"all"];
+            BOOL isAllBillType = [[budget.billIds firstObject] isEqualToString:SSJAllBillTypeId];
             
             switch (budget.type) {
                 case SSJBudgetPeriodTypeWeek:
@@ -304,7 +301,7 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
         //  查询预算范围内不同收支类型相应的金额、名称、图标、颜色
         NSMutableString *query = [NSMutableString stringWithFormat:@"select sum(a.imoney), b.ccoin, b.ccolor, b.cname, b.id from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = '%@' and a.operatortype <> 2 and a.cbilldate >= '%@'and a.cbilldate <= '%@' and a.cbilldate <= datetime('now', 'localtime') and a.cbooksid = '%@' and b.itype = 1 and b.istate <> 2", userid, budgetModel.beginDate, budgetModel.endDate, budgetModel.booksId];
         
-        if (![budgetModel.billIds isEqualToArray:@[@"all"]]) {
+        if (![budgetModel.billIds isEqualToArray:@[SSJAllBillTypeId]]) {
             NSMutableArray *billIds = [NSMutableArray arrayWithCapacity:budgetModel.billIds.count];
             for (NSString *billId in budgetModel.billIds) {
                 [billIds addObject:[NSString stringWithFormat:@"'%@'", billId]];
@@ -406,10 +403,11 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
 + (void)queryForBudgetIdListWithType:(SSJBudgetPeriodType)type billIds:(NSArray *)billIds success:(void(^)(NSDictionary *result))success failure:(void (^)(NSError *error))failure {
     
     NSString *userid = SSJUSERID();
-    NSString *booksId = SSJGetCurrentBooksType();
-    
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        
+        NSString *booksId = [db stringForQuery:@"select ccurrentBooksId from bk_user where cuserid = ?", userid];
+        if (!booksId) {
+            booksId = userid;
+        }
         NSString *billIdStr = [self billTypeStringWithBillTypeArr:billIds];
         NSString *today = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"];
         
@@ -541,7 +539,7 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
             return;
         }
         
-        if ([billIds isEqualToString:@"all"]) {
+        if ([billIds isEqualToString:SSJAllBillTypeId]) {
             
             // 检测所有相同类型（周、月、年）、账本、周期分预算总额是否大于当前设置的总预算金额
             double amount = [db doubleForQuery:@"select sum(imoney) from bk_user_budget where cuserid = ? and operatortype <> 2 and ibid <> ? and itype = ? and cbooksid = ? and csdate = ? and cedate = ? and cbilltype <> 'all'", userId, model.ID, @(model.type), model.booksId, model.beginDate, model.endDate];
@@ -728,12 +726,15 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
     }
 }
 
-+ (NSString *)queryBookNameForBookId:(NSString *)ID {
-    __block NSString *bookName = nil;
-    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
-        bookName = [db stringForQuery:@"select cbooksname from bk_books_type where cbooksid = ? and cuserid = ?", ID, SSJUSERID()];
++ (void)queryBookNameForBookId:(NSString *)ID success:(void(^)(NSString *bookName))success failure:(void(^)(NSError *error))failure {
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        NSString *bookName = [db stringForQuery:@"select cbooksname from bk_books_type where cbooksid = ? and cuserid = ?", ID, SSJUSERID()];
+        if (success) {
+            SSJDispatchMainAsync(^{
+                success(bookName);
+            });
+        }
     }];
-    return bookName;
 }
 
 + (SSJBudgetModel *)budgetModelWithResultSet:(FMResultSet *)set inDatabase:(FMDatabase *)db {
@@ -754,7 +755,7 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
     // 当前账本所有有效支出流水的总金额
     NSMutableString *sqlStr = [[NSString stringWithFormat:@"select sum(a.imoney) from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = '%@' and a.operatortype <> 2 and a.cbilldate >= '%@' and a.cbilldate <= '%@' and a.cbilldate <= datetime('now', 'localtime') and a.cbooksid = '%@' and b.istate <> 2 and b.itype = 1", SSJUSERID(), budgetModel.beginDate, budgetModel.endDate, budgetModel.booksId] mutableCopy];
     
-    if (![[budgetModel.billIds firstObject] isEqualToString:@"all"]) {
+    if (![[budgetModel.billIds firstObject] isEqualToString:SSJAllBillTypeId]) {
         NSMutableArray *tmpBillIds = [NSMutableArray arrayWithCapacity:budgetModel.billIds.count];
         for (NSString *billId in budgetModel.billIds) {
             [tmpBillIds addObject:[NSString stringWithFormat:@"'%@'", billId]];
@@ -795,16 +796,14 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
                                                          success:(void(^)(NSArray <SSJBudgetBillTypeSelectionCellItem *>*list))success
                                                          failure:(void(^)(NSError *error))failure {
     NSString *userID = SSJUSERID();
-    
-    if (!booksId) {
-        SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID()];
-        booksId = userItem.currentBooksId ?: SSJUSERID();
-    }
-    
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        
+        NSString *tBooksId = booksId;
+        if (!tBooksId) {
+            tBooksId = [db stringForQuery:@"select ccurrentBooksId from bk_user where cuserid = ?", SSJUSERID()];
+            tBooksId = tBooksId ?: SSJUSERID();
+        }
         // 查询所有默认支出类别
-        FMResultSet *resultSet = [db executeQuery:@"select bt.cname, bt.ccolor, bt.ccoin, ub.cwritedate, bt.id from BK_BILL_TYPE bt, BK_USER_BILL ub where ub.istate = 1 and bt.itype = 1 and bt.id = ub.cbillid and ub.cuserid = ? and ub.cbooksid = ? and (bt.cparent <> 'root' or bt.cparent is null) order by ub.iorder, ub.cwritedate, bt.id", userID, booksId];
+        FMResultSet *resultSet = [db executeQuery:@"select bt.cname, bt.ccolor, bt.ccoin, ub.cwritedate, bt.id from BK_BILL_TYPE bt, BK_USER_BILL ub where ub.istate = 1 and bt.itype = 1 and bt.id = ub.cbillid and ub.cuserid = ? and ub.cbooksid = ? and (bt.cparent <> 'root' or bt.cparent is null) order by ub.iorder, ub.cwritedate, bt.id", userID, tBooksId];
         
         if (!resultSet) {
             if (failure) {
@@ -824,17 +823,17 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
             item.billTypeName = [resultSet stringForColumn:@"cname"];
             item.billTypeColor = [resultSet stringForColumn:@"ccolor"];
             item.canSelect = YES;
-            item.selected = [typeList containsObject:item.billID] || [[typeList firstObject] isEqualToString:@"all"];
+            item.selected = [typeList containsObject:item.billID] || [[typeList firstObject] isEqualToString:SSJAllBillTypeId];
             [list addObject:item];
         }
         [resultSet close];
         
         if (list.count > 0) {
             SSJBudgetBillTypeSelectionCellItem *selectAllItem = [[SSJBudgetBillTypeSelectionCellItem alloc] init];
-            selectAllItem.billID = @"all";
+            selectAllItem.billID = SSJAllBillTypeId;
             selectAllItem.billTypeName = @"全选";
             selectAllItem.canSelect = YES;
-            selectAllItem.selected = [[typeList firstObject] isEqualToString:@"all"];
+            selectAllItem.selected = [[typeList firstObject] isEqualToString:SSJAllBillTypeId];
             [list insertObject:selectAllItem atIndex:0];
         }
         

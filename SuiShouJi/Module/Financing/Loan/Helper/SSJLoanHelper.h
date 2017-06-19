@@ -106,7 +106,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @param ID 资金账户ID
  */
-+ (NSString *)queryForFundNameWithID:(NSString *)ID;
++ (void)queryForFundNameWithID:(NSString *)ID completion:(void(^)(NSString *name))completion;
 
 /**
  查询资金账户颜色值
@@ -114,7 +114,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param ID 资金账户的ID
  @return 16进制颜色值
  */
-+ (NSString *)queryForFundColorWithID:(NSString *)ID;
++ (void)queryForFundColorWithID:(NSString *)ID completion:(void(^)(NSString *color))completion;
 
 /**
  通过借贷id查询对应资金账户的颜色
@@ -122,7 +122,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param loanId 借贷id
  @return 颜色值
  */
-+ (NSString *)queryForFundColorWithLoanId:(NSString *)loanId;
++ (void)queryForFundColorWithLoanId:(NSString *)loanId completion:(void(^)(NSString *color))completion;
 
 /**
  计算每日利息

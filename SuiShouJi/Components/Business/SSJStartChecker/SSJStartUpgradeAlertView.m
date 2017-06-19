@@ -101,9 +101,6 @@ static const NSTimeInterval kDuration = 0.3;
         
         self.sureButton.frame = CGRectMake(0, self.scrollView.bottom, self.width, kButtonHeight);
     }
-    
-    [self.cancelButton ssj_relayoutBorder];
-    [self.sureButton ssj_relayoutBorder];
 }
 
 - (CGSize)sizeThatFits:(CGSize)size {

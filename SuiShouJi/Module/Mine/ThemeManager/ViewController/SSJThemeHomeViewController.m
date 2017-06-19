@@ -49,7 +49,6 @@ static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
     [self checkNetwork];
     UIBarButtonItem *rightButton = [[UIBarButtonItem alloc]initWithTitle:@"管理" style:UIBarButtonItemStylePlain target:self action:@selector(managerButtonClicked:)];
     if ([SSJThemeSetting allThemeModels].count - 1) {
@@ -59,16 +58,17 @@ static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
 
 -(void)viewDidLayoutSubviews{
     [super viewDidLayoutSubviews];
-//    self.hintLabel.width = self.view.width;
-//    self.hintLabel.height = 32;
-//    self.hintLabel.leftTop = CGPointMake(0, SSJ_NAVIBAR_BOTTOM + 10);
-    self.themeSelectView.size = CGSizeMake(self.view.width, self.view.height - 10);
-    self.themeSelectView.leftTop = CGPointMake(0, 10);
+    self.themeSelectView.size = CGSizeMake(self.view.width, self.view.height - 10 - SSJ_NAVIBAR_BOTTOM);
+    self.themeSelectView.leftTop = CGPointMake(0, 10 + SSJ_NAVIBAR_BOTTOM);
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     [self.service cancel];
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle {
+    return UIStatusBarStyleDefault;
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -119,6 +119,7 @@ static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
         SSJBookKeepingHomeViewController *homeVc = [firstNav.viewControllers objectAtIndex:0];
         homeVc.needEditeThemeModel = YES;
         tabVC.selectedIndex = 0;
+        [SSJAnaliyticsManager event:@"more_define_bg"];
         [self.navigationController popViewControllerAnimated:YES];
     } else {
         SSJThemeDetailViewController *themeDetailVc = [[SSJThemeDetailViewController alloc]init];

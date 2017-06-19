@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface SSJReminderItem : SSJBaseItem<NSCopying>
+@interface SSJReminderItem : SSJBaseCellItem<NSCopying>
 
 typedef NS_ENUM(NSInteger, SSJReminderType) {
     SSJReminderTypeNormal,       //自定义提醒
@@ -43,6 +43,7 @@ typedef NS_ENUM(NSInteger, SSJReminderType) {
 
 // 月末是否开启提醒(0为关闭,1为开启)
 @property(nonatomic) BOOL remindAtTheEndOfMonth;
+
 
 // 最小的时间,对于借贷来说最小时间不能早于借贷的日期
 @property(nonatomic, copy) NSDate *minimumDate;

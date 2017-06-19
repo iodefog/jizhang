@@ -14,6 +14,7 @@
 #import "SSJNetworkReachabilityManager.h"
 #import "SSJLoginViewController+SSJCategory.h"
 #import "SSJDomainManager.h"
+#import "SSJShareBooksMemberKickedOutAlerter.h"
 
 @interface SSJSynchronizeBlock : NSObject
 
@@ -184,6 +185,7 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
             [self.dataSuccessBlocks removeBlock];
             [self.dataFailureBlocks removeBlock];
             [[NSNotificationCenter defaultCenter] postNotificationName:SSJSyncDataSuccessNotification object:self];
+            [[SSJShareBooksMemberKickedOutAlerter alerter] showAlertIfNeededWithMemberId:task.userId];
 #ifdef DEBUG
             [CDAutoHideMessageHUD showMessage:@"数据同步成功"];
 #endif

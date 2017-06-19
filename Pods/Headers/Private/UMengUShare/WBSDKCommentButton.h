@@ -1,1 +1,1 @@
-../../../UMengUShare/UShareSDK/SocialLibraries/Sina/SinaSDK/WBSDKCommentButton.h
+../../../UMengUShare/UShareSDK/SocialLibraries/Sina/WBSDKCommentButton.h

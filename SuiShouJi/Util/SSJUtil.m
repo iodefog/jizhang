@@ -404,8 +404,8 @@ BOOL SSJSaveImage(UIImage *image , NSString *imageName){
     float imageHeight = image.size.height;
     float imageWidth = image.size.width;
     float maxLegth = MAX(imageHeight , imageWidth);
-    if (maxLegth > 2500) {
-        float scale = 2500 / maxLegth;
+    if (maxLegth > 1000) {
+        float scale = 1000 / maxLegth;
         imageHeight = imageHeight * scale;
         imageWidth = imageWidth * scale;
     }
@@ -518,3 +518,24 @@ BOOL SSJVerifyPassword(NSString *pwd) {
     return [pred evaluateWithObject:pwd];
 }
 
+void SSJSwizzleSelector(Class class, SEL originalSelector, SEL swizzledSelector) {
+    Method originalMethod = class_getInstanceMethod(class, originalSelector);
+    Method swizzledMethod = class_getInstanceMethod(class, swizzledSelector);
+    method_exchangeImplementations(originalMethod, swizzledMethod);
+}
+
+
+#pragma mark - 账本类型个人账本or共享账本
+SSJBooksCategory SSJGetBooksCategory() {
+    return [[NSUserDefaults standardUserDefaults] integerForKey:SSJBookCategoryKey];
+}
+
+BOOL SSJSaveBooksCategory(SSJBooksCategory category) {
+    [[NSUserDefaults standardUserDefaults] setInteger:category forKey:SSJBookCategoryKey];
+    return [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+void clearCurrentBooksCategory() {
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:SSJBookCategoryKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}

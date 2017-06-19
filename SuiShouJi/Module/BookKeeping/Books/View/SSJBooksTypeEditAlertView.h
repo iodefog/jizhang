@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface SSJBooksTypeEditAlertView : UIView
@@ -16,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, copy) void(^deleteHandler)();
 
-- (void)show;
+- (void)showWithBookCategory:(SSJBooksCategory)category;
 
 - (void)dismiss;
 

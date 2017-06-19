@@ -347,7 +347,7 @@ static const NSInteger kMemoTag = 1002;
             if ([fundingItem.fundingName isEqualToString:@"添加资金新的账户"]) {
                 SSJFundingTypeSelectViewController *newFundingVC = [[SSJFundingTypeSelectViewController alloc] init];
                 newFundingVC.needLoanOrNot = NO;
-                newFundingVC.addNewFundingBlock = ^(SSJBaseItem *item) {
+                newFundingVC.addNewFundingBlock = ^(SSJBaseCellItem *item) {
                     if ([item isKindOfClass:[SSJFundingItem class]]) {
                         SSJFundingItem *fundItem = (SSJFundingItem *)item;
                         weakSelf.item.transferInId = fundItem.fundingID;
@@ -385,7 +385,7 @@ static const NSInteger kMemoTag = 1002;
             if ([fundingItem.fundingName isEqualToString:@"添加资金新的账户"]) {
                 SSJFundingTypeSelectViewController *newFundingVC = [[SSJFundingTypeSelectViewController alloc] init];
                 newFundingVC.needLoanOrNot = NO;
-                newFundingVC.addNewFundingBlock = ^(SSJBaseItem *item) {
+                newFundingVC.addNewFundingBlock = ^(SSJBaseCellItem *item) {
                     if ([item isKindOfClass:[SSJFundingItem class]]) {
                         SSJFundingItem *fundItem = (SSJFundingItem *)item;
                         weakSelf.item.transferOutId = fundItem.fundingID;

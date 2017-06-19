@@ -36,6 +36,8 @@ NSString *const SSJLastLoggedUserItemKey = @"SSJLastLoggedUserItemKey";
 
 NSString *const SSJReminderNotificationKey = @"SSJReminderNotificationKey";
 
+NSString *const SSJBookCategoryKey = @"SSJBookCategoryKey";
+
 NSString *const SSJAnnouncementHaveReadKey = @"SSJAnnouncementHaveReadKey";
 
 NSString *const SSJSyncDataSuccessNotification = @"SSJSyncDataSuccessNotification";
@@ -78,9 +80,15 @@ NSString *const SSJMQAppKey = @"afd40ae47cdf7df68551cfbb0d3676d5";
 
 NSString *const SSJMQSecret = @"$2a$12$7aT9OEXA7uw3w/3WgmHyh.znbeVy32ncR2uVPpuVzvw/8LxXdeGYW";
 
-NSString *const SSJMQDefualtGroupId = @"8cabbcb30fd9b3ab00168555fd892d6f";
+NSString *const SSJMQDefualtGroupId = @"44f5ac6260d63968f8ac66104dd3acd8";
 
 NSString *const SSJOverrunRedColorValue = @"#ff654c";
 
 NSString *const SSJSurplusGreenColorValue = @"#0ac082";
+
+NSString *const SSJAllBooksIds = @"all_books_ids";
+
+NSString *const SSJAllBillTypeId = @"all";
+
+NSString *const SSJAllMembersId = @"all_members_id";
 

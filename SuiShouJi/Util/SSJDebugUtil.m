@@ -7,13 +7,6 @@
 //
 
 #import "SSJDebugUtil.h"
-#import <objc/runtime.h>
-
-void SSJSwizzleSelector(Class class, SEL originalSelector, SEL swizzledSelector) {
-    Method originalMethod = class_getInstanceMethod(class, originalSelector);
-    Method swizzledMethod = class_getInstanceMethod(class, swizzledSelector);
-    method_exchangeImplementations(originalMethod, swizzledMethod);
-}
 
 #ifdef DEBUG
 

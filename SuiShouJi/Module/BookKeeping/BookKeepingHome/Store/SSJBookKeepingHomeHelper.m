@@ -24,21 +24,24 @@ NSString *const SSJMonthSumDicKey = @"SSJMonthSumDicKey";
                               Success:(void(^)(NSDictionary *result))success
                              failure:(void (^)(NSError *error))failure
 {
-    __block NSString *booksid = SSJGetCurrentBooksType();
     [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
         NSString *userid = SSJUSERID();
+        NSString *booksid = [db stringForQuery:@"select ccurrentBooksId from bk_user where cuserid = ?", userid];
+        if (!booksid) {
+            booksid = userid;
+        }
         NSMutableArray *originalChargeArr = [NSMutableArray array];
         NSMutableArray *newAddChargeArr = [NSMutableArray array];
         NSMutableArray *newSectionArr = [NSMutableArray array];
         NSMutableDictionary *summaryDic = [NSMutableDictionary dictionaryWithCapacity:0];
-        NSMutableDictionary *monthSummaryDic = [NSMutableDictionary dictionaryWithCapacity:0];
+        
         NSMutableDictionary *tempDic = [NSMutableDictionary dictionary];
         NSString *lastDate = @"";
         NSInteger totalCount = 0;
-        NSString *lastMonth = @"";
+        
         int section = 0;
         int row = 0;
-        FMResultSet *chargeResult = [db executeQuery:@"select uc.* , uc.operatortype as chargeoperatortype, bt.cname, bt.ccoin, bt.ccolor, bt.itype from bk_user_charge uc , bk_bill_type bt where uc.ibillid = bt.id and uc.cbilldate <= ? and uc.cuserid = ? and uc.cbooksid = ? and uc.operatortype <> 2 and bt.istate <> 2 order by uc.cbilldate desc , uc.cdetaildate desc, uc.clientadddate desc , uc.cwritedate desc",[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"],userid,booksid];
+        FMResultSet *chargeResult = [db executeQuery:@"select uc.* , uc.operatortype as chargeoperatortype, bt.cname, bt.ccoin, bt.ccolor, bt.itype, bf.cmark from bk_user_charge uc left join bk_share_books_friends_mark bf on bf.cfriendid = uc.cuserid and bf.cbooksid = uc.cbooksid and bf.cuserid = ? , bk_bill_type bt where uc.ibillid = bt.id and uc.cbilldate <= ? and uc.cbooksid = ? and uc.operatortype <> 2 and bt.istate <> 2 order by uc.cbilldate desc , uc.clientadddate desc , uc.cwritedate desc", SSJUSERID(), [[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"],booksid];
         if (!chargeResult) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{
@@ -55,6 +58,7 @@ NSString *const SSJMonthSumDicKey = @"SSJMonthSumDicKey";
             item.colorValue = [chargeResult stringForColumn:@"CCOLOR"];
             item.incomeOrExpence = [chargeResult boolForColumn:@"ITYPE"];
             item.ID = [chargeResult stringForColumn:@"ICHARGEID"];
+            item.userId = [chargeResult stringForColumn:@"cuserid"];
             item.fundId = [chargeResult stringForColumn:@"IFUNSID"];
             item.editeDate = [chargeResult stringForColumn:@"CWRITEDATE"];
             item.billId = [chargeResult stringForColumn:@"IBILLID"];
@@ -65,7 +69,9 @@ NSString *const SSJMonthSumDicKey = @"SSJMonthSumDicKey";
             item.billDate = [chargeResult stringForColumn:@"CBILLDATE"];
             item.clientAddDate = [chargeResult stringForColumn:@"clientadddate"];
             item.billDetailDate = [chargeResult stringForColumn:@"cdetaildate"];
-            NSString *currentMonth = [item.billDate substringWithRange:NSMakeRange(0, 7)];
+            item.memberNickname = [chargeResult stringForColumn:@"cmark"];
+            item.idType = [chargeResult intForColumn:@"ichargetype"];
+            
             if (![item.billDate isEqualToString:lastDate]) {
                 SSJBookKeepingHomeListItem *listItem = [[SSJBookKeepingHomeListItem alloc]init];
                 listItem.chargeItems = [NSMutableArray arrayWithCapacity:0];
@@ -131,25 +137,20 @@ NSString *const SSJMonthSumDicKey = @"SSJMonthSumDicKey";
                                           Year:(long)year
                                        Success:(void(^)(NSDictionary *result))success
                                        failure:(void (^)(NSError *error))failure {
-    __block NSString *booksid = SSJGetCurrentBooksType();
     [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
         NSString *userid = SSJUSERID();
+        NSString *booksid = [db stringForQuery:@"select ccurrentBooksId from bk_user where cuserid = ?", userid];
         NSMutableDictionary *SumDic = [NSMutableDictionary dictionary];
-        FMResultSet *resultSet = [db executeQuery:[NSString stringWithFormat:@"SELECT SUM(INCOMEAMOUNT) , SUM(EXPENCEAMOUNT) FROM BK_DAILYSUM_CHARGE WHERE CBILLDATE LIKE '%04ld-%02ld-__' AND CUSERID = '%@' AND CBILLDATE <= '%@' AND CBOOKSID = '%@'", year,month,userid,[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"],booksid]];
-        if (!resultSet) {
-            if (failure) {
-                SSJDispatch_main_async_safe(^{
-                    failure([db lastError]);
-                });
-            }
-            return;
-        }
-        while ([resultSet next]) {
-            double incomeSum = [resultSet doubleForColumn:@"SUM(INCOMEAMOUNT)"];
-            double expentureSum = [resultSet doubleForColumn:@"SUM(EXPENCEAMOUNT)"];
-            [SumDic setObject:@(incomeSum) forKey:SSJIncomeSumlKey];
-            [SumDic setObject:@(expentureSum) forKey:SSJExpentureSumKey];
-        }
+        
+        double incomeSum = [db doubleForQuery:[NSString stringWithFormat:@"select sum(imoney) from bk_user_charge uc, bk_bill_type bt where uc.cbooksid = '%@' and uc.cbilldate like '%04ld-%02ld-__' AND uc.cbilldate <= '%@' and uc.ibillid = bt.id and bt.itype = %d and operatortype <> 2 and bt.istate <> 2", booksid, year, month,[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"], (int)SSJBillTypeIncome]];
+        
+        double expentureSum = [db doubleForQuery:[NSString stringWithFormat:@"select sum(imoney) from bk_user_charge uc, bk_bill_type bt where uc.cbooksid = '%@' and uc.cbilldate like '%04ld-%02ld-__' AND uc.cbilldate <= '%@' and uc.ibillid = bt.id and bt.itype = %d and operatortype <> 2 and bt.istate <> 2", booksid, year, month,[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"], (int)SSJBillTypePay]];
+        
+        [SumDic setObject:@(incomeSum) forKey:SSJIncomeSumlKey];
+        
+        [SumDic setObject:@(expentureSum) forKey:SSJExpentureSumKey];
+
+        
         if (success) {
             SSJDispatch_main_async_safe(^{
                 success(SumDic);

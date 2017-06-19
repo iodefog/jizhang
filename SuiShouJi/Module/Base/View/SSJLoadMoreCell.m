@@ -61,7 +61,7 @@
     [_indicatorView startAnimating];
 }
 
-- (void)setCellItem:(SSJBaseItem *)cellItem {
+- (void)setCellItem:(SSJBaseCellItem *)cellItem {
     [super setCellItem:cellItem];
     
     SSJLoadMoreItem *loadMoreItem = (SSJLoadMoreItem *)cellItem;

@@ -118,41 +118,48 @@
             userItem.openId = @"";
             
             //  只有保存用户登录信息成功后才算登录成功
-            if ([SSJUserTableManager saveUserItem:userItem]
-                && SSJSaveAppId(resultInfo[@"appId"] ?: @"")
-                && SSJSaveAccessToken(resultInfo[@"accessToken"] ?: @"")
-                && SSJSaveUserLogined(YES)) {
-                
-                [[NSNotificationCenter defaultCenter] postNotificationName:SSJLoginOrRegisterNotification object:self];
-                
-                [self.passwordField resignFirstResponder];
-                [self showSuccessMessage];
-                
-                [CDAutoHideMessageHUD showMessage:@"注册成功"];
-                
-                //  如果用户手势密码开启，进入手势密码页面
-                SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"motionPWD", @"motionPWDState"] forUserId:SSJUSERID()];
-                if ([userItem.motionPWDState boolValue]) {
+            [SSJUserTableManager saveUserItem:userItem success:^{
+                if (SSJSaveAppId(resultInfo[@"appId"] ?: @"")
+                    && SSJSaveAccessToken(resultInfo[@"accessToken"] ?: @"")
+                    && SSJSaveUserLogined(YES)) {
                     
-                    SSJMotionPasswordViewController *motionVC = [[SSJMotionPasswordViewController alloc] init];
-                    motionVC.finishHandle = self.finishHandle;
-                    motionVC.backController = self.backController;
-                    if (userItem.motionPWD.length) {
-                        motionVC.type = SSJMotionPasswordViewControllerTypeVerification;
-                    } else {
-                        motionVC.type = SSJMotionPasswordViewControllerTypeSetting;
-                    }
-                    [self.navigationController pushViewController:motionVC animated:YES];
-        
+                    [[NSNotificationCenter defaultCenter] postNotificationName:SSJLoginOrRegisterNotification object:self];
+                    
+                    [self.passwordField resignFirstResponder];
+                    [self showSuccessMessage];
+                    
+                    [CDAutoHideMessageHUD showMessage:@"注册成功"];
+                    
+                    [[NSUserDefaults standardUserDefaults] setObject:userItem forKey:SSJLastLoggedUserItemKey];
+                    
+                    //  如果用户手势密码开启，进入手势密码页面
+                    [SSJUserTableManager queryProperty:@[@"motionPWD", @"motionPWDState"] forUserId:SSJUSERID() success:^(SSJUserItem * _Nonnull userItem) {
+                        if ([userItem.motionPWDState boolValue]) {
+                            SSJMotionPasswordViewController *motionVC = [[SSJMotionPasswordViewController alloc] init];
+                            motionVC.finishHandle = self.finishHandle;
+                            motionVC.backController = self.backController;
+                            if (userItem.motionPWD.length) {
+                                motionVC.type = SSJMotionPasswordViewControllerTypeVerification;
+                            } else {
+                                motionVC.type = SSJMotionPasswordViewControllerTypeSetting;
+                            }
+                            [self.navigationController pushViewController:motionVC animated:YES];
+                            
+                            return;
+                        }
+                        
+                        if (self.finishHandle) {
+                            self.finishHandle(self);
+                        }
+                    } failure:^(NSError * _Nonnull error) {
+                        [SSJAlertViewAdapter showError:error];
+                    }];
+                    
                     return;
                 }
-                
-                if (self.finishHandle) {
-                    self.finishHandle(self);
-                }
-                
-                return;
-            }
+            } failure:^(NSError * _Nonnull error) {
+                [SSJAlertViewAdapter showError:error];
+            }];
         }
     }
     

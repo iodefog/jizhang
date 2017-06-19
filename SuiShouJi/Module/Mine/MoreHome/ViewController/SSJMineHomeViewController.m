@@ -132,6 +132,7 @@ static BOOL kNeedBannerDisplay = YES;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userInfoComplishedNotice) name:kUserItemReturnKey object:nil];
     [self.view addSubview:self.announcementView];
     [self.view addSubview:self.header];
     [self.view addSubview:self.collectionView];
@@ -149,19 +150,27 @@ static BOOL kNeedBannerDisplay = YES;
         [self.annoucementService requestAnnoucementsWithPage:1];
     }
     
-    SSJUserItem *item = [SSJUserTableManager queryUserItemForID:SSJUSERID()];\
-    self.header.item = item;
-    [self.header setSignStr];//设置签名
+    [self updateSign];
     
-    SSJBookkeepingTreeCheckInModel *checkInModel = [SSJBookkeepingTreeStore queryCheckInInfoWithUserId:SSJUSERID() error:nil];
-    self.header.checkInLevel = [SSJBookkeepingTreeHelper treeLevelForDays:checkInModel.checkInTimes];
+    [SSJBookkeepingTreeStore queryCheckInInfoWithUserId:SSJUSERID() success:^(SSJBookkeepingTreeCheckInModel * _Nonnull checkInModel) {
+        self.header.checkInLevel = [SSJBookkeepingTreeHelper treeLevelForDays:checkInModel.checkInTimes];
+    } failure:^(NSError * _Nonnull error) {
+        [SSJAlertViewAdapter showError:error];
+    }];
 
-    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:self.rightButton];
-
-    self.navigationItem.rightBarButtonItem = rightItem;
-    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.rightButton];
     //    [self getCircleChargeState];
     self.navigationItem.rightBarButtonItem.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTintColor];
+}
+
+// 更新用户签名
+- (void)updateSign {
+    [SSJUserTableManager queryUserItemWithID:SSJUSERID() success:^(SSJUserItem * _Nonnull userItem) {
+        self.header.item = userItem;
+        [self.header setSignStr];//设置签名
+    } failure:^(NSError * _Nonnull error) {
+        [SSJAlertViewAdapter showError:error];
+    }];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -179,12 +188,6 @@ static BOOL kNeedBannerDisplay = YES;
 //    self.bottomBgView.centerX = self.view.centerX;
 //    self.bottomBgView.bottom = self.view.bottom - SSJ_TABBAR_HEIGHT;
 }
-
--(void)viewWillDisappear:(BOOL)animated{
-    [super viewWillDisappear:animated];
-    [UIApplication sharedApplication].statusBarHidden = NO;
-}
-
 
 #pragma mark - UICollectionViewDataSource
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
@@ -276,9 +279,14 @@ static BOOL kNeedBannerDisplay = YES;
     
     //  周期记账
     if ([item.adTitle isEqualToString:kTitle3]) {
-        SSJCircleChargeSettingViewController *circleChargeSettingVC = [[SSJCircleChargeSettingViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
-        [self.navigationController pushViewController:circleChargeSettingVC animated:YES];
-        return;
+        if (SSJGetBooksCategory() == SSJBooksCategoryPersional) {
+            SSJCircleChargeSettingViewController *circleChargeSettingVC = [[SSJCircleChargeSettingViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
+            [self.navigationController pushViewController:circleChargeSettingVC animated:YES];
+            return;
+        } else if (SSJGetBooksCategory() == SSJBooksCategoryPublic) {
+            [CDAutoHideMessageHUD showMessage:@"共享账本不能周期记账哦~"];
+        }
+        
     }
 
     //建议与咨询
@@ -334,9 +342,9 @@ static BOOL kNeedBannerDisplay = YES;
     //  把APP推荐给好友
     if ([item.adTitle isEqualToString:kTitle8]) {
         if ([SSJDefaultSource() isEqualToString:@"11501"]) {
-            [SSJShareManager shareWithType:SSJShareTypeUrl image:nil UrlStr:SSJDetailSettingForSource(@"ShareUrl") title:SSJDetailSettingForSource(@"ShareTitle") content:@"财务管理第一步，从记录消费生活开始!" PlatformType:UMSocialPlatformType_Sina | UMSocialPlatformType_WechatSession | UMSocialPlatformType_WechatTimeLine | UMSocialPlatformType_QQ inController:self ShareSuccess:NULL];
+            [SSJShareManager shareWithType:SSJShareTypeUrl image:nil UrlStr:SSJDetailSettingForSource(@"ShareUrl") title:SSJDetailSettingForSource(@"ShareTitle") content:@"财务管理第一步，从记录消费生活开始!" PlatformType:@[@(UMSocialPlatformType_Sina),@(UMSocialPlatformType_WechatSession),@(UMSocialPlatformType_WechatTimeLine),@(UMSocialPlatformType_QQ)] inController:self ShareSuccess:NULL];
         } else {
-            [SSJShareManager shareWithType:SSJShareTypeUrl image:nil UrlStr:SSJDetailSettingForSource(@"ShareUrl") title:SSJDetailSettingForSource(@"ShareTitle") content:@"在这里，记录消费生活是件有趣简单的事儿，管家更有窍门。" PlatformType:UMSocialPlatformType_Sina | UMSocialPlatformType_WechatSession | UMSocialPlatformType_WechatTimeLine | UMSocialPlatformType_QQ inController:self ShareSuccess:NULL];
+            [SSJShareManager shareWithType:SSJShareTypeUrl image:nil UrlStr:SSJDetailSettingForSource(@"ShareUrl") title:SSJDetailSettingForSource(@"ShareTitle") content:@"在这里，记录消费生活是件有趣简单的事儿，管家更有窍门。" PlatformType:@[@(UMSocialPlatformType_Sina),@(UMSocialPlatformType_WechatSession),@(UMSocialPlatformType_WechatTimeLine),@(UMSocialPlatformType_QQ)] inController:self ShareSuccess:NULL];
         }
         
     }
@@ -350,6 +358,7 @@ static BOOL kNeedBannerDisplay = YES;
 
 #pragma mark - SSJBaseNetworkService
 -(void)serverDidFinished:(SSJBaseNetworkService *)service{
+    if ([service isKindOfClass:[SSJNewDotNetworkService class]]) return;
     if ([service isKindOfClass:[SSJBannerNetworkService class]]) {
         //banner
         if (self.bannerService.item.bannerItems.count) {
@@ -364,18 +373,6 @@ static BOOL kNeedBannerDisplay = YES;
         [self loadDataArray];
     }
     
-    if ([service isKindOfClass:[SSJNewDotNetworkService class]]) {
-        //更改模型数据
-        for (SSJListAdItem *item in self.localAdItems) {
-            if ([item.adTitle isEqualToString:kTitle2]) {//主题皮肤
-                item.isShowDot = self.dotService.dotItem.hasThemeUpdate;
-            }
-            if ([item.adTitle isEqualToString:kTitle5]) {//建议与咨询
-                item.isShowDot = self.dotService.dotItem.hasAdviceUpdate;
-            }
-        }
-    }
-    
     if ([service isKindOfClass:[SSJAnnoucementService class]]) {
         NSArray *topAnnoucements = [NSArray array];
         if (self.annoucementService.annoucements.count > 3) {
@@ -388,6 +385,7 @@ static BOOL kNeedBannerDisplay = YES;
             self.rightButton.hasNewAnnoucements = self.annoucementService.hasNewAnnouceMent;
             self.announcements = [NSArray arrayWithArray:self.annoucementService.annoucements];
             self.announcementView.height = 34;
+            self.announcementView.hidden = NO;
             [self.view setNeedsLayout];
         }
     }
@@ -400,6 +398,21 @@ static BOOL kNeedBannerDisplay = YES;
     self.adItemsArray = self.localAdItems;
     [self.collectionView reloadData];
     [self getLocalAnnoucement];
+}
+
+#pragma mark -- NoticeCenter
+- (void)userInfoComplishedNotice
+{
+    //更改模型数据
+    for (SSJListAdItem *item in self.localAdItems) {
+        if ([item.adTitle isEqualToString:kTitle2]) {//主题皮肤
+            item.isShowDot = self.dotService.dotItem.hasThemeUpdate;
+        }
+        if ([item.adTitle isEqualToString:kTitle5]) {//建议与咨询
+            item.isShowDot = self.dotService.dotItem.hasAdviceUpdate;
+        }
+    }
+    [self.collectionView reloadData];
 }
 
 - (void)loadDataArray
@@ -548,6 +561,7 @@ static BOOL kNeedBannerDisplay = YES;
 - (SSJScrollalbleAnnounceView *)announcementView {
     if (!_announcementView) {
         _announcementView = [[SSJScrollalbleAnnounceView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, 0)];
+        _announcementView.hidden = YES;
         __weak typeof(self) weakSelf = self;
         _announcementView.announceClickedBlock = ^(SSJAnnoucementItem *item) {
             if (item) {
@@ -577,9 +591,7 @@ static BOOL kNeedBannerDisplay = YES;
 
 #pragma mark - Event
 -(void)reloadDataAfterSync {
-    SSJUserItem *item = [SSJUserTableManager queryUserItemForID:SSJUSERID()];
-    self.header.item = item;
-    [self.header setSignStr];//设置签名
+    [self updateSign];
 }
 
 #pragma mark - Private
@@ -713,9 +725,9 @@ static BOOL kNeedBannerDisplay = YES;
     NSArray *annoucements = [SSJAnnoucementItem mj_objectArrayWithKeyValuesArray:jsonArr];
 
     if (annoucements.count > 0) {
+        self.announcementView.hidden = NO;
         self.announcementView.items = annoucements;
         self.announcementView.height = 34;
-        self.announcementView.hidden = NO;
         [self.view setNeedsLayout];
     }
 }

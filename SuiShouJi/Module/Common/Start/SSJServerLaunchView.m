@@ -8,6 +8,8 @@
 
 #import "SSJServerLaunchView.h"
 
+
+
 @interface SSJServerLaunchView ()
 
 @property (nonatomic, strong) UIImageView *defaultView;
@@ -23,7 +25,28 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         _defaultView = [[UIImageView alloc] initWithImage:[UIImage ssj_compatibleImageNamed:@"default"]];
-        _defaultView.frame = self.bounds;
+//        if ([SSJDefaultSource() isEqualToString:@"11501"] || [SSJDefaultSource() isEqualToString:@"11502"]) {
+//            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone && SSJLaunchTimesForCurrentVersion() == 1) {
+//                CGSize screenSize = [UIScreen mainScreen].bounds.size;
+//                UIImage *image;
+//                if (CGSizeEqualToSize(screenSize, CGSizeMake(320.0, 480.0))) {
+//                    image = [YYImage imageNamed:@"ani@960.webp"];
+//                } else {
+//                    image = [YYImage imageNamed:@"ani.webp"];
+//                }
+//                _defaultView = [[YYAnimatedImageView alloc] initWithImage:image];
+//                _defaultView.frame = self.bounds;
+//            } else {
+//                if ([SSJDefaultSource() isEqualToString:@"11501"]) {
+//                    _defaultView = [[UIImageView alloc] initWithImage:[UIImage ssj_compatibleImageNamed:@"9188default"]];
+//                } else {
+//                    _defaultView = [[UIImageView alloc] initWithImage:[UIImage ssj_compatibleImageNamed:@"youyudefult"]];
+//                }
+//            }
+//        } else {
+//            _defaultView = [[UIImageView alloc] initWithImage:[UIImage ssj_compatibleImageNamed:@"default"]];
+//        }
+
         [self addSubview:_defaultView];
     }
     return self;
@@ -38,12 +61,12 @@
 }
 
 - (void)downloadImgWithUrl:(NSString *)imgUrl timeout:(NSTimeInterval)timeout completion:(void (^)())completion {
+    
 #ifdef DEBUG
     [CDAutoHideMessageHUD showMessage:@"开始下载服务端下发启动页"];
 #endif
     SDWebImageManager *manager = [[SDWebImageManager alloc] init];
 //    manager.imageDownloader.downloadTimeout = timeout;
-    
     NSURL *url = [NSURL URLWithString:SSJImageURLWithAPI(imgUrl)];
     [manager.imageDownloader downloadImageWithURL:url options:(SDWebImageContinueInBackground | SDWebImageAllowInvalidSSLCertificates) progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, BOOL finished) {
         if (!image || error) {

@@ -13,6 +13,7 @@
 #import "SSJBudgetDatabaseHelper.h"
 #import "SSJBudgetModel.h"
 #import "SSJDatePeriod.h"
+#import "SSJUserTableManager.h"
 
 static NSString *const kBudgetBillTypeSelectionCellId = @"kBudgetBillTypeSelectionCellId";
 
@@ -31,7 +32,7 @@ static NSString *const kBudgetBillTypeSelectionCellId = @"kBudgetBillTypeSelecti
 #pragma mark - Lifecycle
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-        self.title = @"选择类别";
+        self.title = NSLocalizedString(@"选择类别", nil) ;
     }
     return self;
 }
@@ -79,7 +80,7 @@ static NSString *const kBudgetBillTypeSelectionCellId = @"kBudgetBillTypeSelecti
         
         selectedItem.selected = !selectedItem.selected;
         
-        if ([selectedItem.billID isEqualToString:@"all"]) {
+        if ([selectedItem.billID isEqualToString:SSJAllBillTypeId]) {
             for (SSJBudgetBillTypeSelectionCellItem *item in self.items) {
                 if (item.canSelect) {
                     item.selected = selectedItem.selected;
@@ -89,7 +90,7 @@ static NSString *const kBudgetBillTypeSelectionCellId = @"kBudgetBillTypeSelecti
             if (selectedItem.selected) {
                 BOOL isSelectedAll = YES;
                 for (SSJBudgetBillTypeSelectionCellItem *item in self.items) {
-                    if ([item.billID isEqualToString:@"all"] || !item.canSelect) {
+                    if ([item.billID isEqualToString:SSJAllBillTypeId] || !item.canSelect) {
                         continue;
                     }
                     
@@ -144,30 +145,33 @@ static NSString *const kBudgetBillTypeSelectionCellId = @"kBudgetBillTypeSelecti
     }
     
     if (self.enterFromBudgetList) {
-        
-        SSJDatePeriod *period = [SSJDatePeriod datePeriodWithPeriodType:SSJDatePeriodTypeMonth date:[NSDate date]];
-        SSJBudgetModel *budgetModel = [[SSJBudgetModel alloc] init];
-        budgetModel.ID = SSJUUID();
-        budgetModel.userId = SSJUSERID();
-        budgetModel.booksId = SSJGetCurrentBooksType();
-        budgetModel.billIds = self.selectedTypeList;
-        budgetModel.type = 1;
-        budgetModel.budgetMoney = 3000;
-        budgetModel.remindMoney = 300;
-        budgetModel.beginDate = [period.startDate formattedDateWithFormat:@"yyyy-MM-dd"];
-        budgetModel.endDate = [period.endDate formattedDateWithFormat:@"yyyy-MM-dd"];
-        budgetModel.isAutoContinued = YES;
-        budgetModel.isRemind = YES;
-        budgetModel.isAlreadyReminded = NO;
-        budgetModel.isLastDay = YES;
-        
-        SSJBudgetEditViewController *newBudgetController = [[SSJBudgetEditViewController alloc] init];
-        newBudgetController.model = budgetModel;
-        
-        NSMutableArray *viewControllers = [self.navigationController.viewControllers mutableCopy];
-        [viewControllers removeObject:self];
-        [viewControllers addObject:newBudgetController];
-        [self.navigationController setViewControllers:viewControllers animated:YES];
+        [SSJUserTableManager currentBooksId:^(NSString * _Nonnull booksId) {
+            SSJDatePeriod *period = [SSJDatePeriod datePeriodWithPeriodType:SSJDatePeriodTypeMonth date:[NSDate date]];
+            SSJBudgetModel *budgetModel = [[SSJBudgetModel alloc] init];
+            budgetModel.ID = SSJUUID();
+            budgetModel.userId = SSJUSERID();
+            budgetModel.booksId = booksId;
+            budgetModel.billIds = self.selectedTypeList;
+            budgetModel.type = 1;
+            budgetModel.budgetMoney = 3000;
+            budgetModel.remindMoney = 300;
+            budgetModel.beginDate = [period.startDate formattedDateWithFormat:@"yyyy-MM-dd"];
+            budgetModel.endDate = [period.endDate formattedDateWithFormat:@"yyyy-MM-dd"];
+            budgetModel.isAutoContinued = YES;
+            budgetModel.isRemind = YES;
+            budgetModel.isAlreadyReminded = NO;
+            budgetModel.isLastDay = YES;
+            
+            SSJBudgetEditViewController *newBudgetController = [[SSJBudgetEditViewController alloc] init];
+            newBudgetController.model = budgetModel;
+            
+            NSMutableArray *viewControllers = [self.navigationController.viewControllers mutableCopy];
+            [viewControllers removeObject:self];
+            [viewControllers addObject:newBudgetController];
+            [self.navigationController setViewControllers:viewControllers animated:YES];
+        } failure:^(NSError * _Nonnull error) {
+            [SSJAlertViewAdapter showError:error];
+        }];
         
         return;
     }
@@ -177,7 +181,7 @@ static NSString *const kBudgetBillTypeSelectionCellId = @"kBudgetBillTypeSelecti
         [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"更改类别后，该预算的历史预算数据将清除重置哦" action:[SSJAlertViewAction actionWithTitle:@"取消" handler:^(SSJAlertViewAction * _Nonnull action) {
             
             self.selectedTypeList = self.originalBillIds;
-            BOOL allSelect = [self.selectedTypeList isEqualToArray:@[@"all"]];
+            BOOL allSelect = [self.selectedTypeList isEqualToArray:@[SSJAllBillTypeId]];
             for (SSJBudgetBillTypeSelectionCellItem *item in self.items) {
                 if (allSelect) {
                     item.selected = YES;
@@ -213,8 +217,8 @@ static NSString *const kBudgetBillTypeSelectionCellId = @"kBudgetBillTypeSelecti
     NSMutableArray *billIds = [NSMutableArray array];
     for (SSJBudgetBillTypeSelectionCellItem *item in self.items) {
         if (item.selected) {
-            if ([item.billID isEqualToString:@"all"]) {
-                [billIds addObject:@"all"];
+            if ([item.billID isEqualToString:SSJAllBillTypeId]) {
+                [billIds addObject:SSJAllBillTypeId];
                 break;
             }
             

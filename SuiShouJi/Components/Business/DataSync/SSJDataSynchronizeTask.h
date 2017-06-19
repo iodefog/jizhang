@@ -42,3 +42,14 @@
 @interface SSJDataSynchronizeTask : SSJSynchronizeTask
 
 @end
+
+@interface SSJDataSynchronizeTask (Simulation)
+
+/**
+ 模拟用户登录
+
+ @param userId 模拟用户的id
+ */
++ (void)simulateUserSync:(NSString *)userId;
+
+@end

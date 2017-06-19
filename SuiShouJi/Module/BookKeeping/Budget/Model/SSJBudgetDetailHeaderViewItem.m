@@ -16,7 +16,7 @@ NSString *const SSJBudgetDetailBillInfoColorKey = @"SSJBudgetDetailBillInfoColor
 
 + (instancetype)itemWithBudgetModel:(SSJBudgetModel *)model billMapping:(NSDictionary *)billMapping {
     SSJBudgetDetailHeaderViewItem *item = [[SSJBudgetDetailHeaderViewItem alloc] init];
-    item.isMajor = [model.billIds isEqualToArray:@[@"all"]];
+    item.isMajor = [model.billIds isEqualToArray:@[SSJAllBillTypeId]];
     
     NSDate *endDate = [NSDate dateWithString:model.endDate formatString:@"yyyy-MM-dd"];
     NSDate *nowDate = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:[NSDate date].day];

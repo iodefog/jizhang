@@ -55,7 +55,7 @@
         [fundingResult close];
         NSString *currentDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"];
         for (SSJFinancingHomeitem *item in fundingList) {
-            item.fundingAmount = [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and (a.cbilldate <= ? or ichargetype = ?) and b.itype = 0 and a.ifunsid = ?",userid,currentDate,@(SSJChargeIdTypeLoan),item.fundingID] - [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and (a.cbilldate <= ? or ichargetype = ?) and b.itype = 1 and a.ifunsid = ?",userid,currentDate,@(SSJChargeIdTypeLoan),item.fundingID];
+            item.fundingAmount = [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge a, bk_bill_type b left join bk_share_books_member c on c.cbooksid = a.cbooksid and c.cmemberid = ? where a.ibillid = b.id and a.operatortype <> 2 and (a.cbilldate <= ? or ichargetype = ?) and b.itype = 0 and a.ifunsid = ? and (c.istate = ? or c.istate is null or a.ibillid in ('13','14'))",userid,currentDate,@(SSJChargeIdTypeLoan),item.fundingID,@(SSJShareBooksMemberStateNormal)] - [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge as a, bk_bill_type as b left join bk_share_books_member c on c.cbooksid = a.cbooksid and c.cmemberid = ?  where a.ibillid = b.id and a.operatortype <> 2 and (a.cbilldate <= ? or ichargetype = ?) and b.itype = 1 and a.ifunsid = ? and (c.istate = ? or c.istate is null or a.ibillid in ('13','14'))",userid,currentDate,@(SSJChargeIdTypeLoan),item.fundingID,@(SSJShareBooksMemberStateNormal)];
             item.chargeCount = [db intForQuery:@"select count(1) from bk_user_charge where ifunsid = ? and cuserid = ? and operatortype <> 2",item.fundingID,userid];
         }
         if (success) {
@@ -71,7 +71,7 @@
         NSString *userid = SSJUSERID();
         double fundingSum = 0;
         NSString *currentDate = [[NSDate date]formattedDateWithFormat:@"yyyy-MM-dd"];
-        fundingSum = [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge a, bk_bill_type b ,bk_fund_info c where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and (a.cbilldate <= ? or ichargetype = ?) and b.itype = 0 and a.ifunsid = c.cfundid and c.idisplay = 1 and c.operatortype <> 2",userid,currentDate,@(SSJChargeIdTypeLoan)] - [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge a, bk_bill_type b ,bk_fund_info c where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and (a.cbilldate <= ? or ichargetype = ?) and b.itype = 1 and a.ifunsid = c.cfundid and c.idisplay = 1 and c.operatortype <> 2",userid,currentDate,@(SSJChargeIdTypeLoan)];
+        fundingSum = [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge a, bk_bill_type b ,bk_fund_info c where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and (a.cbilldate <= ? or ichargetype = ?) and b.itype = 0 and a.ifunsid = c.cfundid and c.idisplay = 1 and c.operatortype <> 2 and a.ibillid not in ('13','14')",userid,currentDate,@(SSJChargeIdTypeLoan)] - [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge a, bk_bill_type b ,bk_fund_info c where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and (a.cbilldate <= ? or ichargetype = ?) and b.itype = 1 and a.ifunsid = c.cfundid and c.idisplay = 1 and c.operatortype <> 2 and a.ibillid not in ('13','14')",userid,currentDate,@(SSJChargeIdTypeLoan)];
         if (success) {
             SSJDispatch_main_async_safe(^{
                 success(fundingSum);
@@ -97,15 +97,15 @@
     [[SSJDatabaseQueue sharedInstance]asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
         for (int i = 0; i < items.count; i++) {
             NSString *sql;
-            SSJBaseItem *item = [items ssj_safeObjectAtIndex:i];
+            SSJBaseCellItem *item = [items ssj_safeObjectAtIndex:i];
             if ([item isKindOfClass:[SSJFinancingHomeitem class]]) {
                 SSJFinancingHomeitem *fundingItem = (SSJFinancingHomeitem *)item;
                 fundingItem.fundingOrder = i + 1;
-                sql = [NSString stringWithFormat:@"update bk_fund_info set iorder = %ld , cwritedate = '%@' , iversion = %@ , operatortype = 1 where cfundid = '%@'",fundingItem.fundingOrder,[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),fundingItem.fundingID];
+                sql = [NSString stringWithFormat:@"update bk_fund_info set iorder = %ld , cwritedate = '%@' , iversion = %@ , operatortype = 1 where cfundid = '%@'",(long)fundingItem.fundingOrder,[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),fundingItem.fundingID];
             }else if ([item isKindOfClass:[SSJCreditCardItem class]]){
                 SSJCreditCardItem *cardItem = (SSJCreditCardItem *)item;
                 cardItem.cardOder = i + 1;
-                sql = [NSString stringWithFormat:@"update bk_fund_info set iorder = %ld , cwritedate = '%@' , iversion = %@ , operatortype = 1 where cfundid = '%@'",cardItem.cardOder,[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),cardItem.cardId];
+                sql = [NSString stringWithFormat:@"update bk_fund_info set iorder = %ld , cwritedate = '%@' , iversion = %@ , operatortype = 1 where cfundid = '%@'",(long)cardItem.cardOder,[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),cardItem.cardId];
             }
             [db executeUpdate:sql];
         }
@@ -113,7 +113,7 @@
     }];
 }
 
-+ (void)deleteFundingWithFundingItem:(SSJBaseItem *)item
++ (void)deleteFundingWithFundingItem:(SSJBaseCellItem *)item
                           deleteType:(BOOL)type
                              Success:(void(^)())success
                              failure:(void (^)(NSError *error))failure {
@@ -271,7 +271,7 @@
                     }
                     
                     //删除资金账户所对应的流水
-                    if (![db executeUpdate:@"update bk_user_charge set operatortype = 2 , cwritedate = ? , iversion = ? where ifunsid = ? and operatortype <> 2",writeDate,@(SSJSyncVersion()),fundingItem.fundingID]) {
+                    if (![db executeUpdate:@"update bk_user_charge set operatortype = 2 , cwritedate = ? , iversion = ? where ifunsid = ? and operatortype <> 2 and (ichargetype <> ? or cbooksid in (select cbooksid from bk_share_books_member where cmemberid = ? and istate = ?))",writeDate,@(SSJSyncVersion()),fundingItem.fundingID,@(SSJChargeIdTypeShareBooks),userId,@(SSJShareBooksMemberStateNormal)]) {
                         if (failure) {
                             *rollback = YES;
                             SSJDispatchMainAsync(^{
@@ -281,16 +281,6 @@
                         return;
                     };
                     
-                    //更新日常统计表
-                    if (![SSJDailySumChargeTable updateDailySumChargeForUserId:userId inDatabase:db]) {
-                        if (failure) {
-                            *rollback = YES;
-                            SSJDispatchMainAsync(^{
-                                failure([db lastError]);
-                            });
-                        }
-                        return;
-                    }
                 }
             }
         }else{

@@ -6,14 +6,14 @@
 //  Copyright © 2015年 ___9188___. All rights reserved.
 //
 
-#import "SSJBaseItem.h"
+#import "SSJBaseCellItem.h"
 
 typedef NS_ENUM(NSInteger, SSJReportFormsType) {
     SSJReportFormsTypeIncome  = 0, // 收入
     SSJReportFormsTypePayment = 1, // 支出
 };
 
-@interface SSJReportFormsItem : SSJBaseItem
+@interface SSJReportFormsItem : SSJBaseCellItem
 
 // 比例
 @property (nonatomic) double scale;

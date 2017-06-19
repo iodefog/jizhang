@@ -21,7 +21,11 @@
 
 @property(nonatomic, strong) UILabel *memoLabel;
 
-@property(nonatomic, strong) UIView *seperatorLine;
+@property(nonatomic, strong) UILabel *memberLabel;
+
+@property(nonatomic, strong) UIView *seperator1;
+
+@property(nonatomic, strong) UIView *seperator2;
 
 @end
 
@@ -29,25 +33,17 @@
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier]) {
-        self.imageView.contentMode = UIViewContentModeCenter;
-    
-        self.textLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        
         self.separatorInset = UIEdgeInsetsMake(0, 15, 0, 15);
-        
-        
-        [self.contentView addSubview:self.moneyLab];
-        
         self.selectionStyle = UITableViewCellSelectionStyleNone;
-        
+        self.imageView.contentMode = UIViewContentModeCenter;
+        self.textLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+        [self.contentView addSubview:self.moneyLab];
         [self.contentView addSubview:self.typeLabel];
-        
+        [self.contentView addSubview:self.memberLabel];
         [self.contentView addSubview:self.haveImage];
-        
         [self.contentView addSubview:self.memoLabel];
-        
-        [self.contentView addSubview:self.seperatorLine];
-
+        [self.contentView addSubview:self.seperator1];
+        [self.contentView addSubview:self.seperator2];
     }
     return self;
 }
@@ -57,73 +53,84 @@
     
     CGFloat imageDiam = 26;
     
-    self.memoLabel.width = 200;
-    
-    
     if ([_item.billId integerValue] >= 1000 || _item.billId.length > 4) {
         self.imageView.layer.borderWidth = 2 / [UIScreen mainScreen].scale;
         self.imageView.contentMode = UIViewContentModeCenter;
+        self.imageView.contentScaleFactor = [UIScreen mainScreen].scale * self.imageView.image.size.width / (imageDiam * 0.75);
     } else {
         self.imageView.layer.borderWidth = 0;
         self.imageView.contentMode = UIViewContentModeScaleAspectFit;
     }
     
-    if (_item.chargeMemo.length == 0 && _item.chargeImage.length == 0){
+    if (_item.chargeMemo.length == 0
+        && _item.chargeImage.length == 0
+        && _item.memberNickname.length == 0){
         self.memoLabel.hidden = YES;
         self.imageView.left = 15;
         self.imageView.size = CGSizeMake(imageDiam, imageDiam);
         self.imageView.leftTop = CGPointMake(15, (self.contentView.height - imageDiam) * 0.5);
         self.imageView.layer.cornerRadius = imageDiam * 0.5;
-        if (!self.item.loanId.length) {
-            self.imageView.contentScaleFactor = [UIScreen mainScreen].scale * self.imageView.image.size.width / (imageDiam * 0.75);
-        }
         self.typeLabel.left = self.imageView.right + 10;
         self.typeLabel.centerY = self.height * 0.5;
-        self.seperatorLine.hidden = YES;
+        self.seperator1.hidden = YES;
+        self.seperator2.hidden = YES;
     } else {
-        self.memoLabel.hidden = NO;
         self.imageView.size = CGSizeMake(imageDiam, imageDiam);
         self.imageView.left = 15;
+        self.imageView.centerY = self.height / 2;
         self.imageView.layer.cornerRadius = imageDiam * 0.5;
-        if (!self.item.loanId.length) {
-            self.imageView.contentScaleFactor = [UIScreen mainScreen].scale * self.imageView.image.size.width / (imageDiam * 0.75);
-        }
-        self.haveImage.size = CGSizeMake(12, 12);
-        
-        self.seperatorLine.size = CGSizeMake(2 / [UIScreen mainScreen].scale, 9);
         
         self.typeLabel.left = self.imageView.right + 10;
-        
         self.typeLabel.bottom = self.height / 2 - 5;
         
-        self.imageView.centerY = self.height / 2;
+        CGFloat gap = 12; // 成员昵称、流水图片、备注之间的间隙
+        CGFloat left = self.typeLabel.left;
+        CGFloat centerY = self.height * 0.5 + 9;
         
-        self.haveImage.top = self.imageView.centerY + 3;
+        int visibleCount = 0;
         
-        self.haveImage.hidden = !_item.chargeImage.length;
-
-        self.seperatorLine.hidden = !_item.chargeImage.length || !_item.chargeMemo.length;
-
-        self.haveImage.top = self.height / 2 + 3;
-        
-        self.seperatorLine.centerY = self.haveImage.centerY;
-
-        self.memoLabel.centerY = self.haveImage.centerY;
-        
-        self.haveImage.left = self.typeLabel.left;
-        
-        self.seperatorLine.left = self.haveImage.right + 6;
-        
-        if (_item.chargeImage.length) {
-            
-            self.memoLabel.left = self.seperatorLine.right + 12;
-            
-        } else {
-            
-            self.memoLabel.left = self.typeLabel.left;
-            
+        if (!self.memberLabel.hidden) {
+            self.memberLabel.left = left;
+            self.memberLabel.centerY = centerY;
+            left = self.memberLabel.right + gap;
+            visibleCount ++;
         }
         
+        if (!self.haveImage.hidden) {
+            self.haveImage.size = CGSizeMake(12, 12);
+            self.haveImage.left = left;
+            self.haveImage.centerY = centerY;
+            left = self.haveImage.right + gap;
+            visibleCount ++;
+        }
+        
+        if (!self.memoLabel.hidden) {
+            self.memoLabel.left = left;
+            self.memoLabel.centerY = centerY;
+            left = self.memoLabel.right + gap;
+            visibleCount ++;
+        }
+        
+        if (visibleCount == 3) {
+            self.seperator1.hidden = NO;
+            self.seperator1.size = CGSizeMake(2 / [UIScreen mainScreen].scale, 9);
+            self.seperator1.left = self.memberLabel.right + gap * 0.5;
+            self.seperator1.centerY = centerY;
+            
+            self.seperator2.hidden = NO;
+            self.seperator2.size = CGSizeMake(2 / [UIScreen mainScreen].scale, 9);
+            self.seperator2.left = self.haveImage.right + gap * 0.5;
+            self.seperator2.centerY = centerY;
+        } else if (visibleCount == 2) {
+            self.seperator1.size = CGSizeMake(2 / [UIScreen mainScreen].scale, 9);
+            self.seperator1.left = (self.memberLabel.hidden ? self.haveImage.right : self.memberLabel.right) + gap * 0.5;
+            self.seperator1.centerY = centerY;
+            self.seperator1.hidden = NO;
+            self.seperator2.hidden = YES;
+        } else {
+            self.seperator1.hidden = YES;
+            self.seperator2.hidden = YES;
+        }
     }
     
     self.moneyLab.right = self.contentView.width - 15;
@@ -138,6 +145,7 @@
 - (void)setItem:(SSJBillingChargeCellItem *)item {
     _item = item;
     // 如果是信用卡还款有关的
+    NSInteger billid = [item.billId integerValue];
     if (item.idType == SSJChargeIdTypeRepayment) {
         self.imageView.tintColor = [UIColor ssj_colorWithHex:_item.colorValue];
         self.imageView.image = [[UIImage imageNamed:item.imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
@@ -289,34 +297,38 @@
             self.imageView.tintColor = [UIColor ssj_colorWithHex:_item.colorValue];
             self.imageView.image = [[UIImage imageNamed:item.imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             self.imageView.layer.borderColor = [UIColor ssj_colorWithHex:item.colorValue].CGColor;
-            if ([item.typeName isEqualToString:@"平账收入"] || [item.typeName isEqualToString:@"平账支出"]) {
+            if (billid == 1 || billid == 2) {
                 self.typeLabel.text = [NSString stringWithFormat:@"余额变更(%@)",item.typeName];
-            }else if([item.typeName isEqualToString:@"转入"]){
+            }else if (billid == 3) {
                 self.typeLabel.text = [NSString stringWithFormat:@"由%@转入",item.transferSource];
-            }else if([item.typeName isEqualToString:@"转出"]){
+            }else if (billid == 4) {
                 self.typeLabel.text = [NSString stringWithFormat:@"转出至%@",item.transferSource];
-            }else{
+            } else if (billid == 13 || billid == 14) {
+                self.typeLabel.text = [NSString stringWithFormat:@"%@",item.chargeMemo];
+            } else {
                 self.typeLabel.text = item.typeName;
             }
             [self.typeLabel sizeToFit];
         }
 
     }
+    
+    self.memberLabel.text = _item.memberNickname;
+    [self.memberLabel sizeToFit];
+    self.memberLabel.hidden = _item.memberNickname.length == 0;
+    
+    self.haveImage.hidden = _item.chargeImage.length == 0;
+    
+    self.memoLabel.hidden = _item.chargeMemo.length == 0;
     if (item.chargeMemo.length != 0) {
         self.memoImage.hidden = NO;
-        self.memoLabel.hidden = NO;
-        self.memoLabel.text = _item.chargeMemo;
+        if (billid == 13 || billid == 14) {
+            self.memoLabel.text = @"共享账本流水";
+        } else {
+            self.memoLabel.text = _item.chargeMemo;
+        }
         [self.memoLabel sizeToFit];
-    }else{
-        self.memoImage.hidden = YES;
-        self.memoLabel.hidden = NO;
     }
-    if (item.chargeImage.length != 0) {
-        self.haveImage.hidden = NO;
-    }else{
-        self.haveImage.hidden = YES;
-    }
-    [self.textLabel sizeToFit];
     
     self.moneyLab.text = [NSString stringWithFormat:@"%@",item.money];
     [self.moneyLab sizeToFit];
@@ -368,12 +380,29 @@
     return _memoLabel;
 }
 
-- (UIView *)seperatorLine {
-    if (!_seperatorLine) {
-        _seperatorLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 2 / [UIScreen mainScreen].scale, 9)];
-        _seperatorLine.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+-(UILabel *)memberLabel{
+    if (!_memberLabel) {
+        _memberLabel = [[UILabel alloc]init];
+        _memberLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+        _memberLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
     }
-    return _seperatorLine;
+    return _memberLabel;
+}
+
+- (UIView *)seperator1 {
+    if (!_seperator1) {
+        _seperator1 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 2 / [UIScreen mainScreen].scale, 9)];
+        _seperator1.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    }
+    return _seperator1;
+}
+
+- (UIView *)seperator2 {
+    if (!_seperator2) {
+        _seperator2 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 2 / [UIScreen mainScreen].scale, 9)];
+        _seperator2.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    }
+    return _seperator2;
 }
 
 - (void)updateCellAppearanceAfterThemeChanged {
@@ -381,7 +410,8 @@
     _moneyLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     _typeLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     _memoLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
-    _seperatorLine.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    _seperator1.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    _seperator2.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
 }
 
 @end

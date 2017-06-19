@@ -23,8 +23,6 @@
 
 @property (nonatomic, strong, readonly) SSJButton *memberBtn;
 
-@property (nonatomic, strong) UIColor *buttonTitleNormalColor;
-
-@property (nonatomic, strong) UIColor *buttonTitleSelectedColor;
+- (void)updateAppearance;
 
 @end

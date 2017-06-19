@@ -14,6 +14,18 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, copy) void (^finishVerification)();
 
+@property (nonatomic, copy) NSAttributedString *message;
+
+/**
+ 确认按钮标题，如果不设置默认标题是“删除”
+ */
+@property (nonatomic, copy, nullable) NSString *sureButtonTitle;
+
+/**
+ 取消按钮标题，如果不设置默认标题是“取消”
+ */
+@property (nonatomic, copy, nullable) NSString *cancelButtonTitle;
+
 - (void)show;
 
 - (void)dismiss;

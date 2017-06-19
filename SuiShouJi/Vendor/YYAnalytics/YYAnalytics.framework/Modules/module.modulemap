@@ -1,5 +1,5 @@
 framework module YYAnalytics {
-  umbrella header "YYAnalytics-umbrella.h"
+  umbrella header "YYAnalytics.h"
 
   export *
   module * { export * }

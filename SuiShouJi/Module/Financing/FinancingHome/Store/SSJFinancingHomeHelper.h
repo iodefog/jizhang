@@ -37,7 +37,7 @@
  @param success 删除成功的回调
  @param failure 删除失败的回调
  */
-+ (void)deleteFundingWithFundingItem:(SSJBaseItem *)item
++ (void)deleteFundingWithFundingItem:(SSJBaseCellItem *)item
                           deleteType:(BOOL)type
                              Success:(void(^)())success
                              failure:(void (^)(NSError *error))failure;

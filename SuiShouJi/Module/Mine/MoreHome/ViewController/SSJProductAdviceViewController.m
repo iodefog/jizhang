@@ -85,22 +85,23 @@
 #pragma mark -Action
 - (void)navRightButtonClicked
 {
-    SSJUserItem *userItem = [SSJUserTableManager queryUserItemForID:SSJUSERID()];
-    NSDictionary* clientCustomizedAttrs = @{@"userid": userItem.userId ?: @"",
-                                            @"openid": userItem.openId ?: @"",
-                                            @"nickname": userItem.nickName ?: @"",
-                                            @"tel": userItem.mobileNo ?: @"",
-                                            @"登录方式": userItem.loginType ?: @"",
-                                            @"注册状态": userItem.registerState ?: @"",
-                                            @"应用名称": SSJAppName(),
-                                            @"应用版本号": SSJAppVersion(),
-                                            @"手机型号" : SSJPhoneModel()
-                                            };
-    [MQManager setClientInfo:clientCustomizedAttrs completion:^(BOOL success , NSError *error) {
-        
+    [SSJUserTableManager queryUserItemWithID:SSJUSERID() success:^(SSJUserItem * _Nonnull userItem) {
+        NSDictionary* clientCustomizedAttrs = @{@"userid": userItem.userId ?: @"",
+                                                @"openid": userItem.openId ?: @"",
+                                                @"nickname": userItem.nickName ?: @"",
+                                                @"tel": userItem.mobileNo ?: @"",
+                                                @"登录方式": userItem.loginType ?: @"",
+                                                @"注册状态": userItem.registerState ?: @"",
+                                                @"应用名称": SSJAppName(),
+                                                @"应用版本号": SSJAppVersion(),
+                                                @"手机型号" : SSJPhoneModel()
+                                                };
+        [MQManager setClientInfo:clientCustomizedAttrs completion:NULL];
+        MQChatViewManager *chatViewManager = [[MQChatViewManager alloc] init];
+        [chatViewManager pushMQChatViewControllerInViewController:self];
+    } failure:^(NSError * _Nonnull error) {
+        [SSJAlertViewAdapter showError:error];
     }];
-    MQChatViewManager *chatViewManager = [[MQChatViewManager alloc] init];
-    [chatViewManager pushMQChatViewControllerInViewController:self];
 }
 
 #pragma mark - SSJBaseNetworkService
@@ -177,7 +178,7 @@
             userItem.userId = SSJUSERID();
             userItem.adviceTime = item.creplyDate;
             //存储
-            [SSJUserTableManager saveUserItem:userItem];
+            [SSJUserTableManager saveUserItem:userItem success:NULL failure:NULL];
             isStop = YES;
         }
         if ([lastItem.date isSameDay:item.date]) {

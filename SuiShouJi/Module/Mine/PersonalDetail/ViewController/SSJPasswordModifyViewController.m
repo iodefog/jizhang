@@ -156,30 +156,18 @@
         [CDAutoHideMessageHUD showMessage:@"修改密码成功"];
         [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
         SSJClearLoginInfo();
-        [SSJUserTableManager reloadUserIdWithError:nil];
-        [SSJUserDefaultDataCreater asyncCreateAllDefaultDataWithSuccess:NULL failure:NULL];
-        SSJLoginViewController *loginVc = [[SSJLoginViewController alloc]init];
-        loginVc.backController = [self.navigationController.viewControllers firstObject];
-        [self.navigationController pushViewController:loginVc animated:YES];
-    }else{
+        [SSJUserTableManager reloadUserIdWithSuccess:^{
+            SSJLoginViewController *loginVc = [[SSJLoginViewController alloc]init];
+            loginVc.backController = [self.navigationController.viewControllers firstObject];
+            [self.navigationController pushViewController:loginVc animated:YES];
+            [SSJUserDefaultDataCreater asyncCreateAllDefaultDataWithUserId:SSJUSERID() success:NULL failure:NULL];
+        } failure:^(NSError * _Nonnull error) {
+            [SSJAlertViewAdapter showError:error];
+        }];
+    } else {
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:service.desc delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
         [alert show];
     }
 }
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

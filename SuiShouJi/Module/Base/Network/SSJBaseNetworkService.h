@@ -17,6 +17,20 @@ typedef NS_ENUM(NSUInteger, SSJBaseNetworkServiceHttpMethod) {
     SSJBaseNetworkServiceHttpMethodGET
 };
 
+typedef NS_ENUM(NSInteger, SSJRequestSerialization) {
+    SSJHTTPRequestSerialization = 0,
+    SSJJSONRequestSerialization,
+    SSJPropertyListRequestSerialization
+};
+
+typedef NS_OPTIONS(NSInteger, SSJResponseSerialization) {
+    SSJHTTPResponseSerialization = 0,
+    SSJJSONResponseSerialization = 1 << 0,
+    SSJXMLParserResponseSerialization = 1 << 1,
+    SSJPropertyListResponseSerialization = 1 << 2,
+    SSJImageResponseSerialization = 1 << 3
+};
+
 @protocol SSJBaseNetworkServiceDelegate;
 
 @interface SSJBaseNetworkService : NSObject {
@@ -37,9 +51,14 @@ typedef NS_ENUM(NSUInteger, SSJBaseNetworkServiceHttpMethod) {
 @property (nonatomic, assign) SSJBaseNetworkServiceHttpMethod httpMethod;
 
 /**
- 返回数据序列化方式
+ 请求数据序列化方式，默认SSJHTTPRequestSerialization
  */
-@property (nonatomic, strong) AFHTTPResponseSerializer <AFURLResponseSerialization> * responseSerializer;
+@property (nonatomic, assign) SSJRequestSerialization requestSerialization;
+
+/**
+ 返回数据序列化方式，默认SSJJSONResponseSerialization
+ */
+@property (nonatomic, assign) SSJResponseSerialization responseSerialization;
 
 /**
  *  请求超时时间
@@ -65,11 +84,6 @@ typedef NS_ENUM(NSUInteger, SSJBaseNetworkServiceHttpMethod) {
  *  是否显示加载框，默认NO
  */
 @property (nonatomic) BOOL showLodingIndicator;
-
-/**
- *  是否为登录类型接口，决定是否需要传token和appid与登录相关的参数，默认为YES
- */
-@property (nonatomic) BOOL isLoginService;
 
 /**
  *  如果接口请求发生错误，是否显示错误信息，默认为YES
@@ -108,22 +122,9 @@ typedef NS_ENUM(NSUInteger, SSJBaseNetworkServiceHttpMethod) {
 @property (nonatomic, strong, readonly) NSDate *serverDate;
 
 /**
- *  证书验证模式；默认为AFSSLPinningModePublicKey
- *  AFSSLPinningModeNone：不验证客户端证书
- *  AFSSLPinningModePublicKey：验证客户端的证书公钥和服务端的证书公钥是否一致
- *  AFSSLPinningModeCertificate：验证客户端的证书和服务端的证书是否一致
+ *  是否开启https
  */
-@property (nonatomic, assign) AFSSLPinningMode pinningMode;
-
-/**
- *  是否允许无效或过期的证书，默认为YES
- */
-@property (nonatomic, assign) BOOL allowInvalidCertificates;
-
-/**
- *  是否开启域名验证，默认为YES
- */
-@property (nonatomic, assign) BOOL validatesDomainName;
+@property (nonatomic, assign) BOOL httpsOpened;
 
 /**
  *  初始化方法

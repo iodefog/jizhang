@@ -55,7 +55,6 @@ static const NSTimeInterval kTransitionDuration = 0.3;
 @implementation SSJStartViewManager
 
 - (void)dealloc {
-    
 }
 
 - (void)showWithCompletion:(void(^)(SSJStartViewManager *))completion {
@@ -70,16 +69,13 @@ static const NSTimeInterval kTransitionDuration = 0.3;
     
     [self requestStartAPI];
     
-    __block BOOL hasUserTreeTable;
     // 如果没有本地签到表（升级新版本，数据库还没升级完成的情况下），不能请求签到接口
-    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
-        hasUserTreeTable = [db tableExists:@"bk_user_tree"];
-    }];
-    
     // 如果没有userid，就不调用签到接口，签到接口需要userid（第一次启动初始化数据库未完成前，userid为空）
-    if (hasUserTreeTable && SSJUSERID().length) {
-        [self requestCheckIn];
-    }
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        if ([db tableExists:@"bk_user_tree"] && SSJUSERID().length) {
+            [self requestCheckIn];
+        }
+    }];
 }
 
 // 请求启动接口，检测是否有更新、苹果是否正在审核、加载下发启动页
@@ -123,19 +119,22 @@ static const NSTimeInterval kTransitionDuration = 0.3;
     if ([_checkInService.returnCode isEqualToString:@"1"]) {
         
         _checkInModel = _checkInService.checkInModel;
-        [SSJBookkeepingTreeStore saveCheckInModel:_checkInModel error:nil];
+        [SSJBookkeepingTreeStore saveCheckInModel:_checkInModel success:NULL failure:NULL];
         [self loadTreeViewIfNeeded];
         
     } else if ([_checkInService.returnCode isEqualToString:@"2"]) {
         
         // 如果本地保存的最近一次签到时间和服务端返回的不一致，说明本地没有保存最新的签到记录
-        _checkInModel = [SSJBookkeepingTreeStore queryCheckInInfoWithUserId:SSJUSERID() error:nil];
-        if (![_checkInModel.lastCheckInDate isEqualToString:_checkInService.checkInModel.lastCheckInDate]) {
-            _checkInModel = _checkInService.checkInModel;
-            [SSJBookkeepingTreeStore saveCheckInModel:_checkInService.checkInModel error:nil];
-            [self loadTreeViewIfNeeded];
-        }
-        
+        [SSJBookkeepingTreeStore queryCheckInInfoWithUserId:SSJUSERID() success:^(SSJBookkeepingTreeCheckInModel * _Nonnull model) {
+            _checkInModel = model;
+            if (![_checkInModel.lastCheckInDate isEqualToString:_checkInService.checkInModel.lastCheckInDate]) {
+                _checkInModel = _checkInService.checkInModel;
+                [SSJBookkeepingTreeStore saveCheckInModel:_checkInModel success:NULL failure:NULL];
+                [self loadTreeViewIfNeeded];
+            }
+        } failure:^(NSError * _Nonnull error) {
+            [SSJAlertViewAdapter showError:error];
+        }];
     }
 }
 
@@ -173,9 +172,17 @@ static const NSTimeInterval kTransitionDuration = 0.3;
                 }
             };
         }
+        
         [UIView transitionFromView:_launchView toView:_guideView duration:kTransitionDuration options:UIViewAnimationOptionTransitionCrossDissolve completion:NULL];
+        
         _launchView = nil;
+        
     } else {
+        
+//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//            [_launchView removeFromSuperview];
+//            _launchView = nil;
+//        });
         
         [UIView animateWithDuration:0.5f animations:^(void){
             _launchView.transform = CGAffineTransformMakeScale(2.0f, 2.0f);
@@ -184,7 +191,7 @@ static const NSTimeInterval kTransitionDuration = 0.3;
             [_launchView removeFromSuperview];
             _launchView = nil;
         }];
-        
+//
         if (_completion) {
             _completion(self);
             _completion = nil;

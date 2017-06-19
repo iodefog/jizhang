@@ -8,6 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
+typedef NS_ENUM(NSInteger, SSJRecordMakingBillTypeSelectionCellState) {
+    SSJRecordMakingBillTypeSelectionCellStateNormal = 0,
+    SSJRecordMakingBillTypeSelectionCellStateSelected,
+    SSJRecordMakingBillTypeSelectionCellStateEditing
+};
+
 @interface SSJRecordMakingBillTypeSelectionCellItem : NSObject
 
 @property (nonatomic, copy) NSString *title;
@@ -20,13 +26,7 @@
 
 @property (nonatomic) int order;
 
-@property (nonatomic) BOOL showDeleteBtn;
-
-@property (nonatomic) BOOL selected;
-
-@property (nonatomic) BOOL deselected;
-
-@property (nonatomic) BOOL editable;
+@property (nonatomic) SSJRecordMakingBillTypeSelectionCellState state;
 
 //@property (nonatomic) BOOL animated;
 

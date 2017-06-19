@@ -6,9 +6,9 @@
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
 
-#import "SSJBaseItem.h"
+#import "SSJBaseCellItem.h"
 
-@interface SSJChargeMemberItem : SSJBaseItem
+@interface SSJChargeMemberItem : SSJBaseCellItem
 
 //成员名称
 @property(nonatomic, strong) NSString *memberName;

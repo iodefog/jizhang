@@ -7,8 +7,25 @@
 //
 
 #import "SSJBaseTableViewCell.h"
-#import "SSJBillingChargeCellItem.h"
+
+NS_ASSUME_NONNULL_BEGIN
+
+@class SSJBillingChargeCellItem;
 
 @interface SSJCalenderTableViewCell : SSJBaseTableViewCell
 
 @end
+
+@interface SSJCalenderTableViewCellItem : SSJBaseCellItem
+
+@property (nonatomic, copy) UIImage *billImage;
+
+@property (nonatomic, strong) UIColor *billColor;
+
+@property (nonatomic, copy) NSString *billName;
+
+@property (nonatomic, copy) NSString *money;
+
+@end
+
+NS_ASSUME_NONNULL_END

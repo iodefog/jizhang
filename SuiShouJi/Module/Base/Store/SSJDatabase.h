@@ -12,4 +12,6 @@
 
 @property (nonatomic, copy, readonly) NSString *sql;
 
+@property (nonatomic) BOOL shouldHandleError;
+
 @end

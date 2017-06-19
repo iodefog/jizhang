@@ -68,8 +68,8 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
 @end
 
 @implementation SSJFundingTransferViewController{
-    SSJBaseItem *_transferInItem;
-    SSJBaseItem *_transferOutItem;
+    SSJBaseCellItem *_transferInItem;
+    SSJBaseCellItem *_transferOutItem;
     UITextField *_moneyInput;
     UITextField *_memoInput;
 }
@@ -341,7 +341,7 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
             }else{
                 SSJFundingTypeSelectViewController *NewFundingVC = [[SSJFundingTypeSelectViewController alloc]init];
                 NewFundingVC.needLoanOrNot = NO;
-                NewFundingVC.addNewFundingBlock = ^(SSJBaseItem *item){
+                NewFundingVC.addNewFundingBlock = ^(SSJBaseCellItem *item){
                     if ([item isKindOfClass:[SSJFundingItem class]]) {
                         SSJFundingItem *fundItem = (SSJFundingItem *)item;
                         _transferInItem = fundItem;
@@ -373,7 +373,7 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
             }else{
                 SSJFundingTypeSelectViewController *NewFundingVC = [[SSJFundingTypeSelectViewController alloc]init];
                 NewFundingVC.needLoanOrNot = NO;
-                NewFundingVC.addNewFundingBlock = ^(SSJBaseItem *item){
+                NewFundingVC.addNewFundingBlock = ^(SSJBaseCellItem *item){
                     if ([item isKindOfClass:[SSJFundingItem class]]) {
                         SSJFundingItem *fundItem = (SSJFundingItem *)item;
                         _transferOutItem = fundItem;
@@ -570,7 +570,7 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
     [self.view endEditing:YES];
     if (!_alertShowed && [self shouldShowAlert]) {
         NSDate *date = [NSDate dateWithString:_item.beginDate formatString:@"yyyy-MM-dd"];
-        NSString *message = [NSString stringWithFormat:@"每月不一定都有%ld号哦，没有的月份将自动跳过不生成该转账记录哦！", date.day];
+        NSString *message = [NSString stringWithFormat:@"每月不一定都有%ld号哦，没有的月份将自动跳过不生成该转账记录哦！", (long)date.day];
         
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:@"知道了" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {

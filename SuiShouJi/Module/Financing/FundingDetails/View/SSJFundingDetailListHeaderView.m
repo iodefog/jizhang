@@ -65,7 +65,6 @@
         self.subDetailLab.right = self.expandImage.right;
         self.subDetailLab.centerY = self.subLab.centerY;
         self.subLab.width = self.subDetailLab.left - self.subLab.left - 10;
-        [self ssj_relayoutBorder];
     } else {
         self.btn.frame = self.bounds;
         self.dateLabel.left = 15;
@@ -75,7 +74,6 @@
         self.expandImage.centerY = self.height / 2;
         self.moneyLabel.right = self.expandImage.left - 10;
         self.moneyLabel.centerY = self.height / 2;
-        [self ssj_relayoutBorder];
     }
 }
 
@@ -138,7 +136,7 @@
     return _payOffImage;
 }
 
-- (void)setItem:(SSJBaseItem *)item{
+- (void)setItem:(SSJBaseCellItem *)item{
     _item = item;
     if ([_item isKindOfClass:[SSJFundingDetailListItem class]]) {
         _payOffImage.hidden = YES;
@@ -147,10 +145,10 @@
         [formatter setDateFormat:@"yyyy-MM"];
         NSDate *date = [formatter dateFromString:fundingItem.date];
         NSString *dateStr;
-        if ([fundingItem.date hasPrefix:[NSString stringWithFormat:@"%ld",[NSDate date].year]]) {
-            dateStr = [NSString stringWithFormat:@"%ld月",date.month];
+        if ([fundingItem.date hasPrefix:[NSString stringWithFormat:@"%ld",(long)[NSDate date].year]]) {
+            dateStr = [NSString stringWithFormat:@"%ld月",(long)date.month];
         }else{
-            dateStr = [NSString stringWithFormat:@"%ld年%ld月",date.year,date.month];
+            dateStr = [NSString stringWithFormat:@"%ld年%ld月",(long)date.year,(long)date.month];
         }
         self.dateLabel.text = dateStr;
         [self.dateLabel sizeToFit];
@@ -174,10 +172,10 @@
         SSJCreditCardListDetailItem *creditCardItem = (SSJCreditCardListDetailItem *)_item;
         NSDate *date = [NSDate dateWithString:creditCardItem.month formatString:@"yyyy-MM"];
         NSString *dateStr;
-        if ([creditCardItem.month hasPrefix:[NSString stringWithFormat:@"%ld",[NSDate date].year]]) {
-            dateStr = [NSString stringWithFormat:@"%ld月",date.month];
+        if ([creditCardItem.month hasPrefix:[NSString stringWithFormat:@"%ld",(long)[NSDate date].year]]) {
+            dateStr = [NSString stringWithFormat:@"%ld月",(long)date.month];
         }else{
-            dateStr = [NSString stringWithFormat:@"%ld年%ld月",date.year,date.month];
+            dateStr = [NSString stringWithFormat:@"%ld年%ld月",(long)date.year,(long)date.month];
         }
         self.dateLabel.text = dateStr;
         [self.dateLabel sizeToFit];

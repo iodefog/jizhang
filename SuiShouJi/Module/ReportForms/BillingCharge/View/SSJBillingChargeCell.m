@@ -87,7 +87,7 @@
     }
 }
 
-- (void)setCellItem:(SSJBaseItem *)cellItem {
+- (void)setCellItem:(SSJBaseCellItem *)cellItem {
     [super setCellItem:cellItem];
     if (![cellItem isKindOfClass:[SSJBillingChargeCellItem class]]) {
         return;

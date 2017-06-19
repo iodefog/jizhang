@@ -55,9 +55,10 @@
     if (autualCount <= 0 || autualCount > self.titles.count) {
         autualCount = self.titles.count;
     }
-    CGFloat width = self.width / autualCount;
     
+    CGFloat width = self.width / autualCount;
     CGFloat height = self.height;
+    
     for (int idx = 0; idx < _buttons.count; idx ++) {
         UIButton *button = _buttons[idx];
         if (![button isKindOfClass:[UIButton class]]) {
@@ -69,14 +70,18 @@
         [button ssj_layoutContent];
     }
     
-    if (CGSizeEqualToSize(_tabSize, CGSizeZero)) {
+    CGFloat tabWidth = MIN(_tabSize.width, width);
+    CGFloat tabHeight = MIN(_tabSize.height, self.height);
+    _tabView.size = CGSizeMake(tabWidth, tabHeight);
+    
+    if (_tabSize.width <= 0) {
         _tabView.width = width;
-        _tabView.height = 2.0;
-    } else {
-        _tabSize.width = MIN(_tabSize.width, width);
-        _tabSize.height = MIN(_tabSize.height, self.height);
-        _tabView.size = _tabSize;
     }
+    
+    if (_tabSize.height <= 0) {
+        _tabView.height = 2.0;
+    }
+    
     _tabView.bottom = self.height;
     _tabView.centerX = width * 0.5 + width * _selectedIndex;
     self.contentSize = CGSizeMake(width * _buttons.count, height);
@@ -113,8 +118,14 @@
 }
 
 - (void)setTitles:(NSArray *)titles {
+    if (!titles || titles.count == 0) {
+        SSJPRINT(@"titles至少有1个元素");
+        return;
+    }
+    
     if (![_titles isEqualToArray:titles]) {
         _titles = titles;
+        [self setSelectedIndex:0 animated:NO];
         [self reload];
         [self setNeedsLayout];
     }

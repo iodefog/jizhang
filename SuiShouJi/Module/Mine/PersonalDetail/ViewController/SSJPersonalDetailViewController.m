@@ -66,7 +66,7 @@ extern BOOL kHomeNeedLoginPop;
         [weakSelf getCheckInLevel];
         [weakSelf.tableView reloadData];
     } failure:^(NSError *error) {
-        
+        [SSJAlertViewAdapter showError:error];
     }];
 }
 
@@ -213,7 +213,9 @@ extern BOOL kHomeNeedLoginPop;
         SSJUserItem *userItem = [[SSJUserItem alloc] init];
         userItem.userId = SSJUSERID();
         userItem.icon = icon;
-        [SSJUserTableManager saveUserItem:userItem];
+        [SSJUserTableManager saveUserItem:userItem success:NULL failure:^(NSError * _Nonnull error) {
+            [SSJAlertViewAdapter showError:error];
+        }];
     }];
 }
 
@@ -249,10 +251,11 @@ extern BOOL kHomeNeedLoginPop;
     __weak typeof(self) weakSelf = self;
     
     [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:@"退出登录后,后续记账请登录同个帐号哦。" action:[SSJAlertViewAction actionWithTitle:@"取消" handler:NULL], [SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction * _Nonnull action) {
-        //  退出登陆后强制同步一次
-        SSJUserItem *currentUser = [SSJUserTableManager queryUserItemForID:SSJUSERID()];
-        NSData *currentUserData = [NSKeyedArchiver archivedDataWithRootObject:currentUser];
-        [[NSUserDefaults standardUserDefaults] setObject:currentUserData forKey:SSJLastLoggedUserItemKey];
+        // 退出登陆后强制同步一次
+        [SSJUserTableManager queryUserItemWithID:SSJUSERID() success:^(SSJUserItem * _Nonnull userItem) {
+            NSData *currentUserData = [NSKeyedArchiver archivedDataWithRootObject:userItem];
+            [[NSUserDefaults standardUserDefaults] setObject:currentUserData forKey:SSJLastLoggedUserItemKey];
+        } failure:NULL];
         
         NSString *userID = SSJUSERID();
         [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:^(SSJDataSynchronizeType type) {
@@ -261,11 +264,16 @@ extern BOOL kHomeNeedLoginPop;
         } failure:NULL];
         
         SSJClearLoginInfo();
-        [SSJUserTableManager reloadUserIdWithError:nil];
-        [SSJUserDefaultDataCreater asyncCreateAllDefaultDataWithSuccess:NULL failure:NULL];
-        [weakSelf.tableView reloadData];
-        [SSJAnaliyticsManager loginOut];
-        [weakSelf.navigationController popViewControllerAnimated:YES];
+        //清除当前账本类型
+        clearCurrentBooksCategory();
+        [SSJUserTableManager reloadUserIdWithSuccess:^{
+            [weakSelf.tableView reloadData];
+            [SSJAnaliyticsManager loginOut];
+            [weakSelf.navigationController popViewControllerAnimated:YES];
+            [SSJUserDefaultDataCreater asyncCreateAllDefaultDataWithUserId:SSJUSERID() success:NULL failure:NULL];
+        } failure:^(NSError * _Nonnull error) {
+            [SSJAlertViewAdapter showError:error];
+        }];
     }], nil];
 }
 
@@ -300,8 +308,11 @@ extern BOOL kHomeNeedLoginPop;
             userItem.userId = SSJUSERID();
             userItem.nickName = textInputed;
             userItem.writeDate = [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-            [SSJUserTableManager saveUserItem:userItem];
-            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+            [SSJUserTableManager saveUserItem:userItem success:^{
+                [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+            } failure:^(NSError * _Nonnull error) {
+                [SSJAlertViewAdapter showError:error];
+            }];
         };
         _nickNameModifyView.typeErrorBlock = ^(NSString *errorDesc){
             [CDAutoHideMessageHUD showMessage:errorDesc];
@@ -324,8 +335,11 @@ extern BOOL kHomeNeedLoginPop;
             userItem.userId = SSJUSERID();
             userItem.signature = textInputed;
             userItem.writeDate = [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-            [SSJUserTableManager saveUserItem:userItem];
-            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+            [SSJUserTableManager saveUserItem:userItem success:^{
+                [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+            } failure:^(NSError * _Nonnull error) {
+                [SSJAlertViewAdapter showError:error];
+            }];
         };
         _signatureModifyView.typeErrorBlock = ^(NSString *errorDesc){
             [CDAutoHideMessageHUD showMessage:errorDesc];
@@ -335,24 +349,12 @@ extern BOOL kHomeNeedLoginPop;
 }
 
 - (void)getCheckInLevel{
-    SSJBookkeepingTreeCheckInModel *checkInModel = [SSJBookkeepingTreeStore queryCheckInInfoWithUserId:SSJUSERID() error:nil];
-    self.checkInLevel = [SSJBookkeepingTreeHelper treeLevelNameForLevel:[SSJBookkeepingTreeHelper treeLevelForDays:checkInModel.checkInTimes]];
-    [self.tableView reloadData];
+    [SSJBookkeepingTreeStore queryCheckInInfoWithUserId:SSJUSERID() success:^(SSJBookkeepingTreeCheckInModel * _Nonnull checkInModel) {
+        self.checkInLevel = [SSJBookkeepingTreeHelper treeLevelNameForLevel:[SSJBookkeepingTreeHelper treeLevelForDays:checkInModel.checkInTimes]];
+        [self.tableView reloadData];
+    } failure:^(NSError * _Nonnull error) {
+        [SSJAlertViewAdapter showError:error];
+    }];
 }
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

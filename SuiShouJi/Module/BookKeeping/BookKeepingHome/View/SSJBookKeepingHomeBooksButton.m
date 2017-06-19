@@ -7,6 +7,7 @@
 //
 
 #import "SSJBookKeepingHomeBooksButton.h"
+#import "SSJShareBookItem.h"
 
 @interface SSJBookKeepingHomeBooksButton()
 
@@ -48,10 +49,17 @@
     return _booksImage;
 }
 
-- (void)setItem:(SSJBooksTypeItem *)item{
+- (void)setItem:(id)item{
     _item = item;
-    self.booksImage.image = [[UIImage imageNamed:_item.booksIcoin] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    self.booksImage.tintColor = [UIColor ssj_colorWithHex:_item.booksColor];
+    if ([_item isKindOfClass:[SSJBooksTypeItem class]]) {
+        SSJBooksTypeItem *booksItem = (SSJBooksTypeItem *)_item;
+        self.booksImage.image = [[UIImage imageNamed:booksItem.parentIcon] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        self.booksImage.tintColor = [UIColor ssj_colorWithHex:[booksItem getSingleColor]];
+    } else if ([_item isKindOfClass:[SSJShareBookItem class]]) {
+        SSJShareBookItem *shareBooksItem = (SSJShareBookItem *)_item;
+        self.booksImage.image = [[UIImage imageNamed:shareBooksItem.parentIcon] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        self.booksImage.tintColor = [UIColor ssj_colorWithHex:[shareBooksItem getSingleColor]];
+    }
     [self setNeedsLayout];
 }
 

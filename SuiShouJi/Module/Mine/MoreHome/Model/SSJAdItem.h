@@ -6,11 +6,11 @@
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
 
-#import "SSJBaseItem.h"
+#import "SSJBaseCellItem.h"
 #import "SSJListAdItem.h"
 #import "SSJBooksAdBanner.h"
 
-@interface SSJAdItem : SSJBaseItem
+@interface SSJAdItem : SSJBaseCellItem
 
 @property(nonatomic, strong) NSArray *bannerItems;
 

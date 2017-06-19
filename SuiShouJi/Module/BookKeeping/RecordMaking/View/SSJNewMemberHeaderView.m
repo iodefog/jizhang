@@ -36,7 +36,6 @@
     self.nameInput.centerY = self.height / 2;
     self.nameInput.left = self.colorSelectView.right + 10;
     self.nameLab.center = self.colorSelectView.center;
-    [self ssj_relayoutBorder];
 }
 
 -(UITextField *)nameInput{

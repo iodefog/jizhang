@@ -51,11 +51,11 @@ static NSString *const kSummaryButtonAnimationKey = @"summaryButtonAnimationKey"
     [super layoutSubviews];
 //    self.backColorView.leftTop = CGPointMake(0, 0);
     self.waveImage.leftTop = CGPointMake(0, 0);
-    self.incomeTitleLab.centerY = self.expentureTitleLab.centerY = self.height / 2 + 20;
-    self.incomeLab.centerY = self.expentureLab.centerY = self.height / 2 + 44;
+    self.incomeTitleLab.centerY = self.expentureTitleLab.centerY = self.height / 2 + 12;
+    self.incomeLab.centerY = self.expentureLab.centerY = self.height / 2 + 36;
     self.incomeTitleLab.centerX = self.incomeLab.centerX = self.width / 4;
     self.expentureTitleLab.centerX = self.expentureLab.centerX = self.width / 2 + self.width / 4;
-    self.summaryButton.top = 74;
+    self.summaryButton.top = self.incomeTitleLab.top - 10;
     self.summaryButton.centerX = self.width / 2;
 }
 

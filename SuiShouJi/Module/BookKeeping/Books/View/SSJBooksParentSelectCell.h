@@ -1,5 +1,5 @@
 //
-//  SSJBooksParentButton.h
+//  SSJBooksParentSelectCell.h
 //  SuiShouJi
 //
 //  Created by ricky on 16/11/10.
@@ -8,12 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-@interface SSJBooksParentSelectCell : UICollectionViewCell
+@interface SSJBooksParentSelectCell : UITableViewCell
 
-@property(nonatomic, strong) NSString *image;
 
-@property(nonatomic, strong) NSString *title;
+@property(nonatomic, strong) UIImageView *arrowImageView;
 
-@property(nonatomic) BOOL isSelected;
+- (void)setImage:(NSString *)imageName title:(NSString *)title;
 
 @end

@@ -108,10 +108,8 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
         NSDate *endDate = [NSDate dateWithString:_budgetModel.endDate formatString:@"yyyy-MM-dd"];
         
         SSJBillingChargeViewController *billingChargeVC = [[SSJBillingChargeViewController alloc] init];
-        billingChargeVC.ID = item.ID;
-        billingChargeVC.color = [UIColor ssj_colorWithHex:item.colorValue];
+        billingChargeVC.billId = item.ID;
         billingChargeVC.period = [SSJDatePeriod datePeriodWithStartDate:beginDate endDate:endDate];
-        billingChargeVC.isMemberCharge = NO;
         [self.navigationController pushViewController:billingChargeVC animated:YES];
     }
 }
@@ -194,7 +192,7 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
             [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:SSJ_ERROR_MESSAGE action:action, nil];
         }];
         
-        if (![self.budgetModel.billIds isEqualToArray:@[@"all"]]) {
+        if (![self.budgetModel.billIds isEqualToArray:@[SSJAllBillTypeId]]) {
             [SSJAnaliyticsManager event:@"budget_part_detail"];
         }
         

@@ -13,7 +13,6 @@
 
 #import "SSJFundingDetailHelper.h"
 #import "SSJFundingDetailListHeaderView.h"
-#import "SSJReportFormsUtil.h"
 #import "SSJCreditCardRepaymentViewController.h"
 #import "SSJDatabaseQueue.h"
 #import "SSJCreditCardStore.h"
@@ -38,6 +37,7 @@
 #import "SSJInstalmentDetailViewController.h"
 #import "SSJBalenceChangeDetailViewController.h"
 #import "SSJNewFundingViewController.h"
+#import "SSJDeleteBooksDetailViewController.h"
 
 #import "FMDB.h"
 
@@ -205,7 +205,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    SSJBaseItem *item;
+    SSJBaseCellItem *item;
     if (indexPath.row >= 1) {
         item = [((SSJFundingDetailListItem *)[self.listItems objectAtIndex:indexPath.section]).chargeArray ssj_safeObjectAtIndex:indexPath.row - 1];
     }
@@ -227,7 +227,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
         SSJFundingDetailCell *cell = [tableView dequeueReusableCellWithIdentifier:kFundingDetailCellID forIndexPath:indexPath];
         cell.item = [((SSJFundingDetailListItem *)[self.listItems objectAtIndex:indexPath.section]).chargeArray objectAtIndex:indexPath.row - 1];
         if (indexPath.row < [[((SSJFundingDetailListItem *)[self.listItems objectAtIndex:indexPath.section]) chargeArray] count]) {
-            SSJBaseItem *nextItem = [((SSJFundingDetailListItem *)[self.listItems objectAtIndex:indexPath.section]).chargeArray ssj_safeObjectAtIndex:indexPath.row];
+            SSJBaseCellItem *nextItem = [((SSJFundingDetailListItem *)[self.listItems objectAtIndex:indexPath.section]).chargeArray ssj_safeObjectAtIndex:indexPath.row];
             if ([nextItem isKindOfClass:[SSJFundingListDayItem class]]) {
                 cell.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);
             } else {
@@ -261,7 +261,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.row > 0) {
-        SSJBaseItem *item = [((SSJFundingDetailListItem *)[self.listItems objectAtIndex:indexPath.section]).chargeArray objectAtIndex:indexPath.row - 1];
+        SSJBaseCellItem *item = [((SSJFundingDetailListItem *)[self.listItems objectAtIndex:indexPath.section]).chargeArray objectAtIndex:indexPath.row - 1];
         if ([item isKindOfClass:[SSJBillingChargeCellItem class]]) {
             SSJBillingChargeCellItem *billingItem = (SSJBillingChargeCellItem *)item;
             if (billingItem.chargeImage.length || billingItem.chargeMemo.length) {
@@ -272,7 +272,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
             return 30;
         }
     }
-    SSJBaseItem *item = [self.listItems ssj_safeObjectAtIndex:indexPath.section];
+    SSJBaseCellItem *item = [self.listItems ssj_safeObjectAtIndex:indexPath.section];
     if ([item isKindOfClass:[SSJCreditCardListDetailItem class]]) {
         return 65;
     }
@@ -281,7 +281,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.row > 0) {
-        SSJBaseItem *item = [((SSJFundingDetailListItem *)[self.listItems objectAtIndex:indexPath.section]).chargeArray objectAtIndex:indexPath.row - 1];
+        SSJBaseCellItem *item = [((SSJFundingDetailListItem *)[self.listItems objectAtIndex:indexPath.section]).chargeArray objectAtIndex:indexPath.row - 1];
         if ([item isKindOfClass:[SSJBillingChargeCellItem class]]) {
             
             SSJBillingChargeCellItem *cellItem = (SSJBillingChargeCellItem *)item;
@@ -317,6 +317,12 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
                     SSJFundingTransferChargeDetailViewController *transferVc = [[SSJFundingTransferChargeDetailViewController alloc] init];
                     transferVc.chargeItem = (SSJBillingChargeCellItem*)item;
                     [self.navigationController pushViewController:transferVc animated:YES];
+                } else if (billId == 13 || billId == 14) {
+                    SSJDeleteBooksDetailViewController *deleteBooksVc = [[SSJDeleteBooksDetailViewController alloc] init];
+                    deleteBooksVc.booksId = ((SSJBillingChargeCellItem*)item).booksId;
+                    deleteBooksVc.fundId = ((SSJBillingChargeCellItem*)item).fundId;
+                    deleteBooksVc.booksName = ((SSJBillingChargeCellItem*)item).chargeMemo;
+                    [self.navigationController pushViewController:deleteBooksVc animated:YES];
                 } else {
                     if (billId != 1 && billId != 2) {
                         SSJCalenderDetailViewController *calenderDetailVC = [[SSJCalenderDetailViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];

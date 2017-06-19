@@ -195,7 +195,7 @@
 - (void)getYearsArray{
     self.years = [NSMutableArray arrayWithCapacity:0];
     for (NSInteger i = self.minimumDate.year; i < self.maxDate.year; i ++) {
-        [self.years addObject:[NSString stringWithFormat:@"%ld",i]];
+        [self.years addObject:[NSString stringWithFormat:@"%ld",(long)i]];
     }
 }
 

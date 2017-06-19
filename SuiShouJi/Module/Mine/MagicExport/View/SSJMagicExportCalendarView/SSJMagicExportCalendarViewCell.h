@@ -18,9 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) NSArray<SSJMagicExportCalendarDateViewItem *> *dateItems;
 
-@property (nonatomic, copy) BOOL(^shouldSelectBlock)(SSJMagicExportCalendarViewCell *, SSJMagicExportCalendarDateView *);
-
-@property (nonatomic, copy) void(^didSelectBlock)(SSJMagicExportCalendarViewCell *, SSJMagicExportCalendarDateView *);
+@property (nonatomic, copy) void(^clickBlock)(SSJMagicExportCalendarViewCell *, SSJMagicExportCalendarDateView *);
 
 @end
 

@@ -85,7 +85,7 @@
     }else if ([item.fundingID isEqualToString:@"3"]){
         SSJNewCreditCardViewController *newCreditCardVc = [[SSJNewCreditCardViewController alloc]init];
         __weak typeof(self) weakSelf = self;
-        newCreditCardVc.addNewCardBlock = ^(SSJBaseItem *newItem){
+        newCreditCardVc.addNewCardBlock = ^(SSJBaseCellItem *newItem){
             if (weakSelf.addNewFundingBlock) {
                 weakSelf.addNewFundingBlock(newItem);
             }

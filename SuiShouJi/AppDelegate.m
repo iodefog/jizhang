@@ -12,6 +12,7 @@
 #import "SSJUserDefaultDataCreater.h"
 #import "SSJUserTableManager.h"
 #import "SSJDataSynchronizer.h"
+#import "SSJDataSynchronizeTask.h"
 #import "SSJDatabaseUpgrader.h"
 #import "SSJRegularManager.h"
 #import "SSJThirdPartyLoginManger.h"
@@ -35,6 +36,7 @@
 #import "SSJStartViewManager.h"
 #import "SSJStartViewManager.h"
 #import <UShareUI/UMSocialUIManager.h>
+#import "SSJShareBooksUrlHandle.h"
 
 //#import "SSJPatchUpdateService.h"
 //#import "SSJJspatchAnalyze.h"
@@ -98,25 +100,21 @@ NSDate *SCYEnterBackgroundTime() {
     
     [MQManager setScheduledAgentWithAgentId:@"" agentGroupId:SSJMQDefualtGroupId scheduleRule:MQScheduleRulesRedirectGroup];
     
-    [self initializeDatabaseWithFinishHandler:^{
-        //  启动时强制同步一次
-        if (SSJIsUserLogined()) {
-            [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
-        }
-        
-        //  开启定时同步
-        [[SSJDataSynchronizer shareInstance] startTimingSync];
-        
-        // 1.7.0之前有每日提醒，此版本后提醒改变了，所以要取消之前所有提醒
-        [[UIApplication sharedApplication] cancelAllLocalNotifications];
-        [SSJRegularManager registerRegularTaskNotification];
-        [SSJLocalNotificationStore queryForreminderListForUserId:SSJUSERID() WithSuccess:^(NSArray<SSJReminderItem *> *result) {
-            for (SSJReminderItem *item in result) {
-                [SSJLocalNotificationHelper registerLocalNotificationWithremindItem:item];
+    [self initUserDataWithFinishHandler:^(BOOL successfull){
+#ifdef DEBUG
+        // 如果要模拟用户登录，就开启此开关，并在simulateUserSync方法传入用户的id
+        BOOL simulateUserSync = NO;
+#else
+        BOOL simulateUserSync = NO;
+#endif
+        if (simulateUserSync) {
+            [SSJDataSynchronizeTask simulateUserSync:@"8ed837fa-2912-4ea3-af19-7762ba7ec563"];
+        } else {
+            [[SSJDataSynchronizer shareInstance] startTimingSync];
+            if (SSJIsUserLogined()) {
+                [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
             }
-        } failure:^(NSError *error) {
-            SSJPRINT(@"警告：同步后注册本地通知失败 error:%@", [error localizedDescription]);
-        }];
+        }
         
         UILocalNotification *notifcation = launchOptions[UIApplicationLaunchOptionsLocalNotificationKey];
         if (notifcation) {
@@ -231,56 +229,61 @@ NSDate *SCYEnterBackgroundTime() {
 }
 
 #pragma mark - Private
-//  初始化数据库
-- (void)initializeDatabaseWithFinishHandler:(void (^)(void))finishHandler {
-    [[NSNotificationCenter defaultCenter] postNotificationName:SSJInitDatabaseDidBeginNotification object:nil];
+// 初始化用户数据
+- (void)initUserDataWithFinishHandler:(void (^)(BOOL successfull))finishHandler {
+    [[NSNotificationCenter defaultCenter] postNotificationName:SSJInitDatabaseDidBeginNotification object:self];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        // 迁移数据库文件
         NSString *dbDocumentPath = SSJSQLitePath();
         SSJPRINT(@"%@", dbDocumentPath);
         
-        NSError *error = nil;
-        
         if (![[NSFileManager defaultManager] fileExistsAtPath:dbDocumentPath]) {
-            //  迁移数据库到document中
+            NSError *error = nil;
             NSString *dbBundlePath = [[NSBundle mainBundle] pathForResource:@"mydatabase" ofType:@"db"];
-            
-            if (![[NSFileManager defaultManager] copyItemAtPath:dbBundlePath toPath:dbDocumentPath error:&error]) {
-                SSJPRINT(@"move database error:%@",[error localizedDescription]);
+            [[NSFileManager defaultManager] copyItemAtPath:dbBundlePath toPath:dbDocumentPath error:&error];
+            if (error) {
+                SSJDispatchMainAsync(^{
+                    finishHandler(NO);
+                });
+                return;
             }
             
-            //  载入用户id
-            [SSJUserTableManager reloadUserIdWithError:nil];
-            
-            //  创建默认的同步表记录
-            [SSJUserDefaultDataCreater createDefaultSyncRecordWithError:nil];
-            
-            //  创建默认的资金账户
-            [SSJUserDefaultDataCreater createDefaultFundAccountsWithError:nil];
-
-        } else {
-            //  升级数据库
-            [SSJDatabaseUpgrader upgradeDatabase];
+            [SSJUserTableManager reloadUserIdWithError:&error];
+            if (error) {
+                SSJDispatchMainAsync(^{
+                    finishHandler(NO);
+                });
+                return;
+            }
         }
-
-        //  创建默认的收支类型
-        [SSJUserDefaultDataCreater createDefaultBillTypesIfNeededWithError:nil];
         
-        //  创建默认的账本
-        [SSJUserDefaultDataCreater createDefaultBooksTypeWithError:nil];
+        NSError *error = [SSJDatabaseUpgrader upgradeDatabase];
+        if (error) {
+            SSJDispatchMainAsync(^{
+                finishHandler(NO);
+            });
+            return;
+        }
         
-        //  创建默认的成员
-        [SSJUserDefaultDataCreater createDefaultMembersWithError:nil];
+        [SSJUserDefaultDataCreater createAllDefaultDataWithUserId:SSJUSERID() error:nil];
         
-        SSJDispatchMainSync(^{
-            [[NSNotificationCenter defaultCenter] postNotificationName:SSJInitDatabaseDidFinishNotification object:nil];
+        // 1.7.0之前有每日提醒，此版本后提醒改变了，所以要取消之前所有提醒
+        [[UIApplication sharedApplication] cancelAllLocalNotifications];
+        [SSJRegularManager registerRegularTaskNotification];
+        [SSJLocalNotificationStore queryForreminderListForUserId:SSJUSERID() WithSuccess:^(NSArray<SSJReminderItem *> *result) {
+            for (SSJReminderItem *item in result) {
+                [SSJLocalNotificationHelper registerLocalNotificationWithremindItem:item];
+            }
+        } failure:^(NSError *error) {
+            SSJPRINT(@"警告：同步后注册本地通知失败 error:%@", [error localizedDescription]);
+        }];
+        
+        SSJDispatchMainAsync(^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:SSJInitDatabaseDidFinishNotification object:self];
+            finishHandler(YES);
         });
-        
-        if (finishHandler) {
-            finishHandler();
-        }
     });
 }
-
 
 // 设置根控制器
 - (void)setRootViewController {
@@ -336,7 +339,8 @@ NSDate *SCYEnterBackgroundTime() {
     [WXApi handleOpenURL:url delegate:[SSJThirdPartyLoginManger shareInstance].weixinLogin];
     //6.3的新的API调用，是为了兼容国外平台(例如:新版facebookSDK,VK等)的调用[如果用6.2的api调用会没有回调],对国内平台没有影响
     BOOL result = [[UMSocialManager defaultManager] handleOpenURL:url sourceApplication:sourceApplication annotation:annotation];
-    if (!result) {
+    if (!result) {  
+        [SSJShareBooksUrlHandle handleOpenURL:url];
         // 其他如支付等SDK的回调
     }
     return result;
@@ -344,13 +348,13 @@ NSDate *SCYEnterBackgroundTime() {
 
 - (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<NSString*, id> *)options {
     return [TencentOAuth HandleOpenURL:url] ||
-    [WXApi handleOpenURL:url delegate:[SSJThirdPartyLoginManger shareInstance].weixinLogin];
+    [WXApi handleOpenURL:url delegate:[SSJThirdPartyLoginManger shareInstance].weixinLogin] || [SSJShareBooksUrlHandle handleOpenURL:url];
 }
 
 
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url{
     return [TencentOAuth HandleOpenURL:url] ||
-    [WXApi handleOpenURL:url delegate:[SSJThirdPartyLoginManger shareInstance].weixinLogin];
+    [WXApi handleOpenURL:url delegate:[SSJThirdPartyLoginManger shareInstance].weixinLogin] || [SSJShareBooksUrlHandle handleOpenURL:url];
 }
 
 #pragma mark - 根据推送的内容跳转不同的页面
@@ -365,42 +369,48 @@ NSDate *SCYEnterBackgroundTime() {
             if (remindItem.remindType == SSJReminderTypeCreditCard) {
                 SSJCreditCardItem *cardItem = [[SSJCreditCardItem alloc]init];
                 if (!remindItem.fundId.length) {
-                    remindItem.fundId = [self getCreditCardIdForRemindId:remindItem.remindId];
+                    [self getCreditCardIdForRemindId:remindItem.remindId Success:^(NSString *cardId) {
+                        remindItem.fundId = cardId;
+                    } failure:NULL];
                 }
                 cardItem.cardId = remindItem.fundId;
                 SSJFundingDetailsViewController *creditCardVc = [[SSJFundingDetailsViewController alloc]init];
                 creditCardVc.item = cardItem;
                 [currentVc.navigationController pushViewController:creditCardVc animated:YES];
             }else if(remindItem.remindType == SSJReminderTypeBorrowing){
-                SSJLoanDetailViewController *loanVc = [[SSJLoanDetailViewController alloc]init];
                 if (!remindItem.fundId.length) {
-                    remindItem.fundId = [self getLoanIdForRemindId:remindItem.remindId];
+                    [self getLoanIdForRemindId:remindItem.remindId Success:^(NSString *cardId) {
+                        remindItem.fundId = cardId;
+                    } failure:NULL];
                 }
-                loanVc.loanID = remindItem.fundId;
-                loanVc.fundColor = [SSJLoanHelper queryForFundColorWithLoanId:remindItem.fundId];
-                [currentVc.navigationController pushViewController:loanVc animated:YES];
+                [SSJLoanHelper queryForFundColorWithLoanId:remindItem.fundId completion:^(NSString * _Nonnull color) {
+                    SSJLoanDetailViewController *loanVc = [[SSJLoanDetailViewController alloc]init];
+                    loanVc.loanID = remindItem.fundId;
+                    loanVc.fundColor = color;
+                    [currentVc.navigationController pushViewController:loanVc animated:YES];
+                }];
             }
         }
     }
-
 }
-
 
 #pragma mark - 获取当前推送的账户id
-- (NSString *)getCreditCardIdForRemindId:(NSString *)remindID{
-    __block NSString *cardId;
-    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
-        cardId = [db stringForQuery:@"select cfundid from bk_user_credit where cremindid = ? and cuserid = ?",remindID,SSJUSERID()];
+- (void)getCreditCardIdForRemindId:(NSString *)remindID Success:(void (^)(NSString *cardId))success failure:(void (^)())failure{
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        NSString *cardId = [db stringForQuery:@"select cfundid from bk_user_credit where cremindid = ? and cuserid = ?",remindID,SSJUSERID()];
+        if (success) {
+            success(cardId);
+        }
     }];
-    return cardId;
 }
 
-- (NSString *)getLoanIdForRemindId:(NSString *)remindID{
-    __block NSString *loanId;
-    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
-        loanId = [db stringForQuery:@"select loanid from bk_loan where cremindid = ? and cuserid = ?",remindID,SSJUSERID()];
+- (void)getLoanIdForRemindId:(NSString *)remindID Success:(void (^)(NSString *cardId))success failure:(void (^)())failure{
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        NSString * loanId = [db stringForQuery:@"select loanid from bk_loan where cremindid = ? and cuserid = ?",remindID,SSJUSERID()];
+        if (success) {
+            success(loanId);
+        }
     }];
-    return loanId;
 }
 
 #pragma mark - 远程通知有关的

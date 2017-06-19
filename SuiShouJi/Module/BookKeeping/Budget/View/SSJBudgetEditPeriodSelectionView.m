@@ -46,7 +46,6 @@ static NSString *kCellID = @"cellID";
 - (void)layoutSubviews {
     self.titleLab.frame = CGRectMake(0, 0, self.width, kTitleHeight);
     self.tableView.frame = CGRectMake(0, kTitleHeight, self.width, kRowHeight * self.titles.count);
-    [self.tableView ssj_relayoutBorder];
 }
 
 - (CGSize)sizeThatFits:(CGSize)size {

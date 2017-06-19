@@ -21,7 +21,11 @@
 #import "SSJUserCreditSyncTable.h"
 #import "SSJCreditRepaymentSyncTable.h"
 #import "SSJTransferCycleSyncTable.h"
-
+#import "SSJUserTable.h"
+#import "SSJShareBooksMemberSyncTable.h"
+#import "SSJShareBooksSyncTable.h"
+#import "SSJShareBooksFriendMarkSyncTable.h"
+#import "SSJBooksTypeStore.h"
 
 #import "SSJSyncTable.h"
 
@@ -29,7 +33,6 @@
 #import "AFNetworking.h"
 #import "SSJFinancingGradientColorItem.h"
 
-#import "SSJUserTableManager.h"
 #import "SSJRegularManager.h"
 
 #import "SSJLoginViewController+SSJCategory.h"
@@ -80,7 +83,10 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
         
         NSSet *thirdLayer = [NSSet setWithObjects:[SSJUserChargePeriodConfigSyncTable class],
                                                   [SSJTransferCycleSyncTable class],
-                                                  [SSJLoanSyncTable class], nil];
+                                                  [SSJLoanSyncTable class],
+                                                  [SSJShareBooksSyncTable class],
+                                                  [SSJShareBooksMemberSyncTable class],
+                                                  [SSJShareBooksFriendMarkSyncTable class], nil];
         
         NSSet *fourthLayer = [NSSet setWithObjects:[SSJUserChargeSyncTable class], nil];
         
@@ -155,7 +161,7 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
             //            SSJPRINT(@">>> SSJ sync response headers:%@", tResponse.allHeaderFields);
             NSString *contentType = tResponse.allHeaderFields[@"Content-Type"];
             
-            //  返回的是json数据格式
+            // 返回的是json数据格式
             if ([contentType isEqualToString:@"text/json;charset=UTF-8"]) {
                 NSDictionary *responseInfo = [NSJSONSerialization JSONObjectWithData:responseObject options:0 error:&tError];
                 NSInteger code = [responseInfo[@"code"] integerValue];
@@ -167,74 +173,70 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
                 if (failure) {
                     failure(tError);
                 }
-                
-                return;
-            }
-            
-            //  返回的是zip压缩包
-            if ([contentType isEqualToString:@"APPLICATION/OCTET-STREAM"]) {
-                
-                //  将数据解压
-                NSError *tError = nil;
-//                NSString *path = [[NSBundle mainBundle]pathForResource:@"sync_data" ofType:@"json" ];
-//                NSData *jsonData = [[NSData alloc] initWithContentsOfFile:path];
-                
-                NSData *jsonData = [self unzipData:responseObject error:&tError];
-                
-                if (tError) {
-                    SSJPRINT(@">>> SSJ warning:an error occured when unzip response data\n error:%@", tError);
-                    if (failure) {
-                        failure(tError);
-                    }
-                    return;
-                }
-                
-                //  解析json数据
-                NSDictionary *tableInfo = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&tError];
-                if (tError) {
-                    SSJPRINT(@">>> SSJ warning:an error occured when parse json data\n error:%@", tError);
-                    if (failure) {
-                        failure(tError);
-                    }
-                    return;
-                }
-                
-                //    SSJPRINT(@">>> sync response data:%@", tableInfo);
-                
-                NSInteger errorCode = [tableInfo[@"code"] integerValue];
-                if (errorCode != 1) {
-                    tError = [NSError errorWithDomain:SSJErrorDomain code:errorCode userInfo:@{NSLocalizedDescriptionKey:tableInfo[@"desc"]}];
-                    SSJPRINT(@">>> SSJ warning:server response an error:%@", tError);
-                    if (failure) {
-                        failure(tError);
-                    }
-                    return;
-                }
-                
-                //  合并数据
-                if (![self mergeData:tableInfo error:&tError]) {
-                    tError = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:[tError localizedDescription]}];
-                    SSJPRINT(@">>> SSJ warning:server response an error:%@", tError);
-                    if (failure) {
-                        failure(tError);
-                    }
-                    return;
-                }
-                
-                [self extraProcessAfterMerge];
-                
-                if (success) {
-                    SSJPRINT(@"<<< --------- SSJ Sync Data Success! --------- >>>");
-                    success();
-                }
                 return;
             }
             
             //  返回未知数据
-            SSJPRINT(@">>> SSJ warning:sync response unknown content type:%@", contentType);
-            tError = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeDataSyncFailed userInfo:@{NSLocalizedDescriptionKey:@"sync response unknown content type"}];
-            if (failure) {
-                failure(tError);
+            if (![contentType isEqualToString:@"APPLICATION/OCTET-STREAM"]) {
+                SSJPRINT(@">>> SSJ warning:sync response unknown content type:%@", contentType);
+                tError = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeDataSyncFailed userInfo:@{NSLocalizedDescriptionKey:@"sync response unknown content type"}];
+                if (failure) {
+                    failure(tError);
+                }
+                return;
+            }
+            
+            
+            //  返回的是zip压缩包
+            //  将数据解压
+            NSError *tError = nil;
+            NSData *jsonData = [self unzipData:responseObject error:&tError];
+            
+            if (tError) {
+                SSJPRINT(@">>> SSJ warning:an error occured when unzip response data\n error:%@", tError);
+                if (failure) {
+                    failure(tError);
+                }
+                return;
+            }
+            
+            //  解析json数据
+            NSDictionary *tableInfo = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&tError];
+            if (tError) {
+                SSJPRINT(@">>> SSJ warning:an error occured when parse json data\n error:%@", tError);
+                if (failure) {
+                    failure(tError);
+                }
+                return;
+            }
+            
+            //    SSJPRINT(@">>> sync response data:%@", tableInfo);
+            
+            NSInteger errorCode = [tableInfo[@"code"] integerValue];
+            if (errorCode != 1) {
+                tError = [NSError errorWithDomain:SSJErrorDomain code:errorCode userInfo:@{NSLocalizedDescriptionKey:tableInfo[@"desc"]}];
+                SSJPRINT(@">>> SSJ warning:server response an error:%@", tError);
+                if (failure) {
+                    failure(tError);
+                }
+                return;
+            }
+            
+            //  合并数据
+            if (![self mergeData:tableInfo error:&tError]) {
+                tError = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:[tError localizedDescription]}];
+                SSJPRINT(@">>> SSJ warning:server response an error:%@", tError);
+                if (failure) {
+                    failure(tError);
+                }
+                return;
+            }
+            
+            [self extraProcessAfterMerge];
+            
+            if (success) {
+                SSJPRINT(@"<<< --------- SSJ Sync Data Success! --------- >>>");
+                success();
             }
         });
     }];
@@ -262,14 +264,7 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
     }];
     
     if (self.userId.length) {
-        SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"nickName", @"signature",@"writeDate"] forUserId:self.userId];
-        [jsonObject setObject:@[@{@"cuserid":self.userId,
-                                  @"crealname":userItem.nickName ?: @"",
-                                  @"usersignature":userItem.signature ?: @"",
-                                  @"cimei":SSJUniqueID(),
-                                  @"isource":SSJDefaultSource(),
-                                  @"operatortype":@1,
-                                  @"cwritedate":userItem.writeDate ?: @""}] forKey:@"bk_user"];
+        [jsonObject setObject:@[[SSJUserTable syncDataWithUserId:self.userId]] forKey:@"bk_user"];
     }
     
     if (*error) {
@@ -371,14 +366,8 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
         if (![userId isEqualToString:self.userId]) {
             continue;
         }
+        [SSJUserTable mergeData:userInfo];
         
-        SSJUserItem *userItem = [[SSJUserItem alloc] init];
-        userItem.userId = userId;
-        userItem.mobileNo = userInfo[@"cmobileno"];
-        userItem.nickName = userInfo[@"crealname"]; // 第三方登录时，服务器返回的crealname就是用户昵称
-        userItem.signature = userInfo[@"usersignature"];
-        userItem.icon = userInfo[@"cicon"];
-        [SSJUserTableManager saveUserItem:userItem];
     }
     
     // 合并顺序：1.收支类型 2.资金账户 3.定期记账 4.记账流水 5.预算
@@ -430,6 +419,24 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
                 [[NSNotificationCenter defaultCenter] postNotificationName:SSJBooksTypeDidChangeNotification object:nil];
             });
         }
+    }];
+    
+    // 如果当前的账本已经被踢,那切换回默认账本
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+        
+        NSString *currentBooksid = [db stringForQuery:@"select ccurrentbooksid from bk_user where cuserid = ?",self.userId];
+        
+        if ([db boolForQuery:@"select count(1) from bk_share_books where cbooksid = ?",currentBooksid]) {
+            
+            NSInteger currentBooksStatus = [db intForQuery:@"select istate from bk_share_books_member where cbooksid = ? and cmemberid = ?",currentBooksid,self.userId];
+            if (currentBooksStatus != SSJShareBooksMemberStateNormal) {
+                [db executeUpdate:@"update bk_user set ccurrentbooksid = ?",self.userId];
+                SSJDispatchMainSync(^{
+                    [[NSNotificationCenter defaultCenter] postNotificationName:SSJBooksTypeDidChangeNotification object:NULL];
+                });
+            }
+        }
+        
     }];
     
     // 合并数据完成后补充周期记账、周期转账、预算；即使补充失败，也不影响同步，在其他时机可以再次补充
@@ -512,7 +519,59 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
             [db executeUpdate:@"update bk_fund_info set cstartcolor = ? , cendcolor = ?, cwritedate = ?, iversion = ?, operatortype = 1 where cfundid = ?",item.startColor,item.endColor,cwriteDate,@(SSJSyncVersion()),fundid];
         }
     }];
+    
+    
+    // 删除已经退出的账本中的share_books,share_books_friends_mark
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+        
+        [db executeUpdate:@"delete from bk_share_books where cbooksid in (select cbooksid from bk_share_books_member where cmemberid = ? and istate != ?)",self.userId,@(SSJShareBooksMemberStateNormal)];
+        
+        [db executeUpdate:@"delete from bk_share_books_friends_mark where cbooksid in (select cbooksid from bk_share_books_member where cmemberid = ? and istate != ?)",self.userId,@(SSJShareBooksMemberStateNormal)];
+    }];
+    
+    
+    // 将一个收支类别的账本补充一套收支类别
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+        NSMutableArray *booksResult = [NSMutableArray arrayWithCapacity:0];
+        
+        FMResultSet *shareBooksResult = [db executeQuery:@"select sb.iparenttype ,ub.cbooksid ,ub.cuserid , count(ub.cbillid) from bk_share_books sb, bk_share_books_member sbm left join bk_user_bill ub on sbm.cbooksid = ub.cbooksid and ub.cuserid = sbm.cmemberid where length(ub.cbillid) < 10 and ub.cuserid = ? and sb.cbooksid = ub.cbooksid group by ub.cbooksid, ub.cuserid having count(ub.cbillid) = 0",self.userId];
+        
+        while ([shareBooksResult next]) {
+            NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithCapacity:0];
+            NSString *booksId = [shareBooksResult stringForColumn:@"cbooksid"];
+            NSInteger parentType = [shareBooksResult intForColumn:@"iparenttype"];
+            [dic setObject:booksId forKey:@"cbooksid"];
+            [dic setObject:@(parentType) forKey:@"iparenttype"];
+            [booksResult addObject:dic];
+        }
+        
+        [shareBooksResult close];
+        
+        FMResultSet *normalBooksResult = [db executeQuery:@"select bt.iparenttype, ub.cbooksid, ub.cuserid, count(ub.cbillid) from bk_books_type bt left join bk_user_bill ub on bt.cbooksid = ub.cbooksid and ub.cuserid = bt.cuserid where length(ub.cbillid) < 10 and ub.cuserid = ? group by ub.cbooksid, ub.cuserid having count(ub.cbillid) = 0",self.userId];
+        
+        while ([normalBooksResult next]) {
+            NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithCapacity:0];
+            NSString *booksId = [normalBooksResult stringForColumn:@"cbooksid"];
+            NSInteger parentType = [normalBooksResult intForColumn:@"iparenttype"];
+            [dic setObject:booksId forKey:@"cbooksid"];
+            [dic setObject:@(parentType) forKey:@"iparenttype"];
+            [booksResult addObject:dic];
+        }
+        
+        [shareBooksResult close];
+        
+        for (NSDictionary *dic in booksResult) {
+            NSString *booksId = [dic objectForKey:@"cbooksid"];
+            NSInteger parentType = [[dic objectForKey:@"iparenttype"] integerValue];
+            SSJBooksTypeItem *item = [[SSJBooksTypeItem alloc] init];
+            item.booksId = booksId;
+            item.booksParent = parentType;
+            [SSJBooksTypeStore generateBooksTypeForBooksItem:item indatabase:db forUserId:self.userId];
+        }
+    }];
+
 }
+
 
 //  将data进行zip压缩
 - (NSData *)zipData:(NSData *)data error:(NSError **)error {
@@ -563,6 +622,98 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
         [[NSFileManager defaultManager] createDirectoryAtPath:directory withIntermediateDirectories:YES attributes:nil error:nil];
     }
     return directory;
+}
+
+@end
+
+#import "SSJDataClearHelper.h"
+
+@implementation SSJDataSynchronizeTask (Simulation)
+
++ (void)simulateUserSync:(NSString *)userId {
+    [[[[[self updateUserId:userId] then:^RACSignal *{
+        return [self pullUserData];
+    }] then:^RACSignal *{
+        return [self mergeUserData];
+    }] then:^RACSignal *{
+        return [self clearSyncVersion];
+    }] subscribeError:^(NSError *error) {
+        SSJDispatchMainAsync(^{
+            [SSJAlertViewAdapter showError:error];
+        });
+    } completed:^{
+        SSJDispatchMainAsync(^{
+            [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@"模拟用户数据成功" action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
+        });
+    }];
+}
+
++ (RACSignal *)updateUserId:(NSString *)userId {
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
+            BOOL successful = YES;
+            if (![db boolForQuery:@"select count(*) from bk_user where cuserid = ?", userId]) {
+                successful = [db executeUpdate:@"insert into bk_user (cuserid, cregisterstate) values (?, 1)", userId];
+                successful = successful && SSJSetUserId(userId) && SSJSaveUserLogined(YES);
+            }
+            
+            if (successful) {
+                [subscriber sendNext:nil];
+                [subscriber sendCompleted];
+            } else {
+                [subscriber sendError:[db lastError]];
+            }
+        }];
+        return nil;
+    }];
+}
+
++ (RACSignal *)pullUserData {
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [SSJDataClearHelper clearLocalDataWithSuccess:^{
+            [subscriber sendNext:nil];
+            [subscriber sendCompleted];
+        } failure:^(NSError *error) {
+            [subscriber sendError:error];
+        }];
+        return nil;
+    }];
+}
+
++ (RACSignal *)clearSyncVersion {
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
+            if ([db executeUpdate:@"delete from bk_sync where cuserid = ?", SSJUSERID()]) {
+                [subscriber sendNext:nil];
+                [subscriber sendCompleted];
+            } else {
+                [subscriber sendError:[db lastError]];
+            }
+        }];
+        return nil;
+    }];
+}
+
++ (RACSignal *)mergeUserData {
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        NSError *error = nil;
+        NSString *path = [[NSBundle mainBundle] pathForResource:@"sync_data" ofType:@"json"];
+        NSData *jsonData = [NSData dataWithContentsOfFile:path];
+        NSDictionary *data = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&error];
+        
+        SSJDataSynchronizeTask *task = [SSJDataSynchronizeTask task];
+        task.userId = SSJUSERID();
+        //  合并数据
+        if ([task mergeData:data error:&error]) {
+            [task extraProcessAfterMerge];
+            [subscriber sendNext:nil];
+            [subscriber sendCompleted];
+        } else {
+            [subscriber sendError:error];
+        }
+        
+        return nil;
+    }];
 }
 
 @end

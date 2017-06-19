@@ -6,12 +6,14 @@
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
 
-#import "SSJBaseItem.h"
+#import "SSJBaseCellItem.h"
 #import "SSJLoanChargeModel.h"
 
-@interface SSJBillingChargeCellItem : SSJBaseItem
+@class SSJChargeMemberItem;
 
-// 图片名称
+@interface SSJBillingChargeCellItem : SSJBaseCellItem
+
+// 收支类别图片名称
 @property (nonatomic, copy) NSString *imageName;
 
 // 收支类型名称
@@ -25,6 +27,9 @@
 
 // 流水id
 @property (nonatomic, copy) NSString *ID;
+
+// 用户id
+@property (nonatomic, copy) NSString *userId;
 
 // 流水类型(1是支出,0是收入)
 @property (nonatomic) BOOL incomeOrExpence;
@@ -65,9 +70,6 @@
 //记账图片(缩略图)
 @property (nonatomic,strong) NSString *chargeThumbImage;
 
-//循环记账配置ID
-@property (nonatomic,strong) NSString *configId;
-
 //账本id
 @property(nonatomic, strong) NSString *booksId;
 
@@ -92,16 +94,13 @@
 @property(nonatomic, strong) NSString *transferSource;
 
 // 成员id
-@property(nonatomic, strong) NSMutableArray *membersItem;
+@property(nonatomic, strong) NSMutableArray<SSJChargeMemberItem *> *membersItem;
 
 // 新增的成员
 @property(nonatomic, strong) NSArray *newlyAddMembers;
 
 //删除的成员
 @property(nonatomic, strong) NSArray *deletedMembers;
-
-//流水对应的借贷id
-@property(nonatomic, strong) NSString *loanId;
 
 //借贷产生的流水类型
 @property(nonatomic) SSJLoanCompoundChargeType loanChargeType;
@@ -120,5 +119,8 @@
 
 //杂项id(周期记账,借贷,还款id)根据上面的type来判断
 @property(nonatomic, strong) NSString *sundryId;
+
+// 共享账本中,用户昵称
+@property(nonatomic, strong) NSString *memberNickname;
 
 @end

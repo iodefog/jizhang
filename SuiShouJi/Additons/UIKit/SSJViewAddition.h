@@ -66,8 +66,6 @@
 
 @interface UIView (SSJBorder)
 
-@property (nonatomic, readonly, getter=ssj_borderLayer) SSJBorderLayer *borderLayer;
-
 @property (nonatomic, getter=ssj_cornerStyle, setter=ssj_setCornerStyle:) UIRectCorner cornerStyle;
 
 @property (nonatomic, getter=ssj_cornerRadius, setter=ssj_setCornerRadius:) CGFloat cornerRadius;
@@ -95,9 +93,6 @@
 
 //  边框线内凹
 - (UIEdgeInsets)ssj_borderInsets;
-
-//  重新布局边框线，如果在设置了边框线之后view的大小发生变化，需要调用此方法
-- (void)ssj_relayoutBorder;
 
 @end
 

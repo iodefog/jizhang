@@ -52,14 +52,30 @@ static const CGFloat imageDiam = 26;
     
     self.memberNameLabel.leftTop = CGPointMake(10, (self.contentView.height - imageDiam) * 0.5);
     
-    self.textLabel.left = self.imageView.right + 10;
-    
-    self.percentLabel.centerX = self.width * 0.5;
-    self.percentLabel.centerY = self.contentView.height * 0.5;
-    
-    self.moneyLabel.size = CGSizeMake(self.contentView.width * 0.3, self.contentView.height);
-    self.moneyLabel.right = self.contentView.width;
-//    self.moneyLabel.centerY = self.contentView.height * 0.5;
+    if (self.percentLabel.hidden) {
+        [self.textLabel sizeToFit];
+        self.textLabel.left = 46;
+        self.textLabel.centerY = self.contentView.height * 0.5;
+        
+        [self.moneyLabel sizeToFit];
+        self.moneyLabel.left = self.textLabel.right + 10;
+        self.moneyLabel.width = self.contentView.width - self.moneyLabel.left;
+        self.moneyLabel.centerY = self.contentView.height * 0.5;
+    } else {
+        [self.percentLabel sizeToFit];
+        self.percentLabel.centerX = self.width * 0.5;
+        self.percentLabel.centerY = self.contentView.height * 0.5;
+        
+        [self.textLabel sizeToFit];
+        self.textLabel.left = 46;
+        self.textLabel.width = self.percentLabel.left - self.textLabel.left - 10;
+        self.textLabel.centerY = self.contentView.height * 0.5;
+        
+        [self.moneyLabel sizeToFit];
+        self.moneyLabel.left = self.percentLabel.right + 10;
+        self.moneyLabel.width = self.contentView.width - self.moneyLabel.left;
+        self.moneyLabel.centerY = self.contentView.height * 0.5;
+    }
 }
 
 - (void)updateCellAppearanceAfterThemeChanged {
@@ -67,7 +83,7 @@ static const CGFloat imageDiam = 26;
     self.textLabel.textColor = _percentLabel.textColor = _moneyLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
 }
 
-- (void)setCellItem:(SSJBaseItem *)cellItem {
+- (void)setCellItem:(SSJBaseCellItem *)cellItem {
     if (cellItem) {
         SSJReportFormsItem *item = (SSJReportFormsItem *)cellItem;
         
@@ -78,8 +94,8 @@ static const CGFloat imageDiam = 26;
             self.memberNameLabel.layer.borderColor = [UIColor ssj_colorWithHex:item.colorValue].CGColor;
             self.memberNameLabel.textColor = [UIColor ssj_colorWithHex:item.colorValue];
         } else {
-            self.memberNameLabel.hidden = YES;
             self.imageView.hidden = NO;
+            self.memberNameLabel.hidden = YES;
             self.imageView.image = [[UIImage imageNamed:item.imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             self.imageView.tintColor = [UIColor ssj_colorWithHex:item.colorValue];
             self.imageView.layer.borderColor = [UIColor ssj_colorWithHex:item.colorValue].CGColor;
@@ -89,9 +105,7 @@ static const CGFloat imageDiam = 26;
         self.percentLabel.text = [NSString stringWithFormat:@"%.1f％",item.scale * 100];
         self.moneyLabel.text = [NSString stringWithFormat:@"%.2f",item.money];
         
-        [self.percentLabel sizeToFit];
         self.percentLabel.hidden = item.percentHiden;
-//        [self.moneyLabel sizeToFit];
         
         [self setNeedsLayout];
     }

@@ -6,9 +6,9 @@
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
 
-#import "SSJBaseItem.h"
+#import "SSJBaseCellItem.h"
 
-@interface SSJReportFormsNoDataCellItem : SSJBaseItem
+@interface SSJReportFormsNoDataCellItem : SSJBaseCellItem
 
 @property (nonatomic, copy) NSString *remindDesc;
 

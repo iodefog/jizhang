@@ -41,7 +41,7 @@
     if (self.detailTextLabel.text) {
         CGFloat verticalGap = (self.contentView.height - self.textLabel.height - self.detailTextLabel.height) * 0.33;
         
-        self.imageView.left = 10;
+        self.imageView.left = 15;
         self.imageView.top = verticalGap;
         
         self.textLabel.left = self.imageView.right + 10;
@@ -51,16 +51,16 @@
         self.detailTextLabel.top = self.textLabel.bottom + verticalGap;
         self.detailTextLabel.width = MIN(self.detailTextLabel.width, self.contentView.width - self.detailTextLabel.left - 10);
         
-        self.textField.frame = CGRectMake(self.contentView.width * 0.5 - 10, 0, self.contentView.width * 0.5, self.detailTextLabel.top);
+        self.textField.frame = CGRectMake(self.contentView.width * 0.5 - 15, 0, self.contentView.width * 0.5, self.detailTextLabel.top);
         
     } else {
-        self.imageView.left = 10;
+        self.imageView.left = 15;
         self.imageView.centerY = self.contentView.height * 0.5;
         
         self.textLabel.left = self.imageView.right + 10;
         self.textLabel.centerY = self.contentView.height * 0.5;
         
-        self.textField.frame = CGRectMake(self.contentView.width * 0.5 - 10, 0, self.contentView.width * 0.5, self.contentView.height);
+        self.textField.frame = CGRectMake(self.contentView.width * 0.5 - 15, 0, self.contentView.width * 0.5, self.contentView.height);
     }
 }
 

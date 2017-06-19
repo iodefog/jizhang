@@ -10,17 +10,29 @@
 #import <YYKeyboardManager/YYKeyboardManager.h>
 
 @interface SSJNickNameModifyView()<YYKeyboardObserver>
+
 @property(nonatomic, strong) NSString *title;
+
 @property(nonatomic) int maxLength;
+
 @property(nonatomic, strong) UIView *titleView;
+
 @property(nonatomic, strong) UIView *bottomView;
+
 @property(nonatomic, strong) UIButton *comfirmButton;
+
 @property(nonatomic, strong) UIButton *cancelButton;
+
 @property(nonatomic, strong) UILabel *titleLabel;
+
 @property(nonatomic, strong) UITextView *textInput;
+
 @property(nonatomic, strong) UILabel *textLengthLabel;
+
 @property (nonatomic,strong) UIView *backView;
+
 @end
+
 @implementation SSJNickNameModifyView
 
 - (instancetype)initWithFrame:(CGRect)frame maxTextLength:(int)maxTextLength title:(NSString *)title
@@ -29,26 +41,29 @@
     if (self) {
         self.title = title;
         self.maxLength = maxTextLength;
-        self.backgroundColor = [UIColor whiteColor];
-        [self addSubview:self.titleView];
-        [self.titleView addSubview:self.titleLabel];
+        self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainFillColor];
+        [self addSubview:self.titleLabel];
         [self addSubview:self.textInput];
         [self addSubview:self.textLengthLabel];
-        [self addSubview:self.bottomView];
-        [self.bottomView addSubview:self.comfirmButton];
-        [self.bottomView addSubview:self.cancelButton];
+        [self addSubview:self.comfirmButton];
+        [self addSubview:self.cancelButton];
         [[YYKeyboardManager defaultManager] addObserver:self];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCellAppearanceAfterThemeChanged) name:SSJThemeDidChangeNotification object:nil];
+
         [self sizeToFit];
+        [self setNeedsUpdateConstraints];
     }
     return self;
 }
 
 -(void)dealloc{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [[YYKeyboardManager defaultManager] removeObserver:self];
 }
 
 -(CGSize)sizeThatFits:(CGSize)size{
-    return CGSizeMake([UIApplication sharedApplication].keyWindow.width - 20, 200);
+    return CGSizeMake([UIApplication sharedApplication].keyWindow.width - 20, 180);
 }
 
 - (void)show {
@@ -86,27 +101,40 @@
     } timeInterval:0.25 fininshed:NULL];
 }
 
-
--(void)layoutSubviews{
-    [super layoutSubviews];
-    self.titleView.size = CGSizeMake(self.width, 49);
-    self.titleView.leftTop = CGPointMake(0, 0);
-    self.titleView.centerX = self.width / 2;
-    self.titleLabel.center = CGPointMake(self.titleView.width / 2, self.titleView.height / 2);
-    self.textInput.size = CGSizeMake(self.width - 20, 49);
-    self.textInput.top = self.titleView.bottom + 10;
-    self.textInput.centerX = self.width / 2;
-    self.textLengthLabel.right = self.textInput.right;
-    self.textLengthLabel.top = self.textInput.bottom + 15;
-    self.bottomView.size = CGSizeMake(self.width, 50);
-    self.bottomView.rightBottom = CGPointMake(0, self.height);
-    self.bottomView.centerX = self.width / 2;
-    self.comfirmButton.size = CGSizeMake(55, 27);
-    self.comfirmButton.right = self.textInput.right;
-    self.comfirmButton.centerY = self.bottomView.height / 2;
-    self.cancelButton.size = CGSizeMake(55, 27);
-    self.cancelButton.right = self.comfirmButton.left - 20;
-    self.cancelButton.centerY = self.bottomView.height / 2;
+- (void)updateConstraints {
+    [self.titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.width.mas_equalTo(self);
+        make.height.mas_equalTo(42);
+        make.left.top.mas_equalTo(self);
+    }];
+    
+    [self.textInput mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(self.titleLabel.mas_bottom);
+        make.width.mas_equalTo(self);
+        make.height.mas_equalTo(80);
+        make.left.mas_equalTo(self);
+    }];
+    
+    [self.textLengthLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.bottom.mas_equalTo(self.textInput.mas_bottom).offset(- 9);
+        make.right.mas_equalTo(self.textInput.mas_right).offset(- 15);
+    }];
+    
+    [self.comfirmButton mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.bottom.mas_equalTo(self.mas_bottom);
+        make.right.mas_equalTo(self.mas_right);
+        make.width.mas_equalTo(self.mas_width).multipliedBy(0.5);
+        make.height.mas_equalTo(53);
+    }];
+    
+    [self.cancelButton mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.bottom.mas_equalTo(self.mas_bottom);
+        make.left.mas_equalTo(self.mas_left);
+        make.width.mas_equalTo(self.mas_width).multipliedBy(0.5);
+        make.height.mas_equalTo(53);
+    }];
+    
+    [super updateConstraints];
 }
 
 #pragma mark - UITextViewDelegate
@@ -126,7 +154,7 @@
 
 - (void)textViewDidChange:(UITextView *)textView
 {
-    self.textLengthLabel.text = [NSString stringWithFormat:@"剩余%lu个字",self.maxLength - textView.text.length];
+    self.textLengthLabel.text = [NSString stringWithFormat:@"剩余%d个字",self.maxLength - (int)textView.text.length];
     [self.textLengthLabel sizeToFit];
     if (textView.text.length >= self.maxLength) {
         textView.text = [textView.text substringToIndex:self.maxLength];
@@ -151,8 +179,12 @@
 -(UILabel *)titleLabel{
     if (!_titleLabel) {
         _titleLabel = [[UILabel alloc]init];
-        _titleLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
-        _titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_7];
+        _titleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+        [_titleLabel ssj_setBorderStyle:SSJBorderStyleBottom];
+        [_titleLabel ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
+        [_titleLabel ssj_setBorderWidth:1];
+        _titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
+        _titleLabel.textAlignment = NSTextAlignmentCenter;
         _titleLabel.text = self.title;
         [_titleLabel sizeToFit];
     }
@@ -162,9 +194,12 @@
 -(UITextView *)textInput{
     if (!_textInput) {
         _textInput = [[UITextView alloc]init];
-        _textInput.textColor = [UIColor ssj_colorWithHex:@"393939"];
+        _textInput.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _textInput.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
+        [_textInput ssj_setBorderStyle:SSJBorderStyleBottom];
+        [_textInput ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor]];
         _textInput.delegate = self;
+        _textInput.backgroundColor = [UIColor clearColor];
         _textInput.autocorrectionType = UITextAutocorrectionTypeNo;
     }
     return _textInput;
@@ -173,7 +208,7 @@
 -(UILabel *)textLengthLabel{
     if (!_textLengthLabel) {
         _textLengthLabel = [[UILabel alloc]init];
-        _textLengthLabel.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
+        _textLengthLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _textLengthLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_5];
         _textLengthLabel.text = [NSString stringWithFormat:@"剩余%d个字",self.maxLength];
         [_textLengthLabel sizeToFit];
@@ -181,36 +216,11 @@
     return _textLengthLabel;
 }
 
--(UIView *)titleView{
-    if (!_titleView) {
-        _titleView = [[UIView alloc]init];
-        _titleView.backgroundColor = [UIColor ssj_colorWithHex:@"f6f6f6"];
-        [_titleView ssj_setBorderColor:SSJ_DEFAULT_SEPARATOR_COLOR];
-        [_titleView ssj_setBorderStyle:SSJBorderStyleBottom];
-        [_titleView ssj_setBorderWidth:1.0f / [UIScreen mainScreen].scale];
-    }
-    return _titleView;
-}
-
--(UIView *)bottomView{
-    if (!_bottomView) {
-        _bottomView = [[UIView alloc]init];
-        _bottomView.backgroundColor = [UIColor ssj_colorWithHex:@"f6f6f6"];
-        [_bottomView ssj_setBorderColor:SSJ_DEFAULT_SEPARATOR_COLOR];
-        [_bottomView ssj_setBorderStyle:SSJBorderStyleTop];
-        [_bottomView ssj_setBorderWidth:1.0f / [UIScreen mainScreen].scale];
-    }
-    return _bottomView;
-}
-
 -(UIButton *)comfirmButton{
     if (!_comfirmButton) {
         _comfirmButton = [[UIButton alloc]init];
         [_comfirmButton setTitle:@"确定" forState:UIControlStateNormal];
-        [_comfirmButton setTitleColor:[UIColor ssj_colorWithHex:@"eb4a64"] forState:UIControlStateNormal];
-        _comfirmButton.layer.cornerRadius = 3.0f;
-        _comfirmButton.layer.borderColor = [UIColor ssj_colorWithHex:@"eb4a64"].CGColor;
-        _comfirmButton.layer.borderWidth = 1.f / [UIScreen mainScreen].scale;
+        [_comfirmButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] forState:UIControlStateNormal];
         [_comfirmButton addTarget:self action:@selector(comfirmButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _comfirmButton;
@@ -220,10 +230,10 @@
     if (!_cancelButton) {
         _cancelButton = [[UIButton alloc]init];
         [_cancelButton setTitle:@"取消" forState:UIControlStateNormal];
-        [_cancelButton setTitleColor:[UIColor ssj_colorWithHex:@"cccccc"] forState:UIControlStateNormal];
-        _cancelButton.layer.cornerRadius = 3.0f;
-        _cancelButton.layer.borderColor = [UIColor ssj_colorWithHex:@"cccccc"].CGColor;
-        _cancelButton.layer.borderWidth = 1.f / [UIScreen mainScreen].scale;
+        [_cancelButton ssj_setBorderStyle:SSJBorderStyleRight];
+        [_cancelButton ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor]];
+        
+        [_cancelButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] forState:UIControlStateNormal];
         [_cancelButton addTarget:self action:@selector(cancelButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _cancelButton;
@@ -247,8 +257,18 @@
         return;
     }
     self.textInput.text = originalText;
-    self.textLengthLabel.text = [NSString stringWithFormat:@"剩余%lu个字",self.maxLength - _originalText.length];
+    self.textLengthLabel.text = [NSString stringWithFormat:@"剩余%d个字",self.maxLength - (int)_originalText.length];
     [self.textLengthLabel sizeToFit];
+}
+
+- (void)updateCellAppearanceAfterThemeChanged {
+    [_titleLabel ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
+    _titleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    [_textInput ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor]];
+    _textInput.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    _textLengthLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    [_comfirmButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] forState:UIControlStateNormal];
+    [_cancelButton ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor]];
 }
 
 /*

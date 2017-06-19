@@ -1,6 +1,7 @@
-platform :ios, '7.0'
+platform :ios, '8.0'
 
 inhibit_all_warnings!
+#use_frameworks!
 
 def shared_pods
     pod 'AFNetworking', '~> 2.5.4'
@@ -15,6 +16,7 @@ def shared_pods
     pod 'SDWebImage/WebP'
     pod 'MJExtension'
     pod 'UMengAnalytics'
+    pod 'lottie-ios'
 #    pod 'FMDB'
     pod 'DateTools'
     pod 'ZYCornerRadius', '~> 0.5.1'
@@ -22,7 +24,7 @@ def shared_pods
     pod 'SSZipArchive'
     pod 'GTSDK'
     pod 'Masonry'
-    pod 'ReactiveCocoa'
+    pod 'ReactiveCocoa', '~> 2.1.2'
     pod 'UMengUShare/UI'
     # 集成新浪微博
     pod 'UMengUShare/Social/Sina'
@@ -31,7 +33,9 @@ def shared_pods
     pod 'UMengUShare/Social/WeChat'
     
     # 集成QQ
-    pod 'UMengUShare/Social/QQ'
+    pod 'UMengUShare/Social/QQ', '~> 6.3.0'
+    
+    pod 'YYWebImage'
 
 end
 

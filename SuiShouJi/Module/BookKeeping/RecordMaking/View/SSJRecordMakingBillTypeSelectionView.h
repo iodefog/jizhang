@@ -36,4 +36,6 @@
 
 - (void)scrollToSelectedItem;
 
+- (SSJRecordMakingBillTypeSelectionCellItem *)selectedItem;
+
 @end

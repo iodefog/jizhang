@@ -19,7 +19,6 @@
              @"imoney",
              @"ibillid",
              @"ifunsid",
-             @"cadddate",
              @"ioldmoney",
              @"ibalance",
              @"cbilldate",
@@ -43,7 +42,7 @@
 
 + (BOOL)shouldMergeRecord:(NSDictionary *)record forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError *__autoreleasing *)error {
     
-    if ([record[@"ichargetype"] integerValue] > SSJChargeIdTypeCyclicTransfer) {
+    if ([record[@"ichargetype"] integerValue] > SSJChargeIdTypeShareBooks) {
         return NO;
     }
     
@@ -56,18 +55,6 @@
             *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"ibillid and fundId in record must not be nil"}];
         }
         SSJPRINT(@">>> SSJ warning: ibillid and fundId in record must not be nil \n record:%@", record);
-        return NO;
-    }
-    
-    //  如果此流水不依赖于特殊收支类型（istate等于2），还要从user_bill表中查询是否有此类型(因为user_bill中没有特殊收支类型)
-    if ([db intForQuery:@"select istate from bk_bill_type where id = ?", billId] != 2) {
-        if (![db boolForQuery:@"select count(*) from bk_user_bill where cuserid = ? and cbillid = ?", userId, billId]) {
-            return NO;
-        }
-    }
-    
-    //  查询fund_info中是否有对应的资金账户
-    if (![db boolForQuery:@"select count(*) from bk_fund_info where cuserid = ? and cfundid = ?", userId, fundId]) {
         return NO;
     }
     
@@ -105,6 +92,114 @@
         }
     }
     
+    return YES;
+}
+
++ (BOOL)mergeRecords:(NSArray *)records forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
+    for (NSDictionary *recordInfo in records) {
+        
+        NSMutableArray *quitBooksArr = [NSMutableArray arrayWithCapacity:0];
+        
+        FMResultSet *quitBooksResult = [db executeQuery:@"select cbooksid from bk_share_books_member where cmemberid = ? and istate != ?", userId, @(SSJShareBooksMemberStateNormal)];
+        
+        while ([quitBooksResult next]) {
+            NSString *quitBookId = [quitBooksResult stringForColumn:@"cbooksid"];
+            [quitBooksArr addObject:quitBookId];
+        }
+
+        
+        FMResultSet *resultSet = [db executeQuery:@"select operatortype from bk_user_charge where ichargeid = ?", recordInfo[@"ichargeid"]];
+        
+        if (!resultSet) {
+            if (error) {
+                *error = [db lastError];
+            }
+            return NO;
+        }
+        
+        
+        if (![self shouldMergeRecord:recordInfo forUserId:userId inDatabase:db error:error]) {
+            if (error && *error) {
+                return NO;
+            }
+            continue;
+        }
+        
+        // 0添加  1修改  2删除
+        int opertoryValue = [recordInfo[@"operatortype"] intValue];
+
+        NSMutableDictionary *mergeRecord = [NSMutableDictionary dictionary];
+        
+        BOOL isExisted = NO;
+        
+        int localOperatorType = 0;
+        
+        NSString *statement = nil;
+        
+        while ([resultSet next]) {
+            isExisted = YES;
+            localOperatorType = [resultSet intForColumn:@"operatortype"];
+        }
+        
+        if (isExisted) {
+            if (localOperatorType == 2) {
+                continue;
+            }
+            
+            NSMutableString *condition = [NSMutableString stringWithFormat:@"ichargeid = '%@'",recordInfo[@"ichargeid"]];
+            
+            if (opertoryValue == 0 || opertoryValue == 1) {
+                [condition appendFormat:@" and cwritedate < '%@'", recordInfo[@"cwritedate"]];
+            }
+            
+            int chargeType = [recordInfo[@"ichargetype"] intValue];
+            
+            NSMutableArray *keyValues = [NSMutableArray arrayWithCapacity:recordInfo.count];
+            [recordInfo enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+                if ([[self columns] containsObject:key]) {
+                    [keyValues addObject:[NSString stringWithFormat:@"%@ = :%@", key, key]];
+                    [mergeRecord setObject:obj forKey:key];
+                }
+            }];
+            NSString *keyValuesStr = [keyValues componentsJoinedByString:@", "];
+
+            
+            if (chargeType == SSJChargeIdTypeShareBooks) {
+                if ([quitBooksArr containsObject:recordInfo[@"cbooksid"]] || ![recordInfo[@"cuserid"] isEqualToString:userId]) {
+                    statement = [NSString stringWithFormat:@"update bk_user_charge set %@ where ichargeid = '%@'",keyValuesStr, recordInfo[@"ichargeid"]];
+                } else {
+                    statement = [NSString stringWithFormat:@"update bk_user_charge set %@ where %@",keyValuesStr,  condition];
+                }
+            } else {
+                statement = [NSString stringWithFormat:@"update bk_user_charge set %@ where %@",keyValuesStr, condition];
+            }
+        } else {
+            NSMutableArray *columns = [NSMutableArray arrayWithCapacity:[recordInfo count]];
+            NSMutableArray *values = [NSMutableArray arrayWithCapacity:[recordInfo count]];
+            [recordInfo enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+                if ([[self columns] containsObject:key]) {
+                    [columns addObject:key];
+                    [values addObject:[NSString stringWithFormat:@":%@", key]];
+                    [mergeRecord setObject:obj forKey:key];
+                }
+            }];
+            
+            NSString *columnsStr = [columns componentsJoinedByString:@", "];
+            NSString *valuesStr = [values componentsJoinedByString:@", "];
+            
+            statement = [NSString stringWithFormat:@"insert into %@ (%@) values (%@)", [self tableName], columnsStr, valuesStr];
+        }
+        
+        BOOL success = [db executeUpdate:statement withParameterDictionary:mergeRecord];
+        if (!success) {
+            if (error) {
+                *error = [db lastError];
+            }
+            return NO;
+        }
+
+        
+    }
     return YES;
 }
 

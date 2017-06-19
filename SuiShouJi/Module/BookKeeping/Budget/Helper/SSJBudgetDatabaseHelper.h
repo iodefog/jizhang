@@ -163,7 +163,9 @@ extern NSString *const SSJBudgetConflictBudgetModelKey;
                  success:(void(^)())success
                  failure:(void (^)(NSError *error))failure;
 
-+ (NSString *)queryBookNameForBookId:(NSString *)ID;
++ (void)queryBookNameForBookId:(NSString *)ID
+                       success:(void(^)(NSString *bookName))success
+                       failure:(void(^)(NSError *error))failure;
 
 /**
  *  查询支出类别列表

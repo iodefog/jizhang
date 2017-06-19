@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -34,7 +34,7 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fJt-9t-7bo">
-                    <rect key="frame" x="50" y="278" width="80" height="34"/>
+                    <rect key="frame" x="50" y="248" width="80" height="34"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="80" id="UP1-wr-DUH"/>
                         <constraint firstAttribute="height" constant="34" id="wLC-nz-Qbk"/>
@@ -47,7 +47,7 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5BL-WW-bPL">
-                    <rect key="frame" x="177" y="278" width="80" height="34"/>
+                    <rect key="frame" x="177" y="248" width="80" height="34"/>
                     <color key="backgroundColor" red="0.92156862745098034" green="0.29019607843137252" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="34" id="4Cq-mQ-jxj"/>
@@ -70,7 +70,7 @@
                 <constraint firstItem="day-e2-xIH" firstAttribute="top" secondItem="2lc-EN-isa" secondAttribute="top" id="iZP-JW-KHS"/>
                 <constraint firstItem="5BL-WW-bPL" firstAttribute="trailing" secondItem="2lc-EN-isa" secondAttribute="trailing" constant="-40" id="kjZ-fH-hCS"/>
                 <constraint firstItem="fJt-9t-7bo" firstAttribute="leading" secondItem="2lc-EN-isa" secondAttribute="leading" constant="40" id="okP-MT-ZDK"/>
-                <constraint firstItem="fJt-9t-7bo" firstAttribute="bottom" secondItem="2lc-EN-isa" secondAttribute="bottom" constant="-15" id="rzd-yY-cj8"/>
+                <constraint firstItem="fJt-9t-7bo" firstAttribute="bottom" secondItem="2lc-EN-isa" secondAttribute="bottom" constant="-45" id="rzd-yY-cj8"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>

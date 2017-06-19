@@ -14,9 +14,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface SSJBookkeepingTreeStore : NSObject
 
-+ (nullable SSJBookkeepingTreeCheckInModel *)queryCheckInInfoWithUserId:(NSString *)userId error:(NSError **)error;
++ (void)queryCheckInInfoWithUserId:(NSString *)userId success:(void(^)(SSJBookkeepingTreeCheckInModel *model))success failure:(nullable void(^)(NSError *error))failure;
 
-+ (BOOL)saveCheckInModel:(SSJBookkeepingTreeCheckInModel *)model error:(NSError **)error;
++ (void)saveCheckInModel:(SSJBookkeepingTreeCheckInModel *)model success:(nullable void(^)())success failure:(nullable void(^)(NSError *error))failure;
 
 @end
 

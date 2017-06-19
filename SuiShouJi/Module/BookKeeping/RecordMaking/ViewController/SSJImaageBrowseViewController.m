@@ -7,6 +7,7 @@
 //
 
 #import "SSJImaageBrowseViewController.h"
+#import "SSJNavigationController.h"
 
 @interface SSJImaageBrowseViewController ()
 @property (nonatomic,strong) UIButton *changeImageButton;
@@ -29,6 +30,7 @@
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.hidesBottomBarWhenPushed = YES;
         self.appliesTheme = NO;
+        self.hidesNavigationBarWhenPushed = YES;
     }
     return self;
 }
@@ -50,7 +52,6 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    [[UIApplication sharedApplication] setStatusBarHidden:YES];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
     UIBarButtonItem *leftItem = [[UIBarButtonItem alloc]initWithCustomView:self.leftButtonView];
     self.navigationItem.leftBarButtonItem = leftItem;
@@ -72,12 +73,10 @@
     self.moneyLabel.leftTop = CGPointMake(10, self.bottomBackGroundView.top + 10);
     self.memoLabel.leftTop = CGPointMake(10, self.moneyLabel.bottom + 10);
     self.dateLabel.rightTop = CGPointMake(self.view.width - 10, self.bottomBackGroundView.top + 10);
-
 }
 
--(void)viewWillDisappear:(BOOL)animated{
-    [super viewWillDisappear:animated];
-    [[UIApplication sharedApplication] setStatusBarHidden:NO];
+- (BOOL)prefersStatusBarHidden {
+    return YES;
 }
 
 #pragma mark - Getter
@@ -201,32 +200,18 @@
         }
         self.dateLabel.text = _item.billDate;
         [self.dateLabel sizeToFit];
-        if (self.item.chargeImage.length != 0) {
-            if ([[NSFileManager defaultManager] fileExistsAtPath:SSJImagePath(self.item.chargeImage)]) {
-                UIImage *image = [UIImage imageWithContentsOfFile:SSJImagePath(self.item.chargeImage)];
-                self.imageBrowser.image = image;
+    }
+    
+    if (self.item.chargeImage.length != 0) {
+        if ([[NSFileManager defaultManager] fileExistsAtPath:SSJImagePath(self.item.chargeImage)]) {
+            UIImage *image = [UIImage imageWithContentsOfFile:SSJImagePath(self.item.chargeImage)];
+            self.imageBrowser.image = image;
+            [self updateImageSize];
+        }else{
+            [self.imageBrowser sd_setImageWithURL:[NSURL URLWithString:SSJGetChargeImageUrl(self.item.chargeImage)] placeholderImage:nil options:(SDWebImageProgressiveDownload | SDWebImageAllowInvalidSSLCertificates) completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                 [self updateImageSize];
-            }else{
-                [self.imageBrowser sd_setImageWithURL:[NSURL URLWithString:SSJGetChargeImageUrl(self.item.chargeImage)] placeholderImage:nil options:(SDWebImageProgressiveDownload | SDWebImageAllowInvalidSSLCertificates) completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-                    [self updateImageSize];
-                }];
-            }
+            }];
         }
-        
-    }else{
-        if (self.item.chargeImage.length != 0) {
-            if ([[NSFileManager defaultManager] fileExistsAtPath:SSJImagePath(self.item.chargeImage)]) {
-                UIImage *image = [UIImage imageWithContentsOfFile:SSJImagePath(self.item.chargeImage)];
-                self.imageBrowser.image = image;
-                [self updateImageSize];
-            }else{
-                [self.imageBrowser sd_setImageWithURL:[NSURL URLWithString:SSJGetChargeImageUrl(self.item.chargeImage)] placeholderImage:nil options:(SDWebImageProgressiveDownload | SDWebImageAllowInvalidSSLCertificates) completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-                    [self updateImageSize];
-                }];
-            }
-
-        }
-        
     }
 }
 

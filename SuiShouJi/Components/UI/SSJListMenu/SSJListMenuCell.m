@@ -16,6 +16,8 @@
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+        self.appliesTheme = NO;
+        self.contentView.backgroundColor = [UIColor clearColor];
         self.textLabel.backgroundColor = [UIColor clearColor];
         self.textLabel.adjustsFontSizeToFitWidth = YES;
     }
@@ -88,7 +90,7 @@
     self.imageView.centerY = self.textLabel.centerY = CGRectGetMidY(contentFrame);
 }
 
-- (void)setCellItem:(SSJBaseItem *)cellItem {
+- (void)setCellItem:(SSJBaseCellItem *)cellItem {
     if (![cellItem isKindOfClass:[SSJListMenuCellItem class]]) {
         return;
     }
@@ -111,6 +113,7 @@
     self.textLabel.text = item.title;
     self.textLabel.textColor = item.titleColor;
     self.textLabel.font = item.titleFont;
+    self.backgroundColor = item.backgroundColor;
     
     [self setNeedsLayout];
 }
@@ -120,6 +123,7 @@
     [self.cellItem addObserver:self forKeyPath:@"title" options:NSKeyValueObservingOptionNew context:NULL];
     [self.cellItem addObserver:self forKeyPath:@"titleColor" options:NSKeyValueObservingOptionNew context:NULL];
     [self.cellItem addObserver:self forKeyPath:@"imageColor" options:NSKeyValueObservingOptionNew context:NULL];
+    [self.cellItem addObserver:self forKeyPath:@"backgroundColor" options:NSKeyValueObservingOptionNew context:NULL];
 }
 
 - (void)removeObserver {
@@ -127,6 +131,7 @@
     [self.cellItem removeObserver:self forKeyPath:@"title"];
     [self.cellItem removeObserver:self forKeyPath:@"titleColor"];
     [self.cellItem removeObserver:self forKeyPath:@"imageColor"];
+    [self.cellItem removeObserver:self forKeyPath:@"backgroundColor"];
 }
 
 - (void)observeValueForKeyPath:(nullable NSString *)keyPath ofObject:(nullable id)object change:(nullable NSDictionary<NSString*, id> *)change context:(nullable void *)context {

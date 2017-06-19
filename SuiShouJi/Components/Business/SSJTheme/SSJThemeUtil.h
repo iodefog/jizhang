@@ -19,6 +19,14 @@
 // 次要颜色
 #define SSJ_SECONDARY_COLOR [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]
 
+// 次要填充色
+#define SSJ_SECONDARY_FILL_COLOR [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor]
+
+// cell分割线颜色
+#define SSJ_CELL_SEPARATOR_COLOR [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]
+
+#define SSJ_MAIN_BACKGROUND_COLOR [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha]
+
 //  切换主题通知
 extern NSString *const SSJThemeDidChangeNotification;
 

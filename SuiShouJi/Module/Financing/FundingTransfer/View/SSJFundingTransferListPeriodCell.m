@@ -51,7 +51,7 @@
     return self;
 }
 
-- (void)setCellItem:(__kindof SSJBaseItem *)cellItem {
+- (void)setCellItem:(__kindof SSJBaseCellItem *)cellItem {
     if (![cellItem isKindOfClass:[SSJFundingTransferListPeriodCellItem class]]) {
         return;
     }

@@ -24,7 +24,7 @@ typedef NS_ENUM(NSUInteger, SSJShareType) {
                UrlStr:(NSString *)str
                 title:(NSString *)title
               content:(NSString *)content
-         PlatformType:(UMSocialPlatformType)platformType
+         PlatformType:(NSArray *)platforms
          inController:(UIViewController *)controller
          ShareSuccess:(void(^)(UMSocialShareResponse *response))success;
 

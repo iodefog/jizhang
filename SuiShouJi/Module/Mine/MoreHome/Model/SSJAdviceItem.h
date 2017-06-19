@@ -6,8 +6,8 @@
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
 
-#import "SSJBaseItem.h"
+#import "SSJBaseCellItem.h"
 @class SSJChatMessageItem;
-@interface SSJAdviceItem : SSJBaseItem
+@interface SSJAdviceItem : SSJBaseCellItem
 @property (nonatomic, strong) NSArray<SSJChatMessageItem *> *messageItems;
 @end

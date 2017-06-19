@@ -151,8 +151,6 @@ static const CGFloat kGap = 15;
 
 static const int kAuthCodeDigits = 4;
 
-static const CGFloat kAnimationDuration = 0.25;
-
 @interface SSJBooksTypeDeletionAuthCodeAlertView () <YYKeyboardObserver>
 
 @property (nonatomic, strong) UILabel *titleLab;
@@ -202,8 +200,6 @@ static const CGFloat kAnimationDuration = 0.25;
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    [self.cancelBtn ssj_relayoutBorder];
-    [self.sureBtn ssj_relayoutBorder];
     [self updateAuthCodeText];
 }
 
@@ -226,13 +222,13 @@ static const CGFloat kAnimationDuration = 0.25;
     [self.sureBtn mas_updateConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(0);
         make.bottom.mas_equalTo(self);
-        make.size.mas_equalTo(CGSizeMake(140, 50));
+        make.height.mas_equalTo(50);
     }];
     [self.cancelBtn mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(self.cancelBtn.mas_right);
+        make.left.mas_equalTo(self.sureBtn.mas_right);
         make.bottom.mas_equalTo(self);
         make.right.mas_equalTo(self);
-        make.size.mas_equalTo(CGSizeMake(140, 50));
+        make.width.and.height.mas_equalTo(self.sureBtn);
     }];
     
     [self.backView mas_updateConstraints:^(MASConstraintMaker *make) {
@@ -368,16 +364,25 @@ static const CGFloat kAnimationDuration = 0.25;
     }
 }
 
+- (void)setMessage:(NSAttributedString *)message {
+    _titleLab.attributedText = message;
+    [self setNeedsUpdateConstraints];
+}
+
+- (void)setSureButtonTitle:(NSString *)sureButtonTitle {
+    [self.sureBtn setTitle:sureButtonTitle forState:UIControlStateNormal];
+}
+
+- (void)setCancelButtonTitle:(NSString *)cancelButtonTitle {
+    [self.cancelBtn setTitle:cancelButtonTitle forState:UIControlStateNormal];
+}
+
 #pragma mark - Lazyloading
 - (UILabel *)titleLab {
     if (!_titleLab) {
         _titleLab = [[UILabel alloc] init];
         _titleLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
         _titleLab.numberOfLines = 0;
-        NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
-        style.lineSpacing = 5;
-        style.alignment = NSTextAlignmentCenter;
-        _titleLab.attributedText = [[NSAttributedString alloc] initWithString:@"删除后将难以恢复\n仍然删除，请输入下列验证码" attributes:@{NSParagraphStyleAttributeName:style}];
     }
     return _titleLab;
 }

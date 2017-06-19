@@ -38,6 +38,15 @@
 - (void)collectionView:(SSJEditableCollectionView *)collectionView didBeginEditingWhenPressAtIndexPath:(NSIndexPath *)indexPath;
 
 /**
+ 询问代理者是否开始移动指定位置的cell；在整个移动过程中只触发一次
+
+ @param collectionView <#collectionView description#>
+ @param indexPath <#indexPath description#>
+ @return <#return value description#>
+ */
+- (BOOL)collectionView:(SSJEditableCollectionView *)collectionView shouldBeginMovingCellAtIndexPath:(NSIndexPath *)indexPath;
+
+/**
  *  询问代理者是否应该把cell移动到指定的位置；在整个移动过程中可触发多次，只要有其他的cell和当前移动的cell相交的话，就会触发此方法
  *
  *  @param collectionView
@@ -49,7 +58,7 @@
 - (BOOL)collectionView:(SSJEditableCollectionView *)collectionView shouldMoveCellAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath;
 
 /**
- *  已经把cell移动到指定的位置；在整个移动过程中可触发多次，只要有其他的cell和当前移动的cell相交的话，就会触发此方法
+ *  已经把cell移动到指定的位置；在整个移动过程中可触发多次，只要方法collectionView:shouldMoveCellAtIndexPath:toIndexPath:返回YES就会触发此方法
  *
  *  @param collectionView
  *  @param fromIndexPath

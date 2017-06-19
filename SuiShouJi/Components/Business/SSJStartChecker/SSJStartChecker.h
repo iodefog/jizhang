@@ -83,8 +83,23 @@ typedef NS_ENUM(NSInteger, SSJAppUpdateType){
  */
 - (NSString *)startImageUrl;
 
+
 /**
- *  启动页图片地址
+ *  lottie的下载地址
+ *
+ *  @return NSString lottie的url(需要拼接)
+ */
+- (NSString *)lottieUrl;
+
+/**
+ *  启动页动态图片
+ *
+ *  @return NSString 动态图片url(需要拼接)
+ */
+- (NSString *)animUrl;
+
+/**
+ *  下发的客服电话
  *
  *  @return NSString 图片url(需要拼接)
  */

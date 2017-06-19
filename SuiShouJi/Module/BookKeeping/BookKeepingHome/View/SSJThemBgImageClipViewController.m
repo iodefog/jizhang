@@ -57,19 +57,6 @@ static CGFloat imageScale = 0.8; //裁剪框和屏幕大小比例
     self.view.frame = self.view.bounds;
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    [[UIApplication sharedApplication] setStatusBarHidden:YES];
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    [[UIApplication sharedApplication] setStatusBarHidden:NO];
-    
-}
-
 - (BOOL)prefersStatusBarHidden {
     return YES;
 }
@@ -91,39 +78,51 @@ static CGFloat imageScale = 0.8; //裁剪框和屏幕大小比例
 #pragma mark - Setter
 - (void)setNormalImage:(UIImage *)normalImage
 {
-    normalImage = [normalImage fixOrientation];
+    float imageHeight = normalImage.size.height;
+    float imageWidth = normalImage.size.width;
+    float maxLegth = MAX(imageHeight , imageWidth);
+    float tempscale = 1;
+    if (maxLegth > 2000) {
+        tempscale = 2000 / maxLegth;
+        imageHeight = imageHeight * tempscale;
+        imageWidth = imageWidth * tempscale;
+    }
+    UIImage *resizeImage = [self clipWithImageRect:CGRectMake(0, 0, imageWidth, imageHeight) clipImage:normalImage];
+    normalImage = [resizeImage fixOrientation];
     _normalImage = normalImage;
     self.oldImagesize = CGSizeMake(normalImage.size.width, normalImage.size.height);
     self.oldImage = normalImage;
     self.imageView.image = normalImage;
-//    self.imageView.size = CGSizeMake(normalImage.size.width/SSJSCREENSCALE, normalImage.size.height/SSJSCREENSCALE);
-    
-    self.imageView.size = CGSizeMake(normalImage.size.width*imageScale/SSJSCREENSCALE, normalImage.size.height*imageScale/SSJSCREENSCALE);
-    self.scrollview.contentSize = self.imageView.size;
-//    if (self.imageView.width < self.coverLayer.width && self.imageView.height < self.coverLayer.height) {
-//        
-//    }
-    if (self.imageView.width > self.imageView.height) { //宽》 高
-        int clipH = SSJSCREENHEIGHT*imageScale;
-        int imgH = self.imageView.height;
+    double clipH = SSJSCREENHEIGHT * imageScale;
+    double clipW = SSJSCREENWITH * imageScale;
+    double imgH = normalImage.size.height;
+    double imgW = normalImage.size.width;
+    if (imgW > imgH) { //宽》 高
         if (imgH <= clipH) {
-            
+            self.imageView.size = normalImage.size;
         } else {//imgh>cliph
-            double scale = self.imageView.width / self.imageView.height;
+            double scale = imgW / imgH;
             self.imageView.size = CGSizeMake(clipH * scale, clipH);
+            if (self.imageView.width < clipW && imgW > clipW) {
+                double scale1 = imgH / imgW;
+                self.imageView.size = CGSizeMake(clipW, clipW * scale1);
+            }
         }
-        
     } else { //高》宽
-        int clipW = SSJSCREENWITH*imageScale;
-        int imgW = self.imageView.width;
         if (imgW <= clipW) {
-            
+            self.imageView.size = normalImage.size;
         } else {//imgw>clipW
-            double scale = self.imageView.height / self.imageView.width;
+            double scale = imgH / imgW;
             self.imageView.size = CGSizeMake(clipW, clipW * scale);
+            
+            if (self.imageView.height < clipH && imgH > clipH) {
+                double scale1 = imgW / imgH;
+                self.imageView.size = CGSizeMake(clipH*scale1, clipH);
+            }
         }
     }
 
+    self.scrollview.contentSize = self.imageView.size;
     CGPoint conOfSet = self.scrollview.contentOffset;
     conOfSet.x = -SSJSCREENWITH * (1 - imageScale) * 0.5;
     conOfSet.y = -SSJSCREENHEIGHT * (1 - imageScale) * 0.5;
@@ -171,34 +170,19 @@ static CGFloat imageScale = 0.8; //裁剪框和屏幕大小比例
 //获得某个范围内的屏幕图像
 - (UIImage *)imageFromView: (UIView *)theView atFrame:(CGRect)rect
 {
-//    UIGraphicsBeginImageContext(r.size);
-//    CGContextRef context = UIGraphicsGetCurrentContext();
-//    CGContextSaveGState(context);
-//    UIRectClip(r);
-//    [theView.layer renderInContext:context];
-//    UIImage *theImage = UIGraphicsGetImageFromCurrentImageContext();
-//    
-//    UIGraphicsEndImageContext();
-    UIImage * imgeee = [UIImage imageWithCGImage:CGImageCreateWithImageInRect(self.oldImage.CGImage, rect)];
-    return  imgeee;
+    UIImage * image = [UIImage imageWithCGImage:CGImageCreateWithImageInRect(self.oldImage.CGImage, rect)];
+    NSData *imageData = UIImageJPEGRepresentation(image, 0.4);
+    return  [UIImage imageWithData:imageData];
 }
 
 //返回裁剪区域图片,返回裁剪区域大小图片
-
-- (UIImage *)clipWithImageRect:(CGRect)clipRect clipImage:(UIImage *)clipImage;
-
+- (UIImage *)clipWithImageRect:(CGRect)clipRect clipImage:(UIImage *)clipImage
 {
-    
     UIGraphicsBeginImageContext(clipRect.size);
-    
     [clipImage drawInRect:CGRectMake(0,0,clipRect.size.width,clipRect.size.height)];
-    
     UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
-    
     UIGraphicsEndImageContext();
-    
-    return  newImage;
-    
+    return newImage;
 }
 
 #pragma mark - Lazy

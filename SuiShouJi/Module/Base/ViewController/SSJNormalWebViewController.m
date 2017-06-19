@@ -76,7 +76,7 @@
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
-    [self.webView setFrame:self.view.bounds];
+    self.webView.frame = CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM);
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -93,6 +93,10 @@
     [self.navigationController setToolbarHidden:self.previousNavigationControllerToolbarHidden animated:animated];
     [self.navigationController setNavigationBarHidden:self.previousNavigationControllerNavigationBarHidden animated:animated];
     [self invalidateTimer];
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle {
+    return UIStatusBarStyleDefault;
 }
 
 - (UIWebView *)webView{

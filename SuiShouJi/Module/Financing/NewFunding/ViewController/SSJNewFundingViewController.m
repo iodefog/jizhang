@@ -319,12 +319,16 @@
         _authCodeAlertView.finishVerification = ^{
             [wself deleteFundingItem:wself.item type:1];
         };
+        NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+        style.lineSpacing = 5;
+        style.alignment = NSTextAlignmentCenter;
+        _authCodeAlertView.message = [[NSAttributedString alloc] initWithString:@"删除后将难以恢复\n仍然删除，请输入下列验证码" attributes:@{NSParagraphStyleAttributeName:style}];
     }
     return _authCodeAlertView;
 }
 
 #pragma mark - Private
-- (void)deleteFundingItem:(SSJBaseItem *)item type:(BOOL)type{
+- (void)deleteFundingItem:(SSJBaseCellItem *)item type:(BOOL)type{
     __weak typeof(self) weakSelf = self;
     [SSJFinancingHomeHelper deleteFundingWithFundingItem:item deleteType:type Success:^{
         [weakSelf.navigationController popToRootViewControllerAnimated:YES];

@@ -7,9 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "SSJBaseItem.h"
+#import "SSJBaseCellItem.h"
 
-@interface SSJFundingItem : SSJBaseItem<NSCoding>
+@interface SSJFundingItem : SSJBaseCellItem<NSCoding>
 
 //账户ID
 @property (nonatomic,strong) NSString *fundingID;

@@ -29,7 +29,7 @@
 }
 
 - (void)rightButtonClicked:(id)sender {
-    [SSJShareManager shareWithType:SSJShareTypeUrl image:nil UrlStr:self.item.announcementUrl title:self.item.announcementTitle content:self.item.announcementContent PlatformType:UMSocialPlatformType_Sina | UMSocialPlatformType_WechatSession | UMSocialPlatformType_WechatTimeLine | UMSocialPlatformType_QQ inController:self ShareSuccess:^(UMSocialShareResponse *response) {
+    [SSJShareManager shareWithType:SSJShareTypeUrl image:nil UrlStr:self.item.announcementUrl title:self.item.announcementTitle content:self.item.announcementContent PlatformType:@[@(UMSocialPlatformType_Sina),@(UMSocialPlatformType_WechatSession),@(UMSocialPlatformType_WechatTimeLine),@(UMSocialPlatformType_QQ)] inController:self ShareSuccess:^(UMSocialShareResponse *response) {
         
     }];
 }

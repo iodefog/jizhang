@@ -87,7 +87,6 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     _lab2.leftTop = CGPointMake(_arrow.right + gap, 40);
     _lab3.leftTop = CGPointMake(left, _lab1.bottom + 5);
     _sureBtn.frame = CGRectMake(0, 120, self.width, self.height - 120);
-    [_sureBtn ssj_relayoutBorder];
 }
 
 - (void)dismiss {

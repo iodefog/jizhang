@@ -26,15 +26,12 @@ static NSString *const kTextColorAnimationKey = @"kTextColorAnimationKey";
 
 @property (nonatomic, strong) UIButton *deleteBtn;
 
-@property (nonatomic, strong) UIColor *normalTextColor;
-
 @end
 
 @implementation SSJRecordMakingBillTypeSelectionCell
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        _normalTextColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         [self.contentView addSubview:self.borderView];
         [self.contentView addSubview:self.imageView];
         [self.contentView addSubview:self.label];
@@ -44,84 +41,109 @@ static NSString *const kTextColorAnimationKey = @"kTextColorAnimationKey";
 }
 
 - (void)layoutSubviews {
-    _imageView.size = CGSizeMake(_imageView.image.size.width * kIconScale, _imageView.image.size.height * kIconScale);
-    _imageView.top = 24;
-    _imageView.centerX = self.contentView.width * 0.5;
-    _borderView.center = CGPointMake(self.contentView.width * 0.5, _imageView.centerY);
-    _label.bottom = self.contentView.height;
-    _label.centerX = self.contentView.width * 0.5;
-    _deleteBtn.size = CGSizeMake(32, 32);
-    _deleteBtn.centerY = self.contentView.height * 0.5;
-    _deleteBtn.right = self.contentView.width;
-    _deleteBtn.imageEdgeInsets = UIEdgeInsetsMake(10, 14, 0, 0);
+    self.imageView.size = CGSizeMake(self.imageView.image.size.width * kIconScale, self.imageView.image.size.height * kIconScale);
+    self.imageView.top = 24;
+    self.imageView.centerX = self.contentView.width * 0.5;
+    self.borderView.center = CGPointMake(self.contentView.width * 0.5, self.imageView.centerY);
+    self.label.bottom = self.contentView.height;
+    self.label.centerX = self.contentView.width * 0.5;
+    self.deleteBtn.size = CGSizeMake(32, 32);
+    self.deleteBtn.centerY = self.contentView.height * 0.5;
+    self.deleteBtn.right = self.contentView.width;
+    self.deleteBtn.imageEdgeInsets = UIEdgeInsetsMake(10, 14, 0, 0);
 }
 
 - (void)setItem:(SSJRecordMakingBillTypeSelectionCellItem *)item {
     _item = item;
+    
+    @weakify(self);
+    [[RACObserve(_item, title) takeUntil:self.rac_prepareForReuseSignal] subscribeNext:^(id x) {
+        @strongify(self);
+        self.label.text = self.item.title;
+        [self.label sizeToFit];
+        [self setNeedsLayout];
+    }];
+    
+    [[RACObserve(_item, imageName) takeUntil:self.rac_prepareForReuseSignal] subscribeNext:^(id x) {
+        @strongify(self);
+        self.imageView.image = [[UIImage imageNamed:self.item.imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    }];
+    
+    [[[RACObserve(_item, colorValue) takeUntil:self.rac_prepareForReuseSignal] skip:1] subscribeNext:^(id x) {
+        @strongify(self);
+        if (self.item.colorValue.length) {
+            self.imageView.tintColor = [UIColor ssj_colorWithHex:self.item.colorValue];
+        }
+        [self updateBorderAndTextColor:YES];
+    }];
+    
+    [[[RACObserve(_item, state) takeUntil:self.rac_prepareForReuseSignal] skip:1] subscribeNext:^(id x) {
+        @strongify(self);
+        self.deleteBtn.hidden = self.item.state != SSJRecordMakingBillTypeSelectionCellStateEditing;
+        [self updateBorderAndTextColor:YES];
+    }];
+    
     if (_item.colorValue.length) {
-        _imageView.image = [[UIImage imageNamed:_item.imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        _imageView.tintColor = [UIColor ssj_colorWithHex:_item.colorValue];
-    } else {
-        _imageView.image = [UIImage imageNamed:_item.imageName];
+        self.imageView.tintColor = [UIColor ssj_colorWithHex:self.item.colorValue];
     }
-    _label.text = _item.title;
-    [_label sizeToFit];
-    [self updateState];
-    [self setNeedsLayout];
+    self.deleteBtn.hidden = self.item.state != SSJRecordMakingBillTypeSelectionCellStateEditing;
+    [self updateBorderAndTextColor:NO];
 }
 
-- (void)updateState {
-    _deleteBtn.hidden = !_item.editable;
+- (void)updateBorderAndTextColor:(BOOL)animated {
+    CGColorRef textColor = NULL;
+    CGColorRef borderColor = NULL;
     
-    [_borderView.layer removeAnimationForKey:kBorderColorAnimationKey];
-    [_label.layer removeAnimationForKey:kTextColorAnimationKey];
-    
-    if (_item.editable) {
-        _borderView.layer.borderColor = [UIColor clearColor].CGColor;
-        _label.textColor = _item.selected ? [UIColor ssj_colorWithHex:_item.colorValue] : _normalTextColor;
-    } else if (_item.selected) {
-        [self animateSelectState:YES];
-    } else if (_item.deselected) {
-        [self animateSelectState:NO];
-    } else {
-        _borderView.layer.borderColor = (_item.selected ? [UIColor ssj_colorWithHex:_item.colorValue].CGColor : [UIColor clearColor].CGColor);
-        _label.textColor = _item.selected ? [UIColor ssj_colorWithHex:_item.colorValue] : _normalTextColor;
+    switch (_item.state) {
+        case SSJRecordMakingBillTypeSelectionCellStateNormal:
+        case SSJRecordMakingBillTypeSelectionCellStateEditing:
+            textColor = SSJ_MAIN_COLOR.CGColor;
+            borderColor = [UIColor clearColor].CGColor;
+            break;
+            
+        case SSJRecordMakingBillTypeSelectionCellStateSelected:
+            textColor = [UIColor ssj_colorWithHex:_item.colorValue].CGColor;
+            borderColor = [UIColor ssj_colorWithHex:_item.colorValue].CGColor;
+            break;
     }
-}
-
-- (void)animateSelectState:(BOOL)selected {
-    CGColorRef normalBorderColor = [UIColor clearColor].CGColor;
-    CGColorRef selectedBorderColor = [UIColor ssj_colorWithHex:_item.colorValue].CGColor;
     
-    UIColor *selectedTextColor = [UIColor ssj_colorWithHex:_item.colorValue];
+    if (animated) {
+        CABasicAnimation *borderColorAnimation = [CABasicAnimation animationWithKeyPath:@"borderColor"];
+        borderColorAnimation.delegate = self;
+        borderColorAnimation.duration = kDuration;
+        borderColorAnimation.removedOnCompletion = NO;
+        borderColorAnimation.fillMode = kCAFillModeForwards;
+//        borderColorAnimation.fromValue = (__bridge id _Nullable)(_borderView.layer.presentationLayer.borderColor);
+        borderColorAnimation.toValue = (__bridge id _Nullable)(borderColor);
+        [_borderView.layer addAnimation:borderColorAnimation forKey:kBorderColorAnimationKey];
+        
+        
+        // CTMB 动画莫名其妙的不起作用
+        CABasicAnimation *textColorAnimation = [CABasicAnimation animationWithKeyPath:@"foregroundColor"];
+        textColorAnimation.delegate = self;
+        textColorAnimation.duration = kDuration;
+        textColorAnimation.removedOnCompletion = NO;
+        textColorAnimation.fillMode = kCAFillModeForwards;
+//        textColorAnimation.fromValue = (__bridge id _Nullable)(_label.layer.presentationLayer.borderColor);
+        textColorAnimation.toValue = (__bridge id _Nullable)(textColor);
+        [_label.textLayer addAnimation:textColorAnimation forKey:kTextColorAnimationKey];
+    } else {
+        _borderView.layer.borderColor = borderColor;
+        _label.textLayer.foregroundColor = textColor;
+    }
     
-    _borderView.layer.borderColor = selected ? normalBorderColor : selectedBorderColor;
-    _label.textColor = _item.selected ? _normalTextColor : selectedTextColor;
-    
-    CABasicAnimation *borderColorAnimation = [CABasicAnimation animationWithKeyPath:@"borderColor"];
-    borderColorAnimation.duration = kDuration;
-    borderColorAnimation.delegate = self;
-    borderColorAnimation.removedOnCompletion = NO;
-    borderColorAnimation.fillMode = kCAFillModeForwards;
-    borderColorAnimation.toValue = (__bridge id _Nullable)(selected ? selectedBorderColor : normalBorderColor);
-    [_borderView.layer addAnimation:borderColorAnimation forKey:kBorderColorAnimationKey];
-    
-    CABasicAnimation *textColorAnimation = [CABasicAnimation animationWithKeyPath:@"foregroundColor"];
-    textColorAnimation.duration = kDuration;
-    textColorAnimation.delegate = self;
-    textColorAnimation.removedOnCompletion = NO;
-    textColorAnimation.fillMode = kCAFillModeForwards;
-    textColorAnimation.toValue = (__bridge id _Nullable)(selected ? selectedTextColor.CGColor : _normalTextColor.CGColor);
-    [_label.layer addAnimation:textColorAnimation forKey:kTextColorAnimationKey];
+//    _borderView.layer.borderColor = borderColor;
+//    _label.textLayer.foregroundColor = textColor;
 }
 
 - (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag {
+    CABasicAnimation *basicAnimation = (CABasicAnimation *)anim;
     if (anim == [_borderView.layer animationForKey:kBorderColorAnimationKey]) {
-        CABasicAnimation *borderColorAnimation = (CABasicAnimation *)anim;
-        _borderView.layer.borderColor = (__bridge CGColorRef _Nullable)(borderColorAnimation.toValue);
         [_borderView.layer removeAnimationForKey:kBorderColorAnimationKey];
+        _borderView.layer.borderColor = (__bridge CGColorRef _Nullable)(basicAnimation.toValue);
+        
     } else if (anim == [_label.layer animationForKey:kTextColorAnimationKey]) {
-        _label.textColor = _item.selected ? [UIColor ssj_colorWithHex:_item.colorValue] : _normalTextColor;
+        _label.textLayer.foregroundColor = (__bridge CGColorRef _Nullable)(basicAnimation.toValue);
         [_label.layer removeAnimationForKey:kTextColorAnimationKey];
     }
 }

@@ -9,15 +9,21 @@
 #import <UIKit/UIKit.h>
 
 @class SSJRecordMakingCustomNavigationBar;
+@class SSJRecordMakingCustomNavigationBarBookItem;
 
 typedef void(^SSJRecordMakingCustomNavigationBarAction)(SSJRecordMakingCustomNavigationBar *);
 
 @interface SSJRecordMakingCustomNavigationBar : UIView
 
 /**
+ 能否选择标题，如果为NO，点击标题不会显示下拉框并且隐藏标题边的角标
+ */
+@property (nonatomic) BOOL canSelectTitle;
+
+/**
  下拉菜单的标题
  */
-@property (nonatomic, strong) NSArray <NSString *>*titles;
+@property (nonatomic, strong) NSArray<SSJRecordMakingCustomNavigationBarBookItem *> *bookItems;
 
 /**
  选中的标题下标，默认－1（即什么都不选）
@@ -45,11 +51,6 @@ typedef void(^SSJRecordMakingCustomNavigationBarAction)(SSJRecordMakingCustomNav
 @property (nonatomic, copy) SSJRecordMakingCustomNavigationBarAction selectBookHandle;
 
 /**
- 点击添加账本触发的回调
- */
-@property (nonatomic, copy) SSJRecordMakingCustomNavigationBarAction addNewBookHandle;
-
-/**
  选中收入、支出切换控件触发的回调
  */
 @property (nonatomic, copy) SSJRecordMakingCustomNavigationBarAction selectBillTypeHandle;
@@ -68,5 +69,15 @@ typedef void(^SSJRecordMakingCustomNavigationBarAction)(SSJRecordMakingCustomNav
  根据当前主题刷新界面
  */
 - (void)updateAppearance;
+
+@end
+
+@interface SSJRecordMakingCustomNavigationBarBookItem : NSObject
+
+@property (nonatomic, copy) NSString *title;
+
+@property (nonatomic, copy) NSString *iconName;
+
++ (instancetype)itemWithTitle:(NSString *)title iconName:(NSString *)iconName;
 
 @end

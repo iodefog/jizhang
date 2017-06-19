@@ -11,6 +11,10 @@
 
 @implementation SSJDatabaseVersion6
 
++ (NSString *)dbVersion {
+    return @"1.6.0";
+}
+
 + (NSError *)startUpgradeInDatabase:(FMDatabase *)db {
     NSError *error = [self createMemberTableWithDatabase:db];
     if (error) {

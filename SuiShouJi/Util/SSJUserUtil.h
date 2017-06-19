@@ -81,6 +81,13 @@ BOOL SSJSetUserId(NSString *userId);
 NSString *SSJUSERID();
 
 /**
+ 默认成员id
+
+ @return
+ */
+NSString *SSJDefaultMemberId();
+
+/**
  *  获取当前同步记录版本号
  *
  *  @return (int64_t) 当前同步记录版本号
@@ -114,22 +121,6 @@ BOOL SSJSaveSyncSetting(SSJSyncSettingType setting);
 // *  @return (BOOL) 是否更新成功
 // */
 //BOOL SSJSetUserForgetMotionPassword(BOOL forgeted);
-
-/**
- *  获取当前选中的账本
- *
- *  @return 账本id
- */
-NSString *SSJGetCurrentBooksType();
-
-/**
- *  选择当前的账本
- *
- *  @param booksId 账本的id
- *
- *  @return (BOOL) 是否保存成功
- */
-BOOL SSJSelectBooksType(NSString *booksId);
 
 //BOOL
 

@@ -48,11 +48,11 @@ typedef NS_ENUM(NSInteger, SSJDatePeriodComparisonResult) {
 
 - (SSJDatePeriodComparisonResult)compareWithDate:(NSDate *)date;
 
-+ (nullable NSArray *)periodsBetweenDate:(NSDate *)date andAnotherDate:(NSDate *)anotherDate periodType:(SSJDatePeriodType)type;
++ (nullable NSArray<SSJDatePeriod *> *)periodsBetweenDate:(NSDate *)date andAnotherDate:(NSDate *)anotherDate periodType:(SSJDatePeriodType)type;
 
-- (nullable NSArray *)periodsFromPeriod:(SSJDatePeriod *)period;
+- (nullable NSArray<SSJDatePeriod *> *)periodsFromPeriod:(SSJDatePeriod *)period;
 
-- (nullable NSArray *)periodsFromDate:(NSDate *)date;
+- (nullable NSArray<SSJDatePeriod *> *)periodsFromDate:(NSDate *)date;
 
 + (NSInteger)periodCountFromDate:(NSDate *)fromDate toDate:(NSDate *)toDate periodType:(SSJDatePeriodType)type;
 

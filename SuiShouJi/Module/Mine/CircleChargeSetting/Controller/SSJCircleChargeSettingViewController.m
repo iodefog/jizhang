@@ -148,7 +148,7 @@
 //            item.billId = [result stringForColumn:@"IBILLID"];
 //            item.chargeImage = [result stringForColumn:@"CIMGURL"];
 //            item.chargeMemo = [result stringForColumn:@"CMEMO"];
-//            item.configId = [result stringForColumn:@"ICONFIGID"];
+//            item.sundryId = [result stringForColumn:@"ICONFIGID"];
 //            item.chargeCircleType = [result intForColumn:@"ITYPE"];
 //            item.isOnOrNot = [result intForColumn:@"ISTATE"];
 //            [tempArray addObject:item];
@@ -173,20 +173,5 @@
 -(void)reloadDataAfterSync{
     [self getDataFromDataBase];
 }
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

@@ -9,6 +9,7 @@
 
 #import "SSJHomeBudgetButton.h"
 #import "SSJBudgetWaveWaterView.h"
+#import "SSJShareBookItem.h"
 
 @interface SSJHomeBudgetButton()
 
@@ -30,6 +31,9 @@
 -(CGSize)sizeThatFits:(CGSize)size{
     if ([self.button.titleLabel.text isEqualToString:@"添加预算"]) {
         return CGSizeMake(200, 44);
+    }
+    if ([self.model isKindOfClass:[SSJShareBookItem class]]) {
+        return CGSizeMake(115, 44);
     }
     return CGSizeMake([self.button.titleLabel.text sizeWithAttributes:@{NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4]}].width + 20, 44);
 }
@@ -53,7 +57,7 @@
         _button = [[UIButton alloc]init];
         [_button setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] forState:UIControlStateNormal];
         _button.layer.cornerRadius = 13.f;
-        _button.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor].CGColor;
+        _button.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor].CGColor;
         _button.layer.borderWidth = 1.f;
         _button.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
         [_button addTarget:self action:@selector(budgetButtonClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -69,19 +73,39 @@
     return _seperatorLine;
 }
 
--(void)setModel:(SSJBudgetModel *)model{
+-(void)setModel:(id)model{
+    
     _model = model;
-    [self.button setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] forState:UIControlStateNormal];
-    [self.button setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha]];
-    self.button.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor].CGColor;
-    if (_model == nil) {
+    
+    if (model == nil) {
         [self.button setTitle:@"添加预算" forState:UIControlStateNormal];
-    }else{
-        if (_model.budgetMoney >= _model.payMoney) {
-            [self.button setTitle:[NSString stringWithFormat:@"剩余 %.2f",_model.budgetMoney - _model.payMoney] forState:UIControlStateNormal];
+        self.button.backgroundColor = [UIColor clearColor];
+        self.button.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor].CGColor;
+        [self.button setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] forState:UIControlStateNormal];
+    }
+    if ([model isKindOfClass:[SSJBudgetModel class]]) {
+        SSJBudgetModel *currentModel = (SSJBudgetModel *)model;
+        [self.button setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] forState:UIControlStateNormal];
+        [self.button setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha]];
+        self.button.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor].CGColor;
+        if (_model == nil) {
+            [self.button setTitle:@"添加预算" forState:UIControlStateNormal];
+            self.button.backgroundColor = [UIColor clearColor];
+            self.button.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor].CGColor;
+            [self.button setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] forState:UIControlStateNormal];
         }else{
-            [self.button setTitle:[NSString stringWithFormat:@"超支 %.2f",_model.payMoney - _model.budgetMoney] forState:UIControlStateNormal];
+            if (currentModel.budgetMoney >= currentModel.payMoney) {
+                [self.button setTitle:[NSString stringWithFormat:@"剩余 %.2f",currentModel.budgetMoney - currentModel.payMoney] forState:UIControlStateNormal];
+            }else{
+                [self.button setTitle:[NSString stringWithFormat:@"超支 %.2f",currentModel.payMoney - currentModel.budgetMoney] forState:UIControlStateNormal];
+            }
         }
+    } else if ([model isKindOfClass:[SSJShareBookItem class]]){
+        SSJShareBookItem *currentModel = (SSJShareBookItem *)model;
+        [self.button setTitle:[NSString stringWithFormat:@"%ld 人", (long)currentModel.memberCount] forState:UIControlStateNormal];
+        self.button.backgroundColor = [UIColor clearColor];
+        self.button.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor].CGColor;
+        [self.button setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] forState:UIControlStateNormal];
     }
     [self sizeToFit];
     [self setNeedsLayout];

@@ -64,7 +64,7 @@ static NSString *const kMemberTableViewCellIdentifier = @"kMemberTableViewCellId
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath{
     SSJChargeMemberItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
-    if (!item.memberId.length || [item.memberId isEqualToString:@"0"]) {
+    if (!item.memberId.length || [item.memberId isEqualToString:SSJDefaultMemberId()]) {
         return NO;
     }
     return YES;
@@ -163,7 +163,10 @@ static NSString *const kMemberTableViewCellIdentifier = @"kMemberTableViewCellId
     }];
 }
 
-- (void)deleteMemberWithMemberId:(NSString *)Id{
+- (void)deleteMemberWithMemberId:(NSString *)Id {
+    if ([Id isEqualToString:SSJDefaultMemberId()]) {
+        return;
+    }
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         [db executeUpdate:@"update bk_member set istate = 0, iversion = ?, cwritedate = ? where cmemberid = ?",@(SSJSyncVersion()),[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],Id];
 //        [db executeUpdate:@"update bk_member_charge set operatortype = 2 where cmemberid = ?",Id];
@@ -181,9 +184,9 @@ static NSString *const kMemberTableViewCellIdentifier = @"kMemberTableViewCellId
         _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellIndicatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
         _tableView.separatorInset = UIEdgeInsetsZero;
         [_tableView ssj_clearExtendSeparator];
-        [_tableView ssj_setBorderWidth:2];
-        [_tableView ssj_setBorderStyle:SSJBorderStyleTop];
-        [_tableView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellIndicatorColor]];
+//        [_tableView ssj_setBorderWidth:2];
+//        [_tableView ssj_setBorderStyle:SSJBorderStyleTop];
+//        [_tableView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellIndicatorColor]];
     }
     return _tableView;
 }

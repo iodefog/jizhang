@@ -17,6 +17,13 @@
 
 @implementation SSJBookkeepingTreeCheckInService
 
+- (instancetype)initWithDelegate:(id<SSJBaseNetworkServiceDelegate>)delegate {
+    if (self = [super initWithDelegate:delegate]) {
+        self.requestSerialization = SSJHTTPRequestSerialization;
+    }
+    return self;
+}
+
 - (void)checkIn {
     [self request:SSJURLWithAPI(@"/user/userSignIn.go") params:@{@"cuserid":SSJUSERID()}];
 }

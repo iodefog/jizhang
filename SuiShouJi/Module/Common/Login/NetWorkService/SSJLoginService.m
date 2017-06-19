@@ -47,6 +47,7 @@
 @implementation SSJLoginService
 
 - (void)loadLoginModelWithPassWord:(NSString*)password AndUserAccount:(NSString*)useraccount{
+    [self cancel];
     _loginPassword = password;
     
     self.loginType = SSJLoginTypeNormal;
@@ -89,6 +90,7 @@
 }
 
 - (void)loadLoginModelWithLoginItem:(SSJThirdPartLoginItem *)item{
+    [self cancel];
     self.loginType = item.loginType;
     self.showLodingIndicator = YES;
     self.openId = item.openID;
@@ -151,7 +153,7 @@
                      @"openid":@"oauthid"};
         }];
         self.item = [SSJUserItem mj_objectWithKeyValues:result];
-        self.item.loginType = [NSString stringWithFormat:@"%luld",(unsigned long)self.loginType];
+        self.item.loginType = [NSString stringWithFormat:@"%d",(int)self.loginType];
         if (self.loginType != SSJLoginTypeNormal) {
             self.item.mobileNo = @"";
         }

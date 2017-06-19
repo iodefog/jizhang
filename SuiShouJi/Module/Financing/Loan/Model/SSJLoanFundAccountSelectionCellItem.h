@@ -6,11 +6,11 @@
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
 
-#import "SSJBaseItem.h"
+#import "SSJBaseCellItem.h"
 
 @class SSJLoanFundAccountSelectionViewItem;
 
-@interface SSJLoanFundAccountSelectionCellItem : SSJBaseItem
+@interface SSJLoanFundAccountSelectionCellItem : SSJBaseCellItem
 
 @property (nonatomic, copy) NSString *image;
 

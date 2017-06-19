@@ -8,35 +8,35 @@
 //
 
 #import "SSJCalenderDetailViewController.h"
-#import "SSJBillingChargeCell.h"
-#import "SSJCalenderDetailCell.h"
 #import "SSJRecordMakingViewController.h"
+#import "SSJImaageBrowseViewController.h"
+#import "UIViewController+MMDrawerController.h"
+#import "SSJReportFormsViewController.h"
+
 #import "SSJCalenderTableViewCell.h"
-#import "SSJCanlenderChargeDetailCell.h"
-#import "SSJChargeDetailMemberCell.h"
+#import "SSJCalenderDetailInfoCell.h"
+#import "SSJCalenderDetailPhotoCell.h"
+#import "SSJChargeImageBrowseView.h"
+
+#import "SSJBooksTypeItem.h"
+#import "SSJChargeMemBerItem.h"
 #import "SSJDatabaseQueue.h"
 #import "SSJDataSynchronizer.h"
-#import "SSJChargeDetailMemoCell.h"
-#import "SSJCalenderDetaiImagelFooterView.h"
-#import "SSJImaageBrowseViewController.h"
 #import "SSJBooksTypeStore.h"
-#import "SSJBooksTypeItem.h"
-#import "SSJReportFormsViewController.h"
-#import "UIViewController+MMDrawerController.h"
-#import "FMDB.h"
-#import "SSJChargeMemBerItem.h"
-#import "SSJCalenderDetailHeader.h"
+#import "SSJCalenderHelper.h"
 
+static NSString *const kSSJCalenderTableViewCellId = @"kSSJCalenderTableViewCellId";
+static NSString *const kSSJCalenderDetailInfoCellId = @"kSSJCalenderDetailInfoCellId";
+static NSString *const kSSJCalenderDetailPhotoCellId = @"kSSJCalenderDetailPhotoCellId";
 
 @interface SSJCalenderDetailViewController ()
-@property (nonatomic,strong) UIView *footerView;
-@property (nonatomic, strong) NSString *cellImage;
-@property (nonatomic,strong) NSString *cellTitle;
-@property (nonatomic,strong) NSString *cellColor;
-@property (nonatomic)BOOL incomeOrExpence;
-@property (nonatomic,strong) UIBarButtonItem *rightBarButton;
-@property(nonatomic, strong) SSJCalenderDetaiImagelFooterView *imageFooter;
-@property(nonatomic, strong) NSMutableArray *items;
+
+@property (nonatomic, strong) NSMutableArray *items;
+
+@property (nonatomic, strong) UIButton *editBtn;
+
+@property (nonatomic, strong) UILabel *tipLab;
+
 @end
 
 @implementation SSJCalenderDetailViewController
@@ -45,298 +45,311 @@
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.statisticsTitle = @"流水详情";
         self.title = @"详情";
+        self.items = [NSMutableArray array];
+        self.hidesBottomBarWhenPushed = YES;
     }
     return self;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.tableView.top = SSJ_NAVIBAR_BOTTOM;
-    [self.view becomeFirstResponder];
-    self.navigationItem.rightBarButtonItem = self.rightBarButton;
-    [self.tableView registerClass:[SSJCalenderTableViewCell class] forCellReuseIdentifier:@"CalenderTableViewCell"];
-    [self.tableView registerClass:[SSJChargeDetailMemberCell class] forCellReuseIdentifier:@"ChargeDetailMemberCell"];
-    [self.tableView registerClass:[SSJCanlenderChargeDetailCell class] forCellReuseIdentifier:@"CanlenderChargeDetailCell"];
-
+    
+    UIEdgeInsets insets = self.tableView.contentInset;
+    insets.bottom = self.editBtn.height;
+    self.tableView.contentInset = insets;
+    self.tableView.tableFooterView = self.tipLab;
+    [self registerCellClass];
+    
+    [self.view addSubview:self.editBtn];
+    self.editBtn.hidden = YES;
+    
+    [self updateAppearance];
 }
 
--(void)viewWillAppear:(BOOL)animated{
+- (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self getDataFromDb];
+    [self loadData];
 }
 
-#pragma mark - UITableViewDelegate
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    SSJBaseItem *item = [self.items ssj_objectAtIndexPath:indexPath];
-    if ([item isKindOfClass:[SSJBillingChargeCellItem class]] && indexPath.section == 1) {
-        if (self.item.chargeMemo.length) {
-            return 160;
-        }else{
-            return 120;
-        }
-    }
-    return 55;
-}
-
--(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
-    if (section == 1) {
-        SSJCalenderDetailHeader *header = [[SSJCalenderDetailHeader alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 44)];
-        header.item = self.item;
-        return header;
-    }
-    return [UIView new];
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    if (section == 1) {
-        return 44;
-    }
-    return 10;
-}
-
--(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
-    if (section == 1) {
-        if (self.item.chargeImage != nil && ![self.item.chargeImage isEqualToString:@""]) {
-            return 300;
-        }
-        return 100;
-    }
-    return 0.1f;
-}
-
--(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
-    if (section == 1) {
-        if (self.item.chargeImage != nil && ![self.item.chargeImage isEqualToString:@""]) {
-            self.imageFooter.imageName = self.item.chargeImage;
-            return self.imageFooter;
-        }
-        return self.footerView;
-    }
-    return nil;
+- (void)updateAppearanceAfterThemeChanged {
+    [super updateAppearanceAfterThemeChanged];
+    [self updateAppearance];
 }
 
 #pragma mark - UITableViewDataSource
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return [self.items[section] count];
-}
-
--(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return self.items.count;
 }
 
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return [self.items[section] count];
+}
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    SSJBaseItem *item = [self.items ssj_objectAtIndexPath:indexPath];
-    if (indexPath.section == 0) {
-        SSJCalenderTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CalenderTableViewCell" forIndexPath:indexPath];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        [cell setCellItem:item];
-        return cell;
-    }else if (indexPath.section == 1){
-        if ([item isKindOfClass:[SSJChargeMemberItem class]]) {
-            SSJChargeDetailMemberCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ChargeDetailMemberCell" forIndexPath:indexPath];
-            float money = [self.item.money floatValue];
-            cell.memberMoney = [NSString stringWithFormat:@"%.2f",money / (self.item.membersItem.count - 1)];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.memberItem = (SSJChargeMemberItem *)item;
-            return cell;
-        }else{
-            SSJCanlenderChargeDetailCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CanlenderChargeDetailCell" forIndexPath:indexPath];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.item = (SSJBillingChargeCellItem *)item;
-            return cell;
-        }
-    }
-    return nil;
+    SSJBaseCellItem *item = [self.items ssj_objectAtIndexPath:indexPath];
+    SSJBaseTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[self cellReuseIdForItemClass:[item class]] forIndexPath:indexPath];
+    cell.cellItem = item;
+    return cell;
 }
 
-#pragma mark - Getter
--(UIView *)footerView{
-    if (!_footerView) {
-        _footerView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 100)];
-        UIButton *editeButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, self.view.width - 22, 40)];
-        [editeButton setTitle:@"修改此记录" forState:UIControlStateNormal];
-        [editeButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];
-        editeButton.layer.borderWidth = 1.f;
-        editeButton.layer.cornerRadius = 2.f;
-        editeButton.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor].CGColor;
-        editeButton.center = CGPointMake(_footerView.width / 2, _footerView.height / 2);
-        [editeButton addTarget:self action:@selector(editeButtonClicked) forControlEvents:UIControlEventTouchUpInside];
-        [_footerView addSubview:editeButton];
+#pragma mark - UITableViewDelegate
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    SSJBaseCellItem *item = [self.items ssj_objectAtIndexPath:indexPath];
+    if ([item isKindOfClass:[SSJCalenderTableViewCellItem class]]
+        || [item isKindOfClass:[SSJCalenderDetailInfoCellItem class]]) {
+        return 54;
+    } else if ([item isKindOfClass:[SSJCalenderDetailPhotoCellItem class]]) {
+        return 180;
+    } else {
+        return 0;
     }
-    return _footerView;
 }
 
--(UIBarButtonItem*)rightBarButton{
-    if (!_rightBarButton) {
-        _rightBarButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(rightBarButtonClicked:)];
-    }
-    return _rightBarButton;
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 0.1;
 }
 
--(SSJCalenderDetaiImagelFooterView *)imageFooter{
-    if (!_imageFooter) {
-        _imageFooter = [[SSJCalenderDetaiImagelFooterView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 300)];
-        __weak typeof(self) weakSelf = self;
-        _imageFooter.ModifyButtonClickedBlock = ^(){
-            [weakSelf editeButtonClicked];
-        };
-        _imageFooter.ImageClickedBlock = ^(){
-            SSJImaageBrowseViewController *imageBrowseVc = [[SSJImaageBrowseViewController alloc]init];
-            imageBrowseVc.type = SSJImageBrowseVcTypeBrowse;
-            imageBrowseVc.item = weakSelf.item;
-            [weakSelf.navigationController pushViewController:imageBrowseVc animated:YES];
-        };
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    if (section == 0) {
+        return 12;
+    } else {
+        return 0.1;
     }
-    return _imageFooter;
+}
+
+- (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    return [UIView new];
+}
+
+- (nullable UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
+    return [UIView new];
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    SSJBaseCellItem *item = [self.items ssj_objectAtIndexPath:indexPath];
+    if ([item isKindOfClass:[SSJCalenderDetailPhotoCellItem class]]) {
+        SSJCalenderDetailPhotoCellItem *photoItem = (SSJCalenderDetailPhotoCellItem *)item;
+        [UIImage ssj_loadUrl:photoItem.photoPath compeltion:^(NSError *error, UIImage *image) {
+            if (image) {
+                [SSJChargeImageBrowseView showWithImage:image];
+            }
+        }];
+    }
+}
+
+#pragma mark - LazyLoading
+- (UIButton *)editBtn {
+    if (!_editBtn) {
+        _editBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        _editBtn.frame = CGRectMake(0, self.view.height - 54, self.view.width, 54);
+        [_editBtn ssj_setBorderStyle:SSJBorderStyleTop];
+        _editBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
+        [_editBtn setTitle:NSLocalizedString(@"修改", nil) forState:UIControlStateNormal];
+        @weakify(self);
+        [[_editBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
+            @strongify(self);
+            SSJRecordMakingViewController *recordMakingVc = [[SSJRecordMakingViewController alloc]init];
+            recordMakingVc.item = self.item;
+            [self.navigationController pushViewController:recordMakingVc animated:YES];
+        }];
+    }
+    return _editBtn;
+}
+
+- (UILabel *)tipLab {
+    if (!_tipLab) {
+        _tipLab = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 30)];
+        _tipLab.backgroundColor = [UIColor clearColor];
+        _tipLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
+    }
+    return _tipLab;
 }
 
 #pragma mark - Private
-/**
- *  修改流水
- */
--(void)editeButtonClicked{
-    SSJRecordMakingViewController *recordMakingVc = [[SSJRecordMakingViewController alloc]init];
-    recordMakingVc.item = self.item;
-    [self.navigationController pushViewController:recordMakingVc animated:YES];
+- (NSString *)cellReuseIdForItemClass:(Class)itemClass {
+    if (itemClass == [SSJCalenderTableViewCellItem class]) {
+        return kSSJCalenderTableViewCellId;
+    } else if (itemClass == [SSJCalenderDetailInfoCellItem class]) {
+        return kSSJCalenderDetailInfoCellId;
+    } else if (itemClass == [SSJCalenderDetailPhotoCellItem class]) {
+        return kSSJCalenderDetailPhotoCellId;
+    } else {
+        return nil;
+    }
 }
 
+- (void)registerCellClass {
+    [self.tableView registerClass:[SSJCalenderTableViewCell class] forCellReuseIdentifier:kSSJCalenderTableViewCellId];
+    [self.tableView registerClass:[SSJCalenderDetailInfoCell class] forCellReuseIdentifier:kSSJCalenderDetailInfoCellId];
+    [self.tableView registerClass:[SSJCalenderDetailPhotoCell class] forCellReuseIdentifier:kSSJCalenderDetailPhotoCellId];
+}
 
-/**
- *  每次进入页面之前获取一次最修改的数据
- */
--(void)getDataFromDb{
-    __weak typeof(self) weakSelf = self;
-    [[SSJDatabaseQueue sharedInstance]inDatabase:^(FMDatabase *db){
-        FMResultSet *chargeResult = [db executeQuery:@"select a.* , b.* , c.cacctname , d.cbooksname from bk_user_charge a , bk_bill_type b , bk_fund_info c , bk_books_type d where a.ichargeid = ? and a.cuserid = ?  and a.ibillid = b.id and a.ifunsid = c.cfundid and a.cbooksid = d.cbooksid",self.item.ID,SSJUSERID()];
-        while ([chargeResult next]) {
-            weakSelf.item.money = [chargeResult stringForColumn:@"IMONEY"];
-            weakSelf.item.billId = [chargeResult stringForColumn:@"IBILLID"];
-            weakSelf.item.billDate = [chargeResult stringForColumn:@"CBILLDATE"];
-            weakSelf.item.fundId = [chargeResult stringForColumn:@"IFUNSID"];
-            weakSelf.item.typeName = [chargeResult stringForColumn:@"CNAME"];
-            weakSelf.item.imageName = [chargeResult stringForColumn:@"CCOIN"];
-            weakSelf.item.colorValue = [chargeResult stringForColumn:@"CCOLOR"];
-            weakSelf.item.incomeOrExpence = [chargeResult boolForColumn:@"ITYPE"];
-            weakSelf.item.fundName = [chargeResult stringForColumn:@"cacctname"];
-            weakSelf.item.booksId = [chargeResult stringForColumn:@"cbooksid"];
-            weakSelf.item.billDetailDate = [chargeResult stringForColumn:@"cdetaildate"];
-            if (!weakSelf.item.booksId.length) {
-                weakSelf.item.booksId = SSJUSERID();
-            }
-            weakSelf.item.booksName = [chargeResult stringForColumn:@"cbooksname"];
-        }
-        [chargeResult close];
-        FMResultSet *memberResult = [db executeQuery:@"select a.* , b.* from bk_member_charge as a , bk_member as b where a.ichargeid = ? and a.cmemberid = b.cmemberid and b.cuserid = ?",weakSelf.item.ID,SSJUSERID()];
-        NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:0];
-        while ([memberResult next]) {
-            SSJChargeMemberItem *memberItem = [[SSJChargeMemberItem alloc]init];
-            memberItem.memberId = [memberResult stringForColumn:@"cmemberId"];
-            memberItem.memberName = [memberResult stringForColumn:@"cname"];
-            memberItem.memberColor = [memberResult stringForColumn:@"ccolor"];
-            [tempArr addObject:memberItem];
-        }
-        if (!tempArr.count) {
-            SSJChargeMemberItem *item = [[SSJChargeMemberItem alloc]init];
-            item.memberId = [NSString stringWithFormat:@"%@-0",SSJUSERID()];
-            item.memberName = @"我";
-            item.memberColor = @"#fc7a60";
-            [tempArr addObject:item];
-        }
-        weakSelf.item.membersItem = tempArr;
-        weakSelf.items = [NSMutableArray arrayWithCapacity:0];
-        [weakSelf.items addObject:@[weakSelf.item]];
-        [tempArr addObject:weakSelf.item];
-        [weakSelf.items addObject:tempArr];
-        SSJDispatch_main_async_safe(^(){
-            [weakSelf.tableView reloadData];
-        })
+- (RACSignal *)loadChargeDetailSignal {
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [SSJCalenderHelper queryChargeDetailWithId:self.item.ID success:^(SSJBillingChargeCellItem * _Nonnull chargeItem) {
+            [self.view ssj_hideLoadingIndicator];
+            self.item = chargeItem;
+            [self organiseData];
+            [self.tableView reloadData];
+            [subscriber sendCompleted];
+        } failure:^(NSError * _Nonnull error) {
+            [subscriber sendError:error];
+        }];
+        return nil;
     }];
 }
 
--(void)rightBarButtonClicked:(id)sender{
-    __weak typeof(self) weakSelf = self;
-    SSJAlertViewAction *cancelAction = [SSJAlertViewAction actionWithTitle:@"取消" handler:NULL];
-    SSJAlertViewAction *sureAction = [SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction *action){
-        [weakSelf deleteCharge];
+- (RACSignal *)loadShareBookStateSignal {
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        if (self.item.idType == SSJChargeIdTypeShareBooks
+            && [self.item.userId isEqualToString:SSJUSERID()]) {
+            [SSJCalenderHelper queryShareBookStateWithBooksId:self.item.booksId memberId:self.item.userId success:^(SSJShareBooksMemberState state) {
+                if (state != SSJShareBooksMemberStateNormal) {
+                    [self updateTipWithText:@"Tip：已退出账本，无法修改流水"];
+                } else {
+                    self.editBtn.hidden = NO;
+                }
+                [subscriber sendNext:@(state == SSJShareBooksMemberStateNormal)];
+                [subscriber sendCompleted];
+            } failure:^(NSError * _Nonnull error) {
+                [subscriber sendError:error];
+            }];
+        } else if (self.item.idType == SSJChargeIdTypeShareBooks
+                   && ![self.item.userId isEqualToString:SSJUSERID()]) {
+            [self updateTipWithText:@"Tip：无法修改他人的流水"];
+            [subscriber sendNext:@(NO)];
+            [subscriber sendCompleted];
+        } else {
+            self.editBtn.hidden = NO;
+            [subscriber sendNext:@(YES)];
+            [subscriber sendCompleted];
+        }
+        return nil;
     }];
-    [SSJAlertViewAdapter showAlertViewWithTitle:@"提示" message:@"你确定要删除这条流水吗" action: cancelAction , sureAction, nil];
+}
+
+- (void)updateTipWithText:(NSString *)text {
+    NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+    style.firstLineHeadIndent = 10;
+    NSAttributedString *tip = [[NSAttributedString alloc] initWithString:NSLocalizedString(text, nil) attributes:@{NSParagraphStyleAttributeName:style}];
+    self.tipLab.attributedText = tip;
+}
+
+- (void)loadData {
+    if (self.items.count == 0) {
+        [self.view ssj_showLoadingIndicator];
+    }
+    
+    [[[self loadChargeDetailSignal] then:^RACSignal *{
+        return [self loadShareBookStateSignal];
+    }] subscribeNext:^(NSNumber *canEditValue) {
+        if ([canEditValue boolValue]) {
+            self.editBtn.hidden = NO;
+            self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(rightBarButtonClicked:)];
+        } else {
+            self.editBtn.hidden = YES;
+            self.navigationItem.rightBarButtonItem = nil;
+        }
+    } error:^(NSError *error) {
+        [self.view ssj_hideLoadingIndicator];
+        [SSJAlertViewAdapter showError:error];
+    } completed:^{
+        [self.view ssj_hideLoadingIndicator];
+    }];
 }
 
 /**
  *  数据库中删除流水
  */
--(void)deleteCharge{
-    __weak typeof(self) weakSelf = self;
-    __block int chargeCount = 0;
-    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db){
-        NSString *userId = SSJUSERID();
-        [db executeUpdate:@"UPDATE BK_USER_CHARGE SET OPERATORTYPE = 2 , CWRITEDATE = ? , IVERSION = ? WHERE ICHARGEID = ?",[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),weakSelf.item.ID];
-        if ([db intForQuery:@"SELECT ITYPE FROM BK_BILL_TYPE WHERE ID = ?",weakSelf.item.billId]) {
-            if (![db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET EXPENCEAMOUNT = EXPENCEAMOUNT - ? , SUMAMOUNT = SUMAMOUNT + ? , CWRITEDATE = ? WHERE CBILLDATE = ? and cbooksid = ? and cuserid = ?",[NSNumber numberWithDouble:[weakSelf.item.money doubleValue]],[NSNumber numberWithDouble:[weakSelf.item.money doubleValue]],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],weakSelf.item.billDate,weakSelf.item.booksId,userId]) {
-                return;
-            }
-        }else{
-            if (![db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET INCOMEAMOUNT = INCOMEAMOUNT - ? , SUMAMOUnT = SUMAMOUNT - ? , CWRITEDATE = ? WHERE CBILLDATE = ? and cbooksid = ? and cuserid = ?",[NSNumber numberWithDouble:[weakSelf.item.money doubleValue]],[NSNumber numberWithDouble:[weakSelf.item.money doubleValue]],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],weakSelf.item.billDate,weakSelf.item.booksId,userId]) {
-                return;
-            }
+- (void)deleteCharge {
+    self.navigationItem.rightBarButtonItem.enabled = NO;
+    [SSJCalenderHelper deleteChargeWithItem:self.item success:^{
+        self.navigationItem.rightBarButtonItem.enabled = YES;
+        if (self.deleteHandler) {
+            self.deleteHandler();
+        } else {
+            [self.navigationController popViewControllerAnimated:YES];
         }
-        [db executeUpdate:@"DELETE FROM BK_DAILYSUM_CHARGE WHERE SUMAMOUNT = 0 AND INCOMEAMOUNT = 0 AND EXPENCEAMOUNT = 0"];
-        NSMutableString *chargeCountSql;
-        NSString *startDate;
-        NSString *endDate;
-        if (weakSelf.period) {
-            startDate = [weakSelf.period.startDate formattedDateWithFormat:@"yyyy-MM-dd"];
-            endDate = [weakSelf.period.endDate formattedDateWithFormat:@"yyyy-MM-dd"];
-        }
-        if (weakSelf.isMemberCharge) {
-            chargeCountSql = [NSMutableString stringWithFormat:@"select count(1) from bk_user_charge where cuserid = '%@' and operatortype <> 2",userId];
-            if (weakSelf.booksId.length && ![weakSelf.booksId isEqualToString:@"all"]) {
-                [chargeCountSql appendFormat:@" and cbooksid = '%@'",weakSelf.booksId];
-            }
-            if (weakSelf.Id.length) {
-                [chargeCountSql appendFormat:@" and cmemberid = '%@'",weakSelf.Id];
-            }
-            if (weakSelf.period) {
-                [chargeCountSql appendFormat:@" and cbilldate >= '%@' and cbilldate <= '%@'",startDate,endDate];
-            }
-        }else{
-            chargeCountSql = [NSMutableString stringWithFormat:@"select count(1) from bk_user_charge where cuserid = '%@' and operatortype <> 2",userId];
-            if (weakSelf.booksId.length && ![weakSelf.booksId isEqualToString:@"all"]) {
-                [chargeCountSql appendFormat:@" and cbooksid = '%@'",weakSelf.booksId];
-            }
-            if (weakSelf.Id.length) {
-                [chargeCountSql appendFormat:@" and ibillid = '%@'",weakSelf.Id];
-            }
-            if (weakSelf.period) {
-                [chargeCountSql appendFormat:@" and cbilldate >= '%@' and cbilldate <= '%@'",startDate,endDate];
-            }
-        }
-        chargeCount = [db intForQuery:chargeCountSql];
+        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+    } failure:^(NSError * _Nonnull error) {
+        self.navigationItem.rightBarButtonItem.enabled = YES;
+        [SSJAlertViewAdapter showError:error];
     }];
-    if (!chargeCount && weakSelf.Id.length && weakSelf.booksId.length) {
-        UIViewController *vc = [weakSelf.navigationController.viewControllers objectAtIndex:weakSelf.navigationController.viewControllers.count - 3];
-        [self.navigationController popToViewController:vc animated:YES];
-    }else{
-        [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)organiseData {
+    [self.items removeAllObjects];
+    
+    NSMutableArray *section_1 = [NSMutableArray array];
+    [self.items addObject:section_1];
+    
+    SSJCalenderTableViewCellItem *moneyItem = [[SSJCalenderTableViewCellItem alloc] init];
+    moneyItem.billImage = [[UIImage imageNamed:self.item.imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    moneyItem.billColor = [UIColor ssj_colorWithHex:self.item.colorValue];
+    moneyItem.billName = self.item.typeName;
+    moneyItem.money = self.item.money;
+    [section_1 addObject:moneyItem];
+    
+    if (self.item.chargeImage.length) {
+        SSJCalenderDetailPhotoCellItem *photoItem = [[SSJCalenderDetailPhotoCellItem alloc] init];
+        if ([[NSFileManager defaultManager] fileExistsAtPath:SSJImagePath(self.item.chargeImage)]) {
+            photoItem.photoPath = [NSURL fileURLWithPath:SSJImagePath(self.item.chargeImage)];
+        } else {
+            photoItem.photoPath = [NSURL URLWithString:SSJGetChargeImageUrl(self.item.chargeImage)];
+        }
+        [section_1 addObject:photoItem];
     }
     
-    [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+    if (self.item.chargeMemo.length) {
+        SSJCalenderDetailInfoCellItem *memoItem = [[SSJCalenderDetailInfoCellItem alloc] init];
+        memoItem.leftText = @"备注";
+        memoItem.rightText = self.item.chargeMemo;
+        [section_1 addObject:memoItem];
+    }
+    
+    NSMutableArray *section_2 = [NSMutableArray array];
+    [self.items addObject:section_2];
+    
+    SSJCalenderDetailInfoCellItem *memberItem = [[SSJCalenderDetailInfoCellItem alloc] init];
+    memberItem.leftText = @"成员";
+    if (self.item.idType == SSJChargeIdTypeShareBooks) {
+        memberItem.rightText = [self.item.userId isEqualToString:SSJUSERID()] ? @"我" : self.item.memberNickname;
+    } else {
+        memberItem.rightText = [[self.item.membersItem valueForKeyPath:@"memberName"] componentsJoinedByString:@"，"];
+    }
+    memberItem.separatorInsets = UIEdgeInsetsMake(0, 15, 0, 0);
+    [section_2 addObject:memberItem];
+    
+    SSJCalenderDetailInfoCellItem *dateItem = [[SSJCalenderDetailInfoCellItem alloc] init];
+    dateItem.leftText = @"时间";
+    dateItem.rightText = [NSString stringWithFormat:@"%@ %@", self.item.billDate, self.item.billDetailDate];
+    dateItem.separatorInsets = UIEdgeInsetsMake(0, 15, 0, 0);
+    [section_2 addObject:dateItem];
+    
+    if (self.item.fundName) {
+        SSJCalenderDetailInfoCellItem *fundItem = [[SSJCalenderDetailInfoCellItem alloc] init];
+        fundItem.leftText = @"资金";
+        fundItem.rightText = self.item.fundName;
+        fundItem.separatorInsets = UIEdgeInsetsMake(0, 15, 0, 0);
+        [section_2 addObject:fundItem];
+    }
+    
+    SSJCalenderDetailInfoCellItem *bookItem = [[SSJCalenderDetailInfoCellItem alloc] init];
+    bookItem.leftText = @"账本";
+    bookItem.rightText = self.item.booksName;
+    bookItem.separatorInsets = UIEdgeInsetsMake(0, 15, 0, 0);
+    [section_2 addObject:bookItem];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+-(void)rightBarButtonClicked:(id)sender{
+    [self deleteCharge];
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (void)updateAppearance {
+    [self.editBtn ssj_setBorderColor:SSJ_CELL_SEPARATOR_COLOR];
+    [self.editBtn setTitleColor:SSJ_MARCATO_COLOR forState:UIControlStateNormal];
+    [self.editBtn ssj_setBackgroundColor:SSJ_SECONDARY_FILL_COLOR forState:UIControlStateNormal];
+    self.tipLab.textColor = SSJ_SECONDARY_COLOR;
 }
-*/
 
 @end

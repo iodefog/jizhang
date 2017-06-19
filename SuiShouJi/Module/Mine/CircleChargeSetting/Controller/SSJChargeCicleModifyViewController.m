@@ -98,19 +98,14 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
         [SSJCircleChargeStore queryDefualtItemWithIncomeOrExpence:1 Success:^(SSJBillingChargeCellItem *item) {
             item.incomeOrExpence = 1;
             weakSelf.item = item;
-            [self reloadMenberItems];
         } failure:^(NSError *error) {
-            
+            [SSJAlertViewAdapter showError:error];
         }];
-    }else{
-        if (![self.item.membersItem count]) {
-            SSJChargeMemberItem *memberItem = [[SSJChargeMemberItem alloc]init];
-            memberItem.memberId = [NSString stringWithFormat:@"%@-0",SSJUSERID()];
-            memberItem.memberName = @"我";
-            self.item.membersItem = [@[memberItem] mutableCopy];
-        }
-        [self reloadMenberItems];
     }
+    self.memberSelectView.preiodConfigId = self.item.sundryId;
+    [self.memberSelectView reloadData:^{
+        [self.tableView reloadData];
+    }];
 }
 
 #pragma mark - UIImagePickerControllerDelegate
@@ -204,7 +199,6 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
         [self.chargeTypeSelectView show];
     }
     if ([title isEqualToString:kTitle6]) {
-        self.memberSelectView.selectedMemberItems = self.item.membersItem;
         [self.memberSelectView show];
     }
     if ([title isEqualToString:kTitle7]) {
@@ -339,10 +333,10 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
         circleModifyCell.cellDetail = self.item.billDate;
     }else if ([title isEqualToString:kTitle6]){
         circleModifyCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        if (self.item.membersItem.count == 1) {
-            circleModifyCell.cellDetail = ((SSJChargeMemberItem *)[self.item.membersItem ssj_safeObjectAtIndex:0]).memberName;
+        if (self.memberSelectView.selectedMemberItems.count == 1) {
+            circleModifyCell.cellDetail = ((SSJChargeMemberItem *)[self.memberSelectView.selectedMemberItems firstObject]).memberName;
         }else{
-            circleModifyCell.cellDetail = [NSString stringWithFormat:@"%ld人",self.item.membersItem.count];
+            circleModifyCell.cellDetail = [NSString stringWithFormat:@"%d人",(int)self.memberSelectView.selectedMemberItems.count];
         }
     }else if ([title isEqualToString:kTitle12]) {
         circleModifyCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -432,7 +426,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
             }else{
                 SSJFundingTypeSelectViewController *NewFundingVC = [[SSJFundingTypeSelectViewController alloc]init];
                 NewFundingVC.needLoanOrNot = NO;
-                NewFundingVC.addNewFundingBlock = ^(SSJBaseItem *item){
+                NewFundingVC.addNewFundingBlock = ^(SSJBaseCellItem *item){
                     if ([item isKindOfClass:[SSJFundingItem class]]) {
                         SSJFundingItem *fundItem = (SSJFundingItem *)item;
                         weakSelf.item.fundId = fundItem.fundingID;
@@ -470,7 +464,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 
 -(SSJHomeDatePickerView *)chargeCircleTimeView{
     if (!_chargeCircleTimeView) {
-        _chargeCircleTimeView = [[SSJHomeDatePickerView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 244)];
+        _chargeCircleTimeView = [[SSJHomeDatePickerView alloc]initWithFrame:CGRectMake(0, 0, SSJSCREENWITH, 244)];
         _chargeCircleTimeView.horuAndMinuBgViewBgColor = [UIColor clearColor];;
         _chargeCircleTimeView.datePickerMode = SSJDatePickerModeDate;
         __weak typeof(self)weakSelf = self;
@@ -545,7 +539,6 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
         __weak typeof(self) weakSelf = self;
         _memberSelectView = [[SSJMemberSelectView alloc]initWithFrame:[UIScreen mainScreen].bounds];
         _memberSelectView.selectedMemberDidChangeBlock = ^(NSArray *selectedMemberItems){
-            weakSelf.item.membersItem = [selectedMemberItems mutableCopy];
             [weakSelf.tableView reloadData];
         };
         _memberSelectView.manageBlock = ^(NSMutableArray *items){
@@ -555,6 +548,10 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
         };
         _memberSelectView.addNewMemberBlock = ^(){
             SSJNewMemberViewController *newMemberVc = [[SSJNewMemberViewController alloc]init];
+            newMemberVc.addNewMemberAction = ^(SSJChargeMemberItem *item){
+                [weakSelf.memberSelectView show];
+                [weakSelf.memberSelectView addSelectedMemberItem:item];
+            };
             [weakSelf.navigationController pushViewController:newMemberVc animated:YES];
         };
     }
@@ -563,6 +560,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 
 #pragma mark - Event
 -(void)saveButtonClicked:(id)sender{
+    self.item.membersItem = self.memberSelectView.selectedMemberItems;
     [_moneyInput resignFirstResponder];
     [_memoInput resignFirstResponder];
     if (!_moneyInput.text.length) {
@@ -610,8 +608,8 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
     __weak typeof(self) weakSelf = self;
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSString *writeDate = [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-        if ([db intForQuery:@"select count(1) from bk_charge_period_config where iconfigid = ?",weakSelf.item.configId]) {
-            [db executeUpdate:@"update bk_charge_period_config set operatortype = 2 ,cwritedate = ? ,iversion = ? where iconfigid = ?",writeDate,@(SSJSyncVersion()),weakSelf.item.configId];
+        if ([db intForQuery:@"select count(1) from bk_charge_period_config where iconfigid = ?",weakSelf.item.sundryId]) {
+            [db executeUpdate:@"update bk_charge_period_config set operatortype = 2 ,cwritedate = ? ,iversion = ? where iconfigid = ?",writeDate,@(SSJSyncVersion()),weakSelf.item.sundryId];
         }
         SSJDispatch_main_async_safe(^{
             [weakSelf.navigationController popViewControllerAnimated:YES];
@@ -621,23 +619,6 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 
 
 #pragma mark - Private
-- (void)reloadMenberItems {
-    __weak typeof(self) weakSelf = self;
-    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        for (SSJChargeMemberItem *memberItem in weakSelf.item.membersItem) {
-            FMResultSet *result = [db executeQuery:@"select * from bk_member where cmemberid = ?",memberItem.memberId];
-            while ([result next]) {
-                memberItem.memberId = [result stringForColumn:@"cmemberid"];
-                memberItem.memberName = [result stringForColumn:@"cname"];
-                memberItem.memberColor = [result stringForColumn:@"ccolor"];
-            }
-        }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [weakSelf.tableView reloadData];
-        });
-    }];
-}
-
 -(void)takePhoto{
     UIImagePickerControllerSourceType sourceType = UIImagePickerControllerSourceTypeCamera;
     if ([UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypeCamera])

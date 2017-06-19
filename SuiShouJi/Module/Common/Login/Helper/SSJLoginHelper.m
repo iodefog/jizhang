@@ -27,7 +27,7 @@
 
 + (void)updateBooksParentIfNeededForUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
     // 更新默认账本的记账类型
-    if (![db executeUpdate:@"update bk_books_type set iparenttype = case when length(cbooksid) != length(cuserid) and cbooksid like cuserid || '%' then substr(cbooksid, length(cuserid) + 2, length(cbooksid) - length(cuserid) - 1) when cbooksid = cuserid then '0' end ,iversion = ? ,cwritedate = ?",@(SSJSyncVersion()),[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"]]) {
+    if (![db executeUpdate:@"update bk_books_type set iparenttype = case when length(cbooksid) != length(cuserid) and cbooksid like cuserid || '%' then substr(cbooksid, length(cuserid) + 2, length(cbooksid) - length(cuserid) - 1) when cbooksid = cuserid then '0' end ,iversion = ? ,cwritedate = ? where iparenttype is null",@(SSJSyncVersion()),[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"]]) {
         if (error) {
             *error = [db lastError];
         }
@@ -80,8 +80,8 @@
 
 }
 
-+ (void)updateTableWhenLoginWithServices:(SSJLoginService *)service{
-    [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
++ (void)updateTableWhenLoginWithServices:(SSJLoginService *)service completion:(void(^)())completion {
+    [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
         //  merge登陆接口返回的收支类型、资金账户、账本
         [SSJBooksTypeSyncTable mergeRecords:service.booksTypeArray forUserId:SSJUSERID() inDatabase:db error:nil];
         //  更新父类型为空的账本
@@ -90,29 +90,17 @@
         [SSJFundInfoSyncTable mergeRecords:service.fundInfoArray forUserId:SSJUSERID() inDatabase:db error:nil];
         [self updateCustomUserBillNeededForUserId:SSJUSERID() billTypeItems:service.customCategoryArray inDatabase:db error:nil];
         
-        //  检测缺少哪个收支类型就创建
-        [SSJUserDefaultDataCreater createDefaultBillTypesIfNeededForUserId:SSJUSERID() inDatabase:db];
-        
         //  更新排序字段为空的收支类型
         [self updateBillTypeOrderIfNeededForUserId:SSJUSERID() inDatabase:db error:nil];
         
         [self updateFundColorForUserId:SSJUSERID() inDatabase:db error:nil];
         
-        //  如果登录没有返回任何资金账户，说明服务器没有保存任何资金记录，就给用户创建默认的
-        [SSJUserDefaultDataCreater createDefaultFundAccountsIfNeededForUserId:SSJUSERID() inDatabase:db];
-        
-        //  如果登录没有返回任何账本类型，说明服务器没有保存任何账本类型，就给用户创建默认的
-        if (service.booksTypeArray.count == 0) {
-            [SSJUserDefaultDataCreater createDefaultBooksTypeForUserId:SSJUSERID() inDatabase:db];
+        if (completion) {
+            SSJDispatchMainAsync(^{
+                completion();
+            });
         }
-        
-        //  如果登录没有返回任何成员类型，说明服务器没有保存任何成员类型，就给用户创建默认的
-        if (service.membersArray.count == 0) {
-            [SSJUserDefaultDataCreater createDefaultMembersForUserId:SSJUSERID() inDatabase:db];
-        }
-        
     }];
-
 }
 
 + (BOOL)mergeWhenLoginWithRecords:(NSArray *)records forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
@@ -146,7 +134,7 @@
         
         // 如果后端数据没有升级的话要对后端数据进行处理
         if (!hasUpdated) {
-            NSString *sql1 = [NSString stringWithFormat:@"insert into bk_user_bill select ub.cuserid, ub.cbillid, ub.istate, '%@', '%@', 1, ub.iorder, bk.cbooksid from bk_user_bill ub , bk_books_type bk where ub.operatortype <> 2 and bk.cbooksid not like bk.cuserid || '%%' and ub.cbooksid = bk.cuserid and length(ub.cbillid) < 10  and bk.cuserid = '%@' and ub.cuserid = '%@'",writeDate,@(SSJSyncVersion()),userId,userId];
+            NSString *sql1 = [NSString stringWithFormat:@"replace into bk_user_bill select ub.cuserid, ub.cbillid, ub.istate, '%@', '%@', 1, ub.iorder, bk.cbooksid from bk_user_bill ub , bk_books_type bk where ub.operatortype <> 2 and bk.cbooksid not like bk.cuserid || '%%' and ub.cbooksid = bk.cuserid and length(ub.cbillid) < 10  and bk.cuserid = '%@' and ub.cuserid = '%@'",writeDate,@(SSJSyncVersion()),userId,userId];
             // 然后将日常账本的记账类型拷进自定义账本
             if (![db executeUpdate:sql1]) {
                 if (error) {
@@ -156,7 +144,7 @@
             }
             
             // 将四个非日常账本的默认账本插入所有默认类型
-            NSString *sql2 = [NSString stringWithFormat:@"insert into bk_user_bill select a.cuserid ,b.id , 1, '%@', '%@', 0, b.defaultorder, a.cbooksid from bk_books_type a, bk_bill_type b where a.iparenttype = b.ibookstype and a.cbooksid <> a.cuserid and length(b.ibookstype) = 1 and a.cbooksid like a.cuserid || '%%' and cuserid = '%@'",writeDate,@(SSJSyncVersion()),userId];
+            NSString *sql2 = [NSString stringWithFormat:@"replace into bk_user_bill select a.cuserid ,b.id , 1, '%@', '%@', 0, b.defaultorder, a.cbooksid from bk_books_type a, bk_bill_type b where a.iparenttype = b.ibookstype and a.cbooksid <> a.cuserid and length(b.ibookstype) = 1 and a.cbooksid like a.cuserid || '%%' and cuserid = '%@'",writeDate,@(SSJSyncVersion()),userId];
             if (![db executeUpdate:sql2]) {
                 if (error) {
                     *error = [db lastError];
@@ -185,8 +173,11 @@
                 NSArray *parentArr = [iparenttype componentsSeparatedByString:@","];
                 for (NSString *parenttype in parentArr) {
                     if ([parenttype integerValue]) {
-                        if (![db executeUpdate:@"insert into bk_user_bill select cuserid ,? , 1, ?, ?, 1, ?, cbooksid from bk_books_type where iparenttype = ? and operatortype <> 2 and cuserid = ?",cbillid,writeDate,@(SSJSyncVersion()),defualtOrder,parenttype,userId]) {
-                            return [db lastError];
+                        if (![db executeUpdate:@"replace into bk_user_bill select cuserid ,? , 1, ?, ?, 1, ?, cbooksid from bk_books_type where iparenttype = ? and operatortype <> 2 and cuserid = ?",cbillid,writeDate,@(SSJSyncVersion()),defualtOrder,parenttype,userId]) {
+                            if (error) {
+                                *error = [db lastError];
+                            }
+                            return NO;
                         }
                     }
                 }

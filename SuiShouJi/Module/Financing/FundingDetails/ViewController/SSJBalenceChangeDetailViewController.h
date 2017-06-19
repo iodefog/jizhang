@@ -13,6 +13,6 @@
 
 @property(nonatomic, strong) SSJBillingChargeCellItem *chargeItem;
 
-@property(nonatomic, strong) SSJBaseItem *fundItem;
+@property(nonatomic, strong) SSJBaseCellItem *fundItem;
 
 @end

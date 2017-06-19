@@ -10,6 +10,8 @@
 
 @class FMDatabase;
 
+SSJ_DEPRECATED
+
 @interface SSJFundAccountTable : NSObject
 
 /**

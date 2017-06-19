@@ -39,7 +39,6 @@
         [self.backgroundView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
         [self.backgroundView ssj_setBorderStyle:SSJBorderStyleBottom];
         [self.backgroundView ssj_setBorderWidth:1 / [UIScreen mainScreen].scale];
-        [self ssj_relayoutBorder];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCellAppearanceAfterThemeChanged) name:SSJThemeDidChangeNotification object:nil];
     }
     return self;

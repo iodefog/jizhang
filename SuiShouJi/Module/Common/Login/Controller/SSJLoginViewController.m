@@ -39,7 +39,7 @@
 #import "SSJNormalWebViewController.h"
 #import "NSString+MoneyDisplayFormat.h"
 #import "MMDrawerController.h"
-#import "SSJBookKeepingHomeViewController.h"
+#import "UIViewController+MMDrawerController.h"
 
 static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 @interface SSJLoginViewController () <UITextFieldDelegate,UIScrollViewDelegate>
@@ -123,17 +123,9 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 @property (nonatomic, strong) UIButton *protocolButton;
 
 /**
- 手机
- */
-@property (nonatomic, copy) NSString *phoneNum;
-/**
  code
  */
 @property (nonatomic, copy) NSString *codeNum;
-/**
- 密码
- */
-@property (nonatomic, copy) NSString *mimaNum;
 
 /**
  <#注释#>
@@ -254,6 +246,10 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 //        self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:21],
 //                                                                        NSForegroundColorAttributeName:[UIColor whiteColor]};
 //    }
+    
+    [self.mm_drawerController setMaximumLeftDrawerWidth:SSJSCREENWITH];
+    [self.mm_drawerController setOpenDrawerGestureModeMask:MMOpenDrawerGestureModeNone];
+    [self.mm_drawerController setCloseDrawerGestureModeMask:MMCloseDrawerGestureModeNone];
 }
 
 -(void)viewWillLayoutSubviews{
@@ -314,7 +310,10 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
             __weak typeof(self) weakSelf = self;
             NSData *lastUserData = [[NSUserDefaults standardUserDefaults] objectForKey:SSJLastLoggedUserItemKey];
             SSJUserItem *lastUserItem = [NSKeyedUnarchiver unarchiveObjectWithData:lastUserData];
-            if ((![self.loginService.item.mobileNo isEqualToString:lastUserItem.mobileNo] && lastUserItem.mobileNo.length) || (![self.loginService.item.openId isEqualToString:lastUserItem.openId] && lastUserItem.openId.length) || ![self.loginService.item.loginType isEqualToString:lastUserItem.loginType]) {
+            
+//            [self.loginService.item.loginType isEqualToString:lastUserItem.loginType]
+            BOOL isSameUser = ([self.loginService.item.mobileNo isEqualToString:lastUserItem.mobileNo] && lastUserItem.mobileNo.length) || ([self.loginService.item.openId isEqualToString:lastUserItem.openId] && lastUserItem.openId.length);
+            if (!isSameUser) {
                 NSString *userName;
                 int loginType = [lastUserItem.loginType intValue];
                 if (loginType == 0) {
@@ -334,12 +333,11 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
                 [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:message action:[SSJAlertViewAction actionWithTitle:@"取消" handler:NULL], [SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction * _Nonnull action) {
                     [weakSelf comfirmTologin];
                 }], nil];
-            }else{
-                [self comfirmTologin];
+                return;
             }
-        }else{
-            [self comfirmTologin];
         }
+        
+        [self comfirmTologin];
         return;
     }
     
@@ -348,7 +346,6 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
             [CDAutoHideMessageHUD showMessage:@"验证码发送成功"];
             [self beginCountdownIfNeeded];//倒计时
             [self.tfRegYanZhenNum becomeFirstResponder];
-            self.phoneNum = self.tfRegPhoneNum.text;
         } else if ([self.registerService.returnCode isEqualToString:@"1001"]) {
             [self showAlertWhenPhoneNumalreadyExists];
         } else {
@@ -389,11 +386,9 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         return;
     }
     
-    if (service == self.registCompleteService) {
+    if (service == self.registCompleteService) {//完成注册
         if ([self.registCompleteService.returnCode isEqualToString:@"1"]) {
-            
             NSDictionary *resultInfo = [service.rootElement objectForKey:@"results"];
-            
             if (resultInfo) {
                 [[NSUserDefaults standardUserDefaults] setBool:YES forKey:SSJHaveLoginOrRegistKey];
                 [[NSUserDefaults standardUserDefaults] synchronize];
@@ -402,34 +397,64 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
                 userItem.userId = SSJUSERID();
                 userItem.mobileNo = self.registCompleteService.mobileNo;
                 userItem.registerState = @"1";
+                userItem.loginType = @"0";
                 
                 //  只有保存用户登录信息成功后才算登录成功
-                if ([SSJUserTableManager saveUserItem:userItem]
-                    && SSJSaveAppId(resultInfo[@"appId"] ?: @"")
-                    && SSJSaveAccessToken(resultInfo[@"accessToken"] ?: @"")
-                    && SSJSaveUserLogined(YES)) {
-                    
+                RACSignal *sg_1 = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+                    [SSJUserTableManager saveUserItem:userItem success:^{
+                        [subscriber sendCompleted];
+                    } failure:^(NSError * _Nonnull error) {
+                        [subscriber sendError:error];
+                    }];
+                    return nil;
+                }];
+                
+                RACSignal *sg_2 = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+                    if (SSJSaveAppId(resultInfo[@"appId"] ?: @"")
+                        && SSJSaveAccessToken(resultInfo[@"accessToken"] ?: @"")
+                        && SSJSaveUserLogined(YES)) {
+                        [subscriber sendCompleted];
+                    } else {
+                        [subscriber sendError:[NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"保存appid／token／登录状态失败"}]];
+                    }
+                    return nil;
+                }];
+                
+                @weakify(self);
+                RACSignal *sg_3 = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+                    @strongify(self);
                     [self syncData];
                     [[NSNotificationCenter defaultCenter] postNotificationName:SSJLoginOrRegisterNotification object:self];
                     
                     [self.tfRegPasswordNum resignFirstResponder];
-                    self.mimaNum = self.tfRegPasswordNum.text;
                     [CDAutoHideMessageHUD showMessage:@"注册成功"];
-//                    [self.navigationController popViewControllerAnimated:YES];
-                    //  如果用户手势密码开启，进入手势密码页面
-                    SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"motionPWD", @"motionPWDState"] forUserId:SSJUSERID()];
+                    // 如果用户手势密码开启，进入手势密码页面
+                    [SSJUserTableManager queryProperty:@[@"motionPWD", @"motionPWDState"] forUserId:SSJUSERID() success:^(SSJUserItem * _Nonnull userItem) {
+                        [subscriber sendNext:userItem];
+                        [subscriber sendCompleted];
+                    } failure:^(NSError * _Nonnull error) {
+                        [subscriber sendError:error];
+                    }];
+                    return nil;
+                }];
+                
+                [[[sg_1 then:^RACSignal *{
+                    return sg_2;
+                }] then:^RACSignal *{
+                    return sg_3;
+                }] subscribeNext:^(SSJUserItem *userItem) {
+                    @strongify(self);
                     if ([userItem.motionPWDState boolValue]) {
                         SSJMotionPasswordViewController *motionVC = [[SSJMotionPasswordViewController alloc] init];
                         motionVC.finishHandle = ^(UIViewController *controller) {
+                            
                             UITabBarController *tabVC = (UITabBarController *)((MMDrawerController *)[UIApplication sharedApplication].keyWindow.rootViewController).centerViewController;
                             UINavigationController *navi = [tabVC.viewControllers firstObject];
-                            SSJBookKeepingHomeViewController *homeController = [navi.viewControllers firstObject];
-                            homeController.allowRefresh = YES;
-                            homeController.hasLoad = NO;
+                            UIViewController *homeController = [navi.viewControllers firstObject];
                             controller.backController = homeController;
                             [controller ssj_backOffAction];
+                            
                         };
-                        motionVC.backController = self.backController;
                         if (userItem.motionPWD.length) {
                             motionVC.type = SSJMotionPasswordViewControllerTypeVerification;
                         } else {
@@ -443,18 +468,15 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
                     if (self.finishHandle) {
                         self.finishHandle(self);
                     }
-                    return;
-                }
+                } error:^(NSError *error) {
+                    [SSJAlertViewAdapter showError:error];
+                }];
             }
+        } else {
+            [self showErrorMessage:(self.registCompleteService.desc.length ? self.registCompleteService.desc : SSJ_ERROR_MESSAGE)];
         }
-        
-//        [self.tfRegPasswordNum becomeFirstResponder];
-        [self showErrorMessage:(self.registCompleteService.desc.length ? self.registCompleteService.desc : SSJ_ERROR_MESSAGE)];
-        
     }
 }
-
-#pragma mark - UIScrollViewDelegate
 
 #pragma mark - Notification
 -(void)updatetextfield:(id)sender{
@@ -513,7 +535,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 -(void)registerButtonClicked:(UIButton *)sender{//注册
     if (sender.tag == 200) {//注册标题
         self.loginTitleButton.selected = NO;
-        //清空数据
+        //清空数据，停止请求数据
         [self clearLoginData];
         self.centerScrollViewOne.hidden = YES;
         self.centerScrollViewTwo.hidden = NO;
@@ -613,16 +635,18 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 }
 
 - (void)regNextButtonClicked {//验证验证码
-    if (!self.tfRegYanZhenNum.text.length) {
+    NSString *phoneNum = self.tfRegPhoneNum.text;
+    NSString *codeNum = self.tfRegYanZhenNum.text;
+    if (!codeNum.length) {
         [CDAutoHideMessageHUD showMessage:@"请先输入验证码"];
         return;
     }
     
-    if (!self.tfRegPhoneNum.text.length) {
+    if (!phoneNum.length) {
         [CDAutoHideMessageHUD showMessage:@"请先输入手机号码"];
         return;
     }
-    [self.registerNextService checkAuthCodeWithMobileNo:self.tfRegPhoneNum.text authCode:self.tfRegYanZhenNum.text];
+    [self.registerNextService checkAuthCodeWithMobileNo:phoneNum authCode:codeNum];
 }
 
 //  同意、不同意协议
@@ -639,7 +663,8 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 {
     self.tfPhoneNum.text = nil;
     self.tfPassword.text = nil;
-    self.registerButton.enabled = NO;
+    self.loginButton.enabled = NO;
+    [self.loginService cancel];
 }
 
 - (void)clearRegisterData
@@ -648,6 +673,8 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     self.tfRegPhoneNum.text = nil;
     self.tfRegYanZhenNum.text = nil;
     self.tfRegPasswordNum.text = nil;
+    self.registerButton.enabled = NO;
+    [self.registerService cancel];
 //    [self.countdownTimer invalidate];//停止倒计时
 //    self.countdownTimer = nil;
 }
@@ -663,86 +690,130 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 -(void)comfirmTologin{
     //  只要登录就设置用户为已注册，因为9188账户、第三方登录没有注册就可以登录
     self.loginService.item.registerState = @"1";
-//    if (!self.loginService.item) return;
-    if (![SSJUserTableManager saveUserItem:self.loginService.item]
-        || !SSJSaveAppId(self.loginService.appid)
-        || !SSJSaveAccessToken(self.loginService.accesstoken)
-        || !SSJSetUserId(self.loginService.item.userId)
-        || !SSJSaveUserLogined(YES)) {
-        
-        [CDAutoHideMessageHUD showMessage:(SSJ_ERROR_MESSAGE)];
-        return;
+    
+    if (!self.loginService.item.currentBooksId) {
+        self.loginService.item.currentBooksId = self.loginService.item.userId;
     }
     
-    // 合并登陆借口返回的数据，即使合并失败也不影响登陆，因为之后还会同步一次
-    [SSJLoginHelper updateTableWhenLoginWithServices:self.loginService];
-        
-    // 如果本地保存的最近一次签到时间和服务端返回的不一致，说明本地没有保存最新的签到记录
-    SSJBookkeepingTreeCheckInModel *checkInModel = [SSJBookkeepingTreeStore queryCheckInInfoWithUserId:SSJUSERID() error:nil];
-    if (![checkInModel.lastCheckInDate isEqualToString:_loginService.checkInModel.lastCheckInDate]) {
-        [SSJBookkeepingTreeStore saveCheckInModel:_loginService.checkInModel error:nil];
-        [SSJBookkeepingTreeHelper loadTreeImageWithUrlPath:_loginService.checkInModel.treeImgUrl finish:NULL];
-        [SSJBookkeepingTreeHelper loadTreeGifImageDataWithUrlPath:_loginService.checkInModel.treeGifUrl finish:NULL];
-    }
-    
-    NSString *userName;
-    if (self.loginService.item.nickName.length) {
-        userName = self.loginService.item.nickName;
-    } else {
-        userName = self.loginService.item.mobileNo;
-    }
-    
-    [SSJAnaliyticsManager setUserId:SSJUSERID() userName:userName];
-    [CDAutoHideMessageHUD showMessage:@"登录成功"];
-    [[NSNotificationCenter defaultCenter]postNotificationName:SSJLoginOrRegisterNotification object:nil];
-    [SSJLocalNotificationHelper cancelLocalNotificationWithKey:SSJReminderNotificationKey];
-    
-    //  登陆成功后强制同步一次
-    [self syncData];
-    [self.loadingView show];
-    
-    //  如果有finishHandle，就通过finishHandle来控制页面流程，否则走默认流程
-    [[NSUserDefaults standardUserDefaults]setBool:YES forKey:SSJHaveLoginOrRegistKey];
-    [[NSUserDefaults standardUserDefaults]setInteger:self.loginService.loginType forKey:SSJUserLoginTypeKey];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-    
-    //  如果用户手势密码开启，进入手势密码页面
-    SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"motionPWD", @"motionPWDState"] forUserId:SSJUSERID()];
-    if ([userItem.motionPWDState boolValue]) {
-        __weak typeof(self) weakSelf = self;
-        SSJMotionPasswordViewController *motionVC = [[SSJMotionPasswordViewController alloc] init];
-        motionVC.finishHandle = ^(UIViewController *controller) {
-//            UITabBarController *tabbarVc = self.navigationController.tabBarController;
-//            UIViewController *homeController = [((UINavigationController *)[tabbarVc.viewControllers firstObject]).viewControllers firstObject];
-//            controller.backController = homeController;
-            
-            UITabBarController *tabVC = (UITabBarController *)((MMDrawerController *)[UIApplication sharedApplication].keyWindow.rootViewController).centerViewController;
-            UINavigationController *navi = [tabVC.viewControllers firstObject];
-            SSJBookKeepingHomeViewController *homeController = [navi.viewControllers firstObject];
-            homeController.allowRefresh = YES;
-            homeController.hasLoad = NO;
+    // 保存用户信息
+    [[[[[[[[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [SSJUserTableManager saveUserItem:self.loginService.item success:^{
+            [subscriber sendCompleted];
+        } failure:^(NSError * _Nonnull error) {
+            [subscriber sendError:error];
+        }];
+        return nil;
+    }] then:^RACSignal *{
+        // 保存用户登录信息
+        return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+            if (SSJSaveAppId(self.loginService.appid)
+                && SSJSaveAccessToken(self.loginService.accesstoken)
+                && SSJSetUserId(self.loginService.item.userId)
+                && SSJSaveUserLogined(YES)) {
+                //保存账本类型个人or共享
+                [self queryCurrentCategoryForUserId:self.loginService.item.userId];
+                [subscriber sendCompleted];
+                
+            } else {
+                [subscriber sendError:[NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"存储用户登录信息失败"}]];
+            }
+            return nil;
+        }];
+    }] then:^RACSignal *{
+        // 合并用户数据，即使合并失败，之后还会进行同步，所以无论成功与否都正常走接下来的流程
+        return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+            [SSJLoginHelper updateTableWhenLoginWithServices:self.loginService completion:^{
+                [subscriber sendCompleted];
+            }];
+            return nil;
+        }];
+    }] then:^RACSignal *{
+        // 检测用户的默认数据，哪些没有就创建哪些
+        return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+            [SSJUserDefaultDataCreater asyncCreateAllDefaultDataWithUserId:SSJUSERID() success:^{
+                [subscriber sendCompleted];
+            } failure:^(NSError *error) {
+                [subscriber sendError:error];
+            }];
+            return nil;
+        }];
+    }] then:^RACSignal *{
+        // 更新用户签到数据
+        return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+            [SSJBookkeepingTreeStore queryCheckInInfoWithUserId:SSJUSERID() success:^(SSJBookkeepingTreeCheckInModel * _Nonnull checkInModel) {
+                if (![checkInModel.lastCheckInDate isEqualToString:_loginService.checkInModel.lastCheckInDate]) {
+                    [SSJBookkeepingTreeStore saveCheckInModel:_loginService.checkInModel success:NULL failure:NULL];
+                    [SSJBookkeepingTreeHelper loadTreeImageWithUrlPath:_loginService.checkInModel.treeImgUrl finish:NULL];
+                    [SSJBookkeepingTreeHelper loadTreeGifImageDataWithUrlPath:_loginService.checkInModel.treeGifUrl finish:NULL];
+                }
+                [subscriber sendCompleted];
+            } failure:^(NSError * _Nonnull error) {
+                [subscriber sendError:error];
+            }];
+            return nil;
+        }];
+    }] then:^RACSignal *{
+        // 登录成功，做些额外的处理
+        return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+            [self syncData];
+            [self.loadingView show];
+            [CDAutoHideMessageHUD showMessage:@"登录成功"];
+            [SSJAnaliyticsManager setUserId:SSJUSERID() userName:(self.loginService.item.nickName.length ? self.loginService.item.nickName : self.loginService.item.mobileNo)];
+            [[NSNotificationCenter defaultCenter] postNotificationName:SSJLoginOrRegisterNotification object:nil];
+            [SSJLocalNotificationHelper cancelLocalNotificationWithKey:SSJReminderNotificationKey];
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:SSJHaveLoginOrRegistKey];
+            [[NSUserDefaults standardUserDefaults] setInteger:self.loginService.loginType forKey:SSJUserLoginTypeKey];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+            [subscriber sendCompleted];
+            return nil;
+        }];
+    }] then:^RACSignal *{
+        // 如果用户手势密码开启，进入手势密码页面，否则走既定的页面流程
+        return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+            [SSJUserTableManager queryProperty:@[@"motionPWD", @"motionPWDState"] forUserId:SSJUSERID() success:^(SSJUserItem * _Nonnull userItem) {
+                if ([userItem.motionPWDState boolValue]) {
+                    __weak typeof(self) weakSelf = self;
+                    SSJMotionPasswordViewController *motionVC = [[SSJMotionPasswordViewController alloc] init];
+                    motionVC.finishHandle = ^(UIViewController *controller) {
+                        UITabBarController *tabVC = (UITabBarController *)((MMDrawerController *)[UIApplication sharedApplication].keyWindow.rootViewController).centerViewController;
+                        UINavigationController *navi = [tabVC.viewControllers firstObject];
+                        UIViewController *homeController = [navi.viewControllers firstObject];
 
-            controller.backController = homeController;
-            [controller ssj_backOffAction];
+                        controller.backController = homeController;
+                        [controller ssj_backOffAction];
+                    };
+                    motionVC.backController = self.backController;
+                    if (userItem.motionPWD.length) {
+                        motionVC.type = SSJMotionPasswordViewControllerTypeVerification;
+                    } else {
+                        motionVC.type = SSJMotionPasswordViewControllerTypeSetting;
+                    }
+                    [weakSelf.navigationController pushViewController:motionVC animated:YES];
+                } else {
+                    if (self.finishHandle) {
+                        self.finishHandle(self);
+                    } else {
+                        [self ssj_backOffAction];
+                    }
+                }
+                [subscriber sendCompleted];
+            } failure:^(NSError * _Nonnull error) {
+                [subscriber sendError:error];
+            }];
+            return nil;
+        }];
+    }] subscribeError:^(NSError *error) {
+        [SSJAlertViewAdapter showError:error];
+    }];
+}
 
-        };
-        motionVC.backController = self.backController;
-        if (userItem.motionPWD.length) {
-            motionVC.type = SSJMotionPasswordViewControllerTypeVerification;
-        } else {
-            motionVC.type = SSJMotionPasswordViewControllerTypeSetting;
-        }
-        [weakSelf.navigationController pushViewController:motionVC animated:YES];
-        
-        return;
-    }
-    
-    //
-    if (self.finishHandle) {
-        self.finishHandle(self);
-    } else {
-        [self ssj_backOffAction];
-    }
+// 登录成功后保存当前账本类型：共享or个人
+- (void )queryCurrentCategoryForUserId:(NSString *)userId {
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
+        NSString *currentBookId = [db stringForQuery:@"select ccurrentbooksid from bk_user where cuserid = ?",userId];
+        BOOL isShareBook = [db boolForQuery:@"select count(*) from bk_books_type where cbooksid = ? and operatortype <> 2 and cuserid = ?",currentBookId,SSJUSERID()];
+        SSJSaveBooksCategory(!isShareBook);
+    }];
 }
 
 - (void)syncData {
@@ -947,8 +1018,6 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     
     self.protocolButton.left = CGRectGetMaxX(self.agreeButton.frame) + 3;
     self.protocolButton.centerY = self.agreeButton.centerY;
-    [self.tfPhoneNum ssj_relayoutBorder];
-    [self.tfRegYanZhenNum ssj_relayoutBorder];
 }
 
 

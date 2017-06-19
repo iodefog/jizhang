@@ -11,6 +11,10 @@
 
 @implementation SSJDatabaseVersion4
 
++ (NSString *)dbVersion {
+    return @"unknown";
+}
+
 + (NSError *)startUpgradeInDatabase:(FMDatabase *)db {
     
     NSError *error = [self createBooksTypeTableWithDatabase:db];
@@ -24,11 +28,6 @@
     }
     
     error = [self updateUserBudgetTableWithDatabase:db];
-    if (error) {
-        return error;
-    }
-    
-    error = [self updateDailySumChargeTableWithDatabase:db];
     if (error) {
         return error;
     }
@@ -51,22 +50,22 @@
         return [db lastError];
     }
     
-    FMResultSet *resultSet = [db executeQuery:@"select cuserid from bk_user"];
-    if (!resultSet) {
-        return [db lastError];
-    }
-    
-    NSString *writeDate = [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-    
-    while ([resultSet next]) {
-        NSString *userId = [resultSet stringForColumnIndex:0];
-        
-        [db executeUpdate:@"INSERT INTO BK_BOOKS_TYPE (CBOOKSID, CBOOKSNAME, CBOOKSCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID , IORDER, CICOIN) VALUES (?, ?, ?, ?, 0, ?, ? , ? , ?)",userId, @"日常账本", @"#7fb04f", writeDate, @(SSJSyncVersion()), userId,@(1),@"bk_moren"];
-        [db executeUpdate:@"INSERT INTO BK_BOOKS_TYPE (CBOOKSID, CBOOKSNAME, CBOOKSCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID , IORDER, CICOIN) VALUES (?, ?, ?, ?, 0, ?, ? , ? , ?)", [NSString stringWithFormat:@"%@-1",userId], @"生意账本", @"#f5a237", writeDate, @(SSJSyncVersion()), userId,@(2),@"bk_shengyi"];
-        [db executeUpdate:@"INSERT INTO BK_BOOKS_TYPE (CBOOKSID, CBOOKSNAME, CBOOKSCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID , IORDER, CICOIN) VALUES (?, ?, ?, ?, 0, ?, ? , ? , ?)", [NSString stringWithFormat:@"%@-2",userId], @"结婚账本", @"#ff6363", writeDate, @(SSJSyncVersion()), userId,@(3),@"bk_jiehun"];
-        [db executeUpdate:@"INSERT INTO BK_BOOKS_TYPE (CBOOKSID, CBOOKSNAME, CBOOKSCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID , IORDER ,CICOIN) VALUES (?, ?, ?, ?, 0, ?, ? , ? , ?)", [NSString stringWithFormat:@"%@-3",userId], @"装修账本", @"#5ca0d9", writeDate, @(SSJSyncVersion()), userId,@(4),@"bk_zhuangxiu"];
-        [db executeUpdate:@"INSERT INTO BK_BOOKS_TYPE (CBOOKSID, CBOOKSNAME, CBOOKSCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID, IORDER, CICOIN) VALUES (?, ?, ?, ?, 0, ?, ? , ? , ?)", [NSString stringWithFormat:@"%@-4",userId], @"旅行账本", @"#ad82dd", writeDate, @(SSJSyncVersion()), userId,@(5),@"bk_lvxing"];
-    }
+//    FMResultSet *resultSet = [db executeQuery:@"select cuserid from bk_user"];
+//    if (!resultSet) {
+//        return [db lastError];
+//    }
+//    
+//    NSString *writeDate = [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+//    
+//    while ([resultSet next]) {
+//        NSString *userId = [resultSet stringForColumnIndex:0];
+//        
+//        [db executeUpdate:@"INSERT INTO BK_BOOKS_TYPE (CBOOKSID, CBOOKSNAME, CBOOKSCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID , IORDER, CICOIN) VALUES (?, ?, ?, ?, 0, ?, ? , ? , ?)",userId, @"日常账本", @"#FC73AE,#FB91BC", writeDate, @(SSJSyncVersion()), userId,@(1),@"bk_moren"];
+//        [db executeUpdate:@"INSERT INTO BK_BOOKS_TYPE (CBOOKSID, CBOOKSNAME, CBOOKSCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID , IORDER, CICOIN) VALUES (?, ?, ?, ?, 0, ?, ? , ? , ?)", [NSString stringWithFormat:@"%@-1",userId], @"生意账本", @"#f5a237", writeDate, @(SSJSyncVersion()), userId,@(2),@"bk_shengyi"];
+//        [db executeUpdate:@"INSERT INTO BK_BOOKS_TYPE (CBOOKSID, CBOOKSNAME, CBOOKSCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID , IORDER, CICOIN) VALUES (?, ?, ?, ?, 0, ?, ? , ? , ?)", [NSString stringWithFormat:@"%@-2",userId], @"结婚账本", @"#ff6363", writeDate, @(SSJSyncVersion()), userId,@(3),@"bk_jiehun"];
+//        [db executeUpdate:@"INSERT INTO BK_BOOKS_TYPE (CBOOKSID, CBOOKSNAME, CBOOKSCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID , IORDER ,CICOIN) VALUES (?, ?, ?, ?, 0, ?, ? , ? , ?)", [NSString stringWithFormat:@"%@-3",userId], @"装修账本", @"#5ca0d9", writeDate, @(SSJSyncVersion()), userId,@(4),@"bk_zhuangxiu"];
+//        [db executeUpdate:@"INSERT INTO BK_BOOKS_TYPE (CBOOKSID, CBOOKSNAME, CBOOKSCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID, IORDER, CICOIN) VALUES (?, ?, ?, ?, 0, ?, ? , ? , ?)", [NSString stringWithFormat:@"%@-4",userId], @"旅行账本", @"#ad82dd", writeDate, @(SSJSyncVersion()), userId,@(5),@"bk_lvxing"];
+//    }
     
     return nil;
 }
@@ -94,35 +93,6 @@
     if (![db executeUpdate:@"update bk_user_budget set cbooksid = cuserid"]) {
         return [db lastError];
     }
-    return nil;
-}
-
-+ (NSError *)updateDailySumChargeTableWithDatabase:(FMDatabase *)db {
-    // 创建临时表
-    if (![db executeUpdate:@"create temporary table TMP_DAILYSUM_CHARGE (CBILLDATE TEXT, EXPENCEAMOUNT REAL, INCOMEAMOUNT REAL, SUMAMOUNT REAL, CWRITEDATE TEXT, CUSERID TEXT, CBOOKSID TEXT, PRIMARY KEY(CBILLDATE, CUSERID, CBOOKSID))"]) {
-        return [db lastError];
-    }
-    
-    // 将原来表中的纪录插入到临时表中
-    if (![db executeUpdate:@"insert into TMP_DAILYSUM_CHARGE select CBILLDATE, EXPENCEAMOUNT, INCOMEAMOUNT, SUMAMOUNT, CWRITEDATE, CUSERID, CUSERID from BK_DAILYSUM_CHARGE"]) {
-        return [db lastError];
-    }
-    
-    // 删除原来的表
-    if (![db executeUpdate:@"drop table BK_DAILYSUM_CHARGE"]) {
-        return [db lastError];
-    }
-    
-    // 新建表
-    if (![db executeUpdate:@"create table BK_DAILYSUM_CHARGE (CBILLDATE TEXT, EXPENCEAMOUNT REAL, INCOMEAMOUNT REAL, SUMAMOUNT REAL, CWRITEDATE TEXT, CUSERID TEXT, CBOOKSID TEXT, PRIMARY KEY(CBILLDATE, CUSERID, CBOOKSID))"]) {
-        return [db lastError];
-    }
-    
-    //
-    if (![db executeUpdate:@"insert into BK_DAILYSUM_CHARGE select * from TMP_DAILYSUM_CHARGE"]) {
-        return [db lastError];
-    }
-    
     return nil;
 }
 

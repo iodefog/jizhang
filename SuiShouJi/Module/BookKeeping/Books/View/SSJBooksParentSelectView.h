@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+SSJ_DEPRECATED
+
 @interface SSJBooksParentSelectView : UIView
 
 @property (nonatomic, copy) void(^parentSelectBlock)(NSInteger selectParent);

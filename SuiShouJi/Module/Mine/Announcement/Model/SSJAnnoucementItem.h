@@ -6,9 +6,9 @@
 //  Copyright © 2017年 ___9188___. All rights reserved.
 //
 
-#import "SSJBaseItem.h"
+#import "SSJBaseCellItem.h"
 
-@interface SSJAnnoucementItem : SSJBaseItem
+@interface SSJAnnoucementItem : SSJBaseCellItem
 
 typedef NS_ENUM(NSUInteger, SSJAnnouceMentType) {
     SSJAnnouceMentTypeNormal = 0,        //  普通公告

@@ -67,7 +67,7 @@
 
 - (SSJBookKeepingHomeBooksButton *)leftButton{
     if (!_leftButton) {
-        _leftButton = [[SSJBookKeepingHomeBooksButton alloc]initWithFrame:CGRectMake(0, 0, 30, 32)];
+        _leftButton = [[SSJBookKeepingHomeBooksButton alloc]initWithFrame:CGRectMake(0, 0, 22, 22)];
     }
     return _leftButton;
 }

@@ -6,35 +6,18 @@
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
 
-#import "SSJBaseItem.h"
+#import "SSJBaseCellItem.h"
+#import "SSJFinancingGradientColorItem.h"
+#import "SSJBooksItem.h"
 
-@interface SSJBooksTypeItem : NSObject
-
-//账本id
-@property(nonatomic, strong) NSString *booksId;
-
-//账本名称
-@property(nonatomic, strong) NSString *booksName;
-
-//账本颜色
-@property(nonatomic, strong) NSString *booksColor;
-
-//账本图标
-@property(nonatomic, strong) NSString *booksIcoin;
-
-//账本顺序
-@property(nonatomic) int booksOrder;
-
-//账本父类
-@property(nonatomic) NSInteger booksParent;
+@interface SSJBooksTypeItem : SSJBaseCellItem<SSJBooksItemProtocol>
 
 @property(nonatomic, strong) NSString *userId;
 
-@property(nonatomic, strong) NSString *cwriteDate;
-
-@property(nonatomic) NSInteger operatorType;
-
 @property(nonatomic) BOOL editeModel;
+
+/**<#注释#>*/
+@property (nonatomic, copy) NSString *operatorType;
 
 + (NSDictionary *)propertyMapping;
 

@@ -11,3 +11,6 @@
 "收入" = "income";
 "管理" = "manage";
 "完成" = "done";
+"修改" = "modify";
+"无法修改他人的流水" = "can not modify other's charges";
+"无法修改已退出账本的流水" = "无法修改已退出账本的流水";

@@ -15,8 +15,6 @@
 #import "SSJCalenderTableViewNoDataHeader.h"
 #import "SSJCalendarTabelViewHeaderView.h"
 #import "SSJCalendarTableViewCell.h"
-#import "SSJBillingChargeCell.h"
-#import "SSJCalenderTableViewCell.h"
 
 #import "SSJDatabaseQueue.h"
 #import "SSJCalenderHelper.h"
@@ -150,15 +148,13 @@
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
     if (self.needAnimation) {
         __weak typeof(self) weakSelf = self;
-        SSJCalenderTableViewCell * currentCell = (SSJCalenderTableViewCell *)cell;
-        currentCell.transform = CGAffineTransformMakeTranslation(0, self.view.height - 400);
+        cell.transform = CGAffineTransformMakeTranslation(0, self.view.height - 400);
         [UIView animateWithDuration:0.3 delay:0.1 * indexPath.row options:UIViewAnimationOptionTransitionCurlUp animations:^{
-            currentCell.transform = CGAffineTransformIdentity;
+            cell.transform = CGAffineTransformIdentity;
         } completion:^(BOOL finished) {
             weakSelf.needAnimation = NO;
         }];
     }
-
 }
 
 #pragma mark - UITableViewDataSource
@@ -293,7 +289,8 @@
         } else {
             _shareButton.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor alpha:0.8];
         }
-        [_shareButton setImage:[UIImage imageNamed:@"calender_fenxiang"] forState:UIControlStateNormal];
+        [_shareButton setImage:[[UIImage imageNamed:@"calender_fenxiang"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+        _shareButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
         [_shareButton setSpaceBetweenImageAndTitle:10];
         _shareButton.hidden = YES;
         [_shareButton addTarget:self action:@selector(shareButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
@@ -381,7 +378,7 @@
                 _currentExpenture = expence;
                 [weakSelf reloadWithAnimation];
             } failure:^(NSError *error) {
-                
+                [SSJAlertViewAdapter showError:error];
             }];
         }
         weakSelf.calendarView.data = data;
@@ -389,6 +386,7 @@
         [weakSelf.view setNeedsLayout];
     } failure:^(NSError *error) {
         [weakSelf.view ssj_hideLoadingIndicator];
+        [SSJAlertViewAdapter showError:error];
     }];
 }
 
@@ -411,7 +409,7 @@
 - (void)shareTheBillWithImage:(UIImage *)image {
     if (!image) return;
     
-    [SSJShareManager shareWithType:SSJShareTypeImageOnly image:image UrlStr:nil title:@"" content:@"" PlatformType:UMSocialPlatformType_Sina | UMSocialPlatformType_WechatSession | UMSocialPlatformType_WechatTimeLine | UMSocialPlatformType_QQ inController:self ShareSuccess:^(UMSocialShareResponse *response) {
+    [SSJShareManager shareWithType:SSJShareTypeImageOnly image:image UrlStr:nil title:@"" content:@"" PlatformType:@[@(UMSocialPlatformType_Sina),@(UMSocialPlatformType_WechatSession),@(UMSocialPlatformType_WechatTimeLine),@(UMSocialPlatformType_QQ)] inController:self ShareSuccess:^(UMSocialShareResponse *response) {
         if (response.platformType == UMSocialPlatformType_WechatSession) {
             [SSJAnaliyticsManager event:@"calendar_share_weixin"];
         } else if (response.platformType == UMSocialPlatformType_WechatTimeLine) {
@@ -431,6 +429,8 @@
     } else {
         _shareButton.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor alpha:0.8];
     }
+    _shareButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
+    [_shareButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] forState:UIControlStateNormal];
 }
 
 /*

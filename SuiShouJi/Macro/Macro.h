@@ -107,6 +107,8 @@ alpha:(a)]
 
 #define SSJ_KEYWINDOW [UIApplication sharedApplication].keyWindow
 
+#define SSJ_SCREEN_SCALE [UIScreen mainScreen].scale
+
 
 #pragma mark -
 #pragma mark - Font

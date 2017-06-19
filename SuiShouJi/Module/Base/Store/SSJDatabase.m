@@ -40,7 +40,7 @@
 }
 
 - (void)handleErrorIfNeeded {
-    if ([self hadError]) {
+    if (self.shouldHandleError && [self hadError]) {
         NSError *error = [self lastError];
         NSString *desc = [NSString stringWithFormat:@"code:%d  description:%@  sql:%@", (int)error.code, error.localizedDescription, self.sql];
         NSError *customError = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:desc}];

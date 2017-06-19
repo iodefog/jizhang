@@ -102,17 +102,17 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
     NSDictionary *sectionInfo = [self.datas ssj_safeObjectAtIndex:(NSUInteger)indexPath.section];
     NSArray *datas = sectionInfo[SSJBillingChargeRecordKey];
     SSJBillingChargeCellItem *selectedItem = [datas ssj_safeObjectAtIndex:indexPath.row];
-    SSJCalenderDetailViewController *calenderDetailVC = [[SSJCalenderDetailViewController alloc] initWithTableViewStyle:UITableViewStyleGrouped];
-    if (!self.booksId.length) {
-        self.booksId = [SSJUserTableManager queryUserItemForID:SSJUSERID()].currentBooksId;
+    
+    if (self.booksId.length) {
+        [self enterCalenderDetailWithSelectedItem:selectedItem];
+    } else {
+        [SSJUserTableManager queryUserItemWithID:SSJUSERID() success:^(SSJUserItem * _Nonnull userItem) {
+            self.booksId = userItem.currentBooksId;
+            [self enterCalenderDetailWithSelectedItem:selectedItem];
+        } failure:^(NSError * _Nonnull error) {
+            [SSJAlertViewAdapter showError:error];
+        }];
     }
-    if (self.period) {
-        calenderDetailVC.period = self.period;
-    }
-    calenderDetailVC.booksId = self.booksId;
-    calenderDetailVC.Id = self.ID;
-    calenderDetailVC.item = selectedItem;
-    [self.navigationController pushViewController:calenderDetailVC animated:YES];
 }
 
 //- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
@@ -124,10 +124,13 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
     NSDictionary *sectionInfo = [self.datas ssj_safeObjectAtIndex:(NSUInteger)indexPath.section];
     NSArray *datas = sectionInfo[SSJBillingChargeRecordKey];
     SSJBillingChargeCellItem *selectedItem = [datas ssj_safeObjectAtIndex:indexPath.row];
-    if (selectedItem.chargeMemo.length || selectedItem.chargeImage.length) {
+    if (selectedItem.chargeMemo.length
+        || selectedItem.chargeImage.length
+        || selectedItem.memberNickname.length) {
         return 65;
+    } else {
+        return 50;
     }
-    return 50;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
@@ -136,34 +139,59 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
 
 #pragma mark - Private
 - (void)reloadData {
-    if (_isMemberCharge) {
+    if ([self.booksId isEqualToString:SSJAllBooksIds]) {
         [self.view ssj_showLoadingIndicator];
-        [SSJBillingChargeHelper queryMemberChargeWithMemberID:_ID booksId:_booksId inPeriod:_period isPayment:_isPayment success:^(NSArray<NSDictionary *> *data) {
+        [SSJBillingChargeHelper queryAllBooksChargeListBillId:self.billId period:self.period success:^(NSArray<NSDictionary *> * _Nonnull result) {
             [self.view ssj_hideLoadingIndicator];
-            self.datas = data;
+            self.datas = result;
             [self.tableView reloadData];
-        } failure:^(NSError *error) {
+        } failure:^(NSError * _Nonnull error) {
             [self.view ssj_hideLoadingIndicator];
-            NSString *message = [error localizedDescription].length ? [error localizedDescription] : SSJ_ERROR_MESSAGE;
-            [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:message action:[SSJAlertViewAction actionWithTitle:@"确认" handler:NULL], nil];
+            [SSJAlertViewAdapter showError:error];
         }];
-        
+    } else if (self.billId) {
+        [self.view ssj_showLoadingIndicator];
+        [SSJBillingChargeHelper queryChargeListWithMemberId:self.memberId booksId:self.booksId billId:self.billId period:self.period success:^(NSArray<NSDictionary *> * _Nonnull result) {
+            [self.view ssj_hideLoadingIndicator];
+            self.datas = result;
+            [self.tableView reloadData];
+        } failure:^(NSError * _Nonnull error) {
+            [self.view ssj_hideLoadingIndicator];
+            [SSJAlertViewAdapter showError:error];
+        }];
     } else {
         [self.view ssj_showLoadingIndicator];
-        [SSJBillingChargeHelper queryDataWithBillTypeID:_ID booksId:_booksId inPeriod:_period success:^(NSArray<NSDictionary *> *data) {
+        [SSJBillingChargeHelper queryChargeListWithMemberId:self.memberId booksId:self.booksId billName:self.billName billType:self.billType period:self.period success:^(NSArray<NSDictionary *> * _Nonnull result) {
             [self.view ssj_hideLoadingIndicator];
-            self.datas = data;
+            self.datas = result;
             [self.tableView reloadData];
-        } failure:^(NSError *error) {
+        } failure:^(NSError * _Nonnull error) {
             [self.view ssj_hideLoadingIndicator];
-            NSString *message = [error localizedDescription].length ? [error localizedDescription] : SSJ_ERROR_MESSAGE;
-            [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:message action:[SSJAlertViewAction actionWithTitle:@"确认" handler:NULL], nil];
+            [SSJAlertViewAdapter showError:error];
         }];
     }
 }
 
 - (void)reloadDataAfterSync {
     [self reloadData];
+}
+
+- (void)enterCalenderDetailWithSelectedItem:(SSJBillingChargeCellItem *)selectedItem {
+    SSJCalenderDetailViewController *calenderDetailVC = [[SSJCalenderDetailViewController alloc] initWithTableViewStyle:UITableViewStyleGrouped];
+    calenderDetailVC.item = selectedItem;
+    __weak typeof(self) wself = self;
+    calenderDetailVC.deleteHandler = ^ {
+        [SSJBillingChargeHelper queryTheRestChargeCountWithBillId:wself.billId memberId:wself.memberId booksId:wself.booksId period:wself.period success:^(int count) {
+            if (count == 0) {
+                [wself.navigationController popToRootViewControllerAnimated:YES];
+            } else {
+                [wself.navigationController popViewControllerAnimated:YES];
+            }
+        } failure:^(NSError *error) {
+            [SSJAlertViewAdapter showError:error];
+        }];
+    };
+    [self.navigationController pushViewController:calenderDetailVC animated:YES];
 }
 
 #pragma mark - Getter

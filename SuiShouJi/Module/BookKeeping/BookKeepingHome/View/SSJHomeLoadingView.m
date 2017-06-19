@@ -67,9 +67,8 @@
     
     [self.timer invalidate];
     
-    if (self.timer) {
-        self.timer = nil;
-    }
+    // 这里如果用self.timer = nil，在ios8上会导致crash，原因未知。。。
+    self -> _timer = nil;
     
     _currentSecond = 0;
 }

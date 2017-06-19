@@ -6,9 +6,9 @@
 //  Copyright (c) 2015年 ___9188___. All rights reserved.
 //
 
-#import "SSJBaseItem.h"
+#import "SSJBaseCellItem.h"
 
-@interface SSJLoadMoreItem : SSJBaseItem
+@interface SSJLoadMoreItem : SSJBaseCellItem
 
 @property (nonatomic, copy, readonly) NSString *loadingTitle;
 

@@ -21,14 +21,7 @@
 }
 
 - (NSString *)debugDescription {
-    return [NSString stringWithFormat:@"%@", @{@"ID":(_ID ?: [NSNull null]),
-                                               @"title":(_title ?: [NSNull null]),
-                                               @"imageName":(_imageName ?: [NSNull null]),
-                                               @"colorValue":(_colorValue ?: [NSNull null]),
-                                               @"selected":@(_selected),
-                                               @"editable":@(_editable),
-                                               @"deselected":@(_deselected),
-                                               @"order":@(_order)}];
+    return [self ssj_debugDescription];
 }
 
 @end

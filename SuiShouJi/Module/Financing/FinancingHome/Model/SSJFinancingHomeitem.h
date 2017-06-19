@@ -7,9 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "SSJBaseItem.h"
+#import "SSJBaseCellItem.h"
 
-@interface SSJFinancingHomeitem : SSJBaseItem
+@interface SSJFinancingHomeitem : SSJBaseCellItem
 
 //账户名称
 @property (nonatomic,strong) NSString *fundingName;

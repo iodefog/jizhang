@@ -62,18 +62,14 @@
     UIBarButtonItem *helpItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"help"] style:UIBarButtonItemStylePlain target:self action:@selector(checkHelpAction)];
     self.navigationItem.rightBarButtonItem = helpItem;
     
-    NSError *error = nil;
-    _checkInModel = [SSJBookkeepingTreeStore queryCheckInInfoWithUserId:SSJUSERID() error:&error];
-    if (error) {
-        [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
-        return;
-    }
-    
-    if ([self requestIfNeeded]) {
-        return;
-    }
-    
-    [self setupView];
+    [SSJBookkeepingTreeStore queryCheckInInfoWithUserId:SSJUSERID() success:^(SSJBookkeepingTreeCheckInModel * _Nonnull model) {
+        _checkInModel = model;
+        if (![self requestIfNeeded]) {
+            [self setupView];
+        }
+    } failure:^(NSError * _Nonnull error) {
+        [SSJAlertViewAdapter showError:error];
+    }];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -94,39 +90,6 @@
     [_motionManager stopDeviceMotionUpdates];
 }
 
-//#pragma mark - UIResponder
-//- (void)motionBegan:(UIEventSubtype)motion withEvent:(nullable UIEvent *)event {
-//    [super motionBegan:motion withEvent:event];
-//    
-//    [SSJAnaliyticsManager event:@"account_tree_shake"];
-//    // 如果正在请求签到接口，直接返回
-//    if (_checkInService.isLoading) {
-//        return;
-//    }
-//    
-//    // 今天已经浇过水
-//    if (_checkInModel.hasShaked) {
-//        [self showAlreadyWaterAlert];
-//        return;
-//    }
-//    
-//    // 没浇过水
-//    _checkInModel.hasShaked = YES;
-//    if ([self saveCheckInModel]) {
-//        [SSJBookkeepingTreeHelper loadTreeGifImageDataWithUrlPath:_checkInModel.treeGifUrl finish:^(NSData *data, BOOL success) {
-//            if (success) {
-//                [SSJAnaliyticsManager event:@"account_tree_sign"];
-//                [_treeView startRainWithGifData:data completion:^{
-//                    _checkInStateLab.text = @"Yeah,浇水成功啦！";
-//                    [self showWaterSuccessAlert];
-//                }];
-//            } else {
-//                [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
-//            }
-//        }];
-//    }
-//}
-
 #pragma mark - SSJBaseNetworkServiceDelegate
 - (void)serverDidStart:(SSJBaseNetworkService *)service {
     [super serverDidStart:service];
@@ -141,13 +104,17 @@
         _checkInModel = _checkInService.checkInModel;
         _checkInModel.hasShaked = NO;
         [self setupView];
-        [self saveCheckInModel];
+        [SSJBookkeepingTreeStore saveCheckInModel:_checkInModel success:NULL failure:^(NSError * _Nonnull error) {
+            [SSJAlertViewAdapter showError:error];
+        }];
     } else if ([_checkInService.returnCode isEqualToString:@"2"]) {
         // 已经签过到，保存签到结果
         _checkInModel = _checkInService.checkInModel;
         _checkInModel.hasShaked = YES;
         [self setupView];
-        [self saveCheckInModel];
+        [SSJBookkeepingTreeStore saveCheckInModel:_checkInModel success:NULL failure:^(NSError * _Nonnull error) {
+            [SSJAlertViewAdapter showError:error];
+        }];
     } else {
         // 签到失败
         [CDAutoHideMessageHUD showMessage:(service.desc.length > 0 ? service.desc : SSJ_ERROR_MESSAGE)];
@@ -214,19 +181,39 @@
     
     // 没浇过水
     _checkInModel.hasShaked = YES;
-    if ([self saveCheckInModel]) {
-        [SSJBookkeepingTreeHelper loadTreeGifImageDataWithUrlPath:_checkInModel.treeGifUrl finish:^(NSData *data, BOOL success) {
-            if (success) {
-                [SSJAnaliyticsManager event:@"account_tree_sign"];
-                [_treeView startRainWithGifData:data completion:^{
-                    _checkInStateLab.text = @"Yeah,浇水成功啦！";
-                    [self showWaterSuccessAlert];
-                }];
-            } else {
-                [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
-            }
+    [[[[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [SSJBookkeepingTreeStore saveCheckInModel:_checkInModel success:^{
+            [subscriber sendCompleted];
+        } failure:^(NSError * _Nonnull error) {
+            [subscriber sendError:error];
         }];
-    }
+        return nil;
+    }] then:^RACSignal *{
+        return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+            [SSJBookkeepingTreeHelper loadTreeGifImageDataWithUrlPath:_checkInModel.treeGifUrl finish:^(NSData *data, BOOL success) {
+                if (success) {
+                    [SSJAnaliyticsManager event:@"account_tree_sign"];
+                    [subscriber sendNext:data];
+                    [subscriber sendCompleted];
+                } else {
+                    [subscriber sendError:[NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"下载记账树gif图失败"}]];
+                }
+            }];
+            return nil;
+        }];
+    }] flattenMap:^RACStream *(NSData *data) {
+        return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+            [_treeView startRainWithGifData:data completion:^{
+                [subscriber sendCompleted];
+            }];
+            return nil;
+        }];
+    }] subscribeError:^(NSError *error) {
+        [SSJAlertViewAdapter showError:error];
+    } completed:^{
+        _checkInStateLab.text = @"Yeah,浇水成功啦！";
+        [self showWaterSuccessAlert];
+    }];
 }
 
 #pragma mark - Private
@@ -311,17 +298,6 @@
     }
     
     return NO;
-}
-
-// 存储签到记录
-- (BOOL)saveCheckInModel {
-    if ([SSJBookkeepingTreeStore saveCheckInModel:_checkInModel error:nil]) {
-        return YES;
-    } else {
-        // 保存失败
-        [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
-        return NO;
-    }
 }
 
 - (UIImageView *)alertView {

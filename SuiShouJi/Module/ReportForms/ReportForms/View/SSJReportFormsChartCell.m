@@ -46,7 +46,7 @@
     [self updateAppearance];
 }
 
-- (void)setCellItem:(SSJBaseItem *)cellItem {
+- (void)setCellItem:(SSJBaseCellItem *)cellItem {
     SSJReportFormsChartCellItem *item = (SSJReportFormsChartCellItem *)cellItem;
     if (![item isKindOfClass:[SSJReportFormsChartCellItem class]]) {
         return;
@@ -74,16 +74,12 @@
 
 #pragma mark - Private
 - (void)updateAppearance {
-    _chartView.backgroundColor = [UIColor clearColor];
-    [_chartView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
     _chartView.topTitleAttribute = @{NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_1],
                                      NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor]};
     _chartView.bottomTitleAttribute = @{NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_5],
                                         NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]};
     
-    self.listMenu.fillColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
-    self.listMenu.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
-    self.listMenu.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
+    [self.listMenu updateAppearance];
     for (SSJListMenuItem *item in self.listMenu.items) {
         item.normalTitleColor = SSJ_MAIN_COLOR;
         item.selectedTitleColor = SSJ_MARCATO_COLOR;
@@ -136,8 +132,7 @@
     if (!_chartView) {
         _chartView = [[SSJPercentCircleView alloc] initWithFrame:CGRectZero insets:UIEdgeInsetsMake(80, 80, 80, 80) thickness:20];
         _chartView.dataSource = self;
-        [_chartView ssj_setBorderStyle:SSJBorderStyleBottom];
-        [_chartView ssj_setBorderWidth:1];
+        _chartView.backgroundColor = [UIColor clearColor];
     }
     return _chartView;
 }
@@ -158,13 +153,15 @@
                                               normalTitleColor:SSJ_MAIN_COLOR
                                             selectedTitleColor:SSJ_MARCATO_COLOR
                                               normalImageColor:SSJ_SECONDARY_COLOR
-                                            selectedImageColor:SSJ_MARCATO_COLOR],
+                                            selectedImageColor:SSJ_MARCATO_COLOR
+                                               backgroundColor:SSJ_MAIN_BACKGROUND_COLOR],
                             [SSJListMenuItem itemWithImageName:@"reportForms_member"
                                                          title:@"成员"
                                               normalTitleColor:SSJ_MAIN_COLOR
                                             selectedTitleColor:SSJ_MARCATO_COLOR
                                               normalImageColor:SSJ_SECONDARY_COLOR
-                                            selectedImageColor:SSJ_MARCATO_COLOR]];
+                                            selectedImageColor:SSJ_MARCATO_COLOR
+                                               backgroundColor:SSJ_MAIN_BACKGROUND_COLOR]];
         _listMenu.width = 104;
         [_listMenu addTarget:self action:@selector(listMenuSelectAction) forControlEvents:UIControlEventValueChanged];
     }

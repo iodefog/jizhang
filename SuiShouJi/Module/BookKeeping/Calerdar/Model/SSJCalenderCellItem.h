@@ -6,9 +6,9 @@
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
 
-#import "SSJBaseItem.h"
+#import "SSJBaseCellItem.h"
 
-@interface SSJCalenderCellItem : SSJBaseItem
+@interface SSJCalenderCellItem : SSJBaseCellItem
 //日历背景色
 @property (nonatomic,strong) NSString *backGroundColor;
 

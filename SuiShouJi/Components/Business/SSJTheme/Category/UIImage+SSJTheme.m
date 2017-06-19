@@ -100,7 +100,6 @@
         }
     }
 
-    
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         CGSize screenSize = [UIScreen mainScreen].bounds.size;
         if (CGSizeEqualToSize(screenSize, CGSizeMake(768.0, 1024.0))) {
@@ -111,13 +110,13 @@
     }
     
     NSString *imagePath = [[NSString ssj_themeDirectory] stringByAppendingPathComponent:@"customBackGround"];
-    
     imagePath = [imagePath stringByAppendingPathComponent:name];
-    
     UIImage *image = [[self memoCache] objectForKey:imagePath];
+    if (image) {
+        return image;
+    }
     
     image = [UIImage imageWithContentsOfFile:imagePath];
-    
     if (image) {
         [[self memoCache] setObject:image forKey:imagePath];
     } else {

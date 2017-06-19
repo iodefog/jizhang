@@ -86,7 +86,9 @@ static const CGFloat kMaxSpeed = 100;
         return _editing;
     } else if (gestureRecognizer == _panGesture) {
         return _moving;
-    }
+    } /*else if (gestureRecognizer == _longPressGesture) {
+        NSLog(@"state:%@", [self debugDescWithState:gestureRecognizer.state]);
+    }*/
     return YES;
 }
 
@@ -163,9 +165,10 @@ static const CGFloat kMaxSpeed = 100;
 
 #pragma mark - Event
 - (void)beginEditingWhenLongPressBegin {
-    if (_moving) {
-        return;
-    }
+    _longPressGesture.enabled = NO;
+//    if (_moving) {
+//        return;
+//    }
     
     CGPoint touchPoint = [_longPressGesture locationInView:self];
     NSIndexPath *touchIndexPath = [self indexPathForItemAtPoint:touchPoint];
@@ -186,6 +189,18 @@ static const CGFloat kMaxSpeed = 100;
     }
     
     if (!_moving && touchedCell) {
+        
+        BOOL shouldBeginMoving = YES;
+        if (_editDelegate && [_editDelegate respondsToSelector:@selector(collectionView:shouldBeginMovingCellAtIndexPath:)]) {
+            shouldBeginMoving = [_editDelegate collectionView:self shouldBeginMovingCellAtIndexPath:touchIndexPath];
+        }
+        
+        if (!shouldBeginMoving) {
+            return;
+        }
+        
+        _moving = YES;
+        
         _currentMovedIndexPath = touchIndexPath;
         _originalMovedIndexPath = _currentMovedIndexPath;
         
@@ -198,8 +213,6 @@ static const CGFloat kMaxSpeed = 100;
             _movedCell.transform = CGAffineTransformMakeScale(_movedCellScale, _movedCellScale);
         }];
         touchedCell.hidden = YES;
-        _moving = YES;
-        _longPressGesture.enabled = NO;
     }
 }
 
@@ -380,11 +393,10 @@ static const CGFloat kMaxSpeed = 100;
 }
 
 - (void)endMovingCell {
-    if (!_moving || !_currentMovedIndexPath || !_currentMovedIndexPath) {
+    _longPressGesture.enabled = YES;
+    if (!_moving || !_originalMovedIndexPath || !_currentMovedIndexPath) {
         return;
     }
-    
-    _longPressGesture.enabled = YES;
     
     if ([_originalMovedIndexPath compare:_currentMovedIndexPath] != NSOrderedSame) {
         if (_editDelegate && [_editDelegate respondsToSelector:@selector(collectionView:didEndMovingCellFromIndexPath:toTargetIndexPath:)]) {
@@ -406,6 +418,37 @@ static const CGFloat kMaxSpeed = 100;
         _currentMovedIndexPath = nil;
         _originalMovedIndexPath = nil;
     }];
+}
+
+- (NSString *)debugDescWithState:(UIGestureRecognizerState)state {
+    switch (state) {
+        case UIGestureRecognizerStatePossible:
+            return @"UIGestureRecognizerStatePossible";
+            break;
+            
+        case UIGestureRecognizerStateBegan:
+            return @"UIGestureRecognizerStateBegan";
+            break;
+            
+        case UIGestureRecognizerStateChanged:
+            return @"UIGestureRecognizerStateChanged";
+            break;
+            
+        case UIGestureRecognizerStateEnded:
+            return @"UIGestureRecognizerStateEnded";
+            break;
+            
+        case UIGestureRecognizerStateCancelled:
+            return @"UIGestureRecognizerStateCancelled";
+            break;
+            
+        case UIGestureRecognizerStateFailed:
+            return @"UIGestureRecognizerStateFailed";
+            break;
+            
+        default:
+            break;
+    }
 }
 
 @end

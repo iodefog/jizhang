@@ -6,9 +6,9 @@
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
 
-#import "SSJBaseItem.h"
+#import "SSJBaseCellItem.h"
 
-@interface SSJChargeReminderItem : SSJBaseItem
+@interface SSJChargeReminderItem : SSJBaseCellItem
 @property (nonatomic) BOOL isOnOrNot;
 @property (nonatomic,strong) NSString *timeString;
 @property (nonatomic,strong) NSString *circleString;

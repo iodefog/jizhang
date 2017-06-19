@@ -288,6 +288,90 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
+static const void *kBorderLayerKey = &kBorderLayerKey;
+
+@implementation CALayer (SSJBorder)
+
++ (void)load {
+    SSJSwizzleSelector([self class], @selector(setBounds:), @selector(ssj_setBounds:));
+}
+
+- (void)ssj_setBounds:(CGRect)bounds {
+    [self ssj_setBounds:bounds];
+    SSJBorderLayer *layer = objc_getAssociatedObject(self, kBorderLayerKey);
+    if (layer) {
+        layer.frame = self.bounds;
+    }
+}
+
+- (void)ssj_setCornerStyle:(UIRectCorner)cornerStyle {
+    [[self ssj_borderLayer] setCornerStyle:cornerStyle];
+}
+
+- (UIRectCorner)ssj_cornerStyle {
+    return [[self ssj_borderLayer] cornerStyle];
+}
+
+- (void)ssj_setCornerRadius:(CGFloat)cornerRadius {
+    [self ssj_borderLayer].customCornerRadius = cornerRadius;
+}
+
+- (CGFloat)ssj_cornerRadius {
+    return [self ssj_borderLayer].customCornerRadius;
+}
+
+- (void)ssj_setBorderStyle:(SSJBorderStyle)customBorderStyle {
+    [[self ssj_borderLayer] setCustomBorderStyle:customBorderStyle];
+}
+
+- (SSJBorderStyle)ssj_borderStyle {
+    return [[self ssj_borderLayer] customBorderStyle];
+}
+
+- (void)ssj_setBorderColor:(UIColor *)color {
+    [[self ssj_borderLayer] setCustomBorderColor:color];
+}
+
+- (UIColor *)ssj_borderColor {
+    return [[self ssj_borderLayer] customBorderColor];
+}
+
+- (void)ssj_setBorderWidth:(CGFloat)with {
+    [[self ssj_borderLayer] setCustomBorderWidth:with];
+}
+
+- (CGFloat)ssj_borderWidth {
+    return [[self ssj_borderLayer] customBorderWidth];
+}
+
+- (void)ssj_setBorderInsets:(UIEdgeInsets)insets {
+    [[self ssj_borderLayer] setBorderInsets:insets];
+}
+
+- (UIEdgeInsets)ssj_borderInsets {
+    return [[self ssj_borderLayer] borderInsets];
+}
+
+- (void)ssj_relayoutBorder {
+    [self ssj_borderLayer].frame = self.bounds;
+}
+
+- (SSJBorderLayer *)ssj_borderLayer {
+    SSJBorderLayer *layer = objc_getAssociatedObject(self, kBorderLayerKey);
+    if (!layer) {
+        layer = [SSJBorderLayer layer];
+        layer.frame = self.bounds;
+        [self addSublayer:layer];
+        objc_setAssociatedObject(self, kBorderLayerKey, layer, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
+    return layer;
+}
+
+@end
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
+
 @implementation CALayer (SSJScreenshot)
 
 - (UIImage *)ssj_takeScreenShot {

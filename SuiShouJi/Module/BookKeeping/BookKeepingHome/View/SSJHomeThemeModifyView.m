@@ -148,11 +148,15 @@ static NSString *const kCellId = @"SSJCustomThemeSelectCollectionViewCell";
             }
             [self.collectionView reloadData];
             [SSJCustomThemeManager changeThemeWithDefaultImageName:self.seletctTheme type:self.selectType];
+            
 
         }
         if (self.themeSelectBlock) {
             self.themeSelectBlock(self.seletctTheme,self.selectType);
         }
+        
+        //友盟统计
+        [SSJAnaliyticsManager event:@"more_define_bg_sel_default_pic"];
     }
 }
 

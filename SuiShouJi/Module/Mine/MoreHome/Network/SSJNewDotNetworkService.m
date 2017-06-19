@@ -26,15 +26,24 @@
         NSDictionary *result = [[NSDictionary dictionaryWithDictionary:rootElement] objectForKey:@"results"];
         self.dotItem = [SSJThemeAndAdviceDotItem mj_objectWithKeyValues:result];
         self.dotItem.creplyDate = [NSDate dateWithString:self.dotItem.creplydate formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
-        SSJUserItem *userItem = [SSJUserTableManager queryUserItemForID:SSJUSERID()];
-        self.dotItem.hasThemeUpdate = [[self themeVersion] doubleValue] < [self.dotItem.themeVersion doubleValue];
-        if (self.dotItem.creplydate.length < 1) {
-            self.dotItem.hasAdviceUpdate = NO ;
-        }else if (self.dotItem.creplydate.length > 0 && userItem.adviceTime.length < 1) {
-            self.dotItem.hasAdviceUpdate = YES; 
-        } else {
-            self.dotItem.hasAdviceUpdate = [self.dotItem.creplyDate compare:[NSDate dateWithString:userItem.adviceTime formatString:@"yyyy-MM-dd HH:mm:ss.SSS"]] == NSOrderedDescending;
-        }
+        
+        @weakify(self);
+        [SSJUserTableManager queryUserItemWithID:SSJUSERID() success:^(SSJUserItem * _Nonnull userItem) {
+            @strongify(self);
+            self.dotItem.hasThemeUpdate = [[self themeVersion] doubleValue] < [self.dotItem.themeVersion doubleValue];
+            if (self.dotItem.creplydate.length < 1) {
+                self.dotItem.hasAdviceUpdate = NO ;
+            }else if (self.dotItem.creplydate.length > 0 && userItem.adviceTime.length < 1) {
+                self.dotItem.hasAdviceUpdate = YES;
+            } else {
+                self.dotItem.hasAdviceUpdate = [self.dotItem.creplyDate compare:[NSDate dateWithString:userItem.adviceTime formatString:@"yyyy-MM-dd HH:mm:ss.SSS"]] == NSOrderedDescending;
+            }
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:kUserItemReturnKey object:nil];
+            
+        } failure:^(NSError * _Nonnull error) {
+            
+        }];
     }
 }
 

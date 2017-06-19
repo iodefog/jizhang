@@ -26,7 +26,6 @@
 -(void)layoutSubviews{
     [super layoutSubviews];
     self.titleLabel.frame = self.bounds;
-    [self.titleLabel ssj_relayoutBorder];
 }
 
 -(UILabel *)titleLabel{

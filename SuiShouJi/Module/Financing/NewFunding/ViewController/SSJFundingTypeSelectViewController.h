@@ -7,12 +7,12 @@
 //
 
 #import "SSJNewBaseTableViewController.h"
-#import "SSJBaseItem.h"
+#import "SSJBaseCellItem.h"
 #import "SSJFundingItem.h"
 
 @interface SSJFundingTypeSelectViewController : SSJNewBaseTableViewController
 
-typedef void (^addNewFundingBlock)(SSJBaseItem *item);
+typedef void (^addNewFundingBlock)(SSJBaseCellItem *item);
 
 @property(nonatomic,copy) addNewFundingBlock addNewFundingBlock;
 

@@ -10,6 +10,17 @@
 #import "SSJSegmentedControl.h"
 #import "SSJListMenu.h"
 
+@implementation SSJRecordMakingCustomNavigationBarBookItem
+
++ (instancetype)itemWithTitle:(NSString *)title iconName:(NSString *)iconName {
+    SSJRecordMakingCustomNavigationBarBookItem *item = [[SSJRecordMakingCustomNavigationBarBookItem alloc] init];
+    item.title = title;
+    item.iconName = iconName;
+    return item;
+}
+
+@end
+
 @interface SSJRecordMakingCustomNavigationBar ()
 
 @property (nonatomic, strong) UIButton *backOffBtn;
@@ -25,6 +36,8 @@
 @property (nonatomic, strong) CAShapeLayer *arrow;
 
 @property (nonatomic, strong) UIView *containerView;
+
+@property (nonatomic, strong) UITapGestureRecognizer *tapGesture;
 
 @end
 
@@ -51,6 +64,7 @@
         [self updateAppearance];
         
         [self sizeToFit];
+        self.canSelectTitle = NO;
     }
     return self;
 }
@@ -60,18 +74,21 @@
     CGFloat statusBarHeight = SSJ_STATUSBAR_HEIGHT;
     _backOffBtn.frame = CGRectMake(5, 6 + statusBarHeight, 44, 30);
     _managerBtn.rightTop = CGPointMake(self.width - 20, 6 + statusBarHeight);
+    
     _containerView.size = CGSizeMake(100, 26);
     _containerView.centerX = self.width * 0.5;
     _containerView.top = statusBarHeight + 5;
     
     [_titleLab sizeToFit];
-    CGFloat left = (_containerView.width - _titleLab.width - _arrow.width - 5) * 0.5;
-    
-    _titleLab.left = left;
-    _titleLab.centerY = _containerView.height * 0.5;
-    
-    _arrow.left = _titleLab.right + 5;
-    _arrow.position = CGPointMake(_arrow.position.x, _containerView.height * 0.5);
+    if (_canSelectTitle) {
+        CGFloat left = (_containerView.width - _titleLab.width - _arrow.width - 5) * 0.5;
+        _titleLab.left = left;
+        _titleLab.centerY = _containerView.height * 0.5;
+        _arrow.left = _titleLab.right + 5;
+        _arrow.position = CGPointMake(_arrow.position.x, _containerView.height * 0.5);
+    } else {
+        _titleLab.center = CGPointMake(_containerView.width * 0.5, _containerView.height * 0.5);
+    }
     
     _segmentCtrl.size = CGSizeMake(200, 24);
     _segmentCtrl.centerX = self.width * 0.5;
@@ -125,18 +142,18 @@
 }
 
 - (void)selectBookAction {
-    if (_booksMenu.selectedIndex < _booksMenu.items.count - 1) {
+    if (_booksMenu.selectedIndex < _booksMenu.items.count) {
         _selectedTitleIndex = _booksMenu.selectedIndex;
         [self updateTitle];
         
         if (_selectBookHandle) {
             _selectBookHandle(self);
         }
-    } else if (_booksMenu.selectedIndex == _booksMenu.items.count - 1) {
+    }/* else if (_booksMenu.selectedIndex == _booksMenu.items.count - 1) {
         if (_addNewBookHandle) {
             _addNewBookHandle(self);
         }
-    } else {
+    }*/ else {
         
     }
 }
@@ -149,8 +166,8 @@
         _titleLab.text = @"请选择账本";
         return;
     }
-    
-    _titleLab.text = [_titles ssj_safeObjectAtIndex:_selectedTitleIndex];
+    SSJRecordMakingCustomNavigationBarBookItem *item = [_bookItems ssj_safeObjectAtIndex:_selectedTitleIndex];
+    _titleLab.text = item.title;
 }
 
 - (void)updateRightButtonTitle {
@@ -178,18 +195,23 @@
 }
 
 #pragma mark - Public
-- (void)setTitles:(NSArray *)titles {
-    if (!titles && [_titles isEqualToArray:titles]) {
+- (void)setBookItems:(NSArray<SSJRecordMakingCustomNavigationBarBookItem *> *)bookItems {
+    if (!bookItems && [_bookItems isEqualToArray:bookItems]) {
         return;
     }
     
-    _titles = titles;
+    _bookItems = bookItems;
     
     NSMutableArray *items = [[NSMutableArray alloc] init];
-    for (NSString *title in _titles) {
-        [items addObject:[SSJListMenuItem itemWithImageName:nil title:title normalTitleColor:SSJ_MAIN_COLOR selectedTitleColor:SSJ_MARCATO_COLOR normalImageColor:nil selectedImageColor:nil]];
+    for (SSJRecordMakingCustomNavigationBarBookItem *item in _bookItems) {
+        [items addObject:[SSJListMenuItem itemWithImageName:item.iconName
+                                                      title:item.title
+                                           normalTitleColor:SSJ_MAIN_COLOR
+                                         selectedTitleColor:SSJ_MARCATO_COLOR
+                                           normalImageColor:SSJ_SECONDARY_COLOR
+                                         selectedImageColor:SSJ_MARCATO_COLOR
+                                            backgroundColor:SSJ_MAIN_BACKGROUND_COLOR]];
     }
-    [items addObject:[SSJListMenuItem itemWithImageName:nil title:@"添加账本" normalTitleColor:SSJ_MAIN_COLOR selectedTitleColor:nil normalImageColor:nil selectedImageColor:nil]];
     
     self.booksMenu.items = items;
     self.booksMenu.maxDisplayRowCount = 6.5;
@@ -197,12 +219,19 @@
     [self updateTitle];
 }
 
+- (void)setCanSelectTitle:(BOOL)canSelectTitle {
+    _canSelectTitle = canSelectTitle;
+    self.arrow.hidden = !canSelectTitle;
+    self.tapGesture.enabled = canSelectTitle;
+    [self setNeedsLayout];
+}
+
 - (void)setSelectedTitleIndex:(NSInteger)selectedTitleIndex {
     if (_selectedTitleIndex == selectedTitleIndex) {
         return;
     }
     
-    if (selectedTitleIndex >= _titles.count) {
+    if (selectedTitleIndex >= (NSInteger)_bookItems.count) {
         SSJPRINT(@"下标超过标题数组范围");
         return;
     }
@@ -250,9 +279,7 @@
         item.normalTitleColor = (i == self.booksMenu.items.count - 1) ? SSJ_SECONDARY_COLOR : SSJ_MAIN_COLOR;
     }
     
-    self.booksMenu.fillColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
-    self.booksMenu.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
-    self.booksMenu.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
+    [self.booksMenu updateAppearance];
 }
 
 #pragma mark - Getter
@@ -294,6 +321,9 @@
     if (!_booksMenu) {
         _booksMenu = [[SSJListMenu alloc] initWithFrame:CGRectMake(0, 0, 154, 0)];
         _booksMenu.maxDisplayRowCount = 5.5;
+        _booksMenu.gapBetweenImageAndTitle = 10;
+        _booksMenu.contentInsets = UIEdgeInsetsMake(0, 13, 0, 13);
+        _booksMenu.contentAlignment = UIControlContentHorizontalAlignmentLeft;
         _booksMenu.titleFont = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         [_booksMenu addTarget:self action:@selector(selectBookAction) forControlEvents:UIControlEventValueChanged];
     }
@@ -320,10 +350,16 @@
     if (!_containerView) {
         _containerView = [[UIView alloc] init];
         _containerView.backgroundColor = [UIColor clearColor];
-        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showBooksMenuAction)];
-        [_containerView addGestureRecognizer:tap];
+        [_containerView addGestureRecognizer:self.tapGesture];
     }
     return _containerView;
+}
+
+- (UITapGestureRecognizer *)tapGesture {
+    if (!_tapGesture) {
+        _tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showBooksMenuAction)];
+    }
+    return _tapGesture;
 }
 
 @end

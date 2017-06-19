@@ -48,14 +48,15 @@ typedef NS_ENUM(NSInteger, SSJBillType) {
     SSJBillTypeSurplus = 2    // 结余(收入＋支出)
 };
 
-//  收支类型
+//  流水类型
 typedef NS_ENUM(NSInteger, SSJChargeIdType) {
     SSJChargeIdTypeNormal = 0,        // 普通记账
     SSJChargeIdTypeCircleConfig = 1,  // 周期记账
     SSJChargeIdTypeLoan = 2,          // 借贷
     SSJChargeIdTypeRepayment = 3,     // 还款
     SSJChargeIdTypeTransfer = 4,      // 转账（老版本）
-    SSJChargeIdTypeCyclicTransfer = 5 // 周期转账（2.1.0新增）
+    SSJChargeIdTypeCyclicTransfer = 5, // 周期转账（2.1.0新增）
+    SSJChargeIdTypeShareBooks = 6     // 共享账本（2.5.0新增）
 };
 
 //  预算周期
@@ -100,6 +101,49 @@ typedef NS_ENUM(NSInteger, SSJCyclePeriodType) {
     SSJCyclePeriodTypePerMonth = 4,
     SSJCyclePeriodTypeLastDayPerMonth = 5,
     SSJCyclePeriodTypePerYear = 6
+};
+
+/**
+ 账本类型
+
+ - SSJDefaultBooksTypeDaily: 日常
+ - SSJDefaultBooksTypeBusiness: 生意
+ - SSJDefaultBooksTypeMarriage: 结婚
+ - SSJDefaultBooksTypeDecoration: 装修
+ - SSJDefaultBooksTypeTravel: 旅行
+ */
+typedef NS_ENUM(NSInteger, SSJBooksType) {
+    SSJBooksTypeDaily = 0,
+    SSJBooksTypeBusiness = 1,
+    SSJBooksTypeMarriage = 2,
+    SSJBooksTypeDecoration = 3,
+    SSJBooksTypeTravel = 4
+};
+
+/**
+ 共享账本成员状态
+ 
+ - SSJShareBooksMemberStateNormal: 正常
+ - SSJShareBooksMemberStateQuitted: 主动退出
+ - SSJShareBooksMemberStateKickedOut: 被踢出
+ */
+typedef NS_ENUM(NSInteger, SSJShareBooksMemberState) {
+    SSJShareBooksMemberStateNormal = 0,
+    SSJShareBooksMemberStateQuitted = 1,
+    SSJShareBooksMemberStateKickedOut = 2
+};
+
+
+
+/**
+ 账本类型
+
+ - SSJBooksCategoryPersional: 个人账本
+ - SSJBooksCategoryPublic: 共享账本
+ */
+typedef NS_ENUM(NSInteger, SSJBooksCategory) {
+    SSJBooksCategoryPersional = 0,
+    SSJBooksCategoryPublic = 1
 };
 
 ///------------------------------------------
@@ -162,6 +206,15 @@ extern NSString *const SSJOverrunRedColorValue;
 //预算剩余绿色
 extern NSString *const SSJSurplusGreenColorValue;
 
+// 所有账本id
+extern NSString *const SSJAllBooksIds;
+
+// 所有收支类别id
+extern NSString *const SSJAllBillTypeId;
+
+// 所有成员id
+extern NSString *const SSJAllMembersId;
+
 /** -------------------- KEY -------------------- */
 #pragma mark - KEY
 //保存上次弹窗的时间
@@ -193,6 +246,9 @@ extern NSString *const SSJReminderNotificationKey;
 
 //  已经读过的公告的key
 extern NSString *const SSJAnnouncementHaveReadKey;
+
+//保存当前账本类型：共享or个人
+extern NSString *const SSJBookCategoryKey;
 
 /** --------------- Notification --------------- */
 #pragma mark - Notification

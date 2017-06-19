@@ -10,11 +10,55 @@
 #import "SSJGlobalServiceManager.h"
 #import "SSJDomainManager.h"
 
+static inline AFHTTPRequestSerializer *SSJRequestSerializer(SSJRequestSerialization serialization) {
+    switch (serialization) {
+        case SSJHTTPRequestSerialization:
+            return [AFHTTPRequestSerializer serializer];
+            break;
+            
+        case SSJJSONRequestSerialization:
+            return [AFJSONRequestSerializer serializer];
+            break;
+            
+        case SSJPropertyListRequestSerialization:
+            return [AFPropertyListRequestSerializer serializer];
+            break;
+    }
+};
+
+static inline AFHTTPResponseSerializer *SSJResponseSerializer(SSJResponseSerialization responseSerialization) {
+    NSMutableArray *serializers = [NSMutableArray array];
+    if ((responseSerialization & SSJJSONResponseSerialization) == SSJJSONResponseSerialization) {
+        [serializers addObject:[AFJSONResponseSerializer serializer]];
+    }
+    if ((responseSerialization & SSJXMLParserResponseSerialization) == SSJXMLParserResponseSerialization) {
+        [serializers addObject:[AFXMLParserResponseSerializer serializer]];
+    }
+    if ((responseSerialization & SSJPropertyListResponseSerialization) == SSJPropertyListResponseSerialization) {
+        [serializers addObject:[AFPropertyListResponseSerializer serializer]];
+    }
+    if ((responseSerialization & SSJImageResponseSerialization) == SSJImageResponseSerialization) {
+        [serializers addObject:[AFImageResponseSerializer serializer]];
+    }
+    
+    if (serializers.count > 1) {
+        return [AFCompoundResponseSerializer compoundSerializerWithResponseSerializers:serializers];
+    } else {
+        AFHTTPResponseSerializer *serializer = [serializers firstObject];
+        serializer = serializer ?: [AFHTTPResponseSerializer serializer];
+        return serializer;
+    }
+}
+
+
 @interface SSJBaseNetworkService ()
 
 @property (readwrite, nonatomic) BOOL isLoaded;
+
 @property (readwrite, nonatomic) BOOL isCancelled;
+
 @property (nonatomic, strong) NSURLSessionTask *task;
+
 @property (nonatomic, strong) NSDateFormatter *formatter;
 
 @end
@@ -27,15 +71,13 @@
 
 - (instancetype)initWithDelegate:(id <SSJBaseNetworkServiceDelegate>)delegate {
     if (self = [super init]) {
-        _isLoginService = YES;
         _showMessageIfErrorOccured = YES;
         _delegate = delegate;
         _httpMethod = SSJBaseNetworkServiceHttpMethodPOST;
         _timeoutInterval = 60;
-        _pinningMode = AFSSLPinningModeCertificate;
-        _allowInvalidCertificates = YES;
-        _validatesDomainName = YES;
-        _responseSerializer = [AFJSONResponseSerializer serializer];
+        _httpsOpened = YES;
+        _requestSerialization = SSJHTTPRequestSerialization;
+        _responseSerialization = SSJJSONResponseSerialization;
         
         self.formatter = [[NSDateFormatter alloc] init];
         [self.formatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
@@ -50,53 +92,30 @@
     [SSJGlobalServiceManager removeService:self];
     
     SSJGlobalServiceManager *manager = [self p_customManager];
-    
     NSDictionary *paramsDic = [self packParameters:params];
-    
     NSString *fullUrlString = SSJURLWithAPI(urlString);
     
     switch (_httpMethod) {
         case SSJBaseNetworkServiceHttpMethodPOST: {
             self.task = [manager POST:urlString parameters:paramsDic success:^(NSURLSessionDataTask *task, id responseObject) {
-                NSURLResponse *response = task.response;
-                if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
-                    NSHTTPURLResponse *httpUrlResponse = (NSHTTPURLResponse *)response;
-                    [self p_setServerTimeWithHeaders:httpUrlResponse.allHeaderFields];
-                }
-                if ([self isKindOfClass:[SSJBaseNetworkService class]]) {
-                    _isLoaded = YES;
-                    _isLoadSuccess = YES;
-                    [self p_taskDidFinish:task responseObject:responseObject];
-                }
-                
+                [self p_setServerTimeWithResponse:(NSHTTPURLResponse *)task.response];
+                [self p_taskDidFinish:task responseObject:responseObject];
             } failure:^(NSURLSessionDataTask *task, NSError *error) {
-                if ([self isKindOfClass:[SSJBaseNetworkService class]]) {
-                    _isLoaded = YES;
-                    _isLoadSuccess = NO;
-                    
-                    [self p_taskDidFail:task error:error];
-                    
-                }
+                [self p_taskDidFail:task error:error];
             }];
             
-            SSJPRINT(@">>> POST request url:%@",fullUrlString);
-            SSJPRINT(@">>> POST request parameters:\n%@",paramsDic);
+            SSJPRINT(@">>> POST request parameters:%@ url:%@", paramsDic, fullUrlString);
         }   break;
             
         case SSJBaseNetworkServiceHttpMethodGET: {
             self.task = [manager GET:urlString parameters:paramsDic success:^(NSURLSessionDataTask *task, id responseObject) {
-                if ([self isKindOfClass:[SSJBaseNetworkService class]]) {
-                    self -> _isLoaded = YES;
-                    [self p_taskDidFinish:task responseObject:responseObject];
-                }
+                [self p_setServerTimeWithResponse:(NSHTTPURLResponse *)task.response];
+                [self p_taskDidFinish:task responseObject:responseObject];
             } failure:^(NSURLSessionDataTask *task, NSError *error) {
-                if ([self isKindOfClass:[SSJBaseNetworkService class]]) {
-                    [self p_taskDidFail:task error:error];
-                }
+                [self p_taskDidFail:task error:error];
             }];
             
-            SSJPRINT(@">>> GET request url:%@",fullUrlString);
-            SSJPRINT(@">>> GET request parameters:\n%@",paramsDic);
+            SSJPRINT(@">>> GET request parameters:%@ url:%@", paramsDic, fullUrlString);
         }   break;
     }
     
@@ -131,20 +150,17 @@
     [paraDic setObject:SSJDefaultSource() forKey:@"source"];
 //    [paraDic setObject:SSJAppVersion() forKey:@"appVersion"];
     [paraDic setObject:SSJAppVersion() forKey:@"releaseVersion"];
-    if (_isLoginService) {
-        [paraDic setObject:(SSJAccessToken() ?: @"") forKey:@"accessToken"];
-        [paraDic setObject:(SSJAppId() ?: @"") forKey:@"appId"];
-    }
+    [paraDic setObject:(SSJAccessToken() ?: @"") forKey:@"accessToken"];
+    [paraDic setObject:(SSJAppId() ?: @"") forKey:@"appId"];
     return paraDic;
 }
 
 /* 配置manager */
 - (SSJGlobalServiceManager *)p_customManager {
     SSJGlobalServiceManager *manager = [SSJGlobalServiceManager sharedManager];
-    manager.SSLPinningMode = _pinningMode;
-    manager.allowInvalidCertificates = _allowInvalidCertificates;
-    manager.validatesDomainName = _validatesDomainName;
-    manager.responseSerializer = _responseSerializer;
+    manager.httpsOpened = _httpsOpened;
+    manager.requestSerializer = SSJRequestSerializer(_requestSerialization);
+    manager.responseSerializer = SSJResponseSerializer(_responseSerialization);
     manager.requestSerializer.timeoutInterval = _timeoutInterval;
     [manager.operationQueue setMaxConcurrentOperationCount:1];
     return manager;
@@ -152,12 +168,12 @@
 
 /* 请求完成 */
 - (void)p_taskDidFinish:(NSURLSessionTask *)task responseObject:(id)responseObject {
+    _isLoaded = YES;
+    _isLoadSuccess = YES;
     if (self.task.state == NSURLSessionTaskStateCompleted) {
         
         self.task = nil;
         _rootElement = responseObject;
-        
-        SSJPRINT(@">>> response data:%@ URL:%@",_rootElement, task.currentRequest.URL);
         
         if ([_rootElement isKindOfClass:[NSDictionary class]]) {
             id returnCode = [_rootElement objectForKey:@"code"];
@@ -168,8 +184,9 @@
             }
             
             _desc = [_rootElement objectForKey:@"desc"];
-            SSJPRINT(@"%@",_desc);
         }
+        
+        SSJPRINT(@">>> request success code:%@ desc:%@ data:%@ URL:%@", _returnCode, _desc, _rootElement, task.currentRequest.URL);
         
         [self requestDidFinish:_rootElement];
         
@@ -182,6 +199,8 @@
 
 /* 请求失败 */
 - (void)p_taskDidFail:(NSURLSessionTask *)task error:(NSError *)error {
+    _isLoaded = YES;
+    _isLoadSuccess = NO;
     if (self.task.state == NSURLSessionTaskStateCompleted ||
         self.task.state == NSURLSessionTaskStateCanceling) {
         
@@ -197,9 +216,8 @@
         [SSJGlobalServiceManager removeService:self];
         
         NSHTTPURLResponse *httpUrlResponse = (NSHTTPURLResponse *)task.response;
-        SSJPRINT(@"%@",httpUrlResponse.allHeaderFields);
-        
-        SSJPRINT(@">>> response error:%@ URL:%@",[error localizedDescription], task.currentRequest.URL);
+        SSJPRINT(@">>> header fields:%@",httpUrlResponse.allHeaderFields);
+        SSJPRINT(@">>> request failed code:%d desc:%@ URL:%@", (int)[error code], [error localizedDescription], task.currentRequest.URL);
         if (self.delegate && [self.delegate respondsToSelector:@selector(server:didFailLoadWithError:)]) {
             [self.delegate server:self didFailLoadWithError:error];
         }
@@ -207,15 +225,19 @@
 }
 
 //  解析header中的服务器时间
-- (void)p_setServerTimeWithHeaders:(NSDictionary *)headers {
-    NSString *datestring = [headers objectForKey:@"Date"];
+- (void)p_setServerTimeWithResponse:(NSHTTPURLResponse *)response {
+    if (![response isKindOfClass:[NSHTTPURLResponse class]]) {
+        return;
+    }
+    
+    NSString *datestring = [response.allHeaderFields objectForKey:@"Date"];
     datestring = [datestring stringByReplacingOccurrencesOfString:@" GMT" withString:@""];
     
     //  只能设置成美国时区，否则时间格式无法转换
     NSDate *date = [self.formatter dateFromString:datestring];
     
     _serverDate = [date dateByAddingTimeInterval:(60 * 60 * 8)];
-    SSJPRINT(@">>> current server date:%@",_serverDate);
+//    SSJPRINT(@">>> current server date:%@",_serverDate);
 }
 
 //--------------------------------

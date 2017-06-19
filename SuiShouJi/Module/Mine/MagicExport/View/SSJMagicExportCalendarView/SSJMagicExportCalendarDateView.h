@@ -15,8 +15,28 @@
 
 @property (nonatomic, strong) SSJMagicExportCalendarDateViewItem *item;
 
-@property (nonatomic, copy) BOOL(^shouldSelectBlock)(SSJMagicExportCalendarDateView *);
+@property (nonatomic, copy) void(^clickBlock)(SSJMagicExportCalendarDateView *);
 
-@property (nonatomic, copy) void(^didSelectBlock)(SSJMagicExportCalendarDateView *);
+@end
+
+
+
+@interface SSJMagicExportCalendarDateViewItem : NSObject
+
+@property (nonatomic) BOOL hidden;
+
+@property (nonatomic) BOOL showMarker;
+
+@property (nonatomic, strong) NSDate *date;
+
+@property (nonatomic, copy) NSString *desc;
+
+@property (nonatomic, strong) UIColor *dateColor;
+
+@property (nonatomic, strong) UIColor *markerColor;
+
+@property (nonatomic, strong) UIColor *descColor;
+
+@property (nonatomic, strong) UIColor *fillColor;
 
 @end

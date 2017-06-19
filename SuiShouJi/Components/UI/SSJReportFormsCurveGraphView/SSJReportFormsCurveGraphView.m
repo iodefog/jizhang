@@ -12,8 +12,7 @@
 #import "SSJReportFormsCurveCell.h"
 #import "SSJReportFormsCurveDot.h"
 #import "SSJReportFormsCurveSuspensionView.h"
-#import "SSJReportFormsCurveCellItem.h"
-#import "SSJReportFormsCurveViewItem.h"
+#import "SSJReportFormsCurveView.h"
 
 static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID";
 
@@ -43,7 +42,7 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
 
 @property (nonatomic, strong) UIColor *defaultCurveColor;
 
-@property (nonatomic) CGFloat maxValue;
+@property (nonatomic) double maxValue;
 
 @property (nonatomic) NSUInteger axisXCount;
 
@@ -131,7 +130,7 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     SSJReportFormsCurveCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kSSJReportFormsCurveCellID forIndexPath:indexPath];
     if (_items.count > indexPath.item) {
-        SSJReportFormsCurveCellItem *item = [_items objectAtIndex:indexPath.item];
+        SSJReportFormsCurveCellItem *item = [_items ssj_safeObjectAtIndex:indexPath.item];
         cell.cellItem = item;
     }
     
@@ -273,8 +272,8 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
 
 - (nullable NSString *)gridView:(SSJReportFormsCurveGridView *)gridView titleAtIndex:(NSUInteger)index {
     if (_axisYCount > 1) {
-        CGFloat unitValue = _maxValue / (_axisYCount - 1);
-        CGFloat value = _maxValue - unitValue * index;
+        double unitValue = _maxValue / (_axisYCount - 1);
+        double value = _maxValue - unitValue * index;
         return [NSString stringWithFormat:@"%.2f", value];
     } else if (_axisYCount == 1) {
         return @"0.00";
@@ -498,7 +497,7 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
     
     int approach = pow(10, (int)log10(_maxValue));
     double remainder = _maxValue / approach - (int)(_maxValue / approach);
-    _maxValue = remainder == 0 ? _maxValue : ((int)(_maxValue / approach) + 1) * approach;
+    _maxValue = remainder == 0 ? _maxValue : ((int)(_maxValue / approach) + 1.0) * approach;
     
     [self caculateCurvePoint];
     [self updateDotsAndLabelsPosition];
@@ -552,7 +551,7 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
     for (int axisXIdx = 0; axisXIdx < _axisXCount; axisXIdx ++) {
         NSMutableArray *valuesPerAxisX = [[NSMutableArray alloc] initWithCapacity:_curveCount];
         for (int curveIdx = 0; curveIdx < _curveCount; curveIdx ++) {
-            CGFloat value = [_dataSource curveGraphView:self valueForCurveAtIndex:curveIdx axisXIndex:axisXIdx];
+            double value = [_dataSource curveGraphView:self valueForCurveAtIndex:curveIdx axisXIndex:axisXIdx];
             [valuesPerAxisX addObject:@(value)];
             _maxValue = MAX(value, _maxValue);
         }
@@ -612,7 +611,7 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
             
             if (axisXIdx < _axisXCount) {
                 NSArray *valuesPerAxis = _values[axisXIdx + 1];
-                CGFloat value = [valuesPerAxis[curveIdx] floatValue];
+                double value = [valuesPerAxis[curveIdx] doubleValue];
                 curveItem.value = [NSString stringWithFormat:@"%.2f", value];
                 
                 BOOL showValuePoint = _showValuePoint;
@@ -647,9 +646,10 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
         
         UIColor *color = _curveColors[curveIdx];
         
-        CGFloat value = [values[curveIdx] floatValue];
+        double value = [values[curveIdx] doubleValue];
         CGFloat maxCurveHeight = (self.height - _curveInsets.top - _curveInsets.bottom);
-        CGFloat y = self.height - _curveInsets.bottom - value / _maxValue * maxCurveHeight;
+        CGFloat y = self.height - _curveInsets.bottom;
+        y = _maxValue == 0 ?: y - value / _maxValue * maxCurveHeight;
         
         SSJReportFormsCurveDot *dot = [[SSJReportFormsCurveDot alloc] init];
         dot.outerColorAlpha = 0.2;
@@ -718,21 +718,34 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
         NSArray *startValues = _values[cellIdx];
         NSArray *endValues = _values[cellIdx + 1];
         
+        SSJReportFormsCurveCellItem *preItem = nil;
+        if (cellIdx > 0) {
+            preItem = [_items ssj_safeObjectAtIndex:cellIdx - 1];
+        }
+        
         for (int curveIdx = 0; curveIdx < cellItem.curveItems.count; curveIdx ++) {
             
             CGFloat maxCurveHeight = self.height - _curveInsets.top - _curveInsets.bottom;
             
-            CGFloat startValue = [startValues[curveIdx] floatValue];
-            CGFloat startPintY = self.height - (startValue / _maxValue) * maxCurveHeight - _curveInsets.bottom;
+            double startValue = [startValues[curveIdx] doubleValue];
+            double startPintY = self.height - (startValue / _maxValue) * maxCurveHeight - _curveInsets.bottom;
             
-            CGFloat endValue = [endValues[curveIdx] floatValue];
-            CGFloat endPintY = self.height - (endValue / _maxValue) * maxCurveHeight - _curveInsets.bottom;
+            double endValue = [endValues[curveIdx] doubleValue];
+            CGFloat endPintY = self.height - _curveInsets.bottom;
+            endPintY = _maxValue == 0 ?: endPintY - (endValue / _maxValue) * maxCurveHeight;
             
             CGFloat endPointX = (cellIdx == 0 || cellIdx == _items.count - 1) ? _unitAxisXLength * 0.5 : _unitAxisXLength;
             
             SSJReportFormsCurveViewItem *curveItem = cellItem.curveItems[curveIdx];
             curveItem.startPoint = CGPointMake(0, startPintY);
             curveItem.endPoint = CGPointMake(endPointX, endPintY);
+            
+            if (preItem) {
+                SSJReportFormsCurveViewItem *preCurveItem = preItem.curveItems[curveIdx];
+                if (curveItem.showValue && preCurveItem.showValue) {
+                    [curveItem testOverlapPreItem:preCurveItem space:_unitAxisXLength];
+                }
+            }
         }
     }
 }
@@ -767,7 +780,7 @@ static NSString *const kSSJReportFormsCurveCellID = @"kSSJReportFormsCurveCellID
             return;
         }
         
-        CGFloat value = [values[idx] floatValue];
+        double value = [values[idx] doubleValue];
         CGFloat maxCurveHeight = (self.height - _curveInsets.top - _curveInsets.bottom);
         CGFloat y = self.height - _curveInsets.bottom - value / _maxValue * maxCurveHeight;
         

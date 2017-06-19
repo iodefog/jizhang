@@ -22,3 +22,14 @@
 - (void)ssj_removeFirstObject;
 
 @end
+
+typedef NS_ENUM(NSInteger, SSJAxisType) {
+    SSJAxisTypeHorizontal,
+    SSJAxisTypeVertical
+};
+
+@interface NSArray (SSJAutoLayout)
+
+- (void)ssj_distributeViewsAlongAxis:(SSJAxisType)axisType withFixedItemLength:(CGFloat)fixedItemLength;
+
+@end

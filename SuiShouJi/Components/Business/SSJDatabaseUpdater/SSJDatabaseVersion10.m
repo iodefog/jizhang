@@ -16,6 +16,10 @@ static NSString *const kDefualtOrderKey = @"kDefualtOrderKey";
 
 @implementation SSJDatabaseVersion10
 
++ (NSString *)dbVersion {
+    return @"1.9.0";
+}
+
 + (NSError *)startUpgradeInDatabase:(FMDatabase *)db {
     NSError *error = [self updateBooksTypeTableWithDatabase:db];
     if (error) {

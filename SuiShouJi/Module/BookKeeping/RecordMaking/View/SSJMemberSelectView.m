@@ -12,14 +12,130 @@
 #import "SSJDatabaseQueue.h"
 #import "SSJNewMemberViewController.h"
 #import "SSJMemberTableViewCell.h"
+#import "SSJDatabaseSequence.h"
 
+#pragma mark - SSJMemberSelectViewHelper
+#pragma mark -
+@interface SSJMemberSelectViewHelper : NSObject
+
+@end
+
+@implementation SSJMemberSelectViewHelper
+
++ (id)queryMemberItemsInDatabase:(SSJDatabase *)db {
+    FMResultSet *rs = [db executeQuery:@"select * from bk_member where cuserid = ? and istate <> 0 order by iorder asc , cadddate asc", SSJUSERID()];
+    if (!rs) {
+        return [db lastError];
+    }
+    NSMutableArray *memberItems = [NSMutableArray array];
+    int count = 1;
+    while ([rs next]) {
+        SSJChargeMemberItem *item = [[SSJChargeMemberItem alloc] init];
+        item.memberId = [rs stringForColumn:@"CMEMBERID"];
+        item.memberName = [rs stringForColumn:@"CNAME"];
+        item.memberColor = [rs stringForColumn:@"CCOLOR"];
+        item.memberOrder = [rs intForColumn:@"IORDER"];
+        if (!item.memberOrder) {
+            item.memberOrder = count;
+        }
+        count ++;
+        [memberItems addObject:item];
+    }
+    [rs close];
+    return memberItems;
+}
+
++ (id)queryMemberItemsForChargeId:(NSString *)chargeId inDatabase:(SSJDatabase *)db {
+    FMResultSet *rs = [db executeQuery:@"select a.* , b.* from bk_member_charge as a , bk_member as b where a.ichargeid = ? and a.cmemberid = b.cmemberid", chargeId];
+    if (!rs) {
+        return [db lastError];
+    }
+    
+    NSMutableArray *memberItems = [NSMutableArray array];
+    while ([rs next]) {
+        SSJChargeMemberItem *item = [[SSJChargeMemberItem alloc]init];
+        item.memberId = [rs stringForColumn:@"CMEMBERID"];
+        item.memberName = [rs stringForColumn:@"CNAME"];
+        item.memberColor = [rs stringForColumn:@"CCOLOR"];
+        [memberItems addObject:item];
+    }
+    [rs close];
+    
+    return memberItems;
+}
+
++ (id)queryMemberItemsForPeriodChargeConfigId:(NSString *)configId inDatabase:(SSJDatabase *)db {
+    NSString *memberIdsStr = [db stringForQuery:@"select cmemberids from bk_charge_period_config where iconfigid = ?", configId];
+    NSArray *memberIds = [memberIdsStr componentsSeparatedByString:@","];
+    if (memberIds.count == 0) {
+        return nil;
+    }
+    
+    NSMutableArray *bindParams = [NSMutableArray arrayWithCapacity:memberIds.count];
+    NSMutableDictionary *params = [@{@"userId":SSJUSERID()} mutableCopy];
+    [memberIds enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSString *key = [NSString stringWithFormat:@"memberId_%d", (int)idx];
+        [bindParams addObject:[NSString stringWithFormat:@":%@", key]];
+        params[key] = obj;
+    }];
+    
+    NSString *sql = [NSString stringWithFormat:@"select cmemberid, cname, ccolor from bk_member where cmemberid in (%@) and cuserid = :userId", [bindParams componentsJoinedByString:@", "]];
+    FMResultSet *rs = [db executeQuery:sql withParameterDictionary:params];
+    if (!rs) {
+        return [db lastError];
+    }
+    
+    NSMutableArray *memberItems = [NSMutableArray array];
+    while ([rs next]) {
+        SSJChargeMemberItem *memberItem = [[SSJChargeMemberItem alloc] init];
+        memberItem.memberId = [rs stringForColumn:@"cmemberid"];
+        memberItem.memberName = [rs stringForColumn:@"cname"];
+        memberItem.memberColor = [rs stringForColumn:@"ccolor"];
+        [memberItems addObject:memberItem];
+    }
+    [rs close];
+    
+    return memberItems;
+}
+
++ (id)queryDefaultMemberItemInDatabase:(SSJDatabase *)db {
+    NSString *memberId = [NSString stringWithFormat:@"%@-0",SSJUSERID()];
+    FMResultSet *rs = [db executeQuery:@"select cname, ccolor from bk_member where cmemberid = ?", memberId];
+    if (!rs) {
+        return [db lastError];
+    }
+    
+    NSMutableArray *memberItems = [NSMutableArray array];
+    while ([rs next]) {
+        SSJChargeMemberItem *item = [[SSJChargeMemberItem alloc] init];
+        item.memberId = memberId;
+        item.memberName = [rs stringForColumn:@"cname"];
+        item.memberColor = [rs stringForColumn:@"ccolor"];
+        [memberItems addObject:item];
+    }
+    [rs close];
+    
+    return memberItems;
+}
+
+@end
+
+#pragma mark - SSJMemberSelectView
+#pragma mark -
 static NSString *const kMemberTableViewCellIdentifier = @"kMemberTableViewCellIdentifier";
 
 @interface SSJMemberSelectView()
 
-@property(nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) SSJDatabaseSequence *dbSequence;
 
-@property(nonatomic, strong) NSArray *items;
+@property(nonatomic, strong) NSMutableArray<SSJChargeMemberItem *> *items;
+
+@property(nonatomic, strong) NSMutableArray<SSJChargeMemberItem *> *selectedMemberItems;
+
+// 如果chargeId或者preiodConfigId有值，则根据这两个id查询出的依赖的成员，如果没有值，就是默认成员
+@property(nonatomic, strong) NSMutableArray<SSJChargeMemberItem *> *dependentMemberItems;
+
+@property(nonatomic, strong) UITableView *tableView;
 
 @property(nonatomic, strong) UIImageView *accessoryView;
 
@@ -29,14 +145,21 @@ static NSString *const kMemberTableViewCellIdentifier = @"kMemberTableViewCellId
 
 @implementation SSJMemberSelectView
 
+- (void)dealloc {
+    [self.dbSequence cancelAllTasks];
+}
+
 - (instancetype)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
+        self.items = [NSMutableArray array];
+        self.selectedMemberItems = [NSMutableArray array];
+        self.dependentMemberItems = [NSMutableArray array];
+        self.dbSequence = [SSJDatabaseSequence sequence];
         [self addSubview:self.topView];
         [self addSubview:self.tableView];
-        [self.tableView registerClass:[SSJMemberTableViewCell class] forCellReuseIdentifier:kMemberTableViewCellIdentifier];
+        self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
         [self sizeToFit];
     }
     return self;
@@ -51,7 +174,74 @@ static NSString *const kMemberTableViewCellIdentifier = @"kMemberTableViewCellId
     self.topView.leftTop = CGPointMake(0, 0);
     self.tableView.size = CGSizeMake(self.width, self.height - 85);
     self.tableView.leftTop = CGPointMake(0, self.topView.bottom);
-    [self.tableView ssj_relayoutBorder];
+}
+
+- (void)show {
+    if (self.superview) {
+        return;
+    }
+    
+    UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+    
+    self.top = keyWindow.height;
+    [keyWindow ssj_showViewWithBackView:self backColor:[UIColor blackColor] alpha:0.3 target:self touchAction:@selector(dismiss) animation:^{
+        self.bottom = keyWindow.height;
+        if (_showBlock) {
+            _showBlock();
+        }
+    } timeInterval:0.25 fininshed:NULL];
+}
+
+- (void)dismiss {
+    if (!self.superview) {
+        return;
+    }
+    
+    UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+    
+    [self.superview ssj_hideBackViewForView:self animation:^{
+        self.top = keyWindow.bottom;
+    } timeInterval:0.25 fininshed:^(BOOL complation) {
+        if (_dismissBlock) {
+            _dismissBlock();
+        }
+    }];
+}
+
+- (void)reloadData:(void(^)())completion {
+    SSJDatabaseSequenceCompoundTask *compoundTask = [SSJDatabaseSequenceCompoundTask taskWithTasks:@[[self loadAllMembersTask], [self loadSelectedMemberTask]] success:^{
+        // 补充没有的流水依赖成员，比如当前流水依赖的成员已被删除，也要展示出来
+        for (SSJChargeMemberItem *item in self.dependentMemberItems) {
+            if (![self.items containsObject:item]) {
+                [self.items addObject:item];
+            }
+        }
+        
+        SSJChargeMemberItem *item = [[SSJChargeMemberItem alloc] init];
+        item.memberName = @"添加新成员";
+        [self.items addObject:item];
+        
+        // 移除已经被删除的非依赖选中的成员
+        NSMutableArray *tmpSelectedItems = [self.selectedMemberItems mutableCopy];
+        for (SSJChargeMemberItem *item in tmpSelectedItems) {
+            if (![self.items containsObject:item]) {
+                [self.selectedMemberItems removeObject:item];
+            }
+        }
+        [self.tableView reloadData];
+        if (completion) {
+            completion();
+        }
+    } failure:^(NSError * _Nonnull error) {
+        [SSJAlertViewAdapter showError:error];
+    }];
+    [self.dbSequence addCompoundTask:compoundTask];
+}
+
+- (void)addSelectedMemberItem:(SSJChargeMemberItem *)item {
+    if ([item isKindOfClass:[SSJChargeMemberItem class]]) {
+        [self.selectedMemberItems addObject:item];
+    }
 }
 
 #pragma mark - UITableViewDelegate
@@ -114,10 +304,7 @@ static NSString *const kMemberTableViewCellIdentifier = @"kMemberTableViewCellId
         _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
         _tableView.separatorInset = UIEdgeInsetsZero;
         [_tableView ssj_clearExtendSeparator];
-
-        [_tableView ssj_setBorderWidth:2];
-        [_tableView ssj_setBorderStyle:SSJBorderStyleTop];
-        [_tableView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellIndicatorColor]];
+        [_tableView registerClass:[SSJMemberTableViewCell class] forCellReuseIdentifier:kMemberTableViewCellIdentifier];
     }
     return _tableView;
 }
@@ -158,6 +345,10 @@ static NSString *const kMemberTableViewCellIdentifier = @"kMemberTableViewCellId
         manageButton.size = CGSizeMake(40, 40);
         manageButton.centerY = _topView.height / 2;
         manageButton.left = 10;
+        
+        [_topView ssj_setBorderWidth:1];
+        [_topView ssj_setBorderStyle:SSJBorderStyleBottom];
+        [_topView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellIndicatorColor]];
     }
     return _topView;
 }
@@ -171,104 +362,31 @@ static NSString *const kMemberTableViewCellIdentifier = @"kMemberTableViewCellId
 }
 
 #pragma mark - Private
-- (void)show {
-    if (self.superview) {
-        return;
-    }
-    [self getDataFromDb];
-    
-    UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
-    
-    self.top = keyWindow.height;
-    [keyWindow ssj_showViewWithBackView:self backColor:[UIColor blackColor] alpha:0.3 target:self touchAction:@selector(dismiss) animation:^{
-        self.bottom = keyWindow.height;
-        if (_showBlock) {
-            _showBlock();
-        }
-    } timeInterval:0.25 fininshed:NULL];
+- (SSJDatabaseSequenceTask *)loadAllMembersTask {
+    [self.items removeAllObjects];
+    return [SSJDatabaseSequenceTask taskWithHandler:^id _Nonnull(SSJDatabase * _Nonnull db) {
+        return [SSJMemberSelectViewHelper queryMemberItemsInDatabase:db];
+    } success:^(NSArray<SSJChargeMemberItem *> *result) {
+        [self.items addObjectsFromArray:result];
+    } failure:NULL];
 }
 
-- (void)dismiss {
-    if (!self.superview) {
-        return;
-    }
-    
-    UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
-    
-    [self.superview ssj_hideBackViewForView:self animation:^{
-        self.top = keyWindow.bottom;
-    } timeInterval:0.25 fininshed:^(BOOL complation) {
-        if (_dismissBlock) {
-            _dismissBlock();
-        }
-    }];
-}
-
--(void)getDataFromDb{
-    __weak typeof(self) weakSelf = self;
-    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        NSString *userid = SSJUSERID();
-        FMResultSet *allMembersResult = [db executeQuery:@"select * from bk_member where cuserid = ? and istate <> 0 order by iorder asc , cadddate asc",userid];
-        NSMutableArray *allMembersArr = [NSMutableArray array];
-        NSMutableArray *idsArr = [NSMutableArray array];
-        int count = 1;
-        while ([allMembersResult next]) {
-            SSJChargeMemberItem *item = [[SSJChargeMemberItem alloc]init];
-            item.memberId = [allMembersResult stringForColumn:@"CMEMBERID"];
-            [idsArr addObject:[NSString stringWithFormat:@"'%@'",item.memberId]];
-            item.memberName = [allMembersResult stringForColumn:@"CNAME"];
-            item.memberColor = [allMembersResult stringForColumn:@"CCOLOR"];
-            item.memberOrder = [allMembersResult intForColumn:@"IORDER"];
-            if (!item.memberOrder) {
-                item.memberOrder = count;
-            }
-            count ++;
-            [allMembersArr addObject:item];
-        }
-        [allMembersResult close];
+- (SSJDatabaseSequenceTask *)loadSelectedMemberTask {
+    [self.dependentMemberItems removeAllObjects];
+    return [SSJDatabaseSequenceTask taskWithHandler:^id _Nonnull(SSJDatabase * _Nonnull db) {
         if (self.chargeId.length) {
-            NSString *sql = [NSString stringWithFormat:@"select a.* , b.* from bk_member_charge as a , bk_member as b where a.cmemberid not in (%@) and a.ichargeid = '%@' and a.cmemberid = b.cmemberid and b.cuserid = '%@'",[idsArr componentsJoinedByString:@","],weakSelf.chargeId,userid];
-            FMResultSet *result = [db executeQuery:sql];
-            while ([result next]) {
-                SSJChargeMemberItem *item = [[SSJChargeMemberItem alloc]init];
-                item.memberId = [result stringForColumn:@"CMEMBERID"];
-                item.memberName = [result stringForColumn:@"CNAME"];
-                item.memberColor = [result stringForColumn:@"CCOLOR"];
-                [allMembersArr addObject:item];
-            }
+            return [SSJMemberSelectViewHelper queryMemberItemsForChargeId:self.chargeId inDatabase:db];
+        } else if (self.preiodConfigId.length) {
+            return [SSJMemberSelectViewHelper queryMemberItemsForPeriodChargeConfigId:self.preiodConfigId inDatabase:db];
+        } else {
+            return [SSJMemberSelectViewHelper queryDefaultMemberItemInDatabase:db];
         }
-        SSJChargeMemberItem *item = [[SSJChargeMemberItem alloc]init];
-        item.memberName = @"添加新成员";
-        [allMembersArr addObject:item];
-        weakSelf.items = [NSArray arrayWithArray:allMembersArr];
-        [weakSelf updateSelectedMemberItems];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [weakSelf.tableView reloadData];
-        });
-    }];
-}
-
--(void)setSelectedMemberItems:(NSMutableArray *)selectedMemberItems{
-    _selectedMemberItems = selectedMemberItems;
-    [self updateSelectedMemberItems];
-    [self.tableView reloadData];
-}
-
-- (void)updateSelectedMemberItems {
-    NSMutableArray *tmpMemberItems = [_selectedMemberItems copy];
-    for (SSJChargeMemberItem *memberItem in tmpMemberItems) {
-        if (self.items && ![self.items containsObject:memberItem]) {
-            [_selectedMemberItems removeObject:memberItem];
+    } success:^(NSArray<SSJChargeMemberItem *> *result) {
+        [self.dependentMemberItems addObjectsFromArray:result];
+        if (self.selectedMemberItems.count == 0) {
+            [self.selectedMemberItems addObjectsFromArray:result];
         }
-    }
+    } failure:NULL];
 }
-
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
-}
-*/
 
 @end

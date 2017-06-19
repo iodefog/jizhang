@@ -73,6 +73,43 @@ typedef NS_OPTIONS(NSUInteger, SSJBorderStyle) {
 
 @end
 
+@interface CALayer (SSJBorder)
+
+@property (nonatomic, readonly, getter=ssj_borderLayer) SSJBorderLayer *borderLayer;
+
+@property (nonatomic, getter=ssj_cornerStyle, setter=ssj_setCornerStyle:) UIRectCorner cornerStyle;
+
+@property (nonatomic, getter=ssj_cornerRadius, setter=ssj_setCornerRadius:) CGFloat cornerRadius;
+
+//  设置边框线类型
+- (void)ssj_setBorderStyle:(SSJBorderStyle)customBorderStyle;
+
+//  边框线类型
+- (SSJBorderStyle)ssj_borderStyle;
+
+//  设置边框线颜色
+- (void)ssj_setBorderColor:(UIColor *)color;
+
+//  边框线颜色
+- (UIColor *)ssj_borderColor;
+
+//  设置边框线宽度
+- (void)ssj_setBorderWidth:(CGFloat)with;
+
+//  边框线宽度
+- (CGFloat)ssj_borderWidth;
+
+//  设置边框线内凹
+- (void)ssj_setBorderInsets:(UIEdgeInsets)insets;
+
+//  边框线内凹
+- (UIEdgeInsets)ssj_borderInsets;
+
+//  重新布局边框线，如果在设置了边框线之后view的大小发生变化，需要调用此方法
+- (void)ssj_relayoutBorder;
+
+@end
+
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////
 

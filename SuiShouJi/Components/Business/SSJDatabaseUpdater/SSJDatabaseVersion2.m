@@ -11,6 +11,10 @@
 
 @implementation SSJDatabaseVersion2
 
++ (NSString *)dbVersion {
+    return @"unknown";
+}
+
 + (NSError *)startUpgradeInDatabase:(FMDatabase *)db {
     NSError *error = [self upgradeUserTableWithDatabase:db];;
     if (error) {
@@ -40,10 +44,6 @@
             return [db lastError];
         }
     }
-    
-//    if (![db executeUpdate:@"alter table bk_user alter column cDefaultFundAcctState integer default 0"]) {
-//        return [db lastError];
-//    }
     
     return nil;
 }

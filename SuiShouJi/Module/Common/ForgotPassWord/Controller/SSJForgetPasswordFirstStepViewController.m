@@ -359,7 +359,6 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     self.setPasswordButton.left = self.numRegSecretBgView.left;
     self.setPasswordButton.width = self.passwordField.width;
     self.setPasswordButton.height = 45;
-    [self.authCodeField ssj_relayoutBorder];
 }
 
 #pragma mark - Getter
