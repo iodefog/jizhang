@@ -25894,6 +25894,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = YouYuJiZhangBenDev;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = "Debug-production";
 		};
@@ -26397,6 +26398,7 @@
 				PROVISIONING_PROFILE = "94470d36-8a95-4638-a692-726b5daac246";
 				PROVISIONING_PROFILE_SPECIFIER = YouYuJiZhangBenDis;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = "Release-production";
 		};
@@ -30303,6 +30305,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = YouYuJiZhangBenDev;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = "Debug-test";
 		};
@@ -30352,6 +30355,7 @@
 				PROVISIONING_PROFILE = "94470d36-8a95-4638-a692-726b5daac246";
 				PROVISIONING_PROFILE_SPECIFIER = YouYuJiZhangBenDis;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = "Release-test";
 		};
