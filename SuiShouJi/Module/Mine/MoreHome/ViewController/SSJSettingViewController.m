@@ -132,11 +132,11 @@ static NSString *const kTitle9 = @"上传日志";
         return;
     }
     
-    //  重新拉去
+    //  重新拉取
     if ([title isEqualToString:kTitle2]) {
         
         if (SSJIsUserLogined()) {
-            [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"手机上的记账数据将重新从云端获取，若您多个手机使用APP且数据不一致时可重新拉取，请在WIFi下操作。" action:[SSJAlertViewAction actionWithTitle:@"取消" handler:NULL], [SSJAlertViewAction actionWithTitle:@"立即拉取" handler:^(SSJAlertViewAction * _Nonnull action) {
+            [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@"手机上的记账数据将重新从云端获取，若您多个手机使用APP且数据不一致时可重新拉取，请在WIFi下操作。" action:[SSJAlertViewAction actionWithTitle:@"取消" handler:NULL], [SSJAlertViewAction actionWithTitle:@"立即拉取" handler:^(SSJAlertViewAction * _Nonnull action) {
                 if ([SSJNetworkReachabilityManager networkReachabilityStatus] == SSJNetworkReachabilityStatusNotReachable) {
                     [CDAutoHideMessageHUD showMessage:@"请连接网络后重试"];
                     return;
@@ -150,7 +150,7 @@ static NSString *const kTitle9 = @"上传日志";
             }], nil];
         } else {
             __weak typeof(self) wself = self;
-            [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"亲，登录后重新拉取数据哦" action:[SSJAlertViewAction actionWithTitle:@"暂不拉取" handler:NULL], [SSJAlertViewAction actionWithTitle:@"去登录" handler:^(SSJAlertViewAction * _Nonnull action) {
+            [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@"亲，登录后重新拉取数据哦" action:[SSJAlertViewAction actionWithTitle:@"暂不拉取" handler:NULL], [SSJAlertViewAction actionWithTitle:@"去登录" handler:^(SSJAlertViewAction * _Nonnull action) {
                 SSJLoginViewController *loginVc = [[SSJLoginViewController alloc] init];
                 loginVc.backController = wself;
                 [self.navigationController pushViewController:loginVc animated:YES];
@@ -214,13 +214,23 @@ static NSString *const kTitle9 = @"上传日志";
     }
     
     if ([title isEqualToString:kTitle9]) {
-        NSError *tError = nil;
-        NSData *zipData = [self zipDatabaseWithError:&tError];
-        [self uploadData:zipData BaseWithcompletionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
-            if (!error) {
-                [CDAutoHideMessageHUD showMessage:@"上传成功"];
+        @weakify(self);
+        [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@"上传客户端错误日志，仅在您数据丢失或数据对账错误的情况下需手动点击上传，上传前可先联系用户QQ群552563622" action:[SSJAlertViewAction actionWithTitle:@"取消" handler:NULL], [SSJAlertViewAction actionWithTitle:@"立即拉取" handler:^(SSJAlertViewAction * _Nonnull action) {
+            @strongify(self);
+            if ([SSJNetworkReachabilityManager networkReachabilityStatus] == SSJNetworkReachabilityStatusNotReachable) {
+                [CDAutoHideMessageHUD showMessage:@"请连接网络后重试"];
+                return;
             }
-        }];
+            NSError *tError = nil;
+            NSData *zipData = [self zipDatabaseWithError:&tError];
+            
+            [self uploadData:zipData BaseWithcompletionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
+                if (!error) {
+                    [CDAutoHideMessageHUD showMessage:@"上传成功"];
+                }
+            }];
+
+        }], nil];
     }
 }
 
