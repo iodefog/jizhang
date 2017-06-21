@@ -7,7 +7,7 @@
 //
 
 #import "SSJBaseViewController.h"
-#import "SSJChargeMemBerItem.h"
+#import "SSJChargeMemberItem.h"
 
 @interface SSJNewMemberViewController : SSJBaseViewController
 

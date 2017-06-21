@@ -7,7 +7,7 @@
 //
 
 #import "SSJBaseTableViewCell.h"
-#import "SSJChargeMemBerItem.h"
+#import "SSJChargeMemberItem.h"
 
 SSJ_DEPRECATED
 

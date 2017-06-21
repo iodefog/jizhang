@@ -9717,6 +9717,7 @@
 		7D3955511C5F7D25004D807C /* SSJStartChecker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJStartChecker.m; sourceTree = "<group>"; };
 		7D3955531C606BAF004D807C /* SSJStartUpgradeAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJStartUpgradeAlertView.h; sourceTree = "<group>"; };
 		7D3955541C606BAF004D807C /* SSJStartUpgradeAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJStartUpgradeAlertView.m; sourceTree = "<group>"; };
+		7D3D5E741EFA811900253E71 /* SSJChargeMemberItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJChargeMemberItem.h; sourceTree = "<group>"; };
 		7D3EAD291DCC340100E5B2B2 /* SSJLoanChargeModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJLoanChargeModel.h; sourceTree = "<group>"; };
 		7D3EAD2A1DCC340100E5B2B2 /* SSJLoanChargeModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJLoanChargeModel.m; sourceTree = "<group>"; };
 		7D41A6941D1415F30043FD81 /* SSJNetworkReachabilityManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJNetworkReachabilityManager.h; sourceTree = "<group>"; };
@@ -10394,7 +10395,6 @@
 		9C2E02731CAE419600C5F764 /* SSJWeiXinLoginHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJWeiXinLoginHelper.m; sourceTree = "<group>"; };
 		9C2FC0441D3E3A9700A4C0C9 /* SSJMemberSelectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMemberSelectView.h; sourceTree = "<group>"; };
 		9C2FC0451D3E3A9700A4C0C9 /* SSJMemberSelectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMemberSelectView.m; sourceTree = "<group>"; };
-		9C2FC04E1D3E3AA100A4C0C9 /* SSJChargeMemBerItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJChargeMemBerItem.h; sourceTree = "<group>"; };
 		9C2FC04F1D3E3AA100A4C0C9 /* SSJChargeMemberItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJChargeMemberItem.m; sourceTree = "<group>"; };
 		9C2FC0541D3F287C00A4C0C9 /* SSJMemberCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMemberCell.h; sourceTree = "<group>"; };
 		9C2FC0551D3F287C00A4C0C9 /* SSJMemberCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMemberCell.m; sourceTree = "<group>"; };
@@ -11834,7 +11834,7 @@
 		7D5F32F31CEAE6C10086B67E /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				9C2FC04E1D3E3AA100A4C0C9 /* SSJChargeMemBerItem.h */,
+				7D3D5E741EFA811900253E71 /* SSJChargeMemberItem.h */,
 				9C2FC04F1D3E3AA100A4C0C9 /* SSJChargeMemberItem.m */,
 				7D5F32F41CEAE6C10086B67E /* SSJFundingItem.h */,
 				7D5F32F51CEAE6C10086B67E /* SSJFundingItem.m */,

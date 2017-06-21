@@ -19,7 +19,7 @@
 #import "SSJChargeImageBrowseView.h"
 
 #import "SSJBooksTypeItem.h"
-#import "SSJChargeMemBerItem.h"
+#import "SSJChargeMemberItem.h"
 #import "SSJDatabaseQueue.h"
 #import "SSJDataSynchronizer.h"
 #import "SSJBooksTypeStore.h"

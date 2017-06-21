@@ -37,7 +37,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 #import "SSJImaageBrowseViewController.h"
 #import "SSJRecordMakingCategoryItem.h"
 #import "SSJDatabaseQueue.h"
-#import "SSJChargeMemBerItem.h"
+#import "SSJChargeMemberItem.h"
 #import "SSJMemberSelectView.h"
 #import "SSJMemberManagerViewController.h"
 #import "SSJNewMemberViewController.h"
