@@ -21,6 +21,11 @@
         return error;
     }
     
+    error = [self updateUserCrediteTableWithDatabase:db];
+    if (error) {
+        return error;
+    }
+    
     return nil;
 }
 
@@ -29,11 +34,32 @@
         return [db lastError];
     }
     
-    if (![db executeUpdate:@"update set itype = ? where cfundid in ('','','')",SSJAccountTypeliabilities]) {
+    if (![db executeUpdate:@"insert into bk_fund_info (cfundid, cacctname, cicoin, cparent, cwritedate, operatortype) values ('16','蚂蚁花呗','ft_huabei','root','-1','0')"]) {
+        return [db lastError];
+    }
+    
+    if (![db executeUpdate:@"update bk_fund_info set itype = ? where cfundid in ('3','11','16')",SSJAccountTypeliabilities]) {
+        return [db lastError];
+    }
+    
+    if (![db executeUpdate:@"update bk_fund_info set itype = ? where cfundid not in ('3','11','16')",SSJAccountTypeassets]) {
         return [db lastError];
     }
     
     return nil;
 }
+
++ (NSError *)updateUserCrediteTableWithDatabase:(FMDatabase *)db {
+    if (![db executeUpdate:@"alter table bk_user_credit add itype integer"]) {
+        return [db lastError];
+    }
+    
+    if (![db executeUpdate:@"update bk_user_credit set itype = ? where itype is null",SSJCrediteCardTypeCrediteCard]) {
+        return [db lastError];
+    }
+    
+    return nil;
+}
+
 
 @end
