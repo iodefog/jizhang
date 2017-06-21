@@ -25792,7 +25792,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 39E3B4D62A92E52E9A7D3272 /* Pods-SuiShouJi.debug-production.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = 9188jizhangpro;
+				ASSETCATALOG_COMPILER_APPICON_NAME = 9188jizhang;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LongTailLaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -25924,6 +25924,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = YouYuJiZhangBenDev;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = "Debug-production";
 		};
@@ -26297,7 +26298,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 6B2E92DAE4FF9F6B4E6CFC2B /* Pods-SuiShouJi.release-production.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = 9188jizhangpro;
+				ASSETCATALOG_COMPILER_APPICON_NAME = 9188jizhang;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LongTailLaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -26427,6 +26428,7 @@
 				PROVISIONING_PROFILE = "94470d36-8a95-4638-a692-726b5daac246";
 				PROVISIONING_PROFILE_SPECIFIER = YouYuJiZhangBenDis;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = "Release-production";
 		};
@@ -30333,6 +30335,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = YouYuJiZhangBenDev;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = "Debug-test";
 		};
@@ -30382,6 +30385,7 @@
 				PROVISIONING_PROFILE = "94470d36-8a95-4638-a692-726b5daac246";
 				PROVISIONING_PROFILE_SPECIFIER = YouYuJiZhangBenDis;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = "Release-test";
 		};
@@ -30475,7 +30479,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 59B9709CD0561A8AD4BDF638 /* Pods-SuiShouJi.debug-test.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = 9188jizhangpro;
+				ASSETCATALOG_COMPILER_APPICON_NAME = 9188jizhang;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LongTailLaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -30564,7 +30568,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 21EA1E50547213D6FCC8FD05 /* Pods-SuiShouJi.release-test.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = 9188jizhangpro;
+				ASSETCATALOG_COMPILER_APPICON_NAME = 9188jizhang;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LongTailLaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;

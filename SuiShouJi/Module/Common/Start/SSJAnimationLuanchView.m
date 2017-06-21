@@ -33,13 +33,13 @@
                 _defaultView.frame = self.bounds;
             } else {
                 if ([SSJDefaultSource() isEqualToString:@"11501"]) {
-                    _defaultView = [[UIImageView alloc] initWithImage:[UIImage ssj_compatibleImageNamed:@"9188default"]];
+                    _defaultView = [[YYAnimatedImageView alloc] initWithImage:[UIImage ssj_compatibleImageNamed:@"9188default"]];
                 } else {
-                    _defaultView = [[UIImageView alloc] initWithImage:[UIImage ssj_compatibleImageNamed:@"youyudefult"]];
+                    _defaultView = [[YYAnimatedImageView alloc] initWithImage:[UIImage ssj_compatibleImageNamed:@"youyudefult"]];
                 }
             }
         } else {
-            _defaultView = [[UIImageView alloc] initWithImage:[UIImage ssj_compatibleImageNamed:@"default"]];
+            _defaultView = [[YYAnimatedImageView alloc] initWithImage:[UIImage ssj_compatibleImageNamed:@"default"]];
         }
     }
     return self;

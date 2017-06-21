@@ -4,8 +4,8 @@ apple_id "yyfiniancial02@sina.com"
 end
 
 for_lane :release do |options|
-app_identifier "com.youyu.youyujizhangguanjia"
-apple_id "licaidi002@126.com"
+app_identifier "com.youyu.jizhang"
+apple_id "marsfan888@163.com"
 end
 
 for_lane :testflight do |options|
