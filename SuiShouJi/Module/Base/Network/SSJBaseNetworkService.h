@@ -40,7 +40,7 @@ typedef void(^SSJNetworkServiceHandler)(SSJBaseNetworkService *service);
 @protected
     NSString *_returnCode;
     NSString *_desc;
-    id _rootElement;
+    NSDictionary *_rootElement;
 }
 
 /**
@@ -81,7 +81,7 @@ typedef void(^SSJNetworkServiceHandler)(SSJBaseNetworkService *service);
 /**
  *  服务端返回的数据
  */
-@property (nonatomic, strong, readonly) id rootElement;
+@property (nonatomic, strong, readonly) NSDictionary *rootElement;
 
 /**
  *  是否显示加载框，默认NO
@@ -169,7 +169,7 @@ typedef void(^SSJNetworkServiceHandler)(SSJBaseNetworkService *service);
  *
  *  @param rootElement 请求返回的数据
  */
-- (void)handleResult:(id)rootElement;
+- (void)handleResult:(NSDictionary *)rootElement;
 
 @end
 

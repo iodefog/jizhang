@@ -179,7 +179,7 @@ static inline AFHTTPResponseSerializer *SSJResponseSerializer(SSJResponseSeriali
 }
 
 /* 请求完成 */
-- (void)p_taskDidFinish:(NSURLSessionTask *)task responseObject:(id)responseObject {
+- (void)p_taskDidFinish:(NSURLSessionTask *)task responseObject:(NSDictionary *)responseObject {
     _isLoaded = YES;
     _isLoadSuccess = YES;
     if (self.task.state == NSURLSessionTaskStateCompleted) {
@@ -265,7 +265,7 @@ static inline AFHTTPResponseSerializer *SSJResponseSerializer(SSJResponseSeriali
 //--------------------------------
 /** 需要子类覆写的方法 **/
 //--------------------------------
-- (void)handleResult:(id)rootElement {
+- (void)handleResult:(NSDictionary *)rootElement {
 }
 
 @end
