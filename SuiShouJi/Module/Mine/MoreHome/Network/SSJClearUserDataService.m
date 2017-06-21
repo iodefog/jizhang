@@ -32,8 +32,8 @@
     self.failBlock = failure;
 }
 
-- (void)requestDidFinish:(NSDictionary *)rootElement{
-    [super requestDidFinish:rootElement];
+- (void)handleResult:(NSDictionary *)rootElement{
+    [super handleResult:rootElement];
     SSJPRINT(@"%@",self.desc);
     if ([self.returnCode isEqualToString:@"1"]
         || [self.returnCode isEqualToString:@"-5555"]) {

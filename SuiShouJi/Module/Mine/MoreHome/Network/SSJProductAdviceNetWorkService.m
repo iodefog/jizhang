@@ -32,8 +32,8 @@
 }
 
 
-- (void)requestDidFinish:(id)rootElement{
-    [super requestDidFinish:rootElement];
+- (void)handleResult:(id)rootElement{
+    [super handleResult:rootElement];
     NSDictionary *result = [[NSDictionary dictionaryWithDictionary:rootElement] objectForKey:@"results"];
 //    if ([[NSDictionary dictionaryWithDictionary:rootElement] objectForKey:@"desc"]) {
 //        NSDictionary *result = [NSDictionary dictionaryWithDictionary:rootElement];

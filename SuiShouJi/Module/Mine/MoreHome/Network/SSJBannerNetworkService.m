@@ -22,8 +22,8 @@
     [self request:urlStr params:nil];
 }
 
-- (void)requestDidFinish:(NSDictionary *)rootElement{
-    [super requestDidFinish:rootElement];
+- (void)handleResult:(NSDictionary *)rootElement{
+    [super handleResult:rootElement];
     NSDictionary *result = [NSDictionary dictionaryWithDictionary:rootElement];
     self.item = [SSJAdItem mj_objectWithKeyValues:result];
 }

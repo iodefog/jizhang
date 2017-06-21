@@ -146,17 +146,17 @@ typedef void(^SSJNetworkServiceHandler)(SSJBaseNetworkService *service);
  *  @param url    请求的地址
  *  @param params 请求的参数
  */
-- (void)request:(NSString *)urlString params:(nullable id)params;
+- (void)request:(NSString *)urlString params:(nullable NSDictionary *)params;
 
 /**
- <#Description#>
+ 开始网络请求
 
- @param urlString <#urlString description#>
- @param params <#params description#>
- @param success <#success description#>
- @param faliure <#faliure description#>
+ @param urlString 请求的地址
+ @param params 请求的参数
+ @param success 请求成功的回调
+ @param faliure 请求失败的回调
  */
-- (void)request:(NSString *)urlString params:(nullable id)params success:(nullable SSJNetworkServiceHandler)success failure:(nullable SSJNetworkServiceHandler)failure;
+- (void)request:(NSString *)urlString params:(nullable NSDictionary *)params success:(nullable SSJNetworkServiceHandler)success failure:(nullable SSJNetworkServiceHandler)failure;
 
 /**
  *  取消所有未完成的请求
@@ -167,11 +167,11 @@ typedef void(^SSJNetworkServiceHandler)(SSJBaseNetworkService *service);
 /** Overwrite **/
 /* ---------------------------------------------------------------- */
 /**
- *  请求完成时调用此方法，需要时子类可以重写此方法，不用调用父类方法
+ *  请求完成时调用此方法，用来处理返回的结果，需要时子类可以重写此方法，不用调用父类方法
  *
  *  @param rootElement 请求返回的数据
  */
-- (void)requestDidFinish:(id)rootElement;
+- (void)handleResult:(id)rootElement;
 
 @end
 

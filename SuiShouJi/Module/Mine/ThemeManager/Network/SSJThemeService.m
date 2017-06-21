@@ -15,8 +15,8 @@
     [self request:SSJURLWithAPI(@"/user/themes.go") params:nil];
 }
 
-- (void)requestDidFinish:(NSDictionary *)rootElement{
-    [super requestDidFinish:rootElement];
+- (void)handleResult:(NSDictionary *)rootElement{
+    [super handleResult:rootElement];
     if ([self.returnCode isEqualToString:@"1"]) {
         NSDictionary *results = [rootElement objectForKey:@"results"];
         NSMutableArray *themeArray = [SSJThemeItem mj_objectArrayWithKeyValuesArray:[results objectForKey:@"themeconfig"]];

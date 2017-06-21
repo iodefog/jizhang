@@ -18,9 +18,9 @@
     [self request:@"admin/checkRemind.go" params:dict];
 }
 
-- (void)requestDidFinish:(id)rootElement
+- (void)handleResult:(id)rootElement
 {
-    [super requestDidFinish:rootElement];
+    [super handleResult:rootElement];
     if ([rootElement isKindOfClass:[NSDictionary class]] && [self.returnCode isEqualToString:@"1"]) {
         //转模型
         NSDictionary *result = [[NSDictionary dictionaryWithDictionary:rootElement] objectForKey:@"results"];

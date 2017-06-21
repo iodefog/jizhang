@@ -18,8 +18,8 @@
     [self request:SSJURLWithAPI(@"/user/queryUserInfo.go") params:dict];
 }
 
-- (void)requestDidFinish:(NSDictionary *)rootElement{
-    [super requestDidFinish:rootElement];
+- (void)handleResult:(NSDictionary *)rootElement{
+    [super handleResult:rootElement];
     SSJPRINT(@"%@",self.desc);
     if ([self.returnCode isEqualToString:@"1"]) {
         NSDictionary *result = [rootElement objectForKey:@"results"];

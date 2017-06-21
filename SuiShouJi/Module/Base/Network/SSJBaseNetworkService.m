@@ -90,11 +90,11 @@ static inline AFHTTPResponseSerializer *SSJResponseSerializer(SSJResponseSeriali
     return self;
 }
 
-- (void)request:(NSString *)urlString params:(id)params {
+- (void)request:(NSString *)urlString params:(nullable NSDictionary *)params {
     [self request:urlString params:params success:NULL failure:NULL];
 }
 
-- (void)request:(NSString *)urlString params:(nullable id)params success:(nullable SSJNetworkServiceHandler)success failure:(nullable SSJNetworkServiceHandler)failure {
+- (void)request:(NSString *)urlString params:(nullable NSDictionary *)params success:(nullable SSJNetworkServiceHandler)success failure:(nullable SSJNetworkServiceHandler)failure {
     [self.task cancel];
     
     self.isCancelled = NO;
@@ -157,7 +157,7 @@ static inline AFHTTPResponseSerializer *SSJResponseSerializer(SSJResponseSeriali
 }
 
 /* 封装参数 */
-- (NSMutableDictionary *)packParameters:(NSMutableDictionary *)params {
+- (NSMutableDictionary *)packParameters:(NSDictionary *)params {
     NSMutableDictionary *paraDic = params ? [params mutableCopy] : [[NSMutableDictionary alloc] init];
     [paraDic setObject:SSJDefaultSource() forKey:@"source"];
 //    [paraDic setObject:SSJAppVersion() forKey:@"appVersion"];
@@ -200,7 +200,7 @@ static inline AFHTTPResponseSerializer *SSJResponseSerializer(SSJResponseSeriali
         
         SSJPRINT(@">>> request success code:%@ desc:%@ data:%@ URL:%@", _returnCode, _desc, _rootElement, task.currentRequest.URL);
         
-        [self requestDidFinish:_rootElement];
+        [self handleResult:_rootElement];
         
         [SSJGlobalServiceManager removeService:self];
         if (self.delegate && [self.delegate respondsToSelector:@selector(serverDidFinished:)]) {
@@ -265,7 +265,7 @@ static inline AFHTTPResponseSerializer *SSJResponseSerializer(SSJResponseSeriali
 //--------------------------------
 /** 需要子类覆写的方法 **/
 //--------------------------------
-- (void)requestDidFinish:(id)rootElement {
+- (void)handleResult:(id)rootElement {
 }
 
 @end
