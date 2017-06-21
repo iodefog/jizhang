@@ -7,16 +7,22 @@
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
 
-#import "SSJFundingTypeSelectViewController.h"
-#import "SSJFundingTypeTableViewCell.h"
-#import "SSJFundingItem.h"
-#import "SSJNewFundingViewController.h"
-#import "SSJDatabaseQueue.h"
 #import "SSJNewCreditCardViewController.h"
 #import "SSJAddOrEditLoanViewController.h"
-#import "FMDB.h"
+#import "SSJNewFundingViewController.h"
+#import "SSJFundingTypeSelectViewController.h"
+
+#import "SSJFundingTypeTableViewCell.h"
+#import "SCYSlidePagingHeaderView.h"
+
+#import "SSJFundingItem.h"
+#import "SSJDatabaseQueue.h"
+
+
 
 @interface SSJFundingTypeSelectViewController ()
+
+@property(nonatomic, strong) SCYSlidePagingHeaderView *slideView;
 
 @end
 
