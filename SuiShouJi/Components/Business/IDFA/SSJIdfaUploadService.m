@@ -7,7 +7,6 @@
 //
 
 #import "SSJIdfaUploadService.h"
-#import "SSJCustomJsonSerializer.h"
 
 @interface SSJIdfaUploadService()
 

@@ -6,8 +6,6 @@
 //  Copyright (c) 2015年 ___9188___. All rights reserved.
 //
 
-#import "AFNetworking.h"
-
 NS_ASSUME_NONNULL_BEGIN
 
 /* ---------------------------------------------------------------- */
