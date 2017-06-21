@@ -41,12 +41,17 @@
             @weakify(self);
             RACSignal *signal = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
                 @strongify(self);
-//                NSMutableDictionary *paramDic = [NSMutableDictionary dictionary];
-//                [paramDic setObject:SSJUSERID() forKey:@"cuserId"];
-//                
+                NSMutableDictionary *paramDic = [NSMutableDictionary dictionary];
+                [paramDic setObject:SSJUSERID() forKey:@"cuserId"];
+                
 //                [self.netWorkService request:@"/chargebook/user/check_cphoneExist.go" params:paramDic];
-                [subscriber sendNext:@"请求成功"];
-                [subscriber sendCompleted];
+                [self.netWorkService request:@"/chargebook/user/check_cphoneExist.go" params:paramDic success:^(SSJBaseNetworkService * _Nonnull service) {
+                    [subscriber sendNext:service.rootElement];
+                    [subscriber sendCompleted];
+                } failure:^(SSJBaseNetworkService * _Nonnull service) {
+                    [CDAutoHideMessageHUD showMessage:service.description];
+                }];
+                
                 return nil;
             }];
             //返回的数据处理json->model
