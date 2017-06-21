@@ -64,5 +64,9 @@
  *  是否为有效的邮件格式
  */
 - (BOOL)ssj_validEmial;
+/**
+ 是否为有效的手机号码格式
+ */
+- (BOOL)ssj_validPhoneNum;
 
 @end
