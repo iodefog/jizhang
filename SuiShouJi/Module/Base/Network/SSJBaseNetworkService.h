@@ -8,6 +8,8 @@
 
 #import "AFNetworking.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 /* ---------------------------------------------------------------- */
 /** 网络请求基类 **/
 /* ---------------------------------------------------------------- */
@@ -31,6 +33,9 @@ typedef NS_OPTIONS(NSInteger, SSJResponseSerialization) {
     SSJImageResponseSerialization = 1 << 3
 };
 
+@class SSJBaseNetworkService;
+typedef void(^SSJNetworkServiceHandler)(SSJBaseNetworkService *service);
+
 @protocol SSJBaseNetworkServiceDelegate;
 
 @interface SSJBaseNetworkService : NSObject {
@@ -43,7 +48,7 @@ typedef NS_OPTIONS(NSInteger, SSJResponseSerialization) {
 /**
  *  代理协议
  */
-@property (nonatomic, weak, readonly) id <SSJBaseNetworkServiceDelegate> delegate;
+@property (nonatomic, weak, readonly, nullable) id <SSJBaseNetworkServiceDelegate> delegate;
 
 /**
  *  请求方式，默认是POST
@@ -133,7 +138,7 @@ typedef NS_OPTIONS(NSInteger, SSJResponseSerialization) {
  *
  *  @return (instancetype)
  */
-- (instancetype)initWithDelegate:(id <SSJBaseNetworkServiceDelegate>)delegate;
+- (instancetype)initWithDelegate:(nullable id <SSJBaseNetworkServiceDelegate>)delegate;
 
 /**
  *  开始网络请求
@@ -141,13 +146,26 @@ typedef NS_OPTIONS(NSInteger, SSJResponseSerialization) {
  *  @param url    请求的地址
  *  @param params 请求的参数
  */
-- (void)request:(NSString *)urlString params:(id)params;
+- (void)request:(NSString *)urlString params:(nullable id)params;
+
+/**
+ <#Description#>
+
+ @param urlString <#urlString description#>
+ @param params <#params description#>
+ @param success <#success description#>
+ @param faliure <#faliure description#>
+ */
+- (void)request:(NSString *)urlString params:(nullable id)params success:(nullable SSJNetworkServiceHandler)success failure:(nullable SSJNetworkServiceHandler)failure;
 
 /**
  *  取消所有未完成的请求
  */
 - (void)cancel;
 
+/* ---------------------------------------------------------------- */
+/** Overwrite **/
+/* ---------------------------------------------------------------- */
 /**
  *  请求完成时调用此方法，需要时子类可以重写此方法，不用调用父类方法
  *
@@ -155,21 +173,12 @@ typedef NS_OPTIONS(NSInteger, SSJResponseSerialization) {
  */
 - (void)requestDidFinish:(id)rootElement;
 
-/**
- *  封装参数，需要时子类可以重写此方法，但必须调用父类方法
- *
- *  @param params 存储参数的字典
- *
- *  @return 封装好的参数字典
- */
-- (NSMutableDictionary *)packParameters:(NSMutableDictionary *)params;
-
 @end
+
 
 /* ---------------------------------------------------------------- */
 /** 网络请求代理协议 **/
 /* ---------------------------------------------------------------- */
-
 @protocol SSJBaseNetworkServiceDelegate <NSObject>
 
 @optional
@@ -204,3 +213,5 @@ typedef NS_OPTIONS(NSInteger, SSJResponseSerialization) {
 - (void)server:(SSJBaseNetworkService *)service didFailLoadWithError:(NSError *)error;
 
 @end
+
+NS_ASSUME_NONNULL_END
