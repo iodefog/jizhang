@@ -20,7 +20,7 @@
 
 
 
-@interface SSJFundingTypeSelectViewController ()
+@interface SSJFundingTypeSelectViewController () <SCYSlidePagingHeaderViewDelegate>
 
 @property(nonatomic, strong) SCYSlidePagingHeaderView *slideView;
 
@@ -44,6 +44,11 @@
     _items = [[NSMutableArray alloc]init];
     [self getDateFromDb];
     // Do any additional setup after loading the view.
+}
+
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    
 }
 
 #pragma mark - UITableViewDelegate
@@ -71,7 +76,6 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     SSJFundingItem *item = [_items objectAtIndex:indexPath.row];
     if ([item.fundingID isEqualToString:@"10"]) {
-        
         SSJAddOrEditLoanViewController *addLoanController = [[SSJAddOrEditLoanViewController alloc] init];
         addLoanController.type = SSJLoanTypeLend;
         addLoanController.enterFromFundTypeList = YES;
@@ -107,7 +111,7 @@
                 }
             }
         } else {
-            SSJNewFundingViewController *normalFundingVc = [[SSJNewFundingViewController alloc]init];
+            SSJNewFundingViewController *normalFundingVc = [[SSJNewFundingViewController alloc] init];
             __weak typeof(self) weakSelf = self;
             normalFundingVc.addNewFundBlock = ^(SSJFinancingHomeitem *newItem){
                 if (weakSelf.addNewFundingBlock) {
@@ -140,6 +144,26 @@
     FundingTypeCell.selectionStyle = UITableViewCellSelectionStyleNone;
     return FundingTypeCell;
 }
+
+#pragma mark - SCYSlidePagingHeaderViewDelegate
+- (void)slidePagingHeaderView:(SCYSlidePagingHeaderView *)headerView didSelectButtonAtIndex:(NSUInteger)index {
+//    SSJDatePeriod *period = _periodControl.currentPeriod;
+//    [self reloadDatasInPeriod:period];
+}
+
+#pragma mark - Getter
+- (SCYSlidePagingHeaderView *)slideView {
+    if (!_slideView) {
+        _slideView = [[SCYSlidePagingHeaderView alloc] initWithFrame:CGRectMake(self.view.width, 0, self.view.width, 40)];
+        _slideView.customDelegate = self;
+        _slideView.buttonClickAnimated = NO;
+        _slideView.titles = @[@"资产账户", @"负债账户"];
+        [_slideView setTabSize:CGSizeMake(self.view.width * 0.5, 3)];
+        [_slideView ssj_setBorderWidth:1];
+    }
+    return _slideView;
+}
+
 
 #pragma mark - Private
 -(void)getDateFromDb{
