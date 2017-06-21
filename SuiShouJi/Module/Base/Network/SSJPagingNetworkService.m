@@ -35,7 +35,7 @@
     [super request:urlString params:paramDic];
 }
 
-- (void)requestDidFinish:(NSDictionary *)rootElement {
+- (void)handleResult:(NSDictionary *)rootElement {
     if ([self.returnCode isEqualToString:@"1"]) {
         NSDictionary *results = rootElement[@"results"];
         if (results && [results isKindOfClass:[NSDictionary class]]) {

@@ -11,6 +11,7 @@
 #import "SSJSyncSettingViewController.h"
 #import "SSJAdWebViewController.h"
 #import "SSJLoginViewController.h"
+#import "SSJLoginVerifyPhoneViewController.h"
 #import "SSJUserTableManager.h"
 #import "SSJUserInfoItem.h"
 #import "SSJUserDefaultDataCreater.h"
@@ -637,13 +638,14 @@ static BOOL kNeedBannerDisplay = YES;
 }
 
 - (void)login {
-    SSJLoginViewController *loginVc = [[SSJLoginViewController alloc] init];
-    loginVc.finishHandle = ^(UIViewController *controller) {
-        UITabBarController *tabbarVc = self.navigationController.tabBarController;
-        UIViewController *homeController = [((UINavigationController *)[tabbarVc.viewControllers firstObject]).viewControllers firstObject];
-        controller.backController = homeController;
-        [controller ssj_backOffAction];
-    };
+    SSJLoginVerifyPhoneViewController *loginVc = [[SSJLoginVerifyPhoneViewController alloc] init];
+//    SSJLoginViewController *loginVc = [[SSJLoginViewController alloc] init];
+//    loginVc.finishHandle = ^(UIViewController *controller) {
+//        UITabBarController *tabbarVc = self.navigationController.tabBarController;
+//        UIViewController *homeController = [((UINavigationController *)[tabbarVc.viewControllers firstObject]).viewControllers firstObject];
+//        controller.backController = homeController;
+//        [controller ssj_backOffAction];
+//    };
     [self.navigationController pushViewController:loginVc animated:YES];
 }
 

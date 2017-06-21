@@ -7,7 +7,7 @@
 //
 
 #import "SSJMemberManagerViewController.h"
-#import "SSJChargeMemBerItem.h"
+#import "SSJChargeMemberItem.h"
 #import "SSJBaseTableViewCell.h"
 #import "SSJDatabaseQueue.h"
 #import "SSJNewMemberViewController.h"

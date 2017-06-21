@@ -25,8 +25,8 @@
     [self request:SSJURLWithAPI(@"/admin/announcement.go") params:dic];
 }
 
-- (void)requestDidFinish:(id)rootElement {
-    [super requestDidFinish:rootElement];
+- (void)handleResult:(id)rootElement {
+    [super handleResult:rootElement];
     if ([self.returnCode isEqualToString:@"1"]) {
         NSDictionary *results = [[NSDictionary dictionaryWithDictionary:rootElement] objectForKey:@"results"];
         NSArray *announcementArr = [results objectForKey:@"announcements"];
