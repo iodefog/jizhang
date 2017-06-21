@@ -29,8 +29,8 @@
     [self request:SSJURLWithAPI(@"/user/forgetpwd.go") params:params];
 }
 
-- (void)requestDidFinish:(NSDictionary *)rootElement{
-    [super requestDidFinish:rootElement];
+- (void)handleResult:(NSDictionary *)rootElement{
+    [super handleResult:rootElement];
     if ([self.returnCode isEqualToString:@"1"]) {
         
     }

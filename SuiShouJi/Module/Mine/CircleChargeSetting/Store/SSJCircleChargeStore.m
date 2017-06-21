@@ -8,7 +8,7 @@
 
 #import "SSJCircleChargeStore.h"
 #import "SSJDatabaseQueue.h"
-#import "SSJChargeMemBerItem.h"
+#import "SSJChargeMemberItem.h"
 
 @implementation SSJCircleChargeStore
 + (void)queryForChargeListWithSuccess:(void(^)(NSArray<SSJBillingChargeCellItem *> *result))success

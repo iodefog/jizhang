@@ -38,7 +38,7 @@
     [self request:SSJURLWithAPI(@"/chargebook/sharebook/remove_member.go") params:paramDic];
 }
 
-- (void)requestDidFinish:(NSDictionary *)rootElement {
+- (void)handleResult:(NSDictionary *)rootElement {
     if (![self.returnCode isEqualToString:@"1"]) return;
     NSArray *keyArray = [rootElement allKeys];
     if ([keyArray containsObject:@"results"]) {

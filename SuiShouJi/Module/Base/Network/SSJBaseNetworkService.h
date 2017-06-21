@@ -6,7 +6,7 @@
 //  Copyright (c) 2015年 ___9188___. All rights reserved.
 //
 
-#import "AFNetworking.h"
+NS_ASSUME_NONNULL_BEGIN
 
 /* ---------------------------------------------------------------- */
 /** 网络请求基类 **/
@@ -31,19 +31,22 @@ typedef NS_OPTIONS(NSInteger, SSJResponseSerialization) {
     SSJImageResponseSerialization = 1 << 3
 };
 
+@class SSJBaseNetworkService;
+typedef void(^SSJNetworkServiceHandler)(SSJBaseNetworkService *service);
+
 @protocol SSJBaseNetworkServiceDelegate;
 
 @interface SSJBaseNetworkService : NSObject {
 @protected
     NSString *_returnCode;
     NSString *_desc;
-    id _rootElement;
+    NSDictionary *_rootElement;
 }
 
 /**
  *  代理协议
  */
-@property (nonatomic, weak, readonly) id <SSJBaseNetworkServiceDelegate> delegate;
+@property (nonatomic, weak, readonly, nullable) id <SSJBaseNetworkServiceDelegate> delegate;
 
 /**
  *  请求方式，默认是POST
@@ -78,7 +81,7 @@ typedef NS_OPTIONS(NSInteger, SSJResponseSerialization) {
 /**
  *  服务端返回的数据
  */
-@property (nonatomic, strong, readonly) id rootElement;
+@property (nonatomic, strong, readonly) NSDictionary *rootElement;
 
 /**
  *  是否显示加载框，默认NO
@@ -133,7 +136,7 @@ typedef NS_OPTIONS(NSInteger, SSJResponseSerialization) {
  *
  *  @return (instancetype)
  */
-- (instancetype)initWithDelegate:(id <SSJBaseNetworkServiceDelegate>)delegate;
+- (instancetype)initWithDelegate:(nullable id <SSJBaseNetworkServiceDelegate>)delegate;
 
 /**
  *  开始网络请求
@@ -141,35 +144,39 @@ typedef NS_OPTIONS(NSInteger, SSJResponseSerialization) {
  *  @param url    请求的地址
  *  @param params 请求的参数
  */
-- (void)request:(NSString *)urlString params:(id)params;
+- (void)request:(NSString *)urlString params:(nullable NSDictionary *)params;
+
+/**
+ 开始网络请求
+
+ @param urlString 请求的地址
+ @param params 请求的参数
+ @param success 请求成功的回调
+ @param faliure 请求失败的回调
+ */
+- (void)request:(NSString *)urlString params:(nullable NSDictionary *)params success:(nullable SSJNetworkServiceHandler)success failure:(nullable SSJNetworkServiceHandler)failure;
 
 /**
  *  取消所有未完成的请求
  */
 - (void)cancel;
 
+/* ---------------------------------------------------------------- */
+/** Overwrite **/
+/* ---------------------------------------------------------------- */
 /**
- *  请求完成时调用此方法，需要时子类可以重写此方法，不用调用父类方法
+ *  请求完成时调用此方法，用来处理返回的结果，需要时子类可以重写此方法，不用调用父类方法
  *
  *  @param rootElement 请求返回的数据
  */
-- (void)requestDidFinish:(id)rootElement;
-
-/**
- *  封装参数，需要时子类可以重写此方法，但必须调用父类方法
- *
- *  @param params 存储参数的字典
- *
- *  @return 封装好的参数字典
- */
-- (NSMutableDictionary *)packParameters:(NSMutableDictionary *)params;
+- (void)handleResult:(NSDictionary *)rootElement;
 
 @end
+
 
 /* ---------------------------------------------------------------- */
 /** 网络请求代理协议 **/
 /* ---------------------------------------------------------------- */
-
 @protocol SSJBaseNetworkServiceDelegate <NSObject>
 
 @optional
@@ -204,3 +211,5 @@ typedef NS_OPTIONS(NSInteger, SSJResponseSerialization) {
 - (void)server:(SSJBaseNetworkService *)service didFailLoadWithError:(NSError *)error;
 
 @end
+
+NS_ASSUME_NONNULL_END

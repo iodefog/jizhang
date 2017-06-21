@@ -146,6 +146,20 @@ typedef NS_ENUM(NSInteger, SSJBooksCategory) {
     SSJBooksCategoryPublic = 1
 };
 
+
+//  资金账户资产负债类型
+typedef NS_ENUM(NSInteger, SSJAccountType) {
+    SSJAccountTypeassets = 0,           //  账户类型资产
+    SSJAccountTypeliabilities = 1       //  账户类型负债
+};
+
+//  信用卡类型
+typedef NS_ENUM(NSInteger, SSJCrediteCardType) {
+    SSJCrediteCardTypeCrediteCard = 1,    //  信用卡类型信用卡
+    SSJCrediteCardTypeAlipay = 2          //  信用卡类型蚂蚁花呗
+};
+
+
 ///------------------------------------------
 /// @name 基本数据常量
 ///------------------------------------------

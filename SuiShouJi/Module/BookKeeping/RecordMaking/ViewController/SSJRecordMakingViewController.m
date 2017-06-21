@@ -25,7 +25,7 @@
 
 #import "SSJFinancingHomeitem.h"
 #import "SSJCreditCardItem.h"
-#import "SSJChargeMemBerItem.h"
+#import "SSJChargeMemberItem.h"
 #import "SSJRecordMakingBillTypeSelectionCellItem.h"
 #import "YYKeyboardManager.h"
 #import "SSJUserTableManager.h"

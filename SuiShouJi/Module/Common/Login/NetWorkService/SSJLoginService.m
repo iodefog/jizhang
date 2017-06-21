@@ -136,8 +136,8 @@
     [self request:SSJURLWithAPI(@"/oauth/oauthlogin.go") params:dict];
 }
 
-- (void)requestDidFinish:(NSDictionary *)rootElement{
-    [super requestDidFinish:rootElement];
+- (void)handleResult:(NSDictionary *)rootElement{
+    [super handleResult:rootElement];
 
     if ([self.returnCode isEqualToString:@"1"]) {
         NSDictionary *dict=[rootElement objectForKey:@"results"];

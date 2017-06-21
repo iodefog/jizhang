@@ -7,7 +7,6 @@
 //
 
 #import "SSJIdfaUploadService.h"
-#import "SSJCustomJsonSerializer.h"
 
 @interface SSJIdfaUploadService()
 
@@ -39,8 +38,8 @@
     self.successBlock = success;
 }
 
-- (void)requestDidFinish:(NSDictionary *)rootElement{
-    [super requestDidFinish:rootElement];
+- (void)handleResult:(NSDictionary *)rootElement{
+    [super handleResult:rootElement];
     if ([self.returnCode isEqualToString:@"1"]) {
         if (self.successBlock) {
             self.successBlock(self.idfaStr);

@@ -36,7 +36,7 @@
     [super request:@"/trade/start.go" params:nil];
 }
 
-- (void)requestDidFinish:(NSDictionary *)rootElement {
+- (void)handleResult:(NSDictionary *)rootElement {
     if ([_returnCode isEqualToString:@"1"]) {
         self.content = nil;
         self.appversion = nil;

@@ -28,8 +28,8 @@
     [self request:SSJURLWithAPI(@"/user/userSignIn.go") params:@{@"cuserid":SSJUSERID()}];
 }
 
-- (void)requestDidFinish:(NSDictionary *)rootElement{
-    [super requestDidFinish:rootElement];
+- (void)handleResult:(NSDictionary *)rootElement{
+    [super handleResult:rootElement];
     
     // returnCode为1是签到成功，2是已经签过到
     if ([self.returnCode isEqualToString:@"1"]

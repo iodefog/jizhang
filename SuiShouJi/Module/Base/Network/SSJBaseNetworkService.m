@@ -61,6 +61,10 @@ static inline AFHTTPResponseSerializer *SSJResponseSerializer(SSJResponseSeriali
 
 @property (nonatomic, strong) NSDateFormatter *formatter;
 
+@property (nonatomic, copy, nullable) SSJNetworkServiceHandler success;
+
+@property (nonatomic, copy, nullable) SSJNetworkServiceHandler failure;
+
 @end
 
 @implementation SSJBaseNetworkService
@@ -86,14 +90,22 @@ static inline AFHTTPResponseSerializer *SSJResponseSerializer(SSJResponseSeriali
     return self;
 }
 
-- (void)request:(NSString *)urlString params:(id)params {
+- (void)request:(NSString *)urlString params:(nullable NSDictionary *)params {
+    [self request:urlString params:params success:NULL failure:NULL];
+}
+
+- (void)request:(NSString *)urlString params:(nullable NSDictionary *)params success:(nullable SSJNetworkServiceHandler)success failure:(nullable SSJNetworkServiceHandler)failure {
     [self.task cancel];
+    
     self.isCancelled = NO;
     [SSJGlobalServiceManager removeService:self];
     
+    self.success = success;
+    self.failure = failure;
+    
     SSJGlobalServiceManager *manager = [self p_customManager];
     NSDictionary *paramsDic = [self packParameters:params];
-    NSString *fullUrlString = SSJURLWithAPI(urlString);
+    NSString *fullUrlString = [[NSURL URLWithString:urlString relativeToURL:manager.baseURL] absoluteString];
     
     switch (_httpMethod) {
         case SSJBaseNetworkServiceHttpMethodPOST: {
@@ -145,7 +157,7 @@ static inline AFHTTPResponseSerializer *SSJResponseSerializer(SSJResponseSeriali
 }
 
 /* 封装参数 */
-- (NSMutableDictionary *)packParameters:(NSMutableDictionary *)params {
+- (NSMutableDictionary *)packParameters:(NSDictionary *)params {
     NSMutableDictionary *paraDic = params ? [params mutableCopy] : [[NSMutableDictionary alloc] init];
     [paraDic setObject:SSJDefaultSource() forKey:@"source"];
 //    [paraDic setObject:SSJAppVersion() forKey:@"appVersion"];
@@ -167,7 +179,7 @@ static inline AFHTTPResponseSerializer *SSJResponseSerializer(SSJResponseSeriali
 }
 
 /* 请求完成 */
-- (void)p_taskDidFinish:(NSURLSessionTask *)task responseObject:(id)responseObject {
+- (void)p_taskDidFinish:(NSURLSessionTask *)task responseObject:(NSDictionary *)responseObject {
     _isLoaded = YES;
     _isLoadSuccess = YES;
     if (self.task.state == NSURLSessionTaskStateCompleted) {
@@ -188,11 +200,16 @@ static inline AFHTTPResponseSerializer *SSJResponseSerializer(SSJResponseSeriali
         
         SSJPRINT(@">>> request success code:%@ desc:%@ data:%@ URL:%@", _returnCode, _desc, _rootElement, task.currentRequest.URL);
         
-        [self requestDidFinish:_rootElement];
+        [self handleResult:_rootElement];
         
         [SSJGlobalServiceManager removeService:self];
         if (self.delegate && [self.delegate respondsToSelector:@selector(serverDidFinished:)]) {
             [self.delegate serverDidFinished:self];
+        }
+        
+        if (self.success) {
+            self.success(self);
+            self.success = nil;
         }
     }
 }
@@ -221,6 +238,11 @@ static inline AFHTTPResponseSerializer *SSJResponseSerializer(SSJResponseSeriali
         if (self.delegate && [self.delegate respondsToSelector:@selector(server:didFailLoadWithError:)]) {
             [self.delegate server:self didFailLoadWithError:error];
         }
+        
+        if (self.failure) {
+            self.failure(self);
+            self.failure = nil;
+        }
     }
 }
 
@@ -243,8 +265,7 @@ static inline AFHTTPResponseSerializer *SSJResponseSerializer(SSJResponseSeriali
 //--------------------------------
 /** 需要子类覆写的方法 **/
 //--------------------------------
-- (void)requestDidFinish:(id)rootElement {
-    
+- (void)handleResult:(NSDictionary *)rootElement {
 }
 
 @end

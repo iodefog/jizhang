@@ -16,7 +16,7 @@
                                                                                 @"secretKey":code ? : @""}];
 }
 
-- (void)requestDidFinish:(NSDictionary *)rootElement {
+- (void)handleResult:(NSDictionary *)rootElement {
     if ([self.returnCode isEqualToString:@"1"]) {
         NSDictionary *resultInfo = [rootElement objectForKey:@"results"];
         if (resultInfo) {
