@@ -155,8 +155,8 @@ typedef NS_ENUM(NSInteger, SSJAccountType) {
 
 //  信用卡类型
 typedef NS_ENUM(NSInteger, SSJCrediteCardType) {
-    SSJCrediteCardTypeCrediteCard = 1,    //  信用卡类型信用卡
-    SSJCrediteCardTypeAlipay = 2          //  信用卡类型蚂蚁花呗
+    SSJCrediteCardTypeCrediteCard = 0,    //  信用卡类型信用卡
+    SSJCrediteCardTypeAlipay = 1          //  信用卡类型蚂蚁花呗
 };
 
 

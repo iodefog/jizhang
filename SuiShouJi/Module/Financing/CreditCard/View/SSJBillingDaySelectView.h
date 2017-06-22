@@ -12,7 +12,8 @@
 
 typedef NS_ENUM(NSInteger, SSJDateSelectViewType) {
     SSJDateSelectViewTypeFullMonth,      
-    SSJDateSelectViewTypeShortMonth
+    SSJDateSelectViewTypeShortMonth,
+    SSJDateSelectViewTypeAlipay
 };
 
 // 选择日期类型,1是31天,0是28天

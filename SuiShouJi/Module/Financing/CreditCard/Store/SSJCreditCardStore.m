@@ -120,16 +120,18 @@
         }
         
         // 插入信用卡表
-        if (![db executeUpdate:@"insert into bk_user_credit (cfundid, iquota, cbilldate, crepaymentdate, cuserid, cwritedate, iversion, operatortype, cremindid, ibilldatesettlement) values (?,?,?,?,?,?,?,0,?,?)",item.cardId,@(item.cardLimit),@(item.cardBillingDay),@(item.cardRepaymentDay),userId,editeDate,@(SSJSyncVersion()),item.remindId,@(item.settleAtRepaymentDay)]) {
+        if (![db executeUpdate:@"insert into bk_user_credit (cfundid, iquota, cbilldate, crepaymentdate, cuserid, cwritedate, iversion, operatortype, cremindid, ibilldatesettlement, itype) values (?,?,?,?,?,?,?,0,?,?)",item.cardId,@(item.cardLimit),@(item.cardBillingDay),@(item.cardRepaymentDay),userId,editeDate,@(SSJSyncVersion()),item.remindId,@(item.settleAtRepaymentDay),item.cardType]) {
             return [db lastError];
         }
     }else{
+        
         // 修改资金账户
         if (![db executeUpdate:@"update bk_fund_info set cacctname = ? ,ccolor = ?,cwritedate = ?,operatortype = 1,iversion = ?,cmemo = ?,cstartcolor = ?,cendcolor = ? where cfundid = ? and cuserid = ?",item.cardName,item.cardColor,editeDate,@(SSJSyncVersion()),item.cardMemo,item.startColor,item.endColor,item.cardId,userId]) {
             return [db lastError];
         }
         
         NSString *currentDate = [[NSDate date]formattedDateWithFormat:@"yyyy-MM-dd"];
+        
         double originalBalance = [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and (a.cbilldate <= ? or ichargetype = ?) and b.itype = 0 and a.ifunsid = ?",userId,currentDate,@(SSJChargeIdTypeLoan),item.cardId] - [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and (a.cbilldate <= ? or ichargetype = ?) and b.itype = 1 and a.ifunsid = ?",userId,currentDate,@(SSJChargeIdTypeLoan),item.cardId] + [db doubleForQuery:@"select sum(repaymentmoney) from bk_credit_repayment where cuserid = ? and ccardid = ? and operatortype <> 2 and iinstalmentcount > 0",userId,item.cardId];
         
         double differenceBalance = item.cardBalance - originalBalance;

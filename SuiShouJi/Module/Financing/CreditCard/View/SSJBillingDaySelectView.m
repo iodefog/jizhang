@@ -24,6 +24,8 @@
 
 @property(nonatomic, strong) NSArray *longtArr;
 
+@property(nonatomic, strong) NSArray *aliArr;
+
 @property(nonatomic, strong) NSArray *dateArr;
 
 @property(nonatomic, strong) NSString *selectDate;
@@ -38,9 +40,12 @@
     if (self) {
         self.shortArr = @[@"1",@"2",@"3",@"4",@"5",@"6",@"7",@"8",@"9",@"10",@"11",@"12",@"13",@"14",@"15",@"16",@"17",@"18",@"19",@"20",@"21",@"22",@"23",@"24",@"25",@"26",@"27",@"28"];
         self.longtArr = @[@"1",@"2",@"3",@"4",@"5",@"6",@"7",@"8",@"9",@"10",@"11",@"12",@"13",@"14",@"15",@"16",@"17",@"18",@"19",@"20",@"21",@"22",@"23",@"24",@"25",@"26",@"27",@"28",@"29",@"30",@"31"];
+        self.aliArr = @[@"9",@"10"];
         if (type == SSJDateSelectViewTypeFullMonth) {
             self.dateArr = self.longtArr;
-        }else{
+        } else if (type == SSJDateSelectViewTypeAlipay) {
+            self.dateArr = self.aliArr;
+        } else {
             self.dateArr = self.shortArr;
         }
         self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
@@ -170,7 +175,8 @@
 
 -(void)setCurrentDate:(NSInteger)currentDate{
     _currentDate = currentDate;
-    [self.dateSelect selectRow:_currentDate - 1 inComponent:0 animated:NO];
+    NSInteger currentIndex = [self.dateArr indexOfObject:[NSString stringWithFormat:@"%ld",currentDate]];
+    [self.dateSelect selectRow:currentIndex inComponent:0 animated:NO];
 }
 
 /*
