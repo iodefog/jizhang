@@ -120,6 +120,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     if (self.item.remindId.length) {
         self.remindItem = [SSJLocalNotificationStore queryReminderItemForID:self.item.remindId];
     }
+    
     [self.view addSubview:self.tableView];
     [self.tableView reloadData];
     // Do any additional setup after loading the view.

@@ -21,7 +21,7 @@
     SSJCreditCardItem *item = [[SSJCreditCardItem alloc]init];
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
         NSString *userId = SSJUSERID();
-        FMResultSet *resultSet = [db executeQuery:@"select a.* , b.iquota , b.ibilldatesettlement , b.crepaymentdate , b.cbilldate , b.cremindid from bk_fund_info a left join bk_user_credit b on a.cfundid = b.cfundid where a.cfundid = ? and a.cuserid = ?",cardId,userId];
+        FMResultSet *resultSet = [db executeQuery:@"select a.*, b.iquota, b.ibilldatesettlement, b.crepaymentdate, b.cbilldate, b.cremindid, b.itype from bk_fund_info a left join bk_user_credit b on a.cfundid = b.cfundid where a.cfundid = ? and a.cuserid = ?",cardId,userId];
         if (!resultSet) {
             return;
         }
@@ -38,6 +38,10 @@
             item.cardOder = [resultSet intForColumn:@"iorder"];
             item.startColor = [resultSet stringForColumn:@"cstartColor"];
             item.endColor = [resultSet stringForColumn:@"cendColor"];
+            item.cardType = [resultSet intForColumn:@"itype"];
+            if (item.cardType == SSJCrediteCardTypeAlipay) {
+                item.settleAtRepaymentDay = YES;
+            }
         }
         [resultSet close];
         item.remindState = [db boolForQuery:@"select istate from bk_user_remind where cremindid = ? and cuserid = ?",item.remindId,userId];
@@ -100,10 +104,22 @@
     
     NSInteger maxOrder = [db intForQuery:@"select max(iorder) from bk_fund_info where cuserid = ? and operatortype <> 2",userId] + 1;
 
+    NSString *fundParent;
+    NSString *fundIcoin;
+
+    if (item.cardType == SSJCrediteCardTypeAlipay) {
+        fundParent = @"16";
+        fundIcoin = @"ft_huabei";
+        item.settleAtRepaymentDay = YES;
+    } else {
+        fundParent = @"3";
+        fundIcoin = @"ft_creditcard";
+    }
+
     // 判断是新增还是修改
     if (![db intForQuery:@"select count(1) from bk_fund_info where cfundid = ? and cuserid = ? and operatortype <> 2",item.cardId,userId]) {
         // 插入资金账户表
-        if (![db executeUpdate:@"insert into bk_fund_info (cfundid ,cacctname ,cicoin ,cparent ,ccolor ,cwritedate ,operatortype ,iversion ,cmemo ,cuserid , iorder ,idisplay, cstartcolor, cendcolor) values (?,?,?,3,?,?,0,?,?,?,?,1,?,?)",item.cardId,item.cardName,@"ft_creditcard",item.cardColor,editeDate,@(SSJSyncVersion()),item.cardMemo,userId,@(maxOrder),item.startColor,item.endColor]) {
+        if (![db executeUpdate:@"insert into bk_fund_info (cfundid ,cacctname ,cicoin ,cparent ,ccolor ,cwritedate ,operatortype ,iversion ,cmemo ,cuserid , iorder ,idisplay, cstartcolor, cendcolor) values (?,?,?,?,?,?,0,?,?,?,?,1,?,?)",item.cardId,item.cardName,fundIcoin,fundParent,item.cardColor,editeDate,@(SSJSyncVersion()),item.cardMemo,userId,@(maxOrder),item.startColor,item.endColor]) {
             return [db lastError];
         }
         
@@ -120,7 +136,7 @@
         }
         
         // 插入信用卡表
-        if (![db executeUpdate:@"insert into bk_user_credit (cfundid, iquota, cbilldate, crepaymentdate, cuserid, cwritedate, iversion, operatortype, cremindid, ibilldatesettlement, itype) values (?,?,?,?,?,?,?,0,?,?)",item.cardId,@(item.cardLimit),@(item.cardBillingDay),@(item.cardRepaymentDay),userId,editeDate,@(SSJSyncVersion()),item.remindId,@(item.settleAtRepaymentDay),item.cardType]) {
+        if (![db executeUpdate:@"insert into bk_user_credit (cfundid, iquota, cbilldate, crepaymentdate, cuserid, cwritedate, iversion, operatortype, cremindid, ibilldatesettlement, itype) values (?,?,?,?,?,?,?,0,?,?,?)",item.cardId,@(item.cardLimit),@(item.cardBillingDay),@(item.cardRepaymentDay),userId,editeDate,@(SSJSyncVersion()),item.remindId,@(item.settleAtRepaymentDay),@(item.cardType)]) {
             return [db lastError];
         }
     }else{
@@ -151,7 +167,7 @@
         // 查询在信用卡表中有没有数据,如果没有则插入一条(对老的信用卡账户)
         if (![db intForQuery:@"select count(1) from bk_user_credit where cfundid = ? and cuserid = ? and operatortype <> 2",item.cardId,userId]) {
             // 插入信用卡表
-            if (![db executeUpdate:@"insert into bk_user_credit (cfundid, iquota, cbilldate, crepaymentdate, cuserid, cwritedate, iversion, operatortype, cremindid, ibilldatesettlement) values (?,?,?,?,?,?,?,0,?,?)",item.cardId,@(item.cardLimit),@(item.cardBillingDay),@(item.cardRepaymentDay),userId,editeDate,@(SSJSyncVersion()),item.remindId,@(item.settleAtRepaymentDay)]) {
+            if (![db executeUpdate:@"insert into bk_user_credit (cfundid, iquota, cbilldate, crepaymentdate, cuserid, cwritedate, iversion, operatortype, cremindid, ibilldatesettlement, itype) values (?,?,?,?,?,?,?,0,?,?,?)",item.cardId,@(item.cardLimit),@(item.cardBillingDay),@(item.cardRepaymentDay),userId,editeDate,@(SSJSyncVersion()),item.remindId,@(item.settleAtRepaymentDay),@(item.cardType)]) {
                 return [db lastError];
             }
         }else{

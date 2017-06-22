@@ -296,15 +296,31 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
             NSString *currentPeriod;
             NSString *currentMonth;
             if (billDate.day >= cardItem.cardBillingDay) {
-                NSDate *firstDate = [[NSDate dateWithYear:0 month:billDate.month day:cardItem.cardBillingDay] dateByAddingDays:1];
-                NSDate *secondDate = [[NSDate dateWithYear:0 month:billDate.month day:cardItem.cardBillingDay] dateByAddingMonths:1];
-                currentPeriod = [NSString stringWithFormat:@"%ld.%ld-%ld.%ld",(long)firstDate.month,(long)firstDate.day,(long)secondDate.month,(long)secondDate.day];
-                currentMonth = [[[NSDate dateWithYear:billDate.year month:billDate.month day:billDate.day] dateByAddingMonths:1] formattedDateWithFormat:@"yyyy-MM"];
+                if (cardItem.cardType == SSJCrediteCardTypeAlipay) {
+                    NSDate *firstDate = [NSDate dateWithYear:0 month:billDate.month day:cardItem.cardBillingDay];
+                    NSDate *secondDate = [[[NSDate dateWithYear:0 month:billDate.month day:cardItem.cardBillingDay] dateByAddingMonths:1] dateBySubtractingDays:1];
+                    currentPeriod = [NSString stringWithFormat:@"%ld.%ld-%ld.%ld",(long)firstDate.month,(long)firstDate.day,(long)secondDate.month,(long)secondDate.day];
+                    currentMonth = [[[NSDate dateWithYear:billDate.year month:billDate.month day:billDate.day] dateByAddingMonths:1] formattedDateWithFormat:@"yyyy-MM"];
+
+                } else {
+                    NSDate *firstDate = [[NSDate dateWithYear:0 month:billDate.month day:cardItem.cardBillingDay] dateByAddingDays:1];
+                    NSDate *secondDate = [[NSDate dateWithYear:0 month:billDate.month day:cardItem.cardBillingDay] dateByAddingMonths:1];
+                    currentPeriod = [NSString stringWithFormat:@"%ld.%ld-%ld.%ld",(long)firstDate.month,(long)firstDate.day,(long)secondDate.month,(long)secondDate.day];
+                    currentMonth = [[[NSDate dateWithYear:billDate.year month:billDate.month day:billDate.day] dateByAddingMonths:1] formattedDateWithFormat:@"yyyy-MM"];
+
+                }
             }else{
-                NSDate *firstDate = [[[NSDate dateWithYear:0 month:billDate.month day:cardItem.cardBillingDay] dateByAddingDays:1] dateBySubtractingMonths:1];
-                NSDate *secondDate = [NSDate dateWithYear:0 month:billDate.month day:cardItem.cardBillingDay];
-                currentPeriod = [NSString stringWithFormat:@"%ld.%ld-%ld.%ld",(long)firstDate.month,(long)firstDate.day,(long)secondDate.month,(long)secondDate.day];
-                currentMonth = [[NSDate dateWithYear:billDate.year month:billDate.month day:billDate.day] formattedDateWithFormat:@"yyyy-MM"];
+                if (cardItem.cardType == SSJCrediteCardTypeAlipay) {
+                    NSDate *firstDate = [[NSDate dateWithYear:0 month:billDate.month day:cardItem.cardBillingDay] dateBySubtractingMonths:1];
+                    NSDate *secondDate = [[NSDate dateWithYear:0 month:billDate.month day:cardItem.cardBillingDay] dateBySubtractingDays:1];
+                    currentPeriod = [NSString stringWithFormat:@"%ld.%ld-%ld.%ld",(long)firstDate.month,(long)firstDate.day,(long)secondDate.month,(long)secondDate.day];
+                    currentMonth = [[NSDate dateWithYear:billDate.year month:billDate.month day:billDate.day] formattedDateWithFormat:@"yyyy-MM"];
+                } else {
+                    NSDate *firstDate = [[[NSDate dateWithYear:0 month:billDate.month day:cardItem.cardBillingDay] dateByAddingDays:1] dateBySubtractingMonths:1];
+                    NSDate *secondDate = [NSDate dateWithYear:0 month:billDate.month day:cardItem.cardBillingDay];
+                    currentPeriod = [NSString stringWithFormat:@"%ld.%ld-%ld.%ld",(long)firstDate.month,(long)firstDate.day,(long)secondDate.month,(long)secondDate.day];
+                    currentMonth = [[NSDate dateWithYear:billDate.year month:billDate.month day:billDate.day] formattedDateWithFormat:@"yyyy-MM"];
+                }
             }
             if ([currentPeriod isEqualToString:lastPeriod]) {
                 SSJCreditCardListDetailItem *listItem = [result lastObject];
