@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "SSJFinancingHomeitem.h"
+#import "SSJFundingItem.h"
 
 @interface SSJFinancingStore : NSObject
 
@@ -16,5 +17,10 @@
                 failure:(void (^)(NSError *error))failure;
 
 + (BOOL)checkWhetherSameFundingNameExsitsWith:(SSJFinancingHomeitem *)item ;
+
+
++ (void)queryFundingParentListWithFundingType:(SSJAccountType)type
+                                      Success:(void (^)(NSArray <SSJFundingItem *> *items))success
+                                      failure:(void (^)(NSError *error))failure;
 
 @end
