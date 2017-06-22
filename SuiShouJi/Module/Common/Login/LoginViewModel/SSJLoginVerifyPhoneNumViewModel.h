@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 @class SSJBaseNetworkService;
+@class SSJThirdPartLoginItem;
 
 @interface SSJLoginVerifyPhoneNumViewModel : NSObject
 
@@ -16,21 +17,21 @@
  */
 @property (nonatomic, strong) RACCommand *verifyPhoneNumRequestCommand;
 
-/**是否允许点击验证手机号下一步信号*/
-@property (nonatomic, strong) RACSignal *enableVerifySignal;
-
 /**微信登录命令*/
-@property (nonatomic, strong) RACCommand *wxBtnCommand;
+@property (nonatomic, strong) RACCommand *wxLoginCommand;
 
 /**qq登录命令*/
-@property (nonatomic, strong) RACCommand *qqBtnCommand;
+@property (nonatomic, strong) RACCommand *qqLoginCommand;
+
+/**是否允许点击验证手机号下一步信号*/
+@property (nonatomic, strong) RACSignal *enableVerifySignal;
 
 /**同意协议*/
 @property (nonatomic, assign, getter=isAgreeProtocol) BOOL agreeProtocol;
 
-/**<#注释#>*/
-@property (nonatomic, strong) SSJBaseNetworkService *netWorkService;
-
 /**手机号*/
 @property (nonatomic, copy) NSString *phoneNum;
+
+/**第三方登录model*/
+@property (nonatomic, strong) SSJThirdPartLoginItem *thirdPartLoginItem;
 @end
