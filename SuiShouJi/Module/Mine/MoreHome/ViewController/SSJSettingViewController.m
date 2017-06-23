@@ -12,8 +12,8 @@
 #import "SSJSyncSettingViewController.h"
 #import "SSJMagicExportViewController.h"
 #import "SSJLoginViewController.h"
-#import "SSJMotionPasswordSettingViewController.h"
-#import "SSJLoginViewController+SSJCategory.h"
+#import "SSJMotionPasswordViewController.h"
+
 
 static NSString *const kBindMobileNoTitle = @"手机绑定";
 static NSString *const kMobileNoTitle = @"手机号";
@@ -182,7 +182,9 @@ static NSString *const kClearDataTitle = @"清理数据";
 }
 
 - (void)settingMotionPwd {
-    
+    SSJMotionPasswordViewController *motionPasswordVC = [[SSJMotionPasswordViewController alloc] init];
+    motionPasswordVC.type = SSJMotionPasswordViewControllerTypeSetting;
+    [self.navigationController pushViewController:motionPasswordVC animated:YES];
 }
 
 #pragma mark - Getter
@@ -191,7 +193,7 @@ static NSString *const kClearDataTitle = @"清理数据";
         _fingerPrintPwdCtrl = [[UISwitch alloc] init];
         [[_fingerPrintPwdCtrl rac_signalForControlEvents:UIControlEventValueChanged] subscribeNext:^(UISwitch *ctrl) {
             if (SSJIsUserLogined()) {
-                self.userItem.fingerPrintState = [NSString stringWithFormat:@"%d", !ctrl.on];
+                self.userItem.fingerPrintState = [NSString stringWithFormat:@"%d", ctrl.on];
                 [SSJUserTableManager saveUserItem:self.userItem success:NULL failure:^(NSError * _Nonnull error) {
                     [SSJAlertViewAdapter showError:error];
                 }];
@@ -213,6 +215,7 @@ static NSString *const kClearDataTitle = @"清理数据";
                 [self settingMotionPwd];
             } else {
                 self.userItem.motionPWDState = [NSString stringWithFormat:@"%d", NO];
+                self.userItem.motionPWD = @"";
                 [SSJUserTableManager saveUserItem:self.userItem success:NULL failure:^(NSError * _Nonnull error) {
                     [SSJAlertViewAdapter showError:error];
                 }];
