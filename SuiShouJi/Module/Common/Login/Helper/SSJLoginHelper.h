@@ -7,8 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "SSJLoginService.h"
-
+@class SSJLoginVerifyPhoneNumViewModel;
 @class FMDatabase;
 
 @interface SSJLoginHelper : NSObject
@@ -21,6 +20,6 @@
 + (void)updateCustomUserBillNeededForUserId:(NSString *)userId billTypeItems:(NSArray *)items inDatabase:(FMDatabase *)db error:(NSError **)error;
 
 // 在登录的时候更新表中的数据
-+ (void)updateTableWhenLoginWithServices:(SSJLoginService *)service completion:(void(^)())completion;
++ (void)updateTableWhenLoginWithViewModel:(SSJLoginVerifyPhoneNumViewModel *)viewModel completion:(void(^)())completion;
 
 @end

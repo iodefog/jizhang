@@ -10,11 +10,28 @@
 #import "SSJBaseNetworkService.h"
 
 #import "SSJThirdPartLoginItem.h"
+#import "SSJUserItem.h"
+#import "SSJBookkeepingTreeCheckInModel.h"
+#import "SSJCustomCategoryItem.h"
+
 
 #import "SSJStringAddition.h"
 #import "SSJWeiXinLoginHelper.h"
+#import "SSJLoginHelper.h"
+#import "SSJBookkeepingTreeHelper.h"
+#import "SSJLocalNotificationHelper.h"
 
+#import "SSJUserTableManager.h"
+#import "SSJUserDefaultDataCreater.h"
 #import "GeTuiSdk.h"
+#import "SSJDatabaseQueue.h"
+#import "SSJBookkeepingTreeStore.h"
+
+#import "SSJThirdPartyLoginManger.h"
+
+#import "SSJMotionPasswordViewController.h"
+#import "SSJLoginVerifyPhoneViewController.h"
+#import "MMDrawerController.h"
 
 @interface SSJLoginVerifyPhoneNumViewModel ()
 /**<#注释#>*/
@@ -22,6 +39,19 @@
 
 /**wx*/
 @property (nonatomic, strong) SSJWeiXinLoginHelper *wxLoginHelper;
+
+//  登录方式
+@property (assign, nonatomic) SSJLoginType loginType;
+
+//登录用户的appid
+@property (nonatomic,strong) NSString *appid;
+
+@property (nonatomic,strong) SSJUserItem *userItem;
+
+@property (nonatomic, strong) SSJBookkeepingTreeCheckInModel *checkInModel;
+
+/**openId*/
+@property (nonatomic, copy) NSString *openId;
 
 @end
 
@@ -55,10 +85,12 @@
 
 - (void)wexLoginWithLoginItem:(SSJThirdPartLoginItem *)item subscriber:(id<RACSubscriber>) subscriber {
     self.netWorkService.showLodingIndicator = YES;
+    self.loginType = SSJLoginTypeWeiXin;
     NSString *strAcctID = @"130313003";
     NSString *strSignType = @"1";
     NSString *strKey = @"iwannapie?!";
     NSString *type = @"";
+    self.openId = item.openID;
     if (item.loginType == SSJLoginTypeQQ) {
         type = @"qq";
     }else if (item.loginType == SSJLoginTypeWeiXin){
@@ -102,6 +134,137 @@
     }];
 
 }
+
+// 登录成功后保存当前账本类型：共享or个人
+- (void )queryCurrentCategoryForUserId:(NSString *)userId {
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
+        NSString *currentBookId = [db stringForQuery:@"select ccurrentbooksid from bk_user where cuserid = ?",userId];
+        BOOL isShareBook = [db boolForQuery:@"select count(*) from bk_books_type where cbooksid = ? and operatortype <> 2 and cuserid = ?",currentBookId,SSJUSERID()];
+        SSJSaveBooksCategory(!isShareBook);
+    }];
+}
+
+
+-(void)comfirmTologin {
+    //  只要登录就设置用户为已注册，因为9188账户、第三方登录没有注册就可以登录
+    self.userItem.registerState = @"1";
+    
+    if (!self.userItem.currentBooksId) {
+        self.userItem.currentBooksId = self.userItem.userId;
+    }
+    
+    // 保存用户信息
+    [[[[[[[[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [SSJUserTableManager saveUserItem:self.userItem success:^{
+            [subscriber sendCompleted];
+        } failure:^(NSError * _Nonnull error) {
+            [subscriber sendError:error];
+        }];
+        return nil;
+    }] then:^RACSignal *{
+        // 保存用户登录信息
+        return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+            if (SSJSaveAppId(self.appid)
+                && SSJSaveAccessToken(self.accesstoken)
+                && SSJSetUserId(self.userItem.userId)
+                && SSJSaveUserLogined(YES)) {
+                //保存账本类型个人or共享
+                [self queryCurrentCategoryForUserId:self.userItem.userId];
+                [subscriber sendCompleted];
+                
+            } else {
+                [subscriber sendError:[NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"存储用户登录信息失败"}]];
+            }
+            return nil;
+        }];
+    }] then:^RACSignal *{
+        // 合并用户数据，即使合并失败，之后还会进行同步，所以无论成功与否都正常走接下来的流程
+        return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+            [SSJLoginHelper updateTableWhenLoginWithViewModel:self completion:^{
+                [subscriber sendCompleted];
+            }];
+            return nil;
+        }];
+    }] then:^RACSignal *{
+        // 检测用户的默认数据，哪些没有就创建哪些
+        return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+            [SSJUserDefaultDataCreater asyncCreateAllDefaultDataWithUserId:SSJUSERID() success:^{
+                [subscriber sendCompleted];
+            } failure:^(NSError *error) {
+                [subscriber sendError:error];
+            }];
+            return nil;
+        }];
+    }] then:^RACSignal *{
+        // 更新用户签到数据
+        return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+            [SSJBookkeepingTreeStore queryCheckInInfoWithUserId:SSJUSERID() success:^(SSJBookkeepingTreeCheckInModel * _Nonnull checkInModel) {
+                if (![checkInModel.lastCheckInDate isEqualToString:self.checkInModel.lastCheckInDate]) {
+                    [SSJBookkeepingTreeStore saveCheckInModel:self.checkInModel success:NULL failure:NULL];
+                    [SSJBookkeepingTreeHelper loadTreeImageWithUrlPath:self.checkInModel.treeImgUrl finish:NULL];
+                    [SSJBookkeepingTreeHelper loadTreeGifImageDataWithUrlPath:self.checkInModel.treeGifUrl finish:NULL];
+                }
+                [subscriber sendCompleted];
+            } failure:^(NSError * _Nonnull error) {
+                [subscriber sendError:error];
+            }];
+            return nil;
+        }];
+    }] then:^RACSignal *{
+        // 登录成功，做些额外的处理
+        return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+//            [self syncData];
+//            [self.loadingView show];
+            [CDAutoHideMessageHUD showMessage:@"登录成功"];
+            [SSJAnaliyticsManager setUserId:SSJUSERID() userName:(self.userItem.nickName.length ? self.userItem.nickName : self.userItem.mobileNo)];
+            [[NSNotificationCenter defaultCenter] postNotificationName:SSJLoginOrRegisterNotification object:nil];
+            [SSJLocalNotificationHelper cancelLocalNotificationWithKey:SSJReminderNotificationKey];
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:SSJHaveLoginOrRegistKey];
+            [[NSUserDefaults standardUserDefaults] setInteger:self.loginType forKey:SSJUserLoginTypeKey];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+            [subscriber sendCompleted];
+            return nil;
+        }];
+    }] then:^RACSignal *{
+         // 如果用户手势密码开启，进入手势密码页面，否则走既定的页面流程
+        return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+            [SSJUserTableManager queryProperty:@[@"motionPWD", @"motionPWDState"] forUserId:SSJUSERID() success:^(SSJUserItem * _Nonnull userItem) {
+                if ([userItem.motionPWDState boolValue]) {
+                    __weak typeof(self) weakSelf = self;
+                    SSJMotionPasswordViewController *motionVC = [[SSJMotionPasswordViewController alloc] init];
+                    motionVC.finishHandle = ^(UIViewController *controller) {
+                        UITabBarController *tabVC = (UITabBarController *)((MMDrawerController *)[UIApplication sharedApplication].keyWindow.rootViewController).centerViewController;
+                        UINavigationController *navi = [tabVC.viewControllers firstObject];
+                        UIViewController *homeController = [navi.viewControllers firstObject];
+                        
+                        controller.backController = homeController;
+                        [controller ssj_backOffAction];
+                    };
+                    motionVC.backController = self.vc.backController;
+                    if (userItem.motionPWD.length) {
+                        motionVC.type = SSJMotionPasswordViewControllerTypeVerification;
+                    } else {
+                        motionVC.type = SSJMotionPasswordViewControllerTypeSetting;
+                    }
+                    [weakSelf.vc.navigationController pushViewController:motionVC animated:YES];
+                } else {
+                    if (self.vc.finishHandle) {
+                        self.vc.finishHandle(self.vc);
+                    } else {
+                        [self.vc ssj_backOffAction];
+                    }
+                }
+                [subscriber sendCompleted];
+            } failure:^(NSError * _Nonnull error) {
+                [subscriber sendError:error];
+            }];
+            return nil;
+        }];
+    }] subscribeError:^(NSError *error) {
+        [SSJAlertViewAdapter showError:error];
+    }];
+}
+
 
 #pragma mark - Lazy
 - (SSJBaseNetworkService *)netWorkService {
@@ -155,17 +318,77 @@
             RACSignal *signal = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
                 
                 //发送微信登录请求
-                [self.wxLoginHelper weixinLoginWithSucessBlock:^(SSJThirdPartLoginItem *item) {
+                [[SSJThirdPartyLoginManger shareInstance].weixinLogin weixinLoginWithSucessBlock:^(SSJThirdPartLoginItem *item) {
+                    [SSJThirdPartyLoginManger shareInstance].qqLogin = nil;
+                    [SSJThirdPartyLoginManger shareInstance].weixinLogin = nil;
                     [self wexLoginWithLoginItem:item subscriber:subscriber];
                 }];
+//                [self.wxLoginHelper weixinLoginWithSucessBlock:^(SSJThirdPartLoginItem *item) {
+//                    [self wexLoginWithLoginItem:item subscriber:subscriber];
+//                }];
                 
                 return nil;
             }];
             return [signal map:^id(NSDictionary *rootElement) {
-                
+                NSDictionary *result = [[rootElement objectForKey:@"results"] objectForKey:@"user"];
+                self.accesstoken = [rootElement objectForKey:@"accessToken"];
+                [SSJUserItem mj_setupReplacedKeyFromPropertyName:^NSDictionary *{
+                    return @{@"userId":@"cuserid",
+                             @"nickName":@"crealname",  // 第三方登录时，服务器返回的crealname就是用户昵称
+                             @"mobileNo":@"cmobileno",
+                             @"icon":@"cicon",
+                             @"openid":@"oauthid"};
+                }];
+                _userItem = [SSJUserItem mj_objectWithKeyValues:result];
+                self.userItem.loginType = [NSString stringWithFormat:@"%ld",self.loginType];
+                if (self.loginType != SSJLoginTypeNormal) {
+                    self.userItem.mobileNo = @"";
+                }
+                self.userItem.loginPWD = @"";
+                self.userItem.openId = self.openId;
                 return rootElement;
             }];
         }];
+        
+        [_wxLoginCommand.executionSignals.switchToLatest subscribeNext:^(NSDictionary *dict) {
+            self.userBillArray = [NSArray arrayWithArray:[dict objectForKey:@"userBill"]];
+            self.fundInfoArray = [NSArray arrayWithArray:[dict objectForKey:@"fundInfo"]];
+            self.booksTypeArray = [NSArray arrayWithArray:[dict objectForKey:@"bookType"]];
+            self.membersArray = [NSArray arrayWithArray:[dict objectForKey:@"bk_member"]];
+            self.checkInModel = [SSJBookkeepingTreeCheckInModel mj_objectWithKeyValues:[dict objectForKey:@"userTree"]];
+            self.customCategoryArray = [SSJCustomCategoryItem mj_objectArrayWithKeyValuesArray:[dict objectForKey:@"bookBillArray"]];
+
+                if ([[NSUserDefaults standardUserDefaults] objectForKey:SSJLastLoggedUserItemKey]) {
+//                    __weak typeof(self) weakSelf = self;
+                    NSData *lastUserData = [[NSUserDefaults standardUserDefaults] objectForKey:SSJLastLoggedUserItemKey];
+                    SSJUserItem *lastUserItem = [NSKeyedUnarchiver unarchiveObjectWithData:lastUserData];
+                    BOOL isSameUser = ([self.userItem.mobileNo isEqualToString:lastUserItem.mobileNo] && lastUserItem.mobileNo.length) || ([self.userItem.openId isEqualToString:lastUserItem.openId] && lastUserItem.openId.length);
+                    if (!isSameUser) {
+                        NSString *userName;
+                        int loginType = [lastUserItem.loginType intValue];
+                        if (loginType == 0) {
+                            userName = [lastUserItem.mobileNo stringByReplacingCharactersInRange:NSMakeRange(4, 4) withString:@"****"];
+                        }else{
+                            userName = lastUserItem.nickName;
+                        }
+                        NSString *message;
+                        if (loginType == 0) {
+                            message = [NSString stringWithFormat:@"您已使用过手机号%@登陆过,确定使用新账户登录",userName];
+                        }else if (loginType == 1) {
+                            message = [NSString stringWithFormat:@"您已使用过QQ:%@登陆过,确定使用新账户登录",userName];
+                        }else if (loginType == 2) {
+                            message = [NSString stringWithFormat:@"您已使用过微信:%@登陆过,确定使用新账户登录",userName];
+                        }
+                        
+                        [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:message action:[SSJAlertViewAction actionWithTitle:@"取消" handler:NULL], [SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction * _Nonnull action) {
+                            [self comfirmTologin];
+                        }], nil];
+                        return;
+                    }
+                }
+                
+                [self comfirmTologin];
+        }] ;
     }
     return _wxLoginCommand;
 }

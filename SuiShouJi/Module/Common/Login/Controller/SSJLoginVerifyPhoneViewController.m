@@ -9,8 +9,13 @@
 #import "SSJLoginVerifyPhoneViewController.h"
 #import "TPKeyboardAvoidingScrollView.h"
 #import "SSJNormalWebViewController.h"
+#import "SSJMotionPasswordViewController.h"
+#import "MMDrawerController.h"
 
 #import "SSJLoginVerifyPhoneNumViewModel.h"
+
+#import "SSJUserTableManager.h"
+#import "SSJDatabaseQueue.h"
 
 
 
@@ -231,7 +236,9 @@
         [_weixinLoginButton sizeToFit];
         _weixinLoginButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor];
         _weixinLoginButton.contentMode = UIViewContentModeCenter;
-//        [_weixinLoginButton addTarget:self action:@selector(weixinLoginButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+        [[_weixinLoginButton rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
+            [self.verifyPhoneViewModel.wxLoginCommand execute:nil];
+        }];
     }
     return _weixinLoginButton;
 }
@@ -239,6 +246,7 @@
 - (SSJLoginVerifyPhoneNumViewModel *)verifyPhoneViewModel {
     if (!_verifyPhoneViewModel) {
         _verifyPhoneViewModel = [[SSJLoginVerifyPhoneNumViewModel alloc] init];
+        _verifyPhoneViewModel.vc = self;
     }
     return _verifyPhoneViewModel;
 }

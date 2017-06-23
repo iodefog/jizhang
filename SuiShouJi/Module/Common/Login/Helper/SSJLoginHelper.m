@@ -14,6 +14,7 @@
 #import "SSJBooksTypeSyncTable.h"
 #import "SSJUserBillSyncTable.h"
 #import "SSJFinancingGradientColorItem.h"
+#import "SSJLoginVerifyPhoneNumViewModel.h"
 
 @implementation SSJLoginHelper
 
@@ -80,15 +81,15 @@
 
 }
 
-+ (void)updateTableWhenLoginWithServices:(SSJLoginService *)service completion:(void(^)())completion {
++ (void)updateTableWhenLoginWithViewModel:(SSJLoginVerifyPhoneNumViewModel *)viewModel completion:(void(^)())completion {
     [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
         //  merge登陆接口返回的收支类型、资金账户、账本
-        [SSJBooksTypeSyncTable mergeRecords:service.booksTypeArray forUserId:SSJUSERID() inDatabase:db error:nil];
+        [SSJBooksTypeSyncTable mergeRecords:viewModel.booksTypeArray forUserId:SSJUSERID() inDatabase:db error:nil];
         //  更新父类型为空的账本
         [self updateBooksParentIfNeededForUserId:SSJUSERID() inDatabase:db error:nil];
-        [self mergeWhenLoginWithRecords:service.userBillArray forUserId:SSJUSERID() inDatabase:db error:nil];
-        [SSJFundInfoSyncTable mergeRecords:service.fundInfoArray forUserId:SSJUSERID() inDatabase:db error:nil];
-        [self updateCustomUserBillNeededForUserId:SSJUSERID() billTypeItems:service.customCategoryArray inDatabase:db error:nil];
+        [self mergeWhenLoginWithRecords:viewModel.userBillArray forUserId:SSJUSERID() inDatabase:db error:nil];
+        [SSJFundInfoSyncTable mergeRecords:viewModel.fundInfoArray forUserId:SSJUSERID() inDatabase:db error:nil];
+        [self updateCustomUserBillNeededForUserId:SSJUSERID() billTypeItems:viewModel.customCategoryArray inDatabase:db error:nil];
         
         //  更新排序字段为空的收支类型
         [self updateBillTypeOrderIfNeededForUserId:SSJUSERID() inDatabase:db error:nil];

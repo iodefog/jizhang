@@ -722,9 +722,9 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     }] then:^RACSignal *{
         // 合并用户数据，即使合并失败，之后还会进行同步，所以无论成功与否都正常走接下来的流程
         return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-            [SSJLoginHelper updateTableWhenLoginWithServices:self.loginService completion:^{
+//            [SSJLoginHelper updateTableWhenLoginWithServices:self completion:^{
                 [subscriber sendCompleted];
-            }];
+//            }];
             return nil;
         }];
     }] then:^RACSignal *{

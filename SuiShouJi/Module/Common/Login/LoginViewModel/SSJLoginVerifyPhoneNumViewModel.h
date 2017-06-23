@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 @class SSJBaseNetworkService;
 @class SSJThirdPartLoginItem;
+@class SSJLoginVerifyPhoneViewController;
 
 @interface SSJLoginVerifyPhoneNumViewModel : NSObject
 
@@ -34,4 +35,25 @@
 
 /**第三方登录model*/
 @property (nonatomic, strong) SSJThirdPartLoginItem *thirdPartLoginItem;
+
+//用户账户类型数据
+@property (nonatomic,strong) NSArray *fundInfoArray;
+
+//用户记账类型数据
+@property (nonatomic,strong) NSArray *userBillArray;
+
+//用户账本类型数据
+@property (nonatomic,strong) NSArray *booksTypeArray;
+
+//用户成员类型数据
+@property (nonatomic,strong) NSArray *membersArray;
+
+//用户成员类型数据
+@property (nonatomic,strong) NSArray *customCategoryArray;
+
+//登录用户的accesstoken
+@property ( nonatomic,strong) NSString *accesstoken;
+
+/**vc*/
+@property (nonatomic, assign) SSJLoginVerifyPhoneViewController *vc;
 @end
