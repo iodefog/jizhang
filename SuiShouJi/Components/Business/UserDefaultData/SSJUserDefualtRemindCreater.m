@@ -16,7 +16,7 @@
     for (NSDictionary *dataInfo in datas) {
         BOOL existed = [db boolForQuery:@"select count(1) from bk_member where cmemberid = ?", dataInfo[@"cmemberid"]];
         if (!existed) {
-            BOOL successfull = [db executeUpdate:@"insert into bk_member (cmemberid, cuserid, cname, ccolor, istate, iorder, cadddate, iversion, cwritedate, operatortype) values (:cmemberid, :cuserid, :cname, :ccolor, :istate, :iorder, :cadddate, :iversion, :cwritedate, :operatortype)" withParameterDictionary:dataInfo];
+            BOOL successfull = [db executeUpdate:@"insert into bk_user_remind (cremindid, cuserid, cremindname, cmemo, cstartdate, istate, cwritedate, iversion, operatortype, itype, icycle, iisend) values (:cremindid, :cuserid, :cremindname, :cmemo, :cstartdate, :istate, :cwritedate, :iversion, :operatortype, :itype, :icycle, :iisend)" withParameterDictionary:dataInfo];
             if (!successfull) {
                 if (error) {
                     *error = [db lastError];

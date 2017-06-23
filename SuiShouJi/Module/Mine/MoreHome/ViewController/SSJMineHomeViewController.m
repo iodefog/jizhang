@@ -93,7 +93,7 @@ static BOOL kNeedBannerDisplay = YES;
 
 @property (nonatomic, strong) NSMutableArray *images;
 
-@property (nonatomic, strong) UICollectionView *collectionView;
+@property (nonatomic, strong) UITableView *tableView;
 
 @property (nonatomic, strong) SSJHeaderBannerImageView *headerBannerImageView;//头部banner
 
