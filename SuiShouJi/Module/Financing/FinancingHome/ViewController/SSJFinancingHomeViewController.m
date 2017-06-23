@@ -319,7 +319,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
         for (int i = 0; i < weakSelf.items.count; i ++) {
             SSJFinancingHomeitem *fundItem = [weakSelf.items objectAtIndex:i];
             if ([fundItem isKindOfClass:[SSJFinancingHomeitem class]]) {
-                if ([fundItem.fundingParent isEqualToString:@"3"]) {
+                if ([fundItem.fundingParent isEqualToString:@"3"] || [fundItem.fundingParent isEqualToString:@"16"]) {
                     SSJCreditCardItem *cardItem = [SSJCreditCardStore queryCreditCardDetailWithCardId:fundItem.fundingID];
                     cardItem.cardOder = fundItem.fundingOrder;
                     [weakSelf.items removeObject:fundItem];

@@ -17,4 +17,6 @@ typedef void (^addNewCardBlock)(SSJCreditCardItem *newCardItem);
 
 @property(nonatomic,copy) addNewCardBlock addNewCardBlock;
 
+@property(nonatomic) SSJCrediteCardType cardType;
+
 @end

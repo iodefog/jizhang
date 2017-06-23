@@ -301,7 +301,7 @@ NSDate *SCYEnterBackgroundTime() {
     
     SSJMineHomeViewController *moreVC = [[SSJMineHomeViewController alloc] initWithNibName:nil bundle:nil];
     SSJNavigationController *moreNavi = [[SSJNavigationController alloc] initWithRootViewController:moreVC];
-    moreNavi.tabBarItem.title = @"更多";
+    moreNavi.tabBarItem.title = @"我的";
     
     UITabBarController *tabBarVC = [[UITabBarController alloc] initWithNibName:nil bundle:nil];
     tabBarVC.viewControllers = @[bookKeepingNavi, reportFormsNavi, financingNavi, moreNavi];

@@ -19,7 +19,7 @@ static NSString *const kHeadBannerCellID = @"SSJHeaderBannerCollectionViewCellID
 /**
  <#注释#>
  */
-@property (nonatomic, strong) UIButton *closeButton;
+//@property (nonatomic, strong) UIButton *closeButton;
 @end
 
 @implementation SSJHeaderBannerImageView
@@ -30,7 +30,7 @@ static NSString *const kHeadBannerCellID = @"SSJHeaderBannerCollectionViewCellID
     if (self = [super initWithFrame:frame]) {
         self.backgroundColor = [UIColor clearColor];
         [self addSubview:self.collectionView];
-        [self addSubview:self.closeButton];
+//        [self addSubview:self.closeButton];
     }
     return self;
 }
@@ -54,22 +54,22 @@ static NSString *const kHeadBannerCellID = @"SSJHeaderBannerCollectionViewCellID
     return _collectionView;
 }
 
-- (UIButton *)closeButton
-{
-    if (!_closeButton) {
-        _closeButton = [[UIButton alloc] init];
-        [_closeButton setImage:[UIImage imageNamed:@"banner_cha"] forState:UIControlStateNormal];
-        [_closeButton sizeToFit];
-        [_closeButton addTarget:self action:@selector(closeButtonClicked) forControlEvents:UIControlEventTouchUpInside];
-    }
-    return _closeButton;
-}
+//- (UIButton *)closeButton
+//{
+//    if (!_closeButton) {
+//        _closeButton = [[UIButton alloc] init];
+//        [_closeButton setImage:[UIImage imageNamed:@"banner_cha"] forState:UIControlStateNormal];
+//        [_closeButton sizeToFit];
+//        [_closeButton addTarget:self action:@selector(closeButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+//    }
+//    return _closeButton;
+//}
 
 - (void)layoutSubviews
 {
     [super layoutSubviews];
     self.collectionView.frame = CGRectMake(0, 0, SSJSCREENWITH , kBannerHeight);
-    self.closeButton.rightTop = CGPointMake(SSJSCREENWITH - 20, 10);
+//    self.closeButton.rightTop = CGPointMake(SSJSCREENWITH - 20, 10);
 }
 
 - (void)setBannerItemArray:(NSArray *)bannerItemArray

@@ -203,4 +203,16 @@
     return [emailTest evaluateWithObject:self];
 }
 
+
+/**
+ 手机号码验证
+ */
++ (BOOL)ssj_validPhoneNum
+{
+    //第1位必须为1，第2位不能是1/2/6/9，
+    NSString *phoneRegex = @"^1[3,4,5,7,8]\\d{9}$";
+    NSPredicate *phoneTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",phoneRegex];
+    return [phoneTest evaluateWithObject:self];
+}
+
 @end
