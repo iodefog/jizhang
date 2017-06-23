@@ -32,13 +32,7 @@
             item.ID = SSJUUID();
         }
         
-        if (item.chargeImage.length && !item.chargeThumbImage.length) {
-            NSString *imageName = [item.chargeImage copy];
-            if (![item.chargeImage hasSuffix:@".jpg"]) {
-                item.chargeImage = [NSString stringWithFormat:@"%@.jpg",imageName];
-            }
-            item.chargeThumbImage = [NSString stringWithFormat:@"%@-thumb.jpg",imageName];
-        }
+        
         SSJBillingChargeCellItem *editeItem = [[SSJBillingChargeCellItem alloc]init];
         double money = [item.money doubleValue];
         NSString *moneyStr = [NSString stringWithFormat:@"%.2f",[item.money doubleValue]];
