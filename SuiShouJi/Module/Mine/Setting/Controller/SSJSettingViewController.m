@@ -13,7 +13,7 @@
 #import "SSJMagicExportViewController.h"
 #import "SSJLoginViewController.h"
 #import "SSJMotionPasswordViewController.h"
-
+#import "SSJClearDataViewController.h"
 
 static NSString *const kBindMobileNoTitle = @"手机绑定";
 static NSString *const kMobileNoTitle = @"手机号";
@@ -89,12 +89,15 @@ static NSString *const kClearDataTitle = @"清理数据";
         
     } else if ([title isEqualToString:kModifyPwdTitle]) {// 修改密码
         
-    }  else if ([title isEqualToString:kMagicExportTitle]) {// 数据导出
-        
+    } else if ([title isEqualToString:kMagicExportTitle]) {// 数据导出
+        SSJMagicExportViewController *magicExportVC = [[SSJMagicExportViewController alloc] init];
+        [self.navigationController pushViewController:magicExportVC animated:YES];
     } else if ([title isEqualToString:kDataSyncTitle]) {// 数据同步
-        
+        SSJSyncSettingViewController *syncSettingVC = [[SSJSyncSettingViewController alloc] init];
+        [self.navigationController pushViewController:syncSettingVC animated:YES];
     } else if ([title isEqualToString:kClearDataTitle]) {// 清除数据
-        
+        SSJClearDataViewController *clearDataVC = [[SSJClearDataViewController alloc] init];
+        [self.navigationController pushViewController:clearDataVC animated:YES];
     }
 }
 
