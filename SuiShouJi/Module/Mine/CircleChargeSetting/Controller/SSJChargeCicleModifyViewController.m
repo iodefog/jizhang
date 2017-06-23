@@ -69,7 +69,6 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.hidesBottomBarWhenPushed = YES;
         self.hideKeyboradWhenTouch = YES;
-        self.extendedLayoutIncludesOpaqueBars = YES;
     }
     return self;
 } 

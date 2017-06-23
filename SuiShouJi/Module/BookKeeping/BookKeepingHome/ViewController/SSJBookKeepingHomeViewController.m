@@ -132,7 +132,6 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.statisticsTitle = @"首页";
         self.hidesNavigationBarWhenPushed = YES;
-        self.extendedLayoutIncludesOpaqueBars = YES;
         self.automaticallyAdjustsScrollViewInsets = NO;
     }
     return self;
@@ -177,7 +176,6 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
         }
     }];
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
-    self.extendedLayoutIncludesOpaqueBars = YES;
     
     if (_needEditeThemeModel) {
         [self.themeModifyView show];

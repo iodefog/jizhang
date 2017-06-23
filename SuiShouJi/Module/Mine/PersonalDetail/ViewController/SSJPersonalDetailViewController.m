@@ -51,7 +51,6 @@ extern BOOL kHomeNeedLoginPop;
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.title = @"个人资料";
-        self.extendedLayoutIncludesOpaqueBars = YES;
         self.hidesBottomBarWhenPushed = YES;
     }
     return self;

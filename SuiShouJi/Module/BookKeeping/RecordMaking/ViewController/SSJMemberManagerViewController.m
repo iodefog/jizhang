@@ -24,7 +24,6 @@ static NSString *const kMemberTableViewCellIdentifier = @"kMemberTableViewCellId
 @implementation SSJMemberManagerViewController
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-//        self.extendedLayoutIncludesOpaqueBars = NO;
     }
     return self;
 }
