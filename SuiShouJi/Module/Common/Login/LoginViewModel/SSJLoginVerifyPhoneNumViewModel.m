@@ -38,7 +38,7 @@
 @property (nonatomic, strong) SSJBaseNetworkService *netWorkService;
 
 /**wx*/
-@property (nonatomic, strong) SSJWeiXinLoginHelper *wxLoginHelper;
+//@property (nonatomic, strong) SSJWeiXinLoginHelper *wxLoginHelper;
 
 //  登录方式
 @property (assign, nonatomic) SSJLoginType loginType;
@@ -83,9 +83,8 @@
     }];
 }
 
-- (void)wexLoginWithLoginItem:(SSJThirdPartLoginItem *)item subscriber:(id<RACSubscriber>) subscriber {
+- (void)thirdLoginWithLoginItem:(SSJThirdPartLoginItem *)item subscriber:(id<RACSubscriber>) subscriber {
     self.netWorkService.showLodingIndicator = YES;
-    self.loginType = SSJLoginTypeWeiXin;
     NSString *strAcctID = @"130313003";
     NSString *strSignType = @"1";
     NSString *strKey = @"iwannapie?!";
@@ -144,6 +143,63 @@
     }];
 }
 
+
+- (void)datawithDic:(NSDictionary *)dict {
+    NSDictionary *result = [[dict objectForKey:@"results"] objectForKey:@"user"];
+    self.accesstoken = [dict objectForKey:@"accessToken"];
+    [SSJUserItem mj_setupReplacedKeyFromPropertyName:^NSDictionary *{
+        return @{@"userId":@"cuserid",
+                 @"nickName":@"crealname",  // 第三方登录时，服务器返回的crealname就是用户昵称
+                 @"mobileNo":@"cmobileno",
+                 @"icon":@"cicon",
+                 @"openid":@"oauthid"};
+    }];
+    _userItem = [SSJUserItem mj_objectWithKeyValues:result];
+    self.userItem.loginType = [NSString stringWithFormat:@"%ld",self.loginType];
+    if (self.loginType != SSJLoginTypeNormal) {
+        self.userItem.mobileNo = @"";
+    }
+    self.userItem.loginPWD = @"";
+    self.userItem.openId = self.openId;
+    
+    self.userBillArray = [NSArray arrayWithArray:[dict objectForKey:@"userBill"]];
+    self.fundInfoArray = [NSArray arrayWithArray:[dict objectForKey:@"fundInfo"]];
+    self.booksTypeArray = [NSArray arrayWithArray:[dict objectForKey:@"bookType"]];
+    self.membersArray = [NSArray arrayWithArray:[dict objectForKey:@"bk_member"]];
+    self.checkInModel = [SSJBookkeepingTreeCheckInModel mj_objectWithKeyValues:[dict objectForKey:@"userTree"]];
+    self.customCategoryArray = [SSJCustomCategoryItem mj_objectArrayWithKeyValuesArray:[dict objectForKey:@"bookBillArray"]];
+    
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:SSJLastLoggedUserItemKey]) {
+        //                    __weak typeof(self) weakSelf = self;
+        NSData *lastUserData = [[NSUserDefaults standardUserDefaults] objectForKey:SSJLastLoggedUserItemKey];
+        SSJUserItem *lastUserItem = [NSKeyedUnarchiver unarchiveObjectWithData:lastUserData];
+        BOOL isSameUser = ([self.userItem.mobileNo isEqualToString:lastUserItem.mobileNo] && lastUserItem.mobileNo.length) || ([self.userItem.openId isEqualToString:lastUserItem.openId] && lastUserItem.openId.length);
+        if (!isSameUser) {
+            NSString *userName;
+            int loginType = [lastUserItem.loginType intValue];
+            if (loginType == 0) {
+                userName = [lastUserItem.mobileNo stringByReplacingCharactersInRange:NSMakeRange(4, 4) withString:@"****"];
+            }else{
+                userName = lastUserItem.nickName;
+            }
+            NSString *message;
+            if (loginType == 0) {
+                message = [NSString stringWithFormat:@"您已使用过手机号%@登陆过,确定使用新账户登录",userName];
+            }else if (loginType == 1) {
+                message = [NSString stringWithFormat:@"您已使用过QQ:%@登陆过,确定使用新账户登录",userName];
+            }else if (loginType == 2) {
+                message = [NSString stringWithFormat:@"您已使用过微信:%@登陆过,确定使用新账户登录",userName];
+            }
+            
+            [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:message action:[SSJAlertViewAction actionWithTitle:@"取消" handler:NULL], [SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction * _Nonnull action) {
+                [self comfirmTologin];
+            }], nil];
+            return;
+        }
+    }
+    
+    [self comfirmTologin];
+}
 
 -(void)comfirmTologin {
     //  只要登录就设置用户为已注册，因为9188账户、第三方登录没有注册就可以登录
@@ -321,83 +377,43 @@
                 [[SSJThirdPartyLoginManger shareInstance].weixinLogin weixinLoginWithSucessBlock:^(SSJThirdPartLoginItem *item) {
                     [SSJThirdPartyLoginManger shareInstance].qqLogin = nil;
                     [SSJThirdPartyLoginManger shareInstance].weixinLogin = nil;
-                    [self wexLoginWithLoginItem:item subscriber:subscriber];
+                    self.loginType = SSJLoginTypeWeiXin;
+                    [self thirdLoginWithLoginItem:item subscriber:subscriber];
                 }];
-//                [self.wxLoginHelper weixinLoginWithSucessBlock:^(SSJThirdPartLoginItem *item) {
-//                    [self wexLoginWithLoginItem:item subscriber:subscriber];
-//                }];
                 
                 return nil;
             }];
-            return [signal map:^id(NSDictionary *rootElement) {
-                NSDictionary *result = [[rootElement objectForKey:@"results"] objectForKey:@"user"];
-                self.accesstoken = [rootElement objectForKey:@"accessToken"];
-                [SSJUserItem mj_setupReplacedKeyFromPropertyName:^NSDictionary *{
-                    return @{@"userId":@"cuserid",
-                             @"nickName":@"crealname",  // 第三方登录时，服务器返回的crealname就是用户昵称
-                             @"mobileNo":@"cmobileno",
-                             @"icon":@"cicon",
-                             @"openid":@"oauthid"};
-                }];
-                _userItem = [SSJUserItem mj_objectWithKeyValues:result];
-                self.userItem.loginType = [NSString stringWithFormat:@"%ld",self.loginType];
-                if (self.loginType != SSJLoginTypeNormal) {
-                    self.userItem.mobileNo = @"";
-                }
-                self.userItem.loginPWD = @"";
-                self.userItem.openId = self.openId;
-                return rootElement;
-            }];
+            return signal;
         }];
         
         [_wxLoginCommand.executionSignals.switchToLatest subscribeNext:^(NSDictionary *dict) {
-            self.userBillArray = [NSArray arrayWithArray:[dict objectForKey:@"userBill"]];
-            self.fundInfoArray = [NSArray arrayWithArray:[dict objectForKey:@"fundInfo"]];
-            self.booksTypeArray = [NSArray arrayWithArray:[dict objectForKey:@"bookType"]];
-            self.membersArray = [NSArray arrayWithArray:[dict objectForKey:@"bk_member"]];
-            self.checkInModel = [SSJBookkeepingTreeCheckInModel mj_objectWithKeyValues:[dict objectForKey:@"userTree"]];
-            self.customCategoryArray = [SSJCustomCategoryItem mj_objectArrayWithKeyValuesArray:[dict objectForKey:@"bookBillArray"]];
-
-                if ([[NSUserDefaults standardUserDefaults] objectForKey:SSJLastLoggedUserItemKey]) {
-//                    __weak typeof(self) weakSelf = self;
-                    NSData *lastUserData = [[NSUserDefaults standardUserDefaults] objectForKey:SSJLastLoggedUserItemKey];
-                    SSJUserItem *lastUserItem = [NSKeyedUnarchiver unarchiveObjectWithData:lastUserData];
-                    BOOL isSameUser = ([self.userItem.mobileNo isEqualToString:lastUserItem.mobileNo] && lastUserItem.mobileNo.length) || ([self.userItem.openId isEqualToString:lastUserItem.openId] && lastUserItem.openId.length);
-                    if (!isSameUser) {
-                        NSString *userName;
-                        int loginType = [lastUserItem.loginType intValue];
-                        if (loginType == 0) {
-                            userName = [lastUserItem.mobileNo stringByReplacingCharactersInRange:NSMakeRange(4, 4) withString:@"****"];
-                        }else{
-                            userName = lastUserItem.nickName;
-                        }
-                        NSString *message;
-                        if (loginType == 0) {
-                            message = [NSString stringWithFormat:@"您已使用过手机号%@登陆过,确定使用新账户登录",userName];
-                        }else if (loginType == 1) {
-                            message = [NSString stringWithFormat:@"您已使用过QQ:%@登陆过,确定使用新账户登录",userName];
-                        }else if (loginType == 2) {
-                            message = [NSString stringWithFormat:@"您已使用过微信:%@登陆过,确定使用新账户登录",userName];
-                        }
-                        
-                        [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:message action:[SSJAlertViewAction actionWithTitle:@"取消" handler:NULL], [SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction * _Nonnull action) {
-                            [self comfirmTologin];
-                        }], nil];
-                        return;
-                    }
-                }
-                
-                [self comfirmTologin];
+            [self datawithDic:dict];
         }] ;
     }
     return _wxLoginCommand;
 }
 
-- (SSJWeiXinLoginHelper *)wxLoginHelper {
-    if (!_wxLoginHelper) {
-        _wxLoginHelper = [[SSJWeiXinLoginHelper alloc] init];
+- (RACCommand *)qqLoginCommand {
+    if (!_qqLoginCommand) {
+        _qqLoginCommand = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
+            return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+                //发送qq登录请求
+                [[SSJThirdPartyLoginManger shareInstance].qqLogin qqLoginWithSucessBlock:^(SSJThirdPartLoginItem *item) {
+                    [SSJThirdPartyLoginManger shareInstance].qqLogin = nil;
+                    [SSJThirdPartyLoginManger shareInstance].weixinLogin = nil;
+                    self.loginType = SSJLoginTypeQQ;
+                    [self thirdLoginWithLoginItem:item subscriber:subscriber];
+                }];
+                
+                return nil;
+            }];
+        }];
+        
+        [_qqLoginCommand.executionSignals.switchToLatest subscribeNext:^(NSDictionary *dict) {
+            [self datawithDic:dict];
+        }] ;
     }
-    return _wxLoginHelper;
+    return _qqLoginCommand;
 }
 
 @end

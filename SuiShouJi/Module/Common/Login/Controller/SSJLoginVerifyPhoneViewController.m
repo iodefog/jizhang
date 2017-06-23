@@ -220,11 +220,11 @@
     if (!_tencentLoginButton) {
         _tencentLoginButton = [[UIButton alloc]init];
         [_tencentLoginButton setImage:[UIImage imageNamed:@"login_qq"] forState:UIControlStateNormal];
-        //        _tencentLoginButton.size = CGSizeMake(35, 35);
-        [_tencentLoginButton sizeToFit];
         _tencentLoginButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor];
         _tencentLoginButton.contentMode = UIViewContentModeCenter;
-//        [_tencentLoginButton addTarget:self action:@selector(qqLoginButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+        [[_tencentLoginButton rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
+            [self.verifyPhoneViewModel.qqLoginCommand execute:nil];
+        }];
     }
     return _tencentLoginButton;
 }
