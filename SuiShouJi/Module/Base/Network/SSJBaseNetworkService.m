@@ -104,7 +104,7 @@ static inline AFHTTPResponseSerializer *SSJResponseSerializer(SSJResponseSeriali
     self.failure = failure;
     
     SSJGlobalServiceManager *manager = [self p_customManager];
-    NSDictionary *paramsDic = [self packParameters:params];
+    NSDictionary *paramsDic = [self p_packParameters:params];
     NSString *fullUrlString = [[NSURL URLWithString:urlString relativeToURL:manager.baseURL] absoluteString];
     
     switch (_httpMethod) {
@@ -116,7 +116,15 @@ static inline AFHTTPResponseSerializer *SSJResponseSerializer(SSJResponseSeriali
                 [self p_taskDidFail:task error:error];
             }];
             
-            SSJPRINT(@">>> POST request parameters:%@ url:%@", paramsDic, fullUrlString);
+            SSJPRINT(@"<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< POST start >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\
+                     \n-----------------------------------------------------------------------------------\
+                     \nURL:%@\
+                     \n-----------------------------------------------------------------------------------\
+                     \nheaders:%@ \
+                     \n-----------------------------------------------------------------------------------\
+                     \nparameters:%@\
+                     \n<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< POST end >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\
+                     ", fullUrlString, self.task.currentRequest.allHTTPHeaderFields, paramsDic);
         }   break;
             
         case SSJBaseNetworkServiceHttpMethodGET: {
@@ -127,7 +135,15 @@ static inline AFHTTPResponseSerializer *SSJResponseSerializer(SSJResponseSeriali
                 [self p_taskDidFail:task error:error];
             }];
             
-            SSJPRINT(@">>> GET request parameters:%@ url:%@", paramsDic, fullUrlString);
+            SSJPRINT(@"<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< GET start >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\
+                     \n-----------------------------------------------------------------------------------\
+                     \nURL:%@\
+                     \n-----------------------------------------------------------------------------------\
+                     \nheaders:%@ \
+                     \n-----------------------------------------------------------------------------------\
+                     \nparameters:%@\
+                     \n<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< GET end >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\
+                     ", fullUrlString, self.task.currentRequest.allHTTPHeaderFields, paramsDic);
         }   break;
     }
     
@@ -156,14 +172,28 @@ static inline AFHTTPResponseSerializer *SSJResponseSerializer(SSJResponseSeriali
                           self.task.state == NSURLSessionTaskStateSuspended));
 }
 
+//--------------------------------
+/** 需要子类覆写的方法 **/
+//--------------------------------
+- (void)handleResult:(NSDictionary *)rootElement {
+}
+
+#pragma mark - Private
+/* 基础参数 */
+- (NSDictionary<NSString *, NSString *> *)p_basicParameters {
+    return @{@"source":SSJDefaultSource(),
+             @"releaseVersion":SSJAppVersion(),
+             @"accessToken":(SSJAccessToken() ?: @""),
+             @"appId":(SSJAppId() ?: @""),
+             @"cuserId":SSJUSERID()};
+}
+
 /* 封装参数 */
-- (NSMutableDictionary *)packParameters:(NSDictionary *)params {
+- (NSMutableDictionary *)p_packParameters:(NSDictionary *)params {
     NSMutableDictionary *paraDic = params ? [params mutableCopy] : [[NSMutableDictionary alloc] init];
-    [paraDic setObject:SSJDefaultSource() forKey:@"source"];
-//    [paraDic setObject:SSJAppVersion() forKey:@"appVersion"];
-    [paraDic setObject:SSJAppVersion() forKey:@"releaseVersion"];
-    [paraDic setObject:(SSJAccessToken() ?: @"") forKey:@"accessToken"];
-    [paraDic setObject:(SSJAppId() ?: @"") forKey:@"appId"];
+    [self.p_basicParameters enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
+        paraDic[key] = obj;
+    }];
     return paraDic;
 }
 
@@ -171,9 +201,12 @@ static inline AFHTTPResponseSerializer *SSJResponseSerializer(SSJResponseSeriali
 - (SSJGlobalServiceManager *)p_customManager {
     SSJGlobalServiceManager *manager = [SSJGlobalServiceManager sharedManager];
     manager.httpsOpened = _httpsOpened;
-    manager.requestSerializer = SSJRequestSerializer(_requestSerialization);
     manager.responseSerializer = SSJResponseSerializer(_responseSerialization);
+    manager.requestSerializer = SSJRequestSerializer(_requestSerialization);
     manager.requestSerializer.timeoutInterval = _timeoutInterval;
+    [self.p_basicParameters enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
+        [manager.requestSerializer setValue:obj forHTTPHeaderField:key];
+    }];
     [manager.operationQueue setMaxConcurrentOperationCount:1];
     return manager;
 }
@@ -198,7 +231,16 @@ static inline AFHTTPResponseSerializer *SSJResponseSerializer(SSJResponseSeriali
             _desc = [_rootElement objectForKey:@"desc"];
         }
         
-        SSJPRINT(@">>> request success code:%@ desc:%@ data:%@ URL:%@", _returnCode, _desc, _rootElement, task.currentRequest.URL);
+        NSHTTPURLResponse *httpUrlResponse = (NSHTTPURLResponse *)task.response;
+        SSJPRINT(@"<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Request success >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\
+                 \n-----------------------------------------------------------------------------------------\
+                 \nURL:%@   code:%@   desc:%@\
+                 \n-----------------------------------------------------------------------------------------\
+                 \nheader:%@ \
+                 \n-----------------------------------------------------------------------------------------\
+                 \ndata:%@\
+                 \n<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< End >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\
+                 ", task.currentRequest.URL, _returnCode, _desc, httpUrlResponse.allHeaderFields, _rootElement);
         
         [self handleResult:_rootElement];
         
@@ -233,8 +275,14 @@ static inline AFHTTPResponseSerializer *SSJResponseSerializer(SSJResponseSeriali
         [SSJGlobalServiceManager removeService:self];
         
         NSHTTPURLResponse *httpUrlResponse = (NSHTTPURLResponse *)task.response;
-        SSJPRINT(@">>> header fields:%@",httpUrlResponse.allHeaderFields);
-        SSJPRINT(@">>> request failed code:%d desc:%@ URL:%@", (int)[error code], [error localizedDescription], task.currentRequest.URL);
+        SSJPRINT(@"<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Request failed >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\
+                 \n-----------------------------------------------------------------------------------------\
+                 \nURL:%@   code:%d   desc:%@\
+                 \n-----------------------------------------------------------------------------------------\
+                 \nheader:%@ \
+                 \n<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< End >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\
+                 ", task.currentRequest.URL, (int)[error code], [error localizedDescription], httpUrlResponse.allHeaderFields);
+        
         if (self.delegate && [self.delegate respondsToSelector:@selector(server:didFailLoadWithError:)]) {
             [self.delegate server:self didFailLoadWithError:error];
         }
@@ -260,12 +308,6 @@ static inline AFHTTPResponseSerializer *SSJResponseSerializer(SSJResponseSeriali
     
     _serverDate = [date dateByAddingTimeInterval:(60 * 60 * 8)];
 //    SSJPRINT(@">>> current server date:%@",_serverDate);
-}
-
-//--------------------------------
-/** 需要子类覆写的方法 **/
-//--------------------------------
-- (void)handleResult:(NSDictionary *)rootElement {
 }
 
 @end
