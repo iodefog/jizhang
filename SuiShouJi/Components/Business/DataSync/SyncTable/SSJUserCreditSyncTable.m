@@ -24,7 +24,8 @@
              @"cwritedate",
              @"iversion",
              @"operatortype",
-             @"ibilldatesettlement"];
+             @"ibilldatesettlement",
+             @"itype"];
 }
 
 + (NSArray *)primaryKeys {
