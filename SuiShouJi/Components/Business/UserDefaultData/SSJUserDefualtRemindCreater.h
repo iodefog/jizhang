@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "SSJUserDefaultDataCreaterProtocol.h"
 
 @interface SSJUserDefualtRemindCreater : NSObject<SSJUserDefaultDataCreaterProtocol>
 
