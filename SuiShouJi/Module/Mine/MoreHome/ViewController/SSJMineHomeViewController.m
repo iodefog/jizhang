@@ -136,7 +136,7 @@ static BOOL kNeedBannerDisplay = YES;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userInfoComplishedNotice) name:kUserItemReturnKey object:nil];
     [self.view addSubview:self.announcementView];
     [self.view addSubview:self.header];
-    [self.view addSubview:self.collectionView];
+    [self.view addSubview:self.tableView];
     [self loadOriDataArray];//固定数组
 }
 
@@ -183,9 +183,6 @@ static BOOL kNeedBannerDisplay = YES;
     [super viewDidLayoutSubviews];
     self.header.size = CGSizeMake(self.view.width, 170);
     self.header.leftTop = CGPointMake(0, self.announcementView.bottom);
-    self.collectionView.size = CGSizeMake(self.view.width, self.view.height - self.header.bottom - SSJ_TABBAR_HEIGHT);
-    self.collectionView.top = self.header.bottom;
-    self.collectionView.contentInset = UIEdgeInsetsMake(10, 0, 0, 0);
 //    self.bottomBgView.centerX = self.view.centerX;
 //    self.bottomBgView.bottom = self.view.bottom - SSJ_TABBAR_HEIGHT;
 }
@@ -363,9 +360,7 @@ static BOOL kNeedBannerDisplay = YES;
     if ([service isKindOfClass:[SSJBannerNetworkService class]]) {
         //banner
         if (self.bannerService.item.bannerItems.count) {
-            UICollectionViewFlowLayout *collectionViewLayout = (UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout;
             if (kNeedBannerDisplay == YES) {
-                collectionViewLayout.headerReferenceSize = CGSizeMake(SSJSCREENWITH, kBannerHeight);
                 self.lineView.top = kBannerHeight;
             }else{
                 self.lineView.top = 0;
@@ -390,14 +385,13 @@ static BOOL kNeedBannerDisplay = YES;
             [self.view setNeedsLayout];
         }
     }
-    [self.collectionView reloadData];
 }
 
 - (void)server:(SSJBaseNetworkService *)service didFailLoadWithError:(NSError *)error
 {
 //    [self loadDataArray];
     self.adItemsArray = self.localAdItems;
-    [self.collectionView reloadData];
+    [self.tableView reloadData];
     [self getLocalAnnoucement];
 }
 
@@ -413,7 +407,7 @@ static BOOL kNeedBannerDisplay = YES;
             item.isShowDot = self.dotService.dotItem.hasAdviceUpdate;
         }
     }
-    [self.collectionView reloadData];
+    [self.tableView reloadData];
 }
 
 - (void)loadDataArray
@@ -440,7 +434,7 @@ static BOOL kNeedBannerDisplay = YES;
         _bannerHeader = [[SSJBannerHeaderView alloc]init];
         _bannerHeader.closeButtonClickBlock = ^(){
             kNeedBannerDisplay = NO;
-            [weakSelf.collectionView reloadData];
+            [weakSelf.tableView reloadData];
         };
         _bannerHeader.bannerClickedBlock = ^(NSString *url , NSString *title){
             SSJAdWebViewController *webVc = [SSJAdWebViewController webViewVCWithURL:[NSURL URLWithString:url]];
@@ -474,40 +468,40 @@ static BOOL kNeedBannerDisplay = YES;
     return _annoucementService;
 }
 
-- (UICollectionView *)collectionView
-{
-    if (!_collectionView) {
-        UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
-        layout.minimumLineSpacing = 0;
-        layout.minimumInteritemSpacing = 0;
-        layout.sectionInset = UIEdgeInsetsMake(0, 0, 0, 0);
-//        layout.itemSize = CGSizeMake(SSJSCREENWITH/kColum, 100);
-        layout.headerReferenceSize = CGSizeMake(SSJSCREENWITH, 0);//头的高度
-        if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
-            CGSize screenSize = [UIScreen mainScreen].bounds.size;
-            double footerHeight = 0;
-            if (CGSizeEqualToSize(screenSize, CGSizeMake(768.0, 1024.0))) {
-                footerHeight = 118;
-            } else if (CGSizeEqualToSize(screenSize, CGSizeMake(1536.0, 2048.0))) {
-                footerHeight = 236;
-            } else {
-                footerHeight = 150;
-            }
-            layout.footerReferenceSize = CGSizeMake(SSJSCREENWITH, 150);//头的高度
-        } else {
-            layout.footerReferenceSize = CGSizeMake(SSJSCREENWITH, 0);//头的高度
-        }
-        _collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
-        [_collectionView registerClass:[SSJMineHomeCollectionImageCell class] forCellWithReuseIdentifier:kItemID];
-        [_collectionView registerClass:[SSJHeaderBannerImageView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:kHeaderViewID];//注册头
-        [_collectionView registerClass:[SSJMoreBackImageViewCollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:kFooterViewID];
-        _collectionView.dataSource = self;
-        _collectionView.delegate = self;
-        [_collectionView addSubview:self.lineView];
-        _collectionView.backgroundColor = [UIColor clearColor];
-    }
-    return _collectionView;
-}
+//- (UICollectionView *)collectionView
+//{
+//    if (!_collectionView) {
+//        UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
+//        layout.minimumLineSpacing = 0;
+//        layout.minimumInteritemSpacing = 0;
+//        layout.sectionInset = UIEdgeInsetsMake(0, 0, 0, 0);
+////        layout.itemSize = CGSizeMake(SSJSCREENWITH/kColum, 100);
+//        layout.headerReferenceSize = CGSizeMake(SSJSCREENWITH, 0);//头的高度
+//        if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
+//            CGSize screenSize = [UIScreen mainScreen].bounds.size;
+//            double footerHeight = 0;
+//            if (CGSizeEqualToSize(screenSize, CGSizeMake(768.0, 1024.0))) {
+//                footerHeight = 118;
+//            } else if (CGSizeEqualToSize(screenSize, CGSizeMake(1536.0, 2048.0))) {
+//                footerHeight = 236;
+//            } else {
+//                footerHeight = 150;
+//            }
+//            layout.footerReferenceSize = CGSizeMake(SSJSCREENWITH, 150);//头的高度
+//        } else {
+//            layout.footerReferenceSize = CGSizeMake(SSJSCREENWITH, 0);//头的高度
+//        }
+//        _collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
+//        [_collectionView registerClass:[SSJMineHomeCollectionImageCell class] forCellWithReuseIdentifier:kItemID];
+//        [_collectionView registerClass:[SSJHeaderBannerImageView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:kHeaderViewID];//注册头
+//        [_collectionView registerClass:[SSJMoreBackImageViewCollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:kFooterViewID];
+//        _collectionView.dataSource = self;
+//        _collectionView.delegate = self;
+//        [_collectionView addSubview:self.lineView];
+//        _collectionView.backgroundColor = [UIColor clearColor];
+//    }
+//    return _collectionView;
+//}
 
 
 -(SSJMineHomeTableViewHeader *)header {
@@ -602,13 +596,6 @@ static BOOL kNeedBannerDisplay = YES;
 //    _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
 //  self.collectionView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     self.lineView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
-    UICollectionViewFlowLayout *collectionViewLayout = (UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout;
-    if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
-        collectionViewLayout.footerReferenceSize = CGSizeMake(SSJSCREENWITH, 150);
-    } else {
-        collectionViewLayout.footerReferenceSize = CGSizeMake(SSJSCREENWITH, 0);
-    }
-    
     [self.rightButton updateAfterThemeChange];
     [self.announcementView updateAppearanceAfterThemeChanged];
 }
@@ -673,7 +660,7 @@ static BOOL kNeedBannerDisplay = YES;
     [self orgDataToModel];
     self.adItemsArray = self.localAdItems;
     [self additionOrgDataToModel];
-    [self.collectionView reloadData];
+    [self.tableView reloadData];
 }
 
 - (void)orgDataToModel
@@ -761,20 +748,6 @@ static BOOL kNeedBannerDisplay = YES;
 - (void)pushToViewControllerWithVC:(UIViewController *)vc
 {
     [self.navigationController pushViewController:vc animated:YES];
-}
-
-- (void)closeBanner
-{
-    kNeedBannerDisplay = NO;
-    UICollectionViewFlowLayout *collectionViewLayout = (UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout;
-    if (kNeedBannerDisplay == YES) {
-        collectionViewLayout.headerReferenceSize = CGSizeMake(SSJSCREENWITH, kBannerHeight);
-        self.lineView.top = kBannerHeight;
-    }else{
-        collectionViewLayout.headerReferenceSize = CGSizeMake(SSJSCREENWITH, 0);
-        self.lineView.top = 0;
-    }
-    [self.collectionView reloadData];
 }
 
 @end

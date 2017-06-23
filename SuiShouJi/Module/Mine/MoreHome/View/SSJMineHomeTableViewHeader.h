@@ -30,6 +30,7 @@ typedef void (^checkInButtonClickBlock)();
  签名
  */
 - (void)setSignStr;
+
 @property (nonatomic, copy) checkInButtonClickBlock checkInButtonClickBlock;
 
 //点击登录回调
