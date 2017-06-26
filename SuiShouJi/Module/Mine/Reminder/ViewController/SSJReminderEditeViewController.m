@@ -10,7 +10,6 @@
 #import "SSJCreditCardEditeCell.h"
 #import "TPKeyboardAvoidingTableView.h"
 #import "SSJLocalNotificationStore.h"
-#import "SSJChargeReminderTimeView.h"
 #import "SSJChargeCircleSelectView.h"
 #import "SSJReminderDateSelectView.h"
 #import "SSJReminderCircleSelectView.h"

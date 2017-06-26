@@ -7,7 +7,10 @@
 //
 
 #import "SSJMineHeaderView.h"
+
 @interface SSJMineHeaderView()
+
+
 @end
 
 @implementation SSJMineHeaderView

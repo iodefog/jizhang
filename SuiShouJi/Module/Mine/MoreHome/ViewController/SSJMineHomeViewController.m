@@ -394,7 +394,7 @@ static BOOL kNeedBannerDisplay = YES;
     [self getLocalAnnoucement];
 }
 
-#pragma mark -- NoticeCenter
+#pragma mark - NoticeCenter
 - (void)userInfoComplishedNotice
 {
     //更改模型数据

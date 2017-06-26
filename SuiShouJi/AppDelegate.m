@@ -20,7 +20,7 @@
 
 #import "SSJNavigationController.h"
 #import "SSJBookKeepingHomeViewController.h"
-#import "SSJMineHomeViewController.h"
+#import "SSJNewMineHomeViewController.h"
 #import "SSJFinancingHomeViewController.h"
 #import "SSJReportFormsViewController.h"
 #import "MMDrawerController.h"
@@ -299,7 +299,7 @@ NSDate *SCYEnterBackgroundTime() {
     SSJNavigationController *financingNavi = [[SSJNavigationController alloc] initWithRootViewController:financingVC];
     financingNavi.tabBarItem.title = @"资金";
     
-    SSJMineHomeViewController *moreVC = [[SSJMineHomeViewController alloc] initWithNibName:nil bundle:nil];
+    SSJNewMineHomeViewController *moreVC = [[SSJNewMineHomeViewController alloc] initWithNibName:nil bundle:nil];
     SSJNavigationController *moreNavi = [[SSJNavigationController alloc] initWithRootViewController:moreVC];
     moreNavi.tabBarItem.title = @"我的";
     
