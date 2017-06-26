@@ -7,7 +7,8 @@
 //
 
 #import "SSJBaseViewController.h"
+#import "SSJLoginCommonViewController.h"
 
-@interface SSJLoginVerifyPhoneViewController : SSJBaseViewController
+@interface SSJLoginVerifyPhoneViewController : SSJLoginCommonViewController
 
 @end

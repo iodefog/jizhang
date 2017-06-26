@@ -30,7 +30,6 @@
 #import "SSJThirdPartyLoginManger.h"
 
 #import "SSJMotionPasswordViewController.h"
-#import "SSJLoginVerifyPhoneViewController.h"
 #import "MMDrawerController.h"
 
 @interface SSJLoginVerifyPhoneNumViewModel ()
@@ -52,6 +51,7 @@
 
 /**openId*/
 @property (nonatomic, copy) NSString *openId;
+
 
 @end
 
@@ -83,6 +83,10 @@
     }];
 }
 
+
+/**
+ 第三方登录
+ */
 - (void)thirdLoginWithLoginItem:(SSJThirdPartLoginItem *)item subscriber:(id<RACSubscriber>) subscriber {
     self.netWorkService.showLodingIndicator = YES;
     NSString *strAcctID = @"130313003";
@@ -141,6 +145,10 @@
         BOOL isShareBook = [db boolForQuery:@"select count(*) from bk_books_type where cbooksid = ? and operatortype <> 2 and cuserid = ?",currentBookId,SSJUSERID()];
         SSJSaveBooksCategory(!isShareBook);
     }];
+}
+
+- (void)loginNormalWithPassWord:(NSString*)password AndUserAccount:(NSString*)useraccount subscriber:(id<RACSubscriber>) subscriber {
+
 }
 
 
@@ -345,15 +353,15 @@
                 return nil;
             }];
             //返回的数据处理json->model
-            return [signal map:^id(id value) {
-                return @"成功啦";
-            }];
+//            return [signal map:^id(id value) {
+//                return @"成功啦";
+//            }];
+            return signal;
         }];
         
         //获得数据
-        [_verifyPhoneNumRequestCommand.executionSignals.switchToLatest subscribeNext:^(id x) {
-            NSLog(@"新数据:::::%@",x);
-        }];
+//        [_verifyPhoneNumRequestCommand.executionSignals.switchToLatest subscribeNext:^(id x) {
+//        }];
     }
     return _verifyPhoneNumRequestCommand;
 }
@@ -366,6 +374,39 @@
         }] skip:1];
     }
     return _enableVerifySignal;
+}
+
+- (RACSignal *)enableRegAndLoginSignal {
+    if (!_enableRegAndLoginSignal) {
+        _enableRegAndLoginSignal = [[RACSignal combineLatest:@[RACObserve(self, verificationCode),RACObserve(self, passwardNum)] reduce:^id(NSString *code,NSString *passward){
+            return @(code.length == 6 && passward.length >=6 && passward.length <=15);
+        }] skip:1];
+    }
+    return _enableRegAndLoginSignal;
+}
+
+- (RACCommand *)getVerificationCodeCommand {
+    if (!_getVerificationCodeCommand) {
+        _getVerificationCodeCommand = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
+            RACSignal *signal = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+                return nil;
+            }];
+            return signal;
+        }];
+    }
+    return _getVerificationCodeCommand;
+}
+
+- (RACCommand *)registerAndLoginCommand {
+    if (!_registerAndLoginCommand) {
+        _registerAndLoginCommand = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
+            RACSignal *signal = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+                return nil;
+            }];
+            return signal;
+        }];
+    }
+    return _registerAndLoginCommand;
 }
 
 - (RACCommand *)wxLoginCommand {

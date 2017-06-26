@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 @class SSJBaseNetworkService;
 @class SSJThirdPartLoginItem;
-@class SSJLoginVerifyPhoneViewController;
 
 @interface SSJLoginVerifyPhoneNumViewModel : NSObject
 
@@ -24,14 +23,29 @@
 /**qq登录命令*/
 @property (nonatomic, strong) RACCommand *qqLoginCommand;
 
+/**注册并登录命令*/
+@property (nonatomic, strong) RACCommand *registerAndLoginCommand;
+
+/**获取验证码命令*/
+@property (nonatomic, strong) RACCommand *getVerificationCodeCommand;
+
 /**是否允许点击验证手机号下一步信号*/
 @property (nonatomic, strong) RACSignal *enableVerifySignal;
+
+/**是否允许点击注册并登录按钮信号*/
+@property (nonatomic, strong) RACSignal *enableRegAndLoginSignal;
 
 /**同意协议*/
 @property (nonatomic, assign, getter=isAgreeProtocol) BOOL agreeProtocol;
 
 /**手机号*/
 @property (nonatomic, copy) NSString *phoneNum;
+
+/**验证码*/
+@property (nonatomic, copy) NSString *verificationCode;
+
+/**密码   */
+@property (nonatomic, copy) NSString *passwardNum;
 
 /**第三方登录model*/
 @property (nonatomic, strong) SSJThirdPartLoginItem *thirdPartLoginItem;
@@ -55,5 +69,5 @@
 @property ( nonatomic,strong) NSString *accesstoken;
 
 /**vc*/
-@property (nonatomic, assign) SSJLoginVerifyPhoneViewController *vc;
+@property (nonatomic, assign) __kindof UIViewController *vc;
 @end

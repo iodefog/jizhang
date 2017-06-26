@@ -3738,6 +3738,34 @@
 		91708B361ECD84BB0021A33A /* SSJBookTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 91708B2B1ECD84BB0021A33A /* SSJBookTypeViewController.m */; };
 		91708B371ECD84BB0021A33A /* SSJBookTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 91708B2B1ECD84BB0021A33A /* SSJBookTypeViewController.m */; };
 		91708B381ECD84BB0021A33A /* SSJBookTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 91708B2B1ECD84BB0021A33A /* SSJBookTypeViewController.m */; };
+		91A4B5461EFD1286007434B1 /* SSJLoginCommonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 91A4B5451EFD1286007434B1 /* SSJLoginCommonViewController.m */; };
+		91A4B5471EFD1286007434B1 /* SSJLoginCommonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 91A4B5451EFD1286007434B1 /* SSJLoginCommonViewController.m */; };
+		91A4B5481EFD1286007434B1 /* SSJLoginCommonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 91A4B5451EFD1286007434B1 /* SSJLoginCommonViewController.m */; };
+		91A4B5491EFD1286007434B1 /* SSJLoginCommonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 91A4B5451EFD1286007434B1 /* SSJLoginCommonViewController.m */; };
+		91A4B54A1EFD1286007434B1 /* SSJLoginCommonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 91A4B5451EFD1286007434B1 /* SSJLoginCommonViewController.m */; };
+		91A4B54B1EFD1286007434B1 /* SSJLoginCommonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 91A4B5451EFD1286007434B1 /* SSJLoginCommonViewController.m */; };
+		91A4B54C1EFD1286007434B1 /* SSJLoginCommonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 91A4B5451EFD1286007434B1 /* SSJLoginCommonViewController.m */; };
+		91A4B54D1EFD1286007434B1 /* SSJLoginCommonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 91A4B5451EFD1286007434B1 /* SSJLoginCommonViewController.m */; };
+		91A4B54E1EFD1286007434B1 /* SSJLoginCommonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 91A4B5451EFD1286007434B1 /* SSJLoginCommonViewController.m */; };
+		91A4B54F1EFD1286007434B1 /* SSJLoginCommonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 91A4B5451EFD1286007434B1 /* SSJLoginCommonViewController.m */; };
+		91A4B5501EFD1286007434B1 /* SSJLoginCommonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 91A4B5451EFD1286007434B1 /* SSJLoginCommonViewController.m */; };
+		91A4B5511EFD1286007434B1 /* SSJLoginCommonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 91A4B5451EFD1286007434B1 /* SSJLoginCommonViewController.m */; };
+		91A4B5521EFD1286007434B1 /* SSJLoginCommonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 91A4B5451EFD1286007434B1 /* SSJLoginCommonViewController.m */; };
+		91A4B5531EFD1286007434B1 /* SSJLoginCommonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 91A4B5451EFD1286007434B1 /* SSJLoginCommonViewController.m */; };
+		91A4B5561EFD17C1007434B1 /* SSRegisterAndLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 91A4B5551EFD17C1007434B1 /* SSRegisterAndLoginViewController.m */; };
+		91A4B5571EFD17C1007434B1 /* SSRegisterAndLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 91A4B5551EFD17C1007434B1 /* SSRegisterAndLoginViewController.m */; };
+		91A4B5581EFD17C1007434B1 /* SSRegisterAndLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 91A4B5551EFD17C1007434B1 /* SSRegisterAndLoginViewController.m */; };
+		91A4B5591EFD17C1007434B1 /* SSRegisterAndLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 91A4B5551EFD17C1007434B1 /* SSRegisterAndLoginViewController.m */; };
+		91A4B55A1EFD17C1007434B1 /* SSRegisterAndLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 91A4B5551EFD17C1007434B1 /* SSRegisterAndLoginViewController.m */; };
+		91A4B55B1EFD17C1007434B1 /* SSRegisterAndLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 91A4B5551EFD17C1007434B1 /* SSRegisterAndLoginViewController.m */; };
+		91A4B55C1EFD17C1007434B1 /* SSRegisterAndLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 91A4B5551EFD17C1007434B1 /* SSRegisterAndLoginViewController.m */; };
+		91A4B55D1EFD17C1007434B1 /* SSRegisterAndLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 91A4B5551EFD17C1007434B1 /* SSRegisterAndLoginViewController.m */; };
+		91A4B55E1EFD17C1007434B1 /* SSRegisterAndLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 91A4B5551EFD17C1007434B1 /* SSRegisterAndLoginViewController.m */; };
+		91A4B55F1EFD17C1007434B1 /* SSRegisterAndLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 91A4B5551EFD17C1007434B1 /* SSRegisterAndLoginViewController.m */; };
+		91A4B5601EFD17C1007434B1 /* SSRegisterAndLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 91A4B5551EFD17C1007434B1 /* SSRegisterAndLoginViewController.m */; };
+		91A4B5611EFD17C1007434B1 /* SSRegisterAndLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 91A4B5551EFD17C1007434B1 /* SSRegisterAndLoginViewController.m */; };
+		91A4B5621EFD17C1007434B1 /* SSRegisterAndLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 91A4B5551EFD17C1007434B1 /* SSRegisterAndLoginViewController.m */; };
+		91A4B5631EFD17C1007434B1 /* SSRegisterAndLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 91A4B5551EFD17C1007434B1 /* SSRegisterAndLoginViewController.m */; };
 		91A846AC1E237A5D00D2D0BE /* SSJHomeBillStickyNoteView.m in Sources */ = {isa = PBXBuildFile; fileRef = 91A846AB1E237A5D00D2D0BE /* SSJHomeBillStickyNoteView.m */; };
 		91A846AF1E237A5D00D2D0BE /* SSJHomeBillStickyNoteView.m in Sources */ = {isa = PBXBuildFile; fileRef = 91A846AB1E237A5D00D2D0BE /* SSJHomeBillStickyNoteView.m */; };
 		91C2E81B1DF7D69E003ADABE /* SSJMineHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 91C2E81A1DF7D69E003ADABE /* SSJMineHomeViewController.m */; };
@@ -10287,6 +10315,10 @@
 		91708B1C1ECD444B0021A33A /* SSJNewOrEditeBooksViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJNewOrEditeBooksViewController.m; sourceTree = "<group>"; };
 		91708B2A1ECD84BB0021A33A /* SSJBookTypeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookTypeViewController.h; sourceTree = "<group>"; };
 		91708B2B1ECD84BB0021A33A /* SSJBookTypeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBookTypeViewController.m; sourceTree = "<group>"; };
+		91A4B5441EFD1286007434B1 /* SSJLoginCommonViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJLoginCommonViewController.h; sourceTree = "<group>"; };
+		91A4B5451EFD1286007434B1 /* SSJLoginCommonViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJLoginCommonViewController.m; sourceTree = "<group>"; };
+		91A4B5541EFD17C1007434B1 /* SSRegisterAndLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSRegisterAndLoginViewController.h; sourceTree = "<group>"; };
+		91A4B5551EFD17C1007434B1 /* SSRegisterAndLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSRegisterAndLoginViewController.m; sourceTree = "<group>"; };
 		91A846AA1E237A5D00D2D0BE /* SSJHomeBillStickyNoteView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJHomeBillStickyNoteView.h; sourceTree = "<group>"; };
 		91A846AB1E237A5D00D2D0BE /* SSJHomeBillStickyNoteView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJHomeBillStickyNoteView.m; sourceTree = "<group>"; };
 		91C2E8191DF7D69E003ADABE /* SSJMineHomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMineHomeViewController.h; sourceTree = "<group>"; };
@@ -14697,6 +14729,10 @@
 				7D22E2931D89519B00474B11 /* SSJLoginViewController+SSJCategory.m */,
 				91E0FF7B1EFA7316007FDD71 /* SSJLoginVerifyPhoneViewController.h */,
 				91E0FF7C1EFA7316007FDD71 /* SSJLoginVerifyPhoneViewController.m */,
+				91A4B5541EFD17C1007434B1 /* SSRegisterAndLoginViewController.h */,
+				91A4B5551EFD17C1007434B1 /* SSRegisterAndLoginViewController.m */,
+				91A4B5441EFD1286007434B1 /* SSJLoginCommonViewController.h */,
+				91A4B5451EFD1286007434B1 /* SSJLoginCommonViewController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -16774,6 +16810,7 @@
 				7D08A14C1E4999D30085A8FB /* SSJFundingTypeSelectView.m in Sources */,
 				7D08A14D1E4999D30085A8FB /* SSJReminderEditeViewController.m in Sources */,
 				9C1E4C1D1E4ACD5C00CA5843 /* SSJCalendarTabelViewHeaderView.m in Sources */,
+				91A4B55B1EFD17C1007434B1 /* SSRegisterAndLoginViewController.m in Sources */,
 				9C155F031E68572700FDFD18 /* MJRefreshNormalHeader.m in Sources */,
 				7D08A14F1E4999D30085A8FB /* SSJUserItem.m in Sources */,
 				7D08A1501E4999D30085A8FB /* SSJMemoMakingView.m in Sources */,
@@ -16837,6 +16874,7 @@
 				9C3A2D621E6678D000DFAE2C /* SSJGeTuiManager.m in Sources */,
 				7D08A1851E4999D30085A8FB /* FMDatabase+InMemoryOnDiskIO.m in Sources */,
 				7D08A1871E4999D30085A8FB /* SSJThemeModel.m in Sources */,
+				91A4B54B1EFD1286007434B1 /* SSJLoginCommonViewController.m in Sources */,
 				7D08A1881E4999D30085A8FB /* SSJRecordMakingCustomNavigationBar.m in Sources */,
 				9C3A2D411E658E8B00DFAE2C /* SSJDatabaseVersion13.m in Sources */,
 				7D08A1891E4999D30085A8FB /* SSJStartUpgradeAlertView.m in Sources */,
@@ -17410,6 +17448,7 @@
 				7DA13AA31E35AED7000490A4 /* SSJFundingTypeSelectView.m in Sources */,
 				7DA13AA41E35AED7000490A4 /* SSJReminderEditeViewController.m in Sources */,
 				9C1E4C1C1E4ACD5C00CA5843 /* SSJCalendarTabelViewHeaderView.m in Sources */,
+				91A4B55A1EFD17C1007434B1 /* SSRegisterAndLoginViewController.m in Sources */,
 				9C155F021E68572700FDFD18 /* MJRefreshNormalHeader.m in Sources */,
 				7DA13AA61E35AED7000490A4 /* SSJUserItem.m in Sources */,
 				7DA13AA71E35AED7000490A4 /* SSJMemoMakingView.m in Sources */,
@@ -17473,6 +17512,7 @@
 				9C3A2D611E6678D000DFAE2C /* SSJGeTuiManager.m in Sources */,
 				7DA13ADC1E35AED7000490A4 /* FMDatabase+InMemoryOnDiskIO.m in Sources */,
 				7DA13ADE1E35AED7000490A4 /* SSJThemeModel.m in Sources */,
+				91A4B54A1EFD1286007434B1 /* SSJLoginCommonViewController.m in Sources */,
 				7DA13ADF1E35AED7000490A4 /* SSJRecordMakingCustomNavigationBar.m in Sources */,
 				9C3A2D401E658E8B00DFAE2C /* SSJDatabaseVersion13.m in Sources */,
 				7DA13AE01E35AED7000490A4 /* SSJStartUpgradeAlertView.m in Sources */,
@@ -18046,6 +18086,7 @@
 				7DBB3B2C1E55C2EE0075E638 /* SSJBalenceChangeDetailViewController.m in Sources */,
 				7DBB3B2E1E55C2EE0075E638 /* SSJBillTypeSyncTable.m in Sources */,
 				7DBB3B2F1E55C2EE0075E638 /* SSJLocalNotificationHelper.m in Sources */,
+				91A4B55C1EFD17C1007434B1 /* SSRegisterAndLoginViewController.m in Sources */,
 				9C155F041E68572700FDFD18 /* MJRefreshNormalHeader.m in Sources */,
 				7DBB3B301E55C2EE0075E638 /* SSJRegistGetVerViewController.m in Sources */,
 				7DBB3B311E55C2EE0075E638 /* SSJMagicExportSuccessAlertView.m in Sources */,
@@ -18109,6 +18150,7 @@
 				9C3A2D631E6678D100DFAE2C /* SSJGeTuiManager.m in Sources */,
 				7DBB3B651E55C2EE0075E638 /* SSJCustomTextView.m in Sources */,
 				7DBB3B661E55C2EE0075E638 /* SSJBooksTypeEditeView.m in Sources */,
+				91A4B54C1EFD1286007434B1 /* SSJLoginCommonViewController.m in Sources */,
 				7DBB3B671E55C2EE0075E638 /* SSJPersonalDetailItem.m in Sources */,
 				9C3A2D421E658E8B00DFAE2C /* SSJDatabaseVersion13.m in Sources */,
 				7DBB3B681E55C2EE0075E638 /* FMDatabase+InMemoryOnDiskIO.m in Sources */,
@@ -18682,6 +18724,7 @@
 				7DBB3FC61E55C4E00075E638 /* SSJLoanDetailViewController.m in Sources */,
 				7DBB3FC71E55C4E00075E638 /* SSJBalenceChangeDetailViewController.m in Sources */,
 				7DBB3FC91E55C4E00075E638 /* SSJBillTypeSyncTable.m in Sources */,
+				91A4B5571EFD17C1007434B1 /* SSRegisterAndLoginViewController.m in Sources */,
 				7DBB3FCA1E55C4E00075E638 /* SSJLocalNotificationHelper.m in Sources */,
 				9C155EFE1E68572700FDFD18 /* MJRefreshNormalHeader.m in Sources */,
 				7DBB3FCB1E55C4E00075E638 /* SSJRegistGetVerViewController.m in Sources */,
@@ -18745,6 +18788,7 @@
 				9C155F191E68572700FDFD18 /* MJRefreshConst.m in Sources */,
 				9C3A2D5E1E6678CE00DFAE2C /* SSJGeTuiManager.m in Sources */,
 				7DBB40001E55C4E00075E638 /* SSJCustomTextView.m in Sources */,
+				91A4B5471EFD1286007434B1 /* SSJLoginCommonViewController.m in Sources */,
 				7DBB40011E55C4E00075E638 /* SSJBooksTypeEditeView.m in Sources */,
 				7DBB40021E55C4E00075E638 /* SSJPersonalDetailItem.m in Sources */,
 				9C3A2D3C1E658E8B00DFAE2C /* SSJDatabaseVersion13.m in Sources */,
@@ -19115,6 +19159,7 @@
 				7DFB16651EB0341E00292DD3 /* SSJTransferDetailHeader.m in Sources */,
 				7DFB16661EB0341E00292DD3 /* SSJBookkeepingTreeRuleDescView.m in Sources */,
 				7DFB16671EB0341E00292DD3 /* SRSlimeView.m in Sources */,
+				91A4B5621EFD17C1007434B1 /* SSRegisterAndLoginViewController.m in Sources */,
 				7DFB16681EB0341E00292DD3 /* SSJStartNetworkService.m in Sources */,
 				7DFB16691EB0341E00292DD3 /* SSJHeaderBannerCollectionViewCell.m in Sources */,
 				7DFB166A1EB0341E00292DD3 /* SSJReportFormsItem.m in Sources */,
@@ -19295,6 +19340,7 @@
 				7DFB170E1EB0341E00292DD3 /* SSJColorSelectViewController.m in Sources */,
 				7DFB170F1EB0341E00292DD3 /* SSJRepaymentModel.m in Sources */,
 				7DFB17101EB0341E00292DD3 /* SSJMagicExportAnnouncementViewController.m in Sources */,
+				91A4B5521EFD1286007434B1 /* SSJLoginCommonViewController.m in Sources */,
 				7DFB17111EB0341E00292DD3 /* SSJBillTypeSelectCell.m in Sources */,
 				7D7EF11B1ECAD40300E5D51D /* SSJCalenderDetailInfoCell.m in Sources */,
 				7DFB17121EB0341E00292DD3 /* SSJFontAddition.m in Sources */,
@@ -19956,6 +20002,7 @@
 				9C13F59D1E8267D300AC5FA9 /* SSJLoanDetailViewController.m in Sources */,
 				9C13F59E1E8267D300AC5FA9 /* SSJBalenceChangeDetailViewController.m in Sources */,
 				91633C161ECBE97F00A7A60F /* SSJBooksCollectionViewCell.m in Sources */,
+				91A4B55D1EFD17C1007434B1 /* SSRegisterAndLoginViewController.m in Sources */,
 				9C13F5A01E8267D300AC5FA9 /* SSJBillTypeSyncTable.m in Sources */,
 				9C13F5A11E8267D300AC5FA9 /* SSJLocalNotificationHelper.m in Sources */,
 				9C13F5A21E8267D300AC5FA9 /* MJRefreshNormalHeader.m in Sources */,
@@ -20019,6 +20066,7 @@
 				9C13F5DC1E8267D300AC5FA9 /* SSJDatabaseVersion13.m in Sources */,
 				9C13F5DD1E8267D300AC5FA9 /* FMDatabase+InMemoryOnDiskIO.m in Sources */,
 				9C13F5DE1E8267D300AC5FA9 /* SSJThemeModel.m in Sources */,
+				91A4B54D1EFD1286007434B1 /* SSJLoginCommonViewController.m in Sources */,
 				9C13F5DF1E8267D300AC5FA9 /* SSJFundingTransferListPeriodCell.m in Sources */,
 				9C13F5E01E8267D300AC5FA9 /* SSJRecordMakingCustomNavigationBar.m in Sources */,
 				9C13F5E11E8267D300AC5FA9 /* SSJStartUpgradeAlertView.m in Sources */,
@@ -20389,6 +20437,7 @@
 				9C4C200C1E9E30C8000C5F15 /* SSJTransferDetailHeader.m in Sources */,
 				9C4C200D1E9E30C8000C5F15 /* SSJBookkeepingTreeRuleDescView.m in Sources */,
 				9C4C200E1E9E30C8000C5F15 /* SRSlimeView.m in Sources */,
+				91A4B5601EFD17C1007434B1 /* SSRegisterAndLoginViewController.m in Sources */,
 				9C4C200F1E9E30C8000C5F15 /* SSJStartNetworkService.m in Sources */,
 				9C4C20101E9E30C8000C5F15 /* SSJHeaderBannerCollectionViewCell.m in Sources */,
 				9C4C20111E9E30C8000C5F15 /* SSJReportFormsItem.m in Sources */,
@@ -20569,6 +20618,7 @@
 				9C4C20B31E9E30C8000C5F15 /* SSJLoanFundAccountSelectionCell.m in Sources */,
 				9C4C20B41E9E30C8000C5F15 /* SSJEditableCollectionView.m in Sources */,
 				9C4C20B51E9E30C8000C5F15 /* SSJColorSelectViewController.m in Sources */,
+				91A4B5501EFD1286007434B1 /* SSJLoginCommonViewController.m in Sources */,
 				9C4C20B61E9E30C8000C5F15 /* SSJRepaymentModel.m in Sources */,
 				9C4C20B71E9E30C8000C5F15 /* SSJMagicExportAnnouncementViewController.m in Sources */,
 				9C4C20B81E9E30C8000C5F15 /* SSJBillTypeSelectCell.m in Sources */,
@@ -21054,6 +21104,7 @@
 				9C7D2D081E8DF8A80093001F /* SSJServerLaunchView.m in Sources */,
 				9C7D2D091E8DF8A80093001F /* TPKeyboardAvoidingTableView.m in Sources */,
 				9C7D2D0A1E8DF8A80093001F /* NSString+MoneyDisplayFormat.m in Sources */,
+				91A4B5561EFD17C1007434B1 /* SSRegisterAndLoginViewController.m in Sources */,
 				9C7D2D0B1E8DF8A80093001F /* SSJMagicExportCalendarSwitchStartAndEndDateControl.m in Sources */,
 				9C7D2D0C1E8DF8A80093001F /* SSJFundingDetailListFirstLineCell.m in Sources */,
 				9C7D2D0E1E8DF8A80093001F /* SSJReportFormsNoDataCellItem.m in Sources */,
@@ -21083,6 +21134,7 @@
 				9C7D2D241E8DF8A80093001F /* SSJBooksTypeSyncTable.m in Sources */,
 				9C7D2D251E8DF8A80093001F /* SSJAnnouncementWebViewController.m in Sources */,
 				9C7D2D261E8DF8A80093001F /* SSJInstalmentEditeViewController.m in Sources */,
+				91A4B5461EFD1286007434B1 /* SSJLoginCommonViewController.m in Sources */,
 				9C7D2D271E8DF8A80093001F /* SSJThemeDownLoaderManger.m in Sources */,
 				9C7D2D281E8DF8A80093001F /* SSJCategoryEditableCollectionView.m in Sources */,
 				9C7D2D291E8DF8A80093001F /* SSJArrayAddition.m in Sources */,
@@ -21693,6 +21745,7 @@
 				9C7D2F7F1E8DF96B0093001F /* SSJServerLaunchView.m in Sources */,
 				9C7D2F801E8DF96B0093001F /* TPKeyboardAvoidingTableView.m in Sources */,
 				9C7D2F811E8DF96B0093001F /* NSString+MoneyDisplayFormat.m in Sources */,
+				91A4B55E1EFD17C1007434B1 /* SSRegisterAndLoginViewController.m in Sources */,
 				9C7D2F821E8DF96B0093001F /* SSJMagicExportCalendarSwitchStartAndEndDateControl.m in Sources */,
 				9C7D2F831E8DF96B0093001F /* SSJFundingDetailListFirstLineCell.m in Sources */,
 				9C7D2F851E8DF96B0093001F /* SSJReportFormsNoDataCellItem.m in Sources */,
@@ -21722,6 +21775,7 @@
 				9C7D2F9B1E8DF96B0093001F /* SSJBooksTypeSyncTable.m in Sources */,
 				9C7D2F9C1E8DF96B0093001F /* SSJAnnouncementWebViewController.m in Sources */,
 				9C7D2F9D1E8DF96B0093001F /* SSJInstalmentEditeViewController.m in Sources */,
+				91A4B54E1EFD1286007434B1 /* SSJLoginCommonViewController.m in Sources */,
 				9C7D2F9E1E8DF96B0093001F /* SSJThemeDownLoaderManger.m in Sources */,
 				9C7D2F9F1E8DF96B0093001F /* SSJCategoryEditableCollectionView.m in Sources */,
 				9C7D2FA01E8DF96B0093001F /* SSJArrayAddition.m in Sources */,
@@ -22305,6 +22359,7 @@
 				9C80FCAB1E95E88E00B1BAAC /* SSJTransferDetailHeader.m in Sources */,
 				9C80FCAC1E95E88E00B1BAAC /* SSJBookkeepingTreeRuleDescView.m in Sources */,
 				9C80FCAD1E95E88E00B1BAAC /* SRSlimeView.m in Sources */,
+				91A4B55F1EFD17C1007434B1 /* SSRegisterAndLoginViewController.m in Sources */,
 				9C80FCAE1E95E88E00B1BAAC /* SSJStartNetworkService.m in Sources */,
 				9C80FCAF1E95E88E00B1BAAC /* SSJHeaderBannerCollectionViewCell.m in Sources */,
 				9C80FCB01E95E88E00B1BAAC /* SSJReportFormsItem.m in Sources */,
@@ -22485,6 +22540,7 @@
 				9C80FD541E95E88E00B1BAAC /* SSJColorSelectViewController.m in Sources */,
 				9C80FD551E95E88E00B1BAAC /* SSJRepaymentModel.m in Sources */,
 				9C80FD561E95E88E00B1BAAC /* SSJMagicExportAnnouncementViewController.m in Sources */,
+				91A4B54F1EFD1286007434B1 /* SSJLoginCommonViewController.m in Sources */,
 				9C80FD571E95E88E00B1BAAC /* SSJBillTypeSelectCell.m in Sources */,
 				7D7EF1181ECAD40300E5D51D /* SSJCalenderDetailInfoCell.m in Sources */,
 				9C80FD581E95E88E00B1BAAC /* SSJFontAddition.m in Sources */,
@@ -22943,6 +22999,7 @@
 				9C9CEE6B1EA5F73A007657FE /* SSJTransferDetailHeader.m in Sources */,
 				9C9CEE6C1EA5F73A007657FE /* SSJBookkeepingTreeRuleDescView.m in Sources */,
 				9C9CEE6D1EA5F73A007657FE /* SRSlimeView.m in Sources */,
+				91A4B5611EFD17C1007434B1 /* SSRegisterAndLoginViewController.m in Sources */,
 				9C9CEE6E1EA5F73A007657FE /* SSJStartNetworkService.m in Sources */,
 				9C9CEE6F1EA5F73A007657FE /* SSJHeaderBannerCollectionViewCell.m in Sources */,
 				9C9CEE701EA5F73A007657FE /* SSJReportFormsItem.m in Sources */,
@@ -23123,6 +23180,7 @@
 				9C9CEF141EA5F73A007657FE /* SSJColorSelectViewController.m in Sources */,
 				9C9CEF151EA5F73A007657FE /* SSJRepaymentModel.m in Sources */,
 				9C9CEF161EA5F73A007657FE /* SSJMagicExportAnnouncementViewController.m in Sources */,
+				91A4B5511EFD1286007434B1 /* SSJLoginCommonViewController.m in Sources */,
 				9C9CEF171EA5F73A007657FE /* SSJBillTypeSelectCell.m in Sources */,
 				7D7EF11A1ECAD40300E5D51D /* SSJCalenderDetailInfoCell.m in Sources */,
 				9C9CEF181EA5F73A007657FE /* SSJFontAddition.m in Sources */,
@@ -23608,6 +23666,7 @@
 				9CDB49C01EF3ABBC0097E09D /* SSJFundingDetailListFirstLineCell.m in Sources */,
 				9CDB49C21EF3ABBC0097E09D /* SSJReportFormsNoDataCellItem.m in Sources */,
 				9CDB49C31EF3ABBC0097E09D /* SSJDatabaseVersion11.m in Sources */,
+				91A4B5631EFD17C1007434B1 /* SSRegisterAndLoginViewController.m in Sources */,
 				9CDB49C41EF3ABBC0097E09D /* SSJViewControllerAddition.m in Sources */,
 				9CDB49C51EF3ABBC0097E09D /* SSJBannerHeaderView.m in Sources */,
 				9CDB49C61EF3ABBC0097E09D /* SSJCreditCardItem.m in Sources */,
@@ -23637,6 +23696,7 @@
 				9CDB49DE1EF3ABBC0097E09D /* SSJRecordMakingBillTypeSelectionCellLabel.m in Sources */,
 				9CDB49DF1EF3ABBC0097E09D /* SSJDatabaseVersion10.m in Sources */,
 				9CDB49E01EF3ABBC0097E09D /* SSJCalenderDetailCell.m in Sources */,
+				91A4B5531EFD1286007434B1 /* SSJLoginCommonViewController.m in Sources */,
 				9CDB49E11EF3ABBC0097E09D /* SSJDownLoadProgressButton.m in Sources */,
 				9CDB49E21EF3ABBC0097E09D /* SSJBudgetBillTypeSelectionCell.m in Sources */,
 				9CDB49E31EF3ABBC0097E09D /* SSJBudgetDetailHeaderViewItem.m in Sources */,
@@ -24247,6 +24307,7 @@
 				9CECFB331D6D41A700DB2C8B /* SSJUserInfoNetworkService.m in Sources */,
 				7DF5329D1E13BBC7009A6F6C /* SSJInstalmentDetailViewController.m in Sources */,
 				9CECFB361D6D41A700DB2C8B /* SSJServerLaunchView.m in Sources */,
+				91A4B5591EFD17C1007434B1 /* SSRegisterAndLoginViewController.m in Sources */,
 				9C61FD221EAE0CF200971F0F /* SSJHomeThemeModifyView.m in Sources */,
 				9CECFB371D6D41A700DB2C8B /* TPKeyboardAvoidingTableView.m in Sources */,
 				9CECFB391D6D41A700DB2C8B /* SSJMagicExportCalendarSwitchStartAndEndDateControl.m in Sources */,
@@ -24483,6 +24544,7 @@
 				9CECFBC91D6D41A700DB2C8B /* SSJBillingChargeHeaderView.m in Sources */,
 				9CECFBCA1D6D41A700DB2C8B /* SSJGuideView.m in Sources */,
 				9C155F0A1E68572700FDFD18 /* MJRefreshStateHeader.m in Sources */,
+				91A4B5491EFD1286007434B1 /* SSJLoginCommonViewController.m in Sources */,
 				9CECFBCB1D6D41A700DB2C8B /* SSJThemePlugin.m in Sources */,
 				9C155E9E1E68572700FDFD18 /* MJRefreshBackFooter.m in Sources */,
 				9CECFBCD1D6D41A700DB2C8B /* SSJFinancingHomeitem.m in Sources */,
@@ -24880,6 +24942,7 @@
 				9C9471871CEB224C00D69079 /* SSJFundingDetailListFirstLineCell.m in Sources */,
 				7DB9F8281DFFC9230084E998 /* SSJReportFormsNoDataCellItem.m in Sources */,
 				9C7C511E1DF5615E0032705C /* SSJDatabaseVersion11.m in Sources */,
+				91A4B5581EFD17C1007434B1 /* SSRegisterAndLoginViewController.m in Sources */,
 				7D22A37B1E4F16AC00190CEB /* SSJViewControllerAddition.m in Sources */,
 				9CE7D7851D2F4EA40013E97B /* SSJBannerHeaderView.m in Sources */,
 				9C9A0C8E1D73CDB7002AF046 /* SSJCreditCardItem.m in Sources */,
@@ -24909,6 +24972,7 @@
 				7D5F33851CEAE6C10086B67E /* SSJRecordMakingBillTypeSelectionCellLabel.m in Sources */,
 				9C246BA41DCADB7600C61C34 /* SSJDatabaseVersion10.m in Sources */,
 				7D5F334E1CEAE6C10086B67E /* SSJCalenderDetailCell.m in Sources */,
+				91A4B5481EFD1286007434B1 /* SSJLoginCommonViewController.m in Sources */,
 				9C47E6EF1D222A26005F338A /* SSJDownLoadProgressButton.m in Sources */,
 				7DAA38451D952A8B000ED16E /* SSJBudgetBillTypeSelectionCell.m in Sources */,
 				7D24ED8F1D9E6F8E003C4248 /* SSJBudgetDetailHeaderViewItem.m in Sources */,

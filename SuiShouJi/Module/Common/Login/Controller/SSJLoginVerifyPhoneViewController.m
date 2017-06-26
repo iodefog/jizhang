@@ -7,24 +7,24 @@
 //
 
 #import "SSJLoginVerifyPhoneViewController.h"
-#import "TPKeyboardAvoidingScrollView.h"
 #import "SSJNormalWebViewController.h"
 #import "SSJMotionPasswordViewController.h"
-#import "MMDrawerController.h"
+#import "SSRegisterAndLoginViewController.h"
 
 #import "SSJLoginVerifyPhoneNumViewModel.h"
 
 #import "SSJUserTableManager.h"
 #import "SSJDatabaseQueue.h"
 
+#import "WXApi.h"
 
 
-@interface SSJLoginVerifyPhoneViewController ()
-@property (nonatomic, strong) TPKeyboardAvoidingScrollView *scrollView;
+
+@interface SSJLoginVerifyPhoneViewController ()<UITextFieldDelegate>
+
 
 /**手机号输入框*/
 @property (nonatomic, strong) UITextField *numTextF;
-
 
 @property (nonatomic, strong) UILabel *phonePreL;
 
@@ -44,31 +44,27 @@
 @implementation SSJLoginVerifyPhoneViewController
 
 #pragma mark - System
-- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-        self.hidesBottomBarWhenPushed = YES;
-        self.title = @"登录";
-    }
-    return self;
-}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self initialUI];
+//    [self updateViewConst];
+    [self updateViewConstraint];
     [self initialBind];
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [self.numTextF becomeFirstResponder];
+}
+
 #pragma mark - Layout
-- (void)updateViewConstraints {
-    [self.scrollView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.mas_equalTo(self);
-    }];
-    
+- (void)updateViewConstraint {
     [self.phonePreL mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(100);
-        make.height.mas_equalTo(50);
+        make.top.mas_equalTo(self.topView.mas_bottom).offset(50);
+        make.height.mas_equalTo(40);
         make.left.mas_equalTo(self.scrollView.mas_left).offset(20);
-        make.width.mas_lessThanOrEqualTo(40);
+        make.width.mas_equalTo(50);
     }];
     
     [self.numTextF mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -79,49 +75,69 @@
     
     [self.verifyPhoneBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.height.mas_equalTo(self.phonePreL);
-        make.top.mas_equalTo(self.numTextF.mas_bottom).offset(40);
+        make.top.mas_equalTo(self.numTextF.mas_bottom).offset(44);
         make.right.mas_equalTo(self.numTextF);
     }];
     
     [self.agreeButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(self.phonePreL);
-        make.width.height.mas_equalTo(20);
-        make.top.mas_equalTo(self.verifyPhoneBtn.mas_bottom).offset(10);
+        make.width.height.mas_equalTo(10);
+        make.top.mas_equalTo(self.verifyPhoneBtn.mas_bottom).offset(20);
     }];
     
     [self.protocolButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(self.agreeButton.mas_right);
+        make.left.mas_equalTo(self.agreeButton.mas_right).offset(10);
         make.width.greaterThanOrEqualTo(0);
         make.height.top.mas_equalTo(self.agreeButton);
     }];
     
-    [self.weixinLoginButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.mas_equalTo(self.view).offset(-50);
-        make.size.mas_equalTo(CGSizeMake(50, 50));
-        make.right.mas_equalTo(self.scrollView.mas_centerX).offset(-10);
-    }];
-    
-    [self.tencentLoginButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.bottom.mas_equalTo(self.weixinLoginButton);
-        make.left.mas_equalTo(self.scrollView.mas_centerX).offset(10);
-    }];
-    
-    [super updateViewConstraints];
+    if (([SSJDefaultSource() isEqualToString:@"11501"]
+        || [SSJDefaultSource() isEqualToString:@"11502"]
+        || [SSJDefaultSource() isEqualToString:@"11512"]
+        || [SSJDefaultSource() isEqualToString:@"11513"]) && [WXApi isWXAppInstalled]) {
+        [self.weixinLoginButton mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.bottom.mas_equalTo(self.view).offset(-50);
+            make.size.mas_equalTo(CGSizeMake(50, 50));
+            make.right.mas_equalTo(self.scrollView.mas_centerX).offset(-10);
+        }];
+        
+        [self.tencentLoginButton mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.size.bottom.mas_equalTo(self.weixinLoginButton);
+            make.left.mas_equalTo(self.scrollView.mas_centerX).offset(10);
+        }];
+    } else {
+        [self.tencentLoginButton mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.bottom.mas_equalTo(self.view).offset(-50);
+            make.size.mas_equalTo(CGSizeMake(50, 50));
+            make.centerX.mas_equalTo(self.scrollView.mas_centerX);
+        }];
+    }
+//    [super updateViewConstraints];
 }
 
 #pragma mark - Private
 - (void)initialUI {
+    self.view.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.scrollView];
+    [self.scrollView addSubview:self.topView];
+    [self.topView addSubview:self.titleL];
     [self.scrollView addSubview:self.numTextF];
     [self.scrollView addSubview:self.phonePreL];
     [self.scrollView addSubview:self.verifyPhoneBtn];
     [self.scrollView addSubview:self.agreeButton];
     [self.scrollView addSubview:self.protocolButton];
-    [self.scrollView addSubview:self.weixinLoginButton];
     [self.scrollView addSubview:self.tencentLoginButton];
+    
+    // 只有9188、有鱼并且没有审核的情况下，显示第三方登录
+    if (([SSJDefaultSource() isEqualToString:@"11501"]
+        || [SSJDefaultSource() isEqualToString:@"11502"]
+        || [SSJDefaultSource() isEqualToString:@"11512"]
+        || [SSJDefaultSource() isEqualToString:@"11513"]) && [WXApi isWXAppInstalled]) {
+            [self.scrollView addSubview:self.weixinLoginButton];
+    }
+    
     [self updateViewConstraints];
 }
-
 
 /**
  信号绑定
@@ -132,22 +148,19 @@
 }
 
 #pragma mark - Lazy
-- (TPKeyboardAvoidingScrollView *)scrollView
-{
-    if (!_scrollView) {
-        _scrollView = [[TPKeyboardAvoidingScrollView alloc] init];
-        _scrollView.showsHorizontalScrollIndicator = NO;
-        _scrollView.showsVerticalScrollIndicator = NO;
-        _scrollView.bounces = NO;
-        _scrollView.contentSize = CGSizeMake(0, self.view.height);
-    }
-    return _scrollView;
-}
 
 - (UITextField *)numTextF {
     if (!_numTextF) {
         _numTextF = [[UITextField alloc] init];
-        _numTextF.placeholder = @"请输入手机号";
+        _numTextF.placeholder = @"手机号";
+        _numTextF.textColor = [UIColor ssj_colorWithHex:@"#333333"];
+        _numTextF.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
+        _numTextF.keyboardType = UIKeyboardTypeNumberPad;
+        _numTextF.clearButtonMode = UITextFieldViewModeWhileEditing;
+        _numTextF.delegate = self;
+        [_numTextF ssj_setBorderWidth:1];
+        [_numTextF ssj_setBorderStyle:SSJBorderStyleBottom];
+        [_numTextF ssj_setBorderColor:[UIColor ssj_colorWithHex:@"#CCCCCC"]];
     }
     return _numTextF;
 }
@@ -156,6 +169,11 @@
     if (!_phonePreL) {
         _phonePreL = [[UILabel alloc] init];
         _phonePreL.text = @"+86";
+        _phonePreL.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
+        _phonePreL.textColor = [UIColor ssj_colorWithHex:@"333333"];
+        [_phonePreL ssj_setBorderWidth:1];
+        [_phonePreL ssj_setBorderStyle:SSJBorderStyleBottom];
+        [_phonePreL ssj_setBorderColor:[UIColor ssj_colorWithHex:@"#CCCCCC"]];
     }
     return _phonePreL;
 }
@@ -166,16 +184,25 @@
         [_verifyPhoneBtn setTitle:@"下一步" forState:UIControlStateNormal];
         [_verifyPhoneBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"f9cbd0"] forState:UIControlStateDisabled];
         [_verifyPhoneBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"ea4a64"] forState:UIControlStateNormal];
+        _verifyPhoneBtn.titleLabel.textColor = [UIColor whiteColor];
+        _verifyPhoneBtn.layer.cornerRadius = 6;
+        _verifyPhoneBtn.layer.masksToBounds = YES;
         RAC(_verifyPhoneBtn,enabled) = self.verifyPhoneViewModel.enableVerifySignal;
 
         @weakify(self);
         [[_verifyPhoneBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
             @strongify(self);
-//            [self.verifyPhoneViewModel.verifyPhoneNumRequestCommand execute:nil];
-            [[self.verifyPhoneViewModel.verifyPhoneNumRequestCommand execute:nil] subscribeNext:^(id x) {
-                //请求返回处理好的数据
-                NSLog(@"-----%%%%))*)()%@",x);
-            }];
+            SSRegisterAndLoginViewController *loginVC = [[SSRegisterAndLoginViewController alloc] init];
+            loginVC.finishHandle = self.finishHandle;
+            [self.navigationController pushViewController:loginVC animated:YES];
+            
+            
+//            [[self.verifyPhoneViewModel.verifyPhoneNumRequestCommand execute:nil] subscribeNext:^(id x) {
+//                //请求返回处理好的数据
+//                SSRegisterAndLoginViewController *loginVC = [[SSRegisterAndLoginViewController alloc] init];
+//                loginVC.finishHandle = self.finishHandle;
+//                [self.navigationController pushViewController:loginVC animated:YES];
+//            }];
         }];
     }
     return _verifyPhoneBtn;
@@ -201,7 +228,7 @@
 - (UIButton *)protocolButton {
     if (!_protocolButton) {
         _protocolButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        _protocolButton.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_5];
+        _protocolButton.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
         NSString *oldStr = @"我已阅读并同意用户协定";
         [_protocolButton setAttributedTitle:[oldStr attributeStrWithTargetStr:@"用户协定" range:NSMakeRange(0, 0) color:[UIColor ssj_colorWithHex:@"ea4a64"]] forState:UIControlStateNormal];
         [_protocolButton setTitleColor:[UIColor ssj_colorWithHex:@"666666"] forState:UIControlStateNormal];
@@ -249,6 +276,21 @@
         _verifyPhoneViewModel.vc = self;
     }
     return _verifyPhoneViewModel;
+}
+
+#pragma mark -  UITextFieldDelegate
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    NSString *text = textField.text ? : @"";
+    text = [text stringByReplacingCharactersInRange:range withString:string];
+        if (text.length > 11) {
+            [CDAutoHideMessageHUD showMessage:@"最多只能输入11位手机号" inView:self.view.window duration:1];
+            return NO;
+        }
+    return YES;
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 @end
