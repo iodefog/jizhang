@@ -29,6 +29,9 @@
 /**获取验证码命令*/
 @property (nonatomic, strong) RACCommand *getVerificationCodeCommand;
 
+/**重新获取验证码命令*/
+@property (nonatomic, strong) RACCommand *reGetVerificationCodeCommand;
+
 /**是否允许点击验证手机号下一步信号*/
 @property (nonatomic, strong) RACSignal *enableVerifySignal;
 

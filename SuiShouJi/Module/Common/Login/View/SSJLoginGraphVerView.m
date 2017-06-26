@@ -13,7 +13,7 @@
 
 @property (nonatomic, strong) UIImageView *verImageView;
 
-@property (nonatomic, strong) UIButton *reChooseBtn;
+//@property (nonatomic, strong) UIButton *reChooseBtn;
 
 /**验证码输入框*/
 @property (nonatomic, strong) UITextField *verNumTextF;

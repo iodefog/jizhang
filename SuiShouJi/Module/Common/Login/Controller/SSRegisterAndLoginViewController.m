@@ -252,6 +252,14 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         _graphVerView.size = CGSizeMake(315, 252);
         _graphVerView.centerY = self.view.centerY - 80;
         _graphVerView.centerX = self.view.centerX;
+         [[_graphVerView.reChooseBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(UIButton *btn) {
+             [self.viewModel.reGetVerificationCodeCommand execute:nil];
+             [self.viewModel.reGetVerificationCodeCommand.executionSignals.switchToLatest subscribeNext:^(UIImage *image) {
+                     //成功刷新验证码
+                 self.graphVerView.verImage = image;
+
+             }];
+        }];
     }
     return _graphVerView;
 }

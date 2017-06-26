@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+@class SSJLoginVerifyPhoneNumViewModel;
 
 @interface SSJLoginGraphVerView : UIView
 /**title*/
@@ -15,6 +16,10 @@
 /**验证码*/
 @property (nonatomic, strong) UIImage *verImage;
 
+/**<#注释#>*/
+@property (nonatomic, strong) UIButton *reChooseBtn;
 
+/**<#注释#>*/
+//@property (nonatomic, strong) SSJLoginVerifyPhoneNumViewModel *verViewModel;
 - (void)show;
 @end

@@ -180,6 +180,21 @@
     }];
 }
 
+
+/**
+ 重新获取验证码
+ */
+- (void)reVerCodeWithSubscriber:(id<RACSubscriber>) subscriber {
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    [param setObject:self.phoneNum forKey:@"cmobileno"];
+    [self.netWorkService request:@"/chargebook/user/get_imgYzm.go" params:param success:^(SSJBaseNetworkService * _Nonnull service) {
+        [subscriber sendNext:service.rootElement];
+        [subscriber sendCompleted];
+    } failure:^(SSJBaseNetworkService * _Nonnull service) {
+        [subscriber sendError:nil];
+    }];
+}
+
 - (void)loginNormalWithPassWord:(NSString*)password AndUserAccount:(NSString*)useraccount subscriber:(id<RACSubscriber>) subscriber {
     self.netWorkService.showLodingIndicator = YES;
     self.openId = @"";
@@ -477,6 +492,26 @@
         }];
     }
     return _getVerificationCodeCommand;
+}
+
+- (RACCommand *)reGetVerificationCodeCommand {
+    if (!_reGetVerificationCodeCommand) {
+        _reGetVerificationCodeCommand = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
+            RACSignal *signal = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+                [self reVerCodeWithSubscriber:subscriber];
+                return nil;
+            }];
+            return [signal map:^id(NSDictionary *value) {
+                if ([[value objectForKey:@"code"] isEqualToString:@"1"]) {
+                    return [value objectForKey:@"image"];
+                } else {
+                    [CDAutoHideMessageHUD showMessage:[value objectForKey:@"desc"]];
+                    return [value objectForKey:@"desc"];
+                }
+            }];
+        }];
+    }
+    return _reGetVerificationCodeCommand;
 }
 
 - (RACCommand *)registerAndLoginCommand {
