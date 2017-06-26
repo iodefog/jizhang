@@ -14,7 +14,6 @@
 #import "SSJBookKeepingHomeViewController.h"
 #import "SSJReportFormsViewController.h"
 #import "SSJFinancingHomeViewController.h"
-#import "SSJMineHomeViewController.h"
 
 @implementation SSJThemeSetting
 

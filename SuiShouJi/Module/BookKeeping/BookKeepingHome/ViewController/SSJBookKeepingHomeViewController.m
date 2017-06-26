@@ -162,7 +162,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-
+    
     __weak typeof(self) weakSelf = self;
     [self.mm_drawerController setGestureCompletionBlock:^(MMDrawerController *drawerController, UIGestureRecognizer *gesture) {
         __strong typeof(weakSelf) sself = weakSelf;

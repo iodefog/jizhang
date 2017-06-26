@@ -110,6 +110,10 @@ alpha:(a)]
 #define SSJ_SCREEN_SCALE [UIScreen mainScreen].scale
 
 
+// 是否是主包
+#define SSJ_MAIN_PACKAGE [SSJDefaultSource() isEqualToString:@"11501"] || [SSJDefaultSource() isEqualToString:@"11502"]
+
+
 #pragma mark -
 #pragma mark - Font
 
