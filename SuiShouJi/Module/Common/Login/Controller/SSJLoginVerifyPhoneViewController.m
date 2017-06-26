@@ -194,6 +194,7 @@
             @strongify(self);
             SSRegisterAndLoginViewController *loginVC = [[SSRegisterAndLoginViewController alloc] init];
             loginVC.finishHandle = self.finishHandle;
+            loginVC.viewModel = self.verifyPhoneViewModel;
             [self.navigationController pushViewController:loginVC animated:YES];
             
             

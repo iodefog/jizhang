@@ -7,6 +7,9 @@
 //
 
 #import "SSJLoginCommonViewController.h"
+@class SSJLoginVerifyPhoneNumViewModel;
+
 @interface SSRegisterAndLoginViewController : SSJLoginCommonViewController
 
+@property (nonatomic, strong) SSJLoginVerifyPhoneNumViewModel *viewModel;
 @end
