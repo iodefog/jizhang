@@ -901,7 +901,9 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     if (_selectedImage != nil) {
         NSString *imageName = SSJUUID();
         if (SSJSaveImage(_selectedImage, imageName) && SSJSaveThumbImage(_selectedImage, imageName)) {
-            self.item.chargeImage = imageName;
+            self.item.chargeImage = [NSString stringWithFormat:@"%@.jpg",imageName];
+            self.item.chargeThumbImage = [NSString stringWithFormat:@"%@-thumb.jpg",imageName];
+
         }
     }
     

@@ -16,6 +16,6 @@
 typedef void (^weiXinLoginSuccessBlock)(SSJThirdPartLoginItem *item);
 
 //微信登录的方法
--(void)weixinLoginWithSucessBlock:(weiXinLoginSuccessBlock)sucessBlock;
+- (void)weixinLoginWithSucessBlock:(weiXinLoginSuccessBlock)sucessBlock;
 
 @end

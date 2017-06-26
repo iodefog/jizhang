@@ -9,7 +9,7 @@
 #import "SSJWeiXinLoginHelper.h"
 
 @interface SSJWeiXinLoginHelper()
-@property (nonatomic, strong) weiXinLoginSuccessBlock sucessBlock;
+@property (nonatomic, copy) weiXinLoginSuccessBlock sucessBlock;
 @end
 
 @implementation SSJWeiXinLoginHelper
@@ -21,6 +21,7 @@
     [WXApi sendReq:req];
     self.sucessBlock = sucessBlock;
 }
+
 
 /**
  * onReq微信终端向第三方程序发起请求，要求第三方程序响应。第三方程序响应完后必须调用

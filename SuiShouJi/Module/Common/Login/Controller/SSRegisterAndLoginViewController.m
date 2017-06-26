@@ -1,0 +1,230 @@
+//
+//  SSJLoginSecondViewController.m
+//  SuiShouJi
+//
+//  Created by yi cai on 2017/6/23.
+//  Copyright © 2017年 ___9188___. All rights reserved.
+//
+static const NSInteger kCountdownLimit = 60;    //  倒计时时限
+#import "SSRegisterAndLoginViewController.h"
+
+#import "SSJLoginVerifyPhoneNumViewModel.h"
+
+@interface SSRegisterAndLoginViewController ()<UITextFieldDelegate>
+@property (nonatomic,strong)UITextField *tfRegYanZhenNum;
+
+@property (nonatomic,strong)UITextField *tfPassword;
+
+//  倒计时定时器
+@property (nonatomic, strong) NSTimer *countdownTimer;
+
+//  倒计时
+@property (nonatomic) NSInteger countdown;
+
+//验证码
+@property (nonatomic, strong) UIButton *getAuthCodeBtn;
+
+@property (nonatomic,strong)UIButton *registerAndLoginButton;
+
+/**viewmodel*/
+@property (nonatomic, strong) SSJLoginVerifyPhoneNumViewModel *viewModel;
+
+@end
+
+@implementation SSRegisterAndLoginViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    [self initialUI];
+    [self setUpConst];
+    [self initialBind];
+}
+
+- (void)setUpConst {
+    [self.titleL mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.mas_equalTo(self.topView.mas_bottom).offset(-13);
+        make.centerX.mas_equalTo(self.view);
+        make.width.greaterThanOrEqualTo(0);
+    }];
+    
+    [self.tfRegYanZhenNum mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(self.topView.mas_bottom).offset(50);
+        make.height.mas_equalTo(40);
+        make.left.mas_equalTo(self.view.mas_left).offset(20);
+        make.right.mas_equalTo(self.view.mas_right).offset(-20);
+    }];
+    
+    [self.tfPassword mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(self.tfRegYanZhenNum.mas_bottom).offset(20);
+        make.left.right.height.mas_equalTo(self.tfRegYanZhenNum);
+    }];
+    
+    [self.registerAndLoginButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.mas_equalTo(self.tfPassword);
+        make.height.mas_equalTo(44);
+        make.top.mas_equalTo(self.tfPassword.mas_bottom).offset(30);
+    }];
+}
+
+#pragma mark - Private
+- (void)initialUI {
+    self.view.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:self.scrollView];
+    [self.view addSubview:self.topView];
+    [self.view addSubview:self.titleL];
+    [self.scrollView addSubview:self.tfRegYanZhenNum];
+    [self.scrollView addSubview:self.tfPassword];
+    [self.scrollView addSubview:self.registerAndLoginButton];
+}
+
+- (void)initialBind {
+    RAC(self.viewModel,verificationCode) = self.tfRegYanZhenNum.rac_textSignal;
+    RAC(self.viewModel,passwardNum) = self.tfPassword.rac_textSignal;
+}
+
+//  开始倒计时
+- (void)beginCountdownIfNeeded {
+    if (!self.countdownTimer.valid) {
+        self.countdown = kCountdownLimit;
+//        self.countdownTimer = [NSTimer timerWithTimeInterval:1 target:self selector:@selector(updateCountdown) userInfo:nil repeats:YES];
+//        
+        [[[RACSignal interval:1 onScheduler:[RACScheduler mainThreadScheduler]] takeUntil:self.rac_willDeallocSignal ] subscribeNext:^(id x) {
+            [self updateCountdown];
+        }];
+        [[NSRunLoop currentRunLoop] addTimer:self.countdownTimer forMode:NSRunLoopCommonModes];
+        [self.countdownTimer fire];
+    }
+}
+//取消定时器
+- (void)invalidateTimer {
+    [self.countdownTimer invalidate];
+    _countdownTimer = nil;
+}
+
+//  更新倒计时
+- (void)updateCountdown {
+    if (self.countdown > 0) {
+        self.getAuthCodeBtn.enabled = NO;
+        [self.getAuthCodeBtn setTitle:[NSString stringWithFormat:@"%ds",(int)self.countdown] forState:UIControlStateDisabled];
+    } else {
+        self.getAuthCodeBtn.enabled = YES;
+        [self invalidateTimer];
+    }
+    self.countdown --;
+}
+
+#pragma mark - UITextFieldDelegate
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    NSString *text = textField.text ?:@"";
+    text = [text stringByReplacingCharactersInRange:range withString:string];
+    if (textField == self.tfRegYanZhenNum) {
+        if (text.length > 6) {
+            [CDAutoHideMessageHUD showMessage:@"最多只能输入6位" inView:self.view.window duration:1];
+            return NO;
+        }
+    } else if (textField == self.tfPassword) {
+        if (text.length > 15) {
+            [CDAutoHideMessageHUD showMessage:@"最多只能输入15位" inView:self.view.window duration:1];
+            return NO;
+        }
+    }
+    return YES;
+}
+
+#pragma mark - Lazy
+-(UITextField *)tfRegYanZhenNum{
+    if (!_tfRegYanZhenNum) {
+        _tfRegYanZhenNum = [[UITextField alloc] init];
+        _tfRegYanZhenNum.delegate = self;
+        _tfRegYanZhenNum.textColor = [UIColor ssj_colorWithHex:@"333333"];
+        _tfRegYanZhenNum.clearButtonMode = UITextFieldViewModeWhileEditing;
+        _tfRegYanZhenNum.placeholder = @"验证码";
+        _tfRegYanZhenNum.font = [UIFont ssj_helveticaRegularFontOfSize:SSJ_FONT_SIZE_3];
+        [_tfRegYanZhenNum ssj_setBorderColor:[UIColor ssj_colorWithHex:@"cccccc"]];
+        [_tfRegYanZhenNum ssj_setBorderStyle:SSJBorderStyleBottom];
+        [_tfRegYanZhenNum ssj_setBorderWidth:1];
+        _tfRegYanZhenNum.keyboardType = UIKeyboardTypeNumberPad;
+        _tfRegYanZhenNum.delegate = self;
+        _tfRegYanZhenNum.rightView = self.getAuthCodeBtn;
+        _tfRegYanZhenNum.rightViewMode = UITextFieldViewModeAlways;
+        
+    }
+    return _tfRegYanZhenNum;
+}
+
+-(UITextField*)tfPassword{
+    if (!_tfPassword) {
+        UIButton *rightView = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 40, 50)];
+        [rightView setImage:[UIImage imageNamed:@"founds_xianshi"] forState:UIControlStateSelected];
+        [rightView setImage:[UIImage imageNamed:@"founds_yincang"] forState:UIControlStateNormal];
+        [[rightView rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(UIButton *button) {
+            self.tfPassword.secureTextEntry = button.selected;
+            button.selected = !button.selected;
+        }];
+        _tfPassword = [[UITextField alloc] init];
+        _tfPassword.delegate = self;
+        _tfPassword.textColor = [UIColor ssj_colorWithHex:@"333333"];
+        _tfPassword.clearButtonMode = UITextFieldViewModeWhileEditing;
+        _tfPassword.placeholder = @"请设置6位以上密码";
+        _tfPassword.font = [UIFont ssj_helveticaRegularFontOfSize:SSJ_FONT_SIZE_3];
+        _tfPassword.keyboardType = UIKeyboardTypeASCIICapable;
+        _tfPassword.delegate = self;
+        _tfPassword.rightView = rightView;
+        _tfPassword.rightViewMode = UITextFieldViewModeAlways;
+        _tfPassword.secureTextEntry = YES;
+        [_tfPassword ssj_setBorderColor:[UIColor ssj_colorWithHex:@"cccccc"]];
+        [_tfPassword ssj_setBorderStyle:SSJBorderStyleBottom];
+        [_tfPassword ssj_setBorderWidth:1];
+    }
+    return _tfPassword;
+}
+
+- (UIButton *)getAuthCodeBtn {
+    if (!_getAuthCodeBtn) {
+        _getAuthCodeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        _getAuthCodeBtn.size = CGSizeMake(95, 30);
+        _getAuthCodeBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
+        [_getAuthCodeBtn setTitle:@"获取验证码" forState:UIControlStateNormal];
+        [_getAuthCodeBtn setTitleColor:[UIColor ssj_colorWithHex:@"#ea4a64"] forState:UIControlStateNormal];
+        [_getAuthCodeBtn setTitleColor:[UIColor ssj_colorWithHex:@"#f9cbd0"] forState:UIControlStateDisabled];
+//        [_getAuthCodeBtn addTarget:self action:@selector(getAuthCodeAction) forControlEvents:UIControlEventTouchUpInside];
+        
+        [[_getAuthCodeBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
+            
+        }];
+        [_getAuthCodeBtn ssj_setBorderColor:[UIColor ssj_colorWithHex:@"cccccc"]];
+        [_getAuthCodeBtn ssj_setBorderStyle:SSJBorderStyleLeft];
+        [_getAuthCodeBtn ssj_setBorderWidth:1/SSJSCREENSCALE];
+        [_getAuthCodeBtn ssj_setBorderInsets:UIEdgeInsetsMake(4, 5, 4, 5)];
+    }
+    return _getAuthCodeBtn;
+}
+
+
+- (UIButton*)registerAndLoginButton{
+    if (!_registerAndLoginButton) {
+        _registerAndLoginButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        _registerAndLoginButton.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
+        [_registerAndLoginButton setTitle:@"注册并登录" forState:UIControlStateNormal];
+        [_registerAndLoginButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [_registerAndLoginButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"f9cbd0"] forState:UIControlStateDisabled];
+        [_registerAndLoginButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"ea4a64"] forState:UIControlStateNormal];
+        _registerAndLoginButton.layer.cornerRadius = 6;
+        _registerAndLoginButton.clipsToBounds = YES;
+//        _registerAndLoginButton.enabled = NO;
+        RAC(_registerAndLoginButton,enabled) = self.viewModel.enableRegAndLoginSignal;
+//        [_registerAndLoginButton addTarget:self action:@selector(registerButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _registerAndLoginButton;
+}
+
+- (SSJLoginVerifyPhoneNumViewModel *)viewModel {
+    if (!_viewModel) {
+        _viewModel = [[SSJLoginVerifyPhoneNumViewModel alloc] init];
+        _viewModel.vc = self;
+    }
+    return _viewModel;
+}
+
+@end
