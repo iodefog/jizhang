@@ -5,6 +5,7 @@
 //  Created by ricky on 16/5/12.
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
+
 #define Angle2Radian(angle) ((angle) / 180.0 * M_PI)
 
 static NSString *const kCircleAnimationKey = @"circleAnimationKey";
