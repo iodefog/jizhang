@@ -36,6 +36,10 @@
         return error;
     }
     
+    error = [self updateUserTableWithDatabase:db];
+    if (error) {
+        return error;
+    }
     
     return nil;
 }
@@ -72,6 +76,15 @@
     }
     
     if (![db executeUpdate:@"INSERT INTO BK_BILL_TYPE (ID,CNAME,ITYPE,CCOIN,CCOLOR,ISTATE,ICUSTOM) VALUES ('14','平帐支出(共享账本)',1,'bt_sharebookpzzc','#5889c5',2,0)"]) {
+        return [db lastError];
+    }
+
+    return nil;
+}
+
+// 更新user表
++ (NSError *)updateUserTableWithDatabase:(FMDatabase *)db {
+    if (![db executeUpdate:@"update bk_user set ccurrentbooksid = cuserid where ccurrentbooksid is null"]) {
         return [db lastError];
     }
 
