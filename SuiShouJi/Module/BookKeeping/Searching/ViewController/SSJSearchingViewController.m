@@ -54,7 +54,6 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-        self.extendedLayoutIncludesOpaqueBars = YES;
         self.automaticallyAdjustsScrollViewInsets = NO;
         self.hidesBottomBarWhenPushed = YES;
         self.hidesNavigationBarWhenPushed = YES;

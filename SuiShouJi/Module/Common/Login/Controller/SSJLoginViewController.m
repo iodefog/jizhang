@@ -147,7 +147,6 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         self.title = SSJAppName();
         self.appliesTheme = NO;
         self.backgroundView.hidden = YES;
-        self.extendedLayoutIncludesOpaqueBars = YES;
         self.automaticallyAdjustsScrollViewInsets = NO;
         self.hidesBottomBarWhenPushed = YES;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updatetextfield:) name:UITextFieldTextDidChangeNotification object:nil];

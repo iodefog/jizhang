@@ -49,7 +49,6 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.title = @"我的资金";
-        self.extendedLayoutIncludesOpaqueBars = YES;
     }
     return self;
 }

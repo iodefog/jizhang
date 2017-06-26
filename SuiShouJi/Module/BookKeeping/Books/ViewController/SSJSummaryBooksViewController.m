@@ -47,7 +47,6 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
         self.title = @"总账本";
         self.circleItems = [NSMutableArray array];
         self.automaticallyAdjustsScrollViewInsets = NO;
-        self.extendedLayoutIncludesOpaqueBars = YES;
     }
     return self;
 }

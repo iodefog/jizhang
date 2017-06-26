@@ -38,11 +38,11 @@
         return [db lastError];
     }
     
-    if (![db executeUpdate:@"update bk_fund_info set itype = ? where cfundid in ('3','11','16')",SSJAccountTypeliabilities]) {
+    if (![db executeUpdate:@"update bk_fund_info set itype = ? where cfundid in ('3','11','16')", @(SSJAccountTypeliabilities)]) {
         return [db lastError];
     }
     
-    if (![db executeUpdate:@"update bk_fund_info set itype = ? where cfundid not in ('3','11','16')",SSJAccountTypeassets]) {
+    if (![db executeUpdate:@"update bk_fund_info set itype = ? where cfundid not in ('3','11','16')", @(SSJAccountTypeassets)]) {
         return [db lastError];
     }
     
@@ -54,7 +54,7 @@
         return [db lastError];
     }
     
-    if (![db executeUpdate:@"update bk_user_credit set itype = ? where itype is null",SSJCrediteCardTypeCrediteCard]) {
+    if (![db executeUpdate:@"update bk_user_credit set itype = ? where itype is null", @(SSJCrediteCardTypeCrediteCard)]) {
         return [db lastError];
     }
     

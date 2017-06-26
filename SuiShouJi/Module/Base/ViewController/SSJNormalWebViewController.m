@@ -44,7 +44,6 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         self.appliesTheme = NO;
-        self.extendedLayoutIncludesOpaqueBars = YES;
         self.toolBarHidden=YES;
         self.showURLInNavigationBar = NO;
 //        self.showPageTitleInNavigationBar = NO;
