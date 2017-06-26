@@ -96,7 +96,7 @@ static const int kDatabaseVersion = 16;
              @13:[SSJDatabaseVersion13 class],
              @14:[SSJDatabaseVersion14 class],
              @15:[SSJDatabaseVersion15 class],
-             @15:[SSJDatabaseVersion16 class]};
+             @16:[SSJDatabaseVersion16 class]};
 }
 
 @end

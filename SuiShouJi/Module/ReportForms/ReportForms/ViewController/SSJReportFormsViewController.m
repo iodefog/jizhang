@@ -88,7 +88,6 @@ static NSString *const kSegmentTitleSurplus = @"结余";
         _curveHeaderItem = [[SSJReportFormCurveHeaderViewItem alloc] init];
         _curveHeaderItem.timeDimension = SSJTimeDimensionMonth;
         self.automaticallyAdjustsScrollViewInsets = NO;
-        self.extendedLayoutIncludesOpaqueBars = YES;
         self.showNavigationBarBaseLine = NO;
         self.hidesNavigationBarWhenPushed = YES;
         

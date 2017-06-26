@@ -76,7 +76,6 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])
     {
         self.hidesBottomBarWhenPushed = YES;
-        self.extendedLayoutIncludesOpaqueBars = YES;
         self.statisticsTitle = @"资金账户详情";
     }
     return self;

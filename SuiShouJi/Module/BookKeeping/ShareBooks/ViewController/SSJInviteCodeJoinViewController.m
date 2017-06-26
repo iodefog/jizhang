@@ -18,6 +18,7 @@
 #import "SSJBooksTypeStore.h"
 
 #import "SSJDatabaseQueue.h"
+#import "SSJCodeInputEnableService.h"
 
 @interface SSJInviteCodeJoinViewController ()
 
@@ -31,6 +32,7 @@
 
 @property(nonatomic, strong) SSJCodeEnterBooksService *service;
 
+@property(nonatomic, strong) SSJCodeInputEnableService *verifyCodeInputService;
 
 @end
 
@@ -59,6 +61,11 @@
     [self.view setNeedsUpdateConstraints];
 
     // Do any additional setup after loading the view.
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self.verifyCodeInputService request];
 }
 
 - (void)updateViewConstraints {
@@ -181,6 +188,14 @@
     return _service;
 }
 
+- (SSJCodeInputEnableService *)verifyCodeInputService {
+    if (!_verifyCodeInputService) {
+        _verifyCodeInputService = [[SSJCodeInputEnableService alloc] initWithDelegate:self];
+        
+    }
+    return _verifyCodeInputService;
+}
+
 #pragma mark - Event
 - (void)sendButtonClicked:(id)sender {
     [self.service enterBooksWithCode:self.codeInput.text];
@@ -193,67 +208,77 @@
 
 #pragma mark - SSJBaseNetworkServiceDelegate
 - (void)serverDidFinished:(SSJBaseNetworkService *)service {
-    if ([service.returnCode isEqualToString:@"1"]) {
-        @weakify(self);
-        [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
-            @strongify(self);
-            NSError *error = nil;
-            
-            NSInteger maxOrder = [db intForQuery:@"select max(iorder) from bk_share_books where cbooksid in (select cbooksid  from bk_share_books_member where cmemberid = ? and istate = ?)",SSJUSERID(),@(SSJShareBooksMemberStateNormal)] + 1;
-            
-            NSString *booksId = self.service.shareBooksTableInfo[@"cbooksid"];
-            
-            if (self.service.shareBooksTableInfo) {
-                [self.service.shareBooksTableInfo setObject:@(maxOrder) forKey:@"iorder"];
-            }
-            
-            if (![db executeUpdate:@"delete from bk_share_books_member where cbooksid = ?",booksId]) {
-                return;
-            }
-            
-
-            if (![SSJShareBooksSyncTable mergeRecords:@[self.service.shareBooksTableInfo] forUserId:SSJUSERID() inDatabase:db error:&error]) {
-                return;
-            }
-            
-            if (![SSJShareBooksMemberSyncTable mergeRecords:self.service.shareMemberTableInfo forUserId:SSJUSERID() inDatabase:db error:&error]) {
-                return;
-            }
-            
-            if (![SSJUserChargeSyncTable mergeRecords:self.service.userChargeTableInfo forUserId:SSJUSERID() inDatabase:db error:&error]) {
-                return;
-            }
-            
-            if (![SSJShareBooksFriendMarkSyncTable mergeRecords:self.service.shareFriendMarkTableInfo forUserId:SSJUSERID() inDatabase:db error:&error]) {
-                return;
-            }
-            
-            if (![db executeUpdate:@"delete from bk_user_charge where cbooksid = ? and ibillid = ?",booksId,@"13"]) {
-                return;
-            }
-            
-            
-            if (![db executeUpdate:@"update bk_user set ccurrentbooksid = ? where cuserid = ?",booksId,SSJUSERID()]) {
-                return;
-            }
-            
-            if (![SSJBooksTypeStore generateBooksTypeForBooksItem:[SSJShareBookItem mj_objectWithKeyValues:self.service.shareBooksTableInfo] indatabase:db forUserId:SSJUSERID()]) {
-                return;
-            }
-            NSString *bookName = [db stringForQuery:@"select cbooksname from bk_share_books where cbooksid = ?",booksId];
-
-            SSJDispatchMainSync(^{
-                [[NSNotificationCenter defaultCenter] postNotificationName:SSJBooksTypeDidChangeNotification object:nil];
-                if (self.inviteCodeJoinBooksBlock) {
-                    self.inviteCodeJoinBooksBlock(bookName);
+    if (service == self.service) {
+        if ([service.returnCode isEqualToString:@"1"]) {
+            @weakify(self);
+            [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
+                @strongify(self);
+                NSError *error = nil;
+                
+                NSInteger maxOrder = [db intForQuery:@"select max(iorder) from bk_share_books where cbooksid in (select cbooksid  from bk_share_books_member where cmemberid = ? and istate = ?)",SSJUSERID(),@(SSJShareBooksMemberStateNormal)] + 1;
+                
+                NSString *booksId = self.service.shareBooksTableInfo[@"cbooksid"];
+                
+                if (self.service.shareBooksTableInfo) {
+                    [self.service.shareBooksTableInfo setObject:@(maxOrder) forKey:@"iorder"];
                 }
-                [self.navigationController popToRootViewControllerAnimated:YES];
-            });
-            [SSJAnaliyticsManager event:@"sb_anhao_input_success"];
-        }];
+                
+                if (![db executeUpdate:@"delete from bk_share_books_member where cbooksid = ?",booksId]) {
+                    return;
+                }
+                
+                
+                if (![SSJShareBooksSyncTable mergeRecords:@[self.service.shareBooksTableInfo] forUserId:SSJUSERID() inDatabase:db error:&error]) {
+                    return;
+                }
+                
+                if (![SSJShareBooksMemberSyncTable mergeRecords:self.service.shareMemberTableInfo forUserId:SSJUSERID() inDatabase:db error:&error]) {
+                    return;
+                }
+                
+                if (![SSJUserChargeSyncTable mergeRecords:self.service.userChargeTableInfo forUserId:SSJUSERID() inDatabase:db error:&error]) {
+                    return;
+                }
+                
+                if (![SSJShareBooksFriendMarkSyncTable mergeRecords:self.service.shareFriendMarkTableInfo forUserId:SSJUSERID() inDatabase:db error:&error]) {
+                    return;
+                }
+                
+                if (![db executeUpdate:@"delete from bk_user_charge where cbooksid = ? and ibillid = ?",booksId,@"13"]) {
+                    return;
+                }
+                
+                
+                if (![db executeUpdate:@"update bk_user set ccurrentbooksid = ? where cuserid = ?",booksId,SSJUSERID()]) {
+                    return;
+                }
+                
+                if (![SSJBooksTypeStore generateBooksTypeForBooksItem:[SSJShareBookItem mj_objectWithKeyValues:self.service.shareBooksTableInfo] indatabase:db forUserId:SSJUSERID()]) {
+                    return;
+                }
+                NSString *bookName = [db stringForQuery:@"select cbooksname from bk_share_books where cbooksid = ?",booksId];
+                
+                SSJDispatchMainSync(^{
+                    [[NSNotificationCenter defaultCenter] postNotificationName:SSJBooksTypeDidChangeNotification object:nil];
+                    if (self.inviteCodeJoinBooksBlock) {
+                        self.inviteCodeJoinBooksBlock(bookName);
+                    }
+                    [self.navigationController popToRootViewControllerAnimated:YES];
+                });
+                [SSJAnaliyticsManager event:@"sb_anhao_input_success"];
+            }];
+        } else {
+            [CDAutoHideMessageHUD showMessage:service.desc];
+            [SSJAnaliyticsManager event:@"sb_anhao_input_error"];
+        }
+
     } else {
-        [CDAutoHideMessageHUD showMessage:service.desc];
-        [SSJAnaliyticsManager event:@"sb_anhao_input_error"];
+        if ([service.returnCode isEqualToString:@"-2008"]) {
+            self.codeInput.text = service.desc;
+            self.codeInput.enabled = NO;
+        } else {
+            self.codeInput.enabled = YES;
+        }
     }
 }
 

@@ -112,6 +112,42 @@
     
 }
 
++ (void)queryFundingParentListWithFundingType:(SSJAccountType)type
+                Success:(void (^)(NSArray <SSJFundingItem *> *items))success
+                failure:(void (^)(NSError *error))failure {
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        
+        NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:0];
+        
+        FMResultSet *fundSet = [db executeQuery:@"select * from bk_fund_info where cparent = 'root' and itype = ?",@(type)];
+        
+        if (!fundSet) {
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        }
+        
+        while ([fundSet next]) {
+            SSJFundingItem *item = [[SSJFundingItem alloc] init];
+            item.fundingID = [fundSet stringForColumn:@"cfundid"];
+            item.fundingName = [fundSet stringForColumn:@"cacctname"];
+            item.fundingIcon = [fundSet stringForColumn:@"cicoin"];
+            item.fundingMemo = [fundSet stringForColumn:@"cmemo"];
+            [tempArr addObject:item];
+        }
+        
+        if (success) {
+            SSJDispatchMainAsync(^{
+                success(tempArr);
+            });
+        }
+        
+    }];
+}
+
 + (BOOL)checkWhetherSameFundingNameExsitsWith:(SSJFinancingHomeitem *)item {
     __block BOOL exsit;
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {

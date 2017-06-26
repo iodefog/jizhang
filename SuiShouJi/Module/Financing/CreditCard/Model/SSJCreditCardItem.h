@@ -63,4 +63,6 @@
 
 @property(nonatomic) BOOL hasMadeInstalment;
 
+@property(nonatomic) SSJCrediteCardType cardType;
+
 @end

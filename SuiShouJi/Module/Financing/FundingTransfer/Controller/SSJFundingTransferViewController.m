@@ -533,8 +533,12 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
 }
 
 -(void)saveButtonClicked:(id)sender{
-    if (_transferInItem == nil || _transferInItem == nil) {
-        [CDAutoHideMessageHUD showMessage:@"请选择资金账户"];
+    if (_transferOutItem == nil) {
+        [CDAutoHideMessageHUD showMessage:@"请选择转出账户"];
+        return;
+    }
+    if (_transferInItem == nil) {
+        [CDAutoHideMessageHUD showMessage:@"请选择转入账户"];
         return;
     }
     __block NSString *transferInId;
@@ -713,6 +717,7 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
     } failure:^(NSError * _Nonnull error) {
         _saveButton.enabled = YES;
         [_saveButton ssj_hideLoadingIndicator];
+        [SSJAlertViewAdapter showError:error];
     }];
 }
 

@@ -78,7 +78,6 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.showNavigationBarBaseLine = NO;
         self.appliesTheme = NO;
-        self.extendedLayoutIncludesOpaqueBars = YES;
         self.automaticallyAdjustsScrollViewInsets = NO;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange) name:UITextFieldTextDidChangeNotification object:nil];
     }

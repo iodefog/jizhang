@@ -8,6 +8,8 @@
 
 #import "SSJNewBaseTableViewController.h"
 
+SSJ_DEPRECATED
+
 @interface SSJMotionPasswordSettingViewController : SSJNewBaseTableViewController
 
 @end
