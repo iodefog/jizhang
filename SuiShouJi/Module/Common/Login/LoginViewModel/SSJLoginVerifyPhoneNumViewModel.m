@@ -453,8 +453,8 @@
         }];
         
         //获得数据
-//        [_verifyPhoneNumRequestCommand.executionSignals.switchToLatest subscribeNext:^(id x) {
-//        }];
+        [_verifyPhoneNumRequestCommand.executionSignals.switchToLatest subscribeNext:^(id x) {
+        }];
     }
     return _verifyPhoneNumRequestCommand;
 }
