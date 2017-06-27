@@ -1,5 +1,5 @@
 //
-//  SSJLoginSecondViewController.m
+//  SSRegisterAndLoginViewController.m
 //  SuiShouJi
 //
 //  Created by yi cai on 2017/6/23.
@@ -27,9 +27,6 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 @property (nonatomic, strong) UIButton *getAuthCodeBtn;
 
 @property (nonatomic,strong)UIButton *registerAndLoginButton;
-//
-///**viewmodel*/
-//@property (nonatomic, strong) SSJLoginVerifyPhoneNumViewModel *viewModel;
 
 /**图形验证码*/
 @property (nonatomic, strong) SSJLoginGraphVerView *graphVerView;
@@ -41,20 +38,12 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self initialUI];
+//    [self updateViewConst];
     [self setUpConst];
     [self initialBind];
-    
-    //执行请求验证码
-//    [self.viewModel.getVerificationCodeCommand execute:nil];
 }
 
 - (void)setUpConst {
-    [self.titleL mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.mas_equalTo(self.topView.mas_bottom).offset(-13);
-        make.centerX.mas_equalTo(self.view);
-        make.width.greaterThanOrEqualTo(0);
-    }];
-    
     [self.tfRegYanZhenNum mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self.topView.mas_bottom).offset(50);
         make.height.mas_equalTo(40);
@@ -122,6 +111,14 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     self.countdown --;
 }
 
+#pragma mark - Setter
+- (void)setRegOrForgetType:(SSJRegistAndForgetPasswordType)regOrForgetType {
+    //执行请求验证码
+    _regOrForgetType = regOrForgetType;
+    self.viewModel.regOrForType = regOrForgetType;
+        [self.viewModel.getVerificationCodeCommand execute:nil];
+}
+
 #pragma mark - UITextFieldDelegate
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
@@ -162,7 +159,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     return _tfRegYanZhenNum;
 }
 
--(UITextField*)tfPassword{
+- (UITextField*)tfPassword{
     if (!_tfPassword) {
         UIButton *rightView = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 40, 50)];
         [rightView setImage:[UIImage imageNamed:@"founds_xianshi"] forState:UIControlStateSelected];
@@ -231,7 +228,13 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     if (!_registerAndLoginButton) {
         _registerAndLoginButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _registerAndLoginButton.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
-        [_registerAndLoginButton setTitle:@"注册并登录" forState:UIControlStateNormal];
+        NSString *btnTitle = @"";
+        if (self.regOrForgetType == SSJRegistAndForgetPasswordTypeRegist) {
+            btnTitle = @"注册并登录";
+        } else if (self.regOrForgetType == SSJRegistAndForgetPasswordTypeForgetPassword) {
+            btnTitle = @"确定";
+        }
+        [_registerAndLoginButton setTitle:btnTitle forState:UIControlStateNormal];
         [_registerAndLoginButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_registerAndLoginButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"f9cbd0"] forState:UIControlStateDisabled];
         [_registerAndLoginButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"ea4a64"] forState:UIControlStateNormal];

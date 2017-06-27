@@ -36,9 +36,6 @@
 /**<#注释#>*/
 @property (nonatomic, strong) SSJBaseNetworkService *netWorkService;
 
-/**wx*/
-//@property (nonatomic, strong) SSJWeiXinLoginHelper *wxLoginHelper;
-
 //  登录方式
 @property (assign, nonatomic) SSJLoginType loginType;
 
@@ -72,7 +69,6 @@
  */
 - (void)verityPhoneNumWithPhone:(NSString *)phoneNum subscriber:(id<RACSubscriber>) subscriber {
     NSMutableDictionary *paramDic = [NSMutableDictionary dictionary];
-    [paramDic setObject:SSJUSERID() forKey:@"cuserId"];
     [paramDic setObject:phoneNum forKey:@"cmobileNo"];
     [self.netWorkService request:@"/chargebook/user/check_cphoneExist.go" params:paramDic success:^(SSJBaseNetworkService * _Nonnull service) {
         [subscriber sendNext:service.rootElement];
@@ -182,7 +178,7 @@
 
 
 /**
- 重新获取验证码
+ 重新获取图形验证码
  */
 - (void)reVerCodeWithSubscriber:(id<RACSubscriber>) subscriber {
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
@@ -446,10 +442,9 @@
                 return nil;
             }];
             //返回的数据处理json->model
-//            return [signal map:^id(id value) {
-//                return @"成功啦";
-//            }];
-            return signal;
+            return [signal map:^id(NSDictionary *result) {
+                return [[result objectForKey:@"code"] stringValue];
+            }];
         }];
         
         //获得数据
@@ -478,11 +473,18 @@
     return _enableRegAndLoginSignal;
 }
 
+
+
+/**
+ 获取验证码
+
+ @return <#return value description#>
+ */
 - (RACCommand *)getVerificationCodeCommand {
     if (!_getVerificationCodeCommand) {
         _getVerificationCodeCommand = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
             RACSignal *signal = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-                [self verCode:SSJRegistAndForgetPasswordTypeRegist channelType:SSJLoginAndRegisterPasswordChannelTypeSMS subscriber:subscriber];
+                [self verCode:self.regOrForType channelType:SSJLoginAndRegisterPasswordChannelTypeSMS subscriber:subscriber];
                 return nil;
             }];
             return [signal map:^id(NSDictionary *value) {
@@ -520,6 +522,7 @@
             RACSignal *signal = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
                 //登录
                 self.loginType = SSJLoginTypeNormal;
+                [self loginNormalWithPassWord:self.passwardNum AndUserAccount:self.phoneNum subscriber:subscriber];
                 return nil;
             }];
             return signal;

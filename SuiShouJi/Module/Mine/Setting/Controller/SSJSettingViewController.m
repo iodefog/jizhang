@@ -14,6 +14,7 @@
 #import "SSJLoginViewController.h"
 #import "SSJMotionPasswordViewController.h"
 #import "SSJClearDataViewController.h"
+#import "SSJBindMobileNoViewController.h"
 
 static NSString *const kBindMobileNoTitle = @"手机绑定";
 static NSString *const kMobileNoTitle = @"手机号";
@@ -50,7 +51,6 @@ static NSString *const kClearDataTitle = @"清理数据";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.tableView.separatorInset = UIEdgeInsetsMake(0, 15, 0, 0);
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -84,7 +84,8 @@ static NSString *const kClearDataTitle = @"清理数据";
     }
     
     if ([title isEqualToString:kBindMobileNoTitle]) {// 手机绑定
-        
+        SSJBindMobileNoViewController *bindVC = [[SSJBindMobileNoViewController alloc] init];
+        [self.navigationController pushViewController:bindVC animated:YES];
     } else if ([title isEqualToString:kMobileNoTitle]) {// 手机号
         
     } else if ([title isEqualToString:kModifyPwdTitle]) {// 修改密码

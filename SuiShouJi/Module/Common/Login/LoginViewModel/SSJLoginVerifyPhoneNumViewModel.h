@@ -29,7 +29,7 @@
 /**获取验证码命令*/
 @property (nonatomic, strong) RACCommand *getVerificationCodeCommand;
 
-/**重新获取验证码命令*/
+/**重新获取图形验证码命令*/
 @property (nonatomic, strong) RACCommand *reGetVerificationCodeCommand;
 
 /**是否允许点击验证手机号下一步信号*/
@@ -49,6 +49,9 @@
 
 /**密码   */
 @property (nonatomic, copy) NSString *passwardNum;
+
+/**注册or忘记密码类型 */
+@property (nonatomic, assign) SSJRegistAndForgetPasswordType regOrForType;
 
 /**第三方登录model*/
 @property (nonatomic, strong) SSJThirdPartLoginItem *thirdPartLoginItem;
