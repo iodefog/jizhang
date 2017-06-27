@@ -27,6 +27,11 @@
 
 #define SSJ_MAIN_BACKGROUND_COLOR [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha]
 
+#define SSJ_BUTTON_NORMAL_COLOR [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor]
+
+#define SSJ_BUTTON_DISABLE_COLOR [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor alpha:0.5]
+
+
 //  切换主题通知
 extern NSString *const SSJThemeDidChangeNotification;
 
