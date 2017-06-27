@@ -10,6 +10,7 @@
 #import "SSJNormalWebViewController.h"
 #import "SSJMotionPasswordViewController.h"
 #import "SSRegisterAndLoginViewController.h"
+#import "SSJLoginPhoneViewController.h"
 
 #import "SSJLoginVerifyPhoneNumViewModel.h"
 
@@ -192,17 +193,20 @@
         @weakify(self);
         [[_verifyPhoneBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
             @strongify(self);
-            SSRegisterAndLoginViewController *loginVC = [[SSRegisterAndLoginViewController alloc] init];
-            loginVC.finishHandle = self.finishHandle;
+//            [[self.verifyPhoneViewModel.verifyPhoneNumRequestCommand execute:nil] subscribeNext:^(NSString *code) {
+                //请求返回处理好的数据
+                //1 密码登录，0 验证码注册
+//                if ([code isEqualToString:@"0"]) {
+                    SSRegisterAndLoginViewController *loginVC = [[SSRegisterAndLoginViewController alloc] init];
             loginVC.viewModel = self.verifyPhoneViewModel;
-            [self.navigationController pushViewController:loginVC animated:YES];
-            
-            
-//            [[self.verifyPhoneViewModel.verifyPhoneNumRequestCommand execute:nil] subscribeNext:^(id x) {
-//                //请求返回处理好的数据
-//                SSRegisterAndLoginViewController *loginVC = [[SSRegisterAndLoginViewController alloc] init];
-//                loginVC.finishHandle = self.finishHandle;
-//                [self.navigationController pushViewController:loginVC animated:YES];
+                    loginVC.regOrForgetType = SSJRegistAndForgetPasswordTypeRegist;//注册
+                    loginVC.finishHandle = self.finishHandle;
+                    [self.navigationController pushViewController:loginVC animated:YES];
+//                } else if ([code isEqualToString:@"1"]) {
+//                    SSJLoginPhoneViewController *vc = [[SSJLoginPhoneViewController alloc] init];
+//                    vc.finishHandle = self.finishHandle;
+//                    [self.navigationController pushViewController:vc animated:YES];
+//                }
 //            }];
         }];
     }

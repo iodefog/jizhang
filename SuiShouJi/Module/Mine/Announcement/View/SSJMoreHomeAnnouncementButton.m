@@ -39,7 +39,7 @@
     if (!_button) {
         _button = [[UIButton alloc] initWithFrame:self.bounds];
         [_button setImage:[[UIImage imageNamed:@"more_gonggao"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
-        _button.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTintColor];
+        _button.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         [_button addTarget:self action:@selector(buttonCLickAction:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _button;
@@ -69,7 +69,7 @@
 }
 
 - (void)updateAfterThemeChange {
-    _button.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTintColor];
+    _button.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     self.dotView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTintColor];
 }
 

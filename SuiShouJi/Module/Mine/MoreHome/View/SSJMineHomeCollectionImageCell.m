@@ -49,30 +49,31 @@
 }
 
 
-- (void)setAdItem:(SSJListAdItem *)adItem indexPath:(NSIndexPath *)indexPath
-{
-    if (adItem.url.length && adItem.imageUrl.length) {//是广告
-        [self.topImage sd_setImageWithURL:[NSURL URLWithString:adItem.imageUrl] placeholderImage:nil];
-    }else {
-        _topImage.image = [UIImage imageNamed:adItem.imageName];
-    }
-    _nameLabel.text = adItem.adTitle;
-    if ([adItem.adTitle isEqualToString:@"建议与咨询"]) {//显示附标题
-        _bottomLabel.text = @"反馈群:552563622";
-        self.nameLabel.frame = CGRectMake(0, CGRectGetMaxY(self.topImage.frame) + 10, self.width, 20);
-        self.bottomLabel.frame = CGRectMake(0, CGRectGetMaxY(self.nameLabel.frame), self.width, 15);
-    }else{
-        _bottomLabel.text = @"";
-        self.nameLabel.frame = CGRectMake(0, CGRectGetMaxY(self.topImage.frame) + 15, self.width, 20);
-        self.bottomLabel.frame = CGRectMake(0, CGRectGetMaxY(self.nameLabel.frame), self.width, 15);
-    }
-    //是否显示小红点
-    if ([adItem.adTitle isEqualToString:@"主题皮肤"] || [adItem.adTitle isEqualToString:@"建议与咨询"]) {
-        self.dotView.hidden = !adItem.isShowDot;
-    }else {
-        self.dotView.hidden = YES;
-    }
-}
+//- (void)setAdItem:(SSJListAdItem *)adItem indexPath:(NSIndexPath *)indexPath
+//{
+//    if (adItem.url.length && adItem.imageUrl.length) {//是广告
+//        [self.topImage sd_setImageWithURL:[NSURL URLWithString:adItem.imageUrl] placeholderImage:nil];
+//    }else {
+//        _topImage.image = [UIImage imageNamed:adItem.imageName];
+//    }
+//    _nameLabel.text = adItem.adTitle;
+//    if ([adItem.adTitle isEqualToString:@"建议与咨询"]) {//显示附标题
+//        _bottomLabel.text = @"反馈群:552563622";
+//        self.nameLabel.frame = CGRectMake(0, CGRectGetMaxY(self.topImage.frame) + 10, self.width, 20);
+//        self.bottomLabel.frame = CGRectMake(0, CGRectGetMaxY(self.nameLabel.frame), self.width, 15);
+//    }else{
+//        _bottomLabel.text = @"";
+//        self.nameLabel.frame = CGRectMake(0, CGRectGetMaxY(self.topImage.frame) + 15, self.width, 20);
+//        self.bottomLabel.frame = CGRectMake(0, CGRectGetMaxY(self.nameLabel.frame), self.width, 15);
+//    }
+//    //是否显示小红点
+//    if ([adItem.adTitle isEqualToString:@"主题皮肤"] || [adItem.adTitle isEqualToString:@"建议与咨询"]) {
+//        self.dotView.hidden = !adItem.isShowDot;
+//    }else {
+//        self.dotView.hidden = YES;
+//    }
+//}
+
 #pragma mark - Lazy
 - (UIImageView *)topImage
 {

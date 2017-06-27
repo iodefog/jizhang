@@ -12,4 +12,7 @@
 @interface SSRegisterAndLoginViewController : SSJLoginCommonViewController
 
 @property (nonatomic, strong) SSJLoginVerifyPhoneNumViewModel *viewModel;
+
+/**注册or忘记密码*/
+@property (nonatomic, assign) SSJRegistAndForgetPasswordType regOrForgetType;
 @end

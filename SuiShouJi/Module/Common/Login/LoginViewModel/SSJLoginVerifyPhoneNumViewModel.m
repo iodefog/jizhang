@@ -36,9 +36,6 @@
 /**<#注释#>*/
 @property (nonatomic, strong) SSJBaseNetworkService *netWorkService;
 
-/**wx*/
-//@property (nonatomic, strong) SSJWeiXinLoginHelper *wxLoginHelper;
-
 //  登录方式
 @property (assign, nonatomic) SSJLoginType loginType;
 
@@ -72,7 +69,6 @@
  */
 - (void)verityPhoneNumWithPhone:(NSString *)phoneNum subscriber:(id<RACSubscriber>) subscriber {
     NSMutableDictionary *paramDic = [NSMutableDictionary dictionary];
-    [paramDic setObject:SSJUSERID() forKey:@"cuserId"];
     [paramDic setObject:phoneNum forKey:@"cmobileNo"];
     [self.netWorkService request:@"/chargebook/user/check_cphoneExist.go" params:paramDic success:^(SSJBaseNetworkService * _Nonnull service) {
         [subscriber sendNext:service.rootElement];
@@ -165,7 +161,7 @@
     strSign = [[strSign ssj_md5HexDigest] uppercaseString];
     
     [param setObject:self.phoneNum  forKey:@"cmobileNo"];
-    [param setObject:(type==SSJRegistAndForgetPasswordTypeRegist)?@"13":@"14" forKey:@"yzmType"];//验证码业务类型，13注册 14找回密码
+    [param setObject:(type==SSJRegistAndForgetPasswordTypeForgetPassword)?@"14":@"13" forKey:@"yzmType"];//验证码业务类型，13注册 14找回密码
     [param setObject:(channelType == SSJLoginAndRegisterPasswordChannelTypeSMS) ? @"0" : @"1" forKey:@"channelType"];//验证码类型： 0短信 1语音 , 默认为0；
     
     [param setObject:@(time) forKey:@"timeStamp"];
@@ -182,7 +178,7 @@
 
 
 /**
- 重新获取验证码
+ 重新获取图形验证码
  */
 - (void)reVerCodeWithSubscriber:(id<RACSubscriber>) subscriber {
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
@@ -446,10 +442,9 @@
                 return nil;
             }];
             //返回的数据处理json->model
-//            return [signal map:^id(id value) {
-//                return @"成功啦";
-//            }];
-            return signal;
+            return [signal map:^id(NSDictionary *result) {
+                return [[result objectForKey:@"code"] stringValue];
+            }];
         }];
         
         //获得数据
@@ -478,18 +473,35 @@
     return _enableRegAndLoginSignal;
 }
 
+- (RACSignal *)enableNormalLoginSignal {
+    if (_enableNormalLoginSignal) {
+        _enableNormalLoginSignal = [RACSignal combineLatest:@[self.passwardNum] reduce:^id(NSString *passward){
+            return @(passward.length >=6 && passward.length <= 15);
+        }];
+    }
+    return _enableNormalLoginSignal;
+}
+
+/**
+ 获取验证码
+
+ @return <#return value description#>
+ */
 - (RACCommand *)getVerificationCodeCommand {
     if (!_getVerificationCodeCommand) {
         _getVerificationCodeCommand = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
             RACSignal *signal = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-                [self verCode:SSJRegistAndForgetPasswordTypeRegist channelType:SSJLoginAndRegisterPasswordChannelTypeSMS subscriber:subscriber];
+                [self verCode:self.regOrForType channelType:SSJLoginAndRegisterPasswordChannelTypeSMS subscriber:subscriber];
                 return nil;
             }];
             return [signal map:^id(NSDictionary *value) {
-               return [RACTuple tupleWithObjects:[value objectForKey:@"code"],[value objectForKey:@"desc"], nil];
-//                return [value objectForKey:@"code"];
+               return [RACTuple tupleWithObjects:[[value objectForKey:@"code"] stringValue],[[value objectForKey:@"results"] objectForKey:@"image"],[value objectForKey:@"desc"], nil];
             }];
         }];
+        
+//        [_getVerificationCodeCommand.executionSignals.switchToLatest subscribeNext:^(id x) {
+//            
+//        }];
     }
     return _getVerificationCodeCommand;
 }
@@ -520,6 +532,7 @@
             RACSignal *signal = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
                 //登录
                 self.loginType = SSJLoginTypeNormal;
+                [self loginNormalWithPassWord:self.passwardNum AndUserAccount:self.phoneNum subscriber:subscriber];
                 return nil;
             }];
             return signal;
@@ -577,6 +590,22 @@
         }] ;
     }
     return _qqLoginCommand;
+}
+
+- (RACCommand *)normalLoginCommand {
+    if (!_normalLoginCommand) {
+        _normalLoginCommand = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
+            RACSignal *signal = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+                [self loginNormalWithPassWord:self.passwardNum AndUserAccount:self.phoneNum subscriber:subscriber];
+                return nil;
+            }];
+            return signal;
+        }];
+        [_normalLoginCommand.executionSignals.switchToLatest subscribeNext:^(NSDictionary *dict) {
+            [self datawithDic:dict];
+        }] ;
+    }
+    return _normalLoginCommand;
 }
 
 @end
