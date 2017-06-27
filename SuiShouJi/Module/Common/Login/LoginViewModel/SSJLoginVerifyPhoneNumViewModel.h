@@ -23,6 +23,9 @@
 /**qq登录命令*/
 @property (nonatomic, strong) RACCommand *qqLoginCommand;
 
+/**手机号密码登录命令*/
+@property (nonatomic, strong) RACCommand *normalLoginCommand;
+
 /**注册并登录命令*/
 @property (nonatomic, strong) RACCommand *registerAndLoginCommand;
 
@@ -38,6 +41,11 @@
 /**是否允许点击注册并登录按钮信号*/
 @property (nonatomic, strong) RACSignal *enableRegAndLoginSignal;
 
+/**手机号密码登录时是否允许点击登录按钮信号*/
+@property (nonatomic, strong) RACSignal *enableNormalLoginSignal;
+
+//忘记密码
+
 /**同意协议*/
 @property (nonatomic, assign, getter=isAgreeProtocol) BOOL agreeProtocol;
 
@@ -52,6 +60,9 @@
 
 /**注册or忘记密码类型 */
 @property (nonatomic, assign) SSJRegistAndForgetPasswordType regOrForType;
+
+/**图形验证码*/
+@property (nonatomic, copy) NSString *graphNum;
 
 /**第三方登录model*/
 @property (nonatomic, strong) SSJThirdPartLoginItem *thirdPartLoginItem;

@@ -28,6 +28,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setUpUI];
+    [self initBind];
 }
 
 - (void)setUpUI {
@@ -36,6 +37,10 @@
     [self.scrollView addSubview:self.loginButton];
     [self.scrollView addSubview:self.forgetPasswordBtn];
     [self updateViewConstraints];
+}
+
+- (void)initBind {
+    RAC(self.viewModel,passwardNum) = self.tfPassword.rac_textSignal;
 }
 
 - (void)updateViewConstraints {
@@ -108,15 +113,15 @@
     if (!_loginButton) {
         _loginButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _loginButton.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
-        [_loginButton setTitle:@"注册并登录" forState:UIControlStateNormal];
+        [_loginButton setTitle:@"登录" forState:UIControlStateNormal];
         [_loginButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_loginButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"f9cbd0"] forState:UIControlStateDisabled];
         [_loginButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"ea4a64"] forState:UIControlStateNormal];
         _loginButton.layer.cornerRadius = 6;
         _loginButton.clipsToBounds = YES;
-//        RAC(_loginButton,enabled) = self.viewModel.enableRegAndLoginSignal;
+        RAC(_loginButton,enabled) = self.viewModel.enableNormalLoginSignal;
         [[_loginButton rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
-//            [self.viewModel.registerAndLoginCommand execute:nil];
+            [self.viewModel.normalLoginCommand execute:nil];
         }];
     }
     return _loginButton;

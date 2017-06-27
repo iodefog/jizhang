@@ -161,7 +161,7 @@
     strSign = [[strSign ssj_md5HexDigest] uppercaseString];
     
     [param setObject:self.phoneNum  forKey:@"cmobileNo"];
-    [param setObject:(type==SSJRegistAndForgetPasswordTypeRegist)?@"13":@"14" forKey:@"yzmType"];//验证码业务类型，13注册 14找回密码
+    [param setObject:(type==SSJRegistAndForgetPasswordTypeForgetPassword)?@"14":@"13" forKey:@"yzmType"];//验证码业务类型，13注册 14找回密码
     [param setObject:(channelType == SSJLoginAndRegisterPasswordChannelTypeSMS) ? @"0" : @"1" forKey:@"channelType"];//验证码类型： 0短信 1语音 , 默认为0；
     
     [param setObject:@(time) forKey:@"timeStamp"];
@@ -473,7 +473,14 @@
     return _enableRegAndLoginSignal;
 }
 
-
+- (RACSignal *)enableNormalLoginSignal {
+    if (_enableNormalLoginSignal) {
+        _enableNormalLoginSignal = [RACSignal combineLatest:@[self.passwardNum] reduce:^id(NSString *passward){
+            return @(passward.length >=6 && passward.length <= 15);
+        }];
+    }
+    return _enableNormalLoginSignal;
+}
 
 /**
  获取验证码
@@ -580,6 +587,22 @@
         }] ;
     }
     return _qqLoginCommand;
+}
+
+- (RACCommand *)normalLoginCommand {
+    if (!_normalLoginCommand) {
+        _normalLoginCommand = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
+            RACSignal *signal = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+                [self loginNormalWithPassWord:self.passwardNum AndUserAccount:self.phoneNum subscriber:subscriber];
+                return nil;
+            }];
+            return signal;
+        }];
+        [_normalLoginCommand.executionSignals.switchToLatest subscribeNext:^(NSDictionary *dict) {
+            [self datawithDic:dict];
+        }] ;
+    }
+    return _normalLoginCommand;
 }
 
 @end

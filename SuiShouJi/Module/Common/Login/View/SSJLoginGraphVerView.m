@@ -7,6 +7,9 @@
 //
 
 #import "SSJLoginGraphVerView.h"
+
+#import "SSJLoginVerifyPhoneNumViewModel.h"
+
 @interface SSJLoginGraphVerView ()
 
 @property (nonatomic, strong) UILabel *titleL;
@@ -35,11 +38,15 @@
         
         self.layer.cornerRadius = 8;
         self.layer.masksToBounds = YES;
+        [self initBind];//信号绑定
         self.backgroundColor = [UIColor whiteColor];
         [self updateConstraintsIfNeeded];
-        
     }
     return self;
+}
+
+- (void)initBind{
+    RAC(self.verViewModel,graphNum) = self.verNumTextF.rac_textSignal;
 }
 
 - (void)updateConstraints {
@@ -148,6 +155,16 @@
         _commitBtn = [[UIButton alloc] init];
         [_commitBtn setTitle:@"提交" forState:UIControlStateNormal];
         _commitBtn.backgroundColor = [UIColor ssj_colorWithHex:@"#EB4A64"];
+        [[_commitBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(UIButton *btn) {
+            //发送获取验证码请求
+            [self.verViewModel.getVerificationCodeCommand execute:nil];
+//            [self.verViewModel.getVerificationCodeCommand.executionSignals.switchToLatest subscribeNext:^(NSString *code) {
+//                if ([code isEqualToString:@"1"]) {
+//                    //成功后发送验证码并倒计时
+//                    
+//                }
+//            }];
+        }];
     }
     return _commitBtn;
 }
