@@ -14,10 +14,13 @@
 #import "SSJCircleChargeSettingViewController.h"
 #import "SSJThemeHomeViewController.h"
 #import "SSJProductAdviceViewController.h"
+#import "SSJAdWebViewController.h"
 #import "SSJSettingViewController.h"
+#import "SSJAnnouncementsListViewController.h"
 
 #import "SSJMineHomeTableViewHeader.h"
 #import "SSJNewMineHomeTabelviewCell.h"
+#import "SSJMoreHomeAnnouncementButton.h"
 
 #import "SSJStartChecker.h"
 #import "SSJMineHomeTableViewItem.h"
@@ -38,15 +41,21 @@ static NSString * SSJNewMineHomeTabelviewCelldentifier = @"SSJNewMineHomeTabelvi
 
 @property (nonatomic, strong) NSMutableArray *titles;
 
+@property (nonatomic,strong) SSJMineHomeTableViewHeader *header;
+
 @property (nonatomic, strong) NSMutableArray *images;
 
 @property(nonatomic, strong) NSMutableArray *items;
 
-@property (nonatomic,strong) SSJMineHomeTableViewHeader *header;
+@property(nonatomic, strong) SSJMoreHomeAnnouncementButton *rightButton;
 
 @property(nonatomic, strong) SSJBannerNetworkService *bannerService;
 
-@property(nonatomic, strong) NSMutableArray *bannerItems;
+@property(nonatomic, strong) NSArray *bannerItems;
+
+@property(nonatomic, strong) NSArray *listItems;
+
+@property(nonatomic, strong) NSArray *announcements;
 
 @end
 
@@ -67,8 +76,11 @@ static NSString * SSJNewMineHomeTabelviewCelldentifier = @"SSJNewMineHomeTabelvi
     self.images = [@[@[@"more_tixing"], @[@"more_pifu", @"more_zhouqi"],@[@"more_fankui", @"more_haoping"]] mutableCopy];
     self.titles = [@[@[kTitle1] , @[kTitle2 , kTitle3], @[kTitle4,kTitle5]] mutableCopy];
     self.items = [self defualtItems];
-    UIBarButtonItem *leftItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"more_setting"] style:UIBarButtonItemStyleDone target:self action:@selector(leftButtonClicked:)];
+    UIBarButtonItem *leftItem = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"more_setting"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] style:UIBarButtonItemStyleDone target:self action:@selector(leftButtonClicked:)];
+    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:self.rightButton];
     self.navigationItem.leftBarButtonItem = leftItem;
+    self.navigationItem.rightBarButtonItem = rightItem;
+    self.navigationItem.leftBarButtonItem.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     // Do any additional setup after loading the view.
 }
 
@@ -81,6 +93,8 @@ static NSString * SSJNewMineHomeTabelviewCelldentifier = @"SSJNewMineHomeTabelvi
     } failure:^(NSError * _Nonnull error) {
         [SSJAlertViewAdapter showError:error];
     }];
+    
+    [self.bannerService requestBannersList];
 }
 
 #pragma mark - UITableViewDelegate
@@ -103,6 +117,12 @@ static NSString * SSJNewMineHomeTabelviewCelldentifier = @"SSJNewMineHomeTabelvi
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     SSJMineHomeTableViewItem *item = [self.items ssj_objectAtIndexPath:indexPath];
+    
+    if (item.toUrl.length) {
+        SSJAdWebViewController *adWeb = [SSJAdWebViewController webViewVCWithURL:[NSURL URLWithString:item.toUrl]];
+        [self.navigationController pushViewController:adWeb animated:YES];
+        return;
+    }
     
     if ([item.title isEqualToString:kTitle1]) {
         SSJReminderViewController *BookkeepingReminderVC = [[SSJReminderViewController alloc]init];
@@ -159,7 +179,10 @@ static NSString * SSJNewMineHomeTabelviewCelldentifier = @"SSJNewMineHomeTabelvi
 
 #pragma mark - SSJBaseNetworkServiceDelegate
 - (void)serverDidFinished:(SSJBaseNetworkService *)service {
-    
+    [self sortPinnedBannerWithItems:self.bannerService.item.listAdItems];
+    self.listItems = self.bannerService.item.listAdItems;
+    self.bannerItems = self.bannerService.item.bannerItems;
+    [self.tableView reloadData];
 }
 
 #pragma mark - Getter
@@ -215,6 +238,21 @@ static NSString * SSJNewMineHomeTabelviewCelldentifier = @"SSJNewMineHomeTabelvi
     return _bannerService;
 }
 
+- (SSJMoreHomeAnnouncementButton *)rightButton {
+    if (!_rightButton) {
+        _rightButton = [[SSJMoreHomeAnnouncementButton alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
+        @weakify(self);
+        _rightButton.buttonClickBlock = ^(){
+            @strongify(self);
+            SSJAnnouncementsListViewController *annoucementListVc = [[SSJAnnouncementsListViewController alloc] initWithTableViewStyle:UITableViewStyleGrouped];
+            annoucementListVc.items = [self.announcements mutableCopy];
+//            annoucementListVc.totalPage = self.annoucementService.totalPage;
+            [self.navigationController pushViewController:annoucementListVc animated:YES];
+        };
+    }
+    return _rightButton;
+}
+
 #pragma mark - Event
 - (void)loginButtonClicked {
     if (!SSJIsUserLogined()) {
@@ -235,6 +273,13 @@ static NSString * SSJNewMineHomeTabelviewCelldentifier = @"SSJNewMineHomeTabelvi
     [self.navigationController pushViewController:settingVC animated:YES];
 }
 
+- (void)updateAppearanceAfterThemeChanged {
+    [super updateAppearanceAfterThemeChanged];
+    [self.rightButton updateAfterThemeChange];
+    [self.header updateAfterThemeChange];
+    self.navigationItem.leftBarButtonItem.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+}
+
 #pragma mark - Private
 - (NSMutableArray *)defualtItems {
     NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:0];
@@ -252,6 +297,28 @@ static NSString * SSJNewMineHomeTabelviewCelldentifier = @"SSJNewMineHomeTabelvi
         [tempArr addObject:sectionArr];
     }
     return tempArr;
+}
+
+- (void)sortPinnedBannerWithItems:(NSArray *)items {
+    if (!items.count) {
+        return;
+    }
+
+    NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:0];
+    
+    for (SSJListAdItem *item in items) {
+        SSJMineHomeTableViewItem *cellItem = [[SSJMineHomeTableViewItem alloc] init];
+        cellItem.title = item.adTitle;
+        cellItem.image = item.imageUrl;
+        cellItem.toUrl = item.url;
+        [tempArr addObject:cellItem];
+    }
+    
+    if (self.listItems.count) {
+        [self.items replaceObjectAtIndex:0 withObject:tempArr];
+    } else {
+        [self.items insertObject:tempArr atIndex:0];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
