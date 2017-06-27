@@ -386,10 +386,10 @@ static BOOL kNeedBannerDisplay = YES;
             self.announcements = [NSArray arrayWithArray:self.annoucementService.annoucements];
             self.announcementView.height = 34;
             self.announcementView.hidden = NO;
-            [self.view setNeedsLayout];
         }
     }
     [self.collectionView reloadData];
+    [self.view setNeedsLayout];
 }
 
 - (void)server:(SSJBaseNetworkService *)service didFailLoadWithError:(NSError *)error

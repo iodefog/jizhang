@@ -63,6 +63,21 @@ static const int kCustomThemeVersion = 2;
             NSString *themeBackPath = [[NSBundle mainBundle] pathForResource:@"customBackGround" ofType:@"zip"];
             NSError *error = nil;
             [SSZipArchive unzipFileAtPath:themeBackPath toDestination:[NSString ssj_themeDirectory] overwrite:YES password:nil error:&error];
+            
+        }
+        if (SSJLaunchTimesForAllVersion() == 1 && [[NSDate date] isEarlierThan:[NSDate dateWithYear:2017 month:7 day:3]]) {
+            NSArray *customTheme = @[@"theme_custom1_light",@"theme_custom2_light",@"theme_custom3_dark",@"theme_custom4_dark"];
+            NSInteger randomIndex = arc4random() % 4;
+            bool currentType;
+            if (randomIndex > 1) {
+                currentType = YES;
+            } else {
+                currentType = NO;
+            }
+            NSString *randomImage = [customTheme objectAtIndex:randomIndex];
+            SSJDispatchMainSync(^{
+                [self changeThemeWithDefaultImageName:randomImage type:currentType];
+            });
         }
     });
 }

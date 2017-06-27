@@ -305,6 +305,17 @@ NSInteger SSJLaunchTimesForCurrentVersion() {
     return [[SSJLaunchTimesInfo() objectForKey:SSJAppVersion()] integerValue];
 }
 
+NSInteger SSJLaunchTimesForAllVersion() {
+    NSDictionary *info = SSJLaunchTimesInfo();
+    __block NSInteger luanchTime = 0;
+    if (info) {
+        [info enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+            luanchTime += [obj integerValue];
+        }];
+    }
+    return luanchTime;
+}
+
 void SSJAddLaunchTimesForCurrentVersion() {
     NSMutableDictionary *info = [SSJLaunchTimesInfo() mutableCopy];
     NSInteger launchTimes = [[info objectForKey:SSJAppVersion()] integerValue];

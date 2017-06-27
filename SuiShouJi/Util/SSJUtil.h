@@ -139,6 +139,13 @@ void SSJMigrateLaunchTimesInfo();
 NSDictionary *SSJLaunchTimesInfo();
 
 /**
+ 返回所有版本的启动次数
+ 
+ @return 所有版本的启动次数
+ */
+NSInteger SSJLaunchTimesForAllVersion();
+
+/**
  *  当前版本的启动次数
  */
 NSInteger SSJLaunchTimesForCurrentVersion();

@@ -167,6 +167,7 @@ NSDate *SCYEnterBackgroundTime() {
     }];
     
     [SSJDomainManager requestDomain];
+
     
     // 美恰sdk设置
     [MQManager initWithAppkey:SSJMQAppKey completion:^(NSString *clientId, NSError *error) {
