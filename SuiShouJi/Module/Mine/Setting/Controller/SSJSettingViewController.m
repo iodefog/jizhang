@@ -51,7 +51,6 @@ static NSString *const kClearDataTitle = @"清理数据";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.tableView.separatorInset = UIEdgeInsetsMake(0, 15, 0, 0);
 }
 
 - (void)viewWillAppear:(BOOL)animated{

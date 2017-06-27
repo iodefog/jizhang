@@ -40,6 +40,8 @@
     [self.scrollView addSubview:self.descLab];
     [self.scrollView addSubview:self.phoneNoField];
     [self.scrollView addSubview:self.nextBtn];
+    [self.view setNeedsUpdateConstraints];
+    [self updateAppearance];
 }
 
 - (void)updateViewConstraints {
@@ -71,6 +73,11 @@
         make.centerX.mas_equalTo(self.scrollView);
     }];
     [super updateViewConstraints];
+}
+
+- (void)updateAppearanceAfterThemeChanged {
+    [super updateAppearanceAfterThemeChanged];
+    [self updateAppearance];
 }
 
 #pragma mark - Private

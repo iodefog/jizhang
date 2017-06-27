@@ -26,9 +26,11 @@
     if (self = [super initWithFrame:frame]) {
         self.mobileNoLength = 11;
         self.keyboardType = UIKeyboardTypeNumberPad;
+        self.clearButtonMode = UITextFieldViewModeWhileEditing;
         self.leftView = self.areaCodeLab;
         self.leftViewMode = UITextFieldViewModeAlways;
         self.placeholder = NSLocalizedString(@"手机号", nil);
+        [self ssj_setBorderWidth:2];
         [self ssj_setBorderStyle:SSJBorderStyleBottom];
         self.observer = [[NSNotificationCenter defaultCenter] addObserverForName:UITextFieldTextDidChangeNotification object:self queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
             if (self.text.length > self.mobileNoLength) {
@@ -49,6 +51,7 @@
     if (!_areaCodeLab) {
         _areaCodeLab = [[UILabel alloc] init];
         _areaCodeLab.text = @"+86";
+        [_areaCodeLab ssj_setBorderWidth:2];
         [_areaCodeLab ssj_setBorderStyle:SSJBorderStyleRight];
     }
     return _areaCodeLab;
@@ -57,6 +60,20 @@
 - (void)setFont:(UIFont *)font {
     [super setFont:font];
     self.areaCodeLab.font = font;
+}
+
+- (CGRect)textRectForBounds:(CGRect)bounds {
+    CGRect rect = [super textRectForBounds:bounds];
+    return [self newRectForOriginalRect:rect];
+}
+
+- (CGRect)editingRectForBounds:(CGRect)bounds {
+    CGRect rect = [super editingRectForBounds:bounds];
+    return [self newRectForOriginalRect:rect];
+}
+
+- (CGRect)newRectForOriginalRect:(CGRect)rect {
+    return CGRectMake(rect.origin.x + 12, rect.origin.y, rect.size.width - 12, rect.size.height);
 }
 
 @end
