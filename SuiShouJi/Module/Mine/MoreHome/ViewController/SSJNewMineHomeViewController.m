@@ -10,6 +10,10 @@
 #import "SSJPersonalDetailViewController.h"
 #import "SSJBookkeepingTreeViewController.h"
 #import "SSJLoginVerifyPhoneViewController.h"
+#import "SSJReminderViewController.h"
+#import "SSJCircleChargeSettingViewController.h"
+#import "SSJThemeHomeViewController.h"
+#import "SSJProductAdviceViewController.h"
 
 #import "SSJMineHomeTableViewHeader.h"
 #import "SSJNewMineHomeTabelviewCell.h"
@@ -17,6 +21,7 @@
 #import "SSJStartChecker.h"
 #import "SSJMineHomeTableViewItem.h"
 #import "SSJUserTableManager.h"
+#import "SSJBannerNetworkService.h"
 
 static NSString *const kTitle1 = @"记账提醒";
 static NSString *const kTitle2 = @"主题皮肤";
@@ -38,6 +43,10 @@ static NSString * SSJNewMineHomeTabelviewCelldentifier = @"SSJNewMineHomeTabelvi
 
 @property (nonatomic,strong) SSJMineHomeTableViewHeader *header;
 
+@property(nonatomic, strong) SSJBannerNetworkService *bannerService;
+
+@property(nonatomic, strong) NSMutableArray *bannerItems;
+
 @end
 
 @implementation SSJNewMineHomeViewController
@@ -57,6 +66,8 @@ static NSString * SSJNewMineHomeTabelviewCelldentifier = @"SSJNewMineHomeTabelvi
     self.images = [@[@[@"more_tixing"], @[@"more_pifu", @"more_zhouqi"],@[@"more_fankui", @"more_haoping"]] mutableCopy];
     self.titles = [@[@[kTitle1] , @[kTitle2 , kTitle3], @[kTitle4,kTitle5]] mutableCopy];
     self.items = [self defualtItems];
+    UIBarButtonItem *leftItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"more_setting"] style:UIBarButtonItemStyleDone target:self action:@selector(rightButtonClicked:)];
+    self.navigationItem.leftBarButtonItem = leftItem;
     // Do any additional setup after loading the view.
 }
 
@@ -77,6 +88,9 @@ static NSString * SSJNewMineHomeTabelviewCelldentifier = @"SSJNewMineHomeTabelvi
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    if (self.bannerItems.count && section == 0) {
+        return 110;
+    }
     return 10;
 }
 
@@ -86,6 +100,39 @@ static NSString * SSJNewMineHomeTabelviewCelldentifier = @"SSJNewMineHomeTabelvi
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    SSJMineHomeTableViewItem *item = [self.items ssj_objectAtIndexPath:indexPath];
+    
+    if ([item.title isEqualToString:kTitle1]) {
+        SSJReminderViewController *BookkeepingReminderVC = [[SSJReminderViewController alloc]init];
+        [self.navigationController pushViewController:BookkeepingReminderVC animated:YES];
+        return;
+    }
+    
+    
+    //主题
+    if ([item.title isEqualToString:kTitle2]) {
+        SSJThemeHomeViewController *themeVC = [[SSJThemeHomeViewController alloc]init];
+        [self.navigationController pushViewController:themeVC animated:YES];
+    }
+
+    
+    //  周期记账
+    if ([item.title isEqualToString:kTitle3]) {
+        if (SSJGetBooksCategory() == SSJBooksCategoryPersional) {
+            SSJCircleChargeSettingViewController *circleChargeSettingVC = [[SSJCircleChargeSettingViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
+            [self.navigationController pushViewController:circleChargeSettingVC animated:YES];
+            return;
+        } else if (SSJGetBooksCategory() == SSJBooksCategoryPublic) {
+            [CDAutoHideMessageHUD showMessage:@"共享账本不能周期记账哦~"];
+        }
+    }
+    
+    //建议与咨询
+    if ([item.title isEqualToString:kTitle4]) {
+        SSJProductAdviceViewController *adviceVC = [[SSJProductAdviceViewController alloc] init];
+        [self.navigationController pushViewController:adviceVC animated:YES];
+    }
     
 }
 
@@ -109,10 +156,15 @@ static NSString * SSJNewMineHomeTabelviewCelldentifier = @"SSJNewMineHomeTabelvi
 
 }
 
+#pragma mark - SSJBaseNetworkServiceDelegate
+- (void)serverDidFinished:(SSJBaseNetworkService *)service {
+    
+}
+
 #pragma mark - Getter
 - (UITableView *)tableView {
     if (_tableView == nil) {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM) style:UITableViewStylePlain];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM) style:UITableViewStyleGrouped];
         _tableView.dataSource=self;
         _tableView.delegate = self;
         _tableView.backgroundView = nil;
@@ -155,6 +207,13 @@ static NSString * SSJNewMineHomeTabelviewCelldentifier = @"SSJNewMineHomeTabelvi
     return _header;
 }
 
+- (SSJBannerNetworkService *)bannerService {
+    if (!_bannerService) {
+        _bannerService = [[SSJBannerNetworkService alloc] initWithDelegate:self];
+    }
+    return _bannerService;
+}
+
 #pragma mark - Event
 - (void)loginButtonClicked {
     if (!SSJIsUserLogined()) {
@@ -168,6 +227,10 @@ static NSString * SSJNewMineHomeTabelviewCelldentifier = @"SSJNewMineHomeTabelvi
 - (void)login {
     SSJLoginVerifyPhoneViewController *loginVc = [[SSJLoginVerifyPhoneViewController alloc] init];
     [self.navigationController pushViewController:loginVc animated:YES];
+}
+
+- (void)rightButtonClicked:(id)sender {
+    
 }
 
 

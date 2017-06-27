@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "SSJMineHeaderView.h"
 #import "SSJUserItem.h"
 #import "SSJBookkeepingTreeHelper.h"
 

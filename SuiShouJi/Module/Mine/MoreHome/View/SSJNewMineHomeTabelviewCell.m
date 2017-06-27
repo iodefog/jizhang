@@ -20,7 +20,7 @@
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
-                
+        
         [self.contentView addSubview:self.cellImageView];
         
         [self.contentView addSubview:self.titleLab];
@@ -37,14 +37,13 @@
 - (void)updateConstraints {
     
     [self.cellImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(20, 20));
         make.left.mas_equalTo(15);
         make.centerY.mas_equalTo(self.contentView);
     }];
     
     [self.titleLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(self.cellImageView.right).offset(10);
-        make.centerY.mas_equalTo(self.contentView);
+        make.left.mas_equalTo(self.contentView.mas_left).offset(44);
+        make.centerY.mas_equalTo(self.cellImageView);
     }];
     
     [super updateConstraints];

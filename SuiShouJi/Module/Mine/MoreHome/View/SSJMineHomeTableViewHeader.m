@@ -138,6 +138,7 @@
         [_checkInButton ssj_setBorderStyle:SSJBorderStyleTop];
         [_checkInButton ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
         [_checkInButton ssj_setBorderWidth:1.f / [UIScreen mainScreen].scale];
+        [_checkInButton setSpaceBetweenImageAndTitle:12];
         [_checkInButton addTarget:self action:@selector(checkInButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _checkInButton;
