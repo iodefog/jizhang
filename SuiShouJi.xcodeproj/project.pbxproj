@@ -15223,7 +15223,7 @@
 						};
 					};
 					9C80FC961E95E88E00B1BAAC = {
-						DevelopmentTeam = 6LHW8D7QNZ;
+						DevelopmentTeam = 5JG69S6VH6;
 						SystemCapabilities = {
 							com.apple.Push = {
 								enabled = 1;
@@ -29107,9 +29107,9 @@
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/SuiShouJi/Resource/Entitlements/YouYuJiZhang.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Developer: Yutang Zhou (UCD7C6BN5E)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Yutang Zhou (UCD7C6BN5E)";
-				DEVELOPMENT_TEAM = 6LHW8D7QNZ;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Shuowu Huang (XK3WHDG7U4)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Shuowu Huang (XK3WHDG7U4)";
+				DEVELOPMENT_TEAM = 5JG69S6VH6;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -29192,8 +29192,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhang;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "93ab62c7-baf4-43c6-a89c-f067cb9be6f4";
-				PROVISIONING_PROFILE_SPECIFIER = youyujizhangAppStoreDev;
+				PROVISIONING_PROFILE = "6a9880b9-08ac-4112-82ca-0a7e465692d1";
+				PROVISIONING_PROFILE_SPECIFIER = youyujizhangdev;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -29209,9 +29209,9 @@
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/SuiShouJi/Resource/Entitlements/YouYuJiZhang.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Developer: Yutang Zhou (UCD7C6BN5E)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Yutang Zhou (UCD7C6BN5E)";
-				DEVELOPMENT_TEAM = 6LHW8D7QNZ;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Shuowu Huang (XK3WHDG7U4)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Shuowu Huang (XK3WHDG7U4)";
+				DEVELOPMENT_TEAM = 5JG69S6VH6;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -29295,8 +29295,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhang;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "93ab62c7-baf4-43c6-a89c-f067cb9be6f4";
-				PROVISIONING_PROFILE_SPECIFIER = youyujizhangAppStoreDev;
+				PROVISIONING_PROFILE = "6a9880b9-08ac-4112-82ca-0a7e465692d1";
+				PROVISIONING_PROFILE_SPECIFIER = youyujizhangdev;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -29312,9 +29312,9 @@
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/SuiShouJi/Resource/Entitlements/YouYuJiZhang.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Yutang Zhou (6LHW8D7QNZ)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Yutang Zhou (6LHW8D7QNZ)";
-				DEVELOPMENT_TEAM = 6LHW8D7QNZ;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Shanghai CaiYi Investment Advisory Co., Ltd. (5JG69S6VH6)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shanghai CaiYi Investment Advisory Co., Ltd. (5JG69S6VH6)";
+				DEVELOPMENT_TEAM = 5JG69S6VH6;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -29397,8 +29397,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhang;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "718b05a9-554f-44db-8080-ded490bdf8e3";
-				PROVISIONING_PROFILE_SPECIFIER = youyujizhangAppStore;
+				PROVISIONING_PROFILE = "361a77df-f37a-4218-8de4-a08bca3df587";
+				PROVISIONING_PROFILE_SPECIFIER = youyujizhangdis;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -29413,9 +29413,9 @@
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/SuiShouJi/Resource/Entitlements/YouYuJiZhang.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Yutang Zhou (6LHW8D7QNZ)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Yutang Zhou (6LHW8D7QNZ)";
-				DEVELOPMENT_TEAM = 6LHW8D7QNZ;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Shanghai CaiYi Investment Advisory Co., Ltd. (5JG69S6VH6)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shanghai CaiYi Investment Advisory Co., Ltd. (5JG69S6VH6)";
+				DEVELOPMENT_TEAM = 5JG69S6VH6;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -29498,8 +29498,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhang;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "718b05a9-554f-44db-8080-ded490bdf8e3";
-				PROVISIONING_PROFILE_SPECIFIER = youyujizhangAppStore;
+				PROVISIONING_PROFILE = "361a77df-f37a-4218-8de4-a08bca3df587";
+				PROVISIONING_PROFILE_SPECIFIER = youyujizhangdis;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
