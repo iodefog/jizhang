@@ -19,6 +19,12 @@ typedef NS_ENUM(NSInteger, SSJRegistAndForgetPasswordType) {
     SSJRegistAndForgetPasswordTypeForgetPassword    //  忘记密码
 };
 
+//  验证码类型： 0短信 1语音
+typedef NS_ENUM(NSInteger, SSJLoginAndRegisterPasswordChannelType) {
+    SSJLoginAndRegisterPasswordChannelTypeSMS,           //  注册
+    SSJLoginAndRegisterPasswordChannelTypeVoice    //  忘记密码
+};
+
 typedef NS_ENUM(NSInteger, SSJSyncSettingType) {
     SSJSyncSettingTypeWWAN = 0,
     SSJSyncSettingTypeWIFI //

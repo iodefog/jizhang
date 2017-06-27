@@ -10,6 +10,8 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 
 #import "SSJLoginVerifyPhoneNumViewModel.h"
 
+#import "SSJLoginGraphVerView.h"
+
 @interface SSRegisterAndLoginViewController ()<UITextFieldDelegate>
 @property (nonatomic,strong)UITextField *tfRegYanZhenNum;
 
@@ -25,9 +27,12 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 @property (nonatomic, strong) UIButton *getAuthCodeBtn;
 
 @property (nonatomic,strong)UIButton *registerAndLoginButton;
+//
+///**viewmodel*/
+//@property (nonatomic, strong) SSJLoginVerifyPhoneNumViewModel *viewModel;
 
-/**viewmodel*/
-@property (nonatomic, strong) SSJLoginVerifyPhoneNumViewModel *viewModel;
+/**图形验证码*/
+@property (nonatomic, strong) SSJLoginGraphVerView *graphVerView;
 
 @end
 
@@ -38,6 +43,9 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     [self initialUI];
     [self setUpConst];
     [self initialBind];
+    
+    //执行请求验证码
+//    [self.viewModel.getVerificationCodeCommand execute:nil];
 }
 
 - (void)setUpConst {
@@ -78,6 +86,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 }
 
 - (void)initialBind {
+    self.viewModel.vc = self;
     RAC(self.viewModel,verificationCode) = self.tfRegYanZhenNum.rac_textSignal;
     RAC(self.viewModel,passwardNum) = self.tfPassword.rac_textSignal;
 }
@@ -188,11 +197,26 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         [_getAuthCodeBtn setTitle:@"获取验证码" forState:UIControlStateNormal];
         [_getAuthCodeBtn setTitleColor:[UIColor ssj_colorWithHex:@"#ea4a64"] forState:UIControlStateNormal];
         [_getAuthCodeBtn setTitleColor:[UIColor ssj_colorWithHex:@"#f9cbd0"] forState:UIControlStateDisabled];
-//        [_getAuthCodeBtn addTarget:self action:@selector(getAuthCodeAction) forControlEvents:UIControlEventTouchUpInside];
-        
-        [[_getAuthCodeBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
-            
-        }];
+
+        [[_getAuthCodeBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(UIButton *btn) {
+            [self.viewModel.getVerificationCodeCommand execute:nil];
+            [self.viewModel.getVerificationCodeCommand.executionSignals.switchToLatest subscribeNext:^(RACTuple *tuple) {
+                //请求成功并且不需要图形验证码的时候开启倒计时
+                    if ([tuple.first isEqualToString:@"1"]) {//发送验证码成功
+                        //倒计时
+                        [self beginCountdownIfNeeded];
+                    } else if ([tuple.first isEqualToString:@"1"]) {//需要图片验证码
+                        //显示图形验证码
+//                        self.graphVerView.verSt
+                        [self.graphVerView show];
+                    } else if ([tuple.first isEqualToString:@"1"]) {//图片验证码错误
+                        [CDAutoHideMessageHUD showMessage:@"图片验证码错误"];
+                    } else {
+                        [CDAutoHideMessageHUD showMessage:tuple.last];
+                    }
+                }];
+
+            }];
         [_getAuthCodeBtn ssj_setBorderColor:[UIColor ssj_colorWithHex:@"cccccc"]];
         [_getAuthCodeBtn ssj_setBorderStyle:SSJBorderStyleLeft];
         [_getAuthCodeBtn ssj_setBorderWidth:1/SSJSCREENSCALE];
@@ -200,6 +224,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     }
     return _getAuthCodeBtn;
 }
+
 
 
 - (UIButton*)registerAndLoginButton{
@@ -212,19 +237,31 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         [_registerAndLoginButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"ea4a64"] forState:UIControlStateNormal];
         _registerAndLoginButton.layer.cornerRadius = 6;
         _registerAndLoginButton.clipsToBounds = YES;
-//        _registerAndLoginButton.enabled = NO;
         RAC(_registerAndLoginButton,enabled) = self.viewModel.enableRegAndLoginSignal;
-//        [_registerAndLoginButton addTarget:self action:@selector(registerButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+        [[_registerAndLoginButton rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
+            [self.viewModel.registerAndLoginCommand execute:nil];
+        }];
     }
     return _registerAndLoginButton;
 }
 
-- (SSJLoginVerifyPhoneNumViewModel *)viewModel {
-    if (!_viewModel) {
-        _viewModel = [[SSJLoginVerifyPhoneNumViewModel alloc] init];
-        _viewModel.vc = self;
+
+- (SSJLoginGraphVerView *)graphVerView {
+    if (!_graphVerView) {
+        _graphVerView = [[SSJLoginGraphVerView alloc] init];
+        _graphVerView.size = CGSizeMake(315, 252);
+        _graphVerView.centerY = self.view.centerY - 80;
+        _graphVerView.centerX = self.view.centerX;
+         [[_graphVerView.reChooseBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(UIButton *btn) {
+             [self.viewModel.reGetVerificationCodeCommand execute:nil];
+             [self.viewModel.reGetVerificationCodeCommand.executionSignals.switchToLatest subscribeNext:^(UIImage *image) {
+                     //成功刷新验证码
+                 self.graphVerView.verImage = image;
+
+             }];
+        }];
     }
-    return _viewModel;
+    return _graphVerView;
 }
 
 @end
