@@ -20,7 +20,7 @@
 @property (nonatomic) NSUInteger maxPasswordLength;
 
 //只有找回密码用14其他都是13
-- (instancetype)initWithFrame:(CGRect)frame getCodeType:(SSJRegistAndForgetPasswordType)type;
+- (instancetype)initWithGetCodeType:(SSJRegistAndForgetPasswordType)type;
 @end
 
 @interface SSJVerifCodeField (SSJTheme)

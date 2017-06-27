@@ -35,8 +35,8 @@ static NSInteger kCountdownLimit = 60;
     [[NSNotificationCenter defaultCenter] removeObserver:self.observer];
 }
 
-- (instancetype)initWithFrame:(CGRect)frame getCodeType:(SSJRegistAndForgetPasswordType)type {
-    if (self = [super initWithFrame:frame]) {
+- (instancetype)initWithGetCodeType:(SSJRegistAndForgetPasswordType)type {
+    if (self = [super init]) {
         self.viewModel.regOrForType = type;
         self.keyboardType = UIKeyboardTypeNumberPad;
         self.clearButtonMode = UITextFieldViewModeWhileEditing;
