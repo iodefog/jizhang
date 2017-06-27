@@ -21,6 +21,4 @@
 
 /**titleLabel*/
 @property (nonatomic, strong) UILabel *titleL;
-
-- (void)updateViewConst;
 @end

@@ -45,7 +45,7 @@
     self.view.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.scrollView];
     [self.scrollView addSubview:self.topView];
-//    [self updateViewConstraints];
+    [self.scrollView addSubview:self.titleL];
 }
 
 - (void)initialNav {
@@ -63,12 +63,10 @@
     }];
     
     [self.titleL mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.mas_equalTo(self.scrollView);
-        make.bottom.mas_equalTo(-13);
+        make.centerX.mas_equalTo(self.scrollView.mas_centerX);
+        make.bottom.mas_equalTo(self.topView.mas_bottom).offset(-13);
         make.width.greaterThanOrEqualTo(0);
     }];
-
-    [super updateViewConstraints];
 }
 
 
