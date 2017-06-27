@@ -14,6 +14,7 @@
 #import "SSJCircleChargeSettingViewController.h"
 #import "SSJThemeHomeViewController.h"
 #import "SSJProductAdviceViewController.h"
+#import "SSJAdWebViewController.h"
 
 #import "SSJMineHomeTableViewHeader.h"
 #import "SSJNewMineHomeTabelviewCell.h"
@@ -107,6 +108,12 @@ static NSString * SSJNewMineHomeTabelviewCelldentifier = @"SSJNewMineHomeTabelvi
     
     SSJMineHomeTableViewItem *item = [self.items ssj_objectAtIndexPath:indexPath];
     
+    if (item.toUrl.length) {
+        SSJAdWebViewController *adWeb = [SSJAdWebViewController webViewVCWithURL:[NSURL URLWithString:item.toUrl]];
+        [self.navigationController pushViewController:adWeb animated:YES];
+        return;
+    }
+    
     if ([item.title isEqualToString:kTitle1]) {
         SSJReminderViewController *BookkeepingReminderVC = [[SSJReminderViewController alloc]init];
         [self.navigationController pushViewController:BookkeepingReminderVC animated:YES];
@@ -162,9 +169,9 @@ static NSString * SSJNewMineHomeTabelviewCelldentifier = @"SSJNewMineHomeTabelvi
 
 #pragma mark - SSJBaseNetworkServiceDelegate
 - (void)serverDidFinished:(SSJBaseNetworkService *)service {
-    if ([service.returnCode isEqualToString:@"1"]) {
-        
-    }
+    [self sortPinnedBannerWithItems:self.bannerService.item.listAdItems];
+    self.listItems = self.bannerService.item.listAdItems;
+    [self.tableView reloadData];
 }
 
 #pragma mark - Getter
