@@ -16,9 +16,11 @@
 #import "SSJProductAdviceViewController.h"
 #import "SSJAdWebViewController.h"
 #import "SSJSettingViewController.h"
+#import "SSJAnnouncementsListViewController.h"
 
 #import "SSJMineHomeTableViewHeader.h"
 #import "SSJNewMineHomeTabelviewCell.h"
+#import "SSJMoreHomeAnnouncementButton.h"
 
 #import "SSJStartChecker.h"
 #import "SSJMineHomeTableViewItem.h"
@@ -39,17 +41,21 @@ static NSString * SSJNewMineHomeTabelviewCelldentifier = @"SSJNewMineHomeTabelvi
 
 @property (nonatomic, strong) NSMutableArray *titles;
 
+@property (nonatomic,strong) SSJMineHomeTableViewHeader *header;
+
 @property (nonatomic, strong) NSMutableArray *images;
 
 @property(nonatomic, strong) NSMutableArray *items;
 
-@property (nonatomic,strong) SSJMineHomeTableViewHeader *header;
+@property(nonatomic, strong) SSJMoreHomeAnnouncementButton *rightButton;
 
 @property(nonatomic, strong) SSJBannerNetworkService *bannerService;
 
-@property(nonatomic, strong) NSMutableArray *bannerItems;
+@property(nonatomic, strong) NSArray *bannerItems;
 
 @property(nonatomic, strong) NSArray *listItems;
+
+@property(nonatomic, strong) NSArray *announcements;
 
 @end
 
@@ -70,8 +76,11 @@ static NSString * SSJNewMineHomeTabelviewCelldentifier = @"SSJNewMineHomeTabelvi
     self.images = [@[@[@"more_tixing"], @[@"more_pifu", @"more_zhouqi"],@[@"more_fankui", @"more_haoping"]] mutableCopy];
     self.titles = [@[@[kTitle1] , @[kTitle2 , kTitle3], @[kTitle4,kTitle5]] mutableCopy];
     self.items = [self defualtItems];
-    UIBarButtonItem *leftItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"more_setting"] style:UIBarButtonItemStyleDone target:self action:@selector(leftButtonClicked:)];
+    UIBarButtonItem *leftItem = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"more_setting"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] style:UIBarButtonItemStyleDone target:self action:@selector(leftButtonClicked:)];
+    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:self.rightButton];
     self.navigationItem.leftBarButtonItem = leftItem;
+    self.navigationItem.rightBarButtonItem = rightItem;
+    self.navigationItem.leftBarButtonItem.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     // Do any additional setup after loading the view.
 }
 
@@ -172,6 +181,7 @@ static NSString * SSJNewMineHomeTabelviewCelldentifier = @"SSJNewMineHomeTabelvi
 - (void)serverDidFinished:(SSJBaseNetworkService *)service {
     [self sortPinnedBannerWithItems:self.bannerService.item.listAdItems];
     self.listItems = self.bannerService.item.listAdItems;
+    self.bannerItems = self.bannerService.item.bannerItems;
     [self.tableView reloadData];
 }
 
@@ -228,6 +238,21 @@ static NSString * SSJNewMineHomeTabelviewCelldentifier = @"SSJNewMineHomeTabelvi
     return _bannerService;
 }
 
+- (SSJMoreHomeAnnouncementButton *)rightButton {
+    if (!_rightButton) {
+        _rightButton = [[SSJMoreHomeAnnouncementButton alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
+        @weakify(self);
+        _rightButton.buttonClickBlock = ^(){
+            @strongify(self);
+            SSJAnnouncementsListViewController *annoucementListVc = [[SSJAnnouncementsListViewController alloc] initWithTableViewStyle:UITableViewStyleGrouped];
+            annoucementListVc.items = [self.announcements mutableCopy];
+//            annoucementListVc.totalPage = self.annoucementService.totalPage;
+            [self.navigationController pushViewController:annoucementListVc animated:YES];
+        };
+    }
+    return _rightButton;
+}
+
 #pragma mark - Event
 - (void)loginButtonClicked {
     if (!SSJIsUserLogined()) {
@@ -246,6 +271,13 @@ static NSString * SSJNewMineHomeTabelviewCelldentifier = @"SSJNewMineHomeTabelvi
 - (void)leftButtonClicked:(id)sender {
     SSJSettingViewController *settingVC = [[SSJSettingViewController alloc] init];
     [self.navigationController pushViewController:settingVC animated:YES];
+}
+
+- (void)updateAppearanceAfterThemeChanged {
+    [super updateAppearanceAfterThemeChanged];
+    [self.rightButton updateAfterThemeChange];
+    [self.header updateAfterThemeChange];
+    self.navigationItem.leftBarButtonItem.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
 }
 
 #pragma mark - Private
