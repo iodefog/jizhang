@@ -66,6 +66,8 @@ static NSString * SSJNewMineHomeTabelviewCelldentifier = @"SSJNewMineHomeTabelvi
     self.images = [@[@[@"more_tixing"], @[@"more_pifu", @"more_zhouqi"],@[@"more_fankui", @"more_haoping"]] mutableCopy];
     self.titles = [@[@[kTitle1] , @[kTitle2 , kTitle3], @[kTitle4,kTitle5]] mutableCopy];
     self.items = [self defualtItems];
+    UIBarButtonItem *leftItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"more_setting"] style:UIBarButtonItemStyleDone target:self action:@selector(rightButtonClicked:)];
+    self.navigationItem.leftBarButtonItem = leftItem;
     // Do any additional setup after loading the view.
 }
 
@@ -225,6 +227,10 @@ static NSString * SSJNewMineHomeTabelviewCelldentifier = @"SSJNewMineHomeTabelvi
 - (void)login {
     SSJLoginVerifyPhoneViewController *loginVc = [[SSJLoginVerifyPhoneViewController alloc] init];
     [self.navigationController pushViewController:loginVc animated:YES];
+}
+
+- (void)rightButtonClicked:(id)sender {
+    
 }
 
 
