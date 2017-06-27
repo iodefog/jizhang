@@ -22,12 +22,4 @@
 //图片url
 @property (nonatomic, copy) NSString *imageUrl;
 
-//图片名字
-@property (nonatomic, copy) NSString *imageName;
-
-/**
- 是否显示小红点
- */
-@property (nonatomic, assign) BOOL isShowDot;
-
 @end

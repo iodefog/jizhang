@@ -47,6 +47,8 @@ static NSString * SSJNewMineHomeTabelviewCelldentifier = @"SSJNewMineHomeTabelvi
 
 @property(nonatomic, strong) NSMutableArray *bannerItems;
 
+@property(nonatomic, strong) NSArray *listItems;
+
 @end
 
 @implementation SSJNewMineHomeViewController
@@ -80,6 +82,8 @@ static NSString * SSJNewMineHomeTabelviewCelldentifier = @"SSJNewMineHomeTabelvi
     } failure:^(NSError * _Nonnull error) {
         [SSJAlertViewAdapter showError:error];
     }];
+    
+    [self.bannerService requestBannersList];
 }
 
 #pragma mark - UITableViewDelegate
@@ -158,7 +162,9 @@ static NSString * SSJNewMineHomeTabelviewCelldentifier = @"SSJNewMineHomeTabelvi
 
 #pragma mark - SSJBaseNetworkServiceDelegate
 - (void)serverDidFinished:(SSJBaseNetworkService *)service {
-    
+    if ([service.returnCode isEqualToString:@"1"]) {
+        
+    }
 }
 
 #pragma mark - Getter
@@ -251,6 +257,28 @@ static NSString * SSJNewMineHomeTabelviewCelldentifier = @"SSJNewMineHomeTabelvi
         [tempArr addObject:sectionArr];
     }
     return tempArr;
+}
+
+- (void)sortPinnedBannerWithItems:(NSArray *)items {
+    if (!items.count) {
+        return;
+    }
+
+    NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:0];
+    
+    for (SSJListAdItem *item in items) {
+        SSJMineHomeTableViewItem *cellItem = [[SSJMineHomeTableViewItem alloc] init];
+        cellItem.title = item.adTitle;
+        cellItem.image = item.imageUrl;
+        cellItem.toUrl = item.url;
+        [tempArr addObject:cellItem];
+    }
+    
+    if (self.listItems.count) {
+        [self.items replaceObjectAtIndex:0 withObject:tempArr];
+    } else {
+        [self.items insertObject:tempArr atIndex:0];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
