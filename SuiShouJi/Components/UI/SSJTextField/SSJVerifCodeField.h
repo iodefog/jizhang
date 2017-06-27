@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SSJLoginVerifyPhoneNumViewModel.h"
 
 @interface SSJVerifCodeField : UITextField
 /**
@@ -18,6 +19,9 @@
  default 15
  */
 @property (nonatomic) NSUInteger maxPasswordLength;
+
+/**<#注释#>*/
+@property (nonatomic, strong) SSJLoginVerifyPhoneNumViewModel *viewModel;
 
 //只有找回密码用14其他都是13
 - (instancetype)initWithGetCodeType:(SSJRegistAndForgetPasswordType)type;

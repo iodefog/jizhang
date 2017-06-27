@@ -215,4 +215,11 @@
     return [phoneTest evaluateWithObject:self];
 }
 
+
+- (UIImage *)base64ToImage {
+    NSData *decodedImageData = [[NSData alloc] initWithBase64EncodedString:self options:NSDataBase64DecodingIgnoreUnknownCharacters];
+    return [UIImage imageWithData:decodedImageData];
+}
+
+
 @end

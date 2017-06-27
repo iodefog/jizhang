@@ -9,6 +9,7 @@
 #import "SSJLoginGraphVerView.h"
 
 #import "SSJLoginVerifyPhoneNumViewModel.h"
+#import "SSJStringAddition.h"
 
 @interface SSJLoginGraphVerView ()
 
@@ -125,6 +126,7 @@
     if (!_verImageView) {
         _verImageView = [[UIImageView alloc] init];
         _verImageView.backgroundColor = [UIColor ssj_colorWithHex:@"#cccccc"];
+        _verImageView.contentMode = UIViewContentModeCenter;
     }
     return _verImageView;
 }
@@ -158,12 +160,6 @@
         [[_commitBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(UIButton *btn) {
             //发送获取验证码请求
             [self.verViewModel.getVerificationCodeCommand execute:nil];
-//            [self.verViewModel.getVerificationCodeCommand.executionSignals.switchToLatest subscribeNext:^(NSString *code) {
-//                if ([code isEqualToString:@"1"]) {
-//                    //成功后发送验证码并倒计时
-//                    
-//                }
-//            }];
         }];
     }
     return _commitBtn;

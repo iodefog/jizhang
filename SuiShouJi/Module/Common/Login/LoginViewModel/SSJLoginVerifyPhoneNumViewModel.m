@@ -495,10 +495,13 @@
                 return nil;
             }];
             return [signal map:^id(NSDictionary *value) {
-               return [RACTuple tupleWithObjects:[value objectForKey:@"code"],[value objectForKey:@"desc"], nil];
-//                return [value objectForKey:@"code"];
+               return [RACTuple tupleWithObjects:[[value objectForKey:@"code"] stringValue],[[value objectForKey:@"results"] objectForKey:@"image"],[value objectForKey:@"desc"], nil];
             }];
         }];
+        
+//        [_getVerificationCodeCommand.executionSignals.switchToLatest subscribeNext:^(id x) {
+//            
+//        }];
     }
     return _getVerificationCodeCommand;
 }

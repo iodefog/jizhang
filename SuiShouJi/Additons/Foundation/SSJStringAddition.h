@@ -69,4 +69,12 @@
  */
 - (BOOL)ssj_validPhoneNum;
 
+
+/**
+ base64转图片
+
+ @return <#return value description#>
+ */
+- (UIImage *)base64ToImage;
+
 @end

@@ -18,7 +18,7 @@ static NSInteger kCountdownLimit = 60;
 //验证码
 @property (nonatomic, strong) UIButton *getAuthCodeBtn;
 
-@property (nonatomic, strong) SSJLoginVerifyPhoneNumViewModel *viewModel;
+//@property (nonatomic, strong) SSJLoginVerifyPhoneNumViewModel *viewModel;
 
 /**倒计时*/
 @property (nonatomic, strong) NSTimer *countdownTimer;
@@ -31,10 +31,6 @@ static NSInteger kCountdownLimit = 60;
 @end
 
 @implementation SSJVerifCodeField
-- (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self.observer];
-}
-
 - (instancetype)initWithGetCodeType:(SSJRegistAndForgetPasswordType)type {
     if (self = [super init]) {
         self.viewModel.regOrForType = type;
@@ -42,30 +38,40 @@ static NSInteger kCountdownLimit = 60;
         self.clearButtonMode = UITextFieldViewModeWhileEditing;
         self.rightView = self.getAuthCodeBtn;
         self.leftViewMode = UITextFieldViewModeAlways;
-        self.placeholder = NSLocalizedString(@"手机号", nil);
+        self.placeholder = NSLocalizedString(@"验证码", nil);
 
-        [self ssj_setBorderWidth:2];
+        [self ssj_setBorderWidth:1/SSJSCREENSCALE];
         [self ssj_setBorderStyle:SSJBorderStyleBottom];
-        self.observer = [[NSNotificationCenter defaultCenter] addObserverForName:UITextFieldTextDidChangeNotification object:self queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
-            if (self.text.length > self.maxPasswordLength) {
-                self.text = [self.text substringToIndex:self.maxPasswordLength];
-            }
-        }];
-
+        
+//        [self.viewModel.getVerificationCodeCommand execute:nil];
     }
     return self;
 }
 
 #pragma mark - Private
+- (CGRect)clearButtonRectForBounds:(CGRect)bounds{
+    CGRect rect = [super clearButtonRectForBounds:bounds];
+    return CGRectMake(rect.origin.x - 100, rect.origin.y , rect.size.width, rect.size.height);
+}
+
+- (CGRect)rightViewRectForBounds:(CGRect)bounds {
+    return CGRectMake(self.width - 95, 3, 95, 30);
+}
+
+- (void)setViewModel:(SSJLoginVerifyPhoneNumViewModel *)viewModel {
+    _viewModel = viewModel;
+}
+
+
 //  开始倒计时
 - (void)beginCountdownIfNeeded {
-    if (!self.countdownTimer.valid) {
+    if (!self.countdownTimer.valid && !self.countdownTimer) {
         self.countdown = kCountdownLimit;
-        //        self.countdownTimer = [NSTimer timerWithTimeInterval:1 target:self selector:@selector(updateCountdown) userInfo:nil repeats:YES];
+                self.countdownTimer = [NSTimer timerWithTimeInterval:1 target:self selector:@selector(updateCountdown) userInfo:nil repeats:YES];
         //
-        [[[RACSignal interval:1 onScheduler:[RACScheduler mainThreadScheduler]] takeUntil:self.rac_willDeallocSignal ] subscribeNext:^(id x) {
-            [self updateCountdown];
-        }];
+//        [[[RACSignal interval:1 onScheduler:[RACScheduler mainThreadScheduler]] takeUntil:self.rac_willDeallocSignal ] subscribeNext:^(id x) {
+//            [self updateCountdown];
+//        }];
         [[NSRunLoop currentRunLoop] addTimer:self.countdownTimer forMode:NSRunLoopCommonModes];
         [self.countdownTimer fire];
     }
@@ -79,10 +85,11 @@ static NSInteger kCountdownLimit = 60;
 //  更新倒计时
 - (void)updateCountdown {
     if (self.countdown > 0) {
+        self.getAuthCodeBtn.enabled = NO;
         [self.getAuthCodeBtn setTitle:[NSString stringWithFormat:@"%ds",(int)self.countdown] forState:UIControlStateDisabled];
     } else {
         self.getAuthCodeBtn.enabled = YES;
-        [self.countdownTimer invalidate];
+        [self invalidateTimer];
     }
     self.countdown --;
 }
@@ -105,22 +112,24 @@ static NSInteger kCountdownLimit = 60;
         [_getAuthCodeBtn ssj_setBorderInsets:UIEdgeInsetsMake(4, 5, 4, 5)];
         
         [[_getAuthCodeBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(UIButton *btn) {
-            [self.viewModel.getVerificationCodeCommand execute:nil];
-            [self.viewModel.getVerificationCodeCommand.executionSignals.switchToLatest subscribeNext:^(RACTuple *tuple) {
+            [[self.viewModel.getVerificationCodeCommand execute:nil] subscribeNext:^(RACTuple *tuple) {
                 //请求成功并且不需要图形验证码的时候开启倒计时
                 if ([tuple.first isEqualToString:@"1"]) {//发送验证码成功
                     //倒计时
                     [self beginCountdownIfNeeded];
-                } else if ([tuple.first isEqualToString:@"1"]) {//需要图片验证码
+                } else if ([tuple.first isEqualToString:@"2"]) {//需要图片验证码
                     //显示图形验证码
-                    //                        self.graphVerView.verSt
+                    self.graphVerView.verImage = [tuple.second base64ToImage];
                     [self.graphVerView show];
-                } else if ([tuple.first isEqualToString:@"1"]) {//图片验证码错误
+                } else if ([tuple.first isEqualToString:@"3"]) {//图片验证码错误
                     [CDAutoHideMessageHUD showMessage:@"图片验证码错误"];
                 } else {
                     [CDAutoHideMessageHUD showMessage:tuple.last];
                 }
             }];
+//            [self.viewModel.getVerificationCodeCommand.executionSignals.switchToLatest subscribeNext:^(RACTuple *tuple) {
+//                
+//            }];
             
         }];
         
@@ -131,6 +140,7 @@ static NSInteger kCountdownLimit = 60;
 - (SSJLoginGraphVerView *)graphVerView {
     if (!_graphVerView) {
         _graphVerView = [[SSJLoginGraphVerView alloc] init];
+        _graphVerView.verViewModel = self.viewModel;
         _graphVerView.size = CGSizeMake(315, 252);
         _graphVerView.centerY = SSJSCREENHEIGHT * 0.5 - 80;
         _graphVerView.centerX = SSJSCREENWITH * 0.5;
@@ -140,13 +150,6 @@ static NSInteger kCountdownLimit = 60;
             [self.viewModel.reGetVerificationCodeCommand.executionSignals.switchToLatest subscribeNext:^(UIImage *image) {
                 //成功刷新验证码
                 self.graphVerView.verImage = image;
-            }];
-            //点击提交图形验证码后
-            [_graphVerView.verViewModel.getVerificationCodeCommand.executionSignals.switchToLatest subscribeNext:^(NSString *code) {
-                if ([code isEqualToString:@"1"]) {
-                    //成功后发送验证码并倒计时
-                    [self beginCountdownIfNeeded];
-                }
             }];
         }];
     }
