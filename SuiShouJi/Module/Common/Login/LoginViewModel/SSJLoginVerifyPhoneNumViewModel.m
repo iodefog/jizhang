@@ -27,8 +27,9 @@
 #import "SSJDatabaseQueue.h"
 #import "SSJBookkeepingTreeStore.h"
 #import "SSJDataSynchronizer.h"
-
 #import "SSJThirdPartyLoginManger.h"
+
+#import "SSJHomeLoadingView.h"
 
 #import "SSJMotionPasswordViewController.h"
 #import "MMDrawerController.h"
@@ -49,6 +50,8 @@
 
 /**openId*/
 @property (nonatomic, copy) NSString *openId;
+
+@property(nonatomic, strong) SSJHomeLoadingView *loadingView;
 
 
 @end
@@ -408,7 +411,7 @@
         // 登录成功，做些额外的处理
         return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
             [self syncData];
-//            [self.loadingView show];
+            [self.loadingView show];
             [CDAutoHideMessageHUD showMessage:@"登录成功"];
             [SSJAnaliyticsManager setUserId:SSJUSERID() userName:(self.userItem.nickName.length ? self.userItem.nickName : self.userItem.mobileNo)];
             [[NSNotificationCenter defaultCenter] postNotificationName:SSJLoginOrRegisterNotification object:nil];
@@ -742,6 +745,14 @@
         }] ;
     }
     return _normalLoginCommand;
+}
+
+
+- (SSJHomeLoadingView *)loadingView{
+    if (!_loadingView) {
+        _loadingView = [[SSJHomeLoadingView alloc] init];
+    }
+    return _loadingView;
 }
 
 @end
