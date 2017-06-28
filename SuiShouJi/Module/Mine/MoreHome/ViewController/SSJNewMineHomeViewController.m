@@ -165,6 +165,13 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     if (self.bannerItems.count && section == 0) {
         SSJMineHomeBannerHeader *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:SSJNewMineHomeBannerHeaderdentifier];
+        @weakify(self);
+        headerView.bannerView.tapAction = ^(SCYWinCowryHomeBannerView *view, NSUInteger tapIndex) {
+            @strongify(self);
+            SSJBannerItem *item = [self.bannerItems ssj_safeObjectAtIndex:tapIndex];
+            SSJAdWebViewController *webVc = [SSJAdWebViewController webViewVCWithURL:[NSURL URLWithString:item.bannerUrl]];
+            [self.navigationController pushViewController:webVc animated:YES];
+        };
         headerView.items = self.bannerItems;
         return headerView;
     }
