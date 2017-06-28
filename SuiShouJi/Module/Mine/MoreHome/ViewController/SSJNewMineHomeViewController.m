@@ -22,6 +22,7 @@
 #import "SSJMineHomeTableViewHeader.h"
 #import "SSJNewMineHomeTabelviewCell.h"
 #import "SSJMoreHomeAnnouncementButton.h"
+#import "SSJMineHomeBannerHeader.h"
 
 #import "SSJStartChecker.h"
 #import "SSJMineHomeTableViewItem.h"
@@ -35,6 +36,9 @@ static NSString *const kTitle4 = @"帮助与反馈";
 static NSString *const kTitle5 = @"爱的鼓励";
 
 static NSString * SSJNewMineHomeTabelviewCelldentifier = @"SSJNewMineHomeTabelviewCelldentifier";
+
+static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHeaderdentifier";
+
 
 @interface SSJNewMineHomeViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -66,7 +70,6 @@ static NSString * SSJNewMineHomeTabelviewCelldentifier = @"SSJNewMineHomeTabelvi
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.title = @"我的";
         self.extendedLayoutIncludesOpaqueBars = YES;
-        self.automaticallyAdjustsScrollViewInsets = NO;
     }
     return self;
 }
@@ -158,6 +161,24 @@ static NSString * SSJNewMineHomeTabelviewCelldentifier = @"SSJNewMineHomeTabelvi
     
 }
 
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    if (self.bannerItems.count && section == 0) {
+        SSJMineHomeBannerHeader *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:SSJNewMineHomeBannerHeaderdentifier];
+        @weakify(self);
+        headerView.bannerView.tapAction = ^(SCYWinCowryHomeBannerView *view, NSUInteger tapIndex) {
+            @strongify(self);
+            SSJBannerItem *item = [self.bannerItems ssj_safeObjectAtIndex:tapIndex];
+            SSJAdWebViewController *webVc = [SSJAdWebViewController webViewVCWithURL:[NSURL URLWithString:item.bannerUrl]];
+            [self.navigationController pushViewController:webVc animated:YES];
+        };
+        headerView.items = self.bannerItems;
+        return headerView;
+    }
+    UIView *clearView = [[UIView alloc] init];
+    clearView.backgroundColor = [UIColor clearColor];
+    return clearView;
+}
+
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return self.items.count;
@@ -189,7 +210,7 @@ static NSString * SSJNewMineHomeTabelviewCelldentifier = @"SSJNewMineHomeTabelvi
 #pragma mark - Getter
 - (UITableView *)tableView {
     if (_tableView == nil) {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM) style:UITableViewStyleGrouped];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM - SSJ_TABBAR_HEIGHT) style:UITableViewStyleGrouped];
         _tableView.dataSource=self;
         _tableView.delegate = self;
         _tableView.backgroundView = nil;
@@ -197,7 +218,9 @@ static NSString * SSJNewMineHomeTabelviewCelldentifier = @"SSJNewMineHomeTabelvi
         _tableView.backgroundColor = [UIColor clearColor];
         _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
         [_tableView registerClass:[SSJNewMineHomeTabelviewCell class] forCellReuseIdentifier:SSJNewMineHomeTabelviewCelldentifier];
+        [_tableView registerClass:[SSJMineHomeBannerHeader class] forHeaderFooterViewReuseIdentifier:SSJNewMineHomeBannerHeaderdentifier];
         [_tableView ssj_clearExtendSeparator];
+        
         if ([_tableView respondsToSelector:@selector(setSeparatorInset:)]) {
             [_tableView setSeparatorInset:UIEdgeInsetsZero];
         }

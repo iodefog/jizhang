@@ -1,105 +1,125 @@
 //
-//  SSJFirstBindMobileNoViewController.m
+//  SSJChangeMobileNoFirstViewController.m
 //  SuiShouJi
 //
-//  Created by old lang on 2017/6/26.
+//  Created by old lang on 2017/6/27.
 //  Copyright © 2017年 ___9188___. All rights reserved.
 //
 
-#import "SSJBindMobileNoViewController.h"
-#import "SSJSettingPasswordViewController.h"
-#import "TPKeyboardAvoidingScrollView.h"
-#import "SSJMobileNoField.h"
-#import "SSJLoginVerifyPhoneNumViewModel.h"
+#import "SSJChangeMobileNoFirstViewController.h"
 
-@interface SSJBindMobileNoViewController ()
+#import "TPKeyboardAvoidingScrollView.h"
+#import "SSJChangeMobileNoStepView.h"
+#import "SSJUserTableManager.h"
+
+@interface SSJChangeMobileNoFirstViewController ()
 
 @property (nonatomic, strong) TPKeyboardAvoidingScrollView *scrollView;
+
+@property (nonatomic, strong) SSJChangeMobileNoStepView *stepView;
 
 @property (nonatomic, strong) UIImageView *icon;
 
 @property (nonatomic, strong) UILabel *descLab;
 
-@property (nonatomic, strong) SSJMobileNoField *phoneNoField;
+@property (nonatomic, strong) UITextField *authCodeField;
 
 @property (nonatomic, strong) UIButton *nextBtn;
 
-@property (nonatomic, strong) SSJLoginVerifyPhoneNumViewModel *viewModel;
+@property (nonatomic, strong) UIButton *changeWayBtn;
 
 @end
 
-@implementation SSJBindMobileNoViewController
+@implementation SSJChangeMobileNoFirstViewController
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-        self.title = @"绑定手机号";
+        self.title = @"验证原手机号";
     }
     return self;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self setUpViews];
-    [self setUpBindings];
-    [self updateAppearance];
-    [self.view setNeedsUpdateConstraints];
+    [self loadMobileNo:^{
+        [self setUpViews];
+        [self.view setNeedsUpdateConstraints];
+    }];
 }
 
 - (void)updateViewConstraints {
     [self.scrollView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.edges.mas_equalTo(self.view).insets(UIEdgeInsetsMake(SSJ_NAVIBAR_BOTTOM, 0, 0, 0));
     }];
-    [self.icon mas_updateConstraints:^(MASConstraintMaker *make) {
+    [self.stepView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self.scrollView).offset(30);
         make.centerX.mas_equalTo(self.scrollView);
-        make.size.mas_equalTo(CGSizeMake(74, 88));
+    }];
+    [self.icon mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(self.stepView.mas_bottom).offset(30);
+        make.centerX.mas_equalTo(self.scrollView);
+        make.size.mas_equalTo(self.icon.image.size);
     }];
     [self.descLab mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self.icon.mas_bottom).offset(30);
         make.centerX.mas_equalTo(self.scrollView);
     }];
-    [self.phoneNoField mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.descLab.mas_bottom).offset(48);
+    [self.authCodeField mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(self.descLab.mas_bottom).offset(28);
         make.left.mas_equalTo(self.scrollView).offset(15);
         make.right.mas_equalTo(self.scrollView).offset(-15);
         make.height.mas_equalTo(44);
         make.centerX.mas_equalTo(self.scrollView);
     }];
     [self.nextBtn mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.phoneNoField.mas_bottom).offset(38);
+        make.top.mas_equalTo(self.authCodeField.mas_bottom).offset(40);
         make.left.mas_equalTo(self.scrollView).offset(15);
-        make.bottom.mas_equalTo(self.scrollView).offset(-40);
         make.right.mas_equalTo(self.scrollView).offset(-15);
         make.height.mas_equalTo(44);
+        make.centerX.mas_equalTo(self.scrollView);
+    }];
+    [self.changeWayBtn mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(self.nextBtn.mas_bottom).offset(0);
+        make.left.mas_equalTo(self.scrollView).offset(15);
+        make.size.mas_equalTo(CGSizeMake(106, 38));
+        make.bottom.mas_equalTo(self.scrollView).offset(-20);
         make.centerX.mas_equalTo(self.scrollView);
     }];
     [super updateViewConstraints];
 }
 
-- (void)updateAppearanceAfterThemeChanged {
-    [super updateAppearanceAfterThemeChanged];
-    [self updateAppearance];
+#pragma mark - Private
+- (void)loadMobileNo:(void(^)())completion {
+    [self.view ssj_showLoadingIndicator];
+    [SSJUserTableManager queryUserItemWithID:SSJUSERID() success:^(SSJUserItem * _Nonnull userItem) {
+        [self.view ssj_hideLoadingIndicator];
+//        [self updateMobileNoLab:userItem.mobileNo];
+        if (completion) {
+            completion();
+        }
+    } failure:^(NSError * _Nonnull error) {
+        [self.view ssj_hideLoadingIndicator];
+        [SSJAlertViewAdapter showError:error];
+    }];
 }
 
-#pragma mark - Private
 - (void)updateAppearance {
     self.descLab.textColor = SSJ_MAIN_COLOR;
-    [self.phoneNoField updateAppearanceAccordingToTheme];
+    //    [self.authCodeField updateAppearanceAccordingToTheme];
+    //    [self.passwordField updateAppearanceAccordingToTheme];
     [self.nextBtn ssj_setBackgroundColor:SSJ_BUTTON_NORMAL_COLOR forState:UIControlStateNormal];
     [self.nextBtn ssj_setBackgroundColor:SSJ_BUTTON_DISABLE_COLOR forState:UIControlStateDisabled];
+    [self.changeWayBtn setTitleColor:SSJ_MAIN_COLOR forState:UIControlStateNormal];
 }
 
 - (void)setUpViews {
     [self.view addSubview:self.scrollView];
+    [self.scrollView addSubview:self.stepView];
     [self.scrollView addSubview:self.icon];
     [self.scrollView addSubview:self.descLab];
-    [self.scrollView addSubview:self.phoneNoField];
+    [self.scrollView addSubview:self.authCodeField];
     [self.scrollView addSubview:self.nextBtn];
-}
-
-- (void)setUpBindings {
-    RAC(self.viewModel, phoneNum) = RACObserve(self.phoneNoField, text);
-    self.nextBtn.rac_command = self.viewModel.verifyPhoneNumRequestCommand;
+    [self.scrollView addSubview:self.changeWayBtn];
 }
 
 #pragma mark - Lazyloading
@@ -110,9 +130,17 @@
     return _scrollView;
 }
 
+- (SSJChangeMobileNoStepView *)stepView {
+    if (!_stepView) {
+        _stepView = [[SSJChangeMobileNoStepView alloc] initWithStep:3];
+        _stepView.currentStep = 1;
+    }
+    return _stepView;
+}
+
 - (UIImageView *)icon {
     if (!_icon) {
-        _icon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"bind_No_shield"]];
+        _icon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"bind_No_SMS"]];
     }
     return _icon;
 }
@@ -120,17 +148,9 @@
 - (UILabel *)descLab {
     if (!_descLab) {
         _descLab = [[UILabel alloc] init];
-        _descLab.text = @"绑定手机，提高账号安全等级";
         _descLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
     }
     return _descLab;
-}
-
-- (SSJMobileNoField *)phoneNoField {
-    if (!_phoneNoField) {
-        _phoneNoField = [[SSJMobileNoField alloc] init];
-    }
-    return _phoneNoField;
 }
 
 - (UIButton *)nextBtn {
@@ -145,11 +165,13 @@
     return _nextBtn;
 }
 
-- (SSJLoginVerifyPhoneNumViewModel *)viewModel {
-    if (!_viewModel) {
-        _viewModel = [[SSJLoginVerifyPhoneNumViewModel alloc] init];
+- (UIButton *)changeWayBtn {
+    if (!_changeWayBtn) {
+        _changeWayBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        _changeWayBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
+        [_changeWayBtn setTitle:@"手机号丢失或停用" forState:UIControlStateNormal];
     }
-    return _viewModel;
+    return _changeWayBtn;
 }
 
 @end

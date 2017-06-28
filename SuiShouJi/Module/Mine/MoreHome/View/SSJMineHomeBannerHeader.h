@@ -8,9 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import "SSJBannerItem.h"
+#import "SCYWinCowryHomeBannerView.h"
 
 @interface SSJMineHomeBannerHeader : UITableViewHeaderFooterView
 
 @property(nonatomic, strong) NSArray <SSJBannerItem *> *items;
+
+@property (nonatomic, strong) SCYWinCowryHomeBannerView *bannerView;
 
 @end

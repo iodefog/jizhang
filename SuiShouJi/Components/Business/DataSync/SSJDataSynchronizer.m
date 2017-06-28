@@ -230,6 +230,7 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
                 BOOL hasResync = [self.userInfo[task.userId] boolValue];
                 if (!hasResync) {
                     shouldPerformFailuer = NO;
+                    
                     self.userInfo[task.userId] = @(YES);
                     void (^success)() = [self.dataSuccessBlocks block];
                     void (^failure)() = [self.dataFailureBlocks block];
