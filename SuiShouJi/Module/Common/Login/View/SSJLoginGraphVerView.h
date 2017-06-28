@@ -20,6 +20,6 @@
 @property (nonatomic, strong) UIButton *reChooseBtn;
 
 /**<#注释#>*/
-//@property (nonatomic, strong) SSJLoginVerifyPhoneNumViewModel *verViewModel;
+@property (nonatomic, strong) SSJLoginVerifyPhoneNumViewModel *verViewModel;
 - (void)show;
 @end

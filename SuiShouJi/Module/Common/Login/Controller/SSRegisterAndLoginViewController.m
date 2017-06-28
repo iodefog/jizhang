@@ -5,31 +5,35 @@
 //  Created by yi cai on 2017/6/23.
 //  Copyright © 2017年 ___9188___. All rights reserved.
 //
-static const NSInteger kCountdownLimit = 60;    //  倒计时时限
+//static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 #import "SSRegisterAndLoginViewController.h"
 
 #import "SSJLoginVerifyPhoneNumViewModel.h"
 
 #import "SSJLoginGraphVerView.h"
+#import "SSJVerifCodeField.h"
 
 @interface SSRegisterAndLoginViewController ()<UITextFieldDelegate>
-@property (nonatomic,strong)UITextField *tfRegYanZhenNum;
+//@property (nonatomic,strong)UITextField *tfRegYanZhenNum;
 
 @property (nonatomic,strong)UITextField *tfPassword;
 
+/**验证码*/
+@property (nonatomic, strong) SSJVerifCodeField *tfRegYanZhenF;
+
 //  倒计时定时器
-@property (nonatomic, strong) NSTimer *countdownTimer;
+//@property (nonatomic, strong) NSTimer *countdownTimer;
 
 //  倒计时
-@property (nonatomic) NSInteger countdown;
+//@property (nonatomic) NSInteger countdown;
 
 //验证码
-@property (nonatomic, strong) UIButton *getAuthCodeBtn;
+//@property (nonatomic, strong) UIButton *getAuthCodeBtn;
 
 @property (nonatomic,strong)UIButton *registerAndLoginButton;
 
 /**图形验证码*/
-@property (nonatomic, strong) SSJLoginGraphVerView *graphVerView;
+//@property (nonatomic, strong) SSJLoginGraphVerView *graphVerView;
 
 @end
 
@@ -38,13 +42,12 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self initialUI];
-//    [self updateViewConst];
     [self setUpConst];
     [self initialBind];
 }
 
 - (void)setUpConst {
-    [self.tfRegYanZhenNum mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.tfRegYanZhenF mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self.topView.mas_bottom).offset(50);
         make.height.mas_equalTo(40);
         make.left.mas_equalTo(self.view.mas_left).offset(20);
@@ -52,8 +55,8 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     }];
     
     [self.tfPassword mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.tfRegYanZhenNum.mas_bottom).offset(20);
-        make.left.right.height.mas_equalTo(self.tfRegYanZhenNum);
+        make.top.mas_equalTo(self.tfRegYanZhenF.mas_bottom).offset(20);
+        make.left.right.height.mas_equalTo(self.tfRegYanZhenF);
     }];
     
     [self.registerAndLoginButton mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -69,54 +72,54 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     [self.view addSubview:self.scrollView];
     [self.view addSubview:self.topView];
     [self.view addSubview:self.titleL];
-    [self.scrollView addSubview:self.tfRegYanZhenNum];
+    [self.scrollView addSubview:self.tfRegYanZhenF];
     [self.scrollView addSubview:self.tfPassword];
     [self.scrollView addSubview:self.registerAndLoginButton];
 }
 
 - (void)initialBind {
     self.viewModel.vc = self;
-    RAC(self.viewModel,verificationCode) = self.tfRegYanZhenNum.rac_textSignal;
+    RAC(self.viewModel,verificationCode) = self.tfRegYanZhenF.rac_textSignal;
     RAC(self.viewModel,passwardNum) = self.tfPassword.rac_textSignal;
 }
 
-//  开始倒计时
-- (void)beginCountdownIfNeeded {
-    if (!self.countdownTimer.valid) {
-        self.countdown = kCountdownLimit;
-//        self.countdownTimer = [NSTimer timerWithTimeInterval:1 target:self selector:@selector(updateCountdown) userInfo:nil repeats:YES];
-//        
-        [[[RACSignal interval:1 onScheduler:[RACScheduler mainThreadScheduler]] takeUntil:self.rac_willDeallocSignal ] subscribeNext:^(id x) {
-            [self updateCountdown];
-        }];
-        [[NSRunLoop currentRunLoop] addTimer:self.countdownTimer forMode:NSRunLoopCommonModes];
-        [self.countdownTimer fire];
-    }
-}
-//取消定时器
-- (void)invalidateTimer {
-    [self.countdownTimer invalidate];
-    _countdownTimer = nil;
-}
-
-//  更新倒计时
-- (void)updateCountdown {
-    if (self.countdown > 0) {
-        self.getAuthCodeBtn.enabled = NO;
-        [self.getAuthCodeBtn setTitle:[NSString stringWithFormat:@"%ds",(int)self.countdown] forState:UIControlStateDisabled];
-    } else {
-        self.getAuthCodeBtn.enabled = YES;
-        [self invalidateTimer];
-    }
-    self.countdown --;
-}
+////  开始倒计时
+//- (void)beginCountdownIfNeeded {
+//    if (!self.countdownTimer.valid) {
+//        self.countdown = kCountdownLimit;
+////        self.countdownTimer = [NSTimer timerWithTimeInterval:1 target:self selector:@selector(updateCountdown) userInfo:nil repeats:YES];
+////        
+//        [[[RACSignal interval:1 onScheduler:[RACScheduler mainThreadScheduler]] takeUntil:self.rac_willDeallocSignal ] subscribeNext:^(id x) {
+//            [self updateCountdown];
+//        }];
+//        [[NSRunLoop currentRunLoop] addTimer:self.countdownTimer forMode:NSRunLoopCommonModes];
+//        [self.countdownTimer fire];
+//    }
+//}
+////取消定时器
+//- (void)invalidateTimer {
+//    [self.countdownTimer invalidate];
+//    _countdownTimer = nil;
+//}
+//
+////  更新倒计时
+//- (void)updateCountdown {
+//    if (self.countdown > 0) {
+//        self.getAuthCodeBtn.enabled = NO;
+//        [self.getAuthCodeBtn setTitle:[NSString stringWithFormat:@"%ds",(int)self.countdown] forState:UIControlStateDisabled];
+//    } else {
+//        self.getAuthCodeBtn.enabled = YES;
+//        [self invalidateTimer];
+//    }
+//    self.countdown --;
+//}
 
 #pragma mark - Setter
 - (void)setRegOrForgetType:(SSJRegistAndForgetPasswordType)regOrForgetType {
     //执行请求验证码
     _regOrForgetType = regOrForgetType;
     self.viewModel.regOrForType = regOrForgetType;
-        [self.viewModel.getVerificationCodeCommand execute:nil];
+    self.tfRegYanZhenF.viewModel = self.viewModel;
 }
 
 #pragma mark - UITextFieldDelegate
@@ -124,7 +127,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 {
     NSString *text = textField.text ?:@"";
     text = [text stringByReplacingCharactersInRange:range withString:string];
-    if (textField == self.tfRegYanZhenNum) {
+    if (textField == self.tfRegYanZhenF) {
         if (text.length > 6) {
             [CDAutoHideMessageHUD showMessage:@"最多只能输入6位" inView:self.view.window duration:1];
             return NO;
@@ -139,24 +142,34 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 }
 
 #pragma mark - Lazy
--(UITextField *)tfRegYanZhenNum{
-    if (!_tfRegYanZhenNum) {
-        _tfRegYanZhenNum = [[UITextField alloc] init];
-        _tfRegYanZhenNum.delegate = self;
-        _tfRegYanZhenNum.textColor = [UIColor ssj_colorWithHex:@"333333"];
-        _tfRegYanZhenNum.clearButtonMode = UITextFieldViewModeWhileEditing;
-        _tfRegYanZhenNum.placeholder = @"验证码";
-        _tfRegYanZhenNum.font = [UIFont ssj_helveticaRegularFontOfSize:SSJ_FONT_SIZE_3];
-        [_tfRegYanZhenNum ssj_setBorderColor:[UIColor ssj_colorWithHex:@"cccccc"]];
-        [_tfRegYanZhenNum ssj_setBorderStyle:SSJBorderStyleBottom];
-        [_tfRegYanZhenNum ssj_setBorderWidth:1];
-        _tfRegYanZhenNum.keyboardType = UIKeyboardTypeNumberPad;
-        _tfRegYanZhenNum.delegate = self;
-        _tfRegYanZhenNum.rightView = self.getAuthCodeBtn;
-        _tfRegYanZhenNum.rightViewMode = UITextFieldViewModeAlways;
-        
+//-(UITextField *)tfRegYanZhenNum{
+//    if (!_tfRegYanZhenNum) {
+//        _tfRegYanZhenNum = [[UITextField alloc] init];
+//        _tfRegYanZhenNum.delegate = self;
+//        _tfRegYanZhenNum.textColor = [UIColor ssj_colorWithHex:@"333333"];
+//        _tfRegYanZhenNum.clearButtonMode = UITextFieldViewModeWhileEditing;
+//        _tfRegYanZhenNum.placeholder = @"验证码";
+//        _tfRegYanZhenNum.font = [UIFont ssj_helveticaRegularFontOfSize:SSJ_FONT_SIZE_3];
+//        [_tfRegYanZhenNum ssj_setBorderColor:[UIColor ssj_colorWithHex:@"cccccc"]];
+//        [_tfRegYanZhenNum ssj_setBorderStyle:SSJBorderStyleBottom];
+//        [_tfRegYanZhenNum ssj_setBorderWidth:1];
+//        _tfRegYanZhenNum.keyboardType = UIKeyboardTypeNumberPad;
+//        _tfRegYanZhenNum.delegate = self;
+//        _tfRegYanZhenNum.rightView = self.getAuthCodeBtn;
+//        _tfRegYanZhenNum.rightViewMode = UITextFieldViewModeAlways;
+//        
+//    }
+//    return _tfRegYanZhenNum;
+//}
+
+- (SSJVerifCodeField *)tfRegYanZhenF {
+    if (!_tfRegYanZhenF) {
+        _tfRegYanZhenF = [[SSJVerifCodeField alloc] initWithGetCodeType:self.regOrForgetType];
+        _tfRegYanZhenF.rightViewMode = UITextFieldViewModeAlways;
+        _tfRegYanZhenF.delegate = self;
     }
-    return _tfRegYanZhenNum;
+    _tfRegYanZhenF.viewModel = self.viewModel;
+    return _tfRegYanZhenF;
 }
 
 - (UITextField*)tfPassword{
@@ -186,42 +199,42 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     return _tfPassword;
 }
 
-- (UIButton *)getAuthCodeBtn {
-    if (!_getAuthCodeBtn) {
-        _getAuthCodeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        _getAuthCodeBtn.size = CGSizeMake(95, 30);
-        _getAuthCodeBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
-        [_getAuthCodeBtn setTitle:@"获取验证码" forState:UIControlStateNormal];
-        [_getAuthCodeBtn setTitleColor:[UIColor ssj_colorWithHex:@"#ea4a64"] forState:UIControlStateNormal];
-        [_getAuthCodeBtn setTitleColor:[UIColor ssj_colorWithHex:@"#f9cbd0"] forState:UIControlStateDisabled];
-
-        [[_getAuthCodeBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(UIButton *btn) {
-            [self.viewModel.getVerificationCodeCommand execute:nil];
-            [self.viewModel.getVerificationCodeCommand.executionSignals.switchToLatest subscribeNext:^(RACTuple *tuple) {
-                //请求成功并且不需要图形验证码的时候开启倒计时
-                    if ([tuple.first isEqualToString:@"1"]) {//发送验证码成功
-                        //倒计时
-                        [self beginCountdownIfNeeded];
-                    } else if ([tuple.first isEqualToString:@"1"]) {//需要图片验证码
-                        //显示图形验证码
-//                        self.graphVerView.verSt
-                        [self.graphVerView show];
-                    } else if ([tuple.first isEqualToString:@"1"]) {//图片验证码错误
-                        [CDAutoHideMessageHUD showMessage:@"图片验证码错误"];
-                    } else {
-                        [CDAutoHideMessageHUD showMessage:tuple.last];
-                    }
-                }];
-
-            }];
-        [_getAuthCodeBtn ssj_setBorderColor:[UIColor ssj_colorWithHex:@"cccccc"]];
-        [_getAuthCodeBtn ssj_setBorderStyle:SSJBorderStyleLeft];
-        [_getAuthCodeBtn ssj_setBorderWidth:1/SSJSCREENSCALE];
-        [_getAuthCodeBtn ssj_setBorderInsets:UIEdgeInsetsMake(4, 5, 4, 5)];
-    }
-    return _getAuthCodeBtn;
-}
-
+//- (UIButton *)getAuthCodeBtn {
+//    if (!_getAuthCodeBtn) {
+//        _getAuthCodeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+//        _getAuthCodeBtn.size = CGSizeMake(95, 30);
+//        _getAuthCodeBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
+//        [_getAuthCodeBtn setTitle:@"获取验证码" forState:UIControlStateNormal];
+//        [_getAuthCodeBtn setTitleColor:[UIColor ssj_colorWithHex:@"#ea4a64"] forState:UIControlStateNormal];
+//        [_getAuthCodeBtn setTitleColor:[UIColor ssj_colorWithHex:@"#f9cbd0"] forState:UIControlStateDisabled];
+//
+//        [[_getAuthCodeBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(UIButton *btn) {
+//            [self.viewModel.getVerificationCodeCommand execute:nil];
+//            [self.viewModel.getVerificationCodeCommand.executionSignals.switchToLatest subscribeNext:^(RACTuple *tuple) {
+//                //请求成功并且不需要图形验证码的时候开启倒计时
+//                    if ([tuple.first isEqualToString:@"1"]) {//发送验证码成功
+//                        //倒计时
+//                        [self beginCountdownIfNeeded];
+//                    } else if ([tuple.first isEqualToString:@"1"]) {//需要图片验证码
+//                        //显示图形验证码
+////                        self.graphVerView.verSt
+//                        [self.graphVerView show];
+//                    } else if ([tuple.first isEqualToString:@"1"]) {//图片验证码错误
+//                        [CDAutoHideMessageHUD showMessage:@"图片验证码错误"];
+//                    } else {
+//                        [CDAutoHideMessageHUD showMessage:tuple.last];
+//                    }
+//                }];
+//
+//            }];
+//        [_getAuthCodeBtn ssj_setBorderColor:[UIColor ssj_colorWithHex:@"cccccc"]];
+//        [_getAuthCodeBtn ssj_setBorderStyle:SSJBorderStyleLeft];
+//        [_getAuthCodeBtn ssj_setBorderWidth:1/SSJSCREENSCALE];
+//        [_getAuthCodeBtn ssj_setBorderInsets:UIEdgeInsetsMake(4, 5, 4, 5)];
+//    }
+//    return _getAuthCodeBtn;
+//}
+//
 
 
 - (UIButton*)registerAndLoginButton{
@@ -249,22 +262,22 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 }
 
 
-- (SSJLoginGraphVerView *)graphVerView {
-    if (!_graphVerView) {
-        _graphVerView = [[SSJLoginGraphVerView alloc] init];
-        _graphVerView.size = CGSizeMake(315, 252);
-        _graphVerView.centerY = self.view.centerY - 80;
-        _graphVerView.centerX = self.view.centerX;
-         [[_graphVerView.reChooseBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(UIButton *btn) {
-             [self.viewModel.reGetVerificationCodeCommand execute:nil];
-             [self.viewModel.reGetVerificationCodeCommand.executionSignals.switchToLatest subscribeNext:^(UIImage *image) {
-                     //成功刷新验证码
-                 self.graphVerView.verImage = image;
-
-             }];
-        }];
-    }
-    return _graphVerView;
-}
+//- (SSJLoginGraphVerView *)graphVerView {
+//    if (!_graphVerView) {
+//        _graphVerView = [[SSJLoginGraphVerView alloc] init];
+//        _graphVerView.size = CGSizeMake(315, 252);
+//        _graphVerView.centerY = self.view.centerY - 80;
+//        _graphVerView.centerX = self.view.centerX;
+//         [[_graphVerView.reChooseBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(UIButton *btn) {
+//             [self.viewModel.reGetVerificationCodeCommand execute:nil];
+//             [self.viewModel.reGetVerificationCodeCommand.executionSignals.switchToLatest subscribeNext:^(UIImage *image) {
+//                     //成功刷新验证码
+//                 self.graphVerView.verImage = image;
+//
+//             }];
+//        }];
+//    }
+//    return _graphVerView;
+//}
 
 @end
