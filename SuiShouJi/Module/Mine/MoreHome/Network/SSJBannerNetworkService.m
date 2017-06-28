@@ -11,7 +11,7 @@
 @implementation SSJBannerNetworkService
 
 - (void)requestBannersList{
-//    self.httpMethod = SSJBaseNetworkServiceHttpMethodGET;
+    self.httpMethod = SSJBaseNetworkServiceHttpMethodGET;
     
 //#ifdef DEBUG
 //    NSString *api = @"/app/banner_test.json";
