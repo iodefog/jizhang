@@ -255,6 +255,7 @@
         _registerAndLoginButton.clipsToBounds = YES;
         RAC(_registerAndLoginButton,enabled) = self.viewModel.enableRegAndLoginSignal;
         [[_registerAndLoginButton rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
+            
             [self.viewModel.registerAndLoginCommand execute:nil];
         }];
     }
