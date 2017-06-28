@@ -12,7 +12,7 @@
 #import "SSJImageSynchronizeTask.h"
 #import "SSJSynchronizeTaskQueue.h"
 #import "SSJNetworkReachabilityManager.h"
-#import "SSJLoginViewController+SSJCategory.h"
+#import "SSJLoginVerifyPhoneViewController+SSJLoginCategory.h"
 #import "SSJDomainManager.h"
 #import "SSJShareBooksMemberKickedOutAlerter.h"
 
@@ -223,7 +223,7 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
             if (error.code == -5555) {
                 // -5555是用户格式化后原userid被注销了，需要用户重新登陆获取新的userid
                 [SSJAlertViewAdapter showAlertViewWithTitle:nil message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction * _Nonnull action) {
-                    [SSJLoginViewController reloginIfNeeded];
+                    [SSJLoginVerifyPhoneViewController reloginIfNeeded];
                 }], nil];
             } else if (error.code == -2000) {
                 // 例如同步一条流水失败，可能是流水依赖的资金账户或者收支类别没有同步给服务端，这种情况就会导致－2000

@@ -31,7 +31,7 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
 #import "SSJUserTableManager.h"
 #import "SSJBooksHeadeCollectionrReusableView.h"
 #import "SSJCreateOrDeleteBooksService.h"
-#import "SSJLoginViewController.h"
+#import "SSJLoginVerifyPhoneViewController.h"
 #import "UIViewController+SSJPageFlow.h"
 #import "SSJInviteCodeJoinSuccessView.h"
 
@@ -185,7 +185,7 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
                 [self.createShareBookTypeView show];
             } else {
                 //去登录
-                SSJLoginViewController *loginVC = [[SSJLoginViewController alloc] init];
+                SSJLoginVerifyPhoneViewController *loginVC = [[SSJLoginVerifyPhoneViewController alloc] init];
                 loginVC.backController = self;
                 loginVC.finishHandle = ^(UIViewController *controller) {
                     [self.navigationController popToRootViewControllerAnimated:YES];

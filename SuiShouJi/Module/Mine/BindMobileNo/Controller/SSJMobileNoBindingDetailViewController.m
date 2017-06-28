@@ -41,7 +41,7 @@
 
 - (void)updateViewConstraints {
     [self.icon mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.view).offset(46);
+        make.top.mas_equalTo(self.view).offset(SSJ_NAVIBAR_BOTTOM + 46);
         make.centerX.mas_equalTo(self.view);
         make.size.mas_equalTo(CGSizeMake(98, 103));
     }];
@@ -120,6 +120,7 @@
         _changeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _changeBtn.clipsToBounds = YES;
         _changeBtn.layer.cornerRadius = 3;
+        _changeBtn.layer.borderWidth = 1;
         _changeBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
         [_changeBtn setTitle:@"更换手机号" forState:UIControlStateNormal];
         [[_changeBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {

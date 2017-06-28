@@ -148,6 +148,13 @@
     RAC(self.verifyPhoneViewModel, agreeProtocol) = RACObserve(self.agreeButton,selected);
 }
 
+- (void)setMobileNo:(NSString *)mobileNo {
+    _mobileNo = mobileNo;
+    if (mobileNo.length) {
+        self.numTextF.text = mobileNo;
+    }
+}
+
 #pragma mark - Lazy
 
 - (UITextField *)numTextF {

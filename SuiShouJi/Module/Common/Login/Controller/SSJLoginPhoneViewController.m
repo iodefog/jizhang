@@ -8,6 +8,7 @@
 
 #import "SSJLoginPhoneViewController.h"
 #import "SSRegisterAndLoginViewController.h"
+#import "UIViewController+SSJPageFlow.h"
 
 #import "SSJLoginVerifyPhoneNumViewModel.h"
 
@@ -140,6 +141,7 @@
             @strongify(self);
             //忘记密码
             SSRegisterAndLoginViewController *vc = [[SSRegisterAndLoginViewController alloc] init];
+            vc.finishHandle = self.finishHandle;
             vc.viewModel = self.viewModel;
             vc.regOrForgetType = SSJRegistAndForgetPasswordTypeForgetPassword;
             [self.navigationController pushViewController:vc animated:YES];

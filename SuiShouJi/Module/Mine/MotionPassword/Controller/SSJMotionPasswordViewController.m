@@ -8,7 +8,7 @@
 
 #import "SSJMotionPasswordViewController.h"
 #import "SSJNavigationController.h"
-#import "SSJLoginViewController.h"
+#import "SSJLoginVerifyPhoneViewController.h"
 #import "SCYMotionEncryptionView.h"
 #import "SSJUserTableManager.h"
 #import "UIImageView+CornerRadius.h"
@@ -334,12 +334,12 @@ static const int kVerifyFailureTimesLimit = 5;
         } completed:^{
             @strongify(self);
             UIViewController *previousVC = [self ssj_previousViewController];
-            if ([previousVC isKindOfClass:[SSJLoginViewController class]]) {
-                SSJLoginViewController *loginVC = (SSJLoginViewController *)previousVC;
+            if ([previousVC isKindOfClass:[SSJLoginVerifyPhoneViewController class]]) {
+                SSJLoginVerifyPhoneViewController *loginVC = (SSJLoginVerifyPhoneViewController *)previousVC;
                 loginVC.mobileNo = self.userItem.mobileNo;
                 [self.navigationController popViewControllerAnimated:YES];
             } else {
-                SSJLoginViewController *loginVC = [[SSJLoginViewController alloc] init];
+                SSJLoginVerifyPhoneViewController *loginVC = [[SSJLoginVerifyPhoneViewController alloc] init];
                 loginVC.mobileNo = self.userItem.mobileNo;
                 loginVC.finishHandle = self.finishHandle;
                 loginVC.cancelHandle = self.finishHandle;
@@ -355,10 +355,10 @@ static const int kVerifyFailureTimesLimit = 5;
 - (void)changeAccountAction {
     SSJClearLoginInfo();
     [SSJUserTableManager reloadUserIdWithSuccess:^{
-        if ([[self ssj_previousViewController] isKindOfClass:[SSJLoginViewController class]]) {
+        if ([[self ssj_previousViewController] isKindOfClass:[SSJLoginVerifyPhoneViewController class]]) {
             [self.navigationController popViewControllerAnimated:YES];
         } else {
-            SSJLoginViewController *loginVC = [[SSJLoginViewController alloc] init];
+            SSJLoginVerifyPhoneViewController *loginVC = [[SSJLoginVerifyPhoneViewController alloc] init];
             loginVC.finishHandle = self.finishHandle;
             loginVC.cancelHandle = self.finishHandle;
             loginVC.backController = self.backController;

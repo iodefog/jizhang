@@ -23,6 +23,5 @@
 @interface SSJMobileNoField (SSJTheme)
 
 - (void)updateAppearanceAccordingToTheme;
-- (void)defaultAppearanceTheme;
 
 @end
