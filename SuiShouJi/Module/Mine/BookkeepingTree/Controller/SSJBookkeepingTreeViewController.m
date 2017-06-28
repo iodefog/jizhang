@@ -169,7 +169,7 @@
 - (void)startMotion {
     [SSJAnaliyticsManager event:@"account_tree_shake"];
     // 如果正在请求签到接口，直接返回
-    if (_checkInService.isLoading) {
+    if (_checkInService.state == SSJNetworkServiceStateLoading) {
         return;
     }
     

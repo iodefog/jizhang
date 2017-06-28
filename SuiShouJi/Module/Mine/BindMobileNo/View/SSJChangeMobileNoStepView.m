@@ -15,6 +15,8 @@
 #pragma mark -
 @interface _SSJChangeMobileNoStepDashedView : UIImageView
 
+@property (nonatomic, strong) UIColor *lineColor;
+
 @end
 
 @implementation _SSJChangeMobileNoStepDashedView
@@ -41,7 +43,7 @@
     CGFloat lengths[] = {2, 2};
     CGContextRef ctx = UIGraphicsGetCurrentContext();
     CGContextSetLineWidth(ctx, self.height);
-    CGContextSetStrokeColorWithColor(ctx, self.backgroundColor.CGColor);
+    CGContextSetStrokeColorWithColor(ctx, self.lineColor.CGColor);
     CGContextSetLineDash(ctx, 0, lengths, 2); //画虚线
     CGContextMoveToPoint(ctx, 0, 0); //开始画线
     CGContextAddLineToPoint(ctx, self.width, 0);
@@ -49,8 +51,11 @@
     self.image = UIGraphicsGetImageFromCurrentImageContext();
 }
 
-- (void)setBackgroundColor:(UIColor *)backgroundColor {
-    [self drawDash];
+- (void)setLineColor:(UIColor *)lineColor {
+    if (!CGColorEqualToColor(_lineColor.CGColor, lineColor.CGColor)) {
+        _lineColor = lineColor;
+        [self drawDash];
+    }
 }
 
 @end
@@ -111,8 +116,9 @@ typedef NS_ENUM(NSInteger, SSJChangeMobileNoStepSingleViewStyle) {
             }];
             [self.dash mas_updateConstraints:^(MASConstraintMaker *make) {
                 make.size.mas_equalTo(CGSizeMake(36, 2));
-                make.left.mas_equalTo(self.lab).offset(4);
-                make.top.and.right.bottom.mas_equalTo(self);
+                make.left.mas_equalTo(self.lab.mas_right).offset(4);
+                make.right.mas_equalTo(self);
+                make.centerY.mas_equalTo(self.lab);
             }];
         }
             break;
@@ -131,7 +137,7 @@ typedef NS_ENUM(NSInteger, SSJChangeMobileNoStepSingleViewStyle) {
 
 - (void)setBackgroundColor:(UIColor *)backgroundColor {
     self.lab.backgroundColor = backgroundColor;
-    self.dash.backgroundColor = backgroundColor;
+    self.dash.lineColor = backgroundColor;
 }
 
 - (void)setNumber:(NSInteger)number {
@@ -146,6 +152,7 @@ typedef NS_ENUM(NSInteger, SSJChangeMobileNoStepSingleViewStyle) {
         _lab.layer.cornerRadius = 2;
         _lab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_5];
         _lab.textColor = [UIColor whiteColor];
+        _lab.textAlignment = NSTextAlignmentCenter;
     }
     return _lab;
 }
@@ -217,6 +224,7 @@ typedef NS_ENUM(NSInteger, SSJChangeMobileNoStepSingleViewStyle) {
         view.number = i + 1;
         view.backgroundColor = i < self.currentStep ? SSJ_COMPLETION_COLOR : SSJ_INCOMPLETION_COLOR;
         [self.singleViews addObject:view];
+        [self addSubview:view];
     }
 }
 
