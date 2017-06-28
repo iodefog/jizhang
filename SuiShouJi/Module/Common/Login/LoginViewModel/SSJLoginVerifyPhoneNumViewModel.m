@@ -222,7 +222,6 @@
     [param setObject:@(time) forKey:@"timeStamp"];
     [param setObject:strSign forKey:@"signMsg"];
     [param setObject:@"" forKey:@"imgYzm"];
-    
     [self.netWorkService request:@"/chargebook/user/send_sms.go" params:param success:^(SSJBaseNetworkService * _Nonnull service) {
         [subscriber sendNext:service.rootElement];
         [subscriber sendCompleted];
@@ -237,15 +236,25 @@
  */
 - (void)reVerCodeWithSubscriber:(id<RACSubscriber>) subscriber {
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
-    [param setObject:self.phoneNum forKey:@"cmobileno"];
+    [param setObject:self.phoneNum forKey:@"cmobileNo"];
     [self.netWorkService request:@"/chargebook/user/get_imgYzm.go" params:param success:^(SSJBaseNetworkService * _Nonnull service) {
-        [subscriber sendNext:service.rootElement];
+        if ([service.returnCode isEqualToString:@"1"]) {
+            [subscriber sendNext:service.rootElement];
+        }
         [subscriber sendCompleted];
     } failure:^(SSJBaseNetworkService * _Nonnull service) {
         [subscriber sendError:nil];
     }];
 }
 
+
+/**
+ 注册
+
+ @param password <#password description#>
+ @param useraccount <#useraccount description#>
+ @param subscriber <#subscriber description#>
+ */
 - (void)registerWithPassWord:(NSString*)password AndUserAccount:(NSString*)useraccount subscriber:(id<RACSubscriber>) subscriber {
     self.netWorkService.showLodingIndicator = YES;
     self.openId = @"";
@@ -274,6 +283,26 @@
     [dict setObject:getuiId ?: @"" forKey:@"cgetuiid"];
     SSJUSERID();
     [self.netWorkService request:SSJURLWithAPI(@"/chargebook/user/mobile_register.go") params:dict success:^(SSJBaseNetworkService * _Nonnull service) {
+        if ([service.returnCode isEqualToString:@"1"]) {
+            [subscriber sendNext:service.rootElement];
+        }
+        [subscriber sendCompleted];
+    } failure:^(SSJBaseNetworkService * _Nonnull service) {
+        [CDAutoHideMessageHUD showMessage:service.desc];
+        [subscriber sendError:nil];
+    }];
+}
+
+
+/**
+ 忘记密码
+
+ @param password <#password description#>
+ @param useraccount <#useraccount description#>
+ @param subscriber <#subscriber description#>
+ */
+- (void)forgetWithPassWord:(NSString*)password AndUserAccount:(NSString*)mobileNo authCode:(NSString *)authCode subscriber:(id<RACSubscriber>) subscriber {
+    [self.netWorkService request:@"/user/resetpwd.go" params:@{@"mobileNo":mobileNo ?: @"",@"yzm":authCode ?: @"",@"pwd":password ?: @""} success:^(SSJBaseNetworkService * _Nonnull service) {
         if ([service.returnCode isEqualToString:@"1"]) {
             [subscriber sendNext:service.rootElement];
         }
@@ -567,27 +596,23 @@
 }
 
 - (RACCommand *)verifyPhoneNumRequestCommand {
-    //判断手机号格式
-    if (![self.phoneNum ssj_validPhoneNum]) {
-        [CDAutoHideMessageHUD showMessage:@"请输入正确的手机号"];
-        return nil;
-    }
     if (!_verifyPhoneNumRequestCommand) {
         _verifyPhoneNumRequestCommand = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
             @weakify(self);
             RACSignal *signal = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
                 @strongify(self);
-                [self verityPhoneNumWithPhone:self.phoneNum subscriber:subscriber];
+                //判断手机号格式
+                if (![self.phoneNum ssj_validPhoneNum]) {
+                    [CDAutoHideMessageHUD showMessage:@"请输入正确的手机号"];
+                } else {
+                    [self verityPhoneNumWithPhone:self.phoneNum subscriber:subscriber];
+                }
                 return nil;
             }];
             //返回的数据处理json->model
             return [signal map:^id(NSDictionary *result) {
                 return [[result objectForKey:@"code"] stringValue];
             }];
-        }];
-        
-        //获得数据
-        [_verifyPhoneNumRequestCommand.executionSignals.switchToLatest subscribeNext:^(id x) {
         }];
     }
     return _verifyPhoneNumRequestCommand;
@@ -629,7 +654,9 @@
 - (RACCommand *)getVerificationCodeCommand {
     if (!_getVerificationCodeCommand) {
         _getVerificationCodeCommand = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
+            @weakify(self);
             RACSignal *signal = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+                @strongify(self);
                 [self verCode:self.regOrForType channelType:SSJLoginAndRegisterPasswordChannelTypeSMS subscriber:subscriber];
                 return nil;
             }];
@@ -637,28 +664,27 @@
                return [RACTuple tupleWithObjects:[[value objectForKey:@"code"] stringValue],[[value objectForKey:@"results"] objectForKey:@"image"],[value objectForKey:@"desc"], nil];
             }];
         }];
-        
-//        [_getVerificationCodeCommand.executionSignals.switchToLatest subscribeNext:^(id x) {
-//            
-//        }];
     }
     return _getVerificationCodeCommand;
 }
 
+
+/**
+ 重新获取图形验证码页面
+
+ @return <#return value description#>
+ */
 - (RACCommand *)reGetVerificationCodeCommand {
     if (!_reGetVerificationCodeCommand) {
         _reGetVerificationCodeCommand = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
+            @weakify(self);
             RACSignal *signal = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+                @strongify(self);
                 [self reVerCodeWithSubscriber:subscriber];
                 return nil;
             }];
             return [signal map:^id(NSDictionary *value) {
-                if ([[value objectForKey:@"code"] isEqualToString:@"1"]) {
-                    return [value objectForKey:@"image"];
-                } else {
-                    [CDAutoHideMessageHUD showMessage:[value objectForKey:@"desc"]];
-                    return [value objectForKey:@"desc"];
-                }
+                    return [[[value objectForKey:@"results"] objectForKey:@"image"] base64ToImage];
             }];
         }];
     }
@@ -668,16 +694,31 @@
 - (RACCommand *)registerAndLoginCommand {
     if (!_registerAndLoginCommand) {
         _registerAndLoginCommand = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
+            @weakify(self);
             RACSignal *signal = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+                @strongify(self);
                 //登录
                 self.loginType = SSJLoginTypeNormal;
-                [self registerWithPassWord:self.passwardNum AndUserAccount:self.phoneNum subscriber:subscriber];
+                if (self.regOrForType == SSJRegistAndForgetPasswordTypeForgetPassword) {//忘记密码
+                    [self forgetWithPassWord:self.passwardNum AndUserAccount:self.phoneNum authCode:self.verificationCode subscriber:subscriber];
+                } else if(self.regOrForType == SSJRegistAndForgetPasswordTypeRegist){
+                    [self registerWithPassWord:self.passwardNum AndUserAccount:self.phoneNum subscriber:subscriber];
+                }
+                
                 return nil;
             }];
             return signal;
         }];
+        
+        @weakify(self);
         [_registerAndLoginCommand.executionSignals.switchToLatest subscribeNext:^(NSDictionary *dict) {
-            [self registerSuccessWithDic:dict];
+            @strongify(self);
+            if (self.regOrForType == SSJRegistAndForgetPasswordTypeForgetPassword) {//忘记密码
+                //成功之后调用登录接口
+                [self.normalLoginCommand execute:nil];
+            } else if(self.regOrForType == SSJRegistAndForgetPasswordTypeRegist){
+                [self registerSuccessWithDic:dict];
+            }
         }];
     }
     return _registerAndLoginCommand;
@@ -686,8 +727,9 @@
 - (RACCommand *)wxLoginCommand {
     if (!_wxLoginCommand) {
         _wxLoginCommand = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
+            @weakify(self);
             RACSignal *signal = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-                
+                @strongify(self);
                 //发送微信登录请求
                 [[SSJThirdPartyLoginManger shareInstance].weixinLogin weixinLoginWithSucessBlock:^(SSJThirdPartLoginItem *item) {
                     [SSJThirdPartyLoginManger shareInstance].qqLogin = nil;
@@ -701,7 +743,9 @@
             return signal;
         }];
         
+        @weakify(self);
         [_wxLoginCommand.executionSignals.switchToLatest subscribeNext:^(NSDictionary *dict) {
+            @strongify(self);
             [self datawithDic:dict];
         }] ;
     }
@@ -711,7 +755,9 @@
 - (RACCommand *)qqLoginCommand {
     if (!_qqLoginCommand) {
         _qqLoginCommand = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
+            @weakify(self);
             return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+                @strongify(self);
                 //发送qq登录请求
                 [[SSJThirdPartyLoginManger shareInstance].qqLogin qqLoginWithSucessBlock:^(SSJThirdPartLoginItem *item) {
                     [SSJThirdPartyLoginManger shareInstance].qqLogin = nil;
@@ -724,7 +770,9 @@
             }];
         }];
         
+        @weakify(self);
         [_qqLoginCommand.executionSignals.switchToLatest subscribeNext:^(NSDictionary *dict) {
+            @strongify(self);
             [self datawithDic:dict];
         }] ;
     }
@@ -734,13 +782,18 @@
 - (RACCommand *)normalLoginCommand {
     if (!_normalLoginCommand) {
         _normalLoginCommand = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
+            @weakify(self);
             RACSignal *signal = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+                @strongify(self);
                 [self loginNormalWithPassWord:self.passwardNum AndUserAccount:self.phoneNum subscriber:subscriber];
                 return nil;
             }];
             return signal;
         }];
+        
+        @weakify(self);
         [_normalLoginCommand.executionSignals.switchToLatest subscribeNext:^(NSDictionary *dict) {
+            @strongify(self);
             [self datawithDic:dict];
         }] ;
     }

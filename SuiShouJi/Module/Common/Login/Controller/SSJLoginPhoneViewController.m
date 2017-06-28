@@ -135,7 +135,9 @@
         [_forgetPasswordBtn setTitleColor:[UIColor ssj_colorWithHex:@"333333"] forState:UIControlStateNormal];
         _forgetPasswordBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
         
+        @weakify(self);
         [[_forgetPasswordBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(UIButton *btn) {
+            @strongify(self);
             //忘记密码
             SSRegisterAndLoginViewController *vc = [[SSRegisterAndLoginViewController alloc] init];
             vc.viewModel = self.viewModel;

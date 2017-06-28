@@ -88,7 +88,9 @@
     if (self.superview) return;
     self.verNumTextF.text = nil;
     UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+    @weakify(self);
     [keyWindow ssj_showViewWithBackView:self backColor:[UIColor blackColor] alpha:0.3 target:self touchAction:@selector(dismiss) animation:^{
+        @strongify(self);
         self.hidden = NO;
     } timeInterval:0.25 fininshed:NULL];
     [self.verNumTextF becomeFirstResponder];
@@ -96,7 +98,9 @@
 
 - (void)dismiss {
     if (!self.superview) return;
+    @weakify(self);
     [self.superview ssj_hideBackViewForView:self animation:^{
+        @strongify(self);
         self.hidden = YES;
     } timeInterval:0.25 fininshed:NULL];
     [self.verNumTextF resignFirstResponder];
@@ -125,7 +129,7 @@
 - (UIImageView *)verImageView {
     if (!_verImageView) {
         _verImageView = [[UIImageView alloc] init];
-        _verImageView.backgroundColor = [UIColor ssj_colorWithHex:@"#cccccc"];
+//        _verImageView.backgroundColor = [UIColor ssj_colorWithHex:@"#cccccc"];
         _verImageView.contentMode = UIViewContentModeCenter;
     }
     return _verImageView;
@@ -157,7 +161,9 @@
         _commitBtn = [[UIButton alloc] init];
         [_commitBtn setTitle:@"提交" forState:UIControlStateNormal];
         _commitBtn.backgroundColor = [UIColor ssj_colorWithHex:@"#EB4A64"];
+        @weakify(self);
         [[_commitBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(UIButton *btn) {
+            @strongify(self);
             //发送获取验证码请求
             [self.verViewModel.getVerificationCodeCommand execute:nil];
         }];

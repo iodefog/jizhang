@@ -131,8 +131,9 @@ static const NSInteger kAuthCodeLimit = 6;
         [_getAuthCodeBtn setTitleColor:[UIColor ssj_colorWithHex:@"#f9cbd0"] forState:UIControlStateDisabled];
         [_getAuthCodeBtn ssj_setBorderStyle:SSJBorderStyleLeft];
         [_getAuthCodeBtn ssj_setBorderWidth:1/SSJSCREENSCALE];
-        
+        @weakify(self);
         [[_getAuthCodeBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(UIButton *btn) {
+            @strongify(self);
             [[self.viewModel.getVerificationCodeCommand execute:nil] subscribeNext:^(RACTuple *tuple) {
                 //请求成功并且不需要图形验证码的时候开启倒计时
                 if ([tuple.first isEqualToString:@"1"]) {//发送验证码成功
@@ -151,7 +152,7 @@ static const NSInteger kAuthCodeLimit = 6;
 //            [self.viewModel.getVerificationCodeCommand.executionSignals.switchToLatest subscribeNext:^(RACTuple *tuple) {
 //                
 //            }];
-            
+        
         }];
         
     }
@@ -165,10 +166,11 @@ static const NSInteger kAuthCodeLimit = 6;
         _graphVerView.size = CGSizeMake(315, 252);
         _graphVerView.centerY = SSJSCREENHEIGHT * 0.5 - 80;
         _graphVerView.centerX = SSJSCREENWITH * 0.5;
+        @weakify(self);
         [[_graphVerView.reChooseBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(UIButton *btn) {
+            @strongify(self);
             //点击重新获取图形验证码
-            [self.viewModel.reGetVerificationCodeCommand execute:nil];
-            [self.viewModel.reGetVerificationCodeCommand.executionSignals.switchToLatest subscribeNext:^(UIImage *image) {
+            [[self.viewModel.reGetVerificationCodeCommand execute:nil] subscribeNext:^(UIImage *image) {
                 //成功刷新验证码
                 self.graphVerView.verImage = image;
             }];
