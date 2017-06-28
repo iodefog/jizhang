@@ -8,7 +8,7 @@
 
 #import "SSJShareBooksUrlHandle.h"
 #import "SSJInviteCodeJoinViewController.h"
-#import "SSJLoginViewController.h"
+#import "SSJLoginVerifyPhoneViewController.h"
 
 @implementation SSJShareBooksUrlHandle
 
@@ -34,7 +34,7 @@
     } else {
         SSJInviteCodeJoinViewController *codeInviteVc = [[SSJInviteCodeJoinViewController alloc] init];
         codeInviteVc.inviteCode = inviteCode;
-        SSJLoginViewController *loginVc = [[SSJLoginViewController alloc] init];
+        SSJLoginVerifyPhoneViewController *loginVc = [[SSJLoginVerifyPhoneViewController alloc] init];
         NSMutableArray *viewControllers = [SSJVisibalController().navigationController.viewControllers mutableCopy];
         [viewControllers addObject:codeInviteVc];
         [viewControllers addObject:loginVc];

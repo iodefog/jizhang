@@ -10,7 +10,8 @@
 #import "SSJHeaderBannerCollectionViewCell.h"
 #import "SSJAdWebViewController.h"
 #import "SSJBannerItem.h"
-#import "SSJLoginViewController.h"
+
+#import "SSJLoginVerifyPhoneViewController.h"
 
 static NSString *const kHeadBannerCellID = @"SSJHeaderBannerCollectionViewCellID";
 
@@ -136,7 +137,7 @@ static NSString *const kHeadBannerCellID = @"SSJHeaderBannerCollectionViewCellID
             [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:@"请登录后再查看2016账单吧！" action:[SSJAlertViewAction actionWithTitle:@"关闭" handler:^(SSJAlertViewAction *action) {
             }],[SSJAlertViewAction actionWithTitle:@"立即登录" handler:^(SSJAlertViewAction *action) {
                 if (weakSelf.delegate && [weakSelf.delegate respondsToSelector:@selector(pushToViewControllerWithVC:)]) {
-                    SSJLoginViewController *loginVC = [[SSJLoginViewController alloc] init];
+                    SSJLoginVerifyPhoneViewController *loginVC = [[SSJLoginVerifyPhoneViewController alloc] init];
                     [weakSelf.delegate pushToViewControllerWithVC:loginVC];
                 }
             }],nil];

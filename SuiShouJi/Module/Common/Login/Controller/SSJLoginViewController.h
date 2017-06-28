@@ -7,7 +7,7 @@
 //
 
 #import "SSJBaseViewController.h"
-
+SSJ_DEPRECATED
 @interface SSJLoginViewController : SSJBaseViewController
 
 //  手机号码

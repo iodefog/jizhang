@@ -14,7 +14,7 @@
 #import "SSJUserDefaultDataCreater.h"
 #import "SSJDataSynchronizer.h"
 #import "SSJLoginViewController.h"
-#import "SSJLoginViewController+SSJCategory.h"
+#import "SSJLoginVerifyPhoneViewController+SSJLoginCategory.h"
 #import "SSJLocalNotificationHelper.h"
 
 @implementation SSJDataClearHelper
@@ -86,7 +86,7 @@
                 
                 if ([service.returnCode isEqualToString:@"-5555"]) {
                     [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"数据已格式化成功，请重新登录！" action:[SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction * _Nonnull action) {
-                        [SSJLoginViewController reloginIfNeeded];
+                        [SSJLoginVerifyPhoneViewController reloginIfNeeded];
                     }], nil];
                     return;
                 }

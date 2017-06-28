@@ -16,9 +16,12 @@
 
 //只有找回密码用14其他都是13
 - (instancetype)initWithGetCodeType:(SSJRegistAndForgetPasswordType)type;
+- (void)getVerifCode;
+
 @end
 
 @interface SSJVerifCodeField (SSJTheme)
 
 - (void)updateAppearanceAccordingToTheme;
+- (void)defaultAppearanceTheme;
 @end

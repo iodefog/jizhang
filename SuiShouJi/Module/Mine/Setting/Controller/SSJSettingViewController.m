@@ -11,7 +11,7 @@
 #import "SSJUserTableManager.h"
 #import "SSJSyncSettingViewController.h"
 #import "SSJMagicExportViewController.h"
-#import "SSJLoginViewController.h"
+#import "SSJLoginVerifyPhoneViewController.h"
 #import "SSJMotionPasswordViewController.h"
 #import "SSJClearDataViewController.h"
 #import "SSJBindMobileNoViewController.h"
@@ -185,7 +185,7 @@ static NSString *const kClearDataTitle = @"清理数据";
 }
 
 - (void)login {
-    SSJLoginViewController *loginVc = [[SSJLoginViewController alloc] init];
+    SSJLoginVerifyPhoneViewController *loginVc = [[SSJLoginVerifyPhoneViewController alloc] init];
     loginVc.backController = self;
     [self.navigationController pushViewController:loginVc animated:YES];
 }

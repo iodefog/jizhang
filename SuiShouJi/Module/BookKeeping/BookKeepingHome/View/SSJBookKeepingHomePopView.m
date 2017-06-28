@@ -7,7 +7,7 @@
 //
 
 #import "SSJBookKeepingHomePopView.h"
-#import "SSJLoginViewController.h"
+#import "SSJLoginVerifyPhoneViewController.h"
 #import "SSJRegistGetVerViewController.h"
 @interface SSJBookKeepingHomePopView()
 @property (weak, nonatomic) IBOutlet UIButton *registerButton;
@@ -67,7 +67,7 @@
             
             self.frame = [UIScreen mainScreen].bounds;
             self.loginBtnClickBlock = ^(){
-                SSJLoginViewController *loginVC = [[SSJLoginViewController alloc]init];
+                SSJLoginVerifyPhoneViewController *loginVC = [[SSJLoginVerifyPhoneViewController alloc]init];
                 loginVC.backController = backVC;
                 [nav pushViewController:loginVC animated:YES];
             };

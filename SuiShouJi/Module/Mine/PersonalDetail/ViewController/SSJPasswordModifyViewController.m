@@ -11,7 +11,7 @@
 #import "SSJPasswordModifyViewController.h"
 #import "SSJPasswordModifyCell.h"
 #import "SSJPasswordModifyService.h"
-#import "SSJLoginViewController.h"
+#import "SSJLoginVerifyPhoneViewController.h"
 
 #import "SSJDataSynchronizer.h"
 #import "SSJUserTableManager.h"
@@ -157,7 +157,7 @@
         [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
         SSJClearLoginInfo();
         [SSJUserTableManager reloadUserIdWithSuccess:^{
-            SSJLoginViewController *loginVc = [[SSJLoginViewController alloc]init];
+            SSJLoginVerifyPhoneViewController *loginVc = [[SSJLoginVerifyPhoneViewController alloc]init];
             loginVc.backController = [self.navigationController.viewControllers firstObject];
             [self.navigationController pushViewController:loginVc animated:YES];
             [SSJUserDefaultDataCreater asyncCreateAllDefaultDataWithUserId:SSJUSERID() success:NULL failure:NULL];

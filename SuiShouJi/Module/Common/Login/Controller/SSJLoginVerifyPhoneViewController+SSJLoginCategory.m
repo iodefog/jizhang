@@ -1,28 +1,28 @@
 //
-//  SSJLoginViewController+SSJCategory.m
+//  SSJLoginVerifyPhoneViewController+SSJLoginCategory.m
 //  SuiShouJi
 //
-//  Created by old lang on 16/9/14.
-//  Copyright © 2016年 ___9188___. All rights reserved.
+//  Created by yi cai on 2017/6/28.
+//  Copyright © 2017年 ___9188___. All rights reserved.
 //
 
-#import "SSJLoginViewController+SSJCategory.h"
+#import "SSJLoginVerifyPhoneViewController+SSJLoginCategory.h"
 #import "UIViewController+SSJPageFlow.h"
-#import "SSJUserTableManager.h"
 #import "SSJNavigationController.h"
 
-@implementation SSJLoginViewController (SSJCategory)
+#import "SSJUserTableManager.h"
 
+@implementation SSJLoginVerifyPhoneViewController (SSJLoginCategory)
 + (BOOL)reloginIfNeeded {
     UIViewController *currentVC = SSJVisibalController();
-    if ([currentVC isKindOfClass:[SSJLoginViewController class]]) {
+    if ([currentVC isKindOfClass:[SSJLoginVerifyPhoneViewController class]]) {
         return NO;
     }
     
     SSJClearLoginInfo();
     [SSJUserTableManager reloadUserIdWithSuccess:^{
         __weak typeof(currentVC) weak_currentVc = currentVC;
-        SSJLoginViewController *loginVC = [[SSJLoginViewController alloc] initWithNibName:nil bundle:nil];
+        SSJLoginVerifyPhoneViewController *loginVC = [[SSJLoginVerifyPhoneViewController alloc] initWithNibName:nil bundle:nil];
         loginVC.finishHandle = ^(UIViewController *controller) {
             controller.backController = weak_currentVc;
             [controller ssj_backOffAction];

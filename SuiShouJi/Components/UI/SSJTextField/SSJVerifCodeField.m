@@ -60,8 +60,6 @@ static const NSInteger kAuthCodeLimit = 6;
                 wself.text = [wself.text substringToIndex:kAuthCodeLimit];
             }
         }];
-        
-//        [self.viewModel.getVerificationCodeCommand execute:nil];
     }
     return self;
 }
@@ -92,7 +90,26 @@ static const NSInteger kAuthCodeLimit = 6;
     _viewModel = viewModel;
 }
 
+- (void)getVerifCode {
+    [[self.viewModel.getVerificationCodeCommand execute:nil] subscribeNext:^(RACTuple *tuple) {
+        //请求成功并且不需要图形验证码的时候开启倒计时
+        if ([tuple.first isEqualToString:@"1"]) {//发送验证码成功
+            //倒计时
+            [self beginCountdownIfNeeded];
+        } else if ([tuple.first isEqualToString:@"2"]) {//需要图片验证码
+            //显示图形验证码
+            self.graphVerView.verImage = [tuple.second base64ToImage];
+            [self.graphVerView show];
+        } else if ([tuple.first isEqualToString:@"3"]) {//图片验证码错误
+            [CDAutoHideMessageHUD showMessage:@"图片验证码错误"];
+        } else {
+            [CDAutoHideMessageHUD showMessage:tuple.last];
+        }
+    }];
+}
+
 #pragma mark - Private
+
 //  开始倒计时
 - (void)beginCountdownIfNeeded {
     if (!self.countdownTimer.valid && !self.countdownTimer) {
@@ -141,24 +158,7 @@ static const NSInteger kAuthCodeLimit = 6;
         @weakify(self);
         [[_getAuthCodeBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(UIButton *btn) {
             @strongify(self);
-            [[self.viewModel.getVerificationCodeCommand execute:nil] subscribeNext:^(RACTuple *tuple) {
-                //请求成功并且不需要图形验证码的时候开启倒计时
-                if ([tuple.first isEqualToString:@"1"]) {//发送验证码成功
-                    //倒计时
-                    [self beginCountdownIfNeeded];
-                } else if ([tuple.first isEqualToString:@"2"]) {//需要图片验证码
-                    //显示图形验证码
-                    self.graphVerView.verImage = [tuple.second base64ToImage];
-                    [self.graphVerView show];
-                } else if ([tuple.first isEqualToString:@"3"]) {//图片验证码错误
-                    [CDAutoHideMessageHUD showMessage:@"图片验证码错误"];
-                } else {
-                    [CDAutoHideMessageHUD showMessage:tuple.last];
-                }
-            }];
-//            [self.viewModel.getVerificationCodeCommand.executionSignals.switchToLatest subscribeNext:^(RACTuple *tuple) {
-//                
-//            }];
+            [self getVerifCode];
         
         }];
     }
@@ -197,4 +197,11 @@ static const NSInteger kAuthCodeLimit = 6;
     [self.getAuthCodeBtn ssj_setBorderColor:SSJ_CELL_SEPARATOR_COLOR];
 }
 
+
+- (void)defaultAppearanceTheme {
+    self.textColor = [UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].mainColor];
+//    self.attributedPlaceholder = [[NSAttributedString alloc] initWithString:self.placeholder attributes:@{NSForegroundColorAttributeName:SSJ_SECONDARY_COLOR}];
+    [self ssj_setBorderColor:[UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].cellSeparatorColor]];
+    [self.getAuthCodeBtn ssj_setBorderColor:[UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].cellSeparatorColor]];
+}
 @end

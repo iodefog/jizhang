@@ -10,7 +10,7 @@
 #import "SSJCalenderDetailViewController.h"
 #import "SSJRecordMakingViewController.h"
 #import "SSJCalendarViewController.h"
-#import "SSJLoginViewController.h"
+//#import "SSJLoginViewController.h"
 #import "SSJRegistGetVerViewController.h"
 #import "SSJBudgetListViewController.h"
 #import "SSJBudgetEditViewController.h"
@@ -21,7 +21,8 @@
 #import "SSJThemBgImageClipViewController.h"
 #import "SSJNavigationController.h"
 #import "UIViewController+SSJMotionPassword.h"
-#import "SSJLoginViewController+SSJCategory.h"
+//#import "SSJLoginViewController+SSJCategory.h"
+#import "SSJLoginVerifyPhoneViewController+SSJLoginCategory.h"
 #import "SSJShareBooksMenberManagerViewController.h"
 
 #import "SSJBookKeepingHomeTableViewCell.h"

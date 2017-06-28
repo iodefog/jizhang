@@ -15,7 +15,7 @@
 #import "UIViewController+MMDrawerController.h"
 #import "SSJBookKeepingHomeViewController.h"
 #import "SSJBooksTypeSelectViewController.h"
-#import "SSJLoginViewController+SSJCategory.h"
+#import "SSJLoginVerifyPhoneViewController+SSJLoginCategory.h"
 #import "SSJReportFormsViewController.h"
 #import "SSJRecordMakingViewController.h"
 
@@ -175,7 +175,7 @@
         || codeint == 9007
         || codeint == 9009) {
         
-        if ([SSJLoginViewController reloginIfNeeded] && service.showMessageIfErrorOccured) {
+        if ([SSJLoginVerifyPhoneViewController reloginIfNeeded] && service.showMessageIfErrorOccured) {
             [CDAutoHideMessageHUD showMessage:message];
         }
         
