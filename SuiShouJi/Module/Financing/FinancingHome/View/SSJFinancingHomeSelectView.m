@@ -33,6 +33,10 @@
     return self;
 }
 
+- (void)show {
+    
+}
+
 - (void)updateConstraints {
     [self.titleView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(self);
@@ -66,7 +70,7 @@
         _maskLayer = [CAShapeLayer layer];
         UIBezierPath *path = [UIBezierPath bezierPath];
         [path moveToPoint:CGPointMake(0, 14)];
-        [path addArcWithCenter:CGPointMake(8, 14) radius:8 startAngle:M_PI endAngle:M_PI * 3 / 2 clockwise:YES];
+        [path addArcWithCenter:CGPointMake(8, 14) radius:8 startAngle:M_PI endAngle:M_PI_2 * 3 clockwise:YES];
         [path addLineToPoint:CGPointMake(48, 6)];
         [path addLineToPoint:CGPointMake(53, 0)];
         [path addLineToPoint:CGPointMake(60, 6)];
