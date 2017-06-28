@@ -11,10 +11,12 @@
 #import "SSJUserTableManager.h"
 #import "SSJSyncSettingViewController.h"
 #import "SSJMagicExportViewController.h"
-#import "SSJLoginViewController.h"
+#import "SSJLoginVerifyPhoneViewController.h"
 #import "SSJMotionPasswordViewController.h"
 #import "SSJClearDataViewController.h"
 #import "SSJBindMobileNoViewController.h"
+#import "SSJMobileNoBindingDetailViewController.h"
+#import "SSJSettingPasswordViewController.h"
 
 static NSString *const kBindMobileNoTitle = @"手机绑定";
 static NSString *const kMobileNoTitle = @"手机号";
@@ -87,9 +89,12 @@ static NSString *const kClearDataTitle = @"清理数据";
         SSJBindMobileNoViewController *bindVC = [[SSJBindMobileNoViewController alloc] init];
         [self.navigationController pushViewController:bindVC animated:YES];
     } else if ([title isEqualToString:kMobileNoTitle]) {// 手机号
-        
+        SSJMobileNoBindingDetailViewController *mobileNoDetailVC = [[SSJMobileNoBindingDetailViewController alloc] init];
+        [self.navigationController pushViewController:mobileNoDetailVC animated:YES];
     } else if ([title isEqualToString:kModifyPwdTitle]) {// 修改密码
-        
+        SSJSettingPasswordViewController *modifyPwdVC = [[SSJSettingPasswordViewController alloc] init];
+        modifyPwdVC.type = SSJSettingPasswordTypeResettingPassword;
+        [self.navigationController pushViewController:modifyPwdVC animated:YES];
     } else if ([title isEqualToString:kMagicExportTitle]) {// 数据导出
         SSJMagicExportViewController *magicExportVC = [[SSJMagicExportViewController alloc] init];
         [self.navigationController pushViewController:magicExportVC animated:YES];
@@ -180,7 +185,7 @@ static NSString *const kClearDataTitle = @"清理数据";
 }
 
 - (void)login {
-    SSJLoginViewController *loginVc = [[SSJLoginViewController alloc] init];
+    SSJLoginVerifyPhoneViewController *loginVc = [[SSJLoginVerifyPhoneViewController alloc] init];
     loginVc.backController = self;
     [self.navigationController pushViewController:loginVc animated:YES];
 }

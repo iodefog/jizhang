@@ -32,9 +32,11 @@
         self.placeholder = NSLocalizedString(@"手机号", nil);
         [self ssj_setBorderWidth:2];
         [self ssj_setBorderStyle:SSJBorderStyleBottom];
+        
+        __weak typeof(self) wself = self;
         self.observer = [[NSNotificationCenter defaultCenter] addObserverForName:UITextFieldTextDidChangeNotification object:self queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
-            if (self.text.length > self.mobileNoLength) {
-                self.text = [self.text substringToIndex:self.mobileNoLength];
+            if (wself.text.length > wself.mobileNoLength) {
+                wself.text = [wself.text substringToIndex:wself.mobileNoLength];
             }
         }];
     }

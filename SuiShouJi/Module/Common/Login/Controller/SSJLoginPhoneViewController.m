@@ -8,6 +8,7 @@
 
 #import "SSJLoginPhoneViewController.h"
 #import "SSRegisterAndLoginViewController.h"
+#import "UIViewController+SSJPageFlow.h"
 
 #import "SSJLoginVerifyPhoneNumViewModel.h"
 
@@ -102,7 +103,7 @@
         _tfPassword.rightView = rightView;
         _tfPassword.rightViewMode = UITextFieldViewModeAlways;
         _tfPassword.secureTextEntry = YES;
-        [_tfPassword ssj_setBorderColor:[UIColor ssj_colorWithHex:@"cccccc"]];
+        [_tfPassword ssj_setBorderColor:[UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].cellSeparatorColor alpha:[SSJThemeSetting defaultThemeModel].cellSeparatorAlpha]];
         [_tfPassword ssj_setBorderStyle:SSJBorderStyleBottom];
         [_tfPassword ssj_setBorderWidth:1];
     }
@@ -135,9 +136,12 @@
         [_forgetPasswordBtn setTitleColor:[UIColor ssj_colorWithHex:@"333333"] forState:UIControlStateNormal];
         _forgetPasswordBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
         
+        @weakify(self);
         [[_forgetPasswordBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(UIButton *btn) {
+            @strongify(self);
             //忘记密码
             SSRegisterAndLoginViewController *vc = [[SSRegisterAndLoginViewController alloc] init];
+            vc.finishHandle = self.finishHandle;
             vc.viewModel = self.viewModel;
             vc.regOrForgetType = SSJRegistAndForgetPasswordTypeForgetPassword;
             [self.navigationController pushViewController:vc animated:YES];

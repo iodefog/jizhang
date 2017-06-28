@@ -167,8 +167,10 @@
         _tfRegYanZhenF = [[SSJVerifCodeField alloc] initWithGetCodeType:self.regOrForgetType];
         _tfRegYanZhenF.rightViewMode = UITextFieldViewModeAlways;
         _tfRegYanZhenF.delegate = self;
+        _tfRegYanZhenF.viewModel = self.viewModel;
+        [_tfRegYanZhenF defaultAppearanceTheme];
+        [_tfRegYanZhenF getVerifCode];//请求验证码
     }
-    _tfRegYanZhenF.viewModel = self.viewModel;
     return _tfRegYanZhenF;
 }
 
@@ -192,7 +194,7 @@
         _tfPassword.rightView = rightView;
         _tfPassword.rightViewMode = UITextFieldViewModeAlways;
         _tfPassword.secureTextEntry = YES;
-        [_tfPassword ssj_setBorderColor:[UIColor ssj_colorWithHex:@"cccccc"]];
+        [_tfPassword ssj_setBorderColor:[UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].cellSeparatorColor alpha:[SSJThemeSetting defaultThemeModel].cellSeparatorAlpha]];
         [_tfPassword ssj_setBorderStyle:SSJBorderStyleBottom];
         [_tfPassword ssj_setBorderWidth:1];
     }
@@ -254,7 +256,9 @@
         _registerAndLoginButton.layer.cornerRadius = 6;
         _registerAndLoginButton.clipsToBounds = YES;
         RAC(_registerAndLoginButton,enabled) = self.viewModel.enableRegAndLoginSignal;
+        @weakify(self);
         [[_registerAndLoginButton rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
+            @strongify(self);
             [self.viewModel.registerAndLoginCommand execute:nil];
         }];
     }

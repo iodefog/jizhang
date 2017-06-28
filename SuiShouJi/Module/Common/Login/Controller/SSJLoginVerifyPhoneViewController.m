@@ -148,6 +148,13 @@
     RAC(self.verifyPhoneViewModel, agreeProtocol) = RACObserve(self.agreeButton,selected);
 }
 
+- (void)setMobileNo:(NSString *)mobileNo {
+    _mobileNo = mobileNo;
+    if (mobileNo.length) {
+        self.numTextF.text = mobileNo;
+    }
+}
+
 #pragma mark - Lazy
 
 - (UITextField *)numTextF {
@@ -161,7 +168,7 @@
         _numTextF.delegate = self;
         [_numTextF ssj_setBorderWidth:1];
         [_numTextF ssj_setBorderStyle:SSJBorderStyleBottom];
-        [_numTextF ssj_setBorderColor:[UIColor ssj_colorWithHex:@"#CCCCCC"]];
+        [_numTextF ssj_setBorderColor:[UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].cellSeparatorColor alpha:[SSJThemeSetting defaultThemeModel].cellSeparatorAlpha]];
     }
     return _numTextF;
 }
@@ -174,7 +181,7 @@
         _phonePreL.textColor = [UIColor ssj_colorWithHex:@"333333"];
         [_phonePreL ssj_setBorderWidth:1];
         [_phonePreL ssj_setBorderStyle:SSJBorderStyleBottom];
-        [_phonePreL ssj_setBorderColor:[UIColor ssj_colorWithHex:@"#CCCCCC"]];
+        [_phonePreL ssj_setBorderColor:[UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].cellSeparatorColor alpha:[SSJThemeSetting defaultThemeModel].cellSeparatorAlpha]];
     }
     return _phonePreL;
 }
@@ -255,7 +262,9 @@
         [_tencentLoginButton setImage:[UIImage imageNamed:@"login_qq"] forState:UIControlStateNormal];
         _tencentLoginButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor];
         _tencentLoginButton.contentMode = UIViewContentModeCenter;
+        @weakify(self);
         [[_tencentLoginButton rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
+            @strongify(self);
             _verifyPhoneViewModel.vc = self;
             [self.verifyPhoneViewModel.qqLoginCommand execute:nil];
         }];
@@ -268,9 +277,11 @@
         _weixinLoginButton = [[UIButton alloc]init];
         [_weixinLoginButton setImage:[UIImage imageNamed:@"login_weixin"] forState:UIControlStateNormal];
         [_weixinLoginButton sizeToFit];
-        _weixinLoginButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor];
+//        _weixinLoginButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor];
         _weixinLoginButton.contentMode = UIViewContentModeCenter;
+        @weakify(self);
         [[_weixinLoginButton rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
+            @strongify(self);
             _verifyPhoneViewModel.vc = self;
             [self.verifyPhoneViewModel.wxLoginCommand execute:nil];
         }];
@@ -295,10 +306,6 @@
             return NO;
         }
     return YES;
-}
-
-- (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 @end

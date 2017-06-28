@@ -7,8 +7,10 @@
 //
 
 #import "SSJBindMobileNoViewController.h"
+#import "SSJSettingPasswordViewController.h"
 #import "TPKeyboardAvoidingScrollView.h"
 #import "SSJMobileNoField.h"
+#import "SSJLoginVerifyPhoneNumViewModel.h"
 
 @interface SSJBindMobileNoViewController ()
 
@@ -21,6 +23,8 @@
 @property (nonatomic, strong) SSJMobileNoField *phoneNoField;
 
 @property (nonatomic, strong) UIButton *nextBtn;
+
+@property (nonatomic, strong) SSJLoginVerifyPhoneNumViewModel *viewModel;
 
 @end
 
@@ -35,13 +39,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self.view addSubview:self.scrollView];
-    [self.scrollView addSubview:self.icon];
-    [self.scrollView addSubview:self.descLab];
-    [self.scrollView addSubview:self.phoneNoField];
-    [self.scrollView addSubview:self.nextBtn];
-    [self.view setNeedsUpdateConstraints];
+    [self setUpViews];
+    [self setUpBindings];
     [self updateAppearance];
+    [self.view setNeedsUpdateConstraints];
 }
 
 - (void)updateViewConstraints {
@@ -88,14 +89,23 @@
     [self.nextBtn ssj_setBackgroundColor:SSJ_BUTTON_DISABLE_COLOR forState:UIControlStateDisabled];
 }
 
-#pragma mark - Lazy
+- (void)setUpViews {
+    [self.view addSubview:self.scrollView];
+    [self.scrollView addSubview:self.icon];
+    [self.scrollView addSubview:self.descLab];
+    [self.scrollView addSubview:self.phoneNoField];
+    [self.scrollView addSubview:self.nextBtn];
+}
+
+- (void)setUpBindings {
+    RAC(self.viewModel, phoneNum) = RACObserve(self.phoneNoField, text);
+    self.nextBtn.rac_command = self.viewModel.verifyPhoneNumRequestCommand;
+}
+
+#pragma mark - Lazyloading
 - (TPKeyboardAvoidingScrollView *)scrollView {
     if (!_scrollView) {
         _scrollView = [[TPKeyboardAvoidingScrollView alloc] initWithFrame:self.view.bounds];
-//        _scrollView.bounces = NO;
-//        _scrollView.showsHorizontalScrollIndicator = NO;
-//        _scrollView.showsVerticalScrollIndicator = NO;
-//        _scrollView.contentSize = CGSizeMake(0, self.view.height);
     }
     return _scrollView;
 }
@@ -128,9 +138,18 @@
         _nextBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _nextBtn.clipsToBounds = YES;
         _nextBtn.layer.cornerRadius = 3;
+        _nextBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
         [_nextBtn setTitle:@"下一步" forState:UIControlStateNormal];
+        [_nextBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     }
     return _nextBtn;
+}
+
+- (SSJLoginVerifyPhoneNumViewModel *)viewModel {
+    if (!_viewModel) {
+        _viewModel = [[SSJLoginVerifyPhoneNumViewModel alloc] init];
+    }
+    return _viewModel;
 }
 
 @end

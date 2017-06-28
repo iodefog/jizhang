@@ -7,12 +7,16 @@
 //
 
 #import "SSJVerifCodeField.h"
-
 #import "SSJLoginGraphVerView.h"
-
 #import "SSJLoginVerifyPhoneNumViewModel.h"
-static NSInteger kCountdownLimit = 60;
+
+
+static const CGFloat kAuthCodeBtnWidth = 125;
+static const NSInteger kCountdownLimit = 60;
+static const NSInteger kAuthCodeLimit = 6;
+
 @interface SSJVerifCodeField()
+
 @property (nonatomic, strong) id <NSObject> observer;
 
 //验证码
@@ -28,40 +32,83 @@ static NSInteger kCountdownLimit = 60;
 
 /**图形验证码*/
 @property (nonatomic, strong) SSJLoginGraphVerView *graphVerView;
+
 @end
 
 @implementation SSJVerifCodeField
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self.observer];
+}
+
 - (instancetype)initWithGetCodeType:(SSJRegistAndForgetPasswordType)type {
     if (self = [super init]) {
         self.viewModel.regOrForType = type;
         self.keyboardType = UIKeyboardTypeNumberPad;
         self.clearButtonMode = UITextFieldViewModeWhileEditing;
-        self.rightView = self.getAuthCodeBtn;
-        self.leftViewMode = UITextFieldViewModeAlways;
         self.placeholder = NSLocalizedString(@"验证码", nil);
+        self.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
+        
+        [self addSubview:self.getAuthCodeBtn];
 
         [self ssj_setBorderWidth:1/SSJSCREENSCALE];
         [self ssj_setBorderStyle:SSJBorderStyleBottom];
         
-//        [self.viewModel.getVerificationCodeCommand execute:nil];
+        __weak typeof(self) wself = self;
+        self.observer = [[NSNotificationCenter defaultCenter] addObserverForName:UITextFieldTextDidChangeNotification object:self queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+            if (wself.text.length > kAuthCodeLimit) {
+                wself.text = [wself.text substringToIndex:kAuthCodeLimit];
+            }
+        }];
     }
     return self;
 }
 
-#pragma mark - Private
-- (CGRect)clearButtonRectForBounds:(CGRect)bounds{
-    CGRect rect = [super clearButtonRectForBounds:bounds];
-    return CGRectMake(rect.origin.x - 100, rect.origin.y , rect.size.width, rect.size.height);
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    self.getAuthCodeBtn.size = CGSizeMake(kAuthCodeBtnWidth, self.height);
+    self.getAuthCodeBtn.right = self.width;
+    
+    CGFloat verticalInset = (self.height - 18) * 0.5;
+    [self.getAuthCodeBtn ssj_setBorderInsets:UIEdgeInsetsMake(verticalInset, 0, verticalInset, 0)];
 }
 
-- (CGRect)rightViewRectForBounds:(CGRect)bounds {
-    return CGRectMake(self.width - 95, 3, 95, 30);
+#pragma mark - Overwrite
+- (CGRect)clearButtonRectForBounds:(CGRect)bounds{
+    CGRect rect = [super clearButtonRectForBounds:bounds];
+    CGFloat x = rect.origin.x - kAuthCodeBtnWidth - 10;
+    return CGRectMake(x, rect.origin.y , rect.size.width, rect.size.height);
+}
+
+- (CGRect)editingRectForBounds:(CGRect)bounds {
+    CGRect rect = [super editingRectForBounds:bounds];
+    CGRect newRect = CGRectMake(rect.origin.x, rect.origin.y, rect.size.width - kAuthCodeBtnWidth, rect.size.height);
+    return newRect;
 }
 
 - (void)setViewModel:(SSJLoginVerifyPhoneNumViewModel *)viewModel {
     _viewModel = viewModel;
 }
 
+- (void)getVerifCode {
+    [[self.viewModel.getVerificationCodeCommand execute:nil] subscribeNext:^(RACTuple *tuple) {
+        //请求成功并且不需要图形验证码的时候开启倒计时
+        if ([tuple.first isEqualToString:@"1"]) {//发送验证码成功
+            //倒计时
+            [self beginCountdownIfNeeded];
+        } else if ([tuple.first isEqualToString:@"2"]) {//需要图片验证码
+            //显示图形验证码
+            self.graphVerView.verImage = [tuple.second base64ToImage];
+            [self.graphVerView show];
+        } else if ([tuple.first isEqualToString:@"3"]) {//图片验证码错误
+            [CDAutoHideMessageHUD showMessage:@"图片验证码错误"];
+        } else {
+            [CDAutoHideMessageHUD showMessage:tuple.last];
+        }
+    }];
+}
+
+#pragma mark - Private
 
 //  开始倒计时
 - (void)beginCountdownIfNeeded {
@@ -102,37 +149,18 @@ static NSInteger kCountdownLimit = 60;
 - (UIButton *)getAuthCodeBtn {
     if (!_getAuthCodeBtn) {
         _getAuthCodeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        _getAuthCodeBtn.size = CGSizeMake(95, 30);
-        _getAuthCodeBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
+        _getAuthCodeBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         [_getAuthCodeBtn setTitle:@"获取验证码" forState:UIControlStateNormal];
         [_getAuthCodeBtn setTitleColor:[UIColor ssj_colorWithHex:@"#ea4a64"] forState:UIControlStateNormal];
         [_getAuthCodeBtn setTitleColor:[UIColor ssj_colorWithHex:@"#f9cbd0"] forState:UIControlStateDisabled];
         [_getAuthCodeBtn ssj_setBorderStyle:SSJBorderStyleLeft];
         [_getAuthCodeBtn ssj_setBorderWidth:1/SSJSCREENSCALE];
-        [_getAuthCodeBtn ssj_setBorderInsets:UIEdgeInsetsMake(4, 5, 4, 5)];
-        
+        @weakify(self);
         [[_getAuthCodeBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(UIButton *btn) {
-            [[self.viewModel.getVerificationCodeCommand execute:nil] subscribeNext:^(RACTuple *tuple) {
-                //请求成功并且不需要图形验证码的时候开启倒计时
-                if ([tuple.first isEqualToString:@"1"]) {//发送验证码成功
-                    //倒计时
-                    [self beginCountdownIfNeeded];
-                } else if ([tuple.first isEqualToString:@"2"]) {//需要图片验证码
-                    //显示图形验证码
-                    self.graphVerView.verImage = [tuple.second base64ToImage];
-                    [self.graphVerView show];
-                } else if ([tuple.first isEqualToString:@"3"]) {//图片验证码错误
-                    [CDAutoHideMessageHUD showMessage:@"图片验证码错误"];
-                } else {
-                    [CDAutoHideMessageHUD showMessage:tuple.last];
-                }
-            }];
-//            [self.viewModel.getVerificationCodeCommand.executionSignals.switchToLatest subscribeNext:^(RACTuple *tuple) {
-//                
-//            }];
-            
-        }];
+            @strongify(self);
+            [self getVerifCode];
         
+        }];
     }
     return _getAuthCodeBtn;
 }
@@ -144,10 +172,11 @@ static NSInteger kCountdownLimit = 60;
         _graphVerView.size = CGSizeMake(315, 252);
         _graphVerView.centerY = SSJSCREENHEIGHT * 0.5 - 80;
         _graphVerView.centerX = SSJSCREENWITH * 0.5;
+        @weakify(self);
         [[_graphVerView.reChooseBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(UIButton *btn) {
+            @strongify(self);
             //点击重新获取图形验证码
-            [self.viewModel.reGetVerificationCodeCommand execute:nil];
-            [self.viewModel.reGetVerificationCodeCommand.executionSignals.switchToLatest subscribeNext:^(UIImage *image) {
+            [[self.viewModel.reGetVerificationCodeCommand execute:nil] subscribeNext:^(UIImage *image) {
                 //成功刷新验证码
                 self.graphVerView.verImage = image;
             }];
@@ -168,4 +197,11 @@ static NSInteger kCountdownLimit = 60;
     [self.getAuthCodeBtn ssj_setBorderColor:SSJ_CELL_SEPARATOR_COLOR];
 }
 
+
+- (void)defaultAppearanceTheme {
+    self.textColor = [UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].mainColor];
+//    self.attributedPlaceholder = [[NSAttributedString alloc] initWithString:self.placeholder attributes:@{NSForegroundColorAttributeName:SSJ_SECONDARY_COLOR}];
+    [self ssj_setBorderColor:[UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].cellSeparatorColor]];
+    [self.getAuthCodeBtn ssj_setBorderColor:[UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].cellSeparatorColor]];
+}
 @end

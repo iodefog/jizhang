@@ -53,9 +53,9 @@ static inline AFHTTPResponseSerializer *SSJResponseSerializer(SSJResponseSeriali
 
 @interface SSJBaseNetworkService ()
 
-@property (readwrite, nonatomic) BOOL isLoaded;
+@property (nonatomic) SSJNetworkServiceState state;
 
-@property (readwrite, nonatomic) BOOL isCancelled;
+@property (nonatomic, strong, nullable) NSError *error;
 
 @property (nonatomic, strong) NSURLSessionTask *task;
 
@@ -97,7 +97,8 @@ static inline AFHTTPResponseSerializer *SSJResponseSerializer(SSJResponseSeriali
 - (void)request:(NSString *)urlString params:(nullable NSDictionary *)params success:(nullable SSJNetworkServiceHandler)success failure:(nullable SSJNetworkServiceHandler)failure {
     [self.task cancel];
     
-    self.isCancelled = NO;
+    self.error = nil;
+    self.state = SSJNetworkServiceStateLoading;
     [SSJGlobalServiceManager removeService:self];
     
     self.success = success;
@@ -161,15 +162,14 @@ static inline AFHTTPResponseSerializer *SSJResponseSerializer(SSJResponseSeriali
     }
     
     [self.task cancel];
-    self.isCancelled = YES;
+    self.state = SSJNetworkServiceStateCanceled;
     if (_delegate && [_delegate respondsToSelector:@selector(serverDidCancel:)]) {
         [_delegate serverDidCancel:self];
     }
 }
 
-- (BOOL)isLoading {
-    return (self.task && (self.task.state == NSURLSessionTaskStateRunning ||
-                          self.task.state == NSURLSessionTaskStateSuspended));
+- (BOOL)isLoaded {
+    return self.state == SSJNetworkServiceStateFailed || self.state == SSJNetworkServiceStateSuccessful;
 }
 
 //--------------------------------
@@ -204,20 +204,21 @@ static inline AFHTTPResponseSerializer *SSJResponseSerializer(SSJResponseSeriali
     manager.responseSerializer = SSJResponseSerializer(_responseSerialization);
     manager.requestSerializer = SSJRequestSerializer(_requestSerialization);
     manager.requestSerializer.timeoutInterval = _timeoutInterval;
-    [self.p_basicParameters enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
-        [manager.requestSerializer setValue:obj forHTTPHeaderField:key];
-    }];
+    if (self.httpMethod == SSJBaseNetworkServiceHttpMethodPOST) {
+        [self.p_basicParameters enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
+            [manager.requestSerializer setValue:obj forHTTPHeaderField:key];
+        }];
+    }
     [manager.operationQueue setMaxConcurrentOperationCount:1];
     return manager;
 }
 
 /* 请求完成 */
 - (void)p_taskDidFinish:(NSURLSessionTask *)task responseObject:(NSDictionary *)responseObject {
-    _isLoaded = YES;
-    _isLoadSuccess = YES;
     if (self.task.state == NSURLSessionTaskStateCompleted) {
         
         self.task = nil;
+        self.state = SSJNetworkServiceStateSuccessful;
         _rootElement = responseObject;
         
         if ([_rootElement isKindOfClass:[NSDictionary class]]) {
@@ -258,20 +259,20 @@ static inline AFHTTPResponseSerializer *SSJResponseSerializer(SSJResponseSeriali
 
 /* 请求失败 */
 - (void)p_taskDidFail:(NSURLSessionTask *)task error:(NSError *)error {
-    _isLoaded = YES;
-    _isLoadSuccess = NO;
     if (self.task.state == NSURLSessionTaskStateCompleted ||
         self.task.state == NSURLSessionTaskStateCanceling) {
         
         self.task = nil;
         
-        //  取消请求
-        if (self.isCancelled/*error.code == kCFURLErrorCancelled*/) {
+        // 取消请求
+        if (self.state == SSJNetworkServiceStateCanceled) {
             [SSJGlobalServiceManager removeService:self];
             return;
         }
         
-        //  请求失败
+        // 请求失败
+        self.state = SSJNetworkServiceStateFailed;
+        self.error = error;
         [SSJGlobalServiceManager removeService:self];
         
         NSHTTPURLResponse *httpUrlResponse = (NSHTTPURLResponse *)task.response;

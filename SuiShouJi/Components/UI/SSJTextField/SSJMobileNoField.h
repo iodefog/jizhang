@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
+/**
+ 手机号输入框
+ */
 @interface SSJMobileNoField : UITextField
 
 /**

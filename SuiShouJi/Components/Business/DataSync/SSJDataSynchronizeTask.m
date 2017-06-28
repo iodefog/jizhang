@@ -35,7 +35,7 @@
 
 #import "SSJRegularManager.h"
 
-#import "SSJLoginViewController+SSJCategory.h"
+#import "SSJLoginVerifyPhoneViewController+SSJLoginCategory.h"
 #import "SSJLocalNotificationStore.h"
 #import "SSJLocalNotificationHelper.h"
 #import "SSJDomainManager.h"

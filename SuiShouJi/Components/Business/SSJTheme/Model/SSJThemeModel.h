@@ -199,6 +199,9 @@
 // 通屏按钮的透明度
 @property (nonatomic) CGFloat throughScreenButtonAlpha;
 
+// 验证码底色
+@property (nonatomic, copy) NSString *authCodeGroundColor;
+
 //-----和自定义主题有关的-----
 
 // 自定义主题的背景图
@@ -209,8 +212,5 @@
 
 // 是暗色还是亮色
 @property (nonatomic) BOOL darkOrLight;
-
-// 验证码底色
-@property (nonatomic, copy) NSString *authCodeGroundColor;
 
 @end
