@@ -110,8 +110,9 @@ static NSInteger kCountdownLimit = 60;
         [_getAuthCodeBtn ssj_setBorderStyle:SSJBorderStyleLeft];
         [_getAuthCodeBtn ssj_setBorderWidth:1/SSJSCREENSCALE];
         [_getAuthCodeBtn ssj_setBorderInsets:UIEdgeInsetsMake(4, 5, 4, 5)];
-        
+        @weakify(self);
         [[_getAuthCodeBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(UIButton *btn) {
+            @strongify(self);
             [[self.viewModel.getVerificationCodeCommand execute:nil] subscribeNext:^(RACTuple *tuple) {
                 //请求成功并且不需要图形验证码的时候开启倒计时
                 if ([tuple.first isEqualToString:@"1"]) {//发送验证码成功
@@ -144,16 +145,14 @@ static NSInteger kCountdownLimit = 60;
         _graphVerView.size = CGSizeMake(315, 252);
         _graphVerView.centerY = SSJSCREENHEIGHT * 0.5 - 80;
         _graphVerView.centerX = SSJSCREENWITH * 0.5;
+        @weakify(self);
         [[_graphVerView.reChooseBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(UIButton *btn) {
+            @strongify(self);
             //点击重新获取图形验证码
             [[self.viewModel.reGetVerificationCodeCommand execute:nil] subscribeNext:^(UIImage *image) {
                 //成功刷新验证码
                 self.graphVerView.verImage = image;
             }];
-//            [self.viewModel.reGetVerificationCodeCommand.executionSignals.switchToLatest subscribeNext:^(UIImage *image) {
-//                //成功刷新验证码
-//                self.graphVerView.verImage = image;
-//            }];
         }];
     }
     return _graphVerView;

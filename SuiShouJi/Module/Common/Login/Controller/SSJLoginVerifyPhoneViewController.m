@@ -255,7 +255,9 @@
         [_tencentLoginButton setImage:[UIImage imageNamed:@"login_qq"] forState:UIControlStateNormal];
         _tencentLoginButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor];
         _tencentLoginButton.contentMode = UIViewContentModeCenter;
+        @weakify(self);
         [[_tencentLoginButton rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
+            @strongify(self);
             _verifyPhoneViewModel.vc = self;
             [self.verifyPhoneViewModel.qqLoginCommand execute:nil];
         }];
@@ -270,7 +272,9 @@
         [_weixinLoginButton sizeToFit];
         _weixinLoginButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor];
         _weixinLoginButton.contentMode = UIViewContentModeCenter;
+        @weakify(self);
         [[_weixinLoginButton rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
+            @strongify(self);
             _verifyPhoneViewModel.vc = self;
             [self.verifyPhoneViewModel.wxLoginCommand execute:nil];
         }];
@@ -295,10 +299,6 @@
             return NO;
         }
     return YES;
-}
-
-- (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 @end

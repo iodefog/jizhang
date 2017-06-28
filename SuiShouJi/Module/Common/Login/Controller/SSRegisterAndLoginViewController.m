@@ -254,8 +254,9 @@
         _registerAndLoginButton.layer.cornerRadius = 6;
         _registerAndLoginButton.clipsToBounds = YES;
         RAC(_registerAndLoginButton,enabled) = self.viewModel.enableRegAndLoginSignal;
+        @weakify(self);
         [[_registerAndLoginButton rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
-            
+            @strongify(self);
             [self.viewModel.registerAndLoginCommand execute:nil];
         }];
     }
