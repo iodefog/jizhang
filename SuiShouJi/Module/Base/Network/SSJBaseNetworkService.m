@@ -204,9 +204,11 @@ static inline AFHTTPResponseSerializer *SSJResponseSerializer(SSJResponseSeriali
     manager.responseSerializer = SSJResponseSerializer(_responseSerialization);
     manager.requestSerializer = SSJRequestSerializer(_requestSerialization);
     manager.requestSerializer.timeoutInterval = _timeoutInterval;
-    [self.p_basicParameters enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
-        [manager.requestSerializer setValue:obj forHTTPHeaderField:key];
-    }];
+    if (self.httpMethod == SSJBaseNetworkServiceHttpMethodPOST) {
+        [self.p_basicParameters enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
+            [manager.requestSerializer setValue:obj forHTTPHeaderField:key];
+        }];
+    }
     [manager.operationQueue setMaxConcurrentOperationCount:1];
     return manager;
 }
