@@ -83,10 +83,6 @@
     }];
 }
 
-///chargebook/user/mobile_register.go
-
-
-
 /**
  第三方登录
  */
@@ -302,11 +298,16 @@
  @param subscriber <#subscriber description#>
  */
 - (void)forgetWithPassWord:(NSString*)password AndUserAccount:(NSString*)mobileNo authCode:(NSString *)authCode subscriber:(id<RACSubscriber>) subscriber {
-    [self.netWorkService request:@"/user/resetpwd.go" params:@{@"mobileNo":mobileNo ?: @"",@"yzm":authCode ?: @"",@"pwd":password ?: @""} success:^(SSJBaseNetworkService * _Nonnull service) {
+    NSString *encryptPassword = [password stringByAppendingString:@"http://www.9188.com/"];
+    encryptPassword = [[encryptPassword ssj_md5HexDigest] lowercaseString];
+    [self.netWorkService request:@"/chargebook/user/forget_pwd.go" params:@{@"cmobileNo":mobileNo ?: @"",@"yzm":authCode ?: @"",@"newPwd":encryptPassword ?: @""} success:^(SSJBaseNetworkService * _Nonnull service) {
         if ([service.returnCode isEqualToString:@"1"]) {
             [subscriber sendNext:service.rootElement];
+            [subscriber sendCompleted];
+        }else {
+            [CDAutoHideMessageHUD showMessage:service.desc];
+            [subscriber sendError:nil];
         }
-        [subscriber sendCompleted];
     } failure:^(SSJBaseNetworkService * _Nonnull service) {
         [CDAutoHideMessageHUD showMessage:service.desc];
         [subscriber sendError:nil];
@@ -604,6 +605,7 @@
                 //判断手机号格式
                 if (![self.phoneNum ssj_validPhoneNum]) {
                     [CDAutoHideMessageHUD showMessage:@"请输入正确的手机号"];
+                    [subscriber sendError:nil];
                 } else {
                     [self verityPhoneNumWithPhone:self.phoneNum subscriber:subscriber];
                 }

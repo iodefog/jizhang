@@ -18,8 +18,6 @@ static NSInteger kCountdownLimit = 60;
 //验证码
 @property (nonatomic, strong) UIButton *getAuthCodeBtn;
 
-//@property (nonatomic, strong) SSJLoginVerifyPhoneNumViewModel *viewModel;
-
 /**倒计时*/
 @property (nonatomic, strong) NSTimer *countdownTimer;
 
@@ -40,15 +38,33 @@ static NSInteger kCountdownLimit = 60;
         self.leftViewMode = UITextFieldViewModeAlways;
         self.placeholder = NSLocalizedString(@"验证码", nil);
 
-        [self ssj_setBorderWidth:1/SSJSCREENSCALE];
+        [self ssj_setBorderWidth:1];
         [self ssj_setBorderStyle:SSJBorderStyleBottom];
-        
-//        [self.viewModel.getVerificationCodeCommand execute:nil];
     }
     return self;
 }
 
 #pragma mark - Private
+- (void)getVerifCode {
+    @weakify(self);
+    [[self.viewModel.getVerificationCodeCommand execute:nil] subscribeNext:^(RACTuple *tuple) {
+        @strongify(self);
+        //请求成功并且不需要图形验证码的时候开启倒计时
+        if ([tuple.first isEqualToString:@"1"]) {//发送验证码成功
+            //倒计时
+            [self beginCountdownIfNeeded];
+        } else if ([tuple.first isEqualToString:@"2"]) {//需要图片验证码
+            //显示图形验证码
+            self.graphVerView.verImage = [tuple.second base64ToImage];
+            [self.graphVerView show];
+        } else if ([tuple.first isEqualToString:@"3"]) {//图片验证码错误
+            [CDAutoHideMessageHUD showMessage:@"图片验证码错误"];
+        } else {
+            [CDAutoHideMessageHUD showMessage:tuple.last];
+        }
+    }];
+}
+
 - (CGRect)clearButtonRectForBounds:(CGRect)bounds{
     CGRect rect = [super clearButtonRectForBounds:bounds];
     return CGRectMake(rect.origin.x - 100, rect.origin.y , rect.size.width, rect.size.height);
@@ -60,6 +76,7 @@ static NSInteger kCountdownLimit = 60;
 
 - (void)setViewModel:(SSJLoginVerifyPhoneNumViewModel *)viewModel {
     _viewModel = viewModel;
+    [self getVerifCode];
 }
 
 
@@ -113,27 +130,8 @@ static NSInteger kCountdownLimit = 60;
         @weakify(self);
         [[_getAuthCodeBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(UIButton *btn) {
             @strongify(self);
-            [[self.viewModel.getVerificationCodeCommand execute:nil] subscribeNext:^(RACTuple *tuple) {
-                //请求成功并且不需要图形验证码的时候开启倒计时
-                if ([tuple.first isEqualToString:@"1"]) {//发送验证码成功
-                    //倒计时
-                    [self beginCountdownIfNeeded];
-                } else if ([tuple.first isEqualToString:@"2"]) {//需要图片验证码
-                    //显示图形验证码
-                    self.graphVerView.verImage = [tuple.second base64ToImage];
-                    [self.graphVerView show];
-                } else if ([tuple.first isEqualToString:@"3"]) {//图片验证码错误
-                    [CDAutoHideMessageHUD showMessage:@"图片验证码错误"];
-                } else {
-                    [CDAutoHideMessageHUD showMessage:tuple.last];
-                }
-            }];
-//            [self.viewModel.getVerificationCodeCommand.executionSignals.switchToLatest subscribeNext:^(RACTuple *tuple) {
-//                
-//            }];
-        
+            [self getAuthCodeBtn];
         }];
-        
     }
     return _getAuthCodeBtn;
 }
@@ -168,6 +166,14 @@ static NSInteger kCountdownLimit = 60;
     self.attributedPlaceholder = [[NSAttributedString alloc] initWithString:self.placeholder attributes:@{NSForegroundColorAttributeName:SSJ_SECONDARY_COLOR}];
     [self ssj_setBorderColor:SSJ_CELL_SEPARATOR_COLOR];
     [self.getAuthCodeBtn ssj_setBorderColor:SSJ_CELL_SEPARATOR_COLOR];
+}
+
+- (void)defaultAppearanceTheme
+{
+    self.textColor = [UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].mainColor];
+//    self.attributedPlaceholder = [[NSAttributedString alloc] initWithString:self.placeholder attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].secondaryColor]}];
+    [self ssj_setBorderColor:[UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].cellSeparatorColor]];
+    [self.getAuthCodeBtn ssj_setBorderColor:[UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].cellSeparatorColor]];
 }
 
 @end

@@ -102,7 +102,7 @@
         _tfPassword.rightView = rightView;
         _tfPassword.rightViewMode = UITextFieldViewModeAlways;
         _tfPassword.secureTextEntry = YES;
-        [_tfPassword ssj_setBorderColor:[UIColor ssj_colorWithHex:@"cccccc"]];
+        [_tfPassword ssj_setBorderColor:[UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].cellSeparatorColor alpha:[SSJThemeSetting defaultThemeModel].cellSeparatorAlpha]];
         [_tfPassword ssj_setBorderStyle:SSJBorderStyleBottom];
         [_tfPassword ssj_setBorderWidth:1];
     }
