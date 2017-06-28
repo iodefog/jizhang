@@ -193,21 +193,22 @@
         @weakify(self);
         [[_verifyPhoneBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
             @strongify(self);
-//            [[self.verifyPhoneViewModel.verifyPhoneNumRequestCommand execute:nil] subscribeNext:^(NSString *code) {
-                //请求返回处理好的数据
-                //1 密码登录，0 验证码注册
-//                if ([code isEqualToString:@"0"]) {
+            [[self.verifyPhoneViewModel.verifyPhoneNumRequestCommand execute:nil] subscribeNext:^(NSString *code) {
+//                请求返回处理好的数据
+//                1 密码登录，0 验证码注册
+                if ([code isEqualToString:@"0"]) {
                     SSRegisterAndLoginViewController *loginVC = [[SSRegisterAndLoginViewController alloc] init];
             loginVC.viewModel = self.verifyPhoneViewModel;
                     loginVC.regOrForgetType = SSJRegistAndForgetPasswordTypeRegist;//注册
                     loginVC.finishHandle = self.finishHandle;
                     [self.navigationController pushViewController:loginVC animated:YES];
-//                } else if ([code isEqualToString:@"1"]) {
-//                    SSJLoginPhoneViewController *vc = [[SSJLoginPhoneViewController alloc] init];
-//                    vc.finishHandle = self.finishHandle;
-//                    [self.navigationController pushViewController:vc animated:YES];
-//                }
-//            }];
+                } else if ([code isEqualToString:@"1"]) {
+                    SSJLoginPhoneViewController *vc = [[SSJLoginPhoneViewController alloc] init];
+                    vc.viewModel = self.verifyPhoneViewModel;
+                    vc.finishHandle = self.finishHandle;
+                    [self.navigationController pushViewController:vc animated:YES];
+                }
+            }];
         }];
     }
     return _verifyPhoneBtn;
@@ -255,6 +256,7 @@
         _tencentLoginButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor];
         _tencentLoginButton.contentMode = UIViewContentModeCenter;
         [[_tencentLoginButton rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
+            _verifyPhoneViewModel.vc = self;
             [self.verifyPhoneViewModel.qqLoginCommand execute:nil];
         }];
     }
@@ -269,6 +271,7 @@
         _weixinLoginButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor];
         _weixinLoginButton.contentMode = UIViewContentModeCenter;
         [[_weixinLoginButton rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
+            _verifyPhoneViewModel.vc = self;
             [self.verifyPhoneViewModel.wxLoginCommand execute:nil];
         }];
     }
@@ -278,7 +281,7 @@
 - (SSJLoginVerifyPhoneNumViewModel *)verifyPhoneViewModel {
     if (!_verifyPhoneViewModel) {
         _verifyPhoneViewModel = [[SSJLoginVerifyPhoneNumViewModel alloc] init];
-        _verifyPhoneViewModel.vc = self;
+//        _verifyPhoneViewModel.vc = self;
     }
     return _verifyPhoneViewModel;
 }

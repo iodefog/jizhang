@@ -26,8 +26,10 @@
 #import "GeTuiSdk.h"
 #import "SSJDatabaseQueue.h"
 #import "SSJBookkeepingTreeStore.h"
-
+#import "SSJDataSynchronizer.h"
 #import "SSJThirdPartyLoginManger.h"
+
+#import "SSJHomeLoadingView.h"
 
 #import "SSJMotionPasswordViewController.h"
 #import "MMDrawerController.h"
@@ -48,6 +50,8 @@
 
 /**openId*/
 @property (nonatomic, copy) NSString *openId;
+
+@property(nonatomic, strong) SSJHomeLoadingView *loadingView;
 
 
 @end
@@ -78,6 +82,9 @@
         [subscriber sendError:nil];
     }];
 }
+
+///chargebook/user/mobile_register.go
+
 
 
 /**
@@ -131,7 +138,55 @@
     } failure:^(SSJBaseNetworkService * _Nonnull service) {
         [subscriber sendError:nil];
     }];
+}
 
+- (void)loginNormalWithPassWord:(NSString*)password AndUserAccount:(NSString*)useraccount subscriber:(id<RACSubscriber>) subscriber {
+    self.loginType = SSJLoginTypeNormal;
+    self.netWorkService.showLodingIndicator = YES;
+    self.openId = @"";
+    NSString *strAcctID=@"130313003";
+    NSString *strSignType=@"1";
+    NSString *strKey=@"A9FK25RHT487ULMI";
+    
+    //imei
+    NSString *imei = [UIDevice currentDevice].identifierForVendor.UUIDString;
+    
+    //手机型号
+    NSString *phoneModel = SSJPhoneModel();
+    
+    //个推id
+    NSString *getuiId = [GeTuiSdk clientId];
+    
+    //手机系统版本
+    NSString *phoneVersion = [[UIDevice currentDevice] systemVersion];
+    
+    NSString *encryptPassword = [password stringByAppendingString:@"http://www.9188.com/"];
+    encryptPassword = [[encryptPassword ssj_md5HexDigest] lowercaseString];
+    
+    NSString *strSign=[NSString stringWithFormat:@"signType=%@&merchantacctId=%@&mobileNo=%@&pwd=%@&key=%@",strSignType,strAcctID,useraccount,encryptPassword,strKey];
+    
+    NSString *strmd5Sign=[[strSign ssj_md5HexDigest]uppercaseString];
+    NSMutableDictionary *dict=[[NSMutableDictionary alloc]init];
+    [dict setObject:useraccount forKey:@"mobileNo"];
+    [dict setObject:strAcctID forKey:@"merchantacctId"];
+    [dict setObject:strSignType forKey:@"signType"];
+    [dict setObject:encryptPassword forKey:@"pwd"];
+    [dict setObject:strmd5Sign forKey:@"signMsg"];
+    [dict setObject:SSJUSERID() forKey:@"cuserid"];
+    [dict setObject:imei forKey:@"cimei"];
+    [dict setObject:phoneModel forKey:@"cmodel"];
+    [dict setObject:phoneVersion forKey:@"cphoneos"];
+    [dict setObject:getuiId ?: @"" forKey:@"cgetuiid"];
+
+    [self.netWorkService request:SSJURLWithAPI(@"/user/login.go") params:dict success:^(SSJBaseNetworkService * _Nonnull service) {
+        if ([service.returnCode isEqualToString:@"1"]) {
+            [subscriber sendNext:service.rootElement];
+        }
+        [subscriber sendCompleted];
+    } failure:^(SSJBaseNetworkService * _Nonnull service) {
+        [subscriber sendError:nil];
+        [CDAutoHideMessageHUD showMessage:service.desc];
+    }];
 }
 
 // 登录成功后保存当前账本类型：共享or个人
@@ -191,13 +246,9 @@
     }];
 }
 
-- (void)loginNormalWithPassWord:(NSString*)password AndUserAccount:(NSString*)useraccount subscriber:(id<RACSubscriber>) subscriber {
+- (void)registerWithPassWord:(NSString*)password AndUserAccount:(NSString*)useraccount subscriber:(id<RACSubscriber>) subscriber {
     self.netWorkService.showLodingIndicator = YES;
     self.openId = @"";
-//    NSString *strAcctID = @"130313003";
-//    NSString *strSignType = @"1";
-//    NSString *strKey = @"A9FK25RHT487ULMI";
-    
     //imei
     NSString *imei = [UIDevice currentDevice].identifierForVendor.UUIDString;
     
@@ -212,10 +263,6 @@
     
     NSString *encryptPassword = [password stringByAppendingString:@"http://www.9188.com/"];
     encryptPassword = [[encryptPassword ssj_md5HexDigest] lowercaseString];
-    
-//    NSString *strSign=[NSString stringWithFormat:@"signType=%@&merchantacctId=%@&mobileNo=%@&pwd=%@&key=%@",strSignType,strAcctID,useraccount,encryptPassword,strKey];
-    
-//    NSString *strmd5Sign=[[strSign ssj_md5HexDigest]uppercaseString];
     NSMutableDictionary *dict=[[NSMutableDictionary alloc]init];
     [dict setObject:useraccount forKey:@"cmobileno"];
     [dict setObject:self.verificationCode forKey:@"yzm"];
@@ -225,13 +272,11 @@
     [dict setObject:phoneModel forKey:@"cphonebrand"];
     [dict setObject:imei forKey:@"cimei"];
     [dict setObject:getuiId ?: @"" forKey:@"cgetuiid"];
-    
-//    [dict setObject:strAcctID forKey:@"merchantacctId"];
-//    [dict setObject:strSignType forKey:@"signType"];
-//    [dict setObject:strmd5Sign forKey:@"signMsg"];
-    
-    [self.netWorkService request:SSJURLWithAPI(@"/user/login.go") params:dict success:^(SSJBaseNetworkService * _Nonnull service) {
-        [subscriber sendNext:service.rootElement];
+    SSJUSERID();
+    [self.netWorkService request:SSJURLWithAPI(@"/chargebook/user/mobile_register.go") params:dict success:^(SSJBaseNetworkService * _Nonnull service) {
+        if ([service.returnCode isEqualToString:@"1"]) {
+            [subscriber sendNext:service.rootElement];
+        }
         [subscriber sendCompleted];
     } failure:^(SSJBaseNetworkService * _Nonnull service) {
         [CDAutoHideMessageHUD showMessage:service.desc];
@@ -365,8 +410,8 @@
     }] then:^RACSignal *{
         // 登录成功，做些额外的处理
         return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-//            [self syncData];
-//            [self.loadingView show];
+            [self syncData];
+            [self.loadingView show];
             [CDAutoHideMessageHUD showMessage:@"登录成功"];
             [SSJAnaliyticsManager setUserId:SSJUSERID() userName:(self.userItem.nickName.length ? self.userItem.nickName : self.userItem.mobileNo)];
             [[NSNotificationCenter defaultCenter] postNotificationName:SSJLoginOrRegisterNotification object:nil];
@@ -417,6 +462,100 @@
     }];
 }
 
+
+- (void)registerSuccessWithDic:(NSDictionary *)dic {
+    NSDictionary *resultInfo = [dic objectForKey:@"results"];
+        if (resultInfo) {
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:SSJHaveLoginOrRegistKey];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+            
+            SSJUserItem *userItem = [[SSJUserItem alloc] init];
+            userItem.userId = SSJUSERID();
+            userItem.mobileNo = self.phoneNum;
+            userItem.registerState = @"1";
+            userItem.loginType = @"0";
+            
+            //  只有保存用户登录信息成功后才算登录成功
+            RACSignal *sg_1 = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+                [SSJUserTableManager saveUserItem:userItem success:^{
+                    [subscriber sendCompleted];
+                } failure:^(NSError * _Nonnull error) {
+                    [subscriber sendError:error];
+                }];
+                return nil;
+            }];
+            
+            RACSignal *sg_2 = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+                if (SSJSaveAppId(resultInfo[@"appId"] ?: @"")
+                    && SSJSaveAccessToken(resultInfo[@"accessToken"] ?: @"")
+                    && SSJSaveUserLogined(YES)) {
+                    [subscriber sendCompleted];
+                } else {
+                    [subscriber sendError:[NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"保存appid／token／登录状态失败"}]];
+                }
+                return nil;
+            }];
+            
+            @weakify(self);
+            RACSignal *sg_3 = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+                @strongify(self);
+                [self syncData];
+                [[NSNotificationCenter defaultCenter] postNotificationName:SSJLoginOrRegisterNotification object:self];
+                [CDAutoHideMessageHUD showMessage:@"注册成功"];
+                // 如果用户手势密码开启，进入手势密码页面
+                [SSJUserTableManager queryProperty:@[@"motionPWD", @"motionPWDState"] forUserId:SSJUSERID() success:^(SSJUserItem * _Nonnull userItem) {
+                    [subscriber sendNext:userItem];
+                    [subscriber sendCompleted];
+                } failure:^(NSError * _Nonnull error) {
+                    [subscriber sendError:error];
+                }];
+                return nil;
+            }];
+            
+            [[[sg_1 then:^RACSignal *{
+                return sg_2;
+            }] then:^RACSignal *{
+                return sg_3;
+            }] subscribeNext:^(SSJUserItem *userItem) {
+                @strongify(self);
+                if ([userItem.motionPWDState boolValue]) {
+                    SSJMotionPasswordViewController *motionVC = [[SSJMotionPasswordViewController alloc] init];
+                    motionVC.finishHandle = ^(UIViewController *controller) {
+                        
+                        UITabBarController *tabVC = (UITabBarController *)((MMDrawerController *)[UIApplication sharedApplication].keyWindow.rootViewController).centerViewController;
+                        UINavigationController *navi = [tabVC.viewControllers firstObject];
+                        UIViewController *homeController = [navi.viewControllers firstObject];
+                        controller.backController = homeController;
+                        [controller ssj_backOffAction];
+                        
+                    };
+                    if (userItem.motionPWD.length) {
+                        motionVC.type = SSJMotionPasswordViewControllerTypeVerification;
+                    } else {
+                        motionVC.type = SSJMotionPasswordViewControllerTypeSetting;
+                    }
+                    [self.vc.navigationController pushViewController:motionVC animated:YES];
+                    
+                    return;
+                }
+                
+                if (self.vc.finishHandle) {
+                    self.vc.finishHandle(self.vc);
+                }
+            } error:^(NSError *error) {
+                [SSJAlertViewAdapter showError:error];
+            }];
+        }
+    }
+
+
+- (void)syncData {
+    [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:^(SSJDataSynchronizeType type){
+        [CDAutoHideMessageHUD showMessage:@"同步成功"];
+    } failure:^(SSJDataSynchronizeType type, NSError *error) {
+        [CDAutoHideMessageHUD showMessage:@"同步失败"];
+    }];
+}
 
 #pragma mark - Lazy
 - (SSJBaseNetworkService *)netWorkService {
@@ -532,13 +671,13 @@
             RACSignal *signal = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
                 //登录
                 self.loginType = SSJLoginTypeNormal;
-                [self loginNormalWithPassWord:self.passwardNum AndUserAccount:self.phoneNum subscriber:subscriber];
+                [self registerWithPassWord:self.passwardNum AndUserAccount:self.phoneNum subscriber:subscriber];
                 return nil;
             }];
             return signal;
         }];
         [_registerAndLoginCommand.executionSignals.switchToLatest subscribeNext:^(NSDictionary *dict) {
-            [self datawithDic:dict];
+            [self registerSuccessWithDic:dict];
         }];
     }
     return _registerAndLoginCommand;
@@ -606,6 +745,14 @@
         }] ;
     }
     return _normalLoginCommand;
+}
+
+
+- (SSJHomeLoadingView *)loadingView{
+    if (!_loadingView) {
+        _loadingView = [[SSJHomeLoadingView alloc] init];
+    }
+    return _loadingView;
 }
 
 @end

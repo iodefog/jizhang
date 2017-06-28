@@ -121,6 +121,7 @@
         _loginButton.clipsToBounds = YES;
         RAC(_loginButton,enabled) = self.viewModel.enableNormalLoginSignal;
         [[_loginButton rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
+            self.viewModel.vc = self;
             [self.viewModel.normalLoginCommand execute:nil];
         }];
     }

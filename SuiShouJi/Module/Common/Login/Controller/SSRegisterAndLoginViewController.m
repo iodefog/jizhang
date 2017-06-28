@@ -166,6 +166,7 @@
     if (!_tfRegYanZhenF) {
         _tfRegYanZhenF = [[SSJVerifCodeField alloc] initWithGetCodeType:self.regOrForgetType];
         _tfRegYanZhenF.rightViewMode = UITextFieldViewModeAlways;
+        _tfRegYanZhenF.delegate = self;
     }
     _tfRegYanZhenF.viewModel = self.viewModel;
     return _tfRegYanZhenF;
