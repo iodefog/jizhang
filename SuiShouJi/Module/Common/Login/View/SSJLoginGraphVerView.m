@@ -125,7 +125,7 @@
 - (UIImageView *)verImageView {
     if (!_verImageView) {
         _verImageView = [[UIImageView alloc] init];
-        _verImageView.backgroundColor = [UIColor ssj_colorWithHex:@"#cccccc"];
+//        _verImageView.backgroundColor = [UIColor ssj_colorWithHex:@"#cccccc"];
         _verImageView.contentMode = UIViewContentModeCenter;
     }
     return _verImageView;

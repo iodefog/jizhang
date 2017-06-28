@@ -130,7 +130,7 @@ static NSInteger kCountdownLimit = 60;
 //            [self.viewModel.getVerificationCodeCommand.executionSignals.switchToLatest subscribeNext:^(RACTuple *tuple) {
 //                
 //            }];
-            
+        
         }];
         
     }
@@ -146,11 +146,14 @@ static NSInteger kCountdownLimit = 60;
         _graphVerView.centerX = SSJSCREENWITH * 0.5;
         [[_graphVerView.reChooseBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(UIButton *btn) {
             //点击重新获取图形验证码
-            [self.viewModel.reGetVerificationCodeCommand execute:nil];
-            [self.viewModel.reGetVerificationCodeCommand.executionSignals.switchToLatest subscribeNext:^(UIImage *image) {
+            [[self.viewModel.reGetVerificationCodeCommand execute:nil] subscribeNext:^(UIImage *image) {
                 //成功刷新验证码
                 self.graphVerView.verImage = image;
             }];
+//            [self.viewModel.reGetVerificationCodeCommand.executionSignals.switchToLatest subscribeNext:^(UIImage *image) {
+//                //成功刷新验证码
+//                self.graphVerView.verImage = image;
+//            }];
         }];
     }
     return _graphVerView;
