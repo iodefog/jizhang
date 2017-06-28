@@ -75,17 +75,24 @@ static const NSInteger kAuthCodeLimit = 6;
     [self.getAuthCodeBtn ssj_setBorderInsets:UIEdgeInsetsMake(verticalInset, 0, verticalInset, 0)];
 }
 
-#pragma mark - Private
+#pragma mark - Overwrite
 - (CGRect)clearButtonRectForBounds:(CGRect)bounds{
     CGRect rect = [super clearButtonRectForBounds:bounds];
     CGFloat x = rect.origin.x - kAuthCodeBtnWidth - 10;
     return CGRectMake(x, rect.origin.y , rect.size.width, rect.size.height);
 }
 
+- (CGRect)editingRectForBounds:(CGRect)bounds {
+    CGRect rect = [super editingRectForBounds:bounds];
+    CGRect newRect = CGRectMake(rect.origin.x, rect.origin.y, rect.size.width - kAuthCodeBtnWidth, rect.size.height);
+    return newRect;
+}
+
 - (void)setViewModel:(SSJLoginVerifyPhoneNumViewModel *)viewModel {
     _viewModel = viewModel;
 }
 
+#pragma mark - Private
 //  开始倒计时
 - (void)beginCountdownIfNeeded {
     if (!self.countdownTimer.valid && !self.countdownTimer) {
@@ -154,7 +161,6 @@ static const NSInteger kAuthCodeLimit = 6;
 //            }];
         
         }];
-        
     }
     return _getAuthCodeBtn;
 }
