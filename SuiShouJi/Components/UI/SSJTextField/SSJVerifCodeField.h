@@ -10,15 +10,6 @@
 #import "SSJLoginVerifyPhoneNumViewModel.h"
 
 @interface SSJVerifCodeField : UITextField
-/**
- default 6
- */
-@property (nonatomic) NSUInteger minPasswordLength;
-
-/**
- default 15
- */
-@property (nonatomic) NSUInteger maxPasswordLength;
 
 /**<#注释#>*/
 @property (nonatomic, strong) SSJLoginVerifyPhoneNumViewModel *viewModel;

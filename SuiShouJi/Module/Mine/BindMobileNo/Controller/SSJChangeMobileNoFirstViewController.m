@@ -10,6 +10,7 @@
 
 #import "TPKeyboardAvoidingScrollView.h"
 #import "SSJChangeMobileNoStepView.h"
+#import "SSJVerifCodeField.h"
 #import "SSJUserTableManager.h"
 
 @interface SSJChangeMobileNoFirstViewController ()
@@ -22,7 +23,7 @@
 
 @property (nonatomic, strong) UILabel *descLab;
 
-@property (nonatomic, strong) UITextField *authCodeField;
+@property (nonatomic, strong) SSJVerifCodeField *authCodeField;
 
 @property (nonatomic, strong) UIButton *nextBtn;
 
@@ -31,6 +32,10 @@
 @end
 
 @implementation SSJChangeMobileNoFirstViewController
+
+- (void)dealloc {
+    
+}
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
@@ -43,6 +48,7 @@
     [super viewDidLoad];
     [self loadMobileNo:^{
         [self setUpViews];
+        [self updateAppearance];
         [self.view setNeedsUpdateConstraints];
     }];
 }
@@ -86,6 +92,11 @@
         make.centerX.mas_equalTo(self.scrollView);
     }];
     [super updateViewConstraints];
+}
+
+- (void)updateAppearanceAfterThemeChanged {
+    [super updateAppearanceAfterThemeChanged];
+    [self updateAppearance];
 }
 
 #pragma mark - Private
@@ -151,6 +162,14 @@
         _descLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
     }
     return _descLab;
+}
+
+- (SSJVerifCodeField *)authCodeField {
+    if (!_authCodeField) {
+        _authCodeField = [[SSJVerifCodeField alloc] initWithGetCodeType:SSJRegistAndForgetPasswordTypeForgetPassword];
+//        _authCodeField.delegate = self;
+    }
+    return _authCodeField;
 }
 
 - (UIButton *)nextBtn {
