@@ -21,6 +21,7 @@
 #import "SSJMineHomeTableViewHeader.h"
 #import "SSJNewMineHomeTabelviewCell.h"
 #import "SSJMoreHomeAnnouncementButton.h"
+#import "SSJMineHomeBannerHeader.h"
 
 #import "SSJStartChecker.h"
 #import "SSJMineHomeTableViewItem.h"
@@ -34,6 +35,9 @@ static NSString *const kTitle4 = @"帮助与反馈";
 static NSString *const kTitle5 = @"爱的鼓励";
 
 static NSString * SSJNewMineHomeTabelviewCelldentifier = @"SSJNewMineHomeTabelviewCelldentifier";
+
+static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHeaderdentifier";
+
 
 @interface SSJNewMineHomeViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -157,6 +161,17 @@ static NSString * SSJNewMineHomeTabelviewCelldentifier = @"SSJNewMineHomeTabelvi
     
 }
 
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    if (self.bannerItems.count && section == 0) {
+        SSJMineHomeBannerHeader *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:SSJNewMineHomeBannerHeaderdentifier];
+        headerView.items = self.bannerItems;
+        return headerView;
+    }
+    UIView *clearView = [[UIView alloc] init];
+    clearView.backgroundColor = [UIColor clearColor];
+    return clearView;
+}
+
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return self.items.count;
@@ -196,7 +211,9 @@ static NSString * SSJNewMineHomeTabelviewCelldentifier = @"SSJNewMineHomeTabelvi
         _tableView.backgroundColor = [UIColor clearColor];
         _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
         [_tableView registerClass:[SSJNewMineHomeTabelviewCell class] forCellReuseIdentifier:SSJNewMineHomeTabelviewCelldentifier];
+        [_tableView registerClass:[SSJMineHomeBannerHeader class] forHeaderFooterViewReuseIdentifier:SSJNewMineHomeBannerHeaderdentifier];
         [_tableView ssj_clearExtendSeparator];
+        
         if ([_tableView respondsToSelector:@selector(setSeparatorInset:)]) {
             [_tableView setSeparatorInset:UIEdgeInsetsZero];
         }
