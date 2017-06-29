@@ -187,9 +187,9 @@ static NSString *const SSJFundingHomeSelectCellIndetifer = @"SSJFundingHomeSelec
         self.transform = CGAffineTransformMakeScale(0.1, 0.1);
         self.point = point;
         
-        self.left = self.point.x - kGap;
-        self.top = self.point.y;
-        [view ssj_showViewWithBackView:self backColor:[UIColor blackColor] alpha:0.5 target:self touchAction:@selector(tapBackgroundViewAction) animation:^{
+        UIWindow *window = [UIApplication sharedApplication].keyWindow;
+        
+        [window ssj_showViewWithBackView:self backColor:[UIColor blackColor] alpha:0.5 target:self touchAction:@selector(tapBackgroundViewAction) animation:^{
             self.left = self.point.x - kGap;
             self.top = self.point.y;
             self.transform = CGAffineTransformIdentity;
