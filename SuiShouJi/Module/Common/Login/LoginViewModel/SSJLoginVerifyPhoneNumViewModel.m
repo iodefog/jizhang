@@ -72,6 +72,7 @@
  @param subscriber 订阅者
  */
 - (void)verityPhoneNumWithPhone:(NSString *)phoneNum subscriber:(id<RACSubscriber>) subscriber {
+    self.netWorkService.showLodingIndicator = YES;
     NSMutableDictionary *paramDic = [NSMutableDictionary dictionary];
     [paramDic setObject:phoneNum forKey:@"cmobileNo"];
     [self.netWorkService request:@"/chargebook/user/check_cphoneExist.go" params:paramDic success:^(SSJBaseNetworkService * _Nonnull service) {
@@ -203,6 +204,7 @@
  @param subscriber <#subscriber description#>
  */
 - (void)verCode:(SSJRegistAndForgetPasswordType)type channelType:(SSJLoginAndRegisterPasswordChannelType)channelType subscriber:(id<RACSubscriber>) subscriber {
+    self.netWorkService.showLodingIndicator = YES;
     //                (mobileNo+timeStamp+key) MD5加密
     //发送验证码请求
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
@@ -231,6 +233,7 @@
  重新获取图形验证码
  */
 - (void)reVerCodeWithSubscriber:(id<RACSubscriber>) subscriber {
+    self.netWorkService.showLodingIndicator = YES;
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
     [param setObject:self.phoneNum forKey:@"cmobileNo"];
     [self.netWorkService request:@"/chargebook/user/get_imgYzm.go" params:param success:^(SSJBaseNetworkService * _Nonnull service) {
@@ -298,6 +301,7 @@
  @param subscriber <#subscriber description#>
  */
 - (void)forgetWithPassWord:(NSString*)password AndUserAccount:(NSString*)mobileNo authCode:(NSString *)authCode subscriber:(id<RACSubscriber>) subscriber {
+    self.netWorkService.showLodingIndicator = YES;
     NSString *encryptPassword = [password stringByAppendingString:@"http://www.9188.com/"];
     encryptPassword = [[encryptPassword ssj_md5HexDigest] lowercaseString];
     [self.netWorkService request:@"/chargebook/user/forget_pwd.go" params:@{@"cmobileNo":mobileNo ?: @"",@"yzm":authCode ?: @"",@"newPwd":encryptPassword ?: @""} success:^(SSJBaseNetworkService * _Nonnull service) {

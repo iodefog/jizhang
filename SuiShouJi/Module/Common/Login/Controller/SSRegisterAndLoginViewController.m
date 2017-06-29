@@ -260,6 +260,15 @@
         [[_registerAndLoginButton rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
             @strongify(self);
             [self.viewModel.registerAndLoginCommand execute:nil];
+            [[[self.viewModel.registerAndLoginCommand.executing skip:1] distinctUntilChanged] subscribeNext:^(id x) {
+                 if ([x boolValue]) {
+                     self.tfPassword.userInteractionEnabled = NO;
+                     self.tfRegYanZhenF.userInteractionEnabled = NO;
+                 } else {
+                     self.tfPassword.userInteractionEnabled = YES;
+                     self.tfRegYanZhenF.userInteractionEnabled = YES;
+                 }
+             }];
         }];
     }
     return _registerAndLoginButton;

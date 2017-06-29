@@ -16,7 +16,11 @@
 
 @property(nonatomic, strong) UIButton *hiddenButton;
 
+@property(nonatomic, strong) UIButton *balanceButton;
+
 @property (nonatomic, copy) void(^hiddenButtonClickBlock)();
+
+@property (nonatomic, copy) void(^balanceButtonClickBlock)();
 
 - (void)updateAfterThemeChange;
 

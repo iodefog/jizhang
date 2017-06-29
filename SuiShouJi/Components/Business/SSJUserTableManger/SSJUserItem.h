@@ -71,6 +71,9 @@
 // 用户最后一条建议回复时间
 @property(nonatomic, copy) NSString *adviceTime;
 
+// 用户资金页面选中的统计资金帐户(如果是全选的话就是all)
+@property(nonatomic, strong) NSString *selectFundid;
+
 + (NSDictionary *)propertyMapping;
 
 @end

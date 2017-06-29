@@ -200,7 +200,9 @@
         @weakify(self);
         [[_verifyPhoneBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
             @strongify(self);
+            [self.view endEditing:YES];
             [[self.verifyPhoneViewModel.verifyPhoneNumRequestCommand execute:nil] subscribeNext:^(NSNumber *result) {
+                
 //                请求返回处理好的数据
                 if ([result boolValue]) {
                     SSJLoginPhoneViewController *vc = [[SSJLoginPhoneViewController alloc] init];
@@ -216,6 +218,15 @@
                 }
             }];
         }];
+        
+        [[[self.verifyPhoneViewModel.verifyPhoneNumRequestCommand.executing skip:1] distinctUntilChanged]
+         subscribeNext:^(id x) {
+             if ([x boolValue]) {
+                 self.numTextF.userInteractionEnabled = NO;
+             } else {
+                 self.numTextF.userInteractionEnabled = YES;
+             }
+         }];
     }
     return _verifyPhoneBtn;
 }
@@ -247,6 +258,7 @@
         @weakify(self);
         [[_protocolButton rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
             @strongify(self);
+            [self.view endEditing:YES];
             SSJNormalWebViewController *userAgreementVC = [SSJNormalWebViewController webViewVCWithURL:[NSURL URLWithString:SSJUserProtocolUrl]];
             userAgreementVC.title = @"用户协定";
             [self.navigationController pushViewController:userAgreementVC animated:YES];
@@ -264,6 +276,7 @@
         @weakify(self);
         [[_tencentLoginButton rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
             @strongify(self);
+            [self.view endEditing:YES];
             _verifyPhoneViewModel.vc = self;
             [self.verifyPhoneViewModel.qqLoginCommand execute:nil];
         }];
@@ -281,6 +294,7 @@
         @weakify(self);
         [[_weixinLoginButton rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
             @strongify(self);
+            [self.view endEditing:YES];
             _verifyPhoneViewModel.vc = self;
             [self.verifyPhoneViewModel.wxLoginCommand execute:nil];
         }];
