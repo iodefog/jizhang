@@ -7,13 +7,11 @@
 //
 
 #import "SSJLoginVerifyPhoneNumViewModel.h"
-#import "SSJBaseNetworkService.h"
 
 #import "SSJThirdPartLoginItem.h"
 #import "SSJUserItem.h"
 #import "SSJBookkeepingTreeCheckInModel.h"
 #import "SSJCustomCategoryItem.h"
-
 
 #import "SSJStringAddition.h"
 #import "SSJWeiXinLoginHelper.h"
@@ -35,8 +33,6 @@
 #import "MMDrawerController.h"
 
 @interface SSJLoginVerifyPhoneNumViewModel ()
-/**<#注释#>*/
-@property (nonatomic, strong) SSJBaseNetworkService *netWorkService;
 
 //  登录方式
 @property (assign, nonatomic) SSJLoginType loginType;

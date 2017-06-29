@@ -13,6 +13,6 @@
 
 @property(nonatomic) BOOL isSelected;
 
-@property(nonatomic, strong) SSJFinancingHomeitem *item;
+@property(nonatomic, strong) id item;
 
 @end
