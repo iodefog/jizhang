@@ -31,6 +31,8 @@
 
 #define SSJ_BUTTON_DISABLE_COLOR [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor alpha:0.5]
 
+#define SSJ_BORDER_COLOR [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor]
+
 
 //  切换主题通知
 extern NSString *const SSJThemeDidChangeNotification;

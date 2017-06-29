@@ -85,8 +85,8 @@
 - (void)updateAppearanceAccordingToTheme {
     self.textColor = SSJ_MAIN_COLOR;
     self.attributedPlaceholder = [[NSAttributedString alloc] initWithString:self.placeholder attributes:@{NSForegroundColorAttributeName:SSJ_SECONDARY_COLOR}];
-    [self ssj_setBorderColor:SSJ_CELL_SEPARATOR_COLOR];
-    [self.areaCodeLab ssj_setBorderColor:SSJ_CELL_SEPARATOR_COLOR];
+    [self ssj_setBorderColor:SSJ_BORDER_COLOR];
+    [self.areaCodeLab ssj_setBorderColor:SSJ_BORDER_COLOR];
 }
 
 @end

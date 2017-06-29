@@ -57,6 +57,7 @@
     [self.descLab mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self.icon.mas_bottom).offset(30);
         make.centerX.mas_equalTo(self.scrollView);
+        make.height.mas_equalTo(30);
     }];
     [self.phoneNoField mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self.descLab.mas_bottom).offset(48);
@@ -98,8 +99,29 @@
 }
 
 - (void)setUpBindings {
-    RAC(self.viewModel, phoneNum) = RACObserve(self.phoneNoField, text);
+    RAC(self.nextBtn, enabled) = self.viewModel.enableVerifySignal;
+    RAC(self.viewModel, phoneNum) = self.phoneNoField.rac_textSignal;
     self.nextBtn.rac_command = self.viewModel.verifyPhoneNumRequestCommand;
+    
+    @weakify(self);
+    [[self.nextBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
+        @strongify(self);
+        [self.phoneNoField resignFirstResponder];
+    }];
+    
+    [self.viewModel.verifyPhoneNumRequestCommand.executionSignals.switchToLatest subscribeNext:^(NSNumber *result) {
+        @strongify(self);
+        if ([result boolValue]) {
+            NSError *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"此手机号已经注册过了，换一个吧"}];
+            [SSJAlertViewAdapter showError:error completion:^{
+                [self.phoneNoField becomeFirstResponder];
+            }];
+        } else {
+            SSJSettingPasswordViewController *pwdSetttingVC = [[SSJSettingPasswordViewController alloc] init];
+            pwdSetttingVC.type = SSJSettingPasswordTypeMobileNoBinding;
+            [self.navigationController pushViewController:pwdSetttingVC animated:YES];
+        }
+    } error:NULL];
 }
 
 #pragma mark - Lazyloading
@@ -148,6 +170,7 @@
 - (SSJLoginVerifyPhoneNumViewModel *)viewModel {
     if (!_viewModel) {
         _viewModel = [[SSJLoginVerifyPhoneNumViewModel alloc] init];
+        _viewModel.agreeProtocol = YES;
     }
     return _viewModel;
 }
