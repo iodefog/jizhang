@@ -114,6 +114,7 @@
 - (void)setupBindings {
     RAC(self.viewModel,phoneNum) = [self.mobileNoField rac_textSignal];
     RAC(self.nextBtn,enabled) = self.viewModel.enableVerifySignal;
+//    RAC(self.mobileNoField,enabled) = self
     
     @weakify(self);
     [[self.nextBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
@@ -131,6 +132,7 @@
             }];
         } else {
             SSJChangeMobileNoThirdViewController *thirdVC = [[SSJChangeMobileNoThirdViewController alloc] init];
+            thirdVC.mobileNo = self.mobileNoField.text;
             [self.navigationController pushViewController:thirdVC animated:YES];
         }
     } error:NULL];
@@ -179,7 +181,7 @@
     if (!_nextBtn) {
         _nextBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _nextBtn.clipsToBounds = YES;
-        _nextBtn.layer.cornerRadius = 3;
+        _nextBtn.layer.cornerRadius = 6;
         _nextBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
         [_nextBtn setTitle:@"下一步" forState:UIControlStateNormal];
         [_nextBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];

@@ -11,11 +11,17 @@
 
 @interface SSJVerifCodeField : UITextField
 
+/**
+ 验证码长度限制，默认6；如果为0就不做限制
+ */
+@property (nonatomic) NSUInteger authCodeLength;
+
 /**<#注释#>*/
 @property (nonatomic, strong) SSJLoginVerifyPhoneNumViewModel *viewModel;
 
 //只有找回密码用14其他都是13
 - (instancetype)initWithGetCodeType:(SSJRegistAndForgetPasswordType)type;
+
 - (void)getVerifCode;
 
 @end

@@ -206,7 +206,7 @@
     if (!_nextBtn) {
         _nextBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _nextBtn.clipsToBounds = YES;
-        _nextBtn.layer.cornerRadius = 3;
+        _nextBtn.layer.cornerRadius = 6;
         _nextBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
         [_nextBtn setTitle:@"下一步" forState:UIControlStateNormal];
         [_nextBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
