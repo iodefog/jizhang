@@ -12,6 +12,9 @@ const int64_t SSJDefaultSyncVersion = -1;
 
 const float SSJMaskAlpha = 0.3;
 
+//网络请求事件间隔
+const NSTimeInterval SSJRequestTimeDuration = 5;
+
 const NSUInteger SSJAuthCodeLength = 6;
 
 NSString *const SSJErrorDomain = @"com.9188.jizhang";
