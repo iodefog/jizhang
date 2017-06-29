@@ -18,6 +18,7 @@
 #import "SSJSettingViewController.h"
 #import "SSJAnnouncementsListViewController.h"
 #import "UIViewController+SSJPageFlow.h"
+#import "SSJTestViewController.h"
 
 #import "SSJMineHomeTableViewHeader.h"
 #import "SSJNewMineHomeTabelviewCell.h"
@@ -271,6 +272,9 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
             SSJAnnouncementsListViewController *annoucementListVc = [[SSJAnnouncementsListViewController alloc] initWithTableViewStyle:UITableViewStyleGrouped];
             annoucementListVc.items = [self.announcements mutableCopy];
 //            annoucementListVc.totalPage = self.annoucementService.totalPage;
+            
+//            SSJTestViewController *annoucementListVc = [[SSJTestViewController alloc] init];
+//
             [self.navigationController pushViewController:annoucementListVc animated:YES];
         };
     }

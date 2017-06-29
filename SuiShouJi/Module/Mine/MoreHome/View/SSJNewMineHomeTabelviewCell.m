@@ -73,7 +73,7 @@
     self.titleLab.text = item.title;
     
     if ([item.image hasPrefix:@"http"]) {
-        [self.cellImageView sd_setImageWithURL:[NSURL URLWithString:item.image]];
+//        [self.cellImageView sd_setImageWithURL:[NSURL URLWithString:item.image]];
     } else {
         self.cellImageView.image = [UIImage imageNamed:item.image];
     }
