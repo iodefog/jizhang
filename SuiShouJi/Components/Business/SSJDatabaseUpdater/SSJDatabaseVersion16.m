@@ -26,6 +26,11 @@
         return error;
     }
     
+    error = [self updateUserTableWithDatabase:db];
+    if (error) {
+        return error;
+    }
+    
     return nil;
 }
 
@@ -61,5 +66,17 @@
     return nil;
 }
 
+// 更新user表
++ (NSError *)updateUserTableWithDatabase:(FMDatabase *)db {
+    if (![db executeUpdate:@"alter table bk_user add ccurrentselectfundid text default 'all'"]) {
+        return [db lastError];
+    }
+    
+    if (![db executeUpdate:@"update bk_user_credit set ccurrentselectfundid = 'all' where ccurrentselectfundid is null"]) {
+        return [db lastError];
+    }
+    
+    return nil;
+}
 
 @end

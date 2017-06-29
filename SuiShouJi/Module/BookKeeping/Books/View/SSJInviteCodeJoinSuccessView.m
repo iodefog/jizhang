@@ -23,6 +23,7 @@
 @end
 
 @implementation SSJInviteCodeJoinSuccessView
+
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         [self addSubview:self.bgView];
@@ -39,39 +40,50 @@
 - (void)updateConstraints {
     [self.topImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.mas_equalTo(self);
-        make.top.mas_equalTo(self);
+        make.size.mas_equalTo(self.topImageView.image.size);
     }];
     
     [self.bgView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.bottom.mas_equalTo(self);
-        make.height.width.mas_equalTo(280);
+        make.top.mas_equalTo(self).offset(self.topImageView.image.size.height * 0.5);
+        make.width.mas_equalTo(280);
     }];
     
     [self.centerLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(78);
-        make.left.mas_equalTo(self).offset(22);
-        make.right.mas_equalTo(self).offset(-22);
+        make.top.mas_equalTo(self.bgView).offset(78);
+        make.left.mas_equalTo(self.bgView).offset(22);
+        make.right.mas_equalTo(self.bgView).offset(-22);
     }];
     
     [self.sureButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(self).offset(30);
-        make.right.mas_equalTo(self).offset(-30);
-        make.height.mas_equalTo(44);
         make.top.mas_equalTo(self.centerLab.mas_bottom).offset(40);
+        make.left.mas_equalTo(self.bgView).offset(30);
+        make.bottom.mas_equalTo(self.bgView).offset(-34);
+        make.right.mas_equalTo(self.bgView).offset(-30);
+        make.height.mas_equalTo(44);
+    }];
+    [self mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(self.topImageView);
+        make.left.and.bottom.and.right.mas_equalTo(self.bgView);
+        if (self.superview) {
+            make.center.mas_equalTo(self.superview);
+        }
     }];
     
     [super updateConstraints];
 }
 
-- (CGSize)sizeThatFits:(CGSize)size {
-    return CGSizeMake(280, 328);
+#pragma mark - Private
+- (void)showWithDesc:(NSString *)desc {
+    self.centerLab.text = desc;
+    [self setNeedsUpdateConstraints];
+    
+    self.alpha = 0;
+    self.center = CGPointMake(SSJSCREENWITH * 0.5, SSJSCREENHEIGHT * 0.5);
+    [SSJ_KEYWINDOW ssj_showViewWithBackView:self backColor:[UIColor blackColor] alpha:0.5 target:self touchAction:@selector(dismiss) animation:^{
+        self.alpha = 1;
+    } timeInterval:0.25 fininshed:NULL];
 }
 
-#pragma mark - Private
-- (void)show {
-    self.center = CGPointMake(SSJSCREENWITH * 0.5, SSJSCREENHEIGHT * 0.5);
-    [SSJ_KEYWINDOW ssj_showViewWithBackView:self backColor:[UIColor blackColor] alpha:0.5 target:self touchAction:@selector(dismiss)];
-}
 - (void)dismiss {
     if (!self.superview) {
         return;
@@ -87,12 +99,6 @@
     self.centerLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     self.bgView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
     [self.sureButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-}
-
-- (void)setBookName:(NSString *)bookName {
-    _bookName = bookName;
-    self.centerLab.text = [NSString stringWithFormat:@"你已成功加入共享账本【%@】，今后，将和ta一起，共同记账，祝你们记账愉快～",bookName];
-    [self setNeedsUpdateConstraints];
 }
 
 #pragma mark - Lazy
@@ -111,6 +117,7 @@
         _centerLab.preferredMaxLayoutWidth = 236;
         _centerLab.backgroundColor = [UIColor clearColor];
         _centerLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
+        _centerLab.textAlignment = NSTextAlignmentCenter;
     }
     return _centerLab;
 }

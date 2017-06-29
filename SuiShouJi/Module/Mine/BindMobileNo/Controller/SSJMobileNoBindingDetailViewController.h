@@ -8,6 +8,10 @@
 //  手机号绑定详情
 #import "SSJBaseViewController.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface SSJMobileNoBindingDetailViewController : SSJBaseViewController
 
 @end
+
+NS_ASSUME_NONNULL_END

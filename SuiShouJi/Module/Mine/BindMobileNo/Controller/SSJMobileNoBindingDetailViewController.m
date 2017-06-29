@@ -10,6 +10,8 @@
 #import "SSJChangeMobileNoFirstViewController.h"
 #import "SSJUserTableManager.h"
 
+#import "SSJInviteCodeJoinSuccessView.h"
+
 @interface SSJMobileNoBindingDetailViewController ()
 
 @property (nonatomic, strong) UIImageView *icon;
@@ -119,13 +121,19 @@
     if (!_changeBtn) {
         _changeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _changeBtn.clipsToBounds = YES;
-        _changeBtn.layer.cornerRadius = 3;
+        _changeBtn.layer.cornerRadius = 6;
         _changeBtn.layer.borderWidth = 1;
         _changeBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
         [_changeBtn setTitle:@"更换手机号" forState:UIControlStateNormal];
+//        [[_changeBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
+//            SSJChangeMobileNoFirstViewController *firstVC = [[SSJChangeMobileNoFirstViewController alloc] init];
+//            [self.navigationController pushViewController:firstVC animated:YES];
+//        }];
+        
+#warning test
         [[_changeBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
-            SSJChangeMobileNoFirstViewController *firstVC = [[SSJChangeMobileNoFirstViewController alloc] init];
-            [self.navigationController pushViewController:firstVC animated:YES];
+            SSJInviteCodeJoinSuccessView *successAlertView = [[SSJInviteCodeJoinSuccessView alloc] init];
+            [successAlertView showWithDesc:@"更换手机号成功"];
         }];
     }
     return _changeBtn;

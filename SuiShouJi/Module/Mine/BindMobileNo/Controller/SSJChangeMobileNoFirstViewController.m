@@ -7,13 +7,16 @@
 //
 
 #import "SSJChangeMobileNoFirstViewController.h"
-
+#import "SSJChangeMobileNoSecondViewController.h"
 #import "TPKeyboardAvoidingScrollView.h"
 #import "SSJChangeMobileNoStepView.h"
 #import "SSJVerifCodeField.h"
 #import "SSJUserTableManager.h"
+#import "SSJLoginVerifyPhoneNumViewModel.h"
 
 @interface SSJChangeMobileNoFirstViewController ()
+
+@property (nonatomic, copy) NSString *mobileNo;
 
 @property (nonatomic, strong) TPKeyboardAvoidingScrollView *scrollView;
 
@@ -29,10 +32,15 @@
 
 @property (nonatomic, strong) UIButton *changeWayBtn;
 
+@property (nonatomic, strong) SSJLoginVerifyPhoneNumViewModel *viewModel;
+
+@property (nonatomic, strong) SSJBaseNetworkService *service;
+
 @end
 
 @implementation SSJChangeMobileNoFirstViewController
 
+#pragma mark - Lifecycle
 - (void)dealloc {
     
 }
@@ -48,6 +56,7 @@
     [super viewDidLoad];
     [self loadMobileNo:^{
         [self setUpViews];
+        [self setupBindings];
         [self updateAppearance];
         [self.view setNeedsUpdateConstraints];
     }];
@@ -89,7 +98,6 @@
         make.left.mas_equalTo(self.scrollView).offset(15);
         make.size.mas_equalTo(CGSizeMake(106, 38));
         make.bottom.mas_equalTo(self.scrollView).offset(-20);
-        make.centerX.mas_equalTo(self.scrollView);
     }];
     [super updateViewConstraints];
 }
@@ -104,7 +112,7 @@
     [self.view ssj_showLoadingIndicator];
     [SSJUserTableManager queryUserItemWithID:SSJUSERID() success:^(SSJUserItem * _Nonnull userItem) {
         [self.view ssj_hideLoadingIndicator];
-//        [self updateMobileNoLab:userItem.mobileNo];
+        self.mobileNo = userItem.mobileNo;
         if (completion) {
             completion();
         }
@@ -116,8 +124,7 @@
 
 - (void)updateAppearance {
     self.descLab.textColor = SSJ_MAIN_COLOR;
-    //    [self.authCodeField updateAppearanceAccordingToTheme];
-    //    [self.passwordField updateAppearanceAccordingToTheme];
+    [self.authCodeField updateAppearanceAccordingToTheme];
     [self.nextBtn ssj_setBackgroundColor:SSJ_BUTTON_NORMAL_COLOR forState:UIControlStateNormal];
     [self.nextBtn ssj_setBackgroundColor:SSJ_BUTTON_DISABLE_COLOR forState:UIControlStateDisabled];
     [self.changeWayBtn setTitleColor:SSJ_MAIN_COLOR forState:UIControlStateNormal];
@@ -133,10 +140,33 @@
     [self.scrollView addSubview:self.changeWayBtn];
 }
 
+- (void)setupBindings {
+    self.viewModel.phoneNum = self.mobileNo;
+    self.authCodeField.viewModel = self.viewModel;
+    RAC(self.nextBtn, enabled) = [RACSignal merge:@[[[self.authCodeField rac_textSignal] map:^id(NSString *authCode) {
+        return @(self.authCodeField.text.length >= 6 && self.service.state != SSJNetworkServiceStateLoading);
+    }], [RACObserve(self.service, state) map:^id(id value) {
+        return @(self.authCodeField.text.length >= 6 && self.service.state != SSJNetworkServiceStateLoading);
+    }]]];
+}
+
+- (void)checkAuthCode {
+    NSDictionary *params = @{@"cmobileNo":self.mobileNo,
+                             @"yzm":self.authCodeField.text,
+                             @"mobileType":@2};
+    [self.service request:@"/chargebook/user/check_sms.go" params:params success:^(SSJBaseNetworkService * _Nonnull service) {
+        [self.authCodeField resignFirstResponder];
+        SSJChangeMobileNoSecondViewController *secondVC = [[SSJChangeMobileNoSecondViewController alloc] init];
+        [self.navigationController pushViewController:secondVC animated:YES];
+    } failure:^(SSJBaseNetworkService * _Nonnull service) {
+        [SSJAlertViewAdapter showError:service.error];
+    }];
+}
+
 #pragma mark - Lazyloading
 - (TPKeyboardAvoidingScrollView *)scrollView {
     if (!_scrollView) {
-        _scrollView = [[TPKeyboardAvoidingScrollView alloc] initWithFrame:self.view.bounds];
+        _scrollView = [[TPKeyboardAvoidingScrollView alloc] init];
     }
     return _scrollView;
 }
@@ -176,10 +206,13 @@
     if (!_nextBtn) {
         _nextBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _nextBtn.clipsToBounds = YES;
-        _nextBtn.layer.cornerRadius = 3;
+        _nextBtn.layer.cornerRadius = 6;
         _nextBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
         [_nextBtn setTitle:@"下一步" forState:UIControlStateNormal];
         [_nextBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [[_nextBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
+            [self checkAuthCode];
+        }];
     }
     return _nextBtn;
 }
@@ -191,6 +224,21 @@
         [_changeWayBtn setTitle:@"手机号丢失或停用" forState:UIControlStateNormal];
     }
     return _changeWayBtn;
+}
+
+- (SSJLoginVerifyPhoneNumViewModel *)viewModel {
+    if (!_viewModel) {
+        _viewModel = [[SSJLoginVerifyPhoneNumViewModel alloc] init];
+    }
+    return _viewModel;
+}
+
+- (SSJBaseNetworkService *)service {
+    if (!_service) {
+        _service = [[SSJBaseNetworkService alloc] init];
+        _service.showLodingIndicator = YES;
+    }
+    return _service;
 }
 
 @end

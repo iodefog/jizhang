@@ -9,8 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface SSJInviteCodeJoinSuccessView : UIView
-//- (instancetype)initWithFrame:(CGRect)frame bookName:(NSString *)bookName;
-/**bookName*/
-@property (nonatomic, copy) NSString *bookName;
-- (void)show;
+
+- (void)showWithDesc:(NSString *)desc;
+
 @end

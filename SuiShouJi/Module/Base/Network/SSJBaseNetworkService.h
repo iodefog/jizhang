@@ -31,6 +31,14 @@ typedef NS_OPTIONS(NSInteger, SSJResponseSerialization) {
     SSJImageResponseSerialization = 1 << 3
 };
 
+typedef NS_ENUM(NSInteger, SSJNetworkServiceState) {
+    SSJNetworkServiceStateReady,
+    SSJNetworkServiceStateLoading,
+    SSJNetworkServiceStateSuccessful,
+    SSJNetworkServiceStateFailed,
+    SSJNetworkServiceStateCanceled
+};
+
 @class SSJBaseNetworkService;
 typedef void(^SSJNetworkServiceHandler)(SSJBaseNetworkService *service);
 
@@ -84,6 +92,11 @@ typedef void(^SSJNetworkServiceHandler)(SSJBaseNetworkService *service);
 @property (nonatomic, strong, readonly) NSDictionary *rootElement;
 
 /**
+ 请求失败的错误（不包括请求被取消）
+ */
+@property (nonatomic, strong, readonly, nullable) NSError *error;
+
+/**
  *  是否显示加载框，默认NO
  */
 @property (nonatomic) BOOL showLodingIndicator;
@@ -94,30 +107,16 @@ typedef void(^SSJNetworkServiceHandler)(SSJBaseNetworkService *service);
 @property (nonatomic) BOOL showMessageIfErrorOccured;
 
 /**
- *  是否成功加载过，不区分成功、失败
+ 状态
+ */
+@property (nonatomic, readonly) SSJNetworkServiceState state;
+
+/**
+ *  是否请求过，不区分成功、失败
  *
  *  @return (BOOL)
  */
 @property (readonly, nonatomic) BOOL isLoaded;
-
-/**
- *  是否加载成功
- *
- *  @return (BOOL)
- */
-@property (readonly, nonatomic) BOOL isLoadSuccess;
-
-/**
- *  是否正在加载
- *
- *  @return (BOOL)
- */
-@property (readonly, nonatomic) BOOL isLoading;
-
-/**
- *  是否取消了请求
- */
-@property (readonly, nonatomic) BOOL isCancelled;
 
 /**
  *  服务器时间

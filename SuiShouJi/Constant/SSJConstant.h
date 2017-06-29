@@ -176,6 +176,8 @@ extern const float SSJMaskAlpha;
 
 extern const NSTimeInterval SSJRequestTimeDuration;
 
+extern const NSUInteger SSJAuthCodeLength;
+
 ///------------------------------------------
 /// @name 字符串常量
 ///------------------------------------------

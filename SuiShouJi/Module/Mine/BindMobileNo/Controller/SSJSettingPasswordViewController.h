@@ -8,6 +8,8 @@
 //  重置密码、绑定手机号设置密码
 #import "SSJBaseViewController.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 typedef NS_ENUM(NSInteger, SSJSettingPasswordType) {
     SSJSettingPasswordTypeMobileNoBinding,
     SSJSettingPasswordTypeResettingPassword
@@ -18,3 +20,5 @@ typedef NS_ENUM(NSInteger, SSJSettingPasswordType) {
 @property (nonatomic) SSJSettingPasswordType type;
 
 @end
+
+NS_ASSUME_NONNULL_END

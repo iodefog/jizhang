@@ -78,8 +78,8 @@
         [subscriber sendNext:service.rootElement];
         [subscriber sendCompleted];
     } failure:^(SSJBaseNetworkService * _Nonnull service) {
-        [CDAutoHideMessageHUD showMessage:service.desc];
-        [subscriber sendError:nil];
+        [SSJAlertViewAdapter showError:service.error];
+        [subscriber sendError:service.error];
     }];
 }
 
@@ -612,8 +612,9 @@
                 return nil;
             }];
             //返回的数据处理json->model
+            //1 密码登录(已注册)，0 验证码注册（未注册）
             return [signal map:^id(NSDictionary *result) {
-                return [[result objectForKey:@"code"] stringValue];
+                return @([[result objectForKey:@"code"] boolValue]);
             }];
         }];
     }
@@ -623,9 +624,9 @@
 - (RACSignal *)enableVerifySignal {
     if (!_enableVerifySignal) {
         //手机号位数，是否同意用户协议
-        _enableVerifySignal = [[RACSignal combineLatest:@[RACObserve(self, phoneNum),RACObserve(self, agreeProtocol)] reduce:^id(NSString *phoneNum,NSNumber *isAgree){
-            return @(phoneNum.length == 11 && isAgree.boolValue);
-        }] skip:1];
+        _enableVerifySignal = [RACSignal combineLatest:@[RACObserve(self, phoneNum),RACObserve(self, agreeProtocol)] reduce:^id(NSString *phoneNum,NSNumber *isAgree){
+            return @(phoneNum.length >= 11 && isAgree.boolValue);
+        }];
     }
     return _enableVerifySignal;
 }

@@ -13,7 +13,6 @@
 
 static const CGFloat kAuthCodeBtnWidth = 125;
 static const NSInteger kCountdownLimit = 60;
-static const NSInteger kAuthCodeLimit = 6;
 
 @interface SSJVerifCodeField()
 
@@ -43,6 +42,7 @@ static const NSInteger kAuthCodeLimit = 6;
 
 - (instancetype)initWithGetCodeType:(SSJRegistAndForgetPasswordType)type {
     if (self = [super init]) {
+        self.authCodeLength = SSJAuthCodeLength;
         self.viewModel.regOrForType = type;
         self.keyboardType = UIKeyboardTypeNumberPad;
         self.clearButtonMode = UITextFieldViewModeWhileEditing;
@@ -56,8 +56,8 @@ static const NSInteger kAuthCodeLimit = 6;
         
         __weak typeof(self) wself = self;
         self.observer = [[NSNotificationCenter defaultCenter] addObserverForName:UITextFieldTextDidChangeNotification object:self queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
-            if (wself.text.length > kAuthCodeLimit) {
-                wself.text = [wself.text substringToIndex:kAuthCodeLimit];
+            if (wself.text.length > self.authCodeLength && self.authCodeLength > 0) {
+                wself.text = [wself.text substringToIndex:self.authCodeLength];
             }
         }];
     }
