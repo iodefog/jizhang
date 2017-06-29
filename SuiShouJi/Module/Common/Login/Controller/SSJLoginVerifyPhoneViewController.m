@@ -207,7 +207,7 @@
             @strongify(self);
             [self.view endEditing:YES];
             [[[self.verifyPhoneViewModel.verifyPhoneNumRequestCommand execute:nil] takeUntil:self.rac_willDeallocSignal] subscribeNext:^(NSNumber *result) {
-                
+//                1 密码登录(已注册)，0 验证码注册（未注册）
 //                请求返回处理好的数据
                 if ([result boolValue]) {
                     SSJLoginPhoneViewController *vc = [[SSJLoginPhoneViewController alloc] init];
