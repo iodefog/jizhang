@@ -22,6 +22,7 @@
 #import "SSJNavigationController.h"
 #import "UIViewController+SSJMotionPassword.h"
 //#import "SSJLoginViewController+SSJCategory.h"
+#import "SSJProductAdviceViewController.h"
 #import "SSJLoginVerifyPhoneViewController+SSJLoginCategory.h"
 #import "SSJShareBooksMenberManagerViewController.h"
 
@@ -39,7 +40,8 @@
 #import "SSJBookKeepingHomeDateView.h"
 #import "SSJMultiFunctionButtonView.h"
 #import "SSJBookKeepingHomeBar.h"
-#import "SSJBookKeepingHomeEvaluatePopView.h"
+//#import "SSJBookKeepingHomeEvaluatePopView.h"
+#import "SSJAPPEvaluatePopView.h"
 #import "SSJLoginPopView.h"
 #import "SSJBookKeepingHomePopView.h"
 #import "SSJHomeBillStickyNoteView.h"
@@ -84,7 +86,9 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 /**
  弹出好评弹框
  */
-@property (nonatomic, strong) SSJBookKeepingHomeEvaluatePopView *evaluatePopView;
+//@property (nonatomic, strong) SSJBookKeepingHomeEvaluatePopView *evaluatePopView;
+
+@property (nonatomic, strong) SSJAPPEvaluatePopView *appEvaluatePopView;
 /**指引弹框*/
 @property (nonatomic, strong) SSJListMenu *guidePopView;
 @property(nonatomic, strong) UILabel *statusLabel;
@@ -621,12 +625,25 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
     return _homeBar;
 }
 
-- (SSJBookKeepingHomeEvaluatePopView *)evaluatePopView
-{
-    if (!_evaluatePopView) {
-        _evaluatePopView = [[SSJBookKeepingHomeEvaluatePopView alloc] initWithFrame:CGRectMake(0, 0, SSJSCREENWITH, SSJSCREENHEIGHT)];
+//- (SSJBookKeepingHomeEvaluatePopView *)evaluatePopView
+//{
+//    if (!_evaluatePopView) {
+//        _evaluatePopView = [[SSJBookKeepingHomeEvaluatePopView alloc] initWithFrame:CGRectMake(0, 0, SSJSCREENWITH, SSJSCREENHEIGHT)];
+//    }
+//    return _evaluatePopView;
+//}
+
+- (SSJAPPEvaluatePopView *)appEvaluatePopView {
+    if (!_appEvaluatePopView) {
+        _appEvaluatePopView = [[SSJAPPEvaluatePopView alloc] init];
+        @weakify(self);
+        _appEvaluatePopView.tuCaoBtnClickBlock = ^{
+            @strongify(self);
+            SSJProductAdviceViewController *proVC = [[SSJProductAdviceViewController alloc] init];
+            [self.navigationController pushViewController:proVC animated:YES];
+        };
     }
-    return _evaluatePopView;
+    return _appEvaluatePopView;
 }
 
 - (SSJBookKeepingHomePopView *)keepingHomePopView
@@ -973,7 +990,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
                 && !model.isAlreadyReminded
                 && ![remindedBookTypes containsObject:booksId]
                 && (model.remindMoney >= model.budgetMoney - model.payMoney)
-                && (![[UIApplication sharedApplication].keyWindow.subviews containsObject:self.evaluatePopView])
+                && (![[UIApplication sharedApplication].keyWindow.subviews containsObject:self.appEvaluatePopView])
                 && (![[UIApplication sharedApplication].keyWindow.subviews containsObject:self.keepingHomePopView])) {
                 self.remindView.model = model;
                 [self.remindView show];
@@ -1016,13 +1033,9 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 
 - (void)whichViewShouldPopToHomeView
 {
-    
-    //当前版本是否显示过弹框()
-    int type = [[[NSUserDefaults standardUserDefaults] objectForKey:SSJEvaluateSelecatedKey] intValue];
-    if(type == SSJEvaluateSelecatedTypeNotShowAgain && SSJLaunchTimesForCurrentVersion() <= 1){//更新新版本继续弹出,当前版本是第一次启动并且上一个版本选择了高冷无视更新为还未选择
-        self.evaluatePopView.evaluateSelecatedType = SSJEvaluateSelecatedTypeUnKnow;
-    }
-    
+    //评分
+    [self.appEvaluatePopView showEvaluatePopView];
+    return;
     //1.定期登录提示
     if ([self.keepingHomePopView popLoginViewWithNav:self.navigationController backController:self] == YES) return;
     
@@ -1031,7 +1044,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
     if ([SSJLoginPopView popIfNeededWithNav:self.navigationController backController:self] == YES) return;
     //4.评分
     if (self.isBudgetOverrunsPopViewShow == NO) {
-        if ([self.evaluatePopView showEvaluatePopView] == YES) return;
+        if ([self.appEvaluatePopView showEvaluatePopView] == YES) return;
     }
 }
 

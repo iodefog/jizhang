@@ -11,6 +11,7 @@
 extern NSString *const SSJApplicationLunchTimeKey;
 extern NSString *const SSJNewUserKey;//是否为新用户
 extern NSString *const SSJEvaluateSelecatedKey;//用户点击了那个按钮
+
 //  评价弹框用户选择类型
 typedef NS_ENUM(NSUInteger, SSJEvaluateSelecatedType) {
     SSJEvaluateSelecatedTypeUnKnow = 0,        //  未知，用户没有选择

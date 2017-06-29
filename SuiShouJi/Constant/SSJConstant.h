@@ -174,6 +174,8 @@ extern const int64_t SSJDefaultSyncVersion;
 
 extern const float SSJMaskAlpha;
 
+extern const NSTimeInterval SSJRequestTimeDuration;
+
 ///------------------------------------------
 /// @name 字符串常量
 ///------------------------------------------
