@@ -72,8 +72,15 @@
     NSMutableDictionary *paramDic = [NSMutableDictionary dictionary];
     [paramDic setObject:phoneNum forKey:@"cmobileNo"];
     [self.netWorkService request:@"/chargebook/user/check_cphoneExist.go" params:paramDic success:^(SSJBaseNetworkService * _Nonnull service) {
-        [subscriber sendNext:service.rootElement];
-        [subscriber sendCompleted];
+        if ([service.returnCode isEqualToString:@"0"]
+            || [service.returnCode isEqualToString:@"1"]) {
+            [subscriber sendNext:service.rootElement];
+            [subscriber sendCompleted];
+        } else {
+            NSError *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:service.desc}];
+            [SSJAlertViewAdapter showError:error];
+            [subscriber sendError:error];
+        }
     } failure:^(SSJBaseNetworkService * _Nonnull service) {
         [SSJAlertViewAdapter showError:service.error];
         [subscriber sendError:service.error];
