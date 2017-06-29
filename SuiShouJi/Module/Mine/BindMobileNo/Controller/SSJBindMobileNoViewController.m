@@ -99,16 +99,14 @@
 }
 
 - (void)setUpBindings {
-    RAC(self.nextBtn, enabled) = self.viewModel.enableVerifySignal;
-    RAC(self.viewModel, phoneNum) = self.phoneNoField.rac_textSignal;
-    self.nextBtn.rac_command = self.viewModel.verifyPhoneNumRequestCommand;
-    
     @weakify(self);
     [[self.nextBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
         @strongify(self);
         [self.phoneNoField resignFirstResponder];
     }];
-    
+
+    RAC(self.viewModel, phoneNum) = self.phoneNoField.rac_textSignal;
+    self.nextBtn.rac_command = self.viewModel.verifyPhoneNumRequestCommand;
     [self.viewModel.verifyPhoneNumRequestCommand.executionSignals.switchToLatest subscribeNext:^(NSNumber *result) {
         @strongify(self);
         if ([result boolValue]) {
@@ -122,6 +120,8 @@
             [self.navigationController pushViewController:pwdSetttingVC animated:YES];
         }
     } error:NULL];
+    
+    RAC(self.nextBtn, enabled) = self.viewModel.enableVerifySignal;
 }
 
 #pragma mark - Lazyloading

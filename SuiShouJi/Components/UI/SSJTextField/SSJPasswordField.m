@@ -27,7 +27,7 @@
         self.maxLength = 15;
         self.textColor = [UIColor ssj_colorWithHex:@"333333"];
         self.clearButtonMode = UITextFieldViewModeWhileEditing;
-        self.placeholder = @"至少6位";
+        self.placeholder = @"请设置6位以上密码";
         self.font = [UIFont ssj_helveticaRegularFontOfSize:SSJ_FONT_SIZE_3];
         
         self.secureTextEntry = YES;

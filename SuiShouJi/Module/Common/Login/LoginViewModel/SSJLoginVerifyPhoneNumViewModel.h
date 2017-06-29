@@ -7,11 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
-@class SSJBaseNetworkService;
+#import "SSJBaseNetworkService.h"
 @class SSJThirdPartLoginItem;
 
 @interface SSJLoginVerifyPhoneNumViewModel : NSObject
 
+@property (nonatomic, strong) SSJBaseNetworkService *netWorkService;
 /**
  请求验证手机号命令
  */

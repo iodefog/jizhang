@@ -9,7 +9,7 @@
 #import "SSJSettingPasswordViewController.h"
 #import "TPKeyboardAvoidingScrollView.h"
 #import "SSJVerifCodeField.h"
-#import "SSJMobileNoField.h"
+#import "SSJPasswordField.h"
 
 
 @interface SSJSettingPasswordViewController ()
@@ -22,7 +22,7 @@
 
 @property (nonatomic, strong) SSJVerifCodeField *authCodeField;
 
-@property (nonatomic, strong) SSJMobileNoField *passwordField;
+@property (nonatomic, strong) SSJPasswordField *passwordField;
 
 @property (nonatomic, strong) UIButton *bindingBtn;
 
@@ -148,12 +148,12 @@
     return _authCodeField;
 }
 
-//- (SSJMobileNoField *) {
-//    if (!_mobileNoField) {
-//        _mobileNoField = [[SSJMobileNoField alloc] init];
-//    }
-//    return _mobileNoField;
-//}
+- (SSJPasswordField *)passwordField {
+    if (!_passwordField) {
+        _passwordField = [[SSJPasswordField alloc] init];
+    }
+    return _passwordField;
+}
 
 - (UIButton *)bindingBtn {
     if (!_bindingBtn) {
