@@ -224,7 +224,7 @@
         [subscriber sendNext:service.rootElement];
         [subscriber sendCompleted];
     } failure:^(SSJBaseNetworkService * _Nonnull service) {
-        [subscriber sendError:nil];
+        [subscriber sendError:service.error];
     }];
 }
 
@@ -596,6 +596,7 @@
     if (!_netWorkService) {
         _netWorkService = [[SSJBaseNetworkService alloc] init];
         _netWorkService.httpMethod = SSJBaseNetworkServiceHttpMethodPOST;
+        _netWorkService.showLodingIndicator = YES;
     }
     return _netWorkService;
 }

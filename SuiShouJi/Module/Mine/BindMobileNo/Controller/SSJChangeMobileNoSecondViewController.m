@@ -70,6 +70,7 @@
     [self.descLab mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self.icon.mas_bottom).offset(30);
         make.centerX.mas_equalTo(self.scrollView);
+        make.height.mas_equalTo(22);
     }];
     [self.mobileNoField mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self.descLab.mas_bottom).offset(28);
