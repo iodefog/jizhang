@@ -148,12 +148,12 @@
     return _authCodeField;
 }
 
-- (SSJMobileNoField *) {
-    if (!_mobileNoField) {
-        _mobileNoField = [[SSJMobileNoField alloc] init];
-    }
-    return _mobileNoField;
-}
+//- (SSJMobileNoField *) {
+//    if (!_mobileNoField) {
+//        _mobileNoField = [[SSJMobileNoField alloc] init];
+//    }
+//    return _mobileNoField;
+//}
 
 - (UIButton *)bindingBtn {
     if (!_bindingBtn) {
