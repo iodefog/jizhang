@@ -200,20 +200,19 @@
         @weakify(self);
         [[_verifyPhoneBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
             @strongify(self);
-            [[self.verifyPhoneViewModel.verifyPhoneNumRequestCommand execute:nil] subscribeNext:^(NSString *code) {
+            [[self.verifyPhoneViewModel.verifyPhoneNumRequestCommand execute:nil] subscribeNext:^(NSNumber *result) {
 //                请求返回处理好的数据
-//                1 密码登录，0 验证码注册
-                if ([code isEqualToString:@"0"]) {
-                    SSRegisterAndLoginViewController *loginVC = [[SSRegisterAndLoginViewController alloc] init];
-            loginVC.viewModel = self.verifyPhoneViewModel;
-                    loginVC.regOrForgetType = SSJRegistAndForgetPasswordTypeRegist;//注册
-                    loginVC.finishHandle = self.finishHandle;
-                    [self.navigationController pushViewController:loginVC animated:YES];
-                } else if ([code isEqualToString:@"1"]) {
+                if ([result boolValue]) {
                     SSJLoginPhoneViewController *vc = [[SSJLoginPhoneViewController alloc] init];
                     vc.viewModel = self.verifyPhoneViewModel;
                     vc.finishHandle = self.finishHandle;
                     [self.navigationController pushViewController:vc animated:YES];
+                } else {
+                    SSRegisterAndLoginViewController *loginVC = [[SSRegisterAndLoginViewController alloc] init];
+                    loginVC.viewModel = self.verifyPhoneViewModel;
+                    loginVC.regOrForgetType = SSJRegistAndForgetPasswordTypeRegist;//注册
+                    loginVC.finishHandle = self.finishHandle;
+                    [self.navigationController pushViewController:loginVC animated:YES];
                 }
             }];
         }];
