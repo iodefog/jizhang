@@ -49,6 +49,10 @@ static NSString *const SSJFundingHomeSelectCellIndetifer = @"SSJFundingHomeSelec
         [self sizeToFit];
         self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
         self.layer.mask = self.maskLayer;
+        [self addSubview:self.titleView];
+        [self addSubview:self.titleLab];
+        [self addSubview:self.tableView];
+        [self updateConstraintsIfNeeded];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCellAppearanceAfterThemeChanged) name:SSJThemeDidChangeNotification object:nil];
     }
     return self;
@@ -56,6 +60,10 @@ static NSString *const SSJFundingHomeSelectCellIndetifer = @"SSJFundingHomeSelec
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
 }
 
 - (void)updateConstraints {
@@ -109,6 +117,14 @@ static NSString *const SSJFundingHomeSelectCellIndetifer = @"SSJFundingHomeSelec
 
 
 #pragma mark - Getter
+- (UIView *)titleView {
+    if (!_titleView) {
+        _titleView = [[UIView alloc] init];
+        _titleView.backgroundColor = [UIColor clearColor];
+    }
+    return _titleView;
+}
+
 - (UILabel *)titleLab {
     if (!_titleLab) {
         _titleLab = [[UILabel alloc] init];
@@ -141,6 +157,10 @@ static NSString *const SSJFundingHomeSelectCellIndetifer = @"SSJFundingHomeSelec
     return self.items.count;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 0.1f;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     SSJFinancingHomeitem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
     
@@ -171,11 +191,12 @@ static NSString *const SSJFundingHomeSelectCellIndetifer = @"SSJFundingHomeSelec
     if (self.superview) {
         
         [self.superview ssj_hideBackViewForView:self animation:^{
+            self.transform = CGAffineTransformMakeScale(0.1, 0.1);
             self.left = self.point.x - kGap;
             self.top = self.point.y;
-            self.transform = CGAffineTransformMakeScale(0.1, 0.1);
         } timeInterval:kDuration fininshed:^(BOOL complation) {
             self.transform = CGAffineTransformIdentity;
+            
         }];
     }
 
@@ -188,15 +209,15 @@ static NSString *const SSJFundingHomeSelectCellIndetifer = @"SSJFundingHomeSelec
         self.point = point;
         
         self.transform = CGAffineTransformMakeScale(0.1, 0.1);
-        self.left = self.point.x - kGap;
-        self.top = self.point.y;
         
         UIWindow *window = [UIApplication sharedApplication].keyWindow;
+        
+        
         
         [window ssj_showViewWithBackView:self backColor:[UIColor blackColor] alpha:0.5 target:self touchAction:@selector(tapBackgroundViewAction) animation:^{
             
             self.transform = CGAffineTransformIdentity;
-            self.left = self.point.x - kGap;
+            self.left = self.point.x - kGap - 7;
             self.top = self.point.y;
         } timeInterval:kDuration fininshed:^(BOOL finished) {
             [_tableView reloadData];

@@ -10,6 +10,7 @@
 //
 
 #import "SSJFundingHomeSelectCell.h"
+#import "SSJCreditCardItem.h"
 
 @interface SSJFundingHomeSelectCell()
 
@@ -30,6 +31,11 @@
     return self;
 }
 
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    self.selectButton.layer.cornerRadius = self.selectButton.width / 2;
+}
+
 - (void)updateConstraints {
     [self.titleLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.mas_equalTo(self);
@@ -37,6 +43,7 @@
     }];
 
     [self.selectButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.height.mas_equalTo(16);
         make.centerY.mas_equalTo(self);
         make.right.mas_equalTo(self).offset(-15);
     }];
@@ -80,9 +87,15 @@
     }
 }
 
-- (void)setItem:(SSJFinancingHomeitem *)item {
+- (void)setItem:(id )item {
     _item = item;
-    self.titleLab.text = _item.fundingName;
+    if ([item isKindOfClass:[SSJFinancingHomeitem class]]) {
+        SSJFinancingHomeitem *fundingItem = (SSJFinancingHomeitem *)item;
+        self.titleLab.text = fundingItem.fundingName;
+    } else if ([item isKindOfClass:[SSJCreditCardItem class]]) {
+        SSJCreditCardItem *fundingItem = (SSJCreditCardItem *)item;
+        self.titleLab.text = fundingItem.cardName;
+    }
     [self updateConstraintsIfNeeded];
 }
 

@@ -311,11 +311,11 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
         [SSJUserTableManager queryUserItemWithID:SSJUSERID() success:^(SSJUserItem * _Nonnull userItem) {
             self.selectedFundids = userItem.selectFundid;
             [self.fundingSelectView setItems:self.items andSelectFundid:userItem.selectFundid];
-            [self.fundingSelectView showInView:self.view atPoint:[self.headerView convertPoint:self.headerView.balanceButton.frame.origin toView:self.view]];
+            [self.fundingSelectView showInView:self.view atPoint:[self.headerView convertPoint:CGPointMake(self.headerView.balanceButton.frame.origin.x, self.headerView.balanceButton.frame.origin.y + 20)  toView:self.view]];
         } failure:NULL];
     } else {
         [self.fundingSelectView setItems:self.items andSelectFundid:self.selectedFundids];
-        [self.fundingSelectView showInView:self.view atPoint:[self.headerView convertPoint:self.headerView.balanceButton.frame.origin toView:self.view]];
+        [self.fundingSelectView showInView:self.view atPoint:[self.headerView convertPoint:CGPointMake(self.headerView.balanceButton.frame.origin.x, self.headerView.balanceButton.frame.origin.y + 20)  toView:self.view]];
     }
 }
 
