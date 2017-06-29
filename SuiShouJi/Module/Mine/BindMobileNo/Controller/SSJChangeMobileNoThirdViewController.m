@@ -36,6 +36,10 @@
 
 @implementation SSJChangeMobileNoThirdViewController
 
+- (void)dealloc {
+    
+}
+
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.title = @"绑定新手机号";
@@ -48,6 +52,7 @@
     [self setupViews];
     [self setupBindings];
     [self updateAppearance];
+    [self.authCodeField getVerifCode];
     [self.view setNeedsUpdateConstraints];
 }
 
@@ -67,6 +72,7 @@
     [self.descLab mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self.icon.mas_bottom).offset(30);
         make.centerX.mas_equalTo(self.scrollView);
+        make.height.mas_equalTo(22);
     }];
     [self.authCodeField mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self.descLab.mas_bottom).offset(28);
@@ -113,6 +119,18 @@
     self.authCodeField.viewModel = self.viewModel;
     RAC(self.nextBtn, enabled) = [self.authCodeField.rac_textSignal map:^id(NSString *text) {
         return @(text.length >= SSJAuthCodeLength);
+    }];
+    RAC(self.descLab,text) = [RACObserve(self.authCodeField, getAuthCodeState) map:^id(NSNumber *value) {
+        SSJGetVerifCodeState state = [value integerValue];
+        if (state == SSJGetVerifCodeStateSent) {
+            NSString *ciphertext = self.mobileNo;
+            if (self.mobileNo.length >= 7) {
+                ciphertext = [self.mobileNo stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
+            }
+            return [NSString stringWithFormat:@"验证码已发送至：%@", ciphertext];
+        } else {
+            return nil;
+        }
     }];
     @weakify(self);
     [[self.nextBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
