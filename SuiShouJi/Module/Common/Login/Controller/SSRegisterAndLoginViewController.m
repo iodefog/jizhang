@@ -46,6 +46,11 @@
     [self initialBind];
 }
 
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [self.viewModel.netWorkService cancel];
+}
+
 - (void)setUpConst {
     [self.tfRegYanZhenF mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self.topView.mas_bottom).offset(50);
@@ -259,7 +264,7 @@
         @weakify(self);
         [[_registerAndLoginButton rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
             @strongify(self);
-            [self.viewModel.registerAndLoginCommand execute:nil];
+            [[self.viewModel.registerAndLoginCommand execute:nil] takeUntil:self.rac_willDeallocSignal];
             [[[self.viewModel.registerAndLoginCommand.executing skip:1] distinctUntilChanged] subscribeNext:^(id x) {
                  if ([x boolValue]) {
                      self.tfPassword.userInteractionEnabled = NO;

@@ -31,6 +31,10 @@
     [self setUpUI];
     [self initBind];
 }
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [self.viewModel.netWorkService cancel];
+}
 
 - (void)setUpUI {
     [self.scrollView addSubview:self.tipsL];
@@ -123,7 +127,7 @@
         RAC(_loginButton,enabled) = self.viewModel.enableNormalLoginSignal;
         [[_loginButton rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
             self.viewModel.vc = self;
-            [self.viewModel.normalLoginCommand execute:nil];
+            [[self.viewModel.normalLoginCommand execute:nil] takeUntil:self.rac_willDeallocSignal];
             [[[self.viewModel.normalLoginCommand.executing skip:1] distinctUntilChanged] subscribeNext:^(id x) {
                 if ([x boolValue]) {
                     self.tfPassword.userInteractionEnabled = NO;

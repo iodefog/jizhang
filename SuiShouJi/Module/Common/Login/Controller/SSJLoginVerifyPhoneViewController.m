@@ -59,6 +59,11 @@
     [self.numTextF becomeFirstResponder];
 }
 
+//- (void)viewWillDisappear:(BOOL)animated {
+//    [super viewWillDisappear:animated];
+//    [self.verifyPhoneViewModel.netWorkService cancel];
+//}
+
 #pragma mark - Layout
 - (void)updateViewConstraint {
     [self.phonePreL mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -201,7 +206,7 @@
         [[_verifyPhoneBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
             @strongify(self);
             [self.view endEditing:YES];
-            [[self.verifyPhoneViewModel.verifyPhoneNumRequestCommand execute:nil] subscribeNext:^(NSNumber *result) {
+            [[[self.verifyPhoneViewModel.verifyPhoneNumRequestCommand execute:nil] takeUntil:self.rac_willDeallocSignal] subscribeNext:^(NSNumber *result) {
                 
 //                请求返回处理好的数据
                 if ([result boolValue]) {

@@ -92,7 +92,7 @@ static const NSInteger kCountdownLimit = 60;
 
 - (void)getVerifCode {
     self.getAuthCodeState = SSJGetVerifCodeStateLoading;
-    [[self.viewModel.getVerificationCodeCommand execute:nil] subscribeNext:^(RACTuple *tuple) {
+    [[[self.viewModel.getVerificationCodeCommand execute:nil] takeUntil:self.rac_willDeallocSignal]subscribeNext:^(RACTuple *tuple) {
         //请求成功并且不需要图形验证码的时候开启倒计时
         if ([tuple.first isEqualToString:@"1"]) {//发送验证码成功
             //倒计时
@@ -184,7 +184,7 @@ static const NSInteger kCountdownLimit = 60;
         [[_graphVerView.reChooseBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(UIButton *btn) {
             @strongify(self);
             //点击重新获取图形验证码
-            [[self.viewModel.reGetVerificationCodeCommand execute:nil] subscribeNext:^(UIImage *image) {
+            [[[self.viewModel.reGetVerificationCodeCommand execute:nil] takeUntil:self.rac_willDeallocSignal] subscribeNext:^(UIImage *image) {
                 //成功刷新验证码
                 self.graphVerView.verImage = image;
             }];
