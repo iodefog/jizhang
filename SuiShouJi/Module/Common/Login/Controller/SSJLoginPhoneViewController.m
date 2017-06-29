@@ -124,6 +124,13 @@
         [[_loginButton rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
             self.viewModel.vc = self;
             [self.viewModel.normalLoginCommand execute:nil];
+            [[[self.viewModel.normalLoginCommand.executing skip:1] distinctUntilChanged] subscribeNext:^(id x) {
+                if ([x boolValue]) {
+                    self.tfPassword.userInteractionEnabled = NO;
+                } else {
+                    self.tfPassword.userInteractionEnabled = YES;
+                }
+            }];
         }];
     }
     return _loginButton;

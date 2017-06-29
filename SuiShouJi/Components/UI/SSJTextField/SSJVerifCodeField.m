@@ -13,7 +13,6 @@
 
 static const CGFloat kAuthCodeBtnWidth = 125;
 static const NSInteger kCountdownLimit = 60;
-static const NSInteger kAuthCodeLimit = 6;
 
 @interface SSJVerifCodeField()
 
@@ -22,7 +21,7 @@ static const NSInteger kAuthCodeLimit = 6;
 //验证码
 @property (nonatomic, strong) UIButton *getAuthCodeBtn;
 
-//@property (nonatomic, strong) SSJLoginVerifyPhoneNumViewModel *viewModel;
+@property (nonatomic) SSJGetVerifCodeState getAuthCodeState;
 
 /**倒计时*/
 @property (nonatomic, strong) NSTimer *countdownTimer;
@@ -43,6 +42,7 @@ static const NSInteger kAuthCodeLimit = 6;
 
 - (instancetype)initWithGetCodeType:(SSJRegistAndForgetPasswordType)type {
     if (self = [super init]) {
+        self.authCodeLength = SSJAuthCodeLength;
         self.viewModel.regOrForType = type;
         self.keyboardType = UIKeyboardTypeNumberPad;
         self.clearButtonMode = UITextFieldViewModeWhileEditing;
@@ -56,8 +56,8 @@ static const NSInteger kAuthCodeLimit = 6;
         
         __weak typeof(self) wself = self;
         self.observer = [[NSNotificationCenter defaultCenter] addObserverForName:UITextFieldTextDidChangeNotification object:self queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
-            if (wself.text.length > kAuthCodeLimit) {
-                wself.text = [wself.text substringToIndex:kAuthCodeLimit];
+            if (wself.text.length > self.authCodeLength && self.authCodeLength > 0) {
+                wself.text = [wself.text substringToIndex:self.authCodeLength];
             }
         }];
     }
@@ -91,20 +91,28 @@ static const NSInteger kAuthCodeLimit = 6;
 }
 
 - (void)getVerifCode {
+    self.getAuthCodeState = SSJGetVerifCodeStateLoading;
     [[self.viewModel.getVerificationCodeCommand execute:nil] subscribeNext:^(RACTuple *tuple) {
         //请求成功并且不需要图形验证码的时候开启倒计时
         if ([tuple.first isEqualToString:@"1"]) {//发送验证码成功
             //倒计时
             [self beginCountdownIfNeeded];
+            self.getAuthCodeState = SSJGetVerifCodeStateSent;
         } else if ([tuple.first isEqualToString:@"2"]) {//需要图片验证码
             //显示图形验证码
             self.graphVerView.verImage = [tuple.second base64ToImage];
             [self.graphVerView show];
+            self.getAuthCodeState = SSJGetVerifCodeStateNeedImageCode;
         } else if ([tuple.first isEqualToString:@"3"]) {//图片验证码错误
             [CDAutoHideMessageHUD showMessage:@"图片验证码错误"];
+            self.getAuthCodeState = SSJGetVerifCodeStateImageCodeError;
         } else {
             [CDAutoHideMessageHUD showMessage:tuple.last];
+            self.getAuthCodeState = SSJGetVerifCodeStateFailed;
         }
+    } error:^(NSError *error) {
+        [SSJAlertViewAdapter showError:error];
+        self.getAuthCodeState = SSJGetVerifCodeStateFailed;
     }];
 }
 

@@ -572,10 +572,9 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
                     //保存账本类型
                     SSJSaveBooksCategory(SSJBooksCategoryPublic);
                     weakSelf.showCreateBookAnimation = YES;
-                    weakSelf.inviteCodeJoinSuccessView.bookName = bookName;
                     //弹出加入账本成功弹窗
                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                        [weakSelf.inviteCodeJoinSuccessView show];
+                        [weakSelf.inviteCodeJoinSuccessView showWithDesc:[NSString stringWithFormat:@"你已成功加入共享账本【%@】，今后，将和ta一起，共同记账，祝你们记账愉快～",bookName]];
                     });
                 };
                 [weakSelf.navigationController pushViewController:inviteVc animated:YES];

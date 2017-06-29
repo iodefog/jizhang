@@ -47,6 +47,7 @@
     }];
     [self.descLab mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self.icon.mas_bottom).offset(25);
+        make.height.mas_equalTo(22);
         make.centerX.mas_equalTo(self.view);
     }];
     [self.changeBtn mas_updateConstraints:^(MASConstraintMaker *make) {
@@ -88,8 +89,8 @@
 
 - (void)updateAppearance {
     self.descLab.textColor = SSJ_MAIN_COLOR;
-    self.changeBtn.layer.borderColor = SSJ_BUTTON_NORMAL_COLOR.CGColor;
-    [self.changeBtn setTitleColor:SSJ_BUTTON_NORMAL_COLOR forState:UIControlStateNormal];
+    [self.changeBtn ssj_setBackgroundColor:SSJ_BUTTON_NORMAL_COLOR forState:UIControlStateNormal];
+    [self.changeBtn ssj_setBackgroundColor:SSJ_BUTTON_DISABLE_COLOR forState:UIControlStateDisabled];
 }
 
 - (void)updateMobileNoLab:(NSString *)mobileNo {
@@ -119,10 +120,10 @@
     if (!_changeBtn) {
         _changeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _changeBtn.clipsToBounds = YES;
-        _changeBtn.layer.cornerRadius = 3;
-        _changeBtn.layer.borderWidth = 1;
+        _changeBtn.layer.cornerRadius = 6;
         _changeBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
         [_changeBtn setTitle:@"更换手机号" forState:UIControlStateNormal];
+        [_changeBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [[_changeBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
             SSJChangeMobileNoFirstViewController *firstVC = [[SSJChangeMobileNoFirstViewController alloc] init];
             [self.navigationController pushViewController:firstVC animated:YES];

@@ -59,7 +59,8 @@
     }];
     
     [self.topView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.top.right.mas_equalTo(self);
+        make.left.top.mas_equalTo(0);
+        make.width.mas_equalTo(SSJSCREENWITH);
     }];
     
     [self.titleL mas_makeConstraints:^(MASConstraintMaker *make) {

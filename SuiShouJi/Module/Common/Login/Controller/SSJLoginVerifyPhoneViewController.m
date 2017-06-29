@@ -200,23 +200,33 @@
         @weakify(self);
         [[_verifyPhoneBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
             @strongify(self);
-            [[self.verifyPhoneViewModel.verifyPhoneNumRequestCommand execute:nil] subscribeNext:^(NSString *code) {
+            [self.view endEditing:YES];
+            [[self.verifyPhoneViewModel.verifyPhoneNumRequestCommand execute:nil] subscribeNext:^(NSNumber *result) {
+                
 //                请求返回处理好的数据
-//                1 密码登录，0 验证码注册
-                if ([code isEqualToString:@"0"]) {
-                    SSRegisterAndLoginViewController *loginVC = [[SSRegisterAndLoginViewController alloc] init];
-            loginVC.viewModel = self.verifyPhoneViewModel;
-                    loginVC.regOrForgetType = SSJRegistAndForgetPasswordTypeRegist;//注册
-                    loginVC.finishHandle = self.finishHandle;
-                    [self.navigationController pushViewController:loginVC animated:YES];
-                } else if ([code isEqualToString:@"1"]) {
+                if ([result boolValue]) {
                     SSJLoginPhoneViewController *vc = [[SSJLoginPhoneViewController alloc] init];
                     vc.viewModel = self.verifyPhoneViewModel;
                     vc.finishHandle = self.finishHandle;
                     [self.navigationController pushViewController:vc animated:YES];
+                } else {
+                    SSRegisterAndLoginViewController *loginVC = [[SSRegisterAndLoginViewController alloc] init];
+                    loginVC.viewModel = self.verifyPhoneViewModel;
+                    loginVC.regOrForgetType = SSJRegistAndForgetPasswordTypeRegist;//注册
+                    loginVC.finishHandle = self.finishHandle;
+                    [self.navigationController pushViewController:loginVC animated:YES];
                 }
             }];
         }];
+        
+        [[[self.verifyPhoneViewModel.verifyPhoneNumRequestCommand.executing skip:1] distinctUntilChanged]
+         subscribeNext:^(id x) {
+             if ([x boolValue]) {
+                 self.numTextF.userInteractionEnabled = NO;
+             } else {
+                 self.numTextF.userInteractionEnabled = YES;
+             }
+         }];
     }
     return _verifyPhoneBtn;
 }
@@ -248,6 +258,7 @@
         @weakify(self);
         [[_protocolButton rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
             @strongify(self);
+            [self.view endEditing:YES];
             SSJNormalWebViewController *userAgreementVC = [SSJNormalWebViewController webViewVCWithURL:[NSURL URLWithString:SSJUserProtocolUrl]];
             userAgreementVC.title = @"用户协定";
             [self.navigationController pushViewController:userAgreementVC animated:YES];
@@ -265,6 +276,7 @@
         @weakify(self);
         [[_tencentLoginButton rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
             @strongify(self);
+            [self.view endEditing:YES];
             _verifyPhoneViewModel.vc = self;
             [self.verifyPhoneViewModel.qqLoginCommand execute:nil];
         }];
@@ -282,6 +294,7 @@
         @weakify(self);
         [[_weixinLoginButton rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
             @strongify(self);
+            [self.view endEditing:YES];
             _verifyPhoneViewModel.vc = self;
             [self.verifyPhoneViewModel.wxLoginCommand execute:nil];
         }];

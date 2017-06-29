@@ -31,9 +31,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-@interface SSJAlertViewAdapter (SSJDebug)
+@interface SSJAlertViewAdapter (SSJError)
 
 + (void)showError:(NSError *)error;
+
++ (void)showError:(NSError *)error completion:(nullable void(^)())completion;
 
 @end
 

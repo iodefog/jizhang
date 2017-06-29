@@ -12,6 +12,11 @@ const int64_t SSJDefaultSyncVersion = -1;
 
 const float SSJMaskAlpha = 0.3;
 
+//网络请求事件间隔
+const NSTimeInterval SSJRequestTimeDuration = 5;
+
+const NSUInteger SSJAuthCodeLength = 6;
+
 NSString *const SSJErrorDomain = @"com.9188.jizhang";
 
 //NSString *const SSJAppStoreAddress = @"https://itunes.apple.com/us/app/li-cai-di/id1023600539?l=zh&ls=1&mt=8";

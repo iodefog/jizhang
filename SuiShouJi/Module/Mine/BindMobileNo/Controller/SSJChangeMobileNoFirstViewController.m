@@ -58,6 +58,7 @@
         [self setUpViews];
         [self setupBindings];
         [self updateAppearance];
+        [self.authCodeField getVerifCode];
         [self.view setNeedsUpdateConstraints];
     }];
 }
@@ -78,6 +79,7 @@
     [self.descLab mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self.icon.mas_bottom).offset(30);
         make.centerX.mas_equalTo(self.scrollView);
+        make.height.mas_equalTo(22);
     }];
     [self.authCodeField mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self.descLab.mas_bottom).offset(28);
@@ -143,11 +145,25 @@
 - (void)setupBindings {
     self.viewModel.phoneNum = self.mobileNo;
     self.authCodeField.viewModel = self.viewModel;
+    
     RAC(self.nextBtn, enabled) = [RACSignal merge:@[[[self.authCodeField rac_textSignal] map:^id(NSString *authCode) {
         return @(self.authCodeField.text.length >= 6 && self.service.state != SSJNetworkServiceStateLoading);
     }], [RACObserve(self.service, state) map:^id(id value) {
         return @(self.authCodeField.text.length >= 6 && self.service.state != SSJNetworkServiceStateLoading);
     }]]];
+    
+    RAC(self.descLab,text) = [RACObserve(self.authCodeField, getAuthCodeState) map:^id(NSNumber *value) {
+        SSJGetVerifCodeState state = [value integerValue];
+        if (state == SSJGetVerifCodeStateSent) {
+            NSString *ciphertext = self.mobileNo;
+            if (self.mobileNo.length >= 7) {
+                ciphertext = [self.mobileNo stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
+            }
+            return [NSString stringWithFormat:@"验证码已发送至：%@", ciphertext];
+        } else {
+            return nil;
+        }
+    }];
 }
 
 - (void)checkAuthCode {
@@ -206,7 +222,7 @@
     if (!_nextBtn) {
         _nextBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _nextBtn.clipsToBounds = YES;
-        _nextBtn.layer.cornerRadius = 3;
+        _nextBtn.layer.cornerRadius = 6;
         _nextBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
         [_nextBtn setTitle:@"下一步" forState:UIControlStateNormal];
         [_nextBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];

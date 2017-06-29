@@ -141,7 +141,7 @@
     if (!_bindingBtn) {
         _bindingBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _bindingBtn.clipsToBounds = YES;
-        _bindingBtn.layer.cornerRadius = 3;
+        _bindingBtn.layer.cornerRadius = 6;
         _bindingBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
         [_bindingBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         switch (self.type) {
