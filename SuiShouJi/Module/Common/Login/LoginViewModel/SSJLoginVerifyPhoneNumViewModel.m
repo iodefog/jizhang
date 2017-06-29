@@ -126,9 +126,16 @@
     [dict setObject:getuiId ?: @"" forKey:@"cgetuiid"];
 
     [self.netWorkService request:SSJURLWithAPI(@"/oauth/oauthlogin.go") params:dict success:^(SSJBaseNetworkService * _Nonnull service) {
-        [subscriber sendNext:service.rootElement];
-        [subscriber sendCompleted];
+        if ([service.returnCode isEqualToString:@"1"]) {
+            [subscriber sendNext:service.rootElement];
+            [subscriber sendCompleted];
+        }else {
+            [CDAutoHideMessageHUD showMessage:service.desc];
+            [subscriber sendError:nil];
+        }
+        
     } failure:^(SSJBaseNetworkService * _Nonnull service) {
+        [CDAutoHideMessageHUD showMessage:service.desc];
         [subscriber sendError:nil];
     }];
 }
@@ -174,8 +181,12 @@
     [self.netWorkService request:SSJURLWithAPI(@"/user/login.go") params:dict success:^(SSJBaseNetworkService * _Nonnull service) {
         if ([service.returnCode isEqualToString:@"1"]) {
             [subscriber sendNext:service.rootElement];
+            [subscriber sendCompleted];
+        } else {
+            [subscriber sendError:nil];
+            [CDAutoHideMessageHUD showMessage:service.desc];
         }
-        [subscriber sendCompleted];
+        
     } failure:^(SSJBaseNetworkService * _Nonnull service) {
         [subscriber sendError:nil];
         [CDAutoHideMessageHUD showMessage:service.desc];
@@ -235,9 +246,14 @@
     [self.netWorkService request:@"/chargebook/user/get_imgYzm.go" params:param success:^(SSJBaseNetworkService * _Nonnull service) {
         if ([service.returnCode isEqualToString:@"1"]) {
             [subscriber sendNext:service.rootElement];
+            [subscriber sendCompleted];
+        } else {
+            [CDAutoHideMessageHUD showMessage:service.desc];
+            [subscriber sendError:nil];
         }
-        [subscriber sendCompleted];
+        
     } failure:^(SSJBaseNetworkService * _Nonnull service) {
+        [CDAutoHideMessageHUD showMessage:service.desc];
         [subscriber sendError:nil];
     }];
 }
@@ -280,8 +296,12 @@
     [self.netWorkService request:SSJURLWithAPI(@"/chargebook/user/mobile_register.go") params:dict success:^(SSJBaseNetworkService * _Nonnull service) {
         if ([service.returnCode isEqualToString:@"1"]) {
             [subscriber sendNext:service.rootElement];
+            [subscriber sendCompleted];
+        }else {
+            [CDAutoHideMessageHUD showMessage:service.desc];
+            [subscriber sendError:nil];
         }
-        [subscriber sendCompleted];
+        
     } failure:^(SSJBaseNetworkService * _Nonnull service) {
         [CDAutoHideMessageHUD showMessage:service.desc];
         [subscriber sendError:nil];
