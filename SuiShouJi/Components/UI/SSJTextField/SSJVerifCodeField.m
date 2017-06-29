@@ -21,7 +21,7 @@ static const NSInteger kCountdownLimit = 60;
 //验证码
 @property (nonatomic, strong) UIButton *getAuthCodeBtn;
 
-//@property (nonatomic, strong) SSJLoginVerifyPhoneNumViewModel *viewModel;
+@property (nonatomic) SSJGetVerifCodeState getAuthCodeState;
 
 /**倒计时*/
 @property (nonatomic, strong) NSTimer *countdownTimer;
@@ -91,20 +91,28 @@ static const NSInteger kCountdownLimit = 60;
 }
 
 - (void)getVerifCode {
+    self.getAuthCodeState = SSJGetVerifCodeStateLoading;
     [[self.viewModel.getVerificationCodeCommand execute:nil] subscribeNext:^(RACTuple *tuple) {
         //请求成功并且不需要图形验证码的时候开启倒计时
         if ([tuple.first isEqualToString:@"1"]) {//发送验证码成功
             //倒计时
             [self beginCountdownIfNeeded];
+            self.getAuthCodeState = SSJGetVerifCodeStateSent;
         } else if ([tuple.first isEqualToString:@"2"]) {//需要图片验证码
             //显示图形验证码
             self.graphVerView.verImage = [tuple.second base64ToImage];
             [self.graphVerView show];
+            self.getAuthCodeState = SSJGetVerifCodeStateNeedImageCode;
         } else if ([tuple.first isEqualToString:@"3"]) {//图片验证码错误
             [CDAutoHideMessageHUD showMessage:@"图片验证码错误"];
+            self.getAuthCodeState = SSJGetVerifCodeStateImageCodeError;
         } else {
             [CDAutoHideMessageHUD showMessage:tuple.last];
+            self.getAuthCodeState = SSJGetVerifCodeStateFailed;
         }
+    } error:^(NSError *error) {
+        [SSJAlertViewAdapter showError:error];
+        self.getAuthCodeState = SSJGetVerifCodeStateFailed;
     }];
 }
 
