@@ -7,6 +7,18 @@
 //
 
 #import "SSJFinancingHomeSelectView.h"
+#import "SSJFundingHomeSelectCell.h"
+#import "SSJFinancingHomeitem.h"
+
+static const NSTimeInterval kDuration = 0.2;
+
+static const CGFloat kGap = 40;
+
+static const CGFloat kTriangleHeight = 6;
+
+static const CGFloat kCornerRadius = 8;
+
+static NSString *const SSJFundingHomeSelectCellIndetifer = @"SSJFundingHomeSelectCellIndetifer";
 
 @interface SSJFinancingHomeSelectView() <UITableViewDelegate,UITableViewDataSource>
 
@@ -17,6 +29,14 @@
 @property(nonatomic, strong) UILabel *titleLab;
 
 @property(nonatomic, strong) CAShapeLayer *maskLayer;
+
+@property(nonatomic) CGPoint point;
+
+@property(nonatomic, strong) NSString *selectedFundid;
+
+@property(nonatomic, strong) NSArray *items;
+
+@property(nonatomic, strong) NSArray *selectedFundids;
 
 @end
 
@@ -29,12 +49,13 @@
         [self sizeToFit];
         self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
         self.layer.mask = self.maskLayer;
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCellAppearanceAfterThemeChanged) name:SSJThemeDidChangeNotification object:nil];
     }
     return self;
 }
 
-- (void)show {
-    
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)updateConstraints {
@@ -69,23 +90,25 @@
     if (!_maskLayer) {
         _maskLayer = [CAShapeLayer layer];
         UIBezierPath *path = [UIBezierPath bezierPath];
-        [path moveToPoint:CGPointMake(0, 14)];
-        [path addArcWithCenter:CGPointMake(8, 14) radius:8 startAngle:M_PI endAngle:M_PI_2 * 3 clockwise:YES];
-        [path addLineToPoint:CGPointMake(48, 6)];
-        [path addLineToPoint:CGPointMake(53, 0)];
-        [path addLineToPoint:CGPointMake(60, 6)];
-        [path addLineToPoint:CGPointMake(self.width - 8, 6)];
-        [path addArcWithCenter:CGPointMake(self.width - 8, 14) radius:8 startAngle:M_PI_2 * 3 endAngle:0 clockwise:YES];
-        [path addLineToPoint:CGPointMake(self.width, self.height - 8)];
-        [path addArcWithCenter:CGPointMake(self.width - 8, self.height - 8) radius:8 startAngle:0 endAngle:M_PI_2 clockwise:YES];
-        [path addLineToPoint:CGPointMake(8, self.height)];
-        [path addArcWithCenter:CGPointMake(8, self.height - 8) radius:8 startAngle:M_PI_2 endAngle:M_PI clockwise:YES];
-        [path addLineToPoint:CGPointMake(0, 14)];
+        [path moveToPoint:CGPointMake(0, kTriangleHeight + kCornerRadius)];
+        [path addArcWithCenter:CGPointMake(kCornerRadius, kTriangleHeight + kCornerRadius) radius:kCornerRadius startAngle:M_PI endAngle:M_PI_2 * 3 clockwise:YES];
+        [path addLineToPoint:CGPointMake(kGap + kCornerRadius, kTriangleHeight)];
+        [path addLineToPoint:CGPointMake(kGap + kCornerRadius + kCornerRadius, 0)];
+        [path addLineToPoint:CGPointMake(60, kTriangleHeight)];
+        [path addLineToPoint:CGPointMake(self.width - kCornerRadius, kTriangleHeight)];
+        [path addArcWithCenter:CGPointMake(self.width - kCornerRadius, kTriangleHeight + kCornerRadius) radius:kCornerRadius startAngle:M_PI_2 * 3 endAngle:0 clockwise:YES];
+        [path addLineToPoint:CGPointMake(self.width, self.height - kCornerRadius)];
+        [path addArcWithCenter:CGPointMake(self.width - kCornerRadius, self.height - 8) radius:kCornerRadius startAngle:0 endAngle:M_PI_2 clockwise:YES];
+        [path addLineToPoint:CGPointMake(kCornerRadius, self.height)];
+        [path addArcWithCenter:CGPointMake(kCornerRadius, self.height - kCornerRadius) radius:kCornerRadius startAngle:M_PI_2 endAngle:M_PI clockwise:YES];
+        [path addLineToPoint:CGPointMake(kCornerRadius, kTriangleHeight + kCornerRadius)];
         _maskLayer.path = path.CGPath;
     }
     return _maskLayer;
 }
 
+
+#pragma mark - Getter
 - (UILabel *)titleLab {
     if (!_titleLab) {
         _titleLab = [[UILabel alloc] init];
@@ -105,6 +128,7 @@
         _tableView.backgroundColor = [UIColor clearColor];
         _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
         [_tableView ssj_clearExtendSeparator];
+        [_tableView registerClass:[SSJFundingHomeSelectCell class] forCellReuseIdentifier:SSJFundingHomeSelectCellIndetifer];
         if ([_tableView respondsToSelector:@selector(setSeparatorInset:)]) {
             [_tableView setSeparatorInset:UIEdgeInsetsZero];
         }
@@ -112,6 +136,95 @@
     return _tableView;
 }
 
+#pragma mark - UITableViewDataSource
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return self.items.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    SSJFinancingHomeitem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
+    
+    SSJFundingHomeSelectCell *cell = [tableView dequeueReusableCellWithIdentifier:SSJFundingHomeSelectCellIndetifer];
+    
+    BOOL selectAll = [self.selectedFundid isEqualToString:@"all"];
+    
+    if (selectAll) {
+        cell.isSelected = YES;
+    } else {
+        cell.isSelected = [self.items containsObject:item.fundingID];
+    }
+    
+    cell.item = item;
+    
+    return cell;
+    
+}
+
+#pragma mark - UITableViewDelegate
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return 40;
+}
+
+#pragma mark - Event
+- (void)dismiss {
+    if (self.superview) {
+        
+        [self.superview ssj_hideBackViewForView:self animation:^{
+            self.left = self.point.x - kGap;
+            self.top = self.point.y;
+            self.transform = CGAffineTransformMakeScale(0.1, 0.1);
+        } timeInterval:kDuration fininshed:^(BOOL complation) {
+            self.transform = CGAffineTransformIdentity;
+        }];
+    }
+
+}
+
+- (void)showInView:(UIView *)view atPoint:(CGPoint)point {
+    if (!self.superview) {
+        _tableView.alpha = 0;
+        
+        self.point = point;
+        
+        self.transform = CGAffineTransformMakeScale(0.1, 0.1);
+        self.left = self.point.x - kGap;
+        self.top = self.point.y;
+        
+        UIWindow *window = [UIApplication sharedApplication].keyWindow;
+        
+        [window ssj_showViewWithBackView:self backColor:[UIColor blackColor] alpha:0.5 target:self touchAction:@selector(tapBackgroundViewAction) animation:^{
+            
+            self.transform = CGAffineTransformIdentity;
+            self.left = self.point.x - kGap;
+            self.top = self.point.y;
+        } timeInterval:kDuration fininshed:^(BOOL finished) {
+            [_tableView reloadData];
+            [UIView animateWithDuration:kDuration animations:^{
+                _tableView.alpha = 1;
+            }];
+        }];
+        
+    }
+}
+
+- (void)tapBackgroundViewAction {
+    [self dismiss];
+}
+
+- (void)updateCellAppearanceAfterThemeChanged {
+    _titleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
+    self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
+}
+
+- (void)setItems:(NSArray *)items andSelectFundid:(NSString *)fundids {
+    _items = items;
+    _selectedFundid = fundids;
+    if (![fundids isEqualToString:@"all"]) {
+        _selectedFundids = [fundids componentsSeparatedByString:@","];
+    }
+}
 
 /*
 // Only override drawRect: if you perform custom drawing.

@@ -14,31 +14,42 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 
 
 #import "SSJFinancingHomeViewController.h"
-#import "SSJEditableCollectionView.h"
-#import "SSJFinancingHomeCell.h"
-#import "SSJFinancingHomeitem.h"
-#import "SSJFundingDetailsViewController.h"
-#import "SSJFundingTransferViewController.h"
-#import "SSJFundingItem.h"
-#import "SSJFinancingHomePopView.h"
-#import "SSJDatabaseQueue.h"
-#import "SSJFinancingHomeHelper.h"
-#import "SSJFinancingHomeHeader.h"
-#import "SSJDataSynchronizer.h"
 #import "SSJFundingTypeSelectViewController.h"
 #import "SSJLoanListViewController.h"
+#import "SSJFundingDetailsViewController.h"
+#import "SSJFundingTransferViewController.h"
+
+#import "SSJEditableCollectionView.h"
+#import "SSJFinancingHomeCell.h"
+#import "SSJFinancingHomePopView.h"
+#import "SSJFinancingHomeHeader.h"
+#import "SSJFinancingHomeSelectView.h"
+
 #import "SSJCreditCardItem.h"
 #import "SSJCreditCardStore.h"
 #import "SSJLoanHelper.h"
+#import "SSJFinancingHomeitem.h"
+#import "SSJFundingItem.h"
+#import "SSJDataSynchronizer.h"
+#import "SSJFinancingHomeHelper.h"
+#import "SSJDatabaseQueue.h"
+#import "SSJUserTableManager.h"
 
 #import "FMDB.h"
 
 @interface SSJFinancingHomeViewController () <UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,SSJEditableCollectionViewDelegate,SSJEditableCollectionViewDataSource>
 
 @property (nonatomic,strong) SSJEditableCollectionView *collectionView;
+
 @property (nonatomic,strong) NSMutableArray *items;
+
 @property (nonatomic,strong) SSJFinancingHomeHeader *headerView;
+
 @property(nonatomic, strong) NSString *newlyAddFundId;
+
+@property(nonatomic, strong) SSJFinancingHomeSelectView *fundingSelectView;
+
+@property(nonatomic, strong) NSString *selectedFundids;
 
 @end
 
@@ -81,13 +92,6 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
     [super viewDidLayoutSubviews];
     self.headerView.size = CGSizeMake(self.view.width, 80);
     self.headerView.leftTop = CGPointMake(0, SSJ_NAVIBAR_BOTTOM);
-//    self.profitAmountLabel.left = self.profitLabel.right + 20;
-//    self.transferButton.size = CGSizeMake(65, 30);
-//    self.profitLabel.left = 10.0f;
-//    self.profitLabel.centerY = self.headerView.height / 2;
-//    self.profitAmountLabel.centerY = self.headerView.height / 2;
-//    self.transferButton.right = self.view.width - 15;
-//    self.transferButton.centerY = self.headerView.height / 2;
     self.collectionView.size = CGSizeMake(self.view.width, self.view.height - self.headerView.bottom - self.tabBarController.tabBar.height);
     self.collectionView.leftTop = CGPointMake(0, self.headerView.bottom);
 }
@@ -176,24 +180,6 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
         [alert addAction:cancel];
         [alert addAction:comfirm];
         [self presentViewController:alert animated:YES completion:NULL];
-//        if ([cell.item isKindOfClass:[SSJCreditCardItem class]]) {
-//            SSJCreditCardItem *deleteItem = (SSJCreditCardItem *)cell.item;
-//            [SSJCreditCardStore deleteCreditCardWithCardItem:deleteItem Success:^{
-//                //            [weakSelf.items removeObjectAtIndex:deleteIndex.item];
-//                //            [weakSelf.collectionView deleteItemsAtIndexPaths:@[deleteIndex]];
-//                [weakSelf getDataFromDataBase];
-//                [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
-//            } failure:^(NSError *error) {
-//                
-//            }];
-//        }else{
-//            SSJFinancingHomeitem *deleteItem = (SSJFinancingHomeitem *)cell.item;
-//            [SSJLoanHelper queryForLoanModelsWithFundID:deleteItem.fundingParent colseOutState:2 success:^(NSArray<SSJLoanModel *> * _Nonnull list) {
-//                
-//            } failure:^(NSError * _Nonnull error) {
-//                
-//            }];
-//        }
     };
     return cell;
 }
@@ -273,12 +259,25 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
     if (!_headerView) {
         _headerView = [[SSJFinancingHomeHeader alloc] init];
         [_headerView.transferButton addTarget:self action:@selector(transferButtonClicked) forControlEvents:UIControlEventTouchUpInside];
-        __weak typeof(self) weakSelf = self;
+        @weakify(self);
         _headerView.hiddenButtonClickBlock = ^(){
-            [weakSelf hiddenButtonClicked];
+            @strongify(self);
+            [self hiddenButtonClicked];
+        };
+        
+        _headerView.balanceButtonClickBlock = ^{
+            @strongify(self);
+            [self balanceSelectButtonClicked];
         };
     }
     return _headerView;
+}
+
+- (SSJFinancingHomeSelectView *)fundingSelectView {
+    if (!_fundingSelectView) {
+        _fundingSelectView = [[SSJFinancingHomeSelectView alloc] init];
+    }
+    return _fundingSelectView;
 }
 
 
@@ -305,6 +304,19 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
         }
     };
     [self.navigationController pushViewController:fundingTypeSelectVC animated:YES];
+}
+
+- (void)balanceSelectButtonClicked {
+    if (!self.selectedFundids) {
+        [SSJUserTableManager queryUserItemWithID:SSJUSERID() success:^(SSJUserItem * _Nonnull userItem) {
+            self.selectedFundids = userItem.selectFundid;
+            [self.fundingSelectView setItems:self.items andSelectFundid:userItem.selectFundid];
+            [self.fundingSelectView showInView:self.view atPoint:[self.headerView convertPoint:self.headerView.balanceButton.frame.origin toView:self.view]];
+        } failure:NULL];
+    } else {
+        [self.fundingSelectView setItems:self.items andSelectFundid:self.selectedFundids];
+        [self.fundingSelectView showInView:self.view atPoint:[self.headerView convertPoint:self.headerView.balanceButton.frame.origin toView:self.view]];
+    }
 }
 
 #pragma mark - Private

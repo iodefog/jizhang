@@ -51,7 +51,7 @@ static const NSInteger kCountdownLimit = 60;
         
         [self addSubview:self.getAuthCodeBtn];
 
-        [self ssj_setBorderWidth:1/SSJSCREENSCALE];
+        [self ssj_setBorderWidth:2];
         [self ssj_setBorderStyle:SSJBorderStyleBottom];
         
         __weak typeof(self) wself = self;
@@ -162,7 +162,7 @@ static const NSInteger kCountdownLimit = 60;
         [_getAuthCodeBtn setTitleColor:[UIColor ssj_colorWithHex:@"#ea4a64"] forState:UIControlStateNormal];
         [_getAuthCodeBtn setTitleColor:[UIColor ssj_colorWithHex:@"#f9cbd0"] forState:UIControlStateDisabled];
         [_getAuthCodeBtn ssj_setBorderStyle:SSJBorderStyleLeft];
-        [_getAuthCodeBtn ssj_setBorderWidth:1/SSJSCREENSCALE];
+        [_getAuthCodeBtn ssj_setBorderWidth:2];
         @weakify(self);
         [[_getAuthCodeBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(UIButton *btn) {
             @strongify(self);
@@ -201,15 +201,15 @@ static const NSInteger kCountdownLimit = 60;
 - (void)updateAppearanceAccordingToTheme {
     self.textColor = SSJ_MAIN_COLOR;
     self.attributedPlaceholder = [[NSAttributedString alloc] initWithString:self.placeholder attributes:@{NSForegroundColorAttributeName:SSJ_SECONDARY_COLOR}];
-    [self ssj_setBorderColor:SSJ_CELL_SEPARATOR_COLOR];
-    [self.getAuthCodeBtn ssj_setBorderColor:SSJ_CELL_SEPARATOR_COLOR];
+    [self ssj_setBorderColor:SSJ_BORDER_COLOR];
+    [self.getAuthCodeBtn ssj_setBorderColor:SSJ_BORDER_COLOR];
 }
 
 
 - (void)defaultAppearanceTheme {
     self.textColor = [UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].mainColor];
 //    self.attributedPlaceholder = [[NSAttributedString alloc] initWithString:self.placeholder attributes:@{NSForegroundColorAttributeName:SSJ_SECONDARY_COLOR}];
-    [self ssj_setBorderColor:[UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].cellSeparatorColor]];
-    [self.getAuthCodeBtn ssj_setBorderColor:[UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].cellSeparatorColor]];
+    [self ssj_setBorderColor:[UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].borderColor]];
+    [self.getAuthCodeBtn ssj_setBorderColor:[UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].borderColor]];
 }
 @end

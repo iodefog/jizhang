@@ -213,7 +213,6 @@
 - (SSJVerifCodeField *)authCodeField {
     if (!_authCodeField) {
         _authCodeField = [[SSJVerifCodeField alloc] initWithGetCodeType:SSJRegistAndForgetPasswordTypeForgetPassword];
-//        _authCodeField.delegate = self;
     }
     return _authCodeField;
 }

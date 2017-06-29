@@ -34,7 +34,8 @@
                     @"openId":@"copenid",
                     @"remindSettingMotionPWD":@"remindsettingmotionpwd",
                     @"email":@"cemail",
-                    @"adviceTime":@"cadvicetime"};
+                    @"adviceTime":@"cadvicetime",
+                    @"selectFundid":@"ccurrentselectfundid"};
     }
     return mapping;
 }

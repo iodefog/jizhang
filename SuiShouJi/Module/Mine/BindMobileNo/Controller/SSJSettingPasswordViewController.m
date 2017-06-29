@@ -8,6 +8,9 @@
 
 #import "SSJSettingPasswordViewController.h"
 #import "TPKeyboardAvoidingScrollView.h"
+#import "SSJVerifCodeField.h"
+#import "SSJPasswordField.h"
+
 
 @interface SSJSettingPasswordViewController ()
 
@@ -17,9 +20,9 @@
 
 @property (nonatomic, strong) UILabel *descLab;
 
-@property (nonatomic, strong) UITextField *authCodeField;
+@property (nonatomic, strong) SSJVerifCodeField *authCodeField;
 
-@property (nonatomic, strong) UITextField *passwordField;
+@property (nonatomic, strong) SSJPasswordField *passwordField;
 
 @property (nonatomic, strong) UIButton *bindingBtn;
 
@@ -49,6 +52,7 @@
     [self.descLab mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self.icon.mas_bottom).offset(30);
         make.centerX.mas_equalTo(self.scrollView);
+        make.height.mas_equalTo(30);
     }];
     [self.authCodeField mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self.descLab.mas_bottom).offset(18);
@@ -83,8 +87,8 @@
 #pragma mark - Private
 - (void)updateAppearance {
     self.descLab.textColor = SSJ_MAIN_COLOR;
-    //    [self.authCodeField updateAppearanceAccordingToTheme];
-    //    [self.passwordField updateAppearanceAccordingToTheme];
+    [self.authCodeField updateAppearanceAccordingToTheme];
+    [self.passwordField updateAppearanceAccordingToTheme];
     [self.bindingBtn ssj_setBackgroundColor:SSJ_BUTTON_NORMAL_COLOR forState:UIControlStateNormal];
     [self.bindingBtn ssj_setBackgroundColor:SSJ_BUTTON_DISABLE_COLOR forState:UIControlStateDisabled];
 }
@@ -135,6 +139,20 @@
         _descLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
     }
     return _descLab;
+}
+
+- (SSJVerifCodeField *)authCodeField {
+    if (!_authCodeField) {
+        _authCodeField = [[SSJVerifCodeField alloc] initWithGetCodeType:SSJRegistAndForgetPasswordTypeForgetPassword];
+    }
+    return _authCodeField;
+}
+
+- (SSJPasswordField *)passwordField {
+    if (!_passwordField) {
+        _passwordField = [[SSJPasswordField alloc] init];
+    }
+    return _passwordField;
 }
 
 - (UIButton *)bindingBtn {
