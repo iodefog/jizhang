@@ -10,8 +10,11 @@
 
 @interface SSJFinancingHomeSelectView : UIView 
 
-@property(nonatomic, strong) NSString *selectedFundid;
 
-- (void)show;
+- (void)showInView:(UIView *)view atPoint:(CGPoint)point;
+
+- (void)dismiss;
+
+- (void)setItems:(NSArray *)items andSelectFundid:(NSString *)fundids;
 
 @end
