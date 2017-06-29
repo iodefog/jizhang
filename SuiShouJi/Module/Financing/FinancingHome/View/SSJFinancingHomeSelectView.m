@@ -184,15 +184,20 @@ static NSString *const SSJFundingHomeSelectCellIndetifer = @"SSJFundingHomeSelec
 - (void)showInView:(UIView *)view atPoint:(CGPoint)point {
     if (!self.superview) {
         _tableView.alpha = 0;
-        self.transform = CGAffineTransformMakeScale(0.1, 0.1);
+        
         self.point = point;
+        
+        self.transform = CGAffineTransformMakeScale(0.1, 0.1);
+        self.left = self.point.x - kGap;
+        self.top = self.point.y;
         
         UIWindow *window = [UIApplication sharedApplication].keyWindow;
         
         [window ssj_showViewWithBackView:self backColor:[UIColor blackColor] alpha:0.5 target:self touchAction:@selector(tapBackgroundViewAction) animation:^{
+            
+            self.transform = CGAffineTransformIdentity;
             self.left = self.point.x - kGap;
             self.top = self.point.y;
-            self.transform = CGAffineTransformIdentity;
         } timeInterval:kDuration fininshed:^(BOOL finished) {
             [_tableView reloadData];
             [UIView animateWithDuration:kDuration animations:^{
