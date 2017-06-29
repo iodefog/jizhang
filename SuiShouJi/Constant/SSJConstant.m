@@ -17,6 +17,12 @@ const NSTimeInterval SSJRequestTimeDuration = 5;
 
 const NSUInteger SSJAuthCodeLength = 6;
 
+const NSUInteger SSJMobileNoLength = 11;
+
+const NSUInteger SSJMinPasswordLength = 6;
+
+const NSUInteger SSJMaxPasswordLength = 15;
+
 NSString *const SSJErrorDomain = @"com.9188.jizhang";
 
 //NSString *const SSJAppStoreAddress = @"https://itunes.apple.com/us/app/li-cai-di/id1023600539?l=zh&ls=1&mt=8";

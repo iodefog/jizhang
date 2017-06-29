@@ -10,7 +10,8 @@
 #import "TPKeyboardAvoidingScrollView.h"
 #import "SSJVerifCodeField.h"
 #import "SSJPasswordField.h"
-
+#import "SSJInviteCodeJoinSuccessView.h"
+#import "SSJBindMobileNoNetworkService.h"
 
 @interface SSJSettingPasswordViewController ()
 
@@ -26,6 +27,12 @@
 
 @property (nonatomic, strong) UIButton *bindingBtn;
 
+@property (nonatomic, strong) SSJInviteCodeJoinSuccessView *successAlertView;
+
+@property (nonatomic, strong) SSJLoginVerifyPhoneNumViewModel *viewModel;
+
+@property (nonatomic, strong) SSJBindMobileNoNetworkService *service;
+
 @end
 
 @implementation SSJSettingPasswordViewController
@@ -37,6 +44,7 @@
     [self setUpViews];
     [self setUpBindings];
     [self updateAppearance];
+    [self.authCodeField getVerifCode];
     [self.view setNeedsUpdateConstraints];
 }
 
@@ -115,7 +123,22 @@
 }
 
 - (void)setUpBindings {
-    
+    self.viewModel.phoneNum = self.mobileNo;
+    self.authCodeField.viewModel = self.viewModel;
+}
+
+- (void)bindMobileNo {
+    [self.service bindMobileNoWithMobileNo:self.mobileNo authCode:self.authCodeField.text password:self.passwordField.text success:^(SSJBaseNetworkService * _Nonnull service) {
+        UIViewController *setttingVC = [self ssj_previousViewControllerBySubtractingIndex:2];
+        if (setttingVC) {
+            [self.navigationController popToViewController:setttingVC animated:YES];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self.successAlertView showWithDesc:@"绑定手机号成功"];
+            });
+        }
+    } failure:^(SSJBaseNetworkService * _Nonnull service) {
+        [SSJAlertViewAdapter showError:service.error];
+    }];
 }
 
 #pragma mark - Lazyloading
@@ -173,6 +196,28 @@
         }
     }
     return _bindingBtn;
+}
+
+- (SSJInviteCodeJoinSuccessView *)successAlertView {
+    if (!_successAlertView) {
+        _successAlertView = [[SSJInviteCodeJoinSuccessView alloc] init];
+    }
+    return _successAlertView;
+}
+
+- (SSJLoginVerifyPhoneNumViewModel *)viewModel {
+    if (!_viewModel) {
+        _viewModel = [[SSJLoginVerifyPhoneNumViewModel alloc] init];
+    }
+    return _viewModel;
+}
+
+- (SSJBindMobileNoNetworkService *)service {
+    if (!_service) {
+        _service = [[SSJBindMobileNoNetworkService alloc] init];
+        _service.showLodingIndicator = YES;
+    }
+    return _service;
 }
 
 @end

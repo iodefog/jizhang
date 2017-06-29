@@ -633,7 +633,7 @@
     if (!_enableVerifySignal) {
         //手机号位数，是否同意用户协议
         _enableVerifySignal = [RACSignal combineLatest:@[RACObserve(self, phoneNum),RACObserve(self, agreeProtocol)] reduce:^id(NSString *phoneNum,NSNumber *isAgree){
-            return @(phoneNum.length >= 11 && isAgree.boolValue);
+            return @(phoneNum.length >= SSJMobileNoLength && isAgree.boolValue);
         }];
     }
     return _enableVerifySignal;
@@ -642,7 +642,7 @@
 - (RACSignal *)enableRegAndLoginSignal {
     if (!_enableRegAndLoginSignal) {
         _enableRegAndLoginSignal = [[RACSignal combineLatest:@[RACObserve(self, verificationCode),RACObserve(self, passwardNum)] reduce:^id(NSString *code,NSString *passward){
-            return @(code.length == 6 && passward.length >=6 && passward.length <=15);
+            return @(code.length >= SSJAuthCodeLength && passward.length >= SSJMinPasswordLength && passward.length <= SSJMaxPasswordLength);
         }] skip:1];
     }
     return _enableRegAndLoginSignal;
@@ -651,7 +651,7 @@
 - (RACSignal *)enableNormalLoginSignal {
     if (_enableNormalLoginSignal) {
         _enableNormalLoginSignal = [RACSignal combineLatest:@[self.passwardNum] reduce:^id(NSString *passward){
-            return @(passward.length >=6 && passward.length <= 15);
+            return @(passward.length >= SSJMinPasswordLength && passward.length <= SSJMaxPasswordLength);
         }];
     }
     return _enableNormalLoginSignal;
