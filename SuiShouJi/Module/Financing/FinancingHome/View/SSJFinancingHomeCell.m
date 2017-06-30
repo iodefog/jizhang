@@ -223,7 +223,11 @@ static const CGFloat kRadius = 12.f;
         self.fundingBalanceLabel.hidden = NO;
         self.fundingBalanceLabel.text = [NSString stringWithFormat:@"%.2f",item.cardBalance];
         [self.fundingBalanceLabel sizeToFit];
-        self.fundingImage.image = [[UIImage imageNamed:@"ft_creditcard"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        if (item.cardType == SSJCrediteCardTypeCrediteCard) {
+            self.fundingImage.image = [[UIImage imageNamed:@"ft_creditcard"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        } else {
+            self.fundingImage.image = [[UIImage imageNamed:@"ft_huabei"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        }
         self.fundingNameLabel.text = item.cardName;
         [self.fundingNameLabel sizeToFit];
         if (item.cardMemo.length) {
@@ -239,25 +243,25 @@ static const CGFloat kRadius = 12.f;
                 repaymentDate = [repaymentDate dateByAddingMonths:1];
                 billDate = [billDate dateByAddingMonths:1];
             }
-            NSInteger daysFromBill = [billDate daysFrom:[NSDate date]];
-            NSInteger daysFromRepayment = [repaymentDate daysFrom:[NSDate date]];
+            NSInteger daysFromBill = [billDate daysFrom:[NSDate date]] + 1;
+            NSInteger daysFromRepayment = [repaymentDate daysFrom:[NSDate date]] + 1;
             NSInteger mostRecentDay = MIN(daysFromBill, daysFromRepayment);
             if (billDate.day == [NSDate date].day) {
-                self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距还款日:%ld天",(long)daysFromRepayment + 1];
+                self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距还款日:%ld天",(long)daysFromRepayment];
             }else if(repaymentDate.day == [NSDate date].day){
-                self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距账单日:%ld天",(long)daysFromBill + 1];
+                self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距账单日:%ld天",(long)daysFromBill];
             }else{
                 if (mostRecentDay == daysFromBill) {
                     if (daysFromBill > 0 ) {
-                        self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距账单日%ld天",(long)mostRecentDay + 1];
+                        self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距账单日%ld天",(long)mostRecentDay];
                     }else{
-                        self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距还款日%ld天",(long)daysFromRepayment + 1];
+                        self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距还款日%ld天",(long)daysFromRepayment];
                     }
                 }else if (mostRecentDay == daysFromRepayment){
                     if (daysFromRepayment < 0 ) {
-                        self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距账单日日%ld天",(long)daysFromBill + 1];
+                        self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距账单日日%ld天",(long)daysFromBill];
                     }else{
-                        self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距还款日%ld天",(long)mostRecentDay + 1];
+                        self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距还款日%ld天",(long)mostRecentDay];
                     }
                 }
             }
