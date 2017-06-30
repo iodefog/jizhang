@@ -15,7 +15,10 @@
 //微信登陆成功的回调
 typedef void (^weiXinLoginSuccessBlock)(SSJThirdPartLoginItem *item);
 
+//微信登陆成功的回调
+typedef void (^weiXinLoginFailBlock)();
+
 //微信登录的方法
-- (void)weixinLoginWithSucessBlock:(weiXinLoginSuccessBlock)sucessBlock;
+- (void)weixinLoginWithSucessBlock:(weiXinLoginSuccessBlock)sucessBlock failBlock:(weiXinLoginFailBlock)failBlock ;
 
 @end

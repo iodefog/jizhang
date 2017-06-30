@@ -625,7 +625,7 @@
 }
 
 - (RACCommand *)verifyPhoneNumRequestCommand {
-    if (!_verifyPhoneNumRequestCommand) {
+//    if (!_verifyPhoneNumRequestCommand) {
         _verifyPhoneNumRequestCommand = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
             @weakify(self);
             RACSignal *signal = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
@@ -645,7 +645,7 @@
                 return @([[result objectForKey:@"code"] boolValue]);
             }];
         }];
-    }
+//    }
     return _verifyPhoneNumRequestCommand;
 }
 
@@ -767,6 +767,8 @@
                     [SSJThirdPartyLoginManger shareInstance].weixinLogin = nil;
                     self.loginType = SSJLoginTypeWeiXin;
                     [self thirdLoginWithLoginItem:item subscriber:subscriber];
+                } failBlock:^{
+                    [subscriber sendError:nil];
                 }];
                 
                 return nil;
@@ -795,6 +797,8 @@
                     [SSJThirdPartyLoginManger shareInstance].weixinLogin = nil;
                     self.loginType = SSJLoginTypeQQ;
                     [self thirdLoginWithLoginItem:item subscriber:subscriber];
+                } failBlock:^{
+                    [subscriber sendError:nil];
                 }];
                 
                 return nil;
