@@ -54,6 +54,20 @@ NSString *SSJAppVersion() {
     return [NSString stringWithFormat:@"%@",verString];
 }
 
+NSString *SSJAppIcon() {
+    NSString *icon = @"";
+    
+    NSDictionary *infoPlist = [[NSBundle mainBundle] infoDictionary];
+    
+    if ([UIScreen mainScreen].scale >= 2) {
+        icon = [[infoPlist valueForKeyPath:@"CFBundleIcons.CFBundlePrimaryIcon.CFBundleIconFiles"] lastObject];
+    } else {
+        icon = [[infoPlist valueForKeyPath:@"CFBundleIcons.CFBundlePrimaryIcon.CFBundleIconFiles"] firstObject];
+    }
+    
+    return icon;
+}
+
 float SSJSystemVersion() {
     return [[UIDevice currentDevice].systemVersion floatValue];
 }
