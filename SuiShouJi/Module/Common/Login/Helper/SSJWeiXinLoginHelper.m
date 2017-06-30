@@ -10,16 +10,18 @@
 
 @interface SSJWeiXinLoginHelper()
 @property (nonatomic, copy) weiXinLoginSuccessBlock sucessBlock;
+@property (nonatomic, copy) weiXinLoginFailBlock failBlock;
 @end
 
 @implementation SSJWeiXinLoginHelper
 
--(void)weixinLoginWithSucessBlock:(weiXinLoginSuccessBlock)sucessBlock{
+-(void)weixinLoginWithSucessBlock:(weiXinLoginSuccessBlock)sucessBlock failBlock:(weiXinLoginFailBlock)failBlock{
     SendAuthReq* req =[[SendAuthReq alloc ]init];
     req.scope = @"snsapi_userinfo";
     req.state = SSJWeiXinDescription;
     [WXApi sendReq:req];
     self.sucessBlock = sucessBlock;
+    self.failBlock = failBlock;
 }
 
 
@@ -42,11 +44,14 @@
             SendAuthResp *aresp=(SendAuthResp *)resp;
             [self getAccessTokenWithCode:aresp.code];
         }
-        
+        return;
     }else if (resp.errCode == -4){
         SSJPRINT(@"用户拒绝");
     }else if (resp.errCode == -2){
         SSJPRINT(@"用户取消");;
+    }
+    if (self.failBlock) {
+        self.failBlock();
     }
 }
 

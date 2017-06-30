@@ -597,6 +597,8 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         [SSJThirdPartyLoginManger shareInstance].qqLogin = nil;
         [SSJThirdPartyLoginManger shareInstance].weixinLogin = nil;
         [weakSelf.loginService loadLoginModelWithLoginItem:item];
+    }failBlock:^{
+        
     }];
 }
 
@@ -607,6 +609,8 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         [SSJThirdPartyLoginManger shareInstance].qqLogin = nil;
         [SSJThirdPartyLoginManger shareInstance].weixinLogin = nil;
         [weakSelf.loginService loadLoginModelWithLoginItem:item];
+    } failBlock:^{
+        
     }];
     
 }
