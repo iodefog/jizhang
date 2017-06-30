@@ -7,11 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
-@protocol SSJProductAdviceTableHeaderViewDelegate<NSObject>
 
-- (void)submitAdviceButtonClickedWithMessage:(NSString *)messageStr additionalMessage:(NSString *)addMessage;
-
-@end
+//typedef NS_ENUM(NSUInteger, SSJAdviceType) {
+//    SSJAdviceTypeAdvice,//产品建议
+//    SSJAdviceTypeFault,//使用故障
+//    SSJAdviceTypeTuCao,//我要吐槽
+//};
 
 @interface SSJProductAdviceTableHeaderView : UIView
 
@@ -22,9 +23,5 @@
 
 - (void)clearAdviceContext;
 
-/**
- <#注释#>
- */
-@property (nonatomic, weak) id<SSJProductAdviceTableHeaderViewDelegate>delegate;
 
 @end

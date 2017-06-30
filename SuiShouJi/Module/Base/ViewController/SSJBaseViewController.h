@@ -50,6 +50,21 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, nullable) UIColor *navigationBarBaseLineColor;
 
 /**
+ 导航栏标题颜色
+ */
+@property (nonatomic, strong, nullable) UIColor *navigationBarTitleColor;
+
+/**
+ 导航栏按钮颜色
+ */
+@property (nonatomic, strong, nullable) UIColor *navigationBarTintColor;
+
+/**
+ 导航栏背景颜色
+ */
+@property (nonatomic, strong, nullable) UIColor *navigationBarBackgroundColor;
+
+/**
  *  导航栏返回按钮点击事件
  */
 - (void)goBackAction;

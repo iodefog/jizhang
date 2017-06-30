@@ -40,7 +40,7 @@ typedef NS_ENUM(NSInteger, SSJNetworkServiceState) {
 };
 
 @class SSJBaseNetworkService;
-typedef void(^SSJNetworkServiceHandler)(SSJBaseNetworkService *service);
+typedef void(^SSJNetworkServiceHandler)(__kindof SSJBaseNetworkService *service);
 
 @protocol SSJBaseNetworkServiceDelegate;
 

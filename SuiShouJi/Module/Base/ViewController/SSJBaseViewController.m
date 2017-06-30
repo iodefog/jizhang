@@ -71,7 +71,7 @@
     [[UIApplication sharedApplication] setStatusBarStyle:SSJ_CURRENT_THEME.statusBarStyle];
 }
 
-- (void)viewDidAppear:(BOOL)animated{
+- (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     [SSJAnaliyticsManager beginLogPageView:[self statisticsTitle]];
     if (self.navigationController && [[self.navigationController viewControllers] count] > 1) {
@@ -222,10 +222,17 @@
 
 - (void)updateNavigationAppearance {
     SSJThemeModel *themeModel = _appliesTheme ? [SSJThemeSetting currentThemeModel] : [SSJThemeSetting defaultThemeModel];
-    self.navigationController.navigationBar.tintColor = [UIColor ssj_colorWithHex:themeModel.naviBarTintColor];
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:themeModel.naviBarBackgroundColor alpha:themeModel.backgroundAlpha] size:CGSizeZero] forBarMetrics:UIBarMetricsDefault];
-    self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2],
-                                                                    NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:themeModel.naviBarTitleColor]};
+    
+    UIColor *tintColor = self.navigationBarTintColor ?: [UIColor ssj_colorWithHex:themeModel.naviBarTintColor];
+    self.navigationController.navigationBar.tintColor = tintColor;
+    
+    UIColor *backgroundColor = self.navigationBarBackgroundColor ?: [UIColor ssj_colorWithHex:themeModel.naviBarBackgroundColor alpha:themeModel.backgroundAlpha];
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:backgroundColor size:CGSizeZero] forBarMetrics:UIBarMetricsDefault];
+    
+    UIColor *titleColor = self.navigationBarTitleColor ?: [UIColor ssj_colorWithHex:themeModel.naviBarTitleColor];
+    NSDictionary *titleAttirbutes = @{NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2],
+                                      NSForegroundColorAttributeName:titleColor};
+    self.navigationController.navigationBar.titleTextAttributes = titleAttirbutes;
     
     if (_showNavigationBarBaseLine) {
         UIColor *lineColor = _navigationBarBaseLineColor ?: [UIColor ssj_colorWithHex:themeModel.cellSeparatorColor alpha:themeModel.cellSeparatorAlpha];

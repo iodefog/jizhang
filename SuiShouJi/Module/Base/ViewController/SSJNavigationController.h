@@ -24,7 +24,7 @@
 @interface UIViewController (SSJNavigationController)
 
 /**
- 是否隐藏导航栏；只有设置SSJNavigationController的子控制器有效
+ 是否隐藏导航栏；只有设置SSJNavigationController的子控制器有效，默认NO
  */
 @property (nonatomic, getter=ssj_hidesNavigationBarWhenPushed, setter=ssj_setHidesNavigationBarWhenPushed:) BOOL hidesNavigationBarWhenPushed;
 
