@@ -138,7 +138,7 @@ typedef void(^SSJNetworkServiceHandler)(SSJBaseNetworkService *service);
 - (instancetype)initWithDelegate:(nullable id <SSJBaseNetworkServiceDelegate>)delegate;
 
 /**
- *  开始网络请求
+ *  开始网络请求；简便方法，此方法内部还是调用request:params:success:failure:
  *
  *  @param url    请求的地址
  *  @param params 请求的参数
@@ -161,7 +161,7 @@ typedef void(^SSJNetworkServiceHandler)(SSJBaseNetworkService *service);
 - (void)cancel;
 
 /* ---------------------------------------------------------------- */
-/** Overwrite **/
+/** 需要子类复写的方法 **/
 /* ---------------------------------------------------------------- */
 /**
  *  请求完成时调用此方法，用来处理返回的结果，需要时子类可以重写此方法，不用调用父类方法
@@ -169,6 +169,14 @@ typedef void(^SSJNetworkServiceHandler)(SSJBaseNetworkService *service);
  *  @param rootElement 请求返回的数据
  */
 - (void)handleResult:(NSDictionary *)rootElement;
+
+/**
+ 根据后端返回的code决定请求是否成功，如果返回NO，会根据后端返回的code、desc组装error对象；字累根据需要重写此方法；默认返回YES
+
+ @param code 后端返回的code
+ @return 根据此值来决定此次请求是否成功，如果返回YES则调用成功的回调，反之调用失败的回调
+ */
+- (BOOL)isRequestSuccessfulWithCode:(NSInteger)code;
 
 @end
 

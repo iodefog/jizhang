@@ -178,6 +178,10 @@ static inline AFHTTPResponseSerializer *SSJResponseSerializer(SSJResponseSeriali
 - (void)handleResult:(NSDictionary *)rootElement {
 }
 
+- (BOOL)isRequestSuccessfulWithCode:(NSInteger)code {
+    return YES;
+}
+
 #pragma mark - Private
 /* 基础参数 */
 - (NSDictionary<NSString *, NSString *> *)p_basicParameters {
@@ -246,13 +250,27 @@ static inline AFHTTPResponseSerializer *SSJResponseSerializer(SSJResponseSeriali
         [self handleResult:_rootElement];
         
         [SSJGlobalServiceManager removeService:self];
-        if (self.delegate && [self.delegate respondsToSelector:@selector(serverDidFinished:)]) {
-            [self.delegate serverDidFinished:self];
-        }
         
-        if (self.success) {
-            self.success(self);
-            self.success = nil;
+        NSInteger code = [self.returnCode integerValue];
+        if ([self isRequestSuccessfulWithCode:code]) {
+            if (self.delegate && [self.delegate respondsToSelector:@selector(serverDidFinished:)]) {
+                [self.delegate serverDidFinished:self];
+            }
+            
+            if (self.success) {
+                self.success(self);
+                self.success = nil;
+            }
+        } else {
+            self.error = [NSError errorWithDomain:SSJErrorDomain code:code userInfo:@{NSLocalizedDescriptionKey:self.desc}];
+            if (self.delegate && [self.delegate respondsToSelector:@selector(server:didFailLoadWithError:)]) {
+                [self.delegate server:self didFailLoadWithError:self.error];
+            }
+            
+            if (self.failure) {
+                self.failure(self);
+                self.failure = nil;
+            }
         }
     }
 }
