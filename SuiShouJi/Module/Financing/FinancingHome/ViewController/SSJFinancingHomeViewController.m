@@ -287,6 +287,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
             @strongify(self);
             self.selectedFundids = selectedFundid;
             self.selectedFundidsArr = selectedFundids;
+            self.headerView.balanceButton.layer.transform = CATransform3DIdentity;
             [self getSumMoney];
         };
     }
