@@ -103,6 +103,9 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
     if (self.collectionView.editing) {
         [self collectionViewEndEditing];
     }
+    SSJUserItem *item = [[SSJUserItem alloc] init];
+    item.selectFundid = self.selectedFundids;
+    [SSJUserTableManager saveUserItem:item success:NULL failure:NULL];
 }
 
 #pragma mark - UICollectionViewDelegate

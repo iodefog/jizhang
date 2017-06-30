@@ -229,6 +229,7 @@ static NSString *const SSJFundingHomeSelectCellIndetifer = @"SSJFundingHomeSelec
 #pragma mark - Event
 - (void)dismiss {
     if (self.superview) {
+        self.tableView.alpha = 0;
         
         [self.superview ssj_hideBackViewForView:self animation:^{
             self.transform = CGAffineTransformMakeScale(0.1, 0.1);
