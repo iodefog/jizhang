@@ -100,7 +100,7 @@
         _tfPassword.delegate = self;
         _tfPassword.textColor = [UIColor ssj_colorWithHex:@"333333"];
         _tfPassword.clearButtonMode = UITextFieldViewModeWhileEditing;
-        _tfPassword.placeholder = @"至少6位";
+        _tfPassword.placeholder = @"请输入账户密码";
         _tfPassword.font = [UIFont ssj_helveticaRegularFontOfSize:SSJ_FONT_SIZE_3];
         _tfPassword.keyboardType = UIKeyboardTypeASCIICapable;
         _tfPassword.delegate = self;
