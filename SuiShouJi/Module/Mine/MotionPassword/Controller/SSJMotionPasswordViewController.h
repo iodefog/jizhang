@@ -10,9 +10,8 @@
 #import "UIViewController+SSJPageFlow.h"
 
 typedef NS_ENUM(NSUInteger, SSJMotionPasswordViewControllerType) {
-    SSJMotionPasswordViewControllerTypeSetting,     // 设置手势密码
+    SSJMotionPasswordViewControllerTypeSetting,      // 设置手势密码
     SSJMotionPasswordViewControllerTypeVerification, // 验证手势密码
-    SSJMotionPasswordViewControllerTypeTurnoff      // 关闭手势密码
 };
 
 @interface SSJMotionPasswordViewController : SSJBaseViewController

@@ -154,7 +154,6 @@
 		7D08A1271E4999D30085A8FB /* SSJMotionPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBE41CFD2DAA0061803B /* SSJMotionPasswordViewController.m */; };
 		7D08A1281E4999D30085A8FB /* SSJFundingDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9471561CEB224C00D69079 /* SSJFundingDetailCell.m */; };
 		7D08A1291E4999D30085A8FB /* SSJLoanModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D87AE991D6319DC0024D33C /* SSJLoanModel.m */; };
-		7D08A12A1E4999D30085A8FB /* SSJMotionPasswordSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBE21CFD2DAA0061803B /* SSJMotionPasswordSettingViewController.m */; };
 		7D08A12B1E4999D30085A8FB /* SSJForgotPSWSendVerCodeService.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF3C1C4751EA000E6CC9 /* SSJForgotPSWSendVerCodeService.m */; };
 		7D08A12C1E4999D30085A8FB /* SSJMagicExportCalendarIndexPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB9F1CFD2DAA0061803B /* SSJMagicExportCalendarIndexPath.m */; };
 		7D08A12D1E4999D30085A8FB /* SSJMotionPasswordLoginPasswordAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBE71CFD2DAA0061803B /* SSJMotionPasswordLoginPasswordAlertView.m */; };
@@ -1259,7 +1258,6 @@
 		7DA13A7E1E35AED7000490A4 /* SSJMotionPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBE41CFD2DAA0061803B /* SSJMotionPasswordViewController.m */; };
 		7DA13A7F1E35AED7000490A4 /* SSJFundingDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9471561CEB224C00D69079 /* SSJFundingDetailCell.m */; };
 		7DA13A801E35AED7000490A4 /* SSJLoanModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D87AE991D6319DC0024D33C /* SSJLoanModel.m */; };
-		7DA13A811E35AED7000490A4 /* SSJMotionPasswordSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBE21CFD2DAA0061803B /* SSJMotionPasswordSettingViewController.m */; };
 		7DA13A821E35AED7000490A4 /* SSJForgotPSWSendVerCodeService.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF3C1C4751EA000E6CC9 /* SSJForgotPSWSendVerCodeService.m */; };
 		7DA13A831E35AED7000490A4 /* SSJMagicExportCalendarIndexPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB9F1CFD2DAA0061803B /* SSJMagicExportCalendarIndexPath.m */; };
 		7DA13A841E35AED7000490A4 /* SSJMotionPasswordLoginPasswordAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBE71CFD2DAA0061803B /* SSJMotionPasswordLoginPasswordAlertView.m */; };
@@ -1895,7 +1893,6 @@
 		7DBB3B0C1E55C2EE0075E638 /* SSJMotionPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBE41CFD2DAA0061803B /* SSJMotionPasswordViewController.m */; };
 		7DBB3B0D1E55C2EE0075E638 /* SSJFundingDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9471561CEB224C00D69079 /* SSJFundingDetailCell.m */; };
 		7DBB3B0E1E55C2EE0075E638 /* SSJLoanModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D87AE991D6319DC0024D33C /* SSJLoanModel.m */; };
-		7DBB3B0F1E55C2EE0075E638 /* SSJMotionPasswordSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBE21CFD2DAA0061803B /* SSJMotionPasswordSettingViewController.m */; };
 		7DBB3B101E55C2EE0075E638 /* SSJForgotPSWSendVerCodeService.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF3C1C4751EA000E6CC9 /* SSJForgotPSWSendVerCodeService.m */; };
 		7DBB3B111E55C2EE0075E638 /* SSJMagicExportCalendarIndexPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB9F1CFD2DAA0061803B /* SSJMagicExportCalendarIndexPath.m */; };
 		7DBB3B121E55C2EE0075E638 /* SSJMotionPasswordLoginPasswordAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBE71CFD2DAA0061803B /* SSJMotionPasswordLoginPasswordAlertView.m */; };
@@ -2438,7 +2435,6 @@
 		7DBB3FA71E55C4E00075E638 /* SSJMotionPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBE41CFD2DAA0061803B /* SSJMotionPasswordViewController.m */; };
 		7DBB3FA81E55C4E00075E638 /* SSJFundingDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9471561CEB224C00D69079 /* SSJFundingDetailCell.m */; };
 		7DBB3FA91E55C4E00075E638 /* SSJLoanModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D87AE991D6319DC0024D33C /* SSJLoanModel.m */; };
-		7DBB3FAA1E55C4E00075E638 /* SSJMotionPasswordSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBE21CFD2DAA0061803B /* SSJMotionPasswordSettingViewController.m */; };
 		7DBB3FAB1E55C4E00075E638 /* SSJForgotPSWSendVerCodeService.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF3C1C4751EA000E6CC9 /* SSJForgotPSWSendVerCodeService.m */; };
 		7DBB3FAC1E55C4E00075E638 /* SSJMagicExportCalendarIndexPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB9F1CFD2DAA0061803B /* SSJMagicExportCalendarIndexPath.m */; };
 		7DBB3FAD1E55C4E00075E638 /* SSJMotionPasswordLoginPasswordAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBE71CFD2DAA0061803B /* SSJMotionPasswordLoginPasswordAlertView.m */; };
@@ -3241,7 +3237,6 @@
 		7DFB16F91EB0341E00292DD3 /* SSJMotionPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBE41CFD2DAA0061803B /* SSJMotionPasswordViewController.m */; };
 		7DFB16FA1EB0341E00292DD3 /* SSJFundingDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9471561CEB224C00D69079 /* SSJFundingDetailCell.m */; };
 		7DFB16FB1EB0341E00292DD3 /* SSJLoanModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D87AE991D6319DC0024D33C /* SSJLoanModel.m */; };
-		7DFB16FC1EB0341E00292DD3 /* SSJMotionPasswordSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBE21CFD2DAA0061803B /* SSJMotionPasswordSettingViewController.m */; };
 		7DFB16FD1EB0341E00292DD3 /* SSJColorSelectCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3A2D541E6673B500DFAE2C /* SSJColorSelectCollectionViewCell.m */; };
 		7DFB16FE1EB0341E00292DD3 /* SSJForgotPSWSendVerCodeService.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF3C1C4751EA000E6CC9 /* SSJForgotPSWSendVerCodeService.m */; };
 		7DFB16FF1EB0341E00292DD3 /* SSJMagicExportCalendarIndexPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB9F1CFD2DAA0061803B /* SSJMagicExportCalendarIndexPath.m */; };
@@ -4191,7 +4186,6 @@
 		9C13F57D1E8267D300AC5FA9 /* SSJMotionPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBE41CFD2DAA0061803B /* SSJMotionPasswordViewController.m */; };
 		9C13F57E1E8267D300AC5FA9 /* SSJFundingDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9471561CEB224C00D69079 /* SSJFundingDetailCell.m */; };
 		9C13F57F1E8267D300AC5FA9 /* SSJLoanModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D87AE991D6319DC0024D33C /* SSJLoanModel.m */; };
-		9C13F5801E8267D300AC5FA9 /* SSJMotionPasswordSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBE21CFD2DAA0061803B /* SSJMotionPasswordSettingViewController.m */; };
 		9C13F5811E8267D300AC5FA9 /* SSJForgotPSWSendVerCodeService.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF3C1C4751EA000E6CC9 /* SSJForgotPSWSendVerCodeService.m */; };
 		9C13F5821E8267D300AC5FA9 /* SSJMagicExportCalendarIndexPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB9F1CFD2DAA0061803B /* SSJMagicExportCalendarIndexPath.m */; };
 		9C13F5831E8267D300AC5FA9 /* SSJMotionPasswordLoginPasswordAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBE71CFD2DAA0061803B /* SSJMotionPasswordLoginPasswordAlertView.m */; };
@@ -5159,7 +5153,6 @@
 		9C4C20A01E9E30C8000C5F15 /* SSJMotionPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBE41CFD2DAA0061803B /* SSJMotionPasswordViewController.m */; };
 		9C4C20A11E9E30C8000C5F15 /* SSJFundingDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9471561CEB224C00D69079 /* SSJFundingDetailCell.m */; };
 		9C4C20A21E9E30C8000C5F15 /* SSJLoanModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D87AE991D6319DC0024D33C /* SSJLoanModel.m */; };
-		9C4C20A31E9E30C8000C5F15 /* SSJMotionPasswordSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBE21CFD2DAA0061803B /* SSJMotionPasswordSettingViewController.m */; };
 		9C4C20A41E9E30C8000C5F15 /* SSJColorSelectCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3A2D541E6673B500DFAE2C /* SSJColorSelectCollectionViewCell.m */; };
 		9C4C20A51E9E30C8000C5F15 /* SSJForgotPSWSendVerCodeService.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF3C1C4751EA000E6CC9 /* SSJForgotPSWSendVerCodeService.m */; };
 		9C4C20A61E9E30C8000C5F15 /* SSJMagicExportCalendarIndexPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB9F1CFD2DAA0061803B /* SSJMagicExportCalendarIndexPath.m */; };
@@ -6068,7 +6061,6 @@
 		9C7D2D861E8DF8A80093001F /* SSJMotionPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBE41CFD2DAA0061803B /* SSJMotionPasswordViewController.m */; };
 		9C7D2D871E8DF8A80093001F /* SSJFundingDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9471561CEB224C00D69079 /* SSJFundingDetailCell.m */; };
 		9C7D2D881E8DF8A80093001F /* SSJLoanModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D87AE991D6319DC0024D33C /* SSJLoanModel.m */; };
-		9C7D2D891E8DF8A80093001F /* SSJMotionPasswordSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBE21CFD2DAA0061803B /* SSJMotionPasswordSettingViewController.m */; };
 		9C7D2D8A1E8DF8A80093001F /* SSJColorSelectCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3A2D541E6673B500DFAE2C /* SSJColorSelectCollectionViewCell.m */; };
 		9C7D2D8B1E8DF8A80093001F /* SSJForgotPSWSendVerCodeService.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF3C1C4751EA000E6CC9 /* SSJForgotPSWSendVerCodeService.m */; };
 		9C7D2D8C1E8DF8A80093001F /* SSJMagicExportCalendarIndexPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB9F1CFD2DAA0061803B /* SSJMagicExportCalendarIndexPath.m */; };
@@ -6659,7 +6651,6 @@
 		9C7D2FFD1E8DF96B0093001F /* SSJMotionPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBE41CFD2DAA0061803B /* SSJMotionPasswordViewController.m */; };
 		9C7D2FFE1E8DF96B0093001F /* SSJFundingDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9471561CEB224C00D69079 /* SSJFundingDetailCell.m */; };
 		9C7D2FFF1E8DF96B0093001F /* SSJLoanModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D87AE991D6319DC0024D33C /* SSJLoanModel.m */; };
-		9C7D30001E8DF96B0093001F /* SSJMotionPasswordSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBE21CFD2DAA0061803B /* SSJMotionPasswordSettingViewController.m */; };
 		9C7D30011E8DF96B0093001F /* SSJColorSelectCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3A2D541E6673B500DFAE2C /* SSJColorSelectCollectionViewCell.m */; };
 		9C7D30021E8DF96B0093001F /* SSJForgotPSWSendVerCodeService.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF3C1C4751EA000E6CC9 /* SSJForgotPSWSendVerCodeService.m */; };
 		9C7D30031E8DF96B0093001F /* SSJMagicExportCalendarIndexPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB9F1CFD2DAA0061803B /* SSJMagicExportCalendarIndexPath.m */; };
@@ -7251,7 +7242,6 @@
 		9C80FD3F1E95E88E00B1BAAC /* SSJMotionPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBE41CFD2DAA0061803B /* SSJMotionPasswordViewController.m */; };
 		9C80FD401E95E88E00B1BAAC /* SSJFundingDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9471561CEB224C00D69079 /* SSJFundingDetailCell.m */; };
 		9C80FD411E95E88E00B1BAAC /* SSJLoanModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D87AE991D6319DC0024D33C /* SSJLoanModel.m */; };
-		9C80FD421E95E88E00B1BAAC /* SSJMotionPasswordSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBE21CFD2DAA0061803B /* SSJMotionPasswordSettingViewController.m */; };
 		9C80FD431E95E88E00B1BAAC /* SSJColorSelectCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3A2D541E6673B500DFAE2C /* SSJColorSelectCollectionViewCell.m */; };
 		9C80FD441E95E88E00B1BAAC /* SSJForgotPSWSendVerCodeService.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF3C1C4751EA000E6CC9 /* SSJForgotPSWSendVerCodeService.m */; };
 		9C80FD451E95E88E00B1BAAC /* SSJMagicExportCalendarIndexPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB9F1CFD2DAA0061803B /* SSJMagicExportCalendarIndexPath.m */; };
@@ -7940,7 +7930,6 @@
 		9C9CEEFF1EA5F73A007657FE /* SSJMotionPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBE41CFD2DAA0061803B /* SSJMotionPasswordViewController.m */; };
 		9C9CEF001EA5F73A007657FE /* SSJFundingDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9471561CEB224C00D69079 /* SSJFundingDetailCell.m */; };
 		9C9CEF011EA5F73A007657FE /* SSJLoanModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D87AE991D6319DC0024D33C /* SSJLoanModel.m */; };
-		9C9CEF021EA5F73A007657FE /* SSJMotionPasswordSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBE21CFD2DAA0061803B /* SSJMotionPasswordSettingViewController.m */; };
 		9C9CEF031EA5F73A007657FE /* SSJColorSelectCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3A2D541E6673B500DFAE2C /* SSJColorSelectCollectionViewCell.m */; };
 		9C9CEF041EA5F73A007657FE /* SSJForgotPSWSendVerCodeService.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF3C1C4751EA000E6CC9 /* SSJForgotPSWSendVerCodeService.m */; };
 		9C9CEF051EA5F73A007657FE /* SSJMagicExportCalendarIndexPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB9F1CFD2DAA0061803B /* SSJMagicExportCalendarIndexPath.m */; };
@@ -8540,7 +8529,6 @@
 		9CD9BC2B1CFD2DAA0061803B /* SSJNoneCircleChargeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBD11CFD2DAA0061803B /* SSJNoneCircleChargeView.m */; };
 		9CD9BC2C1CFD2DAA0061803B /* SSJSyncSettingTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBD31CFD2DAA0061803B /* SSJSyncSettingTableViewCell.m */; };
 		9CD9BC2D1CFD2DAA0061803B /* SSJAboutusViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBD61CFD2DAA0061803B /* SSJAboutusViewController.m */; };
-		9CD9BC321CFD2DAA0061803B /* SSJMotionPasswordSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBE21CFD2DAA0061803B /* SSJMotionPasswordSettingViewController.m */; };
 		9CD9BC331CFD2DAA0061803B /* SSJMotionPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBE41CFD2DAA0061803B /* SSJMotionPasswordViewController.m */; };
 		9CD9BC341CFD2DAA0061803B /* SSJMotionPasswordLoginPasswordAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBE71CFD2DAA0061803B /* SSJMotionPasswordLoginPasswordAlertView.m */; };
 		9CD9BC351CFD2DAA0061803B /* SSJPersonalDetailHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBEB1CFD2DAA0061803B /* SSJPersonalDetailHelper.m */; };
@@ -8776,7 +8764,6 @@
 		9CDB4A431EF3ABBC0097E09D /* SSJMotionPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBE41CFD2DAA0061803B /* SSJMotionPasswordViewController.m */; };
 		9CDB4A441EF3ABBC0097E09D /* SSJFundingDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9471561CEB224C00D69079 /* SSJFundingDetailCell.m */; };
 		9CDB4A451EF3ABBC0097E09D /* SSJLoanModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D87AE991D6319DC0024D33C /* SSJLoanModel.m */; };
-		9CDB4A461EF3ABBC0097E09D /* SSJMotionPasswordSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBE21CFD2DAA0061803B /* SSJMotionPasswordSettingViewController.m */; };
 		9CDB4A471EF3ABBC0097E09D /* SSJColorSelectCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3A2D541E6673B500DFAE2C /* SSJColorSelectCollectionViewCell.m */; };
 		9CDB4A481EF3ABBC0097E09D /* SSJForgotPSWSendVerCodeService.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF3C1C4751EA000E6CC9 /* SSJForgotPSWSendVerCodeService.m */; };
 		9CDB4A491EF3ABBC0097E09D /* SSJMagicExportCalendarIndexPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB9F1CFD2DAA0061803B /* SSJMagicExportCalendarIndexPath.m */; };
@@ -9408,7 +9395,6 @@
 		9CECFB7E1D6D41A700DB2C8B /* SSJNewBaseTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD04338C1C1A8DA50051E7AB /* SSJNewBaseTableViewController.m */; };
 		9CECFB801D6D41A700DB2C8B /* SSJMotionPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBE41CFD2DAA0061803B /* SSJMotionPasswordViewController.m */; };
 		9CECFB811D6D41A700DB2C8B /* SSJFundingDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9471561CEB224C00D69079 /* SSJFundingDetailCell.m */; };
-		9CECFB821D6D41A700DB2C8B /* SSJMotionPasswordSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBE21CFD2DAA0061803B /* SSJMotionPasswordSettingViewController.m */; };
 		9CECFB831D6D41A700DB2C8B /* SSJForgotPSWSendVerCodeService.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF3C1C4751EA000E6CC9 /* SSJForgotPSWSendVerCodeService.m */; };
 		9CECFB841D6D41A700DB2C8B /* SSJMagicExportCalendarIndexPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB9F1CFD2DAA0061803B /* SSJMagicExportCalendarIndexPath.m */; };
 		9CECFB851D6D41A700DB2C8B /* SSJMotionPasswordLoginPasswordAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBE71CFD2DAA0061803B /* SSJMotionPasswordLoginPasswordAlertView.m */; };
@@ -11156,8 +11142,6 @@
 		9CD9BBD31CFD2DAA0061803B /* SSJSyncSettingTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJSyncSettingTableViewCell.m; sourceTree = "<group>"; };
 		9CD9BBD51CFD2DAA0061803B /* SSJAboutusViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJAboutusViewController.h; sourceTree = "<group>"; };
 		9CD9BBD61CFD2DAA0061803B /* SSJAboutusViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJAboutusViewController.m; sourceTree = "<group>"; };
-		9CD9BBE11CFD2DAA0061803B /* SSJMotionPasswordSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMotionPasswordSettingViewController.h; sourceTree = "<group>"; };
-		9CD9BBE21CFD2DAA0061803B /* SSJMotionPasswordSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMotionPasswordSettingViewController.m; sourceTree = "<group>"; };
 		9CD9BBE31CFD2DAA0061803B /* SSJMotionPasswordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMotionPasswordViewController.h; sourceTree = "<group>"; };
 		9CD9BBE41CFD2DAA0061803B /* SSJMotionPasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMotionPasswordViewController.m; sourceTree = "<group>"; };
 		9CD9BBE61CFD2DAA0061803B /* SSJMotionPasswordLoginPasswordAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMotionPasswordLoginPasswordAlertView.h; sourceTree = "<group>"; };
@@ -11991,6 +11975,13 @@
 				7D5213E51F05EF78004FE68A /* SSJForgetAndResetPasswordNetworkService.m */,
 			);
 			path = Network;
+			sourceTree = "<group>";
+		};
+		7D5DBB311F061EF500E04555 /* Deprecated */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Deprecated;
 			sourceTree = "<group>";
 		};
 		7D5F323F1CEAE6C10086B67E /* BookKeeping */ = {
@@ -14443,6 +14434,7 @@
 		9CD9BBDF1CFD2DAA0061803B /* MotionPassword */ = {
 			isa = PBXGroup;
 			children = (
+				7D5DBB311F061EF500E04555 /* Deprecated */,
 				9CD9BBE01CFD2DAA0061803B /* Controller */,
 				9CD9BBE51CFD2DAA0061803B /* View */,
 			);
@@ -14452,8 +14444,6 @@
 		9CD9BBE01CFD2DAA0061803B /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				9CD9BBE11CFD2DAA0061803B /* SSJMotionPasswordSettingViewController.h */,
-				9CD9BBE21CFD2DAA0061803B /* SSJMotionPasswordSettingViewController.m */,
 				9CD9BBE31CFD2DAA0061803B /* SSJMotionPasswordViewController.h */,
 				9CD9BBE41CFD2DAA0061803B /* SSJMotionPasswordViewController.m */,
 				7DE681631E42FBE30023622E /* UIViewController+SSJMotionPassword.h */,
@@ -17245,7 +17235,6 @@
 				7D08A1271E4999D30085A8FB /* SSJMotionPasswordViewController.m in Sources */,
 				7D08A1281E4999D30085A8FB /* SSJFundingDetailCell.m in Sources */,
 				7D08A1291E4999D30085A8FB /* SSJLoanModel.m in Sources */,
-				7D08A12A1E4999D30085A8FB /* SSJMotionPasswordSettingViewController.m in Sources */,
 				7D08A12B1E4999D30085A8FB /* SSJForgotPSWSendVerCodeService.m in Sources */,
 				7D08A12C1E4999D30085A8FB /* SSJMagicExportCalendarIndexPath.m in Sources */,
 				7D08A12D1E4999D30085A8FB /* SSJMotionPasswordLoginPasswordAlertView.m in Sources */,
@@ -17904,7 +17893,6 @@
 				7DA13A7E1E35AED7000490A4 /* SSJMotionPasswordViewController.m in Sources */,
 				7DA13A7F1E35AED7000490A4 /* SSJFundingDetailCell.m in Sources */,
 				7DA13A801E35AED7000490A4 /* SSJLoanModel.m in Sources */,
-				7DA13A811E35AED7000490A4 /* SSJMotionPasswordSettingViewController.m in Sources */,
 				7DA13A821E35AED7000490A4 /* SSJForgotPSWSendVerCodeService.m in Sources */,
 				7DA13A831E35AED7000490A4 /* SSJMagicExportCalendarIndexPath.m in Sources */,
 				7DA13A841E35AED7000490A4 /* SSJMotionPasswordLoginPasswordAlertView.m in Sources */,
@@ -18567,7 +18555,6 @@
 				7DBB3B0C1E55C2EE0075E638 /* SSJMotionPasswordViewController.m in Sources */,
 				7DBB3B0D1E55C2EE0075E638 /* SSJFundingDetailCell.m in Sources */,
 				7DBB3B0E1E55C2EE0075E638 /* SSJLoanModel.m in Sources */,
-				7DBB3B0F1E55C2EE0075E638 /* SSJMotionPasswordSettingViewController.m in Sources */,
 				7DBB3B101E55C2EE0075E638 /* SSJForgotPSWSendVerCodeService.m in Sources */,
 				7DBB3B111E55C2EE0075E638 /* SSJMagicExportCalendarIndexPath.m in Sources */,
 				7DBB3B121E55C2EE0075E638 /* SSJMotionPasswordLoginPasswordAlertView.m in Sources */,
@@ -19227,7 +19214,6 @@
 				7DBB3FA71E55C4E00075E638 /* SSJMotionPasswordViewController.m in Sources */,
 				7DBB3FA81E55C4E00075E638 /* SSJFundingDetailCell.m in Sources */,
 				7DBB3FA91E55C4E00075E638 /* SSJLoanModel.m in Sources */,
-				7DBB3FAA1E55C4E00075E638 /* SSJMotionPasswordSettingViewController.m in Sources */,
 				7DBB3FAB1E55C4E00075E638 /* SSJForgotPSWSendVerCodeService.m in Sources */,
 				7DBB3FAC1E55C4E00075E638 /* SSJMagicExportCalendarIndexPath.m in Sources */,
 				7DBB3FAD1E55C4E00075E638 /* SSJMotionPasswordLoginPasswordAlertView.m in Sources */,
@@ -19868,7 +19854,6 @@
 				7DFB16F91EB0341E00292DD3 /* SSJMotionPasswordViewController.m in Sources */,
 				7DFB16FA1EB0341E00292DD3 /* SSJFundingDetailCell.m in Sources */,
 				7DFB16FB1EB0341E00292DD3 /* SSJLoanModel.m in Sources */,
-				7DFB16FC1EB0341E00292DD3 /* SSJMotionPasswordSettingViewController.m in Sources */,
 				7D5213A41F0354F4004FE68A /* SSJSettingViewController.m in Sources */,
 				7DFB16FD1EB0341E00292DD3 /* SSJColorSelectCollectionViewCell.m in Sources */,
 				9163C8A81F03B008004FBB07 /* SSJAPPEvaluatePopView.m in Sources */,
@@ -20544,7 +20529,6 @@
 				9C13F57D1E8267D300AC5FA9 /* SSJMotionPasswordViewController.m in Sources */,
 				9C13F57E1E8267D300AC5FA9 /* SSJFundingDetailCell.m in Sources */,
 				9C13F57F1E8267D300AC5FA9 /* SSJLoanModel.m in Sources */,
-				9C13F5801E8267D300AC5FA9 /* SSJMotionPasswordSettingViewController.m in Sources */,
 				9C13F5811E8267D300AC5FA9 /* SSJForgotPSWSendVerCodeService.m in Sources */,
 				9C13F5821E8267D300AC5FA9 /* SSJMagicExportCalendarIndexPath.m in Sources */,
 				9C13F5831E8267D300AC5FA9 /* SSJMotionPasswordLoginPasswordAlertView.m in Sources */,
@@ -21190,7 +21174,6 @@
 				9C4C20A11E9E30C8000C5F15 /* SSJFundingDetailCell.m in Sources */,
 				9C4C20A21E9E30C8000C5F15 /* SSJLoanModel.m in Sources */,
 				7D5213A21F0354F3004FE68A /* SSJSettingViewController.m in Sources */,
-				9C4C20A31E9E30C8000C5F15 /* SSJMotionPasswordSettingViewController.m in Sources */,
 				9163C8A61F03B008004FBB07 /* SSJAPPEvaluatePopView.m in Sources */,
 				9C4C20A41E9E30C8000C5F15 /* SSJColorSelectCollectionViewCell.m in Sources */,
 				9C4C20A51E9E30C8000C5F15 /* SSJForgotPSWSendVerCodeService.m in Sources */,
@@ -21859,7 +21842,6 @@
 				9C71B8EC1EFCEA0B00C63A27 /* SSJNewMineHomeViewController.m in Sources */,
 				9C7D2D871E8DF8A80093001F /* SSJFundingDetailCell.m in Sources */,
 				9C7D2D881E8DF8A80093001F /* SSJLoanModel.m in Sources */,
-				9C7D2D891E8DF8A80093001F /* SSJMotionPasswordSettingViewController.m in Sources */,
 				9C7D2D8A1E8DF8A80093001F /* SSJColorSelectCollectionViewCell.m in Sources */,
 				9C7D2D8B1E8DF8A80093001F /* SSJForgotPSWSendVerCodeService.m in Sources */,
 				9C7D2D8C1E8DF8A80093001F /* SSJMagicExportCalendarIndexPath.m in Sources */,
@@ -22521,7 +22503,6 @@
 				9C71B8F41EFCEA0B00C63A27 /* SSJNewMineHomeViewController.m in Sources */,
 				9C7D2FFE1E8DF96B0093001F /* SSJFundingDetailCell.m in Sources */,
 				9C7D2FFF1E8DF96B0093001F /* SSJLoanModel.m in Sources */,
-				9C7D30001E8DF96B0093001F /* SSJMotionPasswordSettingViewController.m in Sources */,
 				9C7D30011E8DF96B0093001F /* SSJColorSelectCollectionViewCell.m in Sources */,
 				9C7D30021E8DF96B0093001F /* SSJForgotPSWSendVerCodeService.m in Sources */,
 				9C7D30031E8DF96B0093001F /* SSJMagicExportCalendarIndexPath.m in Sources */,
@@ -23172,7 +23153,6 @@
 				9C80FD3F1E95E88E00B1BAAC /* SSJMotionPasswordViewController.m in Sources */,
 				9C80FD401E95E88E00B1BAAC /* SSJFundingDetailCell.m in Sources */,
 				9C80FD411E95E88E00B1BAAC /* SSJLoanModel.m in Sources */,
-				9C80FD421E95E88E00B1BAAC /* SSJMotionPasswordSettingViewController.m in Sources */,
 				9C80FD431E95E88E00B1BAAC /* SSJColorSelectCollectionViewCell.m in Sources */,
 				7D5213A11F0354F2004FE68A /* SSJSettingViewController.m in Sources */,
 				9C80FD441E95E88E00B1BAAC /* SSJForgotPSWSendVerCodeService.m in Sources */,
@@ -23833,7 +23813,6 @@
 				9C9CEEFF1EA5F73A007657FE /* SSJMotionPasswordViewController.m in Sources */,
 				9C9CEF001EA5F73A007657FE /* SSJFundingDetailCell.m in Sources */,
 				9C9CEF011EA5F73A007657FE /* SSJLoanModel.m in Sources */,
-				9C9CEF021EA5F73A007657FE /* SSJMotionPasswordSettingViewController.m in Sources */,
 				9C9CEF031EA5F73A007657FE /* SSJColorSelectCollectionViewCell.m in Sources */,
 				7D5213A31F0354F3004FE68A /* SSJSettingViewController.m in Sources */,
 				9C9CEF041EA5F73A007657FE /* SSJForgotPSWSendVerCodeService.m in Sources */,
@@ -24500,7 +24479,6 @@
 				9CDB4A431EF3ABBC0097E09D /* SSJMotionPasswordViewController.m in Sources */,
 				9CDB4A441EF3ABBC0097E09D /* SSJFundingDetailCell.m in Sources */,
 				9CDB4A451EF3ABBC0097E09D /* SSJLoanModel.m in Sources */,
-				9CDB4A461EF3ABBC0097E09D /* SSJMotionPasswordSettingViewController.m in Sources */,
 				9CDB4A471EF3ABBC0097E09D /* SSJColorSelectCollectionViewCell.m in Sources */,
 				9C71B8F91EFCEA0B00C63A27 /* SSJNewMineHomeViewController.m in Sources */,
 				9CDB4A481EF3ABBC0097E09D /* SSJForgotPSWSendVerCodeService.m in Sources */,
@@ -25140,7 +25118,6 @@
 				7D70C1481E00E84300479E44 /* SSJReportFormCurveHeaderViewItem.m in Sources */,
 				7D52133D1F022ED3004FE68A /* SSJSettingPasswordViewController.m in Sources */,
 				91E0B9A31E01244A00D8516E /* SSJBookKeepingHomeEvaluatePopView.m in Sources */,
-				9CECFB821D6D41A700DB2C8B /* SSJMotionPasswordSettingViewController.m in Sources */,
 				9C24CFCE1D76CA0E0095D150 /* SSJBooksTypeCollectionViewCell.m in Sources */,
 				7DB9F82B1DFFC9230084E998 /* SSJReportFormsNoDataCellItem.m in Sources */,
 				9CECFB831D6D41A700DB2C8B /* SSJForgotPSWSendVerCodeService.m in Sources */,
@@ -25813,7 +25790,6 @@
 				9CD9BC331CFD2DAA0061803B /* SSJMotionPasswordViewController.m in Sources */,
 				9C9471841CEB224C00D69079 /* SSJFundingDetailCell.m in Sources */,
 				7D87AE9A1D6319DC0024D33C /* SSJLoanModel.m in Sources */,
-				9CD9BC321CFD2DAA0061803B /* SSJMotionPasswordSettingViewController.m in Sources */,
 				9C3A2D551E6673B500DFAE2C /* SSJColorSelectCollectionViewCell.m in Sources */,
 				9C71B8EE1EFCEA0B00C63A27 /* SSJNewMineHomeViewController.m in Sources */,
 				BD70DF5D1C4751EA000E6CC9 /* SSJForgotPSWSendVerCodeService.m in Sources */,
