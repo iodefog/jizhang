@@ -12,6 +12,7 @@
 #import "SSJVerifCodeField.h"
 #import "SSJInviteCodeJoinSuccessView.h"
 #import "SSJBindMobileNoNetworkService.h"
+#import "SSJUserTableManager.h"
 
 @interface SSJChangeMobileNoThirdViewController ()
 
@@ -141,7 +142,13 @@
 }
 
 - (void)bindNewMobileNo {
-    [self.service changeMobileNoWithMobileNo:self.mobileNo authCode:self.authCodeField.text success:^(SSJBaseNetworkService * _Nonnull service) {
+    [[[[self requestBindMobileNo] then:^RACSignal *{
+        return [self queryUserItem];
+    }] flattenMap:^RACStream *(SSJUserItem *userItem) {
+        return [self saveMobildNo:userItem];
+    }] subscribeError:^(NSError *error) {
+        [SSJAlertViewAdapter showError:error];
+    } completed:^{
         UIViewController *setttingVC = [self ssj_previousViewControllerBySubtractingIndex:4];
         if (setttingVC) {
             [self.navigationController popToViewController:setttingVC animated:YES];
@@ -149,8 +156,41 @@
                 [self.successAlertView showWithDesc:@"更换手机号成功"];
             });
         }
-    } failure:^(SSJBaseNetworkService * _Nonnull service) {
-        [SSJAlertViewAdapter showError:service.error];
+    }];
+}
+
+- (RACSignal *)requestBindMobileNo {
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [self.service changeMobileNoWithMobileNo:self.mobileNo authCode:self.authCodeField.text success:^(SSJBaseNetworkService * _Nonnull service) {
+            [subscriber sendCompleted];
+        } failure:^(SSJBaseNetworkService * _Nonnull service) {
+            [subscriber sendError:service.error];
+        }];
+        return nil;
+    }];
+}
+
+- (RACSignal *)queryUserItem {
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [SSJUserTableManager queryUserItemWithID:SSJUSERID() success:^(SSJUserItem * _Nonnull userItem) {
+            [subscriber sendNext:userItem];
+            [subscriber sendCompleted];
+        } failure:^(NSError * _Nonnull error) {
+            [subscriber sendError:error];
+        }];
+        return nil;
+    }];
+}
+
+- (RACSignal *)saveMobildNo:(SSJUserItem *)userItem {
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        userItem.mobileNo = self.service.mobileNo;
+        [SSJUserTableManager saveUserItem:userItem success:^{
+            [subscriber sendCompleted];
+        } failure:^(NSError * _Nonnull error) {
+            [subscriber sendError:error];
+        }];
+        return nil;
     }];
 }
 

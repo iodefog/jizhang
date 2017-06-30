@@ -14,6 +14,7 @@
 #import "SSJInviteCodeJoinSuccessView.h"
 #import "SSJBindMobileNoNetworkService.h"
 #import "SSJForgetAndResetPasswordNetworkService.h"
+#import "SSJUserTableManager.h"
 
 @interface SSJSettingPasswordViewController ()
 
@@ -152,35 +153,101 @@
         @strongify(self);
         switch (self.type) {
             case SSJSettingPasswordTypeMobileNoBinding:
-                [self bindMobileNo];
+                [self executeBindMobileNoProcess];
                 break;
                 
             case SSJSettingPasswordTypeResettingPassword:
-                [self resetPassword];
+                [self executeResetPasswordProcess];
                 break;
         }
     }];
 }
 
-- (void)bindMobileNo {
-    [self.bindMobileNoService bindMobileNoWithMobileNo:self.mobileNo authCode:self.authCodeField.text password:self.passwordField.text success:^(SSJBaseNetworkService * _Nonnull service) {
+- (void)executeBindMobileNoProcess {
+    [[[[self bindMobileNo] then:^RACSignal *{
+        return [self queryUserItem];
+    }] flattenMap:^RACStream *(SSJUserItem *userItem) {
+        return [self saveMobildNo:userItem];
+    }] subscribeError:^(NSError *error) {
+        [SSJAlertViewAdapter showError:error];
+    } completed:^{
         [self goBackToSettingPage];
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [self.successAlertView showWithDesc:@"绑定手机号成功"];
         });
-    } failure:^(SSJBaseNetworkService * _Nonnull service) {
-        [SSJAlertViewAdapter showError:service.error];
     }];
 }
 
-- (void)resetPassword {
-    [self.resetPasswordService requestWithType:SSJResetPasswordType mobileNo:self.mobileNo authCode:self.authCodeField.text password:self.passwordField.text success:^(SSJBaseNetworkService * _Nonnull service) {
+- (void)executeResetPasswordProcess {
+    [[[[self resetPassword] then:^RACSignal *{
+        return [self queryUserItem];
+    }] flattenMap:^RACStream *(SSJUserItem *userItem) {
+        return [self savePassword:userItem];
+    }] subscribeError:^(NSError *error) {
+        [SSJAlertViewAdapter showError:error];
+    } completed:^{
         [self goBackToSettingPage];
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [self.successAlertView showWithDesc:@"修改密码成功"];
         });
-    } failure:^(SSJBaseNetworkService * _Nonnull service) {
-        [SSJAlertViewAdapter showError:service.error];
+    }];
+}
+
+- (RACSignal *)bindMobileNo {
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [self.bindMobileNoService bindMobileNoWithMobileNo:self.mobileNo authCode:self.authCodeField.text password:self.passwordField.text success:^(__kindof SSJBaseNetworkService * _Nonnull service) {
+            [subscriber sendCompleted];
+        } failure:^(__kindof SSJBaseNetworkService * _Nonnull service) {
+            [subscriber sendError:service.error];
+        }];
+        return nil;
+    }];
+}
+
+- (RACSignal *)resetPassword {
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [self.resetPasswordService requestWithType:SSJResetPasswordType mobileNo:self.mobileNo authCode:self.authCodeField.text password:self.passwordField.text success:^(SSJBaseNetworkService * _Nonnull service) {
+            [subscriber sendCompleted];
+        } failure:^(SSJBaseNetworkService * _Nonnull service) {
+            [subscriber sendError:service.error];
+        }];
+        return nil;
+    }];
+}
+
+- (RACSignal *)queryUserItem {
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [SSJUserTableManager queryUserItemWithID:SSJUSERID() success:^(SSJUserItem * _Nonnull userItem) {
+            [subscriber sendNext:userItem];
+            [subscriber sendCompleted];
+        } failure:^(NSError * _Nonnull error) {
+            [subscriber sendError:error];
+        }];
+        return nil;
+    }];
+}
+
+- (RACSignal *)saveMobildNo:(SSJUserItem *)userItem {
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        userItem.mobileNo = self.bindMobileNoService.mobileNo;
+        [SSJUserTableManager saveUserItem:userItem success:^{
+            [subscriber sendCompleted];
+        } failure:^(NSError * _Nonnull error) {
+            [subscriber sendError:error];
+        }];
+        return nil;
+    }];
+}
+
+- (RACSignal *)savePassword:(SSJUserItem *)userItem {
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        userItem.loginPWD = self.bindMobileNoService.password.ssj_md5HexDigest;
+        [SSJUserTableManager saveUserItem:userItem success:^{
+            [subscriber sendCompleted];
+        } failure:^(NSError * _Nonnull error) {
+            [subscriber sendError:error];
+        }];
+        return nil;
     }];
 }
 
