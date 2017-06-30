@@ -75,7 +75,7 @@ static NSString *const kFundingListFirstLineCellID = @"kFundingListFirstLineCell
             cell.textLabel.text = @"资金类型";
             if ([self.fundItem isKindOfClass:[SSJCreditCardItem class]]) {
                 SSJCreditCardItem *cardItem = (SSJCreditCardItem *)self.fundItem;
-                cell.textLabel.text = cardItem.cardName;
+                cell.detailTextLabel.text = cardItem.cardName;
             }else{
                 SSJFinancingHomeitem *financingItem = (SSJFinancingHomeitem *)self.fundItem;
                 cell.detailTextLabel.text = financingItem.fundingName;

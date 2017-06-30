@@ -218,7 +218,11 @@ static NSString *const SSJFundingHomeSelectCellIndetifer = @"SSJFundingHomeSelec
         } else {
             [self.selectedFundids addObject:fundId];
         }
-        self.selectedFundid = [self.selectedFundids componentsJoinedByString:@","];
+        if (self.selectedFundids.count == self.items.count - 1) {
+            self.selectedFundid = @"all";
+        } else {
+            self.selectedFundid = [self.selectedFundids componentsJoinedByString:@","];
+        }
 
     }
     
