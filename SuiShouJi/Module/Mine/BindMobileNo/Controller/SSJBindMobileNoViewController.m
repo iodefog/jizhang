@@ -107,7 +107,7 @@
 
     RAC(self.viewModel, phoneNum) = self.phoneNoField.rac_textSignal;
     self.nextBtn.rac_command = self.viewModel.verifyPhoneNumRequestCommand;
-    [self.viewModel.verifyPhoneNumRequestCommand.executionSignals.switchToLatest subscribeNext:^(NSNumber *result) {
+    [self.nextBtn.rac_command.executionSignals.switchToLatest subscribeNext:^(NSNumber *result) {
         @strongify(self);
         if ([result boolValue]) {
             NSError *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"此手机号已经注册过了，换一个吧"}];
