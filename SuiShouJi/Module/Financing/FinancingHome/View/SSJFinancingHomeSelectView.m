@@ -236,7 +236,9 @@ static NSString *const SSJFundingHomeSelectCellIndetifer = @"SSJFundingHomeSelec
             self.top = self.point.y;
         } timeInterval:kDuration fininshed:^(BOOL complation) {
             self.transform = CGAffineTransformIdentity;
-            
+            if (self.dismissBlock) {
+                self.dismissBlock(self.selectedFundid, self.selectedFundids);
+            }
         }];
     }
 
