@@ -24,10 +24,10 @@
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        self.maxLength = 15;
+        self.maxLength = SSJMaxPasswordLength;
         self.textColor = [UIColor ssj_colorWithHex:@"333333"];
         self.clearButtonMode = UITextFieldViewModeWhileEditing;
-        self.placeholder = @"请设置6位以上密码";
+        self.placeholder = [NSString stringWithFormat:@"请设置%d位以上密码", (int)SSJMinPasswordLength];
         self.font = [UIFont ssj_helveticaRegularFontOfSize:SSJ_FONT_SIZE_3];
         
         self.secureTextEntry = YES;

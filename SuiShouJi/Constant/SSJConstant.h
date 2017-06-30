@@ -139,8 +139,6 @@ typedef NS_ENUM(NSInteger, SSJShareBooksMemberState) {
     SSJShareBooksMemberStateKickedOut = 2
 };
 
-
-
 /**
  账本类型
 
@@ -177,6 +175,12 @@ extern const float SSJMaskAlpha;
 extern const NSTimeInterval SSJRequestTimeDuration;
 
 extern const NSUInteger SSJAuthCodeLength;
+
+extern const NSUInteger SSJMobileNoLength;
+
+extern const NSUInteger SSJMinPasswordLength;
+
+extern const NSUInteger SSJMaxPasswordLength;
 
 ///------------------------------------------
 /// @name 字符串常量

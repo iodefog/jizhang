@@ -20,7 +20,6 @@
 @interface SSJProductAdviceViewController ()<UITableViewDelegate,UITableViewDataSource,SSJProductAdviceTableHeaderViewDelegate>
 @property (nonatomic, strong) TPKeyboardAvoidingTableView *tableView;
 @property (nonatomic, strong) SSJProductAdviceTableHeaderView *productAdviceTableHeaderView;
-@property (nonatomic, strong) NSArray *chartMessageArray;
 /**
  <#注释#>
  */
@@ -193,7 +192,7 @@
         }
         lastItem = item;
     }
-    self.chartMessageArray = [NSMutableArray arrayWithArray:arr];
+//    self.chartMessageArray = [NSMutableArray arrayWithArray:arr];
     [self.tableView reloadData];
     
     
@@ -240,13 +239,13 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.chartMessageArray.count;
+    return 2;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
    SSJMoreProductAdviceTableViewCell *cell =  [SSJMoreProductAdviceTableViewCell cellWithTableView:tableView];
-    cell.message = [self.chartMessageArray ssj_safeObjectAtIndex:indexPath.row];
+//    cell.message = [self.chartMessageArray ssj_safeObjectAtIndex:indexPath.row];
     return cell;
 }
 
@@ -260,8 +259,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-   SSJChatMessageItem *item = [self.chartMessageArray ssj_safeObjectAtIndex:indexPath.row];
-    return item.cellHeight;
+    return 44;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForHeaderInSection:(NSInteger)section

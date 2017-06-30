@@ -24,7 +24,7 @@
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        self.mobileNoLength = 11;
+        self.mobileNoLength = SSJMobileNoLength;
         self.keyboardType = UIKeyboardTypeNumberPad;
         self.clearButtonMode = UITextFieldViewModeWhileEditing;
         self.leftView = self.areaCodeLab;

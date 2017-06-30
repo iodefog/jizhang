@@ -7,10 +7,13 @@
 //
 
 #import "SSJSettingPasswordViewController.h"
+#import "SSJSettingViewController.h"
 #import "TPKeyboardAvoidingScrollView.h"
 #import "SSJVerifCodeField.h"
 #import "SSJPasswordField.h"
-
+#import "SSJInviteCodeJoinSuccessView.h"
+#import "SSJBindMobileNoNetworkService.h"
+#import "SSJForgetAndResetPasswordNetworkService.h"
 
 @interface SSJSettingPasswordViewController ()
 
@@ -26,6 +29,14 @@
 
 @property (nonatomic, strong) UIButton *bindingBtn;
 
+@property (nonatomic, strong) SSJInviteCodeJoinSuccessView *successAlertView;
+
+@property (nonatomic, strong) SSJLoginVerifyPhoneNumViewModel *viewModel;
+
+@property (nonatomic, strong) SSJBindMobileNoNetworkService *bindMobileNoService;
+
+@property (nonatomic, strong) SSJForgetAndResetPasswordNetworkService *resetPasswordService;
+
 @end
 
 @implementation SSJSettingPasswordViewController
@@ -37,6 +48,7 @@
     [self setUpViews];
     [self setUpBindings];
     [self updateAppearance];
+    [self.authCodeField getVerifCode];
     [self.view setNeedsUpdateConstraints];
 }
 
@@ -115,7 +127,70 @@
 }
 
 - (void)setUpBindings {
+    self.viewModel.phoneNum = self.mobileNo;
+    self.authCodeField.viewModel = self.viewModel;
+    RAC(self.viewModel, verificationCode) = self.authCodeField.rac_textSignal;
+    RAC(self.viewModel, passwardNum) = self.passwordField.rac_textSignal;
+    RAC(self.bindingBtn, enabled) = self.viewModel.enableRegAndLoginSignal;
     
+    @weakify(self);
+    RAC(self.descLab,text) = [RACObserve(self.authCodeField, getAuthCodeState) map:^id(NSNumber *value) {
+        @strongify(self);
+        SSJGetVerifCodeState state = [value integerValue];
+        if (state == SSJGetVerifCodeStateSent) {
+            NSString *ciphertext = self.mobileNo;
+            if (self.mobileNo.length >= 7) {
+                ciphertext = [self.mobileNo stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
+            }
+            return [NSString stringWithFormat:@"验证码已发送至：%@", ciphertext];
+        } else {
+            return nil;
+        }
+    }];
+    
+    [[self.bindingBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
+        @strongify(self);
+        switch (self.type) {
+            case SSJSettingPasswordTypeMobileNoBinding:
+                [self bindMobileNo];
+                break;
+                
+            case SSJSettingPasswordTypeResettingPassword:
+                [self resetPassword];
+                break;
+        }
+    }];
+}
+
+- (void)bindMobileNo {
+    [self.bindMobileNoService bindMobileNoWithMobileNo:self.mobileNo authCode:self.authCodeField.text password:self.passwordField.text success:^(SSJBaseNetworkService * _Nonnull service) {
+        [self goBackToSettingPage];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self.successAlertView showWithDesc:@"绑定手机号成功"];
+        });
+    } failure:^(SSJBaseNetworkService * _Nonnull service) {
+        [SSJAlertViewAdapter showError:service.error];
+    }];
+}
+
+- (void)resetPassword {
+    [self.resetPasswordService requestWithType:SSJResetPasswordType mobileNo:self.mobileNo authCode:self.authCodeField.text password:self.passwordField.text success:^(SSJBaseNetworkService * _Nonnull service) {
+        [self goBackToSettingPage];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self.successAlertView showWithDesc:@"修改密码成功"];
+        });
+    } failure:^(SSJBaseNetworkService * _Nonnull service) {
+        [SSJAlertViewAdapter showError:service.error];
+    }];
+}
+
+- (void)goBackToSettingPage {
+    for (UIViewController *controller in self.navigationController.viewControllers) {
+        if ([controller isKindOfClass:[SSJSettingViewController class]]) {
+            [self.navigationController popToViewController:controller animated:YES];
+            break;
+        }
+    }
 }
 
 #pragma mark - Lazyloading
@@ -173,6 +248,36 @@
         }
     }
     return _bindingBtn;
+}
+
+- (SSJInviteCodeJoinSuccessView *)successAlertView {
+    if (!_successAlertView) {
+        _successAlertView = [[SSJInviteCodeJoinSuccessView alloc] init];
+    }
+    return _successAlertView;
+}
+
+- (SSJLoginVerifyPhoneNumViewModel *)viewModel {
+    if (!_viewModel) {
+        _viewModel = [[SSJLoginVerifyPhoneNumViewModel alloc] init];
+    }
+    return _viewModel;
+}
+
+- (SSJBindMobileNoNetworkService *)bindMobileNoService {
+    if (!_bindMobileNoService) {
+        _bindMobileNoService = [[SSJBindMobileNoNetworkService alloc] init];
+        _bindMobileNoService.showLodingIndicator = YES;
+    }
+    return _bindMobileNoService;
+}
+
+- (SSJForgetAndResetPasswordNetworkService *)resetPasswordService {
+    if (!_resetPasswordService) {
+        _resetPasswordService = [[SSJForgetAndResetPasswordNetworkService alloc] init];
+        _resetPasswordService.showLodingIndicator = YES;
+    }
+    return _resetPasswordService;
 }
 
 @end

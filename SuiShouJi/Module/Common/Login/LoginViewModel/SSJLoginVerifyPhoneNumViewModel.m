@@ -625,7 +625,7 @@
 }
 
 - (RACCommand *)verifyPhoneNumRequestCommand {
-    if (!_verifyPhoneNumRequestCommand) {
+//    if (!_verifyPhoneNumRequestCommand) {
         _verifyPhoneNumRequestCommand = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
             @weakify(self);
             RACSignal *signal = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
@@ -645,7 +645,7 @@
                 return @([[result objectForKey:@"code"] boolValue]);
             }];
         }];
-    }
+//    }
     return _verifyPhoneNumRequestCommand;
 }
 
@@ -653,7 +653,7 @@
     if (!_enableVerifySignal) {
         //手机号位数，是否同意用户协议
         _enableVerifySignal = [RACSignal combineLatest:@[RACObserve(self, phoneNum),RACObserve(self, agreeProtocol)] reduce:^id(NSString *phoneNum,NSNumber *isAgree){
-            return @(phoneNum.length >= 11 && isAgree.boolValue);
+            return @(phoneNum.length >= SSJMobileNoLength && isAgree.boolValue);
         }];
     }
     return _enableVerifySignal;
@@ -662,7 +662,7 @@
 - (RACSignal *)enableRegAndLoginSignal {
     if (!_enableRegAndLoginSignal) {
         _enableRegAndLoginSignal = [[RACSignal combineLatest:@[RACObserve(self, verificationCode),RACObserve(self, passwardNum)] reduce:^id(NSString *code,NSString *passward){
-            return @(code.length == 6 && passward.length >=6 && passward.length <=15);
+            return @(code.length >= SSJAuthCodeLength && passward.length >= SSJMinPasswordLength && passward.length <= SSJMaxPasswordLength);
         }] skip:1];
     }
     return _enableRegAndLoginSignal;
@@ -671,7 +671,7 @@
 - (RACSignal *)enableNormalLoginSignal {
     if (_enableNormalLoginSignal) {
         _enableNormalLoginSignal = [RACSignal combineLatest:@[self.passwardNum] reduce:^id(NSString *passward){
-            return @(passward.length >=6 && passward.length <= 15);
+            return @(passward.length >= SSJMinPasswordLength && passward.length <= SSJMaxPasswordLength);
         }];
     }
     return _enableNormalLoginSignal;
@@ -767,6 +767,8 @@
                     [SSJThirdPartyLoginManger shareInstance].weixinLogin = nil;
                     self.loginType = SSJLoginTypeWeiXin;
                     [self thirdLoginWithLoginItem:item subscriber:subscriber];
+                } failBlock:^{
+                    [subscriber sendError:nil];
                 }];
                 
                 return nil;
@@ -795,6 +797,8 @@
                     [SSJThirdPartyLoginManger shareInstance].weixinLogin = nil;
                     self.loginType = SSJLoginTypeQQ;
                     [self thirdLoginWithLoginItem:item subscriber:subscriber];
+                } failBlock:^{
+                    [subscriber sendError:nil];
                 }];
                 
                 return nil;
