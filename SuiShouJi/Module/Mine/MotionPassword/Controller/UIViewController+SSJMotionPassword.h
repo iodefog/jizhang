@@ -10,6 +10,8 @@
 
 @interface UIViewController (SSJMotionPassword)
 
++ (void)verifyMotionPasswordIfNeeded:(void (^)(BOOL isVerified))finish animated:(BOOL)animated;
+
 - (void)ssj_remindUserToSetMotionPasswordIfNeeded;
 
 @end

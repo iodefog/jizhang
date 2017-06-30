@@ -16,8 +16,6 @@
 #import "SSJDatabaseUpgrader.h"
 #import "SSJRegularManager.h"
 #import "SSJThirdPartyLoginManger.h"
-#import "SSJMotionPasswordViewController.h"
-
 #import "SSJNavigationController.h"
 #import "SSJBookKeepingHomeViewController.h"
 #import "SSJNewMineHomeViewController.h"
@@ -26,8 +24,9 @@
 #import "MMDrawerController.h"
 #import "SSJFundingDetailsViewController.h"
 #import "SSJLoanDetailViewController.h"
-#import "SSJBookKeepingHomeEvaluatePopView.h"
+#import "UIViewController+SSJMotionPassword.h"
 
+#import "SSJBookKeepingHomeEvaluatePopView.h"
 #import "SSJGradientMaskView.h"
 #import "SSJCreditCardItem.h"
 
@@ -147,7 +146,7 @@ NSDate *SCYEnterBackgroundTime() {
     
     _startViewManager = [[SSJStartViewManager alloc] init];
     [_startViewManager showWithCompletion:^(SSJStartViewManager *manager){
-        [SSJMotionPasswordViewController verifyMotionPasswordIfNeeded:^(BOOL isVerified){
+        [UIViewController verifyMotionPasswordIfNeeded:^(BOOL isVerified){
             // 没有进入手势密码，直接进入首页的话，就调用reloadWithAnimation显示首页数据加载动画;
             // 因为从手势密码返回到首页会触发首页的viewWillAppear，在这个方法中也做了数据刷新，会把加载动画覆盖掉
             UITabBarController *tabVC = (UITabBarController *)((MMDrawerController *)[UIApplication sharedApplication].keyWindow.rootViewController).centerViewController;
@@ -210,7 +209,7 @@ NSDate *SCYEnterBackgroundTime() {
     NSTimeInterval interval = [backgroundTime timeIntervalSinceDate:[NSDate date]];
     interval = ABS(interval);
     if (interval >= kLockScreenDelay) {
-        [SSJMotionPasswordViewController verifyMotionPasswordIfNeeded:NULL animated:NO];
+        [UIViewController verifyMotionPasswordIfNeeded:NULL animated:NO];
     }
     // App 进入前台时，开启美洽服务
     [MQManager openMeiqiaService];

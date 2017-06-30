@@ -874,6 +874,20 @@
 		7D587E511CC0DF360058847B /* SSJStartViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D587E501CC0DF360058847B /* SSJStartViewManager.m */; };
 		7D587E5B1CC0DFF40058847B /* SSJServerLaunchView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D587E5A1CC0DFF40058847B /* SSJServerLaunchView.m */; };
 		7D5C862E1D2F96D300C73A9A /* SSJThemePlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5C862D1D2F96D300C73A9A /* SSJThemePlugin.m */; };
+		7D5DBB341F06588B00E04555 /* SSJFingerprintPWDViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5DBB331F06588B00E04555 /* SSJFingerprintPWDViewController.m */; };
+		7D5DBB351F06588B00E04555 /* SSJFingerprintPWDViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5DBB331F06588B00E04555 /* SSJFingerprintPWDViewController.m */; };
+		7D5DBB361F06588B00E04555 /* SSJFingerprintPWDViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5DBB331F06588B00E04555 /* SSJFingerprintPWDViewController.m */; };
+		7D5DBB371F06588B00E04555 /* SSJFingerprintPWDViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5DBB331F06588B00E04555 /* SSJFingerprintPWDViewController.m */; };
+		7D5DBB381F06588B00E04555 /* SSJFingerprintPWDViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5DBB331F06588B00E04555 /* SSJFingerprintPWDViewController.m */; };
+		7D5DBB391F06588B00E04555 /* SSJFingerprintPWDViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5DBB331F06588B00E04555 /* SSJFingerprintPWDViewController.m */; };
+		7D5DBB3A1F06588B00E04555 /* SSJFingerprintPWDViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5DBB331F06588B00E04555 /* SSJFingerprintPWDViewController.m */; };
+		7D5DBB3B1F06588B00E04555 /* SSJFingerprintPWDViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5DBB331F06588B00E04555 /* SSJFingerprintPWDViewController.m */; };
+		7D5DBB3C1F06588B00E04555 /* SSJFingerprintPWDViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5DBB331F06588B00E04555 /* SSJFingerprintPWDViewController.m */; };
+		7D5DBB3D1F06588B00E04555 /* SSJFingerprintPWDViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5DBB331F06588B00E04555 /* SSJFingerprintPWDViewController.m */; };
+		7D5DBB3E1F06588B00E04555 /* SSJFingerprintPWDViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5DBB331F06588B00E04555 /* SSJFingerprintPWDViewController.m */; };
+		7D5DBB3F1F06588B00E04555 /* SSJFingerprintPWDViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5DBB331F06588B00E04555 /* SSJFingerprintPWDViewController.m */; };
+		7D5DBB401F06588B00E04555 /* SSJFingerprintPWDViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5DBB331F06588B00E04555 /* SSJFingerprintPWDViewController.m */; };
+		7D5DBB411F06588B00E04555 /* SSJFingerprintPWDViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5DBB331F06588B00E04555 /* SSJFingerprintPWDViewController.m */; };
 		7D5F33281CEAE6C10086B67E /* SSJBookKeepingButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32461CEAE6C10086B67E /* SSJBookKeepingButton.m */; };
 		7D5F33291CEAE6C10086B67E /* SSJBookKeepingHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32481CEAE6C10086B67E /* SSJBookKeepingHeader.m */; };
 		7D5F332A1CEAE6C10086B67E /* SSJBookKeepingHomeNodateFooter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F324A1CEAE6C10086B67E /* SSJBookKeepingHomeNodateFooter.m */; };
@@ -10105,6 +10119,8 @@
 		7D587E5A1CC0DFF40058847B /* SSJServerLaunchView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJServerLaunchView.m; sourceTree = "<group>"; };
 		7D5C862C1D2F96D300C73A9A /* SSJThemePlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJThemePlugin.h; sourceTree = "<group>"; };
 		7D5C862D1D2F96D300C73A9A /* SSJThemePlugin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJThemePlugin.m; sourceTree = "<group>"; };
+		7D5DBB321F06588B00E04555 /* SSJFingerprintPWDViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFingerprintPWDViewController.h; sourceTree = "<group>"; };
+		7D5DBB331F06588B00E04555 /* SSJFingerprintPWDViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFingerprintPWDViewController.m; sourceTree = "<group>"; };
 		7D5F32451CEAE6C10086B67E /* SSJBookKeepingButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookKeepingButton.h; sourceTree = "<group>"; };
 		7D5F32461CEAE6C10086B67E /* SSJBookKeepingButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBookKeepingButton.m; sourceTree = "<group>"; };
 		7D5F32471CEAE6C10086B67E /* SSJBookKeepingHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookKeepingHeader.h; sourceTree = "<group>"; };
@@ -14444,6 +14460,8 @@
 		9CD9BBE01CFD2DAA0061803B /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				7D5DBB321F06588B00E04555 /* SSJFingerprintPWDViewController.h */,
+				7D5DBB331F06588B00E04555 /* SSJFingerprintPWDViewController.m */,
 				9CD9BBE31CFD2DAA0061803B /* SSJMotionPasswordViewController.h */,
 				9CD9BBE41CFD2DAA0061803B /* SSJMotionPasswordViewController.m */,
 				7DE681631E42FBE30023622E /* UIViewController+SSJMotionPassword.h */,
@@ -17146,6 +17164,7 @@
 				7D08A0EE1E4999D30085A8FB /* SSJDatabaseVersion1.m in Sources */,
 				7D08A0EF1E4999D30085A8FB /* SSJLoanFundAccountSelectionViewItem.m in Sources */,
 				7D08A0F01E4999D30085A8FB /* SSJFundingTransferEditeViewController.m in Sources */,
+				7D5DBB391F06588B00E04555 /* SSJFingerprintPWDViewController.m in Sources */,
 				91708B311ECD84BB0021A33A /* SSJBookTypeViewController.m in Sources */,
 				9C6CAF9E1E76416C00262FAF /* SSJMoreBackImageViewCollectionReusableView.m in Sources */,
 				7D08A0F11E4999D30085A8FB /* SSJFundingDetailItem.m in Sources */,
@@ -17804,6 +17823,7 @@
 				7DA13A451E35AED7000490A4 /* SSJDatabaseVersion1.m in Sources */,
 				7DA13A461E35AED7000490A4 /* SSJLoanFundAccountSelectionViewItem.m in Sources */,
 				7DA13A471E35AED7000490A4 /* SSJFundingTransferEditeViewController.m in Sources */,
+				7D5DBB381F06588B00E04555 /* SSJFingerprintPWDViewController.m in Sources */,
 				91708B301ECD84BB0021A33A /* SSJBookTypeViewController.m in Sources */,
 				9C6CAF9D1E76416C00262FAF /* SSJMoreBackImageViewCollectionReusableView.m in Sources */,
 				7DA13A481E35AED7000490A4 /* SSJFundingDetailItem.m in Sources */,
@@ -18462,6 +18482,7 @@
 				7DBB3ACC1E55C2EE0075E638 /* SSJRecordMakingMoveCategoryAlertView.m in Sources */,
 				7DBB3ACD1E55C2EE0075E638 /* SSJMineHomeImageCell.m in Sources */,
 				7DBB3ACE1E55C2EE0075E638 /* SSJDatabaseVersion1.m in Sources */,
+				7D5DBB3A1F06588B00E04555 /* SSJFingerprintPWDViewController.m in Sources */,
 				91708B321ECD84BB0021A33A /* SSJBookTypeViewController.m in Sources */,
 				9C6CAF9F1E76416C00262FAF /* SSJMoreBackImageViewCollectionReusableView.m in Sources */,
 				7DBB3ACF1E55C2EE0075E638 /* SSJLoanFundAccountSelectionViewItem.m in Sources */,
@@ -19120,6 +19141,7 @@
 				7DBB3F661E55C4E00075E638 /* SSJFinancingHomeHeader.m in Sources */,
 				7DBB3F671E55C4E00075E638 /* SSJRecordMakingMoveCategoryAlertView.m in Sources */,
 				7DBB3F681E55C4E00075E638 /* SSJMineHomeImageCell.m in Sources */,
+				7D5DBB351F06588B00E04555 /* SSJFingerprintPWDViewController.m in Sources */,
 				91708B2D1ECD84BB0021A33A /* SSJBookTypeViewController.m in Sources */,
 				7DBB3F691E55C4E00075E638 /* SSJDatabaseVersion1.m in Sources */,
 				9C6CAF991E76416C00262FAF /* SSJMoreBackImageViewCollectionReusableView.m in Sources */,
@@ -19950,6 +19972,7 @@
 				7DFB17461EB0341E00292DD3 /* SSJUserTableManager.m in Sources */,
 				7DFB17471EB0341E00292DD3 /* SSJDomainManager.m in Sources */,
 				7D41327F1F01FBA200C623D1 /* SSJMobileNoField.m in Sources */,
+				7D5DBB401F06588B00E04555 /* SSJFingerprintPWDViewController.m in Sources */,
 				7DFB17481EB0341E00292DD3 /* SSJSearchResultItem.m in Sources */,
 				7DFB17491EB0341E00292DD3 /* SSJHomeLoadingView.m in Sources */,
 				7DFB174A1EB0341E00292DD3 /* SSJNormalWebViewController.m in Sources */,
@@ -20438,6 +20461,7 @@
 				9C13F5341E8267D300AC5FA9 /* SSJRecordMakingMoveCategoryAlertView.m in Sources */,
 				9C13F5351E8267D300AC5FA9 /* SSJMineHomeImageCell.m in Sources */,
 				9C13F5361E8267D300AC5FA9 /* SSJDatabaseVersion1.m in Sources */,
+				7D5DBB3B1F06588B00E04555 /* SSJFingerprintPWDViewController.m in Sources */,
 				9C13F5371E8267D300AC5FA9 /* SSJMoreBackImageViewCollectionReusableView.m in Sources */,
 				9C13F5381E8267D300AC5FA9 /* SSJLoanFundAccountSelectionViewItem.m in Sources */,
 				9C13F5391E8267D300AC5FA9 /* SSJFundingTransferEditeViewController.m in Sources */,
@@ -21268,6 +21292,7 @@
 				9C4C20ED1E9E30C8000C5F15 /* SSJUserTableManager.m in Sources */,
 				9C4C20EE1E9E30C8000C5F15 /* SSJDomainManager.m in Sources */,
 				7D41327D1F01FBA200C623D1 /* SSJMobileNoField.m in Sources */,
+				7D5DBB3E1F06588B00E04555 /* SSJFingerprintPWDViewController.m in Sources */,
 				9C4C20EF1E9E30C8000C5F15 /* SSJSearchResultItem.m in Sources */,
 				9C4C20F01E9E30C8000C5F15 /* SSJHomeLoadingView.m in Sources */,
 				9C4C20F11E9E30C8000C5F15 /* SSJNormalWebViewController.m in Sources */,
@@ -21815,6 +21840,7 @@
 				9C7D2D721E8DF8A80093001F /* SSJFinancingColorSelectHeader.m in Sources */,
 				9C7D2D731E8DF8A80093001F /* SSJMagicExportCalendarDateView.m in Sources */,
 				9C396FF21EC980A800AB267A /* SSJShareBookMemberItem.m in Sources */,
+				7D5DBB341F06588B00E04555 /* SSJFingerprintPWDViewController.m in Sources */,
 				7D4132731F01FBA200C623D1 /* SSJMobileNoField.m in Sources */,
 				9C7D2D741E8DF8A80093001F /* SSJMagicExportBookTypeSelectionCell.m in Sources */,
 				7D5213D61F050DFD004FE68A /* SSJBindMobileNoNetworkService.m in Sources */,
@@ -22476,6 +22502,7 @@
 				9C7D2FE91E8DF96B0093001F /* SSJFinancingColorSelectHeader.m in Sources */,
 				9C7D2FEA1E8DF96B0093001F /* SSJMagicExportCalendarDateView.m in Sources */,
 				9C396FFA1EC980A800AB267A /* SSJShareBookMemberItem.m in Sources */,
+				7D5DBB3C1F06588B00E04555 /* SSJFingerprintPWDViewController.m in Sources */,
 				7D41327B1F01FBA200C623D1 /* SSJMobileNoField.m in Sources */,
 				9C7D2FEB1E8DF96B0093001F /* SSJMagicExportBookTypeSelectionCell.m in Sources */,
 				7D5213DE1F050DFD004FE68A /* SSJBindMobileNoNetworkService.m in Sources */,
@@ -23250,6 +23277,7 @@
 				9C80FD8C1E95E88E00B1BAAC /* SSJUserTableManager.m in Sources */,
 				9C80FD8D1E95E88E00B1BAAC /* SSJDomainManager.m in Sources */,
 				7D41327C1F01FBA200C623D1 /* SSJMobileNoField.m in Sources */,
+				7D5DBB3D1F06588B00E04555 /* SSJFingerprintPWDViewController.m in Sources */,
 				9C80FD8E1E95E88E00B1BAAC /* SSJSearchResultItem.m in Sources */,
 				9C80FD8F1E95E88E00B1BAAC /* SSJHomeLoadingView.m in Sources */,
 				9C80FD901E95E88E00B1BAAC /* SSJNormalWebViewController.m in Sources */,
@@ -23910,6 +23938,7 @@
 				9C9CEF4C1EA5F73A007657FE /* SSJUserTableManager.m in Sources */,
 				9C9CEF4D1EA5F73A007657FE /* SSJDomainManager.m in Sources */,
 				7D41327E1F01FBA200C623D1 /* SSJMobileNoField.m in Sources */,
+				7D5DBB3F1F06588B00E04555 /* SSJFingerprintPWDViewController.m in Sources */,
 				9C9CEF4E1EA5F73A007657FE /* SSJSearchResultItem.m in Sources */,
 				9C9CEF4F1EA5F73A007657FE /* SSJHomeLoadingView.m in Sources */,
 				9C9CEF501EA5F73A007657FE /* SSJNormalWebViewController.m in Sources */,
@@ -24457,6 +24486,7 @@
 				9CDB4A2F1EF3ABBC0097E09D /* SSJLoanSyncTable.m in Sources */,
 				9CDB4A301EF3ABBC0097E09D /* SSJBookKeepingHomeBooksButton.m in Sources */,
 				9CDB4A311EF3ABBC0097E09D /* SSJThemBgImageClipViewController.m in Sources */,
+				7D5DBB411F06588B00E04555 /* SSJFingerprintPWDViewController.m in Sources */,
 				7D4132801F01FBA200C623D1 /* SSJMobileNoField.m in Sources */,
 				9CDB4A321EF3ABBC0097E09D /* GTMBase64.m in Sources */,
 				7D5213E31F050DFD004FE68A /* SSJBindMobileNoNetworkService.m in Sources */,
@@ -25468,6 +25498,7 @@
 				910AEE6D1F0230D6000E433C /* SSJVerifCodeField.m in Sources */,
 				9CECFC531D6D41A700DB2C8B /* SSJFundingTransferListViewController.m in Sources */,
 				7D22A34D1E4F16AC00190CEB /* SSJFontAddition.m in Sources */,
+				7D5DBB371F06588B00E04555 /* SSJFingerprintPWDViewController.m in Sources */,
 				9CECFC541D6D41A700DB2C8B /* SSJChargeMemberItem.m in Sources */,
 				9C71B8B71EFA1ABC00C63A27 /* SSJDatabaseVersion16.m in Sources */,
 				7D52138D1F0250D3004FE68A /* SSJChangeMobileNoStepView.m in Sources */,
@@ -25773,6 +25804,7 @@
 				7DDB6D4A1DBA063600D823AE /* GTMBase64.m in Sources */,
 				913E2BF91ECEE20A008242CD /* SSJSelectCreateShareBookType.m in Sources */,
 				7D7EF13E1ECC350D00E5D51D /* SSJChargeImageBrowseView.m in Sources */,
+				7D5DBB361F06588B00E04555 /* SSJFingerprintPWDViewController.m in Sources */,
 				7D2930151D76E917003EF6D8 /* SSJEditBillTypeViewController.m in Sources */,
 				9C6D9CD31DDEF65600D6E85B /* SSJBillingChargeViewController.m in Sources */,
 				7D5F332F1CEAE6C10086B67E /* SSJHomeBarCalenderButton.m in Sources */,

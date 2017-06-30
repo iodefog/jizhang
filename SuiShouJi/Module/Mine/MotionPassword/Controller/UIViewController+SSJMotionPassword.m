@@ -7,12 +7,84 @@
 //
 
 #import "UIViewController+SSJMotionPassword.h"
-#import "SSJStartUpgradeAlertView.h"
+#import "SSJNavigationController.h"
+#import "SSJFingerprintPWDViewController.h"
 #import "SSJMotionPasswordViewController.h"
+
 #import "UIViewController+SSJPageFlow.h"
+#import "SSJStartUpgradeAlertView.h"
 #import "SSJUserTableManager.h"
+#import <LocalAuthentication/LocalAuthentication.h>
+
 
 @implementation UIViewController (SSJMotionPassword)
+
++ (void)verifyMotionPasswordIfNeeded:(void (^)(BOOL isVerified))finish animated:(BOOL)animated {
+    if (!SSJIsUserLogined()) {
+        if (finish) {
+            finish(NO);
+        }
+        return;
+    }
+    
+    // 如果当前页面已经是手势密码或者指纹解锁，直接返回
+    UIViewController *currentVC = SSJVisibalController();
+    if ([currentVC isKindOfClass:[SSJMotionPasswordViewController class]]
+        || [currentVC isKindOfClass:[SSJFingerprintPWDViewController class]]) {
+        if (finish) {
+            finish(NO);
+        }
+        return;
+    }
+    
+    [SSJUserTableManager queryProperty:@[@"motionPWD", @"motionPWDState", @"fingerPrintState"] forUserId:SSJUSERID() success:^(SSJUserItem * _Nonnull userItem) {
+        if ([userItem.fingerPrintState boolValue]) {
+            LAContext *context = [[LAContext alloc] init];
+            context.localizedFallbackTitle = @"";
+            
+            NSError *error = nil;
+            if ([context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&error]) {
+                SSJFingerprintPWDViewController *fingerPwdVC = [[SSJFingerprintPWDViewController alloc] init];
+                fingerPwdVC.context = context;
+                fingerPwdVC.finishHandle = ^(UIViewController *controller) {
+                    if (finish) {
+                        finish(YES);
+                    }
+                    [controller dismissViewControllerAnimated:YES completion:NULL];
+                };
+                SSJNavigationController *naviVC = [[SSJNavigationController alloc] initWithRootViewController:fingerPwdVC];
+                [currentVC presentViewController:naviVC animated:animated completion:NULL];
+                return;
+            }
+        }
+        
+        // 手势密码开启
+        if ([userItem.motionPWDState boolValue] && userItem.motionPWD.length) {
+            // 验证手势密码页面
+            SSJMotionPasswordViewController *motionVC = [[SSJMotionPasswordViewController alloc] init];
+            motionVC.type = SSJMotionPasswordViewControllerTypeVerification;
+            motionVC.finishHandle = ^(UIViewController *controller) {
+                if (finish) {
+                    finish(YES);
+                }
+                [controller dismissViewControllerAnimated:YES completion:NULL];
+            };
+            SSJNavigationController *naviVC = [[SSJNavigationController alloc] initWithRootViewController:motionVC];
+            [currentVC presentViewController:naviVC animated:animated completion:NULL];
+            
+            return;
+        }
+        
+        if (finish) {
+            finish(NO);
+        }
+    } failure:^(NSError * _Nonnull error) {
+        [SSJAlertViewAdapter showError:error];
+        if (finish) {
+            finish(NO);
+        }
+    }];
+}
 
 - (void)ssj_remindUserToSetMotionPasswordIfNeeded {
     if (!SSJIsUserLogined()) {

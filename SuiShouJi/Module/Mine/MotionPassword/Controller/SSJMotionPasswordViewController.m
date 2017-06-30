@@ -13,7 +13,6 @@
 #import "SSJUserTableManager.h"
 #import "UIImageView+CornerRadius.h"
 #import "SSJMotionPasswordLoginPasswordAlertView.h"
-#import <LocalAuthentication/LocalAuthentication.h>
 
 static NSString *const kErrorRemindTextColor = @"ff7139";
 
@@ -46,59 +45,11 @@ static const int kVerifyFailureTimesLimit = 5;
 
 @property (nonatomic, strong) SSJUserItem *userItem;
 
-@property (nonatomic, strong) LAContext *context;
-
 @end
 
 @implementation SSJMotionPasswordViewController
 
 #pragma mark - Lifecycle
-+ (void)verifyMotionPasswordIfNeeded:(void (^)(BOOL isVerified))finish animated:(BOOL)animated {
-    if (!SSJIsUserLogined()) {
-        if (finish) {
-            finish(NO);
-        }
-        return;
-    }
-    
-    //  如果当前页面已经是手势密码，直接返回
-    UIViewController *currentVC = SSJVisibalController();
-    if ([currentVC isKindOfClass:[SSJMotionPasswordViewController class]]) {
-        if (finish) {
-            finish(NO);
-        }
-        return;
-    }
-    
-    [SSJUserTableManager queryProperty:@[@"motionPWD", @"motionPWDState"] forUserId:SSJUSERID() success:^(SSJUserItem * _Nonnull userItem) {
-        // 手势密码开启
-        if ([userItem.motionPWDState boolValue] && userItem.motionPWD.length) {
-            //  验证手势密码页面
-            SSJMotionPasswordViewController *motionVC = [[SSJMotionPasswordViewController alloc] init];
-            motionVC.type = SSJMotionPasswordViewControllerTypeVerification;
-            motionVC.finishHandle = ^(UIViewController *controller) {
-                if (finish) {
-                    finish(YES);
-                }
-                [controller dismissViewControllerAnimated:YES completion:NULL];
-            };
-            SSJNavigationController *naviVC = [[SSJNavigationController alloc] initWithRootViewController:motionVC];
-            [currentVC presentViewController:naviVC animated:animated completion:NULL];
-            
-            return;
-        } else {
-            if (finish) {
-                finish(NO);
-            }
-        }
-    } failure:^(NSError * _Nonnull error) {
-        [SSJAlertViewAdapter showError:error];
-        if (finish) {
-            finish(NO);
-        }
-    }];
-}
-
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.hidesBottomBarWhenPushed = YES;
@@ -128,12 +79,6 @@ static const int kVerifyFailureTimesLimit = 5;
     [super viewDidAppear:animated];
     self.navigationController.interactivePopGestureRecognizer.enabled = NO;
     self.navigationController.interactivePopGestureRecognizer.delegate = nil;
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    [_context invalidate];
-    _context = nil;
 }
 
 - (void)updateViewConstraints {
@@ -315,29 +260,6 @@ static const int kVerifyFailureTimesLimit = 5;
 }
 
 #pragma mark - Private
-//  验证touchID
-- (void)verifyTouchIDIfNeeded {
-    if (!_context) {
-        _context = [[LAContext alloc] init];
-        _context.localizedFallbackTitle = @"";
-    }
-    
-    NSError *error = nil;
-    if ([_context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&error]) {
-        [_context evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics localizedReason:@"请按住Home键进行解锁" reply:^(BOOL success, NSError * _Nullable error) {
-            if (success) {
-                SSJDispatchMainSync(^{
-                    if (self.finishHandle) {
-                        self.finishHandle(self);
-                    } else {
-                        [self ssj_backOffAction];
-                    }
-                });
-            }
-        }];
-    }
-}
-
 // 验证登录密码
 - (void)verifyLoginPassword {
     NSString *inputPwd = [_passwordAlertView.passwordInput.text ssj_md5HexDigest];

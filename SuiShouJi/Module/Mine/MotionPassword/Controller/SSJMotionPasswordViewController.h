@@ -19,6 +19,4 @@ typedef NS_ENUM(NSUInteger, SSJMotionPasswordViewControllerType) {
 //  手势密码类型，默认为设置手势密码(SSJMotionPasswordViewControllerTypeSetting)
 @property (nonatomic) SSJMotionPasswordViewControllerType type;
 
-+ (void)verifyMotionPasswordIfNeeded:(void (^)(BOOL isVerified))finish animated:(BOOL)animated;
-
 @end
