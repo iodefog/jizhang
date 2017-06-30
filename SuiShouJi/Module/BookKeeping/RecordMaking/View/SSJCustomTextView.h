@@ -19,4 +19,12 @@
  placeholder距离上边距的距离
  */
 @property (nonatomic, assign) CGFloat placeholderTopConst;
+
+/**
+ placeholder距离左边距的距离
+ */
+@property (nonatomic, assign) CGFloat placeholderLeftConst;
+
+/**背景颜色*/
+@property (nonatomic, strong) UIColor *bgColor;
 @end

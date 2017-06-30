@@ -7,15 +7,20 @@
 //
 
 #import "SSJBaseNetworkService.h"
-@class SSJChatMessageItem,SSJAdviceItem;
-@interface SSJProductAdviceNetWorkService : SSJBaseNetworkService
-/**
- //type	int	是	0:查询 1：添加
- */
-- (void)requestAdviceMessageListWithType:(int)type message:(NSString *)messageStr additionalMessage:(NSString *)addMessate;
 
-/**
- <#注释#>
- */
-@property (nonatomic, strong) SSJAdviceItem *adviceItems;
+typedef NS_ENUM(NSUInteger, SSJAdviceType) {
+    SSJAdviceTypeAdvice,//产品建议
+    SSJAdviceTypeFault,//使用故障
+    SSJAdviceTypeTuCao,//我要吐槽
+};
+
+@class SSJChatMessageItem,SSJAdviceItem;
+
+
+@interface SSJProductAdviceNetWorkService : SSJBaseNetworkService
+
+- (void)requestAdviceMessageListWithType:(SSJAdviceType)type message:(NSString *)messageStr additionalMessage:(NSString *)addMessate;
+
+- (void)requestQQDetail;
+
 @end

@@ -8,26 +8,33 @@
 
 #import "SSJProductAdviceViewController.h"
 #import "SSJProductAdviceTableHeaderView.h"
-#import "SSJUserItem.h"
-#import "SSJUserInfoItem.h"
-#import "SSJUserTableManager.h"
-#import "SSJProductAdviceNetWorkService.h"
-#import "TPKeyboardAvoidingTableView.h"
 #import "SSJMoreProductAdviceTableViewCell.h"
+#import "TPKeyboardAvoidingTableView.h"
+
+#import "SSJUserTableManager.h"
+
 #import "SSJAdviceItem.h"
 #import "SSJChatMessageItem.h"
+#import "SSJUserItem.h"
+#import "SSJUserInfoItem.h"
 
-@interface SSJProductAdviceViewController ()<UITableViewDelegate,UITableViewDataSource,SSJProductAdviceTableHeaderViewDelegate>
+#import "SSJProductAdviceNetWorkService.h"
+
+#import <TencentOpenAPI/QQApiInterface.h>
+#import <TencentOpenAPI/TencentApiInterface.h>
+
+@interface SSJProductAdviceViewController ()<UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic, strong) TPKeyboardAvoidingTableView *tableView;
 @property (nonatomic, strong) SSJProductAdviceTableHeaderView *productAdviceTableHeaderView;
-/**
- <#注释#>
- */
-@property (nonatomic, strong) SSJProductAdviceNetWorkService *adviceService;
-/**
- 请求类型
- */
-@property (nonatomic, assign) NSInteger requestType;
+
+@property (nonatomic, strong) SSJProductAdviceNetWorkService *service;
+
+/**qq*/
+@property (nonatomic, copy) NSString *qqNumStr;
+
+/**qqKey*/
+@property (nonatomic, copy) NSString *qqKeyStr;
+
 @end
 
 @implementation SSJProductAdviceViewController
@@ -35,26 +42,24 @@
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.hidesBottomBarWhenPushed = YES;
+        self.appliesTheme = NO;
     }
     return self;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.appliesTheme = NO;
+    self.title = @"反馈意见";
     [self.view addSubview:self.tableView];
-    [self setUpNav];
     self.backgroundView.hidden = YES;
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
+    [self.service requestQQDetail];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
-    //type	int	是	0:查询 1：添加
-    self.requestType = 0;
-    [self.adviceService requestAdviceMessageListWithType:0 message:@"" additionalMessage:@""];
 }
 
 -(UIStatusBarStyle)preferredStatusBarStyle
@@ -67,26 +72,6 @@
     [super viewDidLayoutSubviews];
     self.tableView.frame = CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM + SSJ_TABBAR_HEIGHT);
 }
-
-- (void)setUpNav
-{
-    UILabel *titleLabel = [[UILabel alloc] init];
-    titleLabel.text = @"产品建议";
-    titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
-    titleLabel.textColor = [UIColor ssj_colorWithHex:@"333333"];
-    [titleLabel sizeToFit];
-    self.navigationItem.titleView = titleLabel;
-      [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor],NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2]}];
-    UIButton *navRightButton = [[UIButton alloc] init];
-    [navRightButton setTitle:@"在线客服" forState:UIControlStateNormal];
-    navRightButton.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
-    [navRightButton setTitleColor:[UIColor ssj_colorWithHex:@"eb4a64"] forState:UIControlStateNormal];
-    [navRightButton addTarget:self action:@selector(navRightButtonClicked) forControlEvents:UIControlEventTouchUpInside];
-    [navRightButton sizeToFit];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:navRightButton];
-}
-
-
 
 #pragma mark -Action
 - (void)navRightButtonClicked
@@ -110,104 +95,8 @@
     }];
 }
 
-#pragma mark - SSJBaseNetworkService
--(void)serverDidFinished:(SSJBaseNetworkService *)service
-{
-    if ([service.returnCode isEqualToString:@"1"]) {
-//        type	int	是	0:查询 1：添加
-        if (self.requestType == 1) {
-            //清空内容
-            [self.productAdviceTableHeaderView clearAdviceContext];
-            //提示语
-             [CDAutoHideMessageHUD showMessage:service.desc];
-            //刷新数据
-            self.requestType = 0;
-            [self.adviceService requestAdviceMessageListWithType:0 message:@"" additionalMessage:@""];
-        }else if (self.requestType == 0){
-            [self sortedArray];
-        }
-    }
-}
-/*
- 数组排序等处理
- */
-- (void)sortedArray
-{
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    formatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
-    //处理数据
-    //     self.chartMessageArray = self.adviceService.adviceItems.messageItems;
-    NSMutableArray *tempArr = [NSMutableArray array];
-    for (SSJChatMessageItem *item in self.adviceService.adviceItems.messageItems) {
-        if (item.creplyContent.length) {//如果回复内容存在
-            SSJChatMessageItem *chartMessageItem = [[SSJChatMessageItem alloc] init];
-            chartMessageItem.isSystem = YES;
-            [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-            NSDate *tempDate = [formatter dateFromString:item.creplyDate];
-            chartMessageItem.creplyDate = item.creplyDate;
-            [formatter setDateFormat:@"yyyy-MM-dd"];
-            NSString *string = [formatter stringFromDate:tempDate];
-            chartMessageItem.dateStr = string;
-            chartMessageItem.date = tempDate;
-            chartMessageItem.content = item.creplyContent;
-            [tempArr addObject:chartMessageItem];
-        }
-        if (item.cContent.length) {//如果建议内容存在
-            SSJChatMessageItem *chartMessageItem = [[SSJChatMessageItem alloc] init];
-            chartMessageItem.isSystem = NO;
-            [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-            NSDate *tempDate = [formatter dateFromString:item.caddDate];
-            chartMessageItem.caddDate = item.caddDate;
-            [formatter setDateFormat:@"yyyy-MM-dd"];
-            NSString *string = [formatter stringFromDate:tempDate];
-            chartMessageItem.dateStr = string;
-            chartMessageItem.date = tempDate;
-            chartMessageItem.content = item.cContent;
-            [tempArr addObject:chartMessageItem];
-        }
-    }
-    //对数组按照时间进行排序
-    NSArray *arr = [tempArr sortedArrayUsingComparator:^NSComparisonResult(SSJChatMessageItem * _Nonnull obj1, SSJChatMessageItem *  _Nonnull obj2) {
-        NSDate *date1 = obj1.date;
-        NSDate *date2 = obj2.date;
-        NSComparisonResult result = [date1 compare:date2];
-        return result == NSOrderedAscending;
-    }];
-    
-    //遍历排序后的数组判断是否显示时间同一天的不显示，否则显示
-    SSJChatMessageItem *lastItem;
-    BOOL isStop = NO;
-    for (SSJChatMessageItem *item in arr) {
-        //得到最新一条回复的时间并存储到数据库中
-        if (item.isSystem == YES && isStop == NO) {//是系统
-            SSJUserItem *userItem = [[SSJUserItem alloc] init];
-            userItem.userId = SSJUSERID();
-            userItem.adviceTime = item.creplyDate;
-            //存储
-            [SSJUserTableManager saveUserItem:userItem success:NULL failure:NULL];
-            isStop = YES;
-        }
-        if ([lastItem.date isSameDay:item.date]) {
-            item.isHiddenTime = YES;
-        }
-        lastItem = item;
-    }
-//    self.chartMessageArray = [NSMutableArray arrayWithArray:arr];
-    [self.tableView reloadData];
-    
-    
-    
-}
 
-#pragma mark -Lazy
-#pragma mark -Getter
-- (SSJProductAdviceNetWorkService *)adviceService{
-    if (!_adviceService) {
-        _adviceService = [[SSJProductAdviceNetWorkService alloc]initWithDelegate:self];
-        _adviceService.httpMethod = SSJBaseNetworkServiceHttpMethodPOST;
-    }
-    return _adviceService;
-}
+
 
 - (TPKeyboardAvoidingTableView *)tableView
 {
@@ -216,8 +105,8 @@
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.backgroundColor = [UIColor clearColor];
-        _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         _tableView.contentInset = UIEdgeInsetsMake(0, 0, 15, 0);
+        [_tableView ssj_clearExtendSeparator];
     }
     return _tableView;
 }
@@ -226,16 +115,11 @@
 {
     if (!_productAdviceTableHeaderView) {
         _productAdviceTableHeaderView = [[SSJProductAdviceTableHeaderView alloc] init];
-        _productAdviceTableHeaderView.delegate = self;
     }
     return _productAdviceTableHeaderView;
 }
 
 #pragma mark -UITableDataSource
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return 1;
-}
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -244,8 +128,22 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-   SSJMoreProductAdviceTableViewCell *cell =  [SSJMoreProductAdviceTableViewCell cellWithTableView:tableView];
-//    cell.message = [self.chartMessageArray ssj_safeObjectAtIndex:indexPath.row];
+    static NSString *cellId = @"SSJProductAdviceViewControllerId";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+    if (!cell) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellId];
+        cell.textLabel.font = cell.detailTextLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
+        cell.textLabel.textColor = cell.detailTextLabel.textColor = [UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].mainColor];
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        cell.backgroundColor = [UIColor whiteColor];
+    }
+    if (indexPath.row == 0) {
+        cell.textLabel.text = @"QQ群";
+        cell.detailTextLabel.text = self.qqNumStr;
+    } else if(indexPath.row == 1) {
+        cell.textLabel.text = @"在线客服";
+        cell.detailTextLabel.text = @"";
+    }
     return cell;
 }
 
@@ -259,25 +157,53 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 44;
+    return 55;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForHeaderInSection:(NSInteger)section
 {
-    return 436;
+    return 417;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return 100;
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.row == 0) {//qq
+        //打开加群界面
+        if (![self joinGroup:self.qqNumStr key:self.qqKeyStr]) {
+            [CDAutoHideMessageHUD showMessage:@"未安装QQ哦"];
+        }
+    } else if(indexPath.row == 1) {//在线客服
+        [self navRightButtonClicked];
+    }
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
-#pragma mark -SSJProductAdviceTableHeaderViewDelegate
-- (void)submitAdviceButtonClickedWithMessage:(NSString *)messageStr additionalMessage:(NSString *)addMessage
-{
-    self.requestType = 1;
-    [self.adviceService requestAdviceMessageListWithType:1 message:messageStr additionalMessage:addMessage];//添加
-    
+- (BOOL)joinGroup:(NSString *)groupUin key:(NSString *)key{
+    NSString *urlStr = [NSString stringWithFormat:@"mqqapi://card/show_pslcard?src_type=internal&version=1&uin=%@&key=%@&card_type=group&source=external", groupUin,key];
+    NSURL *url = [NSURL URLWithString:urlStr];
+    if([[UIApplication sharedApplication] canOpenURL:url]){
+        [[UIApplication sharedApplication] openURL:url];
+        return YES;
+    } else {
+        return NO;
+    }
+}
+
+#pragma mark - SSJBaseNetworkServiceDelegate
+- (void)serverDidFinished:(SSJBaseNetworkService *)service {
+    if ([service.returnCode isEqualToString:@"1"]) {
+        self.qqNumStr = [[service.rootElement objectForKey:@"results"] objectForKey:@"qq_group"];
+        self.qqKeyStr = [[service.rootElement objectForKey:@"results"] objectForKey:@"group_key"];
+        [self.tableView reloadData];
+    }
+}
+
+
+#pragma mark - Lazy
+- (SSJProductAdviceNetWorkService *)service {
+    if (!_service) {
+        _service = [[SSJProductAdviceNetWorkService alloc] initWithDelegate:self];
+    }
+    return _service;
 }
 
 @end
