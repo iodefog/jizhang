@@ -116,6 +116,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         if (self.item.cardRepaymentDay == 0) {
             self.item.cardRepaymentDay = 10;
         }
+        self.cardType = self.item.cardType;
     }
     if (self.item.remindId.length) {
         self.remindItem = [SSJLocalNotificationStore queryReminderItemForID:self.item.remindId];

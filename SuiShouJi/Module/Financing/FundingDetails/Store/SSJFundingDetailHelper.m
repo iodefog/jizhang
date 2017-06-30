@@ -395,6 +395,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
         newcardItem.startColor = [db stringForQuery:@"select cstartcolor from bk_fund_info where cfundid = ? and cuserid = ?",cardItem.cardId,userid];
         newcardItem.endColor = [db stringForQuery:@"select cendcolor from bk_fund_info where cfundid = ? and cuserid = ?",cardItem.cardId,userid];
         newcardItem.cardName = [db stringForQuery:@"select cacctname from bk_fund_info where cfundid = ? and cuserid = ?",cardItem.cardId,userid];
+        newcardItem.cardType = [db boolForQuery:@"select itype from bk_user_credit where cfundid = ? and cuserid = ?",cardItem.cardId,userid];
         for (SSJCreditCardListDetailItem *listItem in result) {
             listItem.instalmentMoney = [db doubleForQuery:@"select repaymentmoney from bk_credit_repayment where cuserid = ? and crepaymentmonth = ? and ccardid = ? and operatortype <> 2 and iinstalmentcount > 0",userid,listItem.month,cardItem.cardId];
             listItem.repaymentMoney = [db doubleForQuery:@"select sum(repaymentmoney) from bk_credit_repayment where cuserid = ? and crepaymentmonth = ? and ccardid = ? and operatortype <> 2 and iinstalmentcount = 0",userid,listItem.month,cardItem.cardId];

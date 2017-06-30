@@ -673,10 +673,29 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
         }
     } else if(anotherArr.count < array.count){ // 删除
         //保存最新model,展开状态
-        for (SSJFundingDetailListItem *tempItem in anotherArr) {
-            for (SSJFundingDetailListItem *oldItem in array) {
-                if ([oldItem.date isEqualToString:tempItem.date]) {//通过时间判断是哪个
-                    tempItem.isExpand = oldItem.isExpand;
+        for (id tempItem in anotherArr) {
+            for (id oldItem in array) {
+                NSString *tempDate;
+                BOOL tempExpand;
+                if ([tempItem isKindOfClass:[SSJFundingDetailListItem class]]) {
+                    tempDate = ((SSJFundingDetailListItem *)tempItem).date;
+                    tempExpand = ((SSJFundingDetailListItem *)tempItem).isExpand;
+                } else if ([tempItem isKindOfClass:[SSJCreditCardListDetailItem class]]) {
+                    tempDate = ((SSJCreditCardListDetailItem *)tempItem).month;
+                    tempExpand = ((SSJCreditCardListDetailItem *)tempItem).isExpand;
+                }
+                
+                NSString *oldDate;
+                BOOL oldExpand = NO;
+                if ([oldItem isKindOfClass:[SSJFundingDetailListItem class]]) {
+                    oldDate = ((SSJFundingDetailListItem *)oldItem).date;
+                    oldExpand = ((SSJFundingDetailListItem *)oldItem).isExpand;
+                } else if ([oldItem isKindOfClass:[SSJCreditCardListDetailItem class]]) {
+                    oldDate = ((SSJCreditCardListDetailItem *)oldItem).month;
+                    oldExpand = ((SSJCreditCardListDetailItem *)oldItem).isExpand;
+                }
+                if ([tempDate isEqualToString:oldDate]) {//通过时间判断是哪个
+                    tempExpand = oldExpand;
                     break;
                 }
             }

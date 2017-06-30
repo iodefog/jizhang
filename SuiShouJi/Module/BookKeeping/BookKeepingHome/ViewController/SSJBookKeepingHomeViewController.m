@@ -482,9 +482,9 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
         [self.tableView setContentOffset:CGPointMake(0, -46) animated:YES];
         [self.floatingDateView dismiss];
         [self.mutiFunctionButton dismiss];
-    }else if (index == 2){
+    }else if (index == 2) {
         [SSJAnaliyticsManager event:@"main_search"];
-        SSJSearchingViewController *searchVC = [[SSJSearchingViewController alloc]init];
+        SSJSearchingViewController *searchVC = [[SSJSearchingViewController alloc] init];
         [self.navigationController pushViewController:searchVC animated:YES];
     }
 }

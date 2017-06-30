@@ -50,6 +50,14 @@ NSString *SSJURLScheme();
  */
 NSString *SSJAppVersion();
 
+
+/**
+ *  返回当前应用的图标名称
+ *
+ *  @return (NSString *)
+ */
+NSString *SSJAppIcon();
+
 /**
  *   系统版本
  *

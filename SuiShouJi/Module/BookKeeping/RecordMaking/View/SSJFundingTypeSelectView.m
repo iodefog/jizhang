@@ -192,7 +192,7 @@
             item.fundingID = [rs stringForColumn:@"CFUNDID"];
             item.fundingName = [rs stringForColumn:@"CACCTNAME"];
             item.fundingParent = [rs stringForColumn:@"CPARENT"];
-            if (!(!self.needCreditOrNot && [item.fundingParent isEqualToString:@"3"])) {
+            if (!(!self.needCreditOrNot && ([item.fundingParent isEqualToString:@"3"] || [item.fundingParent isEqualToString:@"16"]))) {
                 [_items addObject:item];
             }
         }
