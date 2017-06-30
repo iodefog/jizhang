@@ -394,10 +394,10 @@ static const int kVerifyFailureTimesLimit = 5;
 - (void)updateNavigationBar {
     self.hidesNavigationBarWhenPushed = self.type == SSJMotionPasswordViewControllerTypeVerification;
     
+    self.navigationBarBackgroundColor = [UIColor clearColor];
     if ([SSJCurrentThemeID() isEqualToString:SSJDefaultThemeID]) {
         self.navigationBarTintColor = [UIColor whiteColor];
         self.navigationBarTitleColor = [UIColor whiteColor];
-        self.navigationBarBackgroundColor = [UIColor clearColor];
         self.backgroundView.image = [UIImage ssj_compatibleImageNamed:@"motion_background"];
     }
     
