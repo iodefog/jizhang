@@ -55,4 +55,8 @@
     [self request:@"/chargebook/user/binding_cphone" params:params success:success failure:failure];
 }
 
+- (BOOL)isRequestSuccessfulWithCode:(NSInteger)code {
+    return code == 1;
+}
+
 @end

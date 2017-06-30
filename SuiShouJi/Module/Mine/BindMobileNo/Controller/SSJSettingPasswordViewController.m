@@ -7,11 +7,14 @@
 //
 
 #import "SSJSettingPasswordViewController.h"
+#import "SSJSettingViewController.h"
 #import "TPKeyboardAvoidingScrollView.h"
 #import "SSJVerifCodeField.h"
 #import "SSJPasswordField.h"
 #import "SSJInviteCodeJoinSuccessView.h"
 #import "SSJBindMobileNoNetworkService.h"
+#import "SSJForgetAndResetPasswordNetworkService.h"
+#import "SSJUserTableManager.h"
 
 @interface SSJSettingPasswordViewController ()
 
@@ -31,7 +34,9 @@
 
 @property (nonatomic, strong) SSJLoginVerifyPhoneNumViewModel *viewModel;
 
-@property (nonatomic, strong) SSJBindMobileNoNetworkService *service;
+@property (nonatomic, strong) SSJBindMobileNoNetworkService *bindMobileNoService;
+
+@property (nonatomic, strong) SSJForgetAndResetPasswordNetworkService *resetPasswordService;
 
 @end
 
@@ -125,20 +130,134 @@
 - (void)setUpBindings {
     self.viewModel.phoneNum = self.mobileNo;
     self.authCodeField.viewModel = self.viewModel;
+    RAC(self.viewModel, verificationCode) = self.authCodeField.rac_textSignal;
+    RAC(self.viewModel, passwardNum) = self.passwordField.rac_textSignal;
+    RAC(self.bindingBtn, enabled) = self.viewModel.enableRegAndLoginSignal;
+    
+    @weakify(self);
+    RAC(self.descLab,text) = [RACObserve(self.authCodeField, getAuthCodeState) map:^id(NSNumber *value) {
+        @strongify(self);
+        SSJGetVerifCodeState state = [value integerValue];
+        if (state == SSJGetVerifCodeStateSent) {
+            NSString *ciphertext = self.mobileNo;
+            if (self.mobileNo.length >= 7) {
+                ciphertext = [self.mobileNo stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
+            }
+            return [NSString stringWithFormat:@"验证码已发送至：%@", ciphertext];
+        } else {
+            return nil;
+        }
+    }];
+    
+    [[self.bindingBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
+        @strongify(self);
+        switch (self.type) {
+            case SSJSettingPasswordTypeMobileNoBinding:
+                [self executeBindMobileNoProcess];
+                break;
+                
+            case SSJSettingPasswordTypeResettingPassword:
+                [self executeResetPasswordProcess];
+                break;
+        }
+    }];
 }
 
-- (void)bindMobileNo {
-    [self.service bindMobileNoWithMobileNo:self.mobileNo authCode:self.authCodeField.text password:self.passwordField.text success:^(SSJBaseNetworkService * _Nonnull service) {
-        UIViewController *setttingVC = [self ssj_previousViewControllerBySubtractingIndex:2];
-        if (setttingVC) {
-            [self.navigationController popToViewController:setttingVC animated:YES];
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [self.successAlertView showWithDesc:@"绑定手机号成功"];
-            });
-        }
-    } failure:^(SSJBaseNetworkService * _Nonnull service) {
-        [SSJAlertViewAdapter showError:service.error];
+- (void)executeBindMobileNoProcess {
+    [[[[self bindMobileNo] then:^RACSignal *{
+        return [self queryUserItem];
+    }] flattenMap:^RACStream *(SSJUserItem *userItem) {
+        return [self saveMobildNo:userItem];
+    }] subscribeError:^(NSError *error) {
+        [SSJAlertViewAdapter showError:error];
+    } completed:^{
+        [self goBackToSettingPage];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self.successAlertView showWithDesc:@"绑定手机号成功"];
+        });
     }];
+}
+
+- (void)executeResetPasswordProcess {
+    [[[[self resetPassword] then:^RACSignal *{
+        return [self queryUserItem];
+    }] flattenMap:^RACStream *(SSJUserItem *userItem) {
+        return [self savePassword:userItem];
+    }] subscribeError:^(NSError *error) {
+        [SSJAlertViewAdapter showError:error];
+    } completed:^{
+        [self goBackToSettingPage];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self.successAlertView showWithDesc:@"修改密码成功"];
+        });
+    }];
+}
+
+- (RACSignal *)bindMobileNo {
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [self.bindMobileNoService bindMobileNoWithMobileNo:self.mobileNo authCode:self.authCodeField.text password:self.passwordField.text success:^(__kindof SSJBaseNetworkService * _Nonnull service) {
+            [subscriber sendCompleted];
+        } failure:^(__kindof SSJBaseNetworkService * _Nonnull service) {
+            [subscriber sendError:service.error];
+        }];
+        return nil;
+    }];
+}
+
+- (RACSignal *)resetPassword {
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [self.resetPasswordService requestWithType:SSJResetPasswordType mobileNo:self.mobileNo authCode:self.authCodeField.text password:self.passwordField.text success:^(SSJBaseNetworkService * _Nonnull service) {
+            [subscriber sendCompleted];
+        } failure:^(SSJBaseNetworkService * _Nonnull service) {
+            [subscriber sendError:service.error];
+        }];
+        return nil;
+    }];
+}
+
+- (RACSignal *)queryUserItem {
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [SSJUserTableManager queryUserItemWithID:SSJUSERID() success:^(SSJUserItem * _Nonnull userItem) {
+            [subscriber sendNext:userItem];
+            [subscriber sendCompleted];
+        } failure:^(NSError * _Nonnull error) {
+            [subscriber sendError:error];
+        }];
+        return nil;
+    }];
+}
+
+- (RACSignal *)saveMobildNo:(SSJUserItem *)userItem {
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        userItem.mobileNo = self.bindMobileNoService.mobileNo;
+        [SSJUserTableManager saveUserItem:userItem success:^{
+            [subscriber sendCompleted];
+        } failure:^(NSError * _Nonnull error) {
+            [subscriber sendError:error];
+        }];
+        return nil;
+    }];
+}
+
+- (RACSignal *)savePassword:(SSJUserItem *)userItem {
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        userItem.loginPWD = self.bindMobileNoService.password.ssj_md5HexDigest;
+        [SSJUserTableManager saveUserItem:userItem success:^{
+            [subscriber sendCompleted];
+        } failure:^(NSError * _Nonnull error) {
+            [subscriber sendError:error];
+        }];
+        return nil;
+    }];
+}
+
+- (void)goBackToSettingPage {
+    for (UIViewController *controller in self.navigationController.viewControllers) {
+        if ([controller isKindOfClass:[SSJSettingViewController class]]) {
+            [self.navigationController popToViewController:controller animated:YES];
+            break;
+        }
+    }
 }
 
 #pragma mark - Lazyloading
@@ -212,12 +331,20 @@
     return _viewModel;
 }
 
-- (SSJBindMobileNoNetworkService *)service {
-    if (!_service) {
-        _service = [[SSJBindMobileNoNetworkService alloc] init];
-        _service.showLodingIndicator = YES;
+- (SSJBindMobileNoNetworkService *)bindMobileNoService {
+    if (!_bindMobileNoService) {
+        _bindMobileNoService = [[SSJBindMobileNoNetworkService alloc] init];
+        _bindMobileNoService.showLodingIndicator = YES;
     }
-    return _service;
+    return _bindMobileNoService;
+}
+
+- (SSJForgetAndResetPasswordNetworkService *)resetPasswordService {
+    if (!_resetPasswordService) {
+        _resetPasswordService = [[SSJForgetAndResetPasswordNetworkService alloc] init];
+        _resetPasswordService.showLodingIndicator = YES;
+    }
+    return _resetPasswordService;
 }
 
 @end

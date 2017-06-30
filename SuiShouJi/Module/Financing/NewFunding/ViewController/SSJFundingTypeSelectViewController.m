@@ -173,7 +173,7 @@
         [_slideView setTabSize:CGSizeMake(self.view.width * 0.5, 3)];
         [_slideView ssj_setBorderWidth:1];
         _slideView.selectedTitleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
-        _slideView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+        _slideView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     }
     return _slideView;
 }
@@ -208,7 +208,7 @@
 - (void)updateAppearanceAfterThemeChanged {
     [super updateAppearanceAfterThemeChanged];
     _slideView.selectedTitleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
-    _slideView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+    _slideView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
 }
 
 

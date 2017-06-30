@@ -9,6 +9,7 @@
 #import "SSJFinancingHomeSelectView.h"
 #import "SSJFundingHomeSelectCell.h"
 #import "SSJFinancingHomeitem.h"
+#import "SSJCreditCardItem.h"
 
 static const NSTimeInterval kDuration = 0.2;
 
@@ -34,9 +35,9 @@ static NSString *const SSJFundingHomeSelectCellIndetifer = @"SSJFundingHomeSelec
 
 @property(nonatomic, strong) NSString *selectedFundid;
 
-@property(nonatomic, strong) NSArray *items;
+@property(nonatomic, strong) NSMutableArray *items;
 
-@property(nonatomic, strong) NSArray *selectedFundids;
+@property(nonatomic, strong) NSMutableArray *selectedFundids;
 
 @end
 
@@ -162,6 +163,15 @@ static NSString *const SSJFundingHomeSelectCellIndetifer = @"SSJFundingHomeSelec
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    NSString *fundId;
+    
+    if ([[self.items ssj_safeObjectAtIndex:indexPath.row] isKindOfClass:[SSJFinancingHomeitem class]]) {
+        fundId = ((SSJFinancingHomeitem *)[self.items ssj_safeObjectAtIndex:indexPath.row]).fundingID;
+    } else if (([[self.items ssj_safeObjectAtIndex:indexPath.row] isKindOfClass:[SSJCreditCardItem class]])) {
+        fundId = ((SSJCreditCardItem *)[self.items ssj_safeObjectAtIndex:indexPath.row]).cardId;
+    }
+    
     SSJFinancingHomeitem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
     
     SSJFundingHomeSelectCell *cell = [tableView dequeueReusableCellWithIdentifier:SSJFundingHomeSelectCellIndetifer];
@@ -171,7 +181,7 @@ static NSString *const SSJFundingHomeSelectCellIndetifer = @"SSJFundingHomeSelec
     if (selectAll) {
         cell.isSelected = YES;
     } else {
-        cell.isSelected = [self.items containsObject:item.fundingID];
+        cell.isSelected = [self.selectedFundids containsObject:fundId];
     }
     
     cell.item = item;
@@ -186,9 +196,40 @@ static NSString *const SSJFundingHomeSelectCellIndetifer = @"SSJFundingHomeSelec
     return 40;
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSString *fundId;
+    
+    if ([[self.items ssj_safeObjectAtIndex:indexPath.row] isKindOfClass:[SSJFinancingHomeitem class]]) {
+        fundId = ((SSJFinancingHomeitem *)[self.items ssj_safeObjectAtIndex:indexPath.row]).fundingID;
+    } else if (([[self.items ssj_safeObjectAtIndex:indexPath.row] isKindOfClass:[SSJCreditCardItem class]])) {
+        fundId = ((SSJCreditCardItem *)[self.items ssj_safeObjectAtIndex:indexPath.row]).cardId;
+    }
+    
+    if (indexPath.row == 0) {
+        if ([self.selectedFundid isEqualToString:@"all"]) {
+            [self.selectedFundids removeAllObjects];
+            self.selectedFundid = @"";
+        } else {
+            [self getAllFundIds];
+        }
+    } else {
+        if ([self.selectedFundids containsObject:fundId]) {
+            [self.selectedFundids removeObject:fundId];
+        } else {
+            [self.selectedFundids addObject:fundId];
+        }
+        self.selectedFundid = [self.selectedFundids componentsJoinedByString:@","];
+
+    }
+    
+    [self.tableView reloadData];
+    
+}
+
 #pragma mark - Event
 - (void)dismiss {
     if (self.superview) {
+        self.tableView.alpha = 0;
         
         [self.superview ssj_hideBackViewForView:self animation:^{
             self.transform = CGAffineTransformMakeScale(0.1, 0.1);
@@ -196,7 +237,9 @@ static NSString *const SSJFundingHomeSelectCellIndetifer = @"SSJFundingHomeSelec
             self.top = self.point.y;
         } timeInterval:kDuration fininshed:^(BOOL complation) {
             self.transform = CGAffineTransformIdentity;
-            
+            if (self.dismissBlock) {
+                self.dismissBlock(self.selectedFundid, self.selectedFundids);
+            }
         }];
     }
 
@@ -239,12 +282,41 @@ static NSString *const SSJFundingHomeSelectCellIndetifer = @"SSJFundingHomeSelec
     self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
 }
 
-- (void)setItems:(NSArray *)items andSelectFundid:(NSString *)fundids {
-    _items = items;
+- (void)setItems:(NSMutableArray *)items andSelectFundid:(NSString *)fundids {
+    _items = [NSMutableArray arrayWithArray:items];
+    
+    SSJFinancingHomeitem *item = [[SSJFinancingHomeitem alloc] init];
+    item.fundingName = @"全选";
+    [_items insertObject:item atIndex:0];
+    
     _selectedFundid = fundids;
     if (![fundids isEqualToString:@"all"]) {
-        _selectedFundids = [fundids componentsSeparatedByString:@","];
+        _selectedFundids = [NSMutableArray arrayWithArray:[fundids componentsSeparatedByString:@","]];
+    } else {
+        [self getAllFundIds];
     }
+}
+
+- (void)getAllFundIds {
+    if (!self.selectedFundids) {
+        self.selectedFundids = [NSMutableArray arrayWithCapacity:0];
+    }
+    
+    [_items enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSString *fundId;
+        
+        if (idx != 0) {
+            if ([[self.items ssj_safeObjectAtIndex:idx] isKindOfClass:[SSJFinancingHomeitem class]]) {
+                fundId = ((SSJFinancingHomeitem *)[_items ssj_safeObjectAtIndex:idx]).fundingID;
+            } else if (([[self.items ssj_safeObjectAtIndex:idx] isKindOfClass:[SSJCreditCardItem class]])) {
+                fundId = ((SSJCreditCardItem *)[_items ssj_safeObjectAtIndex:idx]).cardId;
+            }
+            [self.selectedFundids addObject:fundId];
+        }
+    }];
+    
+    self.selectedFundid = @"all";
+
 }
 
 /*

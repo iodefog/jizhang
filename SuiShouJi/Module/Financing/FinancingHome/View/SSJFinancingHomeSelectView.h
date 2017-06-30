@@ -17,4 +17,6 @@
 
 - (void)setItems:(NSArray *)items andSelectFundid:(NSString *)fundids;
 
+@property (nonatomic, copy) void(^dismissBlock)(NSString *selectedFundid, NSArray *selectedFundids);
+
 @end

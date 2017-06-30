@@ -849,6 +849,20 @@
 		7D5213E11F050DFD004FE68A /* SSJBindMobileNoNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5213D51F050DFD004FE68A /* SSJBindMobileNoNetworkService.m */; };
 		7D5213E21F050DFD004FE68A /* SSJBindMobileNoNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5213D51F050DFD004FE68A /* SSJBindMobileNoNetworkService.m */; };
 		7D5213E31F050DFD004FE68A /* SSJBindMobileNoNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5213D51F050DFD004FE68A /* SSJBindMobileNoNetworkService.m */; };
+		7D5213E61F05EF78004FE68A /* SSJForgetAndResetPasswordNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5213E51F05EF78004FE68A /* SSJForgetAndResetPasswordNetworkService.m */; };
+		7D5213E71F05EF78004FE68A /* SSJForgetAndResetPasswordNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5213E51F05EF78004FE68A /* SSJForgetAndResetPasswordNetworkService.m */; };
+		7D5213E81F05EF78004FE68A /* SSJForgetAndResetPasswordNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5213E51F05EF78004FE68A /* SSJForgetAndResetPasswordNetworkService.m */; };
+		7D5213E91F05EF78004FE68A /* SSJForgetAndResetPasswordNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5213E51F05EF78004FE68A /* SSJForgetAndResetPasswordNetworkService.m */; };
+		7D5213EA1F05EF78004FE68A /* SSJForgetAndResetPasswordNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5213E51F05EF78004FE68A /* SSJForgetAndResetPasswordNetworkService.m */; };
+		7D5213EB1F05EF78004FE68A /* SSJForgetAndResetPasswordNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5213E51F05EF78004FE68A /* SSJForgetAndResetPasswordNetworkService.m */; };
+		7D5213EC1F05EF78004FE68A /* SSJForgetAndResetPasswordNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5213E51F05EF78004FE68A /* SSJForgetAndResetPasswordNetworkService.m */; };
+		7D5213ED1F05EF78004FE68A /* SSJForgetAndResetPasswordNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5213E51F05EF78004FE68A /* SSJForgetAndResetPasswordNetworkService.m */; };
+		7D5213EE1F05EF78004FE68A /* SSJForgetAndResetPasswordNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5213E51F05EF78004FE68A /* SSJForgetAndResetPasswordNetworkService.m */; };
+		7D5213EF1F05EF78004FE68A /* SSJForgetAndResetPasswordNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5213E51F05EF78004FE68A /* SSJForgetAndResetPasswordNetworkService.m */; };
+		7D5213F01F05EF78004FE68A /* SSJForgetAndResetPasswordNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5213E51F05EF78004FE68A /* SSJForgetAndResetPasswordNetworkService.m */; };
+		7D5213F11F05EF78004FE68A /* SSJForgetAndResetPasswordNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5213E51F05EF78004FE68A /* SSJForgetAndResetPasswordNetworkService.m */; };
+		7D5213F21F05EF78004FE68A /* SSJForgetAndResetPasswordNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5213E51F05EF78004FE68A /* SSJForgetAndResetPasswordNetworkService.m */; };
+		7D5213F31F05EF78004FE68A /* SSJForgetAndResetPasswordNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5213E51F05EF78004FE68A /* SSJForgetAndResetPasswordNetworkService.m */; };
 		7D567E3C1D9D1632006512C8 /* SSJBudgetProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D567E3B1D9D1632006512C8 /* SSJBudgetProgressView.m */; };
 		7D567E3F1D9D1632006512C8 /* SSJBudgetProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D567E3B1D9D1632006512C8 /* SSJBudgetProgressView.m */; };
 		7D567E4A1D9D1AD6006512C8 /* SSJBudgetListSecondaryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D567E491D9D1AD6006512C8 /* SSJBudgetListSecondaryCell.m */; };
@@ -10083,6 +10097,8 @@
 		7D5213C41F04EDD2004FE68A /* SSJPasswordField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJPasswordField.m; sourceTree = "<group>"; };
 		7D5213D41F050DFD004FE68A /* SSJBindMobileNoNetworkService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBindMobileNoNetworkService.h; sourceTree = "<group>"; };
 		7D5213D51F050DFD004FE68A /* SSJBindMobileNoNetworkService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBindMobileNoNetworkService.m; sourceTree = "<group>"; };
+		7D5213E41F05EF78004FE68A /* SSJForgetAndResetPasswordNetworkService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJForgetAndResetPasswordNetworkService.h; sourceTree = "<group>"; };
+		7D5213E51F05EF78004FE68A /* SSJForgetAndResetPasswordNetworkService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJForgetAndResetPasswordNetworkService.m; sourceTree = "<group>"; };
 		7D567E3A1D9D1632006512C8 /* SSJBudgetProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBudgetProgressView.h; sourceTree = "<group>"; };
 		7D567E3B1D9D1632006512C8 /* SSJBudgetProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBudgetProgressView.m; sourceTree = "<group>"; };
 		7D567E481D9D1AD6006512C8 /* SSJBudgetListSecondaryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBudgetListSecondaryCell.h; sourceTree = "<group>"; };
@@ -11971,6 +11987,8 @@
 			children = (
 				7D5213D41F050DFD004FE68A /* SSJBindMobileNoNetworkService.h */,
 				7D5213D51F050DFD004FE68A /* SSJBindMobileNoNetworkService.m */,
+				7D5213E41F05EF78004FE68A /* SSJForgetAndResetPasswordNetworkService.h */,
+				7D5213E51F05EF78004FE68A /* SSJForgetAndResetPasswordNetworkService.m */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -17603,6 +17621,7 @@
 				7D08A2661E4999D30085A8FB /* SSJBookkeepingTreeHelpViewController.m in Sources */,
 				7D08A2671E4999D30085A8FB /* SSJChargeCicleModifyViewController.m in Sources */,
 				7D08A2681E4999D30085A8FB /* SSJCalendarCollectionViewCell.m in Sources */,
+				7D5213EB1F05EF78004FE68A /* SSJForgetAndResetPasswordNetworkService.m in Sources */,
 				7D08A2691E4999D30085A8FB /* SSJLoadMoreCollectionViewCell.m in Sources */,
 				7D08A26A1E4999D30085A8FB /* SSJMoreProductAdviceTableViewCell.m in Sources */,
 				7D08A26B1E4999D30085A8FB /* SSJUmengManager.m in Sources */,
@@ -18261,6 +18280,7 @@
 				7DA13BBD1E35AED7000490A4 /* SSJBookkeepingTreeHelpViewController.m in Sources */,
 				7DA13BBE1E35AED7000490A4 /* SSJChargeCicleModifyViewController.m in Sources */,
 				7DA13BBF1E35AED7000490A4 /* SSJCalendarCollectionViewCell.m in Sources */,
+				7D5213EA1F05EF78004FE68A /* SSJForgetAndResetPasswordNetworkService.m in Sources */,
 				7DA13BC01E35AED7000490A4 /* SSJLoadMoreCollectionViewCell.m in Sources */,
 				7DA13BC11E35AED7000490A4 /* SSJMoreProductAdviceTableViewCell.m in Sources */,
 				7DA13BC21E35AED7000490A4 /* SSJUmengManager.m in Sources */,
@@ -18919,6 +18939,7 @@
 				7DBB3C4D1E55C2EE0075E638 /* SSJGuideLastContentView.m in Sources */,
 				7DBB3C4E1E55C2EE0075E638 /* SSJBookkeepingTreeHelpViewController.m in Sources */,
 				7DBB3C4F1E55C2EE0075E638 /* SSJChargeCicleModifyViewController.m in Sources */,
+				7D5213EC1F05EF78004FE68A /* SSJForgetAndResetPasswordNetworkService.m in Sources */,
 				7DBB3C501E55C2EE0075E638 /* SSJCalendarCollectionViewCell.m in Sources */,
 				7DBB3C511E55C2EE0075E638 /* SSJLoadMoreCollectionViewCell.m in Sources */,
 				7DBB3C521E55C2EE0075E638 /* SSJMoreProductAdviceTableViewCell.m in Sources */,
@@ -19577,6 +19598,7 @@
 				7DBB40E81E55C4E00075E638 /* SSJGuideLastContentView.m in Sources */,
 				7DBB40E91E55C4E00075E638 /* SSJBookkeepingTreeHelpViewController.m in Sources */,
 				7DBB40EA1E55C4E00075E638 /* SSJChargeCicleModifyViewController.m in Sources */,
+				7D5213E71F05EF78004FE68A /* SSJForgetAndResetPasswordNetworkService.m in Sources */,
 				7DBB40EB1E55C4E00075E638 /* SSJCalendarCollectionViewCell.m in Sources */,
 				7DBB40EC1E55C4E00075E638 /* SSJLoadMoreCollectionViewCell.m in Sources */,
 				7DBB40ED1E55C4E00075E638 /* SSJMoreProductAdviceTableViewCell.m in Sources */,
@@ -20227,6 +20249,7 @@
 				7DFB18441EB0341E00292DD3 /* SSJHeaderBannerImageView.m in Sources */,
 				7DFB18451EB0341E00292DD3 /* SSJListMenuItem.m in Sources */,
 				7DFB18461EB0341E00292DD3 /* SSJProductAdviceViewController.m in Sources */,
+				7D5213F21F05EF78004FE68A /* SSJForgetAndResetPasswordNetworkService.m in Sources */,
 				7DFB18471EB0341E00292DD3 /* SSJLoanFundAccountSelectionView.m in Sources */,
 				7DFB18481EB0341E00292DD3 /* SSJCircleChargeStore.m in Sources */,
 				7DFB18491EB0341E00292DD3 /* SSJDatabaseVersion2.m in Sources */,
@@ -20895,6 +20918,7 @@
 				9C13F6CA1E8267D300AC5FA9 /* SSJGuideLastContentView.m in Sources */,
 				9C13F6CB1E8267D300AC5FA9 /* SSJBookkeepingTreeHelpViewController.m in Sources */,
 				9C13F6CC1E8267D300AC5FA9 /* SSJChargeCicleModifyViewController.m in Sources */,
+				7D5213ED1F05EF78004FE68A /* SSJForgetAndResetPasswordNetworkService.m in Sources */,
 				9C13F6CD1E8267D300AC5FA9 /* SSJCalendarCollectionViewCell.m in Sources */,
 				9C13F6CE1E8267D300AC5FA9 /* SSJLoadMoreCollectionViewCell.m in Sources */,
 				9C13F6CF1E8267D300AC5FA9 /* SSJMoreProductAdviceTableViewCell.m in Sources */,
@@ -21545,6 +21569,7 @@
 				9C4C21EC1E9E30C8000C5F15 /* SSJListMenuItem.m in Sources */,
 				9C4C21ED1E9E30C8000C5F15 /* SSJProductAdviceViewController.m in Sources */,
 				9C4C21EE1E9E30C8000C5F15 /* SSJLoanFundAccountSelectionView.m in Sources */,
+				7D5213F01F05EF78004FE68A /* SSJForgetAndResetPasswordNetworkService.m in Sources */,
 				9C4C21EF1E9E30C8000C5F15 /* SSJCircleChargeStore.m in Sources */,
 				9C4C21F01E9E30C8000C5F15 /* SSJDatabaseVersion2.m in Sources */,
 				9C4C21F11E9E30C8000C5F15 /* SSJReportFormsCurveGraphView.m in Sources */,
@@ -22033,6 +22058,7 @@
 				9C7D2E3B1E8DF8A80093001F /* SSJMemberCell.m in Sources */,
 				9C7D2E3C1E8DF8A80093001F /* SSJBorderButton.m in Sources */,
 				9C7D2E3D1E8DF8A80093001F /* SSJReportFormsPeriodModel.m in Sources */,
+				7D5213E61F05EF78004FE68A /* SSJForgetAndResetPasswordNetworkService.m in Sources */,
 				9C7D2E3E1E8DF8A80093001F /* SSJBookkeepingTreeHelpCell.m in Sources */,
 				9C7D2E3F1E8DF8A80093001F /* SSJBudgetEditSwitchCtrlCell.m in Sources */,
 				9C7D2E401E8DF8A80093001F /* SSJPercentCircleAdditionGroupNode.m in Sources */,
@@ -22694,6 +22720,7 @@
 				9C7D30B21E8DF96B0093001F /* SSJMemberCell.m in Sources */,
 				9C7D30B31E8DF96B0093001F /* SSJBorderButton.m in Sources */,
 				9C7D30B41E8DF96B0093001F /* SSJReportFormsPeriodModel.m in Sources */,
+				7D5213EE1F05EF78004FE68A /* SSJForgetAndResetPasswordNetworkService.m in Sources */,
 				9C7D30B51E8DF96B0093001F /* SSJBookkeepingTreeHelpCell.m in Sources */,
 				9C7D30B61E8DF96B0093001F /* SSJBudgetEditSwitchCtrlCell.m in Sources */,
 				9C7D30B71E8DF96B0093001F /* SSJPercentCircleAdditionGroupNode.m in Sources */,
@@ -23527,6 +23554,7 @@
 				9C80FE8A1E95E88E00B1BAAC /* SSJHeaderBannerImageView.m in Sources */,
 				9C80FE8B1E95E88E00B1BAAC /* SSJListMenuItem.m in Sources */,
 				9C80FE8C1E95E88E00B1BAAC /* SSJProductAdviceViewController.m in Sources */,
+				7D5213EF1F05EF78004FE68A /* SSJForgetAndResetPasswordNetworkService.m in Sources */,
 				9C80FE8D1E95E88E00B1BAAC /* SSJLoanFundAccountSelectionView.m in Sources */,
 				9C80FE8E1E95E88E00B1BAAC /* SSJCircleChargeStore.m in Sources */,
 				9C80FE8F1E95E88E00B1BAAC /* SSJDatabaseVersion2.m in Sources */,
@@ -24187,6 +24215,7 @@
 				9C9CF04A1EA5F73A007657FE /* SSJHeaderBannerImageView.m in Sources */,
 				9C9CF04B1EA5F73A007657FE /* SSJListMenuItem.m in Sources */,
 				9C9CF04C1EA5F73A007657FE /* SSJProductAdviceViewController.m in Sources */,
+				7D5213F11F05EF78004FE68A /* SSJForgetAndResetPasswordNetworkService.m in Sources */,
 				9C9CF04D1EA5F73A007657FE /* SSJLoanFundAccountSelectionView.m in Sources */,
 				9C9CF04E1EA5F73A007657FE /* SSJCircleChargeStore.m in Sources */,
 				9C9CF04F1EA5F73A007657FE /* SSJDatabaseVersion2.m in Sources */,
@@ -24675,6 +24704,7 @@
 				9CDB4B091EF3ABBC0097E09D /* SSJRepaymentStore.m in Sources */,
 				9CDB4B0A1EF3ABBC0097E09D /* SSJAboutusTableViewCell.m in Sources */,
 				9CDB4B0B1EF3ABBC0097E09D /* SSJMemberSyncTable.m in Sources */,
+				7D5213F31F05EF78004FE68A /* SSJForgetAndResetPasswordNetworkService.m in Sources */,
 				9CDB4B0C1EF3ABBC0097E09D /* SSJCustomKeyboard.m in Sources */,
 				9CDB4B0D1EF3ABBC0097E09D /* SSJMemberCell.m in Sources */,
 				9CDB4B0E1EF3ABBC0097E09D /* SSJBorderButton.m in Sources */,
@@ -25437,6 +25467,7 @@
 				9C4E79691ED817A10028E48B /* SSJShareBooksMemberSyncTable.m in Sources */,
 				9CECFC3E1D6D41A700DB2C8B /* SSJFundingTransferDetailItem.m in Sources */,
 				7DF532951E13BBB3009A6F6C /* SSJRepaymentStore.m in Sources */,
+				7D5213E91F05EF78004FE68A /* SSJForgetAndResetPasswordNetworkService.m in Sources */,
 				9CECFC3F1D6D41A700DB2C8B /* SSJMagicExportResultCheckMarkView.m in Sources */,
 				9CECFC401D6D41A700DB2C8B /* SSJChargeCircleTimeSelectView.m in Sources */,
 				9CECFC411D6D41A700DB2C8B /* SSJPasswordModifyViewController.m in Sources */,
@@ -25991,6 +26022,7 @@
 				9CB743CD1E65453C009746EE /* SSJBookKeepingHomeHeaderView.m in Sources */,
 				9C47BB841DF1498B0077ACF5 /* SSJRepaymentStore.m in Sources */,
 				9CD9BC201CFD2DAA0061803B /* SSJAboutusTableViewCell.m in Sources */,
+				7D5213E81F05EF78004FE68A /* SSJForgetAndResetPasswordNetworkService.m in Sources */,
 				7D36AC471D461704006526B3 /* SSJMemberSyncTable.m in Sources */,
 				9C17FF1C1CE96ED90016EE4C /* SSJCustomKeyboard.m in Sources */,
 				9C2FC0561D3F287C00A4C0C9 /* SSJMemberCell.m in Sources */,

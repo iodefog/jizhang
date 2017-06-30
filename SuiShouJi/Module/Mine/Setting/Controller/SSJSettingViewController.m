@@ -93,6 +93,7 @@ static NSString *const kClearDataTitle = @"清理数据";
         [self.navigationController pushViewController:mobileNoDetailVC animated:YES];
     } else if ([title isEqualToString:kModifyPwdTitle]) {// 修改密码
         SSJSettingPasswordViewController *modifyPwdVC = [[SSJSettingPasswordViewController alloc] init];
+        modifyPwdVC.mobileNo = self.userItem.mobileNo;
         modifyPwdVC.type = SSJSettingPasswordTypeResettingPassword;
         [self.navigationController pushViewController:modifyPwdVC animated:YES];
     } else if ([title isEqualToString:kMagicExportTitle]) {// 数据导出

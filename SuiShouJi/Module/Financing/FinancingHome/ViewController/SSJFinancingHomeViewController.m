@@ -51,6 +51,8 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 
 @property(nonatomic, strong) NSString *selectedFundids;
 
+@property(nonatomic, strong) NSArray *selectedFundidsArr;
+
 @end
 
 @implementation SSJFinancingHomeViewController{
@@ -101,6 +103,9 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
     if (self.collectionView.editing) {
         [self collectionViewEndEditing];
     }
+    SSJUserItem *item = [[SSJUserItem alloc] init];
+    item.selectFundid = self.selectedFundids;
+    [SSJUserTableManager saveUserItem:item success:NULL failure:NULL];
 }
 
 #pragma mark - UICollectionViewDelegate
@@ -276,6 +281,13 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 - (SSJFinancingHomeSelectView *)fundingSelectView {
     if (!_fundingSelectView) {
         _fundingSelectView = [[SSJFinancingHomeSelectView alloc] init];
+        @weakify(self);
+        _fundingSelectView.dismissBlock = ^(NSString *selectedFundid, NSArray *selectedFundids) {
+            @strongify(self);
+            self.selectedFundids = selectedFundid;
+            self.selectedFundidsArr = selectedFundids;
+            [self getSumMoney];
+        };
     }
     return _fundingSelectView;
 }
@@ -393,13 +405,16 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 - (void)getSumMoney {
     __block double sumMoney = 0;
     [self.items enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        
         if ([obj isKindOfClass:[SSJFinancingHomeitem class]]) {
             SSJFinancingHomeitem *fundingItem = (SSJFinancingHomeitem *)obj;
-            sumMoney += fundingItem.fundingAmount;
+            if ([self.selectedFundids isEqualToString:@"all"] || [self.selectedFundidsArr containsObject:fundingItem.fundingID]) {
+                sumMoney += fundingItem.fundingAmount;
+            }
         }else if([obj isKindOfClass:[SSJCreditCardItem class]]){
             SSJCreditCardItem *creditItem = (SSJCreditCardItem *)obj;
-            sumMoney += creditItem.cardBalance;
+            if ([self.selectedFundids isEqualToString:@"all"] || [self.selectedFundidsArr containsObject:creditItem.cardId]) {
+                sumMoney += creditItem.cardBalance;
+            }
         }
         
     }];
