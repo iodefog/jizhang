@@ -105,6 +105,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
     }
     SSJUserItem *item = [[SSJUserItem alloc] init];
     item.selectFundid = self.selectedFundids;
+    item.userId = SSJUSERID();
     [SSJUserTableManager saveUserItem:item success:NULL failure:NULL];
 }
 
