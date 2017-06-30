@@ -17,7 +17,15 @@ typedef NS_ENUM(NSInteger, SSJSettingPasswordType) {
 
 @interface SSJSettingPasswordViewController : SSJBaseViewController
 
+/**
+ 指定是绑定手机号还是重置密码
+ */
 @property (nonatomic) SSJSettingPasswordType type;
+
+/**
+ 手机号
+ */
+@property (nonatomic, copy) NSString *mobileNo;
 
 @end
 

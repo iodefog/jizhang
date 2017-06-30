@@ -109,7 +109,7 @@ static NSString *const SSJFundingHomeSelectCellIndetifer = @"SSJFundingHomeSelec
         [path addArcWithCenter:CGPointMake(self.width - kCornerRadius, self.height - 8) radius:kCornerRadius startAngle:0 endAngle:M_PI_2 clockwise:YES];
         [path addLineToPoint:CGPointMake(kCornerRadius, self.height)];
         [path addArcWithCenter:CGPointMake(kCornerRadius, self.height - kCornerRadius) radius:kCornerRadius startAngle:M_PI_2 endAngle:M_PI clockwise:YES];
-        [path addLineToPoint:CGPointMake(kCornerRadius, kTriangleHeight + kCornerRadius)];
+        [path addLineToPoint:CGPointMake(0, kTriangleHeight + kCornerRadius)];
         _maskLayer.path = path.CGPath;
     }
     return _maskLayer;

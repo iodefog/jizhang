@@ -117,6 +117,7 @@
         } else {
             SSJSettingPasswordViewController *pwdSetttingVC = [[SSJSettingPasswordViewController alloc] init];
             pwdSetttingVC.type = SSJSettingPasswordTypeMobileNoBinding;
+            pwdSetttingVC.mobileNo = self.phoneNoField.text;
             [self.navigationController pushViewController:pwdSetttingVC animated:YES];
         }
     } error:NULL];

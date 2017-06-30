@@ -11,6 +11,7 @@
 #import "SSJChangeMobileNoStepView.h"
 #import "SSJVerifCodeField.h"
 #import "SSJInviteCodeJoinSuccessView.h"
+#import "SSJBindMobileNoNetworkService.h"
 
 @interface SSJChangeMobileNoThirdViewController ()
 
@@ -30,7 +31,7 @@
 
 @property (nonatomic, strong) SSJLoginVerifyPhoneNumViewModel *viewModel;
 
-@property (nonatomic, strong) SSJBaseNetworkService *service;
+@property (nonatomic, strong) SSJBindMobileNoNetworkService *service;
 
 @end
 
@@ -140,11 +141,7 @@
 }
 
 - (void)bindNewMobileNo {
-    NSDictionary *params = @{@"cuserId":SSJUSERID(),
-                             @"cmobileNo":self.mobileNo,
-                             @"yzm":self.authCodeField.text,
-                             @"mobileType":@2};
-    [self.service request:@"/chargebook/user/binding_cphone" params:params success:^(SSJBaseNetworkService * _Nonnull service) {
+    [self.service changeMobileNoWithMobileNo:self.mobileNo authCode:self.authCodeField.text success:^(SSJBaseNetworkService * _Nonnull service) {
         UIViewController *setttingVC = [self ssj_previousViewControllerBySubtractingIndex:4];
         if (setttingVC) {
             [self.navigationController popToViewController:setttingVC animated:YES];
@@ -222,9 +219,9 @@
     return _viewModel;
 }
 
-- (SSJBaseNetworkService *)service {
+- (SSJBindMobileNoNetworkService *)service {
     if (!_service) {
-        _service = [[SSJBaseNetworkService alloc] init];
+        _service = [[SSJBindMobileNoNetworkService alloc] init];
         _service.showLodingIndicator = YES;
     }
     return _service;
