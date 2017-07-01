@@ -1035,7 +1035,9 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 {
     //评分
     [self.appEvaluatePopView showEvaluatePopView];
+    
     return;
+    
     //1.定期登录提示
     if ([self.keepingHomePopView popLoginViewWithNav:self.navigationController backController:self] == YES) return;
     
