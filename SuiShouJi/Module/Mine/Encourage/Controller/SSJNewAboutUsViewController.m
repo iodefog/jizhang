@@ -58,7 +58,10 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
 
 #pragma mark - UITableViewDelegate
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 55;
+    SSJEncourageCellModel *item = [self.items ssj_objectAtIndexPath:indexPath];
+
+    
+    return item.rowHeight;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
@@ -79,23 +82,15 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
     }
     
     if ([title isEqualToString:ktitle2]) {
-        NSString *urlStr = SSJAppStoreUrl();
-        if (urlStr) {
-            NSURL *url = [NSURL URLWithString:urlStr];
-            if ([[UIApplication sharedApplication] canOpenURL:url]) {
-                [[UIApplication sharedApplication] openURL:url];
-            }
+        NSString *urlStr = [NSString stringWithFormat:@"sinaweibo://userinfo?uid=%@",@"5603151337"];
+        NSURL *url = [NSURL URLWithString:urlStr];
+        if ([[UIApplication sharedApplication] canOpenURL:url]) {
+            [[UIApplication sharedApplication] openURL:url];
         }
-        return;
     }
     
-    if ([title isEqualToString:ktitle3]) {
-        if ([SSJDefaultSource() isEqualToString:@"11501"]) {
-            [SSJShareManager shareWithType:SSJShareTypeUrl image:nil UrlStr:SSJDetailSettingForSource(@"ShareUrl") title:SSJDetailSettingForSource(@"ShareTitle") content:@"财务管理第一步，从记录消费生活开始!" PlatformType:@[@(UMSocialPlatformType_Sina),@(UMSocialPlatformType_WechatSession),@(UMSocialPlatformType_WechatTimeLine),@(UMSocialPlatformType_QQ)] inController:self ShareSuccess:NULL];
-        } else {
-            [SSJShareManager shareWithType:SSJShareTypeUrl image:nil UrlStr:SSJDetailSettingForSource(@"ShareUrl") title:SSJDetailSettingForSource(@"ShareTitle") content:@"在这里，记录消费生活是件有趣简单的事儿，管家更有窍门。" PlatformType:@[@(UMSocialPlatformType_Sina),@(UMSocialPlatformType_WechatSession),@(UMSocialPlatformType_WechatTimeLine),@(UMSocialPlatformType_QQ)] inController:self ShareSuccess:NULL];
-        }
-        return;
+    if ([title isEqualToString:ktitle1]) {
+        
     }
 }
 
@@ -213,6 +208,7 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
             } else if ([title isEqualToString:ktitle6]) {
                 item.cellDetail = self.service.telNum ? : @"400-7676-298";
                 item.cellSubTitle = @"工作日：9:00——18:00";
+                item.rowHeight = 70;
             }
             [sectionArr addObject:item];
         }
@@ -223,6 +219,16 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
     self.items = [NSMutableArray arrayWithArray:tempArr];
     
     [self.tableView reloadData];
+}
+
+- (BOOL)joinGroup:(NSString *)groupUin key:(NSString *)key{
+    NSString *urlStr = [NSString stringWithFormat:@"mqqapi://card/show_pslcard?src_type=internal&version=1&uin=%@&key=%@&card_type=group&source=external", groupUin,key];
+    NSURL *url = [NSURL URLWithString:urlStr];
+    if([[UIApplication sharedApplication] canOpenURL:url]){
+        [[UIApplication sharedApplication] openURL:url];
+        return YES;
+    }
+    else return NO;
 }
 
 
