@@ -68,13 +68,17 @@
         mineHomeCell = [[SSJSyncSettingTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
     }
     mineHomeCell.cellTitle = [titleArray ssj_safeObjectAtIndex:indexPath.row];
-    if ([indexPath compare:_selectedIndex] == NSOrderedSame) {
-        mineHomeCell.selectedOrNot = YES;
-    }else{
-        mineHomeCell.selectedOrNot = NO;
-    }
     mineHomeCell.selectionStyle = UITableViewCellSelectionStyleNone;
     return mineHomeCell;
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    SSJSyncSettingTableViewCell *mineHomeCell = (SSJSyncSettingTableViewCell *)cell;
+    if ([indexPath compare:_selectedIndex] == NSOrderedSame) {
+        mineHomeCell.selected = YES;
+    }else{
+        mineHomeCell.selected = NO;
+    }
 }
 
 - (void)saveSetting {

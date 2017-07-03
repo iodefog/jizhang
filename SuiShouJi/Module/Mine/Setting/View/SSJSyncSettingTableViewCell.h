@@ -11,5 +11,4 @@
 
 @interface SSJSyncSettingTableViewCell : SSJBaseTableViewCell
 @property (nonatomic,strong) NSString *cellTitle;
-@property (nonatomic) BOOL selectedOrNot;
 @end

@@ -55,19 +55,13 @@
     [_titleLabel sizeToFit];
 }
 
--(void)setSelectedOrNot:(BOOL)selectedOrNot{
-    _selectedOrNot = selectedOrNot;
-    if (_selectedOrNot) {
+-(void)setSelected:(BOOL)selected {
+    [super setSelected:selected];
+    if (selected) {
         self.checkMarkImage.hidden = NO;
     }else{
         self.checkMarkImage.hidden = YES;
     }
-}
-
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
-    [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
 }
 
 @end
