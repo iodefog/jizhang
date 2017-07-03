@@ -155,11 +155,11 @@
 
 + (void)showError:(NSError *)error completion:(nullable void(^)())completion {
     NSString *message = nil;
-#ifdef DEBUG
+//#ifdef DEBUG
     message = [error localizedDescription];
-#else
-    message = SSJ_ERROR_MESSAGE;
-#endif
+//#else
+//    message = SSJ_ERROR_MESSAGE;
+//#endif
     [self showAlertViewWithTitle:@"出错了" message:message action:[SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction * _Nonnull action) {
         if (completion) {
             completion();

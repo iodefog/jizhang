@@ -7,7 +7,10 @@
 //
 
 #import "SSJBaseTableViewCell.h"
+#import "SSJEncourageCellModel.h"
 
 @interface SSJEncourageCell : SSJBaseTableViewCell
+
+@property(nonatomic, strong) SSJEncourageCellModel *item;
 
 @end

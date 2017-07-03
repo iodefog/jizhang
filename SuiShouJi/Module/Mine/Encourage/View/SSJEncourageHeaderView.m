@@ -122,7 +122,6 @@
         [_updateButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         _updateButton.enabled = YES;
     }
-    [self updateConstraintsIfNeeded];
 }
 
 - (void)updateCellAppearanceAfterThemeChanged {
