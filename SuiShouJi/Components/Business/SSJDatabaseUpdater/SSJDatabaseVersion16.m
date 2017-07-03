@@ -72,6 +72,10 @@
         return [db lastError];
     }
     
+    if (![db executeUpdate:@"alter table BK_USER add CLASTSYNCTIME TEXT"]) {
+        return [db lastError];
+    }
+    
     if (![db executeUpdate:@"update bk_user_credit set ccurrentselectfundid = 'all' where ccurrentselectfundid is null"]) {
         return [db lastError];
     }
