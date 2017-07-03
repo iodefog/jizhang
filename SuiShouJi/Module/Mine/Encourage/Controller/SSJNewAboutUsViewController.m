@@ -16,6 +16,7 @@
 #import "WXApi.h"
 #import <TencentOpenAPI/TencentOAuth.h>
 #import "WeiboSDK.h"
+#import "SSJUserTableManager.h"
 
 static NSString *const ktitle1 = @"微信公众号";
 static NSString *const ktitle2 = @"新浪微博";
@@ -78,7 +79,23 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
     NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
     
     if ([title isEqualToString:ktitle1]) {
+        NSString *weixin = self.service.wechatId;
         
+        [[UIPasteboard generalPasteboard] setString:weixin];
+        
+        UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDefault handler:nil];
+        
+        UIAlertAction *comfirm = [UIAlertAction actionWithTitle:@"打开微信" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [WXApi openWXApp];
+        }];
+        
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"" preferredStyle:UIAlertControllerStyleAlert];
+        
+        [alert addAction:cancel];
+        
+        [alert addAction:comfirm];
+        
+        [self.navigationController presentViewController:alert animated:YES completion:NULL];
     }
     
     if ([title isEqualToString:ktitle2]) {
@@ -89,8 +106,54 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
         }
     }
     
-    if ([title isEqualToString:ktitle1]) {
+    if ([title isEqualToString:ktitle3]) {
+        NSString *qqGroup = self.service.qqgroup ? : @"552563622";
+        NSString *qqGroupId = self.service.qqgroupId ? : @"160aa4d10987c3a6ff17b2fb89e3e1f0e4e996e320207f1e23e1299518f58169";
+        [self joinGroup:qqGroup key:qqGroupId];
+    }
+    
+    if ([title isEqualToString:ktitle4]) {
+        UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            
+        }];
         
+        UIAlertAction *comfirm = [UIAlertAction actionWithTitle:@"打开微信" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [WXApi openWXApp];
+        }];
+        
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"" preferredStyle:UIAlertControllerStyleAlert];
+        
+        [alert addAction:cancel];
+        
+        [alert addAction:comfirm];
+        
+        [self.navigationController presentViewController:alert animated:YES completion:NULL];
+    }
+    
+    if ([title isEqualToString:ktitle5]) {
+        [SSJUserTableManager queryUserItemWithID:SSJUSERID() success:^(SSJUserItem * _Nonnull userItem) {
+            NSDictionary* clientCustomizedAttrs = @{@"userid": userItem.userId ?: @"",
+                                                    @"openid": userItem.openId ?: @"",
+                                                    @"nickname": userItem.nickName ?: @"",
+                                                    @"tel": userItem.mobileNo ?: @"",
+                                                    @"登录方式": userItem.loginType ?: @"",
+                                                    @"注册状态": userItem.registerState ?: @"",
+                                                    @"应用名称": SSJAppName(),
+                                                    @"应用版本号": SSJAppVersion(),
+                                                    @"手机型号" : SSJPhoneModel()
+                                                    };
+            [MQManager setClientInfo:clientCustomizedAttrs completion:NULL];
+            MQChatViewManager *chatViewManager = [[MQChatViewManager alloc] init];
+            [chatViewManager pushMQChatViewControllerInViewController:self];
+        } failure:^(NSError * _Nonnull error) {
+            [SSJAlertViewAdapter showError:error];
+        }];
+    }
+    
+    if ([title isEqualToString:ktitle6]) {
+        NSString *telNum = self.service.telNum ? : @"400-7676-298";
+        NSMutableString* str=[[NSMutableString alloc] initWithFormat:@"telprompt://%@",telNum];
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
     }
 }
 
