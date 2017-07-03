@@ -81,7 +81,8 @@
     if (!_iconImage) {
         _iconImage = [[UIImageView alloc] init];
         _iconImage.image = [UIImage imageNamed:SSJAppIcon()];
-        [_iconImage sizeToFit];
+        _iconImage.layer.cornerRadius = 10;
+        _iconImage.layer.masksToBounds = YES;
     }
     return _iconImage;
 }
