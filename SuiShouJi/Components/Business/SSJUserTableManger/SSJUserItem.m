@@ -35,7 +35,8 @@
                     @"remindSettingMotionPWD":@"remindsettingmotionpwd",
                     @"email":@"cemail",
                     @"adviceTime":@"cadvicetime",
-                    @"selectFundid":@"ccurrentselectfundid"};
+                    @"selectFundid":@"ccurrentselectfundid",
+                    @"lastSyncTime":@"clastsynctime"};
     }
     return mapping;
 }

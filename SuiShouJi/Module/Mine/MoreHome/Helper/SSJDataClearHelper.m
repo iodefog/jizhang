@@ -165,4 +165,56 @@
     }];
 }
 
++ (void)uploadAllUserDataWithSuccess:(void(^)(NSString *syncTime))success
+                             failure:(void (^)(NSError *error))failure {
+    NSString *userId = SSJUSERID();
+    [[[[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
+            if ([db executeUpdate:@"delete from bk_sync where cuserid = ?", userId]) {
+                [subscriber sendCompleted];
+            } else {
+                [subscriber sendError:[db lastError]];
+            }
+        }];
+        return nil;
+    }] then:^RACSignal *{
+        return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+            [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:^(SSJDataSynchronizeType type) {
+                if (type == SSJDataSynchronizeTypeData) {
+                    [subscriber sendCompleted];
+                }
+            } failure:^(SSJDataSynchronizeType type, NSError *error) {
+                [subscriber sendError:error];
+            }];
+            return nil;
+        }];
+    }] then:^RACSignal *{
+        return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+            [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
+                NSString *syncTime = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm"];
+                if ([db executeUpdate:@"update bk_user set clastsynctime = ? where cuserid = ?", syncTime, userId]) {
+                    [subscriber sendNext:syncTime];
+                    [subscriber sendCompleted];
+                } else {
+                    [subscriber sendError:[db lastError]];
+                }
+            }];
+            return nil;
+        }];
+    }] subscribeNext:^(NSString *time) {
+        if (success) {
+            SSJDispatchMainAsync(^{
+                success(time);
+            });
+        }
+    } error:^(NSError *error) {
+        if (failure) {
+            SSJDispatchMainAsync(^{
+                failure(error);
+            });
+        }
+    }];
+}
+
+
 @end

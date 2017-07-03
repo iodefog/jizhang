@@ -11,6 +11,7 @@
 #import "SSJSyncSettingMultiLineCell.h"
 #import "SSJSyncSettingWarningFooterView.h"
 
+#import "SSJUserTableManager.h"
 #import "SSJDataClearHelper.h"
 #import "SSJNetworkReachabilityManager.h"
 
@@ -23,6 +24,8 @@ static NSString *const kSSJSyncSettingMultiLineCellId = @"SSJSyncSettingMultiLin
 @interface SSJSyncSettingViewController ()
 
 @property (nonatomic, strong) NSArray *cellItems;
+
+@property (nonatomic, strong) SSJUserItem *userItem;
 
 @property (nonatomic) SSJSyncSettingType syncType;
 
@@ -124,24 +127,44 @@ static NSString *const kSSJSyncSettingMultiLineCellId = @"SSJSyncSettingMultiLin
 }
 
 - (void)organiseCellItems {
-    NSArray *section1 = @[[SSJSyncSettingTableViewCellItem itemWithTitle:@"仅在Wi-Fi自动同步"
-                                                           accessoryType:(self.syncType == SSJSyncSettingTypeWIFI ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone)],
-                          [SSJSyncSettingTableViewCellItem itemWithTitle:@"有网络连接时自动同步"
-                                                           accessoryType:(self.syncType == SSJSyncSettingTypeWWAN ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone)]];
-    NSArray *section2 = @[[SSJSyncSettingMultiLineCellItem itemWithTopTitle:@"将本机数据同步到云端"
-                                                                bottomTitle:@""]];
-    NSArray *section3 = @[[SSJSyncSettingMultiLineCellItem itemWithTopTitle:@"上传日志"
-                                                                bottomTitle:@"仅在工作人员引导下操作"],
-                          [SSJSyncSettingTableViewCellItem itemWithTitle:@"将云端数据拉取到本机"
-                                                           accessoryType:UITableViewCellAccessoryDisclosureIndicator]];
-    self.cellItems = @[section1, section2, section3];
+    [SSJUserTableManager queryUserItemWithID:SSJUSERID() success:^(SSJUserItem * _Nonnull userItem) {
+        self.userItem = userItem;
+        
+        NSString *lastSyncTime = [userItem.lastSyncTime ssj_dateStringFromFormat:@"yyyy-MM-dd HH:mm" toFormat:@"yyyy年MM月dd日 HH:mm"];
+        if (lastSyncTime) {
+            lastSyncTime = [NSString stringWithFormat:@"最后同步日期  %@", lastSyncTime];
+        }
+        
+        
+        NSArray *section1 = @[[SSJSyncSettingTableViewCellItem itemWithTitle:@"仅在Wi-Fi自动同步"
+                                                               accessoryType:(self.syncType == SSJSyncSettingTypeWIFI ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone)],
+                              [SSJSyncSettingTableViewCellItem itemWithTitle:@"有网络连接时自动同步"
+                                                               accessoryType:(self.syncType == SSJSyncSettingTypeWWAN ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone)]];
+        NSArray *section2 = @[[SSJSyncSettingMultiLineCellItem itemWithTopTitle:@"将本机数据同步到云端"
+                                                                    bottomTitle:lastSyncTime]];
+        NSArray *section3 = @[[SSJSyncSettingMultiLineCellItem itemWithTopTitle:@"上传日志"
+                                                                    bottomTitle:@"仅在工作人员引导下操作"],
+                              [SSJSyncSettingTableViewCellItem itemWithTitle:@"将云端数据拉取到本机"
+                                                               accessoryType:UITableViewCellAccessoryDisclosureIndicator]];
+        self.cellItems = @[section1, section2, section3];
+        [self.tableView reloadData];
+    } failure:^(NSError * _Nonnull error) {
+        [SSJAlertViewAdapter showError:error];
+    }];
 }
 
 /**
  上传用户所有数据
  */
 - (void)uploadAllUserData {
-    
+    [SSJDataClearHelper uploadAllUserDataWithSuccess:^(NSString *syncTime){
+        [CDAutoHideMessageHUD showMessage:@"上传成功"];
+        SSJSyncSettingMultiLineCellItem *item = [self.cellItems ssj_objectAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:1]];
+        item.bottomTitle = [NSString stringWithFormat:@"最后同步日期  %@", syncTime];
+        [self.tableView reloadData];
+    } failure:^(NSError *error) {
+        [SSJAlertViewAdapter showError:error];
+    }];
 }
 
 /**
