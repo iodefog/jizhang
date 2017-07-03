@@ -34,4 +34,20 @@ typedef NS_ENUM(NSInteger, SSJBookkeepingTreeLevel) {
 
 + (void)loadTreeGifImageDataWithUrlPath:(NSString *)url finish:(void (^)(NSData *data, BOOL success))finish;
 
+/**
+ 计算缓存图片大小（包括磁盘、内存）
+
+ @param success 成功回调
+ @param failure 失败回调
+ */
++ (NSUInteger)caculateCacheSize;
+
+/**
+ 清楚缓存（包括磁盘、内存）
+
+ @param success 成功回调
+ @param failure 失败回调
+ */
++ (BOOL)clearCache;
+
 @end

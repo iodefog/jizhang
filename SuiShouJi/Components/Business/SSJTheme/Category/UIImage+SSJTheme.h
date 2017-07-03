@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+@class YYMemoryCache;
+
 @interface UIImage (SSJTheme)
 
 + (instancetype)ssj_themeImageWithName:(NSString *)name;
@@ -18,6 +20,6 @@
 
 + (instancetype)ssj_themeLocalBackGroundImageName:(NSString *)name;
 
-+ (NSCache *)memoCache;
++ (YYMemoryCache *)ssj_memoCache;
 
 @end

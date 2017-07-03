@@ -167,29 +167,6 @@
     [moreController.tabBarItem setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:themeModel.tabBarTitleColor]} forState:UIControlStateNormal];
     [moreController.tabBarItem setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:themeModel.tabBarSelectedTitleColor]} forState:UIControlStateSelected];
     
-    
-    [self test:@[recordHomeController.tabBarItem.image,
-                 recordHomeController.tabBarItem.selectedImage,
-                 
-                 reportFormsController.tabBarItem.image,
-                 reportFormsController.tabBarItem.selectedImage,
-                 
-                 financingController.tabBarItem.image,
-                 financingController.tabBarItem.selectedImage,
-                 
-                 moreController.tabBarItem.image,
-                 moreController.tabBarItem.selectedImage,]];
-}
-
-+ (void)test:(NSArray *)images {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [images enumerateObjectsUsingBlock:^(UIImage *image, NSUInteger idx, BOOL * _Nonnull stop) {
-            NSData *data = UIImagePNGRepresentation(image);
-            NSString *path = [SSJDocumentPath() stringByAppendingPathComponent:[NSString stringWithFormat:@"test-%d", (int)idx]];
-            [data writeToFile:path atomically:YES];
-        }];
-        SSJPRINT(@">>>>> write images has completed!");
-    });
 }
 
 + (NSString *)settingFilePath {

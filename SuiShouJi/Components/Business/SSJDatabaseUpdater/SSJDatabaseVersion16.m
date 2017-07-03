@@ -39,15 +39,15 @@
         return [db lastError];
     }
     
-    if (![db executeUpdate:@"insert into bk_fund_info (cfundid, cacctname, cicoin, cparent, cwritedate, operatortype) values ('16','蚂蚁花呗','ft_huabei','root','-1','0')"]) {
+    if (![db executeUpdate:@"insert into BK_FUND_INFO (CFUNDID, CACCTNAME, CICOIN, CPARENT, CWRITEDATE, OPERATORTYPE) values ('16','蚂蚁花呗','ft_huabei','root','-1','0')"]) {
         return [db lastError];
     }
     
-    if (![db executeUpdate:@"update bk_fund_info set itype = ? where cfundid in ('3','11','16')", @(SSJAccountTypeliabilities)]) {
+    if (![db executeUpdate:@"update BK_FUND_INFO set ITYPE = ? where CFUNDID in ('3','11','16')", @(SSJAccountTypeliabilities)]) {
         return [db lastError];
     }
     
-    if (![db executeUpdate:@"update bk_fund_info set itype = ? where cfundid not in ('3','11','16')", @(SSJAccountTypeassets)]) {
+    if (![db executeUpdate:@"update BK_FUND_INFO set ITYPE = ? where CFUNDID not in ('3','11','16')", @(SSJAccountTypeassets)]) {
         return [db lastError];
     }
     
@@ -55,11 +55,11 @@
 }
 
 + (NSError *)updateUserCrediteTableWithDatabase:(FMDatabase *)db {
-    if (![db executeUpdate:@"alter table bk_user_credit add itype integer"]) {
+    if (![db executeUpdate:@"alter table BK_USER_CREDIT add ITYPE integer"]) {
         return [db lastError];
     }
     
-    if (![db executeUpdate:@"update bk_user_credit set itype = ? where itype is null", @(SSJCrediteCardTypeCrediteCard)]) {
+    if (![db executeUpdate:@"update BK_USER_CREDIT set ITYPE = ? where ITYPE is null", @(SSJCrediteCardTypeCrediteCard)]) {
         return [db lastError];
     }
     
@@ -68,11 +68,15 @@
 
 // 更新user表
 + (NSError *)updateUserTableWithDatabase:(FMDatabase *)db {
-    if (![db executeUpdate:@"alter table bk_user add ccurrentselectfundid text default 'all'"]) {
+    if (![db executeUpdate:@"alter table BK_USER add CCURRENTSELECTFUNDID text default 'all'"]) {
         return [db lastError];
     }
     
-    if (![db executeUpdate:@"update bk_user_credit set ccurrentselectfundid = 'all' where ccurrentselectfundid is null"]) {
+    if (![db executeUpdate:@"alter table BK_USER add CLASTSYNCTIME TEXT"]) {
+        return [db lastError];
+    }
+    
+    if (![db executeUpdate:@"update BK_USER set ccurrentselectfundid = 'all' where CCURRENTSELECTFUNDID is null"]) {
         return [db lastError];
     }
     

@@ -8,9 +8,11 @@
 
 #import "SSJBookkeepingTreeHelper.h"
 #import "SSJGlobalServiceManager.h"
+#import "YYMemoryCache.h"
 
 @implementation SSJBookkeepingTreeHelper
 
+#pragma mark - Public
 + (NSString *)treeLevelNameForLevel:(SSJBookkeepingTreeLevel)level {
     switch (level) {
         case SSJBookkeepingTreeLevelSeed:           return @"种子";
@@ -131,6 +133,27 @@
     }];
 }
 
++ (void)load {
+    NSLog(@"%d", (int)[self caculateCacheSize]);
+}
+
++ (NSUInteger)caculateCacheSize {
+    NSUInteger memoryCost = [[self memoryCache] totalCost];
+    NSUInteger diskCost = 0;
+    NSDirectoryEnumerator *enumerator = [[NSFileManager defaultManager] enumeratorAtPath:[self gifPath]];
+    while ([enumerator nextObject]) {
+        diskCost += [enumerator.fileAttributes[NSFileSize] unsignedIntegerValue];
+    }
+    return memoryCost + diskCost;
+}
+
++ (BOOL)clearCache {
+    [[self memoryCache] removeAllObjects];
+    NSError *error = nil;
+    return [[NSFileManager defaultManager] removeItemAtPath:[self gifPath] error:&error];
+}
+
+#pragma mark - Private
 + (NSData *)loadFromCacheWithUrl:(NSString *)url {
     NSData *gifData = [[self memoryCache] objectForKey:url];
     if (gifData) {
@@ -146,11 +169,9 @@
 }
 
 + (NSString *)gifDiskPathWithUrl:(NSString *)url {
-    NSString *documentPath = SSJDocumentPath();
-    NSString *directoryPath = [documentPath stringByAppendingPathComponent:@"gif_tree"];
-    if (![[NSFileManager defaultManager] fileExistsAtPath:directoryPath]) {
+    if (![[NSFileManager defaultManager] fileExistsAtPath:[self gifPath]]) {
         NSError *error = nil;
-        if (![[NSFileManager defaultManager] createDirectoryAtPath:directoryPath withIntermediateDirectories:YES attributes:nil error:&error]) {
+        if (![[NSFileManager defaultManager] createDirectoryAtPath:[self gifPath] withIntermediateDirectories:YES attributes:nil error:&error]) {
             return @"";
         }
     }
@@ -160,16 +181,20 @@
         return @"";
     }
     
-    NSString *filePath = [directoryPath stringByAppendingPathComponent:fileName];
+    NSString *filePath = [[self gifPath] stringByAppendingPathComponent:fileName];
     return filePath;
 }
 
-+ (NSCache *)memoryCache {
-    static NSCache *cache = nil;
++ (NSString *)gifPath {
+    return [SSJDocumentPath() stringByAppendingPathComponent:@"gif_tree"];
+}
+
++ (YYMemoryCache *)memoryCache {
+    static YYMemoryCache *cache = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         if (!cache) {
-            cache = [[NSCache alloc] init];
+            cache = [[YYMemoryCache alloc] init];
         }
     });
     return cache;

@@ -8,23 +8,16 @@
 
 #import "UIImage+SSJTheme.h"
 #import "NSString+SSJTheme.h"
+#import "YYMemoryCache.h"
 
 @implementation UIImage (SSJTheme)
 
-+ (void)load {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(clearCache) name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
-}
-
-+ (void)clearCache {
-    [[self memoCache] removeAllObjects];
-}
-
-+ (NSCache *)memoCache {
-    static NSCache *cache = nil;
++ (YYMemoryCache *)ssj_memoCache {
+    static YYMemoryCache *cache = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         if (!cache) {
-            cache = [[NSCache alloc] init];
+            cache = [[YYMemoryCache alloc] init];
         }
     });
     return cache;
@@ -50,14 +43,14 @@
     imagePath = [imagePath stringByAppendingPathComponent:@"Img"];
     imagePath = [imagePath stringByAppendingPathComponent:imgName];
     
-    UIImage *image = [[self memoCache] objectForKey:imagePath];
+    UIImage *image = [[self ssj_memoCache] objectForKey:imagePath];
     if (image) {
         return image;
     }
     
     image = [UIImage imageWithContentsOfFile:imagePath];
     if (image) {
-        [[self memoCache] setObject:image forKey:imagePath];
+        [[self ssj_memoCache] setObject:image forKey:imagePath];
     } else {
         SSJPRINT(@"imge在指定路径下不存在 %@", imagePath);
         image = [UIImage imageNamed:name];
@@ -111,14 +104,14 @@
     
     NSString *imagePath = [[NSString ssj_themeDirectory] stringByAppendingPathComponent:@"customBackGround"];
     imagePath = [imagePath stringByAppendingPathComponent:name];
-    UIImage *image = [[self memoCache] objectForKey:imagePath];
+    UIImage *image = [[self ssj_memoCache] objectForKey:imagePath];
     if (image) {
         return image;
     }
     
     image = [UIImage imageWithContentsOfFile:imagePath];
     if (image) {
-        [[self memoCache] setObject:image forKey:imagePath];
+        [[self ssj_memoCache] setObject:image forKey:imagePath];
     } else {
         SSJPRINT(@"imge在指定路径下不存在 %@", imagePath);
         image = [UIImage imageNamed:name];

@@ -23,6 +23,8 @@ const NSUInteger SSJMinPasswordLength = 6;
 
 const NSUInteger SSJMaxPasswordLength = 15;
 
+const UIEdgeInsets UIEdgeInsetsEmpty = {CGFLOAT_MIN, CGFLOAT_MIN, CGFLOAT_MIN, CGFLOAT_MIN};
+
 NSString *const SSJErrorDomain = @"com.9188.jizhang";
 
 //NSString *const SSJAppStoreAddress = @"https://itunes.apple.com/us/app/li-cai-di/id1023600539?l=zh&ls=1&mt=8";

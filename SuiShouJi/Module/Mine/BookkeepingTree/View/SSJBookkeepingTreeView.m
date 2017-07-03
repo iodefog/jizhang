@@ -43,17 +43,6 @@ static const NSTimeInterval kRaninDuration = 3;
 
 @implementation SSJBookkeepingTreeView
 
-- (NSCache *)memoryCache {
-    static NSCache *cache = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        if (!cache) {
-            cache = [[NSCache alloc] init];
-        }
-    });
-    return cache;
-}
-
 - (void)dealloc {
     [_player stop];
 }

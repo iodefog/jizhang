@@ -82,7 +82,8 @@
 - (UITableView *)tableView{
     if (_tableView == nil) {
         _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM) style:_tableViewStyle];
-        _tableView.dataSource=self;
+        _tableView.rowHeight = 48.0;
+        _tableView.dataSource = self;
         _tableView.delegate = self;
         _tableView.backgroundView = nil;
         _tableView.backgroundColor = [UIColor clearColor];
@@ -181,10 +182,6 @@
     if ([cell isKindOfClass:[SSJLoadMoreCell class]]) {
         [self startLoadMore];
     }
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 48.0;
 }
 
 - (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {

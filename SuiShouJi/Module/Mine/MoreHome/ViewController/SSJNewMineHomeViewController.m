@@ -18,7 +18,7 @@
 #import "SSJSettingViewController.h"
 #import "SSJAnnouncementsListViewController.h"
 #import "UIViewController+SSJPageFlow.h"
-#import "SSJTestViewController.h"
+#import "SSJEncourageViewController.h"
 
 #import "SSJMineHomeTableViewHeader.h"
 #import "SSJNewMineHomeTabelviewCell.h"
@@ -158,6 +158,11 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
     if ([item.title isEqualToString:kTitle4]) {
         SSJProductAdviceViewController *adviceVC = [[SSJProductAdviceViewController alloc] init];
         [self.navigationController pushViewController:adviceVC animated:YES];
+    }
+    
+    if ([item.title isEqualToString:kTitle5]) {
+        SSJEncourageViewController *encourageVc = [[SSJEncourageViewController alloc] init];
+        [self.navigationController pushViewController:encourageVc animated:YES];
     }
     
 }

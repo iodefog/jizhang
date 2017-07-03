@@ -56,23 +56,27 @@
 @property (nonatomic, copy) NSString *fingerPrintState;
 
 //  当前选中的账本id(默认为0)
-@property(nonatomic, copy) NSString *currentBooksId;
+@property (nonatomic, copy) NSString *currentBooksId;
 
-@property(nonatomic, copy) NSString *loginType;
+@property (nonatomic, copy) NSString *loginType;
 
-@property(nonatomic, copy) NSString *openId;
+@property (nonatomic, copy) NSString *openId;
 
 // 是否提示过用户设置手势密码
-@property(nonatomic, copy) NSString *remindSettingMotionPWD;
+@property (nonatomic, copy) NSString *remindSettingMotionPWD;
 
 // 用户导出数据的邮箱地址
-@property(nonatomic, copy) NSString *email;
+@property (nonatomic, copy) NSString *email;
 
 // 用户最后一条建议回复时间
-@property(nonatomic, copy) NSString *adviceTime;
+@property (nonatomic, copy) NSString *adviceTime;
 
 // 用户资金页面选中的统计资金帐户(如果是全选的话就是all)
-@property(nonatomic, strong) NSString *selectFundid;
+@property (nonatomic, copy) NSString *selectFundid;
+
+// 用户最后一次同步时间（这里的同步是指同步所有数据）;
+// 注意：时间格式：yyyy-MM-dd HH:mm
+@property (nonatomic, copy) NSString *lastSyncTime;
 
 + (NSDictionary *)propertyMapping;
 
