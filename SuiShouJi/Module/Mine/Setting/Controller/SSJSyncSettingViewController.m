@@ -32,6 +32,7 @@ static NSString *const kSSJSyncSettingMultiLineCellId = @"SSJSyncSettingMultiLin
 
 @implementation SSJSyncSettingViewController
 
+#pragma mark - Lifecycle
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.title = @"同步设置";
@@ -64,17 +65,16 @@ static NSString *const kSSJSyncSettingMultiLineCellId = @"SSJSyncSettingMultiLin
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     SSJBaseCellItem *item = [self.cellItems ssj_objectAtIndexPath:indexPath];
     if ([item isKindOfClass:[SSJSyncSettingTableViewCellItem class]]) {
-        return [tableView dequeueReusableCellWithIdentifier:kSSJSyncSettingTableViewCellId forIndexPath:indexPath];
+        SSJBaseTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kSSJSyncSettingTableViewCellId forIndexPath:indexPath];
+        cell.cellItem = item;
+        return cell;
     } else if ([item isKindOfClass:[SSJSyncSettingMultiLineCellItem class]]) {
-        return [tableView dequeueReusableCellWithIdentifier:kSSJSyncSettingMultiLineCellId forIndexPath:indexPath];
+        SSJBaseTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kSSJSyncSettingMultiLineCellId forIndexPath:indexPath];
+        cell.cellItem = item;
+        return cell;
     } else {
         return [UITableViewCell new];
     }
-}
-
-- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    SSJBaseTableViewCell *baseCell = (SSJBaseTableViewCell *)cell;
-    baseCell.cellItem = [self.cellItems ssj_objectAtIndexPath:indexPath];
 }
 
 #pragma mark - UITableViewDelegate
@@ -113,13 +113,14 @@ static NSString *const kSSJSyncSettingMultiLineCellId = @"SSJSyncSettingMultiLin
     [self.tableView registerClass:[SSJSyncSettingTableViewCell class] forCellReuseIdentifier:kSSJSyncSettingTableViewCellId];
     [self.tableView registerClass:[SSJSyncSettingMultiLineCell class] forCellReuseIdentifier:kSSJSyncSettingMultiLineCellId];
     self.tableView.tableFooterView = self.footer;
+    self.tableView.separatorInset = UIEdgeInsetsMake(0, 15, 0, 0);
 }
 
 - (void)updateSyncTypeSelection {
     SSJSyncSettingTableViewCell *WIFIItem = [self.cellItems ssj_objectAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
     SSJSyncSettingTableViewCell *WWANItem = [self.cellItems ssj_objectAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0]];
     WIFIItem.accessoryType = self.syncType == SSJSyncSettingTypeWIFI ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
-    WWANItem.accessoryType = self.syncType == SSJSyncSettingTypeWWAN ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;;
+    WWANItem.accessoryType = self.syncType == SSJSyncSettingTypeWWAN ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
 }
 
 - (void)organiseCellItems {

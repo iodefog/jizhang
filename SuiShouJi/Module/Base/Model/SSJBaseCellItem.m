@@ -20,6 +20,7 @@
 - (instancetype)init {
     if (self = [super init]) {
         self.rowHeight = 54;
+        self.separatorInsets = UIEdgeInsetsEmpty;
     }
     return self;
 }

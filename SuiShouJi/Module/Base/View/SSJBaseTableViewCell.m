@@ -61,8 +61,10 @@
     }
     
     _cellItem = cellItem;
-    self.separatorInset = _cellItem.separatorInsets;
     self.selectionStyle = _cellItem.selectionStyle;
+    if (!UIEdgeInsetsEqualToEdgeInsets(_cellItem.separatorInsets, UIEdgeInsetsEmpty)) {
+        self.separatorInset = _cellItem.separatorInsets;
+    }
 }
 
 - (void)setCustomAccessoryType:(UITableViewCellAccessoryType)customAccessoryType {

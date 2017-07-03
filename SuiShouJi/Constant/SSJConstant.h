@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIGeometry.h>
 
 ///------------------------------------------
 /// @name 枚举
@@ -181,6 +182,8 @@ extern const NSUInteger SSJMobileNoLength;
 extern const NSUInteger SSJMinPasswordLength;
 
 extern const NSUInteger SSJMaxPasswordLength;
+
+extern const UIEdgeInsets UIEdgeInsetsEmpty;
 
 ///------------------------------------------
 /// @name 字符串常量

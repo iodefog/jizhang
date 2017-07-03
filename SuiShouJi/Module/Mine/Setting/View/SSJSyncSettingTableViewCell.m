@@ -48,6 +48,7 @@
     [self.titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(17);
         make.left.mas_equalTo(15);
+        make.right.mas_lessThanOrEqualTo(-15);
         make.bottom.mas_equalTo(-17);
     }];
     [self.checkMarkImage mas_updateConstraints:^(MASConstraintMaker *make) {
@@ -83,7 +84,11 @@
     
     SSJSyncSettingTableViewCellItem *item = cellItem;
     
-    RAC(self.titleLabel, text) = [RACObserve(item, title) takeUntil:self.rac_prepareForReuseSignal];
+    [[RACObserve(item, title) takeUntil:self.rac_prepareForReuseSignal] subscribeNext:^(NSString *title) {
+        self.titleLabel.text = title;
+        [self setNeedsUpdateConstraints];
+        [self setNeedsLayout];
+    }];
     
     [[RACObserve(item, accessoryType) takeUntil:self.rac_prepareForReuseSignal] subscribeNext:^(id x) {
         if (item.accessoryType == UITableViewCellAccessoryNone) {

@@ -16,7 +16,7 @@
 @property (nonatomic) CGFloat rowHeight;
 
 /**
- 分割线的内凹值
+ 分割线的内凹值，默认UIEdgeInsetsEmpty，此值不会对cell产生影响
  */
 @property (nonatomic) UIEdgeInsets separatorInsets;
 
