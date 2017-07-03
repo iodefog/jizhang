@@ -166,7 +166,7 @@ static const int kCustomThemeVersion = 2;
         NSString *imagePath = [backImageFolder stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png",backGroudImageName]];
         if ([[NSFileManager defaultManager] fileExistsAtPath:imagePath]) {
             [[NSFileManager defaultManager] removeItemAtPath:imagePath error:nil];
-            [[UIImage memoCache] removeObjectForKey:imagePath];
+            [[UIImage ssj_memoCache] removeObjectForKey:imagePath];
         }
         
         [UIImagePNGRepresentation(image) writeToFile:imagePath atomically:YES];

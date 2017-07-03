@@ -27,8 +27,7 @@ static NSString *const kSyncTypeKey = @"kSyncTypeKey";
     NSMutableArray *imageInfoArr = [NSMutableArray array];
     
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
-        
-        //  查询当前用户的流水表中没有同步的图片
+        // 查询当前用户的流水表中没有同步的图片
         FMResultSet *resultSet = [db executeQuery:@"select a.cimgname, a.isynctype from bk_img_sync as a, bk_user_charge as b where a.rid = b.ichargeid and a.operatortype <> 2 and a.isyncstate = 0 and b.cuserid = ?", self.userId];
         if (!resultSet) {
             if (failure) {
@@ -36,8 +35,6 @@ static NSString *const kSyncTypeKey = @"kSyncTypeKey";
             }
             return;
         }
-
-        
 
         while ([resultSet next]) {
             NSString *imageName = [resultSet stringForColumn:@"cimgname"];
@@ -51,7 +48,7 @@ static NSString *const kSyncTypeKey = @"kSyncTypeKey";
             }
         }
         
-        //  查询当前用户的顶起记账中没有同步的图片
+        // 查询当前用户的顶起记账中没有同步的图片
         resultSet = [db executeQuery:@"select a.cimgname, a.isynctype from bk_img_sync as a, bk_charge_period_config as b where a.rid = b.iconfigid and a.operatortype <> 2 and a.isyncstate = 0 and b.cuserid = ?", self.userId];
         if (!resultSet) {
             if (failure) {
@@ -82,7 +79,7 @@ static NSString *const kSyncTypeKey = @"kSyncTypeKey";
     
     self.uploadCounter = imageInfoArr.count;
     
-    //  遍历未同步的图片名称，并上传
+    // 遍历未同步的图片名称，并上传
     for (int i = 0; i < imageInfoArr.count; i++) {
         NSDictionary *imageInfo = imageInfoArr[i];
         
@@ -134,7 +131,7 @@ static NSString *const kSyncTypeKey = @"kSyncTypeKey";
                     return;
                 }
                 
-                //  解析json数据
+                // 解析json数据
                 NSDictionary *resultInfo = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:&tError];
                 if (tError) {
                     SSJPRINT(@">>> SSJ warning:an error occured when parse json data\n error:%@", tError);
@@ -160,14 +157,14 @@ static NSString *const kSyncTypeKey = @"kSyncTypeKey";
                 NSDictionary *result = resultInfo[@"results"];
                 NSString *uploadImgeName = [result[@"imgurl"] lastPathComponent];
                 
-                //  更改图片同步状态
+                // 更改图片同步状态
                 [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
                     if (![db executeUpdate:@"update bk_img_sync set isyncstate = 1 where cimgname = ?", uploadImgeName]) {
                         tError = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeImageSyncFailed userInfo:@{NSLocalizedDescriptionKey:[db lastError]}];
                     }
                 }];
                 
-                //  上传完最后一组图片后根据过程中是否有错误，调用响应的回调
+                // 上传完最后一组图片后根据过程中是否有错误，调用响应的回调
                 if (i == imageInfoArr.count - 1) {
                     if (tError) {
                         SSJPRINT(@"<<< ------- 图片同步失败! ------- >>>");

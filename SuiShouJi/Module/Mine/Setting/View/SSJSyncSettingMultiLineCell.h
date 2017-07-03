@@ -8,16 +8,20 @@
 
 #import "SSJBaseTableViewCell.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface SSJSyncSettingMultiLineCell : SSJBaseTableViewCell
 
 @end
 
 @interface SSJSyncSettingMultiLineCellItem : SSJBaseCellItem
 
-@property (nonatomic, copy) NSString *topTitle;
+@property (nonatomic, copy, nullable) NSString *topTitle;
 
-@property (nonatomic, copy) NSString *bottomTitle;
+@property (nonatomic, copy, nullable) NSString *bottomTitle;
 
-+ (instancetype)itemWithTopTitle:(NSString *)topTitle bottomTitle:(NSString *)bottomTitle;
++ (instancetype)itemWithTopTitle:(nullable NSString *)topTitle bottomTitle:(nullable NSString *)bottomTitle;
 
 @end
+
+NS_ASSUME_NONNULL_END

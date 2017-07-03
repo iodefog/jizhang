@@ -8,10 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface SSJSyncSettingWarningFooterView : UIView
 
-@property (nonatomic, copy) NSString *warningText;
+@property (nonatomic, copy, nullable) NSString *warningText;
 
 - (void)updateAppearanceAccordingToTheme;
 
 @end
+
+NS_ASSUME_NONNULL_END

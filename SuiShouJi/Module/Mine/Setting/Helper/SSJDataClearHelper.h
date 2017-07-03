@@ -26,4 +26,22 @@
 + (void)uploadAllUserDataWithSuccess:(void(^)(NSString *syncTime))success
                              failure:(void (^)(NSError *error))failure;
 
+/**
+ 计算磁盘和内存缓存数据大小，结果以字节为单位
+
+ @param success 成功回调，size是计算结果
+ @param failure 失败回调
+ */
++ (void)caculateCacheDataSizeWithSuccess:(void(^)(int64_t size))success
+                                 failure:(void (^)(NSError *error))failure;
+
+/**
+ 清楚磁盘和内存缓存数据
+
+ @param success 成功回调
+ @param failure 失败回调
+ */
++ (void)clearLocalDataCacheWithSuccess:(void(^)())success
+                               failure:(void (^)(NSError *error))failure;
+
 @end

@@ -16,6 +16,7 @@
 #import "SSJLoginViewController.h"
 #import "SSJLoginVerifyPhoneViewController+SSJLoginCategory.h"
 #import "SSJLocalNotificationHelper.h"
+#import "SSJBookkeepingTreeHelper.h"
 
 @implementation SSJDataClearHelper
 
@@ -216,5 +217,33 @@
     }];
 }
 
++ (void)caculateCacheDataSizeWithSuccess:(void(^)(int64_t size))success
+                                 failure:(void (^)(NSError *error))failure {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        int64_t size = [SSJBookkeepingTreeHelper caculateCacheSize];
+        size += [UIImage ssj_memoCache].totalCost;
+        size += [[SDImageCache sharedImageCache] getSize];
+        SSJDispatchMainAsync(^{
+            if (success) {
+                success(size);
+            }
+        });
+    });
+}
+
++ (void)clearLocalDataCacheWithSuccess:(void(^)())success
+                               failure:(void (^)(NSError *error))failure {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [SSJBookkeepingTreeHelper clearCache];
+        [[UIImage ssj_memoCache] removeAllObjects];
+        [[SDImageCache sharedImageCache] clearDiskOnCompletion:^{
+            SSJDispatchMainAsync(^{
+                if (success) {
+                    success();
+                }
+            });
+        }];
+    });
+}
 
 @end
