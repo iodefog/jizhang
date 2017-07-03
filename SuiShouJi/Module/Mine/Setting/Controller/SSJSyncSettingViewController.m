@@ -9,6 +9,7 @@
 #import "SSJSyncSettingViewController.h"
 #import "SSJSyncSettingTableViewCell.h"
 #import "SSJSyncSettingMultiLineCell.h"
+#import "SSJSyncSettingWarningFooterView.h"
 
 #import "SSJDataClearHelper.h"
 #import "SSJNetworkReachabilityManager.h"
@@ -24,6 +25,8 @@ static NSString *const kSSJSyncSettingMultiLineCellId = @"SSJSyncSettingMultiLin
 @property (nonatomic, strong) NSArray *cellItems;
 
 @property (nonatomic) SSJSyncSettingType syncType;
+
+@property (nonatomic, strong) SSJSyncSettingWarningFooterView *footer;
 
 @end
 
@@ -42,6 +45,11 @@ static NSString *const kSSJSyncSettingMultiLineCellId = @"SSJSyncSettingMultiLin
     [super viewDidLoad];
     [self handleTableView];
     [self organiseCellItems];
+}
+
+- (void)updateAppearanceAfterThemeChanged {
+    [super updateAppearanceAfterThemeChanged];
+    [self.footer updateAppearanceAccordingToTheme];
 }
 
 #pragma mark - UITableViewDataSource
@@ -104,6 +112,7 @@ static NSString *const kSSJSyncSettingMultiLineCellId = @"SSJSyncSettingMultiLin
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     [self.tableView registerClass:[SSJSyncSettingTableViewCell class] forCellReuseIdentifier:kSSJSyncSettingTableViewCellId];
     [self.tableView registerClass:[SSJSyncSettingMultiLineCell class] forCellReuseIdentifier:kSSJSyncSettingMultiLineCellId];
+    self.tableView.tableFooterView = self.footer;
 }
 
 - (void)updateSyncTypeSelection {
@@ -220,6 +229,14 @@ static NSString *const kSSJSyncSettingMultiLineCellId = @"SSJSyncSettingMultiLin
     }
     
     return [NSData dataWithContentsOfFile:zipPath];
+}
+
+- (SSJSyncSettingWarningFooterView *)footer {
+    if (!_footer) {
+        _footer = [[SSJSyncSettingWarningFooterView alloc] init];
+        _footer.warningText = @"若您多个手机使用本App，但数据不一致，请先将你希望同步的数据同步到云端，再将云端数据拉取到本机。";
+    }
+    return _footer;
 }
 
 @end

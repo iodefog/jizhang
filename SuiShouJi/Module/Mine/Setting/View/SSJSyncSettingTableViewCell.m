@@ -49,7 +49,6 @@
         make.top.mas_equalTo(17);
         make.left.mas_equalTo(15);
         make.bottom.mas_equalTo(-17);
-        make.height.mas_equalTo(20);
     }];
     [self.checkMarkImage mas_updateConstraints:^(MASConstraintMaker *make) {
         make.right.mas_equalTo(-15);

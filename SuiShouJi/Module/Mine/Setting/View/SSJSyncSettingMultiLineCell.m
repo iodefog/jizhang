@@ -43,12 +43,10 @@
     [self.topLab mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(13);
         make.left.mas_equalTo(15);
-        make.height.mas_equalTo(20);
     }];
     [self.bottomLab mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self.topLab.mas_bottom).offset(7);
         make.left.mas_equalTo(15);
-        make.height.mas_equalTo(17);
         make.bottom.mas_equalTo(-13);
     }];
     [super updateConstraints];
