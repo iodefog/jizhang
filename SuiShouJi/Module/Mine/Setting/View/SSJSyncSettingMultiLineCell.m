@@ -8,6 +8,17 @@
 
 #import "SSJSyncSettingMultiLineCell.h"
 
+@implementation SSJSyncSettingMultiLineCellItem
+
++ (instancetype)itemWithTopTitle:(NSString *)topTitle bottomTitle:(NSString *)bottomTitle {
+    SSJSyncSettingMultiLineCellItem *item = [[SSJSyncSettingMultiLineCellItem alloc] init];
+    item.topTitle = topTitle;
+    item.bottomTitle = bottomTitle;
+    return item;
+}
+
+@end
+
 @interface SSJSyncSettingMultiLineCell ()
 
 @property (nonatomic, strong) UILabel *topLab;
@@ -20,8 +31,10 @@
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+        self.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         [self.contentView addSubview:self.topLab];
         [self.contentView addSubview:self.bottomLab];
+        [self setNeedsUpdateConstraints];
     }
     return self;
 }
@@ -36,13 +49,21 @@
         make.top.mas_equalTo(self.topLab.mas_bottom).offset(7);
         make.left.mas_equalTo(15);
         make.height.mas_equalTo(17);
-        make.bottom.mas_equalTo(13);
+        make.bottom.mas_equalTo(-13);
     }];
     [super updateConstraints];
 }
 
 - (void)setCellItem:(__kindof SSJBaseCellItem *)cellItem {
+    if (![cellItem isKindOfClass:[SSJSyncSettingMultiLineCellItem class]]) {
+        return;
+    }
+    
     [super setCellItem:cellItem];
+    SSJSyncSettingMultiLineCellItem *item = cellItem;
+    self.topLab.text = item.topTitle;
+    self.bottomLab.text = item.bottomTitle;
+    [self setNeedsUpdateConstraints];
 }
 
 - (void)updateCellAppearanceAfterThemeChanged {

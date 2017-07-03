@@ -10,5 +10,15 @@
 #import "SSJBaseTableViewCell.h"
 
 @interface SSJSyncSettingTableViewCell : SSJBaseTableViewCell
-@property (nonatomic,strong) NSString *cellTitle;
+
+@end
+
+@interface SSJSyncSettingTableViewCellItem : SSJBaseCellItem
+
+@property (nonatomic, copy) NSString *title;
+
+@property (nonatomic) UITableViewCellAccessoryType accessoryType;
+
++ (instancetype)itemWithTitle:(NSString *)title accessoryType:(UITableViewCellAccessoryType)accessoryType;
+
 @end

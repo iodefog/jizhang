@@ -11,3 +11,13 @@
 @interface SSJSyncSettingMultiLineCell : SSJBaseTableViewCell
 
 @end
+
+@interface SSJSyncSettingMultiLineCellItem : SSJBaseCellItem
+
+@property (nonatomic, copy) NSString *topTitle;
+
+@property (nonatomic, copy) NSString *bottomTitle;
+
++ (instancetype)itemWithTopTitle:(NSString *)topTitle bottomTitle:(NSString *)bottomTitle;
+
+@end
