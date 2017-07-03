@@ -11,8 +11,10 @@
 
 @interface SSJGeTuiManager : NSObject
 
-+ (void)SSJGeTuiManagerWithDelegate:(id<GeTuiSdkDelegate>)delegate;
++ (instancetype)shareManager;
+- (void)SSJGeTuiManagerWithDelegate:(id<GeTuiSdkDelegate>)delegate;
 
-+ (void)pushToViewControllerWithUserInfo:(NSDictionary *)userInfo;
+- (void)pushToViewControllerWithUserInfo:(NSDictionary *)userInfo;
 
+- (void)registerRemoteNotificationWithDelegate:(id)delegate;
 @end

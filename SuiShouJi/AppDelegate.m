@@ -96,7 +96,7 @@ NSDate *SCYEnterBackgroundTime() {
     
     [SSJUmengManager umengShare];
     [SSJAnaliyticsManager SSJAnaliytics];
-    [SSJGeTuiManager SSJGeTuiManagerWithDelegate:self];
+    [[SSJGeTuiManager shareManager] SSJGeTuiManagerWithDelegate:self];
     
     [MQManager setScheduledAgentWithAgentId:@"" agentGroupId:SSJMQDefualtGroupId scheduleRule:MQScheduleRulesRedirectGroup];
     
@@ -445,7 +445,7 @@ NSDate *SCYEnterBackgroundTime() {
     
     completionHandler(UIBackgroundFetchResultNewData);
     
-    [SSJGeTuiManager pushToViewControllerWithUserInfo:userInfo];
+    [[SSJGeTuiManager shareManager] pushToViewControllerWithUserInfo:userInfo];
     
 }
 

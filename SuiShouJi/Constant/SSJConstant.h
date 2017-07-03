@@ -275,8 +275,14 @@ extern NSString *const SSJReminderNotificationKey;
 //  已经读过的公告的key
 extern NSString *const SSJAnnouncementHaveReadKey;
 
+//提醒通知弹框
+extern NSString *const SSJNoticeRemindKey;
+
 //保存当前账本类型：共享or个人
 extern NSString *const SSJBookCategoryKey;
+
+//是否弹出过通知授权弹框key
+extern NSString *const SSJNoticeAlertKey;
 
 /** --------------- Notification --------------- */
 #pragma mark - Notification
@@ -306,3 +312,6 @@ extern NSString *const SSJBooksTypeDidChangeNotification;
 
 //  本地通知的key
 extern NSString *const SSJHomeContinueLoadingNotification;
+
+//  记完一笔通知的key
+extern NSString *const SSJHomeFinishJZhangNotification;

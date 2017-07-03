@@ -71,7 +71,7 @@
     if (!_switchButton) {
         _switchButton = [[UISwitch alloc]init];
         _switchButton.onTintColor = [UIColor ssj_colorWithHex:@"43cf78"];
-        [_switchButton addTarget:self action:@selector(switchControlAction) forControlEvents:UIControlEventValueChanged];
+        [_switchButton addTarget:self action:@selector(switchControlAction:) forControlEvents:UIControlEventValueChanged];
     }
     return _switchButton;
 }
@@ -108,11 +108,11 @@
     }
 }
 
-- (void)switchControlAction {
-    SSJReminderItem *item = (SSJReminderItem *)self.cellItem;
-    item.remindState = self.switchButton.on;
+- (void)switchControlAction:(UISwitch *)switchA {
+//    SSJReminderItem *item = (SSJReminderItem *)self.cellItem;
+//    item.remindState = self.switchButton.on;
     if (_switchAction) {
-        _switchAction(self);
+        _switchAction(self,switchA);
     }
 }
 

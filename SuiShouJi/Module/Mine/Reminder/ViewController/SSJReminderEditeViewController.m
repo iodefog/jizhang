@@ -277,7 +277,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 - (void)saveButtonClicked:(id)sender{
     self.item.remindName = _nameInput.text;
     self.item.remindMemo = _memoInput.text;
-    self.item.remindState = YES;
+    self.item.remindState = NO;
     if ([self.item.remindDate isEarlierThan:self.item.minimumDate] && self.item.remindType == SSJReminderTypeBorrowing) {
         [CDAutoHideMessageHUD showMessage:@"提醒日期不能晚于借贷的借款日期"];
         return;
@@ -289,21 +289,14 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     if (!self.item.remindId.length) {
         self.item.remindId = SSJUUID();
     }
+    
+    [self.navigationController popViewControllerAnimated:YES];
     if (self.needToSave == YES) {
-        __weak typeof(self) weakSelf = self;
-        [SSJLocalNotificationStore asyncsaveReminderWithReminderItem:self.item Success:^(SSJReminderItem *item){
-//            [SSJLocalNotificationHelper registerLocalNotificationWithremindItem:item];
-            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
-            [weakSelf.navigationController popViewControllerAnimated:YES];
-        } failure:^(NSError *error) {
-            
-        }];
-    }else{
         if (self.addNewReminderAction) {
             self.addNewReminderAction(self.item);
         }
-        [self.navigationController popViewControllerAnimated:YES];
     }
+    
 }
 
 - (void)rightButtonCliked:(id)sender{

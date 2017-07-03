@@ -51,6 +51,7 @@
 #import "SSJAlertViewAction.h"
 #import "SSJListMenu.h"
 #import "SSJChargeImageBrowseView.h"
+#import "SSJNSNotificationRemindAlertView.h"
 
 #import "SSJBudgetModel.h"
 #import "SSJBooksTypeItem.h"
@@ -91,6 +92,8 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 @property (nonatomic, strong) SSJAPPEvaluatePopView *appEvaluatePopView;
 /**指引弹框*/
 @property (nonatomic, strong) SSJListMenu *guidePopView;
+/**开启通知弹框*/
+@property (nonatomic, strong) SSJNSNotificationRemindAlertView *notiRemindAlertView;
 @property(nonatomic, strong) UILabel *statusLabel;
 @property(nonatomic, strong) NSIndexPath *selectIndex;
 @property(nonatomic, strong) NSString *currentIncome;
@@ -162,6 +165,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
     [self.mm_drawerController setCloseDrawerGestureModeMask:MMCloseDrawerGestureModeAll];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(continueLoading) name:SSJHomeContinueLoadingNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(syncDidFail) name:SSJSyncDataFailureNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showRemindNoticeView) name:SSJReminderNotificationKey object:nil];
     [self showGuildView];
 }
 
@@ -731,6 +735,13 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
     [self presentViewController:picker animated:YES completion:^{}];
 }
 
+- (SSJNSNotificationRemindAlertView *)notiRemindAlertView {
+    if (!_notiRemindAlertView) {
+        _notiRemindAlertView = [[SSJNSNotificationRemindAlertView alloc] init];
+    }
+    return _notiRemindAlertView;
+}
+
 
 #pragma mark - Event
 - (void)rightBarButtonClicked {
@@ -769,6 +780,10 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 
 - (void)guidePopViewClicked {
     //[self.guidePopView dismiss];
+}
+
+- (void)showRemindNoticeView {
+    [self.notiRemindAlertView show];
 }
 
 #pragma mark - Private
@@ -1033,9 +1048,6 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 
 - (void)whichViewShouldPopToHomeView
 {
-    //评分
-    [self.appEvaluatePopView showEvaluatePopView];
-    return;
     //1.定期登录提示
     if ([self.keepingHomePopView popLoginViewWithNav:self.navigationController backController:self] == YES) return;
     

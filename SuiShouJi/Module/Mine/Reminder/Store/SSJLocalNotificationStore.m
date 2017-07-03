@@ -81,7 +81,7 @@
         }
         [SSJLocalNotificationHelper registerLocalNotificationWithremindItem:item];
     }else{
-        if (![db executeUpdate:@"insert into bk_user_remind (cremindid,cremindname,cmemo,cstartdate,istate,itype,icycle,iisend,cwritedate,operatortype,iversion,cuserid) values (?,?,?,?,1,?,?,?,?,0,?,?)",item.remindId,item.remindName,item.remindMemo,[item.remindDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss"],@(item.remindType),@(item.remindCycle),@(item.remindAtTheEndOfMonth),cwriteDate,@(SSJSyncVersion()),userId]) {
+        if (![db executeUpdate:@"insert into bk_user_remind (cremindid,cremindname,cmemo,cstartdate,istate,itype,icycle,iisend,cwritedate,operatortype,iversion,cuserid) values (?,?,?,?,?,?,?,?,?,0,?,?)",item.remindId,item.remindName,item.remindMemo,[item.remindDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss"],@(item.remindState),@(item.remindType),@(item.remindCycle),@(item.remindAtTheEndOfMonth),cwriteDate,@(SSJSyncVersion()),userId]) {
             return [db lastError];
         }
         [SSJLocalNotificationHelper registerLocalNotificationWithremindItem:item];
