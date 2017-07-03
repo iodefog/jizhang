@@ -12,7 +12,7 @@
 
 @property(nonatomic, strong) NSString *appVersion;
 
-@property(nonatomic) NSInteger upgradeType;
+@property(nonatomic) NSString *upgradeType;
 
 @property(nonatomic, strong) NSString *upgradeContent;
 

@@ -1,12 +1,11 @@
 //
-//  SSjEncourageViewController.m
+//  SSJNewAboutUsViewController.m
 //  SuiShouJi
 //
-//  Created by ricky on 2017/6/30.
+//  Created by ricky on 2017/7/3.
 //  Copyright © 2017年 ___9188___. All rights reserved.
 //
 
-#import "SSJEncourageViewController.h"
 #import "SSJNewAboutUsViewController.h"
 
 #import "SSJEncourageHeaderView.h"
@@ -14,16 +13,20 @@
 
 #import "SSJEncourageService.h"
 #import "SSJShareManager.h"
+#import "WXApi.h"
+#import <TencentOpenAPI/TencentOAuth.h>
+#import "WeiboSDK.h"
 
-static NSString *const ktitle1 = @"关于我们";
-static NSString *const ktitle2 = @"五星好评";
-static NSString *const ktitle3 = @"分享给好友";
+static NSString *const ktitle1 = @"微信公众号";
+static NSString *const ktitle2 = @"新浪微博";
+static NSString *const ktitle3 = @"QQ群";
+static NSString *const ktitle4 = @"微信群";
+static NSString *const ktitle5 = @"在线客服";
+static NSString *const ktitle6 = @"电话客服";
 
 static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
 
-
-
-@interface SSJEncourageViewController () <UITableViewDelegate,UITableViewDataSource>
+@interface SSJNewAboutUsViewController ()<UITableViewDelegate,UITableViewDataSource>
 
 @property(nonatomic, strong) UITableView *tableView;
 
@@ -31,17 +34,16 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
 
 @property (nonatomic,strong) NSArray *titles;
 
-@property (nonatomic,strong) SSJEncourageService *service;
 
 @property(nonatomic, strong) NSMutableArray <SSJEncourageCellModel *> *items;
 
 @end
 
-@implementation SSJEncourageViewController
+@implementation SSJNewAboutUsViewController
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-        self.title = @"爱的鼓励";
+        self.title = @"关于我们";
         self.hidesBottomBarWhenPushed = YES;
     }
     return self;
@@ -49,19 +51,9 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    if (SSJ_MAIN_PACKAGE) {
-        self.titles = @[@[ktitle1],@[ktitle2,ktitle3]];
-    } else {
-        self.titles = @[@[ktitle1],@[ktitle2]];
-    }
     [self organizeCellItems];
     [self.view addSubview:self.tableView];
     // Do any additional setup after loading the view.
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    [self.service request];
 }
 
 #pragma mark - UITableViewDelegate
@@ -83,9 +75,7 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
     NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
     
     if ([title isEqualToString:ktitle1]) {
-        SSJNewAboutUsViewController *aboutVc = [[SSJNewAboutUsViewController alloc] init];
-        aboutVc.service = self.service;
-        [self.navigationController pushViewController:aboutVc animated:YES];
+        
     }
     
     if ([title isEqualToString:ktitle2]) {
@@ -120,7 +110,7 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     SSJEncourageCellModel *item = [self.items ssj_objectAtIndexPath:indexPath];
-
+    
     SSJEncourageCell * cell = [tableView dequeueReusableCellWithIdentifier:SSJEncourageCellIndetifer];
     
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -131,7 +121,7 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
 }
 
 #pragma mark - SSJBaseNetworkService
-- (void)serverDidFinished:(SSJBaseNetworkService *)service {
+- (void)serverDidStart:(SSJBaseNetworkService *)service {
     if ([service.returnCode isEqualToString:@"1"]) {
         self.header.currentVersion = self.service.updateModel.appVersion;
     }
@@ -171,14 +161,58 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
 
 #pragma mark - Private
 - (void)organizeCellItems {
+    NSMutableArray *tempTitleArr = [NSMutableArray arrayWithCapacity:0];
+    
+    NSMutableArray *firstArr = [NSMutableArray arrayWithCapacity:0];
+    
+    NSMutableArray *secondArr = [NSMutableArray arrayWithCapacity:0];
+
+    NSMutableArray *thirdArr = [NSMutableArray arrayWithArray:@[ktitle5,ktitle6]];
+    
+    if ([WXApi isWXAppInstalled]) {
+        [firstArr insertObject:ktitle1 atIndex:0];
+        [secondArr insertObject:ktitle4 atIndex:0];
+    }
+    
+    if ([TencentOAuth iphoneQQInstalled]) {
+        [firstArr insertObject:ktitle2 atIndex:firstArr.count];
+    }
+    
+    if ([WeiboSDK isWeiboAppInstalled]) {
+        [secondArr insertObject:ktitle3 atIndex:0];
+    }
+    
+    [tempTitleArr insertObject:thirdArr atIndex:0];
+
+    if (secondArr.count) {
+        [tempTitleArr insertObject:secondArr atIndex:0];
+    }
+    
+    if (firstArr.count) {
+        [tempTitleArr insertObject:firstArr atIndex:0];
+    }
+    
+    self.titles = tempTitleArr;
+    
     NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:0];
     for (NSArray *titles in self.titles) {
         NSMutableArray *sectionArr = [NSMutableArray arrayWithCapacity:0];
         for (NSString *title in titles) {
             SSJEncourageCellModel *item = [[SSJEncourageCellModel alloc] init];
             item.cellTitle = title;
-            if ([title isEqualToString:ktitle2]) {
-                item.cellImage = @"fivestars";
+            if ([title isEqualToString:ktitle1]) {
+                item.cellDetail = self.service.wechatId ? : @"youyujz";
+            } else if ([title isEqualToString:ktitle2]) {
+                item.cellDetail = self.service.sinaBlog ? : @"有鱼记账";
+            } else if ([title isEqualToString:ktitle3]) {
+                item.cellDetail = self.service.qqgroup ? : @"552563622";
+            } else if ([title isEqualToString:ktitle4]) {
+                item.cellDetail = self.service.wechatgroup ? : @"youyujz01";
+            } else if ([title isEqualToString:ktitle5]) {
+
+            } else if ([title isEqualToString:ktitle6]) {
+                item.cellDetail = self.service.telNum ? : @"400-7676-298";
+                item.cellSubTitle = @"工作日：9:00——18:00";
             }
             [sectionArr addObject:item];
         }
@@ -190,6 +224,7 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
     
     [self.tableView reloadData];
 }
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
