@@ -23,10 +23,8 @@
         self.wechatId = result[@"wechat_gzh"];
         self.telNum = result[@"telephone"];
         self.sinaBlog = result[@"sina_blog"];
-        
-        NSArray *ajkdj = result[@"app"];
-        
-        self.updateModel = [SSJAppUpdateModel mj_setKeyValues:result[@"app"]];
+                
+        self.updateModel = [SSJAppUpdateModel mj_objectWithKeyValues:result[@"app"]];
     }
 }
 
