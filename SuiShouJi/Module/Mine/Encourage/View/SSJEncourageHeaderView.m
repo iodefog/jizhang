@@ -27,6 +27,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
+        self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         [self addSubview:self.iconImage];
         [self addSubview:self.appNameLab];
         [self addSubview:self.versionLab];
@@ -34,6 +35,7 @@
             [self addSubview:self.updateButton];    
         }
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCellAppearanceAfterThemeChanged) name:SSJThemeDidChangeNotification object:nil];
+        [self updateConstraintsIfNeeded];
     }
     return self;
 }
@@ -42,29 +44,34 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
+
 - (void)updateConstraints {
     [self.iconImage mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(60, 60));
         make.top.mas_equalTo(30);
-        make.centerY.mas_equalTo(self);
+        make.centerX.mas_equalTo(self);
     }];
     
     [self.appNameLab mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.iconImage).offset(10);
-        make.centerY.mas_equalTo(self);
+        make.top.mas_equalTo(self.iconImage.mas_bottom).offset(10);
+        make.centerX.mas_equalTo(self);
     }];
     
     [self.versionLab mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self.appNameLab).offset(29);
         if ([SSJStartChecker sharedInstance].isInReview) {
-            make.centerY.mas_equalTo(self);
+            make.centerX.mas_equalTo(self);
         } else {
-            make.right.mas_equalTo(self.mas_centerY).offset(10);
+            make.right.mas_equalTo(self.mas_centerX).offset(10);
         }
     }];
     
     [self.updateButton mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.appNameLab).offset(29);
-        make.right.mas_equalTo(self.mas_centerY).offset(10);
+        if ([self.updateButton.titleLabel.text isEqualToString:@"检查更新"]) {
+            make.size.mas_equalTo(CGSizeMake(60, 20));
+        }
+        make.centerY.mas_equalTo(self.versionLab.mas_centerY);
+        make.left.mas_equalTo(self.versionLab.mas_right).offset(20);
     }];
     
     [super updateConstraints];
@@ -74,7 +81,8 @@
     if (!_iconImage) {
         _iconImage = [[UIImageView alloc] init];
         _iconImage.image = [UIImage imageNamed:SSJAppIcon()];
-        [_iconImage sizeToFit];
+        _iconImage.layer.cornerRadius = 10;
+        _iconImage.layer.masksToBounds = YES;
     }
     return _iconImage;
 }
@@ -106,6 +114,7 @@
         [_updateButton setTitle:@"检查更新" forState:UIControlStateNormal];
         [_updateButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         _updateButton.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
+        _updateButton.layer.cornerRadius = 4;
     }
     return _updateButton;
 }

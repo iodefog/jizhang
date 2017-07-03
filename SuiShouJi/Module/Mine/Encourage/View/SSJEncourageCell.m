@@ -35,28 +35,28 @@
 
 - (void)updateConstraints {
     [self.titleLab mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.centerY.mas_equalTo(self);
+        make.centerY.mas_equalTo(self.contentView);
         make.left.mas_equalTo(15);
     }];
     
     [self.detailLab mas_updateConstraints:^(MASConstraintMaker *make) {
         if (!_item.cellSubTitle.length) {
-            make.centerY.mas_equalTo(self);
-            make.right.mas_equalTo(self.mas_right).offset(-15);
+            make.centerY.mas_equalTo(self.contentView);
+            make.right.mas_equalTo(self.contentView.mas_right).offset(-15);
         } else {
-            make.bottom.mas_equalTo(self.mas_centerY).offset(-2);
-            make.right.mas_equalTo(self.mas_right).offset(- 15);
+            make.bottom.mas_equalTo(self.contentView.mas_centerY).offset(-2);
+            make.right.mas_equalTo(self.contentView.mas_right).offset(- 15);
         }
     }];
     
     [self.subdetailLab mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.bottom.mas_equalTo(self.mas_centerY).offset(2);
-        make.right.mas_equalTo(self.mas_right).offset(- 15);
+        make.bottom.mas_equalTo(self.contentView.mas_centerY).offset(2);
+        make.right.mas_equalTo(self.contentView.mas_right).offset(- 15);
     }];
     
     [self.celldetailImage mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.centerY.mas_equalTo(self);
-        make.right.mas_equalTo(self.mas_right).offset(-15);
+        make.centerY.mas_equalTo(self.contentView);
+        make.right.mas_equalTo(self.contentView.mas_right).offset(-15);
     }];
     
     [super updateConstraints];

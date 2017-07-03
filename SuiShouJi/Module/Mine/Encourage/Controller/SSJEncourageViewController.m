@@ -12,6 +12,7 @@
 #import "SSJEncourageCell.h"
 
 #import "SSJEncourageService.h"
+#import "SSJShareManager.h"
 
 static NSString *const ktitle1 = @"关于我们";
 static NSString *const ktitle2 = @"五星好评";
@@ -80,6 +81,29 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
     
     NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
     
+    if ([title isEqualToString:ktitle1]) {
+        
+    }
+    
+    if ([title isEqualToString:ktitle2]) {
+        NSString *urlStr = SSJAppStoreUrl();
+        if (urlStr) {
+            NSURL *url = [NSURL URLWithString:urlStr];
+            if ([[UIApplication sharedApplication] canOpenURL:url]) {
+                [[UIApplication sharedApplication] openURL:url];
+            }
+        }
+        return;
+    }
+    
+    if ([title isEqualToString:ktitle3]) {
+        if ([SSJDefaultSource() isEqualToString:@"11501"]) {
+            [SSJShareManager shareWithType:SSJShareTypeUrl image:nil UrlStr:SSJDetailSettingForSource(@"ShareUrl") title:SSJDetailSettingForSource(@"ShareTitle") content:@"财务管理第一步，从记录消费生活开始!" PlatformType:@[@(UMSocialPlatformType_Sina),@(UMSocialPlatformType_WechatSession),@(UMSocialPlatformType_WechatTimeLine),@(UMSocialPlatformType_QQ)] inController:self ShareSuccess:NULL];
+        } else {
+            [SSJShareManager shareWithType:SSJShareTypeUrl image:nil UrlStr:SSJDetailSettingForSource(@"ShareUrl") title:SSJDetailSettingForSource(@"ShareTitle") content:@"在这里，记录消费生活是件有趣简单的事儿，管家更有窍门。" PlatformType:@[@(UMSocialPlatformType_Sina),@(UMSocialPlatformType_WechatSession),@(UMSocialPlatformType_WechatTimeLine),@(UMSocialPlatformType_QQ)] inController:self ShareSuccess:NULL];
+        }
+        return;
+    }
 }
 
 #pragma mark - UITableViewDataSource
@@ -95,6 +119,8 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
     SSJEncourageCellModel *item = [self.items ssj_objectAtIndexPath:indexPath];
 
     SSJEncourageCell * cell = [tableView dequeueReusableCellWithIdentifier:SSJEncourageCellIndetifer];
+    
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     
     cell.item = item;
     
@@ -148,6 +174,9 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
         for (NSString *title in titles) {
             SSJEncourageCellModel *item = [[SSJEncourageCellModel alloc] init];
             item.cellTitle = title;
+            if ([title isEqualToString:ktitle2]) {
+                item.cellImage = @"fivestars";
+            }
             [sectionArr addObject:item];
         }
         
