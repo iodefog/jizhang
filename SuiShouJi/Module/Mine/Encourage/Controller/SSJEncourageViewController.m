@@ -31,6 +31,8 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
 
 @property (nonatomic,strong) SSJEncourageService *service;
 
+@property(nonatomic, strong) NSMutableArray <SSJEncourageCellModel *> *items;
+
 @end
 
 @implementation SSJEncourageViewController
@@ -50,6 +52,8 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
     } else {
         self.titles = @[@[ktitle1],@[ktitle2]];
     }
+    [self organizeCellItems];
+    [self.view addSubview:self.tableView];
     // Do any additional setup after loading the view.
 }
 
@@ -88,11 +92,11 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
+    SSJEncourageCellModel *item = [self.items ssj_objectAtIndexPath:indexPath];
 
     SSJEncourageCell * cell = [tableView dequeueReusableCellWithIdentifier:SSJEncourageCellIndetifer];
     
-    
+    cell.item = item;
     
     return cell;
 }
@@ -107,7 +111,7 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
 #pragma mark - Getter
 - (UITableView *)tableView {
     if (_tableView == nil) {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height) style:UITableViewStyleGrouped];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, self.view.height- SSJ_NAVIBAR_BOTTOM) style:UITableViewStyleGrouped];
         _tableView.dataSource = self;
         _tableView.delegate = self;
         _tableView.backgroundColor = [UIColor clearColor];
@@ -124,7 +128,7 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
 
 - (SSJEncourageHeaderView *)header {
     if (!_header) {
-        _header = [[SSJEncourageHeaderView alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
+        _header = [[SSJEncourageHeaderView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 180)];
     }
     return _header;
 }
@@ -134,6 +138,25 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
         _service = [[SSJEncourageService alloc] initWithDelegate:self];
     }
     return _service;
+}
+
+#pragma mark - Private
+- (void)organizeCellItems {
+    NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:0];
+    for (NSArray *titles in self.titles) {
+        NSMutableArray *sectionArr = [NSMutableArray arrayWithCapacity:0];
+        for (NSString *title in titles) {
+            SSJEncourageCellModel *item = [[SSJEncourageCellModel alloc] init];
+            item.cellTitle = title;
+            [sectionArr addObject:item];
+        }
+        
+        [tempArr addObject:sectionArr];
+    }
+    
+    self.items = [NSMutableArray arrayWithArray:tempArr];
+    
+    [self.tableView reloadData];
 }
 
 - (void)didReceiveMemoryWarning {
