@@ -50,7 +50,7 @@
     }];
     
     [self.subdetailLab mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.bottom.mas_equalTo(self.contentView.mas_centerY).offset(2);
+        make.top.mas_equalTo(self.detailLab.mas_bottom).offset(4);
         make.right.mas_equalTo(self.contentView.mas_right).offset(- 15);
     }];
     
@@ -83,7 +83,7 @@
 - (UILabel *)subdetailLab {
     if (!_subdetailLab) {
         _subdetailLab = [[UILabel alloc] init];
-        _subdetailLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
+        _subdetailLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
         _subdetailLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     }
     return _subdetailLab;
