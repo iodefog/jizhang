@@ -67,10 +67,7 @@ static NSString * SSJReminderListCellIdentifier = @"SSJReminderListCellIdentifie
 #pragma mark - UITableViewDelegate
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     SSJReminderItem *item = [self.items ssj_safeObjectAtIndex:indexPath.section];
-    if (item.remindMemo.length) {
-        return 70;
-    }
-    return 55;
+    return item.rowHeight;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
