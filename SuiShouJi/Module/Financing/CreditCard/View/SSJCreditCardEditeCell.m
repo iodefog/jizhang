@@ -1,4 +1,4 @@
-//
+ //
 //  SSJCreditCardEditeCell.m
 //  SuiShouJi
 //
@@ -20,6 +20,10 @@
 
 @property(nonatomic, strong) CAGradientLayer *gradientLayer;
 
+@property(nonatomic, strong) UIButton *triangleButton;
+
+@property(nonatomic, strong) UIView *backView;
+
 @end
 
 @implementation SSJCreditCardEditeCell
@@ -32,6 +36,8 @@
         [self.contentView addSubview:self.detailLabel];
         [self.contentView addSubview:self.cellDetailImage];
         [self.contentView addSubview:self.subTitleLabel];
+        [self.contentView addSubview:self.triangleButton];
+        [self.contentView addSubview:self.backView];
         [self.contentView.layer addSublayer:self.gradientLayer];
     }
     return self;
