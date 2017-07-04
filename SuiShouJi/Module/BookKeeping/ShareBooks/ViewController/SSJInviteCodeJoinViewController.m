@@ -275,6 +275,8 @@
     } else {
         if ([service.returnCode isEqualToString:@"-2008"]) {
             self.codeInput.text = service.desc;
+            self.codeInput.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
+            self.codeInput.textColor = [UIColor ssj_colorWithHex:@"#EB4A64"];
             self.codeInput.enabled = NO;
         } else {
             self.codeInput.enabled = YES;

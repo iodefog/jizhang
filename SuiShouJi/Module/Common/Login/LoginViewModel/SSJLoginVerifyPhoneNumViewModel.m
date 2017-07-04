@@ -756,6 +756,10 @@
 }
 
 - (RACCommand *)wxLoginCommand {
+//    if (_wxLoginCommand.executing) {
+//
+//        _wxLoginCommand.executionSignals = [RACSignal empty];
+//    }
     if (!_wxLoginCommand) {
         _wxLoginCommand = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
             @weakify(self);

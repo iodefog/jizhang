@@ -15,6 +15,10 @@
 @end
 
 @implementation SSJQQLoginHelper
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 -(void)qqLoginWithSucessBlock:(qqLoginSuccessBlock)sucessBlock failBlock:(qqLoginFailBlock)failBlock {
     self.tencentOAuth=[[TencentOAuth alloc]initWithAppId:SSJDetailSettingForSource(@"QQAppId") andDelegate:self];
     NSArray *permissions = [NSArray arrayWithObjects:kOPEN_PERMISSION_GET_INFO, kOPEN_PERMISSION_GET_USER_INFO, kOPEN_PERMISSION_GET_SIMPLE_USER_INFO, nil];
@@ -22,6 +26,25 @@
     [self.tencentOAuth authorize:permissions inSafari:NO];
     self.sucessBlock = sucessBlock;
     self.failBlock = failBlock;
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:)
+                                                 name:UIApplicationDidBecomeActiveNotification object:nil];
+    
+}
+
+//-(void)applicationWillResignActive:(NSNotification *)notification
+//{
+//    if (self.failBlock) {
+//        self.failBlock();
+//    }
+//    self.failBlock = nil;
+//}
+
+-(void)applicationDidBecomeActive:(NSNotification *)notification
+{
+    if (self.failBlock) {
+        self.failBlock();
+    }
+    self.failBlock = nil;
 }
 
 //登陆完成调用

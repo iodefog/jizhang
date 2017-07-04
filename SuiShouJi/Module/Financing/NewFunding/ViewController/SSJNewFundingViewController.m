@@ -58,8 +58,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:) name:UITextFieldTextDidChangeNotification object:nil];
-    self.titles = @[@[@"账户名称",@"账户余额",@"备注"],@[@"账户类型",@"选择颜色"]];
-    self.images = @[@[@"fund_name",@"fund_balance",@"fund_memo"],@[@"fund_type",@"fund_color"]];
+    self.titles = @[@[@"账户名称",@"账户余额",@"选择颜色"],@[@"备注"]];
+    self.images = @[@[@"fund_name",@"fund_balance",@"fund_color"],@[@"fund_memo"]];
     if (!self.item) {
         self.title = @"添加资金账户";
         self.item = [[SSJFinancingHomeitem alloc] init];

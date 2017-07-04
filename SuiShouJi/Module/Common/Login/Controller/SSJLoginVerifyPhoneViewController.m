@@ -97,27 +97,27 @@
         make.height.top.mas_equalTo(self.agreeButton);
     }];
     
-    if (([SSJDefaultSource() isEqualToString:@"11501"]
-        || [SSJDefaultSource() isEqualToString:@"11502"]
-        || [SSJDefaultSource() isEqualToString:@"11512"]
-        || [SSJDefaultSource() isEqualToString:@"11513"]) && [WXApi isWXAppInstalled]) {
+//    if (([SSJDefaultSource() isEqualToString:@"11501"]
+//        || [SSJDefaultSource() isEqualToString:@"11502"]
+//        || [SSJDefaultSource() isEqualToString:@"11512"]
+//        || [SSJDefaultSource() isEqualToString:@"11513"]) && [WXApi isWXAppInstalled]) {
         [self.weixinLoginButton mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.bottom.mas_equalTo(self.view).offset(-50);
+            make.bottom.mas_equalTo(self.protocolButton).offset(200);
             make.size.mas_equalTo(CGSizeMake(50, 50));
             make.right.mas_equalTo(self.scrollView.mas_centerX).offset(-10);
         }];
         
         [self.tencentLoginButton mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.size.bottom.mas_equalTo(self.weixinLoginButton);
+            make.size.top.mas_equalTo(self.weixinLoginButton);
             make.left.mas_equalTo(self.scrollView.mas_centerX).offset(10);
         }];
-    } else {
-        [self.tencentLoginButton mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.bottom.mas_equalTo(self.view).offset(-50);
-            make.size.mas_equalTo(CGSizeMake(50, 50));
-            make.centerX.mas_equalTo(self.scrollView.mas_centerX);
-        }];
-    }
+//    } else {
+//        [self.tencentLoginButton mas_makeConstraints:^(MASConstraintMaker *make) {
+//            make.bottom.mas_equalTo(self.protocolButton).offset(200);
+//            make.size.mas_equalTo(CGSizeMake(50, 50));
+//            make.centerX.mas_equalTo(self.scrollView.mas_centerX);
+//        }];
+//    }
 //    [super updateViewConstraints];
 }
 
@@ -133,7 +133,7 @@
     [self.scrollView addSubview:self.agreeButton];
     [self.scrollView addSubview:self.protocolButton];
     [self.scrollView addSubview:self.tencentLoginButton];
-    
+    [self.scrollView addSubview:self.weixinLoginButton];
     // 只有9188、有鱼并且没有审核的情况下，显示第三方登录
     if (([SSJDefaultSource() isEqualToString:@"11501"]
         || [SSJDefaultSource() isEqualToString:@"11502"]
