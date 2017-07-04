@@ -221,7 +221,6 @@ static NSString *const kClearDataTitle = @"清理数据";
 
 - (void)login {
     SSJLoginVerifyPhoneViewController *loginVc = [[SSJLoginVerifyPhoneViewController alloc] init];
-    loginVc.backController = self;
     [self.navigationController pushViewController:loginVc animated:YES];
 }
 

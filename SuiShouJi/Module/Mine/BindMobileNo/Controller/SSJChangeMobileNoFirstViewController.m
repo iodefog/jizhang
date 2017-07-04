@@ -13,6 +13,7 @@
 #import "SSJVerifCodeField.h"
 #import "SSJUserTableManager.h"
 #import "SSJLoginVerifyPhoneNumViewModel.h"
+#import "SSJEncourageService.h"
 
 @interface SSJChangeMobileNoFirstViewController ()
 
@@ -34,7 +35,9 @@
 
 @property (nonatomic, strong) SSJLoginVerifyPhoneNumViewModel *viewModel;
 
-@property (nonatomic, strong) SSJBaseNetworkService *service;
+@property (nonatomic, strong) SSJBaseNetworkService *checkAuthCodeService;
+
+@property (nonatomic, strong) SSJEncourageService *getQQGroupService;
 
 @end
 
@@ -61,6 +64,12 @@
         [self.authCodeField getVerifCode];
         [self.view setNeedsUpdateConstraints];
     }];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [self.checkAuthCodeService cancel];
+    [self.getQQGroupService cancel];
 }
 
 - (void)updateViewConstraints {
@@ -98,7 +107,7 @@
     [self.changeWayBtn mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self.nextBtn.mas_bottom).offset(0);
         make.left.mas_equalTo(self.scrollView).offset(15);
-        make.size.mas_equalTo(CGSizeMake(106, 38));
+        make.size.mas_equalTo(CGSizeMake(132, 38));
         make.bottom.mas_equalTo(self.scrollView).offset(-20);
     }];
     [super updateViewConstraints];
@@ -147,9 +156,9 @@
     self.authCodeField.viewModel = self.viewModel;
     
     RAC(self.nextBtn, enabled) = [RACSignal merge:@[[[self.authCodeField rac_textSignal] map:^id(NSString *authCode) {
-        return @(self.authCodeField.text.length >= 6 && self.service.state != SSJNetworkServiceStateLoading);
-    }], [RACObserve(self.service, state) map:^id(id value) {
-        return @(self.authCodeField.text.length >= 6 && self.service.state != SSJNetworkServiceStateLoading);
+        return @(self.authCodeField.text.length >= 6 && self.checkAuthCodeService.state != SSJNetworkServiceStateLoading);
+    }], [RACObserve(self.checkAuthCodeService, state) map:^id(id value) {
+        return @(self.authCodeField.text.length >= 6 && self.checkAuthCodeService.state != SSJNetworkServiceStateLoading);
     }]]];
     
     RAC(self.descLab,text) = [RACObserve(self.authCodeField, getAuthCodeState) map:^id(NSNumber *value) {
@@ -170,11 +179,19 @@
     NSDictionary *params = @{@"cmobileNo":self.mobileNo,
                              @"yzm":self.authCodeField.text,
                              @"mobileType":@2};
-    [self.service request:@"/chargebook/user/check_sms.go" params:params success:^(SSJBaseNetworkService * _Nonnull service) {
+    [self.checkAuthCodeService request:@"/chargebook/user/check_sms.go" params:params success:^(SSJBaseNetworkService * _Nonnull service) {
         [self.authCodeField resignFirstResponder];
         SSJChangeMobileNoSecondViewController *secondVC = [[SSJChangeMobileNoSecondViewController alloc] init];
         [self.navigationController pushViewController:secondVC animated:YES];
     } failure:^(SSJBaseNetworkService * _Nonnull service) {
+        [SSJAlertViewAdapter showError:service.error];
+    }];
+}
+
+- (void)openQQ {
+    [self.getQQGroupService requestWithSuccess:^(SSJEncourageService * _Nonnull service) {
+        SSJJoinQQGroup(service.qqgroup, service.qqgroupId);
+    } failure:^(SSJEncourageService * _Nonnull service) {
         [SSJAlertViewAdapter showError:service.error];
     }];
 }
@@ -236,7 +253,10 @@
     if (!_changeWayBtn) {
         _changeWayBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _changeWayBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
-        [_changeWayBtn setTitle:@"手机号丢失或停用" forState:UIControlStateNormal];
+        [_changeWayBtn setTitle:@"手机号停用，快速反馈" forState:UIControlStateNormal];
+        [[_changeWayBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
+            [self openQQ];
+        }];
     }
     return _changeWayBtn;
 }
@@ -248,12 +268,20 @@
     return _viewModel;
 }
 
-- (SSJBaseNetworkService *)service {
-    if (!_service) {
-        _service = [[SSJBaseNetworkService alloc] init];
-        _service.showLodingIndicator = YES;
+- (SSJBaseNetworkService *)checkAuthCodeService {
+    if (!_checkAuthCodeService) {
+        _checkAuthCodeService = [[SSJBaseNetworkService alloc] init];
+        _checkAuthCodeService.showLodingIndicator = YES;
     }
-    return _service;
+    return _checkAuthCodeService;
+}
+
+- (SSJEncourageService *)getQQGroupService {
+    if (!_getQQGroupService) {
+        _getQQGroupService = [[SSJEncourageService alloc] init];
+        _getQQGroupService.showLodingIndicator = YES;
+    }
+    return _getQQGroupService;
 }
 
 @end

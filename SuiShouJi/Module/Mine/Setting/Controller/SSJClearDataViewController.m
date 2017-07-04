@@ -9,6 +9,7 @@
 #import "SSJClearDataViewController.h"
 #import "SSJClearDataCell.h"
 #import "SSJSyncSettingWarningFooterView.h"
+#import "SSJBooksTypeDeletionAuthCodeAlertView.h"
 #import "SSJDataClearHelper.h"
 #import "SSJDataSynchronizer.h"
 
@@ -20,13 +21,16 @@ static NSString *const kSSJClearDataCellId = @"SSJClearDataCell";
 
 @property (nonatomic, strong) SSJSyncSettingWarningFooterView *footer;
 
+@property (nonatomic, strong) SSJBooksTypeDeletionAuthCodeAlertView *alert;
+
 @end
 
 @implementation SSJClearDataViewController
 
+#pragma mark - Lifecycle
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-        self.title = @"清理数据";
+        self.title = @"清理缓存";
     }
     return self;
 }
@@ -71,9 +75,13 @@ static NSString *const kSSJClearDataCellId = @"SSJClearDataCell";
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.section == 0 && indexPath.row == 0) {
-        [self clearData];
+        [SSJDataClearHelper clearLocalDataCacheWithSuccess:^{
+            [self caculateDataSize];
+        } failure:^(NSError *error) {
+            [SSJAlertViewAdapter showError:error];
+        }];
     } else if (indexPath.section == 1 && indexPath.row == 0) {
-        [self dataFormatting];
+        [self.alert show];
     }
 }
 
@@ -112,35 +120,6 @@ static NSString *const kSSJClearDataCellId = @"SSJClearDataCell";
     }];
 }
 
-/**
- 数据清理
- */
-- (void)clearData {
-    [SSJDataClearHelper clearLocalDataCacheWithSuccess:^{
-        [self caculateDataSize];
-    } failure:^(NSError *error) {
-        [SSJAlertViewAdapter showError:error];
-    }];
-}
-
-/**
- 数据格式化
- */
-- (void)dataFormatting {
-    SSJAlertViewAction *comfirmAction = [SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction * _Nonnull action) {
-        [SSJDataClearHelper clearAllDataWithSuccess:^{
-            [CDAutoHideMessageHUD showMessage:@"数据初始化成功"];
-            if (SSJIsUserLogined()) {
-                [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
-            }
-        } failure:^(NSError *error) {
-            [CDAutoHideMessageHUD showMessage:@"数据初始化失败"];
-        }];
-    }];
-    SSJAlertViewAction *cancelAction = [SSJAlertViewAction actionWithTitle:@"取消" handler:NULL];
-    [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:@"云端和本地的数据将被彻底清除且不可恢复，确定要执行此操作？" action:cancelAction,comfirmAction,nil];
-}
-
 #pragma mark - Lazyloading
 - (SSJSyncSettingWarningFooterView *)footer {
     if (!_footer) {
@@ -148,6 +127,25 @@ static NSString *const kSSJClearDataCellId = @"SSJClearDataCell";
         _footer.warningText = @"数据格式化，本机数据、云端数据将全部清空。";
     }
     return _footer;
+}
+
+- (SSJBooksTypeDeletionAuthCodeAlertView *)alert {
+    if (!_alert) {
+        _alert = [[SSJBooksTypeDeletionAuthCodeAlertView alloc] init];
+        _alert.message = [[NSAttributedString alloc] initWithString:@"选择数据格式化之后，云端和本地的数据将被彻底清除且不可恢复，确定要执行此操作？" attributes:nil];
+        _alert.sureButtonTitle = @"格式化";
+        _alert.finishVerification = ^{
+            [SSJDataClearHelper clearAllDataWithSuccess:^{
+                [CDAutoHideMessageHUD showMessage:@"数据初始化成功"];
+                if (SSJIsUserLogined()) {
+                    [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
+                }
+            } failure:^(NSError *error) {
+                [CDAutoHideMessageHUD showMessage:@"数据初始化失败"];
+            }];
+        };
+    }
+    return _alert;
 }
 
 @end

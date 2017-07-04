@@ -38,6 +38,7 @@
     }
     
     [SSJUserTableManager queryProperty:@[@"motionPWD", @"motionPWDState", @"fingerPrintState"] forUserId:SSJUSERID() success:^(SSJUserItem * _Nonnull userItem) {
+        // 验证指纹密码
         if ([userItem.fingerPrintState boolValue]) {
             LAContext *context = [[LAContext alloc] init];
             context.localizedFallbackTitle = @"";

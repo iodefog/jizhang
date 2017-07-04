@@ -111,7 +111,7 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
     if ([title isEqualToString:ktitle3]) {
         NSString *qqGroup = self.service.qqgroup ? : @"552563622";
         NSString *qqGroupId = self.service.qqgroupId ? : @"160aa4d10987c3a6ff17b2fb89e3e1f0e4e996e320207f1e23e1299518f58169";
-        [self joinGroup:qqGroup key:qqGroupId];
+        SSJJoinQQGroup(qqGroup, qqGroupId);
     }
     
     if ([title isEqualToString:ktitle4]) {
@@ -234,12 +234,12 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
         [secondArr insertObject:ktitle4 atIndex:0];
     }
     
-    if ([TencentOAuth iphoneQQInstalled]) {
-        [firstArr insertObject:ktitle2 atIndex:firstArr.count];
+    if ([WeiboSDK isWeiboAppInstalled]) {
+        [secondArr insertObject:ktitle2 atIndex:0];
     }
     
-    if ([WeiboSDK isWeiboAppInstalled]) {
-        [secondArr insertObject:ktitle3 atIndex:0];
+    if ([TencentOAuth iphoneQQInstalled]) {
+        [firstArr insertObject:ktitle3 atIndex:firstArr.count];
     }
     
     [tempTitleArr insertObject:thirdArr atIndex:0];
@@ -284,16 +284,6 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
     self.items = [NSMutableArray arrayWithArray:tempArr];
     
     [self.tableView reloadData];
-}
-
-- (BOOL)joinGroup:(NSString *)groupUin key:(NSString *)key{
-    NSString *urlStr = [NSString stringWithFormat:@"mqqapi://card/show_pslcard?src_type=internal&version=1&uin=%@&key=%@&card_type=group&source=external", groupUin,key];
-    NSURL *url = [NSURL URLWithString:urlStr];
-    if([[UIApplication sharedApplication] canOpenURL:url]){
-        [[UIApplication sharedApplication] openURL:url];
-        return YES;
-    }
-    else return NO;
 }
 
 

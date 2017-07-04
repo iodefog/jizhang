@@ -11,7 +11,12 @@
 @implementation SSJEncourageService
 
 - (void)request {
-    [self request:SSJURLWithAPI(@"/chargebook/config/about_us.go") params:nil];
+    [self requestWithSuccess:NULL failure:NULL];
+}
+
+- (void)requestWithSuccess:(SSJNetworkServiceHandler)success
+                   failure:(SSJNetworkServiceHandler)failure {
+    [self request:@"/chargebook/config/about_us.go" params:nil success:success failure:failure];
 }
 
 - (void)handleResult:(NSDictionary *)rootElement {
@@ -26,6 +31,10 @@
                 
         self.updateModel = [SSJAppUpdateModel mj_objectWithKeyValues:result[@"app"]];
     }
+}
+
+- (BOOL)isRequestSuccessfulWithCode:(NSInteger)code {
+    return code == 1;
 }
 
 @end

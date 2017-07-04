@@ -11,6 +11,7 @@
 #import "SSJSyncSettingMultiLineCell.h"
 #import "SSJSyncSettingWarningFooterView.h"
 
+#import "SSJEncourageService.h"
 #import "SSJUserTableManager.h"
 #import "SSJDataClearHelper.h"
 #import "SSJNetworkReachabilityManager.h"
@@ -21,6 +22,9 @@
 static NSString *const kSSJSyncSettingTableViewCellId = @"SSJSyncSettingTableViewCell";
 static NSString *const kSSJSyncSettingMultiLineCellId = @"SSJSyncSettingMultiLineCell";
 
+static NSString *const kQQGroupKey = @"kQQGroupKey";
+static NSString *const kQQGroupIdKey = @"kQQGroupIdKey";
+
 @interface SSJSyncSettingViewController ()
 
 @property (nonatomic, strong) NSArray *cellItems;
@@ -28,6 +32,8 @@ static NSString *const kSSJSyncSettingMultiLineCellId = @"SSJSyncSettingMultiLin
 @property (nonatomic, strong) SSJUserItem *userItem;
 
 @property (nonatomic) SSJSyncSettingType syncType;
+
+@property (nonatomic, strong) SSJEncourageService *service;
 
 @property (nonatomic, strong) SSJSyncSettingWarningFooterView *footer;
 
@@ -38,7 +44,7 @@ static NSString *const kSSJSyncSettingMultiLineCellId = @"SSJSyncSettingMultiLin
 #pragma mark - Lifecycle
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-        self.title = @"同步设置";
+        self.title = @"数据同步";
         self.hidesBottomBarWhenPushed = YES;
         self.syncType = SSJSyncSetting();
     }
@@ -171,16 +177,35 @@ static NSString *const kSSJSyncSettingMultiLineCellId = @"SSJSyncSettingMultiLin
  上传日志
  */
 - (void)uploadDBLog {
-    NSError *error = nil;
-    NSData *zipData = [self zipDatabaseWithError:&error];
-    if (error) {
+    [[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [self.service requestWithSuccess:^(SSJEncourageService * _Nonnull service) {
+            [subscriber sendNext:@{kQQGroupKey:service.qqgroup,
+                                   kQQGroupIdKey:service.qqgroupId}];
+            [subscriber sendCompleted];
+        } failure:^(SSJEncourageService * _Nonnull service) {
+            [subscriber sendError:service.error];
+        }];
+        return nil;
+    }] subscribeNext:^(NSDictionary *qqInfo) {
+        SSJAlertViewAction *uploadAction = [SSJAlertViewAction actionWithTitle:@"仍然上传" handler:^(SSJAlertViewAction * _Nonnull action) {
+            NSError *error = nil;
+            NSData *zipData = [self zipDatabaseWithError:&error];
+            if (error) {
+                [SSJAlertViewAdapter showError:error];
+                return;
+            }
+            [self uploadData:zipData BaseWithcompletionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
+                if (!error) {
+                    [CDAutoHideMessageHUD showMessage:@"上传成功"];
+                }
+            }];
+        }];
+        SSJAlertViewAction *contactAction = [SSJAlertViewAction actionWithTitle:@"找工作人员" handler:^(SSJAlertViewAction * _Nonnull action) {
+            SSJJoinQQGroup(qqInfo[kQQGroupKey], qqInfo[kQQGroupIdKey]);
+        }];
+        [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@"请在工作人员引导下操作，也可加QQ群552563622反馈" action:uploadAction, contactAction, nil];
+    } error:^(NSError *error) {
         [SSJAlertViewAdapter showError:error];
-        return;
-    }
-    [self uploadData:zipData BaseWithcompletionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
-        if (!error) {
-            [CDAutoHideMessageHUD showMessage:@"上传成功"];
-        }
     }];
 }
 
@@ -261,6 +286,14 @@ static NSString *const kSSJSyncSettingMultiLineCellId = @"SSJSyncSettingMultiLin
         _footer.warningText = @"若您多个手机使用本App，但数据不一致，请先将你希望同步的数据同步到云端，再将云端数据拉取到本机。";
     }
     return _footer;
+}
+
+- (SSJEncourageService *)service {
+    if (!_service) {
+        _service = [[SSJEncourageService alloc] init];
+        _service.showLodingIndicator = YES;
+    }
+    return _service;
 }
 
 @end
