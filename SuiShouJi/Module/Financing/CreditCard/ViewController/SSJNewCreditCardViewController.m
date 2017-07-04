@@ -321,6 +321,14 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         _balaceInput = newReminderCell.textInput;
         newReminderCell.textInput.tag = 102;
         newReminderCell.textInput.delegate = self;
+        @weakify(self);
+        newReminderCell.showBalanceTypeSelectViewBlock = ^(CGPoint arrowPoint, BOOL isExpand, SSJCreditCardEditeCell *cell) {
+            @strongify(self);
+            self.debtOrbalanceChoice.selectedIndex = self.debtOrbalance;
+            [self.debtOrbalanceChoice showInView:self.view atPoint:[cell convertPoint:CGPointMake(arrowPoint.x, arrowPoint.y + 10) toView:self.view] dismissHandle:^(SSJListMenu *listMenu) {
+                
+            }];
+        };
         newReminderCell.customAccessoryType = UITableViewCellAccessoryNone;
         newReminderCell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
@@ -538,6 +546,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
                 weakSelf.remindItem = nil;
                 [weakSelf.tableView reloadData];
             };
+            
             [self.navigationController pushViewController:remindEditeVc animated:YES];
         }
     }

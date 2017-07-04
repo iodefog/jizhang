@@ -32,6 +32,7 @@
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier]) {
+        self.isExpand = NO;
         [self.contentView addSubview:self.cellImage];
         [self.contentView addSubview:self.textInput];
         [self.contentView addSubview:self.titleLabel];
@@ -201,9 +202,6 @@
             self.accessoryView.centerY = self.cellImage.centerY;
             self.titleLabel.left = self.cellImage.image ? self.cellImage.right + 10 : 15;
             self.titleLabel.centerY = self.contentView.height / 2;
-            self.textInput.size = CGSizeMake(self.contentView.width - self.titleLabel.right - 15, self.contentView.height);
-            self.textInput.left = self.titleLabel.right + 10;
-            self.textInput.centerY = self.contentView.height / 2;
             self.textInput.hidden = NO;
             self.titleLabel.hidden = NO;
             self.detailLabel.hidden = YES;
@@ -215,6 +213,11 @@
             self.arrow.left = self.titleLabel.right + 10;
             self.arrow.position = CGPointMake(self.arrow.position.x, self.contentView.height / 2);
             self.containerView.size = CGSizeMake(self.arrow.right - self.titleLabel.left, self.titleLabel.height);
+            self.containerView.left = self.titleLabel.left;
+            self.containerView.centerY = self.contentView.height / 2;
+            self.textInput.size = CGSizeMake(self.contentView.width - self.containerView.right - 15, self.contentView.height) ;
+            self.textInput.centerY = self.contentView.height / 2;
+            self.textInput.left = self.containerView.right + 10;
         }
             break;
             
@@ -307,6 +310,7 @@
     if (!_containerView) {
         _containerView = [[UIView alloc] init];
         _containerView.backgroundColor = [UIColor clearColor];
+        _containerView.userInteractionEnabled = YES;
         [_containerView addGestureRecognizer:self.tapGesture];
     }
     return _containerView;
@@ -314,7 +318,7 @@
 
 - (UITapGestureRecognizer *)tapGesture {
     if (!_tapGesture) {
-        _tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showBooksMenuAction)];
+        _tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showBalanceTypeSelectView)];
     }
     return _tapGesture;
 }
@@ -337,31 +341,31 @@
     [self.cellDetailImage sizeToFit];
 }
 
-- (void)setCellTitle:(NSString *)cellTitle{
+- (void)setCellTitle:(NSString *)cellTitle {
     _cellTitle = cellTitle;
     self.titleLabel.text = _cellTitle;
     [self.titleLabel sizeToFit];
 }
 
-- (void)setCellSubTitle:(NSString *)cellSubTitle{
+- (void)setCellSubTitle:(NSString *)cellSubTitle {
     _cellSubTitle = cellSubTitle;
     self.subTitleLabel.text = _cellSubTitle;
     [self.subTitleLabel sizeToFit];
 }
 
-- (void)setType:(SSJCreditCardCellType)type{
+- (void)setType:(SSJCreditCardCellType)type {
     _type = type;
     [self setNeedsLayout];
 }
 
-- (void)setCellDetail:(NSString *)cellDetail{
+- (void)setCellDetail:(NSString *)cellDetail {
     _cellDetail = cellDetail;
     self.detailLabel.text = _cellDetail;
     self.detailLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     [self.detailLabel sizeToFit];
 }
 
-- (void)setCellAtrributedDetail:(NSAttributedString *)cellAtrributedDetail{
+- (void)setCellAtrributedDetail:(NSAttributedString *)cellAtrributedDetail {
     _cellAtrributedDetail = cellAtrributedDetail;
     self.detailLabel.attributedText = _cellAtrributedDetail;
     [self.detailLabel sizeToFit];
@@ -373,6 +377,18 @@
     _subTitleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     _textInput.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     _arrow.fillColor = SSJ_MAIN_COLOR.CGColor;
+}
+
+- (void)showBalanceTypeSelectView {
+    self.isExpand = !self.isExpand;
+    if (self.isExpand) {
+        self.arrow.transform = CATransform3DMakeRotation(M_PI, 0, 0, 1);
+    } else {
+        self.arrow.transform = CATransform3DIdentity;
+    }
+    if (self.showBalanceTypeSelectViewBlock) {
+        self.showBalanceTypeSelectViewBlock(self.arrow.position,self.isExpand,self);
+    }
 }
 
 /*
