@@ -113,8 +113,9 @@
 }
 
 + (void)queryFundingParentListWithFundingType:(SSJAccountType)type
-                Success:(void (^)(NSArray <SSJFundingItem *> *items))success
-                failure:(void (^)(NSError *error))failure {
+                                needLoanOrNot:(BOOL)needLoan
+                                      Success:(void (^)(NSArray <SSJFundingItem *> *items))success
+                                      failure:(void (^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         
         NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:0];
@@ -136,7 +137,13 @@
             item.fundingName = [fundSet stringForColumn:@"cacctname"];
             item.fundingIcon = [fundSet stringForColumn:@"cicoin"];
             item.fundingMemo = [fundSet stringForColumn:@"cmemo"];
-            [tempArr addObject:item];
+            if (needLoan) {
+                [tempArr addObject:item];
+            } else {
+                if (![item.fundingID isEqualToString:@"11"] && ![item.fundingID isEqualToString:@"10"]) {
+                    [tempArr addObject:item];
+                }
+            }
         }
         
         if (success) {

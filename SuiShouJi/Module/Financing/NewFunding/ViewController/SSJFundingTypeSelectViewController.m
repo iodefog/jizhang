@@ -139,11 +139,11 @@
 
 
 #pragma mark - UITableViewDataSource
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.items.count;
 }
 
--(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
 
@@ -183,7 +183,7 @@
 - (void)reloadFundList {
     [self.view ssj_showLoadingIndicator];
     @weakify(self);
-    [SSJFinancingStore queryFundingParentListWithFundingType:self.slideView.selectedIndex Success:^(NSArray<SSJFundingItem *> *items) {
+    [SSJFinancingStore queryFundingParentListWithFundingType:self.slideView.selectedIndex needLoanOrNot:self.needLoanOrNot Success:^(NSArray<SSJFundingItem *> *items) {
         @strongify(self);
         [self.view ssj_hideLoadingIndicator];
         self.items = [NSArray arrayWithArray:items];
