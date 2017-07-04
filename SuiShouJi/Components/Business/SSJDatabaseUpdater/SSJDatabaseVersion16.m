@@ -42,6 +42,12 @@
     if (error) {
         return error;
     }
+    
+    error = [self updateFundInfoTableWithDatabase:db];
+    if (error) {
+        return error;
+    }
+
     return nil;
 }
 
