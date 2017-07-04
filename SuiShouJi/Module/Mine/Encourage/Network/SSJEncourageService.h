@@ -13,6 +13,9 @@
 
 - (void)request;
 
+- (void)requestWithSuccess:(SSJNetworkServiceHandler)success
+                   failure:(SSJNetworkServiceHandler)failure;
+
 // qq群
 @property(nonatomic, strong) NSString *qqgroup;
 

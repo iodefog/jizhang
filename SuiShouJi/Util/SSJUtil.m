@@ -553,3 +553,13 @@ void clearCurrentBooksCategory() {
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:SSJBookCategoryKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
+
+BOOL SSJJoinQQGroup(NSString *group, NSString *key) {
+    NSString *urlStr = [NSString stringWithFormat:@"mqqapi://card/show_pslcard?src_type=internal&version=1&uin=%@&key=%@&card_type=group&source=external", group, key];
+    NSURL *url = [NSURL URLWithString:urlStr];
+    if([[UIApplication sharedApplication] canOpenURL:url]){
+        [[UIApplication sharedApplication] openURL:url];
+        return YES;
+    }
+    else return NO;
+}

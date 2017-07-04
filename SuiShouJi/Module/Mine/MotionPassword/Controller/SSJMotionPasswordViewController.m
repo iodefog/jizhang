@@ -294,6 +294,7 @@ static const int kVerifyFailureTimesLimit = 5;
     [self.view addSubview:self.remindLab];
     [self.view addSubview:self.bottomRemindLab];
     [self.view addSubview:self.motionView];
+    [self.view addSubview:self.strokeToggle];
     
     switch (self.type) {
         case SSJMotionPasswordViewControllerTypeSetting:
@@ -301,7 +302,6 @@ static const int kVerifyFailureTimesLimit = 5;
             break;
             
         case SSJMotionPasswordViewControllerTypeVerification:
-            [self.view addSubview:self.strokeToggle];
             [self.view addSubview:self.forgetPwdBtn];
             [self.view addSubview:self.changeAccountBtn];
             self.remindLab.text = @"请绘制手势密码";
@@ -356,7 +356,7 @@ static const int kVerifyFailureTimesLimit = 5;
         _remindLab = [[UILabel alloc] init];
         _remindLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.motionPasswordNormalColor];
         _remindLab.textAlignment = NSTextAlignmentCenter;
-        _remindLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
+        _remindLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
     }
     return _remindLab;
 }
@@ -375,11 +375,12 @@ static const int kVerifyFailureTimesLimit = 5;
 - (UIButton *)strokeToggle {
     if (!_strokeToggle) {
         _strokeToggle = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_strokeToggle setImage:[UIImage imageNamed:@"founds_yincang"] forState:UIControlStateNormal];
-        [_strokeToggle setImage:[UIImage imageNamed:@"founds_yincang"] forState:UIControlStateNormal | UIControlStateHighlighted];
-        [_strokeToggle setImage:[UIImage imageNamed:@"founds_xianshi"] forState:UIControlStateSelected];
-        [_strokeToggle setImage:[UIImage imageNamed:@"founds_xianshi"] forState:UIControlStateSelected | UIControlStateHighlighted];
+        [_strokeToggle setImage:[[UIImage imageNamed:@"founds_yincang"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+        [_strokeToggle setImage:[[UIImage imageNamed:@"founds_yincang"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal | UIControlStateHighlighted];
+        [_strokeToggle setImage:[[UIImage imageNamed:@"founds_xianshi"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateSelected];
+        [_strokeToggle setImage:[[UIImage imageNamed:@"founds_xianshi"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateSelected | UIControlStateHighlighted];
         _strokeToggle.selected = YES;
+        _strokeToggle.tintColor = [UIColor whiteColor];
         [[_strokeToggle rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(UIButton *btn) {
             btn.selected = !btn.selected;
         }];
