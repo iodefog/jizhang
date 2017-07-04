@@ -137,11 +137,13 @@
             item.fundingName = [fundSet stringForColumn:@"cacctname"];
             item.fundingIcon = [fundSet stringForColumn:@"cicoin"];
             item.fundingMemo = [fundSet stringForColumn:@"cmemo"];
-            if (needLoan) {
-                [tempArr addObject:item];
-            } else {
-                if (![item.fundingID isEqualToString:@"11"] && ![item.fundingID isEqualToString:@"10"]) {
+            if (![item.fundingID isEqualToString:@"9"]) {
+                if (needLoan) {
                     [tempArr addObject:item];
+                } else {
+                    if (![item.fundingID isEqualToString:@"11"] && ![item.fundingID isEqualToString:@"10"]) {
+                        [tempArr addObject:item];
+                    }
                 }
             }
         }

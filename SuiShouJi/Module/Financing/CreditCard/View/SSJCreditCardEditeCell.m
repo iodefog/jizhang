@@ -20,9 +20,11 @@
 
 @property(nonatomic, strong) CAGradientLayer *gradientLayer;
 
-@property(nonatomic, strong) UIButton *triangleButton;
+@property (nonatomic, strong) UIView *containerView;
 
-@property(nonatomic, strong) UIView *backView;
+@property (nonatomic, strong) UITapGestureRecognizer *tapGesture;
+
+@property (nonatomic, strong) CAShapeLayer *arrow;
 
 @end
 
@@ -36,8 +38,8 @@
         [self.contentView addSubview:self.detailLabel];
         [self.contentView addSubview:self.cellDetailImage];
         [self.contentView addSubview:self.subTitleLabel];
-        [self.contentView addSubview:self.triangleButton];
-        [self.contentView addSubview:self.backView];
+        [self.contentView.layer addSublayer:self.arrow];
+        [self.contentView addSubview:self.containerView];
         [self.contentView.layer addSublayer:self.gradientLayer];
     }
     return self;
@@ -67,6 +69,8 @@
             self.cellDetailImage.hidden = YES;
             self.subTitleLabel.hidden = YES;
             self.gradientLayer.hidden = YES;
+            self.arrow.hidden = YES;
+            self.containerView.hidden = YES;
         }
             break;
             
@@ -104,6 +108,8 @@
             self.subTitleLabel.hidden = YES;
             self.gradientLayer.hidden = YES;
             self.detailLabel.hidden = NO;
+            self.arrow.hidden = YES;
+            self.containerView.hidden = YES;
         }
             break;
             
@@ -141,6 +147,8 @@
             self.subTitleLabel.hidden = YES;
             self.gradientLayer.hidden = YES;
             self.detailLabel.hidden = NO;
+            self.arrow.hidden = YES;
+            self.containerView.hidden = YES;
         }
             break;
             
@@ -158,6 +166,8 @@
             self.subTitleLabel.hidden = NO;
             self.gradientLayer.hidden = YES;
             self.detailLabel.hidden = NO;
+            self.arrow.hidden = YES;
+            self.containerView.hidden = YES;
         }
             break;
             
@@ -180,6 +190,8 @@
 
             self.textInput.hidden = YES;
             self.subTitleLabel.hidden = YES;
+            self.arrow.hidden = YES;
+            self.containerView.hidden = YES;
         }
             break;
             
@@ -198,6 +210,11 @@
             self.cellDetailImage.hidden = YES;
             self.subTitleLabel.hidden = YES;
             self.gradientLayer.hidden = YES;
+            self.arrow.hidden = NO;
+            self.containerView.hidden = NO;
+            self.arrow.left = self.titleLabel.right + 10;
+            self.arrow.position = CGPointMake(self.arrow.position.x, self.contentView.height / 2);
+            self.containerView.size = CGSizeMake(self.arrow.right - self.titleLabel.left, self.titleLabel.height);
         }
             break;
             
@@ -270,6 +287,38 @@
     return _gradientLayer;
 }
 
+- (CAShapeLayer *)arrow {
+    if (!_arrow) {
+        UIBezierPath *path = [UIBezierPath bezierPath];
+        [path moveToPoint:CGPointZero];
+        [path addLineToPoint:CGPointMake(5, 5)];
+        [path addLineToPoint:CGPointMake(10, 0)];
+        
+        _arrow = [CAShapeLayer layer];
+        _arrow.size = CGSizeMake(10, 5);
+        _arrow.path = path.CGPath;
+        _arrow.lineWidth = 1;
+        _arrow.fillColor = SSJ_MAIN_COLOR.CGColor;
+    }
+    return _arrow;
+}
+
+- (UIView *)containerView {
+    if (!_containerView) {
+        _containerView = [[UIView alloc] init];
+        _containerView.backgroundColor = [UIColor clearColor];
+        [_containerView addGestureRecognizer:self.tapGesture];
+    }
+    return _containerView;
+}
+
+- (UITapGestureRecognizer *)tapGesture {
+    if (!_tapGesture) {
+        _tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showBooksMenuAction)];
+    }
+    return _tapGesture;
+}
+
 - (void)setColorItem:(SSJFinancingGradientColorItem *)colorItem {
     if (!colorItem.startColor) return;
     _gradientLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:colorItem.startColor].CGColor,(__bridge id)[UIColor ssj_colorWithHex:colorItem.endColor].CGColor];
@@ -323,6 +372,7 @@
     _cellImage.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     _subTitleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     _textInput.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    _arrow.fillColor = SSJ_MAIN_COLOR.CGColor;
 }
 
 /*
