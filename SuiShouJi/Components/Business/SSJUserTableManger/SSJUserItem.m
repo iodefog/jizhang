@@ -41,6 +41,14 @@
     return mapping;
 }
 
+- (instancetype)init {
+    if (self = [super init]) {
+        // 因为user表的指纹字段默认是1，但是现在要求默认是0，所以只能在这里处理
+        self.fingerPrintState = @"0";
+    }
+    return self;
+}
+
 - (void)encodeWithCoder:(NSCoder *)aCoder {
     [self mj_encode:aCoder];
 }
