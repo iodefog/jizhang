@@ -52,6 +52,7 @@
 -(UILabel *)titleLabel{
     if (!_titleLabel) {
         _titleLabel = [[UILabel alloc]initWithFrame:CGRectZero];
+        _titleLabel.numberOfLines = 2;
         _titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         _titleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     }
@@ -71,17 +72,9 @@
     if (!_switchButton) {
         _switchButton = [[UISwitch alloc]init];
         _switchButton.onTintColor = [UIColor ssj_colorWithHex:@"43cf78"];
-        [_switchButton addTarget:self action:@selector(switchControlAction) forControlEvents:UIControlEventValueChanged];
+        [_switchButton addTarget:self action:@selector(switchControlAction:) forControlEvents:UIControlEventValueChanged];
     }
     return _switchButton;
-}
-
-- (UIImageView *)cellImageView{
-    if (!_cellImageView) {
-        _cellImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 20, 20)];
-        _cellImageView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-    }
-    return _cellImageView;
 }
 
 - (void)setCellItem:(SSJBaseCellItem *)cellItem{
@@ -108,11 +101,11 @@
     }
 }
 
-- (void)switchControlAction {
-    SSJReminderItem *item = (SSJReminderItem *)self.cellItem;
-    item.remindState = self.switchButton.on;
+- (void)switchControlAction:(UISwitch *)switchA {
+//    SSJReminderItem *item = (SSJReminderItem *)self.cellItem;
+//    item.remindState = self.switchButton.on;
     if (_switchAction) {
-        _switchAction(self);
+        _switchAction(self,switchA);
     }
 }
 

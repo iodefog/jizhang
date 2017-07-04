@@ -30,4 +30,6 @@
 
 @property (nonatomic, strong) UIColor *backgroundColor;
 
+@property(nonatomic, strong) NSMutableAttributedString *attributeStr;
+
 @end

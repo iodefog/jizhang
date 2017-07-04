@@ -359,6 +359,7 @@
     }
     
     // ios8后，需要添加这个注册，才能得到授权
+     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:SSJNoticeAlertKey];
     if ([[UIApplication sharedApplication] respondsToSelector:@selector(registerUserNotificationSettings:)]) {
         UIUserNotificationType type =  UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound;
         UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:type

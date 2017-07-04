@@ -13,6 +13,8 @@
 #import "SSJReminderEditeViewController.h"
 #import "SSJBudgetNodataRemindView.h"
 #import "SSJLocalNotificationHelper.h"
+#import "SSJGeTuiManager.h"
+#import "SSJDataSynchronizer.h"
 
 static NSString * SSJReminderListCellIdentifier = @"SSJReminderListCellIdentifier";
 
@@ -65,10 +67,7 @@ static NSString * SSJReminderListCellIdentifier = @"SSJReminderListCellIdentifie
 #pragma mark - UITableViewDelegate
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     SSJReminderItem *item = [self.items ssj_safeObjectAtIndex:indexPath.section];
-    if (item.remindMemo.length) {
-        return 70;
-    }
-    return 55;
+    return item.rowHeight;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
@@ -103,7 +102,15 @@ static NSString * SSJReminderListCellIdentifier = @"SSJReminderListCellIdentifie
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     SSJReminderItem *item = [self.items ssj_safeObjectAtIndex:indexPath.section];
     SSJReminderListCell * cell = [tableView dequeueReusableCellWithIdentifier:SSJReminderListCellIdentifier forIndexPath:indexPath];
-    cell.switchAction = ^(SSJReminderListCell *cell) {
+    __weak typeof(self) weakSelf = self;
+    cell.switchAction = ^(SSJReminderListCell *cell,UISwitch *switchA) {
+        SSJReminderItem *item = cell.cellItem;
+        if (item.remindState == NO) {
+            [weakSelf remindLocationWithItem:cell.cellItem withSwitch:switchA];
+        } else {
+            item.remindState = NO;
+        }
+        
         [SSJLocalNotificationStore asyncsaveReminderWithReminderItem:(SSJReminderItem *)cell.cellItem Success:^(SSJReminderItem *item){
             if (!item.remindState) {
                 [SSJLocalNotificationHelper cancelLocalNotificationWithremindItem:item];
@@ -119,8 +126,59 @@ static NSString * SSJReminderListCellIdentifier = @"SSJReminderListCellIdentifie
 #pragma mark - Event
 - (void)rightButtonClicked:(id)sender{
     SSJReminderEditeViewController *remindEditeVc = [[SSJReminderEditeViewController alloc]init];
+    __weak typeof(self) weakSelf = self;
+    remindEditeVc.addNewReminderAction = ^(SSJReminderItem *item) {
+
+        [weakSelf remindLocationWithItem:item withSwitch:nil];
+        [SSJLocalNotificationStore asyncsaveReminderWithReminderItem:item Success:^(SSJReminderItem *Ritem){
+            [SSJLocalNotificationHelper registerLocalNotificationWithremindItem:item];
+            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+        } failure:^(NSError *error) {
+            
+        }];
+        
+    };
     remindEditeVc.needToSave = YES;
     [self.navigationController pushViewController:remindEditeVc animated:YES];
+}
+
+- (void)remindLocationWithItem:(SSJReminderItem *)item withSwitch:(UISwitch *)switchA {
+    //如果已经弹出过授权弹框开启通知
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:SSJNoticeAlertKey]) {//弹出过授权弹框
+        if ([[UIDevice currentDevice].systemVersion floatValue] >= 8.0f) {
+            UIUserNotificationSettings *setting = [[UIApplication sharedApplication] currentUserNotificationSettings];
+            if (UIUserNotificationTypeNone == setting.types) {
+                item.remindState = NO;
+                if (switchA) {
+                    switchA.on = NO;
+                }
+                //推送关闭(去设置)
+                [SSJAlertViewAdapter showAlertViewWithTitle:@"哎呀，未开启推送通知" message:@"这样会错过您设定的提醒，墙裂建议您打开吆" action:[SSJAlertViewAction actionWithTitle:@"取消" handler:NULL],[SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction * _Nonnull action) {
+                    NSURL * url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+                    
+                    if([[UIApplication sharedApplication] canOpenURL:url]) {
+                        
+                        NSURL*url =[NSURL URLWithString:UIApplicationOpenSettingsURLString];           [[UIApplication sharedApplication] openURL:url];
+                    }
+                    
+                }],nil];
+            }else{
+                //推送打开
+                item.remindState = YES;
+                if (switchA) {
+                    switchA.on = YES;
+                }
+            }
+        }
+        
+    } else { //没有弹出过授权弹框
+        //弹出授权弹框
+        item.remindState = NO;
+        if (switchA) {
+            switchA.on = NO;
+        }
+        [[SSJGeTuiManager shareManager] registerRemoteNotificationWithDelegate:[UIApplication sharedApplication]];//远程通知
+    }
 }
 
 #pragma mark - Getter

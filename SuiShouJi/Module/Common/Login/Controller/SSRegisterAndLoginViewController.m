@@ -192,7 +192,7 @@
         _tfPassword.delegate = self;
         _tfPassword.textColor = [UIColor ssj_colorWithHex:@"333333"];
         _tfPassword.clearButtonMode = UITextFieldViewModeWhileEditing;
-        _tfPassword.placeholder = @"请输入6-15位数字、字母组合密码";
+        _tfPassword.placeholder = @"请输入6~15位数字、字母组合密码";
         _tfPassword.font = [UIFont ssj_helveticaRegularFontOfSize:SSJ_FONT_SIZE_3];
         _tfPassword.keyboardType = UIKeyboardTypeASCIICapable;
         _tfPassword.delegate = self;

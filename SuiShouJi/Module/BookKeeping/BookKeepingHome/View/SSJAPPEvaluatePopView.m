@@ -80,7 +80,7 @@ NSString *const SSJAppEvaluateSelecatedKey = @"SSJAppEvaluateSelecatedKey";
 - (void)show
 {
     UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
-    self.frame = CGRectMake(0, 0, 320, 340);
+    self.frame = CGRectMake(0, 0, 300, 340);
     self.center = keyWindow.center;
     [keyWindow addSubview:self.bgView];
     [self.bgView addSubview:self];
@@ -95,15 +95,16 @@ NSString *const SSJAppEvaluateSelecatedKey = @"SSJAppEvaluateSelecatedKey";
         switch (type) {
             case SSJAPPEvaluateSelecatedTypeUnKnow:
             {
-                //新用户
-                if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"SSJNewUserKey"] intValue] == 0) {
-                    //30天后弹出
-                    [self showAfterOneMonth];
-                    
-                }else if([[[NSUserDefaults standardUserDefaults] objectForKey:@"SSJNewUserKey"] intValue] == 1){//老用户
-                    [self show];
-                    return YES;
-                }
+                [self show];
+//                //新用户
+//                if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"SSJNewUserKey"] intValue] == 0) {
+//                    //30天后弹出
+//                    [self showAfterOneMonth];
+//                    
+//                }else if([[[NSUserDefaults standardUserDefaults] objectForKey:@"SSJNewUserKey"] intValue] == 1){//老用户
+//                    [self show];
+//                    return YES;
+//                }
             }
                 break;
             case SSJAPPEvaluateSelecatedTypePraise://以后都不弹
@@ -254,11 +255,14 @@ NSString *const SSJAppEvaluateSelecatedKey = @"SSJAppEvaluateSelecatedKey";
         [[UIApplication sharedApplication] openURL:url];
     }
     self.evaluateSelecatedType = SSJAPPEvaluateSelecatedTypePraise;
+    [[NSUserDefaults standardUserDefaults] setObject:@(self.evaluateSelecatedType) forKey:SSJAppEvaluateSelecatedKey];
     [self dismiss];
 }
 
 - (void)tuCaoButtonClicked {
     [self dismiss];
+    self.evaluateSelecatedType = SSJAPPEvaluateSelecatedTypeTuCao;
+    [[NSUserDefaults standardUserDefaults] setObject:@(self.evaluateSelecatedType) forKey:SSJAppEvaluateSelecatedKey];
     if (self.tuCaoBtnClickBlock) {
         self.tuCaoBtnClickBlock();
     }
@@ -268,6 +272,7 @@ NSString *const SSJAppEvaluateSelecatedKey = @"SSJAppEvaluateSelecatedKey";
 {
     [SSJAnaliyticsManager event:@"evaluate_later"];
     self.evaluateSelecatedType = SSJAPPEvaluateSelecatedTypeLatter;
+    [[NSUserDefaults standardUserDefaults] setObject:@(self.evaluateSelecatedType) forKey:SSJAppEvaluateSelecatedKey];
     [self dismiss];
 }
 

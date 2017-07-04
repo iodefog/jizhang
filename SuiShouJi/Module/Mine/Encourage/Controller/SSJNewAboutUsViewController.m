@@ -96,6 +96,8 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
         [alert addAction:comfirm];
         
         [self.navigationController presentViewController:alert animated:YES completion:NULL];
+        
+        
     }
     
     if ([title isEqualToString:ktitle2]) {

@@ -29,12 +29,21 @@
 
 
 @interface SSJGeTuiManager()
-
+/**delegate*/
+@property (nonatomic) id delegate;
 @end
 
 @implementation SSJGeTuiManager
++ (instancetype) shareManager {
+    static dispatch_once_t onceToken;
+    static SSJGeTuiManager *geTuiManager;
+    dispatch_once(&onceToken, ^{
+        geTuiManager = [[SSJGeTuiManager alloc] init];
+    });
+    return geTuiManager;
+}
 
-+ (void)SSJGeTuiManagerWithDelegate:(id<GeTuiSdkDelegate>)delegate {
+- (void)SSJGeTuiManagerWithDelegate:(id<GeTuiSdkDelegate>)delegate {
     NSString *appID;
     NSString *appSecret;
     NSString *appKey;
@@ -48,14 +57,16 @@
     appKey = SSJDetailSettingForSource(@"GeTuiTestAppSecret");
 #endif
     [GeTuiSdk startSdkWithAppId:appID appKey:appKey appSecret:appSecret delegate:delegate];
-    [self registerRemoteNotificationWithDelegate:delegate];
+    self.delegate = delegate;
+//    [self registerRemoteNotificationWithDelegate:delegate];
 }
 
-+ (void)registerRemoteNotificationWithDelegate:(id)delegate {
+- (void)registerRemoteNotificationWithDelegate:(id)delegate {
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:SSJNoticeAlertKey];
     if ([[UIDevice currentDevice].systemVersion floatValue] >= 10.0) {
         
         UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
-        center.delegate = delegate;
+        center.delegate = self.delegate;
         [center requestAuthorizationWithOptions:(UNAuthorizationOptionBadge | UNAuthorizationOptionSound | UNAuthorizationOptionAlert | UNAuthorizationOptionCarPlay) completionHandler:^(BOOL granted, NSError *_Nullable error) {
             if (!error) {
                 NSLog(@"request authorization succeeded!");
@@ -73,7 +84,7 @@
     
 }
 
-+ (void)pushToViewControllerWithUserInfo:(NSDictionary *)userInfo {
+- (void)pushToViewControllerWithUserInfo:(NSDictionary *)userInfo {
     if (!userInfo) {
         return;
     }

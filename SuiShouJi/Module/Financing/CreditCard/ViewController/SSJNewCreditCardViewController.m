@@ -21,6 +21,7 @@
 #import "SSJFinancingHomeHelper.h"
 #import "SSJDataSynchronizer.h"
 #import "SSJBooksTypeDeletionAuthCodeAlertView.h"
+#import "SSJListMenu.h"
 
 #define NUM @"+-.0123456789"
 
@@ -39,31 +40,36 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 
 @interface SSJNewCreditCardViewController ()<UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate>
 
-@property(nonatomic, strong) NSArray *titles;
+@property (nonatomic, strong) NSArray *titles;
 
-@property(nonatomic, strong) NSArray *images;
+@property (nonatomic, strong) NSArray *images;
 
 @property (nonatomic,strong) TPKeyboardAvoidingTableView *tableView;
 
-@property(nonatomic, strong) SSJCreditCardItem *item;
+@property (nonatomic, strong) SSJCreditCardItem *item;
 
 // 提醒开关
-@property(nonatomic, strong) UISwitch *remindStateButton;
+@property (nonatomic, strong) UISwitch *remindStateButton;
 
 // 是否已账单日结算开关
-@property(nonatomic, strong) UISwitch *billDateSettleMentButton;
+@property (nonatomic, strong) UISwitch *billDateSettleMentButton;
 
-@property(nonatomic, strong) SSJBillingDaySelectView *billingDateSelectView;
+@property (nonatomic, strong) SSJBillingDaySelectView *billingDateSelectView;
 
-@property(nonatomic, strong) SSJBillingDaySelectView *repaymentDateSelectView;
+@property (nonatomic, strong) SSJBillingDaySelectView *repaymentDateSelectView;
 
-@property(nonatomic, strong) SSJReminderItem *remindItem;
+@property (nonatomic, strong) SSJReminderItem *remindItem;
 
-@property(nonatomic, strong) UIView *saveFooterView;
+@property (nonatomic, strong) UIView *saveFooterView;
 
-@property(nonatomic, strong) UIView *colorSelectView;
+@property (nonatomic, strong) UIView *colorSelectView;
 
 @property (nonatomic, strong) SSJBooksTypeDeletionAuthCodeAlertView *authCodeAlertView;
+
+@property (nonatomic, strong) SSJListMenu *debtOrbalanceChoice;
+
+// 0是欠款,1是余额
+@property (nonatomic) BOOL debtOrbalance;
 
 @end
 
@@ -300,7 +306,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     
     // 信用卡余额
     if ([title isEqualToString:kTitle4]) {
-        newReminderCell.type = SSJCreditCardCellTypeTextField;
+        newReminderCell.type = SSJCreditCardBalanceCell;
         newReminderCell.cellTitle = title;
         if (self.cardType == SSJCrediteCardTypeAlipay) {
             newReminderCell.textInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"当前蚂蚁花呗余额/欠款" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
@@ -548,6 +554,10 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     }
 }
 
+- (void)debtOrbalanceChoiceChange {
+    
+}
+
 #pragma mark - UITextFieldDelegate
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
     /*NSInteger existedLength = textField.text.length;
@@ -699,6 +709,20 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     return _authCodeAlertView;
 }
 
+- (SSJListMenu *)debtOrbalanceChoice {
+    if (!_debtOrbalanceChoice) {
+        _debtOrbalanceChoice = [[SSJListMenu alloc] init];
+        _debtOrbalanceChoice = [[SSJListMenu alloc] initWithFrame:CGRectMake(0, 0, 154, 50)];
+        _debtOrbalanceChoice.maxDisplayRowCount = 1;
+        _debtOrbalanceChoice.gapBetweenImageAndTitle = 0;
+        _debtOrbalanceChoice.backgroundColor = [UIColor clearColor];
+        _debtOrbalanceChoice.items = [self debtOrbalanceChoiceItems];
+        [_debtOrbalanceChoice addTarget:self action:@selector(debtOrbalanceChoiceChange) forControlEvents:UIControlEventValueChanged];
+
+    }
+    return _debtOrbalanceChoice;
+}
+
 #pragma mark - Private
 - (void)deleteFundingItem:(SSJBaseCellItem *)item type:(BOOL)type{
     __weak typeof(self) weakSelf = self;
@@ -741,6 +765,51 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         }
     }
 }
+
+- (NSArray *)debtOrbalanceChoiceItems {
+    NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:0];
+    
+    NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+
+    style.lineSpacing = 7;
+    
+    NSMutableAttributedString *firstTitle = [[NSMutableAttributedString alloc] initWithString:@"当前欠款\n输入数字为负数，代表当前信用卡有欠款"];
+    
+    [firstTitle addAttribute:NSParagraphStyleAttributeName value:style range:NSMakeRange(0, firstTitle.length)];
+
+    [firstTitle addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:NSMakeRange(0, 3)];
+    
+    [firstTitle addAttribute:NSFontAttributeName value:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3] range:NSMakeRange(0, 3)];
+    
+    [firstTitle addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] range:NSMakeRange(4, firstTitle.length)];
+    
+    [firstTitle addAttribute:NSFontAttributeName value:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4] range:NSMakeRange(4, firstTitle.length)];
+
+
+    SSJListMenuItem *firstItem = [SSJListMenuItem itemWithImageName:nil title:nil normalTitleColor:nil selectedTitleColor:nil normalImageColor:nil selectedImageColor:nil backgroundColor:nil attributedText:firstTitle];
+
+    [tempArr addObject:firstItem];
+    
+    NSMutableAttributedString *secondTitle = [[NSMutableAttributedString alloc] initWithString:@"当前余额\n输入数字为负数，代表当前信用卡有余额"];
+    
+    [secondTitle addAttribute:NSParagraphStyleAttributeName value:style range:NSMakeRange(0, secondTitle.length)];
+
+    [secondTitle addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:NSMakeRange(0, 3)];
+    
+    [secondTitle addAttribute:NSFontAttributeName value:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3] range:NSMakeRange(0, 3)];
+
+    [secondTitle addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] range:NSMakeRange(4, firstTitle.length)];
+    
+    [secondTitle addAttribute:NSFontAttributeName value:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4] range:NSMakeRange(4, firstTitle.length)];
+
+    
+    SSJListMenuItem *secondItem = [SSJListMenuItem itemWithImageName:nil title:nil normalTitleColor:nil selectedTitleColor:nil normalImageColor:nil selectedImageColor:nil backgroundColor:nil attributedText:secondTitle];
+    
+    [tempArr addObject:secondItem];
+ 
+    return tempArr;
+}
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

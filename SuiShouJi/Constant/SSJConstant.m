@@ -51,6 +51,8 @@ NSString *const SSJReminderNotificationKey = @"SSJReminderNotificationKey";
 
 NSString *const SSJBookCategoryKey = @"SSJBookCategoryKey";
 
+NSString *const SSJNoticeAlertKey = @"SSJNoticeAlertKey";
+
 NSString *const SSJAnnouncementHaveReadKey = @"SSJAnnouncementHaveReadKey";
 
 NSString *const SSJSyncDataSuccessNotification = @"SSJSyncDataSuccessNotification";
@@ -72,6 +74,8 @@ NSString *const SSJInitDatabaseDidFinishNotification = @"SSJInitDatabaseDidFinis
 NSString *const SSJBooksTypeDidChangeNotification = @"SSJBooksTypeDidChangeNotification";
 
 NSString *const SSJHomeContinueLoadingNotification = @"SSJHomeContinueLoadingNotification";
+
+NSString *const SSJHomeFinishJZhangNotification = @"SSJHomeFinishJZhangNotification";
 
 NSString *const SSJWeiXinAppKey = @"wxf77f7a5867124dfd";
 
@@ -105,3 +109,4 @@ NSString *const SSJAllBillTypeId = @"all";
 
 NSString *const SSJAllMembersId = @"all_members_id";
 
+NSString *const SSJNoticeRemindKey = @"SSJNoticeRemindKey";

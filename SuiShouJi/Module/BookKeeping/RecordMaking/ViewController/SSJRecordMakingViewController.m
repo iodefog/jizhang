@@ -943,6 +943,8 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         if (self.addNewChargeBlock) {
             self.addNewChargeBlock(@[editeItem],hasChangeBooksType);
         }
+        //发送通知
+        [[NSNotificationCenter defaultCenter] postNotificationName:SSJReminderNotificationKey object:nil];
         [self goBackAction];
     } error:^(NSError *error) {
         [SSJAlertViewAdapter showError:error];

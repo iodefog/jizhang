@@ -14,7 +14,7 @@
 + (void)createDefaultDataTypeForUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
     NSArray *datas = [self datasWithUserId:userId];
     for (NSDictionary *dataInfo in datas) {
-        BOOL existed = [db boolForQuery:@"select count(1) from bk_member where cmemberid = ?", dataInfo[@"cmemberid"]];
+        BOOL existed = [db boolForQuery:@"select count(1) from bk_user_remind where cremindid = ?", dataInfo[@"cremindid"]];
         if (!existed) {
             BOOL successfull = [db executeUpdate:@"insert into bk_user_remind (cremindid, cuserid, cremindname, cmemo, cstartdate, istate, cwritedate, iversion, operatortype, itype, icycle, iisend) values (:cremindid, :cuserid, :cremindname, :cmemo, :cstartdate, :istate, :cwritedate, :iversion, :operatortype, :itype, :icycle, :iisend)" withParameterDictionary:dataInfo];
             if (!successfull) {
@@ -30,60 +30,45 @@
 + (NSArray<NSDictionary *> *)datasWithUserId:(NSString *)userId {
     NSNumber *syncVersion = @(SSJSyncVersion());
     NSString *writeDate = [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-    return @[@{@"cmemberid":[NSString stringWithFormat:@"%@-0", userId],
+    NSDate *startDate = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:[NSDate date].day hour:20 minute:0 second:0];
+    return @[@{@"cremindid":[NSString stringWithFormat:@"%@-0", userId],
                @"cuserid":userId,
-               @"cname":@"我",
-               @"ccolor":@"#fc7a60",
-               @"istate":@1,
-               @"iorder":@1,
-               @"cadddate":writeDate,
-               @"iversion":syncVersion,
+               @"cremindname":@"精打细算，有吃有穿，小主快来记账啦～",
+               @"cmemo":@"",
+               @"cstartdate":startDate,
+               @"istate":@0,
                @"cwritedate":writeDate,
-               @"operatortype":@0},
+               @"iversion":syncVersion,
+               @"operatortype":@0,
+               @"itype":@1,
+               @"icycle":@0,
+               @"iisend":@0},
              
-             @{@"cmemberid":[NSString stringWithFormat:@"%@-1", userId],
+             @{@"cremindid":[NSString stringWithFormat:@"%@-1", userId],
                @"cuserid":userId,
-               @"cname":@"爱人",
-               @"ccolor":@"#b1c23e",
-               @"istate":@1,
-               @"iorder":@2,
-               @"cadddate":writeDate,
-               @"iversion":syncVersion,
+               @"cremindname":@"来记账咯，money money go my home",
+               @"cmemo":@"",
+               @"cstartdate":startDate,
+               @"istate":@0,
                @"cwritedate":writeDate,
-               @"operatortype":@0},
+               @"iversion":syncVersion,
+               @"operatortype":@0,
+               @"itype":@1,
+               @"icycle":@0,
+               @"iisend":@0},
              
-             @{@"cmemberid":[NSString stringWithFormat:@"%@-2", userId],
+             @{@"cremindid":[NSString stringWithFormat:@"%@-2", userId],
                @"cuserid":userId,
-               @"cname":@"小宝宝",
-               @"ccolor":@"#25b4dd",
-               @"istate":@1,
-               @"iorder":@3,
-               @"cadddate":writeDate,
-               @"iversion":syncVersion,
+               @"cremindname":@"记的是账，理的是生活，继续坚持",
+               @"cmemo":@"",
+               @"cstartdate":startDate,
+               @"istate":@0,
                @"cwritedate":writeDate,
-               @"operatortype":@0},
-             
-             @{@"cmemberid":[NSString stringWithFormat:@"%@-3", userId],
-               @"cuserid":userId,
-               @"cname":@"爸爸",
-               @"ccolor":@"#5a98de",
-               @"istate":@1,
-               @"iorder":@4,
-               @"cadddate":writeDate,
                @"iversion":syncVersion,
-               @"cwritedate":writeDate,
-               @"operatortype":@0},
-             
-             @{@"cmemberid":[NSString stringWithFormat:@"%@-4", userId],
-               @"cuserid":userId,
-               @"cname":@"妈妈",
-               @"ccolor":@"#8bb84a",
-               @"istate":@1,
-               @"iorder":@5,
-               @"cadddate":writeDate,
-               @"iversion":syncVersion,
-               @"cwritedate":writeDate,
-               @"operatortype":@0}];
+               @"operatortype":@0,
+               @"itype":@1,
+               @"icycle":@0,
+               @"iisend":@0}];
 }
 
 

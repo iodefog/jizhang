@@ -11,6 +11,7 @@
 #import "SSJUserDefaultBooksCreater.h"
 #import "SSJUserDefaultMembersCreater.h"
 #import "SSJUserDefaultBillTypesCreater.h"
+#import "SSJUserDefualtRemindCreater.h"
 #import "SSJDatabaseQueue.h"
 
 @implementation SSJUserDefaultDataCreater
@@ -69,7 +70,8 @@
     return @[[SSJUserDefaultFundCreater class],
              [SSJUserDefaultBooksCreater class],
              [SSJUserDefaultMembersCreater class],
-             [SSJUserDefaultBillTypesCreater class]];
+             [SSJUserDefaultBillTypesCreater class],
+             [SSJUserDefualtRemindCreater class]];
 }
 
 @end

@@ -210,7 +210,8 @@
                                          selectedTitleColor:SSJ_MARCATO_COLOR
                                            normalImageColor:SSJ_SECONDARY_COLOR
                                          selectedImageColor:SSJ_MARCATO_COLOR
-                                            backgroundColor:SSJ_MAIN_BACKGROUND_COLOR]];
+                                            backgroundColor:SSJ_MAIN_BACKGROUND_COLOR
+                                             attributedText:nil]];
     }
     
     self.booksMenu.items = items;
