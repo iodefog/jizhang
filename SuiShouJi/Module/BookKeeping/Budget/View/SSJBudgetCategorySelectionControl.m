@@ -106,14 +106,16 @@
                                             selectedTitleColor:nil
                                               normalImageColor:SSJ_SECONDARY_COLOR
                                             selectedImageColor:nil
-                                               backgroundColor:SSJ_MAIN_BACKGROUND_COLOR],
+                                               backgroundColor:SSJ_MAIN_BACKGROUND_COLOR
+                                                attributedText:nil],
                             [SSJListMenuItem itemWithImageName:@"reportForms_member"
                                                          title:@"分类预算"
                                               normalTitleColor:SSJ_MAIN_COLOR
                                             selectedTitleColor:nil
                                               normalImageColor:SSJ_SECONDARY_COLOR
                                             selectedImageColor:nil
-                                               backgroundColor:SSJ_MAIN_BACKGROUND_COLOR]];
+                                               backgroundColor:SSJ_MAIN_BACKGROUND_COLOR
+                                                attributedText:nil]];
         _listMenu.width = 124;
         [_listMenu addTarget:self action:@selector(listMenuSelectAction) forControlEvents:UIControlEventValueChanged];
     }

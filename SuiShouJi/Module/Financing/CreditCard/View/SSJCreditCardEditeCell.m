@@ -1,4 +1,4 @@
-//
+ //
 //  SSJCreditCardEditeCell.m
 //  SuiShouJi
 //
@@ -20,6 +20,10 @@
 
 @property(nonatomic, strong) CAGradientLayer *gradientLayer;
 
+@property(nonatomic, strong) UIButton *triangleButton;
+
+@property(nonatomic, strong) UIView *backView;
+
 @end
 
 @implementation SSJCreditCardEditeCell
@@ -32,6 +36,8 @@
         [self.contentView addSubview:self.detailLabel];
         [self.contentView addSubview:self.cellDetailImage];
         [self.contentView addSubview:self.subTitleLabel];
+        [self.contentView addSubview:self.triangleButton];
+        [self.contentView addSubview:self.backView];
         [self.contentView.layer addSublayer:self.gradientLayer];
     }
     return self;
@@ -174,6 +180,24 @@
 
             self.textInput.hidden = YES;
             self.subTitleLabel.hidden = YES;
+        }
+            break;
+            
+        case SSJCreditCardBalanceCell:{
+            self.cellImage.left = 15;
+            self.cellImage.centerY = self.contentView.height / 2;
+            self.accessoryView.centerY = self.cellImage.centerY;
+            self.titleLabel.left = self.cellImage.image ? self.cellImage.right + 10 : 15;
+            self.titleLabel.centerY = self.contentView.height / 2;
+            self.textInput.size = CGSizeMake(self.contentView.width - self.titleLabel.right - 15, self.contentView.height);
+            self.textInput.left = self.titleLabel.right + 10;
+            self.textInput.centerY = self.contentView.height / 2;
+            self.textInput.hidden = NO;
+            self.titleLabel.hidden = NO;
+            self.detailLabel.hidden = YES;
+            self.cellDetailImage.hidden = YES;
+            self.subTitleLabel.hidden = YES;
+            self.gradientLayer.hidden = YES;
         }
             break;
             

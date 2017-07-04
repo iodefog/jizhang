@@ -282,7 +282,8 @@ static const CGFloat kCornerRadius = 2;
         cellItem.contentAlignment = _contentAlignment;
         cellItem.contentInset = _contentInsets;
         cellItem.backgroundColor = item.backgroundColor;
-        
+        cellItem.attributeStr = item.attributedStr;
+
         if (idx == _selectedIndex) {
             cellItem.titleColor = item.selectedTitleColor ?: item.normalTitleColor;
             cellItem.imageColor = item.selectedImageColor ?: item.normalImageColor;

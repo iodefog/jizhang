@@ -16,7 +16,8 @@ typedef NS_ENUM(NSInteger, SSJCreditCardCellType) {
     SSJCreditCardCellTypeDetail,          //带详情的cell
     SSJCreditCardCellTypeassertedDetail,  //带详情的cell
     SSJCreditCardCellTypeSubTitle,        //带副标题的cell
-    SSJCreditCardCellColorSelect          //颜色选择
+    SSJCreditCardCellColorSelect,         //颜色选择
+    SSJCreditCardBalanceCell              //信用卡余额
 };
 
 @property(nonatomic, strong) UITextField *textInput;

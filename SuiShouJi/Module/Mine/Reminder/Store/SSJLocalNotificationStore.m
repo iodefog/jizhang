@@ -34,6 +34,11 @@
             item.remindId = [resultSet stringForColumn:@"cremindid"];
             item.remindName = [resultSet stringForColumn:@"cremindname"];
             item.remindMemo = [resultSet stringForColumn:@"cmemo"];
+            if (item.remindMemo.length) {
+                item.rowHeight = 90;
+            } else {
+                item.rowHeight = 70;
+            }
             item.remindCycle = [resultSet intForColumn:@"icycle"];
             item.remindType = [resultSet intForColumn:@"itype"];
             NSString *dateStr = [resultSet stringForColumn:@"cstartdate"];

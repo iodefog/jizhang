@@ -112,6 +112,9 @@
     
     self.textLabel.text = item.title;
     self.textLabel.textColor = item.titleColor;
+    if (item.attributeStr.length) {
+        self.textLabel.attributedText = item.attributeStr;
+    }
     self.textLabel.font = item.titleFont;
     self.backgroundColor = item.backgroundColor;
     
@@ -124,6 +127,7 @@
     [self.cellItem addObserver:self forKeyPath:@"titleColor" options:NSKeyValueObservingOptionNew context:NULL];
     [self.cellItem addObserver:self forKeyPath:@"imageColor" options:NSKeyValueObservingOptionNew context:NULL];
     [self.cellItem addObserver:self forKeyPath:@"backgroundColor" options:NSKeyValueObservingOptionNew context:NULL];
+    [self.cellItem addObserver:self forKeyPath:@"attributeStr" options:NSKeyValueObservingOptionNew context:NULL];
 }
 
 - (void)removeObserver {
@@ -132,6 +136,7 @@
     [self.cellItem removeObserver:self forKeyPath:@"titleColor"];
     [self.cellItem removeObserver:self forKeyPath:@"imageColor"];
     [self.cellItem removeObserver:self forKeyPath:@"backgroundColor"];
+    [self.cellItem removeObserver:self forKeyPath:@"attributeStr"];
 }
 
 - (void)observeValueForKeyPath:(nullable NSString *)keyPath ofObject:(nullable id)object change:(nullable NSDictionary<NSString*, id> *)change context:(nullable void *)context {
