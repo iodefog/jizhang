@@ -64,7 +64,7 @@
     UIWindow *window = [UIApplication sharedApplication].keyWindow;
     
     CGPoint showPoint = [self convertPoint:CGPointMake(self.imageView.centerX, self.bottom) toView:window];
-    [self.listMenu showInView:window atPoint:showPoint dismissHandle:^(SSJListMenu *listMenu) {
+    [self.listMenu showInView:window atPoint:showPoint superViewInsets:UIEdgeInsetsMake(0, 5, 0, 5) finishHandle:NULL dismissHandle:^(SSJListMenu *listMenu) {
         [UIView animateWithDuration:0.2 animations:^{
             self.imageView.transform = CGAffineTransformIdentity;
         }];

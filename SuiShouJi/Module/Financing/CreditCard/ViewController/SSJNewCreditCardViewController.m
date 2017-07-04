@@ -325,9 +325,10 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         newReminderCell.showBalanceTypeSelectViewBlock = ^(CGPoint arrowPoint, BOOL isExpand, SSJCreditCardEditeCell *cell) {
             @strongify(self);
             self.debtOrbalanceChoice.selectedIndex = self.debtOrbalance;
-            [self.debtOrbalanceChoice showInView:self.view atPoint:[cell convertPoint:CGPointMake(arrowPoint.x, arrowPoint.y + 10) toView:self.view] dismissHandle:^(SSJListMenu *listMenu) {
-                
-            }];
+            [self.debtOrbalanceChoice showInView:self.view atPoint:[cell convertPoint:CGPointMake(arrowPoint.x, arrowPoint.y + 10) toView:self.view] superViewInsets:UIEdgeInsetsZero finishHandle:NULL dismissHandle:NULL];
+//            [self.debtOrbalanceChoice showInView:self.view atPoint:[cell convertPoint:CGPointMake(arrowPoint.x, arrowPoint.y + 10) toView:self.view] dismissHandle:^(SSJListMenu *listMenu) {
+//                
+//            }];
         };
         newReminderCell.customAccessoryType = UITableViewCellAccessoryNone;
         newReminderCell.selectionStyle = UITableViewCellSelectionStyleNone;
