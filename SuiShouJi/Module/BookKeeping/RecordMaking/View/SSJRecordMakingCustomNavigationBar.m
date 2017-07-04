@@ -115,7 +115,7 @@
 - (void)showBooksMenuAction {
     __weak typeof(self) wself = self;
     UIWindow *window = [UIApplication sharedApplication].keyWindow;
-    [self.booksMenu showInView:window atPoint:CGPointMake(self.width * 0.5, 28 + SSJ_STATUSBAR_HEIGHT) finishHandle:^(SSJListMenu *listMenu) {
+    [self.booksMenu showInView:window atPoint:CGPointMake(self.width * 0.5, 28 + SSJ_STATUSBAR_HEIGHT) superViewInsets:UIEdgeInsetsZero finishHandle:^(SSJListMenu *listMenu) {
         if (_showBookHandle) {
             _showBookHandle(self);
         }

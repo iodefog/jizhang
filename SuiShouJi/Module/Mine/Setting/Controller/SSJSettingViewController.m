@@ -212,6 +212,8 @@ static NSString *const kClearDataTitle = @"清理数据";
                 [subscriber sendError:error];
             }];
         } else {
+            self.fingerPrintPwdCtrl.on = NO;
+            self.motionPwdCtrl.on = NO;
             [subscriber sendNext:@(NO)];
             [subscriber sendCompleted];
         }

@@ -84,11 +84,29 @@
  */
 @property (nonatomic) UIControlContentHorizontalAlignment contentAlignment;
 
-- (void)showInView:(UIView *)view atPoint:(CGPoint)point;
+/**
+ 在view中的顶点显示；只是简便方法，内部还是调用showInView:atPoint:superViewInsets:finishHandle:dismissHandle:
 
-- (void)showInView:(UIView *)view atPoint:(CGPoint)point dismissHandle:(void (^)(SSJListMenu *listMenu))dismissHandle;
+ @param view <#view description#>
+ @param point <#point description#>
+ */
+- (void)showInView:(UIView *)view
+           atPoint:(CGPoint)point;
 
-- (void)showInView:(UIView *)view atPoint:(CGPoint)point finishHandle:(void(^)(SSJListMenu *listMenu))finishHandle dismissHandle:(void (^)(SSJListMenu *listMenu))dismissHandle;
+/**
+ <#Description#>
+
+ @param view <#view description#>
+ @param point <#point description#>
+ @param insets <#insets description#>
+ @param finishHandle <#finishHandle description#>
+ @param dismissHandle <#dismissHandle description#>
+ */
+- (void)showInView:(UIView *)view
+           atPoint:(CGPoint)point
+   superViewInsets:(UIEdgeInsets)insets
+      finishHandle:(void(^)(SSJListMenu *listMenu))finishHandle
+     dismissHandle:(void (^)(SSJListMenu *listMenu))dismissHandle;
 
 - (void)dismiss;
 
