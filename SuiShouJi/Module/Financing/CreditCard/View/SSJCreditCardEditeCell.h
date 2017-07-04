@@ -20,7 +20,7 @@ typedef NS_ENUM(NSInteger, SSJCreditCardCellType) {
     SSJCreditCardBalanceCell              //信用卡余额
 };
 
-@property(nonatomic, strong) UITextField *textInput;
+@property (nonatomic, strong) UITextField *textInput;
 
 @property (nonatomic) SSJCreditCardCellType type;
 
@@ -32,14 +32,18 @@ typedef NS_ENUM(NSInteger, SSJCreditCardCellType) {
 
 @property (nonatomic,strong) NSString *cellSubTitle;
 
-@property(nonatomic, strong) NSString *cellDetail;
+@property (nonatomic, strong) NSString *cellDetail;
 
-@property(nonatomic, strong) UILabel *detailLabel;
+@property (nonatomic, strong) UILabel *detailLabel;
 
-@property(nonatomic, strong) NSAttributedString *cellAtrributedDetail;
+@property (nonatomic, strong) NSAttributedString *cellAtrributedDetail;
 
-@property(nonatomic, strong) NSString *cellColor;
+@property (nonatomic, strong) NSString *cellColor;
 
-@property(nonatomic, strong) SSJFinancingGradientColorItem *colorItem;
+// 0为余额,1为收入
+@property (nonatomic) BOOL balanceType;
+
+@property (nonatomic, strong) SSJFinancingGradientColorItem *colorItem;
+
 
 @end
