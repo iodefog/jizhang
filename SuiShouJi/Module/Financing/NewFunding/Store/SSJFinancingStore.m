@@ -119,7 +119,7 @@
         
         NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:0];
         
-        FMResultSet *fundSet = [db executeQuery:@"select * from bk_fund_info where cparent = 'root' and itype = ?",@(type)];
+        FMResultSet *fundSet = [db executeQuery:@"select * from bk_fund_info where cparent = 'root' and itype = ? order by iorder",@(type)];
         
         if (!fundSet) {
             if (failure) {
