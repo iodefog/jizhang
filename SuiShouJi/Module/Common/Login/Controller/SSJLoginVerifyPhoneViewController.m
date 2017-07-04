@@ -49,20 +49,22 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self initialUI];
-//    [self updateViewConst];
     [self updateViewConstraint];
     [self initialBind];
+    
+    self.finishHandle = ^(UIViewController *controller) {
+            UITabBarController *tabVC = (UITabBarController *)((MMDrawerController *)[UIApplication sharedApplication].keyWindow.rootViewController).centerViewController;
+            UINavigationController *navi = [tabVC.viewControllers firstObject];
+            UIViewController *homeController = [navi.viewControllers firstObject];
+            
+            controller.backController = homeController;
+            [controller ssj_backOffAction];
+        };
 }
 
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    [self.numTextF becomeFirstResponder];
+- (void)dealloc {
+    [self.verifyPhoneViewModel.netWorkService cancel];
 }
-
-//- (void)viewWillDisappear:(BOOL)animated {
-//    [super viewWillDisappear:animated];
-//    [self.verifyPhoneViewModel.netWorkService cancel];
-//}
 
 #pragma mark - Layout
 - (void)updateViewConstraint {
@@ -97,12 +99,12 @@
         make.height.top.mas_equalTo(self.agreeButton);
     }];
     
-//    if (([SSJDefaultSource() isEqualToString:@"11501"]
-//        || [SSJDefaultSource() isEqualToString:@"11502"]
-//        || [SSJDefaultSource() isEqualToString:@"11512"]
-//        || [SSJDefaultSource() isEqualToString:@"11513"]) && [WXApi isWXAppInstalled]) {
+    if (([SSJDefaultSource() isEqualToString:@"11501"]
+        || [SSJDefaultSource() isEqualToString:@"11502"]
+        || [SSJDefaultSource() isEqualToString:@"11512"]
+        || [SSJDefaultSource() isEqualToString:@"11513"]) && [WXApi isWXAppInstalled]) {
         [self.weixinLoginButton mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.bottom.mas_equalTo(self.protocolButton).offset(200);
+            make.top.mas_equalTo(SSJSCREENHEIGHT - 85);
             make.size.mas_equalTo(CGSizeMake(50, 50));
             make.right.mas_equalTo(self.scrollView.mas_centerX).offset(-10);
         }];
@@ -111,14 +113,14 @@
             make.size.top.mas_equalTo(self.weixinLoginButton);
             make.left.mas_equalTo(self.scrollView.mas_centerX).offset(10);
         }];
-//    } else {
-//        [self.tencentLoginButton mas_makeConstraints:^(MASConstraintMaker *make) {
-//            make.bottom.mas_equalTo(self.protocolButton).offset(200);
-//            make.size.mas_equalTo(CGSizeMake(50, 50));
-//            make.centerX.mas_equalTo(self.scrollView.mas_centerX);
-//        }];
-//    }
-//    [super updateViewConstraints];
+    } else {
+        [self.tencentLoginButton mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.mas_equalTo(SSJSCREENHEIGHT - 85);
+            make.size.mas_equalTo(CGSizeMake(50, 50));
+            make.centerX.mas_equalTo(self.scrollView.mas_centerX);
+        }];
+    }
+    [super updateViewConstraints];
 }
 
 #pragma mark - Private
@@ -133,7 +135,7 @@
     [self.scrollView addSubview:self.agreeButton];
     [self.scrollView addSubview:self.protocolButton];
     [self.scrollView addSubview:self.tencentLoginButton];
-    [self.scrollView addSubview:self.weixinLoginButton];
+//    [self.scrollView addSubview:self.weixinLoginButton];
     // 只有9188、有鱼并且没有审核的情况下，显示第三方登录
     if (([SSJDefaultSource() isEqualToString:@"11501"]
         || [SSJDefaultSource() isEqualToString:@"11502"]
@@ -171,7 +173,7 @@
         _numTextF.keyboardType = UIKeyboardTypeNumberPad;
         _numTextF.clearButtonMode = UITextFieldViewModeWhileEditing;
         _numTextF.delegate = self;
-        [_numTextF ssj_setBorderWidth:1];
+        [_numTextF ssj_setBorderWidth:2];
         [_numTextF ssj_setBorderStyle:SSJBorderStyleBottom];
         [_numTextF ssj_setBorderColor:[UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].cellSeparatorColor alpha:[SSJThemeSetting defaultThemeModel].cellSeparatorAlpha]];
     }
@@ -184,7 +186,7 @@
         _phonePreL.text = @"+86";
         _phonePreL.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         _phonePreL.textColor = [UIColor ssj_colorWithHex:@"333333"];
-        [_phonePreL ssj_setBorderWidth:1];
+        [_phonePreL ssj_setBorderWidth:2];
         [_phonePreL ssj_setBorderStyle:SSJBorderStyleBottom];
         [_phonePreL ssj_setBorderColor:[UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].cellSeparatorColor alpha:[SSJThemeSetting defaultThemeModel].cellSeparatorAlpha]];
     }
@@ -201,35 +203,34 @@
         _verifyPhoneBtn.layer.cornerRadius = 6;
         _verifyPhoneBtn.layer.masksToBounds = YES;
         RAC(_verifyPhoneBtn,enabled) = self.verifyPhoneViewModel.enableVerifySignal;
-
-        @weakify(self);
+        
+        __weak __typeof(self)weakSelf = self;
         [[_verifyPhoneBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
-            @strongify(self);
-            [self.view endEditing:YES];
-            [[[self.verifyPhoneViewModel.verifyPhoneNumRequestCommand execute:nil] takeUntil:self.rac_willDeallocSignal] subscribeNext:^(NSNumber *result) {
+            [weakSelf.view endEditing:YES];
+            [[[weakSelf.verifyPhoneViewModel.verifyPhoneNumRequestCommand execute:nil] takeUntil:weakSelf.rac_willDeallocSignal] subscribeNext:^(NSNumber *result) {
 //                1 密码登录(已注册)，0 验证码注册（未注册）
 //                请求返回处理好的数据
                 if ([result boolValue]) {
                     SSJLoginPhoneViewController *vc = [[SSJLoginPhoneViewController alloc] init];
-                    vc.viewModel = self.verifyPhoneViewModel;
-                    vc.finishHandle = self.finishHandle;
-                    [self.navigationController pushViewController:vc animated:YES];
+                    vc.viewModel = weakSelf.verifyPhoneViewModel;
+                    vc.finishHandle = weakSelf.finishHandle;
+                    [weakSelf.navigationController pushViewController:vc animated:YES];
                 } else {
                     SSRegisterAndLoginViewController *loginVC = [[SSRegisterAndLoginViewController alloc] init];
-                    loginVC.viewModel = self.verifyPhoneViewModel;
+                    loginVC.viewModel = weakSelf.verifyPhoneViewModel;
                     loginVC.regOrForgetType = SSJRegistAndForgetPasswordTypeRegist;//注册
-                    loginVC.finishHandle = self.finishHandle;
-                    [self.navigationController pushViewController:loginVC animated:YES];
+                    loginVC.finishHandle = weakSelf.finishHandle;
+                    [weakSelf.navigationController pushViewController:loginVC animated:YES];
                 }
             }];
         }];
         
-        [[[self.verifyPhoneViewModel.verifyPhoneNumRequestCommand.executing skip:1] distinctUntilChanged]
+        [[[weakSelf.verifyPhoneViewModel.verifyPhoneNumRequestCommand.executing skip:1] distinctUntilChanged]
          subscribeNext:^(id x) {
              if ([x boolValue]) {
-                 self.numTextF.userInteractionEnabled = NO;
+                 weakSelf.numTextF.userInteractionEnabled = NO;
              } else {
-                 self.numTextF.userInteractionEnabled = YES;
+                 weakSelf.numTextF.userInteractionEnabled = YES;
              }
          }];
     }
@@ -246,7 +247,7 @@
         [[_agreeButton rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(UIButton *btn) {
             btn.selected = !btn.selected;
         }];
-        [_agreeButton ssj_setBorderWidth:1];
+        [_agreeButton ssj_setBorderWidth:2];
         [_agreeButton ssj_setBorderStyle:SSJBorderStyleAll];
         [_agreeButton ssj_setBorderColor:[UIColor ssj_colorWithHex:@"ea4a64"]];
     }
@@ -282,7 +283,7 @@
         [[_tencentLoginButton rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
             @strongify(self);
             [self.view endEditing:YES];
-            _verifyPhoneViewModel.vc = self;
+            self.verifyPhoneViewModel.vc = self;
             [self.verifyPhoneViewModel.qqLoginCommand execute:nil];
         }];
     }
@@ -300,7 +301,7 @@
         [[_weixinLoginButton rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
             @strongify(self);
             [self.view endEditing:YES];
-            _verifyPhoneViewModel.vc = self;
+            self.verifyPhoneViewModel.vc = self;
             [self.verifyPhoneViewModel.wxLoginCommand execute:nil];
         }];
     }
@@ -310,7 +311,7 @@
 - (SSJLoginVerifyPhoneNumViewModel *)verifyPhoneViewModel {
     if (!_verifyPhoneViewModel) {
         _verifyPhoneViewModel = [[SSJLoginVerifyPhoneNumViewModel alloc] init];
-//        _verifyPhoneViewModel.vc = self;
+        _verifyPhoneViewModel.vc = self;
     }
     return _verifyPhoneViewModel;
 }
