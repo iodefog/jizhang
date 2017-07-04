@@ -110,10 +110,12 @@
     [self.nextBtn.rac_command.executionSignals.switchToLatest subscribeNext:^(NSNumber *result) {
         @strongify(self);
         if ([result boolValue]) {
-            NSError *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"此手机号已经注册过了，换一个吧"}];
-            [SSJAlertViewAdapter showError:error completion:^{
-                [self.phoneNoField becomeFirstResponder];
-            }];
+//            NSError *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"此手机号已经注册过了，换一个吧"}];
+//            [SSJAlertViewAdapter showError:error completion:^{
+//                [self.phoneNoField becomeFirstResponder];
+//            }];
+            [CDAutoHideMessageHUD showMessage:@"此手机号已经绑定过了，换一个吧"];
+            [self.phoneNoField becomeFirstResponder];
         } else {
             SSJSettingPasswordViewController *pwdSetttingVC = [[SSJSettingPasswordViewController alloc] init];
             pwdSetttingVC.type = SSJSettingPasswordTypeMobileNoBinding;
