@@ -358,14 +358,15 @@
         break;
     }
     
+    //mzl modify
     // ios8后，需要添加这个注册，才能得到授权
-     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:SSJNoticeAlertKey];
-    if ([[UIApplication sharedApplication] respondsToSelector:@selector(registerUserNotificationSettings:)]) {
-        UIUserNotificationType type =  UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound;
-        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:type
-                                                                                 categories:nil];
-        [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
-    }
+//     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:SSJNoticeAlertKey];
+//    if ([[UIApplication sharedApplication] respondsToSelector:@selector(registerUserNotificationSettings:)]) {
+//        UIUserNotificationType type =  UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound;
+//        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:type
+//                                                                                 categories:nil];
+//        [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+//    }
     // 执行通知注册
     for (UILocalNotification *notification in notificationsArr) {
         [[UIApplication sharedApplication] scheduleLocalNotification:notification];
